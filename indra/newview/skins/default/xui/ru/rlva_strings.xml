@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Cкрытый)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Cкрытый участок)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Cкрытый регион)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** ЛС заблокировано вашим клиентом</string>
+			<key>description</key>
+			<string>Отображается вместо оригинального сообщения, когда входящий чат заблокирован</string>
+			<key>label</key>
+			<string>Заблокированное входящее ЛС-сообщение (локальное)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** ЛС заблокировано клиентом отправителя</string>
+			<key>description</key>
+			<string>Отображается (и отправляется принимающей стороне) когда исходящий чат заблокирован</string>
+			<key>label</key>
+			<string>Заблокировано исходящее ЛС-сообщение (локальное + удаленное)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @list or @except as an IM query (if enabled) -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** Другая сторона с уважением просит вас заняться своими делами (зайчики заставили меня это сделать!)</string>
+			<key>description</key>
+			<string>Отправляется удаленной стороне, когда вы отклоняете их запрос на перечисление ваших активных ограничений RLV)</string>
+			<key>label</key>
+			<string>@list и @except команда (удаленно)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party as a suffix to @list to inform them there might be more information -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>(Используйте @except, чтобы увидеть список активных исключений)</string>
+			<key>description</key>
+			<string>Отправлено удаленной стороне в качестве суффикса к @list, чтобы сообщить им, как запросить ваши исключения</string>
+			<key>label</key>
+			<string>@list суффикс команды (удаленно)</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** Другая сторона не находится под ограничением @startim</string>
+			<key>description</key>
+			<string>Отправляется удаленной стороне, когда они пытаются принудительно закрыть ваш чат с ними (и такой сеанс не существует)</string>
+			<key>label</key>
+			<string>@stopim команда без сеанса (удаленно)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** Сессия была закончена для другой стороны</string>
+			<key>description</key>
+			<string>Отправляется удаленной стороне, когда они пытаются принудительно закрыть чат (и он существует)</string>
+			<key>label</key>
+			<string>@stopim команда с активным сеансом (удаленно)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] удаленно закрыл разговор с @stopim</string>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно использовать автопилот из-за ограничений RLV</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно выполнить действие из-за ограничений RLV</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно изменить активную группу из-за ограничения RLV; переключено обратно на "[GROUP_SLURL]"</string>
+		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно выполнить запрошенное действие инвентаризации из-за заблокированной папки RLV.</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно увидеть присутствие ближайших аватаров из-за ограничений RLV</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>Попытка присоединить '[OBJECT]' была отклонена из-за ограничений RLV</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>'[OBJECT]' было отказано в разрешении телепортировать вас из-за ограничений RLV</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно начать сеанс обмена мгновенными сообщениями с [RECIPIENT] из-за ограничений RLV</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно начать конференцию с [RECIPIENT] из-за ограничений RLV</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно инициировать телепорт из-за ограничений RLV</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно предложить телепорт из-за ограничений RLV</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно открыть [TYPE] из-за ограничений RLV</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно включить каркасный режим из-за ограничений RLV</string>
+		</map>
+
+		<!-- Sent as "Busy" messages to the remote party -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>Житель, которому вы отправили сообщение, в данный момент не может читать ваши мгновенные сообщения, повторите попытку позже.</string>
+			<key>description</key>
+			<string>Отправляется удаленной стороне, когда их ЛС был заблокирован</string>
+			<key>label</key>
+			<string>Заблокировано входящее сообщение (удаленно)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>Резиденту в настоящее время запрещено принимать. Пожалуйста, попробуйте позже.</string>
+			<key>description</key>
+			<string>Отправляется удаленной стороне, когда их предложение телепортации или запрос был заблокирован</string>
+			<key>label</key>
+			<string>Заблокированный телепорт предложение/запрос (удаленный)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+	</map>
+
+	<!-- Generic names used to replace resident names when @shownames restricted -->
+	<key>anonyms</key>
+	<array>
+		<string>Житель</string>
+		<string>Этот житель</string>
+		<string>Тот житель</string>
+		<string>Индивидум</string>
+		<string>Этот индивидум</string>
+		<string>Тот индивидум</string>
+		<string>Персона</string>
+		<string>Эта персона</string>
+		<string>Та персона</string>
+		<string>Незнакомец</string>
+		<string>Этот незнакомец</string>
+		<string>Тот незнакомец</string>
+		<string>Существо</string>
+		<string>Это существо</string>
+		<string>То существо</string>
+		<string>Деятель</string>
+		<string>Этот деятель</string>
+		<string>Тот деятель</string>
+		<string>Человек</string>
+		<string>Этот человек</string>
+		<string>Тот человек</string>
+		<string>Кто-то</string>
+		<string>Некоторые люди</string>
+		<string>Некто</string>
+		<string>Таинственный</string>
+		<string>Неизвестное существо</string>
+		<string>Неопознанный</string>
+		<string>Неизвестный человек</string>
+	</array>
+
+</map>
+</llsd>

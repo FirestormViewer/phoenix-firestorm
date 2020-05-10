@@ -124,6 +124,7 @@
 		<panel  label="詳細" name="area_search_advanced_panel">
 			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触る" />
 			<check_box name="double_click_buy" label="ダブルクリックでオブジェクトを買う" />
+			<check_box name="double_click_sit" label="ダブルクリックでオブジェクトに座る" />
 		</panel>
 	</tab_container>
 </floater>

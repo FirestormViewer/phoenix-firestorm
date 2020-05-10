@@ -11,6 +11,8 @@
 		グロー
 	</text>
 	<check_box label="明るさ全開" name="checkbox fullbright"/>
+	<button tool_tip="コピー" name="copy_face_btn" />
+	<button tool_tip="貼り付け" name="paste_face_btn" />
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="材質" name="Materials"/>
 		<combo_box.item label="メディア" name="Media"/>
@@ -107,5 +109,6 @@
 	<spinner label="水平オフセット" name="shinyOffsetU"/>
 	<spinner label="垂直オフセット" name="shinyOffsetV"/>
 	<check_box label="平面を揃える" name="checkbox planar align" tool_tip="選択面全てのテクスチャを、最後に選択された面に揃えます。平面テクスチャのマッピングが必要です。"/>
-	<button label="揃える" label_selected="現在のテクスチャレイヤーを揃える" name="button align textures" tool_tip="現在のテクスチャレイヤーを揃える"/>
+	<check_box label="素材を同期" name="checkbox_sync_settings" tool_tip="テクスチャ・マップのパラメータを同期します" />
+	<button label="揃える" name="button align textures" tool_tip="現在のテクスチャ・レイヤーを揃えます" />
 </panel>
