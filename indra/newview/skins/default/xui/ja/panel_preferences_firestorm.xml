@@ -62,6 +62,9 @@
         <spinner name="RenderVolumeSAFrameMax" />
 
         <check_box label="スパムからの保護" name="UseAntiSpam" />
+        <!-- FS:TS FIRE-23138: Enable spam protection for user's objects -->
+        <check_box label="自分が所有するオブジェクトからのスパムからも保護する" name="FSUseAntiSpamMine" tool_tip="ここにチェックを入れると、自分が所有するオブジェクトからのスパムに対しても保護されるようになります" />
+        <!-- /FS:TS FIRE-23138 -->
         <text name="AntiSpamText1">
            １メッセージあたりの最大受信行数：
         </text>
@@ -253,6 +256,10 @@
 		</text>
 		<line_editor name="preprocinclude_location" />
 		<button label="参照" name="SetPreprocInclude" />
+		<text name="externaleditor_textbox">
+			外部エディタ：
+		</text>
+		<button label="参照" label_selected="参照" name="SetExternalEditor" />
 		
 	</panel>
 
