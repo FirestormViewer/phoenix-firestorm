@@ -158,7 +158,7 @@ namespace
             // </FS:ND>
 
             //<FS:ND/> Clear out username first, as we get some crashes that has the OS set as username, let's see if this fixes it.
-            sBugSplatSender->setDefaultUserName(L"<unset>");
+            sBugSplatSender->setDefaultUserName( WCSTR("<unset>") );
 
             // <FS:ND> Only send avatar name if enabled via prefs
             if (gCrashSettings.getBOOL("CrashSubmitName"))
