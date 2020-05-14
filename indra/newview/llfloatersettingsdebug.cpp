@@ -39,7 +39,6 @@
 #include "llspinctrl.h"
 #include "llstring.h"
 #include "lltexteditor.h"
-#include "llviewershadermgr.h"
 #include "lluictrlfactory.h"
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
@@ -367,7 +366,6 @@ void LLFloaterSettingsDebug::updateControl()
 	mDefaultButton->setEnabled(FALSE);
 	mBooleanCombo->setVisible(FALSE);
 	mSanityButton->setVisible(FALSE);
-
 
 	if (mCurrentControlVariable)
 	{
