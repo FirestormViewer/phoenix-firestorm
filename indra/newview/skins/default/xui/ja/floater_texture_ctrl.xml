@@ -31,6 +31,24 @@
 		<column label="名前" name="unit_name"/>
 		<column label="ID" name="unit_id_HIDDEN"/>
 	</scroll_list>
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="ベークするテクスチャを選択">
+		<combo_box.item label="なし" name="None" />
+		<combo_box.item label="BAKED_HEAD" name="BAKED_HEAD" />
+		<combo_box.item label="BAKED_UPPER" name="BAKED_UPPER" />
+		<combo_box.item label="BAKED_LOWER" name="BAKED_LOWER" />
+		<combo_box.item label="BAKED_EYES" name="BAKED_EYES" />
+		<combo_box.item label="BAKED_SKIRT" name="BAKED_SKIRT" />
+		<combo_box.item label="BAKED_HAIR" name="BAKED_HAIR" />
+		<combo_box.item label="BAKED_LEFTARM" name="BAKED_LEFTARM" />
+		<combo_box.item label="BAKED_LEFTLEG" name="BAKED_LEFTLEG" />
+		<combo_box.item label="BAKED_AUX1" name="BAKED_AUX1" />
+		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2" />
+		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3" />
+	</combo_box>
+	<check_box label="ベース・メッシュの部分を隠す" name="hide_base_mesh_region" />
+<!-- bottom static -->
+	<line_editor name="TextureKey" label="00000000-0000-0000-0000-000000000000" tool_tip="テクスチャの UUID" />
+	<button name="TextureKeyApply" label="UUID を摘要" tool_tip="この UUID を摘要します" />
 	<button label="OK" label_selected="OK" name="Select"/>
 	<button label="取り消し" label_selected="取り消し" name="Cancel"/>
 </floater>

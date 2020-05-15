@@ -36,7 +36,7 @@
 		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Kanał używany do przesyłania skryptom powiadomień o kolizjach [Domyślnie: -25000]"/>
 	</panel>
 	<panel label="Szafa" name="tab-inventory">
-		<check_box label="Powiadom, gdy muszę zapłacić za załadowanie pliku" name="FSShowUploadPaymentToast" />
+		<check_box label="Powiadom, gdy muszę zapłacić za przesłanie pliku" name="FSShowUploadPaymentToast" />
 		<check_box label="Powiadom, gdy zostanie utworzony Landmark" name="landmark_created_checkbox"/>
 		<check_box label="Wyłącz powiadomienia mówiące o zwróceniu przedmiotów do szafy" name="FSDisableReturnObjectNotification"/>
 		<check_box label="Pokazuj nazwy zapisanych zdjęć w historii czatu" name="FSLogSnapshotsToLocal"/>

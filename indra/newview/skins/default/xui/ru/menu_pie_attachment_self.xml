@@ -22,6 +22,11 @@
     <pie_slice label="Жесты..." name="Gestures"/>
     <pie_menu label="Внешность &gt;" name="Appearance &gt;">
         <pie_slice label="Фигура" name="Edit My Shape"/>
+        <pie_menu name="ResetMenu" label="Сброс &gt;">
+            <pie_slice label="Скел. &amp; Аним." name="Reset Skeleton And Animations"/>
+            <pie_slice label="Скелет" name="Reset Skeleton"/>
+            <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+        </pie_menu>
         <pie_slice label="Комплект" name="Edit My Outfit"/>
         <pie_slice label="Дамп XML" name="Dump XML"/>
         <pie_slice label="Высота" name="Hover Height"/>

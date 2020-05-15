@@ -27,8 +27,12 @@
 	<check_box label="На чужой земле" name="return_other_land" tool_tip="Возвращаются только объекты, расположенные на чужой земле"/>
 	<check_box label="С каждого региона этого землевладения" name="return_estate_wide" tool_tip="Возвращаются объекты со всех регионов, образующих это землевладение"/>
 	<button label="Возврат" name="return_btn"/>
-	<button label="Самые активные участники столкновений..." name="top_colliders_btn" tool_tip="Список объектов, для которых столкновения наиболее вероятны"/>
-	<button label="Список лучших скриптов..." name="top_scripts_btn" tool_tip="Объекты, в которых скрипты выполняются дольше всего"/>
-	<button label="Перезагрузить регион" name="restart_btn" tool_tip="Отсчитать 2 минуты и перезагрузить регион"/>
-	<button label="Отменить перезапуск" name="cancel_restart_btn" tool_tip="Отменить перезапуск региона"/>
+	<button label="Самые активные участники столкновений..." width="270" name="top_colliders_btn" tool_tip="Список объектов, для которых столкновения наиболее вероятны"/>
+	<button label="Список лучших скриптов..." width="170" name="top_scripts_btn" tool_tip="Объекты, в которых скрипты выполняются дольше всего"/>
+	<button label="Перезагрузить регион" width="150" name="restart_btn" tool_tip="Отсчитать 2 минуты и перезагрузить регион"/>
+	<text name="label_restart_delay" left_delta="165">
+		Секунд:
+	</text>
+	<button label="Отменить перезапуск" width="150" name="cancel_restart_btn" tool_tip="Отменить перезапуск региона"/>
+	<button label="Консоль отладки региона" name="region_debug_console_btn" tool_tip="Открыть Консоль Отладки Региона" width="165"/>
 </panel>

@@ -13,7 +13,7 @@
 		<combo_box.item label="1600x1200" name="1600x1200"/>
 		<combo_box.item label="Другое" name="Custom"/>
 	</combo_box>
-	<spinner label="Ширина x Высота" name="local_snapshot_width"/>
+	<spinner label="Ширина Высота" name="local_snapshot_width"/>
 	<check_box label="Сохранять пропорции" name="local_keep_aspect_check"/>
 	<text name="local_format_label">
 		Формат:
@@ -24,7 +24,10 @@
 		<combo_box.item label="BMP (Сжатие без потерь)" name="BMP"/>
 	</combo_box>
 	<slider label="Качество:" name="image_quality_slider"/>
-	<button label="Отмена" name="cancel_btn"/>
+	<text name="local_remember_location_sessions_text">
+		Сохранить место и имя файла между сессиями
+	</text>
+	<button label="&#x25B6; Выбор" name="cancel_btn"/>
 	<flyout_button label="Сохранить" name="save_btn" tool_tip="Сохранить изображение в файл">
 		<flyout_button.item label="Сохранить" name="save_item"/>
 		<flyout_button.item label="Сохранить как..." name="saveas_item"/>

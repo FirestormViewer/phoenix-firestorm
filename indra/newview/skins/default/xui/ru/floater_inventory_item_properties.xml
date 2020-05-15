@@ -13,10 +13,12 @@
 	<button label="Профиль…" name="BtnOwner"/>
 	<text name="LabelAcquiredTitle">Приобретено:</text>
 	<text name="LabelAcquiredDate">Ср 24 Май 12:50:46 2006</text>
+	<text name="LabelItemExperienceTitle">Приключение:</text>
 	<text name="OwnerLabel">Вы:</text>
 	<check_box label="Изменить" name="CheckOwnerModify"/>
 	<check_box label="Копировать" name="CheckOwnerCopy"/>
 	<check_box label="Передавать" name="CheckOwnerTransfer"/>
+	<check_box label="Экспортировать" name="CheckOwnerExport"/>
 	<text name="AnyoneLabel">Все:</text>
 	<check_box label="Копировать" name="CheckEveryoneCopy"/>
 	<text name="GroupLabel">Группа:</text>

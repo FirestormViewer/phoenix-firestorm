@@ -165,7 +165,7 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 		Problem w zapisywaniu danych animacji. Spróbuj ponownie za kilka minut.
 	</notification>
 	<notification name="UploadAuctionSnapshotFail">
-		W trakcie ładowania obrazu aukcji pojawił się problem z następującego powodu: [REASON].
+		W trakcie przesyłania obrazu aukcji pojawił się problem z następującego powodu: [REASON].
 	</notification>
 	<notification name="UnableToViewContentsMoreThanOne">
 		Nie można przeglądać zawartości więcej niż jednego obiektu naraz.
@@ -434,16 +434,16 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 		Potrzebujesz [COST]L$ aby zapisać zdjęcie do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać zdjęcie na swoim komputerze.
 	</notification>
 	<notification name="ErrorCannotAffordUpload">
-		Potrzebujesz [COST]L$ aby załadować ten element.
+		Potrzebujesz [COST]L$ aby przesłać ten element.
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Potrzebujesz [COST]L$ aby zapisać teksturę do swojej Szafy. Możesz zamiast tego kupić L$ lub zapisać teksturę na swoim komputerze.
 	</notification>
 	<notification name="ErrorUploadingPostcard">
-		W trakcie ładowania zdjęcia pojawił się problem z następującego powodu: [REASON]
+		W trakcie przesyłania zdjęcia pojawił się problem z następującego powodu: [REASON]
 	</notification>
 	<notification name="ErrorUploadingReportScreenshot">
-		W trakcie ładowania zdjęcia ekranu do raportu pojawił się problem z następującego powodu: [REASON]
+		W trakcie przesyłania zdjęcia ekranu do raportu pojawił się problem z następującego powodu: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
 		Musisz zaakceptować Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
@@ -763,7 +763,7 @@ Upewnij się, że nazwa pliku ma poprawne rozszerzenie.
 Oczekiwane: [VALIDS]
 	</notification>
 	<notification name="CannotUploadSoundFile">
-		Nie można otworzyć załadowanego pliku dźwiękowego:
+		Nie można otworzyć przesłanego pliku dźwiękowego:
 [FILE]
 	</notification>
 	<notification name="SoundFileNotRIFF">
@@ -826,10 +826,10 @@ To może się zdarzyć, kiedy zmieniasz ustawienia sieci. Zrestartowanie Przegl�
 		Nie można utworzyć pliku wyjściowego: [FILE]
 	</notification>
 	<notification name="DoNotSupportBulkAnimationUpload">
-		[APP_NAME] obecnie nie wspomaga ładowania grupowego plików animacji w formacie BVH.
+		[APP_NAME] obecnie nie wspomaga przesyłania grupowego plików animacji w formacie BVH.
 	</notification>
 	<notification name="CannotUploadReason">
-		Ładowanie pliku [FILE] nie powiodło się z powodu: [REASON]
+		Przesyłanie pliku [FILE] nie powiodło się z powodu: [REASON]
 Spróbuj jeszcze raz później.
 	</notification>
 	<notification name="LandmarkCreated">
@@ -1503,7 +1503,7 @@ Tekstura terenu [TEXTURE_NUM] jest za duża - [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze 1024x1024 lub mniejszą i ponownie kliknij na &quot;Zastosuj&quot;.
 	</notification>
 	<notification name="RawUploadStarted">
-		Ładowanie rozpoczęte. Może potrwać do dwóch minut zależnie od prędkości Twojego połączenia.
+		Przesyłanie rozpoczęte. Może potrwać do dwóch minut zależnie od prędkości Twojego połączenia.
 	</notification>
 	<notification name="ConfirmBakeTerrain">
 		Na pewno chcesz zapisać obecne ukształtowanie terenu jako punkt odniesienia dla górnego i dolnego limitu terenu oraz jako domyślną wartość dla opcji &apos;Odtwórz&apos;?
@@ -2602,17 +2602,17 @@ Temat: [SUBJECT], Treść: [MESSAGE]
 		Nie możesz dodać siebie do listy wyjątków renderowania.
 	</notification>
 	<notification name="UploadingAuctionSnapshot">
-		Ładowanie obrazów z Internetu...
+		Przesyłanie obrazów...
 (Zajmuje około 5 minut.)
 	</notification>
 	<notification name="UploadPayment">
-		Ładowanie kosztowało [AMOUNT]L$.
+		Przesyłanie kosztowało [AMOUNT]L$.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
-		Ładowanie obrazu z Internetu zakończone pomyślnie.
+		Przesyłanie obrazu do sieci zakończone pomyślnie.
 	</notification>
 	<notification name="UploadSnapshotDone">
-		Ładowanie zdjęcia zakończone pomyślnie.
+		Przesyłanie zdjęcia zakończone pomyślnie.
 	</notification>
 	<notification name="TerrainDownloaded">
 		Plik terrain.raw ściągnięty.
@@ -3414,18 +3414,18 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 		Niestety nie udało nam się uzyskać informacji o korzyściach dla tej sesji. Nie powinno się to zdarzyć w normalnym środowisku produkcyjnym. Skontaktuj się z pomocą techniczną. Ta sesja nie będzie działać normalnie i zalecamy restart.
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
-		Spowoduje to załadowanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Załaduj"/>
+		Spowoduje to przesłanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Prześlij"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
-		Wybranych plików nie można załadować zbiorczo.
+		Wybranych plików nie można przesłać zbiorczo.
 	</notification>
 	<notification name="BulkUploadIncompatibleFiles">
-		Niektórych z wybranych plików nie można załadować zbiorczo.
+		Niektórych z wybranych plików nie można przesłać zbiorczo.
 	</notification>
 	<notification name="UploadCostConfirmation">
-		Załadowanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Załaduj"/>
+		Przesłanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Prześlij"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
 		Czy na pewno chcesz usunąć historię teleportacji?
@@ -3439,15 +3439,15 @@ Przycisk zostanie wyświetlony w przypadku dostatecznej ilości przestrzeni.
 		Zaznacz Rezydentów, z którymi chcesz się podzielić.
 	</notification>
 	<notification name="MeshUploadErrorDetails">
-		Nie można załadować [LABEL]: [MESSAGE]
+		Nie można przesłać [LABEL]: [MESSAGE]
 [DETAILS] Zobacz Firestorm.log, aby dowiedzieć się więcej.
 	</notification>
 	<notification name="MeshUploadError">
-		Nie można załadować [LABEL]: [MESSAGE]
+		Nie można przesłać [LABEL]: [MESSAGE]
 Zobacz Firestorm.log, aby dowiedzieć się więcej.
 	</notification>
 	<notification name="MeshUploadPermError">
-		Wystąpił błąd podczas pobierania uprawnień ładowania meszy.
+		Wystąpił błąd podczas pobierania uprawnień przesyłania meszy.
 	</notification>
 	<notification name="RegionCapabilityRequestError">
 		Nie udało się uzyskać zdolności regionu: &apos;[CAPABILITY]&apos;.
@@ -3559,14 +3559,14 @@ Awatar &apos;[NAME]&apos; pozostał w pełni załadowany.
 	</notification>
 	<notification name="AvatarRezSelfBakedTextureUploadNotification">
 		( [EXISTENCE] sekund w Second Life )
-Wstępnie przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; zostały załadowane po [TIME] sekundach.
+Wstępnie przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; zostały przesłane po [TIME] sekundach.
 	</notification>
 	<notification name="AvatarRezSelfBakedTextureUpdateNotification">
 		( [EXISTENCE] sekund w Second Life )
 Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dla &apos;[BODYREGION]&apos; po [TIME] sekundach.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Nie można załadować tekstury.
+		Nie można przesłać tekstury.
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">
@@ -3947,7 +3947,7 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 		Nie można znaleźć nowo utworzonego skryptu dla tego systemu cząsteczkowego.
 	</notification>
 	<notification name="ParticleScriptCreateTempFileFailed">
-		Nie można utworzyć tymczasowego pliku skryptu do załadowania.
+		Nie można utworzyć tymczasowego pliku skryptu do przesłania.
 	</notification>
 	<notification name="ParticleScriptInjected">
 		Skrypt cząsteczkowy został wstawiony w obiekt poprawnie.
@@ -4501,7 +4501,7 @@ Spróbuj ponownie za minutę.
 		Sprecyzuj proszę swoje parametry usuwania.
 	</notification>
 	<notification name="UnableToUploadAsset">
-		Nie można załadować zasobu danych (assetu).
+		Nie można przesłać zasobu danych (assetu).
 	</notification>
 	<notification name="CantTeleportCouldNotFindUser">
 		Nie można znaleźć użytkownika, aby teleportować do domu
@@ -4513,7 +4513,7 @@ Spróbuj ponownie za minutę.
 		żądanie ogólne nie powiodło się
 	</notification>
 	<notification name="CantUploadPostcard">
-		Nie można załadować pocztówki. Spróbuj ponownie później.
+		Nie można przesłać pocztówki. Spróbuj ponownie później.
 	</notification>
 	<notification name="CantFetchInventoryForGroupNotice">
 		Nie można pobrać szczegółów dołączonego przedmiotu dla ogłoszenia grupy.
@@ -4528,7 +4528,7 @@ Spróbuj ponownie za minutę.
 		Nie można zanalizować przedmiotu z ogłoszenia.
 	</notification>
 	<notification name="TerrainUploadFailed">
-		Ładowanie podłoża na serwer nie powiodło się.
+		Przesyłanie podłoża na serwer nie powiodło się.
 	</notification>
 	<notification name="TerrainFileWritten">
 		Plik podłoża zapisany.
@@ -4759,7 +4759,7 @@ Poprzedni symulator: [OLDVERSION]
 [EWHAT]
 	</notification>
 	<notification name="NoHavok">
-		Niektóre funkcje, takie jak [FEATURE], nie są obsługiwane przez [APP_NAME] w wersji dla OpenSimulatora. Jeśli chcesz używać '[FEATURE]', to prosimy o pobranie [APP_NAME] w wersji dla Second Life z:
+		Niektóre funkcje, takie jak [FEATURE], nie są obsługiwane przez [APP_NAME] w obecnej wersji. Jeśli chcesz używać '[FEATURE]', to prosimy o pobranie [APP_NAME] w wersji ze wsparciem dla Havoka z:
 [DOWNLOAD_URL]
 		<form name="form">
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>
@@ -4909,9 +4909,9 @@ Nie można tego cofnąć.
 		</form>
 	</notification>
 	<notification name="ExodusFlickrVerificationExplanation">
-		Aby móc ładować zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
+		Aby móc przesyłać zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
 
-Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
+Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="ExodusFlickrVerificationPrompt">

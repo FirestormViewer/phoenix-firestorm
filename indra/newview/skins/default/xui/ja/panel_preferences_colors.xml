@@ -171,10 +171,13 @@
 		
 		<panel label="ミニマップ" name="tab-minimap">
 			<slider label="背景の不透明度:" name="FSMiniMapOpacity" />
-			<text name="netmap_pickradius_textbox">
-				ピックする半径:
+			<text name="netmap_pickradius_color_textbox">
+				選択する半径:
 			</text>
-			<color_swatch name="MapPickRadiusColor" />
+			<color_swatch name="MapPickRadiusColor" tool_tip="ミニマップ上で選択する範囲の色を制御します。選択する範囲の大きさは「選択範囲」の設定で調整できます。" />
+			<text name="netmap_pickradius_opacity_textbox">
+				不透明度：
+			</text>
 			<slider name="MapPickRadiusTransparency" />
 			<text name="netmap_dots_textbox">
 				ミニマップの点:
@@ -235,6 +238,10 @@
 				検索結果の強調色:
 			</text>
 			<color_swatch name="preferences_search_color" tool_tip="検索結果を強調する色を選択します" />
+			<text name="area_search_beacon_color_label">
+				エリアサーチ・ビーコンの色
+			</text>
+			<color_swatch name="area_search_beacon_color" tool_tip="エリアサーチ・ビーコンの色を選択します" />
 			<check_box name="FSScriptDialogNoTransparency" label="スクリプトからの通知の背景は常に不透明にする" />
 			<check_box name="FSGroupNotifyNoTransparency" label="グループ通知の背景は常に不透明にする" />
      

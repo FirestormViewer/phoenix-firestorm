@@ -12,6 +12,7 @@
 		
 		<menu_item_check label="持ち物" name="Inventory"/>
 		<menu_item_check label="持ち物" name="ShowSidetrayInventory"/>
+		<menu_item_check label="保護フォルダ" name="Protected Folders" />
 		<menu_item_check label="お気に入りの服やHUD" name="WearableFavorites" />
 		<menu_item_call label="ピック..." name="Picks"/>
 		<menu_item_call label="体験..." name="Experiences"/>
@@ -44,6 +45,7 @@
 			<menu_item_call label="アバターを男性のデフォルトにリセット" name="ResetDefaultAvM"/>
 			<menu_item_call label="アバターを女性のデフォルトにリセット" name="ResetDefaultAvF"/>
 			<menu_item_check label="アバター表示の複雑さ情報を表示" name="Avatar Draw Info" />
+			<menu_item_call label="スクリプト" name="MyScripts" />
 			<menu_item_call label="ラグメーター" name="Lag Meter" />
 			<menu_item_call label="ブリッジを再作成" name="Recreate LSL Bridge"/>
 		</menu>
@@ -85,6 +87,7 @@
 		<menu_item_call label="Facebook..." name="Facebook" />
 		<menu_item_call label="Twitter..." name="Twitter" />
 		<menu_item_call label="Flickr..." name="Flickr" />
+		<menu_item_call label="Discord..." name="Discord"/>
         <menu_item_separator/>
         <menu label="ボイスモーフィング" name="VoiceMorphing">
             <menu_item_check label="ボイスモーフィングなし" name="NoVoiceMorphing" />

@@ -1,30 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="Выбор цвета">
-	<text name="r_val_text">
-		Красный:
-	</text>
-	<text name="g_val_text">
-		Зеленый:
-	</text>
-	<text name="b_val_text">
-		Синий:
-	</text>
-	<text name="h_val_text">
-		Оттенок:
-	</text>
-	<text name="s_val_text">
-		Насыщен.:
-	</text>
-	<text name="l_val_text">
-		Яркость:
-	</text>
-	<check_box label="Применить сейчас" name="apply_immediate"/>
-	<button label="ОК" label_selected="ОК" name="select_btn"/>
-	<button label="Отмена" label_selected="Отмена" name="cancel_btn"/>
-	<text name="Current color:">
-		Текущий цвет:
-	</text>
-	<text name="(Drag below to save.)">
-		(Перетащите вниз для сохранения)
-	</text>
+  <tab_container name="scale_type_container">
+    <panel name="RGB" label="RGB">
+      <text name="r_val_text">
+        Красный:
+      </text>
+      <text name="g_val_text">
+        Зеленый:
+      </text>
+      <text name="b_val_text">
+        Синий:
+      </text>
+    </panel>
+    <panel name="LSL" label="LSL">
+      <text name="r_val_text_lsl">
+        Красный:
+      </text>
+      <text name="g_val_text_lsl">
+        Зеленый:
+      </text>
+      <text name="b_val_text_lsl">
+        Синий:
+      </text>
+    </panel>
+    <panel name="Hex" label="Hex">
+      <text name="hex_text">
+        Hex код (#rrggbb):
+      </text>
+    </panel>
+  </tab_container>
+  <text name="h_val_text">
+    Оттенок:
+  </text>
+  <text name="s_val_text">
+    Насыщен.:
+  </text>
+  <text name="l_val_text">
+    Яркость:
+  </text>
+  <check_box label="Прим. сейчас" name="apply_immediate" width="100" />
+  <button label="Копр. LSL"
+     tool_tip="Копирует значение цвета в цветовой вектор LSL в формате &lt;r, g, b&gt;." name="copy_lsl_btn" width="80" />
+  <button label="ОК" label_selected="ОК" name="select_btn"/>
+  <button label="Отмена" label_selected="Отмена" name="cancel_btn"/>
+  <text name="Current color:">
+    ^ Текущий цвет ^
+  </text>
+  <text name="(Drag below to save.)">
+    (Тащи вниз для сохр.)
+  </text>
 </floater>

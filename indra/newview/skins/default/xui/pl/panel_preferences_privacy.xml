@@ -29,7 +29,7 @@
 			<check_box label="Klasyczne powiadomienia akceptacji/odrzucenia przedmiotu" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Gdy włączysz tą opcję, to Przeglądarka będzie wysyłać powiadomienia o akceptacji/odrzuceniu przedmiotu tylko po naciśnięciu odpowiedniego przycisku. Gdy wyłączysz tą opcję, to powiadomienie będzie wysłane automatycznie zaraz po tym, gdy przedmiot zostanie zaakceptowany. Ta opcja nie ma żadnej mocy, gdy przedmioty są akceptowane automatycznie."/>
 			<check_box label="Automatycznie pokazuj akceptowane przedmioty" name="Show_In_Inventory"/>
 			<check_box label="Automatycznie pokazuj noty, tekstury i landmarki po zaakceptowaniu" name="Show_New_Inventory"/>
-			<check_box label="Automatycznie pokazuj zdjęcia w Szafie po załadowaniu" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="Automatycznie pokazuj zdjęcia w Szafie po przesłaniu" name="FSOpenInventoryAfterSnapshot"/>
 			<check_box label="Twórz efekty cząsteczkowe, gdy dam jakiś przedmiot innej osobie" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>

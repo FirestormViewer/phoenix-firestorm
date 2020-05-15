@@ -19,7 +19,9 @@
 			<check_box name="FSMarkObjects" label="Помечать объекты, при отправке в чат, чтобы избежать мошенничества"/>
 			<check_box label="Направлять скрипт llOwnerSay в окно отладки" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
 			<check_box label="Показать чат в пузырьках над аватарами" name="bubble_text_chat"/>
+			<check_box label="Не показывать чат в консоли и тостах"  name="FSBubblesHideConsoleAndToasts"/>
 			<check_box label="Показать индикатор набора в пузырьках над аватарами" name="bubble_text_typing"/>
+			<check_box label="Показать индикатор набора в теге над аватарами" name="FSShowTypingStateInNameTag"/>
 			<check_box label="Показывать секунды в истории переписки [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
 			<text name="show_timestamps_label" width="150">
 				Показывать время в:
@@ -29,12 +31,12 @@
 			<check_box label="Историях чата и ЛС" name="show_timestamps_transcripts"/>
 			<check_box name="FSConsoleClassicDrawMode" label="Использовать классическую консоль" tool_tip="Этот вариант отображает фон консоли как один большой блок под всеми линиями текста, по ширине самой длинной из них."/>
 			<check_box name="ChatFullWidth" label="Использовать всю ширину экрана"/>
-			<spinner label="Затухание после:" name="fade_chat_time" width="170"/>
+			<spinner label="Затухание после:" name="fade_chat_time" label_width="100" width="140"/>
 			<text name="text_box4">
 				(секунд)
 			</text>
 			<text name="text_box5">
-				(линий)
+				(строк)
 			</text>
 		</panel>
 		<panel label="Окна чата" name="ChatWindows">
@@ -57,25 +59,25 @@
 			</text>
 			<check_box name="FSNotifyUnreadChatMessages" label="Общего чата" tool_tip="Показывает уведомление еще непрочитанных сообщениях (и их количество) в общем чате, когда появляются новые, история прокручивается вверх." />
 			<check_box name="FSNotifyUnreadIMMessages" label="Сообщениях ЛС/Групп" tool_tip="Показывает уведомление еще непрочитанных сообщениях (и их количество) в общем чате, когда появляются новые, история прокручивается вверх." />
-			<text name="show_ims_in_label">
+			<text name="show_ims_in_label" width="110">
 				Показывать ЛС в:
 			</text>
 			<radio_group name="chat_window" tool_tip="Показать сообщения в отдельных окнах или во вкладках (требуется перезапуск).">
 				<radio_item label="Окнах" name="radio"/>
-				<radio_item label="Вкладках" width="200" name="radio2"/>
+				<radio_item label="Вкладках" name="radio2"/>
 			</radio_group>
-			<text name="req_restart_ims" >
-				(перезапуск)
+			<text name="req_restart_ims" left_pad="50" width="120">
+				(нужен перезапуск)
 			</text>
-			<text name="tab_direction_label">
+			<text name="tab_direction_label" width="120">
 				Ориентация вкладок:
-			</text>	
-			<radio_group name="chat_tab_direction" tool_tip="Изменить направление размещения вкладок чата горизонтально или вертикально , когда включен режим отображения во вкладках (требуется перезапуск).">
-				<radio_item label="Горизон."  name="radio_horizontal"/>
-				<radio_item label="Вертикально"  width="200" name="radio_vertical"/>
+			</text>
+			<radio_group name="chat_tab_direction" tool_tip="Изменить направление размещения вкладок чата горизонтально или вертикально, когда включен режим отображения во вкладках (требуется перезапуск).">
+				<radio_item label="Горизонтально" name="radio_horizontal" width="120"/>
+				<radio_item label="Вертикально" name="radio_vertical" />
 			</radio_group>
-			<text name="req_restart_chattabs" >
-				(перезапуск)
+			<text name="req_restart_chattabs" left_pad="80" width="120">
+				(нужен перезапуск)
 			</text>
 			<text name="FSIMTabNameFormat_label">
 				Формат имен во вкладках ЛС:
@@ -125,21 +127,21 @@
 			<text name="group_snooze_time_seconds_label" tool_tip="Количество времени, которое групповой чат будет временно заблокирован после нажатия кнопки 'Отдохнуть'. Установка этого значения в 0 просто закроет чат группы до появления следующего сообщения в ней.">
 				секунд
 			</text>
-			<check_box
-			 name="FSEnablePerGroupSnoozeDuration"
-		         label="Установить время отключения чата для каждой группы отдельно"/>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="Установить время отключения чата для каждой группы отдельно"/>
 		</panel>
 		<panel label="Печать" name="ChatTyping">
 			<button name="autoreplace_showgui" label="Автозамена"/>
 			<button name="spellcheck_showgui" label="Проверка орфографии"/>
 			<button label="Перевод..." name="translation_settings_btn"/>
 			<check_box label="Использовать анимацию при наборе текста" name="play_typing_animation"/>
+			<check_box label="Играть анимацию набора еще когда эмоции"  name="play_typing_animation_emote"/>
 			<check_box label="Слышать звук печати, когда кто-то пишет в общий чат" name="play_typing_sound"/>
 			<check_box label="Уведомлять других аватаров о наборе текста в ЛС" name="FSSendTypingState"/>
 			<check_box label="Включить автозаполнение жестов в общем чате" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Включить автоматическую подстановку имени в общем чате" name="FSChatbarNamePrediction"/>
 			<check_box name="AllowMUpose" label="&quot;:&quot; как синоним для &quot;/me&quot;"/>
 			<check_box name="AutoCloseOOC" label="Закрывает ((скобки)) для чата OOC"/>
+			<check_box name="FSShowIMSendButton" label="Показать кнопку отправки в строке набора для ЛС"/>
 			<check_box name="FSNearbyChatbar" label="Добавить строку ввода в окно общего чата"/>
 			<check_box name="FSShowChatChannel" label="Показать выбор канала в окне общего чата"/>
 			<check_box name="FSShowChatType" label="Добавить кнопку 'Отправить' в окно общего чата"/>
@@ -174,6 +176,7 @@
 				Затухание текста ЛС в общем чате
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 для сильного затухания, 1 для отключения затухания" name="FSIMChatHistoryFade"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Показать кол-во непрочитанных ЛС в заголовке окна Firestorm"/>
 			<check_box name="FSAnnounceIncomingIM" label="Сообщить мне о новых IM, как только отправитель начинает писать"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Мигание вкладок IM, когда ваши друзья 'в сети' или 'не в сети'"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="Мигание вкладки общего чата при поступлении сообщений" tool_tip="Мерцание вкладки общего чата при поступлении новых сообщений. Необходимо, чтоб вкладка общего чата была прикреплена к общему окну разговоров"/>
@@ -302,7 +305,7 @@
 			<text name="FSCmdLineTP2_txt">
 				Телепортироваться к аватару (имя)
 			</text>
-			<line_editor tool_tip="Синтаксис не чувствителен к регистру, но рекомендуется писать имя как это указано в радаре" name="FSCmdLineTP2" />	
+			<line_editor tool_tip="Синтаксис не чувствителен к регистру, но рекомендуется писать имя как это указано в радаре" name="FSCmdLineTP2" />
 			<text name="FSCmdLineTeleportHome_txt">
 				Телепортация домой
 			</text>

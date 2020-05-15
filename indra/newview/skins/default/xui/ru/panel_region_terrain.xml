@@ -6,9 +6,9 @@
 	<text name="region_text">
 		неизвестен
 	</text>
-	<spinner label="Уровень воды" name="water_height_spin"/>
-	<spinner label="Верх. точка ландшафта" name="terrain_raise_spin"/>
-	<spinner label="Ниж. точка ландшафта" name="terrain_lower_spin"/>
+	<spinner label="Уровень воды" name="water_height_spin" label_width="90" width="160"/>
+	<spinner label="Лимит подьема ландшафта" name="terrain_raise_spin" left="220" label_width="160" width="230"/>
+	<spinner label="Лимит спуска ландшафта" name="terrain_lower_spin" left="220" label_width="160" width="230"/>
 	<text name="detail_texture_text">
 		Текстуры ландшафта (требования: 512x512 / 1024x1024, 24-битные, TGA)
 	</text>

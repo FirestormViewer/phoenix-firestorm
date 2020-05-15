@@ -6,5 +6,6 @@
 	<button name="open_map" tool_tip="Открыть карту" />
 	<scroll_list name="region_list" tool_tip="Двойное нажатие откроет на карте мира">
 		<scroll_list.columns name="region_label" label="Метка" />
+		<scroll_list.columns name="region_name" label="Регион" />
 	</scroll_list>
 </floater>

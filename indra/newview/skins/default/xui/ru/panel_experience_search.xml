@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_search">
+<panel name="panel_experience_search" label="Поиск">
 	<string name="not_found">
 		Текст «[TEXT]» не найден
 	</string>
@@ -22,6 +22,7 @@
 		&quot;Parcel_R_Light&quot;
 	</string>
 	<panel name="search_panel">
+		<text name="lbl name part" >Введите часть названия:</text>
 		<button label="Начать" name="find"/>
 		<icons_combo_box label="Умеренный" name="maturity">
 			<icons_combo_box.item label="Для взрослых" name="Adult" value="42"/>
@@ -34,7 +35,7 @@
 		</scroll_list>
 		<button label="OK" label_selected="OK" name="ok_btn"/>
 		<button label="Отмена" name="cancel_btn"/>
-		<button label="Посмотреть профиль" name="profile_btn"/>
+		<button label="Профиль" name="profile_btn"/>
 		<button label="&lt;" name="left_btn"/>
 		<button label="&gt;" name="right_btn"/>
 	</panel>
