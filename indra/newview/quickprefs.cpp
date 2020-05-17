@@ -976,6 +976,7 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 		childSetEnabled("edit_sky_preset", enable);
 		childSetEnabled("new_water_preset", enable);
 		childSetEnabled("edit_water_preset", enable);
+		childSetEnabled("PauseClouds", enable);
 	}
 }
 
