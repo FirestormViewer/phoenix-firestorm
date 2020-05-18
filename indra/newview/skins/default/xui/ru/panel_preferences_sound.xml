@@ -14,6 +14,7 @@
 			<check_box name="gesture_audio_play_btn" tool_tip="Отметьте, чтобы слышать звуки из жестов" label="Включить звуки жестов"/>
 			<slider label="Потоковая музыка" name="Music Volume"/>
 			<check_box label="Включено" name="enable_music"/>
+			<slider label="Медиа" name="Media Volume"/>
 			<check_box label="Включено" name="enable_media"/>
 			<slider label="Голосовой чат" name="Voice Volume"/>
 			<check_box label="Включено" name="enable_voice_check_volume"/>
@@ -25,9 +26,33 @@
 			<text name="money_change_threshold_label" tool_tip="Воспроизведение звука при увеличении или уменьшении вашего баланса">
 				Порог изменения L$:
 			</text>
+			<panel height="100" name="output_device_settings_panel">
+				<panel.string name="output_default_text">
+					По умолчанию
+				</panel.string>
+				<panel.string name="output_no_device">
+					Нет доступных устройств
+				</panel.string>
+				<panel.string name="output_name_no_device">
+					Безымянное устройство
+				</panel.string>
+				<panel.string name="output_device_unavailable">
+					Устройство недоступно
+				</panel.string>
+				<text name="output_label" width="120">
+					Устройство вывода:
+				</text>
+			</panel>
 		</panel>
 		<panel name="Media Media Panel" label="Медиа">
-			<check_box label="Разрешить автовоспроизведение медиа" name="media_auto_play_btn" tool_tip="Выберите для автоматического запуска медиа."/>
+			<text name="media_autoplay_label" width="130">
+Автовоспроизведение
+			</text>
+			<combo_box name="media_auto_play_combo" width="100">
+				<item label="Запрещено" name="autoplay_disabled"/>
+				<item label="Разрешено" name="autoplay_enabled"/>
+				<!--<item label="Запросить" name="autoplay_ask" />-->
+			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="Эта настройка разрешает / запрещает скриптовым примам управлять медиа потоками" label="Разрешить скриптам воспроизводить медиа"/>
 			<check_box label="Воспроизведение медиа прикрепленных к другим аватарам" name="media_show_on_others_btn" tool_tip="Воспроизведение медиа прикрепленных к другим аватарам"/>
 			<check_box name="media_filter" tool_tip="Выберить это для того, чтобы фильтровать, будет ли играть медиа с определенного хоста" label="Включить медиа фильтр (повышение безопасности)"/>
@@ -111,7 +136,7 @@
 					Моя громкость:
 				</text>
 				<slider_bar name="mic_volume_slider" tool_tip="Измените громкость используя ползунок"/>
-				<text name="wait_text">
+				<text name="wait_text" width="150">
 					Пожалуйста, подождите
 				</text>
 			</panel>
@@ -402,7 +427,7 @@
 				Здесь вы можете изменить (путем замены звуковых UUID), включить или выключить звуки интерфейса по умолчанию.
 Нажмите на кнопку 'D' рядом с UUID, чтобы вернуть значение по умолчанию.
 			</text>
-			
+
 			<text tool_tip="UUID звука воспроизводимый на предложение инвентаря." name="textFSInventoryOffer">
 				Предложение передачи:
 			</text>
@@ -431,6 +456,13 @@
 			<button name="Def_UISndGroupNotice" tool_tip="Сброс к UUID по умолчанию."/>
 			<check_box label="Включить звук" name="PlayModeUISndGroupNotice"/>
 
+			<text tool_tip="UUID звука воспроизводимый на уведомление Нового Приключения." name="textFSQuestionExperience">
+				Новое приключение:
+			</text>
+			<button name="Prev_UISndQuestionExperience" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndQuestionExperience" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndQuestionExperience"/>
+
 			<text tool_tip="UUID звука воспроизводимый на неверные операции." name="textFSInvalidOp">
 				Неверная операция:
 			</text>
@@ -451,6 +483,13 @@
 			<button name="Prev_UISndFootsteps" tool_tip="Прослушать этот звук."/>
 			<button name="Def_UISndFootsteps" tool_tip="Сброс к UUID по умолчанию."/>
 			<check_box label="Включить звук" name="PlayModeUISndFootsteps"/>
+
+			<text tool_tip="UUID звука воспроизводится когда маяк трекера активен. Учащается когда аватар ближе к месту назначения." name="textFSTrackerBeacon">
+				Трекерный маяк:
+			</text>
+			<button name="Prev_UISndTrackerBeacon" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndTrackerBeacon" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndTrackerBeacon"/>
 
 			<text tool_tip="UUID звука воспроизводимый, когда происходит перезагрузка региона." name="textFSRestart">
 				Перезагрузка региона:

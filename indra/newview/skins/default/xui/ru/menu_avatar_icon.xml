@@ -20,4 +20,5 @@
 	<menu_item_call label="Копировать URL в буфер" name="copy url"/>
 	<menu_item_check label="Блокировать голос" name="Block Unblock"/>
 	<menu_item_check label="Блокировать текст" name="Mute Text"/>
+	<menu_item_call label="Забанить" name="BanMember"/>
 </menu>

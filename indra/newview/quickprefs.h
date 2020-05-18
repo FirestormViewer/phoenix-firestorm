@@ -129,7 +129,6 @@ private:
 	LLCheckBoxCtrl*		mCtrlUseSSAO;
 	LLCheckBoxCtrl*		mCtrlUseDoF;
 	LLComboBox*			mCtrlShadowDetail;
-	LLComboBox*			mCtrlAvatarShadowDetail;
 	LLComboBox*			mCtrlReflectionDetail;
 	
 	// Vignette UI controls

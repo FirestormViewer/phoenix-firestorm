@@ -37,6 +37,7 @@
 				Забыли имя пользователя или пароль?
 			</text>
 			<button label="Войти" name="connect_btn"/>
+			<check_box label="Запомнить пользователя" name="remember_username_check" />
 			<check_box label="Запомнить пароль" name="remember_check"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">

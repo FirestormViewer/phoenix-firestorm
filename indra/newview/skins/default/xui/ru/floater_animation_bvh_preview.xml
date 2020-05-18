@@ -119,6 +119,8 @@
 	<check_box label="Цикл" name="loop_check" tool_tip="Делает анимацию зацикленной"/>
 	<spinner label="Начало(%)" name="loop_in_point" tool_tip="Устанавливает точку возврата цикла"/>
 	<spinner label="Конец(%)" name="loop_out_point" tool_tip="Устанавливает точку конца цикла"/>
+	<spinner label="Начало(к)" name="loop_in_frames" tool_tip="Устанавливает точку в анимации, к которой возвращается цикл, в кадрах"/>
+	<spinner label="Конец(к)" name="loop_out_frames" tool_tip="Устанавливает точку в анимации, которая завершает цикл, в кадрах"/>
 	<text name="hand_label">
 		Положение пальцев
 	</text>
@@ -181,6 +183,7 @@
 
 Рекомендуется использовать BVH-файлы, экспортированные из Poser 4.
 	</text>
+	<button label="Перезагрузить файл" name="reload_btn" width="128" />
 	<button label="Передать (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Отмена" name="cancel_btn"/>
 </floater>

@@ -24,6 +24,7 @@
 			<menu_item_call label="Отменить все изменения" name="Revert All Changes"/>
 			<menu_item_call label="Загрузить из файла..." name="LoadFromFile"/>
 			<menu_item_call label="Сохранить в файл..." name="SaveToFile"/>
+			<menu_item_call label="Настройки Редактора Скриптов..." name="ScriptPrefs" />
 		</menu>
 		<menu label="Изменить" name="Edit">
 			<menu_item_call label="Отменить" name="Undo"/>
@@ -39,12 +40,31 @@
 		<menu label="Справка" name="Help">
 			<menu_item_call label="Справка..." name="Help..."/>
 			<menu_item_call label="Справка по ключевым словам..." name="Keyword Help..."/>
+			<menu_item_call label="Библиотека Скриптов..." name="Script Library"/>
 		</menu>
 	</menu_bar>
+
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Сохранить скрипт" name="save_btn"/>
+			<button tool_tip="Внешний Редактор Скрипта" name="Edit_btn"/>
+			<button tool_tip="Загрузить Скрипт с вашего жесткого диска" name="load_disk_btn"/>
+			<button tool_tip="Сохранить Скрипт на ваш жесткий диск" name="save_disk_btn"/>
+			<button tool_tip="Вырезать" name="cut_btn"/>
+			<button tool_tip="Копировать" name="copy_btn"/>
+			<button tool_tip="Вставить" name="paste_btn"/>
+			<button tool_tip="Отменить" name="undo_btn"/>
+			<button tool_tip="Вернуть" name="redo_btn"/>
+			<button tool_tip="Поиск/Замена" name="search_btn"/>
+			<button tool_tip="Настройки Редактора Скриптов" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
+
 	<script_editor name="Script Editor">
 		Загрузка...
 	</script_editor>
 	<combo_box label="Вставить..." name="Insert..."/>
-	<button label="Сохранить" label_selected="Сохранить" name="Save_btn"/>
-	<button label="Изменить..." name="Edit_btn"/>
+	<text name="line_col" value="Строка 0, Столбец 0"/>
+	<button label="Редактор..." name="edit_btn_2"/>
+	<button label="Сохранить" label_selected="Сохранить" name="save_btn_2"/>
 </panel>

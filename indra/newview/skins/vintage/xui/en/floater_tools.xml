@@ -1241,7 +1241,6 @@ even though the user gets a free copy.
       increment="1"
       top_pad="5"
       left="10"
-      control_name="Edit Cost"
       name="Edit Cost"
       label="Price: L$"
       label_width="65"

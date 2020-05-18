@@ -455,6 +455,12 @@ support@secondlife.com にお問い合わせください。
 	<string name="TooltipOutboxMixedStock">
 		在庫フォルダ内のアイテムはすべて同じ種類と権限でなければなりません
 	</string>
+	<string name="TooltipOutfitNotInInventory">
+		「アウトフィット」に入れることが出来るのは、ご自分の持ち物にあるアイテムやアウトフィットに限られます
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		１つ以上のアイテムが「アウトフィット」として利用することができません
+	</string>
 	<string name="TooltipDragOntoOwnChild">
 		フォルダをその子フォルダに移動することはできません
 	</string>
@@ -2169,6 +2175,9 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="NoGroupDataFound">
 		グループのデータが見つかりませんでした
+	</string>
+	<string name="AlreadyInGroup">
+		既にこのグループに所属しています
 	</string>
 	<string name="IMParentEstate">
 		parent estate
@@ -5041,7 +5050,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		このアウトフィットにはアイテムがありません
 	</string>
 	<string name="ExternalEditorNotSet">
-		ExternalEditor 設定を使ってエディターを選択します。
+		環境変数 LL_SCRIPT_EDITOR を設定するか、ExternalEditor 設定を使ってエディターを選択します。
 	</string>
 	<string name="ExternalEditorNotFound">
 		指定された外部エディターが見つかりません。
@@ -5727,6 +5736,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
 		自分のアニメーションを停止する
+	</string>
+	
+	<string name="Command_Discord_Label">
+		Discord
+	</string>
+	<string name="Command_Discord_Tooltip">
+		Discord
 	</string>
 	
  <!-- Mesh UI terms -->

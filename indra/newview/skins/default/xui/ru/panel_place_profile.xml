@@ -53,7 +53,7 @@
 
 			<text name="region_title" value="Образец_региона"/>
 			<text name="parcel_title" value="Образец_участка, название Long (145, 228, 26)"/>
-			<expandable_text name="description" value="Du waltz die spritz"/>
+			<expandable_text name="description" value="неизвестно"/>
 			<text name="owner_label" value="Владелец:"/>
 			<text name="owner_value" value="Алексей Сверхдлинноеимянов"/>
 			<text name="maturity_value" value="неизвестен"/>
@@ -121,5 +121,5 @@
 			</accordion>
 
 		</layout_panel>
-	</layout_stack> 
+	</layout_stack>
 </panel>

@@ -23,6 +23,9 @@
 			<text name="muted_label">
 				Заблокированные
 			</text>
+			<text name="system_label">
+				Система
+			</text>
 			<text name="script_error_label">
 				Ошибки
 			</text>
@@ -34,6 +37,9 @@
 			</text>
 			<text name="htmllink_label">
 				Ссылки (URL)
+			</text>
+			<text name="uriquerypart_label">
+				URL Часть запроса
 			</text>
 			<text name="direct_label">
 				Прямой
@@ -138,9 +144,16 @@
 		</panel>
 		<panel label="Миникарта" name="tab-minimap">
 			<slider label="Прозрачность фона:" name="FSMiniMapOpacity"/>
-			<text name="netmap_pickradius_textbox">
-				Радиус:
+			<text name="netmap_pickradius_color_textbox" width="90">
+				Радиус выбора:
 			</text>
+			<color_swatch name="MapPickRadiusColor"
+			tool_tip="Управляет цветом радиуса выбора на миникарте. Размер радиуса выбора можно регулировать с помощью настройки Радиуса выбора."/>
+			<text name="netmap_pickradius_opacity_textbox" width="85">
+				Прозрачность:
+			</text>
+			<slider name="MapPickRadiusTransparency"
+			tool_tip="Управляет прозрачностью Радиуса выбора на миникарте. Размер Радиуса выбора можно регулировать с помощью настройки Радиуса выбора." />
 			<text name="netmap_dots_textbox">
 				Точки миникарты:
 			</text>
@@ -171,8 +184,8 @@
 			<text name="effects_color_textbox">
 				Эффекты выделения (Луч частиц):
 			</text>
-			<text name="ScriptDialogFgLabel">
-				Скрипты F/B:
+			<text name="ScriptDialogFgLabel" width="160">
+				Скрипты Текст/Фон:
 			</text>
 			<text name="floater_opacity">
 				Прозрачность окон:
@@ -186,6 +199,9 @@
 			<slider label="Прозрачность:" name="console_background_opacity" tool_tip="Выберите прозрачность фона консоли"/>
 			<text name="preferences_search_label">
 				Цвет подсветки поиска в настройках:
+			</text>
+			<text name="area_search_beacon_color_label">
+				Цвет маяка зоны поиска:
 			</text>
 			<color_swatch name="preferences_search_color" tool_tip="Выберите цвет подсветки поиска в настройках"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Всегда показывать диалоги скриптов на непрозрачном фоне"/>

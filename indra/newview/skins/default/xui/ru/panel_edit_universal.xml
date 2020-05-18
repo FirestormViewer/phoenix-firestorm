@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="edit_universal_panel">
+  <scroll_container name="avatar_universal_scroll">
+    <panel name="avatar_universal_color_panel">
+      <texture_picker label="Тату Головы" name="Head Universal Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Верхнее Тату" name="Upper Universal Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Нижнее Тату" name="Lower Universal Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Тату Юбки" name="Skirt Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Тату Волос" name="Hair Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Тату Глаз" name="Eyes Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Тату Левой Руки" name="Left Arm Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Тату Левой Ноги" name="Left Leg Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Aux1 Тату" name="Aux1 Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Aux2 Тату" name="Aux2 Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <texture_picker label="Aux3 Тату" name="Aux3 Tattoo" tool_tip="Нажмите, чтобы выбрать картинку"/>
+      <color_swatch label="Цвет/Тон" name="Color/Tint" tool_tip="Нажмите чтобы открыть палитру цветов"/>
+    </panel>
+  </scroll_container>
+</panel>
+

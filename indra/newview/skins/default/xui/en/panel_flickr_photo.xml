@@ -48,7 +48,6 @@
                value="[i-1,i-1]" />
             </combo_box>
             <combo_box
-               control_name="FlickrPhotoFilters"
                follows="left|top"
 			   layout="topleft"
                name="filters_combobox"

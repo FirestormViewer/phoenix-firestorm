@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+    <text name="title">
+        Инвентарь
+    </text>
+    <text name="hint_lbl">
+Загрузка изображения в ваш инвентарь стоит L$[UPLOAD_COST].
+
+Плата зависит от вашего уровня подписки. Более высокие уровни взимаются более низкие сборы.
+    </text>
+    <button label="Отмена" name="cancel_btn"/>
+    <button label="Сохранить" name="save_btn"/>
+</panel>

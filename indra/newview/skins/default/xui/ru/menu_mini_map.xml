@@ -58,6 +58,12 @@
 	<menu_item_check label="Повернуть карту" name="Rotate Map"/>
 	<menu_item_check label="Автоцентрирование" name="Auto Center"/>
 	<menu_item_check label="Кольца покрытия чата" name="Chat Distance Ring"/>
+	<menu label="Кольца покрытия чата" name="Chat Distance Rings Menu">
+		<menu_item_check label="Показать Кольца дистанций" name="Chat Distance Rings"/>
+		<menu_item_check label="Показать Кольцо дистанции Шепота" name="Whisper Distance Ring"/>
+		<menu_item_check label="Показать Кольцо дистанции Чата" name="Chat Distance Ring"/>
+		<menu_item_check label="Показать Кольцо дистанции Крика" name="Shout Distance Ring"/>
+	</menu>
 	<menu_item_call label="Профиль места" name="Place Profile"/>
 	<menu_item_call label="Карта мира" name="World Map"/>
 </menu>

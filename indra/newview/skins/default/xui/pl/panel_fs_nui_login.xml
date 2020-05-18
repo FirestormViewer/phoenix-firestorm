@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_login">
+	<panel.string name="ServerComboTooltip">
+		Istniejący świat lub URI świata
+	</panel.string>
 	<layout_stack name="ui_stack">
 		<layout_panel name="ui_container">
 			<layout_stack name="vert_stack_left">
@@ -31,7 +34,6 @@
 							<text name="grid_login_text" width="55">
 								Świat:
 							</text>
-							<combo_box tool_tip="Istniejący świat lub URI świata" name="server_combo" />
 						</layout_panel>
 						<layout_panel name="mode_selection">
 							<text name="mode_selection_text">
