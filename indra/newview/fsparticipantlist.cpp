@@ -37,6 +37,7 @@
 #include "llimview.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
+#include "lloutputmonitorctrl.h"
 #include "llspeakers.h"
 #include "llviewercontrol.h"
 #include "llviewermenu.h"

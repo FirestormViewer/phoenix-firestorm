@@ -62,9 +62,6 @@ F32 LLDrawPoolWater::sWaterFogEnd = 0.f;
 LLDrawPoolWater::LLDrawPoolWater() : LLFacePool(POOL_WATER)
 {
 	// <FS:Zi> Render speedup for water parameters
-	gSavedSettings.getControl("RenderTransparentWater")->getCommitSignal()->connect(boost::bind(&LLDrawPoolWater::onRenderTransparentWaterChanged, this));
-	onRenderTransparentWaterChanged();
-
 	gSavedSettings.getControl("RenderWaterMipNormal")->getCommitSignal()->connect(boost::bind(&LLDrawPoolWater::onRenderWaterMipNormalChanged, this));
 	onRenderWaterMipNormalChanged();
 	// </FS:Zi>
@@ -177,10 +174,7 @@ void LLDrawPoolWater::render(S32 pass)
 	std::sort(mDrawFace.begin(), mDrawFace.end(), LLFace::CompareDistanceGreater());
 
 	// See if we are rendering water as opaque or not
-	// <FS:Zi> Render speedup for water parameters
-	// if (!gSavedSettings.getBOOL("RenderTransparentWater"))
-	if (!mRenderTransparentWater)
-	// </FS:Zi>
+	if (!LLPipeline::sRenderTransparentWater)
 	{
 		// render water for low end hardware
 		renderOpaqueLegacyWater();
@@ -830,13 +824,8 @@ LLColor3 LLDrawPoolWater::getDebugColor() const
 }
 
 // <FS:Zi> Render speedup for water parameters
-void LLDrawPoolWater::onRenderTransparentWaterChanged()
-{
-	mRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
-}
-
 void LLDrawPoolWater::onRenderWaterMipNormalChanged()
 {
-	mRenderWaterMipNormal = gSavedSettings.getBOOL("RenderWaterMipNormal");
+	mRenderWaterMipNormal = (bool)gSavedSettings.getBOOL("RenderWaterMipNormal");
 }
 // </FS:Zi>

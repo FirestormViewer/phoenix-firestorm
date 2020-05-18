@@ -253,7 +253,10 @@
          left_delta="5"
          name="TransparentWater"
          top_pad="5"
-         width="256" />
+         width="256" >
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
         <check_box
          control_name="RenderObjectBump"
          height="16"
@@ -264,9 +267,9 @@
          name="BumpShiny"
          top_pad="1"
          width="256" >
-        <check_box.commit_callback
-        function="Pref.RenderOptionUpdate" />
-      </check_box>
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
         <check_box
          control_name="RenderLocalLights"
          height="16"
