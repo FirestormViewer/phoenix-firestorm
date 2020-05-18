@@ -133,10 +133,11 @@
 	
 	<panel label="ハードウェア設定" name="Hardware Settings" >
 	
-        <check_box label="異方性フィルタリング（有効にすると速度が低下します）" name="ani" />
+        <check_box label="異方性フィルタリング（有効にすると速度が低下します）" name="ani" tool_tip="ここにチェックを入れると、異方性フィルタリングが有効になります。これは、自分のカメラの位置に対して、正面ではない角度で見えているテクスチャの品質を向上させるものです。通常、より遠くにある部分がぼやけて見えるのを防ぎます。" />
         <check_box label="OpenGL Vertex Buffer Objectsを有効化" name="vbo" tool_tip="最新のハードウェアでこの設定を有効にすると、パフォーマンスが向上します。しかし、旧型のハードウェアではVBOの実装が貧弱な場合が多く、この設定を有効にすることでクラッシュにつながるおそれがあります。" />
         <check_box label="VBOのストリームを有効にする" name="vbo_stream" tool_tip="VBOを有効にしている時に、このオプションをオフにするとパフォーマンスが向上する可能性があります。多くのAMDのGPUにおいて、このオプションをオフにしたことで顕著なパフォーマンスの向上が見られました。" />
         <check_box label="テクスチャの不可逆圧縮（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。" />
+        <check_box label="HiDPI 表示対応を有効にする（Mac OSX のみ。再起動が必要。）" name="use HiDPI" tool_tip="高解像度描画のための OpenGL を有効にします" />
         <text name="Antialiasing:" tool_tip="ハードウェアによってはこの設定の変更を適用するには再起動が必要な場合があります。" >
             アンチエイリアス：
         </text>
@@ -180,11 +181,11 @@
         <text name="TextureDetailLabel">
             テクスチャの読み込み精度
         </text>
-        <combo_box name="TextureDetail"
-         width="150">
-            <combo_box.item label="標準品質" name="0"/>
-            <combo_box.item label="低品質" name="3"/>
-            <combo_box.item label="テクスチャなし" name="5"/>
+        <combo_box name="TextureDetail">
+            <combo_box.item label="標準 (0) 品質" name="0" />
+            <combo_box.item label= "中(3) 品質" name="3" />
+            <combo_box.item label="低 (4) 品質" name="4" />
+            <combo_box.item label="テクスチャなし (5)" name="5" />
         </combo_box>
 
         <text name="Alpha Mask Rendering">

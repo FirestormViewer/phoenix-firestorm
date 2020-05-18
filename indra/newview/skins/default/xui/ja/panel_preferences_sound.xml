@@ -3,6 +3,12 @@
 	<panel.string name="middle_mouse">
 		マウスの中央
 	</panel.string>
+	<panel.string name="button4_mouse">
+		マウスボタン 4
+	</panel.string>
+	<panel.string name="button5_mouse">
+		マウスボタン 5
+	</panel.string>
 
 <tab_container label="Firestorm環境設定" name="tabs">
 
@@ -32,13 +38,40 @@
 			L$入出金通知音の閾値：
 		</text>
 		<spinner name="money_change_threshold" />
+		
+		<panel name="output_device_settings_panel">
+			<panel.string name="output_default_text">
+				デフォルト
+			</panel.string>
+			<panel.string name="output_no_device">
+				機器がありません
+			</panel.string>
+			<panel.string name="output_name_no_device">
+				名称未設定の機器
+			</panel.string>
+			<panel.string name="output_device_unavailable">
+				使用できない機器
+			</panel.string>
+			<text name="output_label">
+				出力機器
+			</text>
+		</panel>
 
 	</panel>
 
 	<!-- Media -->
 	
 	<panel label="メディア" name="Media Media Panel" >
+		<text name="media_autoplay_label">
+			メディアの自動再生
+		</text>
+		<combo_box name="media_auto_play_combo">
+			<item label="無効" name="autoplay_disabled" />
+			<item label="有効" name="autoplay_enabled" />
+		</combo_box>
+		<!--
 		<check_box label="メディアを自動再生する" name="media_auto_play_btn" tool_tip="ここにチェックを入れてメディアの自動再生を許可します"/>
+		-->
 		<check_box label="他の住人のスクリプトがメディアを再生することを許可" name="media_allowscript_btn" tool_tip="他の住人がスクリプトの入ったオブジェクトを使って土地のメディアをコントロールすることを許可／禁止します"/>
 		<check_box label="他のアバターに取り付けられたメディアを再生する" name="media_show_on_others_btn" tool_tip="このチェックを外すと、近くにいる他のアバターに取り付けられたメディアを非表示にします"/>
 		<check_box label="メディアフィルターを有効にする（セキュリティレベルが上がります）" name="media_filter" tool_tip="このチェックを入れることで、特定のサイトのメディアを再生するかどうかフィルターをかけることができるようになります"/>
