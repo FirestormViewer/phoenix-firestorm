@@ -1956,17 +1956,6 @@ bool LLDrawPoolAvatar::getRiggedGeometry(
 		face->setPoolType(LLDrawPool::POOL_AVATAR);
 	}
 
-	//let getGeometryVolume know if a texture matrix is in play
-	if (face->mTextureMatrix)
-	{
-		face->setState(LLFace::TEXTURE_ANIM);
-	}
-	else
-	{
-		face->clearState(LLFace::TEXTURE_ANIM);
-	}
-
-
 	//LL_INFOS() << "Rebuilt face " << face->getTEOffset() << " of " << face->getDrawable() << " at " << gFrameTimeSeconds << LL_ENDL;
 
 	// Let getGeometryVolume know if a texture matrix is in play

@@ -4822,7 +4822,13 @@ bool LLMeshRepository::getCostData(LLUUID mesh_id, LLMeshCostData& data)
         LLMeshRepoThread::mesh_header_map::iterator iter = mThread->mMeshHeader.find(mesh_id);
         if (iter != mThread->mMeshHeader.end() && mThread->mMeshHeaderSize[mesh_id] > 0)
         {
-            LLSD& header = iter->second;
+            // <FS:ND> Make a copy of the header rather than holding on to the referece.
+            // Assumption: mMeshHeader gets modified in another thread, invalidating iter and thus causing a lot of crashed down the line
+
+            // LLSD& header = iter->second;
+            LLSD header = iter->second;
+
+            // </FS:ND>
 
             bool header_invalid = (header.has("404")
                                    || !header.has("lowest_lod")
@@ -4838,7 +4844,10 @@ bool LLMeshRepository::getCostData(LLUUID mesh_id, LLMeshCostData& data)
     return false;
 }
 
-bool LLMeshRepository::getCostData(LLSD& header, LLMeshCostData& data)
+// <FS:ND> Use a const ref, just to make sure no one modifies header and we can pass a copy.
+// bool LLMeshRepository::getCostData(LLSD& header, LLMeshCostData& data)
+bool LLMeshRepository::getCostData(LLSD const& header, LLMeshCostData& data)
+// </FS:ND>
 {
     data = LLMeshCostData();
 

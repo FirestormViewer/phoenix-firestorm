@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
+	<floater.string name="participant_added" value="[NAME] был приглашен на разговор."/>
+	<floater.string name="multiple_participants_added" value="[NAME] были приглашены на разговор."/>
 	<layout_stack name="ls_control_panel">
 		<layout_panel name="gprofile_panel">
 			<button name="group_info_btn" tool_tip="Показать профиль данной группы"/>
@@ -62,6 +64,13 @@
 					<text name="unread_messages_text">
 						Непрочитанных сообщений: [NUM]
 					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="Отправить" tool_tip="Отправляет сообщение" />
+						</layout_panel>
+					</layout_stack>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
