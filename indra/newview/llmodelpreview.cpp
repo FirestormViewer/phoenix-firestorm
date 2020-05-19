@@ -133,6 +133,20 @@ std::string stripSuffix(std::string name)
     return name;
 }
 
+std::string getLodSuffix(S32 lod)
+{
+    std::string suffix;
+    switch (lod)
+    {
+    case LLModel::LOD_IMPOSTOR: suffix = "_LOD0"; break;
+    case LLModel::LOD_LOW:      suffix = "_LOD1"; break;
+    case LLModel::LOD_MEDIUM:   suffix = "_LOD2"; break;
+    case LLModel::LOD_PHYSICS:  suffix = "_PHYS"; break;
+    case LLModel::LOD_HIGH:                       break;
+    }
+    return suffix;
+}
+
 void FindModel(LLModelLoader::scene& scene, const std::string& name_to_match, LLModel*& baseModelOut, LLMatrix4& matOut)
 {
     LLModelLoader::scene::iterator base_iter = scene.begin();
@@ -187,6 +201,7 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
     mDirty = false;
     mGenLOD = false;
     mLoading = false;
+    mLookUpLodFiles = false;
     mLoadState = LLModelLoader::STARTING;
     mGroup = 0;
     mLODFrozen = false;
@@ -430,15 +445,7 @@ void LLModelPreview::rebuildUploadData()
                         extensionLOD = mPhysicsSearchLOD;
                     }
 
-                    std::string toAdd;
-                    switch (extensionLOD)
-                    {
-                    case LLModel::LOD_IMPOSTOR: toAdd = "_LOD0"; break;
-                    case LLModel::LOD_LOW:      toAdd = "_LOD1"; break;
-                    case LLModel::LOD_MEDIUM:   toAdd = "_LOD2"; break;
-                    case LLModel::LOD_PHYSICS:  toAdd = "_PHYS"; break;
-                    case LLModel::LOD_HIGH:                      break;
-                    }
+                    std::string toAdd = getLodSuffix(extensionLOD);
 
                     // <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
                     //if (name_to_match.find(toAdd) == -1)
@@ -468,15 +475,7 @@ void LLModelPreview::rebuildUploadData()
                             std::string name_to_match = instance.mLabel;
                             llassert(!name_to_match.empty());
 
-                            std::string toAdd;
-                            switch (searchLOD)
-                            {
-                            case LLModel::LOD_IMPOSTOR: toAdd = "_LOD0"; break;
-                            case LLModel::LOD_LOW:      toAdd = "_LOD1"; break;
-                            case LLModel::LOD_MEDIUM:   toAdd = "_LOD2"; break;
-                            case LLModel::LOD_PHYSICS:  toAdd = "_PHYS"; break;
-                            case LLModel::LOD_HIGH:                      break;
-                            }
+                            std::string toAdd = getLodSuffix(searchLOD);
 
                             // <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
                             //if (name_to_match.find(toAdd) == -1)
@@ -1187,14 +1186,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
 
                             if (loaded_name != name)
                             {
-                                switch (loaded_lod)
-                                {
-                                case LLModel::LOD_IMPOSTOR: name += "_LOD0"; break;
-                                case LLModel::LOD_LOW:      name += "_LOD1"; break;
-                                case LLModel::LOD_MEDIUM:   name += "_LOD2"; break;
-                                case LLModel::LOD_PHYSICS:  name += "_PHYS"; break;
-                                case LLModel::LOD_HIGH:                      break;
-                                }
+                                name += getLodSuffix(loaded_lod);
 
                                 if (mImporterDebug)
                                 {
@@ -1633,16 +1625,7 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
             volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
             mModel[lod][mdl_idx] = new LLModel(volume_params, 0.f);
 
-            std::string name = base->mLabel;
-
-            switch (lod)
-            {
-            case LLModel::LOD_IMPOSTOR: name += "_LOD0"; break;
-            case LLModel::LOD_LOW:      name += "_LOD1"; break;
-            case LLModel::LOD_MEDIUM:   name += "_LOD2"; break;
-            case LLModel::LOD_PHYSICS:  name += "_PHYS"; break;
-            case LLModel::LOD_HIGH:                      break;
-            }
+            std::string name = base->mLabel + getLodSuffix(lod);
 
             mModel[lod][mdl_idx]->mLabel = name;
             mModel[lod][mdl_idx]->mSubmodelID = base->mSubmodelID;
@@ -2813,8 +2796,43 @@ void LLModelPreview::loadedCallback(
         }
         pPreview->mModelLoader->clearLog();
         pPreview->loadModelCallback(lod); // removes mModelLoader in some cases
+        if (pPreview->mLookUpLodFiles && (lod != LLModel::LOD_HIGH))
+        {
+            pPreview->lookupLODModelFiles(lod);
+        }
     }
 
+}
+
+void LLModelPreview::lookupLODModelFiles(S32 lod)
+{
+    if (lod == LLModel::LOD_PHYSICS)
+    {
+        mLookUpLodFiles = false;
+        return;
+    }
+    S32 next_lod = (lod - 1 >= LLModel::LOD_IMPOSTOR) ? lod - 1 : LLModel::LOD_PHYSICS;
+
+    std::string lod_filename = mLODFile[LLModel::LOD_HIGH];
+    std::string ext = ".dae";
+    std::string::size_type i = lod_filename.rfind(ext);
+    if (i != std::string::npos)
+    {
+        lod_filename.replace(i, lod_filename.size() - ext.size(), getLodSuffix(next_lod) + ext);
+    }
+    if (gDirUtilp->fileExists(lod_filename))
+    {
+        LLFloaterModelPreview* fmp = LLFloaterModelPreview::sInstance;
+        if (fmp)
+        {
+            fmp->setCtrlLoadFromFile(next_lod);
+        }
+        loadModel(lod_filename, next_lod);
+    }
+    else
+    {
+        lookupLODModelFiles(next_lod);
+    }
 }
 
 void LLModelPreview::stateChangedCallback(U32 state, void* opaque)
@@ -3365,7 +3383,7 @@ BOOL LLModelPreview::render()
                     }
 
                     // only do this if mDegenerate was set in the preceding mesh checks [Check this if the ordering ever breaks]
-                    if (pass > 0 && mHasDegenerate)
+                    if (mHasDegenerate)
                     {
                         glLineWidth(PREVIEW_DEG_EDGE_WIDTH);
                         glPointSize(PREVIEW_DEG_POINT_SIZE);
@@ -3411,7 +3429,6 @@ BOOL LLModelPreview::render()
                                     for (U32 v = 0; v < num_models; ++v)
                                     {
                                         LLVertexBuffer* buffer = mVertexBuffer[LLModel::LOD_PHYSICS][model][v];
-                                        if (buffer->getNumVerts() < 3)continue;
 
                                         buffer->setBuffer(type_mask & buffer->getTypeMask());
 
@@ -3422,22 +3439,16 @@ BOOL LLModelPreview::render()
                                         LLStrider<U16> idx;
                                         buffer->getIndexStrider(idx, 0);
 
-                                        LLVector4a v1, v2, v3;
-                                        for (U32 indices_offset = 0; indices_offset < buffer->getNumIndices(); indices_offset += 3)
+                                        for (U32 i = 0; i < buffer->getNumIndices(); i += 3)
                                         {
-                                            v1.setMul(pos[*idx++], scale);
-                                            v2.setMul(pos[*idx++], scale);
-                                            v3.setMul(pos[*idx++], scale);
+                                            LLVector4a v1; v1.setMul(pos[*idx++], scale);
+                                            LLVector4a v2; v2.setMul(pos[*idx++], scale);
+                                            LLVector4a v3; v3.setMul(pos[*idx++], scale);
 
                                             if (ll_is_degenerate(v1, v2, v3))
                                             {
-                                                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                                                gGL.diffuseColor3fv(PREVIEW_DEG_EDGE_COL.mV);
-                                                buffer->drawRange(LLRender::TRIANGLES, 0, 2, 3, indices_offset);
-                                                buffer->drawRange(LLRender::POINTS, 0, 2, 3, indices_offset);
-                                                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                                                gGL.diffuseColor3fv(PREVIEW_DEG_FILL_COL.mV);
-                                                buffer->drawRange(LLRender::TRIANGLES, 0, 2, 3, indices_offset);
+                                                buffer->draw(LLRender::LINE_LOOP, 3, i);
+                                                buffer->draw(LLRender::POINTS, 3, i);
                                             }
                                         }
                                     }
@@ -3766,6 +3777,11 @@ bool LLModelPreview::lodQueryCallback()
             S32 lod = preview->mLodsQuery.back();
             preview->mLodsQuery.pop_back();
             preview->genLODs(lod);
+
+            if (preview->mLookUpLodFiles && (lod == LLModel::LOD_HIGH))
+            {
+                preview->lookupLODModelFiles(LLModel::LOD_HIGH);
+            }
 
             // return false to continue cycle
             return false;
