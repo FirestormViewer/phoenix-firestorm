@@ -811,8 +811,11 @@ void FloaterQuickPrefs::refreshSettings()
 	sky_spinner->setEnabled(TRUE);
 	sky_default_button->setEnabled(TRUE);
 
+	BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+	BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-						gSavedSettings.getBOOL("RenderObjectBump") &&
+						bumpshiny &&
+						shaders &&
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
@@ -976,6 +979,7 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 		childSetEnabled("edit_sky_preset", enable);
 		childSetEnabled("new_water_preset", enable);
 		childSetEnabled("edit_water_preset", enable);
+		childSetEnabled("PauseClouds", enable);
 	}
 }
 

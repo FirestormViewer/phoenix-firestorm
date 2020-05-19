@@ -33,6 +33,7 @@
 #include "llbutton.h"
 #include "lllayoutstack.h"
 #include "llinitdestroyclass.h"
+#include "rlvdefines.h"
 
 class LLLocationInputCtrl;
 class LLMenuGL;
@@ -151,7 +152,11 @@ private:
 
 	void fillSearchComboBox();
 	
-	void onClickedSkyBtn();	// <FS:CR> FIRE-11847
+	// <FS:CR> FIRE-11847
+	void onClickedLightingBtn();
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+	// </FS:CR>
 
 	// <FS:Zi> Make navigation bar part of the UI
 	// static void destroyClass()

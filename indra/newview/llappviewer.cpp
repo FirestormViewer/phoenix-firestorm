@@ -4132,20 +4132,13 @@ void LLAppViewer::writeSystemInfo()
     if (! gDebugInfo.has("Dynamic") )
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
-	// <FS:ND> set filename to Firestorm.log
+	// <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
 // #if LL_WINDOWS
 // 	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
 // #else
 //     //Not ideal but sufficient for good reporting.
 //     gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
 // #endif
-
-#if LL_WINDOWS
-	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, APP_NAME + ".log");
-#else
-    //Not ideal but sufficient for good reporting.
-    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, APP_NAME + ".old");  //LLError::logFileName();
-#endif
 	// </FS:ND>
 
 	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
@@ -4227,7 +4220,7 @@ void LLAppViewer::writeSystemInfo()
 	LL_INFOS("SystemInfo") << "OS: " << LLOSInfo::instance().getOSStringSimple() << LL_ENDL;
 	LL_INFOS("SystemInfo") << "OS info: " << LLOSInfo::instance() << LL_ENDL;
 
-	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Path from Catznip
+	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Patch from Catznip
     // gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
 	if (gCrashSettings.getBOOL("CrashSubmitSettings"))
 		gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");

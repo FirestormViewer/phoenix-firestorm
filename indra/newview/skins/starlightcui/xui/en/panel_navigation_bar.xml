@@ -40,7 +40,7 @@
  auto_resize="false">
 
 	<!-- This panel takes up the right click menu, so it only shows when clicking
-		 inactive parts. Will be bound to right click in code, so keep the name intact. -->
+		inactive parts. Will be bound to right click in code, so keep the name intact. -->
 	<panel
 	 name="navigation_bar_context_menu_panel"
 	 layout="topleft"
@@ -115,7 +115,7 @@
 	     layout="topleft"
 	     left_pad="6"
 	     name="About_Land"
-	     tool_tip="Pops up Land Information window"
+	     tool_tip="Opens Land Information window"
 	     top_delta="0"
 	     width="38">
 		 <button.init_callback
@@ -132,14 +132,10 @@
 	     image_overlay="Windlight_btn"
 	     layout="topleft"
 	     left_pad="6"
-	     name="Environment"
-	     tool_tip="Pops up Environment Settings window"
+	     name="PersonalLighting"
+	     tool_tip="Opens the Personal Lighting window"
 	     top_delta="0"
-	     width="38">
-		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="env_settings" />
-		 </button>
+	     width="38" />
           <!-- end of Windlight Button -->
 
 	</layout_panel>
@@ -174,7 +170,7 @@
 	</layout_panel>
 	<!-- Contains the location bar -->
 
-	<!-- Contains the search bar, can be hidden by control values -->
+	<!-- Contains the search bar, can be hidden by control values --><!-- Contains the search bar, can be hidden by code -->
 	<layout_panel
 	 mouse_opaque="false"
 	 name="search_bar_visibility_panel"
@@ -258,7 +254,6 @@
 
 </layout_panel>
 <!-- Favorites Bar visibility panel -->
-
 </layout_stack>
 <!-- Navigation and Favorites Bar visibility stack -->
 
