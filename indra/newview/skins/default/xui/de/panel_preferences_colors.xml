@@ -193,6 +193,7 @@
 			</text>
 			<slider label="Aktiv:" name="active"/>
 			<slider label="Inaktiv:" name="inactive"/>
+			<slider label="Kamera / Bewegung:" name="camera_movement"/>
 			<text name="console_opacity">
 				Konsolen-Deckkraft:
 			</text>

@@ -99,6 +99,7 @@ LLButton::Params::Params()
 	mouse_down_callback("mouse_down_callback"),
 	mouse_up_callback("mouse_up_callback"),
 	mouse_held_callback("mouse_held_callback"),
+	is_toggled_callback("is_toggled_callback"), // <FS:Ansariel> Toggle callback check
 	is_toggle("is_toggle", false),
 	scale_image("scale_image", true),
 	hover_glow_amount("hover_glow_amount"),
@@ -183,8 +184,9 @@ LLButton::LLButton(const LLButton::Params& p)
 	//mFlashingTimer(NULL)
 	mFlashingTimer(NULL),
 	mCheckboxControl(p.checkbox_control),
-	mCheckboxControlPanel(NULL)
+	mCheckboxControlPanel(NULL),
 	// </FS:Zi>
+	mIsToggledSignal(NULL) // <FS:Ansariel> Toggle callback check
 {
 	if (p.button_flash_enable)
 	{
@@ -283,6 +285,12 @@ LLButton::LLButton(const LLButton::Params& p)
 	{
 		setHeldDownCallback(initCommitCallback(p.mouse_held_callback));
 	}
+	// <FS:Ansariel> Toggle callback check
+	if (p.is_toggled_callback.isProvided())
+	{
+		setIsToggledCallback(initEnableCallback(p.is_toggled_callback));
+	}
+	// <FS:Ansariel>
 
 	if (p.badge.isProvided())
 	{
@@ -295,6 +303,7 @@ LLButton::~LLButton()
 	delete mMouseDownSignal;
 	delete mMouseUpSignal;
 	delete mHeldDownSignal;
+	delete mIsToggledSignal; // <FS:Ansariel> Toggle callback check
 
 	if (mFlashingTimer)
 	{
@@ -372,6 +381,18 @@ boost::signals2::connection LLButton::setHeldDownCallback( const commit_signal_t
 	return mHeldDownSignal->connect(cb);
 }
 
+// <FS:Ansariel> Toggle callback check
+boost::signals2::connection LLButton::setIsToggledCallback(const EnableCallbackParam& cb)
+{
+	return setIsToggledCallback(initEnableCallback(cb));
+}
+
+boost::signals2::connection LLButton::setIsToggledCallback(const enable_signal_t::slot_type& cb)
+{
+	if (!mIsToggledSignal) mIsToggledSignal = new enable_signal_t();
+	return mIsToggledSignal->connect(cb);
+}
+// <FS:Ansariel>
 
 // *TODO: Deprecate (for backwards compatibility only)
 boost::signals2::connection LLButton::setClickedCallback( button_callback_t cb, void* data )
@@ -787,6 +808,13 @@ void LLButton::draw()
 
 	// Figure out appropriate color for the text
 	LLColor4 label_color;
+
+	// <FS:Ansariel> Toggle callback check
+	if (mIsToggledSignal)
+	{
+		setToggleState((*mIsToggledSignal)(this, LLSD()));
+	}
+	// </FS:Ansariel>
 
 	// label changes when button state changes, not when pressed
 	if ( enabled )

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Профиль" name="panel_profile">
+    <string name="status_online">В сети</string>
+    <string name="status_offline">Не в сети</string>
     <string name="no_partner_text" value="Нет" />
     <string name="no_group_text" value="Нет" />
     <string name="FSDev" value=" Developer" />

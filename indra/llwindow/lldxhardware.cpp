@@ -740,6 +740,7 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 			if (!disable_wmi && SUCCEEDED(GetVideoMemoryViaWMI(deviceID + 9, &vram)))
 			{
 				mVRAM = vram / (1024 * 1024);
+				LL_INFOS("AppInit") << "VRAM Detected via WMI: " << mVRAM << LL_ENDL;
 			}
 		}
 		

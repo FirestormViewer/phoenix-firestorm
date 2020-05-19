@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Save Pref Preset" title="Voreinstellung speichern">
+<floater name="save_pref_preset" title="Grafikvoreinstellung speichern">
 	<string name="title_graphic">
 		Grafikvoreinstellung speichern
 	</string>

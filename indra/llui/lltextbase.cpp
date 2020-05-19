@@ -1112,6 +1112,9 @@ BOOL LLTextBase::handleMouseDown(S32 x, S32 y, MASK mask)
 				line_start = it->mDocIndexStart;
 			}
 			line_end = it->mDocIndexEnd;
+
+			// <FS:Ansariel> FIRE-29545: Backspace not working after triple-click selecting last line
+			line_end = llclamp(line_end, 0, getLength());
 		}
 
 		if (line_start == -1)
