@@ -207,7 +207,7 @@
 
 	<panel
 	 height="18"
-	 left="-458"
+	 left="-481"
 	 top="0"
 	 width="120"
 	 follows="right|top"
@@ -248,7 +248,7 @@
 
   <panel
     height="18"
-    left="-326"
+    left="-349"
     width="77"
     top="0"
     follows="right|top"
@@ -295,7 +295,7 @@
   <panel
     height="18"
     left_pad="4"
-    width="224"
+    width="247"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
@@ -321,11 +321,20 @@
     <button
      follows="right|top"
      height="16"
-     image_unselected="Presets_Icon"
-     image_pressed="Presets_Icon"
+     image_unselected="Cam_FreeCam_Off"
+     image_pressed="Cam_FreeCam_Off"
      left_pad="5"
      top="2"
-     name="presets_icon"
+     name="presets_icon_camera"
+     width="18" />
+    <button
+     follows="right|top"
+     height="16"
+     image_unselected="Presets_Icon_Graphic"
+     image_pressed="Presets_Icon_Graphic"
+     left_pad="5"
+     top="2"
+     name="presets_icon_graphic"
      width="18" />
     <button
      follows="right|top"
