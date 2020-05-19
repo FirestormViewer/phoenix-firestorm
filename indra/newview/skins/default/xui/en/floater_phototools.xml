@@ -68,7 +68,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="61"
+			 height="27"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -92,7 +92,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="115"
+			 height="135"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -239,9 +239,6 @@
 					<button.commit_callback
 					 function="Floater.ToggleOrBringToFront"
 					 parameter="env_adjust_snapshot" />
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv" />
 				</button>
 				<button
 				 name="ResetToRegionDefault"
@@ -257,6 +254,30 @@
 				 label_selected=""
 				 scale_image="true"
 				/>
+				
+				
+				<button
+				 follows="top|left|right"
+				 height="20"
+				 label="Pause Clouds"
+				 image_selected="PushButton_Selected_Press"
+				 image_disabled_selected="PushButton_Selected_Disabled"
+				 image_disabled="PushButton_Disabled"
+				 image_pressed="PushButton_Press"
+				 image_pressed_selected="PushButton_Selected_Press"
+				 layout="topleft"
+				 name="PauseClouds"
+				 tool_tip="Pauses cloud animations"
+				 top_pad="3"
+				 left="5"
+				 right="-5">
+					<button.commit_callback
+					 function="World.EnvSettings"
+					 parameter="pause_clouds" />
+					<button.is_toggled_callback
+					 function="World.EnableEnvSettings" 
+					 parameter="pause_clouds" />
+				</button>
 			</panel>
 
 			<panel
@@ -266,7 +287,7 @@
 			 layout="topleft"
 			 top_pad="5"
 			 left="4"
-			 width="165"
+			 width="275"
 			 height="135"
 			 border_visible="true"
 			 background_visible="true">
@@ -289,7 +310,7 @@
 				 left="10"
 				 name="horiz_separator1"
 				 top_pad="-7"
-				 width="145"/>
+				 width="255"/>
 				<button
 				 follows="left|top"
 				 name="Sunrise"
@@ -298,7 +319,7 @@
 				 layout="topleft"
 				 left="10"
 				 top_pad="5"
-				 width="145">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunrise"/>
@@ -311,7 +332,7 @@
 				 layout="topleft"
 				 left="10"
 				 top_pad="2"
-				 width="145">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="noon"/>
@@ -324,7 +345,7 @@
 				 layout="topleft"
 				 left="10"
 				 top_pad="2"
-				 width="145">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunset"/>
@@ -337,7 +358,7 @@
 				 layout="topleft"
 				 left="10"
 				 top_pad="2"
-				 width="145">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="midnight"/>
@@ -350,7 +371,7 @@
 				 layout="topleft"
 				 left="10"
 				 top_pad="2"
-				 width="145">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="default"/>

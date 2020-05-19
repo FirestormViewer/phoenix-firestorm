@@ -228,7 +228,7 @@ public:
 	virtual void	setColor(const LLColor4& color);
 
 	// Ansariel: Changed to virtual. We might want to change the transparency ourself!
-	virtual F32 	getCurrentTransparency();
+	virtual F32	getCurrentTransparency();
 
 	void				setTransparencyType(ETypeTransparency type);
 	ETypeTransparency	getTransparencyType() const {return mTransparencyType;}

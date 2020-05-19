@@ -61,7 +61,7 @@ std::string unescape_name(const std::string& name);
 class FSSettingsCollector : public LLInventoryCollectFunctor
 {
 public:
-	FSSettingsCollector() { LL_INFOS() << "EEP: Inventory read: " << (gInventory.isInventoryUsable() ? "yes" : "no") << LL_ENDL;}
+	FSSettingsCollector() {}
 	virtual ~FSSettingsCollector() {}
 
 	bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
@@ -69,7 +69,6 @@ public:
 		if (item && item->getType() == LLAssetType::AT_SETTINGS &&
 			mSeen.find(item->getAssetUUID()) == mSeen.end())
 		{
-			LL_INFOS() << "EEP: Found " << item->getName() << LL_ENDL;
 			mSeen.insert(item->getAssetUUID());
 			return true;
 		}
@@ -334,19 +333,13 @@ void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID
 void FloaterQuickPrefs::loadPresets()
 {
 	LLInventoryModel::cat_array_t cats;
-	LLInventoryModel::item_array_t items, libitems;
+	LLInventoryModel::item_array_t items;
 	FSSettingsCollector collector;
-	gInventory.collectDescendentsIf(gInventory.getRootFolderID(),
+	gInventory.collectDescendentsIf(LLUUID::null,
 									cats,
 									items,
 									LLInventoryModel::EXCLUDE_TRASH,
 									collector);
-	gInventory.collectDescendentsIf(gInventory.getLibraryRootFolderID(),
-									cats,
-									libitems,
-									LLInventoryModel::EXCLUDE_TRASH,
-									collector);
-	items.insert(items.end(), libitems.begin(), libitems.end());
 
 	std::multimap<std::string, LLUUID> sky_map;
 	std::multimap<std::string, LLUUID> water_map;
@@ -474,7 +467,6 @@ BOOL FloaterQuickPrefs::postBuild()
 	mDayCyclePresetsCombo = getChild<LLComboBox>("DCPresetsCombo");
 
 	initCallbacks();
-	loadPresets();
 
 	if (gRlvHandler.isEnabled())
 	{
@@ -819,8 +811,11 @@ void FloaterQuickPrefs::refreshSettings()
 	sky_spinner->setEnabled(TRUE);
 	sky_default_button->setEnabled(TRUE);
 
+	BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+	BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-						gSavedSettings.getBOOL("RenderObjectBump") &&
+						bumpshiny &&
+						shaders &&
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
@@ -984,6 +979,7 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 		childSetEnabled("edit_sky_preset", enable);
 		childSetEnabled("new_water_preset", enable);
 		childSetEnabled("edit_water_preset", enable);
+		childSetEnabled("PauseClouds", enable);
 	}
 }
 

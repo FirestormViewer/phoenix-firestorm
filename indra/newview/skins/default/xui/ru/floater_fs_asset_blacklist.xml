@@ -21,6 +21,9 @@
 	<floater.string name="unknown_region">
 		Неизвестный регион
 	</floater.string>
+	<floater.string name="DateFormatString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
 	<filter_editor label="Фильтр черного списка" name="filter_input"/>
 	<fs_scroll_list name="result_list">
 		<columns name="name" label="Имя" />

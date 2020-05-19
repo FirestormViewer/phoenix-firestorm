@@ -24,11 +24,11 @@
 		<button name="status_lightshare_btn" tool_tip="Impostazioni Lightshare"/>
 		<text tool_tip="Nome del lotto su cui ti trovi. Clic per aprire le informazioni sul lotto." name="parcel_info_text" value="(caricamento...)"/>
 	</panel>
-	<panel name="balance_bg">
+	<panel name="balance_bg" left="-308">
 		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ??"/>
 		<button label="Compra L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
 	</panel>
-	<panel name="time_and_media_bg">
+	<panel name="time_and_media_bg" width="229">
 		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
 		<button name="stream_toggle_btn" tool_tip="Attiva/ferma musica nel lotto"/>
 		<button name="media_toggle_btn" tool_tip="Attiva/ferma tutti i media (musica, video, pagine Web)"/>

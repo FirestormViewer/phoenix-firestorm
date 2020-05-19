@@ -832,11 +832,11 @@ LLColor3 LLDrawPoolWater::getDebugColor() const
 // <FS:Zi> Render speedup for water parameters
 void LLDrawPoolWater::onRenderTransparentWaterChanged()
 {
-	mRenderTransparentWater=gSavedSettings.getBOOL("RenderTransparentWater");
+	mRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
 }
 
 void LLDrawPoolWater::onRenderWaterMipNormalChanged()
 {
-	mRenderWaterMipNormal=gSavedSettings.getBOOL("RenderWaterMipNormal");
+	mRenderWaterMipNormal = gSavedSettings.getBOOL("RenderWaterMipNormal");
 }
 // </FS:Zi>

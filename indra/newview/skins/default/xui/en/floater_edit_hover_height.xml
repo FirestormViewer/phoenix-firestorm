@@ -5,9 +5,9 @@
  can_minimize="true"
  can_close="true"
  can_resize="true"
- min_height="55"
+ min_height="75"
  min_width="515"
- height="55"
+ height="75"
  layout="topleft"
  name="HoverHeight"
  single_instance="true"
@@ -33,4 +33,13 @@
      can_edit_text="true"
      >
     </slider>
+  <check_box
+     control_name="HoverHeightAffectsCamera"
+     follows="all"
+     height="15"
+     label="Affect Camera view"
+     layout="topleft"
+     name="BindCameraCheck"
+     top_pad="10"
+     width="237"/>
 </floater>
