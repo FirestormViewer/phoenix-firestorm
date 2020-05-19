@@ -398,7 +398,6 @@ bool camera_spin_around_ccw_sitting( EKeystate s )
 	if (gAgent.rotateGrabbed() || gAgentCamera.sitCameraEnabled() || gAgent.getRunning())
 	{
 		//send keystrokes, but do not change camera
-		gAgentCamera.unlockView();
 		agent_turn_right(s);
 	}
 	else
