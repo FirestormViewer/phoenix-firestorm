@@ -43,10 +43,12 @@
 	
     <panel label="2D オーバーレイ" name="ui-2d-overlay" >
 
-        <text name="UI Size:" >
-            UIサイズ（副作用の可能性あり）：
-        </text>
-        <slider name="ui_scale_slider" />
+		<text name="UI Size:" width="95">
+			UI サイズ：
+		</text>
+		<text name="HUD Size:" width="95">
+			HUD サイズ：
+		</text>
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
 		</text>
@@ -72,7 +74,16 @@
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
 		<check_box label="テキストに動きを付ける" name="PieMenuPopupFontEffect" tool_tip="パイメニューが開く時のアニメーションに合わせて、パイメニューの中のテキストも動くようにします。" />
 		<check_box label="外側に丸い影を付ける" name="PieMenuOuterRingShade" tool_tip="パイメニューの縁に丸い影をつけてサブメニューを見やすくします。" />
-        <check_box label="グループ通知や支払い通知を右上に表示" name="ShowGroupNoticesTopRight" tool_tip="ここにチェックを入れると、グループ通知や支払い通知などを画面の右上に表示します。（旧式の１系スタイル）" />
+		<text name="ShowGroupNoticesTopRightLabel">
+			グループ通知とミニアイコンの位置：
+		</text>
+		<radio_group name="ShowGroupNoticesTopRight" tool_tip="グループ通知やミニアイコンの画面上の位置を選択します">
+			<radio_item label="右下" name="radio" />
+			<radio_item label="右上" name="radio1" />
+		</radio_group>
+		<!--
+		<check_box label="グループ通知や支払い通知を右上に表示" name="ShowGroupNoticesTopRight" tool_tip="ここにチェックを入れると、グループ通知や支払い通知などを画面の右上に表示します。（旧式の１系スタイル）" />
+		-->
         <text name="GroupTopRightRequiresRestart">
             （再起動が必要）
         </text>

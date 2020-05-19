@@ -341,10 +341,14 @@ void FloaterAO::onSelectSet()
 		return;
 	}
 	
-	mSelectedSet=set;
+	// only update the interface when we actually selected a different set - FIRE-29542
+	if (mSelectedSet != set)
+	{
+		mSelectedSet=set;
 
-	updateSetParameters();
-	updateAnimationList();
+		updateSetParameters();
+		updateAnimationList();
+	}
 }
 
 void FloaterAO::onSelectSetSmall()

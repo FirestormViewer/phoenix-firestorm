@@ -1090,7 +1090,7 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="my_environs" />
-                <menu_item_check.on_enable
+                <menu_item_call.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_call>
@@ -1100,7 +1100,7 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="adjust_tool" />
-                <menu_item_check.on_enable
+                <menu_item_call.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_call>

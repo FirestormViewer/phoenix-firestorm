@@ -1734,6 +1734,24 @@
      show_text="true"
      top_pad="2"
      width="415" />
+     <slider
+     can_edit_text="false"
+     control_name="CameraOpacity"
+     decimal_digits="2"
+     follows="left|top"
+     height="16"
+     increment="0.01"
+     initial_value="0.95"
+     layout="topleft"
+     label_width="115"
+     label="Camera / Movement:"
+     left="50"
+     max_val="1.00"
+     min_val="0.00"
+     name="camera_movement"
+     show_text="true"
+     top_pad="2"
+     width="415" />
      <text
        follows="left|top"
        layout="topleft"

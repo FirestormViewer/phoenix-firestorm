@@ -30,19 +30,12 @@
 
 #include "linden_common.h"
 
-#include "llpanel.h"
+#include "llpanelpulldown.h"
 
-class LLFrameTimer;
-
-class LLPanelVolumePulldown : public LLPanel
+class LLPanelVolumePulldown : public LLPanelPulldown
 {
  public:
 	LLPanelVolumePulldown();
-	/*virtual*/ void draw();
-	/*virtual*/ void onMouseEnter(S32 x, S32 y, MASK mask);
-	/*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
-	/*virtual*/ void onTopLost();
-	/*virtual*/ void onVisibilityChange ( BOOL new_visibility );
 	/*virtual*/ BOOL postBuild();
 	
  private:
@@ -53,13 +46,8 @@ class LLPanelVolumePulldown : public LLPanel
 	// "Streaming Music" and "Media" are unchecked. Otherwise enables it.
 	void updateMediaAutoPlayCheckbox(LLUICtrl* ctrl);
 	void onAdvancedButtonClick(const LLSD& user_data);
-	// <FS:Ansariel> Missing callback function
-	void setSounds();
 	*/
 
-	LLFrameTimer mHoverTimer;
-	static const F32 sAutoCloseFadeStartTimeSec;
-	static const F32 sAutoCloseTotalTimeSec;
 };
 
 

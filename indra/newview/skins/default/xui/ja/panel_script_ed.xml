@@ -15,9 +15,6 @@
 	<panel.string name="Title">
 		スクリプト： [NAME]
 	</panel.string>
-	<panel.string name="external_editor_not_set">
-		環境変数 LL_SCRIPT_EDITOR または ExternalEditor を設定してエディターを選択します。
-	</panel.string>
 	<menu_bar name="script_menu">
 		<menu label="ファイル" name="File">
 			<menu_item_call label="保存" name="Save"/>

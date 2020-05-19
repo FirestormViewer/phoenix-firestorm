@@ -13,11 +13,14 @@
 	<panel.string name="time">
 		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
+	<panel.string name="timeTooltip">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+	</panel.string>
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
 	<panel name="menu_search_panel">
-		<search_editor label="Меню поиска" name="search_menu_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в меню."/>
+		<search_editor label="Поиск в Меню" name="search_menu_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в меню."/>
 	</panel>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
@@ -27,11 +30,12 @@
 	</panel>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Нажмите, для обновления баланса"/>
-		<button label="Купить" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
+		<button label="Купить L$" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Текущее время (Тихоокеанское)"/>
 		<button name="stream_toggle_btn" tool_tip="Включить/Выключить воспроизведение потокового аудио"/>
 		<button name="media_toggle_btn" tool_tip="Включить/Выключить воспроизведение всего медиа (Музыка, Видео, Web)"/>
+		<text name="FPSText" tool_tip="Кадров в секунду"/>
 	</panel>
 </panel>

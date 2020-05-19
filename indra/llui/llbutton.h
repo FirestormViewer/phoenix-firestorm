@@ -141,6 +141,8 @@ public:
 
 		Optional<std::string>		checkbox_control;		// <FS:Zi> Add checkbox control toggle
 
+		Optional<EnableCallbackParam>	is_toggled_callback;	// <FS:Ansariel> Toggle callback check
+
 		Params();
 	};
 	
@@ -187,6 +189,10 @@ public:
 	boost::signals2::connection setMouseUpCallback( const commit_signal_t::slot_type& cb ); // mouse up, EVEN IF NOT IN BUTTON
 	// Passes a 'count' parameter in the commit param payload, i.e. param["count"])
 	boost::signals2::connection setHeldDownCallback( const commit_signal_t::slot_type& cb ); // Mouse button held down and in button
+
+	// <FS:Ansariel> Toggle callback check
+	boost::signals2::connection setIsToggledCallback(const EnableCallbackParam& cb);
+	boost::signals2::connection setIsToggledCallback(const enable_signal_t::slot_type& cb);
 
 	
 	// *TODO: Deprecate (for backwards compatability only)
@@ -307,6 +313,8 @@ protected:
 	commit_signal_t* 			mMouseDownSignal;
 	commit_signal_t* 			mMouseUpSignal;
 	commit_signal_t* 			mHeldDownSignal;
+
+	enable_signal_t*			mIsToggledSignal; 	// <FS:Ansariel> Toggle callback check
 	
 	const LLFontGL*				mGLFont;
 	

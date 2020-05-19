@@ -72,6 +72,7 @@
 #include "llnotificationsutil.h"// <FS:AW hypergrid support >
 
 #include "lluictrl.h"	// <FS:Zi> Make navigation bar part of the UI
+#include "rlvhandler.h"
 
 //-- LLTeleportHistoryMenuItem -----------------------------------------------
 
@@ -279,7 +280,8 @@ LLNavigationBar::LLNavigationBar()
 	mNavigationPanel(NULL),
 	mFavoritePanel(NULL),
 	mNavPanWidth(0),
-	mSearchComboBox(NULL)
+	mSearchComboBox(NULL),
+	mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-11847
 {
 	// buildFromFile( "panel_navigation_bar.xml");	// <FS:Zi> Make navigation bar part of the UI
 
@@ -292,6 +294,13 @@ LLNavigationBar::~LLNavigationBar()
 {
 	mTeleportFinishConnection.disconnect();
 	mTeleportFailedConnection.disconnect();
+
+	// <FS:Ansariel> FIRE-11847
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 // <FS:Zi> Make navigation bar part of the UI
@@ -318,7 +327,7 @@ void LLNavigationBar::setupPanel()
 	mView->getChild<LLUICtrl>("navigation_bar_context_menu_panel")->
 		setRightMouseDownCallback(boost::bind(&LLNavigationBar::onRightMouseDown, this, _2, _3, _4));
 
-	mView->getChild<LLButton>("Sky")->setCommitCallback(boost::bind(&LLNavigationBar::onClickedSkyBtn, this)); // <FS:CR> FIRE-11847
+	mView->getChild<LLButton>("PersonalLighting")->setCommitCallback(boost::bind(&LLNavigationBar::onClickedLightingBtn, this)); // <FS:CR> FIRE-11847
 	// </FS:Zi>
 
 	fillSearchComboBox();
@@ -371,6 +380,9 @@ void LLNavigationBar::setupPanel()
 	// return TRUE;
 	LLHints::getInstance()->registerHintTarget("nav_bar",mView->getHandle());
 	// </FS:Zi>
+
+	// <FS:Ansariel> FIRE-11847
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLNavigationBar::updateRlvRestrictions, this, _1, _2));
 }
 
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
@@ -881,8 +893,16 @@ void LLNavigationBar::onRightMouseDown(S32 x,S32 y,MASK mask)
 // </FS:Zi>
 
 // <FS:CR> FIRE-11847
-void LLNavigationBar::onClickedSkyBtn()
+void LLNavigationBar::onClickedLightingBtn()
 {
-	LLFloaterReg::showInstance("env_edit_sky", "edit");
+	LLFloaterReg::showInstance("env_adjust_snapshot");
+}
+
+void LLNavigationBar::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+	if (behavior == RLV_BHVR_SETENV)
+	{
+		mView->getChild<LLButton>("PersonalLighting")->setEnabled(type != RLV_TYPE_ADD);
+	}
 }
 // </FS:CR> FIRE-11847
