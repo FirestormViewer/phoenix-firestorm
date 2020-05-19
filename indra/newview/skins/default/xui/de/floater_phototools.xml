@@ -25,6 +25,7 @@
 				</text>
 				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..."/>
 				<button name="ResetToRegionDefault" tool_tip="Setzt die Umgebungseinstellungen auf die gemeinsame Umgebung zurück."/>
+				<button name="PauseClouds" label="Wolken pausieren" tool_tip="Pausiert die Wolken-Animation."/>
 			</panel>
 
 			<panel name="P_Q_Windlights">

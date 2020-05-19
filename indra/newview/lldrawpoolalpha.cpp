@@ -620,8 +620,12 @@ void LLDrawPoolAlpha::renderEmissives(U32 mask, std::vector<LLDrawInfo*>& emissi
 
 void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 {
-    BOOL batch_fullbrights = gSavedSettings.getBOOL("RenderAlphaBatchFullbrights");
-    BOOL batch_emissives   = gSavedSettings.getBOOL("RenderAlphaBatchEmissives");
+    // <FS:Ansariel> Tweak performance
+    //BOOL batch_fullbrights = gSavedSettings.getBOOL("RenderAlphaBatchFullbrights");
+    //BOOL batch_emissives   = gSavedSettings.getBOOL("RenderAlphaBatchEmissives");
+    static LLCachedControl<bool> batch_fullbrights(gSavedSettings, "RenderAlphaBatchFullbrights");
+    static LLCachedControl<bool> batch_emissives(gSavedSettings, "RenderAlphaBatchEmissives");
+	// </FS:Ansariel>
 	BOOL initialized_lighting = FALSE;
 	BOOL light_enabled = TRUE;
 	
@@ -825,7 +829,11 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 				// If this alpha mesh has glow, then draw it a second time to add the destination-alpha (=glow).  Interleaving these state-changing calls is expensive, but glow must be drawn Z-sorted with alpha.
 				if (current_shader && 
 					draw_glow_for_this_partition &&
-					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
+					// <FS:Ansariel> Re-add particle rendering optimization
+					//params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
+					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE) &&
+					(!params.mParticle || params.mHasGlow))
+					// </FS:Ansariel>
 				{
                     LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA_EMISSIVE);
 

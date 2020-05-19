@@ -1303,7 +1303,10 @@ bool LLAppViewer::init()
 	gSimLastTime = gRenderStartTime.getElapsedTimeF32();
 	gSimFrames = (F32)gFrameCount;
 
-	LLViewerJoystick::getInstance()->init(false);
+    if (gSavedSettings.getBOOL("JoystickEnabled"))
+    {
+        LLViewerJoystick::getInstance()->init(false);
+    }
 
 	try {
 		initializeSecHandler();
@@ -3781,8 +3784,8 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
-	info["GRAPHICS_CARD_VENDOR"] = (const char*)(glGetString(GL_VENDOR));
-	info["GRAPHICS_CARD"] = (const char*)(glGetString(GL_RENDERER));
+	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
+	info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
 
 #if LL_WINDOWS
 	std::string drvinfo = gDXHardware.getDriverVersionWMI();
@@ -3804,7 +3807,7 @@ LLSD LLAppViewer::getViewerInfo() const
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
 	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : LLTrans::getString("RLVaStatusDisabled");
 // [/RLVa:KB]
-	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
+	info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
 
@@ -4118,20 +4121,13 @@ void LLAppViewer::writeSystemInfo()
     if (! gDebugInfo.has("Dynamic") )
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
-	// <FS:ND> set filename to Firestorm.log
+	// <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
 // #if LL_WINDOWS
 // 	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
 // #else
 //     //Not ideal but sufficient for good reporting.
 //     gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
 // #endif
-
-#if LL_WINDOWS
-	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, APP_NAME + ".log");
-#else
-    //Not ideal but sufficient for good reporting.
-    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, APP_NAME + ".old");  //LLError::logFileName();
-#endif
 	// </FS:ND>
 
 	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
@@ -4213,7 +4209,7 @@ void LLAppViewer::writeSystemInfo()
 	LL_INFOS("SystemInfo") << "OS: " << LLOSInfo::instance().getOSStringSimple() << LL_ENDL;
 	LL_INFOS("SystemInfo") << "OS info: " << LLOSInfo::instance() << LL_ENDL;
 
-	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Path from Catznip
+	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Patch from Catznip
     // gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
 	if (gCrashSettings.getBOOL("CrashSubmitSettings"))
 		gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
