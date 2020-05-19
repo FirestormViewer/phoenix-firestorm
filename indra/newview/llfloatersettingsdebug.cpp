@@ -263,6 +263,7 @@ void LLFloaterSettingsDebug::onCommitSettings()
 
 	LLVector3 vector;
 	LLVector3d vectord;
+	LLQuaternion quat;
 	LLRect rect;
 	LLColor4 col4;
 	LLColor3 col3;
@@ -297,6 +298,13 @@ void LLFloaterSettingsDebug::onCommitSettings()
 		vectord.mdV[VY] = mSpinner2->getValue().asReal();
 		vectord.mdV[VZ] = mSpinner3->getValue().asReal();
 		mCurrentControlVariable->set(vectord.getValue());
+		break;
+	  case TYPE_QUAT:
+		quat.mQ[VX] = getChild<LLUICtrl>("val_spinner_1")->getValue().asReal();
+		quat.mQ[VY] = getChild<LLUICtrl>("val_spinner_2")->getValue().asReal();
+		quat.mQ[VZ] = getChild<LLUICtrl>("val_spinner_3")->getValue().asReal();
+		quat.mQ[VS] = getChild<LLUICtrl>("val_spinner_4")->getValue().asReal();;
+		mCurrentControlVariable->set(quat.getValue());
 		break;
 	  case TYPE_RECT:
 		rect.mLeft = mSpinner1->getValue().asInteger();
@@ -521,6 +529,40 @@ void LLFloaterSettingsDebug::updateControl()
 				mSpinner3->setValue(v[VZ]);
 			}
 			break;
+		  }
+		  case TYPE_QUAT:
+		  {
+			  LLQuaternion q;
+			  q.setValue(sd);
+			  mSpinner1->setVisible(TRUE);
+			  mSpinner1->setLabel(std::string("X"));
+			  mSpinner2->setVisible(TRUE);
+			  mSpinner2->setLabel(std::string("Y"));
+			  mSpinner3->setVisible(TRUE);
+			  mSpinner3->setLabel(std::string("Z"));
+			  mSpinner4->setVisible(TRUE);
+			  mSpinner4->setLabel(std::string("S"));
+			  if (!mSpinner1->hasFocus())
+			  {
+				  mSpinner1->setPrecision(4);
+				  mSpinner1->setValue(q.mQ[VX]);
+			  }
+			  if (!mSpinner2->hasFocus())
+			  {
+				  mSpinner2->setPrecision(4);
+				  mSpinner2->setValue(q.mQ[VY]);
+			  }
+			  if (!mSpinner3->hasFocus())
+			  {
+				  mSpinner3->setPrecision(4);
+				  mSpinner3->setValue(q.mQ[VZ]);
+			  }
+			  if (!mSpinner4->hasFocus())
+			  {
+				  mSpinner4->setPrecision(4);
+				  mSpinner4->setValue(q.mQ[VS]);
+			  }
+			  break;
 		  }
 		  case TYPE_RECT:
 		  {
