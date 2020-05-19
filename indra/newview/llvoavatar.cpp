@@ -4546,16 +4546,15 @@ void LLVOAvatar::updateFootstepSounds()
 }
 
 //------------------------------------------------------------------------
-// computeUpdatePeriodAndVisibility()
+// computeUpdatePeriod()
 // Factored out from updateCharacter()
 // Set new value for mUpdatePeriod based on distance and various other factors.
-// Returs true if character needs an update
 //------------------------------------------------------------------------
-BOOL LLVOAvatar::computeUpdatePeriodAndVisibility()
+void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
-    BOOL is_visible = isVisible(); // includes drawable check
-    if ( is_visible 
+	if (mDrawable.notNull()
+        && isVisible() 
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
 	// <FS:Ansariel> Fix LL impostor hacking; Adjust update period for muted avatars if using no impostors
@@ -4604,12 +4603,10 @@ BOOL LLVOAvatar::computeUpdatePeriodAndVisibility()
 			//nearby avatars, update the impostors more frequently.
 			mUpdatePeriod = 4;
 		}
-		return (LLDrawable::getCurrentFrame() + mID.mData[0]) % mUpdatePeriod == 0 ? TRUE : FALSE;
 	}
 	else
 	{
 		mUpdatePeriod = 1;
-		return is_visible;
 	}
 
 }
@@ -4994,16 +4991,17 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	// The rest should only be done occasionally for far away avatars.
     // Set mUpdatePeriod and visible based on distance and other criteria.
 	//--------------------------------------------------------------------
-    visible = computeUpdatePeriodAndVisibility();
+    computeUpdatePeriod();
+    bool needs_update = (LLDrawable::getCurrentFrame()+mID.mData[0])%mUpdatePeriod == 0 ? TRUE : FALSE;
 
 	//--------------------------------------------------------------------
-    // Early out if not visible and not self
+	// Early out if does not need update and not self
 	// don't early out for your own avatar, as we rely on your animations playing reliably
 	// for example, the "turn around" animation when entering customize avatar needs to trigger
 	// even when your avatar is offscreen
 	//--------------------------------------------------------------------
 	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
-	//if (!visible && !isSelf())
+	//if (!needs_update && !isSelf())
 	//{
 	//	updateMotions(LLCharacter::HIDDEN_UPDATE);
 	//	return FALSE;
@@ -5020,7 +5018,7 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	// This was originally done in updateTimeStep(), but since that is globally disabled for now, we do it here
 	mMotionController.setUpdateFactor(mUpdatePeriod);
 
-	if (!visible && !isSelf())
+	if (!needs_update && !isSelf())
 	{
 		updateMotions(LLCharacter::HIDDEN_UPDATE);
 		return FALSE;
@@ -5064,7 +5062,11 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	mSpeed = speed;
 
 	// update animations
-	if (mSpecialRenderMode == 1) // Animation Preview
+	if (!visible)
+	{
+		updateMotions(LLCharacter::HIDDEN_UPDATE);
+	}
+	else if (mSpecialRenderMode == 1) // Animation Preview
 	{
 		updateMotions(LLCharacter::FORCE_UPDATE);
 	}
@@ -5098,10 +5100,13 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	// Update child joints as needed.
 	mRoot->updateWorldMatrixChildren();
 
-	// System avatar mesh vertices need to be reskinned.
-	mNeedsSkin = TRUE;
+    if (visible)
+    {
+        // System avatar mesh vertices need to be reskinned.
+        mNeedsSkin = TRUE;
+    }
 
-	return TRUE;
+	return visible;
 }
 
 //-----------------------------------------------------------------------------
