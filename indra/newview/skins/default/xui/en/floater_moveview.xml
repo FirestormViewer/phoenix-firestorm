@@ -4,7 +4,7 @@
  right="-693"
  bottom="-50"
  legacy_header_height="15"
- bg_opaque_image="Window_NoTitle_Background"
+ bg_opaque_image="Window_NoTitle_Foreground"
  bg_alpha_image="Window_NoTitle_Foreground"
  can_dock="false"
  can_minimize="false"
@@ -20,7 +20,7 @@
  save_visibility="true"
  single_instance="true"
  chrome="true"
- title=""
+ show_title="false"
  width="86">
     <string
      name="walk_forward_tooltip">

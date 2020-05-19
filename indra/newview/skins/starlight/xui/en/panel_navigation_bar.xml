@@ -116,7 +116,7 @@
 	     layout="topleft"
 	     left_pad="6"
 	     name="About_Land"
-	     tool_tip="Pops up Land Information window"
+	     tool_tip="Opens Land Information window"
 	     top_delta="0"
 	     width="38">
 		 <button.init_callback
@@ -133,14 +133,10 @@
 	     image_overlay="Windlight_btn"
 	     layout="topleft"
 	     left_pad="6"
-	     name="Environment"
-	     tool_tip="Pops up Environment Settings window"
+	     name="PersonalLighting"
+	     tool_tip="Opens the Personal Lighting window"
 	     top_delta="0"
-	     width="38">
-		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="env_settings" />
-		 </button>
+	     width="38" />
           <!-- end of Windlight Button -->
 
 	</layout_panel>

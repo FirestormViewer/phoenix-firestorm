@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="presets_camera_pulldown">
+	<text name="Camera Presets">
+		Kameravoreinstellungen
+	</text>
+	<button label="Kamera-Fenster öffnen" name="open_prefs_btn" tool_tip="Zeigt das Kamera-Fenster an"/>
+</panel>
