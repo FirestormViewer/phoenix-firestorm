@@ -1303,7 +1303,10 @@ bool LLAppViewer::init()
 	gSimLastTime = gRenderStartTime.getElapsedTimeF32();
 	gSimFrames = (F32)gFrameCount;
 
-	LLViewerJoystick::getInstance()->init(false);
+    if (gSavedSettings.getBOOL("JoystickEnabled"))
+    {
+        LLViewerJoystick::getInstance()->init(false);
+    }
 
 	try {
 		initializeSecHandler();
@@ -3782,8 +3785,8 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
-	info["GRAPHICS_CARD_VENDOR"] = (const char*)(glGetString(GL_VENDOR));
-	info["GRAPHICS_CARD"] = (const char*)(glGetString(GL_RENDERER));
+	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
+	info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
 
 #if LL_WINDOWS
 	std::string drvinfo = gDXHardware.getDriverVersionWMI();
@@ -3805,7 +3808,7 @@ LLSD LLAppViewer::getViewerInfo() const
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
 	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : LLTrans::getString("RLVaStatusDisabled");
 // [/RLVa:KB]
-	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
+	info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
 
