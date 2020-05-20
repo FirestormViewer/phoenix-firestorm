@@ -2,7 +2,6 @@
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="La parcela está en venta"/>
-		<button name="status_wl_btn" tool_tip="La parcela tiene configuración WL"/>
 		<text tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma." name="parcel_info_text" value="(cargando...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -17,11 +16,11 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
-	<panel name="balance_bg" left="-431">
+	<panel name="balance_bg" left="-454">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$"/>
 		<button label="COMPRAR L$" name="buyL" tool_tip="Pulsa para comprar más L$" left_pad="-15"/>
 	</panel>
-	<panel name="time_and_media_bg" width="328">
+	<panel name="time_and_media_bg" width="351">
 		<icon name="dd_icon" tool_tip="Distancia de dibujo"/>
 		<slider tool_tip="Distancia máxima desde la cámara, en metros a la que se dibujarán objetos" name="drawdistance"/>
 		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)" width="78">24:00:00 PST</text>

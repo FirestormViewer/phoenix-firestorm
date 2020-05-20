@@ -267,16 +267,6 @@
             (requires restart)
         </text>
         <check_box
-         top_pad="-1"
-         follows="left|top"
-         height="16"
-         label="Show the default camera controls minifloater always as opaque"
-         layout="topleft"
-         left="20"
-         name="FSAlwaysOpaqueCameraControls"
-         width="350"
-         control_name="FSAlwaysOpaqueCameraControls"/>
-        <check_box
          top_pad="3"
          follows="left|top"
          height="16"

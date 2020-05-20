@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="テクスチャ" name="Texture">
-	<panel.string name="string repeats per meter">
-		メーターごとに繰り返す
-	</panel.string>
-	<panel.string name="string repeats per face">
-		面ごとに繰り返す
-	</panel.string>
 	<text name="color label">
 		色
 	</text>

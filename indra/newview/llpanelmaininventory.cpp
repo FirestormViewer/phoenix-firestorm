@@ -58,6 +58,7 @@
 #include "llsidepanelinventory.h"
 #include "llfolderview.h"
 #include "llradiogroup.h"
+#include "llenvironment.h"
 
 // <FS:AW opensim currency support>
 #include "lltrans.h"
@@ -140,6 +141,9 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
 	//mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2)); // <FS:Zi> Sort By menu handlers
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
+
+    mEnableCallbackRegistrar.add("Inventory.EnvironmentEnabled", [](LLUICtrl *, const LLSD &) { return LLPanelMainInventory::hasSettingsInventory(); });
+
 
 	// <FS:Zi> Filter Links Menu
 	mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
@@ -1307,6 +1311,7 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	getChild<LLUICtrl>("check_sound")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
 	getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
 	getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
+    getChild<LLUICtrl>("check_settings")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SETTINGS));
 	getChild<LLUICtrl>("check_transferable")->setValue(mFilter->getFilterTransferable()); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
 
@@ -1393,6 +1398,12 @@ void LLFloaterInventoryFinder::draw()
 		filter &= ~(0x1 << LLInventoryType::IT_SNAPSHOT);
 		filtered_by_all_types = FALSE;
 	}
+
+    if (!getChild<LLUICtrl>("check_settings")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_SETTINGS);
+        filtered_by_all_types = FALSE;
+    }
 
 	if (!filtered_by_all_types || (mPanelMainInventory->getPanel()->getFilter().getFilterTypes() & LLInventoryFilter::FILTERTYPE_DATE))
 	{
@@ -1513,6 +1524,7 @@ void LLFloaterInventoryFinder::selectAllTypes(void* user_data)
 	self->getChild<LLUICtrl>("check_sound")->setValue(TRUE);
 	self->getChild<LLUICtrl>("check_texture")->setValue(TRUE);
 	self->getChild<LLUICtrl>("check_snapshot")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_settings")->setValue(TRUE);
 }
 
 //static
@@ -1532,6 +1544,7 @@ void LLFloaterInventoryFinder::selectNoTypes(void* user_data)
 	self->getChild<LLUICtrl>("check_sound")->setValue(FALSE);
 	self->getChild<LLUICtrl>("check_texture")->setValue(FALSE);
 	self->getChild<LLUICtrl>("check_snapshot")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_settings")->setValue(FALSE);
 }
 
 // <FS:Zi> Inventory Collapse and Expand Buttons
@@ -2091,6 +2104,11 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 		menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
 		menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
 	}
+}
+
+bool LLPanelMainInventory::hasSettingsInventory()
+{
+    return LLEnvironment::instance().isInventoryEnabled();
 }
 
 // List Commands                                                              //

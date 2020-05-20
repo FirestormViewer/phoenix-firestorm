@@ -12,6 +12,7 @@
 	<radio_group name="mode_selection">
 		<radio_item label="インベントリ" name="inventory" value="0"/>
 		<radio_item label="ローカル" name="local" value="1"/>
+		<radio_item label="構築（ベーク）" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
 		サイズ： [DIMENSIONS]
@@ -20,7 +21,6 @@
 	<button label="ブランク" label_selected="ブランク" name="Blank"/>
 	<button label="なし" label_selected="なし" name="None"/>
 	<button label="" label_selected="" name="Pipette"/>
-	<check_box initial_value="true" label="今すぐ適用" name="apply_immediate_check"/>
 	<text name="preview_disabled" value="プレビュー無効"/>
 	<filter_editor label="テクスチャをフィルター" name="inventory search editor"/>
 	<check_box initial_value="false" label="フォルダを表示" name="show_folders_check"/>
@@ -51,4 +51,5 @@
 	<button name="TextureKeyApply" label="UUID を摘要" tool_tip="この UUID を摘要します" />
 	<button label="OK" label_selected="OK" name="Select"/>
 	<button label="取り消し" label_selected="取り消し" name="Cancel"/>
+	<check_box initial_value="true" label="今すぐ適用" name="apply_immediate_check"/>
 </floater>

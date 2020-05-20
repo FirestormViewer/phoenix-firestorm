@@ -747,6 +747,15 @@ support@secondlife.com.
 	<string name="BUTTON_SNOOZE">
 		Вздремнуть
 	</string>
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+		Элементы этого типа не могут быть занесены в 
+карточку для комментариев в этом регионе.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+		Только элементы с безусловным разрешением 
+‘следующего владельца’ можно внести 
+в карточки для комментариев.
+	</string>
 	<string name="Searching">
 		Поиск...
 	</string>
@@ -887,6 +896,9 @@ support@secondlife.com.
 	</string>
 	<string name="symbolic link">
 		ссылку
+	</string>
+	<string name="settings blob">
+		настройки
 	</string>
 	<string name="symbolic folder link">
 		ссылку на папку
@@ -2711,6 +2723,12 @@ support@secondlife.com.
 	</string>
 	<string name="RegionSettings">
 		Установки региона
+	</string>
+	<string name="NoEnvironmentSettings">
+		Этот регион не поддерживает параметры среды.
+	</string>
+	<string name="NoEnvironmentSettings">
+		Этот регион не поддерживает параметры среды.
 	</string>
 	<string name="ClassifiedClicksTxt">
 		Нажатия: [TELEPORT] телепортация, [MAP] карта, [PROFILE] профиль
@@ -5084,6 +5102,15 @@ support@secondlife.com.
 	</string>
 	<string name="Female - Wow">
 		Женщина – ух ты!
+	</string>
+	<string name="New Daycycle">
+		Новый суточный цикл
+	</string>
+	<string name="New Water">
+		Новая вода
+	</string>
+	<string name="New Sky">
+		Новое небо
 	</string>
 	<string name="/bow">
 		/поклониться

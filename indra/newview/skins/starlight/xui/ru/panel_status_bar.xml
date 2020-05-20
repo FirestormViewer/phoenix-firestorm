@@ -2,7 +2,6 @@
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
-		<button name="status_wl_btn" tool_tip="Настройки окружающей среды"/>
 		<text tool_tip="Имя земельного участка, на котором вы стоите. Нажмите о земле." name="parcel_info_text" value="(загрузка...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">

@@ -39,6 +39,7 @@
 #include "llfloaterbuycurrency.h"
 #include "llbuycurrencyhtml.h"
 #include "llpanelnearbymedia.h"
+#include "llpanelpresetscamerapulldown.h"
 #include "llpanelpresetspulldown.h"
 #include "llpanelvolumepulldown.h"
 #include "llfloaterregioninfo.h"
@@ -89,8 +90,6 @@
 #include <iomanip>
 
 // Firestorm includes
-#include "fslightshare.h"
-#include "kcwlinterface.h"
 #include "llagentui.h"
 #include "llaudioengine.h"
 #include "llclipboard.h"
@@ -192,9 +191,11 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mAudioStreamEnabled(FALSE),	// <FS:Zi> Media/Stream separation
 	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
 	mNearbyIcons(FALSE),		// <FS:Ansariel> Script debug
-	mIconPresets(NULL),
+	mIconPresetsGraphic(NULL),
+	mIconPresetsCamera(NULL),
 	mMediaToggle(NULL),
 	mMouseEnterPresetsConnection(),
+	mMouseEnterPresetsCameraConnection(),
 	mMouseEnterVolumeConnection(),
 	mMouseEnterNearbyMediaConnection(),
 	mCurrentLocationString()
@@ -252,6 +253,10 @@ LLStatusBar::~LLStatusBar()
 	{
 		mMouseEnterPresetsConnection.disconnect();
 	}
+	if (mMouseEnterPresetsCameraConnection.connected())
+	{
+		mMouseEnterPresetsCameraConnection.disconnect();
+	}
 	if (mMouseEnterVolumeConnection.connected())
 	{
 		mMouseEnterVolumeConnection.disconnect();
@@ -299,15 +304,23 @@ BOOL LLStatusBar::postBuild()
 	mBoxBalance = getChild<LLTextBox>("balance");
 	mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
 
-	mIconPresets = getChild<LLButton>( "presets_icon" );
-	// <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
-	// mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	mIconPresetsCamera = getChild<LLButton>( "presets_icon_camera" );
+	//mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::mIconPresetsCamera, this));
 	if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
 	{
-		mMouseEnterPresetsConnection = mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+		mMouseEnterPresetsCameraConnection = mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
+	}
+	mIconPresetsCamera->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
+
+	mIconPresetsGraphic = getChild<LLButton>( "presets_icon_graphic" );
+	// <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+	// mIconPresetsGraphic->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
+	{
+		mMouseEnterPresetsConnection = mIconPresetsGraphic->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 	}
 	// </FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
-	mIconPresets->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	mIconPresetsGraphic->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
@@ -398,6 +411,11 @@ BOOL LLStatusBar::postBuild()
 	mSGPacketLoss = LLUICtrlFactory::create<LLStatGraph>(pgp);
 	addChild(mSGPacketLoss);
 
+	mPanelPresetsCameraPulldown = new LLPanelPresetsCameraPulldown();
+	addChild(mPanelPresetsCameraPulldown);
+	mPanelPresetsCameraPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
+	mPanelPresetsCameraPulldown->setVisible(FALSE);
+
 	mPanelPresetsPulldown = new LLPanelPresetsPulldown();
 	addChild(mPanelPresetsPulldown);
 	mPanelPresetsPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
@@ -452,14 +470,6 @@ BOOL LLStatusBar::postBuild()
 
 	mBuyParcelBtn = getChild<LLButton>("buy_land_btn");
 	mBuyParcelBtn->setClickedCallback(boost::bind(&LLStatusBar::onBuyLandClicked, this));
-
-	mPWLBtn = getChild<LLButton>("status_wl_btn");
-	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
-	
-	// <FS:CR> FIRE-5118 - Lightshare support
-	mLightshareBtn = getChild<LLButton>("status_lightshare_btn");
-	mLightshareBtn->setClickedCallback(boost::bind(&LLStatusBar::onLightshareClicked, this));
-	// </FS:CR>
 
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
@@ -695,7 +705,8 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mBandwidthButton->setVisible(visible && showNetStats); // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
-	mIconPresets->setVisible(visible);
+	mIconPresetsCamera->setVisible(visible);
+	mIconPresetsGraphic->setVisible(visible);
 }
 
 void LLStatusBar::debitBalance(S32 debit)
@@ -836,13 +847,40 @@ void LLStatusBar::onClickBuyCurrency()
 	LLFirstUse::receiveLindens(false);
 }
 
+void LLStatusBar::onMouseEnterPresetsCamera()
+{
+	LLView* popup_holder = gViewerWindow->getRootView()->getChildView("popup_holder");
+	// <FS:Ansariel> Changed presets icon to LLButton
+	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon_camera" );
+	//LLRect icon_rect = icon->getRect();
+	LLRect icon_rect = mIconPresetsCamera->getRect();
+	// </FS:Ansariel>
+	LLRect pulldown_rect = mPanelPresetsCameraPulldown->getRect();
+	pulldown_rect.setLeftTopAndSize(icon_rect.mLeft -
+	     (pulldown_rect.getWidth() - icon_rect.getWidth()),
+			       icon_rect.mBottom,
+			       pulldown_rect.getWidth(),
+			       pulldown_rect.getHeight());
+
+	pulldown_rect.translate(popup_holder->getRect().getWidth() - pulldown_rect.mRight, 0);
+	mPanelPresetsCameraPulldown->setShape(pulldown_rect);
+
+	// show the master presets pull-down
+	LLUI::getInstance()->clearPopups();
+	LLUI::getInstance()->addPopup(mPanelPresetsCameraPulldown);
+	mPanelNearByMedia->setVisible(FALSE);
+	mPanelVolumePulldown->setVisible(FALSE);
+	mPanelPresetsPulldown->setVisible(FALSE);
+	mPanelPresetsCameraPulldown->setVisible(TRUE);
+}
+
 void LLStatusBar::onMouseEnterPresets()
 {
 	LLView* popup_holder = gViewerWindow->getRootView()->getChildView("popup_holder");
 	// <FS:Ansariel> Changed presets icon to LLButton
-	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon" );
+	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon_graphic" );
 	//LLRect icon_rect = icon->getRect();
-	LLRect icon_rect = mIconPresets->getRect();
+	LLRect icon_rect = mIconPresetsGraphic->getRect();
 	// </FS:Ansariel>
 	LLRect pulldown_rect = mPanelPresetsPulldown->getRect();
 	pulldown_rect.setLeftTopAndSize(icon_rect.mLeft -
@@ -884,6 +922,7 @@ void LLStatusBar::onMouseEnterVolume()
 	// show the master volume pull-down
 	LLUI::getInstance()->clearPopups();
 	LLUI::getInstance()->addPopup(mPanelVolumePulldown);
+	mPanelPresetsCameraPulldown->setVisible(FALSE);
 	mPanelPresetsPulldown->setVisible(FALSE);
 	mPanelNearByMedia->setVisible(FALSE);
 	mPanelVolumePulldown->setVisible(TRUE);
@@ -908,6 +947,7 @@ void LLStatusBar::onMouseEnterNearbyMedia()
 	LLUI::getInstance()->clearPopups();
 	LLUI::getInstance()->addPopup(mPanelNearByMedia);
 
+	mPanelPresetsCameraPulldown->setVisible(FALSE);
 	mPanelPresetsPulldown->setVisible(FALSE);
 	mPanelVolumePulldown->setVisible(FALSE);
 	mPanelNearByMedia->setVisible(TRUE);
@@ -1340,8 +1380,6 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
-		bool has_pwl		= KCWindlightInterface::instance().getWLset();
-		bool has_lightshare	= FSLightshare::getInstance()->getState();
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
 		bool pathfinding_navmesh_dirty = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
@@ -1373,10 +1411,6 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled && !is_opensim);
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
-		mPWLBtn->setVisible(has_pwl);
-		mPWLBtn->setEnabled(has_pwl);
-		mLightshareBtn->setVisible(has_lightshare);
-		mLightshareBtn->setEnabled(has_lightshare);
 		mScriptOut->setVisible(LLHUDIcon::scriptIconsNearby());
 	}
 	else
@@ -1387,9 +1421,7 @@ void LLStatusBar::updateParcelIcons()
 		}
 		mDamageText->setVisible(false);
 		mBuyParcelBtn->setVisible(false);
-		mPWLBtn->setVisible(false);
-		mLightshareBtn->setVisible(false);
-		mScriptOut->setVisible(FALSE);
+		mScriptOut->setVisible(false);
 	}
 
 	layoutParcelIcons();
@@ -1426,8 +1458,6 @@ void LLStatusBar::layoutParcelIcons()
 		left = layoutWidget(mParcelIcon[i], left);
 	}
 	left = layoutWidget(mBuyParcelBtn, left);
-	left = layoutWidget(mPWLBtn, left);
-	left = layoutWidget(mLightshareBtn, left);
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
 	infoTextRect.mLeft = left;
@@ -1544,16 +1574,6 @@ void LLStatusBar::onInfoButtonClicked()
 		return;
 	}
 	LLFloaterReg::showInstance("about_land");
-}
-
-void LLStatusBar::onParcelWLClicked()
-{
-	KCWindlightInterface::instance().onClickWLStatusButton();
-}
-
-void LLStatusBar::onLightshareClicked()
-{
-	FSLightshare::getInstance()->processLightshareReset();
 }
 
 void LLStatusBar::onBuyLandClicked()
@@ -1673,6 +1693,10 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 	{
 		mMouseEnterPresetsConnection.disconnect();
 	}
+	if (mMouseEnterPresetsCameraConnection.connected())
+	{
+		mMouseEnterPresetsCameraConnection.disconnect();
+	}
 	if (mMouseEnterVolumeConnection.connected())
 	{
 		mMouseEnterVolumeConnection.disconnect();
@@ -1684,7 +1708,8 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 
 	if (new_value)
 	{
-		mMouseEnterPresetsConnection = mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+		mMouseEnterPresetsConnection = mIconPresetsGraphic->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+		mMouseEnterPresetsCameraConnection = mIconPresetsCamera->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresetsCamera, this));
 		mMouseEnterVolumeConnection = mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
 		mMouseEnterNearbyMediaConnection = mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
 	}

@@ -194,39 +194,50 @@ namespace {
             return LLError::getEnabledLogTypesMask() & 0x04;
         }
         
+        LL_FORCE_INLINE std::string createANSI(const std::string& color)
+        {
+            std::string ansi_code;
+            ansi_code  += '\033';
+            ansi_code  += "[";
+            ansi_code  += color;
+            ansi_code += "m";
+            return ansi_code;
+        }
+
 		virtual void recordMessage(LLError::ELevel level,
 					   const std::string& message) override
-		{
+		{            
+            static std::string s_ansi_error = createANSI("31"); // red
+            static std::string s_ansi_warn  = createANSI("34"); // blue
+            static std::string s_ansi_debug = createANSI("35"); // magenta
+
+
 			if (mUseANSI)
 			{
-				// Default all message levels to bold so we can distinguish our own messages from those dumped by subprocesses and libraries.
-				colorANSI("1"); // bold
-				switch (level) {
-				case LLError::LEVEL_ERROR:
-					colorANSI("31"); // red
-					break;
-				case LLError::LEVEL_WARN:
-					colorANSI("34"); // blue
-					break;
-				case LLError::LEVEL_DEBUG:
-					colorANSI("35"); // magenta
-					break;
-				default:
-					break;
-				}
+                writeANSI((level == LLError::LEVEL_ERROR) ? s_ansi_error :
+                          (level == LLError::LEVEL_WARN)  ? s_ansi_warn :
+                                                            s_ansi_debug, message);
 			}
-			fprintf(stderr, "%s\n", message.c_str());
-			if (mUseANSI) colorANSI("0"); // reset
+            else
+            {
+                 fprintf(stderr, "%s\n", message.c_str());
+            }
+#if LL_WINDOWS 
+	fflush(stderr); //Now using a buffer. flush is required. 
+#endif 
 		}
 	
 	private:
 		bool mUseANSI;
 
-		void colorANSI(const std::string color)
+        LL_FORCE_INLINE void writeANSI(const std::string& ansi_code, const std::string& message)
 		{
-			// ANSI color code escape sequence
-			fprintf(stderr, "\033[%sm", color.c_str() );
-		};
+            static std::string s_ansi_bold  = createANSI("1");  // bold
+            static std::string s_ansi_reset = createANSI("0");  // reset
+			// ANSI color code escape sequence, message, and reset in one fprintf call
+            // Default all message levels to bold so we can distinguish our own messages from those dumped by subprocesses and libraries.
+			fprintf(stderr, "%s%s%s\n%s", s_ansi_bold.c_str(), ansi_code.c_str(), message.c_str(), s_ansi_reset.c_str() );
+		}
 
 		static bool checkANSI(void)
 		{
@@ -237,8 +248,8 @@ namespace {
 			return (0 != isatty(2)) &&
 				(NULL == getenv("LL_NO_ANSI_COLOR"));
 #endif // LL_LINUX
-			return false;
-		};
+            return FALSE; // works in a cygwin shell... ;)
+		}
 	};
 
 	class RecordToFixedBuffer : public LLError::Recorder
@@ -671,8 +682,19 @@ namespace
 		
 		// If stderr is a tty, assume the user launched from the command line or
 		// debugger and therefore wants to see stderr.  Otherwise, assume we've
+        if (isatty(STDERR_FILENO))
+            return true;
+        struct stat st;
+        if (fstat(STDERR_FILENO, &st) < 0)
+        {
+            auto errno_save = errno;
+            std::cerr << "shouldLogToStderr: fstat(" << STDERR_FILENO << ") failed, errno "
+                      << errno_save << std::endl;
 		// been launched from the finder and shouldn't spam stderr.
-		return isatty(STDERR_FILENO);
+            return false;
+        }
+
+        return ((st.st_mode & S_IFMT) == S_IFIFO);
 #else
 		return true;
 #endif

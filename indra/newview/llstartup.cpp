@@ -75,6 +75,7 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llpersistentnotificationstorage.h"
+#include "llpresetsmanager.h"
 #include "llteleporthistory.h"
 #include "llregionhandle.h"
 #include "llsd.h"
@@ -191,8 +192,6 @@
 #include "llnamebox.h"
 #include "llnameeditor.h"
 #include "llpostprocess.h"
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
 #include "llagentlanguage.h"
 #include "llwearable.h"
 #include "llinventorybridge.h"
@@ -210,6 +209,8 @@
 #include "lltoolbarview.h"
 #include "llexperiencelog.h"
 #include "llcleanup.h"
+
+#include "llenvironment.h"
 
 #include "llstacktrace.h"
 
@@ -594,7 +595,6 @@ bool idle_startup()
 	static U32 first_sim_size_x = 256;
 	static U32 first_sim_size_y = 256;
 // </FS:CR> Aurora Sim
-	static LLVector3 initial_sun_direction(1.f, 0.f, 0.f);
 	static LLVector3 agent_start_position_region(10.f, 10.f, 10.f);		// default for when no space server
 
 	// last location by default
@@ -1504,20 +1504,6 @@ bool idle_startup()
 		// NaCl - Antispam
 		NACLAntiSpamRegistry::instance();
 		// NaCl End
-
-		//good a place as any to create user windlight directories
-		std::string user_windlight_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight", ""));
-		LLFile::mkdir(user_windlight_path_name.c_str());		
-
-		std::string user_windlight_skies_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/skies", ""));
-		LLFile::mkdir(user_windlight_skies_path_name.c_str());
-
-		std::string user_windlight_water_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/water", ""));
-		LLFile::mkdir(user_windlight_water_path_name.c_str());
-
-		std::string user_windlight_days_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", ""));
-		LLFile::mkdir(user_windlight_days_path_name.c_str());
-
 		// <FS:Ansariel> Create user fonts directory
 		std::string user_fonts_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "fonts", ""));
 		LLFile::mkdir(user_fonts_path_name.c_str());
@@ -1528,7 +1514,6 @@ bool idle_startup()
 		// <FS:Techwolf Lupindo> load per grid data
 		FSData::instance().downloadAgents();
 		// </FS:Techwolf Lupindo>
-
 		if (show_connect_box)
 		{
 			LLSLURL slurl;
@@ -2211,8 +2196,7 @@ bool idle_startup()
 		LLGLState::checkStates();
 		LLGLState::checkTextureChannels();
 
-		LLEnvManagerNew::getInstance()->usePrefs(); // Load all presets and settings
-		gSky.init(initial_sun_direction);
+		gSky.init();
 
 		LLGLState::checkStates();
 		LLGLState::checkTextureChannels();
@@ -2676,7 +2660,10 @@ bool idle_startup()
 		}
 		
 		display_startup();
-        
+
+        // Load stored local environment if needed.
+        LLEnvironment::instance().loadFromSettings();
+
         // *TODO : Uncomment that line once the whole grid migrated to SLM and suppress it from LLAgent::handleTeleportFinished() (llagent.cpp)
         //check_merchant_status();
 
@@ -2791,6 +2778,8 @@ bool idle_startup()
 		// TODO: Put this into RegisterNewAgent
 		// JC - 7/20/2002
 		gViewerWindow->sendShapeToSim();
+
+		LLPresetsManager::getInstance()->createMissingDefault(PRESETS_CAMERA);
 
 		// The reason we show the alert is because we want to
 		// reduce confusion for when you log in and your provided
@@ -3510,7 +3499,8 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 
 	msg->setHandlerFunc("InitiateDownload", process_initiate_download);
 	msg->setHandlerFunc("LandStatReply", LLFloaterTopObjects::handle_land_reply);
-	msg->setHandlerFunc("GenericMessage", process_generic_message);
+    msg->setHandlerFunc("GenericMessage", process_generic_message);
+    msg->setHandlerFunc("LargeGenericMessage", process_large_generic_message);
 
 	msg->setHandlerFuncFast(_PREHASH_FeatureDisabled, process_feature_disabled_message);
 }
@@ -4709,26 +4699,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		{
 			sInitialOutfitGender = flag;
 		}
-	}
-
-	LLSD global_textures = response["global-textures"][0];
-	if(global_textures.size())
-	{
-		// Extract sun and moon texture IDs.  These are used
-		// in the LLVOSky constructor, but I can't figure out
-		// how to pass them in.  JC
-		LLUUID id = global_textures["sun_texture_id"];
-		if(id.notNull())
-		{
-			gSunTextureID = id;
-		}
-
-		id = global_textures["moon_texture_id"];
-		if(id.notNull())
-		{
-			gMoonTextureID = id;
-		}
-
 	}
 
 	// set the location of the Agent Appearance service, from which we can request

@@ -132,32 +132,6 @@
     top="2"
     tool_tip="Parcel is for sale" 
     width="16"/>
-   <button
-    follows="right|top"
-    height="16"
-    hover_glow_amount="0.15"
-    image_disabled="Parcel_Windlight"
-    image_disabled_selected="Parcel_Windlight"
-    image_selected="Parcel_Windlight"
-    image_unselected="Parcel_Windlight"
-    left="208"
-    name="status_wl_btn"
-    top="2"
-    tool_tip="Parcel has WL settings" 
-    width="16"/>
-   <button
-    follows="right|top"
-    height="16"
-    hover_glow_amount="0.15"
-    image_disabled="Icon_Lightshare"
-    image_disabled_selected="Icon_Lightshare"
-    image_selected="Icon_Lightshare"
-    image_unselected="Icon_Lightshare"
-    left="208"
-    name="status_lightshare_btn"
-    top="2"
-    tool_tip="Lightshare settings"
-    width="16"/>
   <icon
     follows="right|top"
     height="13"
@@ -230,7 +204,7 @@
 
 	<panel
 	 height="18"
-	 left="-581"
+	 left="-604"
 	 top="0"
 	 width="110"
 	 follows="right|top"
@@ -270,7 +244,7 @@
 
   <panel
     height="18"
-    left="-449"
+    left="-472"
     width="77"
     top="0"
     follows="right|top"
@@ -316,7 +290,7 @@
   <panel
     height="18"
     left_pad="5"
-    width="346"
+    width="369"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
@@ -372,11 +346,20 @@
     <button
      follows="right|top"
      height="16"
-     image_unselected="Presets_Icon"
-     image_pressed="Presets_Icon"
+     image_unselected="Cam_FreeCam_Off"
+     image_pressed="Cam_FreeCam_Off"
      left_pad="5"
      top="2"
-     name="presets_icon"
+     name="presets_icon_camera"
+     width="18" />
+    <button
+     follows="right|top"
+     height="16"
+     image_unselected="Presets_Icon_Graphic"
+     image_pressed="Presets_Icon_Graphic"
+     left_pad="5"
+     top="2"
+     name="presets_icon_graphic"
      width="18" />
     <button
      follows="right|top"

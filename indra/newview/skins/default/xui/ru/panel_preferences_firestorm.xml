@@ -109,26 +109,6 @@
         <check_box label="Разрешить протокол OpenCollar, чтобы разрешить или запретить строить в AO" name="BridgeIntegrationOC" />
         <check_box label="Разрешить протокол LockMeister, чтобы разрешить или запретить строить в AO" name="BridgeIntegrationLM" />
     </panel>
-    <panel label="Окружение (Windlight)" name="WindlightTab">
-        <check_box label="Автоматическое изменение окружающей среды использя настройки региона/участка" name="UseEnvironmentFromRegionAlways" />
-        <check_box label="Плавный переход предустановленных настроек региона для неба" name="FSInterpolateSky" tool_tip="Может вызвать временное падение FPS" />
-        <check_box label="Плавный переход предустановленных настроек региона для воды" name="FSInterpolateWater" tool_tip="Может вызвать временное падение FPS" />
-        <text name="FSWLshare_txt" width="350">
-          Совместная окружающая среда Firestorm
-        </text>
-        <check_box label="Использовать совместную окружающую среду Firestorm для участка" name="FSWLParcelEnabled" />
-        <check_box label="Автоматически применять настройки окружающей среды от друзей" name="FSWLWhitelistFriends" />
-        <check_box label="Автоматически применять настройки окружающей среды от групп" name="FSWLWhitelistGroups" />
-        <check_box label="Автоматически применять настройки окружающей среды от любого участка" name="FSWLWhitelistAll" />
-        <text name="wl_crossfade_label">
-         Продолжительность перехода:
-         </text>
-        <spinner tool_tip="[По умолчанию: 3]" name="FSWindlightInterpolateTime" />
-        <text name="could_texture_text">
-         Текстуры облаков:
-        </text>
-        <combo_box name="cloud_combo" tool_tip="Выберите текстуру, которая вам нравится" />
-    </panel>
     <panel label="Строить 1" name="BuildTab">
         <text name="text_box_objprams">
          Начальный размер

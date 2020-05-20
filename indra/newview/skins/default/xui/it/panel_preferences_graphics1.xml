@@ -33,7 +33,6 @@
 			<check_box label="Trasparenza acqua" name="TransparentWater"/>
 			<check_box label="Piccoli rilievi e scintillii" name="BumpShiny"/>
 			<check_box label="Luci locali" name="LocalLights"/>
-			<check_box label="Effetti grafici base" name="BasicShaders" tool_tip="Disabilitare questa opzione può evitare che qualche scheda grafica vada in crash."/>
 			<check_box label="Effetti grafici atmosferici" name="WindLightUseAtmosShaders"/>
 			<check_box label="Luci e ombre" name="UseLightShaders" tool_tip="Abilita la gestione avanzata delle luci"/>
 			<check_box label="Ombre ambiente" name="UseSSAO"/>

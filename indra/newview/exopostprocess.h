@@ -82,7 +82,7 @@ public:
 	// Cached settings.
 	static LLVector3	sExodusRenderVignette;
 	
-	S32					mVertexShaderLevel;
+	S32					mShaderLevel;
 };
 
 #endif
