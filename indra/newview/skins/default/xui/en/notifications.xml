@@ -10659,6 +10659,19 @@ Current setting: [CURRENT_VALUE]
   </notification>
   <!-- ## Zi: Debug Settings Editor -->
 
+  <!-- <FS:Sei> LSL Default label missing FIRE-17710 -->
+  <notification
+   icon="alertmodal.tga"
+   name="DefaultLabelMissing"
+   type="alertmodal">
+   <usetemplate
+    ignoretext="A LSL script has switch statement without a default label"
+    name="notifyignore"/>
+The behavior for switch() statements without a default case was previously incorrect and has been fixed. 
+See FIRE-17710 for details.
+  </notification>
+  <!-- </FS:Sei> -->
+
   <notification
    icon="alertmodal.tga"
    name="TeleportToAvatarNotPossible"
