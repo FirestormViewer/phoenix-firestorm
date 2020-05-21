@@ -39,6 +39,7 @@
 #if !LL_WINDOWS
 # include <syslog.h>
 # include <unistd.h>
+# include <sys/stat.h>
 #endif // !LL_WINDOWS
 #include <vector>
 #include "string.h"
@@ -206,11 +207,10 @@ namespace {
 
 		virtual void recordMessage(LLError::ELevel level,
 					   const std::string& message) override
-		{            
+		{
             static std::string s_ansi_error = createANSI("31"); // red
             static std::string s_ansi_warn  = createANSI("34"); // blue
             static std::string s_ansi_debug = createANSI("35"); // magenta
-
 
 			if (mUseANSI)
 			{
@@ -673,33 +673,38 @@ namespace LLError
 
 namespace
 {
-	bool shouldLogToStderr()
-	{
+    bool shouldLogToStderr()
+    {
 #if LL_DARWIN
-		// On Mac OS X, stderr from apps launched from the Finder goes to the
-		// console log.  It's generally considered bad form to spam too much
-		// there.
-		
-		// If stderr is a tty, assume the user launched from the command line or
-		// debugger and therefore wants to see stderr.  Otherwise, assume we've
+        // On Mac OS X, stderr from apps launched from the Finder goes to the
+        // console log.  It's generally considered bad form to spam too much
+        // there. That scenario can be detected by noticing that stderr is a
+        // character device (S_IFCHR).
+
+        // If stderr is a tty or a pipe, assume the user launched from the
+        // command line or debugger and therefore wants to see stderr.
         if (isatty(STDERR_FILENO))
             return true;
+        // not a tty, but might still be a pipe -- check
         struct stat st;
         if (fstat(STDERR_FILENO, &st) < 0)
         {
+            // capture errno right away, before engaging any other operations
             auto errno_save = errno;
+            // this gets called during log-system setup -- can't log yet!
             std::cerr << "shouldLogToStderr: fstat(" << STDERR_FILENO << ") failed, errno "
                       << errno_save << std::endl;
-		// been launched from the finder and shouldn't spam stderr.
+            // if we can't tell, err on the safe side and don't write stderr
             return false;
         }
 
+        // fstat() worked: return true only if stderr is a pipe
         return ((st.st_mode & S_IFMT) == S_IFIFO);
 #else
-		return true;
+        return true;
 #endif
-	}
-	
+    }
+
 	bool stderrLogWantsTime()
 	{
 #if LL_WINDOWS
@@ -1595,33 +1600,33 @@ namespace LLError
 	S32    LLCallStacks::sIndex  = 0 ;
 
 	//static
-   void LLCallStacks::allocateStackBuffer()
-   {
-	   if(sBuffer == NULL)
-	   {
-		   sBuffer = new char*[512] ;
-		   sBuffer[0] = new char[512 * 128] ;
-		   for(S32 i = 1 ; i < 512 ; i++)
-		   {
-			   sBuffer[i] = sBuffer[i-1] + 128 ;
-		   }
-		   sIndex = 0 ;
-	   }
-   }
+    void LLCallStacks::allocateStackBuffer()
+    {
+        if(sBuffer == NULL)
+        {
+            sBuffer = new char*[512] ;
+            sBuffer[0] = new char[512 * 128] ;
+            for(S32 i = 1 ; i < 512 ; i++)
+            {
+                sBuffer[i] = sBuffer[i-1] + 128 ;
+            }
+            sIndex = 0 ;
+        }
+    }
 
-   void LLCallStacks::freeStackBuffer()
-   {
-	   if(sBuffer != NULL)
-	   {
-		   delete [] sBuffer[0] ;
-		   delete [] sBuffer ;
-		   sBuffer = NULL ;
-	   }
-   }
+    void LLCallStacks::freeStackBuffer()
+    {
+        if(sBuffer != NULL)
+        {
+            delete [] sBuffer[0] ;
+            delete [] sBuffer ;
+            sBuffer = NULL ;
+        }
+    }
 
-   //static
-   void LLCallStacks::push(const char* function, const int line)
-   {
+    //static
+    void LLCallStacks::push(const char* function, const int line)
+    {
         LLMutexTrylock lock(getMutex<STACKS_MUTEX>(), 5);
         if (!lock.isLocked())
         {
@@ -1650,7 +1655,6 @@ namespace LLError
     {
         std::ostringstream* _out = LLError::Log::out();
         *_out << function << " line " << line << " " ;
-             
         return _out ;
     }
 

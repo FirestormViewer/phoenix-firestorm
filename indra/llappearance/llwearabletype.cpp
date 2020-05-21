@@ -71,12 +71,6 @@ protected:
 
 LLWearableDictionary::LLWearableDictionary(LLWearableType& wtype)
 {
-    if (!LLWearableType::instanceExists())
-    {
-        // LLWearableType is effectively a wrapper around LLWearableDictionary and is used as storage for LLTranslationBridge
-        // Todo: consider merging LLWearableType and LLWearableDictionary
-        LL_WARNS() << "Initing LLWearableDictionary without LLWearableType" << LL_ENDL;
-    }
 	addEntry(LLWearableType::WT_SHAPE,        new WearableEntry(wtype, "shape",       "New Shape",			LLAssetType::AT_BODYPART, 	LLInventoryType::ICONNAME_BODYPART_SHAPE, FALSE, FALSE));
 	addEntry(LLWearableType::WT_SKIN,         new WearableEntry(wtype, "skin",        "New Skin",			LLAssetType::AT_BODYPART, 	LLInventoryType::ICONNAME_BODYPART_SKIN, FALSE, FALSE));
 	addEntry(LLWearableType::WT_HAIR,         new WearableEntry(wtype, "hair",        "New Hair",			LLAssetType::AT_BODYPART, 	LLInventoryType::ICONNAME_BODYPART_HAIR, FALSE, FALSE));

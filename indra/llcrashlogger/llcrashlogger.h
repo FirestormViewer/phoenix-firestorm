@@ -44,6 +44,11 @@
 struct crypto_threadid_st;
 typedef crypto_threadid_st CRYPTO_THREADID;
 
+// We shouldn't have to know the exact declaration of CRYPTO_THREADID, but VS
+// 2017 complains if we forward-declare it as simply 'struct CRYPTO_THREADID'.
+struct crypto_threadid_st;
+typedef crypto_threadid_st CRYPTO_THREADID;
+
 // Crash reporter behavior
 const S32 CRASH_BEHAVIOR_ASK = 0;
 const S32 CRASH_BEHAVIOR_ALWAYS_SEND = 1;

@@ -216,42 +216,9 @@ namespace tut
     }
 
     void test_data::postAndWait1()
-    {
         BEGIN
         {
-            LLCoroEventPumps waiter;
-            replyName = waiter.getName0();
-            errorName = waiter.getName1();
-            result = waiter.suspendWithLog();
-        }
-        END
-    }
-
-    template<> template<>
-    void object::test<11>()
-    {
-        clear();
-        set_test_name("coroPumpsNoLog");
-        DEBUG;
-        LLCoros::instance().launch("test<11>", coroPumpsNoLog);
-        debug("about to send");
-        LLEventPumps::instance().obtain(replyName).post("received");
-        debug("back from send");
-        ensure_equals(result.asString(), "received");
-    }
-
-    void coroPumpsLog()
-    {
-        BEGIN
-        {
-            LLCoroEventPumps waiter;
-            replyName = waiter.getName0();
-            errorName = waiter.getName1();
-            WrapLLErrs capture;
-            threw = capture.catch_llerrs([&waiter, &debug](){
-                    result = waiter.suspendWithLog();
-                    debug("no exception");
-                });
+            mSync.bump();
             result = postAndSuspend(LLSDMap("value", 17),       // request event
                                  immediateAPI.getPump(),     // requestPump
                                  "reply1",                   // replyPump
@@ -355,28 +322,10 @@ namespace tut
     }
 
     template<> template<>
-    void object::test<21>()
+    void object::test<6>()
     {
-        clear();
-        set_test_name("coroPumpsPostNoLog");
-        DEBUG;
-        LLCoros::instance().launch("test<21>", coroPumpsPostNoLog);
-        ensure_equals(result.asInteger(), 31);
-    }
-
-    void coroPumpsPostLog()
-    {
-        BEGIN
-        {
-            LLCoroEventPumps waiter;
-            WrapLLErrs capture;
-            threw = capture.catch_llerrs(
-                [&waiter, &debug](){
-                    result = waiter.postAndSuspendWithLog(
-                        LLSDMap("value", 31)("fail", LLSD()),
-                        immediateAPI.getPump(), "reply", "error");
-                    debug("no exception");
-                });
+        set_test_name("LLEventMailDrop");
+        tut::test<LLEventMailDrop>();
     }
 
     template<> template<>

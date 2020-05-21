@@ -36,7 +36,6 @@
 #include "llunits.h"
 
 // <FS:Ansariel> Fix dependency on llviewerprecompiledheaders.h in dependent projects
-#include "llpreprocessor.h"
 
 /** 
  * @class LLDate

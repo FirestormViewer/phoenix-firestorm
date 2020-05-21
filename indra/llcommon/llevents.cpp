@@ -153,9 +153,6 @@ void LLEventPumps::clear()
     }
 }
 
-    // Clear every known LLEventPump instance. Leave it up to each instance to
-    // decide what to do with the clear() call.
-
 void LLEventPumps::reset()
 {
     // Reset every known LLEventPump instance. Leave it up to each instance to
@@ -362,8 +359,8 @@ LLBoundListener LLEventPump::listen_impl(const std::string& name, const LLEventL
         // is only when the existing connection object is still connected.
         if (found != mConnections.end() && found->second.connected())
         {
-            LLTHROW(DupListenerName("Attempt to register duplicate listener name '" + name +
-                                    "' on " + typeid(*this).name() + " '" + getName() + "'"));
+        LLTHROW(DupListenerName("Attempt to register duplicate listener name '" + name +
+                                "' on " + typeid(*this).name() + " '" + getName() + "'"));
         }
         // Okay, name is unique, try to reconcile its dependencies. Specify a new
         // "node" value that we never use for an mSignal placement; we'll fix it
@@ -389,8 +386,8 @@ LLBoundListener LLEventPump::listen_impl(const std::string& name, const LLEventL
             // unsortable. If we leave the new node in mDeps, it will continue
             // to screw up all future attempts to sort()! Pull it out.
             mDeps.remove(name);
-            LLTHROW(Cycle("New listener '" + name + "' on " + typeid(*this).name() +
-                          " '" + getName() + "' would cause cycle: " + e.what()));
+        LLTHROW(Cycle("New listener '" + name + "' on " + typeid(*this).name() +
+                      " '" + getName() + "' would cause cycle: " + e.what()));
         }
         // Walk the list to verify that we haven't changed the order.
         float previous = 0.0, myprev = 0.0;
@@ -454,7 +451,7 @@ LLBoundListener LLEventPump::listen_impl(const std::string& name, const LLEventL
                 // NOW remove the offending listener node.
                 mDeps.remove(name);
                 // Having constructed a description of the order change, inform caller.
-                LLTHROW(OrderChange(out.str()));
+            LLTHROW(OrderChange(out.str()));
             }
             // This node becomes the previous one.
             previous = dmi->second;
@@ -550,8 +547,7 @@ bool LLEventStream::post(const LLSD& event)
     // Let caller know if any one listener handled the event. This is mostly
     // useful when using LLEventStream as a listener for an upstream
     // LLEventPump.
-
-	return (*signal)(event);
+    return (*signal)(event);
 }
 
 /*****************************************************************************

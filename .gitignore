@@ -1,25 +1,21 @@
-# WinMerge temp files
-*.bak
-# Compiled python bytecode
-*.pyc
-# Emacs temp files
-*~
-.*.swp
-#OSX image cache file
+# By extension
 *.DS_Store
-#*.orig
+*.bak
+*.diff
+*.orig
+*.pyc
+*.rej
+*.swp
+*~
+
+# Specific paths and/or names
 LICENSES
-scripts/install.cache.*
-indra/newview/res/viewerRes.rc
-indra/llcommon/llversionserver.h
-indra/llcommon/llversionviewer.h
-indra/newview/exoflickrkeys.h
-indra/llcommon/res/llcommon.rc
-indra/newview/Info-SecondLife.plist
-indra/newview/info-Firestorm.plist
-indra/.distcc
-build-linux-*
 build-darwin-*
+build-linux-*
+debian/files
+debian/secondlife-appearance-utility*
+debian/secondlife-viewer*
+indra/.distcc
 build-vc80/
 build-vc100/
 build-vc120/
@@ -27,8 +23,8 @@ build-vc120-32/
 build-vc120-64/
 build-vc150-32/
 build-vc150-64/
-indra/build-vc[0-9]*
 indra/CMakeFiles
+indra/build-vc[0-9]*
 indra/lib/mono/1.0/*.dll
 indra/lib/mono/indra/*.dll
 indra/lib/mono/indra/*.exe

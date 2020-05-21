@@ -23,9 +23,6 @@
 #if ! defined(LL_LLMAKE_H)
 #define LL_LLMAKE_H
 
-// If we're using a compiler newer than VS 2013, use variadic llmake().
-#if (! defined(_MSC_VER)) || (_MSC_VER > 1800)
-
 /**
  * Usage: llmake<SomeTemplate>(args...)
  *
@@ -37,22 +34,6 @@ CLASS_TEMPLATE<ARGS...> llmake(ARGS && ... args)
 {
     return CLASS_TEMPLATE<ARGS...>(std::forward<ARGS>(args)...);
 }
-
-#else // older implementation for VS 2013
-
-template <template<typename> class CLASS_TEMPLATE, typename ARG1>
-CLASS_TEMPLATE<ARG1> llmake(const ARG1& arg1)
-{
-    return CLASS_TEMPLATE<ARG1>(arg1);
-}
-
-template <template<typename, typename> class CLASS_TEMPLATE, typename ARG1, typename ARG2>
-CLASS_TEMPLATE<ARG1, ARG2> llmake(const ARG1& arg1, const ARG2& arg2)
-{
-    return CLASS_TEMPLATE<ARG1, ARG2>(arg1, arg2);
-}
-
-#endif // VS 2013 workaround
 
 /// dumb pointer template just in case that's what's wanted
 template <typename T>
@@ -81,4 +62,22 @@ POINTER_TEMPLATE<CLASS_TEMPLATE<ARGS...>> llmake_heap(ARGS&&... args)
         new CLASS_TEMPLATE<ARGS...>(std::forward<ARGS>(args)...));
 }
 
-#endif /* ! defined(LL_LLMAKE_H) */
+#endif // VS 2013 workaround
+
+/// dumb pointer template just in case that's what's wanted
+
+/**
+ * Same as llmake(), but returns a pointer to a new heap instance of
+ * SomeTemplate<T...>(args...) using the pointer of your choice.
+ *
+ * @code
+ * auto* dumb  = llmake_heap<SomeTemplate>(args...);
+ * auto shared = llmake_heap<SomeTemplate, std::shared_ptr>(args...);
+ * auto unique = llmake_heap<SomeTemplate, std::unique_ptr>(args...);
+ * @endcode
+ */
+// POINTER_TEMPLATE is characterized as template<typename...> rather than as
+// template<typename T> because (e.g.) std::unique_ptr has multiple template
+// arguments. Even though we only engage one, std::unique_ptr doesn't match a
+// template template parameter that itself takes only one template parameter.
+

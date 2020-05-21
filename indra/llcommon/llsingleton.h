@@ -120,6 +120,8 @@ protected:
     static void logdebugs(const char* p1, const char* p2="",
                           const char* p3="", const char* p4="");
     static std::string demangle(const char* mangled);
+    // these classname() declarations restate template functions declared in
+    // llerror.h because we avoid #including that here
     template <typename T>
     static std::string classname()       { return demangle(typeid(T).name()); }
     template <typename T>
@@ -278,18 +280,6 @@ class LLParamSingleton;
  * initSingleton() method explicitly depends on some other LLSingleton
  * subclass, you may continue to rely on that other subclass in your
  * cleanupSingleton() method.
- *
- * We introduce a special cleanupSingleton() method because cleanupSingleton()
- * operations can involve nontrivial realtime, or might throw an exception. A
- * destructor should do neither!
- *
- * If your cleanupSingleton() method throws an exception, we log that
- * exception but proceed with the remaining cleanupSingleton() calls.
- *
- * Similarly, if at some point you call LLSingletonBase::deleteAll(), all
- * remaining LLSingleton instances will be destroyed in dependency order. (Or
- * call MySubclass::deleteSingleton() to specifically destroy the canonical
- * MySubclass instance.)
  */
 template <typename DERIVED_TYPE>
 class LLSingleton : public LLSingletonBase
