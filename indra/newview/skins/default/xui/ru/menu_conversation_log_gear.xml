@@ -12,6 +12,6 @@
 	<menu_item_call label="Пригласить в группу..." name="Invite" />
 	<menu_item_call label="Карта" name="Map" />
 	<menu_item_call label="Поделиться" name="Share" />
-	<menu_item_call label="Заплптить" name="Pay" />
+	<menu_item_call label="Заплатить" name="Pay" />
 	<menu_item_check label="Заблокировать/Разблокировать" name="Block/Unblock" />
 </toggleable_menu>

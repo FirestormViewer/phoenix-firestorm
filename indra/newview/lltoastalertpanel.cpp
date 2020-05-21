@@ -390,7 +390,7 @@ void LLToastAlertPanel::setVisible( BOOL visible )
 	// <FS:PP> FIRE-4322: The "bing" system sound missing
 	// if( visible && !LLToastPanel::getVisible() )
 	LLToastPanel::setVisible( visible );
-	if( visible )
+	if (visible && !LLApp::isExiting())
 	// </FS:PP>
 	{
 		make_ui_sound("UISndAlert");
