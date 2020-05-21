@@ -1885,8 +1885,11 @@ class LinuxManifest(ViewerManifest):
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
+            self.fs_try_path( "libminigbm.so" )
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+            self.path( "*.so" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("lib", "swiftshader") ):
             self.path( "*.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
