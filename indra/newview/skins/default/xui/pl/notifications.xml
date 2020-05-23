@@ -182,7 +182,7 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 		Pamiętaj: kiedy włączysz tą opcję to każdy kto używa tego komputera będzie mógł zobaczyć Twoją listę ulubionych miejsc.
 	</notification>
 	<notification name="AllowMultipleViewers">
-		Uruchamianie kilku przeglądarek Second Life nie podlega wsparciu. Może prowadzić do kolizji pamięci podręcznej tekstur, jej uszkodzeń, pogorszenia efektów wizualnych oraz wydajności.
+		Uruchamianie kilku przeglądarek [APP_NAME] nie podlega wsparciu. Może prowadzić do kolizji pamięci podręcznej tekstur, jej uszkodzeń, pogorszenia efektów wizualnych oraz wydajności.
 	</notification>
 	<notification name="GrantModifyRights">
 		Udzielenie praw modyfikacji innemu Rezydentowi umożliwia modyfikację, usuwanie lub wzięcie JAKIEGOKOLWIEK z Twoich obiektów. Używaj tej opcji z rozwagą!
@@ -2504,7 +2504,7 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		Ciąg [STRING_NAME] nie został znaleziony w strings.xml
 	</notification>
 	<notification name="EnableMediaFilter">
-		Odtwarzanie mediów lub muzyki może pozwolić na zidentyfikowanie Twojej tożsamości witrynom poza Second Life. Możesz włączyć filtr, który pozwoli określić które strony będą mogły odtwarzać media, da Ci lepszą kontrolę nad swoją prywatnością.
+		Odtwarzanie mediów lub muzyki może pozwolić na zidentyfikowanie Twojej tożsamości witrynom poza [CURRENT_GRID]. Możesz włączyć filtr, który pozwoli określić które strony będą mogły odtwarzać media, da Ci lepszą kontrolę nad swoją prywatnością.
 
 Włączyć filtr mediów?
 (Możesz zmienić potem tą opcję w Ustawienia &gt; Dźwięk i Media.)
@@ -3989,6 +3989,11 @@ Obecne ustawienie: [CURRENT_VALUE]
 			<button name="Cancel" text="Zostaw"/>
 			<ignore name="ignore" text="Jakieś ustawienie nie przeszło kontroli spójności."/>
 		</form>
+	</notification>
+	<notification name="DefaultLabelMissing">
+		<usetemplate ignoretext="Skrypt LSL ma instrukcję switch bez domyślnej etykiety" name="notifyignore" />
+Zachowanie instrukcji switch() bez domyślnej etykiety było wcześniej niepoprawne i zostało naprawione.
+Zobacz FIRE-17710 aby dowiedzieć się więcej.
 	</notification>
 	<notification name="TeleportToAvatarNotPossible">
 		Teleportacja do tego awatara nie jest możliwa, ponieważ dokładna pozycja nie jest znana.
