@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9efa40655f23bc9875e96d04a63f37bf</string>
+              <string>9fad2e6e1fb3c698afa2b9094deb8422</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.6.4.202005061828_81.3.1_gb2b49f1_chromium-81.0.4044.113-linux64-201281557.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.6.4.202005232231_81.3.3_g072a5f5_chromium-81.0.4044.147-linux64-201442030.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
