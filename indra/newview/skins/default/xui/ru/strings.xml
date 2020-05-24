@@ -1778,7 +1778,7 @@ support@secondlife.com.
 		Плата зависит от вашего уровня подписки. С подписок более высокого уровня взимаются более низкие сборы. [https://secondlife.com/my/account/membership.php? Узнать больше]
 	</string>
 	<string name="Open landmarks">
-		Открыть закладки
+		Открыть сохраненные локации	
 	</string>
 	<string name="Unconstrained">
 		Несвязанные
@@ -5287,6 +5287,15 @@ support@secondlife.com.
 	</string>
 	<string name="Chat">
 		Чат
+	</string>
+	<string name="BaseMembership">
+		Базовый
+	</string>
+	<string name="PremiumMembership">
+		Премиум
+	</string>
+	<string name="Premium PlusMembership">
+		Премиум Плюс
 	</string>
 	<string name="DeleteItems">
 		Удалить выбранные объекты?

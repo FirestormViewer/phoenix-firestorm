@@ -923,20 +923,20 @@
          parameter="texture_refresh_attachment" />
     </menu_item_call>
     <menu_item_call
-     label="Take Off"
-     layout="topleft"
-     name="Take Off">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="take_off" />
-    </menu_item_call>
-    <menu_item_call
      label="Detach From Yourself"
      layout="topleft"
      name="Detach From Yourself">
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="detach" />
+    </menu_item_call>
+    <menu_item_call
+     label="Take Off"
+     layout="topleft"
+     name="Take Off">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="take_off" />
     </menu_item_call>
     <menu_item_separator
      layout="topleft" 

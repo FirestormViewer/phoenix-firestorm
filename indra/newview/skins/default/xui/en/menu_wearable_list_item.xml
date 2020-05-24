@@ -33,10 +33,9 @@
     <menu_item_call
      label="Edit"
      layout="topleft"
-     name="edit">
-        <on_click
-         function="Wearable.Edit" />
-    </menu_item_call>
+     name="edit"
+     on_click.function="Wearable.Edit"
+     />
     <menu_item_call
      label="Take Off / Detach"
      layout="topleft"

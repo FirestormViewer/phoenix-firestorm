@@ -61,28 +61,6 @@ static void edit_outfit()
 	LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "edit_outfit"));
 }
 
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-static void edit_item(const LLUUID& idItem)
-{
-	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
-	if (!pItem)
-		return;
-
-	switch (pItem->getType())
-	{
-		case LLAssetType::AT_BODYPART:
-		case LLAssetType::AT_CLOTHING:
-			LLAgentWearables::editWearable(idItem);
-			break;
-		case LLAssetType::AT_OBJECT:
-			handle_attachment_edit(idItem);
-			break;
-		default:
-			break;
-	}
-}
-// [/SL:KB]
-
 //////////////////////////////////////////////////////////////////////////
 
 class LLWearingGearMenu
@@ -94,7 +72,8 @@ public:
 		LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 		LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 
-		registrar.add("Gear.Edit", boost::bind(&edit_outfit));
+		registrar.add("Gear.EditItem", boost::bind(&LLWearingGearMenu::handleMultiple, this, handle_item_edit));
+		registrar.add("Gear.EditOutfit", boost::bind(&edit_outfit));
 		registrar.add("Gear.TakeOff", boost::bind(&LLPanelWearing::onRemoveItem, mPanelWearing));
 		registrar.add("Gear.Copy", boost::bind(&LLPanelWearing::copyToClipboard, mPanelWearing));
 
@@ -108,6 +87,16 @@ public:
 	LLToggleableMenu* getMenu() { return mMenu; }
 
 private:
+	void handleMultiple(std::function<void(const LLUUID& id)> functor)
+	{
+		uuid_vec_t selected_item_ids;
+		mPanelWearing->getSelectedItemsUUIDs(selected_item_ids);
+
+		for (const LLUUID& item_id : selected_item_ids)
+		{
+			functor(item_id);
+		}
+	}
 
 	LLToggleableMenu*		mMenu;
 	LLPanelWearing* 		mPanelWearing;
@@ -122,10 +111,8 @@ protected:
 	{
 		LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 
-		registrar.add("Wearing.Edit", boost::bind(&edit_outfit));
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-		registrar.add("Wearing.EditItem", boost::bind(handleMultiple, edit_item, mUUIDs));
-// [/SL:KB]
+		registrar.add("Wearing.EditItem", boost::bind(handleMultiple, handle_item_edit, mUUIDs));
+		registrar.add("Wearing.EditOutfit", boost::bind(&edit_outfit));
 		registrar.add("Wearing.ShowOriginal", boost::bind(show_item_original, mUUIDs.front()));
 		registrar.add("Wearing.TakeOff",
 					  boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), mUUIDs));
@@ -187,11 +174,16 @@ protected:
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		bool rlv_blocked = (mUUIDs.size() == rlv_locked_count);
 // [/RLVa:KB]
+		bool show_edit = bp_selected || clothes_selected || attachments_selected;
 		bool allow_detach = !bp_selected && !clothes_selected && attachments_selected;
 		bool allow_take_off = !bp_selected && clothes_selected && !attachments_selected;
 
+		menu->setItemVisible("edit_item",          show_edit);
+		menu->setItemEnabled("edit_item",          1 == mUUIDs.size() && get_is_item_editable(mUUIDs.front()));
 		menu->setItemVisible("take_off",	allow_take_off);
 		menu->setItemVisible("detach",		allow_detach);
+		menu->setItemVisible("edit_outfit_separator", show_edit | allow_take_off || allow_detach);
+		menu->setItemVisible("show_original", mUUIDs.size() == 1);
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
 		menu->setItemVisible("take_off_or_detach", (!allow_detach) && (!allow_take_off) && (clothes_selected) && (attachments_selected));
 // [/SL:KB]
@@ -199,13 +191,6 @@ protected:
 		menu->setItemEnabled("take_off",	!rlv_blocked);
 		menu->setItemEnabled("detach",		!rlv_blocked);
 // [/RLVa:KB]
-		menu->setItemVisible("edit_outfit_separator", allow_take_off || allow_detach);
-		menu->setItemVisible("show_original", mUUIDs.size() == 1);
-//		menu->setItemVisible("edit_item", FALSE);
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-		menu->setItemVisible("edit_item",	bp_selected || clothes_selected || attachments_selected);
-		menu->setItemEnabled("edit_item",	1 == mUUIDs.size());
-// [/SL:KB]
 	}
 };
 
@@ -233,15 +218,16 @@ protected:
 
 	void updateMenuItemsVisibility(LLContextMenu* menu)
 	{
+		menu->setItemVisible("edit_item", TRUE);
+		menu->setItemEnabled("edit_item", 1 == mUUIDs.size());
 		menu->setItemVisible("take_off", FALSE);
 		menu->setItemVisible("detach", TRUE);
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
 		menu->setItemVisible("take_off_or_detach", FALSE);
 // [/SL:KB]
-		menu->setItemVisible("edit_outfit_separator", TRUE);
+		menu->setItemVisible("edit_outfit_separator", FALSE);
 		menu->setItemVisible("show_original", FALSE);
-		menu->setItemVisible("edit_item", TRUE);
-		menu->setItemVisible("edit", FALSE);
+		menu->setItemVisible("edit_outfit", FALSE);
 	}
 
 	LLPanelWearing* 		mPanelWearing;
@@ -417,6 +403,14 @@ bool LLPanelWearing::isActionEnabled(const LLSD& userdata)
 				return true;
 			}
 		}
+	}
+
+	uuid_vec_t selected_uuids;
+	getSelectedItemsUUIDs(selected_uuids);
+
+	if (command_name == "edit_item")
+	{
+		return (1 == selected_uuids.size()) && (get_is_item_editable(selected_uuids.front()));
 	}
 
 	return false;

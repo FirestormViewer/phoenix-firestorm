@@ -3,7 +3,7 @@
 	<menu_item_call label="Снять" name="take_off"/>
 	<menu_item_call label="Отсоединить" name="detach"/>
 	<menu_item_call label="Снять/Отсоединить" name="take_off_or_detach"/>
-	<menu_item_call label="Изменить комплект" name="edit"/>
+	<menu_item_call label="Изменить комплект" name="edit_outfit"/>
 	<menu_item_call label="Изменить" name="edit_item"/>
 	<menu_item_call label="Показать оригинал" name="show_original"/>
 </context_menu>

@@ -38,9 +38,6 @@
 #include "llgesturemgr.h"
 #include "lltransutil.h"
 #include "llviewerattachmenu.h"
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-#include "llviewermenu.h"
-// [/SL:KB]
 #include "llvoavatarself.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
@@ -698,29 +695,6 @@ bool LLWearableItemCreationDateComparator::doCompare(const LLPanelInventoryListI
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-// TODO-Catznip: [Catznip-2.1.3] This function is duplicated in llpanelwearing.cpp so find a better place where it can be shared instead
-static void edit_item(const LLUUID& idItem)
-{
-	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
-	if (!pItem)
-		return;
-
-	switch (pItem->getType())
-	{
-		case LLAssetType::AT_BODYPART:
-		case LLAssetType::AT_CLOTHING:
-			LLAgentWearables::editWearable(idItem);
-			break;
-		case LLAssetType::AT_OBJECT:
-			handle_attachment_edit(idItem);
-			break;
-		default:
-			break;
-	}
-}
-// [/SL:KB]
-
 static LLWearableItemTypeNameComparator WEARABLE_TYPE_NAME_COMPARATOR;
 static const LLWearableItemTypeNameComparator WEARABLE_TYPE_LAYER_COMPARATOR;
 static const LLWearableItemNameComparator WEARABLE_NAME_COMPARATOR;
@@ -959,10 +933,7 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
 	// Register handlers common for all wearable types.
 	registrar.add("Wearable.Wear", boost::bind(wear_multiple, ids, true));
 	registrar.add("Wearable.Add", boost::bind(wear_multiple, ids, false));
-//	registrar.add("Wearable.Edit", boost::bind(handleMultiple, LLAgentWearables::editWearable, ids));
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-	registrar.add("Wearable.Edit", boost::bind(handleMultiple, edit_item, ids));
-// [/SL:KB]
+	registrar.add("Wearable.Edit", boost::bind(handle_item_edit, selected_id));
 	registrar.add("Wearable.CreateNew", boost::bind(createNewWearable, selected_id));
 	registrar.add("Wearable.ShowOriginal", boost::bind(show_item_original, selected_id));
 	registrar.add("Wearable.TakeOffDetach", 
@@ -1033,11 +1004,7 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 		const LLWearableType::EType wearable_type = item->getWearableType();
 		const bool is_link = item->getIsLinkType();
 		const bool is_worn = get_is_item_worn(id);
-//		const bool is_editable = gAgentWearables.isWearableModifiable(id);
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-		const bool is_editable = 
-			(item->isWearableType()) ? gAgentWearables.isWearableModifiable(id) : (LLAssetType::AT_OBJECT == item->getType());
-// [/SL:KB]
+		const bool is_editable = get_is_item_editable(id);
 		const bool is_already_worn = gAgentWearables.selfHasWearable(wearable_type);
 		if (is_worn)
 		{
@@ -1108,11 +1075,8 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 	setMenuItemEnabled(menu, "wear_replace",		rlvCanWearReplace);
 // [/RLVa:KB]
 	//visible only when one item selected and this item is worn
-//	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART) && n_worn == n_items && n_worn == 1);
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART|MASK_ATTACHMENT) && n_worn == n_items && n_worn == 1);
-// [/SL:KB]
-	setMenuItemEnabled(menu, "edit",				n_editable == 1 && n_worn == 1 && n_items == 1);
+	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART|MASK_ATTACHMENT) && n_worn == n_items);
+	setMenuItemEnabled(menu, "edit",				n_editable && n_worn == 1 && n_items == 1);
 	// <FS:Ansariel> Optional "Create new" menu item
 	//setMenuItemVisible(menu, "create_new",			mask & (MASK_CLOTHING|MASK_BODYPART) && n_items == 1);
 	setMenuItemVisible(menu, "create_new",			show_create_new && mask & (MASK_CLOTHING|MASK_BODYPART) && n_items == 1);

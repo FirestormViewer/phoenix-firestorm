@@ -3423,7 +3423,6 @@ class LLObjectBuild : public view_listener_t
 	}
 };
 
-
 void handle_object_edit()
 {
 	LLViewerParcelMgr::getInstance()->deselectLand();
@@ -3468,23 +3467,19 @@ void handle_object_edit()
 	return;
 }
 
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-void handle_attachment_edit(const LLUUID& idItem)
+void handle_attachment_edit(const LLUUID& inv_item_id)
 {
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return;
+	if (isAgentAvatarValid())
+	{
+		if (LLViewerObject* attached_obj = gAgentAvatarp->getWornAttachment(inv_item_id))
+		{
+			LLSelectMgr::getInstance()->deselectAll();
+			LLSelectMgr::getInstance()->selectObjectAndFamily(attached_obj);
 
-	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-	if (!pAttachObj)
-		return;
-
-	LLSelectMgr::getInstance()->deselectAll();
-	LLSelectMgr::getInstance()->selectObjectAndFamily(pAttachObj);
-
-	handle_object_edit();
+			handle_object_edit();
+		}
+	}
 }
-// [/SL:KB]
 
 void handle_object_inspect()
 {
