@@ -1890,18 +1890,32 @@ class LinuxManifest(ViewerManifest):
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
+            self.fs_try_path( "libminigbm.so" )
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
+            self.path( "*.so" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("lib", "swiftshader") ):
             self.path( "*.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
-            self.path( "natives_blob.bin" )
+            self.fs_try_path( "natives_blob.bin" )
+            self.path( "snapshot_blob.bin" )
+            self.path( "v8_context_snapshot.bin" )
+        with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="lib"):
+            self.fs_try_path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "v8_context_snapshot.bin" )
 
         with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
+            self.path( "cef.pak" )
+            self.path( "cef_extensions.pak" )
+            self.path( "cef_100_percent.pak" )
+            self.path( "cef_200_percent.pak" )
+            self.path( "devtools_resources.pak" )
+            self.path( "icudtl.dat" )
+        with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="lib"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )
