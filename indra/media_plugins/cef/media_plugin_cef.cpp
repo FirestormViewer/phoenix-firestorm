@@ -41,6 +41,7 @@
 #include <chrono>
 
 #include "dullahan.h"
+#include "dullahan_version.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -509,7 +510,9 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				settings.background_color = 0xffffffff;
 				settings.cache_enabled = true;
 				settings.cache_path = mCachePath;
+#if (DULLAHAN_VERSION_MAJOR*100+DULLAHAN_VERSION_MINOR) < 106
 				settings.cookie_store_path = mCookiePath;
+#endif
 				settings.cookies_enabled = mCookiesEnabled;
 				settings.disable_gpu = mDisableGPU;
 				settings.flash_enabled = mPluginsEnabled;
@@ -664,8 +667,10 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "scroll_event")
 			{
 				// Mouse coordinates for cef to be able to scroll 'containers'
-				//S32 x = message_in.getValueS32("x");
-				//S32 y = message_in.getValueS32("y");
+#if (DULLAHAN_VERSION_MAJOR*100+DULLAHAN_VERSION_MINOR) >= 106
+				S32 x = message_in.getValueS32("x");
+				S32 y = message_in.getValueS32("y");
+#endif
 				// Wheel's clicks
 				S32 delta_x = message_in.getValueS32("clicks_x");
 				S32 delta_y = message_in.getValueS32("clicks_y");
@@ -673,8 +678,11 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				delta_x *= -scaling_factor;
 				delta_y *= -scaling_factor;
 
-				// mCEFLib->mouseWheel(x, y, delta_x, delta_y);
+#if (DULLAHAN_VERSION_MAJOR*100+DULLAHAN_VERSION_MINOR) >= 106
+				mCEFLib->mouseWheel(x, y, delta_x, delta_y);
+#else
 				mCEFLib->mouseWheel(delta_x, delta_y);
+#endif
 			}
 			else if (message_name == "text_event")
 			{

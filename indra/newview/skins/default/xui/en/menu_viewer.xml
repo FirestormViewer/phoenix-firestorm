@@ -1277,7 +1277,7 @@
           parameter="fs_avatar_render_settings" />
       </menu_item_call>
       <menu_item_check
-        label="Always show Friends normally"
+        label="Always show Friends fully"
         name="Always show Friends normally">
         <menu_item_check.on_click
           function="ToggleControl"

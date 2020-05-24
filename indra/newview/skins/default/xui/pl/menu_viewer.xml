@@ -139,7 +139,7 @@
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
-		<menu_item_check label="Zawsze renderuj znajomych normalnie" name="Always show Friends normally"/>
+		<menu_item_check label="Zawsze renderuj znajomych w pełni" name="Always show Friends normally"/>
 		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
