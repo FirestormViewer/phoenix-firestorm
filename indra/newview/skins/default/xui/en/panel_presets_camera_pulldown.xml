@@ -57,8 +57,8 @@
     width="215" />
   <button
     name="open_prefs_btn"
-    label="Open Camera floater"
-    tool_tip="Bring up Camera floater"
+    label="Open Camera Controls"
+    tool_tip="Bring up Camera Controls window"
     top_delta="3"
     left="15"
     height="22"
