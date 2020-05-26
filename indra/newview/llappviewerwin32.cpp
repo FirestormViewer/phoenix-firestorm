@@ -172,8 +172,15 @@ namespace
                 }
                 // </FS:ND>
 
-                sBugSplatSender->sendAdditionalFile(
-                    WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml")));
+                //<FS:Ansariel> Only include if sending settings file
+                //sBugSplatSender->sendAdditionalFile(
+                //    WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml")));
+                if (gCrashSettings.getBOOL("CrashSubmitSettings"))
+                {
+                    sBugSplatSender->sendAdditionalFile(
+                        WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml")));
+                }
+                // <FS:Ansariel>
             }
 
             // LL_ERRS message, when there is one

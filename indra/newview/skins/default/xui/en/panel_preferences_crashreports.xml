@@ -39,7 +39,7 @@
      follows="top|left"
      top_pad="5"
      height="16"
-     label="Include settings.xml"
+     label="Include settings files"
      name="checkSendSettings"
      width="130"
      enabled="false" />
