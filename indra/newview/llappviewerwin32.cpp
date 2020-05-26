@@ -160,22 +160,22 @@ namespace
             //<FS:ND/> Clear out username first, as we get some crashes that has the OS set as username, let's see if this fixes it.
             sBugSplatSender->setDefaultUserName( WCSTR("<unset>") );
 
-            // <FS:ND> Only send avatar name if enabled via prefs
-            if (gCrashSettings.getBOOL("CrashSubmitName"))
+            if (gAgentAvatarp)
             {
-            // </FS:ND>
-                if (gAgentAvatarp)
+                // <FS:ND> Only send avatar name if enabled via prefs
+                if (gCrashSettings.getBOOL("CrashSubmitName"))
+                // </FS:ND>
                 {
                     // user name, when we have it
                     sBugSplatSender->setDefaultUserName(WCSTR(gAgentAvatarp->getFullname()));
-
-                    sBugSplatSender->sendAdditionalFile(
-                        WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml")));
+                // <FS:ND> Only send avatar name if enabled via prefs
                 }
-            // <FS:ND> Only send avatar name if enabled via prefs
+                // </FS:ND>
+
+                sBugSplatSender->sendAdditionalFile(
+                    WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "settings_per_account.xml")));
             }
-            // </FS:ND>
-            
+
             // LL_ERRS message, when there is one
             sBugSplatSender->setDefaultUserDescription(WCSTR(LLError::getFatalMessage()));
 
