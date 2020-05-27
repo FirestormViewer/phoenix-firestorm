@@ -833,26 +833,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bd0f62a03d846332adf07997e307cde6</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux-180871715.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>48d316c0ceb898f7577015df75b6d303</string>
+              <string>9fad2e6e1fb3c698afa2b9094deb8422</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1320_3.3626.1895.g7001d56-linux64-191221910.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.6.4.202005232231_81.3.3_g072a5f5_chromium-81.0.4044.147-linux64-201442030.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1032,11 +1020,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aed9fbd15995e71f9b600eb2ed2b73b1</string>
+              <string>88b1ac40d0b2cc1cf862260bb1297a54</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.08-linux64-201031328.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.01-linux64-201412258.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1046,11 +1034,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>670b2dc83403cc9024bc68728d851a4d</string>
+              <string>5c182fe2303511c35480d00d9b6832dc</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows-200921513.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows-201411851.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1060,18 +1048,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b97c88e262d37dd1514c0e580a8cc775</string>
+              <string>10fcd058ec0da77273c61aca78081ede</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows64-200921514.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows64-201412005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.00.08</string>
+        <string>2.01.01</string>
       </map>
       <key>fontconfig</key>
       <map>
