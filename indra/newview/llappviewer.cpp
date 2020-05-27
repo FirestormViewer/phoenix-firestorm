@@ -145,6 +145,7 @@
 #include "llexception.h"
 //#if !LL_LINUX
 #include "cef/dullahan.h"
+#include "cef/dullahan_version.h"
 #include "vlc/libvlc_version.h"
 //#endif // LL_LINUX
 
