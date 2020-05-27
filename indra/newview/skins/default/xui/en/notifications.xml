@@ -629,7 +629,7 @@ Save all changes to clothing/body parts?
    icon="alertmodal.tga"
    name="AllowMultipleViewers"
    type="alertmodal">
-    Running multiple Second Life viewers is not supported. It can lead to texture cache collisions, corruption and degraded visuals and performance.
+    Running multiple [APP_NAME] viewers is not supported. It can lead to texture cache collisions, corruption and degraded visuals and performance.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -6816,7 +6816,7 @@ The string [STRING_NAME] is missing from strings.xml.
    icon="alert.tga"  
    name="EnableMediaFilter"
    type="alert"> 
-Playing media or music can expose your identity to sites outside Second Life. You can enable a filter that will allow you to select which sites will receive media requests, and give you better control over your privacy.
+Playing media or music can expose your identity to sites outside [CURRENT_GRID]. You can enable a filter that will allow you to select which sites will receive media requests, and give you better control over your privacy.
 
 Enable the media filter?
 (You can change this option later under Preferences &gt; Sound &amp; Media.)
@@ -10672,6 +10672,19 @@ Current setting: [CURRENT_VALUE]
     </form>
   </notification>
   <!-- ## Zi: Debug Settings Editor -->
+
+  <!-- <FS:Sei> LSL Default label missing FIRE-17710 -->
+  <notification
+   icon="alertmodal.tga"
+   name="DefaultLabelMissing"
+   type="alertmodal">
+   <usetemplate
+    ignoretext="A LSL script has switch statement without a default label"
+    name="notifyignore"/>
+The behavior for switch() statements without a default case was previously incorrect and has been fixed. 
+See FIRE-17710 for details.
+  </notification>
+  <!-- </FS:Sei> -->
 
   <notification
    icon="alertmodal.tga"

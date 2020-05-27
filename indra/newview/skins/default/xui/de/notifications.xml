@@ -249,7 +249,7 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AllowMultipleViewers">
-		Das Starten mehrerer Second Life Viewer wird nicht unterstützt. Dies kann zu Kollisionen des Textur-Caches, Fehlern sowie verschlechterter Grafik und Leistung führen.
+		Das Starten mehrerer [APP_NAME] Viewer wird nicht unterstützt. Dies kann zu Kollisionen des Textur-Caches, Fehlern sowie verschlechterter Grafik und Leistung führen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GrantModifyRights">
@@ -5002,24 +5002,30 @@ Aktueller Wert: [CURRENT_VALUE]
   </notification>  
   <!-- ## Zi: Debug Settings Editor -->
 
-  <notification name="TeleportToAvatarNotPossible">
-Teleportieren zum Avatar nicht möglich, da die exakte Position unbekannt ist.
-  </notification>
+	<notification name="DefaultLabelMissing">
+		<usetemplate ignoretext="Ein LSL-Skript enthält eine switch-Anweisung ohne „default“-Fall." name="notifyignore"/>
+			Das Verhalten der switch-Anweisung ohne einen „default“-Fall war bislang inkorrekt und wurde korrigiert.
+Siehe FIRE-17710 für Details.
+	</notification>
 
-  <notification name="ZoomToAvatarNotPossible">
-Zoomen auf Avatar nicht möglich, da er sich außerhalb der Reichweite befindet.
-  </notification>
+	<notification name="TeleportToAvatarNotPossible">
+		Teleportieren zum Avatar nicht möglich, da die exakte Position unbekannt ist.
+	</notification>
 
-  <notification name="TrackAvatarNotPossible">
-Verfolgen des Avatars nicht möglich, da er sich außerhalb der Radar-Reichweite befindet.
-  </notification>
-  
-   <notification name="CacheEmpty">
-Der Viewercache ist momentan leer. Während des Downloads von neuen Inhalten kann es daher zu niedrigeren Frameraten und langsamerem Laden des Inventars kommen.
-  </notification>
+	<notification name="ZoomToAvatarNotPossible">
+		Zoomen auf Avatar nicht möglich, da er sich außerhalb der Reichweite befindet.
+	</notification>
+
+	<notification name="TrackAvatarNotPossible">
+		Verfolgen des Avatars nicht möglich, da er sich außerhalb der Radar-Reichweite befindet.
+	</notification>
+
+	<notification name="CacheEmpty">
+		Der Viewercache ist momentan leer. Während des Downloads von neuen Inhalten kann es daher zu niedrigeren Frameraten und langsamerem Laden des Inventars kommen.
+	</notification>
 
 	<notification name="EnableMediaFilter"> 
-Das Abspielen von Medien oder Musik kann deine Identität an Webseiten außerhalb von Second Life verraten. Durch das Einschalten des Filters kann ausgewählt werden, welche Webseiten Medien abspielen dürfen, wodurch eine bessere Kontrolle über die Privatspähre ermöglicht wird.
+Das Abspielen von Medien oder Musik kann deine Identität an Webseiten außerhalb von [CURRENT_GRID] verraten. Durch das Einschalten des Filters kann ausgewählt werden, welche Webseiten Medien abspielen dürfen, wodurch eine bessere Kontrolle über die Privatspähre ermöglicht wird.
 
 Medienfilter aktivieren?
 (Diese Einstellung kann später unter Einstellungen &gt; Sound &amp; Medien geändert werden.)

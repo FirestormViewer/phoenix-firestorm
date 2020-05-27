@@ -54,7 +54,7 @@ include(TemplateCheck)
 include(UI)
 include(UnixInstall)
 include(ViewerMiscLibs)
-include(ViewerManager)
+#include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
 include(URIPARSER)
 include(Growl)

@@ -43,6 +43,7 @@
 #include "llvfile.h"
 #include "llviewercontrol.h"
 #include "llcompilequeue.h"
+#include "llnotificationsutil.h"
 
 #ifdef __GNUC__
 // There is a sprintf( ... "%d", size_t_value) buried inside boost::wave. In order to not mess with system header, I rather disable that warning here.
@@ -980,7 +981,7 @@ static std::string minimalize_whitespace(std::string in)
 }
 */
 
-static std::string reformat_switch_statements(std::string script)
+static std::string reformat_switch_statements(std::string script, bool &lackDefault)
 {
 	std::string buffer = script;
 	{
@@ -1017,7 +1018,7 @@ static std::string reformat_switch_statements(std::string script)
 					S32 cutlen = slen + arg.length() + rstate.length();
 
 					// Call recursively to process nested switch statements (FIRE-10517)
-					rstate = reformat_switch_statements(rstate);
+					rstate = reformat_switch_statements(rstate, lackDefault);
 
 					//rip off the scope edges
 					S32 slicestart = rstate.find("{") + 1;
@@ -1075,7 +1076,7 @@ static std::string reformat_switch_statements(std::string script)
 					}
 
 					std::string deflt = quicklabel();
-					bool isdflt = false;
+					bool hasdflt = false;
 					std::string defstate;
 					defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
 						rCMNT_OR_STR "|" rSPC "++"
@@ -1083,7 +1084,7 @@ static std::string reformat_switch_statements(std::string script)
 						, boost::regex::perl), "?1@" + deflt + ";$2:$&", boost::format_all);
 					if (defstate != rstate)
 					{
-						isdflt = true;
+						hasdflt = true;
 						rstate = defstate;
 					}
 					std::string argl;
@@ -1094,19 +1095,22 @@ static std::string reformat_switch_statements(std::string script)
 					{
 						jumptable += "if(" + arg + " == (" + ifs_it->first + "))jump " + ifs_it->second + ";\n";
 					}
-					if (isdflt)
+					std::string brk = quicklabel();
+					if (!hasdflt)
 					{
-						jumptable += "jump " + deflt + ";\n";
+						// Add jump to break position if there's no default (FIRE-17710)
+						deflt = brk;
+						lackDefault = true;
 					}
+					jumptable += "jump " + deflt + ";\n";
 
 					rstate = jumptable + rstate + "\n";
 
-					std::string brk = quicklabel();
 					defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
 						rCMNT_OR_STR "|"
 						"(?<![A-Za-z0-9_])break(" rOPT_SPC ";)"
 						), "?1jump " + brk + "$1:$&", boost::format_all);
-					if (defstate != rstate)
+					if (defstate != rstate || !hasdflt)
 					{
 						rstate = defstate;
 						rstate += "\n@" + brk + ";\n";
@@ -1146,6 +1150,7 @@ void FSLSLPreprocessor::start_process()
 	}
 
 	mWaving = true;
+	bool lackDefault = false;
 	boost::wave::util::file_position_type current_position;
 	std::string input;
 	if (mStandalone)
@@ -1488,7 +1493,7 @@ void FSLSLPreprocessor::start_process()
 				display_message(LLTrans::getString("fs_preprocessor_switchstatement_start"));
 				try
 				{
-					output = reformat_switch_statements(output);
+					output = reformat_switch_statements(output, lackDefault);
 				}
 				catch (boost::regex_error& e)
 				{
@@ -1576,6 +1581,10 @@ void FSLSLPreprocessor::start_process()
 			mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
 			mCore->doSaveComplete((void*)mCore, mClose, mSync);
 		}
+	}
+	if (lackDefault)
+	{
+		LLNotificationsUtil::add("DefaultLabelMissing");
 	}
 	mWaving = false;
 }
