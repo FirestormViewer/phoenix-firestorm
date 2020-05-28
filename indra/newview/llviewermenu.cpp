@@ -5237,8 +5237,10 @@ void handle_reset_view()
 	}
 	
 	// <FS:Zi> Added optional V1 behavior so the avatar turns into camera direction after hitting ESC
-	if(gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
-		gAgentCamera.resetView();
+	if (!gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
+	{
+		gAgentCamera.setFocusOnAvatar(TRUE, FALSE, FALSE);
+	}
 	// </FS:Zi>
 
 	reset_view_final( TRUE );

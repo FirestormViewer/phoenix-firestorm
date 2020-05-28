@@ -4975,6 +4975,10 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 
 	getChild<LLTextBox>("textInformation4")->setTextArg("[URL]", getString("PrivacyPolicyUrl"));
 
+#if LL_SEND_CRASH_REPORTS && defined(LL_BUGSPLAT)
+	childSetVisible("textRestartRequired", true);
+#endif
+
 	refresh();
 
 	return LLPanelPreference::postBuild();
@@ -4989,13 +4993,6 @@ void LLPanelPreferenceCrashReports::refresh()
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendSettings")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendName")->setEnabled(fEnable);
-
-// <FS:ND> Disable options not available when compiling with Bugsplat and set those to default values.
-#ifdef LL_BUGSPLAT
-	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(false);
-	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setValue(false);
-#endif
-// </FS:ND>
 }
 
 void LLPanelPreferenceCrashReports::apply()

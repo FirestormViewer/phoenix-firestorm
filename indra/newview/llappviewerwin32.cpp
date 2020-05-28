@@ -157,8 +157,9 @@ namespace
             sBugSplatSender->setDefaultUserEmail( WCSTR(STRINGIZE(LLOSInfo::instance().getOSStringSimple() << " ("  << ADDRESS_SIZE << "-bit, flavor " << flavor <<")")));
             // </FS:ND>
 
-            //<FS:ND/> Clear out username first, as we get some crashes that has the OS set as username, let's see if this fixes it.
-            sBugSplatSender->setDefaultUserName( WCSTR("<unset>") );
+            //<FS:ND/> Clear out username first, as we get some crashes that has the OS set as username, let's see if this fixes it. Use Crash.Linden as a usr can never have a "Linden"
+			// name and on the other hand a Linden will not likely ever crash on Firestom.
+            sBugSplatSender->setDefaultUserName( WCSTR("Crash.Linden") );
 
             // <FS:ND> Only send avatar name if enabled via prefs
             if (gCrashSettings.getBOOL("CrashSubmitName"))
@@ -679,6 +680,7 @@ LLAppViewerWin32::~LLAppViewerWin32()
 
 bool LLAppViewerWin32::init()
 {
+	bool success{ false }; // <FS:ND/> For BugSplat we need to call base::init() early on or there's no access to settings.
 	// Platform specific initialization.
 	
 	// Turn off Windows Error Reporting
@@ -702,7 +704,21 @@ bool LLAppViewerWin32::init()
 
 #else // LL_BUGSPLAT
 #pragma message("Building with BugSplat")
+	// <FS:ND> Pre BugSplat dance, make sure settings are valid, query crash behavior and then set up Bugsplat accordingly"
+	success = LLAppViewer::init();
+	if (!success)
+		return false;
 
+	S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
+	// Don't ever send? bail out!
+	if (nCrashSubmitBehavior == 2 /*CRASH_BEHAVIOR_NEVER_SEND*/)
+		return success;
+
+	DWORD dwAsk{ MDSF_NONINTERACTIVE };
+	if (nCrashSubmitBehavior == 0 /*CRASH_BEHAVIOR_ASK*/)
+		dwAsk = 0;
+	// </FS:ND>
+	
 	std::string build_data_fname(
 		gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "build_data.json"));
 	// Use llifstream instead of std::ifstream because LL_PATH_EXECUTABLE
@@ -740,13 +756,26 @@ bool LLAppViewerWin32::init()
 													   LL_VIEWER_VERSION_BUILD));
 
 				// have to convert normal wide strings to strings of __wchar_t
+
+				// <FS:ND> Set up Bugsplat to ask or always send
+
+				// sBugSplatSender = new MiniDmpSender(
+				// 	WCSTR(BugSplat_DB.asString()),
+				// 	WCSTR(LL_TO_WSTRING(LL_VIEWER_CHANNEL)),
+				// 	WCSTR(version_string),
+				// 	nullptr,              // szAppIdentifier -- set later
+				// 	MDSF_NONINTERACTIVE | // automatically submit report without prompting
+				// 	MDSF_PREVENTHIJACKING); // disallow swiping Exception filter
+				
 				sBugSplatSender = new MiniDmpSender(
 					WCSTR(BugSplat_DB.asString()),
 					WCSTR(LL_TO_WSTRING(LL_VIEWER_CHANNEL)),
 					WCSTR(version_string),
 					nullptr,              // szAppIdentifier -- set later
-					MDSF_NONINTERACTIVE | // automatically submit report without prompting
+					dwAsk | 
 					MDSF_PREVENTHIJACKING); // disallow swiping Exception filter
+				// </FS:ND>
+
 				sBugSplatSender->setCallback(bugsplatSendLog);
 
 				// engage stringize() overload that converts from wstring
@@ -759,7 +788,12 @@ bool LLAppViewerWin32::init()
 #endif // LL_BUGSPLAT
 #endif // LL_SEND_CRASH_REPORTS
 
-	bool success = LLAppViewer::init();
+	// <FS:ND> base::init() was potentially called earlier.
+	// bool success = LLAppViewer::init();
+	// </FS:ND>
+
+	if( !success )
+		success = LLAppViewer::init();
 
     return success;
 }
