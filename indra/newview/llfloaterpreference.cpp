@@ -4857,6 +4857,10 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 
 	getChild<LLTextBox>("textInformation4")->setTextArg("[URL]", getString("PrivacyPolicyUrl"));
 
+#if LL_SEND_CRASH_REPORTS && defined(LL_BUGSPLAT)
+	childSetVisible("textRestartRequired", true);
+#endif
+
 	refresh();
 
 	return LLPanelPreference::postBuild();
