@@ -2818,7 +2818,10 @@ void LLFloaterPreference::setMouse(LLMouseHandler::EClickType click)
         LLUICtrl* p2t_line_editor = getChild<LLUICtrl>("modifier_combo");
         // We are using text control names for readability and compatibility with voice
         p2t_line_editor->setControlValue(ctrl_value);
-        LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent());
+        // <FS:Ansariel> Fix crash "Failed to find string middle_mouse in panel Media Voice tab loaded from file"
+        //LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent());
+        LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent()->getParent()->getParent());
+        // </FS:Ansariel>
         if (advanced_preferences)
         {
             p2t_line_editor->setValue(advanced_preferences->getString(bt_name));
