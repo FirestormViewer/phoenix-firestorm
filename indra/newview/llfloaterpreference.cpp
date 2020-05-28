@@ -173,9 +173,9 @@ char const* const VISIBILITY_DEFAULT = "default";
 char const* const VISIBILITY_HIDDEN = "hidden";
 
 //control value for middle mouse as talk2push button
-const static std::string MIDDLE_MOUSE_CV = "MiddleMouse"; // for voice client and redability
-const static std::string MOUSE_BUTTON_4_CV = "MouseButton4";
-const static std::string MOUSE_BUTTON_5_CV = "MouseButton5";
+//const static std::string MIDDLE_MOUSE_CV = "MiddleMouse"; // for voice client and redability
+//const static std::string MOUSE_BUTTON_4_CV = "MouseButton4";
+//const static std::string MOUSE_BUTTON_5_CV = "MouseButton5";
 
 /// This must equal the maximum value set for the IndirectMaxComplexity slider in panel_preferences_graphics1.xml
 static const U32 INDIRECT_MAX_ARC_OFF = 101; // all the way to the right == disabled
@@ -441,7 +441,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
-	mCommitCallbackRegistrar.add("Pref.VoiceSetClearKey",		boost::bind(&LLFloaterPreference::onClickClearKey, this)); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	//<FS:KC> Handled centrally now
 //	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
@@ -2636,13 +2635,6 @@ void LLFloaterPreference::onChangeQuality(const LLSD& data)
 	refreshEnabledGraphics();
 	refresh();
 }
-
-// <FS:Ansariel> FIRE-3803: Clear voice toggle button
-void LLFloaterPreference::onClickClearKey()
-{
-	gSavedSettings.setString("PushToTalkButton", "");
-}
-// </FS:Ansariel>
 
 //<FS:KC> Handled centrally now
 /*
