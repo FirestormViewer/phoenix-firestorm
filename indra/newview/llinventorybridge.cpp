@@ -8550,6 +8550,7 @@ void LLWornItemsFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	items.erase(std::remove(items.begin(), items.end(), std::string("New Gesture")), items.end());
 	items.erase(std::remove(items.begin(), items.end(), std::string("New Script")), items.end());
 	items.erase(std::remove(items.begin(), items.end(), std::string("New Folder")), items.end());
+	items.erase(std::remove(items.begin(), items.end(), std::string("New Settings")), items.end()); // <FS:Ansariel> Don't allow creating settings on the "worn" tab
 
 	hide_context_entries(menu, items, disabled_items);
 }
