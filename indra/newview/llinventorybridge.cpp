@@ -4381,11 +4381,18 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	const LLUUID &lost_and_found_id = model->findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
 	const LLUUID &favorites = model->findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
 	const LLUUID &marketplace_listings_id = model->findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS, false);
+	const LLUUID &outfits_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS, false); // <FS:Ansariel> Fix "outfits" context menu
 
 	// <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
 	if (mUUID == AOEngine::instance().getAOFolder())
 	{
 		items.push_back(std::string("Cleanup broken Links"));
+	}
+	// </FS:Ansariel>
+	// <FS:Ansariel> Fix "outfits" context menu
+	if (outfits_id == mUUID)
+	{
+		items.push_back(std::string("New Outfit"));
 	}
 	// </FS:Ansariel>
 	if (lost_and_found_id == mUUID)
@@ -4489,7 +4496,10 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		// Not sure what the right thing is to do here.
 		if (!isCOFFolder() && cat && (cat->getPreferredType() != LLFolderType::FT_OUTFIT))
 		{
-			if (!isInboxFolder()) // don't allow creation in inbox
+			// <FS:Ansariel> Fix "outfits" context menu
+			//if (!isInboxFolder()) // don't allow creation in inbox
+			if (!isInboxFolder() && outfits_id != mUUID) // don't allow creation in inbox
+			// </FS:Ansariel>
 			{
 				// Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
 				if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
