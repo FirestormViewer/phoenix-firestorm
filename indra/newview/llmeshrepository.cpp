@@ -4594,19 +4594,6 @@ LLMeshCostData::LLMeshCostData()
     std::fill(mEstTrisByLOD.begin(), mEstTrisByLOD.end(), 0.f);
 }
 
-// <FS:ND> Guard against medium/low/lowest LOD missing and crashing the viewer
-S32 getSize( std::string aLOD, const LLSD &aHeader )
-{
-	if( !aHeader.has( aLOD ) )
-		return 0;
-
-	if( !aHeader[ aLOD ].has( "size" ) )
-		return 0;
-
-	return aHeader[ aLOD ][ "size" ].asInteger();
-}
-// </FS:ND>
-
 bool LLMeshCostData::init(const LLSD& header)
 {
     mSizeByLOD.resize(4);
@@ -4615,40 +4602,22 @@ bool LLMeshCostData::init(const LLSD& header)
     std::fill(mSizeByLOD.begin(), mSizeByLOD.end(), 0);
     std::fill(mEstTrisByLOD.begin(), mEstTrisByLOD.end(), 0.f);
 
-	// <FS:ND> Guard against medium/low/lowest LOD missing and crashing the viewer
-	
-    // S32 bytes_high = header["high_lod"]["size"].asInteger();
-    // S32 bytes_med = header["medium_lod"]["size"].asInteger();
-    // if (bytes_med == 0)
-    // {
-    //     bytes_med = bytes_high;
-    // }
-    // S32 bytes_low = header["low_lod"]["size"].asInteger();
-    // if (bytes_low == 0)
-    // {
-    //     bytes_low = bytes_med;
-    // }
-    // S32 bytes_lowest = header["lowest_lod"]["size"].asInteger();
-    // if (bytes_lowest == 0)
-    // {
-    //     bytes_lowest = bytes_low;
-    // }
-
-    S32 bytes_high = getSize( "high_lod", header ),
-        bytes_med = getSize( "medium_lod", header ),
-        bytes_low = getSize( "low_lod", header ),
-        bytes_lowest = getSize( "lowest_lod", header );
-    
+    S32 bytes_high = header["high_lod"]["size"].asInteger();
+    S32 bytes_med = header["medium_lod"]["size"].asInteger();
     if (bytes_med == 0)
+    {
         bytes_med = bytes_high;
-
+    }
+    S32 bytes_low = header["low_lod"]["size"].asInteger();
     if (bytes_low == 0)
+    {
         bytes_low = bytes_med;
-
+    }
+    S32 bytes_lowest = header["lowest_lod"]["size"].asInteger();
     if (bytes_lowest == 0)
+    {
         bytes_lowest = bytes_low;
-
-    // </FS:ND>
+    }
 
     mSizeByLOD[0] = bytes_lowest;
     mSizeByLOD[1] = bytes_low;
@@ -4788,13 +4757,8 @@ bool LLMeshRepository::getCostData(LLUUID mesh_id, LLMeshCostData& data)
         LLMeshRepoThread::mesh_header_map::iterator iter = mThread->mMeshHeader.find(mesh_id);
         if (iter != mThread->mMeshHeader.end() && mThread->mMeshHeaderSize[mesh_id] > 0)
         {
-            // <FS:ND> Make a copy of the header rather than holding on to the referece.
-            // Assumption: mMeshHeader gets modified in another thread, invalidating iter and thus causing a lot of crashed down the line
-
-            // LLSD& header = iter->second;
-            LLSD header = iter->second;
-
-            // </FS:ND>
+            // <FS:ND/> TODO - come to this back later. From all known so far it's not a simply race condition but LLSD being not multi thread safe at all. (which in fact it isn't).
+            LLSD& header = iter->second;
 
             bool header_invalid = (header.has("404")
                                    || !header.has("lowest_lod")
