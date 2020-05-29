@@ -86,6 +86,14 @@
 #include "llagent.h"                // for agent location
 #include "llviewerregion.h"
 #include "llvoavatarself.h"         // for agent name
+#pragma optimize( "", off )
+
+namespace FS
+{
+    std::wstring LogfileIn;
+    std::wstring LogfileOut;
+    std::wstring DumpFile;
+}
 
 namespace
 {
@@ -125,6 +133,14 @@ namespace
     {
         if (nCode == MDSCB_EXCEPTIONCODE)
         {
+            // <FS:ND> Save dump and log into unique crash dymp folder 
+            __wchar_t aBuffer[1024] = {};
+            sBugSplatSender->getMinidumpPath(aBuffer, _countof(aBuffer));
+            std::wstring strPath{ (wchar_t*)aBuffer };
+            ::CopyFileW(strPath.c_str(), FS::DumpFile.c_str(), FALSE);
+            ::CopyFileW(FS::LogfileIn.c_str(), FS::LogfileOut.c_str(), FALSE);
+            // </FS:ND>
+
             // send the main viewer log file
             // widen to wstring, convert to __wchar_t, then pass c_str()
             
@@ -755,6 +771,11 @@ bool LLAppViewerWin32::init()
 		return false;
 
 	checkTemp(); // Always do and log this, no matter if using Bugsplat or not
+
+	// Save those early so we don't have to deal with the dynamic memory during in process crash handling.
+	FS::LogfileIn = ll_convert_string_to_wide(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "Firestorm.log"));
+	FS::LogfileOut = ll_convert_string_to_wide(gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "Firestorm.log"));
+	FS::DumpFile = ll_convert_string_to_wide(gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "Firestorm.dmp"));
 
 	S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
 	// Don't ever send? bail out!
