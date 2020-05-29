@@ -5239,6 +5239,8 @@ void handle_reset_view()
 	// <FS:Zi> Added optional V1 behavior so the avatar turns into camera direction after hitting ESC
 	if (!gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
 	{
+		// The only thing we actually want to do here is set LLAgent::mFocusOnAvatar to TRUE,
+		// since this prevents the avatar from turning.
 		gAgentCamera.setFocusOnAvatar(TRUE, FALSE, FALSE);
 	}
 	// </FS:Zi>
