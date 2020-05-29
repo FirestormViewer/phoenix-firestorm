@@ -678,11 +678,56 @@ LLAppViewerWin32::~LLAppViewerWin32()
 {
 }
 
+// <FS:ND> Check if %TEMP% is defined and accessible (see FIRE-29623, sometimes BugSplat has problems to access TEMP, try to find out why)
+static void checkTemp()
+{
+	char *pTemp{ getenv("TEMP") };
+	if (!pTemp)
+	{
+		LL_WARNS() << "%TEMP% is not set" << LL_ENDL;
+	}
+	else
+	{
+		LL_INFOS() << "%TEMP%: " << pTemp << LL_ENDL;
+		DWORD dwAttr = ::GetFileAttributesA(pTemp);
+		DWORD dwLE = ::GetLastError();
+		if (dwAttr == INVALID_FILE_ATTRIBUTES)
+		{
+			LL_WARNS() << "%TEMP%: " << pTemp << " GetFileAttributesA failed, last error: " << dwLE << LL_ENDL;
+		}
+		else if (0 == (dwAttr & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			LL_WARNS() << "%TEMP%: " << pTemp << " is not a directory" << LL_ENDL;
+		}
+		else
+		{
+			LLUUID id = LLUUID::generateNewID();
+			std::string strFile{ pTemp };
+			if (strFile[strFile.size() - 1] != '/' && strFile[strFile.size() - 1] != '\\')
+				strFile += "\\";
+
+			strFile += id.asString();
+			FILE *fp = fopen(strFile.c_str(), "w");
+			if (!fp)
+			{
+				LL_WARNS() << "%TEMP%: " << pTemp << " cannot create file " << strFile << LL_ENDL;
+			}
+			else
+			{
+				fclose(fp);
+				remove(strFile.c_str());
+				LL_INFOS() << "%TEMP%: " << pTemp << " successfully created file " << strFile << LL_ENDL;
+			}
+		}
+	}
+}
+// </FS:ND>
+
 bool LLAppViewerWin32::init()
 {
 	bool success{ false }; // <FS:ND/> For BugSplat we need to call base::init() early on or there's no access to settings.
 	// Platform specific initialization.
-	
+
 	// Turn off Windows Error Reporting
 	// (Don't send our data to Microsoft--at least until we are Logo approved and have a way
 	// of getting the data back from them.)
@@ -708,6 +753,8 @@ bool LLAppViewerWin32::init()
 	success = LLAppViewer::init();
 	if (!success)
 		return false;
+
+	checkTemp(); // Always do and log this, no matter if using Bugsplat or not
 
 	S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
 	// Don't ever send? bail out!
