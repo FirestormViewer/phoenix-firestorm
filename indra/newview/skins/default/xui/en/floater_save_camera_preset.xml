@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <floater
  legacy_header_height="18"
- height="185"
+ height="180"
  help_topic="floater_save_preset"
  layout="topleft"
  name="save_camera_preset"
  save_rect="true"
  title="Save Camera Preset"
- width="280">
+ width="240">
 
     <string name="btn_label_save">Save</string>
     <string name="btn_label_replace">Replace</string>
     <radio_group
      height="85"
      layout="topleft"
-     left="20"
+     left="5"
      top="15"
      width="150"
      name="radio_save_preset">
@@ -38,7 +38,7 @@
      follows="top|left"
      height="23"
      layout="topleft"
-     left="41"
+     left="26"
      name="preset_txt_editor"
      width="200"
      top="45"/>
@@ -48,9 +48,9 @@
      label="Save"
      layout="topleft"
      top="145"
-     left="25"
+     left="10"
      name="save"
-     width="110"/>
+     width="100"/>
     <button
      follows="bottom|right"
      height="25"
@@ -58,12 +58,12 @@
      layout="topleft"
      left_pad="20"
      name="cancel"
-     width="110"/>
+     width="100"/>
 <!-- *HACK to correctly draw drop-down list over the buttons-->
     <combo_box
      follows="top|left"
      layout="topleft"
-     left="41"
+     left="26"
      name="preset_combo"
      top_delta="-40"
      width="200"/>

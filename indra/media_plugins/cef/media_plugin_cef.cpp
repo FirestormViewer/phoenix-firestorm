@@ -120,9 +120,6 @@ MediaPluginBase(host_send_func, host_user_data)
 	mPluginsEnabled = false;
 	mJavascriptEnabled = true;
 	mDisableGPU = false;
-#ifdef LL_LINUX // <FS:ND> Do not use GPU on Linux, using GPU messes with some window managers (https://bitbucket.org/NickyD/phoenix-firestorm-lgpl-linux/commits/14c936db5a02cf0f3ff24eb7f1c92136#comment-6048984)
-	mDisableGPU = true;
-#endif
 	mUserAgentSubtring = "";
 	mAuthUsername = "";
 	mAuthPassword = "";

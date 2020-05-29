@@ -254,10 +254,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         #<FS:TS> Somehow, we started leaving the - separating the variant from the app name
         # on the beginning of the channel qualifier. This screws up later processing that
         # depends on the channel type. If it's there, we chop it off.
-        #<FS:TS> Well, not for 6.3.9...this is broken elsewhere and we're too rushed to fix
-        # it properly, so we kludge our way around it elsewhere.
-        #if channel_qualifier[0] == '-':
-        #    channel_qualifier = channel_qualifier[1:]
+        if channel_qualifier[0] == '-':
+            channel_qualifier = channel_qualifier[1:]
         if channel_qualifier.startswith('release'):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
@@ -277,8 +275,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # get any part of the channel name after the CHANNEL_VENDOR_BASE
         suffix=self.channel_variant()
         # by ancient convention, we don't use Release in the app name
-        if self.channel_type() == 'release':
-            suffix=suffix.replace('Release', '').strip()
+        #<FS:TS> Well, LL doesn't, but we do. Don't remove it.
+        #if self.channel_type() == 'release':
+        #    suffix=suffix.replace('Release', '').strip()
         # for the base release viewer, suffix will now be null - for any other, append what remains
         if suffix:
             #suffix = "_".join([''] + suffix.split())
@@ -308,10 +307,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def app_name(self):
         global CHANNEL_VENDOR_BASE
         channel_type=self.channel_type()
-        if channel_type == 'release':
-            app_suffix='Viewer'
-        else:
-            app_suffix=self.channel_variant()
+        #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
+        #if channel_type == 'release':
+        #    app_suffix='Viewer'
+        #else:
+        #    app_suffix=self.channel_variant()
+        app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         if self.fs_is_opensim():
