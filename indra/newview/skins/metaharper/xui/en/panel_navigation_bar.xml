@@ -38,7 +38,7 @@
  width="1024">
 
 	<!-- This panel takes up the right click menu, so it only shows when clicking
-			inactive parts. Will be bound to right click in code, so keep the name intact. -->
+	inactive parts. Will be bound to right click in code, so keep the name intact. -->
 	<panel
 	 name="navigation_bar_context_menu_panel"
 	 layout="topleft"
@@ -65,11 +65,11 @@
 	 mouse_opaque="false"
 	 name="navigation_buttons_visibility_panel"
 	 layout="topleft"
-	 right="193"
+	 right="223"
 	 height="22"
 	 auto_resize="false">
 
-	     <pull_button
+		<pull_button
 	     follows="left|top"
 	     direction="down"
 	     height="23"
@@ -108,32 +108,32 @@
 	    <button
 	     follows="left|top"
 	     height="23"
-           use_ellipses="true"
+	     use_ellipses="true"
 	     layout="topleft"
 	     left_pad="7"
 	     name="About_Land"
 	     label="Land" 
-	     tool_tip="Pops up Land Information window"
+	     tool_tip="Opens Land Information window"
 	     top_delta="0"
 	     width="43">
 		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="about_land" />
-		 </button>
+		  function="Button.SetFloaterToggle"
+		  parameter="about_land" />
+		</button>
           <!-- end of About Land Button -->
 
           <!-- Windlight Button here -->  
 	    <button
 	     follows="left|top"
 	     height="23"
-           use_ellipses="true"
+	     use_ellipses="true"
 	     layout="topleft"
 	     left_pad="7"
-	     name="Sky"
-	     label="Sky" 
-	     tool_tip="Pops up Sky Editor window"
+	     name="PersonalLighting"
+	     label="Lighting"
+	     tool_tip="Opens the Personal Lighting window"
 	     top_delta="0"
-	     width="30" />
+	     width="60" />
           <!-- end of Windlight Button -->
 
 	</layout_panel>
@@ -161,7 +161,7 @@
 	     top="0"
 	     width="587">
          <combo_list
-         mouse_wheel_opaque="true"/>
+          mouse_wheel_opaque="true"/>
 	    </location_input>
 
 	</layout_panel>
@@ -190,7 +190,7 @@
 	     top="0"
 	     width="234">
          <combo_editor
-          label="Search MetaVerse"
+          label="Search Metaverse"
           name="search_combo_editor"/>
          <combo_list
           draw_border="true"

@@ -153,9 +153,6 @@
 #include "llsdserialize.h" // KB: SkinsSelector
 #include "lltoolbarview.h"
 #include "llviewernetwork.h" // <FS:AW  opensim search support>
-#include "llwaterparammanager.h"
-#include "llwldaycycle.h"
-#include "llwlparammanager.h"
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
 #if LL_WINDOWS
@@ -568,7 +565,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",	boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",	boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
-	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreference::onVertexShaderEnable, this));
+    mCommitCallbackRegistrar.add("Pref.RenderOptionUpdate",     boost::bind(&LLFloaterPreference::onRenderOptionEnable, this));
 	mCommitCallbackRegistrar.add("Pref.LocalLightsEnable",		boost::bind(&LLFloaterPreference::onLocalLightsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.WindowedMod",			boost::bind(&LLFloaterPreference::onCommitWindowedMode, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateSliderText",		boost::bind(&LLFloaterPreference::refreshUI,this));
@@ -1114,7 +1111,7 @@ void LLFloaterPreference::cancel()
 	// hide spellchecker settings folder
 	LLFloaterReg::hideInstance("prefs_spellchecker");
 
-	// hide advancede floater
+	// hide advanced graphics floater
 	LLFloaterReg::hideInstance("prefs_graphics_advanced");
 	
 	// reverts any changes to current skin
@@ -1299,7 +1296,8 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	saveSettings();
 
 	// Make sure there is a default preference file
-	LLPresetsManager::getInstance()->createMissingDefault();
+	LLPresetsManager::getInstance()->createMissingDefault(PRESETS_CAMERA);
+	LLPresetsManager::getInstance()->createMissingDefault(PRESETS_GRAPHIC);
 
 	// <FS:Ansariel> Fix resetting graphics preset on cancel
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
@@ -1311,13 +1309,14 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	//LLButton* save_btn = findChild<LLButton>("PrefSaveButton");
 	//LLButton* delete_btn = findChild<LLButton>("PrefDeleteButton");
 	//LLButton* exceptions_btn = findChild<LLButton>("RenderExceptionsButton");
-
-	//load_btn->setEnabled(started);
-	//save_btn->setEnabled(started);
-	//delete_btn->setEnabled(started);
-	//exceptions_btn->setEnabled(started);
+	//if (load_btn && save_btn && delete_btn && exceptions_btn)
+	//{
+	//	load_btn->setEnabled(started);
+	//	save_btn->setEnabled(started);
+	//	delete_btn->setEnabled(started);
+	//	exceptions_btn->setEnabled(started);
+	//}
 	// </FS:Ansariel>
-
 	collectSearchableItems();
 	if (!mFilterEdit->getText().empty())
 	{
@@ -1331,12 +1330,23 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	}
 }
 
-void LLFloaterPreference::onVertexShaderEnable()
+void LLFloaterPreference::onRenderOptionEnable()
 {
 	refreshEnabledGraphics();
 }
 
-void LLFloaterPreferenceGraphicsAdvanced::onVertexShaderEnable()
+void LLFloaterPreferenceGraphicsAdvanced::onRenderOptionEnable()
+{
+	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	if (instance)
+	{
+		instance->refresh();
+	}
+
+	refreshEnabledGraphics();
+}
+
+void LLFloaterPreferenceGraphicsAdvanced::onAdvancedAtmosphericsEnable()
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 	if (instance)
@@ -2109,20 +2119,19 @@ void LLFloaterPreference::refreshEnabledState()
 	//LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 
 	//// if vertex shaders off, disable all shader related products
-	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable") ||
-	//	!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
+	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
 	//{
 	//	ctrl_wind_light->setEnabled(FALSE);
 	//	ctrl_wind_light->setValue(FALSE);
 	//}
 	//else
 	//{
-	//	ctrl_wind_light->setEnabled(gSavedSettings.getBOOL("VertexShaderEnable"));
+	//	ctrl_wind_light->setEnabled(TRUE);
 	//}
 
 	////Deferred/SSAO/Shadows
 	//BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
-	//BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders") && gSavedSettings.getBOOL("VertexShaderEnable");
+	//BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	//BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 	//					bumpshiny &&
 	//					shaders && 
@@ -2196,9 +2205,7 @@ void LLFloaterPreference::refreshEnabledState()
 // [/RLVa:KB]
 
 	// Reflections
-	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable")
-		&& gGLManager.mHasCubeMap
-		&& LLCubeMap::sUseCubeMaps;
+	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	ctrl_reflections->setEnabled(reflections);
 	
 	// Bump & Shiny
@@ -2227,8 +2234,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	ctrl_avatar_vp->setEnabled(avatar_vp_enabled);
 	
-	if (gSavedSettings.getBOOL("VertexShaderEnable") == FALSE || 
-		gSavedSettings.getBOOL("RenderAvatarVP") == FALSE)
+	if (gSavedSettings.getBOOL("RenderAvatarVP") == FALSE)
 	{
 		ctrl_avatar_cloth->setEnabled(false);
 	} 
@@ -2237,52 +2243,28 @@ void LLFloaterPreference::refreshEnabledState()
 		ctrl_avatar_cloth->setEnabled(true);
 	}
 	
-	// Vertex Shaders
-	// Global Shader Enable
-	LLCheckBoxCtrl* ctrl_shader_enable = getChild<LLCheckBoxCtrl>("BasicShaders");
-	// radio set for terrain detail mode
+	// Vertex Shaders, Global Shader Enable
 	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
 
-//	ctrl_shader_enable->setEnabled(LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"));
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
-	// "Basic Shaders" can't be disabled - but can be enabled - under @setenv=n
-	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
-	ctrl_shader_enable->setEnabled(
-		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
-// [/RLVa:KB]
-
-	BOOL shaders = ctrl_shader_enable->get();
-	if (shaders)
-	{
-		terrain_detail->setEnabled(FALSE);
-	}
-	else
-	{
-		terrain_detail->setEnabled(TRUE);
-	}
+	terrain_detail->setEnabled(FALSE);
 	
 	// WindLight
 	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-	
-	// *HACK just checks to see if we can use shaders... 
-	// maybe some cards that use shaders, but don't support windlight
-//	ctrl_wind_light->setEnabled(ctrl_shader_enable->getEnabled() && shaders);
+
+//    ctrl_wind_light->setEnabled(TRUE);
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
 	// "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
-	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
-	ctrl_wind_light->setEnabled(
-		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
+	ctrl_wind_light->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
 // [/RLVa:KB]
 
-	sky->setEnabled(ctrl_wind_light->get() && shaders);
+	sky->setEnabled(TRUE);
 
 	//Deferred/SSAO/Shadows
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-						shaders && 
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
@@ -2321,9 +2303,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 	LLTextBox* reflections_text = getChild<LLTextBox>("ReflectionsText");
 
 	// Reflections
-	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable") 
-		&& gGLManager.mHasCubeMap
-		&& LLCubeMap::sUseCubeMaps;
+    BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	ctrl_reflections->setEnabled(reflections);
 	reflections_text->setEnabled(reflections);
 	
@@ -2347,71 +2327,44 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 
 	ctrl_avatar_vp->setEnabled(avatar_vp_enabled);
 	
-	if (gSavedSettings.getBOOL("VertexShaderEnable") == FALSE || 
-		gSavedSettings.getBOOL("RenderAvatarVP") == FALSE)
-	{
-		ctrl_avatar_cloth->setEnabled(FALSE);
-	} 
-	else
-	{
-		ctrl_avatar_cloth->setEnabled(TRUE);
-	}
-	
-	// Vertex Shaders
-	// Global Shader Enable
-	LLCheckBoxCtrl* ctrl_shader_enable   = getChild<LLCheckBoxCtrl>("BasicShaders");
-	LLSliderCtrl* terrain_detail = getChild<LLSliderCtrl>("TerrainDetail");   // can be linked with control var
-	LLTextBox* terrain_text = getChild<LLTextBox>("TerrainDetailText");
+    if (gSavedSettings.getBOOL("RenderAvatarVP") == FALSE)
+    {
+        ctrl_avatar_cloth->setEnabled(FALSE);
+    } 
+    else
+    {
+        ctrl_avatar_cloth->setEnabled(TRUE);
+    }
 
-//	ctrl_shader_enable->setEnabled(LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"));
+    // Vertex Shaders, Global Shader Enable
+    // SL-12594 Basic shaders are always enabled. DJH TODO clean up now-orphaned state handling code
+    LLSliderCtrl* terrain_detail = getChild<LLSliderCtrl>("TerrainDetail");   // can be linked with control var
+    LLTextBox* terrain_text = getChild<LLTextBox>("TerrainDetailText");
+    terrain_detail->setEnabled(FALSE);
+    terrain_text->setEnabled(FALSE);
+
+    // WindLight
+    LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
+    LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
+    LLTextBox* sky_text = getChild<LLTextBox>("SkyMeshDetailText");
+//    ctrl_wind_light->setEnabled(TRUE);
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
-	// "Basic Shaders" can't be disabled - but can be enabled - under @setenv=n
-	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
-	ctrl_shader_enable->setEnabled(
-		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
+    // "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
+    ctrl_wind_light->setEnabled(((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
 // [/RLVa:KB]
+    sky->setEnabled(TRUE);
+    sky_text->setEnabled(TRUE);
 
-	BOOL shaders = ctrl_shader_enable->get();
-	if (shaders)
-	{
-		terrain_detail->setEnabled(FALSE);
-		terrain_text->setEnabled(FALSE);
-	}
-	else
-	{
-		terrain_detail->setEnabled(TRUE);
-		terrain_text->setEnabled(TRUE);
-	}
-	
-	// WindLight
-	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
-	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-	LLTextBox* sky_text = getChild<LLTextBox>("SkyMeshDetailText");
+    //Deferred/SSAO/Shadows
+    LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
+    
+    BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
+                        ((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
+                        gGLManager.mHasFramebufferObject &&
+                        gSavedSettings.getBOOL("RenderAvatarVP") &&
+                        (ctrl_wind_light->get()) ? TRUE : FALSE;
 
-	// *HACK just checks to see if we can use shaders... 
-	// maybe some cards that use shaders, but don't support windlight
-//	ctrl_wind_light->setEnabled(ctrl_shader_enable->getEnabled() && shaders);
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
-	// "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
-	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
-	ctrl_wind_light->setEnabled(
-		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
-// [/RLVa:KB]
-
-	sky->setEnabled(ctrl_wind_light->get() && shaders);
-	sky_text->setEnabled(ctrl_wind_light->get() && shaders);
-
-	//Deferred/SSAO/Shadows
-	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
-	
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-						shaders && 
-						gGLManager.mHasFramebufferObject &&
-						gSavedSettings.getBOOL("RenderAvatarVP") &&
-						(ctrl_wind_light->get()) ? TRUE : FALSE;
-
-	ctrl_deferred->setEnabled(enabled);
+    ctrl_deferred->setEnabled(enabled);
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
@@ -2647,7 +2600,6 @@ void LLFloaterPreferenceGraphicsAdvanced::disableUnavailableSettings()
 	LLTextBox* reflections_text = getChild<LLTextBox>("ReflectionsText");
 	LLCheckBoxCtrl* ctrl_avatar_vp     = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
 	LLCheckBoxCtrl* ctrl_avatar_cloth  = getChild<LLCheckBoxCtrl>("AvatarCloth");
-	LLCheckBoxCtrl* ctrl_shader_enable = getChild<LLCheckBoxCtrl>("BasicShaders");
 	LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
@@ -2657,42 +2609,6 @@ void LLFloaterPreferenceGraphicsAdvanced::disableUnavailableSettings()
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 	LLTextBox* sky_text = getChild<LLTextBox>("SkyMeshDetailText");
 
-	// if vertex shaders off, disable all shader related products
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
-	{
-		ctrl_shader_enable->setEnabled(FALSE);
-		ctrl_shader_enable->setValue(FALSE);
-		
-		ctrl_wind_light->setEnabled(FALSE);
-		ctrl_wind_light->setValue(FALSE);
-
-		sky->setEnabled(FALSE);
-		sky_text->setEnabled(FALSE);
-
-		ctrl_reflections->setEnabled(FALSE);
-		ctrl_reflections->setValue(0);
-		reflections_text->setEnabled(FALSE);
-		
-		ctrl_avatar_vp->setEnabled(FALSE);
-		ctrl_avatar_vp->setValue(FALSE);
-		
-		ctrl_avatar_cloth->setEnabled(FALSE);
-		ctrl_avatar_cloth->setValue(FALSE);
-
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-		shadows_text->setEnabled(FALSE);
-		
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		ctrl_deferred->setEnabled(FALSE);
-		ctrl_deferred->setValue(FALSE);
-	}
-	
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
 	{
@@ -2902,7 +2818,10 @@ void LLFloaterPreference::setMouse(LLMouseHandler::EClickType click)
         LLUICtrl* p2t_line_editor = getChild<LLUICtrl>("modifier_combo");
         // We are using text control names for readability and compatibility with voice
         p2t_line_editor->setControlValue(ctrl_value);
-        LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent());
+        // <FS:Ansariel> Fix crash "Failed to find string middle_mouse in panel Media Voice tab loaded from file"
+        //LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent());
+        LLPanel* advanced_preferences = dynamic_cast<LLPanel*>(p2t_line_editor->getParent()->getParent()->getParent());
+        // </FS:Ansariel>
         if (advanced_preferences)
         {
             p2t_line_editor->setValue(advanced_preferences->getString(bt_name));
@@ -4200,20 +4119,17 @@ void LLPanelPreference::updateMediaAutoPlayCheckbox(LLUICtrl* ctrl)
 
 void LLPanelPreference::deletePreset(const LLSD& user_data)
 {
-	std::string subdirectory = user_data.asString();
-	LLFloaterReg::showInstance("delete_pref_preset", subdirectory);
+	LLFloaterReg::showInstance("delete_pref_preset", user_data.asString());
 }
 
 void LLPanelPreference::savePreset(const LLSD& user_data)
 {
-	std::string subdirectory = user_data.asString();
-	LLFloaterReg::showInstance("save_pref_preset", subdirectory);
+	LLFloaterReg::showInstance("save_pref_preset", user_data.asString());
 }
 
 void LLPanelPreference::loadPreset(const LLSD& user_data)
 {
-	std::string subdirectory = user_data.asString();
-	LLFloaterReg::showInstance("load_pref_preset", subdirectory);
+	LLFloaterReg::showInstance("load_pref_preset", user_data.asString());
 }
 
 void LLPanelPreference::setHardwareDefaults()
@@ -4388,7 +4304,7 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 
 	LLPresetsManager* presetsMgr = LLPresetsManager::getInstance();
     presetsMgr->setPresetListChangeCallback(boost::bind(&LLPanelPreferenceGraphics::onPresetsListChange, this));
-    presetsMgr->createMissingDefault(); // a no-op after the first time, but that's ok
+    presetsMgr->createMissingDefault(PRESETS_GRAPHIC); // a no-op after the first time, but that's ok
     
 
 // <FS:CR> Hide this until we have fullscreen mode functional on OSX again
@@ -4573,7 +4489,7 @@ void LLPanelPreferenceGraphics::setHardwareDefaults()
 LLFloaterPreferenceGraphicsAdvanced::LLFloaterPreferenceGraphicsAdvanced(const LLSD& key)
 	: LLFloater(key)
 {
-	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onVertexShaderEnable, this));
+    mCommitCallbackRegistrar.add("Pref.RenderOptionUpdate",            boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onRenderOptionEnable, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateMaxNonImpostors,this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",   boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity,this));
 }
@@ -4944,6 +4860,10 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 
 	getChild<LLTextBox>("textInformation4")->setTextArg("[URL]", getString("PrivacyPolicyUrl"));
 
+#if LL_SEND_CRASH_REPORTS && defined(LL_BUGSPLAT)
+	childSetVisible("textRestartRequired", true);
+#endif
+
 	refresh();
 
 	return LLPanelPreference::postBuild();
@@ -4958,13 +4878,6 @@ void LLPanelPreferenceCrashReports::refresh()
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendSettings")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendName")->setEnabled(fEnable);
-
-// <FS:ND> Disable options not available when compiling with Bugsplat and set those to default values.
-#ifdef LL_BUGSPLAT
-	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(false);
-	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setValue(false);
-#endif
-// </FS:ND>
 }
 
 void LLPanelPreferenceCrashReports::apply()

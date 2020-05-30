@@ -33,6 +33,7 @@
 #include "llfeaturemanager.h"
 #include "lluictrlfactory.h"
 #include "lltexteditor.h"
+#include "llenvironment.h"
 #include "llerrorcontrol.h"
 #include "lleventtimer.h"
 #include "llviewertexturelist.h"
@@ -145,12 +146,15 @@
 
 #if !LL_LINUX
   #include "cef/dullahan.h"
+  #include "cef/dullahan_version.h"
   #include "vlc/libvlc_version.h"
 #else
   #if LL_USESYSTEMLIBS
     #include "dullahan.h"
+    #include "dullahan_version.h"
   #else
     #include "cef/dullahan.h"
+    #include "cef/dullahan_version.h"
   #endif
 
 #endif
@@ -198,8 +202,6 @@
 #include "llviewerparcelmgr.h"
 #include "llworldmapview.h"
 #include "llpostprocess.h"
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
 
 #include "lldebugview.h"
 #include "llconsole.h"
@@ -235,6 +237,7 @@
 #include "llfloateroutfitsnapshot.h"
 #include "llfloatersnapshot.h"
 #include "llsidepanelinventory.h"
+#include "llatmosphere.h"
 
 // includes for idle() idleShutdown()
 #include "llviewercontrol.h"
@@ -874,6 +877,9 @@ bool LLAppViewer::init()
 	// Memory will be cleaned up in ::cleanupClass()
 	LLWearableType::initParamSingleton(new LLUITranslationBridge());
 
+    LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+    LLSettingsType::initClass(trans);
+
 	// initialize SSE options
 	LLVector4a::initClass();
 
@@ -1335,31 +1341,33 @@ bool LLAppViewer::init()
 
 	gGLActive = FALSE;
 
-	// <FS:Ansariel> Disable updater
-//	LLProcess::Params updater;
-//	updater.desc = "updater process";
-//	// Because it's the updater, it MUST persist beyond the lifespan of the
-//	// viewer itself.
-//	updater.autokill = false;
+    // <FS:Ansariel> Disable updater
+//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//    {
+//        LLProcess::Params updater;
+//        updater.desc = "updater process";
+//        // Because it's the updater, it MUST persist beyond the lifespan of the
+//        // viewer itself.
+//        updater.autokill = false;
 //#if LL_WINDOWS
-//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker.exe");
+//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker.exe");
 //#elif LL_DARWIN
-//	// explicitly run the system Python interpreter on SLVersionChecker.py
-//	updater.executable = "python";
-//	updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", "SLVersionChecker.py"));
+//        // explicitly run the system Python interpreter on SLVersionChecker.py
+//        updater.executable = "python";
+//        updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", "SLVersionChecker.py"));
 //#else
-//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker");
+//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker");
 //#endif
-//	// add LEAP mode command-line argument to whichever of these we selected
-//	updater.args.add("leap");
-//	// UpdaterServiceSettings
-//	updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
-//	// channel
-//	updater.args.add(LLVersionInfo::getChannel());
-//	// testok
-//	updater.args.add(gSavedSettings.getString("UpdaterServiceURL"));
-//	// ForceAddressSize
-//	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
+//        // add LEAP mode command-line argument to whichever of these we selected
+//        updater.args.add("leap");
+//        // UpdaterServiceSettings
+//        updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
+//        // channel
+//        updater.args.add(LLVersionInfo::getChannel());
+//        // testok
+//        updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
+//        // ForceAddressSize
+//        updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
 //#if LL_WINDOWS && !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
 //	// This is neither a release package, nor crash-reporting enabled test build
 //	// try to run version updater, but don't bother if it fails (file might be missing)
@@ -1541,7 +1549,8 @@ static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
 
 static LLTrace::BlockTimerStatHandle FTM_TEXTURE_CACHE("Texture Cache");
 static LLTrace::BlockTimerStatHandle FTM_DECODE("Image Decode");
-static LLTrace::BlockTimerStatHandle FTM_TEXTURE_FETCH("Texture Fetch");
+static LLTrace::BlockTimerStatHandle FTM_FETCH("Image Fetch");
+
 static LLTrace::BlockTimerStatHandle FTM_VFS("VFS Thread");
 static LLTrace::BlockTimerStatHandle FTM_LFS("LFS Thread");
 static LLTrace::BlockTimerStatHandle FTM_PAUSE_THREADS("Pause Threads");
@@ -1735,9 +1744,11 @@ bool LLAppViewer::doFrame()
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
+				display();
+
 				// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 				//static U64 last_call = 0;
-				//if (!gTeleportDisplay)
+				//if (!gTeleportDisplay || gGLManager.mIsIntel) // SL-10625...throttle early, throttle often with Intel
 				//{
 				//	// Frame/draw throttling
 				//	U64 elapsed_time = LLTimer::getTotalTime() - last_call;
@@ -1751,8 +1762,6 @@ bool LLAppViewer::doFrame()
 				//}
 				//last_call = LLTimer::getTotalTime();
 				// </FS:Ansariel>
-
-				display();
 
 				pingMainloopTimeout("Main:Snapshot");
 				LLFloaterSnapshot::update(); // take snapshots
@@ -1917,7 +1926,7 @@ S32 LLAppViewer::updateTextureThreads(F32 max_time)
 	 	work_pending += LLAppViewer::getImageDecodeThread()->update(max_time); // unpauses the image thread
 	}
 	{
-		LL_RECORD_BLOCK_TIME(FTM_TEXTURE_FETCH);
+		LL_RECORD_BLOCK_TIME(FTM_FETCH);
 	 	work_pending += LLAppViewer::getTextureFetch()->update(max_time); // unpauses the texture fetch thread
 	}
 	return work_pending;
@@ -1940,6 +1949,8 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
+    LLAtmosphere::cleanupClass();
+
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
@@ -2249,6 +2260,12 @@ bool LLAppViewer::cleanup()
 
 	// Store the time of our current logoff
 	gSavedPerAccountSettings.setU32("LastLogoff", time_corrected());
+
+    if (LLEnvironment::instanceExists())
+    {
+        //Store environment settings if nessesary
+        LLEnvironment::getInstance()->saveToSettings();
+    }
 
 	// Must do this after all panels have been deleted because panels that have persistent rects
 	// save their rects on delete.
@@ -2620,14 +2637,9 @@ void errorCallback(const std::string &error_string)
 	// static info file.
 	LLAppViewer::instance()->writeDebugInfo();
 
-//	LLError::crashAndLoop(error_string);
-// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4)
-#if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
-	DebugBreak();
-#else
+#ifndef SHADER_CRASH_NONFATAL
 	LLError::crashAndLoop(error_string);
-#endif // LL_RELEASE_WITH_DEBUG_INFO && LL_WINDOWS
-// [/SL:KB]
+#endif
 }
 
 void LLAppViewer::initLoggingAndGetLastDuration()
@@ -4130,20 +4142,13 @@ void LLAppViewer::writeSystemInfo()
     if (! gDebugInfo.has("Dynamic") )
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
-	// <FS:ND> set filename to Firestorm.log
+	// <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
 // #if LL_WINDOWS
 // 	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
 // #else
 //     //Not ideal but sufficient for good reporting.
 //     gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
 // #endif
-
-#if LL_WINDOWS
-	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, APP_NAME + ".log");
-#else
-    //Not ideal but sufficient for good reporting.
-    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, APP_NAME + ".old");  //LLError::logFileName();
-#endif
 	// </FS:ND>
 
 	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
@@ -4225,7 +4230,7 @@ void LLAppViewer::writeSystemInfo()
 	LL_INFOS("SystemInfo") << "OS: " << LLOSInfo::instance().getOSStringSimple() << LL_ENDL;
 	LL_INFOS("SystemInfo") << "OS info: " << LLOSInfo::instance() << LL_ENDL;
 
-	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Path from Catznip
+	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Patch from Catznip
     // gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
 	if (gCrashSettings.getBOOL("CrashSubmitSettings"))
 		gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
@@ -5813,7 +5818,6 @@ void LLAppViewer::idle()
 	//
 	// Update weather effects
 	//
-	gSky.propagateHeavenlyBodies(gFrameDTClamped);				// moves sun, moon, and planets
 
 	// Update wind vector
 	LLVector3 wind_position_region;
@@ -6310,7 +6314,7 @@ bool LLAppViewer::onChangeFrameLimit(LLSD const & evt)
 {
 	if (evt.asInteger() > 0)
 	{
-		mMinMicroSecPerFrame = 1000000 / evt.asInteger();
+		mMinMicroSecPerFrame = (U64)(1000000.0f / F32(evt.asInteger()));
 	}
 	else
 	{

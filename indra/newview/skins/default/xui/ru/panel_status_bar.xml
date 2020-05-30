@@ -2,8 +2,6 @@
 <panel name="status">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
-		<button name="status_wl_btn" tool_tip="Настройки окружающей среды"/>
-		<button name="status_lightshare_btn" tool_tip="Настройки освещения"/>
 		<text tool_tip="Имя земельного участка, на котором вы стоите. Нажмите о земле." name="parcel_info_text" value="(загрузка...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -15,11 +13,14 @@
 	<panel.string name="time">
 		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
+	<panel.string name="timeTooltip">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+	</panel.string>
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
 	<panel name="menu_search_panel">
-		<search_editor label="Меню поиска" name="search_menu_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в меню."/>
+		<search_editor label="Поиск в Меню" name="search_menu_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в меню."/>
 	</panel>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
@@ -35,5 +36,6 @@
 		<text name="TimeText" tool_tip="Текущее время (Тихоокеанское)"/>
 		<button name="stream_toggle_btn" tool_tip="Включить/Выключить воспроизведение потокового аудио"/>
 		<button name="media_toggle_btn" tool_tip="Включить/Выключить воспроизведение всего медиа (Музыка, Видео, Web)"/>
+		<text name="FPSText" tool_tip="Кадров в секунду"/>
 	</panel>
 </panel>

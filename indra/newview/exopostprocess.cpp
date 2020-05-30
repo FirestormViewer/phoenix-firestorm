@@ -42,7 +42,7 @@ exoPostProcess::~exoPostProcess()
 
 void exoPostProcess::ExodusRenderPostStack(LLRenderTarget *src, LLRenderTarget *dst)
 {
-	if (mVertexShaderLevel > 0)
+	if (mShaderLevel > 0)
 	{
 		if (sExodusRenderVignette.mV[0] > 0.f && LLPipeline::sRenderDeferred)
 			ExodusRenderVignette(src, dst); // Don't render vignette here in non-deferred. Do it in the glow combine shader.
@@ -50,7 +50,7 @@ void exoPostProcess::ExodusRenderPostStack(LLRenderTarget *src, LLRenderTarget *
 }
 void exoPostProcess::ExodusRenderPostSettingsUpdate()
 {
-	mVertexShaderLevel = LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
+	mShaderLevel = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
 	sExodusRenderVignette = gSavedSettings.getVector3("FSRenderVignette");
 }
 void exoPostProcess::ExodusRenderPostUpdate()

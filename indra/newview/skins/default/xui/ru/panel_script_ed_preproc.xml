@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="script panel" width="497">
+	<panel.string name="loading">
+		Загрузка...
+	</panel.string>
+	<panel.string name="can_not_view">
+		Вы не можете просматривать и изменять этот скрипт, поскольку для него выбрана категория «не копируемые». Для просмотра или изменения скрипта в объекте нужны полные права доступа.
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		Общедоступные объекты не могут запускать скрипты
+	</panel.string>
+	<panel.string name="script_running">
+		Выполняется
+	</panel.string>
+	<panel.string name="Title">
+		Скрипт: [NAME]
+	</panel.string>
+	<panel.string name="external_editor_not_set">
+		Выберите редактор, задав переменную среды LL_SCRIPT_EDITOR или параметр ExternalEditor.
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu label="Файл" name="File">
+			<menu_item_call label="Сохранить" name="Save" />
+			<menu_item_call label="Отменить все изменения" name="Revert All Changes" />
+			<menu_item_call label="Загрузить из файла..." name="LoadFromFile" />
+			<menu_item_call label="Сохранить в файл..." name="SaveToFile" />
+			<menu_item_call label="Настройки редактора скриптов..." name="ScriptPrefs" />
+		</menu>
+ 		<menu label="Изменить" name="Edit">
+			<menu_item_call label="Отменить" name="Undo" />
+			<menu_item_call label="Вернуть" name="Redo" />
+			<menu_item_call label="Вырезать" name="Cut" />
+			<menu_item_call label="Копировать" name="Copy" />
+			<menu_item_call label="Вставить" name="Paste" />
+			<menu_item_call label="Выделить все" name="Select All" />
+			<menu_item_call label="Снять выделение" name="Deselect" />
+			<menu_item_call label="Поиск/Замена..." name="Search / Replace..." />
+			<menu_item_call label="Перейти на строку..." name="Go to line..." />
+		</menu>
+		<menu label="Справка" name="Help">
+			<menu_item_call label="Справка..." name="Help..." />
+			<menu_item_call label="Справка по ключевым словам..." name="Keyword Help..." />
+			<menu_item_call label="Библиотека Скриптов..." name="Script Library" />
+		</menu>
+	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Сохранить скрипт" name="save_btn" />
+			<button tool_tip="Внешний Редактор" name="Edit_btn" />
+			<button tool_tip="Загрузить скрипт с вашего жесткого диска" name="load_disk_btn" />
+			<button tool_tip="Сохранить скрипт на свой жесткий диск" name="save_disk_btn" />
+			<button tool_tip="Вырезать" name="cut_btn" />
+			<button tool_tip="Копировать" name="copy_btn" />
+			<button tool_tip="Вставить" name="paste_btn" />
+			<button tool_tip="Отменить" name="undo_btn" />
+			<button tool_tip="Вернуть" name="redo_btn" />
+			<button tool_tip="Поиск/Замена" name="search_btn" />
+			<button tool_tip="Настройки редактора скриптов" name="prefs_btn" />
+		</layout_panel>
+	</layout_stack>
+
+	<tab_container name="Tabset" >
+		<panel name="Script" label="Скрипт" width="487">
+			<script_editor name="Script Editor">
+				Загрузка...
+			</script_editor>
+		</panel>
+		<panel name="Preprocessed" label="Препроцессор" width="487">
+			<fs_lsl_preproc_viewer name="Post Editor">
+				Загрузка...
+			</fs_lsl_preproc_viewer>
+		</panel>
+	</tab_container>
+
+	<combo_box label="Вставить..." name="Insert..." width="128" />
+	<text name="line_col" value="Строка 0, Столбец 0" width="128" />
+	<button label="Редактор..." name="edit_btn_2" width="90" />
+	<button label="Сохранить" label_selected="Сохранить" name="save_btn_2" width="90" />
+</panel>

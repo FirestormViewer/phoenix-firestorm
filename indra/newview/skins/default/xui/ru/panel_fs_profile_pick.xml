@@ -4,10 +4,10 @@
 (будет обновлено после сохранения)
     </panel.string>
     <line_editor name="pick_location">
-        загрузка...
+        Загрузка...
     </line_editor>
     <button label="Телепорт" name="teleport_btn" />
-    <button label="Показать на карте" name="show_on_map_btn" />
-    <button label="Установить место" tool_tip="Установить в текущем местоположении" name="set_to_curr_location_btn" />
-    <button label="Сохранить место" name="save_changes_btn" />
+    <button label="На карте" name="show_on_map_btn" />
+    <button label="Установить" tool_tip="Установить в текущем местоположении" name="set_to_curr_location_btn" />
+    <button label="Сохранить" name="save_changes_btn" />
 </panel>

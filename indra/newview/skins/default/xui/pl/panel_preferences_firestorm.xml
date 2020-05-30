@@ -109,26 +109,6 @@
         <check_box label="Zezwól protokołowi OpenCollar na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationOC" />
         <check_box label="Zezwól protokołowi LockMeister na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationLM" />
     </panel>
-    <panel label="Windlight" name="WindlightTab">
-        <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/działce" name="UseEnvironmentFromRegionAlways" />
-        <check_box label="Płynne przenikanie ustawień regionu i moich Szybkich Preferencji" name="FSInterpolateSky" tool_tip="Opcja kontroluje płynne mieszanie się z sobą ustawień WL regionu i Szybkich Preferencji. Ten efekt może spowodować, że wolniejsze komputery mogą zwalniać na kilka sekund podczas zmiany otoczenia. Wyłącz te dwie opcje, aby pominąć efekt i stosować ustawienia natychmiast." />
-        <check_box label="Płynne przenikanie ustawień wody i moich Szybkich Preferencji" name="FSInterpolateWater" tool_tip="To samo co powyżej, ale dla wody." />
-        <text name="FSWLshare_txt" width="350">
-          Dzielenie się WL Firestorma dla działek
-        </text>
-        <check_box label="Używaj dzielenia się WL Firestorma dla działek" name="FSWLParcelEnabled" />
-        <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
-        <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
-        <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />
-        <text name="wl_crossfade_label">
-         Czas przenikania (w sekundach):
-         </text>
-        <spinner tool_tip="Czas przenikania z jednego zestawu ustawień w inny [Domyślnie: 3]" name="FSWindlightInterpolateTime" />
-        <text name="could_texture_text">
-         Tekstura chmur (restart zalecany):
-        </text>
-        <combo_box name="cloud_combo" tool_tip="Wybierz teksturę chmur, jakiej chcesz użyć." />
-    </panel>
     <panel label="Buduj 1" name="BuildTab">
         <text name="text_box_objprams">
          Domyślny rozmiar
@@ -230,7 +210,7 @@
         <check_box label="Zapisuj tekstury z Szafy na dysk domyślnie jako PNG zamiast TGA" tool_tip="Używane w oknie podglądu tekstur oraz menu kontekstowym Szafy." name="FSTextureDefaultSaveAsFormat" />
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
-        <check_box label="Podgląd animacji na własnym awatarze podczas ładowania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas ładowania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
+        <check_box label="Podgląd animacji na własnym awatarze podczas przesyłania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas przesyłania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
         <check_box label="Włącz rozszerzanie funkcjonalności informacji o skryptach" tool_tip="Gdy zaznaczysz tą opcję, to podstawowa funkcjonalność informacji o skryptach zostanie rozszerzona za pomocą różnych szczegółów przydatnych dla budowniczych" name="FSScriptInfoExtended" />
     </panel>
     <panel label="Nowe pliki" name="UploadsTab">

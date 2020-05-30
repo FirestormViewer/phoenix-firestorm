@@ -72,20 +72,6 @@
 			<check_box label="Autoriser OpenCollar à activer ou désactiver l'AO intégré" name="BridgeIntegrationOC"/>
 			<check_box label="Autoriser LockMeister à activer ou désactiver l'AO intégré" name="BridgeIntegrationLM"/>
 		</panel>
-		<panel label="Windlight" name="WindlightTab">
-			<check_box label="Toujours utiliser l'environnement de la région ou du terrain." name="UseEnvironmentFromRegionAlways"/>
-			<check_box label="Transition des changements atmosphériques WL de la région avec les préférences rapides" name="FSInterpolateSky" tool_tip="Contrôle l'effet spécial lors des changements d'environnements. Peut occasionner une chute de FPS sur les ordinateurs moins performants pendant quelques secondes. Désactiver les deux options pour passer la transition et appliquer directement."/>
-			<check_box label="Transition des changements aquatiques WL de la région avec les préférences rapides" name="FSInterpolateWater" tool_tip="Comme ci-dessus, mais pour l'eau."/>
-			<text name="FSWLshare_txt">Partage des Windlights Firestorm</text>
-			<check_box label="Activer le partage Windlight par terrain de Firestorm " name="FSWLParcelEnabled"/>
-			<check_box label="Appliquer automatiquement les paramètres WL des terrains de mes amis" name="FSWLWhitelistFriends"/>
-			<check_box label="Appliquer automatiquement les paramètres WL des terrains de de mes groupes" name="FSWLWhitelistGroups"/>
-			<check_box label="Appliquer automatiquement les paramètres WL de tous les terrains" name="FSWLWhitelistAll"/>
-			<text name="wl_crossfade_label" width="245">Durée des transitions (secondes) :</text>
-			<spinner name="FSWindlightInterpolateTime" tool_tip="La durée en secondes d'une transition entre deux préréglages (3 par défaut)"/>
-			<text name="could_texture_text" width="240">Texture des nuages (Redémarrage requis) :</text>
-			<combo_box name="cloud_combo" tool_tip="Sélectionnez la texture des nuages que vous souhaitez utiliser."/>
-		</panel>
 		<panel label="Construction 1" name="BuildTab">
 			<text name="text_box_objprams">Dimensions par défaut</text>
 			<text name="text_box_objprams2">Paramètres</text>

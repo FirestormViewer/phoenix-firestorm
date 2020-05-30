@@ -84,7 +84,9 @@ LLSnapshotModel::ESnapshotType LLFloaterSnapshotBase::ImplBase::getActiveSnapsho
     {
         return spanel->getSnapshotType();
     }
-	return LLSnapshotModel::SNAPSHOT_WEB;
+	// <FS:Ansariel> Fix XUI parser warnings
+	//return LLSnapshotModel::SNAPSHOT_WEB;
+	return LLSnapshotModel::SNAPSHOT_NONE;
 }
 
 // virtual
@@ -322,7 +324,10 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshotBase* floater)
 	floater->getChildView("layer_types")->setEnabled(shot_type == LLSnapshotModel::SNAPSHOT_LOCAL);
 
 	LLPanelSnapshot* active_panel = getActivePanel(floater);
-	if (active_panel)
+	// <FS:Ansariel> Fix XUI parser warning
+	//if (active_panel)
+	if (active_panel && active_panel->getName() != "panel_snapshot_options")
+	// </FS:Ansariel>
 	{
 		LLSpinCtrl* width_ctrl = getWidthSpinner(floater);
 		LLSpinCtrl* height_ctrl = getHeightSpinner(floater);

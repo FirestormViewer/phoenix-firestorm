@@ -44,6 +44,7 @@ class LLUICtrl;
 class LLUUID;
 class LLFrameTimer;
 class LLStatGraph;
+class LLPanelPresetsCameraPulldown;
 class LLPanelPresetsPulldown;
 class LLPanelVolumePulldown;
 class LLPanelNearByMedia;
@@ -161,6 +162,7 @@ private:
 	void onClickBuyCurrency();
 	void onVolumeChanged(const LLSD& newvalue);
 
+	void onMouseEnterPresetsCamera();
 	void onMouseEnterPresets();
 	void onMouseEnterVolume();
 	void onMouseEnterNearbyMedia();
@@ -224,16 +226,6 @@ private:
 	void onBandwidthGraphButtonClicked();
 	// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
-	/**
-	 * Handles clicks on the parcel wl info button.
-	 */
-	void onParcelWLClicked();
-
-	/** <FS:CR> FIRE-5118 - Lightshare support
-	 * Handles clicks on the lightshare icon.
-	 */
-	void onLightshareClicked();
-	
 	/**
 	 * Called when agent changes the parcel.
 	 */
@@ -337,7 +329,8 @@ private:
 	LLStatGraph *mSGBandwidth;
 	LLStatGraph *mSGPacketLoss;
 
-	LLButton	*mIconPresets;
+	LLButton	*mIconPresetsCamera;
+	LLButton	*mIconPresetsGraphic;
 	LLButton	*mBtnVolume;
 	LLTextBox	*mBoxBalance;
 	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
@@ -359,6 +352,7 @@ private:
 	BOOL			mShowParcelIcons;
 	LLFrameTimer*	mBalanceTimer;
 	LLFrameTimer*	mHealthTimer;
+	LLPanelPresetsCameraPulldown* mPanelPresetsCameraPulldown;
 	LLPanelPresetsPulldown* mPanelPresetsPulldown;
 	LLPanelVolumePulldown* mPanelVolumePulldown;
 	LLPanelNearByMedia*	mPanelNearByMedia;
@@ -369,10 +363,6 @@ private:
 	LLTextBox* 				mDamageText;
 	LLIconCtrl*				mParcelIcon[ICON_COUNT];
 	LLParcelChangeObserver*	mParcelChangedObserver;
-	LLButton* 				mPWLBtn;
-	// <FS:CR> FIRE-5118 - Lightshare support
-	LLButton*				mLightshareBtn;
-	// </FS:CR>
 	LLPanel*				mBalancePanel;
 	LLButton*				mBuyParcelBtn;
 	LLPanel*				mTimeMediaPanel;
@@ -383,6 +373,7 @@ private:
 
 	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	boost::signals2::connection mMouseEnterPresetsConnection;
+	boost::signals2::connection mMouseEnterPresetsCameraConnection;
 	boost::signals2::connection mMouseEnterVolumeConnection;
 	boost::signals2::connection mMouseEnterNearbyMediaConnection;
 	// </FS:Ansariel>

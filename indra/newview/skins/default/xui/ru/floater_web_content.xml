@@ -14,5 +14,19 @@
 			<button name="web_test_home_page" tool_tip="Главная страница веб-тестирования"/>
 			<button name="VLC Plugin Test" tool_tip="Тест видео MPEG4"/>
 		</layout_panel>
+		<layout_panel name="external_controls" >
+			<text name="plugin_fail_text">
+Плагину веб-браузера, кажется, требуется больше времени чтобы открыться.
+Если плагин никогда не загружается, пожалуйста, посетите:
+
+http://wiki.phoenixviewer.com/fs_search_issues
+
+и
+
+http://wiki.phoenixviewer.com/fs_media
+
+для возможных шагов для решения этой проблемы.
+			</text>
+		</layout_panel>
 	</layout_stack>
 </floater>

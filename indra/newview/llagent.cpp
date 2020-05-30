@@ -45,7 +45,6 @@
 #include "llchicletbar.h"
 #include "llconsole.h"
 #include "lldonotdisturbnotificationstorage.h"
-#include "llenvmanager.h"
 #include "llfirstuse.h"
 #include "llfloatercamera.h"
 #include "llfloaterimcontainer.h"
@@ -112,7 +111,6 @@
 
 // Firestorm includes
 #include "fslslbridge.h"
-#include "kcwlinterface.h"
 #include "llpresetsmanager.h"
 #include "NACLantispam.h"
 
@@ -414,6 +412,7 @@ LLAgent::LLAgent() :
 
 	mAgentOriginGlobal(),
 	mPositionGlobal(),
+    mLastTestGlobal(),
 
 	mDistanceTraveled(0.F),
 	mLastPositionGlobal(LLVector3d::zero),
@@ -1151,13 +1150,6 @@ void LLAgent::removeRegionChangedCallback(boost::signals2::connection callback)
 	mRegionChangedSignal.disconnect(callback);
 }
 
-// <FS:Ansariel> Aurora sim windlight refresh
-void LLAgent::changeRegion()
-{
-	mRegionChangedSignal();
-}
-// </FS:Ansariel>
-
 //-----------------------------------------------------------------------------
 // inPrelude()
 //-----------------------------------------------------------------------------
@@ -1268,6 +1260,13 @@ void LLAgent::setPositionAgent(const LLVector3 &pos_agent)
 		pos_agent_d.setVec(pos_agent);
 		mPositionGlobal = pos_agent_d + mAgentOriginGlobal;
 	}
+
+    if (((mLastTestGlobal - mPositionGlobal).lengthSquared() > 1.0) && !mOnPositionChanged.empty())
+    {   // If the position has changed my more than 1 meter since the last time we triggered.
+        // filters out some noise. 
+        mLastTestGlobal = mPositionGlobal;
+        mOnPositionChanged(mFrameAgent.getOrigin(), mPositionGlobal);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1307,6 +1306,12 @@ const LLVector3 &LLAgent::getPositionAgent()
 
 	return mFrameAgent.getOrigin();
 }
+
+boost::signals2::connection LLAgent::whenPositionChanged(position_signal_t::slot_type fn)
+{
+    return mOnPositionChanged.connect(fn);
+}
+
 
 //-----------------------------------------------------------------------------
 // getRegionsVisited()
@@ -4584,9 +4589,6 @@ bool LLAgent::teleportCore(bool is_local)
 			gLastDrawDistanceStep = 32.0f;
 		}
 		// </FS:Ansariel>
-
-		//<FS:KC> bit of a hack
-		KCWindlightInterface::instance().setTPing(true);
 	}
 	make_ui_sound("UISndTeleportOut");
 	
@@ -5665,12 +5667,10 @@ LLTeleportRequestViaLocation::LLTeleportRequestViaLocation(const LLVector3d &pPo
 	: LLTeleportRequest(),
 	mPosGlobal(pPosGlobal)
 {
-    LL_INFOS("Teleport") << "LLTeleportRequestViaLocation created" << LL_ENDL;
 }
 
 LLTeleportRequestViaLocation::~LLTeleportRequestViaLocation()
 {
-    LL_INFOS("Teleport") << "~LLTeleportRequestViaLocation" << LL_ENDL;
 }
 
 bool LLTeleportRequestViaLocation::canRestartTeleport()
@@ -5710,7 +5710,6 @@ LLTeleportRequestViaLocationLookAt::LLTeleportRequestViaLocationLookAt(const LLV
 
 LLTeleportRequestViaLocationLookAt::~LLTeleportRequestViaLocationLookAt()
 {
-    LL_INFOS("Teleport") << "~LLTeleportRequestViaLocationLookAt" << LL_ENDL;
 }
 
 bool LLTeleportRequestViaLocationLookAt::canRestartTeleport()

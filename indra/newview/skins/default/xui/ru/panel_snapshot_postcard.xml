@@ -13,6 +13,6 @@
 		<panel label="Сообщение" name="panel_postcard_message" />
 		<panel label="Настройки" name="panel_postcard_settings" />
 	</tab_container>
-	<button label="Отменить" name="cancel_btn" />
+	<button label="&#x25B6; Выбор" name="cancel_btn" />
 	<button label="Отправить" name="send_btn" />
 </panel>

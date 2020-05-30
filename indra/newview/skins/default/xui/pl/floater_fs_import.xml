@@ -32,7 +32,7 @@
 		Przesyłanie zasobu danych [ASSET] z [ASSETTOTAL].
 	</floater.string>
 	<floater.string name="upload_cost">
-		Łączny koszt ładowanych: [COST] L$.
+		Łączny koszt przesyłanych: [COST] L$.
 	</floater.string>
 	<floater.string name="object">
 		obiekt
@@ -57,7 +57,7 @@
 	</text>
 	<check_box name="do_not_attach" label="Nie zakładaj obiektu" />
 	<check_box name="region_position" label="Przywróć pozycję w regionie" />
-	<check_box name="upload_asset" label="Załaduj zasób" />
+	<check_box name="upload_asset" label="Prześlij zasób" />
 	<check_box name="temp_asset" label="tymcz." />
 	<button name="import_btn" label="Importuj" />
 </floater>

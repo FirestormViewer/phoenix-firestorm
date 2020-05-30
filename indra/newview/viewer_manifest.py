@@ -91,6 +91,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 contributor_names = self.extract_names(contributions_path)
                 self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
 
+                # ... and the default camera position settings
+                self.path("camera")
+
                 # ... and the entire windlight directory
                 self.path("windlight")
 
@@ -272,8 +275,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # get any part of the channel name after the CHANNEL_VENDOR_BASE
         suffix=self.channel_variant()
         # by ancient convention, we don't use Release in the app name
-        if self.channel_type() == 'release':
-            suffix=suffix.replace('Release', '').strip()
+        #<FS:TS> Well, LL doesn't, but we do. Don't remove it.
+        #if self.channel_type() == 'release':
+        #    suffix=suffix.replace('Release', '').strip()
         # for the base release viewer, suffix will now be null - for any other, append what remains
         if suffix:
             #suffix = "_".join([''] + suffix.split())
@@ -303,10 +307,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def app_name(self):
         global CHANNEL_VENDOR_BASE
         channel_type=self.channel_type()
-        if channel_type == 'release':
-            app_suffix='Viewer'
-        else:
-            app_suffix=self.channel_variant()
+        #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
+        #if channel_type == 'release':
+        #    app_suffix='Viewer'
+        #else:
+        #    app_suffix=self.channel_variant()
+        app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         if self.fs_is_opensim():
@@ -1902,9 +1908,12 @@ class LinuxManifest(ViewerManifest):
         # CEF files 
         with self.prefix(src=pkgBase, dst="lib"):
             self.path( "libcef.so" )
+            self.fs_try_path( "libminigbm.so" )
             
         pkgBase = os.path.join( pkgBase, "swiftshader" )
         with self.prefix(src=pkgBase, dst=os.path.join("bin", "swiftshader") ):
+            self.path( "*.so" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("lib", "swiftshader") ):
             self.path( "*.so" )
 
         pkgBase = os.path.join(pkgdir, 'bin', 'release')
@@ -1913,7 +1922,11 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(pkgBase, dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
-            self.path( "natives_blob.bin" )
+            self.fs_try_path( "natives_blob.bin" )
+            self.path( "snapshot_blob.bin" )
+            self.path( "v8_context_snapshot.bin" )
+        with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="lib"):
+            self.fs_try_path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "v8_context_snapshot.bin" )
 
@@ -1922,6 +1935,13 @@ class LinuxManifest(ViewerManifest):
             pkgBase = os.path.join( snapStage, "resources" )
 
         with self.prefix(src=pkgBase, dst="bin"):
+            self.path( "cef.pak" )
+            self.path( "cef_extensions.pak" )
+            self.path( "cef_100_percent.pak" )
+            self.path( "cef_200_percent.pak" )
+            self.path( "devtools_resources.pak" )
+            self.path( "icudtl.dat" )
+        with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="lib"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )

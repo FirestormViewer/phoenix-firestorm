@@ -34,6 +34,7 @@
 		<menu_item_call label="新しいパンツ" name="New Underpants"/>
 		<menu_item_call label="新しいアルファマスク" name="New Alpha Mask"/>
 		<menu_item_call label="新しいタトゥ" name="New Tattoo"/>
+		<menu_item_call label="新しいユニバーサル" name="New Universal"/>
 		<menu_item_call label="新規の物理作用" name="New Physics"/>
 	</menu>
 	<menu label="新しい身体部位" name="New Body Parts">
@@ -110,6 +111,7 @@
 	<menu label="HUD 装着先" name="Attach To HUD"/>
 	<menu_item_call label="編集" name="Wearable Edit"/>
 	<menu_item_call label="触る" name="Touch Attachment" />
+	<menu_item_call label="テクスチャの更新" name="Texture Refresh Attachment" />
 	<menu_item_call label="取り外す" name="Take Off"/>
 	<menu_item_call label="自分から取り外す" name="Detach From Yourself" />
 	<menu_item_call label="マーケットプレイスのリストにコピー" name="Marketplace Copy"/>

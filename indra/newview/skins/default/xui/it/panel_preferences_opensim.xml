@@ -52,7 +52,6 @@
 		</panel>
 	</panel>
 	<panel label="Varie" name="opensim_misc_panel">
-		<check_box label="Abilita impostazioni Lightshare regione" name="Lightshare"/>
 		<check_box label="Ricerca debug" name="DebugSearch"/>
 		<text name="search_url_debug_text">
 			Reimposta la URL di ricerca attuale: (non reimposta se vuoto)

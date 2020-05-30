@@ -41,6 +41,7 @@
 #include <chrono>
 
 #include "dullahan.h"
+#include "dullahan_version.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -119,9 +120,6 @@ MediaPluginBase(host_send_func, host_user_data)
 	mPluginsEnabled = false;
 	mJavascriptEnabled = true;
 	mDisableGPU = false;
-#ifdef LL_LINUX // <FS:ND> Do not use GPU on Linux, using GPU messes with some window managers (https://bitbucket.org/NickyD/phoenix-firestorm-lgpl-linux/commits/14c936db5a02cf0f3ff24eb7f1c92136#comment-6048984)
-	mDisableGPU = true;
-#endif
 	mUserAgentSubtring = "";
 	mAuthUsername = "";
 	mAuthPassword = "";
@@ -509,7 +507,9 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				settings.background_color = 0xffffffff;
 				settings.cache_enabled = true;
 				settings.cache_path = mCachePath;
+#if (DULLAHAN_VERSION_MAJOR*100+DULLAHAN_VERSION_MINOR) < 106
 				settings.cookie_store_path = mCookiePath;
+#endif
 				settings.cookies_enabled = mCookiesEnabled;
 				settings.disable_gpu = mDisableGPU;
 				settings.flash_enabled = mPluginsEnabled;
@@ -664,8 +664,10 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "scroll_event")
 			{
 				// Mouse coordinates for cef to be able to scroll 'containers'
-				//S32 x = message_in.getValueS32("x");
-				//S32 y = message_in.getValueS32("y");
+#if (DULLAHAN_VERSION_MAJOR*100+DULLAHAN_VERSION_MINOR) >= 106
+				S32 x = message_in.getValueS32("x");
+				S32 y = message_in.getValueS32("y");
+#endif
 				// Wheel's clicks
 				S32 delta_x = message_in.getValueS32("clicks_x");
 				S32 delta_y = message_in.getValueS32("clicks_y");
@@ -673,8 +675,11 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				delta_x *= -scaling_factor;
 				delta_y *= -scaling_factor;
 
-				// mCEFLib->mouseWheel(x, y, delta_x, delta_y);
+#if (DULLAHAN_VERSION_MAJOR*100+DULLAHAN_VERSION_MINOR) >= 106
+				mCEFLib->mouseWheel(x, y, delta_x, delta_y);
+#else
 				mCEFLib->mouseWheel(delta_x, delta_y);
+#endif
 			}
 			else if (message_name == "text_event")
 			{

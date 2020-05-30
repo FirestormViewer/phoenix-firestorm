@@ -12,9 +12,11 @@
 	<check_box label="Звуки" name="check_sound"/>
 	<check_box label="Текстуры" name="check_texture"/>
 	<check_box label="Снимки" name="check_snapshot"/>
+	<check_box label="Настройки" name="check_settings"/>
 	<button label="Все" label_selected="Все" name="All"/>
 	<button label="Нет" label_selected="Нет" name="None"/>
-	<check_box label="Всегда показывать папки" name="check_show_empty"/>
+	<check_box label="Передаваемые" name="check_transferable"/>
+	<check_box label="Показывать папки" name="check_show_empty"/>
 	<check_box label="Создано мной" name="check_created_by_me"/>
 	<check_box label="Создано другими" name="check_created_by_others"/>
 	<check_box label="С момента выхода" name="check_since_logoff"/>
@@ -33,5 +35,6 @@
 	<text name="label_days">
 		Дни
 	</text>
+	<button label="Сброс" label_selected="Сброс" name="btnReset"/>
 	<button label="Закрыть" label_selected="Закрыть" name="Close"/>
 </floater>

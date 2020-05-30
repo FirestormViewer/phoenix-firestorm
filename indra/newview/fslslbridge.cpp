@@ -1159,7 +1159,7 @@ void FSLSLBridge::create_script_inner()
 							mCurrentFullName,
 							LLAssetType::AT_LSL_TEXT,
 							LLInventoryType::IT_LSL,
-							NOT_WEARABLE,
+							NO_INV_SUBTYPE,
 							PERM_ALL,
 							cb);
 }
@@ -1264,7 +1264,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 			LL_INFOS("FSLSLBridge") << "Updating script ID for bridge and enqueing upload. Inventory ID: " << inv_item.asString() << LL_ENDL;
 			FSLSLBridge::instance().mScriptItemID = inv_item;
 
-			LLResourceUploadInfo::ptr_t uploadInfo(boost::make_shared<LLScriptAssetUpload>(obj->getID(), inv_item, LLScriptAssetUpload::MONO, true, LLUUID::null, buffer, 
+			LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(obj->getID(), inv_item, LLScriptAssetUpload::MONO, true, LLUUID::null, buffer, 
 				[](LLUUID, LLUUID, LLUUID, LLSD) {
 					FSLSLBridge::getInstance()->setTimerResult(FSLSLBridge::SCRIPT_UPLOAD_FINISHED);
 				}));

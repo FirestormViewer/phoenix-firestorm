@@ -1995,7 +1995,7 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 			return;
 		}
 
-		if (LLAssetType::lookup(item->getType()) == LLAssetType::badLookup())
+		if (LLAssetType::lookup(item->getType()) == LLAssetType::BADLOOKUP)
 		{
 			if (item->getType() >= LLAssetType::AT_COUNT)
 			{
@@ -2824,6 +2824,7 @@ void LLInventoryModel::createCommonSystemCategories()
 	gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE,true);
 	gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD,true);
 	gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS,true);
+    gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS, true);
 }
 
 struct LLUUIDAndName

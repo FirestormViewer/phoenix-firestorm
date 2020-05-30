@@ -45,6 +45,9 @@
 	<string name="edit_tattoo_title">
 		Изменение тату
 	</string>
+	<string name="edit_universal_title">
+		Редактирование универсальных
+	</string>
 	<string name="edit_physics_title">
 		Изменение физики
 	</string>
@@ -93,6 +96,9 @@
 	<string name="tattoo_desc_text">
 		Тату:
 	</string>
+	<string name="universal_desc_text">
+		Универсальные:
+	</string>
 	<string name="physics_desc_text">
 		Физика:
 	</string>
@@ -114,6 +120,9 @@
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
 				<button label="Отменить изменения" name="revert_button"/>
+			</layout_panel>
+			<layout_panel name="import_btn_lp">
+				<button label="Импорт" name="import_btn"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

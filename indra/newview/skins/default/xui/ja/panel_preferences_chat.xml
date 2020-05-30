@@ -407,7 +407,7 @@
 		<line_editor name="FSCmdLineTeleportHome"/>
 		<!-- 指定SIMに移動 -->
 		<text name="FSCmdLineMapTo_txt">
-			指定したSIMに移動（使用法：cmd SIM名）
+			指定したSIMに移動（使用法：cmd SIM名 | x y z）
 		</text>
 		<line_editor name="FSCmdLineMapTo"/>
 		<check_box label="目標SIMの同じ座標に移動" name="toggle"/>

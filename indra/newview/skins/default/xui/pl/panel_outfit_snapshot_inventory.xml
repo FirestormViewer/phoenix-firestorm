@@ -4,7 +4,7 @@
 		Szafa
 	</text>
 	<text name="hint_lbl">
-		Ładowanie zdjęcia do Twojej Szafy kosztuje [UPLOAD_COST] L$.
+		Przesłanie zdjęcia do Twojej Szafy kosztuje [UPLOAD_COST] L$.
 
 Opłata zależy od Twojego poziomu członkostwa. Wyższe poziomy to niższe opłaty.
 	</text>

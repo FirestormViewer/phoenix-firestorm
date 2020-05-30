@@ -659,7 +659,8 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 		// <FS> FIRE-8257: Sometimes text is cut off on left side of console
 		else
 		{
-			break;
+			mLines.push_back(Line());
+			skip_chars = 1;
 		}
 		// </FS>
 		paragraph_offset += (drawable + skip_chars);

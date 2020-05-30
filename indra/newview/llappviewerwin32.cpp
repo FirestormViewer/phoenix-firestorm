@@ -86,6 +86,14 @@
 #include "llagent.h"                // for agent location
 #include "llviewerregion.h"
 #include "llvoavatarself.h"         // for agent name
+#pragma optimize( "", off )
+
+namespace FS
+{
+    std::wstring LogfileIn;
+    std::wstring LogfileOut;
+    std::wstring DumpFile;
+}
 
 namespace
 {
@@ -125,6 +133,14 @@ namespace
     {
         if (nCode == MDSCB_EXCEPTIONCODE)
         {
+            // <FS:ND> Save dump and log into unique crash dymp folder 
+            __wchar_t aBuffer[1024] = {};
+            sBugSplatSender->getMinidumpPath(aBuffer, _countof(aBuffer));
+            std::wstring strPath{ (wchar_t*)aBuffer };
+            ::CopyFileW(strPath.c_str(), FS::DumpFile.c_str(), FALSE);
+            ::CopyFileW(FS::LogfileIn.c_str(), FS::LogfileOut.c_str(), FALSE);
+            // </FS:ND>
+
             // send the main viewer log file
             // widen to wstring, convert to __wchar_t, then pass c_str()
             
@@ -156,6 +172,10 @@ namespace
 #endif
             sBugSplatSender->setDefaultUserEmail( WCSTR(STRINGIZE(LLOSInfo::instance().getOSStringSimple() << " ("  << ADDRESS_SIZE << "-bit, flavor " << flavor <<")")));
             // </FS:ND>
+
+            //<FS:ND/> Clear out username first, as we get some crashes that has the OS set as username, let's see if this fixes it. Use Crash.Linden as a usr can never have a "Linden"
+			// name and on the other hand a Linden will not likely ever crash on Firestom.
+            sBugSplatSender->setDefaultUserName( WCSTR("Crash.Linden") );
 
             // <FS:ND> Only send avatar name if enabled via prefs
             if (gCrashSettings.getBOOL("CrashSubmitName"))
@@ -674,10 +694,56 @@ LLAppViewerWin32::~LLAppViewerWin32()
 {
 }
 
+// <FS:ND> Check if %TEMP% is defined and accessible (see FIRE-29623, sometimes BugSplat has problems to access TEMP, try to find out why)
+static void checkTemp()
+{
+	char *pTemp{ getenv("TEMP") };
+	if (!pTemp)
+	{
+		LL_WARNS() << "%TEMP% is not set" << LL_ENDL;
+	}
+	else
+	{
+		LL_INFOS() << "%TEMP%: " << pTemp << LL_ENDL;
+		DWORD dwAttr = ::GetFileAttributesA(pTemp);
+		DWORD dwLE = ::GetLastError();
+		if (dwAttr == INVALID_FILE_ATTRIBUTES)
+		{
+			LL_WARNS() << "%TEMP%: " << pTemp << " GetFileAttributesA failed, last error: " << dwLE << LL_ENDL;
+		}
+		else if (0 == (dwAttr & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			LL_WARNS() << "%TEMP%: " << pTemp << " is not a directory" << LL_ENDL;
+		}
+		else
+		{
+			LLUUID id = LLUUID::generateNewID();
+			std::string strFile{ pTemp };
+			if (strFile[strFile.size() - 1] != '/' && strFile[strFile.size() - 1] != '\\')
+				strFile += "\\";
+
+			strFile += id.asString();
+			FILE *fp = fopen(strFile.c_str(), "w");
+			if (!fp)
+			{
+				LL_WARNS() << "%TEMP%: " << pTemp << " cannot create file " << strFile << LL_ENDL;
+			}
+			else
+			{
+				fclose(fp);
+				remove(strFile.c_str());
+				LL_INFOS() << "%TEMP%: " << pTemp << " successfully created file " << strFile << LL_ENDL;
+			}
+		}
+	}
+}
+// </FS:ND>
+
 bool LLAppViewerWin32::init()
 {
+	bool success{ false }; // <FS:ND/> For BugSplat we need to call base::init() early on or there's no access to settings.
 	// Platform specific initialization.
-	
+
 	// Turn off Windows Error Reporting
 	// (Don't send our data to Microsoft--at least until we are Logo approved and have a way
 	// of getting the data back from them.)
@@ -699,7 +765,28 @@ bool LLAppViewerWin32::init()
 
 #else // LL_BUGSPLAT
 #pragma message("Building with BugSplat")
+	// <FS:ND> Pre BugSplat dance, make sure settings are valid, query crash behavior and then set up Bugsplat accordingly"
+	success = LLAppViewer::init();
+	if (!success)
+		return false;
 
+	checkTemp(); // Always do and log this, no matter if using Bugsplat or not
+
+	// Save those early so we don't have to deal with the dynamic memory during in process crash handling.
+	FS::LogfileIn = ll_convert_string_to_wide(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "Firestorm.log"));
+	FS::LogfileOut = ll_convert_string_to_wide(gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "Firestorm.log"));
+	FS::DumpFile = ll_convert_string_to_wide(gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "Firestorm.dmp"));
+
+	S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
+	// Don't ever send? bail out!
+	if (nCrashSubmitBehavior == 2 /*CRASH_BEHAVIOR_NEVER_SEND*/)
+		return success;
+
+	DWORD dwAsk{ MDSF_NONINTERACTIVE };
+	if (nCrashSubmitBehavior == 0 /*CRASH_BEHAVIOR_ASK*/)
+		dwAsk = 0;
+	// </FS:ND>
+	
 	std::string build_data_fname(
 		gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "build_data.json"));
 	// Use llifstream instead of std::ifstream because LL_PATH_EXECUTABLE
@@ -737,13 +824,26 @@ bool LLAppViewerWin32::init()
 													   LL_VIEWER_VERSION_BUILD));
 
 				// have to convert normal wide strings to strings of __wchar_t
+
+				// <FS:ND> Set up Bugsplat to ask or always send
+
+				// sBugSplatSender = new MiniDmpSender(
+				// 	WCSTR(BugSplat_DB.asString()),
+				// 	WCSTR(LL_TO_WSTRING(LL_VIEWER_CHANNEL)),
+				// 	WCSTR(version_string),
+				// 	nullptr,              // szAppIdentifier -- set later
+				// 	MDSF_NONINTERACTIVE | // automatically submit report without prompting
+				// 	MDSF_PREVENTHIJACKING); // disallow swiping Exception filter
+				
 				sBugSplatSender = new MiniDmpSender(
 					WCSTR(BugSplat_DB.asString()),
 					WCSTR(LL_TO_WSTRING(LL_VIEWER_CHANNEL)),
 					WCSTR(version_string),
 					nullptr,              // szAppIdentifier -- set later
-					MDSF_NONINTERACTIVE | // automatically submit report without prompting
+					dwAsk | 
 					MDSF_PREVENTHIJACKING); // disallow swiping Exception filter
+				// </FS:ND>
+
 				sBugSplatSender->setCallback(bugsplatSendLog);
 
 				// engage stringize() overload that converts from wstring
@@ -756,7 +856,12 @@ bool LLAppViewerWin32::init()
 #endif // LL_BUGSPLAT
 #endif // LL_SEND_CRASH_REPORTS
 
-	bool success = LLAppViewer::init();
+	// <FS:ND> base::init() was potentially called earlier.
+	// bool success = LLAppViewer::init();
+	// </FS:ND>
+
+	if( !success )
+		success = LLAppViewer::init();
 
     return success;
 }

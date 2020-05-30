@@ -156,6 +156,7 @@ int main( int argc, char **argv )
 	// install crash handlers
 	viewer_app_ptr->setErrorHandler(LLAppViewer::handleViewerCrash);
 
+	unsetenv( "LD_PRELOAD" ); // <FS:ND/> Get rid of any preloading, we do not want this to happen during startup of plugins.
 	exportFlashVars(); // <FS:ND/> Try to autodetect installed pepper flash.
 	
 	bool ok = viewer_app_ptr->init();

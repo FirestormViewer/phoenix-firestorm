@@ -139,7 +139,7 @@
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
-		<menu_item_check label="Zawsze renderuj znajomych normalnie" name="Always show Friends normally"/>
+		<menu_item_check label="Zawsze renderuj znajomych w pełni" name="Always show Friends normally"/>
 		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
@@ -212,7 +212,7 @@
 			<menu_item_call label="Opcje siatki..." name="Grid Options"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia..." name="Set default permissions"/>
 		</menu>
-		<menu label="Załaduj" name="Upload">
+		<menu label="Prześlij" name="Upload">
 			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
 			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
@@ -386,7 +386,7 @@
 		</menu>
 		<menu label="Pokaż informacje" name="Display Info">
 			<menu_item_check label="Pokaż czas" name="Show Time"/>
-			<menu_item_check label="Pokazuj koszt transakcji ładowania pliku" name="Show Upload Transaction"/>
+			<menu_item_check label="Pokazuj koszt transakcji przesyłania pliku" name="Show Upload Transaction"/>
 			<menu_item_check label="Pokaż informacje o teksturach" name="Show Texture Info"/>
 			<menu_item_call label="Zużycie pamięci wideo (VRAM) na obiekt" name="VRAM usage per object"/>
 			<menu_item_check label="Pokaż informacje o renderowaniu awatarów" name="Show Avatar Render Info"/>

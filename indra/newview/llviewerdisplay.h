@@ -40,6 +40,7 @@ extern BOOL	gTeleportDisplay;
 extern LLFrameTimer	gTeleportDisplayTimer;
 extern BOOL			gForceRenderLandFence;
 extern BOOL gResizeScreenTexture;
+extern BOOL gResizeShadowTexture;
 extern BOOL gWindowResized;
 
 // <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL

@@ -10,4 +10,5 @@ Maustaste klicken, um Punkt zu entfernen.
 	<button label="Speichern" name="beamshape_save"/>
 	<button label="Laden" name="beamshape_load"/>
 	<button label="Löschen" name="beamshape_clear"/>
+	<button label="Abbrechen" name="cancel"/>
 </floater>

@@ -131,12 +131,6 @@ void FloaterAO::updateList()
 	mReloadButton->setEnabled(TRUE);
 	mImportRunning = FALSE;
 
-	std::string currentSetName = mSetSelector->getSelectedItemLabel();
-	if (currentSetName.empty())
-	{
-		currentSetName = AOEngine::instance().getCurrentSetName();
-	}
-
 	// Lambda provides simple Alpha sorting, note this is case sensitive.
 	auto sortRuleLambda = [](const AOSet* s1, const AOSet* s2) -> bool
 	{
@@ -145,6 +139,9 @@ void FloaterAO::updateList()
 
 	mSetList=AOEngine::instance().getSetList();
 	std::sort(mSetList.begin(), mSetList.end(), sortRuleLambda);
+
+	// remember currently selected animation set name
+	std::string currentSetName = mSetSelector->getSelectedItemLabel();
 
 	mSetSelector->removeall();
 	mSetSelectorSmall->removeall();
@@ -164,6 +161,21 @@ void FloaterAO::updateList()
 		mSetSelectorSmall->selectNthItem(0);
 		enableSetControls(FALSE);
 		return;
+	}
+
+	// make sure we have an animation set name to display
+	if (currentSetName.empty())
+	{
+		// selected animation set was empty, get the currently active animation set from the engine
+		currentSetName = AOEngine::instance().getCurrentSetName();
+		LL_DEBUGS("AOEngine") << "Current set name was empty, fetched name \"" << currentSetName << "\" from AOEngine" << LL_ENDL;
+
+		if(currentSetName.empty())
+		{
+			// selected animation set was empty, get the name of the first animation set in the list
+			currentSetName = mSetList[0]->getName();
+			LL_DEBUGS("AOEngine") << "Current set name still empty, fetched first set's name \"" << currentSetName << "\"" << LL_ENDL;
+		}
 	}
 
 	for (U32 index = 0; index < mSetList.size(); ++index)
@@ -341,10 +353,14 @@ void FloaterAO::onSelectSet()
 		return;
 	}
 	
-	mSelectedSet=set;
+	// only update the interface when we actually selected a different set - FIRE-29542
+	if (mSelectedSet != set)
+	{
+		mSelectedSet=set;
 
-	updateSetParameters();
-	updateAnimationList();
+		updateSetParameters();
+		updateAnimationList();
+	}
 }
 
 void FloaterAO::onSelectSetSmall()

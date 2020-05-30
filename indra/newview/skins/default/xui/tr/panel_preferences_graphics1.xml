@@ -28,7 +28,6 @@
 		<check_box label="Saydam Su" name="TransparentWater"/>
 		<check_box label="Tümsek eşleme ve parlaklık" name="BumpShiny"/>
 		<check_box label="Yerel Işıklar" name="LocalLights"/>
-		<check_box label="Temel gölgeleyiciler" name="BasicShaders" tool_tip="Bu seçeneğin devre dışı bırakılması bazı grafik kartlarının sürücülerinin kilitlenmesini önleyebilir"/>
 		<check_box label="Atmosferik gölgeleyiciler" name="WindLightUseAtmosShaders"/>
 		<check_box label="Gelişmiş Aydınlatma Modeli" name="UseLightShaders"/>
 		<check_box label="Ortam Gölgeleme" name="UseSSAO"/>
