@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Załaduj" name="upload">
-		<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
-		<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
-		<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
+		<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
+		<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
+		<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 		<menu_item_call label="Model meszowy..." name="Upload Model"/>
-		<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
+		<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 		<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Nowy folder" name="New Folder"/>

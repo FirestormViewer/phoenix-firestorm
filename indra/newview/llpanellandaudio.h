@@ -70,6 +70,10 @@ private:
 	LLCheckBoxCtrl* mCheckAVSoundGroup;
 
 	LLSafeHandle<LLParcelSelection>&	mParcel;
+
+	// <FS:Testy> FIRE-29157 - Remove invalid URLs that were rejected by the server
+	std::string mLastSetURL;
+	// </FS:Testy>
 };
 
 #endif

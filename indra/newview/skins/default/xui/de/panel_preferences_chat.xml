@@ -55,7 +55,7 @@
 			</radio_group>
 			<check_box label="Namen in direkten IMs anzeigen" name="IMShowNamesForP2PConv"/>
 			<check_box label="V1-Stil für IM- und Text-Chatverlauf verwenden" name="plain_text_chat_history"/>
-			<check_box label="Miniaturicons anzeigen, falls V3-Chat-Stil verwendet wird" name="ShowChatMiniIcons"/>	
+			<check_box label="Miniaturicons anzeigen, falls [SHORT_VIEWER_GENERATION]-Chat-Stil verwendet wird" name="ShowChatMiniIcons"/>	
 			<check_box label="Ende der letzten Konversation anzeigen" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Zusätzlichen Pfeil (&gt;) als Schreib-Indikator in IM-Fenstern anzeigen"/>
 			<text name="show_unread_messages_label" width="245">

@@ -5,7 +5,7 @@
 			<button label="Auf Festplatte speichern" name="save_to_computer_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_inventory">
-			<button label="Im Inventar speich. (L$[AMOUNT])" name="save_to_inventory_btn"/>
+			<button label="Im Inventar speich. ([AMOUNT] L$)" name="save_to_inventory_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_profile">
 			<button label="Auf Profil teilen" name="save_to_profile_btn"/>
@@ -23,4 +23,7 @@
 			<button label="Per E-Mail senden" name="save_to_email_btn"/>
 		</layout_panel>
 	</layout_stack>
+	<text name="fee_hint_lbl">
+		Die Gebühr richtet sich nach der Mitgliedsstufe. Höhere Stufen berechnen niedrigere Gebühren.
+	</text>
 </panel>

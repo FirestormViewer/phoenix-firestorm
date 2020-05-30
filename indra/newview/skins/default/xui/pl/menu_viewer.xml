@@ -6,6 +6,7 @@
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
 		<menu_item_check label="Moja szafa" name="Inventory"/>
 		<menu_item_check label="Moja szafa" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Foldery chronione" name="Protected Folders" />
 		<menu_item_check label="Ulubione rzeczy" name="WearableFavorites"/>
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
@@ -62,7 +63,7 @@
 		<menu_item_check label="Kontakty" name="Contacts"/>
 		<menu_item_call label="Zestawy kontaktów" name="Contact Sets" shortcut=""/>
 		<menu_item_call label="Grupy" name="My Groups"/>
-		<menu_item_check label="Czat lokalny..." name="Nearby Chat"/>
+		<menu_item_check label="Czat w pobliżu..." name="Nearby Chat"/>
 		<menu_item_check label="Ludzie" name="People"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>
@@ -212,11 +213,11 @@
 			<menu_item_call label="Ustaw domyślne uprawnienia..." name="Set default permissions"/>
 		</menu>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
-			<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
+			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>
@@ -251,7 +252,7 @@
 		<menu_item_call label="Portal wsparcia" name="Support portal"/>
 		<menu_item_call label="Newsy: [SECOND_LIFE]" name="Second Life News"/>
 		<menu_item_call label="Blogi: [SECOND_LIFE]" name="Second Life Blogs"/> -->
-		<menu_item_check label="Sprawdź stan świata (Siatki)" name="Grid Status"/>
+		<menu_item_check label="Sprawdź stan świata" name="Grid Status"/>
 		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse"/>
 		<menu_item_call label="Zgłoś błędy klienta" name="Report Bug"/>
 		<menu_item_call label="Zderzenia, popchnięcia i uderzenia" name="Bumps, Pushes &amp;amp; Hits"/>
@@ -490,7 +491,7 @@
 			<menu_item_check label="Domyślne ustawienia środowiska Regionu" name="Sim Sun Override"/>
 			<menu_item_check label="Ustalona pogoda" name="Fixed Weather"/>
 			<menu_item_call label="Zrzut buforu pamięci obiektów regionu" name="Dump Region Object Cache"/>
-			<menu_item_call label="Zrzut właściwości symulatora do czatu lokalnego" name="DumpSimFeaturesToChat"/>
+			<menu_item_call label="Zrzut właściwości symulatora do czatu w pobliżu" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Interfejs" name="UI">
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>

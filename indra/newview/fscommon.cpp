@@ -30,6 +30,7 @@
 #include "fscommon.h"
 #include "fsradar.h"
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llavataractions.h"
 #include "llavatarnamecache.h"
 #include "llfloaterperms.h"
@@ -369,9 +370,10 @@ LLSD FSCommon::populateGroupCount()
 {
 	LLStringUtil::format_map_t args;
 	S32 groupcount = gAgent.mGroups.size();
+	S32 maxgroup = LLAgentBenefitsMgr::current().getGroupMembershipLimit();
 	args["[COUNT]"] = llformat("%d", groupcount);
-	args["[REMAINING]"] = llformat("%d", gMaxAgentGroups > groupcount ? gMaxAgentGroups - groupcount : 0);
-	LLUIString groupcountstring = LLTrans::getString((gMaxAgentGroups ? "groupcountstring" : "groupcountunlimitedstring"), args);
+	args["[REMAINING]"] = llformat("%d", maxgroup > groupcount ? maxgroup - groupcount : 0);
+	LLUIString groupcountstring = LLTrans::getString((maxgroup ? "groupcountstring" : "groupcountunlimitedstring"), args);
 	return LLSD(groupcountstring);
 }
 

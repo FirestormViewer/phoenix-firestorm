@@ -224,7 +224,10 @@ public:
 	// <FS:ND/>
 	virtual LLFolderViewModelItem* getParent() const = 0;
 
-	// <FS:Ansariel> Special for protected items
+	// <FS:Ansariel> Special for locked items
+	virtual bool isLocked() const { return false; }
+
+	// <FS:Ansariel> FIRE-29342: Protect folder option
 	virtual bool isProtected() const { return false; }
 
 protected:

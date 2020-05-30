@@ -14,6 +14,7 @@
 	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/downloads</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">Viewer [VERSION]</string>
+	<string name="SHORT_VIEWER_GENERATION">V[VERSION]</string>
 	<string name="APP_NAME_ABBR">FS</string>
 
 	<!-- starting up -->
@@ -374,9 +375,9 @@ Please try logging in again in a minute.</string>
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">Loading...</string>
 
-	<!-- Indicates a protected Inventory folder. ## Zi: Animation Overrider -->
+	<!-- Indicates a locked Inventory folder. ## Zi: Animation Overrider -->
+	<string name="LockedFolder">locked</string>
 	<string name="ProtectedFolder">protected</string>
-
 
 	<!-- namecache -->
 	<!-- Avatar name: text shown for LLUUID::null -->
@@ -803,6 +804,8 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="MarketplaceStock">stock</string>
 	<string name="MarketplaceNoStock">out of stock</string>
 	<string name="MarketplaceUpdating">updating...</string>
+
+	<string name="UploadFeeInfo">Fee is based on your subscription level. Higher levels are charged lower fees. [https://secondlife.com/my/account/membership.php? Learn more]</string>
 
 	<string name="Open landmarks">Open landmarks</string>
   <string name="Unconstrained">Unconstrained</string>
@@ -2417,6 +2420,12 @@ If you continue to experience problems, please check your network and firewall s
   <string name="Accounting">Accounting</string>
   <string name="Notices">Notices</string>
   <string name="Chat">Chat</string>
+  
+  <!-- SL Membership -->
+  <string name="BaseMembership">Base</string>
+  <string name="PremiumMembership">Premium</string>
+  <string name="Premium PlusMembership">Premium Plus</string>
+  <string name="InternalMembership">Internal</string> <!-- No need to translate -->
 
   <!-- Question strings for delete items notifications -->
   <string name="DeleteItems">Delete selected items?</string>

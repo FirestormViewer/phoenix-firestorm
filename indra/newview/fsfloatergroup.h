@@ -31,6 +31,7 @@
 #include "llfloater.h"
 
 class LLPanelGroup;
+class LLPanelGroupCreate;
 
 class FSFloaterGroup : public LLFloater
 {
@@ -54,8 +55,9 @@ public:
 	static FSFloaterGroup* findInstance(const LLUUID& group_id);
 
 private:
-	LLPanelGroup*	mGroupPanel;
-	bool			mIsCreateGroup;
+	LLPanelGroup*		mGroupPanel;
+	LLPanelGroupCreate*	mGroupCreatePanel;
+	bool				mIsCreateGroup;
 };
 
 #endif // FS_FLOATERGROUP_H

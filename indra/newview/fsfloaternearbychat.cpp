@@ -51,6 +51,7 @@
 #include "llconsole.h"
 #include "lldraghandle.h"
 #include "llfloaterreg.h"
+#include "llfloatersearchreplace.h"
 #include "llfocusmgr.h"
 #include "llgesturemgr.h"
 #include "lliconctrl.h"
@@ -144,6 +145,8 @@ BOOL FSFloaterNearbyChat::postBuild()
 	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
 	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
+
+	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onSearchButtonClicked, this));
 
 	// chat type selector and send chat button
 	mChatTypeCombo = getChild<LLComboBox>("chat_type");
@@ -311,6 +314,18 @@ void FSFloaterNearbyChat::onHistoryButtonClicked()
 	else
 	{
 		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
+	}
+}
+
+void FSFloaterNearbyChat::onSearchButtonClicked()
+{
+	if (mChatHistory->getVisible())
+	{
+		LLFloaterSearchReplace::show(mChatHistory);
+	}
+	else if (mChatHistoryMuted->getVisible())
+	{
+		LLFloaterSearchReplace::show(mChatHistoryMuted);
 	}
 }
 

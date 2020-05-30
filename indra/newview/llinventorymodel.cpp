@@ -167,6 +167,7 @@ LLInventoryModel::LLInventoryModel()
 	mModifyMask(LLInventoryObserver::ALL),
 	mChangedItemIDs(),
 	mObservers(),
+	mProtectedCategoriesChangedCallbackConnection(), // <FS:Ansariel> FIRE-29342: Protect folder option
 	mHttpRequestFG(NULL),
 	mHttpRequestBG(NULL),
 	mHttpOptions(),
@@ -187,6 +188,13 @@ LLInventoryModel::LLInventoryModel()
 LLInventoryModel::~LLInventoryModel()
 {
 	cleanupInventory();
+
+	// <FS:Ansariel> FIRE-29342: Protect folder option
+	if (mProtectedCategoriesChangedCallbackConnection.connected())
+	{
+		mProtectedCategoriesChangedCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 void LLInventoryModel::cleanupInventory()
@@ -1353,13 +1361,13 @@ void LLInventoryModel::changeItemParent(LLViewerInventoryItem* item,
 						  << ") from " << item->getParentUUID() << " to folder "
 						  << new_parent_id << LL_ENDL;
 
-		// <FS> Protected folder
+		// <FS> Locked folder
 		if ((isObjectDescendentOf(item->getUUID(), AOEngine::instance().getAOFolder())
-				&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders")) ||
+				&& gSavedPerAccountSettings.getBOOL("LockAOFolders")) ||
 			(isObjectDescendentOf(item->getUUID(), FSLSLBridge::instance().getBridgeFolder())
-				&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")) ||
+				&& gSavedPerAccountSettings.getBOOL("LockBridgeFolder")) ||
 			(isObjectDescendentOf(item->getUUID(), FSFloaterWearableFavorites::getFavoritesFolder())
-				&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders")))
+				&& gSavedPerAccountSettings.getBOOL("LockWearableFavoritesFolders")))
 		{
 			LL_INFOS("Inventory") << "Cannot move item because it is descendent of a protected folder" << LL_ENDL;
 			return;
@@ -1399,11 +1407,11 @@ void LLInventoryModel::changeCategoryParent(LLViewerInventoryCategory* cat,
 
 	// <FS> Protected folder
 	if ((isObjectDescendentOf(cat->getUUID(), AOEngine::instance().getAOFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders")) ||
+			&& gSavedPerAccountSettings.getBOOL("LockAOFolders")) ||
 		(isObjectDescendentOf(cat->getUUID(), FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")) ||
+			&& gSavedPerAccountSettings.getBOOL("LockBridgeFolder")) ||
 		(isObjectDescendentOf(cat->getUUID(), FSFloaterWearableFavorites::getFavoritesFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectWearableFavoritesFolders")))
+			&& gSavedPerAccountSettings.getBOOL("LockWearableFavoritesFolders")))
 	{
 		LL_INFOS("Inventory") << "Cannot move category because it is descendent of a protected folder" << LL_ENDL;
 		return;
@@ -3746,6 +3754,11 @@ const LLUUID &LLInventoryModel::getRootFolderID() const
 void LLInventoryModel::setRootFolderID(const LLUUID& val)
 {
 	mRootFolderID = val;
+
+	// <FS:Ansariel> FIRE-29342: Lock folder option
+	mProtectedCategoriesChangedCallbackConnection = gSavedPerAccountSettings.getControl("FSProtectedFolders")->getCommitSignal()->connect(boost::bind(&LLInventoryModel::onProtectedCategoriesChanged, this, _2));
+	onProtectedCategoriesChanged(gSavedPerAccountSettings.getLLSD("FSProtectedFolders"));
+	// </FS:Ansariel>
 }
 
 const LLUUID &LLInventoryModel::getLibraryRootFolderID() const
@@ -4042,6 +4055,18 @@ void LLInventoryModel::wearItemsOnAvatar(LLInventoryCategory* category)
 	wearGesturesOnAvatar(category_id);
 }
 // </FS:TT>
+
+// <FS:Ansariel> FIRE-29342: Protect folder option
+void LLInventoryModel::onProtectedCategoriesChanged(const LLSD& newvalue)
+{
+	mProtectedCategories.clear();
+
+	for (LLSD::array_const_iterator it = newvalue.beginArray(); it != newvalue.endArray(); ++it)
+	{
+		mProtectedCategories.insert(*it);
+	}
+}
+// </FS:Ansariel>
 
 class LLViewerInventoryItemSort
 {

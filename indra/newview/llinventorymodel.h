@@ -342,17 +342,28 @@ public:
     // Note : This method has been designed for FT_OUTBOX (aka Merchant Outbox) but can be used for other categories
     void consolidateForType(const LLUUID& id, LLFolderType::EType type);
     
-// <FS:TT> ReplaceWornItemsOnly
+	// <FS:TT> ReplaceWornItemsOnly
 	void wearItemsOnAvatar(LLInventoryCategory* category);
 	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+	// </FS:TT>
+
+	// <FS:Ansariel> FIRE-29342: Protect folder option
+	const uuid_set_t& getProtectedCategories() const { return mProtectedCategories; };
 
 private:
+	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
+
+	// <FS:TT> ReplaceWornItemsOnly
 	void wearWearablesOnAvatar(const LLUUID& category_id);
 	void wearAttachmentsOnAvatar(const LLUUID& category_id);
 	void wearGesturesOnAvatar(const LLUUID& category_id);
-// </FS:TT>
-private:
-	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
+	// </FS:TT>
+
+	// <FS:Ansariel> FIRE-29342: Protect folder option
+	uuid_set_t mProtectedCategories;
+	boost::signals2::connection mProtectedCategoriesChangedCallbackConnection;
+	void onProtectedCategoriesChanged(const LLSD& newvalue);
+	// </FS:Ansariel>
 
 	//--------------------------------------------------------------------
 	// Count

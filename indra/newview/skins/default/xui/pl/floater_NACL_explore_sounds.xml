@@ -24,6 +24,7 @@
 		<columns label="Dźwięk" name="sound" />
 	</scroll_list>
 	<button label="Odtwarzaj" name="play_locally_btn" />
+	<button label="Zatrzymaj" name="stop_locally_btn" />
 	<button label="Lokalizuj" name="look_at_btn" />
 	<button label="Czarna lista" name="bl_btn" />
 </floater>

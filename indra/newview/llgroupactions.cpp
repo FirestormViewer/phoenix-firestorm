@@ -573,18 +573,18 @@ void LLGroupActions::createGroup()
 {
 	LLSD params;
 	params["group_id"] = LLUUID::null;
-	params["open_tab_name"] = "panel_group_info_sidetray";
+	params["open_tab_name"] = "panel_group_creation_sidetray";
 	params["action"] = "create";
 
 	// <FS:Ansariel> Standalone group floaters
-	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_creation_sidetray", params);
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
 	{
 		FSFloaterGroup::openGroupFloater(params);
 	}
 	else
 	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+		LLFloaterSidePanelContainer::showPanel("people", "panel_group_creation_sidetray", params);
 	}
 	// </FS:Ansariel>
 }

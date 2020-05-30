@@ -4,7 +4,7 @@
 		Środkowy przycisk myszki
 	</panel.string>
 	<check_box label="Zezwól na wiele Przeglądarek (może obniżyć stabilność i wydajność)" name="allow_multiple_viewer_check"/>
-	<check_box label="Zezwól na logowanie do innych siatek (nie wszystkie będą obsługiwać Firestorma)" name="show_grid_selection_check"/>
+	<check_box label="Zezwól na logowanie do innych światów (nie wszystkie będą obsługiwać Firestorma)" name="show_grid_selection_check"/>
 	<check_box label="Pokaż menu Zaawansowane (na własną odpowiedzialność!)" name="show_advanced_menu_check"/>
 	<check_box label="Pokaż menu Programista" name="show_develop_menu_check"/>
 	<check_box label="Wyłącz detekcję pamięci wideo poprzez odpytywanie WMI w systemach Windows" name="FSDisableWMIProbing"/>

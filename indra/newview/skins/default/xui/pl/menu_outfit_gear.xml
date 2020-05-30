@@ -32,4 +32,5 @@
 	<menu_item_call label="Zwiń wszystkie foldery" name="collapse"/>
 	<menu_item_call label="Zmień nazwę stroju" name="rename"/>
 	<menu_item_call label="Usuń strój" name="delete_outfit"/>
+	<menu_item_check label="Sortuj foldery zawsze wg. nazwy" name="sort_folders_by_name" />
 </toggleable_menu>

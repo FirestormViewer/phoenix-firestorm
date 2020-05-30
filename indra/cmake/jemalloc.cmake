@@ -1,7 +1,9 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-set( USE_JEMALLOC ON CACHE BOOL "Ship prebuild jemalloc library with packaged viewer" )
+if (LINUX AND NOT SYSTEMLIBS )
+  set( USE_JEMALLOC ON CACHE BOOL "Ship prebuild jemalloc library with packaged viewer" )
+endif ()
 
 if( USE_JEMALLOC )
   if (USESYSTEMLIBS)

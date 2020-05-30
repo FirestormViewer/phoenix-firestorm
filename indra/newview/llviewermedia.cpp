@@ -2742,10 +2742,12 @@ bool LLViewerMediaImpl::handleKeyHere(KEY key, MASK mask)
 	{
 		// FIXME: THIS IS SO WRONG.
 		// Menu keys should be handled by the menu system and not passed to UI elements, but this is how LLTextEditor and LLLineEditor do it...
-		if (MASK_CONTROL & mask && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_HOME && key != KEY_END)
-		{
-			result = true;
-		}
+		// <FS:Ansariel> FIRE-5479: CTRL-A doesn't work in CEF
+		//if (MASK_CONTROL & mask && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_HOME && key != KEY_END)
+		//{
+		//	result = true;
+		//}
+		// </FS:Ansariel>
 
 		if (!result)
 		{

@@ -79,6 +79,8 @@ public:
 
 	void onHistoryButtonClicked();
 
+	void onSearchButtonClicked();
+
 	// overridden to fix the multitab focus bug -Zi
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
