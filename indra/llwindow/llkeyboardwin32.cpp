@@ -119,8 +119,10 @@ LLKeyboardWin32::LLKeyboardWin32()
 	mTranslateKeyMap[VK_APPS] = KEY_CONTEXT_MENU; // <FS:Ansariel> FIRE-19933: Open context menu on context menu key press
 
 	// Build inverse map
-	std::map<U16, KEY>::iterator iter;
-	for (iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
+	// <FS:ND> Change to U32 for SDL2
+ 	//std::map<U16, KEY>::iterator iter;
+	// for (iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
+	for (auto iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
 	{
 		mInvTranslateKeyMap[iter->second] = iter->first;
 	}
@@ -142,7 +144,9 @@ LLKeyboardWin32::LLKeyboardWin32()
 	mTranslateNumpadMap[0x6E] = KEY_PAD_DEL;	// keypad .
 	mTranslateNumpadMap[0x6F] = KEY_PAD_DIVIDE;	// keypad /
 
-	for (iter = mTranslateNumpadMap.begin(); iter != mTranslateNumpadMap.end(); iter++)
+	// <FS:ND> Change to U32 for SDL2
+	// for (iter = mTranslateNumpadMap.begin(); iter != mTranslateNumpadMap.end(); iter++)
+	for (auto iter = mTranslateNumpadMap.begin(); iter != mTranslateNumpadMap.end(); iter++)
 	{
 		mInvTranslateNumpadMap[iter->second] = iter->first;
 	}
