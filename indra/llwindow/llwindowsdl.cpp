@@ -413,7 +413,7 @@ static int x11_detect_VRAM_kb()
 
 void LLWindowSDL::setTitle(const std::string &title)
 {
-	// SDL_WM_SetCaption(title.c_str(), title.c_str());
+	SDL_SetWindowTitle( mWindow, title.c_str() );
 }
 
 void LLWindowSDL::tryFindFullscreenSize( int &width, int &height )
