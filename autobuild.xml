@@ -850,9 +850,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>71fa66203326aca918796e874976c080</string>
+              <string>43c03679c3847754b407532efe5d4392</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34070/283477/dullahan-1.1.1320_3.3626.1895.g7001d56-windows-525361.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005292352_81.3.10_gb223419_chromium-81.0.4044.138-windows-201512310.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -862,9 +862,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c7162e4805f50a3609f5dc63d0cf2bc0</string>
+              <string>13574736220c05de847980f851f42827</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34071/283480/dullahan-1.1.1320_3.3626.1895.g7001d56-windows64-525361.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005292352_81.3.10_gb223419_chromium-81.0.4044.138-windows64-201512301.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
