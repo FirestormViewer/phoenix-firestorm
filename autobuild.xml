@@ -52,9 +52,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>68f6096e055e7a0e46913e1c2613b9db</string>
+              <string>7725e9abe4bf84d11bc7286c74467026</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1320_3.3626.1895.g7001d56-linux64-191221945.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.7.0.202005301906_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201511706.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
