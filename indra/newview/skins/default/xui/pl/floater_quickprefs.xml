@@ -21,11 +21,11 @@
 				<text name="WL Water" tool_tip="Ustawienia systemu Windlight dla Twojej wody">
 					Woda WL:
 				</text>
-				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia" />
 				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu Windlight dla cyklów dnia.">
 					Cykl dnia:
 				</text>
-				<button name="ResetToRegionDefault" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu" />
+				<button name="btn_personal_lighting" label="Własne oświetlenie..." />
+				<button name="ResetToRegionDefault" tool_tip="Zresetuj opcje otoczenia do otoczenia współdzielonego." />
 				<button name="button_edit" tool_tip="Kliknij tutaj, aby skonfigurować kontrolki swojego szybkiego strojenia" />
 			</layout_panel>
 		</layout_stack>
