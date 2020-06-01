@@ -955,7 +955,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		
 		if (agent_id.isNull())
 		{
-			LL_INFOS("Search") << "nullptr result returned for QueryID: " << query_id << LL_ENDL;
+			LL_INFOS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
@@ -1600,7 +1600,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getF32(	"QueryReplies",	"Dwell",	dwell,		i);
 		if (parcel_id.isNull())
 		{
-			LL_DEBUGS("Search") << "nullptr result returned for QueryID: " << query_id << LL_ENDL;
+			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
@@ -1947,7 +1947,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getS32(	"QueryReplies", "ActualArea",	area,		i);
 		if (parcel_id.isNull())
 		{
-			LL_DEBUGS("Search") << "nullptr result returned for QueryID: " << query_id << LL_ENDL;
+			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("no_results"));
 		}
@@ -2330,7 +2330,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getS32(	"QueryReplies", "PriceForListing",	price_for_listing,i);
 		if (classified_id.isNull())
 		{
-			LL_DEBUGS("Search") << "nullptr result returned for QueryID: " << query_id << LL_ENDL;
+			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
