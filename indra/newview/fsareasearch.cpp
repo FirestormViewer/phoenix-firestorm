@@ -81,6 +81,18 @@ const F32 MIN_DISTANCE_MOVED = 1.0f;
 const F32 REQUEST_TIMEOUT = 30.0f;
 
 
+F32 calculateObjectDistance(LLVector3d agent_pos, LLViewerObject* object)
+{
+	if (object->isHUDAttachment())
+	{
+		return 0.f;
+	}
+	else
+	{
+		return dist_vec(agent_pos, object->getPositionGlobal());
+	}
+}
+
 class FSAreaSearch::FSParcelChangeObserver : public LLParcelObserver
 {
 public:
@@ -624,8 +636,8 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 				msg->newMessageFast(_PREHASH_ObjectDeselect);
 			}
 			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+			msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+			msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 			select_count++;
 			start_new_message = false;
 		}
@@ -777,7 +789,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	
 	if (mFilterDistance)
 	{
-		S32 distance = dist_vec(mPanelList->getAgentLastPosition(), objectp->getPositionGlobal());// used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
+		S32 distance = (S32)calculateObjectDistance(mPanelList->getAgentLastPosition(), objectp);// used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
 		if (!(distance >= mFilterDistanceMin && distance <= mFilterDistanceMax))
 		{
 			return;
@@ -989,7 +1001,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	row_params.value = object_id.asString();
 	
 	cell_params.column = "distance";
-	cell_params.value = llformat("%1.0f m", dist_vec(mPanelList->getAgentLastPosition(), objectp->getPositionGlobal())); // used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
+	cell_params.value = llformat("%1.0f m", calculateObjectDistance(mPanelList->getAgentLastPosition(), objectp)); // used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
 	row_params.columns.add(cell_params);
 
 	cell_params.column = "name";
@@ -1471,7 +1483,7 @@ void FSPanelAreaSearchList::updateScrollList()
 		{
 			if (agent_moved && distance_column)
 			{
-				item->getColumn(distance_column->mIndex)->setValue(LLSD(llformat("%1.0f m", dist_vec(current_agent_position, objectp->getPositionGlobal()))));
+				item->getColumn(distance_column->mIndex)->setValue(LLSD(llformat("%1.0f m", calculateObjectDistance(current_agent_position, objectp))));
 			}
 		}
 	}
@@ -1614,7 +1626,7 @@ bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
 		{
 			LLUUID object_id = mResultList->getFirstSelected()->getUUID();
 			LLViewerObject* objectp = gObjectList.findObject(object_id);
-			return (objectp && dist_vec_squared(gAgent.getPositionGlobal(), objectp->getPositionGlobal()) < gAgentCamera.mDrawDistance * gAgentCamera.mDrawDistance);
+			return (objectp && calculateObjectDistance(gAgent.getPositionGlobal(), objectp) < gAgentCamera.mDrawDistance);
 		}
 		else
 		{
@@ -1978,8 +1990,8 @@ void FSPanelAreaSearchList::sitOnObject(FSObjectProperties& details, LLViewerObj
         {
             gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
             gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-            gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-            gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+            gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+            gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
             gMessageSystem->nextBlockFast(_PREHASH_TargetObject);
             gMessageSystem->addUUIDFast(_PREHASH_TargetID, objectp->mID);
             gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
