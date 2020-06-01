@@ -362,7 +362,9 @@ public:
 							 U32 eventCover,
 							 LLVector3d eventGlobalPos);
 	void setLoadingProgress(bool started);
-	static LLPanel* getSearchPanel(std::string panel_name);
+
+	template <class T>
+	static T* getSearchPanel(const std::string& panel_name);
 	
 private:
 	virtual void onClose(bool app_quitting);
