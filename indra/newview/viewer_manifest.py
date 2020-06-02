@@ -254,10 +254,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         #<FS:TS> Somehow, we started leaving the - separating the variant from the app name
         # on the beginning of the channel qualifier. This screws up later processing that
         # depends on the channel type. If it's there, we chop it off.
-        #<FS:TS> Well, not for 6.3.9...this is broken elsewhere and we're too rushed to fix
-        # it properly, so we kludge our way around it elsewhere.
-        #if channel_qualifier[0] == '-':
-        #    channel_qualifier = channel_qualifier[1:]
+        if channel_qualifier[0] == '-':
+            channel_qualifier = channel_qualifier[1:]
         if channel_qualifier.startswith('release'):
             channel_type='release'
         elif channel_qualifier.startswith('beta'):
@@ -277,8 +275,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # get any part of the channel name after the CHANNEL_VENDOR_BASE
         suffix=self.channel_variant()
         # by ancient convention, we don't use Release in the app name
-        if self.channel_type() == 'release':
-            suffix=suffix.replace('Release', '').strip()
+        #<FS:TS> Well, LL doesn't, but we do. Don't remove it.
+        #if self.channel_type() == 'release':
+        #    suffix=suffix.replace('Release', '').strip()
         # for the base release viewer, suffix will now be null - for any other, append what remains
         if suffix:
             #suffix = "_".join([''] + suffix.split())
@@ -308,10 +307,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def app_name(self):
         global CHANNEL_VENDOR_BASE
         channel_type=self.channel_type()
-        if channel_type == 'release':
-            app_suffix='Viewer'
-        else:
-            app_suffix=self.channel_variant()
+        #<FS:TS> LL uses "Viewer" in the name of their release package. We use "Release".
+        #if channel_type == 'release':
+        #    app_suffix='Viewer'
+        #else:
+        #    app_suffix=self.channel_variant()
+        app_suffix=self.channel_variant()
 
         #<FS:ND> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
         if self.fs_is_opensim():
@@ -569,6 +570,7 @@ class WindowsManifest(ViewerManifest):
             #        self.path("*.gif")
 
             # </FS:Ansariel> Remove VMP
+
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
@@ -585,21 +587,14 @@ class WindowsManifest(ViewerManifest):
                 print err.message
                 print "Skipping GLOD library (assumming linked statically)"
 
-            # Get fmodstudio dll
-            if self.args['fmodversion'].lower() == 'fmodstudio':
-                if self.args['configuration'].lower() == 'debug':
+            # Get fmodstudio dll if needed
+            if self.args['fmodstudio'] == 'ON':
+                if(self.args['configuration'].lower() == 'debug'):
                     self.path("fmodL.dll")
                 else:
                     self.path("fmod.dll")
 
-            # Get fmodex dll
-            if self.args['fmodversion'].lower() == 'fmodex':
-                if(self.address_size == 64):
-                    self.path("fmodex64.dll")
-                else:
-                    self.path("fmodex.dll")
-
-            # Get openal dll
+            # Get openal dll if needed
             if self.args.get('openal') == 'ON':
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
@@ -689,13 +684,13 @@ class WindowsManifest(ViewerManifest):
             config = 'debug' if self.args['configuration'].lower() == 'debug' else 'release'
             with self.prefix(src=os.path.join(pkgdir, 'bin', config)):
                 self.path("chrome_elf.dll")
-                self.path("d3dcompiler_43.dll")
+                self.fs_try_path("d3dcompiler_43.dll") # <FS:ND> d3dcompiler_43.dll was removed in the latest cef versions
                 self.path("d3dcompiler_47.dll")
                 self.path("libcef.dll")
                 self.path("libEGL.dll")
                 self.path("libGLESv2.dll")
                 self.path("dullahan_host.exe")
-                self.path("natives_blob.bin")
+                self.fs_try_path("natives_blob.bin") # <FS:ND> natives_blob.bin was removed in the latest cef versions 
                 self.path("snapshot_blob.bin")
                 self.path("v8_context_snapshot.bin")
 
@@ -1171,17 +1166,18 @@ class DarwinManifest(ViewerManifest):
                                 # ):
                     # self.path2basename(relpkgdir, libfile)
 
-                # # dylibs that vary based on configuration
-                # if self.args['configuration'].lower() == 'debug':
-                    # for libfile in (
-                                # "libfmodexL.dylib",
-                                # ):
-                        # dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                # else:
-                    # for libfile in (
-                                # "libfmodex.dylib",
-                                # ):
-                        # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                # # Fmod studio dylibs (vary based on configuration)
+                # if self.args['fmodstudio'] == 'ON':
+                    # if self.args['configuration'].lower() == 'debug':
+                        # for libfile in (
+                                    # "libfmodL.dylib",
+                                    # ):
+                            # dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                    # else:
+                        # for libfile in (
+                                    # "libfmod.dylib",
+                                    # ):
+                            # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # # our apps
                 # executable_path = {}
@@ -1419,8 +1415,8 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
-                # dylibs that vary based on configuration
-                if self.args['fmodversion'].lower() == 'fmodstudio':
+                # Fmod studio dylibs (vary based on configuration)
+                if self.args['fmodstudio'] == 'ON':
                     if self.args['configuration'].lower() == 'debug':
                         for libfile in (
                                     "libfmodL.dylib",
@@ -1430,19 +1426,6 @@ class DarwinManifest(ViewerManifest):
                         for libfile in (
                                     "libfmod.dylib",
                                     ):
-                            dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-
-                # dylibs that vary based on configuration
-                if self.args['fmodversion'].lower() == 'fmodex':
-                    if self.args['configuration'].lower() == 'debug':
-                        for libfile in (
-                                   "libfmodexL.dylib",
-                                   ):
-                            dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                    else:
-                        for libfile in (
-                                   "libfmodex.dylib",
-                                   ):
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # our apps
@@ -2177,16 +2160,14 @@ class Linux_i686_Manifest(LinuxManifest):
                 print "tcmalloc files not found, skipping"
                 pass
 
-            if self.args['fmodversion'].lower() == 'fmodex':
-                self.path("libfmodex-*.so")
-                self.path("libfmodex.so")
-                self.path("libfmodex.so*")
-                pass
-
-            if self.args['fmodversion'].lower() == 'fmodstudio':
-                self.path("libfmod.so")
-                self.path("libfmod.so*")
-                pass
+            if self.args['fmodstudio'] == 'ON':
+                try:
+                    self.path("libfmod.so")
+                    self.path("libfmod.so*")
+                    pass
+                except:
+                    print "Skipping libfmod.so - not found"
+                    pass
 
 
         # Vivox runtimes
@@ -2221,16 +2202,15 @@ class Linux_x86_64_Manifest(LinuxManifest):
             # <FS:TS> No, we don't need to dink with this. A usable library
             # is now in the slvoice package, and we need to just use it as is.
             # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
-            if self.args['fmodversion'].lower() == 'fmodex':
-                    self.path("libfmodex64-*.so")
-                    self.path("libfmodex64.so")
-                    self.path("libfmodex64.so*")
-                    pass
 
-            if self.args['fmodversion'].lower() == 'fmodstudio':
-                self.path("libfmod.so")
-                self.path("libfmod.so*")
-                pass
+            if self.args['fmodstudio'] == 'ON':
+                try:
+                    self.path("libfmod.so")
+                    self.path("libfmod.so*")
+                    pass
+                except:
+                    print "Skipping libfmod.so - not found"
+                    pass
 
         with self.prefix(dst="bin"):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
@@ -2285,6 +2265,7 @@ if __name__ == "__main__":
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
+        dict(name='fmodstudio', description="""Indication if fmod studio libraries are needed""", default='OFF'),
         dict(name='openal', description="""Indication openal libraries are needed""", default='OFF')
         ]
     try:

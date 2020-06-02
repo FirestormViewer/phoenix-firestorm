@@ -76,16 +76,14 @@
 #include "lldrawpoolbump.h"
 #include "llpostprocess.h"
 #include "llscenemonitor.h"
+
+#include "llenvironment.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llpresetsmanager.h"
 #include "fsdata.h"
-
-#include "llenvironment.h"
-
-#include "llenvironment.h"
 
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Delete Pref Preset" title="Voreinstellung löschen">
+<floater name="delete_pref_preset" title="Voreinstellung löschen">
 	<string name="title_graphic">
 		Grafik-Voreinstellung löschen
 	</string>

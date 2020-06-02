@@ -68,7 +68,7 @@
 	<check_box label="Przezroczysta woda" name="TransparentWater" />
 	<check_box label="Mapping wypukłości i połysk" name="BumpShiny" />
 	<check_box label="Lokalne światła" name="LocalLights" />
-	<check_box label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych" />
+	<!-- <check_box label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych" /> -->
 	<slider label="Szczegóły terenu:" name="TerrainDetail" />
 	<text name="TerrainDetailText">
 		Mało
@@ -93,6 +93,7 @@
 	<check_box label="Zaawansowane oświetlenie" name="UseLightShaders" />
 	<check_box label="Okluzja otoczenia" name="UseSSAO" />
 	<check_box label="Włącz głębię ostrości" name="UseDoF" />
+	<!-- <check_box label="Zaawansowana atmosfera" name="UseAdvancedAtmo" /> -->
 	<text name="RenderShadowDetailText">
 		Cienie:
 	</text>

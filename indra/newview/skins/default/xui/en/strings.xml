@@ -369,17 +369,6 @@ to notecards on this region.
 	<string name="TooltipNotecardOwnerRestrictedDrop">
 Only items with unrestricted
 'next owner' permissions
-"can be attached to notecards.
-	</string>
-
-	<!-- ToolTips for notecards -->
-	<string name="TooltipNotecardNotAllowedTypeDrop">
-Items of this type can't be attached
-to notecards on this region.
-	</string>
-	<string name="TooltipNotecardOwnerRestrictedDrop">
-Only items with unrestricted
-'next owner' permissions
 can be attached to notecards.
 	</string>
 

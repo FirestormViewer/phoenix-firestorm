@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <floater
  legacy_header_height="18"
- height="145"
+ height="140"
  help_topic="floater_save_preset"
  layout="topleft"
  name="save_pref_preset"
  save_rect="true"
  title="Save Graphic Preset"
- width="300">
+ width="245">
 
     <text
      follows="top|left|right"
      height="32"
      layout="topleft"
      word_wrap="true"
-     left="20"
+     left="10"
      name="Preset"
      top="30"
-     width="200">
+     width="220">
      Type a name for the preset or choose an existing preset.
     </text>
     <combo_box
      follows="top|left"
      layout="topleft"
-     left="20"
+     left="10"
      name="preset_combo"
      top_delta="35"
      allow_text_entry="true"
-     width="200"/>
+     width="220"/>
     <button
      follows="top|left"
      height="23"
      label="Save"
      layout="topleft"
      top_delta="40"
-     left="20"
+     left="10"
      name="save"
-     width="70"/>
+     width="100"/>
     <button
      follows="bottom|right"
      height="23"
@@ -44,5 +44,5 @@
      layout="topleft"
      left_pad="20"
      name="cancel"
-     width="70"/>
+     width="100"/>
 </floater>
