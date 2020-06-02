@@ -1989,6 +1989,11 @@ Kontynuować?
 	<notification name="EstateParcelAccessOverride">
 		Odznaczenie tej opcji może usunąć ograniczenia nadane przez właścicieli działek w celu zapobiegania dokuczaniu, zachowaniu prywatności lub aby chronić nieletnich przed materiałami dla dorosłych. Porozmawiaj z właścicielami działek, jeśli to konieczne.
 	</notification>
+	<notification name="EstateParcelEnvironmentOverride">
+		(Zmiana w całym majątku: [ESTATENAME]) Odznaczenie tej opcji spowoduje usunięcie wszelkich niestandardowych otoczeń, które zostały dodane do działek przez ich właścicieli. Przedyskutuj zmianę z właścicielami działek w razie potrzeby.
+Czy chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="EstateChangeCovenant">
 		Na pewno chcesz zmienić treść umowy dla tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -2454,7 +2459,15 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		Ten plik cyklu dziennego używa brakującego pliku nieba: [SKY].
 	</notification>
 	<notification name="WLRegionApplyFail">
-		Ustawienia nie mogą zostać zastosowane w regionie. Opuszczenie regionu, a następnie powrócenie do niego może naprawić problem. Powód: [FAIL_REASON]
+		Ustawienia nie mogą zostać zastosowane w regionie. Powód: [FAIL_REASON]
+	</notification>
+	<notification name="WLLocalTextureDayBlock">
+		Lokalna tekstura jest używana na ścieżce [TRACK], klatce #[FRAMENO] ([FRAME]%) w polu [FIELD].
+Otoczenia nie mogą zostać zapisane gdy lokalne tekstury są w użyciu.
+	</notification>
+	<notification name="WLLocalTextureFixedBlock">
+		Lokalna tekstura jest używana w polu [FIELD].
+Otoczenia nie mogą zostać zapisane gdy lokalne tekstury są w użyciu.
 	</notification>
 	<notification name="EnvCannotDeleteLastDayCycleKey">
 		Nie można usunąć ostatniego klucza w cyklu dnia, bo nie może on być pusty. Zmodyfikuj ten klucz zamiast go usuwać, a potem dodaj nowy.
@@ -3393,6 +3406,10 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="DefaultPresetNotSaved">
 		Nie można zastąpić domyślnego ustawienia.
+	</notification>
+	<notification name="PresetAlreadyExists">
+		&apos;[NAME]&apos; jest w użyciu. Możesz zastąpić
+to ustawienie lub wybrać inną nazwę.
 	</notification>
 	<notification name="PresetNotDeleted">
 		Błąd podczas usuwania ustawienia [NAME].
@@ -4962,5 +4979,93 @@ Jeśli nie zgadzasz się z niniejszymi warunkami użytkowania, nie należy przep
 	</notification>
 	<notification name="EnableHiDPI">
 		Włączenie obsługi HiDPI może mieć niekorzystne skutki i pogorszyć wydajność.
+	</notification>
+
+
+
+
+
+
+
+
+
+
+
+
+	<notification name="FailedToFindSettings">
+		Nie można załadować ustawień dla [NAME] z bazy danych.
+	</notification>
+	<notification name="FailedToLoadSettingsApply">
+		Nie można zastosować tych ustawień do otoczenia.
+	</notification>
+	<notification name="FailedToBuildSettingsDay">
+		Nie można zastosować tych ustawień do otoczenia.
+	</notification>
+	<notification name="NoEnvironmentSettings">
+		Ten region nie obsługuje ustawień otoczenia.
+	</notification>
+	<notification label="Zapisz otoczenie" name="SaveSettingAs">
+		Zapisz bieżące ustawienia otoczenia jako:
+		<form name="form">
+			<input name="message">
+				[DESC] (nowe)
+			</input>
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="WLImportFail">
+		Nie można zaimportować starszych ustawień Windlight [NAME] z
+[FILE].
+
+[REASONS]
+	</notification>
+	<notification name="WLParcelApplyFail">
+		Nie można ustawić otoczenia dla tej działki.
+Odwiedź lub wybierz działkę, którą masz prawo zmodyfikować.
+	</notification>
+	<notification name="SettingsUnsuported">
+		Otoczenia nie są obsługiwane w tym regionie.
+Przejdź do regionu z włączonymi otoczeniami i spróbuj ponownie.
+	</notification>
+	<notification name="SettingsConfirmLoss">
+		Za chwilę stracisz zmiany wprowadzone dla [TYPE] o nazwie "[NAME]".
+Czy na pewno chcesz kontynuować?
+		<usetemplate ignoretext="Czy na pewno chcesz stracić zmiany?" name="okcancelignore" notext="Nie" yestext="Tak" />
+	</notification>
+	<notification name="SettingsConfirmReset">
+		Za chwilę usuniesz wszystkie zastosowane otoczenia.
+Czy na pewno chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
+	</notification>
+	<notification name="PersonalSettingsConfirmReset">
+		Za chwilę usuniesz wszystkie zastosowane ustawienia własnego oświetlenia.
+Czy na pewno chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
+	</notification>
+	<notification name="SettingsMakeNoTrans">
+		Zamierzasz zaimportować nietransferowalne otoczenia do tego cyklu dnia. Kontynuowanie spowoduje, że edytowane otoczenia również staną się nietransferowalne.
+
+Tej zmiany nie można cofnąć.
+
+Czy na pewno chcesz kontynuować?
+		<usetemplate ignoretext="Czy na pewno chcesz, aby otoczenia były nietransferowalne?" name="okcancelignore" notext="Nie" yestext="Tak" />
+	</notification>
+	<notification name="NoEditFromLibrary">
+		Nie możesz edytować otoczeń bezpośrednio w bibliotece.
+Skopiuj do własnej szafy i spróbuj ponownie.
+	</notification>
+	<notification name="EnvironmentApplyFailed">
+		Napotkaliśmy problem z tymi ustawieniami otoczenia. Nie można ich teraz zapisać ani zastosować.
+	</notification>
+	<notification name="TrackLoadFailed">
+		Nie można załadować ścieżki do [TRACK].
+	</notification>
+	<notification name="TrackLoadMismatch">
+		Nie można załadować ścieżki z [TRACK1] do [TRACK2].
+	</notification>
+	<notification name="NoValidEnvSettingFound">
+		Nie wybrano prawidłowego ustawienia otoczenia.
+
+Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na cyklu dnia"!
 	</notification>
 </notifications>

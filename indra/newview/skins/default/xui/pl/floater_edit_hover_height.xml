@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="HoverHeight" title="Ustaw uniesienie">
 	<slider label="Unieś" name="HoverHeightSlider" />
+	<check_box label="Wpływ na widok kamery" name="BindCameraCheck" />
 </floater>

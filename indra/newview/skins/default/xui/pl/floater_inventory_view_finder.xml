@@ -11,6 +11,7 @@
 	<check_box label="Dźwięki" name="check_sound" />
 	<check_box label="Tekstury" name="check_texture" />
 	<check_box label="Zdjęcia" name="check_snapshot" />
+	<check_box label="Otoczenia" name="check_settings" />
 	<button label="Wszystko" label_selected="Wszystko" name="All" />
 	<button label="Żadne" label_selected="Żadne" name="None" />
 	<check_box label="Tylko transferowalne" name="check_transferable" />

@@ -9,27 +9,31 @@
 	<floater.string name="move_tooltip">
 		Poruszaj kamerą w górę, w dół, w lewo i w prawo
 	</floater.string>
-	<panel name="zoom">
-		<layout_stack name="camera_view_layout_stack">
-			<layout_panel name="camera_rotate_layout_panel">
-				<joystick_rotate name="cam_rotate_stick" tool_tip="Obróć kamerę wokół punktu skupienia"/>
-			</layout_panel>
-			<layout_panel name="camera_zoom_layout_panel">
-				<slider_bar name="zoom_slider" tool_tip="Przybliż kamerę do punktu skupienia"/>
-			</layout_panel>
-			<layout_panel name="panel_track">
-				<joystick_track name="cam_track_stick" tool_tip="Poruszaj kamerą w górę, w dół, w lewo i w prawo"/>
-			</layout_panel>
-		</layout_stack>
+    <floater.string name="free_mode_title">
+        Pokaż obiekt
+    </floater.string>
+	<string name="inactive_combo_text">
+		Użyj ustawienia
+	</string>
+	<panel name="controls">
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="Obróć kamerę wokół punktu skupienia"/>
+			<slider_bar name="zoom_slider" tool_tip="Przybliż kamerę do punktu skupienia"/>
+			<joystick_track name="cam_track_stick" tool_tip="Poruszaj kamerą w górę, w dół, w lewo i w prawo"/>
+		</panel>
 	</panel>
-	<panel name="buttons_view">
+	<panel name="buttons_panel">
 		<panel_camera_item name="front_view" tool_tip="Widok od przodu"/>
 		<panel_camera_item name="group_view" tool_tip="Widok ponad ramieniem"/>
 		<panel_camera_item name="rear_view" tool_tip="Widok od tyłu"/>
-	</panel>
-	<panel name="buttons">
 		<panel_camera_item name="object_view" tool_tip="Pokazywanie obiektu"/>
 		<panel_camera_item name="mouselook_view" tool_tip="Widok pierwszoosobowy"/>
 		<panel_camera_item name="reset_view" tool_tip="Resetuj widok"/>
 	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="Użyj ustawienia" name="Use preset" />
+	</combo_box>
+	<button name="gear_btn" tool_tip="Ustawienia kamery" />
+	<!-- <button label="Zapisz jako ustawienie" name="save_preset_btn" /> -->
+	<button label="Pozycja kamery" name="camera_position_btn" />
 </floater>
