@@ -33,6 +33,7 @@
 		<action description="Zmiany ustawień muzyki oraz mediów" longdescription="Zmiany ustawień muzyki oraz mediów w O działce &gt; Media." name="land change media"/>
 		<action description="Selekcja opcji &apos;Edycja Terenu&apos;" longdescription="Selekcja opcji &apos;Edycja Terenu&apos;. *UWAGA* O działce &gt; Opcje &gt; Edycja Terenu pozwala każdemu na zmianę kształtu gruntów Twojej działki oraz na przemieszczanie roślin z Linden Lab. Udzielaj tego Przywileju z rozwagą. Selekcja opcji Edycji Terenu jest dostępna poprzez O działce &gt; Opcje." name="land edit"/>
 		<action description="Dodatkowe ustawienia O działce &gt; Opcje" longdescription="Selekcja opcji &apos;Bezpieczeństwo&apos; (brak uszkodzeń), &apos;Latanie&apos;, opcje dla innych Rezydentów: &apos;Tworzenie Obiektów&apos;, &apos;Edycja Terenu&apos;, &apos;Zapamiętywanie Miejsca (LM)&apos; i &apos;Skrypty&apos; na działkach Grupy, pod O działce &gt; Opcje." name="land options"/>
+		<action description="Modyfikacja ustawień otoczenia i cyklu dnia" longdescription="Modyfikacja ustawień otoczenia i cyklu dnia na karcie O działce &gt; Otoczenie." name="land change environment" />
 	</action_set>
 	<action_set description="Przywileje pozwalające osobom na omijanie ograniczeń na działkach Grupy." name="Parcel Powers">
 		<action description="Pozwól na edycję terenu" longdescription="Osoby w Funkcji z tym Przywilejem mogą zawsze edytować teren na działkach Grupy." name="land allow edit land"/>

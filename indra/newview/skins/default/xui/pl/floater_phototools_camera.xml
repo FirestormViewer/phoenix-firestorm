@@ -12,6 +12,9 @@
 	<floater.string name="free_mode_title">
 		Pokazywanie obiektu
 	</floater.string>
+	<string name="inactive_combo_text">
+		Użyj ustawienia
+	</string>
 	<tab_container name="tabs">
 		<panel name="P_Cam_Controls_1" label="Kamera 1">
 			<panel name="cameracontrolspanel">
@@ -32,6 +35,11 @@
 								Widok od tyłu
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="Użyj ustawienia" name="Use preset" />
+						</combo_box>
+						<button name="gear_btn" tool_tip="Ustawienia kamery" />
+						<button label="Pozycja..." name="camera_position_btn" />
 					</panel>
 					<panel name="camera_modes_list">
 						<panel_camera_item name="object_view">

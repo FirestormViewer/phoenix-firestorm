@@ -1,33 +1,124 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Otoczenie" name="panel_env_info">
- <text name="water_settings_title">
-  Wybierz ustawienia wody i nieba/dnia jakie mają widzieć goście w Twoim regionie. Więcej
- </text>
- <radio_group name="region_settings_radio_group">
-  <radio_item label="Domyślne Second Life" name="use_sl_default_settings"/>
-  <radio_item label="Używaj poniższych" name="use_my_settings"/>
- </radio_group>
- <panel name="user_environment_settings">
-   <text name="water_settings_title">
-    Ustaw wodę
-   </text>
-   <combo_box name="water_settings_preset_combo">
-    <combo_box.item label="-Wybierz ustawienie-" name="item0"/>
-   </combo_box>
-   <text name="sky_dayc_settings_title">
-    Cykl dnia/niebo
-   </text>
-   <radio_group name="sky_dayc_settings_radio_group">
-    <radio_item label="Stałe niebo" name="my_sky_settings"/>
-    <radio_item label="Cykl dnia" name="my_dayc_settings"/>
-   </radio_group>
-   <combo_box name="sky_settings_preset_combo">
-    <combo_box.item label="-Wybierz ustawienie-" name="item0"/>
-   </combo_box>
-   <combo_box name="dayc_settings_preset_combo">
-    <combo_box.item label="-Wybierz ustawienie-" name="item0"/>
-   </combo_box>
- </panel>
- <button label="Zastosuj" name="apply_btn"/>
- <button label="Anuluj" name="cancel_btn"/>
+<panel label="Otoczenie" name="panel_env_info"> 
+	<string name="str_label_use_default">
+		Użyj domyślnych
+	</string>
+	<string name="str_label_use_region">
+		Użyj ust. regionu
+	</string>
+	<string name="str_altitude_desription">
+		Niebo [INDEX]([ALTITUDE]m)
+	</string>
+	<string name="str_no_parcel">
+		Nie wybrano działki. Ustawienia otoczenia są wyłączone.
+	</string>
+	<string name="str_cross_region">
+		Ustawienia otoczenia nie są dostępne przez granice regionów.
+	</string>
+	<string name="str_legacy">
+		Ustawienia otoczenia nie są dostępne w tym regionie.
+	</string>
+	<string name="str_disallowed">
+		Zarządca majątku nie zezwala na zmianę otoczenia działek w tym regionie.
+	</string>
+	<string name="str_too_small">
+		Działka musi mieć co najmniej 128 metrów kwadratowych, aby wspierać otoczenia.
+	</string>
+	<string name="str_empty">
+		(puste)
+	</string>
+	<string name="str_region_env">
+		(otoczenie regionu)
+	</string>
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text name="region_text">
+				nieznany
+			</text>
+		</layout_panel>
+		<layout_panel name="pnl_environment_config">
+			<layout_stack name="ls_environment_config">
+				<layout_panel name="pnl_environment_config">
+					<layout_stack name="ls_environment_config2">
+						<layout_panel name="pnl_environment_current">
+							<text name="select_environment_label">
+								Wybierz otoczenie
+							</text>
+							<button label="Z Szafy" name="btn_select_inventory" />
+							<button label="Dostosuj" name="btn_edit" />
+							<check_box label="Właściciele działek mogą zastąpić" name="chk_allow_override" />
+						</layout_panel>
+						<layout_panel name="pnl_environment_length">
+							<text name="day_settings_label">
+								Ustawienia dnia
+							</text>
+							<text name="day_length_label">
+								Długość dnia (godziny)
+							</text>
+							<text name="day_offset_label">
+								Przesunięcie dnia (godziny)
+							</text>
+							<text name="apparent_time_of_day_label">
+								Widoczna pora dnia:
+							</text>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="pnl_environment_altitudes">
+					<panel name="pnl_alt1">
+						<text name="txt_alt1">
+							Niebo [INDEX]
+							[ALTITUDE]m
+						</text>
+						<line_editor name="edt_invname_alt1">
+							Nieznane
+						</line_editor>
+						<settings_drop_target name="sdt_alt1" tool_tip="Przeciągnij otoczenie z Szafy na to pole, aby wybrać je jako bieżące niebo." />
+					</panel>
+					<panel name="pnl_alt2">
+						<text name="txt_alt2">
+							Niebo [INDEX]
+							[ALTITUDE]m
+						</text>
+						<line_editor name="edt_invname_alt2">
+							Nieznane
+						</line_editor>
+						<settings_drop_target name="sdt_alt2" tool_tip="Przeciągnij otoczenie z Szafy na to pole, aby wybrać je jako bieżące niebo." />
+					</panel>
+					<panel name="pnl_alt3">
+						<text name="txt_alt3">
+							Niebo [INDEX]
+							[ALTITUDE]m
+						</text>
+						<line_editor name="edt_invname_alt3">
+							Nieznane
+						</line_editor>
+						<settings_drop_target name="sdt_alt3" tool_tip="Przeciągnij otoczenie z Szafy na to pole, aby wybrać je jako bieżące niebo." />
+					</panel>
+					<text name="sky_altitudes_label">
+						Wysokości nieba
+					</text>
+					<panel name="pnl_ground">
+						<text name="txt_ground">
+							Ziemia
+						</text>
+						<line_editor name="edt_invname_ground">
+							Nieznane
+						</line_editor>
+						<settings_drop_target name="sdt_ground" tool_tip="Przeciągnij otoczenie z Szafy na to pole, aby wybrać je jako niebo poziomu ziemi." />
+					</panel>
+					<panel name="pnl_water">
+						<text name="txt_water">
+							Woda
+						</text>
+						<line_editor name="edt_invname_water">
+							Nieznane
+						</line_editor>
+						<settings_drop_target name="sdt_water" tool_tip="Przeciągnij otoczenie z Szafy na to pole, aby wybrać je jako bieżącą wodę." />
+					</panel>
+					<button tool_tip="Zresetuj do domyślnych wysokości" name="btn_rst_altitudes" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
 </panel>

@@ -516,7 +516,13 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				settings.flip_mouse_y = false;
 				settings.flip_pixels_y = true;
 				settings.frame_rate = 60;
-				settings.force_wave_audio = true;
+
+				// <FS:ND> With the latest CEF this does more worse than good. It will allow the viewer to control the audio level (apparently); But it will also break a lot of sites (among then twitch, netflix, spotify).
+				// Right now with the choice between lots of broken sites or volumes for me it's rather the sites being usable.
+				// settings.force_wave_audio = true;
+				settings.force_wave_audio = false;
+				// </FS:ND>
+
 				settings.initial_height = 1024;
 				settings.initial_width = 1024;
 				settings.java_enabled = false;
