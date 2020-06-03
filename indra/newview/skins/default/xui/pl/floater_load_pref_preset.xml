@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<floater name="Load Pref Preset" title="Wczytaj ustawienie">
+<floater name="load_pref_preset" title="Wczytaj ustawienie">
 	<string name="title_graphic">
 		Wczytaj ustawienie graficzne
 	</string>

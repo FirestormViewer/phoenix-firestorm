@@ -47,6 +47,7 @@ public:
 protected:
 	void addToDictFile(const std::string& dict_path, const std::string& word);
 	void initHunspell(const std::string& dict_language);
+	void initSingleton(); // <FS:Ansariel> FIRE-29649: Crash when opening spellcheck settings
 
 public:
 	typedef std::list<std::string> dict_list_t;
