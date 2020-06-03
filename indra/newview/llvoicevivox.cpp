@@ -339,15 +339,15 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mPlayRequestCount(0),
 
 	mAvatarNameCacheConnection(),
-    mIsInTuningMode(false),
-    mIsInChannel(false),
-    mIsJoiningSession(false),
-    mIsWaitingForFonts(false),
-    mIsLoggingIn(false),
-    mIsLoggedIn(false),
-    mIsProcessingChannels(false),
-    mIsCoroutineActive(false),
-    mVivoxPump("vivoxClientPump")
+	mIsInTuningMode(false),
+	mIsInChannel(false),
+	mIsJoiningSession(false),
+	mIsWaitingForFonts(false),
+	mIsLoggingIn(false),
+	mIsLoggedIn(false),
+	mIsProcessingChannels(false),
+	mIsCoroutineActive(false),
+	mVivoxPump("vivoxClientPump")
 {	
 	mSpeakerVolume = scale_speaker_volume(0);
 
@@ -877,6 +877,21 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             }
             //</FS:ND>
 
+            // VOICE-88: Cycle through [portbase..portbase+portrange) on
+            // successive tries because attempting to relaunch (after manually
+            // disabling and then re-enabling voice) with the same port can
+            // cause SLVoice's bind() call to fail with EADDRINUSE. We expect
+            // that eventually the OS will time out previous ports, which is
+            // why we cycle instead of incrementing indefinitely.
+            U32 portbase = gSavedSettings.getU32("VivoxVoicePort");
+            static U32 portoffset = 0;
+            static const U32 portrange = 100;
+            std::string host(gSavedSettings.getString("VivoxVoiceHost"));
+            U32 port = portbase + portoffset;
+            portoffset = (portoffset + 1) % portrange;
+            params.args.add("-i");
+            params.args.add(STRINGIZE(host << ':' << port));
+
             std::string loglevel = gSavedSettings.getString("VivoxDebugLevel");
             if (loglevel.empty())
             {
@@ -957,7 +972,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
             sGatewayPtr = LLProcess::create(params);
 
-            mDaemonHost = LLHost(gSavedSettings.getString("VivoxVoiceHost").c_str(), gSavedSettings.getU32("VivoxVoicePort"));
+            mDaemonHost = LLHost(host.c_str(), port);
         }
         else
         {
@@ -1350,15 +1365,22 @@ void LLVivoxVoiceClient::logoutOfVivox(bool wait)
         if (wait)
         {
             LLSD timeoutResult(LLSDMap("logout", "timeout"));
+            LLSD result;
 
-            LL_DEBUGS("Voice")
-                << "waiting for logout response on "
-                << mVivoxPump.getName()
-                << LL_ENDL;
+            do
+            {
+                LL_DEBUGS("Voice")
+                    << "waiting for logout response on "
+                    << mVivoxPump.getName()
+                    << LL_ENDL;
 
-            LLSD result = llcoro::suspendUntilEventOnWithTimeout(mVivoxPump, LOGOUT_ATTEMPT_TIMEOUT, timeoutResult);
+                result = llcoro::suspendUntilEventOnWithTimeout(mVivoxPump, LOGOUT_ATTEMPT_TIMEOUT, timeoutResult);
 
-            LL_DEBUGS("Voice") << "event=" << ll_stream_notation_sd(result) << LL_ENDL;
+                LL_DEBUGS("Voice") << "event=" << ll_stream_notation_sd(result) << LL_ENDL;
+                // Don't get confused by prior queued events -- note that it's
+                // very important that mVivoxPump is an LLEventMailDrop, which
+                // does queue events.
+            } while (! result["logout"]);
         }
         else
         {
