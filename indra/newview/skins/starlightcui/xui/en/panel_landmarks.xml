@@ -25,6 +25,7 @@
         <accordion_tab
          layout="topleft"
          name="tab_favorites"
+         selection_enabled="true"
          title="Favorites bar">
             <places_inventory_panel
              allow_multi_select="true"
@@ -43,6 +44,7 @@
         <accordion_tab
          layout="topleft"
          name="tab_landmarks"
+         selection_enabled="true"
          title="Landmarks">
             <places_inventory_panel
              allow_multi_select="true"
@@ -61,6 +63,7 @@
         <accordion_tab
          layout="topleft"
          name="tab_inventory"
+         selection_enabled="true"
          title="Inventory">
             <places_inventory_panel
              allow_multi_select="true"
@@ -79,6 +82,7 @@
           <accordion_tab
            layout="topleft"
            name="tab_library"
+           selection_enabled="true"
            title="Library">
             <places_inventory_panel
              allow_multi_select="true"

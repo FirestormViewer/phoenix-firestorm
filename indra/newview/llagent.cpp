@@ -1159,13 +1159,6 @@ void LLAgent::removeRegionChangedCallback(boost::signals2::connection callback)
 	mRegionChangedSignal.disconnect(callback);
 }
 
-// <FS:Ansariel> Aurora sim windlight refresh
-void LLAgent::changeRegion()
-{
-	mRegionChangedSignal();
-}
-// </FS:Ansariel>
-
 //-----------------------------------------------------------------------------
 // inPrelude()
 //-----------------------------------------------------------------------------

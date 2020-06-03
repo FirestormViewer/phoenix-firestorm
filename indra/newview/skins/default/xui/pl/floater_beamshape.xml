@@ -10,4 +10,5 @@ Zapisz, kiedy skończysz.
 	<button label="Zapisz" name="beamshape_save" />
 	<button label="Wczytaj" name="beamshape_load" />
 	<button label="Wyczyść" name="beamshape_clear" />
+	<button label="Anuluj" name="cancel" />
 </floater>

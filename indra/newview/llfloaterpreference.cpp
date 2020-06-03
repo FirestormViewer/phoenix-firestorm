@@ -173,9 +173,9 @@ char const* const VISIBILITY_DEFAULT = "default";
 char const* const VISIBILITY_HIDDEN = "hidden";
 
 //control value for middle mouse as talk2push button
-const static std::string MIDDLE_MOUSE_CV = "MiddleMouse"; // for voice client and redability
-const static std::string MOUSE_BUTTON_4_CV = "MouseButton4";
-const static std::string MOUSE_BUTTON_5_CV = "MouseButton5";
+//const static std::string MIDDLE_MOUSE_CV = "MiddleMouse"; // for voice client and redability
+//const static std::string MOUSE_BUTTON_4_CV = "MouseButton4";
+//const static std::string MOUSE_BUTTON_5_CV = "MouseButton5";
 
 /// This must equal the maximum value set for the IndirectMaxComplexity slider in panel_preferences_graphics1.xml
 static const U32 INDIRECT_MAX_ARC_OFF = 101; // all the way to the right == disabled
@@ -441,7 +441,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
-	mCommitCallbackRegistrar.add("Pref.VoiceSetClearKey",		boost::bind(&LLFloaterPreference::onClickClearKey, this)); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	//<FS:KC> Handled centrally now
 //	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
@@ -2637,13 +2636,6 @@ void LLFloaterPreference::onChangeQuality(const LLSD& data)
 	refreshEnabledGraphics();
 	refresh();
 }
-
-// <FS:Ansariel> FIRE-3803: Clear voice toggle button
-void LLFloaterPreference::onClickClearKey()
-{
-	gSavedSettings.setString("PushToTalkButton", "");
-}
-// </FS:Ansariel>
 
 //<FS:KC> Handled centrally now
 /*
@@ -4998,6 +4990,10 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 
 	getChild<LLTextBox>("textInformation4")->setTextArg("[URL]", getString("PrivacyPolicyUrl"));
 
+#if LL_SEND_CRASH_REPORTS && defined(LL_BUGSPLAT)
+	childSetVisible("textRestartRequired", true);
+#endif
+
 	refresh();
 
 	return LLPanelPreference::postBuild();
@@ -5012,13 +5008,6 @@ void LLPanelPreferenceCrashReports::refresh()
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendSettings")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendName")->setEnabled(fEnable);
-
-// <FS:ND> Disable options not available when compiling with Bugsplat and set those to default values.
-#ifdef LL_BUGSPLAT
-	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(false);
-	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setValue(false);
-#endif
-// </FS:ND>
 }
 
 void LLPanelPreferenceCrashReports::apply()
@@ -6202,7 +6191,7 @@ BOOL FSPanelPreferenceSounds::postBuild()
 	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
 	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
 
-#if LL_FMODSTUDIO || LL_FMODEX
+#if LL_FMODSTUDIO
 	if (gAudiop && mOutputDevicePanel && mOutputDeviceComboBox)
 	{
 		gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&FSPanelPreferenceSounds::onOutputDeviceChanged, this, _2));

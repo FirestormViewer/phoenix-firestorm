@@ -10,6 +10,9 @@
 	<text name="textSendName">
 		(für eventuelle Rückfragen)
 	</text>
+	<text name="textRestartRequired">
+		Änderungen an jeglichen Einstellungen werden erst nach einem Neustart aktiv.
+	</text>
 	<text name="textInformation1">
 		Sofern nicht ausgewählt, enthalten die Meldungen nur absturzrelevante Informationen.
 	</text>

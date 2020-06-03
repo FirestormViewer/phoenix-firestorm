@@ -7,7 +7,7 @@
  name="delete_pref_preset"
  save_rect="true"
  title="Delete Pref Preset"
- width="300">
+ width="240">
 
     <string name="title_graphic">Delete Graphic Preset</string>
     <string name="title_camera">Delete Camera Preset</string>
@@ -16,7 +16,7 @@
      follows="top|left|right"
      height="10"
      layout="topleft"
-     left="20"
+     left="10"
      name="Preset"
      top="30"
      width="200">
@@ -25,19 +25,19 @@
     <combo_box
      follows="top|left"
      layout="topleft"
-     left="20"
+     left="10"
      name="preset_combo"
      top_delta="20"
-     width="200"/>
+     width="220"/>
     <button
      follows="top|left"
      height="23"
      label="Delete"
      layout="topleft"
      top_delta="40"
-     left="20"
+     left="10"
      name="delete"
-     width="70"/>
+     width="100"/>
     <button
      follows="top|left"
      height="23"
@@ -45,5 +45,5 @@
      layout="topleft"
      left_pad="20"
      name="cancel"
-     width="70"/>
+     width="100"/>
 </floater>

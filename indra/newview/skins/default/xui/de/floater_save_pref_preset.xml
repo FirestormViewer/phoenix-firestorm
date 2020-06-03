@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <floater name="save_pref_preset" title="Grafikvoreinstellung speichern">
-	<string name="title_graphic">
-		Grafikvoreinstellung speichern
-	</string>
-	<string name="title_camera">
-		Kameravoreinstellung speichern
-	</string>
 	<text name="Preset">
 		Geben Sie einen Namen für die Voreinstellung ein oder wählen Sie eine vorhandene Voreinstellung aus.
 	</text>
