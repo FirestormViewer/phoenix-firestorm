@@ -478,12 +478,14 @@ void LLProgressView::initLogos()
 
     temp_str += gDirUtilp->getDirDelimiter();
 
+    S32 pad_y = 0; // <FS:Ansariel> Build fix
+
 #ifdef LL_FMODSTUDIO
     // original image size is 264x96, it is on longer side but
     // with no internal paddings so it gets additional padding
     icon_width = 77;
     icon_height = 21;
-    S32 pad_y = 4;
+    /*S32*/ pad_y = 4; // <FS:Ansariel> Build fix
     texture_start_x++;
     loadLogo(temp_str + "fmod_logo.png",
         image_codec,
