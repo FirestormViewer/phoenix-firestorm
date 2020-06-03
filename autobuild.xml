@@ -52,9 +52,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>68f6096e055e7a0e46913e1c2613b9db</string>
+              <string>7725e9abe4bf84d11bc7286c74467026</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1320_3.3626.1895.g7001d56-linux64-191221945.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.7.0.202005301906_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201511706.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b92c2efe8e3802a26209a4ebe2f840ba</string>
+              <string>05bdafd8e9f32fc6763862ada4b5c4bc</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.6.4.202005241618_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201451417.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005300110_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201502309.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -850,9 +850,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>71fa66203326aca918796e874976c080</string>
+              <string>43c03679c3847754b407532efe5d4392</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34070/283477/dullahan-1.1.1320_3.3626.1895.g7001d56-windows-525361.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005292352_81.3.10_gb223419_chromium-81.0.4044.138-windows-201512310.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -862,9 +862,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c7162e4805f50a3609f5dc63d0cf2bc0</string>
+              <string>13574736220c05de847980f851f42827</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/34071/283480/dullahan-1.1.1320_3.3626.1895.g7001d56-windows64-525361.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005292352_81.3.10_gb223419_chromium-81.0.4044.138-windows64-201512301.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -990,11 +990,11 @@
       <key>fmodstudio</key>
       <map>
         <key>copyright</key>
-        <string>FMOD Studio, copyright (c) Firelight Technologies Pty, Ltd., 2012-2017.</string>
+        <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
         <key>description</key>
-        <string>FMOD Studio audio system library</string>
+        <string>FMOD Studio API</string>
         <key>license</key>
-        <string>fmodstudio</string>
+        <string>fmod</string>
         <key>license_file</key>
         <string>LICENSES/fmodstudio.txt</string>
         <key>name</key>
@@ -1060,58 +1060,6 @@
         </map>
         <key>version</key>
         <string>2.01.01</string>
-      </map>
-      <key>fmodex</key>
-      <map>
-        <key>copyright</key>
-        <string>COPYRIGHT 2014 FIRELIGHT TECHNOLOGIES PTY LTD. ALL RIGHTS RESERVED</string>
-        <key>license</key>
-        <string>fmodex</string>
-        <key>license_file</key>
-        <string>LICENSES/fmodex.txt</string>
-        <key>name</key>
-        <string>fmodex</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cba1feed7f6bb671d791a517fddf205a</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9b090869508fabee82dc53cae977fb99</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
-              <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>4.44.61</string>
       </map>
       <key>fontconfig</key>
       <map>

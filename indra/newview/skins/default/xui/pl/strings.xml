@@ -710,6 +710,15 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="BUTTON_SNOOZE">
 		Tymczasowo wycisz
 	</string>
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+Przedmioty tego typu nie mogą być dołączane
+do notek z tego regionu.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+Tylko przedmioty z nieograniczonymi
+uprawnieniami 'następnego właściciela'
+mogą być dołączane do notek.
+	</string>
 	<string name="Searching">
 		Wyszukiwanie...
 	</string>
@@ -792,6 +801,18 @@ Spróbuj zalogować się ponownie za minutę.
 		Błąd podczas przesyłania. Odwiedź
 http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
+	<string name="SettingValidationError">
+		Walidacja nie powiodła się - importowanie ustawień [NAME]
+	</string>
+	<string name="SettingImportFileError">
+		Nie można otworzyć pliku [FILE]
+	</string>
+	<string name="SettingParseFileError">
+		Nie można otworzyć pliku [FILE]
+	</string>
+	<string name="SettingTranslateError">
+		Nie można przetłumaczyć windlight [NAME]
+	</string>
 	<string name="texture">
 		tekstury
 	</string>
@@ -863,6 +884,9 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="symbolic folder link">
 		link folderu
+	</string>
+	<string name="settings blob">
+		otoczenie
 	</string>
 	<string name="mesh">
 		mesz
@@ -1218,8 +1242,17 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="ForceSitAvatar">
 		Zmuszać Twojego awatara do siadania
 	</string>
+	<string name="ChangeEnvSettings">
+		Zmieniać Twoje ustawienia otoczenia
+	</string>
 	<string name="SnapshotSavedToDisk">
 		Zdjęcie zapisane: [FILENAME]
+	</string>
+	<string name="NotConnected">
+		Brak połączenia
+	</string>
+	<string name="AgentNameSubst">
+		(Ty)
 	</string>
 	<string name="SilentlyManageEstateAccess">
 		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
@@ -1229,12 +1262,6 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="ScriptReturnObjects">
 		Zwróć przedmioty w swoim imieniu
-	</string>
-	<string name="NotConnected">
-		Brak połączenia
-	</string>
-	<string name="AgentNameSubst">
-		(Ty)
 	</string>
 	<string name="UnknownScriptPermission">
 		(nieznane)!
@@ -1839,6 +1866,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="InvFolder Merchant Outbox">
 		Skrzynka nadawcza kupca
+	</string>
+	<string name="InvFolder Settings">
+		Otoczenia
 	</string>
 	<string name="InvFolder Friends">
 		Znajomi
@@ -2621,6 +2651,27 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="RegionSettings">
 		Ustawienia regionu
+	</string>
+	<string name="NoEnvironmentSettings">
+		Ten region nie obsługuje ustawień otoczenia.
+	</string>
+	<string name="EnvironmentSun">
+		Słońce
+	</string>
+	<string name="EnvironmentMoon">
+		Księżyc
+	</string>
+	<string name="EnvironmentBloom">
+		Blask
+	</string>
+	<string name="EnvironmentCloudNoise">
+		Szum chmur
+	</string>
+	<string name="EnvironmentNormalMap">
+		Mapa normalnych
+	</string>
+	<string name="EnvironmentTransparent">
+		Przezroczyste
 	</string>
 	<string name="ClassifiedClicksTxt">
 		Kliknij: [TELEPORT] teleportuj, [MAP] mapa, [PROFILE] profil
@@ -4928,6 +4979,15 @@ Raport o Nadużyciu
 	<string name="Female - Wow">
 		Kobieta - Wow
 	</string>
+	<string name="New Daycycle">
+		Nowy cykl dnia
+	</string>
+	<string name="New Water">
+		Nowa woda
+	</string>
+	<string name="New Sky">
+		Nowe niebo
+	</string>
 	<string name="AvatarBirthDateFormat">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
@@ -5077,6 +5137,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="BeaconMedia">
 		Emitery mediów (biały)
 	</string>
+	<string name="BeaconSun">
+		Emiter kierunku Słońca (pomarańczowy)
+	</string>
+	<string name="BeaconMoon">
+		Emiter kierunku Księżyca (purpurowy)
+	</string>
 	<string name="ParticleHiding">
 		Ukryj cząsteczki
 	</string>
@@ -5103,6 +5169,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Destinations_Label">
 		Cele podróży
+	</string>
+	<string name="Command_Environments_Label">
+		Otoczenia
 	</string>
 	<string name="Command_Gestures_Label">
 		Gesty
@@ -5274,6 +5343,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Punkty, jakie mogą być interesujące
+	</string>
+	<string name="Command_Environments_Tooltip">
+		Otoczenia
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Wyślij na Flickr
@@ -5704,6 +5776,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="ExperiencePermission12">
 		automatycznie akceptować uprawnienia przygody
 	</string>
+	<string name="ExperiencePermission16">
+		zmuszać Twojego awatara do siadania
+	</string>
+	<string name="ExperiencePermission17">
+		zmieniać Twoje ustawienia otoczenia
+	</string>
 	<string name="ExperiencePermissionShortUnknown">
 		wykonać nieznaną operację: [Permission]
 	</string>
@@ -5727,6 +5805,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="ExperiencePermissionShort12">
 		Uprawnienia
+	</string>
+	<string name="ExperiencePermissionShort16">
+		Siadanie
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Otoczenie
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
@@ -6027,7 +6111,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		Ramiona w górze, nogi złączone
 	</string>
 	<string name="QP_WL_Region_Default">
-		Domyślne regionu
+		Otoczenie współdzielone
 	</string>
 	<string name="QP_WL_Day_Cycle_Based">
 		Bazowane na cyklu dnia

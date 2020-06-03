@@ -48,6 +48,11 @@
 				<menu_item_call name="inventory_new_hair" label="Nowe włosy" />
 				<menu_item_call name="inventory_new_eyes" label="Nowe oczy" />
 			</menu>
+			<menu label="Nowe otoczenie" name="New Settings">
+				<menu_item_call label="Nowe niebo" name="New Sky" />
+				<menu_item_call label="Nowa woda" name="New Water" />
+				<menu_item_call label="Nowy cykl dnia" name="New Day Cycle" />
+			</menu>
 		</menu>
 		<menu label="Porządkuj" name="inventory_sort_menu">
 			<menu_item_check name="inventory_sort_by_name" label="Po nazwie" />

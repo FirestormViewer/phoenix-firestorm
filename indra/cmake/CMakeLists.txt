@@ -30,7 +30,6 @@ set(cmake_SOURCE_FILES
     FindAutobuild.cmake
     FindBerkeleyDB.cmake
     FindFMODSTUDIO.cmake
-    FindFMODEX.cmake
     FindGLH.cmake
     FindGoogleBreakpad.cmake
     FindHUNSPELL.cmake
@@ -42,7 +41,6 @@ set(cmake_SOURCE_FILES
     FindXmlRpcEpi.cmake
     FindZLIB.cmake
     FMODSTUDIO.cmake
-    FMODEX.cmake
     FreeType.cmake
     GLEXT.cmake
     GLH.cmake
