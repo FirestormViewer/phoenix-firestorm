@@ -4,17 +4,20 @@
     <check_box label="Zawsze pytaj przed wysłaniem" name="checkSendCrashReportsAlwaysAsk" />
     <check_box label="Dołącz dane konfiguracyjne Firestorma - plik settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">
-        (zawiera nazwę konta Second Life)
+        (zawiera nazwę konta użytkownika)
     </text>
-    <check_box label="Dołącz nazwę konta Second Life" name="checkSendName" />
+    <check_box label="Dołącz nazwę konta użytkownika" name="checkSendName" />
     <text name="textSendName">
         (aby zapytać o dodatkowe info w razie potrzeby)
     </text>
+	<text name="textRestartRequired">
+		Zmiany w dowolnym ustawieniu wymagają ponownego uruchomienia.
+	</text>
     <text name="textInformation1">
         Dopóki nie określono inaczej, to raport zawiera tylko informacje związane z awarią.
     </text>
     <text name="textInformation2">
-        Logi Second Life nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail
+        Logi nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail
     </text>
     <text name="textInformation3">
         jeśli uważasz, że mogą zawierać istotne informacje.
