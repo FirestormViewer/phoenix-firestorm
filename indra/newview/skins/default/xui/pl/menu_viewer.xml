@@ -105,31 +105,31 @@
 			<menu_item_check label="Menu Zaawansowane" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="Teleportuj do Miejsca Startu" name="Teleport Home"/>
-		<menu label="Pozycja Słońca" name="Environment Settings">
+		<menu label="Otoczenie" name="Environment">
 			<menu_item_check label="Wschód Słońca" name="Sunrise"/>
 			<menu_item_check label="Południe" name="Noon"/>
 			<menu_item_check label="Zachód Słońca" name="Sunset"/>
 			<menu_item_check label="Północ" name="Midnight"/>
-			<menu_item_check label="Używaj czasu Regionu" name="Revert to Region Default"/>
+			<menu_item_check label="Użyj otoczenia współdzielonego" name="Use Shared Environment" />
+			<menu_item_call label="Moje otoczenia..." name="my_environs" />
+			<menu_item_call label="Własne oświetlenie..." name="adjustment_tool" />
+			<menu_item_check label="Pauzuj chmury" name="pause_clouds" />
 		</menu>
-		<menu label="Edytor środowiska" name="Environment Editor">
-			<menu_item_call label="Ustawienia środowiska" name="Environment Settings"/>
+		<!-- <menu label="Edytor otoczenia" name="Environment Editor">
+			<menu_item_call label="Ustawienia otoczenia" name="Environment Settings"/>
 			<menu name="Water Presets" label="Ustawienia wody">
 				<menu_item_call label="Nowe Ustawienie..." name="new_water_preset"/>
 				<menu_item_call label="Edytuj Ustawienie..." name="edit_water_preset"/>
-				<menu_item_call label="Usuń Ustawienie..." name="delete_water_preset"/>
 			</menu>
 			<menu name="Sky Presets" label="Ustawienia nieba">
 				<menu_item_call label="Nowe Ustawienie..." name="new_sky_preset"/>
 				<menu_item_call label="Edytuj Ustawienie..." name="edit_sky_preset"/>
-				<menu_item_call label="Usuń Ustawienie..." name="delete_sky_preset"/>
 			</menu>
 			<menu name="Day Presets" label="Ustawienia pory dnia">
 				<menu_item_call label="Nowe Ustawienie..." name="new_day_preset"/>
 				<menu_item_call label="Edytuj Ustawienie..." name="edit_day_preset"/>
-				<menu_item_call label="Usuń Ustawienie..." name="delete_day_preset"/>
 			</menu>
-		</menu>
+		</menu> -->
 		<menu name="photo_and_video" label="Foto i Wideo">
 			<menu_item_call label="Narzędzia fotograficzne" name="phototools_item_call"/>
 			<menu_item_call label="Fotograf: kamera" name="cameratools_item_call"/>
@@ -139,7 +139,7 @@
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
 		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
-		<menu_item_check label="Zawsze renderuj znajomych normalnie" name="Always show Friends normally"/>
+		<menu_item_check label="Zawsze renderuj znajomych w pełni" name="Always show Friends normally"/>
 		<menu_item_check label="Renderuj tylko znajomych" name="Render Friends Only"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
@@ -463,6 +463,9 @@
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
 			<menu_item_call label="Derenderuj cały animowany mesz" name="Derender Animesh"/>
+			<menu_item_check label="Wyłącz światła otoczenia" name="Disable Ambient" />
+			<menu_item_check label="Wyłącz światło słoneczne" name="Disable Sunlight" />
+			<menu_item_check label="Wyłącz światła lokalne" name="Disable Local Lights" />
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
@@ -488,7 +491,7 @@
 			<menu_item_call label="Zatrzymaj nagrywanie" name="Stop Record"/>
 		</menu>
 		<menu label="Świat" name="DevelopWorld">
-			<menu_item_check label="Domyślne ustawienia środowiska Regionu" name="Sim Sun Override"/>
+			<menu_item_check label="Domyślne ustawienia otoczenia Regionu" name="Sim Sun Override"/>
 			<menu_item_check label="Ustalona pogoda" name="Fixed Weather"/>
 			<menu_item_call label="Zrzut buforu pamięci obiektów regionu" name="Dump Region Object Cache"/>
 			<menu_item_call label="Zrzut właściwości symulatora do czatu w pobliżu" name="DumpSimFeaturesToChat"/>

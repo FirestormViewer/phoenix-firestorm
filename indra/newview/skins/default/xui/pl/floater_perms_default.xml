@@ -37,6 +37,9 @@
 		<text name="label_12" tool_tip="Domyślne uprawnienia dla nowych ubrań i części ciała">
 			Ubrania
 		</text>
+		<text name="label_13" tool_tip="Domyślne uprawnienia dla nowych ustawień otoczenia">
+			Otoczenia
+		</text>
 	</panel>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel" />
 </floater>

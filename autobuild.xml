@@ -52,9 +52,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>68f6096e055e7a0e46913e1c2613b9db</string>
+              <string>7725e9abe4bf84d11bc7286c74467026</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.1.1320_3.3626.1895.g7001d56-linux64-191221945.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.7.0.202005301906_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201511706.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -845,26 +845,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bd0f62a03d846332adf07997e307cde6</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1080_3.3325.1750.gaabe4c4-linux-180871715.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>48d316c0ceb898f7577015df75b6d303</string>
+              <string>05bdafd8e9f32fc6763862ada4b5c4bc</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.1.1320_3.3626.1895.g7001d56-linux64-191221910.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005300110_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201502309.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1014,11 +1002,11 @@
       <key>fmodstudio</key>
       <map>
         <key>copyright</key>
-        <string>FMOD Studio, copyright (c) Firelight Technologies Pty, Ltd., 2012-2017.</string>
+        <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
         <key>description</key>
-        <string>FMOD Studio audio system library</string>
+        <string>FMOD Studio API</string>
         <key>license</key>
-        <string>fmodstudio</string>
+        <string>fmod</string>
         <key>license_file</key>
         <string>LICENSES/fmodstudio.txt</string>
         <key>name</key>
@@ -1044,11 +1032,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aed9fbd15995e71f9b600eb2ed2b73b1</string>
+              <string>88b1ac40d0b2cc1cf862260bb1297a54</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.08-linux64-201031328.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.01-linux64-201412258.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1058,11 +1046,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>670b2dc83403cc9024bc68728d851a4d</string>
+              <string>5c182fe2303511c35480d00d9b6832dc</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows-200921513.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows-201411851.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1072,94 +1060,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b97c88e262d37dd1514c0e580a8cc775</string>
+              <string>10fcd058ec0da77273c61aca78081ede</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.00.08-windows64-200921514.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows64-201412005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.00.08</string>
-      </map>
-      <key>fmodex</key>
-      <map>
-        <key>copyright</key>
-        <string>COPYRIGHT 2014 FIRELIGHT TECHNOLOGIES PTY LTD. ALL RIGHTS RESERVED</string>
-        <key>license</key>
-        <string>fmodex</string>
-        <key>license_file</key>
-        <string>LICENSES/fmodex.txt</string>
-        <key>name</key>
-        <string>fmodex</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cba1feed7f6bb671d791a517fddf205a</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6c2e1e440d6759d9a471db62c6ce5919</string>
-              <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/54852/510148/fmodex-4.44.64.538982-darwin64-538982.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9b090869508fabee82dc53cae977fb99</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8efdba2373be883e7536bcc8a82e55f2</string>
-              <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/55018/511934/fmodex-4.44.64.538982-windows-538982.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d724e50266dd5a565a263d2867df421e</string>
-              <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/55016/511920/fmodex-4.44.64.538982-windows64-538982.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>4.44.64.538982</string>
+        <string>2.01.01</string>
       </map>
       <key>fontconfig</key>
       <map>

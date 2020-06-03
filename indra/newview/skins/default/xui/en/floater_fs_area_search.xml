@@ -308,6 +308,7 @@
 			 name="only_list"
 			 height="15"
 			 follows="top|left"
+			 right="-5"
 			 left="5">
 				Only list objects that are:
 			</text>
@@ -541,6 +542,7 @@
 			 height="15"
 			 top_pad="5"
 			 follows="top|left"
+			 right="-5"
 			 left="5">
 				Exclude objects that are:
 			</text>

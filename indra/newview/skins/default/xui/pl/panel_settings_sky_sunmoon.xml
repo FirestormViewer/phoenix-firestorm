@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Słońce i Księżyc" name="panel_settings_sky_hbodies">
+	<layout_stack  name="main_ls">
+		<layout_panel name="sun_layout">
+			<text name="sun_stars_label">
+				Słońce i gwiazdy
+			</text>
+			<text name="position_label">
+				Pozycja:
+			</text>
+			<text name="image_label">
+				Obraz:
+			</text>
+			<text name="scale_label">
+				Skala:
+			</text>
+			<text name="color_label">
+				Kolor:
+			</text>
+			<text name="glow_focus_label">
+				Ostrość blasku:
+			</text>
+			<text name="glow_size_label">
+				Rozmiar blasku:
+			</text>
+			<text name="star_brightness_label">
+				Jasność gwiazd:
+			</text>
+			<check_box label="Pokaż emiter" name="sunbeacon" />
+		</layout_panel>
+		<layout_panel name="moon_layout_main">
+			<layout_stack name="moon_ls">
+				<layout_panel name="moon_layout">
+					<text name="moon_label">
+						Księżyc
+					</text>
+					<text name="position_label">
+						Pozycja:
+					</text>
+					<text name="image_label">
+						Obraz:
+					</text>
+					<text name="scale_label">
+						Skala:
+					</text>
+					<text name="brightness_label">
+						Jasność:
+					</text>
+					<check_box label="Pokaż emiter" name="moonbeacon" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>                

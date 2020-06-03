@@ -3,9 +3,11 @@
 *.bak
 *.diff
 *.orig
+*.patch
 *.pyc
 *.rej
 *.swp
+*.tar.bz2
 *~
 
 # Specific paths and/or names

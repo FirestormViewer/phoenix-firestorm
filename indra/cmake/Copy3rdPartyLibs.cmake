@@ -83,14 +83,6 @@ if(WINDOWS)
       set(release_files ${release_files} fmod.dll)
     endif (FMODSTUDIO)
 
-    if (FMODEX)
-        if(ADDRESS_SIZE EQUAL 32)
-            set(release_files ${release_files} fmodex.dll)
-        else(ADDRESS_SIZE EQUAL 32)
-            set(release_files ${release_files} fmodex64.dll)
-        endif(ADDRESS_SIZE EQUAL 32)
-    endif (FMODEX)
-
     if (OPENAL)
         set(release_files ${release_files} OpenAL32.dll alut.dll)
     endif (OPENAL)
@@ -183,11 +175,6 @@ elseif(DARWIN)
       set(release_files ${release_files} libfmod.dylib)
     endif (FMODSTUDIO)
 
-    if (FMODEX)
-      set(debug_files ${debug_files} libfmodexL.dylib)
-      set(release_files ${release_files} libfmodex.dylib)
-    endif (FMODEX)
-
 elseif(LINUX)
     # linux is weird, multiple side by side configurations aren't supported
     # and we don't seem to have any debug shared libs built yet anyways...
@@ -245,16 +232,6 @@ elseif(LINUX)
       set(debug_files ${debug_files} "libfmodL.so")
       set(release_files ${release_files} "libfmod.so")
     endif (FMODSTUDIO)
-
-    if (FMODEX)
-      if(ADDRESS_SIZE EQUAL 32)
-        set(debug_files ${debug_files} "libfmodexL.so")
-        set(release_files ${release_files} "libfmodex.so")
-      else(ADDRESS_SIZE EQUAL 32)
-        set(debug_files ${debug_files} "libfmodexL64.so")
-        set(release_files ${release_files} "libfmodex64.so")
-      endif(ADDRESS_SIZE EQUAL 32)
-    endif (FMODEX)
 
 else(WINDOWS)
     message(STATUS "WARNING: unrecognized platform for staging 3rd party libs, skipping...")
