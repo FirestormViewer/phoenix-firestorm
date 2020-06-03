@@ -594,8 +594,8 @@ class WindowsManifest(ViewerManifest):
                 else:
                     self.path("fmod.dll")
 
-            # Get openal dll if needed
-            if self.args.get('openal') == 'ON':
+            if self.args['openal'] == 'ON':
+                # Get openal dll
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
 
@@ -1427,7 +1427,7 @@ class DarwinManifest(ViewerManifest):
                                     "libfmod.dylib",
                                     ):
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-
+ 
                 # our apps
                 executable_path = {}
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
