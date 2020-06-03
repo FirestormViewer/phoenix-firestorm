@@ -1307,20 +1307,22 @@ void LLViewerFetchedTexture::loadFromFastCache()
 		else
 		{
             if (mBoostLevel == LLGLTexture::BOOST_ICON)
-        {
-            S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_ICON_DIMENTIONS;
-            S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_ICON_DIMENTIONS;
-            if (mRawImage && (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height))
             {
-                // scale oversized icon, no need to give more work to gl
-                mRawImage->scale(expected_width, expected_height);
-            }
+                // Shouldn't do anything usefull since texures in fast cache are 16x16,
+                // it is here in case fast cache changes.
+                S32 expected_width = mKnownDrawWidth > 0 ? mKnownDrawWidth : DEFAULT_ICON_DIMENTIONS;
+                S32 expected_height = mKnownDrawHeight > 0 ? mKnownDrawHeight : DEFAULT_ICON_DIMENTIONS;
+                if (mRawImage && (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height))
+                {
+                    // scale oversized icon, no need to give more work to gl
+                    mRawImage->scale(expected_width, expected_height);
+                }
             }
 
-		mRequestedDiscardLevel = mDesiredDiscardLevel + 1;
-		mIsRawImageValid = TRUE;			
-		addToCreateTexture();
-	}
+			mRequestedDiscardLevel = mDesiredDiscardLevel + 1;
+			mIsRawImageValid = TRUE;			
+			addToCreateTexture();
+		}
 	}
     else
     {
@@ -1595,7 +1597,8 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 		mOrigWidth = mRawImage->getWidth();
 		mOrigHeight = mRawImage->getHeight();
 
-			
+        // This is only safe because it's a local image and fetcher doesn't use raw data
+        // from local images, but this might become unsafe in case of changes to fetcher
 		if (mBoostLevel == BOOST_PREVIEW)
 		{ 
 			mRawImage->biasedScaleToPowerOfTwo(1024);
@@ -2130,6 +2133,7 @@ bool LLViewerFetchedTexture::updateFetch()
 		
 		if (mRawImage.notNull()) sRawCount--;
 		if (mAuxRawImage.notNull()) sAuxCount--;
+		// keep in mind that fetcher still might need raw image, don't modify original
 		bool finished = LLAppViewer::getTextureFetch()->getRequestFinished(getID(), fetch_discard, mRawImage, mAuxRawImage,
 																		   mLastHttpGetStatus);
 		if (mRawImage.notNull()) sRawCount++;
@@ -2192,7 +2196,8 @@ bool LLViewerFetchedTexture::updateFetch()
                     if (mRawImage && (mRawImage->getWidth() > expected_width || mRawImage->getHeight() > expected_height))
                     {
                         // scale oversized icon, no need to give more work to gl
-                        mRawImage->scale(expected_width, expected_height);
+                        // since we got mRawImage from thread worker and image may be in use (ex: writing cache), make a copy
+                        mRawImage = mRawImage->scaled(expected_width, expected_height);
                     }
                 }
 

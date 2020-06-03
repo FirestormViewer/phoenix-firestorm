@@ -51,6 +51,7 @@
 		<text name="title_label" value="Titel:" width="70"/>
 		<text name="notes_label" value="Meine Notizen:"/>
 		<text name="folder_label" value="Landmarken-Position:"/>
+		<button label="Bearbeiten" name="edit_btn" tool_tip="Landmarken-Information bearbeiten" />
 	</panel>
 
 		</layout_panel>
