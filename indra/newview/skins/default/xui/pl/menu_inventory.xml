@@ -18,6 +18,7 @@
 	<menu_item_call label="Opróżnij Kosz" name="Empty Trash"/>
 	<menu_item_call label="Opróżnij Zagubione i odnalezione" name="Empty Lost And Found"/>
 	<menu_item_call label="Nowy folder" name="New Folder"/>
+	<menu_item_call label="Nowy strój" name="New Outfit" />
 	<menu_item_call label="Nowy skrypt" name="New Script"/>
 	<menu_item_call label="Nowa nota" name="New Note"/>
 	<menu_item_call label="Nowy gest" name="New Gesture"/>
@@ -41,6 +42,11 @@
 		<menu_item_call label="Nowa skórka" name="New Skin"/>
 		<menu_item_call label="Nowe włosy" name="New Hair"/>
 		<menu_item_call label="Nowe oczy" name="New Eyes"/>
+	</menu>
+	<menu label="Nowe otoczenie" name="New Settings">
+		<menu_item_call label="Nowe niebo" name="New Sky" />
+		<menu_item_call label="Nowa woda" name="New Water" />
+		<menu_item_call label="Nowy cykl dnia" name="New Day Cycle" />
 	</menu>
 	<menu label="Ustaw jako domyślne" name="upload_def">
 		<menu_item_call label="Dla nowych obrazów" name="Image uploads" />
@@ -114,6 +120,8 @@
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh Attachment" />
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call label="Odłącz od siebie" name="Detach From Yourself"/>
+	<menu_item_call name="Settings Apply Local" label="Stosuj tylko dla mnie" />
+	<menu_item_call name="Settings Apply Parcel" label="Stosuj dla działki" />
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>

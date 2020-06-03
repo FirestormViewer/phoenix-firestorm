@@ -52,7 +52,7 @@
      height="20"
      width="230"
      text_color="White_25">
-        (contains Second Life name)
+        (contains username)
     </text>
 
     <check_box
@@ -61,7 +61,7 @@
      left="60"
      top_pad="0"
      height="16"
-     label="Include Second Life name"
+     label="Include username"
      name="checkSendName"
      width="160"
      enabled="false" />
@@ -85,8 +85,23 @@
      length="1"
      height="10"
      mouse_opaque="false"
+     name="textRestartRequired"
+     top_pad="10"
+     visible="false"
+     width="475">
+        Changes made to any setting require a restart to become effective.
+    </text>
+
+    <text
+     layout="topleft"
+     follows="top|left"
+     left="30"
+     type="string"
+     length="1"
+     height="10"
+     mouse_opaque="false"
      name="textInformation1"
-     top_pad="30"
+     top_pad="20"
      width="475">
         Unless checked above crash reports only contain information relevant to the crash.
     </text>
@@ -100,7 +115,7 @@
      mouse_opaque="false"
      name="textInformation2"
      width="475" >
-        Second Life logs are not sent, please review the contents and email separately
+        Logs are not sent, please review the contents and email separately
     </text>
     <text
      layout="topleft"

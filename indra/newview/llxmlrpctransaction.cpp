@@ -265,6 +265,22 @@ void LLXMLRPCTransaction::Handler::onCompleted(LLCore::HttpHandle handle,
 	// the contents of a buffer array are potentially noncontiguous, so we
 	// will need to copy them into an contiguous block of memory for XMLRPC.
 	LLCore::BufferArray *body = response->getBody();
+
+	//<FS:Beq> crash in transaction completion (see bugsplat https://app.bugsplat.com/v2/keycrash?database=fs_windows&stackKeyId=13)
+	if(body == nullptr)
+	{
+		// status should be 0 but log it anyway
+		// everything past this point appears to depend on the body data
+		// so log the issues and return.
+		LL_WARNS() 
+			<< "LLXMLRPCTransaction response has no body. status="
+			<< status.toHex() << ": " << status.toString() << LL_ENDL;
+		LL_WARNS() 
+				<< "LLXMLRPCTransaction request URI: "
+				<< mImpl->mURI << LL_ENDL;
+		return;
+	}
+	//</FS:Beq>
 	char * bodydata = new char[body->size()];
 
 	body->read(0, bodydata, body->size());
@@ -302,8 +318,7 @@ void LLXMLRPCTransaction::Handler::onCompleted(LLCore::HttpHandle handle,
 			<< faultString << LL_ENDL;
 		LL_WARNS() << "LLXMLRPCTransaction request URI: "
 			<< mImpl->mURI << LL_ENDL;
-	}
-
+	}	
 }
 
 //=========================================================================

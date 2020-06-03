@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floaterpreferencesviewadvanced" title="Pozycja kamery">
+	<text name="camera_offset_lbl">
+		Przesun. kamery:
+	</text>
+	<text name="focus_offset_lbl">
+		Przesun. ostrości:
+	</text>
+	<text name="offset_scale_lbl">
+		Skala przesunięcia kamery:
+	</text>
+	<button label="Zapisz to ustawienie" name="save_preset_btn" />
+	<button label="Zamknij" name="close_btn" />
+</floater>

@@ -585,6 +585,7 @@ with the same filename but different name
   <texture name="Music_Press" file_name="icons/Music_Press.png" preload="true" />
 
   <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
+  <texture name="ProgressBarSolid" file_name="widgets/ProgressBarSolid.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
   <texture name="ProgressTrack" file_name="widgets/ProgressTrack.png" preload="true" scale.left="4" scale.top="13" scale.right="148" scale.bottom="2" />
 
   <texture name="PushButton_Disabled" file_name="widgets/PushButton_Disabled.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
@@ -1049,7 +1050,6 @@ with the same filename but different name
 <texture name="Icon_DialogStack" file_name="icons/Icon_DialogStack.png" preload="false" />
 
 <texture name="Command_Discord_Icon" file_name="toolbar_icons/discord.png" preload="true" />
-<texture name="FMOD_Logo" file_name="icons/FMOD_logo.png" preload="true" />
 
 <!-- Higher Resolution 200px Loading Progress Indicator -->
 <texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
