@@ -452,5 +452,6 @@ teksturę:
 			</panel>
 		</panel>
 		<panel label="Przygody" name="land_experiences_panel"/>
+		<panel label="Otoczenie" name="land_environment_panel" />
 	</tab_container>
 </floater>

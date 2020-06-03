@@ -273,9 +273,6 @@ public:
     // Capability 
     std::string     getRegionCapability(const std::string &name); // short hand for if (getRegion()) { getRegion()->getCapability(name) }
 
-	// <FS:Ansariel> Aurora sim windlight refresh
-	void changeRegion();
-
 	/**
 	 * Register a boost callback to be called when the agent changes regions
 	 * Note that if you need to access a capability for the region, you may need to wait
