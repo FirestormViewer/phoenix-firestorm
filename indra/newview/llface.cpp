@@ -659,8 +659,9 @@ void renderFace(LLDrawable* drawable, LLFace *face)
             // <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
             //LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
             // <FS:Beq> FIRE-29679 trap empty calls that cause crashes when rezzing in OpenSim.
+            // Note: the drawElements() call checks for 0 length but in this case the number is non-zero but pointer is null.
             // LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mNumVertices, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
-            if (vol_face.mNumIndices !=0 || vol_face.mNumVertices !=0)
+            if (vol_face.mIndices != nullptr && vol_face.mPositions != nullptr)
             {
                 LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mNumVertices, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
             }
