@@ -658,7 +658,13 @@ void renderFace(LLDrawable* drawable, LLFace *face)
             const LLVolumeFace& vol_face = volume->getVolumeFace(face->getTEOffset());
             // <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
             //LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
-            LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mNumVertices, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
+            // <FS:Beq> FIRE-29679 trap empty calls that cause crashes when rezzing in OpenSim.
+            // LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mNumVertices, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
+            if (vol_face.mNumIndices !=0 || vol_face.mNumVertices !=0)
+            {
+                LLVertexBuffer::drawElements(LLRender::TRIANGLES, vol_face.mNumVertices, vol_face.mPositions, NULL, vol_face.mNumIndices, vol_face.mIndices);
+            }
+            // </FS:Beq>
         }
     }
 }
