@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<sun_moon_trackball name="virtualtrackball">
+    <sun_moon_trackball.labelN name="labelN" label="С"/>
+    <sun_moon_trackball.labelS name="labelS" label="Ю"/>
+    <sun_moon_trackball.labelW name="labelW" label="З"/>
+    <sun_moon_trackball.labelE name="labelE" label="В"/>
+</sun_moon_trackball>
+

@@ -24,7 +24,6 @@
 			<text name="ignorecameraconstraints_requires_restart">
 				(нужен перезапуск)
 			</text>
-			<check_box label="Показывать стандартное окно управления камерой всегда прозрачным" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Повторный рендеринг временно скрытых объектов после телепорта" name="FSTempDerenderUntilTeleport" tool_tip="Если включено, временно скрытые объекты будут сохраняться до телепорта. Если отключено, они остаются скрытые до конца сеанса или до удаления вручную из черного списка активов." />
 		</panel>
 		<panel label="От первого лица" name="tab-mouselook">

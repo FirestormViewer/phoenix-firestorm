@@ -6,24 +6,24 @@
 		</panel>
 		<panel label="Регион" name="region">
 			<text name="Region Name:">
-				Название региона:
+				Название:
 			</text>
 			<check_box label="Буферная зона" name="check prelude" tool_tip="Сделать этот регион буферной зоной"/>
 			<check_box label="Солнце на месте" name="check fixed sun" tool_tip="Фиксация положения солнца (как в меню «Регион/Землевладение &gt; Ландшафт»)"/>
-			<check_box label="Сброс дома при телепортации" name="check reset home" tool_tip="Дом жителей, которые телепортируются отсюда, будет там, куда они телепортируются."/>
+			<check_box label="Сброс дома при телепорте" name="check reset home" tool_tip="Дом жителей, которые телепортируются отсюда, будет там, куда они телепортируются."/>
 			<check_box label="Видимый" name="check visible" tool_tip="Сделать регион видимым не только для творцов"/>
 			<check_box label="Повреждения" name="check damage" tool_tip="Сделать возможными повреждения в регионе"/>
 			<check_box label="Блокировать отслеживание трафика" name="block dwell" tool_tip="Выберите, чтобы для региона не отслеживался трафик"/>
 			<check_box label="Запретить терраформирование" name="block terraform" tool_tip="Выберите, чтобы жители не могли изменять ландшафт своей земли"/>
 			<check_box label="Песочница" name="is sandbox" tool_tip="Выберите, является ли этот регион «песочницей»"/>
-			<button label="Зафиксировать пределы" label_selected="Зафиксировать пределы" name="Bake Terrain" tool_tip="Сохранить текущий ландшафт как стандартный"/>
-			<button label="Вернуть ландшафт" label_selected="Вернуть ландшафт" name="Revert Terrain" tool_tip="Заменить текущий ландшафт ландшафтом по умолчанию"/>
-			<button label="Поменять ландшафты" label_selected="Поменять ландшафты" name="Swap Terrain" tool_tip="Поменять местами текущий ландшафт и ландшафт по умолчанию"/>
+			<button label="Зафикс. ландшафт" label_selected="Зафикс. ландшафт" name="Bake Terrain" tool_tip="Сохранить текущий ландшафт как стандартный" width="130"/>
+			<button label="Вернуть ландшафт" label_selected="Вернуть ландшафт" name="Revert Terrain" tool_tip="Заменить текущий ландшафт ландшафтом по умолчанию" width="130"/>
+			<button label="Поменять ландшафт" label_selected="Поменять ландшафт" name="Swap Terrain" tool_tip="Поменять местами текущий ландшафт и ландшафт по умолчанию" width="130"/>
 			<text name="estate id">
-				ИД землевладения:
+				ИД владения:
 			</text>
 			<text name="parent id">
-				ИД родового объекта:
+				ИД родителя:
 			</text>
 			<line_editor name="parentestate" tool_tip="Родовое землевладение для этого региона"/>
 			<text name="Grid Pos: ">
@@ -32,17 +32,17 @@
 			<line_editor name="gridposx" tool_tip="Положение сетки по оси x для этого региона"/>
 			<line_editor name="gridposy" tool_tip="Положение сетки по оси y для этого региона"/>
 			<text name="Redirect to Grid: ">
-				Перенаправить на сетку:
+				Перенапр. на:
 			</text>
 			<text name="billable factor text">
-				Ценовой коэффициент:
+				Коэфф. оплаты:
 			</text>
 			<text name="land cost text">
 				L$ за м²:
 			</text>
 			<button label="Обновить" label_selected="Обновить" name="Refresh" tool_tip="Обновление приведенной выше информации"/>
 			<button label="Применить" label_selected="Применить" name="Apply" tool_tip="Применить все изменения выше"/>
-			<button label="Выбрать регион" label_selected="Выбрать регион" name="Select Region" tool_tip="Выбор всего региона с помощью инструмента изменения ландшафта"/>
+			<button label="Выбрать регион" label_selected="Выбрать регион" name="Select Region" tool_tip="Выбор всего региона с помощью инструмента изменения ландшафта" left="160" />
 			<button label="Автосохранение" label_selected="Автосохранение" name="Autosave now" tool_tip="Сохранить в каталоге автосохранения состояние в архиве Gzip"/>
 		</panel>
 		<panel label="Объекты" name="objects">
@@ -50,29 +50,29 @@
 				(нет персонажа)
 			</panel.string>
 			<text name="Region Name:">
-				Название региона:
+				Название:
 			</text>
 			<text name="region name">
 				Уэльс
 			</text>
-			<check_box label="Отключить скрипты" name="disable scripts" tool_tip="Отключение всех скриптов в этом регионе"/>
-			<check_box label="Отключить столкновения" name="disable collisions" tool_tip="Отключение столкновений не-агентов в этом регионе"/>
-			<check_box label="Отключить физику" name="disable physics" tool_tip="Отключение всех физических параметров в этом регионе"/>
+			<check_box label="Выкл. скрипты" name="disable scripts" tool_tip="Отключение всех скриптов в этом регионе"/>
+			<check_box label="Выкл. столкновения" name="disable collisions" tool_tip="Отключение столкновений не-агентов в этом регионе"/>
+			<check_box label="Выкл. физику" name="disable physics" tool_tip="Отключение всех физических параметров в этом регионе" left_delta="140"/>
 			<button label="Применить" label_selected="Применить" name="Apply" tool_tip="Применить все изменения выше"/>
 			<button label="Задать персонаж" label_selected="Задать персонаж" name="Set Target" tool_tip="Выберите аватар-персонаж для удаления объекта"/>
 			<text name="target_avatar_name">
 				(нет персонажа)
 			</text>
-			<button label="Удалить принадлежащие персонажу объекты со скриптами на чужой земле" label_selected="Удалить принадлежащие персонажу объекты со скриптами на чужой земле" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, на земле, не принадлежащей персонажу. «Не копируемые» объекты будут возвращены."/>
-			<button label="Удалить принадлежащие персонажу объекты со скриптами на *всех* землях" label_selected="Удалить принадлежащие персонажу объекты со скриптами на *всех* землях" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
+			<button label="Удалить объекты персонажа со скриптами на чужой земле" label_selected="Удалить объекты персонажа со скриптами на чужой земле" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, на земле, не принадлежащей персонажу. «Не копируемые» объекты будут возвращены."/>
+			<button label="Удалить объекты персонажа со скриптами на *всех* землях" label_selected="Удалить объекты персонажа со скриптами на *всех* землях" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
 			<button label="Удалить *ВСЕ* объекты персонажа" label_selected="Удалить *ВСЕ* объекты персонажа" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Удаление всех объектов, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
-			<button label="Самые активные участники столкновений" label_selected="Самые активные участники столкновений" name="Get Top Colliders" tool_tip="Список объектов, для которых наблюдается больше всего детализированных обратных вызовов"/>
-			<button label="Загрузить лучшие скрипты" label_selected="Загрузить лучшие скрипты" name="Get Top Scripts" tool_tip="Список объектов, в которых скрипты выполняются дольше всего"/>
-			<button label="Сводка по скриптам" label_selected="Сводка по скриптам" name="Scripts digest" tool_tip="Список всех скриптов с числом использований по каждому из них"/>
+			<button label="Самые активные участники столкновений" label_selected="Самые активные участники столкновений" name="Get Top Colliders" tool_tip="Список объектов, для которых наблюдается больше всего детализированных обратных вызовов" width="260"/>
+			<button label="Загрузить лучшие скрипты" label_selected="Загрузить лучшие скрипты" name="Get Top Scripts" tool_tip="Список объектов, в которых скрипты выполняются дольше всего" width="200"/>
+			<button label="Сводка по скриптам" label_selected="Сводка по скриптам" name="Scripts digest" tool_tip="Список всех скриптов с числом использований по каждому из них" width="160"/>
 		</panel>
 		<panel label="Запрос" name="request">
 			<text name="Destination:">
-				Пункт назначения:
+				Назначение:
 			</text>
 			<combo_box name="destination">
 				<combo_box.item label="назначенный" name="item1"/>

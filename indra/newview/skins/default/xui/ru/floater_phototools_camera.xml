@@ -12,6 +12,7 @@
 	<floater.string name="free_mode_title">
 		Просмотр объекта
 	</floater.string>
+	<string name="inactive_combo_text">Исп. предустановку</string>
 	<tab_container name="tabs">
 		<panel name="P_Cam_Controls_1" label="Управление 1">
 			<panel name="cameracontrolspanel">
@@ -32,6 +33,11 @@
 								Вид сзади
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="Использовать предустановку" name="Use preset"/>
+						</combo_box>
+						<button name="gear_btn" tool_tip="Предустановки Камеры"/>
+						<button label="Позиция..." name="camera_position_btn"/>
 					</panel>
 					<panel name="camera_modes_list">
 						<panel_camera_item name="object_view">
