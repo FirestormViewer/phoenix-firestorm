@@ -3,31 +3,23 @@
 <tab_container label="Firestorm Prefs" name="tabs" >
 
     <!-- 3D World -->
-	
     <panel label="3D 世界" name="UI Prefs Panel" >
-
         <text name="HoverTipText">
             ヒント：
         </text>
-
         <check_box label="マウスを重ねるとヒントを表示（最初に設定）" name="ShowHoverTips" tool_tip="アバターやその他インワールドのものにマウスを重ねるとヒントが表示されるようにします。ヒントを使うにはまず最初にここにチェックを入れて下さい。" />
-        <check_box label="全てのオブジェクトに表示" tool_tip="インワールドのオブジェクトについてのヒントを表示する場合にチェックして下さい。" name="ShowAllHoverTips" />
         <check_box label="土地に表示" tool_tip="土地についてのヒントを表示する場合にチェックして下さい。" name="ShowLandHoverTips" />
-
         <text name="tooltip_textbox">
            ヒント表示までの時間：
         </text>
-		
         <slider label="ツール：" name="ToolTipDelay_slider" tool_tip="ボタンのようなユーザーインターフェイスに関するヒントを表示するまでの時間。（0.7秒がデフォルト）" />
         <text name="ToolTipDelay_text">
             秒
         </text>
-		
         <slider label="アバター：" name="AvatarInspectorTooltipDelay_slider" tool_tip="アバターに関するヒントを表示するまでの時間。（0.35秒がデフォルト）"  />
         <text name="AvatarInspectorTooltipDelay_text">
             秒
         </text>
-		
         <slider label="オブジェクト" name="ObjectInspectorTooltipDelay_slider" tool_tip="オブジェクトに関するヒントを表示するまでの時間。（0.35秒がデフォルト）" />
         <text name="ObjectInspectorTooltipDelay_text">
             秒
@@ -36,13 +28,9 @@
         <check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />
         <slider label="フローティングテキストのフェード開始距離 (m):" tool_tip="フローティングテキストが薄く消え始める距離をメートル単位で設定します" name="FSHudTextFadeDistance" />
         <slider label="フローティングテキストのフェード範囲 (m):" tool_tip="フローティングテキストがはっきりと見える状態から完全に見えなくなるまでの距離をメートル単位で設定します" name="FSHudTextFadeRange" />
-
 	</panel>
-
     <!-- 2D Overlay -->
-	
     <panel label="2D オーバーレイ" name="ui-2d-overlay" >
-
 		<text name="UI Size:" width="95">
 			UI サイズ：
 		</text>
@@ -70,7 +58,6 @@
 		</combo_box>
 		<check_box label="スクリプトダイアログのアニメーションを再生" name="FSAnimatedScriptDialogs" tool_tip="ここにチェックを入れると、スクリプトダイアログが開く時にアニメーションが再生されます。（旧式の１系スタイル）ダイアログが上から下に開く時のみ有効になります。" />
 		<slider label="スクリプトダイアログ当たりの表示行数：" name="FSRowsPerScriptDialog" tool_tip="同時に見ることのできるスクリプトダイアログの最大行数" />
-
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
 		<check_box label="テキストに動きを付ける" name="PieMenuPopupFontEffect" tool_tip="パイメニューが開く時のアニメーションに合わせて、パイメニューの中のテキストも動くようにします。" />
 		<check_box label="外側に丸い影を付ける" name="PieMenuOuterRingShade" tool_tip="パイメニューの縁に丸い影をつけてサブメニューを見やすくします。" />
@@ -100,11 +87,8 @@
 			秒
 		</text>
 	</panel>
-	
 	<!-- Top Bars -->
-
 	<panel label="トップバー" name="UI-interface-top-bars" >
-
 		<text name="statusbar_textbox">
 			ステータスバー
 		</text>
@@ -124,13 +108,9 @@
 		<check_box label="お気に入りバーを表示" name="ShowNavbarFavoritesPanel" />
 		<check_box label="ナビゲーションバーと検索バーを表示" name="ShowNavbarNavigationPanel" />
 		<check_box label="検索バーを表示" name="ShowSearchTopBar" />
-
 	</panel>
-	
 	<!-- Interface Windows -->
-
 	<panel label="インターフェイス" name="UI-interface-windows-tab" >
-
 		<check_box label="名前をクリックするとアバターのプロフィールをすぐに表示" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Iここにチェックを入れると、名前の表示されているリンクをクリックすると Firestorm はそのアバターのプロフィールを表示します。" />
 		<check_box label="Webのプロフィールをデフォルトで使用" name="FSUseWebProfiles" tool_tip="プロフィールを表示するのに、V1形式のパネルではなく、Webページのプロフィールを使用します。"/>
 		<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックする時に、無視リストが自動的に開かないようにします。" />
@@ -181,11 +161,8 @@
 		<check_box label="受け取りアイテムフォルダを通常のインベントリ内に表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。" />
 		<check_box label="受け取りアイテムボタンをインベントリの下に常に表示" name="FSAlwaysShowInboxButton" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。"/>
 		<check_box label="インベントリのそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="こにチェックを入れると、インベントリのそれぞれのタブに異なる検索キーワードを入力することが可能になります。" />
-
     </panel>
-
     <!-- トースト -->
-	
     <panel label="トースト" name="UI-toasts-tab" >
         <text name="ToastSettings">
             通知の表示設定（ポップアップ、コンソール、トースト）：
@@ -237,21 +214,15 @@
 		<check_box label="トーストは必ず最前面に表示" name="FSShowToastsInFront" />
 		<check_box label="新しいSIM再起動の通知方法を使用" name="FSUseNewRegionRestartNotification" />
 		<check_box label="SIM再起動の警告メッセージが表示される時に画面を揺らさない" name="FSNoScreenShakeOnRegionRestart" />
-		
 	</panel>
-	
-	
     <!-- フォント -->
-	
     <panel label="フォント" name="UI-font-tab" >
-
         <text name="tooltip_textbox1">
            フォント種類：
         </text>
         <text name="tooltip_textbox2">
            （再起動が必要）
         </text>
-
         <text name="tooltip_textbox5">
            フォントサイズ：
         </text>
@@ -260,7 +231,6 @@
            ポイント（再起動が必要）
 0がデフォルト。あまり大きいサイズはお勧めしません。
         </text>
-
         <text name="tooltip_textbox3">
            チャットの行間：
         </text>
@@ -269,7 +239,6 @@
           ピクセル（再起動が必要）
 0が２／３系のデフォルト、2が１系のデフォルトです。
         </text>
-
         <text name="Label_FolderItemViewHeight">
            フォルダ表示の高さ：
         </text>
@@ -278,9 +247,7 @@
           ピクセル（再起動が必要）
 20が２／３系のデフォルト、18が１系のデフォルトです。
         </text>
-
     </panel>
-	
 </tab_container>
 </panel>
 
