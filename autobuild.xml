@@ -729,38 +729,28 @@
         <key>version</key>
         <string>2.1.1.500375</string>
       </map>
-      <key>fmodex</key>
+      <key>fmodstudio</key>
       <map>
         <key>copyright</key>
-        <string>COPYRIGHT 2014 FIRELIGHT TECHNOLOGIES PTY LTD. ALL RIGHTS RESERVED</string>
+        <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
+        <key>description</key>
+        <string>FMOD Studio API</string>
         <key>license</key>
-        <string>fmodex</string>
+        <string>fmod</string>
         <key>license_file</key>
-        <string>LICENSES/fmodex.txt</string>
+        <string>LICENSES/fmodstudio.txt</string>
         <key>name</key>
-        <string>fmodex</string>
+        <string>fmodstudio</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ed0d8767652aecd65a7fef3e28645bad</string>
-              <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/fmodex_3p-update-fmodex/rev/297261/arch/Darwin/installer/fmodex-4.44.31.297261-darwin-297261.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cba1feed7f6bb671d791a517fddf205a</string>
+              <string>dc4c9122de8bf77f34cfc8227d10a272</string>
               <key>url</key>
-              <string>https://downloads.catznip.com/packages/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/59038/554626/fmodstudio-2.00.07.541681-darwin64-541681.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -770,9 +760,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b847ec838da1ad1dd646df9d74e9b395</string>
+              <string>c491bdc1690f3d920c66be509ccc6ef2</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/p64_3p-fmodex/rev/314207/arch/Linux/installer/fmodex-4.44.61.314207-linux-314207.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/59039/554632/fmodstudio-2.00.07.541681-linux-541681.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -782,9 +772,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>89a75d8719f7b2cbe1e54cd8407bb992</string>
+              <string>ae75cdb1cc9da824c9e270bf97bfdd6c</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/1544/3476/fmodex-4.44.64.501533-linux64-501533.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/54589/506866/fmodstudio-2.00.07.538806-linux64-538806.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -794,9 +784,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2038da4ab71da8dc086738007c0acdd3</string>
+              <string>fbd53fad464526e9331332fc0b3fee0b</string>
               <key>url</key>
-              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.61-windows-171261212.tar.bz2</string>
+              <string>https://downloads.catznip.com/packages/fmodstudio-2.00.09-windows-201512304.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -806,16 +796,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b4b73cd64bfd72e7ae84aad429d69cf6</string>
+              <string>af7446fdf8d39e114feae354878ec54b</string>
               <key>url</key>
-              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.61-windows64-171261211.tar.bz2</string>
+              <string>https://downloads.catznip.com/packages/fmodstudio-2.00.09-windows64-201512258.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>4.44.64.501533</string>
+        <string>2.00.07.541681</string>
       </map>
       <key>fontconfig</key>
       <map>
