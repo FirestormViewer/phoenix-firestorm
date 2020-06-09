@@ -63,7 +63,8 @@ if (WINDOWS)
   # http://www.cmake.org/pipermail/cmake/2009-September/032143.html
   string(REPLACE "/Zm1000" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  # Moved to variables for the convenience of people who are not Kitty
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
       "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Zo"
