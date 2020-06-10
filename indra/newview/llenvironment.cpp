@@ -33,6 +33,7 @@
 #include "llagent.h"
 #include "llviewercontrol.h" // for gSavedSettings
 #include "llviewerregion.h"
+#include "llviewernetwork.h" // <FS:Beq/> for LLGridManager
 #include "llwlhandlers.h"
 #include "lltrans.h"
 #include "lltrace.h"
@@ -821,6 +822,72 @@ LLEnvironment::LLEnvironment():
     mShowMoonBeacon(false)
 {
 }
+// <FS:Beq> OpenSim legacy Windlight setting support
+#ifdef OPENSIM
+std::string unescape_name(const std::string& name);
+void LLEnvironment::loadLegacyPresets()
+{
+    // [EEPMERGE]
+    //LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
+    //LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
+    // [/EEPMERGE]
+    std::string path_name;
+
+    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", "");
+    bool found = true;
+
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            mLegacySkies.push_back(unescape_name(name));
+            LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+        }
+    }
+
+    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "water", "");
+    found = true;
+
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            mLegacyWater.push_back(unescape_name(name));
+            LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+        }
+    }
+
+    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "days", "");
+    found = true;
+
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            mLegacyDayCycles.push_back(unescape_name(name));
+            LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+        }
+    }
+}
+
+void LLEnvironment::loadUserPrefs()
+{
+    // operate on members directly to avoid side effects
+    mWaterPresetName    = gSavedSettings.getString("WaterPresetName");
+    mSkyPresetName      = gSavedSettings.getString("SkyPresetName");
+    mDayCycleName       = gSavedSettings.getString("DayCycleName");
+}
+#endif //opensim
+//</FS:Beq>
 
 void LLEnvironment::initSingleton()
 {
@@ -832,6 +899,12 @@ void LLEnvironment::initSingleton()
     mCurrentEnvironment->setWater(p_default_water);
 
     mEnvironments[ENV_DEFAULT] = mCurrentEnvironment;
+    // <FS:Beq> OpenSim legacy Windlight setting support
+#ifdef OPENSIM
+    loadLegacyPresets();
+    loadUserPrefs();
+#endif
+    // </FS:Beq>
 
     requestRegion();
 
@@ -1221,7 +1294,7 @@ void LLEnvironment::onSetEnvAssetLoaded(EnvSelection_t env,
     if (!settings || status)
     {
         LLSD args;
-        args["DESC"] = asset_id.asString();
+        args["NAME"] = asset_id.asString();// <FS:Beq/> fix the args to match the template.
         LLNotificationsUtil::add("FailedToFindSettings", args);
         return;
     }
@@ -1367,12 +1440,12 @@ void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool f
     {
         if (transition != TRANSITION_INSTANT)
         {
-	        DayInstance::ptr_t trans = std::make_shared<DayTransition>(
-	            mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
-	
-	        trans->animate();
-	
-	        mCurrentEnvironment = trans;
+            DayInstance::ptr_t trans = std::make_shared<DayTransition>(
+                mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
+    
+            trans->animate();
+    
+            mCurrentEnvironment = trans;
         }
         else
         {
@@ -1618,8 +1691,14 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
         if (!envinfo->mDayCycle)
         {
             clearEnvironment(ENV_PARCEL);
-            setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
-            updateEnvironment();
+// <FS:Beq> opensim legacy windlight. Nothing we can do here as the default assets do not exist in OpenSim
+            LL_WARNS("ENVIRONMENT") << "No DayCycle specified - setting default" << LL_ENDL;
+            if(LLGridManager::getInstance()->isInSecondLife())
+            {
+                setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
+                updateEnvironment();
+            }
+// </FS:Beq>
         }
         else if (envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_WATER)
                  || envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_GROUND_LEVEL))
@@ -2152,10 +2231,14 @@ LLEnvironment::EnvironmentInfo::ptr_t LLEnvironment::EnvironmentInfo::extractLeg
         pinfo->mDayHash = pinfo->mDayCycle->getHash();
 
     pinfo->mAltitudes[0] = 0;
-    pinfo->mAltitudes[2] = 10001;
-    pinfo->mAltitudes[3] = 10002;
-    pinfo->mAltitudes[4] = 10003;
-
+// <FS:Beq> Fix typos that offset this by 1. Shoudl get fixed in a merge from the lab soon.
+    // pinfo->mAltitudes[2] = 10001;
+    // pinfo->mAltitudes[3] = 10002;
+    // pinfo->mAltitudes[4] = 10003;
+    pinfo->mAltitudes[1] = 10001;
+    pinfo->mAltitudes[2] = 10002;
+    pinfo->mAltitudes[3] = 10003;
+// </FS:Beq> 
     return pinfo;
 }
 
@@ -2361,7 +2444,7 @@ void LLEnvironment::onSetExperienceEnvAssetLoaded(LLUUID experience_id, LLSettin
     if (!settings || status)
     {
         LLSD args;
-        args["DESC"] = experience_id.asString();
+        args["NAME"] = experience_id.asString();// <FS:Beq/> fix the args to match the template.
         LLNotificationsUtil::add("FailedToFindSettings", args);
         return;
     }

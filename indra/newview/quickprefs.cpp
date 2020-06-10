@@ -52,6 +52,7 @@
 #include "llspinctrl.h"
 #include "lltoolbarview.h"
 #include "llviewercontrol.h"
+#include "llviewernetwork.h" // <FS:Beq/> for LLGridManager
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
@@ -288,6 +289,27 @@ void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLU
 			mDayCyclePresetsCombo->add(preset_name, LLSD(asset_id));
 		}
 	}
+// <FS:Beq> Opensim legacy windlight support
+// Opensim may support both environment and extenvironment caps on the same region
+// we also need these disabled in SL on the OpenSim build.
+#ifdef OPENSIM
+    if(LLGridManager::getInstance()->isInOpenSim())
+	{
+		LL_DEBUGS("WindlightCaps") << "Adding legacy day cycle presets to QP" << LL_ENDL;
+		// WL still supported 
+		if (!daycycle_map.empty() && !LLEnvironment::getInstance()->mLegacyDayCycles.empty())
+		{
+			mDayCyclePresetsCombo->addSeparator();
+		}
+		for(const auto& preset_name : LLEnvironment::getInstance()->mLegacyDayCycles)
+		{
+			// we add by name and only build the envp on demand
+			LL_DEBUGS("WindlightCaps") << "Adding legacy day cycle " << preset_name << LL_ENDL;
+			mDayCyclePresetsCombo->add(preset_name, LLSD(preset_name));
+		}
+		LL_DEBUGS("WindlightCaps") << "Done: Adding legacy day cycle presets to QP" << LL_ENDL;
+	}
+#endif
 }
 
 void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map)
@@ -308,6 +330,27 @@ void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>&
 			mWLPresetsCombo->add(preset_name, LLSD(asset_id));
 		}
 	}
+// <FS:Beq> Opensim legacy windlight support
+// Opensim may support both environment and extenvironment caps on the same region
+// we also need these disabled in SL on the OpenSim build.
+#ifdef OPENSIM
+    if(LLGridManager::getInstance()->isInOpenSim())
+	{
+		LL_DEBUGS("WindlightCaps") << "Adding legacy sky presets to QP" << LL_ENDL;
+		// WL still supported 
+		if (!sky_map.empty() && !LLEnvironment::getInstance()->mLegacySkies.empty())
+		{
+			mWLPresetsCombo->addSeparator();
+		}
+		for(const auto& preset_name : LLEnvironment::getInstance()->mLegacySkies)
+		{
+			// we add by name and only build the envp on demand
+			LL_DEBUGS("WindlightCaps") << "Adding legacy sky " << preset_name << LL_ENDL;
+			mWLPresetsCombo->add(preset_name, LLSD(preset_name));
+		}
+		LL_DEBUGS("WindlightCaps") << "Done: Adding legacy sky presets to QP" << LL_ENDL;
+	}
+#endif
 }
 
 void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map)
@@ -328,6 +371,27 @@ void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID
 			mWaterPresetsCombo->add(preset_name, LLSD(asset_id));
 		}
 	}
+// <FS:Beq> Opensim legacy windlight support
+// Opensim may support both environment and extenvironment caps on the same region
+// we also need these disabled in SL on the OpenSim build.
+#ifdef OPENSIM
+    if(LLGridManager::getInstance()->isInOpenSim())
+	{
+		LL_DEBUGS("WindlightCaps") << "Adding legacy presets to QP" << LL_ENDL;
+		// WL still supported 
+		if (!water_map.empty() && !LLEnvironment::getInstance()->mLegacyWater.empty())
+		{
+			mWaterPresetsCombo->addSeparator();
+		}
+		for(const auto& preset_name : LLEnvironment::getInstance()->mLegacyWater)
+		{
+			// we add by name and only build the envp on demand
+			LL_DEBUGS("WindlightCaps") << "Adding legacy water " << preset_name << LL_ENDL;
+			mWaterPresetsCombo->add(preset_name, LLSD(preset_name));
+		}
+		LL_DEBUGS("WindlightCaps") << "Done: Adding legacy water presets to QP" << LL_ENDL;
+	}
+#endif
 }
 
 void FloaterQuickPrefs::loadPresets()
@@ -388,32 +452,108 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 		// day cycle. If no fixed sky or fixed water is set, they are either
 		// defined in the day cycle or inherited from a higher environment level.
 		LLSettingsDay::ptr_t day = LLEnvironment::instance().getEnvironmentDay(LLEnvironment::ENV_LOCAL);
-		if (day && day->getAssetId().notNull())
+		if (day)
 		{
 			//LL_INFOS() << "EEP: day name = " << day->getName() << " - asset id = " << day->getAssetId() << LL_ENDL;
-
-			mDayCyclePresetsCombo->selectByValue(LLSD(day->getAssetId()));
-
-			// Water is part of a day cycle
-			mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
-			mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+			if( day->getAssetId().notNull())
+			{ // EEP processing
+				mDayCyclePresetsCombo->selectByValue(LLSD(day->getAssetId()));
+				// Sky and Water are part of a day cycle in EEP
+				mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+				mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+			}
+#ifdef OPENSIM			
+			else if (LLGridManager::getInstance()->isInOpenSim())
+			{
+				auto preset_name = day->getName();
+				LL_DEBUGS("WindlightCaps") << "Current Day cycle is " << preset_name << LL_ENDL;
+				if (preset_name == "_default_")
+				{
+					preset_name = "Default";
+				}				
+				mDayCyclePresetsCombo->selectByValue(preset_name);
+				// Sky is part of day so treat that as day cycle
+				mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+				// Water is not part of legacy day so we need to hunt around
+				LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL);
+				if (water)
+				{
+					// This is going to be possible. OS will support both Legacy and EEP
+					// so having a water EEP asset with a Legacy day cycle could happen.
+					LLUUID asset_id = water->getAssetId();
+					if (asset_id.notNull())
+					{
+						mWaterPresetsCombo->selectByValue(LLSD(asset_id));
+					}
+					else
+					{
+						//mWaterPresetsCombo->selectByValue(LLSD(water->getName()));
+						std::string preset_name = water->getName();
+						if (preset_name == "_default_")
+						{
+							preset_name = "Default";
+						}
+						mWaterPresetsCombo->selectByValue(preset_name);
+					}
+				}
+			}
+#endif //OPENSIM
+		}
+		else
+		{
+			mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_NONE));
 		}
 
 		LLSettingsSky::ptr_t sky = LLEnvironment::instance().getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
-		if (sky && sky->getAssetId().notNull())
+		if (sky)
 		{
 			//LL_INFOS() << "EEP: sky name = " << sky->getName() << " - asset id = " << sky->getAssetId() << LL_ENDL;
-
-			mWLPresetsCombo->selectByValue(LLSD(sky->getAssetId()));
+			if(sky->getAssetId().notNull())
+			{
+				mWLPresetsCombo->selectByValue(LLSD(sky->getAssetId()));
+			}
+#ifdef OPENSIM			
+			else if (LLGridManager::getInstance()->isInOpenSim())
+			{
+				auto preset_name = sky->getName();
+				LL_DEBUGS("WindlightCaps") << "Current Sky is " << preset_name << LL_ENDL;
+				if (preset_name == "_default_")
+				{
+					preset_name = "Default";
+				}				
+				mWLPresetsCombo->selectByValue(preset_name);
+			}
+#endif
 		}
-
+		// Water is not part of legacy day so we need to hunt around
 		LLSettingsWater::ptr_t water = LLEnvironment::instance().getEnvironmentFixedWater(LLEnvironment::ENV_LOCAL);
-		if (water && water->getAssetId().notNull())
+		if (water)
 		{
-			//LL_INFOS() << "EEP: water name = " << water->getName() << " - asset id = " << water->getAssetId() << LL_ENDL;
-
-			mWaterPresetsCombo->selectByValue(LLSD(water->getAssetId()));
+			LLUUID asset_id = water->getAssetId();
+			if (asset_id.notNull())
+			{
+				mWaterPresetsCombo->selectByValue(LLSD(asset_id));
+			}
+#ifdef OPENSIM
+			else if (LLGridManager::getInstance()->isInOpenSim())
+			{
+				auto preset_name = water->getName();
+				if (preset_name == "_default_")
+				{
+					preset_name = "Default";
+				}
+				mWaterPresetsCombo->selectByValue(preset_name);
+			}
 		}
+#endif //OPENSIM
+	}
+	else
+	{
+		// LLEnvironment::ENV_REGION:
+		// LLEnvironment::ENV_PARCEL:
+		mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+		mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+		mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	}
 }
 
@@ -631,11 +771,21 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 
 bool FloaterQuickPrefs::isValidPreset(const LLSD& preset)
 {
-	return (!preset.asString().empty() &&
-		!preset.asUUID().isNull() &&
-		preset.asString() != PRESET_NAME_REGION_DEFAULT &&
-		preset.asString() != PRESET_NAME_DAY_CYCLE &&
-		preset.asString() != PRESET_NAME_NONE);
+	if (preset.isUUID())
+	{
+		if(!preset.asUUID().isNull()){ return true;}
+	}
+	else if (preset.isString())
+	{
+		if(!preset.asString().empty() &&
+			preset.asString() != PRESET_NAME_REGION_DEFAULT &&
+			preset.asString() != PRESET_NAME_DAY_CYCLE &&
+			preset.asString() != PRESET_NAME_NONE)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
@@ -663,21 +813,88 @@ void FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 
 void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 {
-	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+// Opensim continued W/L support
+#ifdef OPENSIM
+	if(!preset.isUUID() && LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLSettingsSky::ptr_t legacy_sky = nullptr;
+		LLSD messages;
+
+		legacy_sky = LLEnvironment::createSkyFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", preset.asString() + ".xml"), messages);
+
+		if (legacy_sky)
+		{
+			// Need to preserve current sky manually in this case in contrast to asset-based settings
+			LLSettingsWater::ptr_t current_water = LLEnvironment::instance().getCurrentWater();
+			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacy_sky, current_water);
+		}		
+		else
+		{
+			LL_WARNS() << "Legacy windlight conversion failed for " << preset << " existing env unchanged." << LL_ENDL;
+			return;
+		}
+	}
+	else // note the else here bridges the endif
+#endif
+	{
+		LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+	}
 	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
 void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
 {
-	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+#ifdef OPENSIM
+	if(!preset.isUUID() && LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLSettingsWater::ptr_t legacy_water = nullptr;
+		LLSD messages;
+		legacy_water = LLEnvironment::createWaterFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "water", preset.asString() + ".xml"), messages);
+		if (legacy_water)
+		{
+			// Need to preserve current sky manually in this case in contrast to asset-based settings
+			LLSettingsSky::ptr_t current_sky = LLEnvironment::instance().getCurrentSky();
+			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, current_sky, legacy_water);
+		}		
+		else
+		{
+			LL_WARNS() << "Legacy windlight conversion failed for " << preset << " existing env unchanged." << LL_ENDL;
+			return;
+		}
+	}
+	else // beware the trailing else here.
+#endif
+	{
+		LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+	}
 	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
 void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 {
-	LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+#ifdef OPENSIM
+	if(!preset.isUUID() && LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLSettingsDay::ptr_t legacyday = nullptr;
+		LLSD messages;
+		legacyday = LLEnvironment::createDayCycleFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "days", preset.asString() + ".xml"), messages);
+		if (legacyday)
+		{
+			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacyday);
+		}		
+		else
+		{
+			LL_WARNS() << "Legacy windlight conversion failed for " << preset << " existing env unchanged." << LL_ENDL;
+			return;
+		}
+	}
+	else // beware trailing else that bridges the endif
+#endif
+	{
+		LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+	}
 	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
