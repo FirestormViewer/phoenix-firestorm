@@ -3440,6 +3440,19 @@ ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlv
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @getheightoffset=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETHEIGHTOFFSET>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if (!rlvCmd.getOption().empty())
+		return RLV_RET_FAILED_OPTION;
+	else if (!isAgentAvatarValid())
+		return RLV_RET_FAILED_UNKNOWN;
+
+	strReply = llformat("%.2f", gAgentAvatarp->getHoverOffset()[VZ] * 100);
+	return RLV_RET_SUCCESS;
+}
+
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const
 {
@@ -3568,7 +3581,8 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 			LLWearableType::WT_GLOVES, LLWearableType::WT_JACKET, LLWearableType::WT_PANTS, LLWearableType::WT_SHIRT, 
 			LLWearableType::WT_SHOES, LLWearableType::WT_SKIRT, LLWearableType::WT_SOCKS, LLWearableType::WT_UNDERPANTS, 
 			LLWearableType::WT_UNDERSHIRT, LLWearableType::WT_SKIN, LLWearableType::WT_EYES, LLWearableType::WT_HAIR, 
-			LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO, LLWearableType::WT_PHYSICS
+			LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO, LLWearableType::WT_PHYSICS,
+			LLWearableType::WT_UNIVERSAL,
 		};
 
 	for (int idxType = 0, cntType = sizeof(wtRlvTypes) / sizeof(LLWearableType::EType); idxType < cntType; idxType++)

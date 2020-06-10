@@ -346,8 +346,11 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 // Checked: 2009-11-11 (RLVa-1.1.0a) | Modified: RLVa-1.1.0a
 std::string RlvStrings::getAnonym(const std::string& strName)
 {
-	if (!rlv_handler_t::isEnabled())
-		return strName;
+	static const std::string strUnknown = LLTrans::getString("Unknown");
+	if ( (!RlvActions::isRlvEnabled()) || (m_Anonyms.empty()) )
+	{
+		return strUnknown;
+	}
 
 	const char* pszName = strName.c_str(); U32 nHash = 0;
 	

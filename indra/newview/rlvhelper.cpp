@@ -292,6 +292,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_TEXTURES>("getcam_textures", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCOMMAND>("getcommand", RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("getgroup",				RLV_BHVR_GETGROUP,				RLV_TYPE_REPLY));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETHEIGHTOFFSET>("getheightoffset", RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("getinv",					RLV_BHVR_GETINV,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinvworn",				RLV_BHVR_GETINVWORN,			RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getoutfit",				RLV_BHVR_GETOUTFIT,				RLV_TYPE_REPLY));

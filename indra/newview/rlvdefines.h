@@ -36,7 +36,7 @@ const S32 RLV_VERSION_BUILD_COMPAT = 0;
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
 const S32 RLVa_VERSION_MINOR = 2;
-const S32 RLVa_VERSION_PATCH = 0;
+const S32 RLVa_VERSION_PATCH = 2;
 
 // Uncomment before a final release
 #define RLV_RELEASE
@@ -180,6 +180,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_DETACHTHIS,			// "detachthis"
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
+	RLV_BHVR_GETHEIGHTOFFSET,       // "getheightoffset"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
 	RLV_BHVR_VERSIONNEW,			// "versionnew"
