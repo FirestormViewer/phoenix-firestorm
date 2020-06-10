@@ -381,7 +381,10 @@ void update_all_marketplace_count()
     return;
 }
 
-void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name)
+//void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name)
+// [RLVa:KB] - Checked: RLVa-2.3 (Give-to-#RLV)
+void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name, LLPointer<LLInventoryCallback> cb)
+// [/RLVa:KB]
 {
 	LLViewerInventoryCategory* cat;
 
@@ -395,7 +398,10 @@ void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::s
 
 	LLSD updates;
 	updates["name"] = new_name;
-	update_inventory_category(cat_id, updates, NULL);
+// [RLVa:KB] - Checked: RLVa-2.3 (Give-to-#RLV)
+	update_inventory_category(cat_id, updates, cb);
+// [/RLVa:KB]
+//	update_inventory_category(cat_id, updates, NULL);
 }
 
 void copy_inventory_category(LLInventoryModel* model,

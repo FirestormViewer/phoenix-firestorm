@@ -578,36 +578,56 @@ void RlvGiveToRLVOffer::onCategoryCreateCallback(LLUUID idFolder, RlvGiveToRLVOf
 	pInstance->onDestinationCreated(idFolder, pInstance->m_DestPath.front());
 }
 
-// Checked: 2014-01-07 (RLVa-1.4.10)
-void RlvGiveToRLVOffer::moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName)
+// static
+void RlvGiveToRLVOffer::moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName, const LLPointer<LLInventoryCallback> cbFinal)
 {
-	const LLViewerInventoryCategory* pDest = gInventory.getCategory(idDestination);
 	const LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
-	if ( (pDest) && (pFolder) )
+	if ( (idDestination.notNull()) && (pFolder) )
 	{
-		LLPointer<LLViewerInventoryCategory> pNewFolder = new LLViewerInventoryCategory(pFolder);
-		if (pDest->getUUID() != pFolder->getParentUUID())
-		{
-			LLInventoryModel::update_list_t update;
-			LLInventoryModel::LLCategoryUpdate updOldParent(pFolder->getParentUUID(), -1);
-			update.push_back(updOldParent);
-			LLInventoryModel::LLCategoryUpdate updNewParent(pDest->getUUID(), 1);
-			update.push_back(updNewParent);
-			gInventory.accountForUpdate(update);
+		bool needsRename = (pFolder->getName() != strName);
 
-			pNewFolder->setParent(pDest->getUUID());
-			pNewFolder->updateParentOnServer(FALSE);
+		LLPointer<LLInventoryCallback> cbMove;
+		if (idDestination != pFolder->getParentUUID())
+		{
+			// We have to move *after* the rename operation completes or AIS will drop it
+			if (!needsRename)
+			{
+				LLInventoryModel::update_list_t update;
+				LLInventoryModel::LLCategoryUpdate updOldParent(pFolder->getParentUUID(), -1);
+				update.push_back(updOldParent);
+				LLInventoryModel::LLCategoryUpdate updNewParent(idDestination, 1);
+				update.push_back(updNewParent);
+				gInventory.accountForUpdate(update);
+
+				LLPointer<LLViewerInventoryCategory> pNewFolder = new LLViewerInventoryCategory(pFolder);
+				pNewFolder->setParent(idDestination);
+				pNewFolder->updateParentOnServer(FALSE);
+
+				gInventory.updateCategory(pNewFolder);
+				gInventory.notifyObservers();
+
+				if (cbFinal)
+				{
+					cbFinal.get()->fire(idFolder);
+				}
+			}
+			else
+			{
+				cbMove = new LLBoostFuncInventoryCallback(boost::bind(RlvGiveToRLVOffer::moveAndRename, _1, idDestination, strName, cbFinal));
+			}
 		}
 
-		pNewFolder->rename(strName);
-		pNewFolder->updateServer(FALSE);
-		gInventory.updateCategory(pNewFolder);
-
-		gInventory.notifyObservers();
+		if (needsRename)
+		{
+			rename_category(&gInventory, idFolder, strName, (cbMove) ? cbMove : cbFinal);
+		}
+	}
+	else if (cbFinal)
+	{
+		cbFinal.get()->fire(LLUUID::null);
 	}
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0)
 void RlvGiveToRLVTaskOffer::changed(U32 mask)
 {
 	if (mask & LLInventoryObserver::ADD)
@@ -633,7 +653,6 @@ void RlvGiveToRLVTaskOffer::changed(U32 mask)
 	}
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0)
 void RlvGiveToRLVTaskOffer::done()
 {
 	gInventory.removeObserver(this);
@@ -642,22 +661,29 @@ void RlvGiveToRLVTaskOffer::done()
 	doOnIdleOneTime(boost::bind(&RlvGiveToRLVTaskOffer::doneIdle, this));
 }
 
-// Checked: 2014-01-07 (RLVa-1.4.10)
 void RlvGiveToRLVTaskOffer::doneIdle()
 {
-	const LLViewerInventoryCategory* pFolder = (m_Folders.size()) ? gInventory.getCategory(m_Folders.front()) : NULL;
+	const LLViewerInventoryCategory* pFolder = (m_Folders.size()) ? gInventory.getCategory(m_Folders.front()) : nullptr;
 	if ( (!pFolder) || (!createDestinationFolder(pFolder->getName())) )
 		delete this;
 }
 
-// Checked: 2010-04-18 (RLVa-1.2.0)
-void RlvGiveToRLVTaskOffer::onDestinationCreated(const LLUUID& idFolder, const std::string& strName)
+void RlvGiveToRLVTaskOffer::onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName)
 {
-	const LLViewerInventoryCategory* pTarget = (idFolder.notNull()) ? gInventory.getCategory(idFolder) : NULL;
-	if (pTarget)
+	if (const LLViewerInventoryCategory* pTarget = (idDestFolder.notNull()) ? gInventory.getCategory(idDestFolder) : nullptr)
 	{
-		const LLUUID& idOfferedFolder = m_Folders.front();
-		moveAndRename(idOfferedFolder, idFolder, strName);
+		moveAndRename(m_Folders.front(), idDestFolder, strName, new LLBoostFuncInventoryCallback(boost::bind(&RlvGiveToRLVTaskOffer::onOfferCompleted, this, _1)));
+	}
+	else
+	{
+		onOfferCompleted(LLUUID::null);
+	}
+}
+
+void RlvGiveToRLVTaskOffer::onOfferCompleted(const LLUUID& idOfferedFolder)
+{
+	if (idOfferedFolder.notNull())
+	{
 		RlvBehaviourNotifyHandler::sendNotification("accepted_in_rlv inv_offer " + RlvInventory::instance().getSharedPath(idOfferedFolder));
 	}
 	delete this;
@@ -684,7 +710,7 @@ void RlvGiveToRLVAgentOffer::doneIdle()
 void RlvGiveToRLVAgentOffer::onDestinationCreated(const LLUUID& idFolder, const std::string& strName)
 {
 	if ( (idFolder.notNull()) && (mComplete.size()) )
-		moveAndRename(mComplete[0], idFolder, strName);
+		moveAndRename(mComplete[0], idFolder, strName, nullptr);
 	delete this;
 }
 
