@@ -8,6 +8,8 @@
 # Documents
 *.txt      text
 *.xml      text
+indra/tools/vstool/README.txt -text
+indra/newview/installers/windows/FILES_ARE_UNICODE_UTF-16LE.txt -text
 
 # Graphics
 *.png      binary diff=exif
