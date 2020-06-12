@@ -1104,11 +1104,12 @@
                       width="16" />
                      <text
                       follows="left|top"
-                      height="15"
+                      height="35"
                       layout="topleft"
                       left_pad="2"
                       name="physics_status_message_text"
                       width="573"
+                      word_wrap="true"
                       top_delta="3"/>
                 </panel>
         </panel>
