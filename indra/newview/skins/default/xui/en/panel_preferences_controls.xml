@@ -15,7 +15,7 @@
    top="6"
    left="3"
    height="23"
-   width="140"
+   width="170"
    name="key_mode">
     <combo_box.item
      label="Third Person "
