@@ -39,8 +39,6 @@
             Плата за создание группы зависит от вашего уровня членства. [https://secondlife.com/my/account/membership.php Больше информации]
           </text>
         </layout_panel>
-        <layout_panel name="create_actions0" >
-        </layout_panel>
         <layout_panel name="create_actions" >
           <layout_stack name="button_row_ls" >
             <layout_panel name="layout_crt">

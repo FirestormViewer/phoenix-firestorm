@@ -10,4 +10,5 @@
 	<button label="Сохранить" name="beamshape_save" />
 	<button label="Загрузить" name="beamshape_load" />
 	<button label="Очистить" name="beamshape_clear" />
+	<button label="Отмена" name="cancel" />
 </floater>

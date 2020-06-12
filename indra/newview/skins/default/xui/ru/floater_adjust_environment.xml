@@ -3,20 +3,34 @@
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
-				<layout_panel>
-					<button label="Сброс" name="btn_reset" tool_tip="Закрыть и сбросить в общую среду"/>
-					<text name="cloud_map_label">
-						Изображение облака:
-					</text>
+				<layout_panel name="lp_1">
+					<text name="ambient_lbl">Окружение:</text>
+					<text name="blue_horizon_lbl">Горизонт:</text>
+					<text name="blue_density_lbl">Небо:</text>
+					<button label="Сброс" name="btn_reset" tool_tip="Закрыть и сбросить на Совместную Окружающую среду"/>
+					<text name="sun_color_lbl">Солнце:</text>
+					<text name="cloud_color_lbl">Цвет облака:</text>
+					<text name="cloud_map_label">Облака:</text>
+					<text name="water_map_label">Вода:</text>
 				</layout_panel>
-				<layout_panel>
-					<text name="label">
-						Солнце:
-					</text>
-					<check_box label="Показать метку" name="sunbeacon"/>
+				<layout_panel name="lp_2">
+					<text name="haze_horizon_label">Дымка Горизонта:</text>
+					<text name="haze_density_label">Плотность Дымки:</text>
+					<text name="cloud_coverage_label">Облачное покрытие:</text>
+					<text name="cloud_scale_label">Масштаб Облаков:</text>
+					<text name="scene_gamma_label">Гамма Сцены:</text>
 				</layout_panel>
-				<layout_panel>
-					<check_box label="Показать метку" name="moonbeacon"/>
+				<layout_panel name="lp_3">
+					<text name="label">Солнце:</text>
+					<check_box label="Показать Маяк" name="sunbeacon"/>
+					<text name="scale_label">Масштаб:</text>
+					<text name="glow_focus_label">Фокус Сияния:</text>
+					<text name="glow_size_label">Размер Сияния:</text>
+					<text name="star_brightness_label">Яркость Звезд:</text>
+				</layout_panel>
+				<layout_panel name="lp_4">
+					<text name="label">Луна:</text>
+					<check_box label="Показать Маяк" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

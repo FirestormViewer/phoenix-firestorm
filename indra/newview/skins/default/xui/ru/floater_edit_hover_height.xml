@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="HoverHeight" title="Установите высоту">
 	<slider label="Высота" name="HoverHeightSlider"/>
+	<check_box label="Влияет на вид камеры" name="BindCameraCheck" width="237"/>
 </floater>
