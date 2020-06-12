@@ -544,8 +544,8 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 				}
 				mWaterPresetsCombo->selectByValue(preset_name);
 			}
-		}
 #endif //OPENSIM
+		}
 	}
 	else
 	{
