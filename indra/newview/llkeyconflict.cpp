@@ -160,7 +160,7 @@ bool LLKeyConflictHandler::canAssignControl(const std::string &control_name)
     {
         return iter->second.mAssignable;
     }
-    // If we don't know this control means it wasn't assigned by user yet and thus is editable
+    // If we don't know this control, means it wasn't assigned by user yet and thus is editable
     return true;
 }
 
@@ -195,7 +195,8 @@ bool LLKeyConflictHandler::registerControl(const std::string &control_name, U32 
     LLKeyConflict &type_data = mControlsMap[control_name];
     if (!type_data.mAssignable)
     {
-        LL_ERRS() << "Error in code, user or system should not be able to change certain controls" << LL_ENDL;
+        // Example: user tried to assign camera spin to all modes, but first person mode doesn't support it
+        return false;
     }
     LLKeyData data(mouse, key, mask, ignore_mask);
     if (type_data.mKeyBind.getKeyData(index) == data)
@@ -293,8 +294,9 @@ void LLKeyConflictHandler::loadFromSettings(const LLViewerInput::KeyMode& keymod
         LLKeyboard::maskFromString(it->mask, &mask);
         // Note: it->command is also the name of UI element, howhever xml we are loading from
         // might not know all the commands, so UI will have to know what to fill by its own
+        // Assumes U32_MAX conflict mask, and is assignable by default,
+        // but assignability might have been overriden by generatePlaceholders.
         LLKeyConflict &type_data = (*destination)[it->command];
-        type_data.mAssignable = true;
         type_data.mKeyBind.addKeyData(mouse, key, mask, true);
     }
 }
@@ -764,8 +766,47 @@ void LLKeyConflictHandler::generatePlaceholders(ESourceMode load_mode)
 {
     // These controls are meant to cause conflicts when user tries to assign same control somewhere else
     // also this can be used to pre-record controls that should not conflict or to assign conflict groups/masks
-    /*registerTemporaryControl(CONTROL_RESERVED_MENU, CLICK_RIGHT, KEY_NONE, MASK_NONE, 0);
-    registerTemporaryControl(CONTROL_DELETE, CLICK_NONE, KEY_DELETE, MASK_NONE, 0);*/
+
+    if (load_mode == MODE_FIRST_PERSON)
+    {
+        // First person view doesn't support camera controls
+        // Note: might be better idea to just load these from control_table_contents_camera.xml
+        // or to pass from floaterpreferences when it loads said file
+        registerTemporaryControl("look_up");
+        registerTemporaryControl("look_down");
+        registerTemporaryControl("move_forward");
+        registerTemporaryControl("move_backward");
+        registerTemporaryControl("move_forward_fast");
+        registerTemporaryControl("move_backward_fast");
+        registerTemporaryControl("spin_over");
+        registerTemporaryControl("spin_under");
+        registerTemporaryControl("pan_up");
+        registerTemporaryControl("pan_down");
+        registerTemporaryControl("pan_left");
+        registerTemporaryControl("pan_right");
+        registerTemporaryControl("pan_in");
+        registerTemporaryControl("pan_out");
+        registerTemporaryControl("spin_around_ccw");
+        registerTemporaryControl("spin_around_cw");
+
+        // control_table_contents_editing.xml
+        registerTemporaryControl("edit_avatar_spin_ccw");
+        registerTemporaryControl("edit_avatar_spin_cw");
+        registerTemporaryControl("edit_avatar_spin_over");
+        registerTemporaryControl("edit_avatar_spin_under");
+        registerTemporaryControl("edit_avatar_move_forward");
+        registerTemporaryControl("edit_avatar_move_backward");
+    }
+
+    if (load_mode != MODE_SITTING)
+    {
+        registerTemporaryControl("move_forward_sitting");
+        registerTemporaryControl("move_backward_sitting");
+        registerTemporaryControl("spin_over_sitting");
+        registerTemporaryControl("spin_under_sitting");
+        registerTemporaryControl("spin_around_ccw_sitting");
+        registerTemporaryControl("spin_around_cw_sitting");
+    }
 }
 
 bool LLKeyConflictHandler::removeConflicts(const LLKeyData &data, const U32 &conlict_mask)
@@ -815,6 +856,13 @@ void LLKeyConflictHandler::registerTemporaryControl(const std::string &control_n
     type_data->mAssignable = false;
     type_data->mConflictMask = conflict_mask;
     type_data->mKeyBind.addKeyData(mouse, key, mask, false);
+}
+
+void LLKeyConflictHandler::registerTemporaryControl(const std::string &control_name, U32 conflict_mask)
+{
+    LLKeyConflict *type_data = &mControlsMap[control_name];
+    type_data->mAssignable = false;
+    type_data->mConflictMask = conflict_mask;
 }
 
 bool LLKeyConflictHandler::clearUnsavedChanges()

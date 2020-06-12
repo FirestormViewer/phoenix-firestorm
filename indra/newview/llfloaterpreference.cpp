@@ -4265,39 +4265,21 @@ void LLPanelPreferenceControls::regenerateControls()
     populateControlTable();
 }
 
-void LLPanelPreferenceControls::populateControlTable()
+bool LLPanelPreferenceControls::addControlTableColumns(const std::string &filename)
 {
-    pControlsTable->clearRows();
-    pControlsTable->clearColumns();
-
-    std::string filename;
-    switch ((LLKeyConflictHandler::ESourceMode)mEditingMode)
-    {
-    case LLKeyConflictHandler::MODE_THIRD_PERSON:
-    case LLKeyConflictHandler::MODE_FIRST_PERSON:
-    case LLKeyConflictHandler::MODE_EDIT_AVATAR:
-    case LLKeyConflictHandler::MODE_SITTING:
-        filename = "control_table_contents.xml";
-        break;
-    default:
-        // 'saved settings' mode doesn't have UI or actual settings yet
-        LL_INFOS() << "Unimplemented mode" << LL_ENDL;
-        return;
-    }
-
     LLXMLNodePtr xmlNode;
     LLScrollListCtrl::Contents contents;
     if (!LLUICtrlFactory::getLayeredXMLNode(filename, xmlNode))
     {
-    LL_WARNS() << "Failed to load " << filename << LL_ENDL;
-    return;
+        LL_WARNS() << "Failed to load " << filename << LL_ENDL;
+        return false;
     }
     LLXUIParser parser;
     parser.readXUI(xmlNode, contents, filename);
 
     if (!contents.validateBlock())
     {
-        return;
+        return false;
     }
 
     for (LLInitParam::ParamIterator<LLScrollListColumn::Params>::const_iterator col_it = contents.columns.begin();
@@ -4305,6 +4287,26 @@ void LLPanelPreferenceControls::populateControlTable()
         ++col_it)
     {
         pControlsTable->addColumn(*col_it);
+    }
+
+    return true;
+}
+
+bool LLPanelPreferenceControls::addControlTableRows(const std::string &filename)
+{
+    LLXMLNodePtr xmlNode;
+    LLScrollListCtrl::Contents contents;
+    if (!LLUICtrlFactory::getLayeredXMLNode(filename, xmlNode))
+    {
+        LL_WARNS() << "Failed to load " << filename << LL_ENDL;
+        return false;
+    }
+    LLXUIParser parser;
+    parser.readXUI(xmlNode, contents, filename);
+
+    if (!contents.validateBlock())
+    {
+        return false;
     }
 
     LLScrollListCell::Params cell_params;
@@ -4322,7 +4324,7 @@ void LLPanelPreferenceControls::populateControlTable()
         std::string control = row_it->value.getValue().asString();
         if (!control.empty() && control != "menu_separator")
         {
-            // At the moment 4 collumns are hardcoded
+            // At the moment viewer is hardcoded to assume that there are 4 collumns
             LLScrollListItem::Params item_params(*row_it);
             bool enabled = mConflictHandler[mEditingMode].canAssignControl(control);
             item_params.enabled.setValue(enabled);
@@ -4339,17 +4341,79 @@ void LLPanelPreferenceControls::populateControlTable()
         }
         else
         {
+            // Separator example:
+            // <rows
+            //  enabled = "false">
+            //  <columns
+            //   type = "icon"
+            //   color = "0 0 0 0.7"
+            //   halign = "center"
+            //   value = "menu_separator" />
+            //</rows>
             pControlsTable->addRow(*row_it, EAddPosition::ADD_BOTTOM);
         }
     }
+    return true;
 }
 
-// Just a workaround to not care about first separator before headers (we can start from random header)
-void LLPanelPreferenceControls::addSeparator()
+void LLPanelPreferenceControls::addControlTableSeparator()
 {
-    if (pControlsTable->getItemCount() > 0)
+    pControlsTable->addSeparator(EAddPosition::ADD_BOTTOM);
+}
+
+void LLPanelPreferenceControls::populateControlTable()
+{
+    pControlsTable->clearRows();
+    pControlsTable->clearColumns();
+
+    // add columns
+    std::string filename;
+    switch ((LLKeyConflictHandler::ESourceMode)mEditingMode)
     {
-        pControlsTable->addSeparator(EAddPosition::ADD_BOTTOM);
+    case LLKeyConflictHandler::MODE_THIRD_PERSON:
+    case LLKeyConflictHandler::MODE_FIRST_PERSON:
+    case LLKeyConflictHandler::MODE_EDIT_AVATAR:
+    case LLKeyConflictHandler::MODE_SITTING:
+        filename = "control_table_contents_columns_basic.xml";
+        break;
+    default:
+        // Either unknown mode or MODE_SAVED_SETTINGS
+        // It doesn't have UI or actual settings yet
+        LL_INFOS() << "Unimplemented mode" << LL_ENDL;
+        return;
+    }
+    addControlTableColumns(filename);
+
+
+    if (mEditingMode == LLKeyConflictHandler::MODE_FIRST_PERSON)
+    {
+        addControlTableRows("control_table_contents_movement.xml");
+        addControlTableSeparator();
+        addControlTableRows("control_table_contents_media.xml");
+    }
+    // MODE_THIRD_PERSON; MODE_EDIT_AVATAR; MODE_SITTING
+    else if (mEditingMode < LLKeyConflictHandler::MODE_SAVED_SETTINGS)
+    {
+        // In case of 'sitting' mode, movements still apply due to vehicles
+        addControlTableRows("control_table_contents_movement.xml");
+        addControlTableSeparator();
+
+        addControlTableRows("control_table_contents_camera.xml");
+        if (mEditingMode == LLKeyConflictHandler::MODE_SITTING)
+        {
+            addControlTableRows("control_table_contents_camera_sitting.xml");
+        }
+        addControlTableSeparator();
+
+        addControlTableRows("control_table_contents_editing.xml");
+        addControlTableSeparator();
+
+        addControlTableRows("control_table_contents_media.xml");
+    }
+    else
+    {
+        LL_INFOS() << "Unimplemented mode" << LL_ENDL;
+        return;
     }
 }
 
