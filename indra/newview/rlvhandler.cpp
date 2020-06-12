@@ -37,7 +37,6 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
-//#include "llenvmanager.h"				// @setenv
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"			// @list IM query
 #include "llnotificationsutil.h"
@@ -56,6 +55,7 @@
 
 // RLVa includes
 #include "rlvactions.h"
+#include "rlvenvironment.h"
 #include "rlvfloaters.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -151,14 +151,58 @@ RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NU
 
 RlvHandler::~RlvHandler()
 {
+	cleanup();
+}
+
+void RlvHandler::cleanup()
+{
+	// Nothing to clean if we're not enabled (or already cleaned up)
+	if (!m_fEnabled)
+		return;
+
+	//
+	// Clean up any restrictions that are still active
+	//
+	RLV_ASSERT(LLApp::isQuitting());	// Several commands toggle debug settings but won't if they know the viewer is quitting
+
+	// Assume we have no way to predict how m_Objects will change so make a copy ahead of time
+	uuid_vec_t idRlvObjects;
+	idRlvObjects.reserve(m_Objects.size());
+	std::transform(m_Objects.begin(), m_Objects.end(), std::back_inserter(idRlvObjects), [](const rlv_object_map_t::value_type& kvPair) {return kvPair.first; });
+	for (const LLUUID & idRlvObj : idRlvObjects)
+	{
+		processCommand(idRlvObj, "clear", true);
+	}
+
+	// Sanity check
+	RLV_ASSERT(m_Objects.empty());
+	RLV_ASSERT(m_Exceptions.empty());
+	RLV_ASSERT(std::all_of(m_Behaviours, m_Behaviours + RLV_BHVR_COUNT, [](S16 cnt) { return !cnt; }));
+	RLV_ASSERT(m_CurCommandStack.empty());
+	RLV_ASSERT(m_CurObjectStack.empty());
+	RLV_ASSERT(m_pOverlayImage.isNull());
+
+	//
+	// Clean up what's left
+	//
 	gAgent.removeListener(this);
+	m_Retained.clear();
+	//delete m_pGCTimer;	// <- deletes itself
+
 	if (m_PendingGroupChange.first.notNull())
 	{
-		LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		if (LLGroupMgr::instanceExists())
+			LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
 		m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
 	}
 
-	//delete m_pGCTimer;	// <- deletes itself
+	for (RlvExtCommandHandler* pCmdHandler : m_CommandHandlers)
+	{
+		delete pCmdHandler;
+	}
+	m_CommandHandlers.clear();
+
+	m_fEnabled = false;
 }
 
 // ============================================================================
@@ -1046,6 +1090,12 @@ bool RlvHandler::onGC()
 	return (0 != m_Objects.size());	// GC will kill itself if it has nothing to do
 }
 
+// static
+void RlvHandler::cleanupClass()
+{
+	gRlvHandler.cleanup();
+}
+
 // Checked: 2009-11-26 (RLVa-1.1.0f) | Added: RLVa-1.1.0f
 void RlvHandler::onIdleStartup(void* pParam)
 {
@@ -1447,6 +1497,7 @@ bool RlvHandler::setEnabled(bool fEnable)
 		RlvSettings::initClass();
 		RlvStrings::initClass();
 
+		RlvHandler::instance().addCommandHandler(new RlvEnvironment());
 		RlvHandler::instance().addCommandHandler(new RlvExtGetSet());
 
 		// Make sure we get notified when login is successful
@@ -2252,34 +2303,47 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 }
 
 // Handles: @setenv=n|y toggles
-//template<> template<>
-//void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
-//{
-//	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
-//	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
-//	{
-//		if (fHasBhvr)
-//		{
-//			// Hide the floater if it's currently visible
-//			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
-//			for (LLFloater* pFloater : envFloaters)
-//				pFloater->closeFloater();
-//			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
-//		}
-//		else
-//		{
-//			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
-//		}
-//	}
-//
-//	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
-//	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
-//	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
-//
-//	// Restore the user's WindLight preferences when releasing
-//	if (!fHasBhvr)
-//		LLEnvManagerNew::instance().usePrefs();
-//}
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "env_fixed_environmentent_water", "my_environments" };
+	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
+	{
+		if (fHasBhvr)
+		{
+			// Hide the floater if it's currently visible
+			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
+			for (LLFloater* pFloater : envFloaters)
+				pFloater->closeFloater();
+			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+		else
+		{
+			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+	}
+
+	// Don't allow toggling "Atmopsheric Shaders" through the debug settings under @setenv=n
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
+
+	if (fHasBhvr)
+	{
+		// Usurp the 'edit' environment for RLVa locking so TPV tools like quick prefs and phototools are automatically locked out as well
+		// (these needed per-feature awareness of RLV in the previous implementation which often wasn't implemented)
+		LLEnvironment* pEnv = LLEnvironment::getInstance();
+		LLSettingsSky::ptr_t pRlvSky = pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL, true)->buildClone();
+		pEnv->setEnvironment(LLEnvironment::ENV_EDIT, pRlvSky);
+		pEnv->setSelectedEnvironment(LLEnvironment::ENV_EDIT, LLEnvironment::TRANSITION_INSTANT);
+		pEnv->updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+	}
+	else
+	{
+		// Restore the user's WindLight preferences when releasing
+		LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_EDIT);
+		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+		LLEnvironment::instance().updateEnvironment();
+	}
+}
 
 // Handles: @showhovertext:<uuid>=n|y
 template<> template<>

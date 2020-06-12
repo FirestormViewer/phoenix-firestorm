@@ -133,7 +133,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendgesture", RLV_BHVR_SENDGESTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETDEBUG, RLV_OPTION_NONE>("setdebug"));
-//	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETENV, RLV_OPTION_NONE>("setenv"));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETENV, RLV_OPTION_NONE>("setenv"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
@@ -690,6 +690,13 @@ bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBeh
 //
 
 template<>
+bool RlvCommandOptionHelper::parseOption<std::string>(const std::string& strOption, std::string& valueOption)
+{
+	valueOption = strOption;
+	return true;
+}
+
+template<>
 bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
 {
 	return idOption.set(strOption, false);
@@ -771,6 +778,17 @@ bool RlvCommandOptionHelper::parseOption<LLViewerInventoryCategory*>(const std::
 }
 
 template<>
+bool RlvCommandOptionHelper::parseOption<LLVector2>(const std::string& strOption, LLVector2& vecOption)
+{
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%f/%f", vecOption.mV + 0, vecOption.mV + 1);
+		return (2 == cntToken);
+	}
+	return false;
+}
+
+template<>
 bool RlvCommandOptionHelper::parseOption<LLVector3>(const std::string& strOption, LLVector3& vecOption)
  {
 	if (!strOption.empty())
@@ -787,6 +805,17 @@ bool RlvCommandOptionHelper::parseOption<LLVector3d>(const std::string& strOptio
 	if (!strOption.empty())
 	{
 		S32 cntToken = sscanf(strOption.c_str(), "%lf/%lf/%lf", vecOption.mdV + 0, vecOption.mdV + 1, vecOption.mdV + 2);
+		return (3 == cntToken);
+	}
+	return false;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLColor3>(const std::string& strOption, LLColor3& clrOption)
+{
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%f/%f/%f", clrOption.mV + 0, clrOption.mV + 1, clrOption.mV + 2);
 		return (3 == cntToken);
 	}
 	return false;
