@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Kamera vorwärts sitzend" />
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Kamera rückwärts sitzend" />
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Kamera hochdrehen sitzend" />
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Kamera runterdrehen sitzend" />
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="Kamera im Sitzen gegen den Uhrzeigersinn drehen" value="gg. Uhrzeigersinn sitzend" />
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="Kamera im Sitzen im Uhrzeigersinn drehen" value="im Uhrzeigersinn sitzend" />
+	</rows>
+</contents>
