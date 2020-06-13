@@ -42,7 +42,7 @@ bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
 	// NOTE: if an object has exclusive camera control then all other objects are locked out
 	return
 		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM)) ) &&
-		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSETSCALE)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
 }
 
 bool RlvActions::canChangeToMouselook()
@@ -70,7 +70,9 @@ bool RlvActions::isCameraFOVClamped()
 
 bool RlvActions::isCameraPresetLocked()
 {
-	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+	return
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) ||
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSETSCALE)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
 }
 
 bool RlvActions::getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax)

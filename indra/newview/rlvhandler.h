@@ -147,6 +147,7 @@ protected:
 	void clearOverlayImage();                                                                   // @setoverlay=n
 	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
 	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
+	void setCameraOverride(bool fOverride);                                                     // @setcam family
 	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay=n
 
 	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
@@ -264,6 +265,8 @@ protected:
 	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
 	LLPointer<LLViewerFetchedTexture>       m_pOverlayImage = nullptr;		// @setoverlay=n
 	int                                     m_nOverlayOrigBoost = 0;		// @setoverlay=n
+
+	std::string                             m_strCameraPresetRestore;       // @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction

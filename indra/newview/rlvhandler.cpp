@@ -37,6 +37,7 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
+#include "llfloatercamera.h"			// @setcam family
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"			// @list IM query
 #include "llnotificationsutil.h"
@@ -864,6 +865,23 @@ void RlvHandler::setActiveGroupRole(const LLUUID& idGroup, const std::string& st
 	}
 
 	m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
+}
+
+// @setcam family
+void RlvHandler::setCameraOverride(bool fOverride)
+{
+	if ( (fOverride) && (CAMERA_RLV_SETCAM_VIEW != gAgentCamera.getCameraPreset()) )
+	{
+		m_strCameraPresetRestore = gSavedSettings.getString("PresetCameraActive");
+		gAgentCamera.switchCameraPreset(CAMERA_RLV_SETCAM_VIEW);
+	}
+	else if ( (!fOverride) && (CAMERA_RLV_SETCAM_VIEW == gAgentCamera.getCameraPreset() && (!RlvActions::isCameraPresetLocked())) )
+	{
+		// We need to clear it or it won't reset properly
+		gSavedSettings.setString("PresetCameraActive", LLStringUtil::null);
+		LLFloaterCamera::switchToPreset(m_strCameraPresetRestore);
+		m_strCameraPresetRestore.clear();
+	}
 }
 
 // ============================================================================
@@ -2121,20 +2139,23 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>::onValueChange()
 		gAgentCamera.changeCameraToThirdPerson();
 }
 
-// Handles: @setcam_eyeoffset:<vector3>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
+// Handles: @setcam_eyeoffset:<vector3>=n|y, @setcam_eyeoffsetscale:<float>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
 template<> template<>
 void RlvBehaviourCamEyeFocusOffsetHandler::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	if (fHasBhvr)
 	{
-		gAgentCamera.switchCameraPreset(CAMERA_RLV_SETCAM_VIEW);
+		gRlvHandler.setCameraOverride(true);
 	}
 	else
 	{
-		const RlvBehaviourModifier* pBhvrEyeModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET);
-		const RlvBehaviourModifier* pBhvrOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET);
-		if ( (!pBhvrEyeModifier->hasValue()) && (!pBhvrOffsetModifier->hasValue()) )
-			gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+		const RlvBehaviourModifier* pBhvrEyeOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET);
+		const RlvBehaviourModifier* pBhvrEyeOffsetScaleModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSETSCALE);
+		const RlvBehaviourModifier* pBhvrFocusOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET);
+		if ( (!pBhvrEyeOffsetModifier->hasValue()) && (!pBhvrEyeOffsetScaleModifier->hasValue()) && (!pBhvrFocusOffsetModifier->hasValue()) )
+		{
+			gRlvHandler.setCameraOverride(false);
+		}
 	}
 }
 
@@ -2152,7 +2173,21 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>::onValueChange()
 	}
 }
 
-// Handles: @setcam_focusoffset:<vector3>=n|y changes
+// Handles: @setcam_eyeoffsetscale:<float>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSETSCALE>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSETSCALE))
+	{
+		LLControlVariable* pControl = gSavedSettings.getControl("CameraOffsetScaleRLVa");
+		if (pBhvrModifier->hasValue())
+			pControl->setValue(pBhvrModifier->getValue<float>());
+		else
+			pControl->resetToDefault();
+	}
+}
+
+// Handles: @setcam_focusoffset:<vector3d>=n|y changes
 template<>
 void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange() const
 {
@@ -2160,7 +2195,7 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange
 	{
 		LLControlVariable* pControl = gSavedSettings.getControl("FocusOffsetRLVaView");
 		if (pBhvrModifier->hasValue())
-			pControl->setValue(pBhvrModifier->getValue<LLVector3>().getValue());
+			pControl->setValue(pBhvrModifier->getValue<LLVector3d>().getValue());
 		else
 			pControl->resetToDefault();
 	}
@@ -2279,12 +2314,13 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour e
 	if (fHasCamUnlock != gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK))
 		RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(RLV_BHVR_SETCAM_UNLOCK, !fHasCamUnlock);
 
-	gAgentCamera.switchCameraPreset( (fHasBhvr) ? CAMERA_RLV_SETCAM_VIEW : CAMERA_PRESET_REAR_VIEW );
+	gRlvHandler.setCameraOverride(fHasBhvr);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMAX)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMAX)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSETSCALE)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMAX)->setPrimaryObject(idRlvObject);
@@ -2788,7 +2824,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvC
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @setcam_eyeoffset[:<vector3>]=force and @setcam_focusoffset[:<vector3>]=force
+// Handles: @setcam_eyeoffset[:<vector3>]=force, @setcam_eyeoffsetscale[:<float>]=force and @setcam_focusoffset[:<vector3>]=force
 template<> template<>
 ERlvCmdRet RlvForceCamEyeFocusOffsetHandler::onCommand(const RlvCommand& rlvCmd)
 {
@@ -2796,22 +2832,54 @@ ERlvCmdRet RlvForceCamEyeFocusOffsetHandler::onCommand(const RlvCommand& rlvCmd)
 	if (!RlvActions::canChangeCameraPreset(rlvCmd.getObjectID()))
 		return RLV_RET_FAILED_LOCK;
 
-	LLControlVariable* pOffsetControl = gSavedSettings.getControl("CameraOffsetRLVaView");
-	LLControlVariable* pFocusControl = gSavedSettings.getControl("FocusOffsetRLVaView");
-	LLControlVariable* pControl = (rlvCmd.getBehaviourType() == RLV_BHVR_SETCAM_EYEOFFSET) ? pOffsetControl : pFocusControl;
-	if (rlvCmd.hasOption())
+	LLControlVariable* pEyeOffsetControl = gSavedSettings.getControl("CameraOffsetRLVaView");
+	LLControlVariable* pEyeOffsetScaleControl = gSavedSettings.getControl("CameraOffsetScaleRLVa");
+	LLControlVariable* pFocusOffsetControl = gSavedSettings.getControl("FocusOffsetRLVaView");
+
+	LLControlVariable* pControl; LLSD sdControlValue;
+	switch (rlvCmd.getBehaviourType())
 	{
-		LLVector3 vecOffset;
-		if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
-			return RLV_RET_FAILED_OPTION;
-		pControl->setValue(vecOffset.getValue());
-	}
-	else
-	{
-		pControl->resetToDefault();
+		case RLV_BHVR_SETCAM_EYEOFFSET:
+			if (rlvCmd.hasOption())
+			{
+				LLVector3 vecOffset;
+				if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
+					return RLV_RET_FAILED_OPTION;
+				sdControlValue = vecOffset.getValue();
+			}
+			pControl = pEyeOffsetControl;
+			break;
+		case RLV_BHVR_SETCAM_EYEOFFSETSCALE:
+			if (rlvCmd.hasOption())
+			{
+				float nScale;
+				if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), nScale))
+					return RLV_RET_FAILED_OPTION;
+				sdControlValue = nScale;
+			}
+			pControl = pEyeOffsetScaleControl;
+			break;
+		case RLV_BHVR_SETCAM_FOCUSOFFSET:
+			if (rlvCmd.hasOption())
+			{
+				LLVector3d vecOffset;
+				if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
+					return RLV_RET_FAILED_OPTION;
+				sdControlValue = vecOffset.getValue();
+			}
+			pControl = pFocusOffsetControl;
+			break;
+		default:
+			return RLV_RET_FAILED;
 	}
 
-	gAgentCamera.switchCameraPreset( ((pOffsetControl->isDefault()) && (pFocusControl->isDefault())) ? CAMERA_PRESET_REAR_VIEW : CAMERA_RLV_SETCAM_VIEW);
+	if (!sdControlValue.isUndefined())
+		pControl->setValue(sdControlValue);
+	else
+		pControl->resetToDefault();
+
+	// NOTE: this doesn't necessarily release the camera preset even if all 3 are at their default now (e.g. @setcam is currently set)
+	gRlvHandler.setCameraOverride( (!pEyeOffsetControl->isDefault()) || (!pEyeOffsetScaleControl->isDefault()) || (!pFocusOffsetControl->isDefault()) );
 	return RLV_RET_SUCCESS;
 }
 
