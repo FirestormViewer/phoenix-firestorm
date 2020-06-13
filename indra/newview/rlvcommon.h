@@ -56,7 +56,7 @@ class RlvObject;
 
 struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
-typedef boost::variant<int, float, bool, LLVector3, LLUUID> RlvBehaviourModifierValue;
+typedef boost::variant<int, float, bool, LLVector3, LLVector3d, LLUUID> RlvBehaviourModifierValue;
 
 class RlvGCTimer;
 
