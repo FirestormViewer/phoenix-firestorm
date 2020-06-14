@@ -6276,6 +6276,10 @@ void LLAppViewer::disconnectViewer()
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
 // [/SL:KB]
 
+// [RLVa:KB] - Checked: RLVa-2.3 (Housekeeping)
+	SUBSYSTEM_CLEANUP(RlvHandler);
+// [/RLVa:KB]
+
 	gAgentWearables.cleanup();
 	gAgentCamera.cleanup();
 	// Also writes cached agent settings to gSavedSettings

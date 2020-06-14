@@ -26,6 +26,7 @@
 
 class LLInventoryCategory;
 class LLInventoryItem;
+class LLViewerObject;
 
 // ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
@@ -206,6 +207,16 @@ public:
 	 * Returns true if the teleport is considered local (e.g. double-click tp)
 	 */
 	static bool isLocalTp(const LLVector3d& posGlobal);
+
+	// =========
+	// WindLight
+	// =========
+public:
+	/*
+	 * Returns true if the user can make changes to their WindLight environment 
+	 */
+	static bool canChangeEnvironment();
+
 
 	// =================
 	// World interaction

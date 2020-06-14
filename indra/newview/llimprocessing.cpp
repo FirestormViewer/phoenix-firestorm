@@ -751,7 +751,6 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                       (message.length() > 3) && (RLV_CMD_PREFIX == message[0]) && (RlvHandler::instance().processIMQuery(from_id, message)) )
             {
                 // Eat the message and do nothing
-                return;
             }
 // [/RLVa:KB]
 //          else if (offline == IM_ONLINE 
@@ -1737,7 +1736,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             // If we auto-accept the offer/request then this will override DnD status (but we'll still let the other party know later)
             bool fRlvAutoAccept = (rlv_handler_t::isEnabled()) &&
                 ( ((IM_LURE_USER == dialog) && (RlvActions::autoAcceptTeleportOffer(from_id))) ||
-                    ((IM_TELEPORT_REQUEST == dialog) && (RlvActions::autoAcceptTeleportRequest(from_id))) );
+                  ((IM_TELEPORT_REQUEST == dialog) && (RlvActions::autoAcceptTeleportRequest(from_id))) );
 // [/RLVa:KB]
 
             if (is_muted)
@@ -1822,7 +1821,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 if (rlv_handler_t::isEnabled())
                 {
                     if ( ((IM_LURE_USER == dialog) && (!RlvActions::canAcceptTpOffer(from_id))) ||
-                            ((IM_TELEPORT_REQUEST == dialog) && (!RlvActions::canAcceptTpRequest(from_id))) )
+                         ((IM_TELEPORT_REQUEST == dialog) && (!RlvActions::canAcceptTpRequest(from_id))) )
                     {
                         RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLUREREQ_REMOTE));
                         if (is_do_not_disturb)
@@ -1832,7 +1831,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
 
                     // Censor message if: 1) restricted from receiving IMs from the sender, or 2) teleport offer/request and @showloc=n restricted
                     if ( (!RlvActions::canReceiveIM(from_id)) || 
-                            ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (IM_LURE_USER == dialog || IM_TELEPORT_REQUEST == dialog)) )
+                         ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (IM_LURE_USER == dialog || IM_TELEPORT_REQUEST == dialog)) )
                     {
                         message = RlvStrings::getString(RLV_STRING_HIDDEN);
                     }

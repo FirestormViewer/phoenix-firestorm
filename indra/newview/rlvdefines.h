@@ -35,7 +35,7 @@ const S32 RLV_VERSION_BUILD_COMPAT = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
-const S32 RLVa_VERSION_MINOR = 2;
+const S32 RLVa_VERSION_MINOR = 3;
 const S32 RLVa_VERSION_PATCH = 0;
 
 // Uncomment before a final release
@@ -180,6 +180,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_DETACHTHIS,			// "detachthis"
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
+	RLV_BHVR_GETHEIGHTOFFSET,       // "getheightoffset"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
 	RLV_BHVR_VERSIONNEW,			// "versionnew"
@@ -213,6 +214,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETCAM_ORIGINDISTMIN,	// Enforces a minimum distance from the camera origin (in m)
 	RLV_BHVR_SETCAM_ORIGINDISTMAX,	// Enforces a maximum distance from the camera origin (in m)
 	RLV_BHVR_SETCAM_EYEOFFSET,      // Changes the default camera offset
+	RLV_BHVR_SETCAM_EYEOFFSETSCALE, // Changes the default camera offset scale
 	RLV_BHVR_SETCAM_FOCUSOFFSET,    // Changes the default camera focus offset
 	RLV_BHVR_SETCAM_FOCUS,			// Forces the camera focus and/or position to a specific object, avatar or position
 	RLV_BHVR_SETCAM_FOV,			// Changes the current - vertical - field of view
@@ -266,6 +268,7 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SETCAM_ORIGINDISTMIN,	// Minimum distance between the camera position and the origin point (normal value)
 	RLV_MODIFIER_SETCAM_ORIGINDISTMAX,	// Maximum distance between the camera position and the origin point (normal value)
 	RLV_MODIFIER_SETCAM_EYEOFFSET,		// Specifies the default camera's offset from the camera (vector)
+	RLV_MODIFIER_SETCAM_EYEOFFSETSCALE,	// Specifies the default camera's offset scale (multiplier)
 	RLV_MODIFIER_SETCAM_FOCUSOFFSET,	// Specifies the default camera's focus (vector)
 	RLV_MODIFIER_SETCAM_FOVMIN,			// Minimum value for the camera's field of view (angle in radians)
 	RLV_MODIFIER_SETCAM_FOVMAX,			// Maximum value for the camera's field of view (angle in radians)

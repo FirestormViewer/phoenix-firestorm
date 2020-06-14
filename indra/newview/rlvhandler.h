@@ -147,6 +147,7 @@ protected:
 	void clearOverlayImage();                                                                   // @setoverlay=n
 	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
 	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
+	void setCameraOverride(bool fOverride);                                                     // @setcam family
 	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay=n
 
 	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
@@ -173,6 +174,7 @@ protected:
 
 	// Externally invoked event handlers
 public:
+	void cleanup();
 	void onActiveGroupChanged();
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
@@ -183,6 +185,7 @@ public:
 	void onSitOrStand(bool fSitting);
 	void onTeleportFailed();
 	void onTeleportFinished(const LLVector3d& posArrival);
+	static void cleanupClass();
 	static void onIdleStartup(void* pParam);
 protected:
 	void getAttachmentResourcesCoro(const std::string& strUrl);
@@ -262,6 +265,8 @@ protected:
 	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
 	LLPointer<LLViewerFetchedTexture>       m_pOverlayImage = nullptr;		// @setoverlay=n
 	int                                     m_nOverlayOrigBoost = 0;		// @setoverlay=n
+
+	std::string                             m_strCameraPresetRestore;       // @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction

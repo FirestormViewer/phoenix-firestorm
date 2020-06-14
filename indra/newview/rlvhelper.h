@@ -172,7 +172,7 @@ template<ERlvBehaviour templBhvr> using RlvForceHandler = RlvCommandHandler<RLV_
 template<ERlvBehaviour templBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE_REPLY, templBhvr>;
 
 // List of shared handlers
-typedef RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvBehaviourCamEyeFocusOffsetHandler;	// Shared between @setcam_eyeoffset and @setcam_focusoffset
+typedef RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvBehaviourCamEyeFocusOffsetHandler;	// Shared between @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;					// Shared between @addattach and @remattach
 typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;					// Shared between @sendchannel and @sendchannel_except
 typedef RlvBehaviourHandler<RLV_BHVR_SENDIM> RlvBehaviourRecvSendStartIMHandler;					// Shared between @recvim, @sendim and @startim
@@ -181,7 +181,7 @@ typedef RlvBehaviourToggleHandler<RLV_BHVR_SHOWSELF> RlvBehaviourShowSelfToggleH
 typedef RlvBehaviourHandler<RLV_BHVR_CAMZOOMMIN> RlvBehaviourCamZoomMinMaxHandler;					// Shared between @camzoommin and @camzoommax (deprecated)
 typedef RlvReplyHandler<RLV_BHVR_GETCAM_AVDISTMIN> RlvReplyCamMinMaxModifierHandler;				// Shared between @getcam_avdistmin and @getcam_avdistmax
 typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;								// Shared between @remattach and @detach
-typedef RlvForceHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvForceCamEyeFocusOffsetHandler;				// Shared between @setcam_eyeoffset and @setcam_focusoffset
+typedef RlvForceHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvForceCamEyeFocusOffsetHandler;				// Shared between @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 
 //
 // RlvCommandProcessor - Templated glue class that brings RlvBehaviourInfo, RlvCommandHandlerBaseImpl and RlvCommandHandler together
