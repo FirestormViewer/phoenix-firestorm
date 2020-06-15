@@ -76,6 +76,7 @@
 #include "llslurl.h"
 #include "llstartup.h"
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
+#include "rlvactions.h"
 #include "rlvcommon.h"
 // [/RLVa:KB]
 
@@ -142,6 +143,15 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 
 static bool handleSetShaderChanged(const LLSD& newvalue)
 {
+// [RLVa:KB] - @setenv
+	if ( (!RlvActions::canChangeEnvironment()) && (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")) && (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) )
+	{
+		gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
+		return true;
+	}
+// [/RLVa:KB]
+
+
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
 	gBumpImageList.restoreGL();
