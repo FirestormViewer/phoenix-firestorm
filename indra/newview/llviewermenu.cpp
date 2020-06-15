@@ -7404,7 +7404,6 @@ BOOL object_selected_and_point_valid(const LLSD& sdParam)
 BOOL object_is_wearable()
 {
 	if (!isAgentAvatarValid())
-	if (!object_selected_and_point_valid(LLSD(0)))
 	{
 		return FALSE;
 	}
