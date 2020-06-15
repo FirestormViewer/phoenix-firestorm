@@ -8788,15 +8788,16 @@ BOOL object_selected_and_point_valid(const LLSD& sdParam)
 }
 
 
-// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-/*
 BOOL object_is_wearable()
 {
 	if (!isAgentAvatarValid())
 	{
 		return FALSE;
 	}
-	if (!object_selected_and_point_valid())
+//	if (!object_selected_and_point_valid())
+// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	if (!object_selected_and_point_valid(LLSD(0)))
+// [/RLVa:KB]
 	{
 		return FALSE;
 	}
@@ -8806,8 +8807,6 @@ BOOL object_is_wearable()
 	}
 	return gAgentAvatarp->canAttachMoreObjects();
 }
-*/
-// [/RLVa:KB]
 
 class LLAttachmentPointFilled : public view_listener_t
 {
@@ -11782,10 +11781,7 @@ void initialize_menus()
 	enable.add("Object.EnableOpen", boost::bind(&enable_object_open));
 	enable.add("Object.EnableTouch", boost::bind(&enable_object_touch, _1));
 	enable.add("Object.EnableDelete", boost::bind(&enable_object_delete));
-//	enable.add("Object.EnableWear", boost::bind(&object_is_wearable));
-// [RLVa:KB] - Checked: 2010-03-16 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-	enable.add("Object.EnableWear", boost::bind(&object_selected_and_point_valid, _2));
-// [/RLVa:KB]
+	enable.add("Object.EnableWear", boost::bind(&object_is_wearable));
 
 	enable.add("Object.EnableStandUp", boost::bind(&enable_object_stand_up));
 	enable.add("Object.EnableSit", boost::bind(&enable_object_sit, _1));
