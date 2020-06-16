@@ -1160,18 +1160,11 @@ void FloaterQuickPrefs::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamT
 {
 	if (behavior == RLV_BHVR_SETENV)
 	{
-		if (type == RLV_TYPE_ADD)
-		{
-			enableWindlightButtons(FALSE);
-		}
-		else
-		{
-			enableWindlightButtons(TRUE);
-		}
+		enableWindlightButtons(type != RLV_TYPE_ADD);
 	}
 }
 
-void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
+void FloaterQuickPrefs::enableWindlightButtons(bool enable)
 {
 	childSetEnabled("WLPresetsCombo", enable);
 	childSetEnabled("WLPrevPreset", enable);
