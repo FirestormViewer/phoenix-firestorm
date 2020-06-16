@@ -70,6 +70,7 @@
 #include "rlvactions.h"
 // [/RLVa:KB]
 #include "fscommon.h"
+#include "llviewernetwork.h"
 
 //=========================================================================
 namespace
@@ -831,12 +832,8 @@ LLEnvironment::LLEnvironment():
 #ifdef OPENSIM
 void LLEnvironment::loadLegacyPresets()
 {
-    // [EEPMERGE]
-    //LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
-    //LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
-    // [/EEPMERGE]
     std::string path_name;
-    std::vector<decltype(LL_PATH_APP_SETTINGS)> folders={LL_PATH_APP_SETTINGS, LL_PATH_USER_SETTINGS};
+    std::vector<decltype(LL_PATH_APP_SETTINGS)> folders = { LL_PATH_APP_SETTINGS, LL_PATH_USER_SETTINGS };
     for (auto & settings_path : folders)
     {
         path_name = gDirUtilp->getExpandedFilename(settings_path , "windlight", "skies", "");
@@ -906,10 +903,14 @@ void LLEnvironment::initSingleton()
     mCurrentEnvironment->setWater(p_default_water);
 
     mEnvironments[ENV_DEFAULT] = mCurrentEnvironment;
+
     // <FS:Beq> OpenSim legacy Windlight setting support
 #ifdef OPENSIM
-    loadLegacyPresets();
-    loadUserPrefs();
+    if (LLGridManager::instance().isInOpenSim())
+    {
+        loadLegacyPresets();
+        loadUserPrefs();
+    }
 #endif
     // </FS:Beq>
 
