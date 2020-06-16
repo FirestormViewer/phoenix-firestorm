@@ -85,6 +85,17 @@ bool is_irc_me_prefix(const std::string& text)
 	return (prefix == "/me " || prefix == "/me'");
 }
 
+std::string unescape_name(const std::string& name)
+{
+	// bugfix for SL-46920: preventing filenames that break stuff.
+	char * curl_str = curl_unescape(name.c_str(), name.size());
+	std::string unescaped_name(curl_str);
+	curl_free(curl_str);
+	curl_str = NULL;
+
+	return unescaped_name;
+}
+
 std::string FSCommon::applyAutoCloseOoc(std::string message)
 {
 	if (!gSavedSettings.getBOOL("AutoCloseOOC"))

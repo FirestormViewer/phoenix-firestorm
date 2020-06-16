@@ -69,6 +69,7 @@
 // [RLVa:KB] - Checked: RLVa-2.4 (@setenv)
 #include "rlvactions.h"
 // [/RLVa:KB]
+#include "fscommon.h"
 
 //=========================================================================
 namespace
@@ -828,7 +829,6 @@ LLEnvironment::LLEnvironment():
 }
 // <FS:Beq> OpenSim legacy Windlight setting support
 #ifdef OPENSIM
-std::string unescape_name(const std::string& name);
 void LLEnvironment::loadLegacyPresets()
 {
     // [EEPMERGE]
