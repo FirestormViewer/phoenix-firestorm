@@ -45,6 +45,9 @@
 #include "llhints.h"
 #include "lltabcontainer.h"
 #include "llvoavatarself.h"
+// [RLVa:KB] - @setcam
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLPanelCameraItem> r("panel_camera_item");
 
@@ -626,6 +629,13 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 /*static*/
 void LLFloaterCamera::switchToPreset(const std::string& name)
 {
+// [RLVa:KB] - @setcam family
+	if (RlvActions::isCameraPresetLocked())
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	sFreeCamera = false;
 	clear_camera_tool();
 	if (PRESETS_REAR_VIEW == name)

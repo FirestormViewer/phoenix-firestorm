@@ -66,6 +66,12 @@
 #include "llviewergenericmessage.h"
 #include "llexperiencelog.h"
 
+// [RLVa:KB] - Checked: RLVa-2.4 (@setenv)
+#include "rlvactions.h"
+// [/RLVa:KB]
+#include "fscommon.h"
+#include "llviewernetwork.h"
+
 //=========================================================================
 namespace
 {
@@ -824,57 +830,55 @@ LLEnvironment::LLEnvironment():
 }
 // <FS:Beq> OpenSim legacy Windlight setting support
 #ifdef OPENSIM
-std::string unescape_name(const std::string& name);
 void LLEnvironment::loadLegacyPresets()
 {
-    // [EEPMERGE]
-    //LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
-    //LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
-    // [/EEPMERGE]
     std::string path_name;
-
-    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", "");
-    bool found = true;
-
-    while (found)
+    std::vector<decltype(LL_PATH_APP_SETTINGS)> folders = { LL_PATH_APP_SETTINGS, LL_PATH_USER_SETTINGS };
+    for (auto & settings_path : folders)
     {
-        std::string name;
-        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-        if (found)
+        path_name = gDirUtilp->getExpandedFilename(settings_path , "windlight", "skies", "");
+        bool found = true;
+
+        while (found)
         {
-            name = name.erase(name.length() - 4);
-            mLegacySkies.push_back(unescape_name(name));
-            LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacySkies.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+            }
         }
-    }
 
-    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "water", "");
-    found = true;
+        path_name = gDirUtilp->getExpandedFilename(settings_path, "windlight", "water", "");
+        found = true;
 
-    while (found)
-    {
-        std::string name;
-        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-        if (found)
+        while (found)
         {
-            name = name.erase(name.length() - 4);
-            mLegacyWater.push_back(unescape_name(name));
-            LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacyWater.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+            }
         }
-    }
 
-    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "days", "");
-    found = true;
+        path_name = gDirUtilp->getExpandedFilename(settings_path, "windlight", "days", "");
+        found = true;
 
-    while (found)
-    {
-        std::string name;
-        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-        if (found)
+        while (found)
         {
-            name = name.erase(name.length() - 4);
-            mLegacyDayCycles.push_back(unescape_name(name));
-            LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacyDayCycles.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+            }
         }
     }
 }
@@ -899,10 +903,14 @@ void LLEnvironment::initSingleton()
     mCurrentEnvironment->setWater(p_default_water);
 
     mEnvironments[ENV_DEFAULT] = mCurrentEnvironment;
+
     // <FS:Beq> OpenSim legacy Windlight setting support
 #ifdef OPENSIM
-    loadLegacyPresets();
-    loadUserPrefs();
+    if (LLGridManager::instance().isInOpenSim())
+    {
+        loadLegacyPresets();
+        loadUserPrefs();
+    }
 #endif
     // </FS:Beq>
 
@@ -1130,6 +1138,13 @@ bool LLEnvironment::getIsMoonUp() const
 //-------------------------------------------------------------------------
 void LLEnvironment::setSelectedEnvironment(LLEnvironment::EnvSelection_t env, LLSettingsBase::Seconds transition, bool forced)
 {
+// [RLVa:KB] - Checked: RLVa-2.4 (@setenv)
+    if ( (!RlvActions::canChangeEnvironment()) && (LLEnvironment::ENV_EDIT != env) )
+    {
+        return;
+    }
+// [/RLVa:KB]
+
     mSelectedEnvironment = env;
     updateEnvironment(transition, forced);
 }

@@ -1910,11 +1910,6 @@ BOOL AOEngine::importNotecard(const LLInventoryItem* item)
 		if (item->getAssetUUID().notNull())
 		{
 			mImportSet = new AOSet(item->getParentUUID());
-			if (!mImportSet)
-			{
-				LLNotificationsUtil::add("AOImportCreateSetFailed", LLSD());
-				return FALSE;
-			}
 			mImportSet->setName(item->getName());
 
 			LLUUID* newUUID = new LLUUID(item->getAssetUUID());
