@@ -650,7 +650,7 @@ void RlvEnvironment::registerSkyFn(const std::string& strFnName, const std::func
 void RlvEnvironment::registerGetEnvFn(const std::string& strFnName, const std::function<std::string(LLEnvironment::EnvSelection_t env)>& getFn)
 {
 	RLV_ASSERT(m_GetFnLookup.end() == m_GetFnLookup.find(strFnName));
-	m_GetFnLookup.insert(std::make_pair(strFnName, [this, getFn](const std::string& strRlvParam)
+	m_GetFnLookup.insert(std::make_pair(strFnName, [getFn](const std::string& strRlvParam)
 		{
 			if (RlvUtil::sendChatReply(strRlvParam, getFn(getTargetEnvironment())))
 				return RLV_RET_SUCCESS;
@@ -662,7 +662,7 @@ template<typename T>
 void RlvEnvironment::registerSetEnvFn(const std::string& strFnName, const std::function<ERlvCmdRet(LLEnvironment::EnvSelection_t env, const T& strRlvOption)>& setFn)
 {
 	RLV_ASSERT(m_SetFnLookup.end() == m_SetFnLookup.find(strFnName));
-	m_SetFnLookup.insert(std::make_pair(strFnName, [this, setFn](const std::string& strRlvOption)
+	m_SetFnLookup.insert(std::make_pair(strFnName, [setFn](const std::string& strRlvOption)
 		{
 			T optionValue;
 			if (!RlvCommandOptionHelper::parseOption<T>(strRlvOption, optionValue))
