@@ -74,8 +74,14 @@
 			<text name="LandType">
 				Тип:
 			</text>
+			<text name="LandTypeText">
+				Материк / Усадьба
+			</text>
 			<text name="ContentRating">
 				Рейтинг:
+			</text>
+			<text name="ContentRatingText">
+				Взрослый
 			</text>
 			<text name="Owner:">
 				Владелец:
@@ -150,7 +156,7 @@
 				Остров:
 			</text>
 			<text name="estate_name_text">
-				Материк
+				материк
 			</text>
 			<text name="estate_owner_lbl">
 				Владелец:
@@ -162,7 +168,10 @@
 				Для данного острова нет договора.
 			</text_editor>
 			<text name="covenant_timestamp_text">
-				Последнее изменение Wed Dec 31 16:00:00 1969
+				Последнее изменение Срд Дек 31 16:00:00 1969
+			</text>
+			<text name="region_section_lbl">
+				Регион:
 			</text>
 			<text name="region_name_text">
 				Загрузка...
@@ -170,8 +179,14 @@
 			<text name="region_landtype_lbl">
 				Тип:
 			</text>
+			<text name="region_landtype_text">
+				Материк / Усадьба
+			</text>
 			<text name="region_maturity_lbl">
 				Рейтинг:
+			</text>
+			<text name="region_maturity_text">
+				Взрослый
 			</text>
 			<text name="resellable_lbl">
 				Перепродажа:

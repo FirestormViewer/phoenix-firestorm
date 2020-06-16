@@ -40,6 +40,7 @@
 				<menu_item_call name="inventory_new_underpants" label="Nową bieliznę" />
 				<menu_item_call name="inventory_new_tattoo" label="Nowy tatuaż" />
 				<menu_item_call name="inventory_new_alpha" label="Nową warstwę alpha" />
+				<menu_item_call name="inventory_new_universal" label="Nową warstwę uniwersalną" />
 				<menu_item_call name="inventory_new_physics" label="Nową fizykę" />
 			</menu>
 			<menu name="inventory_new_body_parts" label="Nowe części ciała">

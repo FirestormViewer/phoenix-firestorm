@@ -851,6 +851,7 @@ set(viewer_SOURCE_FILES
     qtoolalign.cpp
     quickprefs.cpp
     rlvactions.cpp
+    rlvenvironment.cpp
     rlvhandler.cpp
     rlvhelper.cpp
     rlvcommon.cpp
@@ -1609,6 +1610,7 @@ set(viewer_HEADER_FILES
     pieslice.h
     pipeline.h
     rlvactions.h
+    rlvenvironment.h
     rlvdefines.h
     rlvhandler.h
     rlvhelper.h

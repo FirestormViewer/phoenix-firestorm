@@ -6,7 +6,6 @@
 			Suggerimenti al passaggio del mouse (hovertip):
 		</text>
 		<check_box label="Suggerimenti di base" name="ShowHoverTips" tool_tip="Mostra suggerimenti passando col mouse su un&apos;avatar o altre cose. (CTRL+SHIFT+T)" />
-		<check_box label="Su tutti gli oggetti" name="ShowAllHoverTips" />
 		<check_box label="Sul terreno" name="ShowLandHoverTips" />
 		<check_box name="FSAdvancedTooltips" label="Mostra informazioni estese (stile Phoenix)"/>
 		<check_box name="FSShowGroupTitleInTooltip" label="Aggiungi titolo del gruppo"/>

@@ -47,6 +47,7 @@ CHANNEL="" # will be overwritten later with platform-specific values unless manu
 LL_ARGS_PASSTHRU=""
 JOBS="0"
 WANTS_NINJA=$FALSE
+WANTS_VSCODE=$FALSE
 TESTBUILD_PERIOD="0"
 SINGLEGRID_URI=""
 
@@ -81,6 +82,7 @@ showUsage()
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
     echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
     echo "  --ninja                  : Build using Ninja (Linux only)"
+    echo "  --vscode                 : Exports compile commands for VSCode (Linux only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
     echo
@@ -90,7 +92,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -127,6 +129,7 @@ getArgs()
           platform)       PLATFORM="$OPTARG";;
           jobs)           JOBS="$OPTARG";;
           ninja)          WANTS_NINJA=$TRUE;;
+          vscode)         WANTS_VSCODE=$TRUE;;
 
           help)           showUsage && exit 0;;
 
@@ -316,6 +319,7 @@ echo -e "          CLEAN: `b2a $WANTS_CLEAN`"                                  |
 echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  | tee -a $LOG
 echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a $LOG
 echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  | tee -a $LOG
+echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 | tee -a $LOG
 echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a $LOG
 echo -e "          BTYPE: $BTYPE"                                              | tee -a $LOG
 if [ $PLATFORM == "linux" -o $PLATFORM == "darwin" ] ; then
@@ -502,6 +506,16 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         else
             TARGET="Unix Makefiles"
         fi
+        if [ $WANTS_VSCODE -eq $TRUE ] ; then
+            VSCODE_FLAGS="-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
+            ROOT_DIR=$(dirname $(dirname $(readlink -f $0)))
+
+            if [ -d ${ROOT_DIR}/vscode_template/ ]
+            then
+                test -d "${ROOT_DIR}/.vscode" || mkdir "${ROOT_DIR}/.vscode"
+                cp -n "${ROOT_DIR}/vscode_template/"* "${ROOT_DIR}/.vscode/"
+            fi
+        fi
     elif [ \( $PLATFORM == "windows" \) ] ; then
         TARGET="${AUTOBUILD_WIN_CMAKE_GEN}"
         UNATTENDED="-DUNATTENDED=ON"
@@ -509,7 +523,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
-          $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+          $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 
     if [ $PLATFORM == "windows" ] ; then
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE

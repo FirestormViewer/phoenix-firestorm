@@ -156,16 +156,6 @@
 				</text>
 				<button name="Reset_AO_Soften" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 			</panel>
-			<panel name="P_Spec_Highlight_Settings">
-				<text name="T_Smoothness" tool_tip="Gładkość (wykładnik potęgowy dla podświetleń) jest wartością definiowalną przez użytkownika, która kontroluje widoczną gładkość powierzchni.">
-					Gładkość
-				</text>
-				<button name="Reset_Smoothness" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Smooth_Res" tool_tip="Rozdzielczość (SpecularResX) kontroluje jakość mapowania podświetleń uwydatniających.">
-					Rozdzielcz.
-				</text>
-				<button name="Reset_Smooth_Res" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-			</panel>
 		</panel>
 		<panel name="P_DoF_Glow" label="Głębia/blask">
 			<panel name="PT_DoF_Glow">

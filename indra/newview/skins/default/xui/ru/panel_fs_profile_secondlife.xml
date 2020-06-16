@@ -4,38 +4,47 @@
     <string name="status_offline">Не в сети</string>
     <string name="no_partner_text" value="Нет" />
     <string name="no_group_text" value="Нет" />
-    <string name="FSDev" value=" Developer" />
-    <string name="FSSupp" value=" Support" />
-    <string name="FSQualityAssurance" value=" QA" />
-        <text name="Name:" value="Имя:" />
-        <text_editor name="complete_name" value="(загрузка...)" />
-        <button name="set_name" tool_tip="Изменить отображаемое имя" />
-        <text name="Key:" value="Ключ:" />
-        <text_editor name="user_key" value="(загрузка...)" />
-        <text name="label" value="Возраст:" />
-        <text name="label2" value="Статус:" />
-		<text name="partner_label" value="Партнер:" />
-        <text name="Groups:" value="Группы:" />
-        <button name="group_invite" tool_tip="Пригласить в группу" />
-        <text name="About:" value="Инфо:" />
-        <text name="Give item:" value="Передать:" />
-        <text name="Give inventory" tool_tip="Перетяните предмет в данное место, чтоб передать его жителю">
-            Перетяните предмет в данное место.
-        </text>
-        <layout_stack name="buttonstack">
-            <layout_panel name="left_buttonstack">
-                <button label="Найти на карте" label_selected="Найти на карте" name="show_on_map_btn" tool_tip="Найти жителя на карте" />
-                <button label="Платить" label_selected="Платить" name="pay" tool_tip="Заплатить данному жителю"/>
-            </layout_panel>
-            <layout_panel name="middle_buttonstack">
-                <button label="Предложить телепорт" label_selected="Предложить телепорт" name="teleport" tool_tip="Предложить данному жителю телепортироваться" />
-                <button label="Личное сообщение (ЛС)" label_selected="Личное сообщение (ЛС)" name="im" tool_tip="Написать данному жителю лисное сообщение (ЛС)" />
-            </layout_panel>
-            <layout_panel name="right_buttonstack">
-                <button label="Добавить в друзья" label_selected="Добавить в друзья" name="add_friend" tool_tip="Предложить дружбу данному жителю" />
-                <button label="Заблокировать" name="block" tool_tip="Заблокировть данного жителя" />
-                <button label="Разблокировать" name="unblock" tool_tip="Разблокировать данного жителя" />
-            </layout_panel>
-        </layout_stack>
-        <check_box name="show_in_search_checkbox" label="Показывать в поиске" />
+    <string name="FSDev" value=" Разработчик" />
+    <string name="FSSupp" value=" Поддержка" />
+    <string name="FSQualityAssurance" value=" Тестер" />
+    <string name="FSGW" value=" Шлюз" />
+
+    <text name="Key:" value="Ключ:" />
+    <text_editor name="user_key" value="(загрузка...)" />
+    <button name="copy_own_uri_button" label="Копия URI" />
+    <text name="Name:" value="Имя:" />
+    <button label="Имя:" name="set_name" tool_tip="Изменить отображаемое имя" />
+    <text_editor name="complete_name" value="(загрузка...)" />
+    <button name="copy_name_button" label="Копир.Имя" />
+    <text name="Photo:" value="Фото:" />
+
+    <text name="status" value="Статус Неизвестен" />
+    <text name="label" value="Возраст:" />
+    <text_editor name="register_date" value="(загрузка...)" />
+    <text name="label2" value="Аккаунт:" />
+    <text name="partner_label" value="Партнер:" />
+    <text name="Groups:" value="Группы:" />
+    <button name="group_invite" tool_tip="Пригласить в группу" />
+    <text name="About:" value="Инфо:" />
+    <text name="Give item:" value="Передать:" />
+    <text name="Give inventory" tool_tip="Перетяните предмет в данное место, чтоб передать его жителю">
+        Перетяните предмет в данное место.
+    </text>
+    <layout_stack name="buttonstack">
+        <layout_panel name="left_buttonstack">
+            <button name="show_on_map_btn" label="Найти на карте" label_selected="Найти на карте" tool_tip="Найти жителя на карте" />
+            <button name="pay" label="Платить" label_selected="Платить" tool_tip="Заплатить данному жителю"/>
+        </layout_panel>
+
+        <layout_panel name="middle_buttonstack">
+            <button name="teleport" label="Предложить телепорт" label_selected="Предложить телепорт" tool_tip="Предложить данному жителю телепортироваться к вам" />
+            <button name="im" label="Личное сообщение (ЛС)" label_selected="Личное сообщение (ЛС)" tool_tip="Написать данному жителю лисное сообщение (ЛС)" />
+        </layout_panel>
+        <layout_panel name="right_buttonstack">
+            <button name="add_friend" label="Добавить в друзья" label_selected="Добавить в друзья" tool_tip="Предложить дружбу данному жителю" />
+            <button name="block" label="Заблокировать" tool_tip="Заблокировть этого жителя" />
+            <button name="unblock" label="Разблокировать" tool_tip="Разблокировать этого жителя" />
+        </layout_panel>
+    </layout_stack>
+    <check_box name="show_in_search_checkbox" label="Показывать в поиске" />
 </panel>

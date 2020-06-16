@@ -192,6 +192,7 @@
 			</text>
 			<slider label="Активных:" name="active"/>
 			<slider label="Неактивных:" name="inactive"/>
+			<slider label="Камера / Движение:" name="camera_movement"/>
 			<text name="console_opacity">
 				Прозрачность консоли:
 			</text>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<densityctrl label="Плотность" name="density_ctrl">
+    <text name="exponential_term_label">Экспоненциальный термин</text>
+    <text name="exponential_scale_factor_label" width="120">Экспоненциальный коэффициент масштаба</text>
+    <text name="linear_term_label" width="120">Линейный термин</text>
+    <text name="constant_term_label" width="120">Постоянный термин</text>
+    <text name="max_altitude_label" width="80">Макс.высота</text>
+    <text name="aniso_factor_label" width="80">Фактор анизотропии</text>
+</densityctrl>

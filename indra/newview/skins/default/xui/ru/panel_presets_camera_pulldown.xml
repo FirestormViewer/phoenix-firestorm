@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="presets_camera_pulldown">
+	<text name="Camera Presets">Предустановки Камеры</text>
+	<button name="open_prefs_btn" label="Открыть управление Камерой" tool_tip="Открывает окно управления камерой"/>
+</panel>
