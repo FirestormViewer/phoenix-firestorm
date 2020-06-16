@@ -36,6 +36,12 @@
 #include "llpreprocessor.h"
 #include <boost/static_assert.hpp>
 
+// <FS:ND> Supress some false positives of PVS Studio.
+// They are misleading as there is opossibly a pointr taken behid the array and that pointer is passed down. But it's never dereferenced.
+//-V:llassert_always:557
+//-V:lllog_site_args_:557
+// </FS:ND>
+
 const int LL_ERR_NOERR = 0;
 
 // Define one of these for different error levels in release...

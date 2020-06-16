@@ -333,7 +333,7 @@ S32 FSFloaterVRAMUsage::calcVBOEntrySize( LLVertexBuffer *aVBO )
 
 void FSFloaterVRAMUsage::onProperties( LLSelectNode const *aProps )
 {
-	if( !aProps && !aProps->getObject() )
+	if( !aProps || !aProps->getObject() )
 		return;
 
 	LLUUID id = aProps->getObject()->getID();

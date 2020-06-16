@@ -836,49 +836,52 @@ void LLEnvironment::loadLegacyPresets()
     //LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
     // [/EEPMERGE]
     std::string path_name;
-
-    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", "");
-    bool found = true;
-
-    while (found)
+    std::vector<decltype(LL_PATH_APP_SETTINGS)> folders={LL_PATH_APP_SETTINGS, LL_PATH_USER_SETTINGS};
+    for (auto & settings_path : folders)
     {
-        std::string name;
-        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-        if (found)
+        path_name = gDirUtilp->getExpandedFilename(settings_path , "windlight", "skies", "");
+        bool found = true;
+
+        while (found)
         {
-            name = name.erase(name.length() - 4);
-            mLegacySkies.push_back(unescape_name(name));
-            LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacySkies.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+            }
         }
-    }
 
-    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "water", "");
-    found = true;
+        path_name = gDirUtilp->getExpandedFilename(settings_path, "windlight", "water", "");
+        found = true;
 
-    while (found)
-    {
-        std::string name;
-        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-        if (found)
+        while (found)
         {
-            name = name.erase(name.length() - 4);
-            mLegacyWater.push_back(unescape_name(name));
-            LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacyWater.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+            }
         }
-    }
 
-    path_name = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "days", "");
-    found = true;
+        path_name = gDirUtilp->getExpandedFilename(settings_path, "windlight", "days", "");
+        found = true;
 
-    while (found)
-    {
-        std::string name;
-        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-        if (found)
+        while (found)
         {
-            name = name.erase(name.length() - 4);
-            mLegacyDayCycles.push_back(unescape_name(name));
-            LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacyDayCycles.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+            }
         }
     }
 }
