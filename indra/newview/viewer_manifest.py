@@ -1427,7 +1427,7 @@ class DarwinManifest(ViewerManifest):
                                     "libfmod.dylib",
                                     ):
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
- 
+
                 # our apps
                 executable_path = {}
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
@@ -2169,7 +2169,6 @@ class Linux_i686_Manifest(LinuxManifest):
                     print "Skipping libfmod.so - not found"
                     pass
 
-
         # Vivox runtimes
         with self.prefix(src=relpkgdir, dst="bin"):
             self.path("SLVoice")
@@ -2262,6 +2261,7 @@ def symlinkf(src, dst):
 # </FS:Ansariel> Added back for Mac compatibility reason
 
 if __name__ == "__main__":
+    # fmodstudio and openal can be used simultaneously and controled by environment
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
