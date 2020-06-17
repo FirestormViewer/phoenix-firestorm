@@ -2,7 +2,7 @@
 <panel name="panel_group_notify">
 	<text name="group_notice" value="Объявление группы" />
 	<text name="title" value="Отправитель / Группа" />
-	<text name="attachment_label" value="Добавлено:" />
+	<text name="attachment_label" value="Добавлено:" width="80"/>
 	<panel name="attachment_container">
 		<text name="attachment" value="Вложение" />
 	</panel>

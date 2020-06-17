@@ -1514,6 +1514,15 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="none">
 		keine
 	</string>
+	<string name="sky">
+		Himmler
+	</string>
+	<string name="water">
+		Wasser
+	</string>
+	<string name="day">
+		Tageszyklus
+	</string>
 	<string name="shirt_not_worn">
 		Hemd nicht getragen
 	</string>
@@ -5205,7 +5214,7 @@ Missbrauchsbericht
 	<string name="Female - Wow">
 		Weiblich - Wow
 	</string>
-	<string name="New Daycycle">
+	<string name="New Day">
 		Neuer Tageszyklus
 	</string>
 	<string name="New Water">
@@ -5213,6 +5222,9 @@ Missbrauchsbericht
 	</string>
 	<string name="New Sky">
 		Neuer Himmel
+	</string>
+	<string name="New Settings">
+		Neue Einstellungen
 	</string>
 	<string name="/bow">
 		/verbeugen

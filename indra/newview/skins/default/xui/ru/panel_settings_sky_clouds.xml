@@ -1,13 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Облака" name="panel_settings_sky_clouds">
-	<layout_stack>
-		<layout_panel>
-			<slider label="X" name="cloud_density_x"/>
-			<slider label="Y" name="cloud_density_y"/>
-			<slider label="D" name="cloud_density_d"/>
-			<slider label="X" name="cloud_detail_x"/>
-			<slider label="Y" name="cloud_detail_y"/>
-			<slider label="D" name="cloud_detail_d"/>
+	<layout_stack name="main_ls">
+		<layout_panel name="left_lp">
+			<text name="cloud_color_label" width="100">Цвет облака:</text>
+			<text name="cloud_coverage_label">Облачное покрытие:</text>
+			<text name="cloud_scale_label">Масштаб облаков:</text>
+			<text name="cloud_variance_label">Облачная дисперсия:</text>
+			<text name="cloud_scroll_label">Движение облаков:</text>
+			<text name="cloud_image_label">Изображение облака:</text>
+		</layout_panel>
+		<layout_panel name="right_lp">
+			<text name="cloud_density_label">Плотность облаков:</text>
+			<text name="cloud_detail_label">Детальность облака:</text>
 		</layout_panel>
 	</layout_stack>
 </panel>

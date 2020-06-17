@@ -15,7 +15,7 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
-	<panel name="menu_search_panel">
+	<panel name="menu_search_panel" left="-483">
 		<search_editor label="Ricerca nei menu" name="search_menu_edit" tool_tip="Scrivi qui i termini da cercare. Verranno visualizzate anche corrispondenze parziali con le voci di menu." />
 	</panel>
 	<panel name="parcel_info_panel">
@@ -24,14 +24,18 @@
 		<button name="status_lightshare_btn" tool_tip="Impostazioni Lightshare"/>
 		<text tool_tip="Nome del lotto su cui ti trovi. Clic per aprire le informazioni sul lotto." name="parcel_info_text" value="(caricamento...)"/>
 	</panel>
-	<panel name="balance_bg" left="-308">
+	<panel name="balance_bg" width="97" left="-351">
 		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ??"/>
-		<button label="Compra L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
+		<button label="Compra L$" name="buyL" tool_tip="Clicca per acquistare più L$" width="60"/>
 	</panel>
 	<panel name="time_and_media_bg" width="229">
-		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
+		<text name="TimeText" tool_tip="Orario attuale (Pacifico)" width="78">
+			24:00:00 PST
+		</text>
 		<button name="stream_toggle_btn" tool_tip="Attiva/ferma musica nel lotto"/>
 		<button name="media_toggle_btn" tool_tip="Attiva/ferma tutti i media (musica, video, pagine Web)"/>
-		<text name="FPSText" tool_tip="Fotogrammi al secondo (FPS)" />
+		<text name="FPSText" tool_tip="Fotogrammi al secondo (FPS)">
+			200.0
+		</text>
 	</panel>
 </panel>

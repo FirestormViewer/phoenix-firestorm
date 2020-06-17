@@ -8,7 +8,7 @@
 	</string>
 	<layout_stack name="floater_stack">
 		<layout_panel name="info_panel">
-			<text>
+			<text name="info_panel_label" width="40">
 				Nazwa:
 			</text>
 			<button label="Wczytaj" name="btn_load" tool_tip="Wczytaj ustawienia z szafy" />

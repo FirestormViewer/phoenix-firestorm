@@ -24,7 +24,6 @@
 	</panel>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
-		<button name="status_wl_btn" tool_tip="Настройки окружающей среды"/>
 		<button name="status_lightshare_btn" tool_tip="Настройки освещения"/>
 		<text tool_tip="Имя земельного участка, на котором вы стоите. Нажмите о земле." name="parcel_info_text" value="(загрузка...)"/>
 	</panel>
