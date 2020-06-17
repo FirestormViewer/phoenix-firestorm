@@ -56,18 +56,6 @@
          width="256" />
         <check_box
          enabled_control="ShowHoverTips"
-         control_name="ShowAllObjectHoverTip"
-         height="16"
-         initial_value="true"
-         label="on All Objects"
-         tool_tip="Set this to show hover tips on in-world objects"
-         layout="topleft"
-         left_delta="10"
-         name="ShowAllHoverTips"
-         top_pad="2"
-         width="256" />
-        <check_box
-         enabled_control="ShowHoverTips"
          control_name="ShowLandHoverTip"
          height="16"
          initial_value="true"
@@ -76,6 +64,7 @@
          layout="topleft"
          name="ShowLandHoverTips"
          top_pad="2"
+         left_delta="10"
          width="256" />
 		<check_box
 		enabled_control="ShowHoverTips"
@@ -83,7 +72,7 @@
 		name="FSAdvancedTooltips"
 		label="Show extended information in hovertips (Phoenix style)"
 		layout="topleft"
-		top_pad="5"
+		top_pad="25"
 		left_delta="-10"
 		height="16"
 		width="350" />

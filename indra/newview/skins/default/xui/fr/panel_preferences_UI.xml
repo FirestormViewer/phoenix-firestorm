@@ -4,7 +4,6 @@
 		<panel label="Monde 3D" name="UI Prefs Panel">
 			<text name="HoverTipText">Astuces :</text>
 			<check_box label="Afficher les infobulles" name="ShowHoverTips" tool_tip="Activer cette option pour afficher une infobulle informative lorsque votre souris passe au-dessus des avatars et des objets"/>
-			<check_box label="Sur tous les objets" tool_tip="Activer cette option pour afficher les infobulles informatives sur tous les objets" name="ShowAllHoverTips"/>
 			<check_box label="Sur le terrain" tool_tip="Activer cette option pour afficher une infobulle informative sur le terrain" name="ShowLandHoverTips"/>
 			<check_box name="FSAdvancedTooltips" label="Afficher des informations plus détaillées dans les infobulles"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Afficher le titre de l'avatar dans son infobulle"/>

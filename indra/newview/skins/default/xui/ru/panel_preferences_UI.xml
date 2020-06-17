@@ -6,7 +6,6 @@
             Всплывающие подсказки:
         </text>
         <check_box label="Показывать всплывающие подсказки" name="ShowHoverTips" tool_tip="Установите, чтобы показывать подсказки при наведении на аватаров и некоторые другие вещи (CTRL+SHIFT+T)" />
-        <check_box label="На всех объектах" tool_tip="Установите для отображения подсказок при наведении на объекты" name="ShowAllHoverTips" />
         <check_box label="На земле" tool_tip="Установите для отображения подсказок при наведении на землю" name="ShowLandHoverTips" />
         <check_box name="FSAdvancedTooltips" label="Показать расширенную информацию в подсказках (стиль Phoenix)" />
         <check_box name="FSShowGroupTitleInTooltip" label="Показывать роли групп в подсказках" />

@@ -16,7 +16,7 @@
 		Выход
 	</text>
 	<text name="My volume label">
-		Громкость микрофона:
+		Микрофон:
 	</text>
 	<slider_bar name="mic_volume_slider" tool_tip="Измените уровень в микрофоне, используя ползунок"/>
 	<text name="wait_text">

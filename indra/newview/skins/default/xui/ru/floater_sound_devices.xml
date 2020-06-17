@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_sound_devices" title="Звуковые устройства">
-	<text name="voice_label">
-		Голосовой чат
-	</text>
-	<check_box label="Включено" name="enable_voice"/>
+	<text name="voice_label" width="90">Голосовой чат</text>
+	<check_box label="Включено" name="enable_voice" left="100"/>
 </floater>

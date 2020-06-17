@@ -242,7 +242,7 @@
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AllowMultipleViewers">
-		Запуск нескольких приложений Second Life Viewer не поддерживается. Это может привести к конфликтам кэша текстур, повреждению и снижению производительности и визуального отображения.
+		Запуск нескольких приложений [APP_NAME] не поддерживается. Это может привести к конфликтам кэша текстур, повреждению и снижению производительности и визуального отображения.
 		<usetemplate name="okbutton" yestext="ОК"/>
 	</notification>
 	<notification name="GrantModifyRights">
@@ -325,6 +325,14 @@
 	<notification name="EjectGroupMembersWarning">
 		Вы собираетесь исключить [COUNT] участников из группы.
 		<usetemplate ignoretext="Подтвердите исключение участников из группы" name="okcancelignore" notext="Отмена" yestext="Исключить"/>
+	</notification>
+	<notification name="BanGroupMemberWarning">
+		Вы собираетесь заблокировать [AVATAR_NAME] в группе.
+		<usetemplate ignoretext="Подтвердить блокировку участника в группе" name="okcancelignore" notext="Отмена" yestext="Бан"/>
+	</notification>
+	<notification name="BanGroupMembersWarning">
+		Вы собираетесь заблокировать [COUNT] участников в группе.
+		<usetemplate ignoretext="Подтвердить блокировку нескольких участников в группе" name="okcancelignore" notext="Отмена" yestext="Бан"/>
 	</notification>
 	<notification name="GroupBanUserOnBanlist">
 		Некоторым резидентам не отправлено приглашение, так как они исключены из группы.
@@ -539,9 +547,9 @@
 	</notification>
 	<notification name="PromptGoToEventsPage">
 		Перейти на веб-страницу событий [CURRENT_GRID]?
-		<url name="url">
-			http://secondlife.com/events/
-		</url>
+		<!-- <url name="url">
+			https://secondlife.com/my/community/events
+		</url> -->
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="SelectProposalToView">
@@ -638,6 +646,10 @@
 	</notification>
 	<notification name="CannotDownloadFile">
 		Невозможно загрузить файл
+	</notification>
+	<notification name="MediaFileDownloadUnsupported">
+		Вы запросили загрузку файла, которая не поддерживается [APP_NAME].
+		<usetemplate ignoretext="Предупреждать о загрузке неподдерживаемых файлов" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="CannotWriteFile">
 		Невозможно записать файл [[FILE]]
@@ -1222,7 +1234,7 @@
 		Сохранить текущую одежду как новый комплект:
 		<form name="form">
 			<input name="message">
-				[DESC] (новый)
+				[DESC] (new)
 			</input>
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Отмена"/>
@@ -1232,7 +1244,7 @@
 		Сохранить предмет в инвентаре как:
 		<form name="form">
 			<input name="message">
-				[DESC] (новый)
+				[DESC] (new)
 			</input>
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Отмена"/>
@@ -1741,6 +1753,21 @@
 Все входящие предложения телепортироваться или запросы будут автоматически отклоняться и сопровождаться отправкой сообщения, которое было указано в Настройки &gt; Приватность &gt; Автоответ
 		<usetemplate ignoretext="Смена моего статуса на режим &quot;Отклонять предложения телепортации и запросы&quot;" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="RejectTeleportOffersModeWarning">
+Вы не можете отправить запрос телепортации в данный момент, потому что включен режим 'отклонить все входящие предложения и запросы телепорта'.
+Перейдите в меню 'Общение' &gt; 'Статус в сети' если вы хотите отменить его.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RejectFriendshipRequestsModeSet">
+Включен режим отклонять все входящие запросы дружбы.
+Входящие запросы дружбы от кого-либо теперь будут отклонены с вашим настроенным автоответчиком. Вы не будете уведомлены из-за этого факта.
+		<usetemplate ignoretext="Я изменяю свой статус, чтобы отклонять все запросы дружбы" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="RejectAllGroupInvitesModeSet">
+Отклонить все входящие приглашения группы включен.
+Входящие групповые приглашения от кого-либо теперь будут отклоняться автоматически. Вы не будете уведомлены из-за этого факта.
+		<usetemplate ignoretext="Я изменяю свой статус, чтобы отклонять все приглашения группы" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Вы достигли максимального количества групп. Пожалуйста, покиньте любую группу до вступления или отклоните предложение.
 [NAME] пригласил вас вступить в группу как участник.
@@ -1974,16 +2001,51 @@
 		Выбросить пользователя [EVIL_USER] из этого землевладения?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
-	<notification name="EstateChangeCovenant">
-		Вы действительно хотите изменить соглашение по землевладению?
+	<notification label="Подтвердить выбрасывание" name="EstateKickMultiple">
+		Выбросить перечисленных пользователей из этого землевладения?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
+	</notification>
+	<notification label="Подтвердить Телепорт Домой" name="EstateTeleportHomeUser">
+		Телепортировать [AVATAR_NAME] домой?
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
+	</notification>
+	<notification label="Подтвердить Телепорт Домой" name="EstateTeleportHomeMultiple">
+		Телепортировать перечисленных пользователей домой?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
+	</notification>
+	<notification label="Подтвердить Бан" name="EstateBanUser">
+		Отказать в доступе [EVIL_USER] только для этого землевладения или для [ALL_ESTATES]?
+		<usetemplate name="yesnocancelbuttons" canceltext="Отмена" notext="Все земли" yestext="Эта Земля"/>
+	</notification>
+	<notification label="Подтвердить Бан" name="EstateBanUserMultiple">
+		Отказать в доступе перечисленным пользователям только для этого землевладения или для [ALL_ESTATES]?
+
+[RESIDENTS]
+		<usetemplate name="yesnocancelbuttons" canceltext="Отмена" notext="Все земли" yestext="Эта Земля"/>
+	</notification>
+	<notification name="EstateParcelAccessOverride">
+		Снятие отметки с этого параметра может снять ограничения, добавленные владельцами участков, для предотвращения нарушений, сохранения конфиденциальности или защиты несовершеннолетних жителей от материалов для взрослых. Пожалуйста, обсудите с вашими владельцами участков при необходимости.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="EstateParcelEnvironmentOverride">
+		(Изменение по всем владениям: [ESTATENAME]) Если снять этот флажок, будут удалены все пользовательские настройки среды, добавленные владельцами участков в свои участки. Пожалуйста, обсудите с вашими владельцами участков при необходимости.
+Вы хотите продолжить?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		Вы пытаетесь посетить регион, контент в котором не соответствует вашим настройкам.  Попробуйте изменить настройки в меню &quot;Я &gt; Настройки &gt; Общие&quot;.
+		Вы пытаетесь посетить регион, контент в котором не соответствует вашим настройкам.  Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SLM_UPDATE_FOLDER">
 		[MESSAGE]
+	</notification>
+	<notification name="EstateChangeCovenant">
+		Вы действительно хотите изменить соглашение по землевладению?
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		Вы пытаетесь посетить регион, контент в котором имеет рейтинг [REGIONMATURITY] и предназначен только для взрослых.
@@ -2007,7 +2069,7 @@
 		</form>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_PreferencesOutOfSync">
-		При телепортации возникли технические проблемы, так как ваши настройки не синхронизированы с сервером.
+		У нас возникли технические трудности с вашим входом в, потому что ваши настройки не синхронизированы с сервером.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
@@ -2313,11 +2375,24 @@
 		Это действие возвращает все кнопки в инструментарий, а панели инструментов становятся пустыми.
 
 Это действие нельзя отменить.
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="DeleteItems">
-		[QUESTION]
-		<usetemplate ignoretext="Подтверждать перед удалением предметов" name="okcancelignore" notext="Отмена" yestext="OK"/>
+		<form name="form">
+			<ignore name="ignore" text="Подтвердить удаление элементов"/>
+			<button name="Yes" text="Да"/>
+			<button name="No" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="DeleteFilteredItems">
+		Ваш инвентарь в настоящее время отфильтрован, и не все элементы, которые вы собираетесь удалить, в настоящее время видны.
+
+Вы уверены, что хотите удалить их?
+		<usetemplate ignoretext="Подтвердить удаление отфильтрованных элементов" name="okcancelignore" notext="Отмена" yestext="Да"/>
+	</notification>
+	<notification name="ConfirmUnlink">
+		Вы действительно хотите отменить связь выбранного объекта?
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Отсоединить"/>
 	</notification>
 	<notification name="HelpReportAbuseEmailLL">
 		Этот инструмент служит для уведомления о нарушениях [http://secondlife.com/corporate/tos.php Пользовательского соглашения] и [http://secondlife.com/corporate/cs.php стандартов сообщества].
@@ -2416,12 +2491,10 @@
 		Вы действительно хотите очистить кэш инвентаря?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
-	<!--
 	<notification name="ConfirmClearWebBrowserCache">
 		Вы действительно хотите очистить кэш браузера?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
-	-->
 	<notification name="ConfirmClearCookies">
 		Вы действительно хотите удалить файлы cookie?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
@@ -2433,6 +2506,11 @@
 	<notification name="ConfirmEmptyLostAndFound">
 		Вы действительно хотите необратимо удалить содержимое папки Найденные вещи?
 		<usetemplate ignoretext="Подтверждать перед опорожнением папки Найденные вещи инвентаря" name="okcancelignore" notext="Нет" yestext="Да"/>
+	</notification>
+	<notification name="ConfirmReplaceLink">
+		Вы собираетесь заменить ссылку '[TYPE]' на элемент тела, предметом который не соответствует типу.
+Вы уверены, что хотите продолжить?
+		<usetemplate ignoretext="Подтвердить, прежде чем я заменю ссылку" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="CopySLURL">
 		Данный SLurl был скопирован в буфер обмена:
@@ -2454,7 +2532,15 @@
 		Этот файл суточного цикла ссылается на отсутствующий файл неба: [SKY].
 	</notification>
 	<notification name="WLRegionApplyFail">
-		Не удалось применить настройки к региону.  Попробуйте покинуть регион, а затем вернуться в него.  Причина неполадки: [FAIL_REASON]
+		Извините, настройки не могут быть применены к региону. Причина: [FAIL_REASON]
+	</notification>
+	<notification name="WLLocalTextureDayBlock">
+		Локальная текстура используется на дорожке [TRACK], кадр № [FRAMENO] ([FRAME]%) в поле [FIELD].
+Настройки не могут быть сохранены с использованием локальных текстур.
+	</notification>
+	<notification name="WLLocalTextureFixedBlock">
+		В поле [FIELD] используется локальная текстура.
+Настройки не могут быть сохранены с использованием локальных текстур.
 	</notification>
 	<notification name="EnvCannotDeleteLastDayCycleKey">
 		Невозможно удалить последний ключ в этом суточном цикле: пустой суточный цикл не разрешен.  Следует изменить последний оставшийся ключ, а не удалять его и создавать новый.
@@ -2518,7 +2604,7 @@
 		Строка [STRING_NAME] отсутствует в strings.xml
 	</notification>
 	<notification name="EnableMediaFilter">
-		Воспроизведение медиа или музыки может ссылаться на сайты за пределами Second Life. Вы можете включить фильтр, который позволит вам выбрать, какие сайты будут получать медиа запросы, что позволит вам улучшить контроль над вашей личной жизнью.
+		Воспроизведение медиа или музыки может ссылаться на сайты за пределами [CURRENT_GRID]. Вы можете включить фильтр, который позволит вам выбрать, какие сайты будут получать медиа запросы, что позволит вам улучшить контроль над вашей личной жизнью.
 
 Включить медиа фильтр?
 (Вы можете изменить этот параметр позже в Настройки &gt; Звук и Медиа.)
@@ -3441,6 +3527,9 @@ URL: [AUDIOURL]
 	<notification name="DefaultPresetNotSaved">
 		Невозможно изменить настройку по умолчанию.
 	</notification>
+	<notification name="PresetAlreadyExists">
+		&apos;[NAME]&apos; уже используется. Вы можете заменить эту предустановку или выберите другое имя.
+	</notification>
 	<notification name="PresetNotDeleted">
 		Ошибка при удалении пресета [NAME].
 	</notification>
@@ -3826,12 +3915,6 @@ URL: [AUDIOURL]
 
 Если неполадки продолжаются, посетите сайт [SUPPORT_SITE].
 	</global>
-	<global name="UnsupportedCPUAmount">
-		796
-	</global>
-	<global name="UnsupportedRAMAmount">
-		510
-	</global>
 	<global name="UnsupportedGPU">
 		- Графическая карта вашего компьютера не удовлетворяет минимальным требованиям.
 	</global>
@@ -4022,6 +4105,13 @@ URL: [AUDIOURL]
 			<ignore name="ignore" text="Определил ошибки в текущих настройках."/>
 		</form>
 	</notification>
+	  <!-- <FS:Sei> LSL Default label missing FIRE-17710 -->
+	<notification name="DefaultLabelMissing">
+		<usetemplate ignoretext="У LSL-скрипта есть оператор switch без метки по умолчанию" name="notifyignore"/>
+Поведение операторов switch() без регистра по умолчанию ранее было некорректным и было исправлено.
+См. FIRE-17710 для деталей.
+	</notification>	<!-- </FS:Sei> -->
+
 	<notification name="TeleportToAvatarNotPossible">
 		Телепорт к этому аватару Невозможно, потому, что точное положение неизвестно.
 	</notification>
@@ -4034,7 +4124,6 @@ URL: [AUDIOURL]
 	<notification name="CacheEmpty">
 		Кэш вашего клиента очищен. Пожалуйста, помните, что вы можете испытать замедление работы клиента и высокую нагрузку в течение короткого времени, пока загружается контент.
 	</notification>
-<!-- Commented out because without an update it would show false information!
 	<notification name="FirstJoinSupportGroup2">
 		Добро пожаловать в группу технической поддержки Firestorm!
 
@@ -4050,7 +4139,6 @@ URL: [AUDIOURL]
 			<ignore name="ignore" text="Присоединение к группе технической поддержки The Phoenix/Firestorm"/>
 		</form>
 	</notification>
--->
 	<notification name="ConfirmScriptModify">
     Вы уверены, что хотите изменить скрипты в выбранных объектах?
 		<usetemplate ignoretext="Подтвердить прежде чем изменить скрипты в выбранных объектах" name="okcancelignore" notext="Отмена" yestext="OK"/>
@@ -4751,6 +4839,15 @@ URL: [AUDIOURL]
 	<notification name="RLVaChangeStrings">
 		Изменения вступят в силу после перезагрузки [APP_NAME].
 	</notification>
+	<notification name="RLVaListRequested" label="Запрос на ограничение от [NAME_LABEL]">
+		[NAME_SLURL] попросил отправить список ваших текущих активных ограничений RLV.
+		<form name="form">
+			<button name="Allow" text="Позволить"/>
+			<button name="Always Allow" text="Всегда позволить"/>
+			<button name="Deny" text="Отказать"/>
+			<ignore name="ignore" text="Подтвердить отправку кому-либо списка моих текущих ограничений RLV."/>
+		</form>
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Будут удалены журналы предыдущих разговоров и все резервные копии этих файлов.
 		<usetemplate ignoretext="Подтверждать удаление журнала предыдущих разговоров." name="okcancelignore" notext="Отмена" yestext="OK"/>
@@ -4800,9 +4897,9 @@ URL: [AUDIOURL]
 	<notification name="NoHavok">
 		Некоторые функции, такие как [FEATURE] не включены в [APP_NAME] с OpenSimulator. Если вы хотели бы использовать [FEATURE], пожалуйста, скачайте [APP_NAME] для Second Life.
 [DOWNLOAD_URL]
-			<form name="form">
-					<ignore name="ignore" text="Havok Предупреждение"/>
-			</form>
+		<form name="form">
+			<ignore name="ignore" text="Предупреждение Havok"/>
+		</form>
 	</notification>
 	<notification name="StreamListExportSuccess">
 		Список потока успешно экспортирован в XML файл [FILENAME].
@@ -4855,16 +4952,16 @@ URL: [AUDIOURL]
 		Экспорт не удался. Пожалуйста, смотрите журнал ошибок для деталей.
 	</notification>
 	<notification name="ExportColladaSuccess">
-      		Успешно сохранен [OBJECT] в [FILENAME].
+		Успешно сохранен [OBJECT] в [FILENAME].
 	</notification>
 	<notification name="ExportColladaFailure">
-      		Экспорт [OBJECT] в [FILENAME] не удался.
+		Экспорт [OBJECT] в [FILENAME] не удался.
 	</notification>
 	<notification name="MeshMaxConcurrentReqTooHigh">
 		Установленное значение [VALUE], для числа одновременных запросов, чтобы загрузить объекты сетки (настройка отладки [DEBUGNAME] ) выше, чем максимум [MAX]. Значения были восстановлены по умолчанию [DEFAULT].
 	</notification>
 	<notification name="ImportSuccess">
-                Успешно импортировано [COUNT] [OBJECT].
+		Успешно импортировано [COUNT] [OBJECT].
 	</notification>
 	<notification name="AntiSpamBlocked">
 		АнтиСпам: Заблокированно [SOURCE] за спам [QUEUE] ([COUNT]) в [PERIOD] секунду.
@@ -4935,7 +5032,7 @@ URL: [AUDIOURL]
 		</form>
 	</notification>
 	<notification name="CantRestoreToWorldNoCopy">
-		Restore to Last Position is not allowed for no copy items to prevent possible content loss.
+		Восстановление к последней позиции не допускается для элементов без копирования, чтобы предотвратить возможную потерю содержимого.
 	</notification>
 	<notification name="ConfirmRemoveCredential">
 		Удалить сохраненный вход для &lt;nolink&gt;[NAME]&lt;/nolink&gt;?
@@ -4991,5 +5088,107 @@ URL: [AUDIOURL]
 	<notification name="SnoozeDurationInvalidInput">
 		Пожалуйста, введите правильный номер!
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GlobalOnlineStatusToggle">
+		Из-за нагрузки на сервер массовое переключение видимости состояния в сети может занять некоторое время, чтобы стать эффективным. Пожалуйста, будьте терпеливы.
+		<usetemplate ignoretext="Сообщить мне, что переключение видимости статуса в сети может занять некоторое время" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="RenderVolumeLODFactorWarning">
+		ВНИМАНИЕ: уровень детализации (LOD) установлен на высокий
+
+Для повседневного использования достаточно уровня в диапазоне 1-3.
+Попробуйте заменить объекты, которые выглядят деформированными при таких значениях.
+
+Уровень LOD > 3: добавляет задержки. Рекомендуется только для фотографии.
+Уровень LOD > 4: использовать в особых случаях. Возврат после relog.
+Уровень LOD > 8: не имеет реального эффекта. Может вызвать ошибки.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="CurrencyURIOverrideReceived">
+Этот регион решил указать сторонний валютный портал.
+Обратите внимание, что покупки валюты, сделанные через Firestorm Viewer, являются транзакциями между вами (пользователем) и поставщиком (ами) или продавцом (ами) валюты.
+Ни Firestorm Viewer, ни Phoenix Firestorm Viewer Project Inc., ни его команда не несут ответственности за любые расходы или ущерб, возникшие прямо или косвенно в результате любой такой транзакции.
+Если вы не согласны с этими условиями использования, никакие финансовые транзакции не должны проводиться с использованием этого средства просмотра.
+		<usetemplate ignoretext="Когда регион устанавливает новый валютный помощник." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="EnableHiDPI">
+		Включение поддержки HiDPI может иметь негативные последствия и может ухудшить производительность.
+	</notification>
+	<notification name="FailedToFindSettings">
+		Не удалось загрузить настройки для [NAME] из базы данных.
+	</notification>
+	<notification name="FailedToLoadSettingsApply">
+		Невозможно применить эти настройки к окружающей среде.
+	</notification>
+	<notification name="FailedToBuildSettingsDay">
+		Невозможно применить эти настройки к окружающей среде.
+	</notification>
+	<notification name="NoEnvironmentSettings">
+		Этот регион не поддерживает параметры окружающей среды.
+	</notification>
+	<notification label="Сохранить Комплект одежды" name="SaveSettingAs">
+		Сохранить текущие параметры среды как:
+		<form name="form">
+			<input name="message" type="text">
+				[DESC] (new)
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="WLImportFail">
+		Невозможно импортировать устаревшие настройки Windlight [NAME] из
+[FILE].
+
+[REASONS]
+	</notification>
+	<notification name="WLParcelApplyFail">
+		Невозможно установить окружающую среду для этого участка.
+Пожалуйста, введите или выберите участок, который вы можете изменить.
+	</notification>
+	<notification name="SettingsUnsuported">
+		Настройки не поддерживаются в этом регионе.
+Перейдите в регион с включенными настройками и повторите попытку.
+	</notification>
+	<notification name="SettingsConfirmLoss">
+		Вы собираетесь потерять изменения, которые вы внесли в этот [TYPE] с именем "[NAME]".
+Вы уверены что хотите продолжить?
+		<usetemplate ignoretext="Вы уверены, что хотите потерять изменения?" name="okcancelignore" notext="Нет" yestext="Да"/>
+	</notification>
+	<notification name="SettingsConfirmReset">
+		Вы собираетесь удалить все примененные настройки.
+Вы уверены что хотите продолжить?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+	<notification name="PersonalSettingsConfirmReset">
+		Вы собираетесь удалить все примененные персональные настройки освещения.
+Вы уверены что хотите продолжить?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+	<notification name="SettingsMakeNoTrans">
+		Вы собираетесь импортировать непередаваемые настройки в этот дневной цикл. Продолжение приведет к тому, что редактируемые вами настройки также станут непередаваемыми.
+
+Это изменение не может быть отменено.
+
+Вы уверены что хотите продолжить?
+		<usetemplate ignoretext="Вы уверены, что хотите сделать настройки непередаваемыми?" name="okcancelignore" notext="Нет" yestext="Да"/>
+	</notification>
+	<notification name="NoEditFromLibrary">
+		Вы не можете редактировать настройки непосредственно из библиотеки.
+Пожалуйста, скопируйте в свой инвентарь и попробуйте снова.
+	</notification>
+	<notification name="EnvironmentApplyFailed">
+		Мы столкнулись с проблемой этих настроек. Они не могут быть сохранены или применены в это время.
+	</notification>
+	<notification name="TrackLoadFailed">
+		Невозможно загрузить дорожку в [TRACK].
+	</notification>
+	<notification name="TrackLoadMismatch">
+		Невозможно загрузить дорожку из [TRACK1] в [TRACK2].
+	</notification>
+	<notification name="NoValidEnvSettingFound">
+		Не выбрана допустимая настройка окружающей среды.
+
+Обратите внимание, что нельзя выбрать «Общая среда» и «Дневной цикл»!
 	</notification>
 </notifications>

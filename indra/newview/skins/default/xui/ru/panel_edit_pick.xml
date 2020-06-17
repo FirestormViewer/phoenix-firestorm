@@ -8,7 +8,7 @@
 	</text>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
-			<icon label="" name="edit_icon" tool_tip="Щелкните для выбора изображения"/>
+			<icon label="" name="edit_icon" tool_tip="Нажмите, чтобы выбрать изображение"/>
 			<text name="Name:">
 				Название:
 			</text>

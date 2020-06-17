@@ -670,6 +670,9 @@ http://www.firestormviewer.org/support for help fixing this problem.
   <string name="physics">Physics</string>
   <string name="invalid">invalid</string>
   <string name="none">none</string>
+  <string name="sky">Sky</string>
+  <string name="water">Water</string>
+  <string name="day">Daycycle</string>
 
   <!-- Not Worn Wearable Types -->
 	<string name="shirt_not_worn">Shirt not worn</string>
@@ -2372,9 +2375,10 @@ Abuse Report</string>
   <string name="Female - Stick tougue out">Female - Stick tongue out</string>
   <string name="Female - Wow">Female - Wow</string>
   <!-- settings -->
-  <string name="New Daycycle">New Daycycle</string>
+  <string name="New Day">New Daycycle</string>
   <string name="New Water">New Water</string>
   <string name="New Sky">New Sky</string>
+  <string name="New Settings">New Settings</string>
   
 
   <string name="/bow">/bow</string>

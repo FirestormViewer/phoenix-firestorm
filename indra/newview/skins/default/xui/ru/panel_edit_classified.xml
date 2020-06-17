@@ -32,13 +32,13 @@
 			<button label="Использовать текущее место" name="set_to_curr_location_btn"/>
 			<text name="category_label" value="Категория:"/>
 			<text name="content_type_label" value="Тип контента:"/>
-			<icons_combo_box label="General-контент" name="content_type">
-				<icons_combo_box.item label="Moderate-контент" name="mature_ci" value="Mature-контент"/>
-				<icons_combo_box.item label="General-контент" name="pg_ci" value="PG-контент"/>
+			<icons_combo_box label="Общий контент" name="content_type">
+				<icons_combo_box.item label="Умеренный контент" name="mature_ci"/>
+				<icons_combo_box.item label="Общий контент" name="pg_ci"/>
 			</icons_combo_box>
 			<check_box label="Автоматическая оплата каждую неделю" name="auto_renew"/>
 			<text name="price_for_listing_label" value="Стоимость размещения:"/>
-			<spinner label="L$" name="price_for_listing" tool_tip="Стоимость размещения." value="50"/>
+			<spinner label="L$" name="price_for_listing" tool_tip="Стоимость размещения."/>
 		</panel>
 	</scroll_container>
 	<panel label="bottom_panel" name="bottom_panel">
