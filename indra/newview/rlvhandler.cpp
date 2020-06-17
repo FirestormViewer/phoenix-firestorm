@@ -438,42 +438,46 @@ bool RlvHandler::notifyCommandHandlers(rlvExtCommandHandler f, const RlvCommand&
 }
 
 // Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
+ERlvCmdRet RlvHandler::processCommand(std::reference_wrapper<const RlvCommand> rlvCmd, bool fFromObj)
 {
-	RLV_DEBUGS << "[" << rlvCmd.getObjectID() << "]: " << rlvCmd.asString() << RLV_ENDL;
+	{
+		const RlvCommand& rlvCmdTmp = rlvCmd; // Reference to the temporary with limited variable scope since we don't want it to leak below
 
-	if ( (isBlockedObject(rlvCmd.getObjectID())) && (RLV_TYPE_REMOVE != rlvCmd.getParamType()) && (RLV_TYPE_CLEAR != rlvCmd.getParamType()) )
-	{
-		RLV_DEBUGS << "\t-> blocked object" << RLV_ENDL;
-		return RLV_RET_FAILED_BLOCKED;
-	}
-	if (!rlvCmd.isValid())
-	{
-		RLV_DEBUGS << "\t-> invalid syntax" << RLV_ENDL;
-		return RLV_RET_FAILED_SYNTAX;
-	}
-	if (rlvCmd.isBlocked())
-	{
-		RLV_DEBUGS << "\t-> blocked command" << RLV_ENDL;
-		return RLV_RET_FAILED_DISABLED;
+		RLV_DEBUGS << "[" << rlvCmdTmp.getObjectID() << "]: " << rlvCmdTmp.asString() << RLV_ENDL;
+
+		if ( (isBlockedObject(rlvCmdTmp.getObjectID())) && (RLV_TYPE_REMOVE != rlvCmdTmp.getParamType()) && (RLV_TYPE_CLEAR != rlvCmdTmp.getParamType()) )
+		{
+			RLV_DEBUGS << "\t-> blocked object" << RLV_ENDL;
+			return RLV_RET_FAILED_BLOCKED;
+		}
+		if (!rlvCmdTmp.isValid())
+		{
+			RLV_DEBUGS << "\t-> invalid syntax" << RLV_ENDL;
+			return RLV_RET_FAILED_SYNTAX;
+		}
+		if (rlvCmdTmp.isBlocked())
+		{
+			RLV_DEBUGS << "\t-> blocked command" << RLV_ENDL;
+			return RLV_RET_FAILED_DISABLED;
+		}
 	}
 
 	// Using a stack for executing commands solves a few problems:
 	//   - if we passed RlvObject::m_idObj for idObj somewhere and process a @clear then idObj points to invalid/cleared memory at the end
 	//   - if command X triggers command Y along the way then getCurrentCommand()/getCurrentObject() still return Y even when finished
-	m_CurCommandStack.push(&rlvCmd); m_CurObjectStack.push(rlvCmd.getObjectID());
+	m_CurCommandStack.push(rlvCmd); m_CurObjectStack.push(rlvCmd.get().getObjectID());
 	const LLUUID& idCurObj = m_CurObjectStack.top();
 
 	ERlvCmdRet eRet = RLV_RET_UNKNOWN;
-	switch (rlvCmd.getParamType())
+	switch (rlvCmd.get().getParamType())
 	{
 		case RLV_TYPE_ADD:		// Checked: 2009-11-26 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 			{
-				if ( (m_Behaviours[rlvCmd.getBehaviourType()]) && 
-					 ( (RLV_BHVR_SETCAM == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETDEBUG == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETENV == rlvCmd.getBehaviourType()) ) )
+				ERlvBehaviour eBhvr = rlvCmd.get().getBehaviourType();
+				if ( (m_Behaviours[eBhvr]) && ( (RLV_BHVR_SETCAM == eBhvr) || (RLV_BHVR_SETDEBUG == eBhvr) || (RLV_BHVR_SETENV == eBhvr) ) )
 				{
 					// Some restrictions can only be held by one single object to avoid deadlocks
-					RLV_DEBUGS << "\t- " << rlvCmd.getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
+					RLV_DEBUGS << "\t- " << rlvCmd.get().getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
 					eRet = RLV_RET_FAILED_LOCK;
 					break;
 				}
@@ -481,14 +485,14 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 				rlv_object_map_t::iterator itObj = m_Objects.find(idCurObj); bool fAdded = false;
 				if (itObj != m_Objects.end())
 				{
-					RlvObject& rlvObj = itObj->second;
-					fAdded = rlvObj.addCommand(rlvCmd);
+					// Add the command to an existing object
+					rlvCmd = itObj->second.addCommand(rlvCmd, fAdded);
 				}
 				else
 				{
-					RlvObject rlvObj(idCurObj);
-					fAdded = rlvObj.addCommand(rlvCmd);
-					itObj = m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, rlvObj)).first;
+					// Create a new RLV object and then add the command to it (and grab its reference)
+					itObj = m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, RlvObject(idCurObj))).first;
+					rlvCmd = itObj->second.addCommand(rlvCmd, fAdded);
 				}
 
 				RLV_DEBUGS << "\t- " << ( (fAdded) ? "adding behaviour" : "skipping duplicate" ) << RLV_ENDL;
@@ -563,12 +567,13 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 // Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj)
 {
+	const RlvCommand rlvCmd(idObj, strCommand);
 	if (STATE_STARTED != LLStartUp::getStartupState())
 	{
-		m_Retained.push_back(RlvCommand(idObj, strCommand));
+		m_Retained.push_back(rlvCmd);
 		return RLV_RET_RETAINED;
 	}
-	return processCommand(RlvCommand(idObj, strCommand), fFromObj);
+	return processCommand(std::ref(rlvCmd), fFromObj);
 }
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
@@ -583,7 +588,7 @@ void RlvHandler::processRetainedCommands(ERlvBehaviour eBhvrFilter /*=RLV_BHVR_U
 		if ( ((RLV_BHVR_UNKNOWN == eBhvrFilter) || (rlvCmd.getBehaviourType() == eBhvrFilter)) && 
 			 ((RLV_TYPE_UNKNOWN == eTypeFilter) || (rlvCmd.getParamType() == eTypeFilter)) )
 		{
-			processCommand(rlvCmd, true);
+			processCommand(std::ref(rlvCmd), true);
 			m_Retained.erase(itCurCmd);
 		}
 	}

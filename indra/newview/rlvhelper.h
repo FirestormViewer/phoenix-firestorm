@@ -434,8 +434,8 @@ public:
 	 * Member functions
 	 */
 public:
-	bool addCommand(const RlvCommand& rlvCmd);
-	bool removeCommand(const RlvCommand& rlvCmd);
+	const RlvCommand& addCommand(const RlvCommand& rlvCmd, bool& fAdded);
+	bool              removeCommand(const RlvCommand& rlvCmd);
 
 	std::string getStatusString(const std::string& strFilter, const std::string& strSeparator) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const;
