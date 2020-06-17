@@ -377,6 +377,20 @@ private:
     experience_overrides_t      mExperienceOverrides;
 
     DayInstance::ptr_t          getEnvironmentInstance(EnvSelection_t env, bool create = false);
+// <FS:Beq> opensim windlight setting
+#ifdef OPENSIM
+public:
+    std::vector<std::string>    mLegacySkies;
+    std::vector<std::string>    mLegacyWater;
+    std::vector<std::string>    mLegacyDayCycles;
+    std::string                 mWaterPresetName;
+    std::string                 mSkyPresetName;
+    std::string                 mDayCycleName;
+private:
+    void loadLegacyPresets();
+    void loadUserPrefs();
+#endif
+// </FS:Beq>
 
     void                        updateCloudScroll();
 

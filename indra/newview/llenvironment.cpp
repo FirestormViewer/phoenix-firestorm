@@ -33,6 +33,7 @@
 #include "llagent.h"
 #include "llviewercontrol.h" // for gSavedSettings
 #include "llviewerregion.h"
+#include "llviewernetwork.h" // <FS:Beq/> for LLGridManager
 #include "llwlhandlers.h"
 #include "lltrans.h"
 #include "lltrace.h"
@@ -64,6 +65,12 @@
 #include "lldispatcher.h"
 #include "llviewergenericmessage.h"
 #include "llexperiencelog.h"
+
+// [RLVa:KB] - Checked: RLVa-2.4 (@setenv)
+#include "rlvactions.h"
+// [/RLVa:KB]
+#include "fscommon.h"
+#include "llviewernetwork.h"
 
 //=========================================================================
 namespace
@@ -840,6 +847,70 @@ LLEnvironment::LLEnvironment():
     mShowMoonBeacon(false)
 {
 }
+// <FS:Beq> OpenSim legacy Windlight setting support
+#ifdef OPENSIM
+void LLEnvironment::loadLegacyPresets()
+{
+    std::string path_name;
+    std::vector<decltype(LL_PATH_APP_SETTINGS)> folders = { LL_PATH_APP_SETTINGS, LL_PATH_USER_SETTINGS };
+    for (auto & settings_path : folders)
+    {
+        path_name = gDirUtilp->getExpandedFilename(settings_path , "windlight", "skies", "");
+        bool found = true;
+
+        while (found)
+        {
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacySkies.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Sky: " << unescape_name(name) << LL_ENDL;
+            }
+        }
+
+        path_name = gDirUtilp->getExpandedFilename(settings_path, "windlight", "water", "");
+        found = true;
+
+        while (found)
+        {
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacyWater.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Water: " << unescape_name(name) << LL_ENDL;
+            }
+        }
+
+        path_name = gDirUtilp->getExpandedFilename(settings_path, "windlight", "days", "");
+        found = true;
+
+        while (found)
+        {
+            std::string name;
+            found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+            if (found)
+            {
+                name = name.erase(name.length() - 4);
+                mLegacyDayCycles.push_back(unescape_name(name));
+                LL_DEBUGS("WindlightCaps") << "Added Legacy Day Cycle: " << unescape_name(name) << LL_ENDL;
+            }
+        }
+    }
+}
+
+void LLEnvironment::loadUserPrefs()
+{
+    // operate on members directly to avoid side effects
+    mWaterPresetName    = gSavedSettings.getString("WaterPresetName");
+    mSkyPresetName      = gSavedSettings.getString("SkyPresetName");
+    mDayCycleName       = gSavedSettings.getString("DayCycleName");
+}
+#endif //opensim
+//</FS:Beq>
 
 void LLEnvironment::initSingleton()
 {
@@ -851,6 +922,16 @@ void LLEnvironment::initSingleton()
     mCurrentEnvironment->setWater(p_default_water);
 
     mEnvironments[ENV_DEFAULT] = mCurrentEnvironment;
+
+    // <FS:Beq> OpenSim legacy Windlight setting support
+#ifdef OPENSIM
+    if (LLGridManager::instance().isInOpenSim())
+    {
+        loadLegacyPresets();
+        loadUserPrefs();
+    }
+#endif
+    // </FS:Beq>
 
     requestRegion();
 
@@ -1077,6 +1158,13 @@ bool LLEnvironment::getIsMoonUp() const
 //-------------------------------------------------------------------------
 void LLEnvironment::setSelectedEnvironment(LLEnvironment::EnvSelection_t env, LLSettingsBase::Seconds transition, bool forced)
 {
+// [RLVa:KB] - Checked: RLVa-2.4 (@setenv)
+    if ( (!RlvActions::canChangeEnvironment()) && (LLEnvironment::ENV_EDIT != env) )
+    {
+        return;
+    }
+// [/RLVa:KB]
+
     mSelectedEnvironment = env;
     updateEnvironment(transition, forced);
     LL_DEBUGS("ENVIRONMENT") << "Setting environment " << env_selection_to_string(env) << " with transition: " << transition << LL_ENDL;
@@ -1423,12 +1511,12 @@ void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool f
     {
         if (transition != TRANSITION_INSTANT)
         {
-	        DayInstance::ptr_t trans = std::make_shared<DayTransition>(
-	            mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
-	
-	        trans->animate();
-	
-	        mCurrentEnvironment = trans;
+            DayInstance::ptr_t trans = std::make_shared<DayTransition>(
+                mCurrentEnvironment->getSky(), mCurrentEnvironment->getWater(), pinstance, transition);
+    
+            trans->animate();
+    
+            mCurrentEnvironment = trans;
         }
         else
         {
@@ -1674,8 +1762,14 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
         if (!envinfo->mDayCycle)
         {
             clearEnvironment(ENV_PARCEL);
-            setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
-            updateEnvironment();
+// <FS:Beq> opensim legacy windlight. Nothing we can do here as the default assets do not exist in OpenSim
+            LL_WARNS("ENVIRONMENT") << "No DayCycle specified - setting default" << LL_ENDL;
+            if(LLGridManager::getInstance()->isInSecondLife())
+            {
+                setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
+                updateEnvironment();
+            }
+// </FS:Beq>
         }
         else if (envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_WATER)
                  || envinfo->mDayCycle->isTrackEmpty(LLSettingsDay::TRACK_GROUND_LEVEL))
@@ -2208,10 +2302,14 @@ LLEnvironment::EnvironmentInfo::ptr_t LLEnvironment::EnvironmentInfo::extractLeg
         pinfo->mDayHash = pinfo->mDayCycle->getHash();
 
     pinfo->mAltitudes[0] = 0;
-    pinfo->mAltitudes[2] = 10001;
-    pinfo->mAltitudes[3] = 10002;
-    pinfo->mAltitudes[4] = 10003;
-
+// <FS:Beq> Fix typos that offset this by 1. Shoudl get fixed in a merge from the lab soon.
+    // pinfo->mAltitudes[2] = 10001;
+    // pinfo->mAltitudes[3] = 10002;
+    // pinfo->mAltitudes[4] = 10003;
+    pinfo->mAltitudes[1] = 10001;
+    pinfo->mAltitudes[2] = 10002;
+    pinfo->mAltitudes[3] = 10003;
+// </FS:Beq> 
     return pinfo;
 }
 

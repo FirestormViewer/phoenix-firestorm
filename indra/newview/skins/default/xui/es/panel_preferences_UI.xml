@@ -6,7 +6,6 @@
 				Bulas:
 			</text>
 			<check_box label="Básicas" name="ShowHoverTips" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre avatares o algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
-			<check_box label="En todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
 			<check_box label="En el terreno" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre el terreno" name="ShowLandHoverTips"/>
 			<text name="tooltip_textbox">
 				Demora en mostrar bulas:

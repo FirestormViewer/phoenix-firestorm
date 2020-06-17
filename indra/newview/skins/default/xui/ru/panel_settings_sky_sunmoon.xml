@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Солнце и луна" name="panel_settings_sky_hbodies">
-	<layout_stack>
+	<layout_stack name="main_ls">
 		<layout_panel name="sun_layout">
-			<check_box label="Показать метку" name="sunbeacon"/>
+			<text name="sun_stars_label">Солнце и Звезды</text>
+			<text name="position_label">Позиция:</text>
+			<text name="image_label">Изображение:</text>
+			<text name="scale_label">Масштаб:</text>
+			<text name="color_label">Цвет:</text>
+			<text name="glow_focus_label">Фокус свечения:</text>
+			<text name="glow_size_label">Размер свечения:</text>
+			<text name="star_brightness_label">Яркость звезд:</text>
+			<check_box label="Показать маяк" name="sunbeacon"/>
 		</layout_panel>
-		<layout_panel>
-			<layout_stack>
+		<layout_panel name="moon_layout_main">
+			<layout_stack name="moon_ls">
 				<layout_panel name="moon_layout">
-					<check_box label="Показать метку" name="moonbeacon"/>
+					<text name="moon_label">Луна</text>
+					<text name="position_label">Позиция:</text>
+					<text name="image_label">Изображение:</text>
+					<text name="scale_label">Масштаб:</text>
+					<text name="brightness_label">Яркость:</text>
+					<check_box label="Показать маяк" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </panel>
+

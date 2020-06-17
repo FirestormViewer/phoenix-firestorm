@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Атмосфера и освещение" name="panel_settings_sky_atmos"/>
+<panel label="Атмосфера и освещение" name="panel_settings_sky_atmos">
+	<layout_stack name="main_ls">
+		<layout_panel name="top_lp">
+			<text name="ambient_color_label">Цвет Окружения:</text>
+			<text name="blue_horizon_label">Небо Горизонт:</text>
+			<text name="blue_density_label">Небо Плотность:</text>
+		</layout_panel>
+		<layout_panel name="bottom_lp" >
+			<layout_stack name="atmosphere1">
+				<layout_panel name="left_lp">
+					<text name="haze_horizon_label">Дымка горизонта:</text>
+					<text name="haze_density_label">Плотность дымки:</text>
+					<text name="moisture_level_label">Уровень влажности:</text>
+					<text name="droplet_radius_label">Радиус капли:</text>
+					<text name="ice_level_label">Уровень льда:</text>
+					<text name="scene_gamma_label">Гамма сцены:</text>
+				</layout_panel>
+				<layout_panel name="right_lp">
+					<text name="density_multiplier_label">Множитель плотности:</text>
+					<text name="distance_multiplier_label">Множитель расстояния:</text>
+					<text name="maximum_altitude_label">Максимальная высота:</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

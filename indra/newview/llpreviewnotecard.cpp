@@ -346,7 +346,6 @@ void LLPreviewNotecard::loadAsset()
 		if((allow_modify || is_owner) && !source_library)
 		{
 			getChildView("Delete")->setEnabled(TRUE);
-			getChildView("Edit")->setEnabled(FALSE); // <FS:LO> Don't enable external editor button on no mod notecards.
 		}
 	}
 	else

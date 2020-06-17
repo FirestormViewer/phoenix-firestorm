@@ -76,7 +76,10 @@ void update_marketplace_category(const LLUUID& cat_id, bool perform_consistency_
 // Nudge all listing categories to signal that their marketplace status changed
 void update_all_marketplace_count();
 
-void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name);
+// [RLVa:KB] - Checked: RLVa-2.3 (Give-to-#RLV)
+void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name, LLPointer<LLInventoryCallback> cb = nullptr);
+// [/RLVa:KB]
+//void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name);
 
 void copy_inventory_category(LLInventoryModel* model, LLViewerInventoryCategory* cat, const LLUUID& parent_id, const LLUUID& root_copy_id = LLUUID::null, bool move_no_copy_items = false);
 

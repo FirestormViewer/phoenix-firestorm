@@ -32,4 +32,9 @@
 		<menu_item_call label="Новые волосы" name="New Hair"/>
 		<menu_item_call label="Новые глаза" name="New Eyes"/>
 	</menu>
+	<menu label="Новые Настройки" name="New Settings">
+		<menu_item_call label="Новое Небо" name="New Sky"/>
+		<menu_item_call label="Новая Вода" name="New Water"/>
+		<menu_item_call label="Новый Цикл дня" name="New Day Cycle"/>
+	</menu>
 </menu>

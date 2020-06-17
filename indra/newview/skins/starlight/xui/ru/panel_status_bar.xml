@@ -13,6 +13,9 @@
 	<panel.string name="time">
 		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
+	<panel.string name="timeTooltip">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+	</panel.string>
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
@@ -30,5 +33,6 @@
 		<button name="stream_toggle_btn" tool_tip="Включить/Выключить воспроизведение потокового аудио"/>
 		<button name="media_toggle_btn" tool_tip="Включить/Выключить воспроизведение всего медиа (Музыка, Видео, Web)"/>
 		<button name="volume_btn" tool_tip="Громкость"/>
+		<text name="FPSText" tool_tip="Кадров в секунду"/>
 	</panel>
 </panel>

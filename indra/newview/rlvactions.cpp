@@ -42,7 +42,7 @@ bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
 	// NOTE: if an object has exclusive camera control then all other objects are locked out
 	return
 		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM)) ) &&
-		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSETSCALE)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
 }
 
 bool RlvActions::canChangeToMouselook()
@@ -70,7 +70,9 @@ bool RlvActions::isCameraFOVClamped()
 
 bool RlvActions::isCameraPresetLocked()
 {
-	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+	return
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) ||
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSETSCALE)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
 }
 
 bool RlvActions::getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax)
@@ -351,6 +353,15 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 {
 	const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
 	return nDistSq < RLV_MODIFIER_TPLOCAL_DEFAULT * RLV_MODIFIER_TPLOCAL_DEFAULT;
+}
+
+// ============================================================================
+// WindLight
+//
+
+bool RlvActions::canChangeEnvironment()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV);
 }
 
 // ============================================================================

@@ -105,6 +105,7 @@
 		<menu_item_call label="Профиль локации" name="Place Profile"/>
 		<menu_item_call label="Детали участка" name="About Land"/>
 		<menu_item_call label="Детали региона" name="RegionEstate"/>
+		<menu_item_call label="Установить 'Дом' тут" name="Set Home to Here"/>
 		<menu_item_call label="Купить эту землю" name="Buy Land"/>
 		<menu_item_call label="Показать собственные земли" name="My Land"/>
 		<menu label="Показать больше" name="LandShow">
@@ -117,8 +118,19 @@
 			<menu_item_check label="Расширенное меню" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="Телепортироваться домой" name="Teleport Home"/>
-		<menu_item_call label="Установить 'Дом' тут" name="Set Home to Here"/>
-		<menu label="Положение солнца" name="Environment Settings">
+
+		<menu label="Окружающая среда" name="Environment">
+			<menu_item_check label="Восход" name="Sunrise"/>
+			<menu_item_check label="Полдень" name="Noon"/>
+			<menu_item_check label="Закат" name="Sunset"/>
+			<menu_item_check label="Полночь" name="Midnight"/>
+			<menu_item_check label="Использовать Совместную Окружающую среду" name="Use Shared Environment"/>
+			<menu_item_call label="Моя Окружающая среда..." name="my_environs"/>
+			<menu_item_call label="Личное Освещение..." name="adjustment_tool"/>
+			<menu_item_check label="Пауза Облаков" name="pause_clouds"/>
+		</menu>
+
+		<!-- <menu label="Положение солнца" name="Environment Settings">
 			<menu_item_check label="Восход" name="Sunrise"/>
 			<menu_item_check label="Полдень" name="Noon"/>
 			<menu_item_check label="Закат" name="Sunset"/>
@@ -142,7 +154,8 @@
 				<menu_item_call label="Редактировать предустановку..." name="edit_day_preset"/>
 				<menu_item_call label="Удалить предустановку..." name="delete_day_preset"/>
 			</menu>
-		</menu>
+		</menu> -->
+
 		<menu name="photo_and_video" label="Фото и Видео">
 			<menu_item_call label="Инструменты фото" name="phototools_item_call"/>
 			<menu_item_call label="Инструменты камеры" name="cameratools_item_call"/>
@@ -152,7 +165,7 @@
 		<menu_item_call label="Проводник анимаций" name="Animation Explorer"/>
 		<menu_item_call label="Черный список активов" name="asset_blacklist"/>
 		<menu_item_call label="Настройки отображения аватаров" name="Avatar Render Settings"/>
-		<menu_item_check label="Всегда показывать друзей нормально" name="Always show Friends normally"/>
+		<menu_item_check label="Всегда показывать друзей полностью" name="Always show Friends normally"/>
 		<menu_item_check label="Показывать только друзей" name="Render Friends Only"/>
 	</menu>
 
@@ -492,6 +505,9 @@
 			<menu_item_check label="Текстуры анимаций" name="Animation Textures"/>
 			<menu_item_check label="Отключение текстур" name="Disable Textures"/>
 			<menu_item_call label="Не отрисовывать все анимеши" name="Derender Animesh"/>
+			<menu_item_check label="Отключить Окружающую среду" name="Disable Ambient"/>
+			<menu_item_check label="Отключить Солнечный свет" name="Disable Sunlight"/>
+			<menu_item_check label="Отключить Местные огни" name="Disable Local Lights"/>
 			<menu_item_check label="Текстуры в полном разрешении (ОПАСНО)" name="Full Res Textures"/>
 			<menu_item_check label="Прорисовка присоединенных источников света" name="Render Attached Lights"/>
 			<menu_item_check label="Прорисовка присоединенных частиц" name="Render Attached Particles"/>

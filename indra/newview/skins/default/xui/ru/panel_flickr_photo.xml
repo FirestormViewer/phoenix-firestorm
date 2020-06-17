@@ -10,6 +10,9 @@
 		<combo_box.item label="Без фильтра" name="NoFilter"/>
 	</combo_box>
 	<check_box label="Сохр. пропорции" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		Обновление...
+	</text>
 	<button label="Обновить" name="new_snapshot_btn" tool_tip="Щелкните для обновления"/>
 	<button label="Просмотр" name="big_preview_btn" tool_tip="Щелкните для смены вида"/>
 	<text name="title_label">

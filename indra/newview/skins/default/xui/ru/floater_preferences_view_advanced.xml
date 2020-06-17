@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floaterpreferencesviewadvanced" title="Позиция Камеры">
+	<text name="camera_offset_lbl" width="120">Смещение камеры:</text>
+	<text name="focus_offset_lbl" width="120">Смещение Фокуса:</text>
+	<text name="offset_scale_lbl" width="260">Масштаб смещения камеры:</text>
+	<button label="Сохранить как..." name="save_preset_btn" width="125"/>
+	<button label="Закрыть" name="close_btn" width="125"/>
+</floater>
