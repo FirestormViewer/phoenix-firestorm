@@ -622,67 +622,73 @@ void LLAppViewerWin32::disableWinErrorReporting()
 }
 
 const S32 MAX_CONSOLE_LINES = 500;
+// Only defined in newer SDKs than we currently use
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 4
+#endif
 
-static bool create_console()
+namespace {
+
+FILE* set_stream(const char* which, DWORD handle_id, const char* mode);
+
+bool create_console()
 {
-	int h_con_handle;
-	long l_std_handle;
-
-	CONSOLE_SCREEN_BUFFER_INFO coninfo;
-	FILE *fp;
-
 	// allocate a console for this app
 	const bool isConsoleAllocated = AllocConsole();
 
 	// set the screen buffer to be big enough to let us scroll text
+	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
 	coninfo.dwSize.Y = MAX_CONSOLE_LINES;
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
 
 	// redirect unbuffered STDOUT to the console
-	l_std_handle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-	h_con_handle = _open_osfhandle(l_std_handle, _O_TEXT);
-	if (h_con_handle == -1)
+	FILE* fp = set_stream("stdout", STD_OUTPUT_HANDLE, "w");
+	if (fp)
 	{
-		LL_WARNS() << "create_console() failed to open stdout handle" << LL_ENDL;
-	}
-	else
-	{
-		fp = _fdopen( h_con_handle, "w" );
 		*stdout = *fp;
-		setvbuf( stdout, NULL, _IONBF, 0 );
 	}
 
 	// redirect unbuffered STDIN to the console
-	l_std_handle = (long)GetStdHandle(STD_INPUT_HANDLE);
-	h_con_handle = _open_osfhandle(l_std_handle, _O_TEXT);
-	if (h_con_handle == -1)
+	fp = set_stream("stdin", STD_INPUT_HANDLE, "r");
+	if (fp)
 	{
-		LL_WARNS() << "create_console() failed to open stdin handle" << LL_ENDL;
-	}
-	else
-	{
-		fp = _fdopen( h_con_handle, "r" );
 		*stdin = *fp;
-		setvbuf( stdin, NULL, _IONBF, 0 );
 	}
 
 	// redirect unbuffered STDERR to the console
-	l_std_handle = (long)GetStdHandle(STD_ERROR_HANDLE);
-	h_con_handle = _open_osfhandle(l_std_handle, _O_TEXT);
+	fp = set_stream("stderr", STD_ERROR_HANDLE, "w");
+	if (fp)
+	{
+		*stderr = *fp;
+	}
+
+	return isConsoleAllocated;
+}
+
+FILE* set_stream(const char* desc, DWORD handle_id, const char* mode)
+{
+	auto l_std_handle = GetStdHandle(handle_id);
+	int h_con_handle = _open_osfhandle(reinterpret_cast<intptr_t>(l_std_handle), _O_TEXT);
 	if (h_con_handle == -1)
 	{
-		LL_WARNS() << "create_console() failed to open stderr handle" << LL_ENDL;
+		LL_WARNS() << "create_console() failed to open " << desc << " handle" << LL_ENDL;
+		return nullptr;
 	}
 	else
 	{
-		fp = _fdopen( h_con_handle, "w" );
-		*stderr = *fp;
-		setvbuf( stderr, NULL, _IONBF, 0 );
+		FILE* fp = _fdopen( h_con_handle, mode );
+		setvbuf( fp, NULL, _IONBF, 0 );
+		// Enable color processing on Windows 10 console windows.
+		DWORD dwMode = 0;
+		GetConsoleMode(l_std_handle, &dwMode);
+		dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+		SetConsoleMode(l_std_handle, dwMode);
+		return fp;
 	}
-
-    return isConsoleAllocated;
 }
+
+} // anonymous namespace
 
 LLAppViewerWin32::LLAppViewerWin32(const char* cmd_line) :
 	mCmdLine(cmd_line),

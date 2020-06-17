@@ -126,6 +126,8 @@ void handle_object_return();
 void handle_object_delete();
 void handle_object_edit();
 
+void handle_selected_script_action(const std::string& action);
+
 // <FS:Techwolf Lupindo> area search
 // expose this function so other classes can call it
 void handle_object_edit();

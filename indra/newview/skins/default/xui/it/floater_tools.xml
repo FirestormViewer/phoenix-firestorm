@@ -490,7 +490,7 @@ Bas ↔ Min
 			<button label="Nuovo script" label_selected="Nuovo script" name="button new script"/>
 			<button label="Permessi" name="button permissions"/>
 			<button label="Ricarica" name="button refresh"/>
-			<button label="Ripristina script" name="button reset scripts"/>
+			<button label="Ripristina script" name="btn_reset_scripts"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
