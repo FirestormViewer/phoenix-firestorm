@@ -441,6 +441,11 @@ std::string RlvStrings::getVersionNum(const LLUUID& idRlvObject)
 		(!fCompatMode) ? RLV_VERSION_PATCH : RLV_VERSION_PATCH_COMPAT, (!fCompatMode) ? RLV_VERSION_BUILD : RLV_VERSION_BUILD_COMPAT);
 }
 
+std::string RlvStrings::getVersionImplNum()
+{
+	return llformat("%d%02d%02d%02d", RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, RLVa_IMPL_ID);
+}
+
 // Checked: 2011-11-08 (RLVa-1.5.0)
 bool RlvStrings::hasString(const std::string& strStringName, bool fCheckCustom)
 {
