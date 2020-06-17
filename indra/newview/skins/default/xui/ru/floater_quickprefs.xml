@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="quickprefs" title="Быстрые настройки" width="260">
-<panel name="quickprefs" width="260">
-  <layout_stack name="wl_options_stack" width="260">
+<floater name="quickprefs" title="Быстрые настройки">
+<panel name="quickprefs">
+  <layout_stack name="wl_options_stack">
     <layout_panel name="wl_options_panel">
       <text name="HoverHeightLabel" tool_tip="Позволяет изменять положение аватара по вертикали, не меняя самой фигуры." width="100">
         Выс.смещения:
@@ -32,7 +32,7 @@
       <text name="Day Cycle" tool_tip="Предустановка окружения для дневного цикла">
         Цикл дня:
       </text>
-      <icon name="SkyDayCycle" tool_tip="Изменить время суток"/>
+      <button name="btn_personal_lighting" label="Личное Освещение..."/>>
       <button name="ResetToRegionDefault" tool_tip="Сброс настроек Окружения по умолчанию на регионе"/>
 
       <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->

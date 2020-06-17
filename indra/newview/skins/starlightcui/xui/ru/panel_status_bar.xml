@@ -30,5 +30,6 @@
 		<button name="stream_toggle_btn" tool_tip="Включить/Выключить воспроизведение потокового аудио"/>
 		<button name="media_toggle_btn" tool_tip="Включить/Выключить воспроизведение всего медиа (Музыка, Видео, Web)"/>
 		<button name="volume_btn" tool_tip="Громкость"/>
+		<text name="FPSText" tool_tip="Кадров в секунду"/>
 	</panel>
 </panel>

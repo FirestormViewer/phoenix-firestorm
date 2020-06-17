@@ -106,8 +106,8 @@
         <text name="BridgeProtocols">
             Интеграция внешних протоколов моста LSL:
         </text>
-        <check_box label="Разрешить протокол OpenCollar, чтобы разрешить или запретить строить в AO" name="BridgeIntegrationOC" />
-        <check_box label="Разрешить протокол LockMeister, чтобы разрешить или запретить строить в AO" name="BridgeIntegrationLM" />
+        <check_box label="Разрешить протоколу OpenCollar включать или выключать встроенное AO" name="BridgeIntegrationOC" />
+        <check_box label="Разрешить протоколу LockMeister включать или выключать встроенное AO" name="BridgeIntegrationLM" />
     </panel>
     <panel label="Строить 1" name="BuildTab">
         <text name="text_box_objprams">

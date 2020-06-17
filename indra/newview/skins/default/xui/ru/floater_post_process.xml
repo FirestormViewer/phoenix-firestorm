@@ -45,8 +45,9 @@
 			</text>
 		</panel>
 		<panel label="Дополнительно" name="Extras">
-			<button label="Загрузить эффект" label_selected="Загрузить эффект" name="PPLoadEffect"/>
-			<button label="Сохранить эффект" label_selected="Сохранить эффект" name="PPSaveEffect"/>
+			<button label="Загрузить эффект" label_selected="Загрузить эффект" name="PPLoadEffect" width="120"/>
+			<button label="Сохранить эффект" label_selected="Сохранить эффект" name="PPSaveEffect" width="120"/>
+			<combo_box left_delta="130" name="PPEffectsCombo"/>
 			<line_editor label="Название эффекта" name="PPEffectNameEditor"/>
 		</panel>
 	</tab_container>

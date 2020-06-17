@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Вода" name="panel_settings_water">
 	<layout_stack name="water_stack1">
-		<layout_panel>
-			<text name="FresnelOffsetText">
-				Угловая зависимость:
-			</text>
+		<layout_panel name="lp_top">
+			<text name="water_fog_label">Водяной туман:</text>
+			<text name="color_label">Цвет:</text>
+			<text name="density_exponent_label">Показатель плотности:</text>
+			<text name="underwater_modifier_label">Подводный Модификатор:</text>
+			<text name="FresnelScaleText">Масштаб Френеля:</text>
+			<text name="FresnelOffsetText">Смещение Френеля:</text>
 		</layout_panel>
-		<layout_panel>
+		<layout_panel name="lp_bottom">
 			<layout_stack name="water_stack2">
-				<layout_panel>
-					<slider label="X:" name="water_normal_scale_x"/>
-					<slider label="Y:" name="water_normal_scale_y"/>
-					<slider label="Z:" name="water_normal_scale_z"/>
+				<layout_panel name="lp_left">
+					<text name="normal_map_label">Карта нормалей</text>
+					<text name="large_wave_speed_label">Скорость большой волны</text>
+					<text name="small_wave_speed_label">Скорость малой волны</text>
+					<text name="reflection_wavelet_scale_label">Масштаб вейвлет-отражения</text>
+				</layout_panel>
+				<layout_panel name="lp_right">
+					<text name="refraction_and_blur_label">Преломление и размытие:</text>
+					<text name="refraction_scale_above_label">Масштаб преломления (выше)</text>
+					<text name="refraction_scale_below_label">Масштаб преломления (ниже)</text>
+					<text name="blur_multiplier_label">Множитель размытия</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
