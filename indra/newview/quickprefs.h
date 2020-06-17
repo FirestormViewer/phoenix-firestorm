@@ -91,7 +91,7 @@ private:
 
 	boost::signals2::connection mRlvBehaviorCallbackConnection;
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
-	void enableWindlightButtons(BOOL enable);
+	void enableWindlightButtons(bool enable);
 
 public:
 	/*virtual*/ BOOL postBuild();

@@ -41,9 +41,9 @@
 		(чем меньше, тем ярче, 0 – яркость по умолчанию)
 	</text>
 	<check_box label="Анизотропная фильтрация (медленнее, если включено)" name="ani"/>
-	<check_box initial_value="true" label="Включить объекты вершинных буферов OpenGL" name="vbo" tool_tip="Включение этого параметра на современном оборудовании даст увеличение производительности.  Однако на старом оборудовании это может привести к сбою приложения."/>
-	<check_box initial_value="true" label="Разрешить сжатие текстур (требует перезагрузки)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, что позволяет загружать текстуры большего размера за счет некоторого падения качества цвета."/>
-	<check_box initial_value="true" label="Активировать поддержку отображения HiDPI (требуется перезапуск)" name="use HiDPI" tool_tip="Активировать OpenGL для рисования с высоким разрешением."/>
+	<check_box label="Включить буфер вершин объектов OpenGL" name="vbo" tool_tip="Включение этого параметра на современном оборудовании даст увеличение производительности. Однако на старом оборудовании это может привести к сбою приложения."/>
+	<check_box label="Разрешить сжатие текстур (требует перезагрузки)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, что позволяет загружать текстуры большего размера за счет некоторого падения качества цвета."/>
+	<check_box label="Включить поддержку HiDPI дисплея (нужен перезапуск)" name="use HiDPI" tool_tip="Разрешить OpenGL отображение с высоким разрешением."/>
 	<text name="antialiasing label">
 		Сглаживание:
 	</text>
@@ -55,7 +55,7 @@
 		<combo_box.item label="16x" name="16x"/>
 	</combo_box>
 	<text name="antialiasing restart">
-		(требуется перезапуск)
+		(нужен перезапуск)
 	</text>
 	<text name="MeshText">
 		Сетка
@@ -79,15 +79,15 @@
 	<text name="ShadersText">
 		Шейдеры
 	</text>
-	<check_box initial_value="true" label="Прозрачность воды" name="TransparentWater"/>
-	<check_box initial_value="true" label="Рельефность и сияние" name="BumpShiny"/>
-	<check_box initial_value="true" label="Локальный свет" name="LocalLights"/>
+	<check_box label="Прозрачность воды" name="TransparentWater"/>
+	<check_box label="Рельефность и сияние" name="BumpShiny"/>
+	<check_box label="Локальный свет" name="LocalLights"/>
 	<slider label="Ландшафт:" name="TerrainDetail"/>
 	<text name="TerrainDetailText">
 		Низкая
 	</text>
-	<check_box initial_value="true" label="Аппаратная отрисовка аватаров" name="AvatarVertexProgram"/>
-	<check_box initial_value="true" label="Одежда аватара" name="AvatarCloth"/>
+	<check_box label="Аппаратная отрисовка аватаров" name="AvatarVertexProgram"/>
+	<check_box label="Одежда аватара" name="AvatarCloth"/>
 	<text name="ReflectionsText">
 		Вода отражает:
 	</text>
@@ -98,14 +98,17 @@
 		<combo_box.item label="Все аватары и объекты" name="3"/>
 		<combo_box.item label="Все" name="4"/>
 	</combo_box>
-	<check_box initial_value="true" label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
+	<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
 	<slider label="Небо:" name="SkyMeshDetail"/>
 	<text name="SkyMeshDetailText">
 		Низкая
 	</text>
-	<check_box initial_value="true" label="Расширенная модель освещения" name="UseLightShaders"/>
-	<check_box initial_value="true" label="Объемный свет" name="UseSSAO"/>
-	<check_box initial_value="true" label="Глубина поля" name="UseDoF"/>
+	<check_box label="Расширенная модель освещения" name="UseLightShaders"/>
+	<check_box label="Объемный свет" name="UseSSAO"/>
+	<check_box label="Глубина резкости" name="UseDoF"/>
+	<!--
+	<check_box label="Улучшенная Атмосфера" name="UseAdvancedAtmo"/>
+	-->
 	<text name="RenderShadowDetailText">
 		Тени:
 	</text>

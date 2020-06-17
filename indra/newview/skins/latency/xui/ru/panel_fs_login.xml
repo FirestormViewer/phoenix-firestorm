@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_login">
+    <layout_stack name="login_widgets">
+        <layout_panel name="login">
+            <text name="username_text">
+                Пользователь:
+            </text>
+            <combo_box name="username_combo" tool_tip="Имя учетной записи, которую вы выбираете при регистрации, например, bobsmith420 или Stellar Sunshine"/>
+            <check_box name="remember_username_check" label="Запомнить пользователя"/>
+            <text name="password_text">
+                Пароль:
+            </text>
+            <check_box name="remember_check" label="Запомнить пароль"/>
+            <button name="remove_user_btn" tool_tip="Удалить этого пользователя"/>
+        </layout_panel>
+        <layout_panel name="start_location_panel">
+            <text name="start_location_text">
+                Место запуска:
+            </text>
+            <combo_box name="start_location_combo">
+                <combo_box.item name="MyLastLocation" label="Последнее место"/>
+                <combo_box.item name="MyHome" label="Мой дом"/>
+                <combo_box.item name="Typeregionname" label="&lt;Название региона&gt;"/>
+            </combo_box>
+        </layout_panel>
+        <layout_panel name="grid_panel">
+            <text name="grid_login_text">
+                Подключиться к сетке:
+            </text>
+        </layout_panel>
+        <layout_panel name="links_login_panel">
+            <text name="create_new_account_text">
+                Создать аккаунт
+            </text>
+            <button name="connect_btn" label="Войти"/>
+            <text name="forgot_password_text">
+                Забыли имя пользователя или пароль?
+            </text>
+        </layout_panel>
+        <layout_panel name="mode_selection">
+            <text name="mode_selection_text">
+                ВЫБОР РЕЖИМА
+            </text>
+            <combo_box name="mode_combo" tool_tip="Выберите стиль с которым вы наиболее знакомы, чтобы правильно установить значения по умолчанию."/>
+        </layout_panel>
+    </layout_stack>
+</panel>

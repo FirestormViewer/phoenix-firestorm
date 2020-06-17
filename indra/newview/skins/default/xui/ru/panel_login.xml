@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php
-	</panel.string>
-	<panel.string name="sign_up_url">
-		https://join.secondlife.com/
-	</panel.string>
 	<layout_stack name="ui_stack">
 		<layout_panel name="ui_container">
 			<combo_box label="Имя пользователя" name="username_combo" tool_tip="Имя пользователя, которое вы выбрали при регистрации, например, «bobsmith12» или «Steller Sunshine»"/>
@@ -15,7 +9,6 @@
 				<combo_box.item label="Мой дом" name="MyHome"/>
 			</combo_box>
 			<button label="Войти" name="connect_btn"/>
-			<check_box label="Запомнить меня" name="remember_check"/>
 			<text name="forgot_password_text">
 				Забыли пароль?
 			</text>
@@ -23,6 +16,8 @@
 			<text name="sign_up_text">
 				Регистрация
 			</text>
+			<check_box label="Запомнить меня" name="remember_name" tool_tip="Уже запомненный пользователь может быть забыт в Аватар &gt; Настройки &gt; Дополнительно&gt; Запомненные имена пользователей."/>
+			<check_box label="Запомнить пароль" name="remember_password"/>
 		</layout_panel>
 	</layout_stack>
 </panel>
