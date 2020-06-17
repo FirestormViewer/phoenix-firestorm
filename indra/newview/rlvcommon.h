@@ -151,6 +151,7 @@ public:
 	static const std::string& getStringMapPath() { return m_StringMapPath; }
 	static std::string        getVersion(const LLUUID& idRlvObject, bool fLegacy = false);
 	static std::string        getVersionAbout();
+	static std::string        getVersionImplNum();
 	static std::string        getVersionNum(const LLUUID& idRlvObject);
 	static bool               hasString(const std::string& strStringName, bool fCheckCustom = false);
 	static void               setCustomString(const std::string& strStringName, const std::string& strStringValue);

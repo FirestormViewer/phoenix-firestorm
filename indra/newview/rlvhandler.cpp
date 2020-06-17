@@ -3104,7 +3104,10 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_VERSIONNUM:		// @versionnum=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.4b
 			// NOTE: RLV will respond even if there's an option
-			strReply = RlvStrings::getVersionNum(rlvCmd.getObjectID());
+			if (!rlvCmd.hasOption())
+				strReply = RlvStrings::getVersionNum(rlvCmd.getObjectID());
+			else if ("impl" == rlvCmd.getOption())
+				strReply = RlvStrings::getVersionImplNum();
 			break;
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
 			eRet = onGetAttach(rlvCmd, strReply);

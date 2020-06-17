@@ -37,6 +37,7 @@ const S32 RLV_VERSION_BUILD_COMPAT = 0;
 const S32 RLVa_VERSION_MAJOR = 2;
 const S32 RLVa_VERSION_MINOR = 3;
 const S32 RLVa_VERSION_PATCH = 0;
+const S32 RLVa_IMPL_ID = 13;
 
 // Uncomment before a final release
 //#define RLV_RELEASE
