@@ -472,8 +472,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
-	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
-	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
+	mCommitCallbackRegistrar.add("Pref.ClickActionChange",		boost::bind(&LLFloaterPreference::onClickActionChange, this));
+
+	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
+	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&handleAppearanceCameraMovementChanged,  _2));
@@ -993,6 +995,8 @@ void LLFloaterPreference::cancel()
 	// reverts any changes to current skin
 	//gSavedSettings.setString("SkinCurrent", sSkin);
 
+	updateClickActionViews();
+
 	LLFloaterPreferenceProxy * advanced_proxy_settings = LLFloaterReg::findTypedInstance<LLFloaterPreferenceProxy>("prefs_proxy");
 	if (advanced_proxy_settings)
 	{
@@ -1100,6 +1104,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	onChangeTextureFolder();
 	onChangeSoundFolder();
 	onChangeAnimationFolder();
+
+	// Load (double-)click to walk/teleport settings.
+	updateClickActionViews();
 	
 	// <FS:PP> Load UI Sounds tabs settings.
 	updateUISoundsControls();
@@ -2594,6 +2601,7 @@ void LLFloaterPreference::refresh()
 	{
 		advanced->refresh();
 	}
+    updateClickActionViews();
 }
 
 void LLFloaterPreferenceGraphicsAdvanced::refresh()
@@ -3258,6 +3266,11 @@ void LLFloaterPreference::onClickAdvanced()
 	}
 }
 
+void LLFloaterPreference::onClickActionChange()
+{
+    updateClickActionControls();
+}
+
 void LLFloaterPreference::onClickPermsDefault()
 {
 	LLFloaterReg::showInstance("perms_default");
@@ -3317,6 +3330,86 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 }
 // </FS:PP>
+
+void LLFloaterPreference::updateClickActionControls()
+{
+    const int single_clk_action = getChild<LLComboBox>("single_click_action_combo")->getValue().asInteger();
+    const int double_clk_action = getChild<LLComboBox>("double_click_action_combo")->getValue().asInteger();
+
+    // Todo: This is a very ugly way to get access to keybindings.
+    // Reconsider possible options.
+    // Potential option: make constructor of LLKeyConflictHandler private
+    // but add a getter that will return shared pointer for specific
+    // mode, pointer should only exist so long as there are external users.
+    // In such case we won't need to do this 'dynamic_cast' nightmare.
+    // updateTable() can also be avoided
+    LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+    for (child_list_t::const_iterator iter = tabcontainer->getChildList()->begin();
+        iter != tabcontainer->getChildList()->end(); ++iter)
+    {
+        LLView* view = *iter;
+        LLPanelPreferenceControls* panel = dynamic_cast<LLPanelPreferenceControls*>(view);
+        if (panel)
+        {
+            panel->setKeyBind("walk_to",
+                              EMouseClickType::CLICK_LEFT,
+                              KEY_NONE,
+                              MASK_NONE,
+                              single_clk_action == 1);
+            
+            panel->setKeyBind("walk_to",
+                              EMouseClickType::CLICK_DOUBLELEFT,
+                              KEY_NONE,
+                              MASK_NONE,
+                              double_clk_action == 1);
+            
+            panel->setKeyBind("teleport_to",
+                              EMouseClickType::CLICK_DOUBLELEFT,
+                              KEY_NONE,
+                              MASK_NONE,
+                              double_clk_action == 2);
+
+            panel->updateAndApply();
+        }
+    }
+}
+
+void LLFloaterPreference::updateClickActionViews()
+{
+    bool click_to_walk = false;
+    bool dbl_click_to_walk = false;
+    bool dbl_click_to_teleport = false;
+
+    // Todo: This is a very ugly way to get access to keybindings.
+    // Reconsider possible options.
+    LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+    for (child_list_t::const_iterator iter = tabcontainer->getChildList()->begin();
+        iter != tabcontainer->getChildList()->end(); ++iter)
+    {
+        LLView* view = *iter;
+        LLPanelPreferenceControls* panel = dynamic_cast<LLPanelPreferenceControls*>(view);
+        if (panel)
+        {
+            click_to_walk = panel->canKeyBindHandle("walk_to",
+                EMouseClickType::CLICK_LEFT,
+                KEY_NONE,
+                MASK_NONE);
+
+            dbl_click_to_walk = panel->canKeyBindHandle("walk_to",
+                EMouseClickType::CLICK_DOUBLELEFT,
+                KEY_NONE,
+                MASK_NONE);
+
+            dbl_click_to_teleport = panel->canKeyBindHandle("teleport_to",
+                EMouseClickType::CLICK_DOUBLELEFT,
+                KEY_NONE,
+                MASK_NONE);
+        }
+    }
+
+	getChild<LLComboBox>("single_click_action_combo")->setValue((int)click_to_walk);
+	getChild<LLComboBox>("double_click_action_combo")->setValue(dbl_click_to_teleport ? 2 : (int)dbl_click_to_walk);
+}
 
 void LLFloaterPreference::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
 {
@@ -4456,7 +4549,8 @@ void LLPanelPreferenceControls::cancel()
             mConflictHandler[i].clear();
         }
     }
-    pControlsTable->clear();
+    pControlsTable->clearRows();
+    pControlsTable->clearColumns();
 }
 
 void LLPanelPreferenceControls::saveSettings()
@@ -4471,7 +4565,7 @@ void LLPanelPreferenceControls::saveSettings()
     }
 
     S32 mode = pKeyModeBox->getValue().asInteger();
-    if (mConflictHandler[mode].empty())
+    if (mConflictHandler[mode].empty() || pControlsTable->isEmpty())
     {
         regenerateControls();
     }
@@ -4566,6 +4660,13 @@ void LLPanelPreferenceControls::onRestoreDefaultsResponse(const LLSD& notificati
             mConflictHandler[i].resetToDefaults();
             // Apply changes to viewer as 'temporary'
             mConflictHandler[i].saveToSettings(true);
+
+            // notify comboboxes in move&view about potential change
+            LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+            if (instance)
+            {
+                instance->updateClickActionViews();
+            }
         }
 
         updateTable();
@@ -4574,6 +4675,16 @@ void LLPanelPreferenceControls::onRestoreDefaultsResponse(const LLSD& notificati
         mConflictHandler[mEditingMode].resetToDefaults();
         // Apply changes to viewer as 'temporary'
         mConflictHandler[mEditingMode].saveToSettings(true);
+
+        if (mEditingMode == LLKeyConflictHandler::MODE_THIRD_PERSON)
+        {
+            // notify comboboxes in move&view about potential change
+            LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+            if (instance)
+            {
+                instance->updateClickActionViews();
+            }
+        }
 
         updateTable();
         break;
@@ -4584,7 +4695,87 @@ void LLPanelPreferenceControls::onRestoreDefaultsResponse(const LLSD& notificati
     }
 }
 
-// todo: copy onSetKeyBind to interface and inherit from interface
+// Bypass to let Move & view read values without need to create own key binding handler
+// Assumes third person view
+// Might be better idea to just move whole mConflictHandler into LLFloaterPreference
+bool LLPanelPreferenceControls::canKeyBindHandle(const std::string &control, EMouseClickType click, KEY key, MASK mask)
+{
+    S32 mode = LLKeyConflictHandler::MODE_THIRD_PERSON;
+    if (mConflictHandler[mode].empty())
+    {
+        // opening for first time
+        mConflictHandler[mode].loadFromSettings(LLKeyConflictHandler::MODE_THIRD_PERSON);
+    }
+
+    return mConflictHandler[mode].canHandleControl(control, click, key, mask);
+}
+
+// Bypass to let Move & view modify values without need to create own key binding handler
+// Assumes third person view
+// Might be better idea to just move whole mConflictHandler into LLFloaterPreference
+void LLPanelPreferenceControls::setKeyBind(const std::string &control, EMouseClickType click, KEY key, MASK mask, bool set)
+{
+    S32 mode = LLKeyConflictHandler::MODE_THIRD_PERSON;
+    if (mConflictHandler[mode].empty())
+    {
+        // opening for first time
+        mConflictHandler[mode].loadFromSettings(LLKeyConflictHandler::MODE_THIRD_PERSON);
+    }
+
+    if (!mConflictHandler[mode].canAssignControl(mEditingControl))
+    {
+        return;
+    }
+
+    bool already_recorded = mConflictHandler[mode].canHandleControl(control, click, key, mask);
+    if (set)
+    {
+        if (already_recorded)
+        {
+            // nothing to do
+            return;
+        }
+
+        // find free spot to add data, if no free spot, assign to first
+        S32 index = 0;
+        for (S32 i = 0; i < 3; i++)
+        {
+            if (mConflictHandler[mode].getControl(control, i).isEmpty())
+            {
+                index = i;
+                break;
+            }
+        }
+        mConflictHandler[mode].registerControl(control, index, click, key, mask, true);
+    }
+    else if (!set)
+    {
+        if (!already_recorded)
+        {
+            // nothing to do
+            return;
+        }
+
+        // find specific control and reset it
+        for (S32 i = 0; i < 3; i++)
+        {
+            LLKeyData data = mConflictHandler[mode].getControl(control, i);
+            if (data.mMouse == click && data.mKey == key && data.mMask == mask)
+            {
+                mConflictHandler[mode].clearControl(control, i);
+            }
+        }
+    }
+}
+
+void LLPanelPreferenceControls::updateAndApply()
+{
+    S32 mode = LLKeyConflictHandler::MODE_THIRD_PERSON;
+    mConflictHandler[mode].saveToSettings(true);
+    updateTable();
+}
+
+// from LLSetKeybindDialog's interface
 bool LLPanelPreferenceControls::onSetKeyBind(EMouseClickType click, KEY key, MASK mask, bool all_modes)
 {
     if (!mConflictHandler[mEditingMode].canAssignControl(mEditingControl))
@@ -4616,6 +4807,21 @@ bool LLPanelPreferenceControls::onSetKeyBind(EMouseClickType click, KEY key, MAS
     }
 
     updateTable();
+
+    if ((mEditingMode == LLKeyConflictHandler::MODE_THIRD_PERSON || all_modes)
+        && (mEditingControl == "walk_to"
+            || mEditingControl == "teleport_to"
+            || click == CLICK_LEFT
+            || click == CLICK_DOUBLELEFT))
+    {
+        // notify comboboxes in move&view about potential change
+        LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+        if (instance)
+        {
+            instance->updateClickActionViews();
+        }
+    }
+
     return true;
 }
 
@@ -4649,6 +4855,16 @@ void LLPanelPreferenceControls::onDefaultKeyBind(bool all_modes)
         }
     }
     updateTable();
+
+    if (mEditingMode == LLKeyConflictHandler::MODE_THIRD_PERSON || all_modes)
+    {
+        // notify comboboxes in move&view about potential change
+        LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+        if (instance)
+        {
+            instance->updateClickActionViews();
+        }
+    }
 }
 
 void LLPanelPreferenceControls::onCancelKeyBind()

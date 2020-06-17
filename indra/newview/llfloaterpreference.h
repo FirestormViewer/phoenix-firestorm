@@ -112,6 +112,8 @@ public:
 	void selectPrivacyPanel();
 	void selectChatPanel();
 	void getControlNames(std::vector<std::string>& names);
+	// updates click/double-click action controls depending on values from settings.xml
+	void updateClickActionViews();
 
 // <FS:CR> Make onBtnOk() public for settings backup panel
 //protected:
@@ -147,6 +149,11 @@ protected:
 	void onAvatarImpostorsEnable();
 	// <FS:AO> callback for local lights toggle
 	void onLocalLightsEnable();
+
+	// callback for commit in the "Single click on land" and "Double click on land" comboboxes.
+	void onClickActionChange();
+	// updates click/double-click action keybindngs depending on view values
+	void updateClickActionControls();
 
 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
 	void updateUISoundsControls();
@@ -405,9 +412,18 @@ public:
 	void onModeCommit();
 	void onRestoreDefaultsBtn();
 	void onRestoreDefaultsResponse(const LLSD& notification, const LLSD& response);
+
+    // Bypass to let Move & view read values without need to create own key binding handler
+    // Todo: consider a better way to share access to keybindings
+    bool canKeyBindHandle(const std::string &control, EMouseClickType click, KEY key, MASK mask);
+    // Bypasses to let Move & view modify values without need to create own key binding handler
+    void setKeyBind(const std::string &control, EMouseClickType click, KEY key, MASK mask, bool set /*set or reset*/ );
+    void updateAndApply();
+
+    // from interface
 	/*virtual*/ bool onSetKeyBind(EMouseClickType click, KEY key, MASK mask, bool all_modes);
     /*virtual*/ void onDefaultKeyBind(bool all_modes);
-	/*virtual*/ void onCancelKeyBind();
+    /*virtual*/ void onCancelKeyBind();
 
 private:
 	// reloads settings, discards current changes, updates table
@@ -419,9 +435,10 @@ private:
 	void addControlTableSeparator();
 
 	// Cleans content and then adds content from xml files according to current mEditingMode
-	void populateControlTable();
-	// Updates keybindings from storage to table
-	void updateTable();
+    void populateControlTable();
+
+    // Updates keybindings from storage to table
+    void updateTable();
 
 	LLScrollListCtrl* pControlsTable;
 	LLComboBox *pKeyModeBox;
