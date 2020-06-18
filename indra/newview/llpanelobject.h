@@ -80,12 +80,11 @@ public:
     void            onPasteRot();
     void            onCopyParams();
     void            onPasteParams();
-
-	// <FS> Extended copy & paste buttons
-	void 	onPastePosClip();
-	void 	onPasteSizeClip();
-	void 	onPasteRotClip();
-	// </FS>
+    // <FS> Extended copy & paste buttons
+    void            onPastePosClip();
+    void            onPasteSizeClip();
+    void            onPasteRotClip();
+    // </FS>
 
 	static void 	onCommitParametric(LLUICtrl* ctrl, void* userdata);
 
@@ -96,16 +95,13 @@ public:
 	BOOL     		onDropSculpt(LLInventoryItem* item);
 	static void     onCommitSculptType(    LLUICtrl *ctrl, void* userdata);
 
+    // <FS> Extended copy & paste buttons
+    //void            menuDoToSelected(const LLSD& userdata);
+    //bool            menuEnableItem(const LLSD& userdata);
     bool            pasteCheckMenuItem(const LLSD& userdata);
     void            pasteDoMenuItem(const LLSD& userdata);
-    bool            pasteEnabletMenuItem(const LLSD& userdata);
-    static bool     isLibraryTexture(LLUUID image_id);
-
-    // Finds copy-enabled texture with specified asset from inventory
-    // This can be performance unfriendly and doesn't warranty that
-    // the texture is original source of asset
-    static LLUUID   getCopyPermInventoryTextureId(LLUUID image_id);
-    static bool     canCopyTexture(LLUUID image_id);
+    bool            pasteEnabledMenuItem(const LLSD& userdata);
+    // </FS>
 
 protected:
 	void			getState();
@@ -133,6 +129,9 @@ protected:
 	
 	// Per-object options
 	LLComboBox*		mComboBaseType;
+
+	//LLMenuButton*	mMenuClipboardParams; // <FS> Extended copy & paste buttons
+
 	LLComboBox*		mComboLOD;
 
 	LLTextBox*		mLabelCut;
@@ -181,17 +180,20 @@ protected:
 	LLTextBox*		mLabelRevolutions;
 	LLSpinCtrl*		mSpinRevolutions;
 
+	//LLMenuButton*   mMenuClipboardPos; // <FS> Extended copy & paste buttons
 	LLTextBox*		mLabelPosition;
 	LLSpinCtrl*		mCtrlPosX;
 	LLSpinCtrl*		mCtrlPosY;
 	LLSpinCtrl*		mCtrlPosZ;
 
+	//LLMenuButton*   mMenuClipboardSize; // <FS> Extended copy & paste buttons
 	LLTextBox*		mLabelSize;
 	LLSpinCtrl*		mCtrlScaleX;
 	LLSpinCtrl*		mCtrlScaleY;
 	LLSpinCtrl*		mCtrlScaleZ;
 	BOOL			mSizeChanged;
 
+	//LLMenuButton*   mMenuClipboardRot; // <FS> Extended copy & paste buttons
 	LLTextBox*		mLabelRotation;
 	LLSpinCtrl*		mCtrlRotX;
 	LLSpinCtrl*		mCtrlRotY;
@@ -207,11 +209,11 @@ protected:
     LLButton        *mBtnPasteParams;
     LLMenuButton    *mBtnPasteMenu;
 
-	// <FS> Extended copy & paste buttons
-	LLButton		*mBtnPastePosClip;
-	LLButton		*mBtnPasteSizeClip;
-	LLButton		*mBtnPasteRotClip;
-	// </FS>
+    // <FS> Extended copy & paste buttons
+    LLButton        *mBtnPastePosClip;
+    LLButton        *mBtnPasteSizeClip;
+    LLButton        *mBtnPasteRotClip;
+    // </FS>
 
 	LLCheckBoxCtrl	*mCheckLock;
 	LLCheckBoxCtrl	*mCheckPhysics;
@@ -236,19 +238,18 @@ protected:
     LLVector3       mClipboardPos;
     LLVector3           mClipboardSize;
     LLVector3       mClipboardRot;
+    LLSD            mClipboardParams;
 
-    BOOL            mHasPosClipboard;
-    BOOL            mHasSizeClipboard;
-    BOOL            mHasRotClipboard;
-
-    LLSD            mParamsClipboard;
-    LLVolumeParams  mClipboardVolumeParams;
-    BOOL            mHasParamsClipboard;
-    
-    BOOL            mPasteParametric;
-    BOOL            mPasteFlexible;
-    BOOL            mPastePhysics;
-    BOOL            mPasteLight;
+    bool            mHasClipboardPos;
+    bool            mHasClipboardSize;
+    bool            mHasClipboardRot;
+    bool            mHasClipboardParams;
+    // <FS> Extended copy & paste buttons
+    bool            mPasteParametric;
+    bool            mPasteFlexible;
+    bool            mPastePhysics;
+    bool            mPasteLight;
+    // </FS>
 
 	LLPointer<LLViewerObject> mObject;
 	LLPointer<LLViewerObject> mRootObject;

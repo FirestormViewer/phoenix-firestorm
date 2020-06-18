@@ -285,29 +285,29 @@
                                 Posición (metros)
 			</text>
 			<spinner label="X" name="Pos X"/>
-			<button  name="copy_pos_btn" tool_tip="Copiar posición."/>
+			<button  name="copy_pos_btn" label="C" tool_tip="Copiar posición."/>
                         <spinner label="Y" name="Pos Y"/>
-			<button name="paste_pos_btn" tool_tip="Copiar posición."/>
+			<button name="paste_pos_btn" label="P" tool_tip="Copiar posición."/>
 			<spinner label="Z" name="Pos Z"/>
-			<button name="paste_pos_clip_btn" tool_tip="Pegar posición desde el portapapeles."/>
+			<button name="paste_pos_clip_btn" label="p" tool_tip="Pegar posición desde el portapapeles."/>
 			<text name="label size">
                                 Tamaño (metros)
 			</text>
 			<spinner label="X" name="Scale X"/>
-			<button name="copy_size_btn" tool_tip="Copiar tamaño."/>
+			<button name="copy_size_btn" label="C" tool_tip="Copiar tamaño."/>
 			<spinner label="Y" name="Scale Y"/>
-			<button name="paste_size_btn" tool_tip="Pegar tamaño."/>
+			<button name="paste_size_btn" label="P" tool_tip="Pegar tamaño."/>
 			<spinner label="Z" name="Scale Z"/>
-			<button name="paste_size_clip_btn" tool_tip="Pegar tamaño desde el portapapeles."/>
+			<button name="paste_size_clip_btn" label="p" tool_tip="Pegar tamaño desde el portapapeles."/>
 			<text name="label rotation">
                                 Rotación (grados)
 			</text>
 			<spinner label="X" name="Rot X"/>
-			<button name="copy_rot_btn" tool_tip="Copiar rotación."/>
+			<button name="copy_rot_btn" label="C" tool_tip="Copiar rotación."/>
 			<spinner label="Y" name="Rot Y"/>
-			<button name="paste_rot_btn" tool_tip="Pegar rotación."/>
+			<button name="paste_rot_btn" label="P" tool_tip="Pegar rotación."/>
 			<spinner label="Z" name="Rot Z"/>
-			<button name="paste_rot_clip_btn" tool_tip="Pegar rotación desde el portapapeles."/>
+			<button name="paste_rot_clip_btn" label="p" tool_tip="Pegar rotación desde el portapapeles."/>
 			<button label="Copiar" name="copy_params_btn" tool_tip="Copiar parámetros al portapapeles."/>
 			<button label="Pegar" name="paste_params_btn" tool_tip="Pegar parámetros desde el portapapeles."/>
 			<combo_box name="comboBaseType">

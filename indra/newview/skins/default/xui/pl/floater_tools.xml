@@ -273,21 +273,21 @@
 			<text name="label position">
 				Pozycja (metry)
 			</text>
-			<button name="copy_pos_btn" tool_tip="Kopiuj pozycję"/>
-			<button name="paste_pos_btn" tool_tip="Wklej pozycję"/>
-			<button name="paste_pos_clip_btn" tool_tip="Wklej pozycję ze schowka"/>
+			<button name="copy_pos_btn" label="K" tool_tip="Kopiuj pozycję"/>
+			<button name="paste_pos_btn" label="W" tool_tip="Wklej pozycję"/>
+			<button name="paste_pos_clip_btn" label="w" tool_tip="Wklej pozycję ze schowka"/>
 			<text name="label size">
 				Rozmiar (metry)
 			</text>
-			<button name="copy_size_btn" tool_tip="Kopiuj rozmiar"/>
-			<button name="paste_size_btn" tool_tip="Wklej rozmiar"/>
-			<button name="paste_size_clip_btn" tool_tip="Wklej rozmiar ze schowka"/>
+			<button name="copy_size_btn" label="K" tool_tip="Kopiuj rozmiar"/>
+			<button name="paste_size_btn" label="W" tool_tip="Wklej rozmiar"/>
+			<button name="paste_size_clip_btn" label="w" tool_tip="Wklej rozmiar ze schowka"/>
 			<text name="label rotation">
 				Obrót (stopnie)
 			</text>
-			<button name="copy_rot_btn" tool_tip="Kopiuj obrót"/>
-			<button name="paste_rot_btn" tool_tip="Wklej obrót"/>
-			<button name="paste_rot_clip_btn" tool_tip="Wklej obrót ze schowka"/>
+			<button name="copy_rot_btn" label="K" tool_tip="Kopiuj obrót"/>
+			<button name="paste_rot_btn" label="W" tool_tip="Wklej obrót"/>
+			<button name="paste_rot_clip_btn" label="w" tool_tip="Wklej obrót ze schowka"/>
 			<button label="Kopiuj" name="copy_params_btn" tool_tip="Kopiuj parametry do schowka"/>
 			<button label="Wklej" name="paste_params_btn" tool_tip="Wklej parametry ze schowka"/>
 			<combo_box name="comboBaseType">

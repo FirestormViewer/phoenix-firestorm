@@ -91,12 +91,12 @@
 	<text name="RenderingCost" tool_tip="Zeigt die errechneten Wiedergabekosten für dieses Objekt">
 		þ: [COUNT]
 	</text>
-	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures"/>
-	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid"/>
-    <check_box initial_value="false" label="Achse an Wurzel edit." name="checkbox actual root"/>
-	<check_box initial_value="true" label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
-	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures" top_pad="-5"/>
-	<check_box initial_value="true" label="Einrasten" name="checkbox snap to grid" top_pad="15"/>
+	<check_box label="Texturen dehnen" name="checkbox stretch textures"/>
+	<check_box label="An Raster ausrichten" name="checkbox snap to grid"/>
+    <check_box label="Achse an Wurzel edit." name="checkbox actual root"/>
+	<check_box label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
+	<check_box label="Texturen dehnen" name="checkbox stretch textures" top_pad="-5"/>
+	<check_box label="Einrasten" name="checkbox snap to grid" top_pad="15"/>
 	<combo_box name="combobox grid mode" tool_tip="Wählen Sie das gewünschte Rasterlineal zum Positionieren des Objekts aus." left_pad="20">
 		<combo_box.item label="Welt" name="World"/>
 		<combo_box.item label="Lokal" name="Local"/>
@@ -304,29 +304,29 @@
 				Position (Meter)
 			</text>
 			<spinner label="X" name="Pos X"/>
-			<button name="copy_pos_btn" tool_tip="Position kopieren"/>
+			<button name="copy_pos_btn" label="K" tool_tip="Position kopieren"/>
 			<spinner label="Y" name="Pos Y"/>
-			<button name="paste_pos_btn" tool_tip="Position einfügen"/>
+			<button name="paste_pos_btn" label="E" tool_tip="Position einfügen"/>
 			<spinner label="Z" name="Pos Z"/>
-			<button name="paste_pos_clip_btn" tool_tip="Position versuchen aus Zwischenablage einzufügen"/>
+			<button name="paste_pos_clip_btn" label="e" tool_tip="Position versuchen aus Zwischenablage einzufügen"/>
 			<text name="label size">
 				Größe (Meter)
 			</text>
 			<spinner label="X" name="Scale X"/>
-			<button name="copy_size_btn" tool_tip="Größe kopieren"/>
+			<button name="copy_size_btn" label="K" tool_tip="Größe kopieren"/>
 			<spinner label="Y" name="Scale Y"/>
-			<button name="paste_size_btn" tool_tip="Größe einfügen"/>
+			<button name="paste_size_btn" label="E" tool_tip="Größe einfügen"/>
 			<spinner label="Z" name="Scale Z"/>
-			<button name="paste_size_clip_btn" tool_tip="Größe versuchen aus Zwischenablage einzufügen"/>
+			<button name="paste_size_clip_btn" label="e" tool_tip="Größe versuchen aus Zwischenablage einzufügen"/>
 			<text name="label rotation">
 				Rotation (Grad)
 			</text>
 			<spinner label="X" name="Rot X"/>
-			<button name="copy_rot_btn" tool_tip="Rotation kopieren"/>
+			<button name="copy_rot_btn" label="K" tool_tip="Rotation kopieren"/>
 			<spinner label="Y" name="Rot Y"/>
-			<button name="paste_rot_btn" tool_tip="Rotation einfügen"/>
+			<button name="paste_rot_btn" label="E" tool_tip="Rotation einfügen"/>
 			<spinner label="Z" name="Rot Z"/>
-			<button name="paste_rot_clip_btn" tool_tip="Rotation versuchen aus Zwischenablage einzufügen"/>
+			<button name="paste_rot_clip_btn" label="e" tool_tip="Rotation versuchen aus Zwischenablage einzufügen"/>
 			<button label="Kopier." name="copy_params_btn" tool_tip="Objekt-Parameter kopieren"/>
 			<button label="Einfüg." name="paste_params_btn" tool_tip="Objekt-Parameters einfügen"/>
 			<menu_button name="paste_gear_btn" tool_tip="Einfüge-Optionen"/>

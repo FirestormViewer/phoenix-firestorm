@@ -54,7 +54,6 @@
 #include "llmediaentry.h"
 #include "llmenubutton.h"
 #include "llnotificationsutil.h"
-#include "llpanelobject.h" // LLPanelObject::canCopyTexture
 #include "llradiogroup.h"
 #include "llresmgr.h"
 #include "llselectmgr.h"
@@ -3063,7 +3062,7 @@ void LLPanelFace::onCopyFaces()
                 {
                     LLUUID item_id;
                     LLUUID id = te_data["te"]["imageid"].asUUID();
-                    bool full_perm = LLPanelObject::isLibraryTexture(id) || (objectp->permCopy() && objectp->permTransfer() && objectp->permModify());
+                    bool full_perm = get_is_library_texture(id) || (objectp->permCopy() && objectp->permTransfer() && objectp->permModify());
 
                     if (id.notNull() && !full_perm)
                     {
@@ -3078,7 +3077,7 @@ void LLPanelFace::onCopyFaces()
                             // as result it is Hightly unreliable, leaves little control to user, borderline hack
                             // but there are little options to preserve permissions - multiple inventory
                             // items might reference same asset and inventory search is expensive.
-                            item_id = LLPanelObject::getCopyPermInventoryTextureId(id);
+                            item_id = get_copy_free_item_by_asset_id(id);
                             // record value to avoid repeating inventory search when possible
                             asset_item_map[id] = item_id;
                         }
@@ -3156,7 +3155,7 @@ void LLPanelFace::onCopyFaces()
                     if (mat_data.has("NormMap"))
                     {
                         LLUUID id = mat_data["NormMap"].asUUID();
-                        if (id.notNull() && !LLPanelObject::canCopyTexture(id))
+                        if (id.notNull() && !get_can_copy_texture(id))
                         {
                             mat_data["NormMap"] = LLUUID(gSavedSettings.getString( "DefaultObjectTexture" ));
                             mat_data["NormMapNoCopy"] = true;
@@ -3166,7 +3165,7 @@ void LLPanelFace::onCopyFaces()
                     if (mat_data.has("SpecMap"))
                     {
                         LLUUID id = mat_data["SpecMap"].asUUID();
-                        if (id.notNull() && !LLPanelObject::canCopyTexture(id))
+                        if (id.notNull() && !get_can_copy_texture(id))
                         {
                             mat_data["SpecMap"]  = LLUUID(gSavedSettings.getString( "DefaultObjectTexture" ));
                             mat_data["SpecMapNoCopy"] = true;

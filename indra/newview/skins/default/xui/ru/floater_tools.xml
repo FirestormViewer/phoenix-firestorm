@@ -277,21 +277,21 @@
 			<text name="label position">
 				Позиция (метры)
 			</text>
-			<button name="copy_pos_btn" tool_tip="Копировать позицию"/>
-			<button name="paste_pos_btn" tool_tip="Вставить позицию"/>
-			<button name="paste_pos_clip_btn" tool_tip="Вставить позицию из буфера"/>
+			<button name="copy_pos_btn" label="К" tool_tip="Копировать позицию"/>
+			<button name="paste_pos_btn" label="В" tool_tip="Вставить позицию"/>
+			<button name="paste_pos_clip_btn" label="в" tool_tip="Вставить позицию из буфера"/>
 			<text name="label size">
 				Размер (метры)
 			</text>
-			<button name="copy_size_btn" tool_tip="Копировать размер"/>
-			<button name="paste_size_btn" tool_tip="Вставить размер"/>
-			<button name="paste_size_clip_btn" tool_tip="Вставить размер из буфера"/>
+			<button name="copy_size_btn" label="К" tool_tip="Копировать размер"/>
+			<button name="paste_size_btn" label="В" tool_tip="Вставить размер"/>
+			<button name="paste_size_clip_btn" label="в" tool_tip="Вставить размер из буфера"/>
 			<text name="label rotation">
 				Поворот (градусы)
 			</text>
-			<button name="copy_rot_btn" tool_tip="Копировать поворот"/>
-			<button name="paste_rot_btn" tool_tip="Вставить поворот"/>
-			<button name="paste_rot_clip_btn" tool_tip="Вставить поворот из буфера"/>
+			<button name="copy_rot_btn" label="К" tool_tip="Копировать поворот"/>
+			<button name="paste_rot_btn" label="В" tool_tip="Вставить поворот"/>
+			<button name="paste_rot_clip_btn" label="в" tool_tip="Вставить поворот из буфера"/>
 			<button label="Копировать" name="copy_params_btn" tool_tip="Копировать параметры в буфер"/>
 			<button label="Вставить" name="paste_params_btn" tool_tip="Вставить параметры из буфера"/>
 			<combo_box name="comboBaseType">
