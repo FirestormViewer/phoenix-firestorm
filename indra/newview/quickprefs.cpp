@@ -58,7 +58,6 @@
 #include "llvoavatarself.h"
 #include "rlvhandler.h"
 
-std::string unescape_name(const std::string& name);
 class FSSettingsCollector : public LLInventoryCollectFunctor
 {
 public:
