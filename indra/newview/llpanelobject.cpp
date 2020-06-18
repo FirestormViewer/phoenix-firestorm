@@ -3398,7 +3398,7 @@ void LLPanelObject::onPastePosClip()
 	}
 	else
 	{
-		LL_INFOS() << "Couldn't get position vector from clipboard" << LL_ENDL;
+		LL_INFOS("FloaterTools") << "Couldn't get position vector from clipboard" << LL_ENDL;
 	}
 }
 
@@ -3411,7 +3411,7 @@ void LLPanelObject::onPasteSizeClip()
 	}
 	else
 	{
-		LL_INFOS() << "Couldn't get size vector from clipboard" << LL_ENDL;
+		LL_INFOS("FloaterTools") << "Couldn't get size vector from clipboard" << LL_ENDL;
 	}
 }
 
@@ -3424,7 +3424,7 @@ void LLPanelObject::onPasteRotClip()
 	}
 	else
 	{
-		LL_INFOS() << "Couldn't get rotation vector from clipboard" << LL_ENDL;
+		LL_INFOS("FloaterTools") << "Couldn't get rotation vector from clipboard" << LL_ENDL;
 	}
 }
 // </FS>
