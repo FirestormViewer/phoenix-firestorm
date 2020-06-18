@@ -2873,17 +2873,12 @@ void LLPanelObject::onPastePos()
     LLViewerRegion* regionp = mObject->getRegion();
     if (!regionp) return;
 
-
     // Clamp pos on non-attachments, just keep the prims within the region
     if (!mObject->isAttachment())
     {
-        // <FS:CR> Aurora Sim
-        //F32 max_width = regionp->getWidth(); // meters
-        //mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, max_width);
-        //mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, max_width);
-        mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, gAgent.getRegion()->getWidth());
-        mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, gAgent.getRegion()->getWidth());
-        // </FS:CR> Aurora Sim
+        F32 max_width = regionp->getWidth(); // meters
+        mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, max_width);
+        mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, max_width);
        //height will get properly clammed by sendPosition
     }
 
