@@ -266,9 +266,10 @@ void LLModel::normalizeVolumeFaces()
 		scale.splat(1.f);
 		scale.div(size);
 
-		LLVector4a inv_scale(1.f);
-		inv_scale.div(scale);
-
+// <FS:Beq> BUG-228952 - bad vertex normal scaling on mesh asset import
+		// LLVector4a inv_scale(1.f);
+		// inv_scale.div(scale);
+// </FS:Beq>
 		for (U32 i = 0; i < mVolumeFaces.size(); ++i)
 		{
 			LLVolumeFace& face = mVolumeFaces[i];
@@ -294,7 +295,10 @@ void LLModel::normalizeVolumeFaces()
 				pos[j].mul(scale);
 				if (norm && !norm[j].equals3(LLVector4a::getZero()))
 				{
-					norm[j].mul(inv_scale);
+// <FS:Beq> BUG-228952 - bad vertex normal scaling on mesh asset import
+					// norm[j].mul(inv_scale);
+					norm[j].mul(scale);
+// </FS:Beq>
 					norm[j].normalize3();
 				}
 			}
