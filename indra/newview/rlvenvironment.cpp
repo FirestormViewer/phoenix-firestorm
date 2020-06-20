@@ -560,7 +560,7 @@ ERlvCmdRet RlvEnvironment::handleSetFn(const std::string& strRlvOption, const st
 template<>
 std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<const LLVector2& (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
-	if (idxComponent > 2)
+	if (idxComponent >= 2)
 		return LLStringUtil::null;
 	return std::to_string(getFn(LLEnvironment::instance().getCurrentSky()).mV[idxComponent]);
 }
@@ -583,7 +583,7 @@ std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<cons
 template<>
 ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLVector2>(float optionValue, LLVector2 curValue, const std::function<void(LLSettingsSkyPtr_t, const LLVector2&)>& setFn, U32 idxComponent)
 {
-	if (idxComponent > 2)
+	if (idxComponent >= 2)
 		return RLV_RET_FAILED_UNKNOWN;
 
 	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
