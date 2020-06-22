@@ -98,9 +98,6 @@ public:
     // <FS> Extended copy & paste buttons
     //void            menuDoToSelected(const LLSD& userdata);
     //bool            menuEnableItem(const LLSD& userdata);
-    bool            pasteCheckMenuItem(const LLSD& userdata);
-    void            pasteDoMenuItem(const LLSD& userdata);
-    bool            pasteEnabledMenuItem(const LLSD& userdata);
     // </FS>
 
 protected:
@@ -207,7 +204,6 @@ protected:
     LLButton        *mBtnPasteRot;
     LLButton        *mBtnCopyParams;
     LLButton        *mBtnPasteParams;
-    LLMenuButton    *mBtnPasteMenu;
 
     // <FS> Extended copy & paste buttons
     LLButton        *mBtnPastePosClip;
@@ -243,13 +239,6 @@ protected:
     bool            mHasClipboardPos;
     bool            mHasClipboardSize;
     bool            mHasClipboardRot;
-    bool            mHasClipboardParams;
-    // <FS> Extended copy & paste buttons
-    bool            mPasteParametric;
-    bool            mPasteFlexible;
-    bool            mPastePhysics;
-    bool            mPasteLight;
-    // </FS>
 
 	LLPointer<LLViewerObject> mObject;
 	LLPointer<LLViewerObject> mRootObject;

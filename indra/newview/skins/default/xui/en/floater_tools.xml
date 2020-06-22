@@ -1823,50 +1823,38 @@ Paste Rotation
     		<button
     		 follows="top|right"
     		 height="23"
-    		 label="Copy"
+             image_overlay="Copy"
              image_hover_unselected="Toolbar_Middle_Over"
              image_selected="Toolbar_Middle_Selected"
              image_unselected="Toolbar_Middle_Off"
     		 layout="topleft"
-    		 left="125"
+    		 right="-53"
     		 name="copy_params_btn"
-    		 tool_tip="Copy Parameters"
+    		 tool_tip="Copy Object Parameters to Clipboard"
              top="6"
-    		 width="53">
+    		 width="25">
     		</button>
     		<button
     		 follows="top|right"
     		 height="23"
-    		 label="Paste"
+             image_overlay="Paste"
              image_hover_unselected="Toolbar_Middle_Over"
              image_selected="Toolbar_Middle_Selected"
              image_unselected="Toolbar_Middle_Off"
     		 layout="topleft"
-    		 left_pad="5"
+    		 right="-23"
     		 name="paste_params_btn"
-    		 tool_tip="Paste Parameters"
-    		 width="53">
+    		 top_delta="0"
+    		 tool_tip="Paste Object Parameters from Clipboard"
+    		 width="25">
     		</button>
-            <menu_button
-             menu_filename="menu_build_paste.xml"
-             follows="top|left"
-             height="23"
-             image_hover_unselected="Toolbar_Middle_Over"
-             image_overlay="OptionsMenu_Off"
-             image_selected="Toolbar_Middle_Selected"
-             image_unselected="Toolbar_Middle_Off"
-             layout="topleft"
-             left_pad="5"
-             name="paste_gear_btn"
-             tool_tip="Paste options"
-             width="31"/>
             <combo_box
              height="19"
              layout="topleft"
              name="comboBaseType"
              top_pad="5"
              left="125"
-             width="150">
+             width="149">
                 <combo_box.item
                  label="Box"
                  name="Box"
@@ -2636,7 +2624,7 @@ Lowest:
           value="LL"
           visible="false"
           width="30" />
-        <string name="fs_lod_tooltip_msg">[APPNAME] Viewer default ([FACTOR])</string>
+        <string name="fs_lod_tooltip_msg">[APP_NAME] Viewer default ([FACTOR])</string>
         <text
           follows="left|top"
           height="16"
@@ -2787,6 +2775,34 @@ Low ↔ Lwst
              tool_tip="Allows object to flex about the Z axis (Client-side only)"
              top_pad="5"
              width="121" />
+            <button
+             follows="top|right"
+             height="23"
+             image_overlay="Copy"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             layout="topleft"
+             right="-48"
+             name="copy_features_btn"
+             tool_tip="Copy Feature Parameters to Clipboard"
+             top="20"
+             width="25">
+            </button>
+            <button
+             follows="top|right"
+             height="23"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             layout="topleft"
+             name="paste_features_btn"
+             right="-18"
+             tool_tip="Paste Feature Parameters from Clipboard"
+             top_delta="0"
+             width="25">
+            </button>
             <spinner
              follows="left|top"
              height="19"
@@ -2795,10 +2811,10 @@ Low ↔ Lwst
              label="Softness"
              label_width="70"
              layout="topleft"
-             left_delta="0"
+             left="10"
              max_val="3"
              name="FlexNumSections"
-             top_pad="4"
+             top_pad="9"
              width="128" />
             <spinner
              follows="left|top"
@@ -3013,7 +3029,7 @@ Low ↔ Lwst
              height="10"
              layout="topleft"
              name="label physicsshapetype"
-             top="38"
+             top="50"
              width="130">
                 Physics Shape Type:
           </text>
@@ -3043,7 +3059,7 @@ Low ↔ Lwst
              layout="topleft"
              name="material"
              top_pad="5"
-             width="150"
+             width="134"
              left="144">
                 <combo_box.item
                  label="Stone"

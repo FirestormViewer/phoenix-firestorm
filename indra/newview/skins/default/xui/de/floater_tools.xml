@@ -327,9 +327,8 @@
 			<button name="paste_rot_btn" label="E" tool_tip="Rotation einfügen"/>
 			<spinner label="Z" name="Rot Z"/>
 			<button name="paste_rot_clip_btn" label="e" tool_tip="Rotation versuchen aus Zwischenablage einzufügen"/>
-			<button label="Kopier." name="copy_params_btn" tool_tip="Objekt-Parameter kopieren"/>
-			<button label="Einfüg." name="paste_params_btn" tool_tip="Objekt-Parameters einfügen"/>
-			<menu_button name="paste_gear_btn" tool_tip="Einfüge-Optionen"/>
+			<button name="copy_params_btn" tool_tip="Objekt-Parameter in Zwischenablage kopieren"/>
+			<button name="paste_params_btn" tool_tip="Objekt-Parameter aus Zwischenablage einfügen"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Quader" name="Box"/>
 				<combo_box.item label="Zylinder" name="Cylinder"/>
@@ -470,6 +469,8 @@ Ndrg ↔ Nst
 			</text>
 			<check_box label="Animiertes Netz" name="Animated Mesh Checkbox Ctrl" tool_tip="Ermöglicht die unabhängige Animation geriggter Netzobjekte"/>
 			<check_box label="Flexibler Pfad" name="Flexible1D Checkbox Ctrl" tool_tip="Bewirkt, dass sich das Objekt um die Z-Achse biegen kann. (Nur Client-Seite)"/>
+			<button name="copy_features_btn" tool_tip="Eigenschaften-Parameter in Zwischenablage kopieren"/>
+			<button name="paste_features_btn" tool_tip="Eigenschaften-Parameter aus Zwischenablage einfügen"/>
 			<spinner label="Weichheit" name="FlexNumSections"/>
 			<spinner label="Schwerkraft" name="FlexGravity"/>
 			<spinner label="Ziehen" name="FlexFriction"/>

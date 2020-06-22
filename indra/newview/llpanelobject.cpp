@@ -206,7 +206,6 @@ BOOL	LLPanelObject::postBuild()
     mBtnCopyParams->setCommitCallback(boost::bind(&LLPanelObject::onCopyParams, this));
     mBtnPasteParams = getChild<LLButton>("paste_params_btn");
     mBtnPasteParams->setCommitCallback(boost::bind(&LLPanelObject::onPasteParams, this));
-    mBtnPasteMenu = getChild<LLMenuButton>("paste_gear_btn");
 
 	//--------------------------------------------------------
 		
@@ -214,7 +213,7 @@ BOOL	LLPanelObject::postBuild()
 	mComboBaseType = getChild<LLComboBox>("comboBaseType");
 	childSetCommitCallback("comboBaseType",onCommitParametric,this);
 
-	//mMenuClipboardParams = getChild<LLMenuButton>("clipboard_params_btn"); // <FS> Extended copy & paste buttons
+	//mMenuClipboardParams = getChild<LLMenuButton>("clipboard_obj_params_btn"); // <FS> Extended copy & paste buttons
 
 	// Cut
 	mLabelCut = getChild<LLTextBox>("text cut");
@@ -358,21 +357,11 @@ LLPanelObject::LLPanelObject()
     mHasClipboardPos(false),
     mHasClipboardSize(false),
     mHasClipboardRot(false),
-    mHasClipboardParams(false),
-    // <FS> Extended copy & paste buttons
-    mPasteParametric(true),
-    mPasteFlexible(true),
-    mPastePhysics(true),
-    mPasteLight(true),
-    // </FS>
 	mSizeChanged(FALSE)
 {
     // <FS> Extended copy & paste buttons
     //mCommitCallbackRegistrar.add("PanelObject.menuDoToSelected", boost::bind(&LLPanelObject::menuDoToSelected, this, _2));
     //mEnableCallbackRegistrar.add("PanelObject.menuEnable", boost::bind(&LLPanelObject::menuEnableItem, this, _2));
-    mEnableCallbackRegistrar.add("BuildObject.PasteCheckItem", boost::bind(&LLPanelObject::pasteCheckMenuItem, this, _2));
-    mCommitCallbackRegistrar.add("BuildObject.PasteDoToSelected", boost::bind(&LLPanelObject::pasteDoMenuItem, this, _2));
-    mEnableCallbackRegistrar.add("BuildObject.PasteEnable", boost::bind(&LLPanelObject::pasteEnabledMenuItem, this, _2));
     // </FS>
 }
 
@@ -624,8 +613,7 @@ void LLPanelObject::getState( )
     mBtnPasteRotClip->setEnabled( enable_rotate );
 
     mBtnCopyParams->setEnabled( single_volume && enable_modify );
-    mBtnPasteParams->setEnabled( single_volume && enable_modify && mHasClipboardParams );
-    mBtnPasteMenu->setEnabled( single_volume && enable_modify );
+    mBtnPasteParams->setEnabled( single_volume && enable_modify && !mClipboardParams.emptyMap() && (mClipboardParams["volume_params"] || mClipboardParams["sculpt"]));
     // </FS>
 
 	LLUUID owner_id;
@@ -2923,322 +2911,70 @@ void LLPanelObject::onPasteRot()
 void LLPanelObject::onCopyParams()
 {
     LLViewerObject* objectp = mObject;
-    if (!objectp)
+    if (!objectp || objectp->isMesh())
     {
         return;
     }
 
     mClipboardParams.clear();
 
-    // <FS> Extended copy & paste buttons
-    //// Parametrics
-    //if (!objectp->isMesh())
-    //{
-    //    LLVolumeParams params;
-    //    getVolumeParams(params);
-    //    mClipboardParams["volume_params"] = params.asLLSD();
-    //}
-
-    //// Sculpted Prim
-    //if (objectp->getParameterEntryInUse(LLNetworkData::PARAMS_SCULPT))
-    //{
-    //    LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-
-    //    if (!objectp->isMesh())
-    //    {
-    //        LLUUID texture_id = sculpt_params->getSculptTexture();
-    //        if (get_can_copy_texture(texture_id))
-    //        {
-    //            LL_DEBUGS("FloaterTools") << "Recording texture" << LL_ENDL;
-    //            mClipboardParams["sculpt"]["id"] = texture_id;
-    //        }
-    //        else
-    //        {
-    //            mClipboardParams["sculpt"]["id"] = LLUUID(SCULPT_DEFAULT_TEXTURE);
-    //        }
-
-    //        mClipboardParams["sculpt"]["type"] = sculpt_params->getSculptType();
-    //    }
-    //}
-
-    //mHasClipboardParams = TRUE;
-    mClipboardParams["is_phantom"] = objectp->flagPhantom();
-    mClipboardParams["is_physical"] = objectp->flagUsePhysics();
-
     // Parametrics
-    if (!objectp->isMesh())
-    {
-        LLVolumeParams params;
-        getVolumeParams(params);
-        mClipboardParams["volume_params"] = params.asLLSD();
-    }
-
-    LLVOVolume *volobjp = NULL;
-    if (objectp && (objectp->getPCode() == LL_PCODE_VOLUME))
-    {
-        volobjp = (LLVOVolume *)objectp;
-    }
-    
-    // Flexi Prim
-    if (volobjp && volobjp->isFlexible())
-    {
-        LLFlexibleObjectData *attributes = (LLFlexibleObjectData *)objectp->getParameterEntry(LLNetworkData::PARAMS_FLEXIBLE);
-        if (attributes)
-        {
-            mClipboardParams["flex"]["lod"] = attributes->getSimulateLOD();
-            mClipboardParams["flex"]["gav"] = attributes->getGravity();
-            mClipboardParams["flex"]["ten"] = attributes->getTension();
-            mClipboardParams["flex"]["fri"] = attributes->getAirFriction();
-            mClipboardParams["flex"]["sen"] = attributes->getWindSensitivity();
-            LLVector3 force = attributes->getUserForce();
-            mClipboardParams["flex"]["forx"] = force.mV[0];
-            mClipboardParams["flex"]["fory"] = force.mV[1];
-            mClipboardParams["flex"]["forz"] = force.mV[2];
-        }
-    }
+    LLVolumeParams params;
+    getVolumeParams(params);
+    mClipboardParams["volume_params"] = params.asLLSD();
 
     // Sculpted Prim
     if (objectp->getParameterEntryInUse(LLNetworkData::PARAMS_SCULPT))
     {
         LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-        
-        if (!objectp->isMesh())
-        {
-            LLUUID texture_id = sculpt_params->getSculptTexture();
-            if (get_can_copy_texture(texture_id))
-            {
-                LL_DEBUGS("FloaterTools") << "Recording texture" << LL_ENDL;
-                mClipboardParams["sculpt"]["id"] = texture_id;
-            }
-            else
-            {
-                mClipboardParams["sculpt"]["id"] = LLUUID(SCULPT_DEFAULT_TEXTURE);
-            }
 
-            mClipboardParams["sculpt"]["type"] = sculpt_params->getSculptType();
+        LLUUID texture_id = sculpt_params->getSculptTexture();
+        if (get_can_copy_texture(texture_id))
+        {
+            LL_DEBUGS("FloaterTools") << "Recording texture" << LL_ENDL;
+            mClipboardParams["sculpt"]["id"] = texture_id;
         }
+        else
+        {
+            mClipboardParams["sculpt"]["id"] = LLUUID(SCULPT_DEFAULT_TEXTURE);
+        }
+
+        mClipboardParams["sculpt"]["type"] = sculpt_params->getSculptType();
     }
 
-    // Light Source
-    if (volobjp && volobjp->getIsLight())
-    {
-        mClipboardParams["light"]["intensity"] = volobjp->getLightIntensity();
-        mClipboardParams["light"]["radius"] = volobjp->getLightRadius();
-        mClipboardParams["light"]["falloff"] = volobjp->getLightFalloff();
-        LLColor3 color = volobjp->getLightSRGBColor();
-        mClipboardParams["light"]["r"] = color.mV[0];
-        mClipboardParams["light"]["g"] = color.mV[1];
-        mClipboardParams["light"]["b"] = color.mV[2];
-
-        // Spotlight
-        if (volobjp->isLightSpotlight())
-        {
-            LLUUID id = volobjp->getLightTextureID();
-            if (id.notNull() && get_can_copy_texture(id))
-            {
-                mClipboardParams["spot"]["id"] = id;
-                LLVector3 spot_params = volobjp->getSpotLightParams();
-                mClipboardParams["spot"]["fov"] = spot_params.mV[0];
-                mClipboardParams["spot"]["focus"] = spot_params.mV[1];
-                mClipboardParams["spot"]["ambiance"] = spot_params.mV[2];
-            }
-        }
-    }
-
-    // Physics
-    {
-        mClipboardParams["physics"]["shape"] = objectp->getPhysicsShapeType();
-        mClipboardParams["physics"]["gravity"] = objectp->getPhysicsGravity();
-        mClipboardParams["physics"]["friction"] = objectp->getPhysicsFriction();
-        mClipboardParams["physics"]["density"] = objectp->getPhysicsDensity();
-        mClipboardParams["physics"]["restitution"] = objectp->getPhysicsRestitution();
-        
-        U8 material_code = 0;
-        struct f : public LLSelectedTEGetFunctor<U8>
-        {
-            U8 get(LLViewerObject* object, S32 te)
-            {
-                return object->getMaterial();
-            }
-        } func;
-        bool material_same = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &func, material_code );
-        // This should always be true since material should be per object.
-        if (material_same)
-        {
-            mClipboardParams["physics"]["material"] = material_code;
-        }
-    }
-
-    mHasClipboardParams = true;
-    // </FS>
+    // <FS> Extended copy & paste buttons
+    mBtnPasteParams->setEnabled(!mClipboardParams.emptyMap() && (mClipboardParams["volume_params"] || mClipboardParams["sculpt"]));
 }
 
 void LLPanelObject::onPasteParams()
 {
     LLViewerObject* objectp = mObject;
-    if (!objectp || !mHasClipboardParams)
+    if (!objectp)
     {
         return;
     }
 
-    // <FS> Extended copy & paste buttons
-    //// Sculpted Prim
-    //if (mClipboardParams.has("sculpt"))
-    //{
-    //    LLSculptParams sculpt_params;
-    //    LLUUID sculpt_id = mClipboardParams["sculpt"]["id"].asUUID();
-    //    U8 sculpt_type = (U8)mClipboardParams["sculpt"]["type"].asInteger();
-    //    sculpt_params.setSculptTexture(sculpt_id, sculpt_type);
-    //    objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
-    //}
-    //else
-    //{
-    //    LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-    //    if (sculpt_params)
-    //    {
-    //        objectp->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, FALSE, TRUE);
-    //    }
-    //}
-
-    //// volume params
-    //// make sure updateVolume() won't affect flexible
-    //if (mClipboardParams.has("volume_params"))
-    //{
-    //    LLVolumeParams params;
-    //    params.fromLLSD(mClipboardParams["volume_params"]);
-    //    LLVOVolume *volobjp = (LLVOVolume *)objectp;
-    //    if (volobjp->isFlexible())
-    //    {
-    //        if (params.getPathParams().getCurveType() == LL_PCODE_PATH_LINE)
-    //        {
-    //            params.getPathParams().setCurveType(LL_PCODE_PATH_FLEXIBLE);
-    //        }
-    //    }
-    //    else if (params.getPathParams().getCurveType() == LL_PCODE_PATH_FLEXIBLE)
-    //    {
-    //        params.getPathParams().setCurveType(LL_PCODE_PATH_LINE);
-    //    }
-
-    //    objectp->updateVolume(params);
-    //}
-    LLVOVolume *volobjp = NULL;
-    if (objectp && (objectp->getPCode() == LL_PCODE_VOLUME))
+    // Sculpted Prim
+    if (mClipboardParams.has("sculpt"))
     {
-        volobjp = (LLVOVolume *)objectp;
+        LLSculptParams sculpt_params;
+        LLUUID sculpt_id = mClipboardParams["sculpt"]["id"].asUUID();
+        U8 sculpt_type = (U8)mClipboardParams["sculpt"]["type"].asInteger();
+        sculpt_params.setSculptTexture(sculpt_id, sculpt_type);
+        objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
     }
-
-    // Light Source
-    if (mPasteLight && volobjp)
+    else
     {
-        if (mClipboardParams.has("light"))
+        LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+        if (sculpt_params)
         {
-            volobjp->setIsLight(TRUE);
-            volobjp->setLightIntensity((F32)mClipboardParams["light"]["intensity"].asReal());
-            volobjp->setLightRadius((F32)mClipboardParams["light"]["radius"].asReal());
-            volobjp->setLightFalloff((F32)mClipboardParams["light"]["falloff"].asReal());
-            F32 r = (F32)mClipboardParams["light"]["r"].asReal();
-            F32 g = (F32)mClipboardParams["light"]["g"].asReal();
-            F32 b = (F32)mClipboardParams["light"]["b"].asReal();
-            volobjp->setLightSRGBColor(LLColor3(r, g, b));
-        }
-        else
-        {
-            volobjp->setIsLight(FALSE);
-        }
-
-        if (mClipboardParams.has("spot"))
-        {
-            volobjp->setLightTextureID(mClipboardParams["spot"]["id"].asUUID());
-            LLVector3 spot_params;
-            spot_params.mV[0] = (F32)mClipboardParams["spot"]["fov"].asReal();
-            spot_params.mV[1] = (F32)mClipboardParams["spot"]["focus"].asReal();
-            spot_params.mV[2] = (F32)mClipboardParams["spot"]["ambiance"].asReal();
-            volobjp->setSpotLightParams(spot_params);
+            objectp->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, FALSE, TRUE);
         }
     }
 
-    // Physics
-    if (mPastePhysics)
-    {
-        bool is_root = objectp->isRoot();
-
-        // Not sure if phantom should go under physics, but doesn't fit elsewhere
-        BOOL is_phantom = mClipboardParams["is_phantom"].asBoolean() && is_root;
-        LLSelectMgr::getInstance()->selectionUpdatePhantom(is_phantom);
-
-        BOOL is_physical = mClipboardParams["is_physical"].asBoolean() && is_root;
-        LLSelectMgr::getInstance()->selectionUpdatePhysics(is_physical);
-
-        if (mClipboardParams.has("physics"))
-        {
-            objectp->setPhysicsShapeType((U8)mClipboardParams["physics"]["shape"].asInteger());
-            U8 cur_material = objectp->getMaterial();
-            U8 material = (U8)mClipboardParams["physics"]["material"].asInteger() | (cur_material & ~LL_MCODE_MASK);
-
-            objectp->setMaterial(material);
-            objectp->sendMaterialUpdate();
-            objectp->setPhysicsGravity(mClipboardParams["physics"]["gravity"].asReal());
-            objectp->setPhysicsFriction(mClipboardParams["physics"]["friction"].asReal());
-            objectp->setPhysicsDensity(mClipboardParams["physics"]["density"].asReal());
-            objectp->setPhysicsRestitution(mClipboardParams["physics"]["restitution"].asReal());
-            objectp->updateFlags(TRUE);
-        }
-    }
-
-    if (mPasteFlexible)
-    {
-        bool is_flexible = mClipboardParams.has("flex");
-        if (is_flexible)
-        {
-            LLVOVolume *volobjp = (LLVOVolume *)objectp;
-            BOOL update_shape = FALSE;
-            if (!mPasteParametric)
-            {
-                // do before setParameterEntry or it will think that it is already flexi
-                update_shape = volobjp->setIsFlexible(is_flexible);
-            }
-
-            if (objectp->getClickAction() == CLICK_ACTION_SIT)
-            {
-                objectp->setClickAction(CLICK_ACTION_NONE);
-            }
-
-            LLFlexibleObjectData *attributes = (LLFlexibleObjectData *)objectp->getParameterEntry(LLNetworkData::PARAMS_FLEXIBLE);
-            if (attributes)
-            {
-                LLFlexibleObjectData new_attributes;
-                new_attributes = *attributes;
-                new_attributes.setSimulateLOD(mClipboardParams["flex"]["lod"].asInteger());
-                new_attributes.setGravity(mClipboardParams["flex"]["gav"].asReal());
-                new_attributes.setTension(mClipboardParams["flex"]["ten"].asReal());
-                new_attributes.setAirFriction(mClipboardParams["flex"]["fri"].asReal());
-                new_attributes.setWindSensitivity(mClipboardParams["flex"]["sen"].asReal());
-                F32 fx = (F32)mClipboardParams["flex"]["forx"].asReal();
-                F32 fy = (F32)mClipboardParams["flex"]["fory"].asReal();
-                F32 fz = (F32)mClipboardParams["flex"]["forz"].asReal();
-                LLVector3 force(fx, fy, fz);
-                new_attributes.setUserForce(force);
-                objectp->setParameterEntry(LLNetworkData::PARAMS_FLEXIBLE, new_attributes, true);
-            }
-
-            if (!mPasteParametric && update_shape)
-            {
-                mObject->sendShapeUpdate();
-                LLSelectMgr::getInstance()->selectionUpdatePhantom(volobjp->flagPhantom());
-            }
-        }
-        else if (!mPasteParametric)
-        {
-            LLVOVolume *volobjp = (LLVOVolume *)objectp;
-            if (volobjp->setIsFlexible(is_flexible))
-            {
-                mObject->sendShapeUpdate();
-                LLSelectMgr::getInstance()->selectionUpdatePhantom(volobjp->flagPhantom());
-            }
-        }
-    }
-    // Parametric does updateVolume(), make sure we won't affect flexible
-    else if (mPasteParametric && mClipboardParams.has("volume_params"))
+    // volume params
+    // make sure updateVolume() won't affect flexible
+    if (mClipboardParams.has("volume_params"))
     {
         LLVolumeParams params;
         params.fromLLSD(mClipboardParams["volume_params"]);
@@ -3254,114 +2990,12 @@ void LLPanelObject::onPasteParams()
         {
             params.getPathParams().setCurveType(LL_PCODE_PATH_LINE);
         }
-    }
 
-    // Parametrics
-    if (mPasteParametric)
-    {
-        // Sculpted Prim
-        if (mClipboardParams.has("sculpt"))
-        {
-            LLSculptParams sculpt_params;
-            LLUUID sculpt_id = mClipboardParams["sculpt"]["id"].asUUID();
-            U8 sculpt_type = (U8)mClipboardParams["sculpt"]["type"].asInteger();
-            sculpt_params.setSculptTexture(sculpt_id, sculpt_type);
-            objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
-        }
-        else
-        {
-            LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-            if (sculpt_params)
-            {
-                objectp->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, FALSE, TRUE);
-            }
-        }
-
-        if (mClipboardParams.has("volume_params"))
-        {
-            LLVolumeParams params;
-            params.fromLLSD(mClipboardParams["volume_params"]);
-            objectp->updateVolume(params);
-        }
+        objectp->updateVolume(params);
     }
-    // </FS>
 }
 
 // <FS> Extended copy & paste buttons
-bool LLPanelObject::pasteCheckMenuItem(const LLSD& userdata)
-{
-    std::string command = userdata.asString();
-
-    if ("Parametric" == command)
-    {
-        return mPasteParametric;
-    }
-    if ("Flexible" == command)
-    {
-        return mPasteFlexible;
-    }
-    if ("Physics" == command)
-    {
-        return mPastePhysics;
-    }
-    if ("Light" == command)
-    {
-        return mPasteLight;
-    }
-
-    return false;
-}
-
-void LLPanelObject::pasteDoMenuItem(const LLSD& userdata)
-{
-    std::string command = userdata.asString();
-
-    if ("Parametric" == command)
-    {
-        mPasteParametric = !mPasteParametric;
-    }
-    if ("Flexible" == command)
-    {
-        mPasteFlexible = !mPasteFlexible;
-    }
-    if ("Physics" == command)
-    {
-        mPastePhysics = !mPastePhysics;
-    }
-    if ("Light" == command)
-    {
-        mPasteLight = !mPasteLight;
-    }
-}
-
-bool LLPanelObject::pasteEnabledMenuItem(const LLSD& userdata)
-{
-    std::string command = userdata.asString();
-
-    // Keep at least one option enabled
-    if (mPasteParametric + mPasteFlexible + mPastePhysics + mPasteLight == 1)
-    {
-        if ("Parametric" == command && mPasteParametric)
-        {
-            return false;
-        }
-        if ("Flexible" == command && mPasteFlexible)
-        {
-            return false;
-        }
-        if ("Physics" == command && mPastePhysics)
-        {
-            return false;
-        }
-        if ("Light" == command && mPasteLight)
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 bool get_vector_from_clipboard(LLVector3* value)
 {
 	LLWString temp_string;

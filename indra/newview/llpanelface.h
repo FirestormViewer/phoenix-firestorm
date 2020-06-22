@@ -116,8 +116,6 @@ public:
 
 	LLRender::eTexIndex getTextureChannelToEdit();
 
-    void            pasteFace(LLViewerObject* object, S32 te);
-
 protected:
 	void			getState();
 
@@ -210,11 +208,22 @@ protected:
 	static void		onClickAutoFix(void*);
     static void		onAlignTexture(void*);
 
+    // <FS> Extended copy & paste buttons
     void            onCopyFaces();
     void            onPasteFaces();
-    bool            pasteCheckMenuItem(const LLSD& userdata);
-    void            pasteDoMenuItem(const LLSD& userdata);
-    bool            pasteEnabletMenuItem(const LLSD& userdata);
+    // </FS>
+
+public: // needs to be accessible to selection manager
+    void            onCopyColor(); // records all selected faces
+    void            onPasteColor(LLViewerObject* objectp, S32 te); // to specific face
+    void            onCopyTexture();
+    void            onPasteTexture(LLViewerObject* objectp, S32 te);
+
+protected:
+    // <FS> Extended copy & paste buttons
+    //void            menuDoToSelected(const LLSD& userdata);
+    //bool            menuEnableItem(const LLSD& userdata);
+    // </FS>
 
 	static F32     valueGlow(LLViewerObject* object, S32 face);
 
@@ -294,22 +303,6 @@ private:
 	LLSpinCtrl*		mCtrlGlow;
 	LLSpinCtrl*		mCtrlRpt;
 	// </FS:CR>
-
-    LLButton        *mBtnCopyFaces;
-    LLButton        *mBtnPasteFaces;
-    LLMenuButton    *mBtnPasteMenu;
-
-    LLSD            mClipboard;
-    BOOL            mPasteColor;
-    BOOL            mPasteAlpha;
-    BOOL            mPasteGlow;
-    BOOL            mPasteDiffuse;
-    BOOL            mPasteNormal;
-    BOOL            mPasteSpecular;
-    BOOL            mPasteMapping;
-    BOOL            mPasteMedia;
-
-    BOOL            mPopulateAllTEs;
 
 	// Update visibility of controls to match current UI mode
 	// (e.g. materials vs media editing)
@@ -477,7 +470,14 @@ private:
 	 * If agent selects texture which is not allowed to be applied for the currently selected object,
 	 * all controls of the floater texture picker which allow to apply the texture will be disabled.
 	 */
-	void onTextureSelectionChanged(LLInventoryItem* itemp);
+    void onTextureSelectionChanged(LLInventoryItem* itemp);
+
+    // <FS> Extended copy & paste buttons
+    //LLMenuButton*   mMenuClipboardColor;
+    //LLMenuButton*   mMenuClipboardTexture;
+    LLButton*        mBtnCopyFaces;
+    LLButton*        mBtnPasteFaces;
+    // </FS>
 
 	bool mIsAlpha;
 	
@@ -492,7 +492,9 @@ private:
 	 * up-arrow on a spinner, and avoids running afoul of its throttle.
 	 */
 	bool mUpdateInFlight;
-	bool mUpdatePending;
+    bool mUpdatePending;
+
+    LLSD            mClipboardParams;
 
 public:
 	#if defined(DEF_GET_MAT_STATE)
@@ -574,8 +576,6 @@ public:
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setNormalID);
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setSpecularID);
 		DEF_EDIT_MAT_STATE(LLColor4U,	const LLColor4U&,setSpecularLightColor);
-
-		DEF_EDIT_MAT_STATE(LLSD, const LLSD&, fromLLSD);
 	};
 
 	class LLSelectedTE
