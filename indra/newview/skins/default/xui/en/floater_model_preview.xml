@@ -5,7 +5,7 @@
  can_minimize="true"
  can_resize="true"
  height="590"
- min_height="590"
+ min_height="625"
  width="960"
  min_width="960"
  name="Model Preview"
@@ -51,7 +51,7 @@
 
   <panel
     follows="top|left"
-    height="570"
+    height="595"
     layout="topleft"
     left="3"
     name="left_panel"
@@ -1622,161 +1622,179 @@ Analysed:
 [PHU]
         </text>-->
       </panel>
-      <!-- ========== NOTE MESSAGE ========== -->
+      <!-- FS:Beq relocate the preview controls to be sensible -->
+      <panel
+        follows="top|left"
+        layout="topleft"
+        left_pad="92"
+        height="100"
+        border="true"
+        name="preview_controls_panel"
+        width="260">
+        <panel
+          name="preview_controls_inner_panel"
+          height="18" >
+          <text
+            height="18"
+            layout="topleft"
+            name="preview_controls_title"
+            left="3"
+            width="150">
+            Preview controls
+          </text>
+          <combo_box
+              can_resize="false"
+              follows="top|left"
+            left="-85"
+            top_delta="-2"
+              height="18"
+              layout="topleft"
+              name="preview_lod_combo"
+              width="80"
+              tool_tip="LOD to view in preview render">
+              <combo_item name="high">   High   </combo_item>
+              <combo_item name="medium"> Medium </combo_item>
+              <combo_item name="low">    Low    </combo_item>
+              <combo_item name="lowest"> Lowest </combo_item>
+            </combo_box>
+        </panel>
+    <view_border
+      bevel_style="none"
+      follows="top|left"
+      height="0"
+      layout="topleft"
+      left="3"
+      name="preview_controls_border"
+      top_pad="5"
+      halign="center"
+      width="250"/>
+      <check_box
+        follows="top|left"
+        label="Edges"
+        layout="topleft"
+        name="show_edges"
+        width="70"
+        left="0"
+        top_pad="10"/>
+      <check_box
+        follows="top|left"
+        label="Textures"
+        layout="topleft"
+        name="show_textures"
+        left_pad="0"/>
+      <check_box
+        follows="top|left"
+        label="UV guide"
+        layout="topleft"
+        name="show_uv_guide"
+        left_pad="0"/>
+      <check_box
+        follows="top|left"
+        top_pad="10"
+        left="0"
+        width="70"
+        label="Physics"
+        name="show_physics"/>
       <text
-         font="SansSerif"
-         layout="topleft"
-         left="6"
-         name="warning_title"
-         top_pad="5"
-         text_color="DrYellow"
-         visible="true"
-         width="40">
-         NOTE:
-       </text>
-       <text
-         text_color="White"
-         height="20"
-         layout="topleft"
-         left_pad="1"
-         name="warning_message"
-         parse_urls="true"
-         top_delta="0"
-         wrap="true"
-         width="530"
-         visible="true">
-         You dont have rights to upload mesh models. [[VURL] Find out how] to get certified.
-       </text>
-       <text
-         text_color="Yellow"
-         layout="topleft"
-         top_pad="-2"
-         left="6"
-         name="status">
-[STATUS]
-       </text>
+        layout="topleft"
+        follows="top|left"
+        left_pad="2"
+        height="16"
+        width="80"
+        name="exploder_label">
+            Explode hulls
+      </text>
+      <slider
+        name="physics_explode"
+        show_text="false"
+        top_delta="1"
+        follows="top|left"
+        valign="center"
+        left_pad="2"
+        min_val="0.0"
+        max_val="3.0"
+        width="100"/>
+      <check_box
+        follows="top|left"
+        top_pad="15"
+        label="Weights"
+        layout="topleft"
+        width="70"
+        name="show_skin_weight"
+        left="0"/>
+      <check_box
+        follows="top|left"
+        label="Joint Positions"
+        height="0"
+        layout="topleft"
+        name="show_joint_positions"
+        word_wrap="down"
+        left_pad="0"/>
+        <check_box
+        follows="top|left"
+        label="Joint Pos. Overrides"
+        label_text.text_color="White"
+        word_wrap="down"
+        layout="topleft"
+        name="show_joint_overrides"
+        left_pad="0">
+      </check_box>
     </panel>
   </panel>
-  
-  <text
-   follows="left|top"
+<!-- /FS:Beq -->
+<!-- ========== NOTE MESSAGE ========== -->
+<text
+   font="SansSerif"
    layout="topleft"
-   left="630"
-   name="lod_label"
+   left="6"
+   name="warning_title"
+   top_pad="5"
+   text_color="DrYellow"
+   visible="true"
+   width="40">
+   NOTE:
+ </text>
+ <text
    text_color="White"
-   top="4"
-   height="15"
-   width="290">
-    Preview:
-  </text>
-  <panel
-   follows="all"
+   height="20"
    layout="topleft"
+   left_pad="1"
+   name="warning_message"
+   parse_urls="true"
+   top_delta="0"
+   wrap="true"
+   width="530"
+   visible="true">
+   You dont have rights to upload mesh models. [[VURL] Find out how] to get certified.
+ </text>
+ <text
+   text_color="Yellow"
+   layout="topleft"
+   top_pad="-2"
+   left="6"
+   name="status">
+[STATUS]
+ </text>
+</panel>
+<text
+follows="left|top"
+layout="topleft"
+left="630"
+name="lod_label"
+text_color="White"
+top="4"
+height="15"
+width="290">
+Preview:
+</text>
+<panel
    border="true"
    bevel_style="none"
+   follows="top|left|right|bottom"
+   layout="topleft"
    name="preview_panel"
-   top_pad="4"
-   width="325"
-   height="408"/>
-  <panel
-    follows="right|bottom"
-    can_resize="false"
-    height="140"
-    layout="topleft"
-    name="right_panel"
-    top_pad="5"
-    width="340">
-    <combo_box
-      top_pad="3"
-      follows="left|top"
-      height="18"
-      layout="topleft"
-      name="preview_lod_combo"
-      width="150"
-      tool_tip="LOD to view in preview render">
-      <combo_item name="high">   High   </combo_item>
-      <combo_item name="medium"> Medium </combo_item>
-      <combo_item name="low">    Low    </combo_item>
-      <combo_item name="lowest"> Lowest </combo_item>
-    </combo_box>
-    <text
-      follows="top|left"
-      layout="topleft"
-      text_color="White"
-      top="5"
-      left_pad="10"
-      name="label_display"
-      width="100">
-      Display:
-    </text>
-    <check_box
-      follows="top|left"
-      label="Edges"
-      label_text.text_color="White"
-      layout="topleft"
-      left_delta="0"
-      name="show_edges"
-      top_pad="8">
-    </check_box>
-    <check_box
-      follows="top|left"
-      label="Physics"
-      label_text.text_color="White"
-      layout="topleft"
-      name="show_physics"
-      top_pad="8">
-    </check_box>
-    <check_box
-      follows="top|left"
-      label="Textures"
-      label_text.text_color="White"
-      layout="topleft"
-      name="show_textures"
-      top_pad="8">
-    </check_box>
-    <check_box
-      follows="top|left"
-      label="Skin weights"
-      label_text.text_color="White"
-      layout="topleft"
-      name="show_skin_weight"
-      top_pad="8">
-    </check_box>
-    <check_box
-      follows="top|left"
-      label="Joint position overrides"
-      label_text.text_color="White"
-      word_wrap="down"
-      width="150"
-      layout="topleft"
-      name="show_joint_overrides"
-      top_pad="8">
-    </check_box>
-    <check_box
-      follows="top|left"
-      label="Joints"
-      label_text.text_color="White"
-      layout="topleft"
-      name="show_joint_positions"
-      top_pad="8">
-    </check_box>
-    <text
-      follows="top|left"
-      layout="topleft"
-      left="2"
-      name="physics_explode_label"
-      top="85"
-      width="150">
-      Preview Spread:
-    </text>
-    <slider
-      name="physics_explode"
-      follows="top|left"
-      top="100"
-      left="0"
-      min_val="0.0"
-      max_val="3.0"
-      height="20"
-      width="150"/>
-  </panel>
+   top="20"
+   height="560"
+   width="320"
+/>
 </floater>

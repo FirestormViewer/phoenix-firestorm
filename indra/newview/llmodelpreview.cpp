@@ -2090,14 +2090,28 @@ void LLModelPreview::updateStatusMessages()
                 if (mdl->mPhysics.mHull[j].size() > 256)
                 {
                     physExceededVertexLimit = TRUE;
-                    LL_INFOS() << "Physical model " << mdl->mLabel << " exceeds vertex per hull limitations." << LL_ENDL;
+                    // <FS:Beq> add new friendlier logging to mesh uploader
+                    // LL_INFOS() << "Physical model " << mdl->mLabel << " exceeds vertex per hull limitations." << LL_ENDL;
+                    std::ostringstream out;
+                    out << "Physical model " << mdl->mLabel << " exceeds vertex per hull limitations.";
+                    LL_INFOS() << out.str() << LL_ENDL;
+                    LLFloaterModelPreview::addStringToLog(out, true);
+                    out.str("");
+                    // </FS:Beq>                     
                     break;
                 }
             }
             // <FS:Beq> Better error handling
             if (num_hulls > 256) // decomp cannot have more than 256 hulls (http://wiki.secondlife.com/wiki/Mesh/Mesh_physics)
             {
-                LL_INFOS() << "Physical model " << mdl->mLabel << " exceeds 256 hull limitation." << LL_ENDL;
+                // <FS:Beq> improve uplaoder error reporting
+                // LL_INFOS() << "Physical model " << mdl->mLabel << " exceeds 256 hull limitation." << LL_ENDL;
+                std::ostringstream out;
+                out << "Physical model " << mdl->mLabel << " exceeds 256 hull limitation.";
+                LL_INFOS() << out.str() << LL_ENDL;
+                LLFloaterModelPreview::addStringToLog(out, true);
+                out.str("");
+                // </FS:Beq>
                 has_physics_error |= PhysicsError::TOOMANYHULLS;
             }
             // </FS:Beq>
@@ -2174,7 +2188,14 @@ void LLModelPreview::updateStatusMessages()
     if (getLoadState() >= LLModelLoader::ERROR_PARSING)
     {
         mModelNoErrors = false;
-        LL_INFOS() << "Loader returned errors, model can't be uploaded" << LL_ENDL;
+        // <FS:Beq> improve uplaoder error reporting
+        // LL_INFOS() << "Loader returned errors, model can't be uploaded" << LL_ENDL;
+        std::ostringstream out;
+        out << "Loader returned errors, model can't be uploaded";
+        LL_INFOS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
+        out.str("");
+        // </FS:Beq>
     }
 
     bool uploadingSkin = mFMP->childGetValue("upload_skin").asBoolean();
@@ -2185,7 +2206,14 @@ void LLModelPreview::updateStatusMessages()
         if (uploadingJointPositions && !isRigValidForJointPositionUpload())
         {
             mModelNoErrors = false;
-            LL_INFOS() << "Invalid rig, there might be issues with uploading Joint positions" << LL_ENDL;
+            // <FS:Beq> improve uplaoder error reporting
+            // LL_INFOS() << "Invalid rig, there might be issues with uploading Joint positions" << LL_ENDL;
+            std::ostringstream out;
+            out << "Invalid rig, there might be issues with uploading Joint positions";
+            LL_INFOS() << out.str() << LL_ENDL;
+            LLFloaterModelPreview::addStringToLog(out, true);
+            out.str("");
+            // </FS:Beq>
         }
     }
 
@@ -2297,7 +2325,8 @@ void LLModelPreview::updateStatusMessages()
         //    mViewOption["show_physics"] = false;
         //    fmp->childSetValue("show_physics", false);
         //}
-            mViewOption["show_physics"] = true;
+            
+            // mViewOption["show_physics"] = true; // <FS:Beq/> merge LL uplaoder changes
             if (phys_hulls > 0)
             {
                 fmp->enableViewOption("physics_explode");
@@ -2753,7 +2782,14 @@ void LLModelPreview::createPreviewAvatar(void)
     }
     else
     {
-        LL_INFOS() << "Failed to create preview avatar for upload model window" << LL_ENDL;
+        // <FS:Beq> improve uplaoder error reporting
+        // LL_INFOS() << "Failed to create preview avatar for upload model window" << LL_ENDL;
+        std::ostringstream out;
+        out << "Failed to create preview avatar for upload model window";
+        LL_INFOS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
+        out.str("");
+        // </FS:Beq>
     }
 }
 
