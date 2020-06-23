@@ -47,9 +47,8 @@
 			<combo_box name="DCPresetsCombo" />
 			<button name="DCPrevPreset" label="" />
 			<button name="DCNextPreset" label="" />
-			<icon name="SkyDayCycle" tool_tip="その日の時間を変更します。" />
-			<multi_slider name="WLSunPos" />
-			<button name="ResetToRegionDefault" label="地域デフォルトを使用" tool_tip="WindLightのオプションを地域のデフォルトにリセットします。" />
+			<button name="btn_personal_lighting" label="個人の照明..." />
+			<button name="ResetToRegionDefault" tool_tip="環境のオプションを共有された環境にリセットします。" />
 
 			<!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
 			<button name="button_edit" tool_tip="ここをクリックしてクイック設定のコントロールを調整します。" label="" />

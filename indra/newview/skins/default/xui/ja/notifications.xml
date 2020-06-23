@@ -2164,6 +2164,11 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 		このオプションのチェックを外すことにより、土地のオーナーが嫌がらせの帽子、プライバシーの保護、或いは未成年者をアダルトなものから守るために設定した制約を解除する可能性があります。必要であれば土地のオーナーとよく相談して下さい。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="EstateParcelEnvironmentOverride">
+（次の不動産全域にわたる変更です：[ESTATENAME]）このオプションのチェックを外すことにより、土地のオーナーが自分の区画に対して行った自然環境設定を全て削除します。必要であれば事前に土地のオーナーと協議して下さい。
+このまま処理を進めてよろしいですか？
+		<usetemplate name="okcancelbuttons" notext="Cancel" yestext="OK"/>
+	</notification>
 	<notification name="RegionEntryAccessBlocked">
 		これから訪問しようとしている地域には、あなたの現在のレーティング設定を越えるコンテンツがあります。レーティング設定の変更は、「アバター」＞「 環境設定」＞「一般」で行えます。
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -4389,7 +4394,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 			<ignore name="ignore" text="Phoenix/Firestorm サポート・グループに参加した時" />
 		</form>
 	</notification>
---!
+-->
 	<!-- <FS:Zi> Viewer version popup -->
 
 	<notification name="ConfirmScriptModify">
@@ -5403,5 +5408,82 @@ Firestorm ビューワを利用して行った通貨の購入は、ユーザー�
 	</notification>
 	<notification name="EnableHiDPI">
 		HiDPI 表示機能を有効にすると、何らかの影響が生じたり、性能が損なわれる可能性があります。
+	</notification>
+	<notification name="FailedToFindSettings">
+		自然環境設定 [NAME] をデータベースから取得出来ませんでした。
+	</notification>
+	<notification name="FailedToLoadSettingsApply">
+		これらの設定を自然環境に適用できませんでした。
+	</notification>
+	<notification name="FailedToBuildSettingsDay">
+		これらの設定を自然環境に適用できませんでした。
+	</notification>
+	<notification name="NoEnvironmentSettings">
+		この地域では自然環境設定は行えません。
+	</notification>
+	<notification label="Save Outfit" name="SaveSettingAs">
+		自然環境設定を次の名前で保存：
+		<form name="form">
+			<input name="message" type="text">
+				[DESC]（新）
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	<notification name="WLImportFail">
+次のファイルから古い形式の Windlight 設定 [NAME] のインポートができませんでした。
+[FILE]
+
+[REASONS]
+	</notification>
+	<notification name="WLParcelApplyFail">
+この区画では自然環境の設定ができません。
+修正権限のある区画を入力または選択して下さい。
+	</notification>
+	<notification name="SettingsUnsuported">
+この地域では自然環境の設定は行えません。
+自然環境設定の変更が可能な地域に移動してお試し下さい。
+	</notification>
+	<notification name="SettingsConfirmLoss">
+"[NAME]" という名前のこの [TYPE] に加えた変更が失われます。
+このまま処理を続けてもよろしいですか？
+		<usetemplate ignoretext="変更が失われてもよろしいですか？" name="okcancelignore" notext="いいえ" yestext="はい"/>
+	</notification>
+	<notification name="SettingsConfirmReset">
+適用していた全ての自然環境設定を削除しようとしています。
+このまま処理を続けてもよろしいですか？
+		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
+	</notification>
+	<notification name="PersonalSettingsConfirmReset">
+適用していた全ての個人環境設定を削除しようとしています。
+このまま処理を続けてもよろしいですか？
+		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
+	</notification>
+	<notification name="SettingsMakeNoTrans">
+このデイサイクルに再販・プレゼント不可の自然環境設定をインポートしようとしています。このまま処理を続けると、編集しようとしている自然環境設定も再販・プレゼント不可になります。
+
+この変更は元に戻すことができません。
+
+このまま処理を続けてもよろしいですか？
+		<usetemplate ignoretext="自然環境設定を再販・プレゼント不可にしてもよろしいですか？" name="okcancelignore" notext="いいえ" yestext="はい"/>
+	</notification>
+	<notification name="NoEditFromLibrary">
+ライブラリのアイテムを直接編集してはいけません。
+ご自分の持ち物にコピーしてからもう一度お試し下さい。
+	</notification>
+	<notification name="EnvironmentApplyFailed">
+		これらに自然環境設定で問題が発生しました。今回これらの設定を保存したり適用したりすることはできません。
+	</notification>
+	<notification name="TrackLoadFailed">
+		トラックを [TRACK] に読み込むことができませんでした。
+	</notification>
+	<notification name="TrackLoadMismatch">
+		[TRACK1] のトラックを [TRACK2] に読み込むことができませんでした。
+	</notification>
+	<notification name="NoValidEnvSettingFound">
+有効な環境設定が選択されていません。
+
+「共有された環境」と「デイサイクル依存」のものは選択できませんのでご注意下さい！
 	</notification>
 </notifications>
