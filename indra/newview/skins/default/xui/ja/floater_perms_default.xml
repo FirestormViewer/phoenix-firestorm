@@ -68,7 +68,15 @@
 		<check_box name="wearables_t" />
 		<check_box name="wearables_s" />
 		<check_box name="wearables_e" />
-  </panel>
+		<text name="label_13" tool_tip="自然環境設定を作成する時の権限を初期設定します">
+			自然環境設定
+		</text>
+		<check_box name="env_settings_c" />
+		<check_box name="env_settings_m" />
+		<check_box name="env_settings_t" />
+		<check_box name="env_settings_s" />
+		<check_box name="env_settings_e" />
+	</panel>
 	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="取り消し" label_selected="取り消し" name="cancel"/>
 </floater>
