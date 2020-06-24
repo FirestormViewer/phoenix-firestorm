@@ -47,6 +47,7 @@
 		<panel name="tab-movement" label="Movimento">
 			<check_box label="Le frecce di direzione fanno sempre spostare" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Premere i tasti delle lettere permette il movimento (es. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
+			<check_box label="Usare tastiera AZERTY" name="FSUseAzertyKeyboardLayout" />
 			<check_box label="Doppio clic e tenere premuto per correre" name="tap_tap_hold_to_run"/>
 			<check_box label="Volare/atterrare tenendo premuto salta (PagSu)/chinati (PagGiù)" name="automatic_fly"/>
 			<check_box label="Blocca azione chinarsi (PagGiù)" name="crouch_toggle_mode"/>

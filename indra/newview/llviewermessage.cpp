@@ -2325,15 +2325,10 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 	LLUUID destination;
 	bool accept = true;
 
-// [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
-	bool fRlvNotifyAccepted = false;
-// [/RLVa:KB]
 	// If user accepted, accept to proper folder, if user discarded, accept to trash.
 	switch(button)
 	{
 		case IOR_ACCEPT:
-			destination = mFolderID;
-
 // [RLVa:KB] - Checked: 2010-09-23 (RLVa-1.2.1)
 			// Only treat the offer as 'Give to #RLV' if:
 			//   - the user has enabled the feature
@@ -2341,28 +2336,28 @@ bool LLOfferInfo::inventory_task_offer_callback(const LLSD& notification, const 
 			//   - the name starts with the prefix - mDesc format: '[OBJECTNAME]'  ( http://slurl.com/... )
 			if ( (rlv_handler_t::isEnabled()) && (IM_TASK_INVENTORY_OFFERED == mIM) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 1) )
 			{
-				fRlvNotifyAccepted = true;
 				if (!RlvSettings::getForbidGiveToRLV())
 				{
 					const LLUUID& idRlvRoot = RlvInventory::instance().getSharedRootID();
 					if (idRlvRoot.notNull())
 						mFolderID = idRlvRoot;
 
-					fRlvNotifyAccepted = false;		// "accepted_in_rlv" is sent from RlvGiveToRLVTaskOffer *after* we have the folder
-
+					// "accepted_in_rlv" is sent from RlvGiveToRLVTaskOffer *after* we have the folder
 					RlvGiveToRLVTaskOffer* pOfferObserver = new RlvGiveToRLVTaskOffer(mTransactionID);
 					gInventory.addObserver(pOfferObserver);
 				}
-			}
-
-			if (fRlvNotifyAccepted)
-			{
-				std::string::size_type idxToken = mDesc.find("'  ( http://");
-				if (std::string::npos != idxToken)
-					RlvBehaviourNotifyHandler::sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
+				else
+				{
+					std::string::size_type idxToken = mDesc.find("'  ( http://");
+					if (std::string::npos != idxToken)
+					{
+						RlvBehaviourNotifyHandler::sendNotification("accepted_in_inv inv_offer " + mDesc.substr(1, idxToken - 1));
+					}
+				}
 			}
 // [/RLVa:KB]
 
+			destination = mFolderID;
 			//don't spam user if flooded
 			if (check_offer_throttle(mFromName, true))
 			{

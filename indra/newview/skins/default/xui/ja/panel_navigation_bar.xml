@@ -13,7 +13,7 @@
 				<pull_button name="forward_btn" tool_tip="次の場所に移動" />
 				<button name="home_btn" tool_tip="「ホーム」にテレポートします。" />
 				<button name="About_Land" label="土地" tool_tip="土地情報のウィンドウを開きます。"/> 
-				<button name="Sky" label="空" tool_tip="空の環境設定ウィンドウを開きます。" />
+				<button name="PersonalLighting" label="照明" tool_tip="個人照明のウィンドウを開きます。" />
 
 			</layout_panel>
 

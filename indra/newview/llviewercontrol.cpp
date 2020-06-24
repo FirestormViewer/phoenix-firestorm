@@ -79,6 +79,7 @@
 #include "llslurl.h"
 #include "llstartup.h"
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
+#include "rlvactions.h"
 #include "rlvcommon.h"
 // [/RLVa:KB]
 
@@ -98,7 +99,7 @@
 #include "llnotificationsutil.h"
 #include "llpanelplaces.h"
 #include "llstatusbar.h"
-#include "llviewerinput.h"
+#include "llviewerkeyboard.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "NACLantispam.h"
@@ -211,6 +212,15 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 bool handleSetShaderChanged(const LLSD& newvalue)
 // </FS:Ansariel>
 {
+// [RLVa:KB] - @setenv
+	if ( (!RlvActions::canChangeEnvironment()) && (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")) && (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) )
+	{
+		gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
+		return true;
+	}
+// [/RLVa:KB]
+
+
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
 	gBumpImageList.restoreGL();
@@ -827,6 +837,23 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 }
 // </FS:CR>
 
+// <FS:Ansariel> Allow instant change of keyboard layout
+void handleKeyboardLayoutChanged(const LLSD& newvalue)
+{
+	std::string keyBindingFileName("keys.xml");
+	if (newvalue.asBoolean())
+	{
+		keyBindingFileName = "keys_azerty.xml";
+	}
+
+	std::string key_bindings_file = gDirUtilp->findFile(keyBindingFileName,
+														gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
+														gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
+
+	gViewerKeyboard.loadBindingsXML(key_bindings_file);
+}
+// </FS:Ansariel>
+
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
@@ -1169,6 +1196,8 @@ void settings_setup_listeners()
 
 	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
 	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
+
+	gSavedSettings.getControl("FSUseAzertyKeyboardLayout")->getCommitSignal()->connect(boost::bind(&handleKeyboardLayoutChanged, _2));
 
 	// <FS:Ansariel> [FS communication UI]
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));

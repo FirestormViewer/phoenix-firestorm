@@ -40,6 +40,7 @@
 		<panel label="Movimiento" name="tab-movement">
 			<check_box label="Las teclas de cursor siempre me mueven" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Pulsar teclas alfanuméricas afecta al movimiento (p. ej. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="Usar disposición de teclado AZERTY" name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run"/>
 			<check_box label="Volar/aterrizar al mantener arriba/abajo" name="automatic_fly"/>
 			<check_box label="Activar el modo conmutado para agacharse" name="crouch_toggle_mode"/>

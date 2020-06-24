@@ -43,7 +43,7 @@
 				<texture_picker label="Носки" name="lower_socks"/>
 				<texture_picker label="Обувь" name="lower_shoes"/>
 				<texture_picker label="Брюки" name="lower_pants"/>
-				<texture_picker label="Пиджак" name="lower_jacket"/>
+				<texture_picker label="Куртка" name="lower_jacket"/>
 				<texture_picker label="Альфа низа" name="lower_alpha"/>
 				<texture_picker label="Тату низа" name="lower_tattoo"/>
 				<texture_picker label="Универс.тату" name="lower_universal_tattoo"/>
@@ -54,12 +54,12 @@
 				<texture_picker label="Левая рука тату" name="leftarm_tattoo"/>
 				<texture_picker label="Левая нога" name="leftleg-baked"/>
 				<texture_picker label="Левая нога тату" name="leftleg_tattoo"/>
-				<texture_picker label="AUX 1" name="aux1-baked"/>
-				<texture_picker label="AUX 1 тату" name="aux1_tattoo"/>
-				<texture_picker label="AUX 2" name="aux2-baked"/>
-				<texture_picker label="AUX 2 тату" name="aux2_tattoo"/>
-				<texture_picker label="AUX 3" name="aux3-baked"/>
-				<texture_picker label="AUX 3 тату" name="aux3_tattoo"/>
+				<texture_picker label="Доп 1" name="aux1-baked"/>
+				<texture_picker label="Доп 1 тату" name="aux1_tattoo"/>
+				<texture_picker label="Доп 2" name="aux2-baked"/>
+				<texture_picker label="Доп 2 тату" name="aux2_tattoo"/>
+				<texture_picker label="Доп 3" name="aux3-baked"/>
+				<texture_picker label="Доп 3 тату" name="aux3_tattoo"/>
 			</panel>
 		</panel>
 	</scroll_container>

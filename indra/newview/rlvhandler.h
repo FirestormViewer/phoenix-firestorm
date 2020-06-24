@@ -133,7 +133,7 @@ public:
 	bool       processIMQuery(const LLUUID& idSender, const std::string& strCommand);
 
 	// Returns a pointer to the currently executing command (do *not* save this pointer)
-	const RlvCommand* getCurrentCommand() const { return (!m_CurCommandStack.empty()) ? m_CurCommandStack.top() : NULL; }
+	const RlvCommand* getCurrentCommand() const { return (!m_CurCommandStack.empty()) ? &m_CurCommandStack.top().get() : nullptr; }
 	// Returns the UUID of the object we're currently executing a command for
 	const LLUUID&     getCurrentObject() const	{ return (!m_CurObjectStack.empty()) ? m_CurObjectStack.top() : LLUUID::null; }
 
@@ -147,6 +147,7 @@ protected:
 	void clearOverlayImage();                                                                   // @setoverlay=n
 	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
 	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
+	void setCameraOverride(bool fOverride);                                                     // @setcam family
 	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay=n
 
 	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
@@ -173,6 +174,7 @@ protected:
 
 	// Externally invoked event handlers
 public:
+	void cleanup();
 	void onActiveGroupChanged();
 	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
 	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
@@ -183,6 +185,7 @@ public:
 	void onSitOrStand(bool fSitting);
 	void onTeleportFailed();
 	void onTeleportFinished(const LLVector3d& posArrival);
+	static void cleanupClass();
 	static void onIdleStartup(void* pParam);
 protected:
 	void getAttachmentResourcesCoro(const std::string& strUrl);
@@ -201,7 +204,7 @@ public:
 	 * Command processing
 	 */
 protected:
-	ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool fFromObj);
+	ERlvCmdRet processCommand(std::reference_wrapper<const RlvCommand> rlvCmdRef, bool fFromObj);
 	ERlvCmdRet processClearCommand(const RlvCommand& rlvCmd);
 
 	// Command handlers (RLV_TYPE_ADD and RLV_TYPE_CLEAR)
@@ -242,7 +245,7 @@ protected:
 	rlv_command_list_t    m_Retained;
 	RlvGCTimer*           m_pGCTimer;
 
-	std::stack<const RlvCommand*> m_CurCommandStack;// Convenience (see @tpto)
+	std::stack<std::reference_wrapper<const RlvCommand>> m_CurCommandStack; // Convenience (see @tpto)
 	std::stack<LLUUID>    m_CurObjectStack;			// Convenience (see @tpto)
 
 	rlv_behaviour_signal_t m_OnBehaviour;
@@ -262,6 +265,8 @@ protected:
 	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
 	LLPointer<LLViewerFetchedTexture>       m_pOverlayImage = nullptr;		// @setoverlay=n
 	int                                     m_nOverlayOrigBoost = 0;		// @setoverlay=n
+
+	std::string                             m_strCameraPresetRestore;       // @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction

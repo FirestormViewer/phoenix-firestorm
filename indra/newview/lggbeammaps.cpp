@@ -13,6 +13,7 @@
 
 
 #include "llviewerprecompiledheaders.h"
+#include "fscommon.h"
 #include "lggbeammaps.h"
 #include "lggbeamscolors.h"
 #include "llagent.h"
@@ -26,17 +27,6 @@
 #include "message.h"
 
 lggBeamMaps gLggBeamMaps;
-
-std::string unescape_name(const std::string& name)
-{
-	// bugfix for SL-46920: preventing filenames that break stuff.
-	char * curl_str = curl_unescape(name.c_str(), name.size());
-	std::string unescaped_name(curl_str);
-	curl_free(curl_str);
-	curl_str = NULL;
-
-	return unescaped_name;
-}
 
 F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
 {
@@ -70,7 +60,7 @@ F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
 
 void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F32& bValOut)
 {
-	if (sValIn < 0.00001f)
+	if (sValIn < F_ALMOST_ZERO)
 	{
 		rValOut = lValIn;
 		gValOut = lValIn;
@@ -400,4 +390,3 @@ void lggBeamMaps::updateBeamChat(const LLVector3d& currentPos)
 		}
 	}
 }
-

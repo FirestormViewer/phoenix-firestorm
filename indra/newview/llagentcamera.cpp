@@ -219,16 +219,21 @@ void LLAgentCamera::init()
 	
 	mCameraPreset = (ECameraPreset) gSavedSettings.getU32("CameraPresetType");
 
-	mCameraOffsetInitial = gSavedSettings.getControl("CameraOffsetRearView");
-	mFocusOffsetInitial = gSavedSettings.getControl("FocusOffsetRearView");
-//// [RLVa:KB] - Checked: RLVa-2.0.0
-//	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3(mCameraOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
-//	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
-//// [/RLVa:KB]
-//// [RLVa:KB] - Checked: RLVa-2.0.0
-//	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("FocusOffsetRLVaView", LLVector3(mFocusOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
-//	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
-//// [/RLVa:KB]
+//	mCameraOffsetInitial = gSavedSettings.getControl("CameraOffsetRearView");
+//	mFocusOffsetInitial = gSavedSettings.getControl("FocusOffsetRearView");
+// [RLVa:KB] - @setcam_eyeoffset, @setcam_focusoffset and @setcam_eyeoffsetscale
+	mCameraOffsetInitialControl = gSavedSettings.getControl("CameraOffsetRearView");
+	mFocusOffsetInitialControl = gSavedSettings.getControl("FocusOffsetRearView");
+	if (RlvActions::isRlvEnabled())
+	{
+		mRlvCameraOffsetInitialControl = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3::zero, "Declared in code", LLControlVariable::PERSIST_NO);
+		mRlvCameraOffsetInitialControl->setHiddenFromSettingsEditor(true);
+		mRlvCameraOffsetScaleControl = gSavedSettings.declareF32("CameraOffsetScaleRLVa", 0.0f, "Declared in code", LLControlVariable::PERSIST_NO);
+		mRlvCameraOffsetScaleControl->setHiddenFromSettingsEditor(true);
+		mRlvFocusOffsetInitialControl = gSavedSettings.declareVec3d("FocusOffsetRLVaView", LLVector3d::zero, "Declared in code", LLControlVariable::PERSIST_NO);
+		mRlvFocusOffsetInitialControl->setHiddenFromSettingsEditor(true);
+	}
+// [/RLVa:KB]
 
 	mCameraCollidePlane.clearVec();
 	mCurrentCameraDistance = getCameraOffsetInitial().magVec() * gSavedSettings.getF32("CameraOffsetScale");
@@ -1026,7 +1031,10 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 {
 	if (mFocusOnAvatar && mCameraMode == CAMERA_MODE_THIRD_PERSON)
 	{
-		F32 camera_offset_dist = llmax(0.001f, getCameraOffsetInitial().magVec() * gSavedSettings.getF32("CameraOffsetScale"));
+// [RLVa:KB] - @setcam_eyeoffsetscale
+		F32 camera_offset_dist = llmax(0.001f, getCameraOffsetInitial().magVec() * getCameraOffsetScale());
+// [/RLVa:KB]
+//		F32 camera_offset_dist = llmax(0.001f, getCameraOffsetInitial().magVec() * gSavedSettings.getF32("CameraOffsetScale"));
 		
 		mCameraZoomFraction = (mTargetCameraDistance - meters) / camera_offset_dist;
 
@@ -1739,7 +1747,10 @@ LLVector3d LLAgentCamera::calcThirdPersonFocusOffset()
 		agent_rot *= ((LLViewerObject*)(gAgentAvatarp->getParent()))->getRenderRotation();
 	}
 
-	focus_offset = convert_from_llsd<LLVector3d>(mFocusOffsetInitial->get(), TYPE_VEC3D, "");
+//	focus_offset = convert_from_llsd<LLVector3d>(mFocusOffsetInitial->get(), TYPE_VEC3D, "");
+// [RLVa:KB] - @setcam_focusoffset
+	focus_offset = getFocusOffsetInitial();
+// [/RLVa:KB]
 	return focus_offset * agent_rot;
 }
 
@@ -1880,7 +1891,10 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 		}
 		else
 		{
-			local_camera_offset = mCameraZoomFraction * getCameraOffsetInitial() * gSavedSettings.getF32("CameraOffsetScale");
+// [RLVa:KB] - @setcam_eyeoffsetscale
+			local_camera_offset = mCameraZoomFraction * getCameraOffsetInitial() * getCameraOffsetScale();
+// [/RLVa:KB]
+//			local_camera_offset = mCameraZoomFraction * getCameraOffsetInitial() * gSavedSettings.getF32("CameraOffsetScale");
 			
 			// are we sitting down?
 			if (isAgentAvatarValid() && gAgentAvatarp->getParent())
@@ -2076,7 +2090,10 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 		// Check focus distance limits
 		if ( (fCamOriginDistClamped) && (!fCamAvDistLocked) )
 		{
-			const LLVector3 offsetCameraLocal = mCameraZoomFraction * getCameraOffsetInitial() * gSavedSettings.getF32("CameraOffsetScale");
+//			const LLVector3 offsetCameraLocal = mCameraZoomFraction * getCameraOffsetInitial() * gSavedSettings.getF32("CameraOffsetScale");
+// [RLVa:KB] - @setcam_eyeoffsetscale
+			const LLVector3 offsetCameraLocal = mCameraZoomFraction * getCameraOffsetInitial() * getCameraOffsetScale();
+// [/RLVa:KB]
 			const LLVector3d offsetCamera(gAgent.getFrameAgent().rotateToAbsolute(offsetCameraLocal));
 			const LLVector3d posFocusCam = frame_center_global + head_offset + offsetCamera;
 			if (clampCameraPosition(camera_position_global, posFocusCam, nCamOriginDistLimitMin, nCamOriginDistLimitMax))
@@ -2183,13 +2200,26 @@ bool LLAgentCamera::isJoystickCameraUsed()
 
 LLVector3 LLAgentCamera::getCameraOffsetInitial()
 {
-	return convert_from_llsd<LLVector3>(mCameraOffsetInitial->get(), TYPE_VEC3, "");
+// [RLVa:KB] - @setcam_eyeoffset
+	return convert_from_llsd<LLVector3>( (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? mCameraOffsetInitialControl->get() : mRlvCameraOffsetInitialControl->get(), TYPE_VEC3, "");
+// [/RLVa:KB]
+//	return convert_from_llsd<LLVector3>(mCameraOffsetInitial->get(), TYPE_VEC3, "");
 }
 
 LLVector3d LLAgentCamera::getFocusOffsetInitial()
 {
-	return convert_from_llsd<LLVector3d>(mFocusOffsetInitial->get(), TYPE_VEC3D, "");
+// [RLVa:KB] - @setcam_focusoffset
+	return convert_from_llsd<LLVector3d>( (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? mFocusOffsetInitialControl->get() : mRlvFocusOffsetInitialControl->get(), TYPE_VEC3D, "");
+// [/RLVa:KB]
+//	return convert_from_llsd<LLVector3d>(mFocusOffsetInitial->get(), TYPE_VEC3D, "");
 }
+
+// [RLVa:KB] - @setcam_eyeoffsetscale
+F32 LLAgentCamera::getCameraOffsetScale() const
+{
+	return gSavedSettings.getF32( (ECameraPreset::CAMERA_RLV_SETCAM_VIEW != mCameraPreset) ? "CameraOffsetScale" : "CameraOffsetScaleRLVa");
+}
+// [/RLVa:KB]
 
 // <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
 //F32 LLAgentCamera::getCameraMaxZoomDistance()
@@ -2280,10 +2310,16 @@ void LLAgentCamera::handleScrollWheel(S32 clicks)
 
 			F32 camera_offset_initial_mag = getCameraOffsetInitial().magVec();
 			
-			F32 current_zoom_fraction = mTargetCameraDistance / (camera_offset_initial_mag * gSavedSettings.getF32("CameraOffsetScale"));
+//			F32 current_zoom_fraction = mTargetCameraDistance / (camera_offset_initial_mag * gSavedSettings.getF32("CameraOffsetScale"));
+// [RLVa:KB] - @setcam_eyeoffsetscale
+			F32 current_zoom_fraction = mTargetCameraDistance / (camera_offset_initial_mag * getCameraOffsetScale());
+// [/RLVa:KB]
 			current_zoom_fraction *= 1.f - pow(ROOT_ROOT_TWO, clicks);
 			
-			cameraOrbitIn(current_zoom_fraction * camera_offset_initial_mag * gSavedSettings.getF32("CameraOffsetScale"));
+// [RLVa:KB] - @setcam_eyeoffsetscale
+			cameraOrbitIn(current_zoom_fraction * camera_offset_initial_mag * getCameraOffsetScale());
+// [/RLVa:KB]
+//			cameraOrbitIn(current_zoom_fraction * camera_offset_initial_mag * gSavedSettings.getF32("CameraOffsetScale"));
 		}
 		else
 		{
@@ -2635,22 +2671,27 @@ void LLAgentCamera::changeCameraToCustomizeAvatar()
 
 void LLAgentCamera::switchCameraPreset(ECameraPreset preset)
 {
-// [RLVa:KB] - Checked: RLVa-2.0.0
+// [RLVa:KB] - @setcam family
 	if (RlvActions::isRlvEnabled())
 	{
-		// Don't allow changing away from the our view if an object is restricting it
+		// Don't allow changing away from our view if an object is restricting it
 		if (RlvActions::isCameraPresetLocked())
 			preset = CAMERA_RLV_SETCAM_VIEW;
 
-		// Don't reset anything if our view is already current
-		if ( (CAMERA_RLV_SETCAM_VIEW == preset) && (CAMERA_RLV_SETCAM_VIEW == mCameraPreset) )
-			return;
-
-		// Reset our view when switching away
-		if (CAMERA_RLV_SETCAM_VIEW != preset)
+		if (CAMERA_RLV_SETCAM_VIEW == preset)
 		{
-			//mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
-			//mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
+			if (CAMERA_RLV_SETCAM_VIEW == mCameraPreset)
+			{
+				// Don't reset anything if our view is already current
+				return;
+			}
+			else
+			{
+				// When switching to our view, copy the current values
+				mRlvCameraOffsetInitialControl->setDefaultValue(convert_to_llsd(getCameraOffsetInitial()));
+				mRlvFocusOffsetInitialControl->setDefaultValue(convert_to_llsd(getFocusOffsetInitial()));
+				mRlvCameraOffsetScaleControl->setDefaultValue(getCameraOffsetScale());
+			}
 		}
 	}
 // [/RLVa:KB]

@@ -144,7 +144,6 @@
 #include "llcoros.h"
 #include "llexception.h"
 //#if !LL_LINUX
-#include "cef/dullahan.h"
 #include "cef/dullahan_version.h"
 #include "vlc/libvlc_version.h"
 //#endif // LL_LINUX
@@ -165,7 +164,7 @@
 #include "llapr.h"
 #include <boost/lexical_cast.hpp>
 
-#include "llviewerinput.h"
+#include "llviewerkeyboard.h"
 #include "lllfsthread.h"
 #include "llworkerthread.h"
 #include "lltexturecache.h"
@@ -1180,15 +1179,28 @@ bool LLAppViewer::init()
 	gGLManager.getGLInfo(gDebugInfo);
 	gGLManager.printGLInfoString();
 
-	// Load User's bindings
-	std::string key_bindings_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "key_bindings.xml");
-	if (!gDirUtilp->fileExists(key_bindings_file) || !gViewerInput.loadBindingsXML(key_bindings_file))
+	// Load Default bindings
+	// <FS:Ansariel> Optional AZERTY keyboard layout
+	//std::string key_bindings_file = gDirUtilp->findFile("keys.xml",
+	std::string keyBindingFileName("keys.xml");
+	if (gSavedSettings.getBOOL("FSUseAzertyKeyboardLayout"))
 	{
-		// Failed to load custom bindings, try default ones
-		key_bindings_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "key_bindings.xml");
-		if (!gViewerInput.loadBindingsXML(key_bindings_file))
+		keyBindingFileName = "keys_azerty.xml";
+	}
+	std::string key_bindings_file = gDirUtilp->findFile(keyBindingFileName,
+	// </FS:Ansariel>
+														gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
+														gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
+
+
+	if (!gViewerKeyboard.loadBindingsXML(key_bindings_file))
+	{
+		std::string key_bindings_file = gDirUtilp->findFile("keys.ini",
+															gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
+															gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
+		if (!gViewerKeyboard.loadBindings(key_bindings_file))
 		{
-			LL_ERRS("InitInfo") << "Unable to open default key bindings from " << key_bindings_file << LL_ENDL;
+			LL_ERRS("InitInfo") << "Unable to open keys.ini" << LL_ENDL;
 		}
 	}
 
@@ -1689,7 +1701,6 @@ bool LLAppViewer::doFrame()
 			{
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
-                gViewerInput.scanMouse();
 				// <FS:Ansariel> Chalice Yao's crouch toggle
 				static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
 				static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
@@ -3859,12 +3870,16 @@ LLSD LLAppViewer::getViewerInfo() const
 	cef_ver_codec << ".";
 	cef_ver_codec << DULLAHAN_VERSION_MINOR;
 	cef_ver_codec << ".";
+	cef_ver_codec << DULLAHAN_VERSION_POINT;
+	cef_ver_codec << ".";
 	cef_ver_codec << DULLAHAN_VERSION_BUILD;
 
-	cef_ver_codec << " / CEF: ";
+	cef_ver_codec << std::endl;
+	cef_ver_codec << "  CEF: ";
 	cef_ver_codec << CEF_VERSION;
 
-	cef_ver_codec << " / Chromium: ";
+	cef_ver_codec << std::endl;
+	cef_ver_codec << "  Chromium: ";
 	cef_ver_codec << CHROME_VERSION_MAJOR;
 	cef_ver_codec << ".";
 	cef_ver_codec << CHROME_VERSION_MINOR;
@@ -6268,6 +6283,10 @@ void LLAppViewer::disconnectViewer()
 	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
 // [/SL:KB]
+
+// [RLVa:KB] - Checked: RLVa-2.3 (Housekeeping)
+	SUBSYSTEM_CLEANUP(RlvHandler);
+// [/RLVa:KB]
 
 	gAgentWearables.cleanup();
 	gAgentCamera.cleanup();

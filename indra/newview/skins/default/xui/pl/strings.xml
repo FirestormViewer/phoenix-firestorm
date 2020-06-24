@@ -1410,6 +1410,15 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="none">
 		brak
 	</string>
+	<string name="sky">
+		Niebo
+	</string>
+	<string name="water">
+		Woda
+	</string>
+	<string name="day">
+		Cykl dnia
+	</string>
 	<string name="shirt_not_worn">
 		Koszula nie jest założona
 	</string>
@@ -4979,7 +4988,7 @@ Raport o Nadużyciu
 	<string name="Female - Wow">
 		Kobieta - Wow
 	</string>
-	<string name="New Daycycle">
+	<string name="New Day">
 		Nowy cykl dnia
 	</string>
 	<string name="New Water">
@@ -4987,6 +4996,9 @@ Raport o Nadużyciu
 	</string>
 	<string name="New Sky">
 		Nowe niebo
+	</string>
+	<string name="New Settings">
+		Nowe otoczenie
 	</string>
 	<string name="AvatarBirthDateFormat">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]

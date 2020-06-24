@@ -670,6 +670,9 @@ http://www.firestormviewer.org/support for help fixing this problem.
   <string name="physics">Physics</string>
   <string name="invalid">invalid</string>
   <string name="none">none</string>
+  <string name="sky">Sky</string>
+  <string name="water">Water</string>
+  <string name="day">Daycycle</string>
 
   <!-- Not Worn Wearable Types -->
 	<string name="shirt_not_worn">Shirt not worn</string>
@@ -2369,9 +2372,10 @@ Abuse Report</string>
   <string name="Female - Stick tougue out">Female - Stick tongue out</string>
   <string name="Female - Wow">Female - Wow</string>
   <!-- settings -->
-  <string name="New Daycycle">New Daycycle</string>
+  <string name="New Day">New Daycycle</string>
   <string name="New Water">New Water</string>
   <string name="New Sky">New Sky</string>
+  <string name="New Settings">New Settings</string>
   
 
   <string name="/bow">/bow</string>
@@ -2593,15 +2597,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Y">Y</string>
   <string name="Z">Z</string>
   <!-- Key names end -->
-
-  <!-- Mouse button names (short) begin -->
-  <string name="LMB">LMB</string>
-  <string name="MMB">MMB</string>
-  <string name="RMB">RMB</string>
-  <string name="MB4">MB4</string>
-  <string name="MB5">MB5</string>
-  <string name="Double LMB">Double LMB</string>
-  <!-- Mouse button names end -->
 
   <!-- llviewerwindow -->
   <string name="BeaconParticle">Viewing particle beacons (blue)</string>
