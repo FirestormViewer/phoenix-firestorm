@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="環境" name="panel_env_info">
+<panel label="自然環境" name="panel_env_info">
 	<string name="str_label_use_default">
 		既定の設定を使用
 	</string>
@@ -19,7 +19,7 @@
 		このリージョンで環境設定はできません。
 	</string>
 	<string name="str_disallowed">
-		不動産マネージャーが、このリージョンで区画の環境を変更することを許可していません。
+		不動産管理者が、このリージョンで区画の環境を変更することを許可していません。
 	</string>
 	<string name="str_too_small">
 		環境をサポートするには、最低でも 128 平方メートルの区画が必要です。
@@ -30,23 +30,37 @@
 	<string name="str_region_env">
 		（リージョンの環境）
 	</string>
-	<layout_stack>
+	
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text follows="left|top" name="region_text_lbl">
+				地域：
+			</text>
+			<text name="region_text">
+				不明
+			</text>
+		</layout_panel>
 		<layout_panel name="pnl_environment_disabled">
 			<text name="txt_environment_disabled">
 				...
 			</text>
 		</layout_panel>
 		<layout_panel name="pnl_environment_config">
-			<layout_stack>
+			<layout_stack name="ls_environment_config">
 				<layout_panel name="pnl_environment_config">
-					<layout_stack>
+					<layout_stack name="ls_environment_config2">
 						<layout_panel name="pnl_environment_current">
+							<text name="select_environment_label">自然環境を選択</text>
 							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="持ち物を使う" name="btn_select_inventory"/>
 							<button label="カスタマイズ" name="btn_edit"/>
 							<check_box label="区画所有者が環境を上書きすることがあります" name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
+							<text name="day_settings_label">デイサイクル設定</text>
+							<text name="day_length_label">一日の長さ (時間)</text>
+							<text name="day_offset_label">GMTとの時差 (時間)</text>
+							<text name="apparent_time_of_day_label">見かけの時刻：</text>
 							<text name="lbl_apparent_time">
 								[HH]:[MM][AP] ([PRC]%)
 							</text>
@@ -85,6 +99,7 @@
 						</line_editor>
 						<settings_drop_target name="sdt_alt3" tool_tip="持ち物から設定をこのターゲットボックスにドラッグし、現在の空として選択する"/>
 					</panel>
+					<text name="sky_altitudes_label">空の高度</text>
 					<multi_slider initial_value="0" name="sld_altitudes">
 						<slider name="sld1" value="1000"/>
 						<slider name="sld2" value="2000"/>

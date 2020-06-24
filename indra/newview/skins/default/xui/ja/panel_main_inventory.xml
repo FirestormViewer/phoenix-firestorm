@@ -46,8 +46,8 @@
 
 		</panel>
 		<panel name="dummy_panel">
-			<text name="ItemcountText">
-				アイテム
+			<text name="ItemcountText" tool_tip="[CATEGORIES] フォルダに [ITEMS] アイテムがあります">
+				要素
 			</text>
 			<icon name="dummy_icon" />
 		</panel>

@@ -10,8 +10,9 @@
 		カメラを上下左右に移動します
 	</floater.string>
 	<floater.string name="free_mode_title">
-		客観ビュー
+		オブジェクトを見る
 	</floater.string>
+	<string name="inactive_combo_text">プリセットを使用</string>
 	<tab_container name="tabs">
 		<panel name="P_Cam_Controls_1" label="カメラ制御 1">
 			<panel name="cameracontrolspanel">
@@ -32,6 +33,11 @@
 								背面ビュー
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="プリセットを使用" name="Use preset" />
+						</combo_box>
+						<button name="gear_btn" tool_tip="カメラのプリセット" />
+						<button label="カメラ位置..." name="camera_position_btn" />
 					</panel>
 					<panel name="camera_modes_list">
 						<panel_camera_item name="object_view">
