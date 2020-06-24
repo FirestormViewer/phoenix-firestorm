@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Load Pref Preset" title="優先プリセットをロード">
+<floater name="load_pref_preset" title="優先プリセットをロード">
 	<string name="title_graphic">
 		グラフィックプリセットをロード
 	</string>
