@@ -5557,7 +5557,7 @@
     <key>DoubleClickAutoPilot</key>
     <map>
       <key>Comment</key>
-      <string>(Obsolete)Enable double-click auto pilot</string>
+      <string>Enable double-click auto pilot</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -5565,10 +5565,10 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>DoubleClickTeleport</key> 
+    <key>DoubleClickTeleport</key>
     <map>
       <key>Comment</key>
-      <string>Enable double-click to teleport where allowed (afects minimap and people panel)</string>
+      <string>Enable double-click to teleport where allowed</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10979,7 +10979,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>PushToTalkButton</key>
     <map>
       <key>Comment</key>
-      <string>(Obsolete)Which button or keyboard key is used for push-to-talk</string>
+      <string>Which button or keyboard key is used for push-to-talk</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -19816,7 +19816,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ClickToWalk</key>
     <map>
       <key>Comment</key>
-      <string>(obsolete)Click in world to walk to location</string>
+      <string>Click in world to walk to location</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -21051,6 +21051,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Boolean</string>
     <key>Value</key>
     <integer>1</integer>
+  </map>
+  <key>FSUseAzertyKeyboardLayout</key>
+  <map>
+    <key>Comment</key>
+    <string>Uses a keyboard layout suitable for keyboards with AZERTY layout.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   <key>FSNameTagZOffsetCorrection</key>
   <map>

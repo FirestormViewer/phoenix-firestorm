@@ -10173,6 +10173,7 @@ BOOL LLViewerMenuHolderGL::hideMenus()
 	
 	if (LLMenuHolderGL::hideMenus())
 	{
+		LLToolPie::instance().blockClickToWalk();
 		handled = TRUE;
 	}
 

@@ -46,6 +46,7 @@
 		<panel label="Ruch" name="tab-movement">
 			<check_box label="Przyciski ze strzałkami zawsze poruszają awatarem" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Naciskanie klawiszy liter wpływa na ruch (tzn. WASD) zamiast rozpoczynać czat" name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="Użyj układu klawiatury AZERTY" name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Puk-puk-trzymaj, aby biec" name="tap_tap_hold_to_run"/>
 			<check_box label="Przytrzymaj klawisz skoku lub kucania, aby zacząć lub przestać latać" name="automatic_fly"/>
 			<check_box label="Włącz tryb przełączania kucania" name="crouch_toggle_mode"/>

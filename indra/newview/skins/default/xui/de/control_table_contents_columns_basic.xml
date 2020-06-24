@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<contents>
-	<columns label="Aktion" name="lst_action" />
-	<columns label="Primäre Taste" name="lst_ctrl1" />
-	<columns label="Alternative 1" name="lst_ctrl2" />
-	<columns label="Alternative 2" name="lst_ctrl3" />
-</contents>

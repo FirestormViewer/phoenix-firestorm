@@ -117,13 +117,6 @@ struct SortScrollListItem
 // LLScrollListCtrl
 //---------------------------------------------------------------------------
 
-void LLScrollListCtrl::SelectionTypeNames::declareValues()
-{
-    declare("row", LLScrollListCtrl::ROW);
-    declare("cell", LLScrollListCtrl::CELL);
-    declare("header", LLScrollListCtrl::HEADER);
-}
-
 LLScrollListCtrl::Contents::Contents()
 :	columns("column"),
 	rows("row")
@@ -137,10 +130,8 @@ LLScrollListCtrl::Params::Params()
 	has_border("draw_border"),
 	draw_heading("draw_heading"),
 	search_column("search_column", 0),
-	selection_type("selection_type", ROW),
 	sort_column("sort_column", -1),
 	sort_ascending("sort_ascending", true),
-	can_sort("can_sort", true),
 	persist_sort_order("persist_sort_order", false),	// <FS:Ansariel> Persists sort order of scroll lists
 	primary_sort_only("primary_sort_only", false),		// <FS:Ansariel> Option to only sort by one column
 	mouse_wheel_opaque("mouse_wheel_opaque", false),
@@ -177,10 +168,8 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mCommitOnKeyboardMovement(p.commit_on_keyboard_movement),
 	mCommitOnSelectionChange(false),
 	mSelectionChanged(false),
-	mSelectionType(p.selection_type),
 	mNeedsScroll(false),
 	mCanSelect(true),
-	mCanSort(p.can_sort),
 	mColumnsDirty(false),
 	mMaxItemCount(INT_MAX), 
 	mBorderThickness( 2 ),
@@ -920,15 +909,7 @@ BOOL LLScrollListCtrl::selectFirstItem()
 		{
 			if (!itemp->getSelected())
 			{
-                switch (mSelectionType)
-                {
-                case CELL:
-                    selectItem(itemp, 0);
-                    break;
-                case HEADER:
-                case ROW:
-                    selectItem(itemp, -1);
-                }
+				selectItem(itemp);
 			}
 			success = TRUE;
 			mOriginalSelection = 0;
@@ -995,8 +976,7 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
 		{
 			if( itemp->getEnabled() )
 			{
-				// TODO: support range selection for cells
-				selectItem(itemp, -1, FALSE);
+				selectItem(itemp, FALSE);
 				success = TRUE;				
 			}
 		}
@@ -1122,14 +1102,10 @@ void LLScrollListCtrl::clearHighlightedItems()
 
 void LLScrollListCtrl::mouseOverHighlightNthItem(S32 target_index)
 {
-    if (mHighlightedItem != target_index)
-    {
-        if (mHighlightedItem >= 0 && mHighlightedItem < mItemList.size())
-        {
-            mItemList[mHighlightedItem]->setHoverCell(-1);
-        }
-        mHighlightedItem = target_index;
-    }
+	if (mHighlightedItem != target_index)
+	{
+		mHighlightedItem = target_index;
+	}
 }
 
 S32	LLScrollListCtrl::selectMultiple( uuid_vec_t ids )
@@ -1144,8 +1120,7 @@ S32	LLScrollListCtrl::selectMultiple( uuid_vec_t ids )
 		{
 			if (item->getEnabled() && (item->getUUID() == (*iditr)))
 			{
-				// TODO: support multiple selection for cells
-				selectItem(item, -1, FALSE);
+				selectItem(item,FALSE);
 				++count;
 				break;
 			}
@@ -1224,7 +1199,7 @@ void LLScrollListCtrl::selectPrevItem( BOOL extend_selection)
 			{
 				if (prev_item)
 				{
-					selectItem(prev_item, cur_item->getSelectedCell(), !extend_selection);
+					selectItem(prev_item, !extend_selection);
 				}
 				else
 				{
@@ -1268,7 +1243,7 @@ void LLScrollListCtrl::selectNextItem( BOOL extend_selection)
 			{
 				if (next_item)
 				{
-					selectItem(next_item, cur_item->getSelectedCell(), !extend_selection);
+					selectItem(next_item, !extend_selection);
 				}
 				else
 				{
@@ -1347,7 +1322,7 @@ BOOL LLScrollListCtrl::selectItemByLabel(const std::string& label, BOOL case_sen
 	bool found = NULL != item;
 	if(found)
 	{
-		selectItem(item, -1);
+		selectItem(item);
 	}
 
 	if (mCommitOnSelectionChange)
@@ -1422,7 +1397,7 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
 			BOOL select = cellp ? item->getEnabled() && ('\0' == cellp->getValue().asString()[0]) : FALSE;
 			if (select)
 			{
-				selectItem(item, -1);
+				selectItem(item);
 				found = TRUE;
 				break;
 			}
@@ -1473,7 +1448,7 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
 				// find offset of matching text (might have leading whitespace)
 				S32 offset = item_label.find(target_trimmed);
 				cellp->highlightText(offset, target_trimmed.size());
-				selectItem(item, -1);
+				selectItem(item);
 				found = TRUE;
 				break;
 			}
@@ -1552,7 +1527,7 @@ BOOL LLScrollListCtrl::setSelectedByValue(const LLSD& value, BOOL selected)
 		{
 			if (selected)
 			{
-				selectItem(item, -1);
+				selectItem(item);
 			}
 			else
 			{
@@ -1634,7 +1609,7 @@ void LLScrollListCtrl::drawItems()
 		
 		S32 max_columns = 0;
 
-		LLColor4 highlight_color = LLColor4::white; // ex: text inside cells
+		LLColor4 highlight_color = LLColor4::white;
 		static LLUICachedControl<F32> type_ahead_timeout ("TypeAheadTimeout", 0);
 		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout(), 0.4f, 0.f);
 
@@ -1686,8 +1661,7 @@ void LLScrollListCtrl::drawItems()
 			max_columns = llmax(max_columns, item->getNumColumns());
 
 			LLColor4 fg_color;
-			LLColor4 hover_color(LLColor4::transparent);
-			LLColor4 select_color(LLColor4::transparent);
+			LLColor4 bg_color(LLColor4::transparent);
 
 			if( mScrollLines <= line && line < mScrollLines + num_page_lines )
 			{
@@ -1696,45 +1670,45 @@ void LLScrollListCtrl::drawItems()
 				{
 					if(item->getHighlighted())	// if it's highlighted, average the colors
 					{
-						select_color = lerp(mBgSelectedColor.get(), mHighlightedColor.get(), 0.5f);
+						bg_color = lerp(mBgSelectedColor.get(), mHighlightedColor.get(), 0.5f);
 					}
 					else						// otherwise just select-highlight it
 					{
-						select_color = mBgSelectedColor.get();
+						bg_color = mBgSelectedColor.get();
 					}
 
 					fg_color = (item->getEnabled() ? mFgSelectedColor.get() : mFgDisabledColor.get());
 				}
-				if (mHighlightedItem == line && mCanSelect)
+				else if (mHighlightedItem == line && mCanSelect)
 				{
 					if(item->getHighlighted())	// if it's highlighted, average the colors
 					{
-						hover_color = lerp(mHoveredColor.get(), mHighlightedColor.get(), 0.5f);
+						bg_color = lerp(mHoveredColor.get(), mHighlightedColor.get(), 0.5f);
 					}
 					else						// otherwise just hover-highlight it
 					{
-						hover_color = mHoveredColor.get();
+						bg_color = mHoveredColor.get();
 					}
 				}
 				else if (item->getHighlighted())
 				{
-					hover_color = mHighlightedColor.get();
+					bg_color = mHighlightedColor.get();
 				}
 				else 
 				{
 					// Why no stripes in single columns? This should be decided by the skin. -Zi
 					if (mDrawStripes && (line % 2 == 0)) // && (max_columns > 1))
 					{
-						hover_color = mBgStripeColor.get();
+						bg_color = mBgStripeColor.get();
 					}
 				}
 
 				if (!item->getEnabled())
 				{
-					hover_color = mBgReadOnlyColor.get();
+					bg_color = mBgReadOnlyColor.get();
 				}
 
-				item->draw(item_rect, fg_color % alpha, hover_color% alpha, select_color% alpha, highlight_color % alpha, mColumnPadding);
+				item->draw(item_rect, fg_color % alpha, bg_color% alpha, highlight_color % alpha, mColumnPadding);
 
 				cur_y -= mLineHeight;
 			}
@@ -1910,7 +1884,7 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 			{
 				if (mLastSelected == NULL)
 				{
-					selectItem(hit_item, getColumnIndexFromOffset(x));
+					selectItem(hit_item);
 				}
 				else
 				{
@@ -1940,7 +1914,7 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 						// </FS:Ansariel> Fix for FS-specific people list (radar)
                         if (item == hit_item || item == lastSelected)
 						{
-							selectItem(item, getColumnIndexFromOffset(x), FALSE);
+							selectItem(item, FALSE);
 							selecting = !selecting;
 							if (hit_item == lastSelected)
 							{
@@ -1950,7 +1924,7 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 						}
 						if (selecting)
 						{
-							selectItem(item, getColumnIndexFromOffset(x), FALSE);
+							selectItem(item, FALSE);
 						}
 					}
 				}
@@ -1965,7 +1939,7 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 				{
 					if(!(mMaxSelectable > 0 && getAllSelected().size() >= mMaxSelectable))
 					{
-						selectItem(hit_item, getColumnIndexFromOffset(x), FALSE);
+						selectItem(hit_item, FALSE);
 					}
 					else
 					{
@@ -1979,12 +1953,12 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 			else
 			{
 				deselectAllItems(TRUE);
-				selectItem(hit_item, getColumnIndexFromOffset(x));
+				selectItem(hit_item);
 			}
 		}
 		else
 		{
-			selectItem(hit_item, getColumnIndexFromOffset(x));
+			selectItem(hit_item);
 		}
 
 		selection_changed = mSelectionChanged;
@@ -2391,29 +2365,8 @@ BOOL LLScrollListCtrl::handleHover(S32 x,S32 y,MASK mask)
 	{
 		LLScrollListItem* item = hitItem(x, y);
 		if (item)
-        {
-            mouseOverHighlightNthItem(getItemIndex(item));
-            switch (mSelectionType)
-            {
-            case CELL:
-                item->setHoverCell(getColumnIndexFromOffset(x));
-                break;
-            case HEADER:
-                {
-                    S32 cell = getColumnIndexFromOffset(x);
-                    if (cell > 0)
-                    {
-                        item->setHoverCell(cell);
-                    }
-                    else
-                    {
-                        item->setHoverCell(-1);
-                    }
-                    break;
-                }
-            case ROW:
-                break;
-            }
+		{
+			mouseOverHighlightNthItem(getItemIndex(item));
 		}
 		else
 		{
@@ -2461,52 +2414,6 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 					handled = TRUE;
 				}
 				break;
-            case KEY_LEFT:
-                if (mAllowKeyboardMovement || hasFocus())
-                {
-                    // TODO: support multi-select
-                    LLScrollListItem *item = getFirstSelected();
-                    S32 cell = item->getSelectedCell();
-                    switch (mSelectionType)
-                    {
-                    case CELL:
-                        if (cell < mColumns.size()) cell++;
-                        break;
-                    case HEADER:
-                        if (cell == -1) cell = 1;
-                        else if (cell > 1 && cell < mColumns.size()) cell++; // skip header
-                        break;
-                    case ROW:
-                        cell = -1;
-                        break;
-                    }
-                    item->setSelectedCell(cell);
-                    handled = TRUE;
-                }
-                break;
-            case KEY_RIGHT:
-                if (mAllowKeyboardMovement || hasFocus())
-                {
-                    // TODO: support multi-select
-                    LLScrollListItem *item = getFirstSelected();
-                    S32 cell = item->getSelectedCell();
-                    switch (mSelectionType)
-                    {
-                    case CELL:
-                        if (cell >= 0) cell--;
-                        break;
-                    case HEADER:
-                        if (cell > 1) cell--;
-                        else if (cell == 1) cell = -1; // skip header
-                        break;
-                    case ROW:
-                        cell = -1;
-                        break;
-                    }
-                    item->setSelectedCell(cell);
-                    handled = TRUE;
-                }
-                break;
 			case KEY_PAGE_UP:
 				if (mAllowKeyboardMovement || hasFocus())
 				{
@@ -2686,7 +2593,7 @@ BOOL LLScrollListCtrl::handleUnicodeCharHere(llwchar uni_char)
 				LLWString item_label = utf8str_to_wstring(cellp->getValue().asString());
 				if (item->getEnabled() && LLStringOps::toLower(item_label[0]) == uni_char)
 				{
-					selectItem(item, -1);
+					selectItem(item);
 					mNeedsScroll = true;
 					cellp->highlightText(0, 1);
 					mSearchTimer.reset();
@@ -2738,7 +2645,7 @@ BOOL LLScrollListCtrl::isRepeatedChars(const LLWString& string) const
 	return TRUE;
 }
 
-void LLScrollListCtrl::selectItem(LLScrollListItem* itemp, S32 cell, BOOL select_single_item)
+void LLScrollListCtrl::selectItem(LLScrollListItem* itemp, BOOL select_single_item)
 {
 	if (!itemp) return;
 
@@ -2757,18 +2664,6 @@ void LLScrollListCtrl::selectItem(LLScrollListItem* itemp, S32 cell, BOOL select
 			deselectAllItems(TRUE);
 		}
 		itemp->setSelected(TRUE);
-        switch (mSelectionType)
-        {
-        case CELL:
-            itemp->setSelectedCell(cell);
-            break;
-        case HEADER:
-            itemp->setSelectedCell(cell <= 0 ? -1 : cell);
-            break;
-        case ROW:
-            itemp->setSelectedCell(-1);
-            break;
-        }
 		mLastSelected = itemp;
 		mSelectionChanged = true;
 	}
@@ -3036,7 +2931,7 @@ void	LLScrollListCtrl::selectAll()
 		LLScrollListItem *itemp = *iter;
 		if( itemp->getEnabled() )
 		{
-			selectItem(itemp, -1, FALSE);
+			selectItem(itemp, FALSE);
 		}
 	}
 
@@ -3212,8 +3107,6 @@ void LLScrollListCtrl::onClickColumn(void *userdata)
 
 	LLScrollListCtrl *parent = info->mParentCtrl;
 	if (!parent) return;
-
-	if (!parent->mCanSort) return;
 
 	S32 column_index = info->mIndex;
 
@@ -3579,7 +3472,7 @@ void LLScrollListCtrl::setFilterString(const std::string& str)
 		{
 			if (!isFiltered(*iter))
 			{
-				selectItem(*iter, -1);
+				selectItem(*iter);
 				break;
 			}
 		}
