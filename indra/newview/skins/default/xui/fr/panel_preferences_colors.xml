@@ -25,8 +25,8 @@
 				<text name="console_im_label">IMs/Groupes</text>
 			</panel>
 		</panel>
-		<panel label="Tags" name="tab-nametag">
-			<text name="nametag_colors">Couleur des tags :</text>
+		<panel label="Étiquettes" name="tab-nametag">
+			<text name="nametag_colors">Couleur des étiquettes :</text>
 			<text name="self_tag_label">Mon nom</text>
 			<text name="friend_tag_label">Amis</text>
 			<text name="muted_tag_label">Ignorés</text>
@@ -34,37 +34,37 @@
 			<text name="match_tag_label">Correspondances</text>
 			<text name="mismatch_tag_label" width="120">Non-correspondances</text>
 			<check_box name="FSColorUsername" label="Colorer les noms d'utilisateur distinctivement" tool_tip="Displays usernames in a different color"/>
-			<check_box name="NameTagShowFriends" label="Colorer les tags de mes amis distinctivement" tool_tip="Affiche le tag des amis d'une couleur différente"/>
+			<check_box name="NameTagShowFriends" label="Colorer les étiquettes de mes amis distinctivement" tool_tip="Affiche l'étiquette des amis d'une couleur différente"/>
 			<text name="username_tag_label">Nom d'utilisateur</text>
-			<text name="bubble_chat">Tags / Bulle de discussion :</text>
-			<color_swatch name="background" tool_tip="Sélectionnez la couleur des tags"/>
-			<slider label="Transparence" name="bubble_chat_opacity" tool_tip="Sélectionnez la transparence des tags"/>
+			<text name="bubble_chat">Étiquettes / Bulle de discussion :</text>
+			<color_swatch name="background" tool_tip="Sélectionnez la couleur des étiquettes"/>
+			<slider label="Transparence" name="bubble_chat_opacity" tool_tip="Sélectionnez la transparence des étiquettes"/>
 			<slider label="Alignement vertical " name="FSNameTagZOffsetCorrection" tool_tip="Modifiez l'alignement vertical des tags des résidents. 0 par défaut"/>
-			<check_box name="FSTagShowDistance" label="Afficher la distance à côté du tag" tool_tip="Afficher la distance de l'avatar à côté du tag"/>
-			<check_box name="FSTagShowDistanceColors" label="Colorer les tags selon la distance :"/>
+			<check_box name="FSTagShowDistance" label="Afficher la distance à côté de l'étiquette" tool_tip="Afficher la distance de l'avatar à côté de l'étiquette"/>
+			<check_box name="FSTagShowDistanceColors" label="Colorer les étiquettes selon la distance :"/>
 			<panel name="distance_panel">
-				<text name="chat_distance_tag_label">À portée de chat</text>
+				<text name="chat_distance_tag_label">À portée de voix normale</text>
 				<text name="whisper_distance_tag_label">À portée de chuchotement</text>
 				<text name="shout_tag_label">À portée de cri</text>
 				<text name="beyond_shout_distance_tag_label">Hors de portée de cri</text>
 			</panel>
 			<panel name="client_tags_panel">
 				<text name="client_tags_colors">Couleur selon le Viewer : (OpenSim/AuroraSim seulement)</text>
-				<text name="whattagstoshow">Quels tags voulez-vous voir ?</text>
+				<text name="whattagstoshow">Quelles étiquettes voulez-vous voir ?</text>
 				<combo_box name="ClientTagsVisibility">
 					<combo_box.item name="No Viewertags" label=" Aucun"/>
 					<combo_box.item name="TPVD Viewer" label="Les 'Third-Party Viewers' officiels"/>
 					<combo_box.item name="All known Viewers" label="Tous les Viewers connus (définis par une liste)"/>
 					<combo_box.item name="All Viewers" label="Tous les Viewers"/>
 				</combo_box>
-				<text name="colorbasedonviewer">Couleur du tag basé sur le Viewer ?</text>
+				<text name="colorbasedonviewer">Couleur de l'étiquette basé sur le Viewer ?</text>
 				<combo_box name="ColorClienttags">
 					<combo_box.item name="Color not based on Viewer" label="Non"/>
 					<combo_box.item name="Single color per Viewer" label="Une couleur par Viewer"/>
 					<combo_box.item name="Multiple colors per Viewer" label="Plusieurs couleurs par Viewer"/>
 					<combo_box.item name="Userdefined color" label="Couleurs définies par l'utilisateur"/>
 				</combo_box>
-				<text name="listtodisplayviewertags_txt">Liste prédéfinie pour les tags de Viewer ?</text>
+				<text name="listtodisplayviewertags_txt">Liste prédéfinie pour les étiquettes de Viewer ?</text>
 				<combo_box name="UseLegacyClienttags">
 					<combo_box.item name="Don't use a list" label="Non"/>
 					<combo_box.item name="Local Clienttags" label="Liste statique"/>
@@ -74,20 +74,24 @@
 		</panel>
 		<panel label="Minicarte" name="tab-minimap">
 			<slider label="Transparence de l'arrière-plan :" label_width="180" width="485" name="FSMiniMapOpacity"/>
-			<text name="netmap_pickradius_textbox" width="185">Transparence &amp; couleur du point :</text>
+			<text name="netmap_pickradius_textbox">Transparence &amp; couleur du point :</text>
+			<text name="netmap_pickradius_color_textbox">Couleur du point :</text>
+			<color_swatch name="MapPickRadiusColor" tool_tip="Contrôle la couleur du point sur la minicarte. La taille du point peut être ajustée avec le paramètre Taille du point."/>
+			<text name="netmap_pickradius_opacity_textbox">Opacité:</text>
 			<text name="netmap_dots_textbox">Repères sur la minicarte :</text>
 			<text name="MapAvatarSelfColor_label">Moi</text>
 			<text name="MapAvatarColor_label">Autres</text>
 			<text name="MapAvatarFriendColor_label">Amis</text>
 			<text name="MapAvatarLindenColor_label">Linden Lab</text>
 			<text name="MapAvatarMutedColor_label">Ignorés</text>
-			<check_box name="MiniMapChatRing" label="Afficher des périmètres de chat et de cri sur la minicarte :"/>
-			<text name="netmap_chatring_color_label">Périmètre de chat</text>
-			<text name="netmap_shoutring_color_label">Périmètre de cri</text>
+			<check_box name="MiniMapChatRing" label="Afficher des périmètres de murmure, voix normale et cri sur la minicarte :"/>
+			<text name="netmap_whisperring_color_label">Murmure</text>
+			<text name="netmap_chatring_color_label">Voix normale</text>
+			<text name="netmap_shoutring_color_label">Cri</text>
 		</panel>
 		<panel label="Divers" name="tab-misc">
 			<text name="effects_color_textbox">Faisceau de sélection :</text>
-			<text name="ScriptDialogFgLabel" width="280" left="200">Avant et arrière-plan des dialogues de scripts :</text>
+			<text left="240" name="ScriptDialogFgLabel" width="300">Avant et arrière-plan des dialogues de scripts :</text>
 			<text name="floater_opacity">Transparence des fenêtres :</text>
 			<slider label="Actives :" name="active"/>
 			<slider label="Inactives :" name="inactive"/>
@@ -96,6 +100,8 @@
 			<slider label="Transparence :" name="console_background_opacity" tool_tip="Sélectionnez la transparence de l'arrière-plan de la console"/>
 			<text name="preferences_search_label">Surlignage des préférences recherchées :</text>
 			<color_swatch name="preferences_search_color" tool_tip="Sélectionnez la couleur des préférences surlignées par les résultats de recherche"/>
+			<text name="area_search_beacon_color_label">Couleur de la balise de recherche zonière : </text>
+			<color_swatch name="area_search_beacon_color" tool_tip="Choix de la couleur de la balise de recherche zonière"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Toujours afficher les dialogues de scripts sur un arrière-plan opaque"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Toujours afficher les notices de groupe avec un arrière-plan opaque"/>
 			<check_box name="override_pie_color_checkbox" label="Définir la couleur d'arrière-plan et la transparence des menus circulaires :"/>

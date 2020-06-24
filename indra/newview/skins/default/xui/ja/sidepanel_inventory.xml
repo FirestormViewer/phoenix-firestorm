@@ -2,8 +2,11 @@
 <panel label="もの" name="objects panel">
 	<panel label="" name="sidepanel_inventory_panel">
 		<layout_stack name="inventory_layout_stack">
+			<layout_panel name="main_inventory_layout_panel">
+				<panel label="" name="panel_main_inventory" />
+			</layout_panel>
 			<layout_panel name="inbox_layout_panel">
-				<panel label="" name="marketplace_inbox">
+				<panel name="marketplace_inbox" label="">
 					<string name="InboxLabelWithArg">
 						受け取ったアイテム（[NUM]）
 					</string>
