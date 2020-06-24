@@ -52,7 +52,6 @@
 		<panel label="Bewegung" name="tab-movement">
 			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Buchstabeneingabe beeinflusst Bewegung (z.B. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="AZERTY-Tastaturlayout verwenden" name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
 			<check_box label="Fliegen/Landen beim Drücken von auf (springen) / ab (kriechen)" name="automatic_fly" />
 			<check_box label="Kriech-Umschaltmodus aktivieren" name="crouch_toggle_mode"/>

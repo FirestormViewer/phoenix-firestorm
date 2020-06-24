@@ -491,16 +491,6 @@
          width="180"
          top_pad="0"/>
         <check_box
-         control_name="FSUseAzertyKeyboardLayout"
-         follows="left|top"
-         height="20"
-         label="Use AZERTY keyboard layout"
-         layout="topleft"
-         left_delta="0"
-         name="FSUseAzertyKeyboardLayout"
-         width="400"
-         top_pad="0"/>
-        <check_box
          control_name="AllowTapTapHoldRun"
          follows="left|top"
          height="20"

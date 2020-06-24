@@ -119,11 +119,7 @@
 		<check_box label="Automatisch alle eingehenden Gruppenanrufe abweisen" name="VoiceCallsRejectGroup"/>
 		<check_box label="Automatisch alle eingehenden Konferenzanrufe abweisen" name="VoiceCallsRejectAdHoc"/>
 		<check_box label="Automatisch alle eingehenden Privatanrufe abweisen" name="VoiceCallsRejectP2P"/>
-		<check_box label="Sprachfunktion beim Drücken folgender Taste(n) ein-/ausschalten:" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
-		<line_editor label="Auslöser für Zum-Sprechen-drücken:" name="modifier_combo"/>
-		<button label="Taste festlegen" name="set_voice_hotkey_button"/>
-		<button name="clear_voice_hotkey_button" tool_tip="Taste löschen"/>
-		<button name="set_voice_middlemouse_button" tool_tip="Auf mittlere Maustaste zurücksetzen"/>
+		<check_box label="Sprachfunktion beim Drücken des Buttons in der Symbolleiste ein-/ausschalten" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
 		<button label="Geräte-Einstellungen" name="device_settings_btn"/>
 		<panel name="device_settings_panel">
 			<panel.string name="default_text">

@@ -4667,6 +4667,10 @@ Wählen Sie eine kleinere Landfläche aus.
 		Dadurch werden die Protokolle vorheriger Unterhaltungen und alle Backups dieser Datei gelöscht.
 		<usetemplate ignoretext="Löschen des Protokolls vorheriger Unterhaltungen bestätigen." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="PreferenceControlsDefaults">
+		Möchten Sie die Standard-Tastenbelegung wiederherstellen?
+		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Aktueller Modus" yestext="Alle Modi"/>
+	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
 		Dadurch werden die Transkripte aller vorherigen Unterhaltungen gelöscht. Die Liste vergangener Unterhaltungen ist davon nicht betroffen. Alle Dateien mit den Suffixen .txt und txt.backup im Order [FOLDER] werden gelöscht.
 		<usetemplate ignoretext="Um Bestätigung bitten, bevor ich Transkripte lösche." name="okcancelignore" notext="Abbrechen" yestext="OK"/>

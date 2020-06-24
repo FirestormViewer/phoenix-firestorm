@@ -46,7 +46,6 @@
 		<panel label="Движение" name="tab-movement">
 			<check_box label="Клавиши со стрелками всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Буквенные клавиши влияют на движение не запуская локальный чат (т.e. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="Использовать раскладку AZERTY"  name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Двойное нажатие для бега" name="tap_tap_hold_to_run"/>
 			<check_box label="Летать / Приземлиться (верх (прыжок) / вниз (присесть))" name="automatic_fly"/>
 			<check_box label="Включить режим переключения приседания" name="crouch_toggle_mode"/>

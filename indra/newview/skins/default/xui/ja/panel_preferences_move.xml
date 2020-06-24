@@ -57,7 +57,6 @@
 		<panel label="移動" name="tab-movement">
 			<check_box label="常に矢印キー操作で動くようにする" name="arrow_keys_move_avatar_check"/>
 			<check_box label="WASDなどの文字キーを押すと、ローカルチャットを始めるのではなく、前左後右に移動するようにする" name="LetterKeysAffectsMovementNotFocusChatBar" />
-			<check_box label="AZERTYキーボード配列（フランス式）を使用" name="FSUseAzertyKeyboardLayout" />
 			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run"/>
 			<check_box label="UP/DOWNキーの長押しで飛行／着地する" name="automatic_fly" />
 			<check_box label="身をかがめる動作を有効にする" name="crouch_toggle_mode" />

@@ -20,6 +20,7 @@ https://accounts.secondlife.com/change_email/?lang=de-DE
 		<panel label="Sound &amp; Medien" name="audio"/>
 		<panel label="Netzwerk &amp; Dateien" name="input"/>
 		<panel label="Bewegen/Anzeigen" name="move"/>
+		<panel label="Tastenbelegung" name="controls"/>
 		<panel label="Meldungen" name="msgs"/>
 		<panel label="Privatsphäre" name="im"/>
 		<panel label="Erweitert" name="advanced1"/>

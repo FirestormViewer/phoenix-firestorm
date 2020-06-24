@@ -1005,7 +1005,7 @@ LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
 	}	
 	
 	LLSpatialGroup* group = drawablep->getSpatialGroup();
-	llassert(group != NULL);
+	//llassert(group != NULL);
 
 	if (group && was_visible && group->isOcclusionState(LLSpatialGroup::QUERY_PENDING))
 	{
