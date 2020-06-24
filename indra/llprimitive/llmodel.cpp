@@ -31,12 +31,15 @@
 #include "llconvexdecomposition.h"
 #include "llsdserialize.h"
 #include "llvector4a.h"
+#include "llcontrol.h"
 
 #ifdef LL_USESYSTEMLIBS
 # include <zlib.h>
 #else
 # include "zlib/zlib.h"
 #endif
+
+extern LLControlGroup gSavedSettings;
 
 std::string model_names[] =
 {
@@ -266,10 +269,8 @@ void LLModel::normalizeVolumeFaces()
 		scale.splat(1.f);
 		scale.div(size);
 
-// <FS:Beq> BUG-228952 - bad vertex normal scaling on mesh asset import
-		// LLVector4a inv_scale(1.f);
-		// inv_scale.div(scale);
-// </FS:Beq>
+		LLVector4a inv_scale(1.f);
+		inv_scale.div(scale);
 		for (U32 i = 0; i < mVolumeFaces.size(); ++i)
 		{
 			LLVolumeFace& face = mVolumeFaces[i];
@@ -297,7 +298,14 @@ void LLModel::normalizeVolumeFaces()
 				{
 // <FS:Beq> BUG-228952 - bad vertex normal scaling on mesh asset import
 					// norm[j].mul(inv_scale);
-					norm[j].mul(scale);
+					if (!gSavedSettings.getBOOL("FSMeshImportScaleFixup"))
+					{
+						norm[j].mul(inv_scale);
+					}
+					else
+					{
+						norm[j].mul(scale);
+					}
 // </FS:Beq>
 					norm[j].normalize3();
 				}
