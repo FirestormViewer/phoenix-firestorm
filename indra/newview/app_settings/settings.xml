@@ -9058,6 +9058,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSMeshImportScaleFixup</key>
+  <map>
+    <key>Comment</key>
+    <string>Adjust normals on import, fixes underlying issue, not recommended in case underlying rendering gets fixed.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>MeshUploadLogXML</key>
   <map>
     <key>Comment</key>
@@ -11148,7 +11159,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.125</real>
+    <real>0.02</real>
   </map>
   <key>MediaRollOffMin</key>
   <map>
@@ -11159,7 +11170,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>10.0</real>
+    <real>40.0</real>
   </map>
   <key>MediaRollOffMax</key>
   <map>
@@ -11170,7 +11181,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>30.0</real>
+    <real>80.0</real>
   </map>
   <key>RecentItemsSortOrder</key>
     <map>
@@ -25423,4 +25434,3 @@ Change of this parameter will affect the layout of buttons in notification toast
     </map>
   </map>
 </llsd>
-

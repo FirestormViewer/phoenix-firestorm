@@ -72,12 +72,18 @@
 				区画が選択されていません。
 			</panel.string>
 			<panel.string name="time_stamp_template">
-				[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+				[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+			</panel.string>
+			<panel.string name="error_resolving_uuid">
+				この区画 ID は該当がありません。
 			</panel.string>
 			<text name="Name:">
 				名前：
 			</text>
 			<line_editor name="Name"/>
+			<text name="UUID:">
+				区画 ID
+			</text>
 			<text name="Description:">
 				説明：
 			</text>
@@ -97,13 +103,13 @@
 				所有者：
 			</text>
 			<text name="OwnerText">
-				Loading...
+				ロード中...
 			</text>
 			<text name="Group:">
 				グループ：
 			</text>
 			<text name="GroupText">
-				Loading...
+				ロード中...
 			</text>
 			<button label="設定" label_selected="設定..." name="Set..."/>
 			<check_box label="グループへの譲渡を許可" name="check deed" tool_tip="グループのオフィサーはこの土地をグループに譲渡できます。グループの土地割り当てによってサポートされます。"/>
@@ -191,7 +197,7 @@
 				地域：
 			</text>
 			<text name="region_name_text">
-				Loading...
+				ロード中...
 			</text>
 			<text name="region_landtype_lbl">
 				種類：
@@ -283,7 +289,7 @@
 			<text name="Object Owners:">
 				オブジェクトの所有者：
 			</text>
-			<button label="リスト更新" label_selected="リスト更新" name="Refresh List" tool_tip="オブジェクトのリストを更新します"/>
+			<button name="Refresh List" tool_tip="オブジェクトのリストを更新します"/>
 			<button label="オブジェクトを返却する" label_selected="オブジェクトの返却..." name="Return objects..."/>
 			<name_list label="カウント" name="owner list">
 				<name_list.columns label="タイプ" name="type"/>
@@ -366,7 +372,7 @@
 			<combo_box name="land category">
 				<combo_box.item label="全カテゴリ" name="item0"/>
 				<combo_box.item label="Linden 所在地" name="item1"/>
-				<combo_box.item label="アート&amp;カルチャー" name="item3"/>
+				<combo_box.item label="アート＆カルチャー" name="item3"/>
 				<combo_box.item label="ビジネス" name="item4"/>
 				<combo_box.item label="教育的" name="item5"/>
 				<combo_box.item label="ゲーム" name="item6"/>
@@ -382,7 +388,7 @@
 			<text name="Snapshot:">
 				スナップショット：
 			</text>
-			<texture_picker label="" name="snapshot_ctrl" tool_tip="写真をクリックして選択"/>
+			<texture_picker name="snapshot_ctrl" tool_tip="写真をクリックして選択"/>
 			<text name="allow_label5">
 				他の区画にいるアバターがこの区画にいるアバターに会ってチャットできます
 			</text>
@@ -392,6 +398,7 @@
 			</text>
 			<button label="設定" label_selected="設定" name="Set" tool_tip="訪問者の着地点の設定を行います。この区画内に立って行ってください。"/>
 			<button label="クリア" label_selected="クリア" name="Clear" tool_tip="着地点をクリア"/>
+			<button label="テレポート" label_selected="テレポート" name="teleport_to_landing_point" tool_tip="着地点にテレポートします。" />
 			<text name="Teleport Routing: ">
 				テレポート経路：
 			</text>
@@ -417,7 +424,7 @@
 			<text name="Media texture:">
 				テクスチャ置き換え：
 			</text>
-			<texture_picker label="" left="120" name="media texture" tool_tip="写真をクリックして選択"/>
+			<texture_picker left="120" name="media texture" tool_tip="写真をクリックして選択"/>
 			<text name="replace_texture_help" width="290">
 				このテクスチャを使用するオブジェクトの「再生」をクリックすると、動画や Web ページを表示します。  テクスチャを変更するにはサムネイルを選択してください。
 			</text>
@@ -502,6 +509,7 @@
 				<button label="削除" label_selected="削除" name="remove_banned"/>
 			</panel>
 		</panel>
-		<panel label="経験" name="land_experiences_panel"/>
+		<panel label="経験" name="land_experiences_panel" />
+		<panel label="自然環境" name="land_environment_panel" />
 	</tab_container>
 </floater>

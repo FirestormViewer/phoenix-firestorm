@@ -3,6 +3,10 @@
 	<menu_item_call label="触る" name="Attachment Object Touch"/>
 	<menu_item_call label="編集" name="Edit..."/>
 	<menu_item_call label="取り外す" name="Detach"/>
+	<context_menu label="名前を付けて保存" name="Export Menu">
+		<menu_item_call label="バックアップ" name="Backup" />
+		<menu_item_call label="メッシュ" name="Collada" />
+	</context_menu>
 	<menu_item_call label="座る" name="Sit Down Here"/>
 	<menu_item_call label="立ち上がる" name="Stand Up"/>
 	<menu_item_call label="容姿" name="Change Outfit"/>
@@ -11,11 +15,18 @@
 	<menu_item_call label="ホバー高さ" name="Hover Height"/>
 	<menu_item_call label="スケルトンをリセット" name="Reset Skeleton"/>
 	<menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="メッシュ LOD をリセット" name="Reset Mesh LOD" />
 	<menu_item_call label="フレンド" name="Friends..."/>
 	<menu_item_call label="グループ" name="Groups..."/>
 	<menu_item_call label="プロフィール" name="Profile..."/>
-	<menu_item_call label="テクスチャのデバッグ" name="Debug..."/>
 	<menu_item_call label="ダンプ XML" name="Dump XML"/>
+	<menu_item_call label="オブジェクトのプロフィール" name="Object Inspect" />
+	<menu_item_call label="検査" name="Object_Inspect_Floater" />
+	<menu_item_call label="スクリプト情報" name="ScriptInfo" />
+	<menu_item_call label="表示しない" name="Derender" />
+	<menu_item_call label="非表示＋ブラックリスト" name="DerenderPermanent" />
+	<menu_item_call label="テクスチャ表示" name="Debug..." />
+	<menu_item_call label="テクスチャ更新" name="Texture Refresh" />
 	<menu_item_call label="下に落とす" name="Drop"/>
 	<menu_item_call label="パーティクル所有者をブロック" name="Mute Particle"/>
 </context_menu>
