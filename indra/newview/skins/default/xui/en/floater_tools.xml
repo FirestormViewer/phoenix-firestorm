@@ -832,6 +832,22 @@
 	  width="100">
 		Nothing selected.
 	</text>
+	<!--
+	<text
+	  type="string"
+	  length="1"
+	  height="16"
+	  follows="left|top"
+	  font="SansSerifSmall"
+	  layout="topleft"
+	  left="10"
+	  name="selection_faces"
+	  top_delta="0"
+	  visible="false"
+	  width="280">
+    Faces selected: [FACES_STRING]
+  </text>
+	-->
 	<text
 	  type="string"
 	  length="1"
@@ -853,11 +869,11 @@
 	  font="SansSerifSmall"
 	  layout="topleft"
 	  left="10"
-	  name="remaining_capacity"
+	  name="more info label"
 	  top_pad="-5"
 	  visible="false"
 	  width="280">
-	  [CAPACITY_STRING] [secondlife:///app/openfloater/object_weights More info]
+	 [secondlife:///app/openfloater/object_weights More info]
 	</text>
     <view_border
     bevel_style="none"

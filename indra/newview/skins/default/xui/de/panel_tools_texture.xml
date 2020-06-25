@@ -6,6 +6,15 @@
 	<panel.string name="string repeats per face">
 		Wiederholungen pro Fläche
 	</panel.string>
+	<panel.string name="paste_error_face_selection_mismatch">
+		Falls mehrere Flächen kopiert werden, müssen auf dem Zielobjekt dieselbe Anzahl an Flächen selektiert sein.
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		Falls alle Flächen eines Objekts kopiert werden, muss das Zielobjekt dieselbe Anzahl an Flächen besitzen.
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		Eine oder mehrere Texturen wurden nicht im Inventar gefunden.
+	</panel.string>
 	<text name="color label">
 		Farbe
 	</text>

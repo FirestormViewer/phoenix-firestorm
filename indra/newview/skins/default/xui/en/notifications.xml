@@ -9599,6 +9599,29 @@ We cannot display a preview of this texture because it is no-copy and/or no-tran
 
   <notification
    icon="alertmodal.tga"
+   name="FacePasteFailed"
+   type="alertmodal">
+Paste failed. [REASON]
+   <usetemplate
+    name="okbutton"
+    yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="FacePasteTexturePermissions"
+   type="alertmodal">
+    You applied a texture with limited permissions, object will inherit permissions from texture.
+    <usetemplate
+     ignoretext="Paste: You applied a texture with limited permissions"
+     name="notifyignore"/>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="ConfirmLeaveCall"
    type="alertmodal">
 Are you sure you want to leave this call?

@@ -2731,6 +2731,80 @@ void LLPanelFace::onAlignTexture(void* userdata)
     self->alignTestureLayer();
 }
 
+enum EPasteMode
+{
+    PASTE_COLOR,
+    PASTE_TEXTURE
+};
+
+struct LLPanelFacePasteTexFunctor : public LLSelectedTEFunctor
+{
+    LLPanelFacePasteTexFunctor(LLPanelFace* panel, EPasteMode mode) :
+        mPanelFace(panel), mMode(mode) {}
+
+    virtual bool apply(LLViewerObject* objectp, S32 te)
+    {
+        switch (mMode)
+        {
+        case PASTE_COLOR:
+            mPanelFace->onPasteColor(objectp, te);
+            break;
+        case PASTE_TEXTURE:
+            mPanelFace->onPasteTexture(objectp, te);
+            break;
+        }
+        return true;
+    }
+private:
+    LLPanelFace *mPanelFace;
+    EPasteMode mMode;
+};
+
+struct LLPanelFaceUpdateFunctor : public LLSelectedObjectFunctor
+{
+    LLPanelFaceUpdateFunctor(bool update_media) : mUpdateMedia(update_media) {}
+    virtual bool apply(LLViewerObject* object)
+    {
+        object->sendTEUpdate();
+        if (mUpdateMedia)
+        {
+            LLVOVolume *vo = dynamic_cast<LLVOVolume*>(object);
+            if (vo && vo->hasMedia())
+            {
+                vo->sendMediaDataUpdate();
+            }
+        }
+        return true;
+    }
+private:
+    bool mUpdateMedia;
+};
+
+struct LLPanelFaceNavigateHomeFunctor : public LLSelectedTEFunctor
+{
+    virtual bool apply(LLViewerObject* objectp, S32 te)
+    {
+        if (objectp && objectp->getTE(te))
+        {
+            LLTextureEntry* tep = objectp->getTE(te);
+            const LLMediaEntry *media_data = tep->getMediaData();
+            if (media_data)
+            {
+                if (media_data->getCurrentURL().empty() && media_data->getAutoPlay())
+                {
+                    viewer_media_t media_impl =
+                        LLViewerMedia::getInstance()->getMediaImplFromTextureID(tep->getMediaData()->getMediaID());
+                    if (media_impl)
+                    {
+                        media_impl->navigateHome();
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
+
 void LLPanelFace::onCopyColor()
 {
     LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
@@ -2777,12 +2851,74 @@ void LLPanelFace::onCopyColor()
     }
 }
 
-void LLPanelFace::onPasteColor(LLViewerObject* objectp, S32 te)
+void LLPanelFace::onPasteColor()
 {
     if (!mClipboardParams.has("color"))
     {
         return;
     }
+
+    LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+    LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+    S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+    if (!objectp || !node
+        || objectp->getPCode() != LL_PCODE_VOLUME
+        || !objectp->permModify()
+        || objectp->isPermanentEnforced()
+        || selected_count > 1)
+    {
+        // not supposed to happen
+        LL_WARNS() << "Failed to paste color due to missing or wrong selection" << LL_ENDL;
+        return;
+    }
+
+    bool face_selection_mode = LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool();
+    LLSD &clipboard = mClipboardParams["color"]; // array
+    S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces());
+    S32 compare_tes = num_tes;
+
+    if (face_selection_mode)
+    {
+        compare_tes = 0;
+        for (S32 te = 0; te < num_tes; ++te)
+        {
+            if (node->isTESelected(te))
+            {
+                compare_tes++;
+            }
+        }
+    }
+
+    // we can copy if single face was copied in edit face mode or if face count matches
+    if (!((clipboard.size() == 1) && mClipboardParams["color_all_tes"].asBoolean())
+        && compare_tes != clipboard.size())
+    {
+        LLSD notif_args;
+        if (face_selection_mode)
+        {
+            static std::string reason = getString("paste_error_face_selection_mismatch");
+            notif_args["REASON"] = reason;
+        }
+        else
+        {
+            static std::string reason = getString("paste_error_object_face_count_mismatch");
+            notif_args["REASON"] = reason;
+        }
+        LLNotificationsUtil::add("FacePasteFailed", notif_args);
+        return;
+    }
+
+    LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
+
+    LLPanelFacePasteTexFunctor paste_func(this, PASTE_COLOR);
+    selected_objects->applyToTEs(&paste_func);
+
+    LLPanelFaceUpdateFunctor sendfunc(false);
+    selected_objects->applyToObjects(&sendfunc);
+}
+
+void LLPanelFace::onPasteColor(LLViewerObject* objectp, S32 te)
+{
     LLSD te_data;
     LLSD &clipboard = mClipboardParams["color"]; // array
     if ((clipboard.size() == 1) && mClipboardParams["color_all_tes"].asBoolean())
@@ -2839,7 +2975,6 @@ void LLPanelFace::onPasteColor(LLViewerObject* objectp, S32 te)
 
 void LLPanelFace::onCopyTexture()
 {
-
     LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
     LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
     S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
@@ -2886,7 +3021,8 @@ void LLPanelFace::onCopyTexture()
                 {
                     LLUUID item_id;
                     LLUUID id = te_data["te"]["imageid"].asUUID();
-                    bool full_perm = get_is_library_texture(id) || (objectp->permCopy() && objectp->permTransfer() && objectp->permModify());
+                    bool from_library = get_is_predefined_texture(id);
+                    bool full_perm = from_library || (objectp->permCopy() && objectp->permTransfer() && objectp->permModify());
 
                     if (id.notNull() && !full_perm)
                     {
@@ -2907,6 +3043,12 @@ void LLPanelFace::onCopyTexture()
                         }
                     }
 
+                    if (item_id.notNull() && gInventory.isObjectDescendentOf(item_id, gInventory.getLibraryRootFolderID()))
+                    {
+                        full_perm = true;
+                        from_library = true;
+                    }
+
                     if (id.isNull()
                         || (!full_perm && item_id.isNull()))
                     {
@@ -2916,10 +3058,15 @@ void LLPanelFace::onCopyTexture()
                             te_data["te"]["imageid"] = LLUUID(gSavedSettings.getString("DefaultObjectTexture"));
                         }
                         te_data["te"]["itemfullperm"] = true;
+                        te_data["te"]["fromlibrary"] = true;
                     }
                     else
                     {
                         te_data["te"]["itemfullperm"] = full_perm;
+                        // from_library is unreliable since we don't get texture item if source object
+                        // is fullperm but it merely means additional checks when assigning texture
+                        te_data["te"]["fromlibrary"] = from_library; 
+
                         // If full permission object, texture is free to copy,
                         // but otherwise we need to check inventory and extract permissions
                         //
@@ -3006,12 +3153,111 @@ void LLPanelFace::onCopyTexture()
     }
 }
 
-void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
+void LLPanelFace::onPasteTexture()
 {
     if (!mClipboardParams.has("texture"))
     {
         return;
     }
+
+    LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+    LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+    S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+    if (!objectp || !node
+        || objectp->getPCode() != LL_PCODE_VOLUME
+        || !objectp->permModify()
+        || objectp->isPermanentEnforced()
+        || selected_count > 1)
+    {
+        // not supposed to happen
+        LL_WARNS() << "Failed to paste texture due to missing or wrong selection" << LL_ENDL;
+        return;
+    }
+
+    bool face_selection_mode = LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool();
+    LLSD &clipboard = mClipboardParams["texture"]; // array
+    S32 num_tes = llmin((S32)objectp->getNumTEs(), (S32)objectp->getNumFaces());
+    S32 compare_tes = num_tes;
+
+    if (face_selection_mode)
+    {
+        compare_tes = 0;
+        for (S32 te = 0; te < num_tes; ++te)
+        {
+            if (node->isTESelected(te))
+            {
+                compare_tes++;
+            }
+        }
+    }
+
+    // we can copy if single face was copied in edit face mode or if face count matches
+    if (!((clipboard.size() == 1) && mClipboardParams["texture_all_tes"].asBoolean()) 
+        && compare_tes != clipboard.size())
+    {
+        LLSD notif_args;
+        if (face_selection_mode)
+        {
+            static std::string reason = getString("paste_error_face_selection_mismatch");
+            notif_args["REASON"] = reason;
+        }
+        else
+        {
+            static std::string reason = getString("paste_error_object_face_count_mismatch");
+            notif_args["REASON"] = reason;
+        }
+        LLNotificationsUtil::add("FacePasteFailed", notif_args);
+        return;
+    }
+
+    bool full_perm = true;
+    LLSD::array_const_iterator iter = clipboard.beginArray();
+    LLSD::array_const_iterator end = clipboard.endArray();
+    for (; iter != end; ++iter)
+    {
+        const LLSD& te_data = *iter;
+        if (te_data.has("te"))
+        {
+            full_perm &= te_data["te"].has("itemfullperm") && te_data["te"]["itemfullperm"].asBoolean();
+            if (te_data["te"].has("imageitemid"))
+            {
+                LLUUID item_id = te_data["te"]["imageitemid"].asUUID();
+                if (item_id.notNull())
+                {
+                    LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
+                    if (!itemp)
+                    {
+                        // image might be in object's inventory, but it can be not up to date
+                        LLSD notif_args;
+                        static std::string reason = getString("paste_error_inventory_not_found");
+                        notif_args["REASON"] = reason;
+                        LLNotificationsUtil::add("FacePasteFailed", notif_args);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!full_perm)
+    {
+        LLNotificationsUtil::add("FacePasteTexturePermissions");
+    }
+
+    LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
+
+    LLPanelFacePasteTexFunctor paste_func(this, PASTE_TEXTURE);
+    selected_objects->applyToTEs(&paste_func);
+
+    LLPanelFaceUpdateFunctor sendfunc(true);
+    selected_objects->applyToObjects(&sendfunc);
+
+    LLPanelFaceNavigateHomeFunctor navigate_home_func;
+    selected_objects->applyToTEs(&navigate_home_func);
+}
+
+void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
+{
     LLSD te_data;
     LLSD &clipboard = mClipboardParams["texture"]; // array
     if ((clipboard.size() == 1) && mClipboardParams["texture_all_tes"].asBoolean())
@@ -3034,6 +3280,7 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
         {
             // Texture
             bool full_perm = te_data["te"].has("itemfullperm") && te_data["te"]["itemfullperm"].asBoolean();
+            bool from_library = te_data["te"].has("fromlibrary") && te_data["te"]["fromlibrary"].asBoolean();
             if (te_data["te"].has("imageid"))
             {
                 const LLUUID& imageid = te_data["te"]["imageid"].asUUID(); //texture or asset id
@@ -3050,12 +3297,21 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
                             // dropTextureAllFaces will fail if incomplete
                             itemp_res = itemp;
                         }
+                        else
+                        {
+                            // Theoretically shouldn't happend, but if it does happen, we
+                            // might need to add a notification to user that paste will fail
+                            // since inventory isn't fully loaded
+                            LL_WARNS() << "Item " << item_id << " is incomplete, paste might fail silently." << LL_ENDL;
+                        }
                     }
                 }
                 // for case when item got removed from inventory after we pressed 'copy'
                 // or texture got pasted into previous object
                 if (!itemp_res && !full_perm)
                 {
+                    // Due to checks for imageitemid in LLPanelFace::onPasteTexture() this should no longer be reachable.
+                    LL_INFOS() << "Item " << te_data["te"]["imageitemid"].asUUID() << " no longer in inventory." << LL_ENDL;
                     // Todo: fix this, we are often searching same texture multiple times (equal to number of faces)
                     // Perhaps just mPanelFace->onPasteTexture(objectp, te, &asset_to_item_id_map); ? Not pretty, but will work
                     LLViewerInventoryCategory::cat_array_t cats;
@@ -3089,11 +3345,13 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 
                 if (itemp_res)
                 {
+                    // from_library is unreliable since we don't get texture item if object is
+                    // fullperm but it merely means additional checks when assigning texture
                     if (te == -1) // all faces
                     {
                         LLToolDragAndDrop::dropTextureAllFaces(objectp,
                             itemp_res,
-                            LLToolDragAndDrop::SOURCE_AGENT,
+                            from_library ? LLToolDragAndDrop::SOURCE_LIBRARY : LLToolDragAndDrop::SOURCE_AGENT,
                             LLUUID::null);
                     }
                     else // one face
@@ -3101,7 +3359,7 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
                         LLToolDragAndDrop::dropTextureOneFace(objectp,
                             te,
                             itemp_res,
-                            LLToolDragAndDrop::SOURCE_AGENT,
+                            from_library ? LLToolDragAndDrop::SOURCE_LIBRARY : LLToolDragAndDrop::SOURCE_AGENT,
                             LLUUID::null);
                     }
                 }
@@ -3218,80 +3476,6 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
     }
 }
 
-enum EPasteMode
-{
-    PASTE_COLOR,
-    PASTE_TEXTURE
-};
-
-struct LLPanelFacePasteTexFunctor : public LLSelectedTEFunctor
-{
-    LLPanelFacePasteTexFunctor(LLPanelFace* panel, EPasteMode mode) :
-        mPanelFace(panel), mMode(mode) {}
-
-    virtual bool apply(LLViewerObject* objectp, S32 te)
-    {
-        switch (mMode)
-        {
-        case PASTE_COLOR:
-            mPanelFace->onPasteColor(objectp, te);
-            break;
-        case PASTE_TEXTURE:
-            mPanelFace->onPasteTexture(objectp, te);
-            break;
-        }
-        return true;
-    }
-private:
-    LLPanelFace *mPanelFace;
-    EPasteMode mMode;
-};
-
-struct LLPanelFaceUpdateFunctor : public LLSelectedObjectFunctor
-{
-    LLPanelFaceUpdateFunctor(bool update_media) : mUpdateMedia(update_media) {}
-    virtual bool apply(LLViewerObject* object)
-    {
-        object->sendTEUpdate();
-        if (mUpdateMedia)
-        {
-            LLVOVolume *vo = dynamic_cast<LLVOVolume*>(object);
-            if (vo && vo->hasMedia())
-            {
-                vo->sendMediaDataUpdate();
-            }
-        }
-        return true;
-    }
-private:
-    bool mUpdateMedia;
-};
-
-struct LLPanelFaceNavigateHomeFunctor : public LLSelectedTEFunctor
-{
-    virtual bool apply(LLViewerObject* objectp, S32 te)
-    {
-        if (objectp && objectp->getTE(te))
-        {
-            LLTextureEntry* tep = objectp->getTE(te);
-            const LLMediaEntry *media_data = tep->getMediaData();
-            if (media_data)
-            {
-                if (media_data->getCurrentURL().empty() && media_data->getAutoPlay())
-                {
-                    viewer_media_t media_impl =
-                        LLViewerMedia::getInstance()->getMediaImplFromTextureID(tep->getMediaData()->getMediaID());
-                    if (media_impl)
-                    {
-                        media_impl->navigateHome();
-                    }
-                }
-            }
-        }
-        return true;
-    }
-};
-
 // <FS> Extended copy & paste buttons
 //void LLPanelFace::menuDoToSelected(const LLSD& userdata)
 //{
@@ -3300,26 +3484,11 @@ struct LLPanelFaceNavigateHomeFunctor : public LLSelectedTEFunctor
 //    // paste
 //    if (command == "color_paste")
 //    {
-//        LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
-//
-//        LLPanelFacePasteTexFunctor paste_func(this, PASTE_COLOR);
-//        selected_objects->applyToTEs(&paste_func);
-//
-//        LLPanelFaceUpdateFunctor sendfunc(false);
-//        selected_objects->applyToObjects(&sendfunc);
+//        onPasteColor();
 //    }
 //    else if (command == "texture_paste")
 //    {
-//        LLObjectSelectionHandle selected_objects = LLSelectMgr::getInstance()->getSelection();
-//
-//        LLPanelFacePasteTexFunctor paste_func(this, PASTE_TEXTURE);
-//        selected_objects->applyToTEs(&paste_func);
-//
-//        LLPanelFaceUpdateFunctor sendfunc(true);
-//        selected_objects->applyToObjects(&sendfunc);
-//
-//        LLPanelFaceNavigateHomeFunctor navigate_home_func;
-//        selected_objects->applyToTEs(&navigate_home_func);
+//        onPasteTexture();
 //    }
 //    // copy
 //    else if (command == "color_copy")

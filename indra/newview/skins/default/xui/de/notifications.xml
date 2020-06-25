@@ -3713,6 +3713,15 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Wir können keine Vorschau dieser Textur anzeigen, da sie nicht kopier- und/oder übertragungsfähig ist.
 		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Texturen keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="FacePasteFailed">
+		Einfügen fehlgeschlagen. [REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FacePasteTexturePermissions">
+		Sie haben eine Texture mit eingeschränkten Berechtigungen hinzugefügt. Das Objekt wird die Berechtigungen der Textur erben.
+		<usetemplate ignoretext="Einfügen: Sie haben eine Texture mit eingeschränkten Berechtigungen hinzugefügt." name="notifyignore"/>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmLeaveCall">
 		Möchten Sie dieses Gespräch wirklich verlassen ?
 		<usetemplate ignoretext="Bestätigen, bevor ich den Anruf verlasse." name="okcancelignore" notext="Nein" yestext="Ja"/>
