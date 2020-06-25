@@ -415,6 +415,30 @@ Mesh:
 Analysiert:
 				</text>
 			</panel>
+			<panel name="preview_controls_panel">
+				<panel name="preview_controls_inner_panel">
+					<text name="preview_controls_title">
+						Vorschau-Kontrollen
+					</text>
+					<combo_box name="preview_lod_combo" tool_tip="Dargestelltes LOD in der Vorschau">
+						<combo_item name="high">Hoch</combo_item>
+						<combo_item name="medium">Mittel</combo_item>
+						<combo_item name="low">Niedrig</combo_item>
+						<combo_item name="lowest">Niedrigstes </combo_item>
+					</combo_box>
+				</panel>
+				<check_box label="Kanten" name="show_edges"/>
+				<check_box label="Texturen" name="show_textures"/>
+				<check_box label="UV-Hilfe" name="show_uv_guide"/>
+				<check_box label="Physik" name="show_physics"/>
+				<text name="exploder_label" width="105">
+					Vorschaudehnung:
+				</text>
+				<slider name="physics_explode" width="75" />
+				<check_box label="Gelenk Position." name="show_joint_positions"/>
+				<check_box label="Gelenkposition-Übersteuerung" name="show_joint_overrides"/>
+				<check_box label="Skingew." name="show_skin_weight"/>
+			</panel>
 			<text name="warning_title" width="60">
 				HINWEIS:
 			</text>
@@ -429,28 +453,4 @@ Analysiert:
 	<text name="lod_label">
 		Vorschau:
 	</text>
-	<panel name="right_panel">
-		<combo_box name="preview_lod_combo" tool_tip="Dargestelltes LOD in der Vorschau">
-			<combo_item name="high">Hoch</combo_item>
-			<combo_item name="medium">Mittel</combo_item>
-			<combo_item name="low">Niedrig</combo_item>
-			<combo_item name="lowest">Niedrigstes </combo_item>
-		</combo_box>
-		<text name="physics_explode_label" width="105">
-			Vorschaudehnung:
-		</text>
-		<text name="label_display">
-			Anzeigen:
-		</text>
-		<check_box label="Kanten" name="show_edges"/>
-		<check_box label="Texturen" name="show_textures"/>
-		<check_box label="UV-Hilfe" name="show_uv_guide"/>
-		<check_box label="Physik" name="show_physics"/>
-		<check_box label="Skingewichte" name="show_skin_weight"/>
-		<check_box label="Gelenkpos.-Übersteuer." name="show_joint_overrides"/>
-		<check_box label="Gelenke" name="show_joint_positions"/>
-		<text name="exploder_label" width="105">
-			Vorschaudehnung:
-		</text>
-	</panel>
 </floater>

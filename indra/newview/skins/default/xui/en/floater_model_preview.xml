@@ -1729,15 +1729,16 @@ Analysed:
         layout="topleft"
         name="show_joint_positions"
         word_wrap="down"
-        left_pad="0"/>
+        left_pad="0"
+        width="65"/>
         <check_box
         follows="top|left"
         label="Joint Pos. Overrides"
-        label_text.text_color="White"
         word_wrap="down"
         layout="topleft"
         name="show_joint_overrides"
-        left_pad="0">
+        left_pad="5"
+        width="100">
       </check_box>
     </panel>
   </panel>
