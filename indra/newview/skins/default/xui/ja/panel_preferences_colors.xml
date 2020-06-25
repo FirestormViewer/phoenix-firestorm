@@ -229,6 +229,7 @@
 			</text>
 			<slider label="有効:" name="active" />
 			<slider label="無効:" name="inactive" />
+			<slider label="カメラ／移動：" name="camera_movement" />
 			<text name="console_opacity">
 				コンソールの不透明度:
 			</text>
