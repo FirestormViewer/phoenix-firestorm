@@ -35,6 +35,9 @@
 				<combo_box name="DCPresetsCombo" />
 				<button name="DCPrevPreset" />
 				<button name="DCNextPreset" />
+				<button name="btn_personal_lighting" label="個人環境設定..." />
+				<button name="ResetToRegionDefault" label="" tool_tip="自然環境の設定を共有された環境にリセットします。" />
+				<button label="雲を停止" name="PauseClouds" tool_tip="雲のアニメーションを停止します。" />
 			</panel>
 			
 			<panel name="P_Sun">
@@ -52,7 +55,7 @@
 				<button name="Noon"	 label="正午" />
 				<button name="Sunset" label="日没" />
 				<button name="Midnight" label="深夜" />
-				<button name="Revert to Region Default" label="地域設定時間" />
+				<button name="Revert to Region Default" label="共有された環境" />
 			</panel>
 			
 			<panel name="P_WL_Presets">

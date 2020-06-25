@@ -28,7 +28,7 @@
 		<menu_item_call label="Пригласить в группу" name="GroupInvite"/>
 		<menu_item_call label="Информация о скриптах" name="ScriptInfo"/>
 		<menu_item_check label="Заблокировать/Разблокировать" name="Block/Unblock"/>
-		<menu_item_call label="Отчет" name="report"/>
+		<menu_item_call label="Жалоба" name="report"/>
 		<menu_item_call label="Заморозить" name="freeze"/>
 		<menu_item_call label="Участок: Выбросить из участка" name="eject"/>
 		<menu_item_call label="Владение: Выбросить" name="kick"/>

@@ -577,6 +577,19 @@ support@secondlife.com にお問い合わせください。
 		ヘルプを表示
 	</string>
 	<string name="BUTTON_SNOOZE">居眠り</string>
+	
+	<!-- ToolTips for notecards -->
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+この地域ではこの種類のアイテムは
+ノートカードに添付できません。
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+「次のオーナー」の権限に
+制限のないノートカードのみ
+添付することが可能です。
+	</string>
+	
+	<!-- searching - generic -->
 	<string name="Searching">
 		検索中...
 	</string>
@@ -655,6 +668,12 @@ support@secondlife.com にお問い合わせください。
 http://www.firestormviewer.org/support
 	</string>
 	
+	<!-- Settings errors -->
+	<string name="SettingValidationError">自然環境設定 [NAME] のインポート検証に失敗しました</string>
+	<string name="SettingImportFileError">ファイル [FILE] を開けません</string>
+	<string name="SettingParseFileError">ファイル [FILE] を開けません</string>
+	<string name="SettingTranslateError">古い形式の Windlight [NAME] を変換できません</string>
+	
 	<string name="texture">
 		テクスチャ
 	</string>
@@ -729,6 +748,9 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="symbolic folder link">
 		フォルダのリンク
+	</string>
+	<string name="settings blob">
+		自然環境設定
 	</string>
 	<string name="mesh">
 		メッシュ
@@ -1074,6 +1096,12 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="ForceSitAvatar">
 		アバターを強制的に座らせる
+	</string>
+	<string name="ChangeEnvSettings">
+		自分の自然環境設定を変更
+	</string>
+	<string name="SnapshotSavedToDisk">
+		スナップショットを保存しました：[FILENAME]
 	</string>
 	<string name="NotConnected">
 		接続されていません
@@ -1725,6 +1753,9 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="InvFolder Merchant Outbox">
 		マーチャントのアウトボックス
+	</string>
+	<string name="InvFolder Settings">
+		自然環境設定
 	</string>
 	<string name="InvFolder Friends">
 		フレンド
@@ -2495,6 +2526,27 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="RegionSettings">
 		リージョン（地域）の設定
+	</string>
+	<string name="NoEnvironmentSettings">
+		この地域では自然環境設定を行うことはできません
+	</string>
+	<string name="EnvironmentSun">
+		太陽
+	</string>
+	<string name="EnvironmentMoon">
+		月
+	</string>
+	<string name="EnvironmentBloom">
+		ブルーム
+	</string>
+	<string name="EnvironmentCloudNoise">
+		雲のノイズ
+	</string>
+	<string name="EnvironmentNormalMap">
+		通常マッピング
+	</string>
+	<string name="EnvironmentTransparent">
+		透明
 	</string>
 	<string name="ClassifiedClicksTxt">
 		クリック数： [TELEPORT] テレポート、 [MAP] 地図、 [PROFILE] プロフィール
@@ -4871,6 +4923,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Female - Wow">
 		女性 - Wow
 	</string>
+
+	<!-- settings -->
+	<string name="New Day">新しいデイサイクル</string>
+	<string name="New Water">新しい水</string>
+	<string name="New Sky">新しい空</string>
+
 	<string name="/bow">
 		/おじぎする
 	</string>
@@ -5399,6 +5457,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="BeaconMedia">
 		メディアビーコン（白）を表示中
 	</string>
+	<string name="BeaconSun">
+		太陽の方向のビーコンを表示（オレンジ）
+	</string>
+	<string name="BeaconMoon">
+		月の方向のビーコンを表示（紫）
+	</string>
 	<string name="ParticleHiding">
 		パーティクルを非表示
 	</string>
@@ -5425,6 +5489,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Destinations_Label">
 		行き先
+	</string>
+	<string name="Command_Environments_Label">
+		自然環境
 	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
@@ -5559,6 +5626,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		行ってみたい場所
+	</string>
+	<string name="Command_Environments_Tooltip">
+		自然環境
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Flickr にアップロード
@@ -5985,6 +6055,12 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExperiencePermission12">
 		体験の権限を自動的に承諾
 	</string>
+	<string name="ExperiencePermission16">
+		自分のアバターを強制的に座らせる
+	</string>
+	<string name="ExperiencePermission17">
+		自分の自然環境設定を変更する
+	</string>
 	<string name="ExperiencePermissionShortUnknown">
 		が不明な操作を実行しました: [Permission]
 	</string>
@@ -6186,7 +6262,7 @@ Secondlife.com のサポートセクションから
   <string name="PS_Arms_upward_Legs_apart">腕を斜め上に、足を開く</string>
   <string name="PS_Arms_upward_Legs_together">腕を斜め上に、足を揃える</string>
   
-  <string name="QP_WL_Region_Default">地域デフォルト</string>
+  <string name="QP_WL_Region_Default">共有された環境</string>
   <string name="QP_WL_Day_Cycle_Based">デイサイクル</string>
   <string name="QP_WL_None">なし</string>
 
