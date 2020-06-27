@@ -347,6 +347,7 @@ Charles Courtois
 Charlie Sazaland
 Chaser Zaks
     BUG-225599
+    BUG-227485
 Cherry Cheevers
 ChickyBabes Zuzu
 Christopher  Organiser
@@ -1516,6 +1517,7 @@ Whirly Fizzle
 	STORM-1930
 	BUG-6659
 	STORM-2078
+	BUG-17349
 Whoops Babii
 	VWR-631
 	VWR-1640
