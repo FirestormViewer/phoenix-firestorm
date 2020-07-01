@@ -14,22 +14,22 @@
 						<column label="Paramètres généraux :" name="restore_global_files_label"/>
 						<column label="Valeur" name="value"/>
 						<row name="restore_global_row_login">
-							<column name="restore_global_files_label">Login Credentials</column>
+							<column name="restore_global_files_label">Informations de connexion</column>
 						</row>
 						<row name="restore_global_row_colors">
-							<column name="restore_global_files_label">Colors</column>
+							<column name="restore_global_files_label">Couleurs</column>
 						</row>
 						<row name="restore_global_row_dialogs">
-							<column name="restore_global_files_label">Ignorable Dialogs</column>
+							<column name="restore_global_files_label">Dialogues ignorés</column>
 						</row>
 						<row name="restore_global_row_grids">
-							<column name="restore_global_files_label">User-Defined Grids</column>
+							<column name="restore_global_files_label">Grids définies par l'utilisateur</column>
 						</row>
 						<row name="restore_global_row_autoreplace">
-							<column name="restore_global_files_label">Autoreplace</column>
+							<column name="restore_global_files_label">Substitution automatique</column>
 						</row>
 						<row name="restore_global_row_quickprefs">
-							<column name="restore_global_files_label">Quick Preferences</column>
+							<column name="restore_global_files_label">Préférences rapides</column>
 						</row>
 					</scroll_list>
 				</layout_panel>
@@ -38,34 +38,37 @@
 						<column label="Liés au compte :" name="restore_per_account_files_label"/>
 						<column label="Valeur" name="value"/>
 						<row name="restore_per_account_row_blacklist">
-							<column name="restore_per_account_files_label">Asset Blacklist</column>
+							<column name="restore_per_account_files_label">Liste noire</column>
 						</row>
 						<row name="restore_per_account_row_contactsets">
-							<column name="restore_per_account_files_label">Contact Sets</column>
+							<column name="restore_per_account_files_label">Groupes de contacts</column>
 						</row>
 						<row name="restore_per_account_row_invfilters">
-							<column name="restore_per_account_files_label">Inventory Filters</column>
+							<column name="restore_per_account_files_label">Filtres de l'inventaire</column>
 						</row>
 						<row name="restore_per_account_row_favsort">
-							<column name="restore_per_account_files_label">Favorites Sort Order</column>
+							<column name="restore_per_account_files_label">Ordre de tri des favoris</column>
 						</row>
 						<row name="restore_per_account_row_medialists">
-							<column name="restore_per_account_files_label">Media Black/Whitelist</column>
+							<column name="restore_per_account_files_label">Liste noire/blanche des médias</column>
 						</row>
 						<row name="restore_per_account_row_toolbars">
-							<column name="restore_per_account_files_label">Toolbars</column>
+							<column name="restore_per_account_files_label">Barres d'outils</column>
 						</row>
 						<row name="restore_per_account_row_volumes">
-							<column name="restore_per_account_files_label">Voice Chat Volumes</column>
+							<column name="restore_per_account_files_label">Volumes du  chat vocal</column>
 						</row>
 						<row name="restore_per_account_row_tphistory">
-							<column name="restore_per_account_files_label">Teleport History</column>
+							<column name="restore_per_account_files_label">Historique de téléportation</column>
 						</row>
 						<row name="restore_per_account_row_regiontracker">
-							<column name="restore_per_account_files_label">Region Tracker</column>
+							<column name="restore_per_account_files_label">Suivi des régions</column>
 						</row>
 						<row name="restore_per_account_row_groupmutes">
-							<column name="restore_per_account_files_label">Disabled Group Chats</column>
+							<column name="restore_per_account_files_label">Discussions de groupe désactivées</column>
+						</row>
+						<row name="restore_per_account_row_avatar_render_settings">
+							<column name="restore_per_account_files_label">Paramètres de rendu de l'avatar</column>
 						</row>
 					</scroll_list>
 				</layout_panel>
@@ -74,25 +77,25 @@
 						<column label="Divers :" name="restore_global_folders_label"/>
 						<column label="Valeur" name="value"/>
 						<row name="restore_folders_row_beams">
-							<column name="restore_global_folders_label">Selection Beams</column>
+							<column name="restore_global_folders_label">Faisceaux de sélection</column>
 						</row>
 						<row name="restore_folders_row_beamcolors">
-							<column name="restore_global_folders_label">Selection Beam Colors</column>
+							<column name="restore_global_folders_label">Couleurs des faisceaux de sélection</column>
 						</row>
 						<row name="restore_folders_row_spellcheck">
-							<column name="restore_global_folders_label">Custom Spell Check</column>
+							<column name="restore_global_folders_label">Correction orthographique personnalisée</column>
 						</row>
 						<row name="restore_folders_row_windlight">
-							<column name="restore_global_folders_label">Windlight (Mandatory)</column>
+							<column name="restore_global_folders_label">Windlight (Obligatoire)</column>
 						</row>
 						<row name="restore_folders_row_daycycles">
-							<column name="restore_global_folders_label">Windlight Day Cycles</column>
+							<column name="restore_global_folders_label">Cycles du jour Windlight</column>
 						</row>
 						<row name="restore_folders_row_skies">
-							<column name="restore_global_folders_label">Windlight Skies</column>
+							<column name="restore_global_folders_label">Cieux Windlight</column>
 						</row>
 						<row name="restore_folders_row_waters">
-							<column name="restore_global_folders_label">Windlight Waters</column>
+							<column name="restore_global_folders_label">Eaux Windlight</column>
 						</row>
 					</scroll_list>
 				</layout_panel>
