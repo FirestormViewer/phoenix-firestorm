@@ -8,10 +8,11 @@
 			<slider label="Fluidité" name="camera_position_smoothing"/>
 			<check_box label="Désactiver les contraintes de limitation de dézoom" name="DisableCameraConstraints" tool_tip="Activer cette option pour autoriser la caméra à dézoomer au-delà de ses limitations"/>
 			<check_box label="Désactiver la molette de la souris pour régler le niveau du zoom" name="FSDisableMouseWheelCameraZoom"/>
-			<text name="heading2">Positionnement automatique pour :</text>
-			<check_box label="Construire / Modifier" name="edit_camera_movement" tool_tip="Positionner automatiquement la caméra lorsque j'entre et je sors du mode construction"/>
-			<check_box label="Modifier l'apparence" width="150" name="appearance_camera_movement" tool_tip="Tourner ma caméra de face lorsque je modifie ma silhouette"/>
+			<text left="55" name="heading2">Positionnement automatique pour :</text>
+			<check_box label="Construire / Modifier" left_delta="5" name="edit_camera_movement" tool_tip="Positionner automatiquement la caméra lorsque j'entre et je sors du mode construction"/>
+			<check_box label="Modifier l'apparence" width="150" left_delta="15" name="appearance_camera_movement" tool_tip="Tourner ma caméra de face lorsque je modifie ma silhouette"/>
 			<check_box label="Lumière supplémentaire" name="EditAppearanceLighting" tool_tip="Activer cette option pour que votre avatar soit plus lumineux lorsque vous modifiez votre silhouette."/>
+			<check_box label="Indicateurs visuels" name="FSAppearanceShowHints" tool_tip="Active ou désactive les indicateurs visuels montrant les parties de votre avatar en train d'être modifiées."/>
 			<check_box label="Cliquer sur votre avatar ne touche pas à la caméra" name="clickonavatarkeepscamera" tool_tip="Activer cette option empêche la caméra de se réinitialiser lorsque vous cliquez sur votre avatar."/>
 			<check_box label="Réinitialise la caméra après une téléportation dans la région" name="FSResetCameraOnTP" tool_tip="Activer cette option réinitialisera le niveau de zoom de la caméra après une téléportation au sein d'une même région."/>
 			<check_box label="Repositionner la caméra lors des déplacements de l'avatar" name="FSResetCameraOnMovement"/>
@@ -20,6 +21,7 @@
 			<check_box label="Permettre à la caméra de traverser les objets" name="ignorecameraconstraints" tool_tip="Ignore les déplacements de caméra que le simulateur effectue lorsque celle-ci s'approche trop près des objets."/>
 			<text name="ignorecameraconstraints_requires_restart">(Redémarrage requis)</text>
 			<check_box label="Toujours afficher la fenêtre de contrôles de la caméra de façon opaque" name="FSAlwaysOpaqueCameraControls"/>
+			<check_box label="Réaffiche après une téléportation les objets temporairement désaffichés." name="FSTempDerenderUntilTeleport" tool_tip="Activée, les objets temporairement désaffichés le resteront jusqu'à la prochaine téléportation. Désactivée, ils resteront désaffichés jusqu'à la fin de la session ou jusqu'à ce qu'il soient réaffichés manuellement dans la fenêtre de blacklistage des éléments."/>
 		</panel>
 		<panel label="Vue subjective" name="tab-mouselook">
 			<check_box label="Activer la vue subjective" name="EnableMouselook" tool_tip="Permettre une vue à la première personne et un contrôle de la caméra à la souris"/>
@@ -46,15 +48,20 @@
 			<check_box label="Désactiver la temporisation de l'animation avant le saut et à l'atterrissage" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Ne pas me retourner lorsque je marche à reculons" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Empêche votre avatar de se retourner pour faire face à la caméra lorsque vous marchez à reculons. Cette option n'affecte que votre vision et n'est pas compatible avec les AOs."/>
 			<check_box label="Tourner l'avatar vers l'objet qu'il sélectionne" name="FSTurnAvatarToSelectedObject" tool_tip="Tourne votre avatar face à l'objet que vous sélectionnez actuellement."/>
+			<text name="Region_Crossing_Movement_Label" width="290">Prévision de mouvement si changement de région :</text>
+			<radio_group name="Region_Crossing_Movement" left_pad="1">
+				<radio_item label="Illimité" name="move_predict" width="65" />
+				<radio_item label="Arrêt si erreur trop grande" name="move_stop" width="100"/>
+			</radio_group>
 			<text name="movelock_lbl">Si l'ancrage du Bridge LSL est actif...</text>
 			<check_box label="Réactiver l'ancrage après une téléportation" name="RelockMoveLockAfterRegionChange"/>
 			<check_box label="Désactiver/Réactiver l'ancrage lorsque je me déplace" name="RelockMoveLockAfterMovement"/>
-			<text name="single_click_action_lbl">Clic simple sur le terrain :</text>
+			<text name="single_click_action_lbl" width="190">Clic simple sur le terrain :</text>
 			<combo_box name="single_click_action_combo">
 				<combo_box.item label="Pas d'action" name="0"/>
 				<combo_box.item label="Se déplacer à l'endroit" name="1"/>
 			</combo_box>
-			<text name="double_click_action_lbl">Double-clic sur le terrain :</text>
+			<text name="double_click_action_lbl" width="190">Double-clic sur le terrain :</text>
 			<combo_box name="double_click_action_combo">
 				<combo_box.item label="Pas d'action" name="0"/>
 				<combo_box.item label="Se déplacer à l'endroit" name="1"/>
@@ -68,6 +75,8 @@
 			<check_box label="Toujours afficher le bouton Annuler sur les écrans de téléportation" name="FSAlwaysShowTPCancel" tool_tip="Toujours afficher le bouton Annuler lors des téléportations même si la région indique qu'elle ne peut pas l'être. Ce paramètre peut être ignoré par les options RestrainedLoveAPI."/>
 			<check_box label="Désactiver les balises de téléportation" name="tp_beam_toggle" tool_tip="Désactive le repère visuel après une téléportation vers celui-ci."/>
 			<check_box label="Désactiver les écrans de téléportation" name="tp_screen_toggle" tool_tip="Désactiver l'écran de téléportation noir pendant les téléportations."/>
+			<check_box label="Ne pas fermer la carte lors d'une téléportation" name="FSDoNotHideMapOnTeleport" tool_tip="Désactive le fermeture automatique de la carte lors d'une téléportation."/>
+			<check_box label="Garder 'N'afficher que les amis' activé après une téléportation." name="FSRenderFriendsOnlyPersistsTP" tool_tip="Désactive l'annulation automatique de la fonction 'N'afficher que les amis' (par défaut : off)"/>
 		</panel>
 		<panel label="Carte &amp; Minicarte" name="tab-maps">
 			<text name="minimap_options_label">Options de la Minicarte :</text>

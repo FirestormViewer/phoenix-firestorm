@@ -14,12 +14,12 @@
 			<text name="object_im_label">IMs des objets</text>
 			<text name="llownersay_label">Propriétaire</text>
 			<text name="htmllink_label">URLs</text>
-			<text name="uriquerypart_label">Sous-chemin des URL</text>
+			<text name="uriquerypart_label" width="130">Chemin d'URL</text>
 			<text name="direct_label">Direct</text>
 			<text name="header_colors">Émetteur :</text>
 			<text name="chat_name_label">Avatars</text>
 			<text name="object_name_header_label">Objets</text>
-			<slider label="Facteur de diminution de couleur hors de portée de chat :" label_width="330" width="500" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Le facteur de diminution de couleur du message si son émetteur n'est pas à proximité."/>
+			<slider label="Facteur de diminution de couleur hors de portée de chat :" label_width="330" width="460" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Le facteur de diminution de couleur du message si son émetteur n'est pas à proximité."/>
 			<check_box name="FSColorIMsDistinctly" label="Colorer les IM et le chat de groupe distinctivement dans la console :"/>
 			<panel name="im_color_panel">
 				<text name="console_im_label">IMs/Groupes</text>
