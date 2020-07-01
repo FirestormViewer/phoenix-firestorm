@@ -2,6 +2,7 @@
 <panel label="Affichage" name="Display panel">
 	<tab_container label="Paramètres d'affichage" name="tabs">
 		<panel label="Général" name="General">
+			<text name="preset_label">Preset utilisé : </text>
 			<text name="QualitySpeed">Qualité et performance :</text>
 			<text name="FasterText">Performance</text>
 			<text name="BetterText">Qualité</text>
@@ -40,7 +41,8 @@
 			<slider label="Distance d'affichage" name="DrawDistance"/>
 			<text name="DrawDistanceMeterText2">m</text>
 			<slider label="Nombre max. de particules" name="MaxParticleCount"/>
-			<slider label="Maximum d'avatars 3D" name="MaxNumberAvatarDrawn"/>
+			<slider label="Complexité maximale" name="IndirectMaxComplexity"/>
+			<slider label="Maximum d'avatars 3D" name="IndirectMaxNonImpostors"/>
 			<slider label="Qualité post-traitement" name="RenderPostProcess"/>
 			<text name="PostProcessText">Basse</text>
 			<slider label="Propriétés physiques des avatars" name="AvatarPhysicsDetail"/>
@@ -60,13 +62,17 @@
 				<radio_item label="Bas" name="0"/>
 				<radio_item label="Haut" name="2"/>
 			</radio_group>
-			<button tool_tip="Valeurs par défaut." name="Defaults"/>
+			<button tool_tip="Rétablit les valeurs par défaut." name="Defaults"/>
+			<button label="Enregistrer" name="PrefSaveButton"/>
+			<button label="Charger" name="PrefLoadButton"/>
+			<button label="Supprimer" name="PrefDeleteButton"/>
 		</panel>
 		<panel label="Paramètres matériels" name="Hardware Settings">
 			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
 			<check_box label="Activer les Vertex Buffer Objects OpenGL" name="vbo" tool_tip="Activer cette fonction offre un gain un gain de performance. Toutefois, le matériel très ancien peut ne pas implémenter cette technologie et provoquera une instabilité du Viewer s'il est actif."/>
 			<check_box label="Activer les Streamed VBOs" name="vbo_stream" tool_tip="Désactiver cette option peut améliorer les performances lorsque les VBO sont activés. La désactivation de ce paramètre améliore grandement les performances sur certaines cartes graphiques Intel et AMD."/>
 			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
+			<check_box label="Active la prise en charge des écrans HiDPI (Mac OSX seulement; Redémarrage requis)" name="use HiDPI" tool_tip="Active OpenGL pour l'affichage haute résolution."/>
 			<text name="Antialiasing:">Anticrénelage :</text>
 			<combo_box label="Anticrénelage" name="fsaa">
 				<combo_box.item label="Désactivé" name="FSAADisabled"/>
@@ -84,6 +90,7 @@
 			<text name="World Updating">Actualisation de l'univers :</text>
 			<check_box label="Figer les mises à jour de l'univers (Met tout en pause)" tool_tip="Cochez cette option pour figer toutes les mises à jour provenant de l'univers - Ceci interrompra toutes les actions visuelles mais n'affectera pas les conversations écrites  ou vocales" name="WorldPause"/>
 			<text name="Texture Rendering">Rendu des textures :</text>
+			<check_box label="Limiter le résolution maximale des textures à 512px (64bit seulement; redémarrage requis)" tool_tip="Activée, cette option limite la résomution maximale d'affichage des textures dans Second Life à 512px. Cela permet d'afficher plus de textures avant de dépasser la limite de mémoire disponible et évite de voir des textures floues." name="FSRestrictMaxTextureSize"/>
 			<check_box label="Utiliser HTTP pour récupérer les textures" tool_tip="Cochez cette option pour charger les textures en utilisant le protocole HTTP - désactivez cette option si vous avez des problèmes d'affichage et souhaitez utiliser le protocole UDP à la place." name="TexturesHTTP"/>
 			<text name="TextureDetailLabel">Qualité max. des textures :</text>
 			<combo_box name="TextureDetail">
