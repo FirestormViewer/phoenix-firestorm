@@ -4931,6 +4931,12 @@ URL: [AUDIOURL]
 	<notification name="BackupPathDoesNotExist">
 		Путь резервного копирования не может быть найден
 	</notification>
+	<notification name="SettingsConfirmBackup">
+Вы уверены, что хотите сохранить резервную копию в этом каталоге?
+[DIRECTORY]
+Любые существующие резервные копии в этом месте будут перезаписаны!
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Сохранить"/>
+	</notification>
 	<notification name="SettingsRestoreNeedsLogout">
 		Восстановление настроек требует перезапуск клиента. Вы хотите, восстановить настройки и перезапустить клиент сейчас?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Восстановить и выйти"/>
