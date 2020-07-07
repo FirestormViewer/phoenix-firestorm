@@ -1361,10 +1361,8 @@ Please consider using an attachment point close to the item's position on the bo
          height="306"
          layout="topleft"
          left="3"
-         <!-- FS:Beq Add control for vberbose logging -->
          ignore_tab="false"
          right="-21"
-         <!-- FS:Beq/ -->
          name="log_tab_border"
          top_pad="0"
          width="619" />
@@ -1387,10 +1385,8 @@ Please consider using an attachment point close to the item's position on the bo
          layout="topleft"
          height="267"
          left="4"
-         <!-- FS:Beq Add control for vberbose logging -->
          top="24"
          right="-22"
-         <!-- FS:Beq/ -->
          max_length="65536"
          name="log_text"
          parse_urls="true"
