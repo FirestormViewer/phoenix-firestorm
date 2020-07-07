@@ -224,7 +224,8 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
     }
 
     mViewOption["show_textures"] = false;
-
+    mViewOption["verbose_logging"] = mImporterDebug;// <FS:Beq/> initialise verbose logging from debug
+    fmp->childSetValue("verbose_logging", LLSD(mImporterDebug));
     mFMP = fmp;
 
     mHasPivot = false;
@@ -2968,6 +2969,13 @@ BOOL LLModelPreview::render()
     assert_main_thread();
 
     LLMutexLock lock(this);
+    // <FS:Beq> enable the import debug importer debug control
+    if(mNeedsUpdate)
+    {
+        bool verbose_logging = mViewOption["verbose_logging"];
+        gSavedSettings.setBOOL("ImporterDebug",verbose_logging);
+    }
+    // </FS:Beq>
     mNeedsUpdate = FALSE;
 
     bool use_shaders = LLGLSLShader::sNoFixedFunction;
@@ -3058,6 +3066,10 @@ BOOL LLModelPreview::render()
                 fmp->setViewOptionEnabled("show_joint_positions", skin_weight);
                 mFMP->childEnable("upload_skin");
                 mFMP->childSetValue("show_skin_weight", skin_weight);
+            // <FS:Beq> auto enable weight upload if weights are present
+                mViewOption["show_skin_weight"] = true;
+                fmp->childSetValue("upload_skin", true);
+            // </FS:Beq>
             }
             else if ((flags & LEGACY_RIG_FLAG_TOO_MANY_JOINTS) > 0)
             {

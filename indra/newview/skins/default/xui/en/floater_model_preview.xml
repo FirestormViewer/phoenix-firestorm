@@ -1211,7 +1211,7 @@
           label_text.wrap="true"
           label_text.width="180"
           name="lock_scale_if_joint_position"
-          top_pad="7"/>
+          top_pad="17"/>
         <text
           follows="top|left"
           height="15"
@@ -1361,10 +1361,23 @@ Please consider using an attachment point close to the item's position on the bo
          height="306"
          layout="topleft"
          left="3"
+         <!-- FS:Beq Add control for vberbose logging -->
+         ignore_tab="false"
+         right="-21"
+         <!-- FS:Beq/ -->
          name="log_tab_border"
          top_pad="0"
          width="619" />
-        <text_editor
+         <!-- FS:Beq Add control for vberbose logging -->
+         <check_box
+         follows="top|left"
+         top_delta="12"
+         left="4"
+         width="70"
+         label="Show detailed logging"
+         name="verbose_logging"/>
+         <!-- FS:Beq/ -->
+         <text_editor
          type="string"
          length="1"
          embedded_items="false"
@@ -1374,8 +1387,10 @@ Please consider using an attachment point close to the item's position on the bo
          layout="topleft"
          height="267"
          left="4"
-         top="4"
-         right="-21"
+         <!-- FS:Beq Add control for vberbose logging -->
+         top="24"
+         right="-22"
+         <!-- FS:Beq/ -->
          max_length="65536"
          name="log_text"
          parse_urls="true"
@@ -1741,41 +1756,41 @@ Analysed:
         width="100">
       </check_box>
     </panel>
+    <!-- ========== NOTE MESSAGE ========== -->
+    <text
+      font="SansSerif"
+      layout="topleft"
+      left="6"
+      name="warning_title"
+      top_pad="5"
+      text_color="DrYellow"
+      visible="true"
+      width="40">
+      NOTE:
+    </text>
+    <text
+      text_color="White"
+      height="20"
+      layout="topleft"
+      left_pad="1"
+      name="warning_message"
+      parse_urls="true"
+      top_delta="0"
+      wrap="true"
+      width="530"
+      visible="true">
+      You dont have rights to upload mesh models. [[VURL] Find out how] to get certified.
+    </text>
+    <text
+      text_color="Yellow"
+      layout="topleft"
+      top_pad="-2"
+      left="6"
+      name="status">
+    [STATUS]
+    </text>
   </panel>
 <!-- /FS:Beq -->
-<!-- ========== NOTE MESSAGE ========== -->
-<text
-   font="SansSerif"
-   layout="topleft"
-   left="6"
-   name="warning_title"
-   top_pad="5"
-   text_color="DrYellow"
-   visible="true"
-   width="40">
-   NOTE:
- </text>
- <text
-   text_color="White"
-   height="20"
-   layout="topleft"
-   left_pad="1"
-   name="warning_message"
-   parse_urls="true"
-   top_delta="0"
-   wrap="true"
-   width="530"
-   visible="true">
-   You dont have rights to upload mesh models. [[VURL] Find out how] to get certified.
- </text>
- <text
-   text_color="Yellow"
-   layout="topleft"
-   top_pad="-2"
-   left="6"
-   name="status">
-[STATUS]
- </text>
 </panel>
 <text
 follows="left|top"

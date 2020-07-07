@@ -193,6 +193,17 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_joint_overrides")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
+	// <FS:Beq> Allow user selectable debug logging
+	auto vl = getChild<LLCheckBoxCtrl>("verbose_logging");
+	if(vl)
+	{
+		vl->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
+		if(gSavedSettings.getBOOL("ImporterDebug"))
+		{
+			vl->set(true);
+		}
+	};
+	// </FS:Beq>
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
