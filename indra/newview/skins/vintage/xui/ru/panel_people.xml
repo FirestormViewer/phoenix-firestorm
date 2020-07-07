@@ -30,7 +30,7 @@
 		Все наборы
 	</panel.string>
 	<panel.string name="pseudonyms">
-		Алиасы
+		Псевдонимы
 	</panel.string>
 	<tab_container name="tabs">
 		<panel label="Рядом" name="nearby_panel">
