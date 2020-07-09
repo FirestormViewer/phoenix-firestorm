@@ -109,6 +109,7 @@ const U32 DEFAULT_MAX_REGION_WIDE_PRIM_COUNT = 15000;
 BOOL LLViewerRegion::sVOCacheCullingEnabled = FALSE;
 S32  LLViewerRegion::sLastCameraUpdated = 0;
 S32  LLViewerRegion::sNewObjectCreationThrottle = -1;
+LLViewerRegion::vocache_entry_map_t LLViewerRegion::sRegionCacheCleanup;
 
 typedef std::map<std::string, std::string> CapabilityMap;
 
@@ -677,6 +678,9 @@ void LLViewerRegion::initStats()
 	mAlive = false;					// can become false if circuit disconnects
 }
 
+static LLTrace::BlockTimerStatHandle FTM_CLEANUP_REGION_OBJECTS("Cleanup Region Objects");
+static LLTrace::BlockTimerStatHandle FTM_SAVE_REGION_CACHE("Save Region Cache");
+
 LLViewerRegion::~LLViewerRegion() 
 {
 	mDead = TRUE;
@@ -691,7 +695,10 @@ LLViewerRegion::~LLViewerRegion()
 	disconnectAllNeighbors();
 	LLViewerPartSim::getInstance()->cleanupRegion(this);
 
-	gObjectList.killObjects(this);
+    {
+        LL_RECORD_BLOCK_TIME(FTM_CLEANUP_REGION_OBJECTS);
+        gObjectList.killObjects(this);
+    }
 
 	delete mImpl->mCompositionp;
 	delete mParcelOverlay;
@@ -702,7 +709,10 @@ LLViewerRegion::~LLViewerRegion()
 #endif	
 	std::for_each(mImpl->mObjectPartition.begin(), mImpl->mObjectPartition.end(), DeletePointer());
 
-	saveObjectCache();
+    {
+        LL_RECORD_BLOCK_TIME(FTM_SAVE_REGION_CACHE);
+        saveObjectCache();
+    }
 
 	delete mImpl;
 	mImpl = NULL;
@@ -776,6 +786,8 @@ void LLViewerRegion::saveObjectCache()
 		mCacheDirty = FALSE;
 	}
 
+	// Map of LLVOCacheEntry takes time to release, store map for cleanup on idle
+	sRegionCacheCleanup.insert(mImpl->mCacheMap.begin(), mImpl->mCacheMap.end());
 	mImpl->mCacheMap.clear();
 }
 
@@ -1569,6 +1581,16 @@ void LLViewerRegion::idleUpdate(F32 max_update_time)
 
 	LLViewerCamera::sCurCameraID = old_camera_id;
 	return;
+}
+
+// static
+void LLViewerRegion::idleCleanup(F32 max_update_time)
+{
+    LLTimer update_timer;
+    while (!sRegionCacheCleanup.empty() && (max_update_time - update_timer.getElapsedTimeF32() > 0))
+    {
+        sRegionCacheCleanup.erase(sRegionCacheCleanup.begin());
+    }
 }
 
 //update the throttling number for new object creation

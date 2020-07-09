@@ -3001,6 +3001,14 @@ void LLIMMgr::addMessage(
 
 	if (new_session)
 	{
+		// Group chat session was initiated by muted resident, do not start this session viewerside
+		// do not send leave msg either, so we are able to get group messages from other participants
+		if ((IM_SESSION_INVITE == dialog) && gAgent.isInGroup(new_session_id) &&
+			LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !from_linden)
+		{
+			return;
+		}
+
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get(other_participant_id, &av_name) && !name_is_setted)
 		{

@@ -583,6 +583,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 		if (gDetachBodyPartPieMenus[i])
 		{
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
+			gDetachAttSelfMenu->appendContextSubMenu(gDetachBodyPartPieMenus[i]);
+			gDetachAvatarMenu->appendContextSubMenu(gDetachBodyPartPieMenus[i]);
 		}
 		else
 		{
@@ -611,12 +613,14 @@ BOOL LLVOAvatarSelf::buildMenus()
 					LLMenuItemCallGL* item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 
 					gDetachPieMenu->addChild(item);
-
+					gDetachAttSelfMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
+					gDetachAvatarMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
 					break;
 				}
 			}
 		}
 	}
+	
 
 	// <FS:Zi> Pie menu
 	for (S32 i = 0; i < PIE_MAX_SLICES; i++)
@@ -754,6 +758,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 			item_params.on_enable.parameter = iter->first;
 			item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 			gDetachScreenPieMenu->addChild(item);
+			gDetachHUDAttSelfMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
+			gDetachHUDAvatarMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
 
 			// <FS:Zi> Pie menu
 			slice_params.name =(slice_params.label );
