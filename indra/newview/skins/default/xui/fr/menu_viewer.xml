@@ -89,6 +89,7 @@
 		<menu_item_call label="Événements" name="Events"/>
 		<menu_item_check label="Mini-carte" name="Mini-Map"/>
 		<menu_item_check label="Carte du monde" name="World Map"/>
+		<menu_item_check label="Suivi des régions" name="Region Tracker"/>
 		<menu_item_call label="Créer un repère pour ce lieu" name="Create Landmark Here"/>
 		<menu_item_call label="Profil du lieu" name="Place Profile"/>
 		<menu_item_call label="À propos du terrain" name="About Land"/>
