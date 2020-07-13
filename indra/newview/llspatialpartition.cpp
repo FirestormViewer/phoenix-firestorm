@@ -56,6 +56,10 @@
 #include "llcontrolavatar.h"
 
 #include "llvotree.h"
+// <FS:Beq> improved normals debug
+#include "llformat.h"
+#include "llselectmgr.h"
+// </FS:Beq>
 
 static LLTrace::BlockTimerStatHandle FTM_FRUSTUM_CULL("Frustum Culling");
 static LLTrace::BlockTimerStatHandle FTM_CULL_REBOUND("Cull Rebound Partition");
@@ -2269,45 +2273,131 @@ void renderBoundingBox(LLDrawable* drawable, BOOL set_color = TRUE)
 void renderNormals(LLDrawable* drawablep)
 {
 	LLVertexBuffer::unbind();
-
+	// <FS:Beq> FIX and improve renderNormals debug
+	static LLCachedControl<bool> showSelectedOnly(*LLUI::getInstance()->mSettingGroups["config"], "OnlyShowSelectedNormals");
+	// </FS:Beq>
 	LLVOVolume* vol = drawablep->getVOVolume();
 	if (vol)
 	{
+	// <FS:Beq> FIX and improve renderNormals debug
+		if(showSelectedOnly && !drawablep->getVObj()->isSelected())
+		{
+			drawablep->getVObj()->setDebugText("");
+			return;
+		}
+	// </FS:Beq>
 		LLVolume* volume = vol->getVolume();
 		gGL.pushMatrix();
 		gGL.multMatrix((F32*) vol->getRelativeXform().mMatrix);
 		
+	// <FS:Beq> FIX and improve renderNormals debug
+		// LLMatrix3 mat_norm {vol->getRelativeXformInvTrans()};
+		LLMatrix3 scale_inverse;
+		auto scale = drawablep->getScale();
+		// We need something like an inverse transpose, however
+		// we do not use the object rotation as it will be applied in the world transform
+		// but we do need to apply the inverse scale^2(1) as the world transform does a scale too.
+		// transpose of a scale only matrix is a lot of nothing, so skip it.
+		scale_inverse.setRows(LLVector3(1.0, 0.0, 0.0) / scale.mV[VX],
+							  LLVector3(0.0, 1.0, 0.0) / scale.mV[VY],
+							  LLVector3(0.0, 0.0, 1.0) / scale.mV[VZ]);
+		LLMatrix4a inv_scale_mat;
+		inv_scale_mat.loadu(scale_inverse);
+		LLMatrix3 mat_norm = scale_inverse * scale_inverse;
+		LLMatrix4a invtranspose;
+		invtranspose.loadu(mat_norm);
+	// </FS:Beq>
+
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-		LLVector4a scale(gSavedSettings.getF32("RenderDebugNormalScale"));
+	// <FS:Beq> FIX and improve renderNormals debug
+		// LLVector4a scale(gSavedSettings.getF32("RenderDebugNormalScale"));
+		static LLCachedControl<F32> hairlen(*LLUI::getInstance()->mSettingGroups["config"], "RenderDebugNormalScale");
+
+		LLSelectNode* selectionNode = nullptr;
+		auto face_select = LLSelectMgr::getInstance()->getTEMode();
+		if(showSelectedOnly)
+		{
+			auto objp = drawablep->getVObj();
+			if(!objp)
+			{
+				return;
+			}
+			objp->setDebugText(
+				llformat(
+					"obj scale = <%.3f,%.3f,%.3f>",
+					scale.mV[VX],scale.mV[VY],scale.mV[VZ]));
+			if(face_select)
+			{
+				LLObjectSelectionHandle sel = LLSelectMgr::getInstance()->getSelection();
+				selectionNode = sel.get()->findNode(objp);
+			}
+		}
+	// </FS:Beq>
 
 		for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 		{
+	// <FS:Beq> FIX and improve renderNormals debug
+			if(face_select && !selectionNode->isTESelected(i))
+			{
+				continue;
+			}
+	// </FS:Beq>
 			const LLVolumeFace& face = volume->getVolumeFace(i);
 
+	// <FS:Beq> FIX and improve renderNormals debug
+			gGL.begin(LLRender::LINES);
+			gGL.diffuseColor4f(1,1,0,1); // Yellow normals
+	// </FS:Beq>
 			for (S32 j = 0; j < face.mNumVertices; ++j)
 			{
-				gGL.begin(LLRender::LINES);
-				LLVector4a n,p;
+	// <FS:Beq> FIX and improve renderNormals debug
+				// gGL.begin(LLRender::LINES);
+				// LLVector4a n,p;
 				
-				n.setMul(face.mNormals[j], scale);
-				p.setAdd(face.mPositions[j], n);
+				// n.setMul(face.mNormals[j], scale);
+				// p.setAdd(face.mPositions[j], n);
 				
-				gGL.diffuseColor4f(1,1,1,1);
+				// gGL.diffuseColor4f(1,1,1,1);
+				// gGL.vertex3fv(face.mPositions[j].getF32ptr());
+				// gGL.vertex3fv(p.getF32ptr());
+				// 
+				// if (face.mTangents)
+				// {
+				// 	n.setMul(face.mTangents[j], scale);
+				// 	p.setAdd(face.mPositions[j], n);
+				// 	gGL.vertex3fv(face.mPositions[j].getF32ptr());
+				// 	gGL.vertex3fv(p.getF32ptr());
+				// }
+				LLVector4a n,ni,p;
+				n = face.mNormals[j];
+				invtranspose.affineTransform(n, ni);
+				ni.normalize3fast();
+				n.setMul(ni, (F32)hairlen);
+				inv_scale_mat.affineTransform(n, ni); // overcompensate for the fact we draw "through" the model transform
+				p.setAdd(face.mPositions[j], ni);
 				gGL.vertex3fv(face.mPositions[j].getF32ptr());
 				gGL.vertex3fv(p.getF32ptr());
-				
-				if (face.mTangents)
+			}
+			gGL.flush();
+			if (face.mTangents)
+			{
+				// gGL.begin(LLRender::LINES);
+				gGL.diffuseColor4f(0,0,1,1); // blue tangents.
+				for (S32 j = 0; j < face.mNumVertices; ++j)
 				{
-					n.setMul(face.mTangents[j], scale);
-					p.setAdd(face.mPositions[j], n);
-				
-					gGL.diffuseColor4f(0,1,1,1);
+					LLVector4a t,ti,p;
+					t = face.mTangents[j];
+					// invtranspose.affineTransform(t, ti);
+					t.mul((F32)hairlen);
+					inv_scale_mat.affineTransform(t, ti); // overcompensate for the fact we draw "through" the model transform
+					p.setAdd(face.mPositions[j], ti);
 					gGL.vertex3fv(face.mPositions[j].getF32ptr());
 					gGL.vertex3fv(p.getF32ptr());
-				}	
-				gGL.end();
+				}
 			}
+			gGL.end();
+			// </FS:Beq>
 		}
 
 		gGL.popMatrix();
