@@ -672,7 +672,7 @@ void RlvEnvironment::registerSetEnvFn(const std::string& strFnName, const std::f
 }
 
 template<typename T>
-void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std::function<const T& (LLSettingsSkyPtr_t)>& getFn, const std::function<void(LLSettingsSkyPtr_t, const T&)>& setFn)
+void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std::function< T (LLSettingsSkyPtr_t)>& getFn, const std::function<void(LLSettingsSkyPtr_t, const T&)>& setFn)
 {
 	RLV_ASSERT(m_LegacyGetFnLookup.end() == m_LegacyGetFnLookup.find(strFnName));
 	m_LegacyGetFnLookup.insert(std::make_pair(strFnName, [this, getFn](const std::string& strRlvParam, U32 idxComponent)
