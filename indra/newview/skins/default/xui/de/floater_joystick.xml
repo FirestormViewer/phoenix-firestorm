@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Joystick" title="Joystick-Konfiguration">
 	<string name="JoystickDisabled">
-		Keine
+		Keiner
 	</string>
 	<text name="joystick_lbl">
 		Joystick:
