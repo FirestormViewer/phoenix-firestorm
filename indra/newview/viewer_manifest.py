@@ -1338,6 +1338,13 @@ class DarwinManifest(ViewerManifest):
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
             # self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
 
+            # CEF framework goes inside Contents/Frameworks.
+            # Remember where we parked this car.
+            with self.prefix(src="", dst="Frameworks"):
+                CEF_framework = "Chromium Embedded Framework.framework"
+                self.path2basename(relpkgdir, CEF_framework)
+                CEF_framework = self.dst_path_of(CEF_framework)
+
             # most everything goes in the Resources directory
             with self.prefix(dst="Resources"):
                 super(DarwinManifest, self).construct()
@@ -1473,40 +1480,81 @@ class DarwinManifest(ViewerManifest):
                         except OSError as err:
                             print "Can't symlink %s -> %s: %s" % (src, dst, err)
 
-                #<FS:TS> Moved from the x86_64 specific version because code
-                # below that does symlinking and path fixup depends on it.
-                # with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86')):
-                #    self.path("SLPlugin.app", "SLPlugin.app")
-	
-                #    with self.prefix(src_dst="llplugin"):
-                #        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-                #        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
-
                 # Dullahan helper apps go inside SLPlugin.app
-                with self.prefix(dst="SLPlugin.app/Contents/Frameworks"):
-                    helperappfile = 'DullahanHelper.app'
-                    self.path2basename(relpkgdir, helperappfile)
+                with self.prefix(dst=os.path.join(
+                    "SLPlugin.app", "Contents", "Frameworks")):
 
-                    pluginframeworkpath = self.dst_path_of('Chromium Embedded Framework.framework')
-                    # Putting a Frameworks directory under Contents/MacOS
-                    # isn't canonical, but the path baked into Dullahan
-                    # Helper.app/Contents/MacOS/DullahanHelper is:
-                    # @executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework
-                    # (notice, not @executable_path/../Frameworks/etc.)
-                    # So we'll create a symlink (below) from there back to the
-                    # Frameworks directory nested under SLPlugin.app.
-                    helperframeworkpath = \
-                        self.dst_path_of('DullahanHelper.app/Contents/MacOS/'
-                                         'Frameworks/Chromium Embedded Framework.framework')
+                    frameworkname = 'Chromium Embedded Framework'
 
-                helperexecutablepath = self.dst_path_of('SLPlugin.app/Contents/Frameworks/DullahanHelper.app/Contents/MacOS/DullahanHelper')
-                #<FS:TS> Fix unannounced change in DullahanHelper app as supplied
-                # self.run_command_shell('install_name_tool -change '
-                #                  '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
-                #                  '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
-                self.run_command_shell('install_name_tool -change '
-                                 '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
-                                 '"@executable_path/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % helperexecutablepath)
+                    # This code constructs a relative symlink from the
+                    # target framework folder back to the real CEF framework.
+                    # It needs to be relative so that the symlink still works when
+                    # (as is normal) the user moves the app bundle out of the DMG
+                    # and into the /Applications folder. Note we pass catch=False,
+                    # letting the uncaught exception terminate the process, since
+                    # without this symlink, Second Life web media can't possibly work.
+
+                    # It might seem simpler just to symlink Frameworks back to
+                    # the parent of Chromimum Embedded Framework.framework. But
+                    # that would create a symlink cycle, which breaks our
+                    # packaging step. So make a symlink from Chromium Embedded
+                    # Framework.framework to the directory of the same name, which
+                    # is NOT an ancestor of the symlink.
+
+                    # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
+                    # Framework.framework back to
+                    # $viewer_app/Contents/Frameworks/Chromium Embedded Framework.framework
+                    SLPlugin_framework = self.relsymlinkf(CEF_framework, catch=False)
+
+                    # for all the multiple CEF/Dullahan (as of CEF 76) helper app bundles we need:
+                    for helper in (
+                        "DullahanHelper",
+                        "DullahanHelper (GPU)",
+                        "DullahanHelper (Renderer)",
+                        "DullahanHelper (Plugin)",
+                    ):
+                        # app is the directory name of the app bundle, with app/Contents/MacOS/helper as the executable
+                        app = helper + ".app"
+
+                        # copy DullahanHelper.app
+                        self.path2basename(relpkgdir, app)
+
+                        # and fix that up with a Frameworks/CEF symlink too
+                        with self.prefix(dst=os.path.join(
+                                app, 'Contents', 'Frameworks')):
+                            # from Dullahan Helper *.app/Contents/Frameworks/Chromium Embedded
+                            # Framework.framework back to
+                            # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
+                            # Since SLPlugin_framework is itself a
+                            # symlink, don't let relsymlinkf() resolve --
+                            # explicitly call relpath(symlink=True) and
+                            # create that symlink here.
+                            helper_framework = \
+                            self.symlinkf(self.relpath(SLPlugin_framework, symlink=True), catch=False)
+
+                        # change_command includes install_name_tool, the
+                        # -change subcommand and the old framework rpath
+                        # stamped into the executable. To use it with
+                        # run_command(), we must still append the new
+                        # framework path and the pathname of the
+                        # executable to change.
+                        change_command = [
+                            'install_name_tool', '-change',
+                            '@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework']
+
+                        with self.prefix(dst=os.path.join(
+                                app, 'Contents', 'MacOS')):
+                            # Now self.get_dst_prefix() is, at runtime,
+                            # @executable_path. Locate the helper app
+                            # framework (which is a symlink) from here.
+                            newpath = os.path.join(
+                                '@executable_path',
+                                    self.relpath(helper_framework, symlink=True),
+                                frameworkname)
+                                # and restamp the Dullahan Helper executable itself
+                            self.run_command(
+                                change_command +
+                                    [newpath, self.dst_path_of(helper)])
 
                 # SLPlugin plugins
                 with self.prefix(dst="llplugin"):
@@ -1532,57 +1580,6 @@ class DarwinManifest(ViewerManifest):
                 self.run_command_shell('install_name_tool -change '
                                  '"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" '
                                  '"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%s"' % dylibexecutablepath)
-
-                #<FS:TS> Copy in prebuilt framework if it's there
-                # with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'bin_x86', 'Frameworks'), dst="Frameworks"):
-                #     self.path("Chromium Embedded Framework.framework")
-
-            # CEF framework goes inside Second Life.app/Contents/Frameworks
-            with self.prefix(dst="Frameworks"):
-                frameworkfile="Chromium Embedded Framework.framework"
-                self.path2basename(relpkgdir, frameworkfile)
-
-            # This code constructs a relative path from the
-            # target framework folder back to the location of the symlink.
-            # It needs to be relative so that the symlink still works when
-            # (as is normal) the user moves the app bundle out of the DMG
-            # and into the /Applications folder. Note we also call 'raise'
-            # to terminate the process if we get an error since without
-            # this symlink, Second Life web media can't possibly work.
-            # Real Framework folder:
-            #   Second Life.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-            # Location of symlink and why it's relative 
-            #   Second Life.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-            # Real Frameworks folder, with the symlink inside the bundled SLPlugin.app (and why it's relative)
-            #   <top level>.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-            #   <top level>.app/Contents/Resources/SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework ->
-            # It might seem simpler just to create a symlink Frameworks to
-            # the parent of Chromimum Embedded Framework.framework. But
-            # that would create a symlink cycle, which breaks our
-            # packaging step. So make a symlink from Chromium Embedded
-            # Framework.framework to the directory of the same name, which
-            # is NOT an ancestor of the symlink.
-            frameworkpath = os.path.join(os.pardir, os.pardir, os.pardir,
-                                         os.pardir, "Frameworks",
-                                         "Chromium Embedded Framework.framework")
-            try:
-                # from SLPlugin.app/Contents/Frameworks/Chromium Embedded
-                # Framework.framework back to Second
-                # Life.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                origin, target = pluginframeworkpath, frameworkpath
-                symlinkf(target, origin)
-                # from SLPlugin.app/Contents/Frameworks/Dullahan
-                # Helper.app/Contents/MacOS/Frameworks/Chromium Embedded
-                # Framework.framework back to
-                # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                self.cmakedirs(os.path.dirname(helperframeworkpath))
-                origin = helperframeworkpath
-                target = os.path.join(os.pardir, frameworkpath)
-                symlinkf(target, origin)
-            except OSError as err:
-                print "Can't symlink %s -> %s: %s" % (origin, target, err)
-                raise
-
 
         # NOTE: the -S argument to strip causes it to keep enough info for
         # annotated backtraces (i.e. function names in the crash log).  'strip' with no

@@ -55,8 +55,8 @@
 		<combo_box.item label="60 minutes" name="item4"/>
 		<combo_box.item label="Jamais" name="item5"/>
 	</combo_box>
-	<check_box name="AvatarSitOnAway" label="S'asseoir si absent"/>
-	<combo_box name="quitafk">
+	<check_box layout="topleft" left_pad="65" name="AvatarSitOnAway" label="S'asseoir si absent"/>
+	<combo_box layout="topleft" left_pad="40" name="quitafk">
 		<combo_box.item label="2 minutes" name="item0"/>
 		<combo_box.item label="5 minutes" name="item1"/>
 		<combo_box.item label="10 minutes" name="item2"/>

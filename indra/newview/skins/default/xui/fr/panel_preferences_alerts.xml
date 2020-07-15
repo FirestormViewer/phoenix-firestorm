@@ -11,7 +11,8 @@
 			<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="Filtrer les IM en doublon s'ils ont déjà été affichés par une alerte par mot-clé"/>
 		</panel>
 		<panel label="Personnes" name="tab-people">
-			<check_box label="Flasher l'icône de l'appli. à la réception d'un message lorsque celle-ci est à l'arrière-plan" name="FSFlashOnMessage"/>
+			<check_box label="Flasher l'icône de l'appli. à la réception d'un message et que [APP_NAME] est à l'arrière-plan" name="FSFlashOnMessage"/>
+			<check_box label="Flasher aussi l'icône de l'appli. lors de la réception d'un message instantanné d'un objet" name="FSFlashOnObjectIM"/>
 			<check_box label="Me notifier lorsque quelqu'un change son nom d'affichage" name="FSShowDisplayNameUpdateNotification"/>
 			<check_box label="Me notifier lorsque j'ignore ou cesse d'ignorer quelqu'un" name="FSReportBlockToNearbyChat"/>
 			<text name="friends_logon_label">Me notifier lorsque mes amis se connectent et se déconnectent dans :</text>
