@@ -95,16 +95,16 @@
 							<column name="restore_global_folders_label">Проверка правописания</column>
 						</row>
 						<row name="restore_folders_row_windlight">
-							<column name="restore_global_folders_label">Windlight (Обязательное)</column>
+							<column name="restore_global_folders_label">Окр.среда (Обязательное)</column>
 						</row>
 						<row name="restore_folders_row_daycycles">
-							<column name="restore_global_folders_label">Windlight: Дневной цикл</column>
+							<column name="restore_global_folders_label">Окр.среда: Цикл дня</column>
 						</row>
 						<row name="restore_folders_row_skies">
-							<column name="restore_global_folders_label">Windlight: Небо</column>
+							<column name="restore_global_folders_label">Окр.среда: Небо</column>
 						</row>
 						<row name="restore_folders_row_waters">
-							<column name="restore_global_folders_label">Windlight: Вода</column>
+							<column name="restore_global_folders_label">Окр.среда: Вода</column>
 						</row>
 						<row name="restore_folders_row_presets" value="presets">
 							<column name="restore_global_folders_label">Предустановки</column>

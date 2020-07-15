@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="spellcheck_floater" title="Настройки проверки правописания">
 	<check_box label="Включить проверку правописания" name="spellcheck_enable"/>
-	<text name="spellcheck_main">
+	<text name="spellcheck_main" width="110">
 		Основной словарь:
 	</text>
 	<text label="Журналы:" name="spellcheck_additional">
