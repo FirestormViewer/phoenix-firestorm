@@ -48,7 +48,7 @@ public:
 		Optional<LLUIImage*>			image;
 		Optional<std::string>			link_href;
 		Optional<bool>					is_link;
-		Optional<bool>					is_name_slurl;	// <FS:CR> FIRE-11330
+		Optional<bool>					use_default_link_style; // <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
 		Params();
 	};
 	LLStyle(const Params& p = Params());

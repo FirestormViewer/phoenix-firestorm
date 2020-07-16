@@ -1448,8 +1448,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 						prependNewLineState = false;
 					}
 				}
-				
-				name_params.is_name_slurl = true;
+
+				name_params.use_default_link_style = (!moderator_style_active || moderator_name_style_value == 0);
 				name_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))

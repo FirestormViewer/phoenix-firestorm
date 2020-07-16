@@ -2256,8 +2256,8 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			end = match.getEnd()+1;
 
 			LLStyle::Params link_params(style_params);
-			// <FS:CR> FIRE-11330 - if it's a name, don't stylize it like a url
-			if (!input_params.is_name_slurl)
+			// <FS:Ansariel> Overwrite only if we explicitly allow it
+			if (input_params.use_default_link_style)
 				link_params.overwriteFrom(match.getStyle());
 
 			// output the text before the Url
@@ -2297,7 +2297,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// <FS:CR> FIRE-11437 - Don't supress font style for chat history name links
 			//appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params,
-									   input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
+									   input_params.use_default_link_style ? match.underlineOnHoverOnly() : false);
 			// </FS:CR>
 			bool tooltip_required =  !match.getTooltip().empty();
 
@@ -2318,7 +2318,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				static LLUIColor query_part_color = LLUIColorTable::getInstance()->getColor("UriQueryPartColor", LLColor4::grey);
 				link_params.color = query_part_color;
 				link_params.readonly_color = query_part_color;
-				appendAndHighlightTextImpl(label, part, link_params, input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
+				appendAndHighlightTextImpl(label, part, link_params, input_params.use_default_link_style ? match.underlineOnHoverOnly() : false);
 				// </FS:Ansariel>
 
 				// set the tooltip for the query part of url
