@@ -9,4 +9,7 @@
 		<layout_panel name="lp_flickr"><button label="En ligne sur Flickr" name="send_to_flickr_btn"/></layout_panel>
 		<layout_panel name="lp_email"><button label="Envoyer par E-mail" name="save_to_email_btn"/></layout_panel>
 	</layout_stack>
+	<text name="fee_hint_lbl">
+		Les frais sont basés sur votre niveau d'abonnement. Plus haut est ce niveau, plus bas sont les frais.
+	</text>
 </panel>
