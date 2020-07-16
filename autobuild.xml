@@ -3476,9 +3476,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e5a4261599f47045428b520b20405022</string>
+              <string>e5635e173c75dc0675b48ab5f5e4868b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/vlc_bin-3.0.8.200601940-darwin64-200601940.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12143/71451/vlc_bin-2.2.8.511703-darwin64-511703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
