@@ -48,7 +48,10 @@ public:
 		Optional<LLUIImage*>			image;
 		Optional<std::string>			link_href;
 		Optional<bool>					is_link;
-		Optional<bool>					use_default_link_style; // <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
+		// <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
+		Optional<bool>					use_default_link_style;
+		Optional<bool>					is_chat_header;
+		// </FS:Ansariel>
 		Params();
 	};
 	LLStyle(const Params& p = Params());

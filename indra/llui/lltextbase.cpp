@@ -2257,8 +2257,20 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 
 			LLStyle::Params link_params(style_params);
 			// <FS:Ansariel> Overwrite only if we explicitly allow it
+			//link_params.overwriteFrom(match.getStyle());
 			if (input_params.use_default_link_style)
+			{
+				LLUIColor color(link_params.color());
+				LLUIColor readonly_color(link_params.readonly_color());
+				bool is_chat_header = link_params.is_chat_header();
 				link_params.overwriteFrom(match.getStyle());
+				if (is_chat_header)
+				{
+					link_params.color = color;
+					link_params.readonly_color = readonly_color;
+				}
+			}
+			// </FS:Ansariel>
 
 			// output the text before the Url
 			if (start > 0)
