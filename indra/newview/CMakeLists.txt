@@ -1791,7 +1791,9 @@ if (LINUX)
     # </FS:ND>
 
     # <FS:ND> Get rid of memory limit exceeded for -fvar-tracking-assignments.
-    SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+    if (NOT CMAKE_CXX_COMPILER MATCHES ".*clang")
+      SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+    endif()
     # </FS:ND>
 endif (LINUX)
 
