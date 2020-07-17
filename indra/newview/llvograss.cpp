@@ -742,7 +742,7 @@ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
 		else
 		{
 			LL_WARNS() << "Object is 0 (not an alpha maybe)" << LL_ENDL;
-			auto pObject{ facep->getViewerObject() };
+			LLViewerObject *pObject{ facep->getViewerObject() };
 			if( pObject  )
 				LL_WARNS() << typeid( *pObject ).name() << LL_ENDL;
 		}
