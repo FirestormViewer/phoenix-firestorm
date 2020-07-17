@@ -1006,11 +1006,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b5b6897fb6f5413f3396b0666a6422ab</string>
+              <string>371025cc40f8cbb70f0bb88f79a906a6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.08-darwin-201031332.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.02-darwin-201981618.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1034,11 +1034,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c182fe2303511c35480d00d9b6832dc</string>
+              <string>469f3e3a177c089deacad40428d23997</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows-201411851.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows-201991756.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1048,18 +1048,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>10fcd058ec0da77273c61aca78081ede</string>
+              <string>59766e450e7395fe996ae17c8c267c76</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows64-201412005.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows64-201991757.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.01</string>
+        <string>2.01.02</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -3476,9 +3476,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e5a4261599f47045428b520b20405022</string>
+              <string>e5635e173c75dc0675b48ab5f5e4868b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/vlc_bin-3.0.8.200601940-darwin64-200601940.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12143/71451/vlc_bin-2.2.8.511703-darwin64-511703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
