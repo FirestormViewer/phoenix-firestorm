@@ -28,7 +28,7 @@
 #define LL_LLKDUMEM_H
 
 //<FS:TS> Silence Clang warning the flag doesn't for some reason
-#if LL_DARWIN
+#if __clang__
 #pragma clang diagnostic ignored "-Woverloaded-virtual"
 #endif
 //</FS:TS>
