@@ -48,7 +48,7 @@
 			<panel_camera_item.text name="reset_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
-	<button label="Position..." name="camera_position_btn"/>
+		<button label="Position..." name="camera_position_btn"/>
 	</panel>
 	<combo_box name="preset_combo">
 		<combo_box.item label="Voreinstellung verwend." name="Use preset"/>
