@@ -136,7 +136,7 @@
 			<button label="Öde" name="pay_btn" tool_tip="Ödeme Penceresini Aç. Bunun işe yaraması için nesnenin ödeme komut dosyasına sahip olması gerekir."/>
 		</layout_panel>
 		<layout_panel name="buy_btn_panel">
-			<button label="Satın Al" name="buy_btn" name="buy_btn" tool_tip="Alım Penceresini Aç. Nesnenin satışa çıkarılmasını gerektirir."/>
+			<button label="Satın Al" name="buy_btn" tool_tip="Alım Penceresini Aç. Nesnenin satışa çıkarılmasını gerektirir."/>
 		</layout_panel>
 		<layout_panel name="details_btn_panel">
 			<button label="Ayrıntl" name="details_btn" tool_tip="Nesneyi İncele Penceresini Aç."/>
