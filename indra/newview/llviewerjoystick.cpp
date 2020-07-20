@@ -273,7 +273,9 @@ void LLViewerJoystick::init(bool autoenable)
 			{
 				mDriverState = JDS_UNINITIALIZED;
 				LL_WARNS("joystick") << "ndof_init_first FAILED" << LL_ENDL;
+#ifndef LL_LINUX
 				ndof_dump_list(stderr);
+#endif
 			}
 			else
 			{
