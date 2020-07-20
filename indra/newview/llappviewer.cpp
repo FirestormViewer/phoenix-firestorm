@@ -3722,8 +3722,12 @@ LLSD LLAppViewer::getViewerInfo() const
 
 	// return a URL to the release notes for this viewer, such as:
 	// https://releasenotes.secondlife.com/viewer/2.1.0.123456.html
-	std::string url = versionInfo.getReleaseNotes();
-	info["VIEWER_RELEASE_NOTES_URL"] = url.empty()? LLTrans::getString("RetrievingData") : url;
+	// <FS:Ansariel> FIRE-13993: Create URL in the form of https://wiki.firestormviewer.org/firestorm_change_log_x.y.z.rev
+	//std::string url = versionInfo.getReleaseNotes();
+	//info["VIEWER_RELEASE_NOTES_URL"] = url.empty()? LLTrans::getString("RetrievingData") : url;
+	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL") + LLURI::escape(versionInfo.getVersion());
+	info["VIEWER_RELEASE_NOTES_URL"] = url;
+	// </FS:Ansariel>
 
 #if LL_MSVC
 	info["COMPILER"] = "MSVC";
