@@ -1933,26 +1933,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>e4e79a414a3b942d04473c1ee0f98bb7</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-linux-191472043.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e4e79a414a3b942d04473c1ee0f98bb7</string>
+              <string>2d2790facd7c568e4f7c08c030987df2</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-linux-191472043.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-linux64-202021615.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
