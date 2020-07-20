@@ -110,8 +110,8 @@ else (USESYSTEMLIBS)
         optimized boost_thread-mt${addrsfx}
         debug boost_thread-mt${addrsfx}-d)
       set(BOOST_WAVE_LIBRARY 
-          optimized libboost_wave-mt${addrsfx}
-          debug libboost_wave-mt${addrsfx}-gd)
+          optimized boost_wave-mt${addrsfx}
+          debug boost_wave-mt${addrsfx}-gd)
   elseif (DARWIN)
     set(BOOST_CONTEXT_LIBRARY
         optimized boost_context-mt${addrsfx}
