@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Contrôle de la caméra" name="phototools_camera_floater">
+	<floater.string name="rotate_tooltip">
+		Pivoter la caméra autour du focus
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Zoomer la caméra vers le focus
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Bouger la caméra de haut en bas, vers la droite et vers la gauche
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Voir l'objet
+	</floater.string>
+	<string name="inactive_combo_text">
+		Paramètres par défaut...
+	</string>
+
+	<tab_container name="tabs">
+		<panel name="P_Cam_Controls_1" label="Contrôles 1">
+			<panel name="cameracontrolspanel">
+				<panel name="controls1">
+					<panel name="preset_views_list">
+						<panel_camera_item name="front_view">
+							<panel_camera_item.text name="front_view_text">
+								Vue de face
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="group_view">
+							<panel_camera_item.text name="side_view_text">
+								Vue de côté
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="rear_view">
+							<panel_camera_item.text name="rear_view_text">
+								Vue arrière
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="Utiliser les paramètres par défaut" name="Use preset"/>
+						</combo_box>
+						<button name="gear_btn" tool_tip="Préréglages de la caméra"/>
+						<button label="Position..." name="camera_position_btn"/>
+					</panel>
+					<panel name="camera_modes_list">
+						<panel_camera_item name="object_view">
+							<panel_camera_item.text name="object_view_text">
+								Vue de l'objet
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="mouselook_view">
+							<panel_camera_item.text name="mouselook_view_text">
+								Mouselook
+							</panel_camera_item.text>
+						</panel_camera_item>
+					</panel>
+					<panel name="zoom">
+						<joystick_rotate name="cam_rotate_stick" tool_tip="Fait tourner la caméra autour du focus"/>
+						<slider_bar name="zoom_slider" tool_tip="Fait simplement bouger la caméra. NOTE :  Il ne s'agit pas d'un vrai zoom, ce réglage n'a aucun effet sur le champ de vision de la caméra. Pour un vrai zoom, il faut utiliser le curseur Angle de vue"/>
+						<joystick_track name="cam_track_stick" tool_tip="Déplacer la caméra vers le haut, le bas, la gauche et la droite"/>
+					</panel>
+				</panel>
+
+				<panel name="buttons">
+					<button name="presets_btn" tool_tip="Vues prédéfinies"/>
+					<button name="pan_btn" tool_tip="Cercle, zoom, panoramique"/>
+					<button name="avatarview_btn" tool_tip="Modes de fonctionnement des caméras"/>
+					<button name="store_camera_view_btn" tool_tip="Enregistrer la vue actuelle de la caméra"/>
+					<button name="load_camera_view_btn" tool_tip="Charger une vue de caméra enregistrée"/>
+				</panel>
+			</panel>
+
+			<panel name="P_Cam_Mov_Settings">
+				<text name="T_Cam_Mov_Settings">
+					Mouvements de caméra
+				</text>
+			</panel>
+
+			<panel name="P_Zoom">
+				<text name="T_Zoom" tool_tip="Dans le monde réel, il s'agit d'une fonction de zoom. Elle modifie l'angle de vue dans la fenêtre du viewer. Elle a le même résultat que d'appuyer sur Ctrl 0 ou Ctrl 8. NOTE : Cette fonction n'a aucun effet lorsque Flycam est activée (3D SpaceNavigator).">
+					Angle de vue
+				</text>
+				<button name="Reset_Camera_Angle" label="S" tool_tip="Rétablir la valeur par défaut."/>
+
+				<text name="T_Zoom_Speed" tool_tip="Détermine la vitesse à laquelle la caméra effectue un zoom avant et arrière. Des valeurs plus élevées produisent un zoom plus lent et plus doux.">
+					Vitesse du zoom
+				</text>
+				<button name="Reset_Zoom_Time" label="S" tool_tip="Rétablir la valeur par défaut."/>
+
+				<text name="T_Camera_Lag" tool_tip="Détermine le retard de la caméra par rapport au mouvement de l'avatar (0 = aucun retard, 30 = vitesse de l'avatar).">
+					Décalage
+				</text>
+				<button name="Reset_Camera_Lag" label="S" tool_tip="Rétablir la valeur par défaut."/>
+
+				<text name="T_Camera_Offset" tool_tip="Contrôle la distance de la caméra par rapport au point de vue par défaut.">
+					Distance
+				</text>
+				<button name="Reset_Camera_Offset" label="S" tool_tip="Rétablir la valeur par défaut."/>
+
+				<text name="T_Camera_Smoothing" tool_tip="Contrôle la fluidité avec laquelle la caméra démarre et s'arrête. Des valeurs plus élevées produisent un mouvement plus doux (et un peu plus lent).">
+					Fluidité
+				</text>
+				<button name="Reset_Camera_Smoothing" label="S" tool_tip="Rétablir la valeur par défaut."/>
+			</panel>
+		</panel>
+
+		<panel name="P_Cam_Controls_2" label="Contrôles 2">
+			<panel name="P_Mouse_Movement">
+				<text name="T_Mouse_Movement">
+					Mouvements de la souris
+				</text>
+			</panel>
+
+			<panel name="P_Mouse_Movement_Settings">
+				<text name="T_Mouse_Sensitivity" tool_tip="Règle la sensibilité de la souris en mode mouselook.">
+					Sensibilité
+				</text>
+				<button name="Reset_Mouse_Sensitivity" label="S" tool_tip="Rétablir la valeur par défaut."/>
+				<check_box label="Affiche l'avatar en mode Mouselook" tool_tip="Affiche l'avatar et les accessoires sous le cou lorsque vous êtes en mode Mouselook. Désactivé par défaut." name="first_person_avatar_visible"/>
+				<check_box label="Lissage en mode Mouselook" tool_tip="Lisse le mouvement de la souris lorsqu'elle est en mode Mouselook." name="MouseSmooth"/>
+			</panel>
+
+			<panel name="P_Additional_Camera_Options">
+				<text name="T_Additional_Camera_Options">
+					Autres options
+				</text>
+			</panel>
+
+			<panel name="P_Add_Cam_Opt_Settings">
+				<check_box label="Clic sur l'avatar garde la pos. de la caméra" name="clickonavatarkeepscamera" tool_tip="Normalement, la position de la caméra est réinitialisée lorsque l'on clique sur l'avatar. Cette option permet d'éviter ce comportement."/>
+				<check_box label="Réinit. la pos. de la cam. après téléportation" name="FSResetCameraOnTP" tool_tip="Normalement, la position de la caméra est réinitialisée lors de la téléportation. Cette option permet d'éviter ce comportement."/>
+				<check_box label="Désactive la dist. min. du zoom" name="disableminzoomdist" tool_tip="Désactive la distance maximale de zoom de l'appareil photo par rapport à un objet."/>
+				<check_box label="La caméra peut traverser les objets" name="ignorecameraconstraints" tool_tip="Ignore la règle empêchant la caméra de se déplacer à l'intérieur des objets. NÉCESSITE UN REDÉMARRAGE !"/>
+				<check_box label="Réinit. la pos. de la cam. quand l'avatar bouge" name="resetcameraonmovement" tool_tip="Réinitialise la caméra à sa position par défaut lorsque vous déplacez l'avatar."/>
+			</panel>
+		</panel>
+
+		<panel name="P_3D_Mouse" label="Souris 3D">
+			<panel name="P_3D_Mouse_Settings1">
+				<slider label="Gauche/Droite" name="FlycamAxisScale1b" tool_tip="Règle la sensibilité pour les mouvements gauche/droite. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Haut/Bas" name="FlycamAxisScale2b" tool_tip="Définit la sensibilité pour les mouvements de haut en bas. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Avant/Arrière" name="FlycamAxisScale0b" tool_tip="Règle la sensibilité pour les mouvements d'avant en arrière. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Inclinaison" name="FlycamAxisScale4" tool_tip="Règle la sensibilité aux mouvements d'inclinaison. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Tangage" name="FlycamAxisScale5" tool_tip="Règle la sensibilité aux mouvements de tangage. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Embardée" name="FlycamAxisScale3" tool_tip="Règle la sensibilité aux embardées. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Zoom" name="FlycamAxisScale6" tool_tip="Règle la sensibilité pour les mouvements de zoom. Une valeur plus faible doit être utilisée si la précision des mouvements pose problème."/>
+				<slider label="Plume" name="FlycamFeathering" tool_tip="En réglant le curseur à fond vers la droite, on rend la caméra très rigide, ce qui donne un contrôle complet au joystick. Si vous réglez le curseur à fond à gauche, l'appareil sera très fluide, comme si la caméra pesait beaucoup ; c'est bon pour les prises de vue en rafale, mais pas pour le cadrage."/>
+			</panel>
+
+			<panel name="P_3D_Mouse_Settings2">
+				<spinner label="Mappage des axes de zoom" name="JoystickAxis6" tool_tip="Contrôle l'axe de la souris auquel la fonction de zoom est associée (configuré pour fonctionner)."/>
+				<check_box label="Activer la souris 3D" tool_tip="Ce paramètre active la souris 3D." name="enable_joystick"/>
+				<check_box name="CB_Zoom_Control" label="Active le contrôle du zoom (voir l'info-bulle !)" tool_tip="Pour que le contrôle du zoom fonctionne, vous devez régler le Mappage des axes de zoom ci-dessus sur 4."/>
+				<check_box name="CB_Auto_Leveling" label="Alignement auto (pas de roulement de cam.)" tool_tip="Si elle est activée, la caméra est automatiquement alignée."/>
+				<check_box name="CB_3D_Mouse_Avatar" label="Utiliser la souris 3D pour contrôler l'avatar" tool_tip="Si elle est activée, l'avatar est contrôlé par la souris."/>
+				<check_box name="CB_3D_Mouse_Build" label="Utiliser la souris 3D pour déplacer les objets" tool_tip="Si elle est activée, la souris 3D peut être utilisée pour déplacer des objets lors de la construction et de l'édition."/>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>
