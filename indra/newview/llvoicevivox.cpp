@@ -883,14 +883,16 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             // cause SLVoice's bind() call to fail with EADDRINUSE. We expect
             // that eventually the OS will time out previous ports, which is
             // why we cycle instead of incrementing indefinitely.
-            U32 portbase = gSavedSettings.getU32("VivoxVoicePort");
-            static U32 portoffset = 0;
-            static const U32 portrange = 100;
-            std::string host(gSavedSettings.getString("VivoxVoiceHost"));
-            U32 port = portbase + portoffset;
-            portoffset = (portoffset + 1) % portrange;
-            params.args.add("-i");
-            params.args.add(STRINGIZE(host << ':' << port));
+            // <FS:Ansariel> Unfail voice connection failures
+            //U32 portbase = gSavedSettings.getU32("VivoxVoicePort");
+            //static U32 portoffset = 0;
+            //static const U32 portrange = 100;
+            //std::string host(gSavedSettings.getString("VivoxVoiceHost"));
+            //U32 port = portbase + portoffset;
+            //portoffset = (portoffset + 1) % portrange;
+            //params.args.add("-i");
+            //params.args.add(STRINGIZE(host << ':' << port));
+            // </FS:Ansariel>
 
             std::string loglevel = gSavedSettings.getString("VivoxDebugLevel");
             if (loglevel.empty())
@@ -972,7 +974,9 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
             sGatewayPtr = LLProcess::create(params);
 
-            mDaemonHost = LLHost(host.c_str(), port);
+            // <FS:Ansariel> Unfail voice connection failures
+            //mDaemonHost = LLHost(host.c_str(), port);
+            mDaemonHost = LLHost(gSavedSettings.getString("VivoxVoiceHost").c_str(), gSavedSettings.getU32("VivoxVoicePort"));
         }
         else
         {
