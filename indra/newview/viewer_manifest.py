@@ -2045,7 +2045,6 @@ class LinuxManifest(ViewerManifest):
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
         self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
-        self.fs_setuid_chromesandbox() # <FS:ND/> Chown chrome-sandbox to root:root and set the setuid bit
 
         # Fix access permissions
         self.run_command(['find', self.get_dst_prefix(),
