@@ -1382,7 +1382,8 @@ void LLPanelEditWearable::onTabChanged(LLUICtrl* ctrl, LLWearableType::EType typ
 		return;
 	}
 
-	U8 num_subparts = wearable_entry->mSubparts.size();
+	llassert_always(wearable_entry->mSubparts.size() <= 0xFF);
+	U8 num_subparts = static_cast<U8>(wearable_entry->mSubparts.size());
 	for (U8 index = 0; index < num_subparts; ++index)
 	{
 		ESubpart subpart_e = wearable_entry->mSubparts[index];
