@@ -33,36 +33,6 @@
         <key>version</key>
         <string>5.1.0</string>
       </map>
-      <key>dullahan-gcc5</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (c) 2017, Linden Research, Inc.</string>
-        <key>description</key>
-        <string>A headless browser SDK that uses the Chromium Embedded Framework (CEF). It is designed to make it easier to write applications that render modern web content directly to a memory buffer, inject synthesized mouse and keyboard events as well as interact with web based features like JavaScript or cookies.</string>
-        <key>license</key>
-        <string>MPL</string>
-        <key>license_file</key>
-        <string>LICENSES/LICENSE.txt</string>
-        <key>name</key>
-        <string>dullahan-gcc5</string>
-        <key>platforms</key>
-        <map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>7725e9abe4bf84d11bc7286c74467026</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan_gcc5-1.7.0.202005301906_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201511706.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>1.1.1080_3.3325.1750.gaabe4c4</string>
-      </map>
       <key>ndPhysicsStub</key>
       <map>
         <key>license</key>
@@ -431,26 +401,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>32828f4ee3e5a45ed31e37eb7dd6367c</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.57-linux-180871354.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>038853b97307a9b65de20c4c50098023</string>
+              <string>29eb0d338020242454b77b278c11d3e7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9675/45694/boost-1.65.1-linux64-509640.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/boost-1.72-linux64-202021511.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -590,9 +548,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c90613240ba3e3a171d3379275ae4ee3</string>
+              <string>df6fe4c80b96ec20b5ee6f56419e6b9f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/9695/45732/colladadom-2.3.509683-linux64-509683.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.202021526-linux64-202021526.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -874,9 +832,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05bdafd8e9f32fc6763862ada4b5c4bc</string>
+              <string>79e5ef408ea7ee43fef0f738688485c6</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.7.0.202005300110_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201502309.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dullahan-1.8.0.202007201635_81.3.10_gb223419_chromium-81.0.4044.138-linux64-202021435.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1450,9 +1408,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>95860763e872e984e4215b0fa22d40b8</string>
+              <string>ca43974302dc3e2019b0838c2c53b8b5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.180871249-linux-180871249.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.202021450-linux64-202021450.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1902,9 +1860,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>275d45727849245f2ed147d60b905413</string>
+              <string>a29426d6e0c1e8093e579b90574101a3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.181041824-linux64-181041824.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.202021553-linux64-202021553.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3218,9 +3176,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>348a6111dede9a4ddfc51049c2ff186f</string>
+              <string>742a145c1518b9dc195ae0862828e6ae</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/pcre-8.35.180841548-linux64-180841548.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.35.202021522-linux64-202021522.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
