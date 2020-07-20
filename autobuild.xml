@@ -838,12 +838,36 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>350866eec6be17ffc265904b91dcfe6b</string>
+              <string>e145f8ea99a21712434e0e868d1885dc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/60900/572290/dullahan-1.7.0.202005311125_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-543086.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/62333/588183/dullahan-1.7.0.202006240858_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-544091.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>fdbbbfc377e28cba664f2b1c54ea6086</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/62331/588162/dullahan-1.7.0.202006241556_81.3.10_gb223419_chromium-81.0.4044.138-windows-544091.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>d85a32d905b199534e8feafa34b28e39</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/62332/588168/dullahan-1.7.0.202006241556_81.3.10_gb223419_chromium-81.0.4044.138-windows64-544091.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
           </map>
           <key>linux64</key>
           <map>
@@ -857,33 +881,9 @@
             <key>name</key>
             <string>linux64</string>
           </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>579253178199688a84e9c4f11d6dc3a5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.7.0.202007182328_81.3.10_gb223419_chromium-81.0.4044.138-windows-202002136.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8a00268cfd5fce2477420fe2ff2a56e5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.7.0.202007182328_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202002125.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
         </map>
         <key>version</key>
-        <string>1.7.0.202005311828_81.3.10_gb223419_chromium-81.0.4044.138</string>
+        <string>1.7.0.202006240858_81.3.10_gb223419_chromium-81.0.4044.138</string>
       </map>
       <key>elfio</key>
       <map>
