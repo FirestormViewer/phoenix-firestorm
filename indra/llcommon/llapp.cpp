@@ -47,11 +47,8 @@
 #include "llstring.h"
 #include "lleventtimer.h"
 
-#if defined(LL_LINUX) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 26
-  #define ucontext ucontext_t
-#endif
-
 #include "google_breakpad/exception_handler.h"
+
 #include "stringize.h"
 #include "llcleanup.h"
 #include "llevents.h"
