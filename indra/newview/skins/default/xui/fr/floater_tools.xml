@@ -68,6 +68,7 @@
 		<radio_item label="Pivoter (Ctrl)" name="radio rotate"/>
 		<radio_item label="Étirer (Ctrl+Maj)" name="radio stretch"/>
 		<radio_item label="Choisir une face" name="radio select face"/>
+		<radio_item label="Aligner" name="radio align"/>
 	</radio_group>
 	<check_box label="Modification liée" name="checkbox edit linked parts"/>
 	<button label="Lien" name="link_btn"/>
@@ -75,6 +76,8 @@
 	<check_box label="Étirer les deux côtés" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Étirer les textures" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Fixer" name="checkbox snap to grid"/>
+	<check_box label="Axe d'édition à la racine" name="checkbox actual root"/>
+	<check_box label="Afficher le surlignage" name="checkbox show highlight"/>
 	<combo_box name="combobox grid mode" tool_tip="Choisir le type d&apos;axe de grille pour le positionnement de l&apos;objet.">
 		<combo_box.item label="Monde" name="World"/>
 		<combo_box.item label="Local" name="Local"/>
@@ -183,6 +186,9 @@
 			<text name="Owner:">
 				Propriétaire :
 			</text>
+			<text name="Last Owner:" width="140">
+				Propriétaire précédent :
+			</text>
 			<text name="Group:">
 				Groupe :
 			</text>
@@ -209,6 +215,8 @@
 				<combo_box.item label="Contenus" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
+			<button label="Appliquer" name="button mark for sale" tool_tip="Marque/met à jour l'objet à vendre."/>
+			<button label="Copier l'UUID" name="btnCopyKeys" tool_tip="Copie l'UUID de la racine de l'objet sélectionné. Cliquez avec la touche Maj copie tous les UUID des objets sélectionnés"/>
 			<check_box label="Afficher dans la recherche" name="search_check" tool_tip="Afficher l&apos;objet dans les résultats de recherche"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -343,6 +351,11 @@
 			<text name="text revolutions">
 				Révolutions
 			</text>
+			<text name="edit_object">
+				Paramètres de l'objet :
+			</text>
+			<button label="Copier" name="copyparams" tool_tip="Copier les paramètres"/>
+			<button label="Coller" name="pasteparams" tool_tip="Coller les paramètres"/>
 			<texture_picker label="Texture de la sculptie" name="sculpt texture control" tool_tip="Cliquez pour sélectionner une image"/>
 			<check_box label="Mirroir" name="sculpt mirror control" tool_tip="Inverse la sculptie le long de l&apos;axe X"/>
 			<check_box label="A l&apos;envers" name="sculpt invert control" tool_tip="Inverse les normales des sculpties, qui apparaissent alors à l&apos;envers"/>
@@ -395,6 +408,7 @@
 				Type de forme physique :
 			</text>
 			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Choisir un type de forme physique."/>
+			<button name="PhysicsViewToggle" tool_tip="Affiche/Masque la forme physique en mode Modification"/>
 			<combo_box name="material">
 				<combo_box.item label="Pierre" name="Stone"/>
 				<combo_box.item label="Métal" name="Metal"/>
@@ -413,6 +427,8 @@
 		<panel label="Contenu" name="Contents">
 			<button label="Nouveau script" label_selected="Nouveau script" name="button new script"/>
 			<button label="Droits" name="button permissions"/>
+			<button label="Rafraîchir" name="button refresh"/>
+			<button label="Réinit. scripts" name="button reset scripts"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

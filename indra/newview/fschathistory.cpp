@@ -1258,6 +1258,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	LLStyle::Params name_params(body_message_params);
 	name_params.color(name_color);
 	name_params.readonly_color(name_color);
+	name_params.is_chat_header(true);
 
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 	F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
@@ -1448,8 +1449,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 						prependNewLineState = false;
 					}
 				}
-				
-				name_params.is_name_slurl = true;
+
+				name_params.use_default_link_style = (!moderator_style_active || moderator_name_style_value == 0);
 				name_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))

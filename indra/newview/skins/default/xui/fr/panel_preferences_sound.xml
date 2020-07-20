@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Audio" name="Preference Media panel">
-	<panel.string name="middle_mouse">Middle Mouse</panel.string>
-		<tab_container label="Préférences Firestorm" name="tabs">
+	<panel.string name="middle_mouse">Bouton central de la souris</panel.string>
+	<tab_container label="Préférences Firestorm" name="tabs">
 		<panel label="Général" name="Media Sounds Panel">
 			<slider label="Volume principal" name="System Volume"/>
 			<check_box label="Muet lorsque minimisé" name="mute_when_minimized"/>
@@ -20,9 +20,20 @@
 			<check_box name="friends_notify_online_sound" label="Se connectent" width="110"/>
 			<check_box name="friends_notify_offline_sound" label="Se déconnectent"/>
 			<text name="money_change_threshold_label" tool_tip="Jouer un son lorsqu'une transaction est supérieure au montant défini ici." width="330">Seuil en L$ de l'avertissement sonore pour les transactions :</text>
+			<panel name="output_device_settings_panel">
+				<panel.string name="output_default_text">Périphérique par défaut</panel.string>
+				<panel.string name="output_no_device">Aucun périphérique disponible</panel.string>
+				<panel.string name="output_name_no_device">Périphérique inconnu</panel.string>
+				<panel.string name="output_device_unavailable">Périphérique indisponible</panel.string>
+				<text name="output_label" width="130">Périphérique de sortie :</text>
+			</panel>
 		</panel>
 		<panel label="Média" name="Media Media Panel">
-			<check_box name="media_auto_play_btn" tool_tip="Activer cette option pour jouer le média automatiquement." label="Jouer le média automatiquement"/>
+			<text name="media_autoplay_label" width="130">Lecture automatique :</text>
+			<combo_box name="media_auto_play_combo">
+				<item label="Désactivée" name="autoplay_disabled"/>
+				<item label="Activée" name="autoplay_enabled"/>
+			</combo_box>
 			<check_box name="media_allowscript_btn" tool_tip="Activer cette option autorise les objets à contrôler vos connexions multimédia" label="Autoriser les scripts à jouer un média"/>
 			<check_box name="media_show_on_others_btn" tool_tip="Autoriser le média porté par les résidents à proximité à être joué" label="Jouer le média porté par les résidents"/>
 			<check_box name="media_filter" tool_tip="Activer cette option pour mettre en place une restriction sur le domaine du média autorisé ou non" label="Activer un filtre média par domaine"/>
@@ -75,7 +86,7 @@
 				<panel.string name="name_default_system_device">Valeur par défaut du système</panel.string>
 				<panel.string name="no device">Aucun appareil</panel.string>
 				<panel.string name="name_no_device">Aucun appareil</panel.string>
-				<text name="Input">Entrée</text>
+				<text name="Input" width="45">Entrée</text>
 				<text name="Output">Sortie</text>
 				<text name="Volume label" width="105">Volume de la voix :</text>
 				<slider_bar name="mic_volume_slider" tool_tip="Modifiez le volume de la voix en utilisant ce réglage"/>

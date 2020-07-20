@@ -29,6 +29,7 @@
 			<check_box label="Activer JavaScript" name="browser_javascript_enabled"/>
 			<check_box label="Activer les pop-up dans le navigateur" name="media_popup_enabled"/>
 			<button label="Configurer les paramètres proxy" label_selected="Configurer les paramètres proxy" name="set_proxy"/>
+			<text name="home_page_label_l">Page d'accueil du navigateur :</text>
 		</panel>
 		<panel label="Dossiers" name="tab-dir">
 			<text name="cache_size_label_l">Taille du cache ([http://wiki.firestormviewer.org/cache Besoin d'aide ?]) :</text>

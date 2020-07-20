@@ -4,7 +4,6 @@
 		<panel label="Monde 3D" name="UI Prefs Panel">
 			<text name="HoverTipText">Astuces :</text>
 			<check_box label="Afficher les infobulles" name="ShowHoverTips" tool_tip="Activer cette option pour afficher une infobulle informative lorsque votre souris passe au-dessus des avatars et des objets"/>
-			<check_box label="Sur tous les objets" tool_tip="Activer cette option pour afficher les infobulles informatives sur tous les objets" name="ShowAllHoverTips"/>
 			<check_box label="Sur le terrain" tool_tip="Activer cette option pour afficher une infobulle informative sur le terrain" name="ShowLandHoverTips"/>
 			<check_box name="FSAdvancedTooltips" label="Afficher des informations plus détaillées dans les infobulles"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Afficher le titre de l'avatar dans son infobulle"/>
@@ -21,11 +20,15 @@
 		<panel label="Interface 2D" name="ui-2d-overlay">
 			<text name="UI Size:" width="240">Échelle de l'UI (peut poser problème) :</text>
 			<slider name="ui_scale_slider" width="200"/>
+			<text name="HUD Size:" width="100">Échelle du HUD : </text>
 			<text name="ScriptDialogsPerObjectLabel" width="180">Dialogues de script par objet :</text>
 			<combo_box name="ScriptDialogPerObjectDropdown" width="150">
 				<combo_box.item label="Un par objet" name="ScriptDialogOption_0"/>
-				<combo_box.item label="Un par objet &amp; canal" name="ScriptDialogOption_1"/>
-				<combo_box.item label="Illimités" name="ScriptDialogOption_2"/>
+				<combo_box.item label="Un par canal" name="ScriptDialogOption_1"/>
+				<combo_box.item label="Un par canal pour les attachements" name="ScriptDialogOption_2"/>
+				<combo_box.item label="Un par canal pour les HUDs" name="ScriptDialogOption_3"/>
+				<combo_box.item label="Illimité pour les HUDs" name="ScriptDialogOption_4"/>
+				<combo_box.item label="Illimité" name="ScriptDialogOption_5"/>
 			</combo_box>
 			<check_box label="Supprimer le bouton 'Ignorer'" name="FSRemoveScriptBlockButton"/>
 			<text name="ScriptDialogsPositionLabel" width="180">Position des dialogues de scripts :</text>
@@ -39,11 +42,19 @@
 			<check_box label="Jouer une animation" name="FSAnimatedScriptDialogs" tool_tip="Activer cette option pour que les menus soient affichés de façon animée lorsqu'ils s'ouvrent. Ne fonctionne que si le menu est réglé pour s'afficher 'En haut'"/>
 			<slider label="Nombre de lignes par dialogue de script :" label_width="225" name="FSRowsPerScriptDialog" tool_tip="Le nombre maximum de lignes d'entête visibles par dialogue de script."/>
 			<check_box label="Utiliser le menu circulaire" name="UsePieMenu" tool_tip="Utiliser le menu circulaire classique en camembert plutôt que le menu contextuel lorsque j'effectue un clic droit sur un élément du monde."/>
-			<check_box label="Notices de groupes et Chiclets dans l'angle supérieur droit" name="ShowGroupNoticesTopRight" tool_tip="Activer cette option pour afficher les notices de groupes et les Chiclets dans l'angle supérieur droit."/>
-			<text name="GroupTopRightRequiresRestart" left_delta="340">(Redémarrage requis)</text>
+			<check_box label="Activer l'animation du texte" name="PieMenuPopupFontEffect" tool_tip="Si cette option est activée, le texte dans le menu circulaire Fait partie de l'animation quand le menu s'ouvre."/>
+			<check_box label="Activer l'ombrage de l'anneau extérieur" name="PieMenuOuterRingShade" tool_tip="Ajoute à l'extérieur du cercle une ombre qui permet de mieux voir les sous-menus."/>
+			<text name="ShowGroupNoticesTopRightLabel" width="180">Notices de groupe et chiclets :</text>
+			<radio_group name="ShowGroupNoticesTopRight" tool_tip="Indique où apparaitront les notices de groupes et les chiclets sur l'écran.">
+				<radio_item label="En bas à droite" name="radio"/>
+				<radio_item label="En haut à droite" name="radio1"/>
+			</radio_group>
+			<text name="GroupTopRightRequiresRestart" left_pad="10">(Redémarrage requis)</text>
 			<check_box label="Masquer les chiclets de groupes et d'IM" name="FSDisableIMChiclets" tool_tip="Activer cette option masquera tous les mini-portraits de groupe et de conversation privée (l'enveloppe de notification et la bulle cumulative de messages non lus restera affichée à l'écran)."/>
 			<check_box label="Utiliser la liste originelle pour la fenêtre de notifications" name="FSLegacyNotificationWell" tool_tip="Activer cette option pour utiliser la disposition de liste originale pour afficher les notifications enregistrées."/>
+			<check_box label="Redéfinit les réccourcis déjà utilisés par Linux (Linux seul; requires restart)" name="FSRemapLinuxShortcuts" tool_tip="Activée, cette option redéfinit les raccourcis déjà utilisés par Linux (par exemple : CTRL-ALT-Fx)."/>
 			<text name="FSLegacyNotificationWellRequiresRestart" left_pad="70">(Redémarrage requis)</text>
+			<check_box label="Empêche le fenêtre de statistiques d'obtenir le focus" name="FSStatisticsNoFocus" tool_tip="Si cette option est activée, la fenêtre de statistiques n'obtiendra jamais le focus quand une autre fenêtre est fermée (des actions telles que la modification de la présentation des graphiques sont toujours possibles)."/>
 			<slider label="Nombre de flashs sur les onglets d'IM :" label_width="210" name="ButtonsFlashCount"/>
 			<slider label="Durée de flash de l'avertissement :" label_width="210" tool_tip="Durée en secondes d'un flash utilisé pour notifier les notifications de message manqué" name="ButtonFlashRate"/>
 			<text name="ButtonFlashRateText">sec</text>
@@ -58,6 +69,7 @@
 			<check_box label="Afficher l'emplacement dans la barre de menu" name="ShowMenuBarLocation"/>
 			<check_box label="Afficher la recherche des menus" name="show_search_menu_check"/>
 			<check_box label="Afficher le solde de devises" name="FSShowCurrencyBalanceInStatusbar"/>
+			<check_box label="Affiche des infobulles lors du survol des icônes de la barre de statut avec la souris" name="FSStatusBarMenuButtonPopupOnRollover"/>
 			<text name="navfav_textbox">Barres de Navigation &amp; de Favoris :</text>
 			<check_box label="Afficher la barre des favoris" name="ShowNavbarFavoritesPanel"/>
 			<check_box label="Afficher la barre de navigation et de recherche" name="ShowNavbarNavigationPanel"/>
@@ -68,6 +80,7 @@
 			<check_box label="Utiliser les profils Web" name="FSUseWebProfiles" tool_tip="Affiche la page web du profil à la place du panneau par défaut."/>
 			<check_box label="Ne pas afficher les éléments ignorés lorsque j'ajoute une entrée" name="FSDisableBlockListAutoOpen" tool_tip="Désactive l'affichage de la liste des éléments ignorés lors de l'ajout d'un élément à celle-ci."/>
 			<check_box label="'Amis' et 'Groupes' dans le menu Communiquer ouvrent la fenêtre de style [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Cliquer sur 'Amis' et 'Groupes' dans le menu Communiquer ouvrira les onglets associés avec le style [SHORT_VIEWER_GENERATION] dans la fenêtre 'Personnes' au lieu de les afficher via la fenêtre 'Conversations'."/>
+			<check_box label="Fenêtre de propriété des objets style V1" name="FSUseLegacyObjectProperties" tool_tip="Activé, la fenêtre de style viewer V1 sera utilisée pour les propriétés des objets."/>
 			<text name="standalone_textbox">Utiliser des fenêtres distinctes pour :</text>
 			<check_box name="FSUseStandaloneGroupFloater" width="150" label="Les profils de groupe" tool_tip="Si activé, les profils de groupes s'ouvriront dans une fenêtre séparée."/>
 			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="L'historique de téléportation" tool_tip="Si activé, utiliser le raccourci d'historique de téléportation ouvrira l'historique dans une fenêtre séparée."/>
@@ -132,18 +145,20 @@
 			<text name="tooltip_textbox2">(Redémarrage requis)</text>
 			<text name="tooltip_textbox5" width="195">Ajustement de la taille de la police :</text>
 			<text name="tooltip_textbox6">
-            pt (Redémarrage requis)
- 0 par défaut.
+				pt (Redémarrage requis)
+0 par défaut.
 			</text>
 			<text name="tooltip_textbox3" width="195">Espacement entre les lignes :</text>
 			<text name="tooltip_textbox4">
-           pixels (Redémarrage requis)
- 0 par défaut pour le style [VIEWER_GENERATION], 2 pour le style V1iewer .
+				pixels (Redémarrage requis)
+0 par défaut pour le [VIEWER_GENERATION], 2 pour le Viewer 1.
 			</text>
-			<text name="Label_FolderItemViewHeight" width="195">Hauteur d'une ligne d'inventaire :</text>
+			<text name="Label_FolderItemViewHeight" width="195">
+				Hauteur d'une ligne d'inventaire :
+			</text>
 			<text name="Label_FolderItemViewHeight_Scale">
-           pixels (Redémarrage requis)
- 20 par défaut pour le style [VIEWER_GENERATION], 18 pour le style Viewer 1.
+				pixels (Redémarrage requis)
+20 par défaut pour le [VIEWER_GENERATION], 18 pour le Viewer 1.
 			</text>
 		</panel>
 	</tab_container>

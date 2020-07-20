@@ -346,8 +346,11 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 // Checked: 2009-11-11 (RLVa-1.1.0a) | Modified: RLVa-1.1.0a
 std::string RlvStrings::getAnonym(const std::string& strName)
 {
-	if (!rlv_handler_t::isEnabled())
-		return strName;
+	static const std::string strUnknown = LLTrans::getString("Unknown");
+	if ( (!RlvActions::isRlvEnabled()) || (m_Anonyms.empty()) )
+	{
+		return strUnknown;
+	}
 
 	const char* pszName = strName.c_str(); U32 nHash = 0;
 	
@@ -437,6 +440,11 @@ std::string RlvStrings::getVersionNum(const LLUUID& idRlvObject)
 	return llformat("%d%02d%02d%02d",
 		(!fCompatMode) ? RLV_VERSION_MAJOR : RLV_VERSION_MAJOR_COMPAT, (!fCompatMode) ? RLV_VERSION_MINOR : RLV_VERSION_MINOR_COMPAT,
 		(!fCompatMode) ? RLV_VERSION_PATCH : RLV_VERSION_PATCH_COMPAT, (!fCompatMode) ? RLV_VERSION_BUILD : RLV_VERSION_BUILD_COMPAT);
+}
+
+std::string RlvStrings::getVersionImplNum()
+{
+	return llformat("%d%02d%02d%02d", RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, RLVa_IMPL_ID);
 }
 
 // Checked: 2011-11-08 (RLVa-1.5.0)
@@ -734,8 +742,13 @@ void rlvMenuToggleVisible()
 
 bool rlvMenuCanShowName()
 {
-  const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-  return (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
+	bool fEnable = true;
+	if (rlv_handler_t::isEnabled())
+	{
+		const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		fEnable = (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
+	}
+	return fEnable;
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g

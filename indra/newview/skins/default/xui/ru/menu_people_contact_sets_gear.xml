@@ -3,8 +3,8 @@
 	<menu_item_call label="Показать профиль" name="profile" />
 	<menu_item_call label="Отправить ЛС" name="im" />
 	<menu_item_call label="Предложить телепорт" name="teleport" />
-	<menu_item_call label="Установить алиас..." name="set_pseudonym" />
-	<menu_item_call label="Удалить алиас..." name="remove_pseudonym" />
+	<menu_item_call label="Установить псевдоним..." name="set_pseudonym" />
+	<menu_item_call label="Удалить псевдоним..." name="remove_pseudonym" />
 	<menu_item_call label="Удалить отображаемое имя..." name="remove_displayname" />
 	<menu_item_call label="Настройки Набора контактов" name="set_config" />
 </toggleable_menu>

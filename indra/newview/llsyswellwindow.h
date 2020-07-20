@@ -236,7 +236,6 @@ private:
 		LLIMChiclet* mChiclet;
 	private:
 		LLButton*	mCloseBtn;
-		const LLSysWellWindow* mParent;
 	};
 	// </FS:Ansariel> [FS communication UI]
 

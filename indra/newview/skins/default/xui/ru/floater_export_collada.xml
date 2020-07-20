@@ -27,6 +27,7 @@
 			<check_box label="Консолидация текстуры" name="consolidate_check" />
 			<check_box label="Пропускать прозрачность" name="skip_transparent_check" />
 			<check_box label="Используйте параметры текстуры" name="texture_params_check" />
+			<check_box label="Одиночная карта развертки" name="single_uv_map_check"/>
 			<text name="TextureFormatText">
 				Формат текстуры:
 			</text>

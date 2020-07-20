@@ -698,6 +698,14 @@ void LLVertexBuffer::drawElements(U32 mode, const S32 num_vertices, const LLVect
 // </FS:Ansariel>
 {
 	llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShaderPtr != NULL);
+	
+	// <FS:Beq> FIRE-29679 trap empty calls that cause crashes when rezzing in OpenSim.
+	if(pos == nullptr || indicesp == nullptr )
+	{
+		LL_WARNS() << "Called drawElements with null pos or null indices" << LL_ENDL;
+		return;
+	}
+	// </FS:Beq>
 
 	// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
 	if (num_vertices <= 0)

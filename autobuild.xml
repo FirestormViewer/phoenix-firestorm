@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f594d300db4e65b0e371df038e5ae746</string>
+              <string>350866eec6be17ffc265904b91dcfe6b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55124/512176/dullahan-1.1.1320_3.3626.1895.g7001d56-darwin64-539088.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/60900/572290/dullahan-1.7.0.202005311125_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-543086.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -852,7 +852,7 @@
               <key>hash</key>
               <string>05bdafd8e9f32fc6763862ada4b5c4bc</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.7.0.202005300110_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201502309.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.7.0.202005300110_81.3.10_gb223419_chromium-81.0.4044.138-linux64-201502309.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -862,9 +862,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad90bbbd948713394ac3643514ba359c</string>
+              <string>579253178199688a84e9c4f11d6dc3a5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55145/512336/dullahan-1.1.1320_3.3626.1895.g7001d56-windows-539088.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.7.0.202007182328_81.3.10_gb223419_chromium-81.0.4044.138-windows-202002136.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -874,16 +874,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e7ef50205fc4d3e90d16cbf6e0c6c773</string>
+              <string>8a00268cfd5fce2477420fe2ff2a56e5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55144/512324/dullahan-1.1.1320_3.3626.1895.g7001d56-windows64-539088.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.7.0.202007182328_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202002125.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.1.1320_3.3626.1895.g7001d56</string>
+        <string>1.7.0.202005311828_81.3.10_gb223419_chromium-81.0.4044.138</string>
       </map>
       <key>elfio</key>
       <map>
@@ -1018,11 +1018,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b5b6897fb6f5413f3396b0666a6422ab</string>
+              <string>371025cc40f8cbb70f0bb88f79a906a6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.00.08-darwin-201031332.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.02-darwin-201981618.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1032,11 +1032,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88b1ac40d0b2cc1cf862260bb1297a54</string>
+              <string>65f37bfb75cb13161c99a450be13fb96</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.01-linux64-201412258.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.02-linux64-201992052.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1046,11 +1046,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c182fe2303511c35480d00d9b6832dc</string>
+              <string>469f3e3a177c089deacad40428d23997</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows-201411851.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows-201991756.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1060,18 +1060,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>10fcd058ec0da77273c61aca78081ede</string>
+              <string>59766e450e7395fe996ae17c8c267c76</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.01-windows64-201412005.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows64-201991757.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.01</string>
+        <string>2.01.02</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -3550,9 +3550,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5e553a4358203f283c74744aed2fcd8c</string>
+              <string>e5635e173c75dc0675b48ab5f5e4868b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54836/510036/vlc_bin-2.2.8.538966-darwin64-538966.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/12143/71451/vlc_bin-2.2.8.511703-darwin64-511703.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>

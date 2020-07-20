@@ -95,3 +95,9 @@ indra/newview/pilot.txt
 indra/newview/pilot.xml
 #*.rej
 .*\.wixobj
+
+# Firestorm additions
+indra/newview/exoflickrkeys.h
+indra/newview/fsdiscordkey.h
+my_autobuild.xml
+.vscode

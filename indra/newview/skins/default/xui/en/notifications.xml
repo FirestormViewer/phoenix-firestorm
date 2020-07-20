@@ -7007,14 +7007,6 @@ URL: [AUDIOURL]
 
   <notification
    icon="notifytip.tga"
-   name="ChatSystemMessageTip"
-   type="notifytip"
-   log_to_chat="true">
-[MESSAGE]
-  </notification>
-
-  <notification
-   icon="notifytip.tga"
    name="Cancelled"
    type="notifytip">
 Cancelled.

@@ -353,7 +353,7 @@ support@secondlife.com.
 Пожалуйста, попробуйте зайти снова через минуту.
 	</string>
 	<string name="LoginFailedLoggingOutSession">
-		Во время вашего последнего сеанса система начала процедуру выхода.
+		Система начала выход из вашего последнего сеанса.
 Пожалуйста, попробуйте зайти снова через минуту.
 	</string>
 	<string name="AgentLostConnection">
@@ -376,9 +376,6 @@ support@secondlife.com.
 	</string>
 	<string name="TestingDisconnect">
 		Тестирование отключения клиента
-	</string>
-	<string name="SocialFacebookConnecting">
-		Соединение с Facebook...
 	</string>
 
 	<string name="SocialFlickrConnecting">
@@ -469,6 +466,9 @@ support@secondlife.com.
 	<string name="Lightleak">
 		Утечка света
 	</string>
+	<string name="Linearize">
+		Линеаризация
+	</string>
 	<string name="Negative">
 		Негатив
 	</string>
@@ -534,9 +534,6 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipTooManyWearables">
 		Вы не можете надеть папку, содержащую более [AMOUNT] элементов.  Вы можете изменить это ограничение в Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
-	</string>
-	<string name="TooltipTooManyWearables">
-		Нельзя надеть папку, содержащую более [AMOUNT] вещей.  Это ограничение можно изменить в меню Расширенное &gt; Показать настройки отладки &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
 	<string name="TooltipSLIcon">
@@ -689,6 +686,12 @@ support@secondlife.com.
 	<string name="TooltipSLAPP">
 		Нажмите, чтобы выполнить команду secondlife://
 	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Нажмите, чтобы открыть окно настроек отладки для этого параметра.
+	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Нажмите, чтобы надеть содержимое папки инвентаря
+	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Нажмите, чтобы написать письмо
@@ -748,12 +751,12 @@ support@secondlife.com.
 		Вздремнуть
 	</string>
 	<string name="TooltipNotecardNotAllowedTypeDrop">
-		Элементы этого типа не могут быть занесены в 
+		Элементы этого типа не могут быть занесены в
 карточку для комментариев в этом регионе.
 	</string>
 	<string name="TooltipNotecardOwnerRestrictedDrop">
-		Только элементы с безусловным разрешением 
-‘следующего владельца’ можно внести 
+		Только элементы с безусловным разрешением
+‘следующего владельца’ можно внести
 в карточки для комментариев.
 	</string>
 	<string name="Searching">
@@ -824,6 +827,31 @@ support@secondlife.com.
 	</string>
 	<string name="AssetErrorUnknownStatus">
 		Неизвестный статус
+	</string>
+	<string name="AssetUploadServerUnreacheble">
+		Служба недоступна.
+	</string>
+	<string name="AssetUploadServerDifficulties">
+		Сервер испытывает неожиданные трудности.
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		Сервис недоступен или истекло время загрузки.
+	</string>
+	<string name="AssetUploadRequestInvalid">
+Ошибка в запросе на загрузку.  Пожалуйста, посетите
+http://www.firestormviewer.org/support за помощь в решении этой проблемы.
+	</string>
+	<string name="SettingValidationError">
+		Ошибка при импорте настроек [NAME]
+	</string>
+	<string name="SettingImportFileError">
+		Не могу открыть файл [FILE]
+	</string>
+	<string name="SettingParseFileError">
+		Не могу открыть файл [FILE]
+	</string>
+	<string name="SettingTranslateError">
+		Не могу перевести окружение [NAME]
 	</string>
 	<string name="texture">
 		текстуру
@@ -1257,6 +1285,9 @@ support@secondlife.com.
 	<string name="ForceSitAvatar">
 		Заставьте аватар сесть
 	</string>
+	<string name="ChangeEnvSettings">
+		Изменить настройки среды
+	</string>
 	<string name="SnapshotSavedToDisk">
 		Снимок сохранен: [FILENAME]
 	</string>
@@ -1308,6 +1339,9 @@ support@secondlife.com.
 	</string>
 	<string name="Mainland / Full Region">
 		Материк / Полный регион
+	</string>
+	<string name="Linden Homes / Full Region">
+		Linden Дома / Полный регион
 	</string>
 	<string name="all_files">
 		Все файлы
@@ -1426,6 +1460,9 @@ support@secondlife.com.
 	<string name="tattoo">
 		Татуировка
 	</string>
+	<string name="universal">
+		Универсальный
+	</string>
 	<string name="physics">
 		Физика
 	</string>
@@ -1434,6 +1471,15 @@ support@secondlife.com.
 	</string>
 	<string name="none">
 		нет
+	</string>
+	<string name="sky">
+		Небо
+	</string>
+	<string name="water">
+		Вода
+	</string>
+	<string name="day">
+		Цикл дня
 	</string>
 	<string name="shirt_not_worn">
 		Рубашка не надета
@@ -1467,6 +1513,9 @@ support@secondlife.com.
 	</string>
 	<string name="tattoo_not_worn">
 		Татуировка не надета
+	</string>
+	<string name="universal_not_worn">
+		Универсальный не надет
 	</string>
 	<string name="physics_not_worn">
 		Физика не надета
@@ -1918,6 +1967,9 @@ support@secondlife.com.
 	<string name="InvFolder Merchant Outbox">
 		Исходящие продавца
 	</string>
+	<string name="InvFolder Settings">
+		Настройки
+	</string>
 	<string name="InvFolder Friends">
 		Друзья
 	</string>
@@ -2310,6 +2362,12 @@ support@secondlife.com.
 	</string>
 	<string name="CompileQueueStart">
 		перекомпиляция
+	</string>
+	<string name="CompileQueuePreprocessing">
+		Предварительная обработка: [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		Предварительная обработка скрипта [SCRIPT] завершена
 	</string>
 	<string name="ResetQueueTitle">
 		Прогресс Сброса
@@ -2719,7 +2777,7 @@ support@secondlife.com.
 		Общая собственность
 	</string>
 	<string name="LocalSettings">
-		Улокальные установки
+		Локальные установки
 	</string>
 	<string name="RegionSettings">
 		Установки региона
@@ -2727,9 +2785,14 @@ support@secondlife.com.
 	<string name="NoEnvironmentSettings">
 		Этот регион не поддерживает параметры среды.
 	</string>
-	<string name="NoEnvironmentSettings">
-		Этот регион не поддерживает параметры среды.
-	</string>
+
+	<string name="EnvironmentSun">Солнце</string>
+	<string name="EnvironmentMoon">Луна</string>
+	<string name="EnvironmentBloom">Цветение</string>
+	<string name="EnvironmentCloudNoise">Облачный шум</string>
+	<string name="EnvironmentNormalMap">Карта нормали</string>
+	<string name="EnvironmentTransparent">Прозрачный</string>
+
 	<string name="ClassifiedClicksTxt">
 		Нажатия: [TELEPORT] телепортация, [MAP] карта, [PROFILE] профиль
 	</string>
@@ -2789,6 +2852,12 @@ support@secondlife.com.
 	</string>
 	<string name="InvOfferFrom">
 		от
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		Объект [OBJECT_NAME] дал тебе это [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] дал тебе это [OBJECT_TYPE]: [DESC]
 	</string>
 	<string name="GroupMoneyTotal">
 		Итого
@@ -3062,7 +3131,7 @@ support@secondlife.com.
 
 Возможно, выполняется несколько копий или в системе неправильно открыт файл.
 Если это сообщение далее будет отображаться, перезагрузите компьютер и повторите попытку.
-Если и это не поможет, возможно, придется повторно установить приложение [APP_NAME].
+Если и это не поможет, возможно, вам придется полностью удалить [APP_NAME] и переустановить его.
 	</string>
 	<string name="MBFatalError">
 		Неустранимая ошибка
@@ -3084,7 +3153,7 @@ support@secondlife.com.
 Если это сообщение по-прежнему будет отображаться, перезагрузите компьютер.
 	</string>
 	<string name="MBFrozenCrashed">
-		По-видимому, при предыдущем запуске приложения [APP_NAME] оно зависло или в нем возник сбой.
+		[APP_NAME], кажется, завис или произошел сбой при предыдущем запуске.
 Отправить отчет о сбое?
 	</string>
 	<string name="MBAlert">
@@ -3290,7 +3359,7 @@ support@secondlife.com.
 		Обвислость груди
 	</string>
 	<string name="Breast Physics Drag">
-		Аэродинамика груди
+		Динамика груди
 	</string>
 	<string name="Breast Physics InOut Max Effect">
 		Верхняя граница
@@ -3761,10 +3830,10 @@ support@secondlife.com.
 		Внутренние тени
 	</string>
 	<string name="Jacket Length">
-		Длина пиджака
+		Длина куртки
 	</string>
 	<string name="Jacket Wrinkles">
-		Смятый пиджак
+		Мятая куртка
 	</string>
 	<string name="Jaw Angle">
 		Угол челюсти
@@ -4709,10 +4778,10 @@ support@secondlife.com.
 		Элемент [ITEM_NAME] отправлен автоответом
 	</string>
 	<string name="not_online_msg">
-		Пользователь не в онлайне - сообщение будет сохранено и доставлено позже.
+		Пользователь не в сети - сообщение будет сохранено и доставлено позже.
 	</string>
 	<string name="not_online_inventory">
-		Пользователь не в онлайне - инвентарь сохранен.
+		Пользователь не в сети - инвентарь сохранен.
 	</string>
 	<string name="answered_call">
 		На ваш звонок ответили
@@ -4748,10 +4817,13 @@ support@secondlife.com.
 		Конференция с [AGENT_NAME]
 	</string>
 	<string name="inventory_item_offered-im">
-		Предложен элемент инвентаря
+		Предложен элемент инвентаря '[ITEM_NAME]'
+	</string>
+	<string name="inventory_folder_offered-im">
+		Предложена папка инвентаря '[ITEM_NAME]'
 	</string>
 	<string name="inventory_item_offered_rlv">
-		Предложен элемент инвентаря от [NAME]
+		Предложен элемент инвентаря [NAME]
 	</string>
 	<string name="share_alert">
 		Перетащите элементы из инвентаря сюда
@@ -4805,10 +4877,12 @@ support@secondlife.com.
 		Не удается добавить пользователей в сеанс чата с жителем [RECIPIENT].
 	</string>
 	<string name="message">
-		Не удается отправить ваше сообщение в сеанс чата с жителем [RECIPIENT].
+		Сообщение, отправленное [RECIPIENT], все еще обрабатывается.
+Если сообщение не появится в течение следующих нескольких минут, возможно, оно было удалено сервером.
 	</string>
 	<string name="message_session_event">
-		Не удается отправить ваше сообщение в сеанс чата с жителем [RECIPIENT].
+		Сообщение, отправленное [RECIPIENT], все еще обрабатывается.
+Если сообщение не появится в течение следующих нескольких минут, возможно, оно было удалено сервером.
 	</string>
 	<string name="mute">
 		Ошибка при модерировании.
@@ -5103,7 +5177,7 @@ support@secondlife.com.
 	<string name="Female - Wow">
 		Женщина – ух ты!
 	</string>
-	<string name="New Daycycle">
+	<string name="New Day">
 		Новый суточный цикл
 	</string>
 	<string name="New Water">
@@ -5111,6 +5185,9 @@ support@secondlife.com.
 	</string>
 	<string name="New Sky">
 		Новое небо
+	</string>
+	<string name="New Settings">
+		Новые Настройки
 	</string>
 	<string name="/bow">
 		/поклониться
@@ -5216,8 +5293,8 @@ support@secondlife.com.
 	<string name="server_is_down">
 		Несмотря на наши усилия, что-то неожиданно пошло не так.
 
-	Ознакомьтесь с описанием известных проблем в работе этой службы на сайте https://secondlife-status.statuspage.io.
-    Если проблемы продолжаются, то проверьте подключение к сети и настройки брандмауэра.
+Ознакомьтесь с описанием известных проблем в работе этой службы на сайте https://secondlife-status.statuspage.io
+Если проблемы продолжаются, то проверьте подключение к сети и настройки брандмауэра.
 	</string>
 	<string name="dateTimeWeekdaysNames">
 		Воскресенье:Понедельник:Вторник:Среда:Четверг:Пятница:Суббота
@@ -5288,6 +5365,18 @@ support@secondlife.com.
 	<string name="Chat">
 		Чат
 	</string>
+	<string name="BaseMembership">
+		Базовый
+	</string>
+	<string name="PremiumMembership">
+		Премиум
+	</string>
+	<string name="Premium PlusMembership">
+		Премиум Плюс
+	</string>
+	<string name="InternalMembership">
+		Internal
+	</string> <!-- No need to translate -->
 	<string name="DeleteItems">
 		Удалить выбранные объекты?
 	</string>
@@ -5653,6 +5742,12 @@ support@secondlife.com.
 	<string name="BeaconMedia">
 		Просмотр медийных меток (белые)
 	</string>
+	<string name="BeaconSun">
+		Просмотр маяка направления солнца (оражнжевый)
+	</string>
+	<string name="BeaconMoon">
+		Просмотр маяка направления луны (фиолетовый)
+	</string>
 	<string name="ParticleHiding">
 		Сокрытие частиц
 	</string>
@@ -5679,6 +5774,9 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Destinations_Label">
 		Интересные места
+	</string>
+	<string name="Command_Environments_Label">
+		Среды
 	</string>
 	<string name="Command_Flickr_Label">
 		Flickr
@@ -5708,7 +5806,7 @@ support@secondlife.com.
 		Мини-карта
 	</string>
 	<string name="Command_Move_Label">
-		Идти / Бежать / Лететь
+		Движение
 	</string>
 	<string name="Command_People_Label">
 		Люди
@@ -5736,9 +5834,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Speak_Label">
 		Говорить
-	</string>
-	<string name="Command_Twitter_Label">
-		Twitter
 	</string>
 	<string name="Command_View_Label">
 		Управление камерой
@@ -5862,6 +5957,9 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Интересные места
+	</string>
+	<string name="Command_Environments_Tooltip">
+		Среды
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Загрузить на Flickr
@@ -6302,6 +6400,12 @@ support@secondlife.com.
 	<string name="ExperiencePermission12">
 		автоматически принимать разрешения приключения
 	</string>
+	<string name="ExperiencePermission16">
+		заставить ваш аватар сесть
+	</string>
+	<string name="ExperiencePermission17">
+		изменить ваши настройки среды
+	</string>
 	<string name="ExperiencePermissionShortUnknown">
 		выполнил неизвестную операцию: [Permission]
 	</string>
@@ -6326,7 +6430,12 @@ support@secondlife.com.
 	<string name="ExperiencePermissionShort12">
 		Разрешение
 	</string>
-
+	<string name="ExperiencePermissionShort16">
+		Сесть
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Среда
+	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Разговоры не записываются. Чтобы начать запись, в меню "Настройки > Приватность > Истории разговоров" выберите "Сохранить:" "Только журнал" или "Журнал и история".
 	</string>
@@ -6428,6 +6537,9 @@ support@secondlife.com.
 	</string>
 	<string name="FSCmdLineRSP">
 		Максимальная пропускная способность установлена [VALUE] КБ/С.
+	</string>
+	<string name="FSCmdLineTpOffered">
+		Предложен телепорт [NAME].
 	</string>
 	<string name="FSWithHavok">
 		с поддержкой Havok
@@ -6697,6 +6809,12 @@ ID объекта: [INSPECTING_KEY]
 	<string name="fs_preprocessor_error">
 		[ERR_NAME] ([LINENUMBER]): найдено непредвиденное исключение.
 	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Обнаружена установка переопределения предпочтения директивы compile-as-LSL2.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Обнаружена переопределенная установка предпочтения директивы compile-as-Mono.
+	</string>
 	<string name="fs_preprocessor_optimizer_start">
 		Оптимизация неиспользуемых функций, определяемых пользователем и глобальные переменные.
 	</string>
@@ -6771,6 +6889,9 @@ ID объекта: [INSPECTING_KEY]
 	</string>
 	<string name="animation_explorer_still_playing">
 		Продолжает воспроизводиться
+	</string>
+	<string name="animation_explorer_unknown_priority">
+		неизвестный
 	</string>
 	<string name="FriendOnlineNotification">
 		в сети.

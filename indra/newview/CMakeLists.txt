@@ -849,6 +849,7 @@ set(viewer_SOURCE_FILES
     qtoolalign.cpp
     quickprefs.cpp
     rlvactions.cpp
+    rlvenvironment.cpp
     rlvhandler.cpp
     rlvhelper.cpp
     rlvcommon.cpp
@@ -1606,6 +1607,7 @@ set(viewer_HEADER_FILES
     pieslice.h
     pipeline.h
     rlvactions.h
+    rlvenvironment.h
     rlvdefines.h
     rlvhandler.h
     rlvhelper.h
@@ -1788,7 +1790,9 @@ if (LINUX)
     # </FS:ND>
 
     # <FS:ND> Get rid of memory limit exceeded for -fvar-tracking-assignments.
-    SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+    if (NOT CMAKE_CXX_COMPILER MATCHES ".*clang")
+      SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
+    endif()
     # </FS:ND>
 endif (LINUX)
 
@@ -2357,6 +2361,10 @@ elseif (DARWIN)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
+        #<FS:TS> Force the SDK version in the linked executable to be 10.12. This will fool
+        # macOS into using the pre-Mojave display system, avoiding the blurry display that
+        # otherwise occurs when upscaling the viewer to Retina resolution levels.
+        LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -platform_version -Xlinker macos -Xlinker ${CMAKE_OSX_DEPLOYMENT_TARGET} -Xlinker 10.12"
         )
 else (WINDOWS)
         # Linux

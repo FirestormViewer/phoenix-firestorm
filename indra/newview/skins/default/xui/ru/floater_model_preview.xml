@@ -21,7 +21,11 @@
   <string name="mesh_status_too_many_vertices">Слишком много вершин на уровне детализации.</string>
   <string name="mesh_status_missing_lod">Отсутствует необходимый уровень детализации.</string>
   <string name="mesh_status_invalid_material_list">Материалы уровня детализации не входят в эталонную модель.</string>
-  <string name="phys_status_vertex_limit_exceeded">Для некоторых физических оболочек превышен лимит вершин.</string>
+  <string name="phys_status_vertex_limit_exceeded">Для некоторых физических оболочек превышен лимит вершин(256); попробуйте другой 'Метод Анализа'.</string>
+  <string name="phys_status_hull_limit_exceeded">Некоторые модели превышают предел оболочек (256); попробуйте 'Упрощение'.</string>
+  <string name="phys_status_degenerate_triangles">Физика меша слишком плотная; удалить маленькие, тонкие треугольники (смотри просмотр).</string>
+  <string name="phys_status_no_havok">Эта версия не поддерживает Havok и не рекомендуется для загрузки физики в Second Life. Результаты могут быть непредсказуемыми.</string>
+  <string name="phys_status_unknown_error">Обнаружена нераспознанная ошибка.</string>
   <string name="layer_all">Все</string>
   <string name="decomposing">Анализ...</string>
   <string name="simplifying">Упрощение...</string>
