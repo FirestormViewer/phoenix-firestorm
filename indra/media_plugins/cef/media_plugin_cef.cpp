@@ -955,7 +955,7 @@ void MediaPluginCEF::checkEditState()
 void MediaPluginCEF::setVolume()
 {
 	//mVolumeCatcher.setVolume(mCurVolume);
-#if defined( LL_WINDOWS ) && 0
+#if (DULLAHAN_VERSION_MAJOR*100 + DULLAHAN_VERSION_MINOR) >= 108
 	mCEFLib->setVolume(mCurVolume);
 #else
 	mVolumeCatcher.setVolume(mCurVolume);
