@@ -319,7 +319,7 @@ void LLScrollListText::draw(const LLColor4& color, const LLColor4& highlight_col
 	switch(mFontAlignment)
 	{
 	case LLFontGL::LEFT:
-		start_x = 5.f;//0.f; // <FS:Ansariel> Add some padding pixels for better readability
+		start_x = 0.f;
 		break;
 	case LLFontGL::RIGHT:
 		start_x = (F32)getWidth();
