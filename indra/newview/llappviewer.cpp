@@ -862,12 +862,14 @@ bool LLAppViewer::init()
 	// Start of the application
 	//
 
-	// initialize LLWearableType translation bridge.
-	// Memory will be cleaned up in ::cleanupClass()
-	LLWearableType::initParamSingleton(new LLUITranslationBridge());
+	// <FS:Ansariel> Move further down after translation system has been initialized
+	//// initialize LLWearableType translation bridge.
+	//// Memory will be cleaned up in ::cleanupClass()
+	//LLWearableType::initParamSingleton(new LLUITranslationBridge());
 
-    LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
-    LLSettingsType::initClass(trans);
+    //LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+    //LLSettingsType::initClass(trans);
+	// </FS:Ansariel>
 
 	// initialize SSE options
 	LLVector4a::initClass();
@@ -1040,6 +1042,15 @@ bool LLAppViewer::init()
 
 	// Setup LLTrans after LLUI::initClass has been called.
 	initStrings();
+
+	// <FS:Ansariel> Moved down here translation system has been initialized
+	// initialize LLWearableType translation bridge.
+	// Memory will be cleaned up in ::cleanupClass()
+	LLWearableType::initParamSingleton(new LLUITranslationBridge());
+
+	LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+	LLSettingsType::initClass(trans);
+	// </FS:Ansariel>
 
 	// Setup notifications after LLUI::initClass() has been called.
 	LLNotifications::instance();
