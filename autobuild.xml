@@ -1140,9 +1140,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1d1c7b60f71a5152ced60bee87f5bba8</string>
+              <string>0dbb1a9d15bb134096476d657f86ce41</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/56312/526734/freetype-2.4.4.539865-windows-539865.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.202022048-windows-202022048.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1152,9 +1152,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>53e78d4a607e959637e98a82a3cf5bea</string>
+              <string>c000d0c98bded51c7bc7447dc7934e6c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/56310/526723/freetype-2.4.4.539865-windows64-539865.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.202022049-windows64-202022049.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
