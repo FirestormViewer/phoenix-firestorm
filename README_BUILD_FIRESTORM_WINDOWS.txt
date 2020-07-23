@@ -2,10 +2,10 @@ Before you start configuring your Windows build system, be aware of our tested c
     Memory: You will need at least 2GB RAM, 4GB strongly recommended.
     CPU: Multiple CPUs are strongly recommended. 
       A build can take over an hour.
-    Visual Studio 2013 Community Edition.
+    Visual Studio 2017 Community Edition.
 
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help
-compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
+compiling Firestorm, make sure you can build the Second Life viewer first. If you try and skip this step, you may
 receive much less help. http://wiki.secondlife.com/wiki/Visual_Studio_2013_Viewer_Builds
 
 If you want to use licensed FMOD or KDU build libraries (they are optional) you have to provision these yourself.
@@ -48,7 +48,7 @@ If you want to build the 64bit version, add the parameter -A 64 to the autobuild
 
 
 Logs:
-    Look for logs in build-vc120-32/logs for 32bit builds and build-vc120-64/logs for 64bit
+    Look for logs in build-vc150-32/logs for 32bit builds and build-vc150-64/logs for 64bit
 
 Output:
-    Look for output in build-vc120-32/newview/Release for 32bit builds and build-vc120-64/newview/Release for 64bit
+    Look for output in build-vc150-32/newview/Release for 32bit builds and build-vc150-64/newview/Release for 64bit
