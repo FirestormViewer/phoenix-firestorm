@@ -37,8 +37,7 @@
 #include "llavataractions.h"            // @stopim IM query
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
-// [EEPMERGE]
-//#include "llenvmanager.h"				// @setenv
+#include "llfloatercamera.h"			// @setcam family
 #include "llfloatersidepanelcontainer.h"// @shownames
 #include "llnotifications.h"			// @list IM query
 #include "llnotificationsutil.h"
@@ -57,6 +56,7 @@
 
 // RLVa includes
 #include "rlvactions.h"
+#include "rlvenvironment.h"
 #include "rlvfloaters.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -152,14 +152,58 @@ RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NU
 
 RlvHandler::~RlvHandler()
 {
+	cleanup();
+}
+
+void RlvHandler::cleanup()
+{
+	// Nothing to clean if we're not enabled (or already cleaned up)
+	if (!m_fEnabled)
+		return;
+
+	//
+	// Clean up any restrictions that are still active
+	//
+	RLV_ASSERT(LLApp::isQuitting());	// Several commands toggle debug settings but won't if they know the viewer is quitting
+
+	// Assume we have no way to predict how m_Objects will change so make a copy ahead of time
+	uuid_vec_t idRlvObjects;
+	idRlvObjects.reserve(m_Objects.size());
+	std::transform(m_Objects.begin(), m_Objects.end(), std::back_inserter(idRlvObjects), [](const rlv_object_map_t::value_type& kvPair) {return kvPair.first; });
+	for (const LLUUID & idRlvObj : idRlvObjects)
+	{
+		processCommand(idRlvObj, "clear", true);
+	}
+
+	// Sanity check
+	RLV_ASSERT(m_Objects.empty());
+	RLV_ASSERT(m_Exceptions.empty());
+	RLV_ASSERT(std::all_of(m_Behaviours, m_Behaviours + RLV_BHVR_COUNT, [](S16 cnt) { return !cnt; }));
+	RLV_ASSERT(m_CurCommandStack.empty());
+	RLV_ASSERT(m_CurObjectStack.empty());
+	RLV_ASSERT(m_pOverlayImage.isNull());
+
+	//
+	// Clean up what's left
+	//
 	gAgent.removeListener(this);
+	m_Retained.clear();
+	//delete m_pGCTimer;	// <- deletes itself
+
 	if (m_PendingGroupChange.first.notNull())
 	{
-		LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
+		if (LLGroupMgr::instanceExists())
+			LLGroupMgr::instance().removeObserver(m_PendingGroupChange.first, this);
 		m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
 	}
 
-	//delete m_pGCTimer;	// <- deletes itself
+	for (RlvExtCommandHandler* pCmdHandler : m_CommandHandlers)
+	{
+		delete pCmdHandler;
+	}
+	m_CommandHandlers.clear();
+
+	m_fEnabled = false;
 }
 
 // ============================================================================
@@ -401,42 +445,46 @@ bool RlvHandler::notifyCommandHandlers(rlvExtCommandHandler f, const RlvCommand&
 }
 
 // Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
+ERlvCmdRet RlvHandler::processCommand(std::reference_wrapper<const RlvCommand> rlvCmd, bool fFromObj)
 {
-	RLV_DEBUGS << "[" << rlvCmd.getObjectID() << "]: " << rlvCmd.asString() << RLV_ENDL;
+	{
+		const RlvCommand& rlvCmdTmp = rlvCmd; // Reference to the temporary with limited variable scope since we don't want it to leak below
 
-	if ( (isBlockedObject(rlvCmd.getObjectID())) && (RLV_TYPE_REMOVE != rlvCmd.getParamType()) && (RLV_TYPE_CLEAR != rlvCmd.getParamType()) )
-	{
-		RLV_DEBUGS << "\t-> blocked object" << RLV_ENDL;
-		return RLV_RET_FAILED_BLOCKED;
-	}
-	if (!rlvCmd.isValid())
-	{
-		RLV_DEBUGS << "\t-> invalid syntax" << RLV_ENDL;
-		return RLV_RET_FAILED_SYNTAX;
-	}
-	if (rlvCmd.isBlocked())
-	{
-		RLV_DEBUGS << "\t-> blocked command" << RLV_ENDL;
-		return RLV_RET_FAILED_DISABLED;
+		RLV_DEBUGS << "[" << rlvCmdTmp.getObjectID() << "]: " << rlvCmdTmp.asString() << RLV_ENDL;
+
+		if ( (isBlockedObject(rlvCmdTmp.getObjectID())) && (RLV_TYPE_REMOVE != rlvCmdTmp.getParamType()) && (RLV_TYPE_CLEAR != rlvCmdTmp.getParamType()) )
+		{
+			RLV_DEBUGS << "\t-> blocked object" << RLV_ENDL;
+			return RLV_RET_FAILED_BLOCKED;
+		}
+		if (!rlvCmdTmp.isValid())
+		{
+			RLV_DEBUGS << "\t-> invalid syntax" << RLV_ENDL;
+			return RLV_RET_FAILED_SYNTAX;
+		}
+		if (rlvCmdTmp.isBlocked())
+		{
+			RLV_DEBUGS << "\t-> blocked command" << RLV_ENDL;
+			return RLV_RET_FAILED_DISABLED;
+		}
 	}
 
 	// Using a stack for executing commands solves a few problems:
 	//   - if we passed RlvObject::m_idObj for idObj somewhere and process a @clear then idObj points to invalid/cleared memory at the end
 	//   - if command X triggers command Y along the way then getCurrentCommand()/getCurrentObject() still return Y even when finished
-	m_CurCommandStack.push(&rlvCmd); m_CurObjectStack.push(rlvCmd.getObjectID());
+	m_CurCommandStack.push(rlvCmd); m_CurObjectStack.push(rlvCmd.get().getObjectID());
 	const LLUUID& idCurObj = m_CurObjectStack.top();
 
 	ERlvCmdRet eRet = RLV_RET_UNKNOWN;
-	switch (rlvCmd.getParamType())
+	switch (rlvCmd.get().getParamType())
 	{
 		case RLV_TYPE_ADD:		// Checked: 2009-11-26 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 			{
-				if ( (m_Behaviours[rlvCmd.getBehaviourType()]) && 
-					 ( (RLV_BHVR_SETCAM == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETDEBUG == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETENV == rlvCmd.getBehaviourType()) ) )
+				ERlvBehaviour eBhvr = rlvCmd.get().getBehaviourType();
+				if ( (m_Behaviours[eBhvr]) && ( (RLV_BHVR_SETCAM == eBhvr) || (RLV_BHVR_SETDEBUG == eBhvr) || (RLV_BHVR_SETENV == eBhvr) ) )
 				{
 					// Some restrictions can only be held by one single object to avoid deadlocks
-					RLV_DEBUGS << "\t- " << rlvCmd.getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
+					RLV_DEBUGS << "\t- " << rlvCmd.get().getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
 					eRet = RLV_RET_FAILED_LOCK;
 					break;
 				}
@@ -444,14 +492,14 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 				rlv_object_map_t::iterator itObj = m_Objects.find(idCurObj); bool fAdded = false;
 				if (itObj != m_Objects.end())
 				{
-					RlvObject& rlvObj = itObj->second;
-					fAdded = rlvObj.addCommand(rlvCmd);
+					// Add the command to an existing object
+					rlvCmd = itObj->second.addCommand(rlvCmd, fAdded);
 				}
 				else
 				{
-					RlvObject rlvObj(idCurObj);
-					fAdded = rlvObj.addCommand(rlvCmd);
-					itObj = m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, rlvObj)).first;
+					// Create a new RLV object and then add the command to it (and grab its reference)
+					itObj = m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, RlvObject(idCurObj))).first;
+					rlvCmd = itObj->second.addCommand(rlvCmd, fAdded);
 				}
 
 				RLV_DEBUGS << "\t- " << ( (fAdded) ? "adding behaviour" : "skipping duplicate" ) << RLV_ENDL;
@@ -526,12 +574,13 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 // Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj)
 {
+	const RlvCommand rlvCmd(idObj, strCommand);
 	if (STATE_STARTED != LLStartUp::getStartupState())
 	{
-		m_Retained.push_back(RlvCommand(idObj, strCommand));
+		m_Retained.push_back(rlvCmd);
 		return RLV_RET_RETAINED;
 	}
-	return processCommand(RlvCommand(idObj, strCommand), fFromObj);
+	return processCommand(std::ref(rlvCmd), fFromObj);
 }
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
@@ -546,7 +595,7 @@ void RlvHandler::processRetainedCommands(ERlvBehaviour eBhvrFilter /*=RLV_BHVR_U
 		if ( ((RLV_BHVR_UNKNOWN == eBhvrFilter) || (rlvCmd.getBehaviourType() == eBhvrFilter)) && 
 			 ((RLV_TYPE_UNKNOWN == eTypeFilter) || (rlvCmd.getParamType() == eTypeFilter)) )
 		{
-			processCommand(rlvCmd, true);
+			processCommand(std::ref(rlvCmd), true);
 			m_Retained.erase(itCurCmd);
 		}
 	}
@@ -823,6 +872,23 @@ void RlvHandler::setActiveGroupRole(const LLUUID& idGroup, const std::string& st
 	m_PendingGroupChange = std::make_pair(LLUUID::null, LLStringUtil::null);
 }
 
+// @setcam family
+void RlvHandler::setCameraOverride(bool fOverride)
+{
+	if ( (fOverride) && (CAMERA_RLV_SETCAM_VIEW != gAgentCamera.getCameraPreset()) )
+	{
+		m_strCameraPresetRestore = gSavedSettings.getString("PresetCameraActive");
+		gAgentCamera.switchCameraPreset(CAMERA_RLV_SETCAM_VIEW);
+	}
+	else if ( (!fOverride) && (CAMERA_RLV_SETCAM_VIEW == gAgentCamera.getCameraPreset() && (!RlvActions::isCameraPresetLocked())) )
+	{
+		// We need to clear it or it won't reset properly
+		gSavedSettings.setString("PresetCameraActive", LLStringUtil::null);
+		LLFloaterCamera::switchToPreset(m_strCameraPresetRestore);
+		m_strCameraPresetRestore.clear();
+	}
+}
+
 // ============================================================================
 // Externally invoked event handlers
 //
@@ -1045,6 +1111,12 @@ bool RlvHandler::onGC()
 	}
 
 	return (0 != m_Objects.size());	// GC will kill itself if it has nothing to do
+}
+
+// static
+void RlvHandler::cleanupClass()
+{
+	gRlvHandler.cleanup();
 }
 
 // Checked: 2009-11-26 (RLVa-1.1.0f) | Added: RLVa-1.1.0f
@@ -1448,6 +1520,7 @@ bool RlvHandler::setEnabled(bool fEnable)
 		RlvSettings::initClass();
 		RlvStrings::initClass();
 
+		RlvHandler::instance().addCommandHandler(new RlvEnvironment());
 		RlvHandler::instance().addCommandHandler(new RlvExtGetSet());
 
 		// Make sure we get notified when login is successful
@@ -2071,20 +2144,23 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>::onValueChange()
 		gAgentCamera.changeCameraToThirdPerson();
 }
 
-// Handles: @setcam_eyeoffset:<vector3>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
+// Handles: @setcam_eyeoffset:<vector3>=n|y, @setcam_eyeoffsetscale:<float>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
 template<> template<>
 void RlvBehaviourCamEyeFocusOffsetHandler::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	if (fHasBhvr)
 	{
-		gAgentCamera.switchCameraPreset(CAMERA_RLV_SETCAM_VIEW);
+		gRlvHandler.setCameraOverride(true);
 	}
 	else
 	{
-		const RlvBehaviourModifier* pBhvrEyeModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET);
-		const RlvBehaviourModifier* pBhvrOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET);
-		if ( (!pBhvrEyeModifier->hasValue()) && (!pBhvrOffsetModifier->hasValue()) )
-			gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+		const RlvBehaviourModifier* pBhvrEyeOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET);
+		const RlvBehaviourModifier* pBhvrEyeOffsetScaleModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSETSCALE);
+		const RlvBehaviourModifier* pBhvrFocusOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET);
+		if ( (!pBhvrEyeOffsetModifier->hasValue()) && (!pBhvrEyeOffsetScaleModifier->hasValue()) && (!pBhvrFocusOffsetModifier->hasValue()) )
+		{
+			gRlvHandler.setCameraOverride(false);
+		}
 	}
 }
 
@@ -2102,7 +2178,21 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>::onValueChange()
 	}
 }
 
-// Handles: @setcam_focusoffset:<vector3>=n|y changes
+// Handles: @setcam_eyeoffsetscale:<float>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSETSCALE>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSETSCALE))
+	{
+		LLControlVariable* pControl = gSavedSettings.getControl("CameraOffsetScaleRLVa");
+		if (pBhvrModifier->hasValue())
+			pControl->setValue(pBhvrModifier->getValue<float>());
+		else
+			pControl->resetToDefault();
+	}
+}
+
+// Handles: @setcam_focusoffset:<vector3d>=n|y changes
 template<>
 void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange() const
 {
@@ -2110,7 +2200,7 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange
 	{
 		LLControlVariable* pControl = gSavedSettings.getControl("FocusOffsetRLVaView");
 		if (pBhvrModifier->hasValue())
-			pControl->setValue(pBhvrModifier->getValue<LLVector3>().getValue());
+			pControl->setValue(pBhvrModifier->getValue<LLVector3d>().getValue());
 		else
 			pControl->resetToDefault();
 	}
@@ -2222,19 +2312,21 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour e
 		std::list<const RlvObject*> lObjects;
 		// Restore the @setcam_unlock reference count
 		gRlvHandler.findBehaviour(RLV_BHVR_SETCAM_UNLOCK, lObjects);
-		gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_UNLOCK] = lObjects.size();
+		llassert_always(lObjects.size() <= 0x7FFF);
+		gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_UNLOCK] = static_cast<S16>(lObjects.size());
 	}
 
 	// Manually invoke the @setcam_unlock toggle handler if we toggled it on/off
 	if (fHasCamUnlock != gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK))
 		RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(RLV_BHVR_SETCAM_UNLOCK, !fHasCamUnlock);
 
-	gAgentCamera.switchCameraPreset( (fHasBhvr) ? CAMERA_RLV_SETCAM_VIEW : CAMERA_PRESET_REAR_VIEW );
+	gRlvHandler.setCameraOverride(fHasBhvr);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMAX)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMAX)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSETSCALE)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMAX)->setPrimaryObject(idRlvObject);
@@ -2256,7 +2348,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
+	const std::string strEnvFloaters[] = { "env_adjust_snapshot", "env_edit_extdaycycle", "env_fixed_environmentent_sky", "env_fixed_environmentent_water", "my_environments" };
 	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
 	{
 		if (fHasBhvr)
@@ -2273,13 +2365,26 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 		}
 	}
 
-	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
+	// Don't allow toggling "Atmopsheric Shaders" through the debug settings under @setenv=n
 	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
 
-	// Restore the user's WindLight preferences when releasing
-	// [EEPMERGE] Use LLEnvironment::loadPreferences()???
-	//if (!fHasBhvr)
-	//	LLEnvManagerNew::instance().usePrefs();
+	if (fHasBhvr)
+	{
+		// Usurp the 'edit' environment for RLVa locking so TPV tools like quick prefs and phototools are automatically locked out as well
+		// (these needed per-feature awareness of RLV in the previous implementation which often wasn't implemented)
+		LLEnvironment* pEnv = LLEnvironment::getInstance();
+		LLSettingsSky::ptr_t pRlvSky = pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL, true)->buildClone();
+		pEnv->setEnvironment(LLEnvironment::ENV_EDIT, pRlvSky);
+		pEnv->setSelectedEnvironment(LLEnvironment::ENV_EDIT, LLEnvironment::TRANSITION_INSTANT);
+		pEnv->updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+	}
+	else
+	{
+		// Restore the user's WindLight preferences when releasing
+		LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_EDIT);
+		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+		LLEnvironment::instance().updateEnvironment();
+	}
 }
 
 // Handles: @showhovertext:<uuid>=n|y
@@ -2403,13 +2508,12 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviou
 	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
 	if (fHasBhvr)
 	{
-		LLAvatarNameCache::getInstance()->setForceDisplayNames(true);
+		LLAvatarNameCache::instance().setForceDisplayNames(true);
 	}
 	else
 	{
-		LLAvatarNameCache* inst = LLAvatarNameCache::getInstance();
-		inst->setForceDisplayNames(false);
-		inst->setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+		LLAvatarNameCache::instance().setForceDisplayNames(false);
+		LLAvatarNameCache::instance().setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
 	}
 
 	// Refresh all name tags and HUD text
@@ -2726,7 +2830,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvC
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @setcam_eyeoffset[:<vector3>]=force and @setcam_focusoffset[:<vector3>]=force
+// Handles: @setcam_eyeoffset[:<vector3>]=force, @setcam_eyeoffsetscale[:<float>]=force and @setcam_focusoffset[:<vector3>]=force
 template<> template<>
 ERlvCmdRet RlvForceCamEyeFocusOffsetHandler::onCommand(const RlvCommand& rlvCmd)
 {
@@ -2734,22 +2838,54 @@ ERlvCmdRet RlvForceCamEyeFocusOffsetHandler::onCommand(const RlvCommand& rlvCmd)
 	if (!RlvActions::canChangeCameraPreset(rlvCmd.getObjectID()))
 		return RLV_RET_FAILED_LOCK;
 
-	LLControlVariable* pOffsetControl = gSavedSettings.getControl("CameraOffsetRLVaView");
-	LLControlVariable* pFocusControl = gSavedSettings.getControl("FocusOffsetRLVaView");
-	LLControlVariable* pControl = (rlvCmd.getBehaviourType() == RLV_BHVR_SETCAM_EYEOFFSET) ? pOffsetControl : pFocusControl;
-	if (rlvCmd.hasOption())
+	LLControlVariable* pEyeOffsetControl = gSavedSettings.getControl("CameraOffsetRLVaView");
+	LLControlVariable* pEyeOffsetScaleControl = gSavedSettings.getControl("CameraOffsetScaleRLVa");
+	LLControlVariable* pFocusOffsetControl = gSavedSettings.getControl("FocusOffsetRLVaView");
+
+	LLControlVariable* pControl; LLSD sdControlValue;
+	switch (rlvCmd.getBehaviourType())
 	{
-		LLVector3 vecOffset;
-		if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
-			return RLV_RET_FAILED_OPTION;
-		pControl->setValue(vecOffset.getValue());
-	}
-	else
-	{
-		pControl->resetToDefault();
+		case RLV_BHVR_SETCAM_EYEOFFSET:
+			if (rlvCmd.hasOption())
+			{
+				LLVector3 vecOffset;
+				if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
+					return RLV_RET_FAILED_OPTION;
+				sdControlValue = vecOffset.getValue();
+			}
+			pControl = pEyeOffsetControl;
+			break;
+		case RLV_BHVR_SETCAM_EYEOFFSETSCALE:
+			if (rlvCmd.hasOption())
+			{
+				float nScale;
+				if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), nScale))
+					return RLV_RET_FAILED_OPTION;
+				sdControlValue = nScale;
+			}
+			pControl = pEyeOffsetScaleControl;
+			break;
+		case RLV_BHVR_SETCAM_FOCUSOFFSET:
+			if (rlvCmd.hasOption())
+			{
+				LLVector3d vecOffset;
+				if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
+					return RLV_RET_FAILED_OPTION;
+				sdControlValue = vecOffset.getValue();
+			}
+			pControl = pFocusOffsetControl;
+			break;
+		default:
+			return RLV_RET_FAILED;
 	}
 
-	gAgentCamera.switchCameraPreset( ((pOffsetControl->isDefault()) && (pFocusControl->isDefault())) ? CAMERA_PRESET_REAR_VIEW : CAMERA_RLV_SETCAM_VIEW);
+	if (!sdControlValue.isUndefined())
+		pControl->setValue(sdControlValue);
+	else
+		pControl->resetToDefault();
+
+	// NOTE: this doesn't necessarily release the camera preset even if all 3 are at their default now (e.g. @setcam is currently set)
+	gRlvHandler.setCameraOverride( (!pEyeOffsetControl->isDefault()) || (!pEyeOffsetScaleControl->isDefault()) || (!pFocusOffsetControl->isDefault()) );
 	return RLV_RET_SUCCESS;
 }
 
@@ -3122,7 +3258,10 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_VERSIONNUM:		// @versionnum=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.4b
 			// NOTE: RLV will respond even if there's an option
-			strReply = RlvStrings::getVersionNum(rlvCmd.getObjectID());
+			if (!rlvCmd.hasOption())
+				strReply = RlvStrings::getVersionNum(rlvCmd.getObjectID());
+			else if ("impl" == rlvCmd.getOption())
+				strReply = RlvStrings::getVersionImplNum();
 			break;
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
 			eRet = onGetAttach(rlvCmd, strReply);
@@ -3440,6 +3579,19 @@ ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlv
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @getheightoffset=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETHEIGHTOFFSET>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if (!rlvCmd.getOption().empty())
+		return RLV_RET_FAILED_OPTION;
+	else if (!isAgentAvatarValid())
+		return RLV_RET_FAILED_UNKNOWN;
+
+	strReply = llformat("%.2f", gAgentAvatarp->getHoverOffset()[VZ] * 100);
+	return RLV_RET_SUCCESS;
+}
+
 // Checked: 2010-03-09 (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const
 {
@@ -3568,7 +3720,8 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 			LLWearableType::WT_GLOVES, LLWearableType::WT_JACKET, LLWearableType::WT_PANTS, LLWearableType::WT_SHIRT, 
 			LLWearableType::WT_SHOES, LLWearableType::WT_SKIRT, LLWearableType::WT_SOCKS, LLWearableType::WT_UNDERPANTS, 
 			LLWearableType::WT_UNDERSHIRT, LLWearableType::WT_SKIN, LLWearableType::WT_EYES, LLWearableType::WT_HAIR, 
-			LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO, LLWearableType::WT_PHYSICS
+			LLWearableType::WT_SHAPE, LLWearableType::WT_ALPHA, LLWearableType::WT_TATTOO, LLWearableType::WT_PHYSICS,
+			LLWearableType::WT_UNIVERSAL,
 		};
 
 	for (int idxType = 0, cntType = sizeof(wtRlvTypes) / sizeof(LLWearableType::EType); idxType < cntType; idxType++)

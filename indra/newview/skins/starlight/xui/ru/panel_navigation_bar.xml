@@ -7,8 +7,8 @@
 					<pull_button name="back_btn" tool_tip="Вернуться в предыдущую локацию"/>
 					<pull_button name="forward_btn" tool_tip="Идти вперед на одну локацию"/>
 					<button name="home_btn" tool_tip="Телепортироваться домой"/>
-					<button name="About_Land" tool_tip="Появится окно информации об участке"/>
-					<button name="Environment" tool_tip="Появится окно редактора окружающей среды"/>
+					<button name="About_Land" tool_tip="Открыть окно информации об участке"/>
+					<button name="PersonalLighting" tool_tip="Открыть окно Личное освещение"/>
 				</layout_panel>
 				<layout_panel name="location_bar_visibility_panel">
 					<location_input label="Локация" name="location_combo"/>

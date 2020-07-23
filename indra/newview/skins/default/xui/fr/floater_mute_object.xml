@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="block by name" title="Ignorer un objet par son nom">
 	<text name="message">Ignorer un objet :</text>
 	<line_editor name="object_name">Nom de l'objet</line_editor>

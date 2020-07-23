@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray Outfit Edit panel -->
 <panel label="アウトフットの編集" name="outfit_edit">
 	<string name="No Outfit" value="アウトフィットなし"/>

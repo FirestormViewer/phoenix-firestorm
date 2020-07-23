@@ -48,7 +48,7 @@ Memoria de texturas (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLI
 		<panel label="Información" name="support_panel">
 			<text name="support_intro">    
 				Para obtener la información más reciente acerca de Firestorm, visita
-http://www.firestormviewer.org
+https://www.firestormviewer.org
 			</text>
   			<button label="Copiar al portapapeles" name="copy_btn"/>
 		</panel>

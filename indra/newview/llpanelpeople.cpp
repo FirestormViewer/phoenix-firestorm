@@ -413,7 +413,8 @@ public:
 
 private:
 	U32 mMask;
-	LLInventoryFriendCardObserver* mInvObserver;
+	// <FS:Ansariel> Disconnect LLFriendCardsManager
+	//LLInventoryFriendCardObserver* mInvObserver;
 	bool mIsActive;
 
 	/**

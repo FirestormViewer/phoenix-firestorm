@@ -11,6 +11,17 @@
       <key>Value</key>
         <real>0.0</real>
     </map>
+    <key>AvatarHoverOffsetStepSize</key>
+    <map>
+      <key>Comment</key>
+      <string>Step-size for the zoffset_up and zoffset_down command line commands to change avatar Z position.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+        <real>0.05</real>
+    </map>
     <key>RLVaLoginLastLocation</key>
         <map>
         <key>Comment</key>

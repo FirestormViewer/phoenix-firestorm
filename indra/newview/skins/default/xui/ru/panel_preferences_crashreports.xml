@@ -4,17 +4,20 @@
     <check_box label="Всегда спрашивать перед отправкой" name="checkSendCrashReportsAlwaysAsk" />
     <check_box label="Включая settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">
-        (содержит имя Second Life)
+        (содержит имя пользователя)
     </text>
-    <check_box label="Включая имя Second Life" name="checkSendName" />
+    <check_box label="Включая имя пользователя" name="checkSendName" />
     <text name="textSendName">
         (используется для запроса дополнительной информации, если это необходимо)
+    </text>
+    <text name="textRestartRequired">
+        Изменения, внесенные в любой параметр, требуют перезапуска, чтобы вступить в силу.
     </text>
     <text name="textInformation1">
         Отмеченные выше отчеты об ошибках содержат информацию только относящуюся к аварии.
     </text>
     <text name="textInformation2">
-        Журналы Second Life не отправляются, пожалуйста, просмотрите ее содержимое и e-mail,
+        Журналы не отправляются, пожалуйста, просмотрите ее содержимое и e-mail,
     </text>
     <text name="textInformation3">
         если вы чувствуете, что они могут содержать дополнительную информацию.

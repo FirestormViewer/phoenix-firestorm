@@ -463,7 +463,10 @@ void LLProgressView::initLogos()
     const S32 default_height = 28;
     const S32 default_pad = 15;
 
-    S32 icon_width, icon_height;
+	S32 icon_width;
+#if defined(LL_FMODSTUDIO) || defined(HAVOK_TPV)
+	S32 icon_height;
+#endif // defined(LL_FMODSTUDIO) || defined(HAVOK_TPV)
 
     // We don't know final screen rect yet, so we can't precalculate position fully
     LLTextBox *logos_label = getChild<LLTextBox>("logos_lbl");
@@ -478,7 +481,9 @@ void LLProgressView::initLogos()
 
     temp_str += gDirUtilp->getDirDelimiter();
 
-    S32 pad_y = 0; // <FS:Ansariel> Build fix
+#if defined(LL_FMODSTUDIO) || defined(HAVOK_TPV)
+	S32 pad_y = 0; // <FS:Ansariel> Build fix
+#endif // defined(LL_FMODSTUDIO) || defined(HAVOK_TPV)
 
 #ifdef LL_FMODSTUDIO
     // original image size is 264x96, it is on longer side but

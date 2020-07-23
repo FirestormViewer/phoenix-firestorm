@@ -2256,7 +2256,7 @@ void LLVOVolume::setNumTEs(const U8 num_tes)
 	}
 	else if(old_num_tes > num_tes && mMediaImplList.size() > num_tes) //old faces removed
 	{
-		U8 end = mMediaImplList.size() ;
+		U8 end = (U8)(mMediaImplList.size()) ;
 		for(U8 i = num_tes; i < end ; i++)
 		{
 			removeMediaImpl(i) ;				
@@ -5280,11 +5280,12 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		LL_WARNS_ONCE("RenderMaterials") << "Oh no! No binormals for this alpha blended face!" << LL_ENDL;
 	}
 
-	bool selected = facep->getViewerObject()->isSelected();
-
+//	bool selected = facep->getViewerObject()->isSelected();
+//
 //	if (selected && LLSelectMgr::getInstance()->mHideSelectedObjects)
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 	const LLViewerObject* pObj = facep->getViewerObject();
+	bool selected = pObj->isSelected();
 	if ( (pObj->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects) &&
 		 ( (!RlvActions::isRlvEnabled()) ||
 		   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) &&

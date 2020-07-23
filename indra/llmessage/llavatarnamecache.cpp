@@ -50,8 +50,6 @@
 #include <set>
 #include "../newview/lggcontactsets.h"
 #include "../llxml/llcontrol.h"
-
-
 // Time-to-live for a temp cache entry.
 const F64 TEMP_CACHE_ENTRY_LIFETIME = 60.0;
 // Maximum time an unrefreshed cache entry is allowed.
@@ -119,10 +117,6 @@ LLAvatarNameCache::LLAvatarNameCache()
 
     mUsePeopleAPI = true;
 
-// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
-    mForceDisplayNames = false;
-// [/RLVa:KB]
-
     sHttpRequest = LLCore::HttpRequest::ptr_t(new LLCore::HttpRequest());
     sHttpHeaders = LLCore::HttpHeaders::ptr_t(new LLCore::HttpHeaders());
     sHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions());
@@ -140,7 +134,7 @@ LLAvatarNameCache::~LLAvatarNameCache()
 
 void LLAvatarNameCache::requestAvatarNameCache_(std::string url, std::vector<LLUUID> agentIds)
 {
-    LL_DEBUGS("AvNameCache") << "Entering coroutine " << LLCoros::instance().getName()
+    LL_DEBUGS("AvNameCache") << "Entering coroutine " << LLCoros::getName()
         << " with url '" << url << "', requesting " << agentIds.size() << " Agent Ids" << LL_ENDL;
 
     // Check pointer that can be cleaned up by cleanupClass()
@@ -194,7 +188,7 @@ void LLAvatarNameCache::requestAvatarNameCache_(std::string url, std::vector<LLU
     }
     catch (...)
     {
-        LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << LLCoros::instance().getName()
+        LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << LLCoros::getName()
                                           << "('" << url << "', " << agentIds.size()
                                           << " http result: " << httpResults.asString()
                                           << " Agent Ids)"));
@@ -742,12 +736,12 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::getNameCallback(cons
 // [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
 bool LLAvatarNameCache::getForceDisplayNames()
 {
-	return mForceDisplayNames;
+	return mRlvForceDisplayNames;
 }
 
 void LLAvatarNameCache::setForceDisplayNames(bool force)
 {
-	mForceDisplayNames = force;
+	mRlvForceDisplayNames = force;
 	if ( (!LLAvatarName::useDisplayNames()) && (force) )
 	{
 		LLAvatarName::setUseDisplayNames(true);

@@ -40,7 +40,7 @@ namespace
     const LLUUID IMG_HALO("12149143-f599-91a7-77ac-b52a3c0f59cd");
 }
 
-namespace {
+//namespace {
     LLQuaternion convert_azimuth_and_altitude_to_quat(F32 azimuth, F32 altitude)
     {
         F32 sinTheta = sin(azimuth);
@@ -64,7 +64,7 @@ namespace {
 
         return quat;
     }
-}
+//}
 
 static LLTrace::BlockTimerStatHandle FTM_BLEND_SKYVALUES("Blending Sky Environment");
 static LLTrace::BlockTimerStatHandle FTM_RECALCULATE_SKYVALUES("Recalculate Sky");
@@ -171,8 +171,12 @@ LLSettingsSky::validation_list_t legacyHazeValidationList()
             boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(5.0f)))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_HAZE_HORIZON,        false,  LLSD::TypeReal,  
             boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0f)(5.0f)))));
+        // <FS:Beq> FIRE-29682 Allow full range density multipliers
+        // legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_DENSITY_MULTIPLIER,  false,  LLSD::TypeReal,  
+            // boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(2.0f)))));
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_DENSITY_MULTIPLIER,  false,  LLSD::TypeReal,  
-            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(2.0f)))));
+            boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0000001f)(2.0f)))));
+        // </FS:Beq>
         legacyHazeValidation.push_back(LLSettingsBase::Validator(LLSettingsSky::SETTING_DISTANCE_MULTIPLIER, false,  LLSD::TypeReal,
             boost::bind(&LLSettingsBase::Validator::verifyFloatRange, _1, LLSD(LLSDArray(0.0001f)(1000.0f)))));
     }

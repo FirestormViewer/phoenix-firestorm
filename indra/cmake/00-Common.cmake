@@ -67,6 +67,11 @@ if (WINDOWS)
   # http://www.cmake.org/pipermail/cmake/2009-September/032143.html
   string(REPLACE "/Zm1000" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
+  # <FS:ND> Remove this, it's no option to cl.exe and causes a massive amount of warnings.
+  # Without PreferredToolArchitecture=x64, as of 2020-06-26 the 32-bit
+  # compiler on our TeamCity build hosts has started running out of virtual
+  # memory for the precompiled header file.
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /p:PreferredToolArchitecture=x64")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
@@ -193,6 +198,7 @@ if (LINUX)
     # linking can be very memory-hungry, especially the final viewer link
     #set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
 	set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
+	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
   endif (NOT USESYSTEMLIBS)
 
   set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
