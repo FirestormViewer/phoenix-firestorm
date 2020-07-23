@@ -332,7 +332,7 @@ then
     if [ -z "${AUTOBUILD_VSVER}" ]
     then
         echo "AUTOBUILD_VSVER not set, this can lead to Autobuild picking a higher VS version than desired."
-        echo "If you see this happen you should set the variable to e.g. 120 for Visual Studio 2013."
+        echo "If you see this happen you should set the variable to e.g. 150 for Visual Studio 2017."
     fi
 fi
 
@@ -377,8 +377,8 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         fi
 
     elif [ $PLATFORM == "windows" ] ; then
-        rm -rf build-vc${AUTOBUILD_VSVER:-120}-${AUTOBUILD_ADDRSIZE}
-        mkdir -p build-vc${AUTOBUILD_VSVER:-120}-${AUTOBUILD_ADDRSIZE}/logs
+        rm -rf build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}
+        mkdir -p build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}/logs
 
     elif [ $PLATFORM == "linux" ] ; then
         if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
@@ -551,7 +551,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
     elif [ $PLATFORM == "windows" ] ; then
         msbuild.exe Firestorm.sln /p:Configuration=${BTYPE} /flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
                     /flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" /p:Platform=${AUTOBUILD_WIN_VSPLATFORM} /t:Build /p:useenv=true \
-                    /verbosity:normal /toolsversion:12.0 /p:"VCBuildAdditionalOptions= /incremental"
+                    /verbosity:normal /toolsversion:15.0 /p:"VCBuildAdditionalOptions= /incremental"
     fi
 fi
 
