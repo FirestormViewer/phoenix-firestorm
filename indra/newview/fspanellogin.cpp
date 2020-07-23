@@ -293,10 +293,10 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn"));
 	getChild<LLPanel>("start_location_panel")->setDefaultBtn(findChild<LLButton>("connect_btn"));
 
-	std::string channel = LLVersionInfo::getChannel();
+	std::string channel = LLVersionInfo::getInstance()->getChannel();
 	std::string version = llformat("%s (%d)",
-								   LLVersionInfo::getShortVersion().c_str(),
-								   LLVersionInfo::getBuild());
+								   LLVersionInfo::getInstance()->getShortVersion().c_str(),
+								   LLVersionInfo::getInstance()->getBuild());
 	
 	LLTextBox* forgot_password_text = getChild<LLTextBox>("forgot_password_text");
 	forgot_password_text->setClickedCallback(onClickForgotPassword, NULL);
@@ -871,9 +871,9 @@ void FSPanelLogin::loadLoginPage()
 
 	// Channel and Version
 	params["version"] = llformat("%s (%d)",
-								 LLVersionInfo::getShortVersion().c_str(),
-								 LLVersionInfo::getBuild());
-	params["channel"] = LLVersionInfo::getChannel();
+								 LLVersionInfo::getInstance()->getShortVersion().c_str(),
+								 LLVersionInfo::getInstance()->getBuild());
+	params["channel"] = LLVersionInfo::getInstance()->getChannel();
 
 	// Grid
 	params["grid"] = LLGridManager::getInstance()->getGridId();

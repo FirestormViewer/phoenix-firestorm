@@ -309,7 +309,7 @@ bool FSFloaterObjectExport::exportSelection()
 	struct tm* utc_time = gmtime(&rawtime);
 	std::string date = llformat("%04d-%02d-%02d", utc_time->tm_year + 1900, utc_time->tm_mon + 1, utc_time->tm_mday);
 	mManifest["format_version"] = OXP_FORMAT_VERSION;
-	mManifest["client"] = LLVersionInfo::getChannelAndVersion();
+	mManifest["client"] = LLVersionInfo::getInstance()->getChannelAndVersion();
 	mManifest["creation_date"] = date;
 	mManifest["author"] = author;
 	mManifest["grid"] = LLGridManager::getInstance()->getGridLabel();
