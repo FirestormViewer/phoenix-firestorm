@@ -36,7 +36,6 @@ enum class LLExtStat: uint32_t
 	RES_RESULT	= 2UL<<30, // serviced by resident copy
 	VFS_RESULT	= 3UL<<30, // serviced by vfs
 
-#endif
 
 	// Common Status Codes
 	//
