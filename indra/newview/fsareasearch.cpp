@@ -2294,8 +2294,7 @@ bool FSPanelAreaSearchOptions::onEnableColumnVisibilityChecked(const LLSD& userd
 //---------------------------------------------------------------------------
 
 FSPanelAreaSearchAdvanced::FSPanelAreaSearchAdvanced(FSAreaSearch* pointer)
-:	LLPanel(),
-	mFSAreaSearch(pointer)
+:	LLPanel()
 {
 }
 

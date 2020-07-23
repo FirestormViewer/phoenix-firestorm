@@ -800,7 +800,7 @@ BOOL LLPanelEditWearable::postBuild()
                         LL_WARNS() << "could not get wearable dictionary entry for wearable of type: " << type << LL_ENDL;
                         continue;
                 }
-                U8 num_subparts = wearable_entry->mSubparts.size();
+                U8 num_subparts = (U8)(wearable_entry->mSubparts.size());
 
                 // <FS:Ansariel> Appearance panel not updating camera position
                 bool tab_container_cb_set = false;
@@ -1249,7 +1249,7 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
                 updatePanelPickerControls(type);
 
                 // clear and rebuild visual param list
-                U8 num_subparts = wearable_entry->mSubparts.size();
+                U8 num_subparts = (U8)(wearable_entry->mSubparts.size());
         
                 for (U8 index = 0; index < num_subparts; ++index)
                 {
@@ -1382,7 +1382,8 @@ void LLPanelEditWearable::onTabChanged(LLUICtrl* ctrl, LLWearableType::EType typ
 		return;
 	}
 
-	U8 num_subparts = wearable_entry->mSubparts.size();
+	llassert_always(wearable_entry->mSubparts.size() <= 0xFF);
+	U8 num_subparts = static_cast<U8>(wearable_entry->mSubparts.size());
 	for (U8 index = 0; index < num_subparts; ++index)
 	{
 		ESubpart subpart_e = wearable_entry->mSubparts[index];
@@ -1505,7 +1506,7 @@ void LLPanelEditWearable::updateScrollingPanelUI()
                 const LLEditWearableDictionary::WearableEntry *wearable_entry = LLEditWearableDictionary::getInstance()->getWearable(type);
                 llassert(wearable_entry);
                 if (!wearable_entry) return;
-                U8 num_subparts = wearable_entry->mSubparts.size();
+                U8 num_subparts = (U8)(wearable_entry->mSubparts.size());
 
                 LLScrollingPanelParam::sUpdateDelayFrames = 0;
                 for (U8 index = 0; index < num_subparts; ++index)

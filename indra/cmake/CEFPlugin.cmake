@@ -6,15 +6,10 @@ if (USESYSTEMLIBS)
     set(CEFPLUGIN OFF CACHE BOOL
         "CEFPLUGIN support for the llplugin/llmedia test apps.")
 else (USESYSTEMLIBS)
-  if (LINUX AND ( CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9.4 ) )
-      message( "Using dullahan for GCC >= 5 " )
-      use_prebuilt_binary(dullahan-gcc5)
-  else()
     use_prebuilt_binary(dullahan)
-  endif()
     set(CEFPLUGIN ON CACHE BOOL
         "CEFPLUGIN support for the llplugin/llmedia test apps.")
-        set(CEF_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/cef)
+    set(CEF_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/cef)
 endif (USESYSTEMLIBS)
 
 if (WINDOWS)

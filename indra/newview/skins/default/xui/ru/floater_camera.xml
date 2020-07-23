@@ -27,11 +27,11 @@
 		<panel_camera_item name="object_view" tool_tip="Вид на объект"/>
 		<panel_camera_item name="mouselook_view" tool_tip="Вид от первого лица"/>
 		<panel_camera_item name="reset_view" tool_tip="Сбросить вид"/>
+		<button label="Позиция..." name="camera_position_btn"/>
 	</panel>
 	<combo_box name="preset_combo">
 		<combo_box.item label="Предустановки" name="Use preset"/>
 	</combo_box>
 	<button name="gear_btn" tool_tip="Предустановки Камеры"/>
 	<!-- <button label="Сохранить как..." name="save_preset_btn"/> -->
-	<button label="Позиция Камеры..." name="camera_position_btn"/>
 </floater>

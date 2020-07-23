@@ -160,12 +160,6 @@ class FSViewerManifest:
             self.path( "compatibility.manifest", "dullahan_host.exe.manifest" )
             self.end_prefix()
 
-    def fs_setuid_chromesandbox( self ):
-        filename = os.path.join( self.get_dst_prefix(), "bin", "chrome-sandbox" )
-        self.run_command_shell( "chmod 755 %s" % ( filename) ) # Strip sticky bit that might be set (in case the following two commands fail)
-        self.run_command_shell( "sudo -n chown root:root %s || exit 0" % ( filename) )
-        self.run_command_shell( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
-
     def fs_save_osx_symbols( self ):
         self.fs_save_symbols("darwin")
 

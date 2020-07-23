@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_test_line_editor">
 	<line_editor name="enabled_line_editor" tool_tip="enabled line editor">Enabled line editor</line_editor>
 	<line_editor name="ascii_line_editor" tool_tip="ascii line editor">ASCII only line editor</line_editor>
