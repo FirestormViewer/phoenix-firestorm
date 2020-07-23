@@ -558,7 +558,7 @@ ERlvCmdRet RlvEnvironment::handleSetFn(const std::string& strRlvOption, const st
 }
 
 template<>
-std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<const LLVector2& (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
+std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<LLVector2 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
 	if (idxComponent > 2)
 		return LLStringUtil::null;
@@ -566,7 +566,7 @@ std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<con
 }
 
 template<>
-std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<const LLColor3& (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
+std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<LLColor3 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
 	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
 	{
