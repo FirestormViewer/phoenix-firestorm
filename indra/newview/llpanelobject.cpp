@@ -3008,7 +3008,7 @@ bool get_vector_from_clipboard(LLVector3* value)
 	}
 
 	LLVector3 vec;
-	S32 count = sscanf(stringVec.c_str(), "<%f, %f, %f>", &vec.mV[VX], &vec.mV[VY], &vec.mV[VZ]);
+	S32 count = sscanf(stringVec.c_str(), "<%f, %f, %f>", vec.mV + 0, vec.mV + 1, vec.mV + 2);
 	if (count == 3)
 	{
 		value->setVec(vec);
