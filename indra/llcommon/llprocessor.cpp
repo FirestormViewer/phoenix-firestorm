@@ -753,8 +753,6 @@ private:
 			}
 			fclose(cpuinfo_fp);
 		}
-# if LL_X86
-
 // *NOTE:Mani - eww, macros! srry.
 #define LLPI_SET_INFO_STRING(llpi_id, cpuinfo_id) \
 		if (!cpuinfo[cpuinfo_id].empty()) \
@@ -782,7 +780,7 @@ private:
 		LLPI_SET_INFO_INT(eModel, "model");
 
 		
-		S32 family;							 
+		S32 family{0};
 		if (!cpuinfo["cpu family"].empty() 
 			&& LLStringUtil::convertToS32(cpuinfo["cpu family"], family))	
 		{ 
@@ -814,8 +812,6 @@ private:
 		{
 			setExtension(cpu_feature_names[eSSE2_Ext]);
 		}
-	
-# endif // LL_X86
 	}
 
 	std::string getCPUFeatureDescription() const 

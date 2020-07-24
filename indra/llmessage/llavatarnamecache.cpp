@@ -50,8 +50,6 @@
 #include <set>
 #include "../newview/lggcontactsets.h"
 #include "../llxml/llcontrol.h"
-
-
 // Time-to-live for a temp cache entry.
 const F64 TEMP_CACHE_ENTRY_LIFETIME = 60.0;
 // Maximum time an unrefreshed cache entry is allowed.
@@ -136,7 +134,7 @@ LLAvatarNameCache::~LLAvatarNameCache()
 
 void LLAvatarNameCache::requestAvatarNameCache_(std::string url, std::vector<LLUUID> agentIds)
 {
-    LL_DEBUGS("AvNameCache") << "Entering coroutine " << LLCoros::instance().getName()
+    LL_DEBUGS("AvNameCache") << "Entering coroutine " << LLCoros::getName()
         << " with url '" << url << "', requesting " << agentIds.size() << " Agent Ids" << LL_ENDL;
 
     // Check pointer that can be cleaned up by cleanupClass()
@@ -190,7 +188,7 @@ void LLAvatarNameCache::requestAvatarNameCache_(std::string url, std::vector<LLU
     }
     catch (...)
     {
-        LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << LLCoros::instance().getName()
+        LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << LLCoros::getName()
                                           << "('" << url << "', " << agentIds.size()
                                           << " http result: " << httpResults.asString()
                                           << " Agent Ids)"));

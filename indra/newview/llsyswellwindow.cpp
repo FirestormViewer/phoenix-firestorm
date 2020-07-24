@@ -249,7 +249,7 @@ bool LLSysWellWindow::isWindowEmpty()
 //---------------------------------------------------------------------------------
 LLIMWellWindow::RowPanel::RowPanel(const LLSysWellWindow* parent, const LLUUID& sessionId,
 		S32 chicletCounter, const std::string& name, const LLUUID& otherParticipantId) :
-		LLPanel(LLPanel::Params()), mChiclet(NULL), mParent(parent)
+		LLPanel(LLPanel::Params()), mChiclet(NULL)
 {
 	buildFromFile( "panel_fs_activeim_row.xml");
 

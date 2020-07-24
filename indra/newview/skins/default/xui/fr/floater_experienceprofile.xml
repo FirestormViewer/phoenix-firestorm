@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater name="experience_profile" title="Expérience">
 	<floater.string name="empty_slurl">(aucun)</floater.string>
 	<text name="edit_title">Expérience</text>

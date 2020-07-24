@@ -39,6 +39,16 @@
 #include "llcrashlookup.h"
 // [/SL:KB]
 
+// We shouldn't have to know the exact declaration of CRYPTO_THREADID, but VS
+// 2017 complains if we forward-declare it as simply 'struct CRYPTO_THREADID'.
+struct crypto_threadid_st;
+typedef crypto_threadid_st CRYPTO_THREADID;
+
+// We shouldn't have to know the exact declaration of CRYPTO_THREADID, but VS
+// 2017 complains if we forward-declare it as simply 'struct CRYPTO_THREADID'.
+struct crypto_threadid_st;
+typedef crypto_threadid_st CRYPTO_THREADID;
+
 // Crash reporter behavior
 const S32 CRASH_BEHAVIOR_ASK = 0;
 const S32 CRASH_BEHAVIOR_ALWAYS_SEND = 1;
@@ -76,7 +86,7 @@ public:
 protected:
     static void init_curl();
     static void term_curl();
-    static unsigned long ssl_thread_id_callback(void);
+    static void ssl_thread_id_callback(CRYPTO_THREADID*);
     static void ssl_locking_callback(int mode, int type, const char * file, int line);
 
 	S32 mCrashBehavior;

@@ -70,7 +70,7 @@ FSData::FSData() :
 	mAgentsDone(false)
 {
 	mHeaders.insert("User-Agent", LLViewerMedia::getInstance()->getCurrentUserAgent());
-	mHeaders.insert("viewer-version", LLVersionInfo::getChannelAndVersionFS());
+	mHeaders.insert("viewer-version", LLVersionInfo::getInstance()->getChannelAndVersionFS());
 	
 	mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";
 	mFSDataURL = mBaseURL + "/" + "data.xml";
@@ -296,7 +296,7 @@ void downloadError(LLSD const &aData, std::string const &aURL)
 void FSData::startDownload()
 {
 	mFSdataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata.xml");
-	mFSdataDefaultsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getShortVersion().c_str()));
+	mFSdataDefaultsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getInstance()->getShortVersion().c_str()));
 	mClientTagsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
 
 	{
@@ -321,7 +321,7 @@ void FSData::startDownload()
 		{
 			last_modified = stat_data.st_mtime;
 		}
-		std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
+		std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getInstance()->getShortVersion().c_str());
 		mFSdataDefaultsUrl = mBaseURL + "/" + filename;
 		LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modified of " << last_modified << LL_ENDL;
 		LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
@@ -792,7 +792,7 @@ bool FSData::isQA(const LLUUID& avatar_id)
 
 LLSD FSData::allowedLogin()
 {
-	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getChannelAndVersionFS());
+	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getInstance()->getChannelAndVersionFS());
 	if (iter == mBlockedVersions.end())
 	{
 		return LLSD();
@@ -1012,8 +1012,12 @@ LLSD FSData::getSystemInfo()
 	LLSD info = LLAppViewer::instance()->getViewerInfo();
 
 	std::string sysinfo1("\n");
-	sysinfo1 += llformat("%s %s (%d) %s %s (%s %dbit) %s\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str(),
-		info["ADDRESS_SIZE"].asInteger(), info["BUILD_TYPE"].asString().c_str());
+	sysinfo1 += llformat("%s %s (%d) %s %s (%s %dbit) %s\n\n",	LLAppViewer::instance()->getSecondLifeTitle().c_str(),
+																LLVersionInfo::getInstance()->getShortVersion().c_str(),
+																LLVersionInfo::getInstance()->getBuild(),
+																info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(),
+																LLVersionInfo::getInstance()->getChannel().c_str(),
+																info["ADDRESS_SIZE"].asInteger(), info["BUILD_TYPE"].asString().c_str());
 	sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
 	sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
 	sysinfo1 += llformat("%s\n\n", info["SERVER_VERSION"].asString().c_str());

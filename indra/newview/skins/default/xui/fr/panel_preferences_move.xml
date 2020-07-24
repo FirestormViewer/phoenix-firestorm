@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Déplacement &amp; caméra" name="move_panel">
 	<tab_container label="Déplacement &amp; caméra" name="tabs">
 		<panel label="Caméra" name="tab-view">
