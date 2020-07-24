@@ -766,9 +766,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d778c6a3475bc35ee8b9615dfc38b4a9</string>
+              <string>2d59bb6f4bd38a18d9250ff010a13b59</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55025/511964/dictionaries-1.538984-common-538984.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-2.46203-common-46203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
