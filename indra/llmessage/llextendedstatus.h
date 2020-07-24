@@ -28,9 +28,16 @@
 #ifndef LL_LLEXTENDEDSTATUS_H
 #define LL_LLEXTENDEDSTATUS_H
 
+// <FS:ND> Very tentative fix for clang error constant-conversion
+// This happens due to LLExtStat being a S32 but LL_EXSTAT_RES_RESULT/LL_EXSTAT_VFS_RESULT shifting into the sign bit.
+// To not screw everything up right now LLExtStatus only gets to be a U32 when LINUX and CLANG
 
+//typedef S32 LLExtStat;
+#if defined(LL_LINUX) && defined(__clang__)
+typedef U32 LLExtStat;
+#else
 typedef S32 LLExtStat;
-
+#endif
 
 // Status provider groups - Top bits indicate which status type it is
 // Zero is common status code (next section)

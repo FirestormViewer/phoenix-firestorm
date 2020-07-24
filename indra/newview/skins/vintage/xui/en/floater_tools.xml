@@ -2735,7 +2735,7 @@ Low ↔ Lwst
         <panel
          border="false"
          follows="all"
-         height="367"
+         height="387"
          label="Features"
          layout="topleft"
          left_delta="0"

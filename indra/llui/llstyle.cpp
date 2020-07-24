@@ -42,7 +42,10 @@ LLStyle::Params::Params()
 	image("image"),
 	link_href("href"),
 	is_link("is_link"),
-	is_name_slurl("is_name_slurl")	// <FS:CR> FIRE-11330
+	// <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
+	use_default_link_style("use_default_link_style", true),
+	is_chat_header("is_chat_header", false)
+	// </FS:Ansariel>
 {}
 
 

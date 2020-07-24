@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater" title="Kamerasteuerungen">
+	<floater.string name="rotate_tooltip">
+		Kamera um Fokus drehen
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Kamera auf Fokus zoomen
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Kamera nach oben, unten, links und rechts bewegen
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Objekt ansehen
+	</floater.string>
+	<string name="inactive_combo_text">
+		Voreinstellung...
+	</string>
+
+	<panel name="controls">
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>
+			<slider_bar name="zoom_slider" tool_tip="Kamera auf Fokus zoomen"/>
+			<joystick_track name="cam_track_stick" tool_tip="Kamera nach oben, unten, links und rechts bewegen"/>
+		</panel>
+	</panel>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="Frontalansicht">
+			<panel_camera_item.text name="front_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="group_view" tool_tip="Seitenansicht">
+			<panel_camera_item.text name="side_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="rear_view" tool_tip="Rückansicht">
+			<panel_camera_item.text name="rear_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="object_view" tool_tip="Objekt-Ansicht">
+			<panel_camera_item.text name="object_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="mouselook_view" tool_tip="Mouselook">
+			<panel_camera_item.text name="mouselook_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+		<panel_camera_item name="reset_view" tool_tip="Ansicht zurücksetzen">
+			<panel_camera_item.text name="reset_view_text">
+			</panel_camera_item.text>
+		</panel_camera_item>
+	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="Voreinstellung verwenden" name="Use preset"/>
+	</combo_box>
+	<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
+	<button label="Kamera-Position..." name="camera_position_btn"/>
+</floater>

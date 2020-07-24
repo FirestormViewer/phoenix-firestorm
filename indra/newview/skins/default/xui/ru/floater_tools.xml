@@ -130,7 +130,7 @@
 		Сила
 	</text>
 	<button label="Применить" label_selected="Применить" name="button apply to selection" tool_tip="Изменить выбранную землю"/>
-	<text name="link_num_obj_count" tool_tip="Неверное количество объединений">
+	<text name="link_num_obj_count" tool_tip="Номер объединения может быть неточным." width="160">
 		[DESC] [NUM]
 	</text>
 	<text name="selection_empty" width="120">

@@ -22,7 +22,7 @@
 			<check_box label="Не показывать чат в консоли и тостах"  name="FSBubblesHideConsoleAndToasts"/>
 			<check_box label="Показать индикатор набора в пузырьках над аватарами" name="bubble_text_typing"/>
 			<check_box label="Показать индикатор набора в теге над аватарами" name="FSShowTypingStateInNameTag"/>
-			<check_box label="Показывать секунды в истории переписки [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
+			<check_box label="Показывать секунды в истории переписки [ЧЧ:ММ:СС]" name="FSSecondsinChatTimestamps"/>
 			<text name="show_timestamps_label" width="150">
 				Показывать время в:
 			</text>
