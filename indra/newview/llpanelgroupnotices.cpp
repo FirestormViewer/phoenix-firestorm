@@ -203,15 +203,15 @@ std::string build_notice_date(const U32& the_time)
 		time(&t);
 	}
 	
-		// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
-        //std::string dateStr = "["+LLTrans::getString("LTimeYear")+"]/["
-        //                                                        +LLTrans::getString("LTimeMthNum")+"]/["
-        //                                                        +LLTrans::getString("LTimeDay")+"] ["
-        //                                                        +LLTrans::getString("LTimeHour")+"]:["
-        //                                                        +LLTrans::getString("LTimeMin")+"]:["
-        //                                                        +LLTrans::getString("LTimeSec")+"]";
-		std::string dateStr = LLTrans::getString("GroupNoticesPanelDateString");
-		// </FS:Ansariel>
+	// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
+	//std::string dateStr = "["+ LLTrans::getString("LTimeYear") + "]/["
+	//							+ LLTrans::getString("LTimeMthNum") + "]/["
+	//							+ LLTrans::getString("LTimeDay") + "] ["
+	//							+ LLTrans::getString("LTimeHour") + "]:["
+	//							+ LLTrans::getString("LTimeMin") + "]:["
+	//							+ LLTrans::getString("LTimeSec") + "]";
+	std::string dateStr = LLTrans::getString("GroupNoticesPanelDateString");
+	// </FS:Ansariel>
 
 	LLSD substitution;
 	substitution["datetime"] = (S32) t;

@@ -78,6 +78,7 @@ F32  LLViewerJoystick::sDelta[] = {0,0,0,0,0,0,0};
 #define MAX_SPACENAVIGATOR_INPUT  3000.0f
 #define MAX_JOYSTICK_INPUT_VALUE  MAX_SPACENAVIGATOR_INPUT
 
+
 #if LIB_NDOF
 std::ostream& operator<<(std::ostream& out, NDOF_Device* ptr)
 {
@@ -115,8 +116,8 @@ std::ostream& operator<<(std::ostream& out, NDOF_Device* ptr)
 }
 #endif // LIB_NDOF
 
-#if LL_WINDOWS && !LL_MESA_HEADLESS
 
+#if LL_WINDOWS && !LL_MESA_HEADLESS
 // this should reflect ndof and set axises, see ndofdev_win.cpp from ndof package
 BOOL CALLBACK EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* inst, VOID* user_data)
 {
@@ -281,14 +282,14 @@ NDOF_HotPlugResult LLViewerJoystick::HotPlugAddCallback(NDOF_Device *dev)
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
 	if (joystick->mDriverState == JDS_UNINITIALIZED)
 	{
-        LL_INFOS("Joystick") << "HotPlugAddCallback: will use device:" << LL_ENDL;
+		LL_INFOS("Joystick") << "HotPlugAddCallback: will use device:" << LL_ENDL;
 
 		// <FS:ND> Disable for Linux till vs017 gets merged in to no having to support multiple version of libndofdev
 #ifndef LL_LINUX
 		ndof_dump(stderr, dev);
 #endif
 		// </FS:ND>
-		
+
 		joystick->mNdofDev = dev;
 		joystick->mDriverState = JDS_INITIALIZED;
 		res = NDOF_KEEP_HOTPLUGGED;
