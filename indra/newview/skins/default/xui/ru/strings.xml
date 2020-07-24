@@ -1472,6 +1472,15 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="none">
 		нет
 	</string>
+	<string name="sky">
+		Небо
+	</string>
+	<string name="water">
+		Вода
+	</string>
+	<string name="day">
+		Цикл дня
+	</string>
 	<string name="shirt_not_worn">
 		Рубашка не надета
 	</string>
@@ -5176,6 +5185,9 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	</string>
 	<string name="New Sky">
 		Новое небо
+	</string>
+	<string name="New Settings">
+		Новые Настройки
 	</string>
 	<string name="/bow">
 		/поклониться

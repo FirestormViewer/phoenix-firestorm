@@ -1259,6 +1259,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	LLStyle::Params name_params(body_message_params);
 	name_params.color(name_color);
 	name_params.readonly_color(name_color);
+	name_params.is_chat_header(true);
 
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 	F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
@@ -1449,8 +1450,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 						prependNewLineState = false;
 					}
 				}
-				
-				name_params.is_name_slurl = true;
+
+				name_params.use_default_link_style = (!moderator_style_active || moderator_name_style_value == 0);
 				name_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
@@ -1563,14 +1564,12 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				// We don't want multiple friendship offers to appear, this code checks if there are previous offers
 				// by iterating though all panels.
 				// Note: it might be better to simply add a "pending offer" flag somewhere
-				for (LLToastNotifyPanel::instance_iter ti(LLToastNotifyPanel::beginInstances())
-					, tend(LLToastNotifyPanel::endInstances()); ti != tend; ++ti)
+				for (auto& ti : LLToastNotifyPanel::instance_snapshot())
 				{
-					LLToastNotifyPanel& panel = *ti;
-					LLIMToastNotifyPanel * imtoastp = dynamic_cast<LLIMToastNotifyPanel *>(&panel);
-					const std::string& notification_name = panel.getNotificationName();
+					LLIMToastNotifyPanel * imtoastp = dynamic_cast<LLIMToastNotifyPanel *>(&ti);
+					const std::string& notification_name = ti.getNotificationName();
 					if (notification_name == "OfferFriendship"
-						&& panel.isControlPanelEnabled()
+						&& ti.isControlPanelEnabled()
 						&& imtoastp)
 					{
 						create_toast = false;

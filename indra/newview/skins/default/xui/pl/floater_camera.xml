@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="camera_floater">
+<floater name="camera_floater" title="Sterowanie kamerą">
 	<floater.string name="rotate_tooltip">
 		Obróć kamerę wokół punktu skupienia
 	</floater.string>
@@ -29,11 +29,11 @@
 		<panel_camera_item name="object_view" tool_tip="Pokazywanie obiektu"/>
 		<panel_camera_item name="mouselook_view" tool_tip="Widok pierwszoosobowy"/>
 		<panel_camera_item name="reset_view" tool_tip="Resetuj widok"/>
+		<button label="Pozycja..." name="camera_position_btn" />
 	</panel>
 	<combo_box name="preset_combo">
 		<combo_box.item label="Użyj ustawienia" name="Use preset" />
 	</combo_box>
 	<button name="gear_btn" tool_tip="Ustawienia kamery" />
 	<!-- <button label="Zapisz jako ustawienie" name="save_preset_btn" /> -->
-	<button label="Pozycja kamery" name="camera_position_btn" />
 </floater>

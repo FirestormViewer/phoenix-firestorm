@@ -2686,6 +2686,24 @@ Veuillez sélectionner un terrain plus petit.
 	<notification name="FlickrConnect">
 		[MESSAGE]
 	</notification>
+	<notification name="ExodusFlickrVerificationExplanation">
+		Pour utiliser la fonction d'envoi vers Flickr, vous  devez autoriser [APP_NAME] à accéder à votre compte. Si vous continuez, votre navigateur web ouvrira le site Flickr où vous devrez vous connecter et autoriser [APP_NAME]. Vous recevrez alors un code à copier dans [APP_NAME].
+
+Voulez-vous autoriser [APP_NAME] à poster sur votre compte Flickr?
+		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationPrompt">
+		Veuillez autoriser avec votre navigatere web [APP_NAME] à poster dans votre compte Flickr, puis entrez ci=dessous le code donné par le site :
+		<button name="OK" text="OK"/>
+		<button name="Cancel" text="Annuler"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationFailed">
+		La vérification Flickr a échouée. Veuillez réessayer en vous assurant que le code de vérification est correct.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Votre photo est visible maintenant [http://www.flickr.com/photos/upload/edit/?ids=[ID] ici].
+	</notification>
 	<notification name="TwitterConnect">
 		[MESSAGE]
 	</notification>

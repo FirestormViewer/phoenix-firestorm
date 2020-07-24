@@ -1,4 +1,4 @@
-First, make sure gcc-4.9 and g++-4.9 are installed.
+First, make sure gcc-5.4 and g++-5.4 are installed.
 
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help 
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may

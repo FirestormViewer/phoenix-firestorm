@@ -1653,7 +1653,12 @@ void LLVertexBuffer::setupVertexArray()
 				//glVertexattribIPointer requires GLSL 1.30 or later
 				if (gGLManager.mGLSLVersionMajor > 1 || gGLManager.mGLSLVersionMinor >= 30)
 				{
-					glVertexAttribIPointer(i, attrib_size[i], attrib_type[i], sTypeSize[i], (const GLvoid*) (ptrdiff_t)mOffsets[i]); 
+					// nat 2018-10-24: VS 2017 also notices the issue
+					// described below, and warns even with reinterpret_cast.
+					// Cast via intptr_t to make it painfully obvious to the
+					// compiler that we're doing this intentionally.
+					glVertexAttribIPointer(i, attrib_size[i], attrib_type[i], sTypeSize[i],
+										   reinterpret_cast<const GLvoid*>(intptr_t(mOffsets[i]))); 
 				}
 #endif
 			}
@@ -1668,7 +1673,7 @@ void LLVertexBuffer::setupVertexArray()
 				// rather than as an actual pointer, so it's okay.
 				glVertexAttribPointerARB(i, attrib_size[i], attrib_type[i],
 										 attrib_normalized[i], sTypeSize[i],
-										 reinterpret_cast<GLvoid*>(mOffsets[i])); 
+										 reinterpret_cast<GLvoid*>(intptr_t(mOffsets[i]))); 
 			}
 		}
 		else

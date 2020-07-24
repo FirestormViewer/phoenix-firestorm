@@ -36,6 +36,7 @@
 			<text name="SurfaceAreaThreshholdLabel">Protection contre les textures énormes :</text>
 			<check_box label="Seuil avant de masquer les objets possédant une texture trop grande :" width="400" name="RenderVolumeSAProtection" tool_tip="Activer cette option masquera automatiquement les objets possédant une texture et possédant une trop grande surface. (5000m² par défaut)"/>
 			<check_box label="Activer l'antispam" name="UseAntiSpam"/>
+			<check_box label="Activer l'antispam pour vos objets" name="FSUseAntiSpamMine" tool_tip="Cela applique la protection antispam aux objets qui vous apartiennent."/>
 			<text name="AntiSpamText1">Lignes max. dans un message :</text>
 			<spinner name="_NACL_AntiSpamNewlines" tool_tip="Nombre de lignes maximum autorisées dans un message (70 par défaut)"/>
 			<text name="AntiSpamText2">Evènements max. par émetteur :</text>
@@ -54,7 +55,8 @@
 			<text name="PitchFromMousePositionText">degrés</text>
 			<slider label="Inclinaison horizontale :" tool_tip="Inclinaison horizontale maximum de la tête de mon avatar en degrés" name="YawFromMousePositionSlider"/>
 			<text name="YawFromMousePositionText">degrés</text>
-			<text name="note_lookat">Les paramètres de LookAt sont dans l’onglet Confdentialité </text>
+			<text name="note_lookat">Les paramètres de LookAt sont dans l’onglet Confidentialité </text>
+			<check_box label="Désactiver les mouvements aléatoires des yeux de l'avatar" name="FSStaticEyes"/>
 			<text name="BeamPrefs">Aspect du faisceau de sélection</text>
 			<button name="BeamColor_delete" label="Supprimer" width="75" tool_tip="Supprimer ce préréglage"/>
 			<combo_box name="BeamColor_combo" tool_tip="Sélectionnez la couleur du faisceau de sélection" left_delta="80" width="160" />
@@ -112,6 +114,7 @@
 			<spinner label="Pos. Z" name="Z pos"/>
 			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
 			<button label="Permissions de création par défaut" name="fs_default_creation_permissions"/>
+			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>
 			<check_box label="Activer le préprocesseur LSL" tool_tip="Quand coché, le préprocesseur LSL est activé." name="preproc_checkbox"/>
 			<check_box label="Optimiser" tool_tip="Quand coché, le préprocesseur LSL optimisera la place que prennent les scripts." name="preprocoptimizer_checkbox"/>
 			<check_box label="Condition switch()" left_delta="80" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation de la condition switch() pour le contrôle de flux de scripts." name="preprocswitch_checkbox"/>
@@ -119,9 +122,13 @@
 			<check_box label="#includes depuis le disque" left_delta="150" tool_tip="Quand coché, le préprocesseur LSL permettra à la commande #include de pointer vers des fichiers de votre disque dur." name="preprocinclude_checkbox"/>
 			<text name="lslpreprocinclude_textbox">Chemin d'inclusion du préprocesseur :</text>
 			<button label="Parcourir" label_selected="Parcourir" name="SetPreprocInclude"/>
+			<text name="externaleditor_textbox">Éditeur externe :</text>
+			<button label="Parcourir" label_selected="Parcourir" name="SetExternalEditor"/>
 		</panel>
 		<panel label="Construction 2" name="BuildTab2">
-			<check_box label="Contour lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Contours lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Afficher les limites de la parcellle sélectionnée" name="RenderParcelSelection"/>
+			<check_box label="Afficher la limite maximale en hauteur pour construire" name="FSRenderParcelSelectionToMaxBuildHeight"/>
 			<check_box label="Limiter la distance de sélection (mètres) :" width="280" name="LimitSelectDistance"/>
 			<spinner name="MaxSelectDistance" tool_tip="Distance maximale autorisée de sélection (en mètres depuis l'avatar [Par défaut : 128.000]"/>
 			<check_box label="Limiter la distance de déplacement (mètres) :" width="280" name="LimitDragDistance"/>
@@ -137,6 +144,16 @@
 			<check_box label="Utiliser Ctrl+clic pour attraper et déplacer des objets" tool_tip="Quand coché, vous pourrez attraper et déplacer des objets en utilisant la souris et la touche Ctrl." name="FSEnableGrab"/>
 			<check_box label="Déplacer les textures directement en maintenant Shift-Clic en mode construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
 			<check_box label="Prévisualiser les animations sur son avatar pendant l'upload" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le processus d'upload" name="FSUploadAnimationOnOwnAvatar"/>
+			<check_box label="Active les informations détaillées pour les script" tool_tip="Activée, ajoute aux informations de base sur les scripts des détails utiles aux créateurs" name="FSScriptInfoExtended"/>
+		</panel>
+		<panel label="Chargements" name="UploadsTab">
+		<text name="title">Dossiers de destination pour les chargements :</text>
+		<text name="title_sounds">Sons</text>
+		<text name="title_models">Modèles</text>
+		<text name="upload_help">Pour changer le dossier de destinatio, cliquez droit dessus dans l'inventaire et sélectionnez 
+"Par défaut pour"
+		</text>
+		<button name="reset_default_folders" label="Réinitialiser les dossiers par défaut"/>
 		</panel>
 	</tab_container>
 </panel>

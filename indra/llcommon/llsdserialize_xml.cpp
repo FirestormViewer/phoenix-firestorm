@@ -46,7 +46,9 @@ extern "C"
 /**
  * LLSDXMLFormatter
  */
-LLSDXMLFormatter::LLSDXMLFormatter()
+LLSDXMLFormatter::LLSDXMLFormatter(bool boolAlpha, const std::string& realFormat,
+                                   EFormatterOptions options):
+    LLSDFormatter(boolAlpha, realFormat, options)
 {
 }
 
@@ -56,7 +58,8 @@ LLSDXMLFormatter::~LLSDXMLFormatter()
 }
 
 // virtual
-S32 LLSDXMLFormatter::format(const LLSD& data, std::ostream& ostr, U32 options) const
+S32 LLSDXMLFormatter::format(const LLSD& data, std::ostream& ostr,
+							 EFormatterOptions options) const
 {
 	std::streamsize old_precision = ostr.precision(25);
 
@@ -73,7 +76,8 @@ S32 LLSDXMLFormatter::format(const LLSD& data, std::ostream& ostr, U32 options) 
 	return rv;
 }
 
-S32 LLSDXMLFormatter::format_impl(const LLSD& data, std::ostream& ostr, U32 options, U32 level) const
+S32 LLSDXMLFormatter::format_impl(const LLSD& data, std::ostream& ostr,
+								  EFormatterOptions options, U32 level) const
 {
 	S32 format_count = 1;
 	std::string pre;

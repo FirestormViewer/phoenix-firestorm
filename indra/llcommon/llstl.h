@@ -36,6 +36,8 @@
 #include <set>
 #include <typeinfo>
 
+#include <string.h> // <FS:ND/> For strcmp
+
 // Use to compare the first element only of a pair
 // e.g. typedef std::set<std::pair<int, Data*>, compare_pair<int, Data*> > some_pair_set_t; 
 template <typename T1, typename T2>

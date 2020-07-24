@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="associate listing" title="Associer une annonce">
 	<text name="message">Référence de l'annonce :</text>
 	<line_editor name="listing_id">Saisissez la référence de l'annonce ici</line_editor>
