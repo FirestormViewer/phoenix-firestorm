@@ -766,9 +766,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d778c6a3475bc35ee8b9615dfc38b4a9</string>
+              <string>2d59bb6f4bd38a18d9250ff010a13b59</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55025/511964/dictionaries-1.538984-common-538984.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-2.46203-common-46203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -1860,9 +1860,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a29426d6e0c1e8093e579b90574101a3</string>
+              <string>352ab340f2091c93eb313cf80ac0c8cc</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.202021553-linux64-202021553.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.202052209-linux64-202052209.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1950,9 +1950,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a33b5a416daba549898b215f3e4ae7ea</string>
+              <string>995f807a91bd251408ad0f18c13bbcf4</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-vs2017-1906061512.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.5-windows-202060400.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1962,9 +1962,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a33b5a416daba549898b215f3e4ae7ea</string>
+              <string>995f807a91bd251408ad0f18c13bbcf4</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-vs2017-1906061512.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.5-windows-202060400.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
