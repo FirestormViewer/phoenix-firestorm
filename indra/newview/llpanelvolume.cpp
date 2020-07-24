@@ -999,7 +999,7 @@ void LLPanelVolume::onPasteFeatures()
     else
     {
         LLVOVolume *volobjp = (LLVOVolume *)objectp;
-        if (volobjp->setIsFlexible(is_flexible))
+        if (volobjp->setIsFlexible(false))
         {
             mObject->sendShapeUpdate();
             LLSelectMgr::getInstance()->selectionUpdatePhantom(volobjp->flagPhantom());

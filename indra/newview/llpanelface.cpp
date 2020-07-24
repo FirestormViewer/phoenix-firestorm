@@ -3022,7 +3022,21 @@ void LLPanelFace::onCopyTexture()
                     LLUUID item_id;
                     LLUUID id = te_data["te"]["imageid"].asUUID();
                     bool from_library = get_is_predefined_texture(id);
-                    bool full_perm = from_library || (objectp->permCopy() && objectp->permTransfer() && objectp->permModify());
+                    bool full_perm = from_library;
+
+                    if (!full_perm
+                        && objectp->permCopy()
+                        && objectp->permTransfer()
+                        && objectp->permModify())
+                    {
+                        // If agent created this object and nothing is limiting permissions, mark as full perm
+                        // If agent was granted permission to edit objects owned and created by somebody else, mark full perm
+                        // This check is not perfect since we can't figure out whom textures belong to so this ended up restrictive
+                        std::string creator_app_link;
+                        LLUUID creator_id;
+                        LLSelectMgr::getInstance()->selectGetCreator(creator_id, creator_app_link);
+                        full_perm = objectp->mOwnerID == creator_id;
+                    }
 
                     if (id.notNull() && !full_perm)
                     {
@@ -3049,22 +3063,8 @@ void LLPanelFace::onCopyTexture()
                         from_library = true;
                     }
 
-                    if (id.isNull()
-                        || (!full_perm && item_id.isNull()))
-                    {
-                        if (!LLLocalBitmapMgr::getInstance()->isLocal(id))
-                        {
-                            te_data["te"].erase("imageid");
-                            te_data["te"]["imageid"] = LLUUID(gSavedSettings.getString("DefaultObjectTexture"));
-                        }
-                        te_data["te"]["itemfullperm"] = true;
-                        te_data["te"]["fromlibrary"] = true;
-                    }
-                    else
                     {
                         te_data["te"]["itemfullperm"] = full_perm;
-                        // from_library is unreliable since we don't get texture item if source object
-                        // is fullperm but it merely means additional checks when assigning texture
                         te_data["te"]["fromlibrary"] = from_library; 
 
                         // If full permission object, texture is free to copy,
@@ -3073,7 +3073,7 @@ void LLPanelFace::onCopyTexture()
                         // Normally we care only about restrictions for current user and objects
                         // don't inherit any 'next owner' permissions from texture, so there is
                         // no need to record item id if full_perm==true
-                        if (!full_perm && item_id.notNull())
+                        if (!full_perm && !from_library && item_id.notNull())
                         {
                             LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
                             if (itemp)
@@ -3210,36 +3210,51 @@ void LLPanelFace::onPasteTexture()
         return;
     }
 
-    bool full_perm = true;
+    bool full_perm_object = true;
     LLSD::array_const_iterator iter = clipboard.beginArray();
     LLSD::array_const_iterator end = clipboard.endArray();
     for (; iter != end; ++iter)
     {
         const LLSD& te_data = *iter;
-        if (te_data.has("te"))
+        if (te_data.has("te") && te_data["te"].has("imageid"))
         {
-            full_perm &= te_data["te"].has("itemfullperm") && te_data["te"]["itemfullperm"].asBoolean();
-            if (te_data["te"].has("imageitemid"))
+            bool full_perm = te_data["te"].has("itemfullperm") && te_data["te"]["itemfullperm"].asBoolean();
+            full_perm_object &= full_perm;
+            if (!full_perm)
             {
-                LLUUID item_id = te_data["te"]["imageitemid"].asUUID();
-                if (item_id.notNull())
+                if (te_data["te"].has("imageitemid"))
                 {
-                    LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
-                    if (!itemp)
+                    LLUUID item_id = te_data["te"]["imageitemid"].asUUID();
+                    if (item_id.notNull())
                     {
-                        // image might be in object's inventory, but it can be not up to date
-                        LLSD notif_args;
-                        static std::string reason = getString("paste_error_inventory_not_found");
-                        notif_args["REASON"] = reason;
-                        LLNotificationsUtil::add("FacePasteFailed", notif_args);
-                        return;
+                        LLViewerInventoryItem* itemp = gInventory.getItem(item_id);
+                        if (!itemp)
+                        {
+                            // image might be in object's inventory, but it can be not up to date
+                            LLSD notif_args;
+                            static std::string reason = getString("paste_error_inventory_not_found");
+                            notif_args["REASON"] = reason;
+                            LLNotificationsUtil::add("FacePasteFailed", notif_args);
+                            return;
+                        }
                     }
+                }
+                else
+                {
+                    // Item was not found on 'copy' stage
+                    // Since this happened at copy, might be better to either show this
+                    // at copy stage or to drop clipboard here
+                    LLSD notif_args;
+                    static std::string reason = getString("paste_error_inventory_not_found");
+                    notif_args["REASON"] = reason;
+                    LLNotificationsUtil::add("FacePasteFailed", notif_args);
+                    return;
                 }
             }
         }
     }
 
-    if (!full_perm)
+    if (!full_perm_object)
     {
         LLNotificationsUtil::add("FacePasteTexturePermissions");
     }
@@ -3345,8 +3360,6 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 
                 if (itemp_res)
                 {
-                    // from_library is unreliable since we don't get texture item if object is
-                    // fullperm but it merely means additional checks when assigning texture
                     if (te == -1) // all faces
                     {
                         LLToolDragAndDrop::dropTextureAllFaces(objectp,
