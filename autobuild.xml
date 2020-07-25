@@ -808,9 +808,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7253c6787a9aa04b160f450a47bc8d93</string>
+              <string>e11da8884e44c27df3bf3adce01d5760</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202021141.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202072245.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -820,9 +820,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0b24ebef4ea891e5fbf94445acac42bf</string>
+              <string>609dd2d70b73d83c382f73734c648156</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202021146.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202072240.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
