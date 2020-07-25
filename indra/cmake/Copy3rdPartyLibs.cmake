@@ -90,7 +90,7 @@ if(WINDOWS)
         MESSAGE(STATUS "MSVC_VERSION ${MSVC_VERSION}")
     elseif (MSVC_VERSION EQUAL 1800) # VisualStudio 2013, which is (sigh) VS 12
         set(MSVC_VER 120)
-    elseif (MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1920) # Visual Studio 2017
+    elseif (MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1930) # Visual Studio 2017 + 2019
         set(MSVC_VER 140)
     else (MSVC80)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
