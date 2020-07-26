@@ -15,13 +15,13 @@
 				<text name="IndirectMaxComplexityText">
 					Nielimit.
 				</text>
-				<text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
-					Niebo WL:
+				<text name="WL Sky" tool_tip="Ustawienia systemu EEP dla Twojego nieba">
+					Niebo:
 				</text>
-				<text name="WL Water" tool_tip="Ustawienia systemu Windlight dla Twojej wody">
-					Woda WL:
+				<text name="WL Water" tool_tip="Ustawienia systemu EEP dla Twojej wody">
+					Woda:
 				</text>
-				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu Windlight dla cyklów dnia.">
+				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu EEP dla cyklów dnia.">
 					Cykl dnia:
 				</text>
 				<button name="btn_personal_lighting" label="Własne oświetlenie..." />
