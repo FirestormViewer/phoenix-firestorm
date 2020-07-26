@@ -69,6 +69,7 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "exogroupmutelist.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fskeywords.h"
@@ -1621,8 +1622,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             // should happen after you get an "invitation"
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-16 (Catznip-3.3)
             //if ( !gIMMgr->hasSession(session_id) )
-            if ( (!gIMMgr->hasSession(session_id)) &&
-                 ( (!gAgent.isInGroup(session_id)) || (!gIMMgr->checkSnoozeExpiration(session_id)) || LLAvatarActions::isBlocked(from_id) || (!gIMMgr->restoreSnoozedSession(session_id)) ) )
+            if (!gIMMgr->hasSession(session_id) &&
+                 (!gAgent.isInGroup(session_id) || LLAvatarActions::isBlocked(from_id) || (!exoGroupMuteList::instance().restoreDeferredGroupChat(session_id) && (!gIMMgr->checkSnoozeExpiration(session_id) || !gIMMgr->restoreSnoozedSession(session_id)) )))
 // [/SL:KB]
             {
                 return;

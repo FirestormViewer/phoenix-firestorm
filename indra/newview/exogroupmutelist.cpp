@@ -29,6 +29,9 @@
 // <FS:Ansariel> Server-side storage
 #include "llmutelist.h"
 #include "llviewernetwork.h"
+#include "llimview.h"
+#include "llagent.h"
+#include "llviewercontrol.h"
 
 exoGroupMuteList::exoGroupMuteList()
 : mMuted()
@@ -55,6 +58,17 @@ bool exoGroupMuteList::isMuted(const LLUUID& group) const
 #endif
 	return (bool)LLMuteList::instance().isMuted(LLUUID::null, getMutelistString(group));
 	// </FS:Ansariel> Server-side storage
+}
+
+bool exoGroupMuteList::isLoaded() const
+{
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		return true;
+	}
+#endif
+	return LLMuteList::instance().isLoaded();
 }
 
 void exoGroupMuteList::add(const LLUUID& group)
@@ -150,9 +164,47 @@ std::string exoGroupMuteList::getFilePath() const
 	return gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "muted_groups.xml");
 }
 
-// <FS:Ansariel> Server-side storage
+
+void exoGroupMuteList::addDeferredGroupChat(const LLUUID& group)
+{
+	if (mDeferredGroupChatSessionIDs.find(group) == mDeferredGroupChatSessionIDs.end())
+	{
+		mDeferredGroupChatSessionIDs.insert(group);
+	}
+}
+
+bool exoGroupMuteList::restoreDeferredGroupChat(const LLUUID& group)
+{
+	if (!isLoaded())
+	{
+		return false;
+	}
+
+	auto groupIt = mDeferredGroupChatSessionIDs.find(group);
+	if (groupIt != mDeferredGroupChatSessionIDs.end())
+	{
+		mDeferredGroupChatSessionIDs.erase(groupIt);
+
+		LLGroupData groupData;
+		if (gAgent.getGroupData(group, groupData))
+		{
+			gIMMgr->addSession(groupData.mName, IM_SESSION_INVITE, group);
+
+			uuid_vec_t ids;
+			LLIMModel::sendStartSession(group, group, ids, IM_SESSION_GROUP_START);
+
+			if (!gAgent.isDoNotDisturb() && gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0)
+			{
+				make_ui_sound("UISndNewIncomingGroupIMSession");
+			}
+			return true;
+		}
+	}
+
+	return false;
+}
+
 std::string exoGroupMuteList::getMutelistString(const LLUUID& group) const
 {
 	return std::string("Group:" + group.asString());
 }
-// </FS:Ansariel> Server-side storage
