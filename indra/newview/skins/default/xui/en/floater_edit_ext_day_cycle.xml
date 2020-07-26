@@ -570,7 +570,7 @@
                         <panel
                                 border="true"
                                 class="panel_settings_atmos"
-                                filename="panel_settings_sky_atmos.xml "
+                                filename="panel_settings_sky_atmos.xml"
                                 label="Atmosphere &amp; Lighting"
                                 layout="topleft"
                                 left_delta="0"
