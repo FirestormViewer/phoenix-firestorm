@@ -2,7 +2,7 @@
 <floater
         layout="topleft"
         name="env_edit_extdaycycle"
-        help_topic="day_presets"
+        help_topic="fs_day_cycle"
         save_rect="false"
         title="Edit Day Cycle"
         width="705"
@@ -570,7 +570,7 @@
                         <panel
                                 border="true"
                                 class="panel_settings_atmos"
-                                filename="panel_settings_sky_atmos.xml"
+                                filename="panel_settings_sky_atmos.xml "
                                 label="Atmosphere &amp; Lighting"
                                 layout="topleft"
                                 left_delta="0"

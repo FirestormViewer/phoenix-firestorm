@@ -5,7 +5,6 @@
         label="Water"
         layout="topleft"
         left="0"
-        help_topic="land_general_tab"
         name="panel_settings_water"
         top="0">    
     <layout_stack name="water_stack1"
