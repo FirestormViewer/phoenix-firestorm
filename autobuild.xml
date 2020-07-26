@@ -808,9 +808,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1f1c8b2850da982dfa876cb9b55707d7</string>
+              <string>7599bb6b05a5e48ce78180735e5d3355</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/63774/599578/dullahan-1.7.0.202007171514_81.3.10_gb223419_chromium-81.0.4044.138-windows-545143.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007261348_81.3.10_gb223419_chromium-81.0.4044.138-windows-202081313.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -820,9 +820,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>73bce404b3a8c4f252eeca4400c4bc19</string>
+              <string>92ced00cd0f89d0154ce2bcc6da086e0</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/63773/599579/dullahan-1.7.0.202007171514_81.3.10_gb223419_chromium-81.0.4044.138-windows64-545143.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007261348_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202081325.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
