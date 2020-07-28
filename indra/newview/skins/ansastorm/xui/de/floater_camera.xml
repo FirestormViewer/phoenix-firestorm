@@ -50,7 +50,7 @@
 		</panel_camera_item>
 	</panel>
 	<combo_box name="preset_combo">
-		<combo_box.item label="Voreinstellung verwenden" name="Use preset"/>
+		<combo_box.item label="Voreinstell. verw." name="Use preset"/>
 	</combo_box>
 	<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
 	<button label="Position..." name="camera_position_btn"/>
