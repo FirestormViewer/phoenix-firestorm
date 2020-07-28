@@ -2996,9 +2996,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>222a406ecb4071a9cc9635353afa337e</string>
+              <string>b20c18f66ae63c9d3b1970af8866aeb9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54977/511775/openjpeg-1.5.1.538970-windows-538970.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.202102107-windows-202102107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3008,9 +3008,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b5c80807fa8161f3480be3d89fe9516</string>
+              <string>6f1e1d8796301c4e5737cb0db0f696d2</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54974/511767/openjpeg-1.5.1.538970-windows64-538970.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.202102110-windows64-202102110.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
