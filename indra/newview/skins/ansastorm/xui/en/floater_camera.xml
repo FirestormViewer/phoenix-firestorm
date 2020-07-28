@@ -264,14 +264,26 @@
       <button
         follows="top|left"
         height="23"
-        label="Camera Position..."
+        label="Position..."
         layout="topleft"
         left_delta="-125"
         name="camera_position_btn"
         top_pad="9"
-        width="143">
+        width="70">
         <button.commit_callback
           function="Floater.Show"
           parameter="prefs_view_advanced"/>
+      </button>
+      <button
+        follows="top|left"
+        height="23"
+        label="Save"
+        layout="topleft"
+        left_pad="3"
+        name="save_btn"
+        top_delta="0"
+        width="70">
+        <button.commit_callback
+          function="CameraPresets.Save"/>
       </button>
 </floater>
