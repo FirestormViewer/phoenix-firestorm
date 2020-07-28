@@ -807,12 +807,12 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == "/zoffset_up")
 			{
-				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") + 0.05f);
+				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") + gSavedPerAccountSettings.getF32("AvatarHoverOffsetStepSize"));
 				return false;
 			}
 			else if (command == "/zoffset_down")
 			{
-				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") - 0.05f);
+				gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ") - gSavedPerAccountSettings.getF32("AvatarHoverOffsetStepSize"));
 				return false;
 			}
 			else if (command == "/zoffset_reset")

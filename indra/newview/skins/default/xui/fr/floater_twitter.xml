@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<floater name="floater_twitter" title="Twitter">
-	<tab_container name="tabs">
-		<panel label="Écrire" name="panel_twitter_photo"/>
-		<panel label="Compte" name="panel_twitter_account"/>
-	</tab_container>
-	<text name="connection_error_text">Erreur</text>
-	<text name="connection_loading_text">Chargement...</text>
-</floater>

@@ -1,75 +1,102 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
 	<menu label="Moi" name="Me">
-		<menu_item_call label="Profil..." name="Profile"/>
-		<menu_item_call label="Apparence..." name="ChangeOutfit"/>
-		<menu_item_call label="Choisir un avatar..." name="Avatar Picker"/>
-		<menu_item_check label="Inventaire..." name="Inventory"/>
-		<menu_item_call label="Nouvelle fenêtre d&apos;inventaire" name="NewInventoryWindow"/>
-		<menu_item_call label="Endroits..." name="Places"/>
+		<menu_item_call label="Compte" name="Manage Account"/>
+		<menu_item_call label="Annonces de Place du marché..." name="MarketplaceListings"/>
+		<menu_item_call label="Acheter des L$..." name="Buy and Sell L$"/>
+		<menu_item_check label="Inventaire" name="Inventory"/>
+		<menu_item_check label="Inventaire" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Dossiers protégés" name="Protected Folders"/>
+		<menu_item_check label="Éléments portés favoris" name="WearableFavorites"/>
 		<menu_item_call label="Favoris..." name="Picks"/>
 		<menu_item_call label="Expériences..." name="Experiences"/>
-		<menu_item_call label="Mes scripts..." name="MyScripts"/>
-		<menu_item_call label="Contrôles de la caméra..." name="Camera Controls"/>
-		<menu label="Déplacement" name="Movement">
+		<menu_item_call label="Profil..." name="Profile"/>
+		<menu_item_check label="Apparence..." name="ChangeOutfit"/>
+		<menu_item_call label="Choisir un avatar..." name="Avatar Picker"/>
+		<menu label="Déplacements" name="Movement">
 			<menu_item_call label="M&apos;asseoir" name="Sit Down Here"/>
-			<menu_item_call label="Se lever" name="Stand up"/>
+			<menu_item_call label="Me lever" name="Stand up"/>
 			<menu_item_check label="Voler" name="Fly"/>
+			<menu_item_call label="Arrêter de voler" name="Stop flying"/>
 			<menu_item_check label="Toujours courir" name="Always Run"/>
-			<menu_item_call label="Arrêter mon animation" name="Stop Animating My Avatar"/>
-			<menu_item_call label="Marcher / Courir / Voler..." name="WalkRunFly"/>
+			<menu_item_check label="Forcer à s'asseoir" name="Force Toggle Sitting"/>
+			<menu_item_check label="Figer" name="Move Lock"/>
+			<menu_item_check label="Saut rapide" name="Avatar Ignore Prejump"/>
 		</menu>
-		<menu label="Statut" name="Status">
-			<menu_item_check label="Absent" name="Away"/>
-			<menu_item_check label="Ne pas déranger" name="Do Not Disturb"/>
+		<menu_item_check label="Contrôles des mouvements" name="Movement Controls"/>
+		<menu_item_check label="Contrôles de la caméra..." name="Camera Controls"/>
+		<menu label="Santé de l'avatar" name="avhealth">
+			<menu_item_call label="Arrêter les animations de l'avatar" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Arrêter les animations de l'avatar &amp; révoquer les permissions" name="Stop Animating My Avatar With Revoke"/>
+			<menu_item_call label="Remettre en forme l'avatar" name="undeform_avatar"/>
+			<menu_item_call label="Forcer l'actualisation de l'apparence (Rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Actualiser les attachements" name="Refresh Attachments"/>
+			<menu_item_call label="Utiliser l'avatar masculin de base (Character Test)" name="ResetDefaultAvM"/>
+			<menu_item_call label="Utiliser l'avatar féminin de base (Character Test)" name="ResetDefaultAvF"/>
+			<menu_item_check label="Afficher la complexité de l'avatar" name="Avatar Draw Info"/>
+			<menu_item_call label="Scripts" name="MyScripts"/>
+			<menu_item_call label="Indicateur de lag" name="Lag Meter"/>
+			<menu_item_call label="Recréer le Bridge LSL" name="Recreate LSL Bridge"/>
 		</menu>
-		<menu_item_call label="Acheter des L$..." name="Buy and Sell L$"/>
-		<menu_item_call label="Annonces de Place du marché..." name="MarketplaceListings"/>
-		<menu_item_call label="Page d&apos;accueil du compte..." name="Manage My Account">
-			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=fr"/>
-		</menu_item_call>
+		<menu_item_call label="Photo" name="Take Snapshot"/>
+		<menu_item_call label="Suivi des transactions" name="money_tracker"/>
+		<menu_item_call label="Pose Stand..." name="pose_stand"/>
 		<menu_item_call label="Préférences..." name="Preferences"/>
-		<menu_item_call label="Boutons des barres d&apos;outils..." name="Toolbars"/>
-		<menu_item_call label="Masquer tous les contrôles" name="Hide UI"/>
+		<menu_item_call label="Boutons de la barre d'outils" name="Toolbar Buttons"/>
 		<menu_item_check label="Afficher les éléments HUD" name="Show HUD Attachments"/>
+		<menu_item_check label="Afficher l'interface utilisateur" name="Show User Interface"/>
+		<menu_item_call label="Demander le statut Administrateur" name="Request Admin Options"/>
+		<menu_item_call label="Quitter le statut Administrateur" name="Leave Admin Options"/>
 		<menu_item_call label="Quitter [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Communiquer" name="Communicate">
-		<menu_item_check label="Conversations..." name="Conversations"/>
+		<menu label="Statut de connexion" name="Status">
+			<menu_item_check label="Indisponible" name="Away"/>
+			<menu_item_check label="Ne pas déranger" name="Do Not Disturb"/>
+			<menu_item_check label="Réponse automatique" name="Set Autorespond"/>
+			<menu_item_check label="Réponse automatique aux non-amis" name="Set Autorespond to non-friends"/>
+			<menu_item_check label="Rejeter les offres et les demandes de téléportation" name="Automatically reject teleport offers"/>
+			<menu_item_check label="Rejeter toutes les invitations pour un groupe" name="Reject all group invites"/>
+			<menu_item_check label="Rejeter toutes les demandes d'amitié" name="Reject all friendship requests"/>
+		</menu>
+		<menu_item_call label="Amis" name="My Friends"/>
+		<menu_item_check label="Contacts" name="Contacts"/>
+		<menu_item_call label="Groupes de contacts" name="Contact Sets"/>
+		<menu_item_call label="Groupes" name="My Groups"/>
 		<menu_item_check label="Chat près de moi..." name="Nearby Chat"/>
-		<menu_item_check label="Parler" name="Speak"/>
-		<menu_item_check label="Journal des conversations..." name="Conversation Log..."/>
-		<menu_item_call label="Facebook..." name="Facebook"/>
-		<menu_item_call label="Twitter..." name="Twitter"/>
+		<menu_item_check label="Personnes" name="People"/>
+		<menu_item_check label="Conversations..." name="Conversations"/>
+		<menu_item_check label="Gestes..." name="Gestures"/>
 		<menu_item_call label="Flickr..." name="Flickr"/>
-		<menu label="Effet de voix" name="VoiceMorphing">
+		<menu_item_call label="Discord..." name="Discord"/>
+		<menu label="Effets de voix" name="VoiceMorphing">
 			<menu_item_check label="Aucun effet de voix" name="NoVoiceMorphing"/>
 			<menu_item_check label="Aperçu..." name="Preview"/>
 			<menu_item_call label="S&apos;abonner..." name="Subscribe"/>
 			<menu_item_call label="Avantage Premium..." name="PremiumPerk"/>
 		</menu>
-		<menu_item_check label="Gestes..." name="Gestures"/>
-		<menu_item_check label="Amis" name="My Friends"/>
-		<menu_item_check label="Groupes" name="My Groups"/>
-		<menu_item_check label="Personnes près de vous" name="Active Speakers"/>
-		<menu_item_check label="Liste des ignorés" name="Block List"/>
-		<menu_item_check label="Ne pas déranger" name="Do Not Disturb"/>
+		<menu_item_check label="Journal des conversations..." name="Conversation Log..."/>
+		<menu_item_check label="Chat vocal à proximité" name="Nearby Voice"/>
+		<menu_item_call label="Liste des ignorés" name="Block List"/>
 	</menu>
 	<menu label="Monde" name="World">
-		<menu_item_call label="Créer un repère pour ce lieu" name="Create Landmark Here"/>
+		<menu_item_call label="Resynchroniser les animations" name="Resync Animations"/>
+		<menu_item_call label="Personnes à proximité" name="Active Speakers"/>
+		<menu_item_check label="Radar" name="Radar"/>
+		<menu_item_call label="Historique de téléportation" name="Teleport History"/>
+		<menu_item_check label="Lieux" name="Places"/>
 		<menu_item_call label="Destinations..." name="Destinations"/>
-		<menu_item_check label="Carte du monde" name="World Map"/>
-		<menu_item_check label="Mini-carte" name="Mini-Map"/>
 		<menu_item_call label="Événements" name="Events"/>
-		<menu_item_check label="Recherche..." name="Search"/>
-		<menu_item_call label="Me téléporter chez moi" name="Teleport Home"/>
-		<menu_item_call label="Définir le domicile ici" name="Set Home to Here"/>
-		<menu_item_call label="Photo" name="Take Snapshot"/>
+		<menu_item_check label="Mini-carte" name="Mini-Map"/>
+		<menu_item_check label="Carte du monde" name="World Map"/>
+		<menu_item_check label="Suivi des régions" name="Region Tracker"/>
+		<menu_item_call label="Créer un repère pour ce lieu" name="Create Landmark Here"/>
 		<menu_item_call label="Profil du lieu" name="Place Profile"/>
 		<menu_item_call label="À propos du terrain" name="About Land"/>
 		<menu_item_call label="Région/Domaine" name="RegionEstate"/>
-		<menu_item_call label="Mes terrains..." name="My Land"/>
+		<menu_item_call label="Définir le domicile ici" name="Set Home to Here"/>
 		<menu_item_call label="Acheter ce terrain" name="Buy Land"/>
+		<menu_item_call label="Mes terrains..." name="My Land"/>
 		<menu label="Afficher" name="LandShow">
 			<menu_item_check label="Lignes d&apos;interdiction" name="Ban Lines"/>
 			<menu_item_check label="Balises" name="beacons"/>
@@ -79,16 +106,25 @@
 			<menu_item_check label="Propriétés de la parcelle" name="Parcel Properties"/>
 			<menu_item_check label="Menu Avancé" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_call label="Me téléporter chez moi" name="Teleport Home"/>
 		<menu label="Environnement" name="Environment">
-			<menu_item_check label="Aube" name="Sunrise"/>
+			<menu_item_check label="Lever du soleil" name="Sunrise"/>
 			<menu_item_check label="Midi" name="Noon"/>
-			<menu_item_check label="Coucher de soleil" name="Sunset"/>
+			<menu_item_check label="Coucher du soleil" name="Sunset"/>
 			<menu_item_check label="Minuit" name="Midnight"/>
-			<menu_item_check label="Utiliser l&apos;environnement partagé" name="Use Shared Environment"/>
+			<menu_item_check label="Utiliser l'environnement partagé" name="Use Shared Environment"/>
 			<menu_item_call label="Mes environnements..." name="my_environs"/>
 			<menu_item_call label="Éclairage personnel..." name="adjustment_tool"/>
-			<menu_item_check label="Pause des nuages" name="pause_clouds"/>
+			<menu_item_check label="Arrêter les nuages" name="pause_clouds"/>
 		</menu>
+		<menu label="Photo et vidéo" name="photo_and_video"/>
+		<menu_item_call label="Recherche dans la région" name="area_search"/>
+		<menu_item_call label="Explorateur de sons" name="Sound Explorer"/>
+		<menu_item_call label="Explorateur d'animations" name="Animation Explorer"/>
+		<menu_item_call label="Liste noire d'éléments" name="asset_blacklist"/>
+		<menu_item_call label="Paramètres d'affichage de l'avatar" name="Avatar Render Settings"/>
+		<menu_item_check label="Toujours afficher complètement les amis" name="Always show Friends normally"/>
+		<menu_item_check label="N'afficher que les amis" name="Render Friends Only"/>
 	</menu>
 	<menu label="Construire" name="BuildTools">
 		<menu_item_check label="Construire" name="Show Build Tools"/>
@@ -115,17 +151,23 @@
 			<menu_item_call label="Acheter" name="Menu Object Buy"/>
 			<menu_item_call label="Prendre" name="Menu Object Take"/>
 			<menu_item_call label="Prendre une copie" name="Take Copy"/>
+			<menu_item_call label="Dupliquer" name="Duplicate"/>
+			<menu_item_call label="Modifier les particles" name="Menu Object Edit Particles"/>
 			<menu_item_call label="Enregistrer dans le contenu des objets" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Renvoi de l&apos;objet" name="Return Object back to Owner"/>
-			<menu_item_call label="Dupliquer" name="DuplicateObject"/>
+			<menu label="Enregistrer sous" name="Export Menu">
+				<menu_item_call label="Sauvegarde" name="Backup"/>
+			</menu>
 		</menu>
 		<menu label="Scripts" name="Scripts">
-			<menu_item_check label="Avertissements/Erreurs de scripts..." name="Script debug"/>
+			<menu_item_call label="Avertissements/erreurs de script" name="Script Debug"/>
+			<menu_item_call label="Informations sur le script (Compteur)" name="Script Info"/>
 			<menu_item_call label="Recompiler les scripts (Mono)" name="Mono"/>
 			<menu_item_call label="Recompiler les scripts (LSL)" name="LSL"/>
 			<menu_item_call label="Réinitialiser les scripts" name="Reset Scripts"/>
 			<menu_item_call label="Définir les scripts sur Exécution" name="Set Scripts to Running"/>
 			<menu_item_call label="Définir les scripts sur Pas d&apos;exécution" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Supprimer les scripts de la sélection" name="Remove Scripts From Selection"/>
 		</menu>
 		<menu label="Recherche de chemin" name="Pathfinding">
 			<menu_item_call label="Objets des régions" name="pathfinding_linksets_menu_item"/>
@@ -137,7 +179,11 @@
 			<menu_item_check label="Afficher les droits avancés" name="DebugPermissions"/>
 			<menu_item_check label="Sélectionner mes objets uniquement" name="Select Only My Objects"/>
 			<menu_item_check label="Sélectionner les objets déplaçables uniquement" name="Select Only Movable Objects"/>
+			<menu_item_check label="Ne sélectionner que les objets verrouillés" name="Select Only Locked Objects"/>
+			<menu_item_check label="Ne sélectionner que les objets copiables" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Sélectionner en entourant" name="Select By Surrounding"/>
+			<menu_item_check label="Inclure les objets appartenant à un groupe" name="Include Group-Owned Objects"/>
+			<menu_item_check label="Afficher la forme physique lors d'une modification" name="Show Physics Shape"/>
 			<menu_item_check label="Afficher les contours de la sélection" name="Show Selection Outlines"/>
 			<menu_item_check label="Afficher la sélection masquée" name="Show Hidden Selection"/>
 			<menu_item_check label="Afficher le rayon lumineux pour la sélection" name="Show Light Radius for Selection"/>
@@ -154,26 +200,42 @@
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modèle..." name="Upload Model"/>
 			<menu_item_call label="Lot..." name="Bulk Upload"/>
+			<menu_item_call label="Importer un groupe d'objets" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Annuler" name="Undo"/>
 		<menu_item_call label="Refaire" name="Redo"/>
 	</menu>
+	<menu label="Contenu" name="Content">
+		<menu_item_check label="Recherche" name="Search"/>
+		<menu_item_call label="Marketplace SL" name="SL Marketplace"/>
+		<menu_item_call label="Taux de change du L$" name="LindenXchange"/>
+		<menu_item_call label="Bibliothèque de scripts" name="Script Library"/>
+		<menu_item_call label="Blog Firestorm" name="Firestorm Blog"/>
+		<menu_item_call label="Flickr Firestorm" name="Firestorm Flickr"/>
+		<menu_item_call label="YouTube Firestorm" name="Firestorm YouTube"/>
+		<menu_item_call label="Twitter Firestorm" name="Firestorm Twitter"/>
+		<menu_item_call label="Plurk Firestorm" name="Firestorm Plurk"/>
+		<menu_item_call label="Message du jour" name="Firestorm MoTD"/>
+	</menu>
 	<menu label="Aide" name="Help">
-		<menu_item_call label="Aide rapide..." name="How To"/>
-		<menu_item_call label="Démarrage rapide" name="Quickstart"/>
-		<menu_item_call label="Base de connaissances" name="Knowledge Base"/>
-		<menu_item_call label="Wiki" name="Wiki"/>
-		<menu_item_call label="Forums de la communauté" name="Community Forums"/>
-		<menu_item_call label="Portail d&apos;assistance" name="Support portal"/>
-		<menu_item_call label="Actualités [SECOND_LIFE]" name="Second Life News"/>
-		<menu_item_call label="Blogs [SECOND_LIFE]" name="Second Life Blogs"/>
+		<menu_item_check label="Affficher les conseils" name="Enable Hints"/>
+		<menu_item_call label="Wiki Firestorm" name="Firestorm Wiki"/>
+		<menu_item_call label="Dépannage" name="Troubleshooting"/>
+		<menu_item_call label="Rejoindre un groupe d'aide Firestorm" name="firestorm_support_group"/>
+		<menu_item_call label="Horaires des classes Firestorm" name="Firestorm Classes Schedule"/>
+		<menu_item_call label="Calendrier des évènements Firestorm" name="Firestorm Events Calendar"/>
+		<menu_item_call label="Aide [CURRENT_GRID]" name="current_grid_help"/>
+		<menu_item_call label="À propos de [CURRENT_GRID]" name="current_grid_about"/>
+		<menu_item_check label="Consulter l'état de la grille" name="Grid Status"/>
 		<menu_item_call label="Signaler une infraction" name="Report Abuse"/>
 		<menu_item_call label="Signaler un bug" name="Report Bug"/>
 		<menu_item_call label="Collisions, coups et bousculades" name="Bumps, Pushes &amp;amp; Hits"/>
+		<menu_item_check label="Activer le bouton Sysinfo" name="Enable Sysinfo Button"/>
 		<menu_item_call label="À propos de [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="Avancé" name="Advanced">
 		<menu_item_call label="Refixer les textures" name="Rebake Texture"/>
+		<menu_item_call label="Actualiser les attachements" name="Refresh Attachments"/>
 		<menu_item_call label="Taille de l&apos;interface par défaut" name="Set UI Size to Default"/>
 		<menu_item_call label="Définir la taille de la fenêtre…" name="Set Window Size..."/>
 		<menu_item_check label="Limiter la distance de sélection" name="Limit Select Distance"/>
@@ -183,7 +245,7 @@
 		<menu label="Outils de performance" name="Performance Tools">
 			<menu_item_call label="Mesure du lag" name="Lag Meter"/>
 			<menu_item_check label="Barre de statistiques" name="Statistics Bar"/>
-			<menu_item_call label="Statistiques de chargement de scène" name="Scene Load Statistics"/>
+			<menu_item_check label="Statistiques de chargement de scène" name="Scene Load Statistics"/>
 			<menu_item_check label="Afficher les informations de complexité de l’avatar" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Surbrillance et visibilité" name="Highlighting and Visibility">
@@ -192,6 +254,11 @@
 			<menu_item_check label="Masquer la sélection" name="Hide Selected"/>
 			<menu_item_check label="Mettre la transparence en surbrillance" name="Highlight Transparent"/>
 			<menu_item_check label="Afficher le réticule de la vue subjective" name="ShowCrosshairs"/>
+			<menu label="Conseils" name="Hover Tips">
+				<menu_item_check label="Afficher les conseils" name="Show Tips"/>
+				<menu_item_check label="Afficher les conseils à propose des terrains" name="Land Tips"/>
+				<menu_item_check label="Afficher les conseils sur tous les objets" name="Tips On All Objects"/>
+			</menu>
 		</menu>
 		<menu label="Types de rendu" name="Rendering Types">
 			<menu_item_check label="Simple" name="Rendering Type Simple"/>
@@ -218,23 +285,34 @@
 			<menu_item_check label="Tester FRInfo" name="Test FRInfo"/>
 			<menu_item_check label="Objets flexibles" name="Flexible Objects"/>
 		</menu>
+		<menu label="Sauvegarde des flux de médias" name="media_stream_import_export">
+			<menu_item_call label="Importer une liste XML de flux..." name="media_stream_import"/>
+			<menu_item_call label="Exporter une liste XML de flux..." name="media_stream_export"/>
+		</menu>
 		<menu_item_check label="Utiliser le thread de lecture de plug-in" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Effacer le cache du groupe" name="ClearGroupCache"/>
 		<menu_item_check label="Effet de lissage de la souris" name="Mouse Smoothing"/>
 		<menu_item_call label="Libérer les touches" name="Release Keys"/>
 		<menu label="Raccourcis" name="Shortcuts">
+			<menu_item_check label="Recherche" name="Search"/>
 			<menu_item_check label="Afficher le menu Avancé - raccourci existant" name="Show Advanced Menu - legacy shortcut"/>
+			<menu_item_check label="Téléportation par double clic" name="DoubleClick Teleport"/>
+			<menu_item_check label="Toujours courir" name="Always Run"/>
+			<menu_item_check label="Voler" name="Fly"/>
 			<menu_item_call label="Fermer la fenêtre" name="Close Window"/>
 			<menu_item_call label="Fermer toutes les fenêtres" name="Close All Windows"/>
 			<menu_item_call label="Photo sur disque" name="Snapshot to Disk"/>
 			<menu_item_call label="Vue subjective" name="Mouselook"/>
 			<menu_item_check label="Joystick Flycam" name="Joystick Flycam"/>
 			<menu_item_call label="Réinitialiser la vue" name="Reset View"/>
+			<menu_item_call label="Réinitialiser les angles de la caméra" name="Reset Camera Angles"/>
 			<menu_item_call label="Regarder la dernière conversation" name="Look at Last Chatter"/>
 			<menu_item_call label="Zoomer en avant" name="Zoom In"/>
 			<menu_item_call label="Zoom par défaut" name="Zoom Default"/>
 			<menu_item_call label="Zoomer en arrière" name="Zoom Out"/>
 		</menu>
+		<menu_item_check label="Ignorer l'interdiction de voler" name="Fly Override"/>
+		<menu_item_check label="API RestrainedLove" name="RLV API"/>
 		<menu_item_call label="Afficher les paramètres de débogage" name="Debug Settings"/>
 		<menu_item_check label="Afficher le menu Développeurs" name="Debug Mode"/>
 	</menu>
@@ -259,9 +337,11 @@
 		</menu>
 		<menu label="Afficher les infos" name="Display Info">
 			<menu_item_check label="Afficher l&apos;heure" name="Show Time"/>
-			<menu_item_check label="Afficher le coût du chargement" name="Show Upload Cost"/>
-			<menu_item_check label="Afficher les infos de rendu" name="Show Render Info"/>
+			<menu_item_check label="Afficher la transaction d'upload" name="Show Upload Transaction"/>
 			<menu_item_check label="Afficher les infos de texture" name="Show Texture Info"/>
+			<menu_item_call label="Utilisation de VRAM par objet" name="VRAM usage per object"/>
+			<menu_item_check label="Afficher les infos de rendu de l'avatar" name="Show Avatar Render Info"/>
+			<menu_item_check label="Afficher les infos de rendu" name="Show Render Info"/>
 			<menu_item_check label="Afficher les matrices" name="Show Matrices"/>
 			<menu_item_check label="Afficher la couleur sous le curseur" name="Show Color Under Cursor"/>
 			<menu_item_check label="Afficher la mémoire" name="Show Memory"/>
@@ -331,6 +411,8 @@
 			<menu_item_check label="Masques alpha automatiques (non différés)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Textures d&apos;animation" name="Animation Textures"/>
 			<menu_item_check label="Désactiver les textures" name="Disable Textures"/>
+			<menu_item_call label="Ne pas afficher les animesh" name="Derender Animesh"/>
+			<menu_item_check label="Textures pleine résolution (dangereux)" name="Full Res Textures"/>
 			<menu_item_check label="Désactiver l&apos;ambiance" name="Disable Ambient"/>
 			<menu_item_check label="Désactiver la lumière du soleil" name="Disable Sunlight"/>
 			<menu_item_check label="Désactiver les lumières locales" name="Disable Local Lights"/>
@@ -360,6 +442,7 @@
 			<menu_item_check label="Ignorer les paramètres du soleil de la sim" name="Sim Sun Override"/>
 			<menu_item_check label="Météo fixe" name="Fixed Weather"/>
 			<menu_item_call label="Vidage de cache d&apos;objet de la région" name="Dump Region Object Cache"/>
+			<menu_item_call label="Envoie les fonctionnalités du simulateur dans le chat local" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Interface" name="UI">
 			<menu_item_call label="Navigateur de médias" name="Media Browser"/>
@@ -380,7 +463,11 @@
 		<menu label="XUI" name="XUI">
 			<menu_item_call label="Recharger les paramètres de couleurs" name="Reload Color Settings"/>
 			<menu_item_call label="Afficher le test de police" name="Show Font Test"/>
+			<menu_item_call label="Charge à partir d'XML" name="Load from XML"/>
+			<menu_item_call label="Enregistre en XML" name="Save to XML"/>
 			<menu_item_check label="Afficher les noms XUI" name="Show XUI Names"/>
+			<menu_item_check label="Affiche les info de débogage pour les vues" name="DebugViews"/>
+			<menu_item_call label="Outil de prévisualisation de XUI" name="UI Preview Tool"/>
 			<menu_item_call label="Envoyer des IM tests" name="Send Test IMs"/>
 			<menu_item_call label="Vider les caches de noms" name="Flush Names Caches"/>
 		</menu>
@@ -416,15 +503,15 @@
 			<menu_item_check label="Voir les os" name="Show Bones"/>
 			<menu_item_check label="Afficher la cible de l&apos;avatar" name="Display Agent Target"/>
 			<menu_item_check label="Afficher les étendues d&apos;imposteur" name="Show Impostor Extents"/>
-			<menu_item_call label="Dump Attachments" name="Dump Attachments"/>
+			<menu_item_call label="Enregistre les données sur les attachements" name="Dump Attachments"/>
 			<menu_item_call label="Débogage des textures des avatars" name="Debug Avatar Textures"/>
-			<menu_item_call label="Dump Local Textures" name="Dump Local Textures"/>
+			<menu_item_call label="Enregistre les données sur les textures" name="Dump Local Textures"/>
 		</menu>
 		<menu_item_check label="Textures HTTP" name="HTTP Textures"/>
 		<menu_item_call label="Compresser les images" name="Compress Images"/>
 		<menu_item_call label="Activer Visual Leak Detector" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Output Debug Minidump" name="Output Debug Minidump"/>
-		<menu_item_check label="Console Window on next Run" name="Console Window"/>
+		<menu_item_check label="Ouvrir la console de débogage au prochain lancement" name="Console Window"/>
 		<menu label="Définir le niveau de connexion" name="Set Logging Level">
 			<menu_item_check label="Débogage" name="Debug"/>
 			<menu_item_check label="Infos" name="Info"/>
@@ -451,7 +538,7 @@
 			<menu_item_call label="Réclamer un terrain public" name="Claim Public Land"/>
 		</menu>
 		<menu label="Région" name="Region">
-			<menu_item_call label="Dump Temp Asset Data" name="Dump Temp Asset Data"/>
+			<menu_item_call label="Enregistre les données sur les éléments temporaires" name="Dump Temp Asset Data"/>
 			<menu_item_call label="Enregistrer l&apos;état de la région" name="Save Region State"/>
 		</menu>
 		<menu_item_call label="Outils divins" name="God Tools"/>

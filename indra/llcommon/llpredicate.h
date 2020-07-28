@@ -164,7 +164,7 @@ namespace LLPredicate
 			return (mRule && value).someSet() && (!mRule && value).someSet();
 		}
 
-		bool acceptsAll() const	
+		bool acceptsAll() const
 		{
 			return mRule.allSet();
 		}

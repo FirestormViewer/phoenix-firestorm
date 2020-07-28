@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater title="Fotograf" name="phototools">
 	<tab_container name="tabs">
-		<panel name="EnvironmentTab">
+		<panel name="EnvironmentTab" label="Otocz.">
 			<panel name="PT_WL_Settings">
 				<text name="T_WL_Settings">
-					Ustawienia systemu Windlight
+					Ustawienia otoczenia
 				</text>
 			</panel>
 			<panel name="P_WL_Settings">
-				<check_box label="Włącz shadery atmosfery (Windlight)" name="WindLightUseAtmosShaders" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
+				<check_box label="Włącz shadery atmosfery" name="WindLightUseAtmosShaders" tool_tip="Ta opcja włącza pełną funkcjonalność systemu EEP (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
 			</panel>
 			<panel name="P_WL_Sky_Water">
-				<text name="WL Sky" tool_tip="Zapisane ustawienia systemu Windlight dla nieba.">
-					Niebo WL
+				<text name="WL Sky" tool_tip="Zapisane ustawienia dla nieba.">
+					Niebo
 				</text>
-				<text name="WL Water" tool_tip="Zapisane ustawienia systemu Windlight dla wody.">
-					Woda WL
+				<text name="WL Water" tool_tip="Zapisane ustawienia dla wody.">
+					Woda
 				</text>
-				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu Windlight dla cyklów dnia.">
+				<text name="Day Cycle" tool_tip="Zapisane ustawienia dla cyklów dnia.">
 					Cykl dnia
 				</text>
 				<button name="btn_personal_lighting" label="Własne oświetlenie..." />
@@ -26,7 +26,7 @@
 			</panel>
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
-					Szybkie Windlighty
+					Szybkie otoczenia
 				</text>
 				<button name="Sunrise" label="Wschód"/>
 				<button name="Noon" label="Południe"/>
@@ -36,7 +36,7 @@
 			</panel>
 			<panel name="P_WL_Presets">
 				<text name="T_WL_Presets" tool_tip="Kliknij na jakiś element, aby utworzyć nowe ustawienie lub zmodyfikować istniejące.">
-					Zapisane Windlighty
+					Zapisane otoczenia
 				</text>
 				<button name="new_sky_preset" label="Nowe ust. nieba"/>
 				<button name="edit_sky_preset" label="Edytuj ust. nieba"/>

@@ -34,7 +34,7 @@
       value="1"/>
     </radio_group> 
     <line_editor
-     commit_on_focus_lost = "true"
+     commit_on_focus_lost="false"
      follows="top|left"
      height="23"
      layout="topleft"

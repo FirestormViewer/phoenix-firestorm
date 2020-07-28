@@ -23,8 +23,8 @@
 	<button label="Профиль..." name="profile_btn" tool_tip="Открыть профиль аватара" />
 	<button label="ЛС..." name="start_im_btn" tool_tip="Отправить личное сообщение (ЛС)" />
 	<button label="Телепорт..." name="offer_teleport_btn" tool_tip="Предложить пользователю телепортироваться к вам" />
-	<button label="Алиас +" name="set_pseudonym_btn" tool_tip="Задать псевдоним данному аватару" />
-	<button label="Алиас -" name="remove_pseudonym_btn" tool_tip="Удалить псевдоним данного аватара" />
+	<button label="Прозвище +" name="set_pseudonym_btn" tool_tip="Задать псевдоним данному аватару" />
+	<button label="Прозвище -" name="remove_pseudonym_btn" tool_tip="Удалить псевдоним данного аватара" />
 	<button label="Удалить ОИ" name="remove_displayname_btn" tool_tip="Удалить отображаемое имя данного аватара" />
 	<text name="member_count">
 		Членов: [COUNT]

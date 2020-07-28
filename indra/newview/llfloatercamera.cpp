@@ -726,7 +726,14 @@ void LLFloaterCamera::onSavePreset()
 	LLFloaterReg::hideInstance("delete_pref_preset", PRESETS_CAMERA);
 	LLFloaterReg::hideInstance("load_pref_preset", PRESETS_CAMERA);
 	
-	LLFloaterReg::showInstance("save_camera_preset");
+	// <FS:Ansariel> Preselect correct radio button on save camera presets floater
+	//LLFloaterReg::showInstance("save_camera_preset");
+	LLSD key;
+	std::string current_preset = gSavedSettings.getString("PresetCameraActive");
+	bool is_custom_preset = current_preset != "" && !LLPresetsManager::getInstance()->isDefaultCameraPreset(current_preset);
+	key["index"] = is_custom_preset ? 1 : 0;
+	LLFloaterReg::showInstance("save_camera_preset", key);
+	// </FS:Ansariel>
 }
 
 void LLFloaterCamera::onCustomPresetSelected()

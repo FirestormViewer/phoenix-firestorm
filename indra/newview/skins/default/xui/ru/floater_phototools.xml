@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="phototools" title="Фотоинструменты">
 	<tab_container name="tabs">
-		<panel name="EnvironmentTab">
+		<panel name="EnvironmentTab" label="Окр.среда">
 			<panel name="PT_WL_Settings">
 				<text name="T_WL_Settings">
 					Настройка Окружающей среды
@@ -14,13 +14,13 @@
 			</panel>
 
 			<panel name="P_WL_Sky_Water">
-				<text name="WL Sky" tool_tip="Предустановка окружения для вашего неба.">
+				<text name="WL Sky" tool_tip="Предустановка неба для вашей окружающей среды.">
 					Небо
 				</text>
-				<text name="WL Water" tool_tip="Предустановка окружения для вашей воды.">
+				<text name="WL Water" tool_tip="Предустановка воды для вашей окружающей среды.">
 					Вода
 				</text>
-				<text name="Day Cycle" tool_tip="Предустановка окружения для вашего цикла дня.">
+				<text name="Day Cycle" tool_tip="Предустановка цикла дня для вашей окружающей среды.">
 					Цикл Дня
 				</text>
 				<button name="btn_personal_lighting" label="Личное Освещение..."/>
@@ -181,7 +181,7 @@
 			</panel>
 		</panel>
 
-		<panel name="P_DoF_Glow" label="DoF/Glow">
+		<panel name="P_DoF_Glow" label="Резк./Свеч.">
 			<panel name="PT_DoF_Glow">
 				<text name="T_DoF">
 					Настройки Глубины Резкости

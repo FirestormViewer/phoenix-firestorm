@@ -122,7 +122,10 @@ vary_normal  = n;
 #else //HAS_SKIN
 	vec3 n = normalize(normal_matrix * normal);
 #ifdef HAS_NORMAL_MAP
-	vec3 t = normalize(normal_matrix * tangent.xyz);
+// <FS:Beq> tangents should not use the inv_transpose matrix
+	// vec3 t = normalize(normal_matrix * tangent.xyz);
+	vec3 t = normalize((modelview_projection_matrix * vec4(tangent.xyz,0)).xyz);
+// </FS:Beq>
 	vec3 b = cross(n,t)*tangent.w;
 	//vec3 t = cross(b,n) * binormal.w;
 	

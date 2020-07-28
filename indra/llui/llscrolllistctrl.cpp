@@ -2607,6 +2607,7 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 					if (selected_item)
 					{
 						handleRightMouseDown(selected_item->getRect().getCenterX(), selected_item->getRect().getCenterY(), MASK_NONE);
+						handled = TRUE;
 					}
 					break;
 				}
@@ -2616,10 +2617,138 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 			}
 		}
 		// TODO: multiple: shift-up, shift-down, shift-home, shift-end, select all
+		// <FS:Ansariel> Let's just do this!
+		else if (mask == MASK_CONTROL)
+		{
+			switch (key)
+			{
+			case 'A':
+				if (canSelectAll())
+				{
+					selectAll();
+					handled = TRUE;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			switch (key)
+			{
+			case KEY_UP:
+				if (mAllowKeyboardMovement || hasFocus())
+				{
+					auto selected_items = getAllSelected();
+					auto last = selected_items.back();
+
+					if (mLastSelected == last && selected_items.size() > 1)
+					{
+						deselectItem(last);
+						mLastSelected = getAllSelected().back(); // Use updated selection
+					}
+					else
+					{
+						auto items = getAllData();
+						auto first = std::find(items.begin(), items.end(), selected_items.front());
+						if (first != items.end() && first > items.begin())
+						{
+							selectItem(*(--first), FALSE);
+						}
+					}
+
+					handled = TRUE;
+				}
+				
+				break;
+			case KEY_DOWN:
+				if (mAllowKeyboardMovement || hasFocus())
+				{
+					auto selected_items = getAllSelected();
+					auto first = selected_items.front();
+
+					if (mLastSelected == first && selected_items.size() > 1)
+					{
+						deselectItem(first);
+						mLastSelected = getAllSelected().front(); // Use updated selection
+					}
+					else
+					{
+						auto items = getAllData();
+						auto last = std::find(items.begin(), items.end(), selected_items.back());
+						if (last != items.end() && last < items.end() - 1)
+						{
+							selectItem(*(++last), FALSE);
+						}
+					}
+
+					handled = TRUE;
+				}
+				break;
+			case KEY_HOME:
+				if (mAllowKeyboardMovement || hasFocus())
+				{
+					auto items = getAllData();
+					auto first = std::find(items.begin(), items.end(), getAllSelected().front());
+					for (auto it = items.begin(); it != items.end(); ++it)
+					{
+						if (it <= first)
+						{
+							selectItem(*it, FALSE);
+						}
+						else
+						{
+							deselectItem(*it);
+						}
+					}
+
+					handled = TRUE;
+				}
+				break;
+			case KEY_END:
+				if (mAllowKeyboardMovement || hasFocus())
+				{
+					auto items = getAllData();
+					auto last = std::find(items.begin(), items.end(), getAllSelected().back());
+					for (auto it = items.begin(); it != items.end(); ++it)
+					{
+						if (it >= last)
+						{
+							selectItem(*it, FALSE);
+						}
+						else
+						{
+							deselectItem(*it);
+						}
+					}
+
+					handled = TRUE;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		// </FS:Ansariel>
 	}
 
 	return handled;
 }
+
+// <FS:Ansariel> Needed for keyboard selection in radar
+void LLScrollListCtrl::setLastSelectedItem(const LLUUID& id)
+{
+	for (auto item : getAllSelected())
+	{
+		if (item->getUUID() == id)
+		{
+			mLastSelected = item;
+			break;
+		}
+	}
+}
+// </FS:Ansariel>
 
 BOOL LLScrollListCtrl::handleUnicodeCharHere(llwchar uni_char)
 {

@@ -2755,7 +2755,7 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
     else
 	{
 		// <FS:Ansariel> Don't care about viewer maturity
-        //switch (LLVersionInfo::getViewerMaturity())
+        //switch (LLVersionInfo::instance().getViewerMaturity())
         //{
         //case LLVersionInfo::TEST_VIEWER:
         //    new_bg_color = LLUIColorTable::instance().getColor( "MenuBarTestBgColor" );
