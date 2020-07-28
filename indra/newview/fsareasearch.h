@@ -438,9 +438,6 @@ public:
 	LLCheckBoxCtrl* mCheckboxClickTouch;
 	LLCheckBoxCtrl* mCheckboxClickBuy;
 	LLCheckBoxCtrl* mCheckboxClickSit;
-
-private:
-	FSAreaSearch* mFSAreaSearch;
 };
 
 #endif // FS_AREASEARCH_H

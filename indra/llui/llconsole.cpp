@@ -747,9 +747,9 @@ void LLConsole::onUrlLabelCallback(const LLUUID& paragraph_id, const std::string
 // static
 void LLConsole::updateClass()
 {	
-	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+	for (auto& con : instance_snapshot())
 	{
-		it->update();
+		con.update();
 	} 
 }
 

@@ -44,16 +44,19 @@ using namespace kdu_core;
 #include <sstream>
 #include <iomanip>
 
-// stream kdu_dims to std::ostream
 // Turns out this must NOT be in the anonymous namespace!
-// It must also precede #include "stringize.h".
+namespace kdu_core
+{
+// stream kdu_dims to std::ostream
 inline
 std::ostream& operator<<(std::ostream& out, const kdu_dims& dims)
 {
 	return out << "(" << dims.pos.x << "," << dims.pos.y << "),"
 				  "[" << dims.size.x << "x" << dims.size.y << "]";
 }
+} // namespace kdu_core
 
+// operator<<(std::ostream&, const kdu_dims&) must precede #include "stringize.h"
 #include "stringize.h"
 
 namespace {
@@ -1116,6 +1119,14 @@ void set_default_colour_weights(kdu_params *siz)
 	{
 		return;
 	}
+
+// <FS:Ansariel> Fix image encoding for KDU >= 8.0.4
+#if KDU_MAJOR_VERSION >= 8 && KDU_MINOR_VERSION >= 0 && KDU_PATCH_VERSION >= 4
+	cod = siz->access_cluster(ENC_params);
+	assert(cod != NULL);
+#endif
+// </FS:Ansariel>
+
 	float weight;
 	if (cod->get(Clev_weights,0,0,weight) || cod->get(Cband_weights,0,0,weight))
 	{

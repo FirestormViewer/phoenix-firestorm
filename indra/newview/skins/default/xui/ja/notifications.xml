@@ -2841,9 +2841,6 @@ URL: [AUDIOURL]
 	<notification name="IMSystemMessageTip">
 		[MESSAGE]
 	</notification>
-	<notification name="ChatSystemMessageTip">
-		[MESSAGE]
-	</notification>
 	<notification name="Cancelled">
 		取り消されました。
 	</notification>

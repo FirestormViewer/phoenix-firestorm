@@ -114,14 +114,17 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 		// to use it for a history log filename.
 		// <FS:Ansariel> [Legacy IM logfile names]
 		//std::string user_name = LLCacheName::buildUsername(session_name);
-		std::string user_name;
-		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+		std::string user_name(session_name);
+		if (!gAgent.isInGroup(session_owner_id))
 		{
-			user_name = session_name.substr(0, session_name.find(" Resident"));;
-		}
-		else
-		{
-			user_name = LLCacheName::buildUsername(session_name);
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				user_name = session_name.substr(0, session_name.find(" Resident"));;
+			}
+			else
+			{
+				user_name = LLCacheName::buildUsername(session_name);
+			}
 		}
 		// </FS:Ansariel> [Legacy IM logfile names]
 		LLIMModel::instance().logToFile(user_name, from, from_id, message);
@@ -236,6 +239,8 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 	}
 
 	// <FS:KC> Better group notices to IM log
+	//logToIM(IM_SESSION_GROUP_START, group_name, sender_name, payload["message"],
+	//		payload["group_id"], sender_id);
 	if (gSavedSettings.getBOOL("FSBetterGroupNoticesToIMLog"))
 	{
 		std::string msg = llformat(
@@ -247,14 +252,14 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 			payload["message"].asString().c_str()
 		);
 		
-		logToIM(IM_SESSION_GROUP_START, group_name, sender_name, msg, payload["group_id"], sender_id);
+		logToIM(IM_SESSION_GROUP_START, group_name + GROUP_CHAT_SUFFIX, sender_name, msg, payload["group_id"], sender_id);
 	}
 	else
 	{
+		logToIM(IM_SESSION_GROUP_START, group_name + GROUP_CHAT_SUFFIX, sender_name, payload["message"],
+				payload["group_id"], sender_id);
+	}
 	// </FS:KC> Better group notices to IM log
-	logToIM(IM_SESSION_GROUP_START, group_name, sender_name, payload["message"],
-			payload["group_id"], sender_id);
-	}// <FS:KC> Better group notices to IM log
 }
 
 // static

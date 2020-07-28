@@ -11830,7 +11830,20 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
-    <key>RenderCubeMap</key>
+  <key>OnlyShowSelectedNormals</key>
+  <map>
+    <key>Comment</key>
+    <string>Only render the normals for selected objects. in conjunction with render debug normals</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+  <key>RenderCubeMap</key>
     <map>
       <key>Comment</key>
       <string>Whether we can render the cube map or not</string>
@@ -24655,6 +24668,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <string>de</string>
         <string>en</string>
         <string>es</string>
+        <string>fr</string>
         <string>it</string>
         <string>ja</string>
         <string>pl</string>
@@ -25353,7 +25367,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>FSRestrictMaxTextureSize</key>
     <map>
@@ -25419,7 +25433,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>FSUseOwnProfiles</key>
     <map>

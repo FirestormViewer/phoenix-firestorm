@@ -10824,6 +10824,38 @@ class LLWorldEnvSettings : public view_listener_t
 // [/RLVa:KB]
 
 		std::string event_name = userdata.asString();
+// <FS:Beq> FIRE-29785 fix daytime shortcuts for non-EEP 
+#ifdef OPENSIM
+		static std::map<std::string, std::string> sky_presets = {
+			{"sunrise", "Sunrise"},
+			{"noon", "Midday"},
+			{"sunset", "Sunset"},
+			{"midnight", "Midnight"}
+		};
+		auto it = sky_presets.find(event_name);
+		if( LLGridManager::getInstance()->isInOpenSim() &&
+			!LLEnvironment::instance().isExtendedEnvironmentEnabled() &&
+			it != sky_presets.end()
+			)
+		{
+			LLSettingsSky::ptr_t legacysky = nullptr;
+			LLSD messages;
+			legacysky = LLEnvironment::createSkyFromLegacyPreset(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "skies", it->second + ".xml"), messages);
+			if (legacysky)
+			{
+				LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacysky);
+				LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+				LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
+				defocusEnvFloaters();
+			}		
+			else
+			{
+				LL_WARNS() << "Legacy windlight conversion failed for " << it->second << " existing env unchanged." << LL_ENDL;
+			}
+			return true;
+		}
+#endif
+// </FS:Beq>
 		
 		if (event_name == "sunrise")
 		{

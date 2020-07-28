@@ -345,7 +345,8 @@ void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>&
 		{
 			// we add by name and only build the envp on demand
 			LL_DEBUGS("WindlightCaps") << "Adding legacy sky " << preset_name << LL_ENDL;
-			mWLPresetsCombo->add(preset_name, LLSD(preset_name));
+			// append "WL" to denote legacy. Have to create a new string not update the reference.
+			mWLPresetsCombo->add(preset_name+ "[WL]", LLSD(preset_name));
 		}
 		LL_DEBUGS("WindlightCaps") << "Done: Adding legacy sky presets to QP" << LL_ENDL;
 	}
@@ -1162,6 +1163,17 @@ void FloaterQuickPrefs::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamT
 		enableWindlightButtons(type != RLV_TYPE_ADD);
 	}
 }
+
+// void FloaterQuickPrefs::onSunMoved()
+// {
+
+// 	F32 val = mWLSunPos->getCurSliderValue();
+
+// 	auto env = LLEnvironment::instance().getSelectedEnvironment() == LLEnvironment::ENV_LOCAL)
+// 	auto day = LLEnvironment::instance().getEnvironmentDay(env);
+	
+
+// }
 
 void FloaterQuickPrefs::enableWindlightButtons(bool enable)
 {

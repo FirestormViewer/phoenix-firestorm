@@ -4,7 +4,7 @@
 		<panel label="Informations" name="support_panel">
 			<text name="support_intro">
  Pour les dernières informations à propos de Firestorm, visitez
- http://www.firestormviewer.org
+ https://www.firestormviewer.org
 			</text>
 			<button label="Copier" name="copy_btn"/>
 		</panel>
