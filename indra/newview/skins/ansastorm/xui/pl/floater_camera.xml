@@ -34,5 +34,6 @@
 		<combo_box.item label="Użyj ustawienia" name="Use preset" />
 	</combo_box>
 	<button name="gear_btn" tool_tip="Ustawienia kamery" />
-	<button label="Pozycja kamery..." name="camera_position_btn" />
+	<button label="Pozycja..." name="camera_position_btn" />
+	<button label="Zapisz" name="save_btn" />
 </floater>
