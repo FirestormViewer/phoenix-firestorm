@@ -81,7 +81,7 @@
 									<text name="sender_or_fee_box_exp">
                         Sender: "Resident R e s i d e n t R e s i d e n t"
 									</text>
-									<text name="notification_time_exp"value="2014/12/24 23:30" />
+									<text name="notification_time_exp" value="2014/12/24 23:30" />
 								</panel>
 								<panel name="notification_text_panel_exp">
 									<chat_editor name="notification_text_exp">

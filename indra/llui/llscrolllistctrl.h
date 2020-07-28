@@ -276,6 +276,7 @@ public:
 	std::vector<LLScrollListItem*> getAllSelected() const;
 	S32                 getNumSelected() const;
 	LLScrollListItem*	getLastSelectedItem() const { return mLastSelected; }
+	void				setLastSelectedItem(const LLUUID& id); // <FS:Ansariel> Needed for keyboard selection in radar
 
 	// iterate over all items
 	LLScrollListItem*	getFirstData() const;

@@ -23,7 +23,6 @@
  * $/LicenseInfo$
  */
 
-// <FS:Ansariel> Fix LNK4221 compiler warning
-//#include "llatomic.h"
+#include "llatomic.h"
 
 //============================================================================

@@ -4,7 +4,7 @@
 		<panel label="Информация" name="support_panel">
 			<text name="support_intro">
 				Новая информация о Firestorm доступна по адресу 
-http://www.firestormviewer.org
+https://www.firestormviewer.org
 			</text>
 			<button label="Копировать в буфер" name="copy_btn"/>
 		</panel>

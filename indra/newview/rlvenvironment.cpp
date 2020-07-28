@@ -558,7 +558,7 @@ ERlvCmdRet RlvEnvironment::handleSetFn(const std::string& strRlvOption, const st
 }
 
 template<>
-std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<const LLVector2& (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
+std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<LLVector2 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
 	if (idxComponent > 2)
 		return LLStringUtil::null;
@@ -566,7 +566,7 @@ std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<con
 }
 
 template<>
-std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<const LLColor3& (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
+std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<LLColor3 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
 	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
 	{
@@ -672,7 +672,7 @@ void RlvEnvironment::registerSetEnvFn(const std::string& strFnName, const std::f
 }
 
 template<typename T>
-void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std::function<const T& (LLSettingsSkyPtr_t)>& getFn, const std::function<void(LLSettingsSkyPtr_t, const T&)>& setFn)
+void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std::function< T (LLSettingsSkyPtr_t)>& getFn, const std::function<void(LLSettingsSkyPtr_t, const T&)>& setFn)
 {
 	RLV_ASSERT(m_LegacyGetFnLookup.end() == m_LegacyGetFnLookup.find(strFnName));
 	m_LegacyGetFnLookup.insert(std::make_pair(strFnName, [this, getFn](const std::string& strRlvParam, U32 idxComponent)

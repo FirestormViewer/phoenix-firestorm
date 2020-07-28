@@ -3,20 +3,70 @@
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
-				<layout_panel>
-					<button label="Réinitialiser" name="btn_reset" tool_tip="Fermer et réinitialiser vers l&apos;environnement partagé"/>
+				<layout_panel name="lp_1">
+					<text name="ambient_lbl">
+						Ambiance :
+					</text>
+					<text name="blue_horizon_lbl">
+						Bleu horizon :
+					</text>
+					<text name="blue_density_lbl">
+						Densité bleu :
+					</text>
+					<button label="Réinitialiser" tool_tip="Fermer et repasser à l'environnement partagé" name="btn_reset"/>
+					<text name="sun_color_lbl">
+						Soleil :
+					</text>
+					<text name="cloud_color_lbl">
+						Nuages :
+					</text>
 					<text name="cloud_map_label">
-						Image du nuage :
+						Image de nuage :
+					</text>
+					<text name="water_map_label">
+						Image d'eau :
 					</text>
 				</layout_panel>
-				<layout_panel>
+				<layout_panel name="lp_2">
+					<text name="haze_horizon_label">
+						Horizon de la brume :
+					</text>
+					<text name="haze_density_label">
+						Densité de la brume :
+					</text>
+					<text name="cloud_coverage_label">
+						Couverture nuageuse :
+					</text>
+					<text name="cloud_scale_label">
+						Taille des nuages :
+					</text>
+					<text name="scene_gamma_label">
+						Gamma de la scène :
+					</text>
+				</layout_panel>
+				<layout_panel name="lp_3">
 					<text name="label">
 						Soleil :
 					</text>
-					<check_box label="Afficher la balise" name="sunbeacon"/>
+					<check_box label="Montrer la balise" name="sunbeacon"/>
+					<text name="scale_label">
+						Échelle :
+					</text>
+					<text name="glow_focus_label">
+						Glow Focus :
+					</text>
+					<text name="glow_size_label">
+						Taille de la lueur :
+					</text>
+					<text name="star_brightness_label">
+						Brillance des étoiles :
+					</text>
 				</layout_panel>
-				<layout_panel>
-					<check_box label="Afficher la balise" name="moonbeacon"/>
+				<layout_panel name="lp_4">
+					<text name="label">
+						Lune :
+					</text>
+					<check_box label="Montrer la balise" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

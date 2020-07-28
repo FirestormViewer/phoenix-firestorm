@@ -73,7 +73,7 @@
 						<row name="restore_per_account_row_groupmutes">
 							<column name="restore_per_account_files_label">Wyłączone czaty grup</column>
 						</row>
-						<row name="restore_per_account_row_avatar_render_settings" value="avatar_render_settings">
+						<row name="restore_per_account_row_avatar_render_settings">
 							<column name="restore_per_account_files_label">Renderowanie awatarów</column>
 						</row>
 					</scroll_list>

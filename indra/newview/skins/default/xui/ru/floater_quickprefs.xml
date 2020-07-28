@@ -21,18 +21,18 @@
       </text>
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
       <check_box label="Использовать Окружение Региона" name="UseRegionWindlight"/>
-      <text name="WL Sky" tool_tip="Предустановка окружения для неба">
+      <text name="WL Sky" tool_tip="Предустановка неба для окружающй среды">
         Небо:
       </text>
 
-      <text name="WL Water" tool_tip="Предустановка окружения для воды">
+      <text name="WL Water" tool_tip="Предустановка воды для окружающй среды">
         Вода:
       </text>
 
-      <text name="Day Cycle" tool_tip="Предустановка окружения для дневного цикла">
+      <text name="Day Cycle" tool_tip="Предустановка дневного цикла для окружающй среды">
         Цикл дня:
       </text>
-      <button name="btn_personal_lighting" label="Личное Освещение..."/>>
+      <button name="btn_personal_lighting" label="Личное Освещение..."/>
       <button name="ResetToRegionDefault" tool_tip="Сброс настроек Окружения по умолчанию на регионе"/>
 
       <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->

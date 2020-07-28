@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="animation_overrider_outer_panel">
 	<panel name="animation_overrider_panel">
-		<combo_box name="ao_set_selection_combo" tool_tip="Sélectionner un set d'animations à éditer."/>
-		<button name="ao_activate" tool_tip="Activer ce set d'animations maintenant."/>
-		<check_box name="ao_default" label="Par défaut" tool_tip="Faire de ce set d'animation celui qui se lancera par défaut à la connexion."/>
-		<button name="ao_add" tool_tip="Créer un nouveau set d'animations."/>
-		<button name="ao_remove" tool_tip="Effacer ce set d'animations."/>
-		<check_box name="ao_sit_override" label="Outrepasser assis." tool_tip="Activer cette option pour outrepasser les animations de poses assises."/>
+		<combo_box name="ao_set_selection_combo" tool_tip="Sélectionner un ensemble d'animations à éditer."/>
+		<button name="ao_activate" tool_tip="Activer cet ensemble d'animations maintenant."/>
+		<check_box name="ao_default" label="Par défaut" tool_tip="Faire de cet ensemble d'animation celui qui se lancera par défaut à la connexion."/>
+		<button name="ao_add" tool_tip="Créer un nouveau ensemble d'animations."/>
+		<button name="ao_remove" tool_tip="Effacer cet ensemble d'animations."/>
+		<check_box name="ao_sit_override" label="Outrepasser assis." tool_tip="Activer cette option pour que les animations de l'ao soient prioritaires sur celles de l'objet."/>
 		<check_box name="ao_smart" label="Intell." left_pad="20" tool_tip="Le mode intelligent détermine si outrepasser les poses assises entrera en conflit avec les animations des objets, et arrêtera de passer outre temporairement."/>
 		<check_box name="ao_disable_stands_in_mouselook" label="Désact. debout en 1ère pers." tool_tip="Si vous avez besoin de garder vos animations personelles en vue subjective, cochez cette case."/>
 		<combo_box name="ao_state_selection_combo" tool_tip="Sélectionner l'état d'animation à éditer."/>
-		<scroll_list name="ao_state_animation_list"></scroll_list>
 		<panel name="ao_animation_move_trash_panel">
 			<button name="ao_move_up" tool_tip="Déplacer l'animation sélectionnée plus haut dans la liste."/>
 			<button name="ao_move_down" tool_tip="Déplacer l'animation sélectionnée plus bas dans la liste."/>
@@ -37,10 +36,10 @@
 		</panel>
 	</panel>
 	<panel name="animation_overrider_panel_small">
-		<combo_box name="ao_set_selection_combo_small" tool_tip="Sélectionner le set d'animations à éditer."/>
+		<combo_box name="ao_set_selection_combo_small" tool_tip="Sélectionner l'ensemble d'animations à éditer."/>
 		<button name="ao_more" tool_tip="Afficher l'interface complète de configuration."/>
 		<button name="ao_previous_small" tool_tip="Passer à l'animation précédente."/>
 		<button name="ao_next_small" tool_tip="Passer à l'animation suivante."/>
-		<check_box name="ao_sit_override_small" label="Poses assises" tool_tip="Cocher si vous voulez outrepasser les animations de poses assises."/>
+		<check_box name="ao_sit_override_small" label="Assis" tool_tip="Activer cette option pour que les animations de l'ao soient prioritaires sur celles de l'objet."/>
 	</panel>
 </panel>
