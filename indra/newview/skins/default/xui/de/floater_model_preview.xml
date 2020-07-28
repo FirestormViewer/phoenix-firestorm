@@ -304,7 +304,7 @@
 				</text>
 				<check_box label="Texturen einschließen" name="upload_textures"/>
 				</panel>
-			<panel label="Übersteuerung" title="Avatar" name="avatar_panel">
+			<panel label="Übersteuerung" title="Avatar" name="rigging_panel">
 				<text name="scale_label">
 					Skalierung (1=keine):
 				</text>
@@ -362,7 +362,9 @@ Bitte ziehen Sie einen anderen Anhängepunkt nahe der Objektposition in Betracht
 					</text>
 				</panel>
 			</panel>
-			<panel label="Protokoll" name="logs_panel" />
+			<panel label="Protokoll" name="logs_panel">
+				<check_box label="Detailliertes Log anzeigen" name="verbose_logging"/>
+			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
 			<button label="Gewichte und Gebühr berechnen" name="calculate_btn" tool_tip="Gewichte und Gebühr berechnen" width="200"/>
