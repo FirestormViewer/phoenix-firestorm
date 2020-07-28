@@ -15,6 +15,7 @@
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
 		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
+		<menu_item_call label="Schwebehöhe" name="HoverHeight"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
 			<menu_item_call label="Aufstehen" name="Stand up"/>

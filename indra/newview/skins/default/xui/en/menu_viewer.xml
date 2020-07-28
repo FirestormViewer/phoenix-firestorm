@@ -136,6 +136,17 @@
 		
         <menu_item_separator/>
 
+      <menu_item_call
+       label="Hover Height"
+       name="HoverHeight"
+       shortcut="alt|control|H"
+       visible="false">
+        <menu_item_call.on_click
+         function="HoverHeight"/>
+        <menu_item_call.on_enable
+         function="Edit.EnableHoverHeight"/>
+      </menu_item_call>
+
 		<menu
 		 create_jump_keys="true"
 		 label="Movement"
@@ -240,7 +251,8 @@
 
 		<menu_item_check
 		 label="Camera Controls"
-		 name="Camera Controls">
+		 name="Camera Controls"
+		 shortcut="control|K">
 			<menu_item_check.on_check
 			 function="Floater.Visible"
 			 parameter="camera" />
@@ -258,7 +270,8 @@
          tear_off="true">
             <menu_item_call
              label="Stop Avatar Animations"
-             name="Stop Animating My Avatar">
+             name="Stop Animating My Avatar"
+             shortcut="alt|shift|A">
                 <menu_item_call.on_click
                  function="Tools.StopAllAnimations"
                  parameter="stop"/>
@@ -779,7 +792,8 @@
         </menu_item_call>
         <menu_item_call
              label="Events"
-             name="Events">
+             name="Events"
+             shortcut="control|E">
             <menu_item_call.on_click
              function="Advanced.ShowURL"
              parameter="https://secondlife.com/my/community/events"/>
