@@ -1112,7 +1112,9 @@ void LLOcclusionCullingGroup::checkOcclusion()
 
 				if (wait_for_query && mOcclusionIssued[LLViewerCamera::sCurCameraID] < gFrameCount)
 				{ //query was issued last frame, wait until it's available
-					S32 max_loop = 1024;
+					// <FS:Ansariel> Restore occlusion query performance optimization - except for Intel GPUs
+					//S32 max_loop = 1024;
+					S32 max_loop = !gGLManager.mIsIntel ? 64 : 1024;
 					LL_RECORD_BLOCK_TIME(FTM_OCCLUSION_WAIT);
 					while (!available && max_loop-- > 0)
 					{
