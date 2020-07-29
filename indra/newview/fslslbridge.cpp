@@ -38,6 +38,7 @@
 #include "llavatarappearance.h"
 #include "llinventoryfunctions.h"
 #include "llmaniptranslate.h"
+#include "llnotificationsutil.h"
 #include "llpreviewscript.h"
 #include "llselectmgr.h"
 #include "llsdutil.h"
@@ -272,6 +273,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				updateBoolSettingValue("UseMoveLock");
 				report_to_nearby_chat(LLTrans::getString("MovelockEnabling"));
+				make_ui_sound("UISndMovelockToggle");
 			}
 			// </FS:PP>
 
@@ -284,6 +286,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		// Not called right after logging in, and only if movelock was enabled during transition
 		else if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 		{
+			make_ui_sound("UISndMovelockToggle");
 			if (!gSavedSettings.getBOOL("RelockMoveLockAfterRegionChange"))
 			{
 				// Don't call for update here and only change setting to 'false', getCommitSignal()->connect->boost in llviewercontrol.cpp will send a message to Bridge anyway
@@ -450,11 +453,13 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		{
 			if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 1) == "1")
 			{
-				report_to_nearby_chat(LLTrans::getString("MovelockEnabled"));
+				LLNotificationsUtil::add("MovelockEnabled", LLSD());
+				report_to_nearby_chat("--- " + LLTrans::getString("MovelockEnabled"));
 			}
 			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 1) == "0")
 			{
-				report_to_nearby_chat(LLTrans::getString("MovelockDisabled"));
+				LLNotificationsUtil::add("MovelockDisabled", LLSD());
+				report_to_nearby_chat("--- " + LLTrans::getString("MovelockDisabled"));
 			}
 			else
 			{

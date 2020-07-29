@@ -5524,6 +5524,7 @@ void LLAgent::renderAutoPilotTarget()
 // <FS> Phantom mode
 void LLAgent::togglePhantom()
 {
+	make_ui_sound("UISndMovelockToggle");
 	mPhantom = !mPhantom;
 	if (mPhantom)
 	{
