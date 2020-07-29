@@ -60,10 +60,7 @@ LLViewerTexLayerSetBuffer::LLViewerTexLayerSetBuffer(LLTexLayerSet* const owner,
 										 S32 width, S32 height) :
 	// ORDER_LAST => must render these after the hints are created.
 	LLTexLayerSetBuffer(owner),
-	// <FS> Rye Mutt's broken local texture rendering fix
-	//LLViewerDynamicTexture( width, height, 4, LLViewerDynamicTexture::ORDER_LAST, TRUE ), 
-	LLViewerDynamicTexture( width, height, 4, LLViewerDynamicTexture::ORDER_LAST, FALSE ), 
-	// </FS>
+	LLViewerDynamicTexture(width, height, 4, LLViewerDynamicTexture::ORDER_LAST, FALSE),
 	// <FS:Ansariel> [Legacy Bake]
 	mUploadPending(FALSE), // Not used for any logic here, just to sync sending of updates
 	mNeedsUpload(FALSE),
