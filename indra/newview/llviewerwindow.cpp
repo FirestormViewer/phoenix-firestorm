@@ -2185,6 +2185,14 @@ void LLViewerWindow::initBase()
 		chatbar_panel->setReshapePanelCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
 		gFloaterView->setMainChatbarRect(chatbar_panel, chatbar_panel->getRect());
 	}
+
+	// Utility bar on legacy skins
+	LLLayoutPanel* legacy_chat_panel = LLUI::getInstance()->getRootView()->findChild<LLLayoutPanel>("chat_panel");
+	if (legacy_chat_panel)
+	{
+		legacy_chat_panel->setReshapePanelCallback(boost::bind(&LLFloaterView::setUtilityBarRect, gFloaterView, _1, _2));
+		gFloaterView->setUtilityBarRect(legacy_chat_panel, legacy_chat_panel->getRect());
+	}
 	// </FS:Ansariel>
 
 	// optionally forward warnings to chat console/chat floater
