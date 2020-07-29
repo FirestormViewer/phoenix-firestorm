@@ -10523,6 +10523,20 @@ Phantom mode on.
 Phantom mode off.
   </notification>
 
+  <notification
+   icon="notifytip.tga"
+   name="MovelockEnabled"
+   type="notifytip">
+Movelock enabled.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockDisabled"
+   type="notifytip">
+Movelock disabled.
+  </notification>
+
 <!-- Firestorm Phantom -->
 
 <!-- Firestorm Reset Settings -->

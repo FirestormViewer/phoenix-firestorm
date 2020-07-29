@@ -3933,6 +3933,12 @@ Czy chcesz jej/mu wysłać te informacje?
 	<notification name="PhantomOff">
 		Tryb widmowy wyłączony.
 	</notification>
+	<notification name="MovelockEnabled">
+		Blokada pozycji została włączona.
+	</notification>
+	<notification name="MovelockDisabled">
+		Blokada pozycji została wyłączona.
+	</notification>
 	<notification label="Resetuj wszystkie ustawienia" name="FirestormClearSettingsPrompt">
 		Resetowanie ustawień może się przydać, gdy napotykasz na jakieś problemy - pamiętaj jednak, że trzeba będzie wprowadzić od nowa wszystkie zmiany, jakie zostały przez Ciebie ustawione do tej pory.
 

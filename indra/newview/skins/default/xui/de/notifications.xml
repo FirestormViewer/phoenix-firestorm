@@ -4906,6 +4906,12 @@ Möchten Sie diese Informationen übermitteln?
 	<notification name="PhantomOff">
 		Phantom-Modus ausgeschaltet.
 	</notification>
+	<notification name="MovelockEnabled">
+		Movelock aktiviert.
+	</notification>
+	<notification name="MovelockDisabled">
+		Movelock deaktiviert.
+	</notification>
 	<notification label="Alle Einstellungen zurücksetzen" name="FirestormClearSettingsPrompt">
 		Ein Zurücksetzen aller Einstellungen kann bei Problemen hilfreich sein, allerdings müssen Sie anschließend jegliche Anpassungen erneut vornehmen.
 
