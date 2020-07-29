@@ -174,7 +174,6 @@
 			<menu_item_call label="Zwróć obiekt" name="Return Object back to Owner"/>
 			<menu label="Zapisz jako" name="Export Menu">
 				<menu_item_call label="Kopia zapasowa" name="Backup"/>
-				<menu_item_call label="Collada" name="Collada"/>
 			</menu>
 		</menu>
 		<menu label="Skrypty" name="Scripts">
@@ -351,7 +350,7 @@
 			<menu_item_call label="Zamknij wszystkie okna" name="Close All Windows"/>
 			<menu_item_call label="Zapisz zdjęcie na dysk twardy" name="Snapshot to Disk"/>
 			<menu_item_call label="Widok pierwszoosobowy" name="Mouselook"/>
-			<menu_item_call label="Wolna kamera" name="Joystick Flycam"/>
+			<menu_item_check label="Wolna kamera" name="Joystick Flycam"/>
 			<menu_item_call label="Reset widoku" name="Reset View"/>
 			<menu_item_call label="Zresetuj kąty patrzenia kamery" name="Reset Camera Angles"/>
 			<menu_item_call label="Zobacz ostatniego rozmówcę" name="Look at Last Chatter"/>
@@ -449,7 +448,7 @@
 		<menu label="Renderowanie" name="Rendering">
 			<menu_item_check label="Osie" name="Axes"/>
 			<menu_item_check label="Podstawy stycznych" name="Tangent Basis"/>
-			<menu_item_check label="Bazowe informacje wybranych tekstur" name="Selected Texture Info Basis"/>
+			<menu_item_call label="Bazowe informacje wybranych tekstur" name="Selected Texture Info Basis"/>
 			<menu_item_call label="Informacje o zaznaczonym materiale" name="Selected Material Info"/>
 			<menu_item_check label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<menu_item_check label="Okluzja obiektu do obiektu" name="Object-Object Occlusion"/>
@@ -486,7 +485,7 @@
 			<menu_item_call label="Odtwarzanie nagranych zdarzeń" name="Playback event recording"/>
 			<menu_item_call label="Rozpocznij odtwarzanie" name="Start Playback"/>
 			<menu_item_call label="Zatrzymaj odtwarzanie" name="Stop Playback"/>
-			<menu_item_call label="Odtwarzanie w pętli" name="Loop Playback"/>
+			<menu_item_check label="Odtwarzanie w pętli" name="Loop Playback"/>
 			<menu_item_call label="Rozpocznij nagrywanie" name="Start Record"/>
 			<menu_item_call label="Zatrzymaj nagrywanie" name="Stop Record"/>
 		</menu>

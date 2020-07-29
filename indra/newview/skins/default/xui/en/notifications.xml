@@ -4137,6 +4137,8 @@ Finished download of raw terrain file to:
 [DOWNLOAD_PATH].
   </notification>
 
+  <!-- RequiredUpdate does not display release notes URL because we don't get
+       that from login.cgi's login failure message. -->
   <notification
    icon="alertmodal.tga"
    name="RequiredUpdate"
@@ -4154,6 +4156,7 @@ Please download from https://secondlife.com/support/downloads/
    name="PauseForUpdate"
    type="alertmodal">
 Version [VERSION] is required for login.
+Release notes: [URL]
 Click OK to download and install.
     <tag>confirm</tag>
     <usetemplate
@@ -4166,6 +4169,7 @@ Click OK to download and install.
    name="OptionalUpdateReady"
    type="alertmodal">
 Version [VERSION] has been downloaded and is ready to install.
+Release notes: [URL]
 Click OK to install.
     <tag>confirm</tag>
     <usetemplate
@@ -4178,6 +4182,7 @@ Click OK to install.
    name="PromptOptionalUpdate"
    type="alertmodal">
 Version [VERSION] has been downloaded and is ready to install.
+Release notes: [URL]
 Proceed?
     <tag>confirm</tag>
     <usetemplate
@@ -7009,14 +7014,6 @@ URL: [AUDIOURL]
    log_to_im="true"   
    log_to_chat="false"   
    type="notifytip">
-[MESSAGE]
-  </notification>
-
-  <notification
-   icon="notifytip.tga"
-   name="ChatSystemMessageTip"
-   type="notifytip"
-   log_to_chat="true">
 [MESSAGE]
   </notification>
 

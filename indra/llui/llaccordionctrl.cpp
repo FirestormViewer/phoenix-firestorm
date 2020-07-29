@@ -342,7 +342,7 @@ void LLAccordionCtrl::addCollapsibleCtrl(LLView* view, bool aArrange)
 		addChild(accordion_tab);
 	mAccordionTabs.push_back(accordion_tab);
 
-	accordion_tab->setDropDownStateChangedCallback( boost::bind(&LLAccordionCtrl::onCollapseCtrlCloseOpen, this, mAccordionTabs.size() - 1) );
+	accordion_tab->setDropDownStateChangedCallback( boost::bind(&LLAccordionCtrl::onCollapseCtrlCloseOpen, this, (S16)(mAccordionTabs.size() - 1)) );
 
 	// <FS:ND> If adding a lot of controls rapidly, calling arrange will cost a lot of times, as it's running through n! controls.
 	// In that case we can avvoid calling arrange over and over and just call it once when finished.

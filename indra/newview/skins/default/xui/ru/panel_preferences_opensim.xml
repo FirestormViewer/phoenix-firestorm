@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Opensim" name="opensim_panel">
 	<tab_container label="Opensim" name="tabs">
-		<panel label="Оправление сеткой" name="grid_management_panel">
+		<panel label="Управление сеткой" name="grid_management_panel">
 			<text name="add_grid_text">
 				Добавить новую сетку
 			</text>

@@ -326,6 +326,11 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	static const std::string typingColumnIcon = getString("TypingColumnIcon");
 
 	// Store current selection and scroll position
+	LLUUID last_selected_id;
+	if (mRadarList->getLastSelectedItem())
+	{
+		last_selected_id = mRadarList->getLastSelectedItem()->getUUID();
+	}
 	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
 	uuid_vec_t selected_ids;
 	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
@@ -458,6 +463,10 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	if (!selected_ids.empty())
 	{
 		mRadarList->selectMultiple(selected_ids);
+		if (last_selected_id.notNull())
+		{
+			mRadarList->setLastSelectedItem(last_selected_id);
+		}
 	}
 
 	updateButtons();

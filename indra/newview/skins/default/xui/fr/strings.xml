@@ -1628,6 +1628,9 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="MarketplaceUpdating">
 		mise à jour...
 	</string>
+	<string name="UploadFeeInfo">
+		Les frais sont basés sur votre niveau d'abonnement. Plus haut est ce niveau, plus bas sont les frais. [https://secondlife.com/my/account/membership.php? En savoir plus]
+	</string>
 	<string name="Open landmarks">
 		Ouvrir les repères
 	</string>

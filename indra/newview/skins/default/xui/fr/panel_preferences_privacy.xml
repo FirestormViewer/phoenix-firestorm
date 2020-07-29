@@ -11,10 +11,12 @@
 			<check_box label="Afficher mes informations de profil dans les résultats de recherche" name="online_searchresults"/>
 			<check_box label="Seuls mes amis et groupes savent que je suis connecté" name="online_visibility"/>
 			<check_box label="Seuls mes amis et groupes peuvent m'appeler ou m'envoyer des messages instantanés" name="voice_call_friends_only_check"/>
+			<check_box label="Afficher les invitations pour les groupes dont vous faîtes déjà partie" name="FSShowJoinedGroupInvitations"/>
 			<check_box label="Couper le micro à la fin d'un appel vocal" name="auto_disengage_mic_check"/>
 			<check_box label="Permettre aux objets scriptés de connaitre la langue de l’interface" name="LanguageIsPublic"/>
 			<check_box label="Afficher mes repères favoris à la connexion (dans le menu déroulant 'Démarrer :')" name="favorites_on_login_check"/>
 			<check_box label="Accepter automatiquement les nouveaux objets" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Inscrire automatiquement les objets acceptés dans le chat local" name="FSLogAutoAcceptInventoryToChat"/>
 			<check_box label="Utiliser les messages originaux d'acceptation et de refus de transfert d'objet" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Si activé, le Viewer n'acceptera ou déclinera les messages qu'après avoir pressé le bouton concerné. Si désactivé, le message d'acceptation sera envoyé automatiquement dès que l'offre de transfert aura été reçue. Cette option est sans effet si les offres de transfert sont acceptées automatiquement."/>
 			<check_box label="Afficher automatiquement les nouveaux objets acceptés dans l'inventaire" name="Show_In_Inventory"/>
 			<check_box label="Afficher automatiquement les notes, textures, repères, après acceptation" name="Show_New_Inventory"/>
@@ -36,8 +38,8 @@
 			<check_box label="Ajouter la date aux noms de fichiers de transcriptions" name="LogFileNamewithDate" tool_tip="Ajoute la date aux logs de chat et messagerie au format chat-AAAA-MM-JJ et 'IM file name'-AAAA-MM."/>
 			<check_box label="Utiliser la visionneuse de transcriptions intégrée" name="FSUseBuiltInHistory" tool_tip="Utilise la visionneuse de transcriptions intégrée pour lire les transcriptions. Si désactivé, les transcriptions seront ouvertes par l'éditeur de texte défini par le système d'exploitation."/>
 		</panel>
-		<panel label="LookAt" name="tab-lookat">
-			<check_box label="Afficher qui regarde qui :" name="showlookat" tool_tip="Le point de mire permet à votre Viewer de connaître dans quel sens tourner au besoin vos yeux, tête et avatar. Il peut aussi être utilisé pour déterminer le point d'ancrage de la caméra d'un avatar."/>
+		<panel label="Point de mire" name="tab-lookat">
+			<check_box label="Afficher qui regarde qui :" name="showlookat" tool_tip="Le point de mire permet à votre navigateur de savoir dans quel sens tourner vos yeux, tête et avatar. Il peut aussi être utilisé pour déterminer le point d'ancrage de la caméra d'un avatar."/>
 			<text name="lookatshownames" tool_tip="Format du nom affiché lors de l'affichage du point de mire">Nom affiché :</text>
 			<combo_box name="lookatshownames_combobox">
 				<combo_box.item label="Aucun" name="None"/>
@@ -52,8 +54,10 @@
 			<check_box label="Ne pas dévoiler mon point de mire aux autres" name="privatelookat" tool_tip="Empêche les autres personnes de savoir où vous regardez"/>
 			<check_box label="Ne communiquer aucun point de mire, y compris à soi" name="privateLocalLookat" tool_tip="Empêche la tête de votre avatar de bouger pour faire face à l'endroit que vous regardez. Ce mouvement de la tête n'est pas forcément visible des autres, que cette option soit activée ou non"/>
 			<check_box label="Ne pas communiquer mes indications de sélection de cible" name="privatepointat" tool_tip="Empêche le point de sélection d'être visible par les autres"/>
+			<check_box label="Distance limite à partir de la tête :" name="LimitLookAt" tool_tip="Limite le point de mire à une distance fixe de votre avatar, indiquant ainsi la direction du regard mais pas sa cible." width="250"/>
 		</panel>
 		<panel label="Réponses auto. 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">Note : pour activer les messages de réponse automatique, indiquez votre statut de connexion dans le menu Communiquer &gt; Statut de connexion</text>
 			<text name="text_box3">Réponse auto. en mode 'Ne pas déranger' :</text>
 			<text name="autorespond_response_label">Réponse auto. à tous les résidents lorsque je suis en mode 'Réponse automatique' :</text>
 			<text name="autorespond_nf_response_label">Réponse auto. lorsque je suis en mode 'Réponse automatique aux inconnus' :</text>

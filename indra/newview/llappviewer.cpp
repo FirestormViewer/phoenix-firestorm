@@ -280,7 +280,7 @@
 #include "nd/ndlogthrottle.h"
 
 #include "fsradar.h"
-
+#include "fsassetblacklist.h"
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
@@ -862,12 +862,14 @@ bool LLAppViewer::init()
 	// Start of the application
 	//
 
-	// initialize LLWearableType translation bridge.
-	// Memory will be cleaned up in ::cleanupClass()
-	LLWearableType::initParamSingleton(new LLUITranslationBridge());
+	// <FS:Ansariel> Move further down after translation system has been initialized
+	//// initialize LLWearableType translation bridge.
+	//// Memory will be cleaned up in ::cleanupClass()
+	//LLWearableType::initParamSingleton(new LLUITranslationBridge());
 
-    LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
-    LLSettingsType::initClass(trans);
+    //LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+    //LLSettingsType::initClass(trans);
+	// </FS:Ansariel>
 
 	// initialize SSE options
 	LLVector4a::initClass();
@@ -974,11 +976,9 @@ bool LLAppViewer::init()
 		return false;
 
 	LL_INFOS("InitInfo") << "Configuration initialized." << LL_ENDL ;
-
 	//set the max heap size.
 	initMaxHeapSize() ;
 	LLCoros::instance().setStackSize(gSavedSettings.getS32("CoroutineStackSize"));
-
 
 	// Although initLoggingAndGetLastDuration() is the right place to mess with
 	// setFatalFunction(), we can't query gSavedSettings until after
@@ -1043,6 +1043,15 @@ bool LLAppViewer::init()
 	// Setup LLTrans after LLUI::initClass has been called.
 	initStrings();
 
+	// <FS:Ansariel> Moved down here translation system has been initialized
+	// initialize LLWearableType translation bridge.
+	// Memory will be cleaned up in ::cleanupClass()
+	LLWearableType::initParamSingleton(new LLUITranslationBridge());
+
+	LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+	LLSettingsType::initClass(trans);
+	// </FS:Ansariel>
+
 	// Setup notifications after LLUI::initClass() has been called.
 	LLNotifications::instance();
 	LL_INFOS("InitInfo") << "Notifications initialized." << LL_ENDL ;
@@ -1093,6 +1102,15 @@ bool LLAppViewer::init()
 	/////////////////////////////////////////////////
 
 	LLToolMgr::getInstance(); // Initialize tool manager if not already instantiated
+
+	// <FS:ND/> Contruct singleton early.
+	// Otherwise it will get constructed inside the texture decode thread and this will lead to deadlocks:
+	// - Let "Thread I" be the image decode threat that causes the creation of FSAssetBlack. 
+	// - Thread I holds a lock to a mutex the mainthread is sleeping on.
+	// - Thread I will defer the singleton creation to the mainthread, which will cause Thread I to sleep on a mutex till the mainthread is done creating the object.
+	// - The mainthread can never wake up and create the object due do it sleeping on something Tread I must release.
+	// - Thread I can never wake up and release the mutex as the mainthread can never wake up and wake thread I again.
+	FSAssetBlacklist::getInstance();
 
 	LLViewerFloaterReg::registerFloaters();
 
@@ -1311,7 +1329,7 @@ bool LLAppViewer::init()
 
 	// Save the current version to the prefs file
 	gSavedSettings.setString("LastRunVersion",
-							 LLVersionInfo::getChannelAndVersion());
+							 LLVersionInfo::instance().getChannelAndVersion());
 
 	gSimLastTime = gRenderStartTime.getElapsedTimeF32();
 	gSimFrames = (F32)gFrameCount;
@@ -1683,6 +1701,8 @@ bool LLAppViewer::doFrame()
 
 		// canonical per-frame event
 		mainloop.post(newFrame);
+		// give listeners a chance to run
+		llcoro::suspend();
 
 		if (!LLApp::isExiting())
 		{
@@ -1975,24 +1995,9 @@ bool LLAppViewer::cleanup()
 		gDirUtilp->deleteFilesInDir(logdir, "*-*-*-*-*.dmp");
 	}
 
-	{
-		// Kill off LLLeap objects. We can find them all because LLLeap is derived
-		// from LLInstanceTracker. But collect instances first: LLInstanceTracker
-		// specifically forbids adding/deleting instances while iterating.
-		std::vector<LLLeap*> leaps;
-		leaps.reserve(LLLeap::instanceCount());
-		for (LLLeap::instance_iter li(LLLeap::beginInstances()), lend(LLLeap::endInstances());
-			 li != lend; ++li)
-		{
-			leaps.push_back(&*li);
-		}
-		// Okay, now trash them all. We don't have to NULL or erase the entry
-		// in 'leaps' because the whole vector is going away momentarily.
-		BOOST_FOREACH(LLLeap* leap, leaps)
-		{
-			delete leap;
-		}
-	} // destroy 'leaps'
+	// Kill off LLLeap objects. We can find them all because LLLeap is derived
+	// from LLInstanceTracker.
+	LLLeap::instance_snapshot().deleteAll();
 
 	//flag all elements as needing to be destroyed immediately
 	// to ensure shutdown order
@@ -2503,25 +2508,19 @@ bool LLAppViewer::cleanup()
 
 	removeMarkerFiles();
 
-	// It's not at first obvious where, in this long sequence, generic cleanup
-	// calls OUGHT to go. So let's say this: as we migrate cleanup from
+	// It's not at first obvious where, in this long sequence, a generic cleanup
+	// call OUGHT to go. So let's say this: as we migrate cleanup from
 	// explicit hand-placed calls into the generic mechanism, eventually
-	// all cleanup will get subsumed into the generic calls. So the calls you
+	// all cleanup will get subsumed into the generic call. So the calls you
 	// still see above are calls that MUST happen before the generic cleanup
 	// kicks in.
-
-	// This calls every remaining LLSingleton's cleanupSingleton() method.
-	// This method should perform any cleanup that might take significant
-	// realtime, or might throw an exception.
-	LLSingletonBase::cleanupAll();
 
 	// The logging subsystem depends on an LLSingleton. Any logging after
 	// LLSingletonBase::deleteAll() won't be recorded.
 	LL_INFOS() << "Goodbye!" << LL_ENDL;
 
-	// This calls every remaining LLSingleton's deleteSingleton() method.
-	// No class destructor should perform any cleanup that might take
-	// significant realtime, or throw an exception.
+	// This calls every remaining LLSingleton's cleanupSingleton() and
+	// deleteSingleton() methods.
 	LLSingletonBase::deleteAll();
 
 	removeDumpDir();
@@ -2881,7 +2880,7 @@ bool LLAppViewer::initConfiguration()
 	
 	//<FS:Techwolf Lupindo>
 	// load defaults overide here. Can not use settings_files.xml as path is different then above loading of defaults.
-	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getShortVersion().c_str()));
+	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getInstance()->getShortVersion().c_str()));
 	std::string fsdata_global = "Global";
 	LLControlGroup* settings_group = LLControlGroup::getInstance(fsdata_global);
 	if(settings_group && settings_group->loadFromFile(fsdata_defaults, set_defaults))
@@ -3144,7 +3143,7 @@ bool LLAppViewer::initConfiguration()
 	std::string CmdLineChannel(gSavedSettings.getString("CmdLineChannel"));
 	if(! CmdLineChannel.empty())
     {
-		LLVersionInfo::resetChannel(CmdLineChannel);
+		LLVersionInfo::instance().resetChannel(CmdLineChannel);
 	}
 
 	// If we have specified crash on startup, set the global so we'll trigger the crash at the right time
@@ -3359,7 +3358,7 @@ bool LLAppViewer::initConfiguration()
 	//
 	// Set the name of the window
 	//
-	gWindowTitle = LLVersionInfo::getChannelAndVersion();	// <FS:CR>
+	gWindowTitle = LLVersionInfo::getInstance()->getChannelAndVersion();	// <FS:CR>
 #if LL_DEBUG
     gWindowTitle += std::string(" [DEBUG]");
 #endif
@@ -3403,7 +3402,7 @@ bool LLAppViewer::initConfiguration()
 	loadColorSettings();
     
     //<FS:KC> One time fix for Latency
-    if ((gLastRunVersion != LLVersionInfo::getChannelAndVersion()) && (gSavedSettings.getString("SkinCurrent") == "latency") && !gSavedSettings.getBOOL("FSLatencyOneTimeFixRun"))
+    if ((gLastRunVersion != LLVersionInfo::getInstance()->getChannelAndVersion()) && (gSavedSettings.getString("SkinCurrent") == "latency") && !gSavedSettings.getBOOL("FSLatencyOneTimeFixRun"))
     {
         LL_INFOS() << "FSLatencyOneTimeFix: Fixing script dialog colors." << LL_ENDL;
         // Replace previously saved script dialog colors with new defaults, which happen to be the same as the group notice colors
@@ -3415,12 +3414,11 @@ bool LLAppViewer::initConfiguration()
 
 	// Let anyone else who cares know that we've populated our settings
 	// variables.
-	for (LLControlGroup::key_iter ki(LLControlGroup::beginKeys()), kend(LLControlGroup::endKeys());
-		 ki != kend; ++ki)
+	for (const auto& key : LLControlGroup::key_snapshot())
 	{
 		// For each named instance of LLControlGroup, send an event saying
 		// we've initialized an LLControlGroup instance by that name.
-		LLEventPumps::instance().obtain("LLControlGroup").post(LLSDMap("init", *ki));
+		LLEventPumps::instance().obtain("LLControlGroup").post(LLSDMap("init", key));
 	}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
@@ -3496,7 +3494,7 @@ void LLAppViewer::initStrings()
 
 	// <FS:Ansariel> Set version number in VIEWER_GENERATION default substitute automatically
 	LLStringUtil:: format_map_t gen_args;
-	gen_args["[VERSION]"] = llformat("%d", LLVersionInfo::getMajor());
+	gen_args["[VERSION]"] = llformat("%d", LLVersionInfo::getInstance()->getMajor());
 	LLTrans::setDefaultArg("[VIEWER_GENERATION]", LLTrans::getString("VIEWER_GENERATION", gen_args));
 	LLTrans::setDefaultArg("[SHORT_VIEWER_GENERATION]", LLTrans::getString("SHORT_VIEWER_GENERATION", gen_args));
 	// </FS:Ansariel>
@@ -3677,18 +3675,14 @@ LLSD LLAppViewer::getViewerInfo() const
 	// is available to a getInfo() caller as to the user opening
 	// LLFloaterAbout.
 	LLSD info;
-	LLSD version;
-	version.append(LLVersionInfo::getMajor());
-	version.append(LLVersionInfo::getMinor());
-	version.append(LLVersionInfo::getPatch());
-	version.append(LLVersionInfo::getBuild());
-	info["VIEWER_VERSION"] = version;
-	info["VIEWER_VERSION_STR"] = LLVersionInfo::getVersion();
+	auto& versionInfo(LLVersionInfo::instance());
+	info["VIEWER_VERSION"] = LLSDArray(versionInfo.getMajor())(versionInfo.getMinor())(versionInfo.getPatch())(versionInfo.getBuild());
+	info["VIEWER_VERSION_STR"] = versionInfo.getVersion();
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
-	info["CHANNEL"] = LLVersionInfo::getChannel();
+	info["CHANNEL"] = versionInfo.getChannel();
     info["ADDRESS_SIZE"] = ADDRESS_SIZE;
-    //std::string build_config = LLVersionInfo::getBuildConfig();
+    // std::string build_config = versionInfo.getBuildConfig();
     //if (build_config != "Release")
     //{
     //    info["BUILD_CONFIG"] = build_config;
@@ -3742,16 +3736,12 @@ LLSD LLAppViewer::getViewerInfo() const
 
 	// return a URL to the release notes for this viewer, such as:
 	// https://releasenotes.secondlife.com/viewer/2.1.0.123456.html
-	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
-	// <FS:Ansariel> FIRE-13993: Leave out channel so we can use a URL like
-	//                           http://wiki.firestormviewer.org/firestorm_change_log_x.y.z.rev
-	//if (! LLStringUtil::endsWith(url, "/"))
-	//	url += "/";
-	//url += LLURI::escape(LLVersionInfo::getVersion()) + ".html";
-	url += LLURI::escape(LLVersionInfo::getVersion());
-	// </FS:Ansariel>
-
+	// <FS:Ansariel> FIRE-13993: Create URL in the form of https://wiki.firestormviewer.org/firestorm_change_log_x.y.z.rev
+	//std::string url = versionInfo.getReleaseNotes();
+	//info["VIEWER_RELEASE_NOTES_URL"] = url.empty()? LLTrans::getString("RetrievingData") : url;
+	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL") + LLURI::escape(versionInfo.getVersion());
 	info["VIEWER_RELEASE_NOTES_URL"] = url;
+	// </FS:Ansariel>
 
 #if LL_MSVC
 	info["COMPILER"] = "MSVC";
@@ -4146,16 +4136,16 @@ void LLAppViewer::writeSystemInfo()
 // #endif
 	// </FS:ND>
 
-	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
+	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::instance().getChannel();
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
-	gDebugInfo["ClientInfo"]["Version"] = LLVersionInfo::getVersion();
-	gDebugInfo["ClientInfo"]["Platform"] = LLVersionInfo::getBuildPlatform();
+	gDebugInfo["ClientInfo"]["Version"] = LLVersionInfo::instance().getVersion();
+	gDebugInfo["ClientInfo"]["Platform"] = LLVersionInfo::instance().getBuildPlatform();
 // [/SL:KB]
-	gDebugInfo["ClientInfo"]["MajorVersion"] = LLVersionInfo::getMajor();
-	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
-	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
-	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
-	gDebugInfo["ClientInfo"]["AddressSize"] = LLVersionInfo::getAddressSize();
+	gDebugInfo["ClientInfo"]["MajorVersion"] = LLVersionInfo::instance().getMajor();
+	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::instance().getMinor();
+	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::instance().getPatch();
+	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::instance().getBuild();
+	gDebugInfo["ClientInfo"]["AddressSize"] = LLVersionInfo::instance().getAddressSize();
 
 // <FS:ND> Add which flavor of FS generated an error
 #ifdef OPENSIM
@@ -4209,7 +4199,7 @@ void LLAppViewer::writeSystemInfo()
 
 	// <FS:ND> Print into about git sha hash this build is based on.
 	// LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << LL_ENDL;
-	LL_INFOS("SystemInfo") << "Version: " << LLVersionInfo::getChannelAndVersion() << " [" << LLVersionInfo::getGitHash() << "]" << LL_ENDL;
+	LL_INFOS("SystemInfo") << "Version: " <<  LLVersionInfo::instance().getChannelAndVersion() << " [" <<  LLVersionInfo::instance().getGitHash() << "]" << LL_ENDL;
 	// </FS:ND>
 
 	// Dump the local time and time zone
@@ -4437,7 +4427,7 @@ void LLAppViewer::handleViewerCrash()
 // static
 void LLAppViewer::recordMarkerVersion(LLAPRFile& marker_file)
 {
-	std::string marker_version(LLVersionInfo::getChannelAndVersion());
+	std::string marker_version(LLVersionInfo::instance().getChannelAndVersion());
 	if ( marker_version.length() > MAX_MARKER_LENGTH )
 	{
 		LL_WARNS_ONCE("MarkerFile") << "Version length ("<< marker_version.length()<< ")"
@@ -4456,7 +4446,7 @@ bool LLAppViewer::markerIsSameVersion(const std::string& marker_name) const
 {
 	bool sameVersion = false;
 
-	std::string my_version(LLVersionInfo::getChannelAndVersion());
+	std::string my_version(LLVersionInfo::instance().getChannelAndVersion());
 	char marker_version[MAX_MARKER_LENGTH];
 	S32  marker_version_length;
 
@@ -5496,6 +5486,9 @@ void LLAppViewer::idle()
 	LLFrameTimer::updateFrameTime();
 	LLFrameTimer::updateFrameCount();
 	LLEventTimer::updateClass();
+	// LLApp::stepFrame() performs the above three calls plus mRunner.run().
+	// Not sure why we don't call stepFrame() here, except that LLRunner seems
+	// completely redundant with LLEventTimer.
 	LLNotificationsUI::LLToast::updateClass();
 	LLSmoothInterpolation::updateInterpolants();
 	LLMortician::updateClass();
@@ -6134,37 +6127,40 @@ void LLAppViewer::idleNetwork()
 		const S64 frame_count = gFrameCount;  // U32->S64
 		F32 total_time = 0.0f;
 
-		while (gMessageSystem->checkAllMessages(frame_count, gServicePump))
 		{
-			if (gDoDisconnect)
+			LockMessageChecker lmc(gMessageSystem);
+			while (lmc.checkAllMessages(frame_count, gServicePump))
 			{
-				// We're disconnecting, don't process any more messages from the server
-				// We're usually disconnecting due to either network corruption or a
-				// server going down, so this is OK.
-				break;
-			}
+				if (gDoDisconnect)
+				{
+					// We're disconnecting, don't process any more messages from the server
+					// We're usually disconnecting due to either network corruption or a
+					// server going down, so this is OK.
+					break;
+				}
 
-			total_decoded++;
-			gPacketsIn++;
+				total_decoded++;
+				gPacketsIn++;
 
-			if (total_decoded > MESSAGE_MAX_PER_FRAME)
-			{
-				break;
-			}
+				if (total_decoded > MESSAGE_MAX_PER_FRAME)
+				{
+					break;
+				}
 
 #ifdef TIME_THROTTLE_MESSAGES
-			// Prevent slow packets from completely destroying the frame rate.
-			// This usually happens due to clumps of avatars taking huge amount
-			// of network processing time (which needs to be fixed, but this is
-			// a good limit anyway).
-			total_time = check_message_timer.getElapsedTimeF32();
-			if (total_time >= CheckMessagesMaxTime)
-				break;
+				// Prevent slow packets from completely destroying the frame rate.
+				// This usually happens due to clumps of avatars taking huge amount
+				// of network processing time (which needs to be fixed, but this is
+				// a good limit anyway).
+				total_time = check_message_timer.getElapsedTimeF32();
+				if (total_time >= CheckMessagesMaxTime)
+					break;
 #endif
-		}
+			}
 
-		// Handle per-frame message system processing.
-		gMessageSystem->processAcks(gSavedSettings.getF32("AckCollectTime"));
+			// Handle per-frame message system processing.
+			lmc.processAcks(gSavedSettings.getF32("AckCollectTime"));
+		}
 
 #ifdef TIME_THROTTLE_MESSAGES
 		if (total_time >= CheckMessagesMaxTime)
@@ -6447,15 +6443,15 @@ void LLAppViewer::handleLoginComplete()
 	initMainloopTimeout("Mainloop Init");
 
 	// Store some data to DebugInfo in case of a freeze.
-	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
+	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::instance().getChannel();
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
-	gDebugInfo["ClientInfo"]["Version"] = LLVersionInfo::getVersion();
-	gDebugInfo["ClientInfo"]["Platform"] = LLVersionInfo::getBuildPlatform();
+	gDebugInfo["ClientInfo"]["Version"] = LLVersionInfo::getInstance()->getVersion();
+	gDebugInfo["ClientInfo"]["Platform"] = LLVersionInfo::getInstance()->getBuildPlatform();
 // [/SL:KB]
-	gDebugInfo["ClientInfo"]["MajorVersion"] = LLVersionInfo::getMajor();
-	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
-	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
-	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
+	gDebugInfo["ClientInfo"]["MajorVersion"] = LLVersionInfo::instance().getMajor();
+	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::instance().getMinor();
+	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::instance().getPatch();
+	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::instance().getBuild();
 
 // <FS:ND> Add which flavor of FS generated an error
 #ifdef OPENSIM

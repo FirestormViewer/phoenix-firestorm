@@ -1566,6 +1566,10 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	
 	LLMatrix4a mat_normal;
 	mat_normal.loadu(mat_norm_in);
+	// <FS:Beq> FIX incorrect transformation
+	LLMatrix4a mat_tan; 
+	mat_tan.loadu(mat_vert_in);	
+	// </FS:Beq>
 	
 	F32 r = 0, os = 0, ot = 0, ms = 0, mt = 0, cos_ang = 0, sin_ang = 0;
 	bool do_xform = false;
@@ -2125,8 +2129,10 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						LLVector4a t;
 						tangent_to_object.rotate(binormal_dir, t);
 						LLVector4a binormal;
-						mat_normal.rotate(t, binormal);
-						
+						// <FS:Beq> FIX incorrect transformation
+						// mat_normal.rotate(t, binormal);
+						mat_tan.rotate(t, binormal);
+						// </FS:Beq>
 						//VECTORIZE THIS
 						if (mDrawablep->isActive())
 						{
@@ -2256,7 +2262,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		
 		if (rebuild_normal)
 		{
-			//LL_RECORD_TIME_BLOCK(FTM_FACE_GEOM_NORMAL);
+			//LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_NORMAL);
 			mVertexBuffer->getNormalStrider(norm, mGeomIndex, mGeomCount, map_range);
 			F32* normals = (F32*) norm.get();
 			LLVector4a* src = vf.mNormals;
@@ -2294,7 +2300,10 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			while (src < end)
 			{
 				LLVector4a tangent_out;
-				mat_normal.rotate(*src, tangent_out);
+				// <FS:Beq> FIX incorrect transformation
+				// mat_normal.rotate(*src, tangent_out);
+				mat_tan.rotate(*src, tangent_out);
+				// </FS:Beq>
 				tangent_out.normalize3fast();
 				tangent_out.setSelectWithMask(mask, *src, tangent_out);
 				tangent_out.store4a(tangents);

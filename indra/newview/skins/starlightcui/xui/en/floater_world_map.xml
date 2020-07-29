@@ -733,6 +733,7 @@
         <button.commit_callback
         function="WMap.TrackRegion" />
     </button>
+   </panel> 
   </layout_panel> 
  </layout_stack> 
 </floater>
