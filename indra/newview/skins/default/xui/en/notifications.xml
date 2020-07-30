@@ -10538,7 +10538,7 @@ Phantom mode off.
    icon="notifytip.tga"
    name="MovelockEnabled"
    type="notifytip">
-Movelock enabled.
+Movelock enabled. Use Avatar &gt; Movement &gt; Movelock to disable.
   </notification>
 
   <notification
