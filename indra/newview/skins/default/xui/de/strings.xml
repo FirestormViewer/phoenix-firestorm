@@ -7096,4 +7096,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="TexturePickerOutfitHeader">
 		Foto für Outfit
 	</string>
+	<string name="unknown_script">
+		(Unbekanntes Skript)
+	</string>
 </strings>
