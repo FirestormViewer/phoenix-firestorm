@@ -403,10 +403,10 @@ CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
 
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
 				"InternetShortcut" "URL" \
-				"http://join.secondlife.com/"
+				"https://join.secondlife.com/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
 				"InternetShortcut" "URL" \
-				"http://www.secondlife.com/account/"
+				"https://www.secondlife.com/account/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\LSL Scripting Language Help.url" \
 				"InternetShortcut" "URL" \
                 "http://wiki.secondlife.com/wiki/LSL_Portal"
@@ -436,9 +436,9 @@ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Version" "${VERSION_LONG}"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Shortcut" "$INSTSHORTCUT"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Exe" "$VIEWER_EXE"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "The Phoenix Firestorm Project, Inc."
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "http://www.firestormviewer.org"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "http://www.firestormviewer.org/downloads"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "http://www.firestormviewer.org/support"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://www.firestormviewer.org"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://www.firestormviewer.org/downloads"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://www.firestormviewer.org/support"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayName" "$INSTNAME"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}"
