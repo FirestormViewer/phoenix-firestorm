@@ -1119,6 +1119,14 @@ void set_default_colour_weights(kdu_params *siz)
 	{
 		return;
 	}
+
+// <FS:Ansariel> Fix image encoding for KDU >= 8.0.4
+#if KDU_MAJOR_VERSION >= 8 && KDU_MINOR_VERSION >= 0 && KDU_PATCH_VERSION >= 4
+	cod = siz->access_cluster(ENC_params);
+	assert(cod != NULL);
+#endif
+// </FS:Ansariel>
+
 	float weight;
 	if (cod->get(Clev_weights,0,0,weight) || cod->get(Cband_weights,0,0,weight))
 	{

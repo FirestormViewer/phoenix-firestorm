@@ -34,7 +34,7 @@
 		 layout="topleft"
 		 width="285"
 		 top="0"
-		 label="WL"
+		 label="Env"
 		 left="0">
 
 			<panel
@@ -57,7 +57,7 @@
 				 font="SansSerif"
 				 height="17"
 				 width="200">
-					Windlight Settings
+					Environment Settings
 				</text>
 			</panel>
 
@@ -75,12 +75,12 @@
 				 control_name="WindLightUseAtmosShaders"
 				 height="16"
 				 initial_value="true"
-				 label="Enable Atmospheric Shaders (Windlight)"
+				 label="Enable Atmospheric Shaders"
 				 layout="topleft"
 				 left="5"
 				 name="WindLightUseAtmosShaders"
 				 top_pad="8"
-				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
+				 tool_tip="This will enable full EEP functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="240">
 				</check_box>
 			</panel>
@@ -103,11 +103,11 @@
 				 layout="topleft"
 				 left="5"
 				 name="WL Sky"
-				 tool_tip="Windlight presets for your sky."
+				 tool_tip="Presets for your sky."
 				 mouse_opaque="false"
 				 top_pad="10"
 				 width="90">
-					WL Sky
+					Sky
 				</text>
 				<combo_box
 				 allow_text_entry="true"
@@ -147,11 +147,11 @@
 				 layout="topleft"
 				 left="5"
 				 name="WL Water"
-				 tool_tip="Windlight presets for your water."
+				 tool_tip="Presets for your water."
 				 mouse_opaque="false"
 				 top_pad="8"
 				 width="90">
-				 WL Water
+					Water
 				</text>
 				<combo_box
 				 allow_text_entry="true"
@@ -191,11 +191,11 @@
 				 layout="topleft"
 				 left="5"
 				 name="Day Cycle"
-				 tool_tip="Windlight presets for your day cycle."
+				 tool_tip="Presets for your day cycle."
 				 mouse_opaque="false"
 				 top_pad="8"
 				 width="90">
-				 Day Cycle
+					Day Cycle
 				</text>
 				<combo_box
 				 allow_text_entry="true"
@@ -300,7 +300,7 @@
 				 height="20"
 				 word_wrap="true"
 				 width="155">
-					Quick Windlights
+					Quick Environments
 				</text>
 				<view_border
 				 bevel_style="none"

@@ -768,18 +768,6 @@ class WindowsManifest(ViewerManifest):
         self.path(src='../win_crash_logger/%s/windows-crash-logger.exe' % self.args['configuration'],
                   dst="win_crash_logger.exe")
 
-        # <FS:Ansariel> This is still needed! The method to copy the Visual C++ Runtime files
-        #               in Copy3rdPartyLibs is copying the wrong files for 64bit because Autobuild
-        #               is a 32bit process and Windows will silently copy the 32bit versions from
-        #               the SysWOW64 folder, even if explicitly trying to copy from System32!
-        if (self.address_size == 64):
-            with self.prefix(src=os.path.join(self.args['build'], os.pardir, os.pardir, 'indra', 'newview', 'installers', 'windows_x64'), dst="llplugin"):
-                self.path("msvcp120.dll")
-                self.path("msvcr120.dll")
-            with self.prefix(src=os.path.join(self.args['build'], os.pardir, os.pardir, 'indra', 'newview', 'installers', 'windows_x64')):
-                self.path("msvcp120.dll")
-                self.path("msvcr120.dll")
-
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 

@@ -808,9 +808,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7253c6787a9aa04b160f450a47bc8d93</string>
+              <string>e11da8884e44c27df3bf3adce01d5760</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202021141.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202072245.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -820,9 +820,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0b24ebef4ea891e5fbf94445acac42bf</string>
+              <string>609dd2d70b73d83c382f73734c648156</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202021146.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202072240.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2533,7 +2533,7 @@
               <key>hash</key>
               <string>2aa4ec0d72bbe4b755730f1bf92b39e7</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/30340/257304/llphysicsextensions_tpv-1.0.542327-darwin64-542327.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.542327-darwin64-542327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2557,7 +2557,7 @@
               <key>hash</key>
               <string>ad9aba5e2c43a37b6530a0d2de64df1c</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/30341/257307/llphysicsextensions_tpv-1.0.542327-windows-542327.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.542327-windows-542327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2569,7 +2569,7 @@
               <key>hash</key>
               <string>46689ff1442a8eccac3a7f3258308e1e</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/30341/257307/llphysicsextensions_tpv-1.0.542327-windows64-542327.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.542327-windows64-542327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2996,9 +2996,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>222a406ecb4071a9cc9635353afa337e</string>
+              <string>b20c18f66ae63c9d3b1970af8866aeb9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54977/511775/openjpeg-1.5.1.538970-windows-538970.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.202102107-windows-202102107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3008,9 +3008,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b5c80807fa8161f3480be3d89fe9516</string>
+              <string>6f1e1d8796301c4e5737cb0db0f696d2</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54974/511767/openjpeg-1.5.1.538970-windows64-538970.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.202102110-windows64-202102110.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
