@@ -55,18 +55,6 @@
             <key>name</key>
             <string>darwin</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0ea99b626d4d5e3dc43f9f35f88625ba</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201502162025-r74-linux-201502162025-r74.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -84,9 +72,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7649dd9c2075b0cbda5b80b4edb9b90e</string>
+              <string>adb2d66a0f5cb473a36e24c4dc3cfa36</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-windows-202121822.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -96,9 +84,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9e2a24005a4751c3dc4655ac077e35c0</string>
+              <string>02f70159e14c7b7213b22a0225508c46</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows64-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-windows64-202121823.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
