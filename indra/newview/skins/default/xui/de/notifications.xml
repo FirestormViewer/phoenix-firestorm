@@ -2575,6 +2575,11 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Sind Sie sicher, dass Sie den Inhalt Ihres Ordners Fundbüro löschen möchten?
 		<usetemplate ignoretext="Bestätigen, bevor der Ordner Fundbüro im Inventar geleert wird" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
+	<notification icon="alertmodal.tga" name="ConfirmReplaceLink">
+		Sie sind dabei ein Körperteil vom Typ „[TYPE]“ mit einem anderen Gegenstand zu ersetzen, der nicht vom selben Typ ist.
+Sind Sie sicher, dass Sie fortfahren möchten?
+		<usetemplate ignoretext="Bestätigen bevor eine Verknüpfung ersetzt wird" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
 	<notification name="CopySLURL">
 		Die folgende SLurl wurde in die Zwischenablage kopiert:
  [SLURL]
@@ -3545,7 +3550,7 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
 		Das Hochladen von [COUNT] Gegenständen wird insgesamt [COST] L$ kosten. Möchten Sie mit dem Hochladen fortfahren?
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Hochladen" ignoretext="Mehrfach-Uploads bestätigen"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Die ausgewählten Dateien können nicht per Mehrfach-Upload hochgeladen werden.
