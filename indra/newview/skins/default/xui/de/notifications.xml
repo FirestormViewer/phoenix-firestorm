@@ -3552,6 +3552,10 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		Das Hochladen von [COUNT] Gegenständen wird insgesamt [COST] L$ kosten. Möchten Sie mit dem Hochladen fortfahren?
 		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Hochladen" ignoretext="Mehrfach-Uploads bestätigen"/>
 	</notification>
+	<notification name="NotEnoughMoneyForBulkUpload">
+Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstände für insgesamt [COST] L$ hochzuladen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Die ausgewählten Dateien können nicht per Mehrfach-Upload hochgeladen werden.
 		<usetemplate name="okbutton" yestext="OK"/>

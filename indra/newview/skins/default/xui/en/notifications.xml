@@ -9258,6 +9258,16 @@ This will upload [COUNT] items at a total cost of L$[COST]. Do you wish to conti
      notext="Cancel"
      yestext="Upload"/>
    </notification>
+
+   <notification
+    icon="alertmodal.tga"
+    name="NotEnoughMoneyForBulkUpload"
+    type="alertmodal">
+Your current balance of L$[BALANCE] is not enough to upload [COUNT] items at a total cost of L$[COST].
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+   </notification>
   
    <notification
     icon="alertmodal.tga"
