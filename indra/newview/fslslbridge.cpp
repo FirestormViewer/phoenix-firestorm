@@ -454,12 +454,10 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 1) == "1")
 			{
 				LLNotificationsUtil::add("MovelockEnabled", LLSD());
-				report_to_nearby_chat("--- " + LLTrans::getString("MovelockEnabled"));
 			}
 			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 1) == "0")
 			{
 				LLNotificationsUtil::add("MovelockDisabled", LLSD());
-				report_to_nearby_chat("--- " + LLTrans::getString("MovelockDisabled"));
 			}
 			else
 			{
