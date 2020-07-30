@@ -447,7 +447,7 @@ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}
 ${If} ${IS64BIT} == "1"
   WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00064000"		# 400 MB
 ${Else}
-  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00057800"		# 350 MB
+  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00061800"		# 390 MB
 ${EndIf}
 
 # from FS:Ansariel
