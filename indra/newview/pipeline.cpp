@@ -7752,36 +7752,39 @@ void LLPipeline::renderFinalize()
         gGlowExtractProgram.uniform3f(LLShaderMgr::GLOW_WARMTH_WEIGHTS, warmthWeights.mV[0], warmthWeights.mV[1],
                                       warmthWeights.mV[2]);
         gGlowExtractProgram.uniform1f(LLShaderMgr::GLOW_WARMTH_AMOUNT, warmthAmount);
-        LLGLEnable blend_on(GL_BLEND);
-        LLGLEnable test(GL_ALPHA_TEST);
+        
+        {
+            LLGLEnable blend_on(GL_BLEND);
+            LLGLEnable test(GL_ALPHA_TEST);
 
-        gGL.setSceneBlendType(LLRender::BT_ADD_WITH_ALPHA);
+            gGL.setSceneBlendType(LLRender::BT_ADD_WITH_ALPHA);
 
-        mScreen.bindTexture(0, 0, LLTexUnit::TFO_POINT);
+            mScreen.bindTexture(0, 0, LLTexUnit::TFO_POINT);
 
-        gGL.color4f(1, 1, 1, 1);
-        gPipeline.enableLightsFullbright();
-        // <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
-        //gGL.begin(LLRender::TRIANGLE_STRIP);
-        //gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-        //gGL.vertex2f(-1,-1);
-        //
-        //gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-        //gGL.vertex2f(-1,3);
-        //
-        //gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-        //gGL.vertex2f(3,-1);
-        //
-        //gGL.end();
-        drawAuxiliaryVB(tc1, tc2);
-        // </FS:Ansariel>
+            gGL.color4f(1, 1, 1, 1);
+            gPipeline.enableLightsFullbright();
+            // <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
+            //gGL.begin(LLRender::TRIANGLE_STRIP);
+            //gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+            //gGL.vertex2f(-1, -1);
 
-        gGL.getTexUnit(0)->unbind(mScreen.getUsage());
+            //gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+            //gGL.vertex2f(-1, 3);
 
-        mGlow[2].flush();
+            //gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+            //gGL.vertex2f(3, -1);
 
-        tc1.setVec(0, 0);
-        tc2.setVec(2, 2);
+            //gGL.end();
+            drawAuxiliaryVB(tc1, tc2);
+            // </FS:Ansariel>
+
+            gGL.getTexUnit(0)->unbind(mScreen.getUsage());
+
+            mGlow[2].flush();
+
+            tc1.setVec(0, 0);
+            tc2.setVec(2, 2); 
+        }
 
         // power of two between 1 and 1024
         U32 glowResPow = RenderGlowResolutionPow;
