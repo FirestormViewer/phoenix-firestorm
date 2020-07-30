@@ -458,6 +458,9 @@ WriteRegDWORD SHELL_CONTEXT "${MSNTCURRVER_KEY}\Image File Execution Options\$VI
 WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "NoModify" 1
 WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "NoRepair" 1
 
+# <FS:Ansariel> Ask before creating protocol registry entries
+MessageBox MB_YESNO|MB_ICONQUESTION $(CreateUrlRegistryEntries) IDNO skip_create_url_registry_entries
+
 # Write URL registry info
 WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}" "(default)" "URL:Second Life"
 WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}" "URL Protocol" ""
@@ -473,15 +476,18 @@ WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$
 # URL param must be last item passed to viewer, it ignores subsequent params to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
 
-WriteRegStr HKEY_CLASSES_ROOT "Applications\$INSTEXE" "IsHostApp" ""
-##WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
-
 # <FS:CR> Register hop:// protocol registry info
 WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
 WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
 WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
 WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
 # </FS:CR>
+
+# <FS:Ansariel> Ask before creating protocol registry entries
+skip_create_url_registry_entries:
+
+WriteRegStr HKEY_CLASSES_ROOT "Applications\$INSTEXE" "IsHostApp" ""
+##WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
 
 # Write out uninstaller
 WriteUninstaller "$INSTDIR\uninst.exe"
@@ -800,8 +806,10 @@ NOFOLDER:
 MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
 
 DeleteKeys:
+  DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\hop" # <FS:Ansariel> Unregister hop:// protocol registry info
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-location-info"
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\secondlife"
+  DeleteRegKey HKEY_CLASSES_ROOT "hop" # <FS:Ansariel> Unregister hop:// protocol registry info
   DeleteRegKey HKEY_CLASSES_ROOT "x-grid-location-info"
   DeleteRegKey HKEY_CLASSES_ROOT "secondlife"
 
