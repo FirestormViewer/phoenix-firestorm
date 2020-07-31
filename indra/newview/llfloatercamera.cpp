@@ -578,7 +578,10 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
 		if (camera_floater)
 		{
-			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			// <FS:Ansariel> FIRE-29950: Re-add weird legacy object view camera toggle
+			//camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			// </FS:Ansariel>
 			camera_floater->updateItemsSelection();
 			camera_floater->fromFreeToPresets();
 		}
@@ -587,7 +590,10 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		camera_floater = LLFloaterCamera::findPhototoolsInstance();
 		if (camera_floater)
 		{
-			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			// <FS:Ansariel> FIRE-29950: Re-add weird legacy object view camera toggle
+			//camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			// </FS:Ansariel>
 			camera_floater->updateItemsSelection();
 			camera_floater->fromFreeToPresets();
 		}
