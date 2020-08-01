@@ -23,7 +23,17 @@
 			<pie_slice label="Appel audio" name="Call"/>
 			<pie_slice label="Zoomer" name="Zoom In"/>
 			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
+			<pie_menu label="Réinitialiser. &gt;" name="ResetMenu">
+				<pie_slice label="Squel. &amp; Anim." name="Reset Skeleton And Animations"/>
+				<pie_slice label="Squelette" name="Reset Skeleton"/>
+				<pie_slice label="LOD du Mesh" name="Reset Mesh LOD"/>
+			</pie_menu>
 			<pie_slice label="Dump XML" name="Dump XML"/>
+			<pie_menu name="RenderMenu" label="Rendu &gt;">
+				<pie_slice name="RenderNormally" label="Normal"/>
+				<pie_slice name="DoNotRender" label="Jamais"/>
+				<pie_slice name="AlwaysRenderFully" label="Complet"/>
+			</pie_menu>
 		</pie_menu>
 		<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">
 			<pie_slice label="Blacklister" name="DerenderPermanent"/>

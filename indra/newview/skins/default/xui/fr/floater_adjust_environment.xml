@@ -21,10 +21,10 @@
 						Nuages :
 					</text>
 					<text name="cloud_map_label">
-						Image de nuage :
+						Img nuage :
 					</text>
 					<text name="water_map_label">
-						Image d'eau :
+						Img d'eau :
 					</text>
 				</layout_panel>
 				<layout_panel name="lp_2">
