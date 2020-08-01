@@ -28,17 +28,20 @@ class exoGroupMuteList : public LLSingleton<exoGroupMuteList>
 
 public:
 	bool isMuted(const LLUUID &group) const;
+	bool isLoaded() const;
 	void add(const LLUUID &group);
 	void remove(const LLUUID &group);
 	bool loadMuteList();
+	void addDeferredGroupChat(const LLUUID& group);
+	bool restoreDeferredGroupChat(const LLUUID& group);
 
 private:
 	bool saveMuteList();
 	std::string getFilePath() const;
 	
-	std::set<LLUUID> mMuted;
+	uuid_set_t mMuted;
+	uuid_set_t mDeferredGroupChatSessionIDs;
 
-	// <FS:Ansariel> Server-side storage
 	std::string getMutelistString(const LLUUID& group) const;
 };
 

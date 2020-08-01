@@ -223,7 +223,7 @@
         mouse_opaque="true"
         name="preset_combo"
         top_pad="7"
-        width="122">
+        width="116">
         <combo_list
         mouse_wheel_opaque="true"/>
         <combo_box.item
@@ -232,46 +232,42 @@
          value="default" />
       </combo_box>
       <button
-        height="16"
-        width="16"  
+        height="23"
+        width="24"
         layout="topleft"
         mouse_opaque="true"
         name="gear_btn"
         tool_tip="Camera Presets"
-        top_delta="3"
+        top_delta="0"
         left_pad="3" 
-        image_selected="Icon_Gear"
-        image_pressed="Icon_Gear"
-        image_unselected="Icon_Gear"
+        image_overlay="Icon_Gear"
         is_toggle="true">
         <button.commit_callback
           function="CameraPresets.ShowPresetsList"/>
       </button>
-      <!--
       <button
         follows="top|left"
         height="23"
-        label="Save as preset..."
+        label="Position..."
         layout="topleft"
-        left="0"
-        name="save_preset_btn"
-        top_pad="7"
-        width="143">
-        <button.commit_callback
-          function="CameraPresets.Save"/>
-      </button>
-      -->
-      <button
-        follows="top|left"
-        height="23"
-        label="Camera Position..."
-        layout="topleft"
-        left_delta="-125"
+        left_delta="-119"
         name="camera_position_btn"
-        top_pad="9"
-        width="143">
+        top_pad="5"
+        width="70">
         <button.commit_callback
           function="Floater.Show"
           parameter="prefs_view_advanced"/>
+      </button>
+      <button
+        follows="top|left"
+        height="23"
+        label="Save"
+        layout="topleft"
+        left_pad="3"
+        name="save_btn"
+        top_delta="0"
+        width="70">
+        <button.commit_callback
+          function="CameraPresets.Save"/>
       </button>
 </floater>

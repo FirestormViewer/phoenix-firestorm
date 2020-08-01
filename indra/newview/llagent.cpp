@@ -1640,7 +1640,7 @@ void LLAgent::setAFK()
 		// <FS:AO> Gsit on away, antigrief protection
 		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
 		{
-			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+			if (isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
 			{
 				gAgent.sitDown();
 				gAgent.setIsAfkSitting(true);
@@ -5535,6 +5535,7 @@ void LLAgent::renderAutoPilotTarget()
 // <FS> Phantom mode
 void LLAgent::togglePhantom()
 {
+	make_ui_sound("UISndMovelockToggle");
 	mPhantom = !mPhantom;
 	if (mPhantom)
 	{

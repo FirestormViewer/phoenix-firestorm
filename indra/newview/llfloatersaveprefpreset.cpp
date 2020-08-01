@@ -51,7 +51,10 @@ BOOL LLFloaterSavePrefPreset::postBuild()
 	}
 	
 	getChild<LLComboBox>("preset_combo")->setTextEntryCallback(boost::bind(&LLFloaterSavePrefPreset::onPresetNameEdited, this));
-	getChild<LLComboBox>("preset_combo")->setCommitCallback(boost::bind(&LLFloaterSavePrefPreset::onPresetNameEdited, this));
+	// <FS:Ansariel> Save on pressing enter
+	//getChild<LLComboBox>("preset_combo")->setCommitCallback(boost::bind(&LLFloaterSavePrefPreset::onPresetNameEdited, this));
+	getChild<LLComboBox>("preset_combo")->setCommitCallback(boost::bind(&LLFloaterSavePrefPreset::onBtnSave, this));
+	// </FS:Ansariel>
 	getChild<LLButton>("save")->setCommitCallback(boost::bind(&LLFloaterSavePrefPreset::onBtnSave, this));
 
 	getChild<LLButton>("cancel")->setCommitCallback(boost::bind(&LLFloaterSavePrefPreset::onBtnCancel, this));
@@ -85,6 +88,13 @@ void LLFloaterSavePrefPreset::onOpen(const LLSD& key)
 void LLFloaterSavePrefPreset::onBtnSave()
 {
 	std::string name = mPresetCombo->getSimple();
+
+	// <FS:Ansariel> Save on pressing enter
+	if (name.empty())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	std::string upper_name(name);
 	LLStringUtil::toUpper(upper_name);

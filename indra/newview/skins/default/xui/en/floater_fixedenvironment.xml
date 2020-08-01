@@ -12,7 +12,7 @@
         save_rect="true"
         title="Fixed Environment"
         save_visibility="false"
-        help_topic="fixed_environment"
+        help_topic="fs_fixed_environment"
         single_instance="true" 
         width="750">
     <string name="edit_sky">Edit Sky:</string>
