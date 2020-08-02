@@ -63,8 +63,11 @@ if (WINDOWS)
   # http://www.cmake.org/pipermail/cmake/2009-September/032143.html
   string(REPLACE "/Zm1000" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
-  # Moved to variables for the convenience of people who are not Kitty
-  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  # Without PreferredToolArchitecture=x64, as of 2020-06-26 the 32-bit
+  # compiler on our TeamCity build hosts has started running out of virtual
+  # memory for the precompiled header file.
+  # [SL:KB] - Moved to variables for the convenience of people who are not Kitty
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /p:PreferredToolArchitecture=x64")
 
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
       "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Zo"

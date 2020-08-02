@@ -151,7 +151,10 @@ std::string LLExperienceLog::getPermissionString( const LLSD& message, const std
 		}
 		else
 		{
-			buf.str();
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.5
+			buf.str("");
+// [/SL:KB]
+//			buf.str();
 		}
 	}
 
