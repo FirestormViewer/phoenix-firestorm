@@ -5956,27 +5956,51 @@ void LLAgent::sendAgentSetAppearance()
 	// is texture data current relative to wearables?
 	// KLW - TAT this will probably need to check the local queue.
 	BOOL textures_current = gAgentAvatarp->areTexturesCurrent();
-	//<FS:Beq> BOM fallback legacy opensim
+	//<FS:Beq> BOM fallback legacy opensim (extended for FIRE-29903 contrib from Ubit Umarov)
 	// for(U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++ )
-	for(U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++ )
-	//</FS:Beq>
+	// {
+	// 	const ETextureIndex texture_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
+
+	// 	// if we're not wearing a skirt, we don't need the texture to be baked
+	// 	if (texture_index == TEX_SKIRT_BAKED && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT))
+	// 	{
+	// 		continue;
+	// 	}
+
+	// 	// IMG_DEFAULT_AVATAR means not baked. 0 index should be ignored for baked textures
+	// 	if (!gAgentAvatarp->isTextureDefined(texture_index, 0))
+	// 	{
+	// 		LL_DEBUGS("Avatar") << "texture not current for baked " << (S32)baked_index << " local " << (S32)texture_index << LL_ENDL;
+	// 		textures_current = FALSE;
+	// 		break;
+	// 	}
+	// }
+	if(textures_current)
 	{
-		const ETextureIndex texture_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
-
-		// if we're not wearing a skirt, we don't need the texture to be baked
-		if (texture_index == TEX_SKIRT_BAKED && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT))
+		for(U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++ )
 		{
-			continue;
-		}
+			const ETextureIndex texture_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
 
-		// IMG_DEFAULT_AVATAR means not baked. 0 index should be ignored for baked textures
-		if (!gAgentAvatarp->isTextureDefined(texture_index, 0))
-		{
-			LL_DEBUGS("Avatar") << "texture not current for baked " << (S32)baked_index << " local " << (S32)texture_index << LL_ENDL;
-			textures_current = FALSE;
-			break;
+			// if we're not wearing a skirt, we don't need the texture to be baked
+			if (texture_index == TEX_SKIRT_BAKED && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT))
+			{
+				continue;
+			}
+			// if we're not wearing a universal
+		    if ( (texture_index >= TEX_LEFT_ARM_BAKED && texture_index <= TEX_AUX3_BAKED) && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_UNIVERSAL))
+        	{
+          		continue; // ignore universal that is also optional
+        	}
+			// IMG_DEFAULT_AVATAR means not baked. 0 index should be ignored for baked textures
+			if (!gAgentAvatarp->isTextureDefined(texture_index, 0))
+			{
+				LL_DEBUGS("Avatar") << "texture not current for baked " << (S32)baked_index << " local " << (S32)texture_index << LL_ENDL;
+				textures_current = FALSE;
+				break;
+			}
 		}
 	}
+	//</FS:Beq>
 
 	// only update cache entries if we have all our baked textures
 
