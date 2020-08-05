@@ -24,8 +24,8 @@
 	<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
 	<menu_item_call label="Afficher les textures" name="Debug..."/>
 	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>
-	<menu_item_check name="Normal" label="Rendu normal"/>
-	<menu_item_check name="Toujours utiliser un avatar 2D" label="Always use impostor"/>
-	<menu_item_check name="Ne jamais utiliser un avatar 2D" label="Never use impostor"/>
+	<menu_item_check name="RenderNormally" label="Rendu selon vos préférences"/>
+	<menu_item_check name="DoNotRender" label="Aucun rendu"/>
+	<menu_item_check name="AlwaysRenderFully" label="Rendu toujours complet"/>
 	<menu_item_call label="Bloquer les particules" name="Mute Particle"/>
 </context_menu>
