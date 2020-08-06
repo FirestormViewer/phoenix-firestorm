@@ -63,7 +63,7 @@ public:
 protected:
 	void		initialize();
 
-	void		onSpecialRenderModeLightChanged();	// ## Zi: Optional Edit Appearance Lighting
+	void		onSpecialRenderModeLightChanged();	// <FS:Zi> Optional Edit Appearance Lighting
 
 	LLJoint*	mCameraTargetJoint;
 	LLVector3d	mCameraOffset;
@@ -78,7 +78,7 @@ protected:
 	F32			mCameraYaw;
 
 	BOOL		mCameraDrivenByKeys;
-	BOOL		mSpecialRenderModeLight;	// ## Zi: Optional Edit Appearance Lighting
+	boost::signals2::connection	mEditAppearanceLightingConnection;	// <FS:Zi> Optional Edit Appearance Lighting
 };
 
 //

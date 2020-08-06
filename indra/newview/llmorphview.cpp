@@ -61,7 +61,8 @@ LLMorphView::LLMorphView(const LLMorphView::Params& p)
 	mOldCameraNearClip( 0.f ),
 	mCameraPitch( 0.f ),
 	mCameraYaw( 0.f ),
-	mCameraDrivenByKeys( FALSE )
+	mCameraDrivenByKeys( FALSE ),
+	mEditAppearanceLightingConnection() // <FS:Ansariel> Optional Edit Appearance Lighting
 {}
 
 //-----------------------------------------------------------------------------
@@ -80,33 +81,47 @@ void	LLMorphView::initialize()
 
 	gAgentAvatarp->stopMotion( ANIM_AGENT_BODY_NOISE );
 
-	// ## Zi: Optional Edit Appearance Lighting
-//		gAgentAvatarp->mSpecialRenderMode = 3;
-	LLPointer<LLControlVariable> special_render_mode_control=gSavedSettings.getControl("EditAppearanceLighting");
-	special_render_mode_control->getCommitSignal()->connect(boost::bind(&LLMorphView::onSpecialRenderModeLightChanged, this));
+	// <FS:Zi> Optional Edit Appearance Lighting
+	//gAgentAvatarp->mSpecialRenderMode = 3;
+	if (mEditAppearanceLightingConnection.connected())
+	{
+		mEditAppearanceLightingConnection.disconnect();
+	}
+	mEditAppearanceLightingConnection = gSavedSettings.getControl("EditAppearanceLighting")->getCommitSignal()->connect(boost::bind(&LLMorphView::onSpecialRenderModeLightChanged, this));
 	onSpecialRenderModeLightChanged();
-	// ## Zi: Optional Edit Appearance Lighting
+	// </FS:Zi> Optional Edit Appearance Lighting
 	
 	// set up camera for close look at avatar
 	mOldCameraNearClip = LLViewerCamera::getInstance()->getNear();
 	LLViewerCamera::getInstance()->setNear(MORPH_NEAR_CLIP);	
 }
 
-// ## Zi: Optional Edit Appearance Lighting
+// <FS:Zi> Optional Edit Appearance Lighting
 void LLMorphView::onSpecialRenderModeLightChanged()
 {
-	if(gSavedSettings.getBOOL("EditAppearanceLighting"))
+	if (gSavedSettings.getBOOL("EditAppearanceLighting"))
+	{
 		gAgentAvatarp->mSpecialRenderMode = 3;
+	}
 	else
+	{
 		gAgentAvatarp->mSpecialRenderMode = 0;
+	}
 }
-// ## Zi: Optional Edit Appearance Lighting
+// </FS:Zi> Optional Edit Appearance Lighting
 
 //-----------------------------------------------------------------------------
 // shutdown()
 //-----------------------------------------------------------------------------
 void	LLMorphView::shutdown()
 {
+	// <FS:Ansariel> Optional Edit Appearance Lighting
+	if (mEditAppearanceLightingConnection.connected())
+	{
+		mEditAppearanceLightingConnection.disconnect();
+	}
+	// </FS:Ansariel> Optional Edit Appearance Lighting
+
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->startMotion( ANIM_AGENT_BODY_NOISE );
