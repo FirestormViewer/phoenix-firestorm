@@ -183,7 +183,22 @@ protected:
     void modifyNotificationParams()
     {
         LLSD payload = mParams.payload;
-        payload["SESSION_NAME"] = mName;
+        // <FS:Ansariel> FIRE-29943: Item shared messaged logging to wrong IM logfile if user is offline
+        //payload["SESSION_NAME"] = mName;
+        LLAvatarName av_name;
+        // This should work since modifyNotificationParams() is invoked after we already
+        // retrieved the avatar name
+        if (mFromId.notNull() && LLAvatarNameCache::instance().getName(mFromId, &av_name))
+        {
+            // LLHandlerUtil::logToIM() will transform this into the correct filename
+            payload["SESSION_NAME"] = av_name.getLegacyName();
+        }
+        else
+        {
+            payload["SESSION_NAME"] = mName;
+        }
+        // </FS:Ansariel>
+
         mParams.payload = payload;
     }
 };

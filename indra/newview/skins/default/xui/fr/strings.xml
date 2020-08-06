@@ -5387,7 +5387,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Gestes
 	</string>
 	<string name="Command_Grid_Status_Label">
-		État de la grille
+		État du réseau
 	</string>
 	<string name="Command_HowTo_Label">
 		Aide rapide
@@ -5468,7 +5468,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Conversation
 	</string>
 	<string name="Command_Contact_Sets_Label">
-		Liste de contacts
+		Cercles de contacts
 	</string>
 	<string name="Command_Conversation_Log_Label">
 		Enregistrement de conversation
@@ -5480,7 +5480,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Paramètres de débogage
 	</string>
 	<string name="Command_Wearable_Favorites_Label">
-		Vêtements favoris
+		Vêtements préférés
 	</string>
 	<string name="Command_Fly_Label">
 		Voler
@@ -5498,7 +5498,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Outils photo
 	</string>
 	<string name="Command_Phototools_View_Label">
-		Outils pour caméra
+		Outils caméra
 	</string>
 	<string name="Command_Quickprefs_Label">
 		Préférences rapides
@@ -5516,7 +5516,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Ne montrer que les amis
 	</string>
 	<string name="Command_Snapshot_To_Disk_Label">
-		Sauvegarder une photo sur disque
+		Photo sur disque
 	</string>
 	<string name="Command_Sound_Explorer_Label">
 		Explorateur de sons
@@ -5570,7 +5570,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Gestes de votre avatar
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
-		Afficher l’état actuel de la grille
+		Afficher l’état actuel du réseau
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Comment effectuer les opérations courantes
@@ -5642,10 +5642,10 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		actuellement dans la barre d&apos;outils de droite
 	</string>
 	<string name="Command_Stop_Animations_Label">
-		Arrêter mon animation
+		Arrêter l'animation
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
-		Arrêter mon animation
+		Arrêter l'animation
 	</string>
 	<string name="Command_AO_Tooltip">
 		Remplacement d'animation
@@ -5666,7 +5666,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Montre ou cache la barre de conversation
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
-		Ouvre les listes de contacts (CTRL+ALT+SHIFT+C)
+		Gestion des cercles de contacts (CTRL+ALT+SHIFT+C)
 	</string>
 	<string name="Command_Conversation_Log_Tooltip">
 		Ouvre l'historique des conversations pour consulter les transcriptions des conversations passées
@@ -5678,7 +5678,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Changer les paramètres de débogage du logiciel (CTRL+ALT+SHIFT+S)
 	</string>
 	<string name="Command_Wearable_Favorites_Tooltip">
-		Ouvre la liste des vêtements favoris
+		Ouvre la liste des vêtements préférés
 	</string>
 	<string name="Command_Fly_Tooltip">
 		Voler/Arrêter de voler (HOME)

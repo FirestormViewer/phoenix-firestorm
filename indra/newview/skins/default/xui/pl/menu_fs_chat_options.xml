@@ -4,6 +4,7 @@
 	<menu_item_check label="Pokaż głos w pobliżu" name="nearby_voice" />
 	<menu_item_check label="Pokaż listę zablokowanych" name="block_list" />
 	<menu_item_check label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history" />
+	<menu_item_check label="Pokaż ikony profili w nagłówkach czatu" name="chat_header_icons" />
 	<context_menu label="Rozmiar czcionki" name="font_size">
 		<menu_item_check label="Mała" name="font_size_small" />
 		<menu_item_check label="Średnia" name="font_size_medium" />

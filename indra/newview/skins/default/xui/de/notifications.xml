@@ -4916,7 +4916,7 @@ Möchten Sie diese Informationen übermitteln?
 		Phantom-Modus ausgeschaltet.
 	</notification>
 	<notification name="MovelockEnabled">
-		Movelock aktiviert.
+		Movelock aktiviert. Verwenden Sie Avatar &gt; Bewegung &gt; Movelock zum deaktivieren.
 	</notification>
 	<notification name="MovelockDisabled">
 		Movelock deaktiviert.
