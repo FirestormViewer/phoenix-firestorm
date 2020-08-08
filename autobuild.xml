@@ -304,9 +304,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f65774ebabb256f2d217a872b0cf2b5b</string>
+              <string>d670d00aa732b97d105d287b62582762</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4812/15284/apr_suite-1.4.5.504800-darwin64-504800.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55065/512118/apr_suite-1.4.5.539073-darwin64-539073.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1914,9 +1914,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534ea1079513a56a78c99bc08179c87c</string>
+              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1926,9 +1926,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534ea1079513a56a78c99bc08179c87c</string>
+              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
