@@ -6907,16 +6907,9 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 	{
 		LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::getInstance());
 
-		S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
-		S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
-		S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
-		std::string texture_upload_cost_str;
-		std::string sound_upload_cost_str;
-		std::string animation_upload_cost_str;
-
-		texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
-		sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
-		animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
+		const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+		const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+		const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
 		gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]",  texture_upload_cost_str);
 		gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]",  sound_upload_cost_str);
 		gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);

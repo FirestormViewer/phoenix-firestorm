@@ -5039,9 +5039,6 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
-	<string name="free">
-		darmowe
-	</string>
 	<string name="Group Ban">
 		Bany grupowe
 	</string>
