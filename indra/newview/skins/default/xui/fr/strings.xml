@@ -5378,7 +5378,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Conversations
 	</string>
 	<string name="Command_Conversations_Label">
-		Conversations
+		Discuter
 	</string>
 	<string name="Command_Compass_Label">
 		Boussole
@@ -5396,7 +5396,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Gestes
 	</string>
 	<string name="Command_Grid_Status_Label">
-		État de la grille
+		État du réseau
 	</string>
 	<string name="Command_HowTo_Label">
 		Aide rapide
@@ -5458,6 +5458,93 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Voice_Label">
 		Paramètres vocaux
 	</string>
+	<string name="Command_AO_Label">
+		Remplacement d'animations
+	</string>
+	<string name="Command_Areasearch_Label">
+		Recherche Zonale
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Liste Noire active
+	</string>
+	<string name="Command_Blocklist_Label">
+		Liste noire
+	</string>
+	<string name="Command_Beacons_Label">
+		Balises
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Conversation
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Cercles de contacts
+	</string>
+	<string name="Command_Conversation_Log_Label">
+		Enregistrement de conversation
+	</string>
+	<string name="Command_Landmark_Here_Label">
+		Creation de repère
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Paramètres de débogage
+	</string>
+	<string name="Command_Wearable_Favorites_Label">
+		Vêtements préférés
+	</string>
+	<string name="Command_Fly_Label">
+		Voler
+	</string>
+	<string name="Command_Groundsit_Label">
+		S'asseoir au sol
+	</string>
+	<string name="Command_Group_Titles_Label">
+		Titres de Groupe
+	</string>
+	<string name="Command_Move_Lock_Label">
+		Immobiliser
+	</string>
+	<string name="Command_Phototools_Label">
+		Outils photo
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Outils caméra
+	</string>
+	<string name="Command_Quickprefs_Label">
+		Préférences rapides
+	</string>
+	<string name="Command_RegionTracker_Label">
+		Suivi de région
+	</string>
+	<string name="Command_Region_Label">
+		Région/Domaine
+	</string>
+	<string name="Command_ResyncAnimations_Label">
+		Resynchroniser les animations
+	</string>
+	<string name="Command_RFO_Label">
+		Ne montrer que les amis
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Photo sur disque
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Explorateur de sons
+	</string>
+	<string name="Command_Statistics_Label">
+		Statistiques
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Historique de téléportation
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Navigateur web
+	</string>
+	<string name="Command_Mouselook_Label">
+		Vue subjective
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Pose Stand
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Information sur le terrain que vous visitez
 	</string>
@@ -5492,7 +5579,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Gestes de votre avatar
 	</string>
 	<string name="Command_Grid_Status_Tooltip">
-		Afficher l’état actuel de la grille
+		Afficher l’état actuel du réseau
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Comment effectuer les opérations courantes
@@ -5564,10 +5651,100 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		actuellement dans la barre d&apos;outils de droite
 	</string>
 	<string name="Command_Stop_Animations_Label">
-		Arrêter mon animation
+		Arrêter l'animation
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
-		Arrêter mon animation
+		Arrêter l'animation
+	</string>
+	<string name="Command_AO_Tooltip">
+		Remplacement d'animation
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Recherche des objets dans la zone
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Affiche la liste de tous les éléments mis dans la liste noire
+	</string>
+	<string name="Command_Blocklist_Tooltip">
+		Ouvre la liste des éléments bloqués/ignorés
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Montrer les balises
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		Montre ou cache la barre de conversation
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Gestion des cercles de contacts (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Ouvre l'historique des conversations pour consulter les transcriptions des conversations passées
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Crée un repère à votre position actuelle
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Changer les paramètres de débogage du logiciel (CTRL+ALT+SHIFT+S)
+	</string>
+	<string name="Command_Wearable_Favorites_Tooltip">
+		Ouvre la liste des vêtements préférés
+	</string>
+	<string name="Command_Fly_Tooltip">
+		Voler/Arrêter de voler (HOME)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		S'asseoir sur le sol/Se relever (CTRL+ALT+S)
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		Modifier le titre de groupe affiché
+	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Immobilise l'avatar dans sa position actuelle (CTRL+ALT+P)
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Outils pour la création d'image (ATL+P).
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Contrôles avancés de la caméra (CTRL+SHIFT+C)
+	</string>
+	<string name="Command_Quickprefs_Tooltip">
+		Préférences rapides pour modifier des paramètres souvent utilisés
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		Suivre le statut de différentes régions
+	</string>
+	<string name="Command_Region_Tooltip">
+		Ouvre les outils de gestion région et domaine (ALT+R)
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		Synchronise les animations de l'avatar
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Ne montrez que vos amis, tous les autres avatars seront supprimés. Une fois activé, une téléportation est nécessaire pour rétablir la visibilité des autres.
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Prend un cliché rapide et le sauvegarde sur le disque dur
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Ouvre l'explorateur de sons
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Affiche les statistiques du navigateur (CTRL+SHIFT+1)
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Ouverture de l'historique de téléportation (ALT+H)
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Ouvre le navigateur web interne (CTRL+SHIFT+Z)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Passer en mode Vue subjective (M)
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Met l'avatar en pose pour ajuster les objets attachés
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Ouvre le radar pour détecter les avatars à proximité
 	</string>
 	<string name="Retain%">
 		Garder%

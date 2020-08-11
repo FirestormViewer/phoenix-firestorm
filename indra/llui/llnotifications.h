@@ -1043,7 +1043,8 @@ protected:
 	LLPostponedNotification()
 		: mParams(),
 		mName(),
-		mAvatarNameCacheConnection()
+		mAvatarNameCacheConnection(),
+		mFromId(LLUUID::null) // <FS:Ansariel> FIRE-29943: Item shared messaged logging to wrong IM logfile if user is offline
 	{}
 
 	virtual ~LLPostponedNotification()
@@ -1064,6 +1065,7 @@ protected:
 	LLNotification::Params mParams;
 	std::string mName;
 	boost::signals2::connection mAvatarNameCacheConnection;
+	LLUUID mFromId; // <FS:Ansariel> FIRE-29943: Item shared messaged logging to wrong IM logfile if user is offline
 };
 
 // Stores only persistent notifications.

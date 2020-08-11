@@ -1,27 +1,29 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="camera_floater">
-	<floater.string name="rotate_tooltip">Faire tourner la caméra autour du point central</floater.string>
-	<floater.string name="zoom_tooltip">Zoomer en direction du point central</floater.string>
-	<floater.string name="move_tooltip">Déplacer la caméra vers le haut et le bas, la gauche et la droite</floater.string>
-	<floater.string name="camera_modes_title">camera_modes_title</floater.string>
-	<floater.string name="pan_mode_title">pan_mode_title</floater.string>
-	<floater.string name="presets_mode_title">presets_mode_title</floater.string>
-	<floater.string name="free_mode_title">free_mode_title</floater.string>
-	<panel name="zoom">
-		<layout_stack name="camera_view_layout_stack">
-			<layout_panel name="camera_rotate_layout_panel"><joystick_rotate name="cam_rotate_stick" tool_tip="Faire tourner la caméra autour du point central"/></layout_panel>
-			<layout_panel name="camera_zoom_layout_panel"><slider_bar name="zoom_slider" tool_tip="Zoomer en direction du point central"/></layout_panel>
-			<layout_panel name="panel_track"><joystick_track name="cam_track_stick" tool_tip="Déplacer la caméra vers le haut et le bas, la gauche et la droite"/></layout_panel>
-		</layout_stack>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="camera_floater" title="Contrôles de la caméra">
+	<floater.string name="rotate_tooltip">Fait tourner la caméra autour du point central</floater.string>
+	<floater.string name="zoom_tooltip">Zoom en direction du point central</floater.string>
+	<floater.string name="move_tooltip">Déplace la caméra vers le haut et le bas, la gauche et la droite</floater.string>
+	<floater.string name="free_mode_title">Voir l'objet</floater.string>
+	<string name="inactive_combo_text">Utiliser le préréglage</string>
+	<panel name="controls">
+		<panel name="zoom">
+			<joystick_rotate name="cam_rotate_stick" tool_tip="Faire tourner la caméra autour du point central"/>
+			<slider_bar name="zoom_slider" tool_tip="Zoomer en direction du point central"/>
+			<joystick_track name="cam_track_stick" tool_tip="Déplacer la caméra vers le haut et le bas, la gauche et la droite"/>
+		</panel>
 	</panel>
-	<panel name="buttons_view">
-		<panel_camera_item name="front_view" tool_tip="Vue frontale"><panel_camera_item.text name="front_view_text">""</panel_camera_item.text></panel_camera_item>
-		<panel_camera_item name="group_view" tool_tip="Vue latérale"><panel_camera_item.text name="group_view_text">""</panel_camera_item.text></panel_camera_item>
-		<panel_camera_item name="rear_view" tool_tip="Vue arrière"><panel_camera_item.text name="rear_view_text">""</panel_camera_item.text></panel_camera_item>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="Vue frontale"/>
+		<panel_camera_item name="group_view" tool_tip="Vue latérale"/>
+		<panel_camera_item name="rear_view" tool_tip="Vue arrière"/>
+		<panel_camera_item name="object_view" tool_tip="Centre l'objet sélectionné"/>
+		<panel_camera_item name="mouselook_view" tool_tip="Vue subjective"/>
+		<panel_camera_item name="reset_view" tool_tip="Réinitialiser la vue"/>
+		<button label="Position..." name="camera_position_btn"/>
 	</panel>
-	<panel name="buttons">
-		<panel_camera_item name="object_view" tool_tip="Vue de l'objet"><panel_camera_item.text name="object_view_text">""</panel_camera_item.text></panel_camera_item>
-		<panel_camera_item name="mouselook_view" tool_tip="Vue subjective"><panel_camera_item.text name="mouselook_view_text">""</panel_camera_item.text></panel_camera_item>
-		<panel_camera_item name="reset_view" tool_tip="Réinitialiser la vue"><panel_camera_item.text name="reset_view_text">""</panel_camera_item.text></panel_camera_item>
-	</panel>
+	<combo_box name="preset_combo">
+		<combo_box.item label="Utiliser le préréglage" name="Use preset"/>
+	</combo_box>
+	<button name="gear_btn" tool_tip="Préréglages de la caméra"/>
+	<button name="save_preset_btn" tool_tip="Enregistrer comme préréglage"/>
 </floater>

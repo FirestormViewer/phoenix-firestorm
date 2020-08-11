@@ -4283,6 +4283,12 @@ AO セット "[AO_SET_NAME]" の名前を変更できません。
 	<notification name="PhantomOff">
 		ファントム・モードがオフになりました。
 	</notification>
+	<notification name="MovelockEnabled">
+		ムーブメントロックが有効になりました
+	</notification>
+	<notification name="MovelockDisabled">
+		ムーブメントロックが解除されました
+	</notification>
 	<!-- Firestorm Phantom -->
 
 	<!-- Firestorm Reset Settings -->

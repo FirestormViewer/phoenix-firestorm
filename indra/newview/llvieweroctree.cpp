@@ -1110,9 +1110,15 @@ void LLOcclusionCullingGroup::checkOcclusion()
 
 				static LLCachedControl<bool> wait_for_query(gSavedSettings, "RenderSynchronousOcclusion", true);
 
-				if (wait_for_query && mOcclusionIssued[LLViewerCamera::sCurCameraID] < gFrameCount)
+				// <FS:Ansariel> Restore occlusion query performance optimization - except for Intel GPUs
+				//if (wait_for_query && mOcclusionIssued[LLViewerCamera::sCurCameraID] < gFrameCount)
+				U32 target_read_frame = !gGLManager.mIsIntel ? ((gFrameCount > 2) ? (gFrameCount - 2) : 0) : gFrameCount;
+				if (wait_for_query && mOcclusionIssued[LLViewerCamera::sCurCameraID] < target_read_frame)
+				// </FS:Ansariel>
 				{ //query was issued last frame, wait until it's available
-					S32 max_loop = 1024;
+					// <FS:Ansariel> Restore occlusion query performance optimization - except for Intel GPUs
+					//S32 max_loop = 1024;
+					S32 max_loop = !gGLManager.mIsIntel ? 64 : 1024;
 					LL_RECORD_BLOCK_TIME(FTM_OCCLUSION_WAIT);
 					while (!available && max_loop-- > 0)
 					{

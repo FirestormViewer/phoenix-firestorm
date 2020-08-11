@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_discord" title="Discord">
+	<string name="discord_connected">
+		Connecté(e) à Discord en tant que :
+	</string>
+	<string name="discord_disconnected">
+		Non connecté(e) Discord.
+	</string>
+	<string name="SocialDiscordConnecting">
+		En cours de connexion à Discord...
+	</string>
+	<string name="SocialDiscordErrorConnecting">
+		Problème de connexion à Discord
+	</string>
+	<string name="SocialDiscordDisconnecting">
+		En cours de déconnexion de Discord...
+	</string>
+	<text name="account_caption_label">
+		Non connecté à Discord.
+	</text>
+	<check_box label="Connexion automatique lors du login" name="startup_check"/>
+	<check_box label="Partager le nom d'utilisateur" name="name_check"/>
+	<button label="Se connecter..." name="connect_btn"/>
+	<button label="Se déconnecter" name="disconnect_btn"/>
+	<text name="rating_label">
+		Partager avec Discord le nom des régions ayant la classification suivante :
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Général, Modéré, Adulte" name="Desired_Adult"/>
+		<combo_box.item label="Général et modéré" name="Desired_Mature"/>
+		<combo_box.item label="Général" name="Desired_PG"/>
+		<combo_box.item label="Ne pas partager" name="Desired_None"/>
+	</combo_box>
+	<text name="dont_names_label">
+		Ne pas partager avec Discord le noms des régions qui sont dans la liste ci-dessous :
+	</text>
+	<text name="connection_status_text">
+		En cours de chargement...
+	</text>
+</floater>

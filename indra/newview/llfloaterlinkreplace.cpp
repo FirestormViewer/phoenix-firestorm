@@ -436,7 +436,7 @@ void LLFloaterLinkReplace::processBatch(LLInventoryModel::item_array_t items)
 				LLUUID outfit_update_folder_id = LLUUID::null;
 				if (needs_wearable_ordering_update)
 				{
-					outfit_update_folder_id = outfit_folder_id;
+					outfit_update_folder_id = source_item->getParentUUID();
 				}
 				LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(&LLFloaterLinkReplace::itemRemovedCallback, getDerivedHandle<LLFloaterLinkReplace>(), outfit_update_folder_id));
 				remove_inventory_object(source_item->getUUID(), cb);

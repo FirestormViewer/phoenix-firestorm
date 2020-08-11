@@ -2578,6 +2578,11 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Sind Sie sicher, dass Sie den Inhalt Ihres Ordners Fundbüro löschen möchten?
 		<usetemplate ignoretext="Bestätigen, bevor der Ordner Fundbüro im Inventar geleert wird" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
+	<notification icon="alertmodal.tga" name="ConfirmReplaceLink">
+		Sie sind dabei ein Körperteil vom Typ „[TYPE]“ mit einem anderen Gegenstand zu ersetzen, der nicht vom selben Typ ist.
+Sind Sie sicher, dass Sie fortfahren möchten?
+		<usetemplate ignoretext="Bestätigen bevor eine Verknüpfung ersetzt wird" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
 	<notification name="CopySLURL">
 		Die folgende SLurl wurde in die Zwischenablage kopiert:
  [SLURL]
@@ -3548,7 +3553,11 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
 		Dadurch werden [COUNT] Artikel zu einem Gesamtpreis von [COST] $ hochgeladen. Möchtest du mit dem Hochladen fortfahren?
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Hochladen" ignoretext="Mehrfach-Uploads bestätigen"/>
+	</notification>
+	<notification name="NotEnoughMoneyForBulkUpload">
+Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstände für insgesamt [COST] L$ hochzuladen.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Ausgewählte Dateien können nicht per Bulk-Upload hochgeladen werden.
@@ -4908,6 +4917,12 @@ Möchten Sie diese Informationen übermitteln?
 	</notification>
 	<notification name="PhantomOff">
 		Phantom-Modus ausgeschaltet.
+	</notification>
+	<notification name="MovelockEnabled">
+		Movelock aktiviert. Verwenden Sie Avatar &gt; Bewegung &gt; Movelock zum deaktivieren.
+	</notification>
+	<notification name="MovelockDisabled">
+		Movelock deaktiviert.
 	</notification>
 	<notification label="Alle Einstellungen zurücksetzen" name="FirestormClearSettingsPrompt">
 		Ein Zurücksetzen aller Einstellungen kann bei Problemen hilfreich sein, allerdings müssen Sie anschließend jegliche Anpassungen erneut vornehmen.

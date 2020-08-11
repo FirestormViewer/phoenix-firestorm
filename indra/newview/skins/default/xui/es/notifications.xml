@@ -5465,6 +5465,12 @@ El nombre NO puede contener los caracteres ":" o "|".
 	<notification name="PhantomOff">
 		Modo fantasma desactivado.
 	</notification>
+	<notification name="MovelockEnabled">
+		Bloqueo de movimiento activado.
+	</notification>
+	<notification name="MovelockDisabled">
+		Bloqueo de movimiento desactivado.
+	</notification>
 	<notification label="Restablecer todas las configuraciones" name="FirestormClearSettingsPrompt">
 	Restablecer todas las configuraciones puede ser útil si estás experimentando problemas, aunque tendrás que repetir todas las personalizaciones que hayas podido hacer a la configuración por defecto. 
 

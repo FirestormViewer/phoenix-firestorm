@@ -48,10 +48,11 @@
 			<panel_camera_item.text name="reset_view_text">
 			</panel_camera_item.text>
 		</panel_camera_item>
-		<button label="Position..." name="camera_position_btn"/>
+	<button label="Position..." name="camera_position_btn"/>
 	</panel>
 	<combo_box name="preset_combo">
-		<combo_box.item label="Voreinstellung verwend." name="Use preset"/>
+		<combo_box.item label="Voreinstellung verw." name="Use preset"/>
 	</combo_box>
 	<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
+	<button name="save_preset_btn" tool_tip="Als Voreinstellung speichern"/>
 </floater>

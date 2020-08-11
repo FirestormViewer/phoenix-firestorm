@@ -363,94 +363,94 @@ public:
 
 	void onAvatarIconContextMenuItemClicked(const LLSD& userdata)
 	{
-		std::string level = userdata.asString();
+		std::string param = userdata.asString();
 
-		if (level == "profile")
+		if (param == "profile")
 		{
 			LLAvatarActions::showProfile(getAvatarId());
 		}
-		else if (level == "im")
+		else if (param == "im")
 		{
 			LLAvatarActions::startIM(getAvatarId());
 		}
-		else if (level == "teleport_to")
+		else if (param == "teleport_to")
 		{
 			LLAvatarActions::teleportTo(getAvatarId());
 		}
-		else if (level == "teleport")
+		else if (param == "teleport")
 		{
 			LLAvatarActions::offerTeleport(getAvatarId());
 		}
-		else if (level == "request_teleport")
+		else if (param == "request_teleport")
 		{
 			LLAvatarActions::teleportRequest(getAvatarId());
 		}
-		else if (level == "voice_call")
+		else if (param == "voice_call")
 		{
 			LLAvatarActions::startCall(getAvatarId());
 		}
-		else if (level == "chat_history")
+		else if (param == "chat_history")
 		{
 			LLAvatarActions::viewChatHistory(getAvatarId());
 		}
-		else if (level == "add")
+		else if (param == "add")
 		{
 			LLAvatarActions::requestFriendshipDialog(getAvatarId(), mFrom);
 		}
-		else if (level == "add_set")
+		else if (param == "add_set")
 		{
 			LLAvatarActions::addToContactSet(getAvatarId());
 		}
-		else if (level == "remove")
+		else if (param == "remove")
 		{
 			LLAvatarActions::removeFriendDialog(getAvatarId());
 		}
-		else if (level == "invite_to_group")
+		else if (param == "invite_to_group")
 		{
 			LLAvatarActions::inviteToGroup(getAvatarId());
 		}
-		else if (level == "zoom_in")
+		else if (param == "zoom_in")
 		{
 			handle_zoom_to_object(getAvatarId());
 		}
-		else if (level == "map")
+		else if (param == "map")
 		{
 			LLAvatarActions::showOnMap(getAvatarId());
 		}
-		else if (level == "track")
+		else if (param == "track")
 		{
 			LLAvatarActions::track(getAvatarId());
 		}
-		else if (level == "share")
+		else if (param == "share")
 		{
 			LLAvatarActions::share(getAvatarId());
 		}
-		else if (level == "pay")
+		else if (param == "pay")
 		{
 			LLAvatarActions::pay(getAvatarId());
 		}
-		else if (level == "copy_name")
+		else if (param == "copy_name")
 		{
 			LLUrlAction::copyLabelToClipboard(LLSLURL("agent", getAvatarId(), "inspect").getSLURLString());
 		}
-		else if (level == "copy_url")
+		else if (param == "copy_url")
 		{
 			LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "about").getSLURLString());
 		}
-		else if(level == "block_unblock")
+		else if (param == "block_unblock")
 		{
 			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagVoiceChat);
 		}
-		else if(level == "mute_unmute")
+		else if (param == "mute_unmute")
 		{
 			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagTextChat);
 		}
-		else if(level == "toggle_allow_text_chat")
+		else if (param == "toggle_allow_text_chat")
 		{
 			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
 			speaker_mgr->toggleAllowTextChat(getAvatarId());
 		}
-		else if(level == "group_mute")
+		else if (param == "group_mute")
 		{
 			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
 			if (speaker_mgr)
@@ -458,7 +458,7 @@ public:
 				speaker_mgr->moderateVoiceParticipant(getAvatarId(), false);
 			}
 		}
-		else if(level == "group_unmute")
+		else if (param == "group_unmute")
 		{
 			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
 			if (speaker_mgr)
@@ -466,7 +466,7 @@ public:
 				speaker_mgr->moderateVoiceParticipant(getAvatarId(), true);
 			}
 		}
-		else if(level == "ban_member")
+		else if (param == "ban_member")
 		{
 			banGroupMember(getAvatarId());
 		}
@@ -474,17 +474,17 @@ public:
 
 	bool onAvatarIconContextMenuItemChecked(const LLSD& userdata)
 	{
-		std::string level = userdata.asString();
+		std::string param = userdata.asString();
 
-		if (level == "is_blocked")
+		if (param == "is_blocked")
 		{
 			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagVoiceChat);
 		}
-		if (level == "is_muted")
+		if (param == "is_muted")
 		{
 			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagTextChat);
 		}
-		else if (level == "is_allowed_text_chat")
+		else if (param == "is_allowed_text_chat")
 		{
 			if (gAgent.isInGroup(mSessionID))
 			{
@@ -503,13 +503,13 @@ public:
 
 	bool onAvatarIconContextMenuItemEnabled(const LLSD& userdata)
 	{
-		std::string level = userdata.asString();
+		std::string param = userdata.asString();
 
-		if (level == "can_allow_text_chat" || level == "can_mute" || level == "can_unmute")
+		if (param == "can_allow_text_chat" || param == "can_mute" || param == "can_unmute")
 		{
 			return canModerate(userdata);
 		}
-		else if (level == "can_ban_member")
+		else if (param == "can_ban_member")
 		{
 			return canBanGroupMember(getAvatarId());
 		}
@@ -518,9 +518,9 @@ public:
 
 	bool onAvatarIconContextMenuItemVisible(const LLSD& userdata)
 	{
-		std::string level = userdata.asString();
+		std::string param = userdata.asString();
 
-		if (level == "show_mute")
+		if (param == "show_mute")
 		{
 			LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
 			if (speaker_mgr)
@@ -533,7 +533,7 @@ public:
 			}
 			return false;
 		}
-		else if (level == "show_unmute")
+		else if (param == "show_unmute")
 		{
 			LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
 			if (speaker_mgr)
@@ -783,12 +783,6 @@ public:
 
 		// Set up the icon.
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
-		
-		// Hacky preference to hide avatar icons for people who don't like them by overdrawing them. Will change to disable soon. -AO
-		if (!gSavedSettings.getBOOL("ShowChatMiniIcons"))
-		{
-			icon->setColor(LLUIColorTable::instance().getColor("Transparent"));
-		}
 
 		if(mSourceType != CHAT_SOURCE_AGENT ||	mAvatarID.isNull())
 			icon->setDrawTooltip(false);

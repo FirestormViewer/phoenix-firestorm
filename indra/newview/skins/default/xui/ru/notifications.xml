@@ -4038,6 +4038,12 @@ URL: [AUDIOURL]
 	<notification name="PhantomOff">
 		Фантомный режим выключен.
 	</notification>
+	<notification name="MovelockEnabled">
+		Блокировка движения включена.
+	</notification>
+	<notification name="MovelockDisabled">
+		Блокировка движения выключена.
+	</notification>
 	<notification label="Сброс всех настроек" name="FirestormClearSettingsPrompt">
 		Сброс всех настроек может быть полезен, если вы испытываете проблемы; Однако, вам нужно будет переделывать настройки, которые вы сделали ранее.
 
