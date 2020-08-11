@@ -9253,9 +9253,20 @@ Your voice has been muted by a moderator.
     type="alertmodal">
 This will upload [COUNT] items at a total cost of L$[COST]. Do you wish to continue with the upload?
     <usetemplate
-     name="okcancelbuttons"
+     ignoretext="Confirm bulk uploads"
+     name="okcancelignore"
      notext="Cancel"
      yestext="Upload"/>
+   </notification>
+
+   <notification
+    icon="alertmodal.tga"
+    name="NotEnoughMoneyForBulkUpload"
+    type="alertmodal">
+Your current balance of L$[BALANCE] is not enough to upload [COUNT] items at a total cost of L$[COST].
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
    </notification>
   
    <notification
@@ -10521,6 +10532,20 @@ Phantom mode on.
    name="PhantomOff"
    type="notifytip">
 Phantom mode off.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockEnabled"
+   type="notifytip">
+Movelock enabled. Use Avatar &gt; Movement &gt; Movelock to disable.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockDisabled"
+   type="notifytip">
+Movelock disabled.
   </notification>
 
 <!-- Firestorm Phantom -->

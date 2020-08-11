@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floaterpreferencesviewadvanced" title="Position de la caméra">
+	<text name="camera_offset_lbl">
+		Décaler la caméra :
+	</text>
+	<text name="focus_offset_lbl">
+		Décaler l'objectif :
+	</text>
+	<text name="offset_scale_lbl">
+		Échelle du décalage de la caméra :
+	</text>
+	<button label="Enregistrer comme préréglage..." name="save_preset_btn" width="180"/>
+	<button label="Fermer" name="close_btn" width="70"/>
+</floater>

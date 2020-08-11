@@ -304,9 +304,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f65774ebabb256f2d217a872b0cf2b5b</string>
+              <string>d670d00aa732b97d105d287b62582762</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4812/15284/apr_suite-1.4.5.504800-darwin64-504800.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55065/512118/apr_suite-1.4.5.539073-darwin64-539073.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1004,11 +1004,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>469f3e3a177c089deacad40428d23997</string>
+              <string>fab47cbf13e89dd0359b5f5e995f6794</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows-201991756.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.03-windows-202191858.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1018,11 +1018,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>59766e450e7395fe996ae17c8c267c76</string>
+              <string>a757fe92a8a48b247e23802c22153d1c</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows64-201991757.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.03-windows64-202191859.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1914,9 +1914,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534ea1079513a56a78c99bc08179c87c</string>
+              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1926,9 +1926,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534ea1079513a56a78c99bc08179c87c</string>
+              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3428,9 +3428,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d15ad6b86c0e1ef4a1fc46478da65929</string>
+              <string>c5ab9d9d7482e48cd76f4bf391900a8c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54837/510043/viewer_manager-2.0.538967-darwin64-538967.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/43369/385585/viewer_manager-2.0.531000-darwin64-531000.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3464,9 +3464,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>856d1e4b60ef57135ecd99cd608e76bd</string>
+              <string>6b10d7407686d9e12e63576256581e3e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54960/511732/viewer_manager-2.0.538967-windows-538967.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/43370/385592/viewer_manager-2.0.531000-windows-531000.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3477,7 +3477,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>2.0.538967</string>
+        <string>2.0.531000</string>
       </map>
       <key>vlc-bin</key>
       <map>
