@@ -1015,8 +1015,10 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	cell_params.column = "price";
 	if (details.sale_info.isForSale())
 	{
-		S32 price = details.sale_info.getSalePrice();
-		cell_params.value = price > 0 ? llformat("%s%d", "L$", details.sale_info.getSalePrice()) : LLTrans::getString("free");
+		LLStringUtil::format_map_t args;
+		args["COST"] = llformat("%d", details.sale_info.getSalePrice());
+		std::string cost_label = LLTrans::getString("FSAreaSearch_Cost_Label", args);
+		cell_params.value = cost_label;
 	}
 	else
 	{
@@ -1026,7 +1028,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 
 	cell_params.column = "land_impact";
 	F32 cost = objectp->getLinksetCost();
-	if (cost > 0.001)
+	if (cost > F_ALMOST_ZERO)
 	{
 		cell_params.value = cost;
 	}

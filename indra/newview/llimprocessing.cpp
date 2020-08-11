@@ -69,6 +69,7 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "exogroupmutelist.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fskeywords.h"
@@ -182,7 +183,22 @@ protected:
     void modifyNotificationParams()
     {
         LLSD payload = mParams.payload;
-        payload["SESSION_NAME"] = mName;
+        // <FS:Ansariel> FIRE-29943: Item shared messaged logging to wrong IM logfile if user is offline
+        //payload["SESSION_NAME"] = mName;
+        LLAvatarName av_name;
+        // This should work since modifyNotificationParams() is invoked after we already
+        // retrieved the avatar name
+        if (mFromId.notNull() && LLAvatarNameCache::instance().getName(mFromId, &av_name))
+        {
+            // LLHandlerUtil::logToIM() will transform this into the correct filename
+            payload["SESSION_NAME"] = av_name.getLegacyName();
+        }
+        else
+        {
+            payload["SESSION_NAME"] = mName;
+        }
+        // </FS:Ansariel>
+
         mParams.payload = payload;
     }
 };
@@ -1621,8 +1637,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             // should happen after you get an "invitation"
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-16 (Catznip-3.3)
             //if ( !gIMMgr->hasSession(session_id) )
-            if ( (!gIMMgr->hasSession(session_id)) &&
-                 ( (!gAgent.isInGroup(session_id)) || (!gIMMgr->checkSnoozeExpiration(session_id)) || LLAvatarActions::isBlocked(from_id) || (!gIMMgr->restoreSnoozedSession(session_id)) ) )
+            if (!gIMMgr->hasSession(session_id) &&
+                 (!gAgent.isInGroup(session_id) || LLAvatarActions::isBlocked(from_id) || (!exoGroupMuteList::instance().restoreDeferredGroupChat(session_id) && (!gIMMgr->checkSnoozeExpiration(session_id) || !gIMMgr->restoreSnoozedSession(session_id)) )))
 // [/SL:KB]
             {
                 return;

@@ -19,15 +19,15 @@
 				<text name="IndirectMaxComplexityText" width="60">
 					Kein Limit
 				</text>
-				<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
-					WL-Himmel:
+				<text name="WL Sky" width="67" tool_tip="Voreinstellungen für den Himmel.">
+					Himmel:
 				</text>
 				<combo_box left_delta="77" name="WLPresetsCombo"/>
-				<text name="WL Water" width="67" tool_tip="Windlight-Voreinstellung für das Wasser.">
-					WL-Wasser:
+				<text name="WL Water" width="67" tool_tip="Voreinstellungen für das Wasser.">
+					Wasser:
 				</text>
 				<combo_box left_delta="77" name="WaterPresetsCombo"/>
-				<text name="Day Cycle" width="67" tool_tip="Windlight-Voreinstellung für den Tageszyklus.">
+				<text name="Day Cycle" width="67" tool_tip="Voreinstellungen für den Tageszyklus.">
 					Tageszyklus:
 				</text>
 				<combo_box left_delta="77" name="DCPresetsCombo"/>

@@ -1,44 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-	 background_visible="true"
+     background_visible="true"
      bevel_style="in"
      bg_opaque_color="ChatHeaderOpaqueBackground" 
      bg_alpha_color="ChatHeaderAlphaBackground"
      follows="top|left|right"
      height="24"
      label="im_header"
-	 layout="topleft"
+     layout="topleft"
      name="im_header"
      width="310">
-	<avatar_icon
-         follows="left"
-         height="18"
-         image_name="Generic_Person"
-         layout="topleft"
-         left="3"
-         mouse_opaque="true"
-         name="avatar_icon"
-         top="3"
-         width="18" />
-    <text
-      parse_urls="false"
-      allow_scroll="false"
-      v_pad = "6"
-      read_only = "true"
-      follows="left|right"
-      font.style="BOLD"
-      height="24"
-      layout="topleft"
-      left_pad="5"
-      right="-120"
-      name="user_name"
-      text_color="ChatNameColor"
-      bg_readonly_color="Black"
-      top="0"
-      translate="false"
-      use_ellipses="true"
-      valign="top" 
-      value="TestString PleaseIgnore" />
+    <layout_stack
+     top="0"
+     height="24"
+     right="-120"
+     name="header_ls"
+     layout="topleft"
+     follows="top|left|right"
+     animate="false">
+        <layout_panel
+         name="icon_lp"
+         auto_resize="false"
+         user_resize="false"
+         width="21"
+         height="24"
+         visibility_control="ShowChatMiniIcons">
+            <avatar_icon
+             follows="left"
+             height="18"
+             image_name="Generic_Person"
+             layout="topleft"
+             left="3"
+             mouse_opaque="true"
+             name="avatar_icon"
+             top="3"
+             width="18" />
+        </layout_panel>
+        <layout_panel
+         name="name_lp"
+         auto_resize="true"
+         user_resize="false"
+         height="24">
+            <text
+             parse_urls="false"
+             allow_scroll="false"
+             v_pad="6"
+             read_only="true"
+             follows="left|right"
+             font.style="BOLD"
+             height="24"
+             layout="topleft"
+             left="4"
+             right="-1"
+             name="user_name"
+             text_color="ChatNameColor"
+             bg_readonly_color="Black"
+             top="0"
+             translate="false"
+             use_ellipses="true"
+             valign="top" 
+             value="TestString PleaseIgnore" />
+        </layout_panel>
+    </layout_stack>
   <text
     allow_scroll="false"
     font="SansSerifSmall"

@@ -53,13 +53,11 @@
          label="Español (Spanish) - Beta"
          name="Spanish"
          value="es" />
-        <!--
         <combo_box.item
          enabled="true"
          label="Français (French) - Beta"
          name="French"
          value="fr" />
-        -->
         <combo_box.item
          enabled="true"
          label="Italiano (Italian) - Beta"

@@ -25,6 +25,7 @@
 #include "llinventorymodel.h"
 #include "llinventorypanel.h"
 #include "llscrolllistctrl.h"
+#include "lltrans.h"
 #include "llviewerassettype.h"
 #include "llviewerinventory.h"
 #include "llviewerregion.h"
@@ -159,13 +160,30 @@ void LLScriptRecoverQueue::recoverIfNeeded()
 	{
 		// Build a friendly name for the file
 		std::string strName = gDirUtilp->getBaseFileName(strFilename, true);
+
+		std::string agent_id_str = gAgentID.asString();
+		LLStringUtil::replaceString(agent_id_str, "-", "");
+		std::string::size_type agent_delim_offset = strName.find_first_of("_");
+		if (agent_delim_offset != std::string::npos && agent_delim_offset != 0)
+		{
+			std::string file_agent_id_str = strName.substr(0, agent_delim_offset);
+			if (file_agent_id_str != agent_id_str)
+			{
+				continue;
+			}
+			else
+			{
+				strName.erase(0, agent_delim_offset + 1);
+			}
+		}
+
 		std::string::size_type offset = strName.find_last_of("-");
 		if ( (std::string::npos != offset) && (offset != 0) && (offset == strName.length() - 9))
 			strName.erase(strName.length() - 9);
 
 		LLStringUtil::trim(strName);
 		if (0 == strName.length())
-			strName = "(Unknown script)";
+			strName = LLTrans::getString("unknown_script");
 
 		sdFiles.append(LLSD().with("path", strTempPath + strFilename).with("name", strName));
 	}
