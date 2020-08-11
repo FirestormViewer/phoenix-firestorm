@@ -87,8 +87,6 @@ mMediaParcelLocalID(0)
     LLSingleton<LLViewerParcelMediaAutoPlay>::getInstance();
 
 	loadDomainFilterList();
-
-	LLViewerParcelMediaAutoPlay::instance();
 }
 
 LLViewerParcelMedia::~LLViewerParcelMedia()
