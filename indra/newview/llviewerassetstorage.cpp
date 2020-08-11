@@ -51,6 +51,8 @@
 /// LLViewerAssetRequest
 ///----------------------------------------------------------------------------
 
+static const std::string VIEWER_ASSET_STORAGE_CORO_POOL = "VAssetStorage";
+
 /**
  * @brief Local class to encapsulate asset fetch requests with a timestamp.
  *
@@ -127,6 +129,15 @@ LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *
       mCountSucceeded(0),
       mTotalBytesFetched(0)
 {
+}
+
+LLViewerAssetStorage::~LLViewerAssetStorage()
+{
+    if (!LLCoprocedureManager::wasDeleted())
+    {
+        // This class has dedicated coroutine pool, clean it up, otherwise coroutines will crash later. 
+        LLCoprocedureManager::instance().close(VIEWER_ASSET_STORAGE_CORO_POOL);
+    }
 }
 
 // virtual 
@@ -404,7 +415,7 @@ void LLViewerAssetStorage::queueRequestHttp(
         //LLViewerAssetStatsFF::record_enqueue(atype, with_http, is_temp);
         // <FS:Ansariel> [UDP Assets]
 
-        LLCoprocedureManager::instance().enqueueCoprocedure("AssetStorage","LLViewerAssetStorage::assetRequestCoro",
+        LLCoprocedureManager::instance().enqueueCoprocedure(VIEWER_ASSET_STORAGE_CORO_POOL,"LLViewerAssetStorage::assetRequestCoro",
             boost::bind(&LLViewerAssetStorage::assetRequestCoro, this, req, uuid, atype, callback, user_data));
     }
 }
@@ -451,6 +462,11 @@ void LLViewerAssetStorage::assetRequestCoro(
     S32 result_code = LL_ERR_NOERR;
     LLExtStat ext_status = LLExtStat::NONE;
 
+    if (!gAssetStorage)
+    {
+        LL_WARNS_ONCE("ViewerAsset") << "Asset request fails: asset storage no longer exists" << LL_ENDL;
+        return;
+    }
     if (!gAgent.getRegion())
     {
         LL_WARNS_ONCE("ViewerAsset") << "Asset request fails: no region set" << LL_ENDL;
@@ -536,7 +552,7 @@ void LLViewerAssetStorage::assetRequestCoro(
 
     LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts);
 
-    if (LLApp::isQuitting())
+    if (LLApp::isQuitting() || !gAssetStorage)
     {
         // Bail out if result arrives after shutdown has been started.
         return;

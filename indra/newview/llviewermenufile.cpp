@@ -518,6 +518,15 @@ const void upload_bulk(const std::vector<std::string>& filenames, LLFilePicker::
 		LLSD args;
 		args["COST"] = expected_upload_cost;
 		args["COUNT"] = expected_upload_count;
+		// <FS:Ansariel> Check balance before trying to upload
+		S32 current_balance = gStatusBar->getBalance();
+		if (expected_upload_cost > current_balance)
+		{
+			args["BALANCE"] = current_balance;
+			LLNotificationsUtil::add("NotEnoughMoneyForBulkUpload", args);
+			return;
+		}
+		// </FS:Ansariel>
 		LLNotificationsUtil::add("BulkUploadCostConfirmation",  args, LLSD(), boost::bind(do_bulk_upload, filtered_filenames, _1, _2));
 
 		if (filtered_filenames.size() > expected_upload_count)

@@ -18762,7 +18762,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Value</key>
             <real>1</real>
         </map>
-    <key>PoolSizeAssetStorage</key>
+    <key>PoolSizeVAssetStorage</key>
         <map>
         <key>Comment</key>
             <string>Coroutine Pool size for AssetStorage requests</string>
@@ -24668,6 +24668,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <string>de</string>
         <string>en</string>
         <string>es</string>
+        <string>fr</string>
         <string>it</string>
         <string>ja</string>
         <string>pl</string>

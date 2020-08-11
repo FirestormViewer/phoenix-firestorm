@@ -23,7 +23,8 @@
  * $/LicenseInfo$
  */
 
-#include "linden_common.h"
-#include "llthreadsafequeue.h"
+// <FS:Ansariel> Get rid of LNK4221 linker warning since we don't run the unit tests anyway
+//#include "linden_common.h"
+//#include "llthreadsafequeue.h"
 
 

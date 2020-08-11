@@ -54,6 +54,7 @@ BOOL LLFloaterSaveCameraPreset::postBuild()
 
 	mNameEditor = getChild<LLLineEditor>("preset_txt_editor");
 	mNameEditor->setKeystrokeCallback(boost::bind(&LLFloaterSaveCameraPreset::onPresetNameEdited, this), NULL);
+	mNameEditor->setCommitCallback(boost::bind(&LLFloaterSaveCameraPreset::onBtnSave, this)); // <FS:Ansariel> Save on pressing enter
 
 	mSaveButton = getChild<LLButton>("save");
 	mSaveButton->setCommitCallback(boost::bind(&LLFloaterSaveCameraPreset::onBtnSave, this));
@@ -98,6 +99,13 @@ void LLFloaterSaveCameraPreset::onBtnSave()
 {
 	bool is_saving_new = mSaveRadioGroup->getSelectedIndex() == 0;
 	std::string name = is_saving_new ? mNameEditor->getText() : mPresetCombo->getSimple();
+
+	// <FS:Ansariel> Save on pressing enter
+	if (name.empty())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	if ((name == LLTrans::getString(PRESETS_DEFAULT)) || (name == PRESETS_DEFAULT))
 	{

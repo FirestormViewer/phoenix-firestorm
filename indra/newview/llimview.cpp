@@ -2991,9 +2991,9 @@ void LLIMMgr::addMessage(
 	static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
 	static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
 	static LLCachedControl<U32> PlayModeUISndNewIncomingConfIMSession(gSavedSettings, "PlayModeUISndNewIncomingConfIMSession");
-	BOOL do_not_disturb = gAgent.isDoNotDisturb();
-	BOOL is_group_chat = FALSE;
-	if (!new_session && dialog != IM_NOTHING_SPECIAL)
+	bool do_not_disturb = gAgent.isDoNotDisturb();
+	bool is_group_chat = false;
+	if (dialog != IM_NOTHING_SPECIAL)
 	{
 		is_group_chat = gAgent.isInGroup(new_session_id);
 	}
@@ -3010,6 +3010,13 @@ void LLIMMgr::addMessage(
 		// <FS:Ansariel> Clear muted group chat early to prevent contacts floater
 		//               (re-)gaining focus; the server already knows the correct
 		//               session id, so we can leave it!
+		if (is_group_chat && !exoGroupMuteList::instance().isLoaded())
+		{
+			LL_INFOS() << "Received group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") before must list has been loaded - skipping message" << LL_ENDL;
+			exoGroupMuteList::instance().addDeferredGroupChat(new_session_id);
+			return;
+		}
+
 		if (exoGroupMuteList::instance().isMuted(new_session_id))
 		{
 			LL_INFOS() << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << LL_ENDL;
@@ -3033,6 +3040,7 @@ void LLIMMgr::addMessage(
 			gAgent.isInGroup(new_session_id) && LLMuteList::getInstance()->isMuted(other_participant_id) && !from_linden)
 		{
 			LL_INFOS() << "Ignoring group chat initiated by muted resident." << LL_ENDL;
+			exoGroupMuteList::instance().addDeferredGroupChat(new_session_id);
 			return;
 		}
 		// </FS:Ansariel>
@@ -3083,11 +3091,6 @@ void LLIMMgr::addMessage(
 	// <FS:PP> Configurable IM sounds
 			// //Play sound for new conversations
 			// if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
-
-			if (dialog != IM_NOTHING_SPECIAL)
-			{
-				is_group_chat = gAgent.isInGroup(new_session_id);
-			}
 
 			// <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
 			static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");

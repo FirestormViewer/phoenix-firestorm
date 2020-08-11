@@ -4137,8 +4137,6 @@ Finished download of raw terrain file to:
 [DOWNLOAD_PATH].
   </notification>
 
-  <!-- RequiredUpdate does not display release notes URL because we don't get
-       that from login.cgi's login failure message. -->
   <notification
    icon="alertmodal.tga"
    name="RequiredUpdate"
@@ -4156,7 +4154,6 @@ Please download from https://secondlife.com/support/downloads/
    name="PauseForUpdate"
    type="alertmodal">
 Version [VERSION] is required for login.
-Release notes: [URL]
 Click OK to download and install.
     <tag>confirm</tag>
     <usetemplate
@@ -4169,7 +4166,6 @@ Click OK to download and install.
    name="OptionalUpdateReady"
    type="alertmodal">
 Version [VERSION] has been downloaded and is ready to install.
-Release notes: [URL]
 Click OK to install.
     <tag>confirm</tag>
     <usetemplate
@@ -4182,7 +4178,6 @@ Click OK to install.
    name="PromptOptionalUpdate"
    type="alertmodal">
 Version [VERSION] has been downloaded and is ready to install.
-Release notes: [URL]
 Proceed?
     <tag>confirm</tag>
     <usetemplate
@@ -9267,9 +9262,20 @@ Your voice has been muted by a moderator.
     type="alertmodal">
 This will upload [COUNT] items at a total cost of L$[COST]. Do you wish to continue with the upload?
     <usetemplate
-     name="okcancelbuttons"
+     ignoretext="Confirm bulk uploads"
+     name="okcancelignore"
      notext="Cancel"
      yestext="Upload"/>
+   </notification>
+
+   <notification
+    icon="alertmodal.tga"
+    name="NotEnoughMoneyForBulkUpload"
+    type="alertmodal">
+Your current balance of L$[BALANCE] is not enough to upload [COUNT] items at a total cost of L$[COST].
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
    </notification>
   
    <notification
@@ -10535,6 +10541,20 @@ Phantom mode on.
    name="PhantomOff"
    type="notifytip">
 Phantom mode off.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockEnabled"
+   type="notifytip">
+Movelock enabled. Use Avatar &gt; Movement &gt; Movelock to disable.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockDisabled"
+   type="notifytip">
+Movelock disabled.
   </notification>
 
 <!-- Firestorm Phantom -->

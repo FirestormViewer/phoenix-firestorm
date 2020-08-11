@@ -24,7 +24,7 @@
               <key>hash</key>
               <string>aa31ee4c6315cb26bf6e2191b69598f5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jemalloc-5.1.0-linux64-190582149.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jemalloc-5.1.0-linux64-190582149.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -50,22 +50,10 @@
               <key>hash</key>
               <string>47ddd059d48f650e39796c10ea828689</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0ea99b626d4d5e3dc43f9f35f88625ba</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201502162025-r74-linux-201502162025-r74.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -74,7 +62,7 @@
               <key>hash</key>
               <string>99fe10fdec03a22d680de72bc8b5f85a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.181041840-linux64-181041840.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.181041840-linux64-181041840.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -84,9 +72,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7649dd9c2075b0cbda5b80b4edb9b90e</string>
+              <string>adb2d66a0f5cb473a36e24c4dc3cfa36</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-windows-202121822.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -96,9 +84,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9e2a24005a4751c3dc4655ac077e35c0</string>
+              <string>02f70159e14c7b7213b22a0225508c46</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows64-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-windows64-202121823.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -124,7 +112,7 @@
               <key>hash</key>
               <string>33300134846d0f00ac4f31c1a190e3e6</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
+              <uri>http://3p.firestormviewer.org/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -136,7 +124,7 @@
               <key>hash</key>
               <string>af06208ec80b1f170cc560141602e2dc</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
+              <uri>http://3p.firestormviewer.org/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -148,7 +136,7 @@
               <key>hash</key>
               <string>29a573c4d27d617345030cf28860ea2e</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-vs2017-1906061512.tar.bz2</uri>
+              <uri>http://3p.firestormviewer.org/gntp_growl-1.0-windows-vs2017-1906061512.tar.bz2</uri>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -160,7 +148,7 @@
               <key>hash</key>
               <string>a333b335104b3d0df14b9be005ef1571</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows64-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/gntp_growl-1.0-windows64-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -252,7 +240,7 @@
               <key>hash</key>
               <string>ff2e4df5bffe0203dc654b111347e617</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-181412059.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL-1.2.15-linux-181412059.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -264,7 +252,7 @@
               <key>hash</key>
               <string>64c1dff0e19792acec7fd32556bf4d7b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux64-181411635.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL-1.2.15-linux64-181411635.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -304,9 +292,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f65774ebabb256f2d217a872b0cf2b5b</string>
+              <string>d670d00aa732b97d105d287b62582762</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/4812/15284/apr_suite-1.4.5.504800-darwin64-504800.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55065/512118/apr_suite-1.4.5.539073-darwin64-539073.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -318,7 +306,7 @@
               <key>hash</key>
               <string>161e07b37e2f30da004a0d72d5075ad7</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.180871344-linux-180871344.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.180871344-linux-180871344.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -330,7 +318,7 @@
               <key>hash</key>
               <string>5c3c29851edd837d5f9518618c4a303b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -538,7 +526,7 @@
               <key>hash</key>
               <string>d83896f28716f34b7b49d61a23283c4c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.3.180871403-linux-180871403.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.180871403-linux-180871403.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -628,7 +616,7 @@
               <key>hash</key>
               <string>cade3843dfd7985f008cc8161daaefb0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.54.1.180871811-linux-180871811.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/curl-7.54.1.180871811-linux-180871811.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -640,7 +628,7 @@
               <key>hash</key>
               <string>51d9ce98279709854b0be5d0f450ba63</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.54.1.180841943-linux64-180841943.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/curl-7.54.1.180841943-linux64-180841943.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -726,7 +714,7 @@
               <key>hash</key>
               <string>9591dcb7efce2a770d77e907705e1492</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dbus_glib-0.76-linux-180871236.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dbus_glib-0.76-linux-180871236.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -738,7 +726,7 @@
               <key>hash</key>
               <string>5a685a65a7066937ef580dcd5a90f9dc</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dbus_glib-0.76-linux64-180841549.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dbus_glib-0.76-linux64-180841549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -766,9 +754,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d778c6a3475bc35ee8b9615dfc38b4a9</string>
+              <string>2d59bb6f4bd38a18d9250ff010a13b59</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55025/511964/dictionaries-1.538984-common-538984.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dictionaries-2.46203-common-46203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -808,9 +796,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7253c6787a9aa04b160f450a47bc8d93</string>
+              <string>e11da8884e44c27df3bf3adce01d5760</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202021141.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202072245.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -820,9 +808,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0b24ebef4ea891e5fbf94445acac42bf</string>
+              <string>609dd2d70b73d83c382f73734c648156</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202021146.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202072240.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -834,7 +822,7 @@
               <key>hash</key>
               <string>79e5ef408ea7ee43fef0f738688485c6</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dullahan-1.8.0.202007201635_81.3.10_gb223419_chromium-81.0.4044.138-linux64-202021435.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201635_81.3.10_gb223419_chromium-81.0.4044.138-linux64-202021435.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -912,7 +900,7 @@
               <key>hash</key>
               <string>b20e813b55488e43df5c197f1efd165c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/expat-2.1.1.180871203-linux-180871203.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/expat-2.1.1.180871203-linux-180871203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -924,7 +912,7 @@
               <key>hash</key>
               <string>bbcfe77b920fb7f00c7f2a494ffc6c43</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/expat-2.1.1.180841547-linux64-180841547.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/expat-2.1.1.180841547-linux64-180841547.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1004,11 +992,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>469f3e3a177c089deacad40428d23997</string>
+              <string>fab47cbf13e89dd0359b5f5e995f6794</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows-201991756.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.03-windows-202191858.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1018,11 +1006,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>59766e450e7395fe996ae17c8c267c76</string>
+              <string>a757fe92a8a48b247e23802c22153d1c</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.02-windows64-201991757.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.03-windows64-202191859.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1052,7 +1040,7 @@
               <key>hash</key>
               <string>f7a2a70417ab9d2f999f80604cb4fa48</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux-180871443.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/fontconfig-2.11.0-linux-180871443.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1064,7 +1052,7 @@
               <key>hash</key>
               <string>5818ed2d9b29bad00878f3e26b09b7f9</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/fontconfig-2.11.0-linux64-180841833.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/fontconfig-2.11.0-linux64-180841833.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1118,7 +1106,7 @@
               <key>hash</key>
               <string>ced1bc8b28a2e87093b364c2b6d8cb9c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.4.4.180871412-linux-180871412.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/freetype-2.4.4.180871412-linux-180871412.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1130,7 +1118,7 @@
               <key>hash</key>
               <string>0dab99c682433145aa8f5e26d8940afd</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.4.4.180841832-linux64-180841832.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/freetype-2.4.4.180841832-linux64-180841832.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1142,7 +1130,7 @@
               <key>hash</key>
               <string>0dbb1a9d15bb134096476d657f86ce41</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.202022048-windows-202022048.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/freetype-2.3.9.202022048-windows-202022048.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1154,7 +1142,7 @@
               <key>hash</key>
               <string>c000d0c98bded51c7bc7447dc7934e6c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.202022049-windows64-202022049.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/freetype-2.3.9.202022049-windows64-202022049.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1196,7 +1184,7 @@
               <key>hash</key>
               <string>da432b959ccd920adca1030ad7f1b6cf</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glext-68-linux-180871251.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glext-68-linux-180871251.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1208,7 +1196,7 @@
               <key>hash</key>
               <string>12b2d643a013be8297bbbe37743abe94</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glext-68-linux64-180841554.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glext-68-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1292,7 +1280,7 @@
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1304,7 +1292,7 @@
               <key>hash</key>
               <string>94fc457c46e1fb94b31251bd4747d10f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1318,7 +1306,7 @@
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180990859-linux-180990859.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.180990859-linux-180990859.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1330,7 +1318,7 @@
               <key>hash</key>
               <string>acc1181cd31ef32c3724eda84ae4b580</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.180990827-linux64-180990827.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.180990827-linux64-180990827.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1344,7 +1332,7 @@
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.vs2017-1906061512-windows-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.vs2017-1906061512-windows-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1356,7 +1344,7 @@
               <key>hash</key>
               <string>e906cf08bfbfbd9d4fc78557e021e7d0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre3.vs2017-1906061512-windows64-vs2017-1906061512.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.vs2017-1906061512-windows64-vs2017-1906061512.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1410,7 +1398,7 @@
               <key>hash</key>
               <string>ca43974302dc3e2019b0838c2c53b8b5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.202021450-linux64-202021450.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/google_breakpad-1413.202021450-linux64-202021450.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1500,7 +1488,7 @@
               <key>hash</key>
               <string>5bc5ddeb97b8498d5141e27092161323</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/googlemock-1.7.0.180871704-linux-180871704.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/googlemock-1.7.0.180871704-linux-180871704.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1564,7 +1552,7 @@
               <key>hash</key>
               <string>904540d91ea7d577c7bcbb679621f013</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gstreamer-0.10.6.180871246-linux-180871246.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/gstreamer-0.10.6.180871246-linux-180871246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1576,7 +1564,7 @@
               <key>hash</key>
               <string>86a358f1b5a2c2baf68444b2bfc5bb32</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gstreamer-0.10.6.180841551-linux64-180841551.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/gstreamer-0.10.6.180841551-linux64-180841551.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1604,7 +1592,7 @@
               <key>hash</key>
               <string>fb047d496c32cc3b9f99793ee6ebb1e3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.1-linux-180871647.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/gtk_atk_pango_glib-2.1-linux-180871647.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1616,7 +1604,7 @@
               <key>hash</key>
               <string>d918d894430c1d1d869b9f2e06570c65</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.1-linux64-180841902.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/gtk_atk_pango_glib-2.1-linux64-180841902.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1760,7 +1748,7 @@
               <key>hash</key>
               <string>a7039c9a9c4461c5f85542f068dc09e5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c.180871203-linux-180871203.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jpeglib-8c.180871203-linux-180871203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1772,7 +1760,7 @@
               <key>hash</key>
               <string>324bb9deb00d256a12f8cbf686f413f0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c.180841548-linux64-180841548.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jpeglib-8c.180841548-linux64-180841548.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1850,7 +1838,7 @@
               <key>hash</key>
               <string>da45220ec6fcf945f6ca1f11bc7606cf</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.180872045-linux-180872045.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jsoncpp-0.5.0.180872045-linux-180872045.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1862,7 +1850,7 @@
               <key>hash</key>
               <string>352ab340f2091c93eb313cf80ac0c8cc</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.202052209-linux64-202052209.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jsoncpp-0.5.0.202052209-linux64-202052209.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1914,9 +1902,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534ea1079513a56a78c99bc08179c87c</string>
+              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1926,9 +1914,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534ea1079513a56a78c99bc08179c87c</string>
+              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.A.7-darwin-191472236.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1950,9 +1938,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a33b5a416daba549898b215f3e4ae7ea</string>
+              <string>995f807a91bd251408ad0f18c13bbcf4</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-vs2017-1906061512.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.5-windows-202060400.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1962,9 +1950,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a33b5a416daba549898b215f3e4ae7ea</string>
+              <string>995f807a91bd251408ad0f18c13bbcf4</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.A.7-windows-vs2017-1906061512.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.5-windows-202060400.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2018,7 +2006,7 @@
               <key>hash</key>
               <string>77996d95cf2f072f4f277a2aaff20456</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.180871248-linux-180871248.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libhunspell-1.3.2.180871248-linux-180871248.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2030,7 +2018,7 @@
               <key>hash</key>
               <string>6555f040c686d8c1dec8e6264c2d3672</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.180841552-linux64-180841552.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libhunspell-1.3.2.180841552-linux64-180841552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2174,7 +2162,7 @@
               <key>hash</key>
               <string>31754947447ec98374b3bf92e29cf68a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.180871343-linux-180871343.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libpng-1.6.8.180871343-linux-180871343.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2186,7 +2174,7 @@
               <key>hash</key>
               <string>83ae55031f81dace9dcf688cc5510010</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.180841558-linux64-180841558.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libpng-1.6.8.180841558-linux64-180841558.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2240,7 +2228,7 @@
               <key>hash</key>
               <string>1b1d83df165c947bea5c60c460277f93</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux-180871203.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libuuid-1.6.2-linux-180871203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2252,7 +2240,7 @@
               <key>hash</key>
               <string>f3cc32c84b99f1277370ce88a0faf40e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libuuid-1.6.2-linux64-180841554.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libuuid-1.6.2-linux64-180841554.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2306,7 +2294,7 @@
               <key>hash</key>
               <string>b4e676d3d583264f006432510727aa05</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libxml2-2.9.4.180871340-linux-180871340.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libxml2-2.9.4.180871340-linux-180871340.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2318,7 +2306,7 @@
               <key>hash</key>
               <string>0bc56fa68f59537486c75b04646d65a9</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libxml2-2.9.4.180841555-linux64-180841555.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libxml2-2.9.4.180841555-linux64-180841555.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2399,16 +2387,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>25db349f18fc1e79f76ab3ba2c8d1330</string>
+              <string>8501cbaa7e0f254614694da784a9c61c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/62723/591962/llca-202007011528.544371-common-544371.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/64944/606925/llca-202008010216.546021-common-546021.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
         <key>version</key>
-        <string>202007011528.544371</string>
+        <string>202008010216.546021</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -2533,7 +2521,7 @@
               <key>hash</key>
               <string>2aa4ec0d72bbe4b755730f1bf92b39e7</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/30340/257304/llphysicsextensions_tpv-1.0.542327-darwin64-542327.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.542327-darwin64-542327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2557,7 +2545,7 @@
               <key>hash</key>
               <string>ad9aba5e2c43a37b6530a0d2de64df1c</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/30341/257307/llphysicsextensions_tpv-1.0.542327-windows-542327.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.542327-windows-542327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2569,7 +2557,7 @@
               <key>hash</key>
               <string>46689ff1442a8eccac3a7f3258308e1e</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/30341/257307/llphysicsextensions_tpv-1.0.542327-windows64-542327.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.542327-windows64-542327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2638,7 +2626,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>24c50d563fe8ff10ca819088ffbef7a6</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/nghttp2-1.25.0.180871240-linux-180871240.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/nghttp2-1.25.0.180871240-linux-180871240.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2650,7 +2638,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>b460d5bac2d20b38cb73b54d0ab1b6e3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/nghttp2-1.25.0.180841549-linux64-180841549.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/nghttp2-1.25.0.180841549-linux64-180841549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2772,7 +2760,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>0d3db04b9b10085b100b345c68381cb0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.3-1.3.6.183570207-linux-183570207.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ogg_vorbis-1.3.3-1.3.6.183570207-linux-183570207.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2784,7 +2772,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>5e23c312d37367bb2d23dad395891b00</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.3-1.3.6.183570202-linux64-183570202.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ogg_vorbis-1.3.3-1.3.6.183570202-linux64-183570202.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2838,7 +2826,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>246ed298944fd5200e4cac3703d6e075</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150124-linux-183150124.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.9.183150124-linux-183150124.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2850,7 +2838,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>db8a7126178e7230fd6917a28cd67bd7</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2882,7 +2870,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.180871246-linux-180871246.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openal-1.12.854-1.1.0.180871246-linux-180871246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2894,7 +2882,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>4f36ae378593240701fd4453bd6074c8</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openal-1.12.854-1.1.0.180841552-linux64-180841552.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openal-1.12.854-1.1.0.180841552-linux64-180841552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2950,7 +2938,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>4e278d789c5d6e448d1e39211d19bf41</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.201505181816-r27-darwin-201505181816-r27.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-1.4.201505181816-r27-darwin-201505181816-r27.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2974,7 +2962,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>4a5591349005afac44a688e99517a9f3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180991818-linux-180991818.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-1.5.1.180991818-linux-180991818.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2986,7 +2974,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>addb209bb56a8f16602a7222f119191d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg-1.5.1.180991822-linux64-180991822.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-1.5.1.180991822-linux64-180991822.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2996,9 +2984,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>222a406ecb4071a9cc9635353afa337e</string>
+              <string>b20c18f66ae63c9d3b1970af8866aeb9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54977/511775/openjpeg-1.5.1.538970-windows-538970.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-1.4.202102107-windows-202102107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3008,9 +2996,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b5c80807fa8161f3480be3d89fe9516</string>
+              <string>6f1e1d8796301c4e5737cb0db0f696d2</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54974/511767/openjpeg-1.5.1.538970-windows64-538970.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-1.4.202102110-windows64-202102110.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3064,7 +3052,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>343f6ace63617546704c4aad9b432312</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.2l.180871731-linux-180871731.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openssl-1.0.2l.180871731-linux-180871731.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3076,7 +3064,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>7920fce93d9addf63a420d86f91c5749</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.2l.180841936-linux64-180841936.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openssl-1.0.2l.180841936-linux64-180841936.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3154,7 +3142,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>cf1c53b27e5889c7c5963ed06ab23cb2</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/pcre-8.35.180871234-linux-180871234.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/pcre-8.35.180871234-linux-180871234.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3166,7 +3154,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>742a145c1518b9dc195ae0862828e6ae</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/pcre-8.35.202021522-linux64-202021522.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/pcre-8.35.202021522-linux64-202021522.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3244,7 +3232,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3256,7 +3244,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3364,7 +3352,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>6573a190dbdef9b23235beb9b1219bef</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux-180871244.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/uriparser-0.8.0.1-linux-180871244.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3376,7 +3364,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>df570f2b9c0087438604a8ba4dc37a85</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux64-180841550.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/uriparser-0.8.0.1-linux64-180841550.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3428,9 +3416,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5ba21b80695975ab1e1b1c79d0f10c10</string>
+              <string>c5ab9d9d7482e48cd76f4bf391900a8c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55879/522561/viewer_manager-2.0.539630-darwin64-539630.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/43369/385585/viewer_manager-2.0.531000-darwin64-531000.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3442,7 +3430,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>b7167025f54c044abee21b48476ad4f2</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/viewer_manager-1.0.180871935-linux-180871935.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/viewer_manager-1.0.180871935-linux-180871935.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3454,7 +3442,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>129b80dd47b53bfa02fc21ab1eb1901c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/viewer_manager-1.0.180861311-linux64-180861311.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/viewer_manager-1.0.180861311-linux64-180861311.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3464,9 +3452,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0f788eb745fc062ad737824836e48691</string>
+              <string>6b10d7407686d9e12e63576256581e3e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55880/522567/viewer_manager-2.0.539630-windows-539630.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/43370/385592/viewer_manager-2.0.531000-windows-531000.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3477,7 +3465,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>2.0.539630</string>
+        <string>2.0.531000</string>
       </map>
       <key>vlc-bin</key>
       <map>
@@ -3510,7 +3498,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>9f9582031af3b78d6153ec296d6dde9f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/vlc_bin-2.2.3-linux-201607071822-r16.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/vlc_bin-2.2.3-linux-201607071822-r16.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3522,7 +3510,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>5eace400c487011a678493fc520be24d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/vlc_bin-2.2.3-linux-x64-201610182130-r16.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/vlc_bin-2.2.3-linux-x64-201610182130-r16.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3600,7 +3588,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>0f318372198fb34b3a59b4aa03c40ac7</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.180871731-linux-180871731.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.1.180871731-linux-180871731.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3612,7 +3600,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>f810193590cae9b35a1c77b6c72bfb01</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.180841935-linux64-180841935.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.1.180841935-linux64-180841935.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3692,7 +3680,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.180871259-linux-180871259.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/zlib-1.2.8.180871259-linux-180871259.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -3704,7 +3692,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>15a645809cb2f14074f22e7848bb42cf</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.180841547-linux64-180841547.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/zlib-1.2.8.180841547-linux64-180841547.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

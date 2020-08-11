@@ -337,32 +337,9 @@ BOOL LLPanelMainInventory::postBuild()
 	mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
 
 	initListCommandsHandlers();
-// <FS:AW opensim currency support>
-	//const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
-	//const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
-	//const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
-	S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
-	S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
-	S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
-	std::string texture_upload_cost_str;
-	std::string sound_upload_cost_str;
-	std::string animation_upload_cost_str;
-#ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
-		sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
-		animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
-	}
-	else
-#endif
-	{
-		texture_upload_cost_str = "L$" + llformat("%d", texture_upload_cost);
-		sound_upload_cost_str = "L$" + llformat("%d", sound_upload_cost);
-		animation_upload_cost_str = "L$" + llformat("%d", animation_upload_cost);
-	}
-// </FS:AW opensim currency support>
-
+	const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+	const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+	const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
 
 	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
 	if (menu)
@@ -2085,31 +2062,9 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
 	if(mNeedUploadCost && menu)
 	{
-// <FS:AW opensim currency support>
-		//const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
-		//const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
-		//const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
-		S32 texture_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
-		S32 sound_upload_cost = LLAgentBenefitsMgr::current().getSoundUploadCost();
-		S32 animation_upload_cost = LLAgentBenefitsMgr::current().getAnimationUploadCost();
-		std::string texture_upload_cost_str;
-		std::string sound_upload_cost_str;
-		std::string animation_upload_cost_str;
-#ifdef OPENSIM
-		if (LLGridManager::getInstance()->isInOpenSim())
-		{
-			texture_upload_cost_str = texture_upload_cost > 0 ? llformat("%s%d", "L$", texture_upload_cost) : LLTrans::getString("free");
-			sound_upload_cost_str = sound_upload_cost > 0 ? llformat("%s%d", "L$", sound_upload_cost) : LLTrans::getString("free");
-			animation_upload_cost_str = animation_upload_cost > 0 ? llformat("%s%d", "L$", animation_upload_cost) : LLTrans::getString("free");
-		}
-		else
-#endif
-		{
-			texture_upload_cost_str = "L$" + llformat("%d", texture_upload_cost);
-			sound_upload_cost_str = "L$" + llformat("%d", sound_upload_cost);
-			animation_upload_cost_str = "L$" + llformat("%d", animation_upload_cost);
-		}
-// </FS:AW opensim currency support>
+		const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+		const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+		const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
 		menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
 		menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
 		menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
