@@ -2782,9 +2782,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5e23c312d37367bb2d23dad395891b00</string>
+              <string>03b7df0406d7588c4fb49c2ddf0d8264</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.3-1.3.6.183570202-linux64-183570202.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ogg_vorbis-1.3.3-1.3.6.202241500-linux64-202241500.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
