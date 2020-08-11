@@ -2,25 +2,25 @@
 
 <floater title="Fototools" name="phototools">
 	<tab_container name="tabs">
-		<panel name="EnvironmentTab" label="WL">
+		<panel name="EnvironmentTab" label="Umg.">
 			<panel name="PT_WL_Settings">
 				<text name="T_WL_Settings">
-					Windlight-Einstellungen
+					Umgebungseinstellungen
 				</text>
 			</panel>
 
 			<panel name="P_WL_Settings">
-				<check_box name="WindLightUseAtmosShaders" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
+				<check_box name="WindLightUseAtmosShaders" label="Atmosphären-Shader aktivieren" tool_tip="Diese Einstellung aktiviert die komplette EEP-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
 			</panel>
 
 			<panel name="P_WL_Sky_Water">
-				<text name="WL Sky" tool_tip="Windlight-Voreinstellungen für den Himmel.">
+				<text name="WL Sky" tool_tip="Voreinstellungen für den Himmel.">
 					Himmel
 				</text>
-				<text name="WL Water" tool_tip="Windlight-Voreinstellungen für Wasser.">
+				<text name="WL Water" tool_tip="Voreinstellungen für Wasser.">
 					Wasser
 				</text>
-				<text name="Day Cycle" tool_tip="Windlight-Voreinstellungen für den Tageszyklus.">
+				<text name="Day Cycle" tool_tip="Voreinstellungen für den Tageszyklus.">
 					Tageszykl.
 				</text>
 				<button name="btn_personal_lighting" label="Persönliche Beleuchtung..."/>
@@ -30,7 +30,7 @@
 
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
-					Standard-Windlights
+					Standard-Umgebungen
 				</text>
 				<view_border name="horiz_separator1"/>
 				<button name="Sunrise" label="Sonnenaufgang"/>

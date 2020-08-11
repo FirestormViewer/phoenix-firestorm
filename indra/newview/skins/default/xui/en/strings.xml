@@ -2439,9 +2439,6 @@ If you continue to experience problems, please check your network and firewall s
   <!--  currency formatting -->
   <string name="LocalEstimateUSD">US$ [AMOUNT]</string>
 
-  <!--  FS:AW opensim currency support -->
-  <string name="free">free</string>
-
   <!-- Group Profile roles and powers -->
   <string name="Group Ban">Group Ban</string>
   <string name="Membership">Membership</string>
@@ -3191,4 +3188,6 @@ Your current position: [AVATAR_POS]
   <string name="No">No</string>
   <string name="FSUrlEntryWearLabel">Wear inventory folder</string>
   <string name="TexturePickerOutfitHeader">Picture for Outfit</string>
+  <string name="unknown_script">(Unknown script)</string>
+  <string name="FSAreaSearch_Cost_Label">L$[COST]</string>
 </strings>

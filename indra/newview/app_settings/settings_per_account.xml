@@ -961,7 +961,18 @@
         <key>Type</key>
             <string>Boolean</string>
         <key>Value</key>
-            <integer>0</integer>
+            <integer>1</integer>
+        </map>
+    <key>MoveLockInfoVisibleOnScreen</key>
+        <map>
+        <key>Comment</key>
+            <string>If movelock built-in into LSL Bridge is active, then show info on screen all the time</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
         </map>
     <key>BridgeIntegrationOC</key>
         <map>

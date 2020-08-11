@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+	<panel.string name="forgot_password_url">
+		http://secondlife.com/account/request.php?lang=fr
+	</panel.string>
+	<panel.string name="ServerComboTooltip">
+		Une grille connue ou l'URI d'une grille
+	</panel.string>
+	<layout_stack name="ui_stack">
+		<layout_panel name="ui_container">
+			<layout_stack name="vert_stack_left">
+				<layout_panel name="1st_row">
+					<layout_stack name="1st_row_stack">
+						<layout_panel name="login">
+							<combo_box name="username_combo" label="Nom de résident(e) :" tool_tip="Le nom de compte que vous avez choisi lors de votre inscription, par exemple, bobsmith420 ou Steller Sunshine"/>
+							<check_box label="Mémoriser le nom de résident(e)" name="remember_username_check"/>
+						</layout_panel>
+						<layout_panel name="delete_container">
+							<button tool_tip="Supprimer ce nom de résident(e)" name="remove_user_btn"/>
+						</layout_panel>
+						<layout_panel name="password_container">
+							<line_editor name="password_edit" label="Mot de passe"/>
+							<check_box label="Mémoriser le mot de passe" name="remember_check"/>
+						</layout_panel>
+						<layout_panel name="start_location_panel">
+							<combo_box name="start_location_combo" label="Démarrer :">
+								<combo_box.item label="Dernier emplacement" name="MyLastLocation"/>
+								<combo_box.item label="Mon domicile" name="MyHome"/>
+								<combo_box.item label="&lt;Saisissez le nom de la région&gt;" name="Typeregionname"/>
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="2nd_row">
+					<layout_stack name="2nd_row_stack">
+						<layout_panel name="grid_panel">
+							<text name="grid_login_text" width="55">
+								Grille :
+							</text>
+						</layout_panel>
+						<layout_panel name="mode_selection">
+							<text name="mode_selection_text">
+								Mode :
+							</text>
+							<combo_box name="mode_combo" tool_tip="Sélectionnez quel style de navigateur vous sied le mieux pour régler vos paramètres par défaut de manière appropriée.">
+								<combo_box.item label="Hybride" name="Hybrid"/>
+								<combo_box.item label="Texte" name="Text"/>
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+			<button label="Connexion" name="connect_btn"/>
+			<text name="create_new_account_text">
+				S'enregistrer
+			</text>
+			<text name="forgot_password_text">
+				Identifiants oubliés ?
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

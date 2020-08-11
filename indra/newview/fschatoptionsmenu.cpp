@@ -137,6 +137,10 @@ bool FSChatOptionsMenu::onMenuItemVisible(const LLSD& userdata, LLUICtrl* source
 	{
 		return (dynamic_cast<FSFloaterIM*>(source) != NULL);
 	}
+	else if (option == "show_mini_icons")
+	{
+		return !gSavedSettings.getBOOL("PlainTextChatHistory");
+	}
 
 	return false;
 }

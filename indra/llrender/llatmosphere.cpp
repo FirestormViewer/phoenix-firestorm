@@ -86,8 +86,8 @@ AtmosphericModelSettings::AtmosphericModelSettings()
     , m_sunArcRadians(0.00045f)
     , m_mieAnisotropy(0.8f)
 {
-    DensityLayer rayleigh_density(0.0, 1.0, -1.0 / kRayleighScaleHeight, 0.0, 0.0);
-    DensityLayer mie_density(0.0, 1.0, -1.0 / kMieScaleHeight, 0.0, 0.0);
+    DensityLayer rayleigh_density(0.0f, 1.0f, -1.0f / (F32)kRayleighScaleHeight, 0.0f, 0.0f);
+    DensityLayer mie_density(0.0f, 1.0f, -1.0f / (F32)kMieScaleHeight, 0.0f, 0.0f);
 
     m_rayleighProfile.push_back(rayleigh_density);
     m_mieProfile.push_back(mie_density);

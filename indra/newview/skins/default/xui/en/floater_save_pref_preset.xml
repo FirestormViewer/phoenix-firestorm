@@ -5,6 +5,7 @@
  help_topic="floater_save_preset"
  layout="topleft"
  name="save_pref_preset"
+ positioning="centered"
  save_rect="true"
  title="Save Graphic Preset"
  width="245">

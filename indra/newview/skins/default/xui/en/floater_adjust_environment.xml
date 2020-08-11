@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater layout="topleft"
          name="env_adjust_snapshot"
-         help_topic="day_presets"
+         help_topic="fs_personal_lighting"
          save_rect="false"
          title="Personal Lighting"
          width="845"

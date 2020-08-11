@@ -1936,6 +1936,7 @@ void LLPostponedNotification::lookupName(const LLUUID& id,
 	}
 	else
 	{
+		mFromId = id; // <FS:Ansariel> FIRE-29943: Item shared messaged logging to wrong IM logfile if user is offline
 		fetchAvatarName(id);
 	}
 }
