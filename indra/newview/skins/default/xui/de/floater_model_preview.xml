@@ -97,6 +97,12 @@
 	<string name="UnknownJoints">
 		Skinning wurde wegen [COUNT] unbekannter Gelenke deaktiviert.
 	</string>
+	<string name="ModelLoaded">
+		Modell [MODEL_NAME] wurde geladen.
+	</string>
+	<string name="IncompleteTC">
+		Daten für Textur-Koordinaten sind unvollständig.
+	</string>
 
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
