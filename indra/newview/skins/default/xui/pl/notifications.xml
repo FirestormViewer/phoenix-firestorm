@@ -3435,7 +3435,10 @@ to ustawienie lub wybrać inną nazwę.
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
 		Spowoduje to przesłanie [COUNT] elementów o łącznym koszcie [COST]L$. Czy chcesz kontynuować przesyłanie?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Prześlij"/>
+		<usetemplate name="okcancelignore" ignoretext="Potwierdź przesyłanie zbioru wielu plików" notext="Anuluj" yestext="Prześlij"/>
+	</notification>
+	<notification name="NotEnoughMoneyForBulkUpload">
+		Twój obecny stan konta ([BALANCE]L$) nie wystarczy do przesłania [COUNT] elementów - łączny koszt to [COST]L$.
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Wybranych plików nie można przesłać zbiorczo.
@@ -3932,6 +3935,12 @@ Czy chcesz jej/mu wysłać te informacje?
 	</notification>
 	<notification name="PhantomOff">
 		Tryb widmowy wyłączony.
+	</notification>
+	<notification name="MovelockEnabled">
+		Blokada pozycji została włączona. Użyj Awatar &gt; Ruch &gt; Unieruchom, aby wyłączyć.
+	</notification>
+	<notification name="MovelockDisabled">
+		Blokada pozycji została wyłączona.
 	</notification>
 	<notification label="Resetuj wszystkie ustawienia" name="FirestormClearSettingsPrompt">
 		Resetowanie ustawień może się przydać, gdy napotykasz na jakieś problemy - pamiętaj jednak, że trzeba będzie wprowadzić od nowa wszystkie zmiany, jakie zostały przez Ciebie ustawione do tej pory.

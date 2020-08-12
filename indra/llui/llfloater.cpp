@@ -3136,6 +3136,7 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 	S32 delta_right = right_toolbar_rect.notEmpty() ? right_toolbar_rect.mLeft - floater_rect.mLeft : 0;
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	S32 delta_bottom_chatbar = mMainChatbarRect.notEmpty() ? mMainChatbarRect.mTop - floater_rect.mTop : 0;
+	S32 delta_utility_bar = mUtilityBarRect.notEmpty() ? mUtilityBarRect.mTop - floater_rect.mTop : 0;
 
 	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
 	S32 header_height = floater->getHeaderHeight();
@@ -3176,6 +3177,11 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		)
 	{
 		floater->translate(0, delta_bottom_chatbar);
+	}
+	else if (delta_utility_bar > 0 && (floater_rect.mLeft > mUtilityBarRect.mLeft && floater_rect.mRight < mUtilityBarRect.mRight))
+	{
+		// Utility bar on legacy skins
+		floater->translate(0, delta_utility_bar);
 	}
 	// </FS:Ansariel>
 }
@@ -3409,6 +3415,14 @@ void LLFloaterView::setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatb
 {
 	panel->localRectToScreen(chatbar_rect, &mMainChatbarRect);
 	mMainChatbarRect.stretch(FLOATER_MIN_VISIBLE_PIXELS);
+}
+
+void LLFloaterView::setUtilityBarRect(LLLayoutPanel* panel, const LLRect& utility_bar_rect)
+{
+	panel->localRectToScreen(utility_bar_rect, &mUtilityBarRect);
+	mUtilityBarRect.mLeft = mUtilityBarRect.mRight;
+	// Just assume right end of utility bar is always the border of the window
+	mUtilityBarRect.mRight = S32_MAX;
 }
 // </FS:Ansariel>
 

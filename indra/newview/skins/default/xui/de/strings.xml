@@ -5371,11 +5371,6 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
-<!--  FS:AW opensim currency support -->
-	<string name="free">
-		 kostenlos
-	</string>
-<!--  /FS:AW opensim currency support -->
 	<string name="Group Ban">
 		Gruppen-Bann
 	</string>
@@ -7110,5 +7105,11 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="TexturePickerOutfitHeader">
 		Foto für Outfit
+	</string>
+	<string name="unknown_script">
+		(Unbekanntes Skript)
+	</string>
+	<string name="FSAreaSearch_Cost_Label">
+		[COST] L$
 	</string>
 </strings>

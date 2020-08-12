@@ -389,6 +389,7 @@ public:
 		static const std::string beacon_sun = LLTrans::getString("BeaconSun");
 		static const std::string beacon_moon = LLTrans::getString("BeaconMoon");
 		static const std::string particle_hiding = LLTrans::getString("ParticleHiding");
+		static const std::string movelock_enabled = LLTrans::getString("MovelockEnabled"); // <FS:PP> FIRE-29880: Movelock
 
 		// Draw the statistics in a light gray
 		// and in a thin font
@@ -793,6 +794,16 @@ public:
 			addText(xpos, ypos, llformat("%d %d %d %d", color[0], color[1], color[2], color[3]));
 			ypos += y_inc;
 		}
+
+		// <FS:PP> FIRE-29880: Movelock
+		static LLCachedControl<bool> fsRenderMovelockState(gSavedPerAccountSettings, "UseMoveLock");
+		static LLCachedControl<bool> fsRenderMovelockText(gSavedPerAccountSettings, "MoveLockInfoVisibleOnScreen");
+		if (fsRenderMovelockState && fsRenderMovelockText)
+		{
+			addText(xpos, ypos, movelock_enabled);
+			ypos += y_inc;
+		}
+		// </FS:PP>
 
 		// <FS:LO> pull the text saying if particles are hidden out from beacons
 		if (LLPipeline::toggleRenderTypeControlNegated(LLPipeline::RENDER_TYPE_PARTICLES))
@@ -2184,6 +2195,14 @@ void LLViewerWindow::initBase()
 	{
 		chatbar_panel->setReshapePanelCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
 		gFloaterView->setMainChatbarRect(chatbar_panel, chatbar_panel->getRect());
+	}
+
+	// Utility bar on legacy skins
+	LLLayoutPanel* legacy_chat_panel = LLUI::getInstance()->getRootView()->findChild<LLLayoutPanel>("chat_panel");
+	if (legacy_chat_panel)
+	{
+		legacy_chat_panel->setReshapePanelCallback(boost::bind(&LLFloaterView::setUtilityBarRect, gFloaterView, _1, _2));
+		gFloaterView->setUtilityBarRect(legacy_chat_panel, legacy_chat_panel->getRect());
 	}
 	// </FS:Ansariel>
 

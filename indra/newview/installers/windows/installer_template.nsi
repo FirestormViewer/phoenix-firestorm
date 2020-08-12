@@ -55,7 +55,7 @@ RequestExecutionLevel admin	# For when we write to Program Files
 ##!include "%%SOURCE%%\installers\windows\lang_da.nsi"
 !include "%%SOURCE%%\installers\windows\lang_de.nsi"
 !include "%%SOURCE%%\installers\windows\lang_es.nsi"
-##!include "%%SOURCE%%\installers\windows\lang_fr.nsi"
+!include "%%SOURCE%%\installers\windows\lang_fr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
 !include "%%SOURCE%%\installers\windows\lang_it.nsi"
 !include "%%SOURCE%%\installers\windows\lang_pl.nsi" ;<FS:Ansariel> Polish is supported
@@ -69,7 +69,7 @@ RequestExecutionLevel admin	# For when we write to Program Files
 LangString LanguageCode ${LANG_GERMAN}   "de"
 LangString LanguageCode ${LANG_ENGLISH}  "en"
 LangString LanguageCode ${LANG_SPANISH}  "es"
-##LangString LanguageCode ${LANG_FRENCH}   "fr"
+LangString LanguageCode ${LANG_FRENCH}   "fr"
 LangString LanguageCode ${LANG_JAPANESE} "ja"
 LangString LanguageCode ${LANG_ITALIAN}  "it"
 LangString LanguageCode ${LANG_POLISH}   "pl"
@@ -403,10 +403,10 @@ CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
 
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
 				"InternetShortcut" "URL" \
-				"http://join.secondlife.com/"
+				"https://join.secondlife.com/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
 				"InternetShortcut" "URL" \
-				"http://www.secondlife.com/account/"
+				"https://www.secondlife.com/account/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\LSL Scripting Language Help.url" \
 				"InternetShortcut" "URL" \
                 "http://wiki.secondlife.com/wiki/LSL_Portal"
@@ -436,9 +436,9 @@ WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Version" "${VERSION_LONG}"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Shortcut" "$INSTSHORTCUT"
 WriteRegStr SHELL_CONTEXT "${INSTNAME_KEY}" "Exe" "$VIEWER_EXE"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "Publisher" "The Phoenix Firestorm Project, Inc."
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "http://www.firestormviewer.org"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "http://www.firestormviewer.org/downloads"
-WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "http://www.firestormviewer.org/support"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLInfoAbout" "https://www.firestormviewer.org"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "URLUpdateInfo" "https://www.firestormviewer.org/downloads"
+WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "HelpLink" "https://www.firestormviewer.org/support"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayName" "$INSTNAME"
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}"
@@ -447,7 +447,7 @@ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayVersion" "${VERSION_LONG}
 ${If} ${IS64BIT} == "1"
   WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00064000"		# 400 MB
 ${Else}
-  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00057800"		# 350 MB
+  WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00061800"		# 390 MB
 ${EndIf}
 
 # from FS:Ansariel
@@ -457,6 +457,9 @@ WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayIcon" '"$INSTDIR\$VIEWER_
 WriteRegDWORD SHELL_CONTEXT "${MSNTCURRVER_KEY}\Image File Execution Options\$VIEWER_EXE" "DisableExceptionChainValidation" 1
 WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "NoModify" 1
 WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "NoRepair" 1
+
+# <FS:Ansariel> Ask before creating protocol registry entries
+MessageBox MB_YESNO|MB_ICONQUESTION $(CreateUrlRegistryEntries) IDNO skip_create_url_registry_entries
 
 # Write URL registry info
 WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}" "(default)" "URL:Second Life"
@@ -473,15 +476,18 @@ WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$
 # URL param must be last item passed to viewer, it ignores subsequent params to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
 
-WriteRegStr HKEY_CLASSES_ROOT "Applications\$INSTEXE" "IsHostApp" ""
-##WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
-
 # <FS:CR> Register hop:// protocol registry info
 WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
 WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
 WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
 WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
 # </FS:CR>
+
+# <FS:Ansariel> Ask before creating protocol registry entries
+skip_create_url_registry_entries:
+
+WriteRegStr HKEY_CLASSES_ROOT "Applications\$INSTEXE" "IsHostApp" ""
+##WriteRegStr HKEY_CLASSES_ROOT "Applications\${VIEWER_EXE}" "NoStartPage" ""
 
 # Write out uninstaller
 WriteUninstaller "$INSTDIR\uninst.exe"
@@ -800,8 +806,10 @@ NOFOLDER:
 MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
 
 DeleteKeys:
+  DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\hop" # <FS:Ansariel> Unregister hop:// protocol registry info
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-location-info"
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\secondlife"
+  DeleteRegKey HKEY_CLASSES_ROOT "hop" # <FS:Ansariel> Unregister hop:// protocol registry info
   DeleteRegKey HKEY_CLASSES_ROOT "x-grid-location-info"
   DeleteRegKey HKEY_CLASSES_ROOT "secondlife"
 

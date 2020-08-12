@@ -628,6 +628,7 @@ public:
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	void setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatbar_rect);
+	void setUtilityBarRect(LLLayoutPanel* panel, const LLRect& utility_bar_rect);
 
 private:
 	void hiddenFloaterClosed(LLFloater* floater);
@@ -649,6 +650,7 @@ private:
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	LLRect			mMainChatbarRect;
+	LLRect			mUtilityBarRect;
 };
 
 //

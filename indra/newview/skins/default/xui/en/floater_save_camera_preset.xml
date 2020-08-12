@@ -5,6 +5,7 @@
  help_topic="floater_save_preset"
  layout="topleft"
  name="save_camera_preset"
+ positioning="centered"
  save_rect="true"
  title="Save Camera Preset"
  width="240">
