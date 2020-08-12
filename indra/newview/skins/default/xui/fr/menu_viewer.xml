@@ -108,16 +108,19 @@
 		</menu>
 		<menu_item_call label="Me téléporter chez moi" name="Teleport Home"/>
 		<menu label="Environnement" name="Environment">
-			<menu_item_check label="Lever du soleil" name="Sunrise"/>
+			<menu_item_check label="Aube" name="Sunrise"/>
 			<menu_item_check label="Midi" name="Noon"/>
-			<menu_item_check label="Coucher du soleil" name="Sunset"/>
+			<menu_item_check label="Crépuscule" name="Sunset"/>
 			<menu_item_check label="Minuit" name="Midnight"/>
 			<menu_item_check label="Utiliser l'environnement partagé" name="Use Shared Environment"/>
 			<menu_item_call label="Mes environnements..." name="my_environs"/>
 			<menu_item_call label="Éclairage personnel..." name="adjustment_tool"/>
-			<menu_item_check label="Arrêter les nuages" name="pause_clouds"/>
+			<menu_item_check label="Mettre les nuages en pause" name="pause_clouds"/>
 		</menu>
-		<menu label="Photo et vidéo" name="photo_and_video"/>
+		<menu label="Photo et vidéo" name="photo_and_video">
+			<menu_item_call label="Outils de prise de vue" name="phototools_item_call"/>
+			<menu_item_call label="Contrôle de la caméra" name="cameratools_item_call"/>
+		</menu>
 		<menu_item_call label="Recherche dans la région" name="area_search"/>
 		<menu_item_call label="Explorateur de sons" name="Sound Explorer"/>
 		<menu_item_call label="Explorateur d'animations" name="Animation Explorer"/>

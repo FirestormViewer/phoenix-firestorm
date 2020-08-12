@@ -23,7 +23,7 @@
 	<button label="Se connecter..." name="connect_btn"/>
 	<button label="Se déconnecter" name="disconnect_btn"/>
 	<text name="rating_label">
-		Partager dans Discord le nom des régions ayant la classification suivante :
+		Partager avec Discord le nom des régions ayant la classification suivante :
 	</text>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Général, Modéré, Adulte" name="Desired_Adult"/>
@@ -32,7 +32,7 @@
 		<combo_box.item label="Ne pas partager" name="Desired_None"/>
 	</combo_box>
 	<text name="dont_names_label">
-		Ne pas partager dans Discord le noms des régions qui sont dans la liste ci-dessous :
+		Ne pas partager avec Discord le noms des régions qui sont dans la liste ci-dessous :
 	</text>
 	<text name="connection_status_text">
 		En cours de chargement...

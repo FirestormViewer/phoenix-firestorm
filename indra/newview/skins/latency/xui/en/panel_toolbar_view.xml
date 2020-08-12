@@ -150,7 +150,7 @@
 		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
 		<layout_panel
 		 name="bottom_chat_bar_panel"
-		 height="185"
+		 height="46"
 		 width="1024"
 		 auto_resize="false"
 		 mouse_opaque="false"
@@ -161,7 +161,7 @@
 			 name="chat_bar_utility_bar_stack"
 			 top="0"
 			 left="0"
-			 height="185"
+			 height="46"
 			 width="1024"
 			 follows="all"
 			 border_size="0"
@@ -264,8 +264,8 @@
 				<!-- Utility Bar layout panel -->
 				<layout_panel
 				 name="utility_bar_layout_panel"
-				 height="185"
-				 width="225"
+				 height="46"
+				 width="229"
 				 follows="bottom|left"
 				 layout="topleft"
 				 auto_resize="false"
@@ -274,23 +274,10 @@
 				 mouse_opaque="false"
 				 user_resize="false"
 				>
-					<!-- Volume controls -->
-					<panel
-					 name="global_volume_controls_panel"
-					 top="10"
-					 left="2"
-					 height="155"
-					 width="225"
-					 follows="bottom|left"
-					 layout="topleft"
-					 filename="panel_volume_pulldown.xml"
-					 visibility_control="FSVolumeControlsPanelOpen"
-					>
-					</panel>
 					<!-- Utility Bar panel -->
 					<panel
 					 name="utility_bar_panel"
-					 top="159"
+					 top="20"
 					 left="2"
 					 height="26"
 					 width="225"
@@ -411,9 +398,11 @@
 						 follows="bottom|left"
 						 is_toggle="true"
 						 image_unselected="PushButton_Up"
-						 image_selected="PushButton_Down"
-						 control_name="FSVolumeControlsPanelOpen"
-						/>
+						 image_selected="PushButton_Down">
+						 <button.commit_callback
+							 function="Floater.ToggleOrBringToFront"
+							 parameter="fs_volume_controls" />
+						</button>
 						<!-- Volume controls -->
 					</panel>
 					<!-- Utility Bar panel -->

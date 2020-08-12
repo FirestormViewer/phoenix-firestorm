@@ -2022,6 +2022,10 @@ std::string LLScriptEdContainer::getBackupFileName() const
 	// NOTE: this function is not guaranteed to return the same filename every time (i.e. the item name may have changed)
 	std::string strFile = LLFile::tmpdir();
 
+	std::string agent_id_str = gAgentID.asString();
+	LLStringUtil::replaceString(agent_id_str, "-", "");
+	strFile += agent_id_str + "_";
+
 	// Find the inventory item for this script
 	const LLInventoryItem* pItem = getItem();
 	if (pItem)
