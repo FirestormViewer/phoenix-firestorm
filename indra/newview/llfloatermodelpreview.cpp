@@ -193,17 +193,6 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_joint_overrides")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
-	// <FS:Beq> Allow user selectable debug logging
-	auto vl = getChild<LLCheckBoxCtrl>("verbose_logging");
-	if(vl)
-	{
-		vl->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
-		if(gSavedSettings.getBOOL("ImporterDebug"))
-		{
-			vl->set(true);
-		}
-	};
-	// </FS:Beq>
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
@@ -323,6 +312,24 @@ BOOL LLFloaterModelPreview::postBuild()
 	}
 
 	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// reshape()
+//-----------------------------------------------------------------------------
+
+void LLFloaterModelPreview::reshape(S32 width, S32 height, BOOL called_from_parent)
+{
+    LLFloaterModelUploadBase::reshape(width, height, called_from_parent);
+
+    LLView* preview_panel = getChild<LLView>("preview_panel");
+    LLRect rect = preview_panel->getRect();
+
+    if (rect != mPreviewRect)
+    {
+        mModelPreview->refresh();
+        mPreviewRect = preview_panel->getRect();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -755,30 +762,15 @@ void LLFloaterModelPreview::draw3dPreview()
 
 	gGL.getTexUnit(0)->bind(mModelPreview);
 
-
-	LLView* preview_panel = getChild<LLView>("preview_panel");
-
-	if (!preview_panel)
-	{
-		LL_WARNS() << "preview_panel not found in floater definition" << LL_ENDL;
-	}
-	LLRect rect = preview_panel->getRect();
-
-	if (rect != mPreviewRect)
-	{
-		mModelPreview->refresh();
-		mPreviewRect = preview_panel->getRect();
-	}
-
 	// <FS:Ansariel> Remove QUADS rendering mode
 	//gGL.begin( LLRender::QUADS );
 	//{
 	//	gGL.texCoord2f(0.f, 1.f);
-	//	gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop-1);
+	//	gGL.vertex2i(mPreviewRect.mLeft+1, mPreviewRect.mTop-1);
 	//	gGL.texCoord2f(0.f, 0.f);
-	//	gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mBottom);
+	//	gGL.vertex2i(mPreviewRect.mLeft+1, mPreviewRect.mBottom+1);
 	//	gGL.texCoord2f(1.f, 0.f);
-	//	gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom);
+	//	gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mBottom+1);
 	//	gGL.texCoord2f(1.f, 1.f);
 	//	gGL.vertex2i(mPreviewRect.mRight-1, mPreviewRect.mTop-1);
 	//}
@@ -786,18 +778,18 @@ void LLFloaterModelPreview::draw3dPreview()
 	gGL.begin(LLRender::TRIANGLES);
 	{
 		gGL.texCoord2f(0.f, 1.f);
-		gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop - 1);
+		gGL.vertex2i(mPreviewRect.mLeft + 1, mPreviewRect.mTop - 1);
 		gGL.texCoord2f(0.f, 0.f);
-		gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mBottom);
+		gGL.vertex2i(mPreviewRect.mLeft + 1, mPreviewRect.mBottom + 1);
 		gGL.texCoord2f(1.f, 0.f);
-		gGL.vertex2i(mPreviewRect.mRight - 1, mPreviewRect.mBottom);
+		gGL.vertex2i(mPreviewRect.mRight - 1, mPreviewRect.mBottom + 1);
 
 		gGL.texCoord2f(1.f, 0.f);
-		gGL.vertex2i(mPreviewRect.mRight - 1, mPreviewRect.mBottom);
+		gGL.vertex2i(mPreviewRect.mRight - 1, mPreviewRect.mBottom + 1);
 		gGL.texCoord2f(1.f, 1.f);
 		gGL.vertex2i(mPreviewRect.mRight - 1, mPreviewRect.mTop - 1);
 		gGL.texCoord2f(0.f, 1.f);
-		gGL.vertex2i(mPreviewRect.mLeft, mPreviewRect.mTop - 1);
+		gGL.vertex2i(mPreviewRect.mLeft + 1, mPreviewRect.mTop - 1);
 	}
 	gGL.end();
 	// </FS:Ansariel>

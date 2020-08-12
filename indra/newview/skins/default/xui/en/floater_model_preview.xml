@@ -48,6 +48,7 @@
   <string name="UnrecognizedJoint">Rigged to unrecognized joint name [NAME]</string>
   <string name="UnknownJoints">Skinning disabled due to [COUNT] unknown joints</string>
   <string name="ModelLoaded">Model [MODEL_NAME] loaded</string>
+  <string name="IncompleteTC">Texture coordinates data is not complete.</string>
 
   <panel
     follows="top|left"
@@ -1368,6 +1369,7 @@ Please consider using an attachment point close to the item's position on the bo
          width="619" />
          <!-- FS:Beq Add control for vberbose logging -->
          <check_box
+         control_name="ImporterDebug"
          follows="top|left"
          top_delta="12"
          left="4"
