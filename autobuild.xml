@@ -976,11 +976,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>371025cc40f8cbb70f0bb88f79a906a6</string>
+              <string>6963689ea12131c0ff80b07a08cbe667</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.02-darwin-201981618.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.03-darwin-202272255.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
