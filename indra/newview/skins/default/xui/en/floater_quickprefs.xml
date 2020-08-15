@@ -179,11 +179,11 @@
             layout="topleft"
             left="5"
             name="WL Sky"
-            tool_tip="Windlight presets for your sky"
+            tool_tip="Presets for your sky"
             mouse_opaque="false"
             top_delta="24"
             width="90">
-            WL Sky:
+            Sky:
         </text>
         <combo_box
             follows="left|top"
@@ -225,11 +225,11 @@
             layout="topleft"
             left="5"
             name="WL Water"
-			tool_tip="Windlight presets for your water"
+            tool_tip="Presets for your water"
             mouse_opaque="false"
             top_delta="25"
             width="90">
-            WL Water:
+            Water:
         </text>
         <combo_box
             follows="left|top"
@@ -271,7 +271,7 @@
             layout="topleft"
             left="5"
             name="Day Cycle"
-            tool_tip="Windlight presets for your day cycle"
+            tool_tip="Presets for your day cycle"
             mouse_opaque="false"
             top_delta="24"
             width="90">

@@ -3857,6 +3857,12 @@ Inviare queste informazioni?
 	<notification name="PhantomOff">
 		Modalità fantasma non attiva.
 	</notification>
+	<notification name="MovelockEnabled">
+		Blocco movimenti attivo.
+	</notification>
+	<notification name="MovelockDisabled">
+		Blocco movimenti inattivo.
+	</notification>
 	<notification label="Ripristino della configurazione" name="FirestormClearSettingsPrompt">
 		Ripristinare completamente la configurazione può essere utile in caso di problemi. Tuttavia tutte le personalizzazioni rispetto all&apos;originale dovranno essere rifatte.
 

@@ -235,7 +235,7 @@ legacy_header_height="0"
     height="23"
     mouse_opaque="true"
     name="preset_combo"
-    width="162">
+    width="135">
     <combo_list
     mouse_wheel_opaque="true"/>
     <combo_box.item
@@ -244,33 +244,30 @@ legacy_header_height="0"
       value="default" />
   </combo_box>
       <button
-        height="16"
-        width="16"  
+        height="23"
+        width="24"
         layout="topleft"
         mouse_opaque="true"
         name="gear_btn"
         tool_tip="Camera Presets"
-        top_delta="3"
-        left_pad="8" 
-        image_selected="Icon_Gear"
-        image_pressed="Icon_Gear"
-        image_unselected="Icon_Gear"
+        top_delta="0"
+        left_pad="3" 
+        image_overlay="Icon_Gear"
         is_toggle="true">
         <button.commit_callback
           function="CameraPresets.ShowPresetsList"/>
       </button>
-      <!--
       <button
         follows="top|left"
         height="23"
-        label="Save as preset..."
         layout="topleft"
-        left="0"
+        left_pad="3" 
         name="save_preset_btn"
-        top_pad="7"
-        width="143">
+        tool_tip="Save as Preset"
+        image_overlay="Activate_Checkmark"
+        top_delta="0"
+        width="24">
         <button.commit_callback
           function="CameraPresets.Save"/>
       </button>
-      -->
 </floater>

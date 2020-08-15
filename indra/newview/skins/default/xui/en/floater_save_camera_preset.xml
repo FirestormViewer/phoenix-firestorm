@@ -5,6 +5,7 @@
  help_topic="floater_save_preset"
  layout="topleft"
  name="save_camera_preset"
+ positioning="centered"
  save_rect="true"
  title="Save Camera Preset"
  width="240">
@@ -34,7 +35,7 @@
       value="1"/>
     </radio_group> 
     <line_editor
-     commit_on_focus_lost = "true"
+     commit_on_focus_lost="false"
      follows="top|left"
      height="23"
      layout="topleft"

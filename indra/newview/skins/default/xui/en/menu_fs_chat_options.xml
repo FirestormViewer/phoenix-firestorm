@@ -41,6 +41,19 @@
 			function="ToggleControl"
 			parameter="PlainTextChatHistory"/>
 	</menu_item_check>
+	<menu_item_check
+		label="Show profile icons in chat headers"
+		name="chat_header_icons">
+		<menu_item_check.on_check
+			function="CheckControl"
+			parameter="ShowChatMiniIcons"/>
+		<menu_item_check.on_click
+			function="ToggleControl"
+			parameter="ShowChatMiniIcons"/>
+		<menu_item_check.on_visible
+			function="ChatOptions.Visible"
+			parameter="show_mini_icons"/>
+	</menu_item_check>
 	<context_menu
 		label="Font size..."
 		name="font_size">

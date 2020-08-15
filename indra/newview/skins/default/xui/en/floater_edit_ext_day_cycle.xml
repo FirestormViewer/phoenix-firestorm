@@ -2,7 +2,7 @@
 <floater
         layout="topleft"
         name="env_edit_extdaycycle"
-        help_topic="day_presets"
+        help_topic="fs_day_cycle"
         save_rect="false"
         title="Edit Day Cycle"
         width="705"

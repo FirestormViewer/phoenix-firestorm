@@ -30,14 +30,6 @@
         hr.
     </floater.string>
     <floater.string
-     name="Hours">
-        [HOURS] hrs.
-    </floater.string>
-    <floater.string
-     name="Hour">
-        hr.
-    </floater.string>
-    <floater.string
      name="Minutes">
         [MINUTES] min.
     </floater.string>

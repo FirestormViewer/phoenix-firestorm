@@ -51,6 +51,8 @@
 /// LLViewerAssetRequest
 ///----------------------------------------------------------------------------
 
+static const std::string VIEWER_ASSET_STORAGE_CORO_POOL = "VAssetStorage";
+
 /**
  * @brief Local class to encapsulate asset fetch requests with a timestamp.
  *
@@ -114,6 +116,8 @@ LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *
       mCountSucceeded(0),
       mTotalBytesFetched(0)
 {
+    // <FS:Ansariel> Explicitly create the VAAssetStorage pool
+    LLCoprocedureManager::instance().createPool(VIEWER_ASSET_STORAGE_CORO_POOL);
 }
 
 
@@ -127,6 +131,17 @@ LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *
       mCountSucceeded(0),
       mTotalBytesFetched(0)
 {
+    // <FS:Ansariel> Explicitly create the VAAssetStorage pool
+    LLCoprocedureManager::instance().createPool(VIEWER_ASSET_STORAGE_CORO_POOL);
+}
+
+LLViewerAssetStorage::~LLViewerAssetStorage()
+{
+    if (!LLCoprocedureManager::wasDeleted())
+    {
+        // This class has dedicated coroutine pool, clean it up, otherwise coroutines will crash later. 
+        LLCoprocedureManager::instance().close(VIEWER_ASSET_STORAGE_CORO_POOL);
+    }
 }
 
 // virtual 
@@ -404,7 +419,7 @@ void LLViewerAssetStorage::queueRequestHttp(
         //LLViewerAssetStatsFF::record_enqueue(atype, with_http, is_temp);
         // <FS:Ansariel> [UDP Assets]
 
-        LLCoprocedureManager::instance().enqueueCoprocedure("AssetStorage","LLViewerAssetStorage::assetRequestCoro",
+        LLCoprocedureManager::instance().enqueueCoprocedure(VIEWER_ASSET_STORAGE_CORO_POOL,"LLViewerAssetStorage::assetRequestCoro",
             boost::bind(&LLViewerAssetStorage::assetRequestCoro, this, req, uuid, atype, callback, user_data));
     }
 }
