@@ -3,6 +3,34 @@
 <map>
     <key>installables</key>
     <map>
+      <key>fltk</key>
+      <map>
+		<key>copyright</key>
+		<string>Copyright (C) fltk project</string>
+		<key>license</key>
+		<string>LGPL/fltk</string>
+		<key>license_file</key>
+		<string>LICENSES/fltk.txt</string>
+		<key>name</key>
+		<string>fltk</string>
+		<key>platforms</key>
+		<map>
+		  <key>linux64</key>
+		  <map>
+			<key>archive</key>
+			<map>
+			  <key>hash</key>
+			  <string>81fe1e927e4fe3c5e5f15ce6219ca883</string>
+			  <key>url</key>
+			  <string>http://3p.firestormviewer.org/fltk-1.3.5.202282121-linux64-202282121.tar.bz2</string>
+			</map>
+			<key>name</key>
+			<string>linux</string>
+		  </map>
+		</map>
+		<key>version</key>
+		<string>1.3.5</string>
+	  </map>
       <key>gstreamer10</key>
       <map>
 		<key>copyright</key>

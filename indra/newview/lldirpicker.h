@@ -80,7 +80,7 @@ private:
 
 #if LL_LINUX || LL_SOLARIS || LL_DARWIN
 	// On Linux we just implement LLDirPicker on top of LLFilePicker
-	LLFilePicker *mFilePicker;
+	// LLFilePicker *mFilePicker;
 #endif
 
 

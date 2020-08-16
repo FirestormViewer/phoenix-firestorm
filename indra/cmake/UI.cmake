@@ -41,10 +41,12 @@ if (USESYSTEMLIBS)
 else (USESYSTEMLIBS)
   if (LINUX)
     use_prebuilt_binary(gtk-atk-pango-glib)
+    use_prebuilt_binary(fltk)
   endif (LINUX)
 
   if (LINUX)
     set(UI_LIB_NAMES
+        libfltk.a
         freetype
         atk-1.0
         gdk-x11-2.0
@@ -87,5 +89,5 @@ else (USESYSTEMLIBS)
 endif (USESYSTEMLIBS)
 
 if (LINUX)
-  add_definitions(-DLL_GTK=1 -DLL_X11=1)
+  add_definitions(-DLL_GTK=1 -DLL_X11=1 -DLL_FLTK=1)
 endif (LINUX)
