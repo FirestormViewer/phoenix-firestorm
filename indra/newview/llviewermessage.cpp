@@ -2871,9 +2871,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			{
 				if (source->permYouOwner() && useAntiSpamMine)
 				{
-					deferred_spam_check = true;
+					// Only check if not a debug message
+					deferred_spam_check = chat.mChatType != CHAT_TYPE_DEBUG_MSG;
 				}
-				else if (!source->permYouOwner() && NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id, ANTISPAM_SOURCE_OBJECT))
+				else if (!source->permYouOwner() && chat.mChatType != CHAT_TYPE_DEBUG_MSG && NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id, ANTISPAM_SOURCE_OBJECT))
 				{
 					return;
 				}
