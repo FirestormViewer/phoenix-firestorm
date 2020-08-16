@@ -359,10 +359,13 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 		return false;
 	}
 
-	LLViewerObject* obj = gObjectList.findObject(source);
-	if (obj && obj->permYouOwner() && !useAntiSpamMine)
+	if (sourcetype == ANTISPAM_SOURCE_OBJECT)
 	{
-		return false;
+		LLViewerObject* obj = gObjectList.findObject(source);
+		if (obj && obj->permYouOwner() && !useAntiSpamMine)
+		{
+			return false;
+		}
 	}
 	
 	S32 result = 0;
