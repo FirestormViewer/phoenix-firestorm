@@ -182,7 +182,22 @@
              name="flight_extreme"
              value="15.0" />
         </combo_box>
-
+        <slider
+        name="manual_environment_change_transition_period"
+        control_name="FSEnvironmentManualTransitionTime"
+        label="Environment Transition Time:"
+        decimal_digits="1"
+        left="10"
+        top_pad="5"
+        follows="left|top"
+        layout="topleft"
+        height="18"
+        increment="0.5"
+        initial_value="0"
+        max_val="60"
+        min_val="0"
+        width="520"
+        tool_tip="Interval in seconds over which manual environment changes will blend. Zero is instant."/>
     </panel>
 
 

@@ -1283,12 +1283,33 @@ void LLEnvironment::setEnvironment(EnvSelection_t env, const LLUUID &assetId, S3
     setEnvironment(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET);
 }
 
-
-void LLEnvironment::setEnvironment(EnvSelection_t env,
-                                   const LLUUID &assetId,
-                                   LLSettingsDay::Seconds daylength,
-                                   LLSettingsDay::Seconds dayoffset,
-                                   S32 env_version)
+// <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
+void LLEnvironment::setManualEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version)
+{
+    LLSettingsBase::Seconds transitionTime(static_cast<F64>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
+    setEnvironmentWithTransition(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, transitionTime);
+}
+void LLEnvironment::setEnvironmentWithTransition(
+                                    EnvSelection_t env,
+                                    const LLUUID &assetId,
+                                    LLSettingsDay::Seconds daylength,
+                                    LLSettingsDay::Seconds dayoffset,
+                                    LLSettingsBase::Seconds transition,
+                                    S32 env_version)
+{
+    LLSettingsVOBase::getSettingsAsset(assetId,
+        [this, env, daylength, dayoffset, transition, env_version](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat)
+        {
+            onSetEnvAssetLoaded(env, asset_id, settings, daylength, dayoffset, transition, status, env_version);
+        });
+}
+// </FS:Beq>
+void LLEnvironment::setEnvironment(
+                                    EnvSelection_t env,
+                                    const LLUUID &assetId,
+                                    LLSettingsDay::Seconds daylength,
+                                    LLSettingsDay::Seconds dayoffset,
+                                    S32 env_version)
 {
     LLSettingsVOBase::getSettingsAsset(assetId,
         [this, env, daylength, dayoffset, env_version](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat)
