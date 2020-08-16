@@ -3,10 +3,14 @@
 add_subdirectory(base)
 
 if (LINUX)
+    include(GLIB)
     #add_subdirectory(gstreamer010)
-    #add_subdirectory(libvlc)
     add_subdirectory(example)
-    add_subdirectory(gstreamer10)
+    if( GLIB_FOUND )
+      add_subdirectory(gstreamer10)
+	else() 
+      add_subdirectory(libvlc)
+	endif()
     add_subdirectory(cef)
 endif (LINUX)
 

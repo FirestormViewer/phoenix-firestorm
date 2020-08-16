@@ -1,6 +1,8 @@
 # -*- cmake -*-
 include(Prebuilt)
+include(GLIB)
 
+if( GLIB_FOUND )
 if (USESYSTEMLIBS)
   include(FindPkgConfig)
 
@@ -27,3 +29,5 @@ endif (DBUSGLIB_FOUND)
 if (DBUSGLIB)
   add_definitions(-DLL_DBUS_ENABLED=1)
 endif (DBUSGLIB)
+
+endif()

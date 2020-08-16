@@ -2316,7 +2316,25 @@ S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 typ
 	return rtn;
 }
 
-	
+BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
+{
+	return FALSE;
+}
+
+#else
+
+S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 type)
+{
+	LL_INFOS() << "MSGBOX: " << caption << ": " << text << LL_ENDL;
+	return 0;
+}
+
+BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
+{
+	return (FALSE);
+}
+#endif // LL_GTK
+
 
 
 /*
@@ -2349,24 +2367,6 @@ LLSD LLWindowSDL::getNativeKeyData()
 	
 	return result;
 }
-
-
-BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
-{
-	return FALSE;
-}
-#else
-S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 type)
-{
-	LL_INFOS() << "MSGBOX: " << caption << ": " << text << LL_ENDL;
-	return 0;
-}
-
-BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
-{
-	return (FALSE);
-}
-#endif // LL_GTK
 
 #if LL_LINUX || LL_SOLARIS
 // extracted from spawnWebBrowser for clarity and to eliminate

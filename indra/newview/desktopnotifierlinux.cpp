@@ -38,8 +38,25 @@
 
 #include <dlfcn.h>
 
+#ifdef LL_GLIB
+
 #include <glib.h>
 
+#else
+
+// ND: If we cannot use glib headers just stub out what'ns needed to compile.
+// In theory that is enough to have a (leaky, see g_free) implementation. But to play it safe tryLoadLibnotify won't try to load any DSO, thus effectivly
+// disabling the usage of libnotify.
+typedef int gint;
+typedef gint gboolean;
+typedef char gchar;
+struct GError;
+
+void g_free( void* )
+{
+}
+
+#endif
 
 typedef enum
 {
@@ -65,7 +82,6 @@ typedef void (*pND_notify_notification_set_urgency) ( NotifyNotification *notifi
 // the unused one is always pushed first and qualifies just as dead weight.
 typedef NotifyNotification* (*pND_notify_notification_new) (const char *summary, const char *body, const char *icon, void*);
 
-
 void* tryLoadLibnotify()
 {
 	char const* aNames[] = {
@@ -81,6 +97,7 @@ void* tryLoadLibnotify()
 
 	void *pLibHandle(0);
 
+#ifdef LL_GLIB
 	for( int i = 0; !pLibHandle && aNames[i]; ++i )
 	{
 		pLibHandle = dlopen( aNames[i], RTLD_NOW  );
@@ -89,7 +106,8 @@ void* tryLoadLibnotify()
 		else
 			LL_INFOS( "DesktopNotifierLinux" ) << "Loaded " << aNames[i] << LL_ENDL;
 	}
-
+#endif
+	
 	return pLibHandle;
 };
 
@@ -298,10 +316,12 @@ void DesktopNotifierLinux::showNotification( const std::string& notification_tit
 	{
 		LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notification type " << notification_type << " sent." << LL_ENDL;
 	}
+#if LL_GLIB
 	else
 	{
 		LL_WARNS( "DesktopNotifierLinux" ) << "Linux desktop notification type " << notification_type << " FAILED to send, error was " << error->message << LL_ENDL;
 	}
+#endif
 }
 
 bool DesktopNotifierLinux::isUsable()

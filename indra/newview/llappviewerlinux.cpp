@@ -2,7 +2,7 @@
  * @file llappviewerlinux.cpp
  * @brief The LLAppViewerLinux class definitions
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+1 * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  * 
