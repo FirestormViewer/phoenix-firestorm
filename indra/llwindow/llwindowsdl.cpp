@@ -1216,125 +1216,49 @@ void LLWindowSDL::flashIcon(F32 seconds)
 }
 
 
-#if LL_GTK
 BOOL LLWindowSDL::isClipboardTextAvailable()
 {
-	if (ll_try_gtk_init())
-	{
-		GtkClipboard * const clipboard =
-			gtk_clipboard_get(GDK_NONE);
-		return gtk_clipboard_wait_is_text_available(clipboard) ?
-			TRUE : FALSE;
-	}
-	return FALSE; // failure
+	return SDL_HasClipboardText()==SDL_TRUE ? TRUE: FALSE;
 }
 
 BOOL LLWindowSDL::pasteTextFromClipboard(LLWString &text)
 {
-	if (ll_try_gtk_init())
-	{
-		GtkClipboard * const clipboard =
-			gtk_clipboard_get(GDK_NONE);
-		gchar * const data = gtk_clipboard_wait_for_text(clipboard);
-		if (data)
-		{
-			text = LLWString(utf8str_to_wstring(data));
-			g_free(data);
-			return TRUE;
-		}
-	}
-	return FALSE; // failure
+	char *pText = SDL_GetClipboardText();
+	if( !pText )
+		return FALSE;
+			
+	text = LLWString(utf8str_to_wstring(pText));
+	SDL_free( pText );
+	return TRUE;
 }
 
 BOOL LLWindowSDL::copyTextToClipboard(const LLWString &text)
 {
-	if (ll_try_gtk_init())
-	{
-		const std::string utf8 = wstring_to_utf8str(text);
-		GtkClipboard * const clipboard =
-			gtk_clipboard_get(GDK_NONE);
-		gtk_clipboard_set_text(clipboard, utf8.c_str(), utf8.length());
-		return TRUE;
-	}
-	return FALSE; // failure
-}
+	std::string utf8 = wstring_to_utf8str(text);
+	int res = SDL_SetClipboardText( utf8.c_str() );
 
+	if( res != 0 )
+	{
+		LL_WARNS() << "SDL_SetClipboardText failed: " << SDL_GetError() << LL_ENDL;
+	}
+	
+	return res == 0 ? TRUE : FALSE;
+}
 
 BOOL LLWindowSDL::isPrimaryTextAvailable()
 {
-	if (ll_try_gtk_init())
-	{
-		GtkClipboard * const clipboard =
-			gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-		return gtk_clipboard_wait_is_text_available(clipboard) ?
-			TRUE : FALSE;
-	}
-	return FALSE; // failure
+	return FALSE; // unsupported
 }
 
 BOOL LLWindowSDL::pasteTextFromPrimary(LLWString &text)
 {
-	if (ll_try_gtk_init())
-	{
-		GtkClipboard * const clipboard =
-			gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-		gchar * const data = gtk_clipboard_wait_for_text(clipboard);
-		if (data)
-		{
-			text = LLWString(utf8str_to_wstring(data));
-			g_free(data);
-			return TRUE;
-		}
-	}
-	return FALSE; // failure
+	return FALSE; // unsupported
 }
 
 BOOL LLWindowSDL::copyTextToPrimary(const LLWString &text)
 {
-	if (ll_try_gtk_init())
-	{
-		const std::string utf8 = wstring_to_utf8str(text);
-		GtkClipboard * const clipboard =
-			gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-		gtk_clipboard_set_text(clipboard, utf8.c_str(), utf8.length());
-		return TRUE;
-	}
-	return FALSE; // failure
-}
-
-#else
-
-BOOL LLWindowSDL::isClipboardTextAvailable()
-{
 	return FALSE; // unsupported
 }
-
-BOOL LLWindowSDL::pasteTextFromClipboard(LLWString &dst)
-{
-	return FALSE; // unsupported
-}
-
-BOOL LLWindowSDL::copyTextToClipboard(const LLWString &s)
-{
-	return FALSE;  // unsupported
-}
-
-BOOL LLWindowSDL::isPrimaryTextAvailable()
-{
-	return FALSE; // unsupported
-}
-
-BOOL LLWindowSDL::pasteTextFromPrimary(LLWString &dst)
-{
-	return FALSE; // unsupported
-}
-
-BOOL LLWindowSDL::copyTextToPrimary(const LLWString &s)
-{
-	return FALSE;  // unsupported
-}
-
-#endif // LL_GTK
 
 LLWindow::LLWindowResolution* LLWindowSDL::getSupportedResolutions(S32 &num_resolutions)
 {
@@ -2325,8 +2249,35 @@ BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
 
 S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 type)
 {
-	LL_INFOS() << "MSGBOX: " << caption << ": " << text << LL_ENDL;
-	return 0;
+	SDL_MessageBoxData oData = { SDL_MESSAGEBOX_INFORMATION, nullptr, caption.c_str(), text.c_str(), 0, nullptr, nullptr };
+	SDL_MessageBoxButtonData btnOk[] = {{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, OSBTN_OK, "OK" }};
+	SDL_MessageBoxButtonData btnOkCancel [] =  {{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, OSBTN_OK, "OK" }, {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, OSBTN_CANCEL, "Cancel"} };
+	SDL_MessageBoxButtonData btnYesNo[] = { {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, OSBTN_YES, "Yes" }, {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, OSBTN_NO, "No"} };
+	
+	switch (type)
+	{
+		default:
+		case OSMB_OK:
+			oData.flags = SDL_MESSAGEBOX_WARNING;
+			oData.buttons = btnOk;
+			oData.numbuttons = 1;
+			break;
+		case OSMB_OKCANCEL:
+			oData.flags = SDL_MESSAGEBOX_INFORMATION;
+			oData.buttons = btnOkCancel;
+			oData.numbuttons = 2;
+			break;
+		case OSMB_YESNO:
+			oData.flags = SDL_MESSAGEBOX_INFORMATION;
+			oData.buttons = btnYesNo;
+			oData.numbuttons = 2;
+			break;
+	}
+
+	int btn{0};
+	if( 0 == SDL_ShowMessageBox( &oData, &btn ) )
+		return btn;
+	return OSBTN_CANCEL;
 }
 
 BOOL LLWindowSDL::dialogColorPicker( F32 *r, F32 *g, F32 *b)
