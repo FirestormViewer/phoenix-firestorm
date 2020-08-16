@@ -348,6 +348,7 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 {
 	// skip all checks if we're we've been administratively turned off
 	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+	static LLCachedControl<bool> useAntiSpamMine(gSavedSettings, "FSUseAntiSpamMine");
 	if (!useAntiSpam)
 	{
 		return false;
@@ -359,7 +360,7 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 	}
 
 	LLViewerObject* obj = gObjectList.findObject(source);
-	if (obj && obj->permYouOwner())
+	if (obj && obj->permYouOwner() && !useAntiSpamMine)
 	{
 		return false;
 	}
