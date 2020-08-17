@@ -270,17 +270,6 @@ if (USESYSTEMLIBS)
   if (LINUX AND ADDRESS_SIZE EQUAL 32)
     add_definitions(-march=pentiumpro)
   endif (LINUX AND ADDRESS_SIZE EQUAL 32)
-
-else (USESYSTEMLIBS)
-  set(${ARCH}_linux_INCLUDES
-      atk-1.0
-      cairo
-      freetype
-      glib-2.0
-      gstreamer-0.10
-      gtk-2.0
-      pango-1.0
-      )
 endif (USESYSTEMLIBS)
 
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_INCLUDED)

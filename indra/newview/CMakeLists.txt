@@ -2438,7 +2438,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${BOOST_WAVE_LIBRARY} #FS specific
     ${BOOST_THREAD_LIBRARY} #FS specific
     ${BOOST_CONTEXT_LIBRARY}
-    ${DBUSGLIB_LIBRARIES}
+    ${GLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
     ${OPENAL_LIBRARIES}

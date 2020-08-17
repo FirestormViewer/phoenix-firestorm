@@ -13,6 +13,7 @@ include(Linking)
 include(PluginAPI)
 include(MediaPluginBase)
 include(OpenGL)
+include(GLIB)
 
 include(GStreamer10Plugin)
 

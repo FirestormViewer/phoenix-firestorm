@@ -3,6 +3,34 @@
 <map>
     <key>installables</key>
     <map>
+      <key>glib</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) glib project</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/glib.txt</string>
+        <key>name</key>
+        <string>glib</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>9c93ba8b8af97fc8379f77de77e1540a</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/glib-2.48.0.202301938-linux64-202301938.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.48.0</string>
+      </map>
       <key>fltk</key>
       <map>
 		<key>copyright</key>

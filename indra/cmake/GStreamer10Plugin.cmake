@@ -1,5 +1,6 @@
 # -*- cmake -*-
 include(Prebuilt)
+include(GLIB)
 
 if (USESYSTEMLIBS)
   include(FindPkgConfig)
@@ -12,10 +13,10 @@ elseif (LINUX OR WINDOWS)
   set(GSTREAMER10_FOUND ON FORCE BOOL)
   set(GSTREAMER10_PLUGINS_BASE_FOUND ON FORCE BOOL)
   set(GSTREAMER10_INCLUDE_DIRS
-      ${LIBS_PREBUILT_DIR}/include/gstreamer-1.0
-      ${LIBS_PREBUILT_DIR}/include/glib-2.0
-      ${LIBS_PREBUILT_DIR}/include/libxml2
-      )
+	${GLIB_INCLUDE_DIRS}
+    ${LIBS_PREBUILT_DIR}/include/gstreamer-1.0
+    ${LIBS_PREBUILT_DIR}/include/libxml2
+    )
   # We don't need to explicitly link against gstreamer itself, because
   # LLMediaImplGStreamer probes for the system's copy at runtime.
   set(GSTREAMER10_LIBRARIES)
