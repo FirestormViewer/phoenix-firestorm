@@ -145,6 +145,7 @@
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
+#include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
 #include "llscrolllistctrl.h"
@@ -392,6 +393,11 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		// search_ctrl->clearHistory();
 		LLNavigationBar::instance().clearHistory();
 		// </FS:Zi>
+
+		// <FS:Ansariel> FIRE-29761: Clear Location History does not clear Typed Locations history
+		LLLocationHistory::getInstance()->removeItems();
+		LLLocationHistory::getInstance()->save();
+		// </FS:Ansariel>
 
 		LLTeleportHistoryStorage::getInstance()->purgeItems();
 		LLTeleportHistoryStorage::getInstance()->save();
