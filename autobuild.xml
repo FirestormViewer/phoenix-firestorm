@@ -1909,26 +1909,14 @@
         <string>kdu</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f697ff80c30d3f387b2f5b42e53e574e</string>
+              <string>c1be3db6fda7054f615621e9a8139c51</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.5-darwin-202202246.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.6-darwin-202302239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1938,9 +1926,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2d2790facd7c568e4f7c08c030987df2</string>
+              <string>eba43dcfeb1c14aab25f588d9f625839</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.5-linux64-202021615.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.0.6-linux64-202302217.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1950,9 +1938,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>995f807a91bd251408ad0f18c13bbcf4</string>
+              <string>f5c682b490672aadf97ec9b938b351a9</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.5-windows-202060400.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/kdu-8.0.6-windows-202302209.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1962,9 +1950,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>995f807a91bd251408ad0f18c13bbcf4</string>
+              <string>f5c682b490672aadf97ec9b938b351a9</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.5-windows-202060400.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.6-windows-202302209.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
