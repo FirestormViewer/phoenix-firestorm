@@ -6,7 +6,7 @@
 	<tab_container label="Confidentialité" name="tabs">
 		<panel label="Général" name="tab-general">
 			<panel.string name="log_in_to_change">Se connecter pour modifier</panel.string>
-			<button label="Effacer l'historique" tool_tip="Efface l'image de connexion, la dernière position, l'historique de téléportations, le cache du navigateur et des textures" name="clear_cache"/>
+			<button label="Effacer l'historique" tool_tip="Efface l'image de connexion, la dernière position, l'historique de téléportations, le cache du navigateur et des textures" name="clear_webcache"/>
 			<text name="cache_size_label">(Emplacements, images, internet, recherches)</text>
 			<check_box label="Afficher mes informations de profil dans les résultats de recherche" name="online_searchresults"/>
 			<check_box label="Seuls mes amis et groupes savent que je suis connecté" name="online_visibility"/>

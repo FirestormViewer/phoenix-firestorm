@@ -3115,6 +3115,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> FIRE-22564: Route llOwnerSay to scipt debug window
 	getChildView("FSllOwnerSayToScriptDebugWindow_checkbox")->setEnabled(TRUE);
+
+	// <FS:Ansariel> Clear Cache button actually clears per-account cache items
+	getChildView("clear_webcache")->setEnabled(TRUE);
 }
 
 
