@@ -671,6 +671,7 @@ void LLSnapshotLivePreview::generateThumbnailImage(BOOL force_update)
                                          width, height,
                                          // </FS:Ansariel>
                                          mAllowRenderUI && gSavedSettings.getBOOL("RenderUIInSnapshot"),
+                                         gSavedSettings.getBOOL("RenderHUDInSnapshot"),
                                          FALSE,
                                          mSnapshotBufferType) )
         {
@@ -829,6 +830,7 @@ BOOL LLSnapshotLivePreview::onIdle( void* snapshot_preview )
                 previewp->mKeepAspectRatio,//gSavedSettings.getBOOL("KeepAspectForSnapshot"),
                 previewp->getSnapshotType() == LLSnapshotModel::SNAPSHOT_TEXTURE,
                 previewp->mAllowRenderUI && gSavedSettings.getBOOL("RenderUIInSnapshot"),
+                gSavedSettings.getBOOL("RenderHUDInSnapshot"),
                 FALSE,
                 previewp->mSnapshotBufferType,
                 previewp->getMaxImageSize()))

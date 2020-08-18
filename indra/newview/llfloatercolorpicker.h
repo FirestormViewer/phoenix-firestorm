@@ -202,7 +202,6 @@ class LLFloaterColorPicker
         F32       mContextConeOutAlpha;
         F32       mContextConeFadeTime;
 
-
 	// <FS:Zi> Add float LSL color entry widgets
 	protected:
 		static void onClickCopyLSL ( void* data );

@@ -46,7 +46,7 @@
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
-	 label="Info"
+	 label="Profile"
 	 name="info_btn"
 	 width="80" />
 	<button

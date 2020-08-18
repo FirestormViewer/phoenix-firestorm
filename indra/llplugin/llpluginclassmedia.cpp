@@ -371,6 +371,9 @@ void LLPluginClassMedia::setSizeInternal(void)
 #if LL_DARWIN
     if (!gHiDPISupport)
 #endif
+//<FS:TS> FIRE-30019: This clamp doesn't make sense on Linux, which can have
+//        huge windows without needing to turn on HiDPI support
+#if !LL_LINUX
     {
         if (mRequestedMediaWidth > 2048)
             mRequestedMediaWidth = 2048;
@@ -378,6 +381,7 @@ void LLPluginClassMedia::setSizeInternal(void)
         if (mRequestedMediaHeight > 2048)
             mRequestedMediaHeight = 2048;
     }
+#endif
 }
 
 void LLPluginClassMedia::setAutoScale(bool auto_scale)

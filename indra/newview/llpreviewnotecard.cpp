@@ -63,6 +63,7 @@
 #include "llfloatersearchreplace.h"
 // [/SL:KB]
 #include "llautoreplace.h"
+#include "llscrollcontainer.h"
 
 ///----------------------------------------------------------------------------
 /// Class LLPreviewNotecard
@@ -72,6 +73,9 @@
 LLPreviewNotecard::LLPreviewNotecard(const LLSD& key) //const LLUUID& item_id, 
 	: LLPreview( key ),
 	mLiveFile(NULL)
+	// <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
+	,mCursorPos(0)
+	,mScrollPos(0)
 {
 	const LLInventoryItem *item = getItem();
 	if (item)
@@ -407,6 +411,10 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 			preview->setEnabled(modifiable);
 			preview->syncExternal();
 			preview->mAssetStatus = PREVIEW_ASSET_LOADED;
+
+			// <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
+			preview->mEditor->setCursorPos(preview->mCursorPos);
+			preview->mEditor->getScrollContainer()->getScrollbar(LLScrollContainer::VERTICAL)->setDocPos(preview->mScrollPos);
 		}
 		else
 		{
@@ -544,6 +552,10 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem, bool sync)
 		{
 			return false;
 		}
+
+		// <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
+		mCursorPos = editor->getCursorPos();
+		mScrollPos = editor->getScrollContainer()->getScrollbar(LLScrollContainer::VERTICAL)->getDocPos();
 
 		editor->makePristine();
 		const LLInventoryItem* item = getItem();

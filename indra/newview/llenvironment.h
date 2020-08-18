@@ -145,6 +145,10 @@ public:
     void                        setEnvironment(EnvSelection_t env, const LLSettingsWater::ptr_t & fixed, S32 env_version = NO_VERSION) { setEnvironment(env, fixedEnvironment_t(LLSettingsSky::ptr_t(), fixed), env_version); }
     void                        setEnvironment(EnvSelection_t env, const LLSettingsSky::ptr_t & fixeds, const LLSettingsWater::ptr_t & fixedw, S32 env_version = NO_VERSION) { setEnvironment(env, fixedEnvironment_t(fixeds, fixedw), env_version); }
     void                        setEnvironment(EnvSelection_t env, const LLUUID &assetId, LLSettingsDay::Seconds daylength, LLSettingsDay::Seconds dayoffset, S32 env_version = NO_VERSION);
+    // <FS:Beq> FIRE-29926 - Allow configurable transition times
+    void                        setEnvironmentWithTransition(EnvSelection_t env, const LLUUID &assetId, LLSettingsDay::Seconds daylength, LLSettingsDay::Seconds dayoffset, LLSettingsBase::Seconds transition, S32 env_version = NO_VERSION);
+    void                        setManualEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version = NO_VERSION);
+    // </FS:Beq>
     void                        setEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version = NO_VERSION);
 
     void                        setSharedEnvironment();

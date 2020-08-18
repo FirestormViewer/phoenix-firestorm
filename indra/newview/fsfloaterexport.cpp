@@ -839,7 +839,7 @@ void FSFloaterObjectExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid,
 	
 	if (status != 0)
 	{
-		LL_WARNS("export") << "Problem fetching asset: " << asset_uuid << " " << status << " " << ext_status << LL_ENDL;
+		LL_WARNS("export") << "Problem fetching asset: " << asset_uuid << " " << status << " " << (U32)ext_status << LL_ENDL;
 		delete data;
 		return;
 	}

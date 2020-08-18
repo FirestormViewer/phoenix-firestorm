@@ -5443,7 +5443,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Esc
 	</string>
 	<string name="Space">
-		Space
+		Leertaste
 	</string>
 	<string name="Enter">
 		Enter
@@ -5452,25 +5452,37 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Tab
 	</string>
 	<string name="Ins">
-		Ins
+		Einfg
 	</string>
 	<string name="Del">
-		Del
+		Entf
 	</string>
 	<string name="Backsp">
 		Backsp
 	</string>
 	<string name="Shift">
-		Shift
+		Umschalt
 	</string>
 	<string name="Ctrl">
-		Ctrl
+		Strg
 	</string>
 	<string name="Alt">
 		Alt
 	</string>
 	<string name="CapsLock">
 		CapsLock
+	</string>
+	<string name="Left">
+		Links
+	</string>
+	<string name="Right">
+		Rechts
+	</string>
+	<string name="Up">
+		Auf
+	</string>
+	<string name="Down">
+		Ab
 	</string>
 	<string name="Home">
 		Pos1
@@ -5479,10 +5491,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Ende
 	</string>
 	<string name="PgUp">
-		PgUp
+		Bild auf
 	</string>
 	<string name="PgDn">
-		PgDn
+		Bild ab
 	</string>
 	<string name="F1">
 		F1
@@ -5533,91 +5545,91 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Dividieren
 	</string>
 	<string name="PAD_DIVIDE">
-		PAD_DIVIDE
+		PAD_Dividieren
 	</string>
 	<string name="PAD_LEFT">
-		PAD_LEFT
+		PAD_Links
 	</string>
 	<string name="PAD_RIGHT">
-		PAD_RIGHT
+		PAD_Rechts
 	</string>
 	<string name="PAD_DOWN">
-		PAD_DOWN
+		PAD_Ab
 	</string>
 	<string name="PAD_UP">
-		PAD_UP
+		PAD_Auf
 	</string>
 	<string name="PAD_HOME">
-		PAD_HOME
+		PAD_Pos1
 	</string>
 	<string name="PAD_END">
-		PAD_END
+		PAD_Ende
 	</string>
 	<string name="PAD_PGUP">
-		PAD_PGUP
+		PAD_Bild auf
 	</string>
 	<string name="PAD_PGDN">
-		PAD_PGDN
+		PAD_bild ab
 	</string>
 	<string name="PAD_CENTER">
-		PAD_CENTER
+		PAD_Mitte
 	</string>
 	<string name="PAD_INS">
-		PAD_INS
+		PAD_Einfg
 	</string>
 	<string name="PAD_DEL">
-		PAD_DEL
+		PAD_Entf
 	</string>
 	<string name="PAD_Enter">
 		PAD_Enter
 	</string>
 	<string name="PAD_BUTTON0">
-		PAD_BUTTON0
+		PAD_Taste 0
 	</string>
 	<string name="PAD_BUTTON1">
-		PAD_BUTTON1
+		PAD_Taste 1
 	</string>
 	<string name="PAD_BUTTON2">
-		PAD_BUTTON2
+		PAD_Taste 2
 	</string>
 	<string name="PAD_BUTTON3">
-		PAD_BUTTON3
+		PAD_Taste 3
 	</string>
 	<string name="PAD_BUTTON4">
-		PAD_BUTTON4
+		PAD_Taste 4
 	</string>
 	<string name="PAD_BUTTON5">
-		PAD_BUTTON5
+		PAD_Taste 5
 	</string>
 	<string name="PAD_BUTTON6">
-		PAD_BUTTON6
+		PAD_Taste 6
 	</string>
 	<string name="PAD_BUTTON7">
-		PAD_BUTTON7
+		PAD_Taste 7
 	</string>
 	<string name="PAD_BUTTON8">
-		PAD_BUTTON8
+		PAD_Taste 8
 	</string>
 	<string name="PAD_BUTTON9">
-		PAD_BUTTON9
+		PAD_Taste 9
 	</string>
 	<string name="PAD_BUTTON10">
-		PAD_BUTTON10
+		PAD_Taste 10
 	</string>
 	<string name="PAD_BUTTON11">
-		PAD_BUTTON11
+		PAD_Taste 11
 	</string>
 	<string name="PAD_BUTTON12">
-		PAD_BUTTON12
+		PAD_Taste 12
 	</string>
 	<string name="PAD_BUTTON13">
-		PAD_BUTTON13
+		PAD_Taste 13
 	</string>
 	<string name="PAD_BUTTON14">
-		PAD_BUTTON14
+		PAD_Taste 14
 	</string>
 	<string name="PAD_BUTTON15">
-		PAD_BUTTON15
+		PAD_Taste 15
 	</string>
 	<string name="-">
 		-
@@ -5747,6 +5759,24 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Z">
 		Z
+	</string>
+	<string name="LMB">
+		LMT
+	</string>
+	<string name="MMB">
+		MMT
+	</string>
+	<string name="RMB">
+		RMT
+	</string>
+	<string name="MB4">
+		MT4
+	</string>
+	<string name="MB5">
+		MT5
+	</string>
+	<string name="Double LMB">
+		Doppel-LMT
 	</string>
 	<string name="BeaconParticle">
 		Partikel-Beacons werden angezeigt (blau)

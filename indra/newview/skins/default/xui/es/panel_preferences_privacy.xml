@@ -6,7 +6,7 @@
 				conéctate para que cambie
 			</panel.string>
 			<button label="Limpiar historial"
-	     tool_tip="Borra la imagen de fondo de la conexión, la última posición, el historial de teleportes y la caché web y de texturas" name="clear_cache"/>
+	     tool_tip="Borra la imagen de fondo de la conexión, la última posición, el historial de teleportes y la caché web y de texturas" name="clear_webcache"/>
 			<text name="cache_size_label">
 				(Localizaciones, imágenes, web, historial de búsqueda)
 			</text>

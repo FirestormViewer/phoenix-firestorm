@@ -827,6 +827,8 @@ void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 			// Need to preserve current sky manually in this case in contrast to asset-based settings
 			LLSettingsWater::ptr_t current_water = LLEnvironment::instance().getCurrentWater();
 			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacy_sky, current_water);
+			LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+			LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
 		}		
 		else
 		{
@@ -837,10 +839,10 @@ void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 	else // note the else here bridges the endif
 #endif
 	{
-		LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+		LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
 	}
-	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
+	// LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST);
 }
 
 void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
@@ -856,6 +858,8 @@ void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
 			// Need to preserve current sky manually in this case in contrast to asset-based settings
 			LLSettingsSky::ptr_t current_sky = LLEnvironment::instance().getCurrentSky();
 			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, current_sky, legacy_water);
+			LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+			LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
 		}		
 		else
 		{
@@ -866,10 +870,9 @@ void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
 	else // beware the trailing else here.
 #endif
 	{
-		LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+		LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
 	}
-	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
 void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
@@ -883,6 +886,8 @@ void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 		if (legacyday)
 		{
 			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacyday);
+			LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+			LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
 		}		
 		else
 		{
@@ -893,10 +898,9 @@ void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 	else // beware trailing else that bridges the endif
 #endif
 	{
-		LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
+		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
+		LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
 	}
-	LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
-	LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST, true);
 }
 
 void FloaterQuickPrefs::onChangeWaterPreset()

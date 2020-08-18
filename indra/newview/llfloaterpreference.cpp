@@ -145,6 +145,7 @@
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
+#include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
 #include "llscrolllistctrl.h"
@@ -393,6 +394,11 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		LLNavigationBar::instance().clearHistory();
 		// </FS:Zi>
 
+		// <FS:Ansariel> FIRE-29761: Clear Location History does not clear Typed Locations history
+		LLLocationHistory::getInstance()->removeItems();
+		LLLocationHistory::getInstance()->save();
+		// </FS:Ansariel>
+
 		LLTeleportHistoryStorage::getInstance()->purgeItems();
 		LLTeleportHistoryStorage::getInstance()->save();
 	}
@@ -589,8 +595,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	mCommitCallbackRegistrar.add("Pref.ClickActionChange",		boost::bind(&LLFloaterPreference::onClickActionChange, this));
 
-	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
-	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
+	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
+	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&handleAppearanceCameraMovementChanged,  _2));
@@ -2084,12 +2090,12 @@ void LLFloaterPreference::buildPopupLists()
 						if (it->second.asBoolean())
 						{
 							row["columns"][1]["value"] = formp->getElement(it->first)["ignore"].asString();
+							row["columns"][1]["font"] = "SANSSERIF_SMALL";
+							row["columns"][1]["width"] = 360;
 							break;
 						}
 					}
 				}
-				row["columns"][1]["font"] = "SANSSERIF_SMALL";
-				row["columns"][1]["width"] = 360;
 			}
 #endif
 			item = disabled_popups.addElement(row);
@@ -3119,6 +3125,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> FIRE-22564: Route llOwnerSay to scipt debug window
 	getChildView("FSllOwnerSayToScriptDebugWindow_checkbox")->setEnabled(TRUE);
+
+	// <FS:Ansariel> Clear Cache button actually clears per-account cache items
+	getChildView("clear_webcache")->setEnabled(TRUE);
 }
 
 
@@ -4369,7 +4378,7 @@ void LLPanelPreferenceGraphics::setPresetText()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
-	//if (hasDirtyChilds() && !preset_graphic_active.empty())
+    //if (hasDirtyChilds() && !preset_graphic_active.empty())
 	//{
 	//	gSavedSettings.setString("PresetGraphicActive", "");
 	//	preset_graphic_active.clear();

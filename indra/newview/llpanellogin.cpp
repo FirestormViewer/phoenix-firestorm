@@ -43,7 +43,6 @@
 #include "llcommandhandler.h"		// for secondlife:///app/login/
 #include "llcombobox.h"
 #include "llviewercontrol.h"
-#include "llfloaterpreference.h"
 #include "llfocusmgr.h"
 #include "lllineeditor.h"
 #include "llnotificationsutil.h"
@@ -457,6 +456,10 @@ void LLPanelLogin::addFavoritesToStartLocation()
 			}
 		}
 		break;
+	}
+	if (combo->getValue().asString().empty())
+	{
+		combo->selectFirstItem();
 	}
 }
 
@@ -1344,13 +1347,13 @@ void LLPanelLogin::onSelectServer()
 		{
 			std::string location = location_combo->getValue().asString();
 			LLSLURL slurl(location); // generata a slurl from the location combo contents
-			if (   slurl.getType() == LLSLURL::LOCATION
-				&& slurl.getGrid() != LLGridManager::getInstance()->getGrid()
-				)
+			if (location.empty()
+				|| (slurl.getType() == LLSLURL::LOCATION
+				    && slurl.getGrid() != LLGridManager::getInstance()->getGrid())
+				   )
 			{
 				// the grid specified by the location is not this one, so clear the combo
 				location_combo->setCurrentByIndex(0); // last location on the new grid
-				location_combo->setTextEntry(LLStringUtil::null);
 			}
 		}			
 		break;
