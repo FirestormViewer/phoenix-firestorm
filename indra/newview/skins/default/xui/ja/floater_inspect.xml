@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater min_width="450" name="inspect" title="オブジェクトのチェック">
 	<floater.string name="timeStamp">
-		[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+		[year,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [wkday,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</floater.string>
 	<floater.string name="stats_list">
         全体の東経:

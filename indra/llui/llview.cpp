@@ -86,6 +86,11 @@ template class LLView* LLView::getChild<class LLView>(
 
 static LLDefaultChildRegistry::Register<LLView> r("view");
 
+void deleteView(LLView *aView)
+{
+	delete aView;
+}
+
 namespace LLInitParam
 {
 	void TypeValues<LLView::EOrientation>::declareValues()
@@ -683,6 +688,16 @@ void LLView::onVisibilityChange ( BOOL new_visibility )
 		
 		}
 	}
+}
+
+// virtual
+void LLView::onChildGotFocus(const LLUICtrl * cntrl)
+{
+    LLView* parent_view = getParent();
+    if (parent_view)
+    {
+        parent_view->onChildGotFocus(cntrl);
+    }
 }
 
 // virtual

@@ -15,7 +15,8 @@
 		<radio_item label="Kurut" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
-		Büyüklük: [DIMENSIONS]
+		Büyüklük:
+[DIMENSIONS]
 	</text>
 	<button label="Varsayılan" label_selected="Varsayılan" name="Default"/>
 	<button label="Boş" label_selected="Boş" name="Blank"/>
