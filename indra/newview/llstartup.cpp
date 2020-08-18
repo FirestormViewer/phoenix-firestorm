@@ -3856,6 +3856,9 @@ void LLStartUp::setStartSLURL(const LLSLURL& slurl)
 			LLGridManager::getInstance()->setGridChoice(slurl.getGrid());
 			break;
     }
+
+  // <FS:Ansariel> FIRE-29994: Start location doesn't get updated when selection a destination from the login splash screen
+  FSPanelLogin::onUpdateStartSLURL(sStartSLURL);
 }
 
 // static
