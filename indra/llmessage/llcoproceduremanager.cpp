@@ -272,17 +272,6 @@ void LLCoprocedureManager::close(const std::string &pool)
     }
 }
 
-// <FS:Ansariel> Explicitly create the VAAssetStorage pool
-void LLCoprocedureManager::createPool(const std::string& poolName)
-{
-    poolMap_t::iterator it = mPoolMap.find(poolName);
-    if (it == mPoolMap.end())
-    {
-        initializePool(poolName);
-    }
-}
-// </FS:Ansariel> Explicitly create the VAAssetStorage pool
-
 //=========================================================================
 LLCoprocedurePool::LLCoprocedurePool(const std::string &poolName, size_t size):
     mPoolName(poolName),
