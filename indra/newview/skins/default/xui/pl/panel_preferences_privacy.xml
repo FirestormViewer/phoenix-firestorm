@@ -14,7 +14,7 @@
 			<panel.string name="log_in_to_change">
 				Zaloguj się, by zmienić
 			</panel.string>
-			<button label="Wyczyść historię" tool_tip="Wyczyść zapisane obrazy, ostatnią lokalizację, historię teleportów, bufor stron internetowych i bufor danych tekstur" name="clear_cache"/>
+			<button label="Wyczyść historię" tool_tip="Wyczyść zapisane obrazy, ostatnią lokalizację, historię teleportów, bufor stron internetowych i bufor danych tekstur" name="clear_webcache"/>
 			<text name="cache_size_label">
 				(miejsca, obrazy, strony web, historia wyszukiwarki)
 			</text>

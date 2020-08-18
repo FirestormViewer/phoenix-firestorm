@@ -2859,10 +2859,29 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	chat.mChatType = (EChatType)type_temp;
 
 	// NaCL - Antispam Registry
-	if (chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
+	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+	static LLCachedControl<bool> useAntiSpamMine(gSavedSettings, "FSUseAntiSpamMine");
+	bool deferred_spam_check = false;
+	if (useAntiSpam && chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
 	{
+		if (chat.mSourceType == CHAT_SOURCE_OBJECT)
+		{
+			LLViewerObject* source = gObjectList.findObject(from_id);
+			if (source)
+			{
+				if (source->permYouOwner() && useAntiSpamMine)
+				{
+					// Only check if not a debug message
+					deferred_spam_check = chat.mChatType != CHAT_TYPE_DEBUG_MSG;
+				}
+				else if (!source->permYouOwner() && chat.mChatType != CHAT_TYPE_DEBUG_MSG && NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id, ANTISPAM_SOURCE_OBJECT))
+				{
+					return;
+				}
+			}
+		}
 		// owner_id = from_id for agents
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id, ANTISPAM_SOURCE_AGENT))
+		else if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id, ANTISPAM_SOURCE_AGENT))
 		{
 			return;
 		}
@@ -2990,8 +3009,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		// NaCl - Newline flood protection
 		static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
 		// <FS:TS> FIRE-23138: Add option to antispam user's own objects
-		bool deferred_spam_check = false;
-		static LLCachedControl<bool> useAntiSpamMine(gSavedSettings, "FSUseAntiSpamMine");
+		bool deferred_newline_spam_check = false;
 		if (useAntiSpam)
 		{
 			bool doCheck = true;
@@ -3017,7 +3035,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			if (doCheck && useAntiSpamMine)
 			{
 				// If it's the user's object, defer the check so RLV commands still work
-				deferred_spam_check = true;
+				deferred_newline_spam_check = true;
 			}
 			// </FS:TS> FIRE-23138
 		}
@@ -3288,7 +3306,11 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				break;
 			}
 			// <FS:TS> FIRE-23138: Enable spam checking for user's own objects
-			if (deferred_spam_check && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, from_id, mesg))
+			if (deferred_spam_check && NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id, ANTISPAM_SOURCE_OBJECT))
+			{
+				return;
+			}
+			if (deferred_newline_spam_check && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, from_id, mesg))
 			{
 				return;
 			}

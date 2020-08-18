@@ -6408,4 +6408,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="unknown_script">
 		(Nieznany skrypt)
 	</string>
+	<string name="FSAreaSearch_Cost_Label">
+		[COST]L$
+	</string>
 </strings>
