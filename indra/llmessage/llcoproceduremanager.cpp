@@ -191,8 +191,13 @@ LLUUID LLCoprocedureManager::enqueueCoprocedure(const std::string &pool, const s
 
 void LLCoprocedureManager::setPropertyMethods(SettingQuery_t queryfn, SettingUpdate_t updatefn)
 {
+    // functions to discover and store the pool sizes
     mPropertyQueryFn = queryfn;
     mPropertyDefineFn = updatefn;
+
+    // workaround until we get mutex into initializePool
+    initializePool("VAssetStorage");
+    initializePool("Upload");
 }
 
 //-------------------------------------------------------------------------
