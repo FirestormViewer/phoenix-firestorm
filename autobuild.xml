@@ -1017,7 +1017,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.01.02</string>
+        <string>2.01.03</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1947,7 +1947,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>7.A.6</string>
+        <string>8.0.6</string>
       </map>
       <key>libhunspell</key>
       <map>
