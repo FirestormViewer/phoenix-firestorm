@@ -14,7 +14,7 @@
 	 left_delta="262"
 	 width="85" />
 	<button
-	 label="Info"
+	 label="Profil"
 	 name="info_btn"
 	 width="85" />
 	<button

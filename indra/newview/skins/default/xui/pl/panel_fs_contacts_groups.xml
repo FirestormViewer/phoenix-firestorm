@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="groups">
 	<button label="IM/Dzwoń" name="chat_btn" tool_tip="Otwórz sesję IM"/>
-	<button label="Informacje" name="info_btn"/>
+	<button label="Profil" name="info_btn"/>
 	<button label="Tytuły grup" name="titles_btn"/>
 	<button label="Aktywuj" name="activate_btn"/>
 	<button label="Opuść" name="leave_btn"/>

@@ -7,7 +7,8 @@
 		Flere teksturer
 	</text>
 	<text name="unknown">
-		Størrelse: [DIMENSIONS]
+		Størrelse:
+[DIMENSIONS]
 	</text>
 	<button label="Standard" label_selected="Standard" name="Default"/>
 	<button label="Ingen" label_selected="Ingen" name="None"/>

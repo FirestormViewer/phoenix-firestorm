@@ -33,6 +33,7 @@
             <combo_box.item label="Pomocnik lotu: Silne przyspieszanie" name="flight_strong" />
             <combo_box.item label="Pomocnik lotu: Ekstremalne przyspieszanie" name="flight_extreme" />
         </combo_box>
+        <slider name="manual_environment_change_transition_period" label="Czas przejścia otoczenia:" tool_tip="Interwał w sekundach, w czasie którego ręczne zmiany środowiska będą zachodzić. Zero oznacza natychmiast." />
     </panel>
     <panel label="Ochrona" name="ProtectionTab">
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
