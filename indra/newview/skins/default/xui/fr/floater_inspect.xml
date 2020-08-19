@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inspect" title="Inspecter les objets">
-	<floater.string name="timeStamp">[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local], </floater.string>
+	<floater.string name="timeStamp">[wkday,datetime,slt] [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt], </floater.string>
 	<floater.string name="Group">(Groupe)</floater.string>
 	<scroll_list name="object_list" tool_tip="Sélectionner un objet de la liste pour le mettre en surbrillance dans le monde">
 		<scroll_list.columns label="Nom de l'objet" name="object_name"/>

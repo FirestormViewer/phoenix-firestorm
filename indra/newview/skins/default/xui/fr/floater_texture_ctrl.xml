@@ -15,7 +15,8 @@
 		<radio_item label="Figer" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
-		Taille : [DIMENSIONS]
+		Taille:
+[DIMENSIONS]
 	</text>
 	<button label="Défaut" label_selected="Défaut" name="Default" width="60"/>
 	<button label="Vierge" label_selected="Vierge" name="Blank" width="60"/>

@@ -1580,17 +1580,14 @@ Pobierz ją z https://secondlife.com/support/downloads/
 	</notification>
 	<notification name="PauseForUpdate">
 		Do zalogowania się wymagana jest wersja [VERSION].
-Informacje o wydaniu: [URL]
 Kliknij OK, aby pobrać i zainstalować.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
-Informacje o wydaniu: [URL]
 Kliknij OK, aby zainstalować.
 	</notification>
 	<notification name="PromptOptionalUpdate">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
-Informacje o wydaniu: [URL]
 Kontynuować?
 		<usetemplate canceltext="Nie teraz" name="yesnocancelbuttons" notext="Pomiń" yestext="Instaluj" />
 	</notification>
@@ -4811,7 +4808,9 @@ Poprzedni symulator: [OLDVERSION]
 	</notification>
 	<notification name="SettingsConfirmBackup">
 		Czy na pewno chcesz zapisać kopię zapasową w tym katalogu?
+
 [DIRECTORY]
+
 Wszelkie istniejące kopie zapasowe w tej lokalizacji zostaną nadpisane!
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Zapisz kopię" />
 	</notification>
