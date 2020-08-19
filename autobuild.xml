@@ -60,9 +60,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>99fe10fdec03a22d680de72bc8b5f85a</string>
+              <string>c266a8d6124fc11e41a82c288f2bf8e4</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.181041840-linux64-181041840.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.202321033-linux64-202321033.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
