@@ -2260,15 +2260,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			//link_params.overwriteFrom(match.getStyle());
 			if (input_params.use_default_link_style)
 			{
-				LLUIColor color(link_params.color());
-				LLUIColor readonly_color(link_params.readonly_color());
-				bool is_chat_header = link_params.is_chat_header();
 				link_params.overwriteFrom(match.getStyle());
-				if (is_chat_header)
-				{
-					link_params.color = color;
-					link_params.readonly_color = readonly_color;
-				}
 			}
 			// </FS:Ansariel>
 
@@ -2309,7 +2301,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// <FS:CR> FIRE-11437 - Don't supress font style for chat history name links
 			//appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params,
-									   input_params.use_default_link_style ? match.underlineOnHoverOnly() : false);
+									   input_params.can_underline_on_hover ? match.underlineOnHoverOnly() : false);
 			// </FS:CR>
 			bool tooltip_required =  !match.getTooltip().empty();
 
@@ -2330,7 +2322,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				static LLUIColor query_part_color = LLUIColorTable::getInstance()->getColor("UriQueryPartColor", LLColor4::grey);
 				link_params.color = query_part_color;
 				link_params.readonly_color = query_part_color;
-				appendAndHighlightTextImpl(label, part, link_params, input_params.use_default_link_style ? match.underlineOnHoverOnly() : false);
+				appendAndHighlightTextImpl(label, part, link_params, input_params.can_underline_on_hover ? match.underlineOnHoverOnly() : false);
 				// </FS:Ansariel>
 
 				// set the tooltip for the query part of url
@@ -2506,7 +2498,16 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
 			LLTextSegmentPtr segmentp;
 			if (underline_on_hover_only || mSkipLinkUnderline)
 			{
-				highlight_params.font.style("NORMAL");
+				// <FS:Ansariel> Only reset underline font style
+				//highlight_params.font.style("NORMAL");
+				std::string normal_font_style(highlight_params.font.style());
+				LLStringUtil::replaceString(normal_font_style, "UNDERLINE", "");
+				if (normal_font_style.empty())
+				{
+					normal_font_style = "NORMAL";
+				}
+				highlight_params.font.style(normal_font_style);
+				// </FS:Ansariel>
 				LLStyleConstSP normal_sp(new LLStyle(highlight_params));
 				segmentp = new LLOnHoverChangeableTextSegment(sp, normal_sp, cur_length, cur_length + wide_text.size(), *this);
 			}

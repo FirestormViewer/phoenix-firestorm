@@ -1255,12 +1255,14 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	LLStyle::Params name_params(body_message_params);
 	name_params.color(name_color);
 	name_params.readonly_color(name_color);
-	name_params.is_chat_header(true);
+	std::string name_font_style_postfix = use_plain_text_chat_history ? "UNDERLINE" : "";
+	name_params.font.style = name_font_style_postfix; // This will be used when hovering the name (LLTextBase::appendAndHighlightTextImpl() will filter it out)
+	std::string delimiter_style = "NORMAL";
 
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 	F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
 
-	if(FSIMChatHistoryFade > 1.0f)
+	if (FSIMChatHistoryFade > 1.0f)
 	{
 		FSIMChatHistoryFade = 1.0f;
 		gSavedSettings.setF32("FSIMChatHistoryFade",FSIMChatHistoryFade);
@@ -1291,22 +1293,24 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		delimiter = LLStringUtil::null;
 
 		// italics for emotes -Zi
-		if(gSavedSettings.getBOOL("EmotesUseItalic"))
+		if (gSavedSettings.getBOOL("EmotesUseItalic"))
 		{
 			body_message_params.font.style = "ITALIC";
-			name_params.font.style = "ITALIC";
+			name_params.font.style = "ITALIC" + name_font_style_postfix;
 		}
 	}
 
 	if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 	{
 		body_message_params.font.style = "ITALIC";
-		name_params.font.style = "ITALIC";
+		name_params.font.style = "ITALIC" + name_font_style_postfix;
+		delimiter_style = "ITALIC";
 	}
 	else if(chat.mChatType == CHAT_TYPE_SHOUT && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 	{
 		body_message_params.font.style = "BOLD";
-		name_params.font.style = "BOLD";
+		name_params.font.style = "BOLD" + name_font_style_postfix;
+		delimiter_style = "BOLD";
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
@@ -1326,11 +1330,23 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	U32 moderator_body_style_value = gSavedSettings.getU32("FSModTextStyle");
 	std::string moderator_name_style = applyModeratorStyle(moderator_name_style_value);
 	std::string moderator_body_style = applyModeratorStyle(moderator_body_style_value);
+	std::string moderator_timestamp_style = moderator_name_style;
 
 	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
 	{
 		moderator_style_active = true;
 
+		delimiter_style = moderator_name_style;
+		if (moderator_name_style_value < UNDERLINE)
+		{
+			// Need to add "UNDERLINE" here because we want to underline the name on hover
+			moderator_name_style += name_font_style_postfix;
+		}
+		else
+		{
+			// Always contains underline - don't show it on hover only
+			name_params.can_underline_on_hover = false;
+		}
 		name_params.font.style(moderator_name_style);
 		body_message_params.font.style(moderator_body_style);
 
@@ -1339,6 +1355,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			if ( (ITALIC & moderator_name_style_value) != ITALIC )//HG: if ITALIC isn't one of the styles... add it
 			{
 				moderator_name_style += "ITALIC";
+				moderator_timestamp_style += "ITALIC";
 				name_params.font.style(moderator_name_style);
 			}
 			if ( (ITALIC & moderator_body_style_value) != ITALIC )
@@ -1374,7 +1391,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			//<FS:HG> FS-1734 seperate name and text styles for moderator
 			if ( moderator_style_active )
 			{
-				timestamp_style.font.style(moderator_name_style);
+				timestamp_style.font.style(moderator_timestamp_style);
 			}
 			//</FS:HG> FS-1734 seperate name and text styles for moderator
 			appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
@@ -1447,7 +1464,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					}
 				}
 
-				name_params.use_default_link_style = (!moderator_style_active || moderator_name_style_value == 0);
+				name_params.use_default_link_style = false;
 				name_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
@@ -1465,7 +1482,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				if (delimiter.length() > 0 && delimiter[0] == ':')
 				{
 					LLStyle::Params delimiter_params(body_message_params);
-					delimiter_params.font.style = name_params.font.style;
+					delimiter_params.font.style = delimiter_style;
 
 					appendText(":", prependNewLineState, delimiter_params);
 					prependNewLineState = false;
