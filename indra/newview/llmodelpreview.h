@@ -302,6 +302,7 @@ protected:
     U32			mLegacyRigFlags;
 
     bool		mLastJointUpdate;
+    bool		mFirstSkinUpdate;
 
     JointNameSet		mJointsFromNode;
     JointTransformMap	mJointTransformMap;
