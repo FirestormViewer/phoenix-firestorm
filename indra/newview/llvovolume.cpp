@@ -277,8 +277,10 @@ void LLVOVolume::markDead()
 {
 	if (!mDead)
 	{
-		if( getVolume() ) // <FS:ND/> Check for corrupted volume.
-		LLSculptIDSize::instance().rem(getVolume()->getParams().getSculptID());
+        if (getVolume())
+        {
+            LLSculptIDSize::instance().rem(getVolume()->getParams().getSculptID());
+        }
 
 		if(getMDCImplCount() > 0)
 		{
@@ -4818,8 +4820,9 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 					{
 						U8 mode = mat->getDiffuseAlphaMode();
 
-						if (mode == LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE ||
-							mode == LLMaterial::DIFFUSE_ALPHA_MODE_NONE)
+						if (mode == LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE
+							|| mode == LLMaterial::DIFFUSE_ALPHA_MODE_NONE
+							|| (mode == LLMaterial::DIFFUSE_ALPHA_MODE_MASK && mat->getAlphaMaskCutoff() == 0))
 						{
 							ignore_alpha = true;
 						}

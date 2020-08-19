@@ -3,7 +3,7 @@
 	<panel.string name="log_in_to_change">
 		autentique-se para mudar
 	</panel.string>
-	<button label="Limpar histórico" name="clear_cache" tool_tip="Apagar imagem do login, última localização, histórico de teletransporte, cache de texturas e web"/>
+	<button label="Limpar histórico" name="clear_webcache" tool_tip="Apagar imagem do login, última localização, histórico de teletransporte, cache de texturas e web"/>
 	<text name="cache_size_label_l">
 		(Locações, imagens, web, histórico de busca)
 	</text>

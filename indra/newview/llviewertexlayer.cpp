@@ -592,12 +592,12 @@ public:
 			if (result == "complete"
 				&& mBakdedUploadData != NULL)
 			{// Invoke 
-				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, 0, LL_EXSTAT_NONE);
+				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, 0, LLExtStat::NONE);
 				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
 			}
 			else
 			{// Invoke the original callback with an error result
-				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, -1, LL_EXSTAT_NONE);
+				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, -1, LLExtStat::NONE);
 				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
 			}
 		}
@@ -605,7 +605,7 @@ public:
 		{
 			LL_WARNS() << "Uploading baked texture resulted in http " << status.getType() << ll_pretty_print_sd( aResult ) << LL_ENDL;
 			// Invoke the original callback with an error result
-			LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakdedUploadData, -1, LL_EXSTAT_NONE);
+			LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakdedUploadData, -1, LLExtStat::NONE);
 			mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
 		}
 
