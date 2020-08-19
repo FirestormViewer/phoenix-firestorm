@@ -133,6 +133,10 @@ protected:
 	LLUUID mObjectID;
 
 	LLLiveLSLFile* mLiveFile;
+
+	// <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
+	S32 mCursorPos;
+	S32 mScrollPos;
 };
 
 

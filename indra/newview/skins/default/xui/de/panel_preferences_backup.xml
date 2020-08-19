@@ -4,10 +4,10 @@
 		Sicherungspfad:
 	</text>
 	<button label="Setzen" name="set_backup_settings_path"/>
-    <layout_stack name="ls_account_specific_label">
+	<layout_stack name="ls_account_specific_label">
 		<layout_panel name="lp_account_specific_label" height="60">
 			<text name="account_specific_label">
-				Du bist derzeit ausgeloggt. Bitte beachte, dass benutzerspezifische Einstellungen nur gesichert und wiederhergestellt werden können, wenn du eingeloggt bist. Globale Einstellungen, die für alle Accounts gültig sind, können gesichert werden, ohne eingeloggt zu sein.
+				Sie sind derzeit ausgeloggt. Bitte beachten Sie, dass benutzerspezifische Einstellungen nur gesichert und wiederhergestellt werden können, wenn Sie eingeloggt sind. Globale Einstellungen, die für alle Accounts gültig sind, können gesichert werden, ohne eingeloggt zu sein.
 			</text>
 		</layout_panel>
 		<layout_panel name="lp_buttons">

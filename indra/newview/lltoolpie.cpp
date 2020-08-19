@@ -1741,7 +1741,7 @@ LLTool* LLToolPie::getOverrideTool(MASK mask)
 	if (enableGrab)
 	// </FS:Ansariel>
 	{
-		if (mask == MASK_CONTROL)
+		if (mask == DEFAULT_GRAB_MASK)
 		{
 			return LLToolGrab::getInstance();
 		}

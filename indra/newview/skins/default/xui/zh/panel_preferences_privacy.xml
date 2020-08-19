@@ -3,7 +3,7 @@
 	<panel.string name="log_in_to_change">
 		登入以改變
 	</panel.string>
-	<button label="清除歷史紀錄" name="clear_cache" tool_tip="清除登入圖像、最後位置、瞬間傳送紀錄、網頁及材質快取"/>
+	<button label="清除歷史紀錄" name="clear_webcache" tool_tip="清除登入圖像、最後位置、瞬間傳送紀錄、網頁及材質快取"/>
 	<text name="cache_size_label_l">
 		（位置、圖像、網頁、搜尋的歷史紀錄）
 	</text>

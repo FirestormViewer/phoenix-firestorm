@@ -1251,6 +1251,7 @@ bool idle_startup()
 		show_debug_menus();
 
 		// Hide the splash screen
+		LL_DEBUGS("AppInit") << "Hide the splash screen and show window" << LL_ENDL;
 		LLSplashScreen::hide();
 		// Push our window frontmost
 		gViewerWindow->getWindow()->show();
@@ -1258,9 +1259,12 @@ bool idle_startup()
 		// DEV-16927.  The following code removes errant keystrokes that happen while the window is being 
 		// first made visible.
 #ifdef _WIN32
+        LL_DEBUGS("AppInit") << "Processing PeekMessage" << LL_ENDL;
 		MSG msg;
 		while( PeekMessage( &msg, /*All hWnds owned by this thread */ NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE ) )
-		{ }
+        {
+        }
+        LL_DEBUGS("AppInit") << "PeekMessage processed" << LL_ENDL;
 #endif
         display_startup();
         timeout.reset();
@@ -1711,6 +1715,8 @@ bool idle_startup()
 				// Its either downloading or declined.
 				// If optional was skipped this case shouldn't 
 				// be reached.
+
+				LL_INFOS() << "Forcing a quit due to update." << LL_ENDL;
 				LLLoginInstance::getInstance()->disconnect();
 				LLAppViewer::instance()->forceQuit();
 			}
@@ -3850,6 +3856,9 @@ void LLStartUp::setStartSLURL(const LLSLURL& slurl)
 			LLGridManager::getInstance()->setGridChoice(slurl.getGrid());
 			break;
     }
+
+  // <FS:Ansariel> FIRE-29994: Start location doesn't get updated when selection a destination from the login splash screen
+  FSPanelLogin::onUpdateStartSLURL(sStartSLURL);
 }
 
 // static

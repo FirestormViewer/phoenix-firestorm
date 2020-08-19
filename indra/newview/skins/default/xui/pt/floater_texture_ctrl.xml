@@ -15,7 +15,8 @@
 		<radio_item label="Assar" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
-		Tamanho: [DIMENSÕES]
+		Tamanho:
+[DIMENSÕES]
 	</text>
 	<button label="Padrão" label_selected="Padrão" name="Default"/>
 	<button label="Branco" label_selected="Branco" name="Blank"/>
