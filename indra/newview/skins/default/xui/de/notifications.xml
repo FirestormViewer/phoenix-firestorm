@@ -5240,7 +5240,9 @@ Der Sicherungspfad konnte nicht gefunden werden.
 
 	<notification name="SettingsConfirmBackup">
 		Möchten Sie wirklich eine Sicherung in diesem Verzeichnis erstellen?
+
 [DIRECTORY]
+
 Bestehende Sicherungen in diesem Verzeichnis werden überschrieben!
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Sicherung erstellen"/>
 	</notification>

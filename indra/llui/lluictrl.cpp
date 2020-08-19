@@ -709,6 +709,7 @@ void LLUICtrl::setFocus(BOOL b)
 		if (!hasFocus())
 		{
 			gFocusMgr.setKeyboardFocus( this );
+			onChildGotFocus(this);
 		}
 	}
 	else

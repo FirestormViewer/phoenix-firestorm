@@ -15,7 +15,8 @@
 		<radio_item label="確定產出" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
-		尺寸：[DIMENSIONS]
+		尺寸：
+[DIMENSIONS]
 	</text>
 	<button label="預設" label_selected="預設" name="Default"/>
 	<button label="空白" label_selected="空白" name="Blank"/>

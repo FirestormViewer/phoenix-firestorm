@@ -16,7 +16,7 @@
 		Por restricciones en el acceso, los datos de esta localización no están disponibles.  Por favor, revisa tus permisos con el propietario de la parcela.
 	</string>
 	<string name="acquired_date">
-		[wkday,datetime,local][day,datetime,local] [mth,datetime,local] [year,datetime,local][hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+		[wkday,datetime,slt][day,datetime,slt] [mth,datetime,slt] [year,datetime,slt][hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</string>
 
 	<layout_stack name="place_info_sidetray_main">

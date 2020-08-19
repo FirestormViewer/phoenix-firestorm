@@ -18762,7 +18762,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Value</key>
             <real>1</real>
         </map>
-    <key>PoolSizeAssetStorage</key>
+    <key>PoolSizeVAssetStorage</key>
         <map>
         <key>Comment</key>
             <string>Coroutine Pool size for AssetStorage requests</string>
@@ -21436,6 +21436,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
+  </map>
+  <key>FSEnvironmentManualTransitionTime</key>
+  <map>
+    <key>Comment</key>
+    <string>Timespan for blending between day/water/sky settings when manually changed. 0 is immediate.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
   </map>
   <key>FSDisableAvatarTrackerAtCloseIn</key>
   <map>
