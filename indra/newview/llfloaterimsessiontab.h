@@ -105,6 +105,8 @@ public:
 	void restoreFloater();
 	void saveCollapsedState();
 
+	void updateChatIcon(const LLUUID& id);
+
 	LLView* getChatHistory();
 
 protected:

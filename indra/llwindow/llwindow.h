@@ -175,6 +175,9 @@ public:
 	virtual void setTitle(const std::string& win_title) {};
 	// </FS:TT>
 
+
+	static std::vector<std::string> getDisplaysResolutionList();
+
 protected:
 	LLWindow(LLWindowCallbacks* callbacks, BOOL fullscreen, U32 flags);
 	virtual ~LLWindow();

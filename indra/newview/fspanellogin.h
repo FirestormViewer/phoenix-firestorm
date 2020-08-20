@@ -53,6 +53,7 @@ public:
 	static void show(const LLRect &rect,
 		void (*callback)(S32 option, void* user_data), 
 		void* callback_data);
+	static void reshapePanel();
 
 	static void setFields(LLPointer<LLCredential> credential, bool from_startup = false);
 

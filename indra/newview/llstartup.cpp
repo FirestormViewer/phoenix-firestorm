@@ -4522,11 +4522,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 
 	// Request the map server url
-	// Non-agni grids have a different default location.
-	if (LLGridManager::getInstance()->isInSLBeta())
-	{
-		gSavedSettings.setString("MapServerURL", "http://test.map.secondlife.com.s3.amazonaws.com/");
-	}
 	std::string map_server_url = response["map-server-url"];
 	if(!map_server_url.empty())
 	{

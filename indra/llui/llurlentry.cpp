@@ -580,11 +580,7 @@ LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 // secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
 // x-grid-location-info://lincoln.lindenlab.com/app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
 //
-// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-//LLUrlEntryAgent::LLUrlEntryAgent() :
-//	mAvatarNameCacheConnection()
 LLUrlEntryAgent::LLUrlEntryAgent()
-// </FS:Ansariel>
 {
 	mPattern = boost::regex(APP_HEADER_REGEX "/agent/[\\da-f-]+/\\w+",
 							boost::regex::perl|boost::regex::icase);
@@ -616,7 +612,15 @@ void LLUrlEntryAgent::onAvatarNameCache(const LLUUID& id,
 										const LLAvatarName& av_name)
 {
 	// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-	//mAvatarNameCacheConnection.disconnect();
+	//avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
+	//if (it != mAvatarNameCacheConnections.end())
+	//{
+	//	if (it->second.connected())
+	//	{
+	//		it->second.disconnect();
+	//	}
+	//	mAvatarNameCacheConnections.erase(it);
+	//}
 	std::pair<avatar_name_cache_connection_map_t::iterator, avatar_name_cache_connection_map_t::iterator> range;
 	range = mAvatarNameCacheConnections.equal_range(id);
 	for (avatar_name_cache_connection_map_t::iterator it = range.first; it != range.second; ++it)
@@ -715,11 +719,16 @@ std::string LLUrlEntryAgent::getLabel(const std::string &url, const LLUrlLabelCa
 	else
 	{
 		// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-		//if (mAvatarNameCacheConnection.connected())
+		//avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(agent_id);
+		//if (it != mAvatarNameCacheConnections.end())
 		//{
-		//	mAvatarNameCacheConnection.disconnect();
+		//	if (it->second.connected())
+		//	{
+		//		it->second.disconnect();
+		//	}
+		//	mAvatarNameCacheConnections.erase(it);
 		//}
-		//mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
+		//mAvatarNameCacheConnections[agent_id] = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
 		boost::signals2::connection connection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
 		mAvatarNameCacheConnections.insert(std::make_pair(agent_id, connection));
 		// </FS:Ansariel>
@@ -783,18 +792,22 @@ std::string LLUrlEntryAgent::getIcon(const std::string &url)
 // secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/(completename|displayname|username)
 // x-grid-location-info://lincoln.lindenlab.com/app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/(completename|displayname|username)
 //
-// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-//LLUrlEntryAgentName::LLUrlEntryAgentName() :
-//	mAvatarNameCacheConnection()
 LLUrlEntryAgentName::LLUrlEntryAgentName()
-// </FS:Ansariel>
 {}
 
 void LLUrlEntryAgentName::onAvatarNameCache(const LLUUID& id,
 										const LLAvatarName& av_name)
 {
 	// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-	//mAvatarNameCacheConnection.disconnect();
+	//avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
+	//if (it != mAvatarNameCacheConnections.end())
+	//{
+	//	if (it->second.connected())
+	//	{
+	//		it->second.disconnect();
+	//	}
+	//	mAvatarNameCacheConnections.erase(it);
+	//}
 	std::pair<avatar_name_cache_connection_map_t::iterator, avatar_name_cache_connection_map_t::iterator> range;
 	range = mAvatarNameCacheConnections.equal_range(id);
 	for (avatar_name_cache_connection_map_t::iterator it = range.first; it != range.second; ++it)
@@ -841,11 +854,16 @@ std::string LLUrlEntryAgentName::getLabel(const std::string &url, const LLUrlLab
 	else
 	{
 		// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
-		//if (mAvatarNameCacheConnection.connected())
+		//avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(agent_id);
+		//if (it != mAvatarNameCacheConnections.end())
 		//{
-		//	mAvatarNameCacheConnection.disconnect();
+		//	if (it->second.connected())
+		//	{
+		//		it->second.disconnect();
+		//	}
+		//	mAvatarNameCacheConnections.erase(it);
 		//}
-		//mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
+		//mAvatarNameCacheConnections[agent_id] = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
 		boost::signals2::connection connection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
 		mAvatarNameCacheConnections.insert(std::make_pair(agent_id, connection));
 		// </FS:Ansariel>
