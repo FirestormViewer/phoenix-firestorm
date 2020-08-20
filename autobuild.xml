@@ -48,9 +48,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>47ddd059d48f650e39796c10ea828689</string>
+              <string>7d375112b162e32e37262da4a6c0a702</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin-202330107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
