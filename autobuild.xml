@@ -48,9 +48,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>47ddd059d48f650e39796c10ea828689</string>
+              <string>7d375112b162e32e37262da4a6c0a702</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.0-darwin-202330107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -60,9 +60,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>99fe10fdec03a22d680de72bc8b5f85a</string>
+              <string>c266a8d6124fc11e41a82c288f2bf8e4</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.181041840-linux64-181041840.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/ndPhysicsStub-1.202321033-linux64-202321033.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1017,7 +1017,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>2.01.02</string>
+        <string>2.01.03</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1947,7 +1947,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>7.A.6</string>
+        <string>8.0.6</string>
       </map>
       <key>libhunspell</key>
       <map>
