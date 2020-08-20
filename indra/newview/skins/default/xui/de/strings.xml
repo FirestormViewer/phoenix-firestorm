@@ -4878,10 +4878,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Sie haben diesen Einwohner ignoriert. Wenn Sie eine Nachricht senden, wird dieser freigeschaltet.
 	</string>
 	<string name="generic">
-		Fehler bei Anfrage, bitte versuchen Sie es später.
+		Bitte beenden Sie das Gespräch und starten es erneut, oder loggen Sie sich erneut ein und versuchen es erneut.
 	</string>
 	<string name="generic_request_error">
-		Fehler bei Anfrage, bitte versuchen Sie es später.
+		Bitte beenden Sie das Gespräch und starten es erneut, oder loggen Sie sich erneut ein und versuchen es erneut.
 	</string>
 	<string name="insufficient_perms_error">
 		Sie sind dazu nicht berechtigt.
