@@ -116,7 +116,6 @@ public:
 	void	draw();
 	
 	void	onScrollPosChangeCallback(S32, LLScrollbar*);
-	virtual void onChildGotFocus(const LLUICtrl * cntrl);
 
 	void	onOpen		(const LLSD& key);
 	S32		notifyParent(const LLSD& info);
