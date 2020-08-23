@@ -955,7 +955,7 @@ bool LLAppViewer::init()
 				LLFile::remove(per_user_dir_glob + "filters.xml");
 				LLFile::remove(per_user_dir_glob + "medialist.xml");
 				LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
-				LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+				LLFile::remove(per_user_dir_glob + "screen_last*.*");
 				LLFile::remove(per_user_dir_glob + "search_history.xml");
 				LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
 				LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
