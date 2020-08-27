@@ -167,18 +167,29 @@ bool exoGroupMuteList::restoreDeferredGroupChat(const LLUUID& group)
 		LLGroupData groupData;
 		if (gAgent.getGroupData(group, groupData))
 		{
-			LL_INFOS() << "Restoring group chat from " << groupData.mName << " (" << group.asString() << ")" << LL_ENDL;
-
-			gIMMgr->addSession(groupData.mName, IM_SESSION_INVITE, group);
-
-			uuid_vec_t ids;
-			LLIMModel::sendStartSession(group, group, ids, IM_SESSION_GROUP_START);
-
-			if (!gAgent.isDoNotDisturb() && gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0)
+			if (!isMuted(group))
 			{
-				make_ui_sound("UISndNewIncomingGroupIMSession");
+				LL_INFOS() << "Restoring group chat from " << groupData.mName << " (" << group.asString() << ")" << LL_ENDL;
+
+				gIMMgr->addSession(groupData.mName, IM_SESSION_INVITE, group);
+
+				uuid_vec_t ids;
+				LLIMModel::sendStartSession(group, group, ids, IM_SESSION_GROUP_START);
+
+				if (!gAgent.isDoNotDisturb() && gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0)
+				{
+					make_ui_sound("UISndNewIncomingGroupIMSession");
+				}
+				return true;
 			}
-			return true;
+			else
+			{
+				LL_INFOS() << "NOT restoring group chat from " << groupData.mName << " (" << group.asString() << ") because the group is muted" << LL_ENDL;
+				gIMMgr->clearPendingInvitation(group);
+				gIMMgr->clearPendingAgentListUpdates(group);
+				LLIMModel::getInstance()->sendLeaveSession(group, group);
+				return false;
+			}
 		}
 	}
 
