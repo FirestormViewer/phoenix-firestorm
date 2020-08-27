@@ -167,6 +167,8 @@ bool exoGroupMuteList::restoreDeferredGroupChat(const LLUUID& group)
 		LLGroupData groupData;
 		if (gAgent.getGroupData(group, groupData))
 		{
+			LL_INFOS() << "Restoring group chat from " << groupData.mName << " (" << group.asString() << ")" << LL_ENDL;
+
 			gIMMgr->addSession(groupData.mName, IM_SESSION_INVITE, group);
 
 			uuid_vec_t ids;
