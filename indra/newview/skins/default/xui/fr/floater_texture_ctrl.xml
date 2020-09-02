@@ -15,8 +15,7 @@
 		<radio_item label="Figer" name="bake" value="2"/>
 	</radio_group>
 	<text name="unknown">
-		Taille:
-[DIMENSIONS]
+		Taille: [DIMENSIONS]
 	</text>
 	<button label="Défaut" label_selected="Défaut" name="Default" width="60"/>
 	<button label="Vierge" label_selected="Vierge" name="Blank" width="60"/>
@@ -49,5 +48,5 @@
 	<check_box initial_value="false" label="Masquer la région maillée de base" name="hide_base_mesh_region"/>
 	<button label="OK" label_selected="OK" name="Select"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>
-	<check_box initial_value="true" label="Appliquer maintenant" name="apply_immediate_check"/>
+	<check_box initial_value="true" label="Appliquer" name="apply_immediate_check"/>
 </floater>
