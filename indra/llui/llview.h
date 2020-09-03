@@ -307,7 +307,6 @@ public:
 	virtual BOOL	setLabelArg( const std::string& key, const LLStringExplicit& text );
 
 	virtual void	onVisibilityChange ( BOOL new_visibility );
-	virtual void	onChildGotFocus(const LLUICtrl * cntrl);
 
 	void			pushVisible(BOOL visible)	{ mLastVisible = mVisible; setVisible(visible); }
 	void			popVisible()				{ setVisible(mLastVisible); }

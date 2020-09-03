@@ -101,9 +101,11 @@ BOOL LLFloaterConversationPreview::postBuild()
 		name = LLTrans::getString("NearbyChatTitle");
 		file = "chat";
 	}
-	// <FS:Ansariel> Remember used log file name
 	mChatHistoryFileName = file;
-	if (mIsGroup)
+	// <FS:Ansariel> FIRE-30045: Group chat logfile gets appended duplicate suffix if opened in conversation log
+	//if (mIsGroup)
+	if (mIsGroup && !LLStringUtil::endsWith(mChatHistoryFileName, GROUP_CHAT_SUFFIX))
+	// </FS:Ansariel>
 	{
 		mChatHistoryFileName += GROUP_CHAT_SUFFIX;
 	}
