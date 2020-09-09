@@ -3012,7 +3012,7 @@ void LLIMMgr::addMessage(
 		//               session id, so we can leave it!
 		if (is_group_chat && !exoGroupMuteList::instance().isLoaded())
 		{
-			LL_INFOS() << "Received group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") before must list has been loaded - skipping message" << LL_ENDL;
+			LL_INFOS() << "Received group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") before mute list has been loaded - skipping message" << LL_ENDL;
 			exoGroupMuteList::instance().addDeferredGroupChat(new_session_id);
 			return;
 		}
@@ -3039,7 +3039,7 @@ void LLIMMgr::addMessage(
 		if (IM_NOTHING_SPECIAL != dialog && IM_SESSION_P2P_INVITE != dialog &&
 			gAgent.isInGroup(new_session_id) && LLMuteList::getInstance()->isMuted(other_participant_id) && !from_linden)
 		{
-			LL_INFOS() << "Ignoring group chat initiated by muted resident." << LL_ENDL;
+			LL_INFOS() << "Ignoring group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") initiated by muted resident." << LL_ENDL;
 			exoGroupMuteList::instance().addDeferredGroupChat(new_session_id);
 			return;
 		}

@@ -101,7 +101,6 @@ BOOL LLFloaterConversationPreview::postBuild()
 		name = LLTrans::getString("NearbyChatTitle");
 		file = "chat";
 	}
-	// <FS:Ansariel> Remember used log file name
 	mChatHistoryFileName = file;
 
 	LLStringUtil::format_map_t args;
