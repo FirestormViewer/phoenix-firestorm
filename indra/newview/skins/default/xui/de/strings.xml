@@ -195,8 +195,14 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="CertBasicConstraints">
 		In der Zertifikatskette des Servers befanden sich zu viele Zertifikate.  Bitte kontaktieren Sie Ihren Grid-Administrator.
 	</string>
+	<string name="CertInvalid">
+		Das Zertifikat konnte nicht geladen werden.  Bitte kontaktieren Sie Ihren Grid-Administrator.
+	</string>
 	<string name="CertInvalidSignature">
 		Die Zertifikatsunterschrift des Gridservers konnte nicht bestätigt werden.  Bitte kontaktieren Sie Ihren Grid-Administrator.
+	</string>
+	<string name="CertAllocationFailure">
+		Fehler beim Allokieren von Speicher für OpenSSL zum Laden des Zertifikats.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Netzwerkfehler: Verbindung konnte nicht hergestellt werden. Bitte überprüfen Sie Ihre Netzwerkverbindung.
