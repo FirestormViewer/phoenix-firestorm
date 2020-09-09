@@ -266,16 +266,6 @@ BOOL LLPanelMainInventory::postBuild()
 		}
 		// </FS:Ansariel>
 	}
-
-	mFavoriteItemsPanel = getChild<LLInventoryFavoriteItemsPanel>("Favorite Items");
-	if (mFavoriteItemsPanel)
-	{
-		LLInventoryFilter& recent_filter = mFavoriteItemsPanel->getFilter();
-		recent_filter.setEmptyLookupMessage("InventoryFavoritItemsNotSelected");
-		recent_filter.markDefault();
-		mFavoriteItemsPanel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mFavoriteItemsPanel, _1, _2));
-	}
-
 	// <FS:Ansariel> Only if we actually have it!
 	//mSearchTypeCombo  = getChild<LLComboBox>("search_type");
 	mSearchTypeCombo  = findChild<LLComboBox>("search_type");
@@ -1834,7 +1824,7 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 	// </FS:Ansariel>
 	if (command_name == "delete")
 	{
-		return getActivePanel()->isSelectionRemovable() && (getActivePanel() != mFavoriteItemsPanel);
+		return getActivePanel()->isSelectionRemovable();
 	}
 	if (command_name == "save_texture")
 	{
