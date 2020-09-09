@@ -54,7 +54,6 @@
 		<menu_item_call label="Hochgeladene Animationen" name="Animation uploads"/>
 		<menu_item_call label="Hochgeladene Modelle" name="Model uploads"/>
 	</menu>
-	<menu_item_call label="Als Favoriten-Ordner verwenden" name="Set Favorites folder"/>
 	<menu label="Typ ändern" name="Change Type">
 		<menu_item_call label="Standard" name="Default"/>
 		<menu_item_call label="Handschuhe" name="Gloves"/>
