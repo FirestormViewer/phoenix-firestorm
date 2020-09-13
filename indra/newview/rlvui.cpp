@@ -77,7 +77,7 @@ RlvUIEnabler::RlvUIEnabler()
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
 void RlvUIEnabler::onBehaviourToggle(ERlvBehaviour eBhvr, ERlvParamType eType)
 {
-	bool fQuitting = LLApp::isQuitting();
+	bool fQuitting = LLApp::isExiting();
 	for (behaviour_handler_map_t::const_iterator itHandler = m_Handlers.lower_bound(eBhvr), endHandler = m_Handlers.upper_bound(eBhvr);
 			itHandler != endHandler; ++itHandler)
 	{

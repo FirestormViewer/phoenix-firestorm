@@ -70,6 +70,9 @@
 // Boost includes
 #include <boost/algorithm/string.hpp>
 
+// llappviewer.cpp
+extern BOOL gDoDisconnect;
+
 // ============================================================================
 // Static variable initialization
 //
@@ -158,7 +161,7 @@ void RlvHandler::cleanup()
 	//
 	// Clean up any restrictions that are still active
 	//
-	RLV_ASSERT(LLApp::isQuitting());	// Several commands toggle debug settings but won't if they know the viewer is quitting
+	RLV_ASSERT(LLApp::isExiting() || gDoDisconnect);	// Several commands toggle debug settings but won't if they know the viewer is quitting
 
 	// Assume we have no way to predict how m_Objects will change so make a copy ahead of time
 	uuid_vec_t idRlvObjects;
@@ -2385,7 +2388,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	//
@@ -2440,7 +2443,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Update the shownames context
@@ -2477,7 +2480,7 @@ template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
-	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isQuitting()) )
+	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isExiting()) )
 	{
 		const LLUUID idAgent = RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption());
 
@@ -2502,7 +2505,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& 
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMETAGS>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Update the shownames context
@@ -2526,7 +2529,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvComman
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Refresh the nearby people list

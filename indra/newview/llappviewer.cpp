@@ -378,7 +378,10 @@ const std::string START_MARKER_FILE_NAME("SecondLife.start_marker");
 const std::string ERROR_MARKER_FILE_NAME("SecondLife.error_marker");
 const std::string LLERROR_MARKER_FILE_NAME("SecondLife.llerror_marker");
 const std::string LOGOUT_MARKER_FILE_NAME("SecondLife.logout_marker");
-static BOOL gDoDisconnect = FALSE;
+//static BOOL gDoDisconnect = FALSE;
+// [RLVa:KB] - Checked: RLVa-2.3
+BOOL gDoDisconnect = FALSE;
+// [/RLVa:KB]
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)
