@@ -506,6 +506,11 @@ ERlvCmdRet RlvHandler::processCommand(std::reference_wrapper<const RlvCommand> r
 					{
 						RlvCommand rlvCmdRem(rlvCmd, RLV_TYPE_REMOVE);
 						itObj->second.removeCommand(rlvCmdRem);
+						if (itObj->second.m_Commands.empty())
+						{
+							RLV_DEBUGS << "\t- command list empty => removing " << idCurObj << RLV_ENDL;
+							m_Objects.erase(itObj);
+						}
 					}
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 				}
