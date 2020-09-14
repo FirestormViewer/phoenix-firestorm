@@ -69,6 +69,22 @@ if (WINDOWS)
       ole32
       dbghelp
       )
+
+  if(ASAN)
+    if(ADDRESS_SIZE EQUAL 32)
+      set(WINDOWS_LIBRARIES
+          ${WINDOWS_LIBRARIES}
+          clang_rt.asan_dynamic_runtime_thunk-i386
+          clang_rt.asan_dynamic-i386
+          )
+    else(ADDRESS_SIZE EQUAL 32)
+      set(WINDOWS_LIBRARIES
+          ${WINDOWS_LIBRARIES}
+          clang_rt.asan_dynamic_runtime_thunk-x86_64
+          clang_rt.asan_dynamic-x86_64
+          )
+    endif(ADDRESS_SIZE EQUAL 32)
+  endif(ASAN)
 else (WINDOWS)
   set(WINDOWS_LIBRARIES "")
 endif (WINDOWS)

@@ -1762,6 +1762,7 @@ void LLIMProcessing::requestOfflineMessagesCoro(std::string url)
             from_group = message_data["from_group"].asString() == "Y";
         }
 
+
         LLIMProcessing::processNewMessage(
             message_data["from_agent_id"].asUUID(),
             from_group,
