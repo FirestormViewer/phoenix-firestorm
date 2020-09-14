@@ -1859,6 +1859,25 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @buy=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_BUY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Start or stop filtering opening the buy, buy contents and pay object floaters
+	if (fHasBhvr)
+	{
+		RlvUIEnabler::instance().addGenericFloaterFilter("buy_object");
+		RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents");
+		RlvUIEnabler::instance().addGenericFloaterFilter("pay_object");
+	}
+	else
+	{
+		RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object");
+		RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object_contents");
+		RlvUIEnabler::instance().removeGenericFloaterFilter("pay_object");
+	}
+}
+
 // Handles: @detach[:<attachpt>]=n|y
 template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
@@ -1995,6 +2014,17 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 		RlvUIEnabler::instance().addGenericFloaterFilter("beacons");
 	else
 		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
+}
+
+// Handles: @pay=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Start or stop filtering opening the pay avatar floater
+	if (fHasBhvr)
+		RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident");
+	else
+		RlvUIEnabler::instance().removeGenericFloaterFilter("pay_resident");
 }
 
 // Handles: @setoverlay=n|y toggles

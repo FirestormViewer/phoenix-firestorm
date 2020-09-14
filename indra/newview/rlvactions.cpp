@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -367,6 +367,14 @@ bool RlvActions::canBuild()
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
 }
 
+// Handles: @buy
+bool RlvActions::canBuyObject(const LLUUID& idObj)
+{
+	// User can buy an object set for sale if:
+	//    - not restricted from buying objects
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
+}
+
 // Handles: @edit and @editobj
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
@@ -395,6 +403,22 @@ bool RlvActions::canInteract(const LLViewerObject* pObj, const LLVector3& posOff
 		(!pObj) ||
 		( ( (!rlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) || (pObj->isHUDAttachment())) &&
 		  ( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (pObj->isHUDAttachment()) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist)) );
+}
+
+// Handles: @pay
+bool RlvActions::canPayAvatar(const LLUUID& idAvatar)
+{
+	// User can pay an avatar if:
+	//    - not restricted from paying avatars
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_PAY));
+}
+
+// Handles: @buy
+bool RlvActions::canPayObject(const LLUUID& idObj)
+{
+	// User can pay an object/vendor if:
+	//    - not restricted from buying objects
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
 }
 
 bool RlvActions::canRez()
