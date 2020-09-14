@@ -95,6 +95,7 @@
      layout="topleft"
      name="Pay">
        <on_click function="AvatarIcon.Action" parameter="pay" />
+       <on_enable function="AvatarIcon.Enable" parameter="can_pay" />
     </menu_item_call>
     <menu_item_check
      label="Block Voice"

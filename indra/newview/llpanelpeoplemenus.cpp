@@ -254,6 +254,12 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		return LLLogChat::isTranscriptExist(mUUIDs.front());
 	}
+// [RLVa:KB] - @pay
+	else if (item == std::string("can_pay"))
+	{
+		return RlvActions::canPayAvatar(mUUIDs.front());
+	}
+// [/RLVa:KB]
 	else if (item == std::string("can_im") || item == std::string("can_invite") ||
 	         item == std::string("can_share") || item == std::string("can_pay"))
 	{

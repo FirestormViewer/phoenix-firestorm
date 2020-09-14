@@ -1866,15 +1866,15 @@ void RlvBehaviourToggleHandler<RLV_BHVR_BUY>::onCommandToggle(ERlvBehaviour eBhv
 	// Start or stop filtering opening the buy, buy contents and pay object floaters
 	if (fHasBhvr)
 	{
-		RlvUIEnabler::instance().addGenericFloaterFilter("buy_object");
-		RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents");
-		RlvUIEnabler::instance().addGenericFloaterFilter("pay_object");
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object", std::string(RLV_STRING_BLOCKED_GENERIC)));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents", std::string(RLV_STRING_BLOCKED_GENERIC)));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_object", std::string(RLV_STRING_BLOCKED_GENERIC)));
 	}
 	else
 	{
-		RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object");
-		RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object_contents");
-		RlvUIEnabler::instance().removeGenericFloaterFilter("pay_object");
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object_contents"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("pay_object"));
 	}
 }
 
@@ -2011,9 +2011,13 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 
 	// Start or stop filtering opening the beacons floater
 	if (fHasBhvr)
-		RlvUIEnabler::instance().addGenericFloaterFilter("beacons");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("beacons"));
+	}
 	else
-		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("beacons"));
+	}
 }
 
 // Handles: @pay=n|y toggles
@@ -2022,9 +2026,13 @@ void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhv
 {
 	// Start or stop filtering opening the pay avatar floater
 	if (fHasBhvr)
-		RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident"));
+	}
 	else
-		RlvUIEnabler::instance().removeGenericFloaterFilter("pay_resident");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("pay_resident"));
+	}
 }
 
 // Handles: @setoverlay=n|y toggles
@@ -2366,11 +2374,11 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
 			for (LLFloater* pFloater : envFloaters)
 				pFloater->closeFloater();
-			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+			RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]));
 		}
 		else
 		{
-			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+			RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]));
 		}
 	}
 
@@ -2456,9 +2464,13 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 	// Filter (or stop filtering) opening new inventory floaters
 	//
 	if (fHasBhvr)
-		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("inventory"));
+	}
 	else
-		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("inventory"));
+	}
 }
 
 // Handles: @shownames[:<uuid>]=n|y toggles
