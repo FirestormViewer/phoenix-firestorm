@@ -211,7 +211,7 @@ void LLAvatarActions::startIM(const LLUUID& id)
 	if (!RlvActions::canStartIM(id))
 	{
 		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
 		return;
 	}
 // [/RLVa:KB]
@@ -256,7 +256,7 @@ void LLAvatarActions::startCall(const LLUUID& id)
 	if (!RlvActions::canStartIM(id))
 	{
 		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
 		return;
 	}
 // [/RLVa:KB]
@@ -282,7 +282,7 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floate
 		if (!RlvActions::canStartIM(idAgent))
 		{
 			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartConference);
 			return;
 		}
 		id_array.push_back(idAgent);
@@ -339,7 +339,7 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 		if (!RlvActions::canStartIM(idAgent))
 		{
 			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartConference);
 			return;
 		}
 		id_array.push_back(idAgent);
@@ -467,7 +467,7 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 		// Filter the request message if the recipients is IM-blocked
 		if ( (RlvActions::isRlvEnabled()) && ((!RlvActions::canStartIM(idRecipient)) || (!RlvActions::canSendIM(idRecipient))) )
 		{
-			strMessage = RlvStrings::getString(RLV_STRING_HIDDEN);
+			strMessage = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 		}
 // [/RLVa:KB]
 

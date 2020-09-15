@@ -5818,8 +5818,8 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.0.0a
 		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		{
-			notice.setArg("[REGIONNAME]", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
-			notice.setArg("[REGIONPOS]", RlvStrings::getString(RLV_STRING_HIDDEN));
+			notice.setArg("[REGIONNAME]", RlvStrings::getString(RlvStringKeys::Hidden::Region));
+			notice.setArg("[REGIONPOS]", RlvStrings::getString(RlvStringKeys::Hidden::Generic));
 		}
 		else if (!foundpos)
 // [/RLVa:KB]
@@ -6556,7 +6556,7 @@ void send_lures(const LLSD& notification, const LLSD& response)
 	if ( (gRlvHandler.isEnabled()) && 
 	     (std::any_of(sdRecipients.beginArray(), sdRecipients.endArray(), [](const LLSD& id) { return !RlvActions::canStartIM(id.asUUID()) || !RlvActions::canSendIM(id.asUUID()); })) )
 	{
-		text = RlvStrings::getString(RLV_STRING_HIDDEN);
+		text = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 	}
 // [/RLVa:KB]
 
@@ -6652,7 +6652,7 @@ void handle_lure(const uuid_vec_t& ids)
 
 	LLSD edit_args;
 // [RLVa:KB] - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0a
-	edit_args["REGION"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RLV_STRING_HIDDEN);
+	edit_args["REGION"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 // [/RLVa:KB]
 //	edit_args["REGION"] = gAgent.getRegion()->getName();
 
@@ -6668,7 +6668,7 @@ void handle_lure(const uuid_vec_t& ids)
 			if ( (!gRlvHandler.isException(RLV_BHVR_TPLURE, idAgent, RLV_CHECK_PERMISSIVE)) &&
 				 ((!pBuddyInfo) || (!pBuddyInfo->isOnline()) || (!pBuddyInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))) )
 			{
-				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT_OFFER);
+				RlvUtil::notifyBlocked(RlvStringKeys::Blocked::TeleportOffer);
 				return;
 			}
 		}

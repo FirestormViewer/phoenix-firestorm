@@ -3778,7 +3778,7 @@ void LLFolderBridge::perform_pasteFromClipboard()
 // [RLVa:KB] - Checked: RLVa-2.1.0
 				if ( ((item) && (!RlvActions::canPasteInventory(item, dest_folder))) || ((cat) && (!RlvActions::canPasteInventory(cat, dest_folder))) )
 				{
-					RlvActions::notifyBlocked(RLV_STRING_BLOCKED_INVFOLDER);
+					RlvActions::notifyBlocked(RlvStringKeys::Blocked::InvFolder);
 					return;
 				}
 // [/RLVa:KB]
@@ -5906,7 +5906,7 @@ void LLCallingCardBridge::performAction(LLInventoryModel* model, std::string act
 			if (!RlvActions::canStartIM(item->getCreatorUUID()))
 			{
 				make_ui_sound("UISndInvalidOp");
-				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));
+				RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));
 				return;
 			}
 // [/RLVa:KB]

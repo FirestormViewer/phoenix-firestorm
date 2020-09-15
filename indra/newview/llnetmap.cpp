@@ -636,7 +636,7 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 
 //		region_name = region->getName();
 // [RLVa:KB] - Checked: RLVa-1.2.2
-		region_name = (RlvActions::canShowLocation()) ? region->getName() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		region_name = (RlvActions::canShowLocation()) ? region->getName() : RlvStrings::getString(RlvStringKeys::Hidden::Region);
 // [/RLVa:KB]
 		if (!region_name.empty())
 		{

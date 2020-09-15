@@ -3170,7 +3170,7 @@ LLSD LLAppViewer::getViewerInfo() const
 		}
 		else
 		{
-			info["REGION"] = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+			info["REGION"] = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 		}
 		info["SERVER_VERSION"] = gLastVersionChannel;
 // [/RLVa:KB]

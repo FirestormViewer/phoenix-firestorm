@@ -3671,7 +3671,7 @@ public:
 				}
 				else if (!RlvActions::canReceiveIM(from_id))			// Conference chat: don't block; censor if not an exception
 				{
-					message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+					message = RlvStrings::getString(RlvStringKeys::Blocked::RecvIm);
 				}
 			}
 // [/RLVa:KB]

@@ -1,17 +1,17 @@
-/** 
+/**
  *
- * Copyright (c) 2009-2011, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ * Copyright (c) 2009-2020, Kitty Barnett
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -360,7 +360,11 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 }
 
 // Checked: 2011-11-08 (RLVa-1.5.0)
+#ifdef CATZNIP_STRINGVIEW
+const std::string& RlvStrings::getString(const boost::string_view& strStringName)
+#else
 const std::string& RlvStrings::getString(const std::string& strStringName)
+#endif // CATZNIP_STRINGVIEW
 {
 	static const std::string strMissing = "(Missing RLVa string)";
 	string_map_t::const_iterator itString = m_StringMap.find(strStringName);
@@ -476,14 +480,14 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
 	// Filter any mention of the surrounding region names
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
-	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+	const std::string& strHiddenRegion = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
 		boost::ireplace_all(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RlvStringKeys::Hidden::Parcel));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
@@ -529,7 +533,7 @@ void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 	if ((!gRlvAttachmentLocks.canAttach()) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit & nQuestions))
 	{
 		// Notify the user that we blocked it since they're not allowed to wear any new attachments
-		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
+		sdPayload["rlv_blocked"] = RlvStringKeys::Blocked::PermissionAttach;
 		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit;
 	}
 
@@ -537,7 +541,7 @@ void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 	if ((gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit & nQuestions))
 	{
 		// Notify the user that we blocked it since they're not allowed to teleport
-		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMTELEPORT;
+		sdPayload["rlv_blocked"] = RlvStringKeys::Blocked::PermissionTeleport;
 		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit;
 	}
 
@@ -580,7 +584,11 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 }
 
 // Checked: 2011-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
+#ifdef CATZNIP_STRINGVIEW
+void RlvUtil::notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs, bool fLogToChat)
+#else
 void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs, bool fLogToChat)
+#endif // CATZNIP_STRINGVIEW
 {
 	std::string strMsg = RlvStrings::getString(strNotifcation);
 	LLStringUtil::format(strMsg, sdArgs);

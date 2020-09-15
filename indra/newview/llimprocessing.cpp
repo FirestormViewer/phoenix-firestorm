@@ -620,8 +620,8 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
 				if ( (rlv_handler_t::isEnabled()) && (offline != IM_OFFLINE) && (!RlvActions::canReceiveIM(from_id)) && (!LLMuteList::getInstance()->isLinden(original_name) ))
 				{
 					if (!mute_im)
-						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
-					buffer = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RlvStringKeys::Blocked::RecvImRemote), session_id);
+					buffer = RlvStrings::getString(RlvStringKeys::Blocked::RecvIm);
 				}
 // [/RLVa:KB]
 
@@ -1089,7 +1089,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
 				{
 					std::string::size_type idxPos = location.find('/');
 					if ( (std::string::npos != idxPos) && (RlvUtil::isNearbyRegion(location.substr(0, idxPos))) )
-						location = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+						location = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 				}
 			}
 // [/RLVa:KB]
@@ -1337,7 +1337,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
 					if ( ((IM_LURE_USER == dialog) && (!RlvActions::canAcceptTpOffer(from_id))) ||
 					     ((IM_TELEPORT_REQUEST == dialog) && (!RlvActions::canAcceptTpRequest(from_id))) )
 					{
-						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLUREREQ_REMOTE));
+						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RlvStringKeys::Blocked::TpLureRequestRemote));
 						if (is_do_not_disturb)
 							send_do_not_disturb_message(gMessageSystem, from_id);
 						return;
@@ -1347,7 +1347,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
 					if ( (!RlvActions::canReceiveIM(from_id)) || 
 						 ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (IM_LURE_USER == dialog || IM_TELEPORT_REQUEST == dialog)) )
 					{
-						message = RlvStrings::getString(RLV_STRING_HIDDEN);
+						message = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 					}
 				}
 // [/RLVa:KB]

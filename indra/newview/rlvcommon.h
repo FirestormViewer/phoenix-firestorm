@@ -1,21 +1,20 @@
-/** 
+/**
  *
- * Copyright (c) 2009-2011, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ * Copyright (c) 2009-2020, Kitty Barnett
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
-#ifndef RLV_COMMON_H
-#define RLV_COMMON_H
+#pragma once
 
 #include "llavatarname.h"
 #include "llselectmgr.h"
@@ -146,7 +145,11 @@ public:
 
 	static const std::string& getAnonym(const LLAvatarName& avName);		// @shownames
 	static const std::string& getAnonym(const std::string& strName);		// @shownames
+#ifdef CATZNIP_STRINGVIEW
+	static const std::string& getString(const boost::string_view& strStringName);
+#else
 	static const std::string& getString(const std::string& strStringName);
+#endif // CATZNIP_STRINGVIEW
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
 	static const std::string& getStringMapPath() { return m_StringMapPath; }
 	static std::string        getVersion(const LLUUID& idRlvObject, bool fLegacy = false);
@@ -158,7 +161,7 @@ public:
 
 protected:
 	static std::vector<std::string> m_Anonyms;
-	typedef std::map<std::string, std::list<std::string> > string_map_t;
+	typedef std::map<std::string, std::list<std::string>, std::less<>> string_map_t;
 	static string_map_t m_StringMap;
 	static std::string  m_StringMapPath;
 };
@@ -181,9 +184,14 @@ public:
 	static bool isForceTp()	{ return m_fForceTp; }
 	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
+#ifdef CATZNIP_STRINGVIEW
+	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false) { notifyBlocked(boost::string_view(strNotifcation), sdArgs, fLogToChat); }
+	static void notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
+#else
 	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
-	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
+#endif // CATZNIP_STRINGVIEW
+	static void notifyBlockedGeneric() { notifyBlocked(RlvStringKeys::Blocked::Generic); }
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RlvStringKeys::Blocked::ViewXxx, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
@@ -332,5 +340,3 @@ inline bool RlvUtil::sendChatReply(const std::string& strChannel, const std::str
 }
 
 // ============================================================================
-
-#endif // RLV_COMMON_H

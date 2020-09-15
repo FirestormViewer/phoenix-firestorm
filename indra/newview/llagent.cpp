@@ -4139,7 +4139,7 @@ void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 		                                   : gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC) ) ||
 		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) ))
 	{
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Teleport);
 		return;
 	}
 // [/RLVa:KB]
@@ -4241,7 +4241,7 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 	{
 		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal(pos_global) : !RlvActions::canTeleportToLocation() )
 		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Teleport);
 			return;
 		}
 
@@ -4311,7 +4311,7 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global, const LLVe
 	{
 		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal(pos_global) : !RlvActions::canTeleportToLocation() )
 		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Teleport);
 			return;
 		}
 

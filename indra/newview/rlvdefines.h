@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -14,8 +14,11 @@
  *
  */
 
-#ifndef RLV_DEFINES_H
-#define RLV_DEFINES_H
+#pragma once
+
+#ifdef CATZNIP_STRINGVIEW
+#include "llstringview.h"
+#endif // CATZNIP_STRINGVIE
 
 // ============================================================================
 // Defines
@@ -393,30 +396,72 @@ enum ERlvAttachGroupType
 // Strings (see rlva_strings.xml)
 //
 
-#define RLV_STRING_HIDDEN					"hidden_generic"
-#define RLV_STRING_HIDDEN_PARCEL			"hidden_parcel"
-#define RLV_STRING_HIDDEN_REGION			"hidden_region"
+namespace RlvStringKeys
+{
+	namespace Blocked
+	{
+#ifdef CATZNIP_STRINGVIEW
+		/*inline*/ constexpr boost::string_view AutoPilot = make_string_view("blocked_autopilot");
+		/*inline*/ constexpr boost::string_view Generic = make_string_view("blocked_generic");
+		/*inline*/ constexpr boost::string_view GroupChange = make_string_view("blocked_groupchange");
+		/*inline*/ constexpr boost::string_view InvFolder = make_string_view("blocked_invfolder");
+		/*inline*/ constexpr boost::string_view PermissionAttach = make_string_view("blocked_permattach");
+		/*inline*/ constexpr boost::string_view PermissionTeleport = make_string_view("blocked_permteleport");
+		/*inline*/ constexpr boost::string_view RecvIm = make_string_view("blocked_recvim");
+		/*inline*/ constexpr boost::string_view RecvImRemote = make_string_view("blocked_recvim_remote");
+		/*inline*/ constexpr boost::string_view SendIm = make_string_view("blocked_sendim");
+		/*inline*/ constexpr boost::string_view StartConference = make_string_view("blocked_startconf");
+		/*inline*/ constexpr boost::string_view StartIm = make_string_view("blocked_startim");
+		/*inline*/ constexpr boost::string_view Teleport = make_string_view("blocked_teleport");
+		/*inline*/ constexpr boost::string_view TeleportOffer = make_string_view("blocked_teleport_offer");
+		/*inline*/ constexpr boost::string_view TpLureRequestRemote = make_string_view("blocked_tplurerequest_remote");
+		/*inline*/ constexpr boost::string_view ViewXxx = make_string_view("blocked_viewxxx");
+		/*inline*/ constexpr boost::string_view Wireframe = make_string_view("blocked_wireframe");
+#else
+		constexpr const char AutoPilot[] = "blocked_autopilot";
+		constexpr const char Generic[] = "blocked_generic";
+		constexpr const char GroupChange[] = "blocked_groupchange";
+		constexpr const char InvFolder[] = "blocked_invfolder";
+		constexpr const char PermissionAttach[] = "blocked_permattach";
+		constexpr const char PermissionTeleport[] = "blocked_permteleport";
+		constexpr const char RecvIm[] = "blocked_recvim";
+		constexpr const char RecvImRemote[] = "blocked_recvim_remote";
+		constexpr const char SendIm[] = "blocked_sendim";
+		constexpr const char StartConference[] = "blocked_startconf";
+		constexpr const char StartIm[] = "blocked_startim";
+		constexpr const char Teleport[] = "blocked_teleport";
+		constexpr const char TeleportOffer[] = "blocked_teleport_offer";
+		constexpr const char TpLureRequestRemote[] = "blocked_tplurerequest_remote";
+		constexpr const char ViewXxx[] = "blocked_viewxxx";
+		constexpr const char Wireframe[] = "blocked_wireframe";
+#endif // CATZNIP_STRINGVIEW
+	}
 
-#define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
-#define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
-#define RLV_STRING_BLOCKED_GROUPCHANGE		"blocked_groupchange"
-#define RLV_STRING_BLOCKED_INVFOLDER		"blocked_invfolder"
-#define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
-#define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
-#define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
-#define RLV_STRING_BLOCKED_RECVIM_REMOTE	"blocked_recvim_remote"
-#define RLV_STRING_BLOCKED_SENDIM			"blocked_sendim"
-#define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
-#define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
-#define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
-#define RLV_STRING_BLOCKED_TELEPORT_OFFER   "blocked_teleport_offer"
-#define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
-#define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
-#define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"
-#define RLV_STRING_STOPIM_NOSESSION         "stopim_nosession"
-#define RLV_STRING_STOPIM_ENDSESSION_REMOTE "stopim_endsession_remote"
-#define RLV_STRING_STOPIM_ENDSESSION_LOCAL  "stopim_endsession_local"
+	namespace Hidden
+	{
+#ifdef CATZNIP_STRINGVIEW
+		/*inline*/ constexpr boost::string_view Generic = make_string_view("hidden_generic");
+		/*inline*/ constexpr boost::string_view Parcel = make_string_view("hidden_parcel");
+		/*inline*/ constexpr boost::string_view Region = make_string_view("hidden_region");
+#else
+		constexpr const char Generic[] = "hidden_generic";
+		constexpr const char Parcel[] = "hidden_parcel";
+		constexpr const char Region[] = "hidden_region";
+#endif // CATZNIP_STRINGVIEW
+	}
+
+	namespace StopIm
+	{
+#ifdef CATZNIP_STRINGVIEW
+		/*inline*/ constexpr boost::string_view NoSession = make_string_view("stopim_nosession");
+		/*inline*/ constexpr boost::string_view EndSessionRemote = make_string_view("stopim_endsession_remote");
+		/*inline*/ constexpr boost::string_view EndSessionLocal = make_string_view("stopim_endsession_local");
+#else
+		constexpr const char NoSession[] = "stopim_nosession";
+		constexpr const char EndSessionRemote[] = "stopim_endsession_remote";
+		constexpr const char EndSessionLocal[] = "stopim_endsession_local";
+#endif // CATZNIP_STRINGVIEW
+	}
+}
 
 // ============================================================================
-
-#endif // RLV_DEFINES_H

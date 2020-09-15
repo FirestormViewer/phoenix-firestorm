@@ -187,7 +187,7 @@ void LLTeleportHistory::updateCurrentLocation(const LLVector3d& new_pos)
 		}
 		else
 		{
-			mItems[mCurrentItem] = LLTeleportHistoryItem(RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL), LLVector3d::zero);
+			mItems[mCurrentItem] = LLTeleportHistoryItem(RlvStrings::getString(RlvStringKeys::Hidden::Parcel), LLVector3d::zero);
 		}
 // [/RLVa:KB]
 	}

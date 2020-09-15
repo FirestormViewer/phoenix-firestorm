@@ -631,11 +631,11 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 		// If the user can't start an IM session terminate it (if one is open) - always notify the sender in this case
 		if (!RlvActions::canStartIM(idSender, true))
 		{
-			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_ENDSESSION_REMOTE));
+			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RlvStringKeys::StopIm::EndSessionRemote));
 			if (RlvActions::hasOpenP2PSession(idSender))
 			{
 				LLAvatarActions::endIM(idSender);
-				RlvUtil::notifyBlocked(RLV_STRING_STOPIM_ENDSESSION_LOCAL, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()), true);
+				RlvUtil::notifyBlocked(RlvStringKeys::StopIm::EndSessionLocal, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()), true);
 			}
 			return true;
 		}
@@ -643,7 +643,7 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 		// User can start an IM session so we do nothing - notify and hide it from the user only if IM queries are enabled
 		if (!RlvSettings::getEnableIMQuery())
 			return false;
-		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_NOSESSION));
+		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RlvStringKeys::StopIm::NoSession));
 		return true;
 	}
 	else if (RlvSettings::getEnableIMQuery())
@@ -766,7 +766,7 @@ void RlvHandler::onActiveGroupChanged()
 
 		// Notify them about the change
 		const LLSD sdArgs = LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString().c_str()) : "(none)");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, sdArgs);
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::GroupChange, sdArgs);
 
 		setActiveGroup(m_idAgentGroup);
 	}
