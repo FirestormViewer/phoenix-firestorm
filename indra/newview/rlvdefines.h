@@ -365,32 +365,58 @@ enum ERlvAttachGroupType
 // Settings
 //
 
-#define RLV_SETTING_MAIN				"RestrainedLove"
-#define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-#define RLV_SETTING_CANOOC				"RestrainedLoveCanOOC"
-#define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
-#define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
-#define RLV_SETTING_SHOWELLIPSIS		"RestrainedLoveShowEllipsis"
-#define RLV_SETTING_WEARADDPREFIX       "RestrainedLoveStackWhenFolderBeginsWith"
-#define RLV_SETTING_WEARREPLACEPREFIX   "RestrainedLoveReplaceWhenFolderBeginsWith"
+namespace RlvSettingNames
+{
+#ifdef CATZNIP_STRINGVIEW
+	/*inline*/ constexpr boost::string_view Main = make_string_view("RestrainedLove");
+	/*inline*/ constexpr boost::string_view Debug = make_string_view("RestrainedLoveDebug");
+	/*inline*/ constexpr boost::string_view CanOoc = make_string_view("RestrainedLoveCanOOC");
+	/*inline*/ constexpr boost::string_view ForbidGiveToRlv = make_string_view("RestrainedLoveForbidGiveToRLV");
+	/*inline*/ constexpr boost::string_view NoSetEnv = make_string_view("RestrainedLoveNoSetEnv");
+	/*inline*/ constexpr boost::string_view ShowEllipsis = make_string_view("RestrainedLoveShowEllipsis");
+	/*inline*/ constexpr boost::string_view WearAddPrefix = make_string_view("RestrainedLoveStackWhenFolderBeginsWith");
+	/*inline*/ constexpr boost::string_view WearReplacePrefix = make_string_view("RestrainedLoveReplaceWhenFolderBeginsWith");
 
-#define RLV_SETTING_DEBUGHIDEUNSETDUP   "RLVaDebugHideUnsetDuplicate"
-#define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
-#define RLV_SETTING_ENABLELEGACYNAMING	"RLVaEnableLegacyNaming"
-#define RLV_SETTING_ENABLESHAREDWEAR	"RLVaEnableSharedWear"
-#define RLV_SETTING_ENABLETEMPATTACH    "RLVaEnableTemporaryAttachments"
-#define RLV_SETTING_HIDELOCKEDLAYER		"RLVaHideLockedLayers"
-#define RLV_SETTING_HIDELOCKEDATTACH	"RLVaHideLockedAttachments"
-#define RLV_SETTING_HIDELOCKEDINVENTORY	"RLVaHideLockedInventory"
-#define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
-#define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
-#define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
-#define RLV_SETTING_SPLITREDIRECTCHAT   "RLVaSplitRedirectChat"
-#define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
-#define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
+	/*inline*/ constexpr boost::string_view DebugHideUnsetDup = make_string_view("RLVaDebugHideUnsetDuplicate");
+	/*inline*/ constexpr boost::string_view EnableIMQuery = make_string_view("RLVaEnableIMQuery");
+	/*inline*/ constexpr boost::string_view EnableLegacyNaming = make_string_view("RLVaEnableLegacyNaming");
+	/*inline*/ constexpr boost::string_view EnableSharedWear = make_string_view("RLVaEnableSharedWear");
+	/*inline*/ constexpr boost::string_view EnableTempAttach = make_string_view("RLVaEnableTemporaryAttachments");
+	/*inline*/ constexpr boost::string_view HideLockedLayer = make_string_view("RLVaHideLockedLayers");
+	/*inline*/ constexpr boost::string_view HideLockedAttach = make_string_view("RLVaHideLockedAttachments");
+	/*inline*/ constexpr boost::string_view HideLockedInventory = make_string_view("RLVaHideLockedInventory");
+	/*inline*/ constexpr boost::string_view LoginLastLocation = make_string_view("RLVaLoginLastLocation");
+	/*inline*/ constexpr boost::string_view SharedInvAutoRename = make_string_view("RLVaSharedInvAutoRename");
+	/*inline*/ constexpr boost::string_view ShowAssertionFail = make_string_view("RLVaShowAssertionFailures");
+	/*inline*/ constexpr boost::string_view SplitRedirectChat = make_string_view("RLVaSplitRedirectChat");
+	/*inline*/ constexpr boost::string_view TopLevelMenu = make_string_view("RLVaTopLevelMenu");
+	/*inline*/ constexpr boost::string_view WearReplaceUnlocked = make_string_view("RLVaWearReplaceUnlocked");
+#else
+	constexpr const char Main[] = "RestrainedLove";
+	constexpr const char Debug[] = "RestrainedLoveDebug";
+	constexpr const char CanOoc[] = "RestrainedLoveCanOOC";
+	constexpr const char ForbidGiveToRlv[] = "RestrainedLoveForbidGiveToRLV";
+	constexpr const char NoSetEnv[] = "RestrainedLoveNoSetEnv";
+	constexpr const char ShowEllipsis[] = "RestrainedLoveShowEllipsis";
+	constexpr const char WearAddPrefix[] = "RestrainedLoveStackWhenFolderBeginsWith";
+	constexpr const char WearReplacePrefix[] = "RestrainedLoveReplaceWhenFolderBeginsWith";
 
-#define RLV_SETTING_FIRSTUSE_PREFIX		"FirstRLV"
-#define RLV_SETTING_FIRSTUSE_GIVETORLV	RLV_SETTING_FIRSTUSE_PREFIX"GiveToRLV"
+	constexpr const char DebugHideUnsetDup[] = "RLVaDebugHideUnsetDuplicate";
+	constexpr const char EnableIMQuery[] = "RLVaEnableIMQuery";
+	constexpr const char EnableLegacyNaming[] = "RLVaEnableLegacyNaming";
+	constexpr const char EnableSharedWear[] = "RLVaEnableSharedWear";
+	constexpr const char EnableTempAttach[] = "RLVaEnableTemporaryAttachments";
+	constexpr const char HideLockedLayer[] = "RLVaHideLockedLayers";
+	constexpr const char HideLockedAttach[] = "RLVaHideLockedAttachments";
+	constexpr const char HideLockedInventory[] = "RLVaHideLockedInventory";
+	constexpr const char LoginLastLocation[] = "RLVaLoginLastLocation";
+	constexpr const char SharedInvAutoRename[] = "RLVaSharedInvAutoRename";
+	constexpr const char ShowAssertionFail[] = "RLVaShowAssertionFailures";
+	constexpr const char SplitRedirectChat[] = "RLVaSplitRedirectChat";
+	constexpr const char TopLevelMenu[] = "RLVaTopLevelMenu";
+	constexpr const char WearReplaceUnlocked[] = "RLVaWearReplaceUnlocked";
+#endif // CATZNIP_STRINGVIEW
+}
 
 // ============================================================================
 // Strings (see rlva_strings.xml)

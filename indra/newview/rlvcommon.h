@@ -63,13 +63,21 @@ class RlvGCTimer;
 // RlvSettings
 //
 
+#ifdef CATZNIP_STRINGVIEW
+template<typename T> inline T rlvGetSetting(const boost::string_view& strSetting, const T& defaultValue)
+#else
 template<typename T> inline T rlvGetSetting(const std::string& strSetting, const T& defaultValue)
+#endif // CATZNIP_STRINGVIEW
 {
 	RLV_ASSERT_DBG(gSavedSettings.controlExists(strSetting));
 	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.get<T>(strSetting) : defaultValue;
 }
 
+#ifdef CATZNIP_STRINGVIEW
+template<typename T> inline T rlvGetPerUserSetting(const boost::string_view& strSetting, const T& defaultValue)
+#else
 template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting, const T& defaultValue)
+#endif // CATZNIP_STRINGVIEW
 {
 	RLV_ASSERT_DBG(gSavedPerAccountSettings.controlExists(strSetting));
 	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.get<T>(strSetting) : defaultValue;
@@ -78,29 +86,29 @@ template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting
 class RlvSettings
 {
 public:
-	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
+	static bool getDebug()						{ return rlvGetSetting<bool>(RlvSettingNames::Debug, false); }
 	static bool getCanOOC()						{ return s_fCanOOC; }
-	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
+	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RlvSettingNames::ForbidGiveToRlv, true); }
 	static bool getNoSetEnv()					{ return s_fNoSetEnv; }
 
-	static std::string getWearAddPrefix()		{ return rlvGetSetting<std::string>(RLV_SETTING_WEARADDPREFIX, LLStringUtil::null); }
-	static std::string getWearReplacePrefix()	{ return rlvGetSetting<std::string>(RLV_SETTING_WEARREPLACEPREFIX, LLStringUtil::null); }
+	static std::string getWearAddPrefix()		{ return rlvGetSetting<std::string>(RlvSettingNames::WearAddPrefix, LLStringUtil::null); }
+	static std::string getWearReplacePrefix()	{ return rlvGetSetting<std::string>(RlvSettingNames::WearReplacePrefix, LLStringUtil::null); }
 
-	static bool getDebugHideUnsetDup()			{ return rlvGetSetting<bool>(RLV_SETTING_DEBUGHIDEUNSETDUP, false); }
+	static bool getDebugHideUnsetDup()			{ return rlvGetSetting<bool>(RlvSettingNames::DebugHideUnsetDup, false); }
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL getEnableComposites()			{ return s_fCompositeFolders; }
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static bool getEnableIMQuery()              { return rlvGetSetting<bool>("RLVaEnableIMQuery", true); }
+	static bool getEnableIMQuery()              { return rlvGetSetting<bool>(RlvSettingNames::EnableIMQuery, true); }
 	static bool getEnableLegacyNaming()			{ return s_fLegacyNaming; }
-	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RLV_SETTING_ENABLESHAREDWEAR, false); }
+	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RlvSettingNames::EnableSharedWear, false); }
 	static bool getEnableTemporaryAttachments() { return s_fTempAttach; }
-	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }
-	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
-	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
-	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
-	static bool getSplitRedirectChat()          { return rlvGetSetting<bool>(RLV_SETTING_SPLITREDIRECTCHAT, false); }
+	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RlvSettingNames::HideLockedLayer, false); }
+	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RlvSettingNames::HideLockedAttach, false); }
+	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RlvSettingNames::HideLockedInventory, false); }
+	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RlvSettingNames::SharedInvAutoRename, true); }
+	static bool getSplitRedirectChat()          { return rlvGetSetting<bool>(RlvSettingNames::SplitRedirectChat, false); }
 
-	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
+	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RlvSettingNames::LoginLastLocation, true); }
 	static void updateLoginLastLocation();
 
 	static void initCompatibilityMode(std::string strCompatList);

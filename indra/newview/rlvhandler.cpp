@@ -1240,7 +1240,7 @@ bool RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	}
 
 	if (fFilter)
-		strUTF8Text = (gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) ? "..." : "";
+		strUTF8Text = (gSavedSettings.get<bool>(RlvSettingNames::ShowEllipsis)) ? "..." : "";
 	return fFilter;
 }
 
@@ -1520,7 +1520,7 @@ bool RlvHandler::setEnabled(bool fEnable)
 
 		// Reset to show assertions if the viewer version changed
 		if (gSavedSettings.getString("LastRunVersion") != gLastRunVersion)
-			gSavedSettings.setBOOL("RLVaShowAssertionFailures", TRUE);
+			gSavedSettings.set<bool>(RlvSettingNames::ShowAssertionFail, TRUE);
 	}
 
 	return m_fEnabled;

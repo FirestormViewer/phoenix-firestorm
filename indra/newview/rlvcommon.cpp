@@ -100,9 +100,9 @@ void RlvSettings::initClass()
 	{
 		initCompatibilityMode(LLStringUtil::null);
 
-		s_fTempAttach = rlvGetSetting<bool>(RLV_SETTING_ENABLETEMPATTACH, true);
-		if (gSavedSettings.controlExists(RLV_SETTING_ENABLETEMPATTACH))
-			gSavedSettings.getControl(RLV_SETTING_ENABLETEMPATTACH)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fTempAttach));
+		s_fTempAttach = rlvGetSetting<bool>(RlvSettingNames::EnableTempAttach, true);
+		if (gSavedSettings.controlExists(RlvSettingNames::EnableTempAttach))
+			gSavedSettings.getControl(RlvSettingNames::EnableTempAttach)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fTempAttach));
 
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		s_fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
@@ -110,19 +110,19 @@ void RlvSettings::initClass()
 			gSavedSettings.getControl(RLV_SETTING_ENABLECOMPOSITES)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fCompositeFolders));
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
-		s_fLegacyNaming = rlvGetSetting<bool>(RLV_SETTING_ENABLELEGACYNAMING, true);
-		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
-			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fLegacyNaming));
+		s_fLegacyNaming = rlvGetSetting<bool>(RlvSettingNames::EnableLegacyNaming, true);
+		if (gSavedSettings.controlExists(RlvSettingNames::EnableLegacyNaming))
+			gSavedSettings.getControl(RlvSettingNames::EnableLegacyNaming)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fLegacyNaming));
 
-		s_fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
-		s_fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
+		s_fCanOOC = rlvGetSetting<bool>(RlvSettingNames::CanOoc, true);
+		s_fNoSetEnv = rlvGetSetting<bool>(RlvSettingNames::NoSetEnv, false);
 
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
-		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
-			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
+		if (gSavedPerAccountSettings.controlExists(RlvSettingNames::LoginLastLocation))
+			gSavedPerAccountSettings.getControl(RlvSettingNames::LoginLastLocation)->setHiddenFromSettingsEditor(true);
 
-		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
-			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
+		if (gSavedSettings.controlExists(RlvSettingNames::TopLevelMenu))
+			gSavedSettings.getControl(RlvSettingNames::TopLevelMenu)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
 
 		int nMinMaturity = gSavedSettings.getS32("RLVaExperienceMaturityThreshold");
 		s_nExperienceMinMaturity = (nMinMaturity == 0) ? 0 : ((nMinMaturity == 1) ? SIM_ACCESS_PG : ((nMinMaturity == 2) ? SIM_ACCESS_MATURE : SIM_ACCESS_ADULT));
@@ -136,12 +136,12 @@ void RlvSettings::initClass()
 // Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
 void RlvSettings::updateLoginLastLocation()
 {
-	if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
+	if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RlvSettingNames::LoginLastLocation)) )
 	{
-		BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
-		if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
+		bool fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
+		if (gSavedPerAccountSettings.get<bool>(RlvSettingNames::LoginLastLocation) != fValue)
 		{
-			gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);
+			gSavedPerAccountSettings.set<bool>(RlvSettingNames::LoginLastLocation, fValue);
 			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
 		}
 	}
@@ -607,7 +607,7 @@ void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::str
 	// Don't show the same assertion over and over, or if the user opted out
 	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
 	if ( ((strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev)) ||
-		 (!rlvGetSetting<bool>(RLV_SETTING_SHOWASSERTIONFAIL, true)) )
+		 (!rlvGetSetting<bool>(RlvSettingNames::ShowAssertionFail, true)) )
 	{
 		return;
 	}
@@ -705,7 +705,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 	if (pMenuItem)
 	{
 		static std::string strLabel = pMenuItem->getLabel();
-		if ((bool)gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
+		if ((bool)gSavedSettings.get<bool>(RlvSettingNames::Main) == rlv_handler_t::isEnabled())
 			pMenuItem->setLabel(strLabel);
 		else
 			pMenuItem->setLabel(strLabel + " " + LLTrans::getString("RLVaPendingRestart"));
@@ -716,7 +716,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 // Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
 void rlvMenuToggleVisible()
 {
-	bool fTopLevel = rlvGetSetting(RLV_SETTING_TOPLEVELMENU, true);
+	bool fTopLevel = rlvGetSetting(RlvSettingNames::TopLevelMenu, true);
 	bool fRlvEnabled = rlv_handler_t::isEnabled();
 
 	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);
