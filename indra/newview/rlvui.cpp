@@ -303,7 +303,7 @@ bool RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName, co
 bool RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
 {
 	auto itFloater = m_FilteredFloaterMap.find(strFloaterName);
-	if (itFloater != m_FilteredFloaterMap.end())
+	if (m_FilteredFloaterMap.end() == itFloater)
 		return false;
 
 	m_FilteredFloaterMap.erase(itFloater);

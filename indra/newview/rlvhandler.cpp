@@ -2035,7 +2035,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhv
 	// Start or stop filtering opening the pay avatar floater
 	if (fHasBhvr)
 	{
-		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident"));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident", std::string(RLV_STRING_BLOCKED_GENERIC)));
 	}
 	else
 	{
