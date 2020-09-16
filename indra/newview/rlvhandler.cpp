@@ -70,6 +70,9 @@
 // Boost includes
 #include <boost/algorithm/string.hpp>
 
+// llappviewer.cpp
+extern BOOL gDoDisconnect;
+
 // ============================================================================
 // Static variable initialization
 //
@@ -158,7 +161,7 @@ void RlvHandler::cleanup()
 	//
 	// Clean up any restrictions that are still active
 	//
-	RLV_ASSERT(LLApp::isQuitting());	// Several commands toggle debug settings but won't if they know the viewer is quitting
+	RLV_ASSERT(LLApp::isExiting() || gDoDisconnect);	// Several commands toggle debug settings but won't if they know the viewer is quitting
 
 	// Assume we have no way to predict how m_Objects will change so make a copy ahead of time
 	uuid_vec_t idRlvObjects;
@@ -502,6 +505,11 @@ ERlvCmdRet RlvHandler::processCommand(std::reference_wrapper<const RlvCommand> r
 					{
 						RlvCommand rlvCmdRem(rlvCmd, RLV_TYPE_REMOVE);
 						itObj->second.removeCommand(rlvCmdRem);
+						if (itObj->second.m_Commands.empty())
+						{
+							RLV_DEBUGS << "\t- command list empty => removing " << idCurObj << RLV_ENDL;
+							m_Objects.erase(itObj);
+						}
 					}
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 				}
@@ -1856,6 +1864,25 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @buy=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_BUY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Start or stop filtering opening the buy, buy contents and pay object floaters
+	if (fHasBhvr)
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object", std::string(RLV_STRING_BLOCKED_GENERIC)));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents", std::string(RLV_STRING_BLOCKED_GENERIC)));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_object", std::string(RLV_STRING_BLOCKED_GENERIC)));
+	}
+	else
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object_contents"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("pay_object"));
+	}
+}
+
 // Handles: @detach[:<attachpt>]=n|y
 template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
@@ -1989,9 +2016,28 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 
 	// Start or stop filtering opening the beacons floater
 	if (fHasBhvr)
-		RlvUIEnabler::instance().addGenericFloaterFilter("beacons");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("beacons"));
+	}
 	else
-		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("beacons"));
+	}
+}
+
+// Handles: @pay=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Start or stop filtering opening the pay avatar floater
+	if (fHasBhvr)
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident"));
+	}
+	else
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("pay_resident"));
+	}
 }
 
 // Handles: @setoverlay=n|y toggles
@@ -2333,11 +2379,11 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
 			for (LLFloater* pFloater : envFloaters)
 				pFloater->closeFloater();
-			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+			RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]));
 		}
 		else
 		{
-			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+			RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]));
 		}
 	}
 
@@ -2390,7 +2436,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	//
@@ -2436,16 +2482,20 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 	// Filter (or stop filtering) opening new inventory floaters
 	//
 	if (fHasBhvr)
-		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("inventory"));
+	}
 	else
-		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("inventory"));
+	}
 }
 
 // Handles: @shownames[:<uuid>]=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Update the shownames context
@@ -2482,7 +2532,7 @@ template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
-	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isQuitting()) )
+	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isExiting()) )
 	{
 		const LLUUID idAgent = RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption());
 
@@ -2507,7 +2557,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& 
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMETAGS>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Update the shownames context
@@ -2531,7 +2581,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvComman
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Refresh the nearby people list

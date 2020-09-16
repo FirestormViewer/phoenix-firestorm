@@ -154,8 +154,10 @@ enum ERlvBehaviour {
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
 	RLV_BHVR_ACCEPTTPREQUEST,		// "accepttprequest"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
+	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_PAY,					// "pay"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
 	RLV_BHVR_INTERACT,				// "interact"
@@ -388,6 +390,7 @@ namespace RlvSettingNames
 	/*inline*/ constexpr boost::string_view LoginLastLocation = make_string_view("RLVaLoginLastLocation");
 	/*inline*/ constexpr boost::string_view SharedInvAutoRename = make_string_view("RLVaSharedInvAutoRename");
 	/*inline*/ constexpr boost::string_view ShowAssertionFail = make_string_view("RLVaShowAssertionFailures");
+	/*inline*/ constexpr boost::string_view ShowRedirectChatTyping = make_string_view("RLVaShowRedirectChatTyping");
 	/*inline*/ constexpr boost::string_view SplitRedirectChat = make_string_view("RLVaSplitRedirectChat");
 	/*inline*/ constexpr boost::string_view TopLevelMenu = make_string_view("RLVaTopLevelMenu");
 	/*inline*/ constexpr boost::string_view WearReplaceUnlocked = make_string_view("RLVaWearReplaceUnlocked");
@@ -412,6 +415,7 @@ namespace RlvSettingNames
 	constexpr const char LoginLastLocation[] = "RLVaLoginLastLocation";
 	constexpr const char SharedInvAutoRename[] = "RLVaSharedInvAutoRename";
 	constexpr const char ShowAssertionFail[] = "RLVaShowAssertionFailures";
+	constexpr const char ShowRedirectChatTyping[] = "RLVaShowRedirectChatTyping";
 	constexpr const char SplitRedirectChat[] = "RLVaSplitRedirectChat";
 	constexpr const char TopLevelMenu[] = "RLVaTopLevelMenu";
 	constexpr const char WearReplaceUnlocked[] = "RLVaWearReplaceUnlocked";

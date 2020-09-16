@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -89,6 +89,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("attachallthis",			RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("attachthis_except",		RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("attachallthis_except",	RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_BUY, RLV_OPTION_NONE>("buy"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatwhisper", RLV_BHVR_CHATWHISPER));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatnormal", RLV_BHVR_CHATNORMAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatshout", RLV_BHVR_CHATSHOUT));
@@ -106,6 +107,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("interact", RLV_BHVR_INTERACT, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("jump", RLV_BHVR_JUMP));
 	addEntry(new RlvBehaviourInfo("notify",					RLV_BHVR_NOTIFY,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_PAY, RLV_OPTION_NONE>("pay"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("permissive", RLV_BHVR_PERMISSIVE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvchat", RLV_BHVR_RECVCHAT, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvchatfrom", RLV_BHVR_RECVCHATFROM, RlvBehaviourInfo::BHVR_STRICT));

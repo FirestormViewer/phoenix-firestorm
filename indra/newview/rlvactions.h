@@ -109,6 +109,11 @@ public:
 	static bool canSendIM(const LLUUID& idRecipient);
 
 	/*
+	 * Returns true if the viewer can inform the region about the user's (nearby chat) typing
+	 */
+	static bool canSendTypingStart();
+
+	/*
 	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists, unless 'ignore open' is specified)
 	 */
 	static bool canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen = false);
@@ -234,6 +239,11 @@ public:
 	static bool canBuild();
 
 	/*
+	 * Returns true if the user can buy an object set for sale
+	 */
+	static bool canBuyObject(const LLUUID& idObj);
+
+	/*
 	 * Returns true if the user can edit the specified object (with an optional relative offset)
 	 */
 	static bool canEdit(const LLViewerObject* pObj);
@@ -248,6 +258,16 @@ public:
 	 * (returns true if pObj == nullptr to not short circuit calling code)
 	 */
 	static bool canInteract(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
+	/*
+	 * Returns true if the user can pay an avatar
+	 */
+	static bool canPayAvatar(const LLUUID& idAvatar);
+
+	/*
+	 * Returns true if the user can pay an object (i.e. vendor)
+	 */
+	static bool canPayObject(const LLUUID& idObj);
 
 	/*
 	 * Returns true if the user can rez new objects (from inventory or through the create tool)

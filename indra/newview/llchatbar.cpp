@@ -479,11 +479,7 @@ void LLChatBar::onInputEditorKeystroke( LLLineEditor* caller, void* userdata )
 
 	S32 length = raw_text.length();
 
-//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
-// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
-	// RELEASE-RLVa: [SL-2.0.0] This entire class appears to be dead/non-functional?
-	if ( (length > 0) && (raw_text[0] != '/') && (!RlvActions::hasBehaviour(RLV_BHVR_REDIRCHAT)) )
-// [/RLVa:KB]
+	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 	{
 		gAgent.startTyping();
 	}

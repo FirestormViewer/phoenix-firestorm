@@ -188,6 +188,15 @@ bool RlvActions::canSendIM(const LLUUID& idRecipient)
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
 }
 
+// Handles: @redirchat
+bool RlvActions::canSendTypingStart()
+{
+	// The CHAT_TYPE_START indicator can be sent if:
+	//   - nearby chat isn't being redirected
+	//   - the user specifically indicated that they want to show typing under @redirchat
+	return !RlvHandler::instance().hasBehaviour(RLV_BHVR_REDIRCHAT) || gSavedSettings.get<bool>(RLV_SETTING_SHOWREDIRECTCHATTYPING);
+}
+
 bool RlvActions::canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen)
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
@@ -376,6 +385,14 @@ bool RlvActions::canBuild()
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
 }
 
+// Handles: @buy
+bool RlvActions::canBuyObject(const LLUUID& idObj)
+{
+	// User can buy an object set for sale if:
+	//    - not restricted from buying objects
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
+}
+
 // Handles: @edit and @editobj
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
@@ -404,6 +421,22 @@ bool RlvActions::canInteract(const LLViewerObject* pObj, const LLVector3& posOff
 		(!pObj) ||
 		( ( (!rlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) || (pObj->isHUDAttachment())) &&
 		  ( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (pObj->isHUDAttachment()) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist)) );
+}
+
+// Handles: @pay
+bool RlvActions::canPayAvatar(const LLUUID& idAvatar)
+{
+	// User can pay an avatar if:
+	//    - not restricted from paying avatars
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_PAY));
+}
+
+// Handles: @buy
+bool RlvActions::canPayObject(const LLUUID& idObj)
+{
+	// User can pay an object/vendor if:
+	//    - not restricted from buying objects
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
 }
 
 bool RlvActions::canRez()
