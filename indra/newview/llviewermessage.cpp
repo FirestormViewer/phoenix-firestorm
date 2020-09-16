@@ -6665,7 +6665,7 @@ void handle_lure(const uuid_vec_t& ids)
 		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		{
 			const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(idAgent);
-			if ( (!gRlvHandler.isException(RLV_BHVR_TPLURE, idAgent, RLV_CHECK_PERMISSIVE)) &&
+			if ( (!gRlvHandler.isException(RLV_BHVR_TPLURE, idAgent, ERlvExceptionCheck::Permissive)) &&
 				 ((!pBuddyInfo) || (!pBuddyInfo->isOnline()) || (!pBuddyInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))) )
 			{
 				RlvUtil::notifyBlocked(RlvStringKeys::Blocked::TeleportOffer);

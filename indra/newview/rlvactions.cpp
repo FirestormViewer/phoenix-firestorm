@@ -454,7 +454,7 @@ bool RlvActions::canShowHoverText(const LLViewerObject *pObj)
 		  !( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTALL)) ||
 		     ( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTWORLD)) && (!pObj->isHUDAttachment()) ) ||
 		     ( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTHUD)) && (pObj->isHUDAttachment()) ) ||
-		     (rlvHandler.isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), RLV_CHECK_PERMISSIVE)) ) );
+		     (rlvHandler.isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), ERlvExceptionCheck::Permissive)) ) );
 }
 
 // Handles: @touchall, @touchthis, @touchworld, @touchattach, @touchattachself, @touchattachother, @touchhud, @touchme and @fartouch
@@ -501,28 +501,28 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	bool fCanTouch =
 		(idRoot.notNull()) &&
 		( (pObj->isHUDAttachment()) || (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHALL)) ) &&
-		( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, RLV_CHECK_PERMISSIVE)) );
+		( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, ERlvExceptionCheck::Permissive)) );
 	if (fCanTouch)
 	{
 		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
 		{
 			// Rezzed or attachment worn by other - test for (1.c), (2.d), (2.e) and (1/2.h)
 			fCanTouch =
-				( (!pObj->isAttachment()) ? (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE))
-				                          : ((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
+				( (!pObj->isAttachment()) ? (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, ERlvExceptionCheck::Permissive))
+				                          : ((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive)) ) &&
 				( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
 		}
 		else if (!pObj->isHUDAttachment())
 		{
 			// Regular attachment worn by this avie - test for (3.d), (3.e) and (3.h)
 			fCanTouch =
-				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
-				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
+				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive))) &&
+				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive)));
 		}
 		else
 		{
 			// HUD attachment - test for (4.g)
-			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (rlvHandler.isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
+			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (rlvHandler.isException(RLV_BHVR_TOUCHHUD, idRoot, ERlvExceptionCheck::Permissive));
 		}
 	}
 	// Post-check for (1/2/3/4i)

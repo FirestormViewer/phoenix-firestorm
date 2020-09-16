@@ -327,11 +327,11 @@ enum ERlvCmdRet {
 };
 #define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)
 
-enum ERlvExceptionCheck
+enum class ERlvExceptionCheck
 {
-	RLV_CHECK_PERMISSIVE,			// Exception can be set by any object
-	RLV_CHECK_STRICT,				// Exception must be set by all objects holding the restriction
-	RLV_CHECK_DEFAULT				// Permissive or strict will be determined by currently enforced restrictions
+	Permissive,						// Exception can be set by any object
+	Strict,							// Exception must be set by all objects holding the restriction
+	Default,						// Permissive or strict will be determined by currently enforced restrictions
 };
 
 enum ERlvLockMask
