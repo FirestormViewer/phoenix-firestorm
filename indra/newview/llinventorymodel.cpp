@@ -1634,7 +1634,10 @@ void LLInventoryModel::idleNotifyObservers()
 }
 
 // Call this method when it's time to update everyone on a new state.
-void LLInventoryModel::notifyObservers()
+//void LLInventoryModel::notifyObservers()
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+void LLInventoryModel::notifyObservers(const LLUUID& transaction_id)
+// [/SL:KB]
 {
 	if (mIsNotifyObservers)
 	{
@@ -1646,6 +1649,9 @@ void LLInventoryModel::notifyObservers()
 	}
 
 	mIsNotifyObservers = TRUE;
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+    mTransactionId = transaction_id;
+// [/SL:KB]
 	for (observer_list_t::iterator iter = mObservers.begin();
 		 iter != mObservers.end(); )
 	{
@@ -1659,6 +1665,9 @@ void LLInventoryModel::notifyObservers()
 	mModifyMask = LLInventoryObserver::NONE;
 	mChangedItemIDs.clear();
 	mAddedItemIDs.clear();
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+    mTransactionId.setNull();
+// [/SL:KB]
 	mIsNotifyObservers = FALSE;
 }
 
@@ -3321,7 +3330,10 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 	{
 		gInventory.updateItem(*iit);
 	}
-	gInventory.notifyObservers();
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+	gInventory.notifyObservers(tid);
+// [/SL:KB]
+//	gInventory.notifyObservers();
 
 	// The incoming inventory could span more than one BulkInventoryUpdate packet,
 	// so record the transaction ID for this purchase, then wear all clothing
