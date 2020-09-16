@@ -526,7 +526,10 @@ public:
 	void idleNotifyObservers();
 
 	// Call to explicitly update everyone on a new state.
-	void notifyObservers();
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+	void notifyObservers(const LLUUID& transaction_id = LLUUID::null);
+// [/SL:KB]
+//	void notifyObservers();
 
 	// Allows outsiders to tell the inventory if something has
 	// been changed 'under the hood', but outside the control of the
@@ -535,6 +538,9 @@ public:
 	
 	const changed_items_t& getChangedIDs() const { return mChangedItemIDs; }
 	const changed_items_t& getAddedIDs() const { return mAddedItemIDs; }
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+    const LLUUID& getTransactionId() const { return mTransactionId; }
+// [/SL:KB]
 protected:
 	// Updates all linked items pointing to this id.
 	void addChangedMaskForLinks(const LLUUID& object_id, U32 mask);
@@ -546,6 +552,9 @@ private:
 	U32 mModifyMask;
 	changed_items_t mChangedItemIDs;
 	changed_items_t mAddedItemIDs;
+// [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
+    LLUUID mTransactionId;
+// [/SL:KB]
 	
 	
 	//--------------------------------------------------------------------
