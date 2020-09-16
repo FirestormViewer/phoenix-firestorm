@@ -194,7 +194,7 @@ bool RlvActions::canSendTypingStart()
 	// The CHAT_TYPE_START indicator can be sent if:
 	//   - nearby chat isn't being redirected
 	//   - the user specifically indicated that they want to show typing under @redirchat
-	return !RlvHandler::instance().hasBehaviour(RLV_BHVR_REDIRCHAT) || gSavedSettings.get<bool>(RLV_SETTING_SHOWREDIRECTCHATTYPING);
+	return !RlvHandler::instance().hasBehaviour(RLV_BHVR_REDIRCHAT) || gSavedSettings.get<bool>(RlvSettingNames::ShowRedirectChatTyping);
 }
 
 bool RlvActions::canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen)

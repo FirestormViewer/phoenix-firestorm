@@ -279,7 +279,11 @@ void RlvUIEnabler::onUpdateLoginLastLocation(bool fQuitting)
 
 // ============================================================================
 
+#ifdef CATZNIP_STRINGVIEW
+bool RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName, const boost::string_view& strRlvNotification)
+#else
 bool RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName, const std::string& strRlvNotification)
+#endif // CATZNIP_STRINGVIEW
 {
 	return addGenericFloaterFilter(strFloaterName, [strRlvNotification]() { RlvUtil::notifyBlocked(strRlvNotification); });
 }
@@ -303,7 +307,7 @@ bool RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName, co
 bool RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
 {
 	auto itFloater = m_FilteredFloaterMap.find(strFloaterName);
-	if (itFloater != m_FilteredFloaterMap.end())
+	if (m_FilteredFloaterMap.end() == itFloater)
 		return false;
 
 	m_FilteredFloaterMap.erase(itFloater);

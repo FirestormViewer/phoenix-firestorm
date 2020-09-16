@@ -1871,9 +1871,9 @@ void RlvBehaviourToggleHandler<RLV_BHVR_BUY>::onCommandToggle(ERlvBehaviour eBhv
 	// Start or stop filtering opening the buy, buy contents and pay object floaters
 	if (fHasBhvr)
 	{
-		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object", std::string(RLV_STRING_BLOCKED_GENERIC)));
-		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents", std::string(RLV_STRING_BLOCKED_GENERIC)));
-		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_object", std::string(RLV_STRING_BLOCKED_GENERIC)));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object", RlvStringKeys::Blocked::Generic));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents", RlvStringKeys::Blocked::Generic));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_object", RlvStringKeys::Blocked::Generic));
 	}
 	else
 	{
@@ -2032,7 +2032,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhv
 	// Start or stop filtering opening the pay avatar floater
 	if (fHasBhvr)
 	{
-		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident"));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident", RlvStringKeys::Blocked::Generic));
 	}
 	else
 	{
