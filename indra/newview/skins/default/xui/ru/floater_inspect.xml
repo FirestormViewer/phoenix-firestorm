@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="inspect" title="Инспектирование объектов">
     <floater.string name="timeStamp">
-        [wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+        [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
     </floater.string>
     <floater.string name="Group">
         (Группа)

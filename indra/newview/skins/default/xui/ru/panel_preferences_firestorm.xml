@@ -33,6 +33,8 @@
             <combo_box.item label="Помошь полета: Сильное ускорение" name="flight_strong" />
             <combo_box.item label="Помошь полета: Экстремальное ускорение" name="flight_extreme" />
         </combo_box>
+        <slider name="manual_environment_change_transition_period" label="Время изменения окружающей среды:"
+        tool_tip="Интервал в секундах, в течение которого будет изменяться окружающая среда при ручной настройке. Ноль - мгновенно."/>
     </panel>
     <panel label="Защита" name="ProtectionTab">
         <check_box label="Блокировка нажатия левой кнопкой мыши, чтобы сесть на объекты" name="FSBlockClickSit" />

@@ -4,6 +4,7 @@
 	<menu_item_check label="Показать Голоса..." name="nearby_voice"/>
 	<menu_item_check label="Показать Черный список..." name="block_list"/>
 	<menu_item_check label="Использовать стиль V1 для чата" name="plain_text_chat_history"/>
+	<menu_item_check label="Показывать значки профиля в заголовках чата" name="chat_header_icons"/>
 	<context_menu label="Размер шрифта..." name="font_size">
 		<menu_item_check label="Мелкий" name="font_size_small"/>
 		<menu_item_check label="Средний" name="font_size_medium"/>
