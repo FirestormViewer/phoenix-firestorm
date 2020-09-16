@@ -108,6 +108,11 @@ public:
 	static bool canSendIM(const LLUUID& idRecipient);
 
 	/*
+	 * Returns true if the viewer can inform the region about the user's (nearby chat) typing
+	 */
+	static bool canSendTypingStart();
+
+	/*
 	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists, unless 'ignore open' is specified)
 	 */
 	static bool canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen = false);

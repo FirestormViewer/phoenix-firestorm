@@ -188,6 +188,15 @@ bool RlvActions::canSendIM(const LLUUID& idRecipient)
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
 }
 
+// Handles: @redirchat
+bool RlvActions::canSendTypingStart()
+{
+	// The CHAT_TYPE_START indicator can be sent if:
+	//   - nearby chat isn't being redirected
+	//   - the user specifically indicated that they want to show typing under @redirchat
+	return !RlvHandler::instance().hasBehaviour(RLV_BHVR_REDIRCHAT) || gSavedSettings.get<bool>(RLV_SETTING_SHOWREDIRECTCHATTYPING);
+}
+
 bool RlvActions::canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen)
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
