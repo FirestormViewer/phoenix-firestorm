@@ -382,6 +382,7 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_HIDELOCKEDATTACH	"RLVaHideLockedAttachments"
 #define RLV_SETTING_HIDELOCKEDINVENTORY	"RLVaHideLockedInventory"
 #define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
+#define RLV_SETTING_SHOWREDIRECTCHATTYPING "RLVaShowRedirectChatTyping"
 #define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
 #define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
 #define RLV_SETTING_SPLITREDIRECTCHAT   "RLVaSplitRedirectChat"
