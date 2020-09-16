@@ -182,9 +182,13 @@ void RlvUIEnabler::onToggleShowMinimap()
 
 	// Start or stop filtering showing the mini-map floater
 	if (!fEnable)
-		addGenericFloaterFilter("mini_map");
+	{
+		RLV_VERIFY(addGenericFloaterFilter("mini_map"));
+	}
 	else
-		removeGenericFloaterFilter("mini_map");
+	{
+		RLV_VERIFY(removeGenericFloaterFilter("mini_map"));
+	}
 
 	// Hide the mini-map floater if it's currently visible (or restore it if it was previously visible)
 	static bool fPrevVisibile = false;
@@ -217,9 +221,13 @@ void RlvUIEnabler::onToggleShowWorldMap()
 
 	// Start or stop filtering opening the world map
 	if (!fEnable)
-		addGenericFloaterFilter("world_map");
+	{
+		RLV_VERIFY(addGenericFloaterFilter("world_map"));
+	}
 	else
-		removeGenericFloaterFilter("world_map");
+	{
+		RLV_VERIFY(removeGenericFloaterFilter("world_map"));
+	}
 }
 
 // Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
@@ -271,31 +279,53 @@ void RlvUIEnabler::onUpdateLoginLastLocation(bool fQuitting)
 
 // ============================================================================
 
-// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
-void RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName)
+bool RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName, const std::string& strRlvNotification)
 {
-	m_FilteredFloaters.insert(strFloaterName);
+	return addGenericFloaterFilter(strFloaterName, [strRlvNotification]() { RlvUtil::notifyBlocked(strRlvNotification); });
+}
+
+bool RlvUIEnabler::addGenericFloaterFilter(const std::string& strFloaterName, const std::function<void()>& fn)
+{
+	// NOTE: we don't currently support multiple filters for the same floater (due to the need to remove the correct one at the end of it all)
+	if (m_FilteredFloaterMap.end() != m_FilteredFloaterMap.find(strFloaterName))
+		return false;
+
+	m_FilteredFloaterMap.insert(std::make_pair(strFloaterName, fn));
 
 	if (!m_ConnFloaterGeneric.connected())
+	{
 		m_ConnFloaterGeneric = LLFloaterReg::setValidateCallback(boost::bind(&RlvUIEnabler::filterFloaterGeneric, this, _1, _2));
+	}
+
+	return true;
 }
 
-// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
-void RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
+bool RlvUIEnabler::removeGenericFloaterFilter(const std::string& strFloaterName)
 {
-	std::multiset<std::string>::iterator itFloater = m_FilteredFloaters.find(strFloaterName);
-	RLV_ASSERT_DBG(itFloater != m_FilteredFloaters.end());
-	m_FilteredFloaters.erase(itFloater);
+	auto itFloater = m_FilteredFloaterMap.find(strFloaterName);
+	if (itFloater != m_FilteredFloaterMap.end())
+		return false;
+
+	m_FilteredFloaterMap.erase(itFloater);
 
 	RLV_ASSERT_DBG(m_ConnFloaterGeneric.connected());
-	if (m_FilteredFloaters.empty())
+	if (m_FilteredFloaterMap.empty())
 		m_ConnFloaterGeneric.disconnect();
+
+	return true;
 }
 
-// Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
-bool RlvUIEnabler::filterFloaterGeneric(const std::string& strName, const LLSD&)
+bool RlvUIEnabler::filterFloaterGeneric(const std::string& strFloaterName, const LLSD&)
 {
-	return m_FilteredFloaters.end() == m_FilteredFloaters.find(strName);
+	auto itFloater = m_FilteredFloaterMap.find(strFloaterName);
+	if (m_FilteredFloaterMap.end() != itFloater)
+	{
+		if (itFloater->second)
+			itFloater->second();
+		return false;
+	}
+	return true;
+
 }
 
 // Checked: 2010-04-22 (RLVa-1.4.5) | Added: RLVa-1.2.0

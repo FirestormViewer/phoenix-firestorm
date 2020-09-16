@@ -34,6 +34,9 @@
 #include "llconversationloglistitem.h"
 #include "llviewermenu.h"
 #include "lltrans.h"
+// [RLVa:KB] - @pay
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLConversationLogList> r("conversation_log_list");
 
@@ -387,6 +390,12 @@ bool LLConversationLogList::isActionEnabled(const LLSD& userdata)
 	{
 		return (is_p2p || is_group_member) && LLAvatarActions::canCall();
 	}
+// [RLVa:KB] - @pay
+	else if ("can_pay" == command_name)
+	{
+		return is_p2p && RlvActions::canPayAvatar(selected_id);
+	}
+// [/RLVa:KB]
 	else if ("add_rem_friend"		== command_name ||
 			 "can_invite_to_group"	== command_name ||
 			 "can_share"			== command_name ||

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -151,8 +151,10 @@ enum ERlvBehaviour {
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
 	RLV_BHVR_ACCEPTTPREQUEST,		// "accepttprequest"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
+	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_PAY,					// "pay"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
 	RLV_BHVR_INTERACT,				// "interact"
