@@ -5378,7 +5378,7 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 		Удалить выбранные объекты?
 	</string>
 	<string name="DeleteItem">
-		Удалить выбранные объект?
+		Удалить выбранный объект?
 	</string>
 	<string name="EmptyOutfitText">
 		Для этого комплекта одежды нет вещей
@@ -7019,5 +7019,8 @@ ID объекта: [INSPECTING_KEY]
 	</string>
 	<string name="TexturePickerOutfitHeader">
 		Картинка для Комплекта
+	</string>
+	<string name="unknown_script">
+		(Неизвестный скрипт)
 	</string>
 </strings>
