@@ -3428,7 +3428,7 @@ bool LLAppViewer::initConfiguration()
 	}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-	if (LLControlVariable* pControl = gSavedSettings.getControl(RLV_SETTING_MAIN))
+    if (LLControlVariable* pControl = gSavedSettings.getControl(RlvSettingNames::Main))
 	{
 		if ( (pControl->getValue().asBoolean()) && (pControl->hasUnsavedValue()) )
 		{
@@ -3789,7 +3789,7 @@ LLSD LLAppViewer::getViewerInfo() const
 		}
 		else
 		{
-			info["REGION"] = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+			info["REGION"] = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 		}
 		info["SERVER_VERSION"] = gLastVersionChannel;
 // [/RLVa:KB]

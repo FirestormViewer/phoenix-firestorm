@@ -1,21 +1,20 @@
-/** 
+/**
  *
- * Copyright (c) 2009-2011, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ * Copyright (c) 2009-2020, Kitty Barnett
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
-#ifndef RLV_COMMON_H
-#define RLV_COMMON_H
+#pragma once
 
 #include "llavatarname.h"
 #include "llselectmgr.h"
@@ -65,13 +64,21 @@ class RlvGCTimer;
 // RlvSettings
 //
 
+#ifdef CATZNIP_STRINGVIEW
+template<typename T> inline T rlvGetSetting(const boost::string_view& strSetting, const T& defaultValue)
+#else
 template<typename T> inline T rlvGetSetting(const std::string& strSetting, const T& defaultValue)
+#endif // CATZNIP_STRINGVIEW
 {
 	RLV_ASSERT_DBG(gSavedSettings.controlExists(strSetting));
 	return (gSavedSettings.controlExists(strSetting)) ? gSavedSettings.get<T>(strSetting) : defaultValue;
 }
 
+#ifdef CATZNIP_STRINGVIEW
+template<typename T> inline T rlvGetPerUserSetting(const boost::string_view& strSetting, const T& defaultValue)
+#else
 template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting, const T& defaultValue)
+#endif // CATZNIP_STRINGVIEW
 {
 	RLV_ASSERT_DBG(gSavedPerAccountSettings.controlExists(strSetting));
 	return (gSavedPerAccountSettings.controlExists(strSetting)) ? gSavedPerAccountSettings.get<T>(strSetting) : defaultValue;
@@ -80,29 +87,29 @@ template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting
 class RlvSettings
 {
 public:
-	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
+	static bool getDebug()						{ return rlvGetSetting<bool>(RlvSettingNames::Debug, false); }
 	static bool getCanOOC()						{ return s_fCanOOC; }
-	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
+	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RlvSettingNames::ForbidGiveToRlv, true); }
 	static bool getNoSetEnv()					{ return s_fNoSetEnv; }
 
-	static std::string getWearAddPrefix()		{ return rlvGetSetting<std::string>(RLV_SETTING_WEARADDPREFIX, LLStringUtil::null); }
-	static std::string getWearReplacePrefix()	{ return rlvGetSetting<std::string>(RLV_SETTING_WEARREPLACEPREFIX, LLStringUtil::null); }
+	static std::string getWearAddPrefix()		{ return rlvGetSetting<std::string>(RlvSettingNames::WearAddPrefix, LLStringUtil::null); }
+	static std::string getWearReplacePrefix()	{ return rlvGetSetting<std::string>(RlvSettingNames::WearReplacePrefix, LLStringUtil::null); }
 
-	static bool getDebugHideUnsetDup()			{ return rlvGetSetting<bool>(RLV_SETTING_DEBUGHIDEUNSETDUP, false); }
+	static bool getDebugHideUnsetDup()			{ return rlvGetSetting<bool>(RlvSettingNames::DebugHideUnsetDup, false); }
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL getEnableComposites()			{ return s_fCompositeFolders; }
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static bool getEnableIMQuery()              { return rlvGetSetting<bool>("RLVaEnableIMQuery", true); }
+	static bool getEnableIMQuery()              { return rlvGetSetting<bool>(RlvSettingNames::EnableIMQuery, true); }
 	static bool getEnableLegacyNaming()			{ return s_fLegacyNaming; }
-	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RLV_SETTING_ENABLESHAREDWEAR, false); }
+	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RlvSettingNames::EnableSharedWear, false); }
 	static bool getEnableTemporaryAttachments() { return s_fTempAttach; }
-	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }
-	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
-	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
-	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
-	static bool getSplitRedirectChat()          { return rlvGetSetting<bool>(RLV_SETTING_SPLITREDIRECTCHAT, false); }
+	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RlvSettingNames::HideLockedLayer, false); }
+	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RlvSettingNames::HideLockedAttach, false); }
+	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RlvSettingNames::HideLockedInventory, false); }
+	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RlvSettingNames::SharedInvAutoRename, true); }
+	static bool getSplitRedirectChat()          { return rlvGetSetting<bool>(RlvSettingNames::SplitRedirectChat, false); }
 
-	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
+	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RlvSettingNames::LoginLastLocation, true); }
 	static void updateLoginLastLocation();
 
 	static void initCompatibilityMode(std::string strCompatList);
@@ -147,7 +154,11 @@ public:
 
 	static std::string getAnonym(const LLAvatarName& avName);		// @shownames
 	static std::string getAnonym(const std::string& strName);		// @shownames
+#ifdef CATZNIP_STRINGVIEW
+	static const std::string& getString(const boost::string_view& strStringName);
+#else
 	static const std::string& getString(const std::string& strStringName);
+#endif // CATZNIP_STRINGVIEW
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
 	static const std::string& getStringMapPath() { return m_StringMapPath; }
 	static std::string        getVersion(const LLUUID& idRlvObject, bool fLegacy = false);
@@ -159,7 +170,7 @@ public:
 
 protected:
 	static std::vector<std::string> m_Anonyms;
-	typedef std::map<std::string, std::list<std::string> > string_map_t;
+	typedef std::map<std::string, std::list<std::string>, std::less<>> string_map_t;
 	static string_map_t m_StringMap;
 	static std::string  m_StringMapPath;
 };
@@ -182,9 +193,14 @@ public:
 	static bool isForceTp()	{ return m_fForceTp; }
 	static void forceTp(const LLVector3d& posDest);									// Ignores restrictions that might otherwise prevent tp'ing
 
+#ifdef CATZNIP_STRINGVIEW
+	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false) { notifyBlocked(boost::string_view(strNotifcation), sdArgs, fLogToChat); }
+	static void notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
+#else
 	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD(), bool fLogToChat = false);
-	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLTrans::getString(LLAssetType::lookupHumanReadable(assetType)))); }
+#endif // CATZNIP_STRINGVIEW
+	static void notifyBlockedGeneric() { notifyBlocked(RlvStringKeys::Blocked::Generic); }
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RlvStringKeys::Blocked::ViewXxx, LLSD().with("[TYPE]", LLTrans::getString(LLAssetType::lookupHumanReadable(assetType)))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
@@ -333,5 +349,3 @@ inline bool RlvUtil::sendChatReply(const std::string& strChannel, const std::str
 }
 
 // ============================================================================
-
-#endif // RLV_COMMON_H

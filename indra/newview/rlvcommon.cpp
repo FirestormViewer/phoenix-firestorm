@@ -1,17 +1,17 @@
-/** 
+/**
  *
- * Copyright (c) 2009-2011, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ * Copyright (c) 2009-2020, Kitty Barnett
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -102,9 +102,9 @@ void RlvSettings::initClass()
 	{
 		initCompatibilityMode(LLStringUtil::null);
 
-		s_fTempAttach = rlvGetSetting<bool>(RLV_SETTING_ENABLETEMPATTACH, true);
-		if (gSavedSettings.controlExists(RLV_SETTING_ENABLETEMPATTACH))
-			gSavedSettings.getControl(RLV_SETTING_ENABLETEMPATTACH)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fTempAttach));
+		s_fTempAttach = rlvGetSetting<bool>(RlvSettingNames::EnableTempAttach, true);
+		if (gSavedSettings.controlExists(RlvSettingNames::EnableTempAttach))
+			gSavedSettings.getControl(RlvSettingNames::EnableTempAttach)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fTempAttach));
 
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		s_fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
@@ -112,19 +112,19 @@ void RlvSettings::initClass()
 			gSavedSettings.getControl(RLV_SETTING_ENABLECOMPOSITES)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fCompositeFolders));
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
-		s_fLegacyNaming = rlvGetSetting<bool>(RLV_SETTING_ENABLELEGACYNAMING, true);
-		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
-			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fLegacyNaming));
+		s_fLegacyNaming = rlvGetSetting<bool>(RlvSettingNames::EnableLegacyNaming, true);
+		if (gSavedSettings.controlExists(RlvSettingNames::EnableLegacyNaming))
+			gSavedSettings.getControl(RlvSettingNames::EnableLegacyNaming)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fLegacyNaming));
 
-		s_fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
-		s_fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
+		s_fCanOOC = rlvGetSetting<bool>(RlvSettingNames::CanOoc, true);
+		s_fNoSetEnv = rlvGetSetting<bool>(RlvSettingNames::NoSetEnv, false);
 
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
-		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
-			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
+		if (gSavedPerAccountSettings.controlExists(RlvSettingNames::LoginLastLocation))
+			gSavedPerAccountSettings.getControl(RlvSettingNames::LoginLastLocation)->setHiddenFromSettingsEditor(true);
 
-		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
-			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
+		if (gSavedSettings.controlExists(RlvSettingNames::TopLevelMenu))
+			gSavedSettings.getControl(RlvSettingNames::TopLevelMenu)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
 
 		int nMinMaturity = gSavedSettings.getS32("RLVaExperienceMaturityThreshold");
 		s_nExperienceMinMaturity = (nMinMaturity == 0) ? 0 : ((nMinMaturity == 1) ? SIM_ACCESS_PG : ((nMinMaturity == 2) ? SIM_ACCESS_MATURE : SIM_ACCESS_ADULT));
@@ -138,12 +138,12 @@ void RlvSettings::initClass()
 // Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
 void RlvSettings::updateLoginLastLocation()
 {
-	if ( (!LLApp::isExiting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
+	if ( (!LLApp::isExiting()) && (gSavedPerAccountSettings.controlExists(RlvSettingNames::LoginLastLocation)) )
 	{
-		BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
-		if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
+		bool fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
+		if (gSavedPerAccountSettings.get<bool>(RlvSettingNames::LoginLastLocation) != fValue)
 		{
-			gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);
+			gSavedPerAccountSettings.set<bool>(RlvSettingNames::LoginLastLocation, fValue);
 			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
 		}
 	}
@@ -362,7 +362,11 @@ std::string RlvStrings::getAnonym(const std::string& strName)
 }
 
 // Checked: 2011-11-08 (RLVa-1.5.0)
+#ifdef CATZNIP_STRINGVIEW
+const std::string& RlvStrings::getString(const boost::string_view& strStringName)
+#else
 const std::string& RlvStrings::getString(const std::string& strStringName)
+#endif // CATZNIP_STRINGVIEW
 {
 	static const std::string strMissing = "(Missing RLVa string)";
 	string_map_t::const_iterator itString = m_StringMap.find(strStringName);
@@ -430,8 +434,8 @@ std::string RlvStrings::getVersion(const LLUUID& idRlvObject, bool fLegacy)
 
 std::string RlvStrings::getVersionAbout()
 {
-	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d.%d",	RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH,
-															LLVersionInfo::getInstance()->getBuild());
+	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d.%d",
+	                RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, LLVersionInfo::instance().getBuild());
 }
 
 std::string RlvStrings::getVersionNum(const LLUUID& idRlvObject)
@@ -484,14 +488,14 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
 	// Filter any mention of the surrounding region names
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
-	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+	const std::string& strHiddenRegion = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
 		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex((*itRegion)->getName()) + "\\b", boost::regex::icase), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex(pParcelMgr->getAgentParcelName()) + "\\b", boost::regex::icase), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex(pParcelMgr->getAgentParcelName()) + "\\b", boost::regex::icase), RlvStrings::getString(RlvStringKeys::Hidden::Parcel));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
@@ -537,7 +541,7 @@ void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 	if ( (!gRlvAttachmentLocks.canAttach()) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit & nQuestions) )
 	{
 		// Notify the user that we blocked it since they're not allowed to wear any new attachments
-		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
+		sdPayload["rlv_blocked"] = RlvStringKeys::Blocked::PermissionAttach;
 		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit;
 	}
 
@@ -545,7 +549,7 @@ void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit & nQuestions) )
 	{
 		// Notify the user that we blocked it since they're not allowed to teleport
-		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMTELEPORT;
+		sdPayload["rlv_blocked"] = RlvStringKeys::Blocked::PermissionTeleport;
 		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit;
 	}
 
@@ -588,7 +592,11 @@ bool RlvUtil::isNearbyRegion(const std::string& strRegion)
 }
 
 // Checked: 2011-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
+#ifdef CATZNIP_STRINGVIEW
+void RlvUtil::notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs, bool fLogToChat)
+#else
 void RlvUtil::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs, bool fLogToChat)
+#endif // CATZNIP_STRINGVIEW
 {
 	std::string strMsg = RlvStrings::getString(strNotifcation);
 	LLStringUtil::format(strMsg, sdArgs);
@@ -607,7 +615,7 @@ void RlvUtil::notifyFailedAssertion(const std::string& strAssert, const std::str
 	// Don't show the same assertion over and over, or if the user opted out
 	static std::string strAssertPrev, strFilePrev; static int nLinePrev;
 	if ( ((strAssertPrev == strAssert) && (strFile == strFilePrev) && (nLine == nLinePrev)) ||
-		 (!rlvGetSetting<bool>(RLV_SETTING_SHOWASSERTIONFAIL, true)) )
+		 (!rlvGetSetting<bool>(RlvSettingNames::ShowAssertionFail, true)) )
 	{
 		return;
 	}
@@ -705,7 +713,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 	if (pMenuItem)
 	{
 		static std::string strLabel = pMenuItem->getLabel();
-		if ((bool)gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
+		if ((bool)gSavedSettings.get<bool>(RlvSettingNames::Main) == rlv_handler_t::isEnabled())
 			pMenuItem->setLabel(strLabel);
 		else
 			pMenuItem->setLabel(strLabel + " " + LLTrans::getString("RLVaPendingRestart"));
@@ -716,7 +724,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 // Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
 void rlvMenuToggleVisible()
 {
-	bool fTopLevel = rlvGetSetting(RLV_SETTING_TOPLEVELMENU, true);
+	bool fTopLevel = rlvGetSetting(RlvSettingNames::TopLevelMenu, true);
 	bool fRlvEnabled = rlv_handler_t::isEnabled();
 
 	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);

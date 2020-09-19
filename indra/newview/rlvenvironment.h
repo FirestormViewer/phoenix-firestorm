@@ -45,12 +45,12 @@ protected:
 	                     void registerGetEnvFn(const std::string& strFnName, const std::function<std::string(LLEnvironment::EnvSelection_t env)>& getFn);
 	template<typename T> void registerSetEnvFn(const std::string& strFnName, const std::function<ERlvCmdRet(LLEnvironment::EnvSelection_t env, const T& strRlvOption)>& setFn);
 	template<typename T> void registerSkyFn(const std::string& strFnName, const std::function<T(LLSettingsSky::ptr_t)>& getFn, const std::function<void(LLSettingsSky::ptr_t, const T&)>& setFn);
-	template<typename T> void registerLegacySkyFn(const std::string& strFnName, const std::function< T (LLSettingsSky::ptr_t)>& getFn, const std::function<void(LLSettingsSky::ptr_t, const T&)>& setFn);
+	template<typename T> void registerLegacySkyFn(const std::string& strFnName, const std::function<const T (LLSettingsSky::ptr_t)>& getFn, const std::function<void(LLSettingsSky::ptr_t, const T&)>& setFn);
 
 	// Command handling helpers
 	template<typename T> std::string handleGetFn(const std::function<T(LLSettingsSky::ptr_t)>& fn);
 	template<typename T> ERlvCmdRet  handleSetFn(const std::string& strRlvOption, const std::function<void(LLSettingsSky::ptr_t, const T&)>& fn);
-	template<typename T> std::string handleLegacyGetFn(const std::function< T (LLSettingsSky::ptr_t)>& getFn, U32 idxComponent);
+	template<typename T> std::string handleLegacyGetFn(const std::function<const T (LLSettingsSky::ptr_t)>& getFn, U32 idxComponent);
 	template<typename T> ERlvCmdRet  handleLegacySetFn(float optionValue, T value, const std::function<void(LLSettingsSky::ptr_t, const T&)>& setFn, U32 idxComponent);
 
 	/*

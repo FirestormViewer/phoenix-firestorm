@@ -1096,7 +1096,7 @@ bool idle_startup()
 		}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		if (gSavedSettings.get<bool>(RlvSettingNames::Main))
 		{
 			show_connect_box = TRUE;
 		}
@@ -1326,7 +1326,7 @@ bool idle_startup()
 		}
 
 // [RLVa:KB] - Checked: RLVa-0.2.1
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		if (gSavedSettings.get<bool>(RlvSettingNames::Main))
 		{
 			RlvHandler::setEnabled(true);
 		}

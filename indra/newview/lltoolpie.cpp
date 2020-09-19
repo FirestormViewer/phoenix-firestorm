@@ -873,7 +873,7 @@ BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
 
 		if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
 		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
 			fValidPick = false;
 		}
 
@@ -984,7 +984,7 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 		if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
 		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
 			fValidPick = false;
 		}
 

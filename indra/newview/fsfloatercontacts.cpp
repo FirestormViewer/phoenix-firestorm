@@ -796,7 +796,7 @@ void FSFloaterContacts::refreshRightsChangeList()
 			else
 			{
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) &&
-					!gRlvHandler.isException(RLV_BHVR_TPLURE, *itr, RLV_CHECK_PERMISSIVE) &&
+					!gRlvHandler.isException(RLV_BHVR_TPLURE, *itr, ERlvExceptionCheck::Permissive) &&
 					!friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
 				{
 					can_offer_teleport = false;

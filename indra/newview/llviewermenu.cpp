@@ -1360,7 +1360,7 @@ class LLAdvancedToggleWireframe : public view_listener_t
 // [RLVa:KB] - Checked: RLVa-2.0.0
 		bool fRlvBlockWireframe = gRlvAttachmentLocks.hasLockedHUD();
 		if ( (!gUseWireframe) && (fRlvBlockWireframe) )
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_WIREFRAME);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Wireframe);
 		set_use_wireframe( (!gUseWireframe) && (!fRlvBlockWireframe) );
 		return true;
 	}
