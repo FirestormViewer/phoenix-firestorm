@@ -425,7 +425,10 @@ const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"
 const std::string LLERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".llerror_marker"); //FS orig modified LL
 const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker"); //FS orig modified LL
 
-static BOOL gDoDisconnect = FALSE;
+//static BOOL gDoDisconnect = FALSE;
+// [RLVa:KB] - Checked: RLVa-2.3
+BOOL gDoDisconnect = FALSE;
+// [/RLVa:KB]
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)

@@ -57,8 +57,9 @@ protected:
 	 * Floater and sidebar validation callbacks
 	 */
 public:
-	void addGenericFloaterFilter(const std::string& strFloaterName);
-	void removeGenericFloaterFilter(const std::string& strFloaterName);
+	bool addGenericFloaterFilter(const std::string& strFloaterName, const std::string& strRlvNotification);
+	bool addGenericFloaterFilter(const std::string& strFloaterName, const std::function<void()>& fn = nullptr);
+	bool removeGenericFloaterFilter(const std::string& strFloaterName);
 
 protected:
 	bool filterFloaterGeneric(const std::string&, const LLSD&);
@@ -88,7 +89,7 @@ protected:
 	typedef std::multimap<ERlvBehaviour, behaviour_handler_t> behaviour_handler_map_t;
 	behaviour_handler_map_t m_Handlers;
 
-	std::multiset<std::string> m_FilteredFloaters;
+	std::map<std::string, std::function<void()>> m_FilteredFloaterMap;
 };
 
 // ============================================================================
