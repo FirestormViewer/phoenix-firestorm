@@ -514,7 +514,8 @@ public:
 		{
 			return RlvActions::canPayAvatar(getAvatarId());
 		}
-// [/RLVa:KB]		else if (param == "can_ban_member")
+// [/RLVa:KB]
+		else if (param == "can_ban_member")
 		{
 			return canBanGroupMember(getAvatarId());
 		}
