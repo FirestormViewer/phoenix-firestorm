@@ -628,7 +628,7 @@ void RlvAttachmentLockWatchdog::onAttach(const LLViewerObject* pAttachObj, const
 				if ( (pAttachObj != *itAttachObj) && (gRlvAttachmentLocks.isLockedAttachment(*itAttachObj)) )
 				{
 					// Fail if we encounter a non-detachable attachment (unless we're only replacing detachable attachments)
-					if (gSavedSettings.getBOOL("RLVaWearReplaceUnlocked"))
+					if (gSavedSettings.get<bool>(RlvSettingNames::WearReplaceUnlocked))
 						idsAttachObjExcept.push_back((*itAttachObj)->getID());
 					else
 						fAttachAllowed = false;

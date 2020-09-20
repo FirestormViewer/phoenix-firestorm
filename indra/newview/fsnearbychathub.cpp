@@ -613,8 +613,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 	static LLCachedControl<bool> allow_mu_pose(gSavedSettings, "AllowMUpose");
 	if (length > 0 &&
 		((raw_text[0] != '/' || (type_during_emote && length > 3 && prefix == utf8string_to_wstring("/me") && (raw_text[3] == ' ' || raw_text[3] == '\'')))
-		&& (raw_text[0] != ':' || !allow_mu_pose || type_during_emote)) &&
-		!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))
+		&& (raw_text[0] != ':' || !allow_mu_pose || type_during_emote)))
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi
 		if (channel == 0)

@@ -56,6 +56,9 @@
 #include "llworld.h"
 #include "llsdserialize.h"
 #include "llviewerobjectlist.h"
+// [RLVa:KB] - @pay
+#include "rlvactions.h"
+// [/RLVa:KB]
 #include "boost/foreach.hpp"
 
 //
@@ -1436,11 +1439,20 @@ bool LLFloaterIMContainer::enableContextMenuItem(const std::string& item, uuid_v
 	}
 
 	// Handle all other options
-	if (("can_invite" == item) || ("can_chat_history" == item) || ("can_share" == item) || ("can_pay" == item))
+//	if (("can_invite" == item) || ("can_chat_history" == item) || ("can_share" == item) || ("can_pay" == item))
+// [RLVa:KB] - @pay
+	if (("can_invite" == item) || ("can_chat_history" == item) || ("can_share" == item))
+// [/RLVa:KB]
 	{
 		// Those menu items are enable only if a single avatar is selected
 		return is_single_select;
 	}
+// [RLVa:KB] - @pay
+    else if ("can_pay" == item)
+    {
+		return is_single_select && RlvActions::canPayAvatar(single_id);
+    }
+// [/RLVa:KB]
     else if ("can_block" == item)
     {
         return (is_single_select ? LLAvatarActions::canBlock(single_id) : false);

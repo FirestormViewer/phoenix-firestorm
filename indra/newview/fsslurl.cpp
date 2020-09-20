@@ -605,7 +605,7 @@ std::string LLSLURL::getSLURLString() const
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		ret.append( ( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))
 					 ? (LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z))
-					 : RlvStrings::getString(RLV_STRING_HIDDEN_REGION) ));
+					 : RlvStrings::getString(RlvStringKeys::Hidden::Region) ));
 // [/RLVa:KB]
 		LL_DEBUGS("SLURL") << "Location: " << ret << LL_ENDL;
 		return ret;
