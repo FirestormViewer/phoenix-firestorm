@@ -903,7 +903,13 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 		LLUUID new_parent_id = item->getParentUUID();
 		bool update_parent_on_server = false;
 
-		if (new_parent_id.isNull())
+//		if (new_parent_id.isNull())
+// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-6.4
+		// The problem seems to be the 'LogoutReply' message so don't reparent anything to the LNF folder
+		// as soon as we've sent out the log out request (since the quitting state is only set >after< we
+		// start processing the logout response)
+		if ( (new_parent_id.isNull()) && (!LLAppViewer::instance()->logoutRequestSent()) && (!LLApp::isExiting()) )
+// [/SL:KB]
 		{
 			// item with null parent will end in random location and then in Lost&Found,
 			// either move to default folder as if it is new item or don't move at all
