@@ -16,6 +16,7 @@
 	<panel name="header_panel">
 		<panel name="outfit_name_and_status">
 			<text name="status" value="Trwa edycja..."/>
+			<text name="curr_outfit_name" value="[Obecny strój]" />
 		</panel>
 	</panel>
 	<layout_stack name="im_panels">
