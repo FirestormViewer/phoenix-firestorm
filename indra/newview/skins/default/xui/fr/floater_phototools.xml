@@ -99,7 +99,7 @@
 			<panel name="P_L_S_Settings">
 				<check_box label="Activer le mode d'éclairage avancé" name="RenderDeferred" tool_tip="Cela permettra d'utiliser les ombres du Soleil et de la Lune ainsi que toutes les autres sources de lumière. Il vous permettra également d'activer la profondeur de champ et d'autres fonctions graphiques. En principe, vous devez l'activer pour voir la plupart des ' effets visuels ' du monde. Si vous ne pouvez pas activer cette fonction ou voir son effet, assurez-vous d'abord que les Shaders atmosphériques et les Shaders de base sont activés dans l'onglet 'WL'."/>
 				<check_box label="Activer toutes les lumières locales" name="LocalLights" tool_tip="Cette option allume toutes les lumières autour de vous. Si vous la désactivez, la lumière du soleil ou de la lune sera toujours présente. Utile lorsque vous souhaitez supprimer l'éclairage local et n'utiliser que la lumière du soleil ou de la lune."/>
-				<check_box label="Activer les lumières attachées (Lumières sur le visage)" tool_tip="Cette option active toutes les lumières portées par l'avatar, par exemple celles utilisées pour éclairer le visage. Utile pour éteindre ce type de lumières lorsque c'est nécessaire." name="Render Attached Lights"/>
+				<check_box label="Activer les lumières attachées" tool_tip="Cette option active toutes les lumières portées par l'avatar, par exemple celles utilisées pour éclairer le visage. Utile pour éteindre ce type de lumières lorsque c'est nécessaire." name="Render Attached Lights"/>
 			</panel>
 
 			<panel name="P_Shadows">
@@ -115,24 +115,24 @@
 
 			<panel name="P_Shadow_Res">
 				<text name="T_Shadow_Res" tool_tip="Résolution de l'ombre : C'est un réglage TRÈS important. Il détermine la qualité des ombres. Il est également TRÈS lourd pour l'ordinateur. Il est préférable de laisser ce réglage aussi bas que possible lorsque vous ne faîtes pas de prises de vue. Réglez-le sur 1.0 pendant la préparation d'une prise de vue. Lorsque vous êtes prêt à prendre votre photo, déplacez lentement la barre de défilement vers la droite. Vous devez faire attention au frame rate lorsque vous augmentez ce réglage. Activez la barre de statistiques (dans l'onglet 'Aides' sous 'Aides de l'interface') lorsque vous faites cela pour la première fois afin de vous familiariser avec le résolution de l'ombre qui fonctionne le mieux avec votre système. REMARQUE : Si vous réglez ce niveau trop haut ou si vous le déplacez trop rapidement, vous risquez de provoquer des plantages.">
-					Rés. Omb.
+					Résolution
 				</text>
 				<button name="Reset_Shadow_Res" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<!-- RenderShadowSplitExponent Y component -->
 				<text name="T_Shd_Clarity" tool_tip="'est un réglage TRÈS important. Il détermine essentiellement la clarté de l'ensemble des ombres du soleil et de la lune. Ce paramètre doit être réglé en premier avant de régler le paramètre ci-dessous. Avec la valeur de 'Rés. Omb.' au-dessus de 1.0, faites glisser la valeur de 'Clarté Omb.' jusqu'à obtenir le résultat le plus net possible. Veuillez noter que la clarté des ombres est directement liée à la position de la caméra et du soleil/lune. Chaque fois que vous déplacez la caméra ou le Soleil/Lune, il est préférable d'ajuster à nouveau cette valeur. En outre, pour faciliter l'ajustement de cette valeur, il est utile de régler 'Flou Omb.' à 0.0.">
-					Clarté Omb.
+					Clarté
 				</text>
 				<button name="Shd_Clarity_Reset" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_Blur_Size" tool_tip="Plus le nombre est élevé, plus les bords de l'ombre sont doux. Réglez sur '0' pour obtenir les ombres les plus nettes possibles. Ce réglage est aussi directement lié à celui qui est en dessous. Il vous permet de définir la quantité totale possible de flou d'ombre. S'il est défini à 4.00, vous pouvez utiliser Adouc. Omb. pour ajuster le flou de l'ombre indépendamment de l'occlusion ambiante. VEUILLEZ NOTER : L'occlusion ambiante doit être activée pour que ce paramètre fonctionne.">
-					Flou Omb.
+					Flou
 				</text>
 				<button name="Blur_Reset" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<!-- RenderShadowGaussian X component -->
 				<text name="T_Shd_Soften" tool_tip="Contrôle l'effet adoucissant des ombres du soleil et de la lune. Une façon simple de régler cette valeur en fonction de vos besoins spécifiques est de régler d'abord le 'Flou Omb.' à environ 3.0. Ensuite, le curseur ici pour adoucir l'AO à votre convenance. Veuillez noter qu'une valeur de 0,0 désactivera effectivement toutes les ombres du soleil et de la lune. De plus, cela n'a aucun effet sur les ombres causées par les lumières du projecteur">
-					Adouc. Omb.
+					Adoucir.
 				</text>
 				<button name="Shd_Soften_Reset" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -147,7 +147,7 @@
 				<button name="FOV_Cutoff_Reset" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_Shd_Bias" tool_tip="">
-					Bias. Omb.
+					Bias.
 				</text>
 				<button name="Shd_Bias_Reset" label="D" tool_tip="Rétablir la valeur par défaut."/>
 			</panel>
@@ -159,7 +159,7 @@
 			</panel>
 
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Activer l'occl. amb. (Perception de la profondeur)" name="UseSSAO" tool_tip="L'occlusion ambiante ajoute de l'ombre à tous les objets. Elle est plus efficace lorsque les paramètres Effet et Adoucissement ci-dessous sont utilisés. Elle peut ajouter un haut niveau de réalisme à l'image. Cela est particulièrement vrai lorsque les images sont réalisées à des résolutions de 2048 pixels ou plus."/>
+				<check_box label="Activer l'occl. amb. (Perception de la prof.)" name="UseSSAO" tool_tip="L'occlusion ambiante ajoute de l'ombre à tous les objets. Elle est plus efficace lorsque les paramètres Effet et Adoucissement ci-dessous sont utilisés. Elle peut ajouter un haut niveau de réalisme à l'image. Cela est particulièrement vrai lorsque les images sont réalisées à des résolutions de 2048 pixels ou plus."/>
 			</panel>
 		
 			<panel name="P_Scale">
@@ -169,7 +169,7 @@
 				<button name="Reset_Scale" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_Max_Scale"  tool_tip="Contrôle le rayon maximal de l'écran à partir duquel on peut échantillonner , afin d'éviter les erreurs de cache de la carte graphique et la diminution importante des performances qui en découle. Il peut être utile de régler ces valeurs à un niveau élevé, puis d'ajouter un peu de flou d'ombre pour adoucir leur effet.">
-					Échelle max.
+					Éch. max.
 				</text>
 				<button name="Reset_Max_Scale" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -207,7 +207,7 @@
 
 			<panel name="P_Zoom">
 				<text name="T_Zoom" tool_tip="Dans le monde réel, il s'agit d'une fonction de Zoom. Elle permet de modifier le champ de vision dans votre fenêtre de visualisation. C'est la même chose que d'appuyer sur Ctrl + 0 ou Ctrl + 8. NOTE : Cette fonction ne marche pas si vous avez activé flycam (3D SpaceNavigator).">
-					Angle de vue
+					Ang. de vue
 				</text>
 				<button name="Reset_Zoom" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -319,7 +319,7 @@
 				<button name="Reset_Avi_Physics" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_Particle_Cnt" tool_tip="Règle le nombre maximum de particules à rendre.">
-					Nb Particules
+					Nb Part.
 				</text>
 				<button name="Reset_Particle_Cnt" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -329,7 +329,7 @@
 				<button name="Reset_Terrain_Scale" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_Terrain_Quality" tool_tip="Règle la qualité du terrain. Des chiffres élevés signifient un terrain plus détaillé au loin.">
-					Qual. Terrain
+					Qual. Terr.
 				</text>
 				<button name="Reset_Terrain_Quality" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -356,11 +356,11 @@
 
 			<panel name="P_Vignetting">
 				<text name="T_VignetteX" tool_tip="">
-				 Vig. Quantité
+				 Vig. Quant.
 				</text>
 				<button name="Reset_VignetteX" label="D" tool_tip="Rétablir la valeur par défaut." />
 				<text name="T_VignetteY" tool_tip="">
-				 Vig. Puissance
+				 Vig. Puiss.
 				</text>
 				<button name="Reset_VignetteY" label="D" tool_tip="Rétablir la valeur par défaut." />
 				<text name="T_VignetteZ" tool_tip="">
@@ -372,9 +372,9 @@
 			<panel name="P_Render">
 				<check_box label="Activer la distance d'affichage" name="UseFarClip" tool_tip="Active la distance d'affichage, si vous désactivez cette fonction, la visionneuse rendra les objets au-delà de la distance de dessin réglée."/>
 				<check_box label="Ajuster dynamiquement le niveau de détail" name="RednerLod1" tool_tip="Cette fonction permet au viewer d'ajuster dynamiquement le niveau de détail de la scène à mesure qu'il s'éloigne des objets. Elle permet d'améliorer les performances, elle peut également réduire la qualité des objets de la scène."/>
-				<check_box label="Rendre uniquement les objets visibles par la caméra" tool_tip="Cela permet au viewer de ne traiter/dessiner que les objets qui se trouvent dans le champ de vision de la caméra et qui ne sont pas cachés derrière autre chose. En général, il s'agit d'un booster de performance. Parfois, il peut en fait réduire les performances, surtout lorsque la scène/sim comporte peu d'objets. Alternez pour voir si cela aide ou non !" name="UssOcclusion1"/>
+				<check_box label="Rendre slt les obj. visibles par la cam." tool_tip="Cela permet au viewer de ne traiter/dessiner que les objets qui se trouvent dans le champ de vision de la caméra et qui ne sont pas cachés derrière autre chose. En général, il s'agit d'un booster de performance. Parfois, il peut en fait réduire les performances, surtout lorsque la scène/sim comporte peu d'objets. Alternez pour voir si cela aide ou non !" name="UssOcclusion1"/>
 				<check_box label="Filtrage anisotropique (texture nette)" tool_tip="Cela permet d'obtenir une texture encore plus nette." name="Anisotropic"/>
-				<check_box label="Rendre les particules attachées à d'autres avatars" tool_tip="Permet au viewer de rendre toutes les particules attachées à/en provenance d'autres avatars." name="Render Attached Particle"/>
+				<check_box label="Aff. les part. attachées à d'autres avatars" tool_tip="Permet au viewer de rendre toutes les particules attachées à/en provenance d'autres avatars." name="Render Attached Particle"/>
 			</panel>
 
 			<panel name="P_Anti-aliasing">
@@ -476,7 +476,7 @@
 
 			<panel name="P_Cam_Settings">
 				<text name="T_LR_Axis" tool_tip="Ajuste la sensibilité du mouvement gauche/droite. Si vous avez des difficultés à vous déplacer avec précision, utilisez des valeurs d'échelle plus faibles.">
-					Gauche/Droite
+					Gauche/Dte
 				</text>
 				<button name="Reset_LR_Axis" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -493,7 +493,7 @@
 				<button name="Reset_UD_Axis" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_IO_Axis" tool_tip="Règle la sensibilité du mouvement vers l'avant/vers l'arrière. Si vous avez des difficultés à vous déplacer avec précision, utilisez des valeurs d'échelle plus faibles.">
-					Avant/Arrière
+					Avant/Arr.
 				</text>
 				<button name="Reset_IO_Axis" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -503,7 +503,7 @@
 				<button name="Reset_Tilt" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
 				<text name="T_Spin" tool_tip="Ajuste la sensibilité du mouvement de balancement. Si vous avez des difficultés à vous déplacer avec précision, utilisez des valeurs d'échelle plus faibles.">
-					Balancement
+					Balance
 				</text>
 				<button name="Reset_Spin" label="D" tool_tip="Rétablir la valeur par défaut."/>
 
@@ -574,7 +574,7 @@
 					<panel name="P_Mouse" label="Souris">
 						<panel name="P_Mouse_Settings">
 							<text name="T_Mouse_Sens" tool_tip="Contrôle la réactivité de la souris lorsqu'elle est en mode 'mouselook'.">
-								Sensibilité de la souris
+								Sensibilité
 							</text>
 							<button name="Reset_Mouse_Sens" label="D" tool_tip="Rétablir la valeur par défaut."/>
 							<check_box label="Afficher avi et attachements en mouselook" tool_tip="Affiche l'avatar et les attachements sous le cou lorsqu'il est en mouselook. La valeur par défaut est OFF." name="first_person_avatar_visible"/>

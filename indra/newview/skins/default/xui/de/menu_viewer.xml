@@ -272,6 +272,7 @@
 		</menu>
 		<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
 		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
+		<menu_item_check label="Tippen bei umgeleiteten Chat anzeigen" name="Show Redirected Chat Typing"/>
 		<menu_item_check label="Langen, umgeleiteten Chat aufteilen" name="Split Long Redirected Chat"/>
 		<menu_item_check label="Temporäre Anhänge erlauben" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>

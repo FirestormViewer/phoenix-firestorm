@@ -2578,6 +2578,16 @@
       	 parameter="RestrainedLoveShowEllipsis" />
       </menu_item_check>
       <menu_item_check
+       label="Show Redirected Chat Typing"
+       name="Show Redirected Chat Typing">
+        <menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaShowRedirectChatTyping" />
+        <menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaShowRedirectChatTyping" />
+      </menu_item_check>
+      <menu_item_check
        label="Split Long Redirected Chat"
        name="Split Long Redirected Chat">
         <menu_item_check.on_check

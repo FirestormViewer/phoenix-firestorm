@@ -305,14 +305,14 @@
 			<menu_item_check label="Включить старые имена (Legacy Naming)" name="Enable Legacy Naming"/>
 			<menu_item_check label="Включить 'Делиться одеждой' (Shared Wear)" name="Enable Shared Wear"/>
 			<menu_item_check label="Переименование общих элементов при ношении" name="Rename Shared Items on Wear"/>
-			<menu_item_check label="Блокировка..." name="Locks"/>
+			<menu_item_check label="Блокировки..." name="Locks"/>
 		</menu>
-		<menu_item_check label="Разрешить OOC чат (Out Of Character)" name="Allow OOC Chat"/>
-		<menu_item_check label="Запретить получение в #RLV" name="Forbid Give to #RLV"/>
+		<menu_item_check label="Разрешить не ролевой чат (Вышел из Роли)" name="Allow OOC Chat"/>
 		<menu_item_check label="Показать фильтрованый чат" name="Show Filtered Chat"/>
+		<menu_item_check label="Показать 'Печатает' в Перенаправленном Чате" name="Show Redirected Chat Typing"/>
 		<menu_item_check label="Разделять длинный Перенаправленный Чат" name="Split Long Redirected Chat"/>
 		<menu_item_check label="Разрешить временное присоединение" name="Allow Temporary Attachments"/>
-		<menu_item_check label="Показывать имена" name="Show Name Tags"/>
+		<menu_item_check label="Запретить получение в папку #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Замена одежды разблокирована" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Консоль..." name="Console"/>
 		<menu_item_check label="Ограничения..." name="Restrictions"/>

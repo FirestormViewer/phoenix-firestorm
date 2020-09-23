@@ -1,17 +1,17 @@
-/** 
+/**
  *
- * Copyright (c) 2009-2014, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ * Copyright (c) 2009-2020, Kitty Barnett
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -630,26 +630,18 @@ void RlvGiveToRLVOffer::moveAndRename(const LLUUID& idFolder, const LLUUID& idDe
 
 void RlvGiveToRLVTaskOffer::changed(U32 mask)
 {
-	if (mask & LLInventoryObserver::ADD)
-	{
-		LLMessageSystem* pMsg = gMessageSystem;
-		if ( (pMsg->getMessageName()) && (0 == strcmp(pMsg->getMessageName(), "BulkUpdateInventory")) )
-		{
-			LLUUID idTransaction;
-			pMsg->getUUIDFast(_PREHASH_AgentData, _PREHASH_TransactionID, idTransaction);
-			if (m_idTransaction == idTransaction)
+	if ( (mask & LLInventoryObserver::ADD) && (gInventory.getTransactionId().notNull()) && (m_idTransaction == gInventory.getTransactionId()) )
+	{    // BulkUpdateInventory
+	    const auto& idItems = gInventory.getAddedIDs();
+	    for (const LLUUID& idItem : idItems)
+	    {
+	        if (LLInventoryCategory* pCategory = gInventory.getCategory(idItem))
 			{
-				LLUUID idInvObject;
-				for (S32 idxBlock = 0, cntBlock = pMsg->getNumberOfBlocksFast(_PREHASH_FolderData); idxBlock < cntBlock; idxBlock++)
-				{
-					pMsg->getUUIDFast(_PREHASH_FolderData, _PREHASH_FolderID, idInvObject, idxBlock);
-					if ( (idInvObject.notNull()) && (std::find(m_Folders.begin(), m_Folders.end(), idInvObject) == m_Folders.end()) )
-						m_Folders.push_back(idInvObject);
-				}
-
-				done();
+				if (std::find(m_Folders.begin(), m_Folders.end(), pCategory->getUUID()) == m_Folders.end())
+					m_Folders.push_back(pCategory->getUUID());
 			}
 		}
+		done();
 	}
 }
 

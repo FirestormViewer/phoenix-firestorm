@@ -39,6 +39,7 @@
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llnetmap.h"
 #include "llviewermenu.h"			// for gMenuHolder
+#include "rlvactions.h"
 #include "rlvhandler.h"
 
 namespace FSFloaterRadarMenu
@@ -227,6 +228,11 @@ bool FSRadarMenu::enableContextMenuItem(const LLSD& userdata)
 	else if (item == std::string("can_open_inventory"))
 	{
 		return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+	}
+	else if (item == std::string("can_pay"))
+	{
+		const LLUUID& id = mUUIDs.front();
+		return RlvActions::canPayAvatar(id);
 	}
 	return false;
 }
