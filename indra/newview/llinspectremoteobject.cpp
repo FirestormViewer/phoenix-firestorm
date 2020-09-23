@@ -190,7 +190,7 @@ void LLInspectRemoteObject::update()
 	getChild<LLUICtrl>("block_btn")->setEnabled(!mObjectID.isNull() && !LLMuteList::getInstance()->isMuted(mObjectID));
 
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	if ( (rlv_handler_t::isEnabled()) && (RlvStrings::getString(RLV_STRING_HIDDEN_REGION) == mSLurl) )
+	if ( (rlv_handler_t::isEnabled()) && (RlvStrings::getString(RlvStringKeys::Hidden::Region) == mSLurl) )
 	{
 		getChild<LLUICtrl>("object_slurl")->setValue(mSLurl);
 		getChild<LLUICtrl>("map_btn")->setEnabled(false);

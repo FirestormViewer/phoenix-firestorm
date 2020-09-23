@@ -42,7 +42,7 @@
 		Build-Konfiguration [BUILD_CONFIG]
 	</string>
 	<string name="AboutPosition">
-		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (globale Koordinaten [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
@@ -195,8 +195,14 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="CertBasicConstraints">
 		In der Zertifikatskette des Servers befanden sich zu viele Zertifikate.  Bitte kontaktieren Sie Ihren Grid-Administrator.
 	</string>
+	<string name="CertInvalid">
+		Das Zertifikat konnte nicht geladen werden.  Bitte kontaktieren Sie Ihren Grid-Administrator.
+	</string>
 	<string name="CertInvalidSignature">
 		Die Zertifikatsunterschrift des Gridservers konnte nicht bestätigt werden.  Bitte kontaktieren Sie Ihren Grid-Administrator.
+	</string>
+	<string name="CertAllocationFailure">
+		Fehler beim Allokieren von Speicher für OpenSSL zum Laden des Zertifikats.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Netzwerkfehler: Verbindung konnte nicht hergestellt werden. Bitte überprüfen Sie Ihre Netzwerkverbindung.

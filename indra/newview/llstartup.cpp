@@ -1096,7 +1096,7 @@ bool idle_startup()
 		}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		if (gSavedSettings.get<bool>(RlvSettingNames::Main))
 		{
 			show_connect_box = TRUE;
 		}
@@ -1326,7 +1326,7 @@ bool idle_startup()
 		}
 
 // [RLVa:KB] - Checked: RLVa-0.2.1
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		if (gSavedSettings.get<bool>(RlvSettingNames::Main))
 		{
 			RlvHandler::setEnabled(true);
 		}
@@ -1425,9 +1425,9 @@ bool idle_startup()
 		}
 
 		// Set PerAccountSettingsFile to the default value.
-		gSavedSettings.setString("PerAccountSettingsFile",
-			gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, 
-				LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount")));
+		std::string settings_per_account = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount"));
+		gSavedSettings.setString("PerAccountSettingsFile", settings_per_account);
+		gDebugInfo["PerAccountSettingsFilename"] = settings_per_account;
 
 		// Note: can't store warnings files per account because some come up before login
 		
@@ -1716,7 +1716,7 @@ bool idle_startup()
 				// If optional was skipped this case shouldn't 
 				// be reached.
 
-				LL_INFOS() << "Forcing a quit due to update." << LL_ENDL;
+				LL_INFOS("LLStartup") << "Forcing a quit due to update." << LL_ENDL;
 				LLLoginInstance::getInstance()->disconnect();
 				LLAppViewer::instance()->forceQuit();
 			}
@@ -1737,7 +1737,24 @@ bool idle_startup()
 					{
 						// This was a certificate error, so grab the certificate
 						// and throw up the appropriate dialog.
-						LLPointer<LLCertificate> certificate = gSecAPIHandler->getCertificate(response["certificate"]);
+                        LLPointer<LLCertificate> certificate;
+                        try
+                        {
+                            certificate = gSecAPIHandler->getCertificate(response["certificate"]);
+                        }
+                        catch (LLCertException &cert_exception)
+                        {
+                            LL_WARNS("LLStartup", "SECAPI") << "Caught " << cert_exception.what() << " certificate expception on getCertificate("<< response["certificate"] << ")" << LL_ENDL;
+                            LLSD args;
+                            args["REASON"] = LLTrans::getString(cert_exception.what());
+
+                            LLNotificationsUtil::add("GeneralCertificateErrorShort", args, response,
+                                general_cert_done);
+
+                            reset_login();
+                            gSavedSettings.setBOOL("AutoLogin", FALSE);
+                            show_connect_box = true;
+                        }
 						if(certificate)
 						{
 							LLSD args = transform_cert_args(certificate);

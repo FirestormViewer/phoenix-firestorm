@@ -292,7 +292,7 @@ void LLAvatarActions::startIM(const LLUUID& id)
 	if (!RlvActions::canStartIM(id))
 	{
 		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
 		return;
 	}
 // [/RLVa:KB]
@@ -337,7 +337,7 @@ void LLAvatarActions::startCall(const LLUUID& id)
 	if (!RlvActions::canStartIM(id))
 	{
 		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
 		return;
 	}
 // [/RLVa:KB]
@@ -369,7 +369,7 @@ const LLUUID LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID
 		if (!RlvActions::canStartIM(idAgent))
 		{
 			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartConference);
 			return LLUUID::null;
 		}
 		id_array.push_back(idAgent);
@@ -435,7 +435,7 @@ const LLUUID LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUI
 		if (!RlvActions::canStartIM(idAgent))
 		{
 			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartConference);
 			return LLUUID::null;
 		}
 		id_array.push_back(idAgent);
@@ -698,7 +698,7 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 		// Filter the request message if the recipients is IM-blocked
 		if ( (RlvActions::isRlvEnabled()) && ((!RlvActions::canStartIM(idRecipient)) || (!RlvActions::canSendIM(idRecipient))) )
 		{
-			strMessage = RlvStrings::getString(RLV_STRING_HIDDEN);
+			strMessage = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 		}
 // [/RLVa:KB]
 
@@ -1381,7 +1381,7 @@ bool LLAvatarActions::canOfferTeleport(const LLUUID& id)
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 	{
 		const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(id);
-		if (gRlvHandler.isException(RLV_BHVR_TPLURE, id, RLV_CHECK_PERMISSIVE) ||
+		if (gRlvHandler.isException(RLV_BHVR_TPLURE, id, ERlvExceptionCheck::Permissive) ||
 			(pBuddyInfo && pBuddyInfo->isOnline() && pBuddyInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION)))
 		{
 			return true;

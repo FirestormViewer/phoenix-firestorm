@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -186,6 +186,15 @@ bool RlvActions::canSendIM(const LLUUID& idRecipient)
 		(!isRlvEnabled()) ||
 		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.isException(RLV_BHVR_SENDIM, idRecipient)) || (rlvCheckAvatarIMDistance(idRecipient, RLV_MODIFIER_SENDIMDISTMIN, RLV_MODIFIER_SENDIMDISTMAX)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
+}
+
+// Handles: @redirchat
+bool RlvActions::canSendTypingStart()
+{
+	// The CHAT_TYPE_START indicator can be sent if:
+	//   - nearby chat isn't being redirected
+	//   - the user specifically indicated that they want to show typing under @redirchat
+	return !RlvHandler::instance().hasBehaviour(RLV_BHVR_REDIRCHAT) || gSavedSettings.get<bool>(RlvSettingNames::ShowRedirectChatTyping);
 }
 
 bool RlvActions::canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen)
@@ -378,6 +387,14 @@ bool RlvActions::canBuild()
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_REZ));
 }
 
+// Handles: @buy
+bool RlvActions::canBuyObject(const LLUUID& idObj)
+{
+	// User can buy an object set for sale if:
+	//    - not restricted from buying objects
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
+}
+
 // Handles: @edit and @editobj
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
@@ -406,6 +423,22 @@ bool RlvActions::canInteract(const LLViewerObject* pObj, const LLVector3& posOff
 		(!pObj) ||
 		( ( (!rlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) || (pObj->isHUDAttachment())) &&
 		  ( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (pObj->isHUDAttachment()) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist)) );
+}
+
+// Handles: @pay
+bool RlvActions::canPayAvatar(const LLUUID& idAvatar)
+{
+	// User can pay an avatar if:
+	//    - not restricted from paying avatars
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_PAY));
+}
+
+// Handles: @buy
+bool RlvActions::canPayObject(const LLUUID& idObj)
+{
+	// User can pay an object/vendor if:
+	//    - not restricted from buying objects
+	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
 }
 
 bool RlvActions::canRez()
@@ -456,7 +489,7 @@ bool RlvActions::canShowHoverText(const LLViewerObject *pObj)
 		  !( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTALL)) ||
 		     ( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTWORLD)) && (!pObj->isHUDAttachment()) ) ||
 		     ( (rlvHandler.hasBehaviour(RLV_BHVR_SHOWHOVERTEXTHUD)) && (pObj->isHUDAttachment()) ) ||
-		     (rlvHandler.isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), RLV_CHECK_PERMISSIVE)) ) );
+		     (rlvHandler.isException(RLV_BHVR_SHOWHOVERTEXT, pObj->getID(), ERlvExceptionCheck::Permissive)) ) );
 }
 
 // Handles: @touchall, @touchthis, @touchworld, @touchattach, @touchattachself, @touchattachother, @touchhud, @touchme and @fartouch
@@ -503,28 +536,28 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	bool fCanTouch =
 		(idRoot.notNull()) &&
 		( (pObj->isHUDAttachment()) || (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHALL)) ) &&
-		( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, RLV_CHECK_PERMISSIVE)) );
+		( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, ERlvExceptionCheck::Permissive)) );
 	if (fCanTouch)
 	{
 		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
 		{
 			// Rezzed or attachment worn by other - test for (1.c), (2.d), (2.e) and (1/2.h)
 			fCanTouch =
-				( (!pObj->isAttachment()) ? (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE))
-				                          : ((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
+				( (!pObj->isAttachment()) ? (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, ERlvExceptionCheck::Permissive))
+				                          : ((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive)) ) &&
 				( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
 		}
 		else if (!pObj->isHUDAttachment())
 		{
 			// Regular attachment worn by this avie - test for (3.d), (3.e) and (3.h)
 			fCanTouch =
-				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
-				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
+				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive))) &&
+				((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive)));
 		}
 		else
 		{
 			// HUD attachment - test for (4.g)
-			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (rlvHandler.isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
+			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (rlvHandler.isException(RLV_BHVR_TOUCHHUD, idRoot, ERlvExceptionCheck::Permissive));
 		}
 	}
 	// Post-check for (1/2/3/4i)
@@ -586,7 +619,11 @@ bool RlvActions::isRlvEnabled()
 	return RlvHandler::isEnabled();
 }
 
+#ifdef CATZNIP_STRINGVIEW
+void RlvActions::notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs)
+#else
 void RlvActions::notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs)
+#endif // CATZNIP_STRINGVIEW
 {
 	RlvUtil::notifyBlocked(strNotifcation, sdArgs);
 }

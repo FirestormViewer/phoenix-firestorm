@@ -15,6 +15,7 @@
       <file>nirmala.ttf</file>
       <file>tahoma.ttf</file>
       <file load_collection="true">Cambria.ttc</file>
+      <file>micross.ttf</file>
       <file>malgun.ttf</file>
     </os>
     <os name="Mac">
@@ -29,6 +30,7 @@
       <file>华文细黑.ttf</file>
       <file>PingFang.ttc</file>
       <file>STIXGeneral.otf</file>
+      <file>Thonburi.ttc</file>
     </os>
   </font>
 
