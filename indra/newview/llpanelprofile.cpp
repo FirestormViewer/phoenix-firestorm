@@ -832,7 +832,7 @@ void LLPanelProfileSecondLife::updateButtons()
             //mTeleportButton->setEnabled(is_buddy_online);
             const LLRelationship* friend_status = LLAvatarTracker::instance().getBuddyInfo(av_id);
             bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
-                                    (gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, RLV_CHECK_PERMISSIVE) ||
+                                    (gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive) ||
                                     friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION)));
 
             mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
@@ -845,7 +845,7 @@ void LLPanelProfileSecondLife::updateButtons()
             // <FS:Ansariel> RLVa support
             //mTeleportButton->setEnabled(true);
             bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
-                                    gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, RLV_CHECK_PERMISSIVE));
+                                    gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive));
             mTeleportButton->setEnabled(can_offer_tp);
             // </FS:Ansariel>
             mAddFriendButton->setEnabled(true);
