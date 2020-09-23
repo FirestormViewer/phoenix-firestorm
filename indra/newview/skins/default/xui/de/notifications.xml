@@ -1748,10 +1748,6 @@ Fortfahren?
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="GroupDepart">
-		Sie haben die Gruppe „&lt;nolink&gt;[group_name]&lt;/nolink&gt;“ verlassen.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Sie sind gegenwärtig Mitglied der Gruppe „&lt;nolink&gt;[GROUP]&lt;/nolink&gt;“. Erneutes Beitreten kostet [AMOUNT] L$.
 Diese Gruppe verlassen?
@@ -4700,6 +4696,16 @@ Wählen Sie eine kleinere Landfläche aus.
 	<notification name="OutfitPhotoLoadError">
 		[REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="AddPaymentMethod">
+		Wählen Sie einen L$-Betrag auf der folgenden
+Seite und klicken Sie auf Kaufen. Sie haben die
+Möglichkeit an der Kasse eine Zahlungsmethode
+zu hinterlegen.
+		<form name="form">
+			<button name="Continue" text="Fortfahren"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
 	</notification>
 	<notification name="FailedToFindSettings">
 		Die Einstellungen für [NAME] konnten nicht aus der Datenbank geladen werden.

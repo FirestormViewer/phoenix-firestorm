@@ -1706,6 +1706,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="InventoryNoMatchingRecentItems">
 		Sie haben nicht das Richtige gefunden? [secondlife:///app/inventory/filters Filter] anzeigen.
 	</string>
+	<string name="InventoryFavoritItemsNotSelected">
+		Wählen Sie auf „Als Favoriten-Ordner verwenden“ auf einen Ordner Ihrer Wahl. Sie können jederzeit einen anderen Ordner wählen. System-Ordner können nicht als Favoriten-Ordner verwendet werden.
+	</string>
 	<string name="PlacesNoMatchingItems">
 		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/places/[SEARCH_TERM] Suche].
 	</string>
@@ -1757,7 +1760,7 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
-		Ziehen Sie Ordner in dien Bereich und klicken Sie auf „In Marktplatz übertragen“, um sie im [[MARKETPLACE_DASHBOARD_URL] Marktplatz] zum Verkauf anzubieten.
+		Ziehen Sie Ordner in diesen Bereich und klicken Sie auf „In Marktplatz übertragen“, um sie im [[MARKETPLACE_DASHBOARD_URL] Marktplatz] zum Verkauf anzubieten.
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
 		Marktplatz wird initialisiert.
@@ -1912,6 +1915,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Scripts" value=" Skripte,"/>
 	<string name="Sounds" value=" Sounds,"/>
 	<string name="Textures" value=" Texturen,"/>
+	<string name="Settings" value=" Einstellungen," />
 	<string name="Snapshots" value=" Fotos,"/>
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
@@ -2933,9 +2937,6 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	</string>
 	<string name="UploadingCosts">
 		Das Hochladen von [NAME] kostet [AMOUNT] L$
-	</string>
-	<string name="BuyingCosts">
-		Die Kosten betragen: [AMOUNT] L$
 	</string>
 	<string name="UnknownFileExtension">
 		Unbekanntes Dateiformat .%s
@@ -5014,9 +5015,6 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 	<string name="to publish a classified ad">
 		um eine Anzeige aufzugeben
 	</string>
-	<string name="giving">
-		[AMOUNT] L$ werden bezahlt
-	</string>
 	<string name="uploading_costs">
 		Kosten für Hochladen [AMOUNT] L$
 	</string>
@@ -5024,10 +5022,13 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 		Kosten: [AMOUNT] L$
 	</string>
 	<string name="buying_selected_land">
-		Ausgewähltes Land wird für [AMOUNT] L$ gekauft.
+		Dieses Land kostet
 	</string>
 	<string name="this_object_costs">
-		Dieses Objekt kostet  [AMOUNT] L$
+		Dieses Objekt kostet
+	</string>
+	<string name="giving">
+		Sie möchten bezahlen
 	</string>
 	<string name="group_role_everyone">
 		Jeder
