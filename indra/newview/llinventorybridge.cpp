@@ -4102,7 +4102,7 @@ void LLFolderBridge::perform_pasteFromClipboard()
 // [RLVa:KB] - Checked: RLVa-2.1.0
 				if ( ((item) && (!RlvActions::canPasteInventory(item, dest_folder))) || ((cat) && (!RlvActions::canPasteInventory(cat, dest_folder))) )
 				{
-					RlvActions::notifyBlocked(RLV_STRING_BLOCKED_INVFOLDER);
+					RlvActions::notifyBlocked(RlvStringKeys::Blocked::InvFolder);
 					return;
 				}
 // [/RLVa:KB]
@@ -4512,12 +4512,6 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     items.push_back(std::string("New Body Parts"));
                     items.push_back(std::string("New Settings"));
                     items.push_back(std::string("upload_def"));
-
-                    if (!LLEnvironment::instance().isInventoryEnabled())
-                    {
-                        disabled_items.push_back("New Settings");
-                    }
-
                 }
 			}
 			getClipboardEntries(false, items, disabled_items, flags);

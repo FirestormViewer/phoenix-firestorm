@@ -261,6 +261,8 @@ Beansy Twine
 Benja Kepler
 	VWR-746
 Benjamin Bigdipper
+Beq Janus
+	BUG-227094
 Beth Walcher
 Beq Janus
 	SL-10288
@@ -1313,6 +1315,7 @@ Shyotl Kuhr
 	MAINT-2334
 	MAINT-6913
 	STORM-2143
+	SL-11625
 Siana Gearz
 	STORM-960
 	STORM-1088
@@ -1352,6 +1355,7 @@ Sovereign Engineer
     MAINT-7343
     SL-11079
     OPEN-343
+	SL-11625
 SpacedOut Frye
 	VWR-34
 	VWR-45

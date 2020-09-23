@@ -4017,6 +4017,10 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
     }
 
     llcoro::suspend();
+    if (LLApp::isQuitting())
+    {
+        return;
+    }
     S32 retryCount(0);
     bool bRetry;
     do
@@ -4080,6 +4084,11 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
 
         LLSD result = httpAdapter->postAndSuspend(httpRequest, url, postData);
 
+        if (LLApp::isQuitting())
+        {
+            return;
+        }
+
         LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
         LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
@@ -4115,6 +4124,10 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
                 LL_WARNS("Avatar") << "Bake retry #" << retryCount << " in " << timeout << " seconds." << LL_ENDL;
 
                 llcoro::suspendUntilTimeout(timeout); 
+                if (LLApp::isQuitting())
+                {
+                    return;
+                }
                 bRetry = true;
                 continue;
             }

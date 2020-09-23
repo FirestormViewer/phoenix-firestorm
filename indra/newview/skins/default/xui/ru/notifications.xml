@@ -2364,6 +2364,7 @@
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="DeleteItems">
+		[QUESTION]
 		<form name="form">
 			<ignore name="ignore" text="Подтвердить удаление элементов"/>
 			<button name="Yes" text="Да"/>
@@ -3535,7 +3536,10 @@ URL: [AUDIOURL]
 	</notification>
 		<notification name="BulkUploadCostConfirmation">
 		Этим действием загружается [COUNT] предметов на общую стоимость L$[COST]. Вы хотите продолжить загрузку?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Загрузить"/>
+		<usetemplate ignoretext="Подтвердите массовую загрузку" name="okcancelignore" notext="Отмена" yestext="Загрузить"/>
+	</notification>
+	<notification name="NotEnoughMoneyForBulkUpload">
+		Текущий баланс [BALANCE] L$ недостаточен для загрузки [COUNT] элементов общей стоимостью [COST] L$.
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		Выбранные файлы не могут быть загружены группой.
@@ -4039,7 +4043,7 @@ URL: [AUDIOURL]
 		Фантомный режим выключен.
 	</notification>
 	<notification name="MovelockEnabled">
-		Блокировка движения включена.
+		Блокировка движения включена. Для отключения используйте меню Аватар &gt; Движение &gt; Заблокировать перемещение.
 	</notification>
 	<notification name="MovelockDisabled">
 		Блокировка движения выключена.

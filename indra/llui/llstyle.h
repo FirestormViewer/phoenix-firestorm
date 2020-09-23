@@ -50,7 +50,7 @@ public:
 		Optional<bool>					is_link;
 		// <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
 		Optional<bool>					use_default_link_style;
-		Optional<bool>					is_chat_header;
+		Optional<bool>					can_underline_on_hover;
 		// </FS:Ansariel>
 		Params();
 	};

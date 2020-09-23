@@ -2122,6 +2122,12 @@ endif (FMODSTUDIO)
 # set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
 set_source_files_properties(llstartup.cpp llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
 # </FS:Ansariel>
+
+if (HAVOK OR HAVOK_TPV)
+  set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_HAVOK")
+endif (HAVOK OR HAVOK_TPV)
+
+# progress view disables/enables icons based on available packages
 set_source_files_properties(llprogressview.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
 
 list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
@@ -2250,10 +2256,10 @@ if (WINDOWS)
     endif (FMODSTUDIO)
 
     if (OPENAL)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/OpenAL32.dll
-            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
-        )
+      list(APPEND COPY_INPUT_DEPENDENCIES
+           ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/OpenAL32.dll
+           ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
+          )
     endif (OPENAL)
 
     add_custom_command(
@@ -2266,6 +2272,7 @@ if (WINDOWS)
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
         "--fmodstudio=${FMODSTUDIO}"
+        "--openal=${OPENAL}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2276,7 +2283,6 @@ if (WINDOWS)
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/copy_touched.bat
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
-        --openal=${OPENAL}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         stage_third_party_libs
@@ -2330,6 +2336,7 @@ if (WINDOWS)
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
           "--fmodstudio=${FMODSTUDIO}"
+          "--openal=${OPENAL}"
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}
           "--channel=${VIEWER_CHANNEL}"
@@ -2340,7 +2347,6 @@ if (WINDOWS)
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/touched.bat
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
-          --openal=${OPENAL}
         DEPENDS
             ${VIEWER_BINARY_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2511,6 +2517,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
         "--fmodstudio=${FMODSTUDIO}"
+        "--openal=${OPENAL}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2521,7 +2528,6 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
-        --openal=${OPENAL}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         ${COPY_INPUT_DEPENDENCIES}
@@ -2538,6 +2544,7 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
       "--fmodstudio=${FMODSTUDIO}"
+      "--openal=${OPENAL}"
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       "--channel=${VIEWER_CHANNEL}"
@@ -2547,7 +2554,6 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --viewer_flavor=${ND_VIEWER_FLAVOR}
-      --openal=${OPENAL}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       ${COPY_INPUT_DEPENDENCIES}
@@ -2622,6 +2628,7 @@ if (DARWIN)
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
       "--fmodstudio=${FMODSTUDIO}"
+      "--openal=${OPENAL}"
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
@@ -2632,7 +2639,6 @@ if (DARWIN)
       --source=${CMAKE_CURRENT_SOURCE_DIR}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --viewer_flavor=${ND_VIEWER_FLAVOR}
-      --openal=${OPENAL}
     DEPENDS
       ${VIEWER_BINARY_NAME}
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2659,6 +2665,7 @@ if (DARWIN)
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
           "--fmodstudio=${FMODSTUDIO}"
+          "--openal=${OPENAL}"
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}
           "--channel=${VIEWER_CHANNEL}"
@@ -2669,7 +2676,6 @@ if (DARWIN)
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
-          --openal=${OPENAL}
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py

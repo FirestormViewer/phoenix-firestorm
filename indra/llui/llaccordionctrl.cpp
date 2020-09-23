@@ -668,7 +668,7 @@ void	LLAccordionCtrl::onScrollPosChangeCallback(S32, LLScrollbar*)
 }
 
 // virtual
-void LLAccordionCtrl::onChildGotFocus(const LLUICtrl *cntrl)
+void LLAccordionCtrl::onUpdateScrollToChild(const LLUICtrl *cntrl)
 {
     if (mScrollbar && mScrollbar->getVisible())
     {
@@ -694,7 +694,7 @@ void LLAccordionCtrl::onChildGotFocus(const LLUICtrl *cntrl)
         }
     }
 
-    LLUICtrl::onChildGotFocus(cntrl);
+    LLUICtrl::onUpdateScrollToChild(cntrl);
 }
 
 void	LLAccordionCtrl::onOpen		(const LLSD& key)
