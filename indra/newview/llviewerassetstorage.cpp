@@ -51,6 +51,7 @@
 /// LLViewerAssetRequest
 ///----------------------------------------------------------------------------
 
+ // There is also PoolSizeVAssetStorage value in setting that should mirror this name
 static const std::string VIEWER_ASSET_STORAGE_CORO_POOL = "VAssetStorage";
 
 /**
@@ -116,8 +117,6 @@ LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *
       mCountSucceeded(0),
       mTotalBytesFetched(0)
 {
-    // <FS:Ansariel> Explicitly create the VAAssetStorage pool
-    LLCoprocedureManager::instance().createPool(VIEWER_ASSET_STORAGE_CORO_POOL);
 }
 
 
@@ -131,8 +130,6 @@ LLViewerAssetStorage::LLViewerAssetStorage(LLMessageSystem *msg, LLXferManager *
       mCountSucceeded(0),
       mTotalBytesFetched(0)
 {
-    // <FS:Ansariel> Explicitly create the VAAssetStorage pool
-    LLCoprocedureManager::instance().createPool(VIEWER_ASSET_STORAGE_CORO_POOL);
 }
 
 LLViewerAssetStorage::~LLViewerAssetStorage()

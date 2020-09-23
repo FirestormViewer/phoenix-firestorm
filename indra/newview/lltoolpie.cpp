@@ -305,14 +305,39 @@ BOOL LLToolPie::handleLeftClickPick()
 		}
 // [/RLVa:KB]
 
+// [RLVa:KB] - @buy
+		const std::function<bool(const LLUUID&, U8)> fnRlvCheck = [](const LLUUID& idObj, U8 clickAction) {
+			switch (clickAction)
+			{
+				case CLICK_ACTION_BUY:
+					return RlvActions::canBuyObject(idObj);
+				case CLICK_ACTION_PAY:
+					return RlvActions::canPayObject(idObj);
+				default:
+					return true;
+			}
+		};
+// [/RLVa:KB]
 		mClickAction = 0;
 		if (object && object->getClickAction()) 
 		{
 			mClickAction = object->getClickAction();
+// [RLVa:KB] - @buy
+			if ( (RlvActions::isRlvEnabled()) && (!fnRlvCheck(object->getID(), mClickAction)) )
+			{
+				mClickAction = CLICK_ACTION_NONE;
+			}
+// [/RLVa:KB]
 		}
 		else if (parent && parent->getClickAction()) 
 		{
 			mClickAction = parent->getClickAction();
+// [RLVa:KB] - @buy
+			if ((RlvActions::isRlvEnabled()) && (!fnRlvCheck(parent->getID(), mClickAction)))
+			{
+				mClickAction = CLICK_ACTION_NONE;
+			}
+// [/RLVa:KB]
 		}
 
 		switch(mClickAction)
@@ -554,7 +579,12 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 			LLSelectNode* node = LLSelectMgr::getInstance()->getHoverNode();
 			if (!node || node->mSaleInfo.isForSale())
 			{
-				cursor = UI_CURSOR_TOOLBUY;
+// [RLVa:KB] - @buy
+				cursor = (!object || RlvActions::canBuyObject(parent ? parent->getID() : object->getID()))
+					? UI_CURSOR_TOOLBUY
+					: ((object && object->flagHandleTouch()) || (parent && parent->flagHandleTouch())) ? UI_CURSOR_HAND : UI_CURSOR_ARROW;
+// [/RLVa:KB]
+//				cursor = UI_CURSOR_TOOLBUY;
 			}
 		}
 		break;
@@ -572,7 +602,12 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 				|| (parent && parent->flagTakesMoney()))
 			{
 				//cursor = UI_CURSOR_TOOLBUY;  FIRESTORM - pay cursor is separate from buy cursor
-				cursor = UI_CURSOR_TOOLPAY;
+// [RLVa:KB] - @buy
+				cursor = ((object && RlvActions::canPayObject(object->getID())) || (parent && RlvActions::canPayObject(parent->getID())))
+					? UI_CURSOR_TOOLPAY
+					: ((object && object->flagHandleTouch()) || (parent && parent->flagHandleTouch())) ? UI_CURSOR_HAND : UI_CURSOR_ARROW;
+// [/RLVa:KB]
+//				cursor = UI_CURSOR_TOOLPAY;
 			}
 		}
 		break;
@@ -656,7 +691,7 @@ bool LLToolPie::walkToClickedLocation()
 // [RLVa:KB] - Checked: RLVa-2.0.0
         if (RlvActions::isRlvEnabled() && !RlvActions::canTeleportToLocal(mPick.mPosGlobal))
         {
-            RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+            RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
             mPick = saved_pick;
             return false;
         }
@@ -716,7 +751,7 @@ bool LLToolPie::teleportToClickedLocation()
 // [RLVa:KB] - Checked: RLVa-2.0.0
         if (RlvActions::isRlvEnabled() && !RlvActions::canTeleportToLocal(mPick.mPosGlobal))
         {
-            RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+            RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
             return false;
         }
 // [/RLVa:KB]

@@ -880,7 +880,7 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	std::string tooltip("");
 	mTrackedStatus = LLTracker::TRACKING_LOCATION;
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
-	LLTracker::trackLocation(pos_global, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? full_name : RlvStrings::getString(RLV_STRING_HIDDEN).c_str(), tooltip);
+	LLTracker::trackLocation(pos_global, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? full_name : RlvStrings::getString(RlvStringKeys::Hidden::Generic).c_str(), tooltip);
 // [/RLVa:KB]
 //	LLTracker::trackLocation(pos_global, full_name, tooltip);
 	LLWorldMap::getInstance()->cancelTracking();		// The floater is taking over the tracking
@@ -983,7 +983,7 @@ void LLFloaterWorldMap::updateLocation()
 				mSetToUserPosition = FALSE;
 
 				// Fill out the location field
-				getChild<LLUICtrl>("location")->setValue(RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
+				getChild<LLUICtrl>("location")->setValue(RlvStrings::getString(RlvStringKeys::Hidden::Region));
 				
 				// update the coordinate display with location of avatar in region
 				updateTeleportCoordsDisplay( agentPos );
@@ -1045,7 +1045,7 @@ void LLFloaterWorldMap::updateLocation()
 		{
 			mSLURL = LLSLURL();
 
-			childSetValue("location", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
+			childSetValue("location", RlvStrings::getString(RlvStringKeys::Hidden::Region));
 		}
 		else if (gotSimName)
 // [/RLVa:KB]
