@@ -278,6 +278,7 @@ public:
 	EFilterCreatorType		getFilterCreatorType() const;
 
 	void 				setEmptyLookupMessage(const std::string& message);
+	void				setDefaultEmptyLookupMessage(const std::string& message);
 	std::string			getEmptyLookupMessage() const;
 
 	// +-------------------------------------------------------------------+
@@ -354,6 +355,7 @@ private:
     
 	std::string 			mFilterText;
 	std::string 			mEmptyLookupMessage;
+	std::string				mDefaultEmptyLookupMessage;
 
 	ESearchType 			mSearchType;
 
