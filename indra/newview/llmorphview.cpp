@@ -61,8 +61,7 @@ LLMorphView::LLMorphView(const LLMorphView::Params& p)
 	mOldCameraNearClip( 0.f ),
 	mCameraPitch( 0.f ),
 	mCameraYaw( 0.f ),
-	mCameraDrivenByKeys( FALSE ),
-	mEditAppearanceLightingConnection() // <FS:Ansariel> Optional Edit Appearance Lighting
+	mCameraDrivenByKeys( FALSE )
 {}
 
 //-----------------------------------------------------------------------------
@@ -81,51 +80,22 @@ void	LLMorphView::initialize()
 
 	gAgentAvatarp->stopMotion( ANIM_AGENT_BODY_NOISE );
 
-	// <FS:Zi> Optional Edit Appearance Lighting
-	//gAgentAvatarp->mSpecialRenderMode = 3;
-	if (mEditAppearanceLightingConnection.connected())
-	{
-		mEditAppearanceLightingConnection.disconnect();
-	}
-	mEditAppearanceLightingConnection = gSavedSettings.getControl("EditAppearanceLighting")->getCommitSignal()->connect(boost::bind(&LLMorphView::onSpecialRenderModeLightChanged, this));
-	onSpecialRenderModeLightChanged();
-	// </FS:Zi> Optional Edit Appearance Lighting
-	
+	//gAgentAvatarp->mSpecialRenderMode = 3; // <FS:Ansariel> Removed by SL-13522 09/20/2020
+
 	// set up camera for close look at avatar
 	mOldCameraNearClip = LLViewerCamera::getInstance()->getNear();
 	LLViewerCamera::getInstance()->setNear(MORPH_NEAR_CLIP);	
 }
-
-// <FS:Zi> Optional Edit Appearance Lighting
-void LLMorphView::onSpecialRenderModeLightChanged()
-{
-	if (gSavedSettings.getBOOL("EditAppearanceLighting"))
-	{
-		gAgentAvatarp->mSpecialRenderMode = 3;
-	}
-	else
-	{
-		gAgentAvatarp->mSpecialRenderMode = 0;
-	}
-}
-// </FS:Zi> Optional Edit Appearance Lighting
 
 //-----------------------------------------------------------------------------
 // shutdown()
 //-----------------------------------------------------------------------------
 void	LLMorphView::shutdown()
 {
-	// <FS:Ansariel> Optional Edit Appearance Lighting
-	if (mEditAppearanceLightingConnection.connected())
-	{
-		mEditAppearanceLightingConnection.disconnect();
-	}
-	// </FS:Ansariel> Optional Edit Appearance Lighting
-
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->startMotion( ANIM_AGENT_BODY_NOISE );
-		gAgentAvatarp->mSpecialRenderMode = 0;
+		//gAgentAvatarp->mSpecialRenderMode = 0; // <FS:Ansariel> Removed by SL-13522 09/20/2020
 		// reset camera
 		LLViewerCamera::getInstance()->setNear(mOldCameraNearClip);
 	}
