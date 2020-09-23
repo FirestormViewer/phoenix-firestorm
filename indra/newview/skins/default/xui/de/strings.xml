@@ -1712,6 +1712,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="FavoritesNoMatchingItems">
 		Landmarke hier hin ziehen, um diese hinzuzufügen.
 	</string>
+	<string name="MarketplaceNoListing">
+		Sie haben noch keine Liste.
+	</string>
 	<string name="MarketplaceNoMatchingItems">
 		Keine übereinstimmenden Objekte gefunden. Überprüfen Sie die Schreibweise des Suchbegriffs und versuchen Sie es noch einmal.
 	</string>
