@@ -1234,7 +1234,7 @@ BOOL LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
 
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.4.5) | Modified: RLVa-1.4.5
 		std::string message = llformat("%s (%s)", 
-			(RlvActions::canShowLocation()) ? info->getName().c_str() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION).c_str(), 
+			(RlvActions::canShowLocation()) ? info->getName().c_str() : RlvStrings::getString(RlvStringKeys::Hidden::Region).c_str(),
 			info->getAccessString().c_str());
 // [/RLVa:KB]
 //		std::string message = llformat("%s (%s)", info->getName().c_str(), info->getAccessString().c_str());

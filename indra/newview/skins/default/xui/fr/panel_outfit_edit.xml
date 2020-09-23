@@ -5,6 +5,19 @@
 	<string name="now_editing" value="Vous modifiez actuellement"/>
 	<panel.string name="not_available">(NA)</panel.string>
 	<panel.string name="unknown">(inconnu)</panel.string>
+	<string name="Filter.All" value="Tous"/>
+	<string name="Filter.Clothes/Body" value="Vêtements/Corps"/>
+	<string name="Filter.Objects" value="Objets"/>
+	<string name="Filter.Clothing" value="Vêtements"/>
+	<string name="Filter.Bodyparts" value="Parties du corps"/>
+	<string name="replace_body_part" value="Cliquez pour remplacer votre corps"/>
+	<text name="title" value="Modifier l'habillement"/>
+	<panel name="header_panel">
+		<panel name="outfit_name_and_status">
+			<text name="status" value="En cours de traitement..."/>
+			<text name="curr_outfit_name" value="[Current Outfit]"/>
+		</panel>
+	</panel>
 	<layout_stack name="im_panels">
 		<layout_panel name="outfit_wearables_panel">
 			<layout_stack name="filter_panels">
@@ -21,9 +34,11 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">Complexité : [WEIGHT]</text>
 		<button name="shop_btn_1" tool_tip="Visitez le Marketplace SL. Vous pouvez également sélectionner quelque chose que vous portez, puis cliquer ici pour consulter d'autres articles similaires"/>
 	</panel>
 	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">Complexité : [WEIGHT]</text>
 		<button name="shop_btn_2" tool_tip="Visitez le Marketplace SL. Vous pouvez également sélectionner quelque chose que vous portez, puis cliquer ici pour consulter d'autres articles similaires"/>
 	</panel>
 	<panel name="save_revert_button_bar">

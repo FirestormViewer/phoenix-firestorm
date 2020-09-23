@@ -558,15 +558,15 @@ ERlvCmdRet RlvEnvironment::handleSetFn(const std::string& strRlvOption, const st
 }
 
 template<>
-std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<LLVector2 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
+std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<const LLVector2 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
-	if (idxComponent > 2)
+	if (idxComponent >= 2)
 		return LLStringUtil::null;
 	return std::to_string(getFn(LLEnvironment::instance().getCurrentSky()).mV[idxComponent]);
 }
 
 template<>
-std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<LLColor3 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
+std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<const LLColor3 (LLSettingsSkyPtr_t)>& getFn, U32 idxComponent)
 {
 	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
 	{
@@ -583,7 +583,7 @@ std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<LLCo
 template<>
 ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLVector2>(float optionValue, LLVector2 curValue, const std::function<void(LLSettingsSkyPtr_t, const LLVector2&)>& setFn, U32 idxComponent)
 {
-	if (idxComponent > 2)
+	if (idxComponent >= 2)
 		return RLV_RET_FAILED_UNKNOWN;
 
 	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
@@ -672,7 +672,7 @@ void RlvEnvironment::registerSetEnvFn(const std::string& strFnName, const std::f
 }
 
 template<typename T>
-void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std::function< T (LLSettingsSkyPtr_t)>& getFn, const std::function<void(LLSettingsSkyPtr_t, const T&)>& setFn)
+void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std::function<const T (LLSettingsSkyPtr_t)>& getFn, const std::function<void(LLSettingsSkyPtr_t, const T&)>& setFn)
 {
 	RLV_ASSERT(m_LegacyGetFnLookup.end() == m_LegacyGetFnLookup.find(strFnName));
 	m_LegacyGetFnLookup.insert(std::make_pair(strFnName, [this, getFn](const std::string& strRlvParam, U32 idxComponent)

@@ -292,9 +292,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d670d00aa732b97d105d287b62582762</string>
+              <string>9b8bcc3be6dbe40a04c9c81c313f70dc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55065/512118/apr_suite-1.4.5.539073-darwin64-539073.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/68333/658209/apr_suite-1.4.5.548882-darwin64-548882.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -328,9 +328,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83b4a047db5f7ee462753d91e6277cba</string>
+              <string>6bdf460c18ee004b41a46afc80041a92</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55143/512317/apr_suite-1.4.5.539073-windows-539073.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/68334/658225/apr_suite-1.4.5.548882-windows-548882.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -340,16 +340,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b3bbf168b39e25c08cc1febddeb33332</string>
+              <string>83104bfa4dabb77cd70d185e38a95b49</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/55139/512304/apr_suite-1.4.5.539073-windows64-539073.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/68332/658215/apr_suite-1.4.5.548882-windows64-548882.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.4.5.539073</string>
+        <string>1.4.5.548882</string>
       </map>
       <key>boost</key>
       <map>
@@ -964,11 +964,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6963689ea12131c0ff80b07a08cbe667</string>
+              <string>2c7c5fb28c34d4833b14d49d4abb101a</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.03-darwin-202272255.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.04-darwin-202612342.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -992,11 +992,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fab47cbf13e89dd0359b5f5e995f6794</string>
+              <string>fd75a1941350a5a0b510b18192f28ef3</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.03-windows-202191858.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.04-windows-202592205.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1006,18 +1006,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a757fe92a8a48b247e23802c22153d1c</string>
+              <string>534c065e8d284b794d1aabeda20f3600</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.03-windows64-202191859.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.04-windows64-202592207.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.03</string>
+        <string>2.01.04</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -2375,16 +2375,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8501cbaa7e0f254614694da784a9c61c</string>
+              <string>b677ee43822212f0a27c838dc8bf3623</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/64944/606925/llca-202008010216.546021-common-546021.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/67622/646614/llca-202009010215.548269-common-548269.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
         <key>version</key>
-        <string>202008010216.546021</string>
+        <string>202009010215.548269</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -4520,9 +4520,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
+                  <string>-DOPENAL:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -4593,6 +4593,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
+                  <string>-DOPENAL:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>

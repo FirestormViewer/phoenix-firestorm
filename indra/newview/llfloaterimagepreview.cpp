@@ -35,6 +35,7 @@
 
 #include "llagent.h"
 #include "llbutton.h"
+#include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldrawable.h"
 #include "lldrawpoolavatar.h"
@@ -120,17 +121,26 @@ BOOL LLFloaterImagePreview::postBuild()
 		mSculptedPreview->setPreviewTarget(mRawImagep, 2.0f);
 
 		// <FS:Beq> BUG-228331 - lossless_check is misleading don't show it if it won't be used.
-		// if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
-		// 	getChildView("lossless_check")->setEnabled(TRUE);
+        //if (mRawImagep->getWidth() * mRawImagep->getHeight() <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
+        //{
+        //    // We want "lossless_check" to be unchecked when it is disabled, regardless of
+        //    // LosslessJ2CUpload state, so only assign control when enabling checkbox
+        //    LLCheckBoxCtrl* check_box = getChild<LLCheckBoxCtrl>("lossless_check");
+        //    check_box->setEnabled(TRUE);
+        //    check_box->setControlVariable(gSavedSettings.getControl("LosslessJ2CUpload"));
+        //}
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
 		{
-			getChildView("lossless_check")->setEnabled(TRUE);
-			getChildView("lossless_check")->setVisible(TRUE);
+			LLCheckBoxCtrl* check_box = getChild<LLCheckBoxCtrl>("lossless_check");
+			check_box->setEnabled(TRUE);
+			check_box->setVisible(TRUE);
+			check_box->setControlVariable(gSavedSettings.getControl("LosslessJ2CUpload"));
 		}
 		else
 		{
-			getChildView("lossless_check")->setEnabled(FALSE);
-			getChildView("lossless_check")->setVisible(FALSE);
+			LLCheckBoxCtrl* check_box = getChild<LLCheckBoxCtrl>("lossless_check");
+			check_box->setEnabled(FALSE);
+			check_box->setVisible(FALSE);
 		}
 		//</FS:Beq>
 		

@@ -246,7 +246,7 @@ void LLGroupActions::startCall(const LLUUID& group_id)
 	if (!RlvActions::canStartIM(group_id))
 	{
 		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
 		return;
 	}
 // [/RLVa:KB]
@@ -632,7 +632,7 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 	if (!RlvActions::canStartIM(group_id))
 	{
 		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::StartIm, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
 		return LLUUID::null;
 	}
 // [/RLVa:KB]
