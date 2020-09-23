@@ -465,6 +465,7 @@
 		layout="topleft"
 		left="2"
 		max_length_chars="300"
+		highlight_text_field="true"
 		name="inventory search editor"
 		right="-1"
 		tool_tip="Type in one or more words to search for, separated by '+' "
@@ -511,7 +512,7 @@
 		left_pad="4"
 		follows="top|left|right"
 		layout="topleft"
-		right="-1"
+		right="-34"
 		top_delta="-2">
 
 		<combo_box.item value="filter_type_all" label="All Types" />
@@ -530,8 +531,17 @@
 		<combo_box.item value="filter_type_meshes" label="Meshes" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="Custom..." />
-
 	</combo_box>
+	<menu_button
+		follows="top|left|right"
+		tool_tip="Show search visibility options"
+		height="16"
+		image_overlay="Inv_Toolbar_SearchVisibility"
+		layout="topleft"
+		right="-1"
+		name="options_visibility_btn"
+		width="31"
+		top_delta="0"/>
 
 	<tab_container
 		follows="all"
@@ -574,6 +584,15 @@
 			layout="topleft"
 			name="Worn Items"
 			show_item_link_overlays="true" />
+		<favorites_inventory_panel
+			name="Favorite Items"
+			label="Favorites"
+			show_empty_message="false"
+			follows="all"
+			layout="topleft"
+			border="false"
+			bevel_style="none"
+			scroll.reserve_scroll_corner="false"/>
 	</tab_container>
 
 	<text

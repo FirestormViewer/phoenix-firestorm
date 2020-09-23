@@ -42,24 +42,12 @@
 		     width="300">
     Elements:
   </text>
-  <filter_editor
-   text_pad_left="10"
-   follows="left|top|right"
-   height="23"
-   label="Filter Inventory"
-   layout="topleft"
-   left="10"
-   max_length_chars="300"
-   name="inventory search editor"
-   tool_tip="Type in one or more words to search for, separated by '+' "
-   top="18"
-   width="219" />
   <combo_box
    name="filter_combo_box"
    width="80"
    height="21"
-   top="19"
-   left_pad="4"
+   top="18"
+   left="10"
    follows="top|right"
    layout="topleft">
 
@@ -81,6 +69,28 @@
   <combo_box.item value="filter_type_custom" label="Custom..." />
 
   </combo_box>
+  <menu_button
+   follows="top|left"
+   tool_tip="Show search visibility options"
+   height="21"
+   image_overlay="Inv_Toolbar_SearchVisibility"
+   layout="topleft"
+   left_pad="3"
+   name="options_visibility_btn"
+   width="31" />
+  <filter_editor
+   text_pad_left="10"
+   follows="left|top|right"
+   height="23"
+   label="Filter Inventory"
+   layout="topleft"
+   left_pad="3"
+   max_length_chars="300"
+   highlight_text_field="true"
+   name="inventory search editor"
+   tool_tip="Type in one or more words to search for, separated by '+' "
+   top="18"
+   width="185" />
   <tab_container
      bg_alpha_color="Transparent"
      bg_opaque_color="Transparent"
@@ -135,6 +145,18 @@
      name="Worn Items"
 	 show_item_link_overlays="true"
      width="290" />
+    <favorites_inventory_panel
+     name="Favorite Items"
+     label="Favorites"
+     show_empty_message="false"
+     follows="all"
+     layout="topleft"
+     left_delta="0"
+     width="290"
+     height="338"
+     border="false"
+     bevel_style="none"
+     scroll.reserve_scroll_corner="false"/>
   </tab_container>
   <panel
    follows="left|right|bottom"

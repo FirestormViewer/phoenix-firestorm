@@ -1260,6 +1260,9 @@
   <color
     name="OutfitGalleryItemUnselected"
     value="0.4 0.4 0.4 1" />
+  <color
+    name="AddPaymentPanel"
+    value="0.27 0.27 0.27 1" />
 
   <!-- <FS:CR> Script Editor Colors -->
   <color

@@ -31,6 +31,7 @@
    layout="topleft"
    left="10"
    max_length_chars="300"
+   highlight_text_field="true"
    name="inventory search editor"
    tool_tip="Type in one or more words to search for, separated by '+' "
    top_pad="4"
@@ -90,6 +91,15 @@
   <combo_box.item value="filter_type_custom" label="Custom..." />
 
   </combo_box>
+  <menu_button
+   follows="top|left"
+   tool_tip="Show search visibility options"
+   height="16"
+   image_overlay="Inv_Toolbar_SearchVisibility"
+   layout="topleft"
+   left_pad="3"
+   name="options_visibility_btn"
+   width="31" />
 
   <tab_container
      bg_alpha_color="DkGray"
@@ -143,8 +153,20 @@
      layout="topleft"
      left_delta="0"
      name="Worn Items"
-	 show_item_link_overlays="true"
+     show_item_link_overlays="true"
      width="290" />
+    <favorites_inventory_panel
+     name="Favorite Items"
+     label="Favorites"
+     show_empty_message="false"
+     follows="all"
+     height="338"
+     layout="topleft"
+     left_delta="0"
+     width="290"
+     border="false"
+     bevel_style="none"
+     scroll.reserve_scroll_corner="false"/>
   </tab_container>
   <panel
    follows="left|right|bottom"

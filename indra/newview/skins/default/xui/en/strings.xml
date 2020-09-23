@@ -755,6 +755,7 @@ http://www.firestormviewer.org/support for help fixing this problem.
 	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].</string>
 	<string name="InventoryNoMatchingRecentItems">Didn't find what you're looking for? Show [secondlife:///app/inventory/filters Filters].</string>
+	<string name="InventoryFavoritItemsNotSelected">Click "Use as Favorites folder" on a folder of your choice. You can choose a different folder at any time. System folders cannot be used for Favorites.</string>
 	<string name="PlacesNoMatchingItems">Didn't find what you're looking for? Try [secondlife:///app/search/places/[SEARCH_TERM] Search].</string>
 	<string name="FavoritesNoMatchingItems">Drag a landmark here to add it to your favorites.</string>
 	<string name="MarketplaceNoMatchingItems">No items found. Check the spelling of your search string and try again.</string>
@@ -875,6 +876,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="Scripts"       value=" Scripts," />
 	<string name="Sounds"        value=" Sounds," />
 	<string name="Textures"      value=" Textures," />
+	<string name="Settings"      value=" Settings," />
 	<string name="Snapshots"     value=" Snapshots," />
 	<string name="No Filters"    value="No " />
 	<string name="Since Logoff"  value=" - Since Logoff" />
@@ -1320,7 +1322,6 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="AcquiredItems">Acquired Items</string>
 	<string name="Cancel">Cancel</string>
 	<string name="UploadingCosts">Uploading [NAME] costs L$ [AMOUNT]</string>
-	<string name="BuyingCosts">Buying this costs L$ [AMOUNT]</string>
 	<string name="UnknownFileExtension">
 		Unknown file extension .%s
 Expected .wav, .tga, .bmp, .jpg, .jpeg, or .anim
@@ -2296,11 +2297,12 @@ If the message does not appear in the next few minutes, it may have been dropped
   <string name="to upload">to upload</string>
   <string name="to publish a classified ad">to publish a classified ad</string>
 
-  <string name="giving">Giving L$ [AMOUNT]</string>
   <string name="uploading_costs">Uploading costs L$ [AMOUNT]</string>
   <string name="this_costs">This costs L$ [AMOUNT]</string>
-  <string name="buying_selected_land">Buying selected land for L$ [AMOUNT]</string>
-  <string name="this_object_costs">This object costs L$ [AMOUNT]</string>
+  
+  <string name="buying_selected_land">This land costs</string>
+  <string name="this_object_costs">This item costs</string>
+  <string name="giving">You want to give</string>
 
   <string name="group_role_everyone">Everyone</string>
   <string name="group_role_officers">Officers</string>

@@ -38,6 +38,7 @@
 class LLComboBox;
 class LLFolderViewItem;
 class LLInventoryPanel;
+class LLInventoryFavoriteItemsPanel;
 class LLSaveFolderState;
 class LLFilterEditor;
 class LLTabContainer;
@@ -164,6 +165,7 @@ private:
 	LLHandle<LLFloater>			mFinderHandle;
 	LLInventoryPanel*			mActivePanel;
 	LLInventoryPanel*			mWornItemsPanel;
+	LLInventoryFavoriteItemsPanel* mFavoriteItemsPanel;
 	bool						mResortActivePanel;
 	LLSaveFolderState*			mSavedFolderState;
 	std::string					mFilterText;
@@ -213,7 +215,9 @@ protected:
 private:
 	LLDragAndDropButton*		mTrashButton;
 	LLToggleableMenu*			mMenuGearDefault;
+	LLToggleableMenu*			mMenuVisibility;
 	LLMenuButton*				mGearMenuButton;
+	LLMenuButton*				mVisibilityMenuButton;
 	LLHandle<LLView>			mMenuAddHandle;
 
 	// <FS:Zi> Inventory Collapse and Expand Buttons
