@@ -1871,15 +1871,14 @@ bool LLDrawPoolAvatar::getRiggedGeometry(
 
 	face->setGeomIndex(0);
 	face->setIndicesIndex(0);
-		
-	//rigged faces do not batch textures
 
-	// <FS:ND> if needed reset drawinfo as the face was set up for texture for batching
-	if (face->getTextureIndex() != 0xFF )
-		face->setDrawInfo(nullptr);
-	//  <FS:ND>
+    if (face->getTextureIndex() != FACE_DO_NOT_BATCH_TEXTURES)
+    {
+        face->setDrawInfo(NULL);
+    }
 
-	face->setTextureIndex(255);
+    //rigged faces do not batch textures
+    face->setTextureIndex(FACE_DO_NOT_BATCH_TEXTURES);
 
 	if (buffer.isNull() || buffer->getTypeMask() != data_mask || !buffer->isWriteable())
 	{

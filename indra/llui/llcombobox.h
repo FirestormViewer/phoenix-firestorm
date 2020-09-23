@@ -159,6 +159,8 @@ public:
 	BOOL			setCurrentByIndex( S32 index );
 	S32				getCurrentIndex() const;
 
+	void			setEnabledByValue(const LLSD& value, BOOL enabled);
+
 	void			createLineEditor(const Params&);
 
 	// <FS:Ansariel> For setting the focus to the LLLineEditor

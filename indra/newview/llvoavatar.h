@@ -293,8 +293,8 @@ public:
 	// force all name tags to rebuild, useful when display names turned on/off
 	static void		invalidateNameTags();
 	// <FS:Ansariel> Fix nametag not properly updating when display name arrives
-	//void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font);
-	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, bool is_name = false);
+	//void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, const bool use_ellipses = false);
+	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, const bool use_ellipses = false, bool is_name = false);
 	// </FS:Ansariel>
 	void 			idleUpdateRenderComplexity();
 	void 			idleUpdateDebugInfo();

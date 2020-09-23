@@ -102,13 +102,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 		file = "chat";
 	}
 	mChatHistoryFileName = file;
-	// <FS:Ansariel> FIRE-30045: Group chat logfile gets appended duplicate suffix if opened in conversation log
-	//if (mIsGroup)
-	if (mIsGroup && !LLStringUtil::endsWith(mChatHistoryFileName, GROUP_CHAT_SUFFIX))
-	// </FS:Ansariel>
-	{
-		mChatHistoryFileName += GROUP_CHAT_SUFFIX;
-	}
+
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);

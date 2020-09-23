@@ -619,21 +619,6 @@ protected:
 	boost::signals2::connection m_ConnCommand;
 };
 
-// ============================================================================
-// RlvException
-//
-
-struct RlvException
-{
-public:
-	LLUUID				idObject;    // UUID of the object that added the exception
-	ERlvBehaviour		eBehaviour;  // Behaviour the exception applies to
-	RlvExceptionOption	varOption;   // Exception data (type is dependent on eBehaviour)
-
-	RlvException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& option) : idObject(idObj), eBehaviour(eBhvr), varOption(option) {}
-private:
-	RlvException();
-};
 
 // ============================================================================
 // Various helper classes/timers/functors

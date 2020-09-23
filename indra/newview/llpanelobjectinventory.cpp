@@ -1408,6 +1408,7 @@ LLPanelObjectInventory::LLPanelObjectInventory(const LLPanelObjectInventory::Par
 	mCommitCallbackRegistrar.add("Inventory.BeginIMSession", boost::bind(&do_nothing));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
 	mCommitCallbackRegistrar.add("Inventory.FileUploadLocation", boost::bind(&do_nothing));
+	mCommitCallbackRegistrar.add("Inventory.SetFavoritesFolder", boost::bind(&do_nothing)); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.SetFavoritesFolder' in control: Set Favorites folder"
 	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&do_nothing)); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 }
 

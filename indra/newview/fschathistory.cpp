@@ -72,6 +72,7 @@
 #include "llfocusmgr.h"
 #include "llkeyboard.h"
 #include "llpanelblockedlist.h"
+#include "rlvactions.h"
 #include "rlvcommon.h"
 #include "rlvhandler.h"
 
@@ -508,6 +509,12 @@ public:
 		{
 			return canModerate(userdata);
 		}
+// [RLVa:KB] - @pay
+		else if (param == "can_pay")
+		{
+			return RlvActions::canPayAvatar(getAvatarId());
+		}
+// [/RLVa:KB]
 		else if (param == "can_ban_member")
 		{
 			return canBanGroupMember(getAvatarId());

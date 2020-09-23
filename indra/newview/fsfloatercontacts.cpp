@@ -49,6 +49,9 @@
 #include "lltooldraganddrop.h"
 #include "llviewermenu.h"
 #include "llvoiceclient.h"
+// [RLVa:KB] - @pay
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
@@ -796,7 +799,7 @@ void FSFloaterContacts::refreshRightsChangeList()
 			else
 			{
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) &&
-					!gRlvHandler.isException(RLV_BHVR_TPLURE, *itr, RLV_CHECK_PERMISSIVE) &&
+					!gRlvHandler.isException(RLV_BHVR_TPLURE, *itr, ERlvExceptionCheck::Permissive) &&
 					!friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
 				{
 					can_offer_teleport = false;
@@ -840,7 +843,6 @@ void FSFloaterContacts::refreshUI()
 
 	//Options that can only be performed with one friend selected
 	childSetEnabled("profile_btn", single_selected && !multiple_selected);
-	childSetEnabled("pay_btn", single_selected && !multiple_selected);
 
 	//Options that can be performed with up to MAX_FRIEND_SELECT friends selected
 	//(single_selected will always be true in this situations)
@@ -849,12 +851,15 @@ void FSFloaterContacts::refreshUI()
 
 	LLScrollListItem* selected_item = mFriendsList->getFirstSelected();
 	bool mappable = false;
+	bool payable = false;
 	if (selected_item)
 	{
 		LLUUID av_id = selected_item->getUUID();
 		mappable = (single_selected && !multiple_selected && av_id.notNull() && is_agent_mappable(av_id));
+		payable = (single_selected && !multiple_selected && av_id.notNull() && RlvActions::canPayAvatar(av_id));
 	}
 	childSetEnabled("map_btn", mappable && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
+	childSetEnabled("pay_btn", payable);
 
 	// Set friend count
 	mFriendsTab->getChild<LLTextBox>("friend_count")->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
@@ -1088,7 +1093,8 @@ void FSFloaterContacts::childShowTab(const std::string& id, const std::string& t
 void FSFloaterContacts::updateRlvRestrictions(ERlvBehaviour behavior)
 {
 	if (behavior == RLV_BHVR_SHOWLOC ||
-		behavior == RLV_BHVR_SHOWWORLDMAP)
+		behavior == RLV_BHVR_SHOWWORLDMAP ||
+		behavior == RLV_BHVR_PAY)
 	{
 		refreshUI();
 	}
