@@ -43,6 +43,9 @@
 #include "llweb.h"
 #include "llwindow.h"
 #include "llappviewer.h"
+#if OPENSIM
+#include "llviewernetwork.h" // <FS:Ansariel> OpenSim support
+#endif
 
 static const S32 MINIMUM_BALANCE_AMOUNT = 0;
 
@@ -300,15 +303,50 @@ LLFetchAvatarPaymentInfo* LLFloaterBuyCurrency::sPropertiesRequest = NULL;
 // static
 void LLFloaterBuyCurrency::buyCurrency()
 {
-	delete sPropertiesRequest;
-	sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
+	// <FS:Ansariel> OpenSim support
+	//delete sPropertiesRequest;
+	//sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
+#if OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
+		ui->noTarget();
+		ui->updateUI();
+	}
+	else
+#endif
+	{
+		delete sPropertiesRequest;
+		sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
+	}
+	// <FS:Ansariel>
 }
 
 // static
 void LLFloaterBuyCurrency::buyCurrency(const std::string& name, S32 price)
 {
-	delete sPropertiesRequest;
-	sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
+	// <FS:Ansariel> OpenSim support
+	//delete sPropertiesRequest;
+	//sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
+#if OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
+		// <COLOSI opensim multi-currency support>
+		// Not wrapping name here because according to llfloaterbuycurrency.h
+		// name should not include currency symbols as the price will be appended to the string.
+		// If an "L$" is ever included in a name, then we should call Tea::wrapCurrency on it here.
+		// </COLOSI opensim multi-currency support>>
+		ui->target(name, price);
+		ui->updateUI();
+	}
+	else
+#endif
+	{
+		delete sPropertiesRequest;
+		sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
+	}
+	// <FS:Ansariel>
 }
 
 // static
