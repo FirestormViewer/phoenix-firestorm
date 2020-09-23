@@ -49,6 +49,7 @@ public:
 	// </FS:Ansariel>
 	void setBadgeVisibility(bool visible);
 	void setDrawBadgeAtTop(bool draw_at_top);
+	void reshapeBadge(const LLRect& new_rect);
 
 private:
 

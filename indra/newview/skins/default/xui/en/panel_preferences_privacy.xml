@@ -95,7 +95,7 @@
     top_pad="3"
     width="350" />
    <check_box
-    control_name="VoiceCallsFriendsOnly"
+    enabled="false"
     height="16"
     label="Only friends and groups can call or IM me"
     layout="topleft"

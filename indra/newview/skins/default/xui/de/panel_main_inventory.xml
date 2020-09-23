@@ -34,7 +34,7 @@
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="Inventar" name="All Items"/>
 		<recent_inventory_panel label="Aktuell" name="Recent Items"/>
-		<worn_inventory_panel label="Angezogen" name="Worn Items"/>		
+		<worn_inventory_panel label="Angezogen" name="Worn Items"/>
 	</tab_container>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">

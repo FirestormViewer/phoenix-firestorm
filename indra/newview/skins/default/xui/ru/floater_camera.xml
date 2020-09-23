@@ -33,5 +33,4 @@
 		<combo_box.item label="Предустановки" name="Use preset"/>
 	</combo_box>
 	<button name="gear_btn" tool_tip="Предустановки Камеры"/>
-	<!-- <button label="Сохранить как..." name="save_preset_btn"/> -->
 </floater>

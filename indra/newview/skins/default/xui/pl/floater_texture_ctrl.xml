@@ -9,12 +9,12 @@
 	<text name="Multiple">
 		Wiele tekstur
 	</text>
-	<radio_group name="mode_selection">
-		<radio_item label="Szafa" name="inventory" width="51" />
-		<radio_item label="Lokaln." name="local" width="60" />
-		<radio_item label="Wypiek." name="bake" />
-	</radio_group>
-	<text name="unknown">
+	<combo_box name="mode_selection">
+		<combo_box.item label="Szafa" name="inventory" />
+		<combo_box.item label="Lokaln." name="local" />
+		<combo_box.item label="Wypiek." name="bake" />
+	</combo_box>
+	<text name="size_lbl">
 		Rozmiar:
 [DIMENSIONS]
 	</text>
@@ -22,7 +22,6 @@
 	<button label="Pusta" label_selected="Pusta" name="Blank"/>
 	<button label="Przezrocz." label_selected="Przezrocz." tool_tip="Uwaga: Jeśli wybrano teksturę z częściową lub całkowitą przezroczystością, to światło nie będzie przez nią rzucane." name="Transparent"/>
 	<button label="Żadna" label_selected="Żadna" name="None"/>
-	<button name="Pipette"/>
 	<text name="preview_disabled" value="Podgląd wyłączony"/>
 	<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
 	<check_box label="Pokaż foldery" name="show_folders_check"/>

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2009-2016, Kitty Barnett
+ * Copyright (c) 2009-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -14,8 +14,11 @@
  *
  */
 
-#ifndef RLV_DEFINES_H
-#define RLV_DEFINES_H
+#pragma once
+
+#ifdef CATZNIP_STRINGVIEW
+#include "llstringview.h"
+#endif // CATZNIP_STRINGVIE
 
 // ============================================================================
 // Defines
@@ -151,8 +154,10 @@ enum ERlvBehaviour {
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
 	RLV_BHVR_ACCEPTTPREQUEST,		// "accepttprequest"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
+	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_PAY,					// "pay"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
 	RLV_BHVR_INTERACT,				// "interact"
@@ -324,11 +329,11 @@ enum ERlvCmdRet {
 };
 #define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)
 
-enum ERlvExceptionCheck
+enum class ERlvExceptionCheck
 {
-	RLV_CHECK_PERMISSIVE,			// Exception can be set by any object
-	RLV_CHECK_STRICT,				// Exception must be set by all objects holding the restriction
-	RLV_CHECK_DEFAULT				// Permissive or strict will be determined by currently enforced restrictions
+	Permissive,						// Exception can be set by any object
+	Strict,							// Exception must be set by all objects holding the restriction
+	Default,						// Permissive or strict will be determined by currently enforced restrictions
 };
 
 enum ERlvLockMask
@@ -362,61 +367,131 @@ enum ERlvAttachGroupType
 // Settings
 //
 
-#define RLV_SETTING_MAIN				"RestrainedLove"
-#define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-#define RLV_SETTING_CANOOC				"RestrainedLoveCanOOC"
-#define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
-#define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
-#define RLV_SETTING_SHOWELLIPSIS		"RestrainedLoveShowEllipsis"
-#define RLV_SETTING_WEARADDPREFIX       "RestrainedLoveStackWhenFolderBeginsWith"
-#define RLV_SETTING_WEARREPLACEPREFIX   "RestrainedLoveReplaceWhenFolderBeginsWith"
+namespace RlvSettingNames
+{
+#ifdef CATZNIP_STRINGVIEW
+	/*inline*/ constexpr boost::string_view Main = make_string_view("RestrainedLove");
+	/*inline*/ constexpr boost::string_view Debug = make_string_view("RestrainedLoveDebug");
+	/*inline*/ constexpr boost::string_view CanOoc = make_string_view("RestrainedLoveCanOOC");
+	/*inline*/ constexpr boost::string_view ForbidGiveToRlv = make_string_view("RestrainedLoveForbidGiveToRLV");
+	/*inline*/ constexpr boost::string_view NoSetEnv = make_string_view("RestrainedLoveNoSetEnv");
+	/*inline*/ constexpr boost::string_view ShowEllipsis = make_string_view("RestrainedLoveShowEllipsis");
+	/*inline*/ constexpr boost::string_view WearAddPrefix = make_string_view("RestrainedLoveStackWhenFolderBeginsWith");
+	/*inline*/ constexpr boost::string_view WearReplacePrefix = make_string_view("RestrainedLoveReplaceWhenFolderBeginsWith");
 
-#define RLV_SETTING_DEBUGHIDEUNSETDUP   "RLVaDebugHideUnsetDuplicate"
-#define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
-#define RLV_SETTING_ENABLELEGACYNAMING	"RLVaEnableLegacyNaming"
-#define RLV_SETTING_ENABLESHAREDWEAR	"RLVaEnableSharedWear"
-#define RLV_SETTING_ENABLETEMPATTACH    "RLVaEnableTemporaryAttachments"
-#define RLV_SETTING_HIDELOCKEDLAYER		"RLVaHideLockedLayers"
-#define RLV_SETTING_HIDELOCKEDATTACH	"RLVaHideLockedAttachments"
-#define RLV_SETTING_HIDELOCKEDINVENTORY	"RLVaHideLockedInventory"
-#define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
-#define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
-#define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
-#define RLV_SETTING_SPLITREDIRECTCHAT   "RLVaSplitRedirectChat"
-#define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
-#define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
+	/*inline*/ constexpr boost::string_view DebugHideUnsetDup = make_string_view("RLVaDebugHideUnsetDuplicate");
+	/*inline*/ constexpr boost::string_view EnableIMQuery = make_string_view("RLVaEnableIMQuery");
+	/*inline*/ constexpr boost::string_view EnableLegacyNaming = make_string_view("RLVaEnableLegacyNaming");
+	/*inline*/ constexpr boost::string_view EnableSharedWear = make_string_view("RLVaEnableSharedWear");
+	/*inline*/ constexpr boost::string_view EnableTempAttach = make_string_view("RLVaEnableTemporaryAttachments");
+	/*inline*/ constexpr boost::string_view HideLockedLayer = make_string_view("RLVaHideLockedLayers");
+	/*inline*/ constexpr boost::string_view HideLockedAttach = make_string_view("RLVaHideLockedAttachments");
+	/*inline*/ constexpr boost::string_view HideLockedInventory = make_string_view("RLVaHideLockedInventory");
+	/*inline*/ constexpr boost::string_view LoginLastLocation = make_string_view("RLVaLoginLastLocation");
+	/*inline*/ constexpr boost::string_view SharedInvAutoRename = make_string_view("RLVaSharedInvAutoRename");
+	/*inline*/ constexpr boost::string_view ShowAssertionFail = make_string_view("RLVaShowAssertionFailures");
+	/*inline*/ constexpr boost::string_view ShowRedirectChatTyping = make_string_view("RLVaShowRedirectChatTyping");
+	/*inline*/ constexpr boost::string_view SplitRedirectChat = make_string_view("RLVaSplitRedirectChat");
+	/*inline*/ constexpr boost::string_view TopLevelMenu = make_string_view("RLVaTopLevelMenu");
+	/*inline*/ constexpr boost::string_view WearReplaceUnlocked = make_string_view("RLVaWearReplaceUnlocked");
+#else
+	constexpr const char Main[] = "RestrainedLove";
+	constexpr const char Debug[] = "RestrainedLoveDebug";
+	constexpr const char CanOoc[] = "RestrainedLoveCanOOC";
+	constexpr const char ForbidGiveToRlv[] = "RestrainedLoveForbidGiveToRLV";
+	constexpr const char NoSetEnv[] = "RestrainedLoveNoSetEnv";
+	constexpr const char ShowEllipsis[] = "RestrainedLoveShowEllipsis";
+	constexpr const char WearAddPrefix[] = "RestrainedLoveStackWhenFolderBeginsWith";
+	constexpr const char WearReplacePrefix[] = "RestrainedLoveReplaceWhenFolderBeginsWith";
 
-#define RLV_SETTING_FIRSTUSE_PREFIX		"FirstRLV"
-#define RLV_SETTING_FIRSTUSE_GIVETORLV	RLV_SETTING_FIRSTUSE_PREFIX"GiveToRLV"
+	constexpr const char DebugHideUnsetDup[] = "RLVaDebugHideUnsetDuplicate";
+	constexpr const char EnableIMQuery[] = "RLVaEnableIMQuery";
+	constexpr const char EnableLegacyNaming[] = "RLVaEnableLegacyNaming";
+	constexpr const char EnableSharedWear[] = "RLVaEnableSharedWear";
+	constexpr const char EnableTempAttach[] = "RLVaEnableTemporaryAttachments";
+	constexpr const char HideLockedLayer[] = "RLVaHideLockedLayers";
+	constexpr const char HideLockedAttach[] = "RLVaHideLockedAttachments";
+	constexpr const char HideLockedInventory[] = "RLVaHideLockedInventory";
+	constexpr const char LoginLastLocation[] = "RLVaLoginLastLocation";
+	constexpr const char SharedInvAutoRename[] = "RLVaSharedInvAutoRename";
+	constexpr const char ShowAssertionFail[] = "RLVaShowAssertionFailures";
+	constexpr const char ShowRedirectChatTyping[] = "RLVaShowRedirectChatTyping";
+	constexpr const char SplitRedirectChat[] = "RLVaSplitRedirectChat";
+	constexpr const char TopLevelMenu[] = "RLVaTopLevelMenu";
+	constexpr const char WearReplaceUnlocked[] = "RLVaWearReplaceUnlocked";
+#endif // CATZNIP_STRINGVIEW
+}
 
 // ============================================================================
 // Strings (see rlva_strings.xml)
 //
 
-#define RLV_STRING_HIDDEN					"hidden_generic"
-#define RLV_STRING_HIDDEN_PARCEL			"hidden_parcel"
-#define RLV_STRING_HIDDEN_REGION			"hidden_region"
+namespace RlvStringKeys
+{
+	namespace Blocked
+	{
+#ifdef CATZNIP_STRINGVIEW
+		/*inline*/ constexpr boost::string_view AutoPilot = make_string_view("blocked_autopilot");
+		/*inline*/ constexpr boost::string_view Generic = make_string_view("blocked_generic");
+		/*inline*/ constexpr boost::string_view GroupChange = make_string_view("blocked_groupchange");
+		/*inline*/ constexpr boost::string_view InvFolder = make_string_view("blocked_invfolder");
+		/*inline*/ constexpr boost::string_view PermissionAttach = make_string_view("blocked_permattach");
+		/*inline*/ constexpr boost::string_view PermissionTeleport = make_string_view("blocked_permteleport");
+		/*inline*/ constexpr boost::string_view RecvIm = make_string_view("blocked_recvim");
+		/*inline*/ constexpr boost::string_view RecvImRemote = make_string_view("blocked_recvim_remote");
+		/*inline*/ constexpr boost::string_view SendIm = make_string_view("blocked_sendim");
+		/*inline*/ constexpr boost::string_view StartConference = make_string_view("blocked_startconf");
+		/*inline*/ constexpr boost::string_view StartIm = make_string_view("blocked_startim");
+		/*inline*/ constexpr boost::string_view Teleport = make_string_view("blocked_teleport");
+		/*inline*/ constexpr boost::string_view TeleportOffer = make_string_view("blocked_teleport_offer");
+		/*inline*/ constexpr boost::string_view TpLureRequestRemote = make_string_view("blocked_tplurerequest_remote");
+		/*inline*/ constexpr boost::string_view ViewXxx = make_string_view("blocked_viewxxx");
+		/*inline*/ constexpr boost::string_view Wireframe = make_string_view("blocked_wireframe");
+#else
+		constexpr const char AutoPilot[] = "blocked_autopilot";
+		constexpr const char Generic[] = "blocked_generic";
+		constexpr const char GroupChange[] = "blocked_groupchange";
+		constexpr const char InvFolder[] = "blocked_invfolder";
+		constexpr const char PermissionAttach[] = "blocked_permattach";
+		constexpr const char PermissionTeleport[] = "blocked_permteleport";
+		constexpr const char RecvIm[] = "blocked_recvim";
+		constexpr const char RecvImRemote[] = "blocked_recvim_remote";
+		constexpr const char SendIm[] = "blocked_sendim";
+		constexpr const char StartConference[] = "blocked_startconf";
+		constexpr const char StartIm[] = "blocked_startim";
+		constexpr const char Teleport[] = "blocked_teleport";
+		constexpr const char TeleportOffer[] = "blocked_teleport_offer";
+		constexpr const char TpLureRequestRemote[] = "blocked_tplurerequest_remote";
+		constexpr const char ViewXxx[] = "blocked_viewxxx";
+		constexpr const char Wireframe[] = "blocked_wireframe";
+#endif // CATZNIP_STRINGVIEW
+	}
 
-#define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
-#define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
-#define RLV_STRING_BLOCKED_GROUPCHANGE		"blocked_groupchange"
-#define RLV_STRING_BLOCKED_INVFOLDER		"blocked_invfolder"
-#define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
-#define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
-#define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
-#define RLV_STRING_BLOCKED_RECVIM_REMOTE	"blocked_recvim_remote"
-#define RLV_STRING_BLOCKED_SENDIM			"blocked_sendim"
-#define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
-#define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
-#define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
-#define RLV_STRING_BLOCKED_TELEPORT_OFFER   "blocked_teleport_offer"
-#define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
-#define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
-#define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"
-#define RLV_STRING_STOPIM_NOSESSION         "stopim_nosession"
-#define RLV_STRING_STOPIM_ENDSESSION_REMOTE "stopim_endsession_remote"
-#define RLV_STRING_STOPIM_ENDSESSION_LOCAL  "stopim_endsession_local"
+	namespace Hidden
+	{
+#ifdef CATZNIP_STRINGVIEW
+		/*inline*/ constexpr boost::string_view Generic = make_string_view("hidden_generic");
+		/*inline*/ constexpr boost::string_view Parcel = make_string_view("hidden_parcel");
+		/*inline*/ constexpr boost::string_view Region = make_string_view("hidden_region");
+#else
+		constexpr const char Generic[] = "hidden_generic";
+		constexpr const char Parcel[] = "hidden_parcel";
+		constexpr const char Region[] = "hidden_region";
+#endif // CATZNIP_STRINGVIEW
+	}
+
+	namespace StopIm
+	{
+#ifdef CATZNIP_STRINGVIEW
+		/*inline*/ constexpr boost::string_view NoSession = make_string_view("stopim_nosession");
+		/*inline*/ constexpr boost::string_view EndSessionRemote = make_string_view("stopim_endsession_remote");
+		/*inline*/ constexpr boost::string_view EndSessionLocal = make_string_view("stopim_endsession_local");
+#else
+		constexpr const char NoSession[] = "stopim_nosession";
+		constexpr const char EndSessionRemote[] = "stopim_endsession_remote";
+		constexpr const char EndSessionLocal[] = "stopim_endsession_local";
+#endif // CATZNIP_STRINGVIEW
+	}
+}
 
 // ============================================================================
-
-#endif // RLV_DEFINES_H

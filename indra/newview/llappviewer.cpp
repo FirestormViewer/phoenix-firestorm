@@ -425,7 +425,10 @@ const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"
 const std::string LLERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".llerror_marker"); //FS orig modified LL
 const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker"); //FS orig modified LL
 
-static BOOL gDoDisconnect = FALSE;
+//static BOOL gDoDisconnect = FALSE;
+// [RLVa:KB] - Checked: RLVa-2.3
+BOOL gDoDisconnect = FALSE;
+// [/RLVa:KB]
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)
@@ -955,7 +958,7 @@ bool LLAppViewer::init()
 				LLFile::remove(per_user_dir_glob + "filters.xml");
 				LLFile::remove(per_user_dir_glob + "medialist.xml");
 				LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
-				LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+				LLFile::remove(per_user_dir_glob + "screen_last*.*");
 				LLFile::remove(per_user_dir_glob + "search_history.xml");
 				LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
 				LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
@@ -3425,7 +3428,7 @@ bool LLAppViewer::initConfiguration()
 	}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-	if (LLControlVariable* pControl = gSavedSettings.getControl(RLV_SETTING_MAIN))
+    if (LLControlVariable* pControl = gSavedSettings.getControl(RlvSettingNames::Main))
 	{
 		if ( (pControl->getValue().asBoolean()) && (pControl->hasUnsavedValue()) )
 		{
@@ -3776,9 +3779,8 @@ LLSD LLAppViewer::getViewerInfo() const
 			info["POSITION"] = ll_sd_from_vector3d(pos);
 			info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
 			info["REGION"] = gAgent.getRegion()->getName();
-			info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
-			info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
-//			info["SERVER_VERSION"] = gLastVersionChannel;
+			boost::regex regex("\\.(secondlife|lindenlab)\\..*");
+			info["HOSTNAME"] = boost::regex_replace(gAgent.getRegion()->getHost().getHostName(), regex, "");
 			LLSLURL slurl;
 			LLAgentUI::buildSLURL(slurl);
 			info["SLURL"] = slurl.getSLURLString();
@@ -3786,7 +3788,7 @@ LLSD LLAppViewer::getViewerInfo() const
 		}
 		else
 		{
-			info["REGION"] = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+			info["REGION"] = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 		}
 		info["SERVER_VERSION"] = gLastVersionChannel;
 // [/RLVa:KB]
@@ -5719,12 +5721,13 @@ void LLAppViewer::idle()
 		// </FS:CR>
 		return;
     }
+
+    gViewerWindow->updateUI();
+
 	if (gTeleportDisplay)
     {
 		return;
     }
-
-	gViewerWindow->updateUI();
 
 	///////////////////////////////////////
 	// Agent and camera movement
