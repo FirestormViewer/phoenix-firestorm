@@ -77,7 +77,7 @@ public:
 	// Returns TRUE if the specified behaviour has an added exception
 	bool hasException(ERlvBehaviour eBhvr) const;
 	// Returns TRUE if the specified option was added as an exception for the specified behaviour
-	bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck typeCheck = RLV_CHECK_DEFAULT) const;
+	bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck eCheckType = ERlvExceptionCheck::Default) const;
 	// Returns TRUE if the specified behaviour should behave "permissive" (rather than "strict"/"secure")
 	bool isPermissive(ERlvBehaviour eBhvr) const;
 
@@ -235,6 +235,18 @@ public:
 	typedef std::map<LLUUID, RlvObject> rlv_object_map_t;
 	typedef std::tuple<LLUUID, std::string, double> rlv_blocked_object_t;
 	typedef std::list<rlv_blocked_object_t> rlv_blocked_object_list_t;
+
+	struct RlvException
+	{
+	public:
+		LLUUID				idObject;    // UUID of the object that added the exception
+		ERlvBehaviour		eBehaviour;  // Behaviour the exception applies to
+		RlvExceptionOption	varOption;   // Exception data (type is dependent on eBehaviour)
+
+		RlvException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& option) : idObject(idObj), eBehaviour(eBhvr), varOption(option) {}
+	private:
+		RlvException();
+	};
 	typedef std::multimap<ERlvBehaviour, RlvException> rlv_exception_map_t;
 protected:
 	rlv_object_map_t      m_Objects;				// Map of objects that have active restrictions (idObj -> RlvObject)

@@ -79,8 +79,6 @@ public:
 
     void close();
     void close(const std::string &pool);
-
-    void createPool(const std::string& poolName); // <FS:Ansariel> Explicitly create the VAAssetStorage pool
     
 private:
 

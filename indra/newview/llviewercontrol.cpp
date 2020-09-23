@@ -1164,7 +1164,7 @@ void settings_setup_listeners()
 	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getCommitSignal()->connect(boost::bind(&handleAvatarHoverOffsetChanged, _2));
 
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
-	gSavedSettings.getControl("RestrainedLove")->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
+	gSavedSettings.getControl(RlvSettingNames::Main)->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
 // [/RLVa:KB]
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));

@@ -68,6 +68,7 @@
 #include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
+#include "rlvactions.h"
 #include "rlvcommon.h"
 // [/RLVa:KB]
 
@@ -488,6 +489,12 @@ public:
 		{
 			return canModerate(userdata);
 		}
+// [RLVa:KB] - @pay
+		else if (level == "can_pay")
+		{
+			return RlvActions::canPayAvatar(getAvatarId());
+		}
+// [/RLVa:KB]
 		else if (level == "can_ban_member")
 		{
 			return canBanGroupMember(getAvatarId());

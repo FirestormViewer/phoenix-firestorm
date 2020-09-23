@@ -84,7 +84,7 @@ if(WINDOWS)
     endif (FMODSTUDIO)
 
     if (OPENAL)
-        set(release_files ${release_files} OpenAL32.dll alut.dll)
+        list(APPEND release_files openal32.dll alut.dll)
     endif (OPENAL)
 
     #*******************************

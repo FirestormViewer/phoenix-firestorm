@@ -1407,10 +1407,21 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>RLVaShowRedirectChatTyping</key>
+    <map>
+      <key>Comment</key>
+      <string>Sends typing start messages (and optionally plays the typing animation) when @redirchat restricted</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>0</boolean>
+    </map>
     <key>RLVaSplitRedirectChat</key>
     <map>
       <key>Comment</key>
-      <string>Splits long nearby chat lines across multiple messages when @redir* restricted.</string>
+      <string>Splits long nearby chat lines across multiple messages when @redir* restricted</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -17770,17 +17781,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>VoiceCallsFriendsOnly</key>
-    <map>
-      <key>Comment</key>
-      <string>Only accept voice calls from residents on your friends list</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>VoiceCallsRejectGroup</key>
     <map>
       <key>Comment</key>
@@ -22518,17 +22518,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>If true, Firestorm will not use mouse wheel to zoom in/out the camera.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>UseHTTPBakedTextureFetch</key>
-    <map>
-      <key>Comment</key>
-      <string>If true, baked avatar textures will be fetched using HTTP instead of UDP.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
