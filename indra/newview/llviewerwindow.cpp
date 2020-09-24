@@ -2875,7 +2875,7 @@ void LLViewerWindow::draw()
 	static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
 	if (!renderUIBuffer)
 	{
-		LLUI::getInstance()->mDirtyRect = getWindowRectScaled();
+		LLView::sDirtyRect = getWindowRectScaled();
 	}
 
 	// HACK for timecode debugging

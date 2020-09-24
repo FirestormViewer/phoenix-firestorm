@@ -1218,8 +1218,38 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, LLEnvironm
     }
     else if (!environment->getSky())
     {
-        environment->setSky(mCurrentEnvironment->getSky());
-        environment->setFlags(DayInstance::NO_ANIMATE_SKY);
+        if (mCurrentEnvironment->getEnvironmentSelection() != ENV_NONE)
+        {
+            // Note: This looks suspicious. Shouldn't we assign whole day if mCurrentEnvironment has whole day?
+            // and then add water/sky on top
+            // This looks like it will result in sky using single keyframe instead of whole day if day is present
+            // when setting static water without static sky
+            environment->setSky(mCurrentEnvironment->getSky());
+            environment->setFlags(DayInstance::NO_ANIMATE_SKY);
+        }
+        else
+        {
+            // Environment is not properly initialized yet, but we should have environment by this point
+            DayInstance::ptr_t substitute = getEnvironmentInstance(ENV_PARCEL, true);
+            if (!substitute || !substitute->getSky())
+            {
+                substitute = getEnvironmentInstance(ENV_REGION, true);
+            }
+            if (!substitute || !substitute->getSky())
+            {
+                substitute = getEnvironmentInstance(ENV_DEFAULT, true);
+            }
+
+            if (substitute && substitute->getSky())
+            {
+                environment->setSky(substitute->getSky());
+                environment->setFlags(DayInstance::NO_ANIMATE_SKY);
+            }
+            else
+            {
+                LL_WARNS("ENVIRONMENT") << "Failed to assign substitute water/sky, environment is not properly initialized" << LL_ENDL;
+            }
+        }
     }
         
     if (fixed.second)
@@ -1229,8 +1259,38 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, LLEnvironm
     }
     else if (!environment->getWater())
     {
-        environment->setWater(mCurrentEnvironment->getWater());
-        environment->setFlags(DayInstance::NO_ANIMATE_WATER);
+        if (mCurrentEnvironment->getEnvironmentSelection() != ENV_NONE)
+        {
+            // Note: This looks suspicious. Shouldn't we assign whole day if mCurrentEnvironment has whole day?
+            // and then add water/sky on top
+            // This looks like it will result in water using single keyframe instead of whole day if day is present
+            // when setting static sky without static water
+            environment->setWater(mCurrentEnvironment->getWater());
+            environment->setFlags(DayInstance::NO_ANIMATE_WATER);
+        }
+        else
+        {
+            // Environment is not properly initialized yet, but we should have environment by this point
+            DayInstance::ptr_t substitute = getEnvironmentInstance(ENV_PARCEL, true);
+            if (!substitute || !substitute->getWater())
+            {
+                substitute = getEnvironmentInstance(ENV_REGION, true);
+            }
+            if (!substitute || !substitute->getWater())
+            {
+                substitute = getEnvironmentInstance(ENV_DEFAULT, true);
+            }
+
+            if (substitute && substitute->getWater())
+            {
+                environment->setWater(substitute->getWater());
+                environment->setFlags(DayInstance::NO_ANIMATE_WATER);
+            }
+            else
+            {
+                LL_WARNS("ENVIRONMENT") << "Failed to assign substitute water/sky, environment is not properly initialized" << LL_ENDL;
+            }
+        }
     }
 
     if (!mSignalEnvChanged.empty())
