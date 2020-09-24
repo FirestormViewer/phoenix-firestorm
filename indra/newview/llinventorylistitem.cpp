@@ -47,6 +47,7 @@ static const S32 WIDGET_SPACING = 3;
 
 LLPanelInventoryListItemBase::Params::Params()
 :	default_style("default_style"),
+	mismatch_style("mismatch_style"), // <FS:Ansariel> Better attachment list
 	worn_style("worn_style"),
 	hover_image("hover_image"),
 	selected_image("selected_image"),
@@ -361,6 +362,14 @@ void LLPanelInventoryListItemBase::setIconImage(const LLUIImagePtr& image)
 	}
 }
 
+// <FS:Ansariel> Better attachment list
+//virtual
+const LLPanelInventoryListItemBase::Params& LLPanelInventoryListItemBase::getDefaultParams() const
+{
+	return LLUICtrlFactory::getDefaultParams<LLPanelInventoryListItemBase>();
+}
+// </FS:Ansariel>
+
 void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 											const std::string& highlit_text,
 											EItemState item_state)
@@ -370,7 +379,10 @@ void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 
 	LLStyle::Params style_params;
 
-	const LLPanelInventoryListItemBase::Params& params = LLUICtrlFactory::getDefaultParams<LLPanelInventoryListItemBase>();
+	// <FS:Ansariel> Better attachment list
+	//const LLPanelInventoryListItemBase::Params& params = LLUICtrlFactory::getDefaultParams<LLPanelInventoryListItemBase>();
+	const LLPanelInventoryListItemBase::Params& params = getDefaultParams();
+	// </FS:Ansariel>
 
 	switch(item_state)
 	{
@@ -380,6 +392,11 @@ void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 	case IS_WORN:
 		style_params = params.worn_style();
 		break;
+	// <FS:Ansariel> Better attachment list
+	case IS_MISMATCH:
+		style_params = params.mismatch_style();
+		break;
+	// </FS:Ansariel>
 	default:;
 	}
 
