@@ -374,8 +374,7 @@ void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 											const std::string& highlit_text,
 											EItemState item_state)
 {
-	// <ND/> Don't bother with tooltips in inventory
-	//	mTitleCtrl->setToolTip(title);
+	mTitleCtrl->setToolTip(title);
 
 	LLStyle::Params style_params;
 
