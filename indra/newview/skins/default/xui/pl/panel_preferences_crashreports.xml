@@ -2,7 +2,7 @@
 <panel label="Raportowanie błędów" name="crash_reports">
     <check_box label="Wysyłaj raporty o błędach na firestormviewer.org" name="checkSendCrashReports" />
     <check_box label="Zawsze pytaj przed wysłaniem" name="checkSendCrashReportsAlwaysAsk" />
-    <check_box label="Dołącz dane konfiguracyjne Firestorma - plik settings.xml" name="checkSendSettings" />
+    <check_box label="Dołącz pliki konfiguracyjne (settings)" name="checkSendSettings" />
     <text name="textSendSettings">
         (zawiera nazwę konta użytkownika)
     </text>
