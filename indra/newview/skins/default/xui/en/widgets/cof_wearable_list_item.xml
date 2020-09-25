@@ -7,6 +7,22 @@
   name="cof_wearable_item"
   bottom="0"
   width="380">
+  <!-- DEFAULT style for inventory list item -->
+  <default_style
+   font="SansSerifSmall"
+   font.style="NORMAL" />
+
+  <!-- style for inventory list item WORN on avatar -->
+  <worn_style
+   font="SansSerifSmall"
+   font.style="NORMAL"
+   color="White" />
+
+  <!-- style for inventory list item WORN on avatar, but not linked in COF -->
+  <mismatch_style
+   font="SansSerifSmall"
+   font.style="BOLD"
+   color="LtRed" />
   <item_icon
    height="16"
    follows="top|left"
@@ -24,7 +40,7 @@
    parse_urls="false"
    use_ellipses="true"
    name="item_name"
-   text_color="white"
+   text_color="White"
    top="4"
    value="..."
    width="359" />

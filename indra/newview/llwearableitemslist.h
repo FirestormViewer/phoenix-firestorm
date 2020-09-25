@@ -240,6 +240,7 @@ protected:
 	FSPanelCOFWearableOutfitListItem(LLViewerInventoryItem* item,
 							  bool worn_indication_enabled, const Params& params);
 
+	virtual const LLPanelInventoryListItemBase::Params& getDefaultParams() const;
 private:
 	LLTextBox*		mWeightCtrl;
 };
