@@ -141,7 +141,8 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 	//	search_label += LLTrans::getString("worn");
 	//	item_state = IS_WORN;
 	//}
-	if (mWornIndicationEnabled && get_is_item_worn(mInventoryItemUUID))
+	//if (mWornIndicationEnabled && get_is_item_worn(mInventoryItemUUID)) // This doesn't work properly yet, so just check for CoF to prevent false warnings
+	if (mWornIndicationEnabled && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
 	{
 		std::string attachment_point_name;
 		if (getType() != LLAssetType::AT_OBJECT || !isAgentAvatarValid()) // System layer or error condition, can't figure out attach point
