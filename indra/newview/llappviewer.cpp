@@ -2515,8 +2515,6 @@ bool LLAppViewer::cleanup()
 
 	LLError::LLCallStacks::cleanup();
 
-	removeMarkerFiles();
-
 	// It's not at first obvious where, in this long sequence, a generic cleanup
 	// call OUGHT to go. So let's say this: as we migrate cleanup from
 	// explicit hand-placed calls into the generic mechanism, eventually
@@ -2524,13 +2522,11 @@ bool LLAppViewer::cleanup()
 	// still see above are calls that MUST happen before the generic cleanup
 	// kicks in.
 
-	// The logging subsystem depends on an LLSingleton. Any logging after
-	// LLSingletonBase::deleteAll() won't be recorded.
-	LL_INFOS() << "Goodbye!" << LL_ENDL;
-
 	// This calls every remaining LLSingleton's cleanupSingleton() and
 	// deleteSingleton() methods.
 	LLSingletonBase::deleteAll();
+
+    LL_INFOS() << "Goodbye!" << LL_ENDL;
 
 	removeDumpDir();
 
