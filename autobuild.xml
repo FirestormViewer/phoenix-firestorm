@@ -784,9 +784,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fbd53fad464526e9331332fc0b3fee0b</string>
+              <string>6dfd5abf06af96594ad4a709751242d4</string>
               <key>url</key>
-              <string>https://downloads.catznip.com/packages/fmodstudio-2.00.09-windows-201512304.tar.bz2</string>
+              <string>https://downloads.catznip.com/packages/fmodstudio-2.01.04-windows-202701549.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -796,9 +796,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>af7446fdf8d39e114feae354878ec54b</string>
+              <string>4ace21ba072a0a058542a79048c5b50b</string>
               <key>url</key>
-              <string>https://downloads.catznip.com/packages/fmodstudio-2.00.09-windows64-201512258.tar.bz2</string>
+              <string>https://downloads.catznip.com/packages/fmodstudio-2.01.04-windows64-202701551.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
