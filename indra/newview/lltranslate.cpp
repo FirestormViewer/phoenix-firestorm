@@ -127,7 +127,7 @@ void LLTranslationAPIHandler::verifyKeyCoro(LLTranslate::EService service, std::
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("getMerchantStatusCoro", httpPolicy));
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("verifyKeyCoro", httpPolicy));
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
     LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
     LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
@@ -170,7 +170,7 @@ void LLTranslationAPIHandler::translateMessageCoro(LanguagePair_t fromTo, std::s
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("getMerchantStatusCoro", httpPolicy));
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("translateMessageCoro", httpPolicy));
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
     LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
     LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
