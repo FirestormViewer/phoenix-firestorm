@@ -27,7 +27,6 @@
 
 //colladadom includes
 #if LL_MSVC
-#pragma warning (disable : 4018)
 #pragma warning (push)
 #pragma warning (disable : 4068)
 #pragma warning (disable : 4263)
