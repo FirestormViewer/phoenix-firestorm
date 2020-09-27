@@ -110,7 +110,7 @@ namespace DAEExportUtil
 
 ColladaExportFloater::ColladaExportFloater(const LLSD& key)
 : LLFloater(key),
-  mCurrentObjectID(NULL),
+  mCurrentObjectID(LLUUID::null),
   mDirty(true)
 {
 	mCommitCallbackRegistrar.add("ColladaExport.TextureExport", boost::bind(&ColladaExportFloater::onTextureExportCheck, this));
