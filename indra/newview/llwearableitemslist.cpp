@@ -141,8 +141,7 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 	//	search_label += LLTrans::getString("worn");
 	//	item_state = IS_WORN;
 	//}
-	//if (mWornIndicationEnabled && get_is_item_worn(mInventoryItemUUID)) // This doesn't work properly yet, so just check for CoF to prevent false warnings
-	if (mWornIndicationEnabled && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
+	if (mWornIndicationEnabled && get_is_item_worn(mInventoryItemUUID))
 	{
 		std::string attachment_point_name;
 		if (getType() != LLAssetType::AT_OBJECT || !isAgentAvatarValid()) // System layer or error condition, can't figure out attach point
@@ -769,6 +768,7 @@ LLWearableItemsList::Params::Params()
 
 LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 :	LLInventoryItemsList(p)
+, mAttachmentsChangedCallbackConnection() // <FS:Ansariel> Better attachment list
 {
 	setSortOrder(E_SORT_BY_TYPE_LAYER, false);
 	mIsStandalone = p.standalone;
@@ -784,11 +784,21 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 	mShowComplexity = p.show_complexity;
 	mBodyPartsComplexity = 0;
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Better attachment list
+	mAttachmentsChangedCallbackConnection = LLAppearanceMgr::instance().setAttachmentsChangedCallback(boost::bind(&LLWearableItemsList::updateChangedItem, this, _1));
 }
 
 // virtual
 LLWearableItemsList::~LLWearableItemsList()
-{}
+{
+	// <FS:Ansariel> Better attachment list
+	if (mAttachmentsChangedCallbackConnection.connected())
+	{
+		mAttachmentsChangedCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
+}
 
 // virtual
 LLPanel* LLWearableItemsList::createNewItem(LLViewerInventoryItem* item)
@@ -880,6 +890,15 @@ void LLWearableItemsList::updateChangedItems(const uuid_vec_t& changed_items_uui
 		}
 	}
 }
+
+// <FS:Ansariel> Better attachment list
+void LLWearableItemsList::updateChangedItem(const LLUUID& changed_item_uuid)
+{
+	uuid_vec_t items;
+	items.push_back(changed_item_uuid);
+	updateChangedItems(items);
+}
+// </FS:Ansariel>
 
 void LLWearableItemsList::onRightClick(S32 x, S32 y)
 {

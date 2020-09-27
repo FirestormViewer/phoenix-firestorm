@@ -502,6 +502,9 @@ public:
 	 */
 	void updateChangedItems(const uuid_vec_t& changed_items_uuids);
 
+	// <FS:Ansariel> Better attachment list
+	void updateChangedItem(const LLUUID& changed_item_uuid);
+
 	bool isStandalone() const { return mIsStandalone; }
 
 	ESortOrder getSortOrder() const { return mSortOrder; }
@@ -532,6 +535,9 @@ protected:
 	std::map<LLUUID, U32> mItemComplexityMap;
 	U32 mBodyPartsComplexity;
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Better attachment list
+	boost::signals2::connection mAttachmentsChangedCallbackConnection;
 };
 
 #endif //LL_LLWEARABLEITEMSLIST_H
