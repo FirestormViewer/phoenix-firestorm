@@ -40,7 +40,7 @@
      top="0"
      width="309"
      show_complexity="true"
-     worn_indication_enabled="false" />
+     worn_indication_enabled="true" />
      </accordion_tab>
      <accordion_tab
      layout="topleft"

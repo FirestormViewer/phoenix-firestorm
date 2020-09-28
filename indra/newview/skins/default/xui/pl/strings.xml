@@ -181,8 +181,14 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	<string name="CertBasicConstraints">
 		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem świata.
 	</string>
+	<string name="CertInvalid">
+		Nie udało się załadować certyfikatu. Skontaktuj się ze swoim administratorem świata.
+	</string>
 	<string name="CertInvalidSignature">
 		Podpis certyfikatu zwrócony przez świat nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem świata.
+	</string>
+	<string name="CertAllocationFailure">
+		Nie udało się przydzielić pamięci openssl dla certyfikatu.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Błąd sieci: Brak połączenia z siecią, sprawdź status swojego połączenia internetowego.
