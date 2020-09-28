@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * @file pipeline.h
  * @brief Rendering pipeline definitions
  *
@@ -139,7 +139,7 @@ public:
 	void resetVertexBuffers(LLDrawable* drawable);
 	void generateImpostor(LLVOAvatar* avatar);
 	void bindScreenToTexture();
-	void renderBloom(bool for_snapshot, F32 zoom_factor = 1.f, int subfield = 0);
+	void renderFinalize();
 
 	void init();
 	void cleanup();
@@ -245,7 +245,7 @@ public:
 	bool visibleObjectsInFrustum(LLCamera& camera);
 	bool getVisibleExtents(LLCamera& camera, LLVector3 &min, LLVector3& max);
 	bool getVisiblePointCloud(LLCamera& camera, LLVector3 &min, LLVector3& max, std::vector<LLVector3>& fp, LLVector3 light_dir = LLVector3(0,0,0));
-	void updateCull(LLCamera& camera, LLCullResult& result, S32 water_clip = 0, LLPlane* plane = NULL);  //if water_clip is 0, ignore water plane, 1, cull to above plane, -1, cull to below plane
+	void updateCull(LLCamera& camera, LLCullResult& result, S32 water_clip = 0, LLPlane* plane = NULL, bool hud_attachments = false);  //if water_clip is 0, ignore water plane, 1, cull to above plane, -1, cull to below plane
 	void createObjects(F32 max_dtime);
 	void createObject(LLViewerObject* vobj);
 	void processPartitionQ();
@@ -463,6 +463,7 @@ public:
 		RENDER_TYPE_BUMP						= LLDrawPool::POOL_BUMP,
 		RENDER_TYPE_MATERIALS					= LLDrawPool::POOL_MATERIALS,
 		RENDER_TYPE_AVATAR						= LLDrawPool::POOL_AVATAR,
+		RENDER_TYPE_CONTROL_AV					= LLDrawPool::POOL_CONTROL_AV, // Animesh
 		RENDER_TYPE_TREE						= LLDrawPool::POOL_TREE,
 		RENDER_TYPE_INVISIBLE					= LLDrawPool::POOL_INVISIBLE,
 		RENDER_TYPE_VOIDWATER					= LLDrawPool::POOL_VOIDWATER,

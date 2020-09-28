@@ -13,7 +13,6 @@
 			</text>
 			<check_box label="Construir/Editar" name="edit_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de objetos"/>
 			<check_box label="Editar apariencia" name="appearance_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de la apariencia o vestuario" width="115"/>
-			<check_box label="Añadir iluminación adicional" name="EditAppearanceLighting" tool_tip="Activa o desactiva la iluminación adicional mientras se edita la apariencia del avatar."/>
 			<check_box label="Hacer clic en mi avatar mantiene la posición de la cámara" name="clickonavatarkeepscamera" tool_tip="Normalmente, hacer clic en tu avatar restablece la posición de la cámara. Esta configuración evita ese comportamiento."/>
 			<check_box label="Restablecer posición de la cámara al mover el avatar" name="FSResetCameraOnMovement"/>
 			<check_box label="Restablecer posición de la cámara tras teleportarme (en la misma región)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece cuando te teleportas. Esta opción evita ese comportamiento."/>
