@@ -366,6 +366,10 @@ void LLFloaterSettingsDebug::updateControl()
 	mColorSwatch->setVisible(FALSE);
 	mValText->setVisible( FALSE);
 	mComment->setText(LLStringUtil::null);
+	mBooleanCombo->setEnabled(TRUE);
+	getChild<LLUICtrl>("TRUE")->setEnabled(TRUE);
+	getChild<LLUICtrl>("FALSE")->setEnabled(TRUE);
+	mDefaultButton->setEnabled(TRUE);
 	mCopyButton->setEnabled(FALSE);
 	mDefaultButton->setEnabled(FALSE);
 	mBooleanCombo->setVisible(FALSE);

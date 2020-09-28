@@ -18,6 +18,12 @@
    font="SansSerifSmall"
    font.style="BOLD"
    color="EmphasisColor" />
+
+  <!-- style for inventory list item WORN on avatar, but not linked in COF -->
+  <mismatch_style
+   font="SansSerifSmall"
+   font.style="BOLD"
+   color="LtRed" />
   <item_icon
     height="16"
     follows="top|left"
