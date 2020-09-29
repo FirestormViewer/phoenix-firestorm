@@ -4716,7 +4716,9 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 
 	LLAttachmentsMgr::instance().onAttachmentArrived(item_id);
 
-	mAttachmentsChangeSignal();
+	// <FS:Ansariel> Better attachment list
+	//mAttachmentsChangeSignal();
+	mAttachmentsChangeSignal(item_id);
 }
 
 void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
@@ -4738,7 +4740,9 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 		//LL_INFOS() << "no link changes, inv link not enabled" << LL_ENDL;
 	}
 
-	mAttachmentsChangeSignal();
+	// <FS:Ansariel> Better attachment list
+	//mAttachmentsChangeSignal();
+	mAttachmentsChangeSignal(item_id);
 }
 
 BOOL LLAppearanceMgr::getIsInCOF(const LLUUID& obj_id) const
