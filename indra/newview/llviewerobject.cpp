@@ -302,6 +302,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mOnActiveList(FALSE),
 	mOnMap(FALSE),
 	mStatic(FALSE),
+	mSeatCount(0),
 	mNumFaces(0),
 	mRotTime(0.f),
 	mAngularVelocityRot(),
@@ -922,7 +923,12 @@ void LLViewerObject::addChild(LLViewerObject *childp)
 	if(childp->setParent(this))
 	{
 		mChildList.push_back(childp);
-        childp->afterReparent();
+		childp->afterReparent();
+
+		if (childp->isAvatar())
+		{
+			mSeatCount++;
+		}
 	}
 
 	mExtrap.changedlink(*this); // <FS:JN> if linking update, check for sitters
@@ -952,6 +958,11 @@ void LLViewerObject::removeChild(LLViewerObject *childp)
 			if(childp->getParent() == this)
 			{
 				childp->setParent(NULL);			
+			}
+
+			if (childp->isAvatar())
+			{
+				mSeatCount--;
 			}
 			break;
 		}
@@ -1015,21 +1026,10 @@ BOOL LLViewerObject::isChild(const LLViewerObject *childp) const
 	return FALSE;
 }
 
-
 // returns TRUE if at least one avatar is sitting on this object
 BOOL LLViewerObject::isSeat() const
 {
-	for (child_list_t::const_iterator iter = mChildList.begin();
-		 iter != mChildList.end(); iter++)
-	{
-		LLViewerObject* child = *iter;
-		if (child->isAvatar())
-		{
-			return TRUE;
-		}
-	}
-	return FALSE;
-
+	return mSeatCount > 0;
 }
 
 BOOL LLViewerObject::setDrawableParent(LLDrawable* parentp)
