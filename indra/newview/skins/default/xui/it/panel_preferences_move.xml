@@ -13,7 +13,6 @@
 			</text>
 			<check_box label="Costruire/modificare" name="edit_camera_movement" tool_tip="Utilizza il posizionamento automatico della camera entrando o uscendo dalla modalità modifica"/>
 			<check_box label="Aspetto fisico" name="appearance_camera_movement" tool_tip="Utilizza il posizionamento automatico della camera in modalità modifica"/>
-			<check_box label="Aggiungi luminosità" name="EditAppearanceLighting" tool_tip="Quando si entra in Modifica aspetto verrà aggiunta una luce sull&apos;avatar (stile v1.x)"/>
 			<check_box label="Mostra suggerimenti visivi" name="FSAppearanceShowHints" tool_tip="Abilita i suggerimenti che evidenziano le parti dell&apos;avatar che vengono modificate."/>		
 			<check_box label="Mantieni la posizione della camera cliccando l&apos;avatar" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
 			<check_box label="Mantieni posizione telecamera dopo teleport (entro la stessa sim)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, spuntando questa opzione, si annulla tale effetto."/>

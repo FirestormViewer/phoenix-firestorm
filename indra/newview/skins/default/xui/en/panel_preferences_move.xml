@@ -164,17 +164,6 @@
          tool_tip="Use automatic camera positioning while in edit mode"
          width="100" />
         <check_box
-         enabled_control="AppearanceCameraMovement"
-         control_name="EditAppearanceLighting"
-         follows="left|top"
-         height="16"
-         label="Add Additional Lighting"
-         layout="topleft"
-         left_pad="10"
-         name="EditAppearanceLighting"
-         tool_tip="Enable or disable the additional lighting used while editing avatar appearance."
-         width="150" />
-        <check_box
          control_name="FSAppearanceShowHints"
          follows="left|top"
          height="16"

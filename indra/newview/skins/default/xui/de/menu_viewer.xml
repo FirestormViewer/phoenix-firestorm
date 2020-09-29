@@ -294,6 +294,7 @@
 			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Baum" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatare" name="Rendering Type Character"/>
+			<menu_item_check label="Animesh" name="Rendering Type Control Avatar"/>
 			<menu_item_check label="Flächenpatch" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Himmel" name="Rendering Type Sky"/>
 			<menu_item_check label="Wasser" name="Rendering Type Water"/>
