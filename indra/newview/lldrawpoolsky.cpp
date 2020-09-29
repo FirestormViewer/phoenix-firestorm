@@ -95,10 +95,13 @@ void LLDrawPoolSky::render(S32 pass)
 
 	LLGLSPipelineDepthTestSkyBox gls_skybox(true, false);
 
-	LLGLEnable fog_enable( (mShaderLevel < 1 && LLViewerCamera::getInstance()->cameraUnderWater()) ? GL_FOG : 0);
+	// <FS:Ansariel> Factor out instance() calls
+	LLViewerCamera& camera = LLViewerCamera::instance();
+
+	LLGLEnable fog_enable( (mShaderLevel < 1 && camera.cameraUnderWater()) ? GL_FOG : 0); // <FS:Ansariel> Factor out instance() calls
 	
 	gGL.pushMatrix();
-	LLVector3 origin = LLViewerCamera::getInstance()->getOrigin();
+	LLVector3 origin = camera.getOrigin(); // <FS:Ansariel> Factor out instance() calls
 	gGL.translatef(origin.mV[0], origin.mV[1], origin.mV[2]);
 
 	S32 face_count = (S32)mDrawFace.size();
