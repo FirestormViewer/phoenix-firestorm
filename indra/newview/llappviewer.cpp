@@ -4731,7 +4731,9 @@ void LLAppViewer::requestQuit()
 	}
 
 	// Send preferences once, when exiting
-	bool include_preferences = true;
+	// <FS:Ansariel> Don't send all non-default settings which might result in a violation of GDPR
+	//bool include_preferences = true;
+	bool include_preferences = false;
 	send_viewer_stats(include_preferences);
 
 	gLogoutTimer.reset();
