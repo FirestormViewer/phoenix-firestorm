@@ -135,11 +135,35 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 	// We don't use get_is_item_worn() here because this update is triggered by
 	// an inventory observer upon link in COF beind added or removed so actual
 	// worn status of a linked item may still remain unchanged.
-	if (mWornIndicationEnabled && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
+	// <FS:Ansariel> Better attachment list
+	//if (mWornIndicationEnabled && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
+	//{
+	//	search_label += LLTrans::getString("worn");
+	//	item_state = IS_WORN;
+	//}
+	if (mWornIndicationEnabled && get_is_item_worn(mInventoryItemUUID))
 	{
-		search_label += LLTrans::getString("worn");
-		item_state = IS_WORN;
+		std::string attachment_point_name;
+		if (getType() != LLAssetType::AT_OBJECT || !isAgentAvatarValid()) // System layer or error condition, can't figure out attach point
+		{
+			search_label += LLTrans::getString("worn");
+		}
+		else if (gAgentAvatarp->getAttachedPointName(mInventoryItemUUID, attachment_point_name))
+		{
+			LLStringUtil::format_map_t args;
+			args["[ATTACHMENT_POINT]"] =  LLTrans::getString(attachment_point_name);
+			search_label += LLTrans::getString("WornOnAttachmentPoint", args);
+		}
+		else
+		{
+			LLStringUtil::format_map_t args;
+			args["[ATTACHMENT_ERROR]"] =  LLTrans::getString(attachment_point_name);
+			search_label += LLTrans::getString("AttachmentErrorMessage", args);
+		}
+
+		item_state = LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID) ? IS_WORN : IS_MISMATCH;
 	}
+	// </FS:Ansariel>
 
 	LLPanelInventoryListItemBase::updateItem(search_label, item_state);
 }
@@ -452,6 +476,12 @@ void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
 	}
 	mWeightCtrl->setText(complexity_string);
 }
+
+//virtual
+const LLPanelInventoryListItemBase::Params& FSPanelCOFWearableOutfitListItem::getDefaultParams() const
+{
+	return LLUICtrlFactory::getDefaultParams<FSPanelCOFWearableOutfitListItem>();
+}
 // </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////
@@ -738,6 +768,7 @@ LLWearableItemsList::Params::Params()
 
 LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 :	LLInventoryItemsList(p)
+, mAttachmentsChangedCallbackConnection() // <FS:Ansariel> Better attachment list
 {
 	setSortOrder(E_SORT_BY_TYPE_LAYER, false);
 	mMenuWearableType = LLWearableType::WT_NONE;
@@ -754,11 +785,21 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 	mShowComplexity = p.show_complexity;
 	mBodyPartsComplexity = 0;
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Better attachment list
+	mAttachmentsChangedCallbackConnection = LLAppearanceMgr::instance().setAttachmentsChangedCallback(boost::bind(&LLWearableItemsList::updateChangedItem, this, _1));
 }
 
 // virtual
 LLWearableItemsList::~LLWearableItemsList()
-{}
+{
+	// <FS:Ansariel> Better attachment list
+	if (mAttachmentsChangedCallbackConnection.connected())
+	{
+		mAttachmentsChangedCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
+}
 
 // virtual
 LLPanel* LLWearableItemsList::createNewItem(LLViewerInventoryItem* item)
@@ -850,6 +891,15 @@ void LLWearableItemsList::updateChangedItems(const uuid_vec_t& changed_items_uui
 		}
 	}
 }
+
+// <FS:Ansariel> Better attachment list
+void LLWearableItemsList::updateChangedItem(const LLUUID& changed_item_uuid)
+{
+	uuid_vec_t items;
+	items.push_back(changed_item_uuid);
+	updateChangedItems(items);
+}
+// </FS:Ansariel>
 
 void LLWearableItemsList::onRightClick(S32 x, S32 y)
 {

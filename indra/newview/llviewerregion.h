@@ -89,6 +89,8 @@ public:
 		PARTITION_GRASS,
 		PARTITION_VOLUME,
 		PARTITION_BRIDGE,
+		PARTITION_AVATAR,
+		PARTITION_CONTROL_AV, // Animesh
 		PARTITION_HUD_PARTICLE,
 		PARTITION_VO_CACHE,
 		PARTITION_NONE,
@@ -242,6 +244,9 @@ public:
 
 	F32	getWidth() const						{ return mWidth; }
 	F32 getWidthScaleFactor() const				{ return mWidthScaleFactor; } // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+
+	// regions are expensive to release, this function gradually releases cache from memory
+	static void idleCleanup(F32 max_update_time);
 
 	S32 getRegionMaxBakes() const						{ return mMaxBakes; } // <FS:Beq/> FS BOM for OS max bakes restriction
 	S32 getRegionMaxTEs() const							{ return mMaxTEs; } // <FS:Beq/> FS BOM for OS max TEs restriction

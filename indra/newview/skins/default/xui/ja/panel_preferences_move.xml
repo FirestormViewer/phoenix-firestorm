@@ -17,7 +17,6 @@
 			</text>
 			<check_box label="制作・編集" name="edit_camera_movement" tool_tip="編集モードのオン・オフの切り替えに、自動カメラポジションを使います"/>
 			<check_box label="容姿" name="appearance_camera_movement" tool_tip="編集モードに入ったときに、自動カメラポジションを使います"/>
-			<check_box label="照明を追加する" name="EditAppearanceLighting" tool_tip="容姿の編集中に照明を追加することができます" />
 			<check_box label="ビジュアルヒントを表示" name="FSAppearanceShowHints" tool_tip="アバターの身体部位を修正中にビジュアルヒントの表示／非表示を切り替えます。" />
 			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
 			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>

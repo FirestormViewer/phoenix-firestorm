@@ -11,7 +11,6 @@
 			<text left="55" name="heading2">Positionnement automatique pour :</text>
 			<check_box label="Construire / Modifier" left_delta="5" name="edit_camera_movement" tool_tip="Positionner automatiquement la caméra lorsque j'entre et je sors du mode construction"/>
 			<check_box label="Modifier l'apparence" width="150" left_delta="15" name="appearance_camera_movement" tool_tip="Tourner ma caméra de face lorsque je modifie ma silhouette"/>
-			<check_box label="Lumière supplémentaire" name="EditAppearanceLighting" tool_tip="Activer cette option pour que votre avatar soit plus lumineux lorsque vous modifiez votre silhouette."/>
 			<check_box label="Indicateurs visuels" name="FSAppearanceShowHints" tool_tip="Active ou désactive les indicateurs visuels montrant les parties de votre avatar en train d'être modifiées."/>
 			<check_box label="Cliquer sur votre avatar ne touche pas à la caméra" name="clickonavatarkeepscamera" tool_tip="Activer cette option empêche la caméra de se réinitialiser lorsque vous cliquez sur votre avatar."/>
 			<check_box label="Réinitialise la caméra après une téléportation dans la région" name="FSResetCameraOnTP" tool_tip="Activer cette option réinitialisera le niveau de zoom de la caméra après une téléportation au sein d'une même région."/>
