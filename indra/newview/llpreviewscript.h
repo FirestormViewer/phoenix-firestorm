@@ -282,7 +282,7 @@ public:
 	void updateStyle();
 
 protected:
-	std::string		getTmpFileName();
+	std::string		getTmpFileName(const std::string& script_name);
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	virtual std::string getBackupFileName() const;
 	bool			onBackupTimer();
