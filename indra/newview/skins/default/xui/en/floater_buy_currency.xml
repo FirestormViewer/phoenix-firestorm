@@ -382,7 +382,7 @@ purchase again.
       <button
        follows="top|left|right"
        height="20"
-       label="Buy L$ now"
+       label="Buy now"
        layout="topleft"
        left="151"
        name="buy_btn"
