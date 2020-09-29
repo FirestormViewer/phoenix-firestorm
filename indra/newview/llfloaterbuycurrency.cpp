@@ -415,7 +415,8 @@ void LLFloaterBuyCurrency::updateCurrencySymbols()
 
 		// update all text boxes with currency symbols.
 		LLTextBox* tb = NULL;
-		static const std::list<std::string> sctb = { "info_need_more", "info_buying", "currency_label", "purchase_warning_repurchase", "purchase_warning_notenough" };
+		static const std::list<std::string> sctb = { "info_need_more", "info_buying", "target_price", "balance_amount",
+			"required_amount", "currency_label", "total_amount", "purchase_warning_repurchase" };
 		// Do not include balance_amount and total_amount because they are updated on every display when amounts are replaced.
 		for (std::list<std::string>::const_iterator iter = sctb.begin(); iter != sctb.end(); ++iter)
 		{
