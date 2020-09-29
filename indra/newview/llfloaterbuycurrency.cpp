@@ -144,6 +144,13 @@ BOOL LLFloaterBuyCurrencyUI::postBuild()
 	
 	getChild<LLUICtrl>("buy_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickBuy, this));
 	getChild<LLUICtrl>("cancel_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickCancel, this));
+
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		getChild<LLTextBox>("currency_links")->setText(LLStringExplicit(""));
+	}
+#endif
 	
 	center();
 	
