@@ -314,6 +314,7 @@
 			<menu_item_check label="Maska alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Drzewa" name="Rendering Type Tree"/>
 			<menu_item_check label="Awatary" name="Rendering Type Character"/>
+			<menu_item_check label="Animowany mesz" name="Rendering Type Control Avatar" />
 			<menu_item_check label="Płaszczyzna powierzchni" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Niebo" name="Rendering Type Sky"/>
 			<menu_item_check label="Woda" name="Rendering Type Water"/>

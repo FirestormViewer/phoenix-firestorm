@@ -64,6 +64,7 @@ public:
 	struct Params : public LLInitParam::Block<Params, LLPanel::Params>
 	{
 		Optional<LLStyle::Params>	default_style,
+									mismatch_style, // <FS:Ansariel> Better attachment list
 									worn_style;
 		Optional<LLUIImage*>		hover_image,
 									selected_image,
@@ -76,6 +77,7 @@ public:
 	typedef enum e_item_state {
 		IS_DEFAULT,
 		IS_WORN,
+		IS_MISMATCH // <FS:Ansariel> Better attachment list
 	} EItemState;
 
 	static LLPanelInventoryListItemBase* create(LLViewerInventoryItem* item);
@@ -195,6 +197,8 @@ protected:
 	 * Show tool tip if item name text size > panel size
 	 */
 	virtual BOOL handleToolTip( S32 x, S32 y, MASK mask);
+
+	virtual const LLPanelInventoryListItemBase::Params& getDefaultParams() const; // <FS:Ansariel> Better attachment list
 
 	const LLUUID mInventoryItemUUID;
 

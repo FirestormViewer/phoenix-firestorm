@@ -361,17 +361,17 @@
             </text>
             <check_box name="SeeAvatarsCheck" tool_tip="Позволить аватарам из других участков видеть и общаться с аватарами на данном участке,  вы так же можете видеть и общаться с ними."/>
             <text name="landing_point">
-                Точка приземления: [LANDING]
+                Точка прибытия: [LANDING]
             </text>
-            <button label="Задать" name="Set" tool_tip="Устанавливает точку приземления, в которую будут прибывать аватары. Данная точка устанавливается координатами вашего аватара в рамках участка." />
-            <button label="Очистить" label_selected="Очистить" name="Clear" tool_tip="Убрать точку приземления" width="65"/>
-            <button label="Телепортация" label_selected="Телепортация" name="teleport_to_landing_point" tool_tip="Телепортироваться в точку приземления" width="90" />
+            <button label="Задать" name="Set" tool_tip="Устанавливает точку прибытия, в которую будут прибывать аватары. Данная точка устанавливается координатами вашего аватара в рамках участка." />
+            <button label="Очистить" label_selected="Очистить" name="Clear" tool_tip="Убрать точку прибытия" width="65"/>
+            <button label="Телепортация" label_selected="Телепортация" name="teleport_to_landing_point" tool_tip="Телепортироваться в точку прибытия" width="90" />
             <text name="Teleport Routing: ">
                 Маршрутизация телепортации:
             </text>
             <combo_box name="landing type" tool_tip="Маршрутизация телепортации -- выберите, как управлять телепортацией на вашу землю">
-                <combo_box.item label="Заблокированные" name="Blocked" />
-                <combo_box.item label="Точка приземления" name="LandingPoint" />
+                <combo_box.item label="Заблокировано" name="Blocked" />
+                <combo_box.item label="Точка прибытия" name="LandingPoint" />
                 <combo_box.item label="Где угодно" name="Anywhere"/>
             </combo_box>
         </panel>
