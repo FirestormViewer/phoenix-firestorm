@@ -67,7 +67,7 @@ LLInventoryFilter::FilterOps::FilterOps(const Params& p)
 	mFilterTypes(p.types),
 	mFilterUUID(p.uuid),
 	mFilterLinks(p.links),
-	mSearchVisibility(0xffffFFFFffffFFFFULL)
+	mSearchVisibility(p.search_visibility)
 {
 }
 
@@ -998,6 +998,44 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 	}
 }
 
+void LLInventoryFilter::setSearchVisibilityTypes(U32 types)
+{
+	if (mFilterOps.mSearchVisibility != types)
+	{
+		// keep current items only if no perm bits getting turned off
+		BOOL fewer_bits_set = (mFilterOps.mSearchVisibility & ~types);
+		BOOL more_bits_set = (~mFilterOps.mSearchVisibility & types);
+		mFilterOps.mSearchVisibility = types;
+
+		if (more_bits_set && fewer_bits_set)
+		{
+			setModified(FILTER_RESTART);
+		}
+		else if (more_bits_set)
+		{
+			// target must have all requested permission bits, so more bits == more restrictive
+			setModified(FILTER_MORE_RESTRICTIVE);
+		}
+		else if (fewer_bits_set)
+		{
+			setModified(FILTER_LESS_RESTRICTIVE);
+		}
+	}
+}
+
+void LLInventoryFilter::setSearchVisibilityTypes(const Params& params)
+{
+	if (!params.validateBlock())
+	{
+		return;
+	}
+
+	if (params.filter_ops.search_visibility.isProvided())
+	{
+		setSearchVisibilityTypes(params.filter_ops.search_visibility);
+	}
+}
+
 void LLInventoryFilter::setFilterPermissions(PermissionMask perms)
 {
 	if (mFilterOps.mPermissions != perms)
@@ -1521,6 +1559,7 @@ void LLInventoryFilter::toParams(Params& params) const
 	params.filter_ops.show_folder_state = getShowFolderState();
 	params.filter_ops.creator_type = getFilterCreatorType();
 	params.filter_ops.permissions = getFilterPermissions();
+	params.filter_ops.search_visibility = getSearchVisibilityTypes();
 	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	params.filter_ops.transferable = getFilterTransferable();
 	params.substring = getFilterSubString();
@@ -1544,6 +1583,7 @@ void LLInventoryFilter::fromParams(const Params& params)
 	//setFilterCreator(params.filter_ops.creator_type);
 	//setShowFolderState(params.filter_ops.show_folder_state);
 	//setFilterPermissions(params.filter_ops.permissions);
+	//setSearchVisibilityTypes(params.filter_ops.search_visibility);
 	//setFilterSubString(params.substring);
 	//setDateRangeLastLogoff(params.since_logoff);
 	if (params.filter_ops.types.isProvided())
@@ -1581,6 +1621,10 @@ void LLInventoryFilter::fromParams(const Params& params)
 	if (params.filter_ops.permissions.isProvided())
 	{
 		setFilterPermissions(params.filter_ops.permissions);
+	}
+	if (params.filter_ops.search_visibility.isProvided())
+	{
+		setSearchVisibilityTypes(params.filter_ops.search_visibility);
 	}
 	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	if (params.filter_ops.transferable.isProvided())
