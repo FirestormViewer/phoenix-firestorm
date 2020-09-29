@@ -250,8 +250,6 @@ public:
 
 	S32 getRegionMaxBakes() const						{ return mMaxBakes; } // <FS:Beq/> FS BOM for OS max bakes restriction
 	S32 getRegionMaxTEs() const							{ return mMaxTEs; } // <FS:Beq/> FS BOM for OS max TEs restriction
-	// regions are expensive to release, this function gradually releases cache from memory
-	static void idleCleanup(F32 max_update_time);
 
 	void idleUpdate(F32 max_update_time);
 	void lightIdleUpdate();
