@@ -1578,14 +1578,14 @@ void LLScriptEdCore::openInExternalEditor()
 	std::string filename = mContainer->getTmpFileName(script_name);
 
     // Save the script to a temporary file.
-    if (!writeToFile(filename))
+    if (!writeToFile(filename, gSavedSettings.getBOOL("_NACL_LSLPreprocessor")))
     {
         // In case some characters from script name are forbidden
         // and not accounted for, name is too long or some other issue,
         // try file that doesn't include script name
         script_name.clear();
         filename = mContainer->getTmpFileName(script_name);
-        writeToFile(filename);
+        writeToFile(filename, gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
     }
 
 		// Start watching file changes.
