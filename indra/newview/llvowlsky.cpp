@@ -99,7 +99,10 @@ LLDrawable * LLVOWLSky::createDrawable(LLPipeline * pipeline)
 
 inline F32 LLVOWLSky::calcPhi(U32 i)
 {
-    // i should range from [0..SKY_STACKS] so t will range from [0.f .. 1.f]
+    // Calc: PI/8 * 1-((1-t^4)*(1-t^4))  { 0<t<1 }
+    // Demos: \pi/8*\left(1-((1-x^{4})*(1-x^{4}))\right)\ \left\{0<x\le1\right\}
+
+	// i should range from [0..SKY_STACKS] so t will range from [0.f .. 1.f]
 	F32 t = float(i) / float(getNumStacks());
 
 	// ^4 the parameter of the tesselation to bias things toward 0 (the dome's apex)
