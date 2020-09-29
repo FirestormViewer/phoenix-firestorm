@@ -1883,8 +1883,8 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="NoContents">
 		Keine Inhalte
 	</string>
-	<string name="WornOnAttachmentPoint" value=" (getragen am [ATTACHMENT_POINT])"/>
-	<string name="AttachmentErrorMessage" value="([ATTACHMENT_ERROR])"/>
+	<string name="WornOnAttachmentPoint" value=" (getragen an [ATTACHMENT_POINT])"/>
+	<string name="AttachmentErrorMessage" value=" ([ATTACHMENT_ERROR])"/>
 	<string name="ActiveGesture" value="[GESLABEL] (aktiviert)"/>
 	<string name="PermYes">
 		Ja

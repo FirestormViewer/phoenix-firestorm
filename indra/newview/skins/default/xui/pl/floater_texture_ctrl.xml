@@ -11,8 +11,8 @@
 	</text>
 	<combo_box name="mode_selection">
 		<combo_box.item label="Szafa" name="inventory" />
-		<combo_box.item label="Lokaln." name="local" />
-		<combo_box.item label="Wypiek." name="bake" />
+		<combo_box.item label="Lokalna" name="local" />
+		<combo_box.item label="Wypiekana" name="bake" />
 	</combo_box>
 	<text name="size_lbl">
 		Rozmiar:

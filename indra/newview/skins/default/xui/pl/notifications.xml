@@ -1424,6 +1424,10 @@ Wybierz awatara właściwej płci. Ten wybór będzie można później zmienić.
 	<notification name="CantTeleportToGrid">
 		Nie można teleportować do [SLURL], ponieważ jest w innym świecie ([GRID]) niż obecny ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
 	</notification>
+	<notification name="GeneralCertificateErrorShort">
+		Połączenie z serwerem nie mogło zostać nawiązane.
+[REASON]
+	</notification>
 	<notification name="GeneralCertificateError">
 		Połączenie z serwerem nie mogło zostać nawiązane.
 [REASON]
