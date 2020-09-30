@@ -2863,7 +2863,6 @@ void LLViewerWindow::draw()
 	
 	LLUI::setLineWidth(1.f);
 
-	LLUI::setLineWidth(1.f);
 	// Reset any left-over transforms
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	
@@ -2908,14 +2907,16 @@ void LLViewerWindow::draw()
 	gGL.pushMatrix();
 	LLUI::pushMatrix();
 	{
-		
+		// <FS:Ansariel> Factor out instance() call
+		LLViewerCamera& camera = LLViewerCamera::instance();
+
 		// scale view by UI global scale factor and aspect ratio correction factor
 		gGL.scaleUI(mDisplayScale.mV[VX], mDisplayScale.mV[VY], 1.f);
 
 		LLVector2 old_scale_factor = LLUI::getScaleFactor();
 		// apply camera zoom transform (for high res screenshots)
-		F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
-		S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+		F32 zoom_factor = camera.getZoomFactor(); // <FS:Ansariel> Factor out instance() call
+		S16 sub_region = camera.getZoomSubRegion(); // <FS:Ansariel> Factor out instance() call
 		if (zoom_factor > 1.f)
 		{
 			//decompose subregion number to x and y values
@@ -2949,7 +2950,7 @@ void LLViewerWindow::draw()
 			static LLUICachedControl<U32> userPresetHAlign("ExodusMouselookTextHAlign", 2);
 
 			LLVector3d myPosition = gAgentCamera.getCameraPositionGlobal();
-			LLQuaternion myRotation = LLViewerCamera::getInstance()->getQuaternion();
+			LLQuaternion myRotation = camera.getQuaternion();
 
 			myRotation.set(-myRotation.mQ[VX], -myRotation.mQ[VY], -myRotation.mQ[VZ], myRotation.mQ[VW]);
 
@@ -2962,6 +2963,8 @@ void LLViewerWindow::draw()
 			S32 length = avatars.size();
 			if (length)
 			{
+				LGGContactSets& contact_sets = LGGContactSets::instance();
+
 				for (S32 i = 0; i < length; i++)
 				{
 					LLUUID& targetKey = avatars[i];
@@ -2977,10 +2980,10 @@ void LLViewerWindow::draw()
 					}
 
 					LLColor4 targetColor = map_avatar_color.get();
-					targetColor = LGGContactSets::getInstance()->colorize(targetKey, targetColor, LGG_CS_MINIMAP);
+					targetColor = contact_sets.colorize(targetKey, targetColor, LGG_CS_MINIMAP);
 
 					//color based on contact sets prefs
-					LGGContactSets::getInstance()->hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP, targetColor);
+					contact_sets.hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP, targetColor);
 
 					LLColor4 mark_color;
 					if (LLNetMap::getAvatarMarkColor(targetKey, mark_color))
@@ -3085,13 +3088,12 @@ void LLViewerWindow::draw()
 //#endif
 }
 
-
-//-TT Window Title Access
+// <FS:TT> Window Title Access
 void LLViewerWindow::setTitle(const std::string& win_title)
 {
 	mWindow->setTitle(win_title);
 }
-//-TT
+// </FS:TT>
 
 // Takes a single keyup event, usually when UI is visible
 BOOL LLViewerWindow::handleKeyUp(KEY key, MASK mask)

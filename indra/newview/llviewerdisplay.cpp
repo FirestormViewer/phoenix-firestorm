@@ -1598,8 +1598,13 @@ void render_ui_2d()
 	//  Menu overlays, HUD, etc
 	gViewerWindow->setup2DRender();
 
-	F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
-	S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+	// <FS:Ansariel> Factor out instance() call
+	//F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
+	//S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+	LLViewerCamera& camera = LLViewerCamera::instance();
+	F32 zoom_factor = camera.getZoomFactor();
+	S16 sub_region = camera.getZoomSubRegion();
+	LLVector2& ui_scale_factor = LLUI::getScaleFactor();
 
 	if (zoom_factor > 1.f)
 	{
@@ -1620,7 +1625,9 @@ void render_ui_2d()
 		gGL.pushMatrix();
 		S32 half_width = (gViewerWindow->getWorldViewWidthScaled() / 2);
 		S32 half_height = (gViewerWindow->getWorldViewHeightScaled() / 2);
-		gGL.scalef(LLUI::getScaleFactor().mV[0], LLUI::getScaleFactor().mV[1], 1.f);
+		// <FS:Ansariel> Factor out instance() call
+		//gGL.scalef(LLUI::getScaleFactor().mV[0], LLUI::getScaleFactor().mV[1], 1.f);
+		gGL.scalef(ui_scale_factor.mV[0], ui_scale_factor.mV[1], 1.f);
 		gGL.translatef((F32)half_width, (F32)half_height, 0.f);
 		F32 zoom = gAgentCamera.mHUDCurZoom;
 		gGL.scalef(zoom,zoom,1.f);
@@ -1663,10 +1670,15 @@ void render_ui_2d()
 				ui_inst->mDirtyRect = last_rect;
 				last_rect = t_rect;
 			
-				last_rect.mLeft = LLRect::tCoordType(last_rect.mLeft / ui_inst->getScaleFactor().mV[0]);
-				last_rect.mRight = LLRect::tCoordType(last_rect.mRight / ui_inst->getScaleFactor().mV[0]);
-				last_rect.mTop = LLRect::tCoordType(last_rect.mTop / ui_inst->getScaleFactor().mV[1]);
-				last_rect.mBottom = LLRect::tCoordType(last_rect.mBottom / ui_inst->getScaleFactor().mV[1]);
+				// <FS:Ansariel> Factor out instance() call
+				//last_rect.mLeft = LLRect::tCoordType(last_rect.mLeft / ui_inst->getScaleFactor().mV[0]);
+				//last_rect.mRight = LLRect::tCoordType(last_rect.mRight / ui_inst->getScaleFactor().mV[0]);
+				//last_rect.mTop = LLRect::tCoordType(last_rect.mTop / ui_inst->getScaleFactor().mV[1]);
+				//last_rect.mBottom = LLRect::tCoordType(last_rect.mBottom / ui_inst->getScaleFactor().mV[1]);
+				last_rect.mLeft = LLRect::tCoordType(last_rect.mLeft / ui_scale_factor.mV[0]);
+				last_rect.mRight = LLRect::tCoordType(last_rect.mRight / ui_scale_factor.mV[0]);
+				last_rect.mTop = LLRect::tCoordType(last_rect.mTop / ui_scale_factor.mV[1]);
+				last_rect.mBottom = LLRect::tCoordType(last_rect.mBottom / ui_scale_factor.mV[1]);
 
 				LLRect clip_rect(last_rect);
 				
