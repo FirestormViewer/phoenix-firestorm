@@ -6152,7 +6152,7 @@ void LLPipeline::setupAvatarLights(bool for_edit)
 			}
 		}
 		F32 backlight_mag;
-		if (LLEnvironment::instance().getIsSunUp())
+		if (environment.getIsSunUp()) // <FS:Ansariel> Factor out instance() calls
 		{
 			backlight_mag = BACKLIGHT_DAY_MAGNITUDE_OBJECT;
 		}

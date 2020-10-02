@@ -3,6 +3,9 @@
 	<floater.string name="buy_currency">
 		Купить L$ [LINDENS] примерно за [LOCALAMOUNT]
 	</floater.string>
+	<floater.string name="info_cannot_buy">
+		Нельзя купить
+	</floater.string>
 	<text name="info_need_more">
 		Вам нужно больше L$
 	</text>
@@ -59,7 +62,4 @@
 	</text>
 	<button label="Купить" name="buy_btn"/>
 	<button label="Отмена" name="cancel_btn"/>
-	<floater.string name="info_cannot_buy">
-		Нельзя купить
-	</floater.string>
 </floater>
