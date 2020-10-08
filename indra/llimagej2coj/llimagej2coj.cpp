@@ -31,6 +31,7 @@
 #include "openjpeg.h"
 #ifndef OPENJPEG_VERSION
 #include "cio.h"
+#include "event.h"
 #ifdef OPJ_PACKAGE_VERSION
 #define OPENJPEG2
 #endif
@@ -298,20 +299,19 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 	LLTimer decode_timer;
 
 	opj_dparameters_t parameters;	/* decompression parameters */
-#ifndef OPENJPEG2
 	opj_event_mgr_t event_mgr;		/* event manager */
 	opj_image_t *image = NULL;
 
+#ifndef OPENJPEG2
 	opj_dinfo_t* dinfo = NULL;	/* handle to a decompressor */
 	opj_cio_t *cio = NULL;
-
+#endif
 
 	/* configure the event callbacks (not required) */
 	memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
 	event_mgr.error_handler = error_callback;
 	event_mgr.warning_handler = warning_callback;
 	event_mgr.info_handler = info_callback;
-#endif
 
 	/* set decoding parameters to default values */
 	opj_set_default_decoder_parameters(&parameters);
@@ -352,7 +352,6 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 	opj_stream_set_user_data_length(opj_stream_p, base.getDataSize());
 
 	/* decode the stream and fill the image structure */
-	opj_image_t* image = nullptr;
 	bool fSuccess = opj_read_header(opj_stream_p, opj_decoder_p, &image) &&
 	                opj_decode(opj_decoder_p, opj_stream_p, image) &&
 					opj_end_decompress(opj_decoder_p, opj_stream_p);
@@ -515,7 +514,6 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 {
 	const S32 MAX_COMPS = 5;
 	opj_cparameters_t parameters;	/* compression parameters */
-#ifndef OPENJPEG2
 	opj_event_mgr_t event_mgr;		/* event manager */
 
 
@@ -527,7 +525,6 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 	event_mgr.error_handler = error_callback;
 	event_mgr.warning_handler = warning_callback;
 	event_mgr.info_handler = info_callback;
-#endif
 
 	/* set encoding parameters to default values */
 	opj_set_default_encoder_parameters(&parameters);
@@ -794,20 +791,19 @@ bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 	// Do it the old and slow way, decode the image with openjpeg
 
 	opj_dparameters_t parameters;	/* decompression parameters */
-#ifndef OPENJPEG2
 	opj_event_mgr_t event_mgr;		/* event manager */
 	opj_image_t *image = NULL;
 
+#ifndef OPENJPEG2
 	opj_dinfo_t* dinfo = NULL;	/* handle to a decompressor */
 	opj_cio_t *cio = NULL;
-
+#endif
 
 	/* configure the event callbacks (not required) */
 	memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
 	event_mgr.error_handler = error_callback;
 	event_mgr.warning_handler = warning_callback;
 	event_mgr.info_handler = info_callback;
-#endif
 
 	/* set decoding parameters to default values */
 	opj_set_default_decoder_parameters(&parameters);
@@ -853,7 +849,6 @@ bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 	opj_stream_set_user_data_length(opj_stream_p, base.getDataSize());
 
 	/* decode the stream and fill the image structure */
-	opj_image_t* image = nullptr;
 	fSuccess = opj_read_header(opj_stream_p, opj_decoder_p, &image);
 	if (!fSuccess)
 	{
