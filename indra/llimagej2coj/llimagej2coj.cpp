@@ -335,10 +335,12 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 
 	/* setup the decoder decoding parameters using user parameters */
 	opj_setup_decoder(opj_decoder_p, &parameters);
-	//if ( (opj_has_thread_support()) && (s_numDecodeThreads > 1) )
-	//{
-	//	opj_codec_set_threads(opj_decoder_p, s_numDecodeThreads);
-	//}
+
+	/* allow multi-threading */
+	if (opj_has_thread_support())
+	{
+		opj_codec_set_threads(opj_decoder_p, opj_get_num_cpus());
+	}
 
 	/* open a byte stream */
 	LLJp2StreamReader streamReader(&base);
