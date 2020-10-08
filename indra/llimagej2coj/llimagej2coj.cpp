@@ -29,9 +29,144 @@
 
 // this is defined so that we get static linking.
 #include "openjpeg.h"
+#ifndef OPENJPEG_VERSION
+#include "cio.h"
+#ifdef OPJ_PACKAGE_VERSION
+#define OPENJPEG2
+#endif
+#endif
 
 #include "lltimer.h"
 //#include "llmemory.h"
+
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+#ifdef OPENJPEG2
+class LLJp2StreamReader {
+public:
+	LLJp2StreamReader(LLImageJ2C* pImage) : m_pImage(pImage), m_Position(0) { }
+
+	static OPJ_SIZE_T readStream(void* pBufferOut, OPJ_SIZE_T szBufferOut, void* pUserData)
+	{
+		LLJp2StreamReader* pStream = (LLJp2StreamReader*)pUserData;
+		if ( (!pBufferOut) || (!pStream) || (!pStream->m_pImage) )
+			return (OPJ_SIZE_T)-1;
+
+		OPJ_SIZE_T szBufferRead = llmin(szBufferOut, pStream->m_pImage->getDataSize() - pStream->m_Position);
+		if (!szBufferRead)
+			return (OPJ_SIZE_T)-1;
+
+		memcpy(pBufferOut, pStream->m_pImage->getData() + pStream->m_Position, szBufferRead);
+		pStream->m_Position += szBufferRead;
+		return szBufferRead;
+	}
+
+	static OPJ_OFF_T skipStream(OPJ_OFF_T bufferOffset, void* pUserData)
+	{
+		LLJp2StreamReader* pStream = (LLJp2StreamReader*)pUserData;
+		if ( (!pStream) || (!pStream->m_pImage) )
+			return (OPJ_SIZE_T)-1;
+
+		if (bufferOffset < 0)
+		{
+			// Skipping backward
+			if (pStream->m_Position == 0)
+				return (OPJ_SIZE_T)-1;              // Already at the start of the stream
+			else if (pStream->m_Position + bufferOffset < 0)
+				bufferOffset = -(OPJ_OFF_T)pStream->m_Position; // Don't underflow
+		}
+		else
+		{
+			// Skipping forward
+			OPJ_SIZE_T szRemaining = pStream->m_pImage->getDataSize() - pStream->m_Position;
+			if (!szRemaining)
+				return (OPJ_SIZE_T)-1;              // Already at the end of the stream
+			else if (bufferOffset > szRemaining)
+				bufferOffset = szRemaining;          // Don't overflow
+		}
+		pStream->m_Position += bufferOffset;
+
+		return bufferOffset;
+	}
+
+	static OPJ_BOOL seekStream(OPJ_OFF_T bufferOffset, void* pUserData)
+	{
+		LLJp2StreamReader* pStream = (LLJp2StreamReader*)pUserData;
+		if ( (!pStream) || (!pStream->m_pImage) )
+			return OPJ_FALSE;
+
+		if ( (bufferOffset < 0) || (bufferOffset > pStream->m_pImage->getDataSize()) )
+			return OPJ_FALSE;
+
+		pStream->m_Position = bufferOffset;
+		return OPJ_TRUE;
+	}
+protected:
+	LLImageJ2C* m_pImage = nullptr;
+	OPJ_SIZE_T  m_Position = 0;
+};
+
+class LLJp2StreamWriter {
+public:
+	LLJp2StreamWriter(LLImageJ2C* pImage) : m_pImage(pImage), m_Position(0) { }
+
+	static OPJ_SIZE_T writeStream(void* pBufferIn, OPJ_SIZE_T szBufferIn, void* pUserData)
+	{
+		LLJp2StreamWriter* pStream = (LLJp2StreamWriter*)pUserData;
+		if ( (!pBufferIn) || (!pStream) || (!pStream->m_pImage) )
+			return (OPJ_SIZE_T)-1;
+
+		if (pStream->m_Position + szBufferIn > pStream->m_pImage->getDataSize())
+			pStream->m_pImage->reallocateData(pStream->m_Position + szBufferIn);
+
+		memcpy(pStream->m_pImage->getData() + pStream->m_Position, pBufferIn, szBufferIn);
+		pStream->m_Position += szBufferIn;
+		return szBufferIn;
+	}
+
+	static OPJ_OFF_T skipStream(OPJ_OFF_T bufferOffset, void* pUserData)
+	{
+		LLJp2StreamWriter* pStream = (LLJp2StreamWriter*)pUserData;
+		if ( (!pStream) || (!pStream->m_pImage) )
+			return -1;
+
+		if (bufferOffset < 0)
+		{
+			// Skipping backward
+			if (pStream->m_Position == 0)
+				return -1;                           // Already at the start of the stream
+			else if (pStream->m_Position + bufferOffset < 0)
+				bufferOffset = -pStream->m_Position; // Don't underflow
+		}
+		else
+		{
+			// Skipping forward
+			if (pStream->m_Position + bufferOffset > pStream->m_pImage->getDataSize())
+				return -1;                           // Don't allow skipping past the end of the stream
+		}
+
+		pStream->m_Position += bufferOffset;
+		return bufferOffset;
+	}
+
+	static OPJ_BOOL seekStream(OPJ_OFF_T bufferOffset, void* pUserData)
+	{
+		LLJp2StreamWriter* pStream = (LLJp2StreamWriter*)pUserData;
+		if ( (!pStream) || (!pStream->m_pImage) )
+			return OPJ_FALSE;
+
+		if ( (bufferOffset < 0) || (bufferOffset > pStream->m_pImage->getDataSize()) )
+			return OPJ_FALSE;
+
+		pStream->m_Position = bufferOffset;
+		return OPJ_TRUE;
+	}
+
+protected:
+	LLImageJ2C* m_pImage = nullptr;
+	OPJ_OFF_T m_Position = 0;
+};
+#endif
+// [/SL:KB]
 
 // Factory function: see declaration in llimagej2c.cpp
 LLImageJ2CImpl* fallbackCreateLLImageJ2CImpl()
@@ -44,8 +179,10 @@ std::string LLImageJ2COJ::getEngineInfo() const
 #ifdef OPENJPEG_VERSION
 	return std::string("OpenJPEG: " OPENJPEG_VERSION ", Runtime: ")
 		+ opj_version();
+#elif defined OPJ_PACKAGE_VERSION
+	return std::string("OpenJPEG: " OPJ_PACKAGE_VERSION ", Runtime: ") + opj_version();
 #else
-	return std::string("OpenJPEG runtime: ") + opj_version();
+	return std::string("OpenJPEG Runtime: ") + opj_version();
 #endif
 }
 
@@ -161,6 +298,7 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 	LLTimer decode_timer;
 
 	opj_dparameters_t parameters;	/* decompression parameters */
+#ifndef OPENJPEG2
 	opj_event_mgr_t event_mgr;		/* event manager */
 	opj_image_t *image = NULL;
 
@@ -173,6 +311,7 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 	event_mgr.error_handler = error_callback;
 	event_mgr.warning_handler = warning_callback;
 	event_mgr.info_handler = info_callback;
+#endif
 
 	/* set decoding parameters to default values */
 	opj_set_default_decoder_parameters(&parameters);
@@ -184,6 +323,44 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 
 	/* JPEG-2000 codestream */
 
+#ifdef OPENJPEG2
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+	/* get a decoder handle */
+	opj_codec_t* opj_decoder_p = opj_create_decompress(OPJ_CODEC_J2K);
+
+	/* catch events using our callbacks and give a local context */
+	opj_set_error_handler(opj_decoder_p, error_callback, 0);
+	opj_set_warning_handler(opj_decoder_p, warning_callback, 0);
+	opj_set_info_handler(opj_decoder_p, info_callback, 0);
+
+	/* setup the decoder decoding parameters using user parameters */
+	opj_setup_decoder(opj_decoder_p, &parameters);
+	//if ( (opj_has_thread_support()) && (s_numDecodeThreads > 1) )
+	//{
+	//	opj_codec_set_threads(opj_decoder_p, s_numDecodeThreads);
+	//}
+
+	/* open a byte stream */
+	LLJp2StreamReader streamReader(&base);
+	opj_stream_t* opj_stream_p = opj_stream_default_create(OPJ_STREAM_READ);
+	opj_stream_set_read_function(opj_stream_p, LLJp2StreamReader::readStream);
+	opj_stream_set_skip_function(opj_stream_p, LLJp2StreamReader::skipStream);
+	opj_stream_set_seek_function(opj_stream_p, LLJp2StreamReader::seekStream);
+	opj_stream_set_user_data(opj_stream_p, &streamReader, nullptr);
+	opj_stream_set_user_data_length(opj_stream_p, base.getDataSize());
+
+	/* decode the stream and fill the image structure */
+	opj_image_t* image = nullptr;
+	bool fSuccess = opj_read_header(opj_stream_p, opj_decoder_p, &image) &&
+	                opj_decode(opj_decoder_p, opj_stream_p, image) &&
+					opj_end_decompress(opj_decoder_p, opj_stream_p);
+
+	/* close the byte stream */
+	opj_stream_destroy(opj_stream_p);
+
+	/* free remaining structures */
+	opj_destroy_codec(opj_decoder_p);
+#else
 	/* get a decoder handle */
 	dinfo = opj_create_decompress(CODEC_J2K);
 
@@ -207,11 +384,19 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 	{
 		opj_destroy_decompress(dinfo);
 	}
+#endif
+// [/SL:KB]
 
 	// The image decode failed if the return was NULL or the component
 	// count was zero.  The latter is just a sanity check before we
 	// dereference the array.
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+#ifdef OPENJPEG2
+	if ( (!fSuccess) || (!image) || (!image->numcomps) )
+#else
 	if(!image || !image->numcomps)
+#endif
+// [/SL:KB]
 	{
 		LL_DEBUGS("Texture") << "ERROR -> decodeImpl: failed to decode image!" << LL_ENDL;
 		if (image)
@@ -219,21 +404,28 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 			opj_image_destroy(image);
 		}
 
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+		base.decodeFailed();
+// [SL:KB]
 		return true; // done
 	}
 
 	// sometimes we get bad data out of the cache - check to see if the decode succeeded
-	for (S32 i = 0; i < image->numcomps; i++)
-	{
-		if (image->comps[i].factor != base.getRawDiscardLevel())
-		{
-			// if we didn't get the discard level we're expecting, fail
-			opj_image_destroy(image);
-			base.mDecoding = false;
-			return true;
-		}
-	}
-	
+//	for (S32 i = 0; i < image->numcomps; i++)
+//	{
+//		if (image->comps[i].factor != base.getRawDiscardLevel())
+//		{
+//			// if we didn't get the discard level we're expecting, fail
+//
+//// [SN:SG] - Patch: Import-MiscOpenJPEG
+//			LL_WARNS("Texture") <<  "Expected discard level not reached!" << LL_ENDL;
+//			base.decodeFailed();
+//// [SN:SG]
+////			base.mDecoding = false;
+//			return true;
+//		}
+//	}
+
 	if(image->numcomps <= first_channel)
 	{
 		LL_WARNS() << "trying to decode more channels than are present in image: numcomps: " << image->numcomps << " first_channel: " << first_channel << LL_ENDL;
@@ -241,7 +433,11 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 		{
 			opj_image_destroy(image);
 		}
-			
+
+// [SN:SG] - Patch: Import-MiscOpenJPEG
+		base.decodeFailed();
+// [SN:SG]
+
 		return true;
 	}
 
@@ -299,6 +495,9 @@ bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decod
 			LL_DEBUGS("Texture") << "ERROR -> decodeImpl: failed to decode image! (NULL comp data - OpenJPEG bug)" << LL_ENDL;
 			opj_image_destroy(image);
 
+// [SN:SG] - Patch: Import-MiscOpenJPEG
+			base.decodeFailed();
+// [SN:SG]
 			return true; // done
 		}
 	}
@@ -314,6 +513,7 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 {
 	const S32 MAX_COMPS = 5;
 	opj_cparameters_t parameters;	/* compression parameters */
+#ifndef OPENJPEG2
 	opj_event_mgr_t event_mgr;		/* event manager */
 
 
@@ -325,6 +525,7 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 	event_mgr.error_handler = error_callback;
 	event_mgr.warning_handler = warning_callback;
 	event_mgr.info_handler = info_callback;
+#endif
 
 	/* set encoding parameters to default values */
 	opj_set_default_encoder_parameters(&parameters);
@@ -364,7 +565,13 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 	//
 	// Fill in the source image from our raw image
 	//
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+#ifdef OPENJPEG2
+	OPJ_COLOR_SPACE color_space = OPJ_CLRSPC_SRGB;
+#else
 	OPJ_COLOR_SPACE color_space = CLRSPC_SRGB;
+#endif
+// [/SL:KB]
 	opj_image_cmptparm_t cmptparm[MAX_COMPS];
 	opj_image_t * image = NULL;
 	S32 numcomps = raw_image.getComponents();
@@ -409,6 +616,57 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 	/* encode the destination image */
 	/* ---------------------------- */
 
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+#ifdef OPENJPEG2
+	/* get a J2K compressor handle */
+	opj_codec_t* opj_encoder_p = opj_create_compress(OPJ_CODEC_J2K);
+
+	/* catch events using our callbacks and give a local context */
+	opj_set_error_handler(opj_encoder_p, error_callback, 0);
+	opj_set_warning_handler(opj_encoder_p, warning_callback, 0);
+	opj_set_info_handler(opj_encoder_p, info_callback, 0);
+
+	/* setup the encoder parameters using the current image and using user parameters */
+	bool fSuccess = opj_setup_encoder(opj_encoder_p, &parameters, image);
+	if (!fSuccess)
+	{
+		opj_destroy_codec(opj_encoder_p);
+		opj_image_destroy(image);
+		LL_DEBUGS("Texture") << "Failed to encode image." << LL_ENDL;
+		return false;
+	}
+
+	/* open a byte stream for writing */
+	/* allocate memory for all tiles */
+	LLJp2StreamWriter streamWriter(&base);
+	opj_stream_t* opj_stream_p = opj_stream_default_create(OPJ_STREAM_WRITE);
+	opj_stream_set_write_function(opj_stream_p, LLJp2StreamWriter::writeStream);
+	opj_stream_set_skip_function(opj_stream_p, LLJp2StreamWriter::skipStream);
+	opj_stream_set_seek_function(opj_stream_p, LLJp2StreamWriter::seekStream);
+	opj_stream_set_user_data(opj_stream_p, &streamWriter, nullptr);
+	opj_stream_set_user_data_length(opj_stream_p, raw_image.getDataSize());
+
+	/* encode the image */
+	fSuccess = opj_start_compress(opj_encoder_p, image, opj_stream_p) &&
+	           opj_encode(opj_encoder_p, opj_stream_p) &&
+	           opj_end_compress(opj_encoder_p, opj_stream_p);
+	if (!fSuccess)
+	{
+		opj_stream_destroy(opj_stream_p);
+		opj_destroy_codec(opj_encoder_p);
+		opj_image_destroy(image);
+		LL_DEBUGS("Texture") << "Failed to encode image." << LL_ENDL;
+		return false;
+	}
+
+	base.updateData(); // set width, height
+
+	/* close and free the byte stream */
+	opj_stream_destroy(opj_stream_p);
+
+	/* free remaining compression structures */
+	opj_destroy_codec(opj_encoder_p);
+#else
 	int codestream_length;
 	opj_cio_t *cio = NULL;
 
@@ -416,7 +674,7 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 	opj_cinfo_t* cinfo = opj_create_compress(CODEC_J2K);
 
 	/* catch events using our callbacks and give a local context */
-	opj_set_event_mgr((opj_common_ptr)cinfo, &event_mgr, stderr);			
+	opj_set_event_mgr((opj_common_ptr)cinfo, &event_mgr, stderr);
 
 	/* setup the encoder parameters using the current image and using user parameters */
 	opj_setup_encoder(cinfo, &parameters, image);
@@ -447,6 +705,8 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 
 	/* free user parameters structure */
 	if(parameters.cp_matrice) free(parameters.cp_matrice);
+#endif
+	// [/SL:KB]
 
 	/* free image data */
 	opj_image_destroy(image);
@@ -532,6 +792,7 @@ bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 	// Do it the old and slow way, decode the image with openjpeg
 
 	opj_dparameters_t parameters;	/* decompression parameters */
+#ifndef OPENJPEG2
 	opj_event_mgr_t event_mgr;		/* event manager */
 	opj_image_t *image = NULL;
 
@@ -544,12 +805,15 @@ bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 	event_mgr.error_handler = error_callback;
 	event_mgr.warning_handler = warning_callback;
 	event_mgr.info_handler = info_callback;
+#endif
 
 	/* set decoding parameters to default values */
 	opj_set_default_decoder_parameters(&parameters);
 
 	// Only decode what's required to get the size data.
+#ifndef OPENJPEG2
 	parameters.cp_limit_decoding=LIMIT_TO_MAIN_HEADER;
+#endif
 
 	//parameters.cp_reduce = mRawDiscardLevel;
 
@@ -558,6 +822,51 @@ bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 
 	/* JPEG-2000 codestream */
 
+// [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
+#ifdef OPENJPEG2
+	/* get a decoder handle */
+	opj_codec_t* opj_decoder_p = opj_create_decompress(OPJ_CODEC_J2K);
+
+	/* catch events using our callbacks and give a local context */
+	opj_set_error_handler(opj_decoder_p, error_callback, 0);
+	opj_set_warning_handler(opj_decoder_p, warning_callback, 0);
+	opj_set_info_handler(opj_decoder_p, info_callback, 0);
+
+	/* setup the decoder decoding parameters using user parameters */
+	bool fSuccess = opj_setup_decoder(opj_decoder_p, &parameters);
+	if (!fSuccess)
+	{
+		opj_destroy_codec(opj_decoder_p);
+		LL_WARNS() << "ERROR -> getMetadata: failed to decode image!" << LL_ENDL;
+		return false;
+	}
+
+	/* open a byte stream */
+	LLJp2StreamReader streamReader(&base);
+	opj_stream_t* opj_stream_p = opj_stream_default_create(OPJ_STREAM_READ);
+	opj_stream_set_read_function(opj_stream_p, LLJp2StreamReader::readStream);
+	opj_stream_set_skip_function(opj_stream_p, LLJp2StreamReader::skipStream);
+	opj_stream_set_seek_function(opj_stream_p, LLJp2StreamReader::seekStream);
+	opj_stream_set_user_data(opj_stream_p, &streamReader, nullptr);
+	opj_stream_set_user_data_length(opj_stream_p, base.getDataSize());
+
+	/* decode the stream and fill the image structure */
+	opj_image_t* image = nullptr;
+	fSuccess = opj_read_header(opj_stream_p, opj_decoder_p, &image);
+	if (!fSuccess)
+	{
+		opj_stream_destroy(opj_stream_p);
+		opj_destroy_codec(opj_decoder_p);
+		LL_WARNS() << "ERROR -> getMetadata: failed to decode image!" << LL_ENDL;
+		return false;
+	}
+
+	/* close the byte stream */
+	opj_stream_destroy(opj_stream_p);
+
+	/* free remaining structures */
+	opj_destroy_codec(opj_decoder_p);
+#else
 	/* get a decoder handle */
 	dinfo = opj_create_decompress(CODEC_J2K);
 
@@ -581,6 +890,8 @@ bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 	{
 		opj_destroy_decompress(dinfo);
 	}
+#endif
+// [/SL:KB]
 
 	if(!image)
 	{
