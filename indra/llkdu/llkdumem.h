@@ -34,7 +34,9 @@
 //</FS:TS>
 
 // Support classes for reading and writing from memory buffers in KDU
+#ifndef LL_WINDOWS
 #define KDU_NO_THREADS
+#endif
 
 #define kdu_xxxx "kdu_image.h"
 #include "include_kdu_xxxx.h"
