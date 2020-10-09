@@ -38,7 +38,6 @@
 #endif
 
 #include "lltimer.h"
-//#include "llmemory.h"
 
 // [SL:KB] - Patch: Viewer-OpenJPEG2 | Checked: Catznip-5.3
 #ifdef OPENJPEG2
