@@ -27,12 +27,6 @@
 #ifndef LL_LLKDUMEM_H
 #define LL_LLKDUMEM_H
 
-//<FS:TS> Silence Clang warning the flag doesn't for some reason
-#if __clang__
-#pragma clang diagnostic ignored "-Woverloaded-virtual"
-#endif
-//</FS:TS>
-
 // Support classes for reading and writing from memory buffers in KDU
 #ifndef LL_WINDOWS
 #define KDU_NO_THREADS
