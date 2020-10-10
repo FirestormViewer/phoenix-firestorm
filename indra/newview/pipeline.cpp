@@ -3053,8 +3053,9 @@ void LLPipeline::rebuildGroups()
 		if (!group->isDead())
 		{
 			group->rebuildGeom();
-			
-			if (group->getSpatialPartition()->mRenderByGroup)
+			// <FS:Beq> defend against occasional crash due to null SP
+			// if(group->getSpatialPartition()->mRenderByGroup)
+			if(group->getSpatialPartition() && (group->getSpatialPartition()->mRenderByGroup))
 			{
 				count++;
 			}
