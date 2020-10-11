@@ -3163,9 +3163,10 @@ LLSD LLAppViewer::getViewerInfo() const
 			info["POSITION"] = ll_sd_from_vector3d(pos);
 			info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
 			info["REGION"] = gAgent.getRegion()->getName();
-			info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
-			info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
-//			info["SERVER_VERSION"] = gLastVersionChannel;
+
+			boost::regex regex("\\.(secondlife|lindenlab)\\..*");
+			info["HOSTNAME"] = boost::regex_replace(gAgent.getRegion()->getHost().getHostName(), regex, "");
+			info["SERVER_VERSION"] = gLastVersionChannel;
 			LLSLURL slurl;
 			LLAgentUI::buildSLURL(slurl);
 			info["SLURL"] = slurl.getSLURLString();
@@ -4046,6 +4047,7 @@ static LLNotificationFunctorRegistration finish_quit_reg("ConfirmQuit", finish_q
 
 void LLAppViewer::userQuit()
 {
+	LL_INFOS() << "User requested quit" << LL_ENDL;
 	if (gDisconnected
 		|| !gViewerWindow
 		|| !gViewerWindow->getProgressView()
@@ -4906,12 +4908,13 @@ void LLAppViewer::idle()
     {
 		return;
     }
+
+    gViewerWindow->updateUI();
+
 	if (gTeleportDisplay)
     {
 		return;
     }
-
-	gViewerWindow->updateUI();
 
 	///////////////////////////////////////
 	// Agent and camera movement
