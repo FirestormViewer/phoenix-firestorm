@@ -2497,6 +2497,9 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 
 	LL_RECORD_BLOCK_TIME(FTM_CULL);
 
+	// <FS:Ansariel> Factor out instance() call
+	LLWorld& world = LLWorld::instance();
+
 	grabReferences(result);
 
 	sCull->clear();
@@ -2556,8 +2559,8 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         camera.disableUserClipPlane();
     }
 
-	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
-			iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+	for (LLWorld::region_list_t::const_iterator iter = world.getRegionList().begin(); // <FS:Ansariel> Factor out instance() call
+			iter != world.getRegionList().end(); ++iter)
 	{
 		LLViewerRegion* region = *iter;
 
@@ -2622,7 +2625,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 
     if (render_water)
     {
-        LLWorld::getInstance()->precullWaterObjects(camera, sCull, render_water);
+        world.precullWaterObjects(camera, sCull, render_water); // <FS:Ansariel> Factor out instance() call
     }
 	
 	gGL.matrixMode(LLRender::MM_PROJECTION);
