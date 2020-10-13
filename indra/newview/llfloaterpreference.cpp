@@ -639,6 +639,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	gSavedSettings.getControl("FSDynamicTextureMemory")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::handleDynamicTextureMemoryChanged, this));
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -2154,6 +2157,9 @@ void LLFloaterPreference::refreshEnabledState()
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
 
+	// <FS:Ansariel> Dynamic texture memory calculation
+	handleDynamicTextureMemoryChanged();
+
 #if ADDRESS_SIZE == 32
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
@@ -2302,6 +2308,27 @@ void LLFloaterPreference::refreshEnabledState()
 
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 }
+
+// <FS:Ansariel> Dynamic texture memory calculation
+void LLFloaterPreference::handleDynamicTextureMemoryChanged()
+{
+#if ADDRESS_SIZE == 64
+	if (gGLManager.mHasATIMemInfo || gGLManager.mHasNVXMemInfo)
+	{
+		childSetEnabled("FSDynamicTextureMemory", true);
+		childSetEnabled("GraphicsCardTextureMemory", !gSavedSettings.getBOOL("FSDynamicTextureMemory"));
+	}
+	else
+	{
+		childSetEnabled("FSDynamicTextureMemory", false);
+		childSetEnabled("GraphicsCardTextureMemory", true);
+	}
+#else
+	childSetEnabled("FSDynamicTextureMemory", false);
+	childSetEnabled("GraphicsCardTextureMemory", true);
+#endif
+}
+// </FS:Ansariel>
 
 void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 {

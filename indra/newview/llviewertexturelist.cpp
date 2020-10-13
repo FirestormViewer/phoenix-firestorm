@@ -1523,6 +1523,46 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 	LL_INFOS() << "Available Texture Memory set to: " << mMaxResidentTexMemInMegaBytes << " MB" << LL_ENDL;
 }
 
+// <FS:Ansariel> Dynamic texture memory calculation
+void LLViewerTextureList::updateTexMemDynamic()
+{
+#if ADDRESS_SIZE == 32
+	// Sorry, nope
+	return;
+#endif
+
+	static LLCachedControl<bool> fsDynamicTexMem(gSavedSettings, "FSDynamicTextureMemory");
+	if (!fsDynamicTexMem)
+	{
+		return;
+	}
+
+	if (!gGLManager.mHasATIMemInfo && !gGLManager.mHasNVXMemInfo)
+	{
+		// Can't detect current GPU mem usage - so, nope!
+		return;
+	}
+
+	static LLCachedControl<S32> fsDynamicTexMemCacheReserve(gSavedSettings, "FSDynamicTextureMemoryCacheReserve");
+	static LLCachedControl<S32> fsDynamicTexMemSystemReserve(gSavedSettings, "FSDynamicTextureMemorySystemReserve");
+
+	S32Megabytes gpu;
+	S32Megabytes system;
+	LLViewerTexture::getGPUMemoryForTextures(gpu, system);
+
+	// Reserve additional system memory for textures currently not loaded into GPU memory and for OS...
+	system -= S32Megabytes(fsDynamicTexMemCacheReserve() + fsDynamicTexMemSystemReserve());
+
+	// Don't exceed available physical memory on either GPU or system
+	S32Megabytes max_physical_available = llmin(gpu, system);
+
+	// Maximum texture memory is remaining available memory + what's already used for textures by the viewer
+	S32Megabytes max_tex_mem_in_gpu = max_physical_available + LLImageGL::sBoundTextureMemory;
+	mMaxResidentTexMemInMegaBytes = max_tex_mem_in_gpu;
+	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes + S32Megabytes(fsDynamicTexMemCacheReserve());
+}
+// </FS:Ansariel>
+
 ///////////////////////////////////////////////////////////////////////////////
 
 // static

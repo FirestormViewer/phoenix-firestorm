@@ -991,6 +991,16 @@
          width="385">
             (0/1.0 = default brightness, lower = brighter)
         </text>
+        <check_box
+         control_name="FSDynamicTextureMemory"
+         height="16"
+         label="Enable Dynamic Texture Memory"
+         layout="topleft"
+         left="10"
+         top_pad="20"
+         name="FSDynamicTextureMemory"
+         tool_tip="Enables dynamic texture memory calculation (only available on 64bit viewers and AMD/NVIDIA GPUs)"
+         width="315" />
         <slider
          control_name="TextureMemory"
          decimal_digits="0"
@@ -1001,12 +1011,12 @@
          label="Viewer Texture Memory Buffer (MB):"
          label_width="195"
          layout="topleft"
-         left="10"
+         left="13"
          min_val="64"
          max_val="2048"
          name="GraphicsCardTextureMemory"
          tool_tip="Amount of memory to allocate for textures. Defaults to video card memory up to 512MB on 32bit systems and up to 2048MB on 64bit systems, depending on the available dedicated video memory of the video card. Reducing this may improve performance but may also make textures blurry."
-         top_pad="10"
+         top_pad="5"
          width="360" />
         <spinner
          control_name="RenderFogRatio"
