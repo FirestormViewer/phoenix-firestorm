@@ -6146,11 +6146,15 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 		F32 cur_zoom = gAgentCamera.mHUDCurZoom;
 
 		// set up transform to encompass bounding box of HUD
+		F32 aspect = LLViewerCamera::getInstance()->getAspect(); // <FS:Ansariel> Performance improvement
+
 		gGL.matrixMode(LLRender::MM_PROJECTION);
 		gGL.pushMatrix();
 		gGL.loadIdentity();
 		F32 depth = llmax(1.f, hud_bbox.getExtentLocal().mV[VX] * 1.1f);
-		gGL.ortho(-0.5f * LLViewerCamera::getInstance()->getAspect(), 0.5f * LLViewerCamera::getInstance()->getAspect(), -0.5f, 0.5f, 0.f, depth);
+		// <FS:Ansariel> Performance improvement
+		//gGL.ortho(-0.5f * LLViewerCamera::getInstance()->getAspect(), 0.5f * LLViewerCamera::getInstance()->getAspect(), -0.5f, 0.5f, 0.f, depth);
+		gGL.ortho(-0.5f * aspect, 0.5f * aspect, -0.5f, 0.5f, 0.f, depth);
 
 		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.pushMatrix();
@@ -6163,7 +6167,7 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 	}
 
 	bool wireframe_selection = (gFloaterTools && gFloaterTools->getVisible()) || LLSelectMgr::sRenderHiddenSelections;
-	F32 fogCfx = (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
+	F32 fogCfx = (F32)llclamp((getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);  // <FS:Ansariel> Performance improvement
 
 	static LLColor4 sParentColor = LLColor4(sSilhouetteParentColor[VRED], sSilhouetteParentColor[VGREEN], sSilhouetteParentColor[VBLUE], LLSelectMgr::sHighlightAlpha);
 	static LLColor4 sChildColor = LLColor4(sSilhouetteChildColor[VRED], sSilhouetteChildColor[VGREEN], sSilhouetteChildColor[VBLUE], LLSelectMgr::sHighlightAlpha);
@@ -6780,6 +6784,10 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
 	LLVolume *volume = objectp->getVolume();
 	if (volume)
 	{
+		// <FS:Ansariel> Performance improvement
+		LLViewerCamera& camera = LLViewerCamera::instance();
+		LLSelectMgr& selectmgr = LLSelectMgr::instance();
+
 		F32 silhouette_thickness;
 		if (isAgentAvatarValid() && is_hud_object)
 		{
@@ -6787,8 +6795,8 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
 		}
 		else
 		{
-			LLVector3 view_vector = LLViewerCamera::getInstance()->getOrigin() - objectp->getRenderPosition();
-			silhouette_thickness = view_vector.magVec() * LLSelectMgr::sHighlightThickness * (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV());
+			LLVector3 view_vector = camera.getOrigin() - objectp->getRenderPosition();
+			silhouette_thickness = view_vector.magVec() * LLSelectMgr::sHighlightThickness * (camera.getView() / camera.getDefaultFOV());
 		}		
 		F32 animationTime = (F32)LLFrameTimer::getElapsedSeconds();
 
@@ -6806,10 +6814,10 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
 			// </FS:Ansariel>
 				LLGLEnable fog(GL_FOG);
 				glFogi(GL_FOG_MODE, GL_LINEAR);
-				float d = (LLViewerCamera::getInstance()->getPointOfInterest()-LLViewerCamera::getInstance()->getOrigin()).magVec();
-				LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal()-gAgentCamera.getCameraPositionGlobal()).magVec()/(LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec()*4), 0.0, 1.0);
+				float d = (camera.getPointOfInterest()-camera.getOrigin()).magVec();
+				LLColor4 fogCol = color * (F32)llclamp((selectmgr.getSelectionCenterGlobal()-gAgentCamera.getCameraPositionGlobal()).magVec()/(selectmgr.getBBoxOfSelection().getExtentLocal().magVec()*4), 0.0, 1.0);
 				glFogf(GL_FOG_START, d);
-				glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
+				glFogf(GL_FOG_END, d*(1 + (camera.getView() / camera.getDefaultFOV())));
 				glFogfv(GL_FOG_COLOR, fogCol.mV);
 			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
 			}
@@ -6928,7 +6936,7 @@ void dialog_refresh_all()
 
 	LLFloaterProperties::dirtyAll();
 
-	LLFloaterInspect* inspect_instance = LLFloaterReg::getTypedInstance<LLFloaterInspect>("inspect");
+	LLFloaterInspect* inspect_instance = LLFloaterReg::findTypedInstance<LLFloaterInspect>("inspect");
 	if(inspect_instance)
 	{
 		inspect_instance->dirty();
