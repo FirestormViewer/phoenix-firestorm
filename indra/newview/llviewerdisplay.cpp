@@ -281,6 +281,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 {
 	LL_RECORD_BLOCK_TIME(FTM_RENDER);
 
+	LLViewerCamera& camera = LLViewerCamera::instance(); // <FS:Ansariel> Factor out calls to getInstance
+
 	if (gWindowResized)
 	{ //skip render on frames where window has been resized
 		LL_DEBUGS("Window") << "Resizing window" << LL_ENDL;
@@ -493,10 +495,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			{
 				// If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
 				// replicating the behavior here. -Zi
-				LLViewerCamera::getInstance()->setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
+				camera.setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
 				if(gSavedSettings.getBOOL("FSResetCameraOnTP"))
 				{
-					gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
+					gSavedSettings.setF32("CameraAngle", camera.getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
 				}
 				// also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
 				LLVector3 vTemp=gSavedSettings.getVector3("_NACL_MLFovValues");
@@ -674,8 +676,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	//
 
 	LLAppViewer::instance()->pingMainloopTimeout("Display:Camera");
-	LLViewerCamera::getInstance()->setZoomParameters(zoom_factor, subfield);
-	LLViewerCamera::getInstance()->setNear(MIN_NEAR_PLANE);
+	camera.setZoomParameters(zoom_factor, subfield); // <FS:Ansariel> Factor out calls to getInstance
+	camera.setNear(MIN_NEAR_PLANE); // <FS:Ansariel> Factor out calls to getInstance
 
 	//////////////////////////
 	//
@@ -753,7 +755,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		{
 			LL_RECORD_BLOCK_TIME(FTM_EEP_UPDATE);
             // update all the sky/atmospheric/water settings
-            LLEnvironment::instance().update(LLViewerCamera::getInstance());
+            LLEnvironment::instance().update(&camera); // <FS:Ansariel> Factor out calls to getInstance
 		}
 
 		// *TODO: merge these two methods
@@ -782,7 +784,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			 (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_WATER) || 
 			  gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_VOIDWATER)))
 		{
-			if (LLViewerCamera::getInstance()->cameraUnderWater())
+			if (camera.cameraUnderWater()) // <FS:Ansariel> Factor out calls to getInstance
 			{
 				water_clip = -1;
 			}
@@ -813,8 +815,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		static LLCullResult result;
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
-		gPipeline.updateCull(*LLViewerCamera::getInstance(), result, water_clip);
+		LLPipeline::sUnderWaterRender = camera.cameraUnderWater(); // <FS:Ansariel> Factor out calls to getInstance
+		gPipeline.updateCull(camera, result, water_clip); // <FS:Ansariel> Factor out calls to getInstance
 		stop_glerror();
 
 		LLGLState::checkStates();
@@ -842,7 +844,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				if (gFrameCount > 1)
 				{ //for some reason, ATI 4800 series will error out if you 
 				  //try to generate a shadow before the first frame is through
-					gPipeline.generateSunShadow(*LLViewerCamera::getInstance());
+					gPipeline.generateSunShadow(camera); // <FS:Ansariel> Factor out calls to getInstance
 				}
 
 				LLVertexBuffer::unbind();
@@ -883,8 +885,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		//if (!for_snapshot)
 		{
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Imagery");
-			gPipeline.generateWaterReflection(*LLViewerCamera::getInstance());
-			gPipeline.generateHighlight(*LLViewerCamera::getInstance());
+			gPipeline.generateWaterReflection(camera); // <FS:Ansariel> Factor out calls to getInstance
+			gPipeline.generateHighlight(camera); // <FS:Ansariel> Factor out calls to getInstance
 			gPipeline.renderPhysicsDisplay();
 		}
 
@@ -946,7 +948,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:StateSort");
 		{
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-			gPipeline.stateSort(*LLViewerCamera::getInstance(), result);
+			gPipeline.stateSort(camera, result); // <FS:Ansariel> Factor out calls to getInstance
 			stop_glerror();
 				
 			if (rebuild)
@@ -1020,7 +1022,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		//	gGL.popMatrix();
 		//}
 
-		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
+		LLPipeline::sUnderWaterRender = camera.cameraUnderWater() ? TRUE : FALSE; // <FS:Ansariel> Factor out calls to getInstance
 
 // <FS:CR> Aurora Sim
 		if (!LLWorld::getInstance()->getAllowRenderWater())
@@ -1089,11 +1091,11 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gGL.setColorMask(true, false);
 			if (LLPipeline::sRenderDeferred)
 			{
-				gPipeline.renderGeomDeferred(*LLViewerCamera::getInstance());
+				gPipeline.renderGeomDeferred(camera); // <FS:Ansariel> Factor out calls to getInstance
 			}
 			else
 			{
-				gPipeline.renderGeom(*LLViewerCamera::getInstance(), TRUE);
+				gPipeline.renderGeom(camera, TRUE); // <FS:Ansariel> Factor out calls to getInstance
 			}
 			
 			gGL.setColorMask(true, true);
@@ -1296,11 +1298,14 @@ void render_hud_attachments()
 
 LLRect get_whole_screen_region()
 {
+	// <FS:Ansariel> Factor out calls to getInstance
+	LLViewerCamera& camera = LLViewerCamera::instance();
+
 	LLRect whole_screen = gViewerWindow->getWorldViewRectScaled();
 	
 	// apply camera zoom transform (for high res screenshots)
-	F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
-	S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+	F32 zoom_factor = camera.getZoomFactor(); // <FS:Ansariel> Factor out calls to getInstance
+	S16 sub_region = camera.getZoomSubRegion(); // <FS:Ansariel> Factor out calls to getInstance
 	if (zoom_factor > 1.f)
 	{
 		S32 num_horizontal_tiles = llceil(zoom_factor);
@@ -1322,10 +1327,15 @@ bool get_hud_matrices(const LLRect& screen_region, glh::matrix4f &proj, glh::mat
 		LLBBox hud_bbox = gAgentAvatarp->getHUDBBox();
 		
 		F32 hud_depth = llmax(1.f, hud_bbox.getExtentLocal().mV[VX] * 1.1f);
-		proj = gl_ortho(-0.5f * LLViewerCamera::getInstance()->getAspect(), 0.5f * LLViewerCamera::getInstance()->getAspect(), -0.5f, 0.5f, 0.f, hud_depth);
-		proj.element(2,2) = -0.01f;
+
+		// <FS:Ansariel> Factor out calls to getInstance
+		//proj = gl_ortho(-0.5f * LLViewerCamera::getInstance()->getAspect(), 0.5f * LLViewerCamera::getInstance()->getAspect(), -0.5f, 0.5f, 0.f, hud_depth);
+		//proj.element(2,2) = -0.01f;
 		
 		F32 aspect_ratio = LLViewerCamera::getInstance()->getAspect();
+		proj = gl_ortho(-0.5f * aspect_ratio, 0.5f * aspect_ratio, -0.5f, 0.5f, 0.f, hud_depth);
+		proj.element(2,2) = -0.01f;
+		// <//FS:Ansariel> Factor out calls to getInstance
 		
 		glh::matrix4f mat;
 		F32 scale_x = (F32)gViewerWindow->getWorldViewWidthScaled() / (F32)screen_region.getWidth();
