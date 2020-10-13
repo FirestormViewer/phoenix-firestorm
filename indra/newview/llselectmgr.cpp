@@ -5636,8 +5636,8 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 		if (!node)
 		{
 			// <FS:Techwolf Lupindo> area search
-			FSAreaSearch* area_search_floater = LLFloaterReg::getTypedInstance<FSAreaSearch>("area_search");
-			if(!(area_search_floater && area_search_floater->isActive())) // Don't spam the log when areasearch is active.
+			FSAreaSearch* area_search_floater = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
+			if (!area_search_floater || !area_search_floater->isActive()) // Don't spam the log when areasearch is active.
 			{
 			// </FS:Techwolf Lupindo>
 			LL_WARNS() << "Couldn't find object " << id << " selected." << LL_ENDL;
@@ -6243,7 +6243,7 @@ void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 	if (mSelectedObjects->getNumNodes())
 	{
 		LLUUID inspect_item_id= LLUUID::null;
-		LLFloaterInspect* inspect_instance = LLFloaterReg::getTypedInstance<LLFloaterInspect>("inspect");
+		LLFloaterInspect* inspect_instance = LLFloaterReg::findTypedInstance<LLFloaterInspect>("inspect");
 		if(inspect_instance && inspect_instance->getVisible())
 		{
 			inspect_item_id = inspect_instance->getSelectedUUID();
