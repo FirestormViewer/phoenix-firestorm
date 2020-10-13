@@ -15,13 +15,18 @@
 	<string name="inactive_combo_text">
 		Voreinstellung...
 	</string>
-
-	<panel name="controls">
-		<panel name="zoom">
-			<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>
-			<slider_bar name="zoom_slider" tool_tip="Kamera auf Fokus zoomen"/>
-			<joystick_track name="cam_track_stick" tool_tip="Kamera nach oben, unten, links und rechts bewegen"/>
-		</panel>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="Kamera um Fokus kreisen"/>
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="Kamera auf Fokus zoomen"/>
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="Kamera nach oben, unten, links und rechts bewegen"/>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 	<panel name="buttons_panel">
 		<panel_camera_item name="front_view" tool_tip="Frontalansicht">
@@ -50,9 +55,11 @@
 		</panel_camera_item>
 	<button label="Position..." name="camera_position_btn"/>
 	</panel>
-	<combo_box name="preset_combo">
-		<combo_box.item label="Voreinstellung verw." name="Use preset"/>
-	</combo_box>
-	<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
-	<button name="save_preset_btn" tool_tip="Als Voreinstellung speichern"/>
+	<panel name="preset_buttons_panel">
+		<combo_box name="preset_combo">
+			<combo_box.item label="Voreinstellung verw." name="Use preset"/>
+		</combo_box>
+		<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
+		<button name="save_preset_btn" tool_tip="Als Voreinstellung speichern"/>
+	</panel>
 </floater>

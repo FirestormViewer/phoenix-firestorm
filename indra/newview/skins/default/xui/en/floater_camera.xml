@@ -239,6 +239,7 @@
       layout="topleft"
       follows="bottom|left|right"
       left="0"
+      name="preset_buttons_panel"
       mouse_opaque="false">
     <button
         follows="bottom|left|right"
