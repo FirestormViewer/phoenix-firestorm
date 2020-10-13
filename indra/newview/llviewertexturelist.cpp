@@ -1545,6 +1545,7 @@ void LLViewerTextureList::updateTexMemDynamic()
 
 	static LLCachedControl<S32> fsDynamicTexMemCacheReserve(gSavedSettings, "FSDynamicTextureMemoryCacheReserve");
 	static LLCachedControl<S32> fsDynamicTexMemSystemReserve(gSavedSettings, "FSDynamicTextureMemorySystemReserve");
+	static LLCachedControl<S32> fsDynamicTexMemMinTextureMemory(gSavedSettings, "FSDynamicTextureMemoryMinTextureMemory");
 
 	S32Megabytes gpu;
 	S32Megabytes system;
@@ -1558,7 +1559,7 @@ void LLViewerTextureList::updateTexMemDynamic()
 
 	// Maximum texture memory is remaining available memory + what's already used for textures by the viewer
 	S32Megabytes max_tex_mem_in_gpu = max_physical_available + LLImageGL::sBoundTextureMemory;
-	mMaxResidentTexMemInMegaBytes = max_tex_mem_in_gpu;
+	mMaxResidentTexMemInMegaBytes = llmax(max_tex_mem_in_gpu, S32Megabytes(fsDynamicTexMemMinTextureMemory()));
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes + S32Megabytes(fsDynamicTexMemCacheReserve());
 }
 // </FS:Ansariel>
