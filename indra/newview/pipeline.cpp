@@ -6210,15 +6210,15 @@ static F32 calc_light_dist(LLVOVolume* light, const LLVector3& cam_pos, F32 max_
 	bool selected = light->isSelected();
 	if (selected)
 	{
-		return 0.f; // selected lights get highest priority
+        return 0.f; // selected lights get highest priority
 	}
-	F32 radius = light->getLightRadius();
-	F32 dist = dist_vec(light->getRenderPosition(), cam_pos);
-	dist = llmax(dist - radius, 0.f);
+    F32 radius = light->getLightRadius();
+    F32 dist = dist_vec(light->getRenderPosition(), cam_pos);
+    dist = llmax(dist - radius, 0.f);
 	if (light->mDrawable.notNull() && light->mDrawable->isState(LLDrawable::ACTIVE))
 	{
 		// moving lights get a little higher priority (too much causes artifacts)
-		dist = llmax(dist - light->getLightRadius()*0.25f, 0.f);
+        dist = llmax(dist - light->getLightRadius()*0.25f, 0.f);
 	}
 	return dist;
 }
@@ -6237,8 +6237,8 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
 		// mNearbyLight (and all light_set_t's) are sorted such that
 		// begin() == the closest light and rbegin() == the farthest light
 		const S32 MAX_LOCAL_LIGHTS = 6;
-		LLVector3 cam_pos = camera.getOrigin();
-
+        LLVector3 cam_pos = camera.getOrigin();
+		
         F32 max_dist;
         if (LLPipeline::sRenderDeferred)
         {
@@ -6248,7 +6248,7 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
         {
             max_dist = llmin(RenderFarClip, LIGHT_MAX_RADIUS * 4.f);
         }
-		
+
 		// UPDATE THE EXISTING NEARBY LIGHTS
 		light_set_t cur_nearby_lights;
 		for (light_set_t::iterator iter = mNearbyLights.begin();
@@ -6313,7 +6313,7 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
                     fade -= LIGHT_FADE_TIME;
                 }
             }
-			cur_nearby_lights.insert(Light(drawable, dist, fade));
+            cur_nearby_lights.insert(Light(drawable, dist, fade));
 		}
 		mNearbyLights = cur_nearby_lights;
 				
@@ -6332,23 +6332,23 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
 			{
 				continue; // no lighting from HUD objects
 			}
-			if (!sRenderAttachedLights && light && light->isAttachment())
+            if (!sRenderAttachedLights && light && light->isAttachment())
 			{
 				continue;
 			}
-			LLVOAvatar *av = light->getAvatar();
-			if (av && (av->isTooComplex() ||  av->isInMuteList()))
-			{
-				// avatars that are already in the list will be removed by removeMutedAVsLights
-				continue;
-			}
-			F32 dist = calc_light_dist(light, cam_pos, max_dist);
-			if (dist >= max_dist)
+            LLVOAvatar * av = light->getAvatar();
+            if (av && (av->isTooComplex() || av->isInMuteList()))
+            {
+                // avatars that are already in the list will be removed by removeMutedAVsLights
+                continue;
+            }
+            F32 dist = calc_light_dist(light, cam_pos, max_dist);
+            if (dist >= max_dist)
 			{
 				continue;
 			}
 			new_nearby_lights.insert(Light(drawable, dist, 0.f));
-			if (!LLPipeline::sRenderDeferred && new_nearby_lights.size() > (U32)MAX_LOCAL_LIGHTS)
+            if (!LLPipeline::sRenderDeferred && new_nearby_lights.size() > (U32)MAX_LOCAL_LIGHTS)
 			{
 				new_nearby_lights.erase(--new_nearby_lights.end());
 				const Light& last = *new_nearby_lights.rbegin();
@@ -6361,7 +6361,7 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
 			 iter != new_nearby_lights.end(); iter++)
 		{
 			const Light* light = &(*iter);
-			if (LLPipeline::sRenderDeferred || mNearbyLights.size() < (U32)MAX_LOCAL_LIGHTS)
+            if (LLPipeline::sRenderDeferred || mNearbyLights.size() < (U32)MAX_LOCAL_LIGHTS)
 			{
 				mNearbyLights.insert(*light);
 				((LLDrawable*) light->drawable)->setState(LLDrawable::NEARBY_LIGHT);
@@ -8934,8 +8934,8 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget *screen_target)
                 // mNearbyLights also provides fade value to gracefully fade-out out of range lights
                 for (light_set_t::iterator iter = mNearbyLights.begin(); iter != mNearbyLights.end(); ++iter)
                 {
-                    LLDrawable* drawablep = iter->drawable;
-                    LLVOVolume* volume = drawablep->getVOVolume();
+                    LLDrawable * drawablep = iter->drawable;
+                    LLVOVolume * volume = drawablep->getVOVolume();
                     if (!volume)
                     {
                         continue;
