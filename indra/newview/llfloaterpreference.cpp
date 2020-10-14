@@ -2315,16 +2315,26 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 #if ADDRESS_SIZE == 64
 	if (gGLManager.mHasATIMemInfo || gGLManager.mHasNVXMemInfo)
 	{
+		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
 		childSetEnabled("FSDynamicTextureMemory", true);
-		childSetEnabled("GraphicsCardTextureMemory", !gSavedSettings.getBOOL("FSDynamicTextureMemory"));
+		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemoryCacheReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemorySystemReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
 	}
 	else
 	{
 		childSetEnabled("FSDynamicTextureMemory", false);
+		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
+		childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
+		childSetEnabled("FSDynamicTextureMemorySystemReserve", false);
 		childSetEnabled("GraphicsCardTextureMemory", true);
 	}
 #else
 	childSetEnabled("FSDynamicTextureMemory", false);
+	childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
+	childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
+	childSetEnabled("FSDynamicTextureMemorySystemReserve", false);
 	childSetEnabled("GraphicsCardTextureMemory", true);
 #endif
 }
