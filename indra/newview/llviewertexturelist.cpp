@@ -1559,6 +1559,8 @@ void LLViewerTextureList::updateTexMemDynamic()
 
 	// Maximum texture memory is remaining available memory + what's already used for textures by the viewer
 	S32Megabytes max_tex_mem_in_gpu = max_physical_available + LLImageGL::sBoundTextureMemory;
+
+	// Always use at least the specified minimum amount of texture memory, even if it would exceed available physical memory
 	mMaxResidentTexMemInMegaBytes = llmax(max_tex_mem_in_gpu, S32Megabytes(fsDynamicTexMemMinTextureMemory()));
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes + S32Megabytes(fsDynamicTexMemCacheReserve());
 }
