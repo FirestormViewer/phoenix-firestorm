@@ -1471,6 +1471,10 @@
 	<notification name="CantTeleportToGrid">
 		Не удалось телепортироваться в [SLURL]: это место находится на другой сетке ([GRID]), а не на текущей ([CURRENT_GRID]). Закройте программу и попробуйте еще раз.
 	</notification>
+	<notification name="GeneralCertificateErrorShort">
+		Не удалось установить соединение с сервером.
+[REASON]
+	</notification>
 	<notification name="GeneralCertificateError">
 		Не удалось подключиться к серверу.
 [REASON]

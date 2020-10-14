@@ -2,7 +2,7 @@
 <panel label="Сообщения об ошибках" name="crash_reports">
     <check_box label="Отправить отчет об ошибке на firestormviewer.org" name="checkSendCrashReports" />
     <check_box label="Всегда спрашивать перед отправкой" name="checkSendCrashReportsAlwaysAsk" />
-    <check_box label="Включая settings.xml" name="checkSendSettings" />
+    <check_box label="Включая файлы настроек" name="checkSendSettings" />
     <text name="textSendSettings">
         (содержит имя пользователя)
     </text>

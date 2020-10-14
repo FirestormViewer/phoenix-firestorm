@@ -1527,6 +1527,34 @@ LLEnvironment::DayInstance::ptr_t LLEnvironment::getSharedEnvironmentInstance()
 void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool forced)
 {
     DayInstance::ptr_t pinstance = getSelectedEnvironmentInstance();
+    // <FS:Beq> Auto-disable water rendering via hasEEPWaterDerender
+    // Allow parcel and region owners to disable water rendering for their visitors through an EEP setting
+    // We test for the IMG_TRANSPARENT in the NormalMap channel, this is not a valid normal map so cannot clash with
+    // any valid EEP asset use.It also allows non-FS users to create these assets.
+    if(gSavedSettings.getBOOL("FSAllowEEPWaterDerender"))
+    {
+        auto targetWater = pinstance->getWater();
+        static bool hasEEPWaterDerender{false};
+        if(targetWater && targetWater->getNormalMapID()==IMG_TRANSPARENT)
+        {
+            // This EEP has explicit transparent water so let's disable rendering of water
+            if(LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_WATER))
+            {
+                hasEEPWaterDerender = true;// remember that it was us who disabled it.
+                LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_WATER);
+            }
+        }
+        else
+        {
+            // Otherwise re-enable it, only if it was us that disabled it
+            if(hasEEPWaterDerender && !LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_WATER))
+            {
+                LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_WATER);
+            }
+            hasEEPWaterDerender = false; // regardless of whether it was disabled it is no longer our problem
+        }
+    }
+    // </FS:Beq>
 
     if ((mCurrentEnvironment != pinstance) || forced)
     {
@@ -1777,6 +1805,17 @@ void LLEnvironment::updateShaderUniforms(LLGLSLShader *shader)
 
 void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envinfo, LLSettingsBase::Seconds transition)
 {
+    if (!gAgent.getRegion())
+    {
+        return;
+    }
+    // mRegionId id can be null, no specification as to why and if it's valid so check valid ids only
+    if (gAgent.getRegion()->getRegionID() != envinfo->mRegionId && envinfo->mRegionId.notNull())
+    {
+        LL_INFOS("ENVIRONMENT") << "Requested environmend region id: " << envinfo->mRegionId << " agent is on: " << gAgent.getRegion()->getRegionID() << LL_ENDL;
+        return;
+    }
+
     if (envinfo->mParcelId == INVALID_PARCEL_ID)
     {
         // the returned info applies to an entire region.
