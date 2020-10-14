@@ -71,7 +71,10 @@
 // [/RLVa:KB]
 #include "fscommon.h"
 #include "llviewernetwork.h"
-
+// <FS:Beq> make EEP water derender capability opt-in
+#include "llcontrol.h"
+extern LLControlGroup gSavedSettings;
+// </FS@Beq>
 //=========================================================================
 namespace
 {
@@ -1475,25 +1478,28 @@ void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool f
     // Allow parcel and region owners to disable water rendering for their visitors through an EEP setting
     // We test for the IMG_TRANSPARENT in the NormalMap channel, this is not a valid normal map so cannot clash with
     // any valid EEP asset use.It also allows non-FS users to create these assets.
-    auto targetWater = pinstance->getWater();
-    static bool hasEEPWaterDerender{false};
-    if(targetWater && targetWater->getNormalMapID()==IMG_TRANSPARENT)
+    if(gSavedSettings.getBOOL("FSAllowEEPWaterDerender"))
     {
-        // This EEP has explicit transparent water so let's disable rendering of water
-        if(LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_WATER))
+        auto targetWater = pinstance->getWater();
+        static bool hasEEPWaterDerender{false};
+        if(targetWater && targetWater->getNormalMapID()==IMG_TRANSPARENT)
         {
-            hasEEPWaterDerender = true;// remember that it was us who disabled it.
-            LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_WATER);
+            // This EEP has explicit transparent water so let's disable rendering of water
+            if(LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_WATER))
+            {
+                hasEEPWaterDerender = true;// remember that it was us who disabled it.
+                LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_WATER);
+            }
         }
-    }
-    else
-    {
-        // Otherwise re-enable it, only if it was us that disabled it
-        if(hasEEPWaterDerender && !LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_WATER))
+        else
         {
-            LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_WATER);
+            // Otherwise re-enable it, only if it was us that disabled it
+            if(hasEEPWaterDerender && !LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_WATER))
+            {
+                LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_WATER);
+            }
+            hasEEPWaterDerender = false; // regardless of whether it was disabled it is no longer our problem
         }
-        hasEEPWaterDerender = false; // regardless of whether it was disabled it is no longer our problem
     }
     // </FS:Beq>
 
