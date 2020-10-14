@@ -302,7 +302,10 @@ void LLDrawPoolWLSky::renderStarsDeferred(void) const
 
 	gGL.setSceneBlendType(LLRender::BT_ADD_WITH_ALPHA);
 
-    F32 star_alpha = LLEnvironment::instance().getCurrentSky()->getStarBrightness() / 500.0f;
+    // <FS:Ansariel> Factor out instance() calls
+    LLSettingsSky::ptr_t current_sky = LLEnvironment::instance().getCurrentSky();
+
+    F32 star_alpha = current_sky->getStarBrightness() / 500.0f; // <FS:Ansariel> Factor out instance() calls
 
 	// If start_brightness is not set, exit
 	if(star_alpha < 0.001f)
@@ -316,7 +319,7 @@ void LLDrawPoolWLSky::renderStarsDeferred(void) const
     LLViewerTexture* tex_a = gSky.mVOSkyp->getBloomTex();
     LLViewerTexture* tex_b = gSky.mVOSkyp->getBloomTexNext();
 
-    F32 blend_factor = LLEnvironment::instance().getCurrentSky()->getBlendFactor();
+    F32 blend_factor = current_sky->getBlendFactor(); // <FS:Ansariel> Factor out instance() calls
 	
     if (tex_a && (!tex_b || (tex_a == tex_b)))
     {
@@ -479,7 +482,10 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
 
 	LLFace * face = gSky.mVOSkyp->mFace[LLVOSky::FACE_SUN];
 
-    F32 blend_factor = LLEnvironment::instance().getCurrentSky()->getBlendFactor();
+    // <FS:Ansariel> Factor out instance() calls
+    LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+
+    F32 blend_factor = psky->getBlendFactor(); // <FS:Ansariel> Factor out instance() calls
     bool can_use_vertex_shaders = gPipeline.canUseVertexShaders();
     bool can_use_windlight_shaders = gPipeline.canUseWindLightShaders();
 
@@ -562,7 +568,8 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
                 //moon_shader->bindTexture(LLShaderMgr::ALTERNATE_DIFFUSE_MAP, tex_b, LLTexUnit::TT_TEXTURE);
             }
 
-            LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+            // <FS:Ansariel> Factor out instance() calls
+            //LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
             F32 moon_brightness = (float)psky->getMoonBrightness();
 

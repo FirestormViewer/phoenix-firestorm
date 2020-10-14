@@ -201,8 +201,14 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="CertBasicConstraints">
 		В цепочке сертификатов серверов слишком много сертификатов. Обратитесь к администратору сети.
 	</string>
+	<string name="CertInvalid">
+		Не удалось загрузить сертификат. Обратитесь к администратору сети.
+	</string>
 	<string name="CertInvalidSignature">
 		Не удалось проверить подпись сертификата, возвращенного сервером сетки. Обратитесь к администратору сетки.
+	</string>
+	<string name="CertAllocationFailure">
+		Не удалось выделить память openssl для сертификата.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Ошибка сети: не удалось установить соединение. Проверьте подключение к сети.
