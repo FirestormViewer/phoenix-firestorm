@@ -38,6 +38,7 @@
 			<combo_box.item label="Flug-Assistent: Extremer Boost" name="flight_extreme"/>
 		</combo_box>
 		<slider label="Überblendzeit für Umgebungseinstellungen:" tool_tip="Intervall in Sekunden in dem Änderungen an den Umgebungseinstellungen ineinander überblenden. 0 = direkt ohne Verzögerung" name="manual_environment_change_transition_period"/>
+		<check_box name="EnvironmentPersistAcrossLogin" label="Sitzungsübergreifende Umgebungseinstellungen aktivieren" tool_tip="Stellt die aktuellen Umgebungseinstellungen nach einem erneuten Login wieder her."/>
 	</panel>
 
 	<!--Protection-->
