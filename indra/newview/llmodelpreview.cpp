@@ -255,6 +255,12 @@ LLModelPreview::~LLModelPreview()
     {
         mModelLoader->shutdown();
     }
+
+    if (mPreviewAvatar)
+    {
+        mPreviewAvatar->markDead();
+        mPreviewAvatar = NULL;
+    }
 }
 
 U32 LLModelPreview::calcResourceCost()
