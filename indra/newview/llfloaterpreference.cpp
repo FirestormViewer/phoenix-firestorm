@@ -2323,6 +2323,7 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
 	}
 	else
+#endif
 	{
 		childSetEnabled("FSDynamicTextureMemory", false);
 		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
@@ -2330,13 +2331,6 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 		childSetEnabled("FSDynamicTextureMemorySystemReserve", false);
 		childSetEnabled("GraphicsCardTextureMemory", true);
 	}
-#else
-	childSetEnabled("FSDynamicTextureMemory", false);
-	childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
-	childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
-	childSetEnabled("FSDynamicTextureMemorySystemReserve", false);
-	childSetEnabled("GraphicsCardTextureMemory", true);
-#endif
 }
 // </FS:Ansariel>
 
