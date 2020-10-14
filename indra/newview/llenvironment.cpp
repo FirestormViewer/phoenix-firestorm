@@ -71,10 +71,7 @@
 // [/RLVa:KB]
 #include "fscommon.h"
 #include "llviewernetwork.h"
-// <FS:Beq> make EEP water derender capability opt-in
-#include "llcontrol.h"
-extern LLControlGroup gSavedSettings;
-// </FS@Beq>
+
 //=========================================================================
 namespace
 {
