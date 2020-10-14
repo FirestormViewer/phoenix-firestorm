@@ -518,7 +518,10 @@ void LLVOSky::init()
 
 void LLVOSky::calc()
 {
-    LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+    // <FS:Ansariel> Factor out instance() calls
+    LLEnvironment& environment = LLEnvironment::instance();
+
+    LLSettingsSky::ptr_t psky = environment.getCurrentSky(); // <FS:Ansariel> Factor out instance() calls
 
     // invariants across whole sky tex process...
     m_atmosphericsVars.blue_density = psky->getBlueDensity();    
@@ -528,7 +531,7 @@ void LLVOSky::calc()
     m_atmosphericsVars.density_multiplier = psky->getDensityMultiplier();
     m_atmosphericsVars.distance_multiplier = psky->getDistanceMultiplier();
     m_atmosphericsVars.max_y = psky->getMaxY();
-    m_atmosphericsVars.sun_norm = LLEnvironment::instance().getClampedSunNorm();
+    m_atmosphericsVars.sun_norm = environment.getClampedSunNorm(); // <FS:Ansariel> Factor out instance() calls
     m_atmosphericsVars.sunlight = psky->getIsSunUp() ? psky->getSunlightColor() : psky->getMoonlightColor();
     m_atmosphericsVars.ambient = psky->getAmbientColor();    
     m_atmosphericsVars.glow = psky->getGlow();
@@ -1096,8 +1099,11 @@ BOOL LLVOSky::updateGeometry(LLDrawable *drawable)
     bool draw_sun  = updateHeavenlyBodyGeometry(drawable, mSunScale, FACE_SUN, mSun, up, right);
     bool draw_moon = updateHeavenlyBodyGeometry(drawable, mMoonScale, FACE_MOON, mMoon, up, right);
 
-    draw_sun  &= LLEnvironment::getInstance()->getIsSunUp();
-    draw_moon &= LLEnvironment::getInstance()->getIsMoonUp();
+    // <FS:Ansariel> Factor out instance() calls
+    LLEnvironment& environment = LLEnvironment::instance();
+
+    draw_sun  &= environment.getIsSunUp(); // <FS:Ansariel> Factor out instance() calls
+    draw_moon &= environment.getIsMoonUp(); // <FS:Ansariel> Factor out instance() calls
 
 	mSun.setDraw(draw_sun);
 	mMoon.setDraw(draw_moon);

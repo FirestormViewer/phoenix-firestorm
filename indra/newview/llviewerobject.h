@@ -116,7 +116,7 @@ class LLViewerObject
 	public LLTrace::MemTrackable<LLViewerObject>
 {
 protected:
-	~LLViewerObject(); // use unref()
+	virtual ~LLViewerObject(); // use unref()
 
 	// TomY: Provide for a list of extra parameter structures, mapped by structure name
 	struct ExtraParameter

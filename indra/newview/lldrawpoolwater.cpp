@@ -215,11 +215,14 @@ void LLDrawPoolWater::render(S32 pass)
 	gGL.getTexUnit(2)->enable(LLTexUnit::TT_TEXTURE);
 	gGL.getTexUnit(2)->bind(mWaterImagep[1]) ;
 
-	LLVector3 camera_up = LLViewerCamera::getInstance()->getUpAxis();
+	// <FS:Ansariel> Factor out instance() calls
+	LLViewerCamera& camera = LLViewerCamera::instance();
+
+	LLVector3 camera_up = camera.getUpAxis(); // <FS:Ansariel> Factor out instance() calls
 	F32 up_dot = camera_up * LLVector3::z_axis;
 
 	LLColor4 water_color;
-	if (LLViewerCamera::getInstance()->cameraUnderWater())
+	if (camera.cameraUnderWater()) // <FS:Ansariel> Factor out instance() calls
 	{
 		water_color.setVec(1.f, 1.f, 1.f, 0.4f);
 	}
@@ -294,7 +297,7 @@ void LLDrawPoolWater::render(S32 pass)
 
 		gGL.matrixMode(LLRender::MM_TEXTURE);
 		gGL.loadIdentity();
-		LLMatrix4 camera_mat = LLViewerCamera::getInstance()->getModelview();
+		LLMatrix4 camera_mat = camera.getModelview(); // <FS:Ansariel> Factor out instance() calls
 		LLMatrix4 camera_rot(camera_mat.getMat3());
 		camera_rot.invert();
 
@@ -482,12 +485,16 @@ void LLDrawPoolWater::renderReflection(LLFace* face)
 
 void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& light_diffuse, const LLVector3& light_dir, F32 light_exp)
 {
-    F32  water_height  = LLEnvironment::instance().getWaterHeight(); 
+    // <FS:Ansariel> Factor out instance() calls
+    LLEnvironment& environment = LLEnvironment::instance();
+    LLViewerCamera& camera = LLViewerCamera::instance();
+
+    F32  water_height  = environment.getWaterHeight(); // <FS:Ansariel> Factor out instance() calls
     F32  camera_height = LLViewerCamera::getInstance()->getOrigin().mV[2];
     F32  eyedepth      = camera_height - water_height;
     bool underwater    = eyedepth <= 0.0f;
 
-    LLEnvironment& environment = LLEnvironment::instance();
+    //LLEnvironment& environment = LLEnvironment::instance(); // <FS:Ansariel> Factor out instance() calls
     LLSettingsWater::ptr_t pwater = environment.getCurrentWater();
     LLSettingsSky::ptr_t   psky   = environment.getCurrentSky();
 
@@ -524,7 +531,9 @@ void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& li
     LLViewerTexture* tex_a = mWaterNormp[0];
     LLViewerTexture* tex_b = mWaterNormp[1];
 
-    F32 blend_factor = LLEnvironment::instance().getCurrentWater()->getBlendFactor();
+    // <FS:Ansariel> Factor out instance() calls
+    //F32 blend_factor = LLEnvironment::instance().getCurrentWater()->getBlendFactor();
+    F32 blend_factor = pwater->getBlendFactor();
 	
     gGL.getTexUnit(bumpTex)->unbind(LLTexUnit::TT_TEXTURE);
     gGL.getTexUnit(bumpTex2)->unbind(LLTexUnit::TT_TEXTURE);
@@ -581,10 +590,10 @@ void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& li
 	//shader->uniformMatrix4fv("inverse_ref", 1, GL_FALSE, (GLfloat*) gGLObliqueProjectionInverse.mMatrix);
 	shader->uniform1f(LLShaderMgr::WATER_WATERHEIGHT, eyedepth);
 	shader->uniform1f(LLShaderMgr::WATER_TIME, sTime);
-	shader->uniform3fv(LLShaderMgr::WATER_EYEVEC, 1, LLViewerCamera::getInstance()->getOrigin().mV);
+	shader->uniform3fv(LLShaderMgr::WATER_EYEVEC, 1, camera.getOrigin().mV); // <FS:Ansariel> Factor out instance() calls
 	shader->uniform3fv(LLShaderMgr::WATER_SPECULAR, 1, light_diffuse.mV);
 	shader->uniform1f(LLShaderMgr::WATER_SPECULAR_EXP, light_exp);
-    if (LLEnvironment::instance().isCloudScrollPaused())
+    if (environment.isCloudScrollPaused()) // <FS:Ansariel> Factor out instance() calls
     {
         static const std::array<F32, 2> zerowave{ {0.0f, 0.0f} };
         
@@ -612,11 +621,11 @@ void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& li
 	shader->uniform1f(LLShaderMgr::WATER_SUN_ANGLE2, 0.1f + 0.2f*sunAngle);
     shader->uniform1i(LLShaderMgr::WATER_EDGE_FACTOR, edge ? 1 : 0);
 
-    LLVector4 rotated_light_direction = LLEnvironment::instance().getRotatedLightNorm();
+    LLVector4 rotated_light_direction = environment.getRotatedLightNorm(); // <FS:Ansariel> Factor out instance() calls
     shader->uniform4fv(LLViewerShaderMgr::LIGHTNORM, 1, rotated_light_direction.mV);
-    shader->uniform3fv(LLShaderMgr::WL_CAMPOSLOCAL, 1, LLViewerCamera::getInstance()->getOrigin().mV);
+    shader->uniform3fv(LLShaderMgr::WL_CAMPOSLOCAL, 1, camera.getOrigin().mV); // <FS:Ansariel> Factor out instance() calls
 
-	if (LLViewerCamera::getInstance()->cameraUnderWater())
+	if (camera.cameraUnderWater()) // <FS:Ansariel> Factor out instance() calls
 	{
 		shader->uniform1f(LLShaderMgr::WATER_REFSCALE, pwater->getScaleBelow());
 	}
@@ -746,7 +755,7 @@ void LLDrawPoolWater::shade()
 	LLGLSLShader* shader = nullptr;
     LLGLSLShader* edge_shader = nullptr;
 
-	F32 eyedepth = LLViewerCamera::getInstance()->getOrigin().mV[2] - LLEnvironment::instance().getWaterHeight();
+	F32 eyedepth = LLViewerCamera::getInstance()->getOrigin().mV[2] - environment.getWaterHeight(); // <FS:Ansariel> Factor out instance() calls
 	
 	if (eyedepth < 0.f && LLPipeline::sWaterReflections)
 	{

@@ -8925,8 +8925,8 @@
   <!-- =========================================================== -->
   <layer_set
     body_region="hair"
-    width="512"
-    height="512"
+    width="1024"
+    height="1024"
     clear_alpha="false">
     <layer
       name="base"
@@ -9015,8 +9015,8 @@
 
   <layer_set
     body_region="head"
-    width="512"
-    height="512">
+    width="1024"
+    height="1024">
     <layer
        name="head bump base"
        fixed_color = "128,128,128,255"
@@ -10151,8 +10151,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="upper_body"
-   width="512"
-   height="512">
+   width="1024"
+   height="1024">
     <layer
      name="base_upperbody bump"
      render_pass="bump"
@@ -11460,8 +11460,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="lower_body"
-   width="512"
-   height="512">
+   width="1024"
+   height="1024">
     <layer
        name="lower body bump base"
        fixed_color = "128,128,128,255"
@@ -12537,8 +12537,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="skirt"
-   width="512"
-   height="512"
+   width="1024"
+   height="1024"
    clear_alpha="false">
     <layer
      name="skirt_fabric"
@@ -12776,8 +12776,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="leftarm"
-   width="512"
-   height="512"
+   width="1024"
+   height="1024"
    clear_alpha="false">
 	  <layer
      name="base"
@@ -12852,8 +12852,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="leftleg"
-   width="512"
-   height="512"
+   width="1024"
+   height="1024"
    clear_alpha="false">
 
     <layer
@@ -12921,8 +12921,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="aux1"
-   width="512"
-   height="512"
+   width="1024"
+   height="1024"
    clear_alpha="false">
 
     <layer
@@ -12990,8 +12990,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="aux2"
-   width="512"
-   height="512"
+   width="1024"
+   height="1024"
    clear_alpha="false">
 
     <layer
@@ -13059,8 +13059,8 @@ render_pass="bump">
   <!-- =========================================================== -->
   <layer_set
    body_region="aux3"
-   width="512"
-   height="512"
+   width="1024"
+   height="1024"
    clear_alpha="false">
 
     <layer
@@ -17473,4 +17473,3 @@ render_pass="bump">
      layer="lower_pants" />
   </morph_masks>
 </linden_avatar>
-

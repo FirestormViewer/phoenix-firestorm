@@ -533,7 +533,7 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 		map["LISTING_PRICE"] = llformat("L$%d", c_info->price_for_listing);
 		map["SLURL"] = LLSLURL("parcel", c_info->parcel_id, "about").getSLURLString();
 
-		mDetailsPanel->setVisible(mTabContainer->getCurrentPanel()->getName() == "panel_ls_groupspanel_ls_classifieds");
+		mDetailsPanel->setVisible(mTabContainer->getCurrentPanel()->getName() == "panel_ls_classifieds");
 		mHasSelection = true;
 		mDetailMaturity->setVisible(true);
 		mParcelGlobal = c_info->pos_global;
