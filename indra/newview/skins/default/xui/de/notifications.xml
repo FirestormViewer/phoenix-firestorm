@@ -3954,6 +3954,11 @@ Möchten Sie fortfahren?
 		Das ausgewählte Objekt wirkt sich auf das Navmesh aus. Wenn Sie es in einen flexiblen Pfad ändern, wird es aus dem Navmesh entfernt.
 		<usetemplate ignoretext="Das ausgewählte Objekt wirkt sich auf das Navmesh aus. Wenn Sie es in einen flexiblen Pfad ändern, wird es aus dem Navmesh entfernt." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<global name="UnsupportedShaderRequirements">
+		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt OpenGL 2.0-Shader-Unterstützung oder höher voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
+
+Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT_SITE].
+	</global>
 	<global name="UnsupportedGLRequirements">
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 
