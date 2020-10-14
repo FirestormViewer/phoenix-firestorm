@@ -249,8 +249,6 @@ LLModelPreview::~LLModelPreview()
     // glod.dll!glodShutdown()  + 0x77 bytes	
     //
     //glodShutdown();
-    // <FS:WS> Mark the preview avatar as dead, when the floater closes. Prevents memleak!
-    mPreviewAvatar->markDead();
     if (mModelLoader)
     {
         mModelLoader->shutdown();
