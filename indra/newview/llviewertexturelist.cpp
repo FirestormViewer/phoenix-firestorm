@@ -1526,11 +1526,7 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 // <FS:Ansariel> Dynamic texture memory calculation
 void LLViewerTextureList::updateTexMemDynamic()
 {
-#if ADDRESS_SIZE == 32
-	// Sorry, nope
-	return;
-#endif
-
+#if ADDRESS_SIZE == 64 // Only available on 64bit versions
 	static LLCachedControl<bool> fsDynamicTexMem(gSavedSettings, "FSDynamicTextureMemory");
 	if (!fsDynamicTexMem)
 	{
@@ -1563,6 +1559,7 @@ void LLViewerTextureList::updateTexMemDynamic()
 	// Always use at least the specified minimum amount of texture memory, even if it would exceed available physical memory
 	mMaxResidentTexMemInMegaBytes = llmax(max_tex_mem_in_gpu, S32Megabytes(fsDynamicTexMemMinTextureMemory()));
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes + S32Megabytes(fsDynamicTexMemCacheReserve());
+#endif
 }
 // </FS:Ansariel>
 
