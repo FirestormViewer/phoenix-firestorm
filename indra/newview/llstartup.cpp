@@ -231,6 +231,7 @@
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
 #include "fsfloatersearch.h"
+#include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "fsregistrarutils.h"
@@ -3027,6 +3028,9 @@ bool idle_startup()
 			}
 		}
 		// </FS:TT>
+
+		// <FS:Ansariel> Favorite Wearables
+		FSFloaterWearableFavorites::initCategory();
 
 		// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
 		LLFriendCardsManager::createAgentCallingCard();
