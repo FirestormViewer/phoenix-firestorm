@@ -9,6 +9,7 @@ label_pad_left - padding to the left of tab button labels
                halign="center"
                font="SansSerifSmall" 
                tab_height="21"
+               tabs_flashing_color="SL-CustomMain"
                label_pad_bottom="1"
                label_pad_left="4">
   <!--
