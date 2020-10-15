@@ -2497,6 +2497,9 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 
 	LL_RECORD_BLOCK_TIME(FTM_CULL);
 
+	// <FS:Ansariel> Factor out instance() call
+	LLWorld& world = LLWorld::instance();
+
 	grabReferences(result);
 
 	sCull->clear();
@@ -2556,8 +2559,8 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
         camera.disableUserClipPlane();
     }
 
-	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
-			iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+	for (LLWorld::region_list_t::const_iterator iter = world.getRegionList().begin(); // <FS:Ansariel> Factor out instance() call
+			iter != world.getRegionList().end(); ++iter)
 	{
 		LLViewerRegion* region = *iter;
 
@@ -2622,7 +2625,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 
     if (render_water)
     {
-        LLWorld::getInstance()->precullWaterObjects(camera, sCull, render_water);
+        world.precullWaterObjects(camera, sCull, render_water); // <FS:Ansariel> Factor out instance() call
     }
 	
 	gGL.matrixMode(LLRender::MM_PROJECTION);
@@ -3053,8 +3056,9 @@ void LLPipeline::rebuildGroups()
 		if (!group->isDead())
 		{
 			group->rebuildGeom();
-			
-			if (group->getSpatialPartition()->mRenderByGroup)
+			// <FS:Beq> defend against occasional crash due to null SP
+			// if(group->getSpatialPartition()->mRenderByGroup)
+			if(group->getSpatialPartition() && (group->getSpatialPartition()->mRenderByGroup))
 			{
 				count++;
 			}
@@ -6656,7 +6660,7 @@ void LLPipeline::enableLightsDynamic()
 		{
 			gPipeline.enableLightsAvatar();
 		}
-		else if (gAgentAvatarp->mSpecialRenderMode >= 1)  // anim preview
+		else if (gAgentAvatarp->mSpecialRenderMode == 2)  // anim preview
 		{
 			gPipeline.enableLightsAvatarEdit(LLColor4(0.7f, 0.6f, 0.3f, 1.f));
 		}

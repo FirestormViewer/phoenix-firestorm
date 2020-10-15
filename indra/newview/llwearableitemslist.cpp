@@ -141,27 +141,35 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 	//	search_label += LLTrans::getString("worn");
 	//	item_state = IS_WORN;
 	//}
-	if (mWornIndicationEnabled && get_is_item_worn(mInventoryItemUUID))
+	if (mWornIndicationEnabled)
 	{
-		std::string attachment_point_name;
-		if (getType() != LLAssetType::AT_OBJECT || !isAgentAvatarValid()) // System layer or error condition, can't figure out attach point
+		if (getType() == LLAssetType::AT_OBJECT && get_is_item_worn(mInventoryItemUUID))
+		{
+			std::string attachment_point_name;
+			if (!isAgentAvatarValid())
+			{
+				search_label += LLTrans::getString("worn");
+			}
+			else if (gAgentAvatarp->getAttachedPointName(mInventoryItemUUID, attachment_point_name))
+			{
+				LLStringUtil::format_map_t args;
+				args["[ATTACHMENT_POINT]"] = LLTrans::getString(attachment_point_name);
+				search_label += LLTrans::getString("WornOnAttachmentPoint", args);
+			}
+			else
+			{
+				LLStringUtil::format_map_t args;
+				args["[ATTACHMENT_ERROR]"] = LLTrans::getString(attachment_point_name);
+				search_label += LLTrans::getString("AttachmentErrorMessage", args);
+			}
+
+			item_state = LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID) ? IS_WORN : IS_MISMATCH;
+		}
+		else if (getType() != LLAssetType::AT_OBJECT && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
 		{
 			search_label += LLTrans::getString("worn");
+			item_state = IS_WORN;
 		}
-		else if (gAgentAvatarp->getAttachedPointName(mInventoryItemUUID, attachment_point_name))
-		{
-			LLStringUtil::format_map_t args;
-			args["[ATTACHMENT_POINT]"] =  LLTrans::getString(attachment_point_name);
-			search_label += LLTrans::getString("WornOnAttachmentPoint", args);
-		}
-		else
-		{
-			LLStringUtil::format_map_t args;
-			args["[ATTACHMENT_ERROR]"] =  LLTrans::getString(attachment_point_name);
-			search_label += LLTrans::getString("AttachmentErrorMessage", args);
-		}
-
-		item_state = LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID) ? IS_WORN : IS_MISMATCH;
 	}
 	// </FS:Ansariel>
 
