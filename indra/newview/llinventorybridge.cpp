@@ -8515,11 +8515,11 @@ void LLFolderViewGroupedItemBridge::groupFilterContextMenu(folder_view_item_dequ
 	disable_context_entries_if_present(menu, disabled_items);
 }
 
-bool LLFolderViewGroupedItemBridge::canWearSelected(uuid_vec_t item_ids)
+bool LLFolderViewGroupedItemBridge::canWearSelected(const uuid_vec_t& item_ids) const
 {
 	for (uuid_vec_t::const_iterator it = item_ids.begin(); it != item_ids.end(); ++it)
 	{
-		LLViewerInventoryItem* item = gInventory.getItem(*it);
+		const LLViewerInventoryItem* item = gInventory.getItem(*it);
 		// <FS:Ansariel> Fix broken add wearable check
 		//if (!item || (item->getType() >= LLAssetType::AT_COUNT) || (item->getType() <= LLAssetType::AT_NONE))
 		if (!item || (item->getType() != LLAssetType::AT_CLOTHING && item->getType() != LLAssetType::AT_OBJECT && item->getType() != LLAssetType::AT_BODYPART && item->getType() != LLAssetType::AT_GESTURE))

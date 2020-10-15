@@ -6034,11 +6034,56 @@ void LLAppViewer::sendLogoutRequest()
 	}
 }
 
+void LLAppViewer::updateNameLookupUrl()
+{
+    LLViewerRegion* region = gAgent.getRegion();
+    if (!region || !region->capabilitiesReceived())
+    {
+        return;
+    }
+
+    LLAvatarNameCache *name_cache = LLAvatarNameCache::getInstance();
+    bool had_capability = LLAvatarNameCache::getInstance()->hasNameLookupURL();
+    std::string name_lookup_url;
+    name_lookup_url.reserve(128); // avoid a memory allocation below
+    name_lookup_url = region->getCapability("GetDisplayNames");
+    bool have_capability = !name_lookup_url.empty();
+    if (have_capability)
+    {
+        // we have support for display names, use it
+        U32 url_size = name_lookup_url.size();
+        // capabilities require URLs with slashes before query params:
+        // https://<host>:<port>/cap/<uuid>/?ids=<blah>
+        // but the caps are granted like:
+        // https://<host>:<port>/cap/<uuid>
+        if (url_size > 0 && name_lookup_url[url_size - 1] != '/')
+        {
+            name_lookup_url += '/';
+        }
+        name_cache->setNameLookupURL(name_lookup_url);
+    }
+    else
+    {
+        // Display names not available on this region
+        name_cache->setNameLookupURL(std::string());
+    }
+
+    // Error recovery - did we change state?
+    if (had_capability != have_capability)
+    {
+        // name tags are persistant on screen, so make sure they refresh
+        LLVOAvatar::invalidateNameTags();
+    }
+}
+
 void LLAppViewer::idleNameCache()
 {
 	// Neither old nor new name cache can function before agent has a region
 	LLViewerRegion* region = gAgent.getRegion();
-	if (!region) return;
+    if (!region)
+    {
+        return;
+    }
 
 	// deal with any queued name requests and replies.
 	gCacheName->processPending();
@@ -6046,47 +6091,12 @@ void LLAppViewer::idleNameCache()
 	// Can't run the new cache until we have the list of capabilities
 	// for the agent region, and can therefore decide whether to use
 	// display names or fall back to the old name system.
-	if (!region->capabilitiesReceived()) return;
+    if (!region->capabilitiesReceived())
+    {
+        return;
+    }
 
-	// Agent may have moved to a different region, so need to update cap URL
-	// for name lookups.  Can't do this in the cap grant code, as caps are
-	// granted to neighbor regions before the main agent gets there.  Can't
-	// do it in the move-into-region code because cap not guaranteed to be
-	// granted yet, for example on teleport.
-	LLAvatarNameCache *name_cache = LLAvatarNameCache::getInstance();
-	bool had_capability = LLAvatarNameCache::getInstance()->hasNameLookupURL();
-	std::string name_lookup_url;
-	name_lookup_url.reserve(128); // avoid a memory allocation below
-	name_lookup_url = region->getCapability("GetDisplayNames");
-	bool have_capability = !name_lookup_url.empty();
-	if (have_capability)
-	{
-		// we have support for display names, use it
-	    U32 url_size = name_lookup_url.size();
-	    // capabilities require URLs with slashes before query params:
-	    // https://<host>:<port>/cap/<uuid>/?ids=<blah>
-	    // but the caps are granted like:
-	    // https://<host>:<port>/cap/<uuid>
-	    if (url_size > 0 && name_lookup_url[url_size-1] != '/')
-	    {
-		    name_lookup_url += '/';
-	    }
-		name_cache->setNameLookupURL(name_lookup_url);
-	}
-	else
-	{
-		// Display names not available on this region
-		name_cache->setNameLookupURL( std::string() );
-	}
-
-	// Error recovery - did we change state?
-	if (had_capability != have_capability)
-	{
-		// name tags are persistant on screen, so make sure they refresh
-		LLVOAvatar::invalidateNameTags();
-	}
-
-	name_cache->idle();
+    LLAvatarNameCache::getInstance()->idle();
 }
 
 //
