@@ -325,7 +325,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         #</FS:ND>
 
     def exec_name(self):
-        return "SecondLifeViewer"
+        # <FS:Ansariel> Same as app_name_oneword()
+        #return "SecondLifeViewer"
+        return ''.join(self.app_name().split())
 
     def app_name_oneword(self):
         return ''.join(self.app_name().split())
@@ -558,12 +560,12 @@ class WindowsManifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
-            # Find secondlife-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
+            # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
             self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
             # Bugsplat for some reason requires a match between user's exe and supplied pdb on Windows 10
             # this feels wrong and doesn't make any sense, since often we are supposed to match a whole
             # folder of symbol files to a random exe. But Bugsplat says 'it's expected' so just rename files.
-            self.ccopyfile(src='%s/secondlife-bin.pdb' % self.args['configuration'], dst='%s/%s' % (self.args['configuration'], self.final_pdb()))
+            self.ccopyfile(src='%s/firestorm-bin.pdb' % self.args['configuration'], dst='%s/%s' % (self.args['configuration'], self.final_pdb()))
 
             # <FS:Ansariel> Remove VMP
             #with self.prefix(src=os.path.join(pkgdir, "VMP")):
