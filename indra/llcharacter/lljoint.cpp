@@ -430,7 +430,7 @@ void showJointScaleOverrides( const LLJoint& joint, const std::string& note, con
 bool LLJoint::aboveJointPosThreshold(const LLVector3& pos) const
 {
     LLVector3 diff = pos - getDefaultPosition();
-	const F32 max_joint_pos_offset = 0.0001f; // 0.1 mm
+    const F32 max_joint_pos_offset = LL_JOINT_TRESHOLD_POS_OFFSET; // 0.1 mm
 	return diff.lengthSquared() > max_joint_pos_offset * max_joint_pos_offset;
 }
 
@@ -533,7 +533,7 @@ void LLJoint::clearAttachmentPosOverrides()
 // getAllAttachmentPosOverrides()
 //--------------------------------------------------------------------
 void LLJoint::getAllAttachmentPosOverrides(S32& num_pos_overrides,
-                                           std::set<LLVector3>& distinct_pos_overrides)
+                                           std::set<LLVector3>& distinct_pos_overrides) const
 {
     num_pos_overrides = m_attachmentPosOverrides.count();
     LLVector3OverrideMap::map_type::const_iterator it = m_attachmentPosOverrides.getMap().begin();
@@ -547,7 +547,7 @@ void LLJoint::getAllAttachmentPosOverrides(S32& num_pos_overrides,
 // getAllAttachmentScaleOverrides()
 //--------------------------------------------------------------------
 void LLJoint::getAllAttachmentScaleOverrides(S32& num_scale_overrides,
-                                             std::set<LLVector3>& distinct_scale_overrides)
+                                             std::set<LLVector3>& distinct_scale_overrides) const
 {
     num_scale_overrides = m_attachmentScaleOverrides.count();
     LLVector3OverrideMap::map_type::const_iterator it = m_attachmentScaleOverrides.getMap().begin();
