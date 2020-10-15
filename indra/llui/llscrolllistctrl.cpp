@@ -145,6 +145,7 @@ LLScrollListCtrl::Params::Params()
 	primary_sort_only("primary_sort_only", false),		// <FS:Ansariel> Option to only sort by one column
 	mouse_wheel_opaque("mouse_wheel_opaque", false),
 	commit_on_keyboard_movement("commit_on_keyboard_movement", true),
+	commit_on_selection_change("commit_on_selection_change", false),
 	heading_height("heading_height"),
 	page_lines("page_lines", 0),
 	background_visible("background_visible"),
@@ -175,7 +176,7 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mMaxSelectable(0),
 	mAllowKeyboardMovement(true),
 	mCommitOnKeyboardMovement(p.commit_on_keyboard_movement),
-	mCommitOnSelectionChange(false),
+	mCommitOnSelectionChange(p.commit_on_selection_change),
 	mSelectionChanged(false),
 	mSelectionType(p.selection_type),
 	mNeedsScroll(false),

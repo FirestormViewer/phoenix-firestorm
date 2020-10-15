@@ -352,6 +352,7 @@
 			<menu_item_check label="Альфа" name="Rendering Type Alpha"/>
 			<menu_item_check label="Дерево" name="Rendering Type Tree"/>
 			<menu_item_check label="Аватары" name="Rendering Type Character"/>
+			<menu_item_check label="Анимированный меш" name="Rendering Type Control Avatar"/>
 			<menu_item_check label="Исправление поверхности" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Небо" name="Rendering Type Sky"/>
 			<menu_item_check label="Вода" name="Rendering Type Water"/>

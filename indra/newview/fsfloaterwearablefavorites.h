@@ -78,10 +78,10 @@ public:
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
 
+	static void initCategory();
 	static LLUUID getFavoritesFolder();
 
 private:
-	void initCategory();
 	void updateList(const LLUUID& folder_id);
 
 	void onItemDAD(const LLUUID& item_id);

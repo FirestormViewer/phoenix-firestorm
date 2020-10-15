@@ -1913,23 +1913,26 @@ void LLViewerObjectList::clearAllMapObjectsInRegion(LLViewerRegion* regionp)
 
 void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 {
-	LLColor4 above_water_color = LLUIColorTable::instance().getColor( "NetMapOtherOwnAboveWater" );
-	LLColor4 below_water_color = LLUIColorTable::instance().getColor( "NetMapOtherOwnBelowWater" );
+	// <FS:Ansariel> Factor out calls to getInstance
+	LLUIColorTable& colortable = LLUIColorTable::instance();
+
+	LLColor4 above_water_color = colortable.getColor( "NetMapOtherOwnAboveWater" );
+	LLColor4 below_water_color = colortable.getColor( "NetMapOtherOwnBelowWater" );
 	LLColor4 you_own_above_water_color = 
-						LLUIColorTable::instance().getColor( "NetMapYouOwnAboveWater" );
+						colortable.getColor( "NetMapYouOwnAboveWater" );
 	LLColor4 you_own_below_water_color = 
-						LLUIColorTable::instance().getColor( "NetMapYouOwnBelowWater" );
+						colortable.getColor( "NetMapYouOwnBelowWater" );
 	LLColor4 group_own_above_water_color = 
-						LLUIColorTable::instance().getColor( "NetMapGroupOwnAboveWater" );
+						colortable.getColor( "NetMapGroupOwnAboveWater" );
 	LLColor4 group_own_below_water_color = 
-						LLUIColorTable::instance().getColor( "NetMapGroupOwnBelowWater" );
+						colortable.getColor( "NetMapGroupOwnBelowWater" );
 
 // <FS:CR> FIRE-1846: Firestorm netmap enhancements
-	LLColor4 you_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapYouPhysical", LLColor4::red );
-	LLColor4 group_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapGroupPhysical", LLColor4::green );
-	LLColor4 other_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapOtherPhysical", LLColor4::green );
-	LLColor4 scripted_object_color = LLUIColorTable::instance().getColor ( "NetMapScripted", LLColor4::orange );
-	LLColor4 temp_on_rez_object_color = LLUIColorTable::instance().getColor ( "NetMapTempOnRez", LLColor4::orange );
+	LLColor4 you_own_physical_color = colortable.getColor ( "NetMapYouPhysical", LLColor4::red );
+	LLColor4 group_own_physical_color = colortable.getColor ( "NetMapGroupPhysical", LLColor4::green );
+	LLColor4 other_own_physical_color = colortable.getColor ( "NetMapOtherPhysical", LLColor4::green );
+	LLColor4 scripted_object_color = colortable.getColor ( "NetMapScripted", LLColor4::orange );
+	LLColor4 temp_on_rez_object_color = colortable.getColor ( "NetMapTempOnRez", LLColor4::orange );
 	static LLCachedControl<bool> fs_netmap_physical(gSavedSettings, "FSNetMapPhysical", false);
 	static LLCachedControl<bool> fs_netmap_scripted(gSavedSettings, "FSNetMapScripted", false);
 	static LLCachedControl<bool> fs_netmap_temp_on_rez(gSavedSettings, "FSNetMapTempOnRez", false);
