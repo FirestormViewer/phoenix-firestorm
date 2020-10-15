@@ -25449,7 +25449,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSDynamicTextureMemoryCacheReserve</key>
     <map>
       <key>Comment</key>
-      <string>Amount of system memory in Megabytes to reserve for textures loaded, but currently not being rendered</string>
+      <string>Amount of GPU memory in Megabytes to reserve for textures loaded, but currently not being rendered</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

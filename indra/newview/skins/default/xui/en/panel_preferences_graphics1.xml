@@ -1047,7 +1047,7 @@
          min_val="64"
          max_val="1024"
          name="FSDynamicTextureMemoryCacheReserve"
-         tool_tip="The additional amount of system memory reserved to cache loaded textures that are currently not being displayed."
+         tool_tip="The additional amount of memory reserved to cache loaded textures that are currently not being displayed."
          top_pad="5"
          width="475" />
         <slider

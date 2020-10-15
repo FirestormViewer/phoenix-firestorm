@@ -1547,18 +1547,21 @@ void LLViewerTextureList::updateTexMemDynamic()
 	S32Megabytes system;
 	LLViewerTexture::getGPUMemoryForTextures(gpu, system);
 
-	// Reserve additional system memory for textures currently not loaded into GPU memory and for OS...
-	system -= S32Megabytes(fsDynamicTexMemCacheReserve() + fsDynamicTexMemSystemReserve());
+	// Reserve additional system memory for OS...
+	system -= S32Megabytes(fsDynamicTexMemSystemReserve());
 
 	// Don't exceed available physical memory on either GPU or system
 	S32Megabytes max_physical_available = llmin(gpu, system);
 
 	// Maximum texture memory is remaining available memory + what's already used for textures by the viewer
-	S32Megabytes max_tex_mem_in_gpu = max_physical_available + LLImageGL::sBoundTextureMemory;
+	S32Megabytes max_tex_mem_in_gpu = max_physical_available + LLImageGL::sGlobalTextureMemory;
 
-	// Always use at least the specified minimum amount of texture memory, even if it would exceed available physical memory
-	mMaxResidentTexMemInMegaBytes = llmax(max_tex_mem_in_gpu, S32Megabytes(fsDynamicTexMemMinTextureMemory()));
-	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes + S32Megabytes(fsDynamicTexMemCacheReserve());
+	// Always use at least the specified minimum amount of texture memory, even if it would exceed available physical memory.
+	// We need to set MaxTotalTextureMem first, since it contains all textures currently in GPU memory
+	// (displayed = bound AND cached = loaded, but currently not displayed). The cached textures will
+	// get evicted from GPU memory, if available memory gets low (see LLViewerFetchedTexture::destroyTexture()).
+	mMaxTotalTextureMemInMegaBytes = llmax(max_tex_mem_in_gpu, S32Megabytes(fsDynamicTexMemMinTextureMemory() + fsDynamicTexMemCacheReserve()));
+	mMaxResidentTexMemInMegaBytes = mMaxTotalTextureMemInMegaBytes - S32Megabytes(fsDynamicTexMemCacheReserve());
 #endif
 }
 // </FS:Ansariel>
