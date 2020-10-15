@@ -203,6 +203,7 @@ void LLFloaterBuyCurrencyUI::updateUI()
 		args["TITLE"] = getString("info_cannot_buy");
 		args["MESSAGE"] = mManager.errorMessage();
 		LLNotificationsUtil::add("CouldNotBuyCurrency", args);
+		mManager.clearError();
 		closeFloater();
 	}
 	else
@@ -357,7 +358,7 @@ void LLFloaterBuyCurrency::buyCurrency(const std::string& name, S32 price)
 }
 
 // static
-void LLFloaterBuyCurrency::handleBuyCurrency(bool has_piof, bool has_target, const std::string& name, S32 price)
+void LLFloaterBuyCurrency::handleBuyCurrency(bool has_piof, bool has_target, const std::string name, S32 price)
 {
 	delete sPropertiesRequest;
 	sPropertiesRequest = NULL;

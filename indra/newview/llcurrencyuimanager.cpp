@@ -613,6 +613,11 @@ bool LLCurrencyUIManager::bought()
 	return impl.mBought;
 }
 
+void LLCurrencyUIManager::clearError()
+{
+	impl.clearError();
+}
+
 bool LLCurrencyUIManager::hasError()
 {
 	return impl.mError;
