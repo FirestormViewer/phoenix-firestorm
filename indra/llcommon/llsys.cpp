@@ -150,13 +150,13 @@ LLOSInfo::LLOSInfo() :
 
 #if LL_WINDOWS
 
-	if (IsWindowsVersionOrGreater(10, 0, 0))
+	if (IsWindows10OrGreater())
 	{
 		mMajorVer = 10;
 		mMinorVer = 0;
 		if (IsWindowsServer())
 		{
-			mOSStringSimple = "Windows Server 2016 ";
+			mOSStringSimple = "Windows Server ";
 		}
 		else
 		{
