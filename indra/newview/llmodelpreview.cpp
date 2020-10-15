@@ -225,7 +225,6 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
     }
 
     mViewOption["show_textures"] = false;
-    mViewOption["verbose_logging"] = mImporterDebug;// <FS:Beq/> initialise verbose logging from debug
     fmp->childSetValue("verbose_logging", LLSD(mImporterDebug));
     mFMP = fmp;
 
@@ -2974,13 +2973,6 @@ BOOL LLModelPreview::render()
     assert_main_thread();
 
     LLMutexLock lock(this);
-    // <FS:Beq> enable the import debug importer debug control
-    if(mNeedsUpdate)
-    {
-        bool verbose_logging = mViewOption["verbose_logging"];
-        gSavedSettings.setBOOL("ImporterDebug",verbose_logging);
-    }
-    // </FS:Beq>
     mNeedsUpdate = FALSE;
 
     bool use_shaders = LLGLSLShader::sNoFixedFunction;
