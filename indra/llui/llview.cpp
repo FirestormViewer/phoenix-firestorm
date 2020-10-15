@@ -56,6 +56,11 @@
 #include "lltexteditor.h"
 #include "lltextbox.h"
 
+#if defined BOOST_FOREACH
+#undef BOOST_FOREACH
+#define BOOST_FOREACH(iter, coll) for (iter : coll)
+#endif
+
 static const S32 LINE_HEIGHT = 15;
 
 S32		LLView::sDepth = 0;

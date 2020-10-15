@@ -814,6 +814,11 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 	LL_RECORD_BLOCK_TIME(FTM_VOLUME_TEXTURES);
 	// Update the pixel area of all faces
 
+    if (mDrawable.isNull())
+    {
+        return;
+    }
+
 	if(!forced)
 	{
 		if(!isVisible())
@@ -2511,10 +2516,13 @@ bool LLVOVolume::notifyAboutCreatingTexture(LLViewerTexture *texture)
 		} //if
 	} //for
 
+	// <FS:Ansariel> Factor out instance() calls
+	LLMaterialMgr& mmgr = LLMaterialMgr::instance();
+
 	//setup new materials
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
-		LLMaterialMgr::getInstance()->put(getID(), it->first, *it->second);
+		mmgr.put(getID(), it->first, *it->second); // <FS:Ansariel> Factor out instance() calls
 		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 
@@ -2590,10 +2598,13 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 		} //switch
 	} //for
 
+	// <FS:Ansariel> Factor out instance() calls
+	LLMaterialMgr& mmgr = LLMaterialMgr::instance();
+
 	//setup new materials
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
-		LLMaterialMgr::getInstance()->setLocalMaterial(getRegion()->getRegionID(), it->second);
+		mmgr.setLocalMaterial(getRegion()->getRegionID(), it->second); // <FS:Ansariel> Factor out instance() calls
 		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 

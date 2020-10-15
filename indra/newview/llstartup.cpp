@@ -231,6 +231,7 @@
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
 #include "fsfloatersearch.h"
+#include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "fsregistrarutils.h"
@@ -3028,6 +3029,9 @@ bool idle_startup()
 		}
 		// </FS:TT>
 
+		// <FS:Ansariel> Favorite Wearables
+		FSFloaterWearableFavorites::initCategory();
+
 		// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
 		LLFriendCardsManager::createAgentCallingCard();
 
@@ -3803,7 +3807,7 @@ void LLStartUp::initNameCache()
 	cache_inst->setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
 
 	// <FS:CR> Legacy name/Username format
-	LLAvatarNameCache::getInstance()->setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
+	LLAvatarName::setUseLegacyFormat(gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames"));
 	// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	LLAvatarName::setTrimResidentSurname(gSavedSettings.getBOOL("FSTrimLegacyNames"));
 }

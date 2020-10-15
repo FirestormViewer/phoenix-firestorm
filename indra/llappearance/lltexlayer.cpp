@@ -190,8 +190,12 @@ BOOL LLTexLayerSetBuffer::renderTexLayerSet(LLRenderTarget* bound_target)
 
 LLTexLayerSetInfo::LLTexLayerSetInfo() :
 	mBodyRegion( "" ),
-	mWidth( 512 ),
-	mHeight( 512 ),
+// <FS:Beq> FIRE-30020 allow 1024 local bakes (not strictly needed as avatar_lad is required)
+	// mWidth( 512 ),
+	// mHeight( 512 ),
+	mWidth( 1024 ),
+	mHeight( 1024 ),
+// </FS:Beq>
 	mClearAlpha( TRUE )
 {
 }
