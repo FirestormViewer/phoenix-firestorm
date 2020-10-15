@@ -460,6 +460,9 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	if (combo->getValue().asString().empty())
 	{
 		combo->selectFirstItem();
+        // Value 'home' or 'last' should have been taken from NextLoginLocation
+        // but NextLoginLocation was not set, so init it from combo explicitly
+        onLocationSLURL();
 	}
 }
 
@@ -1342,6 +1345,7 @@ void LLPanelLogin::onSelectServer()
 			{
 				// the grid specified by the location is not this one, so clear the combo
 				location_combo->setCurrentByIndex(0); // last location on the new grid
+				onLocationSLURL();
 			}
 		}			
 		break;
