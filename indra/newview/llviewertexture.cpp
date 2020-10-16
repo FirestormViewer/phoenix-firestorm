@@ -569,7 +569,7 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
         glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
         gpu_res = (S32Megabytes)meminfo[0];
 
-        // <FS:Ansariel> Maybe do this indendently from AMD cards????
+        // <FS:Ansariel> Maybe do this independently from AMD cards????
         //check main memory, only works for windows.
         //LLMemory::updateMemoryInfo();
         //physical_res = LLMemory::getAvailableMemKB();
@@ -582,7 +582,7 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
         gpu_res = (S32Megabytes)(free_memory / 1024);
     }
 
-    // <FS:Ansariel> Maybe do this indendently from AMD cards????
+    // <FS:Ansariel> Maybe do this independently from AMD cards????
     //check main memory, only works for windows.
     LLMemory::updateMemoryInfo();
     physical_res = LLMemory::getAvailableMemKB();
