@@ -1543,20 +1543,31 @@ void LLViewerTextureList::updateTexMemDynamic()
 	static LLCachedControl<S32> fsDynamicTexMemReserve(gSavedSettings, "FSDynamicTextureMemoryReserve");
 	static LLCachedControl<S32> fsDynamicTexMemMinTextureMemory(gSavedSettings, "FSDynamicTextureMemoryMinTextureMemory");
 
-	S32Megabytes gpu;
-	S32Megabytes system;
-	LLViewerTexture::getGPUMemoryForTextures(gpu, system);
+	// Make sure to keep the percentages within sane limits
+	S32 cache_reserve_perc = llclamp(fsDynamicTexMemCacheReserve(), 5, 30);
+	S32 gpu_reserve_perc = llclamp(fsDynamicTexMemReserve(), 5, 30);
+
+	// Percentage-based memory reserves
+	S32Megabytes cache_reserve = S32Megabytes((gGLManager.mVRAM / 100) * cache_reserve_perc);
+	S32Megabytes gpu_reserve = S32Megabytes((gGLManager.mVRAM / 100) * gpu_reserve_perc);
+
+	S32Megabytes gpu_available;
+	S32Megabytes system_available;
+	LLViewerTexture::getGPUMemoryForTextures(gpu_available, system_available);
 
 	// Maximum texture memory is remaining available memory + what's already used for textures by the viewer
-	S32Megabytes max_tex_mem_in_gpu = gpu + LLImageGL::sGlobalTextureMemory;
+	S32Megabytes max_tex_mem_in_gpu = gpu_available + LLImageGL::sGlobalTextureMemory;
+
+	// Don't let the minimum texture memory + reserves exceed the total phyiscal memory of the GPU
+	S32Megabytes min_texture_mem = llmin(S32Megabytes(gGLManager.mVRAM), S32Megabytes(fsDynamicTexMemMinTextureMemory()) + cache_reserve + gpu_reserve);
 
 	// Always use at least the specified minimum amount of texture memory, even if it would exceed available
-	// physical memory, but always take the GPU memory reserve into account.
+	// GPU memory, but always take the GPU memory reserve into account.
 	// We need to set MaxTotalTextureMem first, since it contains all textures currently in GPU memory
 	// (displayed = bound AND cached = loaded, but currently not displayed). The cached textures will
 	// get evicted from GPU memory, if available memory gets low (see LLViewerFetchedTexture::destroyTexture()).
-	mMaxTotalTextureMemInMegaBytes = llmax(max_tex_mem_in_gpu, S32Megabytes(fsDynamicTexMemMinTextureMemory() + fsDynamicTexMemCacheReserve())) - S32Megabytes(fsDynamicTexMemReserve());
-	mMaxResidentTexMemInMegaBytes = mMaxTotalTextureMemInMegaBytes - S32Megabytes(fsDynamicTexMemCacheReserve());
+	mMaxTotalTextureMemInMegaBytes = llmax(max_tex_mem_in_gpu, min_texture_mem) - gpu_reserve;
+	mMaxResidentTexMemInMegaBytes = mMaxTotalTextureMemInMegaBytes - cache_reserve;
 #endif
 }
 // </FS:Ansariel>

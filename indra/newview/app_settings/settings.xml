@@ -25449,29 +25449,29 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSDynamicTextureMemoryCacheReserve</key>
     <map>
       <key>Comment</key>
-      <string>Amount of GPU memory in Megabytes to reserve for textures loaded, but currently not being rendered</string>
+      <string>Percentage of total physical GPU memory to reserve for textures loaded, but currently not being rendered</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>512</integer>
+      <integer>15</integer>
     </map>
     <key>FSDynamicTextureMemoryReserve</key>
     <map>
       <key>Comment</key>
-      <string>Amount of video memory in Megabytes to reserve for other usage</string>
+      <string>Percentage of total physical video memory to reserve for other usage</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>512</integer>
+      <integer>15</integer>
     </map>
     <key>FSDynamicTextureMemoryMinTextureMemory</key>
     <map>
       <key>Comment</key>
-      <string>Minimum amount of GPU memory in Megabytes that should be used for textures</string>
+      <string>Minimum amount of GPU memory in Megabytes that should be used for textures (takes reserves and total physical GPU memory into account)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
