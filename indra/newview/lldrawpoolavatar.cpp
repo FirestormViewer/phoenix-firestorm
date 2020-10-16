@@ -1501,7 +1501,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
-	if (render_hitbox && pass == 1)
+	if (render_hitbox && pass == 2)
 	{
 		LLGLSLShader* current_shader_program = NULL;
 
