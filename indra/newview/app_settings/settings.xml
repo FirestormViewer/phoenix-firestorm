@@ -25457,6 +25457,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>512</integer>
     </map>
+    <key>FSDynamicTextureMemoryReserve</key>
+    <map>
+      <key>Comment</key>
+      <string>Amount of video memory in Megabytes to reserve for other usage</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>512</integer>
+    </map>
     <key>FSDynamicTextureMemoryMinTextureMemory</key>
     <map>
       <key>Comment</key>

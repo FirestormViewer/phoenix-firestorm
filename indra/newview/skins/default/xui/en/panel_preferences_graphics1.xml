@@ -1050,6 +1050,22 @@
          tool_tip="The additional amount of memory reserved to cache loaded textures that are currently not being displayed."
          top_pad="5"
          width="475" />
+        <slider
+         control_name="FSDynamicTextureMemoryReserve"
+         decimal_digits="0"
+         follows="left|top"
+         height="20"
+         increment="16"
+         label="Physical Video Memory Reserve (MB):"
+         label_width="275"
+         layout="topleft"
+         left="25"
+         min_val="64"
+         max_val="8192"
+         name="FSDynamicTextureMemoryReserve"
+         tool_tip="The amount of physical video memory reserved for other usage."
+         top_pad="5"
+         width="475" />
         <spinner
          control_name="RenderFogRatio"
          decimal_digits="1"

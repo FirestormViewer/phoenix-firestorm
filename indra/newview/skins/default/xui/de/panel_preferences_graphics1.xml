@@ -133,6 +133,7 @@
 		<check_box label="Dynamischen Texturen-Speicherbuffer aktivieren" name="FSDynamicTextureMemory" tool_tip="Aktiviert dynamische Berechnung für den Texturen-Speicherbuffer (nur verfügbar auf 64bit-System und AMD/NVIDIA-GPUs)"/>
 		<slider label="Minimum Texturen-Speicherbuffer (MB):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Die minimale Speichergröße, die für Texturen verwendet wird. Diese Einstellung hat Vorrang vor den Speicher-Reserve-Einstellungen und stellt sicher, dass jederzeit mindestens die angegebene Größe an Speicher für Texturen verwendet wird, auch wenn diese die Menge an tatsächlich verfügbaren physischen Speicher überschreitet."/>
 		<slider label="Zusätzliche Textur-Speicherbuffer-Reserve (MB):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Die Größe des zusätzlichen Speichers, der zum Zwischenspeichern von geladenen Texturen verwendet wird, die aktuell nicht dargestellt werden."/>
+		<slider label="Physische Videospeicher-Reserve (MB):" name="FSDynamicTextureMemoryReserve" tool_tip="The Größe des Videospeichers, der für andere Zwecke reserviert wird."/>
 		<spinner label="Nebeldistanzverhältnis:" name="fog"/>
 	</panel>
 
