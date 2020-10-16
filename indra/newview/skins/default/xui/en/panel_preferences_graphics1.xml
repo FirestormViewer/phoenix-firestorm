@@ -1051,7 +1051,7 @@
          top_pad="5"
          width="475" />
         <slider
-         control_name="FSDynamicTextureMemoryReserve"
+         control_name="FSDynamicTextureMemoryGPUReserve"
          decimal_digits="0"
          follows="left|top"
          height="20"
@@ -1062,7 +1062,7 @@
          left="25"
          min_val="5"
          max_val="30"
-         name="FSDynamicTextureMemoryReserve"
+         name="FSDynamicTextureMemoryGPUReserve"
          tool_tip="The percentage of physical video memory reserved for other usage."
          top_pad="5"
          width="475" />

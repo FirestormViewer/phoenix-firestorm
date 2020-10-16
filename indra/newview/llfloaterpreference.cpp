@@ -2319,7 +2319,7 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 		childSetEnabled("FSDynamicTextureMemory", true);
 		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", dynamic_tex_mem_enabled);
 		childSetEnabled("FSDynamicTextureMemoryCacheReserve", dynamic_tex_mem_enabled);
-		childSetEnabled("FSDynamicTextureMemorySystemReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemoryGPUReserve", dynamic_tex_mem_enabled);
 		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
 	}
 	else
@@ -2328,7 +2328,7 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 		childSetEnabled("FSDynamicTextureMemory", false);
 		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
 		childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
-		childSetEnabled("FSDynamicTextureMemorySystemReserve", false);
+		childSetEnabled("FSDynamicTextureMemoryGPUReserve", false);
 		childSetEnabled("GraphicsCardTextureMemory", true);
 	}
 }

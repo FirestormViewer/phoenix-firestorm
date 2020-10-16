@@ -1546,12 +1546,12 @@ void LLViewerTextureList::updateTexMemDynamic()
 	}
 
 	static LLCachedControl<S32> fsDynamicTexMemCacheReserve(gSavedSettings, "FSDynamicTextureMemoryCacheReserve");
-	static LLCachedControl<S32> fsDynamicTexMemReserve(gSavedSettings, "FSDynamicTextureMemoryReserve");
+	static LLCachedControl<S32> fsDynamicTexMemGPUReserve(gSavedSettings, "FSDynamicTextureMemoryGPUReserve");
 	static LLCachedControl<S32> fsDynamicTexMemMinTextureMemory(gSavedSettings, "FSDynamicTextureMemoryMinTextureMemory");
 
 	// Make sure to keep the percentages within sane limits
 	S32 cache_reserve_perc = llclamp(fsDynamicTexMemCacheReserve(), 5, 30);
-	S32 gpu_reserve_perc = llclamp(fsDynamicTexMemReserve(), 5, 30);
+	S32 gpu_reserve_perc = llclamp(fsDynamicTexMemGPUReserve(), 5, 30);
 
 	// Percentage-based memory reserves
 	S32Megabytes cache_reserve = S32Megabytes((gGLManager.mVRAM / 100) * cache_reserve_perc);
