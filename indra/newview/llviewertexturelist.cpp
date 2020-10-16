@@ -1539,6 +1539,12 @@ void LLViewerTextureList::updateTexMemDynamic()
 		return;
 	}
 
+	if (gGLManager.mVRAM < 512)
+	{
+		// Only for GPUs with at least 512MB video memory
+		return;
+	}
+
 	static LLCachedControl<S32> fsDynamicTexMemCacheReserve(gSavedSettings, "FSDynamicTextureMemoryCacheReserve");
 	static LLCachedControl<S32> fsDynamicTexMemReserve(gSavedSettings, "FSDynamicTextureMemoryReserve");
 	static LLCachedControl<S32> fsDynamicTexMemMinTextureMemory(gSavedSettings, "FSDynamicTextureMemoryMinTextureMemory");

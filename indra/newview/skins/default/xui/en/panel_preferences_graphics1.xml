@@ -1015,7 +1015,7 @@
          left="10"
          top_pad="5"
          name="FSDynamicTextureMemory"
-         tool_tip="Enables dynamic texture memory calculation (only available on 64bit viewers and AMD/NVIDIA GPUs)"
+         tool_tip="Enables dynamic texture memory calculation (only available on 64bit viewers and AMD/NVIDIA GPUs with at least 512MB of video memory)"
          width="315" />
         <slider
          control_name="FSDynamicTextureMemoryMinTextureMemory"

@@ -2313,7 +2313,7 @@ void LLFloaterPreference::refreshEnabledState()
 void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 {
 #if ADDRESS_SIZE == 64
-	if (gGLManager.mHasATIMemInfo || gGLManager.mHasNVXMemInfo)
+	if ((gGLManager.mHasATIMemInfo || gGLManager.mHasNVXMemInfo) && gGLManager.mVRAM >= 512)
 	{
 		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
 		childSetEnabled("FSDynamicTextureMemory", true);
