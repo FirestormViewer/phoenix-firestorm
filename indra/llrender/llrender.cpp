@@ -1096,7 +1096,8 @@ LLRender::LLRender()
 	//mQuadCycle(0), // <FS:Ansariel> Remove QUADS rendering mode
     mMode(LLRender::TRIANGLES),
     mCurrTextureUnitIndex(0),
-    mMaxAnisotropy(0.f) 
+    mMaxAnisotropy(0.f),
+    mLineWidth(1.f) // <FS> Line width OGL core profile fix by Rye Mutt
 {	
 	mTexUnits.reserve(LL_NUM_TEXTURE_LAYERS);
 	for (U32 i = 0; i < LL_NUM_TEXTURE_LAYERS; i++)
@@ -1887,6 +1888,25 @@ void LLRender::setAmbientLightColor(const LLColor4& color)
 		}
 	}
 }
+
+// <FS> Line width OGL core profile fix by Rye Mutt
+void LLRender::setLineWidth(F32 line_width)
+{
+	if (LLRender::sGLCoreProfile)
+	{
+		line_width = 1.f;
+	}
+	if (mLineWidth != line_width || mDirty)
+	{
+		if (mMode == LLRender::LINES || mMode == LLRender::LINE_STRIP)
+		{
+			flush();
+		}
+		mLineWidth = line_width;
+		glLineWidth(line_width);
+	}
+}
+// </FS>
 
 bool LLRender::verifyTexUnitActive(U32 unitToVerify)
 {

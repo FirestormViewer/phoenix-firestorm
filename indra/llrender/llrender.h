@@ -456,6 +456,8 @@ public:
 	LLLightState* getLight(U32 index);
 	void setAmbientLightColor(const LLColor4& color);
 	
+	void setLineWidth(F32 line_width); // <FS> Line width OGL core profile fix by Rye Mutt
+
 	LLTexUnit* getTexUnit(U32 index);
 
 	U32	getCurrentTexUnitIndex(void) const { return mCurrTextureUnitIndex; }
@@ -499,6 +501,7 @@ private:
 	bool				mCurrColorMask[4];
 	eCompareFunc			mCurrAlphaFunc;
 	F32				mCurrAlphaFuncVal;
+	F32				mLineWidth; // <FS> Line width OGL core profile fix by Rye Mutt
 
 	LLPointer<LLVertexBuffer>	mBuffer;
 	LLStrider<LLVector3>		mVerticesp;

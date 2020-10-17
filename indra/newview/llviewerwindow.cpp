@@ -4369,7 +4369,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glPolygonOffset(offset_factor, offset_units);
-			glLineWidth(1.f);
+			gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 		}
 		{
@@ -4377,7 +4377,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glPolygonOffset(offset_factor, offset_units);
-			glLineWidth(3.f);
+			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 		}
 	}
@@ -4405,12 +4405,12 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			gGL.diffuseColor4fv(line_color.mV);
-			glLineWidth(3.f);
+			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 		}
 	}
 
-	glLineWidth(1.f);
+	gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	gGL.popMatrix();
 

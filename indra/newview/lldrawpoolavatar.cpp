@@ -1518,7 +1518,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 		LLColor4 avatar_color = LLNetMap::getAvatarColor(avatarp->getID());
 		gGL.diffuseColor4f(avatar_color.mV[VRED], avatar_color.mV[VGREEN], avatar_color.mV[VBLUE], avatar_color.mV[VALPHA]);
-		glLineWidth(2.0f);
+		gGL.setLineWidth(2.0f);
 
 		LLQuaternion rot = avatarp->getRotationRegion();
 		LLVector3 pos = avatarp->getPositionAgent();

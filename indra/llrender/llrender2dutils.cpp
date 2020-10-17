@@ -972,7 +972,7 @@ void gl_stippled_line_3d( const LLVector3& start, const LLVector3& end, const LL
 	gGL.color4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], color.mV[VALPHA]);
 
 	gGL.flush();
-	glLineWidth(2.5f);
+	gGL.setLineWidth(2.5f); // <FS> Line width OGL core profile fix by Rye Mutt
 
 	if (!LLGLSLShader::sNoFixedFunction)
 	{
@@ -2072,8 +2072,10 @@ void LLRender2D::setScaleFactor(const LLVector2 &scale_factor)
 
 void LLRender2D::setLineWidth(F32 width)
 {
-	gGL.flush();
-	glLineWidth(width * lerp(mGLScaleFactor.mV[VX], mGLScaleFactor.mV[VY], 0.5f));
+	// <FS> Line width OGL core profile fix by Rye Mutt
+	//gGL.flush();
+	//glLineWidth(width * lerp(mGLScaleFactor.mV[VX], mGLScaleFactor.mV[VY], 0.5f));
+	gGL.setLineWidth(width * lerp(mGLScaleFactor.mV[VX], mGLScaleFactor.mV[VY], 0.5f));
 }
 
 LLPointer<LLUIImage> LLRender2D::getUIImageByID(const LLUUID& image_id, S32 priority)
