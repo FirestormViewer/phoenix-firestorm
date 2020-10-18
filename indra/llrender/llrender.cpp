@@ -1171,10 +1171,11 @@ void LLRender::init()
 	// <FS:Ansariel> Don't ignore OpenGL max line width
 	GLint range[2];
 	glGetIntegerv(GL_ALIASED_LINE_WIDTH_RANGE, range);
+	stop_glerror();
 	mMaxLineWidthAliased = F32(range[1]);
 	glGetIntegerv(GL_SMOOTH_LINE_WIDTH_RANGE, range);
-	mMaxLineWidthSmooth = F32(range[1]);
 	stop_glerror();
+	mMaxLineWidthSmooth = F32(range[1]);
 	// </FS:Ansariel>
 }
 
