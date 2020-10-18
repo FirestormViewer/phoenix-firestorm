@@ -13,13 +13,6 @@
 		Обзор объекта
 	</floater.string>
 	<string name="inactive_combo_text">Предустановки</string>
-	<panel name="controls">
-		<panel name="zoom">
-			<joystick_rotate name="cam_rotate_stick" tool_tip="Вращение камеры вокруг точки фокусировки"/>
-			<slider_bar name="zoom_slider" tool_tip="Приблизить/отдалить камеру относительно точки фокусировки"/>
-			<joystick_track name="cam_track_stick" tool_tip="Переместить камеру вверх, вниз, влево или вправо"/>
-		</panel>
-	</panel>
 	<panel name="buttons_panel">
 		<panel_camera_item name="front_view" tool_tip="Вид спереди" />
 		<panel_camera_item name="group_view" tool_tip="Вид сбоку" />
@@ -27,10 +20,26 @@
 		<panel_camera_item name="object_view" tool_tip="Вид на объект"/>
 		<panel_camera_item name="mouselook_view" tool_tip="Вид от первого лица"/>
 		<panel_camera_item name="reset_view" tool_tip="Сбросить вид"/>
-		<button label="Позиция..." name="camera_position_btn"/>
 	</panel>
-	<combo_box name="preset_combo">
-		<combo_box.item label="Предустановки" name="Use preset"/>
-	</combo_box>
-	<button name="gear_btn" tool_tip="Предустановки Камеры"/>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="Вращение камеры вокруг точки фокусировки"/>
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="Приблизить/отдалить камеру к/от точки фокусировки"/>
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="Двигать камеру вверх и вниз, влево и вправо"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="preset_buttons_panel">
+		<button label="Позиция..." name="camera_position_btn"/>
+		<button name="save_preset_btn" tool_tip="Сохранить как Предустановку"/>
+		<combo_box name="preset_combo">
+			<combo_box.item label="Предустановки" name="Use preset"/>
+		</combo_box>
+		<button name="gear_btn" tool_tip="Предустановки Камеры"/>
+	</panel>
 </floater>
