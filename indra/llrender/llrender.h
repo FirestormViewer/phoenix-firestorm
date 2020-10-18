@@ -502,6 +502,10 @@ private:
 	eCompareFunc			mCurrAlphaFunc;
 	F32				mCurrAlphaFuncVal;
 	F32				mLineWidth; // <FS> Line width OGL core profile fix by Rye Mutt
+	// <FS:Ansariel> Don't ignore OpenGL max line width
+	F32				mMaxLineWidthSmooth;
+	F32				mMaxLineWidthAliased;
+	// </FS:Ansariel>
 
 	LLPointer<LLVertexBuffer>	mBuffer;
 	LLStrider<LLVector3>		mVerticesp;

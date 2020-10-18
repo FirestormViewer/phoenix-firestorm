@@ -1097,7 +1097,11 @@ LLRender::LLRender()
     mMode(LLRender::TRIANGLES),
     mCurrTextureUnitIndex(0),
     mMaxAnisotropy(0.f),
-    mLineWidth(1.f) // <FS> Line width OGL core profile fix by Rye Mutt
+    mLineWidth(1.f), // <FS> Line width OGL core profile fix by Rye Mutt
+    // <FS:Ansariel> Don't ignore OpenGL max line width
+    mMaxLineWidthSmooth(1.f),
+    mMaxLineWidthAliased(1.f)
+    // </FS:Ansariel>
 {	
 	mTexUnits.reserve(LL_NUM_TEXTURE_LAYERS);
 	for (U32 i = 0; i < LL_NUM_TEXTURE_LAYERS; i++)
@@ -1163,6 +1167,15 @@ void LLRender::init()
 	initVB();
 	// </FS:Ansariel>
 	stop_glerror();
+
+	// <FS:Ansariel> Don't ignore OpenGL max line width
+	GLint range[2];
+	glGetIntegerv(GL_ALIASED_LINE_WIDTH_RANGE, range);
+	mMaxLineWidthAliased = F32(range[1]);
+	glGetIntegerv(GL_SMOOTH_LINE_WIDTH_RANGE, range);
+	mMaxLineWidthSmooth = F32(range[1]);
+	stop_glerror();
+	// </FS:Ansariel>
 }
 
 void LLRender::shutdown()
@@ -1895,6 +1908,10 @@ void LLRender::setLineWidth(F32 line_width)
 	if (LLRender::sGLCoreProfile)
 	{
 		line_width = 1.f;
+	}
+	else if (line_width > 1.f)
+	{
+		line_width = llmin(line_width, glIsEnabled(GL_LINE_SMOOTH) ? mMaxLineWidthSmooth : mMaxLineWidthAliased);
 	}
 	if (mLineWidth != line_width || mDirty)
 	{
