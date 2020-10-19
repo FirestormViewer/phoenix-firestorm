@@ -945,7 +945,8 @@ void LLPreviewGesture::loadUIFromGesture(LLMultiGesture* gesture)
 		break;
 	}
 
-	mModifierCombo->setEnabledByValue(CTRL_LABEL, gesture->mKey != KEY_F10);
+	// <FS:Ansariel> Allow CTRL-F10 shortcut for gestures
+	//mModifierCombo->setEnabledByValue(CTRL_LABEL, gesture->mKey != KEY_F10);
 
 	mKeyCombo->setCurrentByIndex(0);
 	if (gesture->mKey != KEY_NONE)
@@ -953,7 +954,8 @@ void LLPreviewGesture::loadUIFromGesture(LLMultiGesture* gesture)
 		mKeyCombo->setSimple(LLKeyboard::stringFromKey(gesture->mKey));
 	}
 
-	mKeyCombo->setEnabledByValue(LLKeyboard::stringFromKey(KEY_F10), gesture->mMask != MASK_CONTROL);
+	// <FS:Ansariel> Allow CTRL-F10 shortcut for gestures
+	//mKeyCombo->setEnabledByValue(LLKeyboard::stringFromKey(KEY_F10), gesture->mMask != MASK_CONTROL);
 
 	// Make UI steps for each gesture step
 	S32 i;
@@ -1355,8 +1357,10 @@ void LLPreviewGesture::onCommitKeyorModifier()
 	// SL-14139: ctrl-F10 is currently used to access top menu,
 	// so don't allow to bound gestures to this combination.
 
-	mKeyCombo->setEnabledByValue(LLKeyboard::stringFromKey(KEY_F10), mModifierCombo->getSimple() != CTRL_LABEL);
-	mModifierCombo->setEnabledByValue(CTRL_LABEL, mKeyCombo->getSimple() != LLKeyboard::stringFromKey(KEY_F10));
+	// <FS:Ansariel> Allow CTRL-F10 shortcut for gestures
+	//mKeyCombo->setEnabledByValue(LLKeyboard::stringFromKey(KEY_F10), mModifierCombo->getSimple() != CTRL_LABEL);
+	//mModifierCombo->setEnabledByValue(CTRL_LABEL, mKeyCombo->getSimple() != LLKeyboard::stringFromKey(KEY_F10));
+	// </FS:Ansariel>
 	mDirty = TRUE;
 	refresh();
 }
