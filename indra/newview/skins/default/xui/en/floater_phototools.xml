@@ -80,7 +80,7 @@
 				 left="5"
 				 name="WindLightUseAtmosShaders"
 				 top_pad="8"
-				 tool_tip="This will enable full EEP functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
+				 tool_tip="This will enable full EEP functionality (atmospheric shaders)."
 				 width="240">
 				</check_box>
 			</panel>
@@ -673,7 +673,7 @@
 				 left="5"
 				 name="RenderDeferred"
 				 top_pad="8"
-				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'WL'."
+				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders are enabled in tab 'WL'."
 				 width="240">
 				</check_box>
 				<check_box
