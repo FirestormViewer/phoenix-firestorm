@@ -156,6 +156,18 @@ public:
 		{
 			mAvatarNameCacheConnection.disconnect();
 		}
+		auto menu = mPopupMenuHandleAvatar.get();
+		if (menu)
+		{
+			menu->die();
+			mPopupMenuHandleAvatar.markDead();
+		}
+		menu = mPopupMenuHandleObject.get();
+		if (menu)
+		{
+			menu->die();
+			mPopupMenuHandleObject.markDead();
+		}
 	}
 
 	BOOL handleMouseUp(S32 x, S32 y, MASK mask)
@@ -930,13 +942,56 @@ protected:
 	void showObjectContextMenu(S32 x,S32 y)
 	{
 		LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandleObject.get();
-		if(menu)
+		if (!menu)
+		{
+			LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
+
+			registrar.add("ObjectIcon.Action", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemClicked, this, _2));
+			registrar_enable.add("ObjectIcon.Visible", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemVisible, this, _2));
+
+			menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_object_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+			if (menu)
+			{
+				mPopupMenuHandleObject = menu->getHandle();
+				menu->updateParent(LLMenuGL::sMenuContainer);
+				LLMenuGL::showPopup(this, menu, x, y);
+			}
+			else
+			{
+				LL_WARNS() << " Failed to create menu_object_icon.xml" << LL_ENDL;
+			}
+		}
+		else
+		{
 			LLMenuGL::showPopup(this, menu, x, y);
+		}
 	}
 	
 	void showAvatarContextMenu(S32 x,S32 y)
 	{
 		LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandleAvatar.get();
+
+		if (!menu)
+		{
+			LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
+
+			registrar.add("AvatarIcon.Action", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemClicked, this, _2));
+			registrar_enable.add("AvatarIcon.Check", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemChecked, this, _2));
+			registrar_enable.add("AvatarIcon.Enable", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemEnabled, this, _2));
+			registrar_enable.add("AvatarIcon.Visible", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemVisible, this, _2));
+
+			menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+			if (menu)
+			{
+				mPopupMenuHandleAvatar = menu->getHandle();
+			}
+			else
+			{
+				LL_WARNS() << " Failed to create menu_avatar_icon.xml" << LL_ENDL;
+			}
+		}
 
 		if(menu)
 		{
