@@ -14,6 +14,7 @@
 			<text name="scale_label">
 				Skala:
 			</text>
+			<check_box label="Pokaż emiter" name="sunbeacon" />
 			<text name="color_label">
 				Kolor:
 			</text>
@@ -26,7 +27,6 @@
 			<text name="star_brightness_label">
 				Jasność gwiazd:
 			</text>
-			<check_box label="Pokaż emiter" name="sunbeacon" />
 		</layout_panel>
 		<layout_panel name="moon_layout_main">
 			<layout_stack name="moon_ls">
@@ -43,10 +43,10 @@
 					<text name="scale_label">
 						Skala:
 					</text>
+					<check_box label="Pokaż emiter" name="moonbeacon" />
 					<text name="brightness_label">
 						Jasność:
 					</text>
-					<check_box label="Pokaż emiter" name="moonbeacon" />
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

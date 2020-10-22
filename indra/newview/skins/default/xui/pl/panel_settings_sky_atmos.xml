@@ -30,10 +30,7 @@
 					<text name="ice_level_label">
 						Poziom lodu:
 					</text>
-					<text name="scene_gamma_label">
-						Gamma sceny:
-					</text>
-				</layout_panel>            
+				</layout_panel>
 				<layout_panel name="right_lp">
 					<text name="density_multiplier_label">
 						Mnożnik gęstości:
@@ -43,6 +40,9 @@
 					</text>
 					<text name="maximum_altitude_label">
 						Maksymalna wysokość:
+					</text>
+					<text name="scene_gamma_label">
+						Gamma sceny:
 					</text>
 				</layout_panel>
 			</layout_stack>
