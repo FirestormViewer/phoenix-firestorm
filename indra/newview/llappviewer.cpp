@@ -1503,6 +1503,7 @@ void LLAppViewer::initMaxHeapSize()
 	BOOL enable_mem_failure_prevention = (BOOL)gSavedSettings.getBOOL("MemoryFailurePreventionEnabled") ;
 // <FS:Ansariel> Enable low memory checks on 32bit builds
 #if ADDRESS_SIZE == 64
+	max_heap_size_gb = F32Gigabytes(128);
 	enable_mem_failure_prevention = FALSE;
 #endif
 // </FS:Ansariel>

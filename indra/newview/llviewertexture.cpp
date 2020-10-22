@@ -569,9 +569,11 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
         glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
         gpu_res = (S32Megabytes)meminfo[0];
 
+        // <FS:Ansariel> Maybe do this independently from AMD cards????
         //check main memory, only works for windows.
-        LLMemory::updateMemoryInfo();
-        physical_res = LLMemory::getAvailableMemKB();
+        //LLMemory::updateMemoryInfo();
+        //physical_res = LLMemory::getAvailableMemKB();
+        // </FS:Ansariel>
     }
     else if (gGLManager.mHasNVXMemInfo)
     {
@@ -579,6 +581,12 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
         glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &free_memory);
         gpu_res = (S32Megabytes)(free_memory / 1024);
     }
+
+    // <FS:Ansariel> Maybe do this independently from AMD cards????
+    //check main memory, only works for windows.
+    LLMemory::updateMemoryInfo();
+    physical_res = LLMemory::getAvailableMemKB();
+    // </FS:Ansariel>
 
     gpu = gpu_res;
     physical = physical_res;
@@ -603,6 +611,9 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 		LL_RECORD_BLOCK_TIME(FTM_TEXTURE_UPDATE_MEDIA);
 		LLViewerMediaTexture::updateClass();
 	}
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	gTextureList.updateTexMemDynamic();
 
 	sBoundTextureMemory = LLImageGL::sBoundTextureMemory;
 	sTotalTextureMemory = LLImageGL::sGlobalTextureMemory;

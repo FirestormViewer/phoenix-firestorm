@@ -2972,9 +2972,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b20c18f66ae63c9d3b1970af8866aeb9</string>
+              <string>e235c5da10f29893e14b14c7a3184d91</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-1.4.202102107-windows-202102107.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.202821233-windows-202821233.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2984,9 +2984,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6f1e1d8796301c4e5737cb0db0f696d2</string>
+              <string>d87183b9cab5910a4a0f15e8faebab06</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-1.4.202102110-windows64-202102110.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.202821246-windows64-202821246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

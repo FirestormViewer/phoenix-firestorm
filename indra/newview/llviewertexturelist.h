@@ -129,6 +129,7 @@ public:
 	S32 getNumImages()					{ return mImageList.size(); }
 
 	void updateMaxResidentTexMem(S32Megabytes mem);
+	void updateTexMemDynamic(); // <FS:Ansariel> Dynamic texture memory calculation
 	
 	void doPreloadImages();
 	void doPrefetchImages();
