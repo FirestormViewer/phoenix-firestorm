@@ -6239,7 +6239,10 @@ void LLAppViewer::disconnectViewer()
 	}
 	// <FS:Ansariel>
 
-	if (LLSelectMgr::getInstance())
+	// <FS:Ansariel> Wrong instance check
+	//if (LLSelectMgr::getInstance())
+	if (LLSelectMgr::instanceExists())
+	// </FS:Ansariel
 	{
 		LLSelectMgr::getInstance()->deselectAll();
 	}
