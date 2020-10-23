@@ -515,8 +515,49 @@ public:
 	virtual LLRect getRequiredRect();	// Return the height of this object, given the set options.
 
 private:
+	S32Megabytes getGPUMemoryUsed(); // <FS:Ansariel> Texture memory bars
+
 	LLTextureView* mTextureView;
 };
+
+// <FS:Ansariel> Texture memory bars
+S32Megabytes LLGLTexMemBar::getGPUMemoryUsed()
+{
+    static const F32 GPU_MEMORY_CHECK_WAIT_TIME = 1.0f;
+
+    static LLFrameTimer timer;
+    static S32Megabytes gpu_res = S32Megabytes(0);
+
+    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
+    {
+        return gpu_res;
+    }
+    timer.reset();
+
+    if (gGLManager.mHasATIMemInfo)
+    {
+        S32 meminfo[4];
+        glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
+        S32Megabytes free = S32Megabytes(meminfo[0]);
+
+        //glGetIntegerv(GL_VBO_FREE_MEMORY_ATI, meminfo);
+        //S32Megabytes free = free + S32Megabytes(meminfo[0]);
+
+        //glGetIntegerv(GL_RENDERBUFFER_FREE_MEMORY_ATI, meminfo);
+        //S32Megabytes free = free + S32Megabytes(meminfo[0]);
+
+        gpu_res = S32Megabytes(gGLManager.mVRAM) - free;
+    }
+    else if (gGLManager.mHasNVXMemInfo)
+    {
+        S32 free_memory;
+        glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &free_memory);
+        gpu_res = S32Megabytes(gGLManager.mVRAM) - S32Megabytes(free_memory / 1024);
+    }
+
+    return gpu_res;
+}
+	// </FS:Ansariel>
 
 void LLGLTexMemBar::draw()
 {
@@ -569,12 +610,23 @@ void LLGLTexMemBar::draw()
     U32 texFetchLatMed = U32(recording.getMean(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
     U32 texFetchLatMax = U32(recording.getMax(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
 
-	text = llformat("GL Tot: %d/%d MB Bound: %4d/%4d MB FBO: %d MB Raw Tot: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
+	// <FS:Ansariel> Texture memory bars
+	S32Megabytes gpu, system;
+	S32Megabytes gpu_used = getGPUMemoryUsed();
+
+	// <FS:Ansariel> Texture memory bars
+	//text = llformat("GL Tot: %d/%d MB Bound: %4d/%4d MB FBO: %d MB Raw Tot: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
+	text = llformat("GL Tot: %d/%d MB Bound: %d/%d MB FBO: %d MB VRAM: %d/%d MB Raw Tot: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
+	// </FS:Ansariel>
 					total_mem.value(),
 					max_total_mem.value(),
 					bound_mem.value(),
 					max_bound_mem.value(),
 					LLRenderTarget::sBytesAllocated/(1024*1024),
+					// <FS:Ansariel> Texture memory bars
+					gpu_used.value(),
+					gGLManager.mVRAM,
+					// </FS:Ansariel>
 					LLImageRaw::sGlobalRawMemory >> 20,
 					discard_bias,
 					cache_usage,
@@ -600,7 +652,7 @@ void LLGLTexMemBar::draw()
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 	// GL Mem Bar
-		
+
 	left = bar_left;
 	text = "GL";
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
@@ -619,8 +671,7 @@ void LLGLTexMemBar::draw()
 	color = (total_mem.value() < llfloor(max_total_mem.value() * texmem_lower_bound_scale)) ? LLColor4::green :
 		(total_mem.value() < max_total_mem.value()) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
-//	gGL.diffuseColor4fv(color.mV);
-	
+
 	gl_rect_2d(left, top, right, bottom, color); // red/yellow/green
 
 	//
@@ -642,10 +693,32 @@ void LLGLTexMemBar::draw()
 	color = (bound_mem.value() < llfloor(max_bound_mem.value() * texmem_lower_bound_scale)) ? LLColor4::green :
 		(bound_mem.value() < max_bound_mem.value()) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
-//	gGL.diffuseColor4fv(color.mV);
 
 	bar_scale = (F32)bar_width / (max_bound_mem.value() * 1.5f);
 	right = left + llfloor(bound_mem.value() * bar_scale);
+
+	gl_rect_2d(left, top, right, bottom, color);
+
+	bar_left = left + bar_width + 10;
+
+	// VRAM Mem Bar
+
+	left = bar_left;
+	text = "VRAM";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
+									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+	left = bar_left + 35;
+	right = left + bar_width;
+	
+	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
+	gl_rect_2d(left, top, right, bottom);
+
+	color = (gpu_used.value() < llfloor(gGLManager.mVRAM * texmem_lower_bound_scale)) ? LLColor4::green :
+		(gpu_used.value() < gGLManager.mVRAM) ? LLColor4::yellow : LLColor4::red;
+	color[VALPHA] = .75f;
+
+	bar_scale = (F32)bar_width / gGLManager.mVRAM;
+	right = left + llfloor(gpu_used.value() * bar_scale);
 
 	gl_rect_2d(left, top, right, bottom, color);
 	// </FS:Ansariel>
