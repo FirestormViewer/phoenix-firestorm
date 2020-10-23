@@ -140,11 +140,11 @@
 		http://join.secondlife.com/index.php?lang=ja-JP&amp;sourceid=[sourceid]
 	</string>
 	<string name="ViewerDownloadURL">
-		http://www.firestormviewer.org/downloads/
+		https://www.firestormviewer.org/choose-your-platform/
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューワでは Second Life にアクセスできません。以下のページから新しいビューワをダウンロードしてください：
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 詳細については、FAQ を参照してください：
 http://secondlife.com/viewer-access-faq
