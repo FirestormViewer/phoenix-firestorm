@@ -231,12 +231,16 @@ void LLTextureBar::draw()
 	struct { const std::string desc; LLColor4 color; } fetch_state_desc[] = {
 		{ "---", LLColor4::red },	// INVALID
 		{ "INI", LLColor4::white },	// INIT
-		{ "DSK", LLColor4::cyan },	// LOAD_FROM_TEXTURE_CACHE
+		// <FS:Ansariel> Unique state codes
+		//{ "DSK", LLColor4::cyan },	// LOAD_FROM_TEXTURE_CACHE
+		{ "CCH", LLColor4::cyan },	// LOAD_FROM_TEXTURE_CACHE
 		{ "DSK", LLColor4::blue },	// CACHE_POST
 		{ "NET", LLColor4::green },	// LOAD_FROM_NETWORK
 		{ "SIM", LLColor4::green },	// LOAD_FROM_SIMULATOR
 		{ "HTW", LLColor4::green },	// WAIT_HTTP_RESOURCE
-		{ "HTW", LLColor4::green },	// WAIT_HTTP_RESOURCE2
+		// <FS:Ansariel> Unique state codes
+		//{ "HTW", LLColor4::green },	// WAIT_HTTP_RESOURCE2
+		{ "HTI", LLColor4::green },	// WAIT_HTTP_RESOURCE2
 		{ "REQ", LLColor4::yellow },// SEND_HTTP_REQ
 		{ "HTP", LLColor4::green },	// WAIT_HTTP_REQ
 		{ "DEC", LLColor4::yellow },// DECODE_IMAGE
