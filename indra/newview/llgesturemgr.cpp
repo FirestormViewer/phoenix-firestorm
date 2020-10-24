@@ -542,7 +542,9 @@ void LLGestureMgr::playGesture(LLMultiGesture* gesture)
 // [/RLVa:KB]
 
 	// Reset gesture to first step
-	gesture->mCurrentStep = 0;
+	// <FS:Ansariel> Do a proper reset or we might end up reading random data from wrong memory locations due to invalid gesture state
+	//gesture->mCurrentStep = 0;
+	gesture->reset();
 
 	// Add to list of playing
 	gesture->mPlaying = TRUE;
@@ -944,8 +946,7 @@ void LLGestureMgr::stepGesture(LLMultiGesture* gesture)
 			LLGestureStepWait* wait_step = (LLGestureStepWait*)step;
 
 			F32 elapsed = gesture->mWaitTimer.getElapsedTimeF32();
-			//if (elapsed > wait_step->mWaitSeconds) // <FS:LO> Fix for fire-5819 Gestures sticking on wait states
-			if (elapsed > wait_step->mWaitSeconds || wait_step->mWaitSeconds == 19426740371009173000000000000000.0f) // Im not to happy with how this fixes gestures getting stuck in the wait state, but, it does fix the problem</FS:LO> 
+			if (elapsed > wait_step->mWaitSeconds)
 			{
 				// wait is done, continue execution
 				gesture->mWaitingTimer = FALSE;
