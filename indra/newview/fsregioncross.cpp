@@ -147,10 +147,9 @@ bool RegionCrossExtrapolate::ifsaton(const LLViewerObject& vo)  // true if root 
         return false;                                           // not root, cannot be sat upon
     }
 
-    for (auto iter = vo.getChildren().begin();                  // check for avatar as child of root
-        iter != vo.getChildren().end(); iter++)
+    LLViewerObject::const_child_list_t& children = vo.getChildren();
+    for (const auto child : children)
     {
-        LLViewerObject* child = *iter;
         if (child->isAvatar())
         {
             return true;
