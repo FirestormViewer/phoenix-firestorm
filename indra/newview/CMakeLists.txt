@@ -2235,7 +2235,7 @@ if (WINDOWS)
       SLPlugin
       media_plugin_cef
       media_plugin_libvlc
-      media_plugin_example
+      #media_plugin_example # <FS:Ansariel> Don't package example plugin
       windows-crash-logger
       )
 
