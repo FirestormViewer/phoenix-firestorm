@@ -2211,9 +2211,11 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
-      ${SHARED_LIB_STAGING_DIR}/Release/openjp2.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjp2.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/openjp2.dll
+      # <FS:Ansariel> Only copy OpenJPEG dll if needed
+      #${SHARED_LIB_STAGING_DIR}/Release/openjp2.dll
+      #${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjp2.dll
+      #${SHARED_LIB_STAGING_DIR}/Debug/openjp2.dll
+      # </FS:Ansariel>
       ${SHARED_LIB_STAGING_DIR}/Release/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll
@@ -2236,6 +2238,16 @@ if (WINDOWS)
       media_plugin_example
       windows-crash-logger
       )
+
+    # <FS:Ansariel> Only copy OpenJPEG dll if needed
+    if (NOT USE_KDU)
+        list(APPEND COPY_INPUT_DEPENDENCIES
+            ${SHARED_LIB_STAGING_DIR}/Release/openjp2.dll
+            ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjp2.dll
+            ${SHARED_LIB_STAGING_DIR}/Debug/openjp2.dll
+            )
+    endif (NOT USE_KDU)
+    # </FS:Ansariel>
 
     if (ADDRESS_SIZE EQUAL 64)
         list(APPEND COPY_INPUT_DEPENDENCIES

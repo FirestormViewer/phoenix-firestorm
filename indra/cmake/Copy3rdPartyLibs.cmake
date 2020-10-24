@@ -52,7 +52,7 @@ if(WINDOWS)
 
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
-        openjp2.dll
+        #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
@@ -62,6 +62,12 @@ if(WINDOWS)
         glod.dll
         libhunspell.dll
         )
+
+    # <FS:Ansariel> Only copy OpenJPEG dll if needed
+    if (NOT USE_KDU)
+        set(release_files ${release_files} openjp2.dll)
+    endif (NOT USE_KDU)
+    # </FS:Ansariel>
 
     # Filenames are different for 32/64 bit BugSplat file and we don't
     # have any control over them so need to branch.
