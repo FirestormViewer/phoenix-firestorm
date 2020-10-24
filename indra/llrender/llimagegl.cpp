@@ -1396,7 +1396,7 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S
 
 	if (mHasExplicitFormat && 
 		((mFormatPrimary == GL_RGBA && mComponents < 4) ||
-		(mFormatPrimary == GL_RGB  && mComponents < 3)))
+		 (mFormatPrimary == GL_RGB  && mComponents < 3)))
 
 	{
 		LL_WARNS()  << "Incorrect format: " << std::hex << mFormatPrimary << " components: " << (U32)mComponents <<  LL_ENDL;		

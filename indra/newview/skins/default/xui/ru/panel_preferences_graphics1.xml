@@ -34,7 +34,7 @@
 			<check_box label="Выпуклости и блеск" name="BumpShiny"/>
 			<check_box label="Локальный свет" name="LocalLights"/>
 			<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
-			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения. ('deferred rendering')." name="UseLightShaders"/>
+			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения." name="UseLightShaders"/>
 			<check_box label="Окклюзия окружения" name="UseSSAO"/>
 			<text name="shadows_label">
 				Тени:
@@ -101,9 +101,9 @@
 		</panel>
 		<panel label="Аппаратные установки" name="Hardware Settings">
 			<check_box label="Анизотропная фильтрация (медленнее, когда включено)" name="ani"/>
-			<check_box label="Включить OpenGL Vertex Buffer Object (VBO)" name="vbo" tool_tip="Включение этого на современном оборудовании дает выигрыш в производительности. Тем не менее, старое оборудование часто имеет плохие реализаций VBO и вы можете вызвать сбой, если это разрешить."/>
+			<check_box label="Включить OpenGL Vertex Buffer Object (VBO)" name="vbo" tool_tip="Включение этого на современном оборудовании дает выигрыш в производительности. Тем не менее, старое оборудование часто имеет плохие реализаций VBO и вы можете вызвать сбой, если это включить."/>
 			<check_box label="Включить потоковое VBO" name="vbo_stream" tool_tip="Отключение этого может улучшить производительность при включеном VBO. Наблюдение показало, что отключение давало улучшения на различных графических картах AMD и Intel."/>
-			<check_box label="Включить сжатие текстур (требуется перезапуск)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, позволяет текстурам с высоким разрешение закгружаться за счет некоторого потери качества цвета."/>
+			<check_box label="Включить сжатие текстур (требуется перезапуск)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, позволяет текстурам с высоким разрешение загружаться за счет некоторого потери качества цвета."/>
 			<check_box label="Включить поддержку дисплеев HiDPI (только Mac OSX; требуется перезагрузка)" name="use HiDPI" tool_tip="Включить OpenGL для отображения в высоком разрешении."/>
 			<text name="Antialiasing:">
 				Сглаживание:

@@ -207,7 +207,7 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Przeglądarka używana przez Ciebie nie ma już dostępu do Second Life. Proszę przejść na poniższą stronę i pobrać nową:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 Więcej informacji w naszym FAQ:
 http://secondlife.com/viewer-access-faq

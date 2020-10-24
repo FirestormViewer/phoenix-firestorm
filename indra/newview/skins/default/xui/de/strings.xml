@@ -227,7 +227,7 @@ Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq

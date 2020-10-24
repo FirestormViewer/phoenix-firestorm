@@ -63,22 +63,13 @@ BOOL FSFloaterContactSetConfiguration::postBuild()
 	mRenameButton->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onRenameSet, this));
 
 	mSetSwatch = getChild<LLColorSwatchCtrl>("set_swatch");
-	if (mSetSwatch)
-	{
-		mSetSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetColor, this));
-	}
+	mSetSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetColor, this));
 
 	mGlobalSwatch = getChild<LLColorSwatchCtrl>("global_swatch");
-	if (mGlobalSwatch)
-	{
-		mGlobalSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitDefaultColor, this));
-	}
+	mGlobalSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitDefaultColor, this));
 
 	mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
-	if (mNotificationCheckBox)
-	{
-		mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
-	}
+	mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
 	return TRUE;
 }
 
