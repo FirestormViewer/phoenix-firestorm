@@ -11,5 +11,5 @@
 		<text name="currentlook_name">(Chargement)</text>
 		<button name="edit_outfit_btn" tool_tip="Modifier cette tenue"/>
 	</panel>
-	<filter_editor label="Filtrer les tenues" name="Filter"/>
+	<search_editor label="Filtrer les tenues" name="Filter"/>
 </panel>

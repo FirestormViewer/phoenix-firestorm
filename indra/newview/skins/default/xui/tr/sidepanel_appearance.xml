@@ -15,5 +15,5 @@
 		</text>
 		<button label="" name="edit_outfit_btn" tool_tip="Bu dış görünümü düzenle"/>
 	</panel>
-	<filter_editor label="Dış Görünümleri Filtrele" name="Filter"/>
+	<search_editor label="Dış Görünümleri Filtrele" name="Filter"/>
 </panel>
