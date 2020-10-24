@@ -110,6 +110,7 @@ width="333">
    </panel>
    <search_editor
    clear_button_visible="true"
+   text_pad_left="10"
    height="23"
    follows="left|top|right"
    layout="topleft"
