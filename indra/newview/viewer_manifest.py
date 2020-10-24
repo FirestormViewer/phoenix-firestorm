@@ -671,9 +671,10 @@ class WindowsManifest(ViewerManifest):
                     self.path("media_plugin_libvlc.dll")
 
                 # Media plugins - Example (useful for debugging - not shipped with release viewer)
-                if self.channel_type() != 'release':
-                    with self.prefix(src=os.path.join('example', self.args['configuration'])):
-                        self.path("media_plugin_example.dll")
+                # <FS:Ansariel> Don't package example plugin
+                #if self.channel_type() != 'release':
+                #    with self.prefix(src=os.path.join('example', self.args['configuration'])):
+                #        self.path("media_plugin_example.dll")
 
             # CEF runtime files - debug
             # CEF runtime files - not debug (release, relwithdebinfo etc.)
