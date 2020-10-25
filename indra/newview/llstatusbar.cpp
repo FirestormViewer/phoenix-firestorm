@@ -662,7 +662,7 @@ void LLStatusBar::refresh()
 						  );
 	mMediaToggle->setEnabled(button_enabled);
 	// Note the "sense" of the toggle is opposite whether media is playing or not
-	bool any_media_playing = (media_inst->isAnyMediaShowing() || 
+	bool any_media_playing = (media_inst->isAnyMediaPlaying() ||
 							  media_inst->isParcelMediaPlaying());
 	mMediaToggle->setValue(!any_media_playing);
 
