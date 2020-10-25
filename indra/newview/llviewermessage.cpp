@@ -1964,6 +1964,13 @@ void LLOfferInfo::handleRespond(const LLSD& notification, const LLSD& response)
 	mRespondFunctions[name](notification, response);
 }
 
+void inventory_offer_name_callback(const LLAvatarName& av_name, std::string message)
+{
+	LLSD args;
+	args["MESSAGE"] = llformat(message.c_str(), av_name.getUserName().c_str());
+	LLNotificationsUtil::add("SystemMessageTip", args);
+}
+
 bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD& response)
 {
 	LLChat chat;
@@ -2096,11 +2103,29 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		{
 			// <FS:Ansariel> This breaks object owner name parsing
 			//log_message = "<nolink>" + chatHistory_string + "</nolink> " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
-			log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
+			// <FS:Ansariel> FIRE-29677 / SL-13720 workaround
+			//log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
 			// </FS:Ansariel>
-			LLSD args;
-			args["MESSAGE"] = log_message;
-			LLNotificationsUtil::add("SystemMessageTip", args);
+
+			//LLSD args;
+			//args["MESSAGE"] = log_message;
+			//LLNotificationsUtil::add("SystemMessageTip", args);
+			log_message = " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
+
+			LLUUID inv_sender_id;
+			size_t separator_idx = mFromName.find('|');
+			if (separator_idx != std::string::npos && LLUUID::parseUUID(mFromName.substr(0, separator_idx), &inv_sender_id) && mFromName.size() > (++separator_idx))
+			{
+				log_message = mFromName.substr(separator_idx) + log_message;
+				LLAvatarNameCache::instance().get(inv_sender_id, boost::bind(&inventory_offer_name_callback, _2, log_message));
+			}
+			else
+			{
+				LLSD args;
+				args["MESSAGE"] = chatHistory_string + log_message;
+				LLNotificationsUtil::add("SystemMessageTip", args);
+			}
+			// </FS:Ansariel>
 		}
 
 		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
