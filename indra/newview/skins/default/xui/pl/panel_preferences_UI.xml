@@ -7,7 +7,7 @@
         </text>
         <check_box label="Pokaż chmurki pomocy" name="ShowHoverTips" tool_tip="Zaznacz, aby pokazywać podstawowe chmurki informacyjne nad awatarami i kilkoma innymi rzeczami - zaznacz najpierw to (CTRL+SHIFT+T)" />
         <check_box label="na terenie" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
-        <check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)" />
+        <check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach" />
         <check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach" />
         <text name="tooltip_textbox">
            Pojawianie się chmurek po:

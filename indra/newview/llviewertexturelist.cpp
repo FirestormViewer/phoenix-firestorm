@@ -1524,24 +1524,26 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 }
 
 // <FS:Ansariel> Dynamic texture memory calculation
+//static
+bool LLViewerTextureList::canUseDynamicTextureMemory()
+{
+#if ADDRESS_SIZE == 64
+	return (gGLManager.mHasATIMemInfo || gGLManager.mHasNVXMemInfo) && gGLManager.mVRAM >= 512;
+#else
+	return false;
+#endif
+}
+
 void LLViewerTextureList::updateTexMemDynamic()
 {
-#if ADDRESS_SIZE == 64 // Only available on 64bit versions
+	if (!canUseDynamicTextureMemory())
+	{
+		return;
+	}
+
 	static LLCachedControl<bool> fsDynamicTexMem(gSavedSettings, "FSDynamicTextureMemory");
 	if (!fsDynamicTexMem)
 	{
-		return;
-	}
-
-	if (!gGLManager.mHasATIMemInfo && !gGLManager.mHasNVXMemInfo)
-	{
-		// Can't detect current GPU mem usage - so, nope!
-		return;
-	}
-
-	if (gGLManager.mVRAM < 512)
-	{
-		// Only for GPUs with at least 512MB video memory
 		return;
 	}
 
@@ -1574,7 +1576,6 @@ void LLViewerTextureList::updateTexMemDynamic()
 	// get evicted from GPU memory, if available memory gets low (see LLViewerFetchedTexture::destroyTexture()).
 	mMaxTotalTextureMemInMegaBytes = llmax(max_tex_mem_in_gpu, min_texture_mem) - gpu_reserve;
 	mMaxResidentTexMemInMegaBytes = mMaxTotalTextureMemInMegaBytes - cache_reserve;
-#endif
 }
 // </FS:Ansariel>
 
