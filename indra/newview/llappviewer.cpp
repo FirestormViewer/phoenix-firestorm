@@ -3786,6 +3786,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
 	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
 	info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
+	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
 	std::string drvinfo = gDXHardware.getDriverVersionWMI();

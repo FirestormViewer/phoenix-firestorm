@@ -60,6 +60,7 @@
 作業系統版本：[OS_VERSION]
 顯示卡供應商：[GRAPHICS_CARD_VENDOR]
 顯示卡：[GRAPHICS_CARD]
+Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Windows 顯示驅動程式版本：[GRAPHICS_DRIVER_VERSION]

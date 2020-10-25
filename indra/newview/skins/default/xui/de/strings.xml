@@ -59,6 +59,7 @@ Speicher: [MEMORY_MB] MB
 Betriebssystemversion: [OS_VERSION]
 Grafikkartenhersteller: [GRAPHICS_CARD_VENDOR]
 Grafikkarte: [GRAPHICS_CARD]
+Grafikkartenspeicher: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Windows-Grafiktreiberversion: [GRAPHICS_DRIVER_VERSION]

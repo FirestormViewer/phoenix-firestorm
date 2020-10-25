@@ -55,6 +55,7 @@ Memory: [MEMORY_MB] MB
 OS Version: [OS_VERSION]
 Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
 Graphics Card: [GRAPHICS_CARD]
+Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">Windows Graphics Driver Version: [GRAPHICS_DRIVER_VERSION]</string>
 	<string name="AboutOGL">OpenGL Version: [OPENGL_VERSION]</string>

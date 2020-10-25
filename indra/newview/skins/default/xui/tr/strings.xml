@@ -60,6 +60,7 @@ Bellek: [MEMORY_MB] MB
 İşl. Sis. Sürümü: [OS_VERSION]
 Grafik Kartı Üreticisi: [GRAPHICS_CARD_VENDOR]
 Grafik Kartı: [GRAPHICS_CARD]
+Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Windows Grafik Sürücüsü Sürümü: [GRAPHICS_DRIVER_VERSION]

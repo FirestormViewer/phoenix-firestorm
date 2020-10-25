@@ -1029,7 +1029,8 @@ LLSD FSData::getSystemInfo()
 	sysinfo1 += llformat("OS: %s\n", info["OS_VERSION"].asString().c_str());
 	sysinfo1 += llformat("Graphics Card Vendor: %s\n", info["GRAPHICS_CARD_VENDOR"].asString().c_str());
 	sysinfo1 += llformat("Graphics Card: %s\n", info["GRAPHICS_CARD"].asString().c_str());
-	
+	sysinfo1 += llformat("Graphics Card Memory: %d MB\n", info["GRAPHICS_CARD_MEMORY"].asInteger());
+
 	if (info.has("GRAPHICS_DRIVER_VERSION"))
 	{
 		sysinfo1 += llformat("Graphics Card Driver Version: %s\n", info["GRAPHICS_DRIVER_VERSION"].asString().c_str());

@@ -48,6 +48,7 @@ Memoria (Memory): [MEMORY_MB] MB
 Versione SO (OS Version): [OS_VERSION]
 Produttore scheda grafica (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Scheda grafica (Graphics Card): [GRAPHICS_CARD]
+Memoria scheda grafica (Graphics Card Memory): [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Versione driver grafico Windows (Windows Graphics Driver Version): [GRAPHICS_DRIVER_VERSION]

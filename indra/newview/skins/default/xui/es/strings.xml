@@ -56,6 +56,7 @@ Memoria: [MEMORY_MB] MB
 Versión del Sistema Operativo: [OS_VERSION]
 Fabricante de la tarjeta gráfica: [GRAPHICS_CARD_VENDOR]
 Tarjeta gráfica: [GRAPHICS_CARD]
+Memoria de la tarjeta gráfica: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Versión de Windows Graphics Driver: [GRAPHICS_DRIVER_VERSION]

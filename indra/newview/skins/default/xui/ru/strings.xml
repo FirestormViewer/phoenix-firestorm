@@ -68,6 +68,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Версия ОС: [OS_VERSION]
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]
 Видеокарта: [GRAPHICS_CARD]
+Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
