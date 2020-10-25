@@ -32,11 +32,11 @@ AOSet::AOSet(const LLUUID inventoryID)
 :	LLEventTimer(10000.0f),
 	mInventoryID(inventoryID),
 	mName("** New AO Set **"),
-	mSitOverride(FALSE),
-	mSmart(FALSE),
-	mMouselookDisable(FALSE),
-	mComplete(FALSE),
-	mDirty(FALSE),
+	mSitOverride(false),
+	mSmart(false),
+	mMouselookStandDisable(false),
+	mComplete(false),
+	mDirty(false),
 	mCurrentMotion(LLUUID())
 {
 	LL_DEBUGS("AOEngine") << "Creating new AO set: " << this << LL_ENDL;
@@ -113,10 +113,10 @@ AOSet::AOSet(const LLUUID inventoryID)
 		mStates[index].mInventoryUUID = LLUUID::null;
 		mStates[index].mCurrentAnimation = 0;
 		mStates[index].mCurrentAnimationID = LLUUID::null;
-		mStates[index].mCycle = FALSE;
-		mStates[index].mRandom = FALSE;
+		mStates[index].mCycle = false;
+		mStates[index].mRandom = false;
 		mStates[index].mCycleTime = 0.0f;
-		mStates[index].mDirty = FALSE;
+		mStates[index].mDirty = false;
 		mStateNames.push_back(stateNameList[0]);
 	}
 	stopTimer();
@@ -145,7 +145,7 @@ AOSet::AOState* AOSet::getStateByName(const std::string& name)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
@@ -163,7 +163,7 @@ AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
 			return &mStates[index];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 const LLUUID& AOSet::getAnimationForState(AOState* state) const
@@ -240,54 +240,54 @@ void AOSet::setName(const std::string& name)
 	mName=name;
 }
 
-BOOL AOSet::getSitOverride() const
+bool AOSet::getSitOverride() const
 {
 	return mSitOverride;
 }
 
-void AOSet::setSitOverride(BOOL yes)
+void AOSet::setSitOverride(bool override_sit)
 {
-	mSitOverride = yes;
+	mSitOverride = override_sit;
 }
 
-BOOL AOSet::getSmart() const
+bool AOSet::getSmart() const
 {
 	return mSmart;
 }
 
-void AOSet::setSmart(BOOL yes)
+void AOSet::setSmart(bool smart)
 {
-	mSmart = yes;
+	mSmart = smart;
 }
 
-BOOL AOSet::getMouselookDisable() const
+bool AOSet::getMouselookStandDisable() const
 {
-	return mMouselookDisable;
+	return mMouselookStandDisable;
 }
 
-void AOSet::setMouselookDisable(BOOL yes)
+void AOSet::setMouselookStandDisable(bool disable)
 {
-	mMouselookDisable = yes;
+	mMouselookStandDisable = disable;
 }
 
-BOOL AOSet::getComplete() const
+bool AOSet::getComplete() const
 {
 	return mComplete;
 }
 
-void AOSet::setComplete(BOOL yes)
+void AOSet::setComplete(bool complete)
 {
-	mComplete = yes;
+	mComplete = complete;
 }
 
-BOOL AOSet::getDirty() const
+bool AOSet::getDirty() const
 {
 	return mDirty;
 }
 
-void AOSet::setDirty(BOOL yes)
+void AOSet::setDirty(bool dirty)
 {
-	mDirty = yes;
+	mDirty = dirty;
 }
 
 void AOSet::setMotion(const LLUUID& motion)
