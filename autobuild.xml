@@ -2943,26 +2943,14 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4a5591349005afac44a688e99517a9f3</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-1.5.1.180991818-linux-180991818.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>addb209bb56a8f16602a7222f119191d</string>
+              <string>b7be1d6116fb5848ab2beef19b6a8b15</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-1.5.1.180991822-linux64-180991822.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.202991551-linux64-202991551.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

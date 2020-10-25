@@ -29,7 +29,7 @@
 
 // this is defined so that we get static linking.
 #include "openjpeg.h"
-#ifdef LL_WINDOWS
+#ifndef LL_DARWIN
 #include "cio.h"
 #include "event.h"
 #define OPENJPEG2
