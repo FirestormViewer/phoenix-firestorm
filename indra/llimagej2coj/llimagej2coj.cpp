@@ -29,12 +29,10 @@
 
 // this is defined so that we get static linking.
 #include "openjpeg.h"
-#ifndef OPENJPEG_VERSION
+#ifdef LL_WINDOWS
 #include "cio.h"
 #include "event.h"
-#ifdef OPJ_PACKAGE_VERSION
 #define OPENJPEG2
-#endif
 #endif
 
 #include "lltimer.h"
