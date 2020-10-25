@@ -67,8 +67,12 @@ Przepustowość (Bandwidth): [BANDWIDTH] kbit/s
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
 Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
-Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutVFS">
+		Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Tryb obrazu HiDPI: [HIDPI]

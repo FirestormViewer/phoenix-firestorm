@@ -67,8 +67,12 @@ Banda (Bandwidth): [BANDWIDTH] kbit/s
 Fattore LOD (LOD factor): [LOD]
 Qualità resa (Render quality): [RENDERQUALITY]
 Stato illuminazione (Advanced Lighting Model): [ALMSTATUS]
-Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-VFS (cache) creation time (UTC): [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutVFS">
+		VFS (cache) creation time (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Modalità display HiDPI: [HIDPI]

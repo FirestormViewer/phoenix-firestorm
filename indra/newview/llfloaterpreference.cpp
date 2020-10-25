@@ -2312,8 +2312,7 @@ void LLFloaterPreference::refreshEnabledState()
 // <FS:Ansariel> Dynamic texture memory calculation
 void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 {
-#if ADDRESS_SIZE == 64
-	if ((gGLManager.mHasATIMemInfo || gGLManager.mHasNVXMemInfo) && gGLManager.mVRAM >= 512)
+	if (LLViewerTextureList::canUseDynamicTextureMemory())
 	{
 		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
 		childSetEnabled("FSDynamicTextureMemory", true);
@@ -2323,7 +2322,6 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
 	}
 	else
-#endif
 	{
 		childSetEnabled("FSDynamicTextureMemory", false);
 		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);

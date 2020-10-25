@@ -87,8 +87,12 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Уровень детализации: [LOD]
 Качество графики: [RENDERQUALITY]
 Модель улучшенного освещения: [ALMSTATUS]
-Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Время создания VFS (кэш) (UTC): [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutVFS">
+		Время создания VFS (кэш) (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Режим отображения HiDPI: [HIDPI]

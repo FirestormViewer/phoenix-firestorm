@@ -3966,8 +3966,12 @@ LLSD LLAppViewer::getViewerInfo() const
 	// </FS:PP>
 
 	// <FS:Ansariel> FIRE-11768: Include texture memory settings
+	info["TEXTUREMEMORYDYNAMIC"] = LLViewerTextureList::canUseDynamicTextureMemory() && gSavedSettings.getBOOL("FSDynamicTextureMemory");
 	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
 	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
+	info["TEXTUREMEMORYMIN"] = gSavedSettings.getS32("FSDynamicTextureMemoryMinTextureMemory");
+	info["TEXTUREMEMORYCACHERESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryCacheReserve");
+	info["TEXTUREMEMORYGPURESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryGPUReserve");
 	// </FS:Ansariel>
 
 	// <FS:ND> Add creation time of VFS (cache)
@@ -4047,6 +4051,21 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
 	if (info.has("BANDWIDTH")) //For added info in help floater
 	{
 		support << "\n" << LLTrans::getString("AboutSettings", args, default_string);
+	}
+	if (info.has("TEXTUREMEMORYDYNAMIC"))
+	{
+		if (info["TEXTUREMEMORYDYNAMIC"].asBoolean())
+		{
+			support << "\n" << LLTrans::getString("AboutTextureMemoryDynamic", args, default_string);
+		}
+		else
+		{
+			support << "\n" << LLTrans::getString("AboutTextureMemory", args, default_string);
+		}
+	}
+	if (info.has("VFS_DATE"))
+	{
+		support << "\n" << LLTrans::getString("AboutVFS", args, default_string);
 	}
 	// </FS>
 	if (info.has("COMPILER"))

@@ -78,8 +78,15 @@ Bandbreite: [BANDWIDTH] kbit/s
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
 Erweitertes Beleuchtungsmodell: [ALMSTATUS]
-Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-VFS (Cache) Erstellungszeit: [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Texturspeicher: Dynamisch ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutVFS">
+		VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		HiDPI-Anzeigemodus: [HIDPI]
