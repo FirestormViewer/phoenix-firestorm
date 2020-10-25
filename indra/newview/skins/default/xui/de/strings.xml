@@ -32,7 +32,7 @@
 		Grafikinitialisierung fehlgeschlagen. Bitte aktualisieren Sie Ihren Grafiktreiber.
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL]) [BUILD_TYPE]
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
@@ -78,8 +78,15 @@ Bandbreite: [BANDWIDTH] kbit/s
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
 Erweitertes Beleuchtungsmodell: [ALMSTATUS]
-Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-VFS (Cache) Erstellungszeit: [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Texturspeicher: Dynamisch ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutVFS">
+		VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		HiDPI-Anzeigemodus: [HIDPI]

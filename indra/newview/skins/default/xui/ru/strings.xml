@@ -41,7 +41,7 @@
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit / [SIMD])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
@@ -87,8 +87,12 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Уровень детализации: [LOD]
 Качество графики: [RENDERQUALITY]
 Модель улучшенного освещения: [ALMSTATUS]
-Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Время создания VFS (кэш) (UTC): [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutVFS">
+		Время создания VFS (кэш) (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Режим отображения HiDPI: [HIDPI]
