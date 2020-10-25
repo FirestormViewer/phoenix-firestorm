@@ -3671,6 +3671,13 @@ LLSD LLAppViewer::getViewerInfo() const
     //{
     //    info["BUILD_CONFIG"] = build_config;
     //}
+#ifdef USE_AVX2_OPTIMIZATION
+	info["SIMD"] = "AVX2";
+#elif USE_AVX_OPTIMIZATION
+	info["SIMD"] = "AVX";
+#else
+	info["SIMD"] = "SSE2";
+#endif
 
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
 #if defined OPENSIM

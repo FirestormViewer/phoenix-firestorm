@@ -1012,12 +1012,14 @@ LLSD FSData::getSystemInfo()
 	LLSD info = LLAppViewer::instance()->getViewerInfo();
 
 	std::string sysinfo1("\n");
-	sysinfo1 += llformat("%s %s (%d) %s %s (%s %dbit) %s\n\n",	LLAppViewer::instance()->getSecondLifeTitle().c_str(),
-																LLVersionInfo::getInstance()->getShortVersion().c_str(),
-																LLVersionInfo::getInstance()->getBuild(),
-																info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(),
-																LLVersionInfo::getInstance()->getChannel().c_str(),
-																info["ADDRESS_SIZE"].asInteger(), info["BUILD_TYPE"].asString().c_str());
+	sysinfo1 += llformat("%s %s (%d) %s %s (%s %dbit / %s) %s\n\n",	LLAppViewer::instance()->getSecondLifeTitle().c_str(),
+																	LLVersionInfo::getInstance()->getShortVersion().c_str(),
+																	LLVersionInfo::getInstance()->getBuild(),
+																	info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(),
+																	LLVersionInfo::getInstance()->getChannel().c_str(),
+																	info["ADDRESS_SIZE"].asInteger(),
+																	info["SIMD"].asString().c_str(),
+																	info["BUILD_TYPE"].asString().c_str());
 	sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
 	sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
 	sysinfo1 += llformat("%s\n\n", info["SERVER_VERSION"].asString().c_str());
