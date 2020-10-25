@@ -189,12 +189,12 @@ void AOEngine::setLastOverriddenMotion(const LLUUID& motion)
 	}
 }
 
-BOOL AOEngine::foreignAnimations()
+bool AOEngine::foreignAnimations()
 {
 	// checking foreign animations only makes sense when smart sit is enabled
 	if (!mCurrentSet->getSmart())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// get the seat the avatar is sitting on
@@ -202,14 +202,14 @@ BOOL AOEngine::foreignAnimations()
 	if (!agentRoot)
 	{
 		// this should not happen, ever
-		return FALSE;
+		return false;
 	}
 
 	LLUUID seat = agentRoot->getID();
 	if (seat == gAgentID)
 	{
 		LL_DEBUGS("AOEngine") << "Not checking for foreign animation when not sitting." << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	LL_DEBUGS("AOEngine") << "Checking for foreign animation on seat " << seat << LL_ENDL;
@@ -221,26 +221,27 @@ BOOL AOEngine::foreignAnimations()
 		if (sourceIterator->first != gAgentID)
 		{
 			// find the source object where the animation came from
-			LLViewerObject* source=gObjectList.findObject(sourceIterator->first);
+			LLViewerObject* source = gObjectList.findObject(sourceIterator->first);
 
 			// proceed if it's not an attachment
-			if(!source->isAttachment())
+			if (source && !source->isAttachment())
 			{
 				LL_DEBUGS("AOEngine") << "Source " << sourceIterator->first << " is running animation " << sourceIterator->second << LL_ENDL;
 
 				// get the source's root prim
-				LLViewerObject* sourceRoot=dynamic_cast<LLViewerObject*>(source->getRoot());
+				LLViewerObject* sourceRoot = dynamic_cast<LLViewerObject*>(source->getRoot());
 
 				// if the root prim is the same as the animation source, report back as TRUE
 				if (sourceRoot && sourceRoot->getID() == seat)
 				{
 					LL_DEBUGS("AOEngine") << "foreign animation " << sourceIterator->second << " found on seat." << LL_ENDL;
-					return TRUE;
+					return true;
 				}
 			}
 		}
 	}
-	return FALSE;
+
+	return false;
 }
 
 // map motion to underwater state, return nullptr if not applicable
@@ -976,7 +977,7 @@ LLUUID AOEngine::addSet(const std::string& name, BOOL reload)
 	return newUUID;
 }
 
-BOOL AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item)
+bool AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item)
 {
 	LL_DEBUGS("AOEngine") << "Asset ID " << item->getAssetUUID() << " inventory id " << item->getUUID() << " category id " << state->mInventoryUUID << LL_ENDL;
 	if (state->mInventoryUUID.isNull())
@@ -1009,7 +1010,7 @@ BOOL AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, cons
 	if (state->mInventoryUUID.isNull())
 	{
 		LL_DEBUGS("AOEngine") << "state inventory UUID not found, failing." << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	LLInventoryObject::const_object_list_t obj_array;
@@ -1018,7 +1019,7 @@ BOOL AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, cons
 							obj_array,
 							LLPointer<LLInventoryCallback>(NULL));
 
-	return TRUE;
+	return true;
 }
 
 BOOL AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, BOOL reload)
@@ -1042,57 +1043,64 @@ BOOL AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
 	return TRUE;
 }
 
-BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
+bool AOEngine::findForeignItems(const LLUUID& uuid) const
 {
-	BOOL moved = FALSE;
+	bool moved = false;
 
 	LLInventoryModel::item_array_t* items;
 	LLInventoryModel::cat_array_t* cats;
 
 	gInventory.getDirectDescendentsOf(uuid, cats, items);
-	for (S32 index = 0; index < cats->size(); ++index)
+
+	if (cats)
 	{
-		// recurse into subfolders
-		if (findForeignItems(cats->at(index)->getUUID()))
+		for (const auto& cat : *cats)
 		{
-			moved = TRUE;
+			if (findForeignItems(cat->getUUID()))
+			{
+				moved = true;
+			}
 		}
 	}
 
 	// count backwards in case we have to remove items
 	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
 	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
-	for (S32 index = items->size() - 1; index >= 0; --index)
-	{
-		BOOL move = FALSE;
 
-		LLPointer<LLViewerInventoryItem> item = items->at(index);
-		if (item->getIsLinkType())
+	if (items)
+	{
+		for (S32 index = items->size() - 1; index >= 0; --index)
 		{
-			if (item->getInventoryType() != LLInventoryType::IT_ANIMATION)
+			bool move = false;
+
+			LLPointer<LLViewerInventoryItem> item = items->at(index);
+			if (item->getIsLinkType())
 			{
-				LL_DEBUGS("AOEngine") << item->getName() << " is a link but does not point to an animation." << LL_ENDL;
-				move = TRUE;
+				if (item->getInventoryType() != LLInventoryType::IT_ANIMATION)
+				{
+					LL_DEBUGS("AOEngine") << item->getName() << " is a link but does not point to an animation." << LL_ENDL;
+					move = true;
+				}
+				else
+				{
+					LL_DEBUGS("AOEngine") << item->getName() << " is an animation link." << LL_ENDL;
+				}
 			}
 			else
 			{
-				LL_DEBUGS("AOEngine") << item->getName() << " is an animation link." << LL_ENDL;
+				LL_DEBUGS("AOEngine") << item->getName() << " is not a link!" << LL_ENDL;
+				move = true;
+			}
+
+			if (move)
+			{
+				moved = true;
+				gInventory.changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
+				LL_DEBUGS("AOEngine") << item->getName() << " moved to lost and found!" << LL_ENDL;
 			}
 		}
-		else
-		{
-			LL_DEBUGS("AOEngine") << item->getName() << " is not a link!" << LL_ENDL;
-			move = TRUE;
-		}
-
-		if (move)
-		{
-			moved = TRUE;
-			LLInventoryModel* model = &gInventory;
-			model->changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), FALSE);
-			LL_DEBUGS("AOEngine") << item->getName() << " moved to lost and found!" << LL_ENDL;
-		}
 	}
+
 	gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
 	return moved;

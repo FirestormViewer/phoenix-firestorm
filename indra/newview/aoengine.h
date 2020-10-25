@@ -171,7 +171,7 @@ class AOEngine
 		void stopAllStandVariants();
 		void stopAllSitVariants();
 
-		BOOL foreignAnimations();
+		bool foreignAnimations();
 		AOSet::AOState* mapSwimming(const LLUUID& motion) const;
 		AOSet::AOState* getStateForMotion(const LLUUID& motion) const;
 
@@ -179,8 +179,8 @@ class AOEngine
 		void saveSet(const AOSet* set);
 		void saveState(const AOSet::AOState* state);
 
-		BOOL createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item);
-		BOOL findForeignItems(const LLUUID& uuid) const;
+		bool createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item);
+		bool findForeignItems(const LLUUID& uuid) const;
 		void purgeFolder(const LLUUID& uuid) const;
 
 		void onRegionChange();
