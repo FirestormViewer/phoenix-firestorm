@@ -7,4 +7,5 @@
 	<text name="group_notice" value="Gruppenmitteilung"/>
 	<button label="OK" name="btn_ok"/>
 	<button label="Gruppenmitteilungen" name="btn_notices" width="130" />
+	<button label="Gruppenchat" name="btn_groupchat" />
 </panel>

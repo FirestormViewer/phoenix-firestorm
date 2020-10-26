@@ -109,4 +109,13 @@
      right="-90"
      name="btn_notices"
      width="100" />
+    <button
+     top_delta="0"
+     follows="bottom"
+     height="20"
+     label="Group Chat"
+     layout="topleft"
+     right="-200"
+     name="btn_groupchat"
+     width="100" />
 </panel>
