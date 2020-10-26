@@ -3440,7 +3440,8 @@ BOOL LLModelPreview::render()
                     {
                         gGL.setLineWidth(PREVIEW_DEG_EDGE_WIDTH); // <FS> Line width OGL core profile fix by Rye Mutt
                         glPointSize(PREVIEW_DEG_POINT_SIZE);
-                        gPipeline.enableLightsFullbright();
+                        // <FS:Beq/> make degenerates show in RED as intended how do we get these red and fullbright is a good question..
+                        // gPipeline.enableLightsFullbright();
                         //show degenerate triangles
                         LLGLDepthTest depth(GL_TRUE, GL_TRUE, GL_ALWAYS);
                         LLGLDisable cull(GL_CULL_FACE);
