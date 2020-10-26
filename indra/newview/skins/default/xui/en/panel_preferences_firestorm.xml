@@ -183,21 +183,32 @@
              value="15.0" />
         </combo_box>
         <slider
-        name="manual_environment_change_transition_period"
-        control_name="FSEnvironmentManualTransitionTime"
-        label="Environment Transition Time:"
-        decimal_digits="1"
-        left="12"
-        top_pad="10"
-        follows="left|top"
-        layout="topleft"
-        height="18"
-        increment="0.5"
-        initial_value="0"
-        max_val="60"
-        min_val="0"
-        width="520"
-        tool_tip="Interval in seconds over which manual environment changes will blend. Zero is instant."/>
+         name="manual_environment_change_transition_period"
+         control_name="FSEnvironmentManualTransitionTime"
+         label="Environment Transition Time:"
+         decimal_digits="1"
+         left="12"
+         top_pad="15"
+         follows="left|top"
+         layout="topleft"
+         height="18"
+         increment="0.5"
+         initial_value="0"
+         max_val="60"
+         min_val="0"
+         width="520"
+         tool_tip="Interval in seconds over which manual environment changes will blend. Zero is instant."/>
+        <check_box
+         top_pad="5"
+         control_name="EnvironmentPersistAcrossLogin"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         name="EnvironmentPersistAcrossLogin"
+         label="Persist Environment settings throughout sessions"
+         left="10"
+         width="500"
+         tool_tip="Restores the current environment settings after next login."/>
     </panel>
 
 

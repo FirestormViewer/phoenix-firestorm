@@ -70,14 +70,14 @@
 			</text>
 		</panel>
 		<panel label="Музыка" name="Media Music Panel">
-			<check_box label="Разрешить автовоспроизведение музыки" name="audio_auto_play_btn" tool_tip="Выберите для автоматического запуска аудио потоков."/>
-			<check_box name="FSFadeAudioStream" tool_tip="Включить затухание аудио на участке" label="Включить затухание аудио на участке:"/>
-			<slider label="Проявление" name="FSAudioMusicFadeIn" tool_tip="Время проявления аудио на участке."/>
-			<text name="FSAudioMusicFadeInSeconds">
+			<check_box label="Разрешить автовоспроизведение музыки" name="audio_auto_play_btn" tool_tip="Выберите для автоматического запуска воспроизведения аудио потоков."/>
+			<check_box name="FSFadeAudioStream" tool_tip="Включить плавное увеличение и уменьшение громкости музыки на участке" label="Включить нарастание/затухание громкости:"/>
+			<slider label="Нарастание:" name="FSAudioMusicFadeIn" tool_tip="Время плавного увеличение громкости музыки на участке." width="270" label_width="70"/>
+			<text name="FSAudioMusicFadeInSeconds" left_delta="275">
 				секунд
 			</text>
-			<slider label="Затухания" name="FSAudioMusicFadeOut" tool_tip="Время затухания аудио на участке."/>
-			<text name="FSAudioMusicFadeOutSeconds">
+			<slider label="Затухание:" name="FSAudioMusicFadeOut" tool_tip="Время плавного уменьшения громкости музыки на участке." width="270" label_width="70"/>
+			<text name="FSAudioMusicFadeOutSeconds" left_delta="275">
 				секунд
 			</text>
 			<text name="show_stream_metadata_text" >
@@ -88,7 +88,7 @@
 				<radio_item label="Всплывающее окно" width="150" name="radio_toasts" />
 				<radio_item label="Общий чат" name="radio_chat" />
 			</radio_group>
-			<check_box name="StreamMetadataAnnounceToChat" width="210" label="Заголовки потока по каналу:"/>
+			<check_box name="StreamMetadataAnnounceToChat" width="200" label="Посылать заголовки в канал:"/>
 		</panel>
 		<panel label="Настройки голоса" name="Media Voice tab">
 			<check_box label="Включить голос" name="enable_voice_check" width="155"/>

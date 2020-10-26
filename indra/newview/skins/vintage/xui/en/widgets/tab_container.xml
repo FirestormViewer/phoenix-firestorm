@@ -12,6 +12,7 @@ label_pad_left - padding to the left of tab button labels
                font="SansSerifSmall"
                label_shadow="true"
                tab_height="18"
+               tabs_flashing_color="ButtonFlashBgColor"
                label_pad_bottom="1"
                label_pad_left="4">
   <!--

@@ -1194,6 +1194,15 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 LLStringUtil::format_map_t args;
                 args["NAME"] = name;
                 from_name += LLTrans::getString("InvOfferGroupNoticeName", args);
+
+                // <FS:Ansariel> FIRE-29677 / SL-13720 workaround
+                if (LLUUID::validate(name))
+                {
+                    LLStringUtil::format_map_t args;
+                    args["NAME"] = "%s";
+                    std::string placeholder_from_name = LLTrans::getString("InvOfferGroupNoticeName", args);
+                    from_name = name + "|" + placeholder_from_name;
+                }
                 // </FS:Ansariel>
 
                 info->mFromName = from_name;

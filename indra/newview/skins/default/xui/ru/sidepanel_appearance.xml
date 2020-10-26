@@ -10,5 +10,5 @@
 		</text>
 		<button name="edit_outfit_btn" tool_tip="Редактировать комплект"/>
 	</panel>
-	<filter_editor label="Фильтр комплектов одежды" name="Filter"/>
+	<search_editor label="Фильтр комплектов одежды" name="Filter"/>
 </panel>

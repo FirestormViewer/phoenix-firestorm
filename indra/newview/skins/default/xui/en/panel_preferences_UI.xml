@@ -70,7 +70,7 @@
 		enabled_control="ShowHoverTips"
 		control_name="FSAdvancedTooltips"
 		name="FSAdvancedTooltips"
-		label="Show extended information in hovertips (Phoenix style)"
+		label="Show extended information in hovertips"
 		layout="topleft"
 		top_pad="25"
 		left_delta="-10"

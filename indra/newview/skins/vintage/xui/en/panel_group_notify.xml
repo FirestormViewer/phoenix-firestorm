@@ -136,4 +136,12 @@
 		left_pad="5"
 		name="btn_notices"
 		width="100" />
+	<button
+		follows="bottom|left"
+		height="20"
+		label="Group Chat"
+		layout="topleft"
+		left_pad="5"
+		name="btn_groupchat"
+		width="100" />
 </panel>

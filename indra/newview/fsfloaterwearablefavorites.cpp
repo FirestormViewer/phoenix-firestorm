@@ -148,12 +148,10 @@ void FSFloaterWearableFavorites::onOpen(const LLSD& /*info*/)
 {
 	if (!mInitialized)
 	{
-		if (!gInventory.isInventoryUsable())
+		if (sFolderID.isNull())
 		{
-			return;
+			initCategory();
 		}
-
-		initCategory();
 
 		LLViewerInventoryCategory* category = gInventory.getCategory(sFolderID);
 		if (!category)
@@ -201,8 +199,15 @@ BOOL FSFloaterWearableFavorites::handleKeyHere(KEY key, MASK mask)
 	return LLFloater::handleKeyHere(key, mask);
 }
 
+// static
 void FSFloaterWearableFavorites::initCategory()
 {
+	if (!gInventory.isInventoryUsable())
+	{
+		LL_WARNS() << "Cannot initialize Favorite Wearables inventory folder - inventory is not usable!" << LL_ENDL;
+		return;
+	}
+
 	LLUUID fs_favs_id;
 
 	LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);

@@ -81,8 +81,10 @@ public:
 	 * circle. Make sure to change method according to shape other than square. 
 	 */
 	bool	pointInCircle(S32 x, S32 y) const;
-	bool	pointInCenterDot(S32 x, S32 y, S32 radius) const;
-	
+	// <FS:Beq> FIRE-30414 Camera control arrows not clickable
+	// bool	pointInCenterDot(S32 x, S32 y, S32 radius) const;
+	bool	pointInCenterDot(S32 x, S32 y) const;
+	// </FS:Beq>
 	static std::string nameFromQuadrant(const EJoystickQuadrant quadrant);
 	static EJoystickQuadrant quadrantFromName(const std::string& name);
 	static EJoystickQuadrant selectQuadrant(LLXMLNodePtr node);

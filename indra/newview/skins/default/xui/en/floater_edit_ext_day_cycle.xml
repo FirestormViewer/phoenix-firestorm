@@ -6,11 +6,11 @@
         save_rect="false"
         title="Edit Day Cycle"
         width="705"
-        height="700"
+        height="620"
         min_width="705"
-        min_height="700"
+        min_height="300"
         single_instance="true" 
-        can_resize="false">
+        can_resize="true">
 
     <!-- obsolete?, add as hint for 'save' button? -->
     <string name="title_new">Create a New Day Cycle</string>
@@ -30,7 +30,7 @@
     <!-- Layout -->
     <layout_stack name="outer_stack"
             width="705"
-            height="700"
+            height="620"
             follows="all"
             animate="false"
             top="0"
@@ -520,14 +520,14 @@
                 <layout_panel name="frame_settings_water"
                         auto_resize="true"
                         user_resize="false"
-                        height="420"
+                        height="320"
                         width="700"
                         min_height="0"
                         visible="false">
                     <tab_container
                             follows="all"
                             halign="left"
-                            height="420"
+                            height="320"
                             layout="topleft"
                             left="0"
                             name="water_tabs"
@@ -550,14 +550,14 @@
                 <layout_panel name="frame_settings_sky"
                         auto_resize="true"
                         user_resize="false"
-                        height="420"
+                        height="320"
                         width="700"
                         min_height="0"
                         visible="true">
                     <tab_container
                             follows="all"
                             halign="left"
-                            height="420"
+                            height="320"
                             visible="true"
                             layout="topleft"
                             left="0"
@@ -569,6 +569,7 @@
                             width="700">
                         <panel
                                 border="true"
+                                height="420"
                                 class="panel_settings_atmos"
                                 filename="panel_settings_sky_atmos.xml"
                                 label="Atmosphere &amp; Lighting"
@@ -610,7 +611,7 @@
             </layout_stack>
         </layout_panel>
         <layout_panel name="buttons"
-                auto_resize="false"
+                auto_resize="true"
                 user_resize="false"
                 height="26"
                 min_height="26"

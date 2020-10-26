@@ -106,6 +106,8 @@ if (WINDOWS)
       /Zc:forScope
       /nologo
       /Oy-
+      /Oi
+      /Ot
       /arch:AVX
       /fp:fast
       )
@@ -118,8 +120,10 @@ if (WINDOWS)
       /Zc:forScope
       /nologo
       /Oy-
+      /Oi
+      /Ot
       /arch:AVX2
-#      /fp:fast
+      /fp:fast
       )
   else (USE_AVX_OPTIMIZATION)
   # </FS:Ansariel> AVX/AVX2 support
@@ -131,6 +135,8 @@ if (WINDOWS)
       /Zc:forScope
       /nologo
       /Oy-
+      /Oi
+      /Ot
 #      /arch:SSE2
       /fp:fast
       )

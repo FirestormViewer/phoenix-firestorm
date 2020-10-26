@@ -569,9 +569,11 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
         glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
         gpu_res = (S32Megabytes)meminfo[0];
 
+        // <FS:Ansariel> Maybe do this independently from AMD cards????
         //check main memory, only works for windows.
-        LLMemory::updateMemoryInfo();
-        physical_res = LLMemory::getAvailableMemKB();
+        //LLMemory::updateMemoryInfo();
+        //physical_res = LLMemory::getAvailableMemKB();
+        // </FS:Ansariel>
     }
     else if (gGLManager.mHasNVXMemInfo)
     {
@@ -579,6 +581,12 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
         glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &free_memory);
         gpu_res = (S32Megabytes)(free_memory / 1024);
     }
+
+    // <FS:Ansariel> Maybe do this independently from AMD cards????
+    //check main memory, only works for windows.
+    LLMemory::updateMemoryInfo();
+    physical_res = LLMemory::getAvailableMemKB();
+    // </FS:Ansariel>
 
     gpu = gpu_res;
     physical = physical_res;
@@ -603,6 +611,9 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 		LL_RECORD_BLOCK_TIME(FTM_TEXTURE_UPDATE_MEDIA);
 		LLViewerMediaTexture::updateClass();
 	}
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	gTextureList.updateTexMemDynamic();
 
 	sBoundTextureMemory = LLImageGL::sBoundTextureMemory;
 	sTotalTextureMemory = LLImageGL::sGlobalTextureMemory;
@@ -1650,6 +1661,26 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 		destroyRawImage();
 		return FALSE;
 	}
+
+    if (mGLTexturep->getHasExplicitFormat())
+    {
+        LLGLenum format = mGLTexturep->getPrimaryFormat();
+        S8 components = mRawImage->getComponents();
+        if ((format == GL_RGBA && components < 4)
+            || (format == GL_RGB && components < 3))
+        {
+            LL_WARNS() << "Can't create a texture " << mID << ": invalid image format " << std::hex << format << " vs components " << (U32)components << LL_ENDL;
+            // Was expecting specific format but raw texture has insufficient components for
+            // such format, using such texture will result in crash or will display wrongly
+            // if we change format. Texture might be corrupted server side, so just set as
+            // missing and clear cashed texture (do not cause reload loop, will retry&recover
+            // during new session)
+            setIsMissingAsset();
+            destroyRawImage();
+            LLAppViewer::getTextureCache()->removeFromCache(mID);
+            return FALSE;
+        }
+    }
 
 	res = mGLTexturep->createGLTexture(mRawDiscardLevel, mRawImage, usename, TRUE, mBoostLevel);
 

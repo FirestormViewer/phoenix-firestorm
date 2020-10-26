@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Загрузка модели">
   <string name="no_havok">загрузка меша с физикой</string>
-  <string name="status_idle"/>
   <string name="status_parse_error">Ошибка: Проблема при анализе файла DAE – см. подробности в журнале.</string>
   <string name="status_bind_shape_orientation">Предупреждение: форма матрицы стандартно не ориентирована по координате X.</string>
   <string name="status_material_mismatch">Ошибка: Материал модели не входит в эталонную модель.</string>
@@ -31,6 +30,13 @@
   <string name="simplifying">Упрощение...</string>
   <string name="tbd">Позже</string>
 
+  <!-- Warnings and info from model loader-->
+  <string name="TooManyJoint">Текстурирование отключено, слишком много суставов: [JOINTS], максимум: [MAX]</string>
+  <string name="UnrecognizedJoint">Подстроено под неизвестный сустав [NAME]</string>
+  <string name="UnknownJoints">Текстурирование отключено, слишком много [COUNT] неизвестных суставов</string>
+  <string name="ModelLoaded">Модель [MODEL_NAME] загружена</string>
+  <string name="IncompleteTC">Данные координат текстуры не полны.</string>
+
   <panel name="left_panel">
     <panel name="model_name_representation_panel">
       <text name="name_label">Имя модели:</text>
@@ -50,8 +56,6 @@
           <item label="Лимит треугольников" name="Triangle Limit"/>
           <item label="Порог ошибки" name="Error Threshold"/>
         </combo_box>
-        <text initial_value="0" name="high_triangles" value="0"/>
-        <text initial_value="0" name="high_vertices" value="0"/>
         <text initial_value="Средний" name="medium_label" value="Средний"/>
         <combo_box name="lod_source_medium">
           <item label="Загрузка из файла" name="Load from file"/>
@@ -63,8 +67,6 @@
           <item label="Лимит треугольников" name="Triangle Limit"/>
           <item label="Порог ошибки" name="Error Threshold"/>
         </combo_box>
-        <text initial_value="0" name="medium_triangles" value="0"/>
-        <text initial_value="0" name="medium_vertices" value="0"/>
         <text initial_value="Низкий" name="low_label" value="Низкий"/>
         <combo_box name="lod_source_low">
           <item label="Загрузка из файла" name="Load from file"/>
@@ -76,8 +78,6 @@
           <item label="Лимит треугольников" name="Triangle Limit"/>
           <item label="Порог ошибки" name="Error Threshold"/>
         </combo_box>
-        <text initial_value="0" name="low_triangles" value="0"/>
-        <text initial_value="0" name="low_vertices" value="0"/>
         <text initial_value="Низший" name="lowest_label" value="Низший"/>
         <combo_box name="lod_source_lowest">
           <item label="Загрузка из файла" name="Load from file"/>
@@ -89,11 +89,8 @@
           <item label="Лимит треугольников" name="Triangle Limit"/>
           <item label="Порог ошибки" name="Error Threshold"/>
         </combo_box>
-        <text initial_value="0" name="lowest_triangles" value="0"/>
-        <text initial_value="0" name="lowest_vertices" value="0"/>
         <check_box label="Генерировать нормали" name="gen_normals"/>
         <text initial_value="Угол сгиба:" name="crease_label" value="Угол сгиба:"/>
-        <spinner name="crease_angle" value="75"/>
       </panel>
 
       <!-- PHYSYCS PANEL -->
@@ -141,23 +138,34 @@
         <text name="scale_label" width="195">Масштаб (1=не масштабировать):</text>
         <text name="dimensions_label">Размеры:</text>
         <check_box label="Включить текстуры" name="upload_textures"/>
+      </panel>
 
-        <text name="include_label" width="190">Только для моделей аватаров:</text>
-        <check_box label="Включить вес кожи" name="upload_skin"/>
-        <check_box label="Включить положения суставов" name="upload_joints"/>
-        <check_box label="Блокировать масштаб, если определено положение суставов" name="lock_scale_if_joint_position"/>
+      <panel label="Переопределения" name="rigging_panel" title="Оснастка">
+        <check_box label="Включая вес кожи" name="upload_skin"/>
+        <check_box label="Включая позицию суставов" name="upload_joints"/>
+        <check_box label="Блокировать масштаб, если задана позиция сустава" name="lock_scale_if_joint_position"/>
         <text name="pelvis_offset_label">Сдвиг Z (поднять/опустить):</text>
+        <text name="skin_too_many_joints">Слишком много кожных суставов</text>
+        <text name="skin_unknown_joint">Модель имеет неизвестный сустав(ы)</text>
+        <text name="joints_descr">Суставы:</text>
+        <text name="conflicts_description">[CONFLICTS] конфликтов в [JOINTS_COUNT] суставах</text>
+        <text name="pos_overrides_descr">Переопределения положения для сустава '[JOINT]':</text>
+        <scroll_list name="pos_overrides_list">
+          <scroll_list.columns label="Модель" name="model_name"/>
+        </scroll_list>
         <panel name="avatar_model_hint_panel">
           <text name="avatar_model_hint_text">
            Подсказка:
-Слишком много предметов используют по умолчанию (правая рука) без необходимости.
+Слишком много предметов используют по умолчанию (правая кисть) без необходимости.
 
 Пожалуйста, рассмотрите возможность использования точки крепления рядом с положением предмета на теле.
           </text>
         </panel>
       </panel>
+      <panel label="Журнал" name="logs_panel">
+        <check_box label="Показать подробно журнал" name="verbose_logging" width="80"/>
+      </panel>
     </tab_container>
-
     <panel name="weights_and_warning_panel">
       <button label="Рассчитать вес и плату" name="calculate_btn" tool_tip="Рассчитать вес и плату"/>
       <button label="Отмена" name="cancel_btn"/>
@@ -165,14 +173,14 @@
       <button label="Очистить настройки и сбросить форму" name="reset_btn"/>
       <!-- ========== WEIGHTS ==========-->
       <text name="upload_fee">Стоимость: L$ [FEE]</text>
-      <text name="prim_weight" width="140">Влияние земли: [EQ]</text>
+      <text name="prim_weight" width="140">Влияет на землю: [EQ]</text>
       <text name="download_weight">Загрузка: [ST]</text>
       <text name="physics_weight">Физика: [PH]</text>
       <text name="server_weight">Сервер: [SIM]</text>
       <!-- =========== Cost breakdown ======== -->
-      <panel name="physics_costs_panel">
+      <panel name="price_breakdown_panel">
         <text name="price_breakdown_title">Ценовая разбивка</text>
-        <text name="price_breakdown_labels" width="70">
+        <text name="price_breakdown_labels">
 Загрузка:
 Физика:
 Экземпляры:
@@ -180,18 +188,18 @@
 Модель:
         </text>
       </panel>
-      <panel name="physics_breakdown_panel" width="120" height="100">
+      <panel name="physics_costs_panel">
         <text name="physics_breakdown_title">Расходы на физику</text>
-        <text name="physics_breakdown_labels" width="65">
+        <text name="physics_breakdown_labels">
 Каркас:
 Меш:
 Анализ:
         </text>
       </panel>
-      <panel name="preview_controls_panel" width="260">
-        <panel name="preview_controls_inner_panel" height="18" >
-          <text name="preview_controls_title" left="3" width="150">Предпросмотр</text>
-          <combo_box name="preview_lod_combo" width="80" tool_tip="Уровень детализации при предварительном просмотре">
+      <panel name="preview_controls_panel">
+        <panel name="preview_controls_inner_panel">
+          <text name="preview_controls_title">Предпросмотр</text>
+          <combo_box name="preview_lod_combo" tool_tip="Уровень детализации при предварительном просмотре">
             <combo_item name="high">Высокий</combo_item>
             <combo_item name="medium">Средний</combo_item>
             <combo_item name="low">Низкий</combo_item>
@@ -199,18 +207,19 @@
           </combo_box>
         </panel>
         <check_box label="Грани" name="show_edges"/>
-        <check_box label="Текстуры" name="show_textures" left_pad="5"/>
-        <check_box label="UV guide" name="show_uv_guide" left_pad="5"/>
+        <check_box label="Текстуры" name="show_textures"/>
+        <check_box label="Развертка" name="show_uv_guide"/>
         <check_box label="Физика" name="show_physics"/>
-        <text width="80" name="exploder_label">Просмотр разложения</text>
-        <check_box label="Вес кожи" name="show_skin_weight"/>
-        <check_box label="Суставы" name="show_joint_positions" left_pad="5"/>
+        <text name="exploder_label">Диапазон</text>
+        <check_box label="Веса кожи" name="show_skin_weight"/>
+        <check_box label="Суставы" name="show_joint_positions"/>
+        <check_box label="Изменение Суставов" name="show_joint_overrides"/>
       </panel>
 
       <!-- ========== NOTE MESSAGE ========== -->
       <text name="warning_title">ПРИМЕЧАНИЕ:</text>
-      <text name="warning_message">У вас нет прав на загрузку меш моделей. [[VURL] Узнайте, как] получить их.
-      </text>
+      <text name="warning_message">У вас нет прав на загрузку меш моделей. [[VURL] Узнайте, как] получить их.</text>
     </panel>
   </panel>
+  <text name="lod_label">Просмотр:</text>
 </floater>

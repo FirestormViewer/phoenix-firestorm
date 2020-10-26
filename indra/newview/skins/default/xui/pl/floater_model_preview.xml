@@ -28,6 +28,11 @@
   <string name="layer_all">Wszystko</string>
   <string name="decomposing">Analizowanie...</string>
   <string name="simplifying">Upraszczanie...</string>
+  <string name="TooManyJoint">Teksturowanie wyłączone, zbyt wiele stawów: [JOINTS], maksimum: [MAX]</string>
+  <string name="UnrecognizedJoint">Riggowane do nieznanej nazwy stawu [NAME]</string>
+  <string name="UnknownJoints">Teksturowanie wyłączone, zbyt wiele nieznanych stawów ([COUNT])</string>
+  <string name="ModelLoaded">Model [MODEL_NAME] załadowany</string>
+  <string name="IncompleteTC">Dane współrzędnych tekstury nie są kompletne.</string>
 <panel name="left_panel">
     <panel name="model_name_representation_panel">
         <text name="name_label">
@@ -159,20 +164,28 @@
              Wymiary:
            </text>
            <check_box name="upload_textures" label="Dołącz tekstury"/>
-           <text name="include_label">
-             Tylko dla modeli awatarów:
-           </text>
-           <check_box label="Dołącz wagi skórki" name="upload_skin"/>
-           <check_box label="Dołącz pozycje stawów" name="upload_joints"/>
-           <check_box label="Deformuj do kształtu awatara" name="deform"/>
-           <radio_group name="deform_base">
-             <radio_item label="Mężczyzna" name="0"/>
-             <radio_item label="Kobieta" name="1"/>
-             <radio_item label="Mężczyzna - chudy" name="2"/>
-           </radio_group>
+     </panel>
+     <panel label="Riggowanie" name="rigging_panel" title="Riggowanie">
+           <check_box label="Dołącz wagi skórki" name="upload_skin" />
+           <check_box label="Dołącz pozycje stawów" name="upload_joints" />
            <check_box label="Blokuj skalowanie gdy stawy ustawione" name="lock_scale_if_joint_position" />
            <text name="pelvis_offset_label">
-             Przesunięcie osi Z:
+             Przesunięcie Z (wyżej lub niżej):
+           </text>
+           <text name="skin_too_many_joints">
+             Zbyt wiele teksturowanych stawów
+           </text>
+           <text name="skin_unknown_joint">
+             Model ma nieznane stawy
+           </text>
+           <text name="joints_descr">
+             Stawy:
+           </text>
+           <text name="conflicts_description">
+             [CONFLICTS] konflikty w [JOINTS_COUNT] stawach
+           </text>
+           <text name="pos_overrides_descr">
+             Nadpisania pozycji dla stawu '[JOINT]':
            </text>
            <panel name="avatar_model_hint_panel">
              <text name="avatar_model_hint_text">
@@ -182,6 +195,9 @@ Zbyt wiele rzeczy niepotrzebnie używa wartości domyślnej (prawa ręka).
 Rozważ użycie innego punktu doczepienia, bliżej do pozycji obiektu na ciele.
              </text>
            </panel>
+     </panel>
+     <panel name="logs_panel">
+           <check_box label="Logowanie szczegółowe" name="verbose_logging" />
      </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">
@@ -204,7 +220,7 @@ Rozważ użycie innego punktu doczepienia, bliżej do pozycji obiektu na ciele.
        <text name="server_weight">
          Serwer: [SIM]
        </text>
-       <panel name="physics_costs_panel">
+       <panel name="price_breakdown_panel">
            <text name="price_breakdown_title">
                 Podział kosztów
            </text>
@@ -223,7 +239,7 @@ Wysokie:
 Niskie:
 Najniższe:
        </text>
-       <panel name="physics_breakdown_panel">
+       <panel name="physics_costs_panel">
            <text name="physics_breakdown_title">
                 Koszty fizyki
            </text>
@@ -250,10 +266,11 @@ Analiza:
            <check_box label="Pomoc UV" name="show_uv_guide" />
            <check_box label="Fizyka" name="show_physics" />
            <text name="exploder_label">
-            Rozpiętość
+                Rozpiętość
            </text>
            <check_box label="Wagi" name="show_skin_weight" />
            <check_box label="Stawy" name="show_joint_positions" />
+           <check_box label="Nadpisania" name="show_joint_overrides" />
        </panel>
        <text name="warning_title">
          UWAGA:
@@ -263,9 +280,7 @@ Analiza:
        </text>
     </panel>
 </panel>
-<panel name="right_panel">
-    <text name="lod_label">
-        Podgląd:
-    </text>
-</panel>
+<text name="lod_label">
+    Podgląd:
+</text>
 </floater>

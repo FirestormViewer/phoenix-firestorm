@@ -15,8 +15,5 @@
 		</text>
 		<button label="" name="edit_outfit_btn" tool_tip="このアウトフィットを編集"/>
 	</panel>
-	<filter_editor label="アウトフィットをフィルター" name="Filter"/>
-	<panel name="panel_outfits_inventory" />
-	<panel name="panel_outfit_edit" />
-	<panel name="panel_edit_wearable" />
+	<search_editor label="アウトフィットをフィルター" name="Filter"/>
 </panel>

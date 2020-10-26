@@ -307,6 +307,14 @@ BOOL LLVLComposition::generateTexture(const F32 x, const F32 y,
 				mDetailTextures[i]->getComponents() != 3)
 			{
 				LLPointer<LLImageRaw> newraw = new LLImageRaw(BASE_SIZE, BASE_SIZE, 3);
+				//<FS:Beq> guard against bad alloc here that leads to crash in composite
+				if(!newraw)
+				{
+					// Not much that is useful to do here, this ship is sinking it seems.
+					LL_WARNS("Terrain") << "allocation of new raw image failed" << LL_ENDL;
+					return(FALSE);
+				}
+				// </FS:Beq>
 				newraw->composite(mRawImages[i]);
 				mRawImages[i] = newraw; // deletes old
 			}

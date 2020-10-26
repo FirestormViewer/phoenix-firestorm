@@ -102,3 +102,5 @@ my_autobuild.xml
 *.srctrlbm
 *.srctrldb
 *.srctrlprj
+
+compile_commands.json

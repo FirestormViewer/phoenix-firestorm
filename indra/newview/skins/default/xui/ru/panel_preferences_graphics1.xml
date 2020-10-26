@@ -5,6 +5,9 @@
 			<text name="preset_label" width="90">
 				Предустановка:
 			</text>
+			<text name="preset_text">
+				(Нет)
+			</text>
 			<text name="QualitySpeed">
 				Качество и скорость:
 			</text>
@@ -31,10 +34,10 @@
 				Шейдеры:
 			</text>
 			<check_box label="Прозрачная вода" name="TransparentWater"/>
-			<check_box label="Выпуклости и блеск" name="BumpShiny"/>
+			<check_box label="Рельеф и блеск" name="BumpShiny"/>
 			<check_box label="Локальный свет" name="LocalLights"/>
 			<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
-			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения. ('deferred rendering')." name="UseLightShaders"/>
+			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения." name="UseLightShaders"/>
 			<check_box label="Окклюзия окружения" name="UseSSAO"/>
 			<text name="shadows_label">
 				Тени:
@@ -54,7 +57,7 @@
 				<combo_box.item label="Все аватары и объекты" name="3"/>
 				<combo_box.item label="Отражать все" name="4"/>
 			</combo_box>
-			<text name="local lights_label" tool_tip="Влияет на количество предоставляемых источников света, когда расширенная модель освещения отключена. Требуется перезагрузка">
+			<text name="local lights_label" tool_tip="Влияет на количество предоставляемых источников света, когда расширенная модель освещения отключена. Требуется перезапуск">
 				Точечное освещение:
 			</text>
 			<combo_box name="LocalLightsDetail">
@@ -74,7 +77,7 @@
 			<text name="MeshDetailText">
 				Уровень детализации (LOD):
 			</text>
-			<slider label="  Объекты и скульпты" name="ObjectMeshDetail"/>
+			<slider label="  Объекты и скульпты" name="ObjectMeshDetail" tool_tip="Управляет применением низкой детализации объектов для снижения нагрузки визуализации. Более высокие значения вызывают задержки, используйте с осторожностью."/>
 			<slider label="  Эластичные объекты" name="FlexibleMeshDetail"/>
 			<slider label="  Деревья" name="TreeMeshDetail"/>
 			<slider label="  Аватары" name="AvatarMeshDetail"/>
@@ -83,7 +86,6 @@
 			<text name="AvatarRenderingText">
 				Прорисовка аватара:
 			</text>
-			<check_box label="Упростить удаленные аватары" name="AvatarImpostors"/>
 			<check_box label="Аппаратная обработка" name="AvatarVertexProgram"/>
 			<check_box label="Одежда аватара" name="AvatarCloth"/>
 			<text name="TerrainDetailText">
@@ -100,13 +102,13 @@
 			<button tool_tip="Восстановить настройки графики по умолчанию." name="Defaults"/>
 		</panel>
 		<panel label="Аппаратные установки" name="Hardware Settings">
-			<check_box label="Анизотропная фильтрация (медленнее, когда включено)" name="ani"/>
-			<check_box label="Включить OpenGL Vertex Buffer Object (VBO)" name="vbo" tool_tip="Включение этого на современном оборудовании дает выигрыш в производительности. Тем не менее, старое оборудование часто имеет плохие реализаций VBO и вы можете вызвать сбой, если это разрешить."/>
+			<check_box label="Анизотропная фильтрация (медленнее, когда включено)" name="ani" tool_tip = "Этот флажок включает анизотропную фильтрацию, которая представляет собой метод повышения качества текстур, когда они просматриваются под относительно большими углами по отношению к положению вашей камеры. Обычно заставляет их выглядеть менее размытыми на больших расстояниях."/>
+			<check_box label="Включить OpenGL Vertex Buffer Object (VBO)" name="vbo" tool_tip="Включение этого на современном оборудовании дает выигрыш в производительности. Тем не менее, старое оборудование часто имеет плохую реализацию VBO и может вызвать сбой, если вы это включите."/>
 			<check_box label="Включить потоковое VBO" name="vbo_stream" tool_tip="Отключение этого может улучшить производительность при включеном VBO. Наблюдение показало, что отключение давало улучшения на различных графических картах AMD и Intel."/>
-			<check_box label="Включить сжатие текстур (требуется перезапуск)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, позволяет текстурам с высоким разрешение закгружаться за счет некоторого потери качества цвета."/>
-			<check_box label="Включить поддержку дисплеев HiDPI (только Mac OSX; требуется перезагрузка)" name="use HiDPI" tool_tip="Включить OpenGL для отображения в высоком разрешении."/>
-			<text name="Antialiasing:">
-				Сглаживание:
+			<check_box label="Включить сжатие текстур с потерями (требуется перезапуск)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, позволяет текстурам с высоким разрешение загружаться за счет некоторого потери качества цвета."/>
+			<check_box label="Включить поддержку дисплеев HiDPI (только Mac OSX; требуется перезапуск)" name="use HiDPI" tool_tip="Включить OpenGL для отображения в высоком разрешении."/>
+			<text name="Antialiasing:" tool_tip = "Изменения этого параметра может потребовать перезапуск на некотором оборудовании.">
+				Сглаживание (рекомендуется перезапуск):
 			</text>
 			<combo_box label="Сглаживание" name="fsaa">
 				<combo_box.item label="Отключено" name="FSAADisabled"/>
@@ -115,8 +117,12 @@
 			<text name="brightness text">
 				(0/1.0 = яркость по уполчанию, ниже = ярче)
 			</text>
-			<slider label="Буфер текстурной памяти (МБ):" name="GraphicsCardTextureMemory" tool_tip="Объем памяти выделенный для текстур. По умолчанию память видеокарты до 512M. Снижение этого значения может улучшить производительность, но также может сделать текстуры размытыми. Увеличение этого значения за пределы 512M не рекомендуется. Даже если ваша видеокарта это поддерживает."/>
-			<spinner label="Расстояние покрытия тумана:" name="fog"/>
+			<slider label="Буфер текстурной памяти (МБ):" name="GraphicsCardTextureMemory" tool_tip="Объем памяти, выделяемой для текстур. По умолчанию память видеокарты составляет до 512МБ в 32-битных системах и до 2048МБ в 64-битных системах, в зависимости от доступной выделенной видеопамяти видеокарты. Уменьшение этого параметра может улучшить производительность, но также может сделать текстуры размытыми."/>
+			<check_box label="Включить динамическую память текстур" name="FSDynamicTextureMemory" tool_tip="Включает вычисление динамической памяти текстур (доступно только в 64-битных программах просмотра и графических процессорах AMD/NVIDIA с не менее 512МБ видеопамяти)"/>
+			<slider label="Минимальный буфер памяти текстур (МБ):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Минимальный объем памяти, выделяемой для текстур. Это гарантирует, что указанный объем всегда будет использоваться для текстур, даже если он превышает объем доступной видеопамяти. Если указанная сумма плюс резервы превышают объем физической видеопамяти, она будет соответственно ограничена."/>
+			<slider label="Дополнительный резерв памяти текстур (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Процент физической видеопамяти, зарезервированной для кэширования загруженных текстур, которые в данный момент не отображаются."/>
+			<slider label="Резерв физической видеопамяти (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Процент физической видеопамяти, зарезервированной для другого использования."/>
+			<spinner label="Коэффициент дистанции тумана:" name="fog"/>
 		</panel>
 		<panel label="Прорисовка" name="Rendering">
 			<text name="World Updating">
@@ -126,18 +132,17 @@
 			<text name="Texture Rendering">
 				Прорисовка текстур:
 			</text>
-			<check_box label="Использовать HTTP для получения текстур" tool_tip="Установите для загрузки текстур, используя протокол HTTP - деактивируйте его, если у вас возникли проблемы с отображением текстур" name="TexturesHTTP"/>
-			<check_box label="Ограничить Макс.разрешение текстур до 512 пикс. (только 64 бит; нужна перезагрузка)"
+			<check_box label="Ограничить Макс.разрешение текстур до 512 пикс. (только 64 бит; нужен перезапуск)"
 			tool_tip="Устанавливает ограничение максимального разрешение отображения для текстур до 512 пикселей. Это позволяет отображать больше текстур, прежде чем превысить доступную память текстур и наблюдать размытые текстуры."
-			name="FSRestrictMaxTextureSize" />
+			name="FSRestrictMaxTextureSize"/>
 			<text name="TextureDetailLabel">
 				Уровень качества текстур:
 			</text>
-			<combo_box name="TextureDetail">
-				<combo_box.item label="Нормальное качество" name="0"/>
-				<combo_box.item label="Среднее качество" name="3"/>
-				<combo_box.item label="Низкое качество" name="4"/>
-				<combo_box.item label="Нет текстур" name="5"/>
+			<combo_box name="TextureDetail" tool_tip = "Качество загрузки текстур, влияет на настройку отладки TextureDiscardLevel">
+				<combo_box.item label="Нормальное (0)" name="0"/>
+				<combo_box.item label="Среднее (3)" name="3"/>
+				<combo_box.item label="Низкое (4)" name="4"/>
+				<combo_box.item label="Нет текстур (5)" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">
 				Маски прозрачности (альфа):
@@ -149,12 +154,12 @@
 			</text>
 			<check_box label="Прорисовка свечения" tool_tip="Прорисовка свечения. Обратите внимание, что сила должна быть установлена на ноль, чтобы отключить свечение, когда тени включены." name="RenderGlow"/>
 			<slider label="Сила:" tool_tip="Сила. Выше = шире и размытей (по умолчанию 2) " name="glow_strength"/>
-			<check_box label="Показывать аватаров, которые не закончили загрузку" name="RenderUnloadedAvatars"/>
+			<check_box label="Показывать не полностью загруженные аватары" name="RenderUnloadedAvatars"/>
 			<check_box label="Ограничение частоты кадров" name="FSLimitFramerate"/>
 			<check_box label="Режим отображения скелета" name="Wireframe"/>
 			<check_box label="Включить прикрепленное освещение" tool_tip="Эта опция включает свет, прикрепленный к аватару, такой как освещение лица. " name="Render Attached Lights"/>
 			<check_box label="Отображать частицы других аватаров" name="Render Attached Particles"/>
-			<slider label="Задержка для предварительного кэширования" tool_tip="Как долго задерживается показ мира вам, после того как другим показно, что вы в сети (по умолчанию 6 секунд)" name="PrecachingDelay"/>
+			<slider label="Задержка для предварительного кэширования" tool_tip="Как долго задерживается показ мира вам, после того как другим показано, что вы в сети (по умолчанию 6 секунд)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				секунд
 			</text>
@@ -165,12 +170,12 @@
 			<check_box label="Включить глубину резкости (Это размоет вид за исключением фокусировки камеры.)" name="UseDoF"/>
 			<check_box label="Включить в режиме редактирования" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="Разрешить когда под водой" name="FSRenderDoFUnderwater"/>
-			<slider label="F-камера:" name="CameraFNum" tool_tip="F номер камеры - значение для эффекта глубины резкости"/>
-			<slider label="Фокусное расстояние камеры (мм):" name="CameraFocal" tool_tip="Фокусное расстояние камеры для эффекта глубины резкости (в миллиметрах)"/>
-			<slider label="Угол наклона камеры (°):" name="Camera FOV" tool_tip="Вертикальный угол наклона камеры для эффекта глубины резкости (в градусах)"/>
+			<slider label="Номер фокуса камеры:" name="CameraFNum" tool_tip="Номер фокуса камеры - значение для эффекта глубины резкости"/>
+			<slider label="Фокусное расстояние (мм):" name="CameraFocal" tool_tip="Фокусное расстояние камеры для эффекта глубины резкости (в миллиметрах)"/>
+			<slider label="Угол зрения камеры (град.):" name="Camera FOV" tool_tip="Вертикальный угол зрения камеры для эффекта глубины резкости (в градусах)"/>
 			<slider label="Соотношение сторон:" name="CameraAspectRatio" tool_tip="Соотношение сторон камеры для эффекта глубины резкости"/>
-			<slider label="Время фокусировки (DoF):" name="CameraFocusTrans" tool_tip="Время перехода фокусировки (DoF):"/>
-			<slider label="Качество прорисовки (DoF):" name="CameraDoFResScale" tool_tip="Влияет на качество размытия и производительность прорисовки.  (выше = лучше качество, ниже = лучше производительность)"/>
+			<slider label="Время фокусировки:" name="CameraFocusTrans" tool_tip="Время изменения фокусировки с одного места на другое"/>
+			<slider label="Качество прорисовки:" name="CameraDoFResScale" tool_tip="Влияет на качество размытия и производительность прорисовки. (выше = лучше качество, ниже = лучше производительность)"/>
 		</panel>
 	</tab_container>
 </panel>
