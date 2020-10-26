@@ -5,16 +5,16 @@
     <map>
       <key>jemalloc</key>
       <map>
-		<key>copyright</key>
-		<string>Copyright (C) 2002-present Jason Evans jasone@canonware.com.</string>
-		<key>description</key>
-		<string>jemalloc is a general purpose malloc(3) implementation that emphasizes fragmentation avoidance and scalable concurrency support.</string>
-		<key>license</key>
-		<string>jemalloc (BSD derived)</string>
-		<key>license_file</key>
-		<string>LICENSES/jemalloc.txt</string>
-		<key>name</key>
-		<string>jemalloc</string>
+        <key>copyright</key>
+        <string>Copyright (C) 2002-present Jason Evans jasone@canonware.com.</string>
+        <key>description</key>
+        <string>jemalloc is a general purpose malloc(3) implementation that emphasizes fragmentation avoidance and scalable concurrency support.</string>
+        <key>license</key>
+        <string>jemalloc (BSD derived)</string>
+        <key>license_file</key>
+        <string>LICENSES/jemalloc.txt</string>
+        <key>name</key>
+        <string>jemalloc</string>
         <key>platforms</key>
         <map>
           <key>linux64</key>
@@ -260,7 +260,7 @@
         </map>
         <key>version</key>
         <string>1.2.15</string>
-      </map>      
+      </map>
       <key>apr_suite</key>
       <map>
         <key>copyright</key>
@@ -2981,7 +2981,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.5.1.538970</string>
+        <string>2.3.1</string>
       </map>
       <key>openssl</key>
       <map>
