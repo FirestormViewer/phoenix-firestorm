@@ -3382,25 +3382,27 @@ BOOL LLMenuBarGL::handleAcceleratorKey(KEY key, MASK mask)
 		mAltKeyTrigger = FALSE;
 	}
 
-	if(!result 
-		&& (key == KEY_F10 && mask == MASK_CONTROL) 
-		&& !gKeyboard->getKeyRepeated(key)
-		&& isInVisibleChain())
-	{
-		if (getHighlightedItem())
-		{
-			clearHoverItem();
-			LLMenuGL::setKeyboardMode(FALSE);
-		}
-		else
-		{
-			// close menus originating from other menu bars when first opening menu via keyboard
-			LLMenuGL::sMenuContainer->hideMenus();
-			highlightNextItem(NULL);
-			LLMenuGL::setKeyboardMode(TRUE);
-		}
-		return TRUE;
-	}
+	// <FS:Ansariel> FIRE-30003: (CTRL-)F10 can't be used as gesture trigger
+	//if(!result 
+	//	&& (key == KEY_F10 && mask == MASK_CONTROL) 
+	//	&& !gKeyboard->getKeyRepeated(key)
+	//	&& isInVisibleChain())
+	//{
+	//	if (getHighlightedItem())
+	//	{
+	//		clearHoverItem();
+	//		LLMenuGL::setKeyboardMode(FALSE);
+	//	}
+	//	else
+	//	{
+	//		// close menus originating from other menu bars when first opening menu via keyboard
+	//		LLMenuGL::sMenuContainer->hideMenus();
+	//		highlightNextItem(NULL);
+	//		LLMenuGL::setKeyboardMode(TRUE);
+	//	}
+	//	return TRUE;
+	//}
+	// </FS:Ansariel>
 
 	if (result && !getHighlightedItem() && LLMenuGL::sMenuContainer->hasVisibleMenu())
 	{

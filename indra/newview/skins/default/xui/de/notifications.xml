@@ -1520,6 +1520,11 @@ Sie können sich später noch umentscheiden.
 		Konnte nicht zu [SLURL] teleportieren, da dieser Standort sich auf einem anderen Grid ([GRID]) befindet. Sie befinden sich im Moment auf dem Grid ([CURRENT_GRID]).  Bitte schließen Sie Ihren Viewer und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="GeneralCertificateErrorShort">
+		Keine Verbindung zum Server möglich.
+[REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="GeneralCertificateError">
 		Eine Verbindung zum Server konnte nicht hergestellt werden.
 [REASON]
@@ -5240,7 +5245,9 @@ Der Sicherungspfad konnte nicht gefunden werden.
 
 	<notification name="SettingsConfirmBackup">
 		Möchten Sie wirklich eine Sicherung in diesem Verzeichnis erstellen?
+
 [DIRECTORY]
+
 Bestehende Sicherungen in diesem Verzeichnis werden überschrieben!
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Sicherung erstellen"/>
 	</notification>

@@ -329,7 +329,7 @@ void LLSettingsVOBase::onAssetDownloadComplete(LLVFS *vfs, const LLUUID &asset_i
     }
     else
     {
-        LL_WARNS("SETTINGS") << "Error retrieving asset " << asset_id << ". Status code=" << status << "(" << LLAssetStorage::getErrorString(status) << ") ext_status=" << ext_status << LL_ENDL;
+        LL_WARNS("SETTINGS") << "Error retrieving asset " << asset_id << ". Status code=" << status << "(" << LLAssetStorage::getErrorString(status) << ") ext_status=" << (U32)ext_status << LL_ENDL;
     }
     if (callback)
         callback(asset_id, settings, status, ext_status);
@@ -678,8 +678,17 @@ void LLSettingsVOSky::applySpecial(void *ptarget, bool force)
 	{
     shader->uniform4fv(LLViewerShaderMgr::LIGHTNORM, 1, light_direction.mV);        
 
+    // Legacy? SETTING_CLOUD_SCROLL_RATE("cloud_scroll_rate")
     LLVector4 vect_c_p_d1(mSettings[SETTING_CLOUD_POS_DENSITY1]);
-    vect_c_p_d1 += LLVector4(LLEnvironment::instance().getCloudScrollDelta());
+    LLVector4 cloud_scroll( LLEnvironment::instance().getCloudScrollDelta() );
+
+    // SL-13084 EEP added support for custom cloud textures -- flip them horizontally to match the preview of Clouds > Cloud Scroll
+    // Keep in Sync!
+    // * indra\newview\llsettingsvo.cpp
+    // * indra\newview\app_settings\shaders\class2\windlight\cloudsV.glsl
+    // * indra\newview\app_settings\shaders\class1\deferred\cloudsV.glsl
+    cloud_scroll[0] = -cloud_scroll[0];
+    vect_c_p_d1 += cloud_scroll;
     shader->uniform4fv(LLShaderMgr::CLOUD_POS_DENSITY1, 1, vect_c_p_d1.mV);
 
     LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();

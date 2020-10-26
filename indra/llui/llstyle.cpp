@@ -33,7 +33,7 @@
 #include "llui.h"
 
 LLStyle::Params::Params()
-:	visible("visible", true),
+	: visible("visible", true),
 	drop_shadow("drop_shadow", LLFontGL::NO_SHADOW),
 	color("color", LLColor4::black),
 	readonly_color("readonly_color", LLColor4::black),
@@ -44,7 +44,7 @@ LLStyle::Params::Params()
 	is_link("is_link"),
 	// <FS:Ansariel> Don't highlight URLs on hover if font style contains underline
 	use_default_link_style("use_default_link_style", true),
-	is_chat_header("is_chat_header", false)
+	can_underline_on_hover("can_underline_on_hover", true)
 	// </FS:Ansariel>
 {}
 

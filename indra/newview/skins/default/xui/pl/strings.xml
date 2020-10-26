@@ -31,7 +31,7 @@
 		Konfiguracja budowania: [BUILD_CONFIG]
 	</string>
 	<string name="AboutPosition">
-Położenie [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] w [REGION] zlokalizowanym w &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+Położenie [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] w [REGION] zlokalizowanym w &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (koordynaty globalne [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
@@ -181,8 +181,14 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	<string name="CertBasicConstraints">
 		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem świata.
 	</string>
+	<string name="CertInvalid">
+		Nie udało się załadować certyfikatu. Skontaktuj się ze swoim administratorem świata.
+	</string>
 	<string name="CertInvalidSignature">
 		Podpis certyfikatu zwrócony przez świat nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem świata.
+	</string>
+	<string name="CertAllocationFailure">
+		Nie udało się przydzielić pamięci openssl dla certyfikatu.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Błąd sieci: Brak połączenia z siecią, sprawdź status swojego połączenia internetowego.
@@ -6407,5 +6413,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="unknown_script">
 		(Nieznany skrypt)
+	</string>
+	<string name="FSAreaSearch_Cost_Label">
+		[COST]L$
 	</string>
 </strings>

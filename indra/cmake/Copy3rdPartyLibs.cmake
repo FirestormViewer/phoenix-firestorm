@@ -84,7 +84,7 @@ if(WINDOWS)
     endif (FMODSTUDIO)
 
     if (OPENAL)
-        set(release_files ${release_files} OpenAL32.dll alut.dll)
+        list(APPEND release_files openal32.dll alut.dll)
     endif (OPENAL)
 
     #*******************************
@@ -165,7 +165,7 @@ elseif(DARWIN)
         libndofdev.dylib
         libnghttp2.dylib
         libnghttp2.14.dylib
-        libnghttp2.14.14.0.dylib
+        libnghttp2.14.19.0.dylib
         libgrowl.dylib
         libgrowl++.dylib
        )

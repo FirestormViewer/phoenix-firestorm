@@ -27,7 +27,6 @@
 
 //colladadom includes
 #if LL_MSVC
-#pragma warning (disable : 4018)
 #pragma warning (push)
 #pragma warning (disable : 4068)
 #pragma warning (disable : 4263)
@@ -111,7 +110,7 @@ namespace DAEExportUtil
 
 ColladaExportFloater::ColladaExportFloater(const LLSD& key)
 : LLFloater(key),
-  mCurrentObjectID(NULL),
+  mCurrentObjectID(LLUUID::null),
   mDirty(true)
 {
 	mCommitCallbackRegistrar.add("ColladaExport.TextureExport", boost::bind(&ColladaExportFloater::onTextureExportCheck, this));

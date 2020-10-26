@@ -873,6 +873,10 @@ U32 render_type_from_string(std::string render_type)
 	{
 		return LLPipeline::RENDER_TYPE_AVATAR;
 	}
+	else if ("controlAV" == render_type) // Animesh
+	{
+		return LLPipeline::RENDER_TYPE_CONTROL_AV;
+	}
 	else if ("surfacePatch" == render_type)
 	{
 		return LLPipeline::RENDER_TYPE_TERRAIN;
@@ -1360,7 +1364,7 @@ class LLAdvancedToggleWireframe : public view_listener_t
 // [RLVa:KB] - Checked: RLVa-2.0.0
 		bool fRlvBlockWireframe = gRlvAttachmentLocks.hasLockedHUD();
 		if ( (!gUseWireframe) && (fRlvBlockWireframe) )
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_WIREFRAME);
+			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Wireframe);
 		set_use_wireframe( (!gUseWireframe) && (!fRlvBlockWireframe) );
 		return true;
 	}
@@ -4395,6 +4399,11 @@ bool enable_buy_object()
 
 		if( for_sale_selection(node) )
 		{
+// [RLVa:KB] - @buy
+			if (!RlvActions::canBuyObject(obj->getID()))
+				return false;
+// [/RLVa:KB]
+
 			// *NOTE: Is this needed?  This checks to see if anyone owns the
 			// object, dating back to when we had "public" objects owned by
 			// no one.  JC
@@ -6164,6 +6173,11 @@ BOOL is_selection_buy_not_take()
 		LLViewerObject* obj = node->getObject();
 		if(obj && !(obj->permYouOwner()) && (node->mSaleInfo.isForSale()))
 		{
+// [RLVa:KB] - @buy
+			if (!RlvActions::canBuyObject(obj->getID()))
+				continue;
+// [/RLVa:KB]
+
 			// you do not own the object and it is for sale, thus,
 			// it's a buy
 			return TRUE;
@@ -7681,8 +7695,8 @@ bool enable_pay_avatar()
 	LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 	LLVOAvatar* avatar = find_avatar_from_object(obj);
 //	return (avatar != NULL);
-// [RLVa:KB] - Checked: RLVa-1.2.1
-	return (avatar != NULL) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, avatar->getID()));
+// [RLVa:KB] - @shownames and @pay
+	return (avatar != NULL) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, avatar->getID())) && (RlvActions::canPayAvatar(avatar->getID()));
 // [/RLVa:KB]
 }
 
@@ -7694,7 +7708,10 @@ bool enable_pay_object()
 		LLViewerObject *parent = (LLViewerObject *)object->getParent();
 		if((object->flagTakesMoney()) || (parent && parent->flagTakesMoney()))
 		{
-			return true;
+// [RLVa:KB] - @buy
+			return RlvActions::canBuyObject(object->getID());
+// [/RLVa:KB]
+//			return true;
 		}
 	}
 	return false;
@@ -10800,28 +10817,40 @@ class LLWorldEnvSettings : public view_listener_t
 		
 		if (event_name == "sunrise")
 		{
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE);
+			// <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
+			// LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE);
+            LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE);
+			// </FS:Beq>
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
 		}
 		else if (event_name == "noon")
 		{
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY);
+			// <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
+            // LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY);
+            LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY);
+			// </FS:Beq>
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
 		}
 		else if (event_name == "sunset")
 		{
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET);
+			// <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
+            // LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET);
+            LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET);
+			// </FS:Beq>
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();
 		}
 		else if (event_name == "midnight")
 		{
-            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT);
+			// <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
+            // LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT);
+            LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT);
+			// </FS:Beq>
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().updateEnvironment();
             defocusEnvFloaters();

@@ -9,13 +9,14 @@
 	<text name="Multiple">
 		Birden çok doku
 	</text>
-	<radio_group name="mode_selection">
-		<radio_item label="Envanter" name="inventory" value="0"/>
-		<radio_item label="Yerel" name="local" value="1"/>
-		<radio_item label="Kurut" name="bake" value="2"/>
-	</radio_group>
-	<text name="unknown">
-		Büyüklük: [DIMENSIONS]
+	<combo_box name="mode_selection">
+		<combo_box.item label="Envanter" name="inventory"/>
+		<combo_box.item label="Yerel" name="local"/>
+		<combo_box.item label="Kurut" name="bake"/>
+	</combo_box>
+	<text name="size_lbl">
+		Büyüklük:
+[DIMENSIONS]
 	</text>
 	<button label="Varsayılan" label_selected="Varsayılan" name="Default"/>
 	<button label="Boş" label_selected="Boş" name="Blank"/>

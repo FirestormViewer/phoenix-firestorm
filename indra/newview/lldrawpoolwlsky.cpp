@@ -216,10 +216,11 @@ void LLDrawPoolWLSky::renderSkyHaze(const LLVector3& camPosLocal, F32 camHeightL
 
 	if (gPipeline.canUseWindLightShaders() && gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_SKY))
 	{
+        LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
         LLGLSPipelineDepthTestSkyBox sky(true, false);
         sky_shader->bind();
         sky_shader->uniform1i(LLShaderMgr::SUN_UP_FACTOR, 1);
-        sky_shader->uniform1f(LLShaderMgr::SUN_MOON_GLOW_FACTOR, 1.0f);
+        sky_shader->uniform1f(LLShaderMgr::SUN_MOON_GLOW_FACTOR, psky->getSunMoonGlowFactor());
         renderDome(origin, camHeightLocal, sky_shader);	
 		sky_shader->unbind();
     }
@@ -301,7 +302,10 @@ void LLDrawPoolWLSky::renderStarsDeferred(void) const
 
 	gGL.setSceneBlendType(LLRender::BT_ADD_WITH_ALPHA);
 
-    F32 star_alpha = LLEnvironment::instance().getCurrentSky()->getStarBrightness() / 500.0f;
+    // <FS:Ansariel> Factor out instance() calls
+    LLSettingsSky::ptr_t current_sky = LLEnvironment::instance().getCurrentSky();
+
+    F32 star_alpha = current_sky->getStarBrightness() / 500.0f; // <FS:Ansariel> Factor out instance() calls
 
 	// If start_brightness is not set, exit
 	if(star_alpha < 0.001f)
@@ -315,7 +319,7 @@ void LLDrawPoolWLSky::renderStarsDeferred(void) const
     LLViewerTexture* tex_a = gSky.mVOSkyp->getBloomTex();
     LLViewerTexture* tex_b = gSky.mVOSkyp->getBloomTexNext();
 
-    F32 blend_factor = LLEnvironment::instance().getCurrentSky()->getBlendFactor();
+    F32 blend_factor = current_sky->getBlendFactor(); // <FS:Ansariel> Factor out instance() calls
 	
     if (tex_a && (!tex_b || (tex_a == tex_b)))
     {
@@ -478,7 +482,10 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
 
 	LLFace * face = gSky.mVOSkyp->mFace[LLVOSky::FACE_SUN];
 
-    F32 blend_factor = LLEnvironment::instance().getCurrentSky()->getBlendFactor();
+    // <FS:Ansariel> Factor out instance() calls
+    LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+
+    F32 blend_factor = psky->getBlendFactor(); // <FS:Ansariel> Factor out instance() calls
     bool can_use_vertex_shaders = gPipeline.canUseVertexShaders();
     bool can_use_windlight_shaders = gPipeline.canUseWindLightShaders();
 
@@ -531,8 +538,6 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
         }
 	}
 
-    blend_factor = LLEnvironment::instance().getCurrentSky()->getBlendFactor();
-
 	face = gSky.mVOSkyp->mFace[LLVOSky::FACE_MOON];
 
 	if (gSky.mVOSkyp->getMoon().getDraw() && face && face->getTexture(LLRender::DIFFUSE_MAP) && face->getGeomCount() && moon_shader)
@@ -550,27 +555,29 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
             {
                 // Bind current and next sun textures
                 moon_shader->bindTexture(LLShaderMgr::DIFFUSE_MAP, tex_a, LLTexUnit::TT_TEXTURE);
-                blend_factor = 0;
+                //blend_factor = 0;
             }
             else if (tex_b && !tex_a)
             {
                 moon_shader->bindTexture(LLShaderMgr::DIFFUSE_MAP, tex_b, LLTexUnit::TT_TEXTURE);
-                blend_factor = 0;
+                //blend_factor = 0;
             }
             else if (tex_b != tex_a)
             {
                 moon_shader->bindTexture(LLShaderMgr::DIFFUSE_MAP, tex_a, LLTexUnit::TT_TEXTURE);
-                moon_shader->bindTexture(LLShaderMgr::ALTERNATE_DIFFUSE_MAP, tex_b, LLTexUnit::TT_TEXTURE);
+                //moon_shader->bindTexture(LLShaderMgr::ALTERNATE_DIFFUSE_MAP, tex_b, LLTexUnit::TT_TEXTURE);
             }
 
-            LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+            // <FS:Ansariel> Factor out instance() calls
+            //LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
             F32 moon_brightness = (float)psky->getMoonBrightness();
 
             moon_shader->uniform1f(LLShaderMgr::MOON_BRIGHTNESS, moon_brightness);
             moon_shader->uniform4fv(LLShaderMgr::MOONLIGHT_COLOR, 1, gSky.mVOSkyp->getMoon().getColor().mV);
             moon_shader->uniform4fv(LLShaderMgr::DIFFUSE_COLOR, 1, color.mV);
-            moon_shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
+            //moon_shader->uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
+            moon_shader->uniform3fv(LLShaderMgr::DEFERRED_MOON_DIR, 1, psky->getMoonDirection().mV); // shader: moon_dir
 
             face->renderIndexed();
 
@@ -630,11 +637,6 @@ void LLDrawPoolWLSky::render(S32 pass)
 void LLDrawPoolWLSky::prerender()
 {
 	//LL_INFOS() << "wlsky prerendering pass." << LL_ENDL;
-}
-
-LLDrawPoolWLSky *LLDrawPoolWLSky::instancePool()
-{
-	return new LLDrawPoolWLSky();
 }
 
 LLViewerTexture* LLDrawPoolWLSky::getTexture()

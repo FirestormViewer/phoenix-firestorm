@@ -35,8 +35,8 @@ RlvExtGetSet::RlvExtGetSet()
 	{
 		m_DbgAllowed.insert(std::pair<std::string, S16>("AvatarSex", DBG_READ | DBG_WRITE | DBG_PSEUDO));
 		m_DbgAllowed.insert(std::pair<std::string, S16>("RenderResolutionDivisor", DBG_READ | DBG_WRITE));
-		m_DbgAllowed.insert(std::pair<std::string, S16>(RLV_SETTING_FORBIDGIVETORLV, DBG_READ));
-		m_DbgAllowed.insert(std::pair<std::string, S16>(RLV_SETTING_NOSETENV, DBG_READ));
+		m_DbgAllowed.insert(std::pair<std::string, S16>(RlvSettingNames::ForbidGiveToRlv, DBG_READ));
+		m_DbgAllowed.insert(std::pair<std::string, S16>(RlvSettingNames::NoSetEnv, DBG_READ));
 		m_DbgAllowed.insert(std::pair<std::string, S16>("WindLightUseAtmosShaders", DBG_READ));
 
 		// Cache persistance of every setting

@@ -14,7 +14,7 @@
 			<panel.string name="log_in_to_change">
 				Accedere per modificare
 			</panel.string>
-			<button label="Cancella cronologia" tool_tip="Cancella immagine accesso, ultimo luogo visitato, cronologia web di Firestorm, cronologia teleport e cache texture." name="clear_cache"/>
+			<button label="Cancella cronologia" tool_tip="Cancella immagine accesso, ultimo luogo visitato, cronologia web di Firestorm, cronologia teleport e cache texture." name="clear_webcache"/>
 			<text name="cache_size_label">
 				(luoghi, immagini, web, cronologia ricerca)
 			</text>

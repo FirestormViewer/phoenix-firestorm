@@ -48,42 +48,27 @@
     </text>
 	
 	<!-- mode selector -->
-	   <radio_group
-     control_name="mode_selection"
+    <combo_box
      height="20"
      layout="topleft"
-     left="0"
-     top_pad="80"
+     left="6"
+     top_pad="77"
      name="mode_selection"
-     follows="left|top">
-        <radio_item
+     follows="left|top"
+     width="161">
+      <combo_box.item
          label="Inventory"
          name="inventory"
-         top_delta="20" 
-         layout="topleft"
-         height="16" 
-         left="0" 
-         value="0"
-         width="70" />
-        <radio_item
+         value="0" />
+      <combo_box.item
          label="Local"
-         left_pad="0"
-         layout="topleft"
-         top_delta="0" 
-         height="16" 
          name="local"
-         value="1"
-         width="50" />
-       <radio_item
+         value="1" />
+      <combo_box.item
          label="Bake"
-         left_pad="0"
-         layout="topleft"
-         top_delta="0"
-         height="16"
          name="bake"
-         value="2"
-         width="50" />
-    </radio_group>
+         value="2" />
+    </combo_box>
 	<!-- -->
 	
     <text
@@ -92,8 +77,8 @@
      follows="left|top"
      height="14"
      layout="topleft"
-     left_delta="12"
-     name="unknown"
+     left="8"
+     name="size_lbl"
      top_pad="4">
         Size:
 [DIMENSIONS]
@@ -156,14 +141,15 @@
      width="28" />
    <text
      follows="left|bottom"
-     height="20"
+     height="40"
      layout="topleft"
      left="8"
      name="preview_disabled"
-     top="282"
+     top="275"
      value="Preview Disabled"
+     word_wrap="true"
      visible="false"
-     width="120" />
+     width="87" />
     <filter_editor
      follows="left|top|right"
      height="23"
@@ -348,7 +334,7 @@
      label="OK"
      label_selected="OK"
      layout="topleft"
-     left="95"
+     left="176"
      top="-30"
      name="Select"
      width="100" />
@@ -371,5 +357,5 @@
      left="5"
      name="apply_immediate_check"
      top_delta="0"
-     width="120" />
+     width="150" />
 </floater>

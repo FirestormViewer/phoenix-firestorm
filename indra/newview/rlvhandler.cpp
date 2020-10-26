@@ -76,6 +76,9 @@
 // Boost includes
 #include <boost/algorithm/string.hpp>
 
+// llappviewer.cpp
+extern BOOL gDoDisconnect;
+
 // ============================================================================
 // Static variable initialization
 //
@@ -164,7 +167,7 @@ void RlvHandler::cleanup()
 	//
 	// Clean up any restrictions that are still active
 	//
-	RLV_ASSERT(LLApp::isQuitting());	// Several commands toggle debug settings but won't if they know the viewer is quitting
+	RLV_ASSERT(LLApp::isExiting() || gDoDisconnect);	// Several commands toggle debug settings but won't if they know the viewer is quitting
 
 	// Assume we have no way to predict how m_Objects will change so make a copy ahead of time
 	uuid_vec_t idRlvObjects;
@@ -263,35 +266,34 @@ bool RlvHandler::ownsBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr) const
 // Behaviour exception handling
 //
 
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
 void RlvHandler::addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
 {
-	m_Exceptions.insert(std::pair<ERlvBehaviour, RlvException>(eBhvr, RlvException(idObj, eBhvr, varOption)));
+	m_Exceptions.insert(std::make_pair(eBhvr, RlvException(idObj, eBhvr, varOption)));
 }
 
-// Checked: 2009-10-04 (RLVa-1.0.4c) | Modified: RLVa-1.0.4c
-bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck typeCheck) const
+bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck eCheckType) const
 {
 	// We need to "strict check" exceptions only if: the restriction is actually in place *and* (isPermissive(eBhvr) == FALSE)
-	if (RLV_CHECK_DEFAULT == typeCheck)
-		typeCheck = ( (hasBehaviour(eBhvr)) && (!isPermissive(eBhvr)) ) ? RLV_CHECK_STRICT : RLV_CHECK_PERMISSIVE;
+	if (ERlvExceptionCheck::Default == eCheckType)
+		eCheckType = ( (hasBehaviour(eBhvr)) && (!isPermissive(eBhvr)) ) ? ERlvExceptionCheck::Strict : ERlvExceptionCheck::Permissive;
 
 	uuid_vec_t objList;
-	if (RLV_CHECK_STRICT == typeCheck)
+	if (ERlvExceptionCheck::Strict == eCheckType)
 	{
 		// If we're "strict checking" then we need the UUID of every object that currently has 'eBhvr' restricted
-		for (rlv_object_map_t::const_iterator itObj = m_Objects.begin(); itObj != m_Objects.end(); ++itObj)
-			if (itObj->second.hasBehaviour(eBhvr, !hasBehaviour(RLV_BHVR_PERMISSIVE)))
-				objList.push_back(itObj->first);
+		for (const auto& objEntry : m_Objects)
+		{
+			if (objEntry.second.hasBehaviour(eBhvr, !hasBehaviour(RLV_BHVR_PERMISSIVE)))
+				objList.push_back(objEntry.first);
+		}
 	}
 
-	for (rlv_exception_map_t::const_iterator itException = m_Exceptions.lower_bound(eBhvr), 
-			endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
+	for (rlv_exception_map_t::const_iterator itException = m_Exceptions.lower_bound(eBhvr), endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
 	{
 		if (itException->second.varOption == varOption)
 		{
 			// For permissive checks we just return on the very first match
-			if (RLV_CHECK_PERMISSIVE == typeCheck)
+			if (ERlvExceptionCheck::Permissive == eCheckType)
 				return true;
 
 			// For strict checks we don't return until the list is empty (every object with 'eBhvr' restricted also contains the exception)
@@ -305,19 +307,16 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 	return false;
 }
 
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
 bool RlvHandler::isPermissive(ERlvBehaviour eBhvr) const
 {
-	return (RlvBehaviourDictionary::instance().getHasStrict(eBhvr)) 
-		? !((hasBehaviour(RLV_BHVR_PERMISSIVE)) || (isException(RLV_BHVR_PERMISSIVE, eBhvr, RLV_CHECK_PERMISSIVE)))
+	return (RlvBehaviourDictionary::instance().getHasStrict(eBhvr))
+		? !((hasBehaviour(RLV_BHVR_PERMISSIVE)) || (isException(RLV_BHVR_PERMISSIVE, eBhvr, ERlvExceptionCheck::Permissive)))
 		: true;
 }
 
-// Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
 void RlvHandler::removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption)
 {
-	for (rlv_exception_map_t::iterator itException = m_Exceptions.lower_bound(eBhvr), 
-			endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
+	for (rlv_exception_map_t::iterator itException = m_Exceptions.lower_bound(eBhvr), endException = m_Exceptions.upper_bound(eBhvr); itException != endException; ++itException)
 	{
 		if ( (itException->second.idObject == idObj) && (itException->second.varOption == varOption) )
 		{
@@ -512,6 +511,11 @@ ERlvCmdRet RlvHandler::processCommand(std::reference_wrapper<const RlvCommand> r
 					{
 						RlvCommand rlvCmdRem(rlvCmd, RLV_TYPE_REMOVE);
 						itObj->second.removeCommand(rlvCmdRem);
+						if (itObj->second.m_Commands.empty())
+						{
+							RLV_DEBUGS << "\t- command list empty => removing " << idCurObj << RLV_ENDL;
+							m_Objects.erase(itObj);
+						}
 					}
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 				}
@@ -637,11 +641,11 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 		// If the user can't start an IM session terminate it (if one is open) - always notify the sender in this case
 		if (!RlvActions::canStartIM(idSender, true))
 		{
-			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_ENDSESSION_REMOTE));
+			RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RlvStringKeys::StopIm::EndSessionRemote));
 			if (RlvActions::hasOpenP2PSession(idSender))
 			{
 				LLAvatarActions::endIM(idSender);
-				RlvUtil::notifyBlocked(RLV_STRING_STOPIM_ENDSESSION_LOCAL, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()), true);
+				RlvUtil::notifyBlocked(RlvStringKeys::StopIm::EndSessionLocal, LLSD().with("NAME", LLSLURL("agent", idSender, "about").getSLURLString()), true);
 			}
 			return true;
 		}
@@ -649,7 +653,7 @@ bool RlvHandler::processIMQuery(const LLUUID& idSender, const std::string& strMe
 		// User can start an IM session so we do nothing - notify and hide it from the user only if IM queries are enabled
 		if (!RlvSettings::getEnableIMQuery())
 			return false;
-		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RLV_STRING_STOPIM_NOSESSION));
+		RlvUtil::sendBusyMessage(idSender, RlvStrings::getString(RlvStringKeys::StopIm::NoSession));
 		return true;
 	}
 	else if (RlvSettings::getEnableIMQuery())
@@ -780,7 +784,7 @@ void RlvHandler::onActiveGroupChanged()
 
 		// Notify them about the change
 		const LLSD sdArgs = LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString().c_str()) : "(none)");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, sdArgs);
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::GroupChange, sdArgs);
 
 		setActiveGroup(m_idAgentGroup);
 	}
@@ -1254,7 +1258,7 @@ bool RlvHandler::filterChat(std::string& strUTF8Text, bool fFilterEmote) const
 	}
 
 	if (fFilter)
-		strUTF8Text = (gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) ? "..." : "";
+		strUTF8Text = (gSavedSettings.get<bool>(RlvSettingNames::ShowEllipsis)) ? "..." : "";
 	return fFilter;
 }
 
@@ -1534,7 +1538,7 @@ bool RlvHandler::setEnabled(bool fEnable)
 
 		// Reset to show assertions if the viewer version changed
 		if (gSavedSettings.getString("LastRunVersion") != gLastRunVersion)
-			gSavedSettings.setBOOL("RLVaShowAssertionFailures", TRUE);
+			gSavedSettings.set<bool>(RlvSettingNames::ShowAssertionFail, TRUE);
 	}
 
 	return m_fEnabled;
@@ -1765,9 +1769,9 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const Rlv
 		return RLV_RET_FAILED_OPTION;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		gRlvHandler.addException(rlvCmd.getObjectID(), rlvCmd.getBehaviourType(), idException);
+		RlvHandler::instance().addException(rlvCmd.getObjectID(), rlvCmd.getBehaviourType(), idException);
 	else
-		gRlvHandler.removeException(rlvCmd.getObjectID(), rlvCmd.getBehaviourType(), idException);
+		RlvHandler::instance().removeException(rlvCmd.getObjectID(), rlvCmd.getBehaviourType(), idException);
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
@@ -1877,6 +1881,25 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 
 	fRefCount = rlvCmd.getOption().empty();	// Only reference count global locks
 	return RLV_RET_SUCCESS;
+}
+
+// Handles: @buy=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_BUY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Start or stop filtering opening the buy, buy contents and pay object floaters
+	if (fHasBhvr)
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object", RlvStringKeys::Blocked::Generic));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("buy_object_contents", RlvStringKeys::Blocked::Generic));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_object", RlvStringKeys::Blocked::Generic));
+	}
+	else
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("buy_object_contents"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("pay_object"));
+	}
 }
 
 // Handles: @detach[:<attachpt>]=n|y
@@ -2012,9 +2035,28 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 
 	// Start or stop filtering opening the beacons floater
 	if (fHasBhvr)
-		RlvUIEnabler::instance().addGenericFloaterFilter("beacons");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("beacons"));
+	}
 	else
-		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("beacons"));
+	}
+}
+
+// Handles: @pay=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Start or stop filtering opening the pay avatar floater
+	if (fHasBhvr)
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("pay_resident", RlvStringKeys::Blocked::Generic));
+	}
+	else
+	{
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("pay_resident"));
+	}
 }
 
 // Handles: @setoverlay=n|y toggles
@@ -2357,11 +2399,11 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
 			for (LLFloater* pFloater : envFloaters)
 				pFloater->closeFloater();
-			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+			RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]));
 		}
 		else
 		{
-			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+			RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]));
 		}
 	}
 
@@ -2414,7 +2456,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	//
@@ -2466,13 +2508,13 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 	// <FS:Ansariel> Modified for FIRE-8804
 	if (fHasBhvr)
 	{
-		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
-		RlvUIEnabler::instance().addGenericFloaterFilter("secondary_inventory");
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("inventory"));
+		RLV_VERIFY(RlvUIEnabler::instance().addGenericFloaterFilter("secondary_inventory"));
 	}
 	else
 	{
-		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
-		RlvUIEnabler::instance().removeGenericFloaterFilter("secondary_inventory");
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("inventory"));
+		RLV_VERIFY(RlvUIEnabler::instance().removeGenericFloaterFilter("secondary_inventory"));
 	}
 }
 
@@ -2480,7 +2522,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Update the shownames context
@@ -2526,7 +2568,7 @@ template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
-	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isQuitting()) )
+	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isExiting()) )
 	{
 		const LLUUID idAgent = RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption());
 
@@ -2564,7 +2606,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& 
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMETAGS>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Update the shownames context
@@ -2588,7 +2630,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvComman
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	if (LLApp::isQuitting())
+	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Refresh the nearby people list

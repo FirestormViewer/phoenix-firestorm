@@ -48,11 +48,6 @@ LLDrawPoolSky::LLDrawPoolSky()
 {
 }
 
-LLDrawPool *LLDrawPoolSky::instancePool()
-{
-	return new LLDrawPoolSky();
-}
-
 void LLDrawPoolSky::prerender()
 {
 	mShaderLevel = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_ENVIRONMENT); 
@@ -100,10 +95,13 @@ void LLDrawPoolSky::render(S32 pass)
 
 	LLGLSPipelineDepthTestSkyBox gls_skybox(true, false);
 
-	LLGLEnable fog_enable( (mShaderLevel < 1 && LLViewerCamera::getInstance()->cameraUnderWater()) ? GL_FOG : 0);
+	// <FS:Ansariel> Factor out instance() calls
+	LLViewerCamera& camera = LLViewerCamera::instance();
+
+	LLGLEnable fog_enable( (mShaderLevel < 1 && camera.cameraUnderWater()) ? GL_FOG : 0); // <FS:Ansariel> Factor out instance() calls
 	
 	gGL.pushMatrix();
-	LLVector3 origin = LLViewerCamera::getInstance()->getOrigin();
+	LLVector3 origin = camera.getOrigin(); // <FS:Ansariel> Factor out instance() calls
 	gGL.translatef(origin.mV[0], origin.mV[1], origin.mV[2]);
 
 	S32 face_count = (S32)mDrawFace.size();
@@ -128,23 +126,12 @@ void LLDrawPoolSky::renderSkyFace(U8 index)
 		return;
 	}
 
-    F32 interp_val = gSky.mVOSkyp ? gSky.mVOSkyp->getInterpVal() : 0.0f;
-
     if (index < 6) // sky tex...interp
     {
         llassert(mSkyTex);
 	    mSkyTex[index].bindTexture(true); // bind the current tex
 
         face->renderIndexed();
-
-        if (interp_val > 0.01f) // iff, we've got enough info to lerp (a to and a from)
-	    {
-		    LLGLEnable blend(GL_BLEND);
-            llassert(mSkyTex);
-	        mSkyTex[index].bindTexture(false); // bind the "other" texture
-		    gGL.diffuseColor4f(1, 1, 1, interp_val); // lighting is disabled
-		    face->renderIndexed();
-	    }
     }
     else // heavenly body faces, no interp...
     {

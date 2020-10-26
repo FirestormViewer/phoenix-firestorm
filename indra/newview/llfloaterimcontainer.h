@@ -166,7 +166,7 @@ private:
     void doToSelectedGroup(const LLSD& userdata);
 
 	static void confirmMuteAllCallback(const LLSD& notification, const LLSD& response);
-	bool enableModerateContextMenuItem(const std::string& userdata);
+	bool enableModerateContextMenuItem(const std::string& userdata, bool is_self = false);
 	LLSpeaker * getSpeakerOfSelectedParticipant(LLSpeakerMgr * speaker_managerp);
 	LLSpeakerMgr * getSpeakerMgrForSelectedParticipant();
 	bool isGroupModerator();
@@ -183,6 +183,7 @@ private:
 	bool isParticipantListExpanded();
 
 	void idleUpdate(); // for convenience (self) from static idle
+	void idleProcessEvents();
 
 	LLButton* mExpandCollapseBtn;
 	LLButton* mStubCollapseBtn;
@@ -222,6 +223,7 @@ private:
 	LLConversationViewSession* createConversationItemWidget(LLConversationItem* item);
 	LLConversationViewParticipant* createConversationViewParticipant(LLConversationItem* item);
 	bool onConversationModelEvent(const LLSD& event);
+	void handleConversationModelEvent(const LLSD& event);
 
 	// Conversation list data
 	LLPanel* mConversationsListPanel;	// This is the main widget we add conversation widget to
@@ -230,6 +232,8 @@ private:
 	LLConversationViewModel mConversationViewModel;
 	LLFolderView* mConversationsRoot;
 	LLEventStream mConversationsEventStream; 
+
+	std::deque<LLSD> mConversationEventQueue;
 
 	LLTimer mParticipantRefreshTimer;
 };

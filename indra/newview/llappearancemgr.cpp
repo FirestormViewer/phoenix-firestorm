@@ -3973,6 +3973,10 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
     }
 
     llcoro::suspend();
+    if (LLApp::isQuitting())
+    {
+        return;
+    }
     S32 retryCount(0);
     bool bRetry;
     do
@@ -4036,6 +4040,11 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
 
         LLSD result = httpAdapter->postAndSuspend(httpRequest, url, postData);
 
+        if (LLApp::isQuitting())
+        {
+            return;
+        }
+
         LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
         LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
@@ -4071,6 +4080,10 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
                 LL_WARNS("Avatar") << "Bake retry #" << retryCount << " in " << timeout << " seconds." << LL_ENDL;
 
                 llcoro::suspendUntilTimeout(timeout); 
+                if (LLApp::isQuitting())
+                {
+                    return;
+                }
                 bRetry = true;
                 continue;
             }
@@ -4659,7 +4672,9 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 
 	LLAttachmentsMgr::instance().onAttachmentArrived(item_id);
 
-	mAttachmentsChangeSignal();
+	// <FS:Ansariel> Better attachment list
+	//mAttachmentsChangeSignal();
+	mAttachmentsChangeSignal(item_id);
 }
 
 void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
@@ -4681,7 +4696,9 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 		//LL_INFOS() << "no link changes, inv link not enabled" << LL_ENDL;
 	}
 
-	mAttachmentsChangeSignal();
+	// <FS:Ansariel> Better attachment list
+	//mAttachmentsChangeSignal();
+	mAttachmentsChangeSignal(item_id);
 }
 
 BOOL LLAppearanceMgr::getIsInCOF(const LLUUID& obj_id) const

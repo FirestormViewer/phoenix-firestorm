@@ -145,6 +145,7 @@
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
+#include "lllocationhistory.h"
 #include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
 #include "llscrolllistctrl.h"
@@ -393,6 +394,11 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		LLNavigationBar::instance().clearHistory();
 		// </FS:Zi>
 
+		// <FS:Ansariel> FIRE-29761: Clear Location History does not clear Typed Locations history
+		LLLocationHistory::getInstance()->removeItems();
+		LLLocationHistory::getInstance()->save();
+		// </FS:Ansariel>
+
 		LLTeleportHistoryStorage::getInstance()->purgeItems();
 		LLTeleportHistoryStorage::getInstance()->save();
 	}
@@ -589,8 +595,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	mCommitCallbackRegistrar.add("Pref.ClickActionChange",		boost::bind(&LLFloaterPreference::onClickActionChange, this));
 
-	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
-	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
+	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
+	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&handleAppearanceCameraMovementChanged,  _2));
@@ -1626,6 +1632,7 @@ void LLFloaterPreference::onBtnCancel(const LLSD& userdata)
 	if (userdata.asString() == "closeadvanced")
 	{
 		LLFloaterReg::hideInstance("prefs_graphics_advanced");
+		updateMaxComplexity();
 	}
 	else
 	{
@@ -2084,12 +2091,12 @@ void LLFloaterPreference::buildPopupLists()
 						if (it->second.asBoolean())
 						{
 							row["columns"][1]["value"] = formp->getElement(it->first)["ignore"].asString();
+							row["columns"][1]["font"] = "SANSSERIF_SMALL";
+							row["columns"][1]["width"] = 360;
 							break;
 						}
 					}
 				}
-				row["columns"][1]["font"] = "SANSSERIF_SMALL";
-				row["columns"][1]["width"] = 360;
 			}
 #endif
 			item = disabled_popups.addElement(row);
@@ -3109,6 +3116,12 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> FIRE-22564: Route llOwnerSay to scipt debug window
 	getChildView("FSllOwnerSayToScriptDebugWindow_checkbox")->setEnabled(TRUE);
+
+	// <FS:Ansariel> Clear Cache button actually clears per-account cache items
+	getChildView("clear_webcache")->setEnabled(TRUE);
+
+	getChild<LLUICtrl>("voice_call_friends_only_check")->setEnabled(TRUE);
+	getChild<LLUICtrl>("voice_call_friends_only_check")->setValue(gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly"));
 }
 
 
@@ -3299,6 +3312,14 @@ void LLFloaterPreference::updateMaxComplexity()
     LLAvatarComplexityControls::updateMax(
         getChild<LLSliderCtrl>("IndirectMaxComplexity"),
         getChild<LLTextBox>("IndirectMaxComplexityText"));
+
+    LLFloaterPreferenceGraphicsAdvanced* floater_graphics_advanced = LLFloaterReg::findTypedInstance<LLFloaterPreferenceGraphicsAdvanced>("prefs_graphics_advanced");
+    if (floater_graphics_advanced)
+    {
+        LLAvatarComplexityControls::updateMax(
+            floater_graphics_advanced->getChild<LLSliderCtrl>("IndirectMaxComplexity"),
+            floater_graphics_advanced->getChild<LLTextBox>("IndirectMaxComplexityText"));
+    }
 }
 
 bool LLFloaterPreference::loadFromFilename(const std::string& filename, std::map<std::string, std::string> &label_map)
@@ -3346,6 +3367,14 @@ void LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity()
     LLAvatarComplexityControls::updateMax(
         getChild<LLSliderCtrl>("IndirectMaxComplexity"),
         getChild<LLTextBox>("IndirectMaxComplexityText"));
+
+    LLFloaterPreference* floater_preferences = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+    if (floater_preferences)
+    {
+        LLAvatarComplexityControls::updateMax(
+            floater_preferences->getChild<LLSliderCtrl>("IndirectMaxComplexity"),
+            floater_preferences->getChild<LLTextBox>("IndirectMaxComplexityText"));
+    }
 }
 
 void LLFloaterPreference::onChangeMaturity()
@@ -3967,9 +3996,13 @@ void LLPanelPreference::showMultipleViewersWarning(LLUICtrl* checkbox, const LLS
 
 void LLPanelPreference::showFriendsOnlyWarning(LLUICtrl* checkbox, const LLSD& value)
 {
-	if (checkbox && checkbox->getValue())
+	if (checkbox)
 	{
-		LLNotificationsUtil::add("FriendsAndGroupsOnly");
+		gSavedPerAccountSettings.setBOOL("VoiceCallsFriendsOnly", checkbox->getValue().asBoolean());
+		if (checkbox->getValue())
+		{
+			LLNotificationsUtil::add("FriendsAndGroupsOnly");
+		}
 	}
 }
 // Manage the custom port alert, fixes Cant Close bug. -WoLf
@@ -4140,7 +4173,6 @@ class LLPanelPreferencePrivacy : public LLPanelPreference
 public:
 	LLPanelPreferencePrivacy()
 	{
-		mAccountIndependentSettings.push_back("VoiceCallsFriendsOnly");
 		mAccountIndependentSettings.push_back("AutoDisengageMic");
 
 		mAutoresponseItem = gSavedPerAccountSettings.getString("FSAutoresponseItemUUID");
@@ -4359,7 +4391,7 @@ void LLPanelPreferenceGraphics::setPresetText()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
-	//if (hasDirtyChilds() && !preset_graphic_active.empty())
+    //if (hasDirtyChilds() && !preset_graphic_active.empty())
 	//{
 	//	gSavedSettings.setString("PresetGraphicActive", "");
 	//	preset_graphic_active.clear();
@@ -4538,6 +4570,7 @@ void LLFloaterPreferenceGraphicsAdvanced::onClickCloseBtn(bool app_quitting)
 	{
 		instance->cancel();
 	}
+	updateMaxComplexity();
 }
 
 LLFloaterPreferenceProxy::~LLFloaterPreferenceProxy()

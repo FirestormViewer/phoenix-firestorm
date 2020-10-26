@@ -44,9 +44,8 @@ static LLDefaultChildRegistry::Register<LLPlacesInventoryPanel> r("places_invent
 static LLPlacesInventoryBridgeBuilder PLACES_INVENTORY_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
 LLPlacesInventoryPanel::LLPlacesInventoryPanel(const Params& p) : 
-	LLInventoryPanel(p),
+    LLAssetFilteredInventoryPanel(p),
 	mSavedFolderState(NULL)
-
 {
 	mInvFVBridgeBuilder = &PLACES_INVENTORY_BUILDER;
 	mSavedFolderState = new LLSaveFolderState();

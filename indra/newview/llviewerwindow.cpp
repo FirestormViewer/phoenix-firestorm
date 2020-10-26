@@ -1482,6 +1482,7 @@ BOOL LLViewerWindow::handleCloseRequest(LLWindow *window)
 
 void LLViewerWindow::handleQuit(LLWindow *window)
 {
+	LL_INFOS() << "Window forced quit" << LL_ENDL;
 	LLAppViewer::instance()->forceQuit();
 }
 
@@ -2862,7 +2863,6 @@ void LLViewerWindow::draw()
 	
 	LLUI::setLineWidth(1.f);
 
-	LLUI::setLineWidth(1.f);
 	// Reset any left-over transforms
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	
@@ -2907,14 +2907,16 @@ void LLViewerWindow::draw()
 	gGL.pushMatrix();
 	LLUI::pushMatrix();
 	{
-		
+		// <FS:Ansariel> Factor out instance() call
+		LLViewerCamera& camera = LLViewerCamera::instance();
+
 		// scale view by UI global scale factor and aspect ratio correction factor
 		gGL.scaleUI(mDisplayScale.mV[VX], mDisplayScale.mV[VY], 1.f);
 
 		LLVector2 old_scale_factor = LLUI::getScaleFactor();
 		// apply camera zoom transform (for high res screenshots)
-		F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
-		S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+		F32 zoom_factor = camera.getZoomFactor(); // <FS:Ansariel> Factor out instance() call
+		S16 sub_region = camera.getZoomSubRegion(); // <FS:Ansariel> Factor out instance() call
 		if (zoom_factor > 1.f)
 		{
 			//decompose subregion number to x and y values
@@ -2948,7 +2950,7 @@ void LLViewerWindow::draw()
 			static LLUICachedControl<U32> userPresetHAlign("ExodusMouselookTextHAlign", 2);
 
 			LLVector3d myPosition = gAgentCamera.getCameraPositionGlobal();
-			LLQuaternion myRotation = LLViewerCamera::getInstance()->getQuaternion();
+			LLQuaternion myRotation = camera.getQuaternion();
 
 			myRotation.set(-myRotation.mQ[VX], -myRotation.mQ[VY], -myRotation.mQ[VZ], myRotation.mQ[VW]);
 
@@ -2961,6 +2963,8 @@ void LLViewerWindow::draw()
 			S32 length = avatars.size();
 			if (length)
 			{
+				LGGContactSets& contact_sets = LGGContactSets::instance();
+
 				for (S32 i = 0; i < length; i++)
 				{
 					LLUUID& targetKey = avatars[i];
@@ -2976,10 +2980,10 @@ void LLViewerWindow::draw()
 					}
 
 					LLColor4 targetColor = map_avatar_color.get();
-					targetColor = LGGContactSets::getInstance()->colorize(targetKey, targetColor, LGG_CS_MINIMAP);
+					targetColor = contact_sets.colorize(targetKey, targetColor, LGG_CS_MINIMAP);
 
 					//color based on contact sets prefs
-					LGGContactSets::getInstance()->hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP, targetColor);
+					contact_sets.hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP, targetColor);
 
 					LLColor4 mark_color;
 					if (LLNetMap::getAvatarMarkColor(targetKey, mark_color))
@@ -3084,13 +3088,12 @@ void LLViewerWindow::draw()
 //#endif
 }
 
-
-//-TT Window Title Access
+// <FS:TT> Window Title Access
 void LLViewerWindow::setTitle(const std::string& win_title)
 {
 	mWindow->setTitle(win_title);
 }
-//-TT
+// </FS:TT>
 
 // Takes a single keyup event, usually when UI is visible
 BOOL LLViewerWindow::handleKeyUp(KEY key, MASK mask)
@@ -5048,12 +5051,12 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 
 					BOOL draw_handles = TRUE;
 
-					if (tool == LLToolCompTranslate::getInstance() && !all_selected_objects_move && !LLSelectMgr::getInstance()->isSelfAvatarSelected())
+					if (tool == LLToolCompTranslate::getInstance() && !all_selected_objects_move && !LLSelectMgr::getInstance()->isMovableAvatarSelected())
 					{
 						draw_handles = FALSE;
 					}
 
-					if (tool == LLToolCompRotate::getInstance() && !all_selected_objects_move)
+					if (tool == LLToolCompRotate::getInstance() && !all_selected_objects_move && !LLSelectMgr::getInstance()->isMovableAvatarSelected())
 					{
 						draw_handles = FALSE;
 					}
@@ -5759,12 +5762,12 @@ void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 
 }
 
-BOOL LLViewerWindow::saveSnapshot(const std::string& filepath, S32 image_width, S32 image_height, BOOL show_ui, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type, LLSnapshotModel::ESnapshotFormat format)
+BOOL LLViewerWindow::saveSnapshot(const std::string& filepath, S32 image_width, S32 image_height, BOOL show_ui, BOOL show_hud, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type, LLSnapshotModel::ESnapshotFormat format)
 {
     LL_INFOS() << "Saving snapshot to: " << filepath << LL_ENDL;
 
     LLPointer<LLImageRaw> raw = new LLImageRaw;
-    BOOL success = rawSnapshot(raw, image_width, image_height, TRUE, FALSE, show_ui, do_rebuild);
+    BOOL success = rawSnapshot(raw, image_width, image_height, TRUE, FALSE, show_ui, show_hud, do_rebuild);
 
     if (success)
     {
@@ -5826,16 +5829,16 @@ void LLViewerWindow::resetSnapshotLoc() const
 	gSavedPerAccountSettings.setString("SnapshotBaseDir", std::string());
 }
 
-BOOL LLViewerWindow::thumbnailSnapshot(LLImageRaw *raw, S32 preview_width, S32 preview_height, BOOL show_ui, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type)
+BOOL LLViewerWindow::thumbnailSnapshot(LLImageRaw *raw, S32 preview_width, S32 preview_height, BOOL show_ui, BOOL show_hud, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type)
 {
-	return rawSnapshot(raw, preview_width, preview_height, FALSE, FALSE, show_ui, do_rebuild, type);
+	return rawSnapshot(raw, preview_width, preview_height, FALSE, FALSE, show_ui, show_hud, do_rebuild, type);
 }
 
 // Saves the image from the screen to a raw image
 // Since the required size might be bigger than the available screen, this method rerenders the scene in parts (called subimages) and copy
 // the results over to the final raw image.
 BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_height, 
-	BOOL keep_window_aspect, BOOL is_texture, BOOL show_ui, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type, S32 max_size)
+    BOOL keep_window_aspect, BOOL is_texture, BOOL show_ui, BOOL show_hud, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type, S32 max_size)
 {
 	if (!raw)
 	{
@@ -5869,7 +5872,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
 	}
 
-	BOOL hide_hud = !gSavedSettings.getBOOL("RenderHUDInSnapshot") && LLPipeline::sShowHUDAttachments;
+    BOOL hide_hud = !show_hud && LLPipeline::sShowHUDAttachments;
 	if (hide_hud)
 	{
 		LLPipeline::sShowHUDAttachments = FALSE;

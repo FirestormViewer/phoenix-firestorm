@@ -48,13 +48,14 @@
   </panel.string>
 
    <button
+    enabled="false"
     follows="left|top"
     height="23"
     label="Clear History"
     tool_tip="Clear login image, last location, teleport history, web and texture cache"
     layout="topleft"
     left="15"
-    name="clear_cache"
+    name="clear_webcache"
     top_pad="10"
     width="145">
     <button.commit_callback
@@ -94,7 +95,7 @@
     top_pad="3"
     width="350" />
    <check_box
-    control_name="VoiceCallsFriendsOnly"
+    enabled="false"
     height="16"
     label="Only friends and groups can call or IM me"
     layout="topleft"

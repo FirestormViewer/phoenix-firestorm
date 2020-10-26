@@ -73,6 +73,7 @@
 #include "llviewermedia.h"
 #include "llviewerparcelaskplay.h"
 #include "llviewerparcelmedia.h"
+#include "llviewershadermgr.h"
 #include "llviewermediafocus.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
@@ -436,7 +437,10 @@ const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"
 const std::string LLERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".llerror_marker"); //FS orig modified LL
 const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker"); //FS orig modified LL
 
-static BOOL gDoDisconnect = FALSE;
+//static BOOL gDoDisconnect = FALSE;
+// [RLVa:KB] - Checked: RLVa-2.3
+BOOL gDoDisconnect = FALSE;
+// [/RLVa:KB]
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)
@@ -771,7 +775,6 @@ LLAppViewer::LLAppViewer()
 	mFastTimerLogThread(NULL),
 	mSettingsLocationList(NULL),
 	mIsFirstRun(false),
-	mMinMicroSecPerFrame(0.f),
 	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
@@ -966,7 +969,7 @@ bool LLAppViewer::init()
 				LLFile::remove(per_user_dir_glob + "filters.xml");
 				LLFile::remove(per_user_dir_glob + "medialist.xml");
 				LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
-				LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+				LLFile::remove(per_user_dir_glob + "screen_last*.*");
 				LLFile::remove(per_user_dir_glob + "search_history.xml");
 				LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
 				LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
@@ -1345,7 +1348,10 @@ bool LLAppViewer::init()
 	gSimLastTime = gRenderStartTime.getElapsedTimeF32();
 	gSimFrames = (F32)gFrameCount;
 
-	LLViewerJoystick::getInstance()->init(false);
+    if (gSavedSettings.getBOOL("JoystickEnabled"))
+    {
+        LLViewerJoystick::getInstance()->init(false);
+    }
 
 	try {
 		initializeSecHandler();
@@ -1484,12 +1490,6 @@ bool LLAppViewer::init()
 
 	joystick = LLViewerJoystick::getInstance();
 	joystick->setNeedsReset(true);
-	/*----------------------------------------------------------------------*/
-
-	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
-	//gSavedSettings.getControl("FramePerSecondLimit")->getSignal()->connect(boost::bind(&LLAppViewer::onChangeFrameLimit, this, _2));
-	//onChangeFrameLimit(gSavedSettings.getLLSD("FramePerSecondLimit"));
-	// </FS:Ansariel>
 
 	return true;
 }
@@ -1765,23 +1765,6 @@ bool LLAppViewer::doFrame()
 				gGLActive = TRUE;
 
 				display();
-
-				// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
-				//static U64 last_call = 0;
-				//if (!gTeleportDisplay || gGLManager.mIsIntel) // SL-10625...throttle early, throttle often with Intel
-				//{
-				//	// Frame/draw throttling
-				//	U64 elapsed_time = LLTimer::getTotalTime() - last_call;
-				//	if (elapsed_time < mMinMicroSecPerFrame)
-				//	{
-				//		LL_RECORD_BLOCK_TIME(FTM_SLEEP);
-				//		// llclamp for when time function gets funky
-				//		U64 sleep_time = llclamp(mMinMicroSecPerFrame - elapsed_time, (U64)1, (U64)1e6);
-				//		micro_sleep(sleep_time, 0);
-				//	}
-				//}
-				//last_call = LLTimer::getTotalTime();
-				// </FS:Ansariel>
 
 				pingMainloopTimeout("Main:Snapshot");
 				LLFloaterSnapshot::update(); // take snapshots
@@ -2210,8 +2193,11 @@ bool LLAppViewer::cleanup()
 	delete gKeyboard;
 	gKeyboard = NULL;
 
-	// Turn off Space Navigator and similar devices
-	LLViewerJoystick::getInstance()->terminate();
+    if (LLViewerJoystick::instanceExists())
+    {
+        // Turn off Space Navigator and similar devices
+        LLViewerJoystick::getInstance()->terminate();
+    }
 
 	LL_INFOS() << "Cleaning up Objects" << LL_ENDL;
 
@@ -3430,7 +3416,7 @@ bool LLAppViewer::initConfiguration()
 	}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-	if (LLControlVariable* pControl = gSavedSettings.getControl(RLV_SETTING_MAIN))
+    if (LLControlVariable* pControl = gSavedSettings.getControl(RlvSettingNames::Main))
 	{
 		if ( (pControl->getValue().asBoolean()) && (pControl->hasUnsavedValue()) )
 		{
@@ -3781,9 +3767,8 @@ LLSD LLAppViewer::getViewerInfo() const
 			info["POSITION"] = ll_sd_from_vector3d(pos);
 			info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
 			info["REGION"] = gAgent.getRegion()->getName();
-			info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
-			info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
-//			info["SERVER_VERSION"] = gLastVersionChannel;
+			boost::regex regex("\\.(secondlife|lindenlab)\\..*");
+			info["HOSTNAME"] = boost::regex_replace(gAgent.getRegion()->getHost().getHostName(), regex, "");
 			LLSLURL slurl;
 			LLAgentUI::buildSLURL(slurl);
 			info["SLURL"] = slurl.getSLURLString();
@@ -3791,7 +3776,7 @@ LLSD LLAppViewer::getViewerInfo() const
 		}
 		else
 		{
-			info["REGION"] = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+			info["REGION"] = RlvStrings::getString(RlvStringKeys::Hidden::Region);
 		}
 		info["SERVER_VERSION"] = gLastVersionChannel;
 // [/RLVa:KB]
@@ -3802,8 +3787,8 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
-	info["GRAPHICS_CARD_VENDOR"] = (const char*)(glGetString(GL_VENDOR));
-	info["GRAPHICS_CARD"] = (const char*)(glGetString(GL_RENDERER));
+	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
+	info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
 
 #if LL_WINDOWS
 	std::string drvinfo = gDXHardware.getDriverVersionWMI();
@@ -3825,7 +3810,7 @@ LLSD LLAppViewer::getViewerInfo() const
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
 	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : LLTrans::getString("RLVaStatusDisabled");
 // [/RLVa:KB]
-	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
+	info["OPENGL_VERSION"] = ll_safe_string((const char*)(glGetString(GL_VERSION)));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
     // Settings
 
@@ -4774,6 +4759,7 @@ static LLNotificationFunctorRegistration finish_quit_reg("ConfirmQuit", finish_q
 
 void LLAppViewer::userQuit()
 {
+	LL_INFOS() << "User requested quit" << LL_ENDL;
 	if (gDisconnected
 		|| !gViewerWindow
 		|| !gViewerWindow->getProgressView()
@@ -5372,6 +5358,7 @@ void LLAppViewer::saveFinalSnapshot()
 									gViewerWindow->getWindowWidthRaw(),
 									gViewerWindow->getWindowHeightRaw(),
 									FALSE,
+									gSavedSettings.getBOOL("RenderHUDInSnapshot"),
 									TRUE,
 									LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
 									LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
@@ -5722,12 +5709,13 @@ void LLAppViewer::idle()
 		// </FS:CR>
 		return;
     }
+
+    gViewerWindow->updateUI();
+
 	if (gTeleportDisplay)
     {
 		return;
     }
-
-	gViewerWindow->updateUI();
 
 	///////////////////////////////////////
 	// Agent and camera movement
@@ -6319,19 +6307,6 @@ void LLAppViewer::disconnectViewer()
 	// Pass the connection state to LLUrlEntryParcel not to attempt
 	// parcel info requests while disconnected.
 	LLUrlEntryParcel::setDisconnected(gDisconnected);
-}
-
-bool LLAppViewer::onChangeFrameLimit(LLSD const & evt)
-{
-	if (evt.asInteger() > 0)
-	{
-		mMinMicroSecPerFrame = (U64)(1000000.0f / F32(evt.asInteger()));
-	}
-	else
-	{
-		mMinMicroSecPerFrame = 0;
-	}
-	return false;
 }
 
 void LLAppViewer::forceErrorLLError()

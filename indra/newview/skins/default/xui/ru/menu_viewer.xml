@@ -65,7 +65,7 @@
 			<menu_item_check label="Не беспокоить" name="Do Not Disturb" />
 			<menu_item_check label="Автоответчик" name="Set Autorespond"/>
 			<menu_item_check label="Автоответчик не друзьям" name="Set Autorespond to non-friends"/>
-			<menu_item_check label="Отклонять предложения телепортации и запросы" name="Automatically reject teleport offers"/>
+			<menu_item_check label="Отклонять предложения и запросы телепортации" name="Automatically reject teleport offers"/>
 			<menu_item_check label="Отклонять все приглашения в группы" name="Reject all group invites"/>
 			<menu_item_check label="Отклонять все запросы дружбы" name="Reject all friendship requests"/>
 		</menu>
@@ -179,10 +179,10 @@
 			<menu_item_call label="Править землю" name="Land"/>
 		</menu>
 		<menu label="Выберите элементы" name="Select Elements">
-			<menu_item_call label="Выбрать следующую часть или лицо" name="Select Next Part or Face"/>
-			<menu_item_call label="Выбрать предыдущую часть или лицо" name="Select Previous Part or Face"/>
-			<menu_item_call label="Включить следующую часть или лицо" name="Include Next Part or Face"/>
-			<menu_item_call label="Включить предыдущую часть или лицо" name="Include Previous Part or Face"/>
+			<menu_item_call label="Выбрать следующую часть или грань" name="Select Next Part or Face"/>
+			<menu_item_call label="Выбрать предыдущую часть или грань" name="Select Previous Part or Face"/>
+			<menu_item_call label="Включать следующую часть или грань" name="Include Next Part or Face"/>
+			<menu_item_call label="Включать предыдущую часть или грань" name="Include Previous Part or Face"/>
 		</menu>
 		<menu_item_call label="Соеденить" name="Link"/>
 		<menu_item_call label="Разделить" name="Unlink"/>
@@ -190,8 +190,8 @@
 		<menu label="Выбрать соединенные части" name="Select Linked Parts">
 			<menu_item_call label="Выбрать следующую часть" name="Select Next Part"/>
 			<menu_item_call label="Выбрать предыдущую часть" name="Select Previous Part"/>
-			<menu_item_call label="Подключить следующую часть" name="Include Next Part"/>
-			<menu_item_call label="Подключить предыдущую часть" name="Include Previous Part"/>
+			<menu_item_call label="Включать следующую часть" name="Include Next Part"/>
+			<menu_item_call label="Включать предыдущую часть" name="Include Previous Part"/>
 		</menu>
 		<menu_item_call label="Сфокусироваться на выбранном" name="Focus on Selection"/>
 		<menu_item_call label="Увеличить выбранное" name="Zoom to Selection"/>
@@ -240,7 +240,7 @@
 			<menu_item_check label="Показать радиус света для выбранных" name="Show Light Radius for Selection"/>
 			<menu_item_check label="Показать луч выбора" name="Show Selection Beam"/>
 			<menu_item_check label="Привязка к сетке" name="Snap to Grid"/>
-			<menu_item_call label="XY привязка объекта к сетке" name="Snap Object XY to Grid"/>
+			<menu_item_call label="Привязка XY объекта к сетке" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Использовать выбранное для сетки" name="Use Selection for Grid"/>
 			<menu_item_call label="Параметры сетки..." name="Grid Options"/>
 			<menu_item_call label="Установить разрешения по умолчанию..." name="Set default permissions"/>
@@ -251,7 +251,7 @@
 			<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Меш модель..." name="Upload Model"/>
 			<menu_item_call label="Несколько..." name="Bulk Upload"/>
-			<menu_item_call label="Импортировать ..." name="import linkset"/>
+			<menu_item_call label="Импортировать..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>
 		<menu_item_call label="Повторить" name="Redo"/>
@@ -273,7 +273,7 @@
 	<menu label="Помощь" name="Help">
 		<menu_item_check label="Включить подсказки интерфейса клиента" name="Enable Hints"/>
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
-		<menu_item_call label="Поиск Проблемы" name="Troubleshooting"/>
+		<menu_item_call label="Поиск решения Проблем" name="Troubleshooting"/>
 		<menu_item_call label="Вступить в группу поддержки Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Расписание обучений Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Календарь Событий Firestorm" name="Firestorm Events Calendar"/>
@@ -290,7 +290,7 @@
 		<menu_item_call label="Проверка статуса сети (Grid Status)" name="Grid Status"/>
 		<menu_item_call label="Пожаловаться" name="Report Abuse"/>
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
-		<menu_item_call label="Удары, толчки и просмотры" name="Bumps, Pushes &amp;amp; Hits"/>
+		<menu_item_call label="Удары, толчки и попадания" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Включить кнопку системной информации" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Информация о [APP_NAME]" name="About Second Life"/>
 	</menu>
@@ -305,14 +305,14 @@
 			<menu_item_check label="Включить старые имена (Legacy Naming)" name="Enable Legacy Naming"/>
 			<menu_item_check label="Включить 'Делиться одеждой' (Shared Wear)" name="Enable Shared Wear"/>
 			<menu_item_check label="Переименование общих элементов при ношении" name="Rename Shared Items on Wear"/>
-			<menu_item_check label="Блокировка..." name="Locks"/>
+			<menu_item_check label="Блокировки..." name="Locks"/>
 		</menu>
-		<menu_item_check label="Разрешить OOC чат (Out Of Character)" name="Allow OOC Chat"/>
-		<menu_item_check label="Запретить получение в #RLV" name="Forbid Give to #RLV"/>
+		<menu_item_check label="Разрешить не ролевой чат (Вышел из Роли)" name="Allow OOC Chat"/>
 		<menu_item_check label="Показать фильтрованый чат" name="Show Filtered Chat"/>
+		<menu_item_check label="Показать 'Печатает' в Перенаправленном Чате" name="Show Redirected Chat Typing"/>
 		<menu_item_check label="Разделять длинный Перенаправленный Чат" name="Split Long Redirected Chat"/>
 		<menu_item_check label="Разрешить временное присоединение" name="Allow Temporary Attachments"/>
-		<menu_item_check label="Показывать имена" name="Show Name Tags"/>
+		<menu_item_check label="Запретить получение в папку #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Замена одежды разблокирована" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Консоль..." name="Console"/>
 		<menu_item_check label="Ограничения..." name="Restrictions"/>
@@ -323,7 +323,7 @@
 	<menu label="Расширенное" name="Advanced">
 		<menu_item_call label="Перегрузить текстуры (rebake)" name="Rebake Texture"/>
 		<menu_item_call label="Обновить присоединения" name="Refresh Attachments"/>
-		<menu_item_call label="Восстановить размер интерфейса по умолчанию" name="Set UI Size to Default"/>
+		<menu_item_call label="Восстановить исходный размер интерфейса" name="Set UI Size to Default"/>
 		<menu_item_call label="Установить размер окна..." name="Set Window Size..."/>
 		<menu_item_check label="Ограничить расстояние выбора" name="Limit Select Distance"/>
 		<menu_item_check label="Отключить ограничения камеры" name="Disable Camera Distance"/>
@@ -342,9 +342,9 @@
 			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
 			<menu_item_check label="Показывать прицел при виде от первого лица" name="ShowCrosshairs"/>
 			<menu label="Всплывающие подсказки" name="Hover Tips">
-				<menu_item_check label="Показывать подсказки" name="Show Tips"/>
-				<menu_item_check label="Показывать подсказки инструментов земли" name="Land Tips"/>
-				<menu_item_check label="Отображать подсказки на все объекты" name="Tips On All Objects"/>
+				<menu_item_check label="Показывать Подсказки" name="Show Tips"/>
+				<menu_item_check label="Подсказки о земле" name="Land Tips"/>
+				<menu_item_check label="Подсказки на все объекты" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Типы визуализации" name="Rendering Types">
@@ -352,6 +352,7 @@
 			<menu_item_check label="Альфа" name="Rendering Type Alpha"/>
 			<menu_item_check label="Дерево" name="Rendering Type Tree"/>
 			<menu_item_check label="Аватары" name="Rendering Type Character"/>
+			<menu_item_check label="Анимированный меш" name="Rendering Type Control Avatar"/>
 			<menu_item_check label="Исправление поверхности" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Небо" name="Rendering Type Sky"/>
 			<menu_item_check label="Вода" name="Rendering Type Water"/>
@@ -378,7 +379,7 @@
 		<menu_item_check label="Использовать плагин чтения сообщений" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Очистить кэш группы" name="ClearGroupCache"/>
 		<menu_item_check label="Сглаживание мыши" name="Mouse Smoothing"/>
-		<menu_item_call label="Сброск значений регулировки зазорами модулей" name="Release Keys"/>
+		<menu_item_call label="Отменить добавление элементов управления кнопками" name="Release Keys"/>
 		<menu label="Горячие клавиши" name="Shortcuts">
 			<menu_item_call label="Загрузить изображение ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Поиск" name="Search"/>

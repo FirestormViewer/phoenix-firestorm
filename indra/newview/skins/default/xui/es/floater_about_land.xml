@@ -72,7 +72,7 @@
 				No se ha seleccionado una parcela.
 			</panel.string>
 			<panel.string name="time_stamp_template">
-				[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+				[wkday,datetime,slt] [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 			</panel.string>
 			<panel.string name="error_resolving_uuid">
 				No se ha podido resolver la id. de la parcela.

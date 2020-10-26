@@ -162,6 +162,10 @@ void display_startup()
 	{
 		LLViewerDynamicTexture::updateAllInstances();
 	}
+    else
+    {
+        LL_DEBUGS("Window") << "First display_startup frame" << LL_ENDL;
+    }
 
 	LLGLState::checkStates();
 	LLGLState::checkTextureChannels();
@@ -279,6 +283,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 	if (gWindowResized)
 	{ //skip render on frames where window has been resized
+		LL_DEBUGS("Window") << "Resizing window" << LL_ENDL;
 		LL_RECORD_BLOCK_TIME(FTM_RESIZE_WINDOW);
 		gGL.flush();
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -816,9 +821,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLGLState::checkTextureChannels();
 		LLGLState::checkClientArrays();
 
-		BOOL to_texture = gPipeline.canUseVertexShaders() &&
-						LLPipeline::sRenderGlow;
-
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Swap");
 		
 		{ 
@@ -1031,31 +1033,28 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		stop_glerror();
 
-		if (to_texture)
-		{
-			gGL.setColorMask(true, true);
-					
-			if (LLPipeline::sRenderDeferred)
-			{
-				gPipeline.mDeferredScreen.bindTarget();
-				glClearColor(1,0,1,1);
-				gPipeline.mDeferredScreen.clear();
-			}
-			else
-			{
-				gPipeline.mScreen.bindTarget();
-				if (LLPipeline::sUnderWaterRender && !gPipeline.canUseWindLightShaders())
-				{
-					const LLColor4 &col = LLEnvironment::instance().getCurrentWater()->getWaterFogColor();
-					glClearColor(col.mV[0], col.mV[1], col.mV[2], 0.f);
-				}
-				gPipeline.mScreen.clear();
-			}
-			
-			gGL.setColorMask(true, false);
-		}
-		
-		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderGeom");
+        gGL.setColorMask(true, true);
+
+        if (LLPipeline::sRenderDeferred)
+        {
+            gPipeline.mDeferredScreen.bindTarget();
+            glClearColor(1, 0, 1, 1);
+            gPipeline.mDeferredScreen.clear();
+        }
+        else
+        {
+            gPipeline.mScreen.bindTarget();
+            if (LLPipeline::sUnderWaterRender && !gPipeline.canUseWindLightShaders())
+            {
+                const LLColor4 &col = LLEnvironment::instance().getCurrentWater()->getWaterFogColor();
+                glClearColor(col.mV[0], col.mV[1], col.mV[2], 0.f);
+            }
+            gPipeline.mScreen.clear();
+        }
+
+        gGL.setColorMask(true, false);
+
+        LLAppViewer::instance()->pingMainloopTimeout("Display:RenderGeom");
 		
 		if (!(LLAppViewer::instance()->logoutRequestSent() && LLAppViewer::instance()->hasSavedFinalSnapshot())
 				&& !gRestoreGL)
@@ -1121,38 +1120,20 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			}
 		}
 
-		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderFlush");		
-		
-		if (to_texture)
-		{
-			if (LLPipeline::sRenderDeferred)
-			{
-				gPipeline.mDeferredScreen.flush();
-				if(LLRenderTarget::sUseFBO)
-				{
-					LLRenderTarget::copyContentsToFramebuffer(gPipeline.mDeferredScreen, 0, 0, gPipeline.mDeferredScreen.getWidth(), 
-															  gPipeline.mDeferredScreen.getHeight(), 0, 0, 
-															  gPipeline.mDeferredScreen.getWidth(), 
-															  gPipeline.mDeferredScreen.getHeight(), 
-															  GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
-				}
-			}
-			else
-			{
-				gPipeline.mScreen.flush();
-				if(LLRenderTarget::sUseFBO)
-				{				
-					LLRenderTarget::copyContentsToFramebuffer(gPipeline.mScreen, 0, 0, gPipeline.mScreen.getWidth(), 
-															  gPipeline.mScreen.getHeight(), 0, 0, 
-															  gPipeline.mScreen.getWidth(), 
-															  gPipeline.mScreen.getHeight(), 
-															  GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
-				}
-			}
-		}
+		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderFlush");
 
-		if (LLPipeline::sRenderDeferred)
-		{
+        LLRenderTarget &rt = (gPipeline.sRenderDeferred ? gPipeline.mDeferredScreen : gPipeline.mScreen);
+        rt.flush();
+
+        if (rt.sUseFBO)
+        {
+            LLRenderTarget::copyContentsToFramebuffer(rt, 0, 0, rt.getWidth(), rt.getHeight(), 0, 0, rt.getWidth(),
+                                                      rt.getHeight(), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
+                                                      GL_NEAREST);
+        }
+
+        if (LLPipeline::sRenderDeferred)
+        {
 			gPipeline.renderDeferredLighting(&gPipeline.mScreen);
 		}
 
@@ -1265,7 +1246,7 @@ void render_hud_attachments()
 		LLSpatialGroup::sNoDelete = TRUE;
 
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-		gPipeline.updateCull(hud_cam, result);
+		gPipeline.updateCull(hud_cam, result, 0, NULL, true);
 
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_BUMP);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_SIMPLE);
@@ -1425,25 +1406,18 @@ void render_ui(F32 zoom_factor, int subfield)
 		gGL.popMatrix();
 	}
 
-	{
-		BOOL to_texture = gPipeline.canUseVertexShaders() &&
-							LLPipeline::sRenderGlow;
+    // Finalize scene
+    gPipeline.renderFinalize();
 
-		if (to_texture)
-		{
-			gPipeline.renderBloom(gSnapshot, zoom_factor, subfield);
-		}
-		
-		LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
-		render_hud_elements();
+    LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
+    render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 		if (gRlvHandler.isEnabled())
 		{
 			gRlvHandler.renderOverlay();
 		}
 // [/RLVa:KB]
-		render_hud_attachments();
-	}
+	render_hud_attachments();
 
 	LLGLSDefault gls_default;
 	LLGLSUIDefault gls_ui;
@@ -1624,8 +1598,13 @@ void render_ui_2d()
 	//  Menu overlays, HUD, etc
 	gViewerWindow->setup2DRender();
 
-	F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
-	S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+	// <FS:Ansariel> Factor out instance() call
+	//F32 zoom_factor = LLViewerCamera::getInstance()->getZoomFactor();
+	//S16 sub_region = LLViewerCamera::getInstance()->getZoomSubRegion();
+	LLViewerCamera& camera = LLViewerCamera::instance();
+	F32 zoom_factor = camera.getZoomFactor();
+	S16 sub_region = camera.getZoomSubRegion();
+	LLVector2& ui_scale_factor = LLUI::getScaleFactor();
 
 	if (zoom_factor > 1.f)
 	{
@@ -1646,7 +1625,9 @@ void render_ui_2d()
 		gGL.pushMatrix();
 		S32 half_width = (gViewerWindow->getWorldViewWidthScaled() / 2);
 		S32 half_height = (gViewerWindow->getWorldViewHeightScaled() / 2);
-		gGL.scalef(LLUI::getScaleFactor().mV[0], LLUI::getScaleFactor().mV[1], 1.f);
+		// <FS:Ansariel> Factor out instance() call
+		//gGL.scalef(LLUI::getScaleFactor().mV[0], LLUI::getScaleFactor().mV[1], 1.f);
+		gGL.scalef(ui_scale_factor.mV[0], ui_scale_factor.mV[1], 1.f);
 		gGL.translatef((F32)half_width, (F32)half_height, 0.f);
 		F32 zoom = gAgentCamera.mHUDCurZoom;
 		gGL.scalef(zoom,zoom,1.f);
@@ -1689,10 +1670,15 @@ void render_ui_2d()
 				ui_inst->mDirtyRect = last_rect;
 				last_rect = t_rect;
 			
-				last_rect.mLeft = LLRect::tCoordType(last_rect.mLeft / ui_inst->getScaleFactor().mV[0]);
-				last_rect.mRight = LLRect::tCoordType(last_rect.mRight / ui_inst->getScaleFactor().mV[0]);
-				last_rect.mTop = LLRect::tCoordType(last_rect.mTop / ui_inst->getScaleFactor().mV[1]);
-				last_rect.mBottom = LLRect::tCoordType(last_rect.mBottom / ui_inst->getScaleFactor().mV[1]);
+				// <FS:Ansariel> Factor out instance() call
+				//last_rect.mLeft = LLRect::tCoordType(last_rect.mLeft / ui_inst->getScaleFactor().mV[0]);
+				//last_rect.mRight = LLRect::tCoordType(last_rect.mRight / ui_inst->getScaleFactor().mV[0]);
+				//last_rect.mTop = LLRect::tCoordType(last_rect.mTop / ui_inst->getScaleFactor().mV[1]);
+				//last_rect.mBottom = LLRect::tCoordType(last_rect.mBottom / ui_inst->getScaleFactor().mV[1]);
+				last_rect.mLeft = LLRect::tCoordType(last_rect.mLeft / ui_scale_factor.mV[0]);
+				last_rect.mRight = LLRect::tCoordType(last_rect.mRight / ui_scale_factor.mV[0]);
+				last_rect.mTop = LLRect::tCoordType(last_rect.mTop / ui_scale_factor.mV[1]);
+				last_rect.mBottom = LLRect::tCoordType(last_rect.mBottom / ui_scale_factor.mV[1]);
 
 				LLRect clip_rect(last_rect);
 				

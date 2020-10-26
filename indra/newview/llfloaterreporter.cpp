@@ -948,7 +948,7 @@ void LLFloaterReporter::takeNewSnapshot(bool refresh)
 
 	// Take a screenshot, but don't draw this floater.
 	setVisible(FALSE);
-	if( !gViewerWindow->rawSnapshot(mImageRaw, IMAGE_WIDTH, IMAGE_HEIGHT, TRUE, FALSE, TRUE, FALSE))
+    if (!gViewerWindow->rawSnapshot(mImageRaw,IMAGE_WIDTH, IMAGE_HEIGHT, TRUE, FALSE, TRUE /*UI*/, TRUE, FALSE))
 	{
 		LL_WARNS() << "Unable to take screenshot" << LL_ENDL;
 		setVisible(TRUE);

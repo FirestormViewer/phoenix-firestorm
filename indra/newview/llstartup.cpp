@@ -108,7 +108,6 @@
 //#include "llfirstuse.h"
 #include "llfloaterhud.h"
 #include "llfloaterland.h"
-#include "llfloaterpreference.h"
 #include "llfloatertopobjects.h"
 #include "llfloaterworldmap.h"
 #include "llgesturemgr.h"
@@ -1097,7 +1096,7 @@ bool idle_startup()
 		}
 
 // [RLVa:KB] - Patch: RLVa-2.1.0
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		if (gSavedSettings.get<bool>(RlvSettingNames::Main))
 		{
 			show_connect_box = TRUE;
 		}
@@ -1252,6 +1251,7 @@ bool idle_startup()
 		show_debug_menus();
 
 		// Hide the splash screen
+		LL_DEBUGS("AppInit") << "Hide the splash screen and show window" << LL_ENDL;
 		LLSplashScreen::hide();
 		// Push our window frontmost
 		gViewerWindow->getWindow()->show();
@@ -1259,9 +1259,12 @@ bool idle_startup()
 		// DEV-16927.  The following code removes errant keystrokes that happen while the window is being 
 		// first made visible.
 #ifdef _WIN32
+        LL_DEBUGS("AppInit") << "Processing PeekMessage" << LL_ENDL;
 		MSG msg;
 		while( PeekMessage( &msg, /*All hWnds owned by this thread */ NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE ) )
-		{ }
+        {
+        }
+        LL_DEBUGS("AppInit") << "PeekMessage processed" << LL_ENDL;
 #endif
         display_startup();
         timeout.reset();
@@ -1323,7 +1326,7 @@ bool idle_startup()
 		}
 
 // [RLVa:KB] - Checked: RLVa-0.2.1
-		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN))
+		if (gSavedSettings.get<bool>(RlvSettingNames::Main))
 		{
 			RlvHandler::setEnabled(true);
 		}
@@ -1422,9 +1425,9 @@ bool idle_startup()
 		}
 
 		// Set PerAccountSettingsFile to the default value.
-		gSavedSettings.setString("PerAccountSettingsFile",
-			gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, 
-				LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount")));
+		std::string settings_per_account = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount"));
+		gSavedSettings.setString("PerAccountSettingsFile", settings_per_account);
+		gDebugInfo["PerAccountSettingsFilename"] = settings_per_account;
 
 		// Note: can't store warnings files per account because some come up before login
 		
@@ -1712,6 +1715,8 @@ bool idle_startup()
 				// Its either downloading or declined.
 				// If optional was skipped this case shouldn't 
 				// be reached.
+
+				LL_INFOS("LLStartup") << "Forcing a quit due to update." << LL_ENDL;
 				LLLoginInstance::getInstance()->disconnect();
 				LLAppViewer::instance()->forceQuit();
 			}
@@ -1732,7 +1737,24 @@ bool idle_startup()
 					{
 						// This was a certificate error, so grab the certificate
 						// and throw up the appropriate dialog.
-						LLPointer<LLCertificate> certificate = gSecAPIHandler->getCertificate(response["certificate"]);
+                        LLPointer<LLCertificate> certificate;
+                        try
+                        {
+                            certificate = gSecAPIHandler->getCertificate(response["certificate"]);
+                        }
+                        catch (LLCertException &cert_exception)
+                        {
+                            LL_WARNS("LLStartup", "SECAPI") << "Caught " << cert_exception.what() << " certificate expception on getCertificate("<< response["certificate"] << ")" << LL_ENDL;
+                            LLSD args;
+                            args["REASON"] = LLTrans::getString(cert_exception.what());
+
+                            LLNotificationsUtil::add("GeneralCertificateErrorShort", args, response,
+                                general_cert_done);
+
+                            reset_login();
+                            gSavedSettings.setBOOL("AutoLogin", FALSE);
+                            show_connect_box = true;
+                        }
 						if(certificate)
 						{
 							LLSD args = transform_cert_args(certificate);
@@ -3781,7 +3803,7 @@ void LLStartUp::initNameCache()
 	cache_inst->setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
 
 	// <FS:CR> Legacy name/Username format
-	LLAvatarNameCache::getInstance()->setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
+	LLAvatarName::setUseLegacyFormat(gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames"));
 	// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	LLAvatarName::setTrimResidentSurname(gSavedSettings.getBOOL("FSTrimLegacyNames"));
 }
@@ -3851,6 +3873,9 @@ void LLStartUp::setStartSLURL(const LLSLURL& slurl)
 			LLGridManager::getInstance()->setGridChoice(slurl.getGrid());
 			break;
     }
+
+  // <FS:Ansariel> FIRE-29994: Start location doesn't get updated when selection a destination from the login splash screen
+  FSPanelLogin::onUpdateStartSLURL(sStartSLURL);
 }
 
 // static

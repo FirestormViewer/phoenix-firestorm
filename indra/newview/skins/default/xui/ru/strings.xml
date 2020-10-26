@@ -51,7 +51,7 @@
 		Конфигурация сборки [BUILD_CONFIG]
 	</string>
 	<string name="AboutPosition">
-		Вы в точке [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] в регионе [REGION], расположенном на &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+		Вы в точке [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] в регионе [REGION], расположенном на &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (глобальные координаты [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
@@ -201,8 +201,14 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="CertBasicConstraints">
 		В цепочке сертификатов серверов слишком много сертификатов. Обратитесь к администратору сети.
 	</string>
+	<string name="CertInvalid">
+		Не удалось загрузить сертификат. Обратитесь к администратору сети.
+	</string>
 	<string name="CertInvalidSignature">
 		Не удалось проверить подпись сертификата, возвращенного сервером сетки. Обратитесь к администратору сетки.
+	</string>
+	<string name="CertAllocationFailure">
+		Не удалось выделить память openssl для сертификата.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Ошибка сети: не удалось установить соединение. Проверьте подключение к сети.
@@ -5378,7 +5384,7 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 		Удалить выбранные объекты?
 	</string>
 	<string name="DeleteItem">
-		Удалить выбранные объект?
+		Удалить выбранный объект?
 	</string>
 	<string name="EmptyOutfitText">
 		Для этого комплекта одежды нет вещей
@@ -7019,5 +7025,8 @@ ID объекта: [INSPECTING_KEY]
 	</string>
 	<string name="TexturePickerOutfitHeader">
 		Картинка для Комплекта
+	</string>
+	<string name="unknown_script">
+		(Неизвестный скрипт)
 	</string>
 </strings>

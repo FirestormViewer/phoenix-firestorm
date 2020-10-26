@@ -594,8 +594,8 @@ class WindowsManifest(ViewerManifest):
                 else:
                     self.path("fmod.dll")
 
-            # Get openal dll if needed
-            if self.args.get('openal') == 'ON':
+            if self.args['openal'] == 'ON':
+                # Get openal dll
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
 
@@ -2192,7 +2192,6 @@ class Linux_i686_Manifest(LinuxManifest):
                     print "Skipping libfmod.so - not found"
                     pass
 
-
         # Vivox runtimes
         with self.prefix(src=relpkgdir, dst="bin"):
             self.path("SLVoice")
@@ -2291,6 +2290,7 @@ if __name__ == "__main__":
     print('%s \\\n%s' %
           (sys.executable,
            ' '.join((("'%s'" % arg) if ' ' in arg else arg) for arg in sys.argv)))
+    # fmodstudio and openal can be used simultaneously and controled by environment
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),

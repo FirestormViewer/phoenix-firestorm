@@ -60,10 +60,7 @@ LLViewerTexLayerSetBuffer::LLViewerTexLayerSetBuffer(LLTexLayerSet* const owner,
 										 S32 width, S32 height) :
 	// ORDER_LAST => must render these after the hints are created.
 	LLTexLayerSetBuffer(owner),
-	// <FS> Rye Mutt's broken local texture rendering fix
-	//LLViewerDynamicTexture( width, height, 4, LLViewerDynamicTexture::ORDER_LAST, TRUE ), 
-	LLViewerDynamicTexture( width, height, 4, LLViewerDynamicTexture::ORDER_LAST, FALSE ), 
-	// </FS>
+	LLViewerDynamicTexture(width, height, 4, LLViewerDynamicTexture::ORDER_LAST, FALSE),
 	// <FS:Ansariel> [Legacy Bake]
 	mUploadPending(FALSE), // Not used for any logic here, just to sync sending of updates
 	mNeedsUpload(FALSE),
@@ -592,12 +589,12 @@ public:
 			if (result == "complete"
 				&& mBakdedUploadData != NULL)
 			{// Invoke 
-				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, 0, LL_EXSTAT_NONE);
+				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, 0, LLExtStat::NONE);
 				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
 			}
 			else
 			{// Invoke the original callback with an error result
-				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, -1, LL_EXSTAT_NONE);
+				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, -1, LLExtStat::NONE);
 				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
 			}
 		}
@@ -605,7 +602,7 @@ public:
 		{
 			LL_WARNS() << "Uploading baked texture resulted in http " << status.getType() << ll_pretty_print_sd( aResult ) << LL_ENDL;
 			// Invoke the original callback with an error result
-			LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakdedUploadData, -1, LL_EXSTAT_NONE);
+			LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakdedUploadData, -1, LLExtStat::NONE);
 			mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
 		}
 

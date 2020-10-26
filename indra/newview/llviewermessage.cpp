@@ -2585,8 +2585,12 @@ protected:
 	}
 };
 
+static LLTrace::BlockTimerStatHandle FTM_PROCESS_IMPROVED_IM("Process IM");
+
 void process_improved_im(LLMessageSystem *msg, void **user_data)
 {
+    LL_RECORD_BLOCK_TIME(FTM_PROCESS_IMPROVED_IM);
+
     LLUUID from_id;
     BOOL from_group;
     LLUUID to_id;
@@ -2859,10 +2863,29 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	chat.mChatType = (EChatType)type_temp;
 
 	// NaCL - Antispam Registry
-	if (chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
+	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+	static LLCachedControl<bool> useAntiSpamMine(gSavedSettings, "FSUseAntiSpamMine");
+	bool deferred_spam_check = false;
+	if (useAntiSpam && chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
 	{
+		if (chat.mSourceType == CHAT_SOURCE_OBJECT)
+		{
+			LLViewerObject* source = gObjectList.findObject(from_id);
+			if (source)
+			{
+				if (source->permYouOwner() && useAntiSpamMine)
+				{
+					// Only check if not a debug message
+					deferred_spam_check = chat.mChatType != CHAT_TYPE_DEBUG_MSG;
+				}
+				else if (!source->permYouOwner() && chat.mChatType != CHAT_TYPE_DEBUG_MSG && NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id, ANTISPAM_SOURCE_OBJECT))
+				{
+					return;
+				}
+			}
+		}
 		// owner_id = from_id for agents
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id, ANTISPAM_SOURCE_AGENT))
+		else if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id, ANTISPAM_SOURCE_AGENT))
 		{
 			return;
 		}
@@ -2990,8 +3013,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		// NaCl - Newline flood protection
 		static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
 		// <FS:TS> FIRE-23138: Add option to antispam user's own objects
-		bool deferred_spam_check = false;
-		static LLCachedControl<bool> useAntiSpamMine(gSavedSettings, "FSUseAntiSpamMine");
+		bool deferred_newline_spam_check = false;
 		if (useAntiSpam)
 		{
 			bool doCheck = true;
@@ -3017,7 +3039,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			if (doCheck && useAntiSpamMine)
 			{
 				// If it's the user's object, defer the check so RLV commands still work
-				deferred_spam_check = true;
+				deferred_newline_spam_check = true;
 			}
 			// </FS:TS> FIRE-23138
 		}
@@ -3288,7 +3310,11 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				break;
 			}
 			// <FS:TS> FIRE-23138: Enable spam checking for user's own objects
-			if (deferred_spam_check && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, from_id, mesg))
+			if (deferred_spam_check && NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id, ANTISPAM_SOURCE_OBJECT))
+			{
+				return;
+			}
+			if (deferred_newline_spam_check && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, from_id, mesg))
 			{
 				return;
 			}
@@ -6344,7 +6370,14 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			std::string snap_filename = gDirUtilp->getLindenUserDir();
 			snap_filename += gDirUtilp->getDirDelimiter();
 			snap_filename += LLStartUp::getScreenHomeFilename();
-			gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
+            gViewerWindow->saveSnapshot(snap_filename,
+                                        gViewerWindow->getWindowWidthRaw(),
+                                        gViewerWindow->getWindowHeightRaw(),
+                                        FALSE, //UI
+                                        gSavedSettings.getBOOL("RenderHUDInSnapshot"),
+                                        FALSE,
+                                        LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
+                                        LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
 		}
 		
 		if (notificationID == "RegionRestartMinutes" ||
@@ -6406,7 +6439,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			std::string snap_filename = gDirUtilp->getLindenUserDir();
 			snap_filename += gDirUtilp->getDirDelimiter();
 			snap_filename += LLStartUp::getScreenHomeFilename();
-			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG))
+			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, gSavedSettings.getBOOL("RenderHUDInSnapshot"), FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG))
 			{
 				LL_INFOS() << LLStartUp::getScreenHomeFilename() << " saved successfully." << LL_ENDL;
 			}
@@ -6478,7 +6511,14 @@ static void process_special_alert_messages(const std::string & message)
 		std::string snap_filename = gDirUtilp->getLindenUserDir();
 		snap_filename += gDirUtilp->getDirDelimiter();
 		snap_filename += LLStartUp::getScreenHomeFilename();
-		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE, LLSnapshotModel::SNAPSHOT_TYPE_COLOR, LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
+		gViewerWindow->saveSnapshot(snap_filename,
+                                    gViewerWindow->getWindowWidthRaw(),
+                                    gViewerWindow->getWindowHeightRaw(),
+                                    FALSE,
+                                    gSavedSettings.getBOOL("RenderHUDInSnapshot"),
+                                    FALSE,
+                                    LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
+                                    LLSnapshotModel::SNAPSHOT_FORMAT_PNG);
 	}
 }
 
@@ -6953,8 +6993,8 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.0.0a
 		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		{
-			notice.setArg("[REGIONNAME]", RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
-			notice.setArg("[REGIONPOS]", RlvStrings::getString(RLV_STRING_HIDDEN));
+			notice.setArg("[REGIONNAME]", RlvStrings::getString(RlvStringKeys::Hidden::Region));
+			notice.setArg("[REGIONPOS]", RlvStrings::getString(RlvStringKeys::Hidden::Generic));
 		}
 		else if (!foundpos)
 // [/RLVa:KB]
@@ -7724,7 +7764,7 @@ void send_lures(const LLSD& notification, const LLSD& response)
 	if ( (gRlvHandler.isEnabled()) && 
 	     (std::any_of(sdRecipients.beginArray(), sdRecipients.endArray(), [](const LLSD& id) { return !RlvActions::canStartIM(id.asUUID()) || !RlvActions::canSendIM(id.asUUID()); })) )
 	{
-		text = RlvStrings::getString(RLV_STRING_HIDDEN);
+		text = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 	}
 // [/RLVa:KB]
 
@@ -7816,7 +7856,7 @@ void handle_lure(const uuid_vec_t& ids)
 
 	LLSD edit_args;
 // [RLVa:KB] - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0a
-	edit_args["REGION"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RLV_STRING_HIDDEN);
+	edit_args["REGION"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RlvStringKeys::Hidden::Generic);
 // [/RLVa:KB]
 //	edit_args["REGION"] = gAgent.getRegion()->getName();
 
@@ -7829,10 +7869,10 @@ void handle_lure(const uuid_vec_t& ids)
 		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		{
 			const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(idAgent);
-			if ( (!gRlvHandler.isException(RLV_BHVR_TPLURE, idAgent, RLV_CHECK_PERMISSIVE)) &&
+			if ( (!gRlvHandler.isException(RLV_BHVR_TPLURE, idAgent, ERlvExceptionCheck::Permissive)) &&
 				 ((!pBuddyInfo) || (!pBuddyInfo->isOnline()) || (!pBuddyInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))) )
 			{
-				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT_OFFER);
+				RlvUtil::notifyBlocked(RlvStringKeys::Blocked::TeleportOffer);
 				return;
 			}
 		}

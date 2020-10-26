@@ -56,6 +56,11 @@
 #include "lltexteditor.h"
 #include "lltextbox.h"
 
+#if defined BOOST_FOREACH
+#undef BOOST_FOREACH
+#define BOOST_FOREACH(iter, coll) for (iter : coll)
+#endif
+
 static const S32 LINE_HEIGHT = 15;
 
 S32		LLView::sDepth = 0;
@@ -85,6 +90,11 @@ template class LLView* LLView::getChild<class LLView>(
 	const std::string& name, BOOL recurse) const;
 
 static LLDefaultChildRegistry::Register<LLView> r("view");
+
+void deleteView(LLView *aView)
+{
+	delete aView;
+}
 
 namespace LLInitParam
 {
@@ -683,6 +693,16 @@ void LLView::onVisibilityChange ( BOOL new_visibility )
 		
 		}
 	}
+}
+
+// virtual
+void LLView::onUpdateScrollToChild(const LLUICtrl * cntrl)
+{
+    LLView* parent_view = getParent();
+    if (parent_view)
+    {
+        parent_view->onUpdateScrollToChild(cntrl);
+    }
 }
 
 // virtual

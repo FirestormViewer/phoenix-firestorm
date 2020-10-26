@@ -273,6 +273,7 @@
 		</menu>
 		<menu_item_check label="Zezwól na czat OOC (Out Of Character)" name="Allow OOC Chat"/>
 		<menu_item_check label="Pokaż filtrowany czat" name="Show Filtered Chat" />
+		<menu_item_check label="Pokaż, że ktoś pisze, gdy czat jest przekierowywany" name="Show Redirected Chat Typing" />
 		<menu_item_check label="Dziel długi przekierowany czat" name="Split Long Redirected Chat" />
 		<menu_item_check label="Zezwól na tymczasowe dodatki" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
@@ -313,6 +314,7 @@
 			<menu_item_check label="Maska alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Drzewa" name="Rendering Type Tree"/>
 			<menu_item_check label="Awatary" name="Rendering Type Character"/>
+			<menu_item_check label="Animowany mesz" name="Rendering Type Control Avatar" />
 			<menu_item_check label="Płaszczyzna powierzchni" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Niebo" name="Rendering Type Sky"/>
 			<menu_item_check label="Woda" name="Rendering Type Water"/>

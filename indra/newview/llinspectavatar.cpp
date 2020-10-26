@@ -63,6 +63,7 @@
 #include "lltoggleablemenu.h"
 #include "lluictrl.h"
 #include "llviewerregion.h"
+#include "rlvactions.h"
 // </FS:Ansariel>
 
 class LLFetchAvatarData;
@@ -152,6 +153,7 @@ private:
 	bool enableUnmute();
 	bool enableTeleportOffer();
 	bool enableTeleportRequest();
+	bool enablePay();
 	bool godModeEnabled();
 
 	// Is used to determine if "Add friend" option should be enabled in gear menu
@@ -257,6 +259,7 @@ LLInspectAvatar::LLInspectAvatar(const LLSD& sd)
 	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableCall",				boost::bind(&LLAvatarActions::canCall));
 	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportOffer",		boost::bind(&LLInspectAvatar::enableTeleportOffer, this));
 	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportRequest",	boost::bind(&LLInspectAvatar::enableTeleportRequest, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnablePay",				boost::bind(&LLInspectAvatar::enablePay, this));
 	mEnableCallbackRegistrar.add("InspectAvatar.EnableMute",					boost::bind(&LLInspectAvatar::enableMute, this));
 	mEnableCallbackRegistrar.add("InspectAvatar.EnableUnmute",					boost::bind(&LLInspectAvatar::enableUnmute, this));
 	// </FS:Ansariel>
@@ -857,6 +860,11 @@ bool LLInspectAvatar::enableTeleportOffer()
 bool LLInspectAvatar::enableTeleportRequest()
 {
 	return LLAvatarActions::canRequestTeleport(mAvatarID);
+}
+
+bool LLInspectAvatar::enablePay()
+{
+	return RlvActions::canPayAvatar(mAvatarID);
 }
 
 bool LLInspectAvatar::godModeEnabled()

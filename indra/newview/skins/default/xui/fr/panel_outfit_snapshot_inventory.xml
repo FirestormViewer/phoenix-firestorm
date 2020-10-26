@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+	<text name="title">
+		Inventaire
+	</text>
+	<text name="hint_lbl">
+		Le téléchargement d'une image dans votre inventaire coûte L$[UPLOAD_COST].
+Les frais sont fonction de votre niveau d'abonnement. Les niveaux supérieurs sont soumis à des frais moins élevés.
+	</text>
+	<button label="Annuler" name="cancel_btn"/>
+	<button label="Enregistrer" name="save_btn"/>
+</panel>

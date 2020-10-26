@@ -652,7 +652,7 @@ LLIMModel::LLIMModel()
 	addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
 	// </FS:Ansariel> [FS communication UI]
 	addNewMsgCallback(boost::bind(&on_new_message, _1));
-
+	LLCallDialogManager::instance();
 }
 
 LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id, const std::string& name, const EInstantMessage& type, const LLUUID& other_participant_id, const uuid_vec_t& ids, bool voice, bool has_offline_msg)
@@ -2975,8 +2975,8 @@ void LLIMMgr::addMessage(
 	bool skip_message = false;
 	bool from_linden = LLMuteList::getInstance()->isLinden(from);
 	// <FS:Ansariel> FIRE-14564: VoiceCallFriendsOnly prevents receiving of
-	//if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden)
-	if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden &&
+	//if (gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden)
+	if (gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden &&
 		(dialog == IM_NOTHING_SPECIAL || (dialog == IM_SESSION_INVITE && !gAgent.isInGroup(new_session_id))) )
 	// </FS:Ansariel>
 	{
@@ -3012,7 +3012,7 @@ void LLIMMgr::addMessage(
 		//               session id, so we can leave it!
 		if (is_group_chat && !exoGroupMuteList::instance().isLoaded())
 		{
-			LL_INFOS() << "Received group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") before must list has been loaded - skipping message" << LL_ENDL;
+			LL_INFOS() << "Received group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") before mute list has been loaded - skipping message" << LL_ENDL;
 			exoGroupMuteList::instance().addDeferredGroupChat(new_session_id);
 			return;
 		}
@@ -3039,7 +3039,7 @@ void LLIMMgr::addMessage(
 		if (IM_NOTHING_SPECIAL != dialog && IM_SESSION_P2P_INVITE != dialog &&
 			gAgent.isInGroup(new_session_id) && LLMuteList::getInstance()->isMuted(other_participant_id) && !from_linden)
 		{
-			LL_INFOS() << "Ignoring group chat initiated by muted resident." << LL_ENDL;
+			LL_INFOS() << "Ignoring group chat from " << fixed_session_name << " (" << new_session_id.asString() << ") initiated by muted resident." << LL_ENDL;
 			exoGroupMuteList::instance().addDeferredGroupChat(new_session_id);
 			return;
 		}
@@ -3090,7 +3090,7 @@ void LLIMMgr::addMessage(
 
 	// <FS:PP> Configurable IM sounds
 			// //Play sound for new conversations
-			// if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
+			// if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
 
 			// <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
 			static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
@@ -3563,7 +3563,7 @@ void LLIMMgr::inviteToSession(
 	if (voice_invite)
 	{
 		bool isRejectGroupCall = (gSavedSettings.getBOOL("VoiceCallsRejectGroup") && (notify_box_type == "VoiceInviteGroup"));
-		bool isRejectNonFriendCall = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(caller_id) == NULL));
+        bool isRejectNonFriendCall = (gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(caller_id) == NULL));
 		// <FS:PP> FIRE-6522: Options to automatically decline all group and personal voice chat requests
 		// if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
 		bool isRejectAdHocCall = (gSavedSettings.getBOOL("VoiceCallsRejectAdHoc") && (notify_box_type == "VoiceInviteAdHoc"));
@@ -4023,7 +4023,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 
 	BOOL is_muted = LLMuteList::getInstance()->isMuted(av_id, av_name.getCompleteName(), LLMute::flagTextChat);
 	bool is_friend = (LLAvatarTracker::instance().getBuddyInfo(av_id) == NULL) ? false : true;
-	static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedSettings, "VoiceCallsFriendsOnly");
+	static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedPerAccountSettings, "VoiceCallsFriendsOnly");
 
 	if (!is_muted && ( (VoiceCallsFriendsOnly && is_friend) || !VoiceCallsFriendsOnly ))
 	{
@@ -4365,7 +4365,7 @@ public:
 				}
 				else if (!RlvActions::canReceiveIM(from_id))			// Conference chat: don't block; censor if not an exception
 				{
-					message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+					message = RlvStrings::getString(RlvStringKeys::Blocked::RecvIm);
 				}
 			}
 // [/RLVa:KB]

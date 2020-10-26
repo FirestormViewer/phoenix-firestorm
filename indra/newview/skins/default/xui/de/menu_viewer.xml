@@ -252,6 +252,7 @@
 		</menu>
 		<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
 		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
+		<menu_item_check label="Tippen bei umgeleiteten Chat anzeigen" name="Show Redirected Chat Typing"/>
 		<menu_item_check label="Langen, umgeleiteten Chat aufteilen" name="Split Long Redirected Chat"/>
 		<menu_item_check label="Temporäre Anhänge erlauben" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
@@ -292,6 +293,7 @@
 			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Baum" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatare" name="Rendering Type Character"/>
+			<menu_item_check label="Animesh" name="Rendering Type Control Avatar"/>
 			<menu_item_check label="Flächenpatch" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Himmel" name="Rendering Type Sky"/>
 			<menu_item_check label="Wasser" name="Rendering Type Water"/>
