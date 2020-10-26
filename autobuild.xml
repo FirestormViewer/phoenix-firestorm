@@ -2936,9 +2936,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5abf2d9c0b250821c59cc60cd94fd8af</string>
+              <string>53966a7ba6342395acb7ce15bc3fbe0a</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/54840/510064/openjpeg-1.5.1.538970-darwin64-538970.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.203000304-darwin-203000304.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -4210,7 +4210,26 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-          </map>
+             <key>ReleaseFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_open</string>
+            </map>
+         </map>
           <key>name</key>
           <string>darwin64</string>
         </map>

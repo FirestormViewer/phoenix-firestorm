@@ -29,11 +29,9 @@
 
 // this is defined so that we get static linking.
 #include "openjpeg.h"
-#ifndef LL_DARWIN
 #include "cio.h"
 #include "event.h"
 #define OPENJPEG2
-#endif
 
 #include "lltimer.h"
 
