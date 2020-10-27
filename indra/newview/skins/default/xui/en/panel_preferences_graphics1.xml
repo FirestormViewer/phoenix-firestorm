@@ -751,6 +751,7 @@
          name="AvatarCloth"
          top_pad="1"
          width="256" />
+      <!-- <FS:LO> remove orphaned code left over from EEP
         <text
          type="string"
          length="1"
@@ -785,7 +786,7 @@
            name="2"
            top_delta="16"
            width="50" />
-        </radio_group>
+        </radio_group>-->
 
         <text
          type="string"

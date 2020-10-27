@@ -623,6 +623,7 @@
     top_delta="16"
     width="300" />
 
+  <!-- <FS:LO> remove orphaned code left over from EEP
   <slider
     control_name="RenderTerrainDetail"
     follows="left|top"
@@ -642,7 +643,7 @@
     <slider.commit_callback
       function="Pref.UpdateSliderText"
       parameter="TerrainDetail" />
-  </slider>
+  </slider> -->
   <text
     type="string"
     length="1"

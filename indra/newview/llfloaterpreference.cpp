@@ -2255,10 +2255,12 @@ void LLFloaterPreference::refreshEnabledState()
 		ctrl_avatar_cloth->setEnabled(true);
 	}
 	
+	/* <FS:LO> remove orphaned code left over from EEP
 	// Vertex Shaders, Global Shader Enable
 	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
 
 	terrain_detail->setEnabled(FALSE);
+	*/
 	
 	// WindLight
 	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -2371,12 +2373,14 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
         ctrl_avatar_cloth->setEnabled(TRUE);
     }
 
+	/* <FS:LO> remove orphaned code left over from EEP
     // Vertex Shaders, Global Shader Enable
     // SL-12594 Basic shaders are always enabled. DJH TODO clean up now-orphaned state handling code
     LLSliderCtrl* terrain_detail = getChild<LLSliderCtrl>("TerrainDetail");   // can be linked with control var
     LLTextBox* terrain_text = getChild<LLTextBox>("TerrainDetailText");
     terrain_detail->setEnabled(FALSE);
     terrain_text->setEnabled(FALSE);
+	*/
 
     // WindLight
     LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
