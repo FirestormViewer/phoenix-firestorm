@@ -25283,7 +25283,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>10</integer>
+      <integer>15</integer>
     </map>
     <key>FSDynamicTextureMemoryGPUReserve</key>
     <map>
@@ -25294,7 +25294,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>10</integer>
+      <integer>15</integer>
     </map>
     <key>FSDynamicTextureMemoryMinTextureMemory</key>
     <map>
@@ -25306,6 +25306,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>512</integer>
+    </map>
+    <key>FSAllowDoubleClickOnScriptedObjects</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, allows double-click movement action (walk/teleport) to scripted objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
   </map>
 </llsd>
