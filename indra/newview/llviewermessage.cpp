@@ -7259,14 +7259,6 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_TaskID, taskid );
 	// itemid -> script asset key of script requesting permissions
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_ItemID, itemid );
-
-	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
-	{
-		return;
-	}
-	// NaCl End
-
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectName, object_name);
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectOwner, owner_name);
 	msg->getS32Fast(_PREHASH_Data, _PREHASH_Questions, questions );
@@ -7295,21 +7287,23 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	typedef LLKeyThrottle<std::string> LLStringThrottle;
 	static LLStringThrottle question_throttle( LLREQUEST_PERMISSION_THROTTLE_LIMIT, LLREQUEST_PERMISSION_THROTTLE_INTERVAL );
 
-	switch (question_throttle.noteAction(throttle_name))
-	{
-		case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
-			LL_INFOS("Messaging") << "process_script_question throttled"
-					<< " owner_name:" << owner_name
-					<< LL_ENDL;
-			// Fall through
+	// <FS:Ansariel> FIRE-7374: Moved spam/throttle check after RLVa check
+	//switch (question_throttle.noteAction(throttle_name))
+	//{
+	//	case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
+	//		LL_INFOS("Messaging") << "process_script_question throttled"
+	//				<< " owner_name:" << owner_name
+	//				<< LL_ENDL;
+	//		// Fall through
 
-		case LLStringThrottle::THROTTLE_BLOCKED:
-			// Escape altogether until we recover
-			return;
+	//	case LLStringThrottle::THROTTLE_BLOCKED:
+	//		// Escape altogether until we recover
+	//		return;
 
-		case LLStringThrottle::THROTTLE_OK:
-			break;
-	}
+	//	case LLStringThrottle::THROTTLE_OK:
+	//		break;
+	//}
+	// </FS:Ansariel>
 
 	std::string script_question;
 	if (questions)
@@ -7395,6 +7389,31 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
 				return;
 			}
+
+			// <FS:Ansariel> FIRE-7374: Moved spam/throttle check after RLVa check
+			// NaCl - Antispam Registry
+			if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
+			{
+				return;
+			}
+			// NaCl End
+
+			switch (question_throttle.noteAction(throttle_name))
+			{
+				case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
+					LL_INFOS("Messaging") << "process_script_question throttled"
+							<< " owner_name:" << owner_name
+							<< LL_ENDL;
+					// Fall through
+
+				case LLStringThrottle::THROTTLE_BLOCKED:
+					// Escape altogether until we recover
+					return;
+
+				case LLStringThrottle::THROTTLE_OK:
+					break;
+			}
+			// </FS:Ansariel>
 // [/RLVa:KB]
 
 			// check whether cautions are even enabled or not
@@ -7416,6 +7435,35 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			make_ui_sound("UISndScriptFloaterOpen"); // <FS:PP> FIRE-16958: Incoming script permission request doesn't trigger a sound
 		}
 	}
+	// <FS:Ansariel> FIRE-7374: Moved spam/throttle check after RLVa check
+	else
+	{
+		// Throttle permission requests from scripts requesting no permission at all!?!?
+
+		// NaCl - Antispam Registry
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
+		{
+			return;
+		}
+		// NaCl End
+
+		switch (question_throttle.noteAction(throttle_name))
+		{
+			case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
+				LL_INFOS("Messaging") << "process_script_question throttled"
+						<< " owner_name:" << owner_name
+						<< LL_ENDL;
+				// Fall through
+
+			case LLStringThrottle::THROTTLE_BLOCKED:
+				// Escape altogether until we recover
+				return;
+
+			case LLStringThrottle::THROTTLE_OK:
+				break;
+		}
+	}
+	// </FS:Ansariel>
 }
 
 
