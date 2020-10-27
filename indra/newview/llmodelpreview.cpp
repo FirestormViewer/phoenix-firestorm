@@ -3321,7 +3321,7 @@ BOOL LLModelPreview::render()
                     gGL.diffuseColor4fv(edge_col().mV); // <FS:Beq/> restore changes removed by the lab
                     if (edges)
                     {
-                        glLineWidth(edge_width()); // <FS:Beq/> restore changes removed by the lab
+                        gGL.setLineWidth(edge_width()); // <FS:Beq/> restore changes removed by the lab
                         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                         buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts() - 1, buffer->getNumIndices(), 0);
                         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
