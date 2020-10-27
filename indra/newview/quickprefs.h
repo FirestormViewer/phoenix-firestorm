@@ -45,6 +45,7 @@ class LLSlider;
 class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
+class LLColorSwatchCtrl;
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
 #define PRESET_NAME_DAY_CYCLE "__Day_Cycle__"
@@ -287,9 +288,9 @@ protected:
 	void selectControl(std::string controlName);
 
 	// toggles edit mode
-	void onDoubleClickLabel(LLUICtrl* ctrl, void* userdata);	// userdata is the associated panel
+	void onDoubleClickLabel(LLUICtrl* ctrl, LLPanel* panel);
 	// selects a control in edit mode
-	void onClickLabel(LLUICtrl* ctrl, void* userdata);			// userdata is the associated panel
+	void onClickLabel(LLUICtrl* ctrl, LLPanel* panel);
 
 	// will save settings when leaving edit mode
 	void onEditModeChanged();
@@ -297,8 +298,8 @@ protected:
 	void onValuesChanged();
 
 	void onAddNewClicked();
-	void onRemoveClicked(LLUICtrl* ctrl, void* userdata);		// userdata is the associated panel
-	void onAlphaChanged(LLUICtrl* ctrl, void* userdata);		// userdata is the associated color swatch
+	void onRemoveClicked(LLUICtrl* ctrl, LLPanel* panel);
+	void onAlphaChanged(LLUICtrl* ctrl, LLColorSwatchCtrl* color_swatch);
 	void onMoveUpClicked();
 	void onMoveDownClicked();
 

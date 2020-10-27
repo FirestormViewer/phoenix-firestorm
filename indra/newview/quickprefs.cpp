@@ -1351,7 +1351,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 		remove_button->setCommitCallback(boost::bind(&FloaterQuickPrefs::onRemoveClicked, this, _1, entry.panel));
 
 		// and the commit signal for the alpha value in a color4 control
-		alpha_widget->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAlphaChanged, this, _1, entry.panel));
+		alpha_widget->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAlphaChanged, this, _1, entry.panel->getChild<LLColorSwatchCtrl>("option_color4_control")));
 
 		// save the text label pointer in the internal list
 		entry.label_textbox = label_textbox;
@@ -1573,20 +1573,19 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 	mControlIncrementSpinner->setEnabled(enable_floating_point);
 }
 
-void FloaterQuickPrefs::onClickLabel(LLUICtrl* ctrl, void* userdata)
+void FloaterQuickPrefs::onClickLabel(LLUICtrl* ctrl, LLPanel* panel)
 {
 	// don't do anything when we are not in edit mode
 	if (!gSavedSettings.getBOOL("QuickPrefsEditMode"))
 	{
 		return;
 	}
-	// get the associated panel from the submitted userdata
-	LLUICtrl* panel = (LLUICtrl*)userdata;
+
 	// select the clicked control, identified by its name
 	selectControl(panel->getName());
 }
 
-void FloaterQuickPrefs::onDoubleClickLabel(LLUICtrl* ctrl, void* userdata)
+void FloaterQuickPrefs::onDoubleClickLabel(LLUICtrl* ctrl, LLPanel* panel)
 {
 	// toggle edit mode
 	BOOL edit_mode = !gSavedSettings.getBOOL("QuickPrefsEditMode");
@@ -1595,8 +1594,6 @@ void FloaterQuickPrefs::onDoubleClickLabel(LLUICtrl* ctrl, void* userdata)
 	// select the double clicked control if we toggled edit on
 	if (edit_mode)
 	{
-		// get the associated widget from the submitted userdata
-		LLUICtrl* panel = (LLUICtrl*)userdata;
 		selectControl(panel->getName());
 	}
 }
@@ -1838,10 +1835,8 @@ void FloaterQuickPrefs::onAddNewClicked()
 	selectControl(new_control_name);
 }
 
-void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl, void* userdata)
+void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl, LLPanel* panel)
 {
-	// get the associated panel from the submitted userdata
-	LLUICtrl* panel = (LLUICtrl*)userdata;
 	// deselect the current entry
 	selectControl("");
 	// first remove the control from the ordering list
@@ -1852,10 +1847,8 @@ void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl, void* userdata)
 	setFocus(TRUE);
 }
 
-void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl, void* userdata)
+void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl, LLColorSwatchCtrl* color_swatch)
 {
-	// get the associated color swatch from the submitted userdata
-	LLColorSwatchCtrl* color_swatch = ((LLPanel*)userdata)->getChild<LLColorSwatchCtrl>("option_color4_control");
 	// get the current color
 	LLColor4 color = color_swatch->get();
 	// replace the alpha value of the color with the value in the alpha spinner
