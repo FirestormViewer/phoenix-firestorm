@@ -25283,7 +25283,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>15</integer>
+      <integer>10</integer>
     </map>
     <key>FSDynamicTextureMemoryGPUReserve</key>
     <map>
@@ -25294,7 +25294,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>15</integer>
+      <integer>10</integer>
     </map>
     <key>FSDynamicTextureMemoryMinTextureMemory</key>
     <map>
