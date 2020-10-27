@@ -225,7 +225,6 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
     }
 
     mViewOption["show_textures"] = false;
-    fmp->childSetValue("verbose_logging", LLSD(mImporterDebug));
     mFMP = fmp;
 
     mHasPivot = false;
@@ -2109,7 +2108,7 @@ void LLModelPreview::updateStatusMessages()
             // <FS:Beq> Better error handling
             if (num_hulls > 256) // decomp cannot have more than 256 hulls (http://wiki.secondlife.com/wiki/Mesh/Mesh_physics)
             {
-                // <FS:Beq> improve uplaoder error reporting
+                // <FS:Beq> improve uploader error reporting
                 // LL_INFOS() << "Physical model " << mdl->mLabel << " exceeds 256 hull limitation." << LL_ENDL;
                 std::ostringstream out;
                 out << "Physical model " << mdl->mLabel << " exceeds 256 hull limitation.";
@@ -2193,7 +2192,7 @@ void LLModelPreview::updateStatusMessages()
     if (getLoadState() >= LLModelLoader::ERROR_PARSING)
     {
         mModelNoErrors = false;
-        // <FS:Beq> improve uplaoder error reporting
+        // <FS:Beq> improve uploader error reporting
         // LL_INFOS() << "Loader returned errors, model can't be uploaded" << LL_ENDL;
         std::ostringstream out;
         out << "Loader returned errors, model can't be uploaded";
@@ -2211,7 +2210,7 @@ void LLModelPreview::updateStatusMessages()
         if (uploadingJointPositions && !isRigValidForJointPositionUpload())
         {
             mModelNoErrors = false;
-            // <FS:Beq> improve uplaoder error reporting
+            // <FS:Beq> improve uploader error reporting
             // LL_INFOS() << "Invalid rig, there might be issues with uploading Joint positions" << LL_ENDL;
             std::ostringstream out;
             out << "Invalid rig, there might be issues with uploading Joint positions";
@@ -2331,7 +2330,7 @@ void LLModelPreview::updateStatusMessages()
         //    fmp->childSetValue("show_physics", false);
         //}
             
-            // mViewOption["show_physics"] = true; // <FS:Beq/> merge LL uplaoder changes
+            // mViewOption["show_physics"] = true; // <FS:Beq/> merge LL uploader changes
             if (phys_hulls > 0)
             {
                 fmp->enableViewOption("physics_explode");
@@ -2787,7 +2786,7 @@ void LLModelPreview::createPreviewAvatar(void)
     }
     else
     {
-        // <FS:Beq> improve uplaoder error reporting
+        // <FS:Beq> improve uploader error reporting
         // LL_INFOS() << "Failed to create preview avatar for upload model window" << LL_ENDL;
         std::ostringstream out;
         out << "Failed to create preview avatar for upload model window";
@@ -3441,7 +3440,7 @@ BOOL LLModelPreview::render()
                                     // gGL.diffuseColor4fv(PREVIEW_PSYH_EDGE_COL.mV);
                                     // gGL.setLineWidth(PREVIEW_PSYH_EDGE_WIDTH); // <FS> Line width OGL core profile fix by Rye Mutt
                                     gGL.diffuseColor4fv(phys_edge_col().mV);
-                                    glLineWidth(phys_edge_width());
+                                    gGL.setLineWidth(phys_edge_width());
                                     // </FS:Beq> 
                                     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                                     buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts() - 1, buffer->getNumIndices(), 0);
