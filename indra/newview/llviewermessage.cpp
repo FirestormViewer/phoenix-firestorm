@@ -7353,7 +7353,6 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			LL_WARNS("Messaging") << "Object \"" << object_name << "\" requested " << script_question
 								<< " permission. Permission is unknown and can't be granted. Item id: " << itemid
 								<< " taskid:" << taskid << LL_ENDL;
-			make_ui_sound("UISndScriptFloaterOpen"); // <FS:PP> FIRE-16958: Incoming script permission request doesn't trigger a sound
 		}
 		
 		if (known_questions)
