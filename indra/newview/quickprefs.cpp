@@ -1351,7 +1351,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 		remove_button->setCommitCallback(boost::bind(&FloaterQuickPrefs::onRemoveClicked, this, _1, entry.panel));
 
 		// and the commit signal for the alpha value in a color4 control
-		alpha_widget->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAlphaChanged, this, _1, widget));
+		alpha_widget->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAlphaChanged, this, _1, entry.panel));
 
 		// save the text label pointer in the internal list
 		entry.label_textbox = label_textbox;
@@ -1855,7 +1855,7 @@ void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl, void* userdata)
 void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl, void* userdata)
 {
 	// get the associated color swatch from the submitted userdata
-	LLColorSwatchCtrl* color_swatch = (LLColorSwatchCtrl*)userdata;
+	LLColorSwatchCtrl* color_swatch = ((LLPanel*)userdata)->getChild<LLColorSwatchCtrl>("option_color4_control");
 	// get the current color
 	LLColor4 color = color_swatch->get();
 	// replace the alpha value of the color with the value in the alpha spinner
