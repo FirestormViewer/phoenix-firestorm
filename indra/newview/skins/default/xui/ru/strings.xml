@@ -41,7 +41,7 @@
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit / [SIMD])
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]бит / [SIMD])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
@@ -64,11 +64,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	</string>
 	<string name="AboutSystem">
 		CPU: [CPU]
-Память RAM: [MEMORY_MB] MB
+Память RAM: [MEMORY_MB] МБ
 Версия ОС: [OS_VERSION]
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]
 Видеокарта: [GRAPHICS_CARD]
-Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
+Память видеокарты: [GRAPHICS_CARD_MEMORY] МБ
 	</string>
 	<string name="AboutDriver">
 		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
@@ -90,7 +90,10 @@ Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 Модель улучшенного освещения: [ALMSTATUS]
 	</string>
 	<string name="AboutTextureMemory">
-		Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+		Память текстур: [TEXTUREMEMORY] МБ ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Память текстур: динамическая ([TEXTUREMEMORYMIN] МБ мин. / [TEXTUREMEMORYCACHERESERVE]% Кэш / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
 	<string name="AboutVFS">
 		Время создания VFS (кэш) (UTC): [VFS_DATE]

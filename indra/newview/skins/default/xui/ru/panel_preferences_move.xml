@@ -79,6 +79,7 @@
 				<combo_box.item label="Идти в точку нажатия" name="1"/>
 				<combo_box.item label="Телепортироваться в точку нажатия" name="2"/>
 			</combo_box>
+			<check_box label="Разрешить двойное нажатие на объекты со скриптами" name="FSAllowDoubleClickOnScriptedObjects"/>
 			<button label="Конфигурация джойстика" name="joystick_setup_button"/>
 		</panel>
 		<panel label="Телепортация" name="tab-teleports">

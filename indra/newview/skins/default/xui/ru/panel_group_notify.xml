@@ -4,4 +4,5 @@
 	<text name="group_notice" value="Объявление группы"/>
 	<text name="attachment" value="Вложение"/>
 	<button label="Другие объявления" name="btn_notices" width="130" />
+	<button label="Чат группы" name="btn_groupchat"/>
 </panel>
