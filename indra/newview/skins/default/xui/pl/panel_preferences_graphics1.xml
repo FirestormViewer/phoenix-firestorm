@@ -85,13 +85,13 @@
 			</text>
 			<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
 			<check_box label="Elastyczne tkaniny ubrań" name="AvatarCloth"/>
-			<text name="TerrainDetailText">
+			<!-- <text name="TerrainDetailText">
 				Szczegóły terenu:
 			</text>
 			<radio_group name="TerrainDetailRadio">
 				<radio_item label="Mało" name="0"/>
 				<radio_item label="Dużo" name="2"/>
-			</radio_group>
+			</radio_group> -->
 			<text name="Presets_Label">
 				Ustawienia:
 			</text>
