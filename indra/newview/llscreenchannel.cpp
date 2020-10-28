@@ -706,7 +706,8 @@ void LLScreenChannel::showToastsBottom()
 				toast->translate(0, shift);
 			}
 
-			LLRect channel_rect = getChannelRect();
+			// <FS:Ansariel> Already defined
+			//LLRect channel_rect = getChannelRect();
 			// don't show toasts if there is not enough space
 			if(toast_rect.mTop > channel_rect.mTop)
 			{
@@ -864,7 +865,8 @@ void LLScreenChannel::showToastsTop()
 				toast->translate(0, shift);
 			}
 
-			LLRect channel_rect = getChannelRect();
+			// <FS:Ansariel> Already defined
+			//LLRect channel_rect = getChannelRect();
 			// don't show toasts if there is not enough space
 			if(toast_rect.mBottom < channel_rect.mBottom)
 			{
