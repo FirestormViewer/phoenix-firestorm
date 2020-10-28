@@ -222,6 +222,12 @@ PieMenu		*gPieMenuLand	= NULL;
 PieMenu		*gPieMenuMuteParticle = NULL;
 // <FS:Zi> Pie menu
 
+// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+LLToggleableMenu	*gMenuInspectSelf	= NULL;
+LLContextMenu		*gInspectSelfDetachScreenMenu = NULL;
+LLContextMenu		*gInspectSelfDetachMenu = NULL;
+// </FS:Ansariel>
+
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
 
 LLMenuGL* gAttachSubMenu = NULL;
@@ -572,6 +578,14 @@ void init_menus()
 	gPieMenuMuteParticle = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_mute_particle.xml", gMenuHolder, registry);
 // </FS:Zi> Pie menu
+
+	// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+	gMenuInspectSelf = LLUICtrlFactory::createFromFile<LLToggleableMenu>(
+		"menu_inspect_self_gear.xml", gMenuHolder, registry);
+
+	gInspectSelfDetachScreenMenu = gMenuHolder->getChild<LLContextMenu>("Inspect Self Detach HUD", true);
+	gInspectSelfDetachMenu = gMenuHolder->getChild<LLContextMenu>("Inspect Self Detach", true);
+	// </FS:Ansariel>
 
 	///
 	/// set up the colors
@@ -2891,6 +2905,11 @@ void cleanup_menus()
 
 	delete gPieMenuMuteParticle;
 	gPieMenuMuteParticle = NULL;
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+	delete gMenuInspectSelf;
+	gMenuInspectSelf = NULL;
 	// </FS:Ansariel>
 
 	delete gMenuBarView;
