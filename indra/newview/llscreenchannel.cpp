@@ -644,6 +644,9 @@ void LLScreenChannel::redrawToasts()
 //--------------------------------------------------------------------------
 void LLScreenChannel::showToastsBottom()
 {
+	// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+	LLRect channel_rect = getChannelRect();
+
 	LLRect	toast_rect;	
 	S32		bottom = getRect().mBottom - gFloaterView->getRect().mBottom;
 	S32		toast_margin = 0;
@@ -683,7 +686,9 @@ void LLScreenChannel::showToastsBottom()
 		}
 
 		toast_rect = toast->getRect();
-		toast_rect.setOriginAndSize(getRect().mRight - toast_rect.getWidth(),
+		// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+		//toast_rect.setOriginAndSize(getRect().mRight - toast_rect.getWidth(),
+		toast_rect.setOriginAndSize(channel_rect.mRight - toast_rect.getWidth(),
 				bottom + toast_margin, toast_rect.getWidth(),
 				toast_rect.getHeight());
 		toast->setRect(toast_rect);
@@ -709,14 +714,18 @@ void LLScreenChannel::showToastsBottom()
 			}
 		}
 
-		bool stop_showing_toasts = toast->getRect().mTop > getRect().mTop;
+		// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+		//bool stop_showing_toasts = toast->getRect().mTop > getRect().mTop;
+		bool stop_showing_toasts = toast->getRect().mTop > channel_rect.mTop;
 
 		if(!stop_showing_toasts)
 		{
 			if( it != vToastList.rend()-1)
 			{
 				S32 toast_top = toast->getRect().mTop + gSavedSettings.getS32("ToastGap");
-				stop_showing_toasts = toast_top > getRect().mTop;
+				// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+				//stop_showing_toasts = toast_top > getRect().mTop;
+				stop_showing_toasts = toast_top > channel_rect.mTop;
 			}
 		} 
 
