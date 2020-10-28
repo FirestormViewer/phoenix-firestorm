@@ -9591,7 +9591,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         //LLPipeline::sUseOcclusion = occlusion;
 		// <FS:Ansariel> Add option to allow object occlusion for water distortion generation
 		static LLCachedControl<bool> fsAllowWaterDistortionOcclusion(gSavedSettings, "FSAllowWaterDistortionOcclusion");
-		LLPipeline::sUseOcclusion = fsAllowWaterDistortionOcclusion?occlusion:0;
+		LLPipeline::sUseOcclusion = fsAllowWaterDistortionOcclusion ? occlusion : 0;
 		// </FS:Ansariel>
 
 		camera.setOrigin(camera_in.getOrigin());
