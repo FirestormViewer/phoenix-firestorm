@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<toggleable_menu name="Self Pie">
+<toggleable_menu name="Gear Menu">
 	<menu_item_call label="Сесть" name="Sit Down Here"/>
 	<menu_item_call label="Встать" name="Stand Up"/>
 	<context_menu label="Снять" name="Take Off &gt;">
@@ -17,7 +17,7 @@
 			<menu_item_call label="Альфа" name="Self Alpha"/>
 			<menu_item_call label="Всю одежду" name="All Clothes"/>
 		</context_menu>
-		<context_menu label="Отделить" name="Object Detach"/>
+		<context_menu label="Отделить" name="Inspect Self Detach"/>
 		<menu_item_call label="Отделить все" name="Detach All"/>
 	</context_menu>
 	<menu_item_call label="Сменить комплект" name="Chenge Outfit"/>
