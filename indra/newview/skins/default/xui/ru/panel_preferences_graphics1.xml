@@ -88,13 +88,13 @@
 			</text>
 			<check_box label="Аппаратная обработка" name="AvatarVertexProgram"/>
 			<check_box label="Одежда аватара" name="AvatarCloth"/>
-			<text name="TerrainDetailText">
+			<!--<text name="TerrainDetailText">
 				Детализация земли:
 			</text>
 			<radio_group name="TerrainDetailRadio">
 				<radio_item label="Низкая" name="0"/>
 				<radio_item label="Высокая" name="2"/>
-			</radio_group>
+			</radio_group>-->
 			<text name="Presets_Label" left="160">Предустановки:</text>
 			<button label="Сохранить" name="PrefSaveButton"/>
 			<button label="Загрузить" name="PrefLoadButton"/>

@@ -82,7 +82,7 @@
 	<check_box label="Прозрачность воды" name="TransparentWater"/>
 	<check_box label="Рельефность и сияние" name="BumpShiny"/>
 	<check_box label="Локальный свет" name="LocalLights"/>
-	<slider label="Ландшафт:" name="TerrainDetail"/>
+	<!--<slider label="Ландшафт:" name="TerrainDetail"/>-->
 	<text name="TerrainDetailText">
 		Низкая
 	</text>
