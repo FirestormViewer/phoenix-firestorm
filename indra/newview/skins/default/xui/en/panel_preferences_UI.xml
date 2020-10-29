@@ -535,6 +535,18 @@
             (requires restart)
         </text>
         <check_box
+         control_name="FSLegacyNotificationWellAutoResize"
+         enabled_control="FSLegacyNotificationWell"
+         height="16"
+         initial_value="true"
+         label="Auto-resize Notifications window"
+         layout="topleft"
+         left="15"
+         name="FSLegacyNotificationWellAutoResize"
+         tool_tip="If checked, Firestorm will always resize use the legacy list automatically when notifications gets added or removed."
+         top_pad="3"
+         width="450" />
+        <check_box
          control_name="FSRemapLinuxShortcuts"
          height="16"
          label="Remap shortcuts already used by Linux (Linux only; requires restart)"

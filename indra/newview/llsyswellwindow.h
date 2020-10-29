@@ -57,6 +57,9 @@ public:
     virtual ~LLSysWellWindow();
 	BOOL postBuild();
 
+	// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
+	virtual void onOpen(const LLSD& key) override;
+
 	// other interface functions
 	// check is window empty
 	bool isWindowEmpty();
@@ -101,6 +104,10 @@ protected:
 	LLSysWellChiclet* mSysWellChiclet;
 
 	bool mIsReshapedByUser;
+
+	// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
+	std::string mReshapedByUserControlName;
+	bool mIsFirstOpen;
 };
 
 // <FS:Ansariel> Optional legacy notification well
