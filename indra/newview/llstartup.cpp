@@ -1522,8 +1522,11 @@ bool idle_startup()
 		// Load location history 
 		LLLocationHistory::getInstance()->load();
 
+		// <FS:Ansariel> FIRE-10607: Avatar icon controls show wrong picture when switching between SL main/beta grid
+		// Moved further down until we know what grid we are connecting to
 		// Load Avatars icons cache
-		LLAvatarIconIDCache::getInstance()->load();
+		//LLAvatarIconIDCache::getInstance()->load();
+		// </FS:Ansariel>
 		
 		// <FS:Ansariel> [FS Persisted Avatar Render Settings]
 		//LLRenderMuteList::getInstance()->loadFromFile();
@@ -1878,6 +1881,11 @@ bool idle_startup()
 			gMenuBarView->getChild<LLMenuItemGL>("HTTP Textures")->setVisible(FALSE);
 			gMenuBarView->getChild<LLMenuItemGL>("HTTP Inventory")->setVisible(FALSE);
 		}
+		// </FS:Ansariel>
+
+		// <FS:Ansariel> FIRE-10607: Avatar icon controls show wrong picture when switching between SL main/beta grid
+		// Load Avatars icons cache - once we know the grid we are connecting to
+		LLAvatarIconIDCache::getInstance()->load();
 		// </FS:Ansariel>
 
 		// <FS:Ansariel> Restore original LLMessageSystem HTTP options for OpenSim
