@@ -674,7 +674,9 @@ void LLScreenChannel::showToastsBottom()
 				return;
 			}
 
-			bottom = toast->getRect().mTop - toast->getTopPad();
+			// <FS:Ansariel> Unify chiclet calculation
+			//bottom = toast->getRect().mTop + toast->getTopPad();
+			bottom = toast->getRect().mTop;
 			toast_margin = gSavedSettings.getS32("ToastGap");
 		}
 
@@ -811,6 +813,7 @@ void LLScreenChannel::showToastsTop()
 
 	LLRect	toast_rect;	
 	S32		top = channel_rect.mTop;
+	S32		toast_margin = 0; // <FS:Ansariel> Unify chiclet calculation
 	std::vector<ToastElem>::reverse_iterator it;
 
 	updateRect();
@@ -835,8 +838,12 @@ void LLScreenChannel::showToastsTop()
 				return;
 			}
 
-			top = toast->getRect().mBottom - toast->getTopPad();
-			gSavedSettings.getS32("ToastGap");
+			// <FS:Ansariel> Unify chiclet calculation
+			//top = toast->getRect().mBottom - toast->getTopPad();
+			//gSavedSettings.getS32("ToastGap");
+			top = toast->getRect().mBottom;
+			toast_margin = gSavedSettings.getS32("ToastGap");
+			// </FS:Ansariel>
 		}
 
 		LLToast* toast = it->getToast();
@@ -848,7 +855,10 @@ void LLScreenChannel::showToastsTop()
 
 		toast_rect = toast->getRect();
 		toast_rect.setLeftTopAndSize(channel_rect.mRight - toast_rect.getWidth(),
-			top, toast_rect.getWidth(),
+			// <FS:Ansariel> Unify chiclet calculation
+			//top, toast_rect.getWidth(),
+			top - toast_margin, toast_rect.getWidth(),
+			// </FS:Ansariel>
 			toast_rect.getHeight());
 		toast->setRect(toast_rect);
 
