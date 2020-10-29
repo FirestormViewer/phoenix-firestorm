@@ -718,7 +718,7 @@ LLScriptFloaterManager::EObjectType LLScriptFloaterManager::getObjectType(const 
 		return it->second;
 	}
 
-	LL_WARNS() << "Unknown object type" << LL_ENDL;
+	LL_WARNS() << "Unknown object type: " << notification->getName() << LL_ENDL;
 	return OBJ_UNKNOWN;
 }
 
@@ -762,6 +762,7 @@ LLScriptFloaterManager::object_type_map LLScriptFloaterManager::initObjectTypeMa
 	type_map["ScriptDialogGroup"] = OBJ_SCRIPT;
 	type_map["LoadWebPage"] = OBJ_LOAD_URL;
 	type_map["ObjectGiveItem"] = OBJ_GIVE_INVENTORY;
+	type_map["OwnObjectGiveItem"] = OBJ_GIVE_INVENTORY; // <FS:Ansariel> Fix log warning about unkown script message type
 	return type_map;
 }
 
