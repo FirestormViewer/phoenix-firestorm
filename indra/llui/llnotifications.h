@@ -400,6 +400,7 @@ private:
 	LLNotificationResponderPtr mResponder;
 	bool mOfferFromAgent;
     bool mIsDND;
+	bool mIsFromStorage; // <FS:Ansariel> FIRE-11339: Persisted group notifications get logged to IM on each login
 
 	// a reference to the template
 	LLNotificationTemplatePtr mTemplatep;
@@ -556,6 +557,18 @@ public:
     {
         mIsDND = flag;
     }
+
+	// <FS:Ansariel> FIRE-11339: Persisted group notifications get logged to IM on each login
+	bool isFromStorage() const
+	{
+		return mIsFromStorage;
+	}
+
+	void setIsFromStorage(bool logged)
+	{
+		mIsFromStorage = logged;
+	}
+	// </FS:Ansariel>
 
 	std::string getType() const;
 	std::string getMessage() const;
