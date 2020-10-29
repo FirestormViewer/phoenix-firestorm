@@ -80,7 +80,7 @@
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(Erfordert Neustart)
 		</text>
-		<check_box label="Größe des Benachrichtigungsfensters automatisch anpassen" name="FSLegacyNotificationWellAutoResize" tool_tip="Falls aktiviert, passt Firestorm die größe des Benachrichtigungsfensters automatisch an, wenn Nachrichten hinzugefügt oder entfernt werden."/>
+		<check_box label="Größe des Unterhaltungen- und alten Benachrichtigungen-Fensters automatisch anpassen" name="FSLegacyNotificationWellAutoResize" tool_tip="Falls aktiviert, passt Firestorm die Größe der Unterhaltungen- und klassischen Benachrichtigungen-Fenster automatisch an, wenn Meldungen hinzugefügt oder entfernt werden."/>
 		<check_box label="Shortcuts anpassen, die von Linux verwendet werden (nur Linux; erfordert Neustart)" name="FSRemapLinuxShortcuts" tool_tip="Aktivieren, die Shortcuts umzudefinieren, die bereits durch das Linux-Betriebssystem verwendet werden, z.B. STRG-ALT-Fx."/>
 		<check_box label="Verhindern, dass Statistik-Fenster Fokus erhält" name="FSStatisticsNoFocus" tool_tip="Falls aktiviert, wird verhindert, dass das Statistik-Fenster den Fokus erhält, wenn ein anderes Fenster geschlossen wird (Aktionen wie das Ändern des Layouts sind auch weiterhin möglich)."/>
 		<slider label_width="230" label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>

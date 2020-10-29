@@ -536,14 +536,13 @@
         </text>
         <check_box
          control_name="FSLegacyNotificationWellAutoResize"
-         enabled_control="FSLegacyNotificationWell"
          height="16"
          initial_value="true"
-         label="Auto-resize Notifications window"
+         label="Auto-resize Conversations and legacy Notifications lists"
          layout="topleft"
-         left="15"
+         left="5"
          name="FSLegacyNotificationWellAutoResize"
-         tool_tip="If checked, Firestorm will always resize use the legacy list automatically when notifications gets added or removed."
+         tool_tip="If checked, Firestorm will always resize the Conversations and legacy Notifications lists automatically when items gets added or removed."
          top_pad="3"
          width="450" />
         <check_box
