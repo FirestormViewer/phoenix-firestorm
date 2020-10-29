@@ -24,7 +24,7 @@
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
-
+#include "llworld.h"
 // <COLOSI opensim multi-currency support>
 #include "llnotificationsutil.h"
 #include "tea.h"
@@ -190,6 +190,21 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				mCurrencySymbolOverride = LLStringUtil::null;
 			}
 			// </COLOSI opensim multi-currency support>
+			// Adding feature extensions adopted from Aurora to OpenSim
+			auto regionSettings=LLWorld::getInstance();
+			if(extras.has("MinPrimScale"))
+			{
+				regionSettings->setRegionMinPrimScale(extras["MinPrimScale"].asReal());
+			}
+			if(extras.has("MaxPrimScale"))
+			{
+				regionSettings->setRegionMaxPrimScale(extras["MaxPrimScale"].asReal());
+				regionSettings->setRegionMaxPrimScaleNoMesh(extras["MaxPrimScale"].asReal());
+			}
+			if(extras.has("MaxPhysPrimScale"))
+			{
+				regionSettings->setMaxPhysPrimScale(extras["MaxPhysPrimScale"].asReal());
+			}
 		}
 		else // OpenSim specifics are unsupported reset all to default
 		{
@@ -203,6 +218,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSimulatorFPSFactor = 1.f;
 			mSimulatorFPSWarn = 30.f;
 			mSimulatorFPSCrit = 20.f;
+			LLWorld::getInstance()->refreshLimits();// reset  prim scales etc.
 
 			if (LLLoginInstance::getInstance()->hasResponse("search"))
 			{
