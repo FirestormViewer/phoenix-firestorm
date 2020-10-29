@@ -369,7 +369,9 @@ void LLScriptFloater::onFocusReceived()
 	}
 }
 
-void LLScriptFloater::dockToChiclet(bool dock)
+// <FS:Ansariel> FIRE-12929: Fix script floater docking issues
+//void LLScriptFloater::dockToChiclet(bool dock)
+void LLScriptFloater::dockToChiclet(bool dock, bool scroll_to_chiclet /* = true */)
 {
 	if (getDockControl() == NULL)
 	{
@@ -383,7 +385,13 @@ void LLScriptFloater::dockToChiclet(bool dock)
 				return;
 			}
 
-			chiclet_panelp->scrollToChiclet(chicletp);
+			// <FS:Ansariel> FIRE-12929: Fix script floater docking issues
+			//chiclet_panelp->scrollToChiclet(chicletp);
+			if (scroll_to_chiclet)
+			{
+				chiclet_panelp->scrollToChiclet(chicletp);
+			}
+			// </FS:Ansariel>
 
 			// Stop saving position while we dock floater
 			bool save = getSavePosition();
@@ -938,7 +946,9 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
-	if (dialog_position == POS_DOCKED && gSavedSettings.getBOOL("FSDisableIMChiclets"))
+	BOOL chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
+
+	if (dialog_position == POS_DOCKED && chicletsDisabled)
 	{
 		dialog_position = POS_TOP_RIGHT;
 	}
@@ -947,6 +957,11 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	{
 		// undock the dialog
 		floater->setDocked(false, true);
+		if (chicletsDisabled)
+		{
+			// Remove the dock icon in case chiclets are hidden since there is nothing to dock to
+			floater->setCanDock(false);
+		}
 	}
 
 	S32 topPad = LLScriptFloaterManager::instance().getTopPad();
@@ -975,13 +990,15 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
 
+	if (!gSavedSettings.getBOOL("FSDisableIMChiclets"))
+	{
+		// This also sets up the dock, so we always need to call this (unless chiclets are hidden)
+		// or the dock button won't work at all.
+		floater->dockToChiclet(dialog_position == POS_DOCKED, dialog_position == POS_DOCKED);
+	}
+
 	switch (dialog_position)
 	{
-		case POS_DOCKED:
-		{
-			floater->dockToChiclet(true);
-			break;
-		}
 		case POS_TOP_LEFT:
 		{
 			pos.setOriginAndSize(leftPad,
