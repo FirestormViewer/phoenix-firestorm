@@ -4642,7 +4642,8 @@ void LLViewerObject::setPositionRegion(const LLVector3 &pos_region, BOOL damped)
 	{
 		LLViewerObject::setPosition(pos_region);
 		mPositionRegion = pos_region;
-		mPositionAgent = mRegionp->getPosAgentFromRegion(mPositionRegion);
+		if(mRegionp)// <FS:Beq/> Avoid crash when region null
+			mPositionAgent = mRegionp->getPosAgentFromRegion(mPositionRegion);
 	}
 }
 
