@@ -482,7 +482,7 @@ WriteRegExpandStr HKEY_CLASSES_ROOT "${URLNAME}\shell\open\command" "" '"$INSTDI
 # <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocols
 WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
 
-WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info" "(default)" "URL:Second Life"
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info" "(default)" "URL:Hypergrid"
 WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info" "URL Protocol" ""
 WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
 
@@ -491,9 +491,16 @@ WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" ""
 # <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocols
 WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
 
+# <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info" "(default)" "URL:Hypergrid"
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info" "URL Protocol" ""
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
+WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-info\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
+
 # <FS:CR> Register hop:// protocol registry info
 ${If} ${ISOPENSIM} == "1"
-  WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
+  WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Hypergrid"
   WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
   WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
   WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
