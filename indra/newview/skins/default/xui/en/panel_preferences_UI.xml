@@ -542,7 +542,7 @@
          layout="topleft"
          left="5"
          name="FSLegacyNotificationWellAutoResize"
-         tool_tip="If checked, Firestorm will always resize the Conversations and legacy Notifications lists automatically when items gets added or removed."
+         tool_tip="If checked, Firestorm will always resize the Conversations and legacy Notifications lists automatically when items get added or removed."
          top_pad="3"
          width="450" />
         <check_box
