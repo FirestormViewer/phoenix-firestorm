@@ -466,7 +466,7 @@ void LLModelPreview::rebuildUploadData()
                         if (mImporterDebug)
                         {
                             std::ostringstream out;
-                            out << "Search of" << name_to_match;
+                            out << "Search of " << name_to_match;
                             out << " in LOD" << i;
                             out << " list failed. Searching for alternative among LOD lists.";
                             LL_INFOS() << out.str() << LL_ENDL;
