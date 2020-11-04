@@ -479,6 +479,12 @@ void LLPreviewTexture::saveMultipleToFile()
     S32 i = 0;
     S32 err = 0;
     std::string extension(".png");
+    // <FS:Ansariel> Allow to use user-defined default save format for textures
+    if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+    {
+        extension = ".tga";
+    }
+    // </FS:PP>
     do
     {
         filepath = texture_location;
@@ -503,8 +509,20 @@ void LLPreviewTexture::saveMultipleToFile()
     getWindow()->incBusyCount();
 
     mImage->forceToSaveRawImage(0);//re-fetch the raw image if the old one is removed.
-    mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSavePNG,
-        0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    // <FS:Ansariel> Allow to use user-defined default save format for textures
+    //mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSavePNG,
+    //    0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    if (gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+    {
+        mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSavePNG,
+            0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    }
+    else
+    {
+        mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSaveTGA,
+            0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    }
+    // </FS:Ansariel>
 }
 
 // virtual
