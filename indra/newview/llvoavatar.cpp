@@ -10014,13 +10014,13 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	{
 		//Wolfspirit: Read the UUID, system and Texturecolor
 		const LLTEContents& tec = contents.mTEContents;
-		const LLUUID tag_uuid = ((LLUUID*)tec.image_data)[TEX_HEAD_BODYPAINT];
+		const LLUUID tag_uuid = tec.image_data[TEX_HEAD_BODYPAINT];
 		bool new_system = (tec.glow[TEX_HEAD_BODYPAINT]);
 
 		//WS: Write them into an LLSD map
 		mClientTagData["uuid"] = tag_uuid.asString();
 		mClientTagData["id_based"] = new_system;
-		mClientTagData["tex_color"] = LLColor4U(tec.colors).getValue();
+		mClientTagData["tex_color"] = tec.colors[TEX_HEAD_BODYPAINT].getValue();
 
 		//WS: Clear mNameString to force a rebuild
 		mNameIsSet = false;
