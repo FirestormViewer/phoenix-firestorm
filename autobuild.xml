@@ -784,9 +784,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e145f8ea99a21712434e0e868d1885dc</string>
+              <string>f7f5a5b5f6cd35da69a86beb9a5dd083</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/62333/588183/dullahan-1.7.0.202006240858_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-544091.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/71404/690443/dullahan-1.7.0.202010291542_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-551434.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -796,9 +796,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e11da8884e44c27df3bf3adce01d5760</string>
+              <string>550d6a172215282b3941167de62d9154</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows-202072245.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/71408/690463/dullahan-1.7.0.202010292249_81.3.10_gb223419_chromium-81.0.4044.138-windows-551434.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -808,9 +808,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>609dd2d70b73d83c382f73734c648156</string>
+              <string>389bccd9d1205fa2fbb0c2c0407dee76</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007201344_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202072240.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/71403/690437/dullahan-1.7.0.202010292241_81.3.10_gb223419_chromium-81.0.4044.138-windows64-551434.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -829,7 +829,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.7.0.202006240858_81.3.10_gb223419_chromium-81.0.4044.138</string>
+        <string>1.7.0.202010292249_81.3.10_gb223419_chromium-81.0.4044.138</string>
       </map>
       <key>elfio</key>
       <map>

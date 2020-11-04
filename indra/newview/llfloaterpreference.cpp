@@ -3914,7 +3914,7 @@ BOOL LLPanelPreference::postBuild()
 
 	//////////////////////PanelSetup ///////////////////
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	//if (hasChild("max_bandwidth"), TRUE)
+	//if (hasChild("max_bandwidth", TRUE))
 	//{
 	//	mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
 	//	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));

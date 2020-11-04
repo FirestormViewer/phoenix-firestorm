@@ -53,6 +53,7 @@
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
 #include "lluictrlfactory.h"
+#include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
@@ -466,6 +467,44 @@ void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenam
 
 	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
 	saveMultiple(remaining_ids);
+}
+
+
+void LLPreviewTexture::saveMultipleToFile()
+{
+    std::string texture_location(gSavedSettings.getString("TextureSaveLocation"));	
+    std::string texture_name = getItem()->getName();
+    
+    std::string filepath;
+    S32 i = 0;
+    S32 err = 0;
+    std::string extension(".png");
+    do
+    {
+        filepath = texture_location;
+        filepath += gDirUtilp->getDirDelimiter();
+        filepath += texture_name;
+
+        if (i != 0)
+        {
+            filepath += llformat("_%.3d", i);
+        }
+
+        filepath += extension;
+
+        llstat stat_info;
+        err = LLFile::stat( filepath, &stat_info );
+        i++;
+    } while (-1 != err);  // Search until the file is not found (i.e., stat() gives an error).
+    
+    
+    mSaveFileName = filepath;
+    mLoadingFullImage = TRUE;
+    getWindow()->incBusyCount();
+
+    mImage->forceToSaveRawImage(0);//re-fetch the raw image if the old one is removed.
+    mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSavePNG,
+        0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
 }
 
 // virtual
