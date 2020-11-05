@@ -47,6 +47,8 @@ LLFloaterLinkReplace::LLFloaterLinkReplace(const LLSD& key)
 	mDeleteOnly(false) // <FS:Ansariel> FIRE-17695 - Delete links capability
 {
 	mEventTimer.stop();
+
+	LL_INFOS() << "Link replace settings: Batch size = " << mBatchSize << " - Pause time = " << mPeriod << LL_ENDL;
 }
 
 LLFloaterLinkReplace::~LLFloaterLinkReplace()
