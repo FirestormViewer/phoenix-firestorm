@@ -29,6 +29,7 @@
 
 #include "llmenugl.h"
 #include "llsafehandle.h"
+#include "lltoggleablemenu.h" // <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
 #include "piemenu.h"
 
 class LLMessageSystem;
@@ -247,6 +248,12 @@ extern PieMenu* gPieDetachMenu;
 extern PieMenu* gPieAttachBodyPartMenus[PIE_MAX_SLICES];
 extern PieMenu* gPieDetachBodyPartMenus[PIE_MAX_SLICES];
 // <FS:Zi> Pie Menu
+
+// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+extern LLToggleableMenu	*gMenuInspectSelf;
+extern LLContextMenu	*gInspectSelfDetachScreenMenu;
+extern LLContextMenu	*gInspectSelfDetachMenu;
+// </FS:Ansariel>
 
 extern LLMenuItemCallGL* gAutorespondMenu;
 extern LLMenuItemCallGL* gAutorespondNonFriendsMenu;

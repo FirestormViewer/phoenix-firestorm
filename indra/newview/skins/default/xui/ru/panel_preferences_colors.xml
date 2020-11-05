@@ -173,6 +173,9 @@
 				Заблокированные
 			</text>
 			<check_box name="MiniMapChatRing" label="Показать кольца на миникарте с указанием диапазонов для разговора и крика"/>
+			<text name="netmap_whisperring_color_label">
+				Радиус шепота
+			</text>
 			<text name="netmap_chatring_color_label">
 				Радиус чата
 			</text>

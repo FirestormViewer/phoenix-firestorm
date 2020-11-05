@@ -44,7 +44,7 @@
         <button
                  auto_resize="false"
                  follows="right"
-                 height="29"
+                 height="25"
                  image_hover_selected="SegmentedBtn_Left_Over"
                  image_hover_unselected="SegmentedBtn_Left_Over"
                  image_overlay="Arrow_Small_Left"
@@ -55,13 +55,13 @@
                  layout="topleft"
                  name="chicklet_left_scroll_button"
                  tab_stop="false"
-                 top="-28"
+                 top="-25"
                  visible="false"
                  width="12" />
         <button
                  auto_resize="false"
                  follows="right"
-                 height="29"
+                 height="25"
                  image_hover_selected="SegmentedBtn_Right_Over"
                  image_hover_unselected="SegmentedBtn_Right_Over"
                  image_overlay="Arrow_Small_Right"
@@ -72,7 +72,7 @@
                  layout="topleft"
                  name="chicklet_right_scroll_button"
                  tab_stop="false"
-                 top="-28"
+                 top="-25"
                  visible="false"
                  width="12" />
       </chiclet_panel>

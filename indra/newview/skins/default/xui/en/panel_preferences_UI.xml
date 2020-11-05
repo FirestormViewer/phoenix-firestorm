@@ -70,7 +70,7 @@
 		enabled_control="ShowHoverTips"
 		control_name="FSAdvancedTooltips"
 		name="FSAdvancedTooltips"
-		label="Show extended information in hovertips (Phoenix style)"
+		label="Show extended information in hovertips"
 		layout="topleft"
 		top_pad="25"
 		left_delta="-10"
@@ -534,6 +534,17 @@
          name="FSLegacyNotificationWellRequiresRestart">
             (requires restart)
         </text>
+        <check_box
+         control_name="FSLegacyNotificationWellAutoResize"
+         height="16"
+         initial_value="true"
+         label="Auto-resize Conversations and legacy Notifications lists"
+         layout="topleft"
+         left="5"
+         name="FSLegacyNotificationWellAutoResize"
+         tool_tip="If checked, Firestorm will always resize the Conversations and legacy Notifications lists automatically when items get added or removed."
+         top_pad="3"
+         width="450" />
         <check_box
          control_name="FSRemapLinuxShortcuts"
          height="16"

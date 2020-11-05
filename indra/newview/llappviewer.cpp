@@ -1519,6 +1519,7 @@ void LLAppViewer::initMaxHeapSize()
 	BOOL enable_mem_failure_prevention = (BOOL)gSavedSettings.getBOOL("MemoryFailurePreventionEnabled") ;
 // <FS:Ansariel> Enable low memory checks on 32bit builds
 #if ADDRESS_SIZE == 64
+	max_heap_size_gb = F32Gigabytes(128);
 	enable_mem_failure_prevention = FALSE;
 #endif
 // </FS:Ansariel>
@@ -3684,6 +3685,13 @@ LLSD LLAppViewer::getViewerInfo() const
     //{
     //    info["BUILD_CONFIG"] = build_config;
     //}
+#ifdef USE_AVX2_OPTIMIZATION
+	info["SIMD"] = "AVX2";
+#elif USE_AVX_OPTIMIZATION
+	info["SIMD"] = "AVX";
+#else
+	info["SIMD"] = "SSE2";
+#endif
 
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
 #if defined OPENSIM
@@ -3792,6 +3800,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
 	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
 	info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
+	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
 	std::string drvinfo = gDXHardware.getDriverVersionWMI();
@@ -3979,8 +3988,12 @@ LLSD LLAppViewer::getViewerInfo() const
 	// </FS:PP>
 
 	// <FS:Ansariel> FIRE-11768: Include texture memory settings
+	info["TEXTUREMEMORYDYNAMIC"] = LLViewerTextureList::canUseDynamicTextureMemory() && gSavedSettings.getBOOL("FSDynamicTextureMemory");
 	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
 	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
+	info["TEXTUREMEMORYMIN"] = gSavedSettings.getS32("FSDynamicTextureMemoryMinTextureMemory");
+	info["TEXTUREMEMORYCACHERESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryCacheReserve");
+	info["TEXTUREMEMORYGPURESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryGPUReserve");
 	// </FS:Ansariel>
 
 	// <FS:ND> Add creation time of VFS (cache)
@@ -4060,6 +4073,21 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
 	if (info.has("BANDWIDTH")) //For added info in help floater
 	{
 		support << "\n" << LLTrans::getString("AboutSettings", args, default_string);
+	}
+	if (info.has("TEXTUREMEMORYDYNAMIC"))
+	{
+		if (info["TEXTUREMEMORYDYNAMIC"].asBoolean())
+		{
+			support << "\n" << LLTrans::getString("AboutTextureMemoryDynamic", args, default_string);
+		}
+		else
+		{
+			support << "\n" << LLTrans::getString("AboutTextureMemory", args, default_string);
+		}
+	}
+	if (info.has("VFS_DATE"))
+	{
+		support << "\n" << LLTrans::getString("AboutVFS", args, default_string);
 	}
 	// </FS>
 	if (info.has("COMPILER"))
@@ -6253,7 +6281,10 @@ void LLAppViewer::disconnectViewer()
 	}
 	// <FS:Ansariel>
 
-	if (LLSelectMgr::getInstance())
+	// <FS:Ansariel> Wrong instance check
+	//if (LLSelectMgr::getInstance())
+	if (LLSelectMgr::instanceExists())
+	// </FS:Ansariel
 	{
 		LLSelectMgr::getInstance()->deselectAll();
 	}

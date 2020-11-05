@@ -5749,7 +5749,7 @@ U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 		gGL.begin(LLRender::LINES); 
 		gGL.color4f(1.f,1.f,1.f,1.f);
 		F32 thickness = llmax(F32(5.0f-5.0f*(gFrameTimeSeconds-mLastImpostorUpdateFrameTime)),1.0f);
-		glLineWidth(thickness);
+		gGL.setLineWidth(thickness); // <FS> Line width OGL core profile fix by Rye Mutt
 		gGL.vertex3fv((pos+left-up).mV);
 		gGL.vertex3fv((pos-left-up).mV);
 		gGL.vertex3fv((pos-left-up).mV);
@@ -6601,7 +6601,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 	LLUUID remap_id;
 	if (isSelf())
 	{
-		remap_id = AOEngine::getInstance()->override(id, TRUE);
+		remap_id = AOEngine::getInstance()->override(id, true);
 		if (remap_id.isNull())
 		{
 			remap_id = remapMotionID(id);
@@ -6647,7 +6647,7 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 	LLUUID remap_id;
 	if (isSelf())
 	{
-		remap_id = AOEngine::getInstance()->override(id, FALSE);
+		remap_id = AOEngine::getInstance()->override(id, false);
 		if (remap_id.isNull())
 		{
 			remap_id = remapMotionID(id);

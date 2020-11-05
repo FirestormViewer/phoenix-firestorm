@@ -243,11 +243,11 @@ void LLSnapshotLivePreview::drawPreviewRect(S32 offset_x, S32 offset_y)
 {
 	F32 line_width ; 
 	glGetFloatv(GL_LINE_WIDTH, &line_width) ;
-	glLineWidth(2.0f * line_width) ;
+	gGL.setLineWidth(2.0f * line_width) ; // <FS> Line width OGL core profile fix by Rye Mutt
 	LLColor4 color(0.0f, 0.0f, 0.0f, 1.0f) ;
 	gl_rect_2d( mPreviewRect.mLeft + offset_x, mPreviewRect.mTop + offset_y,
 		mPreviewRect.mRight + offset_x, mPreviewRect.mBottom + offset_y, color, FALSE ) ;
-	glLineWidth(line_width) ;
+	gGL.setLineWidth(line_width) ; // <FS> Line width OGL core profile fix by Rye Mutt
 
 	//draw four alpha rectangles to cover areas outside of the snapshot image
 	if(!mKeepAspectRatio)

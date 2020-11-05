@@ -639,6 +639,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	gSavedSettings.getControl("FSDynamicTextureMemory")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::handleDynamicTextureMemoryChanged, this));
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -2156,6 +2159,9 @@ void LLFloaterPreference::refreshEnabledState()
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
 
+	// <FS:Ansariel> Dynamic texture memory calculation
+	handleDynamicTextureMemoryChanged();
+
 #if ADDRESS_SIZE == 32
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
@@ -2254,10 +2260,12 @@ void LLFloaterPreference::refreshEnabledState()
 		ctrl_avatar_cloth->setEnabled(true);
 	}
 	
+	/* <FS:LO> remove orphaned code left over from EEP
 	// Vertex Shaders, Global Shader Enable
 	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
 
 	terrain_detail->setEnabled(FALSE);
+	*/
 	
 	// WindLight
 	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -2309,6 +2317,29 @@ void LLFloaterPreference::refreshEnabledState()
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 }
 
+// <FS:Ansariel> Dynamic texture memory calculation
+void LLFloaterPreference::handleDynamicTextureMemoryChanged()
+{
+	if (LLViewerTextureList::canUseDynamicTextureMemory())
+	{
+		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
+		childSetEnabled("FSDynamicTextureMemory", true);
+		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemoryCacheReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemoryGPUReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
+	}
+	else
+	{
+		childSetEnabled("FSDynamicTextureMemory", false);
+		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
+		childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
+		childSetEnabled("FSDynamicTextureMemoryGPUReserve", false);
+		childSetEnabled("GraphicsCardTextureMemory", true);
+	}
+}
+// </FS:Ansariel>
+
 void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 {
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
@@ -2351,12 +2382,14 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
         ctrl_avatar_cloth->setEnabled(TRUE);
     }
 
+	/* <FS:LO> remove orphaned code left over from EEP
     // Vertex Shaders, Global Shader Enable
     // SL-12594 Basic shaders are always enabled. DJH TODO clean up now-orphaned state handling code
     LLSliderCtrl* terrain_detail = getChild<LLSliderCtrl>("TerrainDetail");   // can be linked with control var
     LLTextBox* terrain_text = getChild<LLTextBox>("TerrainDetailText");
     terrain_detail->setEnabled(FALSE);
     terrain_text->setEnabled(FALSE);
+	*/
 
     // WindLight
     LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");

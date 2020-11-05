@@ -686,6 +686,9 @@ void LLPanelWearing::onDoubleClick()
 		ids.push_back(selected_item_id);
 		LLViewerInventoryItem* item = gInventory.getItem(selected_item_id);
 
+		if (!item)
+			return;
+
 		if ((item->getType() == LLAssetType::AT_CLOTHING && (!RlvActions::isRlvEnabled() || gRlvWearableLocks.canRemove(item))) ||
 			((item->getType() == LLAssetType::AT_OBJECT) && (!RlvActions::isRlvEnabled() || gRlvAttachmentLocks.canDetach(item))))
 		{

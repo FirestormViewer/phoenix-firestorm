@@ -26,7 +26,7 @@
 		Falha na inicialização dos gráficos. Atualize seu driver gráfico!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL])
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="BuildConfig">
@@ -48,6 +48,7 @@ Memória: [MEMORY_MB] MBs
 Versão OS: [OS_VERSION]
 Placa de vídeo: [GRAPHICS_CARD_VENDOR]
 Placa gráfica: [GRAPHICS_CARD]
+Memória de Placa gráfica: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Versão do driver de vídeo Windows: [GRAPHICS_CARD_VENDOR]

@@ -31,6 +31,7 @@
 
 #include "lliconctrl.h"
 #include "llavatarpropertiesprocessor.h"
+#include "llviewernetwork.h"
 
 class LLAvatarName;
 
@@ -62,9 +63,17 @@ protected:
 };
 
 inline
+// <FS:Ansariel> FIRE-10607: Avatar icon controls show wrong picture when switching between SL main/beta grid
+//LLAvatarIconIDCache::LLAvatarIconIDCache()
+//	:	mFilename("avatar_icons_cache.txt")
+//{}
 LLAvatarIconIDCache::LLAvatarIconIDCache()
-	:	mFilename("avatar_icons_cache.txt")
-{}
+{
+	const std::string grid_id_str = LLDir::getScrubbedFileName(LLGridManager::getInstance()->getGridId());
+	const std::string& grid_id_lower = utf8str_tolower(grid_id_str);
+	mFilename = "avatar_icons_cache." + grid_id_lower + ".txt";
+}
+// </FS:Ansariel>
 
 namespace LLAvatarIconCtrlEnums
 {

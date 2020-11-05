@@ -1500,7 +1500,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
-	if (render_hitbox && pass == 1)
+	if (render_hitbox && pass == 2)
 	{
 		LLGLSLShader* current_shader_program = NULL;
 
@@ -1515,25 +1515,15 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		LLGLEnable blend(GL_BLEND);
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-		// save current world matrix
-		gGL.matrixMode(LLRender::MM_MODELVIEW);
-		gGL.pushMatrix();
-
 		LLColor4 avatar_color = LLNetMap::getAvatarColor(avatarp->getID());
 		gGL.diffuseColor4f(avatar_color.mV[VRED], avatar_color.mV[VGREEN], avatar_color.mV[VBLUE], avatar_color.mV[VALPHA]);
-		glLineWidth(2.0f);
+		gGL.setLineWidth(2.0f);
 
 		LLQuaternion rot = avatarp->getRotationRegion();
 		LLVector3 pos = avatarp->getPositionAgent();
 		LLVector3 size = avatarp->getScale();
-
-		// *NOTE: Tried this so I wouldn't have to duplcate code, but I didn't find a way to rotate
-		// the matrix by "rot" so the drawBoxOutline function would do the right thing. So
-		// I settled for copying the code and rotating the 4 corner points individually. -Zi
-		// gGL.translatef(pos.mV[VX],pos.mV[VY],pos.mV[VZ]);
-		// gGL.rotatef(rot.mQ[VS]*RAD_TO_DEG,rot.mQ[VX],rot.mQ[VY],rot.mQ[VZ]);
-		// drawBoxOutline(LLVector3::zero,size/2.0);
-		// // drawBoxOutline partly copied from llspatialpartition.cpp below
+		
+		// drawBoxOutline partly copied from llspatialpartition.cpp below
 
 		// set up and rotate hitbox to avatar orientation, half the avatar scale in either direction
 		LLVector3 v1 = size.scaledVec(LLVector3( 0.5f, 0.5f, 0.5f)) * rot;
@@ -1579,9 +1569,6 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.vertex3fv((pos - v1).mV);
 
 		gGL.end();
-
-		// restore world matrix
-		gGL.popMatrix();
 
 		// unload debug shader
 		if (LLGLSLShader::sNoFixedFunction)
@@ -2274,6 +2261,14 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			continue;
 		}
 
+		// <FS:Ansariel> Niran's optimization
+		const LLTextureEntry* tex_entry = face->getTextureEntry();
+		if (tex_entry && tex_entry->getAlpha() == 0.f)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
+
 		//stop_glerror();
 
 		//const LLVolumeFace& vol_face = volume->getVolumeFace(te);
@@ -2285,7 +2280,8 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 
 		LLVertexBuffer* buff = face->getVertexBuffer();
 
-        const LLTextureEntry* tex_entry = face->getTextureEntry();
+		// <FS:Ansariel> Niran's optimization
+        //const LLTextureEntry* tex_entry = face->getTextureEntry();
 		LLMaterial* mat = tex_entry ? tex_entry->getMaterialParams().get() : nullptr;
 
         if (LLDrawPoolAvatar::sShadowPass >= 0)

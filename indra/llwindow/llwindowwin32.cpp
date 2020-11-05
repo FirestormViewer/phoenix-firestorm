@@ -832,16 +832,24 @@ void LLWindowWin32::close()
 
 	LL_DEBUGS("Window") << "Destroying Window" << LL_ENDL;
 
-	// Make sure we don't leave a blank toolbar button.
-	ShowWindow(mWindowHandle, SW_HIDE);
+    if (IsWindow(mWindowHandle))
+    {
+        // Make sure we don't leave a blank toolbar button.
+        ShowWindow(mWindowHandle, SW_HIDE);
 
-	// This causes WM_DESTROY to be sent *immediately*
-	if (!destroy_window_handler(mWindowHandle))
-	{
-		OSMessageBox(mCallbacks->translateString("MBDestroyWinFailed"),
-			mCallbacks->translateString("MBShutdownErr"),
-			OSMB_OK);
-	}
+        // This causes WM_DESTROY to be sent *immediately*
+        if (!destroy_window_handler(mWindowHandle))
+        {
+            OSMessageBox(mCallbacks->translateString("MBDestroyWinFailed"),
+                mCallbacks->translateString("MBShutdownErr"),
+                OSMB_OK);
+        }
+    }
+    else
+    {
+        // Something killed the window while we were busy destroying gl or handle somehow got broken
+        LL_WARNS("Window") << "Failed to destroy Window, invalid handle!" << LL_ENDL;
+    }
 
 	mWindowHandle = NULL;
 }
@@ -1563,9 +1571,9 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 	if (wglCreateContextAttribsARB)
 	{ //attempt to create a specific versioned context
 		S32 attribs[] = 
-		{ //start at 4.2
+		{ //start at 4.6
 			WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-			WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+			WGL_CONTEXT_MINOR_VERSION_ARB, 6,
 			WGL_CONTEXT_PROFILE_MASK_ARB,  LLRender::sGLCoreProfile ? WGL_CONTEXT_CORE_PROFILE_BIT_ARB : WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
 			WGL_CONTEXT_FLAGS_ARB, gDebugGL ? WGL_CONTEXT_DEBUG_BIT_ARB : 0,
 			0
