@@ -44,6 +44,7 @@ LLFloaterLinkReplace::LLFloaterLinkReplace(const LLSD& key)
 	mSourceUUID(LLUUID::null),
 	mTargetUUID(LLUUID::null),
 	mBatchSize(gSavedSettings.getU32("LinkReplaceBatchSize")),
+	mActiveItems(0),
 	mDeleteOnly(false) // <FS:Ansariel> FIRE-17695 - Delete links capability
 {
 	mEventTimer.stop();
@@ -335,6 +336,7 @@ void LLFloaterLinkReplace::itemRemovedCallback(LLHandle<LLFloaterLinkReplace> fl
 
 void LLFloaterLinkReplace::decreaseOpenItemCount()
 {
+	mActiveItems--;
 	mRemainingItems--;
 
 	if (mRemainingItems == 0)
@@ -360,7 +362,7 @@ BOOL LLFloaterLinkReplace::tick()
 
 	LLInventoryModel::item_array_t current_batch;
 
-	for (U32 i = 0; i < mBatchSize; ++i)
+	for (U32 i = 0; i < mBatchSize, mActiveItems <= 250; ++i, ++mActiveItems)
 	{
 		if (!mRemainingInventoryItems.size())
 		{
