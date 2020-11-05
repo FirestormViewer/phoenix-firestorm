@@ -3908,7 +3908,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	// <FS:Ansariel> Crash fix
 	if (!gAgent.getRegion())
 	{
-		LL_WARNS(""Teleport",Messaging") << "Agent was disconnected from the region" << LL_ENDL;
+		LL_WARNS("Teleport","Messaging") << "Agent was disconnected from the region" << LL_ENDL;
 		LLAppViewer::instance()->forceDisconnect(LLTrans::getString("YouHaveBeenDisconnected"));
 		return;
 	}
