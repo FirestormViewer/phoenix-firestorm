@@ -234,9 +234,9 @@
      visible="false"/>
     <scroll_list
      name="l_name_list"
-     left="170"
+     left="175"
      top="22"
-     width="235"
+     width="230"
      height="260"
      follows="left|top|right|bottom"
      column_padding="0"
