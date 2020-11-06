@@ -65,14 +65,14 @@ void LLAgentUI::buildSLURL(LLSLURL& slurl, const bool escaped /*= true*/)
 	{
 // <FS:CR> Aurora-sim var region teleports
 #ifdef OPENSIM
-		if(LLGridManager::instance().isInOpenSim())
+		if (LLGridManager::instance().isInOpenSim())
 		{
 			return_slurl = LLSLURL(LFSimFeatureHandler::getInstance()->gridURL(), regionp->getName(), gAgent.getPositionAgent());
 		}
-#else
-		return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+		else
 #endif
 // </FS:CR>
+		return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
 	}
 	slurl = return_slurl;
 }
