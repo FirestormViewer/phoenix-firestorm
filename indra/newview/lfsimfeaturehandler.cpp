@@ -104,6 +104,20 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mShoutRange = extras.has("shout-range") ? extras["shout-range"].asInteger() : 100;
 			mWhisperRange = extras.has("whisper-range") ? extras["whisper-range"].asInteger() : 10;
 
+			if(extras.has("GridURL"))
+			{
+				mGridURL =  extras["GridURL"].asString();
+				auto pos = mGridURL.find("://");
+				if( pos != std::string::npos)
+				{
+					mGridURL = mGridURL.substr(pos+3,mGridURL.size()-(pos+3));
+				}
+			}
+			else
+			{
+				mGridURL = LLGridManager::instance().getGridId();
+			}
+
 			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
 				extras.has("SimulatorFPSWarnPercent") && extras.has("SimulatorFPSCritPercent"))
 			{
