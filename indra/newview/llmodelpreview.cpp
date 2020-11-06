@@ -536,7 +536,7 @@ void LLModelPreview::rebuildUploadData()
                     else if (mImporterDebug)
                     {
                         std::ostringstream out;
-                        out << "List of models does not include index " << idx;
+                        out << "LOD" << i << ": List of models does not include index " << idx << " scene is missing a LOD model";
                         LL_INFOS() << out.str() << LL_ENDL;
                         LLFloaterModelPreview::addStringToLog(out, false);
                     }
@@ -571,7 +571,7 @@ void LLModelPreview::rebuildUploadData()
                     if (mImporterDebug)
                     {
                         std::ostringstream out;
-                        out << "List of models does not include " << instance.mLabel;
+                        out << "LOD" << i << ": List of models does not include " << instance.mLabel;
                         LL_INFOS() << out.str() << LL_ENDL;
                         LLFloaterModelPreview::addStringToLog(out, false);
                     }
