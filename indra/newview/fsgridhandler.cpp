@@ -768,6 +768,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 				if (existing_grid.has("DEPRECATED"))
 				{
 					LL_DEBUGS("GridManager") << "Removing entry marked as deprecated in the fallback list: " << grid << LL_ENDL;
+					mGridList[grid] = grid_entry->grid;
+					list_changed = true;
 				}
 				else if (grid_entry->grid.has("USER_DELETED"))
 				{
