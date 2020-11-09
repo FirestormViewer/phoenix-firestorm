@@ -277,7 +277,6 @@
     top_delta="16"
     width="335" />
 
-  <!-- <FS:LO> remove orphaned code left over from EEP
   <slider
     control_name="RenderFogRatio"
     follows="left|top"
@@ -323,7 +322,6 @@
     width="260">
       (0 = default brightness, lower = brighter)
   </text>
-  -->
 
   <check_box
     control_name="RenderAnisotropic"

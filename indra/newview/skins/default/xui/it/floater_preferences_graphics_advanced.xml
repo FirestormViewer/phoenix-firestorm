@@ -35,11 +35,11 @@
 		Hardware
 	</text>
 	<slider label="Memoria texture (MB):" name="GraphicsCardTextureMemory" tool_tip="Spazio di memoria da assegnare alle texture. Utilizza la memoria della scheda video come impostazione predefinita. La riduzione di questa impostazione potrebbe migliorare il rendimento ma potrebbe anche rendere le texture poco definite."/>
-	<!-- <slider label="Rapporto distanza nebbia:" name="fog"/>
+	<slider label="Rapporto distanza nebbia:" name="fog"/>
 	<slider label="Gamma:" name="gamma"/>
 	<text name="(brightness, lower is brighter)">
 		(0 = luminosità predefinita, più basso = più luminoso)
-	</text> -->
+	</text>
 	<check_box label="Filtro anisotropico (rallenta quando è attivato)" name="ani"/>
 	<check_box initial_value="true" label="Attiva oggetti buffer vertici OpenGL" name="vbo" tool_tip="Se si attiva questa impostazione su hardware più recente si migliorano le prestazioni. Con la funzione attiva, l&apos;hardware meno recente potrebbe implementare VBO in maniera errata, causando interruzioni."/>
 	<check_box initial_value="true" label="Attiva compressione texture (richiede riavvio)" name="texture compression" tool_tip="Comprime le texture nella memoria video, consentendo il caricamento di texture a risoluzione maggiore al prezzo di una perdita di qualità del colore."/>

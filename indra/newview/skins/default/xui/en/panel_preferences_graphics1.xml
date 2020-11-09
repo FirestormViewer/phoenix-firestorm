@@ -965,6 +965,33 @@
              value="16" />
         </combo_box>
 
+        <spinner
+         control_name="RenderGamma"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="1"
+         label="Gamma:"
+         label_width="198"
+         layout="topleft"
+         left="10"
+         max_val="2"
+         name="gamma"
+         top_pad="10"
+         width="262" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_pad="5"
+         name="brightness text"
+         top_delta="2"
+         width="385">
+            (0/1.0 = default brightness, lower = brighter)
+        </text>
         <slider
          control_name="TextureMemory"
          decimal_digits="0"
@@ -1040,6 +1067,21 @@
          tool_tip="The percentage of physical video memory reserved for other usage."
          top_pad="5"
          width="475" />
+        <spinner
+         control_name="RenderFogRatio"
+         decimal_digits="1"
+         follows="left|top"
+         height="22"
+         initial_value="4"
+         label="Fog Distance Ratio:"
+         label_width="198"
+         layout="topleft"
+         left="10"
+         max_val="10"
+         min_val="0.5"
+         name="fog"
+         top_pad="7"
+         width="262" />
     </panel>
 
 <!--Rendering-->

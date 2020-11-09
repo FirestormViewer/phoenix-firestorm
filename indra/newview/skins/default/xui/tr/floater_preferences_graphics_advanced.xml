@@ -35,11 +35,11 @@
 		Donanım
 	</text>
 	<slider label="Doku Belleği (MB):" name="GraphicsCardTextureMemory" tool_tip="Dokular için tahsis edilecek bellek miktarı. Varsayılan değer video kartı belleğidir. Bu değerin küçültülmesi performansı artırabilir, ama ayrıca dokuları bulanıklaştırabilir."/>
-	<!-- <slider label="Sis Mesafe Oranı:" name="fog"/>
+	<slider label="Sis Mesafe Oranı:" name="fog"/>
 	<slider label="Gama:" name="gamma"/>
 	<text name="(brightness, lower is brighter)">
 		(0 = varsayılan parlaklık, düşük = daha parlak)
-	</text> -->
+	</text>
 	<check_box label="Anisotropik Filtreleme (etkinken daha yavaş)" name="ani"/>
 	<check_box initial_value="true" label="OpenGL Vertex Tampon Nesnelerini Etkinleştir" name="vbo" tool_tip="Modern donanımlarda bunun etkinleştirilmesi performans artışı sağlar.  Ancak, eski donanımlardaki VBO uygulamaları yetersizdir ve etkinleştirildiğinde bilgisayarınız çökebilir."/>
 	<check_box initial_value="true" label="Doku Sıkıştırmasını Etkinleştir (yeniden başlatma gerektirir)" name="texture compression" tool_tip="Video bellekteki dokuları sıkıştırır, renk kalitesinde bazı kayıplar olmasına karşın daha yüksek çözünürlükte dokuların yüklenmesine imkan tanır."/>

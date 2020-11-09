@@ -112,6 +112,9 @@
 			<combo_box label="Antyaliasing" name="fsaa">
 				<combo_box.item label="Wyłączony" name="FSAADisabled"/>
 			</combo_box>
+			<text name="brightness text">
+				(0/1.0 = domyślna jasność, niżej = jaśniej)
+			</text>
 			<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB na systemach 32 bitowych lub 2048 MB na 64 bitowych. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane."/>
 			<check_box label="Włącz dynamiczną pamięć tekstur" name="FSDynamicTextureMemory" tool_tip="Umożliwia dynamiczne obliczanie pamięci tekstur (dostępne tylko w przeglądarkach 64-bitowych i procesorach graficznych AMD/NVIDIA z co najmniej 512 MB pamięci wideo)" />
 			<slider label="Minimalny bufor pamięci tekstur (MB):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Minimalna ilość pamięci do przydzielenia na tekstury. Dzięki temu określona ilość będzie zawsze używana dla tekstur, nawet jeśli przekracza ilość dostępnej pamięci wideo. Jeśli określona tutaj ilość plus zapas przekracza wielkość fizycznej pamięci wideo, to zostanie ona odpowiednio ograniczona." />
