@@ -81,8 +81,6 @@
 				<combo_box.item label="8x" name="8x"/>
 				<combo_box.item label="16x" name="16x"/>
 			</combo_box>
-			<spinner label="Gamma :" name="gamma"/>
-			<text name="brightness text">Baisser la valeur pour augmenter la brillance</text>
 			<slider label="Mémoire vidéo utilisée par le viewer (Mo) :" label_width="235" width="450" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à allouer pour les textures. Par défaut, la mémoire de la carte vidéo jusqu'à 512Mo. Réduire ce paramètre peut améliorer les performances, mais peut également rendre les textures plus floues. Augmenter cette valeur au-delà de 512Mo n'est pas recommandé. Même si votre carte graphique le supporte, l'impact sur la mémoire sera conséquent et se traduira par des ralentissements."/>
 			<spinner label="Ratio de distance du brouillard :" name="fog"/>
 		</panel>

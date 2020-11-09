@@ -35,11 +35,11 @@
 		Hardware
 	</text>
 	<slider label="Memória da textura (MB):" name="GraphicsCardTextureMemory" tool_tip="Quantidade de memória que deve ser alocada para texturas. O padrão é definido pela memória da placa de vídeo. Reduzir este valor pode melhorar o desempenho, mas pode deixar as texturas fora de foco."/>
-	<slider label="Raio de distância da neblina:" name="fog"/>
+	<!-- <slider label="Raio de distância da neblina:" name="fog"/>
 	<slider label="Gama:" name="gamma"/>
 	<text name="(brightness, lower is brighter)">
 		(0 = brilho padrão, menor = mais brilho)
-	</text>
+	</text> -->
 	<check_box label="Filtro anisotrópico (mais lento quando ativado)" name="ani"/>
 	<check_box initial_value="true" label="Ativar Vertex Buffer Objects de OpenGL" name="vbo" tool_tip="Ativar isso em hardware moderno melhora o desempenho.  Entretanto, hardwares mais antigos normalmente implantam mal os VBOs. A ativação dessa configuração pode travar sua máquina."/>
 	<check_box initial_value="true" label="Habilitar compressão da textura (requer reinício)" name="texture compression" tool_tip="Comprime as texturas na memória de vídeo, permitindo o carregamento de texturas de maior resolução em detrimento da qualidade da cor."/>

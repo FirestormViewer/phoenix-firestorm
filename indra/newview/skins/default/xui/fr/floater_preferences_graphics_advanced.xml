@@ -35,11 +35,11 @@
 		Matériel
 	</text>
 	<slider label="Mémoire textures (Mo) :" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à affecter aux textures. Utilise la mémoire de la carte vidéo par défaut. Si vous réduisez ce paramètre, cela peut améliorer les performances, mais les textures risquent d’être floues."/>
-	<slider label="Indice du brouillard :" name="fog"/>
+	<!-- <slider label="Indice du brouillard :" name="fog"/>
 	<slider label="Gamma :" name="gamma"/>
 	<text name="(brightness, lower is brighter)">
 		(0 = défaut, valeur faible = plus lumineux)
-	</text>
+	</text> -->
 	<check_box label="Filtre anisotrope (plus lent quand activé)" name="ani"/>
 	<check_box initial_value="true" label="Activer OpenGL Vertex Buffer Objects" name="vbo" tool_tip="L’activation de cette option sur le matériel récent permet un gain de performance.  Cependant, les implémentations VBO pour le matériel plus ancien sont souvent médiocres et votre système risque de se planter quand cette option est activée."/>
 	<check_box initial_value="true" label="Activer la compression des textures (redémarrage requis)" name="texture compression" tool_tip="Comprime les textures en mémoire vidéo afin de permettre de charger des textures de résolution plus élevée au prix d’une certaine qualité de couleur."/>
