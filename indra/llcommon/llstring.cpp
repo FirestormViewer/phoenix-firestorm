@@ -1299,7 +1299,9 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		if (convertToS32(numStr, intStr))
 		{
 			strStream << intStr;
-			numStr = strStream.str();
+			// <FS:Ansariel> FIRE-6070: Fix random symbols in formatted numbers in some locales
+			//numStr = strStream.str();
+			numStr = ll_convert_string_to_utf8_string(strStream.str());
 		}
 	}
 	else
@@ -1309,7 +1311,9 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		if (convertToF32(numStr, floatStr))
 		{
 			strStream << std::fixed << std::showpoint << std::setprecision(intDecimals) << floatStr;
-			numStr = strStream.str();
+			// <FS:Ansariel> FIRE-6070: Fix random symbols in formatted numbers in some locales
+			//numStr = strStream.str();
+			numStr = ll_convert_string_to_utf8_string(strStream.str());
 		}
 	}
 }
