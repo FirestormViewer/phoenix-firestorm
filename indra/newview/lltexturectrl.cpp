@@ -152,17 +152,25 @@ void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selecti
 
 		if (LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(mImageAssetID))
 		{
-			if ( mBakeTextureEnabled && mModeSelector->getValue().asInteger() != 2)
+			// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+			//if ( mBakeTextureEnabled && mModeSelector->getValue().asInteger() != 2)
+			if ( mBakeTextureEnabled && mModeSelector->getSelectedIndex() != 2)
 			{
-				mModeSelector->selectByValue(2);
+				// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+				//mModeSelector->selectByValue(2);
+				mModeSelector->setSelectedIndex(2, 0);
 				onModeSelect(0,this);
 			}
 		}
 		else
 		{
-			if (mModeSelector->getValue().asInteger() == 2)
+			// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+			//if (mModeSelector->getValue().asInteger() == 2)
+			if (mModeSelector->getSelectedIndex() == 2)
 			{
-				mModeSelector->selectByValue(0);
+				// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+				//mModeSelector->selectByValue(0);
+				mModeSelector->setSelectedIndex(0, 0);
 				onModeSelect(0,this);
 			}
 			
@@ -417,9 +425,14 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 	mInventoryPanel = getChild<LLInventoryPanel>("inventory panel");
 
-	mModeSelector = getChild<LLComboBox>("mode_selection");
+	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+	//mModeSelector = getChild<LLComboBox>("mode_selection");
+	//mModeSelector->setCommitCallback(onModeSelect, this);
+	//mModeSelector->selectByValue(0);
+	mModeSelector = getChild<LLRadioGroup>("mode_selection");
 	mModeSelector->setCommitCallback(onModeSelect, this);
-	mModeSelector->selectByValue(0);
+	mModeSelector->setSelectedIndex(0, 0);
+	// </FS:Ansariel>
 
 	if(mInventoryPanel)
 	{
@@ -870,7 +883,9 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 {
 	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-    int index = self->mModeSelector->getValue().asInteger();
+	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+    //int index = self->mModeSelector->getValue().asInteger();
+	int index = self->mModeSelector->getSelectedIndex();
 
 	self->getChild<LLButton>("Default")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLButton>("Blank")->setVisible(index == 0 ? TRUE : FALSE);
@@ -1213,28 +1228,45 @@ void LLFloaterTexturePicker::onFilterEdit(const std::string& search_string )
 
 void LLFloaterTexturePicker::setLocalTextureEnabled(BOOL enabled)
 {
-    mModeSelector->setEnabledByValue(1, enabled);
-}
+	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+    //mModeSelector->setEnabledByValue(1, enabled);
+	mModeSelector->setIndexEnabled(1,enabled);}
 
 void LLFloaterTexturePicker::setBakeTextureEnabled(BOOL enabled)
 {
 	BOOL changed = (enabled != mBakeTextureEnabled);
 
 	mBakeTextureEnabled = enabled;
-	mModeSelector->setEnabledByValue(2, enabled);
+	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+	//mModeSelector->setEnabledByValue(2, enabled);
 
-	if (!mBakeTextureEnabled && (mModeSelector->getValue().asInteger() == 2))
+	//if (!mBakeTextureEnabled && (mModeSelector->getValue().asInteger() == 2))
+	//{
+	//	mModeSelector->selectByValue(0);
+	//}
+	//
+	//if (changed && mBakeTextureEnabled && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(mImageAssetID))
+	//{
+	//	if (mModeSelector->getValue().asInteger() != 2)
+	//	{
+	//		mModeSelector->selectByValue(2);
+	//	}
+	//}
+	mModeSelector->setIndexEnabled(2, enabled);
+
+	if (!mBakeTextureEnabled && (mModeSelector->getSelectedIndex() == 2))
 	{
-		mModeSelector->selectByValue(0);
+		mModeSelector->setSelectedIndex(0, 0);
 	}
 	
 	if (changed && mBakeTextureEnabled && LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(mImageAssetID))
 	{
-		if (mModeSelector->getValue().asInteger() != 2)
+		if (mModeSelector->getSelectedIndex() != 2)
 		{
-			mModeSelector->selectByValue(2);
+			mModeSelector->setSelectedIndex(2, 0);
 		}
 	}
+	// </FS:Ansariel>
 	onModeSelect(0, this);
 }
 

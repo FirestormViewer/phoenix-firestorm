@@ -54,7 +54,8 @@ LLSysWellWindow::LLSysWellWindow(const LLSD& key) : LLTransientDockableFloater(N
 													mSysWellChiclet(NULL),
 													NOTIFICATION_WELL_ANCHOR_NAME("notification_well_panel"),
 													IM_WELL_ANCHOR_NAME("im_well_panel"),
-													mIsReshapedByUser(false)
+													mIsReshapedByUser(false),
+													mIsFirstOpen(true) // <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
 
 {
 	setOverlapsScreenChannel(true);
@@ -71,6 +72,27 @@ BOOL LLSysWellWindow::postBuild()
 	return LLTransientDockableFloater::postBuild();
 }
 
+// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
+void LLSysWellWindow::onOpen(const LLSD& key)
+{
+	if (mIsFirstOpen)
+	{
+		mReshapedByUserControlName = mInstanceName + "_user_reshaped";
+		if (!getControlGroup()->controlExists(mReshapedByUserControlName))
+		{
+			getControlGroup()->declareBOOL(mReshapedByUserControlName, FALSE, llformat("Has system well %s been resized by the user", mInstanceName.c_str()), LLControlVariable::PERSIST_NONDFT);
+		}
+		mIsReshapedByUser = getControlGroup()->getBOOL(mReshapedByUserControlName);
+
+		mIsFirstOpen = false;
+	}
+
+	reshapeWindow();
+
+	LLTransientDockableFloater::onOpen(key);
+}
+// </FS:Ansariel>
+
 //---------------------------------------------------------------------------------
 void LLSysWellWindow::setMinimized(BOOL minimize)
 {
@@ -81,6 +103,14 @@ void LLSysWellWindow::setMinimized(BOOL minimize)
 void LLSysWellWindow::handleReshape(const LLRect& rect, bool by_user)
 {
 	mIsReshapedByUser |= by_user; // mark floater that it is reshaped by user
+
+	// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
+	if (by_user)
+	{
+		getControlGroup()->setBOOL(mReshapedByUserControlName, TRUE);
+	}
+	// </FS:Ansariel>
+
 	LLTransientDockableFloater::handleReshape(rect, by_user);
 }
 
@@ -208,7 +238,10 @@ void LLSysWellWindow::reshapeWindow()
 	// it includes height from floater top to list top and from floater bottom and list bottom
 	static S32 parent_list_delta_height = getRect().getHeight() - mMessageList->getRect().getHeight();
 
-	if (!mIsReshapedByUser) // Don't reshape Well window, if it ever was reshaped by user. See EXT-5715.
+	// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
+	//if (!mIsReshapedByUser) // Don't reshape Well window, if it ever was reshaped by user. See EXT-5715.
+	if (gSavedSettings.getBOOL("FSLegacyNotificationWellAutoResize") || (!mIsReshapedByUser && !mIsFirstOpen))
+	// </FS:Ansariel>
 	{
 		S32 notif_list_height = mMessageList->getItemsRect().getHeight() + 2 * mMessageList->getBorderWidth();
 

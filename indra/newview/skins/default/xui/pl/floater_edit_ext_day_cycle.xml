@@ -63,7 +63,7 @@
 				</layout_panel>
 				<layout_panel name="frame_settings_sky">
 					<tab_container name="sky_tabs">
-						<panel label="Atmosfera i oświetlenie" name="atmosphere_panel" />
+						<panel label="Atmosfera i światła" name="atmosphere_panel" />
 						<panel label="Chmury" name="clouds_panel" />
 						<panel label="Słońce i Księżyc" name="moon_panel" />
 						<!-- <panel label="Gęstość" name="density_panel" /> -->

@@ -222,6 +222,12 @@ PieMenu		*gPieMenuLand	= NULL;
 PieMenu		*gPieMenuMuteParticle = NULL;
 // <FS:Zi> Pie menu
 
+// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+LLToggleableMenu	*gMenuInspectSelf	= NULL;
+LLContextMenu		*gInspectSelfDetachScreenMenu = NULL;
+LLContextMenu		*gInspectSelfDetachMenu = NULL;
+// </FS:Ansariel>
+
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
 
 LLMenuGL* gAttachSubMenu = NULL;
@@ -451,20 +457,6 @@ void initialize_menus();
 // Break up groups of more than 6 items with separators
 //-----------------------------------------------------------------------------
 
-void set_underclothes_menu_options()
-{
-	if (gMenuHolder && gAgent.isTeen())
-	{
-		gMenuHolder->getChild<LLView>("Self Underpants")->setVisible(FALSE);
-		gMenuHolder->getChild<LLView>("Self Undershirt")->setVisible(FALSE);
-	}
-	if (gMenuBarView && gAgent.isTeen())
-	{
-		gMenuBarView->getChild<LLView>("Menu Underpants")->setVisible(FALSE);
-		gMenuBarView->getChild<LLView>("Menu Undershirt")->setVisible(FALSE);
-	}
-}
-
 void set_merchant_SLM_menu()
 {
     // All other cases (new merchant, not merchant, migrated merchant): show the new Marketplace Listings menu and enable the tool
@@ -579,6 +571,14 @@ void init_menus()
 	gPieMenuMuteParticle = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_mute_particle.xml", gMenuHolder, registry);
 // </FS:Zi> Pie menu
+
+	// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+	gMenuInspectSelf = LLUICtrlFactory::createFromFile<LLToggleableMenu>(
+		"menu_inspect_self_gear.xml", gMenuHolder, registry);
+
+	gInspectSelfDetachScreenMenu = gMenuHolder->getChild<LLContextMenu>("Inspect Self Detach HUD", true);
+	gInspectSelfDetachMenu = gMenuHolder->getChild<LLContextMenu>("Inspect Self Detach", true);
+	// </FS:Ansariel>
 
 	///
 	/// set up the colors
@@ -2905,6 +2905,11 @@ void cleanup_menus()
 	gPieMenuMuteParticle = NULL;
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+	delete gMenuInspectSelf;
+	gMenuInspectSelf = NULL;
+	// </FS:Ansariel>
+
 	delete gMenuBarView;
 	gMenuBarView = NULL;
 
@@ -3417,7 +3422,6 @@ class LLObjectBuild : public view_listener_t
 	}
 };
 
-
 void handle_object_edit()
 {
 	LLViewerParcelMgr::getInstance()->deselectLand();
@@ -3462,23 +3466,59 @@ void handle_object_edit()
 	return;
 }
 
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-void handle_attachment_edit(const LLUUID& idItem)
+void handle_attachment_edit(const LLUUID& inv_item_id)
 {
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return;
+	if (isAgentAvatarValid())
+	{
+		if (LLViewerObject* attached_obj = gAgentAvatarp->getWornAttachment(inv_item_id))
+		{
+			LLSelectMgr::getInstance()->deselectAll();
+			LLSelectMgr::getInstance()->selectObjectAndFamily(attached_obj);
 
-	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-	if (!pAttachObj)
-		return;
-
-	LLSelectMgr::getInstance()->deselectAll();
-	LLSelectMgr::getInstance()->selectObjectAndFamily(pAttachObj);
-
-	handle_object_edit();
+			handle_object_edit();
+		}
+	}
 }
-// [/SL:KB]
+
+void handle_attachment_touch(const LLUUID& inv_item_id)
+{
+	if ( (isAgentAvatarValid()) && (enable_attachment_touch(inv_item_id)) )
+	{
+		if (LLViewerObject* attach_obj = gAgentAvatarp->getWornAttachment(gInventory.getLinkedItemID(inv_item_id)))
+		{
+			LLSelectMgr::getInstance()->deselectAll();
+
+			LLObjectSelectionHandle sel = LLSelectMgr::getInstance()->selectObjectAndFamily(attach_obj);
+			if (!LLToolMgr::getInstance()->inBuildMode())
+			{
+				struct SetTransient : public LLSelectedNodeFunctor
+				{
+					bool apply(LLSelectNode* node)
+					{
+						node->setTransient(TRUE);
+						return true;
+					}
+				} f;
+				sel->applyToNodes(&f);
+			}
+
+			handle_object_touch();
+		}
+	}
+}
+
+bool enable_attachment_touch(const LLUUID& inv_item_id)
+{
+	if (isAgentAvatarValid())
+	{
+		const LLViewerObject* attach_obj = gAgentAvatarp->getWornAttachment(gInventory.getLinkedItemID(inv_item_id));
+		return (attach_obj) && (attach_obj->flagHandleTouch()) && ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(gAgentAvatarp->getWornAttachment(inv_item_id))) );
+// [RLVa:KB] - Checked: 2012-08-15 (RLVa-1.4.7)
+		//return (attach_obj) && (attach_obj->flagHandleTouch());
+// [/RLVa:KB]
+	}
+	return false;
+}
 
 void handle_object_inspect()
 {

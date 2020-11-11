@@ -50,20 +50,15 @@ extern const BOOL 	ANIMATE;
 extern const U8 	AGENT_STATE_TYPING;  // Typing indication
 extern const U8 	AGENT_STATE_EDITING; // Set when agent has objects selected
 
-class LLChat;
 class LLViewerRegion;
 class LLMotion;
-class LLToolset;
 class LLMessageSystem;
 class LLPermissions;
 class LLHost;
 class LLFriendObserver;
-class LLPickInfo;
-class LLViewerObject;
 class LLAgentDropGroupViewerNode;
 class LLAgentAccess;
 class LLSLURL;
-class LLPauseRequestHandle;
 class LLUIColor;
 class LLTeleportRequest;
 
@@ -93,8 +88,6 @@ struct LLGroupData
 };
 
 class LLAgentListener;
-
-class LLAgentImpl;
 
 //------------------------------------------------------------------------
 // LLAgent
@@ -710,6 +703,10 @@ public:
 		TELEPORT_LOCAL = 6,			// Teleporting in-sim without showing the progress screen
 		TELEPORT_PENDING = 7
 	};
+
+	static std::map<S32, std::string> sTeleportStateName;
+	static const std::string& teleportStateName(S32);
+	const std::string& getTeleportStateName() const;
 
 public:
 	static void 	parseTeleportMessages(const std::string& xml_filename);

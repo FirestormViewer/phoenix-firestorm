@@ -176,9 +176,17 @@ void FSRadar::updateRadarList()
 	LLWorld* world = LLWorld::getInstance();
 	LLMuteList* mutelist = LLMuteList::getInstance();
 	FSAssetBlacklist* blacklist = FSAssetBlacklist::getInstance();
+	LGGContactSets* contactsets = LGGContactSets::getInstance();
+	LLLocalSpeakerMgr* speakermgr = LLLocalSpeakerMgr::getInstance();
+	LLVoiceClient* voice_client = LLVoiceClient::getInstance();
+	LLViewerParcelMgr& parcelmgr = LLViewerParcelMgr::instance();
+	LLUIColorTable& colortable = LLUIColorTable::instance();
+	LLAvatarTracker& avatartracker = LLAvatarTracker::instance();
+	FSLSLBridge& bridge = FSLSLBridge::instance();
 
-	const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
-	const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
+	LFSimFeatureHandler& simfeaturehandler = LFSimFeatureHandler::instance();
+	const F32 chat_range_say = simfeaturehandler.sayRange();
+	const F32 chat_range_shout = simfeaturehandler.shoutRange();
 
 	static const std::string str_chat_entering =			LLTrans::getString("entering_chat_range");
 	static const std::string str_chat_leaving =				LLTrans::getString("leaving_chat_range");
@@ -205,7 +213,7 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<bool> sFSRadarColorNamesByDistance(gSavedSettings, "FSRadarColorNamesByDistance", false);
 	static LLCachedControl<bool> sFSRadarShowMutedAndDerendered(gSavedSettings, "FSRadarShowMutedAndDerendered");
 	static LLCachedControl<bool> sFSRadarEnhanceByBridge(gSavedSettings, "FSRadarEnhanceByBridge");
-	bool sUseLSLBridge = FSLSLBridge::instance().canUseBridge();
+	bool sUseLSLBridge = bridge.canUseBridge();
 
 	F32 drawRadius(sRenderFarClip);
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();
@@ -272,8 +280,8 @@ void FSRadar::updateRadarList()
 		mEntryList[avid] = new FSRadarEntry(avid);
 	}
 
-	LLLocalSpeakerMgr::getInstance()->update(TRUE);
-	
+	speakermgr->update(TRUE);
+
 	//STEP 2: Transform detected model list data into more flexible multimap data structure;
 	//TS: Count avatars in chat range and in the same region
 	U32 inChatRange = 0;
@@ -333,7 +341,7 @@ void FSRadar::updateRadarList()
 			avRegion = reg->getRegionID();
 		}
 		bool isInSameRegion = (avRegion == regionSelf);
-		bool isOnSameParcel = LLViewerParcelMgr::instance().inAgentParcel(avPos);
+		bool isOnSameParcel = parcelmgr.inAgentParcel(avPos);
 		S32 seentime = (S32)difftime(now, ent->mFirstSeen);
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
@@ -524,7 +532,7 @@ void FSRadar::updateRadarList()
 			entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
 			if (ent->hasAlertAge())
 			{
-				entry_options["age_color"] = LLUIColorTable::instance().getColor("AvatarListItemAgeAlert", LLColor4::red).get().getValue();
+				entry_options["age_color"] = colortable.getColor("AvatarListItemAgeAlert", LLColor4::red).get().getValue();
 
 				if (sRadarAvatarAgeAlert && !ent->hasAgeAlertPerformed())
 				{
@@ -549,21 +557,21 @@ void FSRadar::updateRadarList()
 		{
 			if (avRange <= chat_range_say)
 			{
-				range_color = LLUIColorTable::instance().getColor("AvatarListItemChatRange", LLColor4::red);
+				range_color = colortable.getColor("AvatarListItemChatRange", LLColor4::red);
 				inChatRange++;
 			}
 			else if (avRange <= chat_range_shout)
 			{
-				range_color = LLUIColorTable::instance().getColor("AvatarListItemShoutRange", LLColor4::white);
+				range_color = colortable.getColor("AvatarListItemShoutRange", LLColor4::white);
 			}
 			else 
 			{
-				range_color = LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange", LLColor4::white);
+				range_color = colortable.getColor("AvatarListItemBeyondShoutRange", LLColor4::white);
 			}
 		}
 		else 
 		{
-			range_color = LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange", LLColor4::white);
+			range_color = colortable.getColor("AvatarListItemBeyondShoutRange", LLColor4::white);
 		}
 		entry_options["range_color"] = range_color.get().getValue();
 
@@ -579,7 +587,7 @@ void FSRadar::updateRadarList()
 
 		// Set friends colors / styles
 		LLFontGL::StyleFlags nameCellStyle = LLFontGL::NORMAL;
-		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
+		const LLRelationship* relation = avatartracker.getBuddyInfo(avId);
 		if (relation && !sFSLegacyRadarFriendColoring && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
 			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
@@ -590,18 +598,17 @@ void FSRadar::updateRadarList()
 		}
 		entry_options["name_style"] = nameCellStyle;
 
-		LLColor4 name_color = LLUIColorTable::instance().getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
-		name_color = LGGContactSets::getInstance()->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), LGG_CS_RADAR);
+		LLColor4 name_color = colortable.getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
+		name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), LGG_CS_RADAR);
 
-		LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR, name_color);
+		contactsets->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR, name_color);
 
 		entry_options["name_color"] = name_color.getValue();
 
 		// Voice power level indicator
-		LLVoiceClient* voice_client = LLVoiceClient::getInstance();
 		if (voice_client->voiceEnabled() && voice_client->isVoiceWorking())
 		{
-			LLSpeaker* speaker = LLLocalSpeakerMgr::getInstance()->findSpeaker(avId);
+			LLSpeaker* speaker = speakermgr->findSpeaker(avId);
 			if (speaker && speaker->isInVoiceChannel())
 			{
 				EVoicePowerLevel power_level = voice_client->getPowerLevel(avId);
@@ -656,7 +663,7 @@ void FSRadar::updateRadarList()
 			if (++updatesPerRequest > FSRADAR_MAX_OFFSET_REQUESTS)
 			{
 				msg = msg.substr(0, msg.size() - 1);
-				FSLSLBridge::instance().viewerToLSL(prefix + msg, FSLSLBridgeRequestRadarPos_Success);
+				bridge.viewerToLSL(prefix + msg, FSLSLBridgeRequestRadarPos_Success);
 				//LL_INFOS() << " OFFSET REQUEST SEGMENT"<< prefix << msg << LL_ENDL;
 				msg = "";
 				updatesPerRequest = 0;
@@ -665,7 +672,7 @@ void FSRadar::updateRadarList()
 		if (updatesPerRequest > 0)
 		{
 			msg = msg.substr(0, msg.size() - 1);
-			FSLSLBridge::instance().viewerToLSL(prefix + msg, FSLSLBridgeRequestRadarPos_Success);
+			bridge.viewerToLSL(prefix + msg, FSLSLBridgeRequestRadarPos_Success);
 			//LL_INFOS() << " OFFSET REQUEST FINAL " << prefix << msg << LL_ENDL;
 		}
 		

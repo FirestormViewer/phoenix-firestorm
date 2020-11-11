@@ -1089,9 +1089,10 @@ void LLImageRaw::composite( LLImageRaw* src )
 		return;
 	}
 
-	llassert(3 == src->getComponents());
-	llassert(3 == dst->getComponents());
-
+// <FS:Beq> These assertions are nonsense.
+	// llassert(3 == src->getComponents());
+	// llassert(3 == dst->getComponents());
+// </FS:Beq>
 	if( 3 == dst->getComponents() )
 	{
 		if( (src->getWidth() == dst->getWidth()) && (src->getHeight() == dst->getHeight()) )
@@ -1153,12 +1154,34 @@ void LLImageRaw::compositeUnscaled4onto3( LLImageRaw* src )
 {
 	LLImageRaw* dst = this;  // Just for clarity.
 
-	llassert( (3 == src->getComponents()) || (4 == src->getComponents()) );
+	// <FS:Beq> Correct bad assertion
+	// llassert( (3 == src->getComponents()) || (4 == src->getComponents()) );
+	llassert( (4 == src->getComponents()) || (3 == dst->getComponents()) );
+	// </FS:Beq>
 	llassert( (src->getWidth() == dst->getWidth()) && (src->getHeight() == dst->getHeight()) );
 
 	U8* src_data = src->getData();
 	U8* dst_data = dst->getData();
 	S32 pixels = getWidth() * getHeight();
+	// <FS:Beq> suspicious crash avoid potential causes.
+	if(!src_data)
+	{
+		LL_WARNS() << "source is null!" << LL_ENDL;
+		return;
+	}
+	if(!dst_data)
+	{
+		LL_WARNS() << "destination is null!" << LL_ENDL;
+		return;
+	}
+	auto src_comps = src->getComponents();
+	if( src_comps != 4)
+	{
+		// This should never be reached, buit apparently it is.
+		LL_WARNS() << "src has incorrect number of layers (" << src_comps << ")" << LL_ENDL;
+		return;
+	}
+	// </FS:Beq>
 	while( pixels-- )
 	{
 		U8 alpha = src_data[3];

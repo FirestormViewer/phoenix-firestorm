@@ -585,6 +585,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
 			gDetachAttSelfMenu->appendContextSubMenu(gDetachBodyPartPieMenus[i]);
 			gDetachAvatarMenu->appendContextSubMenu(gDetachBodyPartPieMenus[i]);
+			// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
+			gInspectSelfDetachMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
 		}
 		else
 		{
@@ -615,6 +617,9 @@ BOOL LLVOAvatarSelf::buildMenus()
 					gDetachPieMenu->addChild(item);
 					gDetachAttSelfMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
 					gDetachAvatarMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
+					// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
+					gInspectSelfDetachMenu->addChild(item);
+
 					break;
 				}
 			}
@@ -760,6 +765,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 			gDetachScreenPieMenu->addChild(item);
 			gDetachHUDAttSelfMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
 			gDetachHUDAvatarMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
+			// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
+			gInspectSelfDetachScreenMenu->addChild(item);
 
 			// <FS:Zi> Pie menu
 			slice_params.name =(slice_params.label );

@@ -488,6 +488,7 @@ void give_money(const LLUUID& uuid, LLViewerRegion* region, S32 amount, BOOL is_
 
 void send_complete_agent_movement(const LLHost& sim_host)
 {
+	LL_DEBUGS("Teleport", "Messaging") << "Sending CompleteAgentMovement to sim_host " << sim_host << LL_ENDL;
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_CompleteAgentMovement);
 	msg->nextBlockFast(_PREHASH_AgentData);
@@ -1964,6 +1965,13 @@ void LLOfferInfo::handleRespond(const LLSD& notification, const LLSD& response)
 	mRespondFunctions[name](notification, response);
 }
 
+void inventory_offer_name_callback(const LLAvatarName& av_name, std::string message)
+{
+	LLSD args;
+	args["MESSAGE"] = llformat(message.c_str(), av_name.getUserName().c_str());
+	LLNotificationsUtil::add("SystemMessageTip", args);
+}
+
 bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD& response)
 {
 	LLChat chat;
@@ -2096,11 +2104,29 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		{
 			// <FS:Ansariel> This breaks object owner name parsing
 			//log_message = "<nolink>" + chatHistory_string + "</nolink> " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
-			log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
+			// <FS:Ansariel> FIRE-29677 / SL-13720 workaround
+			//log_message = chatHistory_string + " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
 			// </FS:Ansariel>
-			LLSD args;
-			args["MESSAGE"] = log_message;
-			LLNotificationsUtil::add("SystemMessageTip", args);
+
+			//LLSD args;
+			//args["MESSAGE"] = log_message;
+			//LLNotificationsUtil::add("SystemMessageTip", args);
+			log_message = " " + LLTrans::getString("InvOfferGaveYou") + " " + getSanitizedDescription() + LLTrans::getString(".");
+
+			LLUUID inv_sender_id;
+			size_t separator_idx = mFromName.find('|');
+			if (separator_idx != std::string::npos && LLUUID::parseUUID(mFromName.substr(0, separator_idx), &inv_sender_id) && mFromName.size() > (++separator_idx))
+			{
+				log_message = mFromName.substr(separator_idx) + log_message;
+				LLAvatarNameCache::instance().get(inv_sender_id, boost::bind(&inventory_offer_name_callback, _2, log_message));
+			}
+			else
+			{
+				LLSD args;
+				args["MESSAGE"] = chatHistory_string + log_message;
+				LLNotificationsUtil::add("SystemMessageTip", args);
+			}
+			// </FS:Ansariel>
 		}
 
 		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
@@ -3618,12 +3644,12 @@ BOOL LLPostTeleportNotifiers::tick()
 // We're going to pretend to be a new agent
 void process_teleport_finish(LLMessageSystem* msg, void**)
 {
-	LL_DEBUGS("Messaging") << "Got teleport location message" << LL_ENDL;
+	LL_DEBUGS("Teleport","Messaging") << "Received TeleportFinish message" << LL_ENDL;
 	LLUUID agent_id;
 	msg->getUUIDFast(_PREHASH_Info, _PREHASH_AgentID, agent_id);
 	if (agent_id != gAgent.getID())
 	{
-		LL_WARNS("Messaging") << "Got teleport notification for wrong agent!" << LL_ENDL;
+		LL_WARNS("Teleport","Messaging") << "Got teleport notification for wrong agent " << agent_id << " expected " << gAgent.getID() << ", ignoring!" << LL_ENDL;
 		return;
 	}
 
@@ -3633,12 +3659,13 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
         {
             // Server either ignored teleport cancel message or did not receive it in time.
             // This message can't be ignored since teleport is complete at server side
+			LL_INFOS("Teleport") << "Restoring canceled teleport request" << LL_ENDL;
             gAgent.restoreCanceledTeleportRequest();
         }
         else
         {
             // Race condition? Make sure all variables are set correctly for teleport to work
-            LL_WARNS("Messaging") << "Teleport 'finish' message without 'start'" << LL_ENDL;
+            LL_WARNS("Teleport","Messaging") << "Teleport 'finish' message without 'start'. Setting state to TELEPORT_REQUESTED" << LL_ENDL;
             gTeleportDisplay = TRUE;
             LLViewerMessage::getInstance()->mTeleportStartedSignal();
             gAgent.setTeleportState(LLAgent::TELEPORT_REQUESTED);
@@ -3647,7 +3674,7 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
     }
     else if (gAgent.getTeleportState() == LLAgent::TELEPORT_MOVING)
     {
-        LL_WARNS("Messaging") << "Teleport message in the middle of other teleport" << LL_ENDL;
+        LL_WARNS("Teleport","Messaging") << "Teleport message in the middle of other teleport" << LL_ENDL;
     }
 	
 	// Teleport is finished; it can't be cancelled now.
@@ -3699,6 +3726,14 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	std::string seedCap;
 	msg->getStringFast(_PREHASH_Info, _PREHASH_SeedCapability, seedCap);
 
+	LL_DEBUGS("Teleport") << "TeleportFinish message params are:"
+						  << " sim_ip " << sim_ip
+						  << " sim_port " << sim_port
+						  << " region_handle " << region_handle
+						  << " teleport_flags " << teleport_flags
+						  << " seedCap " << seedCap
+						  << LL_ENDL;
+	
 	// update home location if we are teleporting out of prelude - specific to teleporting to welcome area 
 	if((teleport_flags & TELEPORT_FLAGS_SET_HOME_TO_TARGET)
 	   && (!gAgent.isGodlike()))
@@ -3750,7 +3785,7 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	gAgent.standUp();
 
 	// now, use the circuit info to tell simulator about us!
-	LL_INFOS("Messaging") << "process_teleport_finish() Enabling "
+	LL_INFOS("Teleport","Messaging") << "process_teleport_finish() sending UseCircuitCode to enable sim_host "
 			<< sim_host << " with code " << msg->mOurCircuitCode << LL_ENDL;
 	msg->newMessageFast(_PREHASH_UseCircuitCode);
 	msg->nextBlockFast(_PREHASH_CircuitCode);
@@ -3759,11 +3794,12 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	msg->addUUIDFast(_PREHASH_ID, gAgent.getID());
 	msg->sendReliable(sim_host);
 
+	LL_INFOS("Teleport") << "Calling send_complete_agent_movement() and setting state to TELEPORT_MOVING" << LL_ENDL;
 	send_complete_agent_movement(sim_host);
 	gAgent.setTeleportState( LLAgent::TELEPORT_MOVING );
 	gAgent.setTeleportMessage(LLAgent::sTeleportProgressMessages["contacting"]);
 
-	LL_DEBUGS("CrossingCaps") << "Calling setSeedCapability from process_teleport_finish(). Seed cap == "
+	LL_DEBUGS("CrossingCaps") << "Calling setSeedCapability(). Seed cap == "
 			<< seedCap << LL_ENDL;
 	regionp->setSeedCapability(seedCap);
 
@@ -3811,6 +3847,8 @@ void process_avatar_init_complete(LLMessageSystem* msg, void**)
 
 void process_agent_movement_complete(LLMessageSystem* msg, void**)
 {
+	LL_INFOS("Teleport","Messaging") << "Received ProcessAgentMovementComplete" << LL_ENDL;
+
 	gShiftFrame = true;
 	gAgentMovementCompleted = true;
 
@@ -3820,12 +3858,12 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_SessionID, session_id);
 	if((gAgent.getID() != agent_id) || (gAgent.getSessionID() != session_id))
 	{
-		LL_WARNS("Messaging") << "Incorrect id in process_agent_movement_complete()"
-				<< LL_ENDL;
+		LL_WARNS("Teleport", "Messaging") << "Incorrect agent or session id in process_agent_movement_complete()"
+										  << " agent " << agent_id << " expected " << gAgent.getID() 
+										  << " session " << session_id << " expected " << gAgent.getSessionID()
+										  << ", ignoring" << LL_ENDL;
 		return;
 	}
-
-	LL_DEBUGS("Messaging") << "process_agent_movement_complete()" << LL_ENDL;
 
 	// *TODO: check timestamp to make sure the movement compleation
 	// makes sense.
@@ -3843,7 +3881,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	{
 		// Could happen if you were immediately god-teleported away on login,
 		// maybe other cases.  Continue, but warn.
-		LL_WARNS("Messaging") << "agent_movement_complete() with NULL avatarp." << LL_ENDL;
+		LL_WARNS("Teleport", "Messaging") << "agent_movement_complete() with NULL avatarp." << LL_ENDL;
 	}
 
 	F32 x, y;
@@ -3853,13 +3891,15 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	{
 		if (gAgent.getRegion())
 		{
-			LL_WARNS("Messaging") << "current region " << gAgent.getRegion()->getOriginGlobal() << LL_ENDL;
+			LL_WARNS("Teleport", "Messaging") << "current region origin "
+											  << gAgent.getRegion()->getOriginGlobal() << " id " << gAgent.getRegion()->getRegionID() << LL_ENDL;
 		}
 
-		LL_WARNS("Messaging") << "Agent being sent to invalid home region: " 
-			<< x << ":" << y 
-			<< " current pos " << gAgent.getPositionGlobal()
-			<< LL_ENDL;
+		LL_WARNS("Teleport", "Messaging") << "Agent being sent to invalid home region: " 
+										  << x << ":" << y 
+										  << " current pos " << gAgent.getPositionGlobal()
+										  << ", calling forceDisconnect()"
+										  << LL_ENDL;
 		LLAppViewer::instance()->forceDisconnect(LLTrans::getString("SentToInvalidRegion"));
 		return;
 
@@ -3868,13 +3908,13 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	// <FS:Ansariel> Crash fix
 	if (!gAgent.getRegion())
 	{
-		LL_WARNS("Messaging") << "Agent was disconnected from the region" << LL_ENDL;
+		LL_WARNS("Teleport","Messaging") << "Agent was disconnected from the region" << LL_ENDL;
 		LLAppViewer::instance()->forceDisconnect(LLTrans::getString("YouHaveBeenDisconnected"));
 		return;
 	}
 	// </FS:Ansariel>
 
-	LL_INFOS("Messaging") << "Changing home region to " << x << ":" << y << LL_ENDL;
+	LL_INFOS("Teleport","Messaging") << "Changing home region to region id " << regionp->getRegionID() << " handle " << region_handle << " == x,y " << x << "," << y << LL_ENDL;
 
 	// set our upstream host the new simulator and shuffle things as
 	// appropriate.
@@ -3928,6 +3968,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 		gAgentCamera.slamLookAt(look_at);
 		gAgentCamera.updateCamera();
 
+		LL_INFOS("Teleport") << "Agent movement complete, setting state to TELEPORT_START_ARRIVAL" << LL_ENDL;
 		gAgent.setTeleportState( LLAgent::TELEPORT_START_ARRIVAL );
 
 		// <FS:Ansariel> [Legacy Bake]
@@ -3961,6 +4002,8 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	else
 	{
 		// This is initial log-in or a region crossing
+		LL_INFOS("Teleport") << "State is not TELEPORT_MOVING, so this is initial log-in or region crossing. "
+							 << "Setting state to TELEPORT_NONE" << LL_ENDL;
 		gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
 
 		if(LLStartUp::getStartupState() < STATE_STARTED)
@@ -7234,14 +7277,6 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_TaskID, taskid );
 	// itemid -> script asset key of script requesting permissions
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_ItemID, itemid );
-
-	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
-	{
-		return;
-	}
-	// NaCl End
-
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectName, object_name);
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectOwner, owner_name);
 	msg->getS32Fast(_PREHASH_Data, _PREHASH_Questions, questions );
@@ -7271,21 +7306,23 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	typedef LLKeyThrottle<std::string> LLStringThrottle;
 	static LLStringThrottle question_throttle( LLREQUEST_PERMISSION_THROTTLE_LIMIT, LLREQUEST_PERMISSION_THROTTLE_INTERVAL );
 
-	switch (question_throttle.noteAction(throttle_name))
-	{
-		case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
-			LL_INFOS("Messaging") << "process_script_question throttled"
-					<< " owner_name:" << owner_name
-					<< LL_ENDL;
-			// Fall through
+	// <FS:Ansariel> FIRE-7374: Moved spam/throttle check after RLVa check
+	//switch (question_throttle.noteAction(throttle_name))
+	//{
+	//	case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
+	//		LL_INFOS("Messaging") << "process_script_question throttled"
+	//				<< " owner_name:" << owner_name
+	//				<< LL_ENDL;
+	//		// Fall through
 
-		case LLStringThrottle::THROTTLE_BLOCKED:
-			// Escape altogether until we recover
-			return;
+	//	case LLStringThrottle::THROTTLE_BLOCKED:
+	//		// Escape altogether until we recover
+	//		return;
 
-		case LLStringThrottle::THROTTLE_OK:
-			break;
-	}
+	//	case LLStringThrottle::THROTTLE_OK:
+	//		break;
+	//}
+	// </FS:Ansariel>
 
 	std::string script_question;
 	if (questions)
@@ -7329,7 +7366,6 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			LL_WARNS("Messaging") << "Object \"" << object_name << "\" requested " << script_question
 								<< " permission. Permission is unknown and can't be granted. Item id: " << itemid
 								<< " taskid:" << taskid << LL_ENDL;
-			make_ui_sound("UISndScriptFloaterOpen"); // <FS:PP> FIRE-16958: Incoming script permission request doesn't trigger a sound
 		}
 		
 		if (known_questions)
@@ -7372,6 +7408,31 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
 				return;
 			}
+
+			// <FS:Ansariel> FIRE-7374: Moved spam/throttle check after RLVa check
+			// NaCl - Antispam Registry
+			if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
+			{
+				return;
+			}
+			// NaCl End
+
+			switch (question_throttle.noteAction(throttle_name))
+			{
+				case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
+					LL_INFOS("Messaging") << "process_script_question throttled"
+							<< " owner_name:" << owner_name
+							<< LL_ENDL;
+					// Fall through
+
+				case LLStringThrottle::THROTTLE_BLOCKED:
+					// Escape altogether until we recover
+					return;
+
+				case LLStringThrottle::THROTTLE_OK:
+					break;
+			}
+			// </FS:Ansariel>
 // [/RLVa:KB]
 
 			// check whether cautions are even enabled or not
@@ -7393,6 +7454,35 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			make_ui_sound("UISndScriptFloaterOpen"); // <FS:PP> FIRE-16958: Incoming script permission request doesn't trigger a sound
 		}
 	}
+	// <FS:Ansariel> FIRE-7374: Moved spam/throttle check after RLVa check
+	else
+	{
+		// Throttle permission requests from scripts requesting no permission at all!?!?
+
+		// NaCl - Antispam Registry
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
+		{
+			return;
+		}
+		// NaCl End
+
+		switch (question_throttle.noteAction(throttle_name))
+		{
+			case LLStringThrottle::THROTTLE_NEWLY_BLOCKED:
+				LL_INFOS("Messaging") << "process_script_question throttled"
+						<< " owner_name:" << owner_name
+						<< LL_ENDL;
+				// Fall through
+
+			case LLStringThrottle::THROTTLE_BLOCKED:
+				// Escape altogether until we recover
+				return;
+
+			case LLStringThrottle::THROTTLE_OK:
+				break;
+		}
+	}
+	// </FS:Ansariel>
 }
 
 
@@ -7529,6 +7619,8 @@ std::string formatted_time(const time_t& the_time)
 
 void process_teleport_failed(LLMessageSystem *msg, void**)
 {
+	LL_WARNS("Teleport","Messaging") << "Received TeleportFailed message" << LL_ENDL;
+
 	std::string message_id;		// Tag from server, like "RegionEntryAccessBlocked"
 	std::string big_reason;		// Actual message to display
 	LLSD args;
@@ -7547,6 +7639,7 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 			// Nothing found in the map - use what the server returned in the original message block
 			msg->getStringFast(_PREHASH_Info, _PREHASH_Reason, big_reason);
 		}
+		LL_WARNS("Teleport") << "AlertInfo message_id " << message_id << " reason: " << big_reason << LL_ENDL;
 
 		LLSD llsd_block;
 		std::string llsd_raw;
@@ -7556,10 +7649,11 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 			std::istringstream llsd_data(llsd_raw);
 			if (!LLSDSerialize::deserialize(llsd_block, llsd_data, llsd_raw.length()))
 			{
-				LL_WARNS() << "process_teleport_failed: Attempted to read alert parameter data into LLSD but failed:" << llsd_raw << LL_ENDL;
+				LL_WARNS("Teleport") << "process_teleport_failed: Attempted to read alert parameter data into LLSD but failed:" << llsd_raw << LL_ENDL;
 			}
 			else
 			{
+				LL_WARNS("Teleport") << "AlertInfo llsd block received: " << llsd_block << LL_ENDL;
 				if(llsd_block.has("REGION_NAME"))
 				{
 					std::string region_name = llsd_block["REGION_NAME"].asString();
@@ -7575,6 +7669,7 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 				{
 					if( gAgent.getTeleportState() != LLAgent::TELEPORT_NONE )
 					{
+						LL_WARNS("Teleport") << "called handle_teleport_access_blocked, setting state to TELEPORT_NONE" << LL_ENDL;
 						gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
 					}
 					return;
@@ -7597,6 +7692,7 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 			args["REASON"] = message_id;
 		}
 	}
+	LL_WARNS("Teleport") << "Displaying CouldNotTeleportReason string, REASON= " << args["REASON"] << LL_ENDL;
 
 	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
 	gAgent.stopTyping();
@@ -7610,17 +7706,21 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 
 	if( gAgent.getTeleportState() != LLAgent::TELEPORT_NONE )
 	{
+		LL_WARNS("Teleport") << "End of process_teleport_failed(). Reason message arg is " << args["REASON"]
+							 << ". Setting state to TELEPORT_NONE" << LL_ENDL;
 		gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
 	}
 }
 
 void process_teleport_local(LLMessageSystem *msg,void**)
 {
+	LL_INFOS("Teleport","Messaging") << "Received TeleportLocal message" << LL_ENDL;
+	
 	LLUUID agent_id;
 	msg->getUUIDFast(_PREHASH_Info, _PREHASH_AgentID, agent_id);
 	if (agent_id != gAgent.getID())
 	{
-		LL_WARNS("Messaging") << "Got teleport notification for wrong agent!" << LL_ENDL;
+		LL_WARNS("Teleport", "Messaging") << "Got teleport notification for wrong agent " << agent_id << " expected " << gAgent.getID() << ", ignoring!" << LL_ENDL;
 		return;
 	}
 
@@ -7632,6 +7732,7 @@ void process_teleport_local(LLMessageSystem *msg,void**)
 	msg->getVector3Fast(_PREHASH_Info, _PREHASH_LookAt, look_at);
 	msg->getU32Fast(_PREHASH_Info, _PREHASH_TeleportFlags, teleport_flags);
 
+	LL_INFOS("Teleport") << "Message params are location_id " << location_id << " teleport_flags " << teleport_flags << LL_ENDL;
 	if( gAgent.getTeleportState() != LLAgent::TELEPORT_NONE )
 	{
 		if( gAgent.getTeleportState() == LLAgent::TELEPORT_LOCAL )
@@ -7644,6 +7745,8 @@ void process_teleport_local(LLMessageSystem *msg,void**)
 		}
 		else
 		{
+			LL_WARNS("Teleport") << "State is not TELEPORT_LOCAL: " << gAgent.getTeleportStateName()
+								 << ", setting state to TELEPORT_NONE" << LL_ENDL;
 			gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
 		}
 	}

@@ -55,6 +55,7 @@
 #include "llcallbacklist.h"
 #include "llworld.h"
 #include "llsdserialize.h"
+#include "llviewermenu.h" // is_agent_mappable
 #include "llviewerobjectlist.h"
 // [RLVa:KB] - @pay
 #include "rlvactions.h"

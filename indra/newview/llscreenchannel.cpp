@@ -644,6 +644,9 @@ void LLScreenChannel::redrawToasts()
 //--------------------------------------------------------------------------
 void LLScreenChannel::showToastsBottom()
 {
+	// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+	LLRect channel_rect = getChannelRect();
+
 	LLRect	toast_rect;	
 	S32		bottom = getRect().mBottom - gFloaterView->getRect().mBottom;
 	S32		toast_margin = 0;
@@ -671,7 +674,9 @@ void LLScreenChannel::showToastsBottom()
 				return;
 			}
 
-			bottom = toast->getRect().mTop - toast->getTopPad();
+			// <FS:Ansariel> Unify chiclet calculation
+			//bottom = toast->getRect().mTop + toast->getTopPad();
+			bottom = toast->getRect().mTop;
 			toast_margin = gSavedSettings.getS32("ToastGap");
 		}
 
@@ -683,7 +688,9 @@ void LLScreenChannel::showToastsBottom()
 		}
 
 		toast_rect = toast->getRect();
-		toast_rect.setOriginAndSize(getRect().mRight - toast_rect.getWidth(),
+		// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+		//toast_rect.setOriginAndSize(getRect().mRight - toast_rect.getWidth(),
+		toast_rect.setOriginAndSize(channel_rect.mRight - toast_rect.getWidth(),
 				bottom + toast_margin, toast_rect.getWidth(),
 				toast_rect.getHeight());
 		toast->setRect(toast_rect);
@@ -701,7 +708,8 @@ void LLScreenChannel::showToastsBottom()
 				toast->translate(0, shift);
 			}
 
-			LLRect channel_rect = getChannelRect();
+			// <FS:Ansariel> Already defined
+			//LLRect channel_rect = getChannelRect();
 			// don't show toasts if there is not enough space
 			if(toast_rect.mTop > channel_rect.mTop)
 			{
@@ -709,14 +717,18 @@ void LLScreenChannel::showToastsBottom()
 			}
 		}
 
-		bool stop_showing_toasts = toast->getRect().mTop > getRect().mTop;
+		// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+		//bool stop_showing_toasts = toast->getRect().mTop > getRect().mTop;
+		bool stop_showing_toasts = toast->getRect().mTop > channel_rect.mTop;
 
 		if(!stop_showing_toasts)
 		{
 			if( it != vToastList.rend()-1)
 			{
 				S32 toast_top = toast->getRect().mTop + gSavedSettings.getS32("ToastGap");
-				stop_showing_toasts = toast_top > getRect().mTop;
+				// <FS:Ansariel> FIRE-7007: Position of chiclets in bottom right corner are off when changing UI scaling
+				//stop_showing_toasts = toast_top > getRect().mTop;
+				stop_showing_toasts = toast_top > channel_rect.mTop;
 			}
 		} 
 
@@ -801,6 +813,7 @@ void LLScreenChannel::showToastsTop()
 
 	LLRect	toast_rect;	
 	S32		top = channel_rect.mTop;
+	S32		toast_margin = 0; // <FS:Ansariel> Unify chiclet calculation
 	std::vector<ToastElem>::reverse_iterator it;
 
 	updateRect();
@@ -825,8 +838,12 @@ void LLScreenChannel::showToastsTop()
 				return;
 			}
 
-			top = toast->getRect().mBottom - toast->getTopPad();
-			gSavedSettings.getS32("ToastGap");
+			// <FS:Ansariel> Unify chiclet calculation
+			//top = toast->getRect().mBottom - toast->getTopPad();
+			//gSavedSettings.getS32("ToastGap");
+			top = toast->getRect().mBottom;
+			toast_margin = gSavedSettings.getS32("ToastGap");
+			// </FS:Ansariel>
 		}
 
 		LLToast* toast = it->getToast();
@@ -838,7 +855,10 @@ void LLScreenChannel::showToastsTop()
 
 		toast_rect = toast->getRect();
 		toast_rect.setLeftTopAndSize(channel_rect.mRight - toast_rect.getWidth(),
-			top, toast_rect.getWidth(),
+			// <FS:Ansariel> Unify chiclet calculation
+			//top, toast_rect.getWidth(),
+			top - toast_margin, toast_rect.getWidth(),
+			// </FS:Ansariel>
 			toast_rect.getHeight());
 		toast->setRect(toast_rect);
 
@@ -855,7 +875,8 @@ void LLScreenChannel::showToastsTop()
 				toast->translate(0, shift);
 			}
 
-			LLRect channel_rect = getChannelRect();
+			// <FS:Ansariel> Already defined
+			//LLRect channel_rect = getChannelRect();
 			// don't show toasts if there is not enough space
 			if(toast_rect.mBottom < channel_rect.mBottom)
 			{

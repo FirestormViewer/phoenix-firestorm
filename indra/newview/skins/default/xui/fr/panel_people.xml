@@ -47,7 +47,9 @@
 				<menu_button name="plus_btn" tool_tip="Rejoindre/Créer un nouveau groupe"/>
 				<dnd_button name="minus_btn" tool_tip="Quitter le groupe sélectionné"/>
 			</panel>
-			<text name="groupcount">Vous appartenez à [COUNT] groupes et pouvez en rejoindre [REMAINING] autres.</text>
+			<text name="groupcount">
+				Vous appartenez à [COUNT] groupes et pouvez rejoindre [REMAINING] autres groupes.
+			</text>
 		</panel>
 		<panel label="Récents" name="recent_panel">
 			<panel label="bottom_panel" name="recent_buttons_panel">

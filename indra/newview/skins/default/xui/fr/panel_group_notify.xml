@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="instant_message" name="panel_group_notify">
-	<panel label="header" name="header"/>
+	<text name="title" value="Envoyé par Nom de l'expéditeur, Nom du groupe"/>
+	<text name="group_notice" value="Nouvelle notice"/>
 	<text name="attachment" value="Pièce jointe"/>
-	<button label="OK" name="btn_ok"/>
+	<button label="Notices..." name="btn_notices"/>
 </panel>
