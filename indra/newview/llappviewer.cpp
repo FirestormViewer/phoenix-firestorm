@@ -3789,7 +3789,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
-	std::string drvinfo = gDXHardware.getDriverVersionWMI();
+	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
+	//std::string drvinfo = gDXHardware.getDriverVersionWMI();
+	std::string drvinfo = gDXHardware.getDriverVersionWMI(gGLManager.mGLVendorShort);
 	if (!drvinfo.empty())
 	{
 		info["GRAPHICS_DRIVER_VERSION"] = drvinfo;
