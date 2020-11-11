@@ -388,25 +388,40 @@ void NACLFloaterExploreSounds::handleStop()
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	for( ; selection_iter != selection_end; ++selection_iter)
+	for (; selection_iter != selection_end; ++selection_iter)
 	{
 		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
-		if(item.mID.isNull()) continue;
-		if(item.mPlaying)
+		if (item.mID.notNull() && item.mPlaying)
 		{
 			// Make sure the audio source in question is still in the system to prevent
 			// crashes by using a stale pointer. This can happen when the same UUID is
 			// played twice without stopping it first. -Zi
-			if(!gAudiop->findAudioSource(item.mSourceID))
+			if (!gAudiop->findAudioSource(item.mSourceID))
 			{
 				LL_WARNS("SoundExplorer") << "audio source " << item.mAudioSource << " already gone but still marked as playing. Fixing ..." << LL_ENDL;
-				gSoundHistory[item.mID].mPlaying = false;
-				gSoundHistory[item.mID].mAudioSource = NULL;
-				gSoundHistory[item.mID].mTimeStopped = LLTimer::getElapsedSeconds();
+				if (gSoundHistory.find(item.mID) != gSoundHistory.end())
+				{
+					gSoundHistory[item.mID].mPlaying = false;
+					gSoundHistory[item.mID].mAudioSource = nullptr;
+					gSoundHistory[item.mID].mTimeStopped = LLTimer::getElapsedSeconds();
+				}
+				else
+				{
+					for (auto& histItem : mLastHistory)
+					{
+						if (histItem.mID == item.mID)
+						{
+							histItem.mPlaying = false;
+							histItem.mAudioSource = nullptr;
+							histItem.mTimeStopped = LLTimer::getElapsedSeconds();
+							break;
+						}
+					}
+				}
 				continue;
 			}
 
-			if(item.mAudioSource)
+			if (item.mAudioSource)
 			{
 				S32 type = item.mType;
 				item.mAudioSource->setType(LLAudioEngine::AUDIO_TYPE_UI);
