@@ -182,9 +182,18 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	setDefaultBtn(pOkBtn);
 
 	//group notices button
-	LLButton* pOkNotices = getChild<LLButton>("btn_notices");
-	if (pOkNotices)
-		pOkNotices->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
+	LLButton* pNoticesBtn = findChild<LLButton>("btn_notices");
+	if (pNoticesBtn)
+	{
+		pNoticesBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
+	}
+
+	// group chat button
+	LLButton* pGroupChatBtn = findChild<LLButton>("btn_groupchat");
+	if (pGroupChatBtn)
+	{
+		pGroupChatBtn->setClickedCallback((boost::bind(&LLGroupActions::startIM, mGroupID)));
+	}
 
 	S32 maxLinesCount;
 	std::istringstream ss( getString("message_max_lines_count") );

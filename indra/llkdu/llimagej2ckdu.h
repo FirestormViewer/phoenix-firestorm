@@ -32,7 +32,9 @@
 //
 // KDU core header files
 //
+#ifndef LL_WINDOWS
 #define KDU_NO_THREADS
+#endif
 
 #include "kdu_elementary.h"
 #include "kdu_messaging.h"

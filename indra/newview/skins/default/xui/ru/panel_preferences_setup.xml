@@ -44,7 +44,7 @@
 			<text name="cache_size_label_l">
 				Размер кэша ([http://wiki.firestormviewer.org/cache Нужны подсказки?] (На английском)):
 			</text>
-			<button label="Очистить кэш инвент." name="ClearInventoryCache"/>
+			<button label="Очистить кэш инвентаря" name="ClearInventoryCache" left="380" width="150"/>
 			<text name="Cache location">
 				Расположение кэша:
 			</text>
@@ -58,7 +58,7 @@
 			<button label="Открыть" label_selected="Открыть" width="60" name="open_sound_cache"/>
 			<button label="Задать" label_selected="Задать" width="50" name="set_sound_cache"/>
 			<button label="Сброс" label_selected="Сброс" width="50" name="reset_sound_cache"/>
-			<check_box label="Не удалять распакованные DSF (звук) файлы кэша при выходе" tool_tip="ВНИМАНИЕ: При включении данной функции звуковые файлы кэша удаляться не будут, что может привести к быстрому заполнению каталога кэша и уменьшению дискового пространства на вашем компьютере. По умолчанию данная функция отключена" name="keep_unpacked_cache"/>
+			<check_box label="При выходе не удалять из кэша распакованные DSF-файлы (звуки)" tool_tip="ВНИМАНИЕ: При включении данной функции, звуковые файлы кэша удаляться не будут, что может привести к быстрому заполнению каталога кэша и уменьшению дискового пространства на вашем компьютере. По умолчанию данная функция отключена" name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				Расположение журналов разговоров:
 			</text>

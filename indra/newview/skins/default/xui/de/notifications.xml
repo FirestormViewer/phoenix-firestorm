@@ -374,7 +374,7 @@ Fortfahren?
 Sie haben nicht genug L$, um dieser Gruppe beizutreten.
 	</notification>
 	<notification name="CreateGroupCost">
-		Die Gründung dieser Gruppe kostet [COST] L$.
+		Die Erstellung dieser Gruppe kostet [COST] L$.
 Gruppen müssen mehr als ein Mitglied haben oder sie werden gelöscht.
 Bitte laden Sie innerhalb von 48 Stunden Mitglieder in Ihre Gruppe ein.
 		<usetemplate canceltext="Abbrechen" name="okcancelbuttons" notext="Abbrechen" yestext="Gruppe für [COST] L$ erstellen"/>
@@ -511,6 +511,9 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	</notification>
 	<notification name="ErrorEncodingSnapshot">
 		Fehler beim Erstellen des Fotos!
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Du brauchst L$[COST], um diesen Artikel hochzuladen.
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Es kostet L$[COST], um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
@@ -1839,14 +1842,14 @@ Eingehende Gruppeneinladungen werden jetzt automatisch abgewiesen. Sie erhalten 
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupLimitInfo">
-		Einwohner mit einer Basis-Mitgliedschaft können bis zu [MAX_BASIC] Gruppen beitreten.
-Eine Premium-Mitgliedschaft erlaubt bis zu [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php Mehr erfahren oder upgraden]
+		Einwohner mit Basic-Mitgliedschaft können bis zu [MAX_BASIC] Gruppen beitreten.
+Premium-Mitgliedschaften erlauben bis zu [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Mehr Informationen oder Upgrade]
 		<usetemplate name="okbutton" yestext="Schließen"/>
 	</notification>
 	<notification name="GroupLimitInfoPlus">
-		Einwohner mit einer Basis-Mitgliedschaft können bis zu [MAX_BASIC] Gruppen beitreten.
-Eine Premium-Mitgliedschaft erlaubt bis zu [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php Mehr erfahren oder upgraden]
-Eine Premium-Plus-Mitgliedschaft erlaubt bis zu [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php Mehr erfahren oder upgraden]
+		Einwohner mit Basic-Mitgliedschaft können bis zu [MAX_BASIC] Gruppen beitreten.
+Premium-Mitgliedschaften erlauben bis zu [MAX_PREMIUM]. Premium-Plus-Mitgliedschaften 
+erlauben bis zu [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? Mehr Informationen oder Upgrade]
 		<usetemplate name="okbutton" yestext="Schließen"/>
 	</notification>
 	<notification name="KickUser">
@@ -3052,7 +3055,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="OwnObjectGiveItem">
-		Ein Objekt namens &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; hat Ihnen folgende/n/s [OBJECTTYPE] übergeben:
+		Ihr Objekt namens &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; hat Ihnen folgende/n/s [OBJECTTYPE] übergeben:
 &lt;nolink&gt;[ITEM_SLURL]&lt;/nolink&gt;
 		<form name="form">
 			<button name="Keep" text="Behalten"/>
@@ -3550,11 +3553,11 @@ Voreinstellung überschreiben oder einen anderen Namen wählen
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FailedToGetBenefits">
-		Leider konnten die Vorteilsinformationen für diese Sitzung nicht abgerufen werden. Dieses sollte normalerweise nicht passieren. Bitte kontaktieren Sie den Support. Diese Sitzung wird nicht normal funktionieren und wir empfehlen einen Neustart.
+		Leider konnten wir für diese Sitzung keine Informationen zu den Leistungen erhalten. Dies sollte in einer normalen Produktionsumgebung nicht passieren. Kontaktiere bitte den Support. Diese Sitzung wird nicht normal laufen, und wir empfehlen, die Sitzung neu zu starten.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
-		Das Hochladen von [COUNT] Gegenständen wird insgesamt [COST] L$ kosten. Möchten Sie mit dem Hochladen fortfahren?
+		Dadurch werden [COUNT] Artikel zu einem Gesamtpreis von [COST] $ hochgeladen. Möchtest du mit dem Hochladen fortfahren?
 		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Hochladen" ignoretext="Mehrfach-Uploads bestätigen"/>
 	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
@@ -3562,11 +3565,11 @@ Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstä
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
-		Die ausgewählten Dateien können nicht per Mehrfach-Upload hochgeladen werden.
+		Ausgewählte Dateien können nicht per Bulk-Upload hochgeladen werden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadIncompatibleFiles">
-		Einige der ausgewählten Dateien können nicht per Mehrfach-Upload hochgeladen werden.
+		Einige der ausgewählten Dateien können nicht per Bulk-Upload hochgeladen werden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
@@ -3960,6 +3963,11 @@ Möchten Sie fortfahren?
 		Das ausgewählte Objekt wirkt sich auf das Navmesh aus. Wenn Sie es in einen flexiblen Pfad ändern, wird es aus dem Navmesh entfernt.
 		<usetemplate ignoretext="Das ausgewählte Objekt wirkt sich auf das Navmesh aus. Wenn Sie es in einen flexiblen Pfad ändern, wird es aus dem Navmesh entfernt." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<global name="UnsupportedShaderRequirements">
+		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt OpenGL 2.0-Shader-Unterstützung oder höher voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
+
+Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT_SITE].
+	</global>
 	<global name="UnsupportedGLRequirements">
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 
@@ -4248,7 +4256,7 @@ Sie ist voll oder startet in Kürze neu.
 		Skript konnte nicht hinzugefügt werden.
 	</notification>
 	<notification name="AssetServerTimeoutObjReturn">
-		Asset-Server hat nicht rechtzeitig reagiert.  Objekt wurde zum Sim zurückübertragen.
+		Asset-Server hat nicht rechtzeitig reagiert. Objekt wurde zur Region zurückübertragen.
 	</notification>
 	<notification name="RegionDisablePhysicsShapes">
 		In dieser Region sind keine Physikformen aktiviert.

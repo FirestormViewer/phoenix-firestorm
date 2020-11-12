@@ -212,9 +212,9 @@
           function="CameraPresets.ChangeView"
           parameter="reset_view" />
           <panel_camera_item.picture
-          image_name="StopReload_Off" />
+          image_name="Refresh_Off" />
           <panel_camera_item.selected_picture
-          image_name="StopReload_Over" />
+          image_name="Refresh_Over" />
       </panel_camera_item>
     </panel>
       <combo_box

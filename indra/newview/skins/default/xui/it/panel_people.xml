@@ -52,7 +52,7 @@ Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa
 				<button name="gear_btn" tool_tip="Azioni per la persona selezionata:"/>
 				<menu_button name="friends_view_btn" tool_tip="Opzioni mostra/ordina"/>
 				<button name="friends_add_btn" tool_tip="Offri amicizia a un residente"/>
-				<button name="GlobalOnlineStatusToggle" tool_tip="Commuta visibilitÃ  online"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Commuta visibilità online"/>
 				<dnd_button name="friends_del_btn" tool_tip="Rimuovi la persona selezionata dagli amici"/>
 			</panel>
 			<tab_container name="friends_accordion">
@@ -70,7 +70,7 @@ Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa
 				<dnd_button name="minus_btn" tool_tip="Lascia il gruppo selezionato"/>
 			</panel>
 			<text name="groupcount">
-				Fai parte di [COUNT] gruppi e puoi iscriverti a [REMAINING] altri.
+				Fai parte di [COUNT] gruppi e puoi ancora unirti a [REMAINING] gruppi.
 			</text>
 		</panel>
 		<panel label="Recenti" name="recent_panel">

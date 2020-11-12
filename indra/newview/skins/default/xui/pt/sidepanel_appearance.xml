@@ -12,5 +12,5 @@
 		</text>
 		<button label="" name="edit_outfit_btn" tool_tip="Editar este look"/>
 	</panel>
-	<filter_editor label="Filtrar looks" name="Filter"/>
+	<search_editor label="Filtrar looks" name="Filter"/>
 </panel>

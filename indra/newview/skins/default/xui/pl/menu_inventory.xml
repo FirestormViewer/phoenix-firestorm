@@ -115,11 +115,11 @@
 	<menu_item_call label="Dodaj/dołącz" name="Wearable Add"/>
 	<menu label="Dołącz do" name="Attach To"/>
 	<menu label="Dołącz do HUD-a" name="Attach To HUD"/>
+	<menu_item_call label="Dotknij" name="Attachment Touch"/>
 	<menu_item_call label="Edytuj" name="Wearable Edit"/>
-	<menu_item_call label="Dotknij" name="Touch Attachment"/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh Attachment" />
-	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call label="Odłącz od siebie" name="Detach From Yourself"/>
+	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Stosuj tylko dla mnie" />
 	<menu_item_call name="Settings Apply Parcel" label="Stosuj dla działki" />
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>

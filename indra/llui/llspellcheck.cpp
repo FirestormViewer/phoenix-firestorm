@@ -49,8 +49,6 @@ LLSpellChecker::settings_change_signal_t LLSpellChecker::sSettingsChangeSignal;
 LLSpellChecker::LLSpellChecker()
 	: mHunspell(NULL)
 {
-	// Load initial dictionary information
-	//refreshDictionaryMap(); // <FS:Ansariel> FIRE-29649: Crash when opening spellcheck settings
 }
 
 LLSpellChecker::~LLSpellChecker()
@@ -58,13 +56,11 @@ LLSpellChecker::~LLSpellChecker()
 	delete mHunspell;
 }
 
-// <FS:Ansariel> FIRE-29649: Crash when opening spellcheck settings
 void LLSpellChecker::initSingleton()
 {
 	// Load initial dictionary information
 	refreshDictionaryMap();
 }
-// </FS:Ansariel>
 
 bool LLSpellChecker::checkSpelling(const std::string& word) const
 {

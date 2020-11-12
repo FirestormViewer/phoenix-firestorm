@@ -136,6 +136,7 @@ public:
 	S32  getMipBytes(S32 discard_level = -1) const;
 	BOOL getBoundRecently() const;
 	BOOL isJustBound() const;
+	BOOL getHasExplicitFormat() const { return mHasExplicitFormat; }
 	LLGLenum getPrimaryFormat() const { return mFormatPrimary; }
 	LLGLenum getFormatType() const { return mFormatType; }
 
@@ -203,7 +204,7 @@ private:
 	U16 mPickMaskWidth;
 	U16 mPickMaskHeight;
 	S8 mUseMipMaps;
-	S8 mHasExplicitFormat; // If false (default), GL format is f(mComponents)
+	BOOL mHasExplicitFormat; // If false (default), GL format is f(mComponents)
 	S8 mAutoGenMips;
 
 	BOOL mIsMask;

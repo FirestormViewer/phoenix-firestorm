@@ -56,7 +56,7 @@ Birlikte takılacak kişiler mi arıyorsunuz? [secondlife:///app/worldmap Dünya
 				<dnd_button name="minus_btn" tool_tip="Seçilen gruptan ayrıl"/>
 			</panel>
 			<text name="groupcount">
-				[COUNT] gruba üyesiniz, daha [REMAINING] gruba üye olabilirsiniz.
+				[COUNT] gruba üyesin ve [REMAINING] daha gruba üye olabilirsin.
 			</text>
 		</panel>
 		<panel label="SON" name="recent_panel">

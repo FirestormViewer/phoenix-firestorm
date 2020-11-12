@@ -21,6 +21,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-field"
 #pragma clang diagnostic ignored "-Wunused-private-field"
+#pragma clang diagnostic ignored "-Woverloaded-virtual" //<FS:TS> Silence Clang warning the flag doesn't for some reason
 #include kdu_xxxx
 #pragma clang diagnostic pop
 #elif LL_WINDOWS

@@ -85,13 +85,13 @@
 			</text>
 			<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
 			<check_box label="Elastyczne tkaniny ubrań" name="AvatarCloth"/>
-			<text name="TerrainDetailText">
+			<!-- <text name="TerrainDetailText">
 				Szczegóły terenu:
 			</text>
 			<radio_group name="TerrainDetailRadio">
 				<radio_item label="Mało" name="0"/>
 				<radio_item label="Dużo" name="2"/>
-			</radio_group>
+			</radio_group> -->
 			<text name="Presets_Label">
 				Ustawienia:
 			</text>
@@ -116,6 +116,10 @@
 				(0/1.0 = domyślna jasność, niżej = jaśniej)
 			</text>
 			<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB na systemach 32 bitowych lub 2048 MB na 64 bitowych. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane."/>
+			<check_box label="Włącz dynamiczną pamięć tekstur" name="FSDynamicTextureMemory" tool_tip="Umożliwia dynamiczne obliczanie pamięci tekstur (dostępne tylko w przeglądarkach 64-bitowych i procesorach graficznych AMD/NVIDIA z co najmniej 512 MB pamięci wideo)" />
+			<slider label="Minimalny bufor pamięci tekstur (MB):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Minimalna ilość pamięci do przydzielenia na tekstury. Dzięki temu określona ilość będzie zawsze używana dla tekstur, nawet jeśli przekracza ilość dostępnej pamięci wideo. Jeśli określona tutaj ilość plus zapas przekracza wielkość fizycznej pamięci wideo, to zostanie ona odpowiednio ograniczona." />
+			<slider label="Dodatkowy zapas pamięci podręcznej tekstur (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Procent fizycznej pamięci wideo zarezerwowanej dla tekstur ładowanych do pamięci podręcznej, które obecnie nie są wyświetlane." />
+			<slider label="Fizyczny zapas pamięci wideo (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Procent fizycznej pamięci wideo zarezerwowanej do innego użytku." />
 			<spinner label="Stosunek odległości dla mgły:" name="fog"/>
 		</panel>
 		<panel name="Rendering">

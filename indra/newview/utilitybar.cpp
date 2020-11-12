@@ -102,7 +102,7 @@ void UtilityBar::onParcelStreamClicked()
 
 void UtilityBar::onParcelMediaClicked()
 {
-	bool any_media_playing = (LLViewerMedia::getInstance()->isAnyMediaShowing() ||
+	bool any_media_playing = (LLViewerMedia::getInstance()->isAnyMediaPlaying() ||
 							  LLViewerMedia::getInstance()->isParcelMediaPlaying());
 
 	gStatusBar->toggleMedia(!any_media_playing);
@@ -132,7 +132,7 @@ BOOL UtilityBar::tick()
 		mParcelMediaPlayButton->setEnabled(button_enabled);
 
 		// Note the "sense" of the toggle is opposite whether media is playing or not
-		bool any_media_playing = (inst->isAnyMediaShowing() ||
+		bool any_media_playing = (inst->isAnyMediaPlaying() ||
 								inst->isParcelMediaPlaying());
 		mParcelMediaPlayButton->setImageOverlay(any_media_playing ? "icn_pause.tga" : "icn_play.tga");
 	}
