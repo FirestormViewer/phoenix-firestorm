@@ -6,8 +6,9 @@
 		</menu_item_call>
 		<menu_item_call label="Marktplatz-Auflistungen..." name="MarketplaceListings"/>
 		<menu_item_call label="L$ kaufen" name="Buy and Sell L$"/>
+
 		<menu_item_check label="Inventar" name="Inventory"/>
-		<menu_item_check label="Inventar" name="ShowSidetrayInventory"/>
+		<menu_item_call label="Neues Inventar-Fenster" name="NewInventoryWindow"/>
 		<menu_item_check label="Geschützte Ordner" name="Protected Folders"/>
 		<menu_item_check label="Kleidungsfavoriten" name="WearableFavorites"/>
 		<menu_item_call label="Auswahlen" name="Picks"/>

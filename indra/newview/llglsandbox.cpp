@@ -108,13 +108,17 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 	S32 top =	llmax(y, mDragStartY);
 	S32 bottom =llmin(y, mDragStartY);
 
-	left = ll_round((F32) left * LLUI::getScaleFactor().mV[VX]);
-	right = ll_round((F32) right * LLUI::getScaleFactor().mV[VX]);
-	top = ll_round((F32) top * LLUI::getScaleFactor().mV[VY]);
-	bottom = ll_round((F32) bottom * LLUI::getScaleFactor().mV[VY]);
+	// <FS:Ansariel> Factor out getInstance calls
+	LLViewerCamera& camera = LLViewerCamera::instance();
+	LLVector2& scale_factor = LLUI::getScaleFactor();
 
-	F32 old_far_plane = LLViewerCamera::getInstance()->getFar();
-	F32 old_near_plane = LLViewerCamera::getInstance()->getNear();
+	left = ll_round((F32) left * scale_factor.mV[VX]);
+	right = ll_round((F32) right * scale_factor.mV[VX]);
+	top = ll_round((F32) top * scale_factor.mV[VY]);
+	bottom = ll_round((F32) bottom * scale_factor.mV[VY]);
+
+	F32 old_far_plane = camera.getFar();
+	F32 old_near_plane = camera.getNear();
 
 	S32 width = right - left + 1;
 	S32 height = top - bottom + 1;
@@ -155,19 +159,19 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 	{
 		// ...select distance from control
 		LLVector3 relative_av_pos = av_pos;
-		relative_av_pos -= LLViewerCamera::getInstance()->getOrigin();
+		relative_av_pos -= camera.getOrigin();
 
 		// <FS:Ansariel> Use faster LLCachedControls
 		//F32 new_far = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() + gSavedSettings.getF32("MaxSelectDistance");
 		//F32 new_near = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() - gSavedSettings.getF32("MaxSelectDistance");
-		F32 new_far = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() + maxSelectDistance;
-		F32 new_near = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() - maxSelectDistance;
+		F32 new_far = relative_av_pos * camera.getAtAxis() + maxSelectDistance;
+		F32 new_near = relative_av_pos * camera.getAtAxis() - maxSelectDistance;
 		// </FS:Ansariel>
 
 		new_near = llmax(new_near, 0.1f);
 
-		LLViewerCamera::getInstance()->setFar(new_far);
-		LLViewerCamera::getInstance()->setNear(new_near);
+		camera.setFar(new_far);
+		camera.setNear(new_near);
 	}
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0g
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))
@@ -177,22 +181,22 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 		// We'll allow drag selection under fartouch, but only within the fartouch range
 		// (just copy/paste the code above us to make that work, thank you Lindens!)
 		LLVector3 relative_av_pos = av_pos;
-		relative_av_pos -= LLViewerCamera::getInstance()->getOrigin();
+		relative_av_pos -= camera.getOrigin();
 
-		F32 new_far = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() + s_nFartouchDist;
-		F32 new_near = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() - s_nFartouchDist;
+		F32 new_far = relative_av_pos * camera.getAtAxis() + s_nFartouchDist;
+		F32 new_near = relative_av_pos * camera.getAtAxis() - s_nFartouchDist;
 
 		new_near = llmax(new_near, 0.1f);
 
-		LLViewerCamera::getInstance()->setFar(new_far);
-		LLViewerCamera::getInstance()->setNear(new_near);
+		camera.setFar(new_far);
+		camera.setNear(new_near);
 
 		// Usurp these two
 		limit_select_distance = TRUE;
 		select_dist_squared = s_nFartouchDist * s_nFartouchDist;
 	}
 // [/RLVa:KB]
-	LLViewerCamera::getInstance()->setPerspective(FOR_SELECTION, 
+	camera.setPerspective(FOR_SELECTION, 
 							center_x-width/2, center_y-height/2, width, height, 
 							limit_select_distance);
 
@@ -242,7 +246,7 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 				LLSpatialPartition* part = region->getSpatialPartition(i);
 				if (part)
 				{	
-					part->cull(*LLViewerCamera::getInstance(), &potentials, TRUE);
+					part->cull(camera, &potentials, TRUE);
 				}
 			}
 		}
@@ -282,14 +286,14 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			}
 // [/RLVa:KB]
 
-			S32 result = LLViewerCamera::getInstance()->sphereInFrustum(drawable->getPositionAgent(), drawable->getRadius());
+			S32 result = camera.sphereInFrustum(drawable->getPositionAgent(), drawable->getRadius());
 			if (result)
 			{
 				switch (result)
 				{
 				case 1:
 					// check vertices
-					if (LLViewerCamera::getInstance()->areVertsVisible(vobjp, LLSelectMgr::sRectSelectInclusive))
+					if (camera.areVertsVisible(vobjp, LLSelectMgr::sRectSelectInclusive))
 					{
 						LLSelectMgr::getInstance()->highlightObjectOnly(vobjp);
 					}
@@ -310,8 +314,8 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 
 	// restore camera
-	LLViewerCamera::getInstance()->setFar(old_far_plane);
-	LLViewerCamera::getInstance()->setNear(old_near_plane);
+	camera.setFar(old_far_plane);
+	camera.setNear(old_near_plane);
 	gViewerWindow->setup3DRender();
 }
 
@@ -381,10 +385,12 @@ void LLViewerParcelMgr::renderRect(const LLVector3d &west_south_bottom_global,
 	// resolves correctly so we can get a height value.
 	const F32 FUDGE = 0.01f;
 
-	F32 sw_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( west, south, 0.f ) );
-	F32 se_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( east-FUDGE, south, 0.f ) );
-	F32 ne_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( east-FUDGE, north-FUDGE, 0.f ) );
-	F32 nw_bottom = LLWorld::getInstance()->resolveLandHeightAgent( LLVector3( west, north-FUDGE, 0.f ) );
+	// <FS:Ansariel> Factor out getInstance calls
+	LLWorld& world = LLWorld::instance();
+	F32 sw_bottom = world.resolveLandHeightAgent( LLVector3( west, south, 0.f ) );
+	F32 se_bottom = world.resolveLandHeightAgent( LLVector3( east-FUDGE, south, 0.f ) );
+	F32 ne_bottom = world.resolveLandHeightAgent( LLVector3( east-FUDGE, north-FUDGE, 0.f ) );
+	F32 nw_bottom = world.resolveLandHeightAgent( LLVector3( west, north-FUDGE, 0.f ) );
 
 	F32 sw_top = sw_bottom + PARCEL_POST_HEIGHT;
 	F32 se_top = se_bottom + PARCEL_POST_HEIGHT;

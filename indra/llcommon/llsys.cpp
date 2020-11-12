@@ -956,12 +956,20 @@ LLSD LLMemoryInfo::loadStatsMap( bool aProcessMemoryOnly )
 	DWORDLONG div = 1024;
 
 	stats.add("Percent Memory use", state.dwMemoryLoad/div);
-	stats.add("Total Physical KB",  state.ullTotalPhys/div);
-	stats.add("Avail Physical KB",  state.ullAvailPhys/div);
-	stats.add("Total page KB",      state.ullTotalPageFile/div);
-	stats.add("Avail page KB",      state.ullAvailPageFile/div);
-	stats.add("Total Virtual KB",   state.ullTotalVirtual/div);
-	stats.add("Avail Virtual KB",   state.ullAvailVirtual/div);
+	// <FS:Ansariel> Ugly, but prevent overflow
+	//stats.add("Total Physical KB",  state.ullTotalPhys/div);
+	//stats.add("Avail Physical KB",  state.ullAvailPhys/div);
+	//stats.add("Total page KB",      state.ullTotalPageFile/div);
+	//stats.add("Avail page KB",      state.ullAvailPageFile/div);
+	//stats.add("Total Virtual KB",   state.ullTotalVirtual/div);
+	//stats.add("Avail Virtual KB",   state.ullAvailVirtual/div);
+	stats.add("Total Physical KB",  llclamp(state.ullTotalPhys/div, U64(0), U64(S32_MAX)));
+	stats.add("Avail Physical KB",  llclamp(state.ullAvailPhys/div, U64(0), U64(S32_MAX)));
+	stats.add("Total page KB",      llclamp(state.ullTotalPageFile/div, U64(0), U64(S32_MAX)));
+	stats.add("Avail page KB",      llclamp(state.ullAvailPageFile/div, U64(0), U64(S32_MAX)));
+	stats.add("Total Virtual KB",   llclamp(state.ullTotalVirtual/div, U64(0), U64(S32_MAX)));
+	stats.add("Avail Virtual KB",   llclamp(state.ullAvailVirtual/div, U64(0), U64(S32_MAX)));
+	// </FS:Ansariel>
 
 	// <FS:ND> Early out in case only process memory is requested.
 	if( aProcessMemoryOnly )

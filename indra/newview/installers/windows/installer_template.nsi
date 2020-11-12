@@ -154,6 +154,7 @@ Var SKIP_DIALOGS        # Set from command line in  .onInit. autoinstall GUI and
 # Var SKIP_AUTORUN		# Skip automatic launch of the viewer after install -- <FS:PP> Commented out: Disable autorun
 Var DO_UNINSTALL_V2     # If non-null, path to a previous Viewer 2 installation that will be uninstalled.
 Var NO_STARTMENU        # <FS:Ansariel> Optional start menu entry
+Var FRIENDLY_APP_NAME   # <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocols
 
 # Function definitions should go before file includes, because calls to
 # DLLs like LangDLL trigger an implicit file include, so if that call is at
@@ -450,6 +451,15 @@ ${Else}
   WriteRegDWORD SHELL_CONTEXT "${MSUNINSTALL_KEY}" "EstimatedSize" "0x00061800"		# 390 MB
 ${EndIf}
 
+# <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocols
+${If} ${ISOPENSIM} == "1"
+  StrCpy $FRIENDLY_APP_NAME "${INSTNAME} $(ForOpenSimSuffix)"
+${Else}
+  StrCpy $FRIENDLY_APP_NAME "${INSTNAME}"
+${EndIf}
+# </FS:Ansariel>
+
+
 # from FS:Ansariel
 WriteRegStr SHELL_CONTEXT "${MSUNINSTALL_KEY}" "DisplayIcon" '"$INSTDIR\$VIEWER_EXE"'
 
@@ -469,18 +479,33 @@ WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE
 # URL param must be last item passed to viewer, it ignores subsequent params to avoid parameter injection attacks.
 # MAINT-8305: On SLURL click, directly invoke the viewer, not the launcher.
 WriteRegExpandStr HKEY_CLASSES_ROOT "${URLNAME}\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
-WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info" "(default)" "URL:Second Life"
+# <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocols
+WriteRegStr HKEY_CLASSES_ROOT "${URLNAME}\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
+
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info" "(default)" "URL:Hypergrid"
 WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info" "URL Protocol" ""
 WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
 
 # URL param must be last item passed to viewer, it ignores subsequent params to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
+# <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocols
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
+
+# <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info" "(default)" "URL:Hypergrid"
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info" "URL Protocol" ""
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
+WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-info\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
+WriteRegStr HKEY_CLASSES_ROOT "x-grid-info\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
 
 # <FS:CR> Register hop:// protocol registry info
-WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
-WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
-WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
-WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
+${If} ${ISOPENSIM} == "1"
+  WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Hypergrid"
+  WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
+  WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$VIEWER_EXE"'
+  WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$VIEWER_EXE" -url "%1"'
+  WriteRegStr HKEY_CLASSES_ROOT "hop\shell\open" "FriendlyAppName" "$FRIENDLY_APP_NAME"
+${EndIf}
 # </FS:CR>
 
 # <FS:Ansariel> Ask before creating protocol registry entries
@@ -732,8 +757,11 @@ Push $2
     Delete  "$2\AppData\Roaming\Firestorm\plugin_cookies.txt"
     Delete  "$2\AppData\Roaming\Firestorm\typed_locations.txt"
 # Delete files in \Users\<User>\AppData\Local\Firestorm
-    RMDir /r  "$2\AppData\Local\Firestorm"						#Delete the Havok cache folder
-    RMDir /r  "$2\AppData\Local\FirestormOS"						#Delete the OpenSim cache folder
+    ${If} ${ISOPENSIM} == "0"
+        RMDir /r  "$2\AppData\Local\Firestorm"						#Delete the Havok cache folder
+    ${Else}
+        RMDir /r  "$2\AppData\Local\FirestormOS"					#Delete the OpenSim cache folder
+    ${EndIf}
 
   CONTINUE:
     IntOp $0 $0 + 1
@@ -806,12 +834,18 @@ NOFOLDER:
 MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
 
 DeleteKeys:
-  DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\hop" # <FS:Ansariel> Unregister hop:// protocol registry info
+  DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-info" # <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-location-info"
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\secondlife"
-  DeleteRegKey HKEY_CLASSES_ROOT "hop" # <FS:Ansariel> Unregister hop:// protocol registry info
+  DeleteRegKey HKEY_CLASSES_ROOT "x-grid-info" # <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
   DeleteRegKey HKEY_CLASSES_ROOT "x-grid-location-info"
   DeleteRegKey HKEY_CLASSES_ROOT "secondlife"
+  # <FS:Ansariel> Unregister hop:// protocol registry info
+  ${If} ${ISOPENSIM} == "1"
+    DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\hop"
+    DeleteRegKey HKEY_CLASSES_ROOT "hop"
+  ${EndIf}
+  # </FS:Ansariel>
 
 NoDelete:
 

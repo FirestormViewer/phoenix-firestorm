@@ -12,5 +12,5 @@
 		</text>
 		<button label="" name="edit_outfit_btn" tool_tip="Editar este vestuario"/>
 	</panel>
-	<filter_editor label="Filtrar los vestuarios" name="Filter"/>
+	<search_editor label="Filtrar los vestuarios" name="Filter"/>
 </panel>

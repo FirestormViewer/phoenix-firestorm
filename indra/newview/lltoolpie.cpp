@@ -746,7 +746,11 @@ bool LLToolPie::teleportToClickedLocation()
     bool has_touch_handler = (objp && objp->flagHandleTouch()) || (parentp && parentp->flagHandleTouch());
     bool has_click_action = final_click_action(objp);
 
-    if (pos_non_zero && (is_land || (is_in_world && !has_touch_handler && !has_click_action)))
+    // <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+    //if (pos_non_zero && (is_land || (is_in_world && !has_touch_handler && !has_click_action)))
+    bool allowDoubleClickOnScriptedObjects = gSavedSettings.getBOOL("FSAllowDoubleClickOnScriptedObjects");
+    if (pos_non_zero && (is_land || (is_in_world && ((allowDoubleClickOnScriptedObjects && objp->getClickAction() != CLICK_ACTION_SIT) || (!has_touch_handler && !has_click_action)))))
+    // </FS:Ansariel>
     {
 // [RLVa:KB] - Checked: RLVa-2.0.0
         if (RlvActions::isRlvEnabled() && !RlvActions::canTeleportToLocal(mPick.mPosGlobal))
@@ -982,7 +986,11 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 		return TRUE;
 	}
     
-	if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
+	// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+	//if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
+	bool allowDoubleClickOnScriptedObjects = gSavedSettings.getBOOL("FSAllowDoubleClickOnScriptedObjects");
+	if (!allowDoubleClickOnScriptedObjects && (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f)))
+	// </FS:Ansariel>
 	{
 		mDoubleClickTimer.stop();
 		return FALSE;

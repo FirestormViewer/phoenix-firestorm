@@ -102,7 +102,12 @@ BOOL LLFloaterConversationPreview::postBuild()
 		file = "chat";
 	}
 	mChatHistoryFileName = file;
-
+	// <FS:Ansariel> Obsolete because of https://bitbucket.org/lindenlab/viewer/commits/57b32eb01cd35bbac440569df885036eb24f2369
+	//if (mIsGroup && !LLStringUtil::endsWith(mChatHistoryFileName, GROUP_CHAT_SUFFIX))
+	//{
+	//	mChatHistoryFileName += GROUP_CHAT_SUFFIX;
+	//}
+	// </FS:Ansariel>
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);

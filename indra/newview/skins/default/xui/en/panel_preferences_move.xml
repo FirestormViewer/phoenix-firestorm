@@ -674,6 +674,16 @@
             <combo_box.commit_callback
              function="Pref.ClickActionChange"/>
         </combo_box>
+        <check_box
+         control_name="FSAllowDoubleClickOnScriptedObjects"
+         follows="left|top"
+         height="20"
+         label="Allow double-click action on scripted objects"
+         layout="topleft"
+         left="10"
+         name="FSAllowDoubleClickOnScriptedObjects"
+         width="500"
+         top_pad="3"/>
         <button
          follows="top|left"
          height="23"

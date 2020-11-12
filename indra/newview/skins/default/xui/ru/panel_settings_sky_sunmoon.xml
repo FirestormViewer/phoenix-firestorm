@@ -6,11 +6,11 @@
 			<text name="position_label">Позиция:</text>
 			<text name="image_label">Изображение:</text>
 			<text name="scale_label">Масштаб:</text>
+			<check_box label="Показать маяк" name="sunbeacon"/>
 			<text name="color_label">Цвет:</text>
 			<text name="glow_focus_label">Фокус свечения:</text>
 			<text name="glow_size_label">Размер свечения:</text>
 			<text name="star_brightness_label">Яркость звезд:</text>
-			<check_box label="Показать маяк" name="sunbeacon"/>
 		</layout_panel>
 		<layout_panel name="moon_layout_main">
 			<layout_stack name="moon_ls">
@@ -19,8 +19,8 @@
 					<text name="position_label">Позиция:</text>
 					<text name="image_label">Изображение:</text>
 					<text name="scale_label">Масштаб:</text>
-					<text name="brightness_label">Яркость:</text>
 					<check_box label="Показать маяк" name="moonbeacon"/>
+					<text name="brightness_label">Яркость:</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

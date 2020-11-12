@@ -36,78 +36,87 @@
                 Sun &amp; Stars
             </text>
             <text
-                    name="position_label"
-                    follows="left|top"
-                    height="10"
-                    layout="topleft"
-                    left_delta="10"
-                    top_delta="30"
-                    width="100">
-                Position:
-            </text>
-            <sun_moon_trackball
-                    name="sun_rotation"
-                    follows="left|top"
+            name="position_label"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="20"
+            top_delta="20"
+            width="100">
+            Position:
+        </text>
+        <sun_moon_trackball
+        name="sun_rotation"
+        follows="left|top"
                     left_delta="0"
-                    top_delta="20"
+                    top_delta="15"
                     height="150"
                     width="150"
                     thumb_mode="sun" />
-            <text
+                    <text
                     name="image_label"
                     follows="left|top"
                     height="10"
                     layout="topleft"
                     left_delta="160"
-                    top_delta="-20"
+                    top_delta="-15"
                     width="200">
-                Image:
-            </text>
-            <texture_picker
-                    height="123"
-                    layout="topleft"
-                    left_delta="5"
-                    name="sun_image"
-                    top_pad="10"
-                    width="100"/>
-            <text
-                    name="scale_label"
-                    follows="left|top"
-                    height="10"
-                    layout="topleft"
-                    left_delta="-5"
-                    top_delta="110"
-                    width="80">
+                    Image:
+                </text>
+                <texture_picker
+                height="123"
+                layout="topleft"
+                left_delta="5"
+                name="sun_image"
+                top_pad="5"
+                width="100"/>
+                <text
+                name="scale_label"
+                follows="left|top"
+                height="10"
+                layout="topleft"
+                left_delta="-5"
+                top_delta="110"
+                width="80">
                 Scale:
-            </text>
-            <slider
-                    decimal_digits="2"
-                    follows="left|top"
-                    height="16"
-                    increment="0.01"
-                    initial_value="0"
-                    layout="topleft"
-                    left_delta="5"
-                    min_val="0.25"
-                    max_val="20"
-                    name="sun_scale"
-                    top_delta="15"
-                    width="130"
-                    can_edit_text="true"/>
-            <text
-                    name="color_label"
-                    follows="left|top"
-                    height="10"
-                    layout="topleft"
-                    left_delta="-5"
-                    top_delta="20"
-                    width="80">
-                Color:
-            </text>
-            <color_swatch
+        </text>
+        <slider
+        decimal_digits="2"
+        follows="left|top"
+        height="16"
+        increment="0.01"
+        initial_value="0"
+        layout="topleft"
+        left_delta="5"
+        min_val="0.25"
+        max_val="20"
+        name="sun_scale"
+        top_delta="15"
+        width="130"
+        can_edit_text="true"/>
+        <check_box
+        control_name="sunbeacon"
+        width="60"
+        height="16"
+        label="Show Beacon"
+        layout="topleft"
+        name="sunbeacon" 
+        top_delta="30"
+        left="20"/>
+        <text
+        name="color_label"
+        follows="left|top"
+        height="10"
+        layout="topleft"
+        left="180"
+        top_delta="0"
+        width="80">
+        Color:
+        </text>
+        <color_swatch
                     can_apply_immediately="true"
                     follows="left|top"
-                    height="37"
+                    height="25"
                     label_height="0"
                     layout="topleft"
                     left_delta="5"
@@ -119,9 +128,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-160"
-                    top_delta="27"
-                    width="200">
+                    left="20"
+                    top_delta="43"
+                    width="115">
                 Glow Focus:
             </text>
             <slider
@@ -131,21 +140,21 @@
                     increment="0.01"
                     initial_value="0"
                     layout="topleft"
-                    left_delta="5"
+                    left_pad="5"
                     min_val="-2"
                     max_val="2"
                     name="glow_focus"
-                    top_delta="15"
-                    width="250"
+                    top_delta="0"
+                    width="175"
                     can_edit_text="true"/>
             <text
                     name="glow_size_label"
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-5"
+                    left="20"
                     top_delta="22"
-                    width="200">
+                    width="115">
                 Glow Size:
             </text>
             <slider
@@ -155,21 +164,21 @@
                     increment="0.01"
                     initial_value="0"
                     layout="topleft"
-                    left_delta="5"
+                    left_pad="5"
                     min_val="0"
                     max_val="1.99"
                     name="glow_size"
-                    top_delta="15"
-                    width="250"
+                    top_delta="0"
+                    width="175"
                     can_edit_text="true"/>
             <text
                     name="star_brightness_label"
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-5"
+                    left="20"
                     top_delta="22"
-                    width="200">
+                    width="115">
                 Star Brightness:
             </text>
             <slider
@@ -179,25 +188,13 @@
                     increment="0.01"
                     initial_value="0"
                     layout="topleft"
-                    left_delta="5"
+                    left_pad="5"
                     min_val="0"
                     max_val="500"
                     name="star_brightness"
-                    top_delta="15"
-                    width="250"
+                    top_delta="0"
+                    width="175"
                     can_edit_text="true"/>
-                    
-            <check_box
-                    control_name="sunbeacon"
-                    width="60"
-                    height="16"
-                    label="Show Beacon"
-                    layout="topleft"
-                    name="sunbeacon" 
-                    right="-50"
-                    bottom="-10"
-                    follows="bottom|right"/>
-                    
         </layout_panel>
         <layout_panel
                 name="moon_layout_main"
@@ -210,7 +207,7 @@
             <layout_stack 
                     name="moon_ls"
                     left="5"
-                    top="5"
+                    top="0"
                     right="-5"
                     bottom="-5"
                     follows="left|top|right|bottom"
@@ -240,7 +237,7 @@
                             height="10"
                             layout="topleft"
                             left_delta="10"
-                            top_delta="30"
+                            top_delta="20"
                             width="100">
                         Position:
                     </text>
@@ -248,7 +245,7 @@
                             name="moon_rotation"
                             follows="left|top"
                             left_delta="0"
-                            top_delta="20"
+                            top_delta="15"
                             height="150"
                             width="150"
                             thumb_mode="moon" />
@@ -293,14 +290,24 @@
                             top_delta="15"
                             width="130"
                             can_edit_text="true"/>
-                    <text
+                            <check_box
+                                    control_name="moonbeacon"
+                                    width="60"
+                                    height="16"
+                                    label="Show Beacon"
+                                    layout="topleft"
+                                    name="moonbeacon" 
+                                    top_delta="30"
+                                    left="20"
+                                    bottom="-10"/>
+                            <text
                             name="brightness_label"
                             follows="left|top"
                             height="10"
                             layout="topleft"
-                            left_delta="-5"
-                            top_delta="22"
-                            width="200">
+                            left="20"
+                            top_delta="25"
+                            width="120">
                         Brightness:
                     </text>
                     <slider
@@ -310,23 +317,13 @@
                             increment="0.01"
                             initial_value="0"
                             layout="topleft"
-                            left_delta="5"
+                            left_pad="5"
                             min_val="0.0"
                             max_val="1.0"
                             name="moon_brightness"
-                            top_delta="15"
-                            width="130"
+                            top_delta="0"
+                            width="175"
                             can_edit_text="true"/>
-                <check_box
-                        control_name="moonbeacon"
-                        width="60"
-                        height="16"
-                        label="Show Beacon"
-                        layout="topleft"
-                        name="moonbeacon" 
-                        right="-50"
-                        bottom="-10"
-                        follows="bottom|right"/>
                             
                 </layout_panel>
             </layout_stack>

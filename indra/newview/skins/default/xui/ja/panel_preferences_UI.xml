@@ -24,7 +24,7 @@
         <text name="ObjectInspectorTooltipDelay_text">
             秒
         </text>
-        <check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示（Phoenixスタイル）" />
+        <check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示" />
         <check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />
         <slider label="フローティングテキストのフェード開始距離 (m):" tool_tip="フローティングテキストが薄く消え始める距離をメートル単位で設定します" name="FSHudTextFadeDistance" />
         <slider label="フローティングテキストのフェード範囲 (m):" tool_tip="フローティングテキストがはっきりと見える状態から完全に見えなくなるまでの距離をメートル単位で設定します" name="FSHudTextFadeRange" />

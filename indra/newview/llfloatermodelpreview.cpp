@@ -80,7 +80,7 @@ const double RETAIN_COEFFICIENT = 100;
 // should be represented by Smooth combobox with only 10 values.
 // So this const is used as a size of Smooth combobox list.
 const S32 SMOOTH_VALUES_NUMBER = 10;
-const S32 PREVIEW_RENDER_SIZE = 1024;
+// const S32 PREVIEW_RENDER_SIZE = 1024; // <FS:Beq> Fix up regressions from LL uploader merge
 const F32 PREVIEW_CAMERA_DISTANCE = 16.f;
 
 class LLMeshFilePicker : public LLFilePickerThread
@@ -357,21 +357,24 @@ void LLFloaterModelPreview::initModelPreview()
 
 	S32 tex_width = 512;
 	S32 tex_height = 512;
-
-	S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenWidth);
-	S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenHeight);
-
-	while ((tex_width << 1) < max_width)
+	// <FS:Beq> Fix up regressions from LL's merge of uploader changes
+	// S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenWidth);
+	// S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenHeight);
+	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenWidth);
+	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenHeight);
+	// </FS:Beq>
+	
+	while ((tex_width << 1) <= max_width) // <FS:Beq/> Fix up regressions from LL's merge of uploader changes
 	{
 		tex_width <<= 1;
 	}
-	while ((tex_height << 1) < max_height)
+	while ((tex_height << 1) <= max_height) // <FS:Beq/> Fix up regressions from LL's merge of uploader changes
 	{
 		tex_height <<= 1;
 	}
 
 	mModelPreview = new LLModelPreview(tex_width, tex_height, this);
-    mModelPreview->setPreviewTarget(PREVIEW_CAMERA_DISTANCE);
+	mModelPreview->setPreviewTarget(PREVIEW_CAMERA_DISTANCE);
 	mModelPreview->setDetailsCallback(boost::bind(&LLFloaterModelPreview::setDetails, this, _1, _2, _3, _4, _5));
 	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::modelUpdated, this, _1));
 }

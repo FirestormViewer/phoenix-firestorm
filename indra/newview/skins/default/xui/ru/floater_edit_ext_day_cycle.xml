@@ -84,7 +84,7 @@
 				</layout_panel>
 				<layout_panel name="frame_settings_sky">
 					<tab_container name="sky_tabs">
-						<panel label="Атмосфера и освещение" name="atmosphere_panel"/>
+						<panel label="Атмосфера и Свет" name="atmosphere_panel"/>
 						<panel label="Облака" name="clouds_panel"/>
 						<panel label="Солнце и луна" name="moon_panel"/>
 					</tab_container>

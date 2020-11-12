@@ -36,8 +36,8 @@
 #include "llslurl.h"
 
 FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
-:	LLFloater(target)
-,	mContactSetsCombo(NULL)
+:	LLFloater(target),
+	mContactSetsCombo(NULL)
 {
 	if (target.isArray())
 	{
@@ -54,6 +54,14 @@ FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 	}
 
 	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSFloaterAddToContactSet::updateSets, this, _1));
+}
+
+FSFloaterAddToContactSet::~FSFloaterAddToContactSet()
+{
+	if (mContactSetChangedConnection.connected())
+	{
+		mContactSetChangedConnection.disconnect();
+	}
 }
 
 BOOL FSFloaterAddToContactSet::postBuild()

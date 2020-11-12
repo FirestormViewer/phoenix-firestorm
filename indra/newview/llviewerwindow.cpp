@@ -373,6 +373,12 @@ public:
 
 	void update()
 	{
+		if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+		{
+			clearText();
+			return;
+		}
+
 		static LLCachedControl<bool> log_texture_traffic(gSavedSettings,"LogTextureNetworkTraffic", false) ;
 
 		std::string wind_vel_text;
@@ -2588,7 +2594,7 @@ void LLViewerWindow::shutdownGL()
 LLViewerWindow::~LLViewerWindow()
 {
 	LL_INFOS() << "Destroying Window" << LL_ENDL;
-	gDebugWindowProc = TRUE; // event catching, at this point it shouldn't output at all
+	gDebugWindowProc = TRUE; // event catching, disable once we figure out cause for exit crashes
 	destroyWindow();
 
 	delete mDebugText;
@@ -6901,7 +6907,8 @@ void LLViewerWindow::setUIVisibility(bool visible)
 	FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
 	gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
 	gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-	mRootView->getChildView("chiclet_container")->setVisible(visible);
+	mRootView->getChildView("chiclet_container")->setVisible(visible && gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
+	mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
 	// </FS:Ansariel>
 
 	// <FS:Zi> Is done inside XUI now, using visibility_control

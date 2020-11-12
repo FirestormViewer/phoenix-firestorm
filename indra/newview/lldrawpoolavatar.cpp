@@ -38,7 +38,6 @@
 #include "lldrawable.h"
 #include "lldrawpoolbump.h"
 #include "llface.h"
-#include "llvolume.h"
 #include "llmeshrepository.h"
 #include "llsky.h"
 #include "llviewercamera.h"
@@ -2262,6 +2261,14 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			continue;
 		}
 
+		// <FS:Ansariel> Niran's optimization
+		const LLTextureEntry* tex_entry = face->getTextureEntry();
+		if (tex_entry && tex_entry->getAlpha() == 0.f)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
+
 		//stop_glerror();
 
 		//const LLVolumeFace& vol_face = volume->getVolumeFace(te);
@@ -2273,7 +2280,8 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 
 		LLVertexBuffer* buff = face->getVertexBuffer();
 
-        const LLTextureEntry* tex_entry = face->getTextureEntry();
+		// <FS:Ansariel> Niran's optimization
+        //const LLTextureEntry* tex_entry = face->getTextureEntry();
 		LLMaterial* mat = tex_entry ? tex_entry->getMaterialParams().get() : nullptr;
 
         if (LLDrawPoolAvatar::sShadowPass >= 0)
