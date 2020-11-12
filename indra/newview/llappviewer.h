@@ -268,7 +268,8 @@ private:
     void sendLogoutRequest();
     void disconnectViewer();
 
-	bool onChangeFrameLimit(LLSD const & evt);
+	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	//bool onChangeFrameLimit(LLSD const & evt);
 
 	// *FIX: the app viewer class should be some sort of singleton, no?
 	// Perhaps its child class is the singleton and this should be an abstract base.
@@ -337,7 +338,8 @@ private:
 	LLAppCoreHttp mAppCoreHttp;
 
         bool mIsFirstRun;
-	U64 mMinMicroSecPerFrame; // frame throttling
+	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	//U64 mMinMicroSecPerFrame; // frame throttling
 
 
 	// <FS:Zi> Backup Settings
