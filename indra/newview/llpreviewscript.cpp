@@ -798,6 +798,11 @@ void LLScriptEdCore::initMenu()
 	menuItem = getChild<LLMenuItemCallGL>("Go to line...");
 	menuItem->setClickCallback(boost::bind(&LLFloaterGotoLine::show, this));
 
+	// <FS:Ansariel> Keep help links
+	menuItem = getChild<LLMenuItemCallGL>("Help...");
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnHelp, this));
+	// </FS:Ansariel>
+
 	menuItem = getChild<LLMenuItemCallGL>("Keyword Help...");
 	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnDynamicHelp, this));
 
@@ -1355,6 +1360,13 @@ bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLS
 	}
 	return false;
 }
+
+// <FS:Ansariel> Keep help links
+void LLScriptEdCore::onBtnHelp()
+{
+	LLUI::getInstance()->mHelpImpl->showTopic(HELP_LSL_PORTAL_TOPIC);
+}
+// </FS:Ansariel>
 
 void LLScriptEdCore::onBtnDynamicHelp()
 {

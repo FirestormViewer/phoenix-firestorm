@@ -164,6 +164,7 @@ private:
 	void					onForSaleButtonClicked();
 	void					onAddLandmarkButtonClicked();
 	void					onAgentParcelChange();
+	void					onMaturityButtonClicked(); // <FS:Ansariel> Keep help links
 	void                    onRegionBoundaryCrossed();
 	void                    onNavMeshStatusChange(const LLPathfindingNavMeshStatus &pNavMeshStatus);
 	// callbacks

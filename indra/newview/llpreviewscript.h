@@ -174,6 +174,7 @@ private:
 	void		performAction(const std::string& action);
 	bool		enableAction(const std::string& action);
 	// NaCl End
+	void		onBtnHelp(); // <FS:Ansariel> Keep help links
 	void		onBtnDynamicHelp();
 	void		onBtnUndoChanges();
 
