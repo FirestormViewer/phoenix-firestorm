@@ -3613,7 +3613,7 @@ void LLVOAvatarSelf::checkForUnsupportedServerBakeAppearance()
 
 void LLVOAvatarSelf::setNewBakedTexture(LLAvatarAppearanceDefines::EBakedTextureIndex i, const LLUUID &uuid)
 {
-	ETextureIndex index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex(i);
+	ETextureIndex index = LLAvatarAppearance::getDictionary()->bakedToLocalTextureIndex(i);
 	setNewBakedTexture(index, uuid);
 }
 
@@ -3635,7 +3635,7 @@ void LLVOAvatarSelf::setNewBakedTexture( ETextureIndex te, const LLUUID& uuid )
 	/* switch(te)
 		case TEX_HEAD_BAKED:
 			LL_INFOS() << "New baked texture: HEAD" << LL_ENDL; */
-	const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearanceDictionary::getInstance()->getTexture(te);
+	const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearance::getDictionary()->getTexture(te);
 	if (texture_dict->mIsBakedTexture)
 	{
 		debugBakedTextureUpload(texture_dict->mBakedTextureIndex, TRUE); // FALSE for start of upload, TRUE for finish.
@@ -3722,8 +3722,8 @@ void LLVOAvatarSelf::processRebakeAvatarTextures(LLMessageSystem* msg, void**)
 	/* ETextureIndex baked_texture_indices[BAKED_NUM_INDICES] =
 			TEX_HEAD_BAKED,
 			TEX_UPPER_BAKED, */
-	for (LLAvatarAppearanceDictionary::Textures::const_iterator iter = LLAvatarAppearanceDictionary::getInstance()->getTextures().begin();
-		 iter != LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
+	for (LLAvatarAppearanceDictionary::Textures::const_iterator iter = LLAvatarAppearance::getDictionary()->getTextures().begin();
+		 iter != LLAvatarAppearance::getDictionary()->getTextures().end();
 		 ++iter)
 	{
 		const ETextureIndex index = iter->first;
