@@ -174,7 +174,6 @@ private:
 	void		performAction(const std::string& action);
 	bool		enableAction(const std::string& action);
 	// NaCl End
-	void		onBtnHelp();
 	void		onBtnDynamicHelp();
 	void		onBtnUndoChanges();
 
