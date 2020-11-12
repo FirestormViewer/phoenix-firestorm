@@ -25470,7 +25470,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSAllowWaterDistortionOcclusion</key>
     <map>
       <key>Comment</key>
-      <string>If allowed, object occlusion setting will be restored for generation the water reflection distortion. This was allowed pre-EEP and got disabled for EEP. While generation is more exact without occlusion, it can cause a huge performance impact.</string>
+      <string>If allowed, object occlusion setting will be restored for generating the water reflection distortion. This was allowed pre-EEP and got disabled for EEP. While generating is more exact without occlusion, it can cause a huge performance impact.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

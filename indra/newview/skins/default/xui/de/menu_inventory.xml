@@ -115,8 +115,8 @@
 	<menu_item_call label="Anziehen" name="Wearable And Object Wear"/>
 	<menu label="Anhängen an" name="Attach To"/>
 	<menu label="An HUD hängen" name="Attach To HUD"/>
+	<menu_item_call label="Berühren" name="Attachment Touch" />
 	<menu_item_call label="Bearbeiten" name="Wearable Edit"/>
-	<menu_item_call label="Berühren" name="Touch Attachment"/>
 	<menu_item_call label="In Gesamtansicht anzeigen" name="Show in Main Panel"/>
 	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh Attachment"/>

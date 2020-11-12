@@ -1108,5 +1108,47 @@
         <key>name</key>
             <string>login.aurorascape.com:8002</string>
         </map>
+    <key>vidadupla.com.br:8002</key>
+        <map>
+        <key>DirectoryFee</key>
+            <string>0</string>
+        <key>LastModified</key>
+            <date>2020-11-06T14:42:01.07Z</date>
+        <key>SendGridInfoToViewerOnLogin</key>
+            <string>true</string>
+        <key>about</key>
+            <string>http://vidadupla.com.br</string>
+        <key>gatekeeper</key>
+            <string>vidadupla.com.br:8002</string>
+        <key>gridname</key>
+            <string>Vida Dupla</string>
+        <key>gridnick</key>
+            <string>VD</string>
+        <key>helperuri</key>
+            <string>http://vidadupla.com.br/helper_scripts/helper/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://vidadupla.com.br/splash</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://vidadupla.com.br:8002/</string>
+            </array>
+        <key>name</key>
+            <string>vidadupla.com.br:8002</string>
+        <key>password</key>
+            <string>http://vidadupla.com.br:8002/wifi/forgotpassword</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://vidadupla.com.br:8002/wifi/user/account/</string>
+        <key>search</key>
+            <string>http://vidadupla.com.br/ossearch/query.php</string>
+        <key>slurl_base</key>
+            <string>hop://vidadupla.com.br:8002/</string>
+        </map>
     </map>
 </llsd>

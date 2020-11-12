@@ -119,6 +119,7 @@ private:
 	LLUUID	mTargetUUID;
 	U32		mRemainingItems;
 	U32		mBatchSize;
+	U32		mActiveItems;
 
 	LLInventoryModel::item_array_t	mRemainingInventoryItems;
 	bool mDeleteOnly;// <FS:Beq> FIRE-17695 - Delete links capability

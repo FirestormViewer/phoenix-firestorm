@@ -24,6 +24,8 @@
 		</layout_panel>
 		<layout_panel name="place_info_content">
 			<text name="maturity_value" value="nieznany"/>
+			<text name="parcel_owner_label" value="Właściciel:" />
+			<text name="parcel_owner" value="nieznany" />
 			<panel name="description_panel">
 				<expandable_text name="description" value="(ładowanie...)"/>
 			</panel>
@@ -36,6 +38,7 @@
 				<text name="title_label" value="Tytuł:"/>
 				<text name="notes_label" value="Moje notatki:"/>
 				<text name="folder_label" value="Lokalizacja:"/>
+				<button label="Edytuj" name="edit_btn" tool_tip="Edytuj informacje o landmarku" />
 			</panel>
 		</layout_panel>
 	</layout_stack>

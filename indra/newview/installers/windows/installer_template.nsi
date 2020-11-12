@@ -834,8 +834,10 @@ NOFOLDER:
 MessageBox MB_YESNO $(DeleteRegistryKeysMB) IDYES DeleteKeys IDNO NoDelete
 
 DeleteKeys:
+  DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-info" # <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\x-grid-location-info"
   DeleteRegKey SHELL_CONTEXT "SOFTWARE\Classes\secondlife"
+  DeleteRegKey HKEY_CLASSES_ROOT "x-grid-info" # <FS:Ansariel> FIRE-30446: Register x-grid-info hypergrid protocol
   DeleteRegKey HKEY_CLASSES_ROOT "x-grid-location-info"
   DeleteRegKey HKEY_CLASSES_ROOT "secondlife"
   # <FS:Ansariel> Unregister hop:// protocol registry info

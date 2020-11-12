@@ -88,13 +88,9 @@ void handle_detach_from_avatar(const LLSD& user_data);
 void attach_label(std::string& label, const LLSD&);
 void detach_label(std::string& label, const LLSD&);
 void handle_detach(void*);
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-void handle_attachment_edit(const LLUUID& idItem);
-// [/SL:KB]
 BOOL enable_god_full(void* user_data);
 BOOL enable_god_liaison(void* user_data);
 BOOL enable_god_basic(void* user_data);
-void set_underclothes_menu_options();
 void check_merchant_status(bool force = false);
 
 void exchange_callingcard(const LLUUID& dest_id);
@@ -126,6 +122,10 @@ void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos = LLVe
 void handle_object_return();
 void handle_object_delete();
 void handle_object_edit();
+
+void handle_attachment_edit(const LLUUID& inv_item_id);
+void handle_attachment_touch(const LLUUID& inv_item_id);
+bool enable_attachment_touch(const LLUUID& inv_item_id);
 
 // <FS:Techwolf Lupindo> area search
 // expose this function so other classes can call it

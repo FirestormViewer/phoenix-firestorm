@@ -597,7 +597,8 @@ bool	create_text_segment_icon_from_url_match(LLUrlMatch* match,LLTextBase* base)
 
 	LLIconCtrl* icon;
 
-	if(gAgent.isInGroup(match_id, TRUE))
+	if( match->getMenuName() == "menu_url_group.xml" // See LLUrlEntryGroup constructor
+		|| gAgent.isInGroup(match_id, TRUE)) //This check seems unfiting, urls are either /agent or /group
 	{
 		LLGroupIconCtrl::Params icon_params;
 		icon_params.group_id = match_id;
@@ -679,8 +680,9 @@ static void settings_to_globals()
 static void settings_modify()
 {
 	LLRenderTarget::sUseFBO				= gSavedSettings.getBOOL("RenderDeferred");
+	LLPipeline::sRenderTransparentWater	= gSavedSettings.getBOOL("RenderTransparentWater");
 	LLPipeline::sRenderBump				= gSavedSettings.getBOOL("RenderObjectBump");
-	LLPipeline::sRenderDeferred		= LLPipeline::sRenderBump && gSavedSettings.getBOOL("RenderDeferred");
+	LLPipeline::sRenderDeferred		= LLPipeline::sRenderTransparentWater && LLPipeline::sRenderBump && gSavedSettings.getBOOL("RenderDeferred");
 	LLVOSurfacePatch::sLODFactor		= gSavedSettings.getF32("RenderTerrainLODFactor");
 	LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor; //square lod factor to get exponential range of [1,4]
 	gDebugGL = gSavedSettings.getBOOL("RenderDebugGL") || gDebugSession;
@@ -1052,7 +1054,7 @@ bool LLAppViewer::init()
 	LLWearableType::initParamSingleton(new LLUITranslationBridge());
 
 	LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
-	LLSettingsType::initClass(trans);
+	LLSettingsType::initParamSingleton(trans);
 	// </FS:Ansariel>
 
 	// Setup notifications after LLUI::initClass() has been called.
@@ -1230,12 +1232,26 @@ bool LLAppViewer::init()
 	{
 		// can't use an alert here since we're exiting and
 		// all hell breaks lose.
+		LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedGLRequirements");
 		OSMessageBox(
-			LLNotifications::instance().getGlobalString("UnsupportedGLRequirements"),
+			details.getString(),
 			LLStringUtil::null,
 			OSMB_OK);
 		return 0;
 	}
+
+    // If we don't have the right shader requirements.
+    if (!gGLManager.mHasShaderObjects
+        || !gGLManager.mHasVertexShader
+        || !gGLManager.mHasFragmentShader)
+    {
+        LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedShaderRequirements");
+        OSMessageBox(
+            details.getString(),
+            LLStringUtil::null,
+            OSMB_OK);
+        return 0;
+    }
 
 	// Without SSE2 support we will crash almost immediately, warn here.
 	if (!gSysCPU.hasSSE2())
@@ -1780,8 +1796,10 @@ bool LLAppViewer::doFrame()
 			}
 
 			// yield cooperatively when not running as foreground window
-			if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
-					|| !gFocusMgr.getAppHasFocus())
+			// and when not quiting (causes trouble at mac's cleanup stage)
+			if (!LLApp::isExiting()
+				&& ((gViewerWindow && !gViewerWindow->getWindow()->getVisible())
+					|| !gFocusMgr.getAppHasFocus()))
 			{
 				// Sleep if we're not rendering, or the window is minimized.
 				static LLCachedControl<S32> s_bacground_yeild_time(gSavedSettings, "BackgroundYieldTime", 40);
@@ -3431,7 +3449,7 @@ void LLAppViewer::initStrings()
 	{
 		// initial check to make sure files are there failed
 		gDirUtilp->dumpCurrentDirectories(LLError::LEVEL_WARN);
-		LL_ERRS() << "Viewer failed to find localization and UI files. Please reinstall viewer from  https://secondlife.com/support/downloads/ and contact https://support.secondlife.com if issue persists after reinstall." << LL_ENDL;
+		LL_ERRS() << "Viewer failed to find localization and UI files. Please reinstall viewer from  https://www.firestormviewer.org/downloads and contact https://www.firestormviewer.org/support if issue persists after reinstall." << LL_ENDL;
 	}
 	LLTransUtil::parseStrings(strings_file, default_trans_args);
 	LLTransUtil::parseLanguageStrings("language_settings.xml");
@@ -3785,7 +3803,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
-	std::string drvinfo = gDXHardware.getDriverVersionWMI();
+	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
+	//std::string drvinfo = gDXHardware.getDriverVersionWMI();
+	std::string drvinfo = gDXHardware.getDriverVersionWMI(gGLManager.mGLVendorShort);
 	if (!drvinfo.empty())
 	{
 		info["GRAPHICS_DRIVER_VERSION"] = drvinfo;

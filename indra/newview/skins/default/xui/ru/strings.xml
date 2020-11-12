@@ -1841,7 +1841,7 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 		Плата зависит от вашего уровня подписки. С подписок более высокого уровня взимаются более низкие сборы. [https://secondlife.com/my/account/membership.php? Узнать больше]
 	</string>
 	<string name="Open landmarks">
-		Открыть закладки
+		Открыть сохраненные локации	
 	</string>
 	<string name="Unconstrained">
 		Несвязанные
@@ -5385,9 +5385,6 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="Premium PlusMembership">
 		Премиум Плюс
 	</string>
-	<string name="InternalMembership">
-		Internal
-	</string> <!-- No need to translate -->
 	<string name="DeleteItems">
 		Удалить выбранные объекты?
 	</string>
