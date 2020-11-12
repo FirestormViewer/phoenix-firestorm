@@ -11,7 +11,7 @@
 	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
-	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/downloads</string>
+	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">Viewer [VERSION]</string>
 	<string name="SHORT_VIEWER_GENERATION">V[VERSION]</string>
@@ -28,7 +28,7 @@
 
 	<!-- about dialog/support string-->
 	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL]) [BUILD_TYPE]
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">Built with [COMPILER] version [COMPILER_VERSION]</string>
@@ -55,6 +55,7 @@ Memory: [MEMORY_MB] MB
 OS Version: [OS_VERSION]
 Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
 Graphics Card: [GRAPHICS_CARD]
+Graphics Card Memory: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">Windows Graphics Driver Version: [GRAPHICS_DRIVER_VERSION]</string>
 	<string name="AboutOGL">OpenGL Version: [OPENGL_VERSION]</string>
@@ -70,7 +71,14 @@ Bandwidth: [BANDWIDTH] kbit/s
 LOD factor: [LOD]
 Render quality: [RENDERQUALITY]
 Advanced Lighting Model: [ALMSTATUS]
+	</string>
+	<string name="AboutTextureMemory">
 Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+Texture memory: Dynamic ([TEXTUREMEMORYMIN] MB min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutVFS">
 VFS (cache) creation time (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
@@ -136,10 +144,10 @@ Voice Server Version: [VOICE_VERSION]
 	<string name="AgniGridLabel">Second Life Main Grid (Agni)</string>
 	<string name="AditiGridLabel">Second Life Beta Test Grid (Aditi)</string>
 	
-	<string name="ViewerDownloadURL">http://www.firestormviewer.org/downloads/</string>
+	<string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="LoginFailedViewerNotPermitted">
 The viewer you are using can no longer access Second Life. Please visit the following page to download a new viewer:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 For more information, see our FAQ below:
 http://secondlife.com/viewer-access-faq</string>

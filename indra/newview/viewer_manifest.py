@@ -326,7 +326,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
     def app_name_oneword(self):
         return ''.join(self.app_name().split())
-    
+
+    # <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocol registrations
+    def friendly_app_name(self):
+        global CHANNEL_VENDOR_BASE
+        return CHANNEL_VENDOR_BASE
+    # </FS:Ansariel>
+
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
         if self.fs_is_opensim():
@@ -600,7 +606,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("alut.dll")
 
             # For textures
-            self.path("openjpeg.dll")
+            self.fs_try_path("openjp2.dll")
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
@@ -671,9 +677,10 @@ class WindowsManifest(ViewerManifest):
                     self.path("media_plugin_libvlc.dll")
 
                 # Media plugins - Example (useful for debugging - not shipped with release viewer)
-                if self.channel_type() != 'release':
-                    with self.prefix(src=os.path.join('example', self.args['configuration'])):
-                        self.path("media_plugin_example.dll")
+                # <FS:Ansariel> Don't package example plugin
+                #if self.channel_type() != 'release':
+                #    with self.prefix(src=os.path.join('example', self.args['configuration'])):
+                #        self.path("media_plugin_example.dll")
 
             # CEF runtime files - debug
             # CEF runtime files - not debug (release, relwithdebinfo etc.)
@@ -840,6 +847,8 @@ class WindowsManifest(ViewerManifest):
         
         substitution_strings['installer_file'] = installer_file
         substitution_strings['is64bit'] = (1 if (self.address_size == 64) else 0)
+        substitution_strings['is_opensim'] = self.fs_is_opensim() # <FS:Ansariel> FIRE-30446: Register hop-protocol for OS version only
+        substitution_strings['friendly_app_name'] = self.friendly_app_name() # <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocol registrations
 
         version_vars = """
         !define INSTEXE "SLVersionChecker.exe"
@@ -861,6 +870,8 @@ class WindowsManifest(ViewerManifest):
             !define SHORTCUT   "%(app_name)s"
             !define URLNAME   "secondlife"
             !define IS64BIT   "%(is64bit)d"
+            !define ISOPENSIM   "%(is_opensim)d"
+            !define APPNAME   "%(friendly_app_name)s"
             Caption "%(caption)s"
             """
 

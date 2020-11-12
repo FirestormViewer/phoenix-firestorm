@@ -80,6 +80,7 @@
 			height="96"
 			layout="topleft"
 			left="0"
+			max_length="512"
 			name="comment_text"
 			right="-1"
 			tool_tip="Debug setting comment. Often gives helpful information on the setting you have selected."

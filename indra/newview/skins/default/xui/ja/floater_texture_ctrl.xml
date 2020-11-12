@@ -9,11 +9,11 @@
 	<text name="Multiple">
 		複数のテクスチャ
 	</text>
-	<combo_box name="mode_selection">
-		<combo_box.item label="インベントリ" name="inventory"/>
-		<combo_box.item label="ローカル" name="local"/>
-		<combo_box.item label="構築（ベーク）" name="bake"/>
-	</combo_box>
+	<radio_group name="mode_selection">
+		<radio_item label="インベントリ" name="inventory"/>
+		<radio_item label="ローカル" name="local"/>
+		<radio_item label="構築（ベーク）" name="bake"/>
+	</radio_group>
 	<text name="size_lbl">
 		サイズ：
 [DIMENSIONS]

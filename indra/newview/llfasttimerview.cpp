@@ -1095,8 +1095,10 @@ void LLFastTimerView::drawLineGraph()
 		//fatten highlighted timer
 		if (mHoverID == idp)
 		{
-			gGL.flush();
-			glLineWidth(3);
+			// <FS> Line width OGL core profile fix by Rye Mutt
+			//gGL.flush();
+			//glLineWidth(3);
+			gGL.setLineWidth(3.f);
 		}
 
 		llassert(idp->getIndex() < sTimerColors.size());
@@ -1155,8 +1157,10 @@ void LLFastTimerView::drawLineGraph()
 
 		if (mHoverID == idp)
 		{
-			gGL.flush();
-			glLineWidth(1);
+			// <FS> Line width OGL core profile fix by Rye Mutt
+			//gGL.flush();
+			//glLineWidth(1);
+			gGL.setLineWidth(1.f);
 		}
 
 		if (idp->getTreeNode().mCollapsed)

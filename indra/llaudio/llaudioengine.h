@@ -372,7 +372,7 @@ protected:
 	void setChannel(LLAudioChannel *channelp);
 	LLAudioChannel *getChannel() const						{ return mChannelp; }
 	// NaCl - Sound Explorer
-	static void logSoundPlay(const LLUUID& id, LLAudioSource* audio_source, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped);
+	static void logSoundPlay(const LLUUID& id, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped);
 	static void logSoundStop(const LLUUID& id);
 	static void pruneSoundLog();
 	static S32 sSoundHistoryPruneCounter;
@@ -556,7 +556,6 @@ struct LLSoundHistoryItem
 	F64 mTimeStopped;
 	bool mReviewed;
 	bool mReviewedCollision;
-	LLAudioSource* mAudioSource;
 
 	LLSoundHistoryItem()
 	  : mType(0)
@@ -567,7 +566,6 @@ struct LLSoundHistoryItem
 	  , mTimeStopped(0.f)
 	  , mReviewed(false)
 	  , mReviewedCollision(false)
-	  , mAudioSource(0)
 	{
 	}
 };

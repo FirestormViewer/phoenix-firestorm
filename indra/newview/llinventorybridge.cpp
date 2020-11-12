@@ -95,10 +95,7 @@
 #include "aoengine.h"
 // </FS:TT>
 
-#include "llparcel.h"
-#include "llviewerparcelmgr.h"
-
-// <FS:Zi> Do not allow "Restore To Last Postiion" for no-copy items
+// <FS:Zi> Do not allow "Restore To Last Position" for no-copy items
 #ifdef OPENSIM
 #include "fsgridhandler.h"
 #endif
@@ -7027,70 +7024,6 @@ LLInventoryObject* LLObjectBridge::getObject() const
 	return object;
 }
 
-// [RLVa:KB] - Checked: 2012-08-15 (RLVa-1.4.7)
-bool enable_attachment_touch(const LLUUID& idItem)
-{
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (isAgentAvatarValid()) && (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) )
-	{
-		const LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-		return (pAttachObj) && (pAttachObj->flagHandleTouch()) && ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(gAgentAvatarp->getWornAttachment(idItem))) );
-	}
-	return false;
-}
-// [/RLVa:KB]
-
-// <FS:Ansariel> Touch worn objects
-void handle_attachment_touch(const LLUUID& idItem)
-{
-	if (!enable_attachment_touch(idItem))
-	{
-		return;
-	}
-
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return;
-
-	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-	if (!pAttachObj)
-		return;
-
-	LLMessageSystem	*msg = gMessageSystem;
-
-	msg->newMessageFast(_PREHASH_ObjectGrab);
-	msg->nextBlockFast( _PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast( _PREHASH_ObjectData);
-	msg->addU32Fast(    _PREHASH_LocalID, pAttachObj->mLocalID);
-	msg->addVector3Fast(_PREHASH_GrabOffset, LLVector3::zero);
-	msg->nextBlock("SurfaceInfo");
-	msg->addVector3("UVCoord", LLVector3::zero);
-	msg->addVector3("STCoord", LLVector3::zero);
-	msg->addS32Fast(_PREHASH_FaceIndex, 0);
-	msg->addVector3("Position", pAttachObj->getPosition());
-	msg->addVector3("Normal", LLVector3::zero);
-	msg->addVector3("Binormal", LLVector3::zero);
-	msg->sendMessage( pAttachObj->getRegion()->getHost());
-
-	msg->newMessageFast(_PREHASH_ObjectDeGrab);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_ObjectData);
-	msg->addU32Fast(_PREHASH_LocalID, pAttachObj->mLocalID);
-	msg->nextBlock("SurfaceInfo");
-	msg->addVector3("UVCoord", LLVector3::zero);
-	msg->addVector3("STCoord", LLVector3::zero);
-	msg->addS32Fast(_PREHASH_FaceIndex, 0);
-	msg->addVector3("Position", pAttachObj->getPosition());
-	msg->addVector3("Normal", LLVector3::zero);
-	msg->addVector3("Binormal", LLVector3::zero);
-	msg->sendMessage(pAttachObj->getRegion()->getHost());
-}
-// </FS:Ansariel>
-
 // <FS:Zi> Texture Refresh on worn attachments
 void handle_attachment_texture_refresh(const LLUUID& idItem)
 {
@@ -7156,18 +7089,14 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 	{
 		LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, false); // Don't replace if adding.
 	}
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-	else if ("edit" == action)
-	{
-		handle_attachment_edit(mUUID);
-	}
-// [/SL:KB]
-	// <FS:Ansariel> Touch worn objects
 	else if ("touch" == action)
 	{
 		handle_attachment_touch(mUUID);
 	}
-	// </FS:Ansariel>
+	else if ("edit" == action)
+	{
+		handle_attachment_edit(mUUID);
+	}
 	// <FS:Zi> Texture Refresh on worn attachments
 	else if ("texture_refresh_attachment" == action)
 	{
@@ -7355,14 +7284,18 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			if( get_is_item_worn( mUUID ) )
 			{
 				items.push_back(std::string("Wearable And Object Separator"));
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-				// TOOD-Catznip: should really be "Wearable And Object Edit" if we ever plan on pushing this upstream
-				items.push_back(std::string("Wearable Edit"));
-// [/SL:KB]
 
-				items.push_back(std::string("Touch Attachment"));
-				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || (!enable_attachment_touch(mUUID)) )
-					disabled_items.push_back(std::string("Touch Attachment"));
+				items.push_back(std::string("Attachment Touch"));
+				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || !enable_attachment_touch(mUUID) )
+				{
+					disabled_items.push_back(std::string("Attachment Touch"));
+				}
+
+				items.push_back(std::string("Wearable Edit"));
+				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || !get_is_item_editable(mUUID) )
+				{
+					disabled_items.push_back(std::string("Wearable Edit"));
+				}
 
 				// <FS:Zi> Texture Refresh on worn attachments
 				if (item->getType() == LLAssetType::AT_OBJECT)

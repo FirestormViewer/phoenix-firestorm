@@ -35,6 +35,7 @@
         </combo_box>
         <slider name="manual_environment_change_transition_period" label="Время изменения окружающей среды:"
         tool_tip="Интервал в секундах, в течение которого будет изменяться окружающая среда при ручной настройке. Ноль - мгновенно."/>
+        <check_box name="EnvironmentPersistAcrossLogin" label="Сохранять настройки среды во время сеансов" tool_tip="Восстанавливает текущие настройки среды после следующего входа в систему."/>
     </panel>
     <panel label="Защита" name="ProtectionTab">
         <check_box label="Блокировка нажатия левой кнопкой мыши, чтобы сесть на объекты" name="FSBlockClickSit" />

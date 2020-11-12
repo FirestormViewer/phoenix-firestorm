@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_group_notify">
-	<panel name="header">
-		<text name="title" value="Nadawca/Grupa"/>
-	</panel>
+<panel label="instant_message" name="panel_group_notify">
+	<text name="title" value="Nadawca/Grupa"/>
+	<text name="group_notice" value="Ogłoszenie grupy"/>
 	<text name="attachment" value="Załącznik"/>
+	<button label="Ogłoszenia" name="btn_notices"/>
+	<button label="Czat grupy" name="btn_groupchat" />
 </panel>

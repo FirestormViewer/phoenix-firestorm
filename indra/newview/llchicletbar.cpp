@@ -162,8 +162,10 @@ BOOL LLChicletBar::postBuild()
 	}
 	// </FS:Ansariel>
 
-	LLPanelTopInfoBar::instance().setResizeCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
-	LLPanelTopInfoBar::instance().setVisibleCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
+	// <FS:Ansariel> FIRE-7179: Width of chiclet bar seems to change randomly
+	//LLPanelTopInfoBar::instance().setResizeCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
+	//LLPanelTopInfoBar::instance().setVisibleCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
+	// </FS:Ansariel>
 
 	// <FS:PP> Option to hide IM/Group chat chiclets
 	gSavedSettings.getControl("FSDisableIMChiclets")->getSignal()->connect(boost::bind(&LLChicletBar::updateVisibility, this, _2));

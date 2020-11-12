@@ -337,12 +337,9 @@ namespace LLError
 		}
 		// huh, that's odd, we should see one or the other prefix -- but don't
 		// try to log unless logging is already initialized
-		if (is_available())
-		{
-			// in Python, " or ".join(vector) -- but in C++, a PITB
-			LL_DEBUGS() << "Did not see 'class' or 'struct' prefix on '"
-				<< name << "'" << LL_ENDL;
-		}
+		// in Python, " or ".join(vector) -- but in C++, a PITB
+		LL_DEBUGS() << "Did not see 'class' or 'struct' prefix on '"
+			<< name << "'" << LL_ENDL;
 		return name;
 
 #else  // neither GCC nor Visual Studio
@@ -443,9 +440,12 @@ namespace
 	typedef std::vector<LLError::RecorderPtr> Recorders;
 	typedef std::vector<LLError::CallSite*> CallSiteVector;
 
-	class Globals : public LLSingleton<Globals>
+	class Globals
 	{
-		LLSINGLETON(Globals);
+    public:
+        static Globals* getInstance();
+    protected:
+		Globals();
 	public:
 		std::ostringstream messageStream;
 		bool messageStreamInUse;
@@ -464,6 +464,16 @@ namespace
 		callSites()
 	{
 	}
+
+    Globals* Globals::getInstance()
+    {
+        // According to C++11 Function-Local Initialization
+        // of static variables is supposed to be thread safe
+        // without risk of deadlocks.
+        static Globals inst;
+
+        return &inst;
+    }
 
 	void Globals::addCallSite(LLError::CallSite& site)
 	{
@@ -517,14 +527,17 @@ namespace LLError
 
 	typedef LLPointer<SettingsConfig> SettingsConfigPtr;
 
-	class Settings : public LLSingleton<Settings>
+	class Settings
 	{
-		LLSINGLETON(Settings);
+    public:
+        static Settings* getInstance();
+    protected:
+		Settings();
 	public:
 		SettingsConfigPtr getSettingsConfig();
 
 		void reset();
-		SettingsStoragePtr saveAndReset();
+		SettingsStoragePtr saveAndReset(); 
 		void restore(SettingsStoragePtr pSettingsStorage);
 		
 	private:
@@ -558,6 +571,16 @@ namespace LLError
 	{
 	}
 
+    Settings* Settings::getInstance()
+    {
+        // According to C++11 Function-Local Initialization
+        // of static variables is supposed to be thread safe
+        // without risk of deadlocks.
+        static Settings inst;
+
+        return &inst;
+    }
+
 	SettingsConfigPtr Settings::getSettingsConfig()
 	{
 		return mSettingsConfig;
@@ -581,11 +604,6 @@ namespace LLError
 		Globals::getInstance()->invalidateCallSites();
 		SettingsConfigPtr newSettingsConfig(dynamic_cast<SettingsConfig *>(pSettingsStorage.get()));
 		mSettingsConfig = newSettingsConfig;
-	}
-
-	bool is_available()
-	{
-		return Settings::instanceExists() && Globals::instanceExists();
 	}
 }
 
@@ -1039,7 +1057,7 @@ namespace LLError
     std::pair<boost::shared_ptr<RECORDER>, Recorders::iterator>
     findRecorderPos()
     {
-        SettingsConfigPtr s = Settings::instance().getSettingsConfig();
+        SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
         // Since we promise to return an iterator, use a classic iterator
         // loop.
         auto end{s->mRecorders.end()};
@@ -1082,7 +1100,7 @@ namespace LLError
         auto found = findRecorderPos<RECORDER>();
         if (found.first)
         {
-            SettingsConfigPtr s = Settings::instance().getSettingsConfig();
+            SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
             s->mRecorders.erase(found.second);
         }
         return bool(found.first);
@@ -1323,14 +1341,6 @@ namespace LLError
 			return false;
 		}
 
-		// If we hit a logging request very late during shutdown processing,
-		// when either of the relevant LLSingletons has already been deleted,
-		// DO NOT resurrect them.
-		if (Settings::wasDeleted() || Globals::wasDeleted())
-		{
-			return false;
-		}
-
 		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
 		
 		s->mShouldLogCallCounter++;
@@ -1369,10 +1379,8 @@ namespace LLError
 	std::ostringstream* Log::out()
 	{
 		LLMutexTrylock lock(getMutex<LOG_MUTEX>(),5);
-		// If we hit a logging request very late during shutdown processing,
-		// when either of the relevant LLSingletons has already been deleted,
-		// DO NOT resurrect them.
-		if (lock.isLocked() && ! (Settings::wasDeleted() || Globals::wasDeleted()))
+
+		if (lock.isLocked())
 		{
 			Globals* g = Globals::getInstance();
 
@@ -1390,14 +1398,6 @@ namespace LLError
 	{
 		LLMutexTrylock lock(getMutex<LOG_MUTEX>(),5);
 		if (!lock.isLocked())
-		{
-			return;
-		}
-
-		// If we hit a logging request very late during shutdown processing,
-		// when either of the relevant LLSingletons has already been deleted,
-		// DO NOT resurrect them.
-		if (Settings::wasDeleted() || Globals::wasDeleted())
 		{
 			return;
 		}
@@ -1430,14 +1430,6 @@ namespace LLError
 	{
 		LLMutexTrylock lock(getMutex<LOG_MUTEX>(),5);
 		if (!lock.isLocked())
-		{
-			return;
-		}
-
-		// If we hit a logging request very late during shutdown processing,
-		// when either of the relevant LLSingletons has already been deleted,
-		// DO NOT resurrect them.
-		if (Settings::wasDeleted() || Globals::wasDeleted())
 		{
 			return;
 		}

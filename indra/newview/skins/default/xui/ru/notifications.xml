@@ -211,7 +211,8 @@
 		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="GroupNameLengthWarning">
-		Имя группы должно быть между [MIN_LEN] и [MAX_LEN] символами.
+		Название группы может содержать от [MIN_LEN] до [MAX_LEN] символов.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UnableToCreateGroup">
 		Невозможно создать группу.
@@ -435,6 +436,9 @@
 	</notification>
 	<notification name="ErrorEncodingSnapshot">
 		Ошибка при кодировке снимка.
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Чтобы загрузить этот предмет, вам нужно L$[COST].
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Требуется L$[COST] для сохранения фото в вашем инвентаре. Купите L$ или сохраните фото на компьютере.
@@ -1774,18 +1778,16 @@
 		Вы достигли максимального количества групп. Пожалуйста, покиньте любую группу до вступления или создания новой.
 	</notification>
 	<notification name="GroupLimitInfo">
-		Жители с базовым членством могут присоединяться к [MAX_BASIC] группам.
-Премиум членство позволяет до [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Узнать больше или обновить]
+		Резиденты с Базовым аккаунтом могут присоединиться к [MAX_BASIC] группам.
+Премиум аккаунт разрешает до [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Узнайте больше или расширьте свой аккаунт]
 		<usetemplate name="okbutton" yestext="Закрыть"/>
 	</notification>
 	<notification name="GroupLimitInfoPlus">
-Жители с базовым членством могут присоединяться к  [MAX_BASIC] группам.
-Премиум членство позволяет до [MAX_PREMIUM].
-Премиум-Плюс членство позволяет до [MAX_PREMIUM_PLUS].
-[https://secondlife.com/my/account/membership.php? Узнать больше или обновить]
+		Резиденты с Базовым аккаунтом могут присоединиться к [MAX_BASIC] группам.
+Премиум аккаунт разрешает до [MAX_PREMIUM]. Премиум Плюс аккаунт разрешает до [MAX_PREMIUM_PLUS]. 
+[https://secondlife.com/my/account/membership.php? Узнайте больше или расширьте свой аккаунт]
 		<usetemplate name="okbutton" yestext="Закрыть"/>
 	</notification>
-
 	<notification name="KickUser">
 		Выбросить этого жителя с таким сообщением?
 		<form name="form">
@@ -3533,20 +3535,23 @@ URL: [AUDIOURL]
 		Ваш голос заблокирован модератором.
 	</notification>
 	<notification name="FailedToGetBenefits">
-		К сожалению, нам не удалось получить информацию о преимуществах для этой сессии. Это не должно происходить в нормальной производственной среде. Пожалуйста, свяжитесь со службой поддержки. Этот сеанс не будет работать нормально, и мы рекомендуем вам перезапустить.
+		К сожалению, в этой сессии мы не смогли получить информацию о преимуществах аккаунта. Такое не должно происходить в нормально работающей среде. Пожалуйста, свяжитесь со службой поддержки. Эта сессия работает некорректно, поэтому мы рекомендуем вам перезапустить программу.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Это загрузит [COUNT] предметов общей стоимостью L$ [COST]. Вы хотите продолжить загрузку?
+		<notification name="BulkUploadCostConfirmation">
+		Этим действием загружается [COUNT] предметов на общую стоимость L$[COST]. Вы хотите продолжить загрузку?
 		<usetemplate ignoretext="Подтвердите массовую загрузку" name="okcancelignore" notext="Отмена" yestext="Загрузить"/>
 	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
 		Текущий баланс [BALANCE] L$ недостаточен для загрузки [COUNT] элементов общей стоимостью [COST] L$.
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
-		Выбранные файлы не могут быть загружены.
+		Выбранные файлы не могут быть загружены группой.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadIncompatibleFiles">
-		Некоторые из выбранных файлов не могут быть загружены.
+		Некоторые из выбранных файлов не могут быть загружены группой.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
 		Эта загрузка будет стоить L$[PRICE]. Продолжить загрузку?

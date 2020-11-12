@@ -588,6 +588,7 @@ void LLStatusBar::refresh()
 	}
 
 	// <FS:Zi> Pathfinding rebake functions
+	LLMenuOptionPathfindingRebakeNavmesh& navmesh = LLMenuOptionPathfindingRebakeNavmesh::instance();
 	static LLMenuOptionPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode = LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
 
 	LLViewerRegion* current_region = gAgent.getRegion();
@@ -597,7 +598,7 @@ void LLStatusBar::refresh()
 		bakingStarted = false;
 		mRebakeStuck = false;
 	}
-	if (LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
+	if (navmesh.isRebaking())
 	{
 		if (!bakingStarted)
 		{
@@ -615,9 +616,9 @@ void LLStatusBar::refresh()
 			updateParcelIcons();
 		}
 	}
-	else if (pathfinding_mode != LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode())
+	else if (pathfinding_mode != navmesh.getMode())
 	{
-		pathfinding_mode = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode();
+		pathfinding_mode = navmesh.getMode();
 		updateParcelIcons();
 	}
 	// </FS:Zi>
@@ -661,7 +662,7 @@ void LLStatusBar::refresh()
 						  );
 	mMediaToggle->setEnabled(button_enabled);
 	// Note the "sense" of the toggle is opposite whether media is playing or not
-	bool any_media_playing = (media_inst->isAnyMediaShowing() || 
+	bool any_media_playing = (media_inst->isAnyMediaPlaying() ||
 							  media_inst->isParcelMediaPlaying());
 	mMediaToggle->setValue(!any_media_playing);
 
@@ -1382,9 +1383,10 @@ void LLStatusBar::updateParcelIcons()
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
-		bool pathfinding_navmesh_dirty = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
+		LLMenuOptionPathfindingRebakeNavmesh& navmesh = LLMenuOptionPathfindingRebakeNavmesh::instance();
+		bool pathfinding_navmesh_dirty = navmesh.isRebakeNeeded();
 		F32 pathfinding_dirty_icon_alpha = 1.0f;
-		if (LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
+		if (navmesh.isRebaking())
 		{
 			// Stop the blinking after a while
 			if (mRebakeStuck)

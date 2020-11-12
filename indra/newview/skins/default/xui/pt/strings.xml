@@ -26,7 +26,7 @@
 		Falha na inicialização dos gráficos. Atualize seu driver gráfico!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL])
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="BuildConfig">
@@ -48,6 +48,7 @@ Memória: [MEMORY_MB] MBs
 Versão OS: [OS_VERSION]
 Placa de vídeo: [GRAPHICS_CARD_VENDOR]
 Placa gráfica: [GRAPHICS_CARD]
+Memória de Placa gráfica: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Versão do driver de vídeo Windows: [GRAPHICS_CARD_VENDOR]
@@ -1556,11 +1557,14 @@ http://secondlife.com/support para ajuda ao resolver este problema.
 	<string name="MarketplaceUpdating">
 		atualizando...
 	</string>
+	<string name="UploadFeeInfo">
+		A taxa é baseada em seu nível de inscrição. Níveis mais altos possuem taxas mais baixas. [https://secondlife.com/my/account/membership.php? Saiba mais]
+	</string>
 	<string name="Open landmarks">
-		Marcos abertos
+		Marcos em aberto
 	</string>
 	<string name="Unconstrained">
-		Sem limites
+		Ilimitado
 	</string>
 	<string name="no_transfer" value="(não transferível)"/>
 	<string name="no_modify" value="(não modificável)"/>
@@ -4890,6 +4894,9 @@ Denunciar abuso
 	</string>
 	<string name="Chat" value="Bate papo">
 		Bate-papo
+	</string>
+	<string name="BaseMembership">
+		Básico
 	</string>
 	<string name="DeleteItems">
 		Excluir itens selecionados?

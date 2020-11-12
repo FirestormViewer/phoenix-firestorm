@@ -82,6 +82,7 @@
 #include "llsdutil.h"
 #include "llsdutil_math.h"
 #include "alfloaterregiontracker.h"
+#include "llstartup.h"
 
 //---------------------------------------------------------------------------
 // Constants
@@ -129,6 +130,13 @@ public:
 	bool handle(const LLSD& params, const LLSD& query_map,
 				LLMediaCtrl* web)
 	{
+		// <FS:Ansariel> FIRE-17927: Viewer crashes when opening worldmap SLURL command from login panel
+		if (LLStartUp::getStartupState() < STATE_STARTED)
+		{
+			return true;
+		}
+		// </FS:Ansariel>
+
 		if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableWorldMap"))
 		{
 			LLNotificationsUtil::add("NoWorldMap", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));

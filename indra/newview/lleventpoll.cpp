@@ -191,6 +191,14 @@ namespace Details
 //          LL_DEBUGS("LLEventPollImpl::eventPollCoro") << "<" << counter << "> result = "
 //              << LLSDXMLStreamer(result) << LL_ENDL;
 
+            if (gDisconnected)
+            {
+                // Lost connection or disconnected during quit, don't process sim/region update
+                // messages, they might populate some cleaned up classes (LLWorld, region and object list)
+                LL_INFOS("LLEventPollImpl") << "Dropping event messages" << LL_ENDL;
+                break;
+            }
+
             LLSD httpResults = result["http_result"];
             LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
@@ -246,7 +254,7 @@ namespace Details
 
                     llcoro::suspendUntilTimeout(waitToRetry);
                     
-                    if (mDone)
+                    if (mDone || gDisconnected)
                         break;
                     LL_INFOS("LLEventPollImpl") << "<" << counter << "> About to retry request." << LL_ENDL;
                     continue;

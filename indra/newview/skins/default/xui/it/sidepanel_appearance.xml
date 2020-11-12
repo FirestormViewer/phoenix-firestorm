@@ -7,5 +7,5 @@
 	<panel name="panel_currentlook">
 		<button label="" name="edit_outfit_btn" tool_tip="Modifica questo abito"/>
 	</panel>
-	<filter_editor label="Filtri per gli abiti" name="Filter"/>
+	<search_editor label="Filtri per gli abiti" name="Filter"/>
 </panel>

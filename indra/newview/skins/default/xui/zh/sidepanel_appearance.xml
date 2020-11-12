@@ -15,5 +15,5 @@
 		</text>
 		<button label="" name="edit_outfit_btn" tool_tip="編輯這裝扮"/>
 	</panel>
-	<filter_editor label="裝扮過濾器" name="Filter"/>
+	<search_editor label="裝扮過濾器" name="Filter"/>
 </panel>

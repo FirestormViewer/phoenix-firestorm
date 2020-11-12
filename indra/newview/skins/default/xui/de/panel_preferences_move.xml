@@ -85,6 +85,7 @@
 				<combo_box.item label="Zur Position gehen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
+			<check_box label="Doppelklick-Aktion auf geskripteten Objekten zulassen" name="FSAllowDoubleClickOnScriptedObjects"/>
 			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
 		</panel>
 
