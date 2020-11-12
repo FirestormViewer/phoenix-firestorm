@@ -12,5 +12,5 @@
 		</text>
 		<button label="" name="edit_outfit_btn" tool_tip="Redigér dette sæt"/>
 	</panel>
-	<filter_editor label="Filtrér sæt" name="Filter"/>
+	<search_editor label="Filtrér sæt" name="Filter"/>
 </panel>

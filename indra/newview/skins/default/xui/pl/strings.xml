@@ -48,6 +48,7 @@ Pamięć (Memory): [MEMORY_MB] MB
 System operacyjny (OS Version): [OS_VERSION]
 Dostawca karty graficznej (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Karta graficzna (Graphics Card): [GRAPHICS_CARD]
+Pamięć karty graficznej (Graphics Card Memory): [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Sterownik karty graficznej (Driver Version): [GRAPHICS_DRIVER_VERSION]
@@ -67,8 +68,15 @@ Przepustowość (Bandwidth): [BANDWIDTH] kbit/s
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
 Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
-Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Pamięć tekstur (Texture memory): Dynamiczna ([TEXTUREMEMORYMIN] MB min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutVFS">
+		Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Tryb obrazu HiDPI: [HIDPI]
@@ -207,7 +215,7 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Przeglądarka używana przez Ciebie nie ma już dostępu do Second Life. Proszę przejść na poniższą stronę i pobrać nową:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 Więcej informacji w naszym FAQ:
 http://secondlife.com/viewer-access-faq

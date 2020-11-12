@@ -24,7 +24,7 @@
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
-
+#include "llworld.h"
 // <COLOSI opensim multi-currency support>
 #include "llnotificationsutil.h"
 #include "tea.h"
@@ -103,6 +103,20 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSayRange = extras.has("say-range") ? extras["say-range"].asInteger() : 20;
 			mShoutRange = extras.has("shout-range") ? extras["shout-range"].asInteger() : 100;
 			mWhisperRange = extras.has("whisper-range") ? extras["whisper-range"].asInteger() : 10;
+
+			if(extras.has("GridURL"))
+			{
+				mGridURL =  extras["GridURL"].asString();
+				auto pos = mGridURL.find("://");
+				if( pos != std::string::npos)
+				{
+					mGridURL = mGridURL.substr(pos+3,mGridURL.size()-(pos+3));
+				}
+			}
+			else
+			{
+				mGridURL = LLGridManager::instance().getGridId();
+			}
 
 			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
 				extras.has("SimulatorFPSWarnPercent") && extras.has("SimulatorFPSCritPercent"))
@@ -190,6 +204,21 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				mCurrencySymbolOverride = LLStringUtil::null;
 			}
 			// </COLOSI opensim multi-currency support>
+			// Adding feature extensions adopted from Aurora to OpenSim
+			auto regionSettings=LLWorld::getInstance();
+			if(extras.has("MinPrimScale"))
+			{
+				regionSettings->setRegionMinPrimScale(extras["MinPrimScale"].asReal());
+			}
+			if(extras.has("MaxPrimScale"))
+			{
+				regionSettings->setRegionMaxPrimScale(extras["MaxPrimScale"].asReal());
+				regionSettings->setRegionMaxPrimScaleNoMesh(extras["MaxPrimScale"].asReal());
+			}
+			if(extras.has("MaxPhysPrimScale"))
+			{
+				regionSettings->setMaxPhysPrimScale(extras["MaxPhysPrimScale"].asReal());
+			}
 		}
 		else // OpenSim specifics are unsupported reset all to default
 		{
@@ -203,6 +232,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSimulatorFPSFactor = 1.f;
 			mSimulatorFPSWarn = 30.f;
 			mSimulatorFPSCrit = 20.f;
+			LLWorld::getInstance()->refreshLimits();// reset  prim scales etc.
 
 			if (LLLoginInstance::getInstance()->hasResponse("search"))
 			{

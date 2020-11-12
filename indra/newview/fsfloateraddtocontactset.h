@@ -43,7 +43,7 @@ public:
 	BOOL postBuild();
 	
 private:
-	~FSFloaterAddToContactSet(){};
+	~FSFloaterAddToContactSet();
 	void onClickAdd();
 	void onClickCancel();
 	void onClickAddSet();

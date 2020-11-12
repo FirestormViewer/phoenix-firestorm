@@ -1565,10 +1565,6 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 	ERlvCmdRet eRet = rlvCmd.processCommand();
 	if (RLV_RET_NO_PROCESSOR != eRet)
 	{
-		m_OnBehaviour(eBhvr, eType);
-		if ( ((RLV_TYPE_ADD == eType) && (1 == m_Behaviours[eBhvr])) || ((RLV_TYPE_REMOVE == eType) && (0 == m_Behaviours[eBhvr])) )
-			m_OnBehaviourToggle(eBhvr, eType);
-
 		return eRet;
 	}
 

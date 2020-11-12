@@ -486,6 +486,19 @@ void LLUI::positionViewNearMouse(LLView* view, S32 spawn_x, S32 spawn_y)
 
 	LLRect virtual_window_rect = parent->getLocalRect();
 
+	// <FS:Ansariel> FIRE-5369: Make sure inspect floater and tooltips don't open partially underneath toolbars
+	if (parent == gFloaterView)
+	{
+		S32 left_toolbar_width = gFloaterView->getToolbarRect(LLToolBarEnums::TOOLBAR_LEFT).getWidth();
+		S32 right_toolbar_width = gFloaterView->getToolbarRect(LLToolBarEnums::TOOLBAR_RIGHT).getWidth();
+		S32 bottom_toolbar_height = gFloaterView->getToolbarRect(LLToolBarEnums::TOOLBAR_BOTTOM).getHeight();
+		virtual_window_rect.mLeft += (left_toolbar_width - 2 * FLOATER_MIN_VISIBLE_PIXELS);
+		virtual_window_rect.mRight -= (right_toolbar_width - 2 * FLOATER_MIN_VISIBLE_PIXELS);
+		virtual_window_rect.mBottom += (bottom_toolbar_height - 2 * FLOATER_MIN_VISIBLE_PIXELS);
+		virtual_window_rect.mBottom += gFloaterView->getUtilityBarRect().getHeight();
+	}
+	// </FS:Ansariel>
+
 	LLRect mouse_rect;
 	const S32 MOUSE_CURSOR_PADDING = 1;
 	mouse_rect.setLeftTopAndSize(mouse_x - MOUSE_CURSOR_PADDING, 

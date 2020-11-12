@@ -1097,7 +1097,12 @@ LLRender::LLRender()
 	//mQuadCycle(0), // <FS:Ansariel> Remove QUADS rendering mode
     mMode(LLRender::TRIANGLES),
     mCurrTextureUnitIndex(0),
-    mMaxAnisotropy(0.f) 
+    mMaxAnisotropy(0.f),
+    mLineWidth(1.f), // <FS> Line width OGL core profile fix by Rye Mutt
+    // <FS:Ansariel> Don't ignore OpenGL max line width
+    mMaxLineWidthSmooth(1.f),
+    mMaxLineWidthAliased(1.f)
+    // </FS:Ansariel>
 {	
 	mTexUnits.reserve(LL_NUM_TEXTURE_LAYERS);
 	for (U32 i = 0; i < LL_NUM_TEXTURE_LAYERS; i++)
@@ -1163,6 +1168,16 @@ void LLRender::init()
 	initVB();
 	// </FS:Ansariel>
 	stop_glerror();
+
+	// <FS:Ansariel> Don't ignore OpenGL max line width
+	GLint range[2];
+	glGetIntegerv(GL_ALIASED_LINE_WIDTH_RANGE, range);
+	stop_glerror();
+	mMaxLineWidthAliased = F32(range[1]);
+	glGetIntegerv(GL_SMOOTH_LINE_WIDTH_RANGE, range);
+	stop_glerror();
+	mMaxLineWidthSmooth = F32(range[1]);
+	// </FS:Ansariel>
 }
 
 void LLRender::shutdown()
@@ -1888,6 +1903,29 @@ void LLRender::setAmbientLightColor(const LLColor4& color)
 		}
 	}
 }
+
+// <FS> Line width OGL core profile fix by Rye Mutt
+void LLRender::setLineWidth(F32 line_width)
+{
+	if (LLRender::sGLCoreProfile)
+	{
+		line_width = 1.f;
+	}
+	else if (line_width > 1.f)
+	{
+		line_width = llmin(line_width, glIsEnabled(GL_LINE_SMOOTH) ? mMaxLineWidthSmooth : mMaxLineWidthAliased);
+	}
+	if (mLineWidth != line_width || mDirty)
+	{
+		if (mMode == LLRender::LINES || mMode == LLRender::LINE_STRIP)
+		{
+			flush();
+		}
+		mLineWidth = line_width;
+		glLineWidth(line_width);
+	}
+}
+// </FS>
 
 bool LLRender::verifyTexUnitActive(U32 unitToVerify)
 {

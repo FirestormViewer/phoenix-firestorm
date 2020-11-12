@@ -110,7 +110,7 @@ void LLDebugView::init()
 
 	// <FS:Ansariel> Fix texture console width
 	//r.set(150, rect.getHeight() - 50, 820, 100);
-	r.set(150, rect.getHeight() - 50, 900, 100);
+	r.set(150, rect.getHeight() - 50, 930, 100);
 	// </FS:Ansariel>
 	LLTextureView::Params tvp;
 	tvp.name("gTextureView");

@@ -13,7 +13,7 @@
     chrome="true"
     follows="bottom"
     height="135"
-    min_height="135"
+    min_height="120"
     layout="topleft"
     name="camera_floater"
     title="Camera Controls"
@@ -23,7 +23,7 @@
     show_title="false"
     single_instance="true"
     width="150"
-    min_width="130">
+    min_width="135">
   <floater.string name="rotate_tooltip">
         Rotate Camera Around Focus
   </floater.string>
@@ -109,8 +109,8 @@
       <panel_camera_item.mousedown_callback
           function="CameraPresets.ChangeView"
           parameter="reset_view" />
-      <panel_camera_item.picture image_name="StopReload_Off" />
-      <panel_camera_item.selected_picture image_name="StopReload_Over" />
+      <panel_camera_item.picture image_name="Refresh_Off" />
+      <panel_camera_item.selected_picture image_name="Refresh_Over" />
     </panel_camera_item>
   </panel>
   <panel

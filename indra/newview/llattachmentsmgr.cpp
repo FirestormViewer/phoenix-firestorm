@@ -195,7 +195,10 @@ void LLAttachmentsMgr::requestAttachments(attachments_vec_t& attachment_requests
     // For unknown reasons, requesting many attachments at once causes
     // frequent server-side failures. Here we're limiting the number
     // of attachments requested per idle loop.
-    const S32 max_objects_per_request = 5;
+    // <FS:Ansariel> FIRE-6070: Batching attachment requests is most-likely causing issues
+    //               when replacing already worn attachments
+    //const S32 max_objects_per_request = 5;
+    const S32 max_objects_per_request = 1;
 	S32 obj_count = llmin((S32)attachment_requests.size(),max_objects_per_request);
 	if (obj_count == 0)
 	{

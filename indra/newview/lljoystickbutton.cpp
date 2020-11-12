@@ -55,7 +55,7 @@ static LLDefaultChildRegistry::Register<LLJoystickQuaternion> r6("joystick_quat"
 const F32 NUDGE_TIME = 0.25f;		// in seconds
 const F32 ORBIT_NUDGE_RATE = 0.05f; // fraction of normal speed
 
-const S32 CENTER_DOT_RADIUS = 7;
+//const S32 CENTER_DOT_RADIUS = 7;	// <FS:Beq/> FIRE-30414 Camera control arrows not clickable
 
 //
 // Public Methods
@@ -145,20 +145,35 @@ bool LLJoystick::pointInCircle(S32 x, S32 y) const
 	return in_circle;
 }
 
-bool LLJoystick::pointInCenterDot(S32 x, S32 y, S32 radius) const
+// <FS:Beq> FIRE-30414 Camera control arrows not clickable
+// bool LLJoystick::pointInCenterDot(S32 x, S32 y, S32 radius) const
+// {
+// 	if (this->getLocalRect().getHeight() != this->getLocalRect().getWidth())
+// 	{
+// 		LL_WARNS() << "Joystick shape is not square" << LL_ENDL;
+// 		return true;
+// 	}
+
+// 	S32 center = this->getLocalRect().getHeight() / 2;
+
+// 	bool in_center_circle = (x - center) * (x - center) + (y - center) * (y - center) <= radius * radius;
+
+// 	return in_center_circle;
+// }
+bool LLJoystick::pointInCenterDot(S32 x, S32 y) const
 {
-	if (this->getLocalRect().getHeight() != this->getLocalRect().getWidth())
-	{
-		LL_WARNS() << "Joystick shape is not square" << LL_ENDL;
-		return true;
-	}
+	constexpr auto center_dot_scale{0.15};// based on current images.
+	S32 center_dot_x_rad = this->getLocalRect().getWidth()/2*center_dot_scale;
+	S32 center_dot_y_rad = this->getLocalRect().getHeight()/2*center_dot_scale;
+	auto a{this->getLocalRect().getCenterX()};
+	auto b{this->getLocalRect().getCenterY()};
+	// point inside ellipse if result 1 or less.
+    auto result = ((((x - a)*(x - a)) / (center_dot_x_rad*center_dot_x_rad)) 
+            +(((y - b)*(y - b)) / (center_dot_y_rad*center_dot_y_rad))); 
 
-	S32 center = this->getLocalRect().getHeight() / 2;
-
-	bool in_center_circle = (x - center) * (x - center) + (y - center) * (y - center) <= radius * radius;
-
-	return in_center_circle;
+	return result<=1?true:false;
 }
+// </FS:Beq>
 
 BOOL LLJoystick::handleMouseDown(S32 x, S32 y, MASK mask)
 {
@@ -455,8 +470,10 @@ BOOL LLJoystickCameraRotate::handleMouseDown(S32 x, S32 y, MASK mask)
 
 	S32 dx = x - horiz_center;
 	S32 dy = y - vert_center;
-
-	if (pointInCenterDot(x, y, CENTER_DOT_RADIUS))
+	// <FS:Beq> FIRE-30414 
+	// if (pointInCenterDot(x, y, CENTER_DOT_RADIUS))
+	if (pointInCenterDot(x, y))
+	// </FS:Beq>
 	{
 		mInitialOffset.mX = 0;
 		mInitialOffset.mY = 0;
@@ -506,7 +523,10 @@ BOOL LLJoystickCameraRotate::handleMouseUp(S32 x, S32 y, MASK mask)
 
 BOOL LLJoystickCameraRotate::handleHover(S32 x, S32 y, MASK mask)
 {
-	if (!pointInCenterDot(x, y, CENTER_DOT_RADIUS))
+	// <FS:Beq> FIRE-30414 
+	// if (!pointInCenterDot(x, y, CENTER_DOT_RADIUS))
+	if (!pointInCenterDot(x, y))
+	// </FS:Beq>
 	{
 		mInCenter = FALSE;
 	}

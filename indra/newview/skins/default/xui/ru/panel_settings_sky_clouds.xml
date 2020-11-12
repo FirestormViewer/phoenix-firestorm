@@ -2,16 +2,16 @@
 <panel label="Облака" name="panel_settings_sky_clouds">
 	<layout_stack name="main_ls">
 		<layout_panel name="left_lp">
-			<text name="cloud_color_label" width="100">Цвет облака:</text>
-			<text name="cloud_coverage_label">Облачное покрытие:</text>
-			<text name="cloud_scale_label">Масштаб облаков:</text>
-			<text name="cloud_variance_label">Облачная дисперсия:</text>
-			<text name="cloud_scroll_label">Движение облаков:</text>
-			<text name="cloud_image_label">Изображение облака:</text>
+			<text name="cloud_coverage_label">Покрытие:</text>
+			<text name="cloud_scale_label">Масштаб:</text>
+			<text name="cloud_variance_label">Дисперсия:</text>
+			<text name="cloud_scroll_label">Движение:</text>
+			<text name="cloud_image_label">Изображение:</text>
+			<text name="cloud_color_label">Цвет:</text>
 		</layout_panel>
 		<layout_panel name="right_lp">
-			<text name="cloud_density_label">Плотность облаков:</text>
-			<text name="cloud_detail_label">Детальность облака:</text>
+			<text name="cloud_density_label">Плотность:</text>
+			<text name="cloud_detail_label">Детальность:</text>
 		</layout_panel>
 	</layout_stack>
 </panel>

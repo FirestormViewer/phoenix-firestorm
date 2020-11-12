@@ -18,6 +18,7 @@
 #define RLV_ACTIONS_H
 
 #include "llchat.h"
+#include "llviewerobject.h"
 #include "rlvdefines.h"
 
 // ============================================================================

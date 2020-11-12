@@ -48,27 +48,41 @@
     </text>
 	
 	<!-- mode selector -->
-    <combo_box
+   <radio_group
      height="20"
      layout="topleft"
-     left="6"
-     top_pad="77"
+     left="0"
+     top_pad="80"
      name="mode_selection"
-     follows="left|top"
-     width="161">
-      <combo_box.item
+     follows="left|top">
+        <radio_item
          label="Inventory"
          name="inventory"
-         value="0" />
-      <combo_box.item
+         top_delta="20" 
+         layout="topleft"
+         height="16" 
+         left="0" 
+         value="0"
+         width="70" />
+        <radio_item
          label="Local"
+         left_pad="0"
+         layout="topleft"
+         top_delta="0" 
+         height="16" 
          name="local"
-         value="1" />
-      <combo_box.item
+         value="1"
+         width="50" />
+       <radio_item
          label="Bake"
+         left_pad="0"
+         layout="topleft"
+         top_delta="0"
+         height="16"
          name="bake"
-         value="2" />
-    </combo_box>
+         value="2"
+         width="50" />
+    </radio_group>
 	<!-- -->
 	
     <text
@@ -79,7 +93,7 @@
      layout="topleft"
      left="8"
      name="size_lbl"
-     top_pad="4">
+     top_pad="1">
         Size:
 [DIMENSIONS]
     </text>
@@ -220,9 +234,9 @@
      visible="false"/>
     <scroll_list
      name="l_name_list"
-     left="170"
+     left="175"
      top="22"
-     width="235"
+     width="230"
      height="260"
      follows="left|top|right|bottom"
      column_padding="0"
