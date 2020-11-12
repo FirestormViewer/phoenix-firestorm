@@ -4958,10 +4958,19 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 		Position für Zuhause festgelegt.
 	</string>
 	<string name="voice_morphing_url">
-		https://secondlife.com/destination/voice-island
+		https://secondlife.com/destination/voice-island?lang=de-DE
 	</string>
 	<string name="premium_voice_morphing_url">
-		https://secondlife.com/destination/voice-morphing-premium
+		https://secondlife.com/destination/voice-morphing-premium?lang=de-DE
+	</string>
+	<string name="lindenhomes_get_home_url">
+		https://secondlife.com/land/lindenhomes/member.php?lang=de-DE
+	</string>
+	<string name="lindenhomes_my_home_url">
+		https://land.secondlife.com/en-Us/lindenhomes/my-home.php?lang=de-DE
+	</string>
+	<string name="membership_url">
+		https://secondlife.com/my/account/membership.php?lang=de-DE
 	</string>
 	<string name="paid_you_ldollars">
 		[NAME] hat Ihnen [REASON] [AMOUNT] L$ bezahlt.
@@ -5424,6 +5433,12 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 	</string>
 	<string name="Premium PlusMembership">
 		Premium Plus
+	</string>
+	<string name="MembershipUpgradeText">
+		Upgrade auf Premium
+	</string>
+	<string name="MembershipPremiumText">
+		Meine Premium-Mitgliedschaft
 	</string>
 	<string name="DeleteItems">
 		Ausgewählte Objekte löschen?

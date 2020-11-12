@@ -6,6 +6,9 @@
 		</menu_item_call>
 		<menu_item_call label="Marktplatz-Auflistungen..." name="MarketplaceListings"/>
 		<menu_item_call label="L$ kaufen" name="Buy and Sell L$"/>
+		<menu_item_call label="[Membership]" name="Membership">
+			<menu_item_call.on_click function="Advanced.ShowURL" parameter="https://secondlife.com/my/account/membership.php?lang=de-DE"/>
+		</menu_item_call>
 
 		<menu_item_check label="Inventar" name="Inventory"/>
 		<menu_item_call label="Neues Inventar-Fenster" name="NewInventoryWindow"/>
@@ -102,6 +105,7 @@
 		<menu_item_call label="Region/Grundbesitz" name="RegionEstate"/>
 		<menu_item_call label="Dieses Land kaufen" name="Buy Land"/>
 		<menu_item_call label="Mein Land" name="My Land"/>
+		<menu_item_call label="Mein Linden Home" name="Linden Home"/>
 		<menu label="Anzeigen" name="LandShow">
 			<menu_item_check label="Bannlinien" name="Ban Lines"/>
 			<menu_item_check label="Ortungssignale" name="beacons"/>
