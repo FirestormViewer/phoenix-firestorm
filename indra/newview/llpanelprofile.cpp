@@ -67,6 +67,7 @@
 #include "llweb.h"
 
 #include "fsdata.h"
+#include "llviewermenu.h"
 
 static LLPanelInjector<LLPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
 static LLPanelInjector<LLPanelProfileWeb> t_panel_web("panel_profile_web");
