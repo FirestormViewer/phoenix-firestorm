@@ -11090,7 +11090,10 @@ class LLUpdateMembershipLabel : public view_listener_t
 		const std::string label_str =  LLAgentBenefitsMgr::isCurrent("Base") ? LLTrans::getString("MembershipUpgradeText") : LLTrans::getString("MembershipPremiumText");
 		gMenuHolder->childSetLabelArg("Membership", "[Membership]", label_str);
 
-		return true;
+		// <FS:Ansariel> OpenSim check
+		//return true;
+		return LLGridManager::instance().isInSecondLife();
+		// </FS:Ansariel>
 	}
 };
 
