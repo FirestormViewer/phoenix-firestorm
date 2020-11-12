@@ -766,7 +766,7 @@ LLAppViewer::LLAppViewer()
 	mFastTimerLogThread(NULL),
 	mSettingsLocationList(NULL),
 	mIsFirstRun(false),
-	mMinMicroSecPerFrame(0.f),	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
+	//mMinMicroSecPerFrame(0.f),	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
