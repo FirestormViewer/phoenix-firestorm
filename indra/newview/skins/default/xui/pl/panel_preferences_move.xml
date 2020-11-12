@@ -79,6 +79,7 @@
 				<combo_box.item label="Podejdź do klikniętego punktu" name="1"/>
 				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
 			</combo_box>
+			<check_box label="Zezwól na dwukrotne kliknięcia na obiektach skryptowanych" name="FSAllowDoubleClickOnScriptedObjects" />
 			<button label="Konfiguruj joystick" name="joystick_setup_button"/>
 		</panel>
 		<panel label="Teleportacja" name="tab-teleports">

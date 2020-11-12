@@ -32,7 +32,6 @@
 
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
-//#include "llagentconstants.h"
 #include "llagentdata.h"
 #include "llavatarnamecache.h"
 #include "llbufferstream.h"
@@ -211,6 +210,15 @@ FSFloaterObjectExport::~FSFloaterObjectExport()
 	if (gIdleCallbacks.containsFunction(FSFloaterObjectExport::onIdle, this))
 	{
 		gIdleCallbacks.deleteFunction(FSFloaterObjectExport::onIdle, this);
+	}
+
+	for (const auto& object_id : mInventoryRequests)
+	{
+		LLViewerObject* object = gObjectList.findObject(object_id);
+		if (object)
+		{
+			object->removeInventoryListener(this);
+		}
 	}
 }
 
@@ -1098,7 +1106,7 @@ void FSFloaterObjectExport::onExportFileSelected(const std::vector<std::string>&
 	if (!exportSelection())
 	{
 		LLNotificationsUtil::add("ExportFailed");
-		//closeFloater();
+		closeFloater();
 	}
 }
 

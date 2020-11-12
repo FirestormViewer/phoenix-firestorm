@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<toggleable_menu name="Self Pie">
+<toggleable_menu name="Gear Menu">
 	<menu_item_call label="Sentarme" name="Sit Down Here"/>
 	<menu_item_call label="Levantarme" name="Stand Up"/>
 	<context_menu label="Quitarme" name="Take Off &gt;">
@@ -17,8 +17,8 @@
 			<menu_item_call label="Alfa" name="Self Alpha"/>
 			<menu_item_call label="Toda la ropa" name="All Clothes"/>
 		</context_menu>
-		<context_menu label="HUD" name="Object Detach HUD"/>
-		<context_menu label="Quitar" name="Object Detach"/>
+		<context_menu label="HUD" name="Inspect Self Detach HUD"/>
+		<context_menu label="Quitar" name="Inspect Self Detach"/>
 		<menu_item_call label="Quitarse todo" name="Detach All"/>
 	</context_menu>
 	<menu_item_call label="Cambiar vestuario" name="Chenge Outfit"/>

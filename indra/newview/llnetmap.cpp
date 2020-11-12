@@ -1894,16 +1894,18 @@ LLColor4 LLNetMap::getAvatarColor(const LLUUID& avatar_id)
 {
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 	LLColor4 color = map_avatar_color;
-			
+
+	LGGContactSets& cs_instance = LGGContactSets::instance();
+
 	// Color "special" avatars with special colors (Friends, muted, Lindens, etc)
-	color = LGGContactSets::getInstance()->colorize(avatar_id, color, LGG_CS_MINIMAP);
+	color = cs_instance.colorize(avatar_id, color, LGG_CS_MINIMAP);
 
 	// Color based on contact sets prefs
-	if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avatar_id, LGG_CS_MINIMAP))
+	if (cs_instance.hasFriendColorThatShouldShow(avatar_id, LGG_CS_MINIMAP))
 	{
-		color = LGGContactSets::getInstance()->getFriendColor(avatar_id);
+		color = cs_instance.getFriendColor(avatar_id);
 	}
-			
+
 	// Mark Avatars with special colors
 	avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
 	if (found != sAvatarMarksMap.end())

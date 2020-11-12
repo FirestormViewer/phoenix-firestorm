@@ -75,20 +75,14 @@ BOOL FSPanelContactSets::postBuild()
 	childSetAction("remove_displayname_btn", boost::bind(&FSPanelContactSets::onClickRemoveDisplayName,	this));
 
 	mContactSetCombo = getChild<LLComboBox>("combo_sets");
-	if (mContactSetCombo)
-	{
-		mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::refreshSetList, this));
-		refreshContactSets();
-	}
+	mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::refreshSetList, this));
+	refreshContactSets();
 
 	mAvatarList = getChild<LLAvatarList>("contact_list");
-	if (mAvatarList)
-	{
-		mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
-		mAvatarList->setNoItemsCommentText(getString("empty_list"));
-		mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
-		generateAvatarList(mContactSetCombo->getValue().asString());
-	}
+	mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
+	mAvatarList->setNoItemsCommentText(getString("empty_list"));
+	mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
+	generateAvatarList(mContactSetCombo->getValue().asString());
 
 	return TRUE;
 }
@@ -324,22 +318,24 @@ void FSPanelContactSets::onClickSetPseudonym()
 
 void FSPanelContactSets::onClickRemovePseudonym()
 {
+	LGGContactSets& contact_sets = LGGContactSets::instance();
 	for (auto const& id : mAvatarSelections)
 	{
-		if (LGGContactSets::getInstance()->hasPseudonym(id))
+		if (contact_sets.hasPseudonym(id))
 		{
-			LGGContactSets::getInstance()->clearPseudonym(id);
+			contact_sets.clearPseudonym(id);
 		}
 	}
 }
 
 void FSPanelContactSets::onClickRemoveDisplayName()
 {
+	LGGContactSets& contact_sets = LGGContactSets::instance();
 	for (auto const& id : mAvatarSelections)
 	{
-		if (!LGGContactSets::getInstance()->hasDisplayNameRemoved(id))
+		if (!contact_sets.hasDisplayNameRemoved(id))
 		{
-			LGGContactSets::getInstance()->removeDisplayName(id);
+			contact_sets.removeDisplayName(id);
 		}
 	}
 }

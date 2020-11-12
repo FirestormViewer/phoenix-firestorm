@@ -22,8 +22,8 @@
 			<text name="ObjectInspectorTooltipDelay_text">
 				segundos
 			</text>
-			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas (estilo clásico de Phoenix)"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>			
+			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas"/>
+			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>
 		</panel>
 		<panel label="2D cubrir" name="ui-2d-overlay">
 			<text name="UI Size:" left="5" width="290">

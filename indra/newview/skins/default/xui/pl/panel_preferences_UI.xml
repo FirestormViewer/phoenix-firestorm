@@ -7,7 +7,7 @@
         </text>
         <check_box label="Pokaż chmurki pomocy" name="ShowHoverTips" tool_tip="Zaznacz, aby pokazywać podstawowe chmurki informacyjne nad awatarami i kilkoma innymi rzeczami - zaznacz najpierw to (CTRL+SHIFT+T)" />
         <check_box label="na terenie" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
-        <check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)" />
+        <check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach" />
         <check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach" />
         <text name="tooltip_textbox">
            Pojawianie się chmurek po:
@@ -76,6 +76,7 @@
         <text name="FSLegacyNotificationWellRequiresRestart">
             (wymaga restartu)
         </text>
+        <check_box label="Automatyczna zmiana rozmiaru list Rozmów i Powiadomień" name="FSLegacyNotificationWellAutoResize" tool_tip="Gdy zaznaczysz tą opcję, to Firestorm zawsze automatycznie zmieni rozmiar list Konwersacji i starszych Powiadomień, gdy elementy zostaną dodane lub usunięte." />
         <check_box label="Przemapuj skróty klawiszowe na nieużywane przez Linuksa (tylko Linux; wymaga restartu)" name="FSRemapLinuxShortcuts" tool_tip="Gdy zaznaczysz tą opcję, to skróty klawiszowe używane już przez system operacyjny Linux (takie jak CTRL-ALT-Fx) zostaną przemapowane w przeglądarce." />
         <check_box label="Zapobiegaj wysuwaniu okna statystyk na pierwszy plan" name="FSStatisticsNoFocus" tool_tip="Gdy zaznaczysz tą opcję, to okno statystyk nigdy nie wysunie się na pierwszy plan, gdy inne zostanie zamknięte. Akcje takie jak zmienianie ułożenia wykresów ciągle będą możliwe." />
         <slider label="Ile razy mrugają karty IM:" name="ButtonsFlashCount" />

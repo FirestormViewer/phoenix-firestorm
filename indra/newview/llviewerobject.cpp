@@ -4642,7 +4642,8 @@ void LLViewerObject::setPositionRegion(const LLVector3 &pos_region, BOOL damped)
 	{
 		LLViewerObject::setPosition(pos_region);
 		mPositionRegion = pos_region;
-		mPositionAgent = mRegionp->getPosAgentFromRegion(mPositionRegion);
+		if(mRegionp)// <FS:Beq/> Avoid crash when region null
+			mPositionAgent = mRegionp->getPosAgentFromRegion(mPositionRegion);
 	}
 }
 
@@ -4953,9 +4954,7 @@ LLViewerTexture* LLViewerObject::getBakedTextureForMagicId(const LLUUID& id)
 	}
 
 	LLVOAvatar* avatar = getAvatar();
-	if (avatar && !isHUDAttachment()
-		&& isMesh()
-		&& getVolume() && getVolume()->getParams().getSculptID().notNull()) // checking for the rigged mesh by params instead of using isRiggedMesh() to avoid false negatives when skin info isn't ready
+	if (avatar && !isHUDAttachment())
 	{
 		LLAvatarAppearanceDefines::EBakedTextureIndex texIndex = LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::assetIdToBakedTextureIndex(id);
 		LLViewerTexture* bakedTexture = avatar->getBakedTexture(texIndex);

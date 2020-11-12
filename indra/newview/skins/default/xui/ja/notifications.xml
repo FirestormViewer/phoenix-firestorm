@@ -379,7 +379,7 @@
 L$ が不足しているのでこのグループに参加することができません。
 	</notification>
 	<notification name="CreateGroupCost">
-		このグループを作るには L$ 100 かかります。
+		このグループ作成にかかる費用：L$[COST]
 一人ではグループにならないので、永久に削除されてしまいます。
 48 時間以内にメンバーを勧誘し、入会してもらってください。
 		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="L$100 でグループを作成"/>
@@ -530,6 +530,9 @@ L$ が不足しているのでこのグループに参加することができ�
 	</notification>
 	<notification name="ErrorEncodingSnapshot">
 		スナップショットのエンコード化でエラーが出ました！
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		このアイテムをアップロードするためには L$[COST] が必要です。
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		インベントリに写真を保存するには L$[COST] が必要です。L$ を購入するか、代わりに写真をっコンピュータに保存できます。

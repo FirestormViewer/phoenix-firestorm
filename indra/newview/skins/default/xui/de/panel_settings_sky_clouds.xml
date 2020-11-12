@@ -2,16 +2,13 @@
 <panel label="Wolken" name="panel_settings_sky_clouds">
 	<layout_stack name="main_ls">
 		<layout_panel name="left_lp">
-			<text name="cloud_color_label">
-				Wolkenfarbe:
-			</text>
-			<text name="cloud_coverage_label">
+			<text name="cloud_coverage_label" width="110">
 				Wolkenbedeckung:
 			</text>
-			<text name="cloud_scale_label">
+			<text name="cloud_scale_label" width="110">
 				Wolken-Skalierung:
 			</text>
-			<text name="cloud_variance_label">
+			<text name="cloud_variance_label" width="110">
 				Wolken-Varianz:
 			</text>
 			<text name="cloud_scroll_label">
@@ -19,6 +16,9 @@
 			</text>
 			<text name="cloud_image_label">
 				Wolken-Bild:
+			</text>
+			<text name="cloud_color_label">
+				Wolkenfarbe:
 			</text>
 		</layout_panel>
 		<layout_panel name="right_lp">

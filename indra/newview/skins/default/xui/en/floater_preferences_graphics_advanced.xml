@@ -596,7 +596,10 @@
     left="420"
     name="TransparentWater"
     top_delta="16"
-    width="300" />
+    width="300">
+    <check_box.commit_callback
+      function="Pref.RenderOptionUpdate" />
+  </check_box>
 
   <check_box
     control_name="RenderObjectBump"
@@ -623,23 +626,7 @@
     top_delta="16"
     width="300" />
 
-  <!-- SL-12594, basic shaders always enabled, no fixed-function GL 
-  <check_box
-    control_name="VertexShaderEnable"
-    height="16"
-    initial_value="true"
-    label="Basic shaders"
-    layout="topleft"
-    left="420"
-    name="BasicShaders"
-    tool_tip="Disabling this option may prevent some graphics card drivers from crashing"
-    top_delta="16"
-    width="300">
-    <check_box.commit_callback
-      function="Pref.VertexShaderEnable" />
-  </check_box>
-  -->
-    
+  <!-- <FS:LO> remove orphaned code left over from EEP
   <slider
     control_name="RenderTerrainDetail"
     follows="left|top"
@@ -659,7 +646,7 @@
     <slider.commit_callback
       function="Pref.UpdateSliderText"
       parameter="TerrainDetail" />
-  </slider>
+  </slider> -->
   <text
     type="string"
     length="1"

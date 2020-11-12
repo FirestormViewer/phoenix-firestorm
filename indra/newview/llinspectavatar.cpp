@@ -316,10 +316,16 @@ void LLInspectAvatar::onOpen(const LLSD& data)
 	mAvatarID = data["avatar_id"];
 
 	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	BOOL self = mAvatarID == gAgent.getID();
+	BOOL self = mAvatarID == gAgentID;
 	
-	getChild<LLUICtrl>("gear_self_btn")->setVisible(self);
 	getChild<LLUICtrl>("gear_btn")->setVisible(!self);
+	LLMenuButton* gear_self_btn = getChild<LLMenuButton>("gear_self_btn");
+	gear_self_btn->setVisible(self);
+
+	if (self)
+	{
+		gear_self_btn->setMenu(gMenuInspectSelf);
+	}
 	// </FS:Ansariel>
 
 	LLInspect::repositionInspector(data);
@@ -345,6 +351,7 @@ void LLInspectAvatar::onOpen(const LLSD& data)
 void LLInspectAvatar::onClose(bool app_quitting)
 {
 	getChild<LLMenuButton>("gear_btn")->hideMenu();
+	getChild<LLMenuButton>("gear_self_btn")->hideMenu();
 }
 // </FS:Ansariel>
 

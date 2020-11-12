@@ -1347,7 +1347,7 @@ LLAudioSource::LLAudioSource(const LLUUID& id, const LLUUID& owner_id, const F32
 std::map<LLUUID, LLSoundHistoryItem> gSoundHistory;
 
 // static
-void LLAudioSource::logSoundPlay(const LLUUID& id, LLAudioSource* audio_source, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped)
+void LLAudioSource::logSoundPlay(const LLUUID& id, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped)
 {
 	// <FS:ND> Corrupt asset, do not bother
 	if( gAudiop->isCorruptSound( assetid ) )
@@ -1362,7 +1362,6 @@ void LLAudioSource::logSoundPlay(const LLUUID& id, LLAudioSource* audio_source, 
 
 	LLSoundHistoryItem item;
 	item.mID = id;
-	item.mAudioSource = audio_source;
 	item.mPosition = position;
 	item.mType = type;
 	item.mAssetID = assetid;
@@ -1387,7 +1386,6 @@ void LLAudioSource::logSoundStop(const LLUUID& id)
 	{
 		gSoundHistory[id].mPlaying = false;
 		gSoundHistory[id].mTimeStopped = LLTimer::getElapsedSeconds();
-		gSoundHistory[id].mAudioSource = NULL; // just in case
 		pruneSoundLog();
 	}
 }
@@ -1546,7 +1544,7 @@ bool LLAudioSource::play(const LLUUID &audio_uuid)
 	// NaCl - Sound Explorer
 	if(mType != LLAudioEngine::AUDIO_TYPE_UI) //&& mSourceID.notNull())
 	{
-		logSoundPlay(mLogID, this, mPositionGlobal, mType, audio_uuid, mOwnerID, mSourceID, mIsTrigger, mLoop);
+		logSoundPlay(mLogID, mPositionGlobal, mType, audio_uuid, mOwnerID, mSourceID, mIsTrigger, mLoop);
 	}
 	// NaCl End
 	// Special abuse of play(); don't play a sound, but kill it.

@@ -59,10 +59,10 @@
      height="20"
      layout="topleft"
      left="10"
-     name="version_channel_text_lbl"
+     name="region_type_lbl"
      top="30"
      width="100">
-        Version:
+        Type:
     </text>
     <text
      follows="left|top"
@@ -70,7 +70,7 @@
      height="20"
      layout="topleft"
      left_delta="50"
-     name="version_channel_text"
+     name="region_type"
      top_delta="0"
      width="225">
         unknown
@@ -112,10 +112,10 @@
      height="20"
      layout="topleft"
      left="10"
-     name="region_type_lbl"
+     name="version_channel_text_lbl"
      top="50"
      width="100">
-        Type:
+        Version:
     </text>
     <text
      follows="left|top"
@@ -123,9 +123,9 @@
      height="20"
      layout="topleft"
      left_delta="50"
-     name="region_type"
+     name="version_channel_text"
      top_delta="0"
-     width="225">
+     right="-10">
         unknown
     </text>
     <check_box

@@ -48,6 +48,7 @@ Memoria (Memory): [MEMORY_MB] MB
 Versione SO (OS Version): [OS_VERSION]
 Produttore scheda grafica (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Scheda grafica (Graphics Card): [GRAPHICS_CARD]
+Memoria scheda grafica (Graphics Card Memory): [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Versione driver grafico Windows (Windows Graphics Driver Version): [GRAPHICS_DRIVER_VERSION]
@@ -67,8 +68,12 @@ Banda (Bandwidth): [BANDWIDTH] kbit/s
 Fattore LOD (LOD factor): [LOD]
 Qualità resa (Render quality): [RENDERQUALITY]
 Stato illuminazione (Advanced Lighting Model): [ALMSTATUS]
-Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-VFS (cache) creation time (UTC): [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutVFS">
+		VFS (cache) creation time (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Modalità display HiDPI: [HIDPI]
@@ -1732,11 +1737,14 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="MarketplaceUpdating">
 		in aggiornamento...
 	</string>
+	<string name="UploadFeeInfo">
+		Il costo si basa sul tuo livello di iscrizione. Più alto è il livello, più basso è il costo. [https://secondlife.com/my/account/membership.php? Scopri di più]
+	</string>
 	<string name="Open landmarks">
 		Apri segnaposto
 	</string>
 	<string name="Unconstrained">
-		Libero
+		Senza limitazioni
 	</string>
 	<string name="no_transfer" value=" (no trasferimento)"/>
 	<string name="no_modify" value=" (no modifica)"/>
@@ -5184,6 +5192,15 @@ Segnala abuso
 	</string>
 	<string name="Chat">
 		Chat
+	</string>
+	<string name="BaseMembership">
+		Base
+	</string>
+	<string name="PremiumMembership">
+		Premium
+	</string>
+	<string name="Premium PlusMembership">
+		Premium Plus
 	</string>
 	<string name="DeleteItems">
 		Cancellare gli elementi selezionati?

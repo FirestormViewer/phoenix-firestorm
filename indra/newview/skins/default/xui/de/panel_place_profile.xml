@@ -51,11 +51,13 @@
 		</layout_panel>
 		<layout_panel name="place_info_content">
 
-			<text name="region_title" value="unbekannt"/>
 			<text name="parcel_title" value="unbekannt"/>
+			<text name="region_title">
+				Region: [REGIONAMEPOS]
+			</text>
 			<expandable_text name="description" value="unbekannt"/>
 			<text name="owner_label" value="Eigentümer:"/>
-			<text name="owner_value" value="unbekannt"/>
+			<text name="parcel_owner" value="unbekannt"/>
 			<text name="maturity_value" value="unbekannt"/>
 			<accordion name="advanced_info_accordion">
 				<accordion_tab name="parcel_characteristics_tab" title="Parzelle">

@@ -6,5 +6,6 @@
 		<text name="attachment" value="Anhang"/>
 	</panel>
 	<button label="OK" name="btn_ok"/>
-	<button label="Gruppennachrichten" name="btn_notices"/>
+	<button label="Gruppennachrichten" name="btn_notices" width="130"/>
+	<button label="Gruppenchat" name="btn_groupchat"/>
 </panel>

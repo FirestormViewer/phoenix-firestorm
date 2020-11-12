@@ -9,11 +9,11 @@
 	<text name="Multiple">
 		多重材質
 	</text>
-	<combo_box name="mode_selection">
-		<combo_box.item label="收納區" name="inventory"/>
-		<combo_box.item label="本地" name="local"/>
-		<combo_box.item label="確定產出" name="bake"/>
-	</combo_box>
+	<radio_group name="mode_selection">
+		<radio_item label="收納區" name="inventory"/>
+		<radio_item label="本地" name="local"/>
+		<radio_item label="確定產出" name="bake"/>
+	</radio_group>
 	<text name="size_lbl">
 		尺寸：
 [DIMENSIONS]

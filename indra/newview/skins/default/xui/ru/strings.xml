@@ -41,7 +41,7 @@
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]бит / [SIMD])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
@@ -64,10 +64,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	</string>
 	<string name="AboutSystem">
 		CPU: [CPU]
-Память RAM: [MEMORY_MB] MB
+Память RAM: [MEMORY_MB] МБ
 Версия ОС: [OS_VERSION]
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]
 Видеокарта: [GRAPHICS_CARD]
+Память видеокарты: [GRAPHICS_CARD_MEMORY] МБ
 	</string>
 	<string name="AboutDriver">
 		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
@@ -87,8 +88,15 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 Уровень детализации: [LOD]
 Качество графики: [RENDERQUALITY]
 Модель улучшенного освещения: [ALMSTATUS]
-Графическая память: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-Время создания VFS (кэш) (UTC): [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Память текстур: [TEXTUREMEMORY] МБ ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Память текстур: динамическая ([TEXTUREMEMORYMIN] МБ мин. / [TEXTUREMEMORYCACHERESERVE]% Кэш / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutVFS">
+		Время создания VFS (кэш) (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Режим отображения HiDPI: [HIDPI]
@@ -229,11 +237,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		Second Life Бета-тест Сетка (Aditi)
 	</string>
 	<string name="ViewerDownloadURL">
-		http://www.firestormviewer.org/downloads/
+		https://www.firestormviewer.org/choose-your-platform/
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		У клиента, которым вы пользуетесь, больше нет доступа к игре Second Life. Загрузить новую версию клиента можно по адресу:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 Дополнительные сведения смотрите в разделе вопросов и ответов по адресу:
 http://secondlife.com/viewer-access-faq
@@ -1833,7 +1841,7 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 		Плата зависит от вашего уровня подписки. С подписок более высокого уровня взимаются более низкие сборы. [https://secondlife.com/my/account/membership.php? Узнать больше]
 	</string>
 	<string name="Open landmarks">
-		Открыть закладки
+		Открыть сохраненные локации	
 	</string>
 	<string name="Unconstrained">
 		Несвязанные
@@ -5389,9 +5397,6 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="Premium PlusMembership">
 		Премиум Плюс
 	</string>
-	<string name="InternalMembership">
-		Internal
-	</string> <!-- No need to translate -->
 	<string name="DeleteItems">
 		Удалить выбранные объекты?
 	</string>

@@ -66,6 +66,7 @@
 #include "llparcel.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
+#include "llviewermenu.h"
 #include "llviewernetwork.h" //LLGridManager
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"

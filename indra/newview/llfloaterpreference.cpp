@@ -639,6 +639,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	gSavedSettings.getControl("FSDynamicTextureMemory")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::handleDynamicTextureMemoryChanged, this));
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -2137,9 +2140,11 @@ void LLFloaterPreference::refreshEnabledState()
 
 	////Deferred/SSAO/Shadows
 	//BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+	//BOOL transparent_water = LLFeatureManager::getInstance()->isFeatureAvailable("RenderTransparentWater") && gSavedSettings.getBOOL("RenderTransparentWater");
 	//BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	//BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 	//					bumpshiny &&
+	//					transparent_water &&
 	//					shaders && 
 	//					gGLManager.mHasFramebufferObject &&
 	//					gSavedSettings.getBOOL("RenderAvatarVP") &&
@@ -2153,6 +2158,9 @@ void LLFloaterPreference::refreshEnabledState()
 	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	handleDynamicTextureMemoryChanged();
 
 #if ADDRESS_SIZE == 32
 	childSetEnabled("FSRestrictMaxTextureSize", false);
@@ -2219,12 +2227,15 @@ void LLFloaterPreference::refreshEnabledState()
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
 	
-	// <FS:Ansariel> Does not exist
+    // Transparent Water
+    LLCheckBoxCtrl* transparent_water_ctrl = getChild<LLCheckBoxCtrl>("TransparentWater");
+
+    // <FS:Ansariel> Does not exist
     //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
     //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
     //ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
-	// </FS:Ansariel>
-    
+    // </FS:Ansariel>
+
 	// Avatar Mode
 	// Enable Avatar Shaders
 	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
@@ -2249,10 +2260,12 @@ void LLFloaterPreference::refreshEnabledState()
 		ctrl_avatar_cloth->setEnabled(true);
 	}
 	
+	/* <FS:LO> remove orphaned code left over from EEP
 	// Vertex Shaders, Global Shader Enable
 	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
 
 	terrain_detail->setEnabled(FALSE);
+	*/
 	
 	// WindLight
 	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -2271,6 +2284,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
+						((transparent_water_ctrl && transparent_water_ctrl->get()) ? TRUE : FALSE) &&
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
@@ -2303,6 +2317,29 @@ void LLFloaterPreference::refreshEnabledState()
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 }
 
+// <FS:Ansariel> Dynamic texture memory calculation
+void LLFloaterPreference::handleDynamicTextureMemoryChanged()
+{
+	if (LLViewerTextureList::canUseDynamicTextureMemory())
+	{
+		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
+		childSetEnabled("FSDynamicTextureMemory", true);
+		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemoryCacheReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("FSDynamicTextureMemoryGPUReserve", dynamic_tex_mem_enabled);
+		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
+	}
+	else
+	{
+		childSetEnabled("FSDynamicTextureMemory", false);
+		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
+		childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
+		childSetEnabled("FSDynamicTextureMemoryGPUReserve", false);
+		childSetEnabled("GraphicsCardTextureMemory", true);
+	}
+}
+// </FS:Ansariel>
+
 void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 {
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
@@ -2312,7 +2349,10 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	ctrl_reflections->setEnabled(reflections);
 	reflections_text->setEnabled(reflections);
-	
+
+    // Transparent Water
+    LLCheckBoxCtrl* transparent_water_ctrl = getChild<LLCheckBoxCtrl>("TransparentWater");
+
 	// Bump & Shiny	
 	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
@@ -2342,12 +2382,14 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
         ctrl_avatar_cloth->setEnabled(TRUE);
     }
 
+	/* <FS:LO> remove orphaned code left over from EEP
     // Vertex Shaders, Global Shader Enable
     // SL-12594 Basic shaders are always enabled. DJH TODO clean up now-orphaned state handling code
     LLSliderCtrl* terrain_detail = getChild<LLSliderCtrl>("TerrainDetail");   // can be linked with control var
     LLTextBox* terrain_text = getChild<LLTextBox>("TerrainDetailText");
     terrain_detail->setEnabled(FALSE);
     terrain_text->setEnabled(FALSE);
+	*/
 
     // WindLight
     LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -2366,6 +2408,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     
     BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
                         ((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
+                        ((transparent_water_ctrl && transparent_water_ctrl->get()) ? TRUE : FALSE) &&
                         gGLManager.mHasFramebufferObject &&
                         gSavedSettings.getBOOL("RenderAvatarVP") &&
                         (ctrl_wind_light->get()) ? TRUE : FALSE;

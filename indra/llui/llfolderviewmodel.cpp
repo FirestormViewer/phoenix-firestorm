@@ -48,11 +48,8 @@ std::string LLFolderViewModelCommon::getStatusText()
 
 void LLFolderViewModelCommon::filter()
 {
-	// <FS:Ansariel> Replace frequently called gSavedSettings
-    //getFilter().resetTime(llclamp(LLUI::getInstance()->mSettingGroups["config"]->getS32("FilterItemsMaxTimePerFrameVisible"), 1, 100));
-	static LLCachedControl<S32> sFilterItemsMaxTimePerFrameVisible(*LLUI::getInstance()->mSettingGroups["config"], "FilterItemsMaxTimePerFrameVisible");
-	getFilter().resetTime(llclamp(sFilterItemsMaxTimePerFrameVisible(), 1, 100));
-	// </FS:Ansariel>
+    static LLCachedControl<S32> filter_visible(*LLUI::getInstance()->mSettingGroups["config"], "FilterItemsMaxTimePerFrameVisible", 10);
+    getFilter().resetTime(llclamp(filter_visible(), 1, 100));
 	mFolderView->getViewModelItem()->filter(getFilter());
 }
 

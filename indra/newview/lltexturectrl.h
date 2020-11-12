@@ -43,7 +43,9 @@
 #include "llviewertexture.h"
 #include "llwindow.h"
 
-class LLComboBox;
+// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+//class LLComboBox;
+class LLRadioGroup;
 class LLFloaterTexturePicker;
 class LLInventoryItem;
 class LLViewerFetchedTexture;
@@ -383,7 +385,9 @@ protected:
 	LLSaveFolderState	mSavedFolderState;
 	BOOL				mSelectedItemPinned;
 
-	LLComboBox*			mModeSelector;
+	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
+	//LLComboBox*			mModeSelector;
+	LLRadioGroup*		mModeSelector;
 	LLScrollListCtrl*	mLocalScrollCtrl;
 
 private:

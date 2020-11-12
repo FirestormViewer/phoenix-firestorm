@@ -3424,6 +3424,22 @@ void LLFloaterView::setUtilityBarRect(LLLayoutPanel* panel, const LLRect& utilit
 	// Just assume right end of utility bar is always the border of the window
 	mUtilityBarRect.mRight = S32_MAX;
 }
+
+const LLRect& LLFloaterView::getToolbarRect(LLToolBarEnums::EToolBarLocation tb) const
+{
+	switch (tb)
+	{
+	case LLToolBarEnums::TOOLBAR_LEFT:
+		return mToolbarLeftRect;
+	case LLToolBarEnums::TOOLBAR_BOTTOM:
+		return mToolbarBottomRect;
+	case LLToolBarEnums::TOOLBAR_RIGHT:
+		return mToolbarRightRect;
+	default:
+		LL_WARNS() << "getToolbarRect() passed odd toolbar number " << (S32) tb << LL_ENDL;
+		return LLRect::null;
+	}
+}
 // </FS:Ansariel>
 
 void LLFloater::setInstanceName(const std::string& name)

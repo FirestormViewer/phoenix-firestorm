@@ -9,11 +9,11 @@
 	<text name="Multiple">
 		Texturas múltiples
 	</text>
-	<combo_box name="mode_selection">
-		<combo_box.item label="Inventario" name="inventory"/>
-		<combo_box.item label="Local" name="local"/>
-		<combo_box.item label="Hornear" name="bake"/>
-	</combo_box>
+	<radio_group name="mode_selection">
+		<radio_item label="Inventario" name="inventory"/>
+		<radio_item label="Local" name="local"/>
+		<radio_item label="Hornear" name="bake"/>
+	</radio_group>
 	<text name="size_lbl">
 		Tamaño:
 [DIMENSIONS]

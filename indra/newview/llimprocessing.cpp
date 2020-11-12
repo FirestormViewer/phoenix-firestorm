@@ -1194,6 +1194,15 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 LLStringUtil::format_map_t args;
                 args["NAME"] = name;
                 from_name += LLTrans::getString("InvOfferGroupNoticeName", args);
+
+                // <FS:Ansariel> FIRE-29677 / SL-13720 workaround
+                if (LLUUID::validate(name))
+                {
+                    LLStringUtil::format_map_t args;
+                    args["NAME"] = "%s";
+                    std::string placeholder_from_name = LLTrans::getString("InvOfferGroupNoticeName", args);
+                    from_name = name + "|" + placeholder_from_name;
+                }
                 // </FS:Ansariel>
 
                 info->mFromName = from_name;
@@ -1772,13 +1781,52 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             // </FS:PP>
             else
             {
-//                  if (is_do_not_disturb)
+                // <FS:Ansariel> FS autoresponse feature
+                //if (is_do_not_disturb)
+                //{
+                //    send_do_not_disturb_message(gMessageSystem, from_id);
+                //}
 // [RLVa:KB] - Checked: RLVa-1.4.9
-                if ( (is_do_not_disturb) && (!fRlvAutoAccept) )
+                if (!fRlvAutoAccept)
 // [/RLVa:KB]
                 {
-                    send_do_not_disturb_message(gMessageSystem, from_id);
+                    std::string my_name;
+                    std::string response;
+                    LLAgentUI::buildFullname(my_name);
+                    if (is_do_not_disturb)
+                    {
+                        response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+                    }
+                    else if (is_autorespond_nonfriends && !is_friend)
+                    {
+                        response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+                    }
+                    else if (is_autorespond)
+                    {
+                        response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
+                    }
+                    else if (is_afk && FSSendAwayAvatarResponse)
+                    {
+                        response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
+                    }
+
+                    if (!response.empty())
+                    {
+                        pack_instant_message(
+                            gMessageSystem,
+                            gAgentID,
+                            FALSE,
+                            gAgentSessionID,
+                            from_id,
+                            my_name,
+                            response,
+                            IM_ONLINE,
+                            IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+                            LLUUID::null);
+                        gAgent.sendReliableMessage();
+                    }
                 }
+                // </FS:Ansariel> FS autoresponse feature
 
                 LLVector3 pos, look_at;
                 U64 region_handle(0);

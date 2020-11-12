@@ -17,8 +17,8 @@
 			<menu_item_call label="Alpha" name="Self Alpha"/>
 			<menu_item_call label="Alle Kleider" name="All Clothes"/>
 		</context_menu>
-		<context_menu label="HUD" name="Object Detach HUD"/>
-		<context_menu label="Abnehmen" name="Object Detach"/>
+		<context_menu label="HUD" name="Inspect Self Detach HUD"/>
+		<context_menu label="Abnehmen" name="Inspect Self Detach"/>
 		<menu_item_call label="Alles abnehmen" name="Detach All"/>
 	</context_menu>
 	<menu_item_call label="Outfit ändern" name="Chenge Outfit"/>

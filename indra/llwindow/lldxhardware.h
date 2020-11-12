@@ -91,7 +91,9 @@ public:
 	BOOL getInfo(BOOL vram_only, bool disable_wmi);
 	// </FS:Ansariel>
 
-	std::string getDriverVersionWMI();
+	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
+	//std::string getDriverVersionWMI();
+	std::string getDriverVersionWMI(const std::string& vendor);
 
 	S32 getVRAM() const { return mVRAM; }
 
