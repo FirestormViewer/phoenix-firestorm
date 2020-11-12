@@ -602,7 +602,7 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 		{
 			// no protocol was specified let's assume http
 			// GRID_VALUE remains unchanged
-			std::string uri = "http://" + grid;
+			uri = "http://" + grid;
 		}
 
 		if (std::string::npos != uri.find("lindenlab.com"))
