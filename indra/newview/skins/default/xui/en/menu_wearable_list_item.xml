@@ -36,7 +36,6 @@
     <menu_item_call
      label="Touch"
      layout="topleft"
-     visible="false"
      name="touch"
      visible="false"
      on_click.function="Attachment.Touch"
@@ -44,7 +43,6 @@
     <menu_item_call
      label="Edit"
      layout="topleft"
-     visible="false"
      name="edit"
      visible="false"
      on_click.function="Wearable.Edit"
