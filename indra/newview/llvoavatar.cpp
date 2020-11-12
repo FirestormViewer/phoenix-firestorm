@@ -9692,7 +9692,7 @@ void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, 
 	S32 u8_value = F32_to_U8(value,viewer_param->getMinWeight(),viewer_param->getMaxWeight());
 	apr_file_printf(file, "\t\t<param id=\"%d\" name=\"%s\" display=\"%s\" value=\"%.3f\" u8=\"%d\" type=\"%s\" wearable=\"%s\" group=\"%d\"/>\n",
 					viewer_param->getID(), viewer_param->getName().c_str(), viewer_param->getDisplayName().c_str(), value, u8_value, type_string.c_str(),
-					LLWearableType::getTypeName(LLWearableType::EType(wtype)).c_str(),
+					LLWearableType::getInstance()->getTypeName(LLWearableType::EType(wtype)).c_str(),
 					viewer_param->getGroup());
 	}
 	
@@ -10539,6 +10539,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 {
 // </FS:CR>
 	LLAPRFile outfile;
+    LLWearableType *wr_inst = LLWearableType::getInstance();
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
 	std::string fullpath = filenames[0];
@@ -10562,7 +10563,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 		{
 			for (S32 type = LLWearableType::WT_SHAPE; type < LLWearableType::WT_COUNT; type++)
 			{
-				const std::string& wearable_name = LLWearableType::getTypeName((LLWearableType::EType)type);
+				const std::string& wearable_name = wr_inst->getTypeName((LLWearableType::EType)type);
 				apr_file_printf( file, "\n\t\t<!-- wearable: %s -->\n", wearable_name.c_str() );
 
 				for (LLVisualParam* param = getFirstVisualParam(); param; param = getNextVisualParam())

@@ -138,6 +138,7 @@ void LLPanelGroupCreate::refreshCreatedGroup(const LLUUID& group_id)
     }
     // </FS:Ansariel>
     LLStatusBar::sendMoneyBalanceRequest();
+
 }
 
 void LLPanelGroupCreate::addMembershipRow(const std::string &name)

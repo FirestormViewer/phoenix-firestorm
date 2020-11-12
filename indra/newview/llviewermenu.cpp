@@ -10691,7 +10691,7 @@ class LLEditEnableTakeOff : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string clothing = userdata.asString();
-		LLWearableType::EType type = LLWearableType::typeNameToType(clothing);
+		LLWearableType::EType type = LLWearableType::getInstance()->typeNameToType(clothing);
 //		if (type >= LLWearableType::WT_SHAPE && type < LLWearableType::WT_COUNT)
 // [RLVa:KB] - Checked: 2010-03-20 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
 		// NOTE: see below - enable if there is at least one wearable on this type that can be removed
@@ -10725,7 +10725,7 @@ class LLEditTakeOff : public view_listener_t
 			LLAppearanceMgr::instance().removeAllClothesFromAvatar();
 		else
 		{
-			LLWearableType::EType type = LLWearableType::typeNameToType(clothing);
+			LLWearableType::EType type = LLWearableType::getInstance()->typeNameToType(clothing);
 			if (type >= LLWearableType::WT_SHAPE 
 				&& type < LLWearableType::WT_COUNT
 				&& (gAgentWearables.getWearableCount(type) > 0))

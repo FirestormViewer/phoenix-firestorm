@@ -44,7 +44,7 @@ std::string rlvGetItemName(const LLViewerInventoryItem* pItem)
 {
 	if ( (pItem) && ((LLAssetType::AT_BODYPART == pItem->getType()) || (LLAssetType::AT_CLOTHING == pItem->getType())) )
 	{
-		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getTypeName(pItem->getWearableType()).c_str());
+		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getInstance()->getTypeName(pItem->getWearableType()).c_str());
 	}
 	else if ( (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (isAgentAvatarValid()) )
 	{
@@ -191,7 +191,7 @@ std::string rlvFolderLockSourceToTarget(RlvFolderLocks::folderlock_source_t lock
 			}
 		case RlvFolderLocks::ST_WEARABLETYPE:
 			{
-				const std::string& strTypeName = LLWearableType::getTypeName(boost::get<LLWearableType::EType>(lockSource.second));
+				const std::string& strTypeName = LLWearableType::getInstance()->getTypeName(boost::get<LLWearableType::EType>(lockSource.second));
 				return llformat("Wearable type (%s)", strTypeName.c_str());
 			}
 		default:
@@ -530,7 +530,7 @@ void RlvFloaterLocks::refreshAll()
 	for (RlvWearableLocks::rlv_wearabletypelock_map_t::const_iterator itWearableType = wearableTypeAdd.begin(); 
 			itWearableType != wearableTypeAdd.end(); ++itWearableType)
 	{
-		sdColumns[2]["value"] = LLWearableType::getTypeLabel(itWearableType->first);
+		sdColumns[2]["value"] = LLWearableType::getInstance()->getTypeLabel(itWearableType->first);
 		sdColumns[3]["value"] = rlvGetItemNameFromObjID(itWearableType->second);
 
 		pLockList->addElement(sdRow, ADD_BOTTOM);
@@ -541,7 +541,7 @@ void RlvFloaterLocks::refreshAll()
 	for (RlvWearableLocks::rlv_wearabletypelock_map_t::const_iterator itWearableType = wearableTypeRem.begin(); 
 			itWearableType != wearableTypeRem.end(); ++itWearableType)
 	{
-		sdColumns[2]["value"] = LLWearableType::getTypeName(itWearableType->first);
+		sdColumns[2]["value"] = LLWearableType::getInstance()->getTypeName(itWearableType->first);
 		sdColumns[3]["value"] = rlvGetItemNameFromObjID(itWearableType->second);
 
 		pLockList->addElement(sdRow, ADD_BOTTOM);

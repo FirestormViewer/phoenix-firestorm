@@ -867,14 +867,10 @@ bool LLAppViewer::init()
 	// Start of the application
 	//
 
-	// <FS:Ansariel> Move further down after translation system has been initialized
-	//// initialize LLWearableType translation bridge.
-	//// Memory will be cleaned up in ::cleanupClass()
-	//LLWearableType::initParamSingleton(new LLUITranslationBridge());
-
+    // <FS:Ansariel> Move further down after translation system has been initialized
     //LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
     //LLSettingsType::initClass(trans);
-	// </FS:Ansariel>
+    // </FS:Ansariel>
 
 	// initialize SSE options
 	LLVector4a::initClass();
@@ -977,8 +973,15 @@ bool LLAppViewer::init()
 // </FS>
 	init_default_trans_args();
 
+    // inits from settings.xml and from strings.xml
 	if (!initConfiguration())
 		return false;
+
+	// initialize LLWearableType translation bridge.
+	// Will immediately use LLTranslationBridge to init LLWearableDictionary
+	// <FS:Ansariel> Move further down after translation system has been initialized
+	//LLWearableType::initParamSingleton(trans);
+	// </FS:Ansariel>
 
 	LL_INFOS("InitInfo") << "Configuration initialized." << LL_ENDL ;
 	//set the max heap size.
@@ -1050,10 +1053,9 @@ bool LLAppViewer::init()
 
 	// <FS:Ansariel> Moved down here translation system has been initialized
 	// initialize LLWearableType translation bridge.
-	// Memory will be cleaned up in ::cleanupClass()
-	LLWearableType::initParamSingleton(new LLUITranslationBridge());
-
+	// Will immediately use LLTranslationBridge to init LLWearableDictionary
 	LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+	LLWearableType::initParamSingleton(trans);
 	LLSettingsType::initParamSingleton(trans);
 	// </FS:Ansariel>
 
