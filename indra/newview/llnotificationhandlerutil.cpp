@@ -209,6 +209,12 @@ void LLHandlerUtil::logToIMP2P(const LLNotificationPtr& notification, bool to_fi
 void LLHandlerUtil::logGroupNoticeToIMGroup(
 		const LLNotificationPtr& notification)
 {
+	// <FS:Ansariel> FIRE-11339: Persisted group notifications get logged to IM on each login
+	if (notification->isFromStorage())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	const LLSD& payload = notification->getPayload();
 	LLGroupData groupData;

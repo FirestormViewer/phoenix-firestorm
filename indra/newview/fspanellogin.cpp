@@ -1120,9 +1120,11 @@ void FSPanelLogin::onSelectServer()
 		LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&FSPanelLogin::gridListChanged, this, _1));
 		LLGridManager::getInstance()->addGrid(sPendingNewGridURI);
 	}
+	else
 #endif
-	
-	LLGridManager::getInstance()->setGridChoice(server_combo_val.asString());
+	{
+		LLGridManager::getInstance()->setGridChoice(server_combo_val.asString());
+	}
 	
 	/*
 	 * Determine whether or not the value in the start_location_combo makes sense
@@ -1395,9 +1397,12 @@ void FSPanelLogin::updateServerCombo()
 	if (!sPendingNewGridURI.empty())
 	{
 		LLSD grid_name = LLGridManager::getInstance()->getGridByAttribute(GRID_LOGIN_URI_VALUE, sPendingNewGridURI, false);
-		LL_INFOS("AppInit") << "new grid for ["<<sPendingNewGridURI<<"]=["<< (grid_name.isUndefined()?"FAILED TO ADD":grid_name.asString())<< "]"<<LL_ENDL;
-		server_choice_combo->setSelectedByValue(grid_name, true);
-		LLGridManager::getInstance()->setGridChoice(grid_name.asString());
+		LL_INFOS("AppInit") << "new grid for ["<<sPendingNewGridURI<<"]=["<< ((grid_name.isUndefined() || grid_name.asString().length()==0)?"FAILED TO ADD":grid_name.asString())<< "]"<<LL_ENDL;
+		if(!grid_name.isUndefined() && grid_name.asString().length()!=0)
+		{
+			server_choice_combo->setSelectedByValue(grid_name, true);
+			LLGridManager::getInstance()->setGridChoice(grid_name.asString());
+		}
 	}
 #endif
 

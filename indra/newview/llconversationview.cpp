@@ -433,7 +433,7 @@ void LLConversationViewSession::refresh()
 	// Refresh the session view from its model data
 	LLConversationItem* vmi = dynamic_cast<LLConversationItem*>(getViewModelItem());
 	vmi->resetRefresh();
-	
+
 	if (mSessionTitle)
 	{		
 		if (!highlightFriendTitle(vmi))
@@ -569,7 +569,9 @@ BOOL LLConversationViewParticipant::postBuild()
     }
 
     updateChildren();
-	return LLFolderViewItem::postBuild();
+	LLFolderViewItem::postBuild();
+    refresh();
+    return TRUE;
 }
 
 void LLConversationViewParticipant::draw()
@@ -650,7 +652,7 @@ void LLConversationViewParticipant::refresh()
 	
 	// *TODO: We should also do something with vmi->isModerator() to echo that state in the UI somewhat
 	mSpeakingIndicator->setIsModeratorMuted(participant_model->isModeratorMuted());
-	
+
 	// Do the regular upstream refresh
 	LLFolderViewItem::refresh();
 }

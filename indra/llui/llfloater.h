@@ -628,6 +628,9 @@ public:
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	void setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatbar_rect);
 	void setUtilityBarRect(LLLayoutPanel* panel, const LLRect& utility_bar_rect);
+	const LLRect& getMainChatbarRect() const { return mMainChatbarRect; }
+	const LLRect& getUtilityBarRect() const { return mUtilityBarRect; }
+	const LLRect& getToolbarRect(LLToolBarEnums::EToolBarLocation tb) const;
 
 private:
 	void hiddenFloaterClosed(LLFloater* floater);

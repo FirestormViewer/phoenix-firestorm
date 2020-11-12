@@ -26,33 +26,13 @@
                 visible="true"
                 height="75">
             <text
-                    name="cloud_color_label"
-                    follows="left|top"
-                    height="10"
-                    layout="topleft"
-                    left_delta="15"
-                    top_pad="15"
-                    width="80">
-                Cloud Color:
-            </text>
-            <color_swatch
-                    can_apply_immediately="true"
-                    follows="left|top"
-                    height="37"
-                    label_height="0"
-                    layout="topleft"
-                    left_delta="0"
-                    name="cloud_color"
-                    top_pad="5"
-                    width="60" />
-            <text
                     name="cloud_coverage_label"
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="0"
-                    top_delta="47"
-                    width="200">
+                    left ="5"
+                    top="15"
+                    width="100">
                 Cloud Coverage:
             </text>
             <slider
@@ -62,11 +42,11 @@
                     increment="0.01"
                     initial_value="0"
                     layout="topleft"
-                    left_delta="5"
+                    left_pad="5"
                     min_val="0"
                     max_val="1"
                     name="cloud_coverage"
-                    top_delta="20"
+                    top_delta="0"
                     width="214"
                     can_edit_text="true"/>
             <text
@@ -74,9 +54,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-5"
-                    top_delta="25"
-                    width="200">
+                    left="5"
+                    top_delta="15"
+                    width="100">
                 Cloud Scale:
             </text>
             <slider
@@ -86,11 +66,11 @@
                     increment="0.01"
                     initial_value="0"
                     layout="topleft"
-                    left_delta="5"
+                    left_pad="5"
                     min_val="0.01"
                     max_val="3"
                     name="cloud_scale"
-                    top_delta="20"
+                    top_delta="0"
                     width="214"
                     can_edit_text="true"/>
             <text
@@ -98,9 +78,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-5"
-                    top_delta="25"
-                    width="200">
+                    left="5"
+                    top_delta="15"
+                    width="100">
                 Cloud Variance:
             </text>
             <slider
@@ -110,11 +90,11 @@
                     increment="0.01"
                     initial_value="0"
                     layout="topleft"
-                    left_delta="5"
+                    left_pad="5"
                     min_val="0"
                     max_val="1.0"
                     name="cloud_variance"
-                    top_delta="20"
+                    top_delta="0"
                     width="214"
                     can_edit_text="true"/>
             <text
@@ -122,44 +102,63 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-5"
+                    left="5"
                     top_delta="25"
                     width="200">
-                Cloud Scroll:
+                    Cloud Scroll:
             </text>
             <xy_vector
-                    follows="left|top"
+            follows="left|top"
                     name="cloud_scroll_xy"
-                    width="127"
-                    height="145"
+                    width="157"
+                    height="178"
                     visible="true"
-                    left_delta="0"
+                    left="5"
                     top_delta="21"
                     min_val_x="-30"
                     max_val_x="30"
                     min_val_y="-30"
                     max_val_y="30" 
                     logarithmic="1"/>
-
-            <text
+                <text
                     name="cloud_image_label"
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="160"
+                    left_delta="180"
                     top_delta="-20"
                     width="200">
-                Cloud Image:
-            </text>
-            <texture_picker
-                    height="123"
-                    layout="topleft"
-                    left_delta="5"
-                    name="cloud_map"
-                    top_pad="10"
-                    width="100"/>
+                    Cloud Image:
+                </text>
+                <texture_picker
+                height="123"
+                layout="topleft"
+                left_delta="5"
+                name="cloud_map"
+                top_pad="10"
+                width="100"/>
+                <text
+                        name="cloud_color_label"
+                        follows="left|top"
+                        height="10"
+                        layout="topleft"
+                        left_delta="-5"
+                        top_pad="5"
+                        width="80">
+                    Cloud Color:
+                </text>
+                <color_swatch
+                        can_apply_immediately="true"
+                        follows="left|top"
+                        height="25"
+                        label_height="0"
+                        layout="topleft"
+                        left_delta="5"
+                        name="cloud_color"
+                        top_pad="5"
+                        width="60" />                    
         </layout_panel>
-        <layout_panel
+                <layout_panel
                 name="right_lp"
                 border="true"
                 bevel_style="in"
@@ -167,32 +166,32 @@
                 user_resize="false"
                 visible="true"
                 height="75">
-            <text
-                    name="cloud_density_label"
-                    follows="left|top"
-                    height="10"
-                    layout="topleft"
+                <text
+                name="cloud_density_label"
+                follows="left|top"
+                height="10"
+                layout="topleft"
                     left_delta="15"
                     top_pad="15"
                     width="200">
-                Cloud Density:
-            </text>
-            <slider
-                    label="X"
-                    decimal_digits="2"
-                    follows="left|top"
-                    height="16"
-                    increment="0.01"
-                    initial_value="0"
-                    layout="topleft"
-                    left_delta="5"
+                    Cloud Density:
+                </text>
+                <slider
+                label="X"
+                decimal_digits="2"
+                follows="left|top"
+                height="16"
+                increment="0.01"
+                initial_value="0"
+                layout="topleft"
+                left_delta="5"
                     min_val="0"
                     max_val="1"
                     name="cloud_density_x"
                     top_delta="20"
                     width="200"
                     can_edit_text="true"/>
-            <slider
+                    <slider
                     label="Y"
                     decimal_digits="2"
                     follows="left|top"

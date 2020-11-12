@@ -30,20 +30,24 @@
 					<text name="ice_level_label">
 						Eis-Level:
 					</text>
-					<text name="scene_gamma_label">
-						Szenen-Gamma:
-					</text>
 				</layout_panel>
 				<layout_panel name="right_lp">
-					<text name="density_multiplier_label">
+					<text name="density_multiplier_label" width="120">
 						Dichte-Multiplikator:
 					</text>
-					<text name="distance_multiplier_label">
+					<slider name="density_multip" width="199"/>
+					<text name="distance_multiplier_label" width="120">
 						Distanz-Multiplikator:
 					</text>
-					<text name="maximum_altitude_label">
+					<slider name="distance_multip" width="199"/>
+					<text name="maximum_altitude_label" width="120">
 						Maximale Höhe:
 					</text>
+					<slider name="max_alt" width="199"/>
+					<text name="scene_gamma_label" width="120">
+						Szenen-Gamma:
+					</text>
+					<slider name="scene_gamma" width="187"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

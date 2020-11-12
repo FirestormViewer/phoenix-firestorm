@@ -25,17 +25,13 @@
 #ifndef AOENGINE_H
 #define AOENGINE_H
 
-#include <boost/signals2.hpp>
-
 #include "aoset.h"
 
 #include "llassettype.h"
 #include "lleventtimer.h"
-#include "llsingleton.h"
-
-// NaCl - feex
 #include "llextendedstatus.h"
-// NaCl End
+#include "llsingleton.h"
+#include <boost/signals2.hpp>
 
 class AOTimerCollection
 :	public LLEventTimer
@@ -46,18 +42,18 @@ class AOTimerCollection
 
 		virtual BOOL tick();
 
-		void enableInventoryTimer(BOOL yes);
-		void enableSettingsTimer(BOOL yes);
-		void enableReloadTimer(BOOL yes);
-		void enableImportTimer(BOOL yes);
+		void enableInventoryTimer(bool enable);
+		void enableSettingsTimer(bool enable);
+		void enableReloadTimer(bool enable);
+		void enableImportTimer(bool enable);
 
 	protected:
 		void updateTimers();
 
-		BOOL mInventoryTimer;
-		BOOL mSettingsTimer;
-		BOOL mReloadTimer;
-		BOOL mImportTimer;
+		bool mInventoryTimer;
+		bool mSettingsTimer;
+		bool mReloadTimer;
+		bool mImportTimer;
 };
 
 // ----------------------------------------------------
@@ -98,35 +94,35 @@ class AOEngine
 			CyclePrevious
 		};
 
-		void enable(BOOL yes);
-		void enable_stands(BOOL yes);
-		const LLUUID override(const LLUUID& motion, BOOL start);
+		void enable(bool enable);
+		void enableStands(bool enable_stands);
+		const LLUUID override(const LLUUID& motion, bool start);
 		void tick();
 		void update();
 		void reload(bool);
 		void reloadStateAnimations(AOSet::AOState* state);
-		void clear( bool );
+		void clear(bool from_timer);
 
 		const LLUUID& getAOFolder() const;
 
-		LLUUID addSet(const std::string& name, BOOL reload = TRUE);
-		BOOL removeSet(AOSet* set);
+		LLUUID addSet(const std::string& name, bool reload = true);
+		bool removeSet(AOSet* set);
 
-		BOOL addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, BOOL reload = TRUE);
-		BOOL removeAnimation(const AOSet* set, AOSet::AOState* state, S32 index);
+		bool addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);
+		bool removeAnimation(const AOSet* set, AOSet::AOState* state, S32 index);
 		void checkSitCancel();
-		void checkBelowWater(BOOL yes);
+		void checkBelowWater(bool check_underwater);
 
-		BOOL importNotecard(const LLInventoryItem* item);
-		void processImport(bool);
+		bool importNotecard(const LLInventoryItem* item);
+		void processImport(bool from_timer);
 
-		BOOL swapWithPrevious(AOSet::AOState* state, S32 index);
-		BOOL swapWithNext(AOSet::AOState* state, S32 index);
+		bool swapWithPrevious(AOSet::AOState* state, S32 index);
+		bool swapWithNext(AOSet::AOState* state, S32 index);
 
 		void cycleTimeout(const AOSet* set);
 		void cycle(eCycleMode cycleMode);
 
-		void inMouselook(BOOL yes);
+		void inMouselook(bool mouselook);
 		void selectSet(AOSet* set);
 		AOSet* selectSetByName(const std::string& name);
 		AOSet* getSetByName(const std::string& name) const;
@@ -137,14 +133,14 @@ class AOEngine
 		const std::vector<AOSet*> getSetList() const;
 		const std::string getCurrentSetName() const;
 		const AOSet* getDefaultSet() const;
-		BOOL renameSet(AOSet* set, const std::string& name);
+		bool renameSet(AOSet* set, const std::string& name);
 
 		void setDefaultSet(AOSet* set);
-		void setOverrideSits(AOSet* set, BOOL yes);
-		void setSmart(AOSet* set, BOOL yes);
-		void setDisableStands(AOSet* set, BOOL yes);
-		void setCycle(AOSet::AOState* set, BOOL yes);
-		void setRandomize(AOSet::AOState* state, BOOL yes);
+		void setOverrideSits(AOSet* set, bool override_sit);
+		void setSmart(AOSet* set, bool smart);
+		void setDisableMouselookStands(AOSet* set, bool disabled);
+		void setCycle(AOSet::AOState* set, bool cycle);
+		void setRandomize(AOSet::AOState* state, bool randomize);
 		void setCycleTime(AOSet::AOState* state, F32 time);
 
 		void saveSettings();
@@ -171,7 +167,7 @@ class AOEngine
 		void stopAllStandVariants();
 		void stopAllSitVariants();
 
-		BOOL foreignAnimations();
+		bool foreignAnimations();
 		AOSet::AOState* mapSwimming(const LLUUID& motion) const;
 		AOSet::AOState* getStateForMotion(const LLUUID& motion) const;
 
@@ -179,8 +175,8 @@ class AOEngine
 		void saveSet(const AOSet* set);
 		void saveState(const AOSet::AOState* state);
 
-		BOOL createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item);
-		BOOL findForeignItems(const LLUUID& uuid) const;
+		bool createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item);
+		bool findForeignItems(const LLUUID& uuid) const;
 		void purgeFolder(const LLUUID& uuid) const;
 
 		void onRegionChange();
@@ -197,10 +193,10 @@ class AOEngine
 		AOTimerCollection mTimerCollection;
 		AOSitCancelTimer mSitCancelTimer;
 
-		BOOL mEnabled;
-		BOOL mEnabledStands;
-		BOOL mInMouselook;
-		BOOL mUnderWater;
+		bool mEnabled;
+		bool mEnabledStands;
+		bool mInMouselook;
+		bool mUnderWater;
 
 		LLUUID mAOFolder;
 		LLUUID mLastMotion;

@@ -373,6 +373,12 @@ public:
 
 	void update()
 	{
+		if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+		{
+			clearText();
+			return;
+		}
+
 		static LLCachedControl<bool> log_texture_traffic(gSavedSettings,"LogTextureNetworkTraffic", false) ;
 
 		std::string wind_vel_text;
@@ -782,19 +788,23 @@ public:
 			addText(xpos, ypos, "View Matrix");
 			ypos += y_inc;
 		}
-		//<FS:AO improve use of controls with radiogroups>
-		//if (gSavedSettings.getBOOL("DebugShowColor") && !LLRender::sNsightDebugSupport)
-		//static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
-		static LLCachedControl<S32> debugShowColor(gSavedSettings, "DebugShowColor");
-		//</FS:AO>
-		if (debugShowColor && !LLRender::sNsightDebugSupport)
-		{
-			U8 color[4];
-			LLCoordGL coord = gViewerWindow->getCurrentMouse();
-			glReadPixels(coord.mX, coord.mY, 1,1,GL_RGBA, GL_UNSIGNED_BYTE, color);
-			addText(xpos, ypos, llformat("%d %d %d %d", color[0], color[1], color[2], color[3]));
-			ypos += y_inc;
-		}
+        //<FS:AO improve use of controls with radiogroups>
+        //static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
+        static LLCachedControl<S32> debugShowColor(gSavedSettings, "DebugShowColor");
+        if (debugShowColor && !LLRender::sNsightDebugSupport)
+        //</FS:AO>
+        {
+            U8 color[4];
+            LLCoordGL coord = gViewerWindow->getCurrentMouse();
+
+            // Convert x,y to raw pixel coords
+            S32 x_raw = llround(coord.mX * gViewerWindow->getWindowWidthRaw() / (F32) gViewerWindow->getWindowWidthScaled());
+            S32 y_raw = llround(coord.mY * gViewerWindow->getWindowHeightRaw() / (F32) gViewerWindow->getWindowHeightScaled());
+            
+            glReadPixels(x_raw, y_raw, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+            addText(xpos, ypos, llformat("Pixel <%1d, %1d> R:%1d G:%1d B:%1d A:%1d", x_raw, y_raw, color[0], color[1], color[2], color[3]));
+            ypos += y_inc;
+        }
 
 		// <FS:PP> FIRE-29880: Movelock
 		static LLCachedControl<bool> fsRenderMovelockState(gSavedPerAccountSettings, "UseMoveLock");
@@ -2592,7 +2602,7 @@ void LLViewerWindow::shutdownGL()
 LLViewerWindow::~LLViewerWindow()
 {
 	LL_INFOS() << "Destroying Window" << LL_ENDL;
-	gDebugWindowProc = TRUE; // event catching, at this point it shouldn't output at all
+	gDebugWindowProc = TRUE; // event catching, disable once we figure out cause for exit crashes
 	destroyWindow();
 
 	delete mDebugText;
@@ -4374,7 +4384,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glPolygonOffset(offset_factor, offset_units);
-			glLineWidth(1.f);
+			gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 		}
 		{
@@ -4382,7 +4392,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glPolygonOffset(offset_factor, offset_units);
-			glLineWidth(3.f);
+			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 		}
 	}
@@ -4410,12 +4420,12 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			gGL.diffuseColor4fv(line_color.mV);
-			glLineWidth(3.f);
+			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
 		}
 	}
 
-	glLineWidth(1.f);
+	gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	gGL.popMatrix();
 
@@ -6904,7 +6914,8 @@ void LLViewerWindow::setUIVisibility(bool visible)
 	FSNearbyChat::instance().showDefaultChatBar(visible && !gSavedSettings.getBOOL("AutohideChatBar"));
 	gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
 	gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-	mRootView->getChildView("chiclet_container")->setVisible(visible);
+	mRootView->getChildView("chiclet_container")->setVisible(visible && gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
+	mRootView->getChildView("chiclet_container_bottom")->setVisible(visible && !gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"));
 	// </FS:Ansariel>
 
 	// <FS:Zi> Is done inside XUI now, using visibility_control

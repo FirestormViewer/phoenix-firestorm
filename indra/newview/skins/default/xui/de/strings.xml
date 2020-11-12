@@ -32,7 +32,7 @@
 		Grafikinitialisierung fehlgeschlagen. Bitte aktualisieren Sie Ihren Grafiktreiber.
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit) ([CHANNEL]) [BUILD_TYPE]
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
@@ -59,6 +59,7 @@ Speicher: [MEMORY_MB] MB
 Betriebssystemversion: [OS_VERSION]
 Grafikkartenhersteller: [GRAPHICS_CARD_VENDOR]
 Grafikkarte: [GRAPHICS_CARD]
+Grafikkartenspeicher: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Windows-Grafiktreiberversion: [GRAPHICS_DRIVER_VERSION]
@@ -78,8 +79,15 @@ Bandbreite: [BANDWIDTH] kbit/s
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
 Erweitertes Beleuchtungsmodell: [ALMSTATUS]
-Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-VFS (Cache) Erstellungszeit: [VFS_DATE]
+	</string>
+	<string name="AboutTextureMemory">
+		Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Texturspeicher: Dynamisch ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutVFS">
+		VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		HiDPI-Anzeigemodus: [HIDPI]
@@ -227,7 +235,7 @@ Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq
@@ -1868,11 +1876,14 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="MarketplaceUpdating">
 		Aktualisierung läuft...
 	</string>
+	<string name="UploadFeeInfo">
+		Die Gebühr richtet sich nach deiner Abonnementstufe. Bei höheren Stufen werden niedrigere Gebühren erhoben. [https://secondlife.com/my/account/membership.php? Mehr erfahren]
+	</string>
 	<string name="Open landmarks">
-		Landmarken öffnen
+		Wegweiser öffnen
 	</string>
 	<string name="Unconstrained">
-		Variabel
+		Unbegrenzt
 	</string>
 	<string name="no_transfer" value=" (kein Transferieren)"/>
 	<string name="no_modify" value=" (kein Bearbeiten)"/>
@@ -5406,6 +5417,15 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 	</string>
 	<string name="Chat" value=" Chat:">
 		Chat
+	</string>
+	<string name="BaseMembership">
+		Basis
+	</string>
+	<string name="PremiumMembership">
+		Premium
+	</string>
+	<string name="Premium PlusMembership">
+		Premium Plus
 	</string>
 	<string name="DeleteItems">
 		Ausgewählte Objekte löschen?

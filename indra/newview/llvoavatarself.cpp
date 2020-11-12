@@ -583,6 +583,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 		if (gDetachBodyPartPieMenus[i])
 		{
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
+			// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
+			gInspectSelfDetachMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
 		}
 		else
 		{
@@ -611,6 +613,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 					LLMenuItemCallGL* item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 
 					gDetachPieMenu->addChild(item);
+					// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
+					gInspectSelfDetachMenu->addChild(item);
 
 					break;
 				}
@@ -754,6 +758,8 @@ BOOL LLVOAvatarSelf::buildMenus()
 			item_params.on_enable.parameter = iter->first;
 			item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 			gDetachScreenPieMenu->addChild(item);
+			// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
+			gInspectSelfDetachScreenMenu->addChild(item);
 
 			// <FS:Zi> Pie menu
 			slice_params.name =(slice_params.label );

@@ -7,22 +7,22 @@
 		ID Majątku:
 	</text>
 	<line_editor name="estate_id" initial_value="nieznany"/>
-	<text name="version_channel_text_lbl">
-		Wersja:
+	<text name="region_type_lbl">
+		Typ:
 	</text>
-	<text name="version_channel_text">
-		brak danych
+	<text name="region_type">
+		nieznany
 	</text>
 	<text name="grid_position_lbl">
 		Pozycja siatki:
 	</text>
 	<line_editor name="grid_position_x" initial_value="nieznana"/>
 	<line_editor name="grid_position_y" initial_value="nieznana"/>
-	<text name="region_type_lbl">
-		Typ:
+	<text name="version_channel_text_lbl">
+		Wersja:
 	</text>
-	<text name="region_type">
-		nieznany
+	<text name="version_channel_text">
+		nieznana
 	</text>
 	<check_box label="Zablokuj zmiany terenu" name="block_terraform_check"/>
 	<check_box label="Zablokuj latanie" name="block_fly_check"/>

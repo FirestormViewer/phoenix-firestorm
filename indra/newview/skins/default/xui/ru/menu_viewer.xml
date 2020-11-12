@@ -5,8 +5,8 @@
 		<menu_item_call label="Торговые списки..." name="MarketplaceListings"/>
 		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
 
+		<menu_item_call label="Инвентарь" name="NewInventoryWindow"/>
 		<menu_item_check label="Инвентарь" name="Inventory"/>
-		<menu_item_check label="Инвентарь" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Защищенные папки" name="Protected Folders"/>
 		<menu_item_check label="Избранные Одежды" name="WearableFavorites"/>
 		<menu_item_call label="Места" name="Picks"/>

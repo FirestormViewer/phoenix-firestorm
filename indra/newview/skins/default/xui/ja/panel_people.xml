@@ -105,7 +105,7 @@
             </panel>
             <group_list name="group_list" />
 			<text name="groupcount">
-				あなたは[COUNT]グループに属しているので、まだ[REMAINING]参加できます。
+				あなたは現在、[COUNT] グループに属しています。あと [REMAINING] グループに参加することができます。
 			</text>
         </panel>
 		

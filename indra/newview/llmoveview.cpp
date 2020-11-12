@@ -539,8 +539,7 @@ void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
 F32 LLFloaterMove::getCurrentTransparency()
 {
 	static LLCachedControl<F32> camera_opacity(gSavedSettings, "CameraOpacity");
-	static LLCachedControl<F32> active_floater_transparency(gSavedSettings, "ActiveFloaterTransparency");
-	return llmin(camera_opacity(), active_floater_transparency());
+	return camera_opacity();
 }
 // </FS:Ansariel>
 

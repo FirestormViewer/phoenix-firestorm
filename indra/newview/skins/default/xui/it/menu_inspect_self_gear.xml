@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<toggleable_menu name="Self Pie">
+<toggleable_menu name="Gear Menu">
 	<menu_item_call label="Siedi" name="Sit Down Here"/>
 	<menu_item_call label="Alzati" name="Stand Up"/>
 	<context_menu label="Togli" name="Take Off &gt;">
@@ -17,8 +17,8 @@
 			<menu_item_call label="Alfa (trasparenza)" name="Self Alpha"/>
 			<menu_item_call label="Tutti i capi" name="All Clothes"/>
 		</context_menu>
-		<context_menu label="Accessori" name="Object Detach"/>
-		<menu_item_call label="Stacca tutto" name="Detach All"/>
+		<context_menu label="Accessori" name="Inspect Self Detach"/>
+		<menu_item_call label="Stacca tutto" name="Inspect Self All"/>
 	</context_menu>
 	<menu_item_call label="Cambia abito" name="Chenge Outfit"/>
 	<menu_item_call label="Modifica abito" name="Edit Outfit"/>

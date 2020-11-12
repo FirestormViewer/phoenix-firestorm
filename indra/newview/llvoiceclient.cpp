@@ -1046,7 +1046,12 @@ LLSpeakerVolumeStorage::LLSpeakerVolumeStorage()
 
 LLSpeakerVolumeStorage::~LLSpeakerVolumeStorage()
 {
-	save();
+}
+
+//virtual
+void LLSpeakerVolumeStorage::cleanupSingleton()
+{
+    save();
 }
 
 void LLSpeakerVolumeStorage::storeSpeakerVolume(const LLUUID& speaker_id, F32 volume)

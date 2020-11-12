@@ -150,7 +150,9 @@ void LLEstateInfoModel::commitEstateInfoCapsCoro(std::string url)
     body["deny_age_unverified"] = getDenyAgeUnverified();
     body["allow_voice_chat"] = getAllowVoiceChat();
     body["override_public_access"] = getAllowAccessOverride();
-
+// <FS:Beq> FIRE-29683 Update the (currently unused in SL) Cap to align to EEP as Opensim needs it
+    body["override_environment"] = getAllowEnvironmentOverride();
+// </FS:Beq>
     body["invoice"] = LLFloaterRegionInfo::getLastInvoice();
 
     LL_DEBUGS("WindlightSync") << "Sending estate caps: "

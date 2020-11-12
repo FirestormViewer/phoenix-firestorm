@@ -269,6 +269,16 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
 
 bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
 {
+	LLRenderTarget::sUseFBO = newvalue.asBoolean();
+	if (gPipeline.isInit())
+	{
+		gPipeline.updateRenderTransparentWater();
+		gPipeline.updateRenderDeferred();
+		gPipeline.releaseGLBuffers();
+		gPipeline.createGLBuffers();
+		gPipeline.resetVertexBuffers();
+		LLViewerShaderMgr::instance()->setShaders();
+	}
 	LLWorld::getInstance()->updateWaterObjects();
 	return true;
 }
@@ -402,6 +412,17 @@ static bool handleVideoMemoryChanged(const LLSD& newvalue)
 	gTextureList.updateMaxResidentTexMem(S32Megabytes(newvalue.asInteger()));
 	return true;
 }
+
+// <FS:Ansariel> Dynamic texture memory calculation
+static bool handleDynamicTextureMemoryChanged(const LLSD& newvalue)
+{
+	if (!newvalue.asBoolean())
+	{
+		gTextureList.updateMaxResidentTexMem(S32Megabytes(gSavedSettings.getS32("TextureMemory")));
+	}
+	return true;
+}
+// </FS:Ansariel>
 
 static bool handleChatFontSizeChanged(const LLSD& newvalue)
 {
@@ -1239,6 +1260,9 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Output device selection
 	gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&handleOutputDeviceChanged, _2));
+
+	// <FS:Ansariel> Dynamic texture memory calculation
+	gSavedSettings.getControl("FSDynamicTextureMemory")->getSignal()->connect(boost::bind(&handleDynamicTextureMemoryChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

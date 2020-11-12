@@ -386,32 +386,40 @@ void NACLFloaterExploreSounds::handleLookAt()
 void NACLFloaterExploreSounds::handleStop()
 {
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
-	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
-	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	for( ; selection_iter != selection_end; ++selection_iter)
+	for (const auto& selection_item : selection)
 	{
-		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
-		if(item.mID.isNull()) continue;
-		if(item.mPlaying)
+		LLSoundHistoryItem item = getItem(selection_item->getValue());
+		if (item.mID.notNull() && item.mPlaying)
 		{
-			// Make sure the audio source in question is still in the system to prevent
-			// crashes by using a stale pointer. This can happen when the same UUID is
-			// played twice without stopping it first. -Zi
-			if(!gAudiop->findAudioSource(item.mSourceID))
-			{
-				LL_WARNS("SoundExplorer") << "audio source " << item.mAudioSource << " already gone but still marked as playing. Fixing ..." << LL_ENDL;
-				gSoundHistory[item.mID].mPlaying = false;
-				gSoundHistory[item.mID].mAudioSource = NULL;
-				gSoundHistory[item.mID].mTimeStopped = LLTimer::getElapsedSeconds();
-				continue;
-			}
-
-			if(item.mAudioSource)
+			LLAudioSource* audio_source = gAudiop->findAudioSource(item.mSourceID);
+			if (audio_source)
 			{
 				S32 type = item.mType;
-				item.mAudioSource->setType(LLAudioEngine::AUDIO_TYPE_UI);
-				item.mAudioSource->play(LLUUID::null);
-				item.mAudioSource->setType(type);
+				audio_source->setType(LLAudioEngine::AUDIO_TYPE_UI);
+				audio_source->play(LLUUID::null);
+				audio_source->setType(type);
+			}
+			else
+			{
+				LL_WARNS("SoundExplorer") << "audio source for source ID " << item.mSourceID << " already gone but still marked as playing. Fixing ..." << LL_ENDL;
+				if (gSoundHistory.find(item.mID) != gSoundHistory.end())
+				{
+					gSoundHistory[item.mID].mPlaying = false;
+					gSoundHistory[item.mID].mTimeStopped = LLTimer::getElapsedSeconds();
+				}
+				else
+				{
+					for (auto& histItem : mLastHistory)
+					{
+						if (histItem.mID == item.mID)
+						{
+							histItem.mPlaying = false;
+							histItem.mTimeStopped = LLTimer::getElapsedSeconds();
+							break;
+						}
+					}
+				}
+				continue;
 			}
 		}
 	}

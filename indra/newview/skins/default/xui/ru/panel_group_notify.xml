@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_group_notify">
-	<panel name="header">
-		<text name="title" value="Отправитель / Группа"/>
-	</panel>
+<panel label="instant_message" name="panel_group_notify">
+	<text name="title" value="Отправитель / Группа"/>
+	<text name="group_notice" value="Объявление группы"/>
 	<text name="attachment" value="Вложение"/>
-	<button label="OK" name="btn_ok"/>
-	<button label="Уведомления группы" name="btn_notices" width="130"/>
+	<button label="Другие объявления" name="btn_notices" width="130" />
+	<button label="Чат группы" name="btn_groupchat"/>
 </panel>

@@ -34,7 +34,7 @@
 		Error de inicialización de gráficos. Actualiza tu controlador de gráficos.
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit)
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]bit / [SIMD])
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="BuildConfig">
@@ -56,6 +56,7 @@ Memoria: [MEMORY_MB] MB
 Versión del Sistema Operativo: [OS_VERSION]
 Fabricante de la tarjeta gráfica: [GRAPHICS_CARD_VENDOR]
 Tarjeta gráfica: [GRAPHICS_CARD]
+Memoria de la tarjeta gráfica: [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Versión de Windows Graphics Driver: [GRAPHICS_DRIVER_VERSION]
@@ -191,7 +192,7 @@ Versión del servidor de voz: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Ya no puedes acceder a Second Life con el visor que estás utilizando. Visita la siguiente página para descargar un nuevo visor:
-http://firestormviewer.org/downloads
+https://www.firestormviewer.org/choose-your-platform/
  
 Si deseas obtener más información, consulta las preguntas frecuentes que aparecen a continuación:
 http://secondlife.com/viewer-access-faq
@@ -1679,11 +1680,14 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	<string name="MarketplaceUpdating">
 		actualizando...
 	</string>
+	<string name="UploadFeeInfo">
+		Las tasas se basan en tu nivel de suscripción. Niveles más altos tienen tasas más bajas. [https://secondlife.com/my/account/membership.php? Aprende más al respecto]
+	</string>
 	<string name="Open landmarks">
-		Abrir hitos
+		Abrir puntos destacados
 	</string>
 	<string name="Unconstrained">
-		Sin restricciones
+		Sin Restricciones
 	</string>
 	<string name="no_transfer" value="(no transferible)"/>
 	<string name="no_modify" value="(no modificable)"/>

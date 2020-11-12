@@ -68,7 +68,10 @@ ll::prefs::PanelData::~PanelData()
 bool ll::prefs::PanelData::hightlightAndHide( LLWString const &aFilter )
 {
 	for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
-		(*itr)->setNotHighlighted( );
+		(*itr)->setNotHighlighted();
+
+	for (tPanelDataList::iterator itr = mChildPanel.begin(); itr != mChildPanel.end(); ++itr)
+		(*itr)->setNotHighlighted();
 
 	// <FS:Ansariel> FIRE-23969: This breaks prefs search - and isn't needed on FS
 	//if (aFilter.empty())
@@ -85,6 +88,15 @@ bool ll::prefs::PanelData::hightlightAndHide( LLWString const &aFilter )
 		bVisible |= (*itr)->hightlightAndHide( aFilter );
 
 	return bVisible;
+}
+
+void ll::prefs::PanelData::setNotHighlighted()
+{
+	for (tSearchableItemList::iterator itr = mChildren.begin(); itr != mChildren.end(); ++itr)
+		(*itr)->setNotHighlighted();
+
+	for (tPanelDataList::iterator itr = mChildPanel.begin(); itr != mChildPanel.end(); ++itr)
+		(*itr)->setNotHighlighted();
 }
 
 bool ll::prefs::TabContainerData::hightlightAndHide( LLWString const &aFilter )
