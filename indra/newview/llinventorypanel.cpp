@@ -379,6 +379,8 @@ void LLInventoryPanel::draw()
 {
 	// Select the desired item (in case it wasn't loaded when the selection was requested)
 	updateSelection();
+	// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+	//updateFolderState();
 	
 	LLPanel::draw();
 }
@@ -1314,6 +1316,8 @@ void LLInventoryPanel::setSelectCallback(const boost::function<void (const std::
 void LLInventoryPanel::clearSelection()
 {
 	mSelectThisID.setNull();
+	// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+	//mOpenFolderID.setNull();
 }
 
 LLInventoryPanel::selected_items_t LLInventoryPanel::getSelectedItems() const
@@ -1918,6 +1922,32 @@ void LLInventoryPanel::updateSelection()
 		setSelectionByID(mSelectThisID, false);
 	}
 }
+
+// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+//void LLInventoryPanel::openFolderByID( const LLUUID& folder_id)
+//{
+//    LLFolderViewItem* itemp = getItemByID(folder_id);
+//    if(itemp && itemp->getViewModelItem())
+//    {
+//        itemp->setOpen(TRUE);
+//        mOpenFolderID.setNull();
+//        return;
+//    }
+//    else
+//    {
+//        // save the desired folder to be open later (if/when ready)
+//        mOpenFolderID = folder_id;
+//    }
+//}
+//
+//void LLInventoryPanel::updateFolderState()
+//{
+//    if (mOpenFolderID.notNull())
+//    {
+//        openFolderByID(mOpenFolderID);
+//    }
+//}
+// </FS:Ansariel>
 
 void LLInventoryPanel::doToSelected(const LLSD& userdata)
 {

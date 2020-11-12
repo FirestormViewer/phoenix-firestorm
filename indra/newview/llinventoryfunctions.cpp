@@ -881,7 +881,8 @@ void show_item_profile(const LLUUID& item_uuid)
 
 void show_item_original(const LLUUID& item_uuid)
 {
-	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
+	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel;
+	//				 Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
 	//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
 	//if (!floater_inventory)
 	//{
@@ -890,9 +891,7 @@ void show_item_original(const LLUUID& item_uuid)
 	//}
 
 	////sidetray inventory panel
-	//LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-
-	//bool do_reset_inventory_filter = !floater_inventory->isInVisibleChain();
+	//LLSidepanelInventory *sidepanel_inventory =	LLPanelMainInventory::newWindow()->LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 
 	//LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
 	//if (!active_panel) 
@@ -911,11 +910,7 @@ void show_item_original(const LLUUID& item_uuid)
 	//	return;
 	//}
 	//active_panel->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
-	//
-	//if(do_reset_inventory_filter)
-	//{
-	//	reset_inventory_filter();
-	//}
+	//active_panel->setFocus(TRUE);
 
 	LLFloaterReg::showInstance("inventory");
 	LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
@@ -2755,6 +2750,17 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     // </FS:Ansariel>
     else
     {
+        // <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+        //if (action == "goto")
+        //{
+        //    LLSidepanelInventory *sidepanel_inventory = LLPanelMainInventory::newWindow()->LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+        //    if (sidepanel_inventory && sidepanel_inventory->getMainInventoryPanel())
+        //    {
+        //        model = sidepanel_inventory->getMainInventoryPanel()->getActivePanel()->getModel();
+        //    }
+        //}
+        // </FS:Ansariel>
+        
         std::set<LLFolderViewItem*>::iterator set_iter;
         for (set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
         {

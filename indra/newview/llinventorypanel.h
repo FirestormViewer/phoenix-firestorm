@@ -253,7 +253,11 @@ public:
 	LLFolderViewItem* getItemByID(const LLUUID& id);
 	LLFolderViewFolder* getFolderByID(const LLUUID& id);
 	void setSelectionByID(const LLUUID& obj_id, BOOL take_keyboard_focus);
+	// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+	//void openFolderByID(const LLUUID& folder_id);
 	void updateSelection();
+	// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+	//void updateFolderState();
 
 	void setSuppressOpenItemAction(bool supress_open_item) { mSuppressOpenItemAction = supress_open_item; }
 
@@ -269,7 +273,9 @@ protected:
 	void openStartFolderOrMyInventory(); // open the first level of inventory
 	void onItemsCompletion();			// called when selected items are complete
 
-    LLUUID						mSelectThisID;	
+    LLUUID						mSelectThisID;
+	// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
+	//LLUUID						mOpenFolderID;	
 	LLInventoryModel*			mInventory;
 	LLInventoryObserver*		mInventoryObserver;
 	LLInvPanelComplObserver*	mCompletionObserver;
@@ -362,27 +368,6 @@ private:
 
 	bool				mBuildDefaultHierarchy; // default inventory hierarchy should be created in postBuild()
 	bool				mViewsInitialized; // Views have been generated
-};
-
-
-class LLInventoryFavoriteItemsPanel : public LLInventoryPanel
-{
-public:
-    struct Params : public LLInitParam::Block<Params, LLInventoryPanel::Params>
-    {};
-
-    void initFromParams(const Params& p);
-    bool isSelectionRemovable() { return false; }
-    void setSelectCallback(const boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
-
-protected:
-    LLInventoryFavoriteItemsPanel(const Params& params);
-    ~LLInventoryFavoriteItemsPanel() { mFolderChangedSignal.disconnect(); }
-    void updateFavoritesRootFolder();
-
-    boost::signals2::connection mFolderChangedSignal;
-    boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)> mSelectionCallback;
-    friend class LLUICtrlFactory;
 };
 
 /************************************************************************/

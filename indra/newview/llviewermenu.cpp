@@ -68,6 +68,7 @@
 #include "llfloaterimcontainer.h"
 #include "llfloaterland.h"
 #include "llfloaterimnearbychat.h"
+#include "llfloaterlandholdings.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloaterpathfindinglinksets.h"
 #include "llfloaterpay.h"
@@ -7163,6 +7164,16 @@ class LLWorldSetHomeLocation : public view_listener_t
 	}
 };
 
+class LLWorldLindenHome : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string url = LLFloaterLandHoldings::sHasLindenHome ? LLTrans::getString("lindenhomes_my_home_url") : LLTrans::getString("lindenhomes_get_home_url");
+		LLWeb::loadURL(url);
+		return true;
+	}
+};
+
 class LLWorldTeleportHome : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -11072,6 +11083,17 @@ public:
 	}
 };
 
+class LLUpdateMembershipLabel : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		const std::string label_str =  LLAgentBenefitsMgr::isCurrent("Base") ? LLTrans::getString("MembershipUpgradeText") : LLTrans::getString("MembershipPremiumText");
+		gMenuHolder->childSetLabelArg("Membership", "[Membership]", label_str);
+
+		return true;
+	}
+};
+
 void handle_voice_morphing_subscribe()
 {
 	LLWeb::loadURL(LLTrans::getString("voice_morphing_url"));
@@ -11398,6 +11420,8 @@ void initialize_menus()
 
 	view_listener_t::addEnable(new LLUploadCostCalculator(), "Upload.CalculateCosts");
 
+	view_listener_t::addEnable(new LLUpdateMembershipLabel(), "Membership.UpdateLabel");
+
 	// <FS:Ansariel> [FS communication UI]
 	//enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
 	
@@ -11488,6 +11512,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldTeleportHome(), "World.TeleportHome");
 	view_listener_t::addMenu(new LLWorldSetAway(), "World.SetAway");
 	view_listener_t::addMenu(new LLWorldSetDoNotDisturb(), "World.SetDoNotDisturb");
+	view_listener_t::addMenu(new LLWorldLindenHome(), "World.LindenHome");
+
 	view_listener_t::addMenu(new LLWorldGetAway(), "World.GetAway"); //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldGetBusy(), "World.GetBusy"); //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");

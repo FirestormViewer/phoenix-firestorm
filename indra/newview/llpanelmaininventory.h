@@ -47,6 +47,7 @@ class LLMenuButton;
 class LLMenuGL;
 class LLToggleableMenu;
 class LLFloater;
+class LLFloaterSidePanelContainer;
 class LLComboBox;	// <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +99,7 @@ public:
 
 	void setFocusFilterEditor();
 
-	static void newWindow();
+	static LLFloaterSidePanelContainer* newWindow();
 
 	void toggleFindOptions();
 
