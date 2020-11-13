@@ -1848,6 +1848,13 @@ if (WINDOWS)
         set(ICON_PATH "project")
         set(VIEWER_MACOSX_PHASE "a")
     endif()
+
+    # <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version
+    if (OPENSIM)
+        set(ICON_PATH "${ICON_PATH}-os")
+    endif (OPENSIM)
+    # <FS:Ansariel>
+
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
