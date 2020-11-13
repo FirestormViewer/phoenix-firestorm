@@ -302,9 +302,6 @@ void PieMenu::draw()
 
 	S32 steps = 100;
 
-	// remember to take the UI scaling into account
-	LLVector2 scale = gViewerWindow->getDisplayScale();
-
 	// move origin point to the center of our rectangle
 	LLUI::instance().translate(r.getWidth() / 2.f, r.getHeight() / 2.f);
 
