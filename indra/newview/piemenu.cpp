@@ -272,11 +272,13 @@ void PieMenu::draw()
 	gl_rect_2d(0, r.getHeight(), r.getWidth(), 0, LLColor4::white, FALSE);
 #endif
 
+	LLUIColorTable& colortable = LLUIColorTable::instance();
+
 	// set up pie menu colors
-	LLColor4 lineColor = LLUIColorTable::instance().getColor("PieMenuLineColor");
-	LLColor4 selectedColor = LLUIColorTable::instance().getColor("PieMenuSelectedColor");
-	LLColor4 textColor = LLUIColorTable::instance().getColor("PieMenuTextColor");
-	LLColor4 bgColor = LLUIColorTable::instance().getColor("PieMenuBgColor");
+	LLColor4 lineColor = colortable.getColor("PieMenuLineColor");
+	LLColor4 selectedColor = colortable.getColor("PieMenuSelectedColor");
+	LLColor4 textColor = colortable.getColor("PieMenuTextColor");
+	LLColor4 bgColor = colortable.getColor("PieMenuBgColor");
 	LLColor4 borderColor = bgColor % 0.3f;
 
 	// if the user wants their own colors, apply them here
@@ -285,9 +287,9 @@ void PieMenu::draw()
 	{
 		static LLCachedControl<F32> sPieMenuOpacity(gSavedSettings, "PieMenuOpacity");
 		static LLCachedControl<F32> sPieMenuFade(gSavedSettings, "PieMenuFade");
-		bgColor = LLUIColorTable::instance().getColor("PieMenuBgColorOverride") % sPieMenuOpacity;
+		bgColor = colortable.getColor("PieMenuBgColorOverride") % sPieMenuOpacity;
 		borderColor = bgColor % (1.f - sPieMenuFade);
-		selectedColor = LLUIColorTable::instance().getColor("PieMenuSelectedColorOverride");
+		selectedColor = colortable.getColor("PieMenuSelectedColorOverride");
 	}
 	static LLCachedControl<bool> sPieMenuPopupFontEffect(gSavedSettings, "PieMenuPopupFontEffect");
 	static LLCachedControl<bool> sPieMenuOuterRingShade(gSavedSettings, "PieMenuOuterRingShade");
@@ -300,11 +302,8 @@ void PieMenu::draw()
 
 	S32 steps = 100;
 
-	// remember to take the UI scaling into account
-	LLVector2 scale = gViewerWindow->getDisplayScale();
-
 	// move origin point to the center of our rectangle
-	gGL.translatef(r.getWidth() / 2.f * scale.mV[VX], r.getHeight() / 2.f * scale.mV[VY], 0.f);
+	LLUI::instance().translate(r.getWidth() / 2.f, r.getHeight() / 2.f);
 
 	// draw the general pie background
 	gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, steps, bgColor, borderColor);
