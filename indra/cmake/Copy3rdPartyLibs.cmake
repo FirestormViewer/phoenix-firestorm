@@ -112,7 +112,7 @@ if(WINDOWS)
     endif (MSVC80)
 
     # <FS:Ansariel> Try using the VC runtime redistributables that came with the VS installation first
-    if (MSVC_TOOLSET_VER)
+    if (MSVC_TOOLSET_VER AND DEFINED ENV{VCTOOLSREDISTDIR})
         if(ADDRESS_SIZE EQUAL 32)
             set(redist_find_path "$ENV{VCTOOLSREDISTDIR}x86\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
         else(ADDRESS_SIZE EQUAL 32)
@@ -120,7 +120,7 @@ if(WINDOWS)
         endif(ADDRESS_SIZE EQUAL 32)
         get_filename_component(redist_path "${redist_find_path}" ABSOLUTE)
         MESSAGE(STATUS "VC Runtime redist path: ${redist_path}")
-    endif (MSVC_TOOLSET_VER)
+    endif (MSVC_TOOLSET_VER AND DEFINED ENV{VCTOOLSREDISTDIR})
     # </FS:Ansariel>
 
     if(ADDRESS_SIZE EQUAL 32)
