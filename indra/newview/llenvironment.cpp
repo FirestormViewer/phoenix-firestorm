@@ -1242,7 +1242,7 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, LLEnvironm
     }
     else if (!environment->getSky())
     {
-        LL_DEBUGS("ENVIRONMENT") << "Blank sky for " << env_selection_to_string(env) << ". Reusing environment for sky." << LL_ENDL;        if (mCurrentEnvironment->getEnvironmentSelection() != ENV_NONE)
+        if (mCurrentEnvironment->getEnvironmentSelection() != ENV_NONE)
         {
             // Note: This looks suspicious. Shouldn't we assign whole day if mCurrentEnvironment has whole day?
             // and then add water/sky on top
@@ -1284,7 +1284,7 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, LLEnvironm
     }
     else if (!environment->getWater())
     {
-        LL_DEBUGS("ENVIRONMENT") << "Blank water for " << env_selection_to_string(env) << ". Reusing environment for water." << LL_ENDL;        if (mCurrentEnvironment->getEnvironmentSelection() != ENV_NONE)
+        if (mCurrentEnvironment->getEnvironmentSelection() != ENV_NONE)
         {
             // Note: This looks suspicious. Shouldn't we assign whole day if mCurrentEnvironment has whole day?
             // and then add water/sky on top
