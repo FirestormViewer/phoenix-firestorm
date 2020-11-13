@@ -41,7 +41,7 @@ WANTS_AVX2=$FALSE
 WANTS_TESTBUILD=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_CRASHREPORTING=$FALSE
-PLATFORM="darwin" # darwin, windows, linux
+TARGET_PLATFORM="darwin" # darwin, windows, linux
 BTYPE="Release"
 CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
 LL_ARGS_PASSTHRU=""
@@ -126,7 +126,7 @@ getArgs()
           package)        WANTS_PACKAGE=$TRUE;;
           no-package)     WANTS_PACKAGE=$FALSE;;
           build)          WANTS_BUILD=$TRUE;;
-          platform)       PLATFORM="$OPTARG";;
+          platform)       TARGET_PLATFORM="$OPTARG";;
           jobs)           JOBS="$OPTARG";;
           ninja)          WANTS_NINJA=$TRUE;;
           vscode)         WANTS_VSCODE=$TRUE;;
@@ -153,7 +153,7 @@ getArgs()
         WANTS_VERSION=$TRUE
     fi
 
-    LOG="`pwd`/logs/build_$PLATFORM.log"
+    LOG="`pwd`/logs/build_$TARGET_PLATFORM.log"
     if [ -r "$LOG" ] ; then
         rm -f `basename "$LOG"`/* #(remove old logfiles)
     fi
@@ -296,7 +296,7 @@ if [ ! -d `dirname "$LOG"` ] ; then
 fi
 
 echo -e "configure_firestorm.sh" > $LOG
-echo -e "       PLATFORM: $PLATFORM"                                           | tee -a $LOG
+echo -e "       PLATFORM: $TARGET_PLATFORM"                                    | tee -a $LOG
 echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a $LOG
 echo -e "     FMODSTUDIO: `b2a $WANTS_FMODSTUDIO`"                             | tee -a $LOG
 echo -e "         OPENAL: `b2a $WANTS_OPENAL`"                                 | tee -a $LOG
@@ -322,18 +322,28 @@ echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  |
 echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 | tee -a $LOG
 echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a $LOG
 echo -e "          BTYPE: $BTYPE"                                              | tee -a $LOG
-if [ $PLATFORM == "linux" -o $PLATFORM == "darwin" ] ; then
+if [ $TARGET_PLATFORM == "linux" -o $TARGET_PLATFORM == "darwin" ] ; then
     echo -e "           JOBS: $JOBS"                                           | tee -a $LOG
 fi
 echo -e "       Logging to $LOG"
 
-if [ $PLATFORM == "windows" ]
+if [ $TARGET_PLATFORM == "windows" ]
 then
     if [ -z "${AUTOBUILD_VSVER}" ]
     then
         echo "AUTOBUILD_VSVER not set, this can lead to Autobuild picking a higher VS version than desired."
         echo "If you see this happen you should set the variable to e.g. 150 for Visual Studio 2017."
     fi
+
+    echo "Setting environment variables for Visual Studio..."
+    if [ "$OSTYPE" = "cygwin" ] ; then
+        export AUTOBUILD_EXEC="$(cygpath -u $AUTOBUILD)"
+    fi
+
+    # load autobuild provided shell functions and variables
+    eval "$("$AUTOBUILD_EXEC" source_environment)"
+    # vsvars is needed for determing path to VS runtime redist files in Copy3rdPartyLibs.cmake
+    load_vsvars
 fi
 
 if [ -z "$AUTOBUILD_VARIABLES_FILE" ]
@@ -343,7 +353,7 @@ then
     exit 1
 fi
 
-if [ $PLATFORM == "windows" ] ; then
+if [ $TARGET_PLATFORM == "windows" ] ; then
     FIND=/usr/bin/find
 else
     FIND=find
@@ -351,7 +361,7 @@ fi
 
 
 if [ -z $CHANNEL ] ; then
-    if [ $PLATFORM == "darwin" ] ; then
+    if [ $TARGET_PLATFORM == "darwin" ] ; then
         CHANNEL="private-`hostname -s` "
     else
         CHANNEL="private-`hostname`"
@@ -362,11 +372,11 @@ fi
 CHANNEL="Firestorm-$CHANNEL"
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
-    echo "Cleaning $PLATFORM...."
+    echo "Cleaning $TARGET_PLATFORM...."
     wdir=`pwd`
     pushd ..
 
-    if [ $PLATFORM == "darwin" ] ; then
+    if [ $TARGET_PLATFORM == "darwin" ] ; then
         if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
         then
            rm -rf build-darwin-x86_64/*
@@ -376,11 +386,11 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
            mkdir -p build-darwin-i386/logs
         fi
 
-    elif [ $PLATFORM == "windows" ] ; then
+    elif [ $TARGET_PLATFORM == "windows" ] ; then
         rm -rf build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}
         mkdir -p build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}/logs
 
-    elif [ $PLATFORM == "linux" ] ; then
+    elif [ $TARGET_PLATFORM == "linux" ] ; then
         if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
         then
            rm -rf build-linux-x86_64/*
@@ -416,7 +426,7 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
 fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
-    echo "Configuring $PLATFORM..."
+    echo "Configuring $TARGET_PLATFORM..."
 
     if [ $WANTS_KDU -eq $TRUE ] ; then
         KDU="-DUSE_KDU:BOOL=ON"
@@ -473,16 +483,16 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         PACKAGE="-DPACKAGE:BOOL=OFF"
     fi
     if [ $WANTS_CRASHREPORTING -eq $TRUE ] ; then
-        if [ $PLATFORM == "windows" ] ; then
+        if [ $TARGET_PLATFORM == "windows" ] ; then
             BUILD_DIR=`cygpath -w $(pwd)`
         else
             BUILD_DIR=`pwd`
         fi
         # This name is consumed by indra/newview/CMakeLists.txt
-        if [ $PLATFORM == "linux" ] ; then
-            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+        if [ $TARGET_PLATFORM == "linux" ] ; then
+            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/firestorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
         else
-            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
         fi
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=ON"
     else
@@ -497,9 +507,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         mkdir -p "logs"
     fi
 
-    if [ $PLATFORM == "darwin" ] ; then
+    if [ $TARGET_PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
-    elif [ \( $PLATFORM == "linux" \) ] ; then
+    elif [ \( $TARGET_PLATFORM == "linux" \) ] ; then
         OPENAL="-DOPENAL:BOOL=ON"
         if [ $WANTS_NINJA -eq $TRUE ] ; then
             TARGET="Ninja"
@@ -516,7 +526,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
                 cp -n "${ROOT_DIR}/vscode_template/"* "${ROOT_DIR}/.vscode/"
             fi
         fi
-    elif [ \( $PLATFORM == "windows" \) ] ; then
+    elif [ \( $TARGET_PLATFORM == "windows" \) ] ; then
         TARGET="${AUTOBUILD_WIN_CMAKE_GEN}"
         UNATTENDED="-DUNATTENDED=ON"
     fi
@@ -525,21 +535,21 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 
-    if [ $PLATFORM == "windows" ] ; then
+    if [ $TARGET_PLATFORM == "windows" ] ; then
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
-    echo "Building $PLATFORM..."
-    if [ $PLATFORM == "darwin" ] ; then
+    echo "Building $TARGET_PLATFORM..."
+    if [ $TARGET_PLATFORM == "darwin" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=""
         else
             JOBS="-jobs $JOBS"
         fi
         xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a $LOG
-    elif [ $PLATFORM == "linux" ] ; then
+    elif [ $TARGET_PLATFORM == "linux" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
         fi
@@ -548,7 +558,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         else
             make -j $JOBS | tee -a $LOG
         fi
-    elif [ $PLATFORM == "windows" ] ; then
+    elif [ $TARGET_PLATFORM == "windows" ] ; then
         msbuild.exe Firestorm.sln /p:Configuration=${BTYPE} /flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
                     /flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" /p:Platform=${AUTOBUILD_WIN_VSPLATFORM} /t:Build /p:useenv=true \
                     /verbosity:normal /toolsversion:15.0 /p:"VCBuildAdditionalOptions= /incremental"

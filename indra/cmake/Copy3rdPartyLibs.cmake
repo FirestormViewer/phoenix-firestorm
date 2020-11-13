@@ -103,9 +103,25 @@ if(WINDOWS)
         set(MSVC_VER 120)
     elseif (MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1920) # Visual Studio 2017
         set(MSVC_VER 140)
+        set(MSVC_TOOLSET_VER 141)
+    elseif (MSVC_VERSION GREATER_EQUAL 1920 AND MSVC_VERSION LESS 1930) # Visual Studio 2019
+        set(MSVC_VER 140)
+        set(MSVC_TOOLSET_VER 142)
     else (MSVC80)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
     endif (MSVC80)
+
+    # <FS:Ansariel> Try using the VC runtime redistributables that came with the VS installation first
+    if (MSVC_TOOLSET_VER)
+        if(ADDRESS_SIZE EQUAL 32)
+            set(redist_find_path "$ENV{VCTOOLSREDISTDIR}x86\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
+        else(ADDRESS_SIZE EQUAL 32)
+            set(redist_find_path "$ENV{VCTOOLSREDISTDIR}x64\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
+        endif(ADDRESS_SIZE EQUAL 32)
+        get_filename_component(redist_path "${redist_find_path}" ABSOLUTE)
+        MESSAGE(STATUS "VC Runtime redist path: ${redist_path}")
+    endif (MSVC_TOOLSET_VER)
+    # </FS:Ansariel>
 
     if(ADDRESS_SIZE EQUAL 32)
         # this folder contains the 32bit DLLs.. (yes really!)
@@ -125,10 +141,19 @@ if(WINDOWS)
     # Check each of them.
     foreach(release_msvc_file
             msvcp${MSVC_VER}.dll
-            msvcr${MSVC_VER}.dll
+            #msvcr${MSVC_VER}.dll # <FS:Ansariel> Can't build with older VS versions anyway - no need trying to copy this file
             vcruntime${MSVC_VER}.dll
             )
-        if(EXISTS "${registry_path}/${release_msvc_file}")
+        # <FS:Ansariel> Try using the VC runtime redistributables that came with the VS installation first
+        if(redist_path AND EXISTS "${redist_path}/${release_msvc_file}")
+            MESSAGE(STATUS "Copying redist file from ${redist_path}/${release_msvc_file}")
+            to_staging_dirs(
+                ${redist_path}
+                third_party_targets
+                ${release_msvc_file})
+        # </FS:Ansariel>
+        elseif(EXISTS "${registry_path}/${release_msvc_file}")
+            MESSAGE(STATUS "Copying redist file from ${registry_path}/${release_msvc_file}")
             to_staging_dirs(
                 ${registry_path}
                 third_party_targets
