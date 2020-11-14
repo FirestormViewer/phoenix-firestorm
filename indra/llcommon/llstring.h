@@ -178,6 +178,7 @@ public:
 
 	static bool isSpace(char elem) { return isspace((unsigned char)elem) != 0; }
 	static bool isSpace(llwchar elem) { return iswspace(elem) != 0; }
+	static bool isSpace(wchar_t elem) { return iswspace(elem) != 0; } // <FS:ND/> Specialisation needed for correct number formatting
 
 	static bool isUpper(char elem) { return isupper((unsigned char)elem) != 0; }
 	static bool isUpper(llwchar elem) { return iswupper(elem) != 0; }
