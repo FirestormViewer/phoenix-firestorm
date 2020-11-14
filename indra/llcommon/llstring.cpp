@@ -1298,6 +1298,8 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		// std::locale() throws if the locale is unknown! (EXT-7926)
 		try
 		{
+			// <FS:Ansariel> Use user's system locale setting for number formatting
+			//strStream.imbue(std::locale(sLocale.c_str()));
 			strStream.imbue(std::locale(""));
 		} catch (const std::exception &)
 		{
@@ -1335,6 +1337,8 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		// std::locale() throws if the locale is unknown! (EXT-7926)
 		try
 		{
+			// <FS:Ansariel> Use user's system locale setting for number formatting
+			//strStream.imbue(std::locale(sLocale.c_str()));
 			strStream.imbue(std::locale(""));
 		} catch (const std::exception &)
 		{
