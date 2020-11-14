@@ -1353,6 +1353,25 @@ You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service
      name="okbutton"
      yestext="OK"/>
   </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CouldNotBuyCurrencyOS"
+   type="alertmodal">
+[TITLE]
+[MESSAGE]
+    <tag>confirm</tag>
+    <url
+	option="0"
+	name="url"
+	target = "_external">
+		[LINK]
+    </url>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="No"
+     yestext="OK"/>
+  </notification>
   
   <notification
    icon="alertmodal.tga"
