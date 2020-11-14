@@ -448,6 +448,11 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	<notification name="MustAgreeToLogIn">
 		Musisz zaakceptować Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
 	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Nie" />
+	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Założenie stroju nie powiodło się.
 Folder stroju nie zawiera żadnego ubrania, części ciała ani dodatków.
