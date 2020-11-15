@@ -106,16 +106,30 @@ void LFSimFeatureHandler::setSupportedFeatures()
 
 			if(extras.has("GridURL"))
 			{
-				mGridURL =  extras["GridURL"].asString();
-				auto pos = mGridURL.find("://");
+				// If we have GridURL specified in the extras then we use this by default
+				mHyperGridPrefix =  extras["GridURL"].asString();
+				auto pos = mHyperGridPrefix.find("://");
 				if( pos != std::string::npos)
 				{
-					mGridURL = mGridURL.substr(pos+3,mGridURL.size()-(pos+3));
+					// We always strip off the protocol prefix if it exists
+					// Note: we do not attempt to clear trailing port numbers or / or even directories.
+					mHyperGridPrefix = mHyperGridPrefix.substr(pos+3,mHyperGridPrefix.size()-(pos+3));
 				}
+				LL_DEBUGS() << "Setting HyperGrid URL to \"GridURL\" [" << mHyperGridPrefix << "]" << LL_ENDL;
+			}
+			else if (LLGridManager::instance().getGatekeeper() != std::string{})
+			{
+				// Note: this is a tentative test pending further use of gatekeeper
+				// worst case this is checking the login grid and will simply be the same as the fallback
+				// If the GridURL is not available then we will try to use the Gatekeeper which is expected to be present.
+				mHyperGridPrefix = LLGridManager::instance().getGatekeeper();
+				LL_DEBUGS() << "Setting HyperGrid URL to \"Gatekeeper\" [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
 			else
 			{
-				mGridURL = LLGridManager::instance().getGridId();
+				// Just in case that fails we will default back to the current grid
+				mHyperGridPrefix = LLGridManager::instance().getGridId();
+				LL_DEBUGS() << "Setting HyperGrid URL to fallback of current grid (target grid is misconfigured) [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
 
 			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
