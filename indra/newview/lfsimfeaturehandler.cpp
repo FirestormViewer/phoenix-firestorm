@@ -117,6 +117,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				}
 				LL_DEBUGS() << "Setting HyperGrid URL to \"GridURL\" [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
+#ifdef OPENSIM
 			else if (LLGridManager::instance().getGatekeeper() != std::string{})
 			{
 				// Note: this is a tentative test pending further use of gatekeeper
@@ -125,6 +126,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				mHyperGridPrefix = LLGridManager::instance().getGatekeeper();
 				LL_DEBUGS() << "Setting HyperGrid URL to \"Gatekeeper\" [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
+#endif
 			else
 			{
 				// Just in case that fails we will default back to the current grid
