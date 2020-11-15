@@ -67,7 +67,10 @@ public:
 	LLLocale(const std::string& locale_string);
 	virtual ~LLLocale();
 
-	static const std::string USER_LOCALE;
+	// <FS:Ansariel> Make user locale work properly
+	//static const std::string USER_LOCALE;
+	static void setUserLocale(const std::string& locale);
+	static std::string USER_LOCALE;
 	static const std::string SYSTEM_LOCALE;
 
 private:

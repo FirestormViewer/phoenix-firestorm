@@ -344,7 +344,7 @@ void LLFloaterInspect::refresh()
 	std::string creator_name;
 	S32 pos = mObjectList->getScrollPos();
 	// PoundLife - Improved Object Inspect
-	LLLocale locale("");
+	LLLocale locale(LLLocale::USER_LOCALE);
 	LLResMgr& res_mgr = LLResMgr::instance();
 	LLSelectMgr& sel_mgr = LLSelectMgr::instance();
 	S32 fcount = 0;

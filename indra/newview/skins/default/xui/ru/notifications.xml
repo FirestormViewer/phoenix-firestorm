@@ -458,6 +458,11 @@
 	<notification name="MustAgreeToLogIn">
 		Для входа в [SECOND_LIFE] вы должны принять условия Пользовательского соглашения.
 	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Нет"/>
+	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Не удалось надеть комплект.
 Папка комплекта не содержит одежды, частей тела или присоединений.

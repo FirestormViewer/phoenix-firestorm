@@ -1055,10 +1055,7 @@ void LLPanelMainInventory::updateItemcountText()
 		mItemCount = new_count;
 	// </FS:Ansariel>
 		mItemCountString = "";
-		// <FS:Ansariel> Use user-default locale from operating system
-		//LLLocale locale(LLLocale::USER_LOCALE);
-		LLLocale locale("");
-		// </FS:Ansariel>
+		LLLocale locale(LLLocale::USER_LOCALE);
 		LLResMgr::getInstance()->getIntegerString(mItemCountString, mItemCount);
 		
 		// <FS:Ansariel> Include folders in inventory count
