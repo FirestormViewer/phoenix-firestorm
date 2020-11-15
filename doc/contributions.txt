@@ -223,6 +223,9 @@ Ansariel Hiller
 	MAINT-8723
 	SL-10385
 	SL-10891
+	SL-13364
+	SL-13858
+	SL-13697
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -261,6 +264,9 @@ Benjamin Bigdipper
 Beq Janus
 	BUG-227094
 Beth Walcher
+Beq Janus
+	SL-10288
+	SL-13583
 Bezilon Kasei
 Biancaluce Robbiani
 	CT-225
@@ -831,7 +837,9 @@ Khyota Wulluf
 Kimar Coba
 Kithrak Kirkorian
 Kitty Barnett
+	BUG-228664
 	BUG-228665
+	BUG-228719
 	VWR-19699
 	STORM-288
 	STORM-799

@@ -401,6 +401,7 @@ set(viewer_SOURCE_FILES
     llmenuoptionpathfindingrebakenavmesh.cpp
     llmeshrepository.cpp
     llmimetypes.cpp
+    llmodelpreview.cpp
     llmorphview.cpp
     llmoveview.cpp
     llmutelist.cpp
@@ -1032,6 +1033,7 @@ set(viewer_HEADER_FILES
     llmenuoptionpathfindingrebakenavmesh.h
     llmeshrepository.h
     llmimetypes.h
+    llmodelpreview.h
     llmorphview.h
     llmoveview.h
     llmutelist.h
@@ -2149,7 +2151,7 @@ if (DARWIN)
   set(MACOSX_BUNDLE_BUNDLE_NAME "SecondLife")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright © Linden Research, Inc. 2019")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright © Linden Research, Inc. 2020")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "SecondLife.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLApplication")
 

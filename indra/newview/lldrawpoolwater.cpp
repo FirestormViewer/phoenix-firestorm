@@ -104,13 +104,6 @@ void LLDrawPoolWater::restoreGL()
     }*/
 }
 
-LLDrawPool *LLDrawPoolWater::instancePool()
-{
-	LL_ERRS() << "Should never be calling instancePool on a water pool!" << LL_ENDL;
-	return NULL;
-}
-
-
 void LLDrawPoolWater::prerender()
 {
 	mShaderLevel = (gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps) ? LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_WATER) : 0;
@@ -170,7 +163,7 @@ void LLDrawPoolWater::render(S32 pass)
 	std::sort(mDrawFace.begin(), mDrawFace.end(), LLFace::CompareDistanceGreater());
 
 	// See if we are rendering water as opaque or not
-	if (!gSavedSettings.getBOOL("RenderTransparentWater"))
+	if (!LLPipeline::sRenderTransparentWater)
 	{
 		// render water for low end hardware
 		renderOpaqueLegacyWater();

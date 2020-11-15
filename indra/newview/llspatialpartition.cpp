@@ -556,7 +556,9 @@ void LLSpatialGroup::shift(const LLVector4a &offset)
 	if (!getSpatialPartition()->mRenderByGroup && 
 		getSpatialPartition()->mPartitionType != LLViewerRegion::PARTITION_TREE &&
 		getSpatialPartition()->mPartitionType != LLViewerRegion::PARTITION_TERRAIN &&
-		getSpatialPartition()->mPartitionType != LLViewerRegion::PARTITION_BRIDGE)
+		getSpatialPartition()->mPartitionType != LLViewerRegion::PARTITION_BRIDGE &&
+		getSpatialPartition()->mPartitionType != LLViewerRegion::PARTITION_AVATAR &&
+		getSpatialPartition()->mPartitionType != LLViewerRegion::PARTITION_CONTROL_AV)
 	{
 		setState(GEOM_DIRTY);
 		gPipeline.markRebuild(this, TRUE);
@@ -3123,13 +3125,13 @@ void renderRaycast(LLDrawable* drawablep)
 		LLGLEnable blend(GL_BLEND);
 		gGL.diffuseColor4f(0,1,1,0.5f);
 
-		if (drawablep->getVOVolume())
+		LLVOVolume* vobj = drawablep->getVOVolume();
+		if (vobj && !vobj->isDead())
 		{
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			//pushVerts(drawablep->getFace(gDebugRaycastFaceHit), LLVertexBuffer::MAP_VERTEX);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			LLVOVolume* vobj = drawablep->getVOVolume();
 			LLVolume* volume = vobj->getVolume();
 
 			bool transform = true;
@@ -3358,7 +3360,7 @@ public:
 		for (OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
 		{
 			LLDrawable* drawable = (LLDrawable*)(*i)->getDrawable();
-			if(!drawable)
+			if(!drawable || drawable->isDead())
 		{
 				continue;
 			}
