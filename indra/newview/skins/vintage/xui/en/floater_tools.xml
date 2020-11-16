@@ -988,7 +988,7 @@
              select_on_focus="true"
              top_delta="0"
              width="190"
-             tool_tip="When people have &apos;Hover Tips on All Objects&apos; selected in the viewer's settings, they'll see the object description pop-up for any object under their mouse pointer. The prim description is limited to 127 bytes any string longer then that will be truncated." />
+             tool_tip="When people have &apos;Hover Tips&apos; selected in the viewer's settings, they'll see the object description pop-up for any object under their mouse pointer. The prim description is limited to 127 bytes any string longer then that will be truncated." />
             <text
              type="string"
              left="10"

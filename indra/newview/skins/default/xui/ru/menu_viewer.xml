@@ -344,7 +344,6 @@
 			<menu label="Всплывающие подсказки" name="Hover Tips">
 				<menu_item_check label="Показывать Подсказки" name="Show Tips"/>
 				<menu_item_check label="Подсказки о земле" name="Land Tips"/>
-				<menu_item_check label="Подсказки на все объекты" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Типы визуализации" name="Rendering Types">

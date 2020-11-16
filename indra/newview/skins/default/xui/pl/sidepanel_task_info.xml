@@ -53,7 +53,7 @@
 		<text name="Description:">
 			Opis:
 		</text>
-		<line_editor name="Object Description" tool_tip="Kiedy ludzie mają &apos;Pokaż chmurki pomocy na wszystkich obiektach&apos; włączone w ustawieniach przeglądarki, to zobaczą wyskakujący opis obiektu dla dowolnego obiektu pod ich wskaźnikiem myszy. Opis primy jest ograniczony do 127 bajtów, ciąg znaków dłuższy niż ten limit zostanie obcięty." />
+		<line_editor name="Object Description" tool_tip="Kiedy ludzie mają &apos;chmurki pomocy&apos; włączone w ustawieniach przeglądarki, to zobaczą wyskakujący opis obiektu dla dowolnego obiektu pod ich wskaźnikiem myszy. Opis primy jest ograniczony do 127 bajtów, ciąg znaków dłuższy niż ten limit zostanie obcięty." />
 		<text name="CreatorNameLabel">
 			Twórca:
 		</text>
