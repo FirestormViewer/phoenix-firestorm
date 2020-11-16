@@ -84,6 +84,10 @@
 			<spinner label="Gamma :" name="gamma"/>
 			<text name="brightness text">Baisser la valeur pour augmenter la brillance</text>
 			<slider label="Mémoire vidéo utilisée par le viewer (Mo) :" label_width="235" width="450" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à allouer pour les textures. Par défaut, la mémoire de la carte vidéo jusqu'à 512Mo. Réduire ce paramètre peut améliorer les performances, mais peut également rendre les textures plus floues. Augmenter cette valeur au-delà de 512Mo n'est pas recommandé. Même si votre carte graphique le supporte, l'impact sur la mémoire sera conséquent et se traduira par des ralentissements."/>
+			<check_box label="Activer la mémoire de texture dynamique" name="FSDynamicTextureMemory" tool_tip="Permet le calcul de la mémoire de texture dynamique (uniquement disponible sur les systèmes 64 bits et les GPU AMD/NVIDIA avec au moins 512 Mo de mémoire vidéo)" width="315" />
+			<slider label="Mémoire tampon de texture minimale (Mo):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="La quantité minimale de mémoire à allouer pour les textures. Cela permettra de s'assurer que la quantité spécifiée sera toujours utilisée pour les textures, même si elle dépasse la quantité de mémoire vidéo disponible. Si la quantité spécifiée plus les réserves dépassent la quantité de mémoire vidéo physique, elle sera plafonnée en conséquence."/>
+			<slider label="Réserve supplémentaire de mémoire tampon (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé aux textures chargées en cache qui ne sont actuellement pas affichées."/>
+			<slider label="Réserve de mémoire vidéo physique (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé à un autre usage."/>
 			<spinner label="Ratio de distance du brouillard :" name="fog"/>
 		</panel>
 		<panel label="Rendu" name="Rendering">
@@ -111,6 +115,7 @@
 			<check_box label="Voir en mode fil de fer" name="Wireframe"/>
 			<check_box label="Activer les sources lumineuses portées (Face Lights)" tool_tip="Ce paramètre activera toutes les sources de lumière que les avatars portent, comme les 'Face Lights'." name="Render Attached Lights"/>
 			<check_box label="Rendu des particules portées" name="Render Attached Particles"/>
+			<check_box label="Activer le masquage des objets pour les effets de distorsion de l'eau" name="dist_occl" tool_tip="S'il est activé, le masquage des objets est réactivé lors de la génération des effets de distorsion de l'eau. L'affichage est plus précis sans masquage, mais cela peut dégrader considérablement les performances."/>
 			<slider width="480" label_width="340" label="Temporisation de mise en cache de l'univers" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText" left_delta="480">sec.</text>
 			<slider width="480" label_width="340" label="Qualité des ombres" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>
