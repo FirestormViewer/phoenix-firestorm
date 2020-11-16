@@ -3953,6 +3953,15 @@ Czy chcesz jej/mu wysłać te informacje?
 	<notification name="MovelockDisabled">
 		Blokada pozycji została wyłączona.
 	</notification>
+	<notification name="MovelockEnabling">
+		Włączanie blokady pozycji...
+	</notification>
+	<notification name="MovelockDisabling">
+		Wyłączanie blokady pozycji...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Pomocnik lotu jest włączony
+	</notification>
 	<notification label="Resetuj wszystkie ustawienia" name="FirestormClearSettingsPrompt">
 		Resetowanie ustawień może się przydać, gdy napotykasz na jakieś problemy - pamiętaj jednak, że trzeba będzie wprowadzić od nowa wszystkie zmiany, jakie zostały przez Ciebie ustawione do tej pory.
 

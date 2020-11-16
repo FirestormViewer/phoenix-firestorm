@@ -6583,19 +6583,7 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 	</string>
 	
 	<string name="MovelockEnabled">
-		Movelock aktiviert.
-	</string>
-	<string name="MovelockDisabled">
-		Movelock deaktiviert.
-	</string>
-	<string name="MovelockEnabling">
-		Aktiviere Movelock...
-	</string>
-	<string name="MovelockDisabling">
-		Deaktiviere Movelock...
-	</string>
-	<string name="FlightAssistEnabled">
-		Flug-Assistent ist aktiviert.
+		Avatar &gt; Bewegung &gt; Movelock ist aktiviert.
 	</string>
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
