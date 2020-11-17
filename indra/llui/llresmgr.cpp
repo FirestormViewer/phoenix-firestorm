@@ -291,24 +291,16 @@ void LLResMgr::getIntegerString( std::string& output, S32 input ) const
 }
 
 #if LL_WINDOWS
-// <FS:Ansariel> Make user locale work properly
-//const std::string LLLocale::USER_LOCALE("English_United States.1252");// = LLStringUtil::null;
-std::string LLLocale::USER_LOCALE("");// = LLStringUtil::null;
+const std::string LLLocale::USER_LOCALE("English_United States.1252");// = LLStringUtil::null;
 const std::string LLLocale::SYSTEM_LOCALE("English_United States.1252");
 #elif LL_DARWIN
-// <FS:Ansariel> Make user locale work properly
-//const std::string LLLocale::USER_LOCALE("en_US.iso8859-1");// = LLStringUtil::null;
-std::string LLLocale::USER_LOCALE("");// = LLStringUtil::null;
+const std::string LLLocale::USER_LOCALE("en_US.iso8859-1");// = LLStringUtil::null;
 const std::string LLLocale::SYSTEM_LOCALE("en_US.iso8859-1");
 #elif LL_SOLARIS
-// <FS:Ansariel> Make user locale work properly
-//const std::string LLLocale::USER_LOCALE("en_US.ISO8859-1");
-std::string LLLocale::USER_LOCALE("");
+const std::string LLLocale::USER_LOCALE("en_US.ISO8859-1");
 const std::string LLLocale::SYSTEM_LOCALE("C");
 #else // LL_LINUX likes this
-// <FS:Ansariel> Make user locale work properly
-//const std::string LLLocale::USER_LOCALE("en_US.utf8");
-std::string LLLocale::USER_LOCALE("");
+const std::string LLLocale::USER_LOCALE("en_US.utf8");
 const std::string LLLocale::SYSTEM_LOCALE("C");
 #endif
 
@@ -335,11 +327,3 @@ LLLocale::~LLLocale()
 {
 	setlocale( LC_ALL, mPrevLocaleString.c_str() );
 }
-
-// <FS:Ansariel> Make user locale work properly
-//static
-void LLLocale::setUserLocale(const std::string& locale)
-{
-	USER_LOCALE = locale;
-}
-// </FS:Ansariel>
