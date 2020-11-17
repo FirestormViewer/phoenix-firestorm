@@ -6,7 +6,7 @@
 	<check_box label="Разрешить запускать несколько клиентов" name="allow_multiple_viewer_check"/>
 	<check_box label="Разрешить выбор сетки при входе (Не все сетки поддерживают Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Показать расширенное меню (Используйте на свой страх и риск!)" name="show_advanced_menu_check"/>
-	<check_box label="Показать меню разработчиков" name="show_develop_menu_check"/>
+	<check_box label="Показать меню разработчиков (Используйте на свой страх и риск!)" name="show_develop_menu_check"/>
 	<check_box label="Отключить обнаружение VRAM с помощью WMI зондирования в системах Windows" name="FSDisableWMIProbing"/>
 	<check_box label="Показать поиск по меню" name="show_search_menu_check"/>
 	<check_box label="Включить использование анимации с временным шагом (Эксперементально)" tool_tip="Эта настройка может уменьшить нагрузку прорисовки на дальних аватаров но также может привести к воспроизведению их анимаций на неправильных скоростях" name="UseAnimationTimeSteps"/>
