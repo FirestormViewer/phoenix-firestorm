@@ -2496,7 +2496,7 @@ std::string LLFolderBridge::getLabelSuffix() const
         //}
         if (cat_array.size() > 0 || item_array.size() > 0)
         {
-            LLLocale locale(LLLocale::USER_LOCALE);
+            LLLocale locale("");
             LLStringUtil::format_map_t args;
             std::string count_str;
             LLResMgr::getInstance()->getIntegerString(count_str, item_array.size());

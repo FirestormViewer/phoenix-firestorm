@@ -397,7 +397,10 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshotBase* floater)
 	// *TODO: Separate maximum size for Web images from postcards
 	LL_DEBUGS() << "Is snapshot up-to-date? " << got_snap << LL_ENDL;
 
-	LLLocale locale(LLLocale::USER_LOCALE);
+	// <FS:Ansariel> Use user-default locale from operating system
+	//LLLocale locale(LLLocale::USER_LOCALE);
+	LLLocale locale("");
+	// </FS:Ansariel>
 	std::string bytes_string;
 	if (got_snap)
 	{

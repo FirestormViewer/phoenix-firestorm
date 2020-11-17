@@ -3795,7 +3795,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
 		{
 			std::string complexity_string;
-			LLLocale locale(LLLocale::USER_LOCALE);
+			LLLocale locale("");
 
 			// always show complexity, even if the reason for a jelly baby is the texture area
 			// this is technically not 100% correct but the decision logic with all of the

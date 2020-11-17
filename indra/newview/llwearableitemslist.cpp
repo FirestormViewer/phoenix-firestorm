@@ -477,7 +477,7 @@ void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
 	std::string complexity_string;
 	if (item_weight > 0)
 	{
-		LLLocale locale(LLLocale::USER_LOCALE);
+		LLLocale locale("");
 		LLResMgr::getInstance()->getIntegerString(complexity_string, item_weight);
 	}
 	mWeightCtrl->setText(complexity_string);
