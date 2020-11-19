@@ -3844,7 +3844,12 @@ LLFolderType::EType LLFolderBridge::getPreferredType() const
 	LLViewerInventoryCategory* cat = getCategory();
 	if(cat)
 	{
-		// <FS:Ansariel> Special virtual system folder icons
+		// <FS:Ansariel> Special virtual system folder icons; Since these folders can be user-created
+		//               and not protected, we will assign the folder type here instead of in
+		//               LLFolderDictionary. By latter and not declaring them as protected so the user
+		//               could delete them if they desire, they would not show up within the list of
+		//               protected folders in inventory, by underneath them among the other normal
+		//               folders, which is not desired.
 		//preferred_type = cat->getPreferredType();
 		std::string catName(cat->getName());
 		if (catName == ROOT_FIRESTORM_FOLDER) preferred_type = LLFolderType::FT_FIRESTORM;

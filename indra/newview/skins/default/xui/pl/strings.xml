@@ -5701,19 +5701,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		[NAME] spowodował/a nieznany typ kolizji.
 	</string>
 	<string name="MovelockEnabled">
-		Blokada pozycji została włączona
-	</string>
-	<string name="MovelockDisabled">
-		Blokada pozycji została wyłączona
-	</string>
-	<string name="MovelockEnabling">
-		Włączanie blokady pozycji...
-	</string>
-	<string name="MovelockDisabling">
-		Wyłączanie blokady pozycji...
-	</string>
-	<string name="FlightAssistEnabled">
-		Pomocnik lotu jest włączony
+		Awatar &gt; Ruch &gt; Unieruchom jest włączone
 	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości

@@ -298,7 +298,6 @@
 			<menu label="Suggerimenti al passaggio" name="Hover Tips">
 				<menu_item_check label="Mostra" name="Show Tips" />
 				<menu_item_check label="Mostra sui terreni" name="Land Tips"/>
-				<menu_item_check label="Mostra su tutti gli oggetti" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Tipi resa" name="Rendering Types">

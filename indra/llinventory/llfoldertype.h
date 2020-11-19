@@ -99,6 +99,8 @@ public:
 		FT_RLV = 59,
 		// </FS:Ansariel> Folder types for our own virtual system folders
 
+		FT_MY_SUITCASE = 100, // <FS:Ansariel> OpenSim HG-support
+
 		FT_COUNT,
 
 		FT_NONE = -1

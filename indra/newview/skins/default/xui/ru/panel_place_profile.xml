@@ -18,16 +18,16 @@
 	<string name="all_residents_text" value="Все жители"/>
 	<string name="group_text" value="Группа"/>
 	<string name="can_resell">
-		Приобретенная в этом регионе земля может быть перепродана.
+		Купленую в этом регионе землю можно перепродать.
 	</string>
 	<string name="can_not_resell">
-		Приобретенная в этом регионе земля не может быть перепродана.
+		Купленую в этом регионе землю нельзя перепродать.
 	</string>
 	<string name="can_change">
-		Приобретенная в этом регионе земля может быть объединена или разделена.
+		Купленую в этом регионе землю можно объединить или разделить.
 	</string>
 	<string name="can_not_change">
-		Приобретенная в этом регионе земля не может быть объединена или разделена.
+		Купленую в этом регионе землю нельзя объединить или разделить.
 	</string>
 	<string name="server_update_text">
 		Информация о месте недоступна без обновления сервера.
@@ -98,10 +98,10 @@
 				</accordion_tab>
 				<accordion_tab name="estate_information_tab" title="Землевладение">
 					<panel name="estate_information_panel">
-						<text name="estate_name_label" value="Землевладение:"/>
+						<text name="estate_name_label" value="Поместье:"/>
 						<text name="estate_rating_label" value="Рейтинг:"/>
 						<text name="estate_owner_label" value="Владелец:"/>
-						<text name="estate_owner" value="Длина имени владельца теста (длинное имя)"/>
+						<text name="estate_owner" value="Тест имени владельца используя длинное имя"/>
 						<text name="covenant_label" value="Соглашение:"/>
 					</panel>
 				</accordion_tab>
@@ -112,7 +112,7 @@
 						<text name="traffic_label" value="Посещаемость:"/>
 						<text name="primitives_label" value="Примитивы:"/>
 						<text name="parcel_scripts_label" value="Скрипты:"/>
-						<text name="terraform_limits_label" value="Терраформирование:"/>
+						<text name="terraform_limits_label" value="Терраформинг:"/>
 						<text name="subdivide_label" value="Способность разделения/объединения:"/>
 						<text name="resale_label" value="Способность перепродажи:"/>
 						<text name="sale_to_label" value="Продажа для:"/>

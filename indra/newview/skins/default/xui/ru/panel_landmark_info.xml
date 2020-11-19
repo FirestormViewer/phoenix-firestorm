@@ -18,21 +18,28 @@
         <string name="acquired_date">
                 [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
         </string>
+        <string name="information_text">
+                Трафик: [TRAFFIC] Площадь: [AREA] м²
+        </string>
         <layout_stack name="place_info_sidetray_main">
                 <layout_panel name="header_container">
                         <button name="back_btn" tool_tip="Назад"/>
                         <text name="title" value="Профиль места"/>
                 </layout_panel>
                 <layout_panel name="place_info_content">
-                        <text name="region_title" value="Образец региона"/>
-                        <text name="maturity_value" value="неизвестно"/>
-                        <text name="parcel_title" value="Пример участка, длина имени (145, 228, 26)"/>
+                        <text name="parcel_title" value="Пример участка, длиное название"/>
+                        <text name="region_title">
+                                Регион: [REGIONAMEPOS]
+                        </text>
+                        <text name="maturity_value" value="неизвестно" width="70"/>
+                        <text name="parcel_owner_label" value="Владелец:" width="70" />
+                        <text name="parcel_owner" value="неизвестен"/>
                         <panel name="description_panel">
                                 <expandable_text name="description" value="(загрузка ...)"/>
                         </panel>
                         <panel name="landmark_info_panel">
-                                <text name="owner_label" value="Владелец:"/>
-                                <text name="creator_label" value="Создатель:"/>
+                                <text name="owner_label" value="Владелец:" width="70"/>
+                                <text name="creator_label" value="Создатель:" width="70"/>
                                 <text name="created_label" value="Создано:"/>
                                 <text name="information_label" value="Инфо:"/>
                         </panel>
@@ -40,6 +47,7 @@
                                 <text name="title_label" value="Название:"/>
                                 <text name="notes_label" value="Мои заметки:"/>
                                 <text name="folder_label" value="Расположение:"/>
+                                <button label="Изменить" name="edit_btn" tool_tip="Редактировать информацию о закладке"/>
                         </panel>
                 </layout_panel>
         </layout_stack>

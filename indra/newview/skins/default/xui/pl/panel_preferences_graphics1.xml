@@ -156,6 +156,7 @@
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
+			<check_box label="Okluzja obiektów dla map zniekształceń wody" name="dist_occl" tool_tip="Gdy opcja jest zaznaczona, to okluzja obiektów zostanie przywrócona dla generowania map zniekształceń wody. Grafika jest bardziej poprawna bez okluzji, ale może ona mieć znaczący wpływ na wydajność renderowania." />
 			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				sekund
