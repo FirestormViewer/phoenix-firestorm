@@ -2094,7 +2094,10 @@ bool idle_startup()
 
 		// update the voice settings *after* gCacheName initialization
 		// so that we can construct voice UI that relies on the name cache
-		LLVoiceClient::getInstance()->updateSettings();
+		if (LLVoiceClient::instanceExists())
+		{
+			LLVoiceClient::getInstance()->updateSettings();
+		}
 		display_startup();
 
 		// <FS:Ansariel> OpenSim support: Init with defaults - we get the OpenSimExtras later during login
