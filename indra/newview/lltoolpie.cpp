@@ -1286,8 +1286,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				final_name = LLTrans::getString("TooltipPerson");;
 			}
 
-			// *HACK: We may select this object, so pretend it was clicked
-			mPick = mHoverPick;
 // [RLVa:KB] - Checked: RLVa-1.2.0
 			if ( (!RlvActions::isRlvEnabled()) ||
 			     ( (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
@@ -1558,8 +1556,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			
 			if (show_all_object_tips || needs_tip)
 			{
-				// We may select this object, so pretend it was clicked
-				mPick = mHoverPick;
 // [RLVa:KB] - Checked: RLVa-1.2.1
 				if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) )
 				{
