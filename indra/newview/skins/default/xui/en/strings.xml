@@ -932,6 +932,8 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InvFolder #Firestorm">#Firestorm</string>
 	<string name="InvFolder #Phoenix">#Phoenix</string>
 	<string name="InvFolder #RLV">#RLV</string>
+
+	<string name="InvFolder My Suitcase">My Suitcase</string>
 	
 	<string name="no_attachments">No attachments worn</string>
     <string name="Attachments remain">Attachments ([COUNT] remain)</string>
