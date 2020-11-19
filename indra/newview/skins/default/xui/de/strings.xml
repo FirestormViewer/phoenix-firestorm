@@ -2026,6 +2026,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="InvFolder All">
 		Alle
 	</string>
+	<string name="InvFolder My Suitcase">
+		Mein Koffer
+	</string>
 	<string name="no_attachments">
 		Keine Anhänge getragen
 	</string>

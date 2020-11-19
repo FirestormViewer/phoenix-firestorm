@@ -41,7 +41,9 @@
 #include "llweb.h"
 #include "llwindow.h"
 #include "llappviewer.h"
+#ifdef OPENSIM
 #include "fsgridhandler.h" // <FS:Beq> FIRE-30481 open sim buy floater fixup
+#endif
 
 static const S32 STANDARD_BUY_AMOUNT = 2000;
 static const S32 MINIMUM_BALANCE_AMOUNT = 0;
