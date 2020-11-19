@@ -1999,6 +1999,9 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="InvFolder #RLV">
 		#RLV
 	</string>
+	<string name="InvFolder My Suitcase">
+		Мой Чемодан
+	</string>
 	<string name="no_attachments">
 		Нет надетых вложений
 	</string>
