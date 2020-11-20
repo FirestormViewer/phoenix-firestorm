@@ -3805,7 +3805,7 @@ LLSD LLAppViewer::getViewerInfo() const
 			info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
 			info["REGION"] = gAgent.getRegion()->getName();
 			boost::regex regex("\\.(secondlife|lindenlab)\\..*");
-			info["HOSTNAME"] = boost::regex_replace(gAgent.getRegion()->getHost().getHostName(), regex, "");
+			info["HOSTNAME"] = boost::regex_replace(gAgent.getRegion()->getSimHostName(), regex, "");
 			LLSLURL slurl;
 			LLAgentUI::buildSLURL(slurl);
 			info["SLURL"] = slurl.getSLURLString();
@@ -4391,7 +4391,7 @@ void LLAppViewer::handleViewerCrash()
 
 	if(gAgent.getRegion())
 	{
-		gDebugInfo["Dynamic"]["CurrentSimHost"] = gAgent.getRegionHost().getHostName();
+		gDebugInfo["Dynamic"]["CurrentSimHost"] = gAgent.getRegion()->getSimHostName();
 		gDebugInfo["Dynamic"]["CurrentRegion"] = gAgent.getRegion()->getName();
 
 		const LLVector3& loc = gAgent.getPositionAgent();
@@ -6570,7 +6570,7 @@ void LLAppViewer::handleLoginComplete()
 /*
 	if(gAgent.getRegion())
 	{
-		gDebugInfo["CurrentSimHost"] = gAgent.getRegionHost().getHostName();
+		gDebugInfo["CurrentSimHost"] = gAgent.getRegion()->getSimHostName();
 		gDebugInfo["CurrentRegion"] = gAgent.getRegion()->getName();
 	}
 */

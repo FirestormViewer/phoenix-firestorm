@@ -422,6 +422,8 @@ public:
 	BOOL isPaused() const {return mPaused;}
 	S32  getLastUpdate() const {return mLastUpdate;}
 
+	std::string getSimHostName();
+
 	static BOOL isNewObjectCreationThrottleDisabled() {return sNewObjectCreationThrottle < 0;}
 
 private:
