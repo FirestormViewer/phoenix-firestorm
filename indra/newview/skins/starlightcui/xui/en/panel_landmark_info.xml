@@ -387,12 +387,12 @@
                  name="folder_label"
                  top_pad="20"
                  value="Landmark location:"
-                 width="290" />
+                 width="120" />
                 <combo_box
                  follows="bottom|left|right"
                  height="23"
                  layout="topleft"
-                 left="0"
+                 left_pad="0"
                  name="folder_combo"
                  top_delta="-5"
                  width="200" />
