@@ -41,6 +41,9 @@
 #include "llweb.h"
 #include "llwindow.h"
 #include "llappviewer.h"
+#ifdef OPENSIM
+#include "fsgridhandler.h" // <FS:Beq> FIRE-30481 open sim buy floater fixup
+#endif
 
 static const S32 STANDARD_BUY_AMOUNT = 2000;
 static const S32 MINIMUM_BALANCE_AMOUNT = 0;
@@ -183,6 +186,16 @@ void LLFloaterBuyCurrencyUI::updateUI()
 		LLSD args;
 		args["TITLE"] = getString("info_cannot_buy");
 		args["MESSAGE"] = mManager.errorMessage();
+// <FS:Beq> FIRE-30481 restore access to help/donate link for OpenSim
+#ifdef OPENSIM
+		if( !LLGridManager::getInstance()->isInSecondLife() )
+		{
+			args["LINK"] = mManager.errorURI();
+			LLNotificationsUtil::add("CouldNotBuyCurrencyOS", args);
+		}
+		else // trailing else required for OS builds
+#endif
+// </FS:Beq>
 		LLNotificationsUtil::add("CouldNotBuyCurrency", args);
 		mManager.clearError();
 		closeFloater();

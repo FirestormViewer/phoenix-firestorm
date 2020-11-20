@@ -4685,11 +4685,11 @@ class FSSelfToggleMoveLock : public view_listener_t
 			gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 			if (new_value)
 			{
-				report_to_nearby_chat(LLTrans::getString("MovelockEnabling"));
+				LLNotificationsUtil::add("MovelockEnabling", LLSD());
 			}
 			else
 			{
-				report_to_nearby_chat(LLTrans::getString("MovelockDisabling"));
+				LLNotificationsUtil::add("MovelockDisabling", LLSD());
 			}
 		}
 #ifdef OPENSIM

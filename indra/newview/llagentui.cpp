@@ -67,7 +67,7 @@ void LLAgentUI::buildSLURL(LLSLURL& slurl, const bool escaped /*= true*/)
 #ifdef OPENSIM
 		if (LLGridManager::instance().isInOpenSim())
 		{
-			return_slurl = LLSLURL(LFSimFeatureHandler::getInstance()->gridURL(), regionp->getName(), gAgent.getPositionAgent());
+			return_slurl = LLSLURL(LFSimFeatureHandler::getInstance()->hyperGridURL(), regionp->getName(), gAgent.getPositionAgent());
 		}
 		else
 #endif

@@ -434,6 +434,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	memset(mCurrentGammaRamp, 0, sizeof(mCurrentGammaRamp));
 	memset(mPrevGammaRamp, 0, sizeof(mPrevGammaRamp));
 	mCustomGammaSet = FALSE;
+	mWindowHandle = NULL; // <FS:Ansariel> Initialize...
 	
 	if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mMouseVanish, 0))
 	{
@@ -1160,7 +1161,9 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
         << " Height: " << (window_rect.bottom - window_rect.top)
         << " Fullscreen: " << mFullscreen
         << LL_ENDL;
-    if (!destroy_window_handler(mWindowHandle))
+    // <FS:Ansariel> Only try destroying an existing window
+    //if (!destroy_window_handler(mWindowHandle))
+    if (mWindowHandle && !destroy_window_handler(mWindowHandle))
     {
         LL_WARNS("Window") << "Failed to properly close window before recreating it!" << LL_ENDL;
     }	

@@ -1836,18 +1836,25 @@ if (WINDOWS)
     # Replace the icons with the appropriate ones for the channel
     # ('test' is the default)
     set(ICON_PATH "private")
-    set(VIEWER_MACOSX_PHASE "d")
+    #set(VIEWER_MACOSX_PHASE "d") # <FS:Ansariel> Moved to OSX section
     string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
     if(channel_lower MATCHES "release")
         set(ICON_PATH "release")
-        set(VIEWER_MACOSX_PHASE "f")
+        #set(VIEWER_MACOSX_PHASE "f") # <FS:Ansariel> Moved to OSX section
     elseif(channel_lower MATCHES "beta")
         set(ICON_PATH "beta")
-        set(VIEWER_MACOSX_PHASE "b")
+        #set(VIEWER_MACOSX_PHASE "b") # <FS:Ansariel> Moved to OSX section
     elseif(channel_lower MATCHES "project")
         set(ICON_PATH "project")
-        set(VIEWER_MACOSX_PHASE "a")
+        #set(VIEWER_MACOSX_PHASE "a") # <FS:Ansariel> Moved to OSX section
     endif()
+
+    # <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version
+    if (OPENSIM)
+        set(ICON_PATH "${ICON_PATH}-os")
+    endif (OPENSIM)
+    # <FS:Ansariel>
+
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -2585,6 +2592,18 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
 endif (LINUX)
 
 if (DARWIN)
+    # <FS:Ansariel> Moved from Windows section
+    set(VIEWER_MACOSX_PHASE "d")
+    string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
+    if(channel_lower MATCHES "release")
+        set(VIEWER_MACOSX_PHASE "f")
+    elseif(channel_lower MATCHES "beta")
+        set(VIEWER_MACOSX_PHASE "b")
+    elseif(channel_lower MATCHES "project")
+        set(VIEWER_MACOSX_PHASE "a")
+    endif()
+    # </FS:Ansariel>
+
   # These all get set with PROPERTIES. It's not that the property names are
   # magically known to CMake -- it's that these names are referenced in the
   # Info-SecondLife.plist file in the configure_file() directive below.

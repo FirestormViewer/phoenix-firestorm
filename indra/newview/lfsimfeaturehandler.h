@@ -88,7 +88,7 @@ public:
 	// Accessors
 	bool simSupportsExport() const { return mSupportsExport; }
 	std::string mapServerURL() const { return mMapServerURL; }
-	std::string gridURL() const { return mGridURL; }
+	std::string hyperGridURL() const { return mHyperGridPrefix; }
 	std::string searchURL() const { return mSearchURL; }
 	U32 sayRange() const { return mSayRange; }
 	U32 shoutRange() const { return mShoutRange; }
@@ -114,7 +114,7 @@ private:
 	// SignaledTypes
 	SignaledType<bool> mSupportsExport;
 	std::string mMapServerURL;
-	std::string mGridURL;
+	std::string mHyperGridPrefix;
 	SignaledType<std::string> mSearchURL;
 	SignaledType<U32> mSayRange;
 	SignaledType<U32> mShoutRange;

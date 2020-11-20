@@ -860,6 +860,7 @@ class WindowsManifest(ViewerManifest):
         substitution_strings['is64bit'] = (1 if (self.address_size == 64) else 0)
         substitution_strings['is_opensim'] = self.fs_is_opensim() # <FS:Ansariel> FIRE-30446: Register hop-protocol for OS version only
         substitution_strings['friendly_app_name'] = self.friendly_app_name() # <FS:Ansariel> FIRE-30446: Set FriendlyAppName for protocol registrations
+        substitution_strings['icon_suffix'] = ("_os" if (self.fs_is_opensim()) else "") # <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version
 
         version_vars = """
         !define INSTEXE "SLVersionChecker.exe"
@@ -883,6 +884,7 @@ class WindowsManifest(ViewerManifest):
             !define IS64BIT   "%(is64bit)d"
             !define ISOPENSIM   "%(is_opensim)d"
             !define APPNAME   "%(friendly_app_name)s"
+            !define ICON_SUFFIX   "%(icon_suffix)s"
             Caption "%(caption)s"
             """
 

@@ -458,6 +458,11 @@
 	<notification name="MustAgreeToLogIn">
 		Для входа в [SECOND_LIFE] вы должны принять условия Пользовательского соглашения.
 	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Нет"/>
+	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Не удалось надеть комплект.
 Папка комплекта не содержит одежды, частей тела или присоединений.
@@ -3916,6 +3921,11 @@ URL: [AUDIOURL]
 		Выбранный объект влияет на навигационную сетку.  Если заменить его на гибкий путь, он будет удален из навигационной сетки.
 		<usetemplate ignoretext="Выбранный объект влияет на навигационную сетку.  Если заменить его на гибкий путь, он будет удален из навигационной сетки." name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
+	<global name="UnsupportedShaderRequirements">
+		Ваше оборудование не соответствуете требованиям для [APP_NAME]. [APP_NAME] требуется поддержка шейдеров OpenGL 2.0 или новее. В этом случае вы можете убедиться, что у вас установлены последние версии драйверов для вашей видеокарты, а также пакеты обновления и исправления для вашей операционной системы.
+
+Если проблема не исчезнет, посетите [SUPPORT_SITE].
+	</global>
 	<global name="UnsupportedGLRequirements">
 		По-видимому, ваше оборудование не удовлетворяет требованиям [APP_NAME]. Для работы [APP_NAME] необходима графическая карта OpenGL с поддержкой мультитекстур. Если у вас есть такая карта, убедитесь, что установлены новейшие версии драйверов для нее и пакеты обновлений и исправления для операционной системы.
 
@@ -4051,6 +4061,15 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="MovelockDisabled">
 		Блокировка движения выключена.
+	</notification>
+	<notification name="MovelockEnabling">
+		Включение блокировки движения...
+	</notification>
+	<notification name="MovelockDisabling">
+		Выключение блокировки движения...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Помощь при полете включена
 	</notification>
 	<notification label="Сброс всех настроек" name="FirestormClearSettingsPrompt">
 		Сброс всех настроек может быть полезен, если вы испытываете проблемы; Однако, вам нужно будет переделывать настройки, которые вы сделали ранее.
@@ -4420,7 +4439,7 @@ URL: [AUDIOURL]
 		Невозможно добавить скрипт!
 	</notification>
 	<notification name="AssetServerTimeoutObjReturn">
-		Сервер активов не ответил в заданное время.  Объект возвращен в симулятор.
+		Сервер активов не ответил в заданное время. Объект возвращен в регион.
 	</notification>
 	<notification name="RegionDisablePhysicsShapes">
 		В этом регионе не разрешены фигуры с физическими данными.
