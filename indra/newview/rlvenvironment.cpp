@@ -502,6 +502,12 @@ bool RlvEnvironment::onHandleCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRe
 {
 	if ( (rlvCmd.getBehaviour().length() > strCmdPrefix.length() + 2) && (boost::starts_with(rlvCmd.getBehaviour(), strCmdPrefix)) )
 	{
+		if ( (RLV_TYPE_FORCE == rlvCmd.getParamType()) && (!RlvActions::canChangeEnvironment(rlvCmd.getObjectID())) )
+		{
+			cmdRet = RLV_RET_FAILED_LOCK;
+			return true;
+		}
+
 		std::string strEnvCommand = rlvCmd.getBehaviour().substr(strCmdPrefix.length());
 
 		handler_map_t::const_iterator itFnEntry = fnLookup.find(strEnvCommand);
