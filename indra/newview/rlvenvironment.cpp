@@ -473,6 +473,28 @@ LLEnvironment::EnvSelection_t RlvEnvironment::getTargetEnvironment()
 }
 
 // static
+LLSettingsSky::ptr_t RlvEnvironment::getTargetSky(bool forSetCmd)
+{
+	LLEnvironment* pEnv = LLEnvironment::getInstance();
+
+	if (forSetCmd)
+	{
+		bool isSharedEnv = !pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL), hasLocalDayCycle = !isSharedEnv && pEnv->getEnvironmentDay(LLEnvironment::ENV_LOCAL);
+		if ((isSharedEnv) || (hasLocalDayCycle))
+		{
+			LLSettingsSky::ptr_t pSky = (isSharedEnv) ? pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_PARCEL, true)->buildClone()
+				                                      : pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL)->buildClone();
+			pEnv->setEnvironment(LLEnvironment::ENV_LOCAL, pSky);
+			pEnv->setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
+			pEnv->updateEnvironment(LLEnvironment::TRANSITION_INSTANT);
+		}
+	}
+
+	return pEnv->getCurrentSky();
+}
+
+
+// static
 bool RlvEnvironment::onHandleCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet, const std::string& strCmdPrefix, const handler_map_t& fnLookup, const legacy_handler_map_t& legacyFnLookup)
 {
 	if ( (rlvCmd.getBehaviour().length() > strCmdPrefix.length() + 2) && (boost::starts_with(rlvCmd.getBehaviour(), strCmdPrefix)) )
@@ -517,21 +539,21 @@ bool RlvEnvironment::onForceCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet
 template<>
 std::string RlvEnvironment::handleGetFn<float>(const std::function<float(LLSettingsSky::ptr_t)>& fn)
 {
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky();
 	return std::to_string(fn(pSky));
 }
 
 template<>
 std::string RlvEnvironment::handleGetFn<LLUUID>(const std::function<LLUUID(LLSettingsSky::ptr_t)>& fn)
 {
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky();
 	return fn(pSky).asString();
 }
 
 template<>
 std::string RlvEnvironment::handleGetFn<LLVector2>(const std::function<LLVector2(LLSettingsSky::ptr_t)>& fn)
 {
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky();
 	LLVector2 replyVec = fn(pSky);
 	return llformat("%f/%f", replyVec.mV[VX], replyVec.mV[VY]);
 }
@@ -539,7 +561,7 @@ std::string RlvEnvironment::handleGetFn<LLVector2>(const std::function<LLVector2
 template<>
 std::string RlvEnvironment::handleGetFn<LLColor3>(const std::function<LLColor3(LLSettingsSky::ptr_t)>& fn)
 {
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky();
 	LLColor3 replyColor = fn(pSky);
 	return llformat("%f/%f/%f", replyColor.mV[VX], replyColor.mV[VY], replyColor.mV[VZ]);
 }
@@ -551,7 +573,7 @@ ERlvCmdRet RlvEnvironment::handleSetFn(const std::string& strRlvOption, const st
 	if (!RlvCommandOptionHelper::parseOption<T>(strRlvOption, optionValue))
 		return RLV_RET_FAILED_PARAM;
 
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky(true);
 	fn(pSky, optionValue);
 	pSky->update();
 	return RLV_RET_SUCCESS;
@@ -562,7 +584,7 @@ std::string RlvEnvironment::handleLegacyGetFn<LLVector2>(const std::function<con
 {
 	if (idxComponent >= 2)
 		return LLStringUtil::null;
-	return std::to_string(getFn(LLEnvironment::instance().getCurrentSky()).mV[idxComponent]);
+	return std::to_string(getFn(getTargetSky()).mV[idxComponent]);
 }
 
 template<>
@@ -570,11 +592,11 @@ std::string RlvEnvironment::handleLegacyGetFn<LLColor3>(const std::function<cons
 {
 	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
 	{
-		return std::to_string(getFn(LLEnvironment::instance().getCurrentSky()).mV[idxComponent]);
+		return std::to_string(getFn(getTargetSky()).mV[idxComponent]);
 	}
 	else if (idxComponent == VALPHA)
 	{
-		const LLColor3& clr = getFn(LLEnvironment::instance().getCurrentSky());
+		const LLColor3& clr = getFn(getTargetSky());
 		return std::to_string(llmax(clr.mV[VRED], clr.mV[VGREEN], clr.mV[VBLUE]));
 	}
 	return LLStringUtil::null;
@@ -586,7 +608,7 @@ ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLVector2>(float optionValue, LLVec
 	if (idxComponent >= 2)
 		return RLV_RET_FAILED_UNKNOWN;
 
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky(true);
 	curValue.mV[idxComponent] = optionValue;
 	setFn(pSky, curValue);
 	pSky->update();
@@ -597,7 +619,7 @@ ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLVector2>(float optionValue, LLVec
 template<>
 ERlvCmdRet RlvEnvironment::handleLegacySetFn<LLColor3>(float optionValue, LLColor3 curValue, const std::function<void(LLSettingsSkyPtr_t, const LLColor3&)>& setFn, U32 idxComponent)
 {
-	LLSettingsSky::ptr_t pSky = LLEnvironment::instance().getCurrentSky();
+	LLSettingsSky::ptr_t pSky = getTargetSky(true);
 	if ( (idxComponent >= VRED) && (idxComponent <= VBLUE) )
 	{
 		curValue.mV[idxComponent] = optionValue;
@@ -691,7 +713,7 @@ void RlvEnvironment::registerLegacySkyFn(const std::string& strFnName, const std
 			float optionValue;
 			if (!RlvCommandOptionHelper::parseOption(strRlvOption, optionValue))
 				return RLV_RET_FAILED_PARAM;
-			return handleLegacySetFn<T>(optionValue, getFn(LLEnvironment::instance().getCurrentSky()), setFn, idxComponent);;
+			return handleLegacySetFn<T>(optionValue, getFn(getTargetSky(true)), setFn, idxComponent);;
 		}));
 }
 
