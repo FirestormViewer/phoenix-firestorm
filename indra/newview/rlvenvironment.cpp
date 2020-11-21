@@ -479,11 +479,14 @@ LLSettingsSky::ptr_t RlvEnvironment::getTargetSky(bool forSetCmd)
 
 	if (forSetCmd)
 	{
-		bool isSharedEnv = !pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL), hasLocalDayCycle = !isSharedEnv && pEnv->getEnvironmentDay(LLEnvironment::ENV_LOCAL);
-		if ((isSharedEnv) || (hasLocalDayCycle))
+		bool isSharedEnv = !pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL),
+			 hasLocalDayCycle = !isSharedEnv && pEnv->getEnvironmentDay(LLEnvironment::ENV_LOCAL),
+			 isLocalTransition = !hasLocalDayCycle  && pEnv->getCurrentEnvironmentInstance()->isTransition();
+		if ( (isSharedEnv) || (hasLocalDayCycle) || (isLocalTransition) )
 		{
 			LLSettingsSky::ptr_t pSky = (isSharedEnv) ? pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_PARCEL, true)->buildClone()
-				                                      : pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL)->buildClone();
+				                                      : (hasLocalDayCycle) ? pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL)->buildClone()
+			                                                               : pEnv->getEnvironmentFixedSky(LLEnvironment::ENV_LOCAL);
 			pEnv->setEnvironment(LLEnvironment::ENV_LOCAL, pSky);
 			pEnv->setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
 			pEnv->updateEnvironment(LLEnvironment::TRANSITION_INSTANT);

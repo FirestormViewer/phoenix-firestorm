@@ -252,6 +252,9 @@ public:
 
         void                            initialize();
         bool                            isInitialized();
+// [RLVa:KB] - @setenv
+        virtual bool                    isTransition() { return false; }
+// [/RLVa:KB]
 
         void                            clear();
 
@@ -311,6 +314,9 @@ public:
 
         virtual bool                applyTimeDelta(const LLSettingsBase::Seconds& delta) override;
         virtual void                animate() override;
+// [RLVa:KB] - @setenv
+                bool                isTransition() override { return true; }
+// [/RLVa:KB]
 
     protected:
         LLSettingsSky::ptr_t        mStartSky;
@@ -320,6 +326,9 @@ public:
     };
 
     DayInstance::ptr_t          getSelectedEnvironmentInstance();
+// [RLVa:KB] - @setenv
+    DayInstance::ptr_t          getCurrentEnvironmentInstance() { return mCurrentEnvironment; }
+// [/RLVa:KB]
     DayInstance::ptr_t          getSharedEnvironmentInstance();
 
 protected:
