@@ -51,13 +51,13 @@
 			<check_box label="Включить режим переключения приседания" name="crouch_toggle_mode"/>
 			<check_box label="Отключить анимацию подготовки прыжка" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Отключить поворот аватара лицом к камере при движении назад" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Отключить поворот аватара лицом к камере при движении назад"/>
-			<check_box label="Повернуть аватара лицом к объекту, который выбран" name="FSTurnAvatarToSelectedObject" tool_tip="Повернуть аватара лицом к объекту, который выбран"/>
-			<text name="Region_Crossing_Movement_Label" width="175" >
-				Движение между регионами:
+			<check_box label="Повернуть аватара лицом к объекту, который выбран" name="FSTurnAvatarToSelectedObject" tool_tip="Поворачивает ваш аватар лицом к объекту, который вы в данный момент выбираете."/>
+			<text name="Region_Crossing_Movement_Label" width="275">
+				Прогнозирование движения между регионами:
 			</text>
-			<radio_group width="300" left_pad="5" top_delta="0" name="Region_Crossing_Movement">
-				<radio_item label="Прогноз" name="move_predict" width="75" />
-				<radio_item label="Остановка" name="move_stop" width="75" />
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="Прогноз" name="move_predict"/>
+				<radio_item label="Остановка" name="move_stop"/>
 			</radio_group>
 			<text name="movelock_lbl">
 				Если в построеном LSL мост активна блокировка движения...
