@@ -471,6 +471,7 @@ void LLPanelObject::getState( )
 				root_objectp = objectp;
 			}
 		}
+		deactivateMeshFields();
 	}
 
 	LLCalc* calcp = LLCalc::getInstance();

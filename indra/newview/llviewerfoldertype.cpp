@@ -181,6 +181,9 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_RLV,					new ViewerFolderEntry("RLV",					"Inv_RLVOpen",			"Inv_RLVClosed",		FALSE,     true));
 	// </FS:Ansariel> Special Firestorm folder
 
+	// <FS:Ansariel> OpenSim HG-support
+	addEntry(LLFolderType::FT_MY_SUITCASE,			new ViewerFolderEntry("My Suitcase",			"Inv_SuitcaseOpen",		"Inv_SuitcaseClosed",	FALSE,     true));
+
 	for (U32 type = (U32)LLFolderType::FT_ENSEMBLE_START; type <= (U32)LLFolderType::FT_ENSEMBLE_END; ++type)
 	{
 		addEntry((LLFolderType::EType)type, 		new ViewerFolderEntry("New Folder",				"Inv_FolderOpen",		"Inv_FolderClosed",		FALSE,     false));

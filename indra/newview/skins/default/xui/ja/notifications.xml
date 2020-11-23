@@ -4289,6 +4289,15 @@ AO セット "[AO_SET_NAME]" の名前を変更できません。
 	<notification name="MovelockDisabled">
 		ムーブメントロックが解除されました
 	</notification>
+	<notification name="MovelockEnabling">
+		ムーブメントロックを起動中です...
+	</notification>
+	<notification name="MovelockDisabling">
+		ムーブメントロックを解除中です...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		飛行アシストが有効になりました
+	</notification>
 	<!-- Firestorm Phantom -->
 
 	<!-- Firestorm Reset Settings -->

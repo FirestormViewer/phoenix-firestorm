@@ -3795,7 +3795,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
 		{
 			std::string complexity_string;
-			LLLocale locale(LLLocale::USER_LOCALE);
+			LLLocale locale("");
 
 			// always show complexity, even if the reason for a jelly baby is the texture area
 			// this is technically not 100% correct but the decision logic with all of the
@@ -4779,7 +4779,12 @@ void LLVOAvatar::updateOrientation(LLAgent& agent, F32 speed, F32 delta_time)
 			}
 			else
 			{
-				pelvis_lag_time = PELVIS_LAG_WALKING;
+				// <FS:Beq> FIRE-29581 remove stones from wet sack for Willow
+				// pelvis_lag_time = PELVIS_LAG_WALKING;
+				static constexpr F32 turn_rate_delta{0.0019f}; // linear scale
+				static LLCachedControl<F32> turn_speed(gSavedSettings, "FSAvatarTurnSpeed", 0.0f); // 0 is default. We can't go slower.
+				pelvis_lag_time = llmax(PELVIS_LAG_WALKING - (llclamp(turn_speed(), 0.f, 100.f) * turn_rate_delta), F_ALMOST_ZERO);
+				// </FS:Beq>
 			}
 
     F32 u = llclamp((delta_time / pelvis_lag_time), 0.0f, 1.0f);	

@@ -4062,6 +4062,15 @@ URL: [AUDIOURL]
 	<notification name="MovelockDisabled">
 		Блокировка движения выключена.
 	</notification>
+	<notification name="MovelockEnabling">
+		Включение блокировки движения...
+	</notification>
+	<notification name="MovelockDisabling">
+		Выключение блокировки движения...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Помощь при полете включена
+	</notification>
 	<notification label="Сброс всех настроек" name="FirestormClearSettingsPrompt">
 		Сброс всех настроек может быть полезен, если вы испытываете проблемы; Однако, вам нужно будет переделывать настройки, которые вы сделали ранее.
 

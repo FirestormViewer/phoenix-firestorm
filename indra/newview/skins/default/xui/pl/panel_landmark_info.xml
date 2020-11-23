@@ -23,8 +23,9 @@
 			<text name="title" value="Profil miejsca"/>
 		</layout_panel>
 		<layout_panel name="place_info_content">
+			<text name="parcel_title" value="nieznany" />
 			<text name="maturity_value" value="nieznany"/>
-			<text name="parcel_owner_label" value="Właściciel:" />
+			<text name="parcel_owner_label" value="Właściciel:" width="65" />
 			<text name="parcel_owner" value="nieznany" />
 			<panel name="description_panel">
 				<expandable_text name="description" value="(ładowanie...)"/>

@@ -10593,6 +10593,27 @@ Movelock enabled. Use Avatar &gt; Movement &gt; Movelock to disable.
 Movelock disabled.
   </notification>
 
+  <notification
+   icon="notifytip.tga"
+   name="MovelockEnabling"
+   type="notifytip">
+Enabling movelock...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockDisabling"
+   type="notifytip">
+Disabling movelock...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="FlightAssistEnabled"
+   type="notifytip">
+Flight Assist is enabled
+  </notification>
+
 <!-- Firestorm Phantom -->
 
 <!-- Firestorm Reset Settings -->

@@ -285,7 +285,6 @@
 			<menu label="Bulas" name="Hover Tips">
 				<menu_item_check label="Mostrar bulas" name="Show Tips"/>
 				<menu_item_check label="Mostrar bulas de terreno" name="Land Tips"/>
-				<menu_item_check label="Mostrar bulas en todos los objetos" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Objetos representados" name="Rendering Types">

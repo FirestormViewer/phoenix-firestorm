@@ -6,7 +6,7 @@
 	<check_box label="Mehrere Viewer zulassen" name="allow_multiple_viewer_check"/>
 	<check_box label="Bei Anmeldung Gridauswahl anzeigen" name="show_grid_selection_check"/>
 	<check_box label="Menü „Erweitert“ anzeigen" name="show_advanced_menu_check"/>
-	<check_box label="Menü „Entwickler“ anzeigen" name="show_develop_menu_check"/>
+	<check_box label="Menü „Entwickler“ anzeigen (Benutzung auf eigene Gefahr!)" name="show_develop_menu_check"/>
 	<check_box label="VRAM-Ermittlung über WMI auf Windows-Systemen deaktivieren" name="FSDisableWMIProbing"/>
 	<check_box label="Zeitschritte für Animationen aktivieren (experimentell)" name="UseAnimationTimeSteps" tool_tip="Diese Einstellung kann die Render-Komplexität für entfernte Avatare verringen, aber dadurch können deren Animationen in falscher Geschwindigkeit abgespielt werden."/>
 	<text name="BackgroundYieldTimeText">

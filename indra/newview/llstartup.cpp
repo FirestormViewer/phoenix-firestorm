@@ -244,7 +244,6 @@
 #include "llnotificationmanager.h"
 #include "llpresetsmanager.h"
 #include "llprogressview.h"
-#include "llresmgr.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
 #include "streamtitledisplay.h"
@@ -619,12 +618,7 @@ bool idle_startup()
 	system = osString.substr (begIdx, endIdx - begIdx);
 	system += "Locale";
 
-	// <FS:Ansariel> Make user locale work properly
-	//LLStringUtil::setLocale (LLTrans::getString(system));
-	std::string user_locale = gSavedSettings.getString("Language") == "default" ? "" : LLTrans::getString(system);
-	LLStringUtil::setLocale(user_locale);
-	LLLocale::setUserLocale(user_locale);
-	// </FS:Ansariel>
+	LLStringUtil::setLocale (LLTrans::getString(system));
 
 	//note: Removing this line will cause incorrect button size in the login screen. -- bao.
 	gTextureList.updateImages(0.01f) ;

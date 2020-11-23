@@ -121,7 +121,7 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 	// <FS:Ansariel> FIRE-19958: Add digit group separators to avatar complexity notification
 	//args["AGENT_COMPLEXITY"] = LLSD::Integer(mLatestAgentComplexity);
 	{
-		LLLocale locale(LLLocale::USER_LOCALE);
+		LLLocale locale("");
 		std::string complexity_string;
 		LLResMgr::getInstance()->getIntegerString(complexity_string, mLatestAgentComplexity);
 		args["AGENT_COMPLEXITY"] = complexity_string;
