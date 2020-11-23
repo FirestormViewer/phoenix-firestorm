@@ -4779,7 +4779,12 @@ void LLVOAvatar::updateOrientation(LLAgent& agent, F32 speed, F32 delta_time)
 			}
 			else
 			{
-				pelvis_lag_time = PELVIS_LAG_WALKING;
+				// <FS:Beq> FIRE-29581 remove stones from wet sack for Willow
+				// pelvis_lag_time = PELVIS_LAG_WALKING;
+				static constexpr F32 turn_rate_delta{0.0019}; // linear scale
+				static LLCachedControl<F32> turn_speed(gSavedSettings, "FSAvatarTurnSpeed", 0.0);//0 is default. We can't go slower.
+				pelvis_lag_time = PELVIS_LAG_WALKING-(turn_speed*turn_rate_delta);
+				// </FS:Beq>
 			}
 
     F32 u = llclamp((delta_time / pelvis_lag_time), 0.0f, 1.0f);	
