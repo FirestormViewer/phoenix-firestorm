@@ -219,9 +219,9 @@ public:
 	// =========
 public:
 	/*
-	 * Returns true if the user can make changes to their WindLight environment 
+	 * Returns true if the user can make changes to their WindLight environment
 	 */
-	static bool canChangeEnvironment();
+	static bool canChangeEnvironment(const LLUUID& idRlvObject = LLUUID::null);
 
 
 	// =================

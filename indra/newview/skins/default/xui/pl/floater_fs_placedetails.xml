@@ -31,9 +31,6 @@
 					<layout_panel name="map_btn_lp">
 						<button label="Mapa" name="map_btn" tool_tip="Pokaż odpowiadający obszar na mapie świata" />
 					</layout_panel>
-					<layout_panel name="edit_btn_lp">
-						<button label="Edytuj" name="edit_btn" tool_tip="Edytuj tego landmarka" />
-					</layout_panel>
 					<layout_panel name="overflow_btn_lp">
 						<menu_button name="overflow_btn" tool_tip="Pokaż opcje dodatkowe" />
 					</layout_panel>
