@@ -851,16 +851,22 @@ void LLScrollListCtrl::updateColumns(bool force_update)
 		}
 	}
 
+	bool header_changed_width = false;
 	// expand last column header we encountered to full list width
 	// <FS:KC> Fixed last column on LLScrollListCtrl expanding on control resize when column width should be fixed or dynamic
 	//if (last_header)
 	if (last_header && last_header->canResize())
 	{
+		S32 old_width = last_header->getColumn()->getWidth();
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
 		last_header->reshape(new_width, last_header->getRect().getHeight());
 		last_header->setVisible(mDisplayColumnHeaders && new_width > 0);
-		last_header->getColumn()->setWidth(new_width);
-	}
+        if (old_width != new_width)
+        {
+            last_header->getColumn()->setWidth(new_width);
+            header_changed_width = true;
+        }
+    }
 
 	// propagate column widths to individual cells
 	if (columns_changed_width || force_update)
@@ -879,6 +885,20 @@ void LLScrollListCtrl::updateColumns(bool force_update)
 			}
 		}
 	}
+    else if (header_changed_width)
+    {
+        item_list::iterator iter;
+        S32 index = last_header->getColumn()->mIndex; // Not always identical to last column!
+        for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
+        {
+            LLScrollListItem *itemp = *iter;
+            LLScrollListCell* cell = itemp->getColumn(index);
+            if (cell)
+            {
+                cell->setWidth(last_header->getColumn()->getWidth());
+            }
+        }
+    }
 }
 
 void LLScrollListCtrl::setHeadingHeight(S32 heading_height)

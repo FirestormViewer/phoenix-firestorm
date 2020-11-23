@@ -2237,9 +2237,6 @@ bool LLAppViewer::cleanup()
 
 	SUBSYSTEM_CLEANUP(LLAvatarAppearance);
 
-	// <FS:Ansariel> Comment out duplicate clean up
-	//SUBSYSTEM_CLEANUP(LLAvatarAppearance);
-
 	SUBSYSTEM_CLEANUP(LLPostProcess);
 
 	LLTracker::cleanupInstance();
