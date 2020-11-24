@@ -102,6 +102,8 @@ LLFolderDictionary::LLFolderDictionary()
 		 
     addEntry(LLFolderType::FT_SETTINGS,             new FolderEntry("settings", TRUE));
 
+	addEntry(LLFolderType::FT_MY_SUITCASE,			new FolderEntry("suitcase", TRUE)); // <FS:Ansariel> OpenSim HG-support
+
 	addEntry(LLFolderType::FT_NONE, 				new FolderEntry("-1",		FALSE));
 };
 

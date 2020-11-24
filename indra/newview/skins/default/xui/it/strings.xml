@@ -5802,16 +5802,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		[NAME] ha causato una collisione sconosciuta.
 	</string>
 	<string name="MovelockEnabled">
-		Blocco movimenti attivo
-	</string>
-	<string name="MovelockDisabled">
-		Blocco movimenti inattivo
-	</string>
-	<string name="MovelockEnabling">
-		Abilitazione blocco...
-	</string>
-	<string name="MovelockDisabling">
-		Disabilitazione blocco...
+		Io &gt; Movimento &gt; Blocca attivo
 	</string>
 	<string name="BusyResponse">
 		busy response

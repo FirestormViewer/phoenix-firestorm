@@ -458,6 +458,11 @@
 	<notification name="MustAgreeToLogIn">
 		Для входа в [SECOND_LIFE] вы должны принять условия Пользовательского соглашения.
 	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Нет"/>
+	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Не удалось надеть комплект.
 Папка комплекта не содержит одежды, частей тела или присоединений.
@@ -4056,6 +4061,15 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="MovelockDisabled">
 		Блокировка движения выключена.
+	</notification>
+	<notification name="MovelockEnabling">
+		Включение блокировки движения...
+	</notification>
+	<notification name="MovelockDisabling">
+		Выключение блокировки движения...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Помощь при полете включена
 	</notification>
 	<notification label="Сброс всех настроек" name="FirestormClearSettingsPrompt">
 		Сброс всех настроек может быть полезен, если вы испытываете проблемы; Однако, вам нужно будет переделывать настройки, которые вы сделали ранее.

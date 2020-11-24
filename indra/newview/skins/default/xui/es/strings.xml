@@ -5957,8 +5957,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Collision_ScriptedObject">[NAME] te ha golpeado con un objeto con scripts.</string>
 	<string name="Collision_PhysicalObject">[NAME] te ha golpeado con un objeto físico.</string>
 	<string name="Collision_UnknownType">[NAME] ha causado una colisión de tipo desconocido.</string>
-	<string name="MovelockEnabled">Bloqueo de movimiento activado</string>
-	<string name="MovelockDisabled">Bloqueo de movimiento desactivado</string>
+	<string name="MovelockEnabled">Avatar &gt; Movimiento &gt; Bloquear activado</string>
 	<string name="BusyResponse">respuesta de ocupado</string>
 	<string name="TeleportMaturityExceeded">
 		El residente no puede visitar esta región.

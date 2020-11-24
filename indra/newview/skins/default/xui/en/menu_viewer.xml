@@ -2691,9 +2691,6 @@
                 <menu_item_check.on_click
                  function="View.ShowHoverTips" />
             </menu_item_check>
-
-            <menu_item_separator/>
-
             <menu_item_check
              label="Show Land Tooltips"
              name="Land Tips">
@@ -2702,17 +2699,6 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="ShowLandHoverTip" />
-                <menu_item_check.on_enable
-                 function="View.CheckShowHoverTips" />
-            </menu_item_check>
-           <menu_item_check
-             label="Show Tips On All Objects"
-             name="Tips On All Objects">
-                <menu_item_check.on_check
-                 control="ShowAllObjectHoverTip" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="ShowAllObjectHoverTip" />
                 <menu_item_check.on_enable
                  function="View.CheckShowHoverTips" />
             </menu_item_check>
