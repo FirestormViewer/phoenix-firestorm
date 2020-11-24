@@ -574,6 +574,8 @@ BOOL LLPanelOutfitEdit::postBuild()
 	mAvatarComplexityAddingLabel = getChild<LLTextBox>("avatar_complexity_adding_label");
 
 	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this));
+
+	onOutfitChanging(gAgentWearables.isCOFChangeInProgress());
 	return TRUE;
 }
 

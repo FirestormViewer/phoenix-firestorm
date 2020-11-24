@@ -13,26 +13,6 @@
 	<menu_item_call label="Mein Outfit bearbeiten" name="Edit Outfit"/>
 	<menu_item_call label="Meine Form bearbeiten" name="Edit My Shape"/>
 	<menu_item_call label="Schwebehöhe" name="Hover Height"/>
-	<context_menu label="Ausziehen" name="Take Off &gt;">
-		<context_menu label="Kleidung" name="Clothes &gt;">
-			<menu_item_call label="Hemd" name="Shirt"/>
-			<menu_item_call label="Hose" name="Pants"/>
-			<menu_item_call label="Rock" name="Skirt"/>
-			<menu_item_call label="Schuhe" name="Shoes"/>
-			<menu_item_call label="Strümpfe" name="Socks"/>
-			<menu_item_call label="Jacke" name="Jacket"/>
-			<menu_item_call label="Handschuhe" name="Gloves"/>
-			<menu_item_call label="Unterhemd" name="Self Undershirt"/>
-			<menu_item_call label="Unterhose" name="Self Underpants"/>
-			<menu_item_call label="Tätowierung" name="Self Tattoo"/>
-			<menu_item_call label="Physik" name="Self Physics"/>
-			<menu_item_call label="Alpha" name="Self Alpha"/>
-			<menu_item_call label="Alle Kleider" name="All Clothes"/>
-		</context_menu>
-		<context_menu label="HUD" name="Detach Self HUD"/>
-		<context_menu label="Abnehmen" name="Detach Self"/>
-		<menu_item_call label="Alles abnehmen" name="Detach All"/>
-	</context_menu>
 	<menu_item_call label="Skelett zurücksetzen" name="Reset Skeleton"/>
 	<menu_item_call label="Skelett und Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Mesh LOD zurücksetzen" name="Reset Mesh LOD"/>
