@@ -234,11 +234,15 @@ const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents"
 LLMenuGL* gAttachSubMenu = NULL;
 LLMenuGL* gDetachSubMenu = NULL;
 LLMenuGL* gTakeOffClothes = NULL;
+LLMenuGL* gDetachAvatarMenu = NULL;
+LLMenuGL* gDetachHUDAvatarMenu = NULL;
 LLContextMenu* gAttachScreenPieMenu = NULL;
 LLContextMenu* gAttachPieMenu = NULL;
 LLContextMenu* gAttachBodyPartPieMenus[9];
 LLContextMenu* gDetachPieMenu = NULL;
 LLContextMenu* gDetachScreenPieMenu = NULL;
+LLContextMenu* gDetachAttSelfMenu = NULL;
+LLContextMenu* gDetachHUDAttSelfMenu = NULL;
 LLContextMenu* gDetachBodyPartPieMenus[9];
 
 // <FS:Zi> Pie menu
@@ -531,6 +535,9 @@ void init_menus()
 	gMenuAttachmentOther = LLUICtrlFactory::createFromFile<LLContextMenu>(
 		"menu_attachment_other.xml", gMenuHolder, registry);
 
+	gDetachHUDAttSelfMenu = gMenuHolder->getChild<LLContextMenu>("Detach Self HUD", true);
+	gDetachAttSelfMenu = gMenuHolder->getChild<LLContextMenu>("Detach Self", true);
+
 	gMenuLand = LLUICtrlFactory::createFromFile<LLContextMenu>(
 		"menu_land.xml", gMenuHolder, registry);
 
@@ -640,6 +647,9 @@ void init_menus()
 	gAutorespondNonFriendsMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Autorespond to non-friends", TRUE);
 	gAttachSubMenu = gMenuBarView->findChildMenuByName("Attach Object", TRUE);
 	gDetachSubMenu = gMenuBarView->findChildMenuByName("Detach Object", TRUE);
+
+	gDetachAvatarMenu = gMenuHolder->getChild<LLMenuGL>("Avatar Detach", true);
+	gDetachHUDAvatarMenu = gMenuHolder->getChild<LLMenuGL>("Avatar Detach HUD", true);
 
 	// Don't display the Memory console menu if the feature is turned off
 	LLMenuItemCheckGL *memoryMenu = gMenuBarView->getChild<LLMenuItemCheckGL>("Memory", TRUE);
@@ -824,6 +834,7 @@ class LLAdvancedCheckHUDInfo : public view_listener_t
 };
 
 
+// <FS:Ansariel> Keep this for menu check item
 //////////////
 // FLYING   //
 //////////////
@@ -835,6 +846,7 @@ class LLAdvancedAgentFlyingInfo : public view_listener_t
 		return gAgent.getFlying();
 	}
 };
+// </FS:Ansariel>
 
 
 ///////////////////////
@@ -4593,6 +4605,35 @@ bool enable_sitdown_self()
 	return show_sitdown_self() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT);
 // [/RLVa:KB]
 //	return show_sitdown_self() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying();
+}
+
+class LLSelfToggleSitStand : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (isAgentAvatarValid())
+		{
+			if (gAgentAvatarp->isSitting())
+			{
+				gAgent.standUp();
+			}
+			else
+			{
+				gAgent.sitDown();
+			}
+		}
+		return true;
+	}
+};
+
+bool enable_sit_stand()
+{
+	return enable_sitdown_self() || enable_standup_self();
+}
+
+bool enable_fly_land()
+{
+	return gAgent.getFlying() || LLAgent::enableFlying();
 }
 
 // Force sit -KC
@@ -11434,7 +11475,8 @@ void initialize_menus()
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
-	enable.add("Agent.enableFlying", boost::bind(&LLAgent::enableFlying));
+	enable.add("Agent.enableFlyLand", boost::bind(&enable_fly_land));
+	enable.add("Agent.enableFlying", boost::bind(&LLAgent::enableFlying)); // <FS:Ansariel> Keep this
 	commit.add("Agent.PressMicrophone", boost::bind(&LLAgent::pressMicrophone, _2));
 	commit.add("Agent.ReleaseMicrophone", boost::bind(&LLAgent::releaseMicrophone, _2));
 	commit.add("Agent.ToggleMicrophone", boost::bind(&LLAgent::toggleMicrophone, _2));
@@ -11490,9 +11532,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
 	// </FS:Zi>
 	
+	// <FS:Ansariel> Keep this for menu check item
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
-
 	//Communicate Nearby chat
 	// <FS:Ansariel> [FS Communication UI]
 	//view_listener_t::addMenu(new LLCommunicateNearbyChat(), "Communicate.NearbyChat");
@@ -11796,11 +11838,15 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdminOnSaveState(), "Admin.OnSaveState");
 
 	// Self context menu
+	view_listener_t::addMenu(new LLSelfToggleSitStand(), "Self.ToggleSitStand");
+	enable.add("Self.EnableSitStand", boost::bind(&enable_sit_stand));
+	// <FS:Ansariel> Keep this for menu check item
 	view_listener_t::addMenu(new LLSelfStandUp(), "Self.StandUp");
 	enable.add("Self.EnableStandUp", boost::bind(&enable_standup_self));
 	view_listener_t::addMenu(new LLSelfSitDown(), "Self.SitDown");
 	enable.add("Self.EnableSitDown", boost::bind(&enable_sitdown_self)); 
 	enable.add("Self.ShowSitDown", boost::bind(&show_sitdown_self));
+	// </FS:Ansariel>
 	view_listener_t::addMenu(new FSSelfForceSit(), "Self.ForceSit"); //KC
 	enable.add("Self.EnableForceSit", boost::bind(&enable_forcesit_self)); //KC
 	view_listener_t::addMenu(new FSSelfCheckForceSit(), "Self.getForceSit"); //KC
