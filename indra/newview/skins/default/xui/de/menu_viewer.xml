@@ -18,6 +18,26 @@
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
+		<menu label="Ausziehen" name="Take Off &gt;">
+			<menu label="Kleidung" name="Clothes &gt;">
+				<menu_item_call label="Hemd" name="Shirt"/>
+				<menu_item_call label="Hose" name="Pants"/>
+				<menu_item_call label="Rock" name="Skirt"/>
+				<menu_item_call label="Schuhe" name="Shoes"/>
+				<menu_item_call label="Strümpfe" name="Socks"/>
+				<menu_item_call label="Jacke" name="Jacket"/>
+				<menu_item_call label="Handschuhe" name="Gloves"/>
+				<menu_item_call label="Unterhemd" name="Self Undershirt"/>
+				<menu_item_call label="Unterhose" name="Self Underpants"/>
+				<menu_item_call label="Tätowierung" name="Self Tattoo"/>
+				<menu_item_call label="Physik" name="Self Physics"/>
+				<menu_item_call label="Alpha" name="Self Alpha"/>
+				<menu_item_call label="Alle Kleider" name="All Clothes"/>
+			</menu>
+			<menu label="HUD" name="Avatar Detach HUD"/>
+			<menu label="Abnehmen" name="Avatar Detach"/>
+			<menu_item_call label="Alles abnehmen" name="Detach All"/>
+		</menu>
 		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
