@@ -1899,6 +1899,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="InvFolder All">
 		Wszystkie
 	</string>
+	<string name="InvFolder My Suitcase">
+		Moja walizka
+	</string>
 	<string name="no_attachments">
 		Brak założonych dodatków
 	</string>
