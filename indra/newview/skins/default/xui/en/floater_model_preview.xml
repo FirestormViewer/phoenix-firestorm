@@ -1395,8 +1395,8 @@
          height="12"
          name="mesh_upload_behaviour_label"
          top="8"
-         width="175">
-         Model Upload Behaviour Settings :
+         width="300">
+         Model Upload Behaviour Settings:
        </text>
          <check_box
          height="15"
@@ -1404,7 +1404,7 @@
          follows="top|left"
          top_pad="8"
          left="24"
-         width="70"
+         width="300"
          label="Auto-enable weights"
          tooltip="Automatically set weights enabled for meshes with rigging info"
          name="mesh_preview_auto_weights"/>
@@ -1413,7 +1413,7 @@
          follows="top|left"
          top_pad="8"
          left="24"
-         width="70"
+         width="300"
          label="Auto-preview weights"
          tooltip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
@@ -1424,7 +1424,7 @@
          height="12"
          name="mesh_preview_colors_label"
          top_pad="10"
-         width="175">
+         width="300">
          Model Upload Preview Colors:
        </text>
        <text
@@ -1438,8 +1438,8 @@
         mouse_opaque="false"
         name="user_label"
         top_pad="20"
-        width="80">
-        General :
+        width="100">
+        General:
        </text>
          <color_swatch
          control_name="MeshPreviewCanvasColor"
@@ -1473,8 +1473,8 @@
          mouse_opaque="false"
          name="physics_settings_label"
          top_pad="20"
-         width="80">
-         Physics :
+         width="100">
+         Physics:
         </text>
         <color_swatch
         control_name="MeshPreviewPhysicsEdgeColor"
@@ -1508,7 +1508,7 @@
         mouse_opaque="false"
         name="physics_issues_setting_label"
         top_pad="24"
-        width="80">
+        width="100">
         Physics Issues:
       </text>
        <color_swatch
