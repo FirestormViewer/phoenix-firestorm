@@ -53,7 +53,7 @@ public:
 
 	static void		onClickNewScript(void*);
 	static void		onClickPermissions(void*);
-	static void		onClickResetScripts(void*);
+	static void		onClickResetScripts(void*); // <FS> Script reset in edit floater
 	static void		onClickRefresh(void*);
 	
     // Key suffix for "tentative" fields

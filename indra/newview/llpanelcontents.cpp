@@ -54,7 +54,7 @@
 #include "lltrans.h"
 #include "llviewerassettype.h"
 #include "llviewerinventory.h"
-#include "llviewermenu.h"
+#include "llviewermenu.h" // <FS> Script reset in edit floater
 #include "llviewerobject.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
@@ -87,7 +87,7 @@ BOOL LLPanelContents::postBuild()
 
 	childSetAction("button new script",&LLPanelContents::onClickNewScript, this);
 	childSetAction("button permissions",&LLPanelContents::onClickPermissions, this);
-	childSetAction("btn_reset_scripts", &LLPanelContents::onClickResetScripts, this);
+	childSetAction("btn_reset_scripts", &LLPanelContents::onClickResetScripts, this); // <FS> Script reset in edit floater
 	childSetAction("button refresh",&LLPanelContents::onClickRefresh, this);
 
 	mPanelInventoryObject = getChild<LLPanelObjectInventory>("contents_inventory");
@@ -113,7 +113,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 	if( !objectp )
 	{
 		getChildView("button new script")->setEnabled(FALSE);
-		getChildView("btn_reset_scripts")->setEnabled(FALSE);
+		getChildView("btn_reset_scripts")->setEnabled(FALSE); // <FS> Script reset in edit floater
 		return;
 	}
 
@@ -153,7 +153,6 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 	//		((LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1)
 	//			|| (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)));
 
-	//	getChildView("btn_reset_scripts")->setEnabled(editable);
 	BOOL objectIsOK = FALSE;
 	if( editable && all_volume && ( (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1) || (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1) ) )
 	{
@@ -261,11 +260,13 @@ void LLPanelContents::onClickPermissions(void *userdata)
 	gFloaterView->getParentFloater(self)->addDependentFloater(LLFloaterReg::showInstance("bulk_perms"));
 }
 
+// <FS> Script reset in edit floater
 // static
 void LLPanelContents::onClickResetScripts(void *userdata)
 {
 	handle_selected_script_action("reset");
 }
+// </FS>
 
 // static
 void LLPanelContents::onClickRefresh(void *userdata)

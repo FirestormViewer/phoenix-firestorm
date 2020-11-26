@@ -126,7 +126,7 @@ void handle_object_edit();
 void handle_attachment_edit(const LLUUID& inv_item_id);
 void handle_attachment_touch(const LLUUID& inv_item_id);
 bool enable_attachment_touch(const LLUUID& inv_item_id);
-void handle_selected_script_action(const std::string& action);
+void handle_selected_script_action(const std::string& action); // <FS> Script reset in edit floater
 
 // <FS:Techwolf Lupindo> area search
 // expose this function so other classes can call it
