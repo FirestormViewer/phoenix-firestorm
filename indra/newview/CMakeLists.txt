@@ -1816,7 +1816,7 @@ if (LINUX)
     message(STATUS "Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.bmp"
         "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
       )
 endif (LINUX)
