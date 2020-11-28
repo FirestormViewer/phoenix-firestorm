@@ -153,14 +153,6 @@
         <scroll_list name="pos_overrides_list">
           <scroll_list.columns label="Модель" name="model_name"/>
         </scroll_list>
-        <panel name="avatar_model_hint_panel">
-          <text name="avatar_model_hint_text">
-           Подсказка:
-Слишком много предметов используют по умолчанию (правая кисть) без необходимости.
-
-Пожалуйста, рассмотрите возможность использования точки крепления рядом с положением предмета на теле.
-          </text>
-        </panel>
       </panel>
       <panel label="Журнал" name="logs_panel">
         <check_box label="Показать подробно журнал" name="verbose_logging" width="80"/>
@@ -211,7 +203,7 @@
         <check_box label="Развертка" name="show_uv_guide"/>
         <check_box label="Физика" name="show_physics"/>
         <text name="exploder_label">Диапазон</text>
-        <check_box label="Веса кожи" name="show_skin_weight"/>
+        <check_box label="Веса" name="show_skin_weight"/>
         <check_box label="Суставы" name="show_joint_positions"/>
         <check_box label="Изменение Суставов" name="show_joint_overrides"/>
       </panel>
