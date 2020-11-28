@@ -1406,7 +1406,7 @@
          left="24"
          width="300"
          label="Auto-enable weights"
-         tooltip="Automatically set weights enabled for meshes with rigging info"
+         tool_tip="Automatically set weights enabled for meshes with rigging info"
          name="mesh_preview_auto_weights"/>
          <check_box
          control_name="FSMeshUploadAutoShowWeightsWhenEnabled"
@@ -1415,7 +1415,7 @@
          left="24"
          width="300"
          label="Auto-preview weights"
-         tooltip="Automatically show weights in preview for meshes with rigging info"
+         tool_tip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
         <text
          follows="left|top"
@@ -1450,7 +1450,7 @@
          top_delta="-12"
          can_apply_immediately="true"
          label="Background"
-         tooltip="Canvas color for the Mesh uploader"
+         tool_tip="Canvas color for the Mesh uploader"
          name="mesh_preview_canvas_color"/>
          <color_swatch
          control_name="MeshPreviewEdgeColor"
@@ -1460,7 +1460,7 @@
          width="120"
          can_apply_immediately="true"
          label="Model Edge"
-         tooltip="Edge color for the model in preview window on the Mesh uploader"
+         tool_tip="Edge color for the model in preview window on the Mesh uploader"
          name="mesh_preview_edge_color"/>
          <text
          type="string"
@@ -1485,7 +1485,7 @@
         width="120"
         top_delta="-12"
         label="Physics Edge"
-        tooltip="Edge color for physics triangles in preview window on the Mesh uploader"
+        tool_tip="Edge color for physics triangles in preview window on the Mesh uploader"
         name="mesh_preview_physics_edge_color"/>
         <color_swatch
         control_name="MeshPreviewPhysicsFillColor"
@@ -1495,7 +1495,7 @@
         width="120"
         can_apply_immediately="true"
         label="Physics Fill"
-        tooltip="Fill color for physics model in preview window on the Mesh uploader"
+        tool_tip="Fill color for physics model in preview window on the Mesh uploader"
         name="mesh_preview_physics_fill_color"/>
         <text
         type="string"
@@ -1520,7 +1520,7 @@
         top_delta="-12"
         can_apply_immediately="true"
         label="Bad Triangle Edge"
-        tooltip="Edge color for degenerate (thin) triangles in preview window on the Mesh uploader"
+        tool_tip="Edge color for degenerate (thin) triangles in preview window on the Mesh uploader"
         name="mesh_preview_degenerate_edge_color"/>
         <color_swatch
         control_name="MeshPreviewDegenerateFillColor"
@@ -1530,7 +1530,7 @@
         width="120"
         can_apply_immediately="true"
         label="Bad Triangle Fill"
-        tooltip="Fill color for degenerate (thin) triangles in preview window on the Mesh uploader"
+        tool_tip="Fill color for degenerate (thin) triangles in preview window on the Mesh uploader"
         name="mesh_degenerate_fill_color"/>
       </panel>
     </tab_container>

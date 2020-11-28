@@ -367,26 +367,26 @@
 				<text name="mesh_upload_behaviour_label">
 					Modell-Upload-Verhaltenseinstellungen:
 				</text>
-				<check_box label="Gewichte automatisch aktivieren" tooltip="Automatisch die Gewichte für Netze mit Rigging-Informationen aktivieren" name="mesh_preview_auto_weights"/>
-				<check_box label="Automatische Vorschau für Gewichte" tooltip="Zeigt automatisch die Gewichte für Netze mit Rigging-Informationen in der Vorschau" name="mesh_preview_auto_show_weights"/>
+				<check_box label="Gewichte automatisch aktivieren" tool_tip="Automatisch die Gewichte für Netze mit Rigging-Informationen aktivieren" name="mesh_preview_auto_weights"/>
+				<check_box label="Automatische Vorschau für Gewichte" tool_tip="Zeigt automatisch die Gewichte für Netze mit Rigging-Informationen in der Vorschau" name="mesh_preview_auto_show_weights"/>
 				<text name="mesh_preview_colors_label">
 					Farben für Modell-Upload:
 				</text>
 				<text name="user_label">
 					Allgemein:
 				</text>
-				<color_swatch label="Hintergrund" tooltip="Hintergrundfarbe für den Uploader" name="mesh_preview_canvas_color"/>
-				<color_swatch label="Modell-Kanten" tooltip="Farbe für Kanten des Modells im Vorschau-Fenster" name="mesh_preview_edge_color"/>
+				<color_swatch label="Hintergrund" tool_tip="Hintergrundfarbe für den Uploader" name="mesh_preview_canvas_color"/>
+				<color_swatch label="Modell-Kanten" tool_tip="Farbe für Kanten des Modells im Vorschau-Fenster" name="mesh_preview_edge_color"/>
 				<text name="physics_settings_label">
 					Physik:
 				</text>
-				<color_swatch label="Physik-Kanten" tooltip="Kantenfarbe für Physik-Dreiecke im Vorschau-Fenster" name="mesh_preview_physics_edge_color"/>
-				<color_swatch label="Physik-Füllfarbe" tooltip="Füllfarbe für Physik-Modell im Vorschau-Fenster" name="mesh_preview_physics_fill_color"/>
+				<color_swatch label="Physik-Kanten" tool_tip="Kantenfarbe für Physik-Dreiecke im Vorschau-Fenster" name="mesh_preview_physics_edge_color"/>
+				<color_swatch label="Physik-Füllfarbe" tool_tip="Füllfarbe für Physik-Modell im Vorschau-Fenster" name="mesh_preview_physics_fill_color"/>
 				<text name="physics_issues_setting_label">
 					Physik-Probleme:
 				</text>
-				<color_swatch label="Schlechte Kante" tooltip="Farbe für degenerierte (dünne) Dreiecks-Kanten im Vorschau-Fenster" name="mesh_preview_degenerate_edge_color"/>
-				<color_swatch label="Schlechte Dreiecke" tooltip="Füllfarbe für degenerierte (dünne) Dreiecke im Vorschau-Fenster" name="mesh_degenerate_fill_color"/>
+				<color_swatch label="Schlechte Kante" tool_tip="Farbe für degenerierte (dünne) Dreiecks-Kanten im Vorschau-Fenster" name="mesh_preview_degenerate_edge_color"/>
+				<color_swatch label="Schlechte Dreiecke" tool_tip="Füllfarbe für degenerierte (dünne) Dreiecke im Vorschau-Fenster" name="mesh_degenerate_fill_color"/>
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
