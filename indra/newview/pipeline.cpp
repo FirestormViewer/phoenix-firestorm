@@ -4252,11 +4252,6 @@ void LLPipeline::renderHighlights()
 		glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
 		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
 
-        if (canUseVertexShaders())
-        {
-            gHighlightProgram.bind();
-        }
-
 		gGL.setColorMask(false, false);
 
         if (LLGLSLShader::sNoFixedFunction)
@@ -8956,24 +8951,6 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget *screen_target)
 
                     // send light color to shader in linear space
                     LLColor3 col = volume->getLightLinearColor();
-
-                    // fade also works as flicker prevention during reparenting
-                    // because reparenting causes distance to jump temporary
-                    F32 fade = iter->fade;
-                    if (fade < LIGHT_FADE_TIME)
-                    {
-                        // fade in/out light
-                        if (fade >= 0.f)
-                        {
-                            fade = fade / LIGHT_FADE_TIME;
-                        }
-                        else
-                        {
-                            fade = 1.f + fade / LIGHT_FADE_TIME;
-                        }
-                        fade = llclamp(fade, 0.f, 1.f);
-                        col *= fade;
-                    }
 
                     if (col.magVecSquared() < 0.001f)
                     {
