@@ -1193,7 +1193,15 @@ void LLPipeline::refreshCachedSettings()
 	RenderUIBuffer = gSavedSettings.getBOOL("RenderUIBuffer");
 	RenderShadowDetail = gSavedSettings.getS32("RenderShadowDetail");
 	RenderDeferredSSAO = gSavedSettings.getBOOL("RenderDeferredSSAO");
-	RenderShadowResolutionScale = gSavedSettings.getF32("RenderShadowResolutionScale");
+	// <FS:Beq> FIRE-30538 Shadow map not resized after resolution change
+	// RenderShadowResolutionScale = gSavedSettings.getF32("RenderShadowResolutionScale");
+	auto newShadowResScale = gSavedSettings.getF32("RenderShadowResolutionScale");
+	if ( newShadowResScale != RenderShadowResolutionScale ) 
+	{
+		RenderShadowResolutionScale = newShadowResScale;
+		gResizeShadowTexture = true;
+	}
+	// </FS:Beq>
 	RenderLocalLights = gSavedSettings.getBOOL("RenderLocalLights");
 	RenderDelayCreation = gSavedSettings.getBOOL("RenderDelayCreation");
 //	RenderAnimateRes = gSavedSettings.getBOOL("RenderAnimateRes"); <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
