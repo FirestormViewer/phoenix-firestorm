@@ -139,7 +139,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				hop = "hop://" + hop;
 			slurl_uri = LLURI(hop);
 
-			LL_DEBUGS("SLURL") << "hypergrid slurl " << hop <<LL_ENDL;
+			LL_DEBUGS("SLURL") << "hypergrid slurl " << hop << "hg=" << (mHypergrid?"true":"false") <<  LL_ENDL;
 		}
 
 		LLSD path_array = slurl_uri.pathArray();
@@ -334,13 +334,16 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				}
 
 				probe_grid = LLGridManager::getInstance()->getGridByProbing(hypergrid);
+				LL_DEBUGS("SLURL") << "Probing Hypergrid (trimmed): " << hypergrid << "(" << hyper_trimmed << ")" << LL_ENDL;
+				LL_DEBUGS("SLURL") << "Probing result: " << (probe_grid.empty()?"NOT FOUND":probe_grid.c_str()) << LL_ENDL;
 				if (probe_grid.empty())
 				{
 					probe_grid = LLGridManager::getInstance()->getGridByProbing(slurl_uri.hostName());
+					LL_DEBUGS("SLURL") << "Probing hostName: " << slurl_uri.hostName() << LL_ENDL;
+					LL_DEBUGS("SLURL") << "Probing result: " << (probe_grid.empty()?"NOT FOUND":probe_grid.c_str()) << LL_ENDL;
+					LL_DEBUGS("SLURL") << "slurl_uri.hostNameAndPort(): "  << slurl_uri.hostNameAndPort() << LL_ENDL;
 				}
 
-				LL_DEBUGS("SLURL") << "Probing result: " << probe_grid << LL_ENDL;
-				LL_DEBUGS("SLURL") << "slurl_uri.hostNameAndPort(): "  << slurl_uri.hostNameAndPort() << LL_ENDL;
 
 				if ((slurl_uri.scheme() == LLSLURL::SLURL_HTTP_SCHEME || slurl_uri.scheme() == LLSLURL::SLURL_HTTPS_SCHEME) && slurl_uri.hostNameAndPort() != probe_grid)
 				{
@@ -353,12 +356,17 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				// unlike the stinky maingrid style
 				if (probe_grid.empty())
 				{
+					LL_DEBUGS("SLURL") << "Fallback to hostname and port as grid"  << LL_ENDL;
 					mGrid = slurl_uri.hostNameAndPort();
 				}
 				else
 				{
 					mGrid = probe_grid;
-					mHypergrid = LLGridManager::getInstance()->isHyperGrid(probe_grid);
+					if(!mHypergrid)// only check if we have not already decided HG is true
+					{
+						mHypergrid = LLGridManager::getInstance()->isHyperGrid(probe_grid);
+					}
+					LL_DEBUGS("SLURL") << "using probe result: " << mGrid << " hg=" << ((mHypergrid)?"true":"false") << LL_ENDL;
 				}
 			}
 

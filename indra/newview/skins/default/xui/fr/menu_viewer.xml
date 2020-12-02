@@ -260,7 +260,6 @@
 			<menu label="Conseils" name="Hover Tips">
 				<menu_item_check label="Afficher les conseils" name="Show Tips"/>
 				<menu_item_check label="Afficher les conseils à propose des terrains" name="Land Tips"/>
-				<menu_item_check label="Afficher les conseils sur tous les objets" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Types de rendu" name="Rendering Types">

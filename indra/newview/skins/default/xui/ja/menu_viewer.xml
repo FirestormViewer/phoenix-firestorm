@@ -317,9 +317,7 @@
 			<!-- added Mar.15, 2015 -->
 			<menu label="クイックヒント" name="Hover Tips">
 				<menu_item_check label="ヒントを表示" name="Show Tips" />
-				<menu_item_separator/>
 				<menu_item_check label="土地のヒントを表示" name="Land Tips" />
-				<menu_item_check label="オブジェクト全てにヒントを表示" name="Tips On All Objects" />
 			</menu>
 			<!-- added Mar.15, 2015 -->
 		</menu>

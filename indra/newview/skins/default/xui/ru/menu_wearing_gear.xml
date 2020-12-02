@@ -2,7 +2,7 @@
 <toggleable_menu name="Gear Wearing">
 	<menu_item_call label="Коснуться" name="touch"/>
 	<menu_item_call label="Изменить" name="edit_item"/>
-	<menu_item_call label="Изменить костюм" name="edit_outfit"/>
 	<menu_item_call label="Снять" name="takeoff"/>
+	<menu_item_call label="Изменить костюм" name="edit_outfit"/>
 	<menu_item_call label="Копировать список предметов комплекта в буфер" name="copy"/>
 </toggleable_menu>

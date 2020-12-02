@@ -265,14 +265,14 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			if (gSavedPerAccountSettings.getF32("UseLSLFlightAssist") > 0.f)
 			{
 				viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")) );
-				report_to_nearby_chat(LLTrans::getString("FlightAssistEnabled"));
+				LLNotificationsUtil::add("FlightAssistEnabled", LLSD());
 			}
 
 			// <FS:PP> Inform user, if movelock was enabled at login
 			if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 			{
 				updateBoolSettingValue("UseMoveLock");
-				report_to_nearby_chat(LLTrans::getString("MovelockEnabling"));
+				LLNotificationsUtil::add("MovelockEnabling", LLSD());
 				make_ui_sound("UISndMovelockToggle");
 			}
 			// </FS:PP>
@@ -291,7 +291,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				// Don't call for update here and only change setting to 'false', getCommitSignal()->connect->boost in llviewercontrol.cpp will send a message to Bridge anyway
 				gSavedPerAccountSettings.setBOOL("UseMoveLock", false);
-				report_to_nearby_chat(LLTrans::getString("MovelockDisabling"));
+				LLNotificationsUtil::add("MovelockDisabling", LLSD());
 			}
 			else
 			{

@@ -1353,6 +1353,25 @@ You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service
      name="okbutton"
      yestext="OK"/>
   </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CouldNotBuyCurrencyOS"
+   type="alertmodal">
+[TITLE]
+[MESSAGE]
+    <tag>confirm</tag>
+    <url
+	option="0"
+	name="url"
+	target = "_external">
+		[LINK]
+    </url>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="No"
+     yestext="OK"/>
+  </notification>
   
   <notification
    icon="alertmodal.tga"
@@ -10577,6 +10596,27 @@ Movelock enabled. Use Avatar &gt; Movement &gt; Movelock to disable.
    name="MovelockDisabled"
    type="notifytip">
 Movelock disabled.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockEnabling"
+   type="notifytip">
+Enabling movelock...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockDisabling"
+   type="notifytip">
+Disabling movelock...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="FlightAssistEnabled"
+   type="notifytip">
+Flight Assist is enabled
   </notification>
 
 <!-- Firestorm Phantom -->

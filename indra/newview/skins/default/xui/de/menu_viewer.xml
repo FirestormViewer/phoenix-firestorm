@@ -286,7 +286,6 @@
 			<menu label="Schwebe-Tipps" name="Hover Tips">
 				<menu_item_check label="Tipps anzeigen" name="Show Tips"/>
 				<menu_item_check label="Landtipps" name="Land Tips"/>
-				<menu_item_check label="Tipps zu allen Objekten" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Darstellungstypen" name="Rendering Types">

@@ -49,6 +49,9 @@
 
 // Firestorm includes
 #include "llappearancemgr.h" // needed to query whether we are in COF
+#ifdef OPENSIM
+#include "fsgridhandler.h" // <FS:Beq> need to check if in opensim
+#endif
 
 LLTrace::BlockTimerStatHandle FT_FILTER_CLIPBOARD("Filter Clipboard");
 
@@ -284,6 +287,14 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 		if (!cat)
 			return folder_id.isNull();
 		LLFolderType::EType cat_type = cat->getPreferredType();
+// <FS:Beq> FIRE-30501 suitcase missing on 32 bit viewer.
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInOpenSim() && cat_type == LLFolderType::FT_MY_SUITCASE)
+		{
+			return true; // suitcase will always be shown
+		}
+#endif
+// </FS:Beq>
 		if (cat_type != LLFolderType::FT_NONE && (1LL << cat_type & mFilterOps.mFilterCategoryTypes) == U64(0))
 			return false;
 	}
