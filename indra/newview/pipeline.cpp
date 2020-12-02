@@ -805,7 +805,10 @@ void LLPipeline::requestResizeShadowTexture()
 void LLPipeline::resizeShadowTexture()
 {
     releaseShadowTargets();
-    allocateShadowBuffer(mScreenWidth, mScreenHeight);
+    // <FS:Beq> FIRE-30538 don;t pass zero screen size to shadow buff allocator
+    // allocateShadowBuffer(mScreenWidth, mScreenHeight);
+    allocateShadowBuffer( mScreen.getWidth(), mScreen.getHeight() );
+    // </FS:Beq>
     gResizeShadowTexture = FALSE;
 }
 
