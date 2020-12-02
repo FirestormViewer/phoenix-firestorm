@@ -38,6 +38,7 @@
 
 // Linden library includes
 #include "llerror.h"
+#include "llexception.h"
 #include "llfasttimer.h"
 #include "llgl.h"
 #include "llstring.h"
@@ -117,7 +118,7 @@ void show_window_creation_error(const std::string& title)
 	LL_WARNS("Window") << title << LL_ENDL;
 }
 
-HGLRC SafeCreateContext(HDC hdc)
+HGLRC SafeCreateContext(HDC &hdc)
 {
 	__try 
 	{
@@ -127,6 +128,22 @@ HGLRC SafeCreateContext(HDC hdc)
 	{ 
 		return NULL;
 	}
+}
+
+GLuint SafeChoosePixelFormat(HDC &hdc, const PIXELFORMATDESCRIPTOR *ppfd)
+{
+    __try
+    {
+        return ChoosePixelFormat(hdc, ppfd);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        // convert to C++ styled exception
+        // C exception don't allow classes, so it's a regular char array
+        char integer_string[32];
+        sprintf(integer_string, "SEH, code: %lu\n", GetExceptionCode());
+        throw std::exception(integer_string);
+    }
 }
 
 //static
@@ -463,8 +480,8 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	memset(mCurrentGammaRamp, 0, sizeof(mCurrentGammaRamp));
 	memset(mPrevGammaRamp, 0, sizeof(mPrevGammaRamp));
 	mCustomGammaSet = FALSE;
-	mWindowHandle = NULL; // <FS:Ansariel> Initialize...
-	
+	mWindowHandle = NULL;
+
 	if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mMouseVanish, 0))
 	{
 		mMouseVanish = TRUE;
@@ -1175,8 +1192,6 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
         << " Height: " << (window_rect.bottom - window_rect.top)
         << " Fullscreen: " << mFullscreen
         << LL_ENDL;
-    // <FS:Ansariel> Only try destroying an existing window
-    //if (!destroy_window_handler(mWindowHandle))
     if (mWindowHandle && !destroy_window_handler(mWindowHandle))
     {
         LL_WARNS("Window") << "Failed to properly close window before recreating it!" << LL_ENDL;
@@ -1236,13 +1251,26 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 
 	LL_INFOS("Window") << "Device context retrieved." << LL_ENDL ;
 
-	if (!(pixel_format = ChoosePixelFormat(mhDC, &pfd)))
-	{
-		close();
-		OSMessageBox(mCallbacks->translateString("MBPixelFmtErr"),
-			mCallbacks->translateString("MBError"), OSMB_OK);
-		return FALSE;
-	}
+    try
+    {
+        // Looks like ChoosePixelFormat can crash in case of faulty driver
+        if (!(pixel_format = SafeChoosePixelFormat(mhDC, &pfd)))
+        {
+            LL_WARNS("Window") << "ChoosePixelFormat failed, code: " << GetLastError() << LL_ENDL;
+            OSMessageBox(mCallbacks->translateString("MBPixelFmtErr"),
+                mCallbacks->translateString("MBError"), OSMB_OK);
+            close();
+            return FALSE;
+        }
+    }
+    catch (...)
+    {
+        LOG_UNHANDLED_EXCEPTION("ChoosePixelFormat");
+        OSMessageBox(mCallbacks->translateString("MBPixelFmtErr"),
+            mCallbacks->translateString("MBError"), OSMB_OK);
+        close();
+        return FALSE;
+    }
 
 	LL_INFOS("Window") << "Pixel format chosen." << LL_ENDL ;
 
@@ -1502,7 +1530,7 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 		}
 
         // Destroy The Window
-        if (!destroy_window_handler(mWindowHandle))
+        if (mWindowHandle && !destroy_window_handler(mWindowHandle))
         {
             LL_WARNS("Window") << "Failed to properly close window!" << LL_ENDL;
         }		

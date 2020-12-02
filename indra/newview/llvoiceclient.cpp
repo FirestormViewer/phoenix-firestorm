@@ -190,6 +190,7 @@ void LLVoiceClient::terminate()
 {
 	if (mVoiceModule) mVoiceModule->terminate();
 	mVoiceModule = NULL;
+    m_servicePump = NULL;
 
 	// <FS:Ansariel> Shutdown speaker volume storage before CRT does it
 	if (LLSpeakerVolumeStorage::instanceExists())
