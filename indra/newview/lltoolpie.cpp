@@ -66,6 +66,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
+#include "llviewerinput.h"
 #include "llviewermedia.h"
 #include "llvoavatarself.h"
 #include "llviewermediafocus.h"
@@ -850,7 +851,9 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 		LL_DEBUGS("UserInput") << "hover handled by LLToolPie (inactive)" << LL_ENDL;
 	}
 	else if (!mMouseOutsideSlop 
-		&& mMouseButtonDown)
+		&& mMouseButtonDown
+		// disable camera steering if click on land is not used for moving
+		&& gViewerInput.isMouseBindUsed(CLICK_LEFT))
 	{
 		S32 delta_x = x - mMouseDownX;
 		S32 delta_y = y - mMouseDownY;

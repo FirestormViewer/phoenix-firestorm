@@ -2467,22 +2467,25 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                 {
                     // TODO: support multi-select
                     LLScrollListItem *item = getFirstSelected();
-                    S32 cell = item->getSelectedCell();
-                    switch (mSelectionType)
+                    if (item)
                     {
-                    case CELL:
-                        if (cell < mColumns.size()) cell++;
-                        break;
-                    case HEADER:
-                        if (cell == -1) cell = 1;
-                        else if (cell > 1 && cell < mColumns.size()) cell++; // skip header
-                        break;
-                    case ROW:
-                        cell = -1;
-                        break;
+                        S32 cell = item->getSelectedCell();
+                        switch (mSelectionType)
+                        {
+                        case CELL:
+                            if (cell < mColumns.size()) cell++;
+                            break;
+                        case HEADER:
+                            if (cell == -1) cell = 1;
+                            else if (cell > 1 && cell < mColumns.size()) cell++; // skip header
+                            break;
+                        case ROW:
+                            cell = -1;
+                            break;
+                        }
+                        item->setSelectedCell(cell);
+                        handled = TRUE;
                     }
-                    item->setSelectedCell(cell);
-                    handled = TRUE;
                 }
                 break;
             case KEY_RIGHT:
@@ -2490,22 +2493,25 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
                 {
                     // TODO: support multi-select
                     LLScrollListItem *item = getFirstSelected();
-                    S32 cell = item->getSelectedCell();
-                    switch (mSelectionType)
+                    if (item)
                     {
-                    case CELL:
-                        if (cell >= 0) cell--;
-                        break;
-                    case HEADER:
-                        if (cell > 1) cell--;
-                        else if (cell == 1) cell = -1; // skip header
-                        break;
-                    case ROW:
-                        cell = -1;
-                        break;
+                        S32 cell = item->getSelectedCell();
+                        switch (mSelectionType)
+                        {
+                        case CELL:
+                            if (cell >= 0) cell--;
+                            break;
+                        case HEADER:
+                            if (cell > 1) cell--;
+                            else if (cell == 1) cell = -1; // skip header
+                            break;
+                        case ROW:
+                            cell = -1;
+                            break;
+                        }
+                        item->setSelectedCell(cell);
+                        handled = TRUE;
                     }
-                    item->setSelectedCell(cell);
-                    handled = TRUE;
                 }
                 break;
 			case KEY_PAGE_UP:

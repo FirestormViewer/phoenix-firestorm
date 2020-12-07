@@ -648,7 +648,8 @@ bool edit_avatar_move_backward( EKeystate s )
 
 bool stop_moving( EKeystate s )
 {
-	if( KEYSTATE_DOWN != s  ) return true;
+	//it's supposed that 'stop moving' key will be held down for some time
+	if( KEYSTATE_UP == s  ) return true;
 	// stop agent
 	gAgent.setControlFlags(AGENT_CONTROL_STOP);
 
@@ -1616,4 +1617,15 @@ void LLViewerInput::scanMouse()
             }
         }
     }
+}
+
+bool LLViewerInput::isMouseBindUsed(const EMouseClickType mouse, const MASK mask, const S32 mode)
+{
+    S32 size = mMouseBindings[mode].size();
+    for (S32 index = 0; index < size; index++)
+    {
+        if (mouse == mMouseBindings[mode][index].mMouse && mask == mMouseBindings[mode][index].mMask)
+            return true;
+    }
+    return false;
 }
