@@ -1464,6 +1464,16 @@
          name="FSRenderDoFUnderwater"
          top_pad="4"
          width="256"/>
+        <check_box
+         control_name="FSFocusPointFollowsPointer"
+         enabled_control="RenderDepthOfField"
+         height="16"
+         label="Depth of Field focus follows pointer"
+         layout="topleft"
+         name="FSFocusPointFollowsPointer"
+         tool_tip="Depth of Field focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with lock"
+         top_pad="4"
+         width="256"/>
         <slider
          enabled_control="RenderDepthOfField"
          control_name="CameraFNumber"
