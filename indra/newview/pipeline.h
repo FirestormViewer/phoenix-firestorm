@@ -959,8 +959,8 @@ public:
 	static bool FSRenderDepthOfFieldUnderwater;
 	//</FS:TS> FIRE-16251
 	// <FS:Beq> FIRE-16728
-	static bool LLPipeline::FSFocusPointLocked;
-	static bool LLPipeline::FSFocusPointFollowsPointer;
+	static bool FSFocusPointLocked;
+	static bool FSFocusPointFollowsPointer;
 	// </FS:Beq>	
 	static F32 CameraFocusTransitionTime;
 	static F32 CameraFNumber;
