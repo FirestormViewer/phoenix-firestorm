@@ -700,7 +700,7 @@ BOOL LLFloaterPreference::postBuild()
 // [/SL:KB]
 
 // <FS:AW  opensim preferences>
-#if !defined(OPENSIM) || defined(SINGLEGRID)// <FS:AW optional opensim support/>
+#if !defined(OPENSIM) || defined(SINGLEGRID)
 	// Hide the opensim tab if opensim isn't enabled
 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
 	if (tab_container)
@@ -709,9 +709,11 @@ BOOL LLFloaterPreference::postBuild()
 		if (opensim_panel)
 			tab_container->removeTabPanel(opensim_panel);
 	}
+#endif
+#if defined(OPENSIM) && !defined(SINGLEGRID)
+	childSetEnabled("show_grid_selection_check", !gSavedSettings.getBOOL("FSOpenSimAlwaysForceShowGrid"));
+#endif
 // </FS:AW  opensim preferences>
-#endif  // OPENSIM // <FS:AW optional opensim support/>
-
 
 	// <FS:Zi> Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));

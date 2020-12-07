@@ -1251,7 +1251,19 @@
 					<menu_item_call.on_click
 					function="Floater.Toggle"
 					parameter="phototools_camera" />
-				</menu_item_call>
+            </menu_item_call>
+            <menu_item_check
+               label="Depth of Field Focus lock"
+               layout="topleft"
+               shortcut="alt|shift|X"
+               name="lock_focus_point">
+            <menu_item_check.on_check
+               function="CheckControl"
+               parameter="FSFocusPointLocked" />
+            <menu_item_check.on_click
+               function="ToggleControl"
+               parameter="FSFocusPointLocked" />
+            </menu_item_check>
 		</menu>
       <menu_item_call
         label="Area Search"

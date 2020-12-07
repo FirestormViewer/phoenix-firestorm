@@ -334,7 +334,6 @@
                  enabled="false"
                  use_bg_color="true"
                  bg_color="SL-Background"
-                 parse_urls="false"
                  follows="left|top|right"
                  height="22"
                  layout="topleft"
@@ -342,7 +341,6 @@
                  name="title_value"
                  text_color="white"
                  top_pad="5"
-                 use_ellipses="true"
                  right="290" /> 
                 <line_editor
                  follows="left|top|right"
@@ -387,12 +385,12 @@
                  name="folder_label"
                  top_pad="20"
                  value="Landmark location:"
-                 width="290" />
+                 width="120" />
                 <combo_box
                  follows="bottom|left|right"
                  height="23"
                  layout="topleft"
-                 left="0"
+                 left_pad="0"
                  name="folder_combo"
                  top_delta="-5"
                  width="200" />

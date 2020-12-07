@@ -1084,7 +1084,9 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
             {
                 fmp->enableViewOption("show_joint_overrides");
                 mViewOption["show_joint_overrides"] = true;
+                fmp->childSetValue("show_joint_overrides", true); // <FS:Beq> make sure option appears checked, when value is being forced true
                 fmp->enableViewOption("show_joint_positions");
+                fmp->childSetValue("show_joint_positions", true); // <FS:Beq> make sure option appears checked, when value is being forced true
                 mViewOption["show_joint_positions"] = true;
                 fmp->childSetValue("upload_joints", true);
             }

@@ -537,6 +537,24 @@
          width="270"
          control_name="FSTurnAvatarToSelectedObject"
          tool_tip="Turns your avatar around to face the object you are currently selecting."/>
+         <slider
+         can_edit_text="true"
+         control_name="FSAvatarTurnSpeed"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.5"
+         initial_value="0.00"
+         layout="topleft"
+         label_width="150"
+         label="Avatar Rotation Turn Speed"
+         top_pad="2"
+         max_val="100.0"
+         min_val="0.0"
+         name="av_turn_spd"
+         tool_tip="Alters the rate at which your avatar responds to turning. 0-100 as estimated percentage of max turn rate. High values will be snappy/jerky"
+         show_text="true"
+         width="275" />
         <text
          follows="left|top"
          type="string"
@@ -619,7 +637,7 @@
          left="10"
          name="single_click_action_lbl"
          width="150"
-         top_pad="20">
+         top_pad="10">
          Single click on land:
         </text>
         <combo_box
@@ -690,7 +708,7 @@
          label="Joystick Configuration"
          left="100"
          name="joystick_setup_button"
-         top_pad="15"
+         top_pad="10"
          width="155">
             <button.commit_callback
              function="Floater.Show"
