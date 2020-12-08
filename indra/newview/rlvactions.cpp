@@ -368,9 +368,11 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 // WindLight
 //
 
-bool RlvActions::canChangeEnvironment()
+bool RlvActions::canChangeEnvironment(const LLUUID& idRlvObject)
 {
-	return !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV);
+	// User can (partially) change their environment settings if:
+	//   - not specifically restricted from changing their environment (by any object other than the one specified)
+	return (idRlvObject.isNull()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETENV, idRlvObject);
 }
 
 // ============================================================================

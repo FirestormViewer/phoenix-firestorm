@@ -932,6 +932,8 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="InvFolder #Firestorm">#Firestorm</string>
 	<string name="InvFolder #Phoenix">#Phoenix</string>
 	<string name="InvFolder #RLV">#RLV</string>
+
+	<string name="InvFolder My Suitcase">My Suitcase</string>
 	
 	<string name="no_attachments">No attachments worn</string>
     <string name="Attachments remain">Attachments ([COUNT] remain)</string>
@@ -2833,11 +2835,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Collision_PhysicalObject">[NAME] hit you with a physical object.</string>
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
-  <string name="MovelockEnabled">Movelock enabled</string>
-  <string name="MovelockDisabled">Movelock disabled</string>
-  <string name="MovelockEnabling">Enabling movelock...</string>
-  <string name="MovelockDisabling">Disabling movelock...</string>
-  <string name="FlightAssistEnabled">Flight Assist is enabled</string>
+  <string name="MovelockEnabled">Avatar &gt; Movement &gt; Movelock is enabled</string>
 
   <string name="BusyResponse">busy response</string>
   

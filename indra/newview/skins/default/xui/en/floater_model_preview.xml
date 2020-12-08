@@ -1304,14 +1304,14 @@
          name="pos_overrides_list"
          column_padding="0"
          draw_heading="true"
-         draw_stripes="false"
+         draw_stripes="true"
          heading_height="23"
-         height="100"
+         height="199"
          left_delta="0"
          top_pad="0"
          width="385">
-          <scroll_list.columns
-           label="Model"
+         <scroll_list.columns
+         label="Model"
            name="model_name"
            relative_width="0.49" />
           <scroll_list.columns
@@ -1327,30 +1327,6 @@
            name="axis_z"
            relative_width="0.17" />
         </scroll_list>
-       <panel
-         follows="top|left"
-         layout="topleft"
-         border="true"
-         left="410"
-         height="110"
-         top_pad="5"
-         width="200"
-         name="avatar_model_hint_panel"
-         >
-         <text 
-           left="5"
-           width="190"
-           height="110"
-           name="avatar_model_hint_text" 
-           wrap="true" 
-           word_wrap="true"
-           type="string">
-           Tip:
-Too many items use the default (right hand) unnecessarily.
-
-Please consider using an attachment point close to the item's position on the body.
-         </text>
-       </panel>
       </panel>
       <panel
        label="Log"
@@ -1397,9 +1373,169 @@ Please consider using an attachment point close to the item's position on the bo
          word_wrap="true">
         </text_editor>
       </panel>
+      <panel
+       label="Preview Settings"
+       layout="topleft"
+       name="mesh_preview_settings_panel">
+        <view_border
+         bevel_style="none"
+         follows="top|left"
+         height="306"
+         layout="topleft"
+         left="3"
+         ignore_tab="false"
+         right="-21"
+         name="mesh_preview_settings_tab_border"
+         top_pad="0"
+         width="619" />
+         <text
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         height="12"
+         name="mesh_upload_behaviour_label"
+         top="8"
+         width="300">
+         Model Upload Behaviour Settings:
+       </text>
+         <check_box
+         height="15"
+         control_name="FSMeshUploadAutoEnableWeights"
+         follows="top|left"
+         top_pad="8"
+         left="24"
+         width="300"
+         label="Auto-enable weights"
+         tool_tip="Automatically set weights enabled for meshes with rigging info"
+         name="mesh_preview_auto_weights"/>
+         <check_box
+         control_name="FSMeshUploadAutoShowWeightsWhenEnabled"
+         follows="top|left"
+         top_pad="8"
+         left="24"
+         width="300"
+         label="Auto-preview weights"
+         tool_tip="Automatically show weights in preview for meshes with rigging info"
+         name="mesh_preview_auto_show_weights"/>
+        <text
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         height="12"
+         name="mesh_preview_colors_label"
+         top_pad="10"
+         width="300">
+         Model Upload Preview Colors:
+       </text>
+       <text
+        type="string"
+        length="1"
+        follows="left|top"
+        height="14"
+        layout="topleft"
+        left="24"
+        valign="center"
+        mouse_opaque="false"
+        name="user_label"
+        top_pad="20"
+        width="100">
+        General:
+       </text>
+         <color_swatch
+         control_name="MeshPreviewCanvasColor"
+         follows="top|left"
+         left_pad="14"
+         height="64"
+         width="120"
+         top_delta="-12"
+         can_apply_immediately="true"
+         label="Background"
+         tool_tip="Canvas color for the Mesh uploader"
+         name="mesh_preview_canvas_color"/>
+         <color_swatch
+         control_name="MeshPreviewEdgeColor"
+         follows="top|left"
+         left_pad="24"
+         height="64"
+         width="120"
+         can_apply_immediately="true"
+         label="Model Edge"
+         tool_tip="Edge color for the model in preview window on the Mesh uploader"
+         name="mesh_preview_edge_color"/>
+         <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="14"
+         layout="topleft"
+         left="24"
+         valign="center"
+         mouse_opaque="false"
+         name="physics_settings_label"
+         top_pad="20"
+         width="100">
+         Physics:
+        </text>
+        <color_swatch
+        control_name="MeshPreviewPhysicsEdgeColor"
+        follows="top|left"
+        left_pad="14"
+        height="64"
+        can_apply_immediately="true"
+        width="120"
+        top_delta="-12"
+        label="Physics Edge"
+        tool_tip="Edge color for physics triangles in preview window on the Mesh uploader"
+        name="mesh_preview_physics_edge_color"/>
+        <color_swatch
+        control_name="MeshPreviewPhysicsFillColor"
+        follows="top|left"
+        left_pad="20"
+        height="64"
+        width="120"
+        can_apply_immediately="true"
+        label="Physics Fill"
+        tool_tip="Fill color for physics model in preview window on the Mesh uploader"
+        name="mesh_preview_physics_fill_color"/>
+        <text
+        type="string"
+        length="1"
+        follows="left|top"
+        height="14"
+        layout="topleft"
+        left="24"
+        valign="center"
+        mouse_opaque="false"
+        name="physics_issues_setting_label"
+        top_pad="24"
+        width="100">
+        Physics Issues:
+      </text>
+       <color_swatch
+        control_name="MeshPreviewDegenerateEdgeColor"
+        follows="top|left"
+        left_pad="14"
+        height="64"
+        width="120"
+        top_delta="-12"
+        can_apply_immediately="true"
+        label="Bad Triangle Edge"
+        tool_tip="Edge color for degenerate (thin) triangles in preview window on the Mesh uploader"
+        name="mesh_preview_degenerate_edge_color"/>
+        <color_swatch
+        control_name="MeshPreviewDegenerateFillColor"
+        follows="top|left"
+        left_pad="24"
+        height="64"
+        width="120"
+        can_apply_immediately="true"
+        label="Bad Triangle Fill"
+        tool_tip="Fill color for degenerate (thin) triangles in preview window on the Mesh uploader"
+        name="mesh_degenerate_fill_color"/>
+      </panel>
     </tab_container>
     <panel
-     follows="top|left|bottom"
+    follows="top|left|bottom"
      layout="topleft"
      height="195"
      left="4"

@@ -3895,6 +3895,12 @@ Inviare queste informazioni?
 	<notification name="MovelockDisabled">
 		Blocco movimenti inattivo.
 	</notification>
+	<notification name="MovelockEnabling">
+		Abilitazione blocco...
+	</notification>
+	<notification name="MovelockDisabling">
+		Disabilitazione blocco...
+	</notification>
 	<notification label="Ripristino della configurazione" name="FirestormClearSettingsPrompt">
 		Ripristinare completamente la configurazione può essere utile in caso di problemi. Tuttavia tutte le personalizzazioni rispetto all&apos;originale dovranno essere rifatte.
 

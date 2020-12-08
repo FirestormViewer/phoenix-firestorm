@@ -1999,6 +1999,9 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="InvFolder #RLV">
 		#RLV
 	</string>
+	<string name="InvFolder My Suitcase">
+		Мой Чемодан
+	</string>
 	<string name="no_attachments">
 		Нет надетых вложений
 	</string>
@@ -6321,19 +6324,7 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 		[NAME] является причиной столкновения неизвестного типа.
 	</string>
 	<string name="MovelockEnabled">
-		Блокировка движения включена
-	</string>
-	<string name="MovelockDisabled">
-		Блокировка движения выключена
-	</string>
-	<string name="MovelockEnabling">
-		Включение блокировки движения...
-	</string>
-	<string name="MovelockDisabling">
-		Выключение блокировки движения...
-	</string>
-	<string name="FlightAssistEnabled">
-		Помощь при полете включена
+		Аватар &gt; Движение &gt; Заблокировать включена
 	</string>
 	<string name="BusyResponse">
 		ответ занятости

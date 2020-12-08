@@ -533,6 +533,16 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="MustAgreeToLogIn">
 		Bevor Sie sich in [CURRENT_GRID] anmelden können, müssen Sie den Allgemeinen Geschäftsbedingungen, Datenschutzbestimmungen und Servicebedingungen zustimmen.
 	</notification>
+	<notification name="CouldNotBuyCurrency">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="OK"/>
+	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Outfit konnte nicht angezogen werden.
 Der Outfit-Ordner enthält keine Kleidung, Körperteile oder Anhänge.
@@ -4933,6 +4943,15 @@ Möchten Sie diese Informationen übermitteln?
 	</notification>
 	<notification name="MovelockDisabled">
 		Movelock deaktiviert.
+	</notification>
+	<notification name="MovelockEnabling">
+		Aktiviere Movelock...
+	</notification>
+	<notification name="MovelockDisabling">
+		Deaktiviere Movelock...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Flug-Assistent ist aktiviert.
 	</notification>
 	<notification label="Alle Einstellungen zurücksetzen" name="FirestormClearSettingsPrompt">
 		Ein Zurücksetzen aller Einstellungen kann bei Problemen hilfreich sein, allerdings müssen Sie anschließend jegliche Anpassungen erneut vornehmen.
