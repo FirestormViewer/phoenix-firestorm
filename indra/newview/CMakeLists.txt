@@ -1796,6 +1796,29 @@ if (LINUX)
       SET_SOURCE_FILES_PROPERTIES(llviewermenu.cpp PROPERTIES COMPILE_FLAGS -fno-var-tracking-assignments)
     endif()
     # </FS:ND>
+
+    # Replace the icons with the appropriate ones for the channel
+    # ('test' is the default)
+    set(ICON_PATH "private")
+    string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
+    if(channel_lower MATCHES "release")
+        set(ICON_PATH "release")
+    elseif(channel_lower MATCHES "beta")
+        set(ICON_PATH "beta")
+    elseif(channel_lower MATCHES "project")
+        set(ICON_PATH "project")
+    endif()
+
+    if (OPENSIM)
+        set(ICON_PATH "${ICON_PATH}-os")
+    endif (OPENSIM)
+
+    message(STATUS "Copying icons for ${ICON_PATH}")
+    execute_process(
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.bmp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
+      )
 endif (LINUX)
 
 if (WINDOWS)

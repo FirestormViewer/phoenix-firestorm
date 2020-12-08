@@ -3016,16 +3016,19 @@ bool LLAppViewer::initConfiguration()
 		}
 		// </FS>
 		
-// <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
-#ifdef OPENSIM
-		if (!gSavedSettings.getBOOL("ForceShowGrid"))
-			gSavedSettings.setBOOL("ForceShowGrid", TRUE);
-#endif // OPENSIM
-// </FS:CR>
 		
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
 	
+// <FS:Beq> FIRE-29819 Set ForceShowGrid to TRUE always, unless expressly disabled
+// FSOpenSimAlwaysForcesShowGrid is added to allow closed grids to soft disable the default behaviour
+#if OPENSIM && !SINGLEGRID
+	if (!gSavedSettings.getBOOL("ForceShowGrid") && gSavedSettings.getBOOL("FSOpenSimAlwaysForceShowGrid"))
+	{
+		gSavedSettings.setBOOL("ForceShowGrid", TRUE);
+	}
+#endif
+// </FS:Beq>
 	// <FS:CR> Compatibility with old backups
 	// Put gSavedSettings here, gSavedPerAccountSettings in llstartup.cpp
 	// *TODO: Should we keep these around forever or just three release cycles?

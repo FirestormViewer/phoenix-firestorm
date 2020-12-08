@@ -6648,6 +6648,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSOpenSimAlwaysForceShowGrid</key>
+    <map>
+      <key>Comment</key>
+      <string>Soft enable/disable the startup behaviour of OpenSim builds to allow gridlist access</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ForceMandatoryUpdate</key>
     <map>
       <key>Comment</key>
@@ -12260,6 +12271,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
   <!-- </FS:TS> FIRE-16251 -->
+  <key>FSFocusPointLocked</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether the focus point used for DoF is currently Locked in place</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSFocusPointFollowsPointer</key>
+  <map>
+    <key>Comment</key>
+    <string>Allows the Depth of Field focus to actively follow the mouse point</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 
   <key>CameraDoFResScale</key>
   <map>

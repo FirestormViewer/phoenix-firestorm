@@ -2157,7 +2157,7 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(
 		    {
 			    LLMatrix4a final_mat;
                 // <FS:ND> Use the SSE2 version
-                LLSkinningUtil::getPerVertexSkinMatrix(weights[j].getF32ptr(), mat, false, final_mat, max_joints);
+                // LLSkinningUtil::getPerVertexSkinMatrix(weights[j].getF32ptr(), mat, false, final_mat, max_joints);
                 FSSkinningUtil::getPerVertexSkinMatrixSSE(weights[j], mat, false, final_mat, max_joints);
                 // </FS:ND>
 
