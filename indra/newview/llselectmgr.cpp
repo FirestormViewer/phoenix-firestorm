@@ -5639,9 +5639,18 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 		}
 		else
 		{
-			if (node->mInventorySerial != inv_serial && node->getObject())
+			// <FS:Beq> FIRE-19738 Object content caching improvement
+			// if (node->mInventorySerial != inv_serial && node->getObject())
+			// {
+			// 	node->getObject()->dirtyInventory();
+			if ( node->mInventorySerial != inv_serial )
 			{
-				node->getObject()->dirtyInventory();
+				auto obj = node->getObject();
+				if( obj && obj->getInventorySerial() != inv_serial )
+				{
+					obj->dirtyInventory();
+				}
+			// </FS:Beq>
 			}
 
 			// save texture data as soon as we get texture perms first time

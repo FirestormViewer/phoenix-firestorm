@@ -7,6 +7,11 @@
 		<string>CameraFocusTransitionTime</string>
 		<string>CameraFNumber</string>
 		<string>FramePerSecondLimit</string>
+		<string>FSAllowWaterDistortionOcclusion</string>
+		<string>FSDynamicTextureMemory</string>
+		<string>FSDynamicTextureMemoryCacheReserve</string>
+		<string>FSDynamicTextureMemoryGPUReserve</string>
+		<string>FSDynamicTextureMemoryMinTextureMemory</string>
 		<string>FSLimitFramerate</string>
 		<string>FSRenderDoFUnderwater</string>
 		<string>FSRenderVignette</string>

@@ -173,6 +173,7 @@
 		<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
 		<check_box label="Angehängte Lichter rendern" tool_tip="Diese Option aktiviert alle Lichtquellen, die Avatare angehängt haben, wie z.B. Facelights. Nützlich, um beispielsweise Facelights zu deaktivieren falls notwendig." name="Render Attached Lights"/>
 		<check_box label="Angehängte Partikel rendern" name="Render Attached Particles"/>
+		<check_box label="Objekt-Verdeckung für Wasser-Verzerrungseffekte aktivieren" name="dist_occl" tool_tip="Falls aktiviert, wird die Objekt-Verdeckung bei der Generierung der Wasser-Verzerrungseffekte wieder aktiviert. Die Darstellung ist ohne Verdeckung exakter, allerdings kann sich hierdurch die Performance signifikant verschlechtern."/>
 		<slider name="MaxFPS" label="FPS:"/>
 		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
 		<text name="PrecachingDelayText" width="60">
@@ -186,6 +187,7 @@
 		<check_box label="Schärfentiefe aktivieren (Bereiche außerhalb des Kamerafokus erscheinen unscharf)" name="UseDoF"/>
 		<check_box label="Im Editier-Modus aktivieren" name="RenderDepthOfFieldInEditMode"/>
 		<check_box label="Unter Wasser aktivieren" name="FSRenderDoFUnderwater"/>
+		<check_box label="Schärfentiefe-Fokus folgt Mauszeiger" name="FSFocusPointFollowsPointer" tool_tip="Der Fokus der Schärfentiefe folgt der Maus, ähnlich dem Verhalten bei der Verwendung einer Flycam. In Verbindung mit fixiertem Schärfentiefe-Fokus verwenden."/>
 		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="195" width="409"/>
 		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="195" width="409"/>
 		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="195" width="409"/>

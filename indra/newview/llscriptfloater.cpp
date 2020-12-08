@@ -559,10 +559,11 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 
 		if(it != mNotifications.end())
 		{
+			auto old_id = it->first; // <FS:Beq> store UUID to prevent use after free - Rye
 			LLChicletPanel * chiclet_panelp = LLChicletBar::getInstance()->getChicletPanel();
 			if (NULL != chiclet_panelp)
 			{
-				LLIMChiclet * chicletp = chiclet_panelp->findChiclet<LLIMChiclet>(it->first);
+				LLIMChiclet * chicletp = chiclet_panelp->findChiclet<LLIMChiclet>(old_id); // <FS:Beq> avoid use after free - Rye
 				if (NULL != chicletp)
 				{
 					// Pass the new_message icon state further.
@@ -571,14 +572,14 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 				}
 			}
 
-			LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", it->first);
+			LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", old_id); // <FS:Beq> avoid use after free - Rye
 			if (floater)
 			{
 				// Generate chiclet with a "new message" indicator if a docked window was opened but not in focus. See EXT-3142.
 				set_new_message |= !floater->hasFocus();
 			}
 
-			removeNotification(it->first);
+			removeNotification(old_id);
 		}
 	}
 

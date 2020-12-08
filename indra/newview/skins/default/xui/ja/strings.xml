@@ -5989,10 +5989,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
 	<string name="MovelockEnabled">ムーブメントロックが有効になりました</string>
-	<string name="MovelockDisabled">ムーブメントロックが解除されました</string>
-	<string name="MovelockEnabling">ムーブメントロックを起動中です...</string>
-	<string name="MovelockDisabling">ムーブメントロックを解除中です...</string>
-	<string name="FlightAssistEnabled">飛行アシストが有効になりました</string>
 
 	<string name="BusyResponse">
 		取り込み時の自動応答

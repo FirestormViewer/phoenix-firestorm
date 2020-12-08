@@ -395,6 +395,9 @@ with the same filename but different name
   <texture name="Inv_PhoenixClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_RLVOpen"			file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_RLVClosed"			file_name="icons/Inv_SysClosed.png" />
+
+  <texture name="Inv_SuitcaseOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_SuitcaseClosed"	file_name="icons/Inv_SysClosed.png" />
   
   <texture name="Linden_Dollar_Alert" file_name="widgets/Linden_Dollar_Alert.png"/>
   <texture name="Linden_Dollar_Background" file_name="widgets/Linden_Dollar_Background.png"/>

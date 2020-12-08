@@ -5,7 +5,7 @@
 		<menu_item_call label="Торговые списки..." name="MarketplaceListings"/>
 		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
 
-		<menu_item_call label="Инвентарь" name="NewInventoryWindow"/>
+		<menu_item_call label="Новое окно Инвентаря" name="NewInventoryWindow"/>
 		<menu_item_check label="Инвентарь" name="Inventory"/>
 		<menu_item_check label="Защищенные папки" name="Protected Folders"/>
 		<menu_item_check label="Избранные Одежды" name="WearableFavorites"/>
@@ -344,7 +344,6 @@
 			<menu label="Всплывающие подсказки" name="Hover Tips">
 				<menu_item_check label="Показывать Подсказки" name="Show Tips"/>
 				<menu_item_check label="Подсказки о земле" name="Land Tips"/>
-				<menu_item_check label="Подсказки на все объекты" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Типы визуализации" name="Rendering Types">

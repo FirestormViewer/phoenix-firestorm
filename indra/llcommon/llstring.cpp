@@ -1276,6 +1276,58 @@ std::string LLStringUtil::getLocale(void)
 template<> 
 void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 {
+// <FS:ND> Windows does not/cannot use UTF8 in char strings(1). So to get valid conversions we need to widen the strings to wchar_t(2) do the formatting in std::wstring, then convert
+// down to UTF8 again.
+// 1: Since Win 10 Build 17134 (April 2018 Update) Windows can work with UTF8, so using a codepage like Linux/OSX (lang_region.uf8) via (for example) <string name="MicrosoftLocale">de_DE.UTF-8</string>
+// in language_settings.xml could work.
+// 2: The LL way would be to use llwachr/LLWString and thus in UTF32. But std::basic_string< llwchar > is unusable to what seems
+// a crt bug (https://stackoverflow.com/questions/48716223/compile-error-for-char-based-stl-stream-containers-in-visual-studio)
+// A workaround would be using std::basic_stringstream< char32_t > then using later std::transform to static_cast each code point from char32_t to llwchar (u32) and thus create a LLWString from
+// a std::basic_string< char32_t >.
+//
+// For Linux/OSX the old routinewith std::stringstream should be fine. Those systems use a UTF8 codepage.
+#if LL_WINDOWS
+	std::wstringstream strStream;
+	S32 intDecimals = 0;
+
+	std::wstring wDecimals = utf8str_to_utf16str(decimals);
+	std::wstring wNumStr = utf8str_to_utf16str(numStr);
+	LLStringUtilBase<wchar_t>::convertToS32 (wDecimals, intDecimals);
+	if (!sLocale.empty())
+	{
+		// std::locale() throws if the locale is unknown! (EXT-7926)
+		try
+		{
+			// <FS:Ansariel> Use user's system locale setting for number formatting
+			//strStream.imbue(std::locale(sLocale.c_str()));
+			strStream.imbue(std::locale(""));
+		} catch (const std::exception &)
+		{
+			LL_WARNS_ONCE("Locale") << "Cannot set locale to " << sLocale << LL_ENDL;
+		}
+	}
+
+	if (!intDecimals)
+	{
+		S32 intStr;
+
+		if (LLStringUtilBase<wchar_t>::convertToS32(wNumStr, intStr))
+		{
+			strStream << intStr;
+			numStr = wstring_to_utf8str( strStream.str() );
+		}
+	}
+	else
+	{
+		F32 floatStr;
+
+		if (LLStringUtilBase<wchar_t>::convertToF32(wNumStr, floatStr))
+		{
+			strStream << std::fixed << std::showpoint << std::setprecision(intDecimals) << floatStr;
+			numStr = wstring_to_utf8str( strStream.str() );
+		}
+	}
+#else
 	std::stringstream strStream;
 	S32 intDecimals = 0;
 
@@ -1285,7 +1337,7 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		// std::locale() throws if the locale is unknown! (EXT-7926)
 		try
 		{
-			// <FS:Ansariel> FIRE-6070: Use user's system locale setting for number formatting
+			// <FS:Ansariel> Use user's system locale setting for number formatting
 			//strStream.imbue(std::locale(sLocale.c_str()));
 			strStream.imbue(std::locale(""));
 		} catch (const std::exception &)
@@ -1302,11 +1354,6 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		{
 			strStream << intStr;
 			numStr = strStream.str();
-			// <FS:Ansariel> FIRE-6070: Fix random symbols in formatted numbers in some locales
-#ifdef LL_WINDOWS
-			numStr = ll_convert_string_to_utf8_string(numStr);
-#endif
-			// </FS:Ansariel>
 		}
 	}
 	else
@@ -1317,13 +1364,9 @@ void LLStringUtil::formatNumber(std::string& numStr, std::string decimals)
 		{
 			strStream << std::fixed << std::showpoint << std::setprecision(intDecimals) << floatStr;
 			numStr = strStream.str();
-			// <FS:Ansariel> FIRE-6070: Fix random symbols in formatted numbers in some locales
-#ifdef LL_WINDOWS
-			numStr = ll_convert_string_to_utf8_string(numStr);
-#endif
-			// </FS:Ansariel>
 		}
 	}
+#endif	
 }
 
 // static

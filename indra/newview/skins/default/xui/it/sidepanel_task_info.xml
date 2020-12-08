@@ -53,7 +53,7 @@
 		<text name="Description:">
 			Descrizione:
 		</text>
-		<line_editor name="Object Description" tool_tip="Quando la dicitura &quot;Vedi suggerimenti su tutti gli oggetti&quot; è selezionata nelle impostazioni del Viewer, passando il mouse sopra un oggetto si vedrà la sua descrizione. La descrizione dei Prim è limitata a 127 bytes. Se più lunga, verrá troncata."/>
+		<line_editor name="Object Description" tool_tip="Quando la dicitura &quot;Suggerimenti al passaggio del mouse&quot; è selezionata nelle impostazioni del Viewer, passando il mouse sopra un oggetto si vedrà la sua descrizione. La descrizione dei Prim è limitata a 127 bytes. Se più lunga, verrá troncata."/>
 		<text name="CreatorNameLabel">
 			Ideatore:
 		</text>

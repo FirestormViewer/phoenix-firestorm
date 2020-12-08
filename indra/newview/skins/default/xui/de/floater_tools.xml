@@ -204,7 +204,7 @@
 			<text name="Description:">
 				Beschreibung:
 			</text>
-			<line_editor name="Object Description" tool_tip="Bei Auswahl der Option „Schwebe-Tipps für alle Objekte“ in den Viewer-Einstellungen wird für alle Objekte das Popup mit der Objektbeschreibung unter dem Mauszeiger eingeblendet. Die formelle Beschreibung ist auf 127 Byte begrenzt, und alle längeren Zeichenketten werden gekürzt."/>
+			<line_editor name="Object Description" tool_tip="Bei Auswahl der Option „Schwebe-Tipps“ in den Viewer-Einstellungen wird für alle Objekte das Popup mit der Objektbeschreibung unter dem Mauszeiger eingeblendet. Die formelle Beschreibung ist auf 127 Byte begrenzt, und alle längeren Zeichenketten werden gekürzt."/>
 			<text name="Creator:">
 				Ersteller:
 			</text>
