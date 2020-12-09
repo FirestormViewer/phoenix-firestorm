@@ -185,6 +185,10 @@ bool LLPipeline::RenderDepthOfFieldInEditMode;
 //<FS:TS> FIRE-16251: Depth of field does not work underwater
 bool LLPipeline::FSRenderDepthOfFieldUnderwater;
 //</FS:TS> FIRE-16251
+// <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
+bool LLPipeline::FSFocusPointLocked;
+bool LLPipeline::FSFocusPointFollowsPointer;
+// </FS:Beq>
 F32 LLPipeline::CameraFocusTransitionTime;
 F32 LLPipeline::CameraFNumber;
 F32 LLPipeline::CameraFocalLength;
@@ -658,6 +662,10 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderAttachedLights");
 	connectRefreshCachedSettingsSafe("RenderAttachedParticles");
 	// </FS:Ansariel>
+    // <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
+	connectRefreshCachedSettingsSafe("FSFocusPointLocked");
+	connectRefreshCachedSettingsSafe("FSFocusPointFollowsPointer");
+    // </FS:Beq>
 }
 
 LLPipeline::~LLPipeline()
@@ -1230,6 +1238,10 @@ void LLPipeline::refreshCachedSettings()
 	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
 	FSRenderDepthOfFieldUnderwater = gSavedSettings.getBOOL("FSRenderDoFUnderwater");
 	//</FS:TS> FIRE-16251
+	// <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
+	FSFocusPointLocked = gSavedSettings.getBOOL("FSFocusPointLocked");
+	FSFocusPointFollowsPointer = gSavedSettings.getBOOL("FSFocusPointFollowsPointer");
+	// </FS:Beq>    
 	CameraFocusTransitionTime = gSavedSettings.getF32("CameraFocusTransitionTime");
 	CameraFNumber = gSavedSettings.getF32("CameraFNumber");
 	CameraFocalLength = gSavedSettings.getF32("CameraFocalLength");
@@ -7913,6 +7925,15 @@ void LLPipeline::renderFinalize()
 
             LLVector3 focus_point;
 
+            // <FS:Beq> FIRE-16728 focus point lock & free focus DoF - based on a feature developed by NiranV Dean
+            static LLVector3 last_focus_point{};
+            if( LLPipeline::FSFocusPointLocked && !last_focus_point.isExactlyZero() )
+            {
+                focus_point = last_focus_point;
+            }
+            else
+            {
+            // </FS:Beq>
             LLViewerObject *obj = LLViewerMediaFocus::getInstance()->getFocusedObject();
             if (obj && obj->mDrawable && obj->isSelected())
             { // focus on selected media object
@@ -7926,10 +7947,11 @@ void LLPipeline::renderFinalize()
                     }
                 }
             }
+            }// <FS:Beq/> support focus point lock
 
             if (focus_point.isExactlyZero())
             {
-                if (LLViewerJoystick::getInstance()->getOverrideCamera())
+                if (LLViewerJoystick::getInstance()->getOverrideCamera() || LLPipeline::FSFocusPointFollowsPointer) // <FS:Beq/> FIRE-16728 Add free aim mouse and focus lock
                 { // focus on point under cursor
                     focus_point.set(gDebugRaycastIntersection.getF32ptr());
                 }
@@ -7952,7 +7974,9 @@ void LLPipeline::renderFinalize()
                     }
                 }
             }
-
+            // <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
+            last_focus_point = focus_point;
+            // </FS:Beq>
             LLVector3 eye = LLViewerCamera::getInstance()->getOrigin();
             F32 target_distance = 16.f;
             if (!focus_point.isExactlyZero())
