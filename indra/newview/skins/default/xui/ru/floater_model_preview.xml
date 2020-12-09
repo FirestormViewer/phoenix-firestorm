@@ -153,17 +153,48 @@
         <scroll_list name="pos_overrides_list">
           <scroll_list.columns label="Модель" name="model_name"/>
         </scroll_list>
-        <panel name="avatar_model_hint_panel">
-          <text name="avatar_model_hint_text">
-           Подсказка:
-Слишком много предметов используют по умолчанию (правая кисть) без необходимости.
-
-Пожалуйста, рассмотрите возможность использования точки крепления рядом с положением предмета на теле.
-          </text>
-        </panel>
       </panel>
       <panel label="Журнал" name="logs_panel">
         <check_box label="Показать подробно журнал" name="verbose_logging" width="80"/>
+      </panel>
+      <panel label="Настройки просмотра" name="mesh_preview_settings_panel">
+        <text name="mesh_upload_behaviour_label">
+         Параметры поведения при загрузке модели:
+        </text>
+        <check_box label="Автоматическое включение весов"
+         tool_tip="Автоматическая установка включения весов для ригованых мешей"
+         name="mesh_preview_auto_weights"/>
+        <check_box label="Автоматический просмотр весов"
+         tool_tip="Автоматически показывать веса в предпросмотре для ригованых мешей"
+         name="mesh_preview_auto_show_weights"/>
+        <text name="mesh_preview_colors_label">
+         Цвета предварительного просмотра:
+        </text>
+        <text name="user_label">
+         Основной:
+        </text>
+        <color_swatch label="Задний план" tool_tip="Цвет холста для окна предварительного просмотра"
+         name="mesh_preview_canvas_color"/>
+        <color_swatch label="Грани модели" tool_tip="Цвет граней модели в окне предварительного просмотра"
+         name="mesh_preview_edge_color"/>
+        <text name="physics_settings_label">
+         Физика:
+        </text>
+        <color_swatch label="Грани физики"
+         tool_tip="Цвет граней для физических треугольников в окне предварительного просмотра"
+         name="mesh_preview_physics_edge_color"/>
+        <color_swatch label="Заливка физики"
+         tool_tip="Цвет заливки для физической модели в окне предварительного просмотра"
+         name="mesh_preview_physics_fill_color"/>
+        <text name="physics_issues_setting_label" width="110">
+         Проблемы физики:
+        </text>
+        <color_swatch label="Плохие грани"
+         tool_tip="Цвет граней вырожденных (тонких) треугольников в окне предварительного просмотра"
+         name="mesh_preview_degenerate_edge_color"/>
+        <color_swatch label="Плохая заливка"
+         tool_tip="Цвет заливки вырожденных (тонких) треугольников в окне предварительного просмотра"
+         name="mesh_degenerate_fill_color"/>
       </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">
@@ -211,7 +242,7 @@
         <check_box label="Развертка" name="show_uv_guide"/>
         <check_box label="Физика" name="show_physics"/>
         <text name="exploder_label">Диапазон</text>
-        <check_box label="Веса кожи" name="show_skin_weight"/>
+        <check_box label="Веса" name="show_skin_weight"/>
         <check_box label="Суставы" name="show_joint_positions"/>
         <check_box label="Изменение Суставов" name="show_joint_overrides"/>
       </panel>

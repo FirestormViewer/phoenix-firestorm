@@ -759,7 +759,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 			gDetachScreenPieMenu->addChild(item);
 			// <FS:Ansariel> FIRE-7893: "Detach" sub-menu on inspect menu without function
-			gInspectSelfDetachScreenMenu->addChild(item);
+			gInspectSelfDetachScreenMenu->addChild(LLUICtrlFactory::create<LLMenuItemCallGL>(item_params));
 
 			// <FS:Zi> Pie menu
 			slice_params.name =(slice_params.label );

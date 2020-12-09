@@ -16,7 +16,7 @@
 	<radio_group name="mode_selection" left="7">
 		<radio_item label="Инв." name="inventory"/>
 		<radio_item label="Лок." name="local"/>
-		<radio_item label="Зафиксировать" name="bake"/>
+		<radio_item label="Зпеч." name="bake"/>
 	</radio_group>
 	<text name="size_lbl">
 Размер:

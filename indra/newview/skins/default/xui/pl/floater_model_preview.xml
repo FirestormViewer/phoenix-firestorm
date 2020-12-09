@@ -187,17 +187,34 @@
            <text name="pos_overrides_descr">
              Nadpisania pozycji dla stawu '[JOINT]':
            </text>
-           <panel name="avatar_model_hint_panel">
-             <text name="avatar_model_hint_text">
-Wskazówka:
-Zbyt wiele rzeczy niepotrzebnie używa wartości domyślnej (prawa ręka).
-
-Rozważ użycie innego punktu doczepienia, bliżej do pozycji obiektu na ciele.
-             </text>
-           </panel>
      </panel>
      <panel name="logs_panel">
-           <check_box label="Logowanie szczegółowe" name="verbose_logging" />
+        <check_box label="Logowanie szczegółowe" name="verbose_logging" />
+     </panel>
+     <panel label="Opcje podglądu" name="mesh_preview_settings_panel">
+        <text name="mesh_upload_behaviour_label">
+            Ustawienia przesyłania modelu:
+        </text>
+        <check_box label="Auto-włączanie wag" tool_tip="Automatycznie włącz wagi dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_weights" />
+        <check_box label="Auto-podgląd wag" tool_tip="Automatycznie wyświetlaj wagi w podglądzie dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_show_weights" />
+        <text name="mesh_preview_colors_label">
+			Kolory podglądu przesyłania:
+        </text>
+        <text name="user_label">
+            Ogólne:
+        </text>
+        <color_swatch label="Tło" tool_tip="Kolor tła przesyłania modelu" name="mesh_preview_canvas_color" />
+        <color_swatch label="Krawędź modelu" tool_tip="Kolor krawędzi modelu w oknie podglądu podczas przesyłania meszu" name="mesh_preview_edge_color" />
+        <text name="physics_settings_label">
+            Fizyka:
+        </text>
+        <color_swatch label="Krawędź fizyki" tool_tip="Kolor krawędzi trójkątów fizyki w oknie podglądu podczas przesyłania meszu" name="mesh_preview_physics_edge_color" />
+        <color_swatch label="Wypełnienie fizyki" tool_tip="Kolor wypełnienia modelu fizycznego w oknie podglądu podczas przesyłania meszu" name="mesh_preview_physics_fill_color" />
+        <text name="physics_issues_setting_label">
+            Problemy z fizyką:
+        </text>
+        <color_swatch label="Złe krawędzie" tool_tip="Kolor krawędzi zdegenerowanych (cienkich) trójkątów w oknie podglądu podczas przesyłania meszu" name="mesh_preview_degenerate_edge_color" />
+        <color_swatch label="Złe wypełnienia" tool_tip="Kolor wypełnienia zdegenerowanych (cienkich) trójkątów w oknie podglądu podczas przesyłania meszu" name="mesh_degenerate_fill_color" />
      </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">

@@ -4,7 +4,7 @@
 	<check_box label="Autoriser les clients multiples (Peut réduire la stabilité et la performance)" name="allow_multiple_viewer_check"/>
 	<check_box label="Autoriser la connexion à d'autres grilles (Elles ne supportent pas toutes Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Afficher le menu Avancé (Utilisez le à vos propres risques !)" name="show_advanced_menu_check"/>
-	<check_box label="Afficher le menu Développeur" name="show_develop_menu_check"/>
+	<check_box label="Afficher le menu Développeur (Utilisez le à vos propres risques !)" name="show_develop_menu_check"/>
 	<check_box label="Désactiver la détection de VRAM par l'analyse WMI sur les systèmes Windows" name="FSDisableWMIProbing"/>
 	<check_box tool_tip="Ce paramètre réduira le chargement dû au rendu des avatars distants mais peut aussi provoquer des animations incorrectes pour ces mêmes avatars" label="Activer la temporisation d'animations (expérimental)" name="UseAnimationTimeSteps"/>
 	<text name="BackgroundYieldTimeText">Durée en millisecondes de temporisation des trames quand [APP_NAME] n'est pas au premier plan (40 par défaut) :</text>
