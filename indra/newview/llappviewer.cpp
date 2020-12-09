@@ -977,12 +977,6 @@ bool LLAppViewer::init()
 	if (!initConfiguration())
 		return false;
 
-	// initialize LLWearableType translation bridge.
-	// Will immediately use LLTranslationBridge to init LLWearableDictionary
-	// <FS:Ansariel> Move further down after translation system has been initialized
-	//LLWearableType::initParamSingleton(trans);
-	// </FS:Ansariel>
-
 	LL_INFOS("InitInfo") << "Configuration initialized." << LL_ENDL ;
 	//set the max heap size.
 	initMaxHeapSize() ;
@@ -1373,44 +1367,59 @@ bool LLAppViewer::init()
 	gGLActive = FALSE;
 
     // <FS:Ansariel> Disable updater
+//#if LL_RELEASE_FOR_DOWNLOAD 
 //    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
 //    {
-//        LLProcess::Params updater;
-//        updater.desc = "updater process";
-//        // Because it's the updater, it MUST persist beyond the lifespan of the
-//        // viewer itself.
-//        updater.autokill = false;
+//	LLProcess::Params updater;
+//	updater.desc = "updater process";
+//	// Because it's the updater, it MUST persist beyond the lifespan of the
+//	// viewer itself.
+//	updater.autokill = false;
+//	std::string updater_file;
 //#if LL_WINDOWS
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker.exe");
+//	updater_file = "SLVersionChecker.exe";
+//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#elif LL_DARWIN
-//        // explicitly run the system Python interpreter on SLVersionChecker.py
-//        updater.executable = "python";
-//        updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", "SLVersionChecker.py"));
+//	// explicitly run the system Python interpreter on SLVersionChecker.py
+//	updater.executable = "python";
+//	updater_file = "SLVersionChecker.py";
+//	updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file));
 //#else
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker");
+//	updater_file = "SLVersionChecker";
+//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#endif
-//        // add LEAP mode command-line argument to whichever of these we selected
-//        updater.args.add("leap");
-//        // UpdaterServiceSettings
-//        updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
-//        // channel
-//        updater.args.add(LLVersionInfo::getChannel());
-//        // testok
-//        updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
-//        // ForceAddressSize
-//        updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//#if LL_WINDOWS && !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
-//	// This is neither a release package, nor crash-reporting enabled test build
-//	// try to run version updater, but don't bother if it fails (file might be missing)
-//	LLLeap *leap_p = LLLeap::create(updater, false);
-//	if (!leap_p)
-//	{
-//		LL_WARNS("LLLeap") << "Failed to run LLLeap" << LL_ENDL;
+//	// add LEAP mode command-line argument to whichever of these we selected
+//	updater.args.add("leap");
+//	// UpdaterServiceSettings
+//	updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
+//	// channel
+//	updater.args.add(LLVersionInfo::instance().getChannel());
+//	// testok
+//	updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
+//	// ForceAddressSize
+//	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
+//
+//        try
+//        {
+//            // Run the updater. An exception from launching the updater should bother us.
+//            LLLeap::create(updater, true);
+//        }
+//        catch (...)
+//        {
+//            LLUIString details = LLNotifications::instance().getGlobalString("LLLeapUpdaterFailure");
+//            details.setArg("[UPDATER_APP]", updater_file);
+//            OSMessageBox(
+//                details.getString(),
+//                LLStringUtil::null,
+//                OSMB_OK);
+//            // pass this exception to crash handler
+//            throw;
+//        }
 //	}
-//#else
-// 	// Run the updater. An exception from launching the updater should bother us.
-//	LLLeap::create(updater, true);
-//#endif
+//	else
+//	{
+//		LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
+//	}
 	// </FS:Ansariel>
 
 	// Iterate over --leap command-line options. But this is a bit tricky: if

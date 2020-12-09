@@ -463,6 +463,7 @@ namespace
         LLError::TimeFunction               mTimeFunction;
 
         Recorders                           mRecorders;
+        LLMutex                             mRecorderMutex;
 
         int                                 mShouldLogCallCounter;
 
@@ -485,6 +486,7 @@ namespace
         mCrashFunction(NULL),
         mTimeFunction(NULL),
         mRecorders(),
+        mRecorderMutex(),
         mShouldLogCallCounter(0)
     {
     }
@@ -1010,6 +1012,7 @@ namespace LLError
 			return;
 		}
 		SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
+		LLMutexLock lock(&s->mRecorderMutex);
 		s->mRecorders.push_back(recorder);
 	}
 
@@ -1020,6 +1023,7 @@ namespace LLError
 			return;
 		}
 		SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
+		LLMutexLock lock(&s->mRecorderMutex);
 		s->mRecorders.erase(std::remove(s->mRecorders.begin(), s->mRecorders.end(), recorder),
 							s->mRecorders.end());
 	}
@@ -1031,11 +1035,12 @@ namespace LLError
     // with a Recorders::iterator indicating the position of that entry in
     // mRecorders. The shared_ptr might be empty (operator!() returns true) if
     // there was no such RECORDER subclass instance in mRecorders.
+    //
+    // NOTE!!! Requires external mutex lock!!!
     template <typename RECORDER>
     std::pair<boost::shared_ptr<RECORDER>, Recorders::iterator>
-    findRecorderPos()
+    findRecorderPos(SettingsConfigPtr &s)
     {
-        SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
         // Since we promise to return an iterator, use a classic iterator
         // loop.
         auto end{s->mRecorders.end()};
@@ -1066,7 +1071,9 @@ namespace LLError
     template <typename RECORDER>
     boost::shared_ptr<RECORDER> findRecorder()
     {
-        return findRecorderPos<RECORDER>().first;
+        SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
+        LLMutexLock lock(&s->mRecorderMutex);
+        return findRecorderPos<RECORDER>(s).first;
     }
 
     // Remove an entry from SettingsConfig::mRecorders whose RecorderPtr
@@ -1075,10 +1082,11 @@ namespace LLError
     template <typename RECORDER>
     bool removeRecorder()
     {
-        auto found = findRecorderPos<RECORDER>();
+        SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
+        LLMutexLock lock(&s->mRecorderMutex);
+        auto found = findRecorderPos<RECORDER>(s);
         if (found.first)
         {
-            SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
             s->mRecorders.erase(found.second);
         }
         return bool(found.first);
@@ -1179,7 +1187,8 @@ namespace
 		SettingsConfigPtr s = Globals::getInstance()->getSettingsConfig();
 
         std::string escaped_message;
-        
+
+        LLMutexLock lock(&s->mRecorderMutex);
 		for (Recorders::const_iterator i = s->mRecorders.begin();
 			i != s->mRecorders.end();
 			++i)
