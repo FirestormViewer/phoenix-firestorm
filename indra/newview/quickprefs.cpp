@@ -1372,8 +1372,6 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 	if (var)
 	{
 		widget->setValue(var->getValue());
-		widget->setToolTip(var->getComment());
-		label_textbox->setToolTip(var->getComment());
 	}
 	else
 	{

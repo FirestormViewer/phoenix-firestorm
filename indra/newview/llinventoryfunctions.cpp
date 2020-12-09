@@ -2701,7 +2701,15 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 			if (folder_item)
 			{
 				LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem());
-				if (!bridge || !bridge->isMultiPreviewAllowed())
+				// <FS:Ansariel> FIRE-30518: Multi-preview not working for contents of rezzed objects
+				//               This should prevent multi-previews of settings, but for object inventory items
+				//               this check is always false, since content items in object inventories
+				//               have LLTaskInvFVBridges instead of LLInvFVBridges. Since settings can't be
+				//               opened from inside objects anyway, so restrict the check for actions performed
+				//               on avatar inventories.
+				//if (!bridge || !bridge->isMultiPreviewAllowed())
+				if ("open" == action && (!bridge || !bridge->isMultiPreviewAllowed()))
+				// </FS:Ansariel>
 				{
 					open_multi_preview = false;
 					break;
