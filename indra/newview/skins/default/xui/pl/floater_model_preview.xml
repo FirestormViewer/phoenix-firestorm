@@ -198,7 +198,7 @@
         <check_box label="Auto-włączanie wag" tool_tip="Automatycznie włącz wagi dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_weights" />
         <check_box label="Auto-podgląd wag" tool_tip="Automatycznie wyświetlaj wagi w podglądzie dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_show_weights" />
         <text name="mesh_preview_colors_label">
-			Kolory podglądu przesyłania:
+            Kolory podglądu przesyłania:
         </text>
         <text name="user_label">
             Ogólne:

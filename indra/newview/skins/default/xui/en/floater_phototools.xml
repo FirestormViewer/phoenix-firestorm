@@ -1461,7 +1461,7 @@
 				label="Depth of Field focus follows pointer"
 				layout="topleft"
 				name="FSFocusPointFollowsPointer"
-				tool_tip="Depth of Field focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with lock"
+				tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
 				top_pad="4"
 				width="256"/>	   
 				<check_box
