@@ -1084,7 +1084,9 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
             {
                 fmp->enableViewOption("show_joint_overrides");
                 mViewOption["show_joint_overrides"] = true;
+                fmp->childSetValue("show_joint_overrides", true); // <FS:Beq> make sure option appears checked, when value is being forced true
                 fmp->enableViewOption("show_joint_positions");
+                fmp->childSetValue("show_joint_positions", true); // <FS:Beq> make sure option appears checked, when value is being forced true
                 mViewOption["show_joint_positions"] = true;
                 fmp->childSetValue("upload_joints", true);
             }
@@ -2998,6 +3000,8 @@ BOOL LLModelPreview::render()
     static LLCachedControl<LLColor4> deg_fill_col(gSavedSettings, "MeshPreviewDegenerateFillColor");
     static LLCachedControl<F32> deg_edge_width(gSavedSettings, "MeshPreviewDegenerateEdgeWidth");
     static LLCachedControl<F32> deg_point_size(gSavedSettings, "MeshPreviewDegeneratePointSize");
+    static LLCachedControl<bool> auto_enable_weight_upload(gSavedSettings, "FSMeshUploadAutoEnableWeights");
+    static LLCachedControl<bool> auto_enable_show_weights(gSavedSettings, "FSMeshUploadAutoShowWeightsWhenEnabled");
     // </FS:Beq>
 
     S32 width = getWidth();
@@ -3078,17 +3082,39 @@ BOOL LLModelPreview::render()
                 {
                     // auto enable weight upload if weights are present
                     // (note: all these UI updates need to be somewhere that is not render)
-                    mViewOption["show_skin_weight"] = true;
-                    skin_weight = true;
-                    fmp->childSetValue("upload_skin", true);
+                    // <FS:Beq> BUG-229632 auto enable weights slows manual workflow
+                    // mViewOption["show_skin_weight"] = true;
+                    // skin_weight = true;
+                    // fmp->childSetValue("upload_skin", true);
+                    LL_DEBUGS("MeshUpload") << "FSU auto_enable_weights_upload = " << auto_enable_weight_upload() << LL_ENDL;
+                    LL_DEBUGS("MeshUpload") << "FSU auto_enable_show_weights = " << auto_enable_show_weights() << LL_ENDL;
+                    upload_skin=auto_enable_weight_upload();
+                    fmp->childSetValue("upload_skin", upload_skin);
+
+                    skin_weight = upload_skin && auto_enable_show_weights(); 
+                    mViewOption["show_skin_weight"] = skin_weight;
+                    mFMP->childSetValue("show_skin_weight", skin_weight);
+                    fmp->setViewOptionEnabled("show_skin_weight", upload_skin);
+                    fmp->setViewOptionEnabled("show_joint_overrides", upload_skin);
+                    fmp->setViewOptionEnabled("show_joint_positions", upload_skin);
+                    // </FS:Beq>
                     mFirstSkinUpdate = false;
                 }
-
-                fmp->enableViewOption("show_skin_weight");
-                fmp->setViewOptionEnabled("show_joint_overrides", skin_weight);
-                fmp->setViewOptionEnabled("show_joint_positions", skin_weight);
+                // <FS:Beq> BUG-229632 auto enable weights slows manual workflow
+                // fmp->enableViewOption("show_skin_weight");
+                // fmp->setViewOptionEnabled("show_joint_overrides", skin_weight);
+                // fmp->setViewOptionEnabled("show_joint_posi
+                else
+                {
+                    LL_DEBUGS("MeshUpload") << "NOT FSU auto_enable_weights_upload = " << auto_enable_weight_upload() << LL_ENDL;
+                    LL_DEBUGS("MeshUpload") << "NOT FSU auto_enable_show_weights = " << auto_enable_show_weights() << LL_ENDL;
+                    fmp->setViewOptionEnabled("show_skin_weight", upload_skin);
+                    fmp->setViewOptionEnabled("show_joint_overrides", upload_skin);
+                    fmp->setViewOptionEnabled("show_joint_positions", upload_skin);
+                }
+                // </FS:Beq>
                 mFMP->childEnable("upload_skin");
-                mFMP->childSetValue("show_skin_weight", skin_weight);
+                // mFMP->childSetValue("show_skin_weight", skin_weight); // <FS:Beq/> BUG-229632 
 
             }
             else if ((flags & LEGACY_RIG_FLAG_TOO_MANY_JOINTS) > 0)
@@ -3099,6 +3125,12 @@ BOOL LLModelPreview::render()
             {
                 mFMP->childSetVisible("skin_unknown_joint", true);
             }
+            // <FS:Beq> defensive code to wanr for incorrect flags - no behavioural change
+            else
+            {
+                LL_WARNS("MeshUpload") << "Unexpected flags combination on weights check" << LL_ENDL;
+            }
+            // </FS:Beq>
         }
     }
     else

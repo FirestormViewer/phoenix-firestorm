@@ -120,8 +120,8 @@
 	<menu_item_call label="Коснуться" name="Attachment Touch"/>
 	<menu_item_call label="Редактировать" name="Wearable Edit"/>
 	<menu_item_call label="Обновить текстуру" name="Texture Refresh Attachment" />
-	<menu_item_call label="Снять" name="Take Off"/>
 	<menu_item_call label="Отделить от себя" name="Detach From Yourself"/>
+	<menu_item_call label="Снять" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Применить только к себе"/>
 	<menu_item_call name="Settings Apply Parcel" label="Применить к Участку"/>
 	<menu_item_call label="Отправить на Marketplace" name="Marketplace Send"/>

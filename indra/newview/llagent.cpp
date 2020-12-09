@@ -4728,7 +4728,7 @@ bool LLAgent::hasPendingTeleportRequest()
 
 void LLAgent::startTeleportRequest()
 {
-    LL_INFOS("Telport") << "Agent handling start teleport request." << LL_ENDL;
+    LL_INFOS("Teleport") << "Agent handling start teleport request." << LL_ENDL; // <FS:Beq> fix mistyped tag
     if(LLVoiceClient::instanceExists())
     {
         LLVoiceClient::getInstance()->setHidden(TRUE);

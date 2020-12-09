@@ -58,6 +58,7 @@
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltabcontainer.h"
+#include "llcolorswatch.h" // <FS:Beq>
 #include "lltrans.h"
 #include "llcallbacklist.h"
 #include "llviewertexteditor.h"
@@ -193,6 +194,15 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_joint_overrides")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
+	// <FS:Beq> support for settings panel of floater
+	const auto& preview_refresh_cb = [this](LLUICtrl *, const LLSD &){ if(this->mModelPreview){mModelPreview->refresh();}};
+	getChild<LLColorSwatchCtrl>("mesh_preview_canvas_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_edge_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_physics_edge_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_physics_fill_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_degenerate_edge_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_degenerate_fill_color")->setCommitCallback(preview_refresh_cb);
+	// </FS:Beq>
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
@@ -560,11 +570,13 @@ void add_row_to_list(LLScrollListCtrl *listp,
 
     cell_params.column = "model_name";
     cell_params.value = name;
+	cell_params.font_halign = LLFontGL::LEFT; // <FS:Beq> Fix ugly alignment
 
     item_params.columns.add(cell_params);
 
     cell_params.column = "axis_x";
     cell_params.value = vx;
+	cell_params.font_halign = LLFontGL::RIGHT; // <FS:Beq> Fix ugly alignment
     item_params.columns.add(cell_params);
 
     cell_params.column = "axis_y";
