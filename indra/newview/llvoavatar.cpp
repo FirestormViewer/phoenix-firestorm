@@ -226,6 +226,8 @@ enum ERenderName
 	RENDER_NAME_FADE
 };
 
+#define JELLYDOLLS_SHOULD_IMPOSTOR
+
 //-----------------------------------------------------------------------------
 // Callback data
 //-----------------------------------------------------------------------------
@@ -594,7 +596,8 @@ private:
 //-----------------------------------------------------------------------------
 LLAvatarAppearanceDictionary *LLVOAvatar::sAvatarDictionary = NULL;
 S32 LLVOAvatar::sFreezeCounter = 0;
-U32 LLVOAvatar::sMaxNonImpostors = 12; // overridden based on graphics setting
+U32 LLVOAvatar::sMaxNonImpostors = 12; // Set from RenderAvatarMaxNonImpostors
+bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonImpostors is 0 (unlimited)
 F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
@@ -621,12 +624,12 @@ BOOL LLVOAvatar::sShowFootPlane = FALSE;
 BOOL LLVOAvatar::sVisibleInFirstPerson = FALSE;
 F32 LLVOAvatar::sLODFactor = 1.f;
 F32 LLVOAvatar::sPhysicsLODFactor = 1.f;
-bool LLVOAvatar::sUseImpostors = false; // overwridden by RenderAvatarMaxNonImpostors
 BOOL LLVOAvatar::sJointDebug = FALSE;
 F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
 F32 LLVOAvatar::sGreyUpdateTime = 0.f;
+
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
@@ -653,6 +656,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mMeshValid(FALSE),
 	mVisible(FALSE),
 	mLastImpostorUpdateFrameTime(0.f),
+	mLastImpostorUpdateReason(0),
 	mWindFreq(0.f),
 	mRipplePhase( 0.f ),
 	mBelowWater(FALSE),
@@ -685,6 +689,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mNeedsSkin(FALSE),
 	mLastSkinTime(0.f),
 	mUpdatePeriod(1),
+	mOverallAppearance(AOA_INVISIBLE),
 	mVisualComplexityStale(true),
 	mVisuallyMuteSetting(AV_RENDER_NORMALLY),
 	mMutedAVColor(LLColor4::white /* used for "uninitialize" */),
@@ -732,13 +737,16 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	setAnimationData("Speed", &mSpeed);
 
 	mNeedsImpostorUpdate = TRUE;
+	mLastImpostorUpdateReason = 0;
 	mNeedsAnimUpdate = TRUE;
 
 	mNeedsExtentUpdate = true;
 
 	mImpostorDistance = 0;
 	mImpostorPixelArea = 0;
+
 	setNumTEs(TEX_NUM_INDICES);
+
 	mbCanSelect = TRUE;
 
 	mSignaledAnimations.clear();
@@ -828,8 +836,8 @@ std::string LLVOAvatar::avString() const
     }
     else
     {
-	std::string viz_string = LLVOAvatar::rezStatusToString(getRezzedStatus());
-	return " Avatar '" + getFullname() + "' " + viz_string + " ";
+		std::string viz_string = LLVOAvatar::rezStatusToString(getRezzedStatus());
+		return " Avatar '" + getFullname() + "' " + viz_string + " ";
     }
 }
 
@@ -1156,6 +1164,7 @@ void LLVOAvatar::resetImpostors()
 		LLVOAvatar* avatar = (LLVOAvatar*) *iter;
 		avatar->mImpostor.release();
 		avatar->mNeedsImpostorUpdate = TRUE;
+		avatar->mLastImpostorUpdateReason = 1;
 	}
 }
 
@@ -1439,78 +1448,93 @@ static LLTrace::BlockTimerStatHandle FTM_AVATAR_EXTENT_UPDATE("Av Upd Extent");
 void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 {
     LL_RECORD_BLOCK_TIME(FTM_AVATAR_EXTENT_UPDATE);
+
 //<FS:Beq> not called as often as it used to be but still no harm in optimising
 //    S32 box_detail = gSavedSettings.getS32("AvatarBoundingBoxComplexity");
-	static const LLCachedControl<S32> box_detail(gSavedSettings, "AvatarBoundingBoxComplexity");
+	static const LLCachedControl<S32> avatar_bounding_box_complexity(gSavedSettings, "AvatarBoundingBoxComplexity");
+	S32 box_detail(avatar_bounding_box_complexity);
 //<FS:Beq>
+    if (getOverallAppearance() != AOA_NORMAL)
+    {
+        if (isControlAvatar())
+        {
+            // Animated objects don't show system avatar but do need to include rigged meshes in their bounding box.
+            box_detail = 3;
+        }
+        else
+        {
+            // Jellydolled avatars ignore attachments, etc, use only system avatar.
+            box_detail = 1;
+        }
+    }
+
     // FIXME the update_min_max function used below assumes there is a
     // known starting point, but in general there isn't. Ideally the
     // box update logic should be modified to handle the no-point-yet
     // case. For most models, starting with the pelvis is safe though.
     LLVector3 zero_pos;
-	LLVector4a pos;
+    LLVector4a pos;
     if (dist_vec(zero_pos, mPelvisp->getWorldPosition())<0.001)
     {
         // Don't use pelvis until av initialized
-	pos.load3(getRenderPosition().mV);
+        pos.load3(getRenderPosition().mV);
     }
     else
     {
         pos.load3(mPelvisp->getWorldPosition().mV);
     }
-	newMin = pos;
-	newMax = pos;
+    newMin = pos;
+    newMax = pos;
 
-	//stretch bounding box by joint positions. Doing this for
-	//control avs, where the polymeshes aren't maintained or
-	//displayed, can give inaccurate boxes due to joints stuck at (0,0,0).
-    if ((box_detail>=1) && !isControlAvatar())
+    if (box_detail>=1 && !isControlAvatar())
     {
-	for (polymesh_map_t::iterator i = mPolyMeshes.begin(); i != mPolyMeshes.end(); ++i)
-	{
-		LLPolyMesh* mesh = i->second;
-		for (S32 joint_num = 0; joint_num < mesh->mJointRenderData.size(); joint_num++)
-		{
-			LLVector4a trans;
-			trans.load3( mesh->mJointRenderData[joint_num]->mWorldMatrix->getTranslation().mV);
-			update_min_max(newMin, newMax, trans);
-		}
-	}
-
+        //stretch bounding box by joint positions. Doing this for
+        //control avs, where the polymeshes aren't maintained or
+        //displayed, can give inaccurate boxes due to joints stuck at (0,0,0).
+        for (polymesh_map_t::iterator i = mPolyMeshes.begin(); i != mPolyMeshes.end(); ++i)
+        {
+            LLPolyMesh* mesh = i->second;
+            for (S32 joint_num = 0; joint_num < mesh->mJointRenderData.size(); joint_num++)
+            {
+                LLVector4a trans;
+                trans.load3( mesh->mJointRenderData[joint_num]->mWorldMatrix->getTranslation().mV);
+                update_min_max(newMin, newMax, trans);
+            }
+        }
     }
 
-	// Pad bounding box for starting joint, plus polymesh if
-	// applicable. Subsequent calcs should be accurate enough to not
-	// need padding.
-	LLVector4a padding(0.25);
-	newMin.sub(padding);
-	newMax.add(padding);
+    // Pad bounding box for starting joint, plus polymesh if
+    // applicable. Subsequent calcs should be accurate enough to not
+    // need padding.
+    LLVector4a padding(0.25);
+    newMin.sub(padding);
+    newMax.add(padding);
 
 
-	//stretch bounding box by static attachments
+    //stretch bounding box by static attachments
     if (box_detail >= 2)
     {
         float max_attachment_span = get_default_max_prim_scale() * 5.0f;
-	
-	for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
-		 iter != mAttachmentPoints.end();
-		 ++iter)
-	{
-		LLViewerJointAttachment* attachment = iter->second;
+    
+        for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
+             iter != mAttachmentPoints.end();
+             ++iter)
+        {
+            LLViewerJointAttachment* attachment = iter->second;
 
-		// <FS:Ansariel> Possible crash fix
-		//if (attachment->getValid())
-		if (attachment && attachment->getValid())
-		// </FS:Ansariel>
-		{
-			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-				 attachment_iter != attachment->mAttachedObjects.end();
-				 ++attachment_iter)
-			{
+            // <FS:Ansariel> Possible crash fix
+            //if (attachment->getValid())
+            if (attachment && attachment->getValid())
+            // </FS:Ansariel>
+            {
+                for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+                     attachment_iter != attachment->mAttachedObjects.end();
+                     ++attachment_iter)
+                {
                     // Don't we need to look at children of attached_object as well?
-                const LLViewerObject* attached_object = attachment_iter->get();
-				if (attached_object && !attached_object->isHUDAttachment())
-				{
+                    const LLViewerObject* attached_object = attachment_iter->get();
+                    if (attached_object && !attached_object->isHUDAttachment())
+                    {
                         const LLVOVolume *vol = dynamic_cast<const LLVOVolume*>(attached_object);
                         if (vol && vol->isAnimatedObject())
                         {
@@ -1532,39 +1556,39 @@ void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
                         {
                             continue;
                         }
-					LLDrawable* drawable = attached_object->mDrawable;
-					if (drawable && !drawable->isState(LLDrawable::RIGGED))
-					{
-						LLSpatialBridge* bridge = drawable->getSpatialBridge();
-						if (bridge)
-						{
-							const LLVector4a* ext = bridge->getSpatialExtents();
-							LLVector4a distance;
-							distance.setSub(ext[1], ext[0]);
-							LLVector4a max_span(max_attachment_span);
+                        LLDrawable* drawable = attached_object->mDrawable;
+                        if (drawable && !drawable->isState(LLDrawable::RIGGED))
+                        {
+                            LLSpatialBridge* bridge = drawable->getSpatialBridge();
+                            if (bridge)
+                            {
+                                const LLVector4a* ext = bridge->getSpatialExtents();
+                                LLVector4a distance;
+                                distance.setSub(ext[1], ext[0]);
+                                LLVector4a max_span(max_attachment_span);
 
-							S32 lt = distance.lessThan(max_span).getGatheredBits() & 0x7;
-						
-							// Only add the prim to spatial extents calculations if it isn't a megaprim.
-							// max_attachment_span calculated at the start of the function 
-							// (currently 5 times our max prim size) 
-							if (lt == 0x7)
-							{
-								update_min_max(newMin,newMax,ext[0]);
-								update_min_max(newMin,newMax,ext[1]);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                                S32 lt = distance.lessThan(max_span).getGatheredBits() & 0x7;
+                        
+                                // Only add the prim to spatial extents calculations if it isn't a megaprim.
+                                // max_attachment_span calculated at the start of the function 
+                                // (currently 5 times our max prim size) 
+                                if (lt == 0x7)
+                                {
+                                    update_min_max(newMin,newMax,ext[0]);
+                                    update_min_max(newMin,newMax,ext[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Stretch bounding box by rigged mesh joint boxes
     if (box_detail>=3)
     {
-		updateRiggingInfo();
+        updateRiggingInfo();
         for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
         {
             LLJoint *joint = getJoint(joint_num);
@@ -2164,6 +2188,40 @@ void LLVOAvatar::resetVisualParams()
 	}
 }
 
+void LLVOAvatar::applyDefaultParams()
+{
+	// These are params from avs with newly created copies of shape,
+	// skin, hair, eyes, plus gender set as noted. Run arche_tool.py
+	// to get params from some other xml appearance dump.
+	std::map<S32, U8> male_params = {
+		{1,33}, {2,61}, {4,85}, {5,23}, {6,58}, {7,127}, {8,63}, {10,85}, {11,63}, {12,42}, {13,0}, {14,85}, {15,63}, {16,36}, {17,85}, {18,95}, {19,153}, {20,63}, {21,34}, {22,0}, {23,63}, {24,109}, {25,88}, {27,132}, {31,63}, {33,136}, {34,81}, {35,85}, {36,103}, {37,136}, {38,127}, {80,255}, {93,203}, {98,0}, {99,0}, {105,127}, {108,0}, {110,0}, {111,127}, {112,0}, {113,0}, {114,127}, {115,0}, {116,0}, {117,0}, {119,127}, {130,114}, {131,127}, {132,99}, {133,63}, {134,127}, {135,140}, {136,127}, {137,127}, {140,0}, {141,0}, {142,0}, {143,191}, {150,0}, {155,104}, {157,0}, {162,0}, {163,0}, {165,0}, {166,0}, {167,0}, {168,0}, {169,0}, {177,0}, {181,145}, {182,216}, {183,133}, {184,0}, {185,127}, {192,0}, {193,127}, {196,170}, {198,0}, {503,0}, {505,127}, {506,127}, {507,109}, {508,85}, {513,127}, {514,127}, {515,63}, {517,85}, {518,42}, {603,100}, {604,216}, {605,214}, {606,204}, {607,204}, {608,204}, {609,51}, {616,25}, {617,89}, {619,76}, {624,204}, {625,0}, {629,127}, {637,0}, {638,0}, {646,144}, {647,85}, {649,127}, {650,132}, {652,127}, {653,85}, {654,0}, {656,127}, {659,127}, {662,127}, {663,127}, {664,127}, {665,127}, {674,59}, {675,127}, {676,85}, {678,127}, {682,127}, {683,106}, {684,47}, {685,79}, {690,127}, {692,127}, {693,204}, {700,63}, {701,0}, {702,0}, {703,0}, {704,0}, {705,127}, {706,127}, {707,0}, {708,0}, {709,0}, {710,0}, {711,127}, {712,0}, {713,159}, {714,0}, {715,0}, {750,178}, {752,127}, {753,36}, {754,85}, {755,131}, {756,127}, {757,127}, {758,127}, {759,153}, {760,95}, {762,0}, {763,140}, {764,74}, {765,27}, {769,127}, {773,127}, {775,0}, {779,214}, {780,204}, {781,198}, {785,0}, {789,0}, {795,63}, {796,30}, {799,127}, {800,226}, {801,255}, {802,198}, {803,255}, {804,255}, {805,255}, {806,255}, {807,255}, {808,255}, {812,255}, {813,255}, {814,255}, {815,204}, {816,0}, {817,255}, {818,255}, {819,255}, {820,255}, {821,255}, {822,255}, {823,255}, {824,255}, {825,255}, {826,255}, {827,255}, {828,0}, {829,255}, {830,255}, {834,255}, {835,255}, {836,255}, {840,0}, {841,127}, {842,127}, {844,255}, {848,25}, {858,100}, {859,255}, {860,255}, {861,255}, {862,255}, {863,84}, {868,0}, {869,0}, {877,0}, {879,51}, {880,132}, {921,255}, {922,255}, {923,255}, {10000,0}, {10001,0}, {10002,25}, {10003,0}, {10004,25}, {10005,23}, {10006,51}, {10007,0}, {10008,25}, {10009,23}, {10010,51}, {10011,0}, {10012,0}, {10013,25}, {10014,0}, {10015,25}, {10016,23}, {10017,51}, {10018,0}, {10019,0}, {10020,25}, {10021,0}, {10022,25}, {10023,23}, {10024,51}, {10025,0}, {10026,25}, {10027,23}, {10028,51}, {10029,0}, {10030,25}, {10031,23}, {10032,51}, {11000,1}, {11001,127}
+	};
+	std::map<S32, U8> female_params = {
+		{1,33}, {2,61}, {4,85}, {5,23}, {6,58}, {7,127}, {8,63}, {10,85}, {11,63}, {12,42}, {13,0}, {14,85}, {15,63}, {16,36}, {17,85}, {18,95}, {19,153}, {20,63}, {21,34}, {22,0}, {23,63}, {24,109}, {25,88}, {27,132}, {31,63}, {33,136}, {34,81}, {35,85}, {36,103}, {37,136}, {38,127}, {80,0}, {93,203}, {98,0}, {99,0}, {105,127}, {108,0}, {110,0}, {111,127}, {112,0}, {113,0}, {114,127}, {115,0}, {116,0}, {117,0}, {119,127}, {130,114}, {131,127}, {132,99}, {133,63}, {134,127}, {135,140}, {136,127}, {137,127}, {140,0}, {141,0}, {142,0}, {143,191}, {150,0}, {155,104}, {157,0}, {162,0}, {163,0}, {165,0}, {166,0}, {167,0}, {168,0}, {169,0}, {177,0}, {181,145}, {182,216}, {183,133}, {184,0}, {185,127}, {192,0}, {193,127}, {196,170}, {198,0}, {503,0}, {505,127}, {506,127}, {507,109}, {508,85}, {513,127}, {514,127}, {515,63}, {517,85}, {518,42}, {603,100}, {604,216}, {605,214}, {606,204}, {607,204}, {608,204}, {609,51}, {616,25}, {617,89}, {619,76}, {624,204}, {625,0}, {629,127}, {637,0}, {638,0}, {646,144}, {647,85}, {649,127}, {650,132}, {652,127}, {653,85}, {654,0}, {656,127}, {659,127}, {662,127}, {663,127}, {664,127}, {665,127}, {674,59}, {675,127}, {676,85}, {678,127}, {682,127}, {683,106}, {684,47}, {685,79}, {690,127}, {692,127}, {693,204}, {700,63}, {701,0}, {702,0}, {703,0}, {704,0}, {705,127}, {706,127}, {707,0}, {708,0}, {709,0}, {710,0}, {711,127}, {712,0}, {713,159}, {714,0}, {715,0}, {750,178}, {752,127}, {753,36}, {754,85}, {755,131}, {756,127}, {757,127}, {758,127}, {759,153}, {760,95}, {762,0}, {763,140}, {764,74}, {765,27}, {769,127}, {773,127}, {775,0}, {779,214}, {780,204}, {781,198}, {785,0}, {789,0}, {795,63}, {796,30}, {799,127}, {800,226}, {801,255}, {802,198}, {803,255}, {804,255}, {805,255}, {806,255}, {807,255}, {808,255}, {812,255}, {813,255}, {814,255}, {815,204}, {816,0}, {817,255}, {818,255}, {819,255}, {820,255}, {821,255}, {822,255}, {823,255}, {824,255}, {825,255}, {826,255}, {827,255}, {828,0}, {829,255}, {830,255}, {834,255}, {835,255}, {836,255}, {840,0}, {841,127}, {842,127}, {844,255}, {848,25}, {858,100}, {859,255}, {860,255}, {861,255}, {862,255}, {863,84}, {868,0}, {869,0}, {877,0}, {879,51}, {880,132}, {921,255}, {922,255}, {923,255}, {10000,0}, {10001,0}, {10002,25}, {10003,0}, {10004,25}, {10005,23}, {10006,51}, {10007,0}, {10008,25}, {10009,23}, {10010,51}, {10011,0}, {10012,0}, {10013,25}, {10014,0}, {10015,25}, {10016,23}, {10017,51}, {10018,0}, {10019,0}, {10020,25}, {10021,0}, {10022,25}, {10023,23}, {10024,51}, {10025,0}, {10026,25}, {10027,23}, {10028,51}, {10029,0}, {10030,25}, {10031,23}, {10032,51}, {11000,1}, {11001,127}
+	};
+	std::map<S32, U8> *params = NULL;
+	if (getSex() == SEX_MALE)
+		params = &male_params;
+	else
+		params = &female_params;
+			
+	for( auto it = params->begin(); it != params->end(); ++it)
+	{
+		LLVisualParam* param = getVisualParam(it->first);
+		if( !param )
+		{
+			// invalid id
+			break;
+		}
+
+		U8 value = it->second;
+		F32 newWeight = U8_to_F32(value, param->getMinWeight(), param->getMaxWeight());
+		// <FS:Ansariel> [Legacy Bake]
+		//param->setWeight(newWeight);
+		param->setWeight(newWeight, FALSE); // Most likely FALSE is correct here because it's used in resetSkeleton, which is a local operation
+	}
+}
+
 //-----------------------------------------------------------------------------
 // resetSkeleton()
 //-----------------------------------------------------------------------------
@@ -2226,15 +2284,30 @@ void LLVOAvatar::resetSkeleton(bool reset_animations)
     }
 
     // Reset tweakable params to preserved state
-    if (mLastProcessedAppearance)
-    {
-    bool slam_params = true;
-    applyParsedAppearanceMessage(*mLastProcessedAppearance, slam_params);
-    }
+	if (getOverallAppearance() == AOA_NORMAL)
+	{
+		if (mLastProcessedAppearance)
+		{
+			bool slam_params = true;
+			applyParsedAppearanceMessage(*mLastProcessedAppearance, slam_params);
+		}
+	}
+	else
+	{
+		// Stripped down approximation of
+		// applyParsedAppearanceMessage, but with alternative default
+		// (jellydoll) params
+		setCompositeUpdatesEnabled( FALSE );
+		gPipeline.markGLRebuild(this);
+		applyDefaultParams();
+		setCompositeUpdatesEnabled( TRUE );
+		updateMeshTextures();
+		updateMeshVisibility();
+	}
     updateVisualParams();
 
     // Restore attachment pos overrides
-    updateAttachmentOverrides();
+	updateAttachmentOverrides();
 
     // Animations
     if (reset_animations)
@@ -2921,10 +2994,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 	BOOL visible = isVisible() || mNeedsAnimUpdate;
 
 	// update attachments positions
-	// <FS:Ansariel> Fix LL impostor hacking; No detailed updates if muted when using no impostors
-	//if (detailed_update || !sUseImpostors)
-	if (detailed_update || (!sUseImpostors && !isInMuteList()))
-	// </FS:Ansariel>
+	if (detailed_update)
 	{
 		LL_RECORD_BLOCK_TIME(FTM_ATTACHMENT_UPDATE);
 		for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
@@ -2991,6 +3061,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 			if (angle_diff > F_PI/512.f*distance*mUpdatePeriod)
 			{
 				mNeedsImpostorUpdate = TRUE;
+				mLastImpostorUpdateReason = 2;
 			}
 		}
 
@@ -3002,6 +3073,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 			if (dist_diff/mImpostorDistance > 0.1f)
 			{
 				mNeedsImpostorUpdate = TRUE;
+				mLastImpostorUpdateReason = 3;
 			}
 			else
 			{
@@ -3014,6 +3086,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 				if (diff.getLength3().getF32() > 0.05f)
 				{
 					mNeedsImpostorUpdate = TRUE;
+					mLastImpostorUpdateReason = 4;
 				}
 				else
 				{
@@ -3021,6 +3094,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 					if (diff.getLength3().getF32() > 0.05f)
 					{
 						mNeedsImpostorUpdate = TRUE;
+						mLastImpostorUpdateReason = 5;
 					}
 				}
 			}
@@ -3029,13 +3103,13 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 
     if (mDrawable.notNull())
     {
-	mDrawable->movePartition();
+		mDrawable->movePartition();
 	
-	//force a move if sitting on an active object
-	if (getParent() && ((LLViewerObject*) getParent())->mDrawable->isActive())
-	{
-		gPipeline.markMoved(mDrawable, TRUE);
-	}
+		//force a move if sitting on an active object
+		if (getParent() && ((LLViewerObject*) getParent())->mDrawable->isActive())
+		{
+			gPipeline.markMoved(mDrawable, TRUE);
+		}
     }
 }
 
@@ -4156,8 +4230,13 @@ bool LLVOAvatar::isVisuallyMuted()
 			muted = false;
 		}
 		else if (mVisuallyMuteSetting == AV_DO_NOT_RENDER)
-		{	// Always want to see this AV as an impostor
+		{
+#ifdef JELLYDOLLS_SHOULD_IMPOSTOR
 			muted = true;
+			// Always want to see this AV as an impostor
+#else
+			muted = false;
+#endif
 		}
 		// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
         //else if (isInMuteList())
@@ -4171,7 +4250,7 @@ bool LLVOAvatar::isVisuallyMuted()
 			muted = true;
 		}
 // [/RLVa:KB]
-		else
+		else 
 		{
 			muted = isTooComplex();
 		}
@@ -4180,7 +4259,7 @@ bool LLVOAvatar::isVisuallyMuted()
 	return muted;
 }
 
-bool LLVOAvatar::isInMuteList()
+bool LLVOAvatar::isInMuteList() const
 {
 	bool muted = false;
 	F64 now = LLFrameTimer::getTotalSeconds();
@@ -4273,8 +4352,13 @@ void LLVOAvatar::updateAppearanceMessageDebugText()
 		if (hover_offset[2] != 0.0)
 		{
 			debug_line += llformat(" hov_z: %.3f", hover_offset[2]);
-        debug_line += llformat(" %s", (isSitting() ? "S" : "T"));
+			debug_line += llformat(" %s", (isSitting() ? "S" : "T"));
 			debug_line += llformat("%s", (isMotionActive(ANIM_AGENT_SIT_GROUND_CONSTRAINED) ? "G" : "-"));
+		}
+		if (mInAir)
+		{
+			debug_line += " A";
+			
 		}
 
         LLVector3 ankle_right_pos_agent = mFootRightp->getWorldPosition();
@@ -4288,9 +4372,38 @@ void LLVOAvatar::updateAppearanceMessageDebugText()
         LLVector3 pelvis_pos = mPelvisp->getPosition();
         debug_line += llformat(" rp %.3f pp %.3f", root_pos[2], pelvis_pos[2]);
 
-    S32 is_visible = (S32) isVisible();
-    S32 is_m_visible = (S32) mVisible;
-    debug_line += llformat(" v %d/%d", is_visible, is_m_visible);
+		const LLVector3& scale = getScale();
+		debug_line += llformat(" scale-z %.3f", scale[2]);
+		S32 is_visible = (S32) isVisible();
+		S32 is_m_visible = (S32) mVisible;
+		debug_line += llformat(" v %d/%d", is_visible, is_m_visible);
+
+		AvatarOverallAppearance aoa = getOverallAppearance();
+		if (aoa == AOA_NORMAL)
+		{
+			debug_line += " N";
+		}
+		else if (aoa == AOA_JELLYDOLL)
+		{
+			debug_line += " J";
+		}
+		else
+		{
+			debug_line += " I";
+		}
+
+		if (mMeshValid)
+		{
+			debug_line += "m";
+		}
+		else
+		{
+			debug_line += "-";
+		}
+		if (isImpostor())
+		{
+			debug_line += " Imp" + llformat("%d[%d]:%.1f", mUpdatePeriod, mLastImpostorUpdateReason, ((F32)(gFrameTimeSeconds-mLastImpostorUpdateFrameTime)));
+		}
 
 		addDebugText(debug_line);
 }
@@ -4332,13 +4445,13 @@ LLViewerInventoryItem* recursiveGetObjectInventoryItem(LLViewerObject *vobj, LLU
 
 void LLVOAvatar::updateAnimationDebugText()
 {
-		for (LLMotionController::motion_list_t::iterator iter = mMotionController.getActiveMotions().begin();
-			 iter != mMotionController.getActiveMotions().end(); ++iter)
+	for (LLMotionController::motion_list_t::iterator iter = mMotionController.getActiveMotions().begin();
+		 iter != mMotionController.getActiveMotions().end(); ++iter)
+	{
+		LLMotion* motionp = *iter;
+		if (motionp->getMinPixelArea() < getPixelArea())
 		{
-			LLMotion* motionp = *iter;
-			if (motionp->getMinPixelArea() < getPixelArea())
-			{
-				std::string output;
+			std::string output;
             std::string motion_name = motionp->getName();
             if (motion_name.empty())
             {
@@ -4355,73 +4468,74 @@ void LLVOAvatar::updateAnimationDebugText()
                 }
             }
             if (motion_name.empty())
+			{
+				std::string name;
+				if (gAgent.isGodlikeWithoutAdminMenuFakery() || isSelf())
 				{
-					std::string name;
-					if (gAgent.isGodlikeWithoutAdminMenuFakery() || isSelf())
+					name = motionp->getID().asString();
+					LLVOAvatar::AnimSourceIterator anim_it = mAnimationSources.begin();
+					for (; anim_it != mAnimationSources.end(); ++anim_it)
 					{
-						name = motionp->getID().asString();
-						LLVOAvatar::AnimSourceIterator anim_it = mAnimationSources.begin();
-						for (; anim_it != mAnimationSources.end(); ++anim_it)
+						if (anim_it->second == motionp->getID())
 						{
-							if (anim_it->second == motionp->getID())
+							LLViewerObject* object = gObjectList.findObject(anim_it->first);
+							if (!object)
 							{
-								LLViewerObject* object = gObjectList.findObject(anim_it->first);
-								if (!object)
+								break;
+							}
+							if (object->isAvatar())
+							{
+								if (mMotionController.mIsSelf)
 								{
-									break;
+									// Searching inventory by asset id is really long
+									// so just mark as inventory
+									// Also item is likely to be named by LLPreviewAnim
+									name += "(inventory)";
 								}
-								if (object->isAvatar())
+							}
+							else
+							{
+								LLViewerInventoryItem* item = NULL;
+								if (!object->isInventoryDirty())
 								{
-									if (mMotionController.mIsSelf)
-									{
-										// Searching inventory by asset id is really long
-										// so just mark as inventory
-										// Also item is likely to be named by LLPreviewAnim
-										name += "(inventory)";
-									}
+									item = object->getInventoryItemByAsset(motionp->getID());
+								}
+								if (item)
+								{
+									name = item->getName();
+								}
+								else if (object->isAttachment())
+								{
+									name += "(att:" + getAttachmentItemName() + ")";
 								}
 								else
 								{
-									LLViewerInventoryItem* item = NULL;
-									if (!object->isInventoryDirty())
-									{
-										item = object->getInventoryItemByAsset(motionp->getID());
-									}
-									if (item)
-									{
-										name = item->getName();
-									}
-									else if (object->isAttachment())
-									{
-										name += "(" + getAttachmentItemName() + ")";
-									}
-									else
-									{
-										// in-world object, name or content unknown
-										name += "(in-world)";
-									}
+									// in-world object, name or content unknown
+									name += "(in-world)";
 								}
-								break;
 							}
+							break;
 						}
 					}
-					else
-					{
-						name = LLUUID::null.asString();
-					}
-					output = llformat("%s - %d",
-							  name.c_str(),
-							  (U32)motionp->getPriority());
 				}
 				else
 				{
-					output = llformat("%s - %d",
-                                  motion_name.c_str(),
-							  (U32)motionp->getPriority());
+					name = LLUUID::null.asString();
 				}
-				addDebugText(output);
+				motion_name = name;
 			}
+			std::string motion_tag = "";
+			if (mPlayingAnimations.find(motionp->getID()) != mPlayingAnimations.end())
+			{
+				motion_tag = "*";
+			}
+			output = llformat("%s%s - %d",
+							  motion_name.c_str(),
+							  motion_tag.c_str(),
+							  (U32)motionp->getPriority());
+			addDebugText(output);
 		}
+	}
 }
 
 void LLVOAvatar::updateDebugText()
@@ -4562,7 +4676,14 @@ void LLVOAvatar::updateFootstepSounds()
 // computeUpdatePeriod()
 // Factored out from updateCharacter()
 // Set new value for mUpdatePeriod based on distance and various other factors.
-//------------------------------------------------------------------------
+//
+// Note 10-2020: it turns out that none of these update period
+// calculations have been having any effect, because
+// mNeedsImpostorUpdate was not being set in updateCharacter(). So
+// it's really open to question whether we want to enable time based updates, and if
+// so, at what rate. Leaving the rates as given would lead to
+// drastically more frequent impostor updates than we've been doing all these years.
+// ------------------------------------------------------------------------
 void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
@@ -4570,10 +4691,7 @@ void LLVOAvatar::computeUpdatePeriod()
         && isVisible() 
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
-	// <FS:Ansariel> Fix LL impostor hacking; Adjust update period for muted avatars if using no impostors
-        //&& sUseImpostors
-        && (sUseImpostors || isInMuteList())
-	// </FS:Ansariel>
+        && (sLimitNonImpostors || visually_muted)
         && !mNeedsAnimUpdate 
         && !sFreezeCounter)
 	{
@@ -4581,11 +4699,14 @@ void LLVOAvatar::computeUpdatePeriod()
 		LLVector4a size;
 		size.setSub(ext[1],ext[0]);
 		F32 mag = size.getLength3().getF32()*0.5f;
+
+		const S32 UPDATE_RATE_SLOW = 64;
+		const S32 UPDATE_RATE_MED = 48;
+		const S32 UPDATE_RATE_FAST = 32;
 		
-		F32 impostor_area = 256.f*512.f*(8.125f - LLVOAvatar::sLODFactor*8.f);
 		if (visually_muted)
-		{ // visually muted avatars update at 16 hz
-			mUpdatePeriod = 16;
+		{   // visually muted avatars update at lowest rate
+			mUpdatePeriod = UPDATE_RATE_SLOW;
 		}
 		else if (! shouldImpostor()
 				 || mDrawable->mDistanceWRTCamera < 1.f + mag)
@@ -4594,34 +4715,29 @@ void LLVOAvatar::computeUpdatePeriod()
 			// impostor camera near clip plane
 			mUpdatePeriod = 1;
 		}
-		else if ( shouldImpostor(4) )
+		else if ( shouldImpostor(4.0) )
 		{ //background avatars are REALLY slow updating impostors
-			mUpdatePeriod = 16;
+			mUpdatePeriod = UPDATE_RATE_SLOW;
 		}
 		else if (mLastRezzedStatus <= 0)
 		{
 			// Don't update cloud avatars too often
-			mUpdatePeriod = 8;
+			mUpdatePeriod = UPDATE_RATE_SLOW;
 		}
-		else if ( shouldImpostor(3) )
+		else if ( shouldImpostor(3.0) )
 		{ //back 25% of max visible avatars are slow updating impostors
-			mUpdatePeriod = 8;
+			mUpdatePeriod = UPDATE_RATE_MED;
 		}
-		else if (mImpostorPixelArea <= impostor_area)
-		{  // stuff in between gets an update period based on pixel area
-			mUpdatePeriod = llclamp((S32) sqrtf(impostor_area*4.f/mImpostorPixelArea), 2, 8);
-		}
-		else
+		else 
 		{
 			//nearby avatars, update the impostors more frequently.
-			mUpdatePeriod = 4;
+			mUpdatePeriod = UPDATE_RATE_FAST;
 		}
 	}
 	else
 	{
 		mUpdatePeriod = 1;
 	}
-
 }
 
 //------------------------------------------------------------------------
@@ -4636,7 +4752,7 @@ void LLVOAvatar::updateOrientation(LLAgent& agent, F32 speed, F32 delta_time)
 {
 			LLQuaternion iQ;
 			LLVector3 upDir( 0.0f, 0.0f, 1.0f );
-					
+			
 			// Compute a forward direction vector derived from the primitive rotation
 			// and the velocity vector.  When walking or jumping, don't let body deviate
 			// more than 90 from the view, if necessary, flip the velocity vector.
@@ -4913,7 +5029,33 @@ void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool w
 		if (!isSitting() && !was_sit_ground_constrained)
 		{
 			root_pos += LLVector3d(getHoverOffset());
+			if (getOverallAppearance() == AOA_JELLYDOLL)
+			{
+				F32 offz = -0.5 * (getScale()[VZ] - mBodySize.mV[VZ]);
+				root_pos[2] += offz;
+				// if (!isSelf() && !isControlAvatar())
+				// {
+				// 	LL_DEBUGS("Avatar") << "av " << getFullname() 
+				// 						<< " frame " << LLFrameTimer::getFrameCount()
+				// 						<< " root adjust offz " << offz
+				// 						<< " scalez " << getScale()[VZ]
+				// 						<< " bsz " << mBodySize.mV[VZ]
+				// 						<< LL_ENDL;
+				// }
+			}
 		}
+		// if (!isSelf() && !isControlAvatar())
+		// {
+		// 	LL_DEBUGS("Avatar") << "av " << getFullname() << " aoa " << (S32) getOverallAppearance()
+		// 						<< " frame " << LLFrameTimer::getFrameCount()
+		// 						<< " scalez " << getScale()[VZ]
+		// 						<< " bsz " << mBodySize.mV[VZ]
+		// 						<< " root pos " << root_pos[2]
+		// 						<< " curr rootz " << mRoot->getPosition()[2] 
+		// 						<< " pp-z " << mPelvisp->getPosition()[2]
+		// 						<< " renderpos " << getRenderPosition()
+		// 						<< LL_ENDL;
+		// }
 
         LLControlAvatar *cav = dynamic_cast<LLControlAvatar*>(this);
         if (cav)
@@ -4924,6 +5066,14 @@ void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool w
         else
         {
             LLVector3 newPosition = gAgent.getPosAgentFromGlobal(root_pos);
+			// if (!isSelf() && !isControlAvatar())
+			// {
+			// 	LL_DEBUGS("Avatar") << "av " << getFullname() 
+			// 						<< " frame " << LLFrameTimer::getFrameCount()
+			// 						<< " newPosition " << newPosition
+			// 						<< " renderpos " << getRenderPosition()
+			// 						<< LL_ENDL;
+			// }
             if (newPosition != mRoot->getXform()->getWorldPosition())
             {		
                 mRoot->touch();
@@ -4954,6 +5104,37 @@ void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool w
 }
 
 //------------------------------------------------------------------------
+// LLVOAvatar::computeNeedsUpdate()
+// 
+// Most of the logic here is to figure out when to periodically update impostors.
+// Non-impostors have mUpdatePeriod == 1 and will need update every frame.
+//------------------------------------------------------------------------
+bool LLVOAvatar::computeNeedsUpdate()
+{
+	const F32 MAX_IMPOSTOR_INTERVAL = 4.0f;
+	computeUpdatePeriod();
+
+	bool needs_update_by_frame_count = ((LLDrawable::getCurrentFrame()+mID.mData[0])%mUpdatePeriod == 0);
+
+    bool needs_update_by_max_time = ((gFrameTimeSeconds-mLastImpostorUpdateFrameTime)> MAX_IMPOSTOR_INTERVAL);
+	bool needs_update = needs_update_by_frame_count || needs_update_by_max_time;
+
+	if (needs_update && !isSelf())
+	{
+		if (needs_update_by_max_time)
+		{
+			mNeedsImpostorUpdate = TRUE;
+			mLastImpostorUpdateReason = 11;
+		}
+		else
+		{
+			//mNeedsImpostorUpdate = TRUE;
+			//mLastImpostorUpdateReason = 10;
+		}
+	}
+	return needs_update;
+}
+
 // updateCharacter()
 //
 // This is called for all avatars, so there are 4 possible situations:
@@ -4976,7 +5157,7 @@ void LLVOAvatar::updateRootPositionAndRotation(LLAgent& agent, F32 speed, bool w
 // simulator.
 //
 //------------------------------------------------------------------------
-BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
+bool LLVOAvatar::updateCharacter(LLAgent &agent)
 {	
 	updateDebugText();
 	
@@ -4988,6 +5169,7 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	BOOL visible = isVisible();
     bool is_control_avatar = isControlAvatar(); // capture state to simplify tracing
 	bool is_attachment = false;
+
 	if (is_control_avatar)
 	{
         LLControlAvatar *cav = dynamic_cast<LLControlAvatar*>(this);
@@ -5007,11 +5189,11 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 
 	//--------------------------------------------------------------------
 	// The rest should only be done occasionally for far away avatars.
-    // Set mUpdatePeriod and visible based on distance and other criteria.
+    // Set mUpdatePeriod and visible based on distance and other criteria,
+	// and flag for impostor update if needed.
 	//--------------------------------------------------------------------
-    computeUpdatePeriod();
-    bool needs_update = (LLDrawable::getCurrentFrame()+mID.mData[0])%mUpdatePeriod == 0;
-
+	bool needs_update = computeNeedsUpdate();
+	
 	//--------------------------------------------------------------------
 	// Early out if does not need update and not self
 	// don't early out for your own avatar, as we rely on your animations playing reliably
@@ -5026,6 +5208,12 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 	//}
 	// </FS:Ansariel>
 
+	//--------------------------------------------------------------------
+	// Handle transitions between regular rendering, jellydoll, or invisible.
+	// Can trigger skeleton reset or animation changes
+	//--------------------------------------------------------------------
+	updateOverallAppearance();
+	
 	//--------------------------------------------------------------------
 	// change animation time quanta based on avatar render load
 	//--------------------------------------------------------------------
@@ -5120,8 +5308,8 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 
     if (visible)
     {
-	// System avatar mesh vertices need to be reskinned.
-	mNeedsSkin = TRUE;
+		// System avatar mesh vertices need to be reskinned.
+		mNeedsSkin = TRUE;
     }
 
 	return visible;
@@ -5574,7 +5762,8 @@ U32 LLVOAvatar::renderSkinned()
 			}
 			if (!isSelf() || gAgent.needsRenderHead() || LLPipeline::sShadowRender)
 			{
-				if (isTextureVisible(TEX_HEAD_BAKED) || isUIAvatar())
+	
+				if (isTextureVisible(TEX_HEAD_BAKED) || (getOverallAppearance() == AOA_JELLYDOLL && !isControlAvatar()) || isUIAvatar())
 				{
 					LLViewerJoint* head_mesh = getViewerJoint(MESH_ID_HEAD);
 					if (head_mesh)
@@ -5584,7 +5773,7 @@ U32 LLVOAvatar::renderSkinned()
 					first_pass = FALSE;
 				}
 			}
-			if (isTextureVisible(TEX_UPPER_BAKED) || isUIAvatar())
+			if (isTextureVisible(TEX_UPPER_BAKED) || (getOverallAppearance() == AOA_JELLYDOLL && !isControlAvatar()) || isUIAvatar())
 			{
 				LLViewerJoint* upper_mesh = getViewerJoint(MESH_ID_UPPER_BODY);
 				if (upper_mesh)
@@ -5594,7 +5783,7 @@ U32 LLVOAvatar::renderSkinned()
 				first_pass = FALSE;
 			}
 			
-			if (isTextureVisible(TEX_LOWER_BAKED) || isUIAvatar())
+			if (isTextureVisible(TEX_LOWER_BAKED) || (getOverallAppearance() == AOA_JELLYDOLL && !isControlAvatar()) || isUIAvatar())
 			{
 				LLViewerJoint* lower_mesh = getViewerJoint(MESH_ID_LOWER_BODY);
 				if (lower_mesh)
@@ -5651,7 +5840,7 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 			}
 			first_pass = FALSE;
 		}
-		if (isTextureVisible(TEX_HAIR_BAKED))
+		if (isTextureVisible(TEX_HAIR_BAKED) && (getOverallAppearance() != AOA_JELLYDOLL))
 		{
 			LLViewerJoint* hair_mesh = getViewerJoint(MESH_ID_HAIR);
 			if (hair_mesh)
@@ -5699,7 +5888,7 @@ U32 LLVOAvatar::renderRigid()
 		gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
 	}
 
-	if (isTextureVisible(TEX_EYES_BAKED)  || isUIAvatar())
+	if (isTextureVisible(TEX_EYES_BAKED) || (getOverallAppearance() == AOA_JELLYDOLL && !isControlAvatar()) || isUIAvatar())
 	{
 		LLViewerJoint* eyeball_left = getViewerJoint(MESH_ID_EYEBALL_LEFT);
 		LLViewerJoint* eyeball_right = getViewerJoint(MESH_ID_EYEBALL_RIGHT);
@@ -6373,8 +6562,8 @@ void LLVOAvatar::processAnimationStateChanges()
 		stopMotion(ANIM_AGENT_TARGET);
         if (mEnableDefaultMotions)
         {
-		startMotion(ANIM_AGENT_BODY_NOISE);
-	}
+			startMotion(ANIM_AGENT_BODY_NOISE);
+		}
 	}
 	
 	// clear all current animations
@@ -6394,23 +6583,32 @@ void LLVOAvatar::processAnimationStateChanges()
 		++anim_it;
 	}
 
-	// start up all new anims
-	for (anim_it = mSignaledAnimations.begin(); anim_it != mSignaledAnimations.end();)
+	// if jellydolled, shelve all playing animations
+	if (getOverallAppearance() != AOA_NORMAL)
 	{
-		AnimIterator found_anim = mPlayingAnimations.find(anim_it->first);
-
-		// signaled but not playing, or different sequence id, start motion
-		if (found_anim == mPlayingAnimations.end() || found_anim->second != anim_it->second)
+		mPlayingAnimations.clear();
+	}
+	
+	// start up all new anims
+	if (getOverallAppearance() == AOA_NORMAL)
+	{
+		for (anim_it = mSignaledAnimations.begin(); anim_it != mSignaledAnimations.end();)
 		{
-			if (processSingleAnimationStateChange(anim_it->first, TRUE))
-			{
-				mPlayingAnimations[anim_it->first] = anim_it->second;
-				++anim_it;
-				continue;
-			}
-		}
+			AnimIterator found_anim = mPlayingAnimations.find(anim_it->first);
 
-		++anim_it;
+			// signaled but not playing, or different sequence id, start motion
+			if (found_anim == mPlayingAnimations.end() || found_anim->second != anim_it->second)
+			{
+				if (processSingleAnimationStateChange(anim_it->first, TRUE))
+				{
+					mPlayingAnimations[anim_it->first] = anim_it->second;
+					++anim_it;
+					continue;
+				}
+			}
+
+			++anim_it;
+		}
 	}
 
 	// clear source information for animations which have been stopped
@@ -7048,6 +7246,11 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
 	}
 
     LLScopedContextString str("addAttachmentOverridesForObject " + getFullname());
+
+	if (getOverallAppearance() != AOA_NORMAL)
+	{
+		return;
+	}
     
     LL_DEBUGS("AnimatedObjects") << "adding" << LL_ENDL;
     dumpStack("AnimatedObjectsStack");
@@ -8584,9 +8787,15 @@ void LLVOAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color, BOOL
 }
 
 // virtual
+// Do rigged mesh attachments display with this av?
 bool LLVOAvatar::shouldRenderRigged() const
 {
-    return true;
+	if (getOverallAppearance() == AOA_NORMAL)
+	{
+		return true;
+	}
+	// TBD - render for AOA_JELLYDOLL?
+	return false;
 }
 
 // FIXME: We have an mVisible member, set in updateVisibility(), but this
@@ -8869,12 +9078,14 @@ BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
 	}
 
 	// did our loading state "change" from last call?
-	// runway - why are we updating every 30 calls even if nothing has changed?
+	// FIXME runway - why are we updating every 30 calls even if nothing has changed?
+	// This causes updateLOD() to run every 30 frames, among other things.
 	const S32 UPDATE_RATE = 30;
 	BOOL changed =
 		((mFullyLoaded != mPreviousFullyLoaded) ||         // if the value is different from the previous call
 		 (!mFullyLoadedInitialized) ||                     // if we've never been called before
 		 (mFullyLoadedFrameCounter % UPDATE_RATE == 0));   // every now and then issue a change
+	BOOL fully_loaded_changed = (mFullyLoaded != mPreviousFullyLoaded);
 
 	mPreviousFullyLoaded = mFullyLoaded;
 	mFullyLoadedInitialized = TRUE;
@@ -8885,7 +9096,13 @@ BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
         // to know about outfit switching
         LLAvatarRenderNotifier::getInstance()->updateNotificationState();
     }
-	
+
+	if (fully_loaded_changed && !isSelf() && mFullyLoaded && isImpostor())
+	{
+		// Fix for jellydoll initially invisible
+		mNeedsImpostorUpdate = TRUE;
+		mLastImpostorUpdateReason = 6;
+	}	
 	return changed;
 }
 
@@ -8965,50 +9182,25 @@ void LLVOAvatar::updateMeshVisibility()
 	bool bake_flag[BAKED_NUM_INDICES];
 	memset(bake_flag, 0, BAKED_NUM_INDICES*sizeof(bool));
 
-	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
-		iter != mAttachmentPoints.end();
-		++iter)
+	if (getOverallAppearance() == AOA_NORMAL)
 	{
-		LLViewerJointAttachment* attachment = iter->second;
-		if (attachment)
+		for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+			 iter != mAttachmentPoints.end();
+			 ++iter)
 		{
-			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-				attachment_iter != attachment->mAttachedObjects.end();
-				++attachment_iter)
+			LLViewerJointAttachment* attachment = iter->second;
+			if (attachment)
 			{
-				LLViewerObject *objectp = attachment_iter->get();
-				if (objectp)
+				for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+					 attachment_iter != attachment->mAttachedObjects.end();
+					 ++attachment_iter)
 				{
-					for (int face_index = 0; face_index < objectp->getNumTEs(); face_index++)
+					LLViewerObject *objectp = attachment_iter->get();
+					if (objectp)
 					{
-						LLTextureEntry* tex_entry = objectp->getTE(face_index);
-						if (tex_entry)
+						for (int face_index = 0; face_index < objectp->getNumTEs(); face_index++)
 						{
-							bake_flag[BAKED_HEAD] |= (tex_entry->getID() == IMG_USE_BAKED_HEAD);
-							bake_flag[BAKED_EYES] |= (tex_entry->getID() == IMG_USE_BAKED_EYES);
-							bake_flag[BAKED_HAIR] |= (tex_entry->getID() == IMG_USE_BAKED_HAIR);
-							bake_flag[BAKED_LOWER] |= (tex_entry->getID() == IMG_USE_BAKED_LOWER);
-							bake_flag[BAKED_UPPER] |= (tex_entry->getID() == IMG_USE_BAKED_UPPER);
-							bake_flag[BAKED_SKIRT] |= (tex_entry->getID() == IMG_USE_BAKED_SKIRT);
-						bake_flag[BAKED_LEFT_ARM] |= (tex_entry->getID() == IMG_USE_BAKED_LEFTARM);
-						bake_flag[BAKED_LEFT_LEG] |= (tex_entry->getID() == IMG_USE_BAKED_LEFTLEG);
-						bake_flag[BAKED_AUX1] |= (tex_entry->getID() == IMG_USE_BAKED_AUX1);
-						bake_flag[BAKED_AUX2] |= (tex_entry->getID() == IMG_USE_BAKED_AUX2);
-						bake_flag[BAKED_AUX3] |= (tex_entry->getID() == IMG_USE_BAKED_AUX3);
-						}
-					}
-				}
-
-				LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
-				for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
-					iter1 != child_list.end(); ++iter1)
-				{
-					LLViewerObject* objectchild = *iter1;
-					if (objectchild)
-					{
-						for (int face_index = 0; face_index < objectchild->getNumTEs(); face_index++)
-						{
-							LLTextureEntry* tex_entry = objectchild->getTE(face_index);
+							LLTextureEntry* tex_entry = objectp->getTE(face_index);
 							if (tex_entry)
 							{
 								bake_flag[BAKED_HEAD] |= (tex_entry->getID() == IMG_USE_BAKED_HEAD);
@@ -9022,6 +9214,34 @@ void LLVOAvatar::updateMeshVisibility()
 							bake_flag[BAKED_AUX1] |= (tex_entry->getID() == IMG_USE_BAKED_AUX1);
 							bake_flag[BAKED_AUX2] |= (tex_entry->getID() == IMG_USE_BAKED_AUX2);
 							bake_flag[BAKED_AUX3] |= (tex_entry->getID() == IMG_USE_BAKED_AUX3);
+							}
+						}
+					}
+
+					LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
+					for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
+						 iter1 != child_list.end(); ++iter1)
+					{
+						LLViewerObject* objectchild = *iter1;
+						if (objectchild)
+						{
+							for (int face_index = 0; face_index < objectchild->getNumTEs(); face_index++)
+							{
+								LLTextureEntry* tex_entry = objectchild->getTE(face_index);
+								if (tex_entry)
+								{
+									bake_flag[BAKED_HEAD] |= (tex_entry->getID() == IMG_USE_BAKED_HEAD);
+									bake_flag[BAKED_EYES] |= (tex_entry->getID() == IMG_USE_BAKED_EYES);
+									bake_flag[BAKED_HAIR] |= (tex_entry->getID() == IMG_USE_BAKED_HAIR);
+									bake_flag[BAKED_LOWER] |= (tex_entry->getID() == IMG_USE_BAKED_LOWER);
+									bake_flag[BAKED_UPPER] |= (tex_entry->getID() == IMG_USE_BAKED_UPPER);
+									bake_flag[BAKED_SKIRT] |= (tex_entry->getID() == IMG_USE_BAKED_SKIRT);
+								bake_flag[BAKED_LEFT_ARM] |= (tex_entry->getID() == IMG_USE_BAKED_LEFTARM);
+								bake_flag[BAKED_LEFT_LEG] |= (tex_entry->getID() == IMG_USE_BAKED_LEFTLEG);
+								bake_flag[BAKED_AUX1] |= (tex_entry->getID() == IMG_USE_BAKED_AUX1);
+								bake_flag[BAKED_AUX2] |= (tex_entry->getID() == IMG_USE_BAKED_AUX2);
+								bake_flag[BAKED_AUX3] |= (tex_entry->getID() == IMG_USE_BAKED_AUX3);
+								}
 							}
 						}
 					}
@@ -9987,6 +10207,10 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	}
 
 	// No backsies zone - if we get here, the message should be valid and usable, will be processed.
+	// Note:
+	// RequestAgentUpdateAppearanceResponder::onRequestRequested()
+	// assumes that cof version is only updated with server-bake
+	// appearance messages.
     LL_INFOS("Avatar") << "Processing appearance message version " << thisAppearanceVersion << LL_ENDL;
 
     // Note:
@@ -10001,7 +10225,11 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
     mLastProcessedAppearance = contents;
 
     bool slam_params = false;
-    applyParsedAppearanceMessage(*contents, slam_params);
+	applyParsedAppearanceMessage(*contents, slam_params);
+	if (getOverallAppearance() != AOA_NORMAL)
+	{
+		resetSkeleton(false);
+	}
 }
 
 void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& contents, bool slam_params)
@@ -10065,8 +10293,8 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	BOOL is_first_appearance_message = !mFirstAppearanceMessageReceived;
 	mFirstAppearanceMessageReceived = TRUE;
 
-	// LL_DEBUGS("Avatar") << avString() << "processAvatarAppearance start " << mID
-    //                     << " first? " << is_first_appearance_message << " self? " << isSelf() << LL_ENDL;
+	//LL_DEBUGS("Avatar") << avString() << "processAvatarAppearance start " << mID
+    //                    << " first? " << is_first_appearance_message << " self? " << isSelf() << LL_ENDL;
 
 	if (is_first_appearance_message )
 	{
@@ -10948,11 +11176,8 @@ BOOL LLVOAvatar::updateLOD()
     {
         return FALSE;
     }
- 
-	// <FS:Ansariel> Fix LL impostor hacking
-	//if (isImpostor() && 0 != mDrawable->getNumFaces() && mDrawable->getFace(0)->hasGeometry())
-	if (isImpostor() && !needsImpostorUpdate() && 0 != mDrawable->getNumFaces() && mDrawable->getFace(0)->hasGeometry())
-	// </FS:Ansariel>
+    
+	if (!LLPipeline::sImpostorRender && isImpostor() && 0 != mDrawable->getNumFaces() && mDrawable->getFace(0)->hasGeometry())
 	{
 		return TRUE;
 	}
@@ -11156,13 +11381,10 @@ void LLVOAvatar::updateImpostors()
 		iter != instances_copy.end(); ++iter)
 	{
 		LLVOAvatar* avatar = (LLVOAvatar*) *iter;
-		if (avatar && !avatar->isDead() && avatar->isVisible()
-			&& (
-                // <FS:Ansariel> Fix LL impostor hacking; Generate new impostor if update is needed
-                //(avatar->isImpostor() || LLVOAvatar::AV_DO_NOT_RENDER == avatar->getVisualMuteSettings()) && avatar->needsImpostorUpdate())
-                avatar->isImpostor() && avatar->needsImpostorUpdate())
-                // </FS:Ansariel>
-            )
+		if (!avatar->isDead()
+			&& avatar->isVisible()
+			&& avatar->isImpostor()
+			&& avatar->needsImpostorUpdate())
 		{
             avatar->calcMutedAVColor();
 			gPipeline.generateImpostor(avatar);
@@ -11175,29 +11397,20 @@ void LLVOAvatar::updateImpostors()
 // virtual
 BOOL LLVOAvatar::isImpostor()
 {
-	// <FS:Ansariel> Fix LL impostor hacking
-	// IMPORTANT: LLPipeline::generateImpostor() will set sUseImporstors = FALSE when generating
-	//            an impostor. If checking for isImpostor() somewhere else to skip parts in the
-	//            rendering process, an additional check for needsImpostorUpdate() needs to be
-	//            done to determine if the particular part can really be skipped
-	//            (mNeedsImpostorUpdate = FALSE) or is currently needed to generate the
-	//            impostor (mNeedsImpostorUpdate = TRUE).
-
-	//return sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD)) ? TRUE : FALSE;
-	if (sUseImpostors)
-	{
-		return (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD));
-	}
-	else
-	{
-		return (LLVOAvatar::AV_DO_NOT_RENDER == getVisualMuteSettings() || isInMuteList());
-	}
-	// </FS:Ansariel>
+	return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
 }
 
-BOOL LLVOAvatar::shouldImpostor(const U32 rank_factor) const
+BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 {
-	return (!isSelf() && sUseImpostors && mVisibilityRank > (sMaxNonImpostors * rank_factor));
+	if (isSelf())
+	{
+		return false;
+	}
+	if (isVisuallyMuted())
+	{
+		return true;
+	}
+	return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
 }
 
 BOOL LLVOAvatar::needsImpostorUpdate() const
@@ -11240,16 +11453,16 @@ void LLVOAvatar::getImpostorValues(LLVector4a* extents, LLVector3& angle, F32& d
 }
 
 // static
-const U32 LLVOAvatar::IMPOSTORS_OFF = 66; /* Must equal the maximum allowed the RenderAvatarMaxNonImpostors
+const U32 LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER = 66; /* Must equal the maximum allowed the RenderAvatarMaxNonImpostors
 										   * slider in panel_preferences_graphics1.xml */
 
 // static
 void LLVOAvatar::updateImpostorRendering(U32 newMaxNonImpostorsValue)
 {
 	U32  oldmax = sMaxNonImpostors;
-	bool oldflg = sUseImpostors;
+	bool oldflg = sLimitNonImpostors;
 	
-	if (IMPOSTORS_OFF <= newMaxNonImpostorsValue)
+	if (NON_IMPOSTORS_MAX_SLIDER <= newMaxNonImpostorsValue)
 	{
 		sMaxNonImpostors = 0;
 	}
@@ -11257,13 +11470,13 @@ void LLVOAvatar::updateImpostorRendering(U32 newMaxNonImpostorsValue)
 	{
 		sMaxNonImpostors = newMaxNonImpostorsValue;
 	}
-	// the sUseImpostors flag depends on whether or not sMaxNonImpostors is set to the no-limit value (0)
-	sUseImpostors = (0 != sMaxNonImpostors);
-    if ( oldflg != sUseImpostors )
+	// the sLimitNonImpostors flag depends on whether or not sMaxNonImpostors is set to the no-limit value (0)
+	sLimitNonImpostors = (0 != sMaxNonImpostors);
+    if ( oldflg != sLimitNonImpostors )
     {
         LL_DEBUGS("AvatarRender")
             << "was " << (oldflg ? "use" : "don't use" ) << " impostors (max " << oldmax << "); "
-            << "now " << (sUseImpostors ? "use" : "don't use" ) << " impostors (max " << sMaxNonImpostors << "); "
+            << "now " << (sLimitNonImpostors ? "use" : "don't use" ) << " impostors (max " << sMaxNonImpostors << "); "
             << LL_ENDL;
     }
 }
@@ -11700,9 +11913,178 @@ void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
 {
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
+	mLastImpostorUpdateReason = 7;
+
     // <FS:Ansariel> [FS Persisted Avatar Render Settings]
     //LLRenderMuteList::getInstance()->saveVisualMuteSetting(getID(), S32(set));
     FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
+}
+
+
+void LLVOAvatar::setOverallAppearanceNormal()
+{
+	if (isControlAvatar())
+		return;
+
+    LLVector3 pelvis_pos = getJoint("mPelvis")->getPosition();
+	resetSkeleton(false);
+    getJoint("mPelvis")->setPosition(pelvis_pos);
+
+	for (auto it = mJellyAnims.begin(); it !=  mJellyAnims.end(); ++it)
+	{
+		bool is_playing = (mPlayingAnimations.find(*it) != mPlayingAnimations.end());
+		LL_DEBUGS("Avatar") << "jelly anim " << *it << " " << is_playing << LL_ENDL;
+		if (!is_playing)
+		{
+			// Anim was not requested for this av by sim, but may be playing locally
+			stopMotion(*it);
+		}
+	}
+	mJellyAnims.clear();
+
+	processAnimationStateChanges();
+}
+
+void LLVOAvatar::setOverallAppearanceJellyDoll()
+{
+	if (isControlAvatar())
+		return;
+
+	// stop current animations
+	{
+		for ( LLVOAvatar::AnimIterator anim_it= mPlayingAnimations.begin();
+			  anim_it != mPlayingAnimations.end();
+			  ++anim_it)
+		{
+			{
+				stopMotion(anim_it->first, TRUE);
+			}
+		}
+	}
+	processAnimationStateChanges();
+
+	// Start any needed anims for jellydoll
+	updateOverallAppearanceAnimations();
+	
+    LLVector3 pelvis_pos = getJoint("mPelvis")->getPosition();
+	resetSkeleton(false);
+    getJoint("mPelvis")->setPosition(pelvis_pos);
+
+}
+
+void LLVOAvatar::setOverallAppearanceInvisible()
+{
+}
+
+void LLVOAvatar::updateOverallAppearance()
+{
+	AvatarOverallAppearance new_overall = getOverallAppearance();
+	if (new_overall != mOverallAppearance)
+	{
+		switch (new_overall)
+		{
+			case AOA_NORMAL:
+				setOverallAppearanceNormal();
+				break;
+			case AOA_JELLYDOLL:
+				setOverallAppearanceJellyDoll();
+				break;
+			case AOA_INVISIBLE:
+				setOverallAppearanceInvisible();
+				break;
+		}
+		mOverallAppearance = new_overall;
+		if (!isSelf())
+		{
+			mNeedsImpostorUpdate = TRUE;
+			mLastImpostorUpdateReason = 8;
+		}
+		updateMeshVisibility();
+	}
+
+	// This needs to be done even if overall appearance has not
+	// changed, since sit/stand status can be different.
+	updateOverallAppearanceAnimations();
+}
+
+void LLVOAvatar::updateOverallAppearanceAnimations()
+{
+	if (isControlAvatar())
+		return;
+
+	if (getOverallAppearance() == AOA_JELLYDOLL)
+	{
+		LLUUID motion_id;
+		if (isSitting() && getParent()) // sitting on object
+		{
+			motion_id = ANIM_AGENT_SIT_FEMALE; 
+		}
+		else if (isSitting()) // sitting on ground
+		{
+			motion_id = ANIM_AGENT_SIT_GROUND_CONSTRAINED;
+		}
+		else // standing
+		{
+			motion_id = ANIM_AGENT_STAND;
+		}
+		if (mJellyAnims.find(motion_id) == mJellyAnims.end())
+		{
+			for (auto it = mJellyAnims.begin(); it !=  mJellyAnims.end(); ++it)
+			{
+				bool is_playing = (mPlayingAnimations.find(*it) != mPlayingAnimations.end());
+				LL_DEBUGS("Avatar") << "jelly anim " << *it << " " << is_playing << LL_ENDL;
+				if (!is_playing)
+				{
+					// Anim was not requested for this av by sim, but may be playing locally
+					stopMotion(*it, TRUE);
+				}
+			}
+			mJellyAnims.clear();
+
+			startMotion(motion_id);
+			mJellyAnims.insert(motion_id);
+
+			processAnimationStateChanges();
+		}
+	}
+}
+
+// Based on isVisuallyMuted(), but has 3 possible results.
+LLVOAvatar::AvatarOverallAppearance LLVOAvatar::getOverallAppearance() const
+{
+	AvatarOverallAppearance result = AOA_NORMAL;
+
+	// Priority order (highest priority first)
+	// * own avatar is always drawn normally
+	// * if on the "always draw normally" list, draw them normally
+	// * if on the "always visually mute" list, show as jellydoll
+	// * if explicitly muted (blocked), show as invisible
+	// * check against the render cost and attachment limits - if too complex, show as jellydoll
+	if (isSelf())
+	{
+		result = AOA_NORMAL;
+	}
+	else // !isSelf()
+	{
+		if (isInMuteList())
+		{
+			result = AOA_INVISIBLE;
+		}
+		else if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+		{
+			result = AOA_NORMAL;
+		}
+		else if (mVisuallyMuteSetting == AV_DO_NOT_RENDER)
+		{	// Always want to see this AV as an impostor
+			result = AOA_JELLYDOLL;
+		}
+		else if (isTooComplex())
+		{
+			result = AOA_JELLYDOLL;
+		}
+	}
+
+	return result;
 }
 
 void LLVOAvatar::calcMutedAVColor()
@@ -11723,8 +12105,8 @@ void LLVOAvatar::calcMutedAVColor()
 		 {
 // [/RLVa:KB]
 			// explicitly not-rendered avatars are light grey
-			 new_color = LLColor4::grey3;
-			 change_msg = " not rendered: color is grey3";
+			 new_color = LLColor4::grey4;
+			 change_msg = " not rendered: color is grey4";
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 		 }
 // [/RLVa:KB]
@@ -11740,6 +12122,7 @@ void LLVOAvatar::calcMutedAVColor()
         new_color = LLColor4::white;
         change_msg = " simple imposter ";
     }
+#ifdef COLORIZE_JELLYDOLLS
 //    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 	else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 || mMutedAVColor == LLColor4::silhouette)
@@ -11747,22 +12130,26 @@ void LLVOAvatar::calcMutedAVColor()
    {
         // select a color based on the first byte of the agents uuid so any muted agent is always the same color
         F32 color_value = (F32) (av_id.mData[0]);
-        F32 spectrum = (color_value / 256.0);		// spectrum is between 0 and 1.f
+        F32 spectrum = (color_value / 256.0);          // spectrum is between 0 and 1.f
 
-        // Array of colors.  These are arranged so only one RGB color changes between each step, 
+        // Array of colors.  These are arranged so only one RGB color changes between each step,
         // and it loops back to red so there is an even distribution.  It is not a heat map
-        const S32 NUM_SPECTRUM_COLORS = 7;              
+        const S32 NUM_SPECTRUM_COLORS = 7;
         static LLColor4 * spectrum_color[NUM_SPECTRUM_COLORS] = { &LLColor4::red, &LLColor4::magenta, &LLColor4::blue, &LLColor4::cyan, &LLColor4::green, &LLColor4::yellow, &LLColor4::red };
- 
-        spectrum = spectrum * (NUM_SPECTRUM_COLORS - 1);		// Scale to range of number of colors
-        S32 spectrum_index_1  = floor(spectrum);				// Desired color will be after this index
-        S32 spectrum_index_2  = spectrum_index_1 + 1;			//    and before this index (inclusive)
-        F32 fractBetween = spectrum - (F32)(spectrum_index_1);  // distance between the two indexes (0-1)
- 
-        new_color = lerp(*spectrum_color[spectrum_index_1], *spectrum_color[spectrum_index_2], fractBetween);
-        new_color.normalize();
-        new_color *= 0.28f;		// Tone it down
 
+        spectrum = spectrum * (NUM_SPECTRUM_COLORS - 1);               // Scale to range of number of colors
+        S32 spectrum_index_1  = floor(spectrum);                               // Desired color will be after this index
+        S32 spectrum_index_2  = spectrum_index_1 + 1;                  //    and before this index (inclusive)
+        F32 fractBetween = spectrum - (F32)(spectrum_index_1);  // distance between the two indexes (0-1)
+
+        new_color = lerp(*spectrum_color[spectrum_index_1], *spectrum_color[spectrum_index_2], fractBetween);
+		new_color.normalize();
+        new_color *= 0.28f;            // Tone it down
+	}
+#endif
+    else
+    {
+		new_color = LLColor4::grey4;
         change_msg = " over limit color ";
     }
 

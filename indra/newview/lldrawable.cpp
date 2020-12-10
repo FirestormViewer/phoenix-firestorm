@@ -167,6 +167,7 @@ void LLDrawable::unload()
 		}
 		facep->clearState(LLFace::RIGGED);
 	}
+
 	pVVol->markForUpdate(TRUE);
 }
 
@@ -955,9 +956,7 @@ void LLDrawable::updateDistance(LLCamera& camera, bool force_update)
 			pos = LLVector3(getPositionGroup().getF32ptr());
 		}
 
-
-		pos -= camera.getOrigin();
-		
+		pos -= camera.getOrigin();	
 		mDistanceWRTCamera = ll_round(pos.magVec(), 0.01f);
 		mVObjp->updateLOD();
 	}
@@ -1508,10 +1507,7 @@ void LLSpatialBridge::setVisible(LLCamera& camera_in, std::vector<LLDrawable*>* 
 				LLVOAvatar* avatarp = (LLVOAvatar*) objparent;
 				if (avatarp->isVisible())
 				{
-					// <FS:Ansariel> Fix LL impostor hacking
-					//impostor = objparent->isAvatar() && ((LLVOAvatar*) objparent)->isImpostor();
-					impostor = objparent->isAvatar() && avatarp->isImpostor() && !avatarp->needsImpostorUpdate();
-					// </FS:Ansariel>
+					impostor = objparent->isAvatar() && !LLPipeline::sImpostorRender && ((LLVOAvatar*) objparent)->isImpostor();
 					loaded   = objparent->isAvatar() && ((LLVOAvatar*) objparent)->isFullyLoaded();
 				}
 				else
@@ -1595,16 +1591,14 @@ void LLSpatialBridge::updateDistance(LLCamera& camera_in, bool force_update)
 
 	if (mDrawable->getVObj())
 	{
-		if (mDrawable->getVObj()->isAttachment())
+		// Don't update if we are part of impostor, unles it's an impostor pass
+		if (!LLPipeline::sImpostorRender && mDrawable->getVObj()->isAttachment())
 		{
 			LLDrawable* parent = mDrawable->getParent();
 			if (parent && parent->getVObj())
 			{
 				LLVOAvatar* av = parent->getVObj()->asAvatar();
-				// <FS:Ansariel> Fix LL impostor hacking
-				//if (av && av->isImpostor())
-				if (av && av->isImpostor() && !av->needsImpostorUpdate())
-				// </FS:Ansariel>
+				if (av && av->isImpostor())
 				{
 					return;
 				}

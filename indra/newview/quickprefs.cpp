@@ -2260,7 +2260,7 @@ void FloaterQuickPrefs::updateMaxNonImpostors(const LLSD& newvalue)
 	// Responsible for fixing the setting RenderAvatarMaxNonImpostors
 	U32 value = newvalue.asInteger();
 
-	if (0 == value || LLVOAvatar::IMPOSTORS_OFF <= value)
+	if (0 == value || LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER <= value)
 	{
 		value=0;
 	}
