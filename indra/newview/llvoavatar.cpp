@@ -12125,7 +12125,10 @@ void LLVOAvatar::calcMutedAVColor()
 #ifdef COLORIZE_JELLYDOLLS
 //    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-	else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 || mMutedAVColor == LLColor4::silhouette)
+    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 || mMutedAVColor == LLColor4::silhouette)
+#else
+    else if (mMutedAVColor == LLColor4::silhouette)
+#endif
 // [/RLVa:KB]
    {
         // select a color based on the first byte of the agents uuid so any muted agent is always the same color
@@ -12146,7 +12149,8 @@ void LLVOAvatar::calcMutedAVColor()
 		new_color.normalize();
         new_color *= 0.28f;            // Tone it down
 	}
-#endif
+// <FS:Ansariel> RLVa fix
+//#endif
     else
     {
 		new_color = LLColor4::grey4;
