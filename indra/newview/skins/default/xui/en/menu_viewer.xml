@@ -238,11 +238,9 @@
 		 label="Camera Controls"
 		 name="Camera Controls">
 			<menu_item_check.on_check
-			 function="Floater.Visible"
-			 parameter="camera" />
+			 function="View.CheckCameraFloater" />
 			<menu_item_check.on_click
-			 function="Floater.Toggle"
-			 parameter="camera" />
+			 function="View.ToggleCameraFloater" />
 		</menu_item_check>
 
         <menu_item_separator/>
