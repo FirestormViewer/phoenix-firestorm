@@ -1323,6 +1323,22 @@ void LLAgentCamera::updateCamera()
 											   gAgentCamera.getPanDownKey() > 0.f);		// bottom
 	}
 
+	// <FS:Ansariel> Phototools camera
+	camera_floater = LLFloaterReg::findTypedInstance<LLFloaterCamera>("phototools_camera");
+	if (camera_floater)
+	{
+		camera_floater->mRotate->setToggleState(gAgentCamera.getOrbitRightKey() > 0.f,	// left
+												gAgentCamera.getOrbitUpKey() > 0.f,		// top
+												gAgentCamera.getOrbitLeftKey() > 0.f,	// right
+												gAgentCamera.getOrbitDownKey() > 0.f);	// bottom
+		
+		camera_floater->mTrack->setToggleState(gAgentCamera.getPanLeftKey() > 0.f,		// left
+											   gAgentCamera.getPanUpKey() > 0.f,			// top
+											   gAgentCamera.getPanRightKey() > 0.f,		// right
+											   gAgentCamera.getPanDownKey() > 0.f);		// bottom
+	}
+	// </FS:Ansariel>
+
 	// Handle camera movement based on keyboard.
 	const F32 ORBIT_OVER_RATE = 90.f * DEG_TO_RAD;			// radians per second
 	const F32 ORBIT_AROUND_RATE = 90.f * DEG_TO_RAD;		// radians per second
