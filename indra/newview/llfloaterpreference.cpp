@@ -2513,7 +2513,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_reflections   = getChild<LLComboBox>("Reflections");
 	LLCheckBoxCtrl* ctrl_avatar_vp     = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
 	LLCheckBoxCtrl* ctrl_avatar_cloth  = getChild<LLCheckBoxCtrl>("AvatarCloth");
-	LLCheckBoxCtrl* ctrl_shader_enable = getChild<LLCheckBoxCtrl>("BasicShaders");
+	//LLCheckBoxCtrl* ctrl_shader_enable = getChild<LLCheckBoxCtrl>("BasicShaders"); //<FS:LO> More EEP cleanup of basic shaders being always on
 	LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
@@ -2521,6 +2521,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 
+	/*<FS:LO> More EEP cleanup of basic shaders being always on
 	// if vertex shaders off, disable all shader related products
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
 	{
@@ -2553,6 +2554,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
 	}
+	*/
 	
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
