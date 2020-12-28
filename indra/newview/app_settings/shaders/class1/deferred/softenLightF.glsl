@@ -37,8 +37,10 @@ out vec4 frag_color;
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
 uniform sampler2DRect normalMap;
-uniform sampler2DRect lightMap;
-uniform sampler2DRect depthMap;
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
+// uniform sampler2DRect lightMap;
+// uniform sampler2DRect depthMap;
+// </FS:Beq>
 uniform samplerCube environmentMap;
 uniform sampler2D     lightFunc;
 
@@ -90,7 +92,7 @@ void main()
     vec4 diffuse = texture2DRect(diffuseRect, tc);
 
     //convert to gamma space
-    //diffuse.rgb = linear_to_srgb(diffuse.rgb);
+    diffuse.rgb = linear_to_srgb(diffuse.rgb);// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye) uniform sampler2DRect depthMap;
 
     vec4 spec = texture2DRect(specularRect, vary_fragcoord.xy);
     vec3 color = vec3(0);
