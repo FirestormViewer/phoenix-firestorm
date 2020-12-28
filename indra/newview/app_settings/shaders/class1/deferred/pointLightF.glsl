@@ -35,13 +35,13 @@ out vec4 frag_color;
 
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
-// <FS:Beq> Colour sapce and shader fixes for BUG-228586 (Rye) 
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye) 
 uniform sampler2DRect normalMap;
 uniform samplerCube environmentMap;
 // </FS:Beq>
 uniform sampler2D noiseMap;
 uniform sampler2D lightFunc;
-uniform sampler2DRect depthMap;// <FS:Beq/> Colour sapce and shader fixes for BUG-228586 (Rye) 
+uniform sampler2DRect depthMap;// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 
 uniform vec3 env_mat[3];
 uniform float sun_wash;
