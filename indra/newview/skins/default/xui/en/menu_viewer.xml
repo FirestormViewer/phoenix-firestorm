@@ -1121,25 +1121,28 @@
                  label="Days..."
                  name="WL Bulk Import Days">
                     <menu_item_call.on_click
-                     function="File.ImportWLDayBulk"/>
+                     function="File.ImportWindlightBulk"
+                     parameter="2"/>
                     <menu_item_call.on_enable
-                     function="File.EnableImportWLBulk"/>
+                     function="File.EnableImportWindlightBulk"/>
                 </menu_item_call>
                 <menu_item_call
                  label="Skies..."
                  name="WL Bulk Import Skies">
                     <menu_item_call.on_click
-                     function="File.ImportWLSkyBulk"/>
+                     function="File.ImportWindlightBulk"
+                     parameter="0"/>
                     <menu_item_call.on_enable
-                     function="File.EnableImportWLBulk"/>
+                     function="File.EnableImportWindlightBulk"/>
                 </menu_item_call>
                 <menu_item_call
                  label="Water..."
                  name="WL Bulk Import Water">
                     <menu_item_call.on_click
-                     function="File.ImportWLWaterBulk"/>
+                     function="File.ImportWindlightBulk"
+                     parameter="1"/>
                     <menu_item_call.on_enable
-                     function="File.EnableImportWLBulk"/>
+                     function="File.EnableImportWindlightBulk"/>
                 </menu_item_call>
             </menu>
         </menu>

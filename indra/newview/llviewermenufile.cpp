@@ -1112,34 +1112,17 @@ const void import_windlight_bulk(const std::vector<std::string>& filenames, LLFi
 	}
 }
 
-class FSFileImportWLSkyBulk : public view_listener_t
+class FSFileImportWindlightBulk : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, LLSettingsType::ST_SKY), LLFilePicker::FFLOAD_XML, true))->getFile();
+		LLSettingsType::type_e settings_type = (LLSettingsType::type_e)userdata.asInteger();
+		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, settings_type), LLFilePicker::FFLOAD_XML, true))->getFile();
 		return true;
 	}
 };
 
-class FSFileImportWLWaterBulk : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, LLSettingsType::ST_WATER), LLFilePicker::FFLOAD_XML, true))->getFile();
-		return true;
-	}
-};
-
-class FSFileImportWLDayBulk : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, LLSettingsType::ST_DAYCYCLE), LLFilePicker::FFLOAD_XML, true))->getFile();
-		return true;
-	}
-};
-
-class FSFileEnableImportWLBulk : public view_listener_t
+class FSFileEnableImportWindlightBulk : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
@@ -1169,10 +1152,8 @@ void init_menu_file()
 	view_listener_t::addCommit(new FSFileImportLinkset(), "File.ImportLinkset");	// <FS:CR> Import linkset item
 
 	// <FS:Ansariel> FIRE-30632: Bulk Windlight import
-	view_listener_t::addCommit(new FSFileImportWLSkyBulk(), "File.ImportWLSkyBulk");
-	view_listener_t::addCommit(new FSFileImportWLWaterBulk(), "File.ImportWLWaterBulk");
-	view_listener_t::addCommit(new FSFileImportWLDayBulk(), "File.ImportWLDayBulk");
-	view_listener_t::addEnable(new FSFileEnableImportWLBulk(), "File.EnableImportWLBulk");
+	view_listener_t::addCommit(new FSFileImportWindlightBulk(), "File.ImportWindlightBulk");
+	view_listener_t::addEnable(new FSFileEnableImportWindlightBulk(), "File.EnableImportWindlightBulk");
 	// </FS:Ansariel>
 
 	// "File.SaveTexture" moved to llpanelmaininventory so that it can be properly handled.
