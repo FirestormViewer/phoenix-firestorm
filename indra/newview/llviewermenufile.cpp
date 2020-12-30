@@ -1087,6 +1087,7 @@ const void import_windlight_bulk(const std::vector<std::string>& filenames, LLFi
 				settings = LLEnvironment::createDayCycleFromLegacyPreset(filename, messages);
 				break;
 			default:
+				settings.reset();
 				break;
 		}
 
