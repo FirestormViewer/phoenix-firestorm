@@ -84,6 +84,10 @@
 
 #include "llviewernetwork.h"
 
+// <FS:Ansariel> FIRE-30632: Bulk Windlight import
+#include "llenvironment.h"
+#include "llsettingsvo.h"
+
 class LLFileEnableUpload : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -1032,6 +1036,116 @@ void upload_new_resource(
 	}
 }
 
+// <FS:Ansariel> FIRE-30632: Bulk Windlight import
+static std::set<std::string> windlight_filenames;
+static bool bulk_windlight_import_active = false;
+
+void on_windlight_imported(LLUUID inventory_id, LLSD results, const std::string& name)
+{
+	if (inventory_id.isNull() || !results["success"].asBoolean())
+	{
+		LLSD args;
+		args["NAME"] = name;
+		LLNotificationsUtil::add("CantCreateInventoryName", args);
+	}
+
+	windlight_filenames.erase(name);
+
+	if (windlight_filenames.empty())
+	{
+		bulk_windlight_import_active = false;
+		LLUploadDialog::modalUploadFinished();
+		LLNotificationsUtil::add("WindlightBulkImportFinished");
+	}
+}
+
+const void import_windlight_bulk(const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter filter_type, LLSettingsType::type_e settings_type)
+{
+	LLSD messages;
+	LLSettingsBase::ptr_t settings;
+	if (filenames.size() < 1) return;
+
+	bulk_windlight_import_active = true;
+	LLUploadDialog::modalUploadDialog(LLTrans::getString("ImportingWindlightBulk"));
+
+	const LLUUID parent_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS);
+
+	windlight_filenames.clear();
+	windlight_filenames.insert(filenames.begin(), filenames.end());
+
+	for (auto& filename : filenames)
+	{
+		switch (settings_type)
+		{
+			case LLSettingsType::ST_SKY:
+				settings = LLEnvironment::createSkyFromLegacyPreset(filename, messages);
+				break;
+			case LLSettingsType::ST_WATER:
+				settings = LLEnvironment::createWaterFromLegacyPreset(filename, messages);
+				break;
+			case LLSettingsType::ST_DAYCYCLE:
+				settings = LLEnvironment::createDayCycleFromLegacyPreset(filename, messages);
+				break;
+			default:
+				break;
+		}
+
+		if (settings)
+		{
+			LLSettingsVOBase::createInventoryItem(settings, parent_id, LLURI::unescape(gDirUtilp->getBaseFileName(filename, true)),
+				[filename](LLUUID asset_id, LLUUID inventory_id, LLUUID, LLSD results) { on_windlight_imported(inventory_id, results, filename); });
+		}
+		else
+		{
+			LLNotificationsUtil::add("WLImportFail", messages);
+			windlight_filenames.erase(filename);
+		}
+	}
+
+	// For error cases
+	if (windlight_filenames.empty())
+	{
+		bulk_windlight_import_active = false;
+		LLUploadDialog::modalUploadFinished();
+		LLNotificationsUtil::add("WindlightBulkImportFinished");
+	}
+}
+
+class FSFileImportWLSkyBulk : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, LLSettingsType::ST_SKY), LLFilePicker::FFLOAD_XML, true))->getFile();
+		return true;
+	}
+};
+
+class FSFileImportWLWaterBulk : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, LLSettingsType::ST_WATER), LLFilePicker::FFLOAD_XML, true))->getFile();
+		return true;
+	}
+};
+
+class FSFileImportWLDayBulk : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		(new LLFilePickerReplyThread(boost::bind(&import_windlight_bulk, _1, _2, LLSettingsType::ST_DAYCYCLE), LLFilePicker::FFLOAD_XML, true))->getFile();
+		return true;
+	}
+};
+
+class FSFileEnableImportWLBulk : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return !bulk_windlight_import_active;
+	}
+};
+// </FS:Ansariel>
 
 void init_menu_file()
 {
@@ -1052,6 +1166,13 @@ void init_menu_file()
 	view_listener_t::addMenu(new LLMeshEnabled(), "File.MeshEnabled");
 	view_listener_t::addMenu(new LLMeshUploadVisible(), "File.VisibleUploadModel");
 	view_listener_t::addCommit(new FSFileImportLinkset(), "File.ImportLinkset");	// <FS:CR> Import linkset item
+
+	// <FS:Ansariel> FIRE-30632: Bulk Windlight import
+	view_listener_t::addCommit(new FSFileImportWLSkyBulk(), "File.ImportWLSkyBulk");
+	view_listener_t::addCommit(new FSFileImportWLWaterBulk(), "File.ImportWLWaterBulk");
+	view_listener_t::addCommit(new FSFileImportWLDayBulk(), "File.ImportWLDayBulk");
+	view_listener_t::addEnable(new FSFileEnableImportWLBulk(), "File.EnableImportWLBulk");
+	// </FS:Ansariel>
 
 	// "File.SaveTexture" moved to llpanelmaininventory so that it can be properly handled.
 }

@@ -1113,7 +1113,35 @@
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
-            
+            <menu_item_separator/>
+            <menu
+             label="Bulk Import"
+             name="WL Bulk Import">
+                <menu_item_call
+                 label="Days..."
+                 name="WL Bulk Import Days">
+                    <menu_item_call.on_click
+                     function="File.ImportWLDayBulk"/>
+                    <menu_item_call.on_enable
+                     function="File.EnableImportWLBulk"/>
+                </menu_item_call>
+                <menu_item_call
+                 label="Skies..."
+                 name="WL Bulk Import Skies">
+                    <menu_item_call.on_click
+                     function="File.ImportWLSkyBulk"/>
+                    <menu_item_call.on_enable
+                     function="File.EnableImportWLBulk"/>
+                </menu_item_call>
+                <menu_item_call
+                 label="Water..."
+                 name="WL Bulk Import Water">
+                    <menu_item_call.on_click
+                     function="File.ImportWLWaterBulk"/>
+                    <menu_item_call.on_enable
+                     function="File.EnableImportWLBulk"/>
+                </menu_item_call>
+            </menu>
         </menu>
 	    
 <!--   
