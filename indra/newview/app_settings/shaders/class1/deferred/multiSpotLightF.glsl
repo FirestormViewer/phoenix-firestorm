@@ -42,9 +42,12 @@ uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
 // <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
 // uniform sampler2DRect depthMap;
-// uniform sampler2DRect normalMap;
+// </FS:Beq>
+uniform sampler2DRect normalMap;
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
 // uniform samplerCube environmentMap;
 // </FS:Beq>
+
 uniform sampler2D noiseMap;
 uniform sampler2D projectionMap;
 uniform sampler2D lightFunc;
