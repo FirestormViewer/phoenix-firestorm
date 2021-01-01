@@ -114,6 +114,11 @@
 			<menu_item_call label="Moje otoczenia..." name="my_environs" />
 			<menu_item_call label="Własne oświetlenie..." name="adjustment_tool" />
 			<menu_item_check label="Pauzuj chmury" name="pause_clouds" />
+			<menu label="Import wielu plików" name="WL Bulk Import">
+				<menu_item_call label="Dni..." name="WL Bulk Import Days" />
+				<menu_item_call label="Nieba..." name="WL Bulk Import Skies" />
+				<menu_item_call label="Woda..." name="WL Bulk Import Water" />
+			</menu>
 		</menu>
 		<!-- <menu label="Edytor otoczenia" name="Environment Editor">
 			<menu_item_call label="Ustawienia otoczenia" name="Environment Settings"/>
