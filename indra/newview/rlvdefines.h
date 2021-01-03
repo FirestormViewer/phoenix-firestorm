@@ -240,6 +240,15 @@ enum ERlvBehaviour {
 	// Camera (force)
 	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
+	// Effect: "vision spheres"
+	RLV_BHVR_SETSPHERE,				// Gives an object exclusive control of the 'vision spheres' effect
+	RLV_BHVR_SETSPHERE_COLOR,
+	RLV_BHVR_SETSPHERE_DENSITY,
+	RLV_BHVR_SETSPHERE_MAXALPHA,
+	RLV_BHVR_SETSPHERE_MAXDIST,
+	RLV_BHVR_SETSPHERE_MINALPHA,
+	RLV_BHVR_SETSPHERE_MINDIST,
+
 	// Overlay
 	RLV_BHVR_SETOVERLAY,			// Gives an object exclusive control of the overlay
 	RLV_BHVR_SETOVERLAY_ALPHA,		// Changes the overlay texture's transparency level
@@ -254,17 +263,28 @@ enum ERlvBehaviour {
 
 enum ERlvBehaviourModifier
 {
+	// "Vision spheres" post processing effect
+	RLV_MODIFIER_EFFECT_SPHERE_COLOR,	// Colour to mix with the actual pixel colour (alpha depends non-linerally )
+	RLV_MODIFIER_EFFECT_SPHERE_DENSITY,	// Not exposed at the moment
+	RLV_MODIFIER_EFFECT_SPHERE_MAXALPHA,// Alpha of the mix colour at maximum distance
+	RLV_MODIFIER_EFFECT_SPHERE_MAXDIST,	// Distance at which the blending stops         ; or colour = mix(colour, sphere_colour, max_alpha)
+	RLV_MODIFIER_EFFECT_SPHERE_MINALPHA,// Alpha of the mix colour at minimum distance
+	RLV_MODIFIER_EFFECT_SPHERE_MINDIST,	// Distance at which the gradual blending starts; or colour = mix(colour, sphere_colour, min_alpha)
+
 	RLV_MODIFIER_FARTOUCHDIST,			// Radius of a sphere around the user in which they can interact with the world
+
 	RLV_MODIFIER_OVERLAY_ALPHA,			// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
 	RLV_MODIFIER_OVERLAY_TEXTURE,		// Specifies the UUID of the overlay texture
 	RLV_MODIFIER_OVERLAY_TINT,			// The tint that's applied to the overlay texture
 	RLV_MODIFIER_OVERLAY_TOUCH,			// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
+
 	RLV_MODIFIER_RECVIMDISTMIN,			// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_RECVIMDISTMAX,			// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_SENDIMDISTMIN,			// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_SENDIMDISTMAX,			// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_STARTIMDISTMIN,		// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_STARTIMDISTMAX,		// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
+
 	RLV_MODIFIER_SETCAM_AVDIST,			// Distance at which nearby avatars turn into a silhouette (normal value)
 	RLV_MODIFIER_SETCAM_AVDISTMIN,		// Minimum distance between the camera position and the user's avatar (normal value)
 	RLV_MODIFIER_SETCAM_AVDISTMAX,		// Maximum distance between the camera position and the user's avatar (normal value)
@@ -276,6 +296,7 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SETCAM_FOVMIN,			// Minimum value for the camera's field of view (angle in radians)
 	RLV_MODIFIER_SETCAM_FOVMAX,			// Maximum value for the camera's field of view (angle in radians)
 	RLV_MODIFIER_SETCAM_TEXTURE,		// Specifies the UUID of the texture used to texture the world view
+
 	RLV_MODIFIER_SITTPDIST,
 	RLV_MODIFIER_TPLOCALDIST,
 

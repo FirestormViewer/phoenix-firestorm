@@ -259,6 +259,9 @@ LLTrace::BlockTimerStatHandle FTM_STATESORT("Sort Draw State");
 LLTrace::BlockTimerStatHandle FTM_PIPELINE("Pipeline");
 LLTrace::BlockTimerStatHandle FTM_CLIENT_COPY("Client Copy");
 LLTrace::BlockTimerStatHandle FTM_RENDER_DEFERRED("Deferred Shading");
+// [RLVa:KB] - @setsphere
+LLTrace::BlockTimerStatHandle FTM_POST_DEFERRED_RLV("Post-process (Deferred RLVa)");
+// [/RLVa:KB]
 
 
 static LLTrace::BlockTimerStatHandle FTM_STATESORT_DRAWABLE("Sort Drawables");
@@ -9080,6 +9083,79 @@ void LLPipeline::renderDeferredLighting()
 
 	mScreen.flush();
 						
+// [RLVa:KB] - @setsphere
+	if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
+	{
+		LL_RECORD_BLOCK_TIME(FTM_POST_DEFERRED_RLV);
+
+		LLGLDepthTest depth(GL_FALSE, GL_FALSE);
+
+		mScreen.bindTarget();
+		gDeferredRlvProgram.bind();
+
+		S32 nDiffuseChannel = gDeferredRlvProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mScreen.getUsage());
+		if (nDiffuseChannel > -1)
+		{
+			mScreen.bindTexture(0, nDiffuseChannel);
+			gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
+		}
+
+		S32 nDepthChannel = gDeferredRlvProgram.enableTexture(LLShaderMgr::DEFERRED_DEPTH, mDeferredDepth.getUsage());
+		if (nDepthChannel > -1)
+		{
+			gGL.getTexUnit(nDepthChannel)->bind(&mDeferredDepth, TRUE);
+		}
+
+		RlvActions::setEffectSphereShaderUniforms(&gDeferredRlvProgram, &mScreen);
+
+		gGL.matrixMode(LLRender::MM_PROJECTION);
+		gGL.pushMatrix();
+		gGL.loadIdentity();
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
+		gGL.pushMatrix();
+		gGL.loadMatrix(gGLModelView);
+
+		int nRenderMethod = 0;
+		switch (nRenderMethod)
+		{
+			case 0:
+				{
+					LLVector2 tc1(0, 0);
+					LLVector2 tc2((F32)mScreen.getWidth() * 2, (F32)mScreen.getHeight() * 2);
+
+					gGL.begin(LLRender::TRIANGLE_STRIP);
+					gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+					gGL.vertex2f(-1, -1);
+
+					gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+					gGL.vertex2f(-1, 3);
+
+					gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+					gGL.vertex2f(3, -1);
+
+					gGL.end();
+				}
+				break;
+			case 1:
+				mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
+				mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+				break;
+		}
+
+		gGL.matrixMode(LLRender::MM_PROJECTION);
+		gGL.popMatrix();
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
+		gGL.popMatrix();
+
+		gDeferredRlvProgram.disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mScreen.getUsage());
+		gDeferredRlvProgram.disableTexture(LLShaderMgr::DEFERRED_DEPTH, mScreen.getUsage());
+		gDeferredRlvProgram.unbind();
+		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+		gGL.getTexUnit(0)->activate();
+
+		mScreen.flush();
+	}
+// [/RLVa:KB]
 }
 
 void LLPipeline::renderDeferredLightingToRT(LLRenderTarget* target)

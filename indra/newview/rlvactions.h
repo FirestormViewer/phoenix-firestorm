@@ -24,8 +24,10 @@
 // Forward declarations
 //
 
+class LLGLSLShader;
 class LLInventoryCategory;
 class LLInventoryItem;
+class LLRenderTarget;
 
 // ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
@@ -139,6 +141,15 @@ public:
 protected:
 	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
 	static bool s_BlockNamesContexts[SNC_COUNT];
+
+	// =======
+	// Effects
+	// =======
+public:
+	/*
+	 * Sets the uniform values needed by the 'vision spheres' effect
+	 */
+	static void setEffectSphereShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* renderTarget);
 
 	// =========
 	// Inventory

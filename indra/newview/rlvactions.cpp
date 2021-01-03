@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llimview.h"
+#include "llshadermgr.h"
 #include "llviewercamera.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
@@ -255,6 +256,38 @@ EChatType RlvActions::checkChatVolume(EChatType chatType)
 	else if ( (CHAT_TYPE_WHISPER == chatType) && (rlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
 		chatType = CHAT_TYPE_NORMAL;
 	return chatType;
+}
+
+// ============================================================================
+// Effects
+//
+
+// static
+void RlvActions::setEffectSphereShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* pRenderTarget)
+{
+	if (!pShader || !pRenderTarget)
+		return;
+
+	pShader->uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, FALSE, glh_get_current_projection().inverse().m);
+	pShader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, pRenderTarget->getWidth(), pRenderTarget->getHeight());
+
+	// Pass the center of the sphere to the shader
+	const LLVector4 posSphereOrigin(isAgentAvatarValid() ? gAgentAvatarp->getRenderPosition() : gAgent.getPositionAgent() , 1.0f);
+	glh::vec4f posSphereOriginGl(posSphereOrigin.mV);
+	const glh::matrix4f& mvMatrix = gGL.getModelviewMatrix();
+	mvMatrix.mult_matrix_vec(posSphereOriginGl);
+	pShader->uniform4fv(LLShaderMgr::RLV_AVPOSLOCAL, 1, posSphereOriginGl.v);
+
+	const RlvBehaviourDictionary& rlvBhvrDict = RlvBehaviourDictionary::instance();
+
+	// Pack min/max distance and alpha together
+	pShader->uniform4f(LLShaderMgr::RLV_EFFECT_PARAM1,
+	                   rlvBhvrDict.getModifier(RLV_MODIFIER_EFFECT_SPHERE_MINALPHA)->getValue<float>(), rlvBhvrDict.getModifier(RLV_MODIFIER_EFFECT_SPHERE_MINDIST)->getValue<float>(),
+	                   rlvBhvrDict.getModifier(RLV_MODIFIER_EFFECT_SPHERE_MAXALPHA)->getValue<float>(), rlvBhvrDict.getModifier(RLV_MODIFIER_EFFECT_SPHERE_MAXDIST)->getValue<float>());
+
+	// Pass color
+	const glh::vec4f sphereColor(rlvBhvrDict.getModifier(RLV_MODIFIER_EFFECT_SPHERE_COLOR)->getValue<LLVector3>().mV, 1.0);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM2, 1, sphereColor.v);
 }
 
 // ============================================================================

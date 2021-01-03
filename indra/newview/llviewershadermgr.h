@@ -344,6 +344,9 @@ extern LLGLSLShader			gDeferredFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
+// [RLVa:KB] - @setsphere
+extern LLGLSLShader			gDeferredRlvProgram;
+// [/RLVa:KB]
 
 // Deferred materials shaders
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
