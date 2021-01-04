@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2018, Kitty Barnett
+ * Copyright (c) 2018-2020, Kitty Barnett
  *
  * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -48,35 +48,21 @@ vec4 getPosition_d(vec2 pos_screen, float depth)
 
 void main()
 {
-	vec2 fragTC = vary_fragcoord.xy;
-	float fragDepth = texture2DRect(depthMap, fragTC.xy).r;
+	vec2 fragTC = vary_fragcoord.st;
+	float fragDepth = texture2DRect(depthMap, fragTC).x;
 	vec3 fragPosLocal = getPosition_d(fragTC, fragDepth).xyz;
-
 	vec3 fragColor = texture2DRect(diffuseRect, fragTC).rgb;
-	{
-		vec2 blendStart = rlvEffectParam1.xy;
-		vec2 blendEnd = rlvEffectParam1.zw;
-		vec3 blendColor = rlvEffectParam2.rgb;
+	float distance = length(fragPosLocal.xyz - avPosLocal.xyz);
 
-		float cutoff = blendStart.y;
-		float cutoff2 = blendEnd.y;
-		float minAlpha = blendStart.x;
-		float maxAlpha = blendEnd.x;
+	vec2 sphereMinMaxDist = rlvEffectParam1.yw;
+	vec2 sphereMinMaxValue = rlvEffectParam1.xz;
+	vec3 sphereColour = rlvEffectParam2.rgb;
 
-		float distance = length(fragPosLocal.xyz - avPosLocal.xyz);
-		if (distance < cutoff)
-		{
-			discard;
-		}
-		else if (distance < cutoff2)
-		{
-			fragColor = mix(fragColor, blendColor, minAlpha + (distance - cutoff) * (maxAlpha - minAlpha) / (cutoff2 - cutoff));
-		}
-		else
-		{
-			fragColor = mix(fragColor, blendColor, maxAlpha);
-		}
-	}
+	// Linear non-branching interpolation of the strength of the sphere effect (replaces if/elseif/else for x < min, min <= x <= max and x > max)
+	float effectStrength = mix(sphereMinMaxValue.x, 0, distance < sphereMinMaxDist.x) +
+	                       mix(0, sphereMinMaxValue.y - sphereMinMaxValue.x, clamp((distance - sphereMinMaxDist.x) / (sphereMinMaxDist.y - sphereMinMaxDist.x), 0.0, 1.0));
+
+	fragColor = mix(fragColor, sphereColour, effectStrength);
 
 	frag_color.rgb = fragColor;
 	frag_color.a = 0.0;

@@ -9081,8 +9081,6 @@ void LLPipeline::renderDeferredLighting()
 		}
 	}
 
-	mScreen.flush();
-						
 // [RLVa:KB] - @setsphere
 	if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
 	{
@@ -9090,7 +9088,7 @@ void LLPipeline::renderDeferredLighting()
 
 		LLGLDepthTest depth(GL_FALSE, GL_FALSE);
 
-		mScreen.bindTarget();
+		//mScreen.bindTarget();
 		gDeferredRlvProgram.bind();
 
 		S32 nDiffuseChannel = gDeferredRlvProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mScreen.getUsage());
@@ -9115,32 +9113,8 @@ void LLPipeline::renderDeferredLighting()
 		gGL.pushMatrix();
 		gGL.loadMatrix(gGLModelView);
 
-		int nRenderMethod = 0;
-		switch (nRenderMethod)
-		{
-			case 0:
-				{
-					LLVector2 tc1(0, 0);
-					LLVector2 tc2((F32)mScreen.getWidth() * 2, (F32)mScreen.getHeight() * 2);
-
-					gGL.begin(LLRender::TRIANGLE_STRIP);
-					gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-					gGL.vertex2f(-1, -1);
-
-					gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-					gGL.vertex2f(-1, 3);
-
-					gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-					gGL.vertex2f(3, -1);
-
-					gGL.end();
-				}
-				break;
-			case 1:
-				mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
-				mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
-				break;
-		}
+		mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
+		mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
 
 		gGL.matrixMode(LLRender::MM_PROJECTION);
 		gGL.popMatrix();
@@ -9153,9 +9127,12 @@ void LLPipeline::renderDeferredLighting()
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 		gGL.getTexUnit(0)->activate();
 
-		mScreen.flush();
+		//mScreen.flush();
 	}
 // [/RLVa:KB]
+
+	mScreen.flush();
+						
 }
 
 void LLPipeline::renderDeferredLightingToRT(LLRenderTarget* target)
