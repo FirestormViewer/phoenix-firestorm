@@ -394,20 +394,36 @@ void RlvBehaviourDictionary::clearModifiers(const LLUUID& idRlvObj)
 	}
 }
 
-const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
+const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict, ERlvBehaviourModifier* peBhvrModifier) const
 {
-	bool fStrict = boost::algorithm::ends_with(strBhvr, "_sec");
+	size_t idxBhvrLastPart = strBhvr.find_last_of('_');
+	std::string strBhvrLastPart((std::string::npos != idxBhvrLastPart) && (idxBhvrLastPart < strBhvr.size()) ? strBhvr.substr(idxBhvrLastPart + 1) : LLStringUtil::null);
+
+	bool fStrict = (strBhvrLastPart.compare("sec") == 0);
 	if (pfStrict)
 		*pfStrict = fStrict;
+	ERlvBehaviourModifier eBhvrModifier = RLV_MODIFIER_UNKNOWN;
 
 	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair( (!fStrict) ? strBhvr : strBhvr.substr(0, strBhvr.size() - 4), (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
-	return ( (itBhvr != m_String2InfoMap.end()) && ((!fStrict) || (itBhvr->second->hasStrict())) ) ? itBhvr->second : NULL;
+	if ( (m_String2InfoMap.end() == itBhvr) && (!fStrict) && (!strBhvrLastPart.empty()) && (RLV_TYPE_FORCE == eParamType) )
+	{
+		// No match found but it could still be a local scope modifier
+		auto itBhvrMod = m_String2InfoMap.find(std::make_pair(strBhvr.substr(0, idxBhvrLastPart), RLV_TYPE_ADDREM));
+		if ( (m_String2InfoMap.end() != itBhvrMod) && (eBhvrModifier = itBhvrMod->second->lookupBehaviourModifier(strBhvrLastPart)) != RLV_MODIFIER_UNKNOWN)
+			itBhvr = itBhvrMod;
+	}
+
+	if (peBhvrModifier)
+		*peBhvrModifier = eBhvrModifier;
+	return ( (itBhvr != m_String2InfoMap.end()) && ((!fStrict) || (itBhvr->second->hasStrict())) ) ? itBhvr->second : nullptr;
 }
 
 ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
 {
-	const RlvBehaviourInfo* pBhvrInfo = getBehaviourInfo(strBhvr, eParamType, pfStrict);
-	return (pBhvrInfo) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
+	ERlvBehaviourModifier eBhvrModifier;
+	const RlvBehaviourInfo* pBhvrInfo = getBehaviourInfo(strBhvr, eParamType, pfStrict, &eBhvrModifier);
+	// Filter out locally scoped modifier commands since they don't actually have a unique behaviour value of their own
+	return (pBhvrInfo && RLV_MODIFIER_UNKNOWN != eBhvrModifier) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
 }
 
 bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
@@ -454,6 +470,42 @@ void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERl
 	{
 		const_cast<RlvBehaviourInfo*>(itBhvr->second)->toggleBehaviourFlag(eBhvrFlag, fEnable);
 	}
+}
+
+// ============================================================================
+// RlvBehaviourInfo
+//
+
+// virtual
+ERlvCmdRet RlvBehaviourInfo::processModifier(const RlvCommand& rlvCmd) const
+{
+	// The object should be holding at least one active behaviour
+	if (!gRlvHandler.hasBehaviour(rlvCmd.getObjectID()))
+		return RLV_RET_FAILED_NOBEHAVIOUR;
+
+	auto itBhvrModifier = std::find_if(m_BhvrModifiers.begin(), m_BhvrModifiers.end(), [&rlvCmd](const modifier_lookup_t::value_type& entry) { return std::get<0>(entry.second) == rlvCmd.getBehaviourModifier(); });
+	if (m_BhvrModifiers.end() == itBhvrModifier)
+		return RLV_RET_FAILED_UNKNOWN;
+
+	ERlvCmdRet eCmdRet; const modifier_handler_func_t& fnHandler = std::get<2>(itBhvrModifier->second);
+	if (rlvCmd.hasOption())
+	{
+		// If there's an option parse it (and perform type checking)
+		RlvBehaviourModifierValue modValue;
+		if ( (rlvCmd.hasOption()) && (!RlvBehaviourModifier::convertOptionValue(rlvCmd.getOption(), std::get<1>(itBhvrModifier->second), modValue)) )
+			return RLV_RET_FAILED_OPTION;
+		eCmdRet = (fnHandler) ? fnHandler(rlvCmd.getObjectID(), modValue) : RLV_RET_SUCCESS;
+		if (RLV_RET_SUCCESS == eCmdRet)
+			gRlvHandler.getObject(rlvCmd.getObjectID())->setModifierValue(rlvCmd.getBehaviourModifier(), modValue);
+	}
+	else
+	{
+		eCmdRet = (fnHandler) ? fnHandler(rlvCmd.getObjectID(), boost::none) : RLV_RET_SUCCESS;
+		if (RLV_RET_SUCCESS == eCmdRet)
+			gRlvHandler.getObject(rlvCmd.getObjectID())->clearModifierValue(rlvCmd.getBehaviourModifier());
+	}
+
+	return eCmdRet;
 }
 
 // ============================================================================
@@ -570,21 +622,22 @@ void RlvBehaviourModifier::setValue(const RlvBehaviourModifierValue& modValue, c
 	}
 }
 
-bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const
+// static
+bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, const std::type_index& modType, RlvBehaviourModifierValue& modValue)
 {
 	try
 	{
-		if (typeid(float) == m_DefaultValue.type())
+		if (modType == typeid(float))
 		{
 			modValue = std::stof(optionValue);
 			return true;
 		}
-		else if (typeid(int) == m_DefaultValue.type())
+		else if (modType == typeid(int))
 		{
 			modValue = std::stoi(optionValue);
 			return true;
 		}
-		else if (typeid(LLVector3) == m_DefaultValue.type())
+		else if (modType == typeid(LLVector3))
 		{
 			LLVector3 vecOption;
 			if (3 == sscanf(optionValue.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2))
@@ -593,7 +646,7 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 				return true;
 			}
 		}
-		else if (typeid(LLUUID) == m_DefaultValue.type())
+		else if (modType == typeid(LLUUID))
 		{
 			LLUUID idOption;
 			if (LLUUID::parseUUID(optionValue, &idOption))
@@ -615,7 +668,7 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 //
 
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
-	: m_fValid(false), m_idObj(idObj), m_pBhvrInfo(NULL), m_eParamType(RLV_TYPE_UNKNOWN), m_fStrict(false), m_fRefCounted(false)
+	: m_idObj(idObj)
 {
 	if (m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam))
 	{
@@ -643,7 +696,7 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
-	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(m_strBehaviour, m_eParamType, &m_fStrict);
+	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(m_strBehaviour, m_eParamType, &m_fStrict, &m_eBhvrModifier);
 }
 
 RlvCommand::RlvCommand(const RlvCommand& rlvCmd, ERlvParamType eParamType)
@@ -1072,6 +1125,20 @@ std::string RlvObject::getStatusString(const std::string& strFilter, const std::
 	}
 
 	return strStatus;
+}
+
+void RlvObject::clearModifierValue(ERlvBehaviourModifier eBhvrModifier)
+{
+	m_Modifiers.erase(eBhvrModifier);
+}
+
+void RlvObject::setModifierValue(ERlvBehaviourModifier eBhvrModifier, const RlvBehaviourModifierValue& newValue)
+{
+	auto itBhvrModifierValue = m_Modifiers.find(eBhvrModifier);
+	if (m_Modifiers.end() != itBhvrModifierValue)
+		itBhvrModifierValue->second = newValue;
+	else
+		m_Modifiers.insert(std::make_pair(eBhvrModifier, newValue));
 }
 
 // ============================================================================

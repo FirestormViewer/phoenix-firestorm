@@ -1782,7 +1782,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	RlvBehaviourModifierValue modValue;
-	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
+	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), pBhvrModifier->getType(), modValue)) )
 		return RLV_RET_FAILED_OPTION;
 
 	// HACK-RLVa: reference counting doesn't happen until control returns to our caller but the modifier callbacks will happen now so we need to adjust the reference counts here
@@ -1803,15 +1803,22 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @bhvr[:<modifier>]=n|y
+// Handles: @bhvr=n, @bhvr:<global modifier>=n|y and @bhvr:<local modifier>=force
 template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	// If there is an option then it should specify a valid modifier (and reference count)
-	if (rlvCmd.hasOption())
+	if ( (rlvCmd.getParamType() & RLV_TYPE_ADDREM) && (rlvCmd.hasOption()) )
+	{
+		// @bhvr:<global modifier>=n|y : if there is an option then it should specify a valid global modifier and if so we reference count
 		return RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	}
+	else if (rlvCmd.getParamType() == RLV_TYPE_FORCE)
+	{
+		// @bhvr:<local modifier>=force : local modifiers hide behind their primary behaviour which knows how to handle them
+		return rlvCmd.getBehaviourInfo()->processModifier(rlvCmd);
+	}
 
-	// Add the default option on an empty modifier if needed
+	// @bhvr=n : add the default option on an empty modifier if needed
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	if ( (pBhvrModifier) && (pBhvrModifier->getAddDefault()) )
 	{
@@ -2622,7 +2629,7 @@ ERlvCmdRet RlvForceGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvComma
 	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	RlvBehaviourModifierValue modValue;
-	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
+	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), pBhvrModifier->getType(), modValue)) )
 		return RLV_RET_FAILED_OPTION;
 
 	pBhvrModifier->setValue(modValue, rlvCmd.getObjectID());
