@@ -73,6 +73,7 @@ public:
 public:
 	void run() override;
 	static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onMinDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onMaxDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
@@ -87,12 +88,14 @@ protected:
 	 */
 protected:
 	enum class ESphereMode { Blend = 0, SoftBlur, Blur, Count };
-	ESphereMode m_nMode;
-	LLColor3    m_Color;
-	float       m_nMinValue;
-	float       m_nMaxValue;
-	float       m_nMinDistance;
-	float       m_nMaxDistance;
+	ESphereMode   m_nMode;
+	enum class ESphereOrigin { Avatar = 0, Camera, Count };
+	ESphereOrigin m_nOrigin;
+	LLColor3      m_Color;
+	float         m_nMinDistance;
+	float         m_nMaxDistance;
+	float         m_nMinValue;
+	float         m_nMaxValue;
 };
 
 // ====================================================================================

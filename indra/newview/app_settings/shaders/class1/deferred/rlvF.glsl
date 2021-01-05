@@ -29,11 +29,11 @@ uniform sampler2DRect depthMap;
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
 
-uniform vec4 avPosLocal;
-uniform int  rlvEffectMode;
-uniform vec4 rlvEffectParam1;
-uniform vec4 rlvEffectParam2;
-uniform vec2 rlvEffectParam3;
+uniform int  rlvEffectMode;     // ESphereMode
+uniform vec4 rlvEffectParam1;   // Sphere origin (in local coordinates)
+uniform vec4 rlvEffectParam2;   // Min/max dist + min/max value
+uniform vec4 rlvEffectParam3;   // Sphere color (not used for blur)
+uniform vec2 rlvEffectParam4;   // Blur direction (not used for blend)
 
 vec4 getPosition_d(vec2 pos_screen, float depth)
 {
@@ -70,15 +70,16 @@ vec3 blur13(sampler2DRect image, vec2 uv, vec2 direction)
 
 void main()
 {
+	vec3 avPosLocal = rlvEffectParam1.xyz;
 	vec2 fragTC = vary_fragcoord.st;
 	float fragDepth = texture2DRect(depthMap, fragTC).x;
 	vec3 fragPosLocal = getPosition_d(fragTC, fragDepth).xyz;
 	vec3 fragColor = texture2DRect(diffuseRect, fragTC).rgb;
-	float distance = length(fragPosLocal.xyz - avPosLocal.xyz);
+	float distance = length(fragPosLocal.xyz - avPosLocal);
 
-	vec2 sphereMinMaxDist = rlvEffectParam1.yw;
-	vec2 sphereMinMaxValue = rlvEffectParam1.xz;
-	vec3 sphereColour = rlvEffectParam2.rgb;
+	vec2 sphereMinMaxDist = rlvEffectParam2.yw;
+	vec2 sphereMinMaxValue = rlvEffectParam2.xz;
+	vec3 sphereColour = rlvEffectParam3.rgb;
 
 	// Linear non-branching interpolation of the strength of the sphere effect (replaces if/elseif/else for x < min, min <= x <= max and x > max)
 	float effectStrength = mix(sphereMinMaxValue.x, 0, distance < sphereMinMaxDist.x) +
@@ -91,7 +92,7 @@ void main()
 			fragColor = mix(fragColor, sphereColour, effectStrength);
 			break;
 		case 1:		// Blur
-			fragColor = blur13(diffuseRect, fragTC, effectStrength * rlvEffectParam3.xy);
+			fragColor = blur13(diffuseRect, fragTC, effectStrength * rlvEffectParam4.xy);
 			break;
 	}
 

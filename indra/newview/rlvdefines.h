@@ -277,16 +277,19 @@ enum ERlvBehaviourModifier
 
 enum class ERlvLocalBhvrModifier
 {
+	// @setoverlay
 	OverlayAlpha,						// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
 	OverlayTexture,						// Specifies the UUID of the overlay texture
 	OverlayTint,						// The tint that's applied to the overlay texture
 	OverlayTouch,						// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
-	SphereMode,
-	SphereColor,						// Colour to mix with the actual pixel colour (alpha depends non-linerally )
-	SphereMaxAlpha,						// Alpha of the mix colour at maximum distance
-	SphereMaxDist,						// Distance at which the blending stops         ; or colour = mix(colour, sphere_colour, max_alpha)
-	SphereMinAlpha,						// Alpha of the mix colour at minimum distance
-	SphereMinDist,						// Distance at which the gradual blending starts; or colour = mix(colour, sphere_colour, min_alpha)
+	// @setsphere
+	SphereMode,                         // The type of effect that will apply to any pixel that intersects with the sphere (e.g. blend, blur, ...)
+	SphereOrigin,                       // The origin of the sphere can either be the avatar or the camera position
+	SphereColor,                        // [Blend only] Colour to mix with the actual pixel colour
+	SphereMinDist,                      // Distance at which the effect starts and has weight minValue; e.g. for blend this would be colour = mix(colour, sphere_colour, min_alpha)
+	SphereMaxDist,                      // Distance at which the effect starts and has weight maxValue; e.g. for blend this would be colour = mix(colour, sphere_colour, max_alpha)
+	SphereMinValue,                     // Value of the effect at minimum distance
+	SphereMaxValue,                     // Value of the effect at maximum distance
 
 	Unknown,
 };

@@ -181,37 +181,41 @@ void RlvOverlayEffect::run()
 //
 
 const int   c_SphereDefaultMode = 0;
-const float c_SphereDefaultAlpha = 1.0f;
-const float c_SphereDefaultDistance = 0.0f;
+const int   c_SphereDefaultOrigin = 0;
 const float c_SphereDefaultColor[3] = { 0.0f, 0.0f, 0.0f };
+const float c_SphereDefaultDistance = 0.0f;
+const float c_SphereDefaultAlpha = 1.0f;
 
 RlvSphereEffect::RlvSphereEffect(const LLUUID& idRlvObj)
 	: LLVisualEffect(idRlvObj, EVisualEffect::RlvSphere, EVisualEffectType::PostProcessShader)
 	, m_nMode((ESphereMode)c_SphereDefaultMode)
+	, m_nOrigin((ESphereOrigin)c_SphereDefaultOrigin)
 	, m_Color(LLColor3(c_SphereDefaultColor))
 	, m_nMinDistance(c_SphereDefaultDistance), m_nMaxDistance(c_SphereDefaultDistance)
 	, m_nMinValue(c_SphereDefaultAlpha), m_nMaxValue(c_SphereDefaultAlpha)
 {
 	if (RlvObject* pRlvObj = gRlvHandler.getObject(idRlvObj))
 	{
-		int nMode;
-		if (pRlvObj->getModifierValue<int>(ERlvLocalBhvrModifier::SphereMode, nMode))
-			m_nMode = (ESphereMode)nMode;
+		int nNumber;
+		if (pRlvObj->getModifierValue<int>(ERlvLocalBhvrModifier::SphereMode, nNumber))
+			m_nMode = (ESphereMode)nNumber;
+		if (pRlvObj->getModifierValue<int>(ERlvLocalBhvrModifier::SphereOrigin, nNumber))
+			m_nOrigin = (ESphereOrigin)nNumber;
 
 		LLVector3 vecColor;
 		if (pRlvObj->getModifierValue<LLVector3>(ERlvLocalBhvrModifier::SphereColor, vecColor))
 			m_Color = LLColor3(vecColor.mV);
 
-		float nValue;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMinAlpha, nValue))
-			m_nMinValue = nValue;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMaxAlpha, nValue))
-			m_nMaxValue = nValue;
+		float nFloat;
+		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMinDist, nFloat))
+			m_nMinDistance = nFloat;
+		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMaxDist, nFloat))
+			m_nMaxDistance = nFloat;
 
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMinDist, nValue))
-			m_nMinDistance = nValue;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMaxDist, nValue))
-			m_nMaxDistance = nValue;
+		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMinValue, nFloat))
+			m_nMinValue = nFloat;
+		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereMaxValue, nFloat))
+			m_nMaxValue = nFloat;
 	}
 }
 
@@ -225,6 +229,16 @@ ERlvCmdRet RlvSphereEffect::onModeChanged(const LLUUID& idRlvObj, const boost::o
 	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
 	{
 		pEffect->m_nMode = (ESphereMode)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultMode);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		pEffect->m_nOrigin = (ESphereOrigin)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultOrigin);
 	}
 	return RLV_RET_SUCCESS;
 }
@@ -286,19 +300,29 @@ void RlvSphereEffect::setShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* p
 	pShader->uniform1i(LLShaderMgr::RLV_EFFECT_MODE, llclamp((int)m_nMode, 0, (int)ESphereMode::Count));
 
 	// Pass the sphere origin to the shader
-	const LLVector4 posSphereOrigin(isAgentAvatarValid() ? gAgentAvatarp->getRenderPosition() : gAgent.getPositionAgent(), 1.0f);
+	LLVector4 posSphereOrigin;
+	switch (m_nOrigin)
+	{
+		case ESphereOrigin::Camera:
+			posSphereOrigin.setVec(LLViewerCamera::instance().getOrigin(), 1.0f);
+			break;
+		case ESphereOrigin::Avatar:
+		default:
+			posSphereOrigin.setVec((isAgentAvatarValid()) ? gAgentAvatarp->getRenderPosition() : gAgent.getPositionAgent(), 1.0f);
+			break;
+	}
 	glh::vec4f posSphereOriginGl(posSphereOrigin.mV);
 	const glh::matrix4f& mvMatrix = gGL.getModelviewMatrix();
 	mvMatrix.mult_matrix_vec(posSphereOriginGl);
-	pShader->uniform4fv(LLShaderMgr::RLV_AVPOSLOCAL, 1, posSphereOriginGl.v);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM1, 1, posSphereOriginGl.v);
 
 	// Pack min/max distance and alpha together
 	const glh::vec4f sphereParams(m_nMinValue, m_nMinDistance, m_nMaxValue, m_nMaxDistance);
-	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM1, 1, sphereParams.v);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM2, 1, sphereParams.v);
 
 	// Pass color
 	const glh::vec4f sphereColor(m_Color.mV, 1.0);
-	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM2, 1, sphereColor.v);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM3, 1, sphereColor.v);
 }
 
 void RlvSphereEffect::renderPass(LLGLSLShader* pShader) const
@@ -354,9 +378,9 @@ void RlvSphereEffect::run()
 			renderPass(&gDeferredRlvProgram);
 			break;
 		case ESphereMode::Blur:
-			gDeferredRlvProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM3, 1.f, 0.f);
+			gDeferredRlvProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM4, 1.f, 0.f);
 			renderPass(&gDeferredRlvProgram);
-			gDeferredRlvProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM3, 0.f, 1.f);
+			gDeferredRlvProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM4, 0.f, 1.f);
 			renderPass(&gDeferredRlvProgram);
 			break;
 	}

@@ -1253,11 +1253,11 @@ void LLShaderMgr::initAttribsAndUniforms()
 	
 	mReservedUniforms.push_back("camPosLocal");
 // [RLVa:KB] - @setsphere
-	mReservedUniforms.push_back("avPosLocal");
 	mReservedUniforms.push_back("rlvEffectMode");
 	mReservedUniforms.push_back("rlvEffectParam1");
 	mReservedUniforms.push_back("rlvEffectParam2");
 	mReservedUniforms.push_back("rlvEffectParam3");
+	mReservedUniforms.push_back("rlvEffectParam4");
 // [/RLV:KB]
 
 	mReservedUniforms.push_back("gWindDir");
