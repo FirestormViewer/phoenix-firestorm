@@ -22,6 +22,7 @@
 #include "llviewerobjectlist.h"
 
 #include "rlvcommon.h"
+#include "rlveffects.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
@@ -215,15 +216,12 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("camunlock", RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 
 	// Overlay
-	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE>("setoverlay", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_alpha", RLV_BHVR_SETOVERLAY_ALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-	            RLV_MODIFIER_OVERLAY_ALPHA, new RlvBehaviourModifier("Overlay - Alpha", 1.0f, false, new RlvBehaviourModifierComp()));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_texture", RLV_BHVR_SETOVERLAY_TEXTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-				RLV_MODIFIER_OVERLAY_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_OVERLAY_TEXTURE>("Overlay - Texture", LLUUID::null, false, new RlvBehaviourModifierComp()));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setoverlay_tint", RLV_BHVR_SETOVERLAY_TINT, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-				RLV_MODIFIER_OVERLAY_TINT, new RlvBehaviourModifier("Overlay - Tint", LLVector3(1.0f, 1.0f, 1.0f), false, new RlvBehaviourModifierComp()));
-	addModifier(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setoverlay_touch", RLV_BHVR_SETOVERLAY_TOUCH, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-				RLV_MODIFIER_OVERLAY_TOUCH, new RlvBehaviourModifier("Overlay - Touch", true, true, new RlvBehaviourModifierComp()));
+	RlvBehaviourInfo* pSetOverlayBhvr = new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE_OR_MODIFIER>("setoverlay");
+	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayAlpha, typeid(float), "alpha", &RlvOverlayEffect::onAlphaValueChanged);
+	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTexture, typeid(LLUUID), "texture", &RlvOverlayEffect::onTextureChanged);
+	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTint, typeid(LLVector3), "tint", &RlvOverlayEffect::onColorValueChanged);
+	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTouch, typeid(LLVector3), "touch", &RlvOverlayEffect::onBlockTouchValueChanged);
+	addEntry(pSetOverlayBhvr);
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 
 	//
@@ -394,7 +392,7 @@ void RlvBehaviourDictionary::clearModifiers(const LLUUID& idRlvObj)
 	}
 }
 
-const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict, ERlvBehaviourModifier* peBhvrModifier) const
+const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict, ERlvLocalBhvrModifier* peBhvrModifier) const
 {
 	size_t idxBhvrLastPart = strBhvr.find_last_of('_');
 	std::string strBhvrLastPart((std::string::npos != idxBhvrLastPart) && (idxBhvrLastPart < strBhvr.size()) ? strBhvr.substr(idxBhvrLastPart + 1) : LLStringUtil::null);
@@ -402,14 +400,14 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::stri
 	bool fStrict = (strBhvrLastPart.compare("sec") == 0);
 	if (pfStrict)
 		*pfStrict = fStrict;
-	ERlvBehaviourModifier eBhvrModifier = RLV_MODIFIER_UNKNOWN;
+	ERlvLocalBhvrModifier eBhvrModifier = ERlvLocalBhvrModifier::Unknown;
 
 	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair( (!fStrict) ? strBhvr : strBhvr.substr(0, strBhvr.size() - 4), (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
 	if ( (m_String2InfoMap.end() == itBhvr) && (!fStrict) && (!strBhvrLastPart.empty()) && (RLV_TYPE_FORCE == eParamType) )
 	{
 		// No match found but it could still be a local scope modifier
 		auto itBhvrMod = m_String2InfoMap.find(std::make_pair(strBhvr.substr(0, idxBhvrLastPart), RLV_TYPE_ADDREM));
-		if ( (m_String2InfoMap.end() != itBhvrMod) && (eBhvrModifier = itBhvrMod->second->lookupBehaviourModifier(strBhvrLastPart)) != RLV_MODIFIER_UNKNOWN)
+		if ( (m_String2InfoMap.end() != itBhvrMod) && (eBhvrModifier = itBhvrMod->second->lookupBehaviourModifier(strBhvrLastPart)) != ERlvLocalBhvrModifier::Unknown)
 			itBhvr = itBhvrMod;
 	}
 
@@ -420,10 +418,10 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::stri
 
 ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
 {
-	ERlvBehaviourModifier eBhvrModifier;
+	ERlvLocalBhvrModifier eBhvrModifier;
 	const RlvBehaviourInfo* pBhvrInfo = getBehaviourInfo(strBhvr, eParamType, pfStrict, &eBhvrModifier);
 	// Filter out locally scoped modifier commands since they don't actually have a unique behaviour value of their own
-	return (pBhvrInfo && RLV_MODIFIER_UNKNOWN != eBhvrModifier) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
+	return (pBhvrInfo && ERlvLocalBhvrModifier::Unknown != eBhvrModifier) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
 }
 
 bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
@@ -547,7 +545,6 @@ void RlvBehaviourModifier::clearValues(const LLUUID& idRlvObj)
 	                              [&idRlvObj](const RlvBehaviourModifierValueTuple& modValue) {
 									return (std::get<1>(modValue) == idRlvObj) && (std::get<2>(modValue) == RLV_BHVR_UNKNOWN);
 	                              }), m_Values.end());
-	RlvBehaviourModifierAnimator::instance().clearTweens(idRlvObj);
 	if (origCount != m_Values.size())
 	{
 		onValueChange();
@@ -1127,12 +1124,12 @@ std::string RlvObject::getStatusString(const std::string& strFilter, const std::
 	return strStatus;
 }
 
-void RlvObject::clearModifierValue(ERlvBehaviourModifier eBhvrModifier)
+void RlvObject::clearModifierValue(ERlvLocalBhvrModifier eBhvrModifier)
 {
 	m_Modifiers.erase(eBhvrModifier);
 }
 
-void RlvObject::setModifierValue(ERlvBehaviourModifier eBhvrModifier, const RlvBehaviourModifierValue& newValue)
+void RlvObject::setModifierValue(ERlvLocalBhvrModifier eBhvrModifier, const RlvBehaviourModifierValue& newValue)
 {
 	auto itBhvrModifierValue = m_Modifiers.find(eBhvrModifier);
 	if (m_Modifiers.end() != itBhvrModifierValue)

@@ -66,7 +66,7 @@ public:
 		: m_strBhvr(strBhvr), m_eBhvr(eBhvr), m_maskParamType(maskParamType), m_nBhvrFlags(nBhvrFlags) {}
 	virtual ~RlvBehaviourInfo() {}
 
-	void                  addModifier(ERlvBehaviourModifier eBhvrMod, const std::type_info& valueType, const std::string& strBhvrMod, modifier_handler_func_t fnHandler = nullptr);
+	void                  addModifier(ERlvLocalBhvrModifier eBhvrMod, const std::type_info& valueType, const std::string& strBhvrMod, modifier_handler_func_t fnHandler = nullptr);
 	const std::string&    getBehaviour() const      { return m_strBhvr; }
 	ERlvBehaviour         getBehaviourType() const  { return m_eBhvr; }
 	U32                   getBehaviourFlags() const { return m_nBhvrFlags; }
@@ -76,7 +76,7 @@ public:
 	bool                  isExperimental() const    { return m_nBhvrFlags & BHVR_EXPERIMENTAL; }
 	bool                  isExtended() const        { return m_nBhvrFlags & BHVR_EXTENDED; }
 	bool                  isSynonym() const         { return m_nBhvrFlags & BHVR_SYNONYM; }
-	ERlvBehaviourModifier lookupBehaviourModifier(const std::string& strBhvrMod) const;
+	ERlvLocalBhvrModifier lookupBehaviourModifier(const std::string& strBhvrMod) const;
 	void                  toggleBehaviourFlag(EBehaviourFlags eBhvrFlag, bool fEnable);
 
 	virtual ERlvCmdRet  processCommand(const RlvCommand& rlvCmd) const { return RLV_RET_NO_PROCESSOR; }
@@ -87,7 +87,7 @@ protected:
 	ERlvBehaviour m_eBhvr;
 	U32           m_nBhvrFlags;
 	U32           m_maskParamType;
-	typedef std::map<std::string, std::tuple<ERlvBehaviourModifier, std::type_index, modifier_handler_func_t>> modifier_lookup_t;
+	typedef std::map<std::string, std::tuple<ERlvLocalBhvrModifier, std::type_index, modifier_handler_func_t>> modifier_lookup_t;
 	modifier_lookup_t m_BhvrModifiers;
 };
 
@@ -112,7 +112,7 @@ public:
 public:
 	void                    clearModifiers(const LLUUID& idRlvObj);
 	ERlvBehaviour           getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
-	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = nullptr, ERlvBehaviourModifier* eBhvrModifier = nullptr) const;
+	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = nullptr, ERlvLocalBhvrModifier* peBhvrModifier = nullptr) const;
 	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
 	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
 	RlvBehaviourModifier*   getModifier(ERlvBehaviourModifier eBhvrMod) const { return (eBhvrMod < RLV_MODIFIER_COUNT) ? m_BehaviourModifiers[eBhvrMod] : nullptr; }
@@ -299,14 +299,14 @@ public:
 	const RlvBehaviourInfo* getBehaviourInfo() const { return m_pBhvrInfo; }
 	ERlvBehaviour      getBehaviourType() const	{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN; }
 	U32                getBehaviourFlags() const{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourFlags() : 0; }
-	ERlvBehaviourModifier   getBehaviourModifier() const { return m_eBhvrModifier; }
+	ERlvLocalBhvrModifier   getBehaviourModifier() const { return m_eBhvrModifier; }
 	const LLUUID&      getObjectID() const		{ return m_idObj; }
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
 	ERlvParamType      getParamType() const		{ return m_eParamType; }
 	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
-	bool	           isModifier() const		{ return RLV_MODIFIER_UNKNOWN != m_eBhvrModifier; }
+	bool	           isModifier() const		{ return ERlvLocalBhvrModifier::Unknown != m_eBhvrModifier; }
 	bool               isRefCounted() const     { return m_fRefCounted; }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
@@ -331,7 +331,7 @@ protected:
 	std::string             m_strBehaviour;
 	const RlvBehaviourInfo* m_pBhvrInfo = nullptr;
 	ERlvParamType           m_eParamType = RLV_TYPE_UNKNOWN;
-	ERlvBehaviourModifier   m_eBhvrModifier = RLV_MODIFIER_UNKNOWN;
+	ERlvLocalBhvrModifier   m_eBhvrModifier = ERlvLocalBhvrModifier::Unknown;
 	bool                    m_fStrict = false;
 	std::string             m_strOption;
 	std::string             m_strParam;
@@ -467,9 +467,9 @@ public:
 	 * Local-scope modifiers
 	 */
 public:
-	void                      clearModifierValue(ERlvBehaviourModifier eBhvrMod);
-	template<typename T> bool getModifierValue(ERlvBehaviourModifier eBhvrModifier, T& value) const;
-	void                      setModifierValue(ERlvBehaviourModifier eBhvrMod, const RlvBehaviourModifierValue& modValue);
+	void                      clearModifierValue(ERlvLocalBhvrModifier eBhvrMod);
+	template<typename T> bool getModifierValue(ERlvLocalBhvrModifier eBhvrModifier, T& value) const;
+	void                      setModifierValue(ERlvLocalBhvrModifier eBhvrMod, const RlvBehaviourModifierValue& modValue);
 
 	/*
 	 * Member variables
@@ -481,7 +481,7 @@ protected:
 	bool               m_fLookup;			// TRUE if the object existed in gObjectList at one point in time
 	S16                m_nLookupMisses;		// Count of unsuccessful lookups in gObjectList by the GC
 	rlv_command_list_t m_Commands;			// List of behaviours held by this object (in the order they were received)
-	typedef std::map<ERlvBehaviourModifier, RlvBehaviourModifierValue> bhvr_modifier_map_t;
+	typedef std::map<ERlvLocalBhvrModifier, RlvBehaviourModifierValue> bhvr_modifier_map_t;
 	bhvr_modifier_map_t m_Modifiers;		// List of (local scope) modifiers set on this object
 
 	friend class RlvHandler;
@@ -707,17 +707,17 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 // Inlined class member functions
 //
 
-inline void RlvBehaviourInfo::addModifier(ERlvBehaviourModifier eBhvrMod, const std::type_info& valueType, const std::string& strBhvrMod, modifier_handler_func_t fnHandler)
+inline void RlvBehaviourInfo::addModifier(ERlvLocalBhvrModifier eBhvrMod, const std::type_info& valueType, const std::string& strBhvrMod, modifier_handler_func_t fnHandler)
 {
 	RLV_ASSERT_DBG(m_BhvrModifiers.find(strBhvrMod) == m_BhvrModifiers.end());
 
 	m_BhvrModifiers.insert(std::make_pair(strBhvrMod, std::make_tuple(eBhvrMod, std::type_index(valueType), fnHandler)));
 }
 
-inline ERlvBehaviourModifier RlvBehaviourInfo::lookupBehaviourModifier(const std::string& strBhvrMod) const
+inline ERlvLocalBhvrModifier RlvBehaviourInfo::lookupBehaviourModifier(const std::string& strBhvrMod) const
 {
 	auto itBhvrModifier = m_BhvrModifiers.find(strBhvrMod);
-	return (m_BhvrModifiers.end() != itBhvrModifier) ? std::get<0>(itBhvrModifier->second) : RLV_MODIFIER_UNKNOWN;
+	return (m_BhvrModifiers.end() != itBhvrModifier) ? std::get<0>(itBhvrModifier->second) : ERlvLocalBhvrModifier::Unknown;
 }
 
 inline void RlvBehaviourInfo::toggleBehaviourFlag(EBehaviourFlags eBhvrFlag, bool fEnable)
@@ -745,7 +745,7 @@ inline bool RlvCommand::operator ==(const RlvCommand& rhs) const
 }
 
 template <typename T>
-inline bool RlvObject::getModifierValue(ERlvBehaviourModifier eBhvrModifier, T& value) const
+inline bool RlvObject::getModifierValue(ERlvLocalBhvrModifier eBhvrModifier, T& value) const
 {
 	auto itBhvrModifierValue = m_Modifiers.find(eBhvrModifier);
 	if (m_Modifiers.end() != itBhvrModifierValue)

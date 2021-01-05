@@ -240,12 +240,8 @@ enum ERlvBehaviour {
 	// Camera (force)
 	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
-	// Overlay
+	// Effects
 	RLV_BHVR_SETOVERLAY,			// Gives an object exclusive control of the overlay
-	RLV_BHVR_SETOVERLAY_ALPHA,		// Changes the overlay texture's transparency level
-	RLV_BHVR_SETOVERLAY_TEXTURE,	// Changes the overlay texture
-	RLV_BHVR_SETOVERLAY_TINT,		// Changes the tint that's applied to the overlay texture
-	RLV_BHVR_SETOVERLAY_TOUCH,		// Block world interaction (=touching) based on the alpha channel of the overlay texture
 	RLV_BHVR_SETOVERLAY_TWEEN,		// Animate between the current overlay settings and the supplied values
 
 	RLV_BHVR_COUNT,
@@ -255,10 +251,6 @@ enum ERlvBehaviour {
 enum ERlvBehaviourModifier
 {
 	RLV_MODIFIER_FARTOUCHDIST,			// Radius of a sphere around the user in which they can interact with the world
-	RLV_MODIFIER_OVERLAY_ALPHA,			// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
-	RLV_MODIFIER_OVERLAY_TEXTURE,		// Specifies the UUID of the overlay texture
-	RLV_MODIFIER_OVERLAY_TINT,			// The tint that's applied to the overlay texture
-	RLV_MODIFIER_OVERLAY_TOUCH,			// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
 	RLV_MODIFIER_RECVIMDISTMIN,			// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_RECVIMDISTMAX,			// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_SENDIMDISTMIN,			// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
@@ -281,6 +273,16 @@ enum ERlvBehaviourModifier
 
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN
+};
+
+enum class ERlvLocalBhvrModifier
+{
+	OverlayAlpha,						// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
+	OverlayTexture,						// Specifies the UUID of the overlay texture
+	OverlayTint,						// The tint that's applied to the overlay texture
+	OverlayTouch,						// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
+
+	Unknown,
 };
 
 enum ERlvBehaviourOptionType
