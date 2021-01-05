@@ -116,6 +116,7 @@
 #include "llprogressview.h"
 #include "llcleanup.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
+#include "llvisualeffect.h"
 #include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -9081,58 +9082,15 @@ void LLPipeline::renderDeferredLighting()
 		}
 	}
 
+	mScreen.flush();
+						
 // [RLVa:KB] - @setsphere
 	if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
 	{
 		LL_RECORD_BLOCK_TIME(FTM_POST_DEFERRED_RLV);
-
-		LLGLDepthTest depth(GL_FALSE, GL_FALSE);
-
-		//mScreen.bindTarget();
-		gDeferredRlvProgram.bind();
-
-		S32 nDiffuseChannel = gDeferredRlvProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mScreen.getUsage());
-		if (nDiffuseChannel > -1)
-		{
-			mScreen.bindTexture(0, nDiffuseChannel);
-			gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
-		}
-
-		S32 nDepthChannel = gDeferredRlvProgram.enableTexture(LLShaderMgr::DEFERRED_DEPTH, mDeferredDepth.getUsage());
-		if (nDepthChannel > -1)
-		{
-			gGL.getTexUnit(nDepthChannel)->bind(&mDeferredDepth, TRUE);
-		}
-
-		RlvActions::setEffectSphereShaderUniforms(&gDeferredRlvProgram, &mScreen);
-
-		gGL.matrixMode(LLRender::MM_PROJECTION);
-		gGL.pushMatrix();
-		gGL.loadIdentity();
-		gGL.matrixMode(LLRender::MM_MODELVIEW);
-		gGL.pushMatrix();
-		gGL.loadMatrix(gGLModelView);
-
-		mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
-		mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
-
-		gGL.matrixMode(LLRender::MM_PROJECTION);
-		gGL.popMatrix();
-		gGL.matrixMode(LLRender::MM_MODELVIEW);
-		gGL.popMatrix();
-
-		gDeferredRlvProgram.disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mScreen.getUsage());
-		gDeferredRlvProgram.disableTexture(LLShaderMgr::DEFERRED_DEPTH, mScreen.getUsage());
-		gDeferredRlvProgram.unbind();
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		gGL.getTexUnit(0)->activate();
-
-		//mScreen.flush();
+		LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere);
 	}
 // [/RLVa:KB]
-
-	mScreen.flush();
-						
 }
 
 void LLPipeline::renderDeferredLightingToRT(LLRenderTarget* target)

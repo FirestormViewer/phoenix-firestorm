@@ -2059,6 +2059,21 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehavio
 		LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
 }
 
+// Handles: @setsphere=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
+	{
+		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+			LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
+		else
+			LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
+	}
+	return RLV_RET_SUCCESS;
+}
+
 // Handles: @sendchannel[:<channel>]=n|y and @sendchannel_except[:<channel>]=n|y
 template<> template<>
 ERlvCmdRet RlvBehaviourSendChannelHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)

@@ -36,9 +36,10 @@ public:
 	~RlvOverlayEffect();
 
 public:
+	bool hitTest(const LLCoordGL& ptMouse) const;
+	void run() override;
 	void tweenAlpha(float endAlpha, double duration)    { m_nAlpha.start(endAlpha, duration); }
 	void tweenColor(LLColor3 endColor, double duration) { m_Color.start(endColor, duration); }
-	bool hitTest(const LLCoordGL& ptMouse) const;
 	static ERlvCmdRet onAlphaValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onBlockTouchValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onColorValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
@@ -46,8 +47,6 @@ public:
 protected:
 	void clearImage();
 	void setImage(const LLUUID& idTexture);
-
-	void run() override;
 
 	/*
 	 * Member variables
@@ -59,6 +58,37 @@ protected:
 
 	LLPointer<LLViewerFetchedTexture> m_pImage = nullptr;
 	int      m_nImageOrigBoost = 0;
+};
+
+// ====================================================================================
+// RlvSphereEffect class
+//
+
+class RlvSphereEffect : public LLVisualEffect
+{
+public:
+	RlvSphereEffect(const LLUUID& idRlvObj);
+	~RlvSphereEffect();
+
+public:
+	void run() override;
+	static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onMinAlphaChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onMaxAlphaChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onMinDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onMaxDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+protected:
+	void setShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* pRenderTarget);
+
+	/*
+	 * Member variables
+	 */
+protected:
+	LLColor3 m_Color;
+	float    m_nMinAlpha;
+	float    m_nMaxAlpha;
+	float    m_nMinDistance;
+	float    m_nMaxDistance;
 };
 
 // ====================================================================================

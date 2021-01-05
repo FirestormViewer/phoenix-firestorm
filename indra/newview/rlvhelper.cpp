@@ -215,19 +215,6 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMAX, RlvBehaviourCamZoomMinMaxHandler>("camzoommax", RlvBehaviourInfo::BHVR_DEPRECATED));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("camunlock", RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 
-	// Effect: "vision spheres"
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setsphere", RLV_BHVR_SETSPHERE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setsphere_color", RLV_BHVR_SETSPHERE_COLOR, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-	            RLV_MODIFIER_EFFECT_SPHERE_COLOR, new RlvBehaviourModifier("Effect: Vision spheres - Color", LLVector3(.0f, .0f, .0f), true, new RlvBehaviourModifierComp()));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setsphere_maxdist", RLV_BHVR_SETSPHERE_MAXDIST, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-		RLV_MODIFIER_EFFECT_SPHERE_MAXDIST, new RlvBehaviourModifier("Effect: Vision spheres - Max distance", 0.f, false, new RlvBehaviourModifierCompMin()));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setsphere_maxalpha", RLV_BHVR_SETSPHERE_MAXALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-		RLV_MODIFIER_EFFECT_SPHERE_MAXALPHA, new RlvBehaviourModifier("Effect: Vision spheres - Max distance alpha", 1.0f, false, new RlvBehaviourModifierCompMax()));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setsphere_mindist", RLV_BHVR_SETSPHERE_MINDIST, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-		RLV_MODIFIER_EFFECT_SPHERE_MINDIST, new RlvBehaviourModifier("Effect: Vision spheres - Min distance", 0.f, false, new RlvBehaviourModifierCompMin()));
-	addModifier(new RlvForceGenericProcessor<RLV_OPTION_MODIFIER>("setsphere_minalpha", RLV_BHVR_SETSPHERE_MINALPHA, RlvBehaviourInfo::BHVR_EXPERIMENTAL),
-		RLV_MODIFIER_EFFECT_SPHERE_MINALPHA, new RlvBehaviourModifier("Effect: Vision spheres - Min distance alpha", 1.0f, false, new RlvBehaviourModifierCompMax()));
-
 	// Overlay
 	RlvBehaviourInfo* pSetOverlayBhvr = new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE_OR_MODIFIER>("setoverlay");
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayAlpha, typeid(float), "alpha", &RlvOverlayEffect::onAlphaValueChanged);
@@ -236,6 +223,15 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTouch, typeid(LLVector3), "touch", &RlvOverlayEffect::onBlockTouchValueChanged);
 	addEntry(pSetOverlayBhvr);
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+
+	// Sphere
+	RlvBehaviourInfo* pSetSphereBhvr = new RlvBehaviourProcessor<RLV_BHVR_SETSPHERE>("setsphere", RlvBehaviourInfo::BHVR_EXPERIMENTAL);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereColor, typeid(LLVector3), "color", &RlvSphereEffect::onColorChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinAlpha, typeid(float), "minalpha", &RlvSphereEffect::onMinAlphaChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxAlpha, typeid(float), "maxalpha", &RlvSphereEffect::onMaxAlphaChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinDist, typeid(float), "mindist", &RlvSphereEffect::onMinDistChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxDist, typeid(float), "maxdist", &RlvSphereEffect::onMaxDistChanged);
+	addEntry(pSetSphereBhvr);
 
 	//
 	// Force-wear
