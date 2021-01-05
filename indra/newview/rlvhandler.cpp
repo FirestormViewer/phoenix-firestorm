@@ -53,12 +53,12 @@
 #include "llviewercamera.h"				// @setcam and related
 #include "llworldmapmessage.h"			// @tpto
 #include "llviewertexturelist.h"		// @setcam_texture
-#include "llviewerwindow.h"				// @setoverlay
 
 // RLVa includes
 #include "rlvactions.h"
 #include "rlvfloaters.h"
 #include "rlvactions.h"
+#include "rlveffects.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
@@ -178,7 +178,6 @@ void RlvHandler::cleanup()
 	RLV_ASSERT(std::all_of(m_Behaviours, m_Behaviours + RLV_BHVR_COUNT, [](S16 cnt) { return !cnt; }));
 	RLV_ASSERT(m_CurCommandStack.empty());
 	RLV_ASSERT(m_CurObjectStack.empty());
-	RLV_ASSERT(m_pOverlayImage.isNull());
 
 	//
 	// Clean up what's left
@@ -1782,7 +1781,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	RlvBehaviourModifierValue modValue;
-	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
+	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), pBhvrModifier->getType(), modValue)) )
 		return RLV_RET_FAILED_OPTION;
 
 	// HACK-RLVa: reference counting doesn't happen until control returns to our caller but the modifier callbacks will happen now so we need to adjust the reference counts here
@@ -1803,15 +1802,22 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @bhvr[:<modifier>]=n|y
+// Handles: @bhvr=n, @bhvr:<global modifier>=n|y and @bhvr:<local modifier>=force
 template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	// If there is an option then it should specify a valid modifier (and reference count)
-	if (rlvCmd.hasOption())
+	if ( (rlvCmd.getParamType() & RLV_TYPE_ADDREM) && (rlvCmd.hasOption()) )
+	{
+		// @bhvr:<global modifier>=n|y : if there is an option then it should specify a valid global modifier and if so we reference count
 		return RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	}
+	else if (rlvCmd.getParamType() == RLV_TYPE_FORCE)
+	{
+		// @bhvr:<local modifier>=force : local modifiers hide behind their primary behaviour which knows how to handle them
+		return rlvCmd.getBehaviourInfo()->processModifier(rlvCmd);
+	}
 
-	// Add the default option on an empty modifier if needed
+	// @bhvr=n : add the default option on an empty modifier if needed
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	if ( (pBhvrModifier) && (pBhvrModifier->getAddDefault()) )
 	{
@@ -2047,36 +2053,10 @@ void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhv
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
-	// Once an object has exclusive control over the overlay only its behaviours should be active. This affects:
-	//   - behaviour modifiers         => handled for us once we set the primary object
-
-	LLUUID idRlvObject;
 	if (fHasBhvr)
-	{
-		// Get the UUID of the primary object (there should only be one)
-		std::list<const RlvObject*> lObjects;
-		gRlvHandler.findBehaviour(RLV_BHVR_SETOVERLAY, lObjects);
-		RLV_ASSERT(lObjects.size() == 1);
-		idRlvObject = lObjects.front()->getObjectID();
-	}
-
-	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->setPrimaryObject(idRlvObject);
-	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TINT)->setPrimaryObject(idRlvObject);
-	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TEXTURE)->setPrimaryObject(idRlvObject);
-	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TOUCH)->setPrimaryObject(idRlvObject);
-}
-
-// Handles: @setoverlay_texture:<uuid>=n|y changes
-template<>
-void RlvBehaviourModifierHandler<RLV_MODIFIER_OVERLAY_TEXTURE>::onValueChange() const
-{
-	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TEXTURE))
-	{
-		if (pBhvrModifier->hasValue())
-			gRlvHandler.setOverlayImage(pBhvrModifier->getValue<LLUUID>());
-		else
-			gRlvHandler.clearOverlayImage();
-	}
+		LLVfxManager::instance().addEffect(new RlvOverlayEffect(gRlvHandler.getCurrentObject()));
+	else
+		LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
 }
 
 // Handles: @sendchannel[:<channel>]=n|y and @sendchannel_except[:<channel>]=n|y
@@ -2622,7 +2602,7 @@ ERlvCmdRet RlvForceGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvComma
 	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	RlvBehaviourModifierValue modValue;
-	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
+	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), pBhvrModifier->getType(), modValue)) )
 		return RLV_RET_FAILED_OPTION;
 
 	pBhvrModifier->setValue(modValue, rlvCmd.getObjectID());
@@ -2977,6 +2957,14 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_MODE>::onCommand(const RlvCommand& rl
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETOVERLAY_TWEEN>::onCommand(const RlvCommand& rlvCmd)
 {
+	RlvObject* pRlvObj = gRlvHandler.getObject(rlvCmd.getObjectID());
+	if (!pRlvObj)
+		return RLV_RET_FAILED_NOBEHAVIOUR;
+
+	RlvOverlayEffect* pOverlayEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(rlvCmd.getObjectID());
+	if (!pOverlayEffect)
+		return RLV_RET_FAILED_LOCK;
+
 	std::vector<std::string> optionList;
 	if ( (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList)) || (3 != optionList.size()) )
 		return RLV_RET_FAILED_OPTION;
@@ -2989,12 +2977,18 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETOVERLAY_TWEEN>::onCommand(const RlvComman
 	// Process the overlay alpha tween (if there is one and it is a valid value)
 	float overlayAlpha = .0f;
 	if (RlvCommandOptionHelper::parseOption(optionList[0], overlayAlpha))
-		RlvBehaviourModifierAnimator::instance().addTween(rlvCmd.getObjectID(), RLV_MODIFIER_OVERLAY_ALPHA, RlvBehaviourModifierAnimationType::Lerp, overlayAlpha, tweenDuration);
+	{
+		pOverlayEffect->tweenAlpha(overlayAlpha, tweenDuration);
+		pRlvObj->setModifierValue(ERlvLocalBhvrModifier::OverlayAlpha, overlayAlpha);
+	}
 
 	// Process the overlay tint tween (if there is one and it is a valid value)
 	LLVector3 overlayColor;
 	if (RlvCommandOptionHelper::parseOption(optionList[1], overlayColor))
-		RlvBehaviourModifierAnimator::instance().addTween(rlvCmd.getObjectID(), RLV_MODIFIER_OVERLAY_TINT, RlvBehaviourModifierAnimationType::Lerp, overlayColor, tweenDuration);
+	{
+		pOverlayEffect->tweenColor(LLColor3(overlayColor.mV), tweenDuration);
+		pRlvObj->setModifierValue(ERlvLocalBhvrModifier::OverlayTint, overlayColor);
+	}
 
 	return RLV_RET_SUCCESS;
 }
@@ -3775,77 +3769,5 @@ ERlvCmdRet RlvHandler::onGetPath(const RlvCommand& rlvCmd, std::string& strReply
 // ============================================================================
 // Command specific helper functions - @setoverlay
 //
-
-void RlvHandler::clearOverlayImage()
-{
-	if (m_pOverlayImage)
-	{
-		m_pOverlayImage->setBoostLevel(m_nOverlayOrigBoost);
-		m_pOverlayImage = nullptr;
-	}
-}
-
-bool RlvHandler::hitTestOverlay(const LLCoordGL& ptMouse) const
-{
-	if (!m_pOverlayImage)
-		return false;
-
-	RlvBehaviourModifier* pTouchModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TOUCH);
-	return (pTouchModifier) && (pTouchModifier->hasValue()) && (pTouchModifier->getValue<bool>()) &&
-	       (m_pOverlayImage->getMask(LLVector2((float)ptMouse.mX / gViewerWindow->getWorldViewWidthScaled(), (float)ptMouse.mY / gViewerWindow->getWorldViewHeightScaled())));
-}
-
-void RlvHandler::renderOverlay()
-{
-	if ( (hasBehaviour(RLV_BHVR_SETOVERLAY)) && (m_pOverlayImage) )
-	{
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			gUIProgram.bind();
-		}
-
-		int nWidth = gViewerWindow->getWorldViewWidthScaled();
-		int nHeight = gViewerWindow->getWorldViewHeightScaled();
-
-		m_pOverlayImage->addTextureStats(nWidth * nHeight);
-		m_pOverlayImage->setKnownDrawSize(nWidth, nHeight);
-
-		gGL.pushMatrix();
-		LLGLSUIDefault glsUI;
-		gViewerWindow->setup2DRender();
-
-		const LLVector2& displayScale = gViewerWindow->getDisplayScale();
-		gGL.scalef(displayScale.mV[VX], displayScale.mV[VY], 1.f);
-
-		gGL.getTexUnit(0)->bind(m_pOverlayImage);
-		const LLVector3 overlayTint = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_TINT)->getValue<LLVector3>();
-		gGL.color4f(overlayTint.mV[0], overlayTint.mV[1], overlayTint.mV[2], llclamp(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_OVERLAY_ALPHA)->getValue<float>(), 0.0f, 1.0f));
-
-		gl_rect_2d_simple_tex(nWidth, nHeight);
-
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-
-		gGL.popMatrix();
-		gGL.flush();
-		gViewerWindow->setup3DRender();
-
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			gUIProgram.unbind();
-		}
-	}
-}
-
-void RlvHandler::setOverlayImage(const LLUUID& idTexture)
-{
-	if ( (m_pOverlayImage) && (m_pOverlayImage->getID() == idTexture) )
-		return;
-
-	clearOverlayImage();
-	m_pOverlayImage = LLViewerTextureManager::getFetchedTexture(idTexture, FTT_DEFAULT, MIPMAP_YES, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-	m_nOverlayOrigBoost = m_pOverlayImage->getBoostLevel();
-	m_pOverlayImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
-	m_pOverlayImage->forceToSaveRawImage(0);
-}
 
 // ============================================================================

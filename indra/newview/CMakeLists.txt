@@ -731,14 +731,14 @@ set(viewer_SOURCE_FILES
     noise.cpp
     pipeline.cpp
     rlvactions.cpp
-    rlvhandler.cpp
-    rlvhelper.cpp
     rlvcommon.cpp
-    rlvlocks.cpp
-    rlvinventory.cpp
+    rlveffects.cpp
     rlvextensions.cpp
     rlvfloaters.cpp
-    rlvmodifiers.cpp
+    rlvhandler.cpp
+    rlvhelper.cpp
+    rlvinventory.cpp
+    rlvlocks.cpp
     rlvui.cpp
     )
 
@@ -1366,14 +1366,15 @@ set(viewer_HEADER_FILES
     noise.h
     pipeline.h
     rlvactions.h
-    rlvdefines.h
-    rlvhandler.h
-    rlvhelper.h
     rlvcommon.h
-    rlvlocks.h
-    rlvinventory.h
+    rlvdefines.h
+    rlveffects.h
     rlvextensions.h
     rlvfloaters.h
+    rlvhandler.h
+    rlvhelper.h
+    rlvinventory.h
+    rlvlocks.h
     rlvmodifiers.h
     rlvui.h
     roles_constants.h
