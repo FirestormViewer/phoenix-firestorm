@@ -72,23 +72,27 @@ public:
 
 public:
 	void run() override;
+	static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onMinAlphaChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onMaxAlphaChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onMinDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onMaxDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onMinValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onMaxValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:
+	void renderPass(LLGLSLShader* pShader) const;
 	void setShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* pRenderTarget);
 
 	/*
 	 * Member variables
 	 */
 protected:
-	LLColor3 m_Color;
-	float    m_nMinAlpha;
-	float    m_nMaxAlpha;
-	float    m_nMinDistance;
-	float    m_nMaxDistance;
+	enum class ESphereMode { Blend = 0, SoftBlur, Blur, Count };
+	ESphereMode m_nMode;
+	LLColor3    m_Color;
+	float       m_nMinValue;
+	float       m_nMaxValue;
+	float       m_nMinDistance;
+	float       m_nMaxDistance;
 };
 
 // ====================================================================================

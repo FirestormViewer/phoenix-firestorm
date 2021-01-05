@@ -226,9 +226,10 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 
 	// Sphere
 	RlvBehaviourInfo* pSetSphereBhvr = new RlvBehaviourProcessor<RLV_BHVR_SETSPHERE>("setsphere", RlvBehaviourInfo::BHVR_EXPERIMENTAL);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMode, typeid(int), "mode", &RlvSphereEffect::onModeChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereColor, typeid(LLVector3), "color", &RlvSphereEffect::onColorChanged);
-	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinAlpha, typeid(float), "minalpha", &RlvSphereEffect::onMinAlphaChanged);
-	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxAlpha, typeid(float), "maxalpha", &RlvSphereEffect::onMaxAlphaChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinAlpha, typeid(float), "minalpha", &RlvSphereEffect::onMinValueChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxAlpha, typeid(float), "maxalpha", &RlvSphereEffect::onMaxValueChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinDist, typeid(float), "mindist", &RlvSphereEffect::onMinDistChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxDist, typeid(float), "maxdist", &RlvSphereEffect::onMaxDistChanged);
 	addEntry(pSetSphereBhvr);

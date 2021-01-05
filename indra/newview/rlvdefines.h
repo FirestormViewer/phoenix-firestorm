@@ -281,6 +281,7 @@ enum class ERlvLocalBhvrModifier
 	OverlayTexture,						// Specifies the UUID of the overlay texture
 	OverlayTint,						// The tint that's applied to the overlay texture
 	OverlayTouch,						// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
+	SphereMode,
 	SphereColor,						// Colour to mix with the actual pixel colour (alpha depends non-linerally )
 	SphereMaxAlpha,						// Alpha of the mix colour at maximum distance
 	SphereMaxDist,						// Distance at which the blending stops         ; or colour = mix(colour, sphere_colour, max_alpha)
