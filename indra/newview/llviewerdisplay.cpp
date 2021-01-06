@@ -77,7 +77,8 @@
 #include "llpostprocess.h"
 #include "llscenemonitor.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
+#include "llvisualeffect.h"
+#include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -1046,6 +1047,15 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		{
 			gPipeline.renderDeferredLighting(&gPipeline.mScreen);
 		}
+// [RLVa:KB] - @setsphere
+		else if (LLRenderTarget::sUseFBO && LLPipeline::sUseDepthTexture)
+		{
+			if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
+			{
+				LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere);
+			}
+		}
+// [/RLVa:KB]
 
 		LLPipeline::sUnderWaterRender = FALSE;
 
@@ -1323,9 +1333,9 @@ void render_ui(F32 zoom_factor, int subfield)
 		LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
 		render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
-		if (gRlvHandler.isEnabled())
+		if (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY))
 		{
-			gRlvHandler.renderOverlay();
+			LLVfxManager::instance().runEffect(EVisualEffect::RlvOverlay);
 		}
 // [/RLVa:KB]
 		render_hud_attachments();

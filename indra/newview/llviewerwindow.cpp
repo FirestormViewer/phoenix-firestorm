@@ -214,6 +214,8 @@
 #include "llcleanup.h"
 
 // [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
+#include "rlvactions.h"
+#include "rlveffects.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -5692,11 +5694,12 @@ void LLPickInfo::fetchResults()
 	mPickPt = mMousePt;
 
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
-	if ( (gRlvHandler.isEnabled()) && (hit_object) && (!hit_object->isHUDAttachment()) )
+	if ( (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY)) && (hit_object) && (!hit_object->isHUDAttachment()) )
 	{
-		if (gRlvHandler.hitTestOverlay(mMousePt))
+		if (auto* pOverlayEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(EVisualEffect::RlvOverlay))
 		{
-			hit_object = nullptr;
+			if (pOverlayEffect->hitTest(mMousePt))
+				hit_object = nullptr;
 		}
 	}
 // [/RLVa:KB]
