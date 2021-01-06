@@ -40,7 +40,6 @@ uniform sampler2DRect normalMap;
 // <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
 // uniform sampler2DRect lightMap;
 uniform sampler2DRect depthMap;
-// </FS:Beq>
 uniform samplerCube environmentMap;
 uniform sampler2D     lightFunc;
 
