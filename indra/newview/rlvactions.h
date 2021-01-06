@@ -24,10 +24,8 @@
 // Forward declarations
 //
 
-class LLGLSLShader;
 class LLInventoryCategory;
 class LLInventoryItem;
-class LLRenderTarget;
 
 // ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible

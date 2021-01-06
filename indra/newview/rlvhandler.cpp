@@ -51,8 +51,10 @@
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
 #include "llviewercamera.h"				// @setcam and related
+#include "llviewershadermgr.h"			// @setsphere
 #include "llworldmapmessage.h"			// @tpto
 #include "llviewertexturelist.h"		// @setcam_texture
+#include "pipeline.h"					// @setsphere
 
 // RLVa includes
 #include "rlvactions.h"
@@ -2066,6 +2068,18 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
 	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
 	{
+		// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
+		if ( (!LLPipeline::RenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
+		{
+			LLRenderTarget::sUseFBO = true;
+			LLPipeline::sUseDepthTexture = true;
+
+			gPipeline.releaseGLBuffers();
+			gPipeline.createGLBuffers();
+			gPipeline.resetVertexBuffers();
+			LLViewerShaderMgr::instance()->setShaders();
+		}
+
 		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
 			LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
 		else

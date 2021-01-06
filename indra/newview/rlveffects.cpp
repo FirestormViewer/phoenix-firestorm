@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llagent.h"
+#include "llfasttimer.h"
 #include "llglslshader.h"
 #include "llrender2dutils.h"
 #include "llviewershadermgr.h"
@@ -383,27 +384,30 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader) const
 	gPipeline.mScreen.flush();
 }
 
+LLTrace::BlockTimerStatHandle FTM_RLV_EFFECT_SPHERE("Post-process (RLVa sphere)");
+
 void RlvSphereEffect::run()
 {
+	LL_RECORD_BLOCK_TIME(FTM_RLV_EFFECT_SPHERE);
 	LLGLDepthTest depth(GL_FALSE, GL_FALSE);
 
-	gDeferredRlvProgram.bind();
-	setShaderUniforms(&gDeferredRlvProgram, &gPipeline.mScreen);
+	gRlvSphereProgram.bind();
+	setShaderUniforms(&gRlvSphereProgram, &gPipeline.mScreen);
 
 	switch (m_eMode)
 	{
 		case ESphereMode::Blend:
-			renderPass(&gDeferredRlvProgram);
+			renderPass(&gRlvSphereProgram);
 			break;
 		case ESphereMode::Blur:
-			gDeferredRlvProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
-			renderPass(&gDeferredRlvProgram);
-			gDeferredRlvProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
-			renderPass(&gDeferredRlvProgram);
+			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
+			renderPass(&gRlvSphereProgram);
+			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
+			renderPass(&gRlvSphereProgram);
 			break;
 	}
 
-	gDeferredRlvProgram.unbind();
+	gRlvSphereProgram.unbind();
 }
 
 // ====================================================================================

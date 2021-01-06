@@ -244,7 +244,7 @@ LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 LLGLSLShader			gNormalMapGenProgram;
 // [RLVa:KB] - @setsphere
-LLGLSLShader			gDeferredRlvProgram;
+LLGLSLShader			gRlvSphereProgram;
 // [/RLVa:KB]
 
 // Deferred materials shaders
@@ -352,7 +352,7 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
 	mShaderList.push_back(&gDeferredWLSkyProgram);
 	mShaderList.push_back(&gDeferredWLCloudProgram);
 // [RLVa:KB] - @setsphere
-	mShaderList.push_back(&gDeferredRlvProgram);
+	mShaderList.push_back(&gRlvSphereProgram);
 // [/RLVa:KB]
 }
 
@@ -1181,9 +1181,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightShinyProgram.unload();
 		gDeferredSkinnedFullbrightShinyProgram.unload();
 		gDeferredSkinnedFullbrightProgram.unload();
-// [RLVa:KB] - @setsphere
-		gDeferredRlvProgram.unload();
-// [/RLVa:KB]
 
         gDeferredHighlightProgram.unload();
         gDeferredHighlightNormalProgram.unload();
@@ -2095,18 +2092,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gNormalMapGenProgram.mShaderGroup = LLGLSLShader::SG_SKY;
 		success = gNormalMapGenProgram.createShader(NULL, NULL);
 	}
-
-// [RLVa:KB] - @setsphere
-	if (success)
-	{
-		gDeferredRlvProgram.mName = "Deferred (RLVa) Post Processing Shader";
-		gDeferredRlvProgram.mShaderFiles.clear();
-		gDeferredRlvProgram.mShaderFiles.push_back(make_pair("deferred/rlvV.glsl", GL_VERTEX_SHADER_ARB));
-		gDeferredRlvProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredRlvProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
-		success = gDeferredRlvProgram.createShader(NULL, NULL);
-	}
-// [/RLV:KB]
 
 	return success;
 }
@@ -3417,6 +3402,9 @@ BOOL LLViewerShaderMgr::loadShadersWindLight()
 	{
 		gWLSkyProgram.unload();
 		gWLCloudProgram.unload();
+// [RLVa:KB] - @setsphere
+		gRlvSphereProgram.unload();
+// [/RLVa:KB]
 		return TRUE;
 	}
 
@@ -3443,6 +3431,18 @@ BOOL LLViewerShaderMgr::loadShadersWindLight()
 		gWLCloudProgram.mShaderGroup = LLGLSLShader::SG_SKY;
 		success = gWLCloudProgram.createShader(NULL, NULL);
 	}
+
+// [RLVa:KB] - @setsphere
+	if (success)
+	{
+		gRlvSphereProgram.mName = "RLVa Sphere Post Processing Shader";
+		gRlvSphereProgram.mShaderFiles.clear();
+		gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvV.glsl", GL_VERTEX_SHADER_ARB));
+		gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gRlvSphereProgram.mShaderLevel = mVertexShaderLevel[SHADER_WINDLIGHT];
+		success = gRlvSphereProgram.createShader(NULL, NULL);
+	}
+// [/RLV:KB]
 
 	return success;
 }

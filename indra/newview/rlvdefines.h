@@ -271,6 +271,7 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SETCAM_TEXTURE,		// Specifies the UUID of the texture used to texture the world view
 	RLV_MODIFIER_SITTPDIST,
 	RLV_MODIFIER_TPLOCALDIST,
+
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN
 };
