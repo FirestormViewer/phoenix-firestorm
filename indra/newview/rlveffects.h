@@ -75,10 +75,11 @@ public:
 	static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onMinDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onMaxDistChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onMinValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onMaxValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onDistMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onDistMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onDistExtendChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:
 	void renderPass(LLGLSLShader* pShader) const;
 	void setShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* pRenderTarget);
@@ -88,14 +89,16 @@ protected:
 	 */
 protected:
 	enum class ESphereMode { Blend = 0, SoftBlur, Blur, Count };
-	ESphereMode   m_nMode;
+	ESphereMode   m_eMode;
 	enum class ESphereOrigin { Avatar = 0, Camera, Count };
-	ESphereOrigin m_nOrigin;
+	ESphereOrigin m_eOrigin;
 	LLColor3      m_Color;
-	float         m_nMinDistance;
-	float         m_nMaxDistance;
-	float         m_nMinValue;
-	float         m_nMaxValue;
+	float         m_nDistanceMin;
+	float         m_nDistanceMax;
+	enum class ESphereDistExtend { Max = 0x01, Min = 0x02, Both = 0x03 };
+	ESphereDistExtend m_eDistExtend;
+	float         m_nValueMin;
+	float         m_nValueMax;
 };
 
 // ====================================================================================

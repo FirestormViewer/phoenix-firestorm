@@ -32,8 +32,18 @@ uniform vec2 screen_res;
 uniform int  rlvEffectMode;     // ESphereMode
 uniform vec4 rlvEffectParam1;   // Sphere origin (in local coordinates)
 uniform vec4 rlvEffectParam2;   // Min/max dist + min/max value
-uniform vec4 rlvEffectParam3;   // Sphere color (not used for blur)
-uniform vec2 rlvEffectParam4;   // Blur direction (not used for blend)
+uniform bvec2 rlvEffectParam3;  // Min/max dist extend
+uniform vec4 rlvEffectParam4;   // Sphere color (not used for blur)
+uniform vec2 rlvEffectParam5;   // Blur direction (not used for blend)
+
+#define SPHERE_ORIGIN		rlvEffectParam1.xyz
+#define SPHERE_DISTMIN		rlvEffectParam2.y
+#define SPHERE_DISTMAX		rlvEffectParam2.w
+#define SPHERE_DISTEXTEND	rlvEffectParam3
+#define SPHERE_VALUEMIN		rlvEffectParam2.x
+#define SPHERE_VALUEMAX		rlvEffectParam2.z
+#define SPHERE_COLOUR		rlvEffectParam4.rgb
+#define BLUR_DIRECTION		rlvEffectParam5.xy
 
 vec4 getPosition_d(vec2 pos_screen, float depth)
 {
@@ -70,29 +80,24 @@ vec3 blur13(sampler2DRect image, vec2 uv, vec2 direction)
 
 void main()
 {
-	vec3 avPosLocal = rlvEffectParam1.xyz;
 	vec2 fragTC = vary_fragcoord.st;
 	float fragDepth = texture2DRect(depthMap, fragTC).x;
 	vec3 fragPosLocal = getPosition_d(fragTC, fragDepth).xyz;
 	vec3 fragColor = texture2DRect(diffuseRect, fragTC).rgb;
-	float distance = length(fragPosLocal.xyz - avPosLocal);
-
-	vec2 sphereMinMaxDist = rlvEffectParam2.yw;
-	vec2 sphereMinMaxValue = rlvEffectParam2.xz;
-	vec3 sphereColour = rlvEffectParam3.rgb;
+	float distance = length(fragPosLocal.xyz - SPHERE_ORIGIN);
 
 	// Linear non-branching interpolation of the strength of the sphere effect (replaces if/elseif/else for x < min, min <= x <= max and x > max)
-	float effectStrength = mix(sphereMinMaxValue.x, 0, distance < sphereMinMaxDist.x) +
-	                       mix(0, sphereMinMaxValue.y - sphereMinMaxValue.x, clamp((distance - sphereMinMaxDist.x) / (sphereMinMaxDist.y - sphereMinMaxDist.x), 0.0, 1.0));
+	float effectStrength = SPHERE_VALUEMIN + mix(0, SPHERE_VALUEMAX - SPHERE_VALUEMIN, (distance - SPHERE_DISTMIN) / (SPHERE_DISTMAX - SPHERE_DISTMIN));
+	effectStrength = mix(effectStrength, mix(0, SPHERE_VALUEMIN, SPHERE_DISTEXTEND.x), distance < SPHERE_DISTMIN);
+	effectStrength = mix(effectStrength, mix(0, SPHERE_VALUEMAX, SPHERE_DISTEXTEND.y), distance > SPHERE_DISTMAX);
 
-	// *TODO: It should be fine to branch on a uniform?
 	switch (rlvEffectMode)
 	{
 		case 0:		// Blend
-			fragColor = mix(fragColor, sphereColour, effectStrength);
+			fragColor = mix(fragColor, SPHERE_COLOUR, effectStrength);
 			break;
 		case 1:		// Blur
-			fragColor = blur13(diffuseRect, fragTC, effectStrength * rlvEffectParam4.xy);
+			fragColor = blur13(diffuseRect, fragTC, effectStrength * BLUR_DIRECTION);
 			break;
 	}
 

@@ -1258,6 +1258,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("rlvEffectParam2");
 	mReservedUniforms.push_back("rlvEffectParam3");
 	mReservedUniforms.push_back("rlvEffectParam4");
+	mReservedUniforms.push_back("rlvEffectParam5");
 // [/RLV:KB]
 
 	mReservedUniforms.push_back("gWindDir");

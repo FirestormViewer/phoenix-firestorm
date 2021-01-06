@@ -286,10 +286,11 @@ enum class ERlvLocalBhvrModifier
 	SphereMode,                         // The type of effect that will apply to any pixel that intersects with the sphere (e.g. blend, blur, ...)
 	SphereOrigin,                       // The origin of the sphere can either be the avatar or the camera position
 	SphereColor,                        // [Blend only] Colour to mix with the actual pixel colour
-	SphereMinDist,                      // Distance at which the effect starts and has weight minValue; e.g. for blend this would be colour = mix(colour, sphere_colour, min_alpha)
-	SphereMaxDist,                      // Distance at which the effect starts and has weight maxValue; e.g. for blend this would be colour = mix(colour, sphere_colour, max_alpha)
-	SphereMinValue,                     // Value of the effect at minimum distance
-	SphereMaxValue,                     // Value of the effect at maximum distance
+	SphereDistMin,                      // Distance at which the effect starts and has weight minValue; e.g. for blend this would be colour = mix(colour, sphere_colour, min_alpha)
+	SphereDistMax,                      // Distance at which the effect starts and has weight maxValue; e.g. for blend this would be colour = mix(colour, sphere_colour, max_alpha)
+	SphereDistExtend,                   // Specifies the value beyond min dist or max dist (by default the sphere extends beyond max distance at max vlaue)
+	SphereValueMin,                     // Value of the effect at minimum distance
+	SphereValueMax,                     // Value of the effect at maximum distance
 
 	Unknown,
 };

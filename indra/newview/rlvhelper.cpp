@@ -229,10 +229,11 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMode, typeid(int), "mode", &RlvSphereEffect::onModeChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereOrigin, typeid(int), "origin", &RlvSphereEffect::onOriginChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereColor, typeid(LLVector3), "color", &RlvSphereEffect::onColorChanged);
-	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinDist, typeid(float), "mindist", &RlvSphereEffect::onMinDistChanged);
-	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxDist, typeid(float), "maxdist", &RlvSphereEffect::onMaxDistChanged);
-	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMinValue, typeid(float), "minvalue", &RlvSphereEffect::onMinValueChanged);
-	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMaxValue, typeid(float), "maxvalue", &RlvSphereEffect::onMaxValueChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistMin, typeid(float), "distmin", &RlvSphereEffect::onDistMinChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistMax, typeid(float), "distmax", &RlvSphereEffect::onDistMaxChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistExtend, typeid(int), "distextend", &RlvSphereEffect::onDistExtendChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereValueMin, typeid(float), "valuemin", &RlvSphereEffect::onValueMinChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereValueMax, typeid(float), "valuemax", &RlvSphereEffect::onValueMaxChanged);
 	addEntry(pSetSphereBhvr);
 
 	//
