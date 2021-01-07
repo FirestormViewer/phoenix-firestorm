@@ -5218,4 +5218,10 @@ URL: [AUDIOURL]
 
 Обратите внимание, что нельзя выбрать «Общая среда» и «Дневной цикл»!
 	</notification>
+	<notification name="CantCreateInventoryName">
+		Невозможно создать элемент инвентаря: [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		Массовый импорт Окружающей среды завершен.
+	</notification>
 </notifications>

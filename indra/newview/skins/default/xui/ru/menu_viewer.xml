@@ -128,6 +128,11 @@
 			<menu_item_call label="Моя Окружающая среда..." name="my_environs"/>
 			<menu_item_call label="Личное Освещение..." name="adjustment_tool"/>
 			<menu_item_check label="Пауза Облаков" name="pause_clouds"/>
+			<menu label="Массовый импорт" name="WL Bulk Import">
+				<menu_item_call label="Дни..." name="WL Bulk Import Days"/>
+				<menu_item_call label="Небеса..." name="WL Bulk Import Skies"/>
+				<menu_item_call label="Вода..." name="WL Bulk Import Water"/>
+			</menu>
 		</menu>
 
 		<!-- <menu label="Положение солнца" name="Environment Settings">
