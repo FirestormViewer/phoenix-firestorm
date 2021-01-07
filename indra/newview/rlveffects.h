@@ -78,6 +78,8 @@ public:
 	static ERlvCmdRet onDistMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onDistMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onDistExtendChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onParamsChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+	static ERlvCmdRet onTweenDurationChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:
@@ -88,17 +90,18 @@ protected:
 	 * Member variables
 	 */
 protected:
-	enum class ESphereMode { Blend = 0, SoftBlur, Blur, Count };
+	enum class ESphereMode { Blend = 0, Blur, BlurVariable, ChromaticAberration, Pixelate, Count };
 	ESphereMode   m_eMode;
 	enum class ESphereOrigin { Avatar = 0, Camera, Count };
 	ESphereOrigin m_eOrigin;
-	LLColor3      m_Color;
-	float         m_nDistanceMin;
-	float         m_nDistanceMax;
+	LLTweenableValueLerp<LLVector4> m_Params;
+	LLTweenableValueLerp<float>     m_nDistanceMin;
+	LLTweenableValueLerp<float>     m_nDistanceMax;
 	enum class ESphereDistExtend { Max = 0x01, Min = 0x02, Both = 0x03 };
 	ESphereDistExtend m_eDistExtend;
-	float         m_nValueMin;
-	float         m_nValueMax;
+	LLTweenableValueLerp<float>     m_nValueMin;
+	LLTweenableValueLerp<float>     m_nValueMax;
+	float                           m_nTweenDuration;
 };
 
 // ====================================================================================

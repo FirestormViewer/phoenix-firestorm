@@ -232,6 +232,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistMin, typeid(float), "distmin", &RlvSphereEffect::onDistMinChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistMax, typeid(float), "distmax", &RlvSphereEffect::onDistMaxChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistExtend, typeid(int), "distextend", &RlvSphereEffect::onDistExtendChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereParams, typeid(LLVector4), "param", &RlvSphereEffect::onParamsChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereTween, typeid(float), "tween", &RlvSphereEffect::onTweenDurationChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereValueMin, typeid(float), "valuemin", &RlvSphereEffect::onValueMinChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereValueMax, typeid(float), "valuemax", &RlvSphereEffect::onValueMaxChanged);
 	addEntry(pSetSphereBhvr);
@@ -650,6 +652,15 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, co
 		{
 			LLVector3 vecOption;
 			if (3 == sscanf(optionValue.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2))
+			{
+				modValue = vecOption;
+				return true;
+			}
+		}
+		else if (modType == typeid(LLVector4))
+		{
+			LLVector4 vecOption;
+			if (4 == sscanf(optionValue.c_str(), "%f/%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2, vecOption.mV + 3))
 			{
 				modValue = vecOption;
 				return true;

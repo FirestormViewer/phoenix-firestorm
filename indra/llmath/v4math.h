@@ -434,6 +434,19 @@ inline LLVector4 operator-(const LLVector4 &a)
 	return LLVector4( -a.mV[VX], -a.mV[VY], -a.mV[VZ] );
 }
 
+// [RLVa:KB] - RlvBehaviourModifierCompMin/Max
+inline bool operator<(const LLVector4& lhs, const LLVector4& rhs)
+{
+	return (lhs.mV[0] < rhs.mV[0]
+		|| (lhs.mV[0] == rhs.mV[0]
+			&& (lhs.mV[1] < rhs.mV[1]
+				|| ((lhs.mV[1] == rhs.mV[1])
+					&& lhs.mV[2] < rhs.mV[2]
+						|| ((lhs.mV[2] == rhs.mV[2])
+							&& lhs.mV[3] < rhs.mV[3])))));
+}
+// [/RLVa:KB]
+
 inline F32	dist_vec(const LLVector4 &a, const LLVector4 &b)
 {
 	LLVector4 vec = a - b;
