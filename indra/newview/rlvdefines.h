@@ -157,6 +157,8 @@ enum ERlvBehaviour {
 	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_VIEWTRANSPARENT,
+	RLV_BHVR_VIEWWIREFRAME,
 	RLV_BHVR_PAY,					// "pay"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
