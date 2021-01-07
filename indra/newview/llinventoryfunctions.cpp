@@ -685,7 +685,10 @@ bool get_is_item_editable(const LLUUID& inv_item_id)
 			case LLAssetType::AT_CLOTHING:
 				return gAgentWearables.isWearableModifiable(inv_item_id);
 			case LLAssetType::AT_OBJECT:
-				return true;
+// [RLVa:KB] - @touch*
+				return (!RlvActions::isRlvEnabled()) || ((isAgentAvatarValid()) && (RlvActions::canEdit(gAgentAvatarp->getWornAttachment(inv_item_id))));
+// [/RLVa:KB]
+//				return true;
 			default:
                 return false;;
 		}

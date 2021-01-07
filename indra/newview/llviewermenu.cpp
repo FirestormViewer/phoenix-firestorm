@@ -2911,7 +2911,10 @@ bool enable_attachment_touch(const LLUUID& inv_item_id)
 	if (isAgentAvatarValid())
 	{
 		const LLViewerObject* attach_obj = gAgentAvatarp->getWornAttachment(gInventory.getLinkedItemID(inv_item_id));
-		return (attach_obj) && (attach_obj->flagHandleTouch());
+// [RLVa:KB] - @touch*
+		return (attach_obj) && (attach_obj->flagHandleTouch()) && (!RlvActions::isRlvEnabled() || RlvActions::canTouch(attach_obj));
+// [/RLVa:KB]
+//		return (attach_obj) && (attach_obj->flagHandleTouch());
 	}
 	return false;
 }

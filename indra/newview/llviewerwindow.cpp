@@ -214,6 +214,7 @@
 #include "llcleanup.h"
 
 // [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -458,6 +459,15 @@ public:
 			camera_view_text = llformat("CameraAtAxis    %f %f %f",
 										(F32)(tvector.mdV[VX]), (F32)(tvector.mdV[VY]), (F32)(tvector.mdV[VZ]));
 		
+// [RLVa:KB] - @showloc
+			if (!RlvActions::canShowLocation())
+			{
+				agent_center_text = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
+				agent_root_center_text = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
+				camera_center_text = RlvStrings::getString(RlvStringKeys::Hidden::Generic);
+			}
+// [/RLVa:KB]
+
 			addText(xpos, ypos, agent_center_text);  ypos += y_inc;
 			addText(xpos, ypos, agent_root_center_text);  ypos += y_inc;
 			addText(xpos, ypos, agent_view_text);  ypos += y_inc;
