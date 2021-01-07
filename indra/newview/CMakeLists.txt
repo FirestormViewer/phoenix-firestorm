@@ -682,6 +682,7 @@ set(viewer_SOURCE_FILES
     llviewerwearable.cpp
     llviewerwindow.cpp
     llviewerwindowlistener.cpp
+	llvisualeffect.cpp
     llvlcomposition.cpp
     llvlmanager.cpp
     llvoavatar.cpp
@@ -1302,6 +1303,7 @@ set(viewer_HEADER_FILES
     llviewerwearable.h
     llviewerwindow.h
     llviewerwindowlistener.h
+	llvisualeffect.h
     llvlcomposition.h
     llvlmanager.h
     llvoavatar.h
