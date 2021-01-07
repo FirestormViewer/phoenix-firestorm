@@ -36,6 +36,7 @@
 #include "llsingleton.h"
 #include "llsyswellwindow.h"
 #include "llfloaternotificationstabbed.h"
+#include "llviewermenu.h"
 // [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
 #include "llchannelmanager.h"
 // [/SL:KB]

@@ -57,7 +57,6 @@
 #include "llinventorymodel.h"
 #include "llmultigesture.h"
 #include "llui.h"
-#include "llviewermenu.h"
 #include "lluictrlfactory.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
 #include "rlvactions.h"
