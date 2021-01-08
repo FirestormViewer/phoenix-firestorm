@@ -300,6 +300,20 @@ public:
 	 */
 	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
+	// ===============
+	// World (General)
+	// ===============
+public:
+	/*
+	 * Returns true if the user can highlight transparent faces
+	 */
+	static bool canHighlightTransparent();
+
+	/*
+	 * Returns true if the user can switch to wireframe rendering
+	 */
+	static bool canViewWireframe();
+
 	// ================
 	// Helper functions
 	// ================

@@ -2592,6 +2592,26 @@ void RlvBehaviourShowSelfToggleHandler::onCommandToggle(ERlvBehaviour eBvhr, boo
 		gAgentAvatarp->updateAttachmentVisibility(gAgentCamera.getCameraMode());
 }
 
+// Handles: @viewtransparent toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_VIEWTRANSPARENT>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		LLDrawPoolAlpha::sShowDebugAlpha = false;
+	}
+}
+
+// Handles: @viewwireframe toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_VIEWWIREFRAME>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		set_use_wireframe(false);
+	}
+}
+
 // ============================================================================
 // Command handlers (RLV_TYPE_FORCE)
 //
