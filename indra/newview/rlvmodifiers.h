@@ -74,56 +74,6 @@ struct RlvBehaviourModifierCompMax : public RlvBehaviourModifierComp
 };
 
 // ====================================================================================
-// RlvBehaviourModifierAnimator - A class to animate behaviour modifiers
-//
-
-enum class RlvBehaviourModifierAnimationType { Lerp };
-
-struct RlvBehaviourModifierTween
-{
-	LLUUID idObject;
-	ERlvBehaviourModifier eBhvrMod;
-	RlvBehaviourModifierAnimationType eAnimType;
-	double nStartTime;
-	float nDuration;
-	RlvBehaviourModifierValue startValue;
-	RlvBehaviourModifierValue endValue;
-};
-
-class RlvBehaviourModifierAnimator : public LLSingleton<RlvBehaviourModifierAnimator>
-{
-	LLSINGLETON_EMPTY_CTOR(RlvBehaviourModifierAnimator);
-public:
-	~RlvBehaviourModifierAnimator() override;
-
-	/*
-	 * Member functions
-	 */
-public:
-	void addTween(const LLUUID& idObject, ERlvBehaviourModifier eBhvrMod, RlvBehaviourModifierAnimationType eAnimType, const RlvBehaviourModifierValue& endValue, float nDuration);
-	void clearTweens(const LLUUID& idObject) { clearTweens(idObject, RLV_MODIFIER_UNKNOWN); }
-	void clearTweens(const LLUUID& idObject, ERlvBehaviourModifier eBhvrMod);
-
-	/*
-	 * Animation timer
-	 */
-protected:
-	class AnimationTimer : public LLEventTimer, public LLHandleProvider<AnimationTimer>
-	{
-	public:
-		AnimationTimer();
-		BOOL tick() override;
-	};
-
-	/*
-	 * Member variables
-	 */
-protected:
-	LLHandle<AnimationTimer>              m_TimerHandle;
-	std::list< RlvBehaviourModifierTween> m_Tweens;
-};
-
-// ====================================================================================
 // RlvCachedBehaviourModifier - Provides an optimized way to access a modifier that's frequently accessed and rarely updated
 //
 
