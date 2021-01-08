@@ -26,19 +26,19 @@
 
 // Version of the specifcation we report
 const S32 RLV_VERSION_MAJOR = 3;
-const S32 RLV_VERSION_MINOR = 3;
+const S32 RLV_VERSION_MINOR = 4;
 const S32 RLV_VERSION_PATCH = 3;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Version of the specifcation we report (in compatibility mode)
 const S32 RLV_VERSION_MAJOR_COMPAT = 2;
-const S32 RLV_VERSION_MINOR_COMPAT = 8;
-const S32 RLV_VERSION_PATCH_COMPAT = 0;
+const S32 RLV_VERSION_MINOR_COMPAT = 9;
+const S32 RLV_VERSION_PATCH_COMPAT = 28;
 const S32 RLV_VERSION_BUILD_COMPAT = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
-const S32 RLVa_VERSION_MINOR = 3;
+const S32 RLVa_VERSION_MINOR = 4;
 const S32 RLVa_VERSION_PATCH = 0;
 const S32 RLVa_IMPL_ID = 13;
 
