@@ -142,10 +142,6 @@ void exportFlashVars()
 
 int main( int argc, char **argv ) 
 {
-#if LL_SOLARIS && defined(__sparc)
-	asm ("ta\t6");		 // NOTE:  Make sure memory alignment is enforced on SPARC
-#endif
-
 	gArgC = argc;
 	gArgV = argv;
 
@@ -424,8 +420,6 @@ void LLAppViewerLinux::initCrashReporting(bool reportFreeze)
 	cmd += gDirUtilp->getDirDelimiter();
 #if LL_LINUX
 	cmd += "linux-crash-logger.bin";
-#elif LL_SOLARIS
-	cmd += "solaris-crash-logger";
 #else
 # error Unknown platform
 #endif
@@ -482,9 +476,6 @@ bool LLAppViewerLinux::beingDebugged()
 {
 	static enum {unknown, no, yes} debugged = unknown;
 
-#if LL_SOLARIS
-	return debugged == no;	// BUG: fix this for Solaris
-#else
 	if (debugged == unknown)
 	{
 		pid_t ppid = getppid();
@@ -519,7 +510,6 @@ bool LLAppViewerLinux::beingDebugged()
 	}
 
 	return debugged == yes;
-#endif
 }
 
 void LLAppViewerLinux::initLoggingAndGetLastDuration()

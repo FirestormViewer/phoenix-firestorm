@@ -8987,7 +8987,7 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
-  <key>MemoryFailurePreventionEnabled</key>
+  <key>MemoryFailurePreventionEnabled</key> <!-- deprecated, only used for obsolete-in-2020 Intel 965 Express GPU -->
   <map>
     <key>Comment</key>
     <string>If set, the viewer will try to throttle memory allocations when memory is low (32bit systems only)</string>

@@ -73,10 +73,8 @@ void main()
     vec3 norm = getNorm(frag.xy);
 
     vec4 spec = texture2DRect(specularRect, frag.xy);
-    // spec.rgb  = srgb_to_linear(spec.rgb);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
     vec3 diff = texture2DRect(diffuseRect, frag.xy).rgb;
-    // diff.rgb  = srgb_to_linear(diff.rgb);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
-    
+
     float noise = texture2D(noiseMap, frag.xy / 128.0).b;
     vec3  npos  = normalize(-pos);
 

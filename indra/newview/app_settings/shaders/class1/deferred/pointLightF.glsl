@@ -92,7 +92,6 @@ void main()
     float noise = texture2D(noiseMap, frag.xy/128.0).b;
     
     vec3 col = texture2DRect(diffuseRect, frag.xy).rgb;
-    // col.rgb = srgb_to_linear(col.rgb); // <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
 
     float fa = falloff+1.0;
     float dist_atten = clamp(1.0-(dist-1.0*(1.0-fa))/fa, 0.0, 1.0);
@@ -129,7 +128,7 @@ void main()
     {
         discard;
     }
-//col.rgb = vec3(0);        
+
     frag_color.rgb = col;   
     frag_color.a = 0.0;
 }

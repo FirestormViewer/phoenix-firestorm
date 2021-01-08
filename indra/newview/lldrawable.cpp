@@ -919,33 +919,16 @@ void LLDrawable::updateDistance(LLCamera& camera, bool force_update)
             //if (volume->getAvatar() && volume->getAvatar()->isControlAvatar())
             if (volume->getAvatar())
             {
-			// <FS:Beq> BUG-227041 Fix bad camera position calc forces LOD0 display on non-rigged attachments
-			// TODO: (maybe) Fixing this proved another bug, Rigged mesh attachments have the distance calcualted here then ignored.
-			// TODO: A further fix might be to remove this entirely in favour of calcLOD, waiting on Vir/Oz to reply.
-            //     const LLVector3* av_box = volume->getAvatar()->getLastAnimExtents();
-            //     LLVector3d cam_pos = gAgent.getPosGlobalFromAgent(LLViewerCamera::getInstance()->getOrigin());
-            //     LLVector3 cam_region_pos = LLVector3(cam_pos - volume->getRegion()->getOriginGlobal());
-                
-            //     LLVector3 cam_to_box_offset = point_to_box_offset(cam_region_pos, av_box);
-            //     mDistanceWRTCamera = llmax(0.01f, ll_round(cam_to_box_offset.magVec(), 0.01f));
-            //     LL_DEBUGS("DynamicBox") << volume->getAvatar()->getFullname() 
-            //                             << " pos (ignored) " << pos
-            //                             << " cam pos " << cam_pos
-            //                             << " cam region pos " << cam_region_pos
-            //                             << " box " << av_box[0] << "," << av_box[1] 
-            //                             << " -> dist " << mDistanceWRTCamera
-            //                             << LL_ENDL;
                 const LLVector3* av_box = volume->getAvatar()->getLastAnimExtents();
-				LLVector3 cam_pos_from_agent = LLViewerCamera::getInstance()->getOrigin();
-				LLVector3 cam_to_box_offset = point_to_box_offset(cam_pos_from_agent, av_box);
+                LLVector3 cam_pos_from_agent = LLViewerCamera::getInstance()->getOrigin();
+                LLVector3 cam_to_box_offset = point_to_box_offset(cam_pos_from_agent, av_box);
                 mDistanceWRTCamera = llmax(0.01f, ll_round(cam_to_box_offset.magVec(), 0.01f));
                 LL_DEBUGS("DynamicBox") << volume->getAvatar()->getFullname() 
-                                       << " pos (ignored) " << pos
-                                       << " cam pos " << cam_pos_from_agent
-                                       << " box " << av_box[0] << "," << av_box[1] 
-                                       << " -> dist " << mDistanceWRTCamera
-                                       << LL_ENDL;
-			// </FS:Beq>
+                                        << " pos (ignored) " << pos
+                                        << " cam pos " << cam_pos_from_agent
+                                        << " box " << av_box[0] << "," << av_box[1] 
+                                        << " -> dist " << mDistanceWRTCamera
+                                        << LL_ENDL;
                 mVObjp->updateLOD();
                 return;
             }
@@ -955,9 +938,7 @@ void LLDrawable::updateDistance(LLCamera& camera, bool force_update)
 			pos = LLVector3(getPositionGroup().getF32ptr());
 		}
 
-
-		pos -= camera.getOrigin();
-		
+		pos -= camera.getOrigin();	
 		mDistanceWRTCamera = ll_round(pos.magVec(), 0.01f);
 		mVObjp->updateLOD();
 	}

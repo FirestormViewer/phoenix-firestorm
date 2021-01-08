@@ -89,6 +89,7 @@
 #include "llsdutil_math.h"
 #include "lllocationhistory.h"
 #include "llfasttimerview.h"
+#include "lltelemetry.h"
 #include "llvector4a.h"
 #include "llviewermenufile.h"
 #include "llvoicechannel.h"
@@ -283,9 +284,9 @@
 #include "fsradar.h"
 #include "fsassetblacklist.h"
 
-#if (LL_LINUX || LL_SOLARIS) && LL_GTK
+#if LL_LINUX && LL_GTK
 #include "glib.h"
-#endif // (LL_LINUX || LL_SOLARIS) && LL_GTK
+#endif // (LL_LINUX) && LL_GTK
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1516,55 +1517,13 @@ void LLAppViewer::initMaxHeapSize()
 
 	//F32 max_heap_size_gb = llmin(1.6f, (F32)gSavedSettings.getF32("MaxHeapSize")) ;
 	F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize") ;
-	BOOL enable_mem_failure_prevention = (BOOL)gSavedSettings.getBOOL("MemoryFailurePreventionEnabled") ;
 // <FS:Ansariel> Enable low memory checks on 32bit builds
 #if ADDRESS_SIZE == 64
 	max_heap_size_gb = F32Gigabytes(128);
-	enable_mem_failure_prevention = FALSE;
 #endif
 // </FS:Ansariel>
 
-	LLMemory::initMaxHeapSizeGB(max_heap_size_gb, enable_mem_failure_prevention) ;
-}
-
-void LLAppViewer::checkMemory()
-{
-	const static F32 MEMORY_CHECK_INTERVAL = 1.0f ; //second
-	//const static F32 MAX_QUIT_WAIT_TIME = 30.0f ; //seconds
-	//static F32 force_quit_timer = MAX_QUIT_WAIT_TIME + MEMORY_CHECK_INTERVAL ;
-
-	// <FS:Ansariel> Enable low memory checks on 32bit builds
-	//if(!gGLManager.mDebugGPU)
-	//{
-	//	return ;
-	//}
-#if ADDRESS_SIZE == 32
-	static LLCachedControl<bool> mem_failure_prevention(gSavedSettings, "MemoryFailurePreventionEnabled");
-	if (!mem_failure_prevention)
-#endif
-	{
-		return ;
-	}
-	// </FS:Ansariel>
-
-	if(MEMORY_CHECK_INTERVAL > mMemCheckTimer.getElapsedTimeF32())
-	{
-		return ;
-	}
-	mMemCheckTimer.reset() ;
-
-		//update the availability of memory
-		LLMemory::updateMemoryInfo() ;
-
-	bool is_low = LLMemory::isMemoryPoolLow() ;
-
-	LLPipeline::throttleNewMemoryAllocation(is_low) ;
-
-	if(is_low)
-	{
-		// <FS:Ansariel> Causes spammy log output
-		//LLMemory::logMemoryInfo() ;
-	}
+	LLMemory::initMaxHeapSizeGB(max_heap_size_gb);
 }
 
 static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
@@ -1651,9 +1610,6 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-
-	//check memory availability information
-	checkMemory() ;
 
 	{
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
@@ -1921,6 +1877,8 @@ bool LLAppViewer::doFrame()
 
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
+
+    LLPROFILE_UPDATE();
 
 	return ! LLApp::isRunning();
 }

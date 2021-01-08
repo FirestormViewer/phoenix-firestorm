@@ -40,7 +40,7 @@
 #include "llwindowsdl.h" // for some X/GTK utils to help with filepickers
 #endif // LL_SDL
 
-#if LL_LINUX || LL_SOLARIS
+#if LL_LINUX
 #include "llhttpconstants.h"    // file picker uses some of thes constants on Linux
 #endif
 
@@ -1026,7 +1026,7 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 }
 //END LL_DARWIN
 
-#elif LL_LINUX || LL_SOLARIS
+#elif LL_LINUX
 
 # if LL_GTK
 
@@ -1652,4 +1652,4 @@ BOOL LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
 	return FALSE;
 }
 
-#endif // LL_LINUX || LL_SOLARIS
+#endif // LL_LINUX
