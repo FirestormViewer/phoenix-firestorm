@@ -226,6 +226,20 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(pSetOverlayBhvr);
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 
+	// Sphere
+	RlvBehaviourInfo* pSetSphereBhvr = new RlvBehaviourProcessor<RLV_BHVR_SETSPHERE>("setsphere", RlvBehaviourInfo::BHVR_EXPERIMENTAL);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMode, typeid(int), "mode", &RlvSphereEffect::onModeChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereOrigin, typeid(int), "origin", &RlvSphereEffect::onOriginChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereColor, typeid(LLVector3), "color", &RlvSphereEffect::onColorChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistMin, typeid(float), "distmin", &RlvSphereEffect::onDistMinChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistMax, typeid(float), "distmax", &RlvSphereEffect::onDistMaxChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereDistExtend, typeid(int), "distextend", &RlvSphereEffect::onDistExtendChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereParams, typeid(LLVector4), "param", &RlvSphereEffect::onParamsChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereTween, typeid(float), "tween", &RlvSphereEffect::onTweenDurationChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereValueMin, typeid(float), "valuemin", &RlvSphereEffect::onValueMinChanged);
+	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereValueMax, typeid(float), "valuemax", &RlvSphereEffect::onValueMaxChanged);
+	addEntry(pSetSphereBhvr);
+
 	//
 	// Force-wear
 	//
@@ -394,6 +408,20 @@ void RlvBehaviourDictionary::clearModifiers(const LLUUID& idRlvObj)
 	}
 }
 
+const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(ERlvBehaviour eBhvr, ERlvParamType eParamType) const
+{
+	const RlvBehaviourInfo* pBhvrInfo = nullptr;
+	for (auto itBhvrLower = m_Bhvr2InfoMap.lower_bound(eBhvr), itBhvrUpper = m_Bhvr2InfoMap.upper_bound(eBhvr);
+		 std::find_if(itBhvrLower, itBhvrUpper, [eBhvr, eParamType](const rlv_bhvr2info_map_t::value_type& bhvrEntry) { return bhvrEntry.second->getParamTypeMask() == eParamType; }) != itBhvrUpper;
+		++itBhvrLower)
+	{
+		if (pBhvrInfo)
+			return nullptr;
+		pBhvrInfo = itBhvrLower->second;
+	}
+	return pBhvrInfo;
+}
+
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict, ERlvLocalBhvrModifier* peBhvrModifier) const
 {
 	size_t idxBhvrLastPart = strBhvr.find_last_of('_');
@@ -479,9 +507,9 @@ void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERl
 // virtual
 ERlvCmdRet RlvBehaviourInfo::processModifier(const RlvCommand& rlvCmd) const
 {
-	// The object should be holding at least one active behaviour
-	if (!gRlvHandler.hasBehaviour(rlvCmd.getObjectID()))
-		return RLV_RET_FAILED_NOBEHAVIOUR;
+	// The object should have the base behaviour set (or else there's nothing to modify)
+	if (!gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+		return RLV_RET_FAILED_UNHELDBEHAVIOUR;
 
 	auto itBhvrModifier = std::find_if(m_BhvrModifiers.begin(), m_BhvrModifiers.end(), [&rlvCmd](const modifier_lookup_t::value_type& entry) { return std::get<0>(entry.second) == rlvCmd.getBehaviourModifier(); });
 	if (m_BhvrModifiers.end() == itBhvrModifier)
@@ -640,6 +668,15 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, co
 		{
 			LLVector3 vecOption;
 			if (3 == sscanf(optionValue.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2))
+			{
+				modValue = vecOption;
+				return true;
+			}
+		}
+		else if (modType == typeid(LLVector4))
+		{
+			LLVector4 vecOption;
+			if (4 == sscanf(optionValue.c_str(), "%f/%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2, vecOption.mV + 3))
 			{
 				modValue = vecOption;
 				return true;
@@ -1153,6 +1190,17 @@ std::string RlvObject::getStatusString(const std::string& strFilter, const std::
 	}
 
 	return strStatus;
+}
+
+void RlvObject::clearModifiers(ERlvBehaviour eBhvr)
+{
+	if (const RlvBehaviourInfo* pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(eBhvr, RLV_TYPE_ADDREM))
+	{
+		for (const auto& modifierEntry : pBhvrInfo->getModifiers())
+		{
+			clearModifierValue(std::get<0>(modifierEntry.second));
+		}
+	}
 }
 
 void RlvObject::clearModifierValue(ERlvLocalBhvrModifier eBhvrModifier)

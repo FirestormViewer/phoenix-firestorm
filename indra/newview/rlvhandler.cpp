@@ -50,8 +50,10 @@
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
 #include "llviewercamera.h"				// @setcam and related
+#include "llviewershadermgr.h"			// @setsphere
 #include "llworldmapmessage.h"			// @tpto
 #include "llviewertexturelist.h"		// @setcam_texture
+#include "pipeline.h"					// @setsphere
 
 // RLVa includes
 #include "rlvactions.h"
@@ -1712,6 +1714,8 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 		{
 			if (rlvCmd.isStrict())
 				gRlvHandler.removeException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
+			if (RlvObject* pRlvObj = gRlvHandler.getObject(rlvCmd.getObjectID()))
+				pRlvObj->clearModifiers(eBhvr);
 			gRlvHandler.m_Behaviours[eBhvr]--;
 		}
 
@@ -2054,6 +2058,33 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehavio
 		LLVfxManager::instance().addEffect(new RlvOverlayEffect(gRlvHandler.getCurrentObject()));
 	else
 		LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
+}
+
+// Handles: @setsphere=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
+	{
+		// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
+		if ( (!LLPipeline::RenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
+		{
+			LLRenderTarget::sUseFBO = true;
+			LLPipeline::sUseDepthTexture = true;
+
+			gPipeline.releaseGLBuffers();
+			gPipeline.createGLBuffers();
+			gPipeline.resetVertexBuffers();
+			LLViewerShaderMgr::instance()->setShaders();
+		}
+
+		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+			LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
+		else
+			LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
+	}
+	return eRet;
 }
 
 // Handles: @sendchannel[:<channel>]=n|y and @sendchannel_except[:<channel>]=n|y

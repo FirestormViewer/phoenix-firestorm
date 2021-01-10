@@ -246,6 +246,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
 	// Effects
+	RLV_BHVR_SETSPHERE,				// Gives an object exclusive control of the 'vision spheres' effect
 	RLV_BHVR_SETOVERLAY,			// Gives an object exclusive control of the overlay
 	RLV_BHVR_SETOVERLAY_TWEEN,		// Animate between the current overlay settings and the supplied values
 
@@ -282,10 +283,22 @@ enum ERlvBehaviourModifier
 
 enum class ERlvLocalBhvrModifier
 {
+	// @setoverlay
 	OverlayAlpha,						// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
 	OverlayTexture,						// Specifies the UUID of the overlay texture
 	OverlayTint,						// The tint that's applied to the overlay texture
 	OverlayTouch,						// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
+	// @setsphere
+	SphereMode,                         // The type of effect that will apply to any pixel that intersects with the sphere (e.g. blend, blur, ...)
+	SphereOrigin,                       // The origin of the sphere can either be the avatar or the camera position
+	SphereColor,                        // [Blend only] Colour to mix with the actual pixel colour (stored as params)
+	SphereParams,                       // Effect parameters (dependent on mode - see RlvSphereEffect)
+	SphereDistMin,                      // Distance at which the effect starts and has weight minValue; e.g. for blend this would be colour = mix(colour, sphere_colour, min_alpha)
+	SphereDistMax,                      // Distance at which the effect starts and has weight maxValue; e.g. for blend this would be colour = mix(colour, sphere_colour, max_alpha)
+	SphereDistExtend,                   // Specifies the value beyond min dist or max dist (by default the sphere extends beyond max distance at max vlaue)
+	SphereValueMin,                     // Value of the effect at minimum distance
+	SphereValueMax,                     // Value of the effect at maximum distance
+	SphereTween,                        // Amount of seconds it takes to lerp from value A to value B
 
 	Unknown,
 };
@@ -327,6 +340,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
 	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
 	RLV_RET_FAILED_NOBEHAVIOUR,		// Command failed (force modifier on an object with no active restrictions)
+	RLV_RET_FAILED_UNHELDBEHAVIOUR,	// Command failed (local modifier on an object that doesn't hold the base behaviour)
 	RLV_RET_FAILED_BLOCKED,			// Command failed (object is blocked)
 	RLV_RET_FAILED_THROTTLED,       // Command failed (throttled)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)

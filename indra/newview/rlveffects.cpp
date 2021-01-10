@@ -16,10 +16,13 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llglslshader.h"
-#include "llrender2dutils.h"
+#include "llagent.h"
+#include "llfasttimer.h"
+#include "llviewershadermgr.h"
 #include "llviewertexturelist.h"
 #include "llviewerwindow.h"
+#include "llvoavatarself.h"
+#include "pipeline.h"
 
 #include "rlveffects.h"
 #include "rlvhandler.h"
@@ -37,22 +40,6 @@ RlvOverlayEffect::RlvOverlayEffect(const LLUUID& idRlvObj)
 	, m_fBlockTouch(false)
 	, m_Color(LLColor3(c_DefaultColor))
 {
-	if (RlvObject* pRlvObj = gRlvHandler.getObject(idRlvObj))
-	{
-		float nAlpha;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::OverlayAlpha, nAlpha))
-			m_nAlpha = nAlpha;
-
-		pRlvObj->getModifierValue<bool>(ERlvLocalBhvrModifier::OverlayTouch, m_fBlockTouch);
-
-		LLVector3 vecColor;
-		if (pRlvObj->getModifierValue<LLVector3>(ERlvLocalBhvrModifier::OverlayTint, vecColor))
-			m_Color = LLColor3(vecColor.mV);
-
-		LLUUID idTexture;
-		if ( (pRlvObj) && (pRlvObj->getModifierValue<LLUUID>(ERlvLocalBhvrModifier::OverlayTexture, idTexture)) )
-			setImage(idTexture);
-	}
 }
 
 RlvOverlayEffect::~RlvOverlayEffect()
@@ -170,6 +157,263 @@ void RlvOverlayEffect::run()
 			gUIProgram.unbind();
 		}
 	}
+}
+
+// ====================================================================================
+// RlvSphereEffect class
+//
+
+const int   c_SphereDefaultMode = 0;
+const int   c_SphereDefaultOrigin = 0;
+const float c_SphereDefaultColor[4] = { 0.0, 0.f, 0.f, 0.f };
+const float c_SphereDefaultDistance = 0.0f;
+const int   c_SphereDefaultDistanceExtend = 1;
+const float c_SphereDefaultAlpha = 1.0f;
+
+RlvSphereEffect::RlvSphereEffect(const LLUUID& idRlvObj)
+	: LLVisualEffect(idRlvObj, EVisualEffect::RlvSphere, EVisualEffectType::PostProcessShader)
+	, m_eMode((ESphereMode)c_SphereDefaultMode)
+	, m_eOrigin((ESphereOrigin)c_SphereDefaultOrigin)
+	, m_Params(LLVector4(c_SphereDefaultColor))
+	, m_nDistanceMin(c_SphereDefaultDistance), m_nDistanceMax(c_SphereDefaultDistance)
+	, m_eDistExtend((ESphereDistExtend)c_SphereDefaultDistanceExtend)
+	, m_nValueMin(c_SphereDefaultAlpha), m_nValueMax(c_SphereDefaultAlpha)
+	, m_nTweenDuration(0.f)
+{
+}
+
+RlvSphereEffect::~RlvSphereEffect()
+{
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		pEffect->m_eMode = (ESphereMode)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultMode);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		pEffect->m_eOrigin = (ESphereOrigin)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultOrigin);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		LLVector4 vecColor = (newValue) ? LLVector4(boost::get<LLVector3>(newValue.value()), 1.0f) : LLVector4(c_SphereDefaultColor);
+		if (!pEffect->m_nTweenDuration)
+			pEffect->m_Params = vecColor;
+		else
+			pEffect->m_Params.start(vecColor, pEffect->m_nTweenDuration);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onDistMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		float nDistanceMin = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultDistance;
+		if (!pEffect->m_nTweenDuration)
+			pEffect->m_nDistanceMin = nDistanceMin;
+		else
+			pEffect->m_nDistanceMin.start(nDistanceMin, pEffect->m_nTweenDuration);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onDistMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		float nDistanceMax = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultDistance;
+		if (!pEffect->m_nTweenDuration)
+			pEffect->m_nDistanceMax = nDistanceMax;
+		else
+			pEffect->m_nDistanceMax.start(nDistanceMax, pEffect->m_nTweenDuration);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onDistExtendChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		pEffect->m_eDistExtend = (ESphereDistExtend)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultDistanceExtend);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onParamsChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		LLVector4 params = LLVector4((newValue) ? boost::get<LLVector4>(newValue.value()).mV : c_SphereDefaultColor);
+		if (!pEffect->m_nTweenDuration)
+			pEffect->m_Params = params;
+		else
+			pEffect->m_Params.start(params, pEffect->m_nTweenDuration);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onTweenDurationChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		pEffect->m_nTweenDuration = (newValue) ? boost::get<float>(newValue.value()) : 0;
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		float nValueMin = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultAlpha;;
+		if (!pEffect->m_nTweenDuration)
+			pEffect->m_nValueMin = nValueMin;
+		else
+			pEffect->m_nValueMin.start(nValueMin, pEffect->m_nTweenDuration);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+// static
+ERlvCmdRet RlvSphereEffect::onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
+{
+	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	{
+		float nValueMax = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultAlpha;
+		if (!pEffect->m_nTweenDuration)
+			pEffect->m_nValueMax = nValueMax;
+		else
+			pEffect->m_nValueMax.start(nValueMax, pEffect->m_nTweenDuration);
+	}
+	return RLV_RET_SUCCESS;
+}
+
+void RlvSphereEffect::setShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* pRenderTarget)
+{
+	pShader->uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, FALSE, get_current_projection().inverse().m);
+	pShader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, pRenderTarget->getWidth(), pRenderTarget->getHeight());
+	pShader->uniform1i(LLShaderMgr::RLV_EFFECT_MODE, llclamp((int)m_eMode, 0, (int)ESphereMode::Count));
+
+	// Pass the sphere origin to the shader
+	LLVector4 posSphereOrigin;
+	switch (m_eOrigin)
+	{
+		case ESphereOrigin::Camera:
+			posSphereOrigin.setVec(LLViewerCamera::instance().getOrigin(), 1.0f);
+			break;
+		case ESphereOrigin::Avatar:
+		default:
+			posSphereOrigin.setVec((isAgentAvatarValid()) ? gAgentAvatarp->getRenderPosition() : gAgent.getPositionAgent(), 1.0f);
+			break;
+	}
+	glh::vec4f posSphereOriginGl(posSphereOrigin.mV);
+	const glh::matrix4f& mvMatrix = gGL.getModelviewMatrix();
+	mvMatrix.mult_matrix_vec(posSphereOriginGl);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM1, 1, posSphereOriginGl.v);
+
+	// Pack min/max distance and alpha together
+	float nDistMin = m_nDistanceMin.get(), nDistMax = m_nDistanceMax.get();
+	const glh::vec4f sphereParams(m_nValueMin.get(), nDistMin, m_nValueMax.get(), (nDistMax >= nDistMin) ? nDistMax : nDistMin);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM2, 1, sphereParams.v);
+
+	// Pass dist extend
+	int eDistExtend = (int)m_eDistExtend;
+	pShader->uniform2f(LLShaderMgr::RLV_EFFECT_PARAM3, eDistExtend & (int)ESphereDistExtend::Min, eDistExtend & (int)ESphereDistExtend::Max);
+
+	// Pass effect params
+	const glh::vec4f effectParams(m_Params.get().mV);
+	pShader->uniform4fv(LLShaderMgr::RLV_EFFECT_PARAM4, 1, effectParams.v);
+}
+
+void RlvSphereEffect::renderPass(LLGLSLShader* pShader) const
+{
+	gPipeline.mScreen.bindTarget();
+
+	S32 nDiffuseChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, gPipeline.mScreen.getUsage());
+	if (nDiffuseChannel > -1)
+	{
+		gPipeline.mScreen.bindTexture(0, nDiffuseChannel);
+		gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
+	}
+
+	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mDeferredDepth.getUsage());
+	if (nDepthChannel > -1)
+	{
+		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mDeferredDepth, TRUE);
+	}
+
+	gGL.matrixMode(LLRender::MM_PROJECTION);
+	gGL.pushMatrix();
+	gGL.loadIdentity();
+	gGL.matrixMode(LLRender::MM_MODELVIEW);
+	gGL.pushMatrix();
+	gGL.loadMatrix(gGLModelView);
+
+	gPipeline.mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
+	gPipeline.mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+
+	gGL.matrixMode(LLRender::MM_PROJECTION);
+	gGL.popMatrix();
+	gGL.matrixMode(LLRender::MM_MODELVIEW);
+	gGL.popMatrix();
+
+	pShader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, gPipeline.mScreen.getUsage());
+	pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mScreen.getUsage());
+	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+	gGL.getTexUnit(0)->activate();
+
+	gPipeline.mScreen.flush();
+}
+
+LLTrace::BlockTimerStatHandle FTM_RLV_EFFECT_SPHERE("Post-process (RLVa sphere)");
+
+void RlvSphereEffect::run()
+{
+	LL_RECORD_BLOCK_TIME(FTM_RLV_EFFECT_SPHERE);
+	LLGLDepthTest depth(GL_FALSE, GL_FALSE);
+
+	gRlvSphereProgram.bind();
+	setShaderUniforms(&gRlvSphereProgram, &gPipeline.mScreen);
+
+	switch (m_eMode)
+	{
+		case ESphereMode::Blend:
+		case ESphereMode::ChromaticAberration:
+		case ESphereMode::Pixelate:
+			renderPass(&gRlvSphereProgram);
+			break;
+		case ESphereMode::Blur:
+		case ESphereMode::BlurVariable:
+			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
+			renderPass(&gRlvSphereProgram);
+			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
+			renderPass(&gRlvSphereProgram);
+			break;
+	}
+
+	gRlvSphereProgram.unbind();
 }
 
 // ====================================================================================

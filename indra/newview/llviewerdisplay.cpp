@@ -1031,6 +1031,15 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
         {
 			gPipeline.renderDeferredLighting(&gPipeline.mScreen);
 		}
+// [RLVa:KB] - @setsphere
+		else if (LLRenderTarget::sUseFBO && LLPipeline::sUseDepthTexture)
+		{
+			if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
+			{
+				LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere);
+			}
+		}
+// [/RLVa:KB]
 
 		LLPipeline::sUnderWaterRender = FALSE;
 
