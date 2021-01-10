@@ -42,22 +42,6 @@ RlvOverlayEffect::RlvOverlayEffect(const LLUUID& idRlvObj)
 	, m_fBlockTouch(false)
 	, m_Color(LLColor3(c_DefaultColor))
 {
-	if (RlvObject* pRlvObj = gRlvHandler.getObject(idRlvObj))
-	{
-		float nAlpha;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::OverlayAlpha, nAlpha))
-			m_nAlpha = nAlpha;
-
-		pRlvObj->getModifierValue<bool>(ERlvLocalBhvrModifier::OverlayTouch, m_fBlockTouch);
-
-		LLVector3 vecColor;
-		if (pRlvObj->getModifierValue<LLVector3>(ERlvLocalBhvrModifier::OverlayTint, vecColor))
-			m_Color = LLColor3(vecColor.mV);
-
-		LLUUID idTexture;
-		if ( (pRlvObj) && (pRlvObj->getModifierValue<LLUUID>(ERlvLocalBhvrModifier::OverlayTexture, idTexture)) )
-			setImage(idTexture);
-	}
 }
 
 RlvOverlayEffect::~RlvOverlayEffect()
@@ -198,34 +182,6 @@ RlvSphereEffect::RlvSphereEffect(const LLUUID& idRlvObj)
 	, m_nValueMin(c_SphereDefaultAlpha), m_nValueMax(c_SphereDefaultAlpha)
 	, m_nTweenDuration(0.f)
 {
-	if (RlvObject* pRlvObj = gRlvHandler.getObject(idRlvObj))
-	{
-		int nNumber;
-		if (pRlvObj->getModifierValue<int>(ERlvLocalBhvrModifier::SphereMode, nNumber))
-			m_eMode = (ESphereMode)nNumber;
-		if (pRlvObj->getModifierValue<int>(ERlvLocalBhvrModifier::SphereOrigin, nNumber))
-			m_eOrigin = (ESphereOrigin)nNumber;
-
-		LLVector3 vecColor;
-		if (pRlvObj->getModifierValue<LLVector3>(ERlvLocalBhvrModifier::SphereColor, vecColor))
-			m_Params = LLVector4(vecColor.mV[VX], vecColor.mV[VY], vecColor.mV[VZ], 1.0f);
-		LLVector4 vecParams;
-		if (pRlvObj->getModifierValue<LLVector4>(ERlvLocalBhvrModifier::SphereParams, vecParams))
-			m_Params = vecParams;
-
-		float nFloat;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereDistMin, nFloat))
-			m_nDistanceMin = nFloat;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereDistMax, nFloat))
-			m_nDistanceMax = nFloat;
-		if (pRlvObj->getModifierValue<int>(ERlvLocalBhvrModifier::SphereDistExtend, nNumber))
-			m_eDistExtend = (ESphereDistExtend)nNumber;
-
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereValueMin, nFloat))
-			m_nValueMin = nFloat;
-		if (pRlvObj->getModifierValue<float>(ERlvLocalBhvrModifier::SphereValueMax, nFloat))
-			m_nValueMax = nFloat;
-	}
 }
 
 RlvSphereEffect::~RlvSphereEffect()

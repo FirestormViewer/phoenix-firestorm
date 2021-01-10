@@ -406,6 +406,20 @@ void RlvBehaviourDictionary::clearModifiers(const LLUUID& idRlvObj)
 	}
 }
 
+const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(ERlvBehaviour eBhvr, ERlvParamType eParamType) const
+{
+	const RlvBehaviourInfo* pBhvrInfo = nullptr;
+	for (auto itBhvrLower = m_Bhvr2InfoMap.lower_bound(eBhvr), itBhvrUpper = m_Bhvr2InfoMap.upper_bound(eBhvr);
+		 std::find_if(itBhvrLower, itBhvrUpper, [eBhvr, eParamType](const rlv_bhvr2info_map_t::value_type& bhvrEntry) { return bhvrEntry.second->getParamTypeMask() == eParamType; }) != itBhvrUpper;
+		++itBhvrLower)
+	{
+		if (pBhvrInfo)
+			return nullptr;
+		pBhvrInfo = itBhvrLower->second;
+	}
+	return pBhvrInfo;
+}
+
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict, ERlvLocalBhvrModifier* peBhvrModifier) const
 {
 	size_t idxBhvrLastPart = strBhvr.find_last_of('_');
@@ -491,9 +505,9 @@ void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERl
 // virtual
 ERlvCmdRet RlvBehaviourInfo::processModifier(const RlvCommand& rlvCmd) const
 {
-	// The object should be holding at least one active behaviour
-	if (!gRlvHandler.hasBehaviour(rlvCmd.getObjectID()))
-		return RLV_RET_FAILED_NOBEHAVIOUR;
+	// The object should have the base behaviour set (or else there's nothing to modify)
+	if (!gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+		return RLV_RET_FAILED_UNHELDBEHAVIOUR;
 
 	auto itBhvrModifier = std::find_if(m_BhvrModifiers.begin(), m_BhvrModifiers.end(), [&rlvCmd](const modifier_lookup_t::value_type& entry) { return std::get<0>(entry.second) == rlvCmd.getBehaviourModifier(); });
 	if (m_BhvrModifiers.end() == itBhvrModifier)
@@ -1145,6 +1159,17 @@ std::string RlvObject::getStatusString(const std::string& strFilter, const std::
 	}
 
 	return strStatus;
+}
+
+void RlvObject::clearModifiers(ERlvBehaviour eBhvr)
+{
+	if (const RlvBehaviourInfo* pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(eBhvr, RLV_TYPE_ADDREM))
+	{
+		for (const auto& modifierEntry : pBhvrInfo->getModifiers())
+		{
+			clearModifierValue(std::get<0>(modifierEntry.second));
+		}
+	}
 }
 
 void RlvObject::clearModifierValue(ERlvLocalBhvrModifier eBhvrModifier)
