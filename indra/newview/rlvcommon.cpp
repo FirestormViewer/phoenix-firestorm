@@ -403,6 +403,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "deprecated and disabled";
 		case RLV_RET_FAILED_NOBEHAVIOUR:
 			return "no active behaviours";
+		case RLV_RET_FAILED_UNHELDBEHAVIOUR:
+			return "base behaviour not held";
 		case RLV_RET_FAILED_BLOCKED:
 			return "blocked object";
 		case RLV_RET_FAILED_THROTTLED:

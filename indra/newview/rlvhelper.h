@@ -40,6 +40,8 @@ class RlvBehaviourInfo
 {
 	typedef std::function<ERlvCmdRet(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue>)> modifier_handler_func_t;
 public:
+	typedef std::map<std::string, std::tuple<ERlvLocalBhvrModifier, std::type_index, modifier_handler_func_t>> modifier_lookup_t;
+
 	enum EBehaviourFlags
 	{
 		// General behaviour flags
@@ -71,6 +73,7 @@ public:
 	ERlvBehaviour         getBehaviourType() const  { return m_eBhvr; }
 	U32                   getBehaviourFlags() const { return m_nBhvrFlags; }
 	U32                   getParamTypeMask() const  { return m_maskParamType; }
+	const modifier_lookup_t& getModifiers() const   { return m_BhvrModifiers;  }
 	bool                  hasStrict() const         { return m_nBhvrFlags & BHVR_STRICT; }
 	bool                  isBlocked() const         { return m_nBhvrFlags & BHVR_BLOCKED; }
 	bool                  isExperimental() const    { return m_nBhvrFlags & BHVR_EXPERIMENTAL; }
@@ -87,7 +90,6 @@ protected:
 	ERlvBehaviour m_eBhvr;
 	U32           m_nBhvrFlags;
 	U32           m_maskParamType;
-	typedef std::map<std::string, std::tuple<ERlvLocalBhvrModifier, std::type_index, modifier_handler_func_t>> modifier_lookup_t;
 	modifier_lookup_t m_BhvrModifiers;
 };
 
@@ -112,7 +114,8 @@ public:
 public:
 	void                    clearModifiers(const LLUUID& idRlvObj);
 	ERlvBehaviour           getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
-	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = nullptr, ERlvLocalBhvrModifier* peBhvrModifier = nullptr) const;
+	const RlvBehaviourInfo* getBehaviourInfo(ERlvBehaviour eBhvr, ERlvParamType eParamType) const;
+	const RlvBehaviourInfo* getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = nullptr, ERlvLocalBhvrModifier* peBhvrModifier = nullptr) const;
 	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
 	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
 	RlvBehaviourModifier*   getModifier(ERlvBehaviourModifier eBhvrMod) const { return (eBhvrMod < RLV_MODIFIER_COUNT) ? m_BehaviourModifiers[eBhvrMod] : nullptr; }
@@ -467,6 +470,7 @@ public:
 	 * Local-scope modifiers
 	 */
 public:
+	void                      clearModifiers(ERlvBehaviour eBhvr);
 	void                      clearModifierValue(ERlvLocalBhvrModifier eBhvrMod);
 	template<typename T> bool getModifierValue(ERlvLocalBhvrModifier eBhvrModifier, T& value) const;
 	void                      setModifierValue(ERlvLocalBhvrModifier eBhvrMod, const RlvBehaviourModifierValue& modValue);

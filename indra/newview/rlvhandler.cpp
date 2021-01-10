@@ -1714,6 +1714,8 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 		{
 			if (rlvCmd.isStrict())
 				gRlvHandler.removeException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
+			if (RlvObject* pRlvObj = gRlvHandler.getObject(rlvCmd.getObjectID()))
+				pRlvObj->clearModifiers(eBhvr);
 			gRlvHandler.m_Behaviours[eBhvr]--;
 		}
 
@@ -2082,7 +2084,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 		else
 			LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
 	}
-	return RLV_RET_SUCCESS;
+	return eRet;
 }
 
 // Handles: @sendchannel[:<channel>]=n|y and @sendchannel_except[:<channel>]=n|y
