@@ -37,7 +37,7 @@ public:
 
 public:
 	bool hitTest(const LLCoordGL& ptMouse) const;
-	void run() override;
+	void run(const LLVisualEffectParams*) override;
 	void tweenAlpha(float endAlpha, double duration)    { m_nAlpha.start(endAlpha, duration); }
 	void tweenColor(LLColor3 endColor, double duration) { m_Color.start(endColor, duration); }
 	static ERlvCmdRet onAlphaValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
@@ -71,7 +71,7 @@ public:
 	~RlvSphereEffect();
 
 public:
-	void run() override;
+	void run(const LLVisualEffectParams* pParams) override;
 	static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
@@ -83,8 +83,8 @@ public:
 	static ERlvCmdRet onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:
-	void renderPass(LLGLSLShader* pShader) const;
-	void setShaderUniforms(LLGLSLShader* pShader, LLRenderTarget* pRenderTarget);
+	void renderPass(LLGLSLShader* pShader, const LLShaderEffectParams* pParams) const;
+	void setShaderUniforms(LLGLSLShader* pShader);
 
 	/*
 	 * Member variables

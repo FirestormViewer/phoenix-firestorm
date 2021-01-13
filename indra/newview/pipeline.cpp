@@ -1003,6 +1003,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 			const U32 occlusion_divisor = 3;
 			if (!mDeferredDepth.allocate(resX, resY, 0, TRUE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
 			if (!mOcclusionDepth.allocate(resX / occlusion_divisor, resY / occlusion_divisor, 0, TRUE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
+			if (RlvActions::isRlvEnabled() && !mDeferredLight.allocate(resX, resY, GL_RGBA, FALSE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE)) return false;
 		}
 // [/RLVa:KB]
 //        mDeferredDepth.release();
@@ -7788,6 +7789,9 @@ void LLPipeline::renderFinalize()
 
     LLVertexBuffer::unbind();
 
+// [RLVa:KB] - @setsphere
+	LLRenderTarget* pRenderBuffer = (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE)) ? &mDeferredLight : nullptr;
+// [/RLVa:KB]
     if (LLPipeline::sRenderDeferred)
     {
 
@@ -7796,6 +7800,12 @@ void LLPipeline::renderFinalize()
                            RenderDepthOfField;
 
         bool multisample = RenderFSAASamples > 1 && mFXAABuffer.isComplete();
+// [RLVa:KB] - @setsphere
+		if (multisample && !pRenderBuffer)
+		{
+			pRenderBuffer = &mDeferredLight;
+		}
+// [/RLVa:KB]
 
         gViewerWindow->setup3DViewport();
 
@@ -7976,11 +7986,18 @@ void LLPipeline::renderFinalize()
             }
 
             { // combine result based on alpha
-                if (multisample)
+//                if (multisample)
+//                {
+//                    mDeferredLight.bindTarget();
+//                    glViewport(0, 0, mDeferredScreen.getWidth(), mDeferredScreen.getHeight());
+//                }
+// [RLVa:KB] - @setsphere
+                if (pRenderBuffer)
                 {
-                    mDeferredLight.bindTarget();
+					pRenderBuffer->bindTarget();
                     glViewport(0, 0, mDeferredScreen.getWidth(), mDeferredScreen.getHeight());
                 }
+// [/RLVa:KB]
                 else
                 {
                     gGLViewport[0] = gViewerWindow->getWorldViewRectRaw().mLeft;
@@ -8018,18 +8035,30 @@ void LLPipeline::renderFinalize()
 
                 unbindDeferredShader(*shader);
 
-                if (multisample)
+// [RLVa:KB] - @setsphere
+                if (pRenderBuffer)
                 {
-                    mDeferredLight.flush();
+                    pRenderBuffer->flush();
                 }
+// [/RLVa:KB]
+//                if (multisample)
+//                {
+//                    mDeferredLight.flush();
+//                }
             }
         }
         else
         {
-            if (multisample)
+//            if (multisample)
+//            {
+//                mDeferredLight.bindTarget();
+//            }
+// [RLVa:KB] - @setsphere
+            if (pRenderBuffer)
             {
-                mDeferredLight.bindTarget();
+				pRenderBuffer->bindTarget();
             }
+// [/RLVa:KB]
             LLGLSLShader *shader = &gDeferredPostNoDoFProgram;
 
             bindDeferredShader(*shader);
@@ -8054,11 +8083,26 @@ void LLPipeline::renderFinalize()
 
             unbindDeferredShader(*shader);
 
-            if (multisample)
+// [RLVa:KB] - @setsphere
+            if (pRenderBuffer)
             {
-                mDeferredLight.flush();
+				pRenderBuffer->flush();
             }
+// [/RLVa:KB]
+//            if (multisample)
+//            {
+//                mDeferredLight.flush();
+//            }
         }
+
+// [RLVa:KB] - @setsphere
+		if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
+		{
+			LLShaderEffectParams params(pRenderBuffer, (multisample) ? &mScreen : nullptr);
+			LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere, &params);
+			pRenderBuffer = params.m_pDstBuffer;
+		}
+// [/RLVa:KB]
 
         if (multisample)
         {
@@ -8074,11 +8118,18 @@ void LLPipeline::renderFinalize()
             shader->bind();
             shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, width, height);
 
-            S32 channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mDeferredLight.getUsage());
+//            S32 channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mDeferredLight.getUsage());
+//            if (channel > -1)
+//            {
+//                mDeferredLight.bindTexture(0, channel);
+//            }
+// [RLVa:KB] - @setsphere
+			S32 channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pRenderBuffer->getUsage());
             if (channel > -1)
             {
-                mDeferredLight.bindTexture(0, channel);
+				pRenderBuffer->bindTexture(0, channel);
             }
+// [RLVa:KB]
 
             gGL.begin(LLRender::TRIANGLE_STRIP);
             gGL.vertex2f(-1, -1);
@@ -8088,7 +8139,10 @@ void LLPipeline::renderFinalize()
 
             gGL.flush();
 
-            shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mDeferredLight.getUsage());
+// [RLVa:KB] - @setsphere
+            shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pRenderBuffer->getUsage());
+// [/RLVa:KB]
+//            shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mDeferredLight.getUsage());
             shader->unbind();
 
             mFXAABuffer.flush();
@@ -8129,6 +8183,15 @@ void LLPipeline::renderFinalize()
     }
     else // not deferred
     {
+// [RLVa:KB] - @setsphere
+		if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
+		{
+			LLShaderEffectParams params(&mScreen, &mDeferredLight);
+			LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere, &params);
+			pRenderBuffer = params.m_pDstBuffer;
+		}
+// [/RLVa:KB]
+
         U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1;
         LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(mask, 0);
         buff->allocateBuffer(3, 0, TRUE);
@@ -8171,7 +8234,10 @@ void LLPipeline::renderFinalize()
         }
 
         gGL.getTexUnit(0)->bind(&mGlow[1]);
-        gGL.getTexUnit(1)->bind(&mScreen);
+// [RLVa:KB] - @setsphere
+        gGL.getTexUnit(1)->bind( pRenderBuffer ? pRenderBuffer : &mScreen );
+// [/RLVa:KB]
+//        gGL.getTexUnit(1)->bind(&mScreen);
 
         LLGLEnable multisample(RenderFSAASamples > 0 ? GL_MULTISAMPLE_ARB : 0);
 
@@ -9142,12 +9208,6 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget *screen_target)
     }
 
     screen_target->flush();
-// [RLVa:KB] - @setsphere
-	if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
-	{
-		LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere);
-	}
-// [/RLVa:KB]
 }
 
 void LLPipeline::setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep)
