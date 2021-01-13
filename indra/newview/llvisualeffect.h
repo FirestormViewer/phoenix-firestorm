@@ -19,6 +19,12 @@
 #include "llsingleton.h"
 
 // ============================================================================
+// 
+//
+
+class LLRenderTarget;
+
+// ============================================================================
 //
 //
 
@@ -38,6 +44,22 @@ enum class EVisualEffectType
 //
 //
 
+struct LLVisualEffectParams
+{
+};
+
+struct LLShaderEffectParams : LLVisualEffectParams
+{
+	explicit LLShaderEffectParams(LLRenderTarget* pSrcBuffer, LLRenderTarget* pDstBuffer) : m_pSrcBuffer(pSrcBuffer), m_pDstBuffer(pDstBuffer) {}
+
+	LLRenderTarget* m_pSrcBuffer = nullptr;
+	LLRenderTarget* m_pDstBuffer = nullptr;
+};
+
+// ============================================================================
+//
+//
+
 class LLVisualEffect
 {
 public:
@@ -51,7 +73,7 @@ public:
 	U32               getPriority() const { return m_nPriority; }
 	EVisualEffectType getType() const     { return m_eType;}
 
-	virtual void      run() = 0;
+	virtual void      run(const LLVisualEffectParams* pParams) = 0;
 
 	/*
 	 * Member variables
@@ -139,8 +161,8 @@ public:
 	LLVisualEffect* getEffect(EVisualEffect eCode) const;
 	template<typename T> T* getEffect(EVisualEffect eCode) const { return dynamic_cast<T*>(getEffect(eCode)); }
 	bool            removeEffect(const LLUUID& idEffect);
-	void            runEffect(EVisualEffect eCode);
-	void            runEffect(EVisualEffectType eType);
+	void            runEffect(EVisualEffect eCode, const LLVisualEffectParams* pParams = nullptr);
+	void            runEffect(EVisualEffectType eType, const LLVisualEffectParams* pParams = nullptr);
 protected:
 
 	/*

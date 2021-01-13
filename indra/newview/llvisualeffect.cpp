@@ -107,7 +107,7 @@ bool LLVfxManager::removeEffect(const LLUUID& idEffect)
 	return true;
 }
 
-void LLVfxManager::runEffect(EVisualEffect eCode)
+void LLVfxManager::runEffect(EVisualEffect eCode, const LLVisualEffectParams* pParams)
 {
 	// *TODO-Catz: once we're done, check whether iterating over the entire list still has negliable impact
 	auto pred = [eCode](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode; };
@@ -118,11 +118,11 @@ void LLVfxManager::runEffect(EVisualEffect eCode)
 	auto effectRange = boost::make_iterator_range(beginEffect, endEffect);
 	for (LLVisualEffect* pEffect : effectRange)
 	{
-		pEffect->run();
+		pEffect->run(pParams);
 	}
 }
 
-void LLVfxManager::runEffect(EVisualEffectType eType)
+void LLVfxManager::runEffect(EVisualEffectType eType, const LLVisualEffectParams* pParams)
 {
 	// *TODO-Catz: once we're done, check whether iterating over the entire list still has negliable impact
 	auto pred = [eType](const LLVisualEffect* pEffect) { return pEffect->getType() == eType;  };
@@ -133,7 +133,7 @@ void LLVfxManager::runEffect(EVisualEffectType eType)
 	auto effectRange = boost::make_iterator_range(beginEffect, endEffect);
 	for (LLVisualEffect* pEffect : effectRange)
 	{
-		pEffect->run();
+		pEffect->run(pParams);
 	}
 }
 
