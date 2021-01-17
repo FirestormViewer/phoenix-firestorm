@@ -895,16 +895,24 @@ void LLPluginProcessParent::poll(F64 timeout)
 		{
 			// timed out with no incoming data.  Just return.
 		}
-		else if(status == EBADF)
+		// <FS:Beq> better logging of poll issues
+		// else if(status == EBADF)		
+		else if(APR_STATUS_IS_EBADF(status))
 		{
 			// This happens when one of the file descriptors in the pollset is destroyed, which happens whenever a plugin's socket is closed.
 			// The pollset has been or will be recreated, so just return.
 			LL_DEBUGS("PluginPoll") << "apr_pollset_poll returned EBADF" << LL_ENDL;
 		}
-		else if(status != APR_SUCCESS)
+		// <FS:Beq> better logging of poll issues
+		// else if(status != APR_SUCCESS)
+		// {
+		// 	LL_WARNS("PluginPoll") << "apr_pollset_poll failed with status " << status << LL_ENDL;
+		// }
+		else
 		{
-			LL_WARNS("PluginPoll") << "apr_pollset_poll failed with status " << status << LL_ENDL;
+			LL_WARNS("PluginPoll") << "apr_pollset_poll failed with status " << status << " (" << APR_TO_OS_ERROR(status) << ")" << LL_ENDL;
 		}
+		// </FS:Beq>
 	}
 
     // Remove instances in the done state from the sInstances map.

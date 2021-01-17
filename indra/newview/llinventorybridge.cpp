@@ -4392,7 +4392,9 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	}
 	// </FS:Ansariel>
 	// <FS:Ansariel> Fix "outfits" context menu
-	if (outfits_id == mUUID)
+	if (model->isObjectDescendentOf(mUUID, outfits_id) && getCategory() &&
+		(getCategory()->getPreferredType() == LLFolderType::FT_NONE || 
+		 getCategory()->getPreferredType() == LLFolderType::FT_MY_OUTFITS))
 	{
 		items.push_back(std::string("New Outfit"));
 	}
@@ -4498,17 +4500,17 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		// Not sure what the right thing is to do here.
 		if (!isCOFFolder() && cat && (cat->getPreferredType() != LLFolderType::FT_OUTFIT))
 		{
-			// <FS:Ansariel> Fix "outfits" context menu
-			//if (!isInboxFolder()) // don't allow creation in inbox
-			if (!isInboxFolder() && outfits_id != mUUID) // don't allow creation in inbox
-			// </FS:Ansariel>
+			if (!isInboxFolder()) // don't allow creation in inbox
 			{
 				// Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
 				if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
 				{
 					items.push_back(std::string("New Folder"));
 				}
-                if (!isMarketplaceListingsFolder())
+                // <FS:Ansariel> Fix "outfits" context menu
+                //if (!isMarketplaceListingsFolder())
+                if (!isMarketplaceListingsFolder() && !model->isObjectDescendentOf(mUUID, outfits_id))
+                // </FS:Ansariel>
                 {
                     items.push_back(std::string("New Script"));
                     items.push_back(std::string("New Note"));

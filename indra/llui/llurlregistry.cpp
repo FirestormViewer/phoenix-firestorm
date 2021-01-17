@@ -71,6 +71,7 @@ LLUrlRegistry::LLUrlRegistry()
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 	registerUrl(new LLUrlEntryAgentRLVAnonymizedName());
 // [/RLVa:KB]
+	registerUrl(new FSUrlEntryAgentSelf());// <FS:Ansariel> FIRE-30611: "You" in transcript is underlined
 	// LLUrlEntryAgent*Name must appear before LLUrlEntryAgent since 
 	// LLUrlEntryAgent is a less specific (catchall for agent urls)
 	registerUrl(new LLUrlEntryAgent());

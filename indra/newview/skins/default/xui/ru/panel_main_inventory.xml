@@ -30,6 +30,7 @@
 		<combo_box.item value="filter_type_textures" label="Текстуры" />
 		<combo_box.item value="filter_type_snapshots" label="Снимки" />
 		<combo_box.item value="filter_type_meshes" label="Меш" />
+		<combo_box.item value="filter_type_settings" label="Настройки" />
 		<combo_box.item value="filter_type_custom" label="Другое..." />
 	</combo_box>
 	<tab_container name="inventory filter tabs">

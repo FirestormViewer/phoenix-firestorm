@@ -1195,7 +1195,9 @@ namespace
 		{
 			LLError::RecorderPtr r = *i;
 
-            if (!r->enabled())
+            // <FS:Ansariel> Crash fix
+            //if (!r->enabled())
+            if (!r || !r->enabled())
             {
                 continue;
             }
