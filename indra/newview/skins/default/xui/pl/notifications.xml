@@ -5102,4 +5102,10 @@ Skopiuj do własnej szafy i spróbuj ponownie.
 
 Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na cyklu dnia"!
 	</notification>
+	<notification name="CantCreateInventoryName">
+		Nie można utworzyć: [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		Zakończył się zbiorowy import Windlightów.
+	</notification>
 </notifications>

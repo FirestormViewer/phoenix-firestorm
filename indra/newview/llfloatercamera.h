@@ -91,6 +91,8 @@ private:
 	static LLFloaterCamera* findInstance();
 	// <FS:Ansariel> Phototools camera
 	static LLFloaterCamera* findPhototoolsInstance();
+	// <FS:Ansariel> Optional small camera floater
+	static LLFloaterCamera* findSmallInstance();
 
 	/*virtual*/ BOOL postBuild();
 

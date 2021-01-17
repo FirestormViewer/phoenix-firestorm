@@ -492,7 +492,13 @@ void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& m
 		if (is_group)
 		{
 			std::string old_name(file_name);
-			old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			// <FS:Ansariel> FIRE-30582: Fix out of range crash
+			//old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			if (LLStringUtil::endsWith(old_name, GROUP_CHAT_SUFFIX))
+			{
+				old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			}
+			// </FS:Ansariel>
 			fptr = LLFile::fopen(LLLogChat::makeLogFileName(old_name), "r");
 			if (fptr)
 			{
@@ -1256,7 +1262,13 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 		if (is_group)
 		{
 			std::string old_name(file_name);
-			old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			// <FS:Ansariel> FIRE-30582: Fix out of range crash
+			//old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			if (LLStringUtil::endsWith(old_name, GROUP_CHAT_SUFFIX))
+			{
+				old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			}
+			// </FS:Ansariel>
 			fptr = LLFile::fopen(LLLogChat::makeLogFileName(old_name), "r");
 			if (fptr)
 			{

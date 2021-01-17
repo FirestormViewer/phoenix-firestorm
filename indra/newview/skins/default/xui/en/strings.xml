@@ -3199,4 +3199,6 @@ Your current position: [AVATAR_POS]
   <string name="TexturePickerOutfitHeader">Picture for Outfit</string>
   <string name="unknown_script">(Unknown script)</string>
   <string name="FSAreaSearch_Cost_Label">L$[COST]</string>
+
+  <string name="ImportingWindlightBulk">Importing Windlights...</string>
 </strings>
