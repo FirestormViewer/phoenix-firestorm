@@ -641,7 +641,6 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
 			// </FS:Ansariel>
 			camera_floater->updateItemsSelection();
-			camera_floater->fromFreeToPresets();
 		}
 		// </FS:Ansariel>
 	}
@@ -760,7 +759,6 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 	if (camera_floater)
 	{
 		camera_floater->updateItemsSelection();
-		camera_floater->fromFreeToPresets();
 	}
 	// </FS:Ansariel>
 }
