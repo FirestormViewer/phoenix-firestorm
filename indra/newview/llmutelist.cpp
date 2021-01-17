@@ -435,6 +435,8 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		else
 		{
 			// The caller didn't pass any flags -- just remove the mute entry entirely.
+			// set flags to notify observers with (flag being present means that something is allowed)
+			localmute.mFlags = LLMute::flagAll;
 		}
 		
 		// Always remove the entry from the set -- it will be re-added with new flags if necessary.
@@ -458,6 +460,7 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		}
 		
 		// Must be after erase.
+		notifyObservers();
 		notifyObserversDetailed(localmute);
 
 		// <FS:Ansariel> Return correct return value
@@ -474,6 +477,7 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 			updateRemove(mute);
 			mLegacyMutes.erase(legacy_it);
 			// Must be after erase.
+			notifyObservers();
 			notifyObserversDetailed(mute);
 
 			// <FS:Ansariel> Return correct return value

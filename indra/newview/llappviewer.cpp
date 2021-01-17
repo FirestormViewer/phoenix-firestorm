@@ -753,6 +753,7 @@ LLAppViewer::LLAppViewer()
 	mPurgeCacheOnExit(false),
 	mPurgeUserDataOnExit(false),
 	mSecondInstance(false),
+	mUpdaterNotFound(false),
 	mSavedFinalSnapshot(false),
 	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
 	mQuitRequested(false),
@@ -1371,77 +1372,100 @@ bool LLAppViewer::init()
 
 	gGLActive = FALSE;
 
-    // <FS:Ansariel> Disable updater
+	// <FS:Ansariel> Disable updater
+//#if LL_RELEASE_FOR_DOWNLOAD
 //    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
 //    {
-//        LLProcess::Params updater;
-//        updater.desc = "updater process";
-//        // Because it's the updater, it MUST persist beyond the lifespan of the
-//        // viewer itself.
-//        updater.autokill = false;
+//	LLProcess::Params updater;
+//	updater.desc = "updater process";
+//	// Because it's the updater, it MUST persist beyond the lifespan of the
+//	// viewer itself.
+//	updater.autokill = false;
+//	std::string updater_file;
 //#if LL_WINDOWS
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker.exe");
+//	updater_file = "SLVersionChecker.exe";
+//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#elif LL_DARWIN
-//        // explicitly run the system Python interpreter on SLVersionChecker.py
-//        updater.executable = "python";
-//        updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", "SLVersionChecker.py"));
+//	// explicitly run the system Python interpreter on SLVersionChecker.py
+//	updater.executable = "python";
+//	updater_file = "SLVersionChecker.py";
+//	updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file));
 //#else
-//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "SLVersionChecker");
+//	updater_file = "SLVersionChecker";
+//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#endif
-//        // add LEAP mode command-line argument to whichever of these we selected
-//        updater.args.add("leap");
-//        // UpdaterServiceSettings
-//        updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
-//        // channel
-//        updater.args.add(LLVersionInfo::getChannel());
-//        // testok
-//        updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
-//        // ForceAddressSize
-//        updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
-//#if LL_WINDOWS && !LL_RELEASE_FOR_DOWNLOAD && !LL_SEND_CRASH_REPORTS
-//	// This is neither a release package, nor crash-reporting enabled test build
-//	// try to run version updater, but don't bother if it fails (file might be missing)
-//	LLLeap *leap_p = LLLeap::create(updater, false);
-//	if (!leap_p)
-//	{
-//		LL_WARNS("LLLeap") << "Failed to run LLLeap" << LL_ENDL;
+//	// add LEAP mode command-line argument to whichever of these we selected
+//	updater.args.add("leap");
+//	// UpdaterServiceSettings
+//	updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
+//	// channel
+//	updater.args.add(LLVersionInfo::instance().getChannel());
+//	// testok
+//	updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
+//	// ForceAddressSize
+//	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
+//
+//        try
+//        {
+//            // Run the updater. An exception from launching the updater should bother us.
+//            LLLeap::create(updater, true);
+//            mUpdaterNotFound = false;
+//        }
+//        catch (...)
+//        {
+//            LLUIString details = LLNotifications::instance().getGlobalString("LLLeapUpdaterFailure");
+//            details.setArg("[UPDATER_APP]", updater_file);
+//            OSMessageBox(
+//                details.getString(),
+//                LLStringUtil::null,
+//                OSMB_OK);
+//            mUpdaterNotFound = true;
+//        }
 //	}
-//#else
-// 	// Run the updater. An exception from launching the updater should bother us.
-//	LLLeap::create(updater, true);
-//#endif
+//	else
+//	{
+//		LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
+//	}
+//
+//    if (mUpdaterNotFound)
+//    {
+//        LL_WARNS("InitInfo") << "Failed to launch updater. Skipping Leap commands." << LL_ENDL;
+//    }
+//    else
+//    {
+//        // Iterate over --leap command-line options. But this is a bit tricky: if
+//        // there's only one, it won't be an array at all.
+//        LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
+//        LL_DEBUGS("InitInfo") << "LeapCommand: " << LeapCommand << LL_ENDL;
+//        if (LeapCommand.isDefined() && !LeapCommand.isArray())
+//        {
+//            // If LeapCommand is actually a scalar value, make an array of it.
+//            // Have to do it in two steps because LeapCommand.append(LeapCommand)
+//            // trashes content! :-P
+//            LLSD item(LeapCommand);
+//            LeapCommand.append(item);
+//        }
+//        BOOST_FOREACH(const std::string& leap, llsd::inArray(LeapCommand))
+//        {
+//            LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
+//            // We don't have any better description of this plugin than the
+//            // user-specified command line. Passing "" causes LLLeap to derive a
+//            // description from the command line itself.
+//            // Suppress LLLeap::Error exception: trust LLLeap's own logging. We
+//            // don't consider any one --leap command mission-critical, so if one
+//            // fails, log it, shrug and carry on.
+//            LLLeap::create("", leap, false); // exception=false
+//        }
+//    }
+//
+//	if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
+//	{
+//		LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
+//							 << "lleventhost no longer supported as a dynamic library"
+//							 << LL_ENDL;
+//	}
+//#endif //LL_RELEASE_FOR_DOWNLOAD
 	// </FS:Ansariel>
-
-	// Iterate over --leap command-line options. But this is a bit tricky: if
-	// there's only one, it won't be an array at all.
-	LLSD LeapCommand(gSavedSettings.getLLSD("LeapCommand"));
-	LL_DEBUGS("InitInfo") << "LeapCommand: " << LeapCommand << LL_ENDL;
-	if (LeapCommand.isDefined() && ! LeapCommand.isArray())
-	{
-		// If LeapCommand is actually a scalar value, make an array of it.
-		// Have to do it in two steps because LeapCommand.append(LeapCommand)
-		// trashes content! :-P
-		LLSD item(LeapCommand);
-		LeapCommand.append(item);
-	}
-	BOOST_FOREACH(const std::string& leap, llsd::inArray(LeapCommand))
-	{
-		LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
-		// We don't have any better description of this plugin than the
-		// user-specified command line. Passing "" causes LLLeap to derive a
-		// description from the command line itself.
-		// Suppress LLLeap::Error exception: trust LLLeap's own logging. We
-		// don't consider any one --leap command mission-critical, so if one
-		// fails, log it, shrug and carry on.
-		LLLeap::create("", leap, false); // exception=false
-	}
-
-	if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
-	{
-		LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
-							 << "lleventhost no longer supported as a dynamic library"
-							 << LL_ENDL;
-	}
 
 	LLTextUtil::TextHelpers::iconCallbackCreationFunction = create_text_segment_icon_from_url_match;
 
