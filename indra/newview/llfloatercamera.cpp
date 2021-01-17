@@ -759,6 +759,7 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 	if (camera_floater)
 	{
 		camera_floater->updateItemsSelection();
+		camera_floater->switchMode(CAMERA_CTRL_MODE_PRESETS);
 	}
 	// </FS:Ansariel>
 }
