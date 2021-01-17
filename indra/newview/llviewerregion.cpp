@@ -3020,7 +3020,6 @@ void LLViewerRegion::unpackRegionHandshake()
 		mProductName = productName;
 	}
 
-
 	mCentralBakeVersion = region_protocols & 1; // was (S32)gSavedSettings.getBOOL("UseServerTextureBaking");
 	LLVLComposition *compp = getComposition();
 	if (compp)
