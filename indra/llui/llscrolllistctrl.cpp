@@ -952,6 +952,8 @@ BOOL LLScrollListCtrl::selectFirstItem()
 // virtual
 BOOL LLScrollListCtrl::selectNthItem( S32 target_index )
 {
+	// <FS:Ansariel> FIRE-30571: Comboboxes select all items then pressing Page-Up
+	target_index = llclamp(target_index, 0, (S32)mItemList.size() - 1);
 	return selectItemRange(target_index, target_index);
 }
 

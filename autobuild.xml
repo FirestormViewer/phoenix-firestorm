@@ -964,11 +964,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fc2d285da5298b666fc3c54015a8669a</string>
+              <string>87c4984c2bddcdaf6ca403a06f22ce4e</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.05-darwin-202981448.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.07-darwin-210010951.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -978,11 +978,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ee3c5e3449e06bc3dbb1c9dc29aca53d</string>
+              <string>d33d848660ca7e4c2de789e325706d24</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.05-linux64-202931144.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.07-linux64-203630250.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -992,11 +992,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b88e70667efc230a00d6a2d982af8fc5</string>
+              <string>9e9f303912776014519c18a0205250ee</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.05-windows-202860859.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.07-windows-203561745.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1006,18 +1006,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>401829b65cac61a2f96179fadf7eb015</string>
+              <string>ae336fe814a6867f6449d0401ea7a9e4</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.05-windows64-202860900.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.07-windows64-203561747.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.05</string>
+        <string>2.01.07</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -3709,7 +3709,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       <key>canonical_repo</key>
       <string>https://bitbucket.org/lindenlab/viewer</string>
       <key>copyright</key>
-      <string>Copyright (c) 2020, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2021, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>

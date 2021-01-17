@@ -40,9 +40,14 @@ out vec4 frag_color;
 
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
-uniform sampler2DRect depthMap;
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
+// uniform sampler2DRect depthMap;
+// </FS:Beq>
 uniform sampler2DRect normalMap;
-uniform samplerCube environmentMap;
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
+// uniform samplerCube environmentMap;
+// </FS:Beq>
+
 uniform sampler2D noiseMap;
 uniform sampler2D projectionMap;
 uniform sampler2D lightFunc;
@@ -182,11 +187,12 @@ void main()
 		
 		
 	vec3 diff_tex = texture2DRect(diffuseRect, frag.xy).rgb;
-    // SL-12005 Projector light pops as we get closer, more objectionable than being in wrong color space.
-    //          We can't switch to linear here unless we do it everywhere*
-	// *gbuffer is sRGB, convert to linear whenever sampling from it
-    diff_tex.rgb = srgb_to_linear(diff_tex.rgb);
-
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
+    // // SL-12005 Projector light pops as we get closer, more objectionable than being in wrong color space.
+    // //          We can't switch to linear here unless we do it everywhere*
+	// // *gbuffer is sRGB, convert to linear whenever sampling from it
+    // diff_tex.rgb = srgb_to_linear(diff_tex.rgb);
+// </FS:Beq>
 	vec3 dlit = vec3(0, 0, 0);
 	
 	
