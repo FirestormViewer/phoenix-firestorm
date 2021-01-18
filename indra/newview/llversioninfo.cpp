@@ -28,9 +28,9 @@
 #include "llviewerprecompiledheaders.h"
 #include "llevents.h"
 #include "lleventfilter.h"
+#include "llregex.h"
 #include "llversioninfo.h"
 #include "stringize.h"
-#include <boost/regex.hpp>
 
 // <FS:TS> Use configured file instead of compile time definitions to avoid
 //         rebuilding the world with every Mercurial pull
@@ -184,19 +184,19 @@ LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
 	static const boost::regex is_project_channel("\\bProject\\b");
 	static const boost::regex is_release_channel("\\bRelease\\b");
 
-    if (boost::regex_search(channel, is_release_channel))
+    if (ll_regex_search(channel, is_release_channel))
     {
         maturity = RELEASE_VIEWER;
     }
-    else if (boost::regex_search(channel, is_beta_channel))
+    else if (ll_regex_search(channel, is_beta_channel))
     {
         maturity = BETA_VIEWER;
     }
-    else if (boost::regex_search(channel, is_project_channel))
+    else if (ll_regex_search(channel, is_project_channel))
     {
         maturity = PROJECT_VIEWER;
     }
-    else if (boost::regex_search(channel, is_test_channel))
+    else if (ll_regex_search(channel, is_test_channel))
     {
         maturity = TEST_VIEWER;
     }

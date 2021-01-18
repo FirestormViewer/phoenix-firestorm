@@ -59,7 +59,7 @@
 #include "llwindow.h"
 
 #include "llnotificationsutil.h"		// <FS:Zi> Add float LSL color entry widgets
-#include <boost/algorithm/string_regex.hpp>
+#include "llregex.h"
 
 // System includes
 #include <sstream>
@@ -773,7 +773,7 @@ void LLFloaterColorPicker::onTextEntryChanged ( LLUICtrl* ctrl )
 
 		std::string reg_ex("[[:xdigit:]]{6}");
 		boost::regex pattern(reg_ex.c_str());
-		if (!boost::regex_match(hex_string, pattern))
+		if (!ll_regex_match(hex_string, pattern))
 		{
 			return;
 		}

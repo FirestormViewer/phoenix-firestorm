@@ -269,6 +269,7 @@ Beth Walcher
 Beq Janus
 	SL-10288
 	SL-13583
+	SL-11300
 Bezilon Kasei
 Biancaluce Robbiani
 	CT-225
@@ -806,6 +807,7 @@ Jonathan Yap
 	STORM-2142
 	STORM-2145
 	SL-10089
+	BUG-229818
 Kadah Coba
 	STORM-1060
     STORM-1843

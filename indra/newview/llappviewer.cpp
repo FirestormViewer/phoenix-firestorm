@@ -3656,6 +3656,15 @@ bool LLAppViewer::initWindow()
 
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
+#if LL_WINDOWS && LL_BUGSPLAT
+    // bugsplat does not create dump folder and debug logs are written directly
+    // to logs folder, so it conflicts with main instance
+    if (mSecondInstance)
+    {
+        return;
+    }
+#endif
+
     //Try to do the minimum when writing data during a crash.
     std::string* debug_filename;
     debug_filename = ( isStatic
@@ -4165,7 +4174,7 @@ void LLAppViewer::writeSystemInfo()
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
 	// <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
-// #if LL_WINDOWS
+// #if LL_WINDOWS && !LL_BUGSPLAT
 // 	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
 // #else
 //     //Not ideal but sufficient for good reporting.
@@ -4695,10 +4704,13 @@ void LLAppViewer::removeMarkerFiles()
 
 void LLAppViewer::removeDumpDir()
 {
-    //Call this routine only on clean exit.  Crash reporter will clean up
-    //its locking table for us.
-    std::string dump_dir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
-    gDirUtilp->deleteDirAndContents(dump_dir);
+    if (gDirUtilp->dumpDirExists())
+    {
+        //Call this routine only on clean exit.  Crash reporter will clean up
+        //its locking table for us.
+        std::string dump_dir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
+        gDirUtilp->deleteDirAndContents(dump_dir);
+    }
 }
 
 void LLAppViewer::forceQuit()

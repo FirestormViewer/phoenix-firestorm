@@ -845,7 +845,7 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
             // </FS:Ansariel>
 
             // <FS:Testy> FIRE-22943: Don't switch away from the "Recent Items" tab.
-            //LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, TRUE, TAKE_FOCUS_NO, (panel == NULL));
+            //LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, FALSE, TAKE_FOCUS_NO, (panel == NULL));
             BOOL show_main_panel = (!panel || panel->getName() != "Recent Items");
             LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, show_main_panel, TAKE_FOCUS_NO, (panel == NULL));
             // </FS:Testy>

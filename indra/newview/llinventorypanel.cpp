@@ -44,6 +44,7 @@
 #include "llinventoryfunctions.h"
 #include "llinventorymodelbackgroundfetch.h"
 #include "llnotificationsutil.h"
+#include "llpanelmaininventory.h"
 #include "llpreview.h"
 #include "llsidepanelinventory.h"
 #include "llstartup.h"
@@ -1777,7 +1778,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
-	//if (main_panel && !in_inbox)
+	//if (!in_inbox && (main_panel || !sidepanel_inventory->getMainInventoryPanel()->isRecentItemsPanelSelected()))	//if (main_panel && !in_inbox)
 	//{
 	//	sidepanel_inventory->selectAllItemsPanel();
 	//}
