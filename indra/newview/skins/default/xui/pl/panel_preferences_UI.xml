@@ -110,6 +110,7 @@
         <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
         <check_box label="'Znajomi' oraz 'Grupy' w menu 'Komunikacja' otwierają okna w stylu [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Gdy włączysz tą opcję, to Znajomi / Grupy będą się otwierać poprzez okno Ludzie - w przeciwnym wypadku będzie się to odbywać w oknie Kontaktów." />
         <check_box label="Stary sposób wyświetlania właściwości obiektu" name="FSUseLegacyObjectProperties" tool_tip="Gdy włączysz tą opcję, to stare okno właściwości obiektu będzie używane zamiast nowego."/>
+        <check_box label="Użyj małego okna kamery" name="FSUseSmallCameraFloater" tool_tip="Jeśli ta opcja jest włączona, to zostanie użyte mniejsze, starsze okno kamery bez elementów sterujących wstępnymi ustawieniami." />
         <text name="standalone_textbox">
             Używaj osobnych okien dla:
         </text>

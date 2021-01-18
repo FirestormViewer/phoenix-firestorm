@@ -13578,5 +13578,19 @@ No valid environment setting selected.
 Please note that "Shared Environment" and "Day cycle based" cannot be selected!
   <tag>fail</tag>
   </notification>
-  
+
+  <notification
+   icon="alertmodal.tga"
+   name="CantCreateInventoryName"
+   type="notify">
+   <tag>fail</tag>
+Cannot create inventory item: [NAME]
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="WindlightBulkImportFinished"
+   type="notifytip">
+Bulk import of Windlights has finished.
+  </notification>
 </notifications>

@@ -111,7 +111,10 @@ void main()
 	vec3 n = normalize((mat*vec4(normal.xyz+position.xyz,1.0)).xyz-pos.xyz);
 #ifdef HAS_NORMAL_MAP
 	vec3 t = normalize((mat*vec4(tangent.xyz+position.xyz,1.0)).xyz-pos.xyz);
-	vec3 b = cross(n, t)*tangent.w;
+// <FS:Beq> normalize the bitangent (cross product of two normalised vectors is not itself normalised)
+	// vec3 b = cross(n, t)*tangent.w;
+	vec3 b = normalize(cross(n, t)*tangent.w);
+// </FS:Beq>
 	
 	vary_mat0 = vec3(t.x, b.x, n.x);
 	vary_mat1 = vec3(t.y, b.y, n.y);
@@ -122,11 +125,11 @@ vary_normal  = n;
 #else //HAS_SKIN
 	vec3 n = normalize(normal_matrix * normal);
 #ifdef HAS_NORMAL_MAP
-// <FS:Beq> tangents should not use the inv_transpose matrix
-	// vec3 t = normalize(normal_matrix * tangent.xyz);
-	vec3 t = normalize((modelview_projection_matrix * vec4(tangent.xyz,0)).xyz);
+	vec3 t = normalize(normal_matrix * tangent.xyz);
+// <FS:Beq> normalize the bitangent (cross product of two normalised vectors is not itself normalised)
+	// vec3 b = cross(n,t)*tangent.w;
+	vec3 b = normalize(cross(n,t)*tangent.w);
 // </FS:Beq>
-	vec3 b = cross(n,t)*tangent.w;
 	//vec3 t = cross(b,n) * binormal.w;
 	
 	vary_mat0 = vec3(t.x, b.x, n.x);

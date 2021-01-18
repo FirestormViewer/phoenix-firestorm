@@ -33,10 +33,10 @@ out vec4 frag_color;
 #define frag_color gl_FragColor
 #endif
 
-uniform sampler2DRect depthMap;
+// uniform sampler2DRect depthMap; // <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
-uniform samplerCube   environmentMap;
+// uniform samplerCube   environmentMap;// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 uniform sampler2D     noiseMap;
 uniform sampler2D     lightFunc;
 
@@ -73,10 +73,10 @@ void main()
     vec3 norm = getNorm(frag.xy);
 
     vec4 spec = texture2DRect(specularRect, frag.xy);
-    spec.rgb  = srgb_to_linear(spec.rgb);
+    // spec.rgb  = srgb_to_linear(spec.rgb);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
     vec3 diff = texture2DRect(diffuseRect, frag.xy).rgb;
-    diff.rgb  = srgb_to_linear(diff.rgb);
-
+    // diff.rgb  = srgb_to_linear(diff.rgb);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
+    
     float noise = texture2D(noiseMap, frag.xy / 128.0).b;
     vec3  npos  = normalize(-pos);
 
