@@ -213,6 +213,20 @@ public:
 };
 LLAgentHandler gAgentHandler;
 
+// <FS:Ansariel> FIRE-30611: "You" in transcript is underlined
+class FSAgentSelfHandler : public LLCommandHandler
+{
+public:
+	// requires trusted browser to trigger
+	FSAgentSelfHandler() : LLCommandHandler("agentself", UNTRUSTED_THROTTLE) { }
+
+	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
+	{
+		return gAgentHandler.handle(params, query_map, web);
+	}
+};
+FSAgentSelfHandler gAgentSelfHandler;
+// </FS:Ansariel>
 
 //-- LLPanelProfile::ChildStack begins ----------------------------------------
 LLPanelProfile::ChildStack::ChildStack()

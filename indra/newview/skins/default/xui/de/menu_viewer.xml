@@ -122,6 +122,11 @@
 			<menu_item_call label="Meine Umgebungen..." name="my_environs"/>
 			<menu_item_call label="Persönliche Beleuchtung..." name="adjustment_tool"/>
 			<menu_item_check label="Wolken pausieren" name="pause_clouds"/>
+			<menu label="Mehrfach-Import" name="WL Bulk Import">
+				<menu_item_call label="Tage..." name="WL Bulk Import Days"/>
+				<menu_item_call label="Himmel..." name="WL Bulk Import Skies"/>
+				<menu_item_call label="Wasser..." name="WL Bulk Import Water"/>
+			</menu>
 		</menu>
 		<menu label="Foto und Video" name="photo_and_video">
 			<menu_item_call label="Fototools" name="phototools_item_call"/>

@@ -7025,4 +7025,7 @@ ID объекта: [INSPECTING_KEY]
 	<string name="unknown_script">
 		(Неизвестный скрипт)
 	</string>
+	<string name="ImportingWindlightBulk">
+		Импорт окружающей среды ...
+	</string>
 </strings>

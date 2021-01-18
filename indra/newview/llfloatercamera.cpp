@@ -268,6 +268,12 @@ void LLFloaterCamera::resetCameraMode()
 	if (!floater_camera) return;
 	floater_camera->switchMode(CAMERA_CTRL_MODE_PAN);
 	// <FS:Ansariel>
+
+	// <FS:Ansariel> Optional small camera floater
+	floater_camera = LLFloaterCamera::findSmallInstance();
+	if (!floater_camera) return;
+	floater_camera->switchMode(CAMERA_CTRL_MODE_PAN);
+	// </FS:Ansariel>
 }
 
 void LLFloaterCamera::onAvatarEditingAppearance(bool editing)
@@ -279,6 +285,12 @@ void LLFloaterCamera::onAvatarEditingAppearance(bool editing)
 
 	// <FS:Ansariel> Phototools camera
 	floater_camera = LLFloaterCamera::findPhototoolsInstance();
+	if (!floater_camera) return;
+	floater_camera->handleAvatarEditingAppearance(editing);
+	// <FS:Ansariel>
+
+	// <FS:Ansariel> Optional small camera floater
+	floater_camera = LLFloaterCamera::findSmallInstance();
 	if (!floater_camera) return;
 	floater_camera->handleAvatarEditingAppearance(editing);
 	// <FS:Ansariel>
@@ -324,6 +336,18 @@ void LLFloaterCamera::toPrevMode()
 		}
 	}
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Optional small camera floater
+	floater_camera = LLFloaterCamera::findSmallInstance();
+	if (floater_camera)
+	{
+		floater_camera->updateItemsSelection();
+		if(floater_camera->inFreeCameraMode())
+		{
+			activate_camera_tool();
+		}
+	}
+	// </FS:Ansariel>
 }
 
 LLFloaterCamera* LLFloaterCamera::findInstance()
@@ -335,6 +359,13 @@ LLFloaterCamera* LLFloaterCamera::findInstance()
 LLFloaterCamera* LLFloaterCamera::findPhototoolsInstance()
 {
 	return LLFloaterReg::findTypedInstance<LLFloaterCamera>("phototools_camera");
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Optional small camera floater
+LLFloaterCamera* LLFloaterCamera::findSmallInstance()
+{
+	return LLFloaterReg::findTypedInstance<LLFloaterCamera>("fs_camera_small");
 }
 // </FS:Ansariel>
 
@@ -353,7 +384,9 @@ void LLFloaterCamera::onOpen(const LLSD& key)
 		toPrevMode();
 	mClosed = FALSE;
 
-	populatePresetCombo();
+	// <FS:Ansariel> Optional small camera floater
+	if (mPresetCombo)
+		populatePresetCombo();
 }
 
 void LLFloaterCamera::onClose(bool app_quitting)
@@ -381,7 +414,8 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 :	LLFloater(val),
 	mClosed(FALSE),
 	mCurrMode(CAMERA_CTRL_MODE_PAN),
-	mPrevMode(CAMERA_CTRL_MODE_PAN)
+	mPrevMode(CAMERA_CTRL_MODE_PAN),
+	mPresetCombo(nullptr) // <FS:Ansariel> Optional small camera floater
 {
 	LLHints::getInstance()->registerHintTarget("view_popup", getHandle());
 	mCommitCallbackRegistrar.add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
@@ -395,7 +429,7 @@ BOOL LLFloaterCamera::postBuild()
 	mRotate = getChild<LLJoystickCameraRotate>(ORBIT);
 	mZoom = findChild<LLPanelCameraZoom>(ZOOM);
 	mTrack = getChild<LLJoystickCameraTrack>(PAN);
-	mPresetCombo = getChild<LLComboBox>("preset_combo");
+	mPresetCombo = findChild<LLComboBox>("preset_combo"); // <FS:Ansariel> Optional small camera floater
 
 	// <FS:Ansariel> Improved camera floater
 	//getChild<LLTextBox>("precise_ctrs_label")->setShowCursorHand(false);
@@ -421,8 +455,15 @@ BOOL LLFloaterCamera::postBuild()
 	}
 	// </FS:Ansariel>
 
-	mPresetCombo->setCommitCallback(boost::bind(&LLFloaterCamera::onCustomPresetSelected, this));
-	LLPresetsManager::getInstance()->setPresetListChangeCameraCallback(boost::bind(&LLFloaterCamera::populatePresetCombo, this));
+	// <FS:Ansariel> Optional small camera floater
+	//mPresetCombo->setCommitCallback(boost::bind(&LLFloaterCamera::onCustomPresetSelected, this));
+	//LLPresetsManager::getInstance()->setPresetListChangeCameraCallback(boost::bind(&LLFloaterCamera::populatePresetCombo, this));
+	if (mPresetCombo)
+	{
+		mPresetCombo->setCommitCallback(boost::bind(&LLFloaterCamera::onCustomPresetSelected, this));
+		LLPresetsManager::getInstance()->setPresetListChangeCameraCallback(boost::bind(&LLFloaterCamera::populatePresetCombo, this));
+	}
+	// </FS:Ansariel>
 
 	update();
 
@@ -598,6 +639,19 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 			camera_floater->fromFreeToPresets();
 		}
 		// </FS:Ansariel>
+
+		// <FS:Ansariel> Optional small camera floater
+		camera_floater = LLFloaterCamera::findSmallInstance();
+		if (camera_floater)
+		{
+			// <FS:Ansariel> FIRE-29950: Re-add weird legacy object view camera toggle
+			//camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			// </FS:Ansariel>
+			camera_floater->updateItemsSelection();
+			camera_floater->fromFreeToPresets();
+		}
+		// </FS:Ansariel>
 	}
 	// <FS:Ansariel> Improved camera floater
 	else if ("reset_view" == name)
@@ -608,6 +662,12 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 
 		// <FS:Ansariel> Phototools camera
 		camera_floater = LLFloaterCamera::findPhototoolsInstance();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+		// </FS:Ansariel>
+
+		// <FS:Ansariel> Optional small camera floater
+		camera_floater = LLFloaterCamera::findSmallInstance();
 		if (camera_floater)
 			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
 		// </FS:Ansariel>
@@ -624,6 +684,12 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 
 		// <FS:Ansariel> Phototools camera
 		camera_floater = LLFloaterCamera::findPhototoolsInstance();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+		// </FS:Ansariel>
+
+		// <FS:Ansariel> Optional small camera floater
+		camera_floater = LLFloaterCamera::findSmallInstance();
 		if (camera_floater)
 			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
 		// </FS:Ansariel>
@@ -690,6 +756,15 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 
 	// <FS:Ansariel> Phototools camera
 	camera_floater = LLFloaterCamera::findPhototoolsInstance();
+	if (camera_floater)
+	{
+		camera_floater->updateItemsSelection();
+		camera_floater->fromFreeToPresets();
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Optional small camera floater
+	camera_floater = LLFloaterCamera::findSmallInstance();
 	if (camera_floater)
 	{
 		camera_floater->updateItemsSelection();

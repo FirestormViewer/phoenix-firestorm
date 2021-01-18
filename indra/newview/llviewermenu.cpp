@@ -11367,6 +11367,27 @@ bool use_http_textures()
 }
 // <FS:Ansariel>
 
+// <FS:Ansariel> Optional small camera floater
+class FSToggleCameraFloater : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string floater_name = gSavedSettings.getBOOL("FSUseSmallCameraFloater") ? "fs_camera_small" : "camera";
+		LLFloaterReg::toggleInstance(floater_name);
+		return true;
+	}
+};
+
+class FSCheckCameraFloater : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		static LLCachedControl<bool> fsUseSmallCameraFloater(gSavedSettings, "FSUseSmallCameraFloater");
+		return LLFloaterReg::instanceVisible(fsUseSmallCameraFloater ? "fs_camera_small" : "camera");
+	}
+};
+// <FS:Ansariel>
+
 void initialize_menus()
 {
 	// A parameterized event handler used as ctrl-8/9/0 zoom controls below.
@@ -11462,7 +11483,11 @@ void initialize_menus()
 	// <FS:Zi> Add reset camera angles menu
 	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
 	// </FS:Zi>
-	
+	// <FS:Ansariel> Optional small camera floater
+	view_listener_t::addMenu(new FSToggleCameraFloater(), "View.ToggleCameraFloater");
+	view_listener_t::addMenu(new FSCheckCameraFloater(), "View.CheckCameraFloater");
+	// </FS:Ansariel>
+
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
 

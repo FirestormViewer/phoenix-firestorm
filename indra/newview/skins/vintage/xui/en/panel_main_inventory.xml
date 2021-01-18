@@ -528,6 +528,7 @@
 		<combo_box.item value="filter_type_textures" label="Textures" />
 		<combo_box.item value="filter_type_snapshots" label="Snapshots" />
 		<combo_box.item value="filter_type_meshes" label="Meshes" />
+		<combo_box.item value="filter_type_settings" label="Settings" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="Custom..." />
 
