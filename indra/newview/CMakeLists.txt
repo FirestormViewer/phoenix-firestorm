@@ -544,6 +544,7 @@ set(viewer_SOURCE_FILES
     llpanelavatar.cpp
     llpanelavatartag.cpp
     llpanelblockedlist.cpp
+    llpanelclassified.cpp
     llpanelcontents.cpp
     llpaneleditsky.cpp
     llpaneleditwater.cpp
@@ -1302,6 +1303,7 @@ set(viewer_HEADER_FILES
     llpanelavatar.h
     llpanelavatartag.h
     llpanelblockedlist.h
+    llpanelclassified.h
     llpanelcontents.h
     llpaneleditsky.h
     llpaneleditwater.h
