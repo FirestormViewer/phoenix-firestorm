@@ -2915,10 +2915,20 @@ void  LLScrollListCtrl::sortByColumnIndex(U32 column, BOOL ascending)
 	updateSort();
 }
 
+// <FS:Beq/> FIRE-30667 et al. Group hang issues (grab settings)
+extern LLControlGroup gSavedSettings;
 void LLScrollListCtrl::updateSort() const
 {
-	if (hasSortOrder() && !isSorted())
+	// <FS:Beq> FIRE-30667 et al. Group hang issues
+	// if (hasSortOrder() && !isSorted())
+	// {
+	static LLCachedControl<U32> sortDeferFrameCount( gSavedSettings, "FSSortDeferalFrames" );
+	if ( hasSortOrder() && !isSorted() && ( mLastUpdateFrame > 1 && ( LLFrameTimer::getFrameCount() - mLastUpdateFrame ) >= sortDeferFrameCount ) )
+	// encoding two (unlikely) special values into mLastUpdateFrame 1 means we've sorted and 0 means we've nothing new to do.
+	// 0 is set after sorting, 1 can be set by a parent for any post sorting action.
 	{
+		mLastUpdateFrame=0;
+	// </FS:Beq>
 		// do stable sort to preserve any previous sorts
 		std::stable_sort(
 			mItemList.begin(), 
