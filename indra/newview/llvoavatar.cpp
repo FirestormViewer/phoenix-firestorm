@@ -8904,7 +8904,7 @@ bool LLVOAvatar::isTooComplex() const
 	// <FS:Ansariel> Performance improvement
 	//bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && gSavedSettings.getBOOL("AlwaysRenderFriends"));
 	static LLCachedControl<bool> alwaysRenderFriends(gSavedSettings, "AlwaysRenderFriends");
-	bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && alwaysRenderFriends);
+	bool render_friend =  ( alwaysRenderFriends && LLAvatarTracker::instance().isBuddy( getID() ) ); // Beq note: isBuddy can be slow only check if we have to
 	// </FS:Ansariel>
 
 	if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
