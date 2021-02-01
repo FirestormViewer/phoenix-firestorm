@@ -6199,6 +6199,7 @@ void LLAppViewer::idleNameCache()
 
 #ifdef TIME_THROTTLE_MESSAGES
 #define CHECK_MESSAGES_DEFAULT_MAX_TIME .020f // 50 ms = 50 fps (just for messages!)
+#define CHECK_MESSAGES_MAX_TIME_LIMIT 1.0f // 1 second, a long time but still able to stay connected
 static F32 CheckMessagesMaxTime = CHECK_MESSAGES_DEFAULT_MAX_TIME;
 #endif
 
@@ -6264,11 +6265,24 @@ void LLAppViewer::idleNetwork()
 #ifdef TIME_THROTTLE_MESSAGES
 		if (total_time >= CheckMessagesMaxTime)
 		{
-			// Increase CheckMessagesMaxTime so that we will eventually catch up
-			CheckMessagesMaxTime *= 1.035f; // 3.5% ~= x2 in 20 frames, ~8x in 60 frames
+		// <FS:Beq> Don't allow busy network to excessively starve rendering loop
+		// 	// Increase CheckMessagesMaxTime so that we will eventually catch up
+		// 	CheckMessagesMaxTime *= 1.035f; // 3.5% ~= x2 in 20 frames, ~8x in 60 frames
+		// }
+		// else
+		// {
+			if( CheckMessagesMaxTime < CHECK_MESSAGES_MAX_TIME_LIMIT ) // cap the increase to avoid logout through ping starvation
+			{// Increase CheckMessagesMaxTime so that we will eventually catch up
+				CheckMessagesMaxTime *= 1.035f; // 3.5% ~= x2 in 20 frames, ~8x in 60 frames
+			}
+			else
+			{
+				CheckMessagesMaxTime = CHECK_MESSAGES_MAX_TIME_LIMIT;
+			}
 		}
 		else
 		{
+		// </FS:Beq>
 			// Reset CheckMessagesMaxTime to default value
 			CheckMessagesMaxTime = CHECK_MESSAGES_DEFAULT_MAX_TIME;
 		}
