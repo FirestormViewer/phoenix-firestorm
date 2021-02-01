@@ -329,6 +329,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         return CHANNEL_VENDOR_BASE + app_suffix
         #</FS:ND>
 
+    def exec_name(self):
+        # <FS:Ansariel> Same as app_name_oneword()
+        #return "SecondLifeViewer"
+        return ''.join(self.app_name().split())
+
     def app_name_oneword(self):
         return ''.join(self.app_name().split())
 
@@ -498,10 +503,9 @@ class WindowsManifest(ViewerManifest):
     build_data_json_platform = 'win'
 
     def final_exe(self):
-        return self.app_name_oneword()+".exe"
+        return self.exec_name()+".exe"
 
     def finish_build_data_dict(self, build_data_dict):
-        #MAINT-7294: Windows exe names depend on channel name, so write that in also
         build_data_dict['Executable'] = self.final_exe()
         build_data_dict['AppName']    = self.app_name()
         return build_data_dict
@@ -564,7 +568,7 @@ class WindowsManifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
-            # Find secondlife-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
+            # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
             self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
             # <FS:Ansariel> Remove VMP

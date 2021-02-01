@@ -601,6 +601,20 @@ public:
 };
 
 ///
+/// LLUrlEntryEmail Describes an IPv6 address
+///
+class LLUrlEntryIPv6 : public LLUrlEntryBase
+{
+public:
+	LLUrlEntryIPv6();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+	/*virtual*/ std::string getUrl(const std::string &string) const;
+	/*virtual*/ std::string getQuery(const std::string &url) const;
+
+	std::string mHostPath;
+};
+
+///
 /// LLUrlEntryJira Describes Jira issue names -KC
 ///
 class LLUrlEntryJira : public LLUrlEntryBase

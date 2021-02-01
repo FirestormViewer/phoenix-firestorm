@@ -203,15 +203,15 @@ std::string build_notice_date(const U32& the_time)
 		time(&t);
 	}
 	
-		// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
-        //std::string dateStr = "["+LLTrans::getString("LTimeYear")+"]/["
-        //                                                        +LLTrans::getString("LTimeMthNum")+"]/["
-        //                                                        +LLTrans::getString("LTimeDay")+"] ["
-        //                                                        +LLTrans::getString("LTimeHour")+"]:["
-        //                                                        +LLTrans::getString("LTimeMin")+"]:["
-        //                                                        +LLTrans::getString("LTimeSec")+"]";
-		std::string dateStr = LLTrans::getString("GroupNoticesPanelDateString");
-		// </FS:Ansariel>
+	// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
+	//std::string dateStr = "["+ LLTrans::getString("LTimeYear") + "]/["
+	//							+ LLTrans::getString("LTimeMthNum") + "]/["
+	//							+ LLTrans::getString("LTimeDay") + "] ["
+	//							+ LLTrans::getString("LTimeHour") + "]:["
+	//							+ LLTrans::getString("LTimeMin") + "]:["
+	//							+ LLTrans::getString("LTimeSec") + "]";
+	std::string dateStr = LLTrans::getString("GroupNoticesPanelDateString");
+	// </FS:Ansariel>
 
 	LLSD substitution;
 	substitution["datetime"] = (S32) t;
@@ -473,6 +473,8 @@ void LLPanelGroupNotices::clearNoticeList()
 {
 	mPrevSelectedNotice = mNoticesList->getStringUUIDSelectedItem();
 	mNoticesList->deleteAllItems();
+	// <FS:Beq/> FIRE-30766 group hang prevention.
+	mNoticeIDs.clear();
 }
 
 void LLPanelGroupNotices::onClickRefreshNotices(void* data)
@@ -536,7 +538,8 @@ void LLPanelGroupNotices::processNotices(LLMessageSystem* msg)
 
 	//save sort state and set unsorted state to prevent unnecessary 
 	//sorting while adding notices
-	bool save_sort = mNoticesList->isSorted();
+	// <FS:Beq> FIRE-30667 et al. we will need sorting at the end
+	// bool save_sort = mNoticesList->isSorted();
 	mNoticesList->setNeedsSort(false);
 
 	for (;i<count;++i)
@@ -552,9 +555,12 @@ void LLPanelGroupNotices::processNotices(LLMessageSystem* msg)
 
 		//with some network delays we can receive notice list more then once...
 		//so add only unique notices
-		S32 pos = mNoticesList->getItemIndex(id);
-
-		if(pos!=-1)//if items with this ID already in the list - skip it
+		// <FS:Beq> FIRE-30667 et al. add a set for tracking to avoid the linear time lookup
+		// S32 pos = mNoticesList->getItemIndex(id);
+		// if(pos!=-1)//if items with this ID already in the list - skip it
+		auto exists = mNoticeIDs.emplace(id);
+    	if (!exists.second) 
+		// </FS:Beq>
 			continue;
 			
 		msg->getString("Data","Subject",subj,i);
@@ -596,15 +602,32 @@ void LLPanelGroupNotices::processNotices(LLMessageSystem* msg)
 		mNoticesList->addElement(row, ADD_BOTTOM);
 	}
 
-	mNoticesList->setNeedsSort(save_sort);
-	mNoticesList->updateSort();
-	if (mPanelViewNotice->getVisible())
+	mNoticesList->setNeedsSort(true);
+	// <FS:Beq> FIRE-30667 et al. defer sorting and updating selection
+	// mNoticesList->updateSort();
+	// if (mPanelViewNotice->getVisible())
+	// {
+	// 	if (!mNoticesList->selectByID(mPrevSelectedNotice))
+	// 	{
+	// 		mNoticesList->selectFirstItem();
+	// 	}
+	// }
+}
+
+void LLPanelGroupNotices::updateSelected()
+{
+	if( mNoticesList->mLastUpdateFrame == 0 )
 	{
-		if (!mNoticesList->selectByID(mPrevSelectedNotice))
+		if (mPanelViewNotice->getVisible())
 		{
-			mNoticesList->selectFirstItem();
+			if (!mNoticesList->selectByID(mPrevSelectedNotice))
+			{
+				mNoticesList->selectFirstItem();
+			}
 		}
+		mNoticesList->mLastUpdateFrame = 1;
 	}
+	// </FS:Beq>
 }
 
 void LLPanelGroupNotices::onSelectNotice(LLUICtrl* ctrl, void* data)

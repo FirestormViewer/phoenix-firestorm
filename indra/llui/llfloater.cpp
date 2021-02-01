@@ -329,12 +329,11 @@ void LLFloater::initFloater(const Params& p)
 		mButtonsEnabled[BUTTON_CLOSE] = TRUE;
 	}
 
-	// Help button: '?'
-	if ( !mHelpTopic.empty() )
-	{
-		mButtonsEnabled[BUTTON_HELP] = TRUE;
-	}
-
+	// Help button: '?' 
+	//SL-14050 Disable all Help question marks
+	// <FS:Ansariel> Nope!
+	mButtonsEnabled[BUTTON_HELP] = !mHelpTopic.empty();// FALSE;
+	
 	// Minimize button only for top draggers
 	if ( !mDragOnLeft && mCanMinimize )
 	{

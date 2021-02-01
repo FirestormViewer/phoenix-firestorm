@@ -106,3 +106,5 @@ my_autobuild.xml
 *.srctrlprj
 
 compile_commands.json
+# ignore tracy for now
+indra/tracy

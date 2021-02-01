@@ -54,6 +54,7 @@
 #include "lltrans.h"
 #include "llviewerassettype.h"
 #include "llviewerinventory.h"
+#include "llviewermenu.h" // <FS> Script reset in edit floater
 #include "llviewerobject.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
@@ -86,6 +87,7 @@ BOOL LLPanelContents::postBuild()
 
 	childSetAction("button new script",&LLPanelContents::onClickNewScript, this);
 	childSetAction("button permissions",&LLPanelContents::onClickPermissions, this);
+	childSetAction("btn_reset_scripts", &LLPanelContents::onClickResetScripts, this); // <FS> Script reset in edit floater
 	childSetAction("button refresh",&LLPanelContents::onClickRefresh, this);
 
 	mPanelInventoryObject = getChild<LLPanelObjectInventory>("contents_inventory");
@@ -111,7 +113,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 	if( !objectp )
 	{
 		getChildView("button new script")->setEnabled(FALSE);
-		getChildView("button reset scripts")->setEnabled(FALSE);
+		getChildView("btn_reset_scripts")->setEnabled(FALSE); // <FS> Script reset in edit floater
 		return;
 	}
 
@@ -143,21 +145,22 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 	}
 // [/RLVa:KB]
 
-	// Edit/reset script buttons - ok if object is editable and there's an unambiguous destination for the object.
+	// Edit script buttons - ok if object is editable and there's an unambiguous destination for the object.
 	// <FS:PP> FIRE-3219: Reset Scripts button in Build floater
 	//	getChildView("button new script")->setEnabled(
 	//		editable &&
 	//		all_volume &&
 	//		((LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1)
 	//			|| (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)));
-	bool objectIsOK = FALSE;
+
+	BOOL objectIsOK = FALSE;
 	if( editable && all_volume && ( (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1) || (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1) ) )
 	{
 		objectIsOK = TRUE;
 	}
 
 	getChildView("button new script")->setEnabled(objectIsOK);
-	getChildView("button reset scripts")->setEnabled(objectIsOK);
+	getChildView("btn_reset_scripts")->setEnabled(objectIsOK);
 	// </FS:PP>
 
 	getChildView("button permissions")->setEnabled(!objectp->isPermanentEnforced());
@@ -256,6 +259,14 @@ void LLPanelContents::onClickPermissions(void *userdata)
 	LLPanelContents* self = (LLPanelContents*)userdata;
 	gFloaterView->getParentFloater(self)->addDependentFloater(LLFloaterReg::showInstance("bulk_perms"));
 }
+
+// <FS> Script reset in edit floater
+// static
+void LLPanelContents::onClickResetScripts(void *userdata)
+{
+	handle_selected_script_action("reset");
+}
+// </FS>
 
 // static
 void LLPanelContents::onClickRefresh(void *userdata)
