@@ -182,6 +182,7 @@ if (DARWIN)
     libaprutil-1.0.dylib
     libexception_handler.dylib
     libnghttp2*.dylib
+    liburiparser*.dylib
     ${EXPAT_COPY}
     )
 

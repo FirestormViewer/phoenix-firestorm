@@ -192,12 +192,11 @@ void LLVoiceClient::terminate()
 	mVoiceModule = NULL;
     m_servicePump = NULL;
 
-	// <FS:Ansariel> Shutdown speaker volume storage before CRT does it
-	if (LLSpeakerVolumeStorage::instanceExists())
-	{
-		LLSpeakerVolumeStorage::deleteSingleton();
-	}
-	// <FS:Ansariel>
+    // Shutdown speaker volume storage before LLSingletonBase::deleteAll() does it
+    if (LLSpeakerVolumeStorage::instanceExists())
+    {
+        LLSpeakerVolumeStorage::deleteSingleton();
+    }
 }
 
 const LLVoiceVersionInfo LLVoiceClient::getVersion()

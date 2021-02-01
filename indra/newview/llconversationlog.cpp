@@ -560,11 +560,10 @@ bool LLConversationLog::loadFromFile(const std::string& filename)
 		return false;
 	}
 	bool purge_required = false;
-	// <FS:Beq> FIRE-30705 protect against silly display names that cause lines to exceed max string length
-	// char buffer[MAX_STRING];
-	static constexpr int BUFFER_1K { 1024 }; // long enough to handle the most extreme Unicode nonsense and some to spare
-	char buffer[BUFFER_1K];
-	// </FS:Beq>
+
+	static constexpr int UTF_BUFFER{ 1024 }; // long enough to handle the most extreme Unicode nonsense and some to spare
+
+	char buffer[UTF_BUFFER];
 	char conv_name_buffer[MAX_STRING];
 	char part_id_buffer[MAX_STRING];
 	char conv_id_buffer[MAX_STRING];
@@ -575,21 +574,15 @@ bool LLConversationLog::loadFromFile(const std::string& filename)
 	// before CHUI-348 it was a flag of conversation voice state
 	int prereserved_unused;
 
-	// <FS:Beq/> FIRE-30705 protect against silly display names that cause lines to exceed max string length
-	// while (!feof(fp) && fgets(buffer, MAX_STRING, fp))
-	// {
-	// 	conv_name_buffer[0] = '\0';
-	// 	part_id_buffer[0]	= '\0';
-	// 	conv_id_buffer[0]	= '\0';
-	memset( buffer, '\0', BUFFER_1K );
-	while (!feof(fp) && fgets(buffer, BUFFER_1K, fp))
+	memset(buffer, '\0', UTF_BUFFER);
+	while (!feof(fp) && fgets(buffer, UTF_BUFFER, fp))
 	{
-		// force blank for added safety
-		memset( conv_name_buffer, '\0', MAX_STRING );
-		memset( part_id_buffer, '\0', MAX_STRING );
-		memset( conv_id_buffer, '\0', MAX_STRING );
-		memset( history_file_name, '\0', MAX_STRING );
-	// </FS:Beq>
+        // force blank for added safety
+        memset(conv_name_buffer, '\0', MAX_STRING);
+        memset(part_id_buffer, '\0', MAX_STRING);
+        memset(conv_id_buffer, '\0', MAX_STRING);
+        memset(history_file_name, '\0', MAX_STRING);
+
 		sscanf(buffer, "[%lld] %d %d %d %[^|]| %s %s %[^|]|",
 				&time,
 				&stype,
@@ -627,7 +620,7 @@ bool LLConversationLog::loadFromFile(const std::string& filename)
 		}
 
 		mConversations.push_back(conversation);
-		memset( buffer, '\0', BUFFER_1K ); // <FS:Beq> FIRE-30705 clear buffer down 
+		memset(buffer, '\0', UTF_BUFFER);
 	}
 	fclose(fp);
 
