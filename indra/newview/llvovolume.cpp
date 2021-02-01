@@ -2526,11 +2526,14 @@ bool LLVOVolume::notifyAboutCreatingTexture(LLViewerTexture *texture)
 		} //if
 	} //for
 
+	// <FS:Ansariel> Factor out instance() calls
+	LLMaterialMgr& mmgr = LLMaterialMgr::instance();
+
 	//setup new materials
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
 		// These are placeholder materials, they shouldn't be sent to server
-		LLMaterialMgr::getInstance()->setLocalMaterial(getRegion()->getRegionID(), it->second);
+		mmgr.setLocalMaterial(getRegion()->getRegionID(), it->second); // <FS:Ansariel> Factor out instance() calls
 		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 
@@ -2606,10 +2609,13 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 		} //switch
 	} //for
 
+	// <FS:Ansariel> Factor out instance() calls
+	LLMaterialMgr& mmgr = LLMaterialMgr::instance();
+
 	//setup new materials
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
-		LLMaterialMgr::getInstance()->setLocalMaterial(getRegion()->getRegionID(), it->second);
+		mmgr.setLocalMaterial(getRegion()->getRegionID(), it->second); // <FS:Ansariel> Factor out instance() calls
 		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 
