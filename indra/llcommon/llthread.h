@@ -60,8 +60,8 @@ public:
     bool isQuitting() const { return (QUITTING == mStatus); }
     bool isStopped() const { return (STOPPED == mStatus) || (CRASHED == mStatus); }
     bool isCrashed() const { return (CRASHED == mStatus); } 
-    
-    static id_t currentID(); // Return ID of current thread
+    // <FS:Beq> Try to encourage the inlining
+    static LL_FORCE_INLINE id_t currentID(){return std::this_thread::get_id();}; // Return ID of current thread
     static void yield(); // Static because it can be called by the main thread, which doesn't have an LLThread data structure.
     
 public:

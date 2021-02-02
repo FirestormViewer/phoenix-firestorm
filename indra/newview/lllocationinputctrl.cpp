@@ -308,6 +308,7 @@ LLLocationInputCtrl::LLLocationInputCtrl(const LLLocationInputCtrl::Params& p)
 	LLButton::Params maturity_button = p.maturity_button;
 	mMaturityButton = LLUICtrlFactory::create<LLButton>(maturity_button);
 	addChild(mMaturityButton);
+	// <FS:Ansariel> Keep help links
 	mMaturityButton->setClickedCallback(boost::bind(&LLLocationInputCtrl::onMaturityButtonClicked, this));
 
 	LLButton::Params for_sale_button = p.for_sale_button;
@@ -705,10 +706,12 @@ void LLLocationInputCtrl::onAgentParcelChange()
 	refresh();
 }
 
+// <FS:Ansariel> Keep help links
 void LLLocationInputCtrl::onMaturityButtonClicked()
 {
 	LLUI::getInstance()->mHelpImpl->showTopic(mMaturityHelpTopic);
 }
+// </FS:Ansariel>
 
 void LLLocationInputCtrl::onRegionBoundaryCrossed()
 {

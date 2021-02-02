@@ -359,10 +359,11 @@ void LLThread::setQuitting()
 }
 
 // static
-LLThread::id_t LLThread::currentID()
-{
-    return std::this_thread::get_id();
-}
+// <FS:Beq> give this a better chance to inline 
+// LLThread::id_t LLThread::currentID()
+// {
+//     return std::this_thread::get_id();
+// }
 
 // static
 void LLThread::yield()

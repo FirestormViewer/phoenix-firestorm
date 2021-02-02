@@ -344,6 +344,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>FSSortDeferalFrames</key>
+  <map>
+    <key>Comment</key>
+    <string>How many frames after an update should we wait before sorting</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
   <key>FSGroupNotifyNoTransparency</key>
   <map>
     <key>Comment</key>
@@ -7444,6 +7455,17 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+  <key>JoystickDeviceUUID</key>
+  <map>
+    <key>Comment</key>
+    <string>Preffered device ID.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string />
+  </map>
     <key>JoystickMouselookYaw</key>
     <map>
       <key>Comment</key>
