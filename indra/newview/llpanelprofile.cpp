@@ -1389,8 +1389,22 @@ void LLPanelProfileFirstLife::updateButtons()
 
 LLPanelProfileNotes::LLPanelProfileNotes()
 : LLPanelProfileTab()
+, mAvatarNameCacheConnection()
 {
 
+}
+
+LLPanelProfileNotes::~LLPanelProfileNotes()
+{
+    if (getAvatarId().notNull())
+    {
+        LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+    }
+
+    if (mAvatarNameCacheConnection.connected())
+    {
+        mAvatarNameCacheConnection.disconnect();
+    }
 }
 
 void LLPanelProfileNotes::updateData()
@@ -1409,6 +1423,7 @@ BOOL LLPanelProfileNotes::postBuild()
     mMapRights = getChild<LLCheckBoxCtrl>("map_check");
     mEditObjectRights = getChild<LLCheckBoxCtrl>("objects_check");
     mNotesEditor = getChild<LLTextEditor>("notes_edit");
+    mCharacterLimitWarning = getChild<LLTextBox>("character_limit_warning");
 
     mEditObjectRights->setCommitCallback(boost::bind(&LLPanelProfileNotes::onCommitRights, this));
 
@@ -1424,6 +1439,8 @@ void LLPanelProfileNotes::onOpen(const LLSD& key)
     resetData();
 
     fillRightsData();
+
+    mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileNotes::onAvatarNameCache, this, _1, _2));
 }
 
 void LLPanelProfileNotes::apply()
@@ -1531,6 +1548,27 @@ void LLPanelProfileNotes::applyRights()
     LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(), rights);
 }
 
+void LLPanelProfileNotes::updateWarning()
+{
+    mCharacterLimitWarning->setText(std::string());
+
+    std::string str = getString("header_symbol_limit");
+    mCharacterLimitWarning->appendText(str, false, LLStyle::Params().color(LLColor4::yellow));
+    mCharacterLimitWarning->appendText(" ", false, LLStyle::Params());
+
+    LLStringUtil::format_map_t args;
+    if (!mURLWebProfile.empty())
+    {
+        args["[PROFILE_URL]"] = mURLWebProfile;
+    }
+    else
+    {
+        args["[PROFILE_URL]"] = getProfileURL(getAvatarId().asString());
+    }
+    str = getString("body_symbol_limit", args);
+    mCharacterLimitWarning->appendText(str, false, LLStyle::Params());
+}
+
 void LLPanelProfileNotes::processProperties(void* data, EAvatarProcessorType type)
 {
     if (APT_NOTES == type)
@@ -1545,6 +1583,16 @@ void LLPanelProfileNotes::processProperties(void* data, EAvatarProcessorType typ
             // </FS:Ansariel>
             updateButtons();
 
+            if (avatar_notes->notes.size() > 1000)
+            {
+                mCharacterLimitWarning->setVisible(TRUE);
+                updateWarning();
+            }
+            else
+            {
+                mCharacterLimitWarning->setVisible(FALSE);
+            }
+
             LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
         }
     }
@@ -1557,6 +1605,9 @@ void LLPanelProfileNotes::resetData()
     mOnlineStatus->setValue(FALSE);
     mMapRights->setValue(FALSE);
     mEditObjectRights->setValue(FALSE);
+    mCharacterLimitWarning->setVisible(FALSE);
+
+    mURLWebProfile.clear();
 }
 
 void LLPanelProfileNotes::enableCheckboxes(bool enable)
@@ -1564,14 +1615,6 @@ void LLPanelProfileNotes::enableCheckboxes(bool enable)
     mOnlineStatus->setEnabled(enable);
     mMapRights->setEnabled(enable);
     mEditObjectRights->setEnabled(enable);
-}
-
-LLPanelProfileNotes::~LLPanelProfileNotes()
-{
-    if (getAvatarId().notNull())
-    {
-        LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
-    }
 }
 
 // virtual, called by LLAvatarTracker
@@ -1591,6 +1634,28 @@ void LLPanelProfileNotes::setAvatarId(const LLUUID& avatar_id)
         }
         LLPanelProfileTab::setAvatarId(avatar_id);
         LLAvatarTracker::instance().addParticularFriendObserver(getAvatarId(), this);
+    }
+}
+
+void LLPanelProfileNotes::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+    mAvatarNameCacheConnection.disconnect();
+
+    std::string username = av_name.getAccountName();
+    if (username.empty())
+    {
+        username = LLCacheName::buildUsername(av_name.getDisplayName());
+    }
+    else
+    {
+        LLStringUtil::replaceChar(username, ' ', '.');
+    }
+
+    mURLWebProfile = getProfileURL(username, false);
+
+    if (mCharacterLimitWarning->getVisible())
+    {
+        updateWarning();
     }
 }
 
