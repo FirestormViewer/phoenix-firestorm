@@ -3215,12 +3215,8 @@ Low ↔ Lwst
              label="Reset Scripts"
              layout="topleft"
              top_pad="1"
-             name="button reset scripts"
-             width="90">
-               <button.commit_callback
-                function="Tools.SelectedScriptAction"
-                parameter="reset" />
-            </button>
+             name="btn_reset_scripts"
+             width="90" />
             <panel_inventory_object
              border="true"
              border_visible="true"

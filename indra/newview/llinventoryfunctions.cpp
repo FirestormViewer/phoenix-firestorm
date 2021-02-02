@@ -2700,24 +2700,19 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	{
 		bool open_multi_preview = true;
 
-		for (std::set<LLFolderViewItem*>::iterator set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
+		if ("open" == action)
 		{
-			LLFolderViewItem* folder_item = *set_iter;
-			if (folder_item)
+			for (std::set<LLFolderViewItem*>::iterator set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
 			{
-				LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem());
-				// <FS:Ansariel> FIRE-30518: Multi-preview not working for contents of rezzed objects
-				//               This should prevent multi-previews of settings, but for object inventory items
-				//               this check is always false, since content items in object inventories
-				//               have LLTaskInvFVBridges instead of LLInvFVBridges. Since settings can't be
-				//               opened from inside objects anyway, so restrict the check for actions performed
-				//               on avatar inventories.
-				//if (!bridge || !bridge->isMultiPreviewAllowed())
-				if ("open" == action && (!bridge || !bridge->isMultiPreviewAllowed()))
-				// </FS:Ansariel>
+				LLFolderViewItem* folder_item = *set_iter;
+				if (folder_item)
 				{
-					open_multi_preview = false;
-					break;
+					LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem());
+					if (!bridge || !bridge->isMultiPreviewAllowed())
+					{
+						open_multi_preview = false;
+						break;
+					}
 				}
 			}
 		}

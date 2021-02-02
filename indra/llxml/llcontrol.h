@@ -286,6 +286,8 @@ public:
 	LLColor4	getColor4(const std::string& name);
 	LLColor3	getColor3(const std::string& name);
 
+	LLSD		asLLSD(bool diffs_only);
+	
 	// generic getter
 	template<typename T> T get(const std::string& name)
 	{

@@ -471,7 +471,7 @@ Nis ↔ Najniż
 			<button label="Nowy skrypt" label_selected="Nowy skrypt" name="button new script"/>
 			<button label="Prawa" name="button permissions"/>
 			<button label="Odśwież" name="button refresh"/>
-			<button label="Resetuj skrypty" name="button reset scripts"/>
+			<button label="Resetuj skrypty" name="btn_reset_scripts"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

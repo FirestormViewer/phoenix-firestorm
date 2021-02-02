@@ -1011,8 +1011,8 @@ LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
 	}	
 	
 	LLSpatialGroup* group = drawablep->getSpatialGroup();
-	llassert(group != NULL);
-
+	// <FS:Beq/> avoid crash for race condition with unseating of an avatar
+	// llassert(group != NULL);
 	if (group && was_visible && group->isOcclusionState(LLSpatialGroup::QUERY_PENDING))
 	{
 		group->setOcclusionState(LLSpatialGroup::DISCARD_QUERY, LLSpatialGroup::STATE_MODE_ALL_CAMERAS);
