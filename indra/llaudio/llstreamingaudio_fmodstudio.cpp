@@ -392,6 +392,7 @@ void LLStreamingAudio_FMODSTUDIO::setGain(F32 vol)
         Check_FMOD_Error(mFMODInternetStreamChannelp->setVolume(vol), "FMOD::Channel::setVolume");
     }
 }
+
 // <DKO> Streamtitle display
 // virtual
 bool LLStreamingAudio_FMODSTUDIO::getNewMetadata(LLSD& metadata)
@@ -404,14 +405,17 @@ bool LLStreamingAudio_FMODSTUDIO::getNewMetadata(LLSD& metadata)
             mNewMetadata = false;
             return true;
         }
-            
-        return mNewMetadata;
+        else
+        {
+            return false;
+        }
     }
 
     metadata = LLSD();
     return false;
 }
 // </DKO>
+
 ///////////////////////////////////////////////////////
 // manager of possibly-multiple internet audio streams
 

@@ -667,6 +667,13 @@ void LLPanelGroup::draw()
 {
 	LLPanel::draw();
 
+	// <FS:Beq> FIRE-30667 - group hang fixes
+	LLPanelGroupNotices* panel_notices = findChild<LLPanelGroupNotices>("group_notices_tab_panel");
+	if(panel_notices)
+	{
+		panel_notices->updateSelected();
+	}
+	// </FS:Beq>
 	if (mRefreshTimer.hasExpired())
 	{
 		mRefreshTimer.stop();

@@ -219,7 +219,7 @@ https://accounts.secondlife.com/change_email/
         <panel
          class="panel_preference_backup"
          filename="panel_preferences_backup.xml"
-         label="Backup"
+         label="Backup &amp; Restore"
          layout="topleft"
          help_topic="preferences_backup_tab"
          name="backup" />

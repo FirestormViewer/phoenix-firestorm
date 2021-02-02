@@ -40,6 +40,7 @@ uniform sampler2D specularMap;
 
 VARYING vec2 vary_texcoord0;
 
+vec3 linear_to_srgb(vec3 cl);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 void main() 
 {
 	vec4 col = texture2D(diffuseMap, vary_texcoord0.xy);
@@ -52,6 +53,7 @@ void main()
 	vec4 norm = texture2D(normalMap,   vary_texcoord0.xy);
 	vec4 spec = texture2D(specularMap, vary_texcoord0.xy);
 
+	col.rgb = linear_to_srgb(col.rgb);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 	frag_data[0] = vec4(col.rgb, 0.0);
 	frag_data[1] = spec;
 	frag_data[2] = vec4(norm.xy,0,0);

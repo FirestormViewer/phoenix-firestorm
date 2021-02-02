@@ -196,6 +196,7 @@ void LLCoprocedureManager::setPropertyMethods(SettingQuery_t queryfn, SettingUpd
     // workaround until we get mutex into initializePool
     initializePool("VAssetStorage");
     initializePool("Upload");
+    initializePool("ExpCache"); // <FS:Ansariel> FIRE-30731: ExpCache coroutine pool crash
 }
 
 //-------------------------------------------------------------------------

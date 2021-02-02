@@ -953,6 +953,30 @@ std::string LLUrlEntryAgentRLVAnonymizedName::getName(const LLAvatarName& avatar
 }
 // [/RLVa:KB]
 
+// <FS:Ansariel> FIRE-30611: "You" in transcript is underlined
+///
+/// FSUrlEntryAgentSelf Describes the agent's Second Life agent Url, e.g.,
+/// secondlife:///app/agentself/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
+FSUrlEntryAgentSelf::FSUrlEntryAgentSelf() : LLUrlEntryAgent()
+// </FS:Ansariel>
+{
+	mPattern = boost::regex(APP_HEADER_REGEX "/agentself/[\\da-f-]+/\\w+",
+							boost::regex::perl|boost::regex::icase);
+}
+
+std::string FSUrlEntryAgentSelf::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	if (LLUI::getInstance()->mSettingGroups["config"]->getBOOL("FSChatHistoryShowYou"))
+	{
+		return LLTrans::getString("AgentNameSubst");
+	}
+	else
+	{
+		return LLUrlEntryAgent::getLabel(url, cb);
+	}
+}
+// </FS:Ansariel>
+
 //
 // LLUrlEntryGroup Describes a Second Life group Url, e.g.,
 // secondlife:///app/group/00005ff3-4044-c79f-9de8-fb28ae0df991/about
@@ -1696,4 +1720,43 @@ void LLUrlEntryExperienceProfile::onExperienceDetails( const LLSD& experience_de
     callObservers(experience_details[LLExperienceCache::EXPERIENCE_ID].asString(), name, LLStringUtil::null);
 }
 
+//
+// LLUrlEntryEmail Describes an IPv6 address
+//
+LLUrlEntryIPv6::LLUrlEntryIPv6()
+	: LLUrlEntryBase()
+{
+	mHostPath = "https?://\\[([a-f0-9:]+:+)+[a-f0-9]+]";
+	mPattern = boost::regex(mHostPath + "(:\\d{1,5})?(/\\S*)?",
+		boost::regex::perl | boost::regex::icase);
+	mMenuName = "menu_url_http.xml";
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
 
+std::string LLUrlEntryIPv6::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	boost::regex regex = boost::regex(mHostPath, boost::regex::perl | boost::regex::icase);
+	boost::match_results<std::string::const_iterator> matches;
+
+	if (boost::regex_search(url, matches, regex))
+	{
+		return  url.substr(0, matches[0].length());
+	}
+	else
+	{
+		return url;
+	}
+}
+
+std::string LLUrlEntryIPv6::getQuery(const std::string &url) const
+{
+	boost::regex regex = boost::regex(mHostPath, boost::regex::perl | boost::regex::icase);
+	boost::match_results<std::string::const_iterator> matches;
+
+	return boost::regex_replace(url, regex, "");
+}
+
+std::string LLUrlEntryIPv6::getUrl(const std::string &string) const
+{
+	return string;
+}

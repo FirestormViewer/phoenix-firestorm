@@ -783,11 +783,11 @@
 		 name="FSInspectAvatarSlurlOpensProfile"
 		 tool_tip="If enabled, Firestorm will open the profile of an avatar directly when clicking on a link with its name"
 		 initial_value="true"
-		 top_pad="8"
+		 top_pad="6"
 		 left="10"
 		 width="250" />
 		<check_box
-		 top_pad="2"
+		 top_pad="0"
 		 follows="left|top"
 		 height="16"
 		 label="Use web profiles by default"
@@ -796,7 +796,7 @@
 		 control_name="FSUseWebProfiles"
 		 tool_tip="Shows profiles as a web page instead of a v1-style panel."/>
 		<check_box
-		 top_pad="2"
+		 top_pad="0"
 		 follows="left|top"
 		 height="16"
 		 label="Disable automatic opening of block list"
@@ -805,7 +805,7 @@
 		 control_name="FSDisableBlockListAutoOpen"
 		 tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
 		<check_box
-		 top_pad="2"
+		 top_pad="0"
 		 follows="left|top"
 		 height="16"
 		 label="'Friends' and 'Groups' in 'Comm' menu opens the [SHORT_VIEWER_GENERATION] based windows"
@@ -814,7 +814,7 @@
 		 control_name="FSUseV2Friends"
 		 tool_tip="If enabled, Friends / Groups will open through the People panel - otherwise they will open in the Contacts panel."/>
 		<check_box
-		 top_pad="2"
+		 top_pad="0"
 		 follows="left|top"
 		 height="16"
 		 label="Use legacy object properties"
@@ -822,6 +822,15 @@
 		 width="270"
 		 control_name="FSUseLegacyObjectProperties"
 		 tool_tip="If enabled, the legacy object profile window will be used when opening object properties."/>
+		<check_box
+		 top_pad="0"
+		 follows="left|top"
+		 height="16"
+		 label="Use small camera window"
+		 name="FSUseSmallCameraFloater"
+		 width="270"
+		 control_name="FSUseSmallCameraFloater"
+		 tool_tip="If enabled, the smaller, legacy camera window without camera preset controls will be used."/>
 
 		<text
 		type="string"

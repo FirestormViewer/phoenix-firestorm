@@ -119,6 +119,7 @@
 		<check_box label="Deaktiviere automatisches Öffnen der Blockierliste" name="FSDisableBlockListAutoOpen" tool_tip="Deaktiviert das automatische Öffnen der Blockierliste, wenn Avatare oder Objekte geblockt werden."/>
 		<check_box label="„Freunde“ und „Gruppen“ im Menü „Unterhalten“ öffnen die [SHORT_VIEWER_GENERATION]-Version" name="FSUseV2Friends" tool_tip="Falls aktiviert, werden Freunde bzw. Gruppen im „Leute“-Fenster geöffnet - ansonsten im Fenster „Kontakte“."/>
 		<check_box label="Ursprüngliche Version des Objekteigenschaften-Fensters verwenden" name="FSUseLegacyObjectProperties" tool_tip="Falls aktiviert, wird die ursprüngliche Version im Viewer-1-Stil des Eigenschaften-Fensters für Objekte verwendet."/>
+		<check_box label="Kleineres Fenster für Kamerasteuerung verwenden" name="FSUseSmallCameraFloater" tool_tip="Falls aktiviert, wird die ursprüngliche, kleinere Version des Fensters für die Kamerasteuerung ohne die Kontrollen für die Kamera-Voreinstellungen verwendet."/>
 		<text name="standalone_textbox">
 			Eigene Fenster verwenden für:
 		</text>
