@@ -950,6 +950,7 @@ void LLSpatialGroup::destroyGL(bool keep_occlusion)
 		releaseOcclusionQueryObjectNames();
 	}
 
+
 	for (LLSpatialGroup::element_iter i = getDataBegin(); i != getDataEnd(); ++i)
 	{
 		LLDrawable* drawable = (LLDrawable*)(*i)->getDrawable();
@@ -2270,138 +2271,100 @@ void renderBoundingBox(LLDrawable* drawable, BOOL set_color = TRUE)
 	}
 }
 
-void renderNormals(LLDrawable* drawablep)
+void renderNormals(LLDrawable *drawablep)
 {
-	LLVertexBuffer::unbind();
-	// <FS:Beq> FIX and improve renderNormals debug
-	static LLCachedControl<bool> showSelectedOnly(*LLUI::getInstance()->mSettingGroups["config"], "OnlyShowSelectedNormals");
-	// </FS:Beq>
-	LLVOVolume* vol = drawablep->getVOVolume();
-	if (vol)
-	{
-	// <FS:Beq> FIX and improve renderNormals debug
-		if(showSelectedOnly && !drawablep->getVObj()->isSelected())
-		{
-			drawablep->getVObj()->setDebugText("");
-			return;
-		}
-	// </FS:Beq>
-		LLVolume* volume = vol->getVolume();
-		gGL.pushMatrix();
-		gGL.multMatrix((F32*) vol->getRelativeXform().mMatrix);
-		
-	// <FS:Beq> FIX and improve renderNormals debug
-		// LLMatrix3 mat_norm {vol->getRelativeXformInvTrans()};
-		LLMatrix3 scale_inverse;
-		auto scale = drawablep->getScale();
-		// We need something like an inverse transpose, however
-		// we do not use the object rotation as it will be applied in the world transform
-		// but we do need to apply the inverse scale^2(1) as the world transform does a scale too.
-		// transpose of a scale only matrix is a lot of nothing, so skip it.
-		scale_inverse.setRows(LLVector3(1.0, 0.0, 0.0) / scale.mV[VX],
-							  LLVector3(0.0, 1.0, 0.0) / scale.mV[VY],
-							  LLVector3(0.0, 0.0, 1.0) / scale.mV[VZ]);
-		LLMatrix4a inv_scale_mat;
-		inv_scale_mat.loadu(scale_inverse);
-		LLMatrix3 mat_norm = scale_inverse * scale_inverse;
-		LLMatrix4a invtranspose;
-		invtranspose.loadu(mat_norm);
-	// </FS:Beq>
+    if (!drawablep->isVisible())
+        return;
 
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+    LLVertexBuffer::unbind();
 
-	// <FS:Beq> FIX and improve renderNormals debug
-		// LLVector4a scale(gSavedSettings.getF32("RenderDebugNormalScale"));
-		static LLCachedControl<F32> hairlen(*LLUI::getInstance()->mSettingGroups["config"], "RenderDebugNormalScale");
+    LLVOVolume *vol = drawablep->getVOVolume();
 
-		LLSelectNode* selectionNode = nullptr;
-		auto face_select = LLSelectMgr::getInstance()->getTEMode();
-		if(showSelectedOnly)
-		{
-			auto objp = drawablep->getVObj();
-			if(!objp)
-			{
-				return;
-			}
-			objp->setDebugText(
-				llformat(
-					"obj scale = <%.3f,%.3f,%.3f>",
-					scale.mV[VX],scale.mV[VY],scale.mV[VZ]));
-			if(face_select)
-			{
-				LLObjectSelectionHandle sel = LLSelectMgr::getInstance()->getSelection();
-				selectionNode = sel.get()->findNode(objp);
-			}
-		}
-	// </FS:Beq>
+    if (vol)
+    {
+        // <FS:Beq> FIX and improve renderNormals debug
+        static LLCachedControl<bool> showSelectedOnly(gSavedSettings, "OnlyShowSelectedNormals");
+        if(showSelectedOnly && !drawablep->getVObj()->isSelected())
+        {
+            drawablep->getVObj()->setDebugText("");
+            return;
+        }
+        // </FS:Beq>
 
-		for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
-		{
-	// <FS:Beq> FIX and improve renderNormals debug
-			if(face_select && !selectionNode->isTESelected(i))
-			{
-				continue;
-			}
-	// </FS:Beq>
-			const LLVolumeFace& face = volume->getVolumeFace(i);
+        LLVolume *volume = vol->getVolume();
 
-	// <FS:Beq> FIX and improve renderNormals debug
-			gGL.begin(LLRender::LINES);
-			gGL.diffuseColor4f(1,1,0,1); // Yellow normals
-	// </FS:Beq>
-			for (S32 j = 0; j < face.mNumVertices; ++j)
-			{
-	// <FS:Beq> FIX and improve renderNormals debug
-				// gGL.begin(LLRender::LINES);
-				// LLVector4a n,p;
-				
-				// n.setMul(face.mNormals[j], scale);
-				// p.setAdd(face.mPositions[j], n);
-				
-				// gGL.diffuseColor4f(1,1,1,1);
-				// gGL.vertex3fv(face.mPositions[j].getF32ptr());
-				// gGL.vertex3fv(p.getF32ptr());
-				// 
-				// if (face.mTangents)
-				// {
-				// 	n.setMul(face.mTangents[j], scale);
-				// 	p.setAdd(face.mPositions[j], n);
-				// 	gGL.vertex3fv(face.mPositions[j].getF32ptr());
-				// 	gGL.vertex3fv(p.getF32ptr());
-				// }
-				LLVector4a n,ni,p;
-				n = face.mNormals[j];
-				invtranspose.affineTransform(n, ni);
-				ni.normalize3fast();
-				n.setMul(ni, (F32)hairlen);
-				inv_scale_mat.affineTransform(n, ni); // overcompensate for the fact we draw "through" the model transform
-				p.setAdd(face.mPositions[j], ni);
-				gGL.vertex3fv(face.mPositions[j].getF32ptr());
-				gGL.vertex3fv(p.getF32ptr());
-			}
-			gGL.flush();
-			if (face.mTangents)
-			{
-				// gGL.begin(LLRender::LINES);
-				gGL.diffuseColor4f(0,0,1,1); // blue tangents.
-				for (S32 j = 0; j < face.mNumVertices; ++j)
-				{
-					LLVector4a t,ti,p;
-					t = face.mTangents[j];
-					// invtranspose.affineTransform(t, ti);
-					t.mul((F32)hairlen);
-					inv_scale_mat.affineTransform(t, ti); // overcompensate for the fact we draw "through" the model transform
-					p.setAdd(face.mPositions[j], ti);
-					gGL.vertex3fv(face.mPositions[j].getF32ptr());
-					gGL.vertex3fv(p.getF32ptr());
-				}
-			}
-			gGL.end();
-			// </FS:Beq>
-		}
+        // Drawable's normals & tangents are stored in model space, i.e. before any scaling is applied.
+        //
+        // SL-13490, using pos + normal to compute the 2nd vertex of a normal line segment doesn't
+        // work when there's a non-uniform scale in the mix. Normals require MVP-inverse-transpose
+        // transform. We get that effect here by pre-applying the inverse scale (twice, because
+        // one forward scale will be re-applied via the MVP in the vertex shader)
 
-		gGL.popMatrix();
-	}
+        LLVector3  scale_v3 = vol->getScale();
+        float      scale_len = scale_v3.length();
+        LLVector4a obj_scale(scale_v3.mV[VX], scale_v3.mV[VY], scale_v3.mV[VZ]);
+        obj_scale.normalize3();
+
+        // Normals &tangent line segments get scaled along with the object. Divide by scale length
+        // to keep the as-viewed lengths (relatively) constant with the debug setting length
+        float draw_length = gSavedSettings.getF32("RenderDebugNormalScale") / scale_len;
+
+        // Create inverse-scale vector for normals
+        LLVector4a inv_scale(1.0 / scale_v3.mV[VX], 1.0 / scale_v3.mV[VY], 1.0 / scale_v3.mV[VZ]);
+        inv_scale.mul(inv_scale);  // Squared, to apply inverse scale twice
+        inv_scale.normalize3fast();
+
+        gGL.pushMatrix();
+        gGL.multMatrix((F32 *) vol->getRelativeXform().mMatrix);
+
+        gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+        for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
+        {
+            const LLVolumeFace &face = volume->getVolumeFace(i);
+
+            gGL.flush();
+            gGL.diffuseColor4f(1, 1, 0, 1);
+            gGL.begin(LLRender::LINES);
+            for (S32 j = 0; j < face.mNumVertices; ++j)
+            {
+                LLVector4a n, p;
+
+                n.setMul(face.mNormals[j], 1.0);
+                n.mul(inv_scale);  // Pre-scale normal, so it's left with an inverse-transpose xform after MVP
+                n.normalize3fast();
+                n.mul(draw_length);
+                p.setAdd(face.mPositions[j], n);
+
+                gGL.vertex3fv(face.mPositions[j].getF32ptr());
+                gGL.vertex3fv(p.getF32ptr());
+            }
+            gGL.end();
+
+            // Tangents are simple vectors and do not require reorientation via pre-scaling
+            if (face.mTangents)
+            {
+                gGL.flush();
+                gGL.diffuseColor4f(0, 1, 1, 1);
+                gGL.begin(LLRender::LINES);
+                for (S32 j = 0; j < face.mNumVertices; ++j)
+                {
+                    LLVector4a t, p;
+
+                    t.setMul(face.mTangents[j], 1.0f);
+                    t.normalize3fast();
+                    t.mul(draw_length);
+                    p.setAdd(face.mPositions[j], t);
+
+                    gGL.vertex3fv(face.mPositions[j].getF32ptr());
+                    gGL.vertex3fv(p.getF32ptr());
+                }
+                gGL.end();
+            }
+        }
+
+        gGL.popMatrix();
+    }
 }
 
 S32 get_physics_detail(const LLVolumeParams& volume_params, const LLVector3& scale)

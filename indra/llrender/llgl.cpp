@@ -1020,7 +1020,6 @@ void LLGLManager::asLLSD(LLSD& info)
 	// Other fields
 	info["has_requirements"] = mHasRequirements;
 	info["has_separate_specular_color"] = mHasSeparateSpecularColor;
-	info["debug_gpu"] = mDebugGPU;
 	info["max_vertex_range"] = mGLMaxVertexRange;
 	info["max_index_range"] = mGLMaxIndexRange;
 	info["max_texture_size"] = mGLMaxTextureSize;
