@@ -1369,10 +1369,9 @@ bool LLAppViewer::init()
 	gGLActive = FALSE;
 
 	// <FS:Ansariel> Disable updater
-//#if LL_RELEASE_FOR_DOWNLOAD
 //#if LL_RELEASE_FOR_DOWNLOAD 
-//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
-//    {
+//	if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//	{
 //	LLProcess::Params updater;
 //	updater.desc = "updater process";
 //	// Because it's the updater, it MUST persist beyond the lifespan of the
