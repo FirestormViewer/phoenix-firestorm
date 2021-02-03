@@ -168,6 +168,7 @@
 			<check_box label="Włącz głębię ostrości (rozmywaj widok z wyjątkiem miejsca, gdzie skupiona jest kamera)" name="UseDoF"/>
 			<check_box label="Włączaj w trybie budowania" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="Włączaj pod wodą" name="FSRenderDoFUnderwater"/>
+			<check_box label="Głębia ostrości podąża za kursorem" name="FSFocusPointFollowsPointer" tool_tip="Głębia ostrości (DoF) będzie podążać za kursorem myszy - to zachowanie jest zgodne z tym, co widać podczas korzystania z Flycam. Używaj w połączeniu z blokadą ostrości DoF." />
 			<slider label="Wartość F kamery:" name="CameraFNum" tool_tip="Wartość F kamery dla głębi ostrości"/>
 			<slider label="Ogniskowa (mm):" name="CameraFocal" tool_tip="Ogniskowa dla głębi ostrości (w milimetrach)"/>
 			<slider label="Pole widzenia (°):" name="Camera FOV" tool_tip="Pionowy kąt pola widzenia kamery dla głębi ostrości (w stopniach)"/>

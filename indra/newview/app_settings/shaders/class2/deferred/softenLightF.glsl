@@ -88,6 +88,10 @@ void main()
     da                = pow(da, light_gamma);
 
     vec4 diffuse = texture2DRect(diffuseRect, tc);
+    // <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
+    // convert to gamma space
+    diffuse.rgb = linear_to_srgb(diffuse.rgb);
+    // </FS:Beq>
     vec4 spec    = texture2DRect(specularRect, vary_fragcoord.xy);
 
     vec2 scol_ambocc = texture2DRect(lightMap, vary_fragcoord.xy).rg;

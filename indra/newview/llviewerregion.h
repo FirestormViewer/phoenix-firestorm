@@ -250,6 +250,7 @@ public:
 
 	S32 getRegionMaxBakes() const						{ return mMaxBakes; } // <FS:Beq/> FS BOM for OS max bakes restriction
 	S32 getRegionMaxTEs() const							{ return mMaxTEs; } // <FS:Beq/> FS BOM for OS max TEs restriction
+
 	void idleUpdate(F32 max_update_time);
 	void lightIdleUpdate();
 	bool addVisibleGroup(LLViewerOctreeGroup* group);
@@ -420,6 +421,8 @@ public:
 
 	BOOL isPaused() const {return mPaused;}
 	S32  getLastUpdate() const {return mLastUpdate;}
+
+	std::string getSimHostName();
 
 	static BOOL isNewObjectCreationThrottleDisabled() {return sNewObjectCreationThrottle < 0;}
 

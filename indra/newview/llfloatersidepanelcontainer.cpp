@@ -64,7 +64,7 @@ void LLFloaterSidePanelContainer::onOpen(const LLSD& key)
 void LLFloaterSidePanelContainer::closeFloater(bool app_quitting)
 {
 	LLPanelOutfitEdit* panel_outfit_edit =
-		dynamic_cast<LLPanelOutfitEdit*>(LLFloaterSidePanelContainer::getPanel("appearance", "panel_outfit_edit"));
+		dynamic_cast<LLPanelOutfitEdit*>(LLFloaterSidePanelContainer::findPanel("appearance", "panel_outfit_edit"));
 	if (panel_outfit_edit)
 	{
 		LLFloater *parent = gFloaterView->getParentFloater(panel_outfit_edit);
@@ -171,7 +171,6 @@ LLPanel* LLFloaterSidePanelContainer::getPanel(const std::string& floater_name, 
 	return NULL;
 }
 
-// <FS:Ansariel> Convenience method
 LLPanel* LLFloaterSidePanelContainer::findPanel(const std::string& floater_name, const std::string& panel_name)
 {
 	LLFloaterSidePanelContainer* floaterp = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>(floater_name);
@@ -183,4 +182,3 @@ LLPanel* LLFloaterSidePanelContainer::findPanel(const std::string& floater_name,
 
 	return NULL;
 }
-// </FS:Ansariel>

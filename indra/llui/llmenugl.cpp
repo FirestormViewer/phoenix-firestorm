@@ -4202,6 +4202,9 @@ void LLContextMenu::show(S32 x, S32 y, LLView* spawning_view)
 		{
 			y += height;
 		}
+
+		// <FS:Ansariel> FIRE-10883: Prevent context menu from going off screen
+		y = llmin(y, menu_region_rect.mTop);
 	}
 
 	// Open out to the left if menu extends past right edge
@@ -4215,6 +4218,9 @@ void LLContextMenu::show(S32 x, S32 y, LLView* spawning_view)
 		{
 			x -= width;
 		}
+
+		// <FS:Ansariel> FIRE-10883: Prevent context menu from going off screen
+		x = llmax(x, menu_region_rect.mLeft);
 	}
 
 	S32 local_x, local_y;

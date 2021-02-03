@@ -5484,4 +5484,10 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 	<notification name="EnableHiDPI">
 		HiDPI kann negative Effekte aufweisen und die Leistung beeinträchtigen.
 	</notification>
+	<notification name="CantCreateInventoryName">
+		Dieses Inventar kann nicht erstellt werden: [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		Mehrfach-Import von Windlight abgeschlossen.
+	</notification>
 </notifications>

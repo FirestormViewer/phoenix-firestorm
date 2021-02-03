@@ -405,6 +405,7 @@ void main()
     vec3 npos = normalize(-pos.xyz);
 
     vec3 light = vec3(0, 0, 0);
+    final_specular.rgb = srgb_to_linear(final_specular.rgb);// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
     
 #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, npos, diffuse.rgb, final_specular, pos.xyz, norm.xyz, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, glare, light_attenuation[i].w );
 

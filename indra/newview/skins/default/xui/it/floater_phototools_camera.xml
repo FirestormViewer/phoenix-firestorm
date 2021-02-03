@@ -27,7 +27,7 @@
 								Vista laterale
 							</panel_camera_item.text>
 						</panel_camera_item>
-						<panel_camera_item name="rear_view">/>
+						<panel_camera_item name="rear_view">
 							<panel_camera_item.text	 name="rear_view_text">
 								Vista retro
 							</panel_camera_item.text>

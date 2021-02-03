@@ -7160,4 +7160,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="FSAreaSearch_Cost_Label">
 		[COST] L$
 	</string>
+	<string name="ImportingWindlightBulk">
+		Importiere Windlight...
+	</string>
 </strings>

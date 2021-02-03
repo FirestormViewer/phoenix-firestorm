@@ -93,7 +93,8 @@
 		<combo_box.item value="filter_type_textures" label="Texturen" />
 		<combo_box.item value="filter_type_snapshots" label="Fotos" />
 		<combo_box.item value="filter_type_meshes" label="Meshes" />
-		<combo_box.item value="filter_separator" label="------------" enabled="false" />
+		<combo_box.item value="filter_type_settings" label="Einstellungen" />
+		<combo_box.item value="filter_separator" label="------------" />
 		<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
 	</combo_box>
 	<menu_button name="options_visibility_btn" tool_tip="Sichtbarkeitseinstellungen für Suchergebnisse anzeigen"/>
