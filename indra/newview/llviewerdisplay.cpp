@@ -540,6 +540,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gAgent.setTeleportState( LLAgent::TELEPORT_ARRIVING );
 			gAgent.setTeleportMessage(
 				LLAgent::sTeleportProgressMessages["arriving"]);
+			gAgent.sheduleTeleportIM();
 			gTextureList.mForceResetTextureStats = TRUE;
 			if(!gSavedSettings.getBOOL("FSDisableTeleportScreens"))
 			{

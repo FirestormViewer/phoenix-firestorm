@@ -1081,7 +1081,7 @@ void LLInvFVBridge::addTrashContextMenuOptions(menuentry_vec_t &items,
 		}
 	}
 	items.push_back(std::string("Purge Item"));
-	if (!isItemRemovable())
+	if (!isItemRemovable() || isPanelActive("Favorite Items"))
 	{
 		disabled_items.push_back(std::string("Purge Item"));
 	}
@@ -2070,33 +2070,11 @@ void LLItemBridge::restoreToWorld()
 
 void LLItemBridge::gotoItem()
 {
-	LLInventoryObject *obj = getInventoryObject();
-	if (obj && obj->getIsLinkType())
-	{
-		const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
-		// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-		//if (gInventory.isObjectDescendentOf(obj->getLinkedUUID(), inbox_id))
-		if (gInventory.isObjectDescendentOf(obj->getLinkedUUID(), inbox_id) && !gSavedSettings.getBOOL("FSShowInboxFolder"))
-		// </FS:Ansariel>
-		{
-			LLSidepanelInventory *sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-			if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
-			{
-				sidepanel_inventory->getInboxPanel()->setSelection(obj->getLinkedUUID(), TAKE_FOCUS_NO);
-			}
-		}
-		else
-		{
-			LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel();
-			if (active_panel)
-			{
-				active_panel->setSelection(obj->getLinkedUUID(), TAKE_FOCUS_NO);
-				// <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
-				//active_panel->setFocus(TRUE);
-			}
-		}
-
-	}
+    LLInventoryObject *obj = getInventoryObject();
+    if (obj && obj->getIsLinkType())
+    {
+        show_item_original(obj->getUUID());
+    }
 }
 
 LLUIImagePtr LLItemBridge::getIcon() const
@@ -8026,30 +8004,20 @@ void LLLinkFolderBridge::performAction(LLInventoryModel* model, std::string acti
 	}
 	LLItemBridge::performAction(model,action);
 }
-
 void LLLinkFolderBridge::gotoItem()
 {
-    // <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
-    //LLItemBridge::gotoItem();
-    //LLInventoryPanel::getActiveInventoryPanel()->openFolderByID(getFolderID());
+    LLItemBridge::gotoItem();
+
     const LLUUID &cat_uuid = getFolderID();
     if (!cat_uuid.isNull())
     {
-        LLFolderViewItem *base_folder = mInventoryPanel.get()->getItemByID(cat_uuid);
+        LLFolderViewItem *base_folder = LLInventoryPanel::getActiveInventoryPanel()->getItemByID(cat_uuid);
         if (base_folder)
         {
-            if (LLInventoryModel* model = getInventoryModel())
-            {
-                model->fetchDescendentsOf(cat_uuid);
-            }
             base_folder->setOpen(TRUE);
-            mRoot->setSelection(base_folder,TRUE);
-            mRoot->scrollToShowSelection();
         }
     }
-    // </FS:Ansariel>
 }
-
 const LLUUID &LLLinkFolderBridge::getFolderID() const
 {
 	if (LLViewerInventoryItem *link_item = getItem())

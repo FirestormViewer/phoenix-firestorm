@@ -136,6 +136,7 @@ public:
 		mUserNameFont(NULL),
 		mUserNameTextBox(NULL),
 		mTimeBoxTextBox(NULL),
+		mNeedsTimeBox(true),
 		mAvatarNameCacheConnection()
 	{}
 
@@ -667,8 +668,19 @@ public:
 		user_name->setReadOnlyColor(style_params.readonly_color());
 		user_name->setColor(style_params.color());
 
-		if (chat.mFromName.empty()
-			|| mSourceType == CHAT_SOURCE_SYSTEM)
+        if (mSourceType == CHAT_SOURCE_TELEPORT
+            && chat.mChatStyle == CHAT_STYLE_TELEPORT_SEP)
+        {
+            mFrom = chat.mFromName;
+            mNeedsTimeBox = false;
+            user_name->setValue(mFrom);
+            updateMinUserNameWidth();
+            LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
+            setTransparentColor(sep_color);
+            mTimeBoxTextBox->setVisible(FALSE);
+        }
+        else if (chat.mFromName.empty()
+                 || mSourceType == CHAT_SOURCE_SYSTEM)
 		{
 			mFrom = LLTrans::getString("SECOND_LIFE");
 			if(!chat.mFromName.empty() && (mFrom != chat.mFromName))
@@ -776,6 +788,8 @@ public:
 				break;
 			case CHAT_SOURCE_SYSTEM:
 				icon->setValue(LLSD("SL_Logo"));
+			case CHAT_SOURCE_TELEPORT:
+				icon->setValue(LLSD("Command_Destinations_Icon"));
 				break;
 			case CHAT_SOURCE_UNKNOWN: 
 				icon->setValue(LLSD("Unknown_Icon"));
@@ -815,7 +829,7 @@ public:
 		S32 user_name_width = user_name_rect.getWidth();
 		S32 time_box_width = time_box->getRect().getWidth();
 
-		if (!time_box->getVisible() && user_name_width > mMinUserNameWidth)
+		if (mNeedsTimeBox && !time_box->getVisible() && user_name_width > mMinUserNameWidth)
 		{
 			user_name_rect.mRight -= time_box_width;
 			user_name->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
@@ -1027,6 +1041,8 @@ protected:
 	const LLFontGL*		mUserNameFont;
 	LLTextBox*			mUserNameTextBox;
 	LLTextBox*			mTimeBoxTextBox; 
+
+    bool				mNeedsTimeBox;
 
 private:
 	boost::signals2::connection mAvatarNameCacheConnection;
@@ -1262,6 +1278,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
+	bool teleport_separator = chat.mSourceType == CHAT_SOURCE_TELEPORT;
 	// We graying out chat history by graying out messages that contains full date in a time string
 	if (message_from_log)
 	{
@@ -1282,14 +1299,14 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLStyle::Params timestamp_style(body_message_params);
 
 		// out of the timestamp
-		if (args["show_time"].asBoolean())
+		if (args["show_time"].asBoolean() && !teleport_separator)
 		{
-		if (!message_from_log)
-		{
-			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
-			timestamp_style.color(timestamp_color);
-			timestamp_style.readonly_color(timestamp_color);
-		}
+			if (!message_from_log)
+			{
+				LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
+				timestamp_style.color(timestamp_color);
+				timestamp_style.readonly_color(timestamp_color);
+			}
 			mEditor->appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
 			prependNewLineState = false;
 		}
@@ -1345,6 +1362,13 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					prependNewLineState, link_params);
 				prependNewLineState = false;
 			}
+            else if (teleport_separator)
+            {
+                std::string tp_text = LLTrans::getString("teleport_preamble_compact_chat");
+                mEditor->appendText(tp_text + " <nolink>" + chat.mFromName + "</nolink>",
+                    prependNewLineState, body_message_params);
+                                prependNewLineState = false;
+            }
 			else
 			{
 				mEditor->appendText("<nolink>" + chat.mFromName + "</nolink>" + delimiter,
@@ -1363,8 +1387,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		p.right_pad = mRightWidgetPad;
 
 		LLDate new_message_time = LLDate::now();
-
-		if (mLastFromName == chat.mFromName 
+		if (!teleport_separator
+			&& mLastFromName == chat.mFromName
 			&& mLastFromID == chat.mFromID
 			&& mLastMessageTime.notNull() 
 			&& (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
@@ -1387,7 +1411,14 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				p.top_pad = 0;
 			else
 				p.top_pad = mTopHeaderPad;
-            p.bottom_pad = mBottomHeaderPad;
+            if (teleport_separator)
+            {
+                p.bottom_pad = mBottomSeparatorPad;
+            }
+            else
+            {
+                p.bottom_pad = mBottomHeaderPad;
+            }
             if (!view)
             {
                 LL_WARNS() << "Failed to create header from " << mMessageHeaderFilename << ": can't append to history" << LL_ENDL;
@@ -1465,9 +1496,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			}
 		}
 	}
-
 	// usual messages showing
-	else
+	else if(!teleport_separator)
 	{
 		std::string message = irc_me ? chat.mText.substr(3) : chat.mText;
 
@@ -1500,7 +1530,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		if (square_brackets)
 		{
 			message += "]";
-	}
+		}
 
 		mEditor->appendText(message, prependNewLineState, body_message_params);
 		prependNewLineState = false;

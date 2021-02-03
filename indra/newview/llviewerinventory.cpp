@@ -1654,6 +1654,12 @@ void remove_inventory_category(
 			LLNotificationsUtil::add("CannotRemoveProtectedCategories");
 			return;
 		}
+		const LLUUID fav_id = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_FAVORITE);
+		if ((cat_id == fav_id) || gInventory.isObjectDescendentOf(fav_id, cat_id))
+		{
+			gSavedPerAccountSettings.setString("FavoritesFolder", "");
+		}
+
 		// <FS:Ansariel> [UDP-Msg]
 		if (AISAPI::isAvailable())
 		{

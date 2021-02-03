@@ -497,16 +497,15 @@ void LLPanelMainInventory::closeAllFolders()
 	getPanel()->getRootFolder()->closeAllFolders();
 }
 
-LLFloaterSidePanelContainer* LLPanelMainInventory::newWindow()
+void LLPanelMainInventory::newWindow()
 {
 	static S32 instance_num = 0;
 	instance_num = (instance_num + 1) % S32_MAX;
 
 	if (!gAgentCamera.cameraMouselook())
 	{
-		return LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
+		LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
 	}
-    return NULL;
 }
 
 void LLPanelMainInventory::doCreate(const LLSD& userdata)
@@ -1759,18 +1758,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		{
 			return;
 		}
-        // <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
-        //LLSidepanelInventory *sidepanel_inventory = newWindow()->LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-        //if (sidepanel_inventory)
-        //{
-        //    LLPanelMainInventory* new_inventory = sidepanel_inventory->getMainInventoryPanel();
-        //    if (new_inventory)
-        //    {
-        //        static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->performAction(new_inventory->getActivePanel()->getModel(), "goto");
-        //    }
-        //}
-        static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->performAction(getActivePanel()->getModel(), "goto");
-        // </FS:Ansariel>
+		static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->performAction(getActivePanel()->getModel(), "goto");
 	}
 
 	if (command_name == "find_links")

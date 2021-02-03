@@ -881,64 +881,48 @@ void show_item_profile(const LLUUID& item_uuid)
 
 void show_item_original(const LLUUID& item_uuid)
 {
-	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel;
-	//				 Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
-	//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
-	//if (!floater_inventory)
-	//{
-	//	LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
-	//	return;
-	//}
+    LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+    if (!floater_inventory)
+    {
+        LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
+        return;
+    }
+    LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+    if (sidepanel_inventory)
+    {
+        LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+        if (main_inventory)
+        {
+            main_inventory->resetFilters();
+        }
+        reset_inventory_filter();
 
-	////sidetray inventory panel
-	//LLSidepanelInventory *sidepanel_inventory =	LLPanelMainInventory::newWindow()->LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+        if (!LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("inventory")->isInVisibleChain())
+        {
+            LLFloaterReg::toggleInstanceOrBringToFront("inventory");
+        }
 
-	//LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	//if (!active_panel) 
-	//{
-	//	//this may happen when there is no floatera and other panel is active in inventory tab
-
-	//	if	(sidepanel_inventory)
-	//	{
-	//		sidepanel_inventory->showInventoryPanel();
-	//	}
-	//}
-	//
-	//active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	//if (!active_panel) 
-	//{
-	//	return;
-	//}
-	//active_panel->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
-	//active_panel->setFocus(TRUE);
-
-	LLFloaterReg::showInstance("inventory");
-	LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-	sidepanel_inventory->showInventoryPanel();
-	LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
-	main_inventory->showAllItemsPanel();
-	main_inventory->resetFilters();
-	main_inventory->onFilterEdit("");
-	LLUUID linked_item_id = gInventory.getLinkedItemID(item_uuid);
-	bool in_inbox = (gInventory.isObjectDescendentOf(linked_item_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
-	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-
-	if (in_inbox && !show_inbox)
-	{
-		LLInventoryPanel * inventory_panel = NULL;
-		sidepanel_inventory->openInbox();
-		inventory_panel = sidepanel_inventory->getInboxPanel();
-
-		if (inventory_panel)
-		{
-			inventory_panel->setSelection(linked_item_id, TAKE_FOCUS_YES);
-		}
-	}
-	else
-	{
-		main_inventory->getActivePanel()->setSelection(linked_item_id, TAKE_FOCUS_YES);
-	}
-	// </FS:Ansariel>
+        const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
+        // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+        // if (gInventory.isObjectDescendentOf(gInventory.getLinkedItemID(item_uuid), inbox_id))
+        if (gInventory.isObjectDescendentOf(gInventory.getLinkedItemID(item_uuid), inbox_id) && !gSavedSettings.getBOOL("FSShowInboxFolder"))
+        // </FS:Ansariel>
+        {
+            if (sidepanel_inventory->getInboxPanel())
+            {
+                sidepanel_inventory->openInbox();
+                sidepanel_inventory->getInboxPanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+            }
+        }
+        else
+        {
+            sidepanel_inventory->selectAllItemsPanel();
+            if (sidepanel_inventory->getActivePanel())
+            {
+                sidepanel_inventory->getActivePanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+            }
+        }
+    }
 }
 
 
@@ -2753,17 +2737,6 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     // </FS:Ansariel>
     else
     {
-        // <FS:Ansariel> Undo SL-13826 Open a new inventory floater for "Find original" and "Show original" result
-        //if (action == "goto")
-        //{
-        //    LLSidepanelInventory *sidepanel_inventory = LLPanelMainInventory::newWindow()->LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-        //    if (sidepanel_inventory && sidepanel_inventory->getMainInventoryPanel())
-        //    {
-        //        model = sidepanel_inventory->getMainInventoryPanel()->getActivePanel()->getModel();
-        //    }
-        //}
-        // </FS:Ansariel>
-        
         std::set<LLFolderViewItem*>::iterator set_iter;
         for (set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
         {
