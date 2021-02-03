@@ -172,6 +172,14 @@ LLMuteList::LLMuteList() :
 	gMessageSystem.callWhenReady(boost::bind(&LLMessageSystem::setHandlerFuncFast, _1,
 											 _PREHASH_UseCachedMuteList, processUseCachedMuteList,
 											 static_cast<void**>(NULL)));
+
+    // make sure mute list's instance gets initialized before we start any name requests
+    LLAvatarNameCache::getInstance()->setAccountNameChangedCallback([this](const LLUUID& id, const LLAvatarName& av_name)
+        {
+            // it would be better to just pass LLAvatarName instead of doing unnesssesary copies
+            // but this way is just more convinient
+            onAccountNameChanged(id, av_name.getUserName());
+        });
 }
 
 //-----------------------------------------------------------------------------
@@ -180,6 +188,11 @@ LLMuteList::LLMuteList() :
 LLMuteList::~LLMuteList()
 {
 
+}
+
+void LLMuteList::cleanupSingleton()
+{
+    LLAvatarNameCache::getInstance()->setAccountNameChangedCallback(NULL);
 }
 
 BOOL LLMuteList::isLinden(const std::string& name) const
@@ -235,8 +248,8 @@ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
         LL_WARNS() << "Trying to self; ignored" << LL_ENDL;
 		return FALSE;
 	}
-	
-	S32 mute_list_limit = gSavedSettings.getS32("MuteListLimit");
+
+	static LLCachedControl<S32> mute_list_limit(gSavedSettings, "MuteListLimit", 1000);
 	if (getMutes().size() >= mute_list_limit)
 	{
 		LL_WARNS() << "Mute limit is reached; ignored" << LL_ENDL;
@@ -376,6 +389,10 @@ void LLMuteList::updateAdd(const LLMute& mute, bool show_message /* = true */)
 	msg->addU32("MuteFlags", mute.mFlags);
 	gAgent.sendReliableMessage();
 
+    if (!mIsLoaded)
+    {
+        LL_WARNS() << "Added elements to non-initialized block list" << LL_ENDL;
+    }
 	mIsLoaded = TRUE; // why is this here? -MG
 
 	// <FS:Ansariel> FIRE-15746: Show block report in nearby chat
@@ -418,6 +435,8 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		else
 		{
 			// The caller didn't pass any flags -- just remove the mute entry entirely.
+			// set flags to notify observers with (flag being present means that something is allowed)
+			localmute.mFlags = LLMute::flagAll;
 		}
 		
 		// Always remove the entry from the set -- it will be re-added with new flags if necessary.
@@ -441,8 +460,8 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		}
 		
 		// Must be after erase.
+		notifyObservers();
 		notifyObserversDetailed(localmute);
-		setLoaded();  // why is this here? -MG
 
 		// <FS:Ansariel> Return correct return value
 		found = TRUE;
@@ -458,8 +477,8 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 			updateRemove(mute);
 			mLegacyMutes.erase(legacy_it);
 			// Must be after erase.
+			notifyObservers();
 			notifyObserversDetailed(mute);
-			setLoaded(); // why is this here? -MG
 
 			// <FS:Ansariel> Return correct return value
 			found = TRUE;
@@ -629,6 +648,19 @@ BOOL LLMuteList::loadFromFile(const std::string& filename)
 	}
 	fclose(fp);
 	setLoaded();
+
+    // server does not maintain up-to date account names (not display names!)
+    // in this list, so it falls to viewer.
+    pending_names_t::iterator iter = mPendingAgentNameUpdates.begin();
+    pending_names_t::iterator end = mPendingAgentNameUpdates.end();
+    while (iter != end)
+    {
+        // this will send updates to server, make sure mIsLoaded is set
+        onAccountNameChanged(iter->first, iter->second);
+        iter++;
+    }
+    mPendingAgentNameUpdates.clear();
+
 	return TRUE;
 }
 
@@ -826,6 +858,48 @@ void LLMuteList::onFileMuteList(void** user_data, S32 error_code, LLExtStat ext_
 		LLFile::remove(*local_filename_and_path);
 	}
 	delete local_filename_and_path;
+}
+
+void LLMuteList::onAccountNameChanged(const LLUUID& id, const std::string& username)
+{
+    if (mIsLoaded)
+    {
+        LLMute mute(id, username, LLMute::AGENT);
+        mute_set_t::iterator mute_it = mMutes.find(mute);
+        if (mute_it != mMutes.end()
+            && mute_it->mName != mute.mName
+            && mute_it->mType == LLMute::AGENT) // just in case, it is std::set, not map
+        {
+            // existing mute, but name changed, copy data
+            mute.mFlags = mute_it->mFlags;
+
+            // erase old variant
+            mMutes.erase(mute_it);
+
+            // (re)add the mute entry.
+            {
+                std::pair<mute_set_t::iterator, bool> result = mMutes.insert(mute);
+                if (result.second)
+                {
+                    LL_INFOS() << "Muting " << mute.mName << " id " << mute.mID << " flags " << mute.mFlags << LL_ENDL;
+                    updateAdd(mute);
+                    // Do not notify observers here, observers do not know or need to handle name changes
+                    // Example: block list considers notifyObserversDetailed as a selection update;
+                    // Various chat/voice statuses care only about id and flags
+                    // Since apropriate update time for account names is considered to be in 'hours' it is
+                    // fine not to update UI (will be fine after restart or couple other changes)
+
+                }
+            }
+        }
+    }
+    else
+    {
+        // Delay update until we load file
+        // Ex: Buddies list can arrive too early since we prerequest
+        // names from Buddies list before we load blocklist
+        mPendingAgentNameUpdates[id] = username;
+    }
 }
 
 void LLMuteList::addObserver(LLMuteListObserver* observer)

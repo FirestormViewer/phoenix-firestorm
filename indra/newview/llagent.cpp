@@ -1030,6 +1030,18 @@ boost::signals2::connection LLAgent::addParcelChangedCallback(parcel_changed_cal
 	return mParcelChangedSignal.connect(cb);
 }
 
+// static
+void LLAgent::capabilityReceivedCallback(const LLUUID &region_id)
+{
+    LLViewerRegion* region = gAgent.getRegion();
+    if (region && region->getRegionID() == region_id)
+    {
+        region->requestSimulatorFeatures();
+        LLAppViewer::instance()->updateNameLookupUrl();
+    }
+}
+
+
 //-----------------------------------------------------------------------------
 // setRegion()
 //-----------------------------------------------------------------------------
@@ -1080,10 +1092,11 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             if (regionp->capabilitiesReceived())
             {
                 regionp->requestSimulatorFeatures();
+                LLAppViewer::instance()->updateNameLookupUrl();
             }
             else
             {
-                regionp->setCapabilitiesReceivedCallback(boost::bind(&LLViewerRegion::requestSimulatorFeatures, regionp));
+                regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
             }
 
 		}
@@ -1102,6 +1115,15 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 
 			// Update all of the regions.
 			LLWorld::getInstance()->updateAgentOffset(mAgentOriginGlobal);
+
+            if (regionp->capabilitiesReceived())
+            {
+                LLAppViewer::instance()->updateNameLookupUrl();
+            }
+            else
+            {
+                regionp->setCapabilitiesReceivedCallback([](const LLUUID &region_id) {LLAppViewer::instance()->updateNameLookupUrl(); });
+            }
 		}
 
 		// Pass new region along to metrics components that care about this level of detail.
@@ -6010,8 +6032,8 @@ void LLAgent::processAgentCachedTextureResponse(LLMessageSystem *mesgsys, void *
 
 
 		if ((S32)texture_index < TEX_NUM_INDICES )
-		{	
-			const LLAvatarAppearanceDictionary::TextureEntry *texture_entry = LLAvatarAppearanceDictionary::instance().getTexture((ETextureIndex)texture_index);
+		{
+			const LLAvatarAppearanceDictionary::TextureEntry *texture_entry = LLAvatarAppearance::getDictionary()->getTexture((ETextureIndex)texture_index);
 			if (texture_entry)
 			{
 				EBakedTextureIndex baked_index = texture_entry->mBakedTextureIndex;
@@ -6077,8 +6099,8 @@ void LLAgent::dumpSentAppearance(const std::string& dump_prefix)
 		F32 value = appearance_version_param->getWeight();
 		dump_visual_param(file, appearance_version_param, value);
 	}
-	for (LLAvatarAppearanceDictionary::Textures::const_iterator iter = LLAvatarAppearanceDictionary::getInstance()->getTextures().begin();
-		 iter != LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
+	for (LLAvatarAppearanceDictionary::Textures::const_iterator iter = LLAvatarAppearance::getDictionary()->getTextures().begin();
+		 iter != LLAvatarAppearance::getDictionary()->getTextures().end();
 		 ++iter)
 	{
 		const ETextureIndex index = iter->first;
@@ -6187,7 +6209,7 @@ void LLAgent::sendAgentSetAppearance()
 	{
 		for(U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++ )
 		{
-			const ETextureIndex texture_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
+			const ETextureIndex texture_index = LLAvatarAppearance::getDictionary()->bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
 
 			// if we're not wearing a skirt, we don't need the texture to be baked
 			if (texture_index == TEX_SKIRT_BAKED && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT))
@@ -6246,7 +6268,7 @@ void LLAgent::sendAgentSetAppearance()
 			const LLUUID hash = gAgentWearables.computeBakedTextureHash((EBakedTextureIndex) baked_index, generate_valid_hash);
 			if (hash.notNull())
 			{
-				ETextureIndex texture_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex) baked_index);
+				ETextureIndex texture_index = LLAvatarAppearance::getDictionary()->bakedToLocalTextureIndex((EBakedTextureIndex) baked_index);
 				msg->nextBlockFast(_PREHASH_WearableData);
 				msg->addUUIDFast(_PREHASH_CacheID, hash);
 				msg->addU8Fast(_PREHASH_TextureIndex, (U8)texture_index);

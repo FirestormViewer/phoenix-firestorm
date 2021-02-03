@@ -72,6 +72,8 @@ void FSPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
 	if(!mParticipantList)
 	{
 		LLSpeakerMgr* speaker_manager = LLIMModel::getInstance()->getSpeakerManager(session_id);
+		// <FS:Beq/> potential crash avoidance. getSpeakerManager can return NULL, the constructor does not check
+		if ( speaker_manager == nullptr ){ return;}
 		mParticipantList = new FSParticipantList(speaker_manager, getChild<LLAvatarList>("grp_speakers_list"), true,false);
 	}
 }

@@ -5268,8 +5268,9 @@ void handle_reset_view()
 		// switching to outfit selector should automagically save any currently edited wearable
 		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "my_outfits"));
 	}
-	
+
 	// <FS:Zi> Added optional V1 behavior so the avatar turns into camera direction after hitting ESC
+	// gAgentCamera.setFocusOnAvatar(TRUE, FALSE, FALSE);
 	if (!gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
 	{
 		// The only thing we actually want to do here is set LLAgent::mFocusOnAvatar to TRUE,
@@ -8980,6 +8981,64 @@ class LLToolsSelectedScriptAction : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
+		// <FS> Script reset in edit floater
+		//std::string action = userdata.asString();
+		//bool mono = false;
+		//std::string msg, name;
+		//std::string title;
+		//if (action == "compile mono")
+		//{
+		//	name = "compile_queue";
+		//	mono = true;
+		//	msg = "Recompile";
+		//	title = LLTrans::getString("CompileQueueTitle");
+		//}
+		//if (action == "compile lsl")
+		//{
+		//	name = "compile_queue";
+		//	msg = "Recompile";
+		//	title = LLTrans::getString("CompileQueueTitle");
+		//}
+		//else if (action == "reset")
+		//{
+		//	name = "reset_queue";
+		//	msg = "Reset";
+		//	title = LLTrans::getString("ResetQueueTitle");
+		//}
+		//else if (action == "start")
+		//{
+		//	name = "start_queue";
+		//	msg = "SetRunning";
+		//	title = LLTrans::getString("RunQueueTitle");
+		//}
+		//else if (action == "stop")
+		//{
+		//	name = "stop_queue";
+		//	msg = "SetRunningNot";
+		//	title = LLTrans::getString("NotRunQueueTitle");
+		//}
+		//LLUUID id; id.generate();
+
+		//LLFloaterScriptQueue* queue = LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
+		//if (queue)
+		//{
+		//	queue->setMono(mono);
+		//	queue_actions(queue, msg);
+		//	queue->setTitle(title);
+		//}
+		//else
+		//{
+		//	LL_WARNS() << "Failed to generate LLFloaterScriptQueue with action: " << action << LL_ENDL;
+		//}
+		handle_selected_script_action(userdata.asString());
+		// </FS>
+		return true;
+	}
+};
+
+// <FS> Script reset in edit floater
+void handle_selected_script_action(const std::string& action)
+{
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.0.5a
 		// We'll allow resetting the scripts of objects on a non-attachable attach point since they wouldn't be able to circumvent anything
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
@@ -8987,69 +9046,59 @@ class LLToolsSelectedScriptAction : public view_listener_t
 			LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
 			RlvSelectHasLockedAttach f;
 			if ( (hSel->isAttachment()) && (hSel->getFirstNode(&f) != NULL) )
-				return true;
+				return;
 		}
 // [/RLVa:KB]
 
-		std::string action = userdata.asString();
-		bool mono = false;
-		std::string msg, name;
-		std::string title;
-		if (action == "compile mono")
-		{
-			name = "compile_queue";
-			mono = true;
-			msg = "Recompile";
-			title = LLTrans::getString("CompileQueueTitle");
-		}
-		if (action == "compile lsl")
-		{
-			name = "compile_queue";
-			msg = "Recompile";
-			title = LLTrans::getString("CompileQueueTitle");
-		}
-		else if (action == "reset")
-		{
-			name = "reset_queue";
-			msg = "Reset";
-			title = LLTrans::getString("ResetQueueTitle");
-		}
-		else if (action == "start")
-		{
-			name = "start_queue";
-			msg = "SetRunning";
-			title = LLTrans::getString("RunQueueTitle");
-		}
-		else if (action == "stop")
-		{
-			name = "stop_queue";
-			msg = "SetRunningNot";
-			title = LLTrans::getString("NotRunQueueTitle");
-		}
-		// <FS> Delete scripts
-		else if (action == "delete")
-		{
-			name = "delete_queue";
-			msg = "delete";
-			title = LLTrans::getString("DeleteQueueTitle");
-		}
-		// </FS> Delete scripts
-		LLUUID id; id.generate();
-		
-		LLFloaterScriptQueue* queue =LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
-		if (queue)
-		{
-			queue->setMono(mono);
-			queue_actions(queue, msg);
-			queue->setTitle(title);
-		}
-		else
-		{
-			LL_WARNS() << "Failed to generate LLFloaterScriptQueue with action: " << action << LL_ENDL;
-		}
-		return true;
+	bool mono = false;
+	std::string msg, name;
+	std::string title;
+	if (action == "compile mono")
+	{
+		name = "compile_queue";
+		mono = true;
+		msg = "Recompile";
+		title = LLTrans::getString("CompileQueueTitle");
 	}
-};
+	if (action == "compile lsl")
+	{
+		name = "compile_queue";
+		msg = "Recompile";
+		title = LLTrans::getString("CompileQueueTitle");
+	}
+	else if (action == "reset")
+	{
+		name = "reset_queue";
+		msg = "Reset";
+		title = LLTrans::getString("ResetQueueTitle");
+	}
+	else if (action == "start")
+	{
+		name = "start_queue";
+		msg = "SetRunning";
+		title = LLTrans::getString("RunQueueTitle");
+	}
+	else if (action == "stop")
+	{
+		name = "stop_queue";
+		msg = "SetRunningNot";
+		title = LLTrans::getString("NotRunQueueTitle");
+	}
+	LLUUID id; id.generate();
+
+	LLFloaterScriptQueue* queue = LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
+	if (queue)
+	{
+		queue->setMono(mono);
+		queue_actions(queue, msg);
+		queue->setTitle(title);
+	}
+	else
+	{
+		LL_WARNS() << "Failed to generate LLFloaterScriptQueue with action: " << action << LL_ENDL;
+	}
+}
+// </FS>
 
 void handle_selected_texture_info(void*)
 {
@@ -10041,7 +10090,7 @@ void handle_grab_baked_texture(void* data)
 	if(folder_id.notNull())
 	{
 		std::string name;
-		name = "Baked " + LLAvatarAppearanceDictionary::getInstance()->getBakedTexture(baked_tex_index)->mNameCapitalized + " Texture";
+		name = "Baked " + LLAvatarAppearance::getDictionary()->getBakedTexture(baked_tex_index)->mNameCapitalized + " Texture";
 
 		LLUUID item_id;
 		item_id.generate();
@@ -11373,6 +11422,27 @@ bool use_http_textures()
 }
 // <FS:Ansariel>
 
+// <FS:Ansariel> Optional small camera floater
+class FSToggleCameraFloater : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string floater_name = gSavedSettings.getBOOL("FSUseSmallCameraFloater") ? "fs_camera_small" : "camera";
+		LLFloaterReg::toggleInstance(floater_name);
+		return true;
+	}
+};
+
+class FSCheckCameraFloater : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		static LLCachedControl<bool> fsUseSmallCameraFloater(gSavedSettings, "FSUseSmallCameraFloater");
+		return LLFloaterReg::instanceVisible(fsUseSmallCameraFloater ? "fs_camera_small" : "camera");
+	}
+};
+// <FS:Ansariel>
+
 void initialize_menus()
 {
 	// A parameterized event handler used as ctrl-8/9/0 zoom controls below.
@@ -11468,7 +11538,11 @@ void initialize_menus()
 	// <FS:Zi> Add reset camera angles menu
 	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
 	// </FS:Zi>
-	
+	// <FS:Ansariel> Optional small camera floater
+	view_listener_t::addMenu(new FSToggleCameraFloater(), "View.ToggleCameraFloater");
+	view_listener_t::addMenu(new FSCheckCameraFloater(), "View.CheckCameraFloater");
+	// </FS:Ansariel>
+
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
 

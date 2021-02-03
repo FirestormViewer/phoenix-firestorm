@@ -875,10 +875,11 @@ void LLTexUnit::setTextureColorSpace(eTextureColorSpace space)
         }
     }
     else
-#endif
+// #endif	// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
     {
         glTexParameteri(sGLTextureType[mCurrTexType], GL_TEXTURE_SRGB_DECODE_EXT, GL_SKIP_DECODE_EXT);
     }
+#endif // <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 }
 
 LLLightState::LLLightState(S32 index)
