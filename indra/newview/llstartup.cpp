@@ -3766,6 +3766,11 @@ void reset_login()
 	}
 	LLFloaterReg::hideVisibleInstances();
     LLStartUp::setStartupState( STATE_BROWSER_INIT );
+
+    // Clear any verified certs and verify them again on next login
+    // to ensure cert matches server instead of just getting reused
+    LLPointer<LLCertificateStore> store = gSecAPIHandler->getCertificateStore("");
+    store->clearSertCache();
 }
 
 //---------------------------------------------------------------------------
