@@ -340,7 +340,8 @@ BOOL LLViewerMediaFocus::handleKey(KEY key, MASK mask, BOOL called_from_parent)
 			
 			clearFocus();
 		}
-		
+
+		// <FS:Ansariel> Keep help links
 		if ( KEY_F1 == key && LLUI::getInstance()->mHelpImpl && mMediaControls.get())
 		{
 			std::string help_topic;
@@ -349,6 +350,7 @@ BOOL LLViewerMediaFocus::handleKey(KEY key, MASK mask, BOOL called_from_parent)
 				LLUI::getInstance()->mHelpImpl->showTopic(help_topic);
 			}
 		}
+		// </FS:Ansariel>
 	}
 	
 	return true;

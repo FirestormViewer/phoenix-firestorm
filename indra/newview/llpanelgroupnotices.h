@@ -64,6 +64,7 @@ public:
 					LLOfferInfo* inventory_offer);
 
 	void refreshNotices();
+	void updateSelected(); // FS:Beq FIRE-30667 group notices hang
 
 	void clearNoticeList();
 
@@ -111,6 +112,7 @@ private:
 	//LLIconCtrl		 *mViewInventoryIcon;
 	
 	LLScrollListCtrl *mNoticesList;
+	std::set<LLUUID>   mNoticeIDs; // FS:Beq FIRE-30667 group notices hang
 
 	std::string		mNoNoticesStr;
 
