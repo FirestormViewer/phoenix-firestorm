@@ -2127,7 +2127,9 @@ Fortfahren?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Region, die Sie besuchen möchten, besitzt eine Alterseinstufung, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SLM_UPDATE_FOLDER">
@@ -2159,7 +2161,9 @@ Fortfahren?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Region, die Sie besuchen möchten, besitzt eine Alterseinstufung, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
@@ -2208,7 +2212,9 @@ Fortfahren?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		Die Inhaltseinstufung des Landes, das Sie in Besitz nehmen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Alterseinstufung des Landes, das Sie in Besitz nehmen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
@@ -2233,7 +2239,9 @@ Fortfahren?
 		</form>
 	</notification>
 	<notification name="LandBuyAccessBlocked">
-		Die Inhaltseinstufung des Landes, das Sie kaufen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Alterseinstufung des Landes, das Sie kaufen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
@@ -2980,7 +2988,9 @@ Hier funktionieren nur Skripts, die dem Landeigentümer gehören.
 		Öffentliches Land kann nur in der Region in Besitz genommen werden, in der Sie sich befinden.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Region, die Sie besuchen möchten, besitzt eine Alterseinstufung, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 	</notification>
 	<notification name="RegionAboutToShutdown">
 		Die Region, die Sie gerade betreten möchte, fährt gerade herunter.
