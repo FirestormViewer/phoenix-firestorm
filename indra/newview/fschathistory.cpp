@@ -1505,17 +1505,10 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				}
 
 				name_params.use_default_link_style = false;
-				name_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
+				name_params.link_href = LLSLURL(from_me ? "agentself" : "agent", chat.mFromID, "inspect").getSLURLString();
 
-				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
-				{
-					appendText(LLTrans::getString("AgentNameSubst"), prependNewLineState, name_params);
-				}
-				else
-				{
-					// Add link to avatar's inspector and delimiter to message.
-					appendText(std::string(name_params.link_href), prependNewLineState, name_params);
-				}
+				// Add link to avatar's inspector and delimiter to message.
+				appendText(std::string(name_params.link_href), prependNewLineState, name_params);
 
 				prependNewLineState = false;
 

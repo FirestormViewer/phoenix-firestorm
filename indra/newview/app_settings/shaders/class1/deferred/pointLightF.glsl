@@ -35,11 +35,13 @@ out vec4 frag_color;
 
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
-uniform sampler2DRect normalMap;
-uniform samplerCube environmentMap;
+// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye) 
+//uniform sampler2DRect normalMap;
+//uniform samplerCube environmentMap;
+// </FS:Beq>
 uniform sampler2D noiseMap;
 uniform sampler2D lightFunc;
-uniform sampler2DRect depthMap;
+//uniform sampler2DRect depthMap;// <FS:Beq/> Colour space and shader fixes for BUG-228586 (Rye)
 
 uniform vec3 env_mat[3];
 uniform float sun_wash;
@@ -90,7 +92,7 @@ void main()
     float noise = texture2D(noiseMap, frag.xy/128.0).b;
     
     vec3 col = texture2DRect(diffuseRect, frag.xy).rgb;
-    col.rgb = srgb_to_linear(col.rgb);
+    // col.rgb = srgb_to_linear(col.rgb); // <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
 
     float fa = falloff+1.0;
     float dist_atten = clamp(1.0-(dist-1.0*(1.0-fa))/fa, 0.0, 1.0);

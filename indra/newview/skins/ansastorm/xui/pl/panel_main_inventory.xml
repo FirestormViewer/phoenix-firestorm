@@ -92,6 +92,7 @@
 		<combo_box.item value="filter_type_textures" label="Tekstury" />
 		<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
 		<combo_box.item value="filter_type_meshes" label="Mesze" />
+		<combo_box.item value="filter_type_settings" label="Otoczenia" />
 		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 	</combo_box>
 	<tab_container name="inventory filter tabs">

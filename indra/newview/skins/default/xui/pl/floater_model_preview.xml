@@ -249,13 +249,13 @@ Tekstury:
 Model:
            </text>
        </panel>
-       <text name="streaming_breakdown_labels">
+       <!-- <text name="streaming_breakdown_labels">
 Streaming:
 Wysokie:
 Średnie:
 Niskie:
 Najniższe:
-       </text>
+       </text> -->
        <panel name="physics_costs_panel">
            <text name="physics_breakdown_title">
                 Koszty fizyki

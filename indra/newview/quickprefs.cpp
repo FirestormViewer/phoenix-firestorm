@@ -61,12 +61,17 @@
 class FSSettingsCollector : public LLInventoryCollectFunctor
 {
 public:
-	FSSettingsCollector() {}
+	FSSettingsCollector()
+	{
+		mMarketplaceFolderUUID = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS, false);
+	}
+
 	virtual ~FSSettingsCollector() {}
 
 	bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
 	{
 		if (item && item->getType() == LLAssetType::AT_SETTINGS &&
+			!gInventory.isObjectDescendentOf(item->getUUID(), mMarketplaceFolderUUID) &&
 			mSeen.find(item->getAssetUUID()) == mSeen.end())
 		{
 			mSeen.insert(item->getAssetUUID());
@@ -79,6 +84,7 @@ public:
 	}
 
 protected:
+	LLUUID mMarketplaceFolderUUID;
 	std::set<LLUUID> mSeen;
 };
 
