@@ -4954,6 +4954,9 @@ Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie v
 	<string name="unread_chat_multiple">
 		[SOURCES] haben etwas Neues gesagt
 	</string>
+	<string name="teleport_preamble_compact_chat">
+		Sie befinden sich jetzt:
+	</string>
 	<string name="session_initialization_timed_out_error">
 		Die Initialisierung der Sitzung ist fehlgeschlagen
 	</string>
