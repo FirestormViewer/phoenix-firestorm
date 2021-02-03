@@ -2142,7 +2142,7 @@ void LLAgentWearables::queryWearableCache()
 			num_queries++;
 			// *NOTE: make sure at least one request gets packed
 
-			ETextureIndex te_index = LLAvatarAppearanceDictionary::bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
+			ETextureIndex te_index = LLAvatarAppearance::getDictionary()->bakedToLocalTextureIndex((EBakedTextureIndex)baked_index);
 
 			//LL_INFOS() << "Requesting texture for hash " << hash << " in baked texture slot " << baked_index << LL_ENDL;
 			gMessageSystem->nextBlockFast(_PREHASH_WearableData);

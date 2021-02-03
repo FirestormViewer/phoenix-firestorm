@@ -575,6 +575,8 @@ BOOL LLPanelOutfitEdit::postBuild()
 	mAvatarComplexityAddingLabel = getChild<LLTextBox>("avatar_complexity_adding_label");
 
 	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this));
+
+	onOutfitChanging(gAgentWearables.isCOFChangeInProgress());
 	return TRUE;
 }
 
@@ -719,6 +721,10 @@ void LLPanelOutfitEdit::onListViewFilterCommitted(LLUICtrl* ctrl)
 	S32 curr_filter_type = mListViewFilterCmbBox->getCurrentIndex();
 	if (curr_filter_type < 0) return;
 
+	if (curr_filter_type >= LVIT_SHAPE)
+	{
+		mWearableItemsList->setMenuWearableType(LLWearableType::EType(curr_filter_type - LVIT_SHAPE));
+	}
 	mWearableListManager->setFilterCollector(mListViewItemTypes[curr_filter_type]->collector);
 }
 
@@ -1298,6 +1304,7 @@ void LLPanelOutfitEdit::showFilteredWearablesListView(LLWearableType::EType type
 
 	//e_list_view_item_type implicitly contains LLWearableType::EType starting from LVIT_SHAPE
 	applyListViewFilter(static_cast<EListViewItemType>(LVIT_SHAPE + type));
+	mWearableItemsList->setMenuWearableType(type);
 }
 
 static void update_status_widget_rect(LLView * widget, S32 right_border)

@@ -412,7 +412,9 @@ public:
 	void			sortOnce(S32 column, BOOL ascending);
 
 	// manually call this whenever editing list items in place to flag need for resorting
-	void			setNeedsSort(bool val = true) { mSorted = !val; }
+	// <FS:Beq/> FIRE-30667 et al. Avoid hangs on large list updates
+	// void			setNeedsSort(bool val = true) { mSorted = !val; }
+	void			setNeedsSort(bool val = true) { mSorted = !val; mLastUpdateFrame = LLFrameTimer::getFrameCount(); }
 	void			dirtyColumns(); // some operation has potentially affected column layout or ordering
 
 	boost::signals2::connection setSortCallback(sort_signal_t::slot_type cb )
@@ -452,6 +454,8 @@ protected:
 
 public:
 	void			updateLineHeight();
+	// <FS:Beq/> FIRE-30667 et al. Avoid hangs on large list updates
+    mutable U32		mLastUpdateFrame;
 
 private:
 	void			selectPrevItem(BOOL extend_selection);
@@ -477,6 +481,7 @@ private:
 	static void		showNameDetails(std::string id, bool is_group);
 	static void		copyNameToClipboard(std::string id, bool is_group);
 	static void		copySLURLToClipboard(std::string id, bool is_group);
+
 
 	S32				mLineHeight;	// the max height of a single line
 	S32				mScrollLines;	// how many lines we've scrolled down

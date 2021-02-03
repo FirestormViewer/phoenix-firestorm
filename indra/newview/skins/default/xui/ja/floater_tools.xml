@@ -494,7 +494,7 @@
 			<button label="新しいスクリプト" label_selected="新規スクリプト" name="button new script"/>
 			<button label="権限" name="button permissions"/>
 			<button label="更新" name="button refresh" />
-            <button label="スクリプトリセット" name="button reset scripts" />
+            <button label="スクリプトリセット" name="btn_reset_scripts" />
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

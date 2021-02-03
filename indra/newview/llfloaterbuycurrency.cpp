@@ -197,6 +197,7 @@ void LLFloaterBuyCurrencyUI::updateUI()
 #endif
 // </FS:Beq>
 		LLNotificationsUtil::add("CouldNotBuyCurrency", args);
+		mManager.clearError();
 		closeFloater();
 	}
 	else

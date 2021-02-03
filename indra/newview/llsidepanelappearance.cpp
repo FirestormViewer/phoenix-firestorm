@@ -145,6 +145,8 @@ BOOL LLSidepanelAppearance::postBuild()
 
 	setVisibleCallback(boost::bind(&LLSidepanelAppearance::onVisibilityChanged,this,_2));
 
+	setWearablesLoading(gAgentWearables.isCOFChangeInProgress());
+
 	return TRUE;
 }
 

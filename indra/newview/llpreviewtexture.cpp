@@ -634,7 +634,7 @@ void LLPreviewTexture::onFileLoadedForSaveTGA(BOOL success,
 		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
 		//const U32 ext_length = 3;
 		//std::string extension = self->mSaveFileName.substr( self->mSaveFileName.length() - ext_length);
-
+		//LLStringUtil::toLower(extension);
 		//// We only support saving in PNG or TGA format
 		//LLPointer<LLImageFormatted> image;
 		//if(extension == "png")
