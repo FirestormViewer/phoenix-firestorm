@@ -3832,6 +3832,9 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 	<global name="UnsupportedRAM">
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.
 	</global>
+	<global name="LLLeapUpdaterFailure">
+		Nie udało się uruchomić usługi aktualizatora [UPDATER_APP]. Sprawdź, czy przeglądarka jest poprawnie zainstalowana i czy ma niezbędne uprawnienia do uruchomienia. Jeśli nadal będziesz mieć problemy, odwiedź [SUPPORT_SITE].
+	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		Jeśli jesteś właścicielem działki, to możesz ustawić na niej miejsce startu.
 W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infohub&quot;.
