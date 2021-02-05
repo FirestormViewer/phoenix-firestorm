@@ -353,7 +353,7 @@
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>2</integer>
+    <integer>5</integer>
   </map>
   <key>FSGroupNotifyNoTransparency</key>
   <map>
