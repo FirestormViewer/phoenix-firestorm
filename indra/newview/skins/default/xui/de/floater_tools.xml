@@ -201,7 +201,7 @@
 			<text name="Description:">
 				Beschreibung:
 			</text>
-			<line_editor name="Object Description" tool_tip="Bei Auswahl der Option „Schwebe-Tipps für alle Objekte“ in den Viewer-Einstellungen wird für alle Objekte das Popup mit der Objektbeschreibung unter dem Mauszeiger eingeblendet. Die formelle Beschreibung ist auf 127 Byte begrenzt, und alle längeren Zeichenketten werden gekürzt."/>
+			<line_editor name="Object Description" tool_tip="Bei Auswahl der Option „Schwebe-Tipps“ in den Viewer-Einstellungen wird für alle Objekte das Popup mit der Objektbeschreibung unter dem Mauszeiger eingeblendet. Die formelle Beschreibung ist auf 127 Byte begrenzt, und alle längeren Zeichenketten werden gekürzt."/>
 			<text name="Creator:">
 				Ersteller:
 			</text>
@@ -513,7 +513,7 @@ Ndrg ↔ Nst
 			<button label="Neues Skript" label_selected="Neues Skript" name="button new script" width="80"/>
 			<button label="Berechtigungen" name="button permissions" width="95" left_pad="3"/>
 			<button label="Aktualisieren" name="button refresh" width="92" left_pad="3"/>
-			<button label="Skripte zurücks." name="button reset scripts" width="92"/>
+			<button label="Skripte zurücks." name="btn_reset_scripts" width="92"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

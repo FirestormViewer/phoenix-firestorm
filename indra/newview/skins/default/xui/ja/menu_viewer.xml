@@ -10,8 +10,8 @@
 		<menu_item_call label="マーケティングプレイスのリスト..." name="MarketplaceListings"/>
 		<menu_item_call label="L$ の購入" name="Buy and Sell L$"/>
 		
+		<menu_item_call label="持ち物" name="NewInventoryWindow"/>
 		<menu_item_check label="持ち物" name="Inventory"/>
-		<menu_item_check label="持ち物" name="ShowSidetrayInventory"/>
 		<menu_item_check label="保護フォルダ" name="Protected Folders" />
 		<menu_item_check label="お気に入りの服やHUD" name="WearableFavorites" />
 		<menu_item_call label="ピック..." name="Picks"/>
@@ -317,9 +317,7 @@
 			<!-- added Mar.15, 2015 -->
 			<menu label="クイックヒント" name="Hover Tips">
 				<menu_item_check label="ヒントを表示" name="Show Tips" />
-				<menu_item_separator/>
 				<menu_item_check label="土地のヒントを表示" name="Land Tips" />
-				<menu_item_check label="オブジェクト全てにヒントを表示" name="Tips On All Objects" />
 			</menu>
 			<!-- added Mar.15, 2015 -->
 		</menu>

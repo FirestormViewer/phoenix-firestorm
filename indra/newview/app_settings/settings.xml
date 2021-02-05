@@ -210,6 +210,19 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+
+  <key>FSAvatarTurnSpeed</key>
+  <map>
+    <key>Comment</key>
+    <string>Modify the speed at which the avatar responds to turning movements. 0-100 percent of max rate</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+  
   <key>FSUseLegacyClienttags</key>
   <map>
     <key>Comment</key>
@@ -330,6 +343,17 @@
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
+  </map>
+  <key>FSSortDeferalFrames</key>
+  <map>
+    <key>Comment</key>
+    <string>How many frames after an update should we wait before sorting</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>5</integer>
   </map>
   <key>FSGroupNotifyNoTransparency</key>
   <map>
@@ -6635,6 +6659,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSOpenSimAlwaysForceShowGrid</key>
+    <map>
+      <key>Comment</key>
+      <string>Soft enable/disable the startup behaviour of OpenSim builds to allow gridlist access</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ForceMandatoryUpdate</key>
     <map>
       <key>Comment</key>
@@ -7420,6 +7455,17 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+  <key>JoystickDeviceUUID</key>
+  <map>
+    <key>Comment</key>
+    <string>Preffered device ID.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string />
+  </map>
     <key>JoystickMouselookYaw</key>
     <map>
       <key>Comment</key>
@@ -9129,6 +9175,210 @@
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>FSMeshUploadAutoEnableWeights</key>
+  <map>
+    <key>Comment</key>
+    <string>Automatically set weights enabled for meshes with rigging info</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSMeshUploadAutoShowWeightsWhenEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>Automatically show weights in preview for meshes with rigging info</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>MeshPreviewCanvasColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Canvas colour for the Mesh uploader</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.169</real>
+      <real>0.169</real>
+      <real>0.169</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>MeshPreviewEdgeColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Edge colour for the Mesh uploader preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.4</real>
+      <real>0.4</real>
+      <real>0.4</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>MeshPreviewBaseColor</key>
+  <map>
+    <key>Comment</key>
+    <string>base diffuse colour for the Mesh uploader</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.5</real>
+      <real>0.5</real>
+      <real>0.5</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>MeshPreviewBrightnessColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Brightness modifier</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color3</string>
+    <key>Value</key>
+    <array>
+      <real>0.9</real>
+      <real>0.9</real>
+      <real>0.9</real>
+    </array>
+  </map>
+  <key>MeshPreviewEdgeWidth</key>
+  <map>
+    <key>Comment</key>
+    <string>line thickness used when display edges is selected in mesh preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+      <real>1.0</real>
+  </map>
+  <key>MeshPreviewPhysicsEdgeColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Edge colour for the Mesh uploader physics preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.0</real>
+      <real>0.25</real>
+      <real>0.5</real>
+      <real>0.25</real>
+    </array>
+  </map>
+  <key>MeshPreviewPhysicsFillColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Fill colour for the Mesh uploader physics preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>0.0</real>
+      <real>0.5</real>
+      <real>1.0</real>
+      <real>0.5</real>
+    </array>
+  </map>
+  <key>MeshPreviewPhysicsEdgeWidth</key>
+  <map>
+    <key>Comment</key>
+    <string>line thickness used when display physics is selected in mesh preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.0</real>
+  </map>
+  <key>MeshPreviewDegenerateEdgeColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Edge colour for the Mesh uploader Degenerate preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>0.0</real>
+      <real>0.0</real>
+      <real>1.0</real>
+    </array>
+  </map>
+  <key>MeshPreviewDegenerateFillColor</key>
+  <map>
+    <key>Comment</key>
+    <string>Fill colour for the Mesh uploader Degenerate preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Color4</string>
+    <key>Value</key>
+    <array>
+      <real>1.0</real>
+      <real>0.0</real>
+      <real>0.0</real>
+      <real>0.5</real>
+    </array>
+  </map>
+  <key>MeshPreviewDegenerateEdgeWidth</key>
+  <map>
+    <key>Comment</key>
+    <string>line thickness used when display Degenerate is selected in mesh preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>3.0</real>
+  </map>
+  <key>MeshPreviewDegeneratePointSize</key>
+  <map>
+    <key>Comment</key>
+    <string>Large point size used to highlight degenerate triangle vertices in Mesh preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>8.0</real>
+  </map>
+  <key>MeshPreviewZoomLimit</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum Zoom level in preview</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>10.0</real>
+  </map>
   <key>FSMeshPreviewUVGuideFile</key>
   <map>
     <key>Comment</key>
@@ -10485,6 +10735,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
 	  <integer>13</integer>
     </map>
+  <key>PreviewRenderSize</key>  
+  <map>
+    <key>Comment</key>
+    <string>Resolution of the image rendered for the mesh upload preview (must be a power of 2)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>1024</integer>
+  </map>
   <key>PreviewAmbientColor</key>
   <map>
     <key>Comment</key>
@@ -12021,6 +12282,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
   <!-- </FS:TS> FIRE-16251 -->
+  <key>FSFocusPointLocked</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether the focus point used for DoF is currently Locked in place</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSFocusPointFollowsPointer</key>
+  <map>
+    <key>Comment</key>
+    <string>Allows the Depth of Field focus to actively follow the mouse point</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 
   <key>CameraDoFResScale</key>
   <map>
@@ -15010,7 +15293,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>SyncMaterialSettings</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -24637,6 +24920,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSLegacyNotificationWellAutoResize</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables the automatic resizing of the legacy notifications and system messages well</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>FSShowIMSendButton</key>
     <map>
       <key>Comment</key>
@@ -25255,7 +25549,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSAllowWaterDistortionOcclusion</key>
     <map>
       <key>Comment</key>
-      <string>If allowed, object occlusion setting will be restored for generation the water reflection distortion. This was allowed pre-EEP and got disabled for EEP. While generation is more exact without occlusion, it can cause a huge performance impact.</string>
+      <string>If allowed, object occlusion setting will be restored for generating the water reflection distortion. This was allowed pre-EEP and got disabled for EEP. While generating is more exact without occlusion, it can cause a huge performance impact.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -25283,7 +25577,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>15</integer>
+      <integer>10</integer>
     </map>
     <key>FSDynamicTextureMemoryGPUReserve</key>
     <map>
@@ -25294,7 +25588,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>15</integer>
+      <integer>10</integer>
     </map>
     <key>FSDynamicTextureMemoryMinTextureMemory</key>
     <map>
@@ -25306,6 +25600,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>512</integer>
+    </map>
+    <key>FSAllowDoubleClickOnScriptedObjects</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, allows double-click movement action (walk/teleport) to scripted objects</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSUseSmallCameraFloater</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, the camera floater will be smaller and not contain the camera preset controls.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
   </map>
 </llsd>

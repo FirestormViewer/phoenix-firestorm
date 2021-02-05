@@ -1622,7 +1622,7 @@
          top_pad="8"
          follows="left|top"
          height="16"
-         label="Enable extend script info details"
+         label="Enable extended script info details"
          tool_tip="If enabled, extend basic script info feature with various details useful for builders"
          name="FSScriptInfoExtended"
          enabled_control="UseLSLBridge"

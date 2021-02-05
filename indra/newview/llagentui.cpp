@@ -44,6 +44,10 @@
 
 // <FS:Ansariel> FIRE-1874: Show server channel in statusbar
 #include "llappviewer.h"
+// <FS:Beq> FIRE-10549 etc, incorrect grid URL on HG back links
+#include "fsgridhandler.h"
+#include "lfsimfeaturehandler.h"
+// </FS:Beq>
 
 //static
 void LLAgentUI::buildFullname(std::string& name)
@@ -55,15 +59,21 @@ void LLAgentUI::buildFullname(std::string& name)
 //static
 void LLAgentUI::buildSLURL(LLSLURL& slurl, const bool escaped /*= true*/)
 {
-      LLSLURL return_slurl;
-      LLViewerRegion *regionp = gAgent.getRegion();
-      if (regionp)
-      {
+	LLSLURL return_slurl;
+	LLViewerRegion *regionp = gAgent.getRegion();
+	if (regionp)
+	{
 // <FS:CR> Aurora-sim var region teleports
-		  //return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
-		  return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionAgent());
+#ifdef OPENSIM
+		if (LLGridManager::instance().isInOpenSim())
+		{
+			return_slurl = LLSLURL(LFSimFeatureHandler::getInstance()->hyperGridURL(), regionp->getName(), gAgent.getPositionAgent());
+		}
+		else
+#endif
 // </FS:CR>
-      }
+		return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+	}
 	slurl = return_slurl;
 }
 

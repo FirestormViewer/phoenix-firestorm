@@ -4,8 +4,8 @@
 		<menu_item_call label="Account" name="Manage Account"/>
 		<menu_item_call label="Elenchi marketplace..." name="MarketplaceListings"/>
 		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Inventario" name="NewInventoryWindow"/>
 		<menu_item_check label="Inventario" name="Inventory"/>
-		<menu_item_check label="Inventario" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Abiti preferiti" name="WearableFavorites"/>
 		<menu_item_call label="Preferiti" name="Picks"/>
 		<menu_item_call label="Esperienze" name="Experiences"/>
@@ -298,7 +298,6 @@
 			<menu label="Suggerimenti al passaggio" name="Hover Tips">
 				<menu_item_check label="Mostra" name="Show Tips" />
 				<menu_item_check label="Mostra sui terreni" name="Land Tips"/>
-				<menu_item_check label="Mostra su tutti gli oggetti" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Tipi resa" name="Rendering Types">

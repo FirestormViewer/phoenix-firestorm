@@ -147,6 +147,16 @@ void append_to_last_message(std::list<LLSD>& messages, const std::string& line)
 	messages.back()[LL_IM_TEXT] = im_text;
 }
 
+std::string remove_utf8_bom(const char* buf)
+{
+	std::string res(buf);
+	if (res[0] == (char)0xEF && res[1] == (char)0xBB && res[2] == (char)0xBF)
+	{
+		res.erase(0, 3);
+	}
+	return res;
+}
+
 class LLLogChatTimeScanner: public LLSingleton<LLLogChatTimeScanner>
 {
 	LLSINGLETON(LLLogChatTimeScanner);
@@ -460,7 +470,13 @@ void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& m
 		if (is_group)
 		{
 			std::string old_name(file_name);
-			old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			// <FS:Ansariel> FIRE-30582: Fix out of range crash
+			//old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			if (LLStringUtil::endsWith(old_name, GROUP_CHAT_SUFFIX))
+			{
+				old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			}
+			// </FS:Ansariel>
 			fptr = LLFile::fopen(LLLogChat::makeLogFileName(old_name), "r");
 			if (fptr)
 			{
@@ -504,18 +520,7 @@ void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& m
 			continue;
 		}
 
-		std::string line(buffer);
-
-		// <FS:Ansariel> FIRE-28990: Unable to open chat transcript if file is UTF-8-BOM encoded
-		//               Technically it doesn't make sense to do it each iteration and ideally we
-		//               would do it once before the loop starts, but seeking backwards to the start of
-		//               the file causes the viewer's process being locked up for several seconds
-		//               during login, we just do it here to skip seeking backwards.
-		if (line.length() > 3 && line[0] == char(239) && line[1] == char(187) && line[2] == char(191))
-		{
-			line = line.substr(3);
-		}
-		// </FS:Ansariel>
+		std::string line(remove_utf8_bom(buffer));
 
 		//updated 1.23 plain text log format requires a space added before subsequent lines in a multilined message
 		if (' ' == line[0])
@@ -919,19 +924,11 @@ bool LLLogChat::isTranscriptFileFound(std::string fullname)
 
 		if (bytes_to_read > 0 && NULL != fgets(buffer, bytes_to_read, filep))
 		{
-			// <FS:Ansariel> FIRE-28990: Unable to open chat transcript if file is UTF-8-BOM encoded
-			std::string bufferstr(buffer);
-			if (bufferstr.length() > 3 && bufferstr[0] == char(239) && bufferstr[1] == char(187) && bufferstr[2] == char(191))
-			{
-				bufferstr = bufferstr.substr(3);
-			}
-			// </FS:Ansariel>
-
 			//matching a timestamp
 			boost::match_results<std::string::const_iterator> matches;
 			// <FS:Ansariel> Seconds in timestamp
-			//if (boost::regex_match(std::string(buffer), matches, TIMESTAMP))
-			if (boost::regex_match(bufferstr, matches, TIMESTAMP) || boost::regex_match(bufferstr, matches, TIMESTAMP_AND_SEC))
+			//if (boost::regex_match(remove_utf8_bom(buffer), matches, TIMESTAMP))
+			if (boost::regex_match(remove_utf8_bom(buffer), matches, TIMESTAMP) || boost::regex_match(remove_utf8_bom(buffer), matches, TIMESTAMP_AND_SEC))
 			// </FS:Ansariel>
 			{
 				result = true;
@@ -1243,7 +1240,13 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 		if (is_group)
 		{
 			std::string old_name(file_name);
-			old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			// <FS:Ansariel> FIRE-30582: Fix out of range crash
+			//old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			if (LLStringUtil::endsWith(old_name, GROUP_CHAT_SUFFIX))
+			{
+				old_name.erase(old_name.size() - GROUP_CHAT_SUFFIX.size());
+			}
+			// </FS:Ansariel>
 			fptr = LLFile::fopen(LLLogChat::makeLogFileName(old_name), "r");
 			if (fptr)
 			{
@@ -1295,19 +1298,7 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 			firstline = FALSE;
 			continue;
 		}
-		std::string line(buffer);
-
-		// <FS:Ansariel> FIRE-28990: Unable to open chat transcript if file is UTF-8-BOM encoded
-		//               Technically it doesn't make sense to do it each iteration and ideally we
-		//               would do it once before the loop starts, but since this code was duplicated
-		//               from further above and in the other case seeking backwards to the start of
-		//               the file causes the viewer's process being locked up for several seconds
-		//               during login, we just do it here the same way we do above.
-		if (line.length() > 3 && line[0] == char(239) && line[1] == char(187) && line[2] == char(191))
-		{
-			line = line.substr(3);
-		}
-		// </FS:Ansariel>
+		std::string line(remove_utf8_bom(buffer));
 
 		//updated 1.23 plaint text log format requires a space added before subsequent lines in a multilined message
 		if (' ' == line[0])

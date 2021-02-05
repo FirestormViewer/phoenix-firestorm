@@ -222,6 +222,12 @@ PieMenu		*gPieMenuLand	= NULL;
 PieMenu		*gPieMenuMuteParticle = NULL;
 // <FS:Zi> Pie menu
 
+// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+LLToggleableMenu	*gMenuInspectSelf	= NULL;
+LLContextMenu		*gInspectSelfDetachScreenMenu = NULL;
+LLContextMenu		*gInspectSelfDetachMenu = NULL;
+// </FS:Ansariel>
+
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
 
 LLMenuGL* gAttachSubMenu = NULL;
@@ -447,20 +453,6 @@ void initialize_menus();
 // Break up groups of more than 6 items with separators
 //-----------------------------------------------------------------------------
 
-void set_underclothes_menu_options()
-{
-	if (gMenuHolder && gAgent.isTeen())
-	{
-		gMenuHolder->getChild<LLView>("Self Underpants")->setVisible(FALSE);
-		gMenuHolder->getChild<LLView>("Self Undershirt")->setVisible(FALSE);
-	}
-	if (gMenuBarView && gAgent.isTeen())
-	{
-		gMenuBarView->getChild<LLView>("Menu Underpants")->setVisible(FALSE);
-		gMenuBarView->getChild<LLView>("Menu Undershirt")->setVisible(FALSE);
-	}
-}
-
 void set_merchant_SLM_menu()
 {
     // All other cases (new merchant, not merchant, migrated merchant): show the new Marketplace Listings menu and enable the tool
@@ -572,6 +564,14 @@ void init_menus()
 	gPieMenuMuteParticle = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_mute_particle.xml", gMenuHolder, registry);
 // </FS:Zi> Pie menu
+
+	// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+	gMenuInspectSelf = LLUICtrlFactory::createFromFile<LLToggleableMenu>(
+		"menu_inspect_self_gear.xml", gMenuHolder, registry);
+
+	gInspectSelfDetachScreenMenu = gMenuHolder->getChild<LLContextMenu>("Inspect Self Detach HUD", true);
+	gInspectSelfDetachMenu = gMenuHolder->getChild<LLContextMenu>("Inspect Self Detach", true);
+	// </FS:Ansariel>
 
 	///
 	/// set up the colors
@@ -2893,6 +2893,11 @@ void cleanup_menus()
 	gPieMenuMuteParticle = NULL;
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
+	delete gMenuInspectSelf;
+	gMenuInspectSelf = NULL;
+	// </FS:Ansariel>
+
 	delete gMenuBarView;
 	gMenuBarView = NULL;
 
@@ -3405,7 +3410,6 @@ class LLObjectBuild : public view_listener_t
 	}
 };
 
-
 void handle_object_edit()
 {
 	LLViewerParcelMgr::getInstance()->deselectLand();
@@ -3450,23 +3454,59 @@ void handle_object_edit()
 	return;
 }
 
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-void handle_attachment_edit(const LLUUID& idItem)
+void handle_attachment_edit(const LLUUID& inv_item_id)
 {
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return;
+	if (isAgentAvatarValid())
+	{
+		if (LLViewerObject* attached_obj = gAgentAvatarp->getWornAttachment(inv_item_id))
+		{
+			LLSelectMgr::getInstance()->deselectAll();
+			LLSelectMgr::getInstance()->selectObjectAndFamily(attached_obj);
 
-	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-	if (!pAttachObj)
-		return;
-
-	LLSelectMgr::getInstance()->deselectAll();
-	LLSelectMgr::getInstance()->selectObjectAndFamily(pAttachObj);
-
-	handle_object_edit();
+			handle_object_edit();
+		}
+	}
 }
-// [/SL:KB]
+
+void handle_attachment_touch(const LLUUID& inv_item_id)
+{
+	if ( (isAgentAvatarValid()) && (enable_attachment_touch(inv_item_id)) )
+	{
+		if (LLViewerObject* attach_obj = gAgentAvatarp->getWornAttachment(gInventory.getLinkedItemID(inv_item_id)))
+		{
+			LLSelectMgr::getInstance()->deselectAll();
+
+			LLObjectSelectionHandle sel = LLSelectMgr::getInstance()->selectObjectAndFamily(attach_obj);
+			if (!LLToolMgr::getInstance()->inBuildMode())
+			{
+				struct SetTransient : public LLSelectedNodeFunctor
+				{
+					bool apply(LLSelectNode* node)
+					{
+						node->setTransient(TRUE);
+						return true;
+					}
+				} f;
+				sel->applyToNodes(&f);
+			}
+
+			handle_object_touch();
+		}
+	}
+}
+
+bool enable_attachment_touch(const LLUUID& inv_item_id)
+{
+	if (isAgentAvatarValid())
+	{
+		const LLViewerObject* attach_obj = gAgentAvatarp->getWornAttachment(gInventory.getLinkedItemID(inv_item_id));
+		return (attach_obj) && (attach_obj->flagHandleTouch()) && ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(gAgentAvatarp->getWornAttachment(inv_item_id))) );
+// [RLVa:KB] - Checked: 2012-08-15 (RLVa-1.4.7)
+		//return (attach_obj) && (attach_obj->flagHandleTouch());
+// [/RLVa:KB]
+	}
+	return false;
+}
 
 void handle_object_inspect()
 {
@@ -4604,11 +4644,11 @@ class FSSelfToggleMoveLock : public view_listener_t
 			gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 			if (new_value)
 			{
-				report_to_nearby_chat(LLTrans::getString("MovelockEnabling"));
+				LLNotificationsUtil::add("MovelockEnabling", LLSD());
 			}
 			else
 			{
-				report_to_nearby_chat(LLTrans::getString("MovelockDisabling"));
+				LLNotificationsUtil::add("MovelockDisabling", LLSD());
 			}
 		}
 #ifdef OPENSIM
@@ -5222,8 +5262,9 @@ void handle_reset_view()
 		// switching to outfit selector should automagically save any currently edited wearable
 		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "my_outfits"));
 	}
-	
+
 	// <FS:Zi> Added optional V1 behavior so the avatar turns into camera direction after hitting ESC
+	// gAgentCamera.setFocusOnAvatar(TRUE, FALSE, FALSE);
 	if (!gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
 	{
 		// The only thing we actually want to do here is set LLAgent::mFocusOnAvatar to TRUE,
@@ -8934,6 +8975,64 @@ class LLToolsSelectedScriptAction : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
+		// <FS> Script reset in edit floater
+		//std::string action = userdata.asString();
+		//bool mono = false;
+		//std::string msg, name;
+		//std::string title;
+		//if (action == "compile mono")
+		//{
+		//	name = "compile_queue";
+		//	mono = true;
+		//	msg = "Recompile";
+		//	title = LLTrans::getString("CompileQueueTitle");
+		//}
+		//if (action == "compile lsl")
+		//{
+		//	name = "compile_queue";
+		//	msg = "Recompile";
+		//	title = LLTrans::getString("CompileQueueTitle");
+		//}
+		//else if (action == "reset")
+		//{
+		//	name = "reset_queue";
+		//	msg = "Reset";
+		//	title = LLTrans::getString("ResetQueueTitle");
+		//}
+		//else if (action == "start")
+		//{
+		//	name = "start_queue";
+		//	msg = "SetRunning";
+		//	title = LLTrans::getString("RunQueueTitle");
+		//}
+		//else if (action == "stop")
+		//{
+		//	name = "stop_queue";
+		//	msg = "SetRunningNot";
+		//	title = LLTrans::getString("NotRunQueueTitle");
+		//}
+		//LLUUID id; id.generate();
+
+		//LLFloaterScriptQueue* queue = LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
+		//if (queue)
+		//{
+		//	queue->setMono(mono);
+		//	queue_actions(queue, msg);
+		//	queue->setTitle(title);
+		//}
+		//else
+		//{
+		//	LL_WARNS() << "Failed to generate LLFloaterScriptQueue with action: " << action << LL_ENDL;
+		//}
+		handle_selected_script_action(userdata.asString());
+		// </FS>
+		return true;
+	}
+};
+
+// <FS> Script reset in edit floater
+void handle_selected_script_action(const std::string& action)
+{
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.0.5a
 		// We'll allow resetting the scripts of objects on a non-attachable attach point since they wouldn't be able to circumvent anything
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
@@ -8941,69 +9040,59 @@ class LLToolsSelectedScriptAction : public view_listener_t
 			LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
 			RlvSelectHasLockedAttach f;
 			if ( (hSel->isAttachment()) && (hSel->getFirstNode(&f) != NULL) )
-				return true;
+				return;
 		}
 // [/RLVa:KB]
 
-		std::string action = userdata.asString();
-		bool mono = false;
-		std::string msg, name;
-		std::string title;
-		if (action == "compile mono")
-		{
-			name = "compile_queue";
-			mono = true;
-			msg = "Recompile";
-			title = LLTrans::getString("CompileQueueTitle");
-		}
-		if (action == "compile lsl")
-		{
-			name = "compile_queue";
-			msg = "Recompile";
-			title = LLTrans::getString("CompileQueueTitle");
-		}
-		else if (action == "reset")
-		{
-			name = "reset_queue";
-			msg = "Reset";
-			title = LLTrans::getString("ResetQueueTitle");
-		}
-		else if (action == "start")
-		{
-			name = "start_queue";
-			msg = "SetRunning";
-			title = LLTrans::getString("RunQueueTitle");
-		}
-		else if (action == "stop")
-		{
-			name = "stop_queue";
-			msg = "SetRunningNot";
-			title = LLTrans::getString("NotRunQueueTitle");
-		}
-		// <FS> Delete scripts
-		else if (action == "delete")
-		{
-			name = "delete_queue";
-			msg = "delete";
-			title = LLTrans::getString("DeleteQueueTitle");
-		}
-		// </FS> Delete scripts
-		LLUUID id; id.generate();
-		
-		LLFloaterScriptQueue* queue =LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
-		if (queue)
-		{
-			queue->setMono(mono);
-			queue_actions(queue, msg);
-			queue->setTitle(title);
-		}
-		else
-		{
-			LL_WARNS() << "Failed to generate LLFloaterScriptQueue with action: " << action << LL_ENDL;
-		}
-		return true;
+	bool mono = false;
+	std::string msg, name;
+	std::string title;
+	if (action == "compile mono")
+	{
+		name = "compile_queue";
+		mono = true;
+		msg = "Recompile";
+		title = LLTrans::getString("CompileQueueTitle");
 	}
-};
+	if (action == "compile lsl")
+	{
+		name = "compile_queue";
+		msg = "Recompile";
+		title = LLTrans::getString("CompileQueueTitle");
+	}
+	else if (action == "reset")
+	{
+		name = "reset_queue";
+		msg = "Reset";
+		title = LLTrans::getString("ResetQueueTitle");
+	}
+	else if (action == "start")
+	{
+		name = "start_queue";
+		msg = "SetRunning";
+		title = LLTrans::getString("RunQueueTitle");
+	}
+	else if (action == "stop")
+	{
+		name = "stop_queue";
+		msg = "SetRunningNot";
+		title = LLTrans::getString("NotRunQueueTitle");
+	}
+	LLUUID id; id.generate();
+
+	LLFloaterScriptQueue* queue = LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
+	if (queue)
+	{
+		queue->setMono(mono);
+		queue_actions(queue, msg);
+		queue->setTitle(title);
+	}
+	else
+	{
+		LL_WARNS() << "Failed to generate LLFloaterScriptQueue with action: " << action << LL_ENDL;
+	}
+}
+// </FS>
 
 void handle_selected_texture_info(void*)
 {
@@ -9995,7 +10084,7 @@ void handle_grab_baked_texture(void* data)
 	if(folder_id.notNull())
 	{
 		std::string name;
-		name = "Baked " + LLAvatarAppearanceDictionary::getInstance()->getBakedTexture(baked_tex_index)->mNameCapitalized + " Texture";
+		name = "Baked " + LLAvatarAppearance::getDictionary()->getBakedTexture(baked_tex_index)->mNameCapitalized + " Texture";
 
 		LLUUID item_id;
 		item_id.generate();
@@ -11327,6 +11416,27 @@ bool use_http_textures()
 }
 // <FS:Ansariel>
 
+// <FS:Ansariel> Optional small camera floater
+class FSToggleCameraFloater : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string floater_name = gSavedSettings.getBOOL("FSUseSmallCameraFloater") ? "fs_camera_small" : "camera";
+		LLFloaterReg::toggleInstance(floater_name);
+		return true;
+	}
+};
+
+class FSCheckCameraFloater : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		static LLCachedControl<bool> fsUseSmallCameraFloater(gSavedSettings, "FSUseSmallCameraFloater");
+		return LLFloaterReg::instanceVisible(fsUseSmallCameraFloater ? "fs_camera_small" : "camera");
+	}
+};
+// <FS:Ansariel>
+
 void initialize_menus()
 {
 	// A parameterized event handler used as ctrl-8/9/0 zoom controls below.
@@ -11422,7 +11532,11 @@ void initialize_menus()
 	// <FS:Zi> Add reset camera angles menu
 	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
 	// </FS:Zi>
-	
+	// <FS:Ansariel> Optional small camera floater
+	view_listener_t::addMenu(new FSToggleCameraFloater(), "View.ToggleCameraFloater");
+	view_listener_t::addMenu(new FSCheckCameraFloater(), "View.CheckCameraFloater");
+	// </FS:Ansariel>
+
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
 

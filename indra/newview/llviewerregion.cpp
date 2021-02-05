@@ -298,6 +298,8 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
 
         LL_INFOS("AppInit", "Capabilities") << "Requesting seed from " << url 
                                             << " region name " << regionp->getName()
+                                            << " region id " << regionp->getRegionID()
+                                            << " handle " << regionp->getHandle()
                                             << " (attempt #" << mSeedCapAttempts + 1 << ")" << LL_ENDL;
 		LL_DEBUGS("AppInit", "Capabilities") << "Capabilities requested: " << capabilityNames << LL_ENDL;
 
@@ -361,9 +363,9 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
         log_capabilities(mCapabilities);
 #endif
 
+        LL_DEBUGS("AppInit", "Capabilities", "Teleport") << "received caps for handle " << regionHandle 
+														 << " region name " << regionp->getName() << LL_ENDL;
         regionp->setCapabilitiesReceived(true);
-        LL_DEBUGS("AppInit", "Capabilities") << "received caps for handle " << regionHandle 
-                                             << " region name " << regionp->getName() << LL_ENDL;
 
         if (STATE_SEED_GRANTED_WAIT == LLStartUp::getStartupState())
         {
@@ -416,7 +418,7 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCompleteCoro(U64 regionHandle)
         LLSD capabilityNames = LLSD::emptyArray();
         buildCapabilityNames(capabilityNames);
 
-        LL_INFOS("AppInit", "Capabilities") << "Requesting second Seed from " << url << LL_ENDL;
+        LL_INFOS("AppInit", "Capabilities") << "Requesting second Seed from " << url << " for region " << regionp->getRegionID() << LL_ENDL;
 
         regionp = NULL;
         result = httpAdapter->postAndSuspend(httpRequest, url, capabilityNames);
@@ -2387,7 +2389,7 @@ void LLViewerRegion::requestSimulatorFeatures()
             LLCoros::instance().launch("LLViewerRegionImpl::requestSimulatorFeatureCoro",
                                        boost::bind(&LLViewerRegionImpl::requestSimulatorFeatureCoro, mImpl, url, getHandle()));
         
-        LL_INFOS("AppInit", "SimulatorFeatures") << "Launching " << coroname << " requesting simulator features from " << url << LL_ENDL;
+        LL_INFOS("AppInit", "SimulatorFeatures") << "Launching " << coroname << " requesting simulator features from " << url << " for region " << getRegionID() << LL_ENDL;
     }
     else
     {
@@ -3254,7 +3256,7 @@ void LLViewerRegion::setSeedCapability(const std::string& url)
 	if (getCapability("Seed") == url)
     {	
 		setCapabilityDebug("Seed", url);
-		LL_WARNS("CrossingCaps") <<  "Received duplicate seed capability, posting to seed " <<
+		LL_WARNS("CrossingCaps") <<  "Received duplicate seed capability for " << getRegionID() << ", posting to seed " <<
 				url	<< LL_ENDL;
 
 		//Instead of just returning we build up a second set of seed caps and compare them 
@@ -3275,7 +3277,7 @@ void LLViewerRegion::setSeedCapability(const std::string& url)
         LLCoros::instance().launch("LLViewerRegionImpl::requestBaseCapabilitiesCoro",
         boost::bind(&LLViewerRegionImpl::requestBaseCapabilitiesCoro, mImpl, getHandle()));
 
-    LL_INFOS("AppInit", "Capabilities") << "Launching " << coroname << " requesting seed capabilities from " << url << LL_ENDL;
+    LL_INFOS("AppInit", "Capabilities") << "Launching " << coroname << " requesting seed capabilities from " << url << " for region " << getRegionID() << LL_ENDL;
 }
 
 S32 LLViewerRegion::getNumSeedCapRetries()
@@ -3595,5 +3597,14 @@ U32 LLViewerRegion::getMaxMaterialsPerTransaction() const
 		max_entries = mSimulatorFeatures[ "MaxMaterialsPerTransaction" ].asInteger();
 	}
 	return max_entries;
+}
+
+std::string LLViewerRegion::getSimHostName()
+{
+	if (mSimulatorFeaturesReceived)
+	{
+		return mSimulatorFeatures.has("HostName") ? mSimulatorFeatures["HostName"].asString() : getHost().getHostName();
+	}
+	return std::string("...");
 }
 

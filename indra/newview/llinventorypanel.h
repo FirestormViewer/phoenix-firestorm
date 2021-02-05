@@ -108,6 +108,10 @@ public:
 		Optional<LLFolderViewFolder::Params> folder;
 		Optional<LLFolderViewItem::Params>	 item;
 
+        // All item and folder views will be initialized on init if true (default)
+        // Will initialize on visibility change otherwise.
+        Optional<bool>						preinitialize_views;
+
 		Params()
 		:	sort_order_setting("sort_order_setting"),
 			inventory("", &gInventory),
@@ -126,7 +130,8 @@ public:
 			accepts_drag_and_drop("accepts_drag_and_drop"),
 			folder_view("folder_view"),
 			folder("folder"),
-			item("item")
+			item("item"),
+			preinitialize_views("preinitialize_views", true)
 		{}
 	};
 
@@ -154,6 +159,7 @@ public:
 	LLFolderViewModelInventory& getRootViewModel() { return mInventoryViewModel; }
 
 	// LLView methods
+	/*virtual*/ void onVisibilityChange(BOOL new_visibility);
 	void draw();
 	/*virtual*/ BOOL handleKeyHere( KEY key, MASK mask );
 	BOOL handleHover(S32 x, S32 y, MASK mask);
@@ -322,7 +328,7 @@ public:
 	void addHideFolderType(LLFolderType::EType folder_type);
 
 public:
-	BOOL getIsViewsInitialized() const { return mViewsInitialized; }
+	bool getViewsInitialized() const { return mViewsInitialized == VIEWS_INITIALIZED; }
 
 protected:
 	// Builds the UI.  Call this once the inventory is usable.
@@ -335,8 +341,15 @@ protected:
 	static LLUIColor			sLibraryColor;
 	static LLUIColor			sLinkColor;
 	
-	virtual LLFolderViewItem*	buildNewViews(const LLUUID& id);
-	LLFolderViewItem*			buildNewViews(const LLUUID& id, LLInventoryObject const* objectp);
+	LLFolderViewItem*			buildNewViews(const LLUUID& id);
+    LLFolderViewItem*			buildNewViews(const LLUUID& id,
+                                              LLInventoryObject const* objectp);
+    LLFolderViewItem*			buildNewViews(const LLUUID& id,
+                                              LLInventoryObject const* objectp,
+                                              LLFolderViewItem *target_view);
+    // if certain types are not allowed, no reason to create views
+    virtual bool				typedViewsFilter(const LLUUID& id, LLInventoryObject const* objectp) { return true; }
+
 	virtual void				itemChanged(const LLUUID& item_id, U32 mask, const LLInventoryObject* model_item);
 	BOOL				getIsHiddenFolderType(LLFolderType::EType folder_type) const;
 	
@@ -344,8 +357,44 @@ protected:
 	virtual LLFolderViewFolder*	createFolderViewFolder(LLInvFVBridge * bridge, bool allow_drop);
 	virtual LLFolderViewItem*	createFolderViewItem(LLInvFVBridge * bridge);
 private:
-	bool				mBuildDefaultHierarchy; // default inventory hierarchy should be created in postBuild()
-	bool				mViewsInitialized; // Views have been generated
+    // buildViewsTree does not include some checks and is meant
+    // for recursive use, use buildNewViews() for first call
+    LLFolderViewItem*			buildViewsTree(const LLUUID& id,
+                                              const LLUUID& parent_id,
+                                              LLInventoryObject const* objectp,
+                                              LLFolderViewItem *target_view,
+                                              LLFolderViewFolder *parent_folder_view);
+
+    typedef enum e_views_initialization_state
+    {
+        VIEWS_UNINITIALIZED = 0,
+        VIEWS_INITIALIZING,
+        VIEWS_INITIALIZED,
+    } EViewsInitializationState;
+
+	bool						mBuildViewsOnInit;
+    EViewsInitializationState	mViewsInitialized; // Whether views have been generated
+};
+
+
+class LLInventoryFavoriteItemsPanel : public LLInventoryPanel
+{
+public:
+    struct Params : public LLInitParam::Block<Params, LLInventoryPanel::Params>
+    {};
+
+    void initFromParams(const Params& p);
+    bool isSelectionRemovable() { return false; }
+    void setSelectCallback(const boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
+
+protected:
+    LLInventoryFavoriteItemsPanel(const Params& params);
+    ~LLInventoryFavoriteItemsPanel() { mFolderChangedSignal.disconnect(); }
+    void updateFavoritesRootFolder();
+
+    boost::signals2::connection mFolderChangedSignal;
+    boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)> mSelectionCallback;
+    friend class LLUICtrlFactory;
 };
 
 /************************************************************************/
@@ -379,7 +428,7 @@ public:
         std::string& tooltip_msg) override;
 
 protected:
-    /*virtual*/ LLFolderViewItem*	buildNewViews(const LLUUID& id) override;
+    /*virtual*/ bool				typedViewsFilter(const LLUUID& id, LLInventoryObject const* objectp) override;
     /*virtual*/ void				itemChanged(const LLUUID& item_id, U32 mask, const LLInventoryObject* model_item) override;
 
 private:

@@ -95,10 +95,7 @@
 #include "aoengine.h"
 // </FS:TT>
 
-#include "llparcel.h"
-#include "llviewerparcelmgr.h"
-
-// <FS:Zi> Do not allow "Restore To Last Postiion" for no-copy items
+// <FS:Zi> Do not allow "Restore To Last Position" for no-copy items
 #ifdef OPENSIM
 #include "fsgridhandler.h"
 #endif
@@ -3847,7 +3844,12 @@ LLFolderType::EType LLFolderBridge::getPreferredType() const
 	LLViewerInventoryCategory* cat = getCategory();
 	if(cat)
 	{
-		// <FS:Ansariel> Special virtual system folder icons
+		// <FS:Ansariel> Special virtual system folder icons; Since these folders can be user-created
+		//               and not protected, we will assign the folder type here instead of in
+		//               LLFolderDictionary. By latter and not declaring them as protected so the user
+		//               could delete them if they desire, they would not show up within the list of
+		//               protected folders in inventory, by underneath them among the other normal
+		//               folders, which is not desired.
 		//preferred_type = cat->getPreferredType();
 		std::string catName(cat->getName());
 		if (catName == ROOT_FIRESTORM_FOLDER) preferred_type = LLFolderType::FT_FIRESTORM;
@@ -4390,7 +4392,9 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	}
 	// </FS:Ansariel>
 	// <FS:Ansariel> Fix "outfits" context menu
-	if (outfits_id == mUUID)
+	if (model->isObjectDescendentOf(mUUID, outfits_id) && getCategory() &&
+		(getCategory()->getPreferredType() == LLFolderType::FT_NONE || 
+		 getCategory()->getPreferredType() == LLFolderType::FT_MY_OUTFITS))
 	{
 		items.push_back(std::string("New Outfit"));
 	}
@@ -4496,17 +4500,17 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		// Not sure what the right thing is to do here.
 		if (!isCOFFolder() && cat && (cat->getPreferredType() != LLFolderType::FT_OUTFIT))
 		{
-			// <FS:Ansariel> Fix "outfits" context menu
-			//if (!isInboxFolder()) // don't allow creation in inbox
-			if (!isInboxFolder() && outfits_id != mUUID) // don't allow creation in inbox
-			// </FS:Ansariel>
+			if (!isInboxFolder()) // don't allow creation in inbox
 			{
 				// Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
 				if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
 				{
 					items.push_back(std::string("New Folder"));
 				}
-                if (!isMarketplaceListingsFolder())
+                // <FS:Ansariel> Fix "outfits" context menu
+                //if (!isMarketplaceListingsFolder())
+                if (!isMarketplaceListingsFolder() && !model->isObjectDescendentOf(mUUID, outfits_id))
+                // </FS:Ansariel>
                 {
                     items.push_back(std::string("New Script"));
                     items.push_back(std::string("New Note"));
@@ -6987,70 +6991,6 @@ LLInventoryObject* LLObjectBridge::getObject() const
 	return object;
 }
 
-// [RLVa:KB] - Checked: 2012-08-15 (RLVa-1.4.7)
-bool enable_attachment_touch(const LLUUID& idItem)
-{
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (isAgentAvatarValid()) && (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) )
-	{
-		const LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-		return (pAttachObj) && (pAttachObj->flagHandleTouch()) && ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(gAgentAvatarp->getWornAttachment(idItem))) );
-	}
-	return false;
-}
-// [/RLVa:KB]
-
-// <FS:Ansariel> Touch worn objects
-void handle_attachment_touch(const LLUUID& idItem)
-{
-	if (!enable_attachment_touch(idItem))
-	{
-		return;
-	}
-
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return;
-
-	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-	if (!pAttachObj)
-		return;
-
-	LLMessageSystem	*msg = gMessageSystem;
-
-	msg->newMessageFast(_PREHASH_ObjectGrab);
-	msg->nextBlockFast( _PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast( _PREHASH_ObjectData);
-	msg->addU32Fast(    _PREHASH_LocalID, pAttachObj->mLocalID);
-	msg->addVector3Fast(_PREHASH_GrabOffset, LLVector3::zero);
-	msg->nextBlock("SurfaceInfo");
-	msg->addVector3("UVCoord", LLVector3::zero);
-	msg->addVector3("STCoord", LLVector3::zero);
-	msg->addS32Fast(_PREHASH_FaceIndex, 0);
-	msg->addVector3("Position", pAttachObj->getPosition());
-	msg->addVector3("Normal", LLVector3::zero);
-	msg->addVector3("Binormal", LLVector3::zero);
-	msg->sendMessage( pAttachObj->getRegion()->getHost());
-
-	msg->newMessageFast(_PREHASH_ObjectDeGrab);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_ObjectData);
-	msg->addU32Fast(_PREHASH_LocalID, pAttachObj->mLocalID);
-	msg->nextBlock("SurfaceInfo");
-	msg->addVector3("UVCoord", LLVector3::zero);
-	msg->addVector3("STCoord", LLVector3::zero);
-	msg->addS32Fast(_PREHASH_FaceIndex, 0);
-	msg->addVector3("Position", pAttachObj->getPosition());
-	msg->addVector3("Normal", LLVector3::zero);
-	msg->addVector3("Binormal", LLVector3::zero);
-	msg->sendMessage(pAttachObj->getRegion()->getHost());
-}
-// </FS:Ansariel>
-
 // <FS:Zi> Texture Refresh on worn attachments
 void handle_attachment_texture_refresh(const LLUUID& idItem)
 {
@@ -7116,18 +7056,14 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 	{
 		LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, false); // Don't replace if adding.
 	}
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-	else if ("edit" == action)
-	{
-		handle_attachment_edit(mUUID);
-	}
-// [/SL:KB]
-	// <FS:Ansariel> Touch worn objects
 	else if ("touch" == action)
 	{
 		handle_attachment_touch(mUUID);
 	}
-	// </FS:Ansariel>
+	else if ("edit" == action)
+	{
+		handle_attachment_edit(mUUID);
+	}
 	// <FS:Zi> Texture Refresh on worn attachments
 	else if ("texture_refresh_attachment" == action)
 	{
@@ -7315,14 +7251,18 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 			if( get_is_item_worn( mUUID ) )
 			{
 				items.push_back(std::string("Wearable And Object Separator"));
-// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
-				// TOOD-Catznip: should really be "Wearable And Object Edit" if we ever plan on pushing this upstream
-				items.push_back(std::string("Wearable Edit"));
-// [/SL:KB]
 
-				items.push_back(std::string("Touch Attachment"));
-				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || (!enable_attachment_touch(mUUID)) )
-					disabled_items.push_back(std::string("Touch Attachment"));
+				items.push_back(std::string("Attachment Touch"));
+				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || !enable_attachment_touch(mUUID) )
+				{
+					disabled_items.push_back(std::string("Attachment Touch"));
+				}
+
+				items.push_back(std::string("Wearable Edit"));
+				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || !get_is_item_editable(mUUID) )
+				{
+					disabled_items.push_back(std::string("Wearable Edit"));
+				}
 
 				// <FS:Zi> Texture Refresh on worn attachments
 				if (item->getType() == LLAssetType::AT_OBJECT)
@@ -8515,11 +8455,11 @@ void LLFolderViewGroupedItemBridge::groupFilterContextMenu(folder_view_item_dequ
 	disable_context_entries_if_present(menu, disabled_items);
 }
 
-bool LLFolderViewGroupedItemBridge::canWearSelected(uuid_vec_t item_ids)
+bool LLFolderViewGroupedItemBridge::canWearSelected(const uuid_vec_t& item_ids) const
 {
 	for (uuid_vec_t::const_iterator it = item_ids.begin(); it != item_ids.end(); ++it)
 	{
-		LLViewerInventoryItem* item = gInventory.getItem(*it);
+		const LLViewerInventoryItem* item = gInventory.getItem(*it);
 		// <FS:Ansariel> Fix broken add wearable check
 		//if (!item || (item->getType() >= LLAssetType::AT_COUNT) || (item->getType() <= LLAssetType::AT_NONE))
 		if (!item || (item->getType() != LLAssetType::AT_CLOTHING && item->getType() != LLAssetType::AT_OBJECT && item->getType() != LLAssetType::AT_BODYPART && item->getType() != LLAssetType::AT_GESTURE))

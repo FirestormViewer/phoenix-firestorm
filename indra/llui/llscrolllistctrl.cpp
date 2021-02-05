@@ -132,6 +132,7 @@ LLScrollListCtrl::Params::Params()
 	search_column("search_column", 0),
 	sort_column("sort_column", -1),
 	sort_ascending("sort_ascending", true),
+	sort_lazily("sort_lazily", false),					// <FS:Beq> FIRE-30732 deferred sort as a UI property
 	persist_sort_order("persist_sort_order", false),	// <FS:Ansariel> Persists sort order of scroll lists
 	primary_sort_only("primary_sort_only", false),		// <FS:Ansariel> Option to only sort by one column
 	mouse_wheel_opaque("mouse_wheel_opaque", false),
@@ -186,6 +187,7 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mTotalStaticColumnWidth(0),
 	mTotalColumnPadding(0),
 	mSorted(false),
+	mSortLazily(p.sort_lazily),		// <FS:Beq> FIRE-30732 deferred sort configurability
 	mDirty(false),
 	mOriginalSelection(-1),
 	mLastSelected(NULL),
@@ -851,16 +853,22 @@ void LLScrollListCtrl::updateColumns(bool force_update)
 		}
 	}
 
+	bool header_changed_width = false;
 	// expand last column header we encountered to full list width
 	// <FS:KC> Fixed last column on LLScrollListCtrl expanding on control resize when column width should be fixed or dynamic
 	//if (last_header)
 	if (last_header && last_header->canResize())
 	{
+		S32 old_width = last_header->getColumn()->getWidth();
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
 		last_header->reshape(new_width, last_header->getRect().getHeight());
 		last_header->setVisible(mDisplayColumnHeaders && new_width > 0);
-		last_header->getColumn()->setWidth(new_width);
-	}
+        if (old_width != new_width)
+        {
+            last_header->getColumn()->setWidth(new_width);
+            header_changed_width = true;
+        }
+    }
 
 	// propagate column widths to individual cells
 	if (columns_changed_width || force_update)
@@ -879,6 +887,20 @@ void LLScrollListCtrl::updateColumns(bool force_update)
 			}
 		}
 	}
+    else if (header_changed_width)
+    {
+        item_list::iterator iter;
+        S32 index = last_header->getColumn()->mIndex; // Not always identical to last column!
+        for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
+        {
+            LLScrollListItem *itemp = *iter;
+            LLScrollListCell* cell = itemp->getColumn(index);
+            if (cell)
+            {
+                cell->setWidth(last_header->getColumn()->getWidth());
+            }
+        }
+    }
 }
 
 void LLScrollListCtrl::setHeadingHeight(S32 heading_height)
@@ -932,6 +954,8 @@ BOOL LLScrollListCtrl::selectFirstItem()
 // virtual
 BOOL LLScrollListCtrl::selectNthItem( S32 target_index )
 {
+	// <FS:Ansariel> FIRE-30571: Comboboxes select all items then pressing Page-Up
+	target_index = llclamp(target_index, 0, (S32)mItemList.size() - 1);
 	return selectItemRange(target_index, target_index);
 }
 
@@ -1524,18 +1548,34 @@ BOOL LLScrollListCtrl::setSelectedByValue(const LLSD& value, BOOL selected)
 	for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem* item = *iter;
-		if (item->getEnabled() && (item->getValue().asString() == value.asString()))
+		if (item->getEnabled())
 		{
-			if (selected)
-			{
-				selectItem(item);
-			}
-			else
-			{
-				deselectItem(item);
-			}
-			found = TRUE;
-			break;
+            if (value.isBinary())
+            {
+                if (item->getValue().isBinary())
+                {
+                    LLSD::Binary data1 = value.asBinary();
+                    LLSD::Binary data2 = item->getValue().asBinary();
+                    found = std::equal(data1.begin(), data1.end(), data2.begin()) ? TRUE : FALSE;
+                }
+            }
+            else
+            {
+                found = item->getValue().asString() == value.asString() ? TRUE : FALSE;
+            }
+
+            if (found)
+            {
+                if (selected)
+                {
+                    selectItem(item);
+                }
+                else
+                {
+                    deselectItem(item);
+                }
+                break;
+            }
 		}
 	}
 
@@ -2915,8 +2955,18 @@ void  LLScrollListCtrl::sortByColumnIndex(U32 column, BOOL ascending)
 
 void LLScrollListCtrl::updateSort() const
 {
-	if (hasSortOrder() && !isSorted())
+	// <FS:Beq> FIRE-30667 et al. Group hang issues
+	// if (hasSortOrder() && !isSorted())
+	// {
+	static LLUICachedControl<U32> sortDeferFrameCount("FSSortDeferalFrames");
+	if ( hasSortOrder() && !isSorted() &&
+		( !mSortLazily || // if deferred sorting is off OR the deferral period has been exceeded
+		( mLastUpdateFrame > 1 && ( LLFrameTimer::getFrameCount() - mLastUpdateFrame ) >= sortDeferFrameCount ) ) )
+	// encoding two (unlikely) special values into mLastUpdateFrame 1 means we've sorted and 0 means we've nothing new to do.
+	// 0 is set after sorting, 1 can be set by a parent for any post sorting action.
 	{
+		mLastUpdateFrame=0;
+	// </FS:Beq>
 		// do stable sort to preserve any previous sorts
 		std::stable_sort(
 			mItemList.begin(), 

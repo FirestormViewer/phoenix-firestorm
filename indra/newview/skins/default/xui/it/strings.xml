@@ -1737,11 +1737,14 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="MarketplaceUpdating">
 		in aggiornamento...
 	</string>
+	<string name="UploadFeeInfo">
+		Il costo si basa sul tuo livello di iscrizione. Più alto è il livello, più basso è il costo. [https://secondlife.com/my/account/membership.php? Scopri di più]
+	</string>
 	<string name="Open landmarks">
 		Apri segnaposto
 	</string>
 	<string name="Unconstrained">
-		Libero
+		Senza limitazioni
 	</string>
 	<string name="no_transfer" value=" (no trasferimento)"/>
 	<string name="no_modify" value=" (no modifica)"/>
@@ -5178,6 +5181,15 @@ Segnala abuso
 	<string name="Chat">
 		Chat
 	</string>
+	<string name="BaseMembership">
+		Base
+	</string>
+	<string name="PremiumMembership">
+		Premium
+	</string>
+	<string name="Premium PlusMembership">
+		Premium Plus
+	</string>
 	<string name="DeleteItems">
 		Cancellare gli elementi selezionati?
 	</string>
@@ -5790,16 +5802,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		[NAME] ha causato una collisione sconosciuta.
 	</string>
 	<string name="MovelockEnabled">
-		Blocco movimenti attivo
-	</string>
-	<string name="MovelockDisabled">
-		Blocco movimenti inattivo
-	</string>
-	<string name="MovelockEnabling">
-		Abilitazione blocco...
-	</string>
-	<string name="MovelockDisabling">
-		Disabilitazione blocco...
+		Io &gt; Movimento &gt; Blocca attivo
 	</string>
 	<string name="BusyResponse">
 		busy response

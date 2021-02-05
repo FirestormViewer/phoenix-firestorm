@@ -1428,7 +1428,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="69"
+			 height="85"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -1455,6 +1455,16 @@
 				 name="UseDoFUnderwater">
 				</check_box>
 				<check_box
+				control_name="FSFocusPointFollowsPointer"
+				enabled_control="RenderDepthOfField"
+				height="16"
+				label="Depth of Field focus follows pointer"
+				layout="topleft"
+				name="FSFocusPointFollowsPointer"
+				tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
+				top_pad="4"
+				width="256"/>	   
+				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
@@ -1479,7 +1489,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="195"
+			 height="175"
 			 border_visible="true"
 			 background_visible="true">
 				<text

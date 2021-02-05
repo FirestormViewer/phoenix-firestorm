@@ -5,8 +5,8 @@
 		<menu_item_call label="Торговые списки..." name="MarketplaceListings"/>
 		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
 
+		<menu_item_call label="Новое окно Инвентаря" name="NewInventoryWindow"/>
 		<menu_item_check label="Инвентарь" name="Inventory"/>
-		<menu_item_check label="Инвентарь" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Защищенные папки" name="Protected Folders"/>
 		<menu_item_check label="Избранные Одежды" name="WearableFavorites"/>
 		<menu_item_call label="Места" name="Picks"/>
@@ -128,6 +128,11 @@
 			<menu_item_call label="Моя Окружающая среда..." name="my_environs"/>
 			<menu_item_call label="Личное Освещение..." name="adjustment_tool"/>
 			<menu_item_check label="Пауза Облаков" name="pause_clouds"/>
+			<menu label="Массовый импорт" name="WL Bulk Import">
+				<menu_item_call label="Дни..." name="WL Bulk Import Days"/>
+				<menu_item_call label="Небеса..." name="WL Bulk Import Skies"/>
+				<menu_item_call label="Вода..." name="WL Bulk Import Water"/>
+			</menu>
 		</menu>
 
 		<!-- <menu label="Положение солнца" name="Environment Settings">
@@ -159,6 +164,7 @@
 		<menu name="photo_and_video" label="Фото и Видео">
 			<menu_item_call label="Инструменты фото" name="phototools_item_call"/>
 			<menu_item_call label="Инструменты камеры" name="cameratools_item_call"/>
+			<menu_item_check label="Блокировка фокуса Глубины резкости" name="lock_focus_point"/>
 		</menu>
 		<menu_item_call label="Поиск вокруг" name="area_search"/>
 		<menu_item_call label="Проводник звуков" name="Sound Explorer"/>

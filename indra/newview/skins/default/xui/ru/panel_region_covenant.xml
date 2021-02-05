@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Соглашение" name="Covenant">
 	<panel.string name="can_resell">
-		Приобретенная в этом регионе земля может быть перепродана.
+		Купленую в этом регионе землю можно перепродать.
 	</panel.string>
 	<panel.string name="can_not_resell">
-		Приобретенная в этом регионе земля не может быть перепродана.
+		Купленую в этом регионе землю нельзя перепродать.
 	</panel.string>
 	<panel.string name="can_change">
-		Приобретенная в этом регионе земля может быть объединена или разделена.
+		Купленую землю можно объединить или разделить.
 	</panel.string>
 	<panel.string name="can_not_change">
-		Приобретенная в этом регионе земля не может быть объединена или разделена.
+		Купленую землю нельзя объединить или разделить.
 	</panel.string>
 	<text name="estate_section_lbl">
 		Землевладение
@@ -55,7 +55,7 @@
 	<text name="region_landtype_lbl">
 		Тип:
 	</text>
-	<text name="region_landtype_text">
+	<text name="region_landtype_text" width="180">
 		Материк/поместье
 	</text>
 	<text name="region_maturity_lbl">
@@ -73,7 +73,7 @@
 	<text name="changeable_lbl">
 		Разделение:
 	</text>
-	<text name="changeable_clause" word_wrap="true" height="30">
+	<text name="changeable_clause">
 		Земля в этом регионе не может быть объединена или разделена.
 	</text>
 </panel>

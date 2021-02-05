@@ -78,6 +78,7 @@
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
 #include "lluictrlfactory.h"
+#include "llviewermenu.h"
 #include "llviewermessage.h"
 #include "llviewerfoldertype.h"
 #include "llviewerobjectlist.h"
@@ -693,6 +694,50 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 	return TRUE;
+}
+
+bool get_is_item_editable(const LLUUID& inv_item_id)
+{
+	if (const LLInventoryItem* inv_item = gInventory.getLinkedItem(inv_item_id))
+	{
+		switch (inv_item->getType())
+		{
+			case LLAssetType::AT_BODYPART:
+			case LLAssetType::AT_CLOTHING:
+				return gAgentWearables.isWearableModifiable(inv_item_id);
+			case LLAssetType::AT_OBJECT:
+				return true;
+			default:
+                return false;;
+		}
+	}
+	return gAgentAvatarp->getWornAttachment(inv_item_id) != nullptr;
+}
+
+void handle_item_edit(const LLUUID& inv_item_id)
+{
+	if (get_is_item_editable(inv_item_id))
+	{
+		if (const LLInventoryItem* inv_item = gInventory.getLinkedItem(inv_item_id))
+		{
+			switch (inv_item->getType())
+			{
+				case LLAssetType::AT_BODYPART:
+				case LLAssetType::AT_CLOTHING:
+					LLAgentWearables::editWearable(inv_item_id);
+					break;
+				case LLAssetType::AT_OBJECT:
+					handle_attachment_edit(inv_item_id);
+					break;
+				default:
+					break;
+			}
+		}
+		else
+		{
+			handle_attachment_edit(inv_item_id);
+		}
+	}
 }
 
 BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
@@ -2655,16 +2700,19 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	{
 		bool open_multi_preview = true;
 
-		for (std::set<LLFolderViewItem*>::iterator set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
+		if ("open" == action)
 		{
-			LLFolderViewItem* folder_item = *set_iter;
-			if (folder_item)
+			for (std::set<LLFolderViewItem*>::iterator set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
 			{
-				LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem());
-				if (!bridge || !bridge->isMultiPreviewAllowed())
+				LLFolderViewItem* folder_item = *set_iter;
+				if (folder_item)
 				{
-					open_multi_preview = false;
-					break;
+					LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem());
+					if (!bridge || !bridge->isMultiPreviewAllowed())
+					{
+						open_multi_preview = false;
+						break;
+					}
 				}
 			}
 		}

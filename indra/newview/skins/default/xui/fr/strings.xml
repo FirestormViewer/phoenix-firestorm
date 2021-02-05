@@ -1630,13 +1630,13 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 		mise à jour...
 	</string>
 	<string name="UploadFeeInfo">
-		Les frais sont basés sur votre niveau d'abonnement. Plus haut est ce niveau, plus bas sont les frais. [https://secondlife.com/my/account/membership.php? En savoir plus]
+		Les frais dépendent de votre niveau d'abonnement. Les niveaux supérieurs sont soumis à des frais moins élevés. [https://secondlife.com/my/account/membership.php? En savoir plus]
 	</string>
 	<string name="Open landmarks">
-		Ouvrir les repères
+		Points de repère ouverts
 	</string>
 	<string name="Unconstrained">
-		Sans contraintes
+		Sans contrainte
 	</string>
 	<string name="no_transfer" value=" (pas de transfert)"/>
 	<string name="no_modify" value=" (pas de modification)"/>
@@ -4988,6 +4988,15 @@ Veuillez vous reporter à https://secondlife-status.statuspage.io afin de déter
 	</string>
 	<string name="Chat" value=" Chat :">
 		Chat
+	</string>
+	<string name="BaseMembership">
+		Base
+	</string>
+	<string name="PremiumMembership">
+		Premium
+	</string>
+	<string name="Premium PlusMembership">
+		Premium Plus
 	</string>
 	<string name="DeleteItems">
 		Supprimer les articles sélectionnés ?

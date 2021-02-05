@@ -269,6 +269,16 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
 
 bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
 {
+	LLRenderTarget::sUseFBO = newvalue.asBoolean();
+	if (gPipeline.isInit())
+	{
+		gPipeline.updateRenderTransparentWater();
+		gPipeline.updateRenderDeferred();
+		gPipeline.releaseGLBuffers();
+		gPipeline.createGLBuffers();
+		gPipeline.resetVertexBuffers();
+		LLViewerShaderMgr::instance()->setShaders();
+	}
 	LLWorld::getInstance()->updateWaterObjects();
 	return true;
 }
@@ -1009,6 +1019,20 @@ void handleRenderHiDPIChanged(const LLSD& newvalue)
 }
 // </FS:TS> FIRE-24081
 
+// <FS:Ansariel> Optional small camera floater
+void handleSmallCameraFloaterChanged(const LLSD& newValue)
+{
+	std::string old_floater_name = newValue.asBoolean() ? "camera" : "fs_camera_small";
+	std::string new_floater_name = newValue.asBoolean() ? "fs_camera_small" : "camera";
+
+	if (LLFloaterReg::instanceVisible(old_floater_name))
+	{
+		LLFloaterReg::hideInstance(old_floater_name);
+		LLFloaterReg::showInstance(new_floater_name);
+	}
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1253,6 +1277,9 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Dynamic texture memory calculation
 	gSavedSettings.getControl("FSDynamicTextureMemory")->getSignal()->connect(boost::bind(&handleDynamicTextureMemoryChanged, _2));
+
+	// <FS:Ansariel> Optional small camera floater
+	gSavedSettings.getControl("FSUseSmallCameraFloater")->getSignal()->connect(boost::bind(&handleSmallCameraFloaterChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

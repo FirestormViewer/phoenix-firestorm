@@ -24,7 +24,7 @@
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
-
+#include "llworld.h"
 // <COLOSI opensim multi-currency support>
 #include "llnotificationsutil.h"
 #include "tea.h"
@@ -103,6 +103,36 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSayRange = extras.has("say-range") ? extras["say-range"].asInteger() : 20;
 			mShoutRange = extras.has("shout-range") ? extras["shout-range"].asInteger() : 100;
 			mWhisperRange = extras.has("whisper-range") ? extras["whisper-range"].asInteger() : 10;
+
+			if(extras.has("GridURL"))
+			{
+				// If we have GridURL specified in the extras then we use this by default
+				mHyperGridPrefix =  extras["GridURL"].asString();
+				auto pos = mHyperGridPrefix.find("://");
+				if( pos != std::string::npos)
+				{
+					// We always strip off the protocol prefix if it exists
+					// Note: we do not attempt to clear trailing port numbers or / or even directories.
+					mHyperGridPrefix = mHyperGridPrefix.substr(pos+3,mHyperGridPrefix.size()-(pos+3));
+				}
+				LL_DEBUGS() << "Setting HyperGrid URL to \"GridURL\" [" << mHyperGridPrefix << "]" << LL_ENDL;
+			}
+#ifdef OPENSIM
+			else if (LLGridManager::instance().getGatekeeper() != std::string{})
+			{
+				// Note: this is a tentative test pending further use of gatekeeper
+				// worst case this is checking the login grid and will simply be the same as the fallback
+				// If the GridURL is not available then we will try to use the Gatekeeper which is expected to be present.
+				mHyperGridPrefix = LLGridManager::instance().getGatekeeper();
+				LL_DEBUGS() << "Setting HyperGrid URL to \"Gatekeeper\" [" << mHyperGridPrefix << "]" << LL_ENDL;
+			}
+#endif
+			else
+			{
+				// Just in case that fails we will default back to the current grid
+				mHyperGridPrefix = LLGridManager::instance().getGridId();
+				LL_DEBUGS() << "Setting HyperGrid URL to fallback of current grid (target grid is misconfigured) [" << mHyperGridPrefix << "]" << LL_ENDL;
+			}
 
 			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
 				extras.has("SimulatorFPSWarnPercent") && extras.has("SimulatorFPSCritPercent"))
@@ -190,6 +220,21 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				mCurrencySymbolOverride = LLStringUtil::null;
 			}
 			// </COLOSI opensim multi-currency support>
+			// Adding feature extensions adopted from Aurora to OpenSim
+			auto regionSettings=LLWorld::getInstance();
+			if(extras.has("MinPrimScale"))
+			{
+				regionSettings->setRegionMinPrimScale(extras["MinPrimScale"].asReal());
+			}
+			if(extras.has("MaxPrimScale"))
+			{
+				regionSettings->setRegionMaxPrimScale(extras["MaxPrimScale"].asReal());
+				regionSettings->setRegionMaxPrimScaleNoMesh(extras["MaxPrimScale"].asReal());
+			}
+			if(extras.has("MaxPhysPrimScale"))
+			{
+				regionSettings->setMaxPhysPrimScale(extras["MaxPhysPrimScale"].asReal());
+			}
 		}
 		else // OpenSim specifics are unsupported reset all to default
 		{
@@ -203,6 +248,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSimulatorFPSFactor = 1.f;
 			mSimulatorFPSWarn = 30.f;
 			mSimulatorFPSCrit = 20.f;
+			LLWorld::getInstance()->refreshLimits();// reset  prim scales etc.
 
 			if (LLLoginInstance::getInstance()->hasResponse("search"))
 			{

@@ -227,7 +227,9 @@ protected:
 	
 	/*virtual*/ void onFocusReceived();
 
-	void dockToChiclet(bool dock);
+	// <FS:Ansariel> FIRE-12929: Fix script floater docking issues
+	//void dockToChiclet(bool dock);
+	void dockToChiclet(bool dock, bool scroll_to_chiclet = true);
 
 private:
 	bool isScriptTextbox(LLNotificationPtr notification);

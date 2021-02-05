@@ -1011,8 +1011,8 @@ LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
 	}	
 	
 	LLSpatialGroup* group = drawablep->getSpatialGroup();
-	llassert(group != NULL);
-
+	// <FS:Beq/> avoid crash for race condition with unseating of an avatar
+	// llassert(group != NULL);
 	if (group && was_visible && group->isOcclusionState(LLSpatialGroup::QUERY_PENDING))
 	{
 		group->setOcclusionState(LLSpatialGroup::DISCARD_QUERY, LLSpatialGroup::STATE_MODE_ALL_CAMERAS);
@@ -3269,13 +3269,13 @@ void renderRaycast(LLDrawable* drawablep)
 		LLGLEnable blend(GL_BLEND);
 		gGL.diffuseColor4f(0,1,1,0.5f);
 
-		if (drawablep->getVOVolume())
+		LLVOVolume* vobj = drawablep->getVOVolume();
+		if (vobj && !vobj->isDead())
 		{
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			//pushVerts(drawablep->getFace(gDebugRaycastFaceHit), LLVertexBuffer::MAP_VERTEX);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			LLVOVolume* vobj = drawablep->getVOVolume();
 			LLVolume* volume = vobj->getVolume();
 
 			bool transform = true;
@@ -3516,7 +3516,7 @@ public:
 		for (OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
 		{
 			LLDrawable* drawable = (LLDrawable*)(*i)->getDrawable();
-			if(!drawable)
+			if(!drawable || drawable->isDead())
 		{
 				continue;
 			}

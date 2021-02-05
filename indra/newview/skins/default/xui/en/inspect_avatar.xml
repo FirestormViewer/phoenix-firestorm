@@ -173,7 +173,6 @@
      follows="top|left"
      height="20"
      image_overlay="OptionsMenu_Off"
-     menu_filename="menu_inspect_self_gear.xml"
      name="gear_self_btn"
      right="-5"
      top_delta="0"

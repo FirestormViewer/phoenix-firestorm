@@ -85,13 +85,13 @@
 			</text>
 			<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
 			<check_box label="Elastyczne tkaniny ubrań" name="AvatarCloth"/>
-			<text name="TerrainDetailText">
+			<!-- <text name="TerrainDetailText">
 				Szczegóły terenu:
 			</text>
 			<radio_group name="TerrainDetailRadio">
 				<radio_item label="Mało" name="0"/>
 				<radio_item label="Dużo" name="2"/>
-			</radio_group>
+			</radio_group> -->
 			<text name="Presets_Label">
 				Ustawienia:
 			</text>
@@ -156,6 +156,7 @@
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
+			<check_box label="Okluzja obiektów dla map zniekształceń wody" name="dist_occl" tool_tip="Gdy opcja jest zaznaczona, to okluzja obiektów zostanie przywrócona dla generowania map zniekształceń wody. Grafika jest bardziej poprawna bez okluzji, ale może ona mieć znaczący wpływ na wydajność renderowania." />
 			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				sekund
@@ -167,6 +168,7 @@
 			<check_box label="Włącz głębię ostrości (rozmywaj widok z wyjątkiem miejsca, gdzie skupiona jest kamera)" name="UseDoF"/>
 			<check_box label="Włączaj w trybie budowania" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="Włączaj pod wodą" name="FSRenderDoFUnderwater"/>
+			<check_box label="Głębia ostrości podąża za kursorem" name="FSFocusPointFollowsPointer" tool_tip="Głębia ostrości (DoF) będzie podążać za kursorem myszy - to zachowanie jest zgodne z tym, co widać podczas korzystania z Flycam. Używaj w połączeniu z blokadą ostrości DoF." />
 			<slider label="Wartość F kamery:" name="CameraFNum" tool_tip="Wartość F kamery dla głębi ostrości"/>
 			<slider label="Ogniskowa (mm):" name="CameraFocal" tool_tip="Ogniskowa dla głębi ostrości (w milimetrach)"/>
 			<slider label="Pole widzenia (°):" name="Camera FOV" tool_tip="Pionowy kąt pola widzenia kamery dla głębi ostrości (w stopniach)"/>

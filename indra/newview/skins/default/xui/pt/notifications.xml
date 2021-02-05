@@ -81,7 +81,7 @@ Detalhes do erro: O aviso &apos;[_NAME]&apos; não foi localizado no arquivo not
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Um erro ocorreu ao atualizar o [APP_NAME].  [http://get.secondlife.com Baixe a versão atual] do Visualizador.
+		Um erro ocorreu ao atualizar o [APP_NAME].  [https://www.firestormviewer.org/downloads Baixe a versão atual] do Visualizador.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
@@ -261,6 +261,10 @@ Deseja conceder direitos de modificação para os residentes selecionados?
 		Você quer revogar os direitos de edição para os residentes selecionados?
 		<usetemplate name="okcancelbuttons" notext="Não" yestext="Sim"/>
 	</notification>
+	<notification name="GroupNameLengthWarning">
+		O nome do grupo deve conter entre [MIN_LEN] e [MAX_LEN] caracteres.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="UnableToCreateGroup">
 		Não foi possível criar um grupo.
 [MESSAGE]
@@ -347,7 +351,7 @@ Deseja continuar?
 Você não tem L$ suficientes para associar-se a este grupo.
 	</notification>
 	<notification name="CreateGroupCost">
-		Criar este grupo custa L$[COST].
+		Criar este grupo custará L$[COST].
 Grupos ser formados por mais de um membro, caso contrário serão definitivamente excluídos. 
 Convite outros membros dentro de 48 horas.
 		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Criar grupo por L$[COST]"/>
@@ -452,6 +456,9 @@ Para colocar a mídia em só uma face, selecione Selecionar face e clique na fac
 	</notification>
 	<notification name="ErrorEncodingSnapshot">
 		Erro ao codificar a foto.
+	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Você precisa de L$[COST] para fazer o upload deste item.
 	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Você precisa de L$ [COST] para salvar uma foto em seu inventário. Você pode comprar L$ ou salvar a foto em seu computador.
@@ -1678,6 +1685,17 @@ Deseja prosseguir?
 	<notification name="JoinedTooManyGroups">
 		Você atingiu o limite máximo de grupos. Sai de um grupo para entrar ou criar outro.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GroupLimitInfo">
+		Residentes com o plano Básico podem participar de até [MAX_BASIC] grupos.
+O plano Premium permite até [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Saiba mais ou faça um upgrade]
+		<usetemplate name="okbutton" yestext="Fechar"/>
+	</notification>
+		<notification name="GroupLimitInfoPlus">
+			Residentes com o plano Básico podem participar de até [MAX_BASIC] grupos.
+O plano Premium permite até [MAX_PREMIUM]. O plano Premium Plus permite até [MAX_PREMIUM_PLUS]. 
+[https://secondlife.com/my/account/membership.php? Saiba mais ou faça um upgrade]
+			<usetemplate name="okbutton" yestext="Fechar"/>
 	</notification>
 	<notification name="KickUser">
 		Chutar este residente com qual mensagem?
@@ -3238,6 +3256,22 @@ Para sua segurança, os SLurls serão bloqueados por alguns instantes.
 	</notification>
 	<notification name="VoiceIsMutedByModerator">
 		Sua voz foi silenciada pelo moderador.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToGetBenefits">
+		Infelizmente, não conseguimos obter as informações de benefícios para esta sessão. Isto não deveria ocorrer em um ambiente de produção normal. Por favor, contate o suporte. Esta sessão não funcionará normalmente e recomendamos que você reinicie.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="BulkUploadCostConfirmation">
+		Será feito o upload de [COUNT] itens, com um custo total de L$[COST]. Você deseja prosseguir com o upload?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Carregar"/>
+	</notification>
+	<notification name="BulkUploadNoCompatibleFiles">
+		Não é possível fazer o upload dos arquivos selecionados de uma vez só.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="BulkUploadIncompatibleFiles">
+		Não é possível fazer o upload de alguns dos arquivos selecionados de uma vez só.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">

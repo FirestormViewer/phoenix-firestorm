@@ -362,6 +362,20 @@ private:
 };
 // [/RLVa:KB]
 
+// <FS:Ansariel> FIRE-30611: "You" in transcript is underlined
+///
+/// FSUrlEntryAgentSelf Describes the agent's Second Life agent Url, e.g.,
+/// secondlife:///app/agentself/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
+class FSUrlEntryAgentSelf : public LLUrlEntryAgent
+{
+public:
+	FSUrlEntryAgentSelf();
+private:
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+};
+// </FS:Ansariel>
+
+
 ///
 /// LLUrlEntryExperienceProfile Describes a Second Life experience profile Url, e.g.,
 /// secondlife:///app/experience/0e346d8b-4433-4d66-a6b0-fd37083abc4c/profile
@@ -596,6 +610,20 @@ public:
 	LLUrlEntryEmail();
 	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
 	/*virtual*/ std::string getUrl(const std::string &string) const;
+};
+
+///
+/// LLUrlEntryEmail Describes an IPv6 address
+///
+class LLUrlEntryIPv6 : public LLUrlEntryBase
+{
+public:
+	LLUrlEntryIPv6();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+	/*virtual*/ std::string getUrl(const std::string &string) const;
+	/*virtual*/ std::string getQuery(const std::string &url) const;
+
+	std::string mHostPath;
 };
 
 ///

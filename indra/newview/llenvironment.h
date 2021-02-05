@@ -152,8 +152,11 @@ public:
     void                        setEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version = NO_VERSION);
 
     void                        setSharedEnvironment();
-
     void                        clearEnvironment(EnvSelection_t env);
+
+    static void                 logEnvironment(EnvSelection_t env, const LLSettingsBase::ptr_t &settings, S32 env_version = NO_VERSION);
+
+
     LLSettingsDay::ptr_t        getEnvironmentDay(EnvSelection_t env);
     LLSettingsDay::Seconds      getEnvironmentDayLength(EnvSelection_t env);
     LLSettingsDay::Seconds      getEnvironmentDayOffset(EnvSelection_t env);
@@ -256,6 +259,9 @@ public:
 
         void                            initialize();
         bool                            isInitialized();
+// [RLVa:KB] - @setenv
+        virtual bool                    isTransition() { return false; }
+// [/RLVa:KB]
 
         void                            clear();
 
@@ -315,6 +321,9 @@ public:
 
         virtual bool                applyTimeDelta(const LLSettingsBase::Seconds& delta) override;
         virtual void                animate() override;
+// [RLVa:KB] - @setenv
+                bool                isTransition() override { return true; }
+// [/RLVa:KB]
 
     protected:
         LLSettingsSky::ptr_t        mStartSky;
@@ -324,6 +333,9 @@ public:
     };
 
     DayInstance::ptr_t          getSelectedEnvironmentInstance();
+// [RLVa:KB] - @setenv
+    DayInstance::ptr_t          getCurrentEnvironmentInstance() { return mCurrentEnvironment; }
+// [/RLVa:KB]
     DayInstance::ptr_t          getSharedEnvironmentInstance();
 
 protected:

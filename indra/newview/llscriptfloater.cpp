@@ -369,7 +369,9 @@ void LLScriptFloater::onFocusReceived()
 	}
 }
 
-void LLScriptFloater::dockToChiclet(bool dock)
+// <FS:Ansariel> FIRE-12929: Fix script floater docking issues
+//void LLScriptFloater::dockToChiclet(bool dock)
+void LLScriptFloater::dockToChiclet(bool dock, bool scroll_to_chiclet /* = true */)
 {
 	if (getDockControl() == NULL)
 	{
@@ -383,7 +385,13 @@ void LLScriptFloater::dockToChiclet(bool dock)
 				return;
 			}
 
-			chiclet_panelp->scrollToChiclet(chicletp);
+			// <FS:Ansariel> FIRE-12929: Fix script floater docking issues
+			//chiclet_panelp->scrollToChiclet(chicletp);
+			if (scroll_to_chiclet)
+			{
+				chiclet_panelp->scrollToChiclet(chicletp);
+			}
+			// </FS:Ansariel>
 
 			// Stop saving position while we dock floater
 			bool save = getSavePosition();
@@ -551,10 +559,11 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 
 		if(it != mNotifications.end())
 		{
+			auto old_id = it->first; // <FS:Beq> store UUID to prevent use after free - Rye
 			LLChicletPanel * chiclet_panelp = LLChicletBar::getInstance()->getChicletPanel();
 			if (NULL != chiclet_panelp)
 			{
-				LLIMChiclet * chicletp = chiclet_panelp->findChiclet<LLIMChiclet>(it->first);
+				LLIMChiclet * chicletp = chiclet_panelp->findChiclet<LLIMChiclet>(old_id); // <FS:Beq> avoid use after free - Rye
 				if (NULL != chicletp)
 				{
 					// Pass the new_message icon state further.
@@ -563,14 +572,14 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 				}
 			}
 
-			LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", it->first);
+			LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", old_id); // <FS:Beq> avoid use after free - Rye
 			if (floater)
 			{
 				// Generate chiclet with a "new message" indicator if a docked window was opened but not in focus. See EXT-3142.
 				set_new_message |= !floater->hasFocus();
 			}
 
-			removeNotification(it->first);
+			removeNotification(old_id);
 		}
 	}
 
@@ -710,7 +719,7 @@ LLScriptFloaterManager::EObjectType LLScriptFloaterManager::getObjectType(const 
 		return it->second;
 	}
 
-	LL_WARNS() << "Unknown object type" << LL_ENDL;
+	LL_WARNS() << "Unknown object type: " << notification->getName() << LL_ENDL;
 	return OBJ_UNKNOWN;
 }
 
@@ -754,6 +763,7 @@ LLScriptFloaterManager::object_type_map LLScriptFloaterManager::initObjectTypeMa
 	type_map["ScriptDialogGroup"] = OBJ_SCRIPT;
 	type_map["LoadWebPage"] = OBJ_LOAD_URL;
 	type_map["ObjectGiveItem"] = OBJ_GIVE_INVENTORY;
+	type_map["OwnObjectGiveItem"] = OBJ_GIVE_INVENTORY; // <FS:Ansariel> Fix log warning about unkown script message type
 	return type_map;
 }
 
@@ -936,121 +946,99 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
 	floater->setAutoFocus(FALSE);
 
-	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
+	eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
 	BOOL chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
 
-	LLRect pos = floater->getRect();
-
-	// <FS:PP> FIRE-12037: Inventory Offer Dialog boxes hidden
-	// They should be ALWAYS visible on screen, all of them, not only the most recent one - so use the ScriptDialogsPosition detection as well
-	// Otherwise (after accepting/declining that most recent one) user may not notice, that still has something to click (with chiclets hidden, or just too many of them visible on screen), relog and lost pending inventory offer items
-	// if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT)
-	if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT || floaterType == LLScriptFloaterManager::OBJ_UNKNOWN || floaterType == LLScriptFloaterManager::OBJ_GIVE_INVENTORY)
-	// </FS:PP>
+	if (dialog_position == POS_DOCKED && chicletsDisabled)
 	{
-		eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
-
-		if (dialog_position == POS_DOCKED && chicletsDisabled)
-		{
-			dialog_position = POS_TOP_RIGHT;
-		}
-
-		if (dialog_position != POS_DOCKED)
-		{
-			// undock the dialog
-			floater->setDocked(false, true);
-		}
-
-		S32 topPad = LLScriptFloaterManager::instance().getTopPad();
-
-		S32 bottomPad = 0;
-		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->hasButtons())
-		{
-			bottomPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->getRect().getHeight();
-		}
-
-		S32 leftPad = 0;
-		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->hasButtons())
-		{
-			leftPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->getRect().getWidth();
-		}
-
-		S32 rightPad = 0;
-		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->hasButtons())
-		{
-			rightPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->getRect().getWidth();
-		}
-
-		S32 width = pos.getWidth();
-		S32 height = pos.getHeight();
-
-		floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
-
-		switch (dialog_position)
-		{
-			case POS_DOCKED:
-			{
-				floater->dockToChiclet(true);
-				break;
-			}
-			case POS_TOP_LEFT:
-			{
-				pos.setOriginAndSize(leftPad,
-									gViewerWindow->getWorldViewHeightScaled() - height - topPad,
-									width, height);
-				break;
-			}
-			case POS_TOP_RIGHT:
-			{
-				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
-									gViewerWindow->getWorldViewHeightScaled() - height - topPad,
-									width, height);
-				break;
-			}
-			case POS_BOTTOM_LEFT:
-			{
-				pos.setOriginAndSize(leftPad,
-									bottomPad,
-									width, height);
-				break;
-			}
-			case POS_BOTTOM_RIGHT:
-			{
-				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
-									bottomPad,
-									width, height);
-				break;
-			}
-			default:
-			{
-				LL_WARNS() << "dialog_position value " << dialog_position << " not handled in switch() statement." << LL_ENDL;
-			}
-		}
+		dialog_position = POS_TOP_RIGHT;
 	}
-	else
-	{
-		floater->setSavePosition(true);
 
+	if (dialog_position != POS_DOCKED)
+	{
+		// undock the dialog
+		floater->setDocked(false, true);
 		if (chicletsDisabled)
 		{
-			S32 width = pos.getWidth();
-			S32 height = pos.getHeight();
-
-			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width,
-								 gViewerWindow->getWorldViewHeightScaled() - height,
-								 width, height);
+			// Remove the dock icon in case chiclets are hidden since there is nothing to dock to
+			floater->setCanDock(false);
 		}
-		else
+	}
+
+	S32 topPad = LLScriptFloaterManager::instance().getTopPad();
+
+	S32 bottomPad = 0;
+	if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->hasButtons())
+	{
+		bottomPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->getRect().getHeight();
+	}
+
+	S32 leftPad = 0;
+	if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->hasButtons())
+	{
+		leftPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->getRect().getWidth();
+	}
+
+	S32 rightPad = 0;
+	if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->hasButtons())
+	{
+		rightPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->getRect().getWidth();
+	}
+
+	LLRect pos = floater->getRect();
+	S32 width = pos.getWidth();
+	S32 height = pos.getHeight();
+
+	floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
+
+	if (!gSavedSettings.getBOOL("FSDisableIMChiclets"))
+	{
+		// This also sets up the dock, so we always need to call this (unless chiclets are hidden)
+		// or the dock button won't work at all.
+		floater->dockToChiclet(dialog_position == POS_DOCKED, dialog_position == POS_DOCKED);
+	}
+
+	switch (dialog_position)
+	{
+		case POS_TOP_LEFT:
 		{
-			floater->dockToChiclet(true);
+			pos.setOriginAndSize(leftPad,
+								gViewerWindow->getWorldViewHeightScaled() - height - topPad,
+								width, height);
+			break;
+		}
+		case POS_TOP_RIGHT:
+		{
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
+								gViewerWindow->getWorldViewHeightScaled() - height - topPad,
+								width, height);
+			break;
+		}
+		case POS_BOTTOM_LEFT:
+		{
+			pos.setOriginAndSize(leftPad,
+								bottomPad,
+								width, height);
+			break;
+		}
+		case POS_BOTTOM_RIGHT:
+		{
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
+								bottomPad,
+								width, height);
+			break;
+		}
+		default:
+		{
+			LL_WARNS() << "dialog_position value " << dialog_position << " not handled in switch() statement." << LL_ENDL;
 		}
 	}
 
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
 	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, FALSE);
 
-	if(!floater->isDocked())
+	if (!floater->isDocked())
 	{
 		// reposition the floater which might have been shifted to cascade
 		floater->setRect(pos);

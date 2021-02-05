@@ -193,7 +193,7 @@ No tutorial is currently available.
    icon="alertmodal.tga"
    name="BadInstallation"
    type="alertmodal">
- An error occurred while updating [APP_NAME].  Please [http://get.secondlife.com download the latest version] of the Viewer.
+ Installation of [APP_NAME] is defective. Please [https://www.firestormviewer.org/downloads download a new copy] of the Viewer and reinstall.
     <tag>fail</tag>
     <usetemplate
      name="okbutton"
@@ -1351,6 +1351,25 @@ You must agree to the Terms and Conditions, Privacy Policy, and Terms of Service
    <tag>fail</tag>
    <usetemplate
      name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CouldNotBuyCurrencyOS"
+   type="alertmodal">
+[TITLE]
+[MESSAGE]
+    <tag>confirm</tag>
+    <url
+	option="0"
+	name="url"
+	target = "_external">
+		[LINK]
+    </url>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="No"
      yestext="OK"/>
   </notification>
   
@@ -10237,6 +10256,12 @@ Do you wish to continue?
      yestext="OK"/>
   </notification>
 
+  <global name="UnsupportedShaderRequirements">
+You do not appear to meet the hardware requirements for [APP_NAME]. [APP_NAME] requires OpenGL 2.0 or later shader support. If this is the case, you may want to make sure that you have the latest drivers for your graphics card, and service packs and patches for your operating system.
+
+If you continue to have problems, please visit the [SUPPORT_SITE].
+  </global>
+
   <global name="UnsupportedGLRequirements">
 You do not appear to have the proper hardware requirements for [APP_NAME]. [APP_NAME] requires an OpenGL graphics card that has multitexture support. If this is the case, you may want to make sure that you have the latest drivers for your graphics card, and service packs and patches for your operating system.
 
@@ -10257,6 +10282,10 @@ If you continue to have problems, please visit the [SUPPORT_SITE].
 
   <global name="UnsupportedRAM">
 - Your system memory does not meet the minimum requirements.
+  </global>
+  
+  <global name="LLLeapUpdaterFailure">
+Failed to launch updater service [UPDATER_APP]. Please verify the viewer is installed correctly and has the necessary permissions to run. If you continue to experience issues, please visit the [SUPPORT_SITE].
   </global>
 
 <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
@@ -10566,6 +10595,27 @@ Movelock enabled. Use Avatar &gt; Movement &gt; Movelock to disable.
    name="MovelockDisabled"
    type="notifytip">
 Movelock disabled.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockEnabling"
+   type="notifytip">
+Enabling movelock...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="MovelockDisabling"
+   type="notifytip">
+Disabling movelock...
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="FlightAssistEnabled"
+   type="notifytip">
+Flight Assist is enabled
   </notification>
 
 <!-- Firestorm Phantom -->
@@ -11501,7 +11551,7 @@ Unable to add script!
    name="AssetServerTimeoutObjReturn"
    type="notify">
    <tag>fail</tag>
-Asset server didn't respond in a timely fashion.  Object returned to sim.
+Asset server didn't respond in a timely fashion.  Object returned to the region.
   </notification>
 
   <notification
@@ -13544,5 +13594,19 @@ No valid environment setting selected.
 Please note that "Shared Environment" and "Day cycle based" cannot be selected!
   <tag>fail</tag>
   </notification>
-  
+
+  <notification
+   icon="alertmodal.tga"
+   name="CantCreateInventoryName"
+   type="notify">
+   <tag>fail</tag>
+Cannot create inventory item: [NAME]
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="WindlightBulkImportFinished"
+   type="notifytip">
+Bulk import of Windlights has finished.
+  </notification>
 </notifications>

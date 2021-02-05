@@ -229,7 +229,9 @@ S32 LLDXHardware::getMBVideoMemoryViaWMI()
 }
 
 //Getting the version of graphics controller driver via WMI
-std::string LLDXHardware::getDriverVersionWMI()
+// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
+//std::string LLDXHardware::getDriverVersionWMI()
+std::string LLDXHardware::getDriverVersionWMI(const std::string& vendor)
 {
 	std::string mDriverVersion;
 	HRESULT hrCoInitialize = S_OK;
@@ -327,6 +329,29 @@ std::string LLDXHardware::getDriverVersionWMI()
 		}
 
 		VARIANT vtProp;
+
+		// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
+		hr = pclsObj->Get(L"AdapterCompatibility", 0, &vtProp, 0, 0);
+
+		if (FAILED(hr))
+		{
+			LL_WARNS("AppInit") << "Query for name property failed." << " Error code = 0x" << hr << LL_ENDL;
+			pSvc->Release();
+			pLoc->Release();
+			CoUninitialize();
+			return std::string();               // Program has failed.
+		}
+
+		BSTR vendorCompatibility(vtProp.bstrVal);
+		std::wstring vc_ws(vendorCompatibility, SysStringLen(vendorCompatibility));
+		std::string vc_str(vc_ws.begin(), vc_ws.end());
+
+		LLStringUtil::toUpper(vc_str);
+		if (vc_str.find(vendor) == std::string::npos)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 
 		// Get the value of the Name property
 		hr = pclsObj->Get(L"DriverVersion", 0, &vtProp, 0, 0);

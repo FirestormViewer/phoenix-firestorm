@@ -815,7 +815,7 @@ BOOL LLFloaterPreference::postBuild()
 // [/SL:KB]
 
 // <FS:AW  opensim preferences>
-#if !defined(OPENSIM) || defined(SINGLEGRID)// <FS:AW optional opensim support/>
+#if !defined(OPENSIM) || defined(SINGLEGRID)
 	// Hide the opensim tab if opensim isn't enabled
 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
 	if (tab_container)
@@ -824,9 +824,11 @@ BOOL LLFloaterPreference::postBuild()
 		if (opensim_panel)
 			tab_container->removeTabPanel(opensim_panel);
 	}
+#endif
+#if defined(OPENSIM) && !defined(SINGLEGRID)
+	childSetEnabled("show_grid_selection_check", !gSavedSettings.getBOOL("FSOpenSimAlwaysForceShowGrid"));
+#endif
 // </FS:AW  opensim preferences>
-#endif  // OPENSIM // <FS:AW optional opensim support/>
-
 
 	// <FS:Zi> Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));
@@ -2140,9 +2142,11 @@ void LLFloaterPreference::refreshEnabledState()
 
 	////Deferred/SSAO/Shadows
 	//BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+	//BOOL transparent_water = LLFeatureManager::getInstance()->isFeatureAvailable("RenderTransparentWater") && gSavedSettings.getBOOL("RenderTransparentWater");
 	//BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	//BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 	//					bumpshiny &&
+	//					transparent_water &&
 	//					shaders && 
 	//					gGLManager.mHasFramebufferObject &&
 	//					gSavedSettings.getBOOL("RenderAvatarVP") &&
@@ -2225,12 +2229,15 @@ void LLFloaterPreference::refreshEnabledState()
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
 	
-	// <FS:Ansariel> Does not exist
+    // Transparent Water
+    LLCheckBoxCtrl* transparent_water_ctrl = getChild<LLCheckBoxCtrl>("TransparentWater");
+
+    // <FS:Ansariel> Does not exist
     //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
     //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
     //ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
-	// </FS:Ansariel>
-    
+    // </FS:Ansariel>
+
 	// Avatar Mode
 	// Enable Avatar Shaders
 	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
@@ -2255,10 +2262,12 @@ void LLFloaterPreference::refreshEnabledState()
 		ctrl_avatar_cloth->setEnabled(true);
 	}
 	
+	/* <FS:LO> remove orphaned code left over from EEP
 	// Vertex Shaders, Global Shader Enable
 	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
 
 	terrain_detail->setEnabled(FALSE);
+	*/
 	
 	// WindLight
 	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -2277,6 +2286,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
+						((transparent_water_ctrl && transparent_water_ctrl->get()) ? TRUE : FALSE) &&
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
@@ -2341,7 +2351,10 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	ctrl_reflections->setEnabled(reflections);
 	reflections_text->setEnabled(reflections);
-	
+
+    // Transparent Water
+    LLCheckBoxCtrl* transparent_water_ctrl = getChild<LLCheckBoxCtrl>("TransparentWater");
+
 	// Bump & Shiny	
 	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
@@ -2371,12 +2384,14 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
         ctrl_avatar_cloth->setEnabled(TRUE);
     }
 
+	/* <FS:LO> remove orphaned code left over from EEP
     // Vertex Shaders, Global Shader Enable
     // SL-12594 Basic shaders are always enabled. DJH TODO clean up now-orphaned state handling code
     LLSliderCtrl* terrain_detail = getChild<LLSliderCtrl>("TerrainDetail");   // can be linked with control var
     LLTextBox* terrain_text = getChild<LLTextBox>("TerrainDetailText");
     terrain_detail->setEnabled(FALSE);
     terrain_text->setEnabled(FALSE);
+	*/
 
     // WindLight
     LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -2395,6 +2410,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     
     BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
                         ((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
+                        ((transparent_water_ctrl && transparent_water_ctrl->get()) ? TRUE : FALSE) &&
                         gGLManager.mHasFramebufferObject &&
                         gSavedSettings.getBOOL("RenderAvatarVP") &&
                         (ctrl_wind_light->get()) ? TRUE : FALSE;
@@ -2497,7 +2513,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_reflections   = getChild<LLComboBox>("Reflections");
 	LLCheckBoxCtrl* ctrl_avatar_vp     = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
 	LLCheckBoxCtrl* ctrl_avatar_cloth  = getChild<LLCheckBoxCtrl>("AvatarCloth");
-	LLCheckBoxCtrl* ctrl_shader_enable = getChild<LLCheckBoxCtrl>("BasicShaders");
 	LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
@@ -2505,39 +2520,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 
-	// if vertex shaders off, disable all shader related products
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
-	{
-		ctrl_shader_enable->setEnabled(FALSE);
-		ctrl_shader_enable->setValue(FALSE);
-		
-		ctrl_wind_light->setEnabled(FALSE);
-		ctrl_wind_light->setValue(FALSE);
-
-		sky->setEnabled(FALSE);
-
-		ctrl_reflections->setEnabled(FALSE);
-		ctrl_reflections->setValue(0);
-		
-		ctrl_avatar_vp->setEnabled(FALSE);
-		ctrl_avatar_vp->setValue(FALSE);
-		
-		ctrl_avatar_cloth->setEnabled(FALSE);
-		ctrl_avatar_cloth->setValue(FALSE);
-
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		ctrl_deferred->setEnabled(FALSE);
-		ctrl_deferred->setValue(FALSE);
-	}
-	
 	// disabled windlight
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
 	{

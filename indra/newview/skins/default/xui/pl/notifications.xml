@@ -31,7 +31,7 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>
 	</notification>
 	<notification name="BadInstallation">
-		Podczas aktualizacji [APP_NAME] wystąpił błąd. Proszę [http://get.secondlife.com odwiedzić stronę] aby ściągnąć ostatnią wersję klienta.
+		Podczas aktualizacji [APP_NAME] wystąpił błąd. Proszę [https://www.firestormviewer.org/downloads odwiedzić stronę] aby ściągnąć ostatnią wersję klienta.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Nie można połączyć z [SECOND_LIFE_GRID].
@@ -447,6 +447,11 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 	</notification>
 	<notification name="MustAgreeToLogIn">
 		Musisz zaakceptować Regulamin (Terms and Conditions), Politykę Prywatności (Privacy Policy) i Warunki korzystania z Usług (Terms of Service) by kontynuować logowanie się do [CURRENT_GRID].
+	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Nie" />
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Założenie stroju nie powiodło się.
@@ -3811,6 +3816,11 @@ Czy chcesz kontynuować?
 		Wybrany obiekt ma wpływ na Navmesh. Dodanie elastyczności spowoduje usunięcie go z Navmesha.
 		<usetemplate ignoretext="Wybrany obiekt ma wpływ na Navmesh. Dodanie elastyczności spowoduje usunięcie go z Navmesha." name="okcancelignore" notext="Anuluj" />
 	</notification>
+	<global name="UnsupportedShaderRequirements">
+		Wygląda na to, że Twój komputer nie spełnia wymagań sprzętowych aplikacji [APP_NAME]. [APP_NAME] wymaga obsługi modułu cieniującego OpenGL 2.0 lub nowszego. Możesz chcieć upewnić się, że masz najnowsze sterowniki karty graficznej oraz dodatki Service Pack i poprawki do systemu operacyjnego.
+
+Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
+	</global>
 	<global name="UnsupportedGLRequirements">
 		Wygląda na to, że Twój system nie spełnia wymagań sprzętowych [APP_NAME]. [APP_NAME] wymaga karty graficznej kompatybilnej z OpenGL z multiteksturami. Jeżeli masz taką kartę zainstaluj najnowsze sterowniki do niej i uaktualnienia systemu operacyjnego.
 
@@ -3821,6 +3831,9 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 	</global>
 	<global name="UnsupportedRAM">
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.
+	</global>
+	<global name="LLLeapUpdaterFailure">
+		Nie udało się uruchomić usługi aktualizatora [UPDATER_APP]. Sprawdź, czy przeglądarka jest poprawnie zainstalowana i czy ma niezbędne uprawnienia do uruchomienia. Jeśli nadal będziesz mieć problemy, odwiedź [SUPPORT_SITE].
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		Jeśli jesteś właścicielem działki, to możesz ustawić na niej miejsce startu.
@@ -3942,6 +3955,15 @@ Czy chcesz jej/mu wysłać te informacje?
 	</notification>
 	<notification name="MovelockDisabled">
 		Blokada pozycji została wyłączona.
+	</notification>
+	<notification name="MovelockEnabling">
+		Włączanie blokady pozycji...
+	</notification>
+	<notification name="MovelockDisabling">
+		Wyłączanie blokady pozycji...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Pomocnik lotu jest włączony
 	</notification>
 	<notification label="Resetuj wszystkie ustawienia" name="FirestormClearSettingsPrompt">
 		Resetowanie ustawień może się przydać, gdy napotykasz na jakieś problemy - pamiętaj jednak, że trzeba będzie wprowadzić od nowa wszystkie zmiany, jakie zostały przez Ciebie ustawione do tej pory.
@@ -4304,7 +4326,7 @@ Spróbuj ponownie za minutę.
 		Nie można dodać skryptu!
 	</notification>
 	<notification name="AssetServerTimeoutObjReturn">
-		Czas odpowiedzi z serwera zasobów danych przekroczył dozwolony limit. Obiekt został zwrócony do sima.
+		Czas odpowiedzi z serwera zasobów danych przekroczył dozwolony limit. Obiekt został zwrócony do regionu.
 	</notification>
 	<notification name="RegionDisablePhysicsShapes">
 		Ten region nie ma włączonych kształtów fizycznych.
@@ -5082,5 +5104,11 @@ Skopiuj do własnej szafy i spróbuj ponownie.
 		Nie wybrano prawidłowego ustawienia otoczenia.
 
 Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na cyklu dnia"!
+	</notification>
+	<notification name="CantCreateInventoryName">
+		Nie można utworzyć: [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		Zakończył się zbiorowy import Windlightów.
 	</notification>
 </notifications>

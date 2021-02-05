@@ -37,7 +37,7 @@
 		[MESSAGE]
 	</notification>
 	<notification name="BadInstallation">
-		Произошла ошибка при обновлении [APP_NAME]. [http://get.secondlife.com Загрузите последнюю версию] клиента.
+		Произошла ошибка при обновлении [APP_NAME]. [https://www.firestormviewer.org/downloads Загрузите последнюю версию] клиента.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Не удалось подключиться к [SECOND_LIFE_GRID].
@@ -211,7 +211,8 @@
 		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="GroupNameLengthWarning">
-		Имя группы должно быть между [MIN_LEN] и [MAX_LEN] символами.
+		Название группы может содержать от [MIN_LEN] до [MAX_LEN] символов.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UnableToCreateGroup">
 		Невозможно создать группу.
@@ -436,6 +437,9 @@
 	<notification name="ErrorEncodingSnapshot">
 		Ошибка при кодировке снимка.
 	</notification>
+	<notification name="ErrorCannotAffordUpload">
+		Чтобы загрузить этот предмет, вам нужно L$[COST].
+	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Требуется L$[COST] для сохранения фото в вашем инвентаре. Купите L$ или сохраните фото на компьютере.
 	</notification>
@@ -453,6 +457,11 @@
 	</notification>
 	<notification name="MustAgreeToLogIn">
 		Для входа в [SECOND_LIFE] вы должны принять условия Пользовательского соглашения.
+	</notification>
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="Нет"/>
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Не удалось надеть комплект.
@@ -1774,18 +1783,16 @@
 		Вы достигли максимального количества групп. Пожалуйста, покиньте любую группу до вступления или создания новой.
 	</notification>
 	<notification name="GroupLimitInfo">
-		Жители с базовым членством могут присоединяться к [MAX_BASIC] группам.
-Премиум членство позволяет до [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Узнать больше или обновить]
+		Резиденты с Базовым аккаунтом могут присоединиться к [MAX_BASIC] группам.
+Премиум аккаунт разрешает до [MAX_PREMIUM]. [https://secondlife.com/my/account/membership.php? Узнайте больше или расширьте свой аккаунт]
 		<usetemplate name="okbutton" yestext="Закрыть"/>
 	</notification>
 	<notification name="GroupLimitInfoPlus">
-Жители с базовым членством могут присоединяться к  [MAX_BASIC] группам.
-Премиум членство позволяет до [MAX_PREMIUM].
-Премиум-Плюс членство позволяет до [MAX_PREMIUM_PLUS].
-[https://secondlife.com/my/account/membership.php? Узнать больше или обновить]
+		Резиденты с Базовым аккаунтом могут присоединиться к [MAX_BASIC] группам.
+Премиум аккаунт разрешает до [MAX_PREMIUM]. Премиум Плюс аккаунт разрешает до [MAX_PREMIUM_PLUS]. 
+[https://secondlife.com/my/account/membership.php? Узнайте больше или расширьте свой аккаунт]
 		<usetemplate name="okbutton" yestext="Закрыть"/>
 	</notification>
-
 	<notification name="KickUser">
 		Выбросить этого жителя с таким сообщением?
 		<form name="form">
@@ -3533,20 +3540,23 @@ URL: [AUDIOURL]
 		Ваш голос заблокирован модератором.
 	</notification>
 	<notification name="FailedToGetBenefits">
-		К сожалению, нам не удалось получить информацию о преимуществах для этой сессии. Это не должно происходить в нормальной производственной среде. Пожалуйста, свяжитесь со службой поддержки. Этот сеанс не будет работать нормально, и мы рекомендуем вам перезапустить.
+		К сожалению, в этой сессии мы не смогли получить информацию о преимуществах аккаунта. Такое не должно происходить в нормально работающей среде. Пожалуйста, свяжитесь со службой поддержки. Эта сессия работает некорректно, поэтому мы рекомендуем вам перезапустить программу.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BulkUploadCostConfirmation">
-		Это загрузит [COUNT] предметов общей стоимостью L$ [COST]. Вы хотите продолжить загрузку?
+		<notification name="BulkUploadCostConfirmation">
+		Этим действием загружается [COUNT] предметов на общую стоимость L$[COST]. Вы хотите продолжить загрузку?
 		<usetemplate ignoretext="Подтвердите массовую загрузку" name="okcancelignore" notext="Отмена" yestext="Загрузить"/>
 	</notification>
 	<notification name="NotEnoughMoneyForBulkUpload">
 		Текущий баланс [BALANCE] L$ недостаточен для загрузки [COUNT] элементов общей стоимостью [COST] L$.
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
-		Выбранные файлы не могут быть загружены.
+		Выбранные файлы не могут быть загружены группой.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadIncompatibleFiles">
-		Некоторые из выбранных файлов не могут быть загружены.
+		Некоторые из выбранных файлов не могут быть загружены группой.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
 		Эта загрузка будет стоить L$[PRICE]. Продолжить загрузку?
@@ -3911,6 +3921,11 @@ URL: [AUDIOURL]
 		Выбранный объект влияет на навигационную сетку.  Если заменить его на гибкий путь, он будет удален из навигационной сетки.
 		<usetemplate ignoretext="Выбранный объект влияет на навигационную сетку.  Если заменить его на гибкий путь, он будет удален из навигационной сетки." name="okcancelignore" notext="Отмена" yestext="OK"/>
 	</notification>
+	<global name="UnsupportedShaderRequirements">
+		Ваше оборудование не соответствуете требованиям для [APP_NAME]. [APP_NAME] требуется поддержка шейдеров OpenGL 2.0 или новее. В этом случае вы можете убедиться, что у вас установлены последние версии драйверов для вашей видеокарты, а также пакеты обновления и исправления для вашей операционной системы.
+
+Если проблема не исчезнет, посетите [SUPPORT_SITE].
+	</global>
 	<global name="UnsupportedGLRequirements">
 		По-видимому, ваше оборудование не удовлетворяет требованиям [APP_NAME]. Для работы [APP_NAME] необходима графическая карта OpenGL с поддержкой мультитекстур. Если у вас есть такая карта, убедитесь, что установлены новейшие версии драйверов для нее и пакеты обновлений и исправления для операционной системы.
 
@@ -4046,6 +4061,15 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="MovelockDisabled">
 		Блокировка движения выключена.
+	</notification>
+	<notification name="MovelockEnabling">
+		Включение блокировки движения...
+	</notification>
+	<notification name="MovelockDisabling">
+		Выключение блокировки движения...
+	</notification>
+	<notification name="FlightAssistEnabled">
+		Помощь при полете включена
 	</notification>
 	<notification label="Сброс всех настроек" name="FirestormClearSettingsPrompt">
 		Сброс всех настроек может быть полезен, если вы испытываете проблемы; Однако, вам нужно будет переделывать настройки, которые вы сделали ранее.
@@ -4415,7 +4439,7 @@ URL: [AUDIOURL]
 		Невозможно добавить скрипт!
 	</notification>
 	<notification name="AssetServerTimeoutObjReturn">
-		Сервер активов не ответил в заданное время.  Объект возвращен в симулятор.
+		Сервер активов не ответил в заданное время. Объект возвращен в регион.
 	</notification>
 	<notification name="RegionDisablePhysicsShapes">
 		В этом регионе не разрешены фигуры с физическими данными.
@@ -5193,5 +5217,11 @@ URL: [AUDIOURL]
 		Не выбрана допустимая настройка окружающей среды.
 
 Обратите внимание, что нельзя выбрать «Общая среда» и «Дневной цикл»!
+	</notification>
+	<notification name="CantCreateInventoryName">
+		Невозможно создать элемент инвентаря: [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		Массовый импорт Окружающей среды завершен.
 	</notification>
 </notifications>

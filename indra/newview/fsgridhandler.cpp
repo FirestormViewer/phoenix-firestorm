@@ -587,17 +587,23 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 	if (FETCH == state || RETRY == state)
 	{
 		std::string grid = utf8str_tolower(grid_entry->grid[GRID_VALUE]);
+// FIRE-24068 allow https support - based on patch by unregi resident
+		std::string uri;
 
 		std::string match = "://";
 		size_t find_scheme = grid.find(match);
 		if ( std::string::npos != find_scheme)
 		{
-			// We only support http so just remove anything the user might have chosen
-			grid.erase(0,find_scheme+match.length());
-			grid_entry->grid[GRID_VALUE]  = grid;
+			uri = grid; // assign the full URI
+			grid.erase(0, find_scheme + match.length()); // trim the protocol
+			grid_entry->grid[GRID_VALUE] = grid; // keep the name
 		}
-
-		std::string uri = "http://" + grid;
+		else
+		{
+			// no protocol was specified let's assume http
+			// GRID_VALUE remains unchanged
+			uri = "http://" + grid;
+		}
 
 		if (std::string::npos != uri.find("lindenlab.com"))
 		{
@@ -762,6 +768,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 				if (existing_grid.has("DEPRECATED"))
 				{
 					LL_DEBUGS("GridManager") << "Removing entry marked as deprecated in the fallback list: " << grid << LL_ENDL;
+					mGridList[grid] = grid_entry->grid;
+					list_changed = true;
 				}
 				else if (grid_entry->grid.has("USER_DELETED"))
 				{

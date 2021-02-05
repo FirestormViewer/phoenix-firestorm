@@ -58,6 +58,7 @@
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltabcontainer.h"
+#include "llcolorswatch.h" // <FS:Beq>
 #include "lltrans.h"
 #include "llcallbacklist.h"
 #include "llviewertexteditor.h"
@@ -80,7 +81,7 @@ const double RETAIN_COEFFICIENT = 100;
 // should be represented by Smooth combobox with only 10 values.
 // So this const is used as a size of Smooth combobox list.
 const S32 SMOOTH_VALUES_NUMBER = 10;
-const S32 PREVIEW_RENDER_SIZE = 1024;
+// const S32 PREVIEW_RENDER_SIZE = 1024; // <FS:Beq> Fix up regressions from LL uploader merge
 const F32 PREVIEW_CAMERA_DISTANCE = 16.f;
 
 class LLMeshFilePicker : public LLFilePickerThread
@@ -193,6 +194,15 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLCheckBoxCtrl>("show_joint_overrides")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_joint_positions")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_uv_guide")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1)); // <FS:Beq> - Add UV guide overlay to pmesh preview
+	// <FS:Beq> support for settings panel of floater
+	const auto& preview_refresh_cb = [this](LLUICtrl *, const LLSD &){ if(this->mModelPreview){mModelPreview->refresh();}};
+	getChild<LLColorSwatchCtrl>("mesh_preview_canvas_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_edge_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_physics_edge_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_physics_fill_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_degenerate_edge_color")->setCommitCallback(preview_refresh_cb);
+	getChild<LLColorSwatchCtrl>("mesh_preview_degenerate_fill_color")->setCommitCallback(preview_refresh_cb);
+	// </FS:Beq>
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
@@ -357,21 +367,24 @@ void LLFloaterModelPreview::initModelPreview()
 
 	S32 tex_width = 512;
 	S32 tex_height = 512;
-
-	S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenWidth);
-	S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenHeight);
-
-	while ((tex_width << 1) < max_width)
+	// <FS:Beq> Fix up regressions from LL's merge of uploader changes
+	// S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenWidth);
+	// S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenHeight);
+	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenWidth);
+	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenHeight);
+	// </FS:Beq>
+	
+	while ((tex_width << 1) <= max_width) // <FS:Beq/> Fix up regressions from LL's merge of uploader changes
 	{
 		tex_width <<= 1;
 	}
-	while ((tex_height << 1) < max_height)
+	while ((tex_height << 1) <= max_height) // <FS:Beq/> Fix up regressions from LL's merge of uploader changes
 	{
 		tex_height <<= 1;
 	}
 
 	mModelPreview = new LLModelPreview(tex_width, tex_height, this);
-    mModelPreview->setPreviewTarget(PREVIEW_CAMERA_DISTANCE);
+	mModelPreview->setPreviewTarget(PREVIEW_CAMERA_DISTANCE);
 	mModelPreview->setDetailsCallback(boost::bind(&LLFloaterModelPreview::setDetails, this, _1, _2, _3, _4, _5));
 	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::modelUpdated, this, _1));
 }
@@ -557,11 +570,13 @@ void add_row_to_list(LLScrollListCtrl *listp,
 
     cell_params.column = "model_name";
     cell_params.value = name;
+	cell_params.font_halign = LLFontGL::LEFT; // <FS:Beq> Fix ugly alignment
 
     item_params.columns.add(cell_params);
 
     cell_params.column = "axis_x";
     cell_params.value = vx;
+	cell_params.font_halign = LLFontGL::RIGHT; // <FS:Beq> Fix ugly alignment
     item_params.columns.add(cell_params);
 
     cell_params.column = "axis_y";

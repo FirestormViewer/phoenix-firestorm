@@ -153,7 +153,7 @@
      name="icon_DamageNo"
      translate="false"
      value="Parcel_DamageNo_Dark" />
-	<string
+    <string
      name="icon_SeeAVs_Off"
      translate="false"
      value="Parcel_SeeAVsOff_Dark" />
@@ -226,11 +226,11 @@
      name="place_scroll"
      opaque="true"
      top_pad="10"
-     width="310">
+     width="320">
         <panel
          bg_alpha_color="SL-Background_50"
          follows="left|top|right|bottom"
-         height="580"
+         height="597"
          layout="topleft"
          left="0"
          min_height="300"
@@ -307,34 +307,25 @@
              height="14"
              layout="topleft"
              left="10"
-             name="region_title"
-             text_color="White"
              top_pad="5"
+             width="290"
+             name="parcel_title"
+             text_color="White"
              use_ellipses="true"
-             value="Unknown"
-             width="290" />
+             value="Unknown" />
             <text
              parse_urls="false"
              follows="left|top|right"
              height="14"
              layout="topleft"
              left="10"
-             name="parcel_title"
              top_pad="4"
-             use_ellipses="true"
-             value="Unknown"
-             width="285" />
-            <expandable_text
-             follows="left|top|right"
-             height="50"
-             layout="topleft"
-             left="5"
-             name="description"
-             top_pad="10"
-             value="Unknown"
-             width="300"
-             expanded_bg_visible="true"
-             expanded_bg_color="SL-Background_Light" />
+             width="285"
+             name="region_title"
+             text_color="White"
+             use_ellipses="true">
+              Region: [REGIONAMEPOS]
+            </text>
             <text
              follows="left|top"
              height="14"
@@ -345,17 +336,27 @@
              top_pad="0"
              value="Owner:"
              width="90" />
-         <!--TODO: HOOK THIS NAME UP WITH AN INSPECTOR  -->
             <text
              follows="left|top|right"
              height="14"
              layout="topleft"
              left_pad="1"
-             name="owner_value"
+             name="parcel_owner"
              top_delta="0"
              value="Unknown"
              use_ellipses="true" 
              width="200" />
+            <expandable_text
+             follows="left|top"
+             height="50"
+             layout="topleft"
+             left="5"
+             name="description"
+             top_pad="10"
+             value="Du waltz die spritz"
+             width="285"
+             expanded_bg_visible="true"
+             expanded_bg_color="SL-Background_Light" />
             <icon
              follows="top|left"
              height="16"
@@ -363,7 +364,7 @@
              layout="topleft"
              left="10"
              name="maturity_icon"
-             top_delta="0"
+             top_pad="0"
              width="18" />
             <text
              follows="left|top|right"
@@ -383,7 +384,7 @@
              left="0"
              name="advanced_info_accordion"
              top_pad="5"
-             width="313">
+             width="305">
                 <accordion_tab
                  fit_panel="false"
                  height="175"
@@ -581,7 +582,7 @@
                          top_delta="0"
                          value="Off"
                          width="60" />
-						<icon
+                        <icon
                          follows="top|left"
                          height="18"
                          image_name="Parcel_SeeAVsOff_Dark"

@@ -48,6 +48,7 @@ Pamięć (Memory): [MEMORY_MB] MB
 System operacyjny (OS Version): [OS_VERSION]
 Dostawca karty graficznej (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Karta graficzna (Graphics Card): [GRAPHICS_CARD]
+Pamięć karty graficznej (Graphics Card Memory): [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutDriver">
 		Sterownik karty graficznej (Driver Version): [GRAPHICS_DRIVER_VERSION]
@@ -1897,6 +1898,9 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="InvFolder All">
 		Wszystkie
+	</string>
+	<string name="InvFolder My Suitcase">
+		Moja walizka
 	</string>
 	<string name="no_attachments">
 		Brak założonych dodatków
@@ -5700,19 +5704,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		[NAME] spowodował/a nieznany typ kolizji.
 	</string>
 	<string name="MovelockEnabled">
-		Blokada pozycji została włączona
-	</string>
-	<string name="MovelockDisabled">
-		Blokada pozycji została wyłączona
-	</string>
-	<string name="MovelockEnabling">
-		Włączanie blokady pozycji...
-	</string>
-	<string name="MovelockDisabling">
-		Wyłączanie blokady pozycji...
-	</string>
-	<string name="FlightAssistEnabled">
-		Pomocnik lotu jest włączony
+		Awatar &gt; Ruch &gt; Unieruchom jest włączone
 	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości
@@ -6423,5 +6415,8 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="FSAreaSearch_Cost_Label">
 		[COST]L$
+	</string>
+	<string name="ImportingWindlightBulk">
+		Importowanie Windlightów...
 	</string>
 </strings>

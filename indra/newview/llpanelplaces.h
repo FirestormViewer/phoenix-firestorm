@@ -128,7 +128,6 @@ private:
 	LLButton*					mPlaceProfileBackBtn;
 	LLButton*					mTeleportBtn;
 	LLButton*					mShowOnMapBtn;
-	LLButton*					mEditBtn;
 	LLButton*					mSaveBtn;
 	LLButton*					mCancelBtn;
 	LLButton*					mCloseBtn;

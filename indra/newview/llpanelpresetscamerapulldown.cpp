@@ -146,5 +146,9 @@ void LLPanelPresetsCameraPulldown::onViewButtonClick(const LLSD& user_data)
 	// close the minicontrol, we're bringing up the big one
 	setVisible(FALSE);
 
-	LLFloaterReg::toggleInstanceOrBringToFront("camera");
+	// <FS:Ansariel> Optional small camera floater
+	//LLFloaterReg::toggleInstanceOrBringToFront("camera");
+	std::string floater_name = gSavedSettings.getBOOL("FSUseSmallCameraFloater") ? "fs_camera_small" : "camera";
+	LLFloaterReg::toggleInstanceOrBringToFront(floater_name);
+	// </FS:Ansariel>
 }

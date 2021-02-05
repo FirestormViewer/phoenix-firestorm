@@ -18,6 +18,7 @@
 #define RLV_ACTIONS_H
 
 #include "llchat.h"
+#include "llviewerobject.h"
 #include "rlvdefines.h"
 
 // ============================================================================
@@ -218,9 +219,9 @@ public:
 	// =========
 public:
 	/*
-	 * Returns true if the user can make changes to their WindLight environment 
+	 * Returns true if the user can make changes to their WindLight environment
 	 */
-	static bool canChangeEnvironment();
+	static bool canChangeEnvironment(const LLUUID& idRlvObject = LLUUID::null);
 
 
 	// =================

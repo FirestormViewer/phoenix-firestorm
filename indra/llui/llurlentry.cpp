@@ -520,13 +520,17 @@ std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 }
 
 //
-// LLUrlEntrySeconlifeURL Describes *secondlife.com/ *lindenlab.com/ and *tilia-inc.com/ urls to substitute icon 'hand.png' before link
+// LLUrlEntrySeconlifeURL Describes *secondlife.com/ *lindenlab.com/ *secondlifegrid.net/ and *tilia-inc.com/ urls to substitute icon 'hand.png' before link
 //
 LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 {                              
 	mPattern = boost::regex("((http://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com)"
 							"|"
-							"(https://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(:\\d{1,5})?))"
+							"(http://([-\\w\\.]*\\.)?secondlifegrid\\.net)"
+							"|"
+							"(https://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(:\\d{1,5})?)"
+							"|"
+							"(https://([-\\w\\.]*\\.)?secondlifegrid\\.net(:\\d{1,5})?))"
 							"\\/\\S*",
 		boost::regex::perl|boost::regex::icase);
 	
@@ -564,12 +568,14 @@ std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 }
 
 //
-// LLUrlEntrySimpleSecondlifeURL Describes *secondlife.com *lindenlab.com and *tilia-inc.com urls to substitute icon 'hand.png' before link
+// LLUrlEntrySimpleSecondlifeURL Describes *secondlife.com *lindenlab.com *secondlifegrid.net and *tilia-inc.com urls to substitute icon 'hand.png' before link
 //
 LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
-	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(?!\\S)",
-		boost::regex::perl|boost::regex::icase);
+	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab|tilia-inc)\\.com(?!\\S)"
+							"|"
+							"https?://([-\\w\\.]*\\.)?secondlifegrid\\.net(?!\\S)",
+							boost::regex::perl|boost::regex::icase);
 
 	mIcon = "Hand";
 	mMenuName = "menu_url_http.xml";
@@ -946,6 +952,30 @@ std::string LLUrlEntryAgentRLVAnonymizedName::getName(const LLAvatarName& avatar
 	return rlvGetAnonym(avatar_name);
 }
 // [/RLVa:KB]
+
+// <FS:Ansariel> FIRE-30611: "You" in transcript is underlined
+///
+/// FSUrlEntryAgentSelf Describes the agent's Second Life agent Url, e.g.,
+/// secondlife:///app/agentself/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
+FSUrlEntryAgentSelf::FSUrlEntryAgentSelf() : LLUrlEntryAgent()
+// </FS:Ansariel>
+{
+	mPattern = boost::regex(APP_HEADER_REGEX "/agentself/[\\da-f-]+/\\w+",
+							boost::regex::perl|boost::regex::icase);
+}
+
+std::string FSUrlEntryAgentSelf::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	if (LLUI::getInstance()->mSettingGroups["config"]->getBOOL("FSChatHistoryShowYou"))
+	{
+		return LLTrans::getString("AgentNameSubst");
+	}
+	else
+	{
+		return LLUrlEntryAgent::getLabel(url, cb);
+	}
+}
+// </FS:Ansariel>
 
 //
 // LLUrlEntryGroup Describes a Second Life group Url, e.g.,
@@ -1690,4 +1720,43 @@ void LLUrlEntryExperienceProfile::onExperienceDetails( const LLSD& experience_de
     callObservers(experience_details[LLExperienceCache::EXPERIENCE_ID].asString(), name, LLStringUtil::null);
 }
 
+//
+// LLUrlEntryEmail Describes an IPv6 address
+//
+LLUrlEntryIPv6::LLUrlEntryIPv6()
+	: LLUrlEntryBase()
+{
+	mHostPath = "https?://\\[([a-f0-9:]+:+)+[a-f0-9]+]";
+	mPattern = boost::regex(mHostPath + "(:\\d{1,5})?(/\\S*)?",
+		boost::regex::perl | boost::regex::icase);
+	mMenuName = "menu_url_http.xml";
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
 
+std::string LLUrlEntryIPv6::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	boost::regex regex = boost::regex(mHostPath, boost::regex::perl | boost::regex::icase);
+	boost::match_results<std::string::const_iterator> matches;
+
+	if (boost::regex_search(url, matches, regex))
+	{
+		return  url.substr(0, matches[0].length());
+	}
+	else
+	{
+		return url;
+	}
+}
+
+std::string LLUrlEntryIPv6::getQuery(const std::string &url) const
+{
+	boost::regex regex = boost::regex(mHostPath, boost::regex::perl | boost::regex::icase);
+	boost::match_results<std::string::const_iterator> matches;
+
+	return boost::regex_replace(url, regex, "");
+}
+
+std::string LLUrlEntryIPv6::getUrl(const std::string &string) const
+{
+	return string;
+}

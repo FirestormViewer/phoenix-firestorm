@@ -68,7 +68,7 @@
 	<check_box label="Przezroczysta woda" name="TransparentWater" />
 	<check_box label="Mapping wypukłości i połysk" name="BumpShiny" />
 	<check_box label="Lokalne światła" name="LocalLights" />
-	<slider label="Szczegóły terenu:" name="TerrainDetail" />
+	<!-- <slider label="Szczegóły terenu:" name="TerrainDetail" /> -->
 	<text name="TerrainDetailText">
 		Mało
 	</text>

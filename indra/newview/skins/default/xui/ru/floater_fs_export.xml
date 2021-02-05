@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Резервное копирование объектов...">
+	<floater.string name="title_floater">
+		Сохранение [OBJECT] на Жесткий диск...
+	</floater.string>
+	<floater.string name="title_working">
+		Сохранение [OBJECT] в работе - Собираю информацию...
+	</floater.string>
+	<floater.string name="title_inventory">
+		Сохранение [OBJECT] в работе - Получение инвентаря...
+	</floater.string>
+	<floater.string name="title_assets">
+		Сохранение [OBJECT] в работе - Получение активов...
+	</floater.string>
+	<floater.string name="title_textures">
+		Сохранение [OBJECT] в работе - Получение текстур...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				Информация о выборе
+			</text>
+			<text name="exportable_prims">
+				Экспортные примы: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Экспортные текстуры: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Параметры:
+			</text>
+			<check_box label="Сохранить содержимое объекта" name="contents_check"/>
+			<button label="Сохранить как..." name="export_btn"/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="Объекты" name="prims_panel"/>
+				<panel label="Текстуры" name="texture_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

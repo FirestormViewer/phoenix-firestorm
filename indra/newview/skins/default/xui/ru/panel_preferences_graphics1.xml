@@ -88,13 +88,13 @@
 			</text>
 			<check_box label="Аппаратная обработка" name="AvatarVertexProgram"/>
 			<check_box label="Одежда аватара" name="AvatarCloth"/>
-			<text name="TerrainDetailText">
+			<!--<text name="TerrainDetailText">
 				Детализация земли:
 			</text>
 			<radio_group name="TerrainDetailRadio">
 				<radio_item label="Низкая" name="0"/>
 				<radio_item label="Высокая" name="2"/>
-			</radio_group>
+			</radio_group>-->
 			<text name="Presets_Label" left="160">Предустановки:</text>
 			<button label="Сохранить" name="PrefSaveButton"/>
 			<button label="Загрузить" name="PrefLoadButton"/>
@@ -159,6 +159,7 @@
 			<check_box label="Режим отображения скелета" name="Wireframe"/>
 			<check_box label="Включить прикрепленное освещение" tool_tip="Эта опция включает свет, прикрепленный к аватару, такой как освещение лица. " name="Render Attached Lights"/>
 			<check_box label="Отображать частицы других аватаров" name="Render Attached Particles"/>
+			<check_box label="Окклюзия объектов для карты искажения воды" name="dist_occl" tool_tip="Если разрешено, то окклюзия объекта будет восстановлена для построения карт искажения воды. Визуальные эффекты более корректны без окклюзии, но это может существенно повлиять на производительность рендеринга."/>
 			<slider label="Задержка для предварительного кэширования" tool_tip="Как долго задерживается показ мира вам, после того как другим показано, что вы в сети (по умолчанию 6 секунд)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				секунд
@@ -170,6 +171,7 @@
 			<check_box label="Включить глубину резкости (Это размоет вид за исключением фокусировки камеры.)" name="UseDoF"/>
 			<check_box label="Включить в режиме редактирования" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="Разрешить когда под водой" name="FSRenderDoFUnderwater"/>
+			<check_box label="Фокус ГР следует за указателем" name="FSFocusPointFollowsPointer" tool_tip="Фокус глубины резкости (DoF) будет следовать за курсором мыши, это поведение соответствует тому, что наблюдается при использовании летающей камеры. Используйте вместе с блокировкой фокуса Глубины резкости"/>
 			<slider label="Номер фокуса камеры:" name="CameraFNum" tool_tip="Номер фокуса камеры - значение для эффекта глубины резкости"/>
 			<slider label="Фокусное расстояние (мм):" name="CameraFocal" tool_tip="Фокусное расстояние камеры для эффекта глубины резкости (в миллиметрах)"/>
 			<slider label="Угол зрения камеры (град.):" name="Camera FOV" tool_tip="Вертикальный угол зрения камеры для эффекта глубины резкости (в градусах)"/>

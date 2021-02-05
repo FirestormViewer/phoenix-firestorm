@@ -13,8 +13,8 @@
 		<menu_item_check label="Mi apariencia" name="ChangeOutfit"/>
 		<menu_item_call label="Elige un avatar" name="Avatar Picker"/>
 		<menu_item_call label="Tomar fotografía" name="Take Snapshot"/>
+		<menu_item_call label="Mi inventario" name="NewInventoryWindow"/>
 		<menu_item_check label="Mi inventario" name="Inventory"/>
-		<menu_item_check label="Mi inventario" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Controles del movimiento" name="Movement Controls"/>
 		<menu label="Movimiento" name="Movement">
 			<menu_item_call label="Sentarme" name="Sit Down Here"/>
@@ -285,7 +285,6 @@
 			<menu label="Bulas" name="Hover Tips">
 				<menu_item_check label="Mostrar bulas" name="Show Tips"/>
 				<menu_item_check label="Mostrar bulas de terreno" name="Land Tips"/>
-				<menu_item_check label="Mostrar bulas en todos los objetos" name="Tips On All Objects"/>
 			</menu>
 		</menu>
 		<menu label="Objetos representados" name="Rendering Types">

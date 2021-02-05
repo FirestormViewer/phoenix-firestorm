@@ -59,6 +59,9 @@
 
 #include <dinput.h>
 #include <Dbt.h.>
+#include <InitGuid.h> // needed for llurlentry test to build on some systems
+#pragma comment(lib, "dxguid.lib") // needed for llurlentry test to build on some systems
+#pragma comment(lib, "dinput8")
 
 const S32	MAX_MESSAGE_PER_UPDATE = 20;
 const S32	BITS_PER_PIXEL = 32;
@@ -76,6 +79,7 @@ const F32	ICON_FLASH_TIME = 0.5f;
 extern BOOL gDebugWindowProc;
 
 LPWSTR gIconResource = IDI_APPLICATION;
+LPDIRECTINPUT8 gDirectInput8;
 
 LLW32MsgCallback gAsyncMsgCallback = NULL;
 
@@ -430,6 +434,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	memset(mCurrentGammaRamp, 0, sizeof(mCurrentGammaRamp));
 	memset(mPrevGammaRamp, 0, sizeof(mPrevGammaRamp));
 	mCustomGammaSet = FALSE;
+	mWindowHandle = NULL; // <FS:Ansariel> Initialize...
 	
 	if (!SystemParametersInfo(SPI_GETMOUSEVANISH, 0, &mMouseVanish, 0))
 	{
@@ -483,6 +488,21 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
 	// Make an instance of our window then define the window class
 	mhInstance = GetModuleHandle(NULL);
 	mWndProc = NULL;
+
+    // Init Direct Input - needed for joystick / Spacemouse
+
+    LPDIRECTINPUT8 di8_interface;
+    HRESULT status = DirectInput8Create(
+        mhInstance, // HINSTANCE hinst,
+        DIRECTINPUT_VERSION, // DWORD dwVersion,
+        IID_IDirectInput8, // REFIID riidltf,
+        (LPVOID*)&di8_interface, // LPVOID * ppvOut,
+        NULL                     // LPUNKNOWN punkOuter
+        );
+    if (status == DI_OK)
+    {
+        gDirectInput8 = di8_interface;
+    }
 
 	mSwapMethod = SWAP_METHOD_UNDEFINED;
 
@@ -786,9 +806,6 @@ void LLWindowWin32::close()
 	{
 		resetDisplayResolution();
 	}
-
-	// Don't process events in our mainWindowProc any longer.
-	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
 
 	// Make sure cursor is visible and we haven't mangled the clipping state.
 	showCursor();
@@ -1144,7 +1161,12 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
         << " Height: " << (window_rect.bottom - window_rect.top)
         << " Fullscreen: " << mFullscreen
         << LL_ENDL;
-	DestroyWindow(mWindowHandle);
+    // <FS:Ansariel> Only try destroying an existing window
+    //if (!destroy_window_handler(mWindowHandle))
+    if (mWindowHandle && !destroy_window_handler(mWindowHandle))
+    {
+        LL_WARNS("Window") << "Failed to properly close window before recreating it!" << LL_ENDL;
+    }	
 	mWindowHandle = CreateWindowEx(dw_ex_style,
 		mWindowClassName,
 		mWindowTitle,
@@ -1432,24 +1454,29 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 
 		LL_INFOS("Window") << "pixel formats done." << LL_ENDL ;
 
-		S32 swap_method = 0;
-		S32 cur_format = num_formats-1;
-		GLint swap_query = WGL_SWAP_METHOD_ARB;
+		S32   swap_method = 0;
+		S32   cur_format  = 0;
+		GLint swap_query  = WGL_SWAP_METHOD_ARB;
 
-		BOOL found_format = FALSE;
-
-		while (!found_format && wglGetPixelFormatAttribivARB(mhDC, pixel_format, 0, 1, &swap_query, &swap_method))
+		// SL-14705 Fix name tags showing in front of objects with AMD GPUs.
+		// On AMD hardware we need to iterate from the first pixel format to the end.
+		// Spec:
+		//     https://www.khronos.org/registry/OpenGL/extensions/ARB/WGL_ARB_pixel_format.txt
+		while (wglGetPixelFormatAttribivARB(mhDC, pixel_formats[cur_format], 0, 1, &swap_query, &swap_method))
 		{
-			if (swap_method == WGL_SWAP_UNDEFINED_ARB || cur_format <= 0)
+			if (swap_method == WGL_SWAP_UNDEFINED_ARB)
 			{
-				found_format = TRUE;
+				break;
 			}
-			else
+			else if (cur_format >= (S32)(num_formats - 1))
 			{
-				--cur_format;
+				cur_format = 0;
+				break;
 			}
+
+			++cur_format;
 		}
-		
+
 		pixel_format = pixel_formats[cur_format];
 		
 		if (mhDC != 0)											// Does The Window Have A Device Context?
@@ -1464,8 +1491,12 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 			ReleaseDC (mWindowHandle, mhDC);						// Release The Device Context
 			mhDC = 0;											// Zero The Device Context
 		}
-		DestroyWindow (mWindowHandle);									// Destroy The Window
-		
+
+        // Destroy The Window
+        if (!destroy_window_handler(mWindowHandle))
+        {
+            LL_WARNS("Window") << "Failed to properly close window!" << LL_ENDL;
+        }		
 
 		mWindowHandle = CreateWindowEx(dw_ex_style,
 			mWindowClassName,
@@ -1975,7 +2006,11 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 
 	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( h_wnd, GWLP_USERDATA );
 
-	bool debug_window_proc = gDebugWindowProc || debugLoggingEnabled("Window");
+	//<FS:Beq> avoid unfortunate sleep during trylock by static check
+	// bool debug_window_proc = gDebugWindowProc || debugLoggingEnabled("Window");
+	static auto debug_logging_on = debugLoggingEnabled("Window");
+	bool debug_window_proc = gDebugWindowProc || debug_logging_on;
+	//</FS:Beq>	
 
 
 	if (NULL != window_imp)
@@ -3463,7 +3498,10 @@ void LLSplashScreenWin32::hideImpl()
 {
 	if (mWindow)
 	{
-		DestroyWindow(mWindow);
+        if (!destroy_window_handler(mWindow))
+        {
+            LL_WARNS("Window") << "Failed to properly close splash screen window!" << LL_ENDL;
+        }
 		mWindow = NULL; 
 	}
 }
@@ -4244,6 +4282,28 @@ void LLWindowWin32::setDPIAwareness()
 	{
 		LL_WARNS() << "Could not load shcore.dll library (included by <ShellScalingAPI.h> from Win 8.1 SDK. Will use legacy DPI awareness API of Win XP/7" << LL_ENDL;
 	}
+}
+
+void* LLWindowWin32::getDirectInput8()
+{
+    return &gDirectInput8;
+}
+
+bool LLWindowWin32::getInputDevices(U32 device_type_filter, void * di8_devices_callback, void* userdata)
+{
+    if (gDirectInput8 != NULL)
+    {
+        // Enumerate devices
+        HRESULT status = gDirectInput8->EnumDevices(
+            (DWORD) device_type_filter,        // DWORD dwDevType,
+            (LPDIENUMDEVICESCALLBACK)di8_devices_callback,  // LPDIENUMDEVICESCALLBACK lpCallback, // BOOL DIEnumDevicesCallback( LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef ) // BOOL CALLBACK DinputDevice::DevicesCallback
+            (LPVOID*)userdata, // LPVOID pvRef
+            DIEDFL_ATTACHEDONLY       // DWORD dwFlags
+            );
+
+        return status == DI_OK;
+    }
+    return false;
 }
 
 F32 LLWindowWin32::getSystemUISize()

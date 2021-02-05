@@ -86,6 +86,9 @@
 	<texture name="Inv_RLVOpen"				file_name="legacy/inv_folder_RLVa.tga" />
 	<texture name="Inv_RLVClosed"			file_name="legacy/inv_folder_RLVa.tga" />
 
+	<texture name="Inv_SuitcaseOpen"		file_name="legacy/inv_folder_suitcase.tga" />
+	<texture name="Inv_SuitcaseClosed"		file_name="legacy/inv_folder_suitcase.tga" />
+
 	<!-- Marketplace Listings folders -->
 	<texture name="Inv_StockFolderClosed"	file_name="legacy/inv_folder_stock_closed.tga" />
 	<texture name="Inv_StockFolderOpen" 	file_name="legacy/inv_folder_stock_open.tga" />

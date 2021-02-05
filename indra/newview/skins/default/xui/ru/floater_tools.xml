@@ -195,7 +195,7 @@
 				Описание:
 			</text>
 			<line_editor name="Object Description"
-             tool_tip="Когда у людей установлено &apos;Показать всплывающи подсказки На всех объектах&apos; выбранные в настройках средства просмотра, они увидят всплывающее описание для любого объекта под указателем мыши. Описание ограничено 127 байтами, любая строка длиннее будет усечена." />
+             tool_tip="Когда у людей установлено &apos;Всплывающие подсказки&apos; выбранные в настройках средства просмотра, они увидят всплывающее описание для любого объекта под указателем мыши. Описание ограничено 127 байтами, любая строка длиннее будет усечена." />
 			<text name="Creator:">
 				Создатель:
 			</text>
@@ -566,7 +566,7 @@
 			<button label="Создать скрипт" label_selected="Создать скрипт" name="button new script"/>
 			<button label="Разрешения" name="button permissions"/>
 			<button label="Обновить" name="button refresh" width="100"/>
-			<button label="Сброс скриптов" name="button reset scripts" width="100"/>
+			<button label="Сброс скриптов" name="btn_reset_scripts" width="100"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

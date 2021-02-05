@@ -51,6 +51,8 @@ indra/newview/pilot.txt
 indra/newview/pilot.xml
 indra/newview/res-sdl/ll_icon.*
 indra/newview/res/ll_icon.*
+indra/newview/res-sdl/firestorm_icon.*
+indra/newview/res/firestorm_icon.*
 indra/newview/search_history.txt
 indra/newview/teleport_history.txt
 indra/newview/typed_locations.txt
@@ -104,3 +106,5 @@ my_autobuild.xml
 *.srctrlprj
 
 compile_commands.json
+# ignore tracy for now
+indra/tracy

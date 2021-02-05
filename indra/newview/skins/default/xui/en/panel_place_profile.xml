@@ -286,7 +286,7 @@
              height="14"
              layout="topleft"
              left="10"
-             name="region_title"
+             name="parcel_title"
              text_color="white"
              top_pad="5"
              use_ellipses="true"
@@ -298,11 +298,12 @@
              height="14"
              layout="topleft"
              left="10"
-             name="parcel_title"
+             name="region_title"
              top_pad="4"
              use_ellipses="true"
-             value="unknown"
-             width="320" />
+             width="320">
+              Region: [REGIONAMEPOS]
+            </text>
             <expandable_text
              follows="left|top|right"
              height="50"
@@ -328,7 +329,7 @@
              height="14"
              layout="topleft"
              left_pad="1"
-             name="owner_value"
+             name="parcel_owner"
              top_delta="0"
              value="unknown"
              use_ellipses="true" 

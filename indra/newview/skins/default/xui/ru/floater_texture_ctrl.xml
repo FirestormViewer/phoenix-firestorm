@@ -13,11 +13,11 @@
 	</text>
 
 	<!-- mode selector -->
-	<combo_box name="mode_selection" >
-		<combo_box.item label="Инв." name="inventory"/>
-		<combo_box.item label="Лок." name="local"/>
-		<combo_box.item label="Запеч" name="bake"/>
-	</combo_box>
+	<radio_group name="mode_selection" left="7">
+		<radio_item label="Инв." name="inventory"/>
+		<radio_item label="Лок." name="local"/>
+		<radio_item label="Зпеч." name="bake"/>
+	</radio_group>
 	<text name="size_lbl">
 Размер:
 [DIMENSIONS]

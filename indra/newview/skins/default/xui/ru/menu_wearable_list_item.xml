@@ -5,6 +5,7 @@
 	<menu_item_call label="Добавить" name="wear_add"/>
 	<context_menu label="Присоединить" name="wearable_attach_to"/>
 	<context_menu label="Присоединить к HUD" name="wearable_attach_to_hud"/>
+	<menu_item_call label="Коснуться" name="touch"/>
 	<menu_item_call label="Изменить" name="edit"/>
 	<menu_item_call label="Снять / отсоединить" name="take_off_or_detach"/>
 	<menu_item_call label="Отсоединить" name="detach"/>

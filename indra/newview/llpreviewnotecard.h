@@ -31,6 +31,7 @@
 #include "llassetstorage.h"
 #include "llpreviewscript.h"
 #include "lliconctrl.h"
+#include "llvoinventorylistener.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPreviewNotecard
@@ -44,7 +45,7 @@ class LLButton;
 class LLTextEditor;
 // [/SL:KB]
 
-class LLPreviewNotecard : public LLPreview
+class LLPreviewNotecard : public LLPreview, public LLVOInventoryListener
 {
 public:
 	LLPreviewNotecard(const LLSD& key);
@@ -83,6 +84,11 @@ public:
 	void refreshFromInventory(const LLUUID& item_id = LLUUID::null);
 
 	void syncExternal();
+
+    void inventoryChanged(LLViewerObject* object,
+        LLInventoryObject::object_list_t* inventory,
+        S32 serial_num,
+        void* user_data) override;
 
 	// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
 	void checkCloseAfterSave();

@@ -409,6 +409,7 @@ public:
 	static bool getRenderHighlights();
 	static void setRenderHighlightTextureChannel(LLRender::eTexIndex channel); // sets which UV setup to display in highlight overlay
 
+	static void updateRenderTransparentWater();
 	static void updateRenderBump();
 	static void updateRenderDeferred();
 	static void refreshCachedSettings();
@@ -589,6 +590,7 @@ public:
 	static bool				sAutoMaskAlphaDeferred;
 	static bool				sAutoMaskAlphaNonDeferred;
 	static bool				sDisableShaders; // if true, rendering will be done without shaders
+	static bool				sRenderTransparentWater;
 	static bool				sRenderBump;
 	static bool				sBakeSunlight;
 	static bool				sNoAlpha;
@@ -956,6 +958,10 @@ public:
 	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
 	static bool FSRenderDepthOfFieldUnderwater;
 	//</FS:TS> FIRE-16251
+	// <FS:Beq> FIRE-16728
+	static bool FSFocusPointLocked;
+	static bool FSFocusPointFollowsPointer;
+	// </FS:Beq>	
 	static F32 CameraFocusTransitionTime;
 	static F32 CameraFNumber;
 	static F32 CameraFocalLength;

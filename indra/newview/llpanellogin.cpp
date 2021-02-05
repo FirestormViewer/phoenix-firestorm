@@ -565,7 +565,7 @@ void LLPanelLogin::populateFields(LLPointer<LLCredential> credential, bool remem
     {
         sInstance->getChild<LLUICtrl>("remember_name")->setValue(remember_user);
         LLUICtrl* remember_password = sInstance->getChild<LLUICtrl>("remember_password");
-        remember_password->setValue(remember_psswrd);
+        remember_password->setValue(remember_user && remember_psswrd);
         remember_password->setEnabled(remember_user);
         sInstance->populateUserList(credential);
     }
@@ -689,7 +689,6 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		
 		if (LLPanelLogin::sInstance->mPasswordModified)
 		{
-			authenticator = LLSD::emptyMap();
 			// password is plaintext
 			authenticator["type"] = CRED_AUTHENTICATOR_TYPE_CLEAR;
 			authenticator["secret"] = password;
@@ -700,6 +699,15 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
             if (credential.notNull())
             {
                 authenticator = credential->getAuthenticator();
+                if (authenticator.emptyMap())
+                {
+                    // Likely caused by user trying to log in to non-system grid
+                    // with unsupported name format, just retry
+                    LL_WARNS() << "Authenticator failed to load for: " << username << LL_ENDL;
+                    // password is plaintext
+                    authenticator["type"] = CRED_AUTHENTICATOR_TYPE_CLEAR;
+                    authenticator["secret"] = password;
+                }
             }
         }
 	}
@@ -1139,7 +1147,11 @@ void LLPanelLogin::onRememberUserCheck(void*)
             remember_name->setValue(true);
             LLNotificationsUtil::add("LoginCantRemoveUsername");
         }
-        remember_psswrd->setEnabled(remember);
+        if (!remember)
+        {
+            remember_psswrd->setValue(false);
+        }
+        remember_psswrd->setEnabled(remember);        
     }
 }
 
@@ -1327,8 +1339,10 @@ void LLPanelLogin::onSelectServer()
 	switch (index)
 	{
 	case 0: // last location
+        LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_LAST));
+        break;
 	case 1: // home location
-		// do nothing - these are grid-agnostic locations
+        LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_HOME));
 		break;
 		
 	default:

@@ -102,7 +102,16 @@ BOOL LLFloaterConversationPreview::postBuild()
 		file = "chat";
 	}
 	mChatHistoryFileName = file;
-
+	// <FS:Ansariel> Broken version got removed in https://bitbucket.org/lindenlab/viewer/commits/57b32eb01cd35bbac440569df885036eb24f2369
+	//               but this is actually needed in the fixed form: If a group chat
+	//               log is stored in conversation.log without the suffix, the filename
+	//               will not be updated until the conversation is removed from the log,
+	//               resulting in the old chat log being displayed.
+	if (mIsGroup && !LLStringUtil::endsWith(mChatHistoryFileName, GROUP_CHAT_SUFFIX))
+	{
+		mChatHistoryFileName += GROUP_CHAT_SUFFIX;
+	}
+	// </FS:Ansariel>
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);

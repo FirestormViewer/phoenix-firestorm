@@ -1367,7 +1367,7 @@ bool LLVertexBuffer::createGLBuffer(U32 size)
 		return true;
 	}
 
-	bool sucsess = true;
+	bool success = true;
 
 	mEmpty = true;
 
@@ -1389,9 +1389,9 @@ bool LLVertexBuffer::createGLBuffer(U32 size)
 
 	if (!mMappedData)
 	{
-		sucsess = false;
+		success = false;
 	}
-	return sucsess;
+	return success;
 }
 
 bool LLVertexBuffer::createGLIndices(U32 size)
@@ -1406,7 +1406,7 @@ bool LLVertexBuffer::createGLIndices(U32 size)
 		return true;
 	}
 
-	bool sucsess = true;
+	bool success = true;
 
 	mEmpty = true;
 
@@ -1431,9 +1431,9 @@ bool LLVertexBuffer::createGLIndices(U32 size)
 
 	if (!mMappedIndexData)
 	{
-		sucsess = false;
+		success = false;
 	}
-	return sucsess;
+	return success;
 }
 
 void LLVertexBuffer::destroyGLBuffer()
@@ -1480,7 +1480,7 @@ bool LLVertexBuffer::updateNumVerts(S32 nverts)
 {
 	llassert(nverts >= 0);
 
-	bool sucsess = true;
+	bool success = true;
 
 	if (nverts > 65536)
 	{
@@ -1492,34 +1492,34 @@ bool LLVertexBuffer::updateNumVerts(S32 nverts)
 
 	if (needed_size > mSize || needed_size <= mSize/2)
 	{
-		sucsess &= createGLBuffer(needed_size);
+		success &= createGLBuffer(needed_size);
 	}
 
 	sVertexCount -= mNumVerts;
 	mNumVerts = nverts;
 	sVertexCount += mNumVerts;
 
-	return sucsess;
+	return success;
 }
 
 bool LLVertexBuffer::updateNumIndices(S32 nindices)
 {
 	llassert(nindices >= 0);
 
-	bool sucsess = true;
+	bool success = true;
 
 	U32 needed_size = sizeof(U16) * nindices;
 
 	if (needed_size > mIndicesSize || needed_size <= mIndicesSize/2)
 	{
-		sucsess &= createGLIndices(needed_size);
+		success &= createGLIndices(needed_size);
 	}
 
 	sIndexCount -= mNumIndices;
 	mNumIndices = nindices;
 	sIndexCount += mNumIndices;
 
-	return sucsess;
+	return success;
 }
 
 bool LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
@@ -1532,10 +1532,10 @@ bool LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 		LL_ERRS() << "Bad vertex buffer allocation: " << nverts << " : " << nindices << LL_ENDL;
 	}
 
-	bool sucsess = true;
+	bool success = true;
 
-	sucsess &= updateNumVerts(nverts);
-	sucsess &= updateNumIndices(nindices);
+	success &= updateNumVerts(nverts);
+	success &= updateNumIndices(nindices);
 	
 	if (create && (nverts || nindices))
 	{
@@ -1551,7 +1551,7 @@ bool LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 		}
 	}
 
-	return sucsess;
+	return success;
 }
 
 static LLTrace::BlockTimerStatHandle FTM_SETUP_VERTEX_ARRAY("Setup VAO");

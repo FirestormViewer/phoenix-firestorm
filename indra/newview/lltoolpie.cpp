@@ -947,8 +947,14 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 	{
 		return TRUE;
 	}
+
+	// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+	bool allowDoubleClickOnScriptedObjects = gSavedSettings.getBOOL("FSAllowDoubleClickOnScriptedObjects");
     
-    	if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
+	// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+    //if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
+    if (!allowDoubleClickOnScriptedObjects && (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f)))
+	// </FS:Ansariel>
 	{
 		mDoubleClickTimer.stop();
 		return FALSE;
@@ -1011,7 +1017,10 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 		bool has_touch_handler = (objp && objp->flagHandleTouch()) || (parentp && parentp->flagHandleTouch());
 		bool has_click_action = final_click_action(objp);
 
-		if (pos_non_zero && (is_land || (is_in_world && !has_touch_handler && !has_click_action)))
+		// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+		//if (pos_non_zero && (is_land || (is_in_world && !has_touch_handler && !has_click_action)))
+		if (pos_non_zero && (is_land || (is_in_world && ((allowDoubleClickOnScriptedObjects && objp->getClickAction() != CLICK_ACTION_SIT) || (!has_touch_handler && !has_click_action)))))
+		// </FS:Ansariel>
 		{
 			LLVector3d pos = mPick.mPosGlobal;
 			pos.mdV[VZ] += gAgentAvatarp->getPelvisToFoot();
@@ -1277,8 +1286,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				final_name = LLTrans::getString("TooltipPerson");;
 			}
 
-			// *HACK: We may select this object, so pretend it was clicked
-			mPick = mHoverPick;
 // [RLVa:KB] - Checked: RLVa-1.2.0
 			if ( (!RlvActions::isRlvEnabled()) ||
 			     ( (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
@@ -1549,8 +1556,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			
 			if (show_all_object_tips || needs_tip)
 			{
-				// We may select this object, so pretend it was clicked
-				mPick = mHoverPick;
 // [RLVa:KB] - Checked: RLVa-1.2.1
 				if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) )
 				{

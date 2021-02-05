@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- header_height="0"-->
+<floater
+ legacy_header_height="0"
+ header_height="0"
+ bg_alpha_image_overlay="LtGray_50"
+ can_dock="false"
+ can_minimize="false"
+ can_resize="true"
+ can_close="false"
+ chrome="true"
+ follows="bottom"
+ height="77"
+ min_height="77"
+ layout="topleft"
+ name="fs_camera_floater_small"
+ help_topic="camera_floater_small"
+ save_rect="true"
+ save_visibility="true"
+ save_dock_state="false"
+ single_instance="true"
+ width="155"
+ min_width="155">
+    <floater.string
+     name="rotate_tooltip">
+        Rotate Camera Around Focus
+    </floater.string>
+    <floater.string
+     name="zoom_tooltip">
+        Zoom Camera Towards Focus
+    </floater.string>
+    <floater.string
+     name="move_tooltip">
+        Move Camera Up and Down, Left and Right
+    </floater.string>
+    <floater.string
+     name="camera_modes_title">
+camera_modes_title
+    </floater.string>
+    <floater.string
+     name="pan_mode_title">
+pan_mode_title
+    </floater.string>
+    <floater.string
+     name="presets_mode_title">
+presets_mode_title
+    </floater.string>
+    <floater.string
+     name="free_mode_title">
+free_mode_title
+    </floater.string>
+    <panel
+       border="false"
+       class="camera_zoom_panel"
+       height="50"
+       layout="topleft"
+       left="2"
+       mouse_opaque="false"
+       name="zoom"
+       follows="all"
+       top="25"
+       width="150">
+
+       <layout_stack
+             top="0"
+             enabled="true"
+             height="50"
+             left="0"
+             mouse_opaque="true"
+             name="camera_view_layout_stack"
+             orientation="horizontal"
+             width="150"
+             follows="all">
+
+            <layout_panel
+             name="camera_rotate_layout_panel"
+             user_resize="false"
+             height="80"
+             width="80">
+
+      <joystick_rotate
+         follows="all"
+         height="80"
+         width="80"
+         image_selected="Cam_Rotate_In"
+         image_unselected="Cam_Rotate_Out"
+         layout="topleft"
+         left="0"
+         mouse_opaque="false"
+         name="cam_rotate_stick"
+         quadrant="left"
+         scale_image="true"
+         sound_flags="3"
+         visible="true"
+         tool_tip="Orbit camera around focus"
+		 held_down_delay.seconds="0.0"
+         top="0" />
+    </layout_panel>
+    
+            <layout_panel
+             name="camera_zoom_layout_panel"
+             auto_resize="false"
+             user_resize="false"
+             height="70"
+             width="16">
+             
+             
+      <button
+         follows="top|left"
+         height="16"
+         image_disabled="AddItem_Disabled"
+         image_selected="AddItem_Press"
+         image_unselected="AddItem_Off"
+         layout="topleft"
+         left_delta="-2" 
+         name="zoom_plus_btn"
+         scale_image="false"
+         width="16"
+         top="0">
+        <commit_callback
+           function="Zoom.plus" />
+        <mouse_held_callback
+           function="Zoom.plus" />
+      </button>
+      <slider_bar
+         height="48"
+         layout="topleft"
+         name="zoom_slider"
+         orientation="vertical"
+         follows="top|left|bottom"
+         tool_tip="Zoom camera toward focus"
+         top_delta="13"
+         left_delta="1"
+         min_val="0"
+         max_val="1" 
+         width="16">
+        <commit_callback function="Slider.value_changed"/>
+      </slider_bar>
+      <button
+         follows="bottom|left"
+         height="16"
+         image_disabled="MinusItem_Disabled"
+         image_selected="MinusItem_Press"
+         image_unselected="MinusItem_Off"
+         layout="topleft"
+         name="zoom_minus_btn"
+         scale_image="true"
+         top_delta="44"
+         left_delta="0"
+         width="16">
+        <commit_callback
+           function="Zoom.minus" />
+        <mouse_held_callback
+           function="Zoom.minus" />
+     </button>
+     </layout_panel>
+
+            <layout_panel
+             name="panel_track"
+             user_resize="false"
+             height="80"
+             width="80">
+     
+     <joystick_track
+     follows="all"
+     height="80"
+     width="80"
+     image_selected="Cam_Tracking_In"
+     image_unselected="Cam_Tracking_Out"
+     layout="topleft"
+     left_delta="0"
+     name="cam_track_stick"
+     quadrant="left"
+     scale_image="true"
+     sound_flags="3"
+     tool_tip="Move camera up and down, left and right"
+     top="0"/>
+    </layout_panel>
+    </layout_stack>
+
+    </panel>
+    
+        <panel
+     border="false"
+     height="22"
+     layout="topleft"
+     left="5"
+     top="0"
+     follows="top|left"
+     name="buttons_view"
+     width="56">
+        <panel_camera_item
+          name="front_view"
+          tool_tip="Front view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left="0">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="Front View" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_Front_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_Front_On" />
+            <panel_camera_item.text
+            width="0"
+            name="front_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+        <panel_camera_item
+          name="group_view"
+          tool_tip="Side view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left_delta="20"
+          top_delta="0">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="Side View" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_Side_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_Side_On" />
+            <panel_camera_item.text
+            width="0"
+            name="group_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+        <panel_camera_item
+          name="rear_view"
+          tool_tip="Rear view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left_delta="20"
+          top_delta="0">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="Rear View" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_Back_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Cam_Preset_Back_On" />
+            <panel_camera_item.text
+            width="0"
+            name="rear_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+    </panel>
+    
+    <panel
+     border="false"
+     height="22"
+     layout="topleft"
+     follows="top|left"
+     left_pad="4"
+     top="0"
+     name="buttons"
+     width="58">
+        <panel_camera_item
+          name="object_view"
+          tool_tip="Object view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left_delta="0"
+          top_pad="4">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="object_view" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Object_View_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="Object_View_On" />
+            <panel_camera_item.text
+            width="0"
+            name="object_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+        <panel_camera_item
+          name="mouselook_view"
+          tool_tip="Mouselook view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left_delta="20"
+          top_delta="0">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="mouselook_view" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="MouseLook_View_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="MouseLook_View_On" />
+            <panel_camera_item.text
+            width="0"
+            name="mouselook_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+        <panel_camera_item
+          name="reset_view"
+          tool_tip="Reset view"
+          width="18"
+          height="18"
+          layout="topleft"
+          left_delta="20"
+          top_delta="0">
+            <panel_camera_item.mousedown_callback
+            function="CameraPresets.ChangeView"
+            parameter="reset_view" />
+            <panel_camera_item.icon_over
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.icon_selected
+            top="18"
+            height="18"
+            width="18" />
+            <panel_camera_item.picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="StopReload_Off" />
+            <panel_camera_item.selected_picture
+            top="18"
+            height="18"
+            width="18"
+            image_name="StopReload_Over" />
+            <panel_camera_item.text
+            width="0"
+            name="reset_view_text">
+            ""
+            </panel_camera_item.text>
+        </panel_camera_item>
+    </panel>
+</floater>

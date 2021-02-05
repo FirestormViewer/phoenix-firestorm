@@ -987,7 +987,7 @@
              select_on_focus="true"
              top_delta="0"
              width="190"
-             tool_tip="When people have &apos;Hover Tips on All Objects&apos; selected in the viewer's settings, they'll see the object description pop-up for any object under their mouse pointer. The prim description is limited to 127 bytes any string longer then that will be truncated." />
+             tool_tip="When people have &apos;Hover Tips&apos; selected in the viewer's settings, they'll see the object description pop-up for any object under their mouse pointer. The prim description is limited to 127 bytes any string longer then that will be truncated." />
             <text
              type="string"
              left="10"
@@ -3193,12 +3193,8 @@ Low ↔ Lwst
              label="Reset Scripts"
              layout="topleft"
              top_pad="1"
-             name="button reset scripts"
-             width="90">
-               <button.commit_callback
-                function="Tools.SelectedScriptAction"
-                parameter="reset" />
-            </button>
+             name="btn_reset_scripts"
+             width="90" />
             <panel_inventory_object
              border="true"
              border_visible="true"

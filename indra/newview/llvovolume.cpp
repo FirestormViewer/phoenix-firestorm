@@ -251,7 +251,8 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 	mLastFetchedMediaVersion = -1;
 	memset(&mIndexInTex, 0, sizeof(S32) * LLRender::NUM_VOLUME_TEXTURE_CHANNELS);
 	mMDCImplCount = 0;
-    mLastRiggingInfoLOD = -1;
+	mLastRiggingInfoLOD = -1;
+	mResetDebugText = false;
 }
 
 LLVOVolume::~LLVOVolume()
@@ -1545,6 +1546,15 @@ BOOL LLVOVolume::calcLOD()
         {
             std::string debug_object_text = get_debug_object_lod_text(this);
             setDebugText(debug_object_text);
+            mResetDebugText = true;
+        }
+    }
+    else
+    {
+        if (mResetDebugText)
+        {
+            restoreHudText();
+            mResetDebugText = false;
         }
     }
 
@@ -2522,7 +2532,8 @@ bool LLVOVolume::notifyAboutCreatingTexture(LLViewerTexture *texture)
 	//setup new materials
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
-		mmgr.put(getID(), it->first, *it->second); // <FS:Ansariel> Factor out instance() calls
+		// These are placeholder materials, they shouldn't be sent to server
+		mmgr.setLocalMaterial(getRegion()->getRegionID(), it->second); // <FS:Ansariel> Factor out instance() calls
 		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 
@@ -2550,7 +2561,7 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 
 		switch(range_it->second.map)
 		{
-		    case LLRender::DIFFUSE_MAP:
+		case LLRender::DIFFUSE_MAP:
 			{
 				if(LLMaterial::DIFFUSE_ALPHA_MODE_NONE != cur_material->getDiffuseAlphaMode())
 				{ //missing texture + !LLMaterial::DIFFUSE_ALPHA_MODE_NONE => LLMaterial::DIFFUSE_ALPHA_MODE_NONE

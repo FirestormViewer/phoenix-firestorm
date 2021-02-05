@@ -182,6 +182,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mFilterMap["filter_type_textures"]		= 0x01 << LLInventoryType::IT_TEXTURE;
 	mFilterMap["filter_type_snapshots"]		= 0x01 << LLInventoryType::IT_SNAPSHOT;
 	mFilterMap["filter_type_meshes"]		= 0x01 << LLInventoryType::IT_MESH;
+	mFilterMap["filter_type_settings"]		= 0x01 << LLInventoryType::IT_SETTINGS;
 
 	// initialize empty filter mask
 	mFilterMask = 0;
@@ -233,6 +234,7 @@ BOOL LLPanelMainInventory::postBuild()
 		recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
 		// </FS:Zi>
 		recent_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
+		//recent_items_panel->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS); // <FS:Ansariel> Undo nonsense change
 		LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
 		recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
 		recent_filter.setEmptyLookupMessage("InventoryNoMatchingRecentItems");

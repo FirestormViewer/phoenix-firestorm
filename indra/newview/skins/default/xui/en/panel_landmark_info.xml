@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
+ background_visible="true"
  follows="all"
  height="587"
  layout="topleft"
@@ -105,7 +106,7 @@
      use_ellipses="true"
      value="Place Profile"
      width="280" />
-	
+
 	</layout_panel>
 	<layout_panel
 		name="place_info_content"
@@ -132,12 +133,24 @@
      height="14"
      layout="topleft"
      left="4"
-     name="region_title"
+     name="parcel_title"
      text_color="white"
      top_pad="-18"
      use_ellipses="true"
-     value="SampleRegion"
-     right="-80" />
+     value="SampleParcel, Name Long"
+     right="-1" />
+
+    <text
+     follows="left|top|right"
+     height="14"
+     layout="topleft"
+     left="4"
+     name="region_title"
+     top_pad="10"
+     use_ellipses="true"
+     right="-80">
+      Region: [REGIONAMEPOS]
+    </text>
 
     <icon
      follows="top|right"
@@ -145,7 +158,7 @@
      image_name="Unknown_Icon"
      layout="topleft"
      left_pad="0"
-     top_pad="-12"
+     top_pad="-18"
      name="maturity_icon"
      width="18" />
 
@@ -157,17 +170,26 @@
      name="maturity_value"
      top_pad="-13"
      value="unknown"
-     width="60" />
+     width="50" />
 
     <text
-     follows="left|top|right"
-     height="14"
+     follows="left|top"
+     height="15"
      layout="topleft"
      left="4"
-     name="parcel_title"
+     name="parcel_owner_label"
      top_pad="2"
+     value="Owner:"
+     width="40" />
+    <text
+     follows="left|top|right"
+     height="15"
+     layout="topleft"
+     left_pad="0"
+     name="parcel_owner"
+     top_delta="0"
      use_ellipses="true"
-     value="SampleParcel, Name Long (145, 228, 26)"
+     value="unknown"
      right="-1" />
 
     <panel
@@ -280,7 +302,7 @@
 
     <panel
      follows="all"
-     height="178"
+     height="168"
      layout="topleft"
      left="4"
      top_pad="0"
@@ -297,24 +319,23 @@
          value="Title:"
          width="60" />
 
-        <text
-         parse_urls="false"
+        <line_editor
+         enabled="false"
+         use_bg_color="true"
+         bg_color="DkGray0"
          follows="left|top|right"
          height="22"
          layout="topleft"
          left_pad="0"
-         top_pad="-20"
          name="title_value"
          text_color="white"
-         use_ellipses="true"
-	 wrap="true"
+         top_delta="-3"
          right="-1" />
 
         <line_editor
          follows="left|top|right"
          height="22"
          layout="topleft"
-         top_pad="-22"
          name="title_editor"
          prevalidate_callback="ascii"
          text_readonly_color="white"
@@ -332,15 +353,15 @@
          right="-1" />
 
         <text_editor
+         bg_readonly_color="DkGray0"
          follows="all"
-         height="108"
+         height="90"
          layout="topleft"
          left="0"
          max_length="127"
          name="notes_editor"
          read_only="true"
-                 spellcheck="true"
-         text_readonly_color="white"
+         spellcheck="true"
          text_type="ascii_with_newline"
          top_pad="0"
          right="-1"
@@ -352,7 +373,7 @@
          layout="topleft"
          left="0"
          name="folder_label"
-         top_pad="4"
+         top_pad="6"
          value="Landmark location:"
          width="120" />
 
@@ -361,9 +382,21 @@
          height="23"
          layout="topleft"
          left_pad="0"
-         top_pad="-18"
+         top_pad="-20"
          name="folder_combo"
          right="-1" />
+
+        <button
+         follows="bottom|left|right"
+         height="23"
+         label="Edit"
+         layout="topleft"
+         left="0"
+         mouse_opaque="false"
+         name="edit_btn"
+         tool_tip="Edit landmark information"
+         top_delta="0"
+         width="100" />
     </panel>
 
 	</layout_panel>

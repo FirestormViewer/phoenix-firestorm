@@ -329,12 +329,11 @@ void LLFloater::initFloater(const Params& p)
 		mButtonsEnabled[BUTTON_CLOSE] = TRUE;
 	}
 
-	// Help button: '?'
-	if ( !mHelpTopic.empty() )
-	{
-		mButtonsEnabled[BUTTON_HELP] = TRUE;
-	}
-
+	// Help button: '?' 
+	//SL-14050 Disable all Help question marks
+	// <FS:Ansariel> Nope!
+	mButtonsEnabled[BUTTON_HELP] = !mHelpTopic.empty();// FALSE;
+	
 	// Minimize button only for top draggers
 	if ( !mDragOnLeft && mCanMinimize )
 	{
@@ -3419,6 +3418,22 @@ void LLFloaterView::setUtilityBarRect(LLLayoutPanel* panel, const LLRect& utilit
 	mUtilityBarRect.mLeft = mUtilityBarRect.mRight;
 	// Just assume right end of utility bar is always the border of the window
 	mUtilityBarRect.mRight = S32_MAX;
+}
+
+const LLRect& LLFloaterView::getToolbarRect(LLToolBarEnums::EToolBarLocation tb) const
+{
+	switch (tb)
+	{
+	case LLToolBarEnums::TOOLBAR_LEFT:
+		return mToolbarLeftRect;
+	case LLToolBarEnums::TOOLBAR_BOTTOM:
+		return mToolbarBottomRect;
+	case LLToolBarEnums::TOOLBAR_RIGHT:
+		return mToolbarRightRect;
+	default:
+		LL_WARNS() << "getToolbarRect() passed odd toolbar number " << (S32) tb << LL_ENDL;
+		return LLRect::null;
+	}
 }
 // </FS:Ansariel>
 
