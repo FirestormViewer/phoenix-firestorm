@@ -193,7 +193,7 @@ No tutorial is currently available.
    icon="alertmodal.tga"
    name="BadInstallation"
    type="alertmodal">
- Installation of [APP_NAME] is defect. Please [https://www.firestormviewer.org/downloads download a new copy] of the Viewer and reinstall.
+ Installation of [APP_NAME] is defective. Please [https://www.firestormviewer.org/downloads download a new copy] of the Viewer and reinstall.
     <tag>fail</tag>
     <usetemplate
      name="okbutton"
