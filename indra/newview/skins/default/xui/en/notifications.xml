@@ -193,7 +193,7 @@ No tutorial is currently available.
    icon="alertmodal.tga"
    name="BadInstallation"
    type="alertmodal">
- An error occurred while updating [APP_NAME].  Please [http://get.secondlife.com download the latest version] of the Viewer.
+ An error occurred while updating [APP_NAME].  Please [https://www.firestormviewer.org/downloads download the latest version] of the Viewer.
     <tag>fail</tag>
     <usetemplate
      name="okbutton"
