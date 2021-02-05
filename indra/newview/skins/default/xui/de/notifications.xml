@@ -82,7 +82,7 @@ Fehlerdetails: The notification called &apos;[_NAME]&apos; was not found in noti
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Beim Aktualisieren von [APP_NAME] ist ein Fehler aufgetreten.  Bitte [https://www.firestormviewer.org/downloads laden Sie die aktuellste Version des Viewers herunter].
+		Installation von [APP_NAME] ist defekt. Bitte [https://www.firestormviewer.org/downloads laden Sie neue Kopie des Viewers herunter] und installieren Sie erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
