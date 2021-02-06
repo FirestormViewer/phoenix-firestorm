@@ -3024,6 +3024,14 @@ Your current position: [AVATAR_POS]
   <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>
   <string name="fsbridge_error_wrongvm">NOTICE: Bridge script is using old LSO (16 KB memory limit) instead of new Mono (64 KB memory limit) virtual machine, which creates high probability of stack-heap collision and bridge failure by running out of memory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge. If you'll see this message again - please try again in a different region.</string>
 
+  <!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
+  <string name="FSAOEnabled">Firestorm Animation Overrider enabled.</string>
+  <string name="FSAODisabled">Firestorm Animation Overrider disabled.</string>
+  <string name="FSAOPausedScript">Paused by scripted attachment.</string>
+  <string name="FSAOResumedScript">Resumed by scripted attachment.</string>
+  <string name="FSAOStandsPausedScript">Standing animations paused by scripted attachment.</string>
+  <string name="FSAOStandsResumedScript">Standing animations resumed by scripted attachment.</string>
+
   <!-- <FS:Zi> Quick preferences default options -->
   <string name="QP Draw Distance">Draw Distance</string>
   <string name="QP Max Particles">Max Particles</string>

@@ -16,7 +16,7 @@
  *      may be used to endorse or promote products derived from this
  *      software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY MODULAR SYSTEMS AND CONTRIBUTORS “AS IS”
+ * THIS SOFTWARE IS PROVIDED BY MODULAR SYSTEMS AND CONTRIBUTORS ï¿½AS ISï¿½
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL MODULAR SYSTEMS OR CONTRIBUTORS
@@ -673,13 +673,28 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				std::string status;
 				if (i >> status)
 				{
+					// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
+					bool aoWasEnabled = gSavedPerAccountSettings.getBOOL("UseAO");
+
 					if (status == "on")
 					{
 						gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+
+						// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
+						if (!aoWasEnabled)
+						{
+							report_to_nearby_chat(LLTrans::getString("FSAOEnabled"));
+						}
 					}
 					else if (status == "off")
 					{
 						gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+
+						// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
+						if (aoWasEnabled)
+						{
+							report_to_nearby_chat(LLTrans::getString("FSAODisabled"));
+						}
 					}
 					else if (status == "sit")
 					{
