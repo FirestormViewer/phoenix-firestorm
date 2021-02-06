@@ -31,7 +31,7 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>
 	</notification>
 	<notification name="BadInstallation">
-		Podczas aktualizacji [APP_NAME] wystąpił błąd. Proszę [https://www.firestormviewer.org/downloads odwiedzić stronę] aby ściągnąć ostatnią wersję klienta.
+		Instalacja [APP_NAME] jest uszkodzona. Proszę [https://www.firestormviewer.org/downloads pobrać nową kopię] przeglądarki i ponownie ją zainstalować.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Nie można połączyć z [SECOND_LIFE_GRID].
