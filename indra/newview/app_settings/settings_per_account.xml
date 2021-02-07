@@ -744,7 +744,7 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
-    <key>UseAO</key>
+    <key>PauseAO</key>
         <map>
         <key>Comment</key>
             <string>Pause the viewer side Animation Overrider</string>
