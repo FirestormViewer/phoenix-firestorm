@@ -258,7 +258,11 @@ std::string LLInvFVBridge::getSearchableCreatorName() const
 		if(item)
 		{
 			LLAvatarName av_name;
-			if (LLAvatarNameCache::get(item->getCreatorUUID(), &av_name))
+			// <FS:Beq> Avoid null id requests entering name cache
+			// if (LLAvatarNameCache::get(item->getCreatorUUID(), &av_name))
+			const auto& creatorId {item->getCreatorUUID()};
+			if ( creatorId.notNull() && LLAvatarNameCache::get(creatorId, &av_name) )
+			// </FS:Beq>
 			{
 				std::string username = av_name.getUserName();
 				LLStringUtil::toUpper(username);
