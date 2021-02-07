@@ -3208,4 +3208,9 @@ Your current position: [AVATAR_POS]
   <string name="FSAreaSearch_Cost_Label">L$[COST]</string>
 
   <string name="ImportingWindlightBulk">Importing Windlights...</string>
+
+  <!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+  <string name="FSObjectInventoryNoElements">No Elements</string>
+  <string name="FSObjectInventoryOneElement">1 Element</string>
+  <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
 </strings>
