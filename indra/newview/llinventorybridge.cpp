@@ -7817,7 +7817,9 @@ void LLSettingsBridge::performAction(LLInventoryModel* model, std::string action
         if (!item) 
             return;
         LLUUID asset_id = item->getAssetUUID();
-        LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, asset_id);
+        // FIRE-30701 - Allow crossfade time to apply when using EEP from inventory.
+        // LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, asset_id);
+        LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, asset_id);
         LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
     }
     else if ("apply_settings_parcel" == action)
