@@ -716,7 +716,6 @@ const std::string& LLTaskCategoryBridge::getDisplayName() const
 			LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
 			if (object)
 			{
-				LLInventoryObject* inventory_root = object->getInventoryRoot();
 				LLInventoryObject::object_list_t contents;
 
 				object->getInventoryContents(contents);
