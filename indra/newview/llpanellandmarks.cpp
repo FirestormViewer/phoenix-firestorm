@@ -40,6 +40,7 @@
 #include "llagent.h"
 #include "llagentpicksinfo.h"
 #include "llagentui.h"
+#include "llavataractions.h"
 #include "llcallbacklist.h"
 #include "lldndbutton.h"
 #include "llfloatersidepanelcontainer.h"
@@ -846,9 +847,16 @@ void LLLandmarksPanel::onAddAction(const LLSD& userdata) const
 			}
 			else
 			{
+                LLSD args;
+                args["type"] = "create_landmark";
+                if (view_model->getInventoryType()
+                    == LLInventoryType::IT_CATEGORY)
+                {
+                    args["dest_folder"] = view_model->getUUID();
+                }
 				// <FS:Ansariel> FIRE-817: Separate place details floater
-				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
+				//LLFloaterSidePanelContainer::showPanel("places", args);
+				FSFloaterPlaceDetails::showPlaceDetails(args);
 				// </FS:Ansariel>
 			}
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
@@ -1138,28 +1146,56 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
 		}
 		return false;
 	}
-// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
-	else if("add_landmark" == command_name)
-	{
-		std::string current_tabname;
-		LLView* accordion_view = findChildView("landmarks_accordion");
-		LLAccordionCtrl* accordion = dynamic_cast<LLAccordionCtrl*>(accordion_view);
-		if (accordion)
-		{
-			current_tabname = accordion->getSelectedTab()->getName();
-		}
-		else
-		{
-			LLTabContainer* tabcontainer = dynamic_cast<LLTabContainer*>(accordion_view);
-			if (tabcontainer)
-			{
-				current_tabname = tabcontainer->getCurrentPanel()->getName();
-			}
-		}
+    else if ("add_landmark" == command_name)
+    {
+        bool is_single_selection = root_folder_view && root_folder_view->getSelectedCount() == 1;
+        if (!is_single_selection)
+        {
+            return false;
+        }
+        LLFolderViewModelItemInventory* view_model = getCurSelectedViewModelItem();
+        if (!view_model || view_model->getInventoryType() != LLInventoryType::IT_CATEGORY)
+        {
+            return false;
+        }
+        LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
+        if (landmark)
+        {
+            //already exists
+            return false;
+        }
+        // <FS:Ansariel> RLVa and library check
+        //return true;
+        std::string current_tabname;
+        LLView* accordion_view = findChildView("landmarks_accordion");
+        LLAccordionCtrl* accordion = dynamic_cast<LLAccordionCtrl*>(accordion_view);
+        if (accordion)
+        {
+            current_tabname = accordion->getSelectedTab()->getName();
+        }
+        else
+        {
+            LLTabContainer* tabcontainer = dynamic_cast<LLTabContainer*>(accordion_view);
+            if (tabcontainer)
+            {
+                current_tabname = tabcontainer->getCurrentPanel()->getName();
+            }
+        }
 
-		return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) && current_tabname != "tab_library";
-	}
-// [/RLVa:KB]
+        return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) && current_tabname != "tab_library";
+    }
+    else if ("share" == command_name)
+    {
+        if (!mCurrentSelectedList)
+        {
+            return false;
+        }
+        if (!LLAvatarActions::canShareSelectedItems(mCurrentSelectedList))
+        {
+            return false;
+        }
+        return true;
+    }
 	else
 	{
 		LL_WARNS() << "Unprocessed command has come: " << command_name << LL_ENDL;
@@ -1187,6 +1223,10 @@ void LLLandmarksPanel::onCustomAction(const LLSD& userdata)
 	{
 		doActionOnCurSelectedLandmark(boost::bind(&LLLandmarksPanel::doCreatePick, this, _1));
 	}
+    else if ("share" == command_name && mCurrentSelectedList)
+    {
+        LLAvatarActions::shareWithAvatars(mCurrentSelectedList);
+    }
 	else if ("restore" == command_name && mCurrentSelectedList)
 	{
 		mCurrentSelectedList->doToSelected(userdata);

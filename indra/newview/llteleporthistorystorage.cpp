@@ -33,6 +33,8 @@
 #include "lldir.h"
 #include "llteleporthistory.h"
 #include "llagent.h"
+#include "llfloaterreg.h"
+#include "llfloaterworldmap.h"
 // [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b)
 #include "rlvactions.h"
 // [/RLVa:KB]
@@ -268,5 +270,25 @@ void LLTeleportHistoryStorage::goToItem(S32 idx)
 
 	// Attempt to teleport to the requested item.
 	gAgent.teleportViaLocation(mItems[idx].mGlobalPos);
+}
+
+void LLTeleportHistoryStorage::showItemOnMap(S32 idx)
+{
+    // Validate specified index.
+    if (idx < 0 || idx >= (S32)mItems.size())
+    {
+        LL_WARNS() << "Invalid teleport history index (" << idx << ") specified" << LL_ENDL;
+        dump();
+        return;
+    }
+
+    LLVector3d landmark_global_pos = mItems[idx].mGlobalPos;
+
+    LLFloaterWorldMap* worldmap_instance = LLFloaterWorldMap::getInstance();
+    if (!landmark_global_pos.isExactlyZero() && worldmap_instance)
+    {
+        worldmap_instance->trackLocation(landmark_global_pos);
+        LLFloaterReg::showInstance("world_map", "center");
+    }
 }
 

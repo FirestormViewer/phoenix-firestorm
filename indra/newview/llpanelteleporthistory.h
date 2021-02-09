@@ -54,9 +54,7 @@ public:
 
 	private:
 		LLContextMenu* createMenu();
-		void onTeleport();
-		void onInfo();
-		void onCopyToClipboard();
+		void onUserAction(const LLSD& userdata);
 
 		static void gotSLURLCallback(const std::string& slurl);
 

@@ -317,8 +317,9 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 				mGlobalPos = gAgent.getPositionGlobal();
 			}
 
+			LLUUID dest_folder = key["dest_folder"];
 			mPanelLandmarkInfo->resetLocation();
-			mPanelLandmarkInfo->setInfoType(LLPanelPlaceInfo::CREATE_LANDMARK);
+			mPanelLandmarkInfo->setInfoAndCreateLandmark(dest_folder);
 			mPanelLandmarkInfo->setHeaderVisible(FALSE);
 			mPanelLandmarkInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 			

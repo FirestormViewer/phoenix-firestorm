@@ -417,6 +417,7 @@ LLAgent::LLAgent() :
 	mTeleportFinishedSlot(),
 	mTeleportFailedSlot(),
 	mIsMaturityRatingChangingDuringTeleport(false),
+	mTPNeedsNeabyChatSeparator(false),
 	mMaturityRatingChange(0U),
 	mIsDoSendMaturityPreferenceToServer(false),
 	mMaturityPreferenceRequestId(0U),
@@ -596,10 +597,6 @@ void LLAgent::cleanup()
 	{
 		mTeleportFailedSlot.disconnect();
 	}
-    if (mParcelMgrConnection.connected())
-    {
-        mParcelMgrConnection.disconnect();
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -4695,10 +4692,7 @@ void LLAgent::clearTeleportRequest()
         LLVoiceClient::getInstance()->setHidden(FALSE);
     }
 	mTeleportRequest.reset();
-    if (mParcelMgrConnection.connected())
-    {
-        mParcelMgrConnection.disconnect();
-    }
+    mTPNeedsNeabyChatSeparator = false;
 }
 
 void LLAgent::setMaturityRatingChangeDuringTeleport(U8 pMaturityRatingChange)
@@ -4710,7 +4704,7 @@ void LLAgent::setMaturityRatingChangeDuringTeleport(U8 pMaturityRatingChange)
 void LLAgent::sheduleTeleportIM()
 {
     // is supposed to be called during teleport so we are still waiting for parcel
-    mParcelMgrConnection = addParcelChangedCallback(onParcelReadyAfterTeleport);
+    mTPNeedsNeabyChatSeparator = true;
 }
 
 bool LLAgent::hasPendingTeleportRequest()
@@ -4760,6 +4754,12 @@ void LLAgent::startTeleportRequest()
 void LLAgent::handleTeleportFinished()
 {
     LL_INFOS("Teleport") << "Agent handling teleport finished." << LL_ENDL;
+    if (mTPNeedsNeabyChatSeparator)
+    {
+        // parcel is ready at this point
+        addTPNearbyChatSeparator();
+        mTPNeedsNeabyChatSeparator = false;
+    }
 	clearTeleportRequest();
     mTeleportCanceled.reset();
 	if (mIsMaturityRatingChangingDuringTeleport)
@@ -4823,14 +4823,11 @@ void LLAgent::handleTeleportFailed()
 		mIsMaturityRatingChangingDuringTeleport = false;
 	}
 
-    if (mParcelMgrConnection.connected())
-    {
-        mParcelMgrConnection.disconnect();
-    }
+    mTPNeedsNeabyChatSeparator = false;
 }
 
 /*static*/
-void LLAgent::onParcelReadyAfterTeleport()
+void LLAgent::addTPNearbyChatSeparator()
 {
     LLViewerRegion* agent_region = gAgent.getRegion();
     LLParcel* agent_parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
@@ -4865,11 +4862,6 @@ void LLAgent::onParcelReadyAfterTeleport()
         LLSD args;
         args["do_not_log"] = TRUE;
         nearby_chat->addMessage(chat, true, args);
-    }
-
-    if (gAgent.mParcelMgrConnection.connected())
-    {
-        gAgent.mParcelMgrConnection.disconnect();
     }
 }
 
