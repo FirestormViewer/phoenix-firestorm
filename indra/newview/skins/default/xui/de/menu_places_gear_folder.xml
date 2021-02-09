@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_folder_gear">
-	<menu_item_call label="Landmarke hinzufügen" name="add_landmark"/>
-	<menu_item_call label="Ordner hinzufügen" name="add_folder"/>
+	<menu_item_call label="Aktuellen Ort als Landmarke hinzufügen" name="add_landmark"/>
+	<menu_item_call label="Unterordner hinzufügen" name="add_folder"/>
 	<menu_item_call label="Objekt wiederherstellen" name="restore_item"/>
 	<menu_item_call label="Ausschneiden" name="cut"/>
 	<menu_item_call label="Kopieren" name="copy_folder"/>
