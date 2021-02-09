@@ -920,7 +920,8 @@ void LLPluginProcessParent::poll(F64 timeout)
 		// }
 		else
 		{
-			LL_WARNS("PluginPoll") << "apr_pollset_poll failed with status " << status << " (" << APR_TO_OS_ERROR(status) << ")" << LL_ENDL;
+			LL_WARNS("PluginPoll") << "apr_pollset_poll failed with status " << status << " (" << APR_TO_OS_ERROR(status) << ") Rebuild PollSet" << LL_ENDL;
+			sPollsetNeedsRebuild = true;
 		}
 		// </FS:Beq>
 	}

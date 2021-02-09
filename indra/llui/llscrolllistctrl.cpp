@@ -132,6 +132,7 @@ LLScrollListCtrl::Params::Params()
 	search_column("search_column", 0),
 	sort_column("sort_column", -1),
 	sort_ascending("sort_ascending", true),
+	sort_lazily("sort_lazily", false),					// <FS:Beq> FIRE-30732 deferred sort as a UI property
 	persist_sort_order("persist_sort_order", false),	// <FS:Ansariel> Persists sort order of scroll lists
 	primary_sort_only("primary_sort_only", false),		// <FS:Ansariel> Option to only sort by one column
 	mouse_wheel_opaque("mouse_wheel_opaque", false),
@@ -186,6 +187,7 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mTotalStaticColumnWidth(0),
 	mTotalColumnPadding(0),
 	mSorted(false),
+	mSortLazily(p.sort_lazily),		// <FS:Beq> FIRE-30732 deferred sort configurability
 	mDirty(false),
 	mOriginalSelection(-1),
 	mLastSelected(NULL),
@@ -2957,7 +2959,9 @@ void LLScrollListCtrl::updateSort() const
 	// if (hasSortOrder() && !isSorted())
 	// {
 	static LLUICachedControl<U32> sortDeferFrameCount("FSSortDeferalFrames");
-	if ( hasSortOrder() && !isSorted() && ( mLastUpdateFrame > 1 && ( LLFrameTimer::getFrameCount() - mLastUpdateFrame ) >= sortDeferFrameCount ) )
+	if ( hasSortOrder() && !isSorted() &&
+		( !mSortLazily || // if deferred sorting is off OR the deferral period has been exceeded
+		( mLastUpdateFrame > 1 && ( LLFrameTimer::getFrameCount() - mLastUpdateFrame ) >= sortDeferFrameCount ) ) )
 	// encoding two (unlikely) special values into mLastUpdateFrame 1 means we've sorted and 0 means we've nothing new to do.
 	// 0 is set after sorting, 1 can be set by a parent for any post sorting action.
 	{

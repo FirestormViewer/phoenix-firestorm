@@ -37,7 +37,7 @@
 		[MESSAGE]
 	</notification>
 	<notification name="BadInstallation">
-		Произошла ошибка при обновлении [APP_NAME]. [http://get.secondlife.com Загрузите последнюю версию] клиента.
+		Произошла ошибка при обновлении [APP_NAME]. [https://www.firestormviewer.org/downloads Загрузите последнюю версию] клиента.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Не удалось подключиться к [SECOND_LIFE_GRID].

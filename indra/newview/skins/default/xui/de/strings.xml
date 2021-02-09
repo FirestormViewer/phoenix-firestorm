@@ -2774,16 +2774,16 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		Dieser Einwohner hat den Nicht-stören-Modus aktiviert und wird Ihre Nachricht später sehen.
 	</string>
 	<string name="AutoResponseModeDefault">
-		Dieser Einwohner hat den Firestorm-Viewer-Modus „Automatische Antwort“ aktiviert. Dies bedeutet, dass er nicht gestört werden möchte. Er wird Ihre Nachricht später sehen.
+		Dieser Einwohner hat den [APP_NAME]-Viewer-Modus „Automatische Antwort“ aktiviert. Dies bedeutet, dass er nicht gestört werden möchte. Er wird Ihre Nachricht später sehen.
 	</string>
 	<string name="AutoResponseModeNonFriendsDefault">
-		Dieser Einwohner hat den Firestorm-Viewer-Modus „Automatische Antwort“ aktiviert. Dies bedeutet, dass er nicht gestört werden möchte. Er wird Ihre Nachricht später sehen.
+		Dieser Einwohner hat den [APP_NAME]-Viewer-Modus „Automatische Antwort“ aktiviert. Dies bedeutet, dass er nicht gestört werden möchte. Er wird Ihre Nachricht später sehen.
 	</string>
 	<string name="RejectTeleportOffersResponseDefault">
-		Dieser Einwohner hat den Firestorm-Viewer-Modus „Teleport-Angebote und -Anforderungen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Teleport-Angeboten oder -Anforderungen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
+		Dieser Einwohner hat den [APP_NAME]-Viewer-Modus „Teleport-Angebote und -Anforderungen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Teleport-Angeboten oder -Anforderungen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
 	</string>
 	<string name="RejectFriendshipRequestsResponseDefault">
-		Dieser Einwohner hat den Firestorm-Viewer-Modus „Alle Freundschaftsanfragen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Freundschaftsanfragen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
+		Dieser Einwohner hat den [APP_NAME]-Viewer-Modus „Alle Freundschaftsanfragen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Freundschaftsanfragen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
 	</string>
 	<string name="MutedAvatarsResponseDefault">
 		Dieser Einwohner hat den Empfang Ihrer Nachrichten blockiert.
@@ -6711,10 +6711,10 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 		Unbekannt; Bitte die Debugeinstellung RenderQualityPerformance prüfen!
 	</string>
 	<string name="fsbridge_cant_create_disabled">
-		Firestorm kann die LSL-Brücke nicht erstellen, wenn „LSL-Client-Brücke aktivieren“ in den Einstellungen deaktiviert ist.
+		[APP_NAME] kann die LSL-Brücke nicht erstellen, wenn „LSL-Client-Brücke aktivieren“ in den Einstellungen deaktiviert ist.
 	</string>
 	<string name="fsbridge_no_library">
-		Firestorm konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
+		[APP_NAME] konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
 	</string>
 	<string name="fsbridge_already_creating">
 		LSL-Brücke wird bereits erstellt. Bitte einige Minuten vor einem erneuten Versuch warten.
@@ -6790,10 +6790,29 @@ Ihre aktuelle Position: [AVATAR_POS]
 		Skript-Info: Fehlerhafte Antwort von LSL-Brücke erhalten. Bitte erneut versuchen.
 	</string>
 	<string name="fsbridge_error_injection">
-		HINWEIS: Ein oder mehrere Skripte wurden zur Firestorm-LSL-Brücke hinzugefügt! Falls dieser Hinweis unerwartet aufgetreten ist, bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen.
+		HINWEIS: Ein oder mehrere Skripte wurden zur [APP_NAME]-LSL-Brücke hinzugefügt! Falls dieser Hinweis unerwartet aufgetreten ist, bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen.
 	</string>
 	<string name="fsbridge_error_wrongvm">
-		HINWEIS: Das Skript der Firestorm-LSL-Brücke verwendet die alte LSO Virtuelle Maschine (16 KB Speicherlimit) anstelle von Mono (64 KB Speicherlimit), wodurch eine hohe Wahrscheinlichkeit von Stack-Heap-Collisions und Fehlern aufgrund von nicht mehr verfügbarem Speicher besteht! Bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen. Falls dieser Hinweis erneut angezeigt wurde, bitte die Brücke in einer anderen Region neu erstellen.
+		HINWEIS: Das Skript der [APP_NAME]-LSL-Brücke verwendet die alte LSO Virtuelle Maschine (16 KB Speicherlimit) anstelle von Mono (64 KB Speicherlimit), wodurch eine hohe Wahrscheinlichkeit von Stack-Heap-Collisions und Fehlern aufgrund von nicht mehr verfügbarem Speicher besteht! Bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen. Falls dieser Hinweis erneut angezeigt wurde, bitte die Brücke in einer anderen Region neu erstellen.
+	</string>
+
+	<string name="FSAOEnabled">
+		[APP_NAME] Animation Overrider aktiviert.
+	</string>
+	<string name="FSAODisabled">
+		[APP_NAME] Animation Overrider deaktiviert.
+	</string>
+	<string name="FSAOPausedScript">
+		Pausiert durch geskripteten Anhang.
+	</string>
+	<string name="FSAOResumedScript">
+		Fortgesetzt durch geskripteten Anhang.
+	</string>
+	<string name="FSAOStandsPausedScript">
+		Stand-Animationen pausiert durch geskripteten Anhang.
+	</string>
+	<string name="FSAOStandsResumedScript">
+		Stand-Animationen fortgesetzt durch geskripteten Anhang.
 	</string>
 
 	<string name="QP Draw Distance">
@@ -7165,5 +7184,14 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="ImportingWindlightBulk">
 		Importiere Windlight...
+	</string>
+	<string name="FSObjectInventoryNoElements">
+		Keine Elemente
+	</string>
+	<string name="FSObjectInventoryOneElement">
+		1 Element
+	</string>
+	<string name="FSObjectInventoryElements">
+		[NUM_ELEMENTS] Elemente
 	</string>
 </strings>

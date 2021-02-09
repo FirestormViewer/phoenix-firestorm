@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.25"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.26"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -85,8 +85,11 @@
     {
         if (gAO_EnabledOC)
         {
-            aoListenOC(NULL_KEY, TRUE);
-            llWhisper(gAO_ChannelOC, "OpenCollar?");
+            if (gAO_ChannelOC != PUBLIC_CHANNEL)
+            {
+                aoListenOC(NULL_KEY, TRUE);
+                llWhisper(gAO_ChannelOC, "OpenCollar?");
+            }
         }
         else
         {

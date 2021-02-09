@@ -63,6 +63,7 @@ AOEngine::AOEngine() :
 {
 	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
 	gSavedPerAccountSettings.getControl("UseAOStands")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOStandsControl, this));
+	gSavedPerAccountSettings.getControl("PauseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onPauseAO, this));
 
 	mRegionChangeConnection = gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
 }
@@ -115,6 +116,15 @@ void AOEngine::onToggleAOControl()
 void AOEngine::onToggleAOStandsControl()
 {
 	enableStands(gSavedPerAccountSettings.getBOOL("UseAOStands"));
+}
+
+void AOEngine::onPauseAO()
+{
+	// can't use mEnabled here as that gets switched over by enable()
+	if (gSavedPerAccountSettings.getBOOL("UseAO"))
+	{
+		enable(!gSavedPerAccountSettings.getBOOL("PauseAO"));
+	}
 }
 
 void AOEngine::clear(bool from_timer)

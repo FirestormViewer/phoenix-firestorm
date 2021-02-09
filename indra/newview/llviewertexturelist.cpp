@@ -710,6 +710,8 @@ void LLViewerTextureList::addImage(LLViewerFetchedTexture *new_image, ETexListTy
 	addImageToList(new_image);
 	mUUIDMap[key] = new_image;
 	new_image->setTextureListType(tex_type);
+	// <FS:Beq/> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+	gTextureList.recalcImageDecodePriority(new_image);
 }
 
 
@@ -721,6 +723,9 @@ void LLViewerTextureList::deleteImage(LLViewerFetchedTexture *image)
 		{
 			mCallbackList.erase(image);
 		}
+		// <FS:Beq/> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+		mImagesWithChangedPriorities.erase(image);
+
 		LLTextureKey key(image->getID(), (ETexListType)image->getTextureListType());
 		llverify(mUUIDMap.erase(key) == 1);
 		sNumImages--;
@@ -855,120 +860,251 @@ void LLViewerTextureList::clearFetchingRequests()
 	}
 }
 
+// <FS:Beq> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+// NOTE: previous version retained as single block comment, changes extend to the end of updateOneImageDecodePriority
+// void LLViewerTextureList::updateImagesDecodePriorities()
+// {
+// 	// Update the decode priority for N images each frame
+// 	{
+// 		F32 lazy_flush_timeout = 30.f; // stop decoding
+// 		F32 max_inactive_time  = 20.f; // actually delete
+// 		S32 min_refs = 3; // 1 for mImageList, 1 for mUUIDMap, 1 for local reference
+
+// 		//reset imagep->getLastReferencedTimer() when screen is showing the progress view to avoid removing pre-fetched textures too soon.
+// 		bool reset_timer = gViewerWindow->getProgressView()->getVisible();
+        
+//         static const S32 MAX_PRIO_UPDATES = gSavedSettings.getS32("TextureFetchUpdatePriorities");         // default: 32
+// 		const size_t max_update_count = llmin((S32) (MAX_PRIO_UPDATES*MAX_PRIO_UPDATES*gFrameIntervalSeconds.value()) + 1, MAX_PRIO_UPDATES);
+// 		S32 update_counter = llmin(max_update_count, mUUIDMap.size());
+// 		uuid_map_t::iterator iter = mUUIDMap.upper_bound(mLastUpdateKey);
+// 		while ((update_counter-- > 0) && !mUUIDMap.empty())
+// 		{
+// 			if (iter == mUUIDMap.end())
+// 			{
+// 				iter = mUUIDMap.begin();
+//             }
+//             mLastUpdateKey = iter->first;
+// 			LLPointer<LLViewerFetchedTexture> imagep = iter->second;
+// 			++iter; // safe to increment now
+
+// 			if(imagep->isInDebug() || imagep->isUnremovable())
+// 			{
+// 				update_counter--;
+// 				continue; //is in debug, ignore.
+// 			}
+
+// 			//
+// 			// Flush formatted images using a lazy flush
+// 			//
+// 			S32 num_refs = imagep->getNumRefs();
+// 			if (num_refs == min_refs)
+// 			{
+// 				if(reset_timer)
+// 				{
+// 					imagep->getLastReferencedTimer()->reset();
+// 				}
+// 				else if (imagep->getLastReferencedTimer()->getElapsedTimeF32() > lazy_flush_timeout)
+// 				{
+// 					// Remove the unused image from the image list
+// 					deleteImage(imagep);
+// 					imagep = NULL; // should destroy the image								
+// 				}
+// 				continue;
+// 			}
+// 			else
+// 			{
+// 				if(imagep->hasSavedRawImage())
+// 				{
+// 					if(imagep->getElapsedLastReferencedSavedRawImageTime() > max_inactive_time)
+// 					{
+// 						imagep->destroySavedRawImage() ;
+// 					}
+// 				}
+
+// 				if(imagep->isDeleted())
+// 				{
+// 					continue ;
+// 				}
+// 				else if(imagep->isDeletionCandidate())
+// 				{
+// 					imagep->destroyTexture() ;																
+// 					continue ;
+// 				}
+// 				else if(imagep->isInactive())
+// 				{
+// 					if(reset_timer)
+// 					{
+// 						imagep->getLastReferencedTimer()->reset();
+// 					}
+// 					else if (imagep->getLastReferencedTimer()->getElapsedTimeF32() > max_inactive_time)
+// 					{
+// 						imagep->setDeletionCandidate() ;
+// 					}
+// 					continue ;
+// 				}
+// 				else
+// 				{
+// 					imagep->getLastReferencedTimer()->reset();
+
+// 					//reset texture state.
+// 					imagep->setInactive() ;										
+// 				}
+// 			}
+
+// 			if (!imagep->isInImageList())
+// 			{
+// 				continue;
+// 			}
+// 			if(imagep->isInFastCacheList())
+// 			{
+// 				continue; //wait for loading from the fast cache.
+// 			}
+
+// 			imagep->processTextureStats();
+// 			F32 old_priority = imagep->getDecodePriority();
+// 			F32 old_priority_test = llmax(old_priority, 0.0f);
+// 			F32 decode_priority = imagep->calcDecodePriority();
+// 			F32 decode_priority_test = llmax(decode_priority, 0.0f);
+// 			// Ignore < 20% difference
+// 			if ((decode_priority_test < old_priority_test * .8f) ||
+// 				(decode_priority_test > old_priority_test * 1.25f))
+// 			{
+// 				mImageList.erase(imagep) ;
+// 				imagep->setDecodePriority(decode_priority);
+// 				mImageList.insert(imagep);
+// 			}
+// 		}
+// 	}
+// }
+
+void LLViewerTextureList::recalcImageDecodePriority(LLPointer<LLViewerFetchedTexture> image)
+{
+	mImagesWithChangedPriorities.insert(image);
+}
+
 void LLViewerTextureList::updateImagesDecodePriorities()
 {
 	// Update the decode priority for N images each frame
+	static const S32 MAX_PRIO_UPDATES = gSavedSettings.getS32("TextureFetchUpdatePriorities");         // default: 32
+	const size_t max_update_count = llmin((S32)(MAX_PRIO_UPDATES*MAX_PRIO_UPDATES*gFrameIntervalSeconds.value()) + 1, MAX_PRIO_UPDATES);
+	S32 update_counter = llmin(max_update_count, (mImagesWithChangedPriorities.size() + mUUIDMap.size()));
+
+	// First, process images whose decode priorities may have changed recently
+	image_list_t::iterator iter2 = mImagesWithChangedPriorities.begin();
+	while ((update_counter-- > 0) && (iter2 != mImagesWithChangedPriorities.end()))
 	{
-		F32 lazy_flush_timeout = 30.f; // stop decoding
-		F32 max_inactive_time  = 20.f; // actually delete
-		S32 min_refs = 3; // 1 for mImageList, 1 for mUUIDMap, 1 for local reference
+		LLPointer<LLViewerFetchedTexture> imagep = *iter2;
+		iter2 = mImagesWithChangedPriorities.erase(iter2);
+		updateOneImageDecodePriority(imagep);
+	}
 
-		//reset imagep->getLastReferencedTimer() when screen is showing the progress view to avoid removing pre-fetched textures too soon.
-		bool reset_timer = gViewerWindow->getProgressView()->getVisible();
-        
-        static const S32 MAX_PRIO_UPDATES = gSavedSettings.getS32("TextureFetchUpdatePriorities");         // default: 32
-		const size_t max_update_count = llmin((S32) (MAX_PRIO_UPDATES*MAX_PRIO_UPDATES*gFrameIntervalSeconds.value()) + 1, MAX_PRIO_UPDATES);
-		S32 update_counter = llmin(max_update_count, mUUIDMap.size());
-		uuid_map_t::iterator iter = mUUIDMap.upper_bound(mLastUpdateKey);
-		while ((update_counter-- > 0) && !mUUIDMap.empty())
+	// Second, process all of the images
+	uuid_map_t::iterator iter = mUUIDMap.upper_bound(mLastUpdateKey);
+	while ((update_counter-- > 0) && !mUUIDMap.empty())
+	{
+		if (iter == mUUIDMap.end())
 		{
-			if (iter == mUUIDMap.end())
-			{
-				iter = mUUIDMap.begin();
-            }
-            mLastUpdateKey = iter->first;
-			LLPointer<LLViewerFetchedTexture> imagep = iter->second;
-			++iter; // safe to increment now
-
-			if(imagep->isInDebug() || imagep->isUnremovable())
-			{
-				update_counter--;
-				continue; //is in debug, ignore.
-			}
-
-			//
-			// Flush formatted images using a lazy flush
-			//
-			S32 num_refs = imagep->getNumRefs();
-			if (num_refs == min_refs)
-			{
-				if(reset_timer)
-				{
-					imagep->getLastReferencedTimer()->reset();
-				}
-				else if (imagep->getLastReferencedTimer()->getElapsedTimeF32() > lazy_flush_timeout)
-				{
-					// Remove the unused image from the image list
-					deleteImage(imagep);
-					imagep = NULL; // should destroy the image								
-				}
-				continue;
-			}
-			else
-			{
-				if(imagep->hasSavedRawImage())
-				{
-					if(imagep->getElapsedLastReferencedSavedRawImageTime() > max_inactive_time)
-					{
-						imagep->destroySavedRawImage() ;
-					}
-				}
-
-				if(imagep->isDeleted())
-				{
-					continue ;
-				}
-				else if(imagep->isDeletionCandidate())
-				{
-					imagep->destroyTexture() ;																
-					continue ;
-				}
-				else if(imagep->isInactive())
-				{
-					if(reset_timer)
-					{
-						imagep->getLastReferencedTimer()->reset();
-					}
-					else if (imagep->getLastReferencedTimer()->getElapsedTimeF32() > max_inactive_time)
-					{
-						imagep->setDeletionCandidate() ;
-					}
-					continue ;
-				}
-				else
-				{
-					imagep->getLastReferencedTimer()->reset();
-
-					//reset texture state.
-					imagep->setInactive() ;										
-				}
-			}
-
-			if (!imagep->isInImageList())
-			{
-				continue;
-			}
-			if(imagep->isInFastCacheList())
-			{
-				continue; //wait for loading from the fast cache.
-			}
-
-			imagep->processTextureStats();
-			F32 old_priority = imagep->getDecodePriority();
-			F32 old_priority_test = llmax(old_priority, 0.0f);
-			F32 decode_priority = imagep->calcDecodePriority();
-			F32 decode_priority_test = llmax(decode_priority, 0.0f);
-			// Ignore < 20% difference
-			if ((decode_priority_test < old_priority_test * .8f) ||
-				(decode_priority_test > old_priority_test * 1.25f))
-			{
-				mImageList.erase(imagep) ;
-				imagep->setDecodePriority(decode_priority);
-				mImageList.insert(imagep);
-			}
+			iter = mUUIDMap.begin();
 		}
+		mLastUpdateKey = iter->first;
+		LLPointer<LLViewerFetchedTexture> imagep = iter->second;
+		++iter; // safe to increment now
+		updateOneImageDecodePriority(imagep);
 	}
 }
+
+void LLViewerTextureList::updateOneImageDecodePriority(LLPointer<LLViewerFetchedTexture> imagep)
+{
+	const F32 lazy_flush_timeout = 30.f; // stop decoding
+	const F32 max_inactive_time = 20.f; // actually delete
+	const S32 min_refs = 3; // 1 for mImageList, 1 for mUUIDMap, 1 for local reference
+
+	bool reset_timer = gViewerWindow->getProgressView()->getVisible();
+
+	if(imagep->isInDebug() || imagep->isUnremovable())
+	{
+		return; //is in debug, ignore.
+	}
+	//
+	// Flush formatted images using a lazy flush
+	//
+	S32 num_refs = imagep->getNumRefs();
+	if (num_refs == min_refs)
+	{
+		if(reset_timer)
+		{
+			imagep->getLastReferencedTimer()->reset();
+		}
+		else if (imagep->getLastReferencedTimer()->getElapsedTimeF32() > lazy_flush_timeout)
+		{
+			// Remove the unused image from the image list
+			deleteImage(imagep);
+			imagep = NULL; // should destroy the image								
+		}
+		return;
+	}
+	else
+	{
+		if(imagep->hasSavedRawImage())
+		{
+			if(imagep->getElapsedLastReferencedSavedRawImageTime() > max_inactive_time)
+			{
+				imagep->destroySavedRawImage() ;
+			}
+		}
+
+		if(imagep->isDeleted())
+		{
+			return;
+		}
+		else if(imagep->isDeletionCandidate())
+		{
+			imagep->destroyTexture() ;																
+			return;
+		}
+		else if(imagep->isInactive())
+		{
+			if(reset_timer)
+			{
+				imagep->getLastReferencedTimer()->reset();
+			}
+			else if (imagep->getLastReferencedTimer()->getElapsedTimeF32() > max_inactive_time)
+			{
+				imagep->setDeletionCandidate() ;
+			}
+			return;
+		}
+		else
+		{
+			imagep->getLastReferencedTimer()->reset();
+			//reset texture state.
+			imagep->setInactive() ;
+		}
+	}
+	if (!imagep->isInImageList())
+	{
+		return;
+	}
+	if(imagep->isInFastCacheList())
+	{
+		return; //wait for loading from the fast cache.
+	}
+
+	imagep->processTextureStats();
+	F32 old_priority = imagep->getDecodePriority();
+	F32 old_priority_test = llmax(old_priority, 0.0f);
+	F32 decode_priority = imagep->calcDecodePriority();
+	F32 decode_priority_test = llmax(decode_priority, 0.0f);
+	// Ignore < 20% difference
+	if ((decode_priority_test < old_priority_test * .8f) ||
+		(decode_priority_test > old_priority_test * 1.25f))
+	{
+		mImageList.erase(imagep) ;
+		imagep->setDecodePriority(decode_priority);
+		mImageList.insert(imagep);
+	}
+}
+// </FS:Beq> FIRE-30559 
 
 void LLViewerTextureList::setDebugFetching(LLViewerFetchedTexture* tex, S32 debug_level)
 {

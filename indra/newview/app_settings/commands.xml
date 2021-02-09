@@ -509,6 +509,7 @@
            execute_parameters="fs_posestand"
            is_running_function="Floater.IsOpen"
            is_running_parameters="fs_posestand"
+           is_enabled_function="Agent.enableFlying"
            />
   <command name="snapshot_to_disk"
            available_in_toybox="true"

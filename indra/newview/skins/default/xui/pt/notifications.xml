@@ -81,7 +81,7 @@ Detalhes do erro: O aviso &apos;[_NAME]&apos; não foi localizado no arquivo not
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Um erro ocorreu ao atualizar o [APP_NAME].  [http://get.secondlife.com Baixe a versão atual] do Visualizador.
+		Um erro ocorreu ao atualizar o [APP_NAME].  [https://www.firestormviewer.org/downloads Baixe a versão atual] do Visualizador.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
