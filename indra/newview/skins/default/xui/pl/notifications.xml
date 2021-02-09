@@ -5111,4 +5111,8 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 	<notification name="WindlightBulkImportFinished">
 		Zakończył się zbiorowy import Windlightów.
 	</notification>
+	<notification name="FSAOScriptedNotification">
+		Animator Firestorma: [AO_MESSAGE]
+		<usetemplate ignoretext="Ostrzegaj mnie, gdy Animator Firestorma jest proszony o dostęp przez oskryptowany obiekt" name="notifyignore" />
+	</notification>
 </notifications>
