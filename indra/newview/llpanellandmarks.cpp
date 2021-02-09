@@ -1183,6 +1183,7 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
         }
 
         return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) && current_tabname != "tab_library";
+        // </FS:Ansariel>
     }
     else if ("share" == command_name)
     {
