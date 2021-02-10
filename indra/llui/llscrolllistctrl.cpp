@@ -2114,6 +2114,20 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			enable_registrar.add("FS.EnableViewLog", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_VIEW_TRANSCRIPT));
 			// </FS:Ansariel>
 
+			// <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu
+			std::string uuid_str = uuid.asString();
+
+			registrar.add("FS.JoinGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupjoin", true));
+			registrar.add("FS.LeaveGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupleave", true));
+			registrar.add("FS.ActivateGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupactivate", true));
+
+			enable_registrar.add("FS.WaitingForGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
+			enable_registrar.add("FS.HaveGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_HAVE_GROUP_DATA));
+			enable_registrar.add("FS.EnableJoinGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_CAN_JOIN_GROUP));
+			enable_registrar.add("FS.EnableLeaveGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_CAN_LEAVE_GROUP));
+			enable_registrar.add("FS.EnableActivateGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_GROUP_NOT_ACTIVE));
+			// </FS:Zi>
+
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
 			delete mPopupMenu;
