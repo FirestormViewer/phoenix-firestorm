@@ -3937,6 +3937,9 @@ URL: [AUDIOURL]
 	<global name="UnsupportedRAM">
 		- Системная память вашего компьютера не удовлетворяет минимальным требованиям.
 	</global>
+	<global name="LLLeapUpdaterFailure">
+		Не удалось запустить службу обновления  [UPDATER_APP]. Убедитесь, что программа просмотра установлена правильно и имеет необходимые разрешения для запуска. Если у вас по-прежнему возникают проблемы, посетите [SUPPORT_SITE].
+	</global>
 	<global name="Вы можете установить положение &quot;Дом&quot; только на суше">
 		Если у вас есть участок земли, вы можете сделать его своим домом (домашним местоположением).
 Если нет, посмотрите на карту и найдите места, подписанные &quot;Инфохаб&quot;.
@@ -5223,5 +5226,9 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="WindlightBulkImportFinished">
 		Массовый импорт Окружающей среды завершен.
+	</notification>
+	<notification name="FSAOScriptedNotification">
+		Firestorm Animation Overrider: [AO_MESSAGE]
+		<usetemplate ignoretext="Предупредить меня, когда к функции АО Firestorm обращается скриптовый объект" name="notifyignore"/>
 	</notification>
 </notifications>
