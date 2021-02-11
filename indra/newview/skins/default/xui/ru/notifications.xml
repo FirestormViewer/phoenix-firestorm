@@ -5228,7 +5228,7 @@ URL: [AUDIOURL]
 		Массовый импорт Окружающей среды завершен.
 	</notification>
 	<notification name="FSAOScriptedNotification">
-		Firestorm Animation Overrider: [AO_MESSAGE]
-		<usetemplate ignoretext="Предупредить меня, когда к функции АО Firestorm обращается скриптовый объект" name="notifyignore"/>
+		Диспетчер анимаций (AO): [AO_MESSAGE]
+		<usetemplate ignoretext="Предупредить меня, когда к функции Диспетчера анимаций (AO) обращается скриптовый объект" name="notifyignore"/>
 	</notification>
 </notifications>
