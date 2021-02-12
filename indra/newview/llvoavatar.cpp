@@ -131,6 +131,7 @@
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
 #include "fsavatarrenderpersistence.h"
+#include "fslslbridge.h" // <FS:PP> Movelock position refresh
 
 #include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
 
@@ -8235,6 +8236,13 @@ void LLVOAvatar::sitDown(BOOL bSitting)
 			gRlvHandler.onSitOrStand(bSitting);
 		}
 // [/RLVa:KB]
+
+		// <FS:PP> Refresh movelock position after sitting down to prevent pulling avatar back to previous one after standing up
+		if (bSitting && gSavedPerAccountSettings.getBOOL("UseMoveLock") && gSavedPerAccountSettings.getBOOL("RelockMoveLockAfterMovement"))
+		{
+			FSLSLBridge::instance().viewerToLSL("UseMoveLock|1|noreport");
+		}
+		// </FS:PP>
 	}
 }
 
