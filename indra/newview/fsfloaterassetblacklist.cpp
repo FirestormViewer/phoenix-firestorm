@@ -241,8 +241,10 @@ void FSFloaterAssetBlacklist::onPlayBtn()
 		return;
 	}
 
+	onStopBtn();
+
 	mAudioSourceID = LLUUID::generateNewID();
-	gAudiop->triggerSound(item->getUUID(), gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI, LLVector3d::zero, LLUUID::null, mAudioSourceID);
+	gAudiop->triggerSound(item->getUUID(), gAgentID, 1.0f, LLAudioEngine::AUDIO_TYPE_UI, LLVector3d::zero, LLUUID::null, mAudioSourceID);
 
 	childSetVisible("stop_btn", true);
 	childSetVisible("play_btn", false);
