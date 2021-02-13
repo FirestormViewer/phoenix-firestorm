@@ -587,6 +587,28 @@ bool RlvActions::canShowLocation()
 }
 
 // ============================================================================
+// World (General)
+//
+
+bool RlvActions::canHighlightTransparent()
+{
+	// User cannot highlight transparent faces if:
+	//   - prevented from editing (exceptions are not taken into account)
+	//   - specifically prevented from highlight transparent faces
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_EDIT) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
+}
+
+bool RlvActions::canViewWireframe()
+{
+	// User can use wireframe rendering if:
+	//   - no HUD attachment is (remove) locked
+	//   - not specifically prevented from using wireframe mode
+	return
+		!gRlvAttachmentLocks.hasLockedHUD() &&					// Trivial function so no overhead when RLV is not enabled
+		!gRlvHandler.hasBehaviour(RLV_BHVR_VIEWWIREFRAME);
+}
+
+// ============================================================================
 // Helper functions
 //
 

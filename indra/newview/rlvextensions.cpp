@@ -17,6 +17,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llviewerwindow.h"
 #include "llvoavatarself.h"
 
 #include "rlvextensions.h"
@@ -34,6 +35,7 @@ RlvExtGetSet::RlvExtGetSet()
 	if (!m_DbgAllowed.size())	// m_DbgAllowed is static and should only be initialized once
 	{
 		m_DbgAllowed.insert(std::pair<std::string, S16>("AvatarSex", DBG_READ | DBG_WRITE | DBG_PSEUDO));
+		m_DbgAllowed.insert(std::pair<std::string, S16>("AspectRatio", DBG_READ | DBG_PSEUDO));
 		m_DbgAllowed.insert(std::pair<std::string, S16>("RenderResolutionDivisor", DBG_READ | DBG_WRITE));
 		m_DbgAllowed.insert(std::pair<std::string, S16>(RlvSettingNames::ForbidGiveToRlv, DBG_READ));
 		m_DbgAllowed.insert(std::pair<std::string, S16>(RlvSettingNames::NoSetEnv, DBG_READ));
@@ -195,6 +197,10 @@ std::string RlvExtGetSet::onGetPseudoDebug(const std::string& strSetting)
 			if (isAgentAvatarValid())
 				return llformat("%d", (gAgentAvatarp->getSex() == SEX_MALE)); // [See LLFloaterCustomize::LLFloaterCustomize()]
 		}
+	}
+	else if ("AspectRatio" == strSetting)
+	{
+		return llformat("%.3f", (float)gViewerWindow->getWorldViewWidthScaled() / gViewerWindow->getWorldViewHeightScaled());
 	}
 	return std::string();
 }

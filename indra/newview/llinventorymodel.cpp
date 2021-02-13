@@ -1061,7 +1061,13 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 		LLUUID new_parent_id = item->getParentUUID();
 		bool update_parent_on_server = false;
 
-		if (new_parent_id.isNull() && !LLApp::isExiting())
+//		if (new_parent_id.isNull() && !LLApp::isExiting())
+// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-6.4
+		// The problem seems to be the 'LogoutReply' message so don't reparent anything to the LNF folder
+		// as soon as we've sent out the log out request (since the quitting state is only set >after< we
+		// start processing the logout response)
+		if ( (new_parent_id.isNull()) && (!LLAppViewer::instance()->logoutRequestSent()) && (!LLApp::isExiting()) )
+// [/SL:KB]
 		{
             if (old_parent_id.isNull())
             {
