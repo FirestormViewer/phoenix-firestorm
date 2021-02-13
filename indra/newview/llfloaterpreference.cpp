@@ -5972,7 +5972,10 @@ void LLPanelPreferenceOpensim::onClickRefreshGrid()
 	std::string grid = mGridListControl->getSelectedValue();
 	getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
 	LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::refreshGridList, this, _1));
-	LLGridManager::getInstance()->reFetchGrid(grid);
+	// <FS:Beq> FIRE-13223 grid info refresh does not update properly when applied to currently active grid
+	// LLGridManager::getInstance()->reFetchGrid(grid);
+	LLGridManager::getInstance()->reFetchGrid(grid, (grid == LLGridManager::getInstance()->getGrid()) );
+	// </FS:Beq>
 }
 
 void LLPanelPreferenceOpensim::onClickRemoveGrid()
