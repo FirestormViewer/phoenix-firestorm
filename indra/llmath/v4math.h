@@ -475,9 +475,9 @@ inline bool operator<(const LLVector4& lhs, const LLVector4& rhs)
 		|| (lhs.mV[0] == rhs.mV[0]
 			&& (lhs.mV[1] < rhs.mV[1]
 				|| ((lhs.mV[1] == rhs.mV[1])
-					&& lhs.mV[2] < rhs.mV[2]
+					&& (lhs.mV[2] < rhs.mV[2]
 						|| ((lhs.mV[2] == rhs.mV[2])
-							&& lhs.mV[3] < rhs.mV[3])))));
+							&& (lhs.mV[3] < rhs.mV[3])))))));
 }
 // [/RLVa:KB]
 
