@@ -5484,17 +5484,4 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 	<notification name="WindlightBulkImportFinished">
 		Mehrfach-Import von Windlight abgeschlossen.
 	</notification>
-	<notification name="SendToChannelInIM">
-Es hat den Anschein als ob Sie einen Befehl an einen Chat-Kanal anstatt einer Instant Message senden möchten:
-
-[MESSAGE]
-
-Wie möchten Sie fortfahren?
-		<form name="form">
-			<button name="Channel" text="An Chat-Kanal senden"/>
-			<button name="IM" text="Als Instant Message senden"/>
-			<button name="Discard" text="Nachricht verwerfen"/>
-			<ignore name="ignore" text="Eine Nachricht sieht aus wie ein Chat-Kanal-Befehl, aber wurde als IM gesendet"/>
-		</form>
-	</notification>
 </notifications>
