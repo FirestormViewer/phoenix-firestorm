@@ -89,12 +89,6 @@ protected:
 //
 //
 
-enum class LLTweenType
-{
-	None,
-	Lerp,
-};
-
 template<typename T>
 class LLTweenableValue
 {
@@ -119,7 +113,6 @@ class LLTweenableValueLerp : public LLTweenableValue<T>
 {
 public:
 	LLTweenableValueLerp(const T& defaultValue) : LLTweenableValue(defaultValue) {}
-
 	T    get() override;
 	void start(const T& endValue, double duration) override
 	{
