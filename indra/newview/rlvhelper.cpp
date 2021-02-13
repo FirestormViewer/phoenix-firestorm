@@ -412,7 +412,7 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(ERlvBehaviour e
 {
 	const RlvBehaviourInfo* pBhvrInfo = nullptr;
 	for (auto itBhvrLower = m_Bhvr2InfoMap.lower_bound(eBhvr), itBhvrUpper = m_Bhvr2InfoMap.upper_bound(eBhvr);
-		 std::find_if(itBhvrLower, itBhvrUpper, [eBhvr, eParamType](const rlv_bhvr2info_map_t::value_type& bhvrEntry) { return bhvrEntry.second->getParamTypeMask() == eParamType; }) != itBhvrUpper;
+		 std::find_if(itBhvrLower, itBhvrUpper, [eParamType](const rlv_bhvr2info_map_t::value_type& bhvrEntry) { return bhvrEntry.second->getParamTypeMask() == eParamType; }) != itBhvrUpper;
 		++itBhvrLower)
 	{
 		if (pBhvrInfo)

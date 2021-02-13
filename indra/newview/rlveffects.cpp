@@ -433,6 +433,8 @@ void RlvSphereEffect::run(const LLVisualEffectParams* pParams)
 			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
 			renderPass(&gRlvSphereProgram, pShaderParams);
 			break;
+		default:
+			llassert(true);
 	}
 
 	gRlvSphereProgram.unbind();
