@@ -13624,34 +13624,4 @@ Firestorm Animation Overrider: [AO_MESSAGE]
     name="notifyignore"/>
   </notification>
 
-  <!-- <FS:Zi> FIRE-24133 - Redirect chat channel messages -->
-  <notification
-   icon="notify.tga"
-   name="SendToChannelInIM"
-   type="alertmodal">
-It looks like you want to send a command to a chat channel instead of an instant message:
-
-[MESSAGE]
-
-Please choose one of the options below to proceed:
-    <form name="form">
-      <button
-       index="0"
-       name="Channel"
-       text="Send to Channel"/>
-      <button
-       index="1"
-       name="IM"
-       text="Send to IM"/>
-      <button
-       index="2"
-       name="Discard"
-       text="Discard Message"/>
-      <ignore name="ignore"
-       text="A message looks like a chat channel command but was sent to an IM"
-       save_option="true" />
-    </form>
-  </notification>
-  <!-- </FS:Zi> FIRE-24133 - Redirect chat channel messages -->
-
 </notifications>

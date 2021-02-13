@@ -172,7 +172,6 @@ protected:
 	LLButton* mSysinfoButton;
 	// support sysinfo button -Zi
 
-	void onChatChannelTextSend(const LLSD& notification, const LLSD& response);	// <FS:Zi> FIRE-24133 - Redirect chat channel messages
 	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
 	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();

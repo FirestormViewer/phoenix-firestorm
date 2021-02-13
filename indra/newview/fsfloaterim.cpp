@@ -37,7 +37,6 @@
 #include "fsdata.h"
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
 #include "fsfloaternearbychat.h"
-#include "fsnearbychathub.h"	// <FS:Zi> FIRE-24133 - Redirect chat channel messages
 #include "fspanelimcontrolpanel.h"
 #include "llagent.h"
 #include "llappviewer.h"
@@ -77,8 +76,6 @@
 #include "llvoicechannel.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
-
-#include <boost/regex.hpp>	// <FS:Zi> FIRE-24133 - Redirect chat channel messages
 
 const F32 ME_TYPING_TIMEOUT = 4.0f;
 const F32 OTHER_TYPING_TIMEOUT = 9.0f;
@@ -355,32 +352,6 @@ void FSFloaterIM::onVisibilityChange(BOOL new_visibility)
 	}
 }
 
-// <FS:Zi> FIRE-24133 - Redirect chat channel messages
-void FSFloaterIM::onChatChannelTextSend(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if (option == 2) // Discard message
-	{
-		return;
-	}
-
-	LLSD payload = notification["payload"];
-	std::string text = payload["MESSAGE"];
-
-	if (option == 0) // Send to Channel
-	{
-		// always send the chat as CHAT_TYPE_NORMAL since we don't have any other information
-		FSNearbyChat::instance().sendChatFromViewer(text, CHAT_TYPE_NORMAL, false);
-	}
-	else if (option == 1) // Send to IM
-	{
-		// pass the message on to the IM unaltered
-		sendMsg(text);
-	}
-}
-// </FS:Zi> FIRE-24133 - Redirect chat channel messages
-
-
 void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 {
 	if (gAgent.isGodlike()
@@ -410,36 +381,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 
 				// Truncate and convert to UTF8 for transport
 				std::string utf8_text = wstring_to_utf8str(text);
-
-				// <FS:Zi> FIRE-24133 - Redirect chat channel messages
-				if (boost::regex_match(utf8_text.c_str(), boost::regex("/-{0,1}[0-9].*")))
-				{
-					// message starts with a / and a valid channel number, so ask the user if they really want
-					// to send this to an IM instead of a chat channel
-					std::string sample_text = utf8_text;
-					if (sample_text.size() > 30)
-					{
-						// shorten the sample text for the dialog
-						sample_text.resize(26);
-						sample_text += " ...";
-					}
-
-					LLSD args;
-					args["MESSAGE"] = sample_text;
-
-					LLSD payload;
-					payload["MESSAGE"] = utf8_text;
-
-					LLNotificationsUtil::add("SendToChannelInIM", args, payload, boost::bind(&FSFloaterIM::onChatChannelTextSend, this, _1, _2));
-
-					// clean out the text box and typing indicator, which we wouldn't reach otherwise
-					mInputEditor->setText(LLStringUtil::null);
-					setTyping(false);
-
-					return;
-				}
-				// </FS:Zi> FIRE-24133 - Redirect chat channel messages
-
+				
 				// Convert OOC and MU* style poses
 				utf8_text = FSCommon::applyAutoCloseOoc(utf8_text);
 				utf8_text = FSCommon::applyMuPose(utf8_text);
