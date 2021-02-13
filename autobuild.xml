@@ -964,11 +964,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>87c4984c2bddcdaf6ca403a06f22ce4e</string>
+              <string>4f9bf4566934e6e8611ef918186f20c5</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.07-darwin-210010951.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.08-darwin-210441530.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -978,11 +978,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d33d848660ca7e4c2de789e325706d24</string>
+              <string>c8024bad0445af488d355670ba13cc40</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.07-linux64-203630250.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.08-linux64-210441517.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

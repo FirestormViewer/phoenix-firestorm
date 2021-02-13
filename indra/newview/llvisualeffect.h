@@ -17,6 +17,8 @@
 #pragma once
 
 #include "llsingleton.h"
+#include <boost/optional.hpp>
+#include <boost/none.hpp>
 
 // ============================================================================
 // 
@@ -89,12 +91,6 @@ protected:
 //
 //
 
-enum class LLTweenType
-{
-	None,
-	Lerp,
-};
-
 template<typename T>
 class LLTweenableValue
 {
@@ -118,13 +114,12 @@ template<typename T>
 class LLTweenableValueLerp : public LLTweenableValue<T>
 {
 public:
-	LLTweenableValueLerp(const T& defaultValue) : LLTweenableValue(defaultValue) {}
-
+	LLTweenableValueLerp(const T& defaultValue) : LLTweenableValue<T>(defaultValue) {}
 	T    get() override;
 	void start(const T& endValue, double duration) override
 	{
 		m_StartValue = get();
-		m_CurValue = boost::none;
+		this->m_CurValue = boost::none;
 		m_EndValue = endValue;
 
 		m_StartTime = LLTimer::getElapsedSeconds();
