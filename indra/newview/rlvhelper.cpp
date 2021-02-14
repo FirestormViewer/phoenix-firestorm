@@ -451,7 +451,7 @@ ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& 
 	ERlvLocalBhvrModifier eBhvrModifier;
 	const RlvBehaviourInfo* pBhvrInfo = getBehaviourInfo(strBhvr, eParamType, pfStrict, &eBhvrModifier);
 	// Filter out locally scoped modifier commands since they don't actually have a unique behaviour value of their own
-	return (pBhvrInfo && ERlvLocalBhvrModifier::Unknown != eBhvrModifier) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
+	return (pBhvrInfo && ERlvLocalBhvrModifier::Unknown == eBhvrModifier) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
 }
 
 bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
