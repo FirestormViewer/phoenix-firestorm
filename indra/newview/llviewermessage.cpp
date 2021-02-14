@@ -6902,6 +6902,20 @@ bool callback_script_dialog(const LLSD& notification, const LLSD& response)
 		}
 	}
 
+// [RLVa:KB] - @sendchat and @sendchannel/sendchannelexcept
+	if ( (RlvActions::isRlvEnabled()) && (0 <= button_idx) )
+	{
+		const S32 nChannel = notification["payload"]["chat_channel"].asInteger();
+
+		// *TODO-RLVa: it's too late into the release cycle to block all script interactions so just take care of the nearby chat loophole for now
+		bool fBlock = (0 == nChannel) ? RlvActions::hasBehaviour(RLV_BHVR_SENDCHAT) : /*!RlvActions::canSendChannel(nChannel)*/false;
+		if (fBlock)
+		{
+			button_idx = -1;
+		}
+	}
+// [/RLVa:KB]
+
 	if (0 <= button_idx)
 	{
 		LLMessageSystem* msg = gMessageSystem;

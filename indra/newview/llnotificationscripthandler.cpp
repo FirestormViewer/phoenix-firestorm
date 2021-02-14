@@ -37,6 +37,10 @@
 #include "llscriptfloater.h"
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
+// [RLVa:KB] - @sendchat and @sendchannel/sendchannelexcept
+#include "rlvactions.h"
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 using namespace LLNotificationsUI;
 
@@ -112,6 +116,24 @@ bool LLScriptHandler::processNotification(const LLNotificationPtr& notification)
 
 	if(notification->hasFormElements() && !notification->canShowToast())
 	{
+// [RLVa:KB] - @sendchat and @sendchannel/sendchannelexcept
+		if (RlvActions::isRlvEnabled())
+		{
+			const LLSD& sdPayload = notification->getPayload();
+			if (sdPayload.has("chat_channel"))
+			{
+				const S32 nChannel = sdPayload["chat_channel"].asInteger();
+
+				// *TODO-RLVa: it's too late into the release cycle to block all script interactions so just take care of the nearby chat loophole for now
+				bool fBlock = (0 == nChannel) ? RlvActions::hasBehaviour(RLV_BHVR_SENDCHAT) : /*!RlvActions::canSendChannel(nChannel)*/false;
+				if (fBlock)
+				{
+					RlvUtil::notifyBlocked("blocked_scriptdialog");
+					return false;
+				}
+			}
+		}
+// [/RLVa:KB]
 		LLScriptFloaterManager::getInstance()->onAddNotification(notification->getID());
 	}
 	else if (notification->canShowToast())
