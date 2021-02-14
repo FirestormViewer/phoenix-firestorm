@@ -22,9 +22,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aa31ee4c6315cb26bf6e2191b69598f5</string>
+              <string>1f887cbafc0fe2af1e85783de0f14102</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/jemalloc-5.1.0-linux64-190582149.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jemalloc-5.2.1-linux64-210451204.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
