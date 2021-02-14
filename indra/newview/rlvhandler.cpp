@@ -2564,28 +2564,31 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& 
 	return eRet;
 }
 
-// Handles: @shownametags[:<uuid>]=n|y toggles
-template<> template<>
-void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMETAGS>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+// Handles: @shownametags[:<distance>] value changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SHOWNAMETAGSDIST>::onValueChange() const
 {
 	if (LLApp::isExiting())
 		return;	// Nothing to do if the viewer is shutting down
-
-	// Update the shownames context
-	RlvActions::setShowName(RlvActions::SNC_NAMETAG, !fHasBhvr);
 
 	// Refresh all name tags
 	LLVOAvatar::invalidateNameTags();
 }
 
-// Handles: @shownametags[:<uuid>]=n|y
+// Handles: @shownametags[:<distance|uuid>]=n|y
 template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
-	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) )
-		LLVOAvatar::invalidateNameTag(RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption()));
-	return eRet;
+	LLUUID idOption;
+	if ( (rlvCmd.hasOption()) && (RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), idOption)) )
+	{
+		ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(rlvCmd, fRefCount);
+		if (RLV_RET_SUCCESS == eRet)
+			LLVOAvatar::invalidateNameTag(idOption);
+		fRefCount = false;
+		return eRet;
+	}
+	return RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
 }
 
 // Handles: @shownearby=n|y toggles

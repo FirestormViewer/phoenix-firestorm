@@ -3088,7 +3088,7 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 	bool fRlvShowAvTag = true, fRlvShowAvName = true;
 	if (RlvActions::isRlvEnabled())
 	{
-		fRlvShowAvTag = RlvActions::canShowName(RlvActions::SNC_NAMETAG, getID());
+		fRlvShowAvTag = RlvActions::canShowNameTag(this);
 		fRlvShowAvName = (fRlvShowAvTag) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, getID()));
 	}
 // [/RLVa:KB]
