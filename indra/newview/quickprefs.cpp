@@ -1026,7 +1026,7 @@ void FloaterQuickPrefs::refreshSettings()
 	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	mCtrlReflectionDetail->setEnabled(reflections);
 
-	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETSPHERE)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
+	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) && !gRlvHandler.hasBehaviour(RLV_BHVR_SETSPHERE)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
 
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
