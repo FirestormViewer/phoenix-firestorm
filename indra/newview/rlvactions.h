@@ -27,6 +27,7 @@
 class LLInventoryCategory;
 class LLInventoryItem;
 class LLViewerObject;
+class LLVOAvatar;
 
 // ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
