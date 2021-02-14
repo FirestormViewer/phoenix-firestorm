@@ -737,8 +737,8 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 
 RlvCommand::RlvCommand(const RlvCommand& rlvCmd, ERlvParamType eParamType)
 	: m_fValid(rlvCmd.m_fValid), m_idObj(rlvCmd.m_idObj), m_strBehaviour(rlvCmd.m_strBehaviour), m_pBhvrInfo(rlvCmd.m_pBhvrInfo)
-	, m_eParamType( (RLV_TYPE_UNKNOWN == eParamType) ? rlvCmd.m_eParamType : eParamType),m_fStrict(rlvCmd.m_fStrict), m_strOption(rlvCmd.m_strOption)
-	, m_strParam(rlvCmd.m_strParam), m_fRefCounted(rlvCmd.m_fRefCounted)
+	, m_eParamType( (RLV_TYPE_UNKNOWN == eParamType) ? rlvCmd.m_eParamType : eParamType), m_eBhvrModifier(rlvCmd.m_eBhvrModifier)
+	, m_fStrict(rlvCmd.m_fStrict), m_strOption(rlvCmd.m_strOption), m_strParam(rlvCmd.m_strParam), m_fRefCounted(rlvCmd.m_fRefCounted)
 {
 }
 
