@@ -2064,6 +2064,10 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehavio
 template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
+	// *TODO: this needs to be done in a cleaner way but FS needs to release ASAP
+	if (RLV_TYPE_ADD == rlvCmd.getParamType() && gRlvHandler.m_Behaviours[RLV_BHVR_SETSPHERE] >= 6)
+		return RLV_RET_FAILED_LOCK;
+
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
 	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
 	{
