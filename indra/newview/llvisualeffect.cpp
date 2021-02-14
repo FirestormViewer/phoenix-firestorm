@@ -107,33 +107,33 @@ bool LLVfxManager::removeEffect(const LLUUID& idEffect)
 	return true;
 }
 
-void LLVfxManager::runEffect(EVisualEffect eCode, const LLVisualEffectParams* pParams)
+void LLVfxManager::runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams)
 {
 	// *TODO-Catz: once we're done, check whether iterating over the entire list still has negliable impact
 	auto pred = [eCode](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode; };
 
-	auto beginEffect = boost::make_filter_iterator(pred, m_Effects.begin(), m_Effects.end()),
+	auto itEffect = boost::make_filter_iterator(pred, m_Effects.begin(), m_Effects.end()),
 	     endEffect = boost::make_filter_iterator(pred, m_Effects.end(), m_Effects.end());
-
-	auto effectRange = boost::make_iterator_range(beginEffect, endEffect);
-	for (LLVisualEffect* pEffect : effectRange)
+	for (; itEffect != endEffect; ++itEffect)
 	{
-		pEffect->run(pParams);
+		if (pParams)
+			pParams->step(itEffect == endEffect);
+		(*itEffect)->run(pParams);
 	}
 }
 
-void LLVfxManager::runEffect(EVisualEffectType eType, const LLVisualEffectParams* pParams)
+void LLVfxManager::runEffect(EVisualEffectType eType, LLVisualEffectParams* pParams)
 {
 	// *TODO-Catz: once we're done, check whether iterating over the entire list still has negliable impact
 	auto pred = [eType](const LLVisualEffect* pEffect) { return pEffect->getType() == eType;  };
 
-	auto beginEffect = boost::make_filter_iterator(pred, m_Effects.begin(), m_Effects.end()),
-		endEffect = boost::make_filter_iterator(pred, m_Effects.end(), m_Effects.end());
-
-	auto effectRange = boost::make_iterator_range(beginEffect, endEffect);
-	for (LLVisualEffect* pEffect : effectRange)
+	auto itEffect = boost::make_filter_iterator(pred, m_Effects.begin(), m_Effects.end()),
+	     endEffect = boost::make_filter_iterator(pred, m_Effects.end(), m_Effects.end());
+	for (; itEffect != endEffect; ++itEffect)
 	{
-		pEffect->run(pParams);
+		if (pParams)
+			pParams->step(itEffect == endEffect);
+		(*itEffect)->run(pParams);
 	}
 }
 

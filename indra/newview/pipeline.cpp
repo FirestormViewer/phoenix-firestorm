@@ -8098,7 +8098,7 @@ void LLPipeline::renderFinalize()
 // [RLVa:KB] - @setsphere
 		if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
 		{
-			LLShaderEffectParams params(pRenderBuffer, (multisample) ? &mScreen : nullptr);
+			LLShaderEffectParams params(pRenderBuffer, &mScreen, !multisample);
 			LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere, &params);
 			pRenderBuffer = params.m_pDstBuffer;
 		}
@@ -8186,7 +8186,7 @@ void LLPipeline::renderFinalize()
 // [RLVa:KB] - @setsphere
 		if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
 		{
-			LLShaderEffectParams params(&mScreen, &mDeferredLight);
+			LLShaderEffectParams params(&mScreen, &mDeferredLight, false);
 			LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere, &params);
 			pRenderBuffer = params.m_pDstBuffer;
 		}
