@@ -48,14 +48,23 @@ enum class EVisualEffectType
 
 struct LLVisualEffectParams
 {
+	virtual void step(bool isLast) = 0;
 };
 
 struct LLShaderEffectParams : LLVisualEffectParams
 {
-	explicit LLShaderEffectParams(LLRenderTarget* pSrcBuffer, LLRenderTarget* pDstBuffer) : m_pSrcBuffer(pSrcBuffer), m_pDstBuffer(pDstBuffer) {}
+	explicit LLShaderEffectParams(LLRenderTarget* pSrcBuffer, LLRenderTarget* pScratchBuffer, bool fBindLast) : m_pSrcBuffer(pScratchBuffer), m_pDstBuffer(pSrcBuffer), m_fBindLast(fBindLast) {}
+
+	void step(bool isLast) override
+	{
+		LLRenderTarget* pPrevSrc = m_pSrcBuffer, *pPrevDst = m_pDstBuffer;
+		m_pSrcBuffer = pPrevDst;
+		m_pDstBuffer = (!isLast || !m_fBindLast) ? pPrevSrc : nullptr;
+	}
 
 	LLRenderTarget* m_pSrcBuffer = nullptr;
 	LLRenderTarget* m_pDstBuffer = nullptr;
+	bool            m_fBindLast = false;
 };
 
 // ============================================================================
@@ -156,8 +165,8 @@ public:
 	LLVisualEffect* getEffect(EVisualEffect eCode) const;
 	template<typename T> T* getEffect(EVisualEffect eCode) const { return dynamic_cast<T*>(getEffect(eCode)); }
 	bool            removeEffect(const LLUUID& idEffect);
-	void            runEffect(EVisualEffect eCode, const LLVisualEffectParams* pParams = nullptr);
-	void            runEffect(EVisualEffectType eType, const LLVisualEffectParams* pParams = nullptr);
+	void            runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams = nullptr);
+	void            runEffect(EVisualEffectType eType, LLVisualEffectParams* pParams = nullptr);
 protected:
 
 	/*

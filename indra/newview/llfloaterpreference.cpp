@@ -2275,7 +2275,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
 	// "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
-	ctrl_wind_light->setEnabled( (RlvActions::canChangeEnvironment()) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")));
+	ctrl_wind_light->setEnabled( ((RlvActions::canChangeEnvironment()) && (!RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")));
 // [/RLVa:KB]
 //    ctrl_wind_light->setEnabled(TRUE);
 

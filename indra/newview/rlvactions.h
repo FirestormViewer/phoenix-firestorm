@@ -28,6 +28,7 @@
 class LLInventoryCategory;
 class LLInventoryItem;
 class LLViewerObject;
+class LLVOAvatar;
 
 // ============================================================================
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
@@ -124,8 +125,9 @@ public:
 	 * (This is used to hide an avatar name in one case but not a near-identical case - such as teleporting a friend vs a nearby agent -
 	 *  in a way that limits the amount of code that needs to be changed to carry context from one function to another)
 	 */
-	enum EShowNamesContext { SNC_DEFAULT = 0, SNC_NAMETAG, SNC_TELEPORTOFFER, SNC_TELEPORTREQUEST, SNC_COUNT };
+	enum EShowNamesContext { SNC_DEFAULT = 0, SNC_TELEPORTOFFER, SNC_TELEPORTREQUEST, SNC_COUNT };
 	static bool canShowName(EShowNamesContext eContext, const LLUUID& idAgent = LLUUID::null);
+	static bool canShowNameTag(const LLVOAvatar* pAvatar);
 	static void setShowName(EShowNamesContext eContext, bool fCanShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fCanShowName; } }
 
 	/*

@@ -220,9 +220,6 @@ bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
 	{
 		switch (eContext)
 		{
-			// Show/hide avatar nametag
-			case SNC_NAMETAG:
-				return (gRlvHandler.isException(RLV_BHVR_SHOWNAMETAGS, idAgent)) || (gAgentID == idAgent);
 			// Show/hide avatar name
 			case SNC_DEFAULT:
 			case SNC_TELEPORTOFFER:
@@ -233,6 +230,19 @@ bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
 		}
 	}
 	return false;
+}
+
+bool RlvActions::canShowNameTag(const LLVOAvatar* pAvatar)
+{
+	// An avatar's name tag can be shown if:
+	//   - not restricted from seeing avatars' name tags
+	//   - OR the avatar is a @shownametags exception
+	//   - OR the avatar is within the distance that nametags can be shown
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMETAGS)) || (gRlvHandler.isException(RLV_BHVR_SHOWNAMETAGS, pAvatar->getID())) || (gAgentID == pAvatar->getID()) )
+		return true;
+
+	const F32 nShowNameTagsDist = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SHOWNAMETAGSDIST)->getValue<F32>();
+	return (nShowNameTagsDist != 0.f) && (dist_vec_squared(pAvatar->getPositionGlobal(), gAgent.getPositionGlobal()) < nShowNameTagsDist * nShowNameTagsDist);
 }
 
 bool RlvActions::canShowNearbyAgents()
