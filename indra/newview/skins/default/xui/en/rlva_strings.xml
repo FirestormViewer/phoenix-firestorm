@@ -136,6 +136,11 @@
 			<key>value</key>
 			<string>'[OBJECT]' was denied permission to teleport you due to RLV restrictions</string>
 		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>Unable to show script dialog or textbox due to RLV restrictions</string>
+		</map>
 		<key>blocked_startim</key>
 		<map>
 			<key>value</key>

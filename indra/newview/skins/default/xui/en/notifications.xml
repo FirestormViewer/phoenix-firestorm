@@ -13609,4 +13609,19 @@ Cannot create inventory item: [NAME]
    type="notifytip">
 Bulk import of Windlights has finished.
   </notification>
+
+  <notification
+   icon = "notifytip.tga"
+   name = "FSAOScriptedNotification"
+   type = "notifytip"
+   log_to_chat = "false">
+   <unique combine = "cancel_old">
+     <context>FSAOScriptedNotification</context>
+   </unique>
+Firestorm Animation Overrider: [AO_MESSAGE]
+   <usetemplate
+    ignoretext="Warn me when the Firestorm Animation Overrider gets accessed by a scripted object"
+    name="notifyignore"/>
+  </notification>
+
 </notifications>

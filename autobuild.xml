@@ -106,9 +106,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aa31ee4c6315cb26bf6e2191b69598f5</string>
+              <string>1f887cbafc0fe2af1e85783de0f14102</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/jemalloc-5.1.0-linux64-190582149.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jemalloc-5.2.1-linux64-210451204.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1048,11 +1048,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>87c4984c2bddcdaf6ca403a06f22ce4e</string>
+              <string>4f9bf4566934e6e8611ef918186f20c5</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.07-darwin-210010951.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.08-darwin-210441530.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1062,11 +1062,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d33d848660ca7e4c2de789e325706d24</string>
+              <string>c8024bad0445af488d355670ba13cc40</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.07-linux64-203630250.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.08-linux64-210441517.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1076,11 +1076,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9e9f303912776014519c18a0205250ee</string>
+              <string>c27de9c2f8c562551773a80399d6d037</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.07-windows-203561745.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.08-windows-210431451.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1090,18 +1090,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ae336fe814a6867f6449d0401ea7a9e4</string>
+              <string>29a66f79f7224cc17aa22d047853f7b0</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.07-windows64-203561747.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.08-windows64-210431454.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.07</string>
+        <string>2.01.08</string>
       </map>
       <key>fontconfig</key>
       <map>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <context_menu name="Url Popup">
 	<menu_item_call label="Pokaż szczegóły o grupie" name="show_group" />
+	<menu_item_call label="Pobieranie danych grupy, spróbuj ponownie!" name="waiting_for_group_data" />
+	<menu_item_call label="Aktywuj grupę" name="activate_group" />
+	<menu_item_call label="Dołącz do grupy" name="join_group" />
+	<menu_item_call label="Opuść grupę" name="leave_group" />
 	<menu_item_call label="Kopiuj grupę do schowka" name="url_copy_label" />
 	<menu_item_call label="Kopiuj SLurl do schowka" name="url_copy" />
 </context_menu>

@@ -1006,9 +1006,13 @@ void LLPreviewTexture::onAspectRatioCommit(LLUICtrl* ctrl, void* userdata)
 
 void LLPreviewTexture::loadAsset()
 {
-	mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-	mImageOldBoostLevel = mImage->getBoostLevel();
-	mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
+	// <FS:Beq> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+	// mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	// mImageOldBoostLevel = mImage->getBoostLevel();
+	// mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
+	mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_PREVIEW, LLViewerTexture::LOD_TEXTURE);
+	mImageOldBoostLevel = LLGLTexture::BOOST_NONE;
+	// </FS:Beq>
 	mImage->forceToSaveRawImage(0) ;
 	// <FS:Techwolf Lupindo> texture comment decoder
 	mImage->setLoadedCallback(LLPreviewTexture::onTextureLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
