@@ -146,7 +146,7 @@ void LLCoprocedureManager::initializePool(const std::string &poolName)
     {
         // Pools are not supposed to be initialized twice
         // Todo: ideally restrict init to STATE_FIRST
-        LL_ERRS() << "Pool is already present " << poolName << LL_ENDL;
+        //LL_ERRS() << "Pool is already present " << poolName << LL_ENDL;
         return;
     }
 
