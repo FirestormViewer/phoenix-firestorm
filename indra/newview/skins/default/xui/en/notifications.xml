@@ -4187,6 +4187,7 @@ Please download from https://secondlife.com/support/downloads/
    type="alertmodal">
 Version [VERSION] is required for login.
 Release notes: [URL]
+
 Click OK to download and install.
     <tag>confirm</tag>
     <usetemplate
@@ -4200,6 +4201,7 @@ Click OK to download and install.
    type="alertmodal">
 Version [VERSION] has been downloaded and is ready to install.
 Release notes: [URL]
+
 Click OK to install.
     <tag>confirm</tag>
     <usetemplate
@@ -4213,6 +4215,7 @@ Click OK to install.
    type="alertmodal">
 Version [VERSION] has been downloaded and is ready to install.
 Release notes: [URL]
+
 Proceed?
     <tag>confirm</tag>
     <usetemplate

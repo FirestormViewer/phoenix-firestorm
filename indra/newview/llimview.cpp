@@ -743,10 +743,6 @@ LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id, const std::string&
 	}
 
 	buildHistoryFileName();
-    if (isP2P()) // user's account name can change, but filenames are account name based
-    {
-        LLConversationLog::getInstance()->verifyFilename(mSessionID, mHistoryFileName);
-    }
 	loadHistory();
 
 	// Localizing name of ad-hoc session. STORM-153
@@ -1135,6 +1131,9 @@ void LLIMModel::LLIMSession::buildHistoryFileName()
 			}
 			// </FS:Ansariel> [Legacy IM logfile names]
 		}
+
+        // user's account name can change, but filenames and session names are account name based
+        LLConversationLog::getInstance()->verifyFilename(mSessionID, mHistoryFileName, av_name.getCompleteName());
 	}
 	else if (isGroupChat())
 	{
