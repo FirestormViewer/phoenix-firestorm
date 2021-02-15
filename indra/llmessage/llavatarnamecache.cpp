@@ -632,6 +632,13 @@ bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 // returns bool specifying  if av_name was filled, false otherwise
 bool LLAvatarNameCache::getName(const LLUUID& agent_id, LLAvatarName *av_name)
 {
+	// <FS:Beq> Avoid null entries entering NameCache
+	// This is a catch-all, better to avoid at call site
+	if( agent_id.isNull() )
+	{
+		return false;
+	}
+	// </FS:Beq>
 	if (mRunning)
 	{
 		// ...only do immediate lookups when cache is running

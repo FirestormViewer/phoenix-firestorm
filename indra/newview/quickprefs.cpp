@@ -616,7 +616,7 @@ BOOL FloaterQuickPrefs::postBuild()
 
 	if (gRlvHandler.isEnabled())
 	{
-		enableWindlightButtons(!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV));
+		enableWindlightButtons(!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) && !gRlvHandler.hasBehaviour(RLV_BHVR_SETSPHERE));
 	}
 
 	// <FS:Zi> Dynamic quick prefs
@@ -1026,7 +1026,7 @@ void FloaterQuickPrefs::refreshSettings()
 	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
 	mCtrlReflectionDetail->setEnabled(reflections);
 
-	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
+	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) && !gRlvHandler.hasBehaviour(RLV_BHVR_SETSPHERE)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
 
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
@@ -1170,7 +1170,7 @@ void FloaterQuickPrefs::refreshSettings()
 
 void FloaterQuickPrefs::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
 {
-	if (behavior == RLV_BHVR_SETENV)
+	if (behavior == RLV_BHVR_SETENV || behavior == RLV_BHVR_SETSPHERE)
 	{
 		enableWindlightButtons(type != RLV_TYPE_ADD);
 	}
