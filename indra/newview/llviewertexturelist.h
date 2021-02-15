@@ -34,6 +34,7 @@
 #include "llui.h"
 #include <list>
 #include <set>
+#include <deque>
 #include "lluiimage.h"
 
 const U32 LL_IMAGE_REZ_LOSSLESS_CUTOFF = 128;
@@ -147,6 +148,8 @@ public:
 	
 private:
 	void updateImagesDecodePriorities();
+	// <FS:Beq/> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+	void updateOneImageDecodePriority(LLPointer<LLViewerFetchedTexture> imagep);
 	F32  updateImagesCreateTextures(F32 max_time);
 	F32  updateImagesFetchTextures(F32 max_time);
 	void updateImagesUpdateStats();
@@ -219,7 +222,12 @@ public:
 
 	// <FS:Ansariel> Fast cache stats
 	static U32 sNumFastCacheReads;
-    
+	// <FS:Beq> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+	// Recalculate the image's Decode Priority.
+	// (We'll get to the image eventually even if this method isn't called, but this way it goes
+	// to the head(-ish) of the line.)
+	void recalcImageDecodePriority(LLPointer<LLViewerFetchedTexture> image);
+	// </FS:Beq>
 private:
     typedef std::map< LLTextureKey, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
     uuid_map_t mUUIDMap;
@@ -228,7 +236,11 @@ private:
 	
 	typedef std::set<LLPointer<LLViewerFetchedTexture>, LLViewerFetchedTexture::Compare> image_priority_list_t;	
 	image_priority_list_t mImageList;
-
+	// <FS:Beq> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+	// Images that should be handled first in updateImagesDecodePriorities()
+	image_list_t mImagesWithChangedPriorities;
+	// </FS:Beq>
+	
 	// simply holds on to LLViewerFetchedTexture references to stop them from being purged too soon
 	std::set<LLPointer<LLViewerFetchedTexture> > mImagePreloads;
 

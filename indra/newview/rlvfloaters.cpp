@@ -813,7 +813,7 @@ void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
 				strCmd.clear(); // Only show feedback on successful commands when there's an informational notice
 
 			if (!pstr->empty())
-				pstr->push_back(',');
+				pstr->append(", ");
 			pstr->append(strCmd);
 		}
 

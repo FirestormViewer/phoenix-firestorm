@@ -1244,10 +1244,10 @@ If you continue to receive this message, please contact Second Life support for 
 
   <!-- panel preferences general -->
   <string name="DoNotDisturbModeResponseDefault">This resident has turned on Unavailable mode and will see your message later.</string>
-  <string name="AutoResponseModeDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
-  <string name="AutoResponseModeNonFriendsDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
-  <string name="RejectTeleportOffersResponseDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all teleport offers and requests mode&apos; which means they have requested not to be disturbed with teleport offers and requests. You may still send an IM message manually.</string>
-  <string name="RejectFriendshipRequestsResponseDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all friendship requests mode&apos; which means they have requested not to be disturbed with friendship requests. You may still send an IM message manually.</string>
+  <string name="AutoResponseModeDefault">The Resident you messaged has activated [APP_NAME] viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+  <string name="AutoResponseModeNonFriendsDefault">The Resident you messaged has activated [APP_NAME] viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+  <string name="RejectTeleportOffersResponseDefault">The Resident you messaged has activated [APP_NAME] viewer&apos;s &apos;reject all teleport offers and requests mode&apos; which means they have requested not to be disturbed with teleport offers and requests. You may still send an IM message manually.</string>
+  <string name="RejectFriendshipRequestsResponseDefault">The Resident you messaged has activated [APP_NAME] viewer&apos;s &apos;reject all friendship requests mode&apos; which means they have requested not to be disturbed with friendship requests. You may still send an IM message manually.</string>
   <string name="MutedAvatarsResponseDefault">The Resident you messaged has blocked you from sending them any messages.</string>
   <string name="AwayAvatarResponseDefault">The Resident you messaged is currently away from keyboard. Your message will still be shown in their IM panel for later viewing.</string>
 
@@ -2989,19 +2989,19 @@ and report the problem.
   <string name="render_quality_ultra">Ultra (7/7)</string>
   <string name="render_quality_unknown">Unknown, beyond the normal range, check RenderQualityPerformance debug setting</string>
 
-  <string name="fsbridge_cant_create_disabled">Firestorm cannot create the LSL bridge if "Enable LSL-Client Bridge" is disabled in Preferences.</string>
-  <string name="fsbridge_no_library">Firestorm could not create an LSL bridge. Please enable your library and relog.</string>
+  <string name="fsbridge_cant_create_disabled">[APP_NAME] cannot create the LSL bridge if "Enable LSL-Client Bridge" is disabled in Preferences.</string>
+  <string name="fsbridge_no_library">[APP_NAME] could not create an LSL bridge. Please enable your library and relog.</string>
   <string name="fsbridge_already_creating">Bridge creation in process, cannot start another. Please wait a few minutes before trying again.</string>
   <string name="fsbridge_creating">Creating the bridge. This might take a moment, please wait.</string>
   <string name="fsbridge_failure_creation_create_script">Bridge not created. The bridge script could not be created.</string>
-  <string name="fsbridge_failure_creation_bad_name">Bridge not created. The bridge is named incorrectly. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_creation_null">Bridge not created. The bridge couldn't be found in inventory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_attach_wrong_object">Bridge failed to attach. This is not the current bridge version. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_attach_wrong_location">Bridge failed to attach. The bridge wasn't found in the right inventory location. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_attach_point_in_use">Bridge failed to attach. Something else was using the bridge attachment point. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_creation_bad_name">Bridge not created. The bridge is named incorrectly. Please use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_creation_null">Bridge not created. The bridge couldn't be found in inventory. Please use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_wrong_object">Bridge failed to attach. This is not the current bridge version. Please use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_wrong_location">Bridge failed to attach. The bridge wasn't found in the right inventory location. Please use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_point_in_use">Bridge failed to attach. Something else was using the bridge attachment point. Please use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
   <string name="fsbridge_failure_not_found">The bridge object could not be found. Cannot proceed with its creation, exiting.</string>
   <string name="fsbridge_warning_unexpected_items">The bridge inventory contains unexpected items.</string>
-  <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
+  <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
   <string name="fsbridge_detached">Bridge detached.</string>
   <string name="fsbridge_created">Bridge created.</string>
   <string name="fsbridge_script_info">Script info: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] running scripts, [OBJECT_SCRIPT_MEMORY] KB allowed memory size limit, [OBJECT_SCRIPT_TIME] ms of CPU time consumed.[PATHFINDING_TEXT]</string>
@@ -3030,8 +3030,16 @@ Your current position: [AVATAR_POS]
   </string>
   <string name="fsbridge_error_scriptinfonotfound">Script info: Object to check is invalid or out of range.</string>
   <string name="fsbridge_error_scriptinfomalformed">Script info: Received malformed response from bridge. Try again.</string>
-  <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>
-  <string name="fsbridge_error_wrongvm">NOTICE: Bridge script is using old LSO (16 KB memory limit) instead of new Mono (64 KB memory limit) virtual machine, which creates high probability of stack-heap collision and bridge failure by running out of memory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge. If you'll see this message again - please try again in a different region.</string>
+  <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your [APP_NAME] bridge! If you did not expect this message, use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>
+  <string name="fsbridge_error_wrongvm">NOTICE: Bridge script is using old LSO (16 KB memory limit) instead of new Mono (64 KB memory limit) virtual machine, which creates high probability of stack-heap collision and bridge failure by running out of memory. Please use the [APP_NAME] 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge. If you'll see this message again - please try again in a different region.</string>
+
+  <!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
+  <string name="FSAOEnabled">[APP_NAME] Animation Overrider enabled.</string>
+  <string name="FSAODisabled">[APP_NAME] Animation Overrider disabled.</string>
+  <string name="FSAOPausedScript">Paused by scripted attachment.</string>
+  <string name="FSAOResumedScript">Resumed by scripted attachment.</string>
+  <string name="FSAOStandsPausedScript">Standing animations paused by scripted attachment.</string>
+  <string name="FSAOStandsResumedScript">Standing animations resumed by scripted attachment.</string>
 
   <!-- <FS:Zi> Quick preferences default options -->
   <string name="QP Draw Distance">Draw Distance</string>
@@ -3191,7 +3199,7 @@ Your current position: [AVATAR_POS]
   <string name="font_fonts_noto.xml">Noto Sans</string>
   <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
   <string name="mode_unknown">Unknown Mode</string>
-  <string name="mode_settings_firestorm.xml">Firestorm</string>
+  <string name="mode_settings_firestorm.xml">[APP_NAME]</string>
   <string name="mode_settings_phoenix.xml">Phoenix</string>
   <string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
   <string name="mode_settings_hybrid.xml">Hybrid</string>
@@ -3209,4 +3217,9 @@ Your current position: [AVATAR_POS]
   <string name="FSAreaSearch_Cost_Label">L$[COST]</string>
 
   <string name="ImportingWindlightBulk">Importing Windlights...</string>
+
+  <!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+  <string name="FSObjectInventoryNoElements">No Elements</string>
+  <string name="FSObjectInventoryOneElement">1 Element</string>
+  <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
 </strings>

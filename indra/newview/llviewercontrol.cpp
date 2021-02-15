@@ -517,9 +517,21 @@ static bool handleRenderLocalLightsChanged(const LLSD& newvalue)
 	return true;
 }
 
+// [RLVa:KB] - @setsphere
+static bool handleWindLightAtmosShadersChanged(const LLSD& newvalue)
+{
+	LLRenderTarget::sUseFBO = newvalue.asBoolean() && LLPipeline::sUseDepthTexture;
+	handleSetShaderChanged(LLSD());
+	return true;
+}
+// [/RLVa:KB]
+
 static bool handleRenderDeferredChanged(const LLSD& newvalue)
 {
-	LLRenderTarget::sUseFBO = newvalue.asBoolean();
+//	LLRenderTarget::sUseFBO = newvalue.asBoolean();
+// [RLVa:KB] - @setsphere
+	LLRenderTarget::sUseFBO	= newvalue.asBoolean() || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
+// [/RLVa:KB]
 	if (gPipeline.isInit())
 	{
 		LLPipeline::refreshCachedSettings();
@@ -541,7 +553,10 @@ static bool handleRenderDeferredChanged(const LLSD& newvalue)
 //
 static bool handleRenderBumpChanged(const LLSD& newval)
 {
-	LLRenderTarget::sUseFBO = newval.asBoolean();
+//	LLRenderTarget::sUseFBO = newval.asBoolean();
+// [RLVa:KB] - @setsphere
+	LLRenderTarget::sUseFBO	= newval.asBoolean() || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
+// [/RLVa:KB]
 	if (gPipeline.isInit())
 	{
 		gPipeline.updateRenderBump();
@@ -1019,6 +1034,17 @@ void handleSmallCameraFloaterChanged(const LLSD& newValue)
 }
 // </FS:Ansariel>
 
+// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+void handleStatusbarTimeformatChanged(const LLSD& newValue)
+{
+	const std::string format = newValue.asString();
+	if (gStatusBar)
+	{
+		gStatusBar->onTimeFormatChanged(format);
+	}
+}
+// </FS:Zi>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1046,7 +1072,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderGlow")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderGlowResolutionPow")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
 	gSavedSettings.getControl("RenderAvatarCloth")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
+//	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
+// [RLVa:KB] - @setsphere
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleWindLightAtmosShadersChanged, _2));
+// [/RLVa:KB]
 	gSavedSettings.getControl("RenderGammaFull")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderVolumeLODFactor")->getSignal()->connect(boost::bind(&handleVolumeLODChanged, _2));
 	gSavedSettings.getControl("RenderAvatarLODFactor")->getSignal()->connect(boost::bind(&handleAvatarLODChanged, _2));
@@ -1264,6 +1293,9 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Optional small camera floater
 	gSavedSettings.getControl("FSUseSmallCameraFloater")->getSignal()->connect(boost::bind(&handleSmallCameraFloaterChanged, _2));
+
+	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+	gSavedSettings.getControl("FSStatusBarTimeFormat")->getSignal()->connect(boost::bind(&handleStatusbarTimeformatChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

@@ -140,6 +140,7 @@ LLScrollListCtrl::Params::Params()
 	selection_type("selection_type", ROW),
 	sort_column("sort_column", -1),
 	sort_ascending("sort_ascending", true),
+	sort_lazily("sort_lazily", false),					// <FS:Beq> FIRE-30732 deferred sort as a UI property
 	can_sort("can_sort", true),
 	persist_sort_order("persist_sort_order", false),	// <FS:Ansariel> Persists sort order of scroll lists
 	primary_sort_only("primary_sort_only", false),		// <FS:Ansariel> Option to only sort by one column
@@ -197,6 +198,7 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mTotalStaticColumnWidth(0),
 	mTotalColumnPadding(0),
 	mSorted(false),
+	mSortLazily(p.sort_lazily),		// <FS:Beq> FIRE-30732 deferred sort configurability
 	mDirty(false),
 	mOriginalSelection(-1),
 	mLastSelected(NULL),
@@ -2138,6 +2140,20 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			enable_registrar.add("FS.EnableViewLog", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_VIEW_TRANSCRIPT));
 			// </FS:Ansariel>
 
+			// <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu
+			std::string uuid_str = uuid.asString();
+
+			registrar.add("FS.JoinGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupjoin", true));
+			registrar.add("FS.LeaveGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupleave", true));
+			registrar.add("FS.ActivateGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupactivate", true));
+
+			enable_registrar.add("FS.WaitingForGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
+			enable_registrar.add("FS.HaveGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_HAVE_GROUP_DATA));
+			enable_registrar.add("FS.EnableJoinGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_CAN_JOIN_GROUP));
+			enable_registrar.add("FS.EnableLeaveGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_CAN_LEAVE_GROUP));
+			enable_registrar.add("FS.EnableActivateGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_GROUP_NOT_ACTIVE));
+			// </FS:Zi>
+
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
 			delete mPopupMenu;
@@ -3068,7 +3084,9 @@ void LLScrollListCtrl::updateSort() const
 	// if (hasSortOrder() && !isSorted())
 	// {
 	static LLUICachedControl<U32> sortDeferFrameCount("FSSortDeferalFrames");
-	if ( hasSortOrder() && !isSorted() && ( mLastUpdateFrame > 1 && ( LLFrameTimer::getFrameCount() - mLastUpdateFrame ) >= sortDeferFrameCount ) )
+	if ( hasSortOrder() && !isSorted() &&
+		( !mSortLazily || // if deferred sorting is off OR the deferral period has been exceeded
+		( mLastUpdateFrame > 1 && ( LLFrameTimer::getFrameCount() - mLastUpdateFrame ) >= sortDeferFrameCount ) ) )
 	// encoding two (unlikely) special values into mLastUpdateFrame 1 means we've sorted and 0 means we've nothing new to do.
 	// 0 is set after sorting, 1 can be set by a parent for any post sorting action.
 	{

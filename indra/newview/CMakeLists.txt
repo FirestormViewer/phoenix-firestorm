@@ -808,6 +808,7 @@ set(viewer_SOURCE_FILES
     llviewerwearable.cpp
     llviewerwindow.cpp
     llviewerwindowlistener.cpp
+	llvisualeffect.cpp
     llvlcomposition.cpp
     llvlmanager.cpp
     llvoavatar.cpp
@@ -853,14 +854,14 @@ set(viewer_SOURCE_FILES
     quickprefs.cpp
     rlvactions.cpp
     rlvenvironment.cpp
-    rlvhandler.cpp
-    rlvhelper.cpp
     rlvcommon.cpp
-    rlvlocks.cpp
-    rlvinventory.cpp
+    rlveffects.cpp
     rlvextensions.cpp
     rlvfloaters.cpp
-    rlvmodifiers.cpp
+    rlvhandler.cpp
+    rlvhelper.cpp
+    rlvinventory.cpp
+    rlvlocks.cpp
     rlvui.cpp
     sanitycheck.cpp
     streamtitledisplay.cpp
@@ -1571,6 +1572,7 @@ set(viewer_HEADER_FILES
     llviewerwearable.h
     llviewerwindow.h
     llviewerwindowlistener.h
+	llvisualeffect.h
     llvlcomposition.h
     llvlmanager.h
     llvoavatar.h
@@ -1613,15 +1615,16 @@ set(viewer_HEADER_FILES
     pieslice.h
     pipeline.h
     rlvactions.h
-    rlvenvironment.h
-    rlvdefines.h
-    rlvhandler.h
-    rlvhelper.h
     rlvcommon.h
-    rlvlocks.h
-    rlvinventory.h
+    rlvdefines.h
+    rlveffects.h
+    rlvenvironment.h
     rlvextensions.h
     rlvfloaters.h
+    rlvhandler.h
+    rlvhelper.h
+    rlvinventory.h
+    rlvlocks.h
     rlvmodifiers.h
     rlvui.h
     roles_constants.h

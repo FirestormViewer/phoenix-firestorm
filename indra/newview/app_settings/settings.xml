@@ -353,7 +353,7 @@
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>2</integer>
+    <integer>5</integer>
   </map>
   <key>FSGroupNotifyNoTransparency</key>
   <map>
@@ -25611,6 +25611,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSStatusBarTimeFormat</key>
+    <map>
+      <key>Comment</key>
+      <string>Which time format to use for the status bar clock, e.g. 12 Hours, 24 Hours, etc. The default "Language" restores the original behavior of changing the time display mode per language.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Language</string>
     </map>
   </map>
 </llsd>
