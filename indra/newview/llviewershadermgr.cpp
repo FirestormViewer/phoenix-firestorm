@@ -4162,11 +4162,10 @@ BOOL LLViewerShaderMgr::loadShadersWindLight()
 		gRlvSphereProgram.mName = "RLVa Sphere Post Processing Shader";
 		gRlvSphereProgram.mShaderFiles.clear();
 		gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvV.glsl", GL_VERTEX_SHADER_ARB));
-#ifndef LL_DARWIN
-		gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER_ARB));
-#else
-		gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvFMac.glsl", GL_FRAGMENT_SHADER_ARB));
-#endif
+ 		if (gGLManager.mGLVersion >= 4.5f)
+			gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvF.glsl", GL_FRAGMENT_SHADER_ARB));
+		else
+			gRlvSphereProgram.mShaderFiles.push_back(make_pair("deferred/rlvFLegacy.glsl", GL_FRAGMENT_SHADER_ARB));
 		gRlvSphereProgram.mShaderLevel = mShaderLevel[SHADER_WINDLIGHT];
 		success = gRlvSphereProgram.createShader(NULL, NULL);
 	}
