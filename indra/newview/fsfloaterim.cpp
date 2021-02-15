@@ -37,6 +37,7 @@
 #include "fsdata.h"
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
 #include "fsfloaternearbychat.h"
+#include "fsnearbychathub.h"	// <FS:Zi> FIRE-24133 - Redirect chat channel messages
 #include "fspanelimcontrolpanel.h"
 #include "llagent.h"
 #include "llappviewer.h"
@@ -76,6 +77,8 @@
 #include "llvoicechannel.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
+
+#include <boost/regex.hpp>	// <FS:Zi> FIRE-24133 - Redirect chat channel messages
 
 const F32 ME_TYPING_TIMEOUT = 4.0f;
 const F32 OTHER_TYPING_TIMEOUT = 9.0f;
@@ -381,7 +384,20 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 
 				// Truncate and convert to UTF8 for transport
 				std::string utf8_text = wstring_to_utf8str(text);
-				
+
+				// <FS:Zi> FIRE-24133 - Redirect chat channel messages
+				if (boost::regex_match(utf8_text.c_str(), boost::regex("/-{0,1}[0-9].*")))
+				{
+					// message starts with a / and a valid channel number, so redirect it to a chat channel
+					FSNearbyChat::instance().sendChatFromViewer(text, CHAT_TYPE_NORMAL, false);
+
+					// clean out the text box and typing indicator, which we wouldn't reach otherwise
+					mInputEditor->setText(LLStringUtil::null);
+					setTyping(false);
+
+					return;
+				}
+
 				// Convert OOC and MU* style poses
 				utf8_text = FSCommon::applyAutoCloseOoc(utf8_text);
 				utf8_text = FSCommon::applyMuPose(utf8_text);

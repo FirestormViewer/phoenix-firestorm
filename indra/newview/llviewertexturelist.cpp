@@ -1017,7 +1017,7 @@ void LLViewerTextureList::updateOneImageDecodePriority(LLPointer<LLViewerFetched
 {
 	const F32 lazy_flush_timeout = 30.f; // stop decoding
 	const F32 max_inactive_time = 20.f; // actually delete
-	const S32 min_refs = 3; // 1 for mImageList, 1 for mUUIDMap, 1 for local reference
+	const S32 min_refs = 4; // 1 for mImageList, 1 for mUUIDMap, 2 for local references
 
 	bool reset_timer = gViewerWindow->getProgressView()->getVisible();
 

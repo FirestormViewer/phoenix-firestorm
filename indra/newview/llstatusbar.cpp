@@ -519,8 +519,48 @@ BOOL LLStatusBar::postBuild()
 		updateVolumeControlsVisibility(LLSD(FALSE));
 	}
 	// </FS:PP>
+
+	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+	mClockFormatChoices["12 Hour"] = "[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt]";
+	mClockFormatChoices["12 Hour Seconds"] = "[hour12, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [ampm, datetime, slt]";
+	mClockFormatChoices["12 Hour TZ"] = "[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]";
+	mClockFormatChoices["12 Hour TZ Seconds"] = "[hour12, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]";
+	mClockFormatChoices["24 Hour"] = "[hour24, datetime, slt]:[min, datetime, slt]";
+	mClockFormatChoices["24 Hour Seconds"] = "[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt]";
+	mClockFormatChoices["24 Hour TZ"] = "[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]";
+	mClockFormatChoices["24 Hour TZ Seconds"] = "[hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]";
+
+	// use the time format defined in the language's panel_status_bar.xml (default)
+	mClockFormatChoices["Language"] = getString("time");
+
+	mClockFormat = gSavedSettings.getString("FSStatusBarTimeFormat");
+	// </FS:Zi>
+
 	return TRUE;
 }
+
+// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+void LLStatusBar::updateClockDisplay()
+{
+	// Get current UTC time, adjusted for the user's clock
+	// being off.
+	time_t utc_time;
+	utc_time = time_corrected();
+
+	std::string timeStr = mClockFormatChoices[mClockFormat];
+	LLSD substitution;
+	substitution["datetime"] = (S32) utc_time;
+	LLStringUtil::format (timeStr, substitution);
+	mTextTime->setText(timeStr);
+
+	// <FS:Ansariel> Add seconds to clock
+	static const std::string tooltip_template = getString("timeTooltip");
+	std::string dtStr = tooltip_template;
+	// </FS:Ansariel>
+	LLStringUtil::format (dtStr, substitution);
+	mTextTime->setToolTip (dtStr);
+}
+// </FS:Zi>
 
 // Per-frame updates of visibility
 void LLStatusBar::refresh()
@@ -562,29 +602,25 @@ void LLStatusBar::refresh()
 	{
 		mClockUpdateTimer.reset();
 
-		// Get current UTC time, adjusted for the user's clock
-		// being off.
-		time_t utc_time;
-		utc_time = time_corrected();
+		// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+		// // Get current UTC time, adjusted for the user's clock
+		// // being off.
+		// time_t utc_time;
+		// utc_time = time_corrected();
 
-		// <FS:Ansariel> Add seconds to clock
-		//std::string timeStr = getString("time");
-		static const std::string time_template = getString("time");
-		std::string timeStr = time_template;
-		// </FS:Ansariel>
-		LLSD substitution;
-		substitution["datetime"] = (S32) utc_time;
-		LLStringUtil::format (timeStr, substitution);
-		mTextTime->setText(timeStr);
+		// std::string timeStr = getString("time");
+		// LLSD substitution;
+		// substitution["datetime"] = (S32) utc_time;
+		// LLStringUtil::format (timeStr, substitution);
+		// mTextTime->setText(timeStr);
 
-		// set the tooltip to have the date
-		// <FS:Ansariel> Add seconds to clock
-		//std::string dtStr = getString("timeTooltip");
-		static const std::string tooltip_template = getString("timeTooltip");
-		std::string dtStr = tooltip_template;
-		// </FS:Ansariel>
-		LLStringUtil::format (dtStr, substitution);
-		mTextTime->setToolTip (dtStr);
+		// // set the tooltip to have the date
+		// std::string dtStr = getString("timeTooltip");
+		// LLStringUtil::format (dtStr, substitution);
+		// mTextTime->setToolTip (dtStr);
+
+		updateClockDisplay();
+		// </FS:Zi>
 	}
 
 	// <FS:Zi> Pathfinding rebake functions
@@ -1716,6 +1752,14 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 		mMouseEnterNearbyMediaConnection = mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
 	}
 }
+
+// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+void LLStatusBar::onTimeFormatChanged(const std::string& format)
+{
+	mClockFormat = format;
+	updateClockDisplay();
+}
+// </FS:Zi>
 
 // Implements secondlife:///app/balance/request to request a L$ balance
 // update via UDP message system. JC

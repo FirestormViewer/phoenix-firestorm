@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.26"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.27"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -459,7 +459,10 @@ default
             {
                 gUseMoveLock = llList2Integer(commandList, 1);
                 movelockMe(gUseMoveLock);
-                llOwnerSay("<bridgeMovelock state=" + (string)gUseMoveLock + ">");
+                if (llList2String(commandList, 2) != "noreport")
+                {
+                    llOwnerSay("<bridgeMovelock state=" + (string)gUseMoveLock + ">");
+                }
             }
 
             else if (cmd == "llMoveToTarget")
