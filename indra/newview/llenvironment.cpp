@@ -1899,8 +1899,11 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
         }
         else
         {
-            setEnvironment(ENV_REGION, envinfo->mDayCycle, envinfo->mDayLength, envinfo->mDayOffset, envinfo->mEnvVersion);
             mTrackAltitudes = envinfo->mAltitudes;
+            // update track selection based on new altitudes
+            mCurrentTrack = calculateSkyTrackForAltitude(gAgent.getPositionAgent().mV[VZ]);
+
+            setEnvironment(ENV_REGION, envinfo->mDayCycle, envinfo->mDayLength, envinfo->mDayOffset, envinfo->mEnvVersion);
         }
 
         LL_DEBUGS("ENVIRONMENT") << "Altitudes set to {" << mTrackAltitudes[0] << ", "<< mTrackAltitudes[1] << ", " << mTrackAltitudes[2] << ", " << mTrackAltitudes[3] << LL_ENDL;
@@ -2524,6 +2527,15 @@ void LLEnvironment::onAgentPositionHasChanged(const LLVector3 &localpos)
         return;
 
     mCurrentTrack = trackno;
+
+    LLViewerRegion* cur_region = gAgent.getRegion();
+    if (!cur_region || !cur_region->capabilitiesReceived())
+    {
+        // Environment not ready, environment will be updated later, don't cause 'blend' yet.
+        // But keep mCurrentTrack updated in case we won't get new altitudes for some reason
+        return;
+    }
+
     for (S32 env = ENV_LOCAL; env < ENV_DEFAULT; ++env)
     {
         if (mEnvironments[env])
