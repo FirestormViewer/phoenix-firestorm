@@ -136,6 +136,11 @@
 			<key>value</key>
 			<string>'[OBJECT]' было отказано в разрешении телепортировать вас из-за ограничений RLV</string>
 		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно отобразить диалоговое окно или текстовое поле скрипта из-за ограничений RLV</string>
+		</map>
 		<key>blocked_startim</key>
 		<map>
 			<key>value</key>
