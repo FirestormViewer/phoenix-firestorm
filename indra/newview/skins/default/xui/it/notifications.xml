@@ -31,7 +31,7 @@ Dettagli errore: La notifica denominata &apos;[_NAME]&apos; non è stata trovata
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Si"/>
 	</notification>
 	<notification name="BadInstallation">
-		Il programma [APP_NAME] ha riscontrato un&apos;errore durante il tentativo di aggiornamento.  [http://get.secondlife.com Scarica l&apos;ultima versione] del viewer.
+		Il programma [APP_NAME] ha riscontrato un&apos;errore durante il tentativo di aggiornamento.  [https://www.firestormviewer.org/downloads Scarica l&apos;ultima versione] del viewer.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Non è possibile collegarsi alla [SECOND_LIFE_GRID].

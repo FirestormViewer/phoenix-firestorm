@@ -709,12 +709,42 @@ const std::string& LLTaskCategoryBridge::getDisplayName() const
 
 	if (cat)
 	{
-		// <FS:Ansariel> Make object root folder name localizable again
+		// <FS:Zi> FIRE-24142 - Show number of elements in object inventory
 		//mDisplayName.assign(cat->getName());
 		if (cat->getParentUUID().isNull() && cat->getName() == "Contents")
 		{
-			mDisplayName.assign(LLTrans::getString("Contents"));
+			LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+			if (object)
+			{
+				LLInventoryObject::object_list_t contents;
+
+				object->getInventoryContents(contents);
+				S32 numElements = contents.size();
+
+				std::string elementsString = "FSObjectInventoryNoElements";
+				if (numElements == 1)
+				{
+					elementsString = "FSObjectInventoryOneElement";
+				}
+				else
+				{
+					elementsString = "FSObjectInventoryElements";
+				}
+
+				LLSD args;
+				args["NUM_ELEMENTS"] = numElements;
+				mDisplayName.assign(llformat("%s (%s)",
+					LLTrans::getString("Contents").c_str(),
+					LLTrans::getString(elementsString, args).c_str()));
+			}
+			// fallback in case something goes wrong with finding the inventory object
+			else
+			{
+				// <FS:Ansariel> Make object root folder name localizable again
+				mDisplayName.assign(LLTrans::getString("Contents"));
+			}
 		}
+		// </FS:Zi>
 		else
 		{
 			mDisplayName.assign(cat->getName());

@@ -79,7 +79,8 @@
 
 #include "llenvironment.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
+#include "llvisualeffect.h"
+#include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llpresetsmanager.h"
@@ -1426,9 +1427,9 @@ void render_ui(F32 zoom_factor, int subfield)
     LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
     render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
-		if (gRlvHandler.isEnabled())
+		if (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY))
 		{
-			gRlvHandler.renderOverlay();
+			LLVfxManager::instance().runEffect(EVisualEffect::RlvOverlay);
 		}
 // [/RLVa:KB]
 	render_hud_attachments();

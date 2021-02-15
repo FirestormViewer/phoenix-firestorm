@@ -33,6 +33,8 @@
 		<columns name="permanent" label="Постоянно"/>
 	</fs_scroll_list>
 	<button name="remove_btn" label="Удалить из черного списка" width="190"/>
-	<button name="remove_temp_btn" label="Удалить не постоянные" width="190" />
+	<button name="remove_temp_btn" label="Удалить не постоянные" width="170" />
+	<button name="play_btn" label="Проиграть звук" tool_tip="Воспроизвести выбранный звук; для воспроизведения можно выбрать только одну звуковую запись." width="120"/>
+	<button name="stop_btn" label="Остановить звук" tool_tip="Остановить воспроизведение текущего звука." width="120"/>
 	<button name="close_btn" label="Закрыть"/>
 </floater>

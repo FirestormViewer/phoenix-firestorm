@@ -2049,7 +2049,11 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 
 	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr( h_wnd, GWLP_USERDATA );
 
-	bool debug_window_proc = gDebugWindowProc || debugLoggingEnabled("Window");
+	//<FS:Beq> avoid unfortunate sleep during trylock by static check
+	// bool debug_window_proc = gDebugWindowProc || debugLoggingEnabled("Window");
+	static auto debug_logging_on = debugLoggingEnabled("Window");
+	bool debug_window_proc = gDebugWindowProc || debug_logging_on;
+	//</FS:Beq>	
 
 
 	if (NULL != window_imp)

@@ -617,6 +617,9 @@ public:
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	static bool				sRenderTextures;
 // [/SL:KB]
+// [RLVa:KB] - @setsphere
+	static bool				sUseDepthTexture;
+// [/RLVa:KB]
 
 	static LLTrace::EventStatHandle<S64> sStatBatchSize;
 

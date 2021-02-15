@@ -83,6 +83,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <tuple> // <FS:Beq/> FIRE-30694 DeadObject Spamming cleanup
 #include "fsassetblacklist.h"
 #include "fsfloaterimport.h"
 #include "fscommon.h"
@@ -1410,15 +1411,30 @@ void LLViewerObjectList::clearDebugText()
 
 void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 {
-	bool new_dead_object = true;
+	// <FS:Beq> FIRE-30694 DeadObject Spam - handle new_dead_object properly and closer to source
+	// bool new_dead_object = true;
 	if (mDeadObjects.find(objectp->mID) != mDeadObjects.end())
 	{
 		LL_INFOS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
-		new_dead_object = false;
+	// <FS:Beq> FIRE-30694 DeadObject Spam
+	// 	new_dead_object = false;
 	}
 	else
 	{
-		mDeadObjects.insert(objectp->mID);
+	// <FS:Beq> FIRE-30694 DeadObject Spam
+	// 	mDeadObjects.insert(objectp->mID);
+	 	bool success;
+		std::tie( std::ignore, success ) = mDeadObjects.insert( objectp->mID );
+		if( success )
+		{
+			mNumDeadObjects++;
+			llassert( mNumDeadObjects == mDeadObjects.size() );
+		}
+		else
+		{
+			LL_WARNS() << "Object " << objectp->mID << " failed to insert on dead list!" << LL_ENDL;	
+		}
+	// </FS:Beq>
 	}
 
 	// Cleanup any references we have to this object
@@ -1454,10 +1470,11 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 	// Also, not cleaned up
 	removeDrawable(objectp->mDrawable);
 
-	if(new_dead_object)
-	{
-		mNumDeadObjects++;
-	}
+	// <FS:Beq> FIRE-30694 DeadObject Spam
+	// if(new_dead_object)
+	// {
+	// 	mNumDeadObjects++;
+	// }
 }
 
 static LLTrace::BlockTimerStatHandle FTM_REMOVE_DRAWABLE("Remove Drawable");
@@ -1589,12 +1606,17 @@ void LLViewerObjectList::killAllObjects()
 
 void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 {
+	// <FS:Beq/> FIRE-30694 DeadObject Spam
+	llassert( mNumDeadObjects == mDeadObjects.size() );
+	
 	if (!mNumDeadObjects)
 	{
 		// No dead objects, don't need to scan object list.
 		return;
 	}
 
+	// <FS:Beq/> FIRE-30694 DeadObject Spam
+	S32 num_divergent = 0;
 	S32 num_removed = 0;
 	LLViewerObject *objectp;
 
@@ -1617,7 +1639,13 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 
 		if (objectp->isDead())
 		{
-			mDeadObjects.erase(objectp->mID); // <FS:Ansariel> Use timer for cleaning up dead objects
+			// <FS:Beq> FIRE-30694 DeadObject Spam
+			// mDeadObjects.erase(objectp->mID); // <FS:Ansariel> Use timer for cleaning up dead objects
+			if(mDeadObjects.erase(objectp->mID)==0)
+			{
+				LL_WARNS() << "Attempt to delete object " << objectp->mID << " but object not in dead list" << LL_ENDL;
+				num_divergent++; // this is the number we are adrift in the count
+			}
 			LLPointer<LLViewerObject>::swap(*iter, *target);
 			*target = NULL;
 			++target;
@@ -1651,9 +1679,10 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 	mObjects.erase(mObjects.begin()+(mObjects.size()-num_removed), mObjects.end());
 	mNumDeadObjects -= num_removed;
 
-	if (mNumDeadObjects != mDeadObjects.size())
+	// TODO(Beq) If this still happens, we ought to realign at this point. Do a full sweep and reset.
+	if ( mNumDeadObjects != mDeadObjects.size() )
 	{
-		LL_WARNS() << "Num dead objects != dead object list size" << LL_ENDL;
+		LL_WARNS() << "Num dead objects (" << mNumDeadObjects << ") != dead object list size (" << mDeadObjects.size() << "),  deadlist discrepancy (" << num_divergent << ")" << LL_ENDL;
 	}
 	// </FS:Ansariel>
 }
