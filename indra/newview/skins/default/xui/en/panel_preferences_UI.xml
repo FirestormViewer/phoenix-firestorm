@@ -721,6 +721,63 @@
 		 name="FSStatusBarMenuButtonPopupOnRollover"
 		 width="270"
 		 control_name="FSStatusBarMenuButtonPopupOnRollover"/>
+		<text
+		 type="string"
+		 follows="left|top"
+		 height="16"
+		 layout="topleft"
+		 name="statusbar_timeformat_textbox"
+		 left="13"
+		 top_pad="8"
+		 width="75">
+		 Time format:
+		</text>
+		<combo_box
+		 control_name="FSStatusBarTimeFormat"
+		 height="23"
+		 layout="topleft"
+		 left_pad="10"
+		 top_delta="-4"
+		 name="FSStatusBarTimeFormat"
+		 tool_tip="Selects the time format used on main menu bar."
+		 width="250">
+			<combo_box.item
+			 label="Language default"
+			 name="Language"
+			 value="Language"/>
+			<combo_box.item
+			 label="12 Hour"
+			 name="12_Hour"
+			 value="12 Hour"/>
+			<combo_box.item
+			 label="12 Hour incl. Seconds"
+			 name="12_Hour_Seconds"
+			 value="12 Hour Seconds"/>
+			<combo_box.item
+			 label="12 Hour incl. Timezone"
+			 name="12_Hour_TZ"
+			 value="12 Hour TZ"/>
+			<combo_box.item
+			 label="12 Hour incl. Seconds &amp; Timezone"
+			 name="12_Hour_TZ_Seconds"
+			 value="12 Hour TZ Seconds"/>
+			<combo_box.item
+			 label="24 Hour"
+			 name="24_Hour"
+			 value="24 Hour"/>
+			<combo_box.item
+			 label="24 Hour incl. Seconds"
+			 name="24_Hour_Seconds"
+			 value="24 Hour Seconds"/>
+			<combo_box.item
+			 label="24 Hour incl. Timezone"
+			 name="24_Hour_TZ"
+			 value="12 Hour TZ"/>
+			<combo_box.item
+			 label="24 Hour incl. Seconds &amp; Timezone"
+			 name="24_Hour_TZ_Seconds"
+			 value="24 Hour TZ Seconds"/>
+		</combo_box>
 
 		<text
 		type="string"
@@ -762,7 +819,6 @@
 		 width="270"
 		 left="20"
 		 control_name="ShowSearchTopBar"/>
-
     </panel>
 
     <!--Interface Windows-->

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Joystick" title="Конфигурация джойстика">
-	<floater.string name="NoDevice">
-		устройство не выбрано
+	<floater.string name="JoystickDisabled">
+		никто
 	</floater.string>
-	<check_box label="Вкл. джойстик:" name="enable_joystick"/>
-	<spinner label="Наложение по X" name="JoystickAxis1"/>
-	<spinner label="Наложение по Y" name="JoystickAxis2"/>
-	<spinner label="Наложение по Z" name="JoystickAxis0"/>
-	<spinner label="Н. уклонов" name="JoystickAxis4"/>
-	<spinner label="Н. сгибов" name="JoystickAxis5"/>
-	<spinner label="Н. вращения" name="JoystickAxis3"/>
-	<spinner label="Н. масштабир." name="JoystickAxis6"/>
+	<spinner label="Ось X" name="JoystickAxis1"/>
+	<spinner label="Ось Y" name="JoystickAxis2"/>
+	<spinner label="Ось Z" name="JoystickAxis0"/>
+	<spinner label="Наклон" name="JoystickAxis4"/>
+	<spinner label="Рыскание" name="JoystickAxis5"/>
+	<spinner label="Вращение" name="JoystickAxis3"/>
+	<spinner label="Масштаб" name="JoystickAxis6"/>
 	<check_box label="Масштабирование" name="ZoomDirect"/>
 	<check_box label="3D курсор" name="Cursor3D"/>
 	<check_box label="Автоуровень" name="AutoLeveling"/>
@@ -38,10 +37,10 @@
 		Масштаб по Z
 	</text>
 	<text name="PitchScale">
-		Масштаб уклона
+		Масштаб наклона
 	</text>
 	<text name="YawScale">
-		Масштаб сгиба
+		Масштаб рыскания
 	</text>
 	<text name="RollScale">
 		Масштаб вращения
@@ -56,10 +55,10 @@
 		Невидимая зона по Z
 	</text>
 	<text name="PitchDeadZone">
-		Невид. зона уклона
+		Невид. зона наклона
 	</text>
 	<text name="YawDeadZone">
-		Невид. зона сгиба
+		Невид. зона рыскания
 	</text>
 	<text name="RollDeadZone">
 		Невид. зона вращения

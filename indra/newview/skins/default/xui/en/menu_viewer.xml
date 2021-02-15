@@ -353,6 +353,9 @@
             <menu_item_call.on_click
 			function="Floater.Show"
 			parameter="fs_posestand" />
+			<menu_item_call.on_enable
+				function="Agent.IsActionAllowed"
+				parameter="fs_when_not_sitting" />
         </menu_item_call>
 
         <menu_item_separator/>

@@ -1178,7 +1178,8 @@
        label="Overrides"
        layout="topleft"
        name="rigging_panel"
-       title="Rigging">
+       title="Rigging"
+       help_topic="upload_model_rigging">
         <view_border
          bevel_style="none"
          follows="top|left"
@@ -1331,7 +1332,8 @@
       <panel
        label="Log"
        layout="topleft"
-       name="logs_panel">
+       name="logs_panel"
+       help_topic="upload_model_log">
         <view_border
          bevel_style="none"
          follows="top|left"
@@ -1376,7 +1378,8 @@
       <panel
        label="Preview Settings"
        layout="topleft"
-       name="mesh_preview_settings_panel">
+       name="mesh_preview_settings_panel"
+       help_topic="upload_model_settings">
         <view_border
          bevel_style="none"
          follows="top|left"

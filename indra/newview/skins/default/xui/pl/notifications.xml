@@ -31,7 +31,7 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>
 	</notification>
 	<notification name="BadInstallation">
-		Podczas aktualizacji [APP_NAME] wystąpił błąd. Proszę [http://get.secondlife.com odwiedzić stronę] aby ściągnąć ostatnią wersję klienta.
+		Instalacja [APP_NAME] jest uszkodzona. Proszę [https://www.firestormviewer.org/downloads pobrać nową kopię] przeglądarki i ponownie ją zainstalować.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Nie można połączyć z [SECOND_LIFE_GRID].
@@ -3832,6 +3832,9 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 	<global name="UnsupportedRAM">
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.
 	</global>
+	<global name="LLLeapUpdaterFailure">
+		Nie udało się uruchomić usługi aktualizatora [UPDATER_APP]. Sprawdź, czy przeglądarka jest poprawnie zainstalowana i czy ma niezbędne uprawnienia do uruchomienia. Jeśli nadal będziesz mieć problemy, odwiedź [SUPPORT_SITE].
+	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		Jeśli jesteś właścicielem działki, to możesz ustawić na niej miejsce startu.
 W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infohub&quot;.
@@ -5107,5 +5110,9 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 	</notification>
 	<notification name="WindlightBulkImportFinished">
 		Zakończył się zbiorowy import Windlightów.
+	</notification>
+	<notification name="FSAOScriptedNotification">
+		Animator Firestorma: [AO_MESSAGE]
+		<usetemplate ignoretext="Ostrzegaj mnie, gdy Animator Firestorma jest proszony o dostęp przez oskryptowany obiekt" name="notifyignore" />
 	</notification>
 </notifications>
