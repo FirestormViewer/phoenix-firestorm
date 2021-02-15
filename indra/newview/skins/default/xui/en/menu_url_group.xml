@@ -11,6 +11,58 @@
     </menu_item_call>
     <menu_item_separator
      layout="topleft" />
+
+    <!-- <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu -->
+    <!-- menu entry to call internal request for group data - this will make sure the
+         rest of the functions can actually do something once the data is loaded -->
+    <menu_item_call
+     label="Fetching Group Data, please try again!"
+     layout="topleft"
+     enabled="false"
+     name="waiting_for_group_data">
+        <menu_item_call.on_visible
+         function="FS.WaitingForGroupData" />
+    </menu_item_call>
+    <menu_item_call
+     label="Activate Group"
+     layout="topleft"
+     visible="false"
+     name="activate_group">
+        <menu_item_call.on_click
+         function="FS.ActivateGroup" />
+        <menu_item_call.on_visible
+         function="FS.HaveGroupData" />
+        <menu_item_call.on_enable
+         function="FS.EnableActivateGroup" />
+    </menu_item_call>
+    <menu_item_call
+     label="Join Group"
+     layout="topleft"
+     visible="false"
+     name="join_group">
+        <menu_item_call.on_click
+         function="FS.JoinGroup" />
+        <menu_item_call.on_visible
+         function="FS.HaveGroupData" />
+        <menu_item_call.on_enable
+         function="FS.EnableJoinGroup" />
+    </menu_item_call>
+    <menu_item_call
+     label="Leave Group"
+     layout="topleft"
+     visible="false"
+     name="leave_group">
+        <menu_item_call.on_click
+         function="FS.LeaveGroup" />
+        <menu_item_call.on_visible
+         function="FS.HaveGroupData" />
+        <menu_item_call.on_enable
+         function="FS.EnableLeaveGroup" />
+    </menu_item_call>
+    <menu_item_separator
+     layout="topleft" />
+    <!-- </FS:Zi> -->
+
     <menu_item_call
      label="Copy Group to clipboard"
      layout="topleft"

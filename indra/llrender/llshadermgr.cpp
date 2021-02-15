@@ -1355,6 +1355,14 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("sunAngle2");
 	
 	mReservedUniforms.push_back("camPosLocal");
+// [RLVa:KB] - @setsphere
+	mReservedUniforms.push_back("rlvEffectMode");
+	mReservedUniforms.push_back("rlvEffectParam1");
+	mReservedUniforms.push_back("rlvEffectParam2");
+	mReservedUniforms.push_back("rlvEffectParam3");
+	mReservedUniforms.push_back("rlvEffectParam4");
+	mReservedUniforms.push_back("rlvEffectParam5");
+// [/RLV:KB]
 
 	mReservedUniforms.push_back("gWindDir");
 	mReservedUniforms.push_back("gSinWaveParams");
