@@ -82,7 +82,7 @@
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] 更新時出錯。  請 [http://get.secondlife.com 下載] 最新版本的 Viewer。
+		[APP_NAME] 更新時出錯。  請 [https://www.firestormviewer.org/downloads 下載] 最新版本的 Viewer。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">

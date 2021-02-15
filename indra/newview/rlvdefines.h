@@ -26,19 +26,19 @@
 
 // Version of the specifcation we report
 const S32 RLV_VERSION_MAJOR = 3;
-const S32 RLV_VERSION_MINOR = 3;
+const S32 RLV_VERSION_MINOR = 4;
 const S32 RLV_VERSION_PATCH = 3;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Version of the specifcation we report (in compatibility mode)
 const S32 RLV_VERSION_MAJOR_COMPAT = 2;
-const S32 RLV_VERSION_MINOR_COMPAT = 8;
-const S32 RLV_VERSION_PATCH_COMPAT = 0;
+const S32 RLV_VERSION_MINOR_COMPAT = 9;
+const S32 RLV_VERSION_PATCH_COMPAT = 28;
 const S32 RLV_VERSION_BUILD_COMPAT = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
-const S32 RLVa_VERSION_MINOR = 3;
+const S32 RLVa_VERSION_MINOR = 4;
 const S32 RLVa_VERSION_PATCH = 0;
 const S32 RLVa_IMPL_ID = 13;
 
@@ -157,6 +157,8 @@ enum ERlvBehaviour {
 	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_VIEWTRANSPARENT,
+	RLV_BHVR_VIEWWIREFRAME,
 	RLV_BHVR_PAY,					// "pay"
 	RLV_BHVR_REZ,					// "rez"
 	RLV_BHVR_FARTOUCH,				// "fartouch"
@@ -243,12 +245,9 @@ enum ERlvBehaviour {
 	// Camera (force)
 	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
-	// Overlay
+	// Effects
+	RLV_BHVR_SETSPHERE,				// Gives an object exclusive control of the 'vision spheres' effect
 	RLV_BHVR_SETOVERLAY,			// Gives an object exclusive control of the overlay
-	RLV_BHVR_SETOVERLAY_ALPHA,		// Changes the overlay texture's transparency level
-	RLV_BHVR_SETOVERLAY_TEXTURE,	// Changes the overlay texture
-	RLV_BHVR_SETOVERLAY_TINT,		// Changes the tint that's applied to the overlay texture
-	RLV_BHVR_SETOVERLAY_TOUCH,		// Block world interaction (=touching) based on the alpha channel of the overlay texture
 	RLV_BHVR_SETOVERLAY_TWEEN,		// Animate between the current overlay settings and the supplied values
 
 	RLV_BHVR_COUNT,
@@ -258,10 +257,6 @@ enum ERlvBehaviour {
 enum ERlvBehaviourModifier
 {
 	RLV_MODIFIER_FARTOUCHDIST,			// Radius of a sphere around the user in which they can interact with the world
-	RLV_MODIFIER_OVERLAY_ALPHA,			// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
-	RLV_MODIFIER_OVERLAY_TEXTURE,		// Specifies the UUID of the overlay texture
-	RLV_MODIFIER_OVERLAY_TINT,			// The tint that's applied to the overlay texture
-	RLV_MODIFIER_OVERLAY_TOUCH,			// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
 	RLV_MODIFIER_RECVIMDISTMIN,			// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_RECVIMDISTMAX,			// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
 	RLV_MODIFIER_SENDIMDISTMIN,			// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
@@ -279,11 +274,34 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SETCAM_FOVMIN,			// Minimum value for the camera's field of view (angle in radians)
 	RLV_MODIFIER_SETCAM_FOVMAX,			// Maximum value for the camera's field of view (angle in radians)
 	RLV_MODIFIER_SETCAM_TEXTURE,		// Specifies the UUID of the texture used to texture the world view
+	RLV_MODIFIER_SHOWNAMETAGSDIST,		// Distance at which name tags will still be shown
 	RLV_MODIFIER_SITTPDIST,
 	RLV_MODIFIER_TPLOCALDIST,
 
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN
+};
+
+enum class ERlvLocalBhvrModifier
+{
+	// @setoverlay
+	OverlayAlpha,						// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
+	OverlayTexture,						// Specifies the UUID of the overlay texture
+	OverlayTint,						// The tint that's applied to the overlay texture
+	OverlayTouch,						// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
+	// @setsphere
+	SphereMode,                         // The type of effect that will apply to any pixel that intersects with the sphere (e.g. blend, blur, ...)
+	SphereOrigin,                       // The origin of the sphere can either be the avatar or the camera position
+	SphereColor,                        // [Blend only] Colour to mix with the actual pixel colour (stored as params)
+	SphereParams,                       // Effect parameters (dependent on mode - see RlvSphereEffect)
+	SphereDistMin,                      // Distance at which the effect starts and has weight minValue; e.g. for blend this would be colour = mix(colour, sphere_colour, min_alpha)
+	SphereDistMax,                      // Distance at which the effect starts and has weight maxValue; e.g. for blend this would be colour = mix(colour, sphere_colour, max_alpha)
+	SphereDistExtend,                   // Specifies the value beyond min dist or max dist (by default the sphere extends beyond max distance at max vlaue)
+	SphereValueMin,                     // Value of the effect at minimum distance
+	SphereValueMax,                     // Value of the effect at maximum distance
+	SphereTween,                        // Amount of seconds it takes to lerp from value A to value B
+
+	Unknown,
 };
 
 enum ERlvBehaviourOptionType
@@ -323,6 +341,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
 	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
 	RLV_RET_FAILED_NOBEHAVIOUR,		// Command failed (force modifier on an object with no active restrictions)
+	RLV_RET_FAILED_UNHELDBEHAVIOUR,	// Command failed (local modifier on an object that doesn't hold the base behaviour)
 	RLV_RET_FAILED_BLOCKED,			// Command failed (object is blocked)
 	RLV_RET_FAILED_THROTTLED,       // Command failed (throttled)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)

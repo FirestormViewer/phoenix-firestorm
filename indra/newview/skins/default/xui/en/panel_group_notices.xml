@@ -46,6 +46,7 @@ Maximum 200 per group daily
      draw_heading="true"
      sort_column="4"
      sort_ascending="false"
+     sort_lazily="true"
      follows="left|top|right"
      layout="topleft">
         <scroll_list.columns

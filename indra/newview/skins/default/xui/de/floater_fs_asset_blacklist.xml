@@ -34,5 +34,7 @@
 	</fs_scroll_list>
 	<button name="remove_btn" label="Ausgewählte Objekte entfernen" width="210"/>
 	<button name="remove_temp_btn" label="Alle Temporären entfernen" width="180"/>
+	<button name="play_btn" label="Sound abspielen" tool_tip="Spielt den selektierten Sound; nur ein einzelner Eintrag kann zur Wiedergabe ausgewählt werden." width="120"/>
+	<button name="stop_btn" label="Sound stoppen" tool_tip="Stoppt die Wiedergabe des aktuell abgespielten Sounds." width="120"/>
 	<button name="close_btn" label="Schließen"/>
 </floater>

@@ -60,7 +60,7 @@ namespace
 // LLWindowMacOSX
 //
 
-BOOL LLWindowMacOSX::sUseMultGL = FALSE;
+BOOL LLWindowMacOSX::sUseMultGL = TRUE;
 
 // Cross-platform bits:
 

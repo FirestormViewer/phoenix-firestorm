@@ -345,6 +345,14 @@ bool LLAgent::isActionAllowed(const LLSD& sdname)
 			retval = false;
 		}
 	}
+	else if (param == "fs_when_not_sitting")
+	{
+		if (!gAgentAvatarp)
+		{
+			return false;
+		}
+		return !gAgentAvatarp->isSitting();
+	}
 
 	return retval;
 }

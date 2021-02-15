@@ -91,12 +91,12 @@ void LFSimFeatureHandler::setSupportedFeatures()
 		region->getSimulatorFeatures(info);
 		if (!LLGridManager::getInstance()->isInSecondLife() && info.has("OpenSimExtras")) // OpenSim specific sim features
 		{
-			LL_INFOS() << "Setting OpenSimExtras..." << LL_ENDL;
+			LL_INFOS("SimFeatures") << "Setting OpenSimExtras..." << LL_ENDL;
 
 			// For definition of OpenSimExtras please see
 			// http://opensimulator.org/wiki/SimulatorFeatures_Extras
 			const LLSD& extras(info["OpenSimExtras"]);
-			LL_DEBUGS() << "OpenSimExtras received: " << extras << LL_ENDL;
+			LL_DEBUGS("SimFeatures") << "OpenSimExtras received: " << extras << LL_ENDL;
 
 			mSupportsExport = extras.has("ExportSupported") ? extras["ExportSupported"].asBoolean() : false;
 			mMapServerURL = extras.has("map-server-url") ? extras["map-server-url"].asString() : gSavedSettings.getString("CurrentMapServerURL");
@@ -115,7 +115,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 					// Note: we do not attempt to clear trailing port numbers or / or even directories.
 					mHyperGridPrefix = mHyperGridPrefix.substr(pos+3,mHyperGridPrefix.size()-(pos+3));
 				}
-				LL_DEBUGS() << "Setting HyperGrid URL to \"GridURL\" [" << mHyperGridPrefix << "]" << LL_ENDL;
+				LL_DEBUGS("SimFeatures") << "Setting HyperGrid URL to \"GridURL\" [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
 #ifdef OPENSIM
 			else if (LLGridManager::instance().getGatekeeper() != std::string{})
@@ -124,14 +124,14 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				// worst case this is checking the login grid and will simply be the same as the fallback
 				// If the GridURL is not available then we will try to use the Gatekeeper which is expected to be present.
 				mHyperGridPrefix = LLGridManager::instance().getGatekeeper();
-				LL_DEBUGS() << "Setting HyperGrid URL to \"Gatekeeper\" [" << mHyperGridPrefix << "]" << LL_ENDL;
+				LL_DEBUGS("SimFeatures") << "Setting HyperGrid URL to \"Gatekeeper\" [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
 #endif
 			else
 			{
 				// Just in case that fails we will default back to the current grid
-				mHyperGridPrefix = LLGridManager::instance().getGridId();
-				LL_DEBUGS() << "Setting HyperGrid URL to fallback of current grid (target grid is misconfigured) [" << mHyperGridPrefix << "]" << LL_ENDL;
+				mHyperGridPrefix = LLGridManager::instance().getGrid();
+				LL_DEBUGS("SimFeatures") << "Setting HyperGrid URL to fallback of current grid (target grid is misconfigured) [" << mHyperGridPrefix << "]" << LL_ENDL;
 			}
 
 			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&

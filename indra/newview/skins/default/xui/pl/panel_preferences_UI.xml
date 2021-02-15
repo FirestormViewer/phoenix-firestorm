@@ -98,6 +98,20 @@
         <check_box label="Pokaż wyszukiwarkę pozycji w menu" name="show_search_menu_check" />
         <check_box label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar" />
         <check_box label="Włącz autorozwijanie menusów przy wskazywaniu ikon na pasku" name="FSStatusBarMenuButtonPopupOnRollover" />
+        <text name="statusbar_timeformat_textbox">
+            Format czasu:
+        </text>
+        <combo_box name="FSStatusBarTimeFormat" tool_tip="Wybierz format czasu używany na pasku głównego menu.">
+            <combo_box.item label="Domyślny języka" name="Language" />
+            <combo_box.item label="12-godzinny" name="12_Hour" />
+            <combo_box.item label="12-godzinny z sekundami" name="12_Hour_Seconds" />
+            <combo_box.item label="12-godzinny ze strefą czasową" name="12_Hour_TZ" />
+            <combo_box.item label="12-godzinny ze strefą czasową i sekundami" name="12_Hour_TZ_Seconds" />
+            <combo_box.item label="24-godzinny" name="24_Hour" />
+            <combo_box.item label="24-godzinny z sekundami" name="24_Hour_Seconds" />
+            <combo_box.item label="24-godzinny ze strefą czasową" name="24_Hour_TZ" />
+            <combo_box.item label="24-godzinny ze strefą czasową i sekundami" name="24_Hour_TZ_Seconds" />
+        </combo_box>
         <text name="navfav_textbox">
             Paski nawigacji i ulubionych:
         </text>

@@ -640,7 +640,11 @@ void send_viewer_stats(bool include_preferences)
 
 
 	LL_INFOS("LogViewerStatsPacket") << "Sending viewer statistics: " << body << LL_ENDL;
-	if (debugLoggingEnabled("LogViewerStatsPacket"))
+	//<FS:Beq> avoid unfortunate sleep during trylock by static check
+	// if (debugLoggingEnabled("LogViewerStatsPacket"))
+	static auto debug_logging_on = debugLoggingEnabled("LogViewerStatsPacket");
+	if (debug_logging_on)
+	//</FS:Beq>	
 	{
 		std::string filename("viewer_stats_packet.xml");
 		llofstream of(filename.c_str());

@@ -173,11 +173,11 @@ protected:
 		}
 
 		// Enable/disable some menu items depending on the selection.
+		bool show_touch = !bp_selected && !clothes_selected && attachments_selected;
+		bool show_edit = bp_selected || clothes_selected || attachments_selected;
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		bool rlv_blocked = (mUUIDs.size() == rlv_locked_count);
 // [/RLVa:KB]
-		bool show_touch = !bp_selected && !clothes_selected && attachments_selected;
-		bool show_edit = bp_selected || clothes_selected || attachments_selected;
 		bool allow_detach = !bp_selected && !clothes_selected && attachments_selected;
 		bool allow_take_off = !bp_selected && clothes_selected && !attachments_selected;
 
@@ -187,7 +187,7 @@ protected:
 		menu->setItemEnabled("edit_item",          1 == mUUIDs.size() && get_is_item_editable(mUUIDs.front()));
 		menu->setItemVisible("take_off",	allow_take_off);
 		menu->setItemVisible("detach",		allow_detach);
-		menu->setItemVisible("edit_outfit_separator", show_touch | show_edit | allow_take_off || allow_detach);
+		menu->setItemVisible("edit_outfit_separator", show_touch || show_edit || allow_take_off || allow_detach);
 		menu->setItemVisible("show_original", mUUIDs.size() == 1);
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
 		menu->setItemVisible("take_off_or_detach", (!allow_detach) && (!allow_take_off) && (clothes_selected) && (attachments_selected));

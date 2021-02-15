@@ -31,6 +31,7 @@
 #include "llavataractions.h"
 #include "llcommandhandler.h"
 #include "llfloatersettingsdebug.h"
+#include "llgroupactions.h"
 #include "lllogchat.h"
 #include "llnotificationsutil.h"
 
@@ -132,6 +133,24 @@ public:
 			{
 				LLAvatarActions::viewChatHistory(target_id);
 			}
+			return true;
+		}
+
+		if (verb == "groupjoin")
+		{
+			LLGroupActions::join(LLUUID(target_id));
+			return true;
+		}
+
+		if (verb == "groupleave")
+		{
+			LLGroupActions::leave(LLUUID(target_id));
+			return true;
+		}
+
+		if (verb == "groupactivate")
+		{
+			LLGroupActions::activate(LLUUID(target_id));
 			return true;
 		}
 

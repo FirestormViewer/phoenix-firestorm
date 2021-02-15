@@ -35,7 +35,7 @@
 
 class FSScrollListCtrl;
 
-class FSFloaterAssetBlacklist : public LLFloater
+class FSFloaterAssetBlacklist : public LLFloater, public LLEventTimer
 {
 	LOG_CLASS(FSFloaterAssetBlacklist);
 
@@ -47,6 +47,8 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
+	/*virtual*/ BOOL tick();
+	/*virtual*/ void closeFloater(bool app_quitting = false);
 
 	void addElementToList(const LLUUID& id, const LLSD& data);
 	void removeElements();
@@ -54,12 +56,17 @@ public:
 protected:
 	void onRemoveBtn();
 	void onRemoveAllTemporaryBtn();
+	void onPlayBtn();
+	void onStopBtn();
 	void onCloseBtn();
 	void onFilterEdit(const std::string& search_string);
 	void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);
+	void onSelectionChanged();
 
 	void buildBlacklist();
 	std::string getTypeString(S32 type);
+
+	LLUUID mAudioSourceID;
 
 private:
 	FSScrollListCtrl*	mResultList;

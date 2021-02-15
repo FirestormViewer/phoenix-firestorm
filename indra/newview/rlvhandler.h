@@ -23,13 +23,9 @@
 #include "rlvcommon.h"
 #include "rlvhelper.h"
 
- // ============================================================================
- // Forward declarations
- //
-
-class LLViewerFetchedTexture;
-
 // ============================================================================
+// RlvHandler class
+//
 
 class RlvHandler : public LLOldEvents::LLSimpleListener, public LLParticularGroupObserver
 {
@@ -56,6 +52,8 @@ public:
 public:
 	// Returns a list of all objects containing the specified behaviour
 	bool findBehaviour(ERlvBehaviour eBhvr, std::list<const RlvObject*>& lObjects) const;
+	// Returns a pointer to an RLV object instance (DO NOT STORE THIS!)
+	RlvObject* getObject(const LLUUID& idRlvObj) const;
 	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
 	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
 	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
@@ -123,9 +121,7 @@ public:
 
 	// Command specific helper functions
 	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
-	bool hitTestOverlay(const LLCoordGL& ptMouse) const;                                        // @setoverlay
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
-	void renderOverlay();																		// @setoverlay
 
 	// Command processing helper functions
 	ERlvCmdRet processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj);
@@ -144,11 +140,9 @@ public:
 protected:
 	// Command specific helper functions (NOTE: these generally do not perform safety checks)
 	bool checkActiveGroupThrottle(const LLUUID& idRlvObj);                                      // @setgroup=force
-	void clearOverlayImage();                                                                   // @setoverlay=n
 	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
 	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
 	void setCameraOverride(bool fOverride);                                                     // @setcam family
-	void setOverlayImage(const LLUUID& idTexture);                                              // @setoverlay=n
 
 	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
 
@@ -275,8 +269,6 @@ protected:
 	mutable LLUUID                          m_idAgentGroup;					// @setgroup=n
 	std::pair<LLUUID, std::string>          m_PendingGroupChange;			// @setgroup=force
 	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
-	LLPointer<LLViewerFetchedTexture>       m_pOverlayImage = nullptr;		// @setoverlay=n
-	int                                     m_nOverlayOrigBoost = 0;		// @setoverlay=n
 
 	std::string                             m_strCameraPresetRestore;       // @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 
@@ -311,6 +303,12 @@ inline RlvHandler& RlvHandler::instance()
 inline RlvHandler* RlvHandler::getInstance()
 {
 	return &gRlvHandler;
+}
+
+inline RlvObject* RlvHandler::getObject(const LLUUID& idRlvObj) const
+{
+	auto itObj = m_Objects.find(idRlvObj);
+	return (m_Objects.end() != itObj) ? const_cast<RlvObject*>(&itObj->second) : nullptr;
 }
 
 inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const

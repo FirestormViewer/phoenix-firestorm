@@ -3177,6 +3177,14 @@ void LLIMMgr::addMessage(
 			LL_WARNS() << "Failed to create IM session " << fixed_session_name << LL_ENDL;
 		}
 	}
+	// <FS:Zi> FIRE-30424 - Incoming Group message sound plays for muted posters
+	else if(LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !from_linden)
+	{
+		// if this message was from a muted resident, there is no point in playing any sounds or
+		// doing anything else in this function, so return right here
+		return;
+	}
+	// </FS:Zi>
 	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");

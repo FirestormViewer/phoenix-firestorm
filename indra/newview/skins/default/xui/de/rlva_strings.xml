@@ -81,6 +81,11 @@
 			<key>value</key>
 			<string>"[OBJECT]" wurde aufgrund von RLV-Einschränkungen verweigert, dich zu teleportieren.</string>
 		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>Skript-Dialog oder Textbox kann aufgrund von RLV-Einschränkungen nicht angezeigt werden.</string>
+		</map>
 		<key>blocked_startim</key>
 		<map>
 			<key>value</key>

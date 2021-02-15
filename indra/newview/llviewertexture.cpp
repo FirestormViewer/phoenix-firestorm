@@ -1696,6 +1696,8 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 		mNeedsAux = FALSE;
 		destroyRawImage();
 	}
+	// <FS:Beq/> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
+	gTextureList.recalcImageDecodePriority(this);
 
 	return res;
 }

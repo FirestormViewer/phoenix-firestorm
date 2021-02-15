@@ -2625,16 +2625,16 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Rezydent, do którego wysłałeś/aś wiadomość prywatną znajduje się w trybie zajętości i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
 	</string>
 	<string name="AutoResponseModeDefault">
-		Rezydent, do którego wysłałeś/aś wiadomość prywatną aktywował w Firestormie tryb autoodpowiedzi i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
+		Rezydent, do którego wysłałeś/aś wiadomość prywatną aktywował w przeglądarce [APP_NAME] tryb autoodpowiedzi i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
 	</string>
 	<string name="AutoResponseModeNonFriendsDefault">
-		Rezydent, do którego wysłałeś/aś wiadomość prywatną aktywował w Firestormie tryb autoodpowiedzi i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
+		Rezydent, do którego wysłałeś/aś wiadomość prywatną aktywował w przeglądarce [APP_NAME] tryb autoodpowiedzi i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
 	</string>
 	<string name="RejectTeleportOffersResponseDefault">
-		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania próśb oraz propozycji teleportacji i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
+		Rezydent, do którego wysłałeś/aś wiadomość aktywował w przeglądarce [APP_NAME] tryb odrzucania próśb oraz propozycji teleportacji i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
 	</string>
 	<string name="RejectFriendshipRequestsResponseDefault">
-		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania zaproszeń do znajomych i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
+		Rezydent, do którego wysłałeś/aś wiadomość aktywował w przeglądarce [APP_NAME] tryb odrzucania zaproszeń do znajomych i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
 	</string>
 	<string name="MutedAvatarsResponseDefault">
 		Rezydent, do którego wysłałeś/aś wiadomość zablokował Cię.
@@ -5980,10 +5980,10 @@ do sekcji wsparcia witryny SecondLife.com i zgłoś problem.
 		Nieznana, poza normalnym zakresem, sprawdź ustawienie debugowania RenderQualityPerformance
 	</string>
 	<string name="fsbridge_cant_create_disabled">
-		Firestorm nie może utworzyć Mostu LSL, jeśli "Włącz Most w LScript Language" jest wyłączone w Ustawieniach.
+		[APP_NAME] nie może utworzyć Mostu LSL, jeśli "Włącz Most w LScript Language" jest wyłączone w Ustawieniach.
 	</string>
 	<string name="fsbridge_no_library">
-		Firestorm nie mógł utworzyć Mostu LSL. Włącz swoją Bibliotekę i zaloguj się ponownie.
+		[APP_NAME] nie mógł utworzyć Mostu LSL. Włącz swoją Bibliotekę i zaloguj się ponownie.
 	</string>
 	<string name="fsbridge_already_creating">
 		Tworzenie Mostu LSL już trwa, nie można rozpocząć procesu budowania kolejnego. Poczekaj kilka minut, zanim spróbujesz ponownie.
@@ -6059,10 +6059,28 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		Info o skryptach: Otrzymano uszkodzoną odpowiedź od Mostu LSL. Spróbuj ponownie.
 	</string>
 	<string name="fsbridge_error_injection">
-		UWAGA: Jeden lub więcej skryptów zostało dodanych do Twojego Mostu LSL Firestorma! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
+		UWAGA: Jeden lub więcej skryptów został dodanych do Twojego Mostu LSL! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Kondycja awatara' w menu 'Awatar' na górze).
 	</string>
 	<string name="fsbridge_error_wrongvm">
 		UWAGA: Skrypt Mostu LSL używa starej maszyny wirtualnej LSO (16 KB limitu pamięci) zamiast nowej Mono, co stwarza wysokie prawdopodobieństwo kolizji sterty i stosu oraz awarii Mostu poprzez wyczerpanie się pamięci. Spróbuj stworzyć go na nowo ('Kondycja awatara' w menu 'Awatar' na górze). Jeśli ten komunikat pojawi się ponownie spróbuj jeszcze raz w innym regionie.
+	</string>
+	<string name="FSAOEnabled">
+		Animator przeglądarki [APP_NAME] włączony.
+	</string>
+	<string name="FSAODisabled">
+		Animator przeglądarki [APP_NAME] wyłączony.
+	</string>
+	<string name="FSAOPausedScript">
+		Wstrzymany przez oskryptowany dodatek.
+	</string>
+	<string name="FSAOResumedScript">
+		Wznowiony przez oskryptowany dodatek.
+	</string>
+	<string name="FSAOStandsPausedScript">
+		Animacje stania w miejscu wstrzymane przez oskryptowany dodatek.
+	</string>
+	<string name="FSAOStandsResumedScript">
+		Animacje stania w miejscu wznowione przez oskryptowany dodatek.
 	</string>
 	<string name="QP Draw Distance">
 		Pole widzenia
@@ -6418,5 +6436,14 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="ImportingWindlightBulk">
 		Importowanie Windlightów...
+	</string>
+	<string name="FSObjectInventoryNoElements">
+		Brak elementów
+	</string>
+	<string name="FSObjectInventoryOneElement">
+		1 element
+	</string>
+	<string name="FSObjectInventoryElements">
+		[NUM_ELEMENTS] elementów
 	</string>
 </strings>

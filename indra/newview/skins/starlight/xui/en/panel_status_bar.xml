@@ -336,7 +336,7 @@
      font="SansSerifSmall"
      text_color="TimeTextColor"
      follows="right|top"
-     halign="left"
+     halign="center"
      height="16"
      h_pad="2"
      top="4"

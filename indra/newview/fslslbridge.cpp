@@ -55,7 +55,7 @@
 static const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 static const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 static const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-static const U32 FS_BRIDGE_MINOR_VERSION = 25;
+static const U32 FS_BRIDGE_MINOR_VERSION = 27;
 static const U32 FS_MAX_MINOR_VERSION = 99;
 static const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 static const std::string FS_STATE_ATTRIBUTE = "state=";
@@ -316,18 +316,32 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	}
 	if (tag == "<clientAO ")
 	{
+		// <FS:Zi> do nothing when the FS AO is disabled
+		if (!gSavedPerAccountSettings.getBOOL("UseAO"))
+		{
+			return true;
+		}
+
 		status = true;
 		size_t valuepos = message.find(FS_STATE_ATTRIBUTE);
 		if (valuepos != std::string::npos)
 		{
+			// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
+			// use BOOL to satisfy windows compiler
+			BOOL aoWasPaused = gSavedPerAccountSettings.getBOOL("PauseAO");
+			BOOL aoStandsWasEnabled = gSavedPerAccountSettings.getBOOL("UseAOStands");
+			// </FS:Zi>
+
 			if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 2) == "on")
 			{
-				gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+				// <FS:Zi> Pause AO via bridge instead of switch AO on or off - FIRE-9305
+				gSavedPerAccountSettings.setBOOL("PauseAO", FALSE);
 				gSavedPerAccountSettings.setBOOL("UseAOStands", TRUE);
 			}
 			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 3) == "off")
 			{
-				gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+				// <FS:Zi> Pause AO via bridge instead of switch AO on or off - FIRE-9305
+				gSavedPerAccountSettings.setBOOL("PauseAO", TRUE);
 			}
 			else if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 7) == "standon")
 			{
@@ -341,6 +355,41 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				LL_WARNS("FSLSLBridge") << "AO control - Received unknown state" << LL_ENDL;
 			}
+
+			// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
+			std::string aoMessage;
+
+			if (aoWasPaused != gSavedPerAccountSettings.getBOOL("PauseAO"))
+			{
+				if (aoWasPaused)
+				{
+					aoMessage = LLTrans::getString("FSAOResumedScript");
+				}
+				else
+				{
+					aoMessage = LLTrans::getString("FSAOPausedScript");
+				}
+			}
+
+			if (aoStandsWasEnabled != gSavedPerAccountSettings.getBOOL("UseAOStands"))
+			{
+				if (aoStandsWasEnabled)
+				{
+					aoMessage = LLTrans::getString("FSAOStandsPausedScript");
+				}
+				else
+				{
+					aoMessage = LLTrans::getString("FSAOStandsResumedScript");
+				}
+			}
+
+			if (!aoMessage.empty())
+			{
+				LLSD args;
+				args["AO_MESSAGE"] = aoMessage;
+				LLNotificationsUtil::add("FSAOScriptedNotification", args);
+			}
+			// </FS:Zi>
 		}
 	}
 	//</FS:TS> FIRE-962

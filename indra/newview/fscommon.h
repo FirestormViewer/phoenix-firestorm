@@ -78,6 +78,9 @@ namespace FSCommon
 	 */
 	extern S32 sObjectAddMsg;
 
+	// request group data from the server if it's not already cached
+	bool requestGroupData(const LLUUID& groupID);
+
 	bool checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType);
 	LLSD populateGroupCount();
 

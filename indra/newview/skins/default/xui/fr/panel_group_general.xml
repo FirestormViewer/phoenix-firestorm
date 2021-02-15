@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Général" name="general_tab">
 	<panel.string name="help_text">
-		L&apos;onglet Général contient les informations générales et les préférences du groupe ainsi que la liste et les options des membres.
+		L'onglet Général contient les informations générales et les préférences du groupe ainsi que la liste et les options des membres.
 
 Faites glisser le pointeur de la souris sur les options pour en savoir plus.
 	</panel.string>
@@ -11,48 +11,58 @@ Faites glisser le pointeur de la souris sur les options pour en savoir plus.
 	<panel.string name="incomplete_member_data_str">
 		Extraction des données du résident en cours
 	</panel.string>
-	<panel name="group_info_top">
-		<texture_picker label="" name="insignia" tool_tip="Cliquez pour sélectionner une image"/>
-		<text name="prepend_founded_by">
-			Fondateur :
+	<panel name="group_general_panel">
+		<text name="group_key_label" width="85">
+			UUID du groupe :
 		</text>
-		<name_box initial_value="(récupération en cours)" name="founder_name"/>
-		<text name="join_cost_text">
+		<text_editor name="group_key" label="UUID du groupe :" initial_value="(en cours de chargement...)"/>
+		<button name="copy_uri" label="Copie de l'URI"/>
+		<text name="prepend_founded_by" width="85">
+			Fondateur/trice :
+		</text>
+		<text initial_value="(en cours de chargement...)" name="founder_name"/>
+		<button name="copy_name" label="Copie du nom"/>
+		<text_editor name="charter">
+			Charte du groupe
+		</text_editor>
+		<text name="join_cost_text" width="230">
 			Gratuit
 		</text>
-		<button label="REJOINDRE" name="btn_join"/>
-	</panel>
-	<text_editor name="charter">
-		Indiquez ici la charte de votre groupe
-	</text_editor>
-	<name_list name="visible_members">
-		<name_list.columns label="Membre" name="name" relwidth="0.40"/>
-		<name_list.columns label="Titre" name="title" relwidth="0.25"/>
-		<name_list.columns label="Statut" name="status"/>
-	</name_list>
-	<text name="my_group_settngs_label">
-		Moi
-	</text>
-	<text name="active_title_label">
-		Mon titre :
-	</text>
-	<combo_box name="active_title" tool_tip="Indique le titre qui apparaît en face du nom de votre avatar lorsque votre groupe est actif."/>
-	<check_box label="Recevoir les notices du groupe" name="receive_notices" tool_tip="Indique si vous souhaitez recevoir les notices envoyées au groupe.  Décochez si ce groupe vous envoie des spams."/>
-	<check_box label="Afficher dans mon profil" name="list_groups_in_profile" tool_tip="Indique si vous voulez afficher ce groupe dans votre profil"/>
-	<panel name="preferences_container">
-		<text name="group_settngs_label">
-			Groupe
-		</text>
-		<check_box label="Inscription ouverte à tous" name="open_enrollement" tool_tip="Indique si ce groupe autorise les nouveaux membres à le rejoindre sans y être invités."/>
-		<check_box label="Inscription payante" name="check_enrollment_fee" tool_tip="Indique s&apos;il faut payer des frais d&apos;inscription pour rejoindre ce groupe"/>
-		<spinner label="L$" name="spin_enrollment_fee" tool_tip="Les nouveaux membres doivent payer ces frais pour rejoindre le groupe quand l&apos;option Frais d&apos;inscription est cochée."/>
-		<combo_box name="group_mature_check" tool_tip="Il s&apos;agit du type de contenu et de comportement autorisé au sein d&apos;un groupe." width="195">
-			<combo_item name="select_mature">
-				- Catégorie de contenu -
-			</combo_item>
-			<combo_box.item label="Contenu Modéré" name="mature"/>
-			<combo_box.item label="Contenu Général" name="pg"/>
-		</combo_box>
-		<check_box initial_value="true" label="Afficher dans la recherche" name="show_in_group_list" tool_tip="Permettre aux autres résidents de voir ce groupe dans les résultats de recherche"/>
+		<button label="Inscrivez-vous !" name="btn_join" />
+		<name_list name="visible_members">
+			<name_list.columns label="Membre" name="name" relwidth="0.40"/>
+			<name_list.columns label="Titre" name="title" relwidth="0.25"/>
+			<name_list.columns label="Statut" name="status"/>
+		</name_list>
+		<layout_stack name="group_preferences_layout">
+			<layout_panel name="user_preferences_container">
+				<text name="my_group_settngs_label">
+					Paramètres personnels
+				</text>
+				<check_box label="Afficher dans mon profil" name="list_groups_in_profile" tool_tip="Indique si vous voulez afficher ce groupe dans votre profil"/>
+				<check_box label="Recevoir les notices du groupe" name="receive_notices" tool_tip="Indique si vous souhaitez recevoir les notices envoyées au groupe.  Décochez si ce groupe vous envoie des spams."/>
+				<check_box label="Recevoir les discussions du groupe" name="receive_chat" tool_tip="Indiquez si vous souhaitez recevoir les discussions du groupe."/>
+				<text name="active_title_label">
+					Mon titre actif :
+				</text>
+				<combo_box name="active_title" tool_tip="Détermine ce qui est affiché dans le badge de votre avatar lorsque ce groupe est activé."/>
+			</layout_panel>
+			<layout_panel name="group_preferences_container">
+				<text name="group_settngs_label">
+					Paramètres du groupe :
+				</text>
+				<check_box initial_value="true" label="Afficher dans la recherche" name="show_in_group_list" tool_tip="Afficher ce groupe dans les résultats de recherche"/>
+				<check_box label="Tout le monde peut adhérer" name="open_enrollement" tool_tip="Précisez si l'adhésion au groupe peut se faire sans invitation."/>
+				<check_box label="Frais d'adhésion" name="check_enrollment_fee" tool_tip="Indiquez si les nouveaux membres doivent payer des frais d'adhésion."/>
+				<spinner label="L$" name="spin_enrollment_fee" tool_tip="Si la cotisation d'adhésion est activée, les nouveaux membres doivent payer ce montant."/>
+				<combo_box name="group_mature_check" tool_tip="Les évaluations de contenu identifient le contenu et les comportements autorisés dans un groupe">
+					<combo_item name="select_mature">
+						- Sélectionner la classification du contenu -
+					</combo_item>
+					<combo_box.item label="Contenu modéré" name="mature"/>
+					<combo_box.item label="Contenu général" name="pg"/>
+				</combo_box>
+			</layout_panel>
+		</layout_stack>
 	</panel>
 </panel>

@@ -670,9 +670,12 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
                 U32 have_mask = params.mVertexBuffer->getTypeMask() & mask;
 				if (have_mask != mask)
 				{ //FIXME!
-					LL_WARNS_ONCE() << "Missing required components, expected mask: " << mask
-									<< " present: " << have_mask
-									<< ". Skipping render batch." << LL_ENDL;
+					// <FS:Beq> Remove useless logging info from critical path (can be called many times per frame)
+					// TODO(Beq) Determine whether this can be intercepted earlier
+					// LL_WARNS_ONCE() << "Missing required components, expected mask: " << mask
+					// 				<< " present: " << have_mask
+					// 				<< ". Skipping render batch." << LL_ENDL;
+					// </FS:Beq>
 					continue;
 				}
 

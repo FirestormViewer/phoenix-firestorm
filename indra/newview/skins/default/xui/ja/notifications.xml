@@ -81,7 +81,7 @@
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] をアップデート中にエラーが発生しました。  ビューワの [http://get.secondlife.com 最新バージョンをダウンロード] してください。
+		[APP_NAME] をアップデート中にエラーが発生しました。  ビューワの [https://www.firestormviewer.org/downloads 最新バージョンをダウンロード] してください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">

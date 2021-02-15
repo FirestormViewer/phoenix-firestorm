@@ -48,7 +48,9 @@
 #include "llviewerobject.h"
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
-
+// [RLVa:KB] - @edit
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 LLFloaterOpenObject::LLFloaterOpenObject(const LLSD& key)
 :	LLFloater(key),
@@ -105,6 +107,16 @@ void LLFloaterOpenObject::refresh()
 	BOOL enabled = FALSE;
 
 	LLSelectNode* node = mObjectSelection->getFirstRootNode();
+// [RLVa:KB] - @edit and @editobj
+	if ( (RlvActions::isRlvEnabled()) && (node) && (!RlvActions::canEdit(node->getObject())) )
+	{
+		// If the floater was already open before getting edit restricted then a transient selection will allow manipulation
+		// of the object's inventory without it getting selected by LLSelectMgr::deselectIfTooFar().
+		// Killing the selection would result in the user not realizing why their right-click breaks so close the floater instead.
+		closeFloater();
+		return;
+	}
+// [/RLVa:KB]
 	if (node) 
 	{
 		name = node->mName;

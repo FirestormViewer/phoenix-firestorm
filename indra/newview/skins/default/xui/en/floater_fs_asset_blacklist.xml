@@ -94,6 +94,10 @@
 		 name="date_sort"
 		 width="-1"
 		 />
+		<columns
+		 name="asset_type"
+		 width="-1"
+		 />
 		<row>
 			<column column="name">[UNKNOWN] Template item</column>
 			<column column="region">[UNKNOWN] Template item</column>
@@ -118,6 +122,26 @@
 	 height="24"
 	 width="150"
 	 left_pad="10"
+	 bottom="-6"
+	 follows="left|bottom"/>
+	<button
+	 name="play_btn"
+	 label="Play Sound"
+	 tool_tip="Play the selected sound; only a single sound entry can be selected at a time for playback."
+	 font="SansSerif"
+	 height="24"
+	 width="90"
+	 left_pad="10"
+	 bottom="-6"
+	 follows="left|bottom"/>
+	<button
+	 name="stop_btn"
+	 label="Stop Sound"
+	 tool_tip="Stop playing the current sound."
+	 font="SansSerif"
+	 height="24"
+	 width="90"
+	 left_delta="0"
 	 bottom="-6"
 	 follows="left|bottom"/>
 	<button

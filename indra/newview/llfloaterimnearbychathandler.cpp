@@ -207,7 +207,7 @@ private:
 void LLFloaterIMNearbyChatScreenChannel::reshapePanel(LLFloaterIMNearbyChatToastPanel* panel)
 {
 	S32 percentage = gSavedSettings.getS32("NearbyToastWidth");
-	panel->reshape(gViewerWindow->getWindowWidthRaw() * percentage / 100, panel->getRect().getHeight(), TRUE);
+	panel->reshape(gViewerWindow->getWindowWidthScaled() * percentage / 100, panel->getRect().getHeight(), TRUE);
 }
 
 void LLFloaterIMNearbyChatScreenChannel::updateSize(LLRect old_world_rect, LLRect new_world_rect)

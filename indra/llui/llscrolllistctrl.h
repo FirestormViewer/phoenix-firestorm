@@ -117,6 +117,7 @@ public:
 		Optional<S32>	search_column,
 						sort_column;
 		Optional<bool>	sort_ascending;
+		Optional<bool>	sort_lazily;			// <FS:Beq> FIRE-30732 deferred sort as a UI property
 		Optional<bool>	persist_sort_order; 	// <FS:Ansariel> Persists sort order of scroll lists
 		Optional<bool>	primary_sort_only;		// <FS:Ansariel> Option to only sort by one column
 
@@ -559,6 +560,8 @@ private:
 
 	// <FS:Ansariel> Option to only sort by one column
 	bool			mPrimarySortOnly;
+	// <FS:Beq> deferred sort as a UI property
+	bool			mSortLazily;
 
 	mutable bool	mSorted;
 	

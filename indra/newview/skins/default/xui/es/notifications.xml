@@ -79,7 +79,7 @@ Detalles del error: la notificación de nombre &apos;[_NAME]&apos; no se ha enco
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		Ha habido un error actualizando [APP_NAME]. Por favor, [http://get.secondlife.com descarga la última versión] del Visor.
+		Ha habido un error actualizando [APP_NAME]. Por favor, [https://www.firestormviewer.org/downloads descarga la última versión] del Visor.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">

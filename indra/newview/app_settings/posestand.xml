@@ -1,56 +1,56 @@
 <llsd>
 	<map>
-	<key>d6fee4de-09af-80b2-72c9-dd5eb509f18c</key>
+	<key>3481ccd5-cc6c-65ca-c466-dc9df1bf3944</key>
 		<map>
 			<key>name</key>
 			<string>PS_T_Pose</string>
 		</map>
-	<key>63db3570-950d-089c-54c5-b406cb32635b</key>
+	<key>0b4ee516-5dfd-ef4b-4ab6-300bb44cb045</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_Down_Legs_together</string>
 		</map>
-	<key>46d5043d-6d86-c237-ab9c-c088d5608f37</key>
+	<key>b23c52ef-0b15-11f2-852d-8fbd33417847</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_down_sitting</string>
 		</map>
-	<key>767d488a-faa5-aeca-128f-af0b196967f1</key>
+	<key>e14fee5f-3735-a236-2e26-94f92f366d81</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_downward_Legs_apart</string>
 		</map>
-	<key>c2a3ba2f-499f-6129-2c43-2085815b3c81</key>
+	<key>2029d88f-4efc-d72d-18d1-274caf9e9bc0</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_downward_Legs_together</string>
 		</map>
-	<key>9e6fbfdb-d83e-a590-d59d-571c49002a7c</key>
+	<key>cff5559e-c915-0b5e-d587-f789b5cc299a</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_forward_Legs_apart</string>
 		</map>
-	<key>64d9b2e0-a124-b5fa-73f1-8703218f9aa8</key>
+	<key>23f3163c-183b-dac0-0cdd-7811bcc3b5f1</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_forward_Legs_together</string>
 		</map>
-	<key>a5b4ae9f-05d2-998f-5ca5-63ac5cfdf595</key>
+	<key>b2f312aa-2c1e-27b8-50fe-a0fa4ff3df4e</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_straight_Legs_apart</string>
 		</map>
-	<key>16ca97b1-732d-8964-f044-1575d8bc2f98</key>
+	<key>c17677b8-9fb2-8d6e-bbbe-219edce64ef4</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_straight_sitting</string>
 		</map>
-	<key>284ff48c-5f45-8351-c459-020f0bc1cd77</key>
+	<key>2cfeed25-04f9-caff-f3d2-776cddea5771</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_upward_Legs_apart</string>
 		</map>
-	<key>76e563a3-6a97-0487-f8dc-70a673fa58d8</key>
+	<key>6e83f685-2f53-278f-6758-b529327cce09</key>
 		<map>
 			<key>name</key>
 			<string>PS_Arms_upward_Legs_together</string>
