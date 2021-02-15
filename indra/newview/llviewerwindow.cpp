@@ -5941,7 +5941,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		{
 			// <FS:Ansariel> FIRE-15667: 24bit depth maps
 			//U32 color_fmt = type == LLSnapshotModel::SNAPSHOT_TYPE_DEPTH ? GL_DEPTH_COMPONENT : GL_RGBA;
-			U32 color_fmt = (type == LLSnapshotModel::SNAPSHOT_TYPE_DEPTH || LLSnapshotModel::SNAPSHOT_TYPE_DEPTH24) ? GL_DEPTH_COMPONENT : GL_RGBA;
+			U32 color_fmt = (type == LLSnapshotModel::SNAPSHOT_TYPE_DEPTH || type == LLSnapshotModel::SNAPSHOT_TYPE_DEPTH24) ? GL_DEPTH_COMPONENT : GL_RGBA;
 			// </FS:Ansariel>
 			if (scratch_space.allocate(image_width, image_height, color_fmt, true, true))
 			{
