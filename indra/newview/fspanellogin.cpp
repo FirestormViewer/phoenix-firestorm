@@ -1423,7 +1423,7 @@ void FSPanelLogin::updateServerCombo()
 	server_choice_combo->addSeparator(ADD_TOP);
 	
 	LL_DEBUGS("AppInit") << "adding current " << current_grid << LL_ENDL;
-	server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(),
+	server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(current_grid),
 							 current_grid,
 							 ADD_TOP);
 	server_choice_combo->selectFirstItem();

@@ -329,7 +329,10 @@ std::string LLHandlerUtil::getSubstitutionName(const LLNotificationPtr& notifica
 			from_id = notification->getPayload()["from_id"];
 		}
 		LLAvatarName av_name;
-		if(LLAvatarNameCache::get(from_id, &av_name))
+		// <FS:Beq> Avoid null UUID name cache requests
+		// if(LLAvatarNameCache::get(from_id, &av_name))
+		if( from_id.notNull() && LLAvatarNameCache::get(from_id, &av_name) )
+		// </FS:Beq>
 		{
 			res = av_name.getUserName();
 		}

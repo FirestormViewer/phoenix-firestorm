@@ -33,5 +33,7 @@
 	</fs_scroll_list>
 	<button name="remove_btn" label="Usuń zaznaczone" />
 	<button name="remove_temp_btn" label="Usuń tymczasowe" />
+	<button name="play_btn" label="Odtwórz dźwięk" tool_tip="Odtwórz wybrany dźwięk; Do odtwarzania można wybrać tylko jedną pozycję dźwiękową naraz." width="120" />
+	<button name="stop_btn" label="Nie odtwarzaj" tool_tip="Zatrzymaj odtwarzanie bieżącego dźwięku." width="120" />
 	<button name="close_btn" label="Zamknij" />
 </floater>

@@ -34,6 +34,8 @@
 #include "llavataractions.h"
 #include "llavatarnamecache.h"
 #include "llfloaterperms.h"
+#include "llgroupactions.h"
+#include "llgroupmgr.h"
 #include "llinventorymodel.h"
 #include "lllogchat.h"
 #include "llmutelist.h"
@@ -316,6 +318,16 @@ bool FSCommon::isLinden(const LLUUID& av_id)
 			last_name == LL_TESTER);
 }
 
+// request group data from the server if it's not already cached
+bool FSCommon::requestGroupData(const LLUUID& groupID)
+{
+	if (LLGroupMgr::getInstance()->getGroupData(groupID) == nullptr)
+	{
+		LLGroupMgr::getInstance()->sendGroupPropertiesRequest(groupID);
+		return false;
+	}
+	return true;
+}
 
 bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action)
 {
@@ -372,6 +384,52 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	else if (action == FS_RGSTR_CHK_IS_NOT_SELF)
 	{
 		return !isSelf;
+	}
+	else if (action == FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA)
+	{
+		return !requestGroupData(av_id);
+	}
+	else if (action == FS_RGSTR_CHK_HAVE_GROUP_DATA)
+	{
+		return requestGroupData(av_id);
+	}
+	else if (action == FS_RGSTR_CHK_CAN_LEAVE_GROUP)
+	{
+		if (gAgent.getGroupID() == av_id && !RlvActions::canChangeActiveGroup())
+		{
+			return false;
+		}
+
+		return gAgent.isInGroup(av_id);
+	}
+	else if (action == FS_RGSTR_CHK_CAN_JOIN_GROUP)
+	{
+		if (!gAgent.canJoinGroups())
+		{
+			return false;
+		}
+
+		if (!RlvActions::canChangeActiveGroup())
+		{
+			return false;
+		}
+
+		LLGroupMgrGroupData* groupData = LLGroupMgr::getInstance()->getGroupData(av_id);
+		if (!groupData || !groupData->mOpenEnrollment)
+		{
+			return false;
+		}
+
+		return !gAgent.isInGroup(av_id);
+	}
+	else if (action == FS_RGSTR_CHK_GROUP_NOT_ACTIVE)
+	{
+		if (!RlvActions::canChangeActiveGroup())
+		{
+			return false;
+		}
+
+		return (gAgent.isInGroup(av_id) && gAgent.getGroupID() != av_id);
 	}
 
 	return false;
