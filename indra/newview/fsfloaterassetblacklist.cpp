@@ -32,6 +32,8 @@
 
 #include "fscommon.h"
 #include "fsscrolllistctrl.h"
+#include "llagent.h"
+#include "llaudioengine.h"
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llviewercontrol.h"
@@ -39,10 +41,11 @@
 
 
 FSFloaterAssetBlacklist::FSFloaterAssetBlacklist(const LLSD& key)
- : LLFloater(key),
+ : LLFloater(key), LLEventTimer(0.25f),
    mResultList(NULL),
    mFilterSubString(LLStringUtil::null),
    mFilterSubStringOrig(LLStringUtil::null),
+   mAudioSourceID(LLUUID::null),
    mBlacklistCallbackConnection()
 {
 }
@@ -60,14 +63,23 @@ BOOL FSFloaterAssetBlacklist::postBuild()
 	mResultList = getChild<FSScrollListCtrl>("result_list");
 	mResultList->setContextMenu(&FSFloaterAssetBlacklistMenu::gFSAssetBlacklistMenu);
 	mResultList->setFilterColumn(0);
+	mResultList->setCommitCallback(boost::bind(&FSFloaterAssetBlacklist::onSelectionChanged, this));
+	mResultList->setCommitOnSelectionChange(true);
 
 	childSetAction("remove_btn", boost::bind(&FSFloaterAssetBlacklist::onRemoveBtn, this));
 	childSetAction("remove_temp_btn", boost::bind(&FSFloaterAssetBlacklist::onRemoveAllTemporaryBtn, this));
+	childSetAction("play_btn", boost::bind(&FSFloaterAssetBlacklist::onPlayBtn, this));
+	childSetAction("stop_btn", boost::bind(&FSFloaterAssetBlacklist::onStopBtn, this));
 	childSetAction("close_btn", boost::bind(&FSFloaterAssetBlacklist::onCloseBtn, this));
 
 	getChild<LLFilterEditor>("filter_input")->setCommitCallback(boost::bind(&FSFloaterAssetBlacklist::onFilterEdit, this, _2));
 
 	mBlacklistCallbackConnection = FSAssetBlacklist::getInstance()->setBlacklistChangedCallback(boost::bind(&FSFloaterAssetBlacklist::onBlacklistChanged, this, _1, _2));
+
+	childSetEnabled("play_btn", false);
+	childSetEnabled("stop_btn", true);
+	childSetVisible("play_btn", true);
+	childSetVisible("stop_btn", false);
 
 	return TRUE;
 }
@@ -82,13 +94,13 @@ std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
 {
 	switch (type)
 	{
-		case 0:
+		case LLAssetType::AT_TEXTURE:
 			return getString("asset_texture");
-		case 1:
+		case LLAssetType::AT_SOUND:
 			return getString("asset_sound");
-		case 6:
+		case LLAssetType::AT_OBJECT:
 			return getString("asset_object");
-		case 45:
+		case LLAssetType::AT_PERSON:
 			return getString("asset_resident");
 		default:
 			return getString("asset_unknown");
@@ -144,6 +156,9 @@ void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& dat
 	element["columns"][5]["column"] = "date_sort";
 	element["columns"][5]["type"] = "text";
 	element["columns"][5]["value"] = llformat("%u", (U64)date.secondsSinceEpoch());
+	element["columns"][6]["column"] = "asset_type";
+	element["columns"][6]["type"] = "integer";
+	element["columns"][6]["value"] = data["asset_type"].asInteger();
 
 	mResultList->addElement(element, ADD_BOTTOM);
 }
@@ -198,6 +213,57 @@ void FSFloaterAssetBlacklist::onRemoveAllTemporaryBtn()
 	gObjectList.resetDerenderList(true);
 }
 
+void FSFloaterAssetBlacklist::onSelectionChanged()
+{
+	bool enabled = false;
+	size_t num_selected = mResultList->getAllSelected().size();
+	if (num_selected == 1)
+	{
+		const LLScrollListItem* item = mResultList->getFirstSelected();
+		S32 name_column = mResultList->getColumn("asset_type")->mIndex;
+
+		if (item && item->getColumn(name_column)->getValue().asInteger() == LLAssetType::AT_SOUND)
+		{
+			enabled = true;
+		}
+	}
+
+	childSetEnabled("play_btn", enabled);
+}
+
+void FSFloaterAssetBlacklist::onPlayBtn()
+{
+	const LLScrollListItem* item = mResultList->getFirstSelected();
+	S32 name_column = mResultList->getColumn("asset_type")->mIndex;
+
+	if (!item || item->getUUID().isNull() || item->getColumn(name_column)->getValue().asInteger() != LLAssetType::AT_SOUND)
+	{
+		return;
+	}
+
+	onStopBtn();
+
+	mAudioSourceID = LLUUID::generateNewID();
+	gAudiop->triggerSound(item->getUUID(), gAgentID, 1.0f, LLAudioEngine::AUDIO_TYPE_UI, LLVector3d::zero, LLUUID::null, mAudioSourceID);
+
+	childSetVisible("stop_btn", true);
+	childSetVisible("play_btn", false);
+}
+
+void FSFloaterAssetBlacklist::onStopBtn()
+{
+	if (mAudioSourceID.isNull())
+	{
+		return;
+	}
+
+	LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID);
+	if (audio_source && !audio_source->isDone())
+	{
+		audio_source->play(LLUUID::null);
+	}
+}
+
 void FSFloaterAssetBlacklist::onCloseBtn()
 {
 	closeFloater();
@@ -220,6 +286,7 @@ void FSFloaterAssetBlacklist::onFilterEdit(const std::string& search_string)
 
 	// Apply new filter.
 	mResultList->setFilterString(mFilterSubStringOrig);
+	onSelectionChanged();
 }
 
 BOOL FSFloaterAssetBlacklist::handleKeyHere(KEY key, MASK mask)
@@ -231,6 +298,32 @@ BOOL FSFloaterAssetBlacklist::handleKeyHere(KEY key, MASK mask)
 	}
 
 	return LLFloater::handleKeyHere(key, mask);
+}
+
+BOOL FSFloaterAssetBlacklist::tick()
+{
+	if (mAudioSourceID.isNull())
+	{
+		return FALSE;
+	}
+
+	LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID);
+	if (!audio_source || audio_source->isDone())
+	{
+		childSetVisible("play_btn", true);
+		childSetVisible("stop_btn", false);
+
+		mAudioSourceID.setNull();
+		onSelectionChanged();
+	}
+
+	return FALSE;
+}
+
+void FSFloaterAssetBlacklist::closeFloater(bool /* app_quitting */)
+{
+	onStopBtn();
+	LLFloater::closeFloater();
 }
 
 //---------------------------------------------------------------------------

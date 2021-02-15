@@ -44,6 +44,7 @@ Maximum 200 per group daily
      right="-1"
      name="notice_list"
      sort_ascending="false"
+     sort_lazily="true"
      sort_column="4"
      top_pad="0"
      width="304">

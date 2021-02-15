@@ -1361,11 +1361,11 @@ class LLAdvancedToggleWireframe : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: RLVa-2.0.0
-		bool fRlvBlockWireframe = gRlvAttachmentLocks.hasLockedHUD();
-		if ( (!gUseWireframe) && (fRlvBlockWireframe) )
+// [RLVa:KB] - @detach and @viewwireframe
+		const bool fRlvCanViewWireframe = RlvActions::canViewWireframe();
+		if ( (!gUseWireframe) && (!fRlvCanViewWireframe) )
 			RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Wireframe);
-		set_use_wireframe( (!gUseWireframe) && (!fRlvBlockWireframe) );
+		set_use_wireframe( (!gUseWireframe) && (fRlvCanViewWireframe) );
 		return true;
 	}
 };
@@ -3500,10 +3500,10 @@ bool enable_attachment_touch(const LLUUID& inv_item_id)
 	if (isAgentAvatarValid())
 	{
 		const LLViewerObject* attach_obj = gAgentAvatarp->getWornAttachment(gInventory.getLinkedItemID(inv_item_id));
-		return (attach_obj) && (attach_obj->flagHandleTouch()) && ( (!RlvActions::isRlvEnabled()) || (RlvActions::canTouch(gAgentAvatarp->getWornAttachment(inv_item_id))) );
-// [RLVa:KB] - Checked: 2012-08-15 (RLVa-1.4.7)
-		//return (attach_obj) && (attach_obj->flagHandleTouch());
+// [RLVa:KB] - @touch*
+		return (attach_obj) && (attach_obj->flagHandleTouch()) && (!RlvActions::isRlvEnabled() || RlvActions::canTouch(attach_obj));
 // [/RLVa:KB]
+//		return (attach_obj) && (attach_obj->flagHandleTouch());
 	}
 	return false;
 }
@@ -10486,8 +10486,8 @@ class LLViewHighlightTransparent : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 //		LLDrawPoolAlpha::sShowDebugAlpha = !LLDrawPoolAlpha::sShowDebugAlpha;
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT));
+// [RLVa:KB] - @edit and @viewtransparent
+		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (RlvActions::canHighlightTransparent());
 // [/RLVa:KB]
 		return true;
 	}
