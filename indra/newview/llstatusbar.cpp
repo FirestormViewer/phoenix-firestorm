@@ -533,11 +533,7 @@ BOOL LLStatusBar::postBuild()
 	// use the time format defined in the language's panel_status_bar.xml (default)
 	mClockFormatChoices["Language"] = getString("time");
 
-	mClockFormat = gSavedSettings.getString("StatusBarTimeFormat");
-
-	getChild<LLTextBox>("TimeText")->setClickedCallback(boost::bind(&LLStatusBar::onClockClicked, this));
-	getChild<LLTextBox>("TimeText")->setDoubleClickCallback(boost::bind(&LLStatusBar::onClockDoubleClicked, this));
-	gSavedSettings.getControl("StatusBarTimeFormat")->getSignal()->connect(boost::bind(&LLStatusBar::onTimeFormatChanged, this, _2));
+	mClockFormat = gSavedSettings.getString("FSStatusBarTimeFormat");
 	// </FS:Zi>
 
 	return TRUE;
@@ -1758,31 +1754,9 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 }
 
 // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
-void LLStatusBar::onClockClicked()
+void LLStatusBar::onTimeFormatChanged(const std::string& format)
 {
-	auto current_entry = mClockFormatChoices.find(mClockFormat);
-
-	// get the next time format from the list, skipping the "Language" entry
-	do
-	{
-		current_entry++;
-		if (current_entry == mClockFormatChoices.end())
-		{
-			current_entry = mClockFormatChoices.begin();
-		}
-	} while (current_entry->first == "Language");
-
-	gSavedSettings.setString("StatusBarTimeFormat", current_entry->first);
-}
-
-void LLStatusBar::onClockDoubleClicked()
-{
-	gSavedSettings.setString("StatusBarTimeFormat", "Language");
-}
-
-void LLStatusBar::onTimeFormatChanged(const LLSD& new_format)
-{
-	mClockFormat = new_format.asString();
+	mClockFormat = format;
 	updateClockDisplay();
 }
 // </FS:Zi>

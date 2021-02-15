@@ -196,9 +196,6 @@
     <panel.string
      name="timeTooltip">
         [weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
-
-Click to cycle through different time display modes.
-Double click to restore to default, so time format depends on chosen viewer language.
     </panel.string>
 	<panel.string
      name="buycurrencylabel">

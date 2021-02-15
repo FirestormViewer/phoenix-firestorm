@@ -157,6 +157,9 @@ public:
 	void updateCurrencySymbols();
 	// </COLOSI opensim multi-currency support>
 
+	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+	void onTimeFormatChanged(const std::string& format);
+
 private:
 	
 	void onClickBuyCurrency();
@@ -166,7 +169,8 @@ private:
 	void onMouseEnterPresets();
 	void onMouseEnterVolume();
 	void onMouseEnterNearbyMedia();
-	void onClickScreen(S32 x, S32 y);
+	// <FS:Ansariel> Does not exist 15-02-2021
+	//void onClickScreen(S32 x, S32 y);
 
 	static void onClickStreamToggle(void* data);		// <FS:Zi> Media/Stream separation
 	static void onClickMediaToggle(void* data);
@@ -259,15 +263,10 @@ private:
 	/**
 	 * Updates the visibility state of the parcel icons according to parcel properties
 	 */
-	void updateParcelIconVisibility();
+	 // <FS:Ansariel> Does not exist 15-02-2021
+	//void updateParcelIconVisibility();
 
 	void onBuyLandClicked();
-
-	// <FS:Ansariel> Pathfinding support
-	void onRegionBoundaryCrossed();
-	void onNavMeshStatusChange(const LLPathfindingNavMeshStatus &pNavMeshStatus);
-	void createNavMeshStatusListenerForCurrentRegion();
-	// </FS:Ansariel> Pathfinding support
 
 	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	void onPopupRolloverChanged(const LLSD& newvalue);
@@ -396,13 +395,10 @@ private:
 // </FS:Zi>
 
 // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
-	std::map<std::string,std::string> mClockFormatChoices;
+	std::map<std::string, std::string> mClockFormatChoices;
 	std::string mClockFormat;
 
 	void	updateClockDisplay();
-	void	onClockClicked();
-	void	onClockDoubleClicked();
-	void	onTimeFormatChanged(const LLSD& new_format);
 // </FS:Zi>
 
 	std::string mCurrentLocationString;
