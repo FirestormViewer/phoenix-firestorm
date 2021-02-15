@@ -395,6 +395,16 @@ private:
 	void	onMouseLeaveParcelInfo();
 // </FS:Zi>
 
+// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+	std::map<std::string,std::string> mClockFormatChoices;
+	std::string mClockFormat;
+
+	void	updateClockDisplay();
+	void	onClockClicked();
+	void	onClockDoubleClicked();
+	void	onTimeFormatChanged(const LLSD& new_format);
+// </FS:Zi>
+
 	std::string mCurrentLocationString;
 };
 
