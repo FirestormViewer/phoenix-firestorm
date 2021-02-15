@@ -68,7 +68,7 @@ Fejl detaljer: Beskeden kaldet &apos;[_NAME]&apos; blev ikke fundet i notificati
 		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="Ja"/>
 	</notification>
 	<notification name="BadInstallation">
-		Der opstod en fejl ved opdatering af [APP_NAME].  Please [http://get.secondlife.com download the latest version] of the Viewer.
+		Der opstod en fejl ved opdatering af [APP_NAME].  Please [https://www.firestormviewer.org/downloads download the latest version] of the Viewer.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">

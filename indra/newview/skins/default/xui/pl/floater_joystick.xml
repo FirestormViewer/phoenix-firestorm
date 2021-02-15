@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Joystick" title="Konfiguracja joysticka">
-	<string name="NoDevice">
-		nie wykryto urządzenia
+	<string name="JoystickDisabled">
+		Brak
 	</string>
-	<check_box label="Włącz joystick:" name="enable_joystick"/>
-	<spinner label="Kalibruj oś X" name="JoystickAxis1"/>
-	<spinner label="Kalibruj oś Y" name="JoystickAxis2"/>
-	<spinner label="Kalibruj oś Z" name="JoystickAxis0"/>
-	<spinner label="Kalibruj wznoszenie" name="JoystickAxis4"/>
-	<spinner label="Kalibruj wychył" name="JoystickAxis5"/>
-	<spinner label="Kalibruj obrót" name="JoystickAxis3"/>
-	<spinner label="Kalibruj powiększenie" name="JoystickAxis6"/>
+	<spinner label="Oś X" name="JoystickAxis1"/>
+	<spinner label="Oś Y" name="JoystickAxis2"/>
+	<spinner label="Oś Z" name="JoystickAxis0"/>
+	<spinner label="Wznoszenie" name="JoystickAxis4"/>
+	<spinner label="Wychył" name="JoystickAxis5"/>
+	<spinner label="Obrót" name="JoystickAxis3"/>
+	<spinner label="Powiększenie" name="JoystickAxis6"/>
 	<check_box label="Bezp. powięk." name="ZoomDirect"/>
 	<check_box label="Kursor 3D" name="Cursor3D"/>
 	<check_box label="Autopoziom" name="AutoLeveling"/>
