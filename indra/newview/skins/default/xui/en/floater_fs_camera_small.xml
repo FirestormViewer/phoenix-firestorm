@@ -3,7 +3,8 @@
 <floater
  legacy_header_height="0"
  header_height="0"
- bg_alpha_image_overlay="LtGray_50"
+ bg_opaque_image="Window_NoTitle_Foreground"
+ bg_alpha_image="Window_NoTitle_Foreground"
  can_dock="false"
  can_minimize="false"
  can_resize="true"
