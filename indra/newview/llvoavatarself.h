@@ -135,7 +135,7 @@ public:
 	// Updates
 	//--------------------------------------------------------------------
 public:
-	/*virtual*/ BOOL 	updateCharacter(LLAgent &agent);
+	/*virtual*/ bool 	updateCharacter(LLAgent &agent);
 	/*virtual*/ void 	idleUpdateTractorBeam();
 	bool				checkStuckAppearance();
 
