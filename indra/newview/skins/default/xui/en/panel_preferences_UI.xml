@@ -772,7 +772,7 @@
 			<combo_box.item
 			 label="24 Hour incl. Timezone"
 			 name="24_Hour_TZ"
-			 value="12 Hour TZ"/>
+			 value="24 Hour TZ"/>
 			<combo_box.item
 			 label="24 Hour incl. Seconds &amp; Timezone"
 			 name="24_Hour_TZ_Seconds"

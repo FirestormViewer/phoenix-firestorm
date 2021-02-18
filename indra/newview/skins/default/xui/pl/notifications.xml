@@ -3535,6 +3535,9 @@ Skończono wstępne przetwarzanie stroju po [TIME] sekundach.
 Wysłano aktualizację wyglądu po [TIME] sekundach.
 [STATUS]
 	</notification>
+	<notification name="AvatarRezSelfBakeForceUpdateNotification">
+		Przeglądarka wykryła, że możesz wyglądać jak chmurka i próbuje to automatycznie naprawić.
+	</notification>
 	<notification name="AvatarRezCloudNotification">
 		( [EXISTENCE] sekund w Second Life )
 Awatar &apos;[NAME]&apos; stał się chmurą.
