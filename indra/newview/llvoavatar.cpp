@@ -10209,6 +10209,15 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		// appearance version, which may cause us to look for baked
 		// textures in the wrong place and flag them as missing
 		// assets.
+		// <FS:Beq> Attempt to deal with empty appearance for self
+		if(isSelf() && mLastUpdateReceivedCOFVersion != -1)
+		{
+			LL_INFOS("Avatar") << "Empty appearance for self. Forcing a refresh" << LL_ENDL;
+			LLNotificationsUtil::add("AvatarRezSelfBakeForceUpdateNotification");
+			LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+		}
+		else
+		// </FS:Beq>
 		LL_DEBUGS("Avatar") << "ignoring appearance message due to lack of params" << LL_ENDL;
 		return;
 	}
