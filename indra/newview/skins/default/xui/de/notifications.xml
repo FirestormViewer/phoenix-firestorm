@@ -3667,6 +3667,9 @@ Ihr Outfit wurde in [TIME] Sekunden gebacken.
 Nach [TIME] Sekunden wurde eine Aktualisierung Ihres Aussehens gesendet.
 [STATUS]
 	</notification>
+	<notification name="AvatarRezSelfBakeForceUpdateNotification">
+		Der Viewer hat erkannt, dass Sie möglicherweise als Wolke dargestellt werden und versucht, das Problem automatisch zu korrigieren.
+	</notification>
 	<notification name="AvatarRezCloudNotification">
 		(Seit [EXISTENCE] Sekunden inworld )
 Avatar &apos;[NAME]&apos; wird als Wolke angezeigt.

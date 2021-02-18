@@ -113,7 +113,7 @@
                                     layout="topleft"
                                     height="23"
                                     label="[USEDEFAULT]"
-                                    width="120"
+                                    width="200"
                                     name="btn_usedefault"/>
                             <button
                                     follows="top|left"
@@ -122,7 +122,7 @@
                                     layout="topleft"
                                     height="23"
                                     label="Use Inventory"
-                                    width="120"
+                                    width="200"
                                     name="btn_select_inventory"/>
                             <button
                                     follows="top|left"
@@ -130,12 +130,12 @@
                                     left_delta="0"
                                     layout="topleft"
                                     height="23"
-                                    label="Customize"
-                                    width="120"
+                                    label="Customize Day Cycle"
+                                    width="200"
                                     name="btn_edit"/>
                             <check_box
                                     height="20"
-                                    label="Parcel Owners May Override Environment"
+                                    label="Parcel Owners May Override"
                                     layout="topleft"
                                     left_delta="0"
                                     top_pad="10"

@@ -3921,6 +3921,7 @@ class LLObjectMute : public view_listener_t
 // [/RLVa:KB]
 
 			avatar->mNeedsImpostorUpdate = TRUE;
+			avatar->mLastImpostorUpdateReason = 9;
 
 
 			LLNameValue *firstname = avatar->getNVPair("FirstName");

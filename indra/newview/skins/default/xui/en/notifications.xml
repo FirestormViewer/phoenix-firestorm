@@ -9505,6 +9505,13 @@ You finished baking your outfit after [TIME] seconds.
 You sent out an update of your appearance after [TIME] seconds.
 [STATUS]
   </notification>
+  
+  <notification
+   icon="notifytip.tga"
+   name="AvatarRezSelfBakeForceUpdateNotification"
+   type="notifytip">
+The viewer has detected that you may appear as a cloud and is attempting to fix this automatically.
+  </notification>
 
   <notification
    icon="notifytip.tga"
