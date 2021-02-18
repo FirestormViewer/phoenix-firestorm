@@ -45,7 +45,7 @@
 								Wybierz otoczenie
 							</text>
 							<button label="Z Szafy" name="btn_select_inventory" />
-							<button label="Dostosuj" name="btn_edit" />
+							<button label="Dostosuj cykl dnia" name="btn_edit" />
 							<check_box label="Właściciele działek mogą zastąpić" name="chk_allow_override" />
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
