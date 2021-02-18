@@ -41,7 +41,7 @@
                     height="10"
                     layout="topleft"
                     left_delta="10"
-                    top_delta="30"
+                    top_delta="25"
                     width="100">
                 Position:
             </text>
@@ -99,7 +99,7 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-5"
+                    left_delta="65"
                     top_delta="20"
                     width="80">
                 Color:
@@ -114,13 +114,61 @@
                     name="sun_moon_color"
                     top_pad="5"
                     width="60" />
+          <text
+            follows="left|top"
+            name="sun_azimuth_label"
+            height="10"
+            layout="topleft"
+            left_delta="-235"
+            top_delta="-3"
+            width="200">
+            Azimuth:
+          </text>
+          <slider
+            decimal_digits="2"
+            follows="left|top"
+            height="16"
+            increment="0.01"
+            initial_value="0"
+            layout="topleft"
+            left_delta="5"
+            min_val="0"
+            max_val="359.99"
+            name="sun_azimuth"
+            top_delta="13"
+            width="215"
+            can_edit_text="true"/>
+          <text
+            follows="left|top"
+            name="sun_elevation_label"
+            height="10"
+            layout="topleft"
+            left_delta="-5"
+            top_delta="22"
+            width="200">
+            Elevation:
+          </text>
+          <slider
+            decimal_digits="2"
+            follows="left|top"
+            height="16"
+            increment="0.01"
+            initial_value="0"
+            layout="topleft"
+            left_delta="5"
+            min_val="-90"
+            max_val="90"
+            name="sun_elevation"
+            top_delta="13"
+            width="215"
+            can_edit_text="true"/>
             <text
                     name="glow_focus_label"
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-160"
-                    top_delta="27"
+                    left_delta="-5"
+                    top_delta="22"
                     width="200">
                 Glow Focus:
             </text>
@@ -135,8 +183,8 @@
                     min_val="-2"
                     max_val="2"
                     name="glow_focus"
-                    top_delta="15"
-                    width="250"
+                    top_delta="13"
+                    width="215"
                     can_edit_text="true"/>
             <text
                     name="glow_size_label"
@@ -159,8 +207,8 @@
                     min_val="0"
                     max_val="1.99"
                     name="glow_size"
-                    top_delta="15"
-                    width="250"
+                    top_delta="13"
+                    width="215"
                     can_edit_text="true"/>
             <text
                     name="star_brightness_label"
@@ -183,8 +231,8 @@
                     min_val="0"
                     max_val="500"
                     name="star_brightness"
-                    top_delta="15"
-                    width="250"
+                    top_delta="13"
+                    width="215"
                     can_edit_text="true"/>
                     
             <check_box
@@ -240,7 +288,7 @@
                             height="10"
                             layout="topleft"
                             left_delta="10"
-                            top_delta="30"
+                            top_delta="25"
                             width="100">
                         Position:
                     </text>
@@ -293,31 +341,79 @@
                             top_delta="15"
                             width="130"
                             can_edit_text="true"/>
-                    <text
-                            name="brightness_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left_delta="-5"
-                            top_delta="22"
-                            width="200">
-                        Brightness:
-                    </text>
-                    <slider
-                            decimal_digits="2"
-                            follows="left|top"
-                            height="16"
-                            increment="0.01"
-                            initial_value="0"
-                            layout="topleft"
-                            left_delta="5"
-                            min_val="0.0"
-                            max_val="1.0"
-                            name="moon_brightness"
-                            top_delta="15"
-                            width="130"
-                            can_edit_text="true"/>
-                <check_box
+                  <text
+                    follows="left|top"
+                    name="moon_azimuth_label"
+                    height="10"
+                    layout="topleft"
+                    left_delta="-170"
+                    top_delta="32"
+                    width="200">
+                    Azimuth:
+                  </text>
+                  <slider
+                    decimal_digits="2"
+                    follows="left|top"
+                    height="16"
+                    increment="0.01"
+                    initial_value="0"
+                    layout="topleft"
+                    left_delta="5"
+                    min_val="0"
+                    max_val="359.99"
+                    name="moon_azimuth"
+                    top_delta="13"
+                    width="215"
+                    can_edit_text="true"/>
+                  <text
+                    follows="left|top"
+                    name="moon_elevation_label"
+                    height="10"
+                    layout="topleft"
+                    left_delta="-5"
+                    top_delta="22"
+                    width="200">
+                    Elevation:
+                  </text>
+                  <slider
+                    decimal_digits="2"
+                    follows="left|top"
+                    height="16"
+                    increment="0.01"
+                    initial_value="0"
+                    layout="topleft"
+                    left_delta="5"
+                    min_val="-90"
+                    max_val="90"
+                    name="moon_elevation"
+                    top_delta="13"
+                    width="215"
+                    can_edit_text="true"/>
+                  <text
+                    name="brightness_label"
+                    follows="left|top"
+                    height="10"
+                    layout="topleft"
+                    left_delta="-5"
+                    top_delta="22"
+                    width="200">
+                    Brightness:
+                  </text>
+                  <slider
+                    decimal_digits="2"
+                    follows="left|top"
+                    height="16"
+                    increment="0.01"
+                    initial_value="0"
+                    layout="topleft"
+                    left_delta="5"
+                    min_val="0.0"
+                    max_val="1.0"
+                    name="moon_brightness"
+                    top_delta="13"
+                    width="215"
+                    can_edit_text="true"/>
+                  <check_box
                         control_name="moonbeacon"
                         width="60"
                         height="16"
