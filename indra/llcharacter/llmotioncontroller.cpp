@@ -347,6 +347,13 @@ void LLMotionController::removeMotionInstance(LLMotion* motionp)
 //-----------------------------------------------------------------------------
 LLMotion* LLMotionController::createMotion( const LLUUID &id )
 {
+	// <FS:Ansariel> Don't try to create invalid motions
+	if (id.isNull())
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
 	// do we have an instance of this motion for this character?
 	LLMotion *motion = findMotion(id);
 
