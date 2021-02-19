@@ -792,11 +792,11 @@ namespace
 }
 
 //=========================================================================
-const F32Seconds LLEnvironment::TRANSITION_INSTANT(0.0f);
-const F32Seconds LLEnvironment::TRANSITION_FAST(1.0f);
-const F32Seconds LLEnvironment::TRANSITION_DEFAULT(5.0f);
-const F32Seconds LLEnvironment::TRANSITION_SLOW(10.0f);
-const F32Seconds LLEnvironment::TRANSITION_ALTITUDE(5.0f);
+const F64Seconds LLEnvironment::TRANSITION_INSTANT(0.0f);
+const F64Seconds LLEnvironment::TRANSITION_FAST(1.0f);
+const F64Seconds LLEnvironment::TRANSITION_DEFAULT(5.0f);
+const F64Seconds LLEnvironment::TRANSITION_SLOW(10.0f);
+const F64Seconds LLEnvironment::TRANSITION_ALTITUDE(5.0f);
 
 const LLUUID LLEnvironment::KNOWN_SKY_SUNRISE("01e41537-ff51-2f1f-8ef7-17e4df760bfb");
 const LLUUID LLEnvironment::KNOWN_SKY_MIDDAY("6c83e853-e7f8-cad7-8ee6-5f31c453721c");
@@ -1303,43 +1303,35 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, const LLSe
     }
 }
 
-void LLEnvironment::setEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version)
-{
-    setEnvironment(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET);
-}
-
 // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
 void LLEnvironment::setManualEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version)
 {
     LLSettingsBase::Seconds transitionTime(static_cast<F64>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
-    setEnvironmentWithTransition(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, transitionTime);
-}
-void LLEnvironment::setEnvironmentWithTransition(
-                                    EnvSelection_t env,
-                                    const LLUUID &assetId,
-                                    LLSettingsDay::Seconds daylength,
-                                    LLSettingsDay::Seconds dayoffset,
-                                    LLSettingsBase::Seconds transition,
-                                    S32 env_version)
-{
-    LLSettingsVOBase::getSettingsAsset(assetId,
-        [this, env, daylength, dayoffset, transition, env_version](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat)
-        {
-            onSetEnvAssetLoaded(env, asset_id, settings, daylength, dayoffset, transition, status, env_version);
-        });
+    setEnvironment(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, transitionTime, env_version);
 }
 // </FS:Beq>
-void LLEnvironment::setEnvironment(
-                                    EnvSelection_t env,
-                                    const LLUUID &assetId,
-                                    LLSettingsDay::Seconds daylength,
-                                    LLSettingsDay::Seconds dayoffset,
-                                    S32 env_version)
+
+void LLEnvironment::setEnvironment(EnvSelection_t env, const LLUUID &assetId, S32 env_version)
+{
+    setEnvironment(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, TRANSITION_DEFAULT, env_version);
+}
+
+void LLEnvironment::setEnvironment(EnvSelection_t env, const LLUUID &assetId, LLSettingsBase::Seconds transition, S32 env_version)
+{
+    setEnvironment(env, assetId, LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, transition, env_version);
+}
+
+void LLEnvironment::setEnvironment(EnvSelection_t env,
+                                   const LLUUID &assetId,
+                                   LLSettingsDay::Seconds daylength,
+                                   LLSettingsDay::Seconds dayoffset,
+                                   LLSettingsBase::Seconds transition,
+                                   S32 env_version)
 {
     LLSettingsVOBase::getSettingsAsset(assetId,
-        [this, env, daylength, dayoffset, env_version](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat)
+        [this, env, daylength, dayoffset, env_version, transition](LLUUID asset_id, LLSettingsBase::ptr_t settings, S32 status, LLExtStat)
         {
-            onSetEnvAssetLoaded(env, asset_id, settings, daylength, dayoffset, TRANSITION_DEFAULT, status, env_version);
+            onSetEnvAssetLoaded(env, asset_id, settings, daylength, dayoffset, transition, status, env_version);
         });
 }
 
@@ -1824,9 +1816,9 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
             clearEnvironment(ENV_PARCEL);
 // <FS:Beq> opensim legacy windlight. Nothing we can do here as the default assets do not exist in OpenSim
             LL_WARNS("ENVIRONMENT") << "No DayCycle specified - setting default" << LL_ENDL;
-            if(LLGridManager::getInstance()->isInSecondLife())
+            if (LLGridManager::getInstance()->isInSecondLife())
             {
-                setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
+                setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, TRANSITION_DEFAULT, envinfo->mEnvVersion);
                 updateEnvironment();
             }
 // </FS:Beq>
@@ -1836,7 +1828,7 @@ void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentI
         {
             LL_WARNS("ENVIRONMENT") << "Invalid day cycle for region" << LL_ENDL;
             clearEnvironment(ENV_PARCEL);
-            setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, envinfo->mEnvVersion);
+            setEnvironment(ENV_REGION, LLSettingsDay::GetDefaultAssetId(), LLSettingsDay::DEFAULT_DAYLENGTH, LLSettingsDay::DEFAULT_DAYOFFSET, TRANSITION_DEFAULT, envinfo->mEnvVersion);
             updateEnvironment();
         }
         else
