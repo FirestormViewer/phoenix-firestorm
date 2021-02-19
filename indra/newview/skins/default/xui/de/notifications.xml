@@ -1312,6 +1312,13 @@ nach
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Landmarke umbenennen" name="RenameLandmark">
+		Neuer Name für [NAME]
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Möchten Sie &lt;nolink&gt;[NAME]&lt;/nolink&gt; aus Ihrer Freundesliste entfernen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
