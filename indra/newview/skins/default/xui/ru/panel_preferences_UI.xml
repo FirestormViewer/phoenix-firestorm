@@ -102,6 +102,20 @@
 		<check_box label="Показать поиск в меню" name="show_search_menu_check"/>
 		<check_box label="Показать текущий баланс L$" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Включить выпадающие окна меню мыши на значках верхнего меню" name="FSStatusBarMenuButtonPopupOnRollover" width="270" />
+		<text name="statusbar_timeformat_textbox" width="100">
+			Формат времени:
+		</text>
+		<combo_box name="FSStatusBarTimeFormat" tool_tip="Выбирает формат времени, используемый в строке главного меню." width="250">
+			<combo_box.item label="Стандарт выбранного языка" name="Language"/>
+			<combo_box.item label="12 Часов" name="12_Hour"/>
+			<combo_box.item label="12 Часов с Секундами" name="12_Hour_Seconds"/>
+			<combo_box.item label="12 Часов с Часовым поясом" name="12_Hour_TZ"/>
+			<combo_box.item label="12 Часов с Секундами и Часовым поясом" name="12_Hour_TZ_Seconds"/>
+			<combo_box.item label="24 Часа" name="24_Hour"/>
+			<combo_box.item label="24 Часа с Секундами" name="24_Hour_Seconds"/>
+			<combo_box.item label="24 Часа с Часовым поясом" name="24_Hour_TZ"/>
+			<combo_box.item label="24 Часа с Секундами и Часовым поясом" name="24_Hour_TZ_Seconds"/>
+		</combo_box>
 		<text name="navfav_textbox">
 		Панель навигации и закладок:
 		</text>
