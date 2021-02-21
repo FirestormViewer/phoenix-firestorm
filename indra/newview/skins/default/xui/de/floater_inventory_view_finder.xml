@@ -15,7 +15,6 @@
 	<check_box label="Einstellungen" name="check_settings"/>
 	<button label="Alle" label_selected="Alle" name="All"/>
 	<button label="Keine" label_selected="Keine" name="None"/>
-	<check_box label="Nur Transferierbar" name="check_transferable"/>
 	<check_box label="Ordner immer anz." name="check_show_empty"/>
 	<check_box label="Von mir erstellt" name="check_created_by_me"/>
 	<check_box label="Von anderen erstellt" name="check_created_by_others"/>
