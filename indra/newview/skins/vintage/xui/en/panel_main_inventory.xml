@@ -467,7 +467,7 @@
 		</menu_item_check>
 		<menu_item_check
 			name="inventory_filter_only_copy"
-			label="Only Copiable">
+			label="Only Copyable">
 			<on_click
 				function="Inventory.FilterPermissions.Set"
 				parameter="only_copy" />
