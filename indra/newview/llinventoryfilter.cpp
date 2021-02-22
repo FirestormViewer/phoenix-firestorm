@@ -567,13 +567,6 @@ bool LLInventoryFilter::checkAgainstPermissions(const LLFolderViewModelItemInven
 {
 	if (!listener) return FALSE;
 
-	// <FS:Zi> Fix empty filtered folders still showing
-	if (listener->getInventoryType() == LLInventoryType::IT_CATEGORY)
-	{
-		return false;
-	}
-	// </FS:Zi>
-
 	PermissionMask perm = listener->getPermissionMask();
 	const LLInvFVBridge *bridge = dynamic_cast<const LLInvFVBridge *>(listener);
 	if (bridge && bridge->isLink())
