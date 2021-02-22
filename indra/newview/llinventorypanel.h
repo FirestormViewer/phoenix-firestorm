@@ -202,7 +202,7 @@ public:
 	void setFilterLinks(U64 filter_links);
 	U64 getFilterLinks();		// <FS:Zi> Filter Links Menu
 	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
-	void setFilterPermissions(U64 filter_links);
+	void setFilterPermissions(PermissionMask filter_permissions);
 	PermissionMask getFilterPermissions();
 	// </FS:Zi>
 	void setSearchType(LLInventoryFilter::ESearchType type);
