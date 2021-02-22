@@ -6,9 +6,10 @@
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] Элементов [FILTER]
 	</panel.string>
-	<text name="ItemcountText">
-		Объекты:
-	</text>
+	<panel.string name="ItemcountUnknown">
+		Обнаружено [ITEM_COUNT] элементов [FILTER]
+	</panel.string>
+
 	<menu_bar name="inventory_menu_bar">
 		<menu label="Инвентарь" name="inventory_inventory_menu">
 			<menu_item_call name="inventory_open" label="Открыть" />
@@ -70,7 +71,9 @@
 			<menu_item_check name="inventory_filter_show_links" label="Показать ссылки" />
 			<menu_item_check name="inventory_filter_only_links" label="Показать только ссылки" />
 			<menu_item_check name="inventory_filter_hide_links" label="Скрыть ссылки" />
-			<menu_item_check name="inventory_show_partial_results" label="Показать частичные результаты поиска" />
+			<menu_item_check name="inventory_filter_only_modify" label="Только изменяемое"/>
+			<menu_item_check name="inventory_filter_only_copy" label="Только копируемое"/>
+			<menu_item_check name="inventory_filter_only_transfer" label="Только передаваемое"/>
 		</menu>
 	</menu_bar>
 	<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
@@ -108,7 +111,7 @@
 			<button name="new_inv_btn" tool_tip="Дополнительное окно инвентаря"/>
 		</panel>
 		<panel name="dummy_panel">
-			<text name="ItemcountText">
+			<text name="ItemcountText" tool_tip="[ITEMS] предметов, [CATEGORIES] папок">
 				Элементов
 			</text>
 		</panel>
