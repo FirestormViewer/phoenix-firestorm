@@ -496,7 +496,7 @@ void LLInventoryPanel::setDateSearchDirection(U32 direction)
 }
 
 // <FS:Zi> FIRE-1175 - Filter Permissions Menu
-void LLInventoryPanel::setFilterPermissions(U64 filter_permissions)
+void LLInventoryPanel::setFilterPermissions(PermissionMask filter_permissions)
 {
 	getFilter().setFilterPermissions(filter_permissions);
 }
