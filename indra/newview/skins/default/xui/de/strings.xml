@@ -1926,7 +1926,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Snapshots" value=" Fotos,"/>
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
-	<string name="Transfer Only" value=" - Nur Transfer"/>
+	<string name="Modifiable" value="Modifizierbar" />
+	<string name="Copyable" value="Kopierbar" />
+	<string name="Transferable" value="Transferierbar" />
+	<string name="PermissionsFilter" value=" - Nur [PERMISSIONS]" />
 	<string name="InvFolder My Inventory">
 		Inventar
 	</string>

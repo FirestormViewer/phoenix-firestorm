@@ -886,7 +886,12 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="Snapshots"     value=" Snapshots," />
 	<string name="No Filters"    value="No " />
 	<string name="Since Logoff"  value=" - Since Logoff" />
-	<string name="Transfer Only" value=" - Transfer only" />
+	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
+	<string name="Modifiable"        value="Modifiable" />
+	<string name="Copyable"          value="Copyable" />
+	<string name="Transferable"      value="Transferable" />
+	<string name="PermissionsFilter" value=" - Only [PERMISSIONS]" />
+	<!-- </FS:Zi> -->
 
 	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">Inventory</string>
