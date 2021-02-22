@@ -27,5 +27,8 @@
 	<menu_item_check name="inventory_filter_show_links" label="Pokaż linki"/>
 	<menu_item_check name="inventory_filter_only_links" label="Pokaż tylko linki"/>
 	<menu_item_check name="inventory_filter_hide_links" label="Ukryj linki"/>
+	<menu_item_check name="inventory_filter_only_modify" label="Tylko modyfikowalne" />
+	<menu_item_check name="inventory_filter_only_copy" label="Tylko kopiowalne" />
+	<menu_item_check name="inventory_filter_only_transfer" label="Tylko transferowalne" />
 	<menu_item_call label="Opróżnij Kosz" name="empty_trash"/>
 </toggleable_menu>
