@@ -2287,6 +2287,13 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
 {
 	llassert_always(uuid.notNull());
 
+	// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
+	if (mDeadObjects.find(uuid) != mDeadObjects.end())
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
     LL_DEBUGS("ObjectUpdate") << "creating " << uuid << " local_id " << local_id << LL_ENDL;
     dumpStack("ObjectUpdateStack");
     
@@ -2326,7 +2333,14 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 		return NULL;
 	}
 	// </FS:Ansariel>
-	
+
+	// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
+	if (mDeadObjects.find(uuid) != mDeadObjects.end())
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
 	LLUUID fullid;
 	if (uuid == LLUUID::null)
 	{
