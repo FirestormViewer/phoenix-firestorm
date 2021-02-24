@@ -357,6 +357,13 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	cached_dpp->unpackU32(local_id, "LocalID");
 	cached_dpp->unpackU8(pcode, "PCode");
 
+	// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
+	if (mDeadObjects.find(fullid) != mDeadObjects.end())
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> Don't process derendered objects
 	if (mDerendered.end() != mDerendered.find(fullid))
 	{
@@ -683,6 +690,13 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 				continue;
 			}
 #endif
+
+			// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
+			if (mDeadObjects.find(fullid) != mDeadObjects.end())
+			{
+				continue;
+			}
+			// </FS:Ansariel>
 
 			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, (pcode == LL_PCODE_LEGACY_AVATAR ? LLAssetType::AT_PERSON : LLAssetType::AT_OBJECT)))
 			{
@@ -2287,13 +2301,6 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
 {
 	llassert_always(uuid.notNull());
 
-	// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
-	if (mDeadObjects.find(uuid) != mDeadObjects.end())
-	{
-		return NULL;
-	}
-	// </FS:Ansariel>
-
     LL_DEBUGS("ObjectUpdate") << "creating " << uuid << " local_id " << local_id << LL_ENDL;
     dumpStack("ObjectUpdateStack");
     
@@ -2329,13 +2336,6 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 
 	// <FS:Ansariel> FIRE-20288: Option to render friends only
 	if (isNonFriendDerendered(uuid, pcode))
-	{
-		return NULL;
-	}
-	// </FS:Ansariel>
-
-	// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
-	if (mDeadObjects.find(uuid) != mDeadObjects.end())
 	{
 		return NULL;
 	}
