@@ -357,13 +357,6 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	cached_dpp->unpackU32(local_id, "LocalID");
 	cached_dpp->unpackU8(pcode, "PCode");
 
-	// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
-	if (mDeadObjects.find(fullid) != mDeadObjects.end())
-	{
-		return NULL;
-	}
-	// </FS:Ansariel>
-
 	// <FS:Ansariel> Don't process derendered objects
 	if (mDerendered.end() != mDerendered.find(fullid))
 	{
@@ -410,6 +403,13 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	bool justCreated = false;
 	if (!objectp)
 	{
+		// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
+		if (mDeadObjects.find(fullid) != mDeadObjects.end())
+		{
+			return NULL;
+		}
+		// </FS:Ansariel>
+
 		objectp = createObjectFromCache(pcode, regionp, fullid, entry->getLocalID());
 
         LL_DEBUGS("ObjectUpdate") << "uuid " << fullid << " created objectp " << objectp << LL_ENDL;
