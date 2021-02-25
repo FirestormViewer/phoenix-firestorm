@@ -223,7 +223,10 @@ protected:
 
 	vobj_list_t mMapObjects;
 
-    uuid_set_t   mDeadObjects;
+	// <FS:Beq> deadobject cleanup
+    // uuid_set_t   mDeadObjects;
+    uuid_multiset_t   mDeadObjects;
+	// </FS:Beq>
 
 	std::map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
 
