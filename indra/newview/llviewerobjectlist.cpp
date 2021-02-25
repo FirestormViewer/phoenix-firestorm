@@ -403,12 +403,6 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	bool justCreated = false;
 	if (!objectp)
 	{
-		// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
-		if (mDeadObjects.find(fullid) != mDeadObjects.end())
-		{
-			return NULL;
-		}
-		// </FS:Ansariel>
 
 		objectp = createObjectFromCache(pcode, regionp, fullid, entry->getLocalID());
 
@@ -690,13 +684,6 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 				continue;
 			}
 #endif
-
-			// <FS:Ansariel> Prevent re-creating dead, but not yet disposed objects
-			if (mDeadObjects.find(fullid) != mDeadObjects.end())
-			{
-				continue;
-			}
-			// </FS:Ansariel>
 
 			if (FSAssetBlacklist::getInstance()->isBlacklisted(fullid, (pcode == LL_PCODE_LEGACY_AVATAR ? LLAssetType::AT_PERSON : LLAssetType::AT_OBJECT)))
 			{
@@ -1429,25 +1416,20 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 	// bool new_dead_object = true;
 	if (mDeadObjects.find(objectp->mID) != mDeadObjects.end())
 	{
-		LL_INFOS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
 	// <FS:Beq> FIRE-30694 DeadObject Spam
+	// LL_INFOS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
 	// 	new_dead_object = false;
+		LL_DEBUGS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
+	// </FS:Beq>
 	}
-	else
+	// <FS:Beq> detect but still delete dupes
+	// else
 	{
 	// <FS:Beq> FIRE-30694 DeadObject Spam
 	// 	mDeadObjects.insert(objectp->mID);
-	 	bool success;
-		std::tie( std::ignore, success ) = mDeadObjects.insert( objectp->mID );
-		if( success )
-		{
-			mNumDeadObjects++;
-			llassert( mNumDeadObjects == mDeadObjects.size() );
-		}
-		else
-		{
-			LL_WARNS() << "Object " << objectp->mID << " failed to insert on dead list!" << LL_ENDL;	
-		}
+		mDeadObjects.insert( objectp->mID );
+		mNumDeadObjects++;
+		llassert( mNumDeadObjects == mDeadObjects.size() );
 	// </FS:Beq>
 	}
 
@@ -1646,20 +1628,29 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 	{
 		// Scan for all of the dead objects and put them all on the end of the list with no ref count ops
 		objectp = *iter;
-		if (objectp == NULL)
-		{ //we caught up to the dead tail
-			break;
-		}
+		// <FS:Beq> catch up check removed and a guard on the if added. this allows us to skip random nulls in the list (no idea if it can happen) 
+		// if (objectp == NULL)
+		// { //we caught up to the dead tail
+		// 	break;
+		// }
 
-		if (objectp->isDead())
+		// if objectp->isDead())
+		if (objectp && objectp->isDead())
+		// </FS:Beq>
 		{
 			// <FS:Beq> FIRE-30694 DeadObject Spam
 			// mDeadObjects.erase(objectp->mID); // <FS:Ansariel> Use timer for cleaning up dead objects
-			if(mDeadObjects.erase(objectp->mID)==0)
-			{
+            auto delete_me = mDeadObjects.find(objectp->mID);
+            if( delete_me !=mDeadObjects.end() )
+            {
+                mDeadObjects.erase( delete_me );
+            }
+            else
+            {
 				LL_WARNS() << "Attempt to delete object " << objectp->mID << " but object not in dead list" << LL_ENDL;
 				num_divergent++; // this is the number we are adrift in the count
-			}
+            }
+
 			LLPointer<LLViewerObject>::swap(*iter, *target);
 			*target = NULL;
 			++target;
@@ -1667,7 +1658,7 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 
 			// <FS:Ansariel> Use timer for cleaning up dead objects
 			//if (num_removed == mNumDeadObjects || iter->isNull())
-			if (num_removed == mNumDeadObjects || iter->isNull() || (use_timer && timer.getElapsedTimeF64() > max_time))
+			if (num_removed == mNumDeadObjects || vobj_list_t::reverse_iterator{iter} == target || (use_timer && timer.getElapsedTimeF64() > max_time))
 			// </FS:Ansariel>
 			{
 				// We've cleaned up all of the dead objects or caught up to the dead tail
@@ -2533,7 +2524,9 @@ void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
 		}
 		else
 		{
-			LL_INFOS() << "Missing orphan child, removing from list" << LL_ENDL;
+			// <FS:Beq> descope uninteresting spam we can do nothing about.
+			// LL_INFOS() << "Missing orphan child, removing from list" << LL_ENDL;
+			LL_DEBUGS() << "Missing orphan child, removing from list" << LL_ENDL;
 
 			iter = mOrphanChildren.erase(iter);
 		}
