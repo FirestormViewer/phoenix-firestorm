@@ -1628,15 +1628,12 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 	{
 		// Scan for all of the dead objects and put them all on the end of the list with no ref count ops
 		objectp = *iter;
-		// <FS:Beq> catch up check removed and a guard on the if added. this allows us to skip random nulls in the list (no idea if it can happen) 
-		// if (objectp == NULL)
-		// { //we caught up to the dead tail
-		// 	break;
-		// }
+		if (objectp == NULL)
+		{ //we caught up to the dead tail
+			break;
+		}
 
-		// if objectp->isDead())
-		if (objectp && objectp->isDead())
-		// </FS:Beq>
+		if (objectp->isDead())
 		{
 			// <FS:Beq> FIRE-30694 DeadObject Spam
 			// mDeadObjects.erase(objectp->mID); // <FS:Ansariel> Use timer for cleaning up dead objects
@@ -1658,7 +1655,7 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 
 			// <FS:Ansariel> Use timer for cleaning up dead objects
 			//if (num_removed == mNumDeadObjects || iter->isNull())
-			if (num_removed == mNumDeadObjects || vobj_list_t::reverse_iterator{iter} == target || (use_timer && timer.getElapsedTimeF64() > max_time))
+			if (num_removed == mNumDeadObjects || iter->isNull() || (use_timer && timer.getElapsedTimeF64() > max_time))
 			// </FS:Ansariel>
 			{
 				// We've cleaned up all of the dead objects or caught up to the dead tail
@@ -1687,7 +1684,7 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 	// TODO(Beq) If this still happens, we ought to realign at this point. Do a full sweep and reset.
 	if ( mNumDeadObjects != mDeadObjects.size() )
 	{
-		LL_WARNS() << "Num dead objects (" << mNumDeadObjects << ") != dead object list size (" << mDeadObjects.size() << "),  deadlist discrepancy (" << num_divergent << ")" << LL_ENDL;
+		LL_WARNS_ONCE() << "Num dead objects (" << mNumDeadObjects << ") != dead object list size (" << mDeadObjects.size() << "),  deadlist discrepancy (" << num_divergent << ")" << LL_ENDL;
 	}
 	// </FS:Ansariel>
 }
