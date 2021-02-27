@@ -106,7 +106,7 @@ LLJoint *LLCharacter::getJoint( const std::string &name )
 
 	if (!joint)
 	{
-		LL_WARNS() << "Failed to find joint." << LL_ENDL;
+		LL_WARNS() << "Failed to find joint: " << name << LL_ENDL;
 	}
 	return joint;
 }

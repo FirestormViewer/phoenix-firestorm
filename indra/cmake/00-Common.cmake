@@ -214,6 +214,10 @@ if (LINUX)
 
   set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
+
+  if( NOT (CMAKE_CXX_COMPILER MATCHES ".*clang") )
+	set( CMAKE_CXX_FLAGS "-fabi-version=9 ${CMAKE_CXX_FLAGS}" ) 
+  endif()
 endif (LINUX)
 
 
