@@ -105,6 +105,9 @@
 #include "NACLantispam.h"
 #include "nd/ndlogthrottle.h"
 
+// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+#include "llanimationstates.h"
+
 // Third party library includes
 #include <boost/algorithm/string.hpp>
 
@@ -1059,6 +1062,20 @@ void handleStatusbarTimeformatChanged(const LLSD& newValue)
 }
 // </FS:Zi>
 
+// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+void handlePlayBentoIdleAnimationChanged(const LLSD& newValue)
+{
+	EAnimRequest startStop = ANIM_REQUEST_STOP;
+
+	if (newValue.asBoolean())
+	{
+		startStop = ANIM_REQUEST_START;
+	}
+
+	gAgent.sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, startStop);
+}
+// </FS:Zi>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1312,6 +1329,9 @@ void settings_setup_listeners()
 
 	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
 	gSavedSettings.getControl("FSStatusBarTimeFormat")->getSignal()->connect(boost::bind(&handleStatusbarTimeformatChanged, _2));
+
+	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+	gSavedSettings.getControl("FSPlayDefaultBentoAnimation")->getSignal()->connect(boost::bind(&handlePlayBentoIdleAnimationChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

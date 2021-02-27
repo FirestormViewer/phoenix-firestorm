@@ -1177,6 +1177,13 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 	}
 	// </FS:Ansariel> [Legacy Bake]
 
+	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+	if (gSavedSettings.getBOOL("FSPlayDefaultBentoAnimation"))
+	{
+		sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, ANIM_REQUEST_START);
+	}
+	// </FS:Zi>
+
 	LL_DEBUGS("AgentLocation") << "Calling RegionChanged callbacks" << LL_ENDL;
 	mRegionChangedSignal();
 }
@@ -5287,6 +5294,13 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 		// re-assert at least the default standing animation, because
 		// viewers get confused by avs with no associated anims.
 		sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+
+		// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+		if (gSavedSettings.getBOOL("FSPlayDefaultBentoAnimation"))
+		{
+			sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, ANIM_REQUEST_START);
+		}
+		// </FS:Zi>
 	}
 }
 

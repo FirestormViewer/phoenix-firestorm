@@ -4466,6 +4466,13 @@ void LLVOAvatar::updateAnimationDebugText()
                         motion_name = item->getName();
                     }
                 }
+                else
+                {
+                    if (motionp->getID() == ANIM_AGENT_BENTO_IDLE)
+                    {
+                        motion_name = "bento_idle";
+                    }
+                }
             }
             if (motion_name.empty())
 			{
