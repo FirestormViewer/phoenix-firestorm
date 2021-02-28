@@ -1516,7 +1516,7 @@
     <key>Comment</key>
     <string>Enable debug output to more precisely identify sources of import errors. Warning: the output can slow down import on many machines.</string>
     <key>Persist</key>
-    <integer>1</integer>
+    <integer>0</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
