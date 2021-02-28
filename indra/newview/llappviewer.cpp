@@ -6129,9 +6129,12 @@ void LLAppViewer::sendLogoutRequest()
 	}
 }
 
-void LLAppViewer::updateNameLookupUrl()
+// <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+// void LLAppViewer::updateNameLookupUrl()
+void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * region)
+// </FS:Beq>
 {
-    LLViewerRegion* region = gAgent.getRegion();
+    // LLViewerRegion* region = gAgent.getRegion(); <FS:Beq/>
     if (!region || !region->capabilitiesReceived())
     {
         return;

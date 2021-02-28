@@ -1038,16 +1038,25 @@ boost::signals2::connection LLAgent::addParcelChangedCallback(parcel_changed_cal
 }
 
 // static
-void LLAgent::capabilityReceivedCallback(const LLUUID &region_id)
+// <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+// void LLAgent::capabilityReceivedCallback(const LLUUID &region_id)
+// {
+//     LLViewerRegion* region = gAgent.getRegion();
+//     if (region && region->getRegionID() == region_id)
+//     {
+//         region->requestSimulatorFeatures();
+//         LLAppViewer::instance()->updateNameLookupUrl();
+//     }
+// }
+void LLAgent::capabilityReceivedCallback(const LLUUID &region_id, LLViewerRegion * regionp)
 {
-    LLViewerRegion* region = gAgent.getRegion();
-    if (region && region->getRegionID() == region_id)
+    if (regionp && regionp->getRegionID() == region_id)
     {
-        region->requestSimulatorFeatures();
-        LLAppViewer::instance()->updateNameLookupUrl();
+        regionp->requestSimulatorFeatures();
+        LLAppViewer::instance()->updateNameLookupUrl(regionp);
     }
 }
-
+// </FS:Beq>
 
 //-----------------------------------------------------------------------------
 // setRegion()
@@ -1099,11 +1108,17 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             if (regionp->capabilitiesReceived())
             {
                 regionp->requestSimulatorFeatures();
-                LLAppViewer::instance()->updateNameLookupUrl();
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // LLAppViewer::instance()->updateNameLookupUrl();
+                LLAppViewer::instance()->updateNameLookupUrl(regionp);
+                // </FS:Beq>
             }
             else
             {
-                regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
+                regionp->setCapabilitiesReceivedCallback(boost::bind(&LLAgent::capabilityReceivedCallback, _1,regionp));
+                // </FS:Beq>
             }
 
 		}
@@ -1125,11 +1140,17 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 
             if (regionp->capabilitiesReceived())
             {
-                LLAppViewer::instance()->updateNameLookupUrl();
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // LLAppViewer::instance()->updateNameLookupUrl();
+                LLAppViewer::instance()->updateNameLookupUrl(regionp);
+                // </FS:Beq>
             }
             else
             {
-                regionp->setCapabilitiesReceivedCallback([](const LLUUID &region_id) {LLAppViewer::instance()->updateNameLookupUrl(); });
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // regionp->setCapabilitiesReceivedCallback([regionp](const LLUUID &region_id) {LLAppViewer::instance()->updateNameLookupUrl(); });
+                regionp->setCapabilitiesReceivedCallback([regionp](const LLUUID &region_id) {LLAppViewer::instance()->updateNameLookupUrl(regionp); });
+                // </FS:Beq>
             }
 		}
 
