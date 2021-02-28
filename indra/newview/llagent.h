@@ -260,7 +260,7 @@ public:
 private:
     // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
 	// static void capabilityReceivedCallback(const LLUUID &region_id);
-	static void capabilityReceivedCallback(const LLUUID &region_id, LLViewerRegion * regionp);
+	static void capabilityReceivedCallback(LLViewerRegion* regionp);
 	// </FS:Beq>
 
 	typedef boost::signals2::signal<void()> parcel_changed_signal_t;
