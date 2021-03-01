@@ -2864,7 +2864,8 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 		// <FS:Ansariel> Faster debug settings
 		//if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("VoiceDisableMic"))
 		static LLCachedControl<bool> voiceDisableMic(gSavedSettings, "VoiceDisableMic");
-		if (gAgentCamera.cameraMouselook() || voiceDisableMic)
+		static LLCachedControl<bool> fsShowMyOwnVoiceVisualizer(gSavedSettings, "FSShowMyOwnVoiceVisualizer"); // <FS:PP> FIRE-21210: Don't show my voice visualizer
+		if (gAgentCamera.cameraMouselook() || voiceDisableMic || !fsShowMyOwnVoiceVisualizer)
 		// </FS:Ansariel>
 		{
 			render_visualizer = false;
