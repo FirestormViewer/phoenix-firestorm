@@ -376,8 +376,8 @@ void LLVoiceVisualizer::render()
 		gGL.getTexUnit(0)->bind(mSoundSymbol.mTexture[0]);
 
 		// <FS:PP> FIRE-22570: Option to show visualizers as waves without the dot
-		static LLCachedControl<bool> fsShowVoiceVisualizerAsWavesOnly(gSavedSettings, "FSShowVoiceVisualizerAsWavesOnly");
-		if (!fsShowVoiceVisualizerAsWavesOnly)
+		static LLCachedControl<bool> fsShowVoiceVisualizerWithDot(gSavedSettings, "FSShowVoiceVisualizerWithDot");
+		if (fsShowVoiceVisualizerWithDot)
 		{
 		// </FS:PP>
 

@@ -963,14 +963,14 @@
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"
-         control_name="FSShowVoiceVisualizerAsWavesOnly"
+         control_name="FSShowVoiceVisualizerWithDot"
          follows="left|top"
          height="15"
-         label="Show visualizers as waves without the dot"
-         tool_tip="Hides the voice dot over avatars and shows only voice waves."
+         label="Show the dot as part of the voice visualizer"
+         tool_tip="If enabled, the dot is shown as part of the voice visualizer. If disabled, it only shows voice waves."
          layout="topleft"
          left="35"
-         name="FSShowVoiceVisualizerAsWavesOnly"
+         name="FSShowVoiceVisualizerWithDot"
          top_pad="3"
          width="237"/>
         <check_box
