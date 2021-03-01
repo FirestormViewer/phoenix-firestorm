@@ -114,6 +114,8 @@
 		</radio_group>
 		<check_box label="Avatarlippen beim Sprechen bewegen" name="enable_lip_sync"/>
 		<check_box label="Zeige Voice-Indikator über Avataren" name="FSShowVoiceVisualizer" tool_tip="Wenn diese Option aktiviert ist, wird der Voice-Indicator (weißer Punkt) über Avataren angezeigt."/>
+		<check_box label="Zeige Voice-Indikator über eigenen Avatar" name="FSShowMyOwnVoiceVisualizer"/>
+		<check_box label="Zeige Voice-Indikator ohne Punkt" name="FSShowVoiceVisualizerAsWavesOnly" tool_tip="Wenn diese Option aktiviert ist, zeigt der Voice-Indicator nur die Wellen-Symbole beim Sprechen über Avataren an, nicht aber den weißen Punkt."/>
 		<check_box label="Zeige Voice-Indikator und Lippenbewegungen in P2P- und Gruppenchats" name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice-Indicator und Lippen Bewegungen auch im P2P- sowie im Gruppenchat angezeigt."/>
 		<check_box label="Zeige Voice-Kanal-Status auf Gesprächs-Reitern" name="FSShowConversationVoiceStateIndicator" tool_tip="Zeigt den Status des aktuellen Voice-Kanals auf den Reitern im Gespräche-Fenster"/>
 		<check_box label="Automatisch alle eingehenden Gruppenanrufe abweisen" name="VoiceCallsRejectGroup"/>
