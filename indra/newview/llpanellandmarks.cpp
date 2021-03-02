@@ -232,7 +232,11 @@ BOOL LLLandmarksPanel::postBuild()
 	initMyInventoryPanel();
 	initLibraryInventoryPanel();
 
-	LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("landmarks_accordion");
+	// <FS:Ansariel> Fix warnings log spam
+	//LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("landmarks_accordion");
+	LLView* accordion_view = findChildView("landmarks_accordion");
+	LLAccordionCtrl* accordion = dynamic_cast<LLAccordionCtrl*>(accordion_view);
+	// </FS:Ansariel>
 	if (accordion)
 	{
 		accordion->setSkipScrollToChild(true);

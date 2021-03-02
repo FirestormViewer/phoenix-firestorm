@@ -57,6 +57,7 @@ class LLImageDecodeThread;
 class LLTextureFetch;
 class LLWatchdogTimeout;
 class LLViewerJoystick;
+class LLViewerRegion; // <FS:Beq/>
 
 extern LLTrace::BlockTimerStatHandle FTM_FRAME;
 
@@ -219,7 +220,10 @@ public:
 	// llcorehttp init/shutdown/config information.
 	LLAppCoreHttp & getAppCoreHttp()			{ return mAppCoreHttp; }
 
-    void updateNameLookupUrl();
+    // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+    // void updateNameLookupUrl();
+    void updateNameLookupUrl( const LLViewerRegion * region );
+	// </FS:Beq>
 
 protected:
 	virtual bool initWindow(); // Initialize the viewer's window.

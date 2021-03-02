@@ -1890,7 +1890,10 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="Snapshots" value=" Снимки,"/>
 	<string name="No Filters" value="Нет "/>
 	<string name="Since Logoff" value=" - с выхода"/>
-	<string name="Transfer Only" value=" - только передающиеся"/>
+	<string name="Modifiable" value="Изменяемое"/>
+	<string name="Copyable" value="Копируемое"/>
+	<string name="Transferable" value="Передаваемое"/>
+	<string name="PermissionsFilter" value=" - Только [PERMISSIONS]"/>
 	<string name="InvFolder My Inventory">
 		Инвентарь
 	</string>

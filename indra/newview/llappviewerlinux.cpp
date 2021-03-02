@@ -434,15 +434,18 @@ void LLAppViewerLinux::initCrashReporting(bool reportFreeze)
     pid_str <<  LLApp::getPid();
     std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
     std::string appname = gDirUtilp->getExecutableFilename();
+	std::string grid{ LLGridManager::getInstance()->getGridId() };
+	std::string title{ LLAppViewer::instance()->getSecondLifeTitle() };
+	std::string pidstr{ pid_str.str() };
 	// launch the actual crash logger
 	const char * cmdargv[] =
 		{cmd.c_str(),
 		 "-user",
-		 (char*)LLGridManager::getInstance()->getGridId().c_str(),
+		 grid.c_str(),
 		 "-name",
-		 LLAppViewer::instance()->getSecondLifeTitle().c_str(),
+		 title.c_str(),
 		 "-pid", 
-		 pid_str.str().c_str(),
+		 pidstr.c_str(),
 		 "-dumpdir",
 		 logdir.c_str(),
 		 "-procname",

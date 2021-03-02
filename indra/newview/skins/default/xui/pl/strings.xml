@@ -1799,7 +1799,10 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Snapshots" value=" Zdjęcia,"/>
 	<string name="No Filters" value="Nie "/>
 	<string name="Since Logoff" value=" - od wylogowania"/>
-	<string name="Transfer Only" value=" - tylko transferowalne" />
+	<string name="Modifiable" value="Modyfikowalne" />
+	<string name="Copyable" value="Kopiowalne" />
+	<string name="Transferable" value="Transferowalne" />
+	<string name="PermissionsFilter" value=" - tylko [PERMISSIONS]" />
 	<string name="InvFolder My Inventory">
 		Moja Szafa
 	</string>

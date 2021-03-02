@@ -6140,16 +6140,19 @@ void LLAppViewer::sendLogoutRequest()
 	}
 }
 
-void LLAppViewer::updateNameLookupUrl()
+// <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+// void LLAppViewer::updateNameLookupUrl()
+void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * region)
+// </FS:Beq>
 {
-    LLViewerRegion* region = gAgent.getRegion();
+    // LLViewerRegion* region = gAgent.getRegion(); <FS:Beq/>
     if (!region || !region->capabilitiesReceived())
     {
         return;
     }
 
     LLAvatarNameCache *name_cache = LLAvatarNameCache::getInstance();
-    bool had_capability = LLAvatarNameCache::getInstance()->hasNameLookupURL();
+    bool had_capability = name_cache->hasNameLookupURL();
     std::string name_lookup_url;
     name_lookup_url.reserve(128); // avoid a memory allocation below
     name_lookup_url = region->getCapability("GetDisplayNames");

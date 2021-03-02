@@ -59,8 +59,7 @@ public:
         FILTERTYPE_MARKETPLACE_LISTING_FOLDER = 0x1 << 9,	// pass iff folder is a listing folder
         FILTERTYPE_NO_MARKETPLACE_ITEMS = 0x1 << 10,         // pass iff folder is not under the marketplace
         FILTERTYPE_WORN = 0x1 << 11,     // pass if item is worn
-        FILTERTYPE_SETTINGS = 0x1 << 12,    // pass if the item is a settings object
-		FILTERTYPE_TRANSFERABLE = 0x1 << 13 // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+        FILTERTYPE_SETTINGS = 0x1 << 12    // pass if the item is a settings object
 	};
 
 	enum EFilterDateDirection
@@ -131,7 +130,6 @@ public:
 			Optional<EFolderShow>		show_folder_state;
 			Optional<PermissionMask>	permissions;
 			Optional<EFilterCreatorType> creator_type;
-			Optional<bool>				transferable; // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 
 			Params()
 			:	types("filter_types", FILTERTYPE_OBJECT),
@@ -146,8 +144,7 @@ public:
 				date_search_direction("date_search_direction", FILTERDATEDIRECTION_NEWER),
 				show_folder_state("show_folder_state", SHOW_NON_EMPTY_FOLDERS),
 				creator_type("creator_type", FILTERCREATOR_ALL),
-				permissions("permissions", PERM_NONE),
-				transferable("transferable", false) // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+				permissions("permissions", PERM_NONE)
 			{}
 		};
 
@@ -251,11 +248,6 @@ public:
 
 	// <FS>
 	BOOL 				getFilterWorn() const { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
-
-	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
-	void 				setFilterTransferable(BOOL transferable);
-	BOOL 				getFilterTransferable() const { return mFilterOps.mFilterTypes & FILTERTYPE_TRANSFERABLE; }
-	// </FS:Ansariel>
 
 	// +-------------------------------------------------------------------+
 	// + Execution And Results

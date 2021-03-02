@@ -1,9 +1,5 @@
 First, make sure gcc-5.4 and g++-5.4 are installed.
 
-Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help 
-compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
-receive  much less help. http://wiki.secondlife.com/wiki/Compiling_the_viewer_(Linux)
-
 If you want to use licensed FMOD or KDU build libraries (they are optional) you have to provision these yourself.
 If you're licensing these with Phoenix/Firestorm, ask for the libraries for fmod and kdu. Put them into:
 	/opt/firestorm
@@ -30,6 +26,9 @@ Other examples:
 	autobuild build -A64 -c ReleaseFS --no-configure		# default quick rebuild
 	autobuild build -A64 -c ReleaseFS --no-configure -- --clean	# Clean rebuild
 	autobuild build -A64 -c ReleaseFS -- --package		# Complete a build and package it into a tarball
+
+If you want to build with clang you can call autobuild like this:
+   CC=clang CXX=clang++ autobuild configure -A64 -c ReleaseFS
 
 Any of the configure options can also be used (and do the same thing) with the build options.
 Typical LL autobuild configure options should also work, as long as they don't duplicate configuration we are

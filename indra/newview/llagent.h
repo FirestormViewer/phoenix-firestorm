@@ -258,7 +258,10 @@ public:
 	boost::signals2::connection     addParcelChangedCallback(parcel_changed_callback_t);
 
 private:
-	static void capabilityReceivedCallback(const LLUUID &region_id);
+    // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+	// static void capabilityReceivedCallback(const LLUUID &region_id);
+	static void capabilityReceivedCallback(LLViewerRegion* regionp);
+	// </FS:Beq>
 
 	typedef boost::signals2::signal<void()> parcel_changed_signal_t;
 	parcel_changed_signal_t		mParcelChangedSignal;
