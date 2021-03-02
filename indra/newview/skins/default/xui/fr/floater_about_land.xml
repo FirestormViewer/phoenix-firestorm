@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterland" title="À PROPOS DU TERRAIN">
-	<floater.string name="maturity_icon_general">
-		&quot;Parcel_PG_Dark&quot;
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		&quot;Parcel_M_Dark&quot;
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		&quot;Parcel_R_Dark&quot;
-	</floater.string>
+<floater name="floaterland" title="À propos du terrain">
 	<floater.string name="Hours">
-		[HEURES] hrs.
+		[HOURS] hrs.
 	</floater.string>
 	<floater.string name="Hour">
 		hr.
@@ -31,7 +22,7 @@
 		Toujours
 	</floater.string>
 	<tab_container name="landtab" tab_min_width="60">
-		<panel label="GÉNÉRAL" name="land_general_panel">
+		<panel label="Général" name="land_general_panel">
 			<panel.string name="new users only">
 				Nouveaux résidents uniquement
 			</panel.string>
@@ -77,11 +68,12 @@
 			<text name="Name:">
 				Nom :
 			</text>
-			<line_editor name="Name"/>
+			<text name="UUID:">
+				ID terrain :
+			</text>
 			<text name="Description:">
 				Description :
 			</text>
-			<text_editor name="Description"/>
 			<text name="LandType">
 				Type :
 			</text>
@@ -151,7 +143,7 @@
 			<button label="Abandonner le terrain" label_selected="Abandonner le terrain..." name="Abandon Land..."/>
 			<button label="Récupérer le terrain" label_selected="Redemander le terrain…" name="Reclaim Land..."/>
 		</panel>
-		<panel label="RÈGLEMENT" name="land_covenant_panel">
+		<panel label="Règlement" name="land_covenant_panel">
 			<panel.string name="can_resell">
 				Le terrain acheté dans cette région peut être revendu.
 			</panel.string>
@@ -215,7 +207,7 @@ ou divisé.
 				Le terrain dans cette région ne peut être fusionné/divisé.
 			</text>
 		</panel>
-		<panel label="OBJETS" name="land_objects_panel">
+		<panel label="Objets" name="land_objects_panel">
 			<panel.string name="objects_available_text">
 				[COUNT] sur [MAX] ([AVAILABLE] disponibles)
 			</panel.string>
@@ -234,44 +226,26 @@ ou divisé.
 			<text name="Primitives parcel supports:">
 				Capacité de la parcelle :
 			</text>
-			<text name="object_contrib_text">
-				[COUNT]
-			</text>
 			<text name="Primitives on parcel:">
 				Impact sur la parcelle :
 			</text>
-			<text name="total_objects_text">
-				[COUNT]
-			</text>
 			<text name="Owned by parcel owner:">
 				Appartenant au propriétaire :
-			</text>
-			<text name="owner_objects_text">
-				[COUNT]
 			</text>
 			<button label="Afficher" label_selected="Afficher" name="ShowOwner"/>
 			<button label="Retour" label_selected="Renvoyer..." name="ReturnOwner..." tool_tip="Renvoyer les objets à leurs propriétaires."/>
 			<text name="Set to group:">
 				Données au groupe :
 			</text>
-			<text name="group_objects_text">
-				[COUNT]
-			</text>
 			<button label="Afficher" label_selected="Afficher" name="ShowGroup"/>
 			<button label="Retour" label_selected="Renvoyer..." name="ReturnGroup..." tool_tip="Renvoyer les objets à leurs propriétaires."/>
 			<text name="Owned by others:">
 				Appartenant à d&apos;autres :
 			</text>
-			<text name="other_objects_text">
-				[COUNT]
-			</text>
 			<button label="Afficher" label_selected="Afficher" name="ShowOther"/>
 			<button label="Retour" label_selected="Renvoyer..." name="ReturnOther..." tool_tip="Renvoyer les objets à leurs propriétaires."/>
 			<text name="Selected / sat upon:">
 				Sélectionnées/où quelqu&apos;un est assis :
-			</text>
-			<text name="selected_objects_text">
-				[COUNT]
 			</text>
 			<text name="Autoreturn">
 				Renvoi automatique des objets d&apos;autres résidents (minutes, 0 pour désactiver) :
@@ -285,11 +259,11 @@ ou divisé.
 			<name_list label="Plus récents" name="owner list">
 				<name_list.columns label="Type" name="type"/>
 				<name_list.columns label="Nom" name="name"/>
-				<name_list.columns label="Nombre" name="count"/>
+				<name_list.columns label="Nbre" name="count"/>
 				<name_list.columns label="Plus récents" name="mostrecent"/>
 			</name_list>
 		</panel>
-		<panel label="OPTIONS" name="land_options_panel">
+		<panel label="Options" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
 				Permettre aux autres résidents de voir cette parcelle dans les résultats de recherche
 			</panel.string>
@@ -321,13 +295,26 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 			<panel.string name="push_restrict_region_text">
 				Pas de bousculades (les règles de la région priment)
 			</panel.string>
+			<panel.string name="DirectoryFree">
+				Lieu dans la recherche
+			</panel.string>
+			<panel.string name="DirectoryFee">
+				Lieu dans la recherche ([DIRECTORY_FEE]L$/sem.)
+			</panel.string>
 			<text name="allow_label">
 				Autoriser les autres résidents à :
 			</text>
+			<text name="allow_label1">
+				Modifier le terrain :
+			</text>
+			<check_box label="Tous" name="edit land check" tool_tip="Si cette option est cochée, tous le monde pourra terraformer votre terrain. Il laisser cette option décochée, car vous pouvez toujours modifier votre terrain."/>
+			<text name="caution_text">
+				(À utiliser prudemment !)
+         </text>
 			<text name="allow_label0">
 				Voler :
 			</text>
-			<check_box label="Tous" name="check fly" tool_tip="Si cette option est cochée, les résidents peuvent voler sur votre terrain. Si elle n&apos;est pas cochée, ils ne pourront voler que lorsqu&apos;ils arrivent et passent au dessus de votre terrain."/>
+			<check_box label="Tous" name="check fly" tool_tip="Si cette option est cochée, les résidents peuvent voler sur votre terrain. Si elle n'est pas cochée, ils ne pourront voler que lorsqu&apos;ils arrivent et passent au dessus de votre terrain."/>
 			<text name="allow_label2">
 				Construire :
 			</text>
@@ -344,6 +331,7 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 			<check_box label="Tous" name="check other scripts" tool_tip="Si la case est cochée, les membres du groupe de la parcelle peuvent exécuter des scripts sur votre parcelle, y compris des pièces jointes."/>
 			<check_box label="Groupe" name="check group scripts" tool_tip="Si la case est cochée, les membres du groupe de la parcelle peuvent exécuter des scripts sur votre parcelle, y compris des pièces jointes."/>
 			<check_box label="Sécurisé (pas de dégâts)" name="check safe" tool_tip="Si cette option est cochée, le terrain est sécurisé et il n&apos;y pas de risques de dommages causés par des combats. Si elle est décochée, des dommages causés par les combats peuvent avoir lieu."/>
+			<check_box label="Lieu dans la recherche (L$30/week)" name="ShowDirectoryCheck" tool_tip="Laisser les résidents voir cette parcelle dans les résultats de la recherche."/>
 			<check_box label="Pas de bousculades" name="PushRestrictCheck" tool_tip="Empêche l&apos;utilisation de scripts causant des bousculades. Cette option est utile pour empêcher les comportements abusifs sur votre terrain."/>
 			<check_box label="Voir le lieu dans la recherche (30 L$/sem.)" name="ShowDirectoryCheck" tool_tip="Afficher la parcelle dans les résultats de recherche"/>
 			<combo_box name="land category">
@@ -361,7 +349,7 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 				<combo_box.item label="Location" name="item13"/>
 				<combo_box.item label="Autre" name="item12"/>
 			</combo_box>
-			<check_box label="Contenu Modéré" name="MatureCheck" tool_tip=""/>
+			<check_box label="Contenu Modéré" name="MatureCheck" />
 			<text name="Snapshot:">
 				Photo :
 			</text>
@@ -384,12 +372,11 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 				<combo_box.item label="Lieu d&apos;arrivée libre" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="MÉDIA" name="land_media_panel">
+		<panel label="Médias" name="land_media_panel">
 			<text name="with media:" width="85">
 				Type :
 			</text>
 			<combo_box left="97" name="media type" tool_tip="Indiquez s&apos;il s&apos;agit de l&apos;URL d&apos;un film, d&apos;une page web ou autre"/>
-			<text name="mime_type"/>
 			<text name="at URL:" width="85">
 				Page d&apos;accueil :
 			</text>
@@ -421,7 +408,7 @@ texture :
 			</text>
 			<check_box label="En boucle" name="media_loop" tool_tip="Jouer le média en boucle. Lorsque le média aura fini de jouer, il recommencera."/>
 		</panel>
-		<panel label="SON" name="land_audio_panel">
+		<panel label="Son" name="land_audio_panel">
 			<text bottom_delta="-28" name="MusicURL:">
 				URL de la 
 musique :
@@ -442,7 +429,7 @@ musique :
 			<check_box label="Activer la voix (contrôlé par le domaine)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Limiter le chat vocal à cette parcelle" name="parcel_enable_voice_channel_local"/>
 		</panel>
-		<panel label="ACCÈS" name="land_access_panel">
+		<panel label="Accès" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(défini par le domaine
 			</panel.string>
@@ -451,7 +438,7 @@ musique :
 			</panel.string>
 			<check_box label="Tout le monde peut rendre visite" tool_tip="Des lignes d&apos;interdiction seront créées si cette case n&apos;est pas cochée" name="public_access"/>
 			<check_box label="Doit avoir plus de 18 ans [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Pour accéder à cette parcelle, les résidents doivent avoir au moins 18 ans. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
-			<check_box label="Les infos de paiement doivent être enregistrées dans le dossier  [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Pour pouvoir accéder à cette parcelle, les résidents doivent avoir enregistré des informations de paiement. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
+			<check_box label="Les infos de paiement doivent être enregistrées dans le dossier [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Pour pouvoir accéder à cette parcelle, les résidents doivent avoir enregistré des informations de paiement. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
 			<check_box label="Autoriser le groupe [GROUP] sans restrictions" name="GroupCheck" tool_tip="Définir le groupe à l&apos;onglet Général."/>
 			<check_box label="Vendre des pass à :" name="PassCheck" tool_tip="Autoriser un accès temporaire à cette parcelle"/>
 			<combo_box name="pass_combo" width="110">
@@ -483,7 +470,7 @@ musique :
 				<button label="Supprimer" label_selected="Supprimer" name="remove_banned"/>
 			</panel>
 		</panel>
-		<panel label="EXPÉRIENCES" name="land_experiences_panel"/>
-		<panel label="ENVIRONNEMENT" name="land_environment_panel"/>
+		<panel label="Expériences" name="land_experiences_panel"/>
+		<panel label="Environnement" name="land_environment_panel" />
 	</tab_container>
 </floater>
