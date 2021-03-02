@@ -23,7 +23,6 @@
 	<string name="StartupClearingCache">Clearing cache...</string>
 	<string name="StartupClearingTextureCache">Clearing texture cache...</string>
 	<string name="StartupInitializingTextureCache">Initializing texture cache...</string>
-	<string name="StartupInitializingVFS">Initializing VFS...</string>
 	<string name="StartupRequireDriverUpdate">Graphics initialization failed. Please update your graphics driver!</string>
 
 	<!-- about dialog/support string-->
@@ -78,8 +77,8 @@ Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 	<string name="AboutTextureMemoryDynamic">
 Texture memory: Dynamic ([TEXTUREMEMORYMIN] MB min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
-	<string name="AboutVFS">
-VFS (cache) creation time (UTC): [VFS_DATE]
+	<string name="AboutCache">
+Disk cache: [DISK_CACHE_INFO]
 	</string>
 	<string name="AboutOSXHiDPI">
 HiDPI display mode: [HIDPI]

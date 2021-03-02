@@ -185,7 +185,7 @@ class AOEngine
 		void onToggleAOStandsControl();
 		void onPauseAO();
 
-		static void onNotecardLoadComplete(LLVFS* vfs, const LLUUID& assetUUID, LLAssetType::EType type,
+		static void onNotecardLoadComplete(const LLUUID& assetUUID, LLAssetType::EType type,
 												void* userdata, S32 status, LLExtStat extStatus);
 		void parseNotecard(const char* buffer);
 

@@ -71,7 +71,7 @@ public:
 									  LLInventoryObject::object_list_t* inventory,
 									  S32 serial_num,
 									  void* user_data);
-	static void onLoadComplete(LLVFS *vfs, const LLUUID& asset_uuid,
+	static void onLoadComplete(const LLUUID& asset_uuid,
 							   LLAssetType::EType type,
 							   void* user_data, S32 status, LLExtStat ext_status);
 	
