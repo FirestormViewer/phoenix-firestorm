@@ -72,20 +72,14 @@ bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType fil
 }
 
 // static
-// <FS:Ansariel> Fix log spam
-//bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type)
 bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type, int suppress_error /*= 0*/)
-// </FS:Ansariel>
 {
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
     const std::string filename =  LLDiskCache::getInstance()->metaDataToFilepath(id_str, file_type, extra_info);
 
-    // <FS:Ansariel> Fix log spam
-    //LLFile::remove(filename.c_str());
     LLFile::remove(filename.c_str(), suppress_error);
-    // </FS:Ansariel>
 
     return true;
 }
@@ -104,10 +98,7 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
     const std::string new_filename =  LLDiskCache::getInstance()->metaDataToFilepath(new_id_str, new_file_type, extra_info);
 
     // Rename needs the new file to not exist.
-    // <FS:Ansariel> Fix log spam
-    //LLFileSystem::removeFile(new_file_id, new_file_type);
     LLFileSystem::removeFile(new_file_id, new_file_type, ENOENT);
-    // </FS:Ansariel>
 
     if (LLFile::rename(old_filename, new_filename) != 0)
     {
