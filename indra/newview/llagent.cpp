@@ -1039,16 +1039,25 @@ boost::signals2::connection LLAgent::addParcelChangedCallback(parcel_changed_cal
 }
 
 // static
-void LLAgent::capabilityReceivedCallback(const LLUUID &region_id)
+// <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+// void LLAgent::capabilityReceivedCallback(const LLUUID &region_id)
+// {
+//     LLViewerRegion* region = gAgent.getRegion();
+//     if (region && region->getRegionID() == region_id)
+//     {
+//         region->requestSimulatorFeatures();
+//         LLAppViewer::instance()->updateNameLookupUrl();
+//     }
+// }
+void LLAgent::capabilityReceivedCallback(LLViewerRegion* regionp)
 {
-    LLViewerRegion* region = gAgent.getRegion();
-    if (region && region->getRegionID() == region_id)
+    if (regionp)
     {
-        region->requestSimulatorFeatures();
-        LLAppViewer::instance()->updateNameLookupUrl();
+        regionp->requestSimulatorFeatures();
+        LLAppViewer::instance()->updateNameLookupUrl(regionp);
     }
 }
-
+// </FS:Beq>
 
 //-----------------------------------------------------------------------------
 // setRegion()
@@ -1100,11 +1109,17 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             if (regionp->capabilitiesReceived())
             {
                 regionp->requestSimulatorFeatures();
-                LLAppViewer::instance()->updateNameLookupUrl();
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // LLAppViewer::instance()->updateNameLookupUrl();
+                LLAppViewer::instance()->updateNameLookupUrl(regionp);
+                // </FS:Beq>
             }
             else
             {
-                regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
+                regionp->setCapabilitiesReceivedCallback(boost::bind(&LLAgent::capabilityReceivedCallback, regionp));
+                // </FS:Beq>
             }
 
 		}
@@ -1126,11 +1141,17 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 
             if (regionp->capabilitiesReceived())
             {
-                LLAppViewer::instance()->updateNameLookupUrl();
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // LLAppViewer::instance()->updateNameLookupUrl();
+                LLAppViewer::instance()->updateNameLookupUrl(regionp);
+                // </FS:Beq>
             }
             else
             {
-                regionp->setCapabilitiesReceivedCallback([](const LLUUID &region_id) {LLAppViewer::instance()->updateNameLookupUrl(); });
+                // <FS:Beq> FIRE-30774 displayname capability is targetting previous region
+                // regionp->setCapabilitiesReceivedCallback([regionp](const LLUUID &region_id) {LLAppViewer::instance()->updateNameLookupUrl(); });
+                regionp->setCapabilitiesReceivedCallback([regionp](const LLUUID &region_id) { LLAppViewer::instance()->updateNameLookupUrl(regionp); });
+                // </FS:Beq>
             }
 		}
 
@@ -1177,6 +1198,13 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 		mRegionp->setCapabilitiesReceivedCallback(boost::bind(&LLAgent::handleServerBakeRegionTransition,this,_1));
 	}
 	// </FS:Ansariel> [Legacy Bake]
+
+	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+	if (gSavedSettings.getBOOL("FSPlayDefaultBentoAnimation"))
+	{
+		sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, ANIM_REQUEST_START);
+	}
+	// </FS:Zi>
 
 	LL_DEBUGS("AgentLocation") << "Calling RegionChanged callbacks" << LL_ENDL;
 	mRegionChangedSignal();
@@ -5330,6 +5358,13 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 		// re-assert at least the default standing animation, because
 		// viewers get confused by avs with no associated anims.
 		sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+
+		// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+		if (gSavedSettings.getBOOL("FSPlayDefaultBentoAnimation"))
+		{
+			sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, ANIM_REQUEST_START);
+		}
+		// </FS:Zi>
 	}
 }
 

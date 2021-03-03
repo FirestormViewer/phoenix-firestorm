@@ -952,6 +952,29 @@
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"
+         control_name="FSShowMyOwnVoiceVisualizer"
+         follows="left|top"
+         height="15"
+         label="Show voice visualizer over my own avatar"
+         layout="topleft"
+         left="35"
+         name="FSShowMyOwnVoiceVisualizer"
+         top_pad="3"
+         width="237"/>
+        <check_box
+         enabled_control="EnableVoiceChat"
+         control_name="FSShowVoiceVisualizerWithDot"
+         follows="left|top"
+         height="15"
+         label="Show the dot as part of the voice visualizer"
+         tool_tip="If enabled, the dot is shown as part of the voice visualizer. If disabled, it only shows voice waves."
+         layout="topleft"
+         left="35"
+         name="FSShowVoiceVisualizerWithDot"
+         top_pad="3"
+         width="237"/>
+        <check_box
+         enabled_control="EnableVoiceChat"
          control_name="ShowVoiceVisualizersInCalls"
          follows="left|top"
          height="15"
@@ -960,7 +983,7 @@
          layout="topleft"
          left="25"
          name="Show_Voice_Visualizers_In_Calls"
-         top_pad="3"
+         top_pad="5"
          width="237"/>
         <check_box
          enabled_control="EnableVoiceChat"

@@ -46,7 +46,7 @@
 #include "llselectmgr.h"
 #include "lltrans.h"
 #include "llviewertexteditor.h"
-#include "llvfile.h"
+#include "llfilesystem.h"
 #include "llviewerinventory.h"
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
@@ -250,8 +250,12 @@ void LLPreviewNotecard::updateTitleButtons()
 {
 	LLPreview::updateTitleButtons();
 
-	LLUICtrl* lock_btn = getChild<LLUICtrl>("lock");
-	if(lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
+	// <FS:Ansariel> Fix XUI parser warning
+	//LLUICtrl* lock_btn = getChild<LLUICtrl>("lock");
+	//if (lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
+	LLUICtrl* lock_btn = findChild<LLUICtrl>("lock");
+	if(lock_btn && lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
+	// </FS:Ansariel>
 	{
 		LLRect lock_rc = lock_btn->getRect();
 		LLRect buttons_rect = getDragHandle()->getButtonsRect();
@@ -389,8 +393,7 @@ void LLPreviewNotecard::loadAsset()
 }
 
 // static
-void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
-									   const LLUUID& asset_uuid,
+void LLPreviewNotecard::onLoadComplete(const LLUUID& asset_uuid,
 									   LLAssetType::EType type,
 									   void* user_data, S32 status, LLExtStat ext_status)
 {
@@ -401,7 +404,7 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 	{
 		if(0 == status)
 		{
-			LLVFile file(vfs, asset_uuid, type, LLVFile::READ);
+			LLFileSystem file(asset_uuid, type, LLFileSystem::READ);
 
 			S32 file_length = file.getSize();
 
@@ -516,7 +519,7 @@ void LLPreviewNotecard::finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, 
     LLPreviewNotecard* nc = LLFloaterReg::findTypedInstance<LLPreviewNotecard>("preview_notecard", LLSD(itemId));
     if (nc)
     {
-        // *HACK: we have to delete the asset in the VFS so
+        // *HACK: we have to delete the asset in the cache so
         // that the viewer will redownload it. This is only
         // really necessary if the asset had to be modified by
         // the uploader, so this can be optimized away in some
@@ -524,7 +527,7 @@ void LLPreviewNotecard::finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, 
         // script actually changed the asset.
         if (nc->hasEmbeddedInventory())
         {
-            gVFS->removeFile(newAssetId, LLAssetType::AT_NOTECARD);
+            LLFileSystem::removeFile(newAssetId, LLAssetType::AT_NOTECARD);
         }
         if (newItemId.isNull())
         {
@@ -551,7 +554,7 @@ void LLPreviewNotecard::finishTaskUpload(LLUUID itemId, LLUUID newAssetId, LLUUI
     {
         if (nc->hasEmbeddedInventory())
         {
-            gVFS->removeFile(newAssetId, LLAssetType::AT_NOTECARD);
+            LLFileSystem::removeFile(newAssetId, LLAssetType::AT_NOTECARD);
         }
         nc->setAssetId(newAssetId);
         nc->refreshFromInventory();
@@ -636,14 +639,13 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem, bool sync)
                 tid.generate();
                 asset_id = tid.makeAssetID(gAgent.getSecureSessionID());
 
-                LLVFile file(gVFS, asset_id, LLAssetType::AT_NOTECARD, LLVFile::APPEND);
+                LLFileSystem file(asset_id, LLAssetType::AT_NOTECARD, LLFileSystem::APPEND);
 
 
 				LLSaveNotecardInfo* info = new LLSaveNotecardInfo(this, mItemUUID, mObjectUUID,
 																tid, copyitem);
 
                 S32 size = buffer.length() + 1;
-                file.setMaxSize(size);
                 file.write((U8*)buffer.c_str(), size);
 
 				gAssetStorage->storeAssetData(tid, LLAssetType::AT_NOTECARD,

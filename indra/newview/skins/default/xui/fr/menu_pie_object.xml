@@ -13,7 +13,27 @@
 		<pie_slice label="Porter" name="Wear"/>
 		<pie_slice label="Prendre une copie" name="Take Copy"/>
 		<pie_menu label="Attacher au HUD &gt;" name="Pie Object Attach HUD"/>
-		<pie_menu label="Attacher &gt;" name="Pie Object Attach"/>
+		<pie_menu label="Attacher &gt;" name="Pie Object Attach">
+			<pie_menu label="Squelette (ext) &gt;" name="Enhanced Skeleton">
+				<pie_slice label="Aile droite" name="Right Wing"/>
+				<pie_slice label="Aine" name="Groin"/>
+				<pie_slice label="Base queue" name="Tail Base"/>
+				<pie_slice label="Extr. queue" name="Tail Tip"/>
+				<pie_slice label="Aile gauche" name="Left Wing"/>
+				<pie_slice label="Pied arr. G" name="Left Hind Foot"/>
+				<pie_menu label="Plus &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Oreille droite" name="Alt Right Ear"/>
+					<pie_slice label="Oeil droit" name="Alt Right Eye"/>
+					<pie_slice label="Langue" name="Tongue"/>
+					<pie_slice label="Oeil gauche" name="Alt Left Eye"/>
+					<pie_slice label="Oreille gauche" name="Alt Left Ear"/>
+					<pie_slice label="Annulaire G" name="Left Ring Finger"/>
+					<pie_slice label="Mâchoire" name="Jaw"/>
+					<pie_slice label="Annulaire D" name="Right Ring Finger"/>
+				</pie_menu>
+				<pie_slice label="Pied arr. D" name="Right Hind Foot"/>
+			</pie_menu>
+		</pie_menu>
 		<pie_slice label="Renvoyer" name="Return..."/>
 		<pie_menu label="Plus &gt;" name="Object Pie More 2">
 			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
