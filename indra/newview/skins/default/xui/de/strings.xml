@@ -1712,7 +1712,7 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 		Sie haben nicht das Richtige gefunden? [secondlife:///app/inventory/filters Filter] anzeigen.
 	</string>
 	<string name="InventoryFavoritItemsNotSelected">
-		Wählen Sie auf „Als Favoriten-Ordner verwenden“ auf einen Ordner Ihrer Wahl. Sie können jederzeit einen anderen Ordner wählen. System-Ordner können nicht als Favoriten-Ordner verwendet werden.
+		Wählen Sie auf „Als Favoriten-Ordner verwenden“ auf einen Ordner Ihrer Wahl. Sie können jederzeit einen anderen Ordner wählen. System-Ordner oder Ordner innerhalb davon können nicht als Favoriten-Ordner verwendet werden.
 	</string>
 	<string name="PlacesNoMatchingItems">
 		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/places/[SEARCH_TERM] Suche].
