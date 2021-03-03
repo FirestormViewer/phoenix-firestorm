@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- <FS:Zi> Changed height from 512 to 528 in this block -->
 <floater
  legacy_header_height="18"
  can_minimize="false"
@@ -229,14 +230,30 @@
      left="8"
      name="None"
      width="100" />
+    <!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
     <check_box
      height="16"
-     label="Transfer only"
+     label="Mod"
      layout="topleft"
      left="8"
-     name="check_transferable"
+     name="check_modify"
      top_pad="6"
-     width="144" />
+     width="45" />
+    <check_box
+     height="16"
+     label="Copy"
+     layout="topleft"
+     left_pad="2"
+     name="check_copy"
+     width="45" />
+    <check_box
+     height="16"
+     label="Trans"
+     layout="topleft"
+     left_pad="2"
+     name="check_transfer"
+     width="45" />
+    <!-- Changed top_pad from 6 to 0 in this block -->
     <check_box
      height="16"
      label="Always show folders"
@@ -245,6 +262,7 @@
      name="check_show_empty"
      top_pad="0"
      width="144" />
+    <!-- </FS:Zi> -->
     <check_box
      height="16"
      label="Created by me"

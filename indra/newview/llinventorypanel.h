@@ -201,9 +201,12 @@ public:
 	BOOL getSinceLogoff();
 	void setFilterLinks(U64 filter_links);
 	U64 getFilterLinks();		// <FS:Zi> Filter Links Menu
+	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+	void setFilterPermissions(PermissionMask filter_permissions);
+	PermissionMask getFilterPermissions();
+	// </FS:Zi>
 	void setSearchType(LLInventoryFilter::ESearchType type);
 	LLInventoryFilter::ESearchType getSearchType();
-	void setTransferable(BOOL transferable); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
 	LLInventoryFilter::EFolderShow getShowFolderState();

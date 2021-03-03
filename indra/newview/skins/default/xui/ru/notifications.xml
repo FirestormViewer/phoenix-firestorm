@@ -3642,6 +3642,9 @@ URL: [AUDIOURL]
 Вы отправили обновление своей внешности через [TIME] сек.
 [STATUS]
 	</notification>
+	<notification name="AvatarRezSelfBakeForceUpdateNotification">
+		Программа просмотра обнаружила, что вы можете выглядеть как облако, и пытается исправить это автоматически.
+	</notification>
 	<notification name="AvatarRezCloudNotification">
 		( [EXISTENCE] сек. жизни )
 Аватар &quot;[NAME]&quot; стал облаком.

@@ -54,8 +54,8 @@
 							</text>
 							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="Inventar verwenden" name="btn_select_inventory"/>
-							<button label="Anpassen" name="btn_edit"/>
-							<check_box label="Parzelleneig. können Umg. übersteuern" name="chk_allow_override"/>
+							<button label="Tageszyklus anpassen" name="btn_edit"/>
+							<check_box label="Parzellenbesitzer können übersteuern" name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
 							<text name="day_settings_label">

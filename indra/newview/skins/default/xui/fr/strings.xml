@@ -22,9 +22,6 @@
 	<string name="StartupInitializingTextureCache">
 		Initialisation du cache des textures...
 	</string>
-	<string name="StartupInitializingVFS">
-		Initialisation VFS...
-	</string>
 	<string name="StartupRequireDriverUpdate">
 		Échec d&apos;initialisation des graphiques. Veuillez mettre votre pilote graphique à jour.
 	</string>
@@ -1919,6 +1916,51 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="Avatar Center">
 		Centre de l&apos;avatar
 	</string>
+	<string name="Left Ring Finger">
+		Annulaire gauche
+	</string>
+	<string name="Right Ring Finger">
+		Annulaire droit
+	</string>
+	<string name="Tail Base">
+		Base de la queue
+	</string>
+	<string name="Tail Tip">
+		Extrémité de la queue
+	</string>
+	<string name="Left Wing">
+		Aile gauche
+	</string>
+	<string name="Right Wing">
+		Aile droite
+	</string>
+	<string name="Jaw">
+		Machoire
+	</string>
+	<string name="Alt Left Ear">
+		Oreille gauche (Alt)
+	</string>
+	<string name="Alt Right Ear">
+		Oreille droite (Alt)
+	</string>
+	<string name="Alt Left Eye">
+		Oeil gauche (Alt)
+	</string>
+	<string name="Alt Right Eye">
+		Oeil droit (Alt)
+	</string>
+	<string name="Tongue">
+		Langue
+	</string>
+	<string name="Groin">
+		Aine
+	</string>
+	<string name="Left Hind Foot">
+		Pied arrière gauche
+	</string>
+	<string name="Right Hind Foot">
+		Pied arrière droit
+	</string>
 	<string name="Invalid Attachment">
 		Point d&apos;attache non valide
 	</string>
@@ -2388,6 +2430,51 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	</string>
 	<string name="ATTACH_AVATAR_CENTER">
 		Centre de l&apos;avatar
+	</string>
+	<string name="ATTACH_LHAND_RING1">
+		Annulaire gauche
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		Annulaire droit
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		Base de la queue
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		Extrémité de la queue
+	</string>
+	<string name="ATTACH_LWING">
+		Aile gauche
+	</string>
+	<string name="ATTACH_RWING">
+		Aile droite
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		Mâchoire
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		Oreille gauche (Alt)
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		Oreille droite (Alt)
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		Oeil gauche (Alt)
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		Oeil droit (Alt)
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		Langue
+	</string>
+	<string name="ATTACH_GROIN">
+		Aine
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		Pied arrière gauche
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		Pied arrière droit
 	</string>
 	<string name="CursorPos">
 		Ligne [LINE], colonne [COLUMN]

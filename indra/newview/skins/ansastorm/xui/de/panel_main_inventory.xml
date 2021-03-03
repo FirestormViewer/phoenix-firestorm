@@ -71,6 +71,9 @@
 			<menu_item_check name="inventory_filter_show_links" label="Verknüpfungen anzeigen"/>
 			<menu_item_check name="inventory_filter_only_links" label="Nur Verknüpfungen anzeigen"/>
 			<menu_item_check name="inventory_filter_hide_links" label="Verknüpfungen verstecken"/>
+			<menu_item_check name="inventory_filter_only_modify" label="Nur modifizierbar"/>
+			<menu_item_check name="inventory_filter_only_copy" label="Nur kopierbar"/>
+			<menu_item_check name="inventory_filter_only_transfer" label="Nur transferierbar"/>
 			<!-- Not implemented yet
 			<menu_item_check name="inventory_show_partial_results" label="Zeige unvollständige Suchergebnisse"/>
 			-->

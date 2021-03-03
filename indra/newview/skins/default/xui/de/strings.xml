@@ -25,9 +25,6 @@
 	<string name="StartupInitializingTextureCache">
 		Textur-Cache wird initialisiert...
 	</string>
-	<string name="StartupInitializingVFS">
-		VFS wird initialisiert...
-	</string>
 	<string name="StartupRequireDriverUpdate">
 		Grafikinitialisierung fehlgeschlagen. Bitte aktualisieren Sie Ihren Grafiktreiber.
 	</string>
@@ -86,8 +83,8 @@ Erweitertes Beleuchtungsmodell: [ALMSTATUS]
 	<string name="AboutTextureMemoryDynamic">
 		Texturspeicher: Dynamisch ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
-	<string name="AboutVFS">
-		VFS (Cache) Erstellungszeit: [VFS_DATE]
+	<string name="AboutCache">
+		Disk-Cache: [DISK_CACHE_INFO]
 	</string>
 	<string name="AboutOSXHiDPI">
 		HiDPI-Anzeigemodus: [HIDPI]
@@ -1930,7 +1927,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Snapshots" value=" Fotos,"/>
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
-	<string name="Transfer Only" value=" - Nur Transfer"/>
+	<string name="Modifiable" value="Modifizierbar" />
+	<string name="Copyable" value="Kopierbar" />
+	<string name="Transferable" value="Transferierbar" />
+	<string name="PermissionsFilter" value=" - Nur [PERMISSIONS]" />
 	<string name="InvFolder My Inventory">
 		Inventar
 	</string>

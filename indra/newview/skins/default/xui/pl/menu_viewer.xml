@@ -117,7 +117,7 @@
 			<menu label="Import wielu plików" name="WL Bulk Import">
 				<menu_item_call label="Dni..." name="WL Bulk Import Days" />
 				<menu_item_call label="Nieba..." name="WL Bulk Import Skies" />
-				<menu_item_call label="Woda..." name="WL Bulk Import Water" />
+				<menu_item_call label="Wody..." name="WL Bulk Import Water" />
 			</menu>
 		</menu>
 		<!-- <menu label="Edytor otoczenia" name="Environment Editor">

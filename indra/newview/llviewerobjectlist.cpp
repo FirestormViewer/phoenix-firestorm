@@ -403,6 +403,7 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 	bool justCreated = false;
 	if (!objectp)
 	{
+
 		objectp = createObjectFromCache(pcode, regionp, fullid, entry->getLocalID());
 
         LL_DEBUGS("ObjectUpdate") << "uuid " << fullid << " created objectp " << objectp << LL_ENDL;
@@ -1415,25 +1416,20 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 	// bool new_dead_object = true;
 	if (mDeadObjects.find(objectp->mID) != mDeadObjects.end())
 	{
-		LL_INFOS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
 	// <FS:Beq> FIRE-30694 DeadObject Spam
+	// LL_INFOS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
 	// 	new_dead_object = false;
+		LL_DEBUGS() << "Object " << objectp->mID << " already on dead list!" << LL_ENDL;	
+	// </FS:Beq>
 	}
-	else
+	// <FS:Beq> detect but still delete dupes
+	// else
 	{
 	// <FS:Beq> FIRE-30694 DeadObject Spam
 	// 	mDeadObjects.insert(objectp->mID);
-	 	bool success;
-		std::tie( std::ignore, success ) = mDeadObjects.insert( objectp->mID );
-		if( success )
-		{
-			mNumDeadObjects++;
-			llassert( mNumDeadObjects == mDeadObjects.size() );
-		}
-		else
-		{
-			LL_WARNS() << "Object " << objectp->mID << " failed to insert on dead list!" << LL_ENDL;	
-		}
+		mDeadObjects.insert( objectp->mID );
+		mNumDeadObjects++;
+		llassert( mNumDeadObjects == mDeadObjects.size() );
 	// </FS:Beq>
 	}
 
@@ -1641,11 +1637,17 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 		{
 			// <FS:Beq> FIRE-30694 DeadObject Spam
 			// mDeadObjects.erase(objectp->mID); // <FS:Ansariel> Use timer for cleaning up dead objects
-			if(mDeadObjects.erase(objectp->mID)==0)
-			{
+            auto delete_me = mDeadObjects.find(objectp->mID);
+            if( delete_me !=mDeadObjects.end() )
+            {
+                mDeadObjects.erase( delete_me );
+            }
+            else
+            {
 				LL_WARNS() << "Attempt to delete object " << objectp->mID << " but object not in dead list" << LL_ENDL;
 				num_divergent++; // this is the number we are adrift in the count
-			}
+            }
+
 			LLPointer<LLViewerObject>::swap(*iter, *target);
 			*target = NULL;
 			++target;
@@ -1682,7 +1684,7 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 	// TODO(Beq) If this still happens, we ought to realign at this point. Do a full sweep and reset.
 	if ( mNumDeadObjects != mDeadObjects.size() )
 	{
-		LL_WARNS() << "Num dead objects (" << mNumDeadObjects << ") != dead object list size (" << mDeadObjects.size() << "),  deadlist discrepancy (" << num_divergent << ")" << LL_ENDL;
+		LL_WARNS_ONCE() << "Num dead objects (" << mNumDeadObjects << ") != dead object list size (" << mDeadObjects.size() << "),  deadlist discrepancy (" << num_divergent << ")" << LL_ENDL;
 	}
 	// </FS:Ansariel>
 }
@@ -2326,7 +2328,7 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 		return NULL;
 	}
 	// </FS:Ansariel>
-	
+
 	LLUUID fullid;
 	if (uuid == LLUUID::null)
 	{
@@ -2519,7 +2521,9 @@ void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
 		}
 		else
 		{
-			LL_INFOS() << "Missing orphan child, removing from list" << LL_ENDL;
+			// <FS:Beq> descope uninteresting spam we can do nothing about.
+			// LL_INFOS() << "Missing orphan child, removing from list" << LL_ENDL;
+			LL_DEBUGS() << "Missing orphan child, removing from list" << LL_ENDL;
 
 			iter = mOrphanChildren.erase(iter);
 		}
