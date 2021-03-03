@@ -100,6 +100,8 @@
 			</radio_group>
 			<check_box label="Двигать губами аватара во время разговора" name="enable_lip_sync"/>
 			<check_box label="Показать голосовой индикатор над аватарами" tool_tip="Показывает голосовой индикатор (белую точку) над аватарами" name="FSShowVoiceVisualizer"/>
+			<check_box label="Показать голосовой индикатор над моим аватаром" name="FSShowMyOwnVoiceVisualizer"/>
+			<check_box label="Показывать точку как часть голосового индикатора" tool_tip="Если этот параметр включен, точка отображается как часть голосового индикатора. Если отключено, отображаются только голосовые волны." name="FSShowVoiceVisualizerWithDot"/>
 			<check_box label="Показать голосовые визуализаторы при звонке" tool_tip="Показывает голосовой индикатор и двигать губами в мире, находясь в частных и групповых вызовах" name="Show_Voice_Visualizers_In_Calls"/>
 			<check_box label="Показать состояние голосовых каналов во вкладках разговоров" tool_tip="Показать состояние голосовых каналов во вкладках разговоров" name="FSShowConversationVoiceStateIndicator"/>
 			<check_box label="Автоматически отклонять все входящие групповые голосовые вызовы" name="VoiceCallsRejectGroup"/>

@@ -92,6 +92,9 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutTextureMemoryDynamic">
 		Память текстур: динамическая ([TEXTUREMEMORYMIN] МБ мин. / [TEXTUREMEMORYCACHERESERVE]% Кэш / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
+	<string name="AboutCache">
+		Кэш диска: [DISK_CACHE_INFO]
+	</string>
 	<string name="AboutOSXHiDPI">
 		Режим отображения HiDPI: [HIDPI]
 	</string>
