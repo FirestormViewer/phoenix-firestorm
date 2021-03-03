@@ -1265,7 +1265,6 @@ void LLVOAvatar::initInstance()
 	//-------------------------------------------------------------------------
 	if (LLCharacter::sInstances.size() == 1)
 	{
-		LLKeyframeMotion::setVFS(gStaticVFS);
 		registerMotion( ANIM_AGENT_DO_NOT_DISTURB,					LLNullMotion::create );
 		registerMotion( ANIM_AGENT_CROUCH,					LLKeyframeStandMotion::create );
 		registerMotion( ANIM_AGENT_CROUCHWALK,				LLKeyframeWalkMotion::create );
@@ -2864,7 +2863,8 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 		// <FS:Ansariel> Faster debug settings
 		//if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("VoiceDisableMic"))
 		static LLCachedControl<bool> voiceDisableMic(gSavedSettings, "VoiceDisableMic");
-		if (gAgentCamera.cameraMouselook() || voiceDisableMic)
+		static LLCachedControl<bool> fsShowMyOwnVoiceVisualizer(gSavedSettings, "FSShowMyOwnVoiceVisualizer"); // <FS:PP> FIRE-21210: Don't show my voice visualizer
+		if (gAgentCamera.cameraMouselook() || voiceDisableMic || !fsShowMyOwnVoiceVisualizer)
 		// </FS:Ansariel>
 		{
 			render_visualizer = false;
@@ -4464,6 +4464,13 @@ void LLVOAvatar::updateAnimationDebugText()
                     if (item)
                     {
                         motion_name = item->getName();
+                    }
+                }
+                else
+                {
+                    if (motionp->getID() == ANIM_AGENT_BENTO_IDLE)
+                    {
+                        motion_name = "bento_idle";
                     }
                 }
             }

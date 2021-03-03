@@ -495,6 +495,18 @@ void LLInventoryPanel::setDateSearchDirection(U32 direction)
 	getFilter().setDateSearchDirection(direction);
 }
 
+// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+void LLInventoryPanel::setFilterPermissions(PermissionMask filter_permissions)
+{
+	getFilter().setFilterPermissions(filter_permissions);
+}
+
+PermissionMask LLInventoryPanel::getFilterPermissions()
+{
+	return getFilter().getFilterPermissions();
+}
+// </FS:Zi>
+
 void LLInventoryPanel::setFilterLinks(U64 filter_links)
 {
 	getFilter().setFilterLinks(filter_links);
@@ -516,13 +528,6 @@ LLInventoryFilter::ESearchType LLInventoryPanel::getSearchType()
 {
 	return getFilter().getSearchType();
 }
-
-// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
-void LLInventoryPanel::setTransferable(BOOL transferable)
-{
-	getFilter().setFilterTransferable(transferable);
-}
-// </FS:Ansariel>
 
 void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
 {

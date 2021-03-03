@@ -39,16 +39,15 @@
 #include "llendianswizzle.h"
 #include "llkeyframemotion.h"
 #include "llquantize.h"
-#include "llvfile.h"
 #include "m3math.h"
 #include "message.h"
+#include "llfilesystem.h"
 
 #include "nd/ndexceptions.h" // <FS:ND/> For nd::exceptions::xran
 
 //-----------------------------------------------------------------------------
 // Static Definitions
 //-----------------------------------------------------------------------------
-LLVFS*				LLKeyframeMotion::sVFS = NULL;
 LLKeyframeDataCache::keyframe_data_map_t	LLKeyframeDataCache::sKeyframeDataMap;
 
 //-----------------------------------------------------------------------------
@@ -518,7 +517,7 @@ LLMotion::LLMotionInitStatus LLKeyframeMotion::onInitialize(LLCharacter *charact
 		return STATUS_SUCCESS;
 	default:
 		// we don't know what state the asset is in yet, so keep going
-		// check keyframe cache first then static vfs then asset request
+		// check keyframe cache first then file cache then asset request
 		break;
 	}
 
@@ -562,13 +561,8 @@ LLMotion::LLMotionInitStatus LLKeyframeMotion::onInitialize(LLCharacter *charact
 	U8 *anim_data;
 	S32 anim_file_size;
 
-	if (!sVFS)
-	{
-		LL_ERRS() << "Must call LLKeyframeMotion::setVFS() first before loading a keyframe file!" << LL_ENDL;
-	}
-
 	BOOL success = FALSE;
-	LLVFile* anim_file = new LLVFile(sVFS, mID, LLAssetType::AT_ANIMATION);
+	LLFileSystem* anim_file = new LLFileSystem(mID, LLAssetType::AT_ANIMATION);
 	if (!anim_file || !anim_file->getSize())
 	{
 		delete anim_file;
@@ -2356,10 +2350,9 @@ void LLKeyframeMotion::setLoopOut(F32 out_point)
 //-----------------------------------------------------------------------------
 // onLoadComplete()
 //-----------------------------------------------------------------------------
-void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
-									   const LLUUID& asset_uuid,
-									   LLAssetType::EType type,
-									   void* user_data, S32 status, LLExtStat ext_status)
+void LLKeyframeMotion::onLoadComplete(const LLUUID& asset_uuid,
+									  LLAssetType::EType type,
+									  void* user_data, S32 status, LLExtStat ext_status)
 {
 	LLUUID* id = (LLUUID*)user_data;
 		
@@ -2391,7 +2384,7 @@ void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
 				// asset already loaded
 				return;
 			}
-			LLVFile file(vfs, asset_uuid, type, LLVFile::READ);
+			LLFileSystem file(asset_uuid, type, LLFileSystem::READ);
 			S32 size = file.getSize();
 			
 			U8* buffer = new U8[size];

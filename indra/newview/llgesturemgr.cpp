@@ -42,7 +42,7 @@
 #include "llnotificationsutil.h"
 #include "llstl.h"
 #include "llstring.h"	// todo: remove
-#include "llvfile.h"
+#include "llfilesystem.h"
 #include "message.h"
 
 // newview
@@ -564,7 +564,7 @@ void LLGestureMgr::playGesture(LLMultiGesture* gesture)
 				LLGestureStepAnimation* anim_step = (LLGestureStepAnimation*)step;
 				const LLUUID& anim_id = anim_step->mAnimAssetID;
 
-				// Don't request the animation if this step stops it or if it is already in Static VFS
+				// Don't request the animation if this step stops it or if it is already in the cache
 				if (!(anim_id.isNull()
 					  || anim_step->mFlags & ANIM_FLAG_STOP
 					  || gAssetStorage->hasLocalAsset(anim_id, LLAssetType::AT_ANIMATION)))
@@ -1065,10 +1065,9 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 
 
 // static
-void LLGestureMgr::onLoadComplete(LLVFS *vfs,
-									   const LLUUID& asset_uuid,
-									   LLAssetType::EType type,
-									   void* user_data, S32 status, LLExtStat ext_status)
+void LLGestureMgr::onLoadComplete(const LLUUID& asset_uuid,
+								  LLAssetType::EType type,
+								  void* user_data, S32 status, LLExtStat ext_status)
 {
 	LLLoadInfo* info = (LLLoadInfo*)user_data;
 
@@ -1083,7 +1082,7 @@ void LLGestureMgr::onLoadComplete(LLVFS *vfs,
 
 	if (0 == status)
 	{
-		LLVFile file(vfs, asset_uuid, type, LLVFile::READ);
+		LLFileSystem file(asset_uuid, type, LLFileSystem::READ);
 		S32 size = file.getSize();
 
 		std::vector<char> buffer(size+1);
@@ -1186,8 +1185,7 @@ void LLGestureMgr::onLoadComplete(LLVFS *vfs,
 }
 
 // static
-void LLGestureMgr::onAssetLoadComplete(LLVFS *vfs,
-									   const LLUUID& asset_uuid,
+void LLGestureMgr::onAssetLoadComplete(const LLUUID& asset_uuid,
 									   LLAssetType::EType type,
 									   void* user_data, S32 status, LLExtStat ext_status)
 {
@@ -1199,7 +1197,7 @@ void LLGestureMgr::onAssetLoadComplete(LLVFS *vfs,
 	{
 	case LLAssetType::AT_ANIMATION:
 		{
-			LLKeyframeMotion::onLoadComplete(vfs, asset_uuid, type, user_data, status, ext_status);
+			LLKeyframeMotion::onLoadComplete(asset_uuid, type, user_data, status, ext_status);
 
 			self.mLoadingAssets.erase(asset_uuid);
 
@@ -1207,7 +1205,7 @@ void LLGestureMgr::onAssetLoadComplete(LLVFS *vfs,
 		}
 	case LLAssetType::AT_SOUND:
 		{
-			LLAudioEngine::assetCallback(vfs, asset_uuid, type, user_data, status, ext_status);
+			LLAudioEngine::assetCallback(asset_uuid, type, user_data, status, ext_status);
 
 			self.mLoadingAssets.erase(asset_uuid);
 

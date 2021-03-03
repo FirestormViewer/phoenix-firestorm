@@ -287,6 +287,40 @@
 	<menu_item_separator />
 	<!-- ## Zi: Filter Links Menu -->
 
+	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
+	<menu_item_check
+		name="inventory_filter_only_modify"
+		label="Only Modifiable">
+		<on_click
+			function="Inventory.FilterPermissions.Set"
+			parameter="only_modify" />
+		<on_check
+			function="Inventory.FilterPermissions.Check"
+			parameter="only_modify" />
+	</menu_item_check>
+	<menu_item_check
+		name="inventory_filter_only_copy"
+		label="Only Copyable">
+		<on_click
+			function="Inventory.FilterPermissions.Set"
+			parameter="only_copy" />
+		<on_check
+			function="Inventory.FilterPermissions.Check"
+			parameter="only_copy" />
+	</menu_item_check>
+	<menu_item_check
+		name="inventory_filter_only_transfer"
+		label="Show Transferable">
+		<on_click
+			function="Inventory.FilterPermissions.Set"
+			parameter="only_transfer" />
+		<on_check
+			function="Inventory.FilterPermissions.Check"
+			parameter="only_transfer" />
+	</menu_item_check>
+	<menu_item_separator />
+	<!-- </FS:Zi> -->
+
 	<menu_item_call
      label="Empty Trash"
      layout="topleft"

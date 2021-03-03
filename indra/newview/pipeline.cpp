@@ -4755,6 +4755,8 @@ void LLPipeline::renderGeomDeferred(LLCamera& camera)
 
 	LL_RECORD_BLOCK_TIME(FTM_RENDER_GEOMETRY);
 
+	LL_RECORD_BLOCK_TIME(FTM_DEFERRED_POOLS);
+
 	LLGLEnable cull(GL_CULL_FACE);
 
 	for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)

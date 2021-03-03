@@ -9079,6 +9079,14 @@ void handle_selected_script_action(const std::string& action)
 		msg = "SetRunningNot";
 		title = LLTrans::getString("NotRunQueueTitle");
 	}
+	// <FS> Delete scripts
+	else if (action == "delete")
+	{
+		name = "delete_queue";
+		msg = "delete";
+		title = LLTrans::getString("DeleteQueueTitle");
+	}
+	// </FS> Delete scripts
 	LLUUID id; id.generate();
 
 	LLFloaterScriptQueue* queue = LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));
