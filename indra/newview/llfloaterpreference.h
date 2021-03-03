@@ -116,7 +116,7 @@ protected:
 // </FS:CR>
 	void		onBtnCancel(const LLSD& userdata);
 
-	//void		onClickClearCache();			// Clear viewer texture cache, vfs, and VO cache on next startup // AO: was protected, moved to public
+	//void		onClickClearCache();			// Clear viewer texture cache, file cache on next startup // AO: was protected, moved to public
 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
 	void		onLanguageChange();
 	void		onNotificationsChange(const std::string& OptionName);

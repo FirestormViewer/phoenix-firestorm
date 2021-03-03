@@ -18,9 +18,6 @@
 	<string name="StartupInitializingTextureCache">
 		Inizializzazione della cache texture...
 	</string>
-	<string name="StartupInitializingVFS">
-		Inizializzazione VFS...
-	</string>
 	<string name="StartupRequireDriverUpdate">
 		Inizializzazione grafica non riuscita. Aggiornare il driver della scheda grafica.
 	</string>
@@ -71,9 +68,6 @@ Stato illuminazione (Advanced Lighting Model): [ALMSTATUS]
 	</string>
 	<string name="AboutTextureMemory">
 		Memoria texture (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-	</string>
-	<string name="AboutVFS">
-		VFS (cache) creation time (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Modalità display HiDPI: [HIDPI]

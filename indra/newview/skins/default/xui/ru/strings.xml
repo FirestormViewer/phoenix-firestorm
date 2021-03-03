@@ -34,9 +34,6 @@
 	<string name="StartupInitializingTextureCache">
 		Инициализация кэша текстур...
 	</string>
-	<string name="StartupInitializingVFS">
-		Инициализация виртуальной файловой системы (VFS)...
-	</string>
 	<string name="StartupRequireDriverUpdate">
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
@@ -94,9 +91,6 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	</string>
 	<string name="AboutTextureMemoryDynamic">
 		Память текстур: динамическая ([TEXTUREMEMORYMIN] МБ мин. / [TEXTUREMEMORYCACHERESERVE]% Кэш / [TEXTUREMEMORYGPURESERVE]% VRAM)
-	</string>
-	<string name="AboutVFS">
-		Время создания VFS (кэш) (UTC): [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Режим отображения HiDPI: [HIDPI]

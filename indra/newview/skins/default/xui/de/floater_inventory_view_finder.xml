@@ -18,6 +18,7 @@
 	<check_box label="Mod" name="check_modify"/>
 	<check_box label="Kop" name="check_copy"/>
 	<check_box label="Trans" name="check_transfer"/>
+	<check_box label="Ordner immer anzeig." name="check_show_empty"/>
 	<check_box label="Von mir erstellt" name="check_created_by_me"/>
 	<check_box label="Von anderen erstellt" name="check_created_by_others"/>
 	<check_box label="Seit Abmeldung" name="check_since_logoff"/>

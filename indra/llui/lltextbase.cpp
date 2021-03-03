@@ -2086,6 +2086,10 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	// work out the XUI menu file to use for this url
 	LLUrlMatch match;
 	std::string url = in_url;
+
+	// <FS:Ansariel> FIRE-30805: Replace "agentself" with "agent" when copying SLUrls
+	LLStringUtil::replaceString(url, "/agentself/", "/agent/");
+
 	if (! LLUrlRegistry::instance().findUrl(url, match))
 	{
 		return;
