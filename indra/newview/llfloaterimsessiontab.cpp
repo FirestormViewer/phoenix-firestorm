@@ -50,7 +50,6 @@
 
 const F32 REFRESH_INTERVAL = 1.0f;
 const std::string ICN_GROUP("group_chat_icon");
-const std::string ICN_NEARBY("nearby_chat_icon");
 const std::string ICN_AVATAR("avatar_icon");
 
 void cb_group_do_nothing()
@@ -348,6 +347,8 @@ BOOL LLFloaterIMSessionTab::postBuild()
 			- (mParticipantListPanel->isCollapsed()? 0 : LLPANEL_BORDER_WIDTH);
 
 	assignResizeLimits();
+
+	getChild<LLLayoutPanel>("session_icon_layout_panel")->setVisible(mSessionID.notNull());
 
 	return result;
 }
@@ -728,15 +729,6 @@ void LLFloaterIMSessionTab::updateChatIcon(const LLUUID& id)
 			icon->setValue(id);
 		}
 	}
-	else
-	{
-		if (mIsNearbyChat)
-		{
-			LLIconCtrl* icon = getChild<LLIconCtrl>(ICN_NEARBY);
-			icon->setVisible(true);
-		}
-	}
-
 }
 
 void LLFloaterIMSessionTab::hideAllStandardButtons()
