@@ -98,7 +98,8 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
     const std::string new_filename =  LLDiskCache::getInstance()->metaDataToFilepath(new_id_str, new_file_type, extra_info);
 
     // Rename needs the new file to not exist.
-    LLFileSystem::removeFile(new_file_id, new_file_type);
+    if (LLFileSystem::getExists(new_file_id, new_file_type)) // <FS:Ansariel> Squelch log spam
+        LLFileSystem::removeFile(new_file_id, new_file_type);
 
     if (LLFile::rename(old_filename, new_filename) != 0)
     {
