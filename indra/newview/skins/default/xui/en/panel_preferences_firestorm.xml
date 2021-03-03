@@ -97,6 +97,15 @@
          top_pad="3"
          follows="left|top"
          height="16"
+         label="Fix Bento Idle Animation"
+         name="play_default_bento_idle_animation_toggle"
+         tool_tip="If enabled, the viewer will run a default, priority 0 bento animation that poses hands, wings, mouth and tail in a natural position when no other bento animation is running."
+         width="270"
+         control_name="FSPlayDefaultBentoAnimation"/>
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
          label="Disable Login Progress Screen"
          name="login_screen_toggle"
          width="270"

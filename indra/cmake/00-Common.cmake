@@ -73,12 +73,11 @@ if (WINDOWS)
   # CP changed to only append the flag for 32bit builds - on 64bit builds,
   # locally at least, the build output is spammed with 1000s of 'D9002'
   # warnings about this switch being ignored.
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")  
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   # <FS:ND> Remove this, it's no option to cl.exe and causes a massive amount of warnings.
   #if( ADDRESS_SIZE EQUAL 32 )
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
   #endif()
-
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
       "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Zo"
       CACHE STRING "C++ compiler release-with-debug options" FORCE)
@@ -213,6 +212,10 @@ if (LINUX)
   endif (NOT USESYSTEMLIBS)
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
+
+  if( NOT (CMAKE_CXX_COMPILER MATCHES ".*clang") )
+	set( CMAKE_CXX_FLAGS "-fabi-version=9 ${CMAKE_CXX_FLAGS}" ) 
+  endif()
 endif (LINUX)
 
 
