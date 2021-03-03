@@ -59,6 +59,7 @@
 #include "llweb.h"
 #include "llhints.h"
 
+#include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
 #include "lllandmarkactions.h"
 
@@ -312,6 +313,7 @@ void LLNavigationBar::setupPanel()
 	// mBtnBack	= getChild<LLPullButton>("back_btn");
 	// mBtnForward	= getChild<LLPullButton>("forward_btn");
 	// mBtnHome	= getChild<LLButton>("home_btn");
+	// mBtnLandmarks = getChild<LLButton>("landmarks_btn");
 
 	// mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
 
@@ -320,6 +322,7 @@ void LLNavigationBar::setupPanel()
 	mBtnBack	= mView->getChild<LLPullButton>("back_btn");
 	mBtnForward	= mView->getChild<LLPullButton>("forward_btn");
 	mBtnHome	= mView->getChild<LLButton>("home_btn");
+	//mBtnLandmarks = mView->getChild<LLButton>("landmarks_btn"); // <FS:Ansariel> We don't use that right now...
 
 	mCmbLocation = mView->getChild<LLLocationInputCtrl>("location_combo"); 
 	mSearchComboBox = mView->getChild<LLSearchComboBox>("search_combo_box");
@@ -349,6 +352,8 @@ void LLNavigationBar::setupPanel()
 	// [FS:CR] FIRE-12333
 	//mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
 	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this, _1));
+
+	//mBtnLandmarks->setClickedCallback(boost::bind(&LLNavigationBar::onLandmarksButtonClicked, this)); // <FS:Ansariel> We don't use that right now...
 
 	mCmbLocation->setCommitCallback(boost::bind(&LLNavigationBar::onLocationSelection, this));
 	
@@ -488,6 +493,12 @@ void LLNavigationBar::onHomeButtonClicked(LLUICtrl* ctrl)
 {
 	gAgent.teleportHome();
 	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
+}
+
+void LLNavigationBar::onLandmarksButtonClicked()
+{
+	LLFloaterReg::toggleInstanceOrBringToFront("places");
+	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_landmark_tab"));
 }
 
 void LLNavigationBar::onSearchCommit()

@@ -18,7 +18,7 @@
      tab_width="80"
      left="3"
      top="0"
-     height="373"
+     height="398"
      width="307">
         <panel
          follows="all"
@@ -105,106 +105,4 @@
              width="307"/>
         </panel>
     </tab_container>
- <panel
-     bevel_style="none"
-     bottom="3"
-     follows="left|right|bottom"
-     height="27"
-     layout="bottomleft"
-     left="3"
-     name="bottom_panel"
-     width="313">
-     	  <panel
-		   follows="top|left|right"
-		   height="25"
-		   layout="topleft"
-		   top="0"
-		   left="0"
-		   name="bottom_panel"
-		   width="307">
-		      <panel
-		       height="25"
-		       layout="topleft"
-			   follows="top|left"
-			   left="0"
-		       name="options_gear_btn_panel"
-		       width="32">
-		          <menu_button
-		           follows="bottom|left"
-		           tool_tip="Show additional options"
-		           height="25"
-		           image_hover_unselected="Toolbar_Left_Over"
-		           image_overlay="OptionsMenu_Off"
-		           image_selected="Toolbar_Left_Selected"
-		           image_unselected="Toolbar_Left_Off"
-		           layout="topleft"
-		           left="0"
-		           name="options_gear_btn"
-		           top="0"
-		           width="31" />
-		      </panel>
-		      <panel
-		       height="25"
-		       layout="topleft"
-			   follows="top|left"
-			   left_pad="0"
-		       name="add_btn_panel"
-		       width="32">
-		          <button
-		           follows="bottom|left"
-		           height="25"
-		           image_hover_unselected="Toolbar_Middle_Over"
-		           image_overlay="AddItem_Off"
-		           image_selected="Toolbar_Middle_Selected"
-		           image_unselected="Toolbar_Middle_Off"
-		           layout="topleft"
-		           left="0"
-		           name="add_btn"
-		           tool_tip="Add new landmark"
-		           top="0"
-		           width="31" />
-		      </panel>
-		      <panel
-		       height="25"
-		       layout="topleft"
-			   follows="top|left|right"
-			   left_pad="0"
-		       name="dummy_panel"
-			   min_width="1"
-		       width="212">
-		          <icon
-		           follows="bottom|left|right"
-		           height="25"
-		           image_name="Toolbar_Middle_Off"
-		           layout="topleft"
-		           left="0"
-		           top="0"
-		           name="dummy_icon"
-		           width="211" />
-		      </panel>
-		      <panel
-		       height="25"
-		       layout="topleft"
-		       name="trash_btn_panel"
-			   follows="top|right"
-			   left_pad="0"
-		       width="31">
-		          <dnd_button
-		           follows="bottom|right"
-		           height="25"
-		           image_hover_unselected="Toolbar_Right_Over"
-		           image_overlay="TrashItem_Off"
-		           image_selected="Toolbar_Right_Selected"
-		           image_unselected="Toolbar_Right_Off"
-		           left="0"
-		           layout="topleft"
-		           name="trash_btn"
-		           tool_tip="Remove selected landmark"
-		           top="0"
-		           width="31"/>
-		      </panel>
-  	</panel>
-   </panel>
 </panel>
-
-

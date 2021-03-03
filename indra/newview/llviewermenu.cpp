@@ -10968,8 +10968,8 @@ class LLWorldEnvSettings : public view_listener_t
 		if (event_name == "sunrise")
 		{
             // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
-            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE, LLEnvironment::TRANSITION_FAST);
-            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_FAST);
+            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE, LLEnvironment::TRANSITION_INSTANT);
+            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
             LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNRISE);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             // </FS:Beq>
@@ -10978,8 +10978,8 @@ class LLWorldEnvSettings : public view_listener_t
 		else if (event_name == "noon")
 		{
             // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
-            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY, LLEnvironment::TRANSITION_FAST);
-            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_FAST);
+            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY, LLEnvironment::TRANSITION_INSTANT);
+            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
             LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDDAY);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
             // </FS:Beq>
@@ -10988,8 +10988,8 @@ class LLWorldEnvSettings : public view_listener_t
 		else if (event_name == "sunset")
 		{
             // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
-            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET, LLEnvironment::TRANSITION_FAST);
-            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_FAST);
+            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET, LLEnvironment::TRANSITION_INSTANT);
+            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
             LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_SUNSET);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);            // </FS:Beq>
             defocusEnvFloaters();
@@ -10997,8 +10997,8 @@ class LLWorldEnvSettings : public view_listener_t
 		else if (event_name == "midnight")
 		{
             // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
-            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT, LLEnvironment::TRANSITION_FAST);
-            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_FAST);
+            //LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT, LLEnvironment::TRANSITION_INSTANT);
+            //LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
             LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_MIDNIGHT);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);            // </FS:Beq>
             defocusEnvFloaters();
@@ -11006,7 +11006,7 @@ class LLWorldEnvSettings : public view_listener_t
         else if (event_name == "region")
 		{
             LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
-            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_FAST);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
             defocusEnvFloaters();
 		}
         else if (event_name == "pause_clouds")

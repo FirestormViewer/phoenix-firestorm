@@ -53,6 +53,7 @@
 #include "llagentpicksinfo.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llcommandhandler.h"
+#include "lldndbutton.h"
 #include "llfloaterworldmap.h"
 #include "llinventorybridge.h"
 #include "llinventoryobserver.h"
@@ -305,8 +306,25 @@ BOOL LLPanelPlaces::postBuild()
 	mOverflowBtn = getChild<LLMenuButton>("overflow_btn");
 	mOverflowBtn->setMouseDownCallback(boost::bind(&LLPanelPlaces::onOverflowButtonClicked, this));
 
-	mPlaceInfoBtn = getChild<LLButton>("profile_btn");
-	mPlaceInfoBtn->setClickedCallback(boost::bind(&LLPanelPlaces::onProfileButtonClicked, this));
+    mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
+    mGearMenuButton->setMouseDownCallback(boost::bind(&LLPanelPlaces::onGearMenuClick, this));
+
+    mSortingMenuButton = getChild<LLMenuButton>("sorting_menu_btn");
+    mSortingMenuButton->setMouseDownCallback(boost::bind(&LLPanelPlaces::onSortingMenuClick, this));
+
+    mAddMenuButton = getChild<LLMenuButton>("add_menu_btn");
+    mAddMenuButton->setMouseDownCallback(boost::bind(&LLPanelPlaces::onAddMenuClick, this));
+
+    mRemoveSelectedBtn = getChild<LLButton>("trash_btn");
+    mRemoveSelectedBtn->setClickedCallback(boost::bind(&LLPanelPlaces::onRemoveButtonClicked, this));
+
+    LLDragAndDropButton* trash_btn = (LLDragAndDropButton*)mRemoveSelectedBtn;
+    trash_btn->setDragAndDropHandler(boost::bind(&LLPanelPlaces::handleDragAndDropToTrash, this
+        , _4 // BOOL drop
+        , _5 // EDragAndDropType cargo_type
+        , _6 // void* cargo_data
+        , _7 // EAcceptance* accept
+    ));
 
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	registrar.add("Places.OverflowMenu.Action",  boost::bind(&LLPanelPlaces::onOverflowMenuItemClicked, this, _2));
@@ -334,6 +352,10 @@ BOOL LLPanelPlaces::postBuild()
 	{
 		mTabContainer->setCommitCallback(boost::bind(&LLPanelPlaces::onTabSelected, this));
 	}
+
+    mButtonsContainer = getChild<LLPanel>("button_layout_panel");
+    mButtonsContainer->setVisible(FALSE);
+    mFilterContainer = getChild<LLLayoutStack>("top_menu_panel");
 
 	mFilterEditor = getChild<LLFilterEditor>("Filter");
 	if (mFilterEditor)
@@ -663,6 +685,12 @@ void LLPanelPlaces::onTabSelected()
 
 	onFilterEdit(mActivePanel->getFilterSubString(), true);
 	mActivePanel->updateVerbs();
+
+    // History panel does not support deletion nor creation
+    // Hide menus
+    bool supports_create = mActivePanel->getCreateMenu() != NULL;
+    childSetVisible("add_btn_panel", supports_create);
+    childSetVisible("trash_btn_panel", supports_create);
 }
 
 void LLPanelPlaces::onTeleportButtonClicked()
@@ -940,14 +968,6 @@ void LLPanelPlaces::onOverflowButtonClicked()
 	mOverflowBtn->setMenu(menu, LLMenuButton::MP_TOP_RIGHT);
 }
 
-void LLPanelPlaces::onProfileButtonClicked()
-{
-	if (!mActivePanel)
-		return;
-
-	mActivePanel->onShowProfile();
-}
-
 bool LLPanelPlaces::onOverflowMenuItemEnable(const LLSD& param)
 {
 	std::string value = param.asString();
@@ -1036,6 +1056,50 @@ void LLPanelPlaces::onBackButtonClicked()
 	updateVerbs();
 }
 
+void LLPanelPlaces::onGearMenuClick()
+{
+    if (mActivePanel)
+    {
+        LLToggleableMenu* menu = mActivePanel->getSelectionMenu();
+        mGearMenuButton->setMenu(menu, LLMenuButton::MP_BOTTOM_LEFT);
+    }
+}
+
+void LLPanelPlaces::onSortingMenuClick()
+{
+    if (mActivePanel)
+    {
+        LLToggleableMenu* menu = mActivePanel->getSortingMenu();
+        mSortingMenuButton->setMenu(menu, LLMenuButton::MP_BOTTOM_LEFT);
+    }
+}
+
+void LLPanelPlaces::onAddMenuClick()
+{
+    if (mActivePanel)
+    {
+        LLToggleableMenu* menu = mActivePanel->getCreateMenu();
+        mAddMenuButton->setMenu(menu, LLMenuButton::MP_BOTTOM_LEFT);
+    }
+}
+
+void LLPanelPlaces::onRemoveButtonClicked()
+{
+    if (mActivePanel)
+    {
+        mActivePanel->onRemoveSelected();
+    }
+}
+
+bool LLPanelPlaces::handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, void* cargo_data, EAcceptance* accept)
+{
+    if (mActivePanel)
+    {
+        return mActivePanel->handleDragAndDropToTrash(drop, cargo_type, cargo_data, accept);
+    }
+    return false;
+}
+
 void LLPanelPlaces::togglePickPanel(BOOL visible)
 {
 	if (mPickPanel)
@@ -1052,8 +1116,9 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 	if (!mPlaceProfile || !mLandmarkInfo)
 		return;
 
-	mFilterEditor->setVisible(!visible);
 	mTabContainer->setVisible(!visible);
+	mButtonsContainer->setVisible(visible);
+	mFilterContainer->setVisible(!visible);
 
 	if (mPlaceInfoType == AGENT_INFO_TYPE ||
 		mPlaceInfoType == REMOTE_PLACE_INFO_TYPE ||
@@ -1068,10 +1133,6 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 			// Do not reset location info until mResetInfoTimer has expired
 			// to avoid text blinking.
 			mResetInfoTimer.setTimerExpirySec(PLACE_INFO_UPDATE_INTERVAL);
-
-			LLRect rect = getRect();
-			LLRect new_rect = LLRect(rect.mLeft, rect.mTop, rect.mRight, mTabContainer->getRect().mBottom);
-			mPlaceProfile->reshape(new_rect.getWidth(), new_rect.getHeight());
 
 			mLandmarkInfo->setVisible(FALSE);
 		}
@@ -1093,10 +1154,6 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 		if (visible)
 		{
 			mLandmarkInfo->resetLocation();
-
-			LLRect rect = getRect();
-			LLRect new_rect = LLRect(rect.mLeft, rect.mTop, rect.mRight, mTabContainer->getRect().mBottom);
-			mLandmarkInfo->reshape(new_rect.getWidth(), new_rect.getHeight());
 		}
 		else
 		{
@@ -1110,6 +1167,10 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 				if (mItem.notNull())
 				{
 					landmarks_panel->setItemSelected(mItem->getUUID(), TRUE);
+				}
+				else
+				{
+					landmarks_panel->resetSelection();
 				}
 			}
 		}
@@ -1181,8 +1242,6 @@ void LLPanelPlaces::createTabs()
 	LLLandmarksPanel* landmarks_panel = new LLLandmarksPanel();
 	if (landmarks_panel)
 	{
-		landmarks_panel->setPanelPlacesButtons(this);
-
 		mTabContainer->addTabPanel(
 			LLTabContainer::TabPanelParams().
 			panel(landmarks_panel).
@@ -1193,8 +1252,6 @@ void LLPanelPlaces::createTabs()
 	LLTeleportHistoryPanel* teleport_history_panel = new LLTeleportHistoryPanel();
 	if (teleport_history_panel)
 	{
-		teleport_history_panel->setPanelPlacesButtons(this);
-
 		mTabContainer->addTabPanel(
 			LLTabContainer::TabPanelParams().
 			panel(teleport_history_panel).
@@ -1206,9 +1263,17 @@ void LLPanelPlaces::createTabs()
 
 	mActivePanel = dynamic_cast<LLPanelPlacesTab*>(mTabContainer->getCurrentPanel());
 
-	// Filter applied to show all items.
-	if (mActivePanel)
-		mActivePanel->onSearchEdit(mActivePanel->getFilterSubString());
+    if (mActivePanel)
+    {
+        // Filter applied to show all items.
+        mActivePanel->onSearchEdit(mActivePanel->getFilterSubString());
+
+        // History panel does not support deletion nor creation
+        // Hide menus
+        bool supports_create = mActivePanel->getCreateMenu() != NULL;
+        childSetVisible("add_btn_panel", supports_create);
+        childSetVisible("trash_btn_panel", supports_create);
+    }
 
 	mTabsCreated = true;
 }
@@ -1274,14 +1339,11 @@ void LLPanelPlaces::updateVerbs()
 	mSaveBtn->setVisible(isLandmarkEditModeOn);
 	mCancelBtn->setVisible(isLandmarkEditModeOn);
 	mCloseBtn->setVisible(is_create_landmark_visible && !isLandmarkEditModeOn);
-	mPlaceInfoBtn->setVisible(!is_place_info_visible && !is_create_landmark_visible && !isLandmarkEditModeOn && !is_pick_panel_visible);
 
 	bool show_options_btn = is_place_info_visible && !is_create_landmark_visible && !isLandmarkEditModeOn;
 	mOverflowBtn->setVisible(show_options_btn);
 	getChild<LLLayoutPanel>("lp_options")->setVisible(show_options_btn);
 	getChild<LLLayoutPanel>("lp2")->setVisible(!show_options_btn);
-
-	mPlaceInfoBtn->setEnabled(!is_create_landmark_visible && !isLandmarkEditModeOn && have_3d_pos);
 
 	if (is_place_info_visible)
 	{

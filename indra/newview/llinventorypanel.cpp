@@ -193,6 +193,7 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
 	mCommitCallbackRegistrar.add("Inventory.FileUploadLocation", boost::bind(&LLInventoryPanel::fileUploadLocation, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.SetFavoritesFolder", boost::bind(&LLInventoryPanel::setFavoritesFolder, this, _2));
+    mCommitCallbackRegistrar.add("Inventory.ResetFavoritesFolder", boost::bind(&LLInventoryPanel::resetFavoritesFolder, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLInventoryPanel::onCustomAction, this, _2)); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 }
 
@@ -1616,6 +1617,11 @@ void LLInventoryPanel::fileUploadLocation(const LLSD& userdata)
 void LLInventoryPanel::setFavoritesFolder(const LLSD& userdata)
 {
     gSavedPerAccountSettings.setString("FavoritesFolder", LLFolderBridge::sSelf.get()->getUUID().asString());
+}
+
+void LLInventoryPanel::resetFavoritesFolder(const LLSD& userdata)
+{
+    gSavedPerAccountSettings.setString("FavoritesFolder", "");
 }
 
 void LLInventoryPanel::purgeSelectedItems()
