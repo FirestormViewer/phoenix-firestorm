@@ -13,7 +13,7 @@ include(LLCommon)
 include(LLCoreHttp)
 include(LLMath)
 include(LLMessage)
-include(LLVFS)
+include(LLFileSystem)
 include(LLAddBuildTest)
 include(Python)
 include(Tut)
@@ -27,7 +27,7 @@ include_directories(
     ${LLCOREHTTP_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
     ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLVFS_INCLUDE_DIRS}
+    ${LLFILESYSTEM_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
     )
 
@@ -215,7 +215,7 @@ target_link_libraries(
   llmessage
   ${CURL_LIBRARIES}
   ${LLCOMMON_LIBRARIES}
-  ${LLVFS_LIBRARIES}
+  ${LLFILESYSTEM_LIBRARIES}
   ${LLMATH_LIBRARIES}
   ${JSONCPP_LIBRARIES}
   ${OPENSSL_LIBRARIES}
@@ -233,7 +233,7 @@ target_link_libraries(
   llmessage
   ${CURL_LIBRARIES}
   ${LLCOMMON_LIBRARIES}
-  ${LLVFS_LIBRARIES}
+  ${LLFILESYSTEM_LIBRARIES}
   ${LLMATH_LIBRARIES}
   ${JSONCPP_LIBRARIES}
   ${OPENSSL_LIBRARIES}
@@ -263,7 +263,7 @@ if (LL_TESTS)
 if (LINUX)
   set(test_libs
     ${WINDOWS_LIBRARIES}
-    ${LLVFS_LIBRARIES}
+    ${LLFILESYSTEM_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${CURL_LIBRARIES}
     ${NGHTTP2_LIBRARIES}
@@ -279,7 +279,7 @@ if (LINUX)
 else (LINUX)
   set(test_libs
     ${WINDOWS_LIBRARIES}
-    ${LLVFS_LIBRARIES}
+    ${LLFILESYSTEM_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${CURL_LIBRARIES}
     ${NGHTTP2_LIBRARIES}

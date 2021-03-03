@@ -45,7 +45,7 @@
 #include "llviewerassetupload.h"
 #include "llappviewer.h"
 #include "llviewerstats.h"
-#include "llvfile.h"
+#include "llfilesystem.h"
 #include "llgesturemgr.h"
 #include "llpreviewnotecard.h"
 #include "llpreviewgesture.h"
@@ -492,15 +492,16 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
 
     setAssetType(assetType);
 
-    // copy this file into the vfs for upload
+    // copy this file into the cache for upload
     S32 file_size;
     LLAPRFile infile;
     infile.open(filename, LL_APR_RB, NULL, &file_size);
     if (infile.getFileHandle())
     {
-        LLVFile file(gVFS, getAssetId(), assetType, LLVFile::WRITE);
-
-        file.setMaxSize(file_size);
+        // <FS:Ansariel> Fix broken asset upload
+        //LLFileSystem file(getAssetId(), assetType, LLFileSystem::WRITE);
+        LLFileSystem file(getAssetId(), assetType, LLFileSystem::APPEND);
+        // </FS:Ansariel>
 
         const S32 buf_size = 65536;
         U8 copy_buf[buf_size];
@@ -532,7 +533,7 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID itemId, LLAssetType:
     mContents(buffer),
     mInvnFinishFn(finish),
     mTaskFinishFn(nullptr),
-    mStoredToVFS(false)
+    mStoredToCache(false)
 {
     setItemId(itemId);
     setAssetType(assetType);
@@ -546,7 +547,7 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID itemId, LLPointer<LL
     mContents(),
     mInvnFinishFn(finish),
     mTaskFinishFn(nullptr),
-    mStoredToVFS(false)
+    mStoredToCache(false)
 {
     setItemId(itemId);
 
@@ -580,7 +581,7 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID taskId, LLUUID itemI
     mContents(buffer),
     mInvnFinishFn(nullptr),
     mTaskFinishFn(finish),
-    mStoredToVFS(false)
+    mStoredToCache(false)
 {
     setItemId(itemId);
     setAssetType(assetType);
@@ -591,13 +592,12 @@ LLSD LLBufferedAssetUploadInfo::prepareUpload()
     if (getAssetId().isNull())
         generateNewAssetId();
 
-    LLVFile file(gVFS, getAssetId(), getAssetType(), LLVFile::APPEND);
+    LLFileSystem file(getAssetId(), getAssetType(), LLFileSystem::APPEND);
 
     S32 size = mContents.length() + 1;
-    file.setMaxSize(size);
     file.write((U8*)mContents.c_str(), size);
 
-    mStoredToVFS = true;
+    mStoredToCache = true;
 
     return LLSD().with("success", LLSD::Boolean(true));
 }
@@ -620,10 +620,10 @@ LLUUID LLBufferedAssetUploadInfo::finishUpload(LLSD &result)
     LLUUID newAssetId = result["new_asset"].asUUID();
     LLUUID itemId = getItemId();
 
-    if (mStoredToVFS)
+    if (mStoredToCache)
     {
         LLAssetType::EType assetType(getAssetType());
-        gVFS->renameFile(getAssetId(), assetType, newAssetId, assetType);
+        LLFileSystem::renameFile(getAssetId(), assetType, newAssetId, assetType);
     }
 
     if (mTaskUpload)

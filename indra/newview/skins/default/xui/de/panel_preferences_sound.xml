@@ -113,8 +113,10 @@
 			<radio_item label="Voice-Chat von Avatarposition aus hören" name="1"/>
 		</radio_group>
 		<check_box label="Avatarlippen beim Sprechen bewegen" name="enable_lip_sync"/>
-		<check_box label="Zeige Voice-Indikator über Avataren" name="FSShowVoiceVisualizer" tool_tip="Wenn diese Option aktiviert ist, wird der Voice-Indicator (weißer Punkt) über Avataren angezeigt."/>
-		<check_box label="Zeige Voice-Indikator und Lippenbewegungen in P2P- und Gruppenchats" name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice-Indicator und Lippen Bewegungen auch im P2P- sowie im Gruppenchat angezeigt."/>
+		<check_box label="Zeige Voice-Indikator über Avataren" name="FSShowVoiceVisualizer" tool_tip="Wenn diese Option aktiviert ist, wird der Voice-Indikator (weißer Punkt) über Avataren angezeigt."/>
+		<check_box label="Zeige Voice-Indikator über eigenen Avatar" name="FSShowMyOwnVoiceVisualizer"/>
+		<check_box label="Zeige Voice-Indikator mit Punkt" name="FSShowVoiceVisualizerWithDot" tool_tip="Wenn diese Option aktiviert ist, wird der weiße Punkt im Voice-Indikator mit angezeigt. Falls deaktiviert, werden nur die Wellen-Symbole beim Sprechen angezeigt."/>
+		<check_box label="Zeige Voice-Indikator und Lippenbewegungen in P2P- und Gruppenchats" name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice-Indikator und Lippen Bewegungen auch im P2P- sowie im Gruppenchat angezeigt."/>
 		<check_box label="Zeige Voice-Kanal-Status auf Gesprächs-Reitern" name="FSShowConversationVoiceStateIndicator" tool_tip="Zeigt den Status des aktuellen Voice-Kanals auf den Reitern im Gespräche-Fenster"/>
 		<check_box label="Automatisch alle eingehenden Gruppenanrufe abweisen" name="VoiceCallsRejectGroup"/>
 		<check_box label="Automatisch alle eingehenden Konferenzanrufe abweisen" name="VoiceCallsRejectAdHoc"/>

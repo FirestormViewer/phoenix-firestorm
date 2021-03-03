@@ -11,7 +11,6 @@
 		<menu_item_check name="inventory_search_by_creator" label="Создателю"/>
 		<menu_item_check name="inventory_search_by_description" label="Описанию"/>
 		<menu_item_check name="inventory_search_by_all" label="Всему"/>
-		<menu_item_check name="inventory_show_partial_results" label="Частичные результаты"/>
 	</context_menu>
 	<menu_item_check label="Добавление объектов по двойному нажатию" name="add_inv_toggle"/>
 	<menu_item_check label="Добавление одежды по двойному нажатию" name="add_invclothing_toggle"/>
@@ -27,5 +26,8 @@
 	<menu_item_check name="inventory_filter_show_links" label="Показать ссылки"/>
 	<menu_item_check name="inventory_filter_only_links" label="Показать только ссылки"/>
 	<menu_item_check name="inventory_filter_hide_links" label="Скрыть ссылки"/>
+	<menu_item_check name="inventory_filter_only_modify" label="Только изменяемое"/>
+	<menu_item_check name="inventory_filter_only_copy" label="Только копируемое"/>
+	<menu_item_check name="inventory_filter_only_transfer" label="Показать передаваемое"/>
 	<menu_item_call label="Очистить корзину" name="empty_trash"/>
 </toggleable_menu>
