@@ -250,8 +250,12 @@ void LLPreviewNotecard::updateTitleButtons()
 {
 	LLPreview::updateTitleButtons();
 
-	LLUICtrl* lock_btn = getChild<LLUICtrl>("lock");
-	if(lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
+	// <FS:Ansariel> Fix XUI parser warning
+	//LLUICtrl* lock_btn = getChild<LLUICtrl>("lock");
+	//if (lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
+	LLUICtrl* lock_btn = findChild<LLUICtrl>("lock");
+	if(lock_btn && lock_btn->getVisible() && !isMinimized()) // lock button stays visible if floater is minimized.
+	// </FS:Ansariel>
 	{
 		LLRect lock_rc = lock_btn->getRect();
 		LLRect buttons_rect = getDragHandle()->getButtonsRect();
