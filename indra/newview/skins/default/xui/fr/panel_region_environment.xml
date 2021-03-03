@@ -28,30 +28,46 @@
 		(vide)
 	</string>
 	<string name="str_region_env">
-		(environnement de la région)
+		(envt de la région)
 	</string>
-	<layout_stack>
-		<layout_panel name="pnl_environment_disabled">
-			<text name="txt_environment_disabled">
-				...
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text name="region_text_lbl">
+				Région :
+			</text>
+			<text name="region_text">
+				inconnu
 			</text>
 		</layout_panel>
 		<layout_panel name="pnl_environment_config">
-			<layout_stack>
+			<layout_stack name="ls_environment_config">
 				<layout_panel name="pnl_environment_config">
-					<layout_stack>
+					<layout_stack name="ls_environment_config2">
 						<layout_panel name="pnl_environment_current">
-							<button label="[USEDEFAULT]" name="btn_usedefault"/>
-							<button label="Utiliser l&apos;inventaire" name="btn_select_inventory"/>
+							<text name="select_environment_label">
+								Sélectionner l'environnement
+							</text>
+							<button label="Utiliser l'inventaire" name="btn_select_inventory"/>
 							<button label="Personnaliser" name="btn_edit"/>
-							<check_box label="Les propriétaires de parcelle peuvent neutraliser l&apos;environnement" name="chk_allow_override"/>
+							<check_box label="Les propriétaires de parcelles peuvent passer outre l'environnement" name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
+							<text name="day_settings_label">
+								Réglages de la journée
+							</text>
+							<text name="day_length_label">
+								Durée de la journée (heures)
+							</text>
+							<text name="day_offset_label">
+								Décalage horaire (heures)
+							</text>
+							<text name="apparent_time_of_day_label">
+								Heure apparente de la journée :
+							</text>
 							<text name="lbl_apparent_time">
 								[HH]:[MM][AP] ([PRC]%)
 							</text>
 						</layout_panel>
-						<layout_panel name="pnl_environment_buttons"/>
 					</layout_stack>
 				</layout_panel>
 				<layout_panel name="pnl_environment_altitudes">
@@ -63,7 +79,7 @@
 						<line_editor name="edt_invname_alt1">
 							Inconnu
 						</line_editor>
-						<settings_drop_target name="sdt_alt1" tool_tip="Faites glisser un paramètre de l&apos;inventaire vers cette zone cible pour le sélectionner comme ciel actuel."/>
+						<settings_drop_target name="sdt_alt1" tool_tip="Faites glisser un paramètre de l'inventaire vers cette zone cible pour le sélectionner comme ciel actuel."/>
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
@@ -73,7 +89,7 @@
 						<line_editor name="edt_invname_alt2">
 							Inconnu
 						</line_editor>
-						<settings_drop_target name="sdt_alt2" tool_tip="Faites glisser un paramètre de l&apos;inventaire vers cette zone cible pour le sélectionner comme ciel actuel."/>
+						<settings_drop_target name="sdt_alt2" tool_tip="Faites glisser un paramètre de l'inventaire vers cette zone cible pour le sélectionner comme ciel actuel."/>
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
@@ -83,13 +99,11 @@
 						<line_editor name="edt_invname_alt3">
 							Inconnu
 						</line_editor>
-						<settings_drop_target name="sdt_alt3" tool_tip="Faites glisser un paramètre de l&apos;inventaire vers cette zone cible pour le sélectionner comme ciel actuel."/>
+						<settings_drop_target name="sdt_alt3" tool_tip="Faites glisser un paramètre de l'inventaire vers cette zone cible pour le sélectionner comme ciel actuel."/>
 					</panel>
-					<multi_slider initial_value="0" name="sld_altitudes">
-						<slider name="sld1" value="1000"/>
-						<slider name="sld2" value="2000"/>
-						<slider name="sld3" value="3000"/>
-					</multi_slider>
+					<text follows="top|left" name="sky_altitudes_label">
+						Altitudes du ciel
+					</text>
 					<panel name="pnl_ground">
 						<text name="txt_ground">
 							Sol
@@ -97,7 +111,7 @@
 						<line_editor name="edt_invname_ground">
 							Inconnu
 						</line_editor>
-						<settings_drop_target name="sdt_ground" tool_tip="Faites glisser un paramètre de l&apos;inventaire vers cette zone cible pour le sélectionner comme ciel au niveau du sol."/>
+						<settings_drop_target name="sdt_ground" tool_tip="Faites glisser un paramètre de l'inventaire vers cette zone cible pour le sélectionner comme ciel au niveau du sol."/>
 					</panel>
 					<panel name="pnl_water">
 						<text name="txt_water">
@@ -106,7 +120,7 @@
 						<line_editor name="edt_invname_water">
 							Inconnu
 						</line_editor>
-						<settings_drop_target name="sdt_water" tool_tip="Faites glisser un paramètre de l&apos;inventaire vers cette zone cible pour le sélectionner comme eau actuelle."/>
+						<settings_drop_target name="sdt_water" tool_tip="Faites glisser un paramètre de l'inventaire vers cette zone cible pour le sélectionner comme eau actuelle."/>
 					</panel>
 					<button label="Réinitialiser" name="btn_rst_altitudes" tool_tip="Rétablir les altitudes par défaut."/>
 				</layout_panel>

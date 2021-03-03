@@ -4,7 +4,7 @@
 		Użyj domyślnych
 	</string>
 	<string name="str_label_use_region">
-		Użyj ust. regionu
+		Użyj ustawień regionu
 	</string>
 	<string name="str_altitude_desription">
 		Niebo [INDEX]([ALTITUDE]m)
@@ -44,7 +44,7 @@
 							<text name="select_environment_label">
 								Wybierz otoczenie
 							</text>
-							<button label="Z Szafy" name="btn_select_inventory" />
+							<button label="Wybierz z Szafy" name="btn_select_inventory" />
 							<button label="Dostosuj cykl dnia" name="btn_edit" />
 							<check_box label="Właściciele działek mogą zastąpić" name="chk_allow_override" />
 						</layout_panel>
@@ -68,7 +68,7 @@
 					<panel name="pnl_alt1">
 						<text name="txt_alt1">
 							Niebo [INDEX]
-							[ALTITUDE]m
+                            [ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt1">
 							Nieznane
@@ -78,7 +78,7 @@
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
 							Niebo [INDEX]
-							[ALTITUDE]m
+                            [ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt2">
 							Nieznane
@@ -88,7 +88,7 @@
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
 							Niebo [INDEX]
-							[ALTITUDE]m
+                            [ALTITUDE]m
 						</text>
 						<line_editor name="edt_invname_alt3">
 							Nieznane

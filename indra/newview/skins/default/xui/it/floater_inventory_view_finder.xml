@@ -14,7 +14,6 @@
 	<check_box label="Fotografie" name="check_snapshot"/>
 	<button label="Tutti" label_selected="Tutti" name="All"/>
 	<button label="Nessuno" label_selected="Nessuno" name="None"/>
-	<check_box label="Solo trasferibili" name="check_transferable"/>
 	<check_box label="Mostra sempre cartelle" name="check_show_empty"/>
 	<check_box label="Creati da me" name="check_created_by_me" />
 	<check_box label="Creati da altri" name="check_created_by_others" />

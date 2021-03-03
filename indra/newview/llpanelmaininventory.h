@@ -199,6 +199,11 @@ protected:
 	void onFilterLinksChecked(const LLSD& userdata);
 	// </FS:Zi> Filter Links Menu
 
+	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+	BOOL isFilterPermissionsChecked(const LLSD &userdata);
+	void onFilterPermissionsChecked(const LLSD &userdata);
+	// </FS:Zi>
+
 	// <FS:Zi> Extended Inventory Search
 	BOOL isSearchTypeChecked(const LLSD& userdata);
 	void onSearchTypeChecked(const LLSD& userdata);

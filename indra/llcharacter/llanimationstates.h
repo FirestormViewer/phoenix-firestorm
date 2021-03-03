@@ -183,6 +183,9 @@ extern const LLUUID ANIM_AGENT_YES;
 extern const LLUUID ANIM_AGENT_YES_HAPPY;
 extern const LLUUID ANIM_AGENT_YOGA_FLOAT;
 
+// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+extern const LLUUID ANIM_AGENT_BENTO_IDLE;
+
 extern LLUUID AGENT_WALK_ANIMS[];
 extern S32 NUM_AGENT_WALK_ANIMS;
 

@@ -49,7 +49,7 @@
 							</text>
 							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="Из инвентаря" name="btn_select_inventory"/>
-							<button label="Настроить" name="btn_edit"/>
+							<button label="Настроить цикл дня" name="btn_edit"/>
 							<check_box label="Владельцы участков могут менять" name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">

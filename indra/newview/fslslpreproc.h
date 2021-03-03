@@ -63,7 +63,7 @@ public:
 	std::string lslcomp(std::string script);
 
 	static LLUUID findInventoryByName(std::string name);
-	static void FSProcCacheCallback(LLVFS *vfs, const LLUUID& uuid, LLAssetType::EType type,
+	static void FSProcCacheCallback(const LLUUID& uuid, LLAssetType::EType type,
 									void *userdata, S32 result, LLExtStat extstat);
 	void preprocess_script(BOOL close = FALSE, bool sync = false, bool defcache = false);
 	void preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data);
