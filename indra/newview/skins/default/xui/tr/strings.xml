@@ -31,9 +31,6 @@
 	<string name="StartupInitializingTextureCache">
 		Doku önbelleği başlatılıyor...
 	</string>
-	<string name="StartupInitializingVFS">
-		VFS Başlatılıyor...
-	</string>
 	<string name="StartupRequireDriverUpdate">
 		Grafik başlatma başarılamadı. Lütfen grafik sürücünüzü güncelleştirin!
 	</string>

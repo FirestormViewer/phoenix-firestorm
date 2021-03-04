@@ -34,7 +34,7 @@
 #include "llaudioengine.h"
 #include "llfloaterreg.h"
 #include "llsdserialize.h"
-#include "llvfs.h"
+#include "llfilesystem.h"
 #include "llxorcipher.h"
 #include "llviewerobjectlist.h"
 
@@ -175,7 +175,7 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
 
 	if (type == LLAssetType::AT_SOUND)
 	{
-		gVFS->removeFile(id, LLAssetType::AT_SOUND);
+		LLFileSystem::removeFile(id, LLAssetType::AT_SOUND);
 		std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, id.asString()) + ".dsf";
 		if (gDirUtilp->fileExists(wav_path))
 		{

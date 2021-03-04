@@ -31,9 +31,6 @@
 	<string name="StartupInitializingTextureCache">
 		正在初始化材質快取...
 	</string>
-	<string name="StartupInitializingVFS">
-		VFS 初始化中...
-	</string>
 	<string name="StartupRequireDriverUpdate">
 		顯像初始化失敗。 請更新你的顯像卡驅動程式！
 	</string>

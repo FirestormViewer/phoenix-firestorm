@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="BOTONES DE LA BARRA DE HERRAMIENTAS" width="680">
+<floater name="Toybox" title="BOTONES DE LA BARRA DE HERRAMIENTAS">
 	<text name="toybox label 1">
 		Puedes agregar o quitar botones arrastrándolos a las barras de herramientas o desde ellas.
 	</text>

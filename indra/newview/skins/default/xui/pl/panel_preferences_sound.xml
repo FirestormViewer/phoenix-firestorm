@@ -105,6 +105,8 @@
 			</radio_group>
 			<check_box label="Poruszaj ustami awatara podczas mówienia" name="enable_lip_sync"/>
 			<check_box label="Pokazuj wskaźniki dźwięku ponad awatarami" tool_tip="Pokazuj wskaźniki dźwięku (białe kropki) ponad awatarami" name="FSShowVoiceVisualizer"/>
+			<check_box label="Pokazuj wskaźnik dźwięku ponad moim własnym awatarem" name="FSShowMyOwnVoiceVisualizer" />
+			<check_box label="Pokazuj wskaźniki dźwięku wraz z kropką" tool_tip="Jeśli ta opcja jest włączona, to kropka jest wyświetlana jako część wskaźników dźwięku. Jeśli jest wyłączona, to pokazują się tylko fale głosowe." name="FSShowVoiceVisualizerWithDot" />
 			<check_box label="Pokazuj wskaźniki dźwięku w rozmowach prywatnych i grupowych" tool_tip="Pokazuj wskaźniki dźwięku i poruszaj ustami awatara w świecie, gdy rozmawiasz w rozmowach prywatnych lub grupowych" name="Show_Voice_Visualizers_In_Calls"/>
 			<check_box label="Pokazuj status kanału głosu na kartach rozmów" tool_tip="Pokazuje obecny status kanału głosu na kartach znajdujących się w oknie z listą wszystkich rozmów" name="FSShowConversationVoiceStateIndicator"/>
 			<check_box label="Automatycznie odrzucaj zaproszenia grupowych rozmów głosowych" name="VoiceCallsRejectGroup"/>

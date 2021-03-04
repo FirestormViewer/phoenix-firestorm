@@ -134,6 +134,8 @@ public:
 
 typedef std::vector<LLUUID> uuid_vec_t;
 typedef std::set<LLUUID> uuid_set_t;
+// <FS:Beq> cleanupDeadObject spam avoidance
+typedef std::multiset<LLUUID> uuid_multiset_t;
 
 // Helper structure for ordering lluuids in stl containers.  eg:
 // std::map<LLUUID, LLWidget*, lluuid_less> widget_map;
