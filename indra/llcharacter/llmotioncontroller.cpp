@@ -241,10 +241,12 @@ void LLMotionController::purgeExcessMotions()
 	}
 
 	U32 loaded_count = mLoadedMotions.size();
-	if (loaded_count > (2 * MAX_MOTION_INSTANCES) && loaded_count > mLastCountAfterPurge)
-	{
-		LL_WARNS_ONCE("Animation") << loaded_count << " Loaded Motions. Amount of motions is over limit." << LL_ENDL;
-	}
+	// <FS:Ansariel> Can't do anything about it anyway - stop spamming the log
+	//if (loaded_count > (2 * MAX_MOTION_INSTANCES) && loaded_count > mLastCountAfterPurge)
+	//{
+	//	LL_WARNS_ONCE("Animation") << loaded_count << " Loaded Motions. Amount of motions is over limit." << LL_ENDL;
+	//}
+	// </FS:Ansariel>
 	mLastCountAfterPurge = loaded_count;
 }
 
@@ -347,6 +349,13 @@ void LLMotionController::removeMotionInstance(LLMotion* motionp)
 //-----------------------------------------------------------------------------
 LLMotion* LLMotionController::createMotion( const LLUUID &id )
 {
+	// <FS:Ansariel> Don't try to create invalid motions
+	if (id.isNull())
+	{
+		return NULL;
+	}
+	// </FS:Ansariel>
+
 	// do we have an instance of this motion for this character?
 	LLMotion *motion = findMotion(id);
 

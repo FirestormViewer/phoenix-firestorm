@@ -60,6 +60,7 @@
 #include "lltabcontainer.h"
 #include "llcolorswatch.h" // <FS:Beq>
 #include "lltrans.h"
+#include "llfilesystem.h"
 #include "llcallbacklist.h"
 #include "llviewertexteditor.h"
 #include "llviewernetwork.h"

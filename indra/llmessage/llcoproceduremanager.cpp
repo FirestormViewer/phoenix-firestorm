@@ -196,6 +196,7 @@ void LLCoprocedureManager::setPropertyMethods(SettingQuery_t queryfn, SettingUpd
     // workaround until we get mutex into initializePool
     initializePool("VAssetStorage");
     initializePool("Upload");
+    initializePool("AIS");
     initializePool("ExpCache"); // <FS:Ansariel> FIRE-30731: ExpCache coroutine pool crash
 }
 
@@ -345,7 +346,7 @@ LLUUID LLCoprocedurePool::enqueueCoprocedure(const std::string &name, LLCoproced
 {
     LLUUID id(LLUUID::generateNewID());
 
-    LL_INFOS("CoProcMgr") << "Coprocedure(" << name << ") enqueuing with id=" << id.asString() << " in pool \"" << mPoolName << "\" at " << mPending << LL_ENDL;
+    LL_DEBUGS("CoProcMgr") << "Coprocedure(" << name << ") enqueuing with id=" << id.asString() << " in pool \"" << mPoolName << "\" at " << mPending << LL_ENDL;
     auto pushed = mPendingCoprocs->try_push(boost::make_shared<QueuedCoproc>(name, id, proc));
     if (pushed == boost::fibers::channel_op_status::success)
     {
@@ -361,7 +362,7 @@ LLUUID LLCoprocedurePool::enqueueCoprocedure(const std::string &name, LLCoproced
     }
 
     // The queue should never fill up.
-    LL_ERRS("CoProcMgr") << "Enqueue into '" << name << "' failed (" << unsigned(pushed) << ")" << LL_ENDL;
+    LL_ERRS("CoProcMgr") << "Enqueue into '" << name << "' failed (" << unsigned(pushed) << "; pending: " << mPending <<")" << LL_ENDL;
     return {};                      // never executed, pacify the compiler
 }
 

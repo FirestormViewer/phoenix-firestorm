@@ -31,8 +31,6 @@
 #include "llagent.h"
 #include "llimagej2c.h"
 #include "llnotificationsutil.h"
-#include "llvfile.h"
-#include "llvfs.h"
 #include "llviewerregion.h"
 #include "llglslshader.h"
 #include "llvoavatarself.h"
@@ -41,6 +39,7 @@
 
 #include "llviewerassetupload.h"
 #include "llsdutil.h"
+#include "llfilesystem.h" // <FS:Ansariel> [Legacy Bake]
 
 static const S32 BAKE_UPLOAD_ATTEMPTS = 7;
 static const F32 BAKE_UPLOAD_RETRY_DELAY = 2.f; // actual delay grows by power of 2 each attempt
@@ -661,14 +660,14 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 		LLTransactionID tid;
 		tid.generate();
 		const LLAssetID asset_id = tid.makeAssetID(gAgent.getSecureSessionID());
-		if (LLVFile::writeFile(compressedImage->getData(), compressedImage->getDataSize(),
-							   gVFS, asset_id, LLAssetType::AT_TEXTURE))
+		LLFileSystem up_file(asset_id, LLAssetType::AT_TEXTURE, LLFileSystem::WRITE);
+		if (up_file.write(compressedImage->getData(), compressedImage->getDataSize()))
 		{
 			// Read back the file and validate.
 			BOOL valid = FALSE;
 			LLPointer<LLImageJ2C> integrity_test = new LLImageJ2C;
 			S32 file_size = 0;
-			LLVFile file(gVFS, asset_id, LLAssetType::AT_TEXTURE);
+			LLFileSystem file(asset_id, LLAssetType::AT_TEXTURE);
 			file_size = file.getSize();
 			U8* data = integrity_test->allocateData(file_size);
 			std::string strAssetData;
@@ -752,8 +751,7 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 			{
 				// The read back and validate operation failed.  Remove the uploaded file.
 				mUploadPending = FALSE;
-				LLVFile file(gVFS, asset_id, LLAssetType::AT_TEXTURE, LLVFile::WRITE);
-				file.remove();
+				LLFileSystem::removeFile(asset_id, LLAssetType::AT_TEXTURE);
 				LL_INFOS() << "Unable to create baked upload file (reason: corrupted)." << LL_ENDL;
 			}
 		}

@@ -100,6 +100,8 @@ public:
 	void onCreatorSelfFilterCommit();
 	void onCreatorOtherFilterCommit();
 
+	void onPermissionsChanged(); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+
 	static void onTimeAgo(LLUICtrl*, void *);
 	static void onCloseBtn(void* user_data);
 	static void selectAllTypes(void* user_data);
@@ -149,6 +151,11 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.FilterLinks.Check", boost::bind(&LLPanelMainInventory::isFilterLinksChecked, this, _2));
 	// </FS:Zi> Filter Links Menu
+
+	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+	mCommitCallbackRegistrar.add("Inventory.FilterPermissions.Set", boost::bind(&LLPanelMainInventory::onFilterPermissionsChecked, this, _2));
+	mEnableCallbackRegistrar.add("Inventory.FilterPermissions.Check", boost::bind(&LLPanelMainInventory::isFilterPermissionsChecked, this, _2));
+	// </FS:Zi>
 
 	// <FS:Zi> Extended Inventory Search
 	mCommitCallbackRegistrar.add("Inventory.SearchType.Set", boost::bind(&LLPanelMainInventory::onSearchTypeChecked, this, _2));
@@ -499,7 +506,7 @@ void LLPanelMainInventory::resetFilters()
 	filter.resetDefault();
 	filter.setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
 	filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
-	filter.setFilterTransferable(FALSE);
+	filter.setFilterPermissions(PERM_NONE); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 	getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
 	getActivePanel()->updateHideEmptySystemFolders(gSavedSettings.getBOOL("DebugHideEmptySystemFolders"));
 	updateFilterDropdown(&filter);
@@ -1207,6 +1214,13 @@ BOOL LLFloaterInventoryFinder::postBuild()
 	getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
 
 	updateElementsFromFilter();
+
+	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+	getChild<LLUICtrl>("check_modify")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+	getChild<LLUICtrl>("check_copy")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+	getChild<LLUICtrl>("check_transfer")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+	// </FS:Zi>
+
 	return TRUE;
 }
 void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
@@ -1291,7 +1305,6 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
 	getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
     getChild<LLUICtrl>("check_settings")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SETTINGS));
-	getChild<LLUICtrl>("check_transferable")->setValue(mFilter->getFilterTransferable()); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
 
 	getChild<LLUICtrl>("check_created_by_me")->setValue(show_created_by_me);
@@ -1301,6 +1314,12 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	mSpinSinceHours->set((F32)(hours % 24));
 	mSpinSinceDays->set((F32)(hours / 24));
 	getChild<LLRadioGroup>("date_search_direction")->setSelectedIndex(date_search_direction);
+
+	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+	getChild<LLUICtrl>("check_modify")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_MODIFY));
+	getChild<LLUICtrl>("check_copy")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_COPY));
+	getChild<LLUICtrl>("check_transfer")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_TRANSFER));
+	// </FS:Zi>
 }
 
 void LLFloaterInventoryFinder::draw()
@@ -1417,8 +1436,6 @@ void LLFloaterInventoryFinder::draw()
 
 	mPanelMainInventory->getPanel()->setHoursAgo(hours);
 	mPanelMainInventory->getPanel()->setSinceLogoff(getCheckSinceLogoff());
-	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
-	mPanelMainInventory->getPanel()->setTransferable(getChild<LLUICtrl>("check_transferable")->getValue().asBoolean());
 	mPanelMainInventory->setFilterTextFromFilter();
 	mPanelMainInventory->getPanel()->setDateSearchDirection(getDateSearchDirection());
 
@@ -1464,6 +1481,30 @@ void LLFloaterInventoryFinder::onCreatorOtherFilterCommit()
 		mCreatorSelf->set(TRUE);
 	}
 }
+
+// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+void LLFloaterInventoryFinder::onPermissionsChanged()
+{
+	PermissionMask perms = PERM_NONE;
+
+	if (getChild<LLUICtrl>("check_modify")->getValue().asBoolean())
+	{
+        perms |= PERM_MODIFY;
+    }
+
+	if (getChild<LLUICtrl>("check_copy")->getValue().asBoolean())
+	{
+        perms |= PERM_COPY;
+    }
+
+	if (getChild<LLUICtrl>("check_transfer")->getValue().asBoolean())
+	{
+        perms |= PERM_TRANSFER;
+    }
+
+    mFilter->setFilterPermissions(perms);
+}
+// </FS:Zi>
 
 BOOL LLFloaterInventoryFinder::getCheckShowEmpty()
 {
@@ -1976,6 +2017,55 @@ BOOL LLPanelMainInventory::isFilterLinksChecked(const LLSD& userdata)
 	return FALSE;
 }
 // </FS:Zi> Filter Links Menu
+
+// <FS:Zi> FIRE-1175 - Filter Permissions Menu
+void LLPanelMainInventory::onFilterPermissionsChecked(const LLSD &userdata)
+{
+	U64 permissions = getActivePanel()->getFilterPermissions();
+
+	const std::string command_name = userdata.asString();
+	if (command_name == "only_modify")
+	{
+		getActivePanel()->setFilterPermissions(permissions ^ PERM_MODIFY);
+	}
+
+	if (command_name == "only_copy")
+	{
+		getActivePanel()->setFilterPermissions(permissions ^ PERM_COPY);
+	}
+
+	if (command_name == "only_transfer")
+	{
+		getActivePanel()->setFilterPermissions(permissions ^ PERM_TRANSFER);
+	}
+
+	if (getFinder())
+	{
+		getFinder()->updateElementsFromFilter();
+	}
+}
+
+BOOL LLPanelMainInventory::isFilterPermissionsChecked(const LLSD &userdata)
+{
+	const std::string command_name = userdata.asString();
+	if (command_name == "only_modify")
+	{
+		return (getActivePanel()->getFilter().getFilterPermissions() & PERM_MODIFY);
+	}
+
+	if (command_name == "only_copy")
+	{
+		return (getActivePanel()->getFilter().getFilterPermissions() & PERM_COPY);
+	}
+
+	if (command_name == "only_transfer")
+	{
+		return (getActivePanel()->getFilter().getFilterPermissions() & PERM_TRANSFER);
+	}
+
+	return FALSE;
+}
+// </FS:Zi>
 
 // <FS:Zi> Extended Inventory Search
 void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)

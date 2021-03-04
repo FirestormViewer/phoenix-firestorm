@@ -67,7 +67,9 @@
 			<menu_item_check name="inventory_filter_show_links" label="Показать ссылки" />
 			<menu_item_check name="inventory_filter_only_links" label="Показать только ссылки" />
 			<menu_item_check name="inventory_filter_hide_links" label="Скрыть ссылки" />
-			<menu_item_check name="inventory_show_partial_results" label="Показать частичные результаты поиска" />
+			<menu_item_check name="inventory_filter_only_modify" label="Только изменяемые"/>
+			<menu_item_check name="inventory_filter_only_copy" label="Только копируемые"/>
+			<menu_item_check name="inventory_filter_only_transfer" label="Только передаваемые"/>
 		</menu>
 	</menu_bar>
 	<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
@@ -96,7 +98,7 @@
 		<recent_inventory_panel label="Недавние" name="Recent Items"/>
 		<worn_inventory_panel label="Надетые" name="Worn Items"/>
 	</tab_container>
-	<text name="ItemcountText">
+	<text name="ItemcountText" tool_tip="[ITEMS] предметов, [CATEGORIES] папок">
 		Объекты:
 	</text>
 </panel>
