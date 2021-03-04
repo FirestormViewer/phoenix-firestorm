@@ -40,7 +40,7 @@
 #include "llappviewer.h"
 #include "llinventoryfunctions.h"
 #include "lltrans.h"
-#include "llvfile.h"
+#include "llfilesystem.h"
 #include "llviewercontrol.h"
 #include "llcompilequeue.h"
 #include "llnotificationsutil.h"
@@ -720,7 +720,7 @@ void cache_script(std::string name, std::string content)
 	infile.close();
 }
 
-void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLAssetType::EType type, void *userdata, S32 result, LLExtStat extstat)
+void FSLSLPreprocessor::FSProcCacheCallback(const LLUUID& iuuid, LLAssetType::EType type, void *userdata, S32 result, LLExtStat extstat)
 {
 	LLUUID uuid = iuuid;
 	LL_DEBUGS("FSLSLPreprocessor") << "cachecallback called" << LL_ENDL;
@@ -732,7 +732,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 		std::string name = item->getName();
 		if (result == LL_ERR_NOERR)
 		{
-			LLVFile file(vfs, uuid, type);
+			LLFileSystem file(uuid, type);
 			S32 file_length = file.getSize();
 
 			std::string content;
