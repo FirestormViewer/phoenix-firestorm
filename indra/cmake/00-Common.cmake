@@ -189,6 +189,10 @@ if (LINUX)
       -pthread
       )
 
+  if( FS_KEEP_FRAMEPOINTER )
+    add_compile_options(-fno-omit-frame-pointer)
+  endif()
+	
   # force this platform to accept TOS via external browser <FS:ND> No, do not.
   # add_definitions(-DEXTERNAL_TOS)
 
