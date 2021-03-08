@@ -136,7 +136,7 @@ LLKeyboardMacOSX::LLKeyboardMacOSX()
 	// <FS:ND> <FS:LO> Change to U32 for SDL2
 	//std::map<U16, KEY>::iterator iter;
 	//for (iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
-	for (autoiter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
+	for (auto iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
 	{
 		mInvTranslateKeyMap[iter->second] = iter->first;
 	}
