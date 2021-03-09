@@ -28,8 +28,6 @@
 	<text name="Only Allow">
 		Sólo permitir el acceso a residentes que:
 	</text>
-	<check_box label="Han aportado la información de pago." name="limit_payment" tool_tip="Los residentes deben haber aportado información de pago para acceder a este estado. Para más información, ver [SUPPORT_SITE]."/>
-	<check_box label="Sean mayores de 18 años" name="limit_age_verified" tool_tip="Los residentes deben tener 18 años o más para acceder a este estado. Para más información, consulta [SUPPORT_SITE]."/>
 	<text name="estate_manager_label">
 		Administradores del Estado:
 	</text>

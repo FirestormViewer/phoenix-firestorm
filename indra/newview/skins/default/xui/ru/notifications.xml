@@ -437,14 +437,11 @@
 	<notification name="ErrorEncodingSnapshot">
 		Ошибка при кодировке снимка.
 	</notification>
-	<notification name="ErrorCannotAffordUpload">
-		Чтобы загрузить этот предмет, вам нужно L$[COST].
-	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Требуется L$[COST] для сохранения фото в вашем инвентаре. Купите L$ или сохраните фото на компьютере.
 	</notification>
 	<notification name="ErrorCannotAffordUpload">
-		Вам нужно L$[COST] , чтобы загрузить этот элемент.
+		Чтобы загрузить этот предмет, вам нужно L$[COST].
 	</notification>
 	<notification name="ErrorTextureCannotAfford">
 		Требуется L$[COST] для сохранения текстуры в вашем инвентаре. Купите L$ или сохраните фото на компьютере.
