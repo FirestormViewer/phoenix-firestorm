@@ -31,7 +31,12 @@
 #include "llsdutil.h"
 #include "llflickrconnect.h"
 
+// third-party
+#if LL_USESYSTEMLIBS
+#include "jsoncpp/reader.h" // JSON
+#else
 #include "json/reader.h" // JSON
+#endif
 
 #include <openssl/hmac.h>
 #include <openssl/evp.h>

@@ -36,17 +36,9 @@
 #include "llviewercontrol.h"
 #include "llwindow.h"	// beforeDialog()
 
-#undef LL_GTK
 #if LL_SDL
-// #include "llwindowsdl.h" // for some X/GTK utils to help with filepickers
-// #include <gdk/gdkx.h>
+#include "llwindowsdl.h" // for some X/GTK utils to help with filepickers
 #endif // LL_SDL
-
-#ifdef LL_FLTK
-  #include "FL/Fl.H"
-  #include "FL/Fl_Native_File_Chooser.H"
-#endif
-
 
 #if LL_LINUX || LL_SOLARIS
 #include "llhttpconstants.h"    // file picker uses some of thes constants on Linux
@@ -1143,14 +1135,17 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 			 GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER :
 			 GTK_FILE_CHOOSER_ACTION_OPEN);
 
-		gchar const *acceptText = is_folder ? "_Apply" :(is_save ? "_Save" : "_Open");
 		win = gtk_file_chooser_dialog_new(NULL, NULL,
-										  pickertype,
-										  "_Cancel",
-										  GTK_RESPONSE_CANCEL,
-										  acceptText,
-										  GTK_RESPONSE_ACCEPT,
-										  (gchar *)NULL);
+						  pickertype,
+						  GTK_STOCK_CANCEL,
+						   GTK_RESPONSE_CANCEL,
+						  is_folder ?
+						  GTK_STOCK_APPLY :
+						  (is_save ? 
+						   GTK_STOCK_SAVE :
+						   GTK_STOCK_OPEN),
+						   GTK_RESPONSE_ACCEPT,
+						  (gchar *)NULL);
 		mCurContextName = context;
 
 		// get the default path for this usage context if it's been
@@ -1191,8 +1186,9 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 		if (None != XWindowID)
 		{
 			gtk_widget_realize(GTK_WIDGET(win)); // so we can get its gdkwin
-			GdkWindow *gdkwin = gdk_x11_window_foreign_new_for_display (gdk_display_get_default(),XWindowID);
-			gdk_window_set_transient_for(gtk_widget_get_window(GTK_WIDGET(win)), gdkwin);
+			GdkWindow *gdkwin = gdk_window_foreign_new(XWindowID);
+			gdk_window_set_transient_for(GTK_WIDGET(win)->window,
+						     gdkwin);
 		}
 		else
 		{
@@ -1570,79 +1566,12 @@ BOOL LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
 	return rtn;
 }
 
-#elif LL_FLTK
-BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blocking )
-{
-	return openFileDialog( filter, blocking, eSaveFile );
-}
-
-BOOL LLFilePicker::getOpenFile( ELoadFilter filter, bool blocking )
-{
-	return openFileDialog( filter, blocking, eOpenFile );
-}
-
-BOOL LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
-{
-	return openFileDialog( filter, blocking, eOpenMultiple );
-}
-
-void setupFilter( Fl_Native_File_Chooser &chooser, LLFilePicker::ESaveFilter filter )
-{
-}
-
-void setupFilter( Fl_Native_File_Chooser &chooser, LLFilePicker::ELoadFilter filter )
-{
-}
-
-bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
-{
-	if ( check_local_file_access_enabled() == false )
-		return false;
-
-	reset();
-	Fl_Native_File_Chooser::Type flType = Fl_Native_File_Chooser::BROWSE_FILE;
-
-	if( aType == eOpenMultiple )
-		flType = Fl_Native_File_Chooser::BROWSE_MULTI_FILE; 
-	else if( aType == eSaveFile )
-		flType = Fl_Native_File_Chooser::BROWSE_SAVE_FILE; 
-
-	Fl_Native_File_Chooser flDlg;
-	flDlg.title("Pick a file");
-	flDlg.type( flType );
-
-	if( aType == eSaveFile )
-		setupFilter( flDlg, (ESaveFilter) filter );
-	else
-		setupFilter( flDlg, (ELoadFilter) filter );
-	
-	int res = flDlg.show();
-	if( res == 0 )
-	{
-		int32_t count = flDlg.count();
-		if( count < 0 )
-			count = 0;
-		for( int32_t i = 0; i < count; ++i )
-		{
-			char const *pFile = flDlg.filename(i);
-			if( pFile && strlen(pFile) > 0 )
-				mFiles.push_back( pFile  );
-		}
-	}
-	else if( res == -1 )
-	{
-		LL_WARNS() << "FLTK failed: " <<  flDlg.errmsg() << LL_ENDL;
-	}
-
-	return mFiles.empty()?FALSE:TRUE;
-}
-
 # else // LL_GTK
 
 // Hacky stubs designed to facilitate fake getSaveFile and getOpenFile with
 // static results, when we don't have a real filepicker.
 
-BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blocking )
+BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename )
 {
 	// if local file browsing is turned off, return without opening dialog
 	// (Even though this is a stub, I think we still should not return anything at all)
@@ -1705,7 +1634,7 @@ BOOL LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
 
 #else // not implemented
 
-BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blockin )
+BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename )
 {
 	reset();	
 	return FALSE;

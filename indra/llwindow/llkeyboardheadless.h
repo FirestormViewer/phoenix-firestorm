@@ -35,13 +35,8 @@ public:
 	LLKeyboardHeadless();
 	/*virtual*/ ~LLKeyboardHeadless() {};
 
-#ifdef LL_LINUX
-	/*virtual*/ BOOL	handleKeyUp(const U32 key, MASK mask);
-	/*virtual*/ BOOL	handleKeyDown(const U32 key, MASK mask);
-#else
 	/*virtual*/ BOOL	handleKeyUp(const U16 key, MASK mask);
 	/*virtual*/ BOOL	handleKeyDown(const U16 key, MASK mask);
-#endif	
 	/*virtual*/ void	resetMaskKeys();
 	/*virtual*/ MASK	currentMask(BOOL for_mouse_event);
 	/*virtual*/ void	scanKeyboard();

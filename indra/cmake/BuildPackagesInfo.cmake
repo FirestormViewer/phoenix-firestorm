@@ -3,8 +3,6 @@
 include(Python)
 include(FindAutobuild)
 
-if( NOT USESYSTEMLIBS )
-
 # packages-formatter.py runs autobuild install --versions, which needs to know
 # the build_directory, which (on Windows) depends on AUTOBUILD_ADDRSIZE.
 # Within an autobuild build, AUTOBUILD_ADDRSIZE is already set. But when
@@ -20,5 +18,3 @@ add_custom_command(OUTPUT packages-info.txt
           ${PYTHON_EXECUTABLE}
           ${CMAKE_SOURCE_DIR}/../scripts/packages-formatter.py "${VIEWER_CHANNEL}" "${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}" > packages-info.txt
   )
-  
-endif()

@@ -1861,56 +1861,35 @@ class LinuxManifest(ViewerManifest):
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
             #self.path("gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
-            #self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
+            self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
             self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
 
 
-        #with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-        #    self.path( "plugins.dat" )
-        #    self.path( "*/*.so" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+            self.path( "plugins.dat" )
+            self.path( "*/*.so" )
 
-        #with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
-        #    self.path( "libvlc*.so*" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
+            self.path( "libvlc*.so*" )
 
-        #with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-        #    self.path( "plugins.dat" )
-        #    self.path( "*/*.so" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+            self.path( "plugins.dat" )
+            self.path( "*/*.so" )
 
-        #with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
-        #    self.path( "libvlc*.so*" )
+        with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
+            self.path( "libvlc*.so*" )
 
-        snapStage = os.environ.get( "SNAPCRAFT_STAGE" )
-        if snapStage != None:
-            print( "Building snap package" )
-        else:
-            snapStage = os.environ.get( "FLATPAK_DEST" )
-            if snapStage != None:
-                print( "Building flatpak package" )
-
-        if snapStage == None:
-            data = open( "/proc/1/cgroup", "r" ).readlines()[0]
-            if "docker" in data:
-                snapStage = "/usr"
-
-        pkgBase = os.path.join( pkgdir, 'lib', 'release')
-        if snapStage != None:
-            pkgBase = os.path.join( snapStage, "lib" )
-            
         # CEF files 
-        with self.prefix(src=pkgBase, dst="lib"):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
             self.fs_try_path( "libminigbm.so" )
             
-        pkgBase = os.path.join( pkgBase, "swiftshader" )
-        with self.prefix(src=pkgBase, dst=os.path.join("bin", "swiftshader") ):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("lib", "swiftshader") ):
             self.path( "*.so" )
 
-        pkgBase = os.path.join(pkgdir, 'bin', 'release')
-        if snapStage != None:
-            pkgBase = os.path.join( snapStage, "lib" )
-        with self.prefix(pkgBase, dst="bin"):
+        with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
             self.fs_try_path( "natives_blob.bin" )
@@ -1921,11 +1900,7 @@ class LinuxManifest(ViewerManifest):
             self.path( "snapshot_blob.bin" )
             self.path( "v8_context_snapshot.bin" )
 
-        pkgBase = os.path.join(pkgdir, 'resources')
-        if snapStage != None:
-            pkgBase = os.path.join( snapStage, "resources" )
-
-        with self.prefix(src=pkgBase, dst="bin"):
+        with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
             self.path( "cef.pak" )
             self.path( "cef_extensions.pak" )
             self.path( "cef_100_percent.pak" )
@@ -1940,9 +1915,7 @@ class LinuxManifest(ViewerManifest):
             self.path( "devtools_resources.pak" )
             self.path( "icudtl.dat" )
 
-        pkgBase = os.path.join( pkgBase, "locales" )
-
-        with self.prefix(src=pkgBase, dst=os.path.join('bin', 'locales')):
+        with self.prefix(src=os.path.join(pkgdir, 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
             self.path("am.pak")
             self.path("ar.pak")
             self.path("bg.pak")
@@ -2028,10 +2001,10 @@ class LinuxManifest(ViewerManifest):
             #self.path("libGLOD.so")
             #self.fs_path("libminizip.so")
             self.path("libuuid.so*")
-            self.path("libSDL*")
-            #self.path("libdirectfb*.so*")
-            #self.path("libfusion*.so*")
-            #self.path("libdirect*.so*")
+            self.path("libSDL-1.2.so*")
+            self.path("libdirectfb*.so*")
+            self.path("libfusion*.so*")
+            self.path("libdirect*.so*")
             self.fs_try_path("libopenjpeg.so*")
             self.path("libhunspell-1.3.so*")
             self.path("libalut.so*")
@@ -2041,7 +2014,7 @@ class LinuxManifest(ViewerManifest):
             self.path("libopenal.so", "libopenal.so.1") # Install as versioned file in case it's missing from the 3p- and won't get copied below
             self.path("libopenal.so*")
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
-            self.fs_try_path("libpangox-1.0.so*")
+            self.path("libpangox-1.0.so*")
             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
             # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
             # and libfontconfig.so. Before we added support for library-file
@@ -2084,15 +2057,9 @@ class LinuxManifest(ViewerManifest):
         installer_name = "_".join(installer_name_components)
         #installer_name = self.installer_base_name()
 
-        createTar = True
-        if os.environ.get( "FS_CREATE_NO_TAR" ): 
-            createTar = False
-
-            
-        if createTar:
-            self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
-            self.strip_binaries()
-            self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
+        self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
+        self.strip_binaries()
+        self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
 
         # Fix access permissions
         self.run_command(['find', self.get_dst_prefix(),
@@ -2101,39 +2068,30 @@ class LinuxManifest(ViewerManifest):
             self.run_command(['find', self.get_dst_prefix(),
                               '-type', 'f', '-perm', old,
                               '-exec', 'chmod', new, '{}', ';'])
-
-        if os.environ.get( "SNAPCRAFT_STAGE" ) or os.environ.get( "FLATPAK_DEST" ):
-            print( "Building snap package, not calling tar to bundle" )
-            self.package_file = "<none>"
-            return
-
         self.package_file = installer_name + '.tar.xz'
 
-        if createTar:
-            # temporarily move directory tree so that it has the right
-            # name in the tarfile
-            realname = self.get_dst_prefix()
-            tempname = self.build_path_of(installer_name)
-            self.run_command(["mv", realname, tempname])
-            try:
-                # only create tarball if it's a release build.
-                if self.args['buildtype'].lower() == 'release':
-                    # --numeric-owner hides the username of the builder for
-                    # security etc.
-                    self.run_command(['tar', '-C', self.get_build_prefix(),
-                                      '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
-                                      tempname + '.tar.xz', installer_name])
-                else:
-                    print( "Skipping %s.tar.xz for non-Release build (%s)" ) % \
-                        (installer_name, self.args['buildtype'])
-            finally:
-                self.run_command(["mv", tempname, realname])
+        # temporarily move directory tree so that it has the right
+        # name in the tarfile
+        realname = self.get_dst_prefix()
+        tempname = self.build_path_of(installer_name)
+        self.run_command(["mv", realname, tempname])
+        try:
+            # only create tarball if it's a release build.
+            if self.args['buildtype'].lower() == 'release':
+                # --numeric-owner hides the username of the builder for
+                # security etc.
+                self.run_command(['tar', '-C', self.get_build_prefix(),
+                                  '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
+                                 tempname + '.tar.xz', installer_name])
+            else:
+                print ("Skipping %s.tar.xz for non-Release build (%s)" % \
+                      (installer_name, self.args['buildtype']))
+        finally:
+            self.run_command(["mv", tempname, realname])
 
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print ("* Going strip-crazy on the packaged binaries, since this is a RELEASE build")
-            if not os.path.isdir( os.path.join( self.get_dst_prefix(), "lib") ):
-                os.mkdir( os.path.join( self.get_dst_prefix(), "lib") )
             # makes some small assumptions about our packaged dir structure
             self.run_command(
                 ["find"] +
@@ -2165,7 +2123,7 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libexpat.so.*")
             self.path("libGLOD.so")
             self.path("libuuid.so*")
-            self.path("libSDL*")
+            self.path("libSDL-1.2.so.*")
             self.path("libdirectfb-1.*.so.*")
             self.path("libfusion-1.*.so.*")
             self.path("libdirect-1.*.so.*")
@@ -2244,7 +2202,7 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
         if self.is_packaging_viewer():
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            self.fs_try_path("libffi*.so*")
+            self.path("libffi*.so*")
             # vivox 32-bit hack.
             # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
             # and place it in the prebuilt lib/release directory
@@ -2263,7 +2221,6 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
         with self.prefix(dst="bin"):
             self.path2basename("../llplugin/slplugin", "SLPlugin")
-	
 
         self.path("secondlife-i686.supp")
 

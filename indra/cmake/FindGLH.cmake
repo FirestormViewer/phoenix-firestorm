@@ -6,7 +6,9 @@
 #  GLH_INCLUDE_DIR, where to find glh/glh_linear.h.
 #  GLH_FOUND, If false, do not try to use GLH.
 
-find_path(GLH_INCLUDE_DIR glh/glh_linear.h )
+find_path(GLH_INCLUDE_DIR glh/glh_linear.h
+    NO_SYSTEM_ENVIRONMENT_PATH
+    )
 
 if (GLH_INCLUDE_DIR)
   set(GLH_FOUND "YES")

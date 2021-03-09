@@ -3,91 +3,7 @@
 <map>
     <key>installables</key>
     <map>
-      <key>glib</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (C) glib project</string>
-        <key>license</key>
-        <string>LGPL</string>
-        <key>license_file</key>
-        <string>LICENSES/glib.txt</string>
-        <key>name</key>
-        <string>glib</string>
-        <key>platforms</key>
-        <map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9c93ba8b8af97fc8379f77de77e1540a</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/glib-2.48.0.202301938-linux64-202301938.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>2.48.0</string>
-      </map>
-      <key>fltk</key>
-      <map>
-		<key>copyright</key>
-		<string>Copyright (C) fltk project</string>
-		<key>license</key>
-		<string>LGPL/fltk</string>
-		<key>license_file</key>
-		<string>LICENSES/fltk.txt</string>
-		<key>name</key>
-		<string>fltk</string>
-		<key>platforms</key>
-		<map>
-		  <key>linux64</key>
-		  <map>
-			<key>archive</key>
-			<map>
-			  <key>hash</key>
-			  <string>81fe1e927e4fe3c5e5f15ce6219ca883</string>
-			  <key>url</key>
-			  <string>http://3p.firestormviewer.org/fltk-1.3.5.202282121-linux64-202282121.tar.bz2</string>
-			</map>
-			<key>name</key>
-			<string>linux</string>
-		  </map>
-		</map>
-		<key>version</key>
-		<string>1.3.5</string>
-	  </map>
-      <key>gstreamer10</key>
-      <map>
-		<key>copyright</key>
-		<string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
-		<key>license</key>
-		<string>LGPL</string>
-		<key>license_file</key>
-		<string>LICENSES/gstreamer.txt</string>
-		<key>name</key>
-		<string>gstreamer10</string>
-		<key>platforms</key>
-		<map>
-		  <key>linux</key>
-		  <map>
-			<key>archive</key>
-			<map>
-			  <key>hash</key>
-			  <string>01f39ecf80dae64e30402ac384035b3e</string>
-			  <key>url</key>
-			  <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
-			</map>
-			<key>name</key>
-			<string>linux</string>
-		  </map>
-		</map>
-		<key>version</key>
-		<string>0.10.6.294903</string>
-	  </map>
-	  <key>jemalloc</key>
+      <key>jemalloc</key>
       <map>
         <key>copyright</key>
         <string>Copyright (C) 2002-present Jason Evans jasone@canonware.com.</string>
@@ -334,9 +250,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1d4819f2944d572667b6a009bfadd8e0</string>
+              <string>64c1dff0e19792acec7fd32556bf4d7b</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL-2.0.10-linux64-192791159.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL-1.2.15-linux64-181411635.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2893,14 +2809,26 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>open-libndofdev</string>
         <key>platforms</key>
         <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>246ed298944fd5200e4cac3703d6e075</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.9.183150124-linux-183150124.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e52e1223fe1603485178ac65d6562a61</string>
+              <string>db8a7126178e7230fd6917a28cd67bd7</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.12.193591719-linux64-193591719.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
