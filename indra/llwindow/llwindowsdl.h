@@ -32,12 +32,12 @@
 #include "llwindow.h"
 #include "lltimer.h"
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_endian.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_endian.h"
 
 #if LL_X11
 // get X11-specific headers for use in low-level stuff like copy-and-paste support
-#include "SDL2/SDL_syswm.h"
+#include "SDL/SDL_syswm.h"
 #endif
 
 // AssertMacros.h does bad things.
@@ -182,7 +182,7 @@ protected:
 	void destroyContext();
 	void setupFailure(const std::string& text, const std::string& caption, U32 type);
 	void fixWindowSize(void);
-	U32 SDLCheckGrabbyKeys(U32 keysym, BOOL gain);
+	U32 SDLCheckGrabbyKeys(SDLKey keysym, BOOL gain);
 	BOOL SDLReallyCaptureInput(BOOL capture);
 
 	//
@@ -190,12 +190,7 @@ protected:
 	//
 	U32             mGrabbyKeyFlags;
 	int			mReallyCapturedCount;
-
-	SDL_Window* mWindow;
-	SDL_Surface* mSurface;
-	SDL_GLContext mContext;
-	SDL_Cursor*	mSDLCursors[UI_CURSOR_COUNT];
-
+	SDL_Surface *	mWindow;
 	std::string mWindowTitle;
 	double		mOriginalAspectRatio;
 	BOOL		mNeedsResize;		// Constructor figured out the window is too big, it needs a resize.
@@ -206,6 +201,7 @@ protected:
 
 	int		mSDLFlags;
 
+	SDL_Cursor*	mSDLCursors[UI_CURSOR_COUNT];
 	int             mHaveInputFocus; /* 0=no, 1=yes, else unknown */
 	int             mIsMinimized; /* 0=no, 1=yes, else unknown */
 
@@ -218,12 +214,12 @@ private:
 	LLTimer mFlashTimer;
 #endif //LL_X11
 	
-    U32 mKeyVirtualKey;
-	U32 mKeyModifiers;
+	U32 mKeyScanCode;
+        U32 mKeyVirtualKey;
+	SDLMod mKeyModifiers;
+	U32 mSDLSym; // <FS:ND/> Store the SDL Keysym too.
 
 	BOOL mUseLegacyCursors; // <FS:LO> Legacy cursor setting from main program
-private:
-	void tryFindFullscreenSize( int &aWidth, int &aHeight );
 };
 
 

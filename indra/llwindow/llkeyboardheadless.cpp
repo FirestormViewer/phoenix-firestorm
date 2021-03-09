@@ -35,21 +35,12 @@ void LLKeyboardHeadless::resetMaskKeys()
 { }
 
 
-#ifdef LL_LINUX
-
-BOOL LLKeyboardHeadless::handleKeyDown(const U32 key, const U32 mask)
-{ return FALSE; }
-BOOL LLKeyboardHeadless::handleKeyUp(const U32 key, const U32 mask)
-{ return FALSE; }
-
-#else
-
-BOOL LLKeyboardHeadless::handleKeyUp(const U16 key, const U32 mask)
-{ return FALSE; }
 BOOL LLKeyboardHeadless::handleKeyDown(const U16 key, const U32 mask)
 { return FALSE; }
 
-#endif
+
+BOOL LLKeyboardHeadless::handleKeyUp(const U16 key, const U32 mask)
+{ return FALSE; }
 
 MASK LLKeyboardHeadless::currentMask(BOOL for_mouse_event)
 { return MASK_NONE; }

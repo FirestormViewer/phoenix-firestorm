@@ -27,17 +27,15 @@
 #ifndef LL_LLAPPVIEWERLINUX_H
 #define LL_LLAPPVIEWERLINUX_H
 
-#ifdef LL_GLIB
 extern "C" {
 # include <glib.h>
-
-#if LL_DBUS_ENABLED
-# include <glib-object.h>
-# include <dbus/dbus-glib.h>
-#endif
-
 }
 
+#if LL_DBUS_ENABLED
+extern "C" {
+# include <glib-object.h>
+# include <dbus/dbus-glib.h>
+}
 #endif
 
 #ifndef LL_LLAPPVIEWER_H
@@ -72,7 +70,7 @@ protected:
 	virtual bool sendURLToOtherInstance(const std::string& url);
 };
 
-#if LL_DBUS_ENABLED && LL_GLIB
+#if LL_DBUS_ENABLED
 typedef struct
 {
         GObject parent;

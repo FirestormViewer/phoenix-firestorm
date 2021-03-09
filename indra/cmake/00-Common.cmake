@@ -189,10 +189,6 @@ if (LINUX)
       -pthread
       )
 
-  if( FS_KEEP_FRAMEPOINTER )
-    add_compile_options(-fno-omit-frame-pointer)
-  endif()
-	
   # force this platform to accept TOS via external browser <FS:ND> No, do not.
   # add_definitions(-DEXTERNAL_TOS)
 
@@ -215,7 +211,6 @@ if (LINUX)
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
   endif (NOT USESYSTEMLIBS)
 
-  set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
 
   if( NOT (CMAKE_CXX_COMPILER MATCHES ".*clang") )
@@ -288,6 +283,17 @@ if (USESYSTEMLIBS)
   if (LINUX AND ADDRESS_SIZE EQUAL 32)
     add_definitions(-march=pentiumpro)
   endif (LINUX AND ADDRESS_SIZE EQUAL 32)
+
+else (USESYSTEMLIBS)
+  set(${ARCH}_linux_INCLUDES
+      atk-1.0
+      cairo
+      freetype
+      glib-2.0
+      gstreamer-0.10
+      gtk-2.0
+      pango-1.0
+      )
 endif (USESYSTEMLIBS)
 
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_INCLUDED)
