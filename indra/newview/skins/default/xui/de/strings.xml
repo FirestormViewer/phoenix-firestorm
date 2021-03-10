@@ -104,9 +104,6 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="AboutTime">
 		[day, datetime, slt]. [month, datetime, slt] [year, datetime, slt] [hour24, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
 	</string>
-	<string name="AboutTime">
-		[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt]
-	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Fehler beim Abrufen der URL für die Server-Versionshinweise.
 	</string>
@@ -6620,7 +6617,7 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 	<string name="FSCmdLineRollDiceExploded">
 		Explodiert
 	</string>
-	<string name="FSCmdLineRollDiceExploded">
+	<string name="FSCmdLineRollDicePenetrated">
 		Penetriert
 	</string>
 	<string name="FSCmdLineRollDiceSuccess">

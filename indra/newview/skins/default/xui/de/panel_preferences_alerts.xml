@@ -29,7 +29,6 @@
 		<!-- Objects & Scripts -->
 		<panel label="Objekte &amp; Skripte" name="tab-objects">
 			<check_box label="Anwendungsicon blinkt bei neuen Skriptdialogen, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnScriptDialog"/>
-			<check_box label="Anwendungsicon blinkt ebenfalls, wenn Instant Messages von Objekten empfangen werden" name="FSFlashOnObjectIM"/>
 			<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
 			<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
 			<radio_group name="show_script_errors_location">

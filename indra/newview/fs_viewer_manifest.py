@@ -78,31 +78,6 @@ class FSViewerManifest:
         # New Method, for reading cross platform stack traces on a linux/mac host
         print( "Packaging symbols" )
 
-        """
-         Copy symbols into a .debug subdir, then add a debug link into the stripped exe.
-         This allows gdb to automatically pick up symbols, even when they are not embedded.
-         Maybe at some point it is worth to extract the build-id (readelf -n) and store the
-         symbols in a .symbol server in form of xy/za*.debug where xyza* is the build-id.
-        """ 
-        
-        fileBin = os.path.join( self.get_dst_prefix(), "bin", "do-not-directly-run-firestorm-bin" )
-        fileSource = os.path.join( self.get_dst_prefix(), "..", "firestorm-bin" )
-
-        debugName = "firestorm-bin.debug"
-        debugIndexName = "firestorm-bin.debug.gdb-index"
-        debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
-        debugFile = os.path.join( self.get_dst_prefix(), "bin", ".debug", debugName )
-        debugIndexFile = os.path.join( self.get_dst_prefix(), "bin", ".debug", debugIndexName )
-        if not os.path.exists( debugDir ):
-            os.makedirs( debugDir )
-
-        self.run_command_shell( "objcopy %s %s" % (fileSource, debugFile) )
-
-        self.run_command_shell( "gdb -batch -ex \"save gdb-index %s\" %s" % (debugDir, debugFile ) )
-        self.run_command_shell( "objcopy --add-section .gdb_index=%s --set-section-flags .gdb_index=readonly %s %s" % (debugIndexFile, debugFile, debugFile) )
-
-        self.run_command_shell( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
-        
         self.fs_save_symbols("linux")
 
     def fs_linux_tar_excludes(self):
