@@ -25,6 +25,9 @@
 	<string name="StartupInitializingTextureCache">
 		Textur-Cache wird initialisiert...
 	</string>
+	<string name="StartupInitializingVFS">
+		VFS wird initialisiert...
+	</string>
 	<string name="StartupRequireDriverUpdate">
 		Grafikinitialisierung fehlgeschlagen. Bitte aktualisieren Sie Ihren Grafiktreiber.
 	</string>
@@ -83,8 +86,8 @@ Erweitertes Beleuchtungsmodell: [ALMSTATUS]
 	<string name="AboutTextureMemoryDynamic">
 		Texturspeicher: Dynamisch ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
-	<string name="AboutCache">
-		Disk-Cache: [DISK_CACHE_INFO]
+	<string name="AboutVFS">
+		VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		HiDPI-Anzeigemodus: [HIDPI]

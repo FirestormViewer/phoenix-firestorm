@@ -41,7 +41,7 @@
 #include "lltextbox.h"
 #include "llui.h"
 #include "lluictrlfactory.h"
-#include "llfilesystem.h"
+#include "llvfile.h"
 #include "message.h"
 #include "llstartup.h"              // login_alert_done
 #include "llviewernetwork.h"        // FIX FIRE 3143 SJ

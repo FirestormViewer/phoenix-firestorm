@@ -244,6 +244,11 @@
                     decimal_digits="1"
                     show_history="false"
                     setting="DebugStatModeActualOut"/>
+          <stat_bar name="vfspendingoperations"
+                    label="VFS Pending Operations"
+                    stat="vfspendingoperations"
+                    unit_label="Ops."
+                    setting="DebugStatModeVFSPendingOps"/>
         </stat_view>
       </stat_view>
 

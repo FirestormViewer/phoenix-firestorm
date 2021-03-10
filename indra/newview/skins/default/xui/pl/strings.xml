@@ -18,6 +18,9 @@
 	<string name="StartupInitializingTextureCache">
 		Inicjowanie bufora danych tekstur...
 	</string>
+	<string name="StartupInitializingVFS">
+		Inicjowanie wirtualnego systemu plików...
+	</string>
 	<string name="StartupRequireDriverUpdate">
 		Nie można zainicjować grafiki. Zaktualizuj sterowniki!
 	</string>
@@ -72,8 +75,8 @@ Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
 	<string name="AboutTextureMemoryDynamic">
 		Pamięć tekstur (Texture memory): Dynamiczna ([TEXTUREMEMORYMIN] MB min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
-	<string name="AboutCache">
-		Pamięć podręczna dysku (disk cache): [DISK_CACHE_INFO]
+	<string name="AboutVFS">
+		Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Tryb obrazu HiDPI: [HIDPI]

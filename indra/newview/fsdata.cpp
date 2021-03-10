@@ -53,7 +53,7 @@
 #include "llviewermedia.h"
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
-#include "llfilesystem.h"
+#include "llvfs.h"
 #include "message.h"
 
 // [RLVa:KB]
@@ -1071,7 +1071,7 @@ LLSD FSData::getSystemInfo()
 	{
 		sysinfo2 += llformat("Texture memory: %d MB (%.2f)\n", info["TEXTUREMEMORY"].asInteger(), info["TEXTUREMEMORYMULTIPLIER"].asReal());
 	}
-	sysinfo2 += "Disk cache: " + info["DISK_CACHE_INFO"].asString();
+	sysinfo2 += "VFS (cache) creation time (UTC) " + info["VFS_DATE"].asString();
 
 	LLSD sysinfos;
 	sysinfos["Part1"] = sysinfo1;

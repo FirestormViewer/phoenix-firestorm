@@ -22,6 +22,9 @@
 	<string name="StartupInitializingTextureCache">
 		Initialisation du cache des textures...
 	</string>
+	<string name="StartupInitializingVFS">
+		Initialisation VFS...
+	</string>
 	<string name="StartupRequireDriverUpdate">
 		Échec d&apos;initialisation des graphiques. Veuillez mettre votre pilote graphique à jour.
 	</string>
