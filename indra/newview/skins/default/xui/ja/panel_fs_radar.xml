@@ -45,8 +45,6 @@
 			</layout_panel>
 			
 			<layout_panel name="radar_lower_layout">
-				<icon name="nearby_dummy_icon" />
-				<icon name="nearby_dummy_icon"/>
 				<slider label="範囲 (m):" name="NearMeRange" />
 			</layout_panel>
 		</layout_stack>

@@ -72,8 +72,8 @@ Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
 	<string name="AboutTextureMemoryDynamic">
 		Pamięć tekstur (Texture memory): Dynamiczna ([TEXTUREMEMORYMIN] MB min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
 	</string>
-	<string name="AboutVFS">
-		Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
+	<string name="AboutCache">
+		Pamięć podręczna dysku (disk cache): [DISK_CACHE_INFO]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Tryb obrazu HiDPI: [HIDPI]
