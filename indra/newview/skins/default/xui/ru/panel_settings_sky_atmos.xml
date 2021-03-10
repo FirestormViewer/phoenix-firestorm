@@ -11,14 +11,14 @@
 				<layout_panel name="left_lp">
 					<text name="haze_horizon_label">Дымка горизонта:</text>
 					<text name="haze_density_label">Плотность дымки:</text>
-					<text name="moisture_level_label">Уровень влажности:</text>
+					<text name="moisture_level_label">Уровень влаги:</text>
 					<text name="droplet_radius_label">Радиус капли:</text>
 					<text name="ice_level_label">Уровень льда:</text>
 				</layout_panel>
 				<layout_panel name="right_lp">
-					<text name="density_multiplier_label">Множитель плотности:</text>
-					<text name="distance_multiplier_label">Множитель расстояния:</text>
-					<text name="maximum_altitude_label">Максимальная высота:</text>
+					<text name="density_multiplier_label">Множ. плотности:</text>
+					<text name="distance_multiplier_label">Множ. дистанции:</text>
+					<text name="maximum_altitude_label">Макс. высота:</text>
 					<text name="scene_gamma_label">Гамма сцены:</text>
 				</layout_panel>
 			</layout_stack>

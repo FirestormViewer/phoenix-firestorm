@@ -3113,9 +3113,6 @@ Accettare?
 		Una modifica apportata al gruppo esperienza è stata ignorata perché il proprietario non è un membro del gruppo selezionato.
 	</notification>
 	<notification name="UneditableExperienceProfileMessage">
-		Il campo non modificabile &apos;[field]&apos; è stato ignorato durante l&apos;aggiornamento del profilo esperienza.
-	</notification>
-	<notification name="UneditableExperienceProfileMessage">
 		Il campo non modificabile '[field]' è stato ignorato durante l&apos;aggiornamento del profilo esperienza.
 	</notification>
 	<notification name="RestrictedToOwnerExperienceProfileMessage">
