@@ -31,7 +31,7 @@
 		Pulsa y arrastra para mover la cámara.
 	</floater.string>
 	<floater.string name="status_grab">
-                Arrastra para mover: Ctrl, verticalmente; Ctrl+Mayúscula, girando.
+		Arrastra para mover: Ctrl, verticalmente; Ctrl+Mayúscula, girando.
 	</floater.string>
 	<floater.string name="status_place">
 		Pulsa en el mundo para construir.
@@ -40,7 +40,7 @@
 		Pulsa y arrastra para seleccionar el terreno.
 	</floater.string>
 	<floater.string name="status_selectcount">
-                [OBJ_COUNT] obj. seleccionados. Impacto en la parcela: [LAND_IMPACT].
+		[OBJ_COUNT] obj. seleccionados. Impacto en la parcela: [LAND_IMPACT].
 	</floater.string>
 	<floater.string name="status_remaining_capacity">
 		Capacidad restante: [LAND_CAPACITY]. 
@@ -62,12 +62,12 @@
 	<radio_group name="focus_radio_group">
 		<radio_item label="Zoom" name="radio zoom"/>
 		<radio_item label="Órbita (Ctrl)" name="radio orbit"/>
-                <radio_item label="Panorámica (Ctrl+Mayúscula)" name="radio pan"/>
+		<radio_item label="Panorámica (Ctrl+Mayúscula)" name="radio pan"/>
 	</radio_group>
 	<radio_group name="move_radio_group">
 		<radio_item label="Mover" name="radio move"/>
 		<radio_item label="Vertical (Ctrl)" name="radio lift"/>
-                <radio_item label="Horizontal (Ctrl+Mayúscula)" name="radio spin"/>
+		<radio_item label="Horizontal (Ctrl+Mayúscula)" name="radio spin"/>
 	</radio_group>
 	<radio_group name="edit_radio_group">
 		<radio_item label="Mover" name="radio position"/>
@@ -78,7 +78,7 @@
 	</radio_group>
 	<check_box label="Editar partes" name="checkbox edit linked parts"/>
 	<button label="Enlazar" name="link_btn"/>
-        <button label="Desenlazar" name="unlink_btn"/>
+	<button label="Desenlazar" name="unlink_btn"/>
 	<combo_box name="combobox grid mode" tool_tip="Elegir el tipo de ajuste de rejilla para posicionar el objeto.">
 		<combo_box.item label="Rejilla mundial" name="World"/>
 		<combo_box.item label="Rejilla local" name="Local"/>
@@ -87,9 +87,9 @@
 	<check_box label="Estirar ambos lados" name="checkbox uniform"/>
 	<check_box label="Estirar texturas" name="checkbox stretch textures"/>
 	<check_box label="Ajustar" name="checkbox snap to grid"/>
-        <check_box label="Eje en primitiva raíz" name="checkbox actual root"/>
+	<check_box label="Eje en primitiva raíz" name="checkbox actual root"/>
 	<check_box label="Resaltar" name="checkbox show highlight"/>
-        <button name="Options..." label="Opciones..." tool_tip="Mostrar opciones de rejilla"/>
+	<button name="Options..." label="Opciones..." tool_tip="Mostrar opciones de rejilla"/>
 	<button name="ToolCube" tool_tip="Cubo"/>
 	<button name="ToolPrism" tool_tip="Prisma"/>
 	<button name="ToolPyramid" tool_tip="Pirámide"/>
@@ -111,7 +111,7 @@
 	<check_box label="Copia girada" name="checkbox copy rotates"/>
 	<radio_group name="land_radio_group">
 		<radio_item label="Seleccionar terreno" name="radio select land"/>
-                <radio_item label="Nivelar" name="radio flatten"/>
+		<radio_item label="Nivelar" name="radio flatten"/>
 		<radio_item label="Elevar" name="radio raise"/>
 		<radio_item label="Rebajar" name="radio lower"/>
 		<radio_item label="Suavizar" name="radio smooth"/>
@@ -220,13 +220,12 @@
 				<combo_box.item label="Ninguno" name="None"/>
 			</combo_box>
 			<check_box label="En venta:" name="checkbox for sale" tool_tip="Permite a las personas comprar este objeto, su contenido o su copia en el mundo virtual al precio indicado."/>
-			<spinner label="L$" name="Edit Cost" tool_tip="Precio del objeto."/>
+			<spinner label="Precio: L$" name="Edit Cost" tool_tip="Precio del objeto."/>
 			<combo_box name="sale type" tool_tip="Selecciona si el comprador recibirá una copia, una copia del contenido o el objeto propiamente dicho.">
 				<combo_box.item name="Copy" label="Copia"/>
 				<combo_box.item name="Contents" label="Contenido"/>
 				<combo_box.item name="Original" label="Original"/>
 			</combo_box>
-			<spinner name="Edit Cost" label="Precio: L$"/>
 			<button label="Aplicar" name="button mark for sale" tool_tip="Marcar/Actualizar objeto(s) en venta."/>
 			<button label="Copiar UUIDs" name="btnCopyKeys" tool_tip="Copia la clave del prim raíz del objeto seleccionado al portapapeles. Mayús.-Clic copia las claves de todos los objetos seleccionados."/>
 			<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda."/>
@@ -267,11 +266,6 @@
 			</panel>
 			<panel name="pathfinding_attrs_panel">
 				<text name="pathfinding_attributes_label">
-					Atributos de pathfinding:
-				</text>
-			</panel>
-			<panel name="pathfinding_attrs_panel">
-				<text name="pathfinding_attributes_label">
 					Atributos Pathfinding:
 				</text>
 			</panel>
@@ -282,16 +276,16 @@
 			<check_box label="Temporal" name="Temporary Checkbox Ctrl" tool_tip="Provoca que el objeto desaparezca 1 minuto después de ser creado."/>
 			<check_box label="Inmaterial" name="Phantom Checkbox Ctrl" tool_tip="Evita que el objeto no colisione con otros objetos o avatares."/>
 			<text name="label position">
-                                Posición (metros)
+				Posición (metros)
 			</text>
 			<spinner label="X" name="Pos X"/>
 			<button  label="C" name="copypos" tool_tip="Copiar posición."/>
-                        <spinner label="Y" name="Pos Y"/>
+			<spinner label="Y" name="Pos Y"/>
 			<button label="P" name="pastepos" tool_tip="Copiar posición."/>
 			<spinner label="Z" name="Pos Z"/>
 			<button label="p" name="pasteposclip" tool_tip="Pegar posición desde el portapapeles."/>
 			<text name="label size">
-                                Tamaño (metros)
+				Tamaño (metros)
 			</text>
 			<spinner label="X" name="Scale X"/>
 			<button label="C" name="copysize" tool_tip="Copiar tamaño."/>
@@ -300,7 +294,7 @@
 			<spinner label="Z" name="Scale Z"/>
 			<button label="p" name="pastesizeclip" tool_tip="Pegar tamaño desde el portapapeles."/>
 			<text name="label rotation">
-                                Rotación (grados)
+				Rotación (grados)
 			</text>
 			<spinner label="X" name="Rot X"/>
 			<button label="C" name="copyrot" tool_tip="Copiar rotación."/>
@@ -312,7 +306,7 @@
 				Paráms. del objeto:
 			</text>
 			<button label="Copiar" name="copyparams" tool_tip="Copiar parámetros al portapapeles."/>
-                        <button label="Pegar" name="pasteparams" tool_tip="Pegar parámetros desde el portapapeles."/>
+			<button label="Pegar" name="pasteparams" tool_tip="Pegar parámetros desde el portapapeles."/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Cubo" name="Box"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
@@ -320,7 +314,7 @@
 				<combo_box.item label="Esfera" name="Sphere"/>
 				<combo_box.item label="Toroide" name="Torus"/>
 				<combo_box.item label="Tubo" name="Tube"/>
-                                <combo_box.item label="Anillo" name="Ring"/>
+				<combo_box.item label="Anillo" name="Ring"/>
 				<combo_box.item label="Esculpido" name="Sculpted"/>
 				<combo_item name="PathLineProfileHalfCircle" label="Línea->Semicírculo"/>
 				<combo_item name="PathCircleProfileHalfCircle" label="Círculo->Semicírculo"/>
@@ -353,9 +347,9 @@
 			</text>
 			<combo_box name="hole">
 				<combo_box.item label="Por defecto" name="Default"/>
-                                <combo_box.item label="Circular" name="Circle"/>
+				<combo_box.item label="Circular" name="Circle"/>
 				<combo_box.item label="Cuadrado" name="Square"/>
-                                <combo_box.item label="Triangular" name="Triangle"/>
+				<combo_box.item label="Triangular" name="Triangle"/>
 			</combo_box>
 			<text name="text twist">
 				Torsión (inicio/fin)
@@ -381,7 +375,7 @@
 			<text name="advanced_dimple">
 				Abolladura (inicio/fin)
 			</text>
-                        <text name="advanced_slice">
+			<text name="advanced_slice">
 				Troceado (inicio/fin)
 			</text>
 			<spinner label="I" name="Path Limit Begin"/>
@@ -391,13 +385,13 @@
 			</text>
 			<spinner label="X" name="Taper X"/>
 			<spinner label="Y" name="Taper Y"/>
-                        <text name="text radius delta">
+			<text name="text radius delta">
 				Radio
 			</text>
 			<text name="text revolutions">
 				Giros
 			</text>
-                        <texture_picker label="Textura para escultura" name="sculpt texture control" tool_tip="Pulse para elegir una imagen"/>
+			<texture_picker label="Textura para escultura" name="sculpt texture control" tool_tip="Pulse para elegir una imagen"/>
 			<check_box label="Reflejar" name="sculpt mirror control" tool_tip="Voltea la primitiva esculpida siguiendo el eje X"/>
 			<check_box label="Volver del revés" name="sculpt invert control" tool_tip="Invierte los valores de las primitivas esculpidas, haciendo aparecer fuera lo de dentro"/>
 			<text name="label sculpt type">
@@ -411,15 +405,15 @@
 			</combo_box>
 		</panel>
 		<panel label="Caracter." name="Features">
-                        <panel.string name="None">
-                                Ninguno
-                        </panel.string>
-                        <panel.string name="Prim">
-                                Prim
-                        </panel.string>
-                        <panel.string name="Convex Hull">
-                                Convexo
-                        </panel.string>
+			<panel.string name="None">
+				Ninguno
+			</panel.string>
+			<panel.string name="Prim">
+				Prim
+			</panel.string>
+			<panel.string name="Convex Hull">
+				Convexo
+			</panel.string>
 			<text name="select_single">
 				Selecciona una sola primitiva para poder editarla.
 			</text>
@@ -436,7 +430,7 @@
 			<spinner label="Fuerza en X" name="FlexForceX"/>
 			<spinner label="Fuerza en Y" name="FlexForceY"/>
 			<spinner label="Fuerza en Z" name="FlexForceZ"/>
-                        <check_box label="Luz" name="Light Checkbox Ctrl" tool_tip="Permite que el objeto emita luz."/>
+			<check_box label="Luz" name="Light Checkbox Ctrl" tool_tip="Permite que el objeto emita luz."/>
 			<color_swatch name="colorswatch" tool_tip="Pulsa para elegir el color."/>
 		 	<texture_picker name="light texture control" tool_tip="Pulsa para elegir una imagen para proyectar (sólo tiene efecto con la renderización deferida activada)."/>
 		  	<spinner label="Intensidad" name="Light Intensity"/>
@@ -460,7 +454,7 @@
 			</combo_box>
 			<spinner label="Gravedad" name="Physics Gravity"/>
 			<spinner label="Fricción" name="Physics Friction"/>
-                        <spinner label="Densidad *100 kg/m^3" name="Physics Density"/>
+			<spinner label="Densidad *100 kg/m^3" name="Physics Density"/>
 			<spinner label="Rebote" name="Physics Restitution"/>
 		</panel>
 		<panel label="Textura" name="Texture"/>

@@ -331,9 +331,8 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 			<check_box label="Tous" name="check other scripts" tool_tip="Si la case est cochée, les membres du groupe de la parcelle peuvent exécuter des scripts sur votre parcelle, y compris des pièces jointes."/>
 			<check_box label="Groupe" name="check group scripts" tool_tip="Si la case est cochée, les membres du groupe de la parcelle peuvent exécuter des scripts sur votre parcelle, y compris des pièces jointes."/>
 			<check_box label="Sécurisé (pas de dégâts)" name="check safe" tool_tip="Si cette option est cochée, le terrain est sécurisé et il n&apos;y pas de risques de dommages causés par des combats. Si elle est décochée, des dommages causés par les combats peuvent avoir lieu."/>
-			<check_box label="Lieu dans la recherche (L$30/week)" name="ShowDirectoryCheck" tool_tip="Laisser les résidents voir cette parcelle dans les résultats de la recherche."/>
 			<check_box label="Pas de bousculades" name="PushRestrictCheck" tool_tip="Empêche l&apos;utilisation de scripts causant des bousculades. Cette option est utile pour empêcher les comportements abusifs sur votre terrain."/>
-			<check_box label="Voir le lieu dans la recherche (30 L$/sem.)" name="ShowDirectoryCheck" tool_tip="Afficher la parcelle dans les résultats de recherche"/>
+			<check_box label="Lieu dans la recherche (L$30/week)" name="ShowDirectoryCheck" tool_tip="Laisser les résidents voir cette parcelle dans les résultats de la recherche."/>
 			<combo_box name="land category">
 				<combo_box.item label="Toutes catégories" name="item0"/>
 				<combo_box.item label="Appartenant aux Lindens" name="item1"/>

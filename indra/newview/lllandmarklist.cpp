@@ -163,7 +163,9 @@ void LLLandmarkList::processGetAssetReply(
                     gLandmarkList.makeCallbacks(uuid);
                 }
             }
+            else gLandmarkList.mLoadedCallbackMap.erase(uuid); // <FS:Ansariel> Clean up callback map
         }
+        else gLandmarkList.mLoadedCallbackMap.erase(uuid); // <FS:Ansariel> Clean up callback map
 	}
 	else
 	{
@@ -182,6 +184,7 @@ void LLLandmarkList::processGetAssetReply(
 		gLandmarkList.mBadList.insert(uuid);
         gLandmarkList.mRequestedList.erase(uuid); //mBadList effectively blocks any load, so no point keeping id in requests
         // todo: this should clean mLoadedCallbackMap!
+		gLandmarkList.mLoadedCallbackMap.erase(uuid); // <FS:Ansariel> Clean up callback map
 	}
 
     // getAssetData can fire callback immediately, causing
@@ -225,6 +228,7 @@ void LLLandmarkList::onRegionHandle(const LLUUID& landmark_id)
 	if (!landmark)
 	{
 		LL_WARNS() << "Got region handle but the landmark not found." << LL_ENDL;
+		mLoadedCallbackMap.erase(landmark_id); // <FS:Ansariel> Clean up callback map
 		return;
 	}
 
@@ -234,6 +238,7 @@ void LLLandmarkList::onRegionHandle(const LLUUID& landmark_id)
 	if (!landmark->getGlobalPos(pos))
 	{
 		LL_WARNS() << "Got region handle but the landmark global position is still unknown." << LL_ENDL;
+		mLoadedCallbackMap.erase(landmark_id); // <FS:Ansariel> Clean up callback map
 		return;
 	}
 
