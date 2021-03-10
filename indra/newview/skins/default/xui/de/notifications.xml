@@ -3990,6 +3990,9 @@ Ansonsten können Sie auf der Karte nachsehen und dort Ort suchen, die als „In
 		[FNAME] wurde nicht gefunden und konnte deshalb nicht aktualisiert werden.
 Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
 	</notification>
+	<notification name="NoTransNoSaveToContents">
+		&lt;nolink&gt;„[OBJ_NAME]“&lt;/nolink&gt; kann nicht als Inhalt des Objekts gespeichert werden, da Sie keine Berechtigung zur Übertragung des Gegenstands besitzen.
+	</notification>
 	<notification name="LocalBitmapsUpdateFailedFinal">
 		[FNAME] konnte auch nach [NRETRIES] Versuchen nicht geöffnet oder decodiert werden und gilt als beschädigt.
 Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
