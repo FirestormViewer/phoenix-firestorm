@@ -35,7 +35,6 @@
 					<stat_bar label="Слои" name="layerskbitstat"/>
 					<stat_bar label="Действительный ввод" name="actualinkbitstat"/>
 					<stat_bar label="Действительный вывод" name="actualoutkbitstat"/>
-					<stat_bar label="Ожидающие операции VFS" name="vfspendingoperations"/>
 				</stat_view>
 			</stat_view>
 			<stat_view label="Симулятор" name="sim">

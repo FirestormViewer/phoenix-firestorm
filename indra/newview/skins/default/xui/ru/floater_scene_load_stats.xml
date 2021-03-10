@@ -32,7 +32,6 @@
 					<stat_bar name="layersdatareceived" label="Слои"/>
 					<stat_bar name="messagedatain" label="фактический ввод"/>
 					<stat_bar name="messagedataout" label="фактический вывод"/>
-					<stat_bar name="vfspendingoperations" label="Ожидающие операции VFS"/>
 				</stat_view>
 			</stat_view>
 			<!--Sim Stats-->

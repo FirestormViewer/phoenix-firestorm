@@ -36,7 +36,6 @@
 					<stat_bar label="Capas" name="layerskbitstat"/>
 					<stat_bar label="Entrando ahora" name="actualinkbitstat"/>
 					<stat_bar label="Saliendo ahora" name="actualoutkbitstat"/>
-					<stat_bar label="Operaciones VFS pendientes" name="vfspendingoperations"/>
 				</stat_view>
 			</stat_view>
 			<stat_view label="Simulador" name="sim">
