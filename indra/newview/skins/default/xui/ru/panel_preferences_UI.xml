@@ -34,7 +34,6 @@
         <text name="HUD Size:" width="130">
             Масштаб HUD:
         </text>
-        <check_box label="Использовать круглое меню" name="UsePieMenu" tool_tip="Использовать стиль V1 для отображения круглого меню при нажатии правой кнопкой мыши на объекты, аватары и землю" />
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Диалогов скрипта на объект:
         </text>

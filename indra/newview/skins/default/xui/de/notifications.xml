@@ -512,9 +512,6 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="ErrorEncodingSnapshot">
 		Fehler beim Erstellen des Fotos!
 	</notification>
-	<notification name="ErrorCannotAffordUpload">
-		Du brauchst L$[COST], um diesen Artikel hochzuladen.
-	</notification>
 	<notification name="ErrorPhotoCannotAfford">
 		Es kostet L$[COST], um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
 	</notification>
@@ -3527,9 +3524,6 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 		Fehler beim Speichern des Bildes unter [PATH]: Zu wenig Speicherplatz auf dem Medium. [NEED_MEMORY]KB werden benötigt, es stehen jedoch nur [FREE_MEMORY]KB zur Verfügung.
 	</notification>
 	<notification name="SnapshotToLocalDirNotExist">
-		Fehler beim Speichern des Bildes unter [PATH]: Verzeichnis nicht vorhanden.
-	</notification>
-	<notification name="SnapshotToLocalDirNotExist">
 		Fehler beim Speichern des Bildes unter [PATH]: Verzeichnis existiert nicht.
 	</notification>
 	<notification name="PresetNotSaved">
@@ -3730,10 +3724,6 @@ Sie haben eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach [TIME]
 	<notification name="AvatarRezSelfBakedTextureUpdateNotification">
 		( [EXISTENCE] Sekunden am Leben)
 Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach [TIME] Sekunden aktualisiert.
-	</notification>
-	<notification name="CannotUploadTexture">
-		Textur kann nicht hochgeladen werden.
-[REASON]
 	</notification>
 	<notification name="CannotUploadTexture">
 		Texture konnte nicht hochgeladen werden.
@@ -5261,7 +5251,7 @@ Stream-Liste erfolgreich aus XML importiert.
 Einstellungen wurden gesichert.
 	</notification>
 
-	<notification name="BackupFinished">
+	<notification name="BackupPathEmpty">
 Sicherungspfad ist nicht gesetzt. Bitte zunächst einen Ort festlegen, an dem die Einstellungen gesichert sind und von wo sie wiederhergestellt werden sollen.
 	</notification>
 
@@ -5314,7 +5304,7 @@ Export unerwartet fehlgeschlagen. Siehe Log-Datei für weitergehende Details.
 [OBJECT] erfolgreich als [FILENAME] gespeichert.
 	</notification>
 
-	<notification name="ExportColladaSuccess">
+	<notification name="ExportColladaFailure">
 Export von [OBJECT] nach [FILENAME] fehlgeschlagen.
 	</notification>
 

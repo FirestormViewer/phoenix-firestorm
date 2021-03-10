@@ -1116,9 +1116,6 @@ pueden adjuntarse a las notas.
 	<string name="AdditionalPermissionsRequestHeader">
 		Si permites acceso a tu cuenta, también estarás permitiendo al objeto:
 	</string>
-	<string name="AdditionalPermissionsRequestHeader">
-		Si autorizas el acceso a tu cuenta, también permitirás al objeto:
-	</string>
 	<string name="ScriptTakeMoney">
 		Obtener de usted dólares Linden (L$)
 	</string>
@@ -1182,9 +1179,6 @@ pueden adjuntarse a las notas.
 	</string>
 	<string name="NotConnected">
 		No conectado/a
-	</string>
-	<string name="AgentNameSubst">
-		(Tú)
 	</string>
 	<string name="UnknownScriptPermission">
 		(desconocido)!
@@ -1784,9 +1778,6 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	<string name="InvFolder Gestures">
 		Gestos
 	</string>
-	<string name="InvFolder Favorites">
-		Favoritos
-	</string>
 	<string name="InvFolder favorite">
 		Favoritos
 	</string>
@@ -1813,12 +1804,6 @@ Si sigues recibiendo el mismo mensaje, solicita ayuda al personal de asistencia 
 	</string>
 	<string name="InvFolder Received Items">
 		Items recibidos
-	</string>
-	<string name="InvFolder Merchant Outbox">
-		Merchant Outbox
-	</string>
-	<string name="InvFolder Received Items">
-		Objetos recibidos
 	</string>
 	<string name="InvFolder Merchant Outbox">
 		Buzón de salida de comerciante
@@ -4479,12 +4464,6 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="LocationCtrlPathfindingDisabledTooltip">
 		Pathfinding dinámico no activado en esta región.
 	</string>
-	<string name="LocationCtrlPathfindingDirtyTooltip">
-		Los objetos que se mueven pueden presentar un comportamiento incorrecto en la región hasta que ésta se recargue.
-	</string>
-	<string name="LocationCtrlPathfindingDisabledTooltip">
-		Esta región no tiene activado el pathfinding dinámico.
-	</string>
 	<string name="UpdaterWindowTitle">
 		Actualizar [APP_NAME]
 	</string>
@@ -4601,9 +4580,6 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	</string>
 	<string name="answering-im">
 		Conectando...
-	</string>
-	<string name="conference-title">
-		Multiconferencia
 	</string>
 	<string name="conference-title-incoming">
 		Conferencia con [AGENT_NAME]

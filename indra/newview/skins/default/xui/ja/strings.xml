@@ -1124,10 +1124,6 @@ http://www.firestormviewer.org/support
 	<string name="AgentNameSubst">
 		(あなた)
 	</string>
-	<string name="TeleportYourAgent">
-		あなたをテレポート
-	</string>
-	<string name="JoinAnExperience"/>
 	<string name="SilentlyManageEstateAccess">
 		土地のアクセスリストを管理するときにアラートを表示しない
 	</string>
@@ -1738,9 +1734,6 @@ http://www.firestormviewer.org/support
 	</string>
 	<string name="InvFolder Gestures">
 		ジェスチャー
-	</string>
-	<string name="InvFolder Favorites">
-		お気に入り
 	</string>
 	<string name="InvFolder favorite">
 		お気に入り
@@ -4545,11 +4538,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="not_online_inventory">
 		ユーザーがオンラインでありません - インベントリが保存されました。
 	</string>
-	<string name="not_online_msg">
-		相手ユーザーはオンラインではありません。メッセージは保存され、後ほど配達されます。
-	</string>
-	<string name="not_online_inventory">
-		相手ユーザーはオンラインではありません。インベントリは保存されました。</string>
 	<string name="answered_call">
 		相手がコールを受けました
 	</string>
@@ -4698,9 +4686,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="you_paid_ldollars_gift">
 		[NAME] に L$[AMOUNT] を支払いました：[REASON]
-	</string>
-	<string name="you_paid_ldollars_gift">
-		[NAME] に L$ [AMOUNT] を支払いました：[REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
 		L$ [AMOUNT] を支払いました。
@@ -5582,9 +5567,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Report_Abuse_Label">
 		嫌がらせを報告
-	</string>
-	<string name="Command_Report_Abuse_Label">
-		嫌がらせの報告
 	</string>
 	<string name="Command_Search_Label">
 		検索

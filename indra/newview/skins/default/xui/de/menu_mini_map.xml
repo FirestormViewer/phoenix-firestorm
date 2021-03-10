@@ -59,7 +59,7 @@
 	<menu_item_check label="Automatisch zentrieren" name="Auto Center"/>
 	
 	<menu label="Chatdistanz-Markierungen" name="Chat Distance Rings Menu">
-		<menu_item_check label="Chatdistanz-Markierung anzeigen" name="Chat Distance Ring"/>
+		<menu_item_check label="Chatdistanz-Markierung anzeigen" name="Chat Distance Rings"/>
 		<menu_item_check label="Flüstern anzeigen" name="Whisper Distance Ring"/>
 		<menu_item_check label="Sprechen anzeigen" name="Chat Distance Ring"/>
 		<menu_item_check label="Rufen anzeigen" name="Shout Distance Ring"/>

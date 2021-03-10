@@ -49,5 +49,4 @@
 	<button label="Aceptar" label_selected="Aceptar" name="Select" width="80" left="115"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel" width="80" left_delta="100"/>
 	<check_box label="Aplicar ahora" name="apply_immediate_check"/>
-	<check_box label="Aplicarlo ahora" name="apply_immediate_check"/>
 </floater>

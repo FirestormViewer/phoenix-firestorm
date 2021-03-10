@@ -1763,9 +1763,6 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="InvFolder favorite">
 		Mes Favoris
 	</string>
-	<string name="InvFolder Favorites">
-		Mes favoris
-	</string>
 	<string name="InvFolder favorites">
 		Mes favoris
 	</string>
@@ -5926,18 +5923,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="UserDictionary">
 		[User]
-	</string>
-	<string name="logging_calls_disabled_log_empty">
-		Les conversations ne sont pas archivées. Pour commencer à tenir un journal, choisissez Enregistrer : Journal seul ou Enregistrer : Journal et transcriptions sous Préférences &gt; Chat.
-	</string>
-	<string name="logging_calls_disabled_log_not_empty">
-		Aucune conversation ne sera plus enregistrée. Pour recommencer à tenir un journal, choisissez Enregistrer : Journal seul ou Enregistrer : Journal et transcriptions sous Préférences &gt; Chat.
-	</string>
-	<string name="logging_calls_enabled_log_empty">
-		Il n&apos;y a aucune conversation enregistrée. Quand quelqu&apos;un vous contacte ou quand vous contactez quelqu&apos;un, une entrée de journal s&apos;affiche ici.
-	</string>
-	<string name="loading_chat_logs">
-		Chargement...
 	</string>
 	<string name="experience_tools_experience">
 		Expérience

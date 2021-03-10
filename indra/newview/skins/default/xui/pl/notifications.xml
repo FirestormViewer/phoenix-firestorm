@@ -1746,13 +1746,6 @@ Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/m
 	<notification name="JoinedTooManyGroups">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 	</notification>
-	<notification name="GroupLimitInfo">
-		Limit ilości grup dla kont standardowych to [MAX_BASIC], a dla [https://secondlife.com/premium/ kont premium] to [MAX_PREMIUM].
-Jeśli Twoje konto zostało pozbawione statusu premium, to musisz zejść poniżej limitu [MAX_BASIC] grup, zanim będzie można dołączyć do kolejnej.
-
-[https://secondlife.com/my/account/membership.php Przejdź na premium już teraz!]
-		<usetemplate name="okbutton" yestext="Zamknij"/>
-	</notification>
 	<notification name="KickUser">
 		Wyrzuć tego Rezydenta, wysyłając następujący komunikat.
 		<form name="form">
