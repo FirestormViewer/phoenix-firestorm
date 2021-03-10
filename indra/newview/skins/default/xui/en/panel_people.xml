@@ -34,9 +34,9 @@
 
 Looking for places with more people?
 
-[secondlife:///app/floater/destinations Destination Guide] has locations chosen by Second Life staff.
+[secondlife:///app/floater/destinations Destination Guide] has locations chosen by the grid operator staff.
 
-[secondlife:///app/search/people Search] lets you search all of Second Life for certain keywords.
+[secondlife:///app/search/people Search] lets you search all the grid for certain keywords.
     </string>
     <string
      name="no_filtered_friends_msg">
@@ -53,7 +53,7 @@ Looking for places with more people?
      name="no_groups_msg">
 You are not a member of any groups.
 
-Learn about [https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ groups in Second Life.]
+Learn about [https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ groups].
   </string>
 	<string
 	 name="MiniMapToolTipMsg"
