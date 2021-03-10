@@ -26,7 +26,6 @@
 		</text>
 		<slider label="Inizio sparizione testo sopra (in m):" tool_tip="Distanza a cui il testo sopra agli oggetti inizia a sbiadire" name="FSHudTextFadeDistance"/>
 		<slider label="Distanza sparizione testo (in m):" tool_tip="Imposta la distanza a cui il testo sopra agli oggetti diventa totalmente invisibile" name="FSHudTextFadeRange"/>
-		<slider label="Totale sparizione testo sopra (in m):" tool_tip="Distanza a cui il testo sopra agli oggetti sparisce del tutto" name="FSHudTextFadeRange"/>
 	</panel>
 	<panel label="2D sovrapposto" name="ui-2d-overlay">
 		<text name="UI Size:" width="100">

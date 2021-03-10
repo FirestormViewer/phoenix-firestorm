@@ -74,7 +74,6 @@ LLKeyboardSDL::LLKeyboardSDL()
 	mTranslateKeyMap[SDLK_RIGHT] = KEY_RIGHT;
 	mTranslateKeyMap[SDLK_UP] = KEY_UP;
 	mTranslateKeyMap[SDLK_DOWN] = KEY_DOWN;
-	mTranslateKeyMap[SDLK_ESCAPE] = KEY_ESCAPE;
 	mTranslateKeyMap[SDLK_KP_ENTER] = KEY_RETURN;
 	mTranslateKeyMap[SDLK_ESCAPE] = KEY_ESCAPE;
 	mTranslateKeyMap[SDLK_BACKSPACE] = KEY_BACKSPACE;
