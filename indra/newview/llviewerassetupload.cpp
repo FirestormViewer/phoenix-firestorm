@@ -498,10 +498,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
     infile.open(filename, LL_APR_RB, NULL, &file_size);
     if (infile.getFileHandle())
     {
-        // <FS:Ansariel> Fix broken asset upload
-        //LLFileSystem file(getAssetId(), assetType, LLFileSystem::WRITE);
         LLFileSystem file(getAssetId(), assetType, LLFileSystem::APPEND);
-        // </FS:Ansariel>
 
         const S32 buf_size = 65536;
         U8 copy_buf[buf_size];
