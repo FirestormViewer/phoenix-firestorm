@@ -33,7 +33,6 @@
 			<combo_box.item label="フライトアシスト＝中" name="flight_moderate"/>
 			<combo_box.item label="フライトアシスト＝強" name="flight_strong"/>
 		</combo_box>
-        <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/>
 		
     </panel>
 
