@@ -27,7 +27,7 @@ Texturen
 				<texture_picker label="Augen" name="eyes-baked"/>
 				<texture_picker label="Auge" name="eyes_iris"/>
 				<texture_picker label="Alpha: Augen" name="eyes_alpha"/>
-				<texture_picker label="Augen: Uni. Tattoo" name="eyes_alpha"/>
+				<texture_picker label="Augen: Uni. Tattoo" name="eyes_tattoo"/>
 				<texture_picker label="Oberkörper" name="upper-baked"/>
 				<texture_picker label="Oberkörperfarbe" name="upper_bodypaint"/>
 				<texture_picker label="Unterhemd" name="upper_undershirt"/>

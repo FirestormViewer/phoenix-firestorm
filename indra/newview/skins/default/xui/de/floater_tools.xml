@@ -92,11 +92,9 @@
 		þ: [COUNT]
 	</text>
 	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures"/>
-	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid"/>
+	<check_box initial_value="true" label="Einrasten" name="checkbox snap to grid"/>
     <check_box initial_value="false" label="Achse an Wurzel edit." name="checkbox actual root"/>
 	<check_box initial_value="true" label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
-	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures" top_pad="-5"/>
-	<check_box initial_value="true" label="Einrasten" name="checkbox snap to grid" top_pad="15"/>
 	<combo_box name="combobox grid mode" tool_tip="Wählen Sie das gewünschte Rasterlineal zum Positionieren des Objekts aus." left_pad="20">
 		<combo_box.item label="Welt" name="World"/>
 		<combo_box.item label="Lokal" name="Local"/>

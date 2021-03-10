@@ -133,8 +133,10 @@ LLKeyboardMacOSX::LLKeyboardMacOSX()
 	mTranslateKeyMap[0x7e] = KEY_UP;
 
 	// Build inverse map
-	std::map<U16, KEY>::iterator iter;
-	for (iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
+	// <FS:ND> <FS:LO> Change to U32 for SDL2
+	//std::map<U16, KEY>::iterator iter;
+	//for (iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
+	for (auto iter = mTranslateKeyMap.begin(); iter != mTranslateKeyMap.end(); iter++)
 	{
 		mInvTranslateKeyMap[iter->second] = iter->first;
 	}
@@ -154,7 +156,9 @@ LLKeyboardMacOSX::LLKeyboardMacOSX()
 	mTranslateNumpadMap[0x4c] = KEY_PAD_RETURN;	// keypad enter
 	
 	// Build inverse numpad map
-	for (iter = mTranslateNumpadMap.begin(); iter != mTranslateNumpadMap.end(); iter++)
+	// <FS:ND> <FS:LO> Change to U32 for SDL2
+	//for (iter = mTranslateNumpadMap.begin(); iter != mTranslateNumpadMap.end(); iter++)
+	for (auto iter = mTranslateNumpadMap.begin(); iter != mTranslateNumpadMap.end(); iter++)
 	{
 		mInvTranslateNumpadMap[iter->second] = iter->first;
 	}
