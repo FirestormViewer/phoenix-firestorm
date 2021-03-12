@@ -256,6 +256,10 @@ set(llcommon_HEADER_FILES
     )
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
+# <FS:Beq> Tracy Profiler support
+if (USE_TRACY_PROFILER)
+  list(APPEND llcommon_SOURCE_FILES FSTracyClient.cpp)
+endif()
 
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp

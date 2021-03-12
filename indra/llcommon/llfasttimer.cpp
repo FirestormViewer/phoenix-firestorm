@@ -54,13 +54,20 @@
 #else 
 #error "architecture not supported"
 #endif
+// <FS:Beq> are we actively profiling?
+#ifdef TRACY_ENABLE
+namespace LLTrace
+{
+	bool	active{false};
+}
+// </FS:Beq>
 
+#endif
 namespace LLTrace
 {
 
 //////////////////////////////////////////////////////////////////////////////
 // statics
-
 bool        BlockTimer::sLog		     = false;
 std::string BlockTimer::sLogName         = "";
 bool        BlockTimer::sMetricLog       = false;

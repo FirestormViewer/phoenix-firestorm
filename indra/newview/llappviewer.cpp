@@ -1652,7 +1652,19 @@ bool LLAppViewer::doFrame()
 {
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
-
+// <FS:Beq> Tracy enabling
+	static bool one_time{false};
+	static LLCachedControl<bool> tracy_enable_when_connected(gSavedSettings, "FSTracyEnableWhenConnected");
+	if( !one_time && (gFrameCount % 10 == 0) )
+	{
+		if(!LLTrace::active && tracy_enable_when_connected && TracyIsConnected)
+		{
+			LLTrace::active = true;
+			one_time=true; // prevent reset race if we disable manually.
+			LL_INFOS() << "Tracy profiler or collector connected" << LL_ENDL;
+		}
+	}
+// </FS:Beq>
 	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 	LLTimer periodicRenderingTimer;
 	BOOL restore_rendering_masks = FALSE;
@@ -1953,7 +1965,7 @@ bool LLAppViewer::doFrame()
 
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
-
+    FrameMark; // <FS:Beq> Tracy support delineate Frame
 	return ! LLApp::isRunning();
 }
 
