@@ -17,9 +17,11 @@
 #include "llviewerprecompiledheaders.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
+#include "llfeaturemanager.h"
 #include "llgesturemgr.h"
 #include "llnotificationsutil.h"
 #include "llviewerobjectlist.h"
+#include "pipeline.h"
 
 #include "rlvcommon.h"
 #include "rlveffects.h"
@@ -2035,6 +2037,22 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 		return strText.substr(idxIt + 1, idxEnd - idxIt - 1);
 	}
 	return std::string();
+}
+
+// =========================================================================
+// Various helper functions
+//
+
+namespace Rlv
+{
+	void forceAtmosphericShadersIfAvailable()
+	{
+		if ( (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")) && (!LLPipeline::WindLightUseAtmosShaders) )
+		{
+			// Triggers handleSetShaderChanged() which will do the actual work for us
+			gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
+		}
+	}
 }
 
 // =========================================================================

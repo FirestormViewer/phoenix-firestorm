@@ -2071,22 +2071,28 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
 	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
 	{
-		// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
-		if ( (!LLPipeline::RenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
-		{
-			LLRenderTarget::sUseFBO = true;
-			LLPipeline::sUseDepthTexture = true;
-
-			gPipeline.releaseGLBuffers();
-			gPipeline.createGLBuffers();
-			gPipeline.resetVertexBuffers();
-			LLViewerShaderMgr::instance()->setShaders();
-		}
-
 		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+		{
+			Rlv::forceAtmosphericShadersIfAvailable();
+
+			// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
+			if ( (!LLPipeline::sRenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
+			{
+				LLRenderTarget::sUseFBO = true;
+				LLPipeline::sUseDepthTexture = true;
+
+				gPipeline.releaseGLBuffers();
+				gPipeline.createGLBuffers();
+				gPipeline.resetVertexBuffers();
+				LLViewerShaderMgr::instance()->setShaders();
+			}
+
 			LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
+		}
 		else
+		{
 			LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
+		}
 	}
 	return eRet;
 }
@@ -2402,11 +2408,10 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 		}
 	}
 
-	// Don't allow toggling "Atmopsheric Shaders" through the debug settings under @setenv=n
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
-
 	if (fHasBhvr)
 	{
+		Rlv::forceAtmosphericShadersIfAvailable();
+
 		// Usurp the 'edit' environment for RLVa locking so TPV tools like quick prefs and phototools are automatically locked out as well
 		// (these needed per-feature awareness of RLV in the previous implementation which often wasn't implemented)
 		LLEnvironment* pEnv = LLEnvironment::getInstance();
