@@ -83,7 +83,11 @@ void LLDiskCache::purge()
     //if (boost::filesystem::is_directory(cache_path))
     for (S32 i = 0; i < 16; i++)
     {
-        cache_path += subdirs[i];
+#if LL_WINDOWS
+        cache_path = cache_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
+#else
+        cache_path = cache_path + gDirUtilp->getDirDelimiter() + subdirs[i];
+#endif
     // </FS:Ansariel>
         if (boost::filesystem::is_directory(cache_path))
         {
@@ -302,7 +306,11 @@ void LLDiskCache::clearCache()
     //if (boost::filesystem::is_directory(cache_path))
     for (S32 i = 0; i < 16; i++)
     {
-        cache_path += subdirs[i];
+#if LL_WINDOWS
+        cache_path = cache_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
+#else
+        cache_path = cache_path + gDirUtilp->getDirDelimiter() + subdirs[i];
+#endif
     // </FS:Ansariel>
         if (boost::filesystem::is_directory(cache_path))
         {
@@ -342,7 +350,11 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
     //if (boost::filesystem::is_directory(dir_path))
     for (S32 i = 0; i < 16; i++)
     {
-        dir_path += subdirs[i];
+#if LL_WINDOWS
+        dir_path = dir_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
+#else
+        dir_path = dir_path + gDirUtilp->getDirDelimiter() + subdirs[i];
+#endif
     // </FS:Ansariel>
         if (boost::filesystem::is_directory(dir_path))
         {
