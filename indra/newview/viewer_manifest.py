@@ -778,11 +778,6 @@ class WindowsManifest(ViewerManifest):
                 self.path("libvlccore.dll")
                 self.path("plugins/")
 
-        # pull in the crash logger from other projects
-        # tag:"crash-logger" here as a cue to the exporter
-        self.path(src='../win_crash_logger/%s/windows-crash-logger.exe' % self.args['configuration'],
-                  dst="win_crash_logger.exe")
-
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 
@@ -1432,7 +1427,6 @@ class DarwinManifest(ViewerManifest):
                                 "libapr-1.0.dylib",
                                 "libaprutil-1.0.dylib",
                                 "libexpat.1.dylib",
-                                "libexception_handler.dylib",
                                 "libGLOD.dylib",
                                 # libnghttp2.dylib is a symlink to
                                 # libnghttp2.major.dylib, which is a symlink
