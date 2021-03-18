@@ -282,6 +282,8 @@
 #include "fsradar.h"
 #include "fsassetblacklist.h"
 
+#include "fsprofiler.h" // <FS:Beq> Tracy profiler support
+
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
 #endif // (LL_LINUX || LL_SOLARIS) && LL_GTK
@@ -1653,17 +1655,19 @@ bool LLAppViewer::doFrame()
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 // <FS:Beq> Tracy enabling
+#ifdef TRACY_ENABLE
 	static bool one_time{false};
 	static LLCachedControl<bool> tracy_enable_when_connected(gSavedSettings, "FSTracyEnableWhenConnected");
 	if( !one_time && (gFrameCount % 10 == 0) )
 	{
-		if(!LLTrace::active && tracy_enable_when_connected && TracyIsConnected)
+		if(!FSProfiler::active && tracy_enable_when_connected && TracyIsConnected)
 		{
-			LLTrace::active = true;
+			FSProfiler::active = true;
 			one_time=true; // prevent reset race if we disable manually.
 			LL_INFOS() << "Tracy profiler or collector connected" << LL_ENDL;
 		}
 	}
+#endif
 // </FS:Beq>
 	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 	LLTimer periodicRenderingTimer;
@@ -1965,7 +1969,7 @@ bool LLAppViewer::doFrame()
 
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
-    FrameMark; // <FS:Beq> Tracy support delineate Frame
+    FSFrameMark; // <FS:Beq> Tracy support delineate Frame
 	return ! LLApp::isRunning();
 }
 

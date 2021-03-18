@@ -33,8 +33,7 @@
 #include "llfilesystem.h"
 #include "llfasttimer.h"
 #include "lldiskcache.h"
-
-#define FSZoneScoped ZoneNamedC( ___tracy_scoped_zone, tracy::Color::Gold, LLTrace::active);
+#include "fsprofiler.h"
 
 const S32 LLFileSystem::READ        = 0x00000001;
 const S32 LLFileSystem::WRITE       = 0x00000002;
@@ -59,7 +58,7 @@ LLFileSystem::~LLFileSystem()
 // static
 bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
-    FSZoneScoped;
+    FSZoneC(tracy::Color::Gold);
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -88,7 +87,7 @@ bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType fil
 bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type, int suppress_error /*= 0*/)
 // </FS:Ansariel>
 {
-    FSZoneScoped;
+    FSZoneC(tracy::Color::Gold);
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -106,7 +105,8 @@ bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType fi
 bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::EType old_file_type,
                               const LLUUID& new_file_id, const LLAssetType::EType new_file_type)
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     std::string old_id_str;
     old_file_id.toString(old_id_str);
     const std::string extra_info = "";
@@ -137,7 +137,8 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
 // static
 S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -163,7 +164,8 @@ S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType fi
 
 BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     BOOL success = TRUE;
 
     std::string id;
@@ -222,19 +224,22 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 
 S32 LLFileSystem::getLastBytesRead()
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     return mBytesRead;
 }
 
 BOOL LLFileSystem::eof()
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     return mPosition >= getSize();
 }
 
 BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     std::string id_str;
     mFileID.toString(id_str);
     const std::string extra_info = "";
@@ -344,7 +349,8 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 
 BOOL LLFileSystem::seek(S32 offset, S32 origin)
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     if (-1 == origin)
     {
         origin = mPosition;
@@ -375,26 +381,30 @@ BOOL LLFileSystem::seek(S32 offset, S32 origin)
 
 S32 LLFileSystem::tell() const
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     return mPosition;
 }
 
 S32 LLFileSystem::getSize()
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     return LLFileSystem::getFileSize(mFileID, mFileType);
 }
 
 S32 LLFileSystem::getMaxSize()
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     // offer up a huge size since we don't care what the max is
     return INT_MAX;
 }
 
 BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_type)
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     LLFileSystem::renameFile(mFileID, mFileType, new_id, new_type);
 
     mFileID = new_id;
@@ -405,7 +415,8 @@ BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_typ
 
 BOOL LLFileSystem::remove()
 {
-    FSZoneScoped;
+        FSZoneC(tracy::Color::Gold);
+;
     LLFileSystem::removeFile(mFileID, mFileType);
 
     return TRUE;

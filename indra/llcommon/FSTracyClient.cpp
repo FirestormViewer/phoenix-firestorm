@@ -14,6 +14,15 @@
 #include "common/TracySystem.cpp"
 
 #ifdef TRACY_ENABLE
+// <FS:Beq> are we actively profiling?
+// At some point this should move to fsprofiler.cpp to correspond with the headerfile
+#ifdef TRACY_ENABLE
+namespace FSProfiler
+{
+	bool	active{false};
+}
+#endif
+// </FS:Beq>
 
 #ifdef _MSC_VER
 #  pragma warning(push, 0)

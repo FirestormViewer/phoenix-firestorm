@@ -54,15 +54,7 @@
 #else 
 #error "architecture not supported"
 #endif
-// <FS:Beq> are we actively profiling?
-#ifdef TRACY_ENABLE
-namespace LLTrace
-{
-	bool	active{false};
-}
-// </FS:Beq>
 
-#endif
 namespace LLTrace
 {
 
