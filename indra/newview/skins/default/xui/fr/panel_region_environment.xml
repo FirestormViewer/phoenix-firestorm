@@ -49,7 +49,7 @@
 							</text>
 							<button label="Utiliser l'inventaire" name="btn_select_inventory"/>
 							<button label="Personnaliser" name="btn_edit"/>
-							<check_box label="Les propriétaires peuvent personnaliser" name="chk_allow_override"/>
+							<check_box label="Un(e) propriétaire peut personnaliser" name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
 							<text name="day_settings_label">
