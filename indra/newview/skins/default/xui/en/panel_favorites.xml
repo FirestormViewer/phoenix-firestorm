@@ -4,8 +4,6 @@
    layout="topleft" 
    left="0"
    border="false"
-   background_visible="true"
-   bg_alpha_color="DkGray"
    follows="all">
     <places_inventory_panel
       allow_multi_select="true"
