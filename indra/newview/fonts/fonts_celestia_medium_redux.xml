@@ -32,6 +32,9 @@
       <file>STIXGeneral.otf</file>
       <file>Thonburi.ttc</file>
     </os>
+    <os name="Linux">
+      <file>DejaVuSans.ttf</file>
+    </os>
   </font>
 
   <font name="SansSerifBold"
