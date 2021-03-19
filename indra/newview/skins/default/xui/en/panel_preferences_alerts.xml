@@ -414,12 +414,10 @@
      height="22"
      right="-10"
      top_pad="8"
-     clear_button_visible="true"
-     label="Search Here"
-     max_length_bytes="255"
+     label="Filter Alerts"
      name="popup_filter"
      text_pad_left="6"
-     tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the popup's name.">
+     tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches.">
        <filter_editor.commit_callback
         function="Pref.UpdatePopupFilter" />
     </filter_editor>
