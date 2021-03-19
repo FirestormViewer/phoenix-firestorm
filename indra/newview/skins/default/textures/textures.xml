@@ -356,7 +356,9 @@ with the same filename but different name
   <texture name="Inv_VersionFolderOpen" file_name="icons/Inv_VersionFolderOpen.png" preload="false" />
 
   <texture name="Inv_Toolbar_SearchVisibility" file_name="icons/Inv_Toolbar_SearchVisibility.png" preload="false" />
-  
+
+  <texture name="Landmarks_overlay" file_name="navbar/Landmarks.png" preload="false" />
+
  <!-- Firestorm specific individual system folder icons -->
   <texture name="Inv_TexturesOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_TexturesClosed"	file_name="icons/Inv_SysClosed.png" />

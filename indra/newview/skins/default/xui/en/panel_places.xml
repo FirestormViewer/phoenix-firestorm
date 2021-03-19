@@ -16,6 +16,9 @@
   <string
    name="teleport_history_tab_title"
    value="Teleport History" />
+  <string
+   name="favorites_tab_title"
+   value="Favorites" />
   <layout_stack
     animate="false"
     border_size="0"

@@ -532,6 +532,8 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
 	//mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
 	//mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
 	//addChild(mMoreTextBox);
+	//LLRect rect = mMoreTextBox->getRect();
+	//mMoreTextBox->setRect(LLRect(rect.mLeft - rect.getWidth(), rect.mTop, rect.mRight, rect.mBottom));
 	if (p.chevron_button.isProvided())
 	{
 		LLButton::Params chevron_button_params(p.chevron_button);                                         
@@ -545,6 +547,8 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
 		mMoreCtrl = LLUICtrlFactory::create<LLTextBox> (more_button_params);
 		((LLTextBox*)mMoreCtrl)->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
 		addChild(mMoreCtrl);
+		LLRect rect = mMoreCtrl->getRect();
+		mMoreCtrl->setRect(LLRect(rect.mLeft - rect.getWidth(), rect.mTop, rect.mRight, rect.mBottom));
 	}
 	// </FS:Ansariel>
 
@@ -992,7 +996,7 @@ void LLFavoritesBarCtrl::updateButtons()
 		int j = first_changed_item_index;
 		for (; j < mItems.size(); j++)
 		{
-			last_new_button = createButton(mItems[j], button_params, j == 0? last_right_edge + 4 : last_right_edge);
+			last_new_button = createButton(mItems[j], button_params, last_right_edge);
 			if (!last_new_button)
 			{
 				break;
