@@ -763,7 +763,10 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
             //already exists
             return false;
         }
-        return true;
+        // <FS:Ansariel> RLVa check
+        //return true;
+        return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
+        // </FS:Ansariel>
     }
     else if ("share" == command_name)
     {
