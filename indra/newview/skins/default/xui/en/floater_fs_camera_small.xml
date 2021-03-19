@@ -398,12 +398,12 @@ free_mode_title
             top="18"
             height="18"
             width="18"
-            image_name="StopReload_Off" />
+            image_name="Refresh_Off" />
             <panel_camera_item.selected_picture
             top="18"
             height="18"
             width="18"
-            image_name="StopReload_Over" />
+            image_name="Refresh_Over" />
             <panel_camera_item.text
             width="0"
             name="reset_view_text">

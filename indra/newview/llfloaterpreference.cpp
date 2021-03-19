@@ -166,6 +166,9 @@
 #endif
 // </FS:LO>
 
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+#include "llfiltereditor.h"
+
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 char const* const VISIBILITY_DEFAULT = "default";
@@ -187,6 +190,13 @@ static const F32 MAX_ARC_LIMIT = 350000.0f;
 static const F32 MIN_ARC_LOG = log(MIN_ARC_LIMIT);
 static const F32 MAX_ARC_LOG = log(MAX_ARC_LIMIT);
 static const F32 ARC_LIMIT_MAP_SCALE = (MAX_ARC_LOG - MIN_ARC_LOG) / (MAX_INDIRECT_ARC_LIMIT - MIN_INDIRECT_ARC_LIMIT);
+
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+// define these constants so any future changes will be easier and less error prone
+static const S32 COLUMN_POPUP_SPACER = 0;
+static const S32 COLUMN_POPUP_CHECKBOX = 1;
+static const S32 COLUMN_POPUP_LABEL = 2;
+// </FS:Zi>
 
 struct LabelDef : public LLInitParam::Block<LabelDef>
 {
@@ -563,8 +573,12 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
 	//<FS:KC> Handled centrally now
 //	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
-	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
-	mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
+	// mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
+	mCommitCallbackRegistrar.add("Pref.SelectPopup",			boost::bind(&LLFloaterPreference::onSelectPopup, this));
+	mCommitCallbackRegistrar.add("Pref.UpdatePopupFilter",		boost::bind(&LLFloaterPreference::onUpdatePopupFilter, this));
+	// </FS:Zi>
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
 	mCommitCallbackRegistrar.add("Pref.RenderExceptions",       boost::bind(&LLFloaterPreference::onClickRenderExceptions, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
@@ -889,6 +903,12 @@ BOOL LLFloaterPreference::postBuild()
 #endif
 	// </FS:Ansariel>
 
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	mPopupList = getChild<LLScrollListCtrl>("all_popups");
+	mPopupList->setFilterColumn(COLUMN_POPUP_LABEL);
+	mPopupFilter = getChild<LLFilterEditor>("popup_filter");
+	// </FS:Zi>
+
 	return TRUE;
 }
 
@@ -984,25 +1004,18 @@ LLFloaterPreference::~LLFloaterPreference()
 	LLConversationLog::instance().removeObserver(this);
 }
 
-void LLFloaterPreference::draw()
-{
-	// <FS:Ansariel> Performance improvement
-	//BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
-	//gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
-	//
-	//has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
-	//gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
-
-	static LLScrollListCtrl* disabled_popups = getChild<LLScrollListCtrl>("disabled_popups");
-	static LLScrollListCtrl* enabled_popups = getChild<LLScrollListCtrl>("enabled_popups");
-	BOOL has_first_selected = disabled_popups->getFirstSelected() != NULL;
-	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
-	has_first_selected = enabled_popups->getFirstSelected() != NULL;
-	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
-	// </FS:Ansariel>
-
-	LLFloater::draw();
-}
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+// void LLFloaterPreference::draw()
+// {
+//	BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
+//	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
+//	
+//	has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
+//	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
+//
+//	LLFloater::draw();
+//}
+// </FS:Zi>
 
 void LLFloaterPreference::saveSettings()
 {
@@ -1249,8 +1262,14 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	
 	// Enabled/disabled popups, might have been changed by user actions
 	// while preferences floater was closed.
-	buildPopupLists();
 
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// buildPopupLists();
+	mPopupFilter->setText(LLStringExplicit(""));
+	mPopupList->setFilterString(LLStringExplicit(""));
+
+	buildPopupList();
+	// </FS:Zi>
 
 	//get the options that were checked
 	// <FS:CR> [CHUI MERGE]
@@ -2046,16 +2065,79 @@ void LLFloaterPreference::refreshSkin(void* data)
 	self->getChild<LLRadioGroup>("skin_selection", true)->setValue(sSkin);
 }
 */
-void LLFloaterPreference::buildPopupLists()
+
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+// void LLFloaterPreference::buildPopupLists()
+// {
+// 	LLScrollListCtrl& disabled_popups =
+// 		getChildRef<LLScrollListCtrl>("disabled_popups");
+// 	LLScrollListCtrl& enabled_popups =
+// 		getChildRef<LLScrollListCtrl>("enabled_popups");
+//	
+// 	disabled_popups.deleteAllItems();
+// 	enabled_popups.deleteAllItems();
+//	
+// 	for (LLNotifications::TemplateMap::const_iterator iter = LLNotifications::instance().templatesBegin();
+// 		 iter != LLNotifications::instance().templatesEnd();
+// 		 ++iter)
+// 	{
+// 		LLNotificationTemplatePtr templatep = iter->second;
+// 		LLNotificationFormPtr formp = templatep->mForm;
+//		
+// 		LLNotificationForm::EIgnoreType ignore = formp->getIgnoreType();
+// 		if (ignore <= LLNotificationForm::IGNORE_NO)
+// 			continue;
+//		
+// 		LLSD row;
+// 		row["columns"][0]["value"] = formp->getIgnoreMessage();
+// 		row["columns"][0]["font"] = "SANSSERIF_SMALL";
+// 		row["columns"][0]["width"] = 400;
+//		
+// 		LLScrollListItem* item = NULL;
+//		
+// 		bool show_popup = !formp->getIgnored();
+// 		if (!show_popup)
+// 		{
+// 			if (ignore == LLNotificationForm::IGNORE_WITH_LAST_RESPONSE)
+// 			{
+// 				// <FS:Ansariel> Default responses are declared in "ignores" settings group, see llnotifications.cpp
+// 				//LLSD last_response = LLUI::getInstance()->mSettingGroups["config"]->getLLSD("Default" + templatep->mName);
+// 				LLSD last_response = LLUI::getInstance()->mSettingGroups["ignores"]->getLLSD("Default" + templatep->mName);
+// 				// </FS:Ansariel>
+// 				if (!last_response.isUndefined())
+// 				{
+// 					for (LLSD::map_const_iterator it = last_response.beginMap();
+// 						 it != last_response.endMap();
+// 						 ++it)
+// 					{
+// 						if (it->second.asBoolean())
+// 						{
+// 							row["columns"][1]["value"] = formp->getElement(it->first)["ignore"].asString();
+// 							row["columns"][1]["font"] = "SANSSERIF_SMALL";
+// 							row["columns"][1]["width"] = 360;
+// 							break;
+// 						}
+// 					}
+// 				}
+// 			}
+// 			item = disabled_popups.addElement(row);
+// 		}
+// 		else
+// 		{
+// 			item = enabled_popups.addElement(row);
+// 		}
+//		
+// 		if (item)
+// 		{
+// 			item->setUserdata((void*)&iter->first);
+// 		}
+// 	}
+// }
+
+void LLFloaterPreference::buildPopupList()
 {
-	LLScrollListCtrl& disabled_popups =
-		getChildRef<LLScrollListCtrl>("disabled_popups");
-	LLScrollListCtrl& enabled_popups =
-		getChildRef<LLScrollListCtrl>("enabled_popups");
-	
-	disabled_popups.deleteAllItems();
-	enabled_popups.deleteAllItems();
-	
+	mPopupList->deleteAllItems();
+
 	for (LLNotifications::TemplateMap::const_iterator iter = LLNotifications::instance().templatesBegin();
 		 iter != LLNotifications::instance().templatesEnd();
 		 ++iter)
@@ -2066,62 +2148,43 @@ void LLFloaterPreference::buildPopupLists()
 		LLNotificationForm::EIgnoreType ignore = formp->getIgnoreType();
 		if (ignore <= LLNotificationForm::IGNORE_NO)
 			continue;
-		
-		LLSD row;
-		row["columns"][0]["value"] = formp->getIgnoreMessage();
-		row["columns"][0]["font"] = "SANSSERIF_SMALL";
-		row["columns"][0]["width"] = 400;
-		
-		LLScrollListItem* item = NULL;
-		
+
 		bool show_popup = !formp->getIgnored();
-		if (!show_popup)
-		{
-// <FS:Ansariel> Don't show chosen option for ignored dialogs in the list. There is only one
-//               notification that makes use of it ("ReplaceAttachment") and it would make the
-//               list appear truncated.
-#if 0
-			if (ignore == LLNotificationForm::IGNORE_WITH_LAST_RESPONSE)
-			{
-				// <FS:Ansariel> Default responses are declared in "ignores" settings group, see llnotifications.cpp
-				//LLSD last_response = LLUI::getInstance()->mSettingGroups["config"]->getLLSD("Default" + templatep->mName);
-				LLSD last_response = LLUI::getInstance()->mSettingGroups["ignores"]->getLLSD("Default" + templatep->mName);
-				// </FS:Ansariel>
-				if (!last_response.isUndefined())
-				{
-					for (LLSD::map_const_iterator it = last_response.beginMap();
-						 it != last_response.endMap();
-						 ++it)
-					{
-						if (it->second.asBoolean())
-						{
-							row["columns"][1]["value"] = formp->getElement(it->first)["ignore"].asString();
-							row["columns"][1]["font"] = "SANSSERIF_SMALL";
-							row["columns"][1]["width"] = 360;
-							break;
-						}
-					}
-				}
-			}
-#endif
-			item = disabled_popups.addElement(row);
-		}
-		else
-		{
-			item = enabled_popups.addElement(row);
-		}
-		
+
+		LLSD row;
+
+		// column COLUMN_POPUP_SPACER makes things look good, since "halign" and "center" or LLFontGL::HCENTER don't work -Zi
+		row["columns"][COLUMN_POPUP_CHECKBOX]["type"] = "checkbox";
+		row["columns"][COLUMN_POPUP_CHECKBOX]["column"] = "alert_enabled_check";
+		row["columns"][COLUMN_POPUP_CHECKBOX]["value"] = show_popup;
+		row["columns"][COLUMN_POPUP_LABEL]["column"] = "alert_label";
+		row["columns"][COLUMN_POPUP_LABEL]["value"] = formp->getIgnoreMessage();
+
+		LLScrollListItem* item = mPopupList->addElement(row);
+
 		if (item)
 		{
 			item->setUserdata((void*)&iter->first);
 		}
 	}
-
-	// <FS:Ansariel> Let's sort it so we can find stuff!
-	enabled_popups.sortByColumnIndex(0, TRUE);
-	disabled_popups.sortByColumnIndex(0, TRUE);
-	// </FS:Ansariel>
 }
+
+void LLFloaterPreference::onSelectPopup()
+{
+	LLScrollListItem* last = mPopupList->getLastSelectedItem();
+	for (auto popup : mPopupList->getAllSelected())
+	{
+		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)(popup->getUserdata()));
+		std::string notification_name = templatep->mName;
+		LLUI::getInstance()->mSettingGroups["ignores"]->setBOOL(notification_name, last->getColumn(COLUMN_POPUP_CHECKBOX)->getValue().asBoolean());
+	}
+}
+
+void LLFloaterPreference::onUpdatePopupFilter()
+{
+	mPopupList->setFilterString(mPopupFilter->getValue().asString());
+}
+// <FS:Zi>
 
 void LLFloaterPreference::refreshEnabledState()
 {
@@ -2889,37 +2952,39 @@ void LLFloaterPreference::onClickResetDialogs()
 }
  */
 
-void LLFloaterPreference::onClickEnablePopup()
-{	
-	LLScrollListCtrl& disabled_popups = getChildRef<LLScrollListCtrl>("disabled_popups");
-	
-	std::vector<LLScrollListItem*> items = disabled_popups.getAllSelected();
-	std::vector<LLScrollListItem*>::iterator itor;
-	for (itor = items.begin(); itor != items.end(); ++itor)
-	{
-		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)((*itor)->getUserdata()));
-		//gSavedSettings.setWarning(templatep->mName, TRUE);
-		std::string notification_name = templatep->mName;
-		LLUI::getInstance()->mSettingGroups["ignores"]->setBOOL(notification_name, TRUE);
-	}
-	
-	buildPopupLists();
-}
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+// void LLFloaterPreference::onClickEnablePopup()
+// {	
+// 	LLScrollListCtrl& disabled_popups = getChildRef<LLScrollListCtrl>("disabled_popups");
+//	
+// 	std::vector<LLScrollListItem*> items = disabled_popups.getAllSelected();
+// 	std::vector<LLScrollListItem*>::iterator itor;
+// 	for (itor = items.begin(); itor != items.end(); ++itor)
+// 	{
+// 		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)((*itor)->getUserdata()));
+// 		//gSavedSettings.setWarning(templatep->mName, TRUE);
+// 		std::string notification_name = templatep->mName;
+// 		LLUI::getInstance()->mSettingGroups["ignores"]->setBOOL(notification_name, TRUE);
+// 	}
+//	
+// 	buildPopupLists();
+// }
 
-void LLFloaterPreference::onClickDisablePopup()
-{	
-	LLScrollListCtrl& enabled_popups = getChildRef<LLScrollListCtrl>("enabled_popups");
-	
-	std::vector<LLScrollListItem*> items = enabled_popups.getAllSelected();
-	std::vector<LLScrollListItem*>::iterator itor;
-	for (itor = items.begin(); itor != items.end(); ++itor)
-	{
-		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)((*itor)->getUserdata()));
-		templatep->mForm->setIgnored(true);
-	}
-	
-	buildPopupLists();
-}
+// void LLFloaterPreference::onClickDisablePopup()
+// {	
+// 	LLScrollListCtrl& enabled_popups = getChildRef<LLScrollListCtrl>("enabled_popups");
+//	
+// 	std::vector<LLScrollListItem*> items = enabled_popups.getAllSelected();
+// 	std::vector<LLScrollListItem*>::iterator itor;
+// 	for (itor = items.begin(); itor != items.end(); ++itor)
+// 	{
+// 		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)((*itor)->getUserdata()));
+// 		templatep->mForm->setIgnored(true);
+// 	}
+//	
+// 	buildPopupLists();
+// }
+// </FS:Zi>
 
 void LLFloaterPreference::resetAllIgnored()
 {
