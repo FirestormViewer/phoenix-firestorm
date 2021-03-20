@@ -91,6 +91,11 @@
 		<file>ocra.ttf</file>
 	</font>
 
+  <font name="Cascadia"
+	comment="Name of an optional Cascadia Code font used for the script editor">
+    <file>CascadiaCode-Light.ttf</file>
+  </font>
+
   <font name="DejaVu"
 	comment="Name of DejaVu font">
     <file>DejaVuSans.ttf</file>
@@ -178,6 +183,10 @@
   <font_size name="Monospace"
 	     comment="Size for monospaced font (points, or 1/72 of an inch)"
 	     size="8.0"
+	     />
+  <font_size name="Cascadia"
+	     comment="Size for monospaced font (points, or 1/72 of an inch)"
+	     size="8.6"
 	     />
   <font_size name="Huge"
 	     comment="Size of huge font (points, or 1/72 of an inch)"
