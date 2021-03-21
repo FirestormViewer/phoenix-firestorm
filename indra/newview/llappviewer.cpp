@@ -1654,17 +1654,24 @@ bool LLAppViewer::doFrame()
 {
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
-// <FS:Beq> Tracy enabling
-#ifdef TRACY_ENABLE
+// <FS:Beq> telemetry enabling. 
+// This ifdef is optional but better to avoid even low overhead code in main loop where not needed.
+#ifdef FS_HAS_TELEMETRY_SUPPORT
 	static bool one_time{false};
-	static LLCachedControl<bool> tracy_enable_when_connected(gSavedSettings, "FSTracyEnableWhenConnected");
+	static LLCachedControl<bool> profiling_enabled_when_connected(gSavedSettings, "FSTelemetryEnableWhenConnected");
 	if( !one_time && (gFrameCount % 10 == 0) )
 	{
-		if(!FSProfiler::active && tracy_enable_when_connected && TracyIsConnected)
+		if(!FSTelemetry::active && profiling_enabled_when_connected && FSTelemetryIsConnected)
 		{
-			FSProfiler::active = true;
+			FSTelemetry::active = true;
+			gSavedSettings.setBOOL("FSTelemetryActive", TRUE); // keep the setting in sync.
 			one_time=true; // prevent reset race if we disable manually.
-			LL_INFOS() << "Tracy profiler or collector connected" << LL_ENDL;
+			LL_INFOS() << "Profiler or collector connected" << LL_ENDL;
+		}
+		else if(!profiling_enabled_when_connected)
+		{
+			// no point in checking if we are not waiting.
+			one_time = true;
 		}
 	}
 #endif
