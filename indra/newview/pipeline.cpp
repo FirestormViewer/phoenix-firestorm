@@ -4753,7 +4753,7 @@ void LLPipeline::renderGeomDeferred(LLCamera& camera)
 {
 	LLAppViewer::instance()->pingMainloopTimeout("Pipeline:RenderGeomDeferred");
 
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_GEOMETRY);
+	// LL_RECORD_BLOCK_TIME(FTM_RENDER_GEOMETRY);<FS:Beq> remove duplicate zone scope
 
 	LL_RECORD_BLOCK_TIME(FTM_DEFERRED_POOLS);
 
