@@ -14,7 +14,7 @@
 
 #ifdef TRACY_ENABLE
 
-#ifdef _MSC_VER
+#ifdef LL_WINDOWS
 #  pragma warning(push, 0)
 #endif
 
@@ -48,7 +48,7 @@
 #  endif
 #endif
 
-#ifdef _MSC_VER
+#ifdef LL_WINDOWS
 #  pragma comment(lib, "ws2_32.lib")
 #  pragma comment(lib, "dbghelp.lib")
 #  pragma warning(pop)
