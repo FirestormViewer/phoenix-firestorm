@@ -139,11 +139,6 @@ if (WINDOWS)
 #      /arch:SSE2
       /fp:fast
       )
-# <FS:Beq> Add Tracy profiler support
-  if (USE_TRACY_PROFILER)
-    add_definitions( /DTRACY_ENABLE /DTRACY_NO_FASTTIMERS )
-  endif()
-# </FS:Beq>
   # Nicky: x64 implies SSE2
   if( ADDRESS_SIZE EQUAL 32 )
     add_definitions( /arch:SSE2 )

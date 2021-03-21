@@ -282,7 +282,7 @@
 #include "fsradar.h"
 #include "fsassetblacklist.h"
 
-#include "fsprofiler.h" // <FS:Beq> Tracy profiler support
+#include "fstelemetry.h" // <FS:Beq> Tracy profiler support
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"

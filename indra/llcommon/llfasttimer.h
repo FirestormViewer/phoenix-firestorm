@@ -41,7 +41,7 @@
 // <FS:Beq> Add Tracy profiler support
 // #define LL_RECORD_BLOCK_TIME(timer_stat) \
 // const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(timer_stat)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__); 
-#include "fsprofiler.h"
+#include "fstelemetry.h"
 #ifdef TRACY_ENABLE
 // #undef TRACY_NO_FASTTIMERS // Uncomment if you want FASTTIMERS as well.
 #ifdef TRACY_NO_FASTTIMERS
