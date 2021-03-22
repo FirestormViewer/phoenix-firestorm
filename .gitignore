@@ -108,4 +108,3 @@ my_autobuild.xml
 compile_commands.json
 # ignore tracy for now
 indra/tracy
-indra/tools/vstool/
