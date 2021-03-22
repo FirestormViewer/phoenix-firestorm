@@ -259,7 +259,7 @@ set(llcommon_HEADER_FILES
 # <FS:Beq> Tracy Profiler support
 list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
 if (USE_TRACY_PROFILER)
-  list(APPEND llcommon_SOURCE_FILES FSTracyClient.cpp)
+  list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
 endif()
 
 SET( llcommon_ND_SOURCE_FILES
