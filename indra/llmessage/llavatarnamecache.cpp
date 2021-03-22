@@ -48,8 +48,9 @@
 
 #include <map>
 #include <set>
-#include "../newview/lggcontactsets.h"
-#include "../llxml/llcontrol.h"
+
+#include "llcontrol.h" // <FS:Ansariel> Optional legacy name cache expiration
+
 // Time-to-live for a temp cache entry.
 const F64 TEMP_CACHE_ENTRY_LIFETIME = 60.0;
 // Maximum time an unrefreshed cache entry is allowed.
@@ -213,13 +214,15 @@ void LLAvatarNameCache::handleAvNameCacheSuccess(const LLSD &data, const LLSD &h
 
         LLAvatarName av_name;
         // <FS> Contact sets alias
-        if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
+        bool dn_removed;
+        std::string pseudonym;
+        if (mCustomNameCheckCallback && mCustomNameCheckCallback(agent_id, dn_removed, pseudonym))
         {
             LLSD info(row);
-            info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
-            info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+            info["is_display_name_default"] = dn_removed;
+            info["display_name"] = dn_removed
                 ? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
-                : LGGContactSets::getInstance()->getPseudonym(agent_id);
+                : pseudonym;
             av_name.fromLLSD(info);
         }
         else
@@ -647,13 +650,15 @@ bool LLAvatarNameCache::getName(const LLUUID& agent_id, LLAvatarName *av_name)
 		{
 			*av_name = it->second;
 			// <FS> Contact sets alias
-			if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
+			bool dn_removed;
+			std::string pseudonym;
+			if (mCustomNameCheckCallback && mCustomNameCheckCallback(agent_id, dn_removed, pseudonym))
 			{
 				LLSD info = av_name->asLLSD();
-				info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
-				info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+				info["is_display_name_default"] = dn_removed;
+				info["display_name"] = dn_removed
 					? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
-					: LGGContactSets::getInstance()->getPseudonym(agent_id);
+					: pseudonym;
 				av_name->fromLLSD(info);
 			}
 			// <FS/> Contact sets alias
@@ -711,14 +716,15 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::getNameCallback(cons
 			LLSD test = av_name.asLLSD();
 
 			// <FS> Contact sets alias
-			if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
+			bool dn_removed;
+			std::string pseudonym;
+			if (mCustomNameCheckCallback && mCustomNameCheckCallback(agent_id, dn_removed, pseudonym))
 			{
-				LL_DEBUGS("AvNameCache") << "DN cache hit via alias " << agent_id << LL_ENDL;
 				LLSD info = av_name.asLLSD();
-				info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
-				info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+				info["is_display_name_default"] = dn_removed;
+				info["display_name"] = dn_removed
 					? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
-					: LGGContactSets::getInstance()->getPseudonym(agent_id);
+					: pseudonym;
 				av_name.fromLLSD(info);
 			}
 			// </FS> Contact sets alias
