@@ -285,7 +285,7 @@
               <string>http://3p.firestormviewer.org/Tracy-v0.7.6-windows-210761143.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>windows</string>
           </map>
         </map>
         <key>version</key>
@@ -1944,9 +1944,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eba43dcfeb1c14aab25f588d9f625839</string>
+              <string>dce2cc624e216eb991412ec0c5538cf9</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.6-linux64-202302217.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.1-linux64-210652339.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
