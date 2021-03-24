@@ -71,6 +71,18 @@
 			<check_box label="Afficher la recherche des menus" name="show_search_menu_check"/>
 			<check_box label="Afficher le solde de devises" name="FSShowCurrencyBalanceInStatusbar"/>
 			<check_box label="Affiche des infobulles lors du survol des icônes de la barre de statut avec la souris" name="FSStatusBarMenuButtonPopupOnRollover"/>
+			<text name="statusbar_timeformat_textbox">Format heure :</text>
+			<combo_box name="FSStatusBarTimeFormat" tool_tip="Sélectionne le format de l'heure utilisé dans la barre de menu principale.">
+				<combo_box.item label="Langue par défaut" name="Language"/>
+				<combo_box.item label="12 Heures" name="12_Hour"/>
+				<combo_box.item label="12 Heures incl. Secondes" name="12_Hour_Seconds"/>
+				<combo_box.item label="12 Heures incl. Fuseau horaire" name="12_Hour_TZ"/>
+				<combo_box.item label="12 Heures incl. Secondes &amp; Fuseau horaire" name="12_Hour_TZ_Seconds"/>
+				<combo_box.item label="24 Heures" name="24_Hour"/>
+				<combo_box.item label="24 Heures incl. Secondes" name="24_Hour_Seconds"/>
+				<combo_box.item label="24 Heures incl. Fuseau horaire" name="24_Hour_TZ"/>
+				<combo_box.item label="24 Heures incl. Secondes &amp; Fuseau horaire" name="24_Hour_TZ_Seconds"/>
+			</combo_box>
 			<text name="navfav_textbox">Barres de Navigation &amp; de Favoris :</text>
 			<check_box label="Afficher la barre des favoris" name="ShowNavbarFavoritesPanel"/>
 			<check_box label="Afficher la barre de navigation et de recherche" name="ShowNavbarNavigationPanel"/>
