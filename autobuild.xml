@@ -261,6 +261,36 @@
         <key>version</key>
         <string>1.2.15</string>
       </map>
+      <key>Tracy</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2017-2021, Bartosz Taudul</string>
+        <key>description</key>
+        <string>A real time, nanosecond resolution, remote telemetry, hybrid frame and sampling profiler for games and other applications.</string>
+        <key>license</key>
+        <string>BSD</string>
+        <key>license_file</key>
+        <string>LICENSES/Tracy.txt</string>
+        <key>name</key>
+        <string>Tracy</string>
+        <key>platforms</key>
+        <map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>8e4cc0d82acbf83f10fb866302fd7519</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/Tracy-v0.7.6-windows-210761143.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.7.6</string>
+      </map>
       <key>apr_suite</key>
       <map>
         <key>copyright</key>
@@ -1914,9 +1944,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eba43dcfeb1c14aab25f588d9f625839</string>
+              <string>dce2cc624e216eb991412ec0c5538cf9</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.6-linux64-202302217.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.1-linux64-210652339.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

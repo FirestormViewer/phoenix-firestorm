@@ -130,9 +130,31 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					name="radarmap_options_panel"
 					label="Options"
 					layout="topleft"
+					background_visible="false"
+					follows="all"
+					left="3"
+					height="375">
+
+				<scroll_container
+					label="Options"
+					opaque="false"
+					name="radarmap_options_scroll_container"
 					follows="all"
 					top="0"
-					height="383">
+					height="370">
+
+				<container_view
+					name="radarmap_options_container_view"
+					label="Options"
+					follows="all"
+					background_visible="false"
+					width="290"
+					height="380">
+
+				<panel
+					name="radarmap_options_scrolled_panel"
+					background_visible="false"
+					height="420">
 
 					<check_box
 						label="Show Minimap above Radar"
@@ -467,6 +489,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
 							function="People.ToggleColumn"
 							parameter="has_notes"/>
 					</check_box>
+
+				</panel>
+				</container_view>
+				</scroll_container>
 
 				</panel>
 

@@ -109,4 +109,6 @@
 	<spinner label="Décalage vertical" name="shinyOffsetV"/>
 	<check_box initial_value="false" label="Aligner les faces Plan" name="checkbox planar align" tool_tip="Aligner les textures sur toutes les faces sélectionnées avec la dernière face sélectionnée. Application de la texture Plan requise."/>
 	<button label="Aligner" label_selected="Aligner les couches de texture actuelles" name="button align textures" tool_tip="Aligner les couches de texture actuelles"/>
+	<button label="Copie" name="copytextures"/>
+	<button label="Collé" name="pastetextures"/>
 </panel>

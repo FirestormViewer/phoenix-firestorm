@@ -39,6 +39,9 @@
 
 #include "lldiskcache.h"
 
+// <FS:Ansariel> Optimize asset simple disk cache
+static const char* subdirs = "0123456789abcdef";
+
 LLDiskCache::LLDiskCache(const std::string cache_dir,
                          const int max_size_bytes,
                          const bool enable_cache_debug_info) :
@@ -49,6 +52,14 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
     mCacheFilenamePrefix = "sl_cache";
 
     LLFile::mkdir(cache_dir);
+
+    // <FS:Ansariel> Optimize asset simple disk cache
+    for (S32 i = 0; i < 16; i++)
+    {
+        std::string dirname = cache_dir + gDirUtilp->getDirDelimiter() + subdirs[i];
+        LLFile::mkdir(dirname);
+    }
+    // </FS:Ansariel>
 }
 
 void LLDiskCache::purge()
@@ -68,23 +79,34 @@ void LLDiskCache::purge()
 #else
     std::string cache_path(mCacheDir);
 #endif
-    if (boost::filesystem::is_directory(cache_path))
+    // <FS:Ansariel> Optimize asset simple disk cache
+    //if (boost::filesystem::is_directory(cache_path))
+    for (S32 i = 0; i < 16; i++)
     {
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+#if LL_WINDOWS
+        cache_path = cache_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
+#else
+        cache_path = cache_path + gDirUtilp->getDirDelimiter() + subdirs[i];
+#endif
+    // </FS:Ansariel>
+        if (boost::filesystem::is_directory(cache_path))
         {
-            if (boost::filesystem::is_regular_file(entry))
+            for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
             {
-                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if (boost::filesystem::is_regular_file(entry))
                 {
-                    uintmax_t file_size = boost::filesystem::file_size(entry);
-                    const std::string file_path = entry.path().string();
-                    const std::time_t file_time = boost::filesystem::last_write_time(entry);
+                    if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                    {
+                        uintmax_t file_size = boost::filesystem::file_size(entry);
+                        const std::string file_path = entry.path().string();
+                        const std::time_t file_time = boost::filesystem::last_write_time(entry);
 
-                    file_info.push_back(file_info_t(file_time, { file_size, file_path }));
+                        file_info.push_back(file_info_t(file_time, { file_size, file_path }));
+                    }
                 }
             }
         }
-    }
+    } // <FS:Ansariel> Optimize asset simple disk cache
 
     std::sort(file_info.begin(), file_info.end(), [](file_info_t& x, file_info_t& y)
     {
@@ -179,31 +201,42 @@ const std::string LLDiskCache::assetTypeToString(LLAssetType::EType at)
     return std::string("UNKNOWN");
 }
 
-const std::string LLDiskCache::metaDataToFilepath(const std::string id,
-        LLAssetType::EType at,
-        const std::string extra_info)
+// <FS:Ansariel> Optimize asset simple disk cache
+//const std::string LLDiskCache::metaDataToFilepath(const std::string id,
+//        LLAssetType::EType at,
+//        const std::string extra_info)
+//{
+//    std::ostringstream file_path;
+//
+//    file_path << mCacheDir;
+//    file_path << gDirUtilp->getDirDelimiter();
+//    file_path << mCacheFilenamePrefix;
+//    file_path << "_";
+//    file_path << id;
+//    file_path << "_";
+//    file_path << (extra_info.empty() ? "0" : extra_info);
+//    //file_path << "_";
+//    //file_path << assetTypeToString(at); // see  SL-14210 Prune descriptive tag from new cache filenames
+//                                          // for details of why it was removed. Note that if you put it
+//                                          // back or change the format of the filename, the cache files
+//                                          // files will be invalidated (and perhaps, more importantly,
+//                                          // never deleted unless you delete them manually).
+//    file_path << ".asset";
+//
+//    return file_path.str();
+//}
+const std::string LLDiskCache::metaDataToFilepath(const std::string& id,
+    LLAssetType::EType at,
+    const std::string& extra_info)
 {
-    std::ostringstream file_path;
-
-    file_path << mCacheDir;
-    file_path << gDirUtilp->getDirDelimiter();
-    file_path << mCacheFilenamePrefix;
-    file_path << "_";
-    file_path << id;
-    file_path << "_";
-    file_path << (extra_info.empty() ? "0" : extra_info);
-    //file_path << "_";
-    //file_path << assetTypeToString(at); // see  SL-14210 Prune descriptive tag from new cache filenames
-                                          // for details of why it was removed. Note that if you put it
-                                          // back or change the format of the filename, the cache files
-                                          // files will be invalidated (and perhaps, more importantly,
-                                          // never deleted unless you delete them manually).
-    file_path << ".asset";
-
-    return file_path.str();
+    return llformat("%s%s%c%s%s_%s_%s.asset", mCacheDir.c_str(), gDirUtilp->getDirDelimiter().c_str(), id[0], gDirUtilp->getDirDelimiter().c_str(), mCacheFilenamePrefix.c_str(), id.c_str(), (extra_info.empty() ? "0" : extra_info).c_str());
 }
+// </FS:Ansariel>
 
-void LLDiskCache::updateFileAccessTime(const std::string file_path)
+// <FS:Ansariel> Optimize asset simple disk cache
+//void LLDiskCache::updateFileAccessTime(const std::string file_path)
+void LLDiskCache::updateFileAccessTime(const std::string& file_path)
+// </FS:Ansariel>
 {
     /**
      * Threshold in time_t units that is used to decide if the last access time
@@ -276,19 +309,30 @@ void LLDiskCache::clearCache()
 #else
     std::string cache_path(mCacheDir);
 #endif
-    if (boost::filesystem::is_directory(cache_path))
+    // <FS:Ansariel> Optimize asset simple disk cache
+    //if (boost::filesystem::is_directory(cache_path))
+    for (S32 i = 0; i < 16; i++)
     {
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+#if LL_WINDOWS
+        cache_path = cache_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
+#else
+        cache_path = cache_path + gDirUtilp->getDirDelimiter() + subdirs[i];
+#endif
+    // </FS:Ansariel>
+        if (boost::filesystem::is_directory(cache_path))
         {
-            if (boost::filesystem::is_regular_file(entry))
+            for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
             {
-                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if (boost::filesystem::is_regular_file(entry))
                 {
-                    boost::filesystem::remove(entry);
+                    if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                    {
+                        boost::filesystem::remove(entry);
+                    }
                 }
             }
         }
-    }
+    } // <FS:Ansariel> Optimize asset simple disk cache
 }
 
 uintmax_t LLDiskCache::dirFileSize(const std::string dir)
@@ -309,19 +353,30 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
 #else
     std::string dir_path(dir);
 #endif
-    if (boost::filesystem::is_directory(dir_path))
+    // <FS:Ansariel> Optimize asset simple disk cache
+    //if (boost::filesystem::is_directory(dir_path))
+    for (S32 i = 0; i < 16; i++)
     {
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path), {}))
+#if LL_WINDOWS
+        dir_path = dir_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
+#else
+        dir_path = dir_path + gDirUtilp->getDirDelimiter() + subdirs[i];
+#endif
+    // </FS:Ansariel>
+        if (boost::filesystem::is_directory(dir_path))
         {
-            if (boost::filesystem::is_regular_file(entry))
+            for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path), {}))
             {
-                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if (boost::filesystem::is_regular_file(entry))
                 {
-                    total_file_size += boost::filesystem::file_size(entry);
+                    if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                    {
+                        total_file_size += boost::filesystem::file_size(entry);
+                    }
                 }
             }
         }
-    }
+    } // <FS:Ansariel> Optimize asset simple disk cache
 
     return total_file_size;
 }

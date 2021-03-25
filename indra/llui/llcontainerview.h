@@ -47,9 +47,17 @@ public:
 		Optional<std::string> label;
 		Optional<bool> show_label;
 		Optional<bool> display_children;
+		// <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
+		Optional<bool> background_visible;
+		Optional<LLUIColor> bg_color;
+		// </FS:Zi>
 		Params()
 			: label("label"),
 			  show_label("show_label", FALSE),
+			  // <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
+			  background_visible("background_visible", true),
+			  bg_color("bg_color", LLColor4(0.f, 0.f, 0.f, 0.25f)),
+			  // </FS:Zi>
 			  display_children("display_children", TRUE)
 		{
 			changeDefault(mouse_opaque, false);
@@ -90,5 +98,9 @@ public:
 protected:
 	BOOL mDisplayChildren;
 	std::string mLabel;
+	// <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
+	bool mBackgroundVisible;
+	LLUIColor mBackgroundColor;
+	// </FS:Zi>
 };
 #endif // LL_CONTAINERVIEW_

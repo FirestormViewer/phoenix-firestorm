@@ -3193,6 +3193,7 @@ Your current position: [AVATAR_POS]
   <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
   <string name="font_fonts_noto.xml">Noto Sans</string>
   <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
+  <string name="font_fonts_cascadia_code.xml">Cascadia Code</string>
   <string name="mode_unknown">Unknown Mode</string>
   <string name="mode_settings_firestorm.xml">[APP_NAME]</string>
   <string name="mode_settings_phoenix.xml">Phoenix</string>

@@ -37,41 +37,46 @@
 			<tab_container name="tabcont_radarpeople_main">
 				<panel name="panel_radar" label="Список" />
 				<panel name="radarmap_options_panel" label="Опции">
-					<check_box label="Показать миникарту над радаром" name="ShowRadarMinimap"/>
-					<check_box label="Показать заблокированые аватары" name="FSRadarShowMutedAndDerendered"/>
-					<check_box label="Сообщить о появлении в радиусе прорисовки" name="RadarReportDrawRangeEnter"/>
-					<check_box label="Сообщить о выходе из радиуса прорисовки" name="RadarReportDrawRangeLeaving"/>
-					<check_box label="Сообщить о появлении в радиусе чата" name="RadarReportChatRangeEnter"/>
-					<check_box label="Сообщить о выходе из радиуса чата" name="RadarReportChatRangeLeave"/>
-					<check_box label="Сообщить о появлении пользователя в регионе" name="RadarReportSimRangeEnter"/>
-					<check_box label="Сообщить о выходе пользователя из региона" name="RadarReportSimRangeLeave"/>
-					<check_box label="Отправлять оповещения о появлении скриптов" name="RadarEnterChannelAlert"/>
-					<check_box label="Отправлять оповещения о выходе скриптов" name="RadarLeaveChannelAlert"/>
-					<check_box label="Усиление радара с помощью моста LSL" tool_tip="Когда эта опция включена, то функции радара отвечающие за определения высоты, на которой есть аватары, поддерживаются LSL мостом" name="FSRadarEnhanceByBridge"/>
-					<check_box label="Цвета имен основанны на расстоянии" name="FSRadarColorNamesByDistance"/>
-					<check_box label="Ограничить дальность:" tool_tip="Ограничить результаты на заданном расстоянии" name="LimitRadarByRange"/>
-					<slider name="NearMeRangeVintage" left_pad="50"/>
-					<text name="radarmap_range_label" value="Формат имен"/>
-					<combo_box name="RadarNameFormat">
-						<combo_box.item name="RadarNameFormat_display" label="Отображаемое имя" />
-						<combo_box.item name="RadarNameFormat_user" label="Имя пользователя" />
-						<combo_box.item name="RadarNameFormat_displayuser" label="Отображаемое имя (Имя пользователя)" />
-						<combo_box.item name="RadarNameFormat_userdisplay" label="Имя пользователя (Отображаемое имя)" />
-					</combo_box>
-					<text name="columns_label" value="Отображаемые колонки:" width="150"/>
-					<check_box label="Голос" name="column_voice" />
-					<check_box label="Время" name="column_seen" />
-					<check_box label="Возраст" name="column_age" />
-					<check_box label="В этом же регионе" name="column_region" />
-					<check_box label="Индикатор набора" name="column_typing_status" />
-					<check_box label="Сидячее состояние" name="column_sitting_status" />
-					<check_box label="Состояние платежной информации" name="column_flags" />
-					<check_box label="Заметки" name="notes_flags" />
+					<scroll_container label="Опции" name="radarmap_options_scroll_container">
+						<container_view name="radarmap_options_container_view" label="Опции">
+							<panel name="radarmap_options_scrolled_panel">
+								<check_box label="Показать миникарту над радаром" name="ShowRadarMinimap"/>
+								<check_box label="Показать заблокированые аватары" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="Сообщить о появлении в радиусе прорисовки" name="RadarReportDrawRangeEnter"/>
+								<check_box label="Сообщить о выходе из радиуса прорисовки" name="RadarReportDrawRangeLeaving"/>
+								<check_box label="Сообщить о появлении в радиусе чата" name="RadarReportChatRangeEnter"/>
+								<check_box label="Сообщить о выходе из радиуса чата" name="RadarReportChatRangeLeave"/>
+								<check_box label="Сообщить о появлении пользователя в регионе" name="RadarReportSimRangeEnter"/>
+								<check_box label="Сообщить о выходе пользователя из региона" name="RadarReportSimRangeLeave"/>
+								<check_box label="Отправлять оповещения о появлении скриптов" name="RadarEnterChannelAlert"/>
+								<check_box label="Отправлять оповещения о выходе скриптов" name="RadarLeaveChannelAlert"/>
+								<check_box label="Усиление радара с помощью моста LSL" tool_tip="Когда эта опция включена, то функции радара отвечающие за определения высоты, на которой есть аватары, поддерживаются LSL мостом" name="FSRadarEnhanceByBridge"/>
+								<check_box label="Цвета имен основанны на расстоянии" name="FSRadarColorNamesByDistance"/>
+								<check_box label="Ограничить дальность:" tool_tip="Ограничить результаты на заданном расстоянии" name="LimitRadarByRange"/>
+								<slider name="NearMeRangeVintage" left_pad="50"/>
+								<text name="radarmap_range_label" value="Формат имен"/>
+								<combo_box name="RadarNameFormat">
+									<combo_box.item name="RadarNameFormat_display" label="Отображаемое имя" />
+									<combo_box.item name="RadarNameFormat_user" label="Имя пользователя" />
+									<combo_box.item name="RadarNameFormat_displayuser" label="Отображаемое имя (Имя пользователя)" />
+									<combo_box.item name="RadarNameFormat_userdisplay" label="Имя пользователя (Отображаемое имя)" />
+								</combo_box>
+								<text name="columns_label" value="Отображаемые колонки:" width="150"/>
+								<check_box label="Голос" name="column_voice" />
+								<check_box label="Время" name="column_seen" />
+								<check_box label="Возраст" name="column_age" />
+								<check_box label="В этом же регионе" name="column_region" />
+								<check_box label="Индикатор набора" name="column_typing_status" />
+								<check_box label="Сидячее состояние" name="column_sitting_status" />
+								<check_box label="Состояние платежной информации" name="column_flags" />
+								<check_box label="Заметки" name="notes_flags" />
+							</panel>
+						</container_view>
+					</scroll_container>
 				</panel>
 			</tab_container>
 		</panel>
 		<panel label="Недавние" name="recent_panel" />
 		<panel label="Заблокированные" name="blocked_panel" />
-		<panel label="Наборы контактов" name="contact_sets_panel" />
 	</tab_container>
 </panel>

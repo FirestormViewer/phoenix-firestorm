@@ -99,6 +99,7 @@
 			<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 			<check_box label="Karte bei Teleports nicht schließen" name="FSDoNotHideMapOnTeleport" tool_tip="Deaktiviert das automatische Schließen der Karte während eines Teleports."/>
 			<check_box label="Nach Teleports „Nur Freunde anzeigen“ aktiviert lassen" name="FSRenderFriendsOnlyPersistsTP" tool_tip="Falls aktiviert bleibt die Einstellung „Nur Freunde anzeigen“ nach einem Teleport aktiviert (Standard: deaktiviert)"/>
+			<check_box label="SLurl der Region ausgeben, aus der ein Teleport stattgefunden hat" name="FSShowBackSLURL"/>
 		</panel>
 
 		<!-- Map & Minimap -->
