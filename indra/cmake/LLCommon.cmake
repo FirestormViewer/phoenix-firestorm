@@ -4,12 +4,21 @@ include(APR)
 include(Boost)
 include(EXPAT)
 include(ZLIB)
+include(Tracy) # <FS:Beq> Tracy profiler
 
+# <FS:Beq> Add Tracy profiler support
+#set(LLCOMMON_INCLUDE_DIRS
+#    ${LIBS_OPEN_DIR}/llcommon
+#    ${APRUTIL_INCLUDE_DIR}
+#    ${APR_INCLUDE_DIR}
+#    )
 set(LLCOMMON_INCLUDE_DIRS
     ${LIBS_OPEN_DIR}/llcommon
     ${APRUTIL_INCLUDE_DIR}
     ${APR_INCLUDE_DIR}
+    ${TRACY_INCLUDE_DIR}
     )
+# </FS:Beq>
 set(LLCOMMON_SYSTEM_INCLUDE_DIRS
     ${Boost_INCLUDE_DIRS}
     )

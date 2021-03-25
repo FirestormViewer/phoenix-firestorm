@@ -282,6 +282,8 @@
 #include "fsradar.h"
 #include "fsassetblacklist.h"
 
+#include "fstelemetry.h" // <FS:Beq> Tracy profiler support
+
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
 #endif // (LL_LINUX || LL_SOLARIS) && LL_GTK
@@ -1652,7 +1654,28 @@ bool LLAppViewer::doFrame()
 {
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
-
+// <FS:Beq> telemetry enabling. 
+// This ifdef is optional but better to avoid even low overhead code in main loop where not needed.
+#ifdef FS_HAS_TELEMETRY_SUPPORT
+	static bool one_time{false};
+	static LLCachedControl<bool> profiling_enabled_when_connected(gSavedSettings, "FSTelemetryEnableWhenConnected");
+	if( !one_time && (gFrameCount % 10 == 0) )
+	{
+		if(!FSTelemetry::active && profiling_enabled_when_connected && FSTelemetryIsConnected)
+		{
+			FSTelemetry::active = true;
+			gSavedSettings.setBOOL("FSTelemetryActive", TRUE); // keep the setting in sync.
+			one_time=true; // prevent reset race if we disable manually.
+			LL_INFOS() << "Profiler or collector connected" << LL_ENDL;
+		}
+		else if(!profiling_enabled_when_connected)
+		{
+			// no point in checking if we are not waiting.
+			one_time = true;
+		}
+	}
+#endif
+// </FS:Beq>
 	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 	LLTimer periodicRenderingTimer;
 	BOOL restore_rendering_masks = FALSE;
@@ -1953,7 +1976,7 @@ bool LLAppViewer::doFrame()
 
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
-
+    FSFrameMark; // <FS:Beq> Tracy support delineate Frame
 	return ! LLApp::isRunning();
 }
 
@@ -6174,6 +6197,7 @@ void LLAppViewer::disconnectViewer()
 			gInventory.getLibraryOwnerID());
 	}
 
+	LLAvatarNameCache::instance().setCustomNameCheckCallback(LLAvatarNameCache::custom_name_check_callback_t()); // <FS:Ansariel> Contact sets
 	saveNameCache();
 	if (LLExperienceCache::instanceExists())
 	{

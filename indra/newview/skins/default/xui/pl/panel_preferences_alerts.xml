@@ -45,12 +45,14 @@
 		<slider name="FSOfferThrottleMaxCount" label="Limit ofert przychodzących obiektów:" tool_tip="Ustaw limit dla ofert przychodzących obiektów, w ciągu 10 sekund zanim zostaną one ograniczone. Domyślnie 5" />
 	</panel>
 	<panel label="Ostrzeżenia" name="tab-alerts">
-		<text name="show_label">
-			Zawsze pokazuj:
+		<text name="show_label" tool_tip="Lista ostrzeżeń w przeglądarce. Zaznacz pole wyboru po lewej stronie, aby włączyć ostrzeżenie. Odznacz je, aby ukryć ostrzeżenie.">
+			Ostrzeżenia przeglądarki, które można pokazać lub ukryć:
 		</text>
-		<text name="dont_show_label">
-			Nigdy nie pokazuj:
-		</text>
+		<filter_editor label="Filtruj ostrzeżenia" name="popup_filter" tool_tip="Wpisz tutaj wyszukiwane hasło, które Cię interesuje. Wyniki zostaną wyświetlone dla częściowych dopasowań pełnotekstowych." />
+		<scroll_list name="all_popups">
+			<column label="Pokaż" name="alert_enabled_check" />
+			<column label="Ostrzeżenie" name="alert_label" />
+		</scroll_list>
 	</panel>
 </tab_container>
 </panel>

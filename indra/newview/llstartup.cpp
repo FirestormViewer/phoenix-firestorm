@@ -2505,8 +2505,12 @@ bool idle_startup()
 			LLAvatarTracker::instance().addBuddyList(list);
 			display_startup();
  		}
-		
-		LGGContactSets::getInstance()->loadFromDisk();	// [FS:CR] Load contact sets
+
+		// <FS:Ansariel> Contact sets
+		LGGContactSets* cs_instance = LGGContactSets::getInstance();
+		cs_instance->loadFromDisk();
+		LLAvatarNameCache::instance().setCustomNameCheckCallback(boost::bind(&LGGContactSets::checkCustomName, cs_instance, _1, _2, _3));
+		// </FS:Ansariel>
 
 		bool show_hud = false;
 		LLSD tutorial_setting = response["tutorial_setting"];

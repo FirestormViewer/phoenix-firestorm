@@ -52,6 +52,11 @@
 #include <dinput.h>
 #endif
 
+// <FS:Zi> FIRE-14344 - show joystick buttons
+const std::string JOYSTICK_BUTTON_ON ( "\xE2\xAC\xA4" ); // U+2B24 BLACK LARGE CIRCLE
+const std::string JOYSTICK_BUTTON_OFF( "\xE2\x97\xAF" ); // U+25EF WHITE LARGE CIRCLE
+// </FS:Zi>
+
 static LLTrace::SampleStatHandle<>	sJoystickAxis0("Joystick axis 0"),
 									sJoystickAxis1("Joystick axis 1"),
 									sJoystickAxis2("Joystick axis 2"),
@@ -67,7 +72,6 @@ static LLTrace::SampleStatHandle<>* sJoystickAxes[6] =
 	&sJoystickAxis4,
 	&sJoystickAxis5
 };
-
 
 #if LL_WINDOWS && !LL_MESA_HEADLESS
 
@@ -113,10 +117,20 @@ void LLFloaterJoystick::draw()
         refreshListOfDevices();
     }
 
+	// <FS:Zi> FIRE-14344 - If we are on the login screen, this value will be 0.0f and we know we
+	// have to update the joystick status by ourselves
+	if (gFrameIntervalSeconds.value() == 0.0f)
+	{
+		joystick->updateStatus();
+	}
+	// </FS:Zi>
+
 	for (U32 i = 0; i < 6; i++)
 	{
 		F32 value = joystick->getJoystickAxis(i);
-		sample(*sJoystickAxes[i], value * gFrameIntervalSeconds.value());
+		// <FS:Zi> FIRE-14344 - using the frame interval seems to break the graphs
+		// sample(*sJoystickAxes[i], value * gFrameIntervalSeconds.value());
+		sample(*sJoystickAxes[i], value);
 		if (mAxisStatsBar[i])
 		{
 			F32 minbar, maxbar;
@@ -129,6 +143,23 @@ void LLFloaterJoystick::draw()
 		}
 	}
 
+	// <FS:Zi> FIRE-14344 - show joystick buttons
+	std::string buttons;
+	for (U32 i = 0; i < 16; i++)
+	{
+		U32 value = joystick->getJoystickButton(i);
+		if (value == 0)
+		{
+			buttons += JOYSTICK_BUTTON_OFF;
+		}
+		else
+		{
+			buttons += JOYSTICK_BUTTON_ON;
+		}
+	}
+	mJoystickButtons->setText(buttons);
+	// </FS:Zi>
+
 	LLFloater::draw();
 }
 
@@ -137,7 +168,10 @@ BOOL LLFloaterJoystick::postBuild()
 	center();
 	// <FS:CR> Micro Save on calls to gSavedSettings
 	//F32 range = gSavedSettings.getBOOL("Cursor3D") ? 128.f : 2.f;
-	F32 range = m3DCursor ? 128.f : 2.f;
+	// <FS:Zi> FIRE-14344 - use 1.f for the graph  ranges instead of 128.f : 2.f to get better resolution -
+	//         needs testing with an actual absolute pointer device if the range scales in a useful way when
+	//         not starting at 128.f
+	F32 range = 1.f;
 
 	for (U32 i = 0; i < 6; i++)
 	{
@@ -159,6 +193,9 @@ BOOL LLFloaterJoystick::postBuild()
 	childSetAction("SpaceNavigatorDefaults", onClickRestoreSNDefaults, this);
 	childSetAction("cancel_btn", onClickCancel, this);
 	childSetAction("ok_btn", onClickOK, this);
+
+	// <FS:Zi> FIRE-14344 - show joystick buttons
+	mJoystickButtons = getChild<LLTextBase>("joystick_buttons");
 
 	refresh();
 	refreshListOfDevices();
@@ -294,7 +331,9 @@ void LLFloaterJoystick::refreshListOfDevices()
         std::string desc = LLViewerJoystick::getInstance()->getDescription();
         if (!desc.empty())
         {
-            LLSD value = LLSD::Integer(0);
+            // <FS:Zi> FIRE-30846 - Select the first detected device, don't fall back to 0 which will select "None"
+            // LLSD value = LLSD::Integer(0);
+            LLSD value = LLSD::Integer(1);
             addDevice(desc, value);
             mHasDeviceList = true;
         }
