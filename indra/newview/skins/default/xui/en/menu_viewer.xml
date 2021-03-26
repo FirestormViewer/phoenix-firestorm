@@ -3568,6 +3568,32 @@
                  function="Advanced.ToggleShowObjectUpdates" />
             </menu_item_check>
         </menu>
+        <menu
+         create_jump_keys="true"
+         label="Profiling/Telemetry"
+         name="Enable / Disable telemetry capture"
+         tear_off="true">
+            <menu_item_check
+             label="Profiling"
+             name="Profiling">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="FSTelemetryActive" />
+                <menu_item_check.on_click
+                 function="Develop.ToggleTelemetry"
+                 parameter="FSTelemetryActive" />
+            </menu_item_check>
+            <menu_item_check
+             label="Start when connected"
+             name="Start when telemetry client connects">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="FSTelemetryEnableWhenConnected" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="FSTelemetryEnableWhenConnected" />
+            </menu_item_check>
+        </menu>
 
         <menu_item_separator/>
 

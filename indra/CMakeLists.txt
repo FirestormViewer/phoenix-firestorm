@@ -76,6 +76,15 @@ endif (USE_AVX_OPTIMIZATION)
 
 add_subdirectory(cmake)
 
+# <FS:Beq> Tracy Profiler support
+option(USE_TRACY_PROFILER "Tracy Profiler support" OFF)
+if (USE_TRACY_PROFILER)
+  message(STATUS "Compiling with Tracy profiler")
+else (USE_TRACY_PROFILER)
+  message(STATUS "Compiling without Tracy profiler")
+endif (USE_TRACY_PROFILER)
+# </FS:Beq> Tracy Profiler support
+
 add_subdirectory(${LIBS_OPEN_PREFIX}llaudio)
 add_subdirectory(${LIBS_OPEN_PREFIX}llappearance)
 add_subdirectory(${LIBS_OPEN_PREFIX}llcharacter)

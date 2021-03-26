@@ -52,6 +52,9 @@ class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
 
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+class LLFilterEditor;
+
 namespace ll
 {
 	namespace prefs
@@ -80,7 +83,9 @@ public:
 
 	void apply();
 	void cancel();
-	/*virtual*/ void draw();
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// /*virtual*/ void draw();
+	// </FS:Zi>
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/	void onClose(bool app_quitting);
@@ -211,8 +216,12 @@ public:
 	void setExternalEditor();
 	void changeExternalEditorPath(const std::vector<std::string>& filenames);
 	// </FS:LO>
-	void onClickEnablePopup();
-	void onClickDisablePopup();	
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// void onClickEnablePopup();
+	// void onClickDisablePopup();	
+	void onSelectPopup();
+	void onUpdatePopupFilter();
+	// </FS:Zi>
 	void resetAllIgnored();
 	void setAllIgnored();
 	void onClickLogPath();
@@ -271,7 +280,12 @@ public:
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void onLogChatHistorySaved();	
-	void buildPopupLists();
+
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// void buildPopupLists();
+	void buildPopupList();
+	// </FS:Zi>
+
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
 	// <FS:Ansariel> Build fix
@@ -308,6 +322,11 @@ private:
 
 	void onUpdateFilterTerm( bool force = false );
 	void collectSearchableItems();
+
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	LLScrollListCtrl* mPopupList;
+	LLFilterEditor* mPopupFilter;
+	// </FS.Zi>
 };
 
 class LLPanelPreference : public LLPanel

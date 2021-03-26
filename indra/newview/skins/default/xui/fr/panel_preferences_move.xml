@@ -47,6 +47,7 @@
 			<check_box label="Désactiver la temporisation de l'animation avant le saut et à l'atterrissage" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Ne pas me retourner lorsque je marche à reculons" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Empêche votre avatar de se retourner pour faire face à la caméra lorsque vous marchez à reculons. Cette option n'affecte que votre vision et n'est pas compatible avec les AOs."/>
 			<check_box label="Tourner l'avatar vers l'objet qu'il sélectionne" name="FSTurnAvatarToSelectedObject" tool_tip="Tourne votre avatar face à l'objet que vous sélectionnez actuellement."/>
+			<slider label="Vitesse rotation avatar" name="av_turn_spd" tool_tip="Modifie la vitesse à laquelle votre avatar répond à la rotation. 0-100 en pourcentage estimé de la vitesse de rotation maximale. Les valeurs élevées donneront des résultats brusques et saccadées."/>
 			<text name="Region_Crossing_Movement_Label" width="290">Prévision de mouvement si changement de région :</text>
 			<radio_group name="Region_Crossing_Movement" left_pad="1">
 				<radio_item label="Illimité" name="move_predict" width="65" />
@@ -66,6 +67,7 @@
 				<combo_box.item label="Se déplacer à l'endroit" name="1"/>
 				<combo_box.item label="Se téléporter à l'endroit" name="2"/>
 			</combo_box>
+			<check_box label="Autoriser le double-clic sur les objets scriptés" name="FSAllowDoubleClickOnScriptedObjects"/>
 			<button label="Config. de la manette" name="joystick_setup_button"/>
 		</panel>
 		<panel label="Téléportations" name="tab-teleports">
@@ -76,6 +78,7 @@
 			<check_box label="Désactiver les écrans de téléportation" name="tp_screen_toggle" tool_tip="Désactiver l'écran de téléportation noir pendant les téléportations."/>
 			<check_box label="Ne pas fermer la carte lors d'une téléportation" name="FSDoNotHideMapOnTeleport" tool_tip="Désactive le fermeture automatique de la carte lors d'une téléportation."/>
 			<check_box label="Garder 'N'afficher que les amis' activé après une téléportation." name="FSRenderFriendsOnlyPersistsTP" tool_tip="Désactive l'annulation automatique de la fonction 'N'afficher que les amis' (par défaut : off)"/>
+			<check_box label="Indiquer le SLURL de la région à partir de laquelle vous avez effectué une téléportation." name="FSShowBackSLURL"/>
 		</panel>
 		<panel label="Carte &amp; Minicarte" name="tab-maps">
 			<text name="minimap_options_label">Options de la Minicarte :</text>

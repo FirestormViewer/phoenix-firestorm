@@ -125,6 +125,7 @@
 			<check_box label="Activer la profondeur de champ (Floutera la vue sauf au point de focalisation de la caméra)" name="UseDoF"/>
 			<check_box label="Activer pendant la modification d'objets ou de terrain" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="Activer sous l'eau" name="FSRenderDoFUnderwater"/>
+			<check_box label="La mise au point de la profondeur de champ suit le pointeur" name="FSFocusPointFollowsPointer" tool_tip="La mise au point de la profondeur de champ (PdC) suivra votre curseur, ce comportement correspond à celui observé lors de l'utilisation de flycam. Utilisation en conjonction avec le verrouillage de la mise au point PdC"/>
 			<slider label="Indice d'ouverture :" name="CameraFNum" tool_tip="Indice d'ouverture de la caméra pour les effets de profondeur"/>
 			<slider label="Distance focale :" name="CameraFocal" tool_tip="Distance focale de la caméra pour les effets de profondeur (en millimètres)"/>
 			<slider label="Angle de champ :" name="Camera FOV" tool_tip="Angle de champ vertical de la caméra pour les effets de profondeur (en degrés)"/>

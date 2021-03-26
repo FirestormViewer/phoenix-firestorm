@@ -32,7 +32,7 @@
 //
 // KDU core header files
 //
-#ifndef LL_WINDOWS
+#ifdef LL_DARWIN
 #define KDU_NO_THREADS
 #endif
 
