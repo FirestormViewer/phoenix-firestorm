@@ -7468,10 +7468,7 @@ class LLWorldCreateLandmark : public view_listener_t
 			return true;
 // [/RLVa:KB]
 
-		// <FS:Ansariel> FIRE-817: Separate place details floater
-		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
-		// </FS:Ansariel>
+		LLFloaterReg::showInstance("add_landmark");
 
 		return true;
 	}

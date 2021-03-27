@@ -65,7 +65,6 @@
 
 // helper functions
 static void filter_list(LLPlacesInventoryPanel* inventory_list, const std::string& string);
-static bool category_has_descendents(LLPlacesInventoryPanel* inventory_list);
 static void collapse_all_folders(LLFolderView* root_folder);
 static void expand_all_folders(LLFolderView* root_folder);
 static bool has_expanded_folders(LLFolderView* root_folder);
@@ -508,10 +507,7 @@ void LLLandmarksPanel::onAddAction(const LLSD& userdata) const
                 {
                     args["dest_folder"] = view_model->getUUID();
                 }
-				// <FS:Ansariel> FIRE-817: Separate place details floater
-				//LLFloaterSidePanelContainer::showPanel("places", args);
-				FSFloaterPlaceDetails::showPlaceDetails(args);
-				// </FS:Ansariel>
+				LLFloaterReg::showInstance("add_landmark", args);
 			}
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 		}
@@ -1120,17 +1116,6 @@ static void filter_list(LLPlacesInventoryPanel* inventory_list, const std::strin
 
 	// Set new filter string
 	inventory_list->setFilterSubString(string);
-}
-
-static bool category_has_descendents(LLPlacesInventoryPanel* inventory_list)
-{
-	LLViewerInventoryCategory* category = gInventory.getCategory(inventory_list->getRootFolderID());
-	if (category)
-	{
-		return category->getDescendentCount() > 0;
-	}
-
-	return false;
 }
 
 static void collapse_all_folders(LLFolderView* root_folder)

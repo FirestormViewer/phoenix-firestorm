@@ -44,6 +44,7 @@
 
 // newview includes
 #include "llagent.h"
+#include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llinventoryobserver.h"
 #include "lllandmarkactions.h"
@@ -694,10 +695,7 @@ void LLLocationInputCtrl::onAddLandmarkButtonClicked()
 	}
 	else
 	{
-		// <FS:Ansariel> FIRE-817: Separate place details floater
-		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
-		// </FS:Ansariel>
+		LLFloaterReg::showInstance("add_landmark");
 	}
 }
 
@@ -1213,10 +1211,7 @@ void LLLocationInputCtrl::onLocationContextMenuItemClicked(const LLSD& userdata)
 			
 			if(!landmark)
 			{
-				// <FS:Ansariel> FIRE-817: Separate place details floater
-				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
-				// </FS:Ansariel>
+				LLFloaterReg::showInstance("add_landmark");
 			}
 			else
 			{
