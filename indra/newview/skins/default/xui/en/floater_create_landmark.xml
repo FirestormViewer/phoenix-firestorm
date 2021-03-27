@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  can_resize="false"
- show_title="false"
+ show_title="true"
  can_minimize="false"
  can_close="false"
  height="305"
  layout="topleft"
  name="create_landmark"
+ title="Create Landmark"
  width="330">
   <string name="favorites_bar">
     Favorites bar
@@ -19,7 +20,7 @@
      name="title_label"
      top="5"
      font="SansSerifLargeBold"
-     value="Landmark added"
+     value="Landmark Details"
      width="290" />
     <text
      follows="left|top"

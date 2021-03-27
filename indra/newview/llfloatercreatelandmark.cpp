@@ -282,6 +282,13 @@ void LLFloaterCreateLandmark::onSaveClicked()
 
 void LLFloaterCreateLandmark::onCancelClicked()
 {
+	// <FS:Ansariel> Don't create landmark on cancel
+	if (mItem)
+	{
+		remove_inventory_item(mItem, nullptr, true);
+		gInventory.notifyObservers();
+	}
+	// </FS:Ansariel>
 	closeFloater();
 }
 
