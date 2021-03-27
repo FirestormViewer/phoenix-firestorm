@@ -29,7 +29,7 @@
      left="20"
      name="name_label"
      top_pad="10"
-     value="Name"
+     value="Name:"
      width="290" />
     <line_editor
      follows="left|top"
@@ -74,7 +74,7 @@
      layout="topleft"
      name="notes_label"
      top_pad="10"
-     value="My notes"
+     value="My notes:"
      width="290" />
     <text_editor
      bg_readonly_color="DkGray0"

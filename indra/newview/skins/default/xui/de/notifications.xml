@@ -939,6 +939,13 @@ Bitte versuchen Sie es erneut.
 	<notification name="CannotCreateLandmarkNotOwner">
 		Sie können hier keine Landmarke erstellen, da der Landeigentümer dies verboten hat.
 	</notification>
+	<notification label="Ordner erstellen" name="CreateLandmarkFolder">
+		Namen für den Ordner eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		„Rekompilieren“ nicht möglich.
 Objekt mit Skript wählen.
