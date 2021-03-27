@@ -1347,16 +1347,6 @@
          function="Advanced.HandleAttachedLightParticles"
          parameter="RenderAttachedParticles"/>
         </check_box>
-        <check_box
-        follows="top|left"
-        layout="topleft"
-        left="20"
-        top_pad="9"
-        control_name="FSAllowWaterDistortionOcclusion"
-        label="Occlude objects for water distortion map"
-        name="dist_occl"
-        tool_tip="If allowed, object occlusion will be restored for generation of the water distortion maps. Visuals are more correct without occlusion, but this can have a significant impact on rendering performance."
-        />
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"
