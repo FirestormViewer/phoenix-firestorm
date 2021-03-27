@@ -91,6 +91,7 @@
 			<check_box label="Отключение экрана телепортации" name="tp_screen_toggle" tool_tip="Отключение черного экрана телепортации" />
 			<check_box label="Не закрывать карту при телепортции" name="FSDoNotHideMapOnTeleport"  tool_tip="Запретить автоматическое закрытие карты при телепортции."/>
 			<check_box label="Держать 'Показывать только друзей' включеным после телепортации." name="FSRenderFriendsOnlyPersistsTP" tool_tip="Отключает автоматическую отмену функции «Показать только друзей» (по умолчанию: выключено)"/>
+			<check_box label="Сообщить SLURL региона, из которого вы завершили телепорт." name="FSShowBackSLURL"/>
 		</panel>
 		<panel label="Карта и Миникарта" name="tab-maps">
 			<text name="minimap_options_label">

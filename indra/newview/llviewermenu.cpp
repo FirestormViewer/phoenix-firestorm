@@ -9475,6 +9475,20 @@ class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
 	}
 };
 
+// <FS:Beq> Add telemetry controls to the viewer menus
+class FSTelemetryToggleActive : public view_listener_t
+{
+protected:
+
+	bool handleEvent(const LLSD& userdata)
+	{
+		BOOL checked = gSavedSettings.getBOOL( "FSTelemetryActive" );
+		gSavedSettings.setBOOL( "FSTelemetryActive", !checked );
+		FSTelemetry::active = !checked;
+		return true;
+	}
+};
+// </FS:Beq>
 void menu_toggle_attached_lights(void* user_data)
 {
 	LLPipeline::sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
@@ -11830,6 +11844,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLDevelopTextureFetchDebugger(), "Develop.SetTexFetchDebugger");
 	//Develop (clear cache immediately)
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
+
+	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
+	view_listener_t::addMenu(new FSTelemetryToggleActive(), "Develop.ToggleTelemetry");
 
 	// Admin >Object
 	view_listener_t::addMenu(new LLAdminForceTakeCopy(), "Admin.ForceTakeCopy");

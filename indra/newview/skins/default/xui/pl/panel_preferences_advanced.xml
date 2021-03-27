@@ -8,7 +8,7 @@
 	<check_box label="Pokaż menu Zaawansowane (na własną odpowiedzialność!)" name="show_advanced_menu_check"/>
 	<check_box label="Pokaż menu Programista (na własną odpowiedzialność!)" name="show_develop_menu_check"/>
 	<check_box label="Wyłącz detekcję pamięci wideo poprzez odpytywanie WMI w systemach Windows" name="FSDisableWMIProbing"/>
-	<check_box label="Używaj kroków czasowych w animacjach (eksperymentalne)" tool_tip="Ta opcja może zmniejszyć obciążenie podczas renderowania odległych awatarów, ale także spowodować, że ich animacje będą odtwarzane w niewłaściwych prędkościach" name="UseAnimationTimeSteps"/>
+	<!-- <check_box label="Używaj kroków czasowych w animacjach (eksperymentalne)" tool_tip="Ta opcja może zmniejszyć obciążenie podczas renderowania odległych awatarów, ale także spowodować, że ich animacje będą odtwarzane w niewłaściwych prędkościach" name="UseAnimationTimeSteps"/> -->
 	<text name="BackgroundYieldTimeText">
 		Ilość czasu, w milisekundach, jaką [APP_NAME] ma odstępować innym aplikacjom, gdy nie jest na pierwszym planie (domyślnie: 40; 1 sekunda = 1000 milisekund):
 	</text>

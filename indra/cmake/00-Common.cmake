@@ -139,7 +139,6 @@ if (WINDOWS)
 #      /arch:SSE2
       /fp:fast
       )
-
   # Nicky: x64 implies SSE2
   if( ADDRESS_SIZE EQUAL 32 )
     add_definitions( /arch:SSE2 )

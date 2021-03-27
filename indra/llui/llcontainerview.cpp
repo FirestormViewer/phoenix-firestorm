@@ -47,6 +47,10 @@ LLContainerView::LLContainerView(const LLContainerView::Params& p)
 :	LLView(p),
 	mShowLabel(p.show_label),
 	mLabel(p.label),
+	// <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
+	mBackgroundVisible(p.background_visible),
+	mBackgroundColor(p.bg_color),
+	// </FS:Zi>
 	mDisplayChildren(p.display_children)
 {
 	mScrollContainer = NULL;
@@ -111,10 +115,14 @@ BOOL LLContainerView::handleMouseUp(S32 x, S32 y, MASK mask)
 
 void LLContainerView::draw()
 {
+	// <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
+	if (mBackgroundVisible)
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-		gl_rect_2d(0, getRect().getHeight(), getRect().getWidth(), 0, LLColor4(0.f, 0.f, 0.f, 0.25f));
+		// <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
+		// gl_rect_2d(0, getRect().getHeight(), getRect().getWidth(), 0, LLColor4(0.f, 0.f, 0.f, 0.25f));
+		gl_rect_2d(0, getRect().getHeight(), getRect().getWidth(), 0, mBackgroundColor);
 	}
 		
 	// Draw the label

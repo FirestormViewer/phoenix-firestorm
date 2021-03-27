@@ -400,76 +400,44 @@
      name="tab-alerts">
     <text
      type="string"
-     length="1"
-     follows="top|left"
+     follows="top|left|right"
      height="12"
-     layout="topleft"
      left="10"
      name="show_label"
+     tool_tip="List of alerts in the viewer. Check the mark to the left to enable the alert, uncheck it to hide the alert."
+     top="8"
+     right="-10">
+       Viewer alerts that can be shown or hidden:
+    </text>
+    <filter_editor
+     follows="top|left|right"
+     height="22"
+     right="-10"
      top_pad="8"
-     width="450">
-        Always show:
-    </text>
+     label="Filter Alerts"
+     name="popup_filter"
+     text_pad_left="6"
+     tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches.">
+       <filter_editor.commit_callback
+        function="Pref.UpdatePopupFilter" />
+    </filter_editor>
+    <!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
     <scroll_list
      follows="top|left|right"
-     height="170"
-     layout="topleft"
-     left="10"
-     multi_select="true"
-     name="enabled_popups"
-     sort_column="0"
-     sort_ascending="true"
-     width="515" />
-    <button
-     enabled_control="FirstSelectedDisabledPopups"
-     follows="top|left"
-     height="23"
-     image_overlay="Arrow_Up"
-     hover_glow_amount="0.25"
-     layout="topleft"
-     left="218"
-     name="enable_this_popup"
-     top_pad="5"
-     width="40">
-        <button.commit_callback
-         function="Pref.ClickEnablePopup" />
-    </button>
-    <button
-     enabled_control="FirstSelectedEnabledPopups"
-     follows="top|left"
-     height="23"
-     image_overlay="Arrow_Down"
-     hover_glow_amount="0.25"
-     layout="topleft"
-     left_pad="20"
-     name="disable_this_popup"
-     top_delta="0"
-     width="40">
-        <button.commit_callback
-         function="Pref.ClickDisablePopup" />
-    </button>
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     height="12"
-     layout="topleft"
-     left="10"
-     name="dont_show_label"
-     top_pad="-10"
-     width="450">
-        Never show:
-    </text>
-    <scroll_list
-     follows="top|left|right"
-     height="170"
-     layout="topleft"
-     left="10"
-     sort_column="0"
+     height="344"
+     top_pad="8"
+     sort_column="2"
      sort_ascending="true"
      multi_select="true"
-     name="disabled_popups"
-     width="515" />
+     name="all_popups"
+     right="-10">
+        <!-- using a blank padding column to make things look prettier, since "halign" doesn't seem to work for checkboxes -Zi -->
+        <column label="" name="make_pretty" width="1" />
+        <column label="Show" name="alert_enabled_check" width="22" />
+        <column label="Alert" name="alert_label" width="460" />
+        <scroll_list.commit_callback
+         function="Pref.SelectPopup" />
+    </scroll_list>
     </panel>
 </tab_container>
 </panel>

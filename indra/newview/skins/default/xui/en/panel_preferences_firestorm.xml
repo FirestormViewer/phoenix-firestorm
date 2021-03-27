@@ -1295,6 +1295,7 @@
          tool_tip="Name of the font used in the LSL script editor">
              <combo_item name="Monospace" value="Monospace" label="Monospace"/>
              <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
         </combo_box>
         <combo_box
          allow_text_entry="false"
@@ -1309,6 +1310,7 @@
          tool_tip="Size of the font used in the LSL script editor">
              <combo_item name="Monospace" value="Monospace" label="Monospace"/>
              <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
              <combo_item name="Small" value="Small" label="Small"/>
              <combo_item name="Medium" value="Medium" label="Medium"/>
              <combo_item name="Large" value="Large" label="Large"/>
