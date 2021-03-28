@@ -752,7 +752,10 @@ S32 LLGestureMgr::getPlayingCount() const
 }
 
 
-struct IsGesturePlaying : public std::unary_function<LLMultiGesture*, bool>
+//struct IsGesturePlaying : public std::unary_function<LLMultiGesture*, bool>
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznîp-6.6
+struct IsGesturePlaying
+// [/SL:KB]
 {
 	bool operator()(const LLMultiGesture* gesture) const
 	{
