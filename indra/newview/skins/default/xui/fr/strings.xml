@@ -6041,4 +6041,531 @@ correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez v
 
 [https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Base de connaissances]
 	</string>
+	<string name="LoadCameraPositionNoneSaved">
+		Aucune vue de la caméra n'a encore été enregistrée.
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		Impossible de restaurer la vue de la caméra parce que la position de la caméra est au-delà de la distance d'affichage.
+	</string>
+	<string name="DrawDistanceSteppingGestureObsolete">
+		En raison des modifications apportées au code, il n'est plus nécessaire d'utiliser ce geste. Le réglage progressif de la distance d'affichage a été activé..
+	</string>
+	<string name="FSCameraPositionCopied">
+		Position de la caméra [POS] copiée dans le presse-papiers.
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Distance d'affichage réglèe [DISTANCE]m.
+	</string>
+	<string name="FSCmdLineRollDiceTotal">
+		Résultat total pour [DICE]d[FACES][MODIFIER]: [RESULT].
+	</string>
+	<string name="FSCmdLineRollDiceLimits">
+		Vous devez fournir des valeurs positives pour les dés (max 100) et les faces (max 1000).
+	</string>
+	<string name="FSCmdLineRollDiceModifiersInvalid">
+		Si vous souhaitez utiliser un modificateur, vous devez fournir un numéro de modificateur valide et le type de modificateur. Le modificateur doit être compris entre -1000 et 1000. Les types de modificateurs valides sont "+" (bonus), "-" (pénalités), "&gt;", "&lt;" (succès), "r&gt;", "r&lt;", "r" (relancer), "!p&gt;", "!p&lt;", "!p" (pénétrations), "!&gt;", "!&lt;" and "!" (explosions). Vous ne pouvez utiliser qu'un seul type de modificateur par tirage. Exemples : "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".
+	</string>
+	<string name="FSCmdLineRollDiceExploded">
+		Explosé
+	</string>
+	<string name="FSCmdLineRollDicePenetrated">
+		Pénétré
+	</string>
+	<string name="FSCmdLineRollDiceSuccess">
+		Succès
+	</string>
+	<string name="FSCmdLineRollDiceReroll">
+		Relancer
+	</string>
+	<string name="FSCmdLineRollDiceFreezeGuard">
+		Cette opération ne peut être réalisée car le viewer se figerait dans une boucle infinie. Veuillez modifier les critères.
+	</string>
+	<string name="FSCmdLineCalcRandError">
+		'[RAND]' n'est pas une expression valable pour RAND(min,max). MAX doit être supérieur à MIN, les deux dans une fourchette de -10000 à 10000.
+	</string>
+	<string name="FSCmdLineRSP">
+		Bande passante maximale réglée à [VALUE] KBPS.
+	</string>
+	<string name="FSCmdLineTpOffered">
+		Téléportation proposée à [NAME].
+	</string>
+
+	<!-- Build types for about floater -->
+	<string name="FSWithHavok">
+		avec support de Havok
+	</string>
+	<string name="FSWithOpensim">
+		avec support de OpenSimulator
+	</string>
+
+	<!-- Firestorm search -->
+	<string name="not_found">
+		&apos;[TEXT]&apos; introuvable
+	</string>
+	<string name="no_results">
+		Aucun résultat
+	</string>
+	<string name="searching">
+		Recherche en cours...
+	</string>
+	<string name="all_categories">
+		Toutes catégories
+	</string>
+	<string name="search_banned">
+		Certains termes de votre requête de recherche ont été exclus en raison de restrictions de contenu, comme précisé dans les Community Standards.
+	</string>
+	<string name="search_short">
+		Vos termes de recherche étant trop courts, aucune recherche n'a été effectuée.
+	</string>
+	<string name="search_disabled">
+		La recherche à l'ancienne a été désactivée dans cette région.
+	</string>
+	<string name="render_quality_low">
+		Basse (1/7)
+	</string>
+	<string name="render_quality_mediumlow">
+		Moyenne-Basse (2/7)
+	</string>
+	<string name="render_quality_medium">
+		Moyenne (3/7)
+	</string>
+	<string name="render_quality_mediumhigh">
+		Moyenne-Élevée (4/7)
+	</string>
+	<string name="render_quality_high">
+		Élevée (5/7)
+	</string>
+	<string name="render_quality_highultra">
+		Élevée-Ultra (6/7)
+	</string>
+	<string name="render_quality_ultra">
+		Ultra (7/7)
+	</string>
+	<string name="render_quality_unknown">
+		Inconnu, au-delà de la normale, vérifiez le paramètre de débogage RenderQualityPerformance
+	</string>
+	<string name="fsbridge_cant_create_disabled">
+		[APP_NAME] ne peut pas créer le bridge LSL si "Activer le Bridge LSL" est désactivé dans les Préférences.
+	</string>
+	<string name="fsbridge_no_library">
+		[APP_NAME] n'a pas pu créer un bridge LSL. Veuillez activer votre bibliothèque et vous reconnecter.
+	</string>
+	<string name="fsbridge_already_creating">
+		Création d'un bridge en cours, impossible d'en lancer un autre. Veuillez attendre quelques minutes avant de réessayer.
+	</string>
+	<string name="fsbridge_creating">
+		Création du bridge. Cela peut prendre un moment, veuillez patienter.
+	</string>
+	<string name="fsbridge_failure_creation_create_script">
+		Bridge non créé. Le script de bridge n'a pas pu être créé.
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		Bridge non créé. Le bridge porte un nom incorrect. Veuillez utiliser le menu 'Moi/Santé de l'avatar/Recréer le Bridge' LSL de [APP_NAME] pour recréer le bridge.
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		Bridge non créé. Le bridge n'a pas pu être trouvé dans l'inventaire. Veuillez utiliser le menu 'Moi/Santé de l'avatar/Recréer le Bridge' LSL de [APP_NAME] pour recréer le bridge.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		Le bridge n'a pas réussi à s'attacher. Il ne s'agit pas de la version actuelle du bridge. Veuillez utiliser le menu 'Moi/Santé de l'avatar/Recréer le Bridge' LSL de [APP_NAME] pour recréer le bridge.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		Le bridge ne s'est pas attaché. Le bridge n'a pas été trouvé dans le bon emplacement de l'inventaire. Veuillez utiliser le menu 'Moi/Santé de l'avatar/Recréer le Bridge' LSL de [APP_NAME] pour recréer le bridge.
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		Le bridge ne s'est pas attaché. Quelque chose d'autre utilisait le point d'attache du bridge. Veuillez utiliser le menu 'Moi/Santé de l'avatar/Recréer le Bridge' LSL de [APP_NAME] pour recréer le bridge.
+	</string>
+	<string name="fsbridge_failure_not_found">
+		L'objet bridge n'a pas pu être trouvé. Impossible de procéder à sa création, fin de tâche.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		L'inventaire du bridge contient des éléments inattendus.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Le bridge n'a pas fini de se créer, vous devrez peut-être utiliser la fonction 'Moi/Santé de l'avatar/Recréer le Bridge' LSL de [APP_NAME] pour le recréer avant de l'utiliser.
+	</string>
+	<string name="fsbridge_detached">
+		Bridge détaché.
+	</string>
+	<string name="fsbridge_created">
+		Bridge créé.
+	</string>
+	<string name="fsbridge_script_info">
+		Infos sur le script : '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] scripts en cours d'exécution, [OBJECT_SCRIPT_MEMORY] KB taille limite de mémoire autorisée, [OBJECT_SCRIPT_TIME] ms de temps CPU utilisé.[PATHFINDING_TEXT]
+	</string>
+	<string name="fsbridge_script_info_pf">
+		Temps moyen d'utilisation du CPU pour la navigation avec recherche de chemin : [OBJECT_CHARACTER_TIME] ms.
+	</string>
+	<string name="fsbridge_script_info_ext">
+ID de l'objet : [INSPECTING_KEY]
+Description: [OBJECT_DESC]
+Prim racine : [OBJECT_ROOT]
+Prim count: [OBJECT_PRIM_COUNT]
+Impact sur le terrain : [OBJECT_PRIM_EQUIVALENCE]
+Articles de l'inventaire : [OBJECT_TOTAL_INVENTORY_COUNT]
+Vélocité : [OBJECT_VELOCITY]
+Position: [OBJECT_POS]
+Rotation: [OBJECT_ROT]
+Vitesse angulaire : [OBJECT_OMEGA] (radians per second)
+Créateur : [OBJECT_CREATOR]
+Propriétaire : [OBJECT_OWNER]
+Propriétaire précédent : [OBJECT_LAST_OWNER_ID]
+Posé par : [OBJECT_REZZER_KEY]
+Groupe : [OBJECT_GROUP]
+Date de création : [OBJECT_CREATION_TIME]
+Type de cheminement : [OBJECT_PATHFINDING_TYPE]
+Point d'attache : [OBJECT_ATTACHED_POINT]
+Attaché temporairement : [OBJECT_TEMP_ATTACHED]
+Votre position actuelle : [AVATAR_POS]
+	</string>
+	<string name="fsbridge_error_scriptinfonotfound">
+		Info script : L'objet à vérifier n'est pas valable ou est hors de portée.
+	</string>
+	<string name="fsbridge_error_scriptinfomalformed">
+		Info script : Réception d'une réponse malformée du bridge. Réessayez.
+	</string>
+	<string name="fsbridge_error_injection">
+		NOTICE : Un ou plusieurs scripts ont été ajoutés au bridge de votre [APP_NAME] ! Si vous ne vous attendiez pas à recevoir ce message, utilisez le menu Moi/Santé de l'avatar/Recréer le bridge LSL de [APP_NAME] pour recréer le bridge.
+	</string>
+	<string name="fsbridge_error_wrongvm">
+		NOTICE : Le script du Bridge utilise l'ancien LSO (Limite de mémoire de 16 Ko) au lieu de la nouvelle machine virtuelle Mono (Limite de mémoire de 64 Ko), qui crée une forte probabilité de collision entre piles et de défaillance du bridge par manque de mémoire. Utilisez le menu Moi/Santé de l'avatar/Recréer le bridge LSL de [APP_NAME] pour recréer le bridge. Si vous voyez ce message à nouveau - veuillez essayer à nouveau dans une autre région.
+	</string>
+
+	<!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
+	<string name="FSAOEnabled">
+		[APP_NAME] Animation Overrider enabled.
+	</string>
+	<string name="FSAODisabled">
+		[APP_NAME] Animation Overrider disabled.
+	</string>
+	<string name="FSAOPausedScript">
+		Pause par un attachement scripté.
+	</string>
+	<string name="FSAOResumedScript">
+		Relancé par un attachement scripté.
+	</string>
+	<string name="FSAOStandsPausedScript">
+		Animations de position debout mises en pause par un attachement scripté.
+	</string>
+	<string name="FSAOStandsResumedScript">
+		Animations de position debout relancées par un attachement scripté.
+	</string>
+
+	<!-- <FS:Zi> Quick preferences default options -->
+	<string name="QP Draw Distance">
+		Distance d'affichage
+	</string>
+	<string name="QP Max Particles">
+		Particules max.
+	</string>
+	<string name="QP Avatar Physics LOD">
+		LOD de l'avatar
+	</string>
+	<string name="QP LOD Factor">
+		Facteur de LOD
+	</string>
+	<string name="QP Max Avatars">
+		Avatars max.
+	</string>
+	<string name="QP Tags Offset">
+		Décalage des étiquettes
+	</string>
+	<string name="QP Name Tags">
+		Étiquettes de nom
+	</string>
+	<string name="QP LookAt Target">
+		Cible du LookAt
+	</string>
+	<string name="QP Color Under Cursor">
+		Couleur sous le curseur
+	</string>
+
+	<!-- <FS:Ansariel> Posestand animation names -->
+	<string name="PS_T_Pose">
+		Pose T
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Bras baissés, jambes jointes
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Bras baissés, assis
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Bras en bas, jambes jointes
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Bras en bas, jambes écartées
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Bras vers l'avant, jambes écartées
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Bras vers l'avant, jambes jointes
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Bras tendus, jambes écartées
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Bras tendus, assis
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Bras vers le haut, jambes écartées
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Bras vers le haut, jambes serrées
+	</string>
+
+	<string name="QP_WL_Region_Default">
+		Environnement partagé
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Basé sur le cycle du jour
+	</string>
+	<string name="QP_WL_None">
+		Rien
+	</string>
+
+	<string name="GroupChatMuteNotice">
+		Mute de la discussion de groupe de [NAME].
+	</string>
+	<string name="IgnoredAdHocSession">
+		Vous avez été invité à une conférence (ad-hoc) par [AVATAR_NAME], mais la visionneuse l'a automatiquement ignoré à cause de vos réglages.
+	</string>
+  
+	<!-- <FS:Ansariel> Radar notifications -->
+	<string name="camera_no_focus">
+		L'appareil photo ne peut pas faire la mise au point sur l'utilisateur [AVATARNAME] parce qu'il est en dehors de votre distance d'affichage.
+	</string>
+	<string name="entering_draw_distance">
+		est entré dans la distance d'affichage ([DISTANCE] m).
+	</string>
+	<string name="leaving_draw_distance">
+		a quitté la distance d'affichage.
+	</string>
+	<string name="entering_chat_range">
+		est entré portée de discussion ([DISTANCE] m).
+	</string>
+	<string name="leaving_chat_range">
+		est hors de portée de discussion.
+	</string>
+	<string name="entering_region">
+		est entré dans la région.
+	</string>
+	<string name="entering_region_distance">
+		est entré dans la région ([DISTANCE] m).
+	</string>
+	<string name="leaving_region">
+		a quitté la région.
+	</string>
+	<string name="avatar_age_alert">
+		a déclenché l'alerte sur l'âge. Âge: [AGE] jour(s)
+	</string>
+
+	<string name="TotalScriptCountChangeIncrease">
+		Le nombre total de scripts dans la région est passé de [OLD_VALUE] à [NEW_VALUE] ([DIFFERENCE]).
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Le nombre total de scripts dans la région est passé de [OLD_VALUE] à [NEW_VALUE] ([DIFFERENCE]).
+	</string>
+	<string name="preproc_toggle_warning">
+		Le basculement du préprocesseur ne prendra effet que lorsque vous fermerez et rouvrirez cet éditeur.
+	</string>
+
+	<!-- <FS:Cron> FIRE-9335 -->
+	<!-- <LSL Preprocessor -->
+	<string name="fs_preprocessor_starting">
+		Démarrage du préprocesseur de [APP_NAME]...
+	</string>
+	<string name="fs_preprocessor_not_supported">
+		Avertissement : Préprocesseur non supporté dans cette version. ([WHERE])
+	</string>
+	<string name="fs_preprocessor_disabled_by_script_marker">
+		Préprocesseur de [APP_NAME] désactivé par la directive à la ligne [LINENUMBER].
+	</string>
+	<string name="fs_preprocessor_settings_list_prefix">
+		Réglages :
+	</string>
+	<string name="fs_preprocessor_cpp_exception">
+		[ERR_NAME] ([LINENUMBER]): [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_lexing_exception">
+		[SEVERITY]: [ERR_NAME] ([LINENUMBER]): [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_exception">
+		[ERR_NAME] ([LINENUMBER]): exception captée: [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_error">
+		[ERR_NAME] ([LINENUMBER]): exception inattendue captée.
+	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Détection de la directive compile-as-LSL2 outrepassant les préférences.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Détection de la directive compile-as-Mono outrepassant les préférences.
+	</string>
+
+	<!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
+	<string name="skin_defaults_starlight_location">
+		L'affichage de votre position actuelle dans la barre de menu a été désactivé par défaut pour la série de skin Starlight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		L'affichage de la barre de navigation a été activé par défaut pour la série de skin Starlight.
+	</string>
+
+	<!-- Animation Explorer -->
+	<string name="animation_explorer_seconds_ago">
+		[SECONDS] plus tôt
+	</string>
+	<string name="animation_explorer_still_playing">
+		Toujours en cours
+	</string>
+	<string name="animation_explorer_unknown_priority">
+		inconnu
+	</string>
+
+	<string name="FriendOnlineNotification">
+		est en ligne.
+	</string>
+	<string name="FriendOfflineNotification">
+		est hors ligne.
+	</string>
+
+	<string name="Inbox_Folderview_New">
+		Nouveau
+	</string>
+	<string name="Mouselook_Unknown_Avatar">
+		Agent inconnu
+	</string>
+	<string name="groupcountstring">
+		Vous faites partie de [COUNT] groups ([REMAINING] restant).
+	</string>
+	<string name="groupcountunlimitedstring">
+		Vous faites partie de [COUNT] groupes.
+	</string>
+	<string name="SLGridStatusInvalidMsg">
+		Code d'erreur SL : Format de message non valide. Réessayer plus tard.
+	</string>
+	<string name="SLGridStatusTimedOut">
+		Code d'erreur SL : La requête a expiré.
+	</string>
+	<string name="SLGridStatusOtherError">
+		Code d'erreur SL : [STATUS] ( https://en.wikipedia.org/wiki/List_of_HTTP_status_codes ).
+	</string>
+	<string name="DoubleClickTeleportEnabled">
+		Téléportation par double clic activée.
+	</string>
+	<string name="DoubleClickTeleportDisabled">
+		Téléportation par double clic désactivée.
+	</string>
+	<string name="AlwaysRunEnabled">
+		Toujours courir activé.
+	</string>
+	<string name="AlwaysRunDisabled">
+		Toujours courir désactivé.
+	</string>
+	<string name="FSRegionRestartInLocalChat">
+		La région où vous êtes est sur le point de redémarrer. Si vous restez, vous serez déconnecté.
+	</string>
+	<string name="Mute_Add">
+		'[NAME]' a été ajouté à la liste de blocage.
+	</string>
+	<string name="Mute_Remove">
+		'[NAME]' a été supprimé de la liste de blocage.
+	</string>
+	<string name="Reqsysinfo_Chat_NoReason">
+		Je demande des informations sur la configuration de votre système.
+	</string>
+	<string name="Reqsysinfo_Chat_Reason">
+		Je demande des informations sur la configuration de votre système pour la raison suivante : [REASON]
+	</string>
+	<string name="Reqsysinfo_Chat_Information_sent">
+		Informations envoyées : [DATA]
+	</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">
+		Demande refusée.
+	</string>
+	<string name="Reqsysinfo_Reason">
+		La raison invoquée est la suivante : [REASON]
+	</string>
+
+	<!-- Titles for inventory finder floater -->
+	<string name="All Items">
+		Tous les éléments
+	</string>
+	<string name="Recent Items">
+		Eléments récents
+	</string>
+	<string name="Worn Items">
+		Eléments portés
+	</string>
+
+	<string name="InvOfferGroupNoticeName">
+		Un membre du groupe nommé [NAME]
+	</string>
+	<string name="CallingCardOnlineLabelSuffix">
+		(en ligne)
+	</string>
+
+	<string name="Pie_av_render_normally">
+		Normalement
+	</string>
+	<string name="Pie_av_render_never">
+		Jamais
+	</string>
+	<string name="Pie_av_render_fully">
+		Entièrement
+	</string>
+
+	<string name="Nametag_Complexity_Label">
+		Complexité : [COMPLEXITY]
+	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Surface de la texture : [TEXTURE_AREA] m²
+	</string>
+
+	<string name="font_unknown">
+		Police inconnue
+	</string>
+	<string name="mode_unknown">
+		Mode inconnu
+	</string>
+	<string name="mode_settings_text.xml">
+		Texte
+	</string>
+	<string name="Asset_Uploading">
+		Envoi...
+[ASSET_NAME]
+	</string>
+	<string name="Yes">
+		Oui
+	</string>
+	<string name="No">
+		Non
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Porter le dossier de l'inventaire
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Image pour le vêtement
+	</string>
+	<string name="unknown_script">
+		(Script inconnu)
+	</string>
+	<string name="FSAreaSearch_Cost_Label">
+		[COST] L$
+	</string>
+
+	<string name="ImportingWindlightBulk">
+		Importation des réglages Windlights...
+	</string>
+
+	<!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+	<string name="FSObjectInventoryNoElements">
+		Aucun élément
+	</string>
+	<string name="FSObjectInventoryOneElement">
+		1 élément
+	</string>
+	<string name="FSObjectInventoryElements">
+		[NUM_ELEMENTS] éléments
+	</string>
 </strings>
