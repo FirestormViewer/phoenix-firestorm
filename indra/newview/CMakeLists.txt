@@ -655,7 +655,7 @@ set(viewer_SOURCE_FILES
     llregionposition.cpp
     llremoteparcelrequest.cpp
     #llsavedsettingsglue.cpp #<FS:Ansariel> Unused
-    llsaveoutfitcombobtn.cpp
+    #llsaveoutfitcombobtn.cpp #<FS:Ansariel> Unused
     llscenemonitor.cpp
     llsceneview.cpp
     llscreenchannel.cpp
@@ -1415,7 +1415,7 @@ set(viewer_HEADER_FILES
     llresourcedata.h
     llrootview.h
     #llsavedsettingsglue.h #<FS:Ansariel> Unused
-    llsaveoutfitcombobtn.h
+    #llsaveoutfitcombobtn.h #<FS:Ansariel> Unused
     llscenemonitor.h
     llsceneview.h
     llscreenchannel.h
