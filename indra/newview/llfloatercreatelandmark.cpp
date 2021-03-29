@@ -216,7 +216,7 @@ void LLFloaterCreateLandmark::onCreateFolderClicked()
 			if (!folder_name.empty())
 			{
 				inventory_func_type func = boost::bind(&LLFloaterCreateLandmark::folderCreatedCallback, this, _1);
-				LLUUID test = gInventory.createNewCategory(mLandmarksID, LLFolderType::FT_NONE, folder_name, func);
+				gInventory.createNewCategory(mLandmarksID, LLFolderType::FT_NONE, folder_name, func);
 				gInventory.notifyObservers();
 			}
 		}
@@ -282,13 +282,8 @@ void LLFloaterCreateLandmark::onSaveClicked()
 
 void LLFloaterCreateLandmark::onCancelClicked()
 {
-	// <FS:Ansariel> Don't create landmark on cancel
-	if (mItem)
-	{
-		remove_inventory_item(mItem, nullptr, true);
-		gInventory.notifyObservers();
-	}
-	// </FS:Ansariel>
+	LLUUID item_id = mItem->getUUID();
+	remove_inventory_item(item_id, NULL);
 	closeFloater();
 }
 
