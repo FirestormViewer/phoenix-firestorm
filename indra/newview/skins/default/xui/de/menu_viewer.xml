@@ -17,7 +17,8 @@
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
 		<menu_item_call label="Profil" name="Profile"/>
-		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
+		<menu_item_check label="Aktuelles Outfit" name="NowWearing"/>
+		<menu_item_check label="Outfits" name="ChangeOutfit"/>
 		<menu label="Ausziehen" name="Take Off &gt;">
 			<menu label="Kleidung" name="Clothes &gt;">
 				<menu_item_call label="Hemd" name="Shirt"/>
