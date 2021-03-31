@@ -275,17 +275,17 @@
         <string>Tracy</string>
         <key>platforms</key>
         <map>
-          <key>windows</key>
+          <key>common</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8e4cc0d82acbf83f10fb866302fd7519</string>
+              <string>b0a0fc6b7bda02fe14cccea2dd342058</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/Tracy-v0.7.6-windows-210761143.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/Tracy-0.7.6-windows-210902110.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>windows</string>
+            <string>common</string>
           </map>
         </map>
         <key>version</key>
