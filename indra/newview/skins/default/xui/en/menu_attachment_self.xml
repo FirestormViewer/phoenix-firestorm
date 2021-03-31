@@ -88,6 +88,14 @@ name="Stand Up">
      function="Self.EnableStandUp" />
   </menu_item_call>
   <menu_item_call
+  label="Now wearing..."
+  name="NowWearing">
+    <menu_item_call.on_click
+     function="NowWearing" />
+    <menu_item_call.on_enable
+     function="Edit.EnableCustomizeAvatar" />
+  </menu_item_call>
+  <menu_item_call
   label="Change Outfit"
   name="Change Outfit">
     <menu_item_call.on_click
@@ -95,21 +103,21 @@ name="Stand Up">
     <menu_item_call.on_enable
      function="Edit.EnableCustomizeAvatar" />
   </menu_item_call>
-  <menu_item_call label="Edit Outfit"
-layout="topleft"
-name="Edit Outfit">
-    <menu_item_call.on_click
-     function="EditOutfit" />
-    <menu_item_call.on_enable
-     function="Edit.EnableCustomizeAvatar" />
-  </menu_item_call>
   <menu_item_call label="Edit Shape"
     layout="topleft"
-    name="Edit My Shape">
+    name="Edit Shape">
     <menu_item_call.on_click
      function="EditShape" />
     <menu_item_call.on_enable
      function="Edit.EnableEditShape" />
+  </menu_item_call>
+  <menu_item_call label="Edit Outfit"
+layout="topleft"
+name="Edit Outfit Parts">
+    <menu_item_call.on_click
+     function="EditOutfit" />
+    <menu_item_call.on_enable
+     function="Edit.EnableCustomizeAvatar" />
   </menu_item_call>
   <menu_item_call label="Hover Height"
      layout="topleft"
@@ -120,7 +128,7 @@ name="Edit Outfit">
       function="Edit.EnableHoverHeight" />
   </menu_item_call>
   <context_menu
-  label="Take Off"
+  label="Take off"
   layout="topleft"
   name="Take Off &gt;">
     <context_menu
