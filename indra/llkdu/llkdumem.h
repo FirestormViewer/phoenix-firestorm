@@ -28,7 +28,7 @@
 #define LL_LLKDUMEM_H
 
 // Support classes for reading and writing from memory buffers in KDU
-#ifndef LL_WINDOWS
+#ifdef LL_DARWIN
 #define KDU_NO_THREADS
 #endif
 

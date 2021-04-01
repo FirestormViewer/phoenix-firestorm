@@ -402,7 +402,11 @@
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
 			<menu_item_check label="Farbe unter Cursor anzeigen" name="Show Color Under Cursor"/>
 			<menu_item_check label="Speicher anzeigen" name="Show Memory"/>
-			<menu_item_check label="Akutalisierungen an Objekten anzeigen" name="Show Updates"/>
+			<menu_item_check label="Aktualisierungen an Objekten anzeigen" name="Show Updates"/>
+		</menu>
+		<menu label="Profiling/Telemetrie" name="Enable / Disable telemetry capture">
+			<menu_item_check label="Profiling" name="Profiling"/>
+			<menu_item_check label="Starten wenn verbunden" name="Start when telemetry client connects"/>
 		</menu>
 		<menu label="Fehler erzwingen" name="Force Errors">
 			<menu_item_call label="Haltepunkt erzwingen" name="Force Breakpoint"/>
