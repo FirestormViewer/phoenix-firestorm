@@ -176,7 +176,7 @@ Versão do servidor de voz: [VOICE_VERSION]
 		Sair
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/?sourceid=[sourceid]
+		https://www.firestormviewer.org/join-secondlife/
 	</string>
 	<string name="ViewerDownloadURL">
 		http://secondlife.com/download

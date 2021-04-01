@@ -408,7 +408,7 @@ CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
 
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
 				"InternetShortcut" "URL" \
-				"https://join.secondlife.com/"
+				"https://www.firestormviewer.org/join-secondlife/"
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
 				"InternetShortcut" "URL" \
 				"https://www.secondlife.com/account/"
