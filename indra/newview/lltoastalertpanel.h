@@ -83,7 +83,9 @@ private:
 	struct ButtonData
 	{
 		ButtonData()
-		: mWidth(0)
+		// <FS:Zi> Linux compile fix
+		// : mWidth(0)
+		: mWidth(0), mButton(nullptr)
 		{}
 		
 		LLButton* mButton;
