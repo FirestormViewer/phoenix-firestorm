@@ -14,7 +14,7 @@
   </panel.string>
   <panel.string
     name="sign_up_url">
-    https://join.secondlife.com/
+    https://www.firestormviewer.org/join-secondlife/
   </panel.string>
   <layout_stack
     follows="left|right|top|bottom"

@@ -173,7 +173,7 @@ Version serveur vocal : [VOICE_VERSION]
 		Quitter
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/?sourceid=[sourceid]
+		https://www.firestormviewer.org/join-secondlife/
 	</string>
 	<string name="AgniGridLabel">
 		Grille principale de Second Life (Agni)

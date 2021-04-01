@@ -1383,7 +1383,7 @@ Enquando isso, use o [CURRENT_GRID] normalmente. Seu visual será exibido corret
 		A instalação do [APP_NAME] está pronta.
 
 Se você ainda não conhece o [CURRENT_GRID], basta criar uma conta para começar. 
-Voltar para [http://join.secondlife.com secondlife.com] para criar sua conta?
+Voltar para [https://www.firestormviewer.org/join-secondlife/ firestormviewer.org] para criar sua conta?
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Criar conta"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">

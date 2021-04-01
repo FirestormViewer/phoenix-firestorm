@@ -134,7 +134,7 @@
 		終了
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=ja-JP&amp;sourceid=[sourceid]
+		https://www.firestormviewer.org/join-secondlife/
 	</string>
 	<string name="ViewerDownloadURL">
 		https://www.firestormviewer.org/choose-your-platform/
