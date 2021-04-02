@@ -71,6 +71,7 @@ set(llcommon_SOURCE_FILES
     llinitparam.cpp
     llinitdestroyclass.cpp
     llinstancetracker.cpp
+    llkeybind.cpp
     llleap.cpp
     llleaplistener.cpp
     llliveappconfig.cpp
@@ -182,6 +183,7 @@ set(llcommon_HEADER_FILES
     llinitdestroyclass.h
     llinitparam.h
     llinstancetracker.h
+    llkeybind.h
     llkeythrottle.h
     llleap.h
     llleaplistener.h
@@ -256,6 +258,11 @@ set(llcommon_HEADER_FILES
     )
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
+# <FS:Beq> Tracy Profiler support
+list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
+if (USE_TRACY_PROFILER)
+  list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
+endif()
 
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp

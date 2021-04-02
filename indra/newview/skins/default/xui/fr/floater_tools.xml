@@ -254,7 +254,7 @@
 			</panel>
 			<panel name="pathfinding_attrs_panel">
 				<text name="pathfinding_attributes_label">
-					Attributs de recherche de chemin :
+					Att. de rche. de chemin :
 				</text>
 			</panel>
 		</panel>

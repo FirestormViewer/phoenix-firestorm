@@ -57,23 +57,33 @@ LLFileSystem::~LLFileSystem()
 // static
 bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
     const std::string filename = LLDiskCache::getInstance()->metaDataToFilepath(id_str, file_type, extra_info);
 
-    llifstream file(filename, std::ios::binary);
-    if (file.is_open())
+    // <FS:Ansariel> IO-streams replacement
+    //llifstream file(filename, std::ios::binary);
+    //if (file.is_open())
+    //{
+    //    file.seekg(0, std::ios::end);
+    //    return file.tellg() > 0;
+    //}
+    llstat file_stat;
+    if (LLFile::stat(filename, &file_stat) == 0)
     {
-        file.seekg(0, std::ios::end);
-        return file.tellg() > 0;
+        return S_ISREG(file_stat.st_mode) && file_stat.st_size > 0;
     }
+    // </FS:Ansariel>
+
     return false;
 }
 
 // static
 bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type, int suppress_error /*= 0*/)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -88,6 +98,7 @@ bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType fi
 bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::EType old_file_type,
                               const LLUUID& new_file_id, const LLAssetType::EType new_file_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string old_id_str;
     old_file_id.toString(old_id_str);
     const std::string extra_info = "";
@@ -115,24 +126,33 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
 // static
 S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
     const std::string filename =  LLDiskCache::getInstance()->metaDataToFilepath(id_str, file_type, extra_info);
 
     S32 file_size = 0;
-    llifstream file(filename, std::ios::binary);
-    if (file.is_open())
+    // <FS:Ansariel> IO-streams replacement
+    //llifstream file(filename, std::ios::binary);
+    //if (file.is_open())
+    //{
+    //    file.seekg(0, std::ios::end);
+    //    file_size = file.tellg();
+    //}
+    llstat file_stat;
+    if (LLFile::stat(filename, &file_stat) == 0)
     {
-        file.seekg(0, std::ios::end);
-        file_size = file.tellg();
+        file_size = file_stat.st_size;
     }
+    // </FS:Ansariel>
 
     return file_size;
 }
 
 BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     BOOL success = TRUE;
 
     std::string id;
@@ -140,23 +160,37 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
     const std::string extra_info = "";
     const std::string filename =  LLDiskCache::getInstance()->metaDataToFilepath(id, mFileType, extra_info);
 
-    llifstream file(filename, std::ios::binary);
-    if (file.is_open())
+    // <FS:Ansariel> IO-streams replacement
+    //llifstream file(filename, std::ios::binary);
+    //if (file.is_open())
+    //{
+    //    file.seekg(mPosition, std::ios::beg);
+
+    //    file.read((char*)buffer, bytes);
+
+    //    if (file)
+    //    {
+    //        mBytesRead = bytes;
+    //    }
+    //    else
+    //    {
+    //        mBytesRead = file.gcount();
+    //    }
+
+    //    file.close();
+
+    //    mPosition += mBytesRead;
+    //    if (!mBytesRead)
+    //    {
+    //        success = FALSE;
+    //    }
+    //}
+    LLFILE* file = LLFile::fopen(filename, "rb");
+    if (file)
     {
-        file.seekg(mPosition, std::ios::beg);
-
-        file.read((char*)buffer, bytes);
-
-        if (file)
-        {
-            mBytesRead = bytes;
-        }
-        else
-        {
-            mBytesRead = file.gcount();
-        }
-
-        file.close();
+        fseek(file, mPosition, SEEK_SET);
+        mBytesRead = fread(buffer, 1, bytes, file);
+        fclose(file);
 
         mPosition += mBytesRead;
         if (!mBytesRead)
@@ -164,6 +198,7 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
             success = FALSE;
         }
     }
+    // </FS:Ansariel>
 
     // update the last access time for the file - this is required
     // even though we are reading and not writing because this is the
@@ -176,16 +211,19 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 
 S32 LLFileSystem::getLastBytesRead()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mBytesRead;
 }
 
 BOOL LLFileSystem::eof()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mPosition >= getSize();
 }
 
 BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     mFileID.toString(id_str);
     const std::string extra_info = "";
@@ -193,61 +231,109 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 
     BOOL success = FALSE;
 
+    // <FS:Ansariel> IO-streams replacement
+    //if (mMode == APPEND)
+    //{
+    //    llofstream ofs(filename, std::ios::app | std::ios::binary);
+    //    if (ofs)
+    //    {
+    //        ofs.write((const char*)buffer, bytes);
+
+    //        mPosition = ofs.tellp(); // <FS:Ansariel> Fix asset caching
+
+    //        success = TRUE;
+    //    }
+    //}
+    //// <FS:Ansariel> Fix asset caching
+    //else if (mMode == READ_WRITE)
+    //{
+    //    // Don't truncate if file already exists
+    //    llofstream ofs(filename, std::ios::in | std::ios::binary);
+    //    if (ofs)
+    //    {
+    //        ofs.seekp(mPosition, std::ios::beg);
+    //        ofs.write((const char*)buffer, bytes);
+    //        mPosition += bytes;
+    //        success = TRUE;
+    //    }
+    //    else
+    //    {
+    //        // File doesn't exist - open in write mode
+    //        ofs.open(filename, std::ios::binary);
+    //        if (ofs.is_open())
+    //        {
+    //            ofs.write((const char*)buffer, bytes);
+    //            mPosition += bytes;
+    //            success = TRUE;
+    //        }
+    //    }
+    //}
+    //// </FS:Ansariel>
+    //else
+    //{
+    //    llofstream ofs(filename, std::ios::binary);
+    //    if (ofs)
+    //    {
+    //        ofs.write((const char*)buffer, bytes);
+
+    //        mPosition += bytes;
+
+    //        success = TRUE;
+    //    }
+    //}
     if (mMode == APPEND)
     {
-        llofstream ofs(filename, std::ios::app | std::ios::binary);
+        LLFILE* ofs = LLFile::fopen(filename, "a+b");
         if (ofs)
         {
-            ofs.write((const char*)buffer, bytes);
-
-            mPosition = ofs.tellp(); // <FS:Ansariel> Fix asset caching
-
+            fwrite(buffer, 1, bytes, ofs);
+            mPosition = ftell(ofs);
+            fclose(ofs);
             success = TRUE;
         }
     }
-    // <FS:Ansariel> Fix asset caching
     else if (mMode == READ_WRITE)
     {
-        // Don't truncate if file already exists
-        llofstream ofs(filename, std::ios::in | std::ios::binary);
+        LLFILE* ofs = LLFile::fopen(filename, "r+b");
         if (ofs)
         {
-            ofs.seekp(mPosition, std::ios::beg);
-            ofs.write((const char*)buffer, bytes);
-            mPosition += bytes;
+            fseek(ofs, mPosition, SEEK_SET);
+            fwrite(buffer, 1, bytes, ofs);
+            mPosition = ftell(ofs);
+            fclose(ofs);
             success = TRUE;
         }
         else
         {
-            // File doesn't exist - open in write mode
-            ofs.open(filename, std::ios::binary);
-            if (ofs.is_open())
+            ofs = LLFile::fopen(filename, "wb");
+            if (ofs)
             {
-                ofs.write((const char*)buffer, bytes);
-                mPosition += bytes;
+                fwrite(buffer, 1, bytes, ofs);
+                mPosition = ftell(ofs);
+                fclose(ofs);
                 success = TRUE;
             }
         }
     }
-    // </FS:Ansariel>
     else
     {
-        llofstream ofs(filename, std::ios::binary);
+        LLFILE* ofs = LLFile::fopen(filename, "wb");
         if (ofs)
         {
-            ofs.write((const char*)buffer, bytes);
-
-            mPosition += bytes;
-
+            fwrite(buffer, 1, bytes, ofs);
+            mPosition = ftell(ofs);
+            fclose(ofs);
             success = TRUE;
         }
     }
+    // </FS:Ansariel>
 
     return success;
 }
 
 BOOL LLFileSystem::seek(S32 offset, S32 origin)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     if (-1 == origin)
     {
         origin = mPosition;
@@ -278,22 +364,26 @@ BOOL LLFileSystem::seek(S32 offset, S32 origin)
 
 S32 LLFileSystem::tell() const
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mPosition;
 }
 
 S32 LLFileSystem::getSize()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return LLFileSystem::getFileSize(mFileID, mFileType);
 }
 
 S32 LLFileSystem::getMaxSize()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     // offer up a huge size since we don't care what the max is
     return INT_MAX;
 }
 
 BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::renameFile(mFileID, mFileType, new_id, new_type);
 
     mFileID = new_id;
@@ -304,6 +394,7 @@ BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_typ
 
 BOOL LLFileSystem::remove()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::removeFile(mFileID, mFileType);
 
     return TRUE;

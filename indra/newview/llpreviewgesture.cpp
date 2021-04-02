@@ -373,11 +373,11 @@ BOOL LLPreviewGesture::postBuild()
 	mReplaceEditor = edit;
 
 	combo = getChild<LLComboBox>( "modifier_combo");
-	combo->setCommitCallback(onCommitSetDirty, this);
+	combo->setCommitCallback(boost::bind(&LLPreviewGesture::onCommitKeyorModifier, this));
 	mModifierCombo = combo;
 
 	combo = getChild<LLComboBox>( "key_combo");
-	combo->setCommitCallback(onCommitSetDirty, this);
+	combo->setCommitCallback(boost::bind(&LLPreviewGesture::onCommitKeyorModifier, this));
 	mKeyCombo = combo;
 
 	list = getChild<LLScrollListCtrl>("library_list");
@@ -944,11 +944,17 @@ void LLPreviewGesture::loadUIFromGesture(LLMultiGesture* gesture)
 		break;
 	}
 
+	// <FS:Ansariel> Allow CTRL-F10 shortcut for gestures
+	//mModifierCombo->setEnabledByValue(CTRL_LABEL, gesture->mKey != KEY_F10);
+
 	mKeyCombo->setCurrentByIndex(0);
 	if (gesture->mKey != KEY_NONE)
 	{
 		mKeyCombo->setSimple(LLKeyboard::stringFromKey(gesture->mKey));
 	}
+
+	// <FS:Ansariel> Allow CTRL-F10 shortcut for gestures
+	//mKeyCombo->setEnabledByValue(LLKeyboard::stringFromKey(KEY_F10), gesture->mMask != MASK_CONTROL);
 
 	// Make UI steps for each gesture step
 	S32 i;
@@ -1343,6 +1349,19 @@ LLMultiGesture* LLPreviewGesture::createGesture()
 	return gesture;
 }
 
+
+void LLPreviewGesture::onCommitKeyorModifier()
+{
+	// SL-14139: ctrl-F10 is currently used to access top menu,
+	// so don't allow to bound gestures to this combination.
+
+	// <FS:Ansariel> Allow CTRL-F10 shortcut for gestures
+	//mKeyCombo->setEnabledByValue(LLKeyboard::stringFromKey(KEY_F10), mModifierCombo->getSimple() != CTRL_LABEL);
+	//mModifierCombo->setEnabledByValue(CTRL_LABEL, mKeyCombo->getSimple() != LLKeyboard::stringFromKey(KEY_F10));
+	// </FS:Ansariel>
+	mDirty = TRUE;
+	refresh();
+}
 
 // static
 void LLPreviewGesture::updateLabel(LLScrollListItem* item)

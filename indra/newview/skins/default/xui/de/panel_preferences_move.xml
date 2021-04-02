@@ -51,7 +51,6 @@
 		<panel label="Bewegung" name="tab-movement">
 			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Buchstabeneingabe beeinflusst Bewegung (z.B. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="AZERTY-Tastaturlayout verwenden" name="FSUseAzertyKeyboardLayout"/>
 			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
 			<check_box label="Fliegen/Landen beim Drücken von auf (springen) / ab (kriechen)" name="automatic_fly" />
 			<check_box label="Kriech-Umschaltmodus aktivieren" name="crouch_toggle_mode"/>
@@ -99,6 +98,7 @@
 			<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 			<check_box label="Karte bei Teleports nicht schließen" name="FSDoNotHideMapOnTeleport" tool_tip="Deaktiviert das automatische Schließen der Karte während eines Teleports."/>
 			<check_box label="Nach Teleports „Nur Freunde anzeigen“ aktiviert lassen" name="FSRenderFriendsOnlyPersistsTP" tool_tip="Falls aktiviert bleibt die Einstellung „Nur Freunde anzeigen“ nach einem Teleport aktiviert (Standard: deaktiviert)"/>
+			<check_box label="SLurl der Region ausgeben, aus der ein Teleport stattgefunden hat" name="FSShowBackSLURL"/>
 		</panel>
 
 		<!-- Map & Minimap -->

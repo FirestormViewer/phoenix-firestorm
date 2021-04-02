@@ -5207,13 +5207,11 @@ bool LLVOAvatar::updateCharacter(LLAgent &agent)
 	// for example, the "turn around" animation when entering customize avatar needs to trigger
 	// even when your avatar is offscreen
 	//--------------------------------------------------------------------
-	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
-	//if (!needs_update && !isSelf())
-	//{
-	//	updateMotions(LLCharacter::HIDDEN_UPDATE);
-	//	return FALSE;
-	//}
-	// </FS:Ansariel>
+	if (!needs_update && !isSelf())
+	{
+		updateMotions(LLCharacter::HIDDEN_UPDATE);
+		return FALSE;
+	}
 
 	//--------------------------------------------------------------------
 	// Handle transitions between regular rendering, jellydoll, or invisible.
@@ -5227,17 +5225,6 @@ bool LLVOAvatar::updateCharacter(LLAgent &agent)
     // SL-763 the time step quantization does not currently work.
     //updateTimeStep();
     
-	// <FS:Ansariel> Fix impostered animation speed based on a fix by Henri Beauchamp
-	// This was originally done in updateTimeStep(), but since that is globally disabled for now, we do it here
-	mMotionController.setUpdateFactor(mUpdatePeriod);
-
-	if (!needs_update && !isSelf())
-	{
-		updateMotions(LLCharacter::HIDDEN_UPDATE);
-		return FALSE;
-	}
-	// </FS:Ansariel>
-
 	//--------------------------------------------------------------------
     // Update sitting state based on parent and active animation info.
 	//--------------------------------------------------------------------

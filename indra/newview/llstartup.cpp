@@ -2086,7 +2086,10 @@ bool idle_startup()
 
 		// update the voice settings *after* gCacheName initialization
 		// so that we can construct voice UI that relies on the name cache
-		LLVoiceClient::getInstance()->updateSettings();
+		if (LLVoiceClient::instanceExists())
+		{
+			LLVoiceClient::getInstance()->updateSettings();
+		}
 		display_startup();
 
 		// <FS:Ansariel> OpenSim support: Init with defaults - we get the OpenSimExtras later during login
@@ -2504,8 +2507,12 @@ bool idle_startup()
 			LLAvatarTracker::instance().addBuddyList(list);
 			display_startup();
  		}
-		
-		LGGContactSets::getInstance()->loadFromDisk();	// [FS:CR] Load contact sets
+
+		// <FS:Ansariel> Contact sets
+		LGGContactSets* cs_instance = LGGContactSets::getInstance();
+		cs_instance->loadFromDisk();
+		LLAvatarNameCache::instance().setCustomNameCheckCallback(boost::bind(&LGGContactSets::checkCustomName, cs_instance, _1, _2, _3));
+		// </FS:Ansariel>
 
 		bool show_hud = false;
 		LLSD tutorial_setting = response["tutorial_setting"];

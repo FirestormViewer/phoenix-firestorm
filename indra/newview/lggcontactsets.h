@@ -72,6 +72,8 @@ public:
 	bool hasDisplayNameRemoved(const LLUUID& friend_id);
 	bool hasDisplayNameRemoved(uuid_vec_t ids);
 
+	bool checkCustomName(const LLUUID& id, bool& dn_removed, std::string& pseudonym);
+
 	string_vec_t getFriendSets(const LLUUID& friend_id);
 	string_vec_t getAllContactSets();
 

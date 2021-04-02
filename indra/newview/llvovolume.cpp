@@ -6367,9 +6367,10 @@ static LLTrace::BlockTimerStatHandle FTM_REBUILD_MESH_FLUSH("Flush Mesh");
 void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 {
 	llassert(group);
+	LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_VB);// <FS:Beq> move out one scope (but are these even useful as dupes?)
 	if (group && group->hasState(LLSpatialGroup::MESH_DIRTY) && !group->hasState(LLSpatialGroup::GEOM_DIRTY))
 	{
-		LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_VB);
+		// LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_VB);// <FS:Beq> move out one scope (but are these even useful as dupes?)
 		LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_GEN_DRAW_INFO); //make sure getgeometryvolume shows up in the right place in timers
 
 		group->mBuilt = 1.f;
