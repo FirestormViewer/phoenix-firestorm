@@ -13,6 +13,7 @@
 		<menu_item_call label="Mój profil" name="Profile"/>
 		<menu_item_check label="Mój wygląd" name="ChangeOutfit"/>
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
+		<menu_item_call label="Uniesienie" name="HoverHeight" />
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
 			<menu_item_call label="Wstań" name="Stand up"/>
@@ -349,7 +350,6 @@
 		<menu_item_call label="Cofnij dodatkom zezwolenia kontroli przycisków" name="Release Keys"/>
 		<menu label="Skróty" name="Shortcuts">
 			<menu_item_check label="Wyszukiwarka" name="Search"/>
-			<menu_item_check label="Pokazuj menu Zaawansowane" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleportuj po podwójnym kliknięciu" name="DoubleClick Teleport"/>
 			<menu_item_check label="Zawsze biegaj" name="Always Run"/>
 			<menu_item_check label="Lataj" name="Fly"/>

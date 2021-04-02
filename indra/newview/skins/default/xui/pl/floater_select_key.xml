@@ -1,7 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container" title="Wybierz klawisz">
-	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
-	<text name="Save item as:">
-		Naciśnij przycisk, aby ustawić przełącznik Głosu.
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Wybierz klawisz" name="modal container">
+	<floater.string name="keyboard">
+		Klawiatura
+	</floater.string>
+	<floater.string name="mouse">
+		Przyciski myszy
+	</floater.string>
+	<floater.string name="basic_description">
+		Naciśnij klawisz lub przycisk myszy, aby ustawić wyzwalacz.
+Dozwolone: [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+		Kombinacja [KEYSTR] jest zarezerwowana przez menu.
+	</floater.string>
+	<text name="descritption">
+		Naciśnij klawisz lub przycisk myszy, aby ustawić wyzwalacz.
+Dozwolone: [INPUT].
 	</text>
+	<check_box label="Zastosuj do wszystkich" name="apply_all" tool_tip="Przeglądarka korzysta z różnych kombinacji klawiszy w zależności od tego, co robisz w świecie. Użycie tej opcji spowoduje zastosowanie Twojej zmiany do wszystkich trybów." />
+	<button label="Wyczyść" name="SetEmpty" />
+	<button label="Domyślne" name="Default" />
+	<button label="Anuluj" name="Cancel" />
 </floater>

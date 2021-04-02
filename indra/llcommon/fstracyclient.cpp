@@ -23,16 +23,7 @@
 #include "client/TracyCallstack.cpp"
 #include "client/TracySysTime.cpp"
 
-// Black magic on Windows to deal with windows entry points that are not found in a standard LL windows build
-// This is less invasive than changing the 3p library itself.
-// TODO: work out why the windows trace subsystem stuff is not defined in our builds, this then goes away (hopefully)
-#if defined(LL_WINDOWS) && !defined(__CYGWIN__)
-#define __CYGWIN__
 #include "client/TracySysTrace.cpp"
-#undef __CYGWIN__
-#else
-#include "client/TracySysTrace.cpp"
-#endif
 
 #include "common/TracySocket.cpp"
 #include "client/tracy_rpmalloc.cpp"

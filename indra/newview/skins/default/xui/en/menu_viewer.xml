@@ -132,6 +132,19 @@
 		
         <menu_item_separator/>
 
+      <menu_item_call
+       label="Hover Height"
+       name="HoverHeight"
+       shortcut="alt|control|H"
+       use_mac_ctrl="true"
+       visible="false">
+        <menu_item_call.on_click
+         function="Floater.ToggleOrBringToFront"
+         parameter="edit_hover_height"/>
+        <menu_item_call.on_enable
+         function="Edit.EnableHoverHeight"/>
+      </menu_item_call>
+
 		<menu
 		 create_jump_keys="true"
 		 label="Movement"
@@ -236,7 +249,8 @@
 
 		<menu_item_check
 		 label="Camera Controls"
-		 name="Camera Controls">
+		 name="Camera Controls"
+		 shortcut="control|K">
 			<menu_item_check.on_check
 			 function="View.CheckCameraFloater" />
 			<menu_item_check.on_click
@@ -252,7 +266,9 @@
          tear_off="true">
             <menu_item_call
              label="Stop Avatar Animations"
-             name="Stop Animating My Avatar">
+             name="Stop Animating My Avatar"
+             allow_key_repeat="true"
+             shortcut="alt|shift|A">
                 <menu_item_call.on_click
                  function="Tools.StopAllAnimations"
                  parameter="stop"/>
@@ -776,7 +792,8 @@
         </menu_item_call>
         <menu_item_call
              label="Events"
-             name="Events">
+             name="Events"
+             shortcut="control|E">
             <menu_item_call.on_click
              function="Advanced.ShowURL"
              parameter="https://secondlife.com/my/community/events"/>
@@ -962,8 +979,7 @@
           <menu_item_separator />
           <menu_item_check
              label="Advanced Menu"
-             name="Show Advanced Menu"
-             shortcut="control|alt|shift|D">
+             name="Show Advanced Menu">
             <on_check
                function="CheckControl"
                parameter="UseDebugMenus" />
@@ -3071,19 +3087,6 @@
              parameter="search" />
             </menu_item_check>
 
-            <!-- This second, alternative shortcut for Show Advanced Menu is for backward compatibility.  The main shortcut has been changed so it's Linux-friendly, where the old shortcut is typically eaten by the window manager. -->
-            <menu_item_check
-               label="Show Advanced Menu - legacy shortcut"
-               name="Show Advanced Menu - legacy shortcut"
-               shortcut="control|alt|D">
-              <on_check
-                 function="CheckControl"
-                 parameter="UseDebugMenus" />
-              <on_click
-                 function="ToggleControl"
-                 parameter="UseDebugMenus" />
-            </menu_item_check>
-
           <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
           <menu_item_check
            label="DoubleClick Teleport"
@@ -4914,7 +4917,7 @@
             <menu_item_call
              label="Debug Avatar Textures"
              name="Debug Avatar Textures"
-             shortcut="control|alt|shift|A">
+             shortcut="control|alt|shift|K">
                 <menu_item_call.on_click
                  function="Advanced.DebugAvatarTextures" />
             </menu_item_call>

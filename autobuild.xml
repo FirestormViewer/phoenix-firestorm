@@ -275,17 +275,17 @@
         <string>Tracy</string>
         <key>platforms</key>
         <map>
-          <key>windows</key>
+          <key>common</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8e4cc0d82acbf83f10fb866302fd7519</string>
+              <string>b0a0fc6b7bda02fe14cccea2dd342058</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/Tracy-v0.7.6-windows-210761143.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/Tracy-0.7.6-windows-210902110.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>windows</string>
+            <string>common</string>
           </map>
         </map>
         <key>version</key>
@@ -814,9 +814,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cc26af2ebfa241891caca829a6e46b88</string>
+              <string>856ba0e5b7be4bf683cf2849bce845e0</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/65005/607316/dullahan-1.7.0.202008031101_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-546064.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/72458/699860/dullahan-1.7.0.202011160759_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-552313.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -826,9 +826,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7599bb6b05a5e48ce78180735e5d3355</string>
+              <string>9a586d333b3c35389b29c7e8c7ebcc8f</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007261348_81.3.10_gb223419_chromium-81.0.4044.138-windows-202081313.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows-203261227.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>92ced00cd0f89d0154ce2bcc6da086e0</string>
+              <string>698e79226d0fb3b935509769a36bffd4</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007261348_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202081325.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows64-203261222.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -859,7 +859,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.7.0.202008031800_81.3.10_gb223419_chromium-81.0.4044.138</string>
+        <string>1.7.0.202011161603_81.3.10_gb223419_chromium-81.0.4044.138</string>
       </map>
       <key>elfio</key>
       <map>
@@ -1956,9 +1956,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5c682b490672aadf97ec9b938b351a9</string>
+              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.6-windows-202302209.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1968,9 +1968,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5c682b490672aadf97ec9b938b351a9</string>
+              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.6-windows-202302209.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

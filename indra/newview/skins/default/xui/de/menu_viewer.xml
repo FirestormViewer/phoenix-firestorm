@@ -16,6 +16,7 @@
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
 		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
+		<menu_item_call label="Schwebehöhe" name="HoverHeight"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
 			<menu_item_call label="Aufstehen" name="Stand up"/>
@@ -352,7 +353,6 @@
 			<menu_item_check label="Suchen" name="Search"/>
 			<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 			<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>
-			<menu_item_check label="Erweitert-Menü anzeigen - veraltetet" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Doppelklick-Teleport" name="DoubleClick Teleport"/>
             <menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Fliegen" name="Fly"/>

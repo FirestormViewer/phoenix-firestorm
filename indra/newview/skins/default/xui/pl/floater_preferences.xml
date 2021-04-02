@@ -19,6 +19,7 @@ https://accounts.secondlife.com/change_email/
 		<panel label="Dźwięk i media" name="audio"/>
 		<panel label="Sieć i pliki" name="input"/>
 		<panel label="Ruch i widok" name="move"/>
+		<panel label="Sterowanie" name="controls" />
 		<panel label="Powiadomienia" name="msgs"/>
 		<panel label="Prywatność" name="im"/>
 		<panel label="Zaawansowane" name="advanced1"/>
