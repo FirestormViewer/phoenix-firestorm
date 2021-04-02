@@ -22,6 +22,8 @@
 				<combo_box.item label="Aide au vol : Boost amplifié" name="flight_moderate"/>
 				<combo_box.item label="Aide au vol : Pleine puissance" name="flight_strong"/>
 			</combo_box>
+			<slider name="manual_environment_change_transition_period" label="Durée de transition de l'environnement :" tool_tip="Intervalle de transition en secondes entre des environnements. Zéro veut dire instantané."/>
+			<check_box name="EnvironmentPersistAcrossLogin" label="Persistance des réglages d'environnement entre deux sessions" tool_tip="Reprend les réglages actuels d'environnement lors de la prochaine connexion."/>
 		</panel>
 		<panel label="Protection" name="ProtectionTab">
 			<check_box label="Empêcher de s'asseoir sur les objets par clic simple" name="FSBlockClickSit"/>

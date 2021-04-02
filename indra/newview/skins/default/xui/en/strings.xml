@@ -138,7 +138,7 @@ Voice Server Version: [VOICE_VERSION]
 	<string name="LoginFailedNoNetwork">Network error: Could not establish connection, please check your network connection.</string>
 	<string name="LoginFailed">Login failed.</string>
 	<string name="Quit">Quit</string>
-	<string name="create_account_url">http://join.secondlife.com/?sourceid=[sourceid]</string>
+	<string name="create_account_url">https://www.firestormviewer.org/join-secondlife/</string>
 	
 	<string name="AgniGridLabel">Second Life Main Grid (Agni)</string>
 	<string name="AditiGridLabel">Second Life Beta Test Grid (Aditi)</string>
@@ -2610,6 +2610,15 @@ Try enclosing path to the editor with double quotes.
   <string name="Z">Z</string>
   <!-- Key names end -->
 
+  <!-- Mouse button names (short) begin -->
+  <string name="LMB">LMB</string>
+  <string name="MMB">MMB</string>
+  <string name="RMB">RMB</string>
+  <string name="MB4">MB4</string>
+  <string name="MB5">MB5</string>
+  <string name="Double LMB">Double LMB</string>
+  <!-- Mouse button names end -->
+
   <!-- llviewerwindow -->
   <string name="BeaconParticle">Viewing particle beacons (blue)</string>
   <string name="BeaconPhysical">Viewing physical object beacons (green)</string>
@@ -3193,6 +3202,7 @@ Your current position: [AVATAR_POS]
   <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
   <string name="font_fonts_noto.xml">Noto Sans</string>
   <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
+  <string name="font_fonts_cascadia_code.xml">Cascadia Code</string>
   <string name="mode_unknown">Unknown Mode</string>
   <string name="mode_settings_firestorm.xml">[APP_NAME]</string>
   <string name="mode_settings_phoenix.xml">Phoenix</string>

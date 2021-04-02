@@ -60,7 +60,6 @@ namespace LLTrace
 
 //////////////////////////////////////////////////////////////////////////////
 // statics
-
 bool        BlockTimer::sLog		     = false;
 std::string BlockTimer::sLogName         = "";
 bool        BlockTimer::sMetricLog       = false;
