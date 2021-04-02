@@ -5822,6 +5822,20 @@ void handle_take_copy()
 	derez_objects(DRD_ACQUIRE_TO_AGENT_INVENTORY, category_id);
 }
 
+void handle_link_objects()
+{
+	// <FS:Ansariel> We don't use a shortcut for two completely different functions based on context
+	//if (LLSelectMgr::getInstance()->getSelection()->isEmpty())
+	//{
+	//	LLFloaterReg::toggleInstanceOrBringToFront("places");
+	//}
+	//else
+	// </FS:Ansariel>
+	{
+		LLSelectMgr::getInstance()->linkObjects();
+	}
+}
+
 // You can return an object to its owner if it is on your land.
 class LLObjectReturn : public view_listener_t
 {
@@ -10280,7 +10294,6 @@ BOOL LLViewerMenuHolderGL::hideMenus()
 	
 	if (LLMenuHolderGL::hideMenus())
 	{
-		LLToolPie::instance().blockClickToWalk();
 		handled = TRUE;
 	}
 
@@ -11630,7 +11643,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSnapObjectXY(), "Tools.SnapObjectXY");
 	view_listener_t::addMenu(new LLToolsUseSelectionForGrid(), "Tools.UseSelectionForGrid");
 	view_listener_t::addMenu(new LLToolsSelectNextPartFace(), "Tools.SelectNextPart");
-	commit.add("Tools.Link", boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
+	commit.add("Tools.Link", boost::bind(&handle_link_objects));
 	commit.add("Tools.Unlink", boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 	view_listener_t::addMenu(new LLToolsStopAllAnimations(), "Tools.StopAllAnimations");
 	view_listener_t::addMenu(new LLToolsReleaseKeys(), "Tools.ReleaseKeys");
