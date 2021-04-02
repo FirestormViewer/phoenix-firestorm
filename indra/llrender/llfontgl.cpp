@@ -1100,6 +1100,13 @@ LLFontGL* LLFontGL::getFontOCRA()
 	static LLFontGL* fontp = getFont(LLFontDescriptor("OCRA","Monospace",0));
 	return fontp;
 }
+
+//static
+LLFontGL* LLFontGL::getFontCascadia()
+{
+	static LLFontGL* fontp = getFont(LLFontDescriptor("Cascadia", "Cascadia", 0));
+	return fontp;
+}
 // </FS:CR>
 
 //static
@@ -1151,6 +1158,10 @@ LLFontGL* LLFontGL::getFontByName(const std::string& name)
 	else if (name == "Monospace")
 	{
 		return getFontMonospace();
+	}
+	else if (name == "Cascadia")
+	{
+		return getFontCascadia();
 	}
 	// </FS:CR>
 	else

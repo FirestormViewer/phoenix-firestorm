@@ -44,6 +44,14 @@ public:
 	typedef boost::signals2::signal<void (void)> use_display_name_signal_t;
 	typedef boost::function<void (const LLUUID id, const LLAvatarName& av_name)> account_name_changed_callback_t;
 
+	// <FS:Ansariel> Contact sets
+	typedef boost::function<bool(const LLUUID& id, bool& dn_removed, std::string& custom_name)> custom_name_check_callback_t;
+	void setCustomNameCheckCallback(custom_name_check_callback_t cb)
+	{
+		mCustomNameCheckCallback = cb;
+	}
+	// </FS:Ansariel>
+
 	// Import/export the name cache to file.
 	bool importFile(std::istream& istr);
 	void exportFile(std::ostream& ostr);
@@ -200,6 +208,9 @@ private:
 
     // Time when unrefreshed cached names were checked last.
     F64 mLastExpireCheck;
+
+    // <FS:Ansariel> Contact sets
+    custom_name_check_callback_t mCustomNameCheckCallback;
 };
 
 // Parse a cache-control header to get the max-age delta-seconds.

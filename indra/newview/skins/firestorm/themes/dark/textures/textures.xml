@@ -1,0 +1,4 @@
+<textures version="101">
+	<texture name="Parcel_SeeAVsOff_Light"	file_name="icons/Parcel_SeeAVsOff_Dark.png" />
+	<texture name="Pathfinding_Disabled" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
+</textures>

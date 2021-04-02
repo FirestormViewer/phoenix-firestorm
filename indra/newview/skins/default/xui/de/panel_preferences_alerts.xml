@@ -54,12 +54,14 @@
 
 		<!-- Alerts -->
 		<panel label="Hinweise" name="tab-alerts">
-			<text name="show_label">
-				Immer anzeigen:
+			<text name="show_label" tool_tip="Liste aller Hinweise. Durch das Setzen des Hakens kann der Hinweis immer angezeigt werden, durch Entfernen des Hakens niemals.">
+				Hinweise, die immer oder niemals angezeigt werden können:
 			</text>
-			<text name="dont_show_label">
-				Niemals anzeigen:
-			</text>
+			<filter_editor label="Hinweise filtern" name="popup_filter" tool_tip="Filterbegriff für die Liste der Hinweise hier eingeben." />
+			<scroll_list name="all_popups">
+				<column label="Anzeigen" name="alert_enabled_check" width="22" />
+				<column label="Hinweis" name="alert_label" width="460" />
+			</scroll_list>
 		</panel>
 	</tab_container>
 </panel>

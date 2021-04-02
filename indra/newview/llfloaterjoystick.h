@@ -97,6 +97,9 @@ private:
 
 	// stats view 
 	LLStatBar* mAxisStatsBar[6];
+
+	// <FS:Zi> FIRE-14344 - show joystick buttons
+	LLTextBase* mJoystickButtons;
 };
 
 #endif

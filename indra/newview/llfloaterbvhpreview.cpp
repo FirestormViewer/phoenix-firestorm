@@ -278,6 +278,7 @@ BOOL LLFloaterBvhPreview::postBuild()
 // </FS:CR>
 
 // <FS> Reload animation from disk
+	setAnimCallbacks();
 	loadBVH();
 
 	return TRUE;
@@ -393,7 +394,8 @@ BOOL LLFloaterBvhPreview::loadBVH()
 
 		if (success)
 		{
-			setAnimCallbacks() ;
+			// <FS> Reload animation from disk; moved to postBuild
+			//setAnimCallbacks() ;
 			
 			const LLBBoxLocal &pelvis_bbox = motionp->getPelvisBBox();
 
@@ -1470,6 +1472,7 @@ void LLFloaterBvhPreview::onBtnReload(void* userdata)
 	
 	floaterp->unloadMotion();
 	floaterp->loadBVH();
+	floaterp->resetMotion();
 }
 // </FS>
 

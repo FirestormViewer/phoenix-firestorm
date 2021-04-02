@@ -38,35 +38,41 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 			<tab_container name="tabcont_radarpeople_main">
 				<panel name="panel_radar" label="Lista" />
 				<panel name="radarmap_options_panel" label="Opcje">
-					<check_box label="Pokaż minimapę nad radarem" name="ShowRadarMinimap"/>
-					<check_box label="Pokaż awatary zablokowane i z czarnej listy" name="FSRadarShowMutedAndDerendered"/>
-					<check_box label="Zgłaszaj wejście w pola widzenia" name="RadarReportDrawRangeEnter"/>
-					<check_box label="Zgłaszaj wyjście z pola widzenia" name="RadarReportDrawRangeLeaving"/>
-					<check_box label="Zgłaszaj wejście w przestrzeń czatu" name="RadarReportChatRangeEnter"/>
-					<check_box label="Zgłaszaj wyjście z przestrzeni czatu" name="RadarReportChatRangeLeave"/>
-					<check_box label="Zgłaszaj wejście w przestrzeń regionu" name="RadarReportSimRangeEnter"/>
-					<check_box label="Zgłaszaj wyjście z przestrzeni regionu" name="RadarReportSimRangeLeave"/>
-					<check_box label="Zgłaszaj alerty wejść skryptom" name="RadarEnterChannelAlert"/>
-					<check_box label="Zgłaszaj alerty wyjść skryptom" name="RadarLeaveChannelAlert"/>
-					<check_box label="Wspomaganie radaru za pomocą Mostu LSL" tool_tip="Gdy ta opcja jest włączona, to funkcje radaru odpowiedzialne za ustalanie wysokości na jakiej znajdują się awatary są wspomagane przez Most LSL - zwłaszcza gdy jest ona duża i osoby są poza polem widzenia." name="FSRadarEnhanceByBridge"/>
-					<check_box label="Koloruj imiona bazując na odległości" name="FSRadarColorNamesByDistance"/>
-					<check_box label="Ogranicz odl.:" tool_tip="Ogranicza wyniki do określonego dystansu" name="LimitRadarByRange" />
-					<text name="radarmap_range_label" value="Format imion radaru:"/>
-					<combo_box name="RadarNameFormat">
-						<combo_box.item name="RadarNameFormat_display" label="Wyświetlane" />
-						<combo_box.item name="RadarNameFormat_user" label="Nazwa konta" />
-						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (Nazwa konta)" />
-						<combo_box.item name="RadarNameFormat_userdisplay" label="Nazwa konta (Wyświetlane)" />
-					</combo_box>
-					<text name="columns_label" value="Widoczne kolumny:" />
-					<check_box label="Rozmawia głosowo" name="column_voice" />
-					<check_box label="Czas" name="column_seen" />
-					<check_box label="Wiek" name="column_age" />
-					<check_box label="Jest w tym samym regionie" name="column_region" />
-					<check_box label="Obecnie pisze" name="column_typing_status" />
-					<check_box label="Obecnie siedzi" name="column_sitting_status" />
-					<check_box label="Stan danych płatniczych" name="column_flags" />
-					<check_box label="Notatki" name="notes_flags" />
+					<scroll_container label="Opcje" name="radarmap_options_scroll_container">
+						<container_view name="radarmap_options_container_view" label="Opcje">
+							<panel name="radarmap_options_scrolled_panel">
+								<check_box label="Pokaż minimapę nad radarem" name="ShowRadarMinimap"/>
+								<check_box label="Pokaż awatary zablokowane i z czarnej listy" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="Zgłaszaj wejście w pola widzenia" name="RadarReportDrawRangeEnter"/>
+								<check_box label="Zgłaszaj wyjście z pola widzenia" name="RadarReportDrawRangeLeaving"/>
+								<check_box label="Zgłaszaj wejście w przestrzeń czatu" name="RadarReportChatRangeEnter"/>
+								<check_box label="Zgłaszaj wyjście z przestrzeni czatu" name="RadarReportChatRangeLeave"/>
+								<check_box label="Zgłaszaj wejście w przestrzeń regionu" name="RadarReportSimRangeEnter"/>
+								<check_box label="Zgłaszaj wyjście z przestrzeni regionu" name="RadarReportSimRangeLeave"/>
+								<check_box label="Zgłaszaj alerty wejść skryptom" name="RadarEnterChannelAlert"/>
+								<check_box label="Zgłaszaj alerty wyjść skryptom" name="RadarLeaveChannelAlert"/>
+								<check_box label="Wspomaganie radaru za pomocą Mostu LSL" tool_tip="Gdy ta opcja jest włączona, to funkcje radaru odpowiedzialne za ustalanie wysokości na jakiej znajdują się awatary są wspomagane przez Most LSL - zwłaszcza gdy jest ona duża i osoby są poza polem widzenia." name="FSRadarEnhanceByBridge"/>
+								<check_box label="Koloruj imiona bazując na odległości" name="FSRadarColorNamesByDistance"/>
+								<check_box label="Ogranicz odl.:" tool_tip="Ogranicza wyniki do określonego dystansu" name="LimitRadarByRange" />
+								<text name="radarmap_range_label" value="Format imion radaru:"/>
+								<combo_box name="RadarNameFormat">
+									<combo_box.item name="RadarNameFormat_display" label="Wyświetlane" />
+									<combo_box.item name="RadarNameFormat_user" label="Nazwa konta" />
+									<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (Nazwa konta)" />
+									<combo_box.item name="RadarNameFormat_userdisplay" label="Nazwa konta (Wyświetlane)" />
+								</combo_box>
+								<text name="columns_label" value="Widoczne kolumny:" />
+								<check_box label="Rozmawia głosowo" name="column_voice" />
+								<check_box label="Czas" name="column_seen" />
+								<check_box label="Wiek" name="column_age" />
+								<check_box label="Jest w tym samym regionie" name="column_region" />
+								<check_box label="Obecnie pisze" name="column_typing_status" />
+								<check_box label="Obecnie siedzi" name="column_sitting_status" />
+								<check_box label="Stan danych płatniczych" name="column_flags" />
+								<check_box label="Notatki" name="notes_flags" />
+							</panel>
+						</container_view>
+					</scroll_container>
 				</panel>
 			</tab_container>
 		</panel>

@@ -208,6 +208,7 @@ or specifying its path in the "Editor Path" field.</string>
          right="-10"
          tab_group="1"
          search_column="1"
+         sort_column="1"
          top="80">
             <scroll_list.columns
              label="Title"
@@ -216,11 +217,11 @@ or specifying its path in the "Editor Path" field.</string>
             <scroll_list.columns
              label="File"
              name="file_column"
-             width="150" />
+             dynamic_width="true" />
             <scroll_list.columns
-             dynamic_width="true"
              label="Top-Level Node"
-             name="top_level_node_column" />
+             name="top_level_node_column"
+             width="250" />
         </scroll_list>
         <panel
          bevel_style="in"

@@ -68,6 +68,7 @@
      name="FSDisableWMIProbing"
      top_pad="10"
      width="237"/>
+    <!-- Ansa: Timesteps are currently disabled in the viewer
     <check_box
      control_name="UseAnimationTimeSteps"
      tool_tip="This setting may reduce render load for distant avatars but, may also cause their animations to play at incorrect speeds"
@@ -79,6 +80,7 @@
      name="UseAnimationTimeSteps"
      top_pad="5"
      width="237"/>
+    -->
     <text
      name="BackgroundYieldTimeText"
      follows="top|left"
