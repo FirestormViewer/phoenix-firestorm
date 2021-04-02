@@ -39,6 +39,7 @@ WANTS_SINGLEGRID=$FALSE
 WANTS_AVX=$FALSE
 WANTS_AVX2=$FALSE
 WANTS_TESTBUILD=$FALSE
+WANTS_TRACY=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_CRASHREPORTING=$FALSE
 TARGET_PLATFORM="darwin" # darwin, windows, linux
@@ -77,6 +78,7 @@ showUsage()
     echo "  --singlegrid <login_uri> : Build for single grid usage (Requires --opensim)"
     echo "  --avx                    : Build with Advanced Vector Extensions"
     echo "  --avx2                   : Build with Advanced Vector Extensions 2"
+    echo "  --tracy                  : Build with Tracy Profiler support"
     echo "  --crashreporting         : Build with crash reporting enabled"
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
@@ -92,7 +94,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -119,6 +121,7 @@ getArgs()
                           ;;
           avx)            WANTS_AVX=$TRUE;;
           avx2)           WANTS_AVX2=$TRUE;;
+          tracy)          WANTS_TRACY=$TRUE;;
           crashreporting) WANTS_CRASHREPORTING=$TRUE;;
           testbuild)      WANTS_TESTBUILD=$TRUE
                           TESTBUILD_PERIOD="$OPTARG"
@@ -308,6 +311,7 @@ else
 fi
 echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a $LOG
 echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a $LOG
+echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a $LOG
 echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a $LOG
 if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
     echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD` ($TESTBUILD_PERIOD days)" | tee -a $LOG
@@ -463,6 +467,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         AVX2_OPTIMIZATION="-DUSE_AVX2_OPTIMIZATION:BOOL=OFF"
     fi
+    if [ $WANTS_TRACY -eq $TRUE ] ; then
+        TRACY_PROFILER="-DUSE_TRACY_PROFILER:BOOL=ON"
+    else
+        TRACY_PROFILER="-DUSE_TRACY_PROFILER:BOOL=OFF"
+    fi   
     if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
         TESTBUILD="-DTESTBUILD:BOOL=ON -DTESTBUILDPERIOD:STRING=$TESTBUILD_PERIOD"
     else
@@ -531,7 +540,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TESTBUILD $PACKAGE \
+    cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 

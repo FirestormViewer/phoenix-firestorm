@@ -3456,7 +3456,7 @@ void LLAppearanceMgr::updateIsDirty()
 		{
 			LLViewerInventoryItem *item = *i;
 
-			if (item->getName() == FSLSLBridge::instance().currentFullName())
+			if (FSLSLBridge::instance().isBridgeValid() && item && item->getLinkedUUID() == FSLSLBridge::instance().getBridge()->getUUID())
 			{
 				cof_items.erase( i );
 				break;
@@ -3687,6 +3687,19 @@ void update_base_outfit_after_ordering()
                 break;
             }
         }
+
+        // <FS:Ansariel> Exclude LSL bridge or the following size check will always fail!
+        for (LLInventoryModel::item_array_t::iterator i = cof_item_array.begin(); i != cof_item_array.end(); ++i)
+        {
+            LLViewerInventoryItem *item = *i;
+
+            if (FSLSLBridge::instance().isBridgeValid() && item && item->getLinkedUUID() == FSLSLBridge::instance().getBridge()->getUUID())
+            {
+                cof_item_array.erase(i);
+                break;
+            }
+        }
+        // </FS:Ansariel>
 
         if (outfit_item_array.size() != cof_item_array.size())
         {

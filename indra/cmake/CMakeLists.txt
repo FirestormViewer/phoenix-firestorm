@@ -88,6 +88,7 @@ set(cmake_SOURCE_FILES
     PulseAudio.cmake
     Python.cmake
     TemplateCheck.cmake
+    Tracy.cmake
     Tut.cmake
     UI.cmake
     UnixInstall.cmake

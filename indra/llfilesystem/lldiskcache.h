@@ -104,16 +104,24 @@ class LLDiskCache :
          * so many things had to be pushed back there to accomodate it, that I
          * decided to move it here.  Still not sure that's completely right.
          */
-        const std::string metaDataToFilepath(const std::string id,
+        // <FS:Ansariel> Optimize asset simple disk cache
+         //const std::string metaDataToFilepath(const std::string id,
+         //                                     LLAssetType::EType at,
+         //                                     const std::string extra_info);
+        const std::string metaDataToFilepath(const std::string& id,
                                              LLAssetType::EType at,
-                                             const std::string extra_info);
+                                             const std::string& extra_info);
+        // </FS:Ansariel>
 
         /**
          * Update the "last write time" of a file to "now". This must be called whenever a
          * file in the cache is read (not written) so that the last time the file was
          * accessed is up to date (This is used in the mechanism for purging the cache)
          */
-        void updateFileAccessTime(const std::string file_path);
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //void updateFileAccessTime(const std::string file_path);
+        void updateFileAccessTime(const std::string& file_path);
+        // </FS:Ansariel>
 
         /**
          * Purge the oldest items in the cache so that the combined size of all files

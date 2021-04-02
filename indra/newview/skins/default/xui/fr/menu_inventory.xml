@@ -70,6 +70,7 @@
 	<menu_item_call label="Ouvrir" name="Sound Open"/>
 	<menu_item_call label="Remplacer la tenue actuelle" name="Replace Outfit"/>
 	<menu_item_call label="Ajouter à la tenue actuelle" name="Add To Outfit"/>
+	<menu_item_call label="Porter les objets" name="Wear Items"/>
 	<menu_item_call label="Enlever de la tenue actuelle" name="Remove From Outfit"/>
 	<menu_item_call label="Copier la liste de la tenue dans le presse-papiers" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Trouver l&apos;original" name="Find Original"/>
@@ -79,6 +80,7 @@
 	<menu_item_call label="Ouvrir l&apos;original" name="Open Original"/>
 	<menu_item_call label="Propriétés" name="Properties"/>
 	<menu_item_call label="Renommer" name="Rename"/>
+	<menu_item_call label="Protéger" name="ProtectFolder"/>
 	<menu_item_call label="Copier l&apos;UUID (identifiant universel unique)" name="Copy Asset UUID"/>
 	<menu_item_call label="Affiche le Panneau principal" name="Show in Main Panel"/>
 	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>

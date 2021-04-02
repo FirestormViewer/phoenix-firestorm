@@ -30,6 +30,9 @@
       <file>PingFang.ttc</file>
       <file>STIXGeneral.otf</file>
     </os>
+    <os name="Linux">
+      <file>DejaVuSans.ttf</file>
+    </os>
   </font>
 
   <font name="SansSerifBold"
@@ -84,6 +87,11 @@
   <font name="OCRA"
   comment="OCRA machine character recognition used in script editor compile errors">
     <file>ocra.ttf</file>
+  </font>
+
+  <font name="Cascadia"
+	comment="Name of an optional Cascadia Code font used for the script editor">
+    <file>CascadiaCode-Light.ttf</file>
   </font>
 
   <font name="DejaVu"
@@ -169,6 +177,10 @@
   <font_size name="Monospace"
 	     comment="Size for monospaced font (points, or 1/72 of an inch)"
 	     size="8.0"
+	     />
+  <font_size name="Cascadia"
+	     comment="Size for monospaced font (points, or 1/72 of an inch)"
+	     size="8.6"
 	     />
   <font_size name="Huge"
 	     comment="Size of huge font (points, or 1/72 of an inch)"

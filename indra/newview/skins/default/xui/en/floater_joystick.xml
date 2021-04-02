@@ -269,6 +269,13 @@
          tick_spacing="0.5" />
     </stat_view>
     <text
+      type="string"
+      halign="center"
+      length="16"
+      name="joystick_buttons"
+      text_color="White"
+      top_pad="1" />
+    <text
      type="string"
      length="1"
      bottom="152"
