@@ -6042,13 +6042,9 @@ void LLAppViewer::sendLogoutRequest()
 	}
 }
 
-// <FS:Beq> FIRE-30774 displayname capability is targetting previous region
-// void LLAppViewer::updateNameLookupUrl()
-void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * region)
-// </FS:Beq>
+void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * regionp)
 {
-    // LLViewerRegion* region = gAgent.getRegion(); <FS:Beq/>
-    if (!region || !region->capabilitiesReceived())
+    if (!regionp || !regionp->capabilitiesReceived())
     {
         return;
     }
@@ -6057,7 +6053,7 @@ void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * region)
     bool had_capability = name_cache->hasNameLookupURL();
     std::string name_lookup_url;
     name_lookup_url.reserve(128); // avoid a memory allocation below
-    name_lookup_url = region->getCapability("GetDisplayNames");
+    name_lookup_url = regionp->getCapability("GetDisplayNames");
     bool have_capability = !name_lookup_url.empty();
     if (have_capability)
     {
@@ -6403,6 +6399,33 @@ void LLAppViewer::forceErrorDriverCrash()
 {
    	LL_WARNS() << "Forcing a deliberate driver crash" << LL_ENDL;
 	glDeleteTextures(1, NULL);
+}
+
+void LLAppViewer::forceErrorCoroutineCrash()
+{
+    LL_WARNS() << "Forcing a crash in LLCoros" << LL_ENDL;
+    LLCoros::instance().launch("LLAppViewer::crashyCoro", [] {throw LLException("A deliberate crash from LLCoros"); });
+}
+
+void LLAppViewer::forceErrorThreadCrash()
+{
+    class LLCrashTestThread : public LLThread
+    {
+    public:
+
+        LLCrashTestThread() : LLThread("Crash logging test thread")
+        {
+        }
+
+        void run()
+        {
+            LL_ERRS() << "This is a deliberate llerror in thread" << LL_ENDL;
+        }
+    };
+
+    LL_WARNS() << "This is a deliberate crash in a thread" << LL_ENDL;
+    LLCrashTestThread *thread = new LLCrashTestThread();
+    thread->start();
 }
 
 // <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame

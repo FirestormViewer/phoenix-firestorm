@@ -2407,7 +2407,7 @@ void LLViewerRegion::setSimulatorFeaturesReceived(bool received)
 	mSimulatorFeaturesReceived = received;
 	if (received)
 	{
-		mSimulatorFeaturesReceivedSignal(getRegionID());
+		mSimulatorFeaturesReceivedSignal(getRegionID(), this);
 		mSimulatorFeaturesReceivedSignal.disconnect_all_slots();
 	}
 }
@@ -3421,7 +3421,7 @@ void LLViewerRegion::setCapabilitiesReceived(bool received)
 	// so that they can safely use getCapability().
 	if (received)
 	{
-		mCapabilitiesReceivedSignal(getRegionID());
+		mCapabilitiesReceivedSignal(getRegionID(), this);
 
 		LLFloaterPermsDefault::sendInitialPerms();
 
