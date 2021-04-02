@@ -188,7 +188,7 @@ Ses Sunucusu Sürümü: [VOICE_VERSION]
 		Çık
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/?sourceid=[sourceid]
+		https://www.firestormviewer.org/join-secondlife/
 	</string>
 	<string name="AgniGridLabel">
 		Second Life Ana Ağı (Agni)

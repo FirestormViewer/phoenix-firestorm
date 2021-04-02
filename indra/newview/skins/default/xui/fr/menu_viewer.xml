@@ -116,10 +116,16 @@
 			<menu_item_call label="Mes environnements..." name="my_environs"/>
 			<menu_item_call label="Éclairage personnel..." name="adjustment_tool"/>
 			<menu_item_check label="Mettre les nuages en pause" name="pause_clouds"/>
+			<menu label="Importation par lot" name="WL Bulk Import">
+				<menu_item_call label="Jours..." name="WL Bulk Import Days"/>
+				<menu_item_call label="Ciels..." name="WL Bulk Import Skies"/>
+				<menu_item_call label="Eau..." name="WL Bulk Import Water"/>
+			</menu>
 		</menu>
 		<menu label="Photo et vidéo" name="photo_and_video">
 			<menu_item_call label="Outils de prise de vue" name="phototools_item_call"/>
 			<menu_item_call label="Contrôle de la caméra" name="cameratools_item_call"/>
+			<menu_item_check label="Verrouillage de la mise au point de la PdC" name="lock_focus_point"/>
 		</menu>
 		<menu_item_call label="Recherche dans la région" name="area_search"/>
 		<menu_item_call label="Explorateur de sons" name="Sound Explorer"/>

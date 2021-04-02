@@ -250,6 +250,21 @@ void activate_camera_tool()
 /*static*/ bool LLFloaterCamera::inFreeCameraMode()
 {
 	LLFloaterCamera* floater_camera = LLFloaterCamera::findInstance();
+
+	// <FS:Ansariel> Phototools camera
+	if (!floater_camera)
+	{
+		floater_camera = LLFloaterCamera::findPhototoolsInstance();
+	}
+	// <FS:Ansariel>
+
+	// <FS:Ansariel> Optional small camera floater
+	if (!floater_camera)
+	{
+		floater_camera = LLFloaterCamera::findSmallInstance();
+	}
+	// <FS:Ansariel>
+
 	if (floater_camera && floater_camera->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK)
 	{
 		return true;

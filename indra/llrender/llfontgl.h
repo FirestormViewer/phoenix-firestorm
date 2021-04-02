@@ -193,6 +193,7 @@ public:
 	// <FS:CR> Advanced script editor
 	static LLFontGL* getFontScripting();
 	static LLFontGL* getFontOCRA();
+	static LLFontGL* getFontCascadia();
 	// </FS:CR>
 	static LLFontGL* getFontExtChar();
 	static LLFontGL* getFont(const LLFontDescriptor& desc);

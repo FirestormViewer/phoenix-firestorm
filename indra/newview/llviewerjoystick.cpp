@@ -1427,6 +1427,8 @@ bool LLViewerJoystick::isLikeSpaceNavigator() const
 #if LIB_NDOF
 	return (isJoystickInitialized() 
 			&& (strncmp(mNdofDev->product, "SpaceNavigator", 14) == 0
+				// <FS:Zi> FIRE-30846 - Add combined product string that is returned by some devices
+				|| strncmp(mNdofDev->product, "3Dconnexion SpaceNavigator", 26) == 0
 				|| strncmp(mNdofDev->product, "SpaceExplorer", 13) == 0
 				|| strncmp(mNdofDev->product, "SpaceTraveler", 13) == 0
 				|| strncmp(mNdofDev->product, "SpacePilot", 10) == 0));

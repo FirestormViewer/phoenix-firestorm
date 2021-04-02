@@ -1048,6 +1048,13 @@ LGGContactSets::ContactSet* LGGContactSets::getContactSet(const std::string& set
 	return NULL;
 }
 
+bool LGGContactSets::checkCustomName(const LLUUID& id, bool& dn_removed, std::string& pseudonym)
+{
+	dn_removed = hasDisplayNameRemoved(id);
+	pseudonym = getPseudonym(id);
+	return hasPseudonym(id);
+}
+
 // static
 bool LGGContactSets::handleAddContactSetCallback(const LLSD& notification, const LLSD& response)
 {

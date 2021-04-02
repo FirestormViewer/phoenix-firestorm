@@ -10,16 +10,17 @@
 		Textures multiples
 	</text>
 	<radio_group name="mode_selection">
-		<radio_item label="Inventaire" name="inventory"/>
-		<radio_item label="Local" name="local""/>
-		<radio_item label="Figer" name="bake"/>
+		<radio_item label="Inventaire" name="inventory" width="75" />
+		<radio_item label="Local" name="local"/>
+		<radio_item label="BOM" name="bake"/>
 	</radio_group>
 	<text name="size_lbl">
-		Taille: [DIMENSIONS]
+		Taille:
+[DIMENSIONS]
 	</text>
-	<button label="Défaut" label_selected="Défaut" name="Default" width="60"/>
-	<button label="Vierge" label_selected="Vierge" name="Blank" width="60"/>
-	<button label="Aucune" label_selected="Aucune" left="68" name="None" width="60"/>
+	<button label="Défaut" label_selected="Défaut" name="Default" />
+	<button label="Vierge" label_selected="Vierge" name="Blank" />
+	<button label="Aucune" label_selected="Aucune" name="None" />
 	<button bottom="-240" label="" label_selected="" name="Pipette"/>
 	<text name="preview_disabled" value="Aperçu désactivé"/>
 	<filter_editor label="Filtrer les textures" name="inventory search editor"/>
@@ -46,6 +47,8 @@
 		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
 	</combo_box>
 	<check_box initial_value="false" label="Masquer la région maillée de base" name="hide_base_mesh_region"/>
+	<line_editor name="TextureKey" tool_tip="Clé de la texture"/>
+	<button name="TextureKeyApply" label="Appl. UUID" tool_tip="Appliquer cet UUID"/>
 	<button label="OK" label_selected="OK" name="Select"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>
 	<check_box initial_value="true" label="Appliquer" name="apply_immediate_check"/>

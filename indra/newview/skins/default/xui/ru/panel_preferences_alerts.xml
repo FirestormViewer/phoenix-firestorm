@@ -45,12 +45,14 @@
 		<slider name="FSOfferThrottleMaxCount" label="Порог количества поступающих объектов:" tool_tip="Установите порог количества поступающих объектов в течении 10 секунд. По умолчанию 5" />
 	</panel>
 	<panel label="Оповещения" name="tab-alerts">
-		<text name="show_label">
-			Всегда показывать:
+		<text name="show_label" tool_tip="Список оповещений в программе просмотра. Поставьте отметку слева, чтобы включить оповещение, снимите отметку, чтобы скрыть оповещение.">
+			Оповещения которые можно показать или скрыть:
 		</text>
-		<text name="dont_show_label">
-			Никогда не показывать:
-		</text>
+		<filter_editor label="Фильтр оповещений" name="popup_filter" tool_tip="Введите здесь интересующий вас поисковый запрос. Результаты будут отображаться для частичных полнотекстовых совпадений."/>
+		<scroll_list name="all_popups">
+			<column label="Показ" name="alert_enabled_check"/>
+			<column label="Оповещение" name="alert_label"/>
+		</scroll_list>
 	</panel>
 </tab_container>
 </panel>
