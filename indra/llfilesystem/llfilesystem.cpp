@@ -57,6 +57,7 @@ LLFileSystem::~LLFileSystem()
 // static
 bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -85,6 +86,7 @@ bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType fil
 bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type, int suppress_error /*= 0*/)
 // </FS:Ansariel>
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -102,6 +104,7 @@ bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType fi
 bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::EType old_file_type,
                               const LLUUID& new_file_id, const LLAssetType::EType new_file_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string old_id_str;
     old_file_id.toString(old_id_str);
     const std::string extra_info = "";
@@ -132,6 +135,7 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
 // static
 S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType file_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     file_id.toString(id_str);
     const std::string extra_info = "";
@@ -157,6 +161,7 @@ S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType fi
 
 BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     BOOL success = TRUE;
 
     std::string id;
@@ -215,16 +220,19 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 
 S32 LLFileSystem::getLastBytesRead()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mBytesRead;
 }
 
 BOOL LLFileSystem::eof()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mPosition >= getSize();
 }
 
 BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     std::string id_str;
     mFileID.toString(id_str);
     const std::string extra_info = "";
@@ -334,6 +342,7 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
 
 BOOL LLFileSystem::seek(S32 offset, S32 origin)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     if (-1 == origin)
     {
         origin = mPosition;
@@ -364,22 +373,26 @@ BOOL LLFileSystem::seek(S32 offset, S32 origin)
 
 S32 LLFileSystem::tell() const
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return mPosition;
 }
 
 S32 LLFileSystem::getSize()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     return LLFileSystem::getFileSize(mFileID, mFileType);
 }
 
 S32 LLFileSystem::getMaxSize()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     // offer up a huge size since we don't care what the max is
     return INT_MAX;
 }
 
 BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_type)
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::renameFile(mFileID, mFileType, new_id, new_type);
 
     mFileID = new_id;
@@ -390,6 +403,7 @@ BOOL LLFileSystem::rename(const LLUUID& new_id, const LLAssetType::EType new_typ
 
 BOOL LLFileSystem::remove()
 {
+    FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
     LLFileSystem::removeFile(mFileID, mFileType);
 
     return TRUE;

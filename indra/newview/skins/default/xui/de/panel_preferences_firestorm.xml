@@ -186,10 +186,12 @@
 		<combo_box name="FSScriptingFontName" tool_tip="Name der Schrift, die für den Skript-Editor verwendet wird">
 			<combo_item name="Monospace" label="Monospace"/>
 			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
 		</combo_box>
 		<combo_box name="FSScriptingFontSize" tool_tip="Größe der Schrift, die für den Skript-Editor verwendet wird">
 			<combo_item name="Monospace" label="Monospace"/>
 			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
 			<combo_item name="Small" label="Klein"/>
 			<combo_item name="Medium" label="Mittel"/>
 			<combo_item name="Large" label="Groß"/>

@@ -37,6 +37,8 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llconversationlog.h"
 #include "llsearcheditor.h"
+#include "llsetkeybinddialog.h"
+#include "llkeyconflict.h"
 
 #include "llaudioengine.h" // <FS:Ansariel> Output device selection
 
@@ -45,12 +47,17 @@ class LLPanelPreference;
 class LLPanelLCD;
 class LLPanelDebug;
 class LLMessageSystem;
+class LLComboBox;
 class LLScrollListCtrl;
+class LLScrollListCell;
 class LLSliderCtrl;
 class LLSD;
 class LLTextBox;
 class LLComboBox;
 class LLLineEditor;
+
+// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+class LLFilterEditor;
 
 namespace ll
 {
@@ -80,7 +87,9 @@ public:
 
 	void apply();
 	void cancel();
-	/*virtual*/ void draw();
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// /*virtual*/ void draw();
+	// </FS:Zi>
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/	void onClose(bool app_quitting);
@@ -108,6 +117,8 @@ public:
 	void selectPrivacyPanel();
 	void selectChatPanel();
 	void getControlNames(std::vector<std::string>& names);
+	// updates click/double-click action controls depending on values from settings.xml
+	void updateClickActionViews();
 
 // <FS:CR> Make onBtnOk() public for settings backup panel
 //protected:
@@ -146,10 +157,9 @@ protected:
 
 	// callback for commit in the "Single click on land" and "Double click on land" comboboxes.
 	void onClickActionChange();
-	// updates click/double-click action settings depending on controls values
-	void updateClickActionSettings();
-	// updates click/double-click action controls depending on values from settings.xml
+	// updates click/double-click action keybindngs depending on view values
 	void updateClickActionControls();
+
 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
 	void updateUISoundsControls();
 
@@ -166,7 +176,6 @@ protected:
 
 	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
 	void onShowGroupNoticesTopRightChanged();
-
 	// <FS:Ansariel> Dynamic texture memory calculation
 	void handleDynamicTextureMemoryChanged();
 
@@ -198,11 +207,6 @@ public:
 	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
-	void onClickSetKey();
-	void onClickClearKey(); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
-	void setKey(KEY key);
-	void setMouse(LLMouseHandler::EClickType click);
-	void onClickSetMiddleMouse();
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	void setPreprocInclude();
@@ -211,8 +215,12 @@ public:
 	void setExternalEditor();
 	void changeExternalEditorPath(const std::vector<std::string>& filenames);
 	// </FS:LO>
-	void onClickEnablePopup();
-	void onClickDisablePopup();	
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// void onClickEnablePopup();
+	// void onClickDisablePopup();	
+	void onSelectPopup();
+	void onUpdatePopupFilter();
+	// </FS:Zi>
 	void resetAllIgnored();
 	void setAllIgnored();
 	void onClickLogPath();
@@ -271,7 +279,12 @@ public:
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void onLogChatHistorySaved();	
-	void buildPopupLists();
+
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	// void buildPopupLists();
+	void buildPopupList();
+	// </FS:Zi>
+
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
 	// <FS:Ansariel> Build fix
@@ -289,7 +302,6 @@ private:
 
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
-	bool mClickActionDirty; ///< Set to true when the click/double-click options get changed by user.
 	bool mGotPersonalInfo;
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
@@ -308,6 +320,11 @@ private:
 
 	void onUpdateFilterTerm( bool force = false );
 	void collectSearchableItems();
+
+	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
+	LLScrollListCtrl* mPopupList;
+	LLFilterEditor* mPopupFilter;
+	// </FS.Zi>
 };
 
 class LLPanelPreference : public LLPanel
@@ -397,6 +414,60 @@ private:
 
 	void onPresetsListChange();
 	LOG_CLASS(LLPanelPreferenceGraphics);
+};
+
+class LLPanelPreferenceControls : public LLPanelPreference, public LLKeyBindResponderInterface
+{
+	LOG_CLASS(LLPanelPreferenceControls);
+public:
+	LLPanelPreferenceControls();
+	virtual ~LLPanelPreferenceControls();
+
+	BOOL postBuild();
+
+	void apply();
+	void cancel();
+	void saveSettings();
+	void resetDirtyChilds();
+
+	void onListCommit();
+	void onModeCommit();
+	void onRestoreDefaultsBtn();
+	void onRestoreDefaultsResponse(const LLSD& notification, const LLSD& response);
+
+    // Bypass to let Move & view read values without need to create own key binding handler
+    // Todo: consider a better way to share access to keybindings
+    bool canKeyBindHandle(const std::string &control, EMouseClickType click, KEY key, MASK mask);
+    // Bypasses to let Move & view modify values without need to create own key binding handler
+    void setKeyBind(const std::string &control, EMouseClickType click, KEY key, MASK mask, bool set /*set or reset*/ );
+    void updateAndApply();
+
+    // from interface
+	/*virtual*/ bool onSetKeyBind(EMouseClickType click, KEY key, MASK mask, bool all_modes);
+    /*virtual*/ void onDefaultKeyBind(bool all_modes);
+    /*virtual*/ void onCancelKeyBind();
+
+private:
+	// reloads settings, discards current changes, updates table
+	void regenerateControls();
+
+	// These fuctions do not clean previous content
+	bool addControlTableColumns(const std::string &filename);
+	bool addControlTableRows(const std::string &filename);
+	void addControlTableSeparator();
+
+	// Cleans content and then adds content from xml files according to current mEditingMode
+    void populateControlTable();
+
+    // Updates keybindings from storage to table
+    void updateTable();
+
+	LLScrollListCtrl* pControlsTable;
+	LLComboBox *pKeyModeBox;
+	LLKeyConflictHandler mConflictHandler[LLKeyConflictHandler::MODE_COUNT];
+	std::string mEditingControl;
+	S32 mEditingColumn;
+	S32 mEditingMode;
 };
 
 class LLFloaterPreferenceGraphicsAdvanced : public LLFloater

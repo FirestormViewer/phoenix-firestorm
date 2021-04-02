@@ -225,7 +225,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		Выйти
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/?sourceid=[sourceid]
+		https://www.firestormviewer.org/join-secondlife/
 	</string>
 	<string name="AgniGridLabel">
 		Second Life Главная Сетка (Agni)

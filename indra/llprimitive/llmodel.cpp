@@ -446,7 +446,7 @@ void LLModel::generateNormals(F32 angle_cutoff)
 
 		if (vol_face.mNumIndices > 65535)
 		{
-			LL_WARNS() << "Too many vertices for normal generation to work." << LL_ENDL;
+			LL_WARNS("MESHSKININFO") << "Too many vertices for normal generation to work." << LL_ENDL;
 			continue;
 		}
 
@@ -1115,7 +1115,7 @@ bool LLModel::loadModel(std::istream& is)
 	{
 		if (!LLSDSerialize::fromBinary(header, is, 1024*1024*1024))
 		{
-			LL_WARNS() << "Mesh header parse error.  Not a valid mesh asset!" << LL_ENDL;
+			LL_WARNS("MESHSKININFO") << "Mesh header parse error.  Not a valid mesh asset!" << LL_ENDL;
 			return false;
 		}
 	}
@@ -1147,7 +1147,7 @@ bool LLModel::loadModel(std::istream& is)
 	if (header[lod_name[lod]]["offset"].asInteger() == -1 || 
 		header[lod_name[lod]]["size"].asInteger() == 0 )
 	{ //cannot load requested LOD
-		LL_WARNS() << "LoD data is invalid!" << LL_ENDL;
+		LL_WARNS("MESHSKININFO") << "LoD data is invalid!" << LL_ENDL;
 		return false;
 	}
 
@@ -1210,7 +1210,7 @@ bool LLModel::loadModel(std::istream& is)
 	}
 	else
 	{
-		LL_WARNS() << "unpackVolumeFaces failed!" << LL_ENDL;
+		LL_WARNS("MESHSKININFO") << "unpackVolumeFaces failed!" << LL_ENDL;
 	}
 
 	return false;
@@ -1238,7 +1238,7 @@ bool LLModel::isMaterialListSubset( LLModel* ref )
 
 		if (!foundRef)
 		{
-            LL_INFOS() << "Could not find material " << mMaterialList[src] << " in reference model " << ref->mLabel << LL_ENDL;
+            LL_INFOS("MESHSKININFO") << "Could not find material " << mMaterialList[src] << " in reference model " << ref->mLabel << LL_ENDL;
 			return false;
 		}
 	}
@@ -1274,7 +1274,7 @@ bool LLModel::matchMaterialOrder(LLModel* ref, int& refFaceCnt, int& modelFaceCn
 	bool isASubset = isMaterialListSubset( ref );
 	if ( !isASubset )
 	{
-		LL_INFOS()<<"Material of model is not a subset of reference."<<LL_ENDL;
+		LL_INFOS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
 		return false;
 	}
 	
@@ -1416,6 +1416,14 @@ void LLMeshSkinInfo::fromLLSD(LLSD& skin)
 
 			mInvBindMatrix.push_back(mat);
 		}
+
+        if (mJointNames.size() != mInvBindMatrix.size())
+        {
+            LL_WARNS("MESHSKININFO") << "Joints vs bind matrix count mismatch. Dropping joint bindings." << LL_ENDL;
+            mJointNames.clear();
+            mJointNums.clear();
+            mInvBindMatrix.clear();
+        }
 	}
 
 	if (skin.has("bind_shape_matrix"))
@@ -1863,14 +1871,14 @@ bool validate_face(const LLVolumeFace& face)
 	{
 		if (face.mIndices[i] >= face.mNumVertices)
 		{
-			LL_WARNS() << "Face has invalid index." << LL_ENDL;
+			LL_WARNS("MESHSKININFO") << "Face has invalid index." << LL_ENDL;
 			return false;
 		}
 	}
 
 	if (face.mNumIndices % 3 != 0 || face.mNumIndices == 0)
 	{
-		LL_WARNS() << "Face has invalid number of indices." << LL_ENDL;
+		LL_WARNS("MESHSKININFO") << "Face has invalid number of indices." << LL_ENDL;
 		return false;
 	}
 
@@ -1900,7 +1908,7 @@ bool validate_model(const LLModel* mdl)
 {
 	if (mdl->getNumVolumeFaces() == 0)
 	{
-		LL_WARNS() << "Model has no faces!" << LL_ENDL;
+		LL_WARNS("MESHSKININFO") << "Model has no faces!" << LL_ENDL;
 		return false;
 	}
 
@@ -1908,13 +1916,13 @@ bool validate_model(const LLModel* mdl)
 	{
 		if (mdl->getVolumeFace(i).mNumVertices == 0)
 		{
-			LL_WARNS() << "Face has no vertices." << LL_ENDL;
+			LL_WARNS("MESHSKININFO") << "Face has no vertices." << LL_ENDL;
 			return false;
 		}
 
 		if (mdl->getVolumeFace(i).mNumIndices == 0)
 		{
-			LL_WARNS() << "Face has no indices." << LL_ENDL;
+			LL_WARNS("MESHSKININFO") << "Face has no indices." << LL_ENDL;
 			return false;
 		}
 

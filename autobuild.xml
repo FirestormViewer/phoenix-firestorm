@@ -261,6 +261,36 @@
         <key>version</key>
         <string>1.2.15</string>
       </map>
+      <key>Tracy</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (c) 2017-2021, Bartosz Taudul</string>
+        <key>description</key>
+        <string>A real time, nanosecond resolution, remote telemetry, hybrid frame and sampling profiler for games and other applications.</string>
+        <key>license</key>
+        <string>BSD</string>
+        <key>license_file</key>
+        <string>LICENSES/Tracy.txt</string>
+        <key>name</key>
+        <string>Tracy</string>
+        <key>platforms</key>
+        <map>
+          <key>common</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>b0a0fc6b7bda02fe14cccea2dd342058</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/Tracy-0.7.6-windows-210902110.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>common</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.7.6</string>
+      </map>
       <key>apr_suite</key>
       <map>
         <key>copyright</key>
@@ -796,9 +826,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7599bb6b05a5e48ce78180735e5d3355</string>
+              <string>9a586d333b3c35389b29c7e8c7ebcc8f</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007261348_81.3.10_gb223419_chromium-81.0.4044.138-windows-202081313.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows-203261227.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -808,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>92ced00cd0f89d0154ce2bcc6da086e0</string>
+              <string>698e79226d0fb3b935509769a36bffd4</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202007261348_81.3.10_gb223419_chromium-81.0.4044.138-windows64-202081325.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows64-203261222.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1824,9 +1854,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eba43dcfeb1c14aab25f588d9f625839</string>
+              <string>dce2cc624e216eb991412ec0c5538cf9</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.6-linux64-202302217.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.1-linux64-210652339.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1836,9 +1866,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5c682b490672aadf97ec9b938b351a9</string>
+              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.6-windows-202302209.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1848,9 +1878,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5c682b490672aadf97ec9b938b351a9</string>
+              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.0.6-windows-202302209.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
