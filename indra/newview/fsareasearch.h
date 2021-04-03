@@ -36,6 +36,7 @@
 #include "llviewerobject.h"
 #include <boost/regex.hpp>
 #include "llscrolllistcolumn.h"
+#include "rlvdefines.h"
 
 class LLAvatarName;
 class LLTextBox;
@@ -113,7 +114,7 @@ public:
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
 
-	void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name);
+	void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name, bool needs_rlva_check);
 	void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
 	void processObjectProperties(LLMessageSystem* msg);
 	void updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost);
@@ -171,12 +172,15 @@ public:
 private:
 	void requestObjectProperties(const std::vector< U32 >& request_list, bool select, LLViewerRegion* regionp);
 	void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
-	void getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested);
+	void getNameFromUUID(const LLUUID& id, bool needs_rvla_check, std::string& name, bool group, bool& name_requested);
 
 	void updateCounterText();
 	bool regexTest(std::string text);
 	void findObjects();
 	void processRequestQueue();
+
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior);
 
 	S32 mRequested;
 	bool mRefresh;
