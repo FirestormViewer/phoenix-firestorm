@@ -327,19 +327,32 @@ void LLScriptEditor::drawSelectionBackground()
 //virtual
 void LLScriptEditor::startOfLine()
 {
-	const LLWString text = getWText();
+	const LLWString& text = getWText();
 	const S32 line_start_pos = mCursorPos - getLineOffsetFromDocIndex(mCursorPos);
+
+	S32 line_end_pos;
+	S32 line = getLineNumFromDocIndex(mCursorPos);
+	S32 num_lines = getLineCount();
+	if (line + 1 >= num_lines)
+	{
+		line_end_pos = getLength();
+	}
+	else
+	{
+		line_end_pos = getLineStart(line + 1) - 1;
+	}
+
 	S32 trimmed_line_start_pos = line_start_pos;
-	while (trimmed_line_start_pos < mCursorPos && LLStringOps::isSpace(text[trimmed_line_start_pos]))
+	while (trimmed_line_start_pos < line_end_pos && LLStringOps::isSpace(text[trimmed_line_start_pos]))
 	{
 		++trimmed_line_start_pos;
 	}
 
-	if (mCursorPos != trimmed_line_start_pos)
+	if (mCursorPos != trimmed_line_start_pos || mCursorPos == line_start_pos)
 	{
 		setCursorPos(trimmed_line_start_pos);
 	}
-	else if (mCursorPos != line_start_pos)
+	else if (mCursorPos == trimmed_line_start_pos)
 	{
 		setCursorPos(line_start_pos);
 	}
