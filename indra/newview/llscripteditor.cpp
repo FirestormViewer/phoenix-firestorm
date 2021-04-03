@@ -322,3 +322,26 @@ void LLScriptEditor::drawSelectionBackground()
 		}
 	}
 }
+
+// <FS> Improved Home-key behavior
+//virtual
+void LLScriptEditor::startOfLine()
+{
+	const LLWString text = getWText();
+	const S32 line_start_pos = mCursorPos - getLineOffsetFromDocIndex(mCursorPos);
+	S32 trimmed_line_start_pos = line_start_pos;
+	while (trimmed_line_start_pos < mCursorPos && LLStringOps::isSpace(text[trimmed_line_start_pos]))
+	{
+		++trimmed_line_start_pos;
+	}
+
+	if (mCursorPos != trimmed_line_start_pos)
+	{
+		setCursorPos(trimmed_line_start_pos);
+	}
+	else if (mCursorPos != line_start_pos)
+	{
+		setCursorPos(line_start_pos);
+	}
+}
+// </FS>
