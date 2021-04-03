@@ -14,6 +14,7 @@
 #include "llviewerregion.h"
 #include "fsassetblacklist.h"
 #include "fscommon.h"
+#include "rlvhandler.h"
 
 static const size_t num_collision_sounds = 28;
 const LLUUID collision_sounds[num_collision_sounds] =
@@ -129,9 +130,9 @@ class LLSoundHistoryItemCompare
 public:
 	bool operator() (LLSoundHistoryItem first, LLSoundHistoryItem second)
 	{
-		if(first.mPlaying)
+		if (first.mPlaying)
 		{
-			if(second.mPlaying)
+			if (second.mPlaying)
 			{
 				return (first.mTimeStarted > second.mTimeStarted);
 			}
@@ -140,7 +141,7 @@ public:
 				return true;
 			}
 		}
-		else if(second.mPlaying)
+		else if (second.mPlaying)
 		{
 			return false;
 		}
@@ -175,7 +176,7 @@ BOOL NACLFloaterExploreSounds::tick()
 	{
 		std::map<LLUUID, LLSoundHistoryItem>::iterator map_iter = gSoundHistory.begin();
 		std::map<LLUUID, LLSoundHistoryItem>::iterator map_end = gSoundHistory.end();
-		for( ; map_iter != map_end; ++map_iter)
+		for ( ; map_iter != map_end; ++map_iter)
 		{
 			history.push_back((*map_iter).second);
 		}
@@ -201,26 +202,39 @@ BOOL NACLFloaterExploreSounds::tick()
 
 	std::list<LLSoundHistoryItem>::iterator iter = history.begin();
 	std::list<LLSoundHistoryItem>::iterator end = history.end();
-	for( ; iter != end; ++iter)
+	for ( ; iter != end; ++iter)
 	{
 		LLSoundHistoryItem item = (*iter);
 
 		bool is_avatar = item.mOwnerID == item.mSourceID;
-		if(is_avatar && !show_avatars) continue;
+		if (is_avatar && !show_avatars)
+		{
+			continue;
+		}
 
 		bool is_object = !is_avatar;
-		if(is_object && !show_objects) continue;
+		if (is_object && !show_objects)
+		{
+			continue;
+		}
 
 		bool is_repeated_asset = std::find(unique_asset_list.begin(), unique_asset_list.end(), item.mAssetID) != unique_asset_list.end();
-		if(is_repeated_asset && !show_repeated_assets) continue;
+		if (is_repeated_asset && !show_repeated_assets)
+		{
+			continue;
+		}
 
-		if(!item.mReviewed)
+		if (!item.mReviewed)
 		{
 			item.mReviewedCollision = std::find(&collision_sounds[0], &collision_sounds[num_collision_sounds], item.mAssetID) != &collision_sounds[num_collision_sounds];
 			item.mReviewed = true;
 		}
+
 		bool is_collision_sound = item.mReviewedCollision;
-		if(is_collision_sound && !show_collision_sounds) continue;
+		if (is_collision_sound && !show_collision_sounds)
+		{
+			continue;
+		}
 
 		unique_asset_list.push_back(item.mAssetID);
 
@@ -229,7 +243,7 @@ BOOL NACLFloaterExploreSounds::tick()
 
 		LLSD& playing_column = element["columns"][0];
 		playing_column["column"] = "playing";
-		if(item.mPlaying)
+		if (item.mPlaying)
 		{
 			playing_column["value"] = " " + str_playing;
 		}
@@ -242,7 +256,7 @@ BOOL NACLFloaterExploreSounds::tick()
 
 		LLSD& type_column = element["columns"][1];
 		type_column["column"] = "type";
-		if(item.mType == LLAudioEngine::AUDIO_TYPE_UI)
+		if (item.mType == LLAudioEngine::AUDIO_TYPE_UI)
 		{
 			// this shouldn't happen for now, as UI is forbidden in the log
 			type_column["value"] = str_type_ui;
@@ -251,19 +265,19 @@ BOOL NACLFloaterExploreSounds::tick()
 		{
 			std::string type;
 
-			if(is_avatar)
+			if (is_avatar)
 			{
 				type = str_type_avatar;
 			}
 			else
 			{
-				if(item.mIsTrigger)
+				if (item.mIsTrigger)
 				{
 					type = str_type_trigger_sound;
 				}
 				else
 				{
-					if(item.mIsLooped)
+					if (item.mIsLooped)
 					{
 						type = str_type_loop_sound;
 					}
@@ -282,7 +296,7 @@ BOOL NACLFloaterExploreSounds::tick()
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get(item.mOwnerID, &av_name))
 		{
-			owner_column["value"] = av_name.getCompleteName();
+			owner_column["value"] = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 		}
 		else
 		{
@@ -334,12 +348,16 @@ void NACLFloaterExploreSounds::handlePlayLocally()
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	uuid_vec_t asset_list;
-	for( ; selection_iter != selection_end; ++selection_iter)
+	for ( ; selection_iter != selection_end; ++selection_iter)
 	{
 		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
-		if(item.mID.isNull()) continue;
+		if (item.mID.isNull())
+		{
+			continue;
+		}
+
 		// Unique assets only
-		if(std::find(asset_list.begin(), asset_list.end(), item.mAssetID) == asset_list.end())
+		if (std::find(asset_list.begin(), asset_list.end(), item.mAssetID) == asset_list.end())
 		{
 			asset_list.push_back(item.mAssetID);
 			LLUUID audio_source_id = LLUUID::generateNewID();
@@ -355,15 +373,18 @@ void NACLFloaterExploreSounds::handleLookAt()
 {
 	LLUUID selection = mHistoryScroller->getSelectedValue().asUUID();
 	LLSoundHistoryItem item = getItem(selection); // Single item only
-	if(item.mID.isNull()) return;
+	if (item.mID.isNull())
+	{
+		return;
+	}
 
 	LLVector3d pos_global = item.mPosition;
 
 	// Try to find object position
-	if(item.mSourceID.notNull())
+	if (item.mSourceID.notNull())
 	{
 		LLViewerObject* object = gObjectList.findObject(item.mSourceID);
-		if(object)
+		if (object)
 		{
 			pos_global = object->getPositionGlobal();
 		}
@@ -491,4 +512,3 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
 	}
 	FSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND);
 }
-
