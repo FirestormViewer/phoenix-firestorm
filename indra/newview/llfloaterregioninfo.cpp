@@ -633,12 +633,18 @@ void LLFloaterRegionInfo::refreshFromRegion(LLViewerRegion* region)
 	}
 
 	// call refresh from region on all panels
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
 	std::for_each(
 		mInfoPanels.begin(),
 		mInfoPanels.end(),
-		llbind2nd(
-			std::mem_fun(&LLPanelRegionInfo::refreshFromRegion),
-			region));
+		[region](LLPanelRegionInfo* panelp) { panelp->refreshFromRegion(region); });
+// [/SL:KB]
+//	std::for_each(
+//		mInfoPanels.begin(),
+//		mInfoPanels.end(),
+//		llbind2nd(
+//			std::mem_fun(&LLPanelRegionInfo::refreshFromRegion),
+//			region));
     mEnvironmentPanel->refreshFromRegion(region);
 }
 
