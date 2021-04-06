@@ -464,6 +464,12 @@ bool RlvActions::canGroundSit()
 	return (!hasBehaviour(RLV_BHVR_SIT)) && (canStand());
 }
 
+bool RlvActions::canGroundSit(const LLUUID& idRlvObjExcept)
+{
+	// See canGroundSit() but disregard any restrictions held by the issuing object
+	return (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_SIT, idRlvObjExcept)) && (canStand(idRlvObjExcept));
+}
+
 bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
 {
 	// User can sit on the specified object if:

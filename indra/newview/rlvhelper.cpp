@@ -287,6 +287,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_MODE>("setcam_mode", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SITGROUND>("sitground"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_TPTO>("tpto"));
 	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_FORCE));
 

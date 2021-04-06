@@ -254,6 +254,7 @@ public:
 	 * Returns true if the user can sit on the ground
 	 */
 	static bool canGroundSit();
+	static bool canGroundSit(const LLUUID& idRlvObjExcept);
 
 	/*
 	 * Returns true if the user can interact with the specified object (with an optional relative offset)

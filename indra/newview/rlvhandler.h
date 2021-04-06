@@ -266,6 +266,7 @@ protected:
 
 	bool                                    m_fCanCancelTp;					// @accepttp=n and @tpto=force
 	mutable LLVector3d                      m_posSitSource;					// @standtp=n (mutable because onForceXXX handles are all declared as const)
+	mutable bool                            m_fPendingGroundSit = false;	// @sitground=force
 	mutable LLUUID                          m_idAgentGroup;					// @setgroup=n
 	std::pair<LLUUID, std::string>          m_PendingGroupChange;			// @setgroup=force
 	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force

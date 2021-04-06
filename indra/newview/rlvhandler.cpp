@@ -902,6 +902,12 @@ void RlvHandler::onSitOrStand(bool fSitting)
 		doOnIdleOneTime(boost::bind(RlvUtil::forceTp, m_posSitSource));
 		m_posSitSource.setZero();
 	}
+	else if ( (!fSitting) && (m_fPendingGroundSit) )
+	{
+		m_fPendingGroundSit = false;
+		gAgent.setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+		send_agent_update(TRUE, TRUE);
+	}
 }
 
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
@@ -3142,6 +3148,28 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 	return (fValid) ? RLV_RET_SUCCESS : RLV_RET_FAILED_OPTION;
 }
 
+// Handles: @sitground=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SITGROUND>::onCommand(const RlvCommand& rlvCmd)
+{
+	if ( (!RlvActions::canGroundSit(rlvCmd.getObjectID())) || (!isAgentAvatarValid()) )
+		return RLV_RET_FAILED_LOCK;
+
+	if (!gAgentAvatarp->isSitting())
+	{
+		gRlvHandler.m_fPendingGroundSit = false;
+		gAgent.setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+	}
+	else if (gAgentAvatarp->getParent())
+	{
+		gRlvHandler.m_fPendingGroundSit = true;
+		gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+	}
+	send_agent_update(TRUE, TRUE);
+
+	return RLV_RET_SUCCESS;
+}
+
 // Handles: @sit:<uuid>=force
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
@@ -3153,10 +3181,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 	LLViewerObject* pObj = NULL;
 	if (idTarget.isNull())
 	{
-		if ( (!RlvActions::canGroundSit()) || ((isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) )
-			return RLV_RET_FAILED_LOCK;
-		gAgent.sitDown();
-		send_agent_update(TRUE, TRUE);
+		return RlvForceHandler<RLV_BHVR_SITGROUND>::onCommand(rlvCmd);
 	}
 	else if ( ((pObj = gObjectList.findObject(idTarget)) != NULL) && (LL_PCODE_VOLUME == pObj->getPCode()))
 	{

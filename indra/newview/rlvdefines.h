@@ -176,6 +176,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETGROUP,				// "setgroup"
 	RLV_BHVR_UNSIT,					// "unsit"
 	RLV_BHVR_SIT,					// "sit"
+	RLV_BHVR_SITGROUND,
 	RLV_BHVR_SITTP,					// "sittp"
 	RLV_BHVR_STANDTP,				// "standtp"
 	RLV_BHVR_SETDEBUG,				// "setdebug"
