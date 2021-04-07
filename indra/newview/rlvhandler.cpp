@@ -887,10 +887,7 @@ void RlvHandler::setCameraOverride(bool fOverride)
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvHandler::onSitOrStand(bool fSitting)
 {
-	if (rlv_handler_t::isEnabled())
-	{
-		RlvSettings::updateLoginLastLocation();
-	}
+	RlvSettings::updateLoginLastLocation();
 
 	if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (!fSitting) && (!m_posSitSource.isExactlyZero()) )
 	{
@@ -907,6 +904,16 @@ void RlvHandler::onSitOrStand(bool fSitting)
 		m_fPendingGroundSit = false;
 		gAgent.setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
 		send_agent_update(TRUE, TRUE);
+	}
+
+	if (isAgentAvatarValid())
+	{
+		const LLViewerObject* pSitObj = static_cast<const LLViewerObject*>(gAgentAvatarp->getParent());
+		const LLUUID& idSitObj = (pSitObj) ? pSitObj->getID() : LLUUID::null;
+		if (fSitting)
+			RlvBehaviourNotifyHandler::instance().onSit(idSitObj, true /* Apparently we shouldn't track legal vs 'illegal' (ground) sits */);
+		else
+			RlvBehaviourNotifyHandler::instance().onStand(idSitObj, !gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, getCurrentObject()));
 	}
 }
 

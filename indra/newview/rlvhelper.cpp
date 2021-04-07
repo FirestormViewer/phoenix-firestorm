@@ -1920,6 +1920,22 @@ void RlvBehaviourNotifyHandler::onReattach(const LLViewerJointAttachment* pAttac
 	sendNotification(llformat("reattached %s %s", (fAllowed) ? "legally" : "illegally", pAttachPt->getName().c_str()));
 }
 
+void RlvBehaviourNotifyHandler::onSit(const LLUUID& idObj, bool fAllowed)
+{
+	if (idObj.isNull())
+		sendNotification(llformat("sat ground %s", (fAllowed) ? "legally" : "illegally"));
+	else
+		sendNotification(llformat("sat object %s %s", (fAllowed) ? "legally" : "illegally", idObj.asString().c_str()));
+}
+
+void RlvBehaviourNotifyHandler::onStand(const LLUUID& idObj, bool fAllowed)
+{
+	if (idObj.isNull())
+		sendNotification(llformat("unsat ground %s", (fAllowed) ? "legally" : "illegally"));
+	else
+		sendNotification(llformat("unsat object %s %s", (fAllowed) ? "legally" : "illegally", idObj.asString().c_str()));
+}
+
 // =========================================================================
 // Various helper classes/timers/functors
 //
