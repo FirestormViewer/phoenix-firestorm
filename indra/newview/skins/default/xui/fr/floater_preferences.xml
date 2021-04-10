@@ -16,6 +16,7 @@
 		<panel label="Son et Média" name="audio"/>
 		<panel label="Configuration" name="input"/>
 		<panel label="Affichage/Dépl." name="move"/>
+		<panel label="Contrôles" name="controls" />
 		<panel label="Notifications" name="msgs"/>
 		<panel label="Confidentialité" name="im"/>
 		<panel label="Avancées" name="advanced1"/>

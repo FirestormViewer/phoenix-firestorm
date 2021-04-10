@@ -428,7 +428,7 @@
 			<button label="Nouveau script" label_selected="Nouveau script" name="button new script"/>
 			<button label="Droits" name="button permissions"/>
 			<button label="Rafraîchir" name="button refresh"/>
-			<button label="Réinit. scripts" name="button reset scripts"/>
+			<button label="Réinit. scripts" name="btn_reset_scripts"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
