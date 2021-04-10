@@ -1,7 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="modal container">
-	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
-	<text name="Save item as:">
-		Нажмите кнопку, чтобы установить переключатель голоса.
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Select Key" name="modal container">
+	<floater.string name="keyboard">Клавиатура</floater.string>
+	<floater.string name="mouse">Кнопки Мыши</floater.string>
+	<floater.string name="basic_description">
+Нажмите клавишу или кнопку мыши, чтобы установить триггер.
+Разрешенный ввод: [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+Комбинация [KEYSTR] зарезервировано меню.
+	</floater.string>
+	<text name="descritption">
+Нажмите клавишу или кнопку мыши, чтобы установить триггер.
+Разрешенный ввод: [INPUT].
 	</text>
+	<check_box label="Применить ко всем" name="apply_all" tool_tip="Программа использует разные комбинации элементов управления в зависимости от того, что вы делаете в мире, установка этого параметра применит ваши изменения ко всем комбинациям."/>
+	<button label="Очистить" name="SetEmpty"/>
+	<button label="По умолчанию" name="Default" width="90"/>
+	<button label="Отмена" name="Cancel"/>
 </floater>
