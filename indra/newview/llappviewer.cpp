@@ -4994,10 +4994,9 @@ bool LLAppViewer::initCache()
 		std::string new_cache_location = gSavedSettings.getString("NewCacheLocation");
 		if (new_cache_location != cache_location)
 		{
-			// AO: Don't automatically purge old cache location, has unwanted side effects with shared caches, upgrades
-			//LL_INFOS("AppCache") << "Cache location changed, cache needs purging" << LL_ENDL;
-			//gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
-			//purgeCache(); // purge old cache
+			LL_INFOS("AppCache") << "Cache location changed, cache needs purging" << LL_ENDL;
+			gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
+			purgeCache(); // purge old cache
 			gSavedSettings.setString("CacheLocation", new_cache_location);
 			gSavedSettings.setString("CacheLocationTopFolder", gDirUtilp->getBaseFileName(new_cache_location));
 		}
