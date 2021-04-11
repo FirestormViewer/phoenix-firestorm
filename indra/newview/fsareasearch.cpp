@@ -1127,12 +1127,15 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 
 void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std::string& name, bool group, bool& name_requested)
 {
+	static const std::string unknown_name = LLTrans::getString("AvatarNameWaiting");
+
 	if (group)
 	{
 		BOOL is_group;
 		if (!gCacheName->getIfThere(id, name, is_group))
 		{
-			if(std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
+			name = unknown_name;
+			if (std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
 			{
 				mNamesRequested.push_back(id);
 				gCacheName->get(id, group, boost::bind(&FSAreaSearch::callbackLoadFullName, this, _1, _2));
@@ -1147,7 +1150,7 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std:
 		{
 			if (!needs_rlva_check || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
-				name = av_name.getUserName();
+				name = av_name.getCompleteName();
 			}
 			else
 			{
@@ -1156,6 +1159,7 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std:
 		}
 		else
 		{
+			name = unknown_name;
 			if (std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
 			{
 				mNamesRequested.push_back(id);
@@ -1171,7 +1175,7 @@ void FSAreaSearch::avatarNameCacheCallback(const LLUUID& id, const LLAvatarName&
 	std::string name;
 	if (!needs_rlva_check || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
-		name = av_name.getUserName();
+		name = av_name.getCompleteName();
 	}
 	else
 	{

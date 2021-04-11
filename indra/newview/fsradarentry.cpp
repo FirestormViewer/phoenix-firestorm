@@ -35,7 +35,7 @@
 
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	: mID(avid),
-	mName(avid.asString()),
+	mName(LLTrans::getString("AvatarNameWaiting")),
 	mUserName(LLStringUtil::null),
 	mDisplayName(LLStringUtil::null),
 	mRange(0.f),

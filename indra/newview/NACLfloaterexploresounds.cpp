@@ -161,6 +161,7 @@ BOOL NACLFloaterExploreSounds::tick()
 	static const std::string str_type_trigger_sound = getString("Type_llTriggerSound");
 	static const std::string str_type_loop_sound = getString("Type_llLoopSound");
 	static const std::string str_type_play_sound = getString("Type_llPlaySound");
+	static const std::string str_unknown_name = LLTrans::getString("AvatarNameWaiting");
 
 	bool show_collision_sounds = mCollisionSounds->get();
 	bool show_repeated_assets = mRepeatedAssets->get();
@@ -300,7 +301,7 @@ BOOL NACLFloaterExploreSounds::tick()
 		}
 		else
 		{
-			owner_column["value"] = item.mOwnerID.asString();
+			owner_column["value"] = str_unknown_name;
 		}
 
 		LLSD& sound_column = element["columns"][3];
