@@ -41,7 +41,7 @@
 #include "lldatapacker.h"
 
 extern LLAgent gAgent;
-const S32 ADVANCED_VPAD = 3;
+//const S32 ADVANCED_VPAD = 3; // <FS:Ansariel> Improved animation preview
 
 LLPreviewAnim::LLPreviewAnim(const LLSD& key)
 	: LLPreview( key ),
@@ -62,13 +62,26 @@ BOOL LLPreviewAnim::postBuild()
 
 	childSetCommitCallback("desc", LLPreview::onText, this);
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
-	getChild<LLTextBox>("adv_trigger")->setClickedCallback(boost::bind(&LLPreviewAnim::showAdvanced, this));
-	pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
+	// <FS:Ansariel> Improved animation preview
+	//getChild<LLTextBox>("adv_trigger")->setClickedCallback(boost::bind(&LLPreviewAnim::showAdvanced, this));
+	//pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
 
-    // Assume that advanced stats start visible (for XUI preview tool's purposes)
-    pAdvancedStatsTextBox->setVisible(FALSE);
-    LLRect rect = getRect();
-    reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+    //// Assume that advanced stats start visible (for XUI preview tool's purposes)
+    //pAdvancedStatsTextBox->setVisible(FALSE);
+    //LLRect rect = getRect();
+    //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+	if (pMotion)
+	{
+		LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
+		LLTextBox* stats_box_right = getChild<LLTextBox>("AdvancedStatsRight");
+		stats_box_left->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
+		stats_box_left->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
+		stats_box_left->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
+		stats_box_right->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
+		stats_box_right->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
+		stats_box_right->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
+	}
+	// </FS:Ansariel>
 
 	return LLPreview::postBuild();
 }
@@ -193,31 +206,33 @@ void LLPreviewAnim::onClose(bool app_quitting)
 	}
 }
 
-void LLPreviewAnim::showAdvanced()
-{
-    BOOL was_visible =  pAdvancedStatsTextBox->getVisible();
-
-    if (was_visible)
-    {
-        pAdvancedStatsTextBox->setVisible(FALSE);
-        LLRect rect = getRect();
-        reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
-    }
-    else
-    {
-        pAdvancedStatsTextBox->setVisible(TRUE);
-        LLRect rect = getRect();
-        reshape(rect.getWidth(), rect.getHeight() + pAdvancedStatsTextBox->getRect().getHeight() + ADVANCED_VPAD, FALSE);
-
-        // set text
-        if (pMotion)
-        {
-            pAdvancedStatsTextBox->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
-            pAdvancedStatsTextBox->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
-            pAdvancedStatsTextBox->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
-            pAdvancedStatsTextBox->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
-            pAdvancedStatsTextBox->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
-            pAdvancedStatsTextBox->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
-        }
-    }
-}
+// <FS:Ansariel> Improved animation preview
+//void LLPreviewAnim::showAdvanced()
+//{
+//    BOOL was_visible =  pAdvancedStatsTextBox->getVisible();
+//
+//    if (was_visible)
+//    {
+//        pAdvancedStatsTextBox->setVisible(FALSE);
+//        LLRect rect = getRect();
+//        reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+//    }
+//    else
+//    {
+//        pAdvancedStatsTextBox->setVisible(TRUE);
+//        LLRect rect = getRect();
+//        reshape(rect.getWidth(), rect.getHeight() + pAdvancedStatsTextBox->getRect().getHeight() + ADVANCED_VPAD, FALSE);
+//
+//        // set text
+//        if (pMotion)
+//        {
+//            pAdvancedStatsTextBox->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
+//            pAdvancedStatsTextBox->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
+//            pAdvancedStatsTextBox->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
+//            pAdvancedStatsTextBox->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
+//            pAdvancedStatsTextBox->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
+//            pAdvancedStatsTextBox->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
+//        }
+//    }
+//}
+// </FS:Ansariel>

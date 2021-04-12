@@ -43,14 +43,16 @@ public:
 	void draw();
 	void cleanup();
 	void play(const LLSD& param);
-	void showAdvanced();
+	// <FS:Ansariel> Improved animation preview
+	//void showAdvanced();
 
 protected:
 	
 	LLUUID	mItemID;
 	bool	mDidStart;
 	LLMotion* pMotion;
-	LLTextBox* pAdvancedStatsTextBox;
+	// <FS:Ansariel> Improved animation preview
+	//LLTextBox* pAdvancedStatsTextBox;
 };
 
 #endif  // LL_LLPREVIEWANIM_H
