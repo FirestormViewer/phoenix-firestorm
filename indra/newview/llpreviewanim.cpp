@@ -1,25 +1,25 @@
-/**
+/** 
  * @file llpreviewanim.cpp
  * @brief LLPreviewAnim class implementation
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- *
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- *
+ * 
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -44,7 +44,7 @@ extern LLAgent gAgent;
 //const S32 ADVANCED_VPAD = 3; // <FS:Ansariel> Improved animation preview
 
 LLPreviewAnim::LLPreviewAnim(const LLSD& key)
-	: LLPreview(key),
+	: LLPreview( key ),
 	pMotion(NULL)
 {
 	mCommitCallbackRegistrar.add("PreviewAnim.Play", boost::bind(&LLPreviewAnim::play, this, _2));
@@ -54,7 +54,7 @@ LLPreviewAnim::LLPreviewAnim(const LLSD& key)
 BOOL LLPreviewAnim::postBuild()
 {
 	const LLInventoryItem* item = getItem();
-	if (item)
+	if(item)
 	{
 		pMotion = gAgentAvatarp->createMotion(item->getAssetUUID()); // preload the animation
 		getChild<LLUICtrl>("desc")->setValue(item->getDescription());
@@ -66,10 +66,10 @@ BOOL LLPreviewAnim::postBuild()
 	//getChild<LLTextBox>("adv_trigger")->setClickedCallback(boost::bind(&LLPreviewAnim::showAdvanced, this));
 	//pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
 
-	//// Assume that advanced stats start visible (for XUI preview tool's purposes)
-	//pAdvancedStatsTextBox->setVisible(FALSE);
-	//LLRect rect = getRect();
-	//reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+    //// Assume that advanced stats start visible (for XUI preview tool's purposes)
+    //pAdvancedStatsTextBox->setVisible(FALSE);
+    //LLRect rect = getRect();
+    //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
 	if (pMotion)
 	{
 		LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
@@ -92,9 +92,9 @@ void LLPreviewAnim::play(const LLSD& param)
 {
 	const LLInventoryItem *item = getItem();
 
-	if (item)
+	if(item)
 	{
-		LLUUID itemID = item->getAssetUUID();
+		LLUUID itemID=item->getAssetUUID();
 
 		std::string btn_name = param.asString();
 		LLButton* btn_inuse;
@@ -124,10 +124,10 @@ void LLPreviewAnim::play(const LLSD& param)
 		{
 			btn_other->setEnabled(false);
 		}
-
-		if (getChild<LLUICtrl>(btn_name)->getValue().asBoolean())
+		
+		if (getChild<LLUICtrl>(btn_name)->getValue().asBoolean() ) 
 		{
-			if ("Inworld" == btn_name)
+			if("Inworld" == btn_name)
 			{
 				gAgent.sendAnimationRequest(itemID, ANIM_REQUEST_START);
 			}
@@ -169,7 +169,7 @@ void LLPreviewAnim::draw()
 			{
 				cleanup();
 			}
-			if (gAgentAvatarp->isMotionActive(this->mItemID) && !this->mDidStart)
+			if(gAgentAvatarp->isMotionActive(this->mItemID) && !this->mDidStart)
 			{
 				const LLInventoryItem *item = getItem();
 				LLMotion* motion = gAgentAvatarp->findMotion(this->mItemID);
@@ -199,7 +199,7 @@ void LLPreviewAnim::onClose(bool app_quitting)
 {
 	const LLInventoryItem *item = getItem();
 
-	if (item)
+	if(item)
 	{
 		gAgentAvatarp->stopMotion(item->getAssetUUID());
 		gAgent.sendAnimationRequest(item->getAssetUUID(), ANIM_REQUEST_STOP);
