@@ -18,6 +18,5 @@ Schleife: [IS_LOOP]
 Einblenden: [EASE_IN]s
 Ausblenden: [EASE_OUT]s
 Gelenke: [NUM_JOINTS]
-    </text>
-
+	</text>
 </floater>

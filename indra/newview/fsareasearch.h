@@ -28,15 +28,15 @@
 #ifndef FS_AREASEARCH_H
 #define FS_AREASEARCH_H
 
+#include "llcategory.h"
 #include "llfloater.h"
 #include "llframetimer.h"
-#include "llsaleinfo.h"
-#include "llcategory.h"
 #include "llpermissions.h"
-#include "llviewerobject.h"
-#include <boost/regex.hpp>
+#include "llsaleinfo.h"
 #include "llscrolllistcolumn.h"
+#include "llviewerobject.h"
 #include "rlvdefines.h"
+#include <boost/regex.hpp>
 
 class LLAvatarName;
 class LLTextBox;
@@ -210,15 +210,14 @@ private:
 
 	uuid_vec_t mNamesRequested;
 
+	typedef std::map<LLUUID, boost::signals2::connection> name_cache_connection_map_t;
+	name_cache_connection_map_t mNameCacheConnections;
+
 	LLViewerRegion* mLastRegion;
 	
 	class FSParcelChangeObserver;
 	friend class FSParcelChangeObserver;
 	FSParcelChangeObserver*	mParcelChangedObserver;
-
-	// Used for checking to see if a floater has been created.
-	// Can not be trusted as a singleton pointer, don't use as a pointer.
-	FSAreaSearch* mInstance;
 
 	LLTabContainer* mTab;
 	FSPanelAreaSearchList* mPanelList;

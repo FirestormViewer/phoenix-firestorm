@@ -166,8 +166,6 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRequestNeedsSent(false),
 	mRlvBehaviorCallbackConnection()
 {
-	mInstance = this;
-
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -192,6 +190,15 @@ FSAreaSearch::~FSAreaSearch()
 	{
 		mRlvBehaviorCallbackConnection.disconnect();
 	}
+
+	for (const auto& cb : mNameCacheConnections)
+	{
+		if (cb.second.connected())
+		{
+			cb.second.disconnect();
+		}
+	}
+	mNameCacheConnections.clear();
 
 	if (mParcelChangedObserver)
 	{
@@ -310,7 +317,7 @@ void FSAreaSearch::updateRlvRestrictions(ERlvBehaviour behavior)
 
 void FSAreaSearch::checkRegion()
 {
-	if (mInstance && mActive)
+	if (mActive)
 	{
 		// Check if we changed region, and if we did, clear the object details cache.
 		LLViewerRegion* region = gAgent.getRegion(); // getRegion can return NULL if disconnected.
@@ -679,8 +686,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 
 void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 {
-	// This function is called by llviewermessage even if no floater has been created.
-	if (!(mInstance && mActive))
+	if (!mActive)
 	{
 		return;
 	}
@@ -1098,15 +1104,13 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	mPanelList->getResultList()->refreshLineHeight();
 }
 
-// <FS:Cron> Allows the object costs to be updated on-the-fly so as to bypass the problem with the data being stale when first accessed.
 void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost)
 {
-	// This fuction is called by LLObjectCostResponder::result even if no floater has been created.
-	if (!(mInstance && mActive))
+	if (!mActive)
 	{
 		return;
 	}
-	
+
 	FSScrollListCtrl* result_list = mPanelList->getResultList();
 	if (result_list)
 	{
@@ -1122,7 +1126,6 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 			}
 		}
 	}
-	
 }
 
 void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std::string& name, bool group, bool& name_requested)
@@ -1138,7 +1141,8 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std:
 			if (std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
 			{
 				mNamesRequested.push_back(id);
-				gCacheName->get(id, group, boost::bind(&FSAreaSearch::callbackLoadFullName, this, _1, _2));
+				boost::signals2::connection cb_connection = gCacheName->get(id, group, boost::bind(&FSAreaSearch::callbackLoadFullName, this, _1, _2));
+				mNameCacheConnections.insert(std::make_pair(id, cb_connection)); // mNamesRequested will do the dupe check
 			}
 			name_requested = true;
 		}
@@ -1163,7 +1167,8 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std:
 			if (std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
 			{
 				mNamesRequested.push_back(id);
-				LLAvatarNameCache::get(id, boost::bind(&FSAreaSearch::avatarNameCacheCallback, this, _1, _2, needs_rlva_check));
+				boost::signals2::connection cb_connection = LLAvatarNameCache::get(id, boost::bind(&FSAreaSearch::avatarNameCacheCallback, this, _1, _2, needs_rlva_check));
+				mNameCacheConnections.insert(std::make_pair(id, cb_connection)); // mNamesRequested will do the dupe check
 			}
 			name_requested = true;
 		}
@@ -1186,13 +1191,23 @@ void FSAreaSearch::avatarNameCacheCallback(const LLUUID& id, const LLAvatarName&
 
 void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& full_name)
 {
+	auto iter = mNameCacheConnections.find(id);
+	if (iter != mNameCacheConnections.end())
+	{
+		if (iter->second.connected())
+		{
+			iter->second.disconnect();
+		}
+		mNameCacheConnections.erase(iter);
+	}
+
 	LLViewerRegion* our_region = gAgent.getRegion();
 
 	for (auto& entry : mObjectDetails)
 	{
 		if (entry.second.name_requested && !entry.second.listed)
 		{
-			LLUUID object_id = entry.second.id;
+			const LLUUID& object_id = entry.second.id;
 			LLViewerObject* objectp = gObjectList.findObject(object_id);
 			if (objectp && isSearchableObject(objectp, our_region))
 			{

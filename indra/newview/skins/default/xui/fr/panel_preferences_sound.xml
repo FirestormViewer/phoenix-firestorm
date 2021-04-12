@@ -70,7 +70,7 @@
 			<check_box label="Bouger les lèvres de l'avatar lorsque je parle" name="enable_lip_sync"/>
 			<check_box label="Afficher les indicateurs de voix au-dessus des avatars" tool_tip="Afficher un indicateur signifiant un chat vocal actif au-dessus des avatars" name="FSShowVoiceVisualizer"/>
 			<check_box label="Afficher l'indicateur de voix au dessus de mon avatar" name="FSShowMyOwnVoiceVisualizer"/>
-			<check_box label="Afficher le point comme faisant partie de l'indicateur de voix" name="FSShowVoiceVisualizerWithDot"/>
+			<check_box label="Afficher le point comme faisant partie de l'indicateur de voix" tool_tip="Si l'option est activée, le point s'affiche avec l'indicateur de voix. Sinon, l'indicateur de voix n'affiche que les ondes vocales." name="FSShowVoiceVisualizerWithDot"/>
 			<check_box label="Afficher les indicateurs de chat vocal privé" tool_tip="Afficher un indicateur et bouger les lèvres de l'avatar lorsque je discute en vocal dans une conversation privée ou de groupe" name="Show_Voice_Visualizers_In_Calls"/>
 			<check_box label="Afficher si le chat vocal est activé dans les onglets de conversations" tool_tip="Afficher un indicateur indiquant si le chat vocal de la personne est activé dans les onglets des conversations" name="FSShowConversationVoiceStateIndicator"/>
 			<check_box label="Refuser automatiquement tout chat vocal de groupe" name="VoiceCallsRejectGroup"/>
