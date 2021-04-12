@@ -210,6 +210,9 @@ private:
 
 	uuid_vec_t mNamesRequested;
 
+	typedef std::map<LLUUID, boost::signals2::connection> name_cache_connection_map_t;
+	name_cache_connection_map_t mNameCacheConnections;
+
 	LLViewerRegion* mLastRegion;
 	
 	class FSParcelChangeObserver;
