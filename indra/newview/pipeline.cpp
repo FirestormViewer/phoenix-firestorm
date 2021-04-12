@@ -7366,6 +7366,7 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 	
 	if (!sPickAvatar)
 	{
+		pick_rigged = false;
 		//save hit info in case we need to restore
 		//due to attachment override
 		LLVector4a local_normal;

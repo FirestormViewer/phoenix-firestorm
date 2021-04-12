@@ -62,6 +62,8 @@
 #include "llsdutil.h"
 #include "llcorehttputil.h"
 #include "llvoicevivox.h"
+#include "llinventorymodel.h"
+#include "lluiusage.h"
 
 namespace LLStatViewer
 {
@@ -580,6 +582,13 @@ void send_viewer_stats(bool include_preferences)
 	fail["invalid"] = (S32) gMessageSystem->mInvalidOnCircuitPackets;
 	fail["missing_updater"] = (S32) LLAppViewer::instance()->isUpdaterMissing();
 
+	LLSD &inventory = body["inventory"];
+	inventory["usable"] = gInventory.isInventoryUsable();
+	LLSD& validation_info = inventory["validation_info"];
+	gInventory.mValidationInfo->asLLSD(validation_info);
+
+	body["ui"] = LLUIUsage::instance().asLLSD();
+		
 	body["stats"]["voice"] = LLVoiceVivoxStats::getInstance()->read();
 
 	// Misc stats, two strings and two ints

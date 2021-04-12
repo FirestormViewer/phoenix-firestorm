@@ -112,7 +112,7 @@ private:
 	//LLIconCtrl		 *mViewInventoryIcon;
 	
 	LLScrollListCtrl *mNoticesList;
-	std::set<LLUUID>   mNoticeIDs; // FS:Beq FIRE-30667 group notices hang
+    std::set<LLUUID>  mKnownNoticeIds; // Dupplicate avoidance, to avoid searching and inserting dupplciates into mNoticesList
 
 	std::string		mNoNoticesStr;
 

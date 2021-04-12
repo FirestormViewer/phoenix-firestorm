@@ -126,7 +126,6 @@
 #include "rlvui.h"
 // [/RLVa:KB]
 
-#include <boost/algorithm/string/split.hpp> //
 #include <boost/foreach.hpp>
 
 #include "llnotificationmanager.h" //
@@ -4887,16 +4886,20 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 		}
 		return;
 	}
-		
-	// Don't play sounds from gestures if they are not enabled.
-	// ...TS: Unless they're your own.
-	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
-		(owner_id != gAgent.getID()) &&
-		(owner_id == object_id)) return;
 
-  // NaCl - Sound Explorer
+	// Do play sounds triggered by avatar, since muting your own
+	// gesture sounds and your own sounds played inworld from 
+	// Inventory can cause confusion.
+	if (object_id == owner_id
+        && owner_id != gAgentID
+        && !gSavedSettings.getBOOL("EnableGestureSounds"))
+	{
+		return;
+	}
+
+	// NaCl - Sound Explorer
 	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global, object_id);
-  // NaCl End
+	// NaCl End
 }
 
 void process_preload_sound(LLMessageSystem *msg, void **user_data)
