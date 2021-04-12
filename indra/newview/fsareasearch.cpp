@@ -1107,15 +1107,14 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	mPanelList->getResultList()->refreshLineHeight();
 }
 
-// <FS:Cron> Allows the object costs to be updated on-the-fly so as to bypass the problem with the data being stale when first accessed.
 void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost)
 {
-	// This fuction is called by LLObjectCostResponder::result even if no floater has been created.
+	// This fuction is called by LLViewerObjectList::fetchObjectCostsCoro even if no floater has been created.
 	if (!(mInstance && mActive))
 	{
 		return;
 	}
-	
+
 	FSScrollListCtrl* result_list = mPanelList->getResultList();
 	if (result_list)
 	{
@@ -1131,7 +1130,6 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 			}
 		}
 	}
-	
 }
 
 void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std::string& name, bool group, bool& name_requested)
