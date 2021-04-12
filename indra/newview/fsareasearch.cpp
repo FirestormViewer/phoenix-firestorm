@@ -166,8 +166,6 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRequestNeedsSent(false),
 	mRlvBehaviorCallbackConnection()
 {
-	mInstance = this;
-
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -319,7 +317,7 @@ void FSAreaSearch::updateRlvRestrictions(ERlvBehaviour behavior)
 
 void FSAreaSearch::checkRegion()
 {
-	if (mInstance && mActive)
+	if (mActive)
 	{
 		// Check if we changed region, and if we did, clear the object details cache.
 		LLViewerRegion* region = gAgent.getRegion(); // getRegion can return NULL if disconnected.
@@ -688,8 +686,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 
 void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 {
-	// This function is called by llviewermessage even if no floater has been created.
-	if (!(mInstance && mActive))
+	if (!mActive)
 	{
 		return;
 	}
@@ -1109,8 +1106,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 
 void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost)
 {
-	// This fuction is called by LLViewerObjectList::fetchObjectCostsCoro even if no floater has been created.
-	if (!(mInstance && mActive))
+	if (!mActive)
 	{
 		return;
 	}
