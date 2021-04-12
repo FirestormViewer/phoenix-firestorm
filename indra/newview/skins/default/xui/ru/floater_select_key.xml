@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="Select Key" name="modal container">
+<floater title="Выбор кнопки" name="modal container">
 	<floater.string name="keyboard">Клавиатура</floater.string>
 	<floater.string name="mouse">Кнопки Мыши</floater.string>
 	<floater.string name="basic_description">
-Нажмите клавишу или кнопку мыши, чтобы установить триггер.
+Нажмите клавишу или кнопку мыши для выбора.
 Разрешенный ввод: [INPUT].
 	</floater.string>
 	<floater.string name="reserved_by_menu">
 Комбинация [KEYSTR] зарезервировано меню.
 	</floater.string>
 	<text name="descritption">
-Нажмите клавишу или кнопку мыши, чтобы установить триггер.
+Нажмите клавишу или кнопку мыши для выбора.
 Разрешенный ввод: [INPUT].
 	</text>
 	<check_box label="Применить ко всем" name="apply_all" tool_tip="Программа использует разные комбинации элементов управления в зависимости от того, что вы делаете в мире, установка этого параметра применит ваши изменения ко всем комбинациям."/>
