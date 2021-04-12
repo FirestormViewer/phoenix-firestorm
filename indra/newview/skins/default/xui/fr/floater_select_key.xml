@@ -1,5 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater title="Sélectionnez une touche" name="modal container">
-	<text name="Save item as:">Appuyez sur la touche qui contrôlera l'activation et la désactivation du chat vocal.</text>
-	<button label="Annuler" label_selected="Annuler" name="Cancel"/>
+	<floater.string name="keyboard">
+		Clavier
+	</floater.string>
+	<floater.string name="mouse">
+		Boutons de la souris
+	</floater.string>
+	<floater.string name="basic_description">
+		Appuyez sur une touche ou un bouton de la souris pour régler votre déclencheur..
+Saisie autorisée : [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+		La combinaison [KEYSTR] est réservé par un menu.
+	</floater.string>
+	<text name="descritption">
+		Appuyez sur une touche ou un bouton de la souris pour régler votre déclencheur.
+Saisie autorisée : [INPUT].
+	</text>
+	<check_box label="Appliquer à tous" name="apply_all" tool_tip="Viewer uses different control combinations depending on what you are doing in world, setting this will apply your change to all combinations"/>
+	<button label="Vide" name="SetEmpty"/>
+	<button label="Défaut" name="Default"/>
+	<button label="Annuler" name="Cancel"/>
 </floater>

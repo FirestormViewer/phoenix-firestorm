@@ -14,7 +14,7 @@
 		<panel label="Couleurs" name="colors"/>
 		<panel label="Graphiques" name="display"/>
 		<panel label="Son et Média" name="audio"/>
-		<panel label="Configuration" name="input"/>
+		<panel label="Réseau &amp; fichiers" name="input"/>
 		<panel label="Affichage/Dépl." name="move"/>
 		<panel label="Contrôles" name="controls" />
 		<panel label="Notifications" name="msgs"/>
