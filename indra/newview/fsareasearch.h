@@ -287,7 +287,7 @@ public:
 	void setCounterText();
 	void setCounterText(LLStringUtil::format_map_t args);
 	void updateScrollList();
-	void updateName(LLUUID id, std::string name);
+	void updateName(const LLUUID& id, const std::string& name);
 	static void touchObject(LLViewerObject* objectp);
 
 	FSScrollListCtrl* getResultList() { return mResultList; }
@@ -411,9 +411,6 @@ class FSPanelAreaSearchOptions
 public:
 	FSPanelAreaSearchOptions(FSAreaSearch* pointer);
 	virtual ~FSPanelAreaSearchOptions();
-
-	// not used
-//	/*virtual*/ BOOL postBuild();
 
 private:
 	void onCommitCheckboxDisplayColumn(const LLSD& userdata);
