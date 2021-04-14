@@ -746,7 +746,7 @@ bool LLToolPie::teleportToClickedLocation()
     bool is_land = mHoverPick.mPickType == LLPickInfo::PICK_LAND;
     bool pos_non_zero = !mHoverPick.mPosGlobal.isExactlyZero();
     bool has_touch_handler = (objp && objp->flagHandleTouch()) || (parentp && parentp->flagHandleTouch());
-    U8 click_action = final_click_action(objp); // deault action: 0 - touch
+    U8 click_action = final_click_action(objp); // default action: 0 - touch
     bool has_click_action = (click_action || has_touch_handler) && click_action != CLICK_ACTION_DISABLED;
 
     // <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
