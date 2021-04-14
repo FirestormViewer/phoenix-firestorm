@@ -2882,7 +2882,7 @@ void LLTextBase::updateCursorXPos()
 	mDesiredXPixel = getLocalRectFromDocIndex(mCursorPos).mLeft;
 }
 
-
+//virtual
 void LLTextBase::startOfLine()
 {
 	S32 offset = getLineOffsetFromDocIndex(mCursorPos);

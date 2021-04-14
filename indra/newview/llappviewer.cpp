@@ -4943,7 +4943,7 @@ bool LLAppViewer::initCache()
     const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
     const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
     const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
-	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
+	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableCacheDebugInfo");
 	// <FS:Ansariel> Don't ignore cache path for asset cache; Moved further down until cache path has been set correctly
 	//const std::string cache_dir = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name);
 	//LLDiskCache::initParamSingleton(cache_dir, disk_cache_bytes, enable_cache_debug_info);
@@ -4994,10 +4994,10 @@ bool LLAppViewer::initCache()
 		std::string new_cache_location = gSavedSettings.getString("NewCacheLocation");
 		if (new_cache_location != cache_location)
 		{
-			// AO: Don't automatically purge old cache location, has unwanted side effects with shared caches, upgrades
-			//LL_INFOS("AppCache") << "Cache location changed, cache needs purging" << LL_ENDL;
-			//gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
-			//purgeCache(); // purge old cache
+			LL_INFOS("AppCache") << "Cache location changed, cache needs purging" << LL_ENDL;
+			gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
+			purgeCache(); // purge old cache
+			gDirUtilp->deleteDirAndContents(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name));
 			gSavedSettings.setString("CacheLocation", new_cache_location);
 			gSavedSettings.setString("CacheLocationTopFolder", gDirUtilp->getBaseFileName(new_cache_location));
 		}
