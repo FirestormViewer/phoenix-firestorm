@@ -2698,6 +2698,19 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		LLInventoryModel::item_array_t cof_item_array;
 		get_sorted_base_and_cof_items(cof_item_array, outfit_item_array);
 
+		// <FS:Ansariel> Exclude LSL bridge or the following size check will always fail!
+		for (LLInventoryModel::item_array_t::iterator i = cof_item_array.begin(); i != cof_item_array.end(); ++i)
+		{
+			LLViewerInventoryItem *item = *i;
+
+			if (FSLSLBridge::instance().isBridgeValid() && item && item->getLinkedUUID() == FSLSLBridge::instance().getBridge()->getUUID())
+			{
+				cof_item_array.erase(i);
+				break;
+			}
+		}
+		// </FS:Ansariel>
+
 		if (outfit_item_array.size() == cof_item_array.size())
 		{
 			for (U32 i = 0; i < cof_item_array.size(); ++i)
