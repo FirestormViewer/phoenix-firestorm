@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="Камера" name="lst_action"/>
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="Смотреть вверх"/>
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="Смотреть вниз"/>
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="Камеру вперед"/>
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="Камеру назад"/>
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="Камеру быстро вперед"/>
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="Камеру быстро назад"/>
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="Камеру вращать над"/>
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="Камеру вращать под"/>
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="Камеру панорама вверх"/>
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="Камеру панорама вниз"/>
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="Камеру панорама влево"/>
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="Камеру панорама вправо"/>
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="Камеру панорама к"/>
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="Камеру панорама от"/>
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="Камеру вращать против часовой стрелки" value="Против часовой стрелки"/>
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="Камеру вращать по часовой стрелке" value="По часовой стрелке"/>
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Камеру вперед сидящего"/>
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Камеру назад сидящего"/>
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Камеру вращать над сидящим"/>
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Камеру вращать под сидящим"/>
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="Камеру вращать против часовой стрелки вокруг сидящего" value="Против часовой стрелки Сидя"/>
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="Камеру вращать по часовой стрелке вокруг сидящего" value="По часовой стрелке Сидя"/>
+	</rows>
+</contents>

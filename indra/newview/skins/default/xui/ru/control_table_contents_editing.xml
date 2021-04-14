@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="editing_actions">
+		<columns label="Правка" name="lst_action"/>
+	</rows>
+	<rows name="edit_avatar_spin_ccw">
+		<columns name="lst_action" tool_tip="Камера вращается вокруг аватара против часовой стрелки" value="Против часовой стрелки"/>
+	</rows>
+	<rows name="edit_avatar_spin_cw">
+		<columns name="lst_action" tool_tip="Камера вращается вокруг аватара по часовой стрелке" value="По часовой стрелке"/>
+	</rows>
+	<rows name="edit_avatar_spin_over">
+		<columns name="lst_action" tool_tip="Камера вращается над аватаром" value="Камера вращается над"/>
+	</rows>
+	<rows name="edit_avatar_spin_under">
+		<columns name="lst_action" tool_tip="Камера вращается под аватаром" value="Камера вращается под"/>
+	</rows>
+	<rows name="edit_avatar_move_forward">
+		<columns name="lst_action" value="Камера вперед"/>
+	</rows>
+	<rows name="edit_avatar_move_backward">
+		<columns name="lst_action" value="Камера назад"/>
+	</rows>
+</contents>

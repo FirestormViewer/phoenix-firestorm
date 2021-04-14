@@ -89,6 +89,10 @@ public:
 	LLUUID				mID;
 	LLCacheNameSignal	mSignal;
 	LLHost				mHost;
+	// <FS:Ansariel> Fix stale legacy requests
+	F64SecondsImplicit	mRequestStart;
+	bool				mIsGroup;
+	// </FS:Ansariel>
 	
 	PendingReply(const LLUUID& id, const LLHost& host)
 		: mID(id), mHost(host)
@@ -219,9 +223,13 @@ public:
 
 	BOOL getName(const LLUUID& id, std::string& first, std::string& last);
 
-	boost::signals2::connection addPending(const LLUUID& id, const LLCacheNameCallback& callback);
-	void addPending(const LLUUID& id, const LLHost& host);
-	
+	// <FS:Ansariel> Fix stale legacy requests
+	//boost::signals2::connection addPending(const LLUUID& id, const LLCacheNameCallback& callback);
+	//void addPending(const LLUUID& id, const LLHost& host);
+	boost::signals2::connection addPending(const LLUUID& id, bool is_group, const LLCacheNameCallback& callback);
+	void addPending(const LLUUID& id, bool is_group, const LLHost& host);
+	// </FS:Ansariel>
+
 	void processPendingAsks();
 	void processPendingReplies();
 	void sendRequest(const char* msg_name, const AskQueue& queue);
@@ -282,17 +290,31 @@ LLCacheName::Impl::~Impl()
 	mReplyQueue.clear();
 }
 
-boost::signals2::connection LLCacheName::Impl::addPending(const LLUUID& id, const LLCacheNameCallback& callback)
+// <FS:Ansariel> Fix stale legacy requests
+//boost::signals2::connection LLCacheName::Impl::addPending(const LLUUID& id, const LLCacheNameCallback& callback)
+boost::signals2::connection LLCacheName::Impl::addPending(const LLUUID& id, bool is_group, const LLCacheNameCallback& callback)
+// </FS:Ansariel>
 {
 	PendingReply* reply = new PendingReply(id, LLHost());
+	// <FS:Ansariel> Fix stale legacy requests
+	reply->mIsGroup = is_group;
+	reply->mRequestStart = LLTimer::getElapsedSeconds();
+	// </FS:Ansariel>
 	boost::signals2::connection res = reply->setCallback(callback);
 	mReplyQueue.push_back(reply);
 	return res;
 }
 
-void LLCacheName::Impl::addPending(const LLUUID& id, const LLHost& host)
+// <FS:Ansariel> Fix stale legacy requests
+//void LLCacheName::Impl::addPending(const LLUUID& id, const LLHost& host)
+void LLCacheName::Impl::addPending(const LLUUID& id, bool is_group, const LLHost& host)
+// </FS:Ansariel>
 {
 	PendingReply* reply = new PendingReply(id, host);
+	// <FS:Ansariel> Fix stale legacy requests
+	reply->mIsGroup = is_group;
+	reply->mRequestStart = LLTimer::getElapsedSeconds();
+	// </FS:Ansariel>
 	mReplyQueue.push_back(reply);
 }
 
@@ -689,7 +711,9 @@ boost::signals2::connection LLCacheName::get(const LLUUID& id, bool is_group, co
 				impl.mAskNameQueue.insert(id);
 			}
 		}
-		res = impl.addPending(id, callback);
+		// <FS:Ansariel> Fix stale legacy requests
+		//res = impl.addPending(id, callback);
+		res = impl.addPending(id, is_group, callback);
 	}
 	return res;
 }
@@ -849,11 +873,44 @@ void LLCacheName::Impl::processPendingAsks()
 void LLCacheName::Impl::processPendingReplies()
 {
 	// First call all the callbacks, because they might send messages.
-	for(ReplyQueue::iterator it = mReplyQueue.begin(); it != mReplyQueue.end(); ++it)
+	// <FS:Ansariel> Fix stale legacy requests
+	//for(ReplyQueue::iterator it = mReplyQueue.begin(); it != mReplyQueue.end(); ++it)
+	for (ReplyQueue::iterator it = mReplyQueue.begin(); it != mReplyQueue.end(); )
+	// </FS:Ansariel>
 	{
 		PendingReply* reply = *it;
+
 		LLCacheNameEntry* entry = get_ptr_in_map(mCache, reply->mID);
-		if(!entry) continue;
+		// <FS:Ansariel> Fix stale legacy requests
+		//if(!entry) continue;
+		if (!entry)
+		{
+			static const F64SecondsImplicit TIMEOUT(10.0);
+			if (LLTimer::getElapsedSeconds() - reply->mRequestStart > TIMEOUT)
+			{
+				if (reply->mIsGroup)
+				{
+					(reply->mSignal)(reply->mID, "(???)", true);
+				}
+				else
+				{
+					(reply->mSignal)(reply->mID, "(???).(???)", false);
+				}
+
+				// Assuming we don't need to send a reply to the simulator
+				// since we never received anything for this request either.
+
+				delete reply;
+				it = mReplyQueue.erase(it);
+				continue;
+			}
+			else
+			{
+				it++;
+				continue;
+			}
+		}
+		// </FS:Ansariel>
 
 		if (!entry->mIsGroup)
 		{
@@ -865,6 +922,9 @@ void LLCacheName::Impl::processPendingReplies()
 		{
 			(reply->mSignal)(reply->mID, entry->mGroupName, true);
 		}
+
+		// <FS:Ansariel> Fix stale legacy requests
+		it++;
 	}
 
 	// Forward on all replies, if needed.
@@ -996,7 +1056,9 @@ void LLCacheName::Impl::processUUIDRequest(LLMessageSystem* msg, bool isGroup)
 				}
 			}
 			
-			addPending(id, fromHost);
+			// <FS:Ansariel> Fix stale legacy requests
+			//addPending(id, fromHost);
+			addPending(id, isGroup, fromHost);
 		}
 	}
 }

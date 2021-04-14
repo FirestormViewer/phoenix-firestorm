@@ -5735,6 +5735,14 @@ http://www.firestormviewer.org/support за помощь в решении эт�
 	<string name="Z">
 		Z
 	</string>
+
+	<string name="LMB">ЛКМ</string>
+	<string name="MMB">СКМ</string>
+	<string name="RMB">ПКМ</string>
+	<string name="MB4">СК4</string>
+	<string name="MB5">СК5</string>
+	<string name="Double LMB">Двойной ЛКМ</string>
+
 	<string name="BeaconParticle">
 		Просмотр меток частиц (синие)
 	</string>
