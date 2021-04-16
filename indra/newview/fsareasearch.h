@@ -28,14 +28,15 @@
 #ifndef FS_AREASEARCH_H
 #define FS_AREASEARCH_H
 
+#include "llcategory.h"
 #include "llfloater.h"
 #include "llframetimer.h"
-#include "llsaleinfo.h"
-#include "llcategory.h"
 #include "llpermissions.h"
-#include "llviewerobject.h"
-#include <boost/regex.hpp>
+#include "llsaleinfo.h"
 #include "llscrolllistcolumn.h"
+#include "llviewerobject.h"
+#include "rlvdefines.h"
+#include <boost/regex.hpp>
 
 class LLAvatarName;
 class LLTextBox;
@@ -113,7 +114,7 @@ public:
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
 
-	void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name);
+	void avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name, bool needs_rlva_check);
 	void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
 	void processObjectProperties(LLMessageSystem* msg);
 	void updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost);
@@ -171,12 +172,15 @@ public:
 private:
 	void requestObjectProperties(const std::vector< U32 >& request_list, bool select, LLViewerRegion* regionp);
 	void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
-	void getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested);
+	void getNameFromUUID(const LLUUID& id, bool needs_rvla_check, std::string& name, bool group, bool& name_requested);
 
 	void updateCounterText();
 	bool regexTest(std::string text);
 	void findObjects();
 	void processRequestQueue();
+
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior);
 
 	S32 mRequested;
 	bool mRefresh;
@@ -206,15 +210,14 @@ private:
 
 	uuid_vec_t mNamesRequested;
 
+	typedef std::map<LLUUID, boost::signals2::connection> name_cache_connection_map_t;
+	name_cache_connection_map_t mNameCacheConnections;
+
 	LLViewerRegion* mLastRegion;
 	
 	class FSParcelChangeObserver;
 	friend class FSParcelChangeObserver;
 	FSParcelChangeObserver*	mParcelChangedObserver;
-
-	// Used for checking to see if a floater has been created.
-	// Can not be trusted as a singleton pointer, don't use as a pointer.
-	FSAreaSearch* mInstance;
 
 	LLTabContainer* mTab;
 	FSPanelAreaSearchList* mPanelList;
@@ -284,7 +287,7 @@ public:
 	void setCounterText();
 	void setCounterText(LLStringUtil::format_map_t args);
 	void updateScrollList();
-	void updateName(LLUUID id, std::string name);
+	void updateName(const LLUUID& id, const std::string& name);
 	static void touchObject(LLViewerObject* objectp);
 
 	FSScrollListCtrl* getResultList() { return mResultList; }
@@ -408,9 +411,6 @@ class FSPanelAreaSearchOptions
 public:
 	FSPanelAreaSearchOptions(FSAreaSearch* pointer);
 	virtual ~FSPanelAreaSearchOptions();
-
-	// not used
-//	/*virtual*/ BOOL postBuild();
 
 private:
 	void onCommitCheckboxDisplayColumn(const LLSD& userdata);

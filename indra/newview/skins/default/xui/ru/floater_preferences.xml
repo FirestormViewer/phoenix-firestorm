@@ -16,6 +16,7 @@
 		<panel label="Звук и медиа" name="audio"/>
 		<panel label="Сеть и файлы" name="input"/>
 		<panel label="Движение и вид" name="move"/>
+		<panel label="Управление" name="controls"/>
 		<panel label="Уведомления" name="msgs"/>
 		<panel label="Приватность" name="im"/>
 		<panel label="Расширеное" name="advanced1"/>

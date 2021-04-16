@@ -28,9 +28,9 @@
 #define LL_LLKDUMEM_H
 
 // Support classes for reading and writing from memory buffers in KDU
-#ifdef LL_DARWIN
-#define KDU_NO_THREADS
-#endif
+//#ifdef LL_DARWIN
+//#define KDU_NO_THREADS
+//#endif
 
 #define kdu_xxxx "kdu_image.h"
 #include "include_kdu_xxxx.h"
