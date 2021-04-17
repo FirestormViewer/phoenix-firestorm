@@ -1932,9 +1932,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c1be3db6fda7054f615621e9a8139c51</string>
+              <string>8d0ad384de8fbbc9083cac20258fcb0c</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.0.6-darwin-202302239.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.1-darwin64-210931415.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>

@@ -72,6 +72,9 @@ void main()
 #endif
 
 	color.rgb *= vertex_color.rgb;
+	// <FS> Fullbright fog fix
+	color.rgb = fullbrightAtmosTransport(color.rgb);
+	color.rgb = fullbrightScaleSoftClip(color.rgb);
 
 #ifdef WATER_FOG
 	vec3 pos = vary_position;

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="move_actions">
+		<columns label="Actions de déplacement" name="lst_action"/>
+	</rows>
+	<rows name="walk_to">
+		<columns name="lst_action" tool_tip="Se rendre à l'endroit où le curseur de la souris pointe" value="Marcher vers" />
+	</rows>
+	<rows name="teleport_to">
+		<columns name="lst_action" tool_tip="Se téléporter à l'endroit pointé par le curseur de la souris, mais tous les lieux ne permettent pas la téléportation directe. Il se peut donc que vous soyez téléporté plus près de votre destination." value="Se téléporter vers" />
+	</rows>
+	<rows name="push_forward">
+		<columns name="lst_action" value="Avancer" />
+	</rows>
+	<rows name="push_backward">
+		<columns name="lst_action" value="Reculer" />
+	</rows>
+	<rows name="turn_left">
+		<columns name="lst_action" value="Gauche" />
+	</rows>
+	<rows name="turn_right">
+		<columns name="lst_action" value="Droite" />
+	</rows>
+	<rows name="slide_left">
+		<columns name="lst_action" value="Aller vers la gauche" />
+	</rows>
+	<rows name="slide_right">
+		<columns name="lst_action" value="Aller vers la droite" />
+	</rows>
+	<rows name="jump">
+		<columns name="lst_action" value="Sauter / monter" />
+	</rows>
+	<rows name="push_down">
+		<columns name="lst_action" value="Descendre" />
+	</rows>
+	<rows name="run_forward">
+		<columns name="lst_action" value="Courir en avant" />
+	</rows>
+	<rows name="run_backward">
+		<columns name="lst_action" value="Courir à reculons" />
+	</rows>
+	<rows name="run_left">
+		<columns name="lst_action" value="Courir vers la gauche" />
+	</rows>
+	<rows name="run_right">
+		<columns name="lst_action" value="Courir vers la droite" />
+	</rows>
+	<rows name="toggle_run">
+		<columns name="lst_action" value="Courir" />
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="lst_action" value="Voler / Arrêter de voler" />
+	</rows>
+	<rows name="toggle_sit">
+		<columns name="lst_action" value="S'asseoir / Se lever" />
+	</rows>
+	<rows name="stop_moving">
+		<columns name="lst_action" value="Arrêter de bouger" />
+	</rows>
+</contents>

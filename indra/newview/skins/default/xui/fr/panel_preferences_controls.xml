@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Contrôles" name="controls">
+	<combo_box name="key_mode">
+		<combo_box.item label="A la troisième personne" name="third_person"/>
+		<combo_box.item label="En vue subjective" name="first_person"/>
+		<combo_box.item label="En modification d'apparence" name="edit_avatar"/>
+		<combo_box.item label="En position assise" name="sitting"/>
+	</combo_box>
+	<button label="Réinitialiser" tool_tip="Restores default values for all control modes." name="restore_defaults"/>
+</panel>

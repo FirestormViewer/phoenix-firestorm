@@ -51,8 +51,9 @@
 #include "llviewerwindow.h"			// for gViewerWindow
 #include "llvoavatar.h"
 #include "llvoavatarself.h"			// for gAgentAvatarp
+#include "llavatarnamecache.h"
 
-const S32 MAX_ANIMATIONS=100;
+constexpr S32 MAX_ANIMATIONS = 100;
 
 // --------------------------------------------------------------------------
 
@@ -77,7 +78,7 @@ void RecentAnimationList::addAnimation(const LLUUID& id, const LLUUID& playedBy)
 
 	// only remember animation when it wasn't played by ourselves or the explorer window is open,
 	// so the list doesn't get polluted
-	if (playedBy != gAgentAvatarp->getID() || explorer != NULL)
+	if (playedBy != gAgentAvatarp->getID() || explorer)
 	{
 		mAnimationList.push_back(entry);
 
@@ -114,7 +115,7 @@ void RecentAnimationList::requestList(AnimationExplorer* explorer)
 
 AnimationExplorer::AnimationExplorer(const LLSD& key)
 :	LLFloater(key),
-	mPreviewCtrl(NULL),
+	mPreviewCtrl(nullptr),
 	mLastMouseX(0),
 	mLastMouseY(0)
 {
@@ -122,7 +123,16 @@ AnimationExplorer::AnimationExplorer(const LLSD& key)
 
 AnimationExplorer::~AnimationExplorer()
 {
-	mAnimationPreview = NULL;
+	mAnimationPreview = nullptr;
+
+	for (const auto& cb : mAvatarNameCacheConnections)
+	{
+		if (cb.second.connected())
+		{
+			cb.second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
 }
 
 void AnimationExplorer::startMotion(const LLUUID& motionID)
@@ -363,8 +373,21 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
 		// if it was an avatar, get the name here
 		if (vo->isAvatar())
 		{
-			playedByName = std::string(vo->getNVPair("FirstName")->getString()) + " " +
-				std::string(vo->getNVPair("LastName")->getString());
+			LLAvatarName av_name;
+			if (LLAvatarNameCache::get(played_by, &av_name))
+			{
+				playedByName = av_name.getCompleteName();
+			}
+			else
+			{
+				if (mAvatarNameCacheConnections.find(played_by) != mAvatarNameCacheConnections.end())
+				{
+					boost::signals2::connection cb_connection = LLAvatarNameCache::get(played_by, boost::bind(&AnimationExplorer::onAvatarNameCallback, this, _1, _2));
+					mAvatarNameCacheConnections.insert(std::make_pair(played_by, cb_connection));
+				}
+
+				playedByName = LLTrans::getString("AvatarNameWaiting");
+			}
 		}
 		// not an avatar, do a lookup by UUID
 		else
@@ -425,6 +448,21 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
 	mAnimationScrollList->addElement(item, ADD_TOP);
 }
 
+void AnimationExplorer::onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name)
+{
+	auto iter = mAvatarNameCacheConnections.find(id);
+	if (iter != mAvatarNameCacheConnections.end())
+	{
+		if (iter->second.connected())
+		{
+			iter->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(iter);
+	}
+
+	updateListEntry(id, av_name.getCompleteName());
+}
+
 void AnimationExplorer::requestNameCallback(LLMessageSystem* msg)
 {
 	// if we weren't looking for any IDs, ignore this callback
@@ -453,22 +491,27 @@ void AnimationExplorer::requestNameCallback(LLMessageSystem* msg)
 			mRequestedIDs.erase(iter);
 			mKnownIDs[object_id] = object_name;
 
-			S32 object_id_column = mAnimationScrollList->getColumn("object_id")->mIndex;
-			S32 played_by_column = mAnimationScrollList->getColumn("played_by")->mIndex;
+			updateListEntry(object_id, object_name);
+		}
+	}
+}
 
-			// find all scroll list entries with this object UUID and update the names there
-			std::vector<LLScrollListItem*> items = mAnimationScrollList->getAllData();
-			for (std::vector<LLScrollListItem*>::iterator list_iter = items.begin(); list_iter != items.end(); ++list_iter)
-			{
-				LLScrollListItem* item = *list_iter;
-				LLUUID list_object_id = item->getColumn(object_id_column)->getValue().asUUID();
+void AnimationExplorer::updateListEntry(const LLUUID& id, const std::string& name)
+{
+	S32 object_id_column = mAnimationScrollList->getColumn("object_id")->mIndex;
+	S32 played_by_column = mAnimationScrollList->getColumn("played_by")->mIndex;
 
-				if (object_id == list_object_id)
-				{
-					LLScrollListText* played_by_text = (LLScrollListText*)item->getColumn(played_by_column);
-					played_by_text->setText(object_name);
-				}
-			}
+	// find all scroll list entries with this object UUID and update the names there
+	std::vector<LLScrollListItem*> items = mAnimationScrollList->getAllData();
+	for (std::vector<LLScrollListItem*>::iterator list_iter = items.begin(); list_iter != items.end(); ++list_iter)
+	{
+		LLScrollListItem* item = *list_iter;
+		LLUUID list_object_id = item->getColumn(object_id_column)->getValue().asUUID();
+
+		if (id == list_object_id)
+		{
+			LLScrollListText* played_by_text = (LLScrollListText*)item->getColumn(played_by_column);
+			played_by_text->setText(name);
 		}
 	}
 }
@@ -478,7 +521,7 @@ BOOL AnimationExplorer::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (mPreviewCtrl && mPreviewCtrl->getRect().pointInRect(x, y))
 	{
-		bringToFront( x, y );
+		bringToFront(x, y);
 		gFocusMgr.setMouseCapture(this);
 		gViewerWindow->hideCursor();
 		mLastMouseX = x;
