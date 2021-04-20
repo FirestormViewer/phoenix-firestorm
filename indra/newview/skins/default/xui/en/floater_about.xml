@@ -91,7 +91,7 @@ Dummy Name replaced at run time
       </text_editor>
     </panel>
     <panel
-      height="855"
+      height="885"
       border="true"
       label="Firestorm Credits"
       help_topic="about_fscredits_tab"
@@ -156,7 +156,7 @@ Additional code generously contributed to Firestorm by:
                 <text
                  enabled="false"
                  follows="top|left"
-                 height="185"
+                 height="215"
                  bg_readonly_color="Transparent"
                  left="5"
                  text_color="LtGray"
