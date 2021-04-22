@@ -574,7 +574,7 @@ std::string LLCacheName::buildFullName(const std::string& first, const std::stri
 std::string LLCacheName::cleanFullName(const std::string& full_name)
 {
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	return (LLAvatarName::trimResidentSurname() ? full_name : full_name.substr(0, full_name.find(" Resident")));
+	return (!LLAvatarName::trimResidentSurname() ? full_name : full_name.substr(0, full_name.find(" Resident")));
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 }
 

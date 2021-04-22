@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c8024bad0445af488d355670ba13cc40</string>
+              <string>65d60415962cf65918c4fabe379ad43a</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.08-linux64-210441517.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.01.09-linux64-211101316.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1022,11 +1022,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c27de9c2f8c562551773a80399d6d037</string>
+              <string>215de14980a03774795de8cde24f1ad5</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.08-windows-210431451.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.09-windows-211090925.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1036,18 +1036,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>29a66f79f7224cc17aa22d047853f7b0</string>
+              <string>a55f9ae859a5a60285f0c6c764729194</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.08-windows64-210431454.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.09-windows64-211090927.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.08</string>
+        <string>2.01.09</string>
       </map>
       <key>fontconfig</key>
       <map>
