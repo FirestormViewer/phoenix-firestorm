@@ -618,15 +618,6 @@
 			layout="topleft"
 			name="Worn Items"
 			show_item_link_overlays="true" />
-		<favorites_inventory_panel
-			name="Favorite Items"
-			label="Favorites"
-			show_empty_message="false"
-			follows="all"
-			layout="topleft"
-			border="false"
-			bevel_style="none"
-			scroll.reserve_scroll_corner="false"/>
 	</tab_container>
 
 	<text

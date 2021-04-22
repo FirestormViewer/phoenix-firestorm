@@ -2659,9 +2659,10 @@ bool idle_startup()
 			// on with this install.
 			gSavedSettings.setBOOL("ShowStartLocation", TRUE);
 
-			// Open Conversation floater on first login.
+            // <FS:Ansariel> Disabled...
+            //LLFloaterReg::toggleInstanceOrBringToFront("how_to");
+
 			// <FS:Ansariel> [FS Communication UI]
-			//LLFloaterReg::toggleInstanceOrBringToFront("im_container");
 			LLFloaterReg::toggleInstanceOrBringToFront("fs_im_container");
 			// </FS:Ansariel> [FS Communication UI]
 
