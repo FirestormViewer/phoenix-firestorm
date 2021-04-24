@@ -52,7 +52,8 @@ const S32 TEXTURE_CACHE_ENTRY_SIZE = FIRST_PACKET_SIZE;//1024;
 const F32 TEXTURE_CACHE_PURGE_AMOUNT = .20f; // % amount to reduce the cache by when it exceeds its limit
 const F32 TEXTURE_CACHE_LRU_SIZE = .10f; // % amount for LRU list (low overhead to regenerate)
 const S32 TEXTURE_FAST_CACHE_ENTRY_OVERHEAD = sizeof(S32) * 4; //w, h, c, level
-const S32 TEXTURE_FAST_CACHE_ENTRY_SIZE = 16 * 16 * 4 + TEXTURE_FAST_CACHE_ENTRY_OVERHEAD;
+const S32 TEXTURE_FAST_CACHE_DATA_SIZE = 16 * 16 * 4;
+const S32 TEXTURE_FAST_CACHE_ENTRY_SIZE = TEXTURE_FAST_CACHE_DATA_SIZE + TEXTURE_FAST_CACHE_ENTRY_OVERHEAD;
 const F32 TEXTURE_LAZY_PURGE_TIME_LIMIT = .004f; // 4ms. Would be better to autoadjust, but there is a major cache rework in progress.
 
 class LLTextureCacheWorker : public LLWorkerClass
@@ -616,6 +617,9 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			if(idx >= 0)
 			{
 				// write to the fast cache.
+                // mRawImage is not entirely safe here since it is a pointer to one owned by cache worker,
+                // it could have been retrieved via getRequestFinished() and then modified.
+                // If writeToFastCache crashes, something is wrong around fetch worker.
 				if(!mCache->writeToFastCache(mID, idx, mRawImage, mRawDiscardLevel))
 				{
 					LL_WARNS() << "writeToFastCache failed" << LL_ENDL;
@@ -1822,28 +1826,27 @@ void LLTextureCache::purgeTextures(bool validate)
 		 iter != time_idx_set.end(); ++iter)
 	{
 		S32 idx = iter->second;
-		bool purge_entry = false;
-		std::string filename = getTextureFileName(entries[idx].mID);
-		if (cache_size >= purged_cache_size)
-		{
-			purge_entry = true;
-		}
-		else if (validate)
+		bool purge_entry = false;		
+        if (validate)
 		{
 			// make sure file exists and is the correct size
 			U32 uuididx = entries[idx].mID.mData[0];
 			if (uuididx == validate_idx)
 			{
+                std::string filename = getTextureFileName(entries[idx].mID);
  				LL_DEBUGS("TextureCache") << "Validating: " << filename << "Size: " << entries[idx].mBodySize << LL_ENDL;
 				// mHeaderAPRFilePoolp because this is under header mutex in main thread
 				S32 bodysize = LLAPRFile::size(filename, mHeaderAPRFilePoolp);
 				if (bodysize != entries[idx].mBodySize)
 				{
-					LL_WARNS("TextureCache") << "TEXTURE CACHE BODY HAS BAD SIZE: " << bodysize << " != " << entries[idx].mBodySize
-							<< filename << LL_ENDL;
+					LL_WARNS("TextureCache") << "TEXTURE CACHE BODY HAS BAD SIZE: " << bodysize << " != " << entries[idx].mBodySize << filename << LL_ENDL;
 					purge_entry = true;
 				}
 			}
+		}
+		else if (cache_size >= purged_cache_size)
+		{
+			purge_entry = true;
 		}
 		else
 		{
@@ -1853,6 +1856,7 @@ void LLTextureCache::purgeTextures(bool validate)
 		if (purge_entry)
 		{
 			purge_count++;
+            std::string filename = getTextureFileName(entries[idx].mID);
 	 		LL_DEBUGS("TextureCache") << "PURGING: " << filename << LL_ENDL;
 			cache_size -= entries[idx].mBodySize;
 			removeEntry(idx, entries[idx], filename) ;			
@@ -2065,7 +2069,9 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
 		}
 		
 		S32 image_size = head[0] * head[1] * head[2];
-		if(!image_size) //invalid
+        if(image_size <= 0
+           || image_size > TEXTURE_FAST_CACHE_DATA_SIZE
+           || head[3] < 0) //invalid
 		{
 			closeFastCache();
 			return NULL;
@@ -2087,46 +2093,6 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
 	return raw;
 }
 
-#if LL_WINDOWS
-
-static const U32 STATUS_MSC_EXCEPTION = 0xE06D7363; // compiler specific
-
-U32 exception_dupe_filter(U32 code, struct _EXCEPTION_POINTERS *exception_infop)
-{
-    if (code == STATUS_MSC_EXCEPTION)
-    {
-        // C++ exception, go on
-        return EXCEPTION_CONTINUE_SEARCH;
-    }
-    else
-    {
-        // handle it
-        return EXCEPTION_EXECUTE_HANDLER;
-    }
-}
-
-//due to unwinding
-void dupe(LLPointer<LLImageRaw> &raw)
-{
-    raw = raw->duplicate();
-}
-
-void logExceptionDupplicate(LLPointer<LLImageRaw> &raw)
-{
-    __try
-    {
-        dupe(raw);
-    }
-    __except (exception_dupe_filter(GetExceptionCode(), GetExceptionInformation()))
-    {
-        // convert to C++ styled exception
-        char integer_string[32];
-        sprintf(integer_string, "SEH, code: %lu\n", GetExceptionCode());
-        throw std::exception(integer_string);
-    }
-}
-#endif
-
 //return the fast cache location
 bool LLTextureCache::writeToFastCache(LLUUID image_id, S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel)
 {
@@ -2143,8 +2109,9 @@ bool LLTextureCache::writeToFastCache(LLUUID image_id, S32 id, LLPointer<LLImage
 	c = raw->getComponents();
 
 	S32 i = 0 ;
-	
-	while(((w >> i) * (h >> i) * c) > TEXTURE_FAST_CACHE_ENTRY_SIZE - TEXTURE_FAST_CACHE_ENTRY_OVERHEAD)
+
+	// Search for a discard level that will fit into fast cache
+	while(((w >> i) * (h >> i) * c) > TEXTURE_FAST_CACHE_DATA_SIZE)
 	{
 		++i ;
 	}
@@ -2155,31 +2122,8 @@ bool LLTextureCache::writeToFastCache(LLUUID image_id, S32 id, LLPointer<LLImage
 		h >>= i;
 		if(w * h *c > 0) //valid
 		{
-			//make a duplicate to keep the original raw image untouched.
-
-            try
-            {
-#if LL_WINDOWS
-                // Temporary diagnostics for scale/duplicate crash
-                logExceptionDupplicate(raw);
-#else
-                raw = raw->duplicate();
-#endif
-            }
-            catch (...)
-            {
-                removeFromCache(image_id);
-                LL_ERRS() << "Failed to cache image: " << image_id
-                    << " local id: " << id
-                    << " Exception: " << boost::current_exception_diagnostic_information()
-                    << " Image new width: " << w
-                    << " Image new height: " << h
-                    << " Image new components: " << c
-                    << " Image discard difference: " << i
-                    << LL_ENDL;
-
-                return false;
-            }
+            // Make a duplicate to keep the original raw image untouched.
+            raw = raw->duplicate();
 
 			if (raw->isBufferInvalid())
 			{

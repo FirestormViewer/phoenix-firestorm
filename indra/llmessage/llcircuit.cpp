@@ -437,11 +437,16 @@ LLCircuit::LLCircuit(const F32Seconds circuit_heartbeat_interval, const F32Secon
 LLCircuit::~LLCircuit()
 {
 	// delete pointers in the map.
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
 	std::for_each(mCircuitData.begin(),
 				  mCircuitData.end(),
-				  llcompose1(
-					  DeletePointerFunctor<LLCircuitData>(),
-					  llselect2nd<circuit_data_map::value_type>()));
+				  [](const circuit_data_map::value_type& x) { delete x.second;});
+// [/SL:KB]
+//	std::for_each(mCircuitData.begin(),
+//				  mCircuitData.end(),
+//				  llcompose1(
+//					  DeletePointerFunctor<LLCircuitData>(),
+//					  llselect2nd<circuit_data_map::value_type>()));
 }
 
 LLCircuitData *LLCircuit::addCircuitData(const LLHost &host, TPACKETID in_id)
@@ -543,7 +548,7 @@ void LLCircuitData::checkPeriodTime()
 		mBytesOutLastPeriod	= mBytesOutThisPeriod;
 		mBytesInThisPeriod	= S32Bytes(0);
 		mBytesOutThisPeriod	= S32Bytes(0);
-		mLastPeriodLength	= period_length;
+		mLastPeriodLength	= F32Seconds::convert(period_length);
 
 		mPeriodTime = mt_sec;
 	}
@@ -1378,8 +1383,8 @@ F32Milliseconds LLCircuitData::getPingInTransitTime()
 
 	if (mPingsInTransit)
 	{
-		time_since_ping_was_sent =  ((mPingsInTransit*mHeartbeatInterval - F32Seconds(1)) 
-			+ (LLMessageSystem::getMessageTimeSeconds() - mPingTime));
+		time_since_ping_was_sent =  F32Milliseconds::convert(((mPingsInTransit*mHeartbeatInterval - F32Seconds(1)) 
+			+ (LLMessageSystem::getMessageTimeSeconds() - mPingTime)));
 	}
 
 	return time_since_ping_was_sent;

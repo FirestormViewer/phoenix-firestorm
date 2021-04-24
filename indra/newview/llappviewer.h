@@ -95,6 +95,7 @@ public:
     bool quitRequested() { return mQuitRequested; }
     bool logoutRequestSent() { return mLogoutRequestSent; }
 	bool isSecondInstance() { return mSecondInstance; }
+    bool isUpdaterMissing() { return mUpdaterNotFound; }
 
 	void writeDebugInfo(bool isStatic=true);
 
@@ -205,7 +206,9 @@ public:
 
 	// llcorehttp init/shutdown/config information.
 	LLAppCoreHttp & getAppCoreHttp()			{ return mAppCoreHttp; }
-	
+
+    void updateNameLookupUrl();
+
 protected:
 	virtual bool initWindow(); // Initialize the viewer's window.
 	virtual void initLoggingAndGetLastDuration(); // Initialize log files, logging system
@@ -262,6 +265,7 @@ private:
 	static LLAppViewer* sInstance; 
 
     bool mSecondInstance; // Is this a second instance of the app?
+	bool mUpdaterNotFound; // True when attempt to start updater failed
 
 	std::string mMarkerFileName;
 	LLAPRFile mMarkerFile; // A file created to indicate the app is running.
@@ -393,8 +397,6 @@ extern LLVector3 gRelativeWindVec;
 extern U32	gPacketsIn;
 extern BOOL gPrintMessagesThisFrame;
 
-extern LLUUID gSunTextureID;
-extern LLUUID gMoonTextureID;
 extern LLUUID gBlackSquareID;
 
 extern BOOL gRandomizeFramerate;

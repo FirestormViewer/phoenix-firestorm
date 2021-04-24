@@ -101,7 +101,7 @@ public:
 	bool getCanReplaceCOF(const LLUUID& outfit_cat_id);
 
     // Can we add all referenced items to the avatar?
-    bool canAddWearables(const uuid_vec_t& item_ids);
+    bool canAddWearables(const uuid_vec_t& item_ids) const;
     
 	// Copy all items in a category.
 	void shallowCopyCategoryContents(const LLUUID& src_id, const LLUUID& dst_id,
@@ -276,7 +276,10 @@ private:
 	
 	LLUUID mCOFImageID;
 
-	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
+	std::unique_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
+// [/SL:KB]
+//	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
 	// Set of temp attachment UUIDs that should be removed
 	typedef std::set<LLUUID> doomed_temp_attachments_t;

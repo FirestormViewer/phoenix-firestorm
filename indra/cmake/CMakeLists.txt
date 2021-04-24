@@ -22,13 +22,11 @@ set(cmake_SOURCE_FILES
     Copy3rdPartyLibs.cmake
     DBusGlib.cmake
     DeploySharedLibs.cmake
-    DirectX.cmake
     DragDrop.cmake
     EXPAT.cmake
     FindAPR.cmake
     FindAutobuild.cmake
     FindBerkeleyDB.cmake
-    FindFMODEX.cmake
     FindGLH.cmake
     FindGoogleBreakpad.cmake
     FindHUNSPELL.cmake
@@ -39,7 +37,7 @@ set(cmake_SOURCE_FILES
     FindURIPARSER.cmake
     FindXmlRpcEpi.cmake
     FindZLIB.cmake
-    FMODEX.cmake
+    FMODSTUDIO.cmake
     FreeType.cmake
     GLEXT.cmake
     GLH.cmake

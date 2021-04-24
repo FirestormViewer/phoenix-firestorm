@@ -33,7 +33,6 @@
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldir.h"
-#include "llenvmanager.h"
 #include "llexternaleditor.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
@@ -545,9 +544,6 @@ void LLScriptEdCore::initMenu()
 	menuItem = getChild<LLMenuItemCallGL>("Go to line...");
 	menuItem->setClickCallback(boost::bind(&LLFloaterGotoLine::show, this));
 
-	menuItem = getChild<LLMenuItemCallGL>("Help...");
-	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnHelp, this));
-
 	menuItem = getChild<LLMenuItemCallGL>("Keyword Help...");
 	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnDynamicHelp, this));
 
@@ -881,11 +877,6 @@ bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLS
 		break;
 	}
 	return false;
-}
-
-void LLScriptEdCore::onBtnHelp()
-{
-	LLUI::getInstance()->mHelpImpl->showTopic(HELP_LSL_PORTAL_TOPIC);
 }
 
 void LLScriptEdCore::onBtnDynamicHelp()
@@ -1693,9 +1684,11 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
         if (!url.empty())
         {
             std::string buffer(mScriptEd->mEditor->getText());
-            LLBufferedAssetUploadInfo::invnUploadFinish_f proc = boost::bind(&LLPreviewLSL::finishedLSLUpload, _1, _4);
 
-            LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mItemUUID, buffer, proc));
+            LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mItemUUID, buffer, 
+                [](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
+                    LLPreviewLSL::finishedLSLUpload(itemId, response);
+                }));
 
             LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
         }
@@ -2243,11 +2236,13 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
     if (!url.empty())
     {
         std::string buffer(mScriptEd->mEditor->getText());
-        LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLLiveLSLEditor::finishLSLUpload, _1, _2, _3, _4, isRunning);
 
-        LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObjectUUID, mItemUUID, 
+        LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mObjectUUID, mItemUUID, 
                 monoChecked() ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2, 
-                isRunning, mScriptEd->getAssociatedExperience(), buffer, proc));
+                isRunning, mScriptEd->getAssociatedExperience(), buffer, 
+                [isRunning](LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response) { 
+                    LLLiveLSLEditor::finishLSLUpload(itemId, taskId, newAssetId, response, isRunning);
+                }));
 
         LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
     }

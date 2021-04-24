@@ -215,8 +215,8 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 	request_params["last_exec_event"] = mLastExecEvent;
 	request_params["last_exec_duration"] = mLastExecDuration;
 	request_params["mac"] = (char*)hashed_unique_id_string;
-	request_params["version"] = LLVersionInfo::getVersion();
-	request_params["channel"] = LLVersionInfo::getChannel();
+	request_params["version"] = LLVersionInfo::instance().getVersion();
+	request_params["channel"] = LLVersionInfo::instance().getChannel();
 	request_params["platform"] = mPlatform;
 	request_params["address_size"] = ADDRESS_SIZE;
 	request_params["platform_version"] = mPlatformVersion;
@@ -427,6 +427,7 @@ void LLLoginInstance::handleLoginSuccess(const LLSD& event)
 	LL_INFOS("LLLogin") << "LLLoginInstance::handleLoginSuccess" << LL_ENDL;
 
 	attemptComplete();
+	mRequestData.clear();
 }
 
 void LLLoginInstance::handleDisconnect(const LLSD& event)

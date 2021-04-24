@@ -825,8 +825,11 @@ void LLFavoritesBarCtrl::updateButtons()
 		if (getChildList()->size() > 0)
 		{
 			//find last visible child to get the rightest button offset
-			child_list_const_reverse_iter_t last_visible_it = std::find_if(childs->rbegin(), childs->rend(), 
-					std::mem_fun(&LLView::getVisible));
+//			child_list_const_reverse_iter_t last_visible_it = std::find_if(childs->rbegin(), childs->rend(), 
+//					std::mem_fun(&LLView::getVisible));
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
+			child_list_const_reverse_iter_t last_visible_it = std::find_if(childs->rbegin(), childs->rend(), [](const LLView* viewp) { return viewp->getVisible(); });
+// [/SL:KB]
 			if(last_visible_it != childs->rend())
 			{
 				last_right_edge = (*last_visible_it)->getRect().mRight;
@@ -1590,14 +1593,29 @@ void LLFavoritesOrderStorage::load()
 												<< (fav_llsd.isMap() ? "" : "un") << "successfully"
 												<< LL_ENDL;
 				in_file.close();
-				user_llsd = fav_llsd[gAgentUsername];
-
-				S32 index = 0;
-				for (LLSD::array_iterator iter = user_llsd.beginArray();
-						iter != user_llsd.endArray(); ++iter)
+				if (fav_llsd.isMap() && fav_llsd.has(gAgentUsername))
 				{
-					mSortIndexes.insert(std::make_pair(iter->get("id").asUUID(), index));
-					index++;
+					user_llsd = fav_llsd[gAgentUsername];
+
+					S32 index = 0;
+					bool needs_validation = gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin");
+					for (LLSD::array_iterator iter = user_llsd.beginArray();
+						iter != user_llsd.endArray(); ++iter)
+					{
+						// Validation
+						LLUUID fv_id = iter->get("id").asUUID();
+						if (needs_validation
+							&& (fv_id.isNull()
+								|| iter->get("asset_id").asUUID().isNull()
+								|| iter->get("name").asString().empty()
+								|| iter->get("slurl").asString().empty()))
+						{
+							mRecreateFavoriteStorage = true;
+						}
+
+						mSortIndexes.insert(std::make_pair(fv_id, index));
+						index++;
+					}
 				}
 			}
 			else
@@ -1841,6 +1859,8 @@ void LLFavoritesOrderStorage::rearrangeFavoriteLandmarks(const LLUUID& source_it
 
 BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 {
+	pref_changed |= mRecreateFavoriteStorage;
+	mRecreateFavoriteStorage = false;
 
 	LLUUID favorite_folder= gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
 	if (favorite_folder.isNull())

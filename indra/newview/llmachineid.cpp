@@ -30,9 +30,12 @@
 #if	LL_WINDOWS
 #define _WIN32_DCOM
 #include <iostream>
-using namespace std;
+//using namespace std;
 #include <comdef.h>
 #include <Wbemidl.h>
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
+using namespace std;
+// [/SL:KB]
 #endif
 unsigned char static_unique_id[] =  {0,0,0,0,0,0};
 bool static has_static_unique_id = false;
@@ -237,7 +240,7 @@ S32 LLMachineID::init()
                 {
                     if (j >= serial_size || vtProp.bstrVal[j] == 0)
                         break;
-
+                    
                     static_unique_id[i] = (unsigned int)(static_unique_id[i] + serialNumber[j]);
                     j++;
                 }

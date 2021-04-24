@@ -284,8 +284,9 @@ public:
 	static void		invalidateNameTag(const LLUUID& agent_id);
 	// force all name tags to rebuild, useful when display names turned on/off
 	static void		invalidateNameTags();
-	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font);
+	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, const bool use_ellipses = false);
 	void 			idleUpdateRenderComplexity();
+	void 			idleUpdateDebugInfo();
     void 			accountRenderComplexityForObject(const LLViewerObject *attached_object,
                                                      const F32 max_attachment_complexity,
                                                      LLVOVolume::texture_cost_t& textures,
@@ -443,7 +444,7 @@ public:
 	F32			getLastSkinTime() { return mLastSkinTime; }
 	U32 		renderTransparent(BOOL first_pass);
 	void 		renderCollisionVolumes();
-	void		renderBones();
+	void		renderBones(const std::string &selected_joint = std::string());
 	void		renderJoints();
 	static void	deleteCachedImages(bool clearAll=true);
 	static void	destroyGL();
@@ -676,9 +677,6 @@ public:
 public:
 	static BOOL 	isIndexLocalTexture(LLAvatarAppearanceDefines::ETextureIndex i);
 	static BOOL 	isIndexBakedTexture(LLAvatarAppearanceDefines::ETextureIndex i);
-private:
-	static const LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary *getDictionary() { return sAvatarDictionary; }
-	static LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary* sAvatarDictionary;
 
 	//--------------------------------------------------------------------
 	// Messaging

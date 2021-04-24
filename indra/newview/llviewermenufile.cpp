@@ -391,7 +391,9 @@ const void upload_single_file(const std::vector<std::string>& filenames, LLFileP
 		}
 		if (type == LLFilePicker::FFLOAD_ANIM)
 		{
-			if (filename.rfind(".anim") != std::string::npos)
+			std::string filename_lc(filename);
+			LLStringUtil::toLower(filename_lc);
+			if (filename_lc.rfind(".anim") != std::string::npos)
 			{
 				LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
 			}
@@ -416,7 +418,7 @@ void do_bulk_upload(std::vector<std::string> filenames, const LLSD& notification
 	for (std::vector<std::string>::const_iterator in_iter = filenames.begin(); in_iter != filenames.end(); ++in_iter)
 	{
 		std::string filename = (*in_iter);
-			
+		
 		std::string name = gDirUtilp->getBaseFileName(filename, true);
 		std::string asset_name = name;
 		LLStringUtil::replaceNonstandardASCII(asset_name, '?');
@@ -431,19 +433,19 @@ void do_bulk_upload(std::vector<std::string> filenames, const LLSD& notification
 		if (LLResourceUploadInfo::findAssetTypeAndCodecOfExtension(ext, asset_type, codec) &&
 			LLAgentBenefitsMgr::current().findUploadCost(asset_type, expected_upload_cost))
 		{
-			LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
-													   filename,
-													   asset_name,
-													   asset_name, 0,
-													   LLFolderType::FT_NONE, LLInventoryType::IT_NONE,
-													   LLFloaterPerms::getNextOwnerPerms("Uploads"),
-													   LLFloaterPerms::getGroupPerms("Uploads"),
-													   LLFloaterPerms::getEveryonePerms("Uploads"),
-													   expected_upload_cost));
-			
-			upload_new_resource(uploadInfo, NULL, NULL);
-		}
+		LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
+			filename,
+			asset_name,
+			asset_name, 0,
+			LLFolderType::FT_NONE, LLInventoryType::IT_NONE,
+			LLFloaterPerms::getNextOwnerPerms("Uploads"),
+			LLFloaterPerms::getGroupPerms("Uploads"),
+			LLFloaterPerms::getEveryonePerms("Uploads"),
+			expected_upload_cost));
+
+		upload_new_resource(uploadInfo);
 	}
+}
 }
 
 bool get_bulk_upload_expected_cost(const std::vector<std::string>& filenames, S32& total_cost, S32& file_count, S32& bvh_count)
@@ -552,7 +554,7 @@ class LLFileUploadModel : public view_listener_t
 		LLFloaterModelPreview* fmp = (LLFloaterModelPreview*) LLFloaterReg::getInstance("upload_model");
 		if (fmp && !fmp->isModelLoading())
 		{
-			fmp->loadModel(3);
+			fmp->loadHighLodModel();
 		}
 		
 		return TRUE;
@@ -683,10 +685,17 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 		S32 width = gViewerWindow->getWindowWidthRaw();
 		S32 height = gViewerWindow->getWindowHeightRaw();
 
-		if (gSavedSettings.getBOOL("HighResSnapshot"))
+		bool render_ui = gSavedSettings.getBOOL("RenderUIInSnapshot");
+		bool render_hud = gSavedSettings.getBOOL("RenderHUDInSnapshot");
+
+		BOOL high_res = gSavedSettings.getBOOL("HighResSnapshot");
+		if (high_res)
 		{
 			width *= 2;
 			height *= 2;
+			// not compatible with UI/HUD
+			render_ui = false;
+			render_hud = false;
 		}
 
 		if (gViewerWindow->rawSnapshot(raw,
@@ -694,8 +703,11 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 									   height,
 									   TRUE,
 									   FALSE,
-									   gSavedSettings.getBOOL("RenderUIInSnapshot"),
-									   FALSE))
+									   render_ui,
+									   render_hud,
+									   FALSE,
+									   LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
+									   high_res ? S32_MAX : MAX_SNAPSHOT_IMAGE_SIZE)) //per side
 		{
 			LLPointer<LLImageFormatted> formatted;
             LLSnapshotModel::ESnapshotFormat fmt = (LLSnapshotModel::ESnapshotFormat) gSavedSettings.getS32("SnapshotFormat");
@@ -781,7 +793,7 @@ LLUUID upload_new_resource(
 	bool show_inventory)
 {	
 
-    LLResourceUploadInfo::ptr_t uploadInfo(new LLNewFileResourceUploadInfo(
+    LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLNewFileResourceUploadInfo>(
         src_filename,
         name, desc, compression_info,
         destination_folder_type, inv_type,
@@ -864,7 +876,7 @@ void upload_done_callback(
 					create_inventory_item(gAgent.getID(), gAgent.getSessionID(),
 							      folder_id, data->mAssetInfo.mTransactionID, data->mAssetInfo.getName(),
 							      data->mAssetInfo.getDescription(), data->mAssetInfo.mType,
-							      data->mInventoryType, NOT_WEARABLE, next_owner_perms,
+                                  data->mInventoryType, NO_INV_SUBTYPE, next_owner_perms,
 							      LLPointer<LLInventoryCallback>(NULL));
 				}
 				else
@@ -900,7 +912,7 @@ void upload_done_callback(
 		LLStringUtil::trim(asset_name);
 
 		std::string display_name = LLStringUtil::null;
-		LLAssetStorage::LLStoreAssetCallback callback = NULL;
+		LLAssetStorage::LLStoreAssetCallback callback;
 		void *userdata = NULL;
 		upload_new_resource(
 			next_file,

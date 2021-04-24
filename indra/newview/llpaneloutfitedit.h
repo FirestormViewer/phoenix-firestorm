@@ -237,7 +237,10 @@ private:
 	LLToggleableMenu*	mGearMenu;
 	LLToggleableMenu*	mAddWearablesGearMenu;
 	bool				mInitialized;
-	std::auto_ptr<LLSaveOutfitComboBtn> mSaveComboBtn;
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
+	std::unique_ptr<LLSaveOutfitComboBtn> mSaveComboBtn;
+// [/SL:KB]
+//	std::auto_ptr<LLSaveOutfitComboBtn> mSaveComboBtn;
 	LLMenuButton*		mWearablesGearMenuBtn;
 	LLMenuButton*		mGearMenuBtn;
 

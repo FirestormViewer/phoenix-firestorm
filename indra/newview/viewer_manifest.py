@@ -78,6 +78,9 @@ class ViewerManifest(LLManifest):
                 contributor_names = self.extract_names(contributions_path)
                 self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
 
+                # ... and the default camera position settings
+                self.path("camera")
+
                 # ... and the entire windlight directory
                 self.path("windlight")
 
@@ -257,6 +260,9 @@ class ViewerManifest(LLManifest):
             app_suffix=self.channel_variant()
         return CHANNEL_VENDOR_BASE + ' ' + app_suffix
 
+    def exec_name(self):
+        return "SecondLifeViewer"
+
     def app_name_oneword(self):
         return ''.join(self.app_name().split())
     
@@ -416,10 +422,9 @@ class WindowsManifest(ViewerManifest):
     build_data_json_platform = 'win'
 
     def final_exe(self):
-        return self.app_name_oneword()+".exe"
+        return self.exec_name()+".exe"
 
     def finish_build_data_dict(self, build_data_dict):
-        #MAINT-7294: Windows exe names depend on channel name, so write that in also
         build_data_dict['Executable'] = self.final_exe()
         build_data_dict['AppName']    = self.app_name()
         return build_data_dict
@@ -513,26 +518,25 @@ class WindowsManifest(ViewerManifest):
                 print err.message
                 print "Skipping GLOD library (assumming linked statically)"
 
-            # Get fmodex dll, continue if missing
-            try:
-                if(self.address_size == 64):
-                    self.path("fmodex64.dll")
+            # Get fmodstudio dll if needed
+            if self.args['fmodstudio'] == 'ON':
+                if(self.args['configuration'].lower() == 'debug'):
+                    self.path("fmodL.dll")
                 else:
-                    self.path("fmodex.dll")
-            except:
-                print "Skipping fmodex audio library(assuming other audio engine)"
+                    self.path("fmod.dll")
+
+            if self.args['openal'] == 'ON':
+                # Get openal dll
+                self.path("OpenAL32.dll")
+                self.path("alut.dll")
 
             # For textures
             self.path("openjpeg.dll")
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
-            if self.args['configuration'].lower() == 'debug':
-                self.path("msvcr120d.dll")
-                self.path("msvcp120d.dll")
-            else:
-                self.path("msvcr120.dll")
-                self.path("msvcp120.dll")
+            self.path("msvcp140.dll")
+            self.path("vcruntime140.dll")
 
             # SLVoice executable
             with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
@@ -593,21 +597,19 @@ class WindowsManifest(ViewerManifest):
             config = 'debug' if self.args['configuration'].lower() == 'debug' else 'release'
             with self.prefix(src=os.path.join(pkgdir, 'bin', config)):
                 self.path("chrome_elf.dll")
-                self.path("d3dcompiler_43.dll")
                 self.path("d3dcompiler_47.dll")
                 self.path("libcef.dll")
                 self.path("libEGL.dll")
                 self.path("libGLESv2.dll")
                 self.path("dullahan_host.exe")
-                self.path("natives_blob.bin")
                 self.path("snapshot_blob.bin")
                 self.path("v8_context_snapshot.bin")
 
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                               'sharedlibs', 'Release')):
-                self.path("msvcp120.dll")
-                self.path("msvcr120.dll")
+                self.path("msvcp140.dll")
+                self.path("vcruntime140.dll")
 
             # CEF files common to all configurations
             with self.prefix(src=os.path.join(pkgdir, 'resources')):
@@ -794,6 +796,7 @@ class WindowsManifest(ViewerManifest):
         for exe in (
             self.final_exe(),
             "SLVersionChecker.exe",
+            "llplugin/dullahan_host.exe",
             ):
             self.sign(exe)
             
@@ -827,13 +830,13 @@ class WindowsManifest(ViewerManifest):
 
     def sign(self, exe):
         sign_py = os.environ.get('SIGN', r'C:\buildscripts\code-signing\sign.py')
-        python  = os.environ.get('PYTHON', 'python')
+        python  = os.environ.get('PYTHON', sys.executable)
         if os.path.exists(sign_py):
             dst_path = self.dst_path_of(exe)
             print "about to run signing of: ", dst_path
             self.run_command([python, sign_py, dst_path])
         else:
-            print "Skipping code signing of %s: %s not found" % (exe, sign_py)
+            print "Skipping code signing of %s %s: %s not found" % (self.dst_path_of(exe), exe, sign_py)
 
     def escape_slashes(self, path):
         return path.replace('\\', '\\\\\\\\')
@@ -956,7 +959,7 @@ class DarwinManifest(ViewerManifest):
 
                 with self.prefix(src=relpkgdir, dst=""):
                     self.path("libndofdev.dylib")
-                    self.path("libhunspell-1.3.a")   
+                    self.path("libhunspell-*.dylib")   
 
                 with self.prefix(src_dst="cursors_mac"):
                     self.path("*.tif")
@@ -1046,17 +1049,18 @@ class DarwinManifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
-                # dylibs that vary based on configuration
-                if self.args['configuration'].lower() == 'debug':
-                    for libfile in (
-                                "libfmodexL.dylib",
-                                ):
-                        dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
-                else:
-                    for libfile in (
-                                "libfmodex.dylib",
-                                ):
-                        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                # Fmod studio dylibs (vary based on configuration)
+                if self.args['fmodstudio'] == 'ON':
+                    if self.args['configuration'].lower() == 'debug':
+                        for libfile in (
+                                    "libfmodL.dylib",
+                                    ):
+                            dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
+                    else:
+                        for libfile in (
+                                    "libfmod.dylib",
+                                    ):
+                            dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
                 # our apps
                 executable_path = {}
@@ -1103,46 +1107,55 @@ class DarwinManifest(ViewerManifest):
                     # $viewer_app/Contents/Frameworks/Chromium Embedded Framework.framework
                     SLPlugin_framework = self.relsymlinkf(CEF_framework, catch=False)
 
-                    # copy DullahanHelper.app
-                    self.path2basename(relpkgdir, 'DullahanHelper.app')
+                    # for all the multiple CEF/Dullahan (as of CEF 76) helper app bundles we need:
+                    for helper in (
+                        "DullahanHelper",
+                        "DullahanHelper (GPU)",
+                        "DullahanHelper (Renderer)",
+                        "DullahanHelper (Plugin)",
+                    ):
+                        # app is the directory name of the app bundle, with app/Contents/MacOS/helper as the executable
+                        app = helper + ".app"
 
-                    # and fix that up with a Frameworks/CEF symlink too
-                    with self.prefix(dst=os.path.join(
-                        'DullahanHelper.app', 'Contents', 'Frameworks')):
-                        # from Dullahan Helper.app/Contents/Frameworks/Chromium Embedded
-                        # Framework.framework back to
-                        # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
-                        # Since SLPlugin_framework is itself a
-                        # symlink, don't let relsymlinkf() resolve --
-                        # explicitly call relpath(symlink=True) and
-                        # create that symlink here.
-                        DullahanHelper_framework = \
-                            self.symlinkf(self.relpath(SLPlugin_framework, symlink=True),
-                                          catch=False)
+                        # copy DullahanHelper.app
+                        self.path2basename(relpkgdir, app)
 
-                    # change_command includes install_name_tool, the
-                    # -change subcommand and the old framework rpath
-                    # stamped into the executable. To use it with
-                    # run_command(), we must still append the new
-                    # framework path and the pathname of the
-                    # executable to change.
-                    change_command = [
-                        'install_name_tool', '-change',
-                        '@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework']
+                        # and fix that up with a Frameworks/CEF symlink too
+                        with self.prefix(dst=os.path.join(
+                                app, 'Contents', 'Frameworks')):
+                            # from Dullahan Helper *.app/Contents/Frameworks/Chromium Embedded
+                            # Framework.framework back to
+                            # SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework
+                            # Since SLPlugin_framework is itself a
+                            # symlink, don't let relsymlinkf() resolve --
+                            # explicitly call relpath(symlink=True) and
+                            # create that symlink here.
+                            helper_framework = \
+                            self.symlinkf(self.relpath(SLPlugin_framework, symlink=True), catch=False)
 
-                    with self.prefix(dst=os.path.join(
-                        'DullahanHelper.app', 'Contents', 'MacOS')):
-                        # Now self.get_dst_prefix() is, at runtime,
-                        # @executable_path. Locate the helper app
-                        # framework (which is a symlink) from here.
-                        newpath = os.path.join(
-                            '@executable_path',
-                            self.relpath(DullahanHelper_framework, symlink=True),
-                            frameworkname)
-                        # and restamp the DullahanHelper executable
-                        self.run_command(
-                            change_command +
-                            [newpath, self.dst_path_of('DullahanHelper')])
+                        # change_command includes install_name_tool, the
+                        # -change subcommand and the old framework rpath
+                        # stamped into the executable. To use it with
+                        # run_command(), we must still append the new
+                        # framework path and the pathname of the
+                        # executable to change.
+                        change_command = [
+                            'install_name_tool', '-change',
+                            '@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework']
+
+                        with self.prefix(dst=os.path.join(
+                                app, 'Contents', 'MacOS')):
+                            # Now self.get_dst_prefix() is, at runtime,
+                            # @executable_path. Locate the helper app
+                            # framework (which is a symlink) from here.
+                            newpath = os.path.join(
+                                '@executable_path',
+                                    self.relpath(helper_framework, symlink=True),
+                                frameworkname)
+                                # and restamp the Dullahan Helper executable itself
+                            self.run_command(
+                                change_command +
+                                    [newpath, self.dst_path_of(helper)])
 
                 # SLPlugin plugins
                 with self.prefix(dst="llplugin"):
@@ -1205,11 +1218,6 @@ class DarwinManifest(ViewerManifest):
             devfile = re.search("/dev/disk([0-9]+)[^s]", hdi_output).group(0).strip()
             volpath = re.search('HFS\s+(.+)', hdi_output).group(1).strip()
 
-            if devfile != '/dev/disk1':
-                # adding more debugging info based upon nat's hunches to the
-                # logs to help track down 'SetFile -a V' failures -brad
-                print "WARNING: 'SetFile -a V' command below is probably gonna fail"
-
             # Copy everything in to the mounted .dmg
 
             app_name = self.app_name()
@@ -1237,21 +1245,6 @@ class DarwinManifest(ViewerManifest):
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
             for f in ".VolumeIcon.icns", "background.jpg", ".DS_Store":
                 pathname = os.path.join(volpath, f)
-                # We've observed mysterious "no such file" failures of the SetFile
-                # command, especially on the first file listed above -- yet
-                # subsequent inspection of the target directory confirms it's
-                # there. Timing problem with copy command? Try to handle.
-                for x in xrange(3):
-                    if os.path.exists(pathname):
-                        print "Confirmed existence: %r" % pathname
-                        break
-                    print "Waiting for %s copy command to complete (%s)..." % (f, x+1)
-                    sys.stdout.flush()
-                    time.sleep(1)
-                # If we fall out of the loop above without a successful break, oh
-                # well, possibly we've mistaken the nature of the problem. In any
-                # case, don't hang up the whole build looping indefinitely, let
-                # the original problem manifest by executing the desired command.
                 self.run_command(['SetFile', '-a', 'V', pathname])
 
             # Create the alias file (which is a resource file) from the .r
@@ -1519,14 +1512,15 @@ class Linux_i686_Manifest(LinuxManifest):
                 print "tcmalloc files not found, skipping"
                 pass
 
-            try:
-                self.path("libfmodex-*.so")
-                self.path("libfmodex.so")
-                pass
-            except:
-                print "Skipping libfmodex.so - not found"
-                pass
-
+            if self.args['fmodstudio'] == 'ON':
+                try:
+                    self.path("libfmod.so.11.7")
+                    self.path("libfmod.so.11")
+                    self.path("libfmod.so")
+                    pass
+                except:
+                    print "Skipping libfmod.so - not found"
+                    pass
 
         # Vivox runtimes
         with self.prefix(src=relpkgdir, dst="bin"):
@@ -1552,9 +1546,17 @@ class Linux_x86_64_Manifest(LinuxManifest):
 ################################################################
 
 if __name__ == "__main__":
+    # Report our own command line so that, in case of trouble, a developer can
+    # manually rerun the same command.
+    print('%s \\\n%s' %
+          (sys.executable,
+           ' '.join((("'%s'" % arg) if ' ' in arg else arg) for arg in sys.argv)))
+    # fmodstudio and openal can be used simultaneously and controled by environment
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
+        dict(name='fmodstudio', description="""Indication if fmod studio libraries are needed""", default='OFF'),
+        dict(name='openal', description="""Indication openal libraries are needed""", default='OFF'),
         ]
     try:
         main(extra=extra_arguments)

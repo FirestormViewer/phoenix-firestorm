@@ -1029,14 +1029,13 @@ void LLWearableHoldingPattern::recoverMissingWearable(LLWearableType::EType type
 	const LLUUID lost_and_found_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
 	LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(recovered_item_cb,_1,type,wearable,this));
 
-	create_inventory_item(gAgent.getID(),
+    create_inventory_wearable(gAgent.getID(),
 						  gAgent.getSessionID(),
 						  lost_and_found_id,
 						  wearable->getTransactionID(),
 						  wearable->getName(),
 						  wearable->getDescription(),
 						  wearable->getAssetType(),
-						  LLInventoryType::IT_WEARABLE,
 						  wearable->getType(),
 						  wearable->getPermissions().getMaskNextOwner(),
 						  cb);
@@ -1958,7 +1957,7 @@ bool LLAppearanceMgr::getCanReplaceCOF(const LLUUID& outfit_cat_id)
 }
 
 // Moved from LLWearableList::ContextMenu for wider utility.
-bool LLAppearanceMgr::canAddWearables(const uuid_vec_t& item_ids)
+bool LLAppearanceMgr::canAddWearables(const uuid_vec_t& item_ids) const
 {
 	// TODO: investigate wearables may not be loaded at this point EXT-8231
 
@@ -1968,7 +1967,7 @@ bool LLAppearanceMgr::canAddWearables(const uuid_vec_t& item_ids)
 	// Count given clothes (by wearable type) and objects.
 	for (uuid_vec_t::const_iterator it = item_ids.begin(); it != item_ids.end(); ++it)
 	{
-		LLViewerInventoryItem* item = gInventory.getItem(*it);
+		const LLViewerInventoryItem* item = gInventory.getItem(*it);
 		if (!item)
 		{
 			return false;
@@ -3279,6 +3278,50 @@ void update_base_outfit_after_ordering()
 	bool copy_folder_links = false;
 	app_mgr.slamCategoryLinks(app_mgr.getCOF(), base_outfit_id, copy_folder_links, dirty_state_updater);
 
+    if (base_outfit_id.notNull())
+    {
+        LLIsValidItemLink collector;
+
+        LLInventoryModel::cat_array_t cof_cats;
+        LLInventoryModel::item_array_t cof_item_array;
+        gInventory.collectDescendentsIf(app_mgr.getCOF(), cof_cats, cof_item_array,
+            LLInventoryModel::EXCLUDE_TRASH, collector);
+
+        for (U32 i = 0; i < outfit_item_array.size(); ++i)
+        {
+            LLViewerInventoryItem* linked_item = outfit_item_array.at(i)->getLinkedItem();
+            if (linked_item != NULL && linked_item->getActualType() == LLAssetType::AT_TEXTURE)
+            {
+                outfit_item_array.erase(outfit_item_array.begin() + i);
+                break;
+            }
+        }
+
+        if (outfit_item_array.size() != cof_item_array.size())
+        {
+            return;
+        }
+
+        std::sort(cof_item_array.begin(), cof_item_array.end(), sort_by_linked_uuid);
+        std::sort(outfit_item_array.begin(), outfit_item_array.end(), sort_by_linked_uuid);
+
+        for (U32 i = 0; i < cof_item_array.size(); ++i)
+        {
+            LLViewerInventoryItem *cof_it = cof_item_array.at(i);
+            LLViewerInventoryItem *base_it = outfit_item_array.at(i);
+
+            if (cof_it->getActualDescription() != base_it->getActualDescription())
+            {
+                if (cof_it->getLinkedUUID() == base_it->getLinkedUUID())
+                {
+                    base_it->setDescription(cof_it->getActualDescription());
+                    gInventory.updateItem(base_it);
+                }
+            }
+        }
+        LLAppearanceMgr::getInstance()->updateIsDirty();
+    }
+
 }
 
 // Save COF changes - update the contents of the current base outfit
@@ -3583,6 +3626,10 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
     }
 
     llcoro::suspend();
+    if (LLApp::isQuitting())
+    {
+        return;
+    }
     S32 retryCount(0);
     bool bRetry;
     do
@@ -3646,6 +3693,11 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
 
         LLSD result = httpAdapter->postAndSuspend(httpRequest, url, postData);
 
+        if (LLApp::isQuitting())
+        {
+            return;
+        }
+
         LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
         LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
@@ -3681,6 +3733,10 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
                 LL_WARNS("Avatar") << "Bake retry #" << retryCount << " in " << timeout << " seconds." << LL_ENDL;
 
                 llcoro::suspendUntilTimeout(timeout); 
+                if (LLApp::isQuitting())
+                {
+                    return;
+                }
                 bRetry = true;
                 continue;
             }

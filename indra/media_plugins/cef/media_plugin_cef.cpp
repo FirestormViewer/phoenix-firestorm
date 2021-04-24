@@ -62,6 +62,7 @@ private:
 	void onConsoleMessageCallback(std::string message, std::string source, int line);
 	void onStatusMessageCallback(std::string value);
 	void onTitleChangeCallback(std::string title);
+	void onTooltipCallback(std::string text);
 	void onLoadStartCallback();
 	void onRequestExitCallback();
 	void onLoadEndCallback(int httpStatusCode);
@@ -71,6 +72,7 @@ private:
 	bool onHTTPAuthCallback(const std::string host, const std::string realm, std::string& username, std::string& password);
 	void onCursorChangedCallback(dullahan::ECursorType type);
 	const std::vector<std::string> onFileDialog(dullahan::EFileDialogType dialog_type, const std::string dialog_title, const std::string default_file, const std::string dialog_accept_filter, bool& use_default);
+	bool onJSDialogCallback(const std::string origin_url, const std::string message_text, const std::string default_prompt_text);
 
 	void postDebugMessage(const std::string& msg);
 	void authResponse(LLPluginMessage &message);
@@ -87,6 +89,8 @@ private:
 	bool mPluginsEnabled;
 	bool mJavascriptEnabled;
 	bool mDisableGPU;
+	bool mDisableNetworkService;
+	bool mUseMockKeyChain;
 	std::string mUserAgentSubtring;
 	std::string mAuthUsername;
 	std::string mAuthPassword;
@@ -94,8 +98,9 @@ private:
 	bool mCanCut;
 	bool mCanCopy;
 	bool mCanPaste;
+    std::string mRootCachePath;
 	std::string mCachePath;
-	std::string mCookiePath;
+	std::string mContextCachePath;
 	std::string mCefLogFile;
 	bool mCefLogVerbose;
 	std::vector<std::string> mPickedFiles;
@@ -119,6 +124,8 @@ MediaPluginBase(host_send_func, host_user_data)
 	mPluginsEnabled = false;
 	mJavascriptEnabled = true;
 	mDisableGPU = false;
+	mDisableNetworkService = true;
+	mUseMockKeyChain = true;
 	mUserAgentSubtring = "";
 	mAuthUsername = "";
 	mAuthPassword = "";
@@ -127,7 +134,6 @@ MediaPluginBase(host_send_func, host_user_data)
 	mCanCopy = false;
 	mCanPaste = false;
 	mCachePath = "";
-	mCookiePath = "";
 	mCefLogFile = "";
 	mCefLogVerbose = false;
 	mPickedFiles.clear();
@@ -208,6 +214,12 @@ void MediaPluginCEF::onTitleChangeCallback(std::string title)
 	sendMessage(message);
 }
 
+void MediaPluginCEF::onTooltipCallback(std::string text)
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "tooltip_text");
+    message.setValue("tooltip", text);
+    sendMessage(message);
+}
 ////////////////////////////////////////////////////////////////////////////////
 //
 void MediaPluginCEF::onLoadStartCallback()
@@ -357,6 +369,14 @@ const std::vector<std::string> MediaPluginCEF::onFileDialog(dullahan::EFileDialo
 
 ////////////////////////////////////////////////////////////////////////////////
 //
+bool MediaPluginCEF::onJSDialogCallback(const std::string origin_url, const std::string message_text, const std::string default_prompt_text)
+{
+	// return true indicates we suppress the JavaScript alert UI entirely
+	return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
 void MediaPluginCEF::onCursorChangedCallback(dullahan::ECursorType type)
 {
 	std::string name = "";
@@ -431,6 +451,8 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			{
 				mCEFLib->update();
 
+				mVolumeCatcher.pump();
+
 				// this seems bad but unless the state changes (it won't until we figure out
 				// how to get CEF to tell us if copy/cut/paste is available) then this function
 				// will return immediately
@@ -438,7 +460,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			}
 			else if (message_name == "cleanup")
 			{
-				mVolumeCatcher.setVolume(0); // Hack: masks CEF exit issues
 				mCEFLib->requestExit();
 			}
 			else if (message_name == "force_exit")
@@ -491,6 +512,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mCEFLib->setOnConsoleMessageCallback(std::bind(&MediaPluginCEF::onConsoleMessageCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 				mCEFLib->setOnStatusMessageCallback(std::bind(&MediaPluginCEF::onStatusMessageCallback, this, std::placeholders::_1));
 				mCEFLib->setOnTitleChangeCallback(std::bind(&MediaPluginCEF::onTitleChangeCallback, this, std::placeholders::_1));
+				mCEFLib->setOnTooltipCallback(std::bind(&MediaPluginCEF::onTooltipCallback, this, std::placeholders::_1));
 				mCEFLib->setOnLoadStartCallback(std::bind(&MediaPluginCEF::onLoadStartCallback, this));
 				mCEFLib->setOnLoadEndCallback(std::bind(&MediaPluginCEF::onLoadEndCallback, this, std::placeholders::_1));
 				mCEFLib->setOnLoadErrorCallback(std::bind(&MediaPluginCEF::onLoadError, this, std::placeholders::_1, std::placeholders::_2));
@@ -500,15 +522,21 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mCEFLib->setOnFileDialogCallback(std::bind(&MediaPluginCEF::onFileDialog, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 				mCEFLib->setOnCursorChangedCallback(std::bind(&MediaPluginCEF::onCursorChangedCallback, this, std::placeholders::_1));
 				mCEFLib->setOnRequestExitCallback(std::bind(&MediaPluginCEF::onRequestExitCallback, this));
-
+				mCEFLib->setOnJSDialogCallback(std::bind(&MediaPluginCEF::onJSDialogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+				
 				dullahan::dullahan_settings settings;
 				settings.accept_language_list = mHostLanguage;
 				settings.background_color = 0xffffffff;
 				settings.cache_enabled = true;
+				settings.root_cache_path = mRootCachePath;
 				settings.cache_path = mCachePath;
-				settings.cookie_store_path = mCookiePath;
+				settings.context_cache_path = mContextCachePath;
 				settings.cookies_enabled = mCookiesEnabled;
 				settings.disable_gpu = mDisableGPU;
+#if LL_DARWIN
+				settings.disable_network_service = mDisableNetworkService;
+				settings.use_mock_keychain = mUseMockKeyChain;
+#endif
 				settings.flash_enabled = mPluginsEnabled;
 				settings.flip_mouse_y = false;
 				settings.flip_pixels_y = true;
@@ -558,10 +586,25 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "set_user_data_path")
 			{
 				std::string user_data_path_cache = message_in.getValue("cache_path");
-				std::string user_data_path_cookies = message_in.getValue("cookies_path");
+				std::string subfolder = message_in.getValue("username");
 
-				mCachePath = user_data_path_cache + "cef_cache";
-				mCookiePath = user_data_path_cookies + "cef_cookies";
+				mRootCachePath = user_data_path_cache + "cef_cache";
+                if (!subfolder.empty())
+                {
+                    std::string delim;
+#if LL_WINDOWS
+                    // media plugin doesn't have access to gDirUtilp
+                    delim = "\\";
+#else
+                    delim = "/";
+#endif
+                    mCachePath = mRootCachePath + delim + subfolder;
+                }
+                else
+                {
+                    mCachePath = mRootCachePath;
+                }
+                mContextCachePath = ""; // disabled by ""
 				mCefLogFile = message_in.getValue("cef_log_file");
 				mCefLogVerbose = message_in.getValueBoolean("cef_verbose_log");
 			}
@@ -661,8 +704,9 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "scroll_event")
 			{
 				// Mouse coordinates for cef to be able to scroll 'containers'
-				//S32 x = message_in.getValueS32("x");
-				//S32 y = message_in.getValueS32("y");
+				S32 x = message_in.getValueS32("x");
+				S32 y = message_in.getValueS32("y");
+
 				// Wheel's clicks
 				S32 delta_x = message_in.getValueS32("clicks_x");
 				S32 delta_y = message_in.getValueS32("clicks_y");
@@ -670,8 +714,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				delta_x *= -scaling_factor;
 				delta_y *= -scaling_factor;
 
-				// mCEFLib->mouseWheel(x, y, delta_x, delta_y);
-				mCEFLib->mouseWheel(delta_x, delta_y);
+				mCEFLib->mouseWheel(x, y, delta_x, delta_y);
 			}
 			else if (message_name == "text_event")
 			{

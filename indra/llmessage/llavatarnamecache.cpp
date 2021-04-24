@@ -134,7 +134,7 @@ LLAvatarNameCache::~LLAvatarNameCache()
 
 void LLAvatarNameCache::requestAvatarNameCache_(std::string url, std::vector<LLUUID> agentIds)
 {
-    LL_DEBUGS("AvNameCache") << "Entering coroutine " << LLCoros::instance().getName()
+    LL_DEBUGS("AvNameCache") << "Entering coroutine " << LLCoros::getName()
         << " with url '" << url << "', requesting " << agentIds.size() << " Agent Ids" << LL_ENDL;
 
     // Check pointer that can be cleaned up by cleanupClass()
@@ -188,7 +188,7 @@ void LLAvatarNameCache::requestAvatarNameCache_(std::string url, std::vector<LLU
     }
     catch (...)
     {
-        LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << LLCoros::instance().getName()
+        LOG_UNHANDLED_EXCEPTION(STRINGIZE("coroutine " << LLCoros::getName()
                                           << "('" << url << "', " << agentIds.size()
                                           << " http result: " << httpResults.asString()
                                           << " Agent Ids)"));
@@ -285,11 +285,26 @@ void LLAvatarNameCache::processName(const LLUUID& agent_id, const LLAvatarName& 
 		return;
 	}
 
+    bool updated_account = true; // assume obsolete value for new arrivals by default
+
+    std::map<LLUUID, LLAvatarName>::iterator it = mCache.find(agent_id);
+    if (it != mCache.end()
+        && (*it).second.getAccountName() == av_name.getAccountName())
+    {
+        updated_account = false;
+    }
+
 	// Add to the cache
 	mCache[agent_id] = av_name;
 
 	// Suppress request from the queue
 	mPendingQueue.erase(agent_id);
+
+	// notify mute list about changes
+    if (updated_account && mAccountNameChangedCallback)
+    {
+        mAccountNameChangedCallback(agent_id, av_name);
+    }
 
 	// Signal everyone waiting on this name
 	signal_map_t::iterator sig_it =	mSignalMap.find(agent_id);
@@ -303,6 +318,8 @@ void LLAvatarNameCache::processName(const LLUUID& agent_id, const LLAvatarName& 
 		delete signal;
 		signal = NULL;
 	}
+
+
 }
 
 void LLAvatarNameCache::requestNamesViaCapability()

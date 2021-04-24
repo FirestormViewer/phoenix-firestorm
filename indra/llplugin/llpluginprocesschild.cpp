@@ -225,6 +225,18 @@ void LLPluginProcessChild::idle(void)
 				}
 				setState(STATE_UNLOADED);
 			}
+
+            if (mInstance)
+            {
+                // Provide some time to the plugin
+                // example: CEF on "cleanup" sets shutdown request, but it still needs idle loop to actually shutdown
+                LLPluginMessage message("base", "idle");
+                message.setValueReal("time", PLUGIN_IDLE_SECONDS);
+                sendMessageToPlugin(message);
+
+                mInstance->idle();
+            }
+
 			break;
 
 		case STATE_UNLOADED:
@@ -258,7 +270,7 @@ void LLPluginProcessChild::sleep(F64 seconds)
 	}
 	else
 	{
-		ms_sleep((int)(seconds * 1000.0f));
+    ms_sleep((int)(seconds * 1000.0f));
 	}
 }
 

@@ -857,12 +857,12 @@ void LLPluginClassMedia::paste()
 }
 
 void LLPluginClassMedia::setUserDataPath(const std::string &user_data_path_cache,
-										 const std::string &user_data_path_cookies,
+										 const std::string &username,
 										 const std::string &user_data_path_cef_log)
 {
 	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "set_user_data_path");
-	message.setValue("cache_path", user_data_path_cache);
-	message.setValue("cookies_path", user_data_path_cookies);
+    message.setValue("cache_path", user_data_path_cache);
+    message.setValue("username", username); // cef shares cache between users but creates user-based contexts
 	message.setValue("cef_log_file", user_data_path_cef_log);
 
 	bool cef_verbose_log = gSavedSettings.getBOOL("CefVerboseLog");
@@ -1137,6 +1137,10 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
 			mDebugMessageText = message.getValue("message_text");
 			mDebugMessageLevel = message.getValue("message_level");
 			mediaEvent(LLPluginClassMediaOwner::MEDIA_EVENT_DEBUG_MESSAGE);
+		}
+		else if (message_name == "tooltip_text")
+		{
+			mHoverText = message.getValue("tooltip");
 		}
 		else
 		{

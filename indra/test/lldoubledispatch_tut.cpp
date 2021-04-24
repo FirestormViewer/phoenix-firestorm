@@ -135,10 +135,16 @@ namespace tut
 
         // Instantiate a few GameObjects.  Make sure we refer to them
         // polymorphically, and don't let them leak.
-        std::auto_ptr<GameObject> home;
-        std::auto_ptr<GameObject> obstacle;
-        std::auto_ptr<GameObject> tug;
-        std::auto_ptr<GameObject> patrol;
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
+        std::unique_ptr<GameObject> home;
+        std::unique_ptr<GameObject> obstacle;
+        std::unique_ptr<GameObject> tug;
+        std::unique_ptr<GameObject> patrol;
+// [/SL:KB]
+//        std::auto_ptr<GameObject> home;
+//        std::auto_ptr<GameObject> obstacle;
+//        std::auto_ptr<GameObject> tug;
+//        std::auto_ptr<GameObject> patrol;
 
         // prototype objects
         Asteroid dummyAsteroid;

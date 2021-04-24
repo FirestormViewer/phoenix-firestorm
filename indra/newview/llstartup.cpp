@@ -39,8 +39,8 @@
 #include "llviewermedia_streamingaudio.h"
 #include "llaudioengine.h"
 
-#ifdef LL_FMODEX
-# include "llaudioengine_fmodex.h"
+#ifdef LL_FMODSTUDIO
+# include "llaudioengine_fmodstudio.h"
 #endif
 
 #ifdef LL_OPENAL
@@ -71,6 +71,7 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llpersistentnotificationstorage.h"
+#include "llpresetsmanager.h"
 #include "llteleporthistory.h"
 #include "llregionhandle.h"
 #include "llsd.h"
@@ -107,7 +108,6 @@
 //#include "llfirstuse.h"
 #include "llfloaterhud.h"
 #include "llfloaterland.h"
-#include "llfloaterpreference.h"
 #include "llfloatertopobjects.h"
 #include "llfloaterworldmap.h"
 #include "llgesturemgr.h"
@@ -183,8 +183,6 @@
 #include "llnamebox.h"
 #include "llnameeditor.h"
 #include "llpostprocess.h"
-#include "llwlparammanager.h"
-#include "llwaterparammanager.h"
 #include "llagentlanguage.h"
 #include "llwearable.h"
 #include "llinventorybridge.h"
@@ -199,6 +197,8 @@
 #include "lltoolbarview.h"
 #include "llexperiencelog.h"
 #include "llcleanup.h"
+
+#include "llenvironment.h"
 
 #include "llstacktrace.h"
 
@@ -336,7 +336,6 @@ bool idle_startup()
 	static std::string auth_desc;
 	static std::string auth_message;
 
-	static LLVector3 initial_sun_direction(1.f, 0.f, 0.f);
 	static LLVector3 agent_start_position_region(10.f, 10.f, 10.f);		// default for when no space server
 
 	// last location by default
@@ -512,9 +511,9 @@ bool idle_startup()
 			if(!start_messaging_system(
 				   message_template_path,
 				   port,
-				   LLVersionInfo::getMajor(),
-				   LLVersionInfo::getMinor(),
-				   LLVersionInfo::getPatch(),
+				   LLVersionInfo::instance().getMajor(),
+				   LLVersionInfo::instance().getMinor(),
+				   LLVersionInfo::instance().getPatch(),
 				   FALSE,
 				   std::string(),
 				   responder,
@@ -623,13 +622,13 @@ bool idle_startup()
 			delete gAudiop;
 			gAudiop = NULL;
 
-#ifdef LL_FMODEX		
+#ifdef LL_FMODSTUDIO
 #if !LL_WINDOWS
-			if (NULL == getenv("LL_BAD_FMODEX_DRIVER"))
+            if (NULL == getenv("LL_BAD_FMODSTUDIO_DRIVER"))
 #endif // !LL_WINDOWS
-			{
-				gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODEX(gSavedSettings.getBOOL("FMODExProfilerEnable"));
-			}
+            {
+                gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODSTUDIO(gSavedSettings.getBOOL("FMODExProfilerEnable"));
+            }
 #endif
 
 #ifdef LL_OPENAL
@@ -650,7 +649,7 @@ bool idle_startup()
 #else
 				void* window_handle = NULL;
 #endif
-				bool init = gAudiop->init(kAUDIO_NUM_SOURCES, window_handle);
+				bool init = gAudiop->init(kAUDIO_NUM_SOURCES, window_handle, LLAppViewer::instance()->getSecondLifeTitle());
 				if(init)
 				{
 					gAudiop->setMuted(TRUE);
@@ -812,6 +811,7 @@ bool idle_startup()
 		show_debug_menus();
 
 		// Hide the splash screen
+		LL_DEBUGS("AppInit") << "Hide the splash screen and show window" << LL_ENDL;
 		LLSplashScreen::hide();
 		// Push our window frontmost
 		gViewerWindow->getWindow()->show();
@@ -819,9 +819,12 @@ bool idle_startup()
 		// DEV-16927.  The following code removes errant keystrokes that happen while the window is being 
 		// first made visible.
 #ifdef _WIN32
+        LL_DEBUGS("AppInit") << "Processing PeekMessage" << LL_ENDL;
 		MSG msg;
 		while( PeekMessage( &msg, /*All hWnds owned by this thread */ NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE ) )
-		{ }
+        {
+        }
+        LL_DEBUGS("AppInit") << "PeekMessage processed" << LL_ENDL;
 #endif
         display_startup();
         timeout.reset();
@@ -914,9 +917,9 @@ bool idle_startup()
 		}
 
 		// Set PerAccountSettingsFile to the default value.
-		gSavedSettings.setString("PerAccountSettingsFile",
-			gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, 
-				LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount")));
+		std::string settings_per_account = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount"));
+		gSavedSettings.setString("PerAccountSettingsFile", settings_per_account);
+		gDebugInfo["PerAccountSettingsFilename"] = settings_per_account;
 
 		// Note: can't store warnings files per account because some come up before login
 		
@@ -953,21 +956,6 @@ bool idle_startup()
 		
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
-
-
-		//good a place as any to create user windlight directories
-		std::string user_windlight_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight", ""));
-		LLFile::mkdir(user_windlight_path_name.c_str());		
-
-		std::string user_windlight_skies_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/skies", ""));
-		LLFile::mkdir(user_windlight_skies_path_name.c_str());
-
-		std::string user_windlight_water_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/water", ""));
-		LLFile::mkdir(user_windlight_water_path_name.c_str());
-
-		std::string user_windlight_days_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight/days", ""));
-		LLFile::mkdir(user_windlight_days_path_name.c_str());
-
 
 		if (show_connect_box)
 		{
@@ -1009,9 +997,8 @@ bool idle_startup()
 
 		gViewerWindow->getWindow()->setCursor(UI_CURSOR_WAIT);
 
-		init_start_screen(agent_location_id);
-
 		// Display the startup progress bar.
+		gViewerWindow->initTextures(agent_location_id);
 		gViewerWindow->setShowProgress(TRUE);
 		gViewerWindow->setProgressCancelButtonVisible(TRUE, LLTrans::getString("Quit"));
 
@@ -1118,6 +1105,8 @@ bool idle_startup()
 				// Its either downloading or declined.
 				// If optional was skipped this case shouldn't 
 				// be reached.
+
+				LL_INFOS("LLStartup") << "Forcing a quit due to update." << LL_ENDL;
 				LLLoginInstance::getInstance()->disconnect();
 				LLAppViewer::instance()->forceQuit();
 			}
@@ -1138,7 +1127,24 @@ bool idle_startup()
 					{
 						// This was a certificate error, so grab the certificate
 						// and throw up the appropriate dialog.
-						LLPointer<LLCertificate> certificate = gSecAPIHandler->getCertificate(response["certificate"]);
+                        LLPointer<LLCertificate> certificate;
+                        try
+                        {
+                            certificate = gSecAPIHandler->getCertificate(response["certificate"]);
+                        }
+                        catch (LLCertException &cert_exception)
+                        {
+                            LL_WARNS("LLStartup", "SECAPI") << "Caught " << cert_exception.what() << " certificate expception on getCertificate("<< response["certificate"] << ")" << LL_ENDL;
+                            LLSD args;
+                            args["REASON"] = LLTrans::getString(cert_exception.what());
+
+                            LLNotificationsUtil::add("GeneralCertificateErrorShort", args, response,
+                                general_cert_done);
+
+                            reset_login();
+                            gSavedSettings.setBOOL("AutoLogin", FALSE);
+                            show_connect_box = true;
+                        }
 						if(certificate)
 						{
 							LLSD args = transform_cert_args(certificate);
@@ -1224,7 +1230,6 @@ bool idle_startup()
 		display_startup();
 		gAgentCamera.init();
 		display_startup();
-		set_underclothes_menu_options();
 		display_startup();
 
 		// Since we connected, save off the settings so the user doesn't have to
@@ -1485,8 +1490,7 @@ bool idle_startup()
 		LLGLState::checkStates();
 		LLGLState::checkTextureChannels();
 
-		LLEnvManagerNew::getInstance()->usePrefs(); // Load all presets and settings
-		gSky.init(initial_sun_direction);
+		gSky.init();
 
 		LLGLState::checkStates();
 		LLGLState::checkTextureChannels();
@@ -1551,12 +1555,14 @@ bool idle_startup()
 		{
 			LLStartUp::setStartupState( STATE_AGENT_SEND );
 		}
-		LLMessageSystem* msg = gMessageSystem;
-		while (msg->checkAllMessages(gFrameCount, gServicePump))
 		{
-			display_startup();
+			LockMessageChecker lmc(gMessageSystem);
+			while (lmc.checkAllMessages(gFrameCount, gServicePump))
+			{
+				display_startup();
+			}
+			lmc.processAcks();
 		}
-		msg->processAcks();
 		display_startup();
 		return FALSE;
 	}
@@ -1606,25 +1612,27 @@ bool idle_startup()
 	//---------------------------------------------------------------------
 	if (STATE_AGENT_WAIT == LLStartUp::getStartupState())
 	{
-		LLMessageSystem* msg = gMessageSystem;
-		while (msg->checkAllMessages(gFrameCount, gServicePump))
 		{
-			if (gAgentMovementCompleted)
+			LockMessageChecker lmc(gMessageSystem);
+			while (lmc.checkAllMessages(gFrameCount, gServicePump))
 			{
-				// Sometimes we have more than one message in the
-				// queue. break out of this loop and continue
-				// processing. If we don't, then this could skip one
-				// or more login steps.
-				break;
+				if (gAgentMovementCompleted)
+				{
+					// Sometimes we have more than one message in the
+					// queue. break out of this loop and continue
+					// processing. If we don't, then this could skip one
+					// or more login steps.
+					break;
+				}
+				else
+				{
+					LL_DEBUGS("AppInit") << "Awaiting AvatarInitComplete, got "
+										 << gMessageSystem->getMessageName() << LL_ENDL;
+				}
+				display_startup();
 			}
-			else
-			{
-				LL_DEBUGS("AppInit") << "Awaiting AvatarInitComplete, got "
-				<< msg->getMessageName() << LL_ENDL;
-			}
-			display_startup();
+			lmc.processAcks();
 		}
-		msg->processAcks();
 
 		display_startup();
 
@@ -1895,7 +1903,10 @@ bool idle_startup()
 		}
 
 		display_startup();
-        
+
+        // Load stored local environment if needed.
+        LLEnvironment::instance().loadFromSettings();
+
         // *TODO : Uncomment that line once the whole grid migrated to SLM and suppress it from LLAgent::handleTeleportFinished() (llagent.cpp)
         //check_merchant_status();
 
@@ -1978,6 +1989,8 @@ bool idle_startup()
 		// TODO: Put this into RegisterNewAgent
 		// JC - 7/20/2002
 		gViewerWindow->sendShapeToSim();
+
+		LLPresetsManager::getInstance()->createMissingDefault(PRESETS_CAMERA);
 
 		// The reason we show the alert is because we want to
 		// reduce confusion for when you log in and your provided
@@ -2309,8 +2322,8 @@ void login_callback(S32 option, void *userdata)
 void show_release_notes_if_required()
 {
     static bool release_notes_shown = false;
-    if (!release_notes_shown && (LLVersionInfo::getChannelAndVersion() != gLastRunVersion)
-        && LLVersionInfo::getViewerMaturity() != LLVersionInfo::TEST_VIEWER // don't show Release Notes for the test builds
+    if (!release_notes_shown && (LLVersionInfo::instance().getChannelAndVersion() != gLastRunVersion)
+        && LLVersionInfo::instance().getViewerMaturity() != LLVersionInfo::TEST_VIEWER // don't show Release Notes for the test builds
         && gSavedSettings.getBOOL("UpdaterShowReleaseNotes")
         && !gSavedSettings.getBOOL("FirstLoginThisInstall"))
     {
@@ -2570,7 +2583,8 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 
 	msg->setHandlerFunc("InitiateDownload", process_initiate_download);
 	msg->setHandlerFunc("LandStatReply", LLFloaterTopObjects::handle_land_reply);
-	msg->setHandlerFunc("GenericMessage", process_generic_message);
+    msg->setHandlerFunc("GenericMessage", process_generic_message);
+    msg->setHandlerFunc("LargeGenericMessage", process_large_generic_message);
 
 	msg->setHandlerFuncFast(_PREHASH_FeatureDisabled, process_feature_disabled_message);
 }
@@ -2725,81 +2739,6 @@ std::string LLStartUp::getUserId()
         return "";
     }
     return gUserCredential->userID();
-}
-
-// Loads a bitmap to display during load
-void init_start_screen(S32 location_id)
-{
-	if (gStartTexture.notNull())
-	{
-		gStartTexture = NULL;
-		LL_INFOS("AppInit") << "re-initializing start screen" << LL_ENDL;
-	}
-
-	LL_DEBUGS("AppInit") << "Loading startup bitmap..." << LL_ENDL;
-
-	U8 image_codec = IMG_CODEC_PNG;
-	std::string temp_str = gDirUtilp->getLindenUserDir() + gDirUtilp->getDirDelimiter();
-
-	if ((S32)START_LOCATION_ID_LAST == location_id)
-	{
-		temp_str += LLStartUp::getScreenLastFilename();
-	}
-	else
-	{
-		std::string path = temp_str + LLStartUp::getScreenHomeFilename();
-		
-		if (!gDirUtilp->fileExists(path) && LLGridManager::getInstance()->isInProductionGrid())
-		{
-			// Fallback to old file, can be removed later
-			// Home image only sets when user changes home, so it will take time for users to switch to pngs
-			temp_str += "screen_home.bmp";
-			image_codec = IMG_CODEC_BMP;
-		}
-		else
-		{
-			temp_str = path;
-		}
-	}
-
-	LLPointer<LLImageFormatted> start_image_frmted = LLImageFormatted::createFromType(image_codec);
-
-	// Turn off start screen to get around the occasional readback 
-	// driver bug
-	if(!gSavedSettings.getBOOL("UseStartScreen"))
-	{
-		LL_INFOS("AppInit")  << "Bitmap load disabled" << LL_ENDL;
-		return;
-	}
-	else if(!start_image_frmted->load(temp_str) )
-	{
-		LL_WARNS("AppInit") << "Bitmap load failed" << LL_ENDL;
-		gStartTexture = NULL;
-	}
-	else
-	{
-		gStartImageWidth = start_image_frmted->getWidth();
-		gStartImageHeight = start_image_frmted->getHeight();
-
-		LLPointer<LLImageRaw> raw = new LLImageRaw;
-		if (!start_image_frmted->decode(raw, 0.0f))
-		{
-			LL_WARNS("AppInit") << "Bitmap decode failed" << LL_ENDL;
-			gStartTexture = NULL;
-		}
-		else
-		{
-			raw->expandToPowerOfTwo();
-			gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE) ;
-		}
-	}
-
-	if(gStartTexture.isNull())
-	{
-		gStartTexture = LLViewerTexture::sBlackImagep ;
-		gStartImageWidth = gStartTexture->getWidth() ;
-		gStartImageHeight = gStartTexture->getHeight() ;
-	}
 }
 
 
@@ -3648,26 +3587,6 @@ bool process_login_success_response()
 		{
 			sInitialOutfitGender = flag;
 		}
-	}
-
-	LLSD global_textures = response["global-textures"][0];
-	if(global_textures.size())
-	{
-		// Extract sun and moon texture IDs.  These are used
-		// in the LLVOSky constructor, but I can't figure out
-		// how to pass them in.  JC
-		LLUUID id = global_textures["sun_texture_id"];
-		if(id.notNull())
-		{
-			gSunTextureID = id;
-		}
-
-		id = global_textures["moon_texture_id"];
-		if(id.notNull())
-		{
-			gMoonTextureID = id;
-		}
-
 	}
 
 	// set the location of the Agent Appearance service, from which we can request

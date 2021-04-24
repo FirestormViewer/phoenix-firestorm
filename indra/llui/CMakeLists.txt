@@ -133,8 +133,10 @@ set(llui_SOURCE_FILES
     llview.cpp
     llviewquery.cpp
     llviewereventrecorder.cpp
+    llvirtualtrackball.cpp
     llwindowshade.cpp
     llxuiparser.cpp
+    llxyvector.cpp
     )
     
 set(llui_HEADER_FILES
@@ -250,8 +252,10 @@ set(llui_HEADER_FILES
     llview.h
     llviewereventrecorder.h
     llviewquery.h
+    llvirtualtrackball.h
     llwindowshade.h
     llxuiparser.h
+    llxyvector.h
     )
 
 set_source_files_properties(${llui_HEADER_FILES}
@@ -299,7 +303,7 @@ if(LL_TESTS)
   set(test_libs llui llmessage llcorehttp llcommon
       ${HUNSPELL_LIBRARY}
       ${LLCOMMON_LIBRARIES}
-      ${BOOST_COROUTINE_LIBRARY} ${BOOST_CONTEXT_LIBRARY} ${BOOST_SYSTEM_LIBRARY}
+      ${BOOST_FIBER_LIBRARY} ${BOOST_CONTEXT_LIBRARY} ${BOOST_SYSTEM_LIBRARY}
       ${WINDOWS_LIBRARIES})
   if(NOT LINUX)
     LL_ADD_INTEGRATION_TEST(llurlentry llurlentry.cpp "${test_libs}")

@@ -55,12 +55,12 @@
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llviewerwindow.h"		// *TODO: remove, only used for width/height
 #include "llworld.h"
 #include "llfeaturemanager.h"
 #include "llviewernetwork.h"
 #include "llmeshrepository.h" //for LLMeshRepository::sBytesReceived
 #include "llsdserialize.h"
+#include "llsdutil.h"
 #include "llcorehttputil.h"
 #include "llvoicevivox.h"
 
@@ -426,7 +426,7 @@ void update_statistics()
  * If you move stats around here, make the corresponding changes in
  * those locations, too.
  */
-void send_stats()
+void send_viewer_stats(bool include_preferences)
 {
 	// IW 9/23/02 I elected not to move this into LLViewerStats
 	// because it depends on too many viewer.cpp globals.
@@ -473,7 +473,7 @@ void send_stats()
 
 	// send fps only for time app spends in foreground
 	agent["fps"] = (F32)gForegroundFrameCount / gForegroundTime.getElapsedTimeF32();
-	agent["version"] = LLVersionInfo::getChannelAndVersion();
+	agent["version"] = LLVersionInfo::instance().getChannelAndVersion();
 	std::string language = LLUI::getLanguage();
 	agent["language"] = language;
 	
@@ -513,6 +513,8 @@ void send_stats()
 	system["gpu_vendor"] = gGLManager.mGLVendorShort;
 	system["gpu_version"] = gGLManager.mDriverVersionVendorString;
 	system["opengl_version"] = gGLManager.mGLVersionString;
+
+	gGLManager.asLLSD(system["gl"]);
 
 	S32 shader_level = 0;
 	if (LLPipeline::sRenderDeferred)
@@ -573,6 +575,7 @@ void send_stats()
 	fail["failed_resends"] = (S32) gMessageSystem->mFailedResendPackets;
 	fail["off_circuit"] = (S32) gMessageSystem->mOffCircuitPackets;
 	fail["invalid"] = (S32) gMessageSystem->mInvalidOnCircuitPackets;
+	fail["missing_updater"] = (S32) LLAppViewer::instance()->isUpdaterMissing();
 
 	body["stats"]["voice"] = LLVoiceVivoxStats::getInstance()->read();
 
@@ -582,29 +585,61 @@ void send_stats()
 	// If the current revision is recent, ping the previous author before overriding
 	LLSD &misc = body["stats"]["misc"];
 
-	// Screen size so the UI team can figure out how big the widgets
-	// appear and use a "typical" size for end user tests.
+#ifdef LL_WINDOWS
+    // Probe for Vulkan capability (Dave Houlton 05/2020)
+    //
+    // Check for presense of a Vulkan loader dll, as a proxy for a Vulkan-capable gpu.
+    // False-positives and false-negatives are possible, but unlikely. We'll get a good
+    // approximation of Vulkan capability within current user systems from this. More
+    // detailed information on versions and extensions can come later.
+    static bool vulkan_oneshot = false;
+    static bool vulkan_detected = false;
 
-	S32 window_width = gViewerWindow->getWindowWidthRaw();
-	S32 window_height = gViewerWindow->getWindowHeightRaw();
-	S32 window_size = (window_width * window_height) / 1024;
-	misc["string_1"] = llformat("%d", window_size);
-	misc["string_2"] = llformat("Texture Time: %.2f, Total Time: %.2f", gTextureTimer.getElapsedTimeF32(), gFrameTimeSeconds.value());
+    if (!vulkan_oneshot)
+    {
+        HMODULE vulkan_loader = LoadLibraryExA("vulkan-1.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
+        if (NULL != vulkan_loader)
+        {
+            vulkan_detected = true;
+            FreeLibrary(vulkan_loader);
+        }
+        vulkan_oneshot = true;
+    }
 
-	F32 unbaked_time = LLVOAvatar::sUnbakedTime * 1000.f / gFrameTimeSeconds;
-	misc["int_1"] = LLSD::Integer(unbaked_time); // Steve: 1.22
-	F32 grey_time = LLVOAvatar::sGreyTime * 1000.f / gFrameTimeSeconds;
-	misc["int_2"] = LLSD::Integer(grey_time); // Steve: 1.22
+    misc["string_1"] = vulkan_detected ? llformat("Vulkan driver is detected") : llformat("No Vulkan driver detected");
 
-	LL_INFOS() << "Misc Stats: int_1: " << misc["int_1"] << " int_2: " << misc["int_2"] << LL_ENDL;
+#else
+    misc["string_1"] = llformat("Unused");
+#endif // LL_WINDOWS
+
+    misc["string_2"] = llformat("Unused");
+    misc["int_1"] = LLSD::Integer(0);
+    misc["int_2"] = LLSD::Integer(0);
+
+    LL_INFOS() << "Misc Stats: int_1: " << misc["int_1"] << " int_2: " << misc["int_2"] << LL_ENDL;
 	LL_INFOS() << "Misc Stats: string_1: " << misc["string_1"] << " string_2: " << misc["string_2"] << LL_ENDL;
 
 	body["DisplayNamesEnabled"] = gSavedSettings.getBOOL("UseDisplayNames");
 	body["DisplayNamesShowUsername"] = gSavedSettings.getBOOL("NameTagShowUsernames");
-	
+
+	// Preferences
+	if (include_preferences)
+	{
+		bool diffs_only = true; // only log preferences that differ from default
+		body["preferences"]["settings"] = gSavedSettings.asLLSD(diffs_only);
+		body["preferences"]["settings_per_account"] = gSavedPerAccountSettings.asLLSD(diffs_only);
+	}
+
 	body["MinimalSkin"] = false;
 
+
 	LL_INFOS("LogViewerStatsPacket") << "Sending viewer statistics: " << body << LL_ENDL;
+	if (debugLoggingEnabled("LogViewerStatsPacket"))
+	{
+		std::string filename("viewer_stats_packet.xml");
+		llofstream of(filename.c_str());
+		LLSDSerialize::toPrettyXML(body,of);
+	}
 
 	// The session ID token must never appear in logs
 	body["session_id"] = gAgentSessionID;

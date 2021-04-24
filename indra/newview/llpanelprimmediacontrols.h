@@ -48,6 +48,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 	virtual void draw();
 	virtual BOOL handleScrollWheel(S32 x, S32 y, S32 clicks);
+	virtual BOOL handleScrollHWheel(S32 x, S32 y, S32 clicks);
 
 	virtual BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	virtual BOOL handleMouseUp(S32 x, S32 y, MASK mask);
@@ -118,6 +119,8 @@ private:
 	void showVolumeSlider();
 	void hideVolumeSlider();
 	bool shouldVolumeSliderBeVisible();
+
+	bool isZoomDistExceeding();
 	
 	static void onScrollUp(void* user_data);
 	static void onScrollUpHeld(void* user_data);
@@ -182,6 +185,8 @@ private:
 	F32 mZoomMediumPadding;
 	F32 mZoomFarPadding;
 	S32 mTopWorldViewAvoidZone;
+
+	LLVector3d mZoomedCameraPos;
 	
 	LLUICtrl *mMediaPanelScroll;
 	LLButton *mScrollUpCtrl;

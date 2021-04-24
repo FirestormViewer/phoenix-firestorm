@@ -222,7 +222,10 @@ private:
 	LLPanel*	 mWrapperPanel;
 
 	// timer counts a lifetime of a toast
-	std::auto_ptr<LLToastLifeTimer> mTimer;
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
+	std::unique_ptr<LLToastLifeTimer> mTimer;
+// [/SL:KB]
+//	std::auto_ptr<LLToastLifeTimer> mTimer;
 
 	F32			mToastLifetime; // in seconds
 	F32			mToastFadingTime; // in seconds

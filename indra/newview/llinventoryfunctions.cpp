@@ -78,6 +78,7 @@
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
 #include "lluictrlfactory.h"
+#include "llviewermenu.h"
 #include "llviewermessage.h"
 #include "llviewerfoldertype.h"
 #include "llviewerobjectlist.h"
@@ -653,6 +654,50 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 	return TRUE;
+}
+
+bool get_is_item_editable(const LLUUID& inv_item_id)
+{
+	if (const LLInventoryItem* inv_item = gInventory.getLinkedItem(inv_item_id))
+	{
+		switch (inv_item->getType())
+		{
+			case LLAssetType::AT_BODYPART:
+			case LLAssetType::AT_CLOTHING:
+				return gAgentWearables.isWearableModifiable(inv_item_id);
+			case LLAssetType::AT_OBJECT:
+				return true;
+			default:
+                return false;;
+		}
+	}
+	return gAgentAvatarp->getWornAttachment(inv_item_id) != nullptr;
+}
+
+void handle_item_edit(const LLUUID& inv_item_id)
+{
+	if (get_is_item_editable(inv_item_id))
+	{
+		if (const LLInventoryItem* inv_item = gInventory.getLinkedItem(inv_item_id))
+		{
+			switch (inv_item->getType())
+			{
+				case LLAssetType::AT_BODYPART:
+				case LLAssetType::AT_CLOTHING:
+					LLAgentWearables::editWearable(inv_item_id);
+					break;
+				case LLAssetType::AT_OBJECT:
+					handle_attachment_edit(inv_item_id);
+					break;
+				default:
+					break;
+			}
+		}
+		else
+		{
+			handle_attachment_edit(inv_item_id);
+		}
+	}
 }
 
 BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
@@ -2395,10 +2440,32 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 
 	if (("task_open" == action  || "open" == action) && selected_items.size() > 1)
 	{
-		multi_previewp = new LLMultiPreview();
-		gFloaterView->addChild(multi_previewp);
+		bool open_multi_preview = true;
 
-		LLFloater::setFloaterHost(multi_previewp);
+		if ("open" == action)
+		{
+			for (std::set<LLFolderViewItem*>::iterator set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
+			{
+				LLFolderViewItem* folder_item = *set_iter;
+				if (folder_item)
+				{
+					LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(folder_item->getViewModelItem());
+					if (!bridge || !bridge->isMultiPreviewAllowed())
+					{
+						open_multi_preview = false;
+						break;
+					}
+				}
+			}
+		}
+
+		if (open_multi_preview)
+		{
+			multi_previewp = new LLMultiPreview();
+			gFloaterView->addChild(multi_previewp);
+
+			LLFloater::setFloaterHost(multi_previewp);
+		}
 
 	}
 	else if (("task_properties" == action || "properties" == action) && selected_items.size() > 1)

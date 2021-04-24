@@ -32,6 +32,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "$ENV{LL_BUILD_DEBUG}")
 # Portable compilation flags.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DADDRESS_SIZE=${ADDRESS_SIZE}")
 
+# Configure asan
+set(ASAN OFF CACHE BOOL "Enable use of asan in builds")
+
 # Configure crash reporting
 set(RELEASE_CRASH_REPORTING OFF CACHE BOOL "Enable use of crash reporting in release builds")
 set(NON_RELEASE_CRASH_REPORTING OFF CACHE BOOL "Enable use of crash reporting in developer builds")
@@ -63,8 +66,21 @@ if (WINDOWS)
   # http://www.cmake.org/pipermail/cmake/2009-September/032143.html
   string(REPLACE "/Zm1000" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
-  # Moved to variables for the convenience of people who are not Kitty
+  if(ASAN)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fsanitize=address")
+  endif(ASAN)
+
+  # Without PreferredToolArchitecture=x64, as of 2020-06-26 the 32-bit
+  # compiler on our TeamCity build hosts has started running out of virtual
+  # memory for the precompiled header file.
+  # CP changed to only append the flag for 32bit builds - on 64bit builds,
+  # locally at least, the build output is spammed with 1000s of 'D9002'
+  # warnings about this switch being ignored.
+  # [SL:KB] - Moved to variables for the convenience of people who are not Kitty
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  if( ADDRESS_SIZE EQUAL 32 )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
+  endif()
 
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
       "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Zo"

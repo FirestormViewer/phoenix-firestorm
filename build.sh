@@ -28,7 +28,7 @@ build_dir_Linux()
 
 build_dir_CYGWIN()
 {
-  echo build-vc120-${AUTOBUILD_ADDRSIZE}
+  echo build-vc${AUTOBUILD_VSVER}-${AUTOBUILD_ADDRSIZE}
 }
 
 viewer_channel_suffix()
@@ -480,10 +480,12 @@ then
       fi
 
       # Run upload extensions
+      # Ex: bugsplat
       if [ -d ${build_dir}/packages/upload-extensions ]; then
           for extension in ${build_dir}/packages/upload-extensions/*.sh; do
               begin_section "Upload Extension $extension"
               . $extension
+              [ $? -eq 0 ] || fatal "Upload of extension $extension failed"
               end_section "Upload Extension $extension"
           done
       fi

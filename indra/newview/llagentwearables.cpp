@@ -799,14 +799,13 @@ void LLAgentWearables::createStandardWearables()
 			((OnWearableItemCreatedCB*)(&(*cb)))->addPendingWearable(wearable);
 			// no need to update here...
 			LLUUID category_id = LLUUID::null;
-			create_inventory_item(gAgent.getID(),
+            create_inventory_wearable(gAgent.getID(),
 								  gAgent.getSessionID(),
 								  category_id,
 								  wearable->getTransactionID(),
 								  wearable->getName(),
 								  wearable->getDescription(),
 								  wearable->getAssetType(),
-								  LLInventoryType::IT_WEARABLE,
 								  wearable->getType(),
 								  wearable->getPermissions().getMaskNextOwner(),
 								  cb);
@@ -868,14 +867,13 @@ void LLAgentWearables::addWearableToAgentInventory(LLPointer<LLInventoryCallback
 												   const LLUUID& category_id,
 												   BOOL notify)
 {
-	create_inventory_item(gAgent.getID(),
+    create_inventory_wearable(gAgent.getID(),
 						  gAgent.getSessionID(),
 						  category_id,
 						  wearable->getTransactionID(),
 						  wearable->getName(),
 						  wearable->getDescription(),
 						  wearable->getAssetType(),
-						  LLInventoryType::IT_WEARABLE,
 						  wearable->getType(),
 						  wearable->getPermissions().getMaskNextOwner(),
 						  cb);
@@ -883,13 +881,6 @@ void LLAgentWearables::addWearableToAgentInventory(LLPointer<LLInventoryCallback
 
 void LLAgentWearables::removeWearable(const LLWearableType::EType type, bool do_remove_all, U32 index)
 {
-	if (gAgent.isTeen() &&
-		(type == LLWearableType::WT_UNDERSHIRT || type == LLWearableType::WT_UNDERPANTS))
-	{
-		// Can't take off underclothing in simple UI mode or on PG accounts
-		// TODO: enable the removing of a single undershirt/underpants if multiple are worn. - Nyx
-		return;
-	}
 	if (getWearableCount(type) == 0)
 	{
 		// no wearables to remove
@@ -1546,7 +1537,6 @@ void LLAgentWearables::createWearable(LLWearableType::EType type, bool wear, con
 
 	LLViewerWearable* wearable = LLWearableList::instance().createNewWearable(type, gAgentAvatarp);
 	LLAssetType::EType asset_type = wearable->getAssetType();
-	LLInventoryType::EType inv_type = LLInventoryType::IT_WEARABLE;
 	LLPointer<LLInventoryCallback> cb;
 	if(wear)
 	{
@@ -1569,13 +1559,13 @@ void LLAgentWearables::createWearable(LLWearableType::EType type, bool wear, con
 		folder_id = gInventory.findCategoryUUIDForType(folder_type);
 	}
 
-	create_inventory_item(gAgent.getID(),
+    create_inventory_wearable(gAgent.getID(),
 						  gAgent.getSessionID(),
 						  folder_id,
 						  wearable->getTransactionID(),
 						  wearable->getName(),
 						  wearable->getDescription(),
-						  asset_type, inv_type,
+						  asset_type,
 						  wearable->getType(),
 						  LLFloaterPerms::getNextOwnerPerms("Wearables"),
 						  cb);

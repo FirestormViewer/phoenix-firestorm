@@ -47,20 +47,15 @@ extern const BOOL 	ANIMATE;
 extern const U8 	AGENT_STATE_TYPING;  // Typing indication
 extern const U8 	AGENT_STATE_EDITING; // Set when agent has objects selected
 
-class LLChat;
 class LLViewerRegion;
 class LLMotion;
-class LLToolset;
 class LLMessageSystem;
 class LLPermissions;
 class LLHost;
 class LLFriendObserver;
-class LLPickInfo;
-class LLViewerObject;
 class LLAgentDropGroupViewerNode;
 class LLAgentAccess;
 class LLSLURL;
-class LLPauseRequestHandle;
 class LLUIColor;
 class LLTeleportRequest;
 
@@ -90,8 +85,6 @@ struct LLGroupData
 };
 
 class LLAgentListener;
-
-class LLAgentImpl;
 
 //------------------------------------------------------------------------
 // LLAgent
@@ -189,6 +182,8 @@ private:
  	// Position
 	//--------------------------------------------------------------------
 public:
+    typedef boost::signals2::signal<void(const LLVector3 &position_local, const LLVector3d &position_global)> position_signal_t;
+
 	LLVector3		getPosAgentFromGlobal(const LLVector3d &pos_global) const;
 	LLVector3d		getPosGlobalFromAgent(const LLVector3 &pos_agent) const;	
 	const LLVector3d &getPositionGlobal() const;
@@ -196,10 +191,16 @@ public:
 	// Call once per frame to update position, angles (radians).
 	void			updateAgentPosition(const F32 dt, const F32 yaw, const S32 mouse_x, const S32 mouse_y);	
 	void			setPositionAgent(const LLVector3 &center);
+
+    boost::signals2::connection whenPositionChanged(position_signal_t::slot_type fn);
+
 protected:
 	void			propagate(const F32 dt); // ! BUG ! Should roll into updateAgentPosition
 private:
 	mutable LLVector3d mPositionGlobal;
+
+    position_signal_t   mOnPositionChanged;
+    LLVector3d          mLastTestGlobal;
 
   	//--------------------------------------------------------------------
  	// Velocity
@@ -253,6 +254,8 @@ public:
 	boost::signals2::connection     addParcelChangedCallback(parcel_changed_callback_t);
 
 private:
+	static void capabilityReceivedCallback(const LLUUID &region_id);
+
 	typedef boost::signals2::signal<void()> parcel_changed_signal_t;
 	parcel_changed_signal_t		mParcelChangedSignal;
 
@@ -343,6 +346,7 @@ public:
 	static void		toggleFlying();
 	static bool		enableFlying();
 	BOOL			canFly(); 			// Does this parcel allow you to fly?
+	static bool		isSitting();
 
 	//--------------------------------------------------------------------
 	// Voice
@@ -609,6 +613,10 @@ public:
 		TELEPORT_LOCAL = 6,			// Teleporting in-sim without showing the progress screen
 		TELEPORT_PENDING = 7
 	};
+
+	static std::map<S32, std::string> sTeleportStateName;
+	static const std::string& teleportStateName(S32);
+	const std::string& getTeleportStateName() const;
 
 public:
 	static void 	parseTeleportMessages(const std::string& xml_filename);

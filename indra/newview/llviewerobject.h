@@ -114,7 +114,7 @@ class LLViewerObject
 	public LLTrace::MemTrackable<LLViewerObject>
 {
 protected:
-	~LLViewerObject(); // use unref()
+	virtual ~LLViewerObject(); // use unref()
 
 	// TomY: Provide for a list of extra parameter structures, mapped by structure name
 	struct ExtraParameter
@@ -832,6 +832,7 @@ protected:
 	BOOL			mOnActiveList;
 	BOOL			mOnMap;						// On the map.
 	BOOL			mStatic;					// Object doesn't move.
+	S32				mSeatCount;
 	S32				mNumFaces;
 
 	F32				mRotTime;					// Amount (in seconds) that object has rotated according to angular velocity (llSetTargetOmega)

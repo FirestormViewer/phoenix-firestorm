@@ -92,11 +92,13 @@ public:
 		Optional<std::string>				sort_order_setting;
 		Optional<LLInventoryModel*>			inventory;
 		Optional<bool>						allow_multi_select;
+		Optional<bool>						allow_drag;
 		Optional<bool>						show_item_link_overlays;
 		Optional<Filter>					filter;
 		Optional<StartFolder>               start_folder;
 		Optional<bool>						use_label_suffix;
 		Optional<bool>						show_empty_message;
+		Optional<bool>						suppress_folder_menu;
 		Optional<bool>						show_root_folder;
 		Optional<bool>						allow_drop_on_root;
 		Optional<bool>						use_marketplace_folders;
@@ -106,11 +108,17 @@ public:
 		Optional<LLFolderViewFolder::Params> folder;
 		Optional<LLFolderViewItem::Params>	 item;
 
+        // All item and folder views will be initialized on init if true (default)
+        // Will initialize on visibility change otherwise.
+        Optional<bool>						preinitialize_views;
+
 		Params()
 		:	sort_order_setting("sort_order_setting"),
 			inventory("", &gInventory),
 			allow_multi_select("allow_multi_select", true),
+			allow_drag("allow_drag", true),
 			show_item_link_overlays("show_item_link_overlays", false),
+			suppress_folder_menu("suppress_folder_menu", false),
 			filter("filter"),
 			start_folder("start_folder"),
 			use_label_suffix("use_label_suffix", true),
@@ -122,7 +130,8 @@ public:
 			accepts_drag_and_drop("accepts_drag_and_drop"),
 			folder_view("folder_view"),
 			folder("folder"),
-			item("item")
+			item("item"),
+			preinitialize_views("preinitialize_views", true)
 		{}
 	};
 
@@ -144,14 +153,17 @@ public:
 	virtual ~LLInventoryPanel();
 
 public:
+    typedef std::set<LLFolderViewItem*> selected_items_t;
+
 	LLInventoryModel* getModel() { return mInventory; }
 	LLFolderViewModelInventory& getRootViewModel() { return mInventoryViewModel; }
 
 	// LLView methods
+	/*virtual*/ void onVisibilityChange(BOOL new_visibility);
 	void draw();
 	/*virtual*/ BOOL handleKeyHere( KEY key, MASK mask );
 	BOOL handleHover(S32 x, S32 y, MASK mask);
-	BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 								   EDragAndDropType cargo_type,
 								   void* cargo_data,
 								   EAcceptance* accept,
@@ -168,6 +180,8 @@ public:
 	void setSelection(const LLUUID& obj_id, BOOL take_keyboard_focus);
 	void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
 	void clearSelection();
+    selected_items_t getSelectedItems() const;
+
 	bool isSelectionRemovable();
 	LLInventoryFilter& getFilter();
 	const LLInventoryFilter& getFilter() const;
@@ -176,8 +190,9 @@ public:
 	U32 getFilterObjectTypes() const;
 	void setFilterPermMask(PermissionMask filter_perm_mask);
 	U32 getFilterPermMask() const;
-	void setFilterWearableTypes(U64 filter);
-	void setFilterSubString(const std::string& string);
+    void setFilterWearableTypes(U64 filter);
+    void setFilterSettingsTypes(U64 filter);
+    void setFilterSubString(const std::string& string);
 	const std::string getFilterSubString();
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);
@@ -236,6 +251,8 @@ public:
 	void setSelectionByID(const LLUUID& obj_id, BOOL take_keyboard_focus);
 	void updateSelection();
 
+	void setSuppressOpenItemAction(bool supress_open_item) { mSuppressOpenItemAction = supress_open_item; }
+
 	LLFolderViewModelInventory* getFolderViewModel() { return &mInventoryViewModel; }
 	const LLFolderViewModelInventory* getFolderViewModel() const { return &mInventoryViewModel; }
     
@@ -254,8 +271,11 @@ protected:
 	LLInvPanelComplObserver*	mCompletionObserver;
 	bool						mAcceptsDragAndDrop;
 	bool 						mAllowMultiSelect;
+	bool 						mAllowDrag;
 	bool 						mShowItemLinkOverlays; // Shows link graphic over inventory item icons
 	bool						mShowEmptyMessage;
+	bool						mSuppressFolderMenu;
+	bool						mSuppressOpenItemAction;
 
 	LLHandle<LLFolderView>      mFolderRoot;
 	LLScrollContainer*			mScroller;
@@ -299,7 +319,7 @@ public:
 	void addHideFolderType(LLFolderType::EType folder_type);
 
 public:
-	BOOL getIsViewsInitialized() const { return mViewsInitialized; }
+	bool getViewsInitialized() const { return mViewsInitialized == VIEWS_INITIALIZED; }
 protected:
 	// Builds the UI.  Call this once the inventory is usable.
 	void 				initializeViews();
@@ -311,15 +331,98 @@ protected:
 	static LLUIColor			sLibraryColor;
 	static LLUIColor			sLinkColor;
 	
-	LLFolderViewItem*	buildNewViews(const LLUUID& id);
+	LLFolderViewItem*			buildNewViews(const LLUUID& id);
+    LLFolderViewItem*			buildNewViews(const LLUUID& id,
+                                              LLInventoryObject const* objectp);
+    LLFolderViewItem*			buildNewViews(const LLUUID& id,
+                                              LLInventoryObject const* objectp,
+                                              LLFolderViewItem *target_view);
+    // if certain types are not allowed, no reason to create views
+    virtual bool				typedViewsFilter(const LLUUID& id, LLInventoryObject const* objectp) { return true; }
+
+	virtual void				itemChanged(const LLUUID& item_id, U32 mask, const LLInventoryObject* model_item);
 	BOOL				getIsHiddenFolderType(LLFolderType::EType folder_type) const;
 	
     virtual LLFolderView * createFolderRoot(LLUUID root_id );
 	virtual LLFolderViewFolder*	createFolderViewFolder(LLInvFVBridge * bridge, bool allow_drop);
 	virtual LLFolderViewItem*	createFolderViewItem(LLInvFVBridge * bridge);
 private:
-	bool				mBuildDefaultHierarchy; // default inventory hierarchy should be created in postBuild()
-	bool				mViewsInitialized; // Views have been generated
+    // buildViewsTree does not include some checks and is meant
+    // for recursive use, use buildNewViews() for first call
+    LLFolderViewItem*			buildViewsTree(const LLUUID& id,
+                                              const LLUUID& parent_id,
+                                              LLInventoryObject const* objectp,
+                                              LLFolderViewItem *target_view,
+                                              LLFolderViewFolder *parent_folder_view);
+
+    typedef enum e_views_initialization_state
+    {
+        VIEWS_UNINITIALIZED = 0,
+        VIEWS_INITIALIZING,
+        VIEWS_INITIALIZED,
+    } EViewsInitializationState;
+
+	bool						mBuildViewsOnInit;
+    EViewsInitializationState	mViewsInitialized; // Whether views have been generated
+};
+
+
+class LLInventoryFavoriteItemsPanel : public LLInventoryPanel
+{
+public:
+    struct Params : public LLInitParam::Block<Params, LLInventoryPanel::Params>
+    {};
+
+    void initFromParams(const Params& p);
+    bool isSelectionRemovable() { return false; }
+    void setSelectCallback(const boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
+
+protected:
+    LLInventoryFavoriteItemsPanel(const Params& params);
+    ~LLInventoryFavoriteItemsPanel() { mFolderChangedSignal.disconnect(); }
+    void updateFavoritesRootFolder();
+
+    boost::signals2::connection mFolderChangedSignal;
+    boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)> mSelectionCallback;
+    friend class LLUICtrlFactory;
+};
+
+/************************************************************************/
+/* Asset Pre-Filtered Inventory Panel related class                     */
+/* Exchanges filter's flexibility for speed of generation and           */
+/* improved performance                                                 */
+/************************************************************************/
+
+class LLAssetFilteredInventoryPanel : public LLInventoryPanel
+{
+public:
+    struct Params
+        : public LLInitParam::Block<Params, LLInventoryPanel::Params>
+    {
+        Mandatory<std::string>	filter_asset_type;
+
+        Params() : filter_asset_type("filter_asset_type") {}
+    };
+
+    void initFromParams(const Params& p);
+protected:
+    LLAssetFilteredInventoryPanel(const Params& p) : LLInventoryPanel(p) {}
+    friend class LLUICtrlFactory;
+public:
+    ~LLAssetFilteredInventoryPanel() {}
+
+    /*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+        EDragAndDropType cargo_type,
+        void* cargo_data,
+        EAcceptance* accept,
+        std::string& tooltip_msg) override;
+
+protected:
+    /*virtual*/ bool				typedViewsFilter(const LLUUID& id, LLInventoryObject const* objectp) override;
+    /*virtual*/ void				itemChanged(const LLUUID& item_id, U32 mask, const LLInventoryObject* model_item) override;
+
+private:
+    LLAssetType::EType mAssetType;
 };
 
 #endif // LL_LLINVENTORYPANEL_H

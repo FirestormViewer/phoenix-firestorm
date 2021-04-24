@@ -565,7 +565,10 @@ S32 LLHUDText::getMaxLines()
 
 void LLHUDText::markDead()
 {
-	sTextObjects.erase(LLPointer<LLHUDText>(this));
+    // make sure we have at least one pointer
+    // till the end of the function
+	LLPointer<LLHUDText> ptr(this);
+	sTextObjects.erase(ptr);
 	LLHUDObject::markDead();
 }
 
@@ -588,8 +591,6 @@ void LLHUDText::renderAllHUD()
 	}
 	
 	LLVertexBuffer::unbind();
-
-    LLVertexBuffer::unbind();
 
 	LLGLState::checkStates();
 	LLGLState::checkTextureChannels();

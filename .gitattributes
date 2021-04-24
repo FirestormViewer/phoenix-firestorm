@@ -4,6 +4,7 @@
 *.cpp      text diff=cpp
 *.h        text diff=cpp
 *.py       text diff=python
+indra/newview/llimprocessing.cpp -text
 
 # Documents
 *.txt      text

@@ -53,6 +53,7 @@ LLInventoryFilter::FilterOps::FilterOps(const Params& p)
 :	mFilterObjectTypes(p.object_types),
 	mFilterCategoryTypes(p.category_types),
 	mFilterWearableTypes(p.wearable_types),
+    mFilterSettingsTypes(p.settings_types),
 	mMinDate(p.date_range.min_date),
 	mMaxDate(p.date_range.max_date),
 	mHoursAgo(p.hours_ago),
@@ -191,10 +192,15 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 	// when applying a filter, matching folders get their contents downloaded first
 	// but make sure we are not interfering with pre-download
 	if (isNotDefault()
-		&& !gInventory.isCategoryComplete(folder_id)
 		&& LLStartUp::getStartupState() > STATE_WEARABLES_WAIT)
-	{
-		LLInventoryModelBackgroundFetch::instance().start(folder_id);
+    {
+        LLViewerInventoryCategory* cat = gInventory.getCategory(folder_id);
+        if (!cat || (cat->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN))
+        {
+            // At the moment background fetch only cares about VERSION_UNKNOWN,
+            // so do not check isCategoryComplete that compares descendant count
+            LLInventoryModelBackgroundFetch::instance().start(folder_id);
+        }
 	}
 
 	// Marketplace folder filtering
@@ -286,21 +292,34 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
 	// Pass if this item's type is of the correct filter type
 	if (filterTypes & FILTERTYPE_OBJECT)
 	{
-
-		// If it has no type, pass it, unless it's a link.
-		if (object_type == LLInventoryType::IT_NONE)
-		{
-			if (object && object->getIsLinkType())
-			{
-				return FALSE;
-			}
-		}
-		else if ((1LL << object_type & mFilterOps.mFilterObjectTypes) == U64(0))
-		{
-			return FALSE;
-		}
+        switch (object_type)
+        {
+        case LLInventoryType::IT_NONE:
+            // If it has no type, pass it, unless it's a link.
+            if (object && object->getIsLinkType())
+            {
+                return FALSE;
+            }
+            break;
+        case LLInventoryType::IT_UNKNOWN:
+            {
+                // Unknows are only shown when we show every type. 
+                // Unknows are 255 and won't fit in 64 bits.
+                if (mFilterOps.mFilterObjectTypes != 0xffffffffffffffffULL)
+                {
+                    return FALSE;
+                }
+                break;
+            }
+        default:
+            if ((1LL << object_type & mFilterOps.mFilterObjectTypes) == U64(0))
+            {
+                return FALSE;
+            }
+            break;
+        }
 	}
-	
+
 	if(filterTypes & FILTERTYPE_WORN)
 	{
 		if (!get_is_item_worn(object_id))
@@ -357,7 +376,21 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
 	if (filterTypes & FILTERTYPE_WEARABLE)
 	{
 		LLWearableType::EType type = listener->getWearableType();
-		if ((0x1LL << type & mFilterOps.mFilterWearableTypes) == 0)
+        if ((object_type == LLInventoryType::IT_WEARABLE) &&
+                (((0x1LL << type) & mFilterOps.mFilterWearableTypes) == 0))
+		{
+			return FALSE;
+		}
+	}
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // FILTERTYPE_SETTINGS
+    // Pass if this item is a setting of the appropriate type
+    if (filterTypes & FILTERTYPE_SETTINGS)
+    {
+        LLSettingsType::type_e type = listener->getSettingsType();
+        if ((object_type == LLInventoryType::IT_SETTINGS) &&
+            (((0x1LL << type) & mFilterOps.mFilterSettingsTypes) == 0))
 		{
 			return FALSE;
 		}
@@ -411,18 +444,32 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLInventoryItem* item) cons
 	// Pass if this item's type is of the correct filter type
 	if (filterTypes & FILTERTYPE_OBJECT)
 	{
-		// If it has no type, pass it, unless it's a link.
-		if (object_type == LLInventoryType::IT_NONE)
-		{
-			if (item && item->getIsLinkType())
-			{
-				return false;
-			}
-		}
-		else if ((1LL << object_type & mFilterOps.mFilterObjectTypes) == U64(0))
-		{
-			return false;
-		}
+        switch (object_type)
+        {
+        case LLInventoryType::IT_NONE:
+            // If it has no type, pass it, unless it's a link.
+            if (item && item->getIsLinkType())
+            {
+                return FALSE;
+            }
+            break;
+        case LLInventoryType::IT_UNKNOWN:
+            {
+                // Unknows are only shown when we show every type. 
+                // Unknows are 255 and won't fit in 64 bits.
+                if (mFilterOps.mFilterObjectTypes != 0xffffffffffffffffULL)
+                {
+                    return FALSE;
+                }
+                break;
+            }
+        default:
+            if ((1LL << object_type & mFilterOps.mFilterObjectTypes) == U64(0))
+            {
+                return FALSE;
+            }
+            break;
+        }
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -656,6 +703,12 @@ void LLInventoryFilter::setFilterWearableTypes(U64 types)
 {
 	updateFilterTypes(types, mFilterOps.mFilterWearableTypes);
 	mFilterOps.mFilterTypes |= FILTERTYPE_WEARABLE;
+}
+
+void LLInventoryFilter::setFilterSettingsTypes(U64 types)
+{
+    updateFilterTypes(types, mFilterOps.mFilterSettingsTypes);
+    mFilterOps.mFilterTypes |= FILTERTYPE_SETTINGS;
 }
 
 void LLInventoryFilter::setFilterEmptySystemFolders()
@@ -1309,6 +1362,11 @@ U64 LLInventoryFilter::getFilterCategoryTypes() const
 U64 LLInventoryFilter::getFilterWearableTypes() const
 {
 	return mFilterOps.mFilterWearableTypes;
+}
+
+U64 LLInventoryFilter::getFilterSettingsTypes() const
+{
+    return mFilterOps.mFilterSettingsTypes;
 }
 
 bool LLInventoryFilter::hasFilterString() const
