@@ -169,6 +169,7 @@ public:
 	template<typename T> T* getEffect(const LLUUID& idEffect) const { return dynamic_cast<T*>(getEffect(idEffect)); }
 	LLVisualEffect* getEffect(EVisualEffect eCode) const;
 	template<typename T> T* getEffect(EVisualEffect eCode) const { return dynamic_cast<T*>(getEffect(eCode)); }
+	bool            hasEffect(EVisualEffect eCode) const         { return getEffect(eCode); }
 	bool            removeEffect(const LLUUID& idEffect);
 	void            runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams = nullptr);
 	void            runEffect(EVisualEffectType eType, LLVisualEffectParams* pParams = nullptr);
