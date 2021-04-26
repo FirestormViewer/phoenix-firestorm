@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Управление" name="controls">
+	<combo_box name="key_mode">
+		<combo_box.item label="Когда вид со стороны" name="third_person"/>
+		<combo_box.item label="Когда вид от перого лица (Mouselook)" name="first_person"/>
+		<combo_box.item label="Когда редактируется аватар" name="edit_avatar"/>
+		<combo_box.item label="Когда сидишь" name="sitting"/>
+	</combo_box>
+	<button label="По умолчанию" tool_tip="Восстанавливает значения по умолчанию для всех режимов управления." name="restore_defaults"/>
+</panel>

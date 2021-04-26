@@ -32,9 +32,9 @@
 //
 // KDU core header files
 //
-#ifdef LL_DARWIN
-#define KDU_NO_THREADS
-#endif
+//#ifdef LL_DARWIN
+//#define KDU_NO_THREADS
+//#endif
 
 #include "kdu_elementary.h"
 #include "kdu_messaging.h"

@@ -16,6 +16,7 @@
 		<menu_item_check label="Внешность" name="ChangeOutfit"/>
 		<menu_item_call label="Выберите аватар" name="Avatar Picker"/>
 
+		<menu_item_call label="Высота смещения" name="HoverHeight"/>
 		<menu label="Движение" name="Movement">
 			<menu_item_call label="Встать" name="Stand up"/>
 			<menu_item_call label="Сесть" name="Sit Down Here"/>
@@ -389,7 +390,6 @@
 		<menu label="Горячие клавиши" name="Shortcuts">
 			<menu_item_call label="Загрузить изображение ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Поиск" name="Search"/>
-			<menu_item_check label="Показать расширенное меню - старый ярлык" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Телепортация двойным нажатием" name="DoubleClick Teleport"/>
 			<menu_item_check label="Всегда бежать" name="Always Run"/>
 			<menu_item_check label="Лететь" name="Fly"/>

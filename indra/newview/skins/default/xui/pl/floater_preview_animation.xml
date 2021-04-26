@@ -8,4 +8,14 @@
 	</text>
 	<button label="Uruchom publicznie" label_selected="Zatrzymaj" name="Inworld" tool_tip="Uruchom animację tak, aby widzieli ją pozostali Rezydenci"/>
 	<button label="Uruchom prywatnie" label_selected="Zatrzymaj" name="Locally" tool_tip="Uruchom animację tak, aby była ona widoczna tylko dla Ciebie"/>
+	<text name="AdvancedStatsLeft">
+Priorytet: [PRIORITY]
+Długość: [DURATION]s
+Zapętlona: [IS_LOOP]
+	</text>
+	<text name="AdvancedStatsRight">
+Wygł. startu: [EASE_IN]s
+Wygł. końca: [EASE_OUT]s
+Stawy: [NUM_JOINTS]
+	</text>
 </floater>

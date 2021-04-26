@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="Wybierz klawisz" name="modal container">
+<floater title="Wybierz klawisz dla wyzwalacza" name="modal container">
 	<floater.string name="keyboard">
 		Klawiatura
 	</floater.string>
@@ -7,14 +7,14 @@
 		Przyciski myszy
 	</floater.string>
 	<floater.string name="basic_description">
-		Naciśnij klawisz lub przycisk myszy, aby ustawić wyzwalacz.
+		Wciśnij klawisz / przycisk myszy, aby ustawić.
 Dozwolone: [INPUT].
 	</floater.string>
 	<floater.string name="reserved_by_menu">
 		Kombinacja [KEYSTR] jest zarezerwowana przez menu.
 	</floater.string>
 	<text name="descritption">
-		Naciśnij klawisz lub przycisk myszy, aby ustawić wyzwalacz.
+		Wciśnij klawisz / przycisk myszy, aby ustawić.
 Dozwolone: [INPUT].
 	</text>
 	<check_box label="Zastosuj do wszystkich" name="apply_all" tool_tip="Przeglądarka korzysta z różnych kombinacji klawiszy w zależności od tego, co robisz w świecie. Użycie tej opcji spowoduje zastosowanie Twojej zmiany do wszystkich trybów." />
