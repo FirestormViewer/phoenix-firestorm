@@ -4768,6 +4768,10 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		Ta opcja usunie dzienniki poprzednich rozmów i wszelkie kopie zapasowe tego pliku.
 		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" />
 	</notification>
+	<notification name="PreferenceControlsDefaults">
+		Czy chcesz przywrócić domyślne ustawienia klawiszy sterowania?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Obecny tryb" yestext="Wszystkie tryby" />
+	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
 		Ta opcja usunie logi wszystkich poprzednich rozmów. Nie będzie to miało wpływu na listę rozmów odbytych w przeszłości. Wszystkie pliki z przyrostkami .txt oraz txt.backup w folderze [FOLDER] zostaną usunięte.
 		<usetemplate ignoretext="Potwierdź, zanim usunę logi rozmów." name="okcancelignore" notext="Anuluj" />

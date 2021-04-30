@@ -107,10 +107,7 @@
 			<check_box label="Автоматически отклонять все входящие групповые голосовые вызовы" name="VoiceCallsRejectGroup"/>
 			<check_box label="Автоматически отклонять все входящие специальные голосовые вызовы AdHoc" name="VoiceCallsRejectAdHoc"/>
 			<check_box label="Автоматически отклонять все входящие P2P (аватар с аватаром) голосовые вызовы" name="VoiceCallsRejectP2P"/>
-			<check_box label="'Включить / Выключить' микрофон при нажатии:" name="push_to_talk_toggle_check" tool_tip="Когда в режиме переключения, нажмите и отпустите клавишу включения один раз, чтобы переключить микрофон 'Включить / Выключить'. Когда не в режиме переключения, микрофон передает голос только тогда, когда нажата кнопка."/>
-			<line_editor label="Переключатель Нажать-и-говорить" name="modifier_combo"/>
-			<button label="Задать кнопку" name="set_voice_hotkey_button"/>
-			<button name="set_voice_middlemouse_button" tool_tip="Вернуть на 'Средняя кнопка мыши'"/>
+			<check_box label="Включить/выключить микрофон при нажатии кнопки на панели инструментов" name="push_to_talk_toggle_check" tool_tip="В режиме 'Включить/выключить' микрофон включается и выключается одиночным нажатием кнопки. Иначе микрофон включен только когда нажата кнопка."/>
 			<button label="Настройки звукового устройства" name="device_settings_btn"/>
 			<panel label="Настройки устройства" name="device_settings_panel">
 				<panel.string name="default_text">

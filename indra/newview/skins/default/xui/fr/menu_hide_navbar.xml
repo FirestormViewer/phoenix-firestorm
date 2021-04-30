@@ -7,4 +7,9 @@
 	<menu_item_check label="Afficher la version du simulateur dans la barre supérieure" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Afficher la recherche dans les menus" name="FSMenuSearch"/>
 	<menu_item_check label="Afficher le solde de devises" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Afficher les contrôles des médias" name="FSEnableVolumeControls"/>
+	<menu_item_check label="Afficher le nombre d'images par seconde" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Afficher l'indicateur de trafic" name="ShowNetStats"/>
+	<menu_item_check label="Afficher les coordonnées" name="Coordinates"/>
+	<menu_item_check label="Afficher les autorisations de la parcelle" name="Parcel Properties"/>
 </menu>

@@ -1037,7 +1037,7 @@
          enabled_control="EnableVoiceChat"
          control_name="PushToTalkToggle"
          height="15"
-  label="Toggle speak on/off when I press button in toolbar"
+         label="Toggle speak on/off when I press button in toolbar"
          layout="topleft"
          left="25"
          name="push_to_talk_toggle_check"

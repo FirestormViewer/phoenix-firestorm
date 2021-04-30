@@ -1365,7 +1365,16 @@ bool LLAppViewer::init()
 //	// add LEAP mode command-line argument to whichever of these we selected
 //	updater.args.add("leap");
 //	// UpdaterServiceSettings
-//	updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
+//    if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+//    {
+//        // Befor first login, treat this as 'manual' updates,
+//        // updater won't install anything, but required updates
+//        updater.args.add("0");
+//    }
+//    else
+//    {
+//        updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
+//    }
 //	// channel
 //	updater.args.add(LLVersionInfo::instance().getChannel());
 //	// testok
@@ -1951,6 +1960,7 @@ bool LLAppViewer::doFrame()
 		}
 
 		delete gServicePump;
+		gServicePump = NULL;
 
 		destroyMainloopTimeout();
 
@@ -2011,7 +2021,11 @@ bool LLAppViewer::cleanup()
 	//dump scene loading monitor results
 	if (LLSceneMonitor::instanceExists())
 	{
-		LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+		if (!isSecondInstance())
+		{
+			LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+		}
+		LLSceneMonitor::deleteSingleton();
 	}
 
 	// There used to be an 'if (LLFastTimerView::sAnalyzePerformance)' block
@@ -4261,6 +4275,12 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["FirstRunThisInstall"] = gSavedSettings.getBOOL("FirstRunThisInstall");
     gDebugInfo["StartupState"] = LLStartUp::getStartupStateString();
 
+	std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
+	for (auto res_iter : resolutions)
+	{
+		gDebugInfo["DisplayInfo"].append(res_iter);
+	}
+
 	writeDebugInfo(); // Save out debug_info.log early, in case of crash.
 }
 
@@ -4943,7 +4963,7 @@ bool LLAppViewer::initCache()
     const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
     const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
     const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
-	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
+	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableCacheDebugInfo");
 	// <FS:Ansariel> Don't ignore cache path for asset cache; Moved further down until cache path has been set correctly
 	//const std::string cache_dir = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name);
 	//LLDiskCache::initParamSingleton(cache_dir, disk_cache_bytes, enable_cache_debug_info);
@@ -4994,10 +5014,10 @@ bool LLAppViewer::initCache()
 		std::string new_cache_location = gSavedSettings.getString("NewCacheLocation");
 		if (new_cache_location != cache_location)
 		{
-			// AO: Don't automatically purge old cache location, has unwanted side effects with shared caches, upgrades
-			//LL_INFOS("AppCache") << "Cache location changed, cache needs purging" << LL_ENDL;
-			//gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
-			//purgeCache(); // purge old cache
+			LL_INFOS("AppCache") << "Cache location changed, cache needs purging" << LL_ENDL;
+			gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
+			purgeCache(); // purge old cache
+			gDirUtilp->deleteDirAndContents(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name));
 			gSavedSettings.setString("CacheLocation", new_cache_location);
 			gSavedSettings.setString("CacheLocationTopFolder", gDirUtilp->getBaseFileName(new_cache_location));
 		}

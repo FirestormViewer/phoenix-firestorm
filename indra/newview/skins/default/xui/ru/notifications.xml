@@ -4880,6 +4880,10 @@ URL: [AUDIOURL]
 			<ignore name="ignore" text="Подтвердить отправку кому-либо списка моих текущих ограничений RLV."/>
 		</form>
 	</notification>
+	<notification name="PreferenceControlsDefaults">
+		Вы хотите восстановить значения по умолчанию для элементов управления?
+		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Текущий режим" yestext="Все режимы"/>
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Будут удалены журналы предыдущих разговоров и все резервные копии этих файлов.
 		<usetemplate ignoretext="Подтверждать удаление журнала предыдущих разговоров." name="okcancelignore" notext="Отмена" yestext="OK"/>

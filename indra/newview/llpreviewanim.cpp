@@ -35,14 +35,17 @@
 #include "llkeyframemotion.h"
 #include "llfilepicker.h"
 #include "lllineeditor.h"
+#include "lltrans.h"
 #include "lluictrlfactory.h"
 #include "lluictrlfactory.h"
 #include "lldatapacker.h"
 
 extern LLAgent gAgent;
+//const S32 ADVANCED_VPAD = 3; // <FS:Ansariel> Improved animation preview
 
 LLPreviewAnim::LLPreviewAnim(const LLSD& key)
-	: LLPreview( key )
+	: LLPreview( key ),
+	pMotion(NULL)
 {
 	mCommitCallbackRegistrar.add("PreviewAnim.Play", boost::bind(&LLPreviewAnim::play, this, _2));
 }
@@ -53,12 +56,32 @@ BOOL LLPreviewAnim::postBuild()
 	const LLInventoryItem* item = getItem();
 	if(item)
 	{
-		gAgentAvatarp->createMotion(item->getAssetUUID()); // preload the animation
+		pMotion = gAgentAvatarp->createMotion(item->getAssetUUID()); // preload the animation
 		getChild<LLUICtrl>("desc")->setValue(item->getDescription());
 	}
 
 	childSetCommitCallback("desc", LLPreview::onText, this);
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
+	// <FS:Ansariel> Improved animation preview
+	//getChild<LLTextBox>("adv_trigger")->setClickedCallback(boost::bind(&LLPreviewAnim::showAdvanced, this));
+	//pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
+
+    //// Assume that advanced stats start visible (for XUI preview tool's purposes)
+    //pAdvancedStatsTextBox->setVisible(FALSE);
+    //LLRect rect = getRect();
+    //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+	if (pMotion)
+	{
+		LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
+		LLTextBox* stats_box_right = getChild<LLTextBox>("AdvancedStatsRight");
+		stats_box_left->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
+		stats_box_left->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
+		stats_box_left->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
+		stats_box_right->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
+		stats_box_right->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
+		stats_box_right->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
+	}
+	// </FS:Ansariel>
 
 	return LLPreview::postBuild();
 }
@@ -167,8 +190,8 @@ void LLPreviewAnim::cleanup()
 	this->mDidStart = false;
 	getChild<LLUICtrl>("Inworld")->setValue(FALSE);
 	getChild<LLUICtrl>("Locally")->setValue(FALSE);
-	getChild<LLUICtrl>("Inworld")->setEnabled(true);
-	getChild<LLUICtrl>("Locally")->setEnabled(true);
+	getChild<LLUICtrl>("Inworld")->setEnabled(TRUE);
+	getChild<LLUICtrl>("Locally")->setEnabled(TRUE);
 }
 
 // virtual
@@ -182,3 +205,34 @@ void LLPreviewAnim::onClose(bool app_quitting)
 		gAgent.sendAnimationRequest(item->getAssetUUID(), ANIM_REQUEST_STOP);
 	}
 }
+
+// <FS:Ansariel> Improved animation preview
+//void LLPreviewAnim::showAdvanced()
+//{
+//    BOOL was_visible =  pAdvancedStatsTextBox->getVisible();
+//
+//    if (was_visible)
+//    {
+//        pAdvancedStatsTextBox->setVisible(FALSE);
+//        LLRect rect = getRect();
+//        reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+//    }
+//    else
+//    {
+//        pAdvancedStatsTextBox->setVisible(TRUE);
+//        LLRect rect = getRect();
+//        reshape(rect.getWidth(), rect.getHeight() + pAdvancedStatsTextBox->getRect().getHeight() + ADVANCED_VPAD, FALSE);
+//
+//        // set text
+//        if (pMotion)
+//        {
+//            pAdvancedStatsTextBox->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
+//            pAdvancedStatsTextBox->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
+//            pAdvancedStatsTextBox->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
+//            pAdvancedStatsTextBox->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
+//            pAdvancedStatsTextBox->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
+//            pAdvancedStatsTextBox->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
+//        }
+//    }
+//}
+// </FS:Ansariel>

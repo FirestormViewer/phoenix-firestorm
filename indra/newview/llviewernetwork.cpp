@@ -136,7 +136,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 				  "https://secondlife.aditi.lindenlab.com/helpers/",
 				  DEFAULT_LOGIN_PAGE,
 				  SL_UPDATE_QUERY_URL,
-				  "https://my.aditi.lindenlab.com/",
+				  "https://my.secondlife-beta.com/",
 				  "Aditi");
 
     // dump example grid file...
