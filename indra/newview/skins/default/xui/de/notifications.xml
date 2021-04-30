@@ -3600,7 +3600,7 @@ Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstä
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
-		Möchten Sie Ihre Teleport-Liste löschen?
+		Möchten Sie die gesamte Teleport-Liste aller besuchten Orte löschen? Diese Aktion kann nicht rückgängig gemacht werden!
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="BottomTrayButtonCanNotBeShown">
