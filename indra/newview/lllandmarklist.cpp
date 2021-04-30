@@ -106,14 +106,14 @@ LLLandmark* LLLandmarkList::getAsset(const LLUUID& asset_uuid, loaded_callback_t
             mWaitList.insert(asset_uuid);
             return NULL;
         }
-		// <FS:Beq/> fIRE-14457 Fix CopySLURL fails / landmakrs not loading - based on snippet from Chorazin Allen
-		mRequestedList[asset_uuid] = gFrameTimeSeconds;
+
+        mRequestedList[asset_uuid] = gFrameTimeSeconds;
+
+        // Note that getAssetData can callback immediately and cleans mRequestedList
 		gAssetStorage->getAssetData(asset_uuid,
 									LLAssetType::AT_LANDMARK,
 									LLLandmarkList::processGetAssetReply,
 									NULL);
-		// <FS:Beq/> fIRE-14457 Fix CopySLURL fails / landmakrs not loading - based on snippet from Chorazin Allen
-		// mRequestedList[asset_uuid] = gFrameTimeSeconds;
 	}
 	return NULL;
 }
@@ -197,11 +197,15 @@ void LLLandmarkList::processGetAssetReply(
             landmark_uuid_list_t::iterator iter = gLandmarkList.mWaitList.begin();
             LLUUID asset_uuid = *iter;
             gLandmarkList.mWaitList.erase(iter);
+
+            // add to mRequestedList before calling getAssetData()
+            gLandmarkList.mRequestedList[asset_uuid] = gFrameTimeSeconds;
+
+            // Note that getAssetData can callback immediately and cleans mRequestedList
             gAssetStorage->getAssetData(asset_uuid,
                 LLAssetType::AT_LANDMARK,
                 LLLandmarkList::processGetAssetReply,
                 NULL);
-            gLandmarkList.mRequestedList[asset_uuid] = gFrameTimeSeconds;
         }
         scheduling = false;
     }

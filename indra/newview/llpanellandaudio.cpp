@@ -169,12 +169,9 @@ void LLPanelLandAudio::refresh()
 		std::string current_url = parcel->getMusicURL();
 		mMusicURLEdit->clearRows();
 		LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
-		// <FS:Testy> FIRE-29157 - Remove invalid URLs that were rejected by the server
-		//LLSD streams = streamlist["audio"];
 		LLSD& streams = streamlist["audio"];
-		// </FS:Testy>
 
-		for(LLSD::array_iterator s_itr = streams.beginArray(); s_itr != streams.endArray(); ++s_itr)
+		for (LLSD::array_iterator s_itr = streams.beginArray(); s_itr != streams.endArray(); ++s_itr)
 		{
 			mMusicURLEdit->add(LLSD(*s_itr));
 			LL_DEBUGS() << "adding: " << *s_itr << " to the audio stream combo." << LL_ENDL;
@@ -198,6 +195,7 @@ void LLPanelLandAudio::refresh()
 			{
 				if ((*iter).asString() == mLastSetURL)
 				{
+					LL_WARNS() << "Removing stream from saved streams list because it was rejected by the region: " << mLastSetURL << LL_ENDL;
 					streams.erase(index);
 					break;
 				}
@@ -298,6 +296,10 @@ void LLPanelLandAudio::onBtnStreamAdd()
 			gSavedSettings.setLLSD("FSStreamList", streamlist);
 			refresh();
 		}
+		else
+		{
+			LL_INFOS() << "Could not add stream to saved streams list because it is already in the list: " << music_url << LL_ENDL;
+		}
 	}
 }
 
@@ -305,14 +307,12 @@ void LLPanelLandAudio::onBtnStreamDelete()
 {
 	std::string music_url = mMusicURLEdit->getSimple();
 	LLStringUtil::trim(music_url);
-	// <FS:Testy> FIRE-29157 - Stream can't be deleted if onCommitAny() prepended "http://" to the URL since it doesn't match in the list.
 	std::string music_url_no_http;
 	if (music_url.find("http://") == 0)
 	{
 		music_url_no_http = music_url.substr(7, music_url.size() - 7);
 	}
-	// </FS:Testy>
-	
+
 	LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
 	LLSD streamlist_new;
 	streamlist_new["version"] = 1;
@@ -320,13 +320,15 @@ void LLPanelLandAudio::onBtnStreamDelete()
 	for (LLSD::array_const_iterator it = streamlist["audio"].beginArray(); it != streamlist["audio"].endArray(); ++it)
 	{
 		std::string current_url = (*it).asString();
-		// <FS:Testy> FIRE-29157 - Stream can't be deleted if onCommitAny() prepended "http://" to the URL since it doesn't match in the list.
-		//if (current_url != music_url)
 		if (current_url != music_url && !(current_url.find("://") == std::string::npos && current_url == music_url_no_http))
 		{
 			streamlist_new["audio"].append(current_url);
 		}
-		// </FS:Testy>
+	}
+
+	if (streamlist["audio"].size() == streamlist_new["audio"].size())
+	{
+		LL_WARNS() << "Could not remove stream from saved streams list: " << music_url << LL_ENDL;
 	}
 
 	gSavedSettings.setLLSD("FSStreamList", streamlist_new);

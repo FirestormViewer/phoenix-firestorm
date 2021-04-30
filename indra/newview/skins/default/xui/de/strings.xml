@@ -1714,6 +1714,9 @@ http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="FavoritesNoMatchingItems">
 		Landmarke hier hin ziehen, um diese hinzuzufügen.
 	</string>
+	<string name="MarketplaceNoListing">
+		Sie haben noch keine Liste.
+	</string>
 	<string name="MarketplaceNoMatchingItems">
 		Keine übereinstimmenden Objekte gefunden. Überprüfen Sie die Schreibweise des Suchbegriffs und versuchen Sie es noch einmal.
 	</string>
@@ -4895,10 +4898,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Sie haben diesen Einwohner ignoriert. Wenn Sie eine Nachricht senden, wird dieser freigeschaltet.
 	</string>
 	<string name="generic">
-		Fehler bei Anfrage, bitte versuchen Sie es später.
+		Bitte beenden Sie das Gespräch und starten es erneut, oder loggen Sie sich erneut ein und versuchen es erneut.
 	</string>
 	<string name="generic_request_error">
-		Fehler bei Anfrage, bitte versuchen Sie es später.
+		Bitte beenden Sie das Gespräch und starten es erneut, oder loggen Sie sich erneut ein und versuchen es erneut.
 	</string>
 	<string name="insufficient_perms_error">
 		Sie sind dazu nicht berechtigt.
