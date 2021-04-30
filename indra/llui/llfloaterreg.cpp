@@ -32,6 +32,7 @@
 #include "llfloater.h"
 #include "llmultifloater.h"
 #include "llfloaterreglistener.h"
+#include "lluiusage.h"
 #include <string>
 
 //*******************************************************
@@ -513,7 +514,6 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	std::string name = sdname.asString();
 	LLFloater* instance = getInstance(name, key); 
 	
-
 	if (!instance)
 	{
 		LL_DEBUGS() << "Unable to get instance of floater '" << name << "'" << LL_ENDL;

@@ -690,7 +690,18 @@ void LLPanelPlaces::onTabSelected()
     // Hide menus
     bool supports_create = mActivePanel->getCreateMenu() != NULL;
     childSetVisible("add_btn_panel", supports_create);
-    childSetVisible("trash_btn_panel", supports_create);
+
+    // favorites and inventory can remove items, history can clear history
+    childSetVisible("trash_btn_panel", TRUE);
+
+    if (supports_create)
+    {
+        mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_items"));
+    }
+    else
+    {
+        mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_history"));
+    }
 }
 
 void LLPanelPlaces::onTeleportButtonClicked()
@@ -1262,7 +1273,21 @@ void LLPanelPlaces::createTabs()
         // Hide menus
         bool supports_create = mActivePanel->getCreateMenu() != NULL;
         childSetVisible("add_btn_panel", supports_create);
-        childSetVisible("trash_btn_panel", supports_create);
+
+        // favorites and inventory can remove items, history can clear history
+        childSetVisible("trash_btn_panel", TRUE);
+
+        if (supports_create)
+        {
+            mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_items"));
+        }
+        else
+        {
+            mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_history"));
+        }
+
+        mActivePanel->setRemoveBtn(mRemoveSelectedBtn);
+		mActivePanel->updateVerbs();
     }
 
 	mTabsCreated = true;

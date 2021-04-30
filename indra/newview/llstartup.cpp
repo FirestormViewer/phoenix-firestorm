@@ -147,6 +147,7 @@
 #include "lltoolmgr.h"
 #include "lltrans.h"
 #include "llui.h"
+#include "lluiusage.h"
 #include "llurldispatcher.h"
 #include "llurlentry.h"
 #include "llslurl.h"
@@ -3128,6 +3129,8 @@ bool idle_startup()
 			DFQ_AGENT_OWNED,
 			LLParcel::C_ANY,
 			"");
+
+		LLUIUsage::instance().clear();
 
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))

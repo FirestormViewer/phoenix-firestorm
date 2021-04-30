@@ -126,7 +126,6 @@
 #include "rlvui.h"
 // [/RLVa:KB]
 
-#include <boost/algorithm/string/split.hpp> //
 #include <boost/foreach.hpp>
 
 #include "llnotificationmanager.h" //

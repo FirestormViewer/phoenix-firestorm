@@ -56,7 +56,7 @@ public:
     void onShowProfile() override;
     void onTeleport() override;
     ///*virtual*/ void onCopySLURL();
-    void onRemoveSelected() override {};
+    void onRemoveSelected() override;
     void updateVerbs() override;
     bool isSingleItemSelected() override;
 

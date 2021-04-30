@@ -621,6 +621,12 @@ void LLTeleportHistoryPanel::onTeleport()
 	confirmTeleport(itemp->getIndex());
 }
 
+// virtual
+void LLTeleportHistoryPanel::onRemoveSelected()
+{
+    LLNotificationsUtil::add("ConfirmClearTeleportHistory", LLSD(), LLSD(), boost::bind(&LLTeleportHistoryPanel::onClearTeleportHistoryDialog, this, _1, _2));
+}
+
 /*
 // virtual
 void LLTeleportHistoryPanel::onCopySLURL()
@@ -651,9 +657,9 @@ void LLTeleportHistoryPanel::updateVerbs()
 	if (!isTabVisible())
 		return;
 
-	if (!mLastSelectedFlatlList)
+	if (sRemoveBtn)
 	{
-		return;
+		sRemoveBtn->setEnabled(true);
 	}
 }
 
@@ -1199,10 +1205,6 @@ void LLTeleportHistoryPanel::onGearMenuAction(const LLSD& userdata)
         {
             mLastSelectedFlatlList->resetSelection();
         }
-    }
-    else if ("clear_history" == command_name)
-    {
-        LLNotificationsUtil::add("ConfirmClearTeleportHistory", LLSD(), LLSD(), boost::bind(&LLTeleportHistoryPanel::onClearTeleportHistoryDialog, this, _1, _2));
     }
 
     S32 index = -1;
