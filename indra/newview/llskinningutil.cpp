@@ -132,47 +132,52 @@ void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin
 
 //<FS:Beq> Per frame SkinningMatrix Caching
 //void LLSkinningUtil::initSkinningMatrixPalette(
-//	LLMatrix4* mat,
-//	S32 count,
-//	const LLMeshSkinInfo* skin,
-//	LLVOAvatar *avatar)
+//    LLMatrix4* mat,
+//    S32 count,
+//    const LLMeshSkinInfo* skin,
+//    LLVOAvatar *avatar)
 //{
-//	initJointNums(const_cast<LLMeshSkinInfo*>(skin), avatar);
-//	for (U32 j = 0; j < count; ++j)
-//	{
-//		LLJoint *joint = avatar->getJoint(skin->mJointNums[j]);
-//		llassert(joint);
-//		if (joint)
-//		{
+//    initJointNums(const_cast<LLMeshSkinInfo*>(skin), avatar);
+//    for (U32 j = 0; j < count; ++j)
+//    {
+//        S32 joint_num = skin->mJointNums[j];
+//        LLJoint * joint = NULL;
+//        if (joint_num >= 0 && joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS)
+//        {
+//            joint = avatar->getJoint(joint_num);
+//        }
+//        llassert(joint);
+//        if (joint)
+//        {
 //#ifdef MAT_USE_SSE
-//			LLMatrix4a bind, world, res;
-//			bind.loadu(skin->mInvBindMatrix[j]);
-//			world.loadu(joint->getWorldMatrix());
-//			matMul(bind, world, res);
-//			memcpy(mat[j].mMatrix, res.mMatrix, 16 * sizeof(float));
+//            LLMatrix4a bind, world, res;
+//            bind.loadu(skin->mInvBindMatrix[j]);
+//            world.loadu(joint->getWorldMatrix());
+//            matMul(bind, world, res);
+//            memcpy(mat[j].mMatrix, res.mMatrix, 16 * sizeof(float));
 //#else
-//			mat[j] = skin->mInvBindMatrix[j];
-//			mat[j] *= joint->getWorldMatrix();
+//            mat[j] = skin->mInvBindMatrix[j];
+//            mat[j] *= joint->getWorldMatrix();
 //#endif
-//		}
-//		else
-//		{
-//			mat[j] = skin->mInvBindMatrix[j];
+//        }
+//        else
+//        {
+//            mat[j] = skin->mInvBindMatrix[j];
 //#if DEBUG_SKINNING
-//			// This  shouldn't  happen   -  in  mesh  upload,  skinned
-//			// rendering  should  be disabled  unless  all joints  are
-//			// valid.  In other  cases of  skinned  rendering, invalid
-//			// joints should already have  been removed during scrubInvalidJoints().
-//			LL_WARNS_ONCE("Avatar") << avatar->getFullname()
-//				<< " rigged to invalid joint name " << skin->mJointNames[j]
-//				<< " num " << skin->mJointNums[j] << LL_ENDL;
-//			LL_WARNS_ONCE("Avatar") << avatar->getFullname()
-//				<< " avatar build state: isBuilt() " << avatar->isBuilt()
-//				<< " mInitFlags " << avatar->mInitFlags << LL_ENDL;
+//            // This  shouldn't  happen   -  in  mesh  upload,  skinned
+//            // rendering  should  be disabled  unless  all joints  are
+//            // valid.  In other  cases of  skinned  rendering, invalid
+//            // joints should already have  been removed during scrubInvalidJoints().
+//            LL_WARNS_ONCE("Avatar") << avatar->getFullname()
+//                << " rigged to invalid joint name " << skin->mJointNames[j]
+//                << " num " << skin->mJointNums[j] << LL_ENDL;
+//            LL_WARNS_ONCE("Avatar") << avatar->getFullname()
+//                << " avatar build state: isBuilt() " << avatar->isBuilt()
+//                << " mInitFlags " << avatar->mInitFlags << LL_ENDL;
 //#endif
-//			dump_avatar_and_skin_state("initSkinningMatrixPalette joint not found", avatar, skin);
-//		}
-//	}
+//            dump_avatar_and_skin_state("initSkinningMatrixPalette joint not found", avatar, skin);
+//        }
+//    }
 //}
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
@@ -186,44 +191,49 @@ void LLSkinningUtil::initSkinningMatrixPalette(
     LLVOAvatar *avatar)
 {
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-	// This timer is too hot for normal use (though better now with caching)
-	LL_RECORD_BLOCK_TIME(FTM_SKINNING_INIT);
+    // This timer is too hot for normal use (though better now with caching)
+    LL_RECORD_BLOCK_TIME(FTM_SKINNING_INIT);
 #endif
-	LLMatrix4a bind[LL_MAX_JOINTS_PER_MESH_OBJECT];
-	LLMatrix4a world[LL_MAX_JOINTS_PER_MESH_OBJECT];
+    LLMatrix4a bind[LL_MAX_JOINTS_PER_MESH_OBJECT];
+    LLMatrix4a world[LL_MAX_JOINTS_PER_MESH_OBJECT];
 
-	initJointNums(const_cast<LLMeshSkinInfo*>(skin), avatar);
+    initJointNums(const_cast<LLMeshSkinInfo*>(skin), avatar);
 // TODO: Refactored to encourage the compiler to optimise better but it's too old and stubborn. Need to hand tool the SIMD.
 // TODO: There are two overheads in this function casued by the unaligned loads. use Matrix4a
 // TODO: getWorldMatrix forces a reverse recursion up through the skelly. Check if this is happening efficiently.
-	for (U32 j = 0; j < count; ++j)
+    for (U32 j = 0; j < count; ++j)
     {
-        LLJoint *joint = avatar->getJoint(skin->mJointNums[j]);
-		if (joint)
-		{
-			bind[j].loadu(skin->mInvBindMatrix[j]);
-			world[j].loadu(joint->getWorldMatrix());
-			matMul(bind[j], world[j], mat[j]);
-		}
-		else
-		{
-			mat[j].loadu(skin->mInvBindMatrix[j]);
+        S32 joint_num = skin->mJointNums[j];
+        LLJoint * joint = NULL;
+        if (joint_num >= 0 && joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS)
+        {
+            joint = avatar->getJoint(joint_num);
+        }
+        if (joint)
+        {
+            bind[j].loadu(skin->mInvBindMatrix[j]);
+            world[j].loadu(joint->getWorldMatrix());
+            matMul(bind[j], world[j], mat[j]);
+        }
+        else
+        {
+            mat[j].loadu(skin->mInvBindMatrix[j]);
 #if DEBUG_SKINNING
-			// This  shouldn't  happen   -  in  mesh  upload,  skinned
-			// rendering  should  be disabled  unless  all joints  are
-			// valid.  In other  cases of  skinned  rendering, invalid
-			// joints should already have  been removed during scrubInvalidJoints().
-			// Beq note - Oct 2018 Animesh - Many rigged meshes still fail here. ('mElbowLeeft' typo in the rigging data)
-			LL_WARNS_ONCE("Avatar") << avatar->getFullname()
-				<< " rigged to invalid joint name " << skin->mJointNames[j]
-				<< " num " << skin->mJointNums[j] << LL_ENDL;
-			LL_WARNS_ONCE("Avatar") << avatar->getFullname()
-				<< " avatar build state: isBuilt() " << avatar->isBuilt()
-				<< " mInitFlags " << avatar->mInitFlags << LL_ENDL;
+            // This  shouldn't  happen   -  in  mesh  upload,  skinned
+            // rendering  should  be disabled  unless  all joints  are
+            // valid.  In other  cases of  skinned  rendering, invalid
+            // joints should already have  been removed during scrubInvalidJoints().
+            // Beq note - Oct 2018 Animesh - Many rigged meshes still fail here. ('mElbowLeeft' typo in the rigging data)
+            LL_WARNS_ONCE("Avatar") << avatar->getFullname()
+                << " rigged to invalid joint name " << skin->mJointNames[j]
+                << " num " << skin->mJointNums[j] << LL_ENDL;
+            LL_WARNS_ONCE("Avatar") << avatar->getFullname()
+                << " avatar build state: isBuilt() " << avatar->isBuilt()
+                << " mInitFlags " << avatar->mInitFlags << LL_ENDL;
 
 #endif
 
-		}
+        }
 //LL_DEBUGS("Skinning") << "[" << avatar->getFullname() << "] joint(" << skin->mJointNames[j] << ") matices bind(" << bind << ") world(" << world << ")" << LL_ENDL;
     }
 }
@@ -232,7 +242,7 @@ void LLSkinningUtil::initSkinningMatrixPalette(
 void LLSkinningUtil::checkSkinWeights(LLVector4a* weights, U32 num_vertices, const LLMeshSkinInfo* skin)
 {
 #if DEBUG_SKINNING
-	const S32 max_joints = skin->mJointNames.size();
+    const S32 max_joints = skin->mJointNames.size();
     for (U32 j=0; j<num_vertices; j++)
     {
         F32 *w = weights[j].getF32ptr();
@@ -406,7 +416,7 @@ void LLSkinningUtil::updateRiggingInfo(const LLMeshSkinInfo* skin, LLVOAvatar *a
                     }
                     for (U32 k=0; k<4; ++k)
                     {
-						S32 joint_index = idx[k];
+                        S32 joint_index = idx[k];
                         if (wght[k] > 0.0f && num_joints > joint_index)
                         {
                             S32 joint_num = skin->mJointNums[joint_index];
