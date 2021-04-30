@@ -140,6 +140,7 @@
         height="25"
         layout="topleft"
         name="trash_btn_panel"
+        tool_tip="Remove selected landmark or folder"
         width="31">
         <dnd_button
           follows="bottom|left"

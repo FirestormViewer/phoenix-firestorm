@@ -692,16 +692,19 @@ void LLPanelPlaces::onTabSelected()
     childSetVisible("add_btn_panel", supports_create);
 
     // favorites and inventory can remove items, history can clear history
-    childSetVisible("trash_btn_panel", TRUE);
+    // <FS:Ansariel> Trashcan icon clearing everything? No way!
+    //childSetVisible("trash_btn_panel", TRUE);
 
-    if (supports_create)
-    {
-        mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_items"));
-    }
-    else
-    {
-        mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_history"));
-    }
+    //if (supports_create)
+    //{
+    //    mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_items"));
+    //}
+    //else
+    //{
+    //    mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_history"));
+    //}
+    childSetVisible("trash_btn_panel", supports_create);
+    // </FS:Ansariel>
 }
 
 void LLPanelPlaces::onTeleportButtonClicked()
@@ -1275,16 +1278,19 @@ void LLPanelPlaces::createTabs()
         childSetVisible("add_btn_panel", supports_create);
 
         // favorites and inventory can remove items, history can clear history
-        childSetVisible("trash_btn_panel", TRUE);
+        // <FS:Ansariel> Trashcan icon clearing everything? No way!
+        //childSetVisible("trash_btn_panel", TRUE);
 
-        if (supports_create)
-        {
-            mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_items"));
-        }
-        else
-        {
-            mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_history"));
-        }
+        //if (supports_create)
+        //{
+        //    mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_items"));
+        //}
+        //else
+        //{
+        //    mRemoveSelectedBtn->setToolTip(getString("tooltip_trash_history"));
+        //}
+        childSetVisible("trash_btn_panel", supports_create);
+        // </FS:Ansariel>
 
         mActivePanel->setRemoveBtn(mRemoveSelectedBtn);
 		mActivePanel->updateVerbs();
