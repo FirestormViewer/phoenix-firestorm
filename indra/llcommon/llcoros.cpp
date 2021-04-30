@@ -56,10 +56,6 @@
 #include "stringize.h"
 #include "llexception.h"
 
-#if LL_WINDOWS
-#include <excpt.h>
-#endif
-
 // static
 LLCoros::CoroData& LLCoros::get_CoroData(const std::string& caller)
 {

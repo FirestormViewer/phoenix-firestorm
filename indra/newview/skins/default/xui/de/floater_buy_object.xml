@@ -15,6 +15,9 @@
 	<floater.string name="no_transfer_text">
 		(kein Transferieren)
 	</floater.string>
+	<floater.string name="mupliple_selected">
+		Mehrfachauswahl
+	</floater.string>
 	<text name="contents_text">
 		Inhalt:
 	</text>
