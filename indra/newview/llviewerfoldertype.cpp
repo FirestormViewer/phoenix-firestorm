@@ -157,7 +157,7 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_FAVORITE, 			new ViewerFolderEntry("Favorites",				"Inv_FavoritesOpen",	"Inv_FavoritesClosed",	FALSE,     true));
 
 	addEntry(LLFolderType::FT_CURRENT_OUTFIT, 		new ViewerFolderEntry("Current Outfit",			"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      false));
-	addEntry(LLFolderType::FT_OUTFIT, 				new ViewerFolderEntry("New Outfit",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
+	addEntry(LLFolderType::FT_OUTFIT, 				new ViewerFolderEntry("New Outfit",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      false));
 	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
 	addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_MeshesOpen",		"Inv_MeshesClosed",		FALSE,     true));
 	addEntry(LLFolderType::FT_SETTINGS, 		    new ViewerFolderEntry("Settings",			    "Inv_SettingsOpen",		"Inv_SettingsClosed",	FALSE,     true));
