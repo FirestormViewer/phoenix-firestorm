@@ -1262,6 +1262,15 @@ void LLViewerObjectList::fetchObjectCostsCoro(std::string url)
             F32 linkPhysicsCost = objectData["linked_set_physics_cost"].asReal();
 
             gObjectList.updateObjectCost(objectId, objectCost, linkCost, physicsCost, linkPhysicsCost);
+
+            // <FS:Cron> area search
+            // Update area search to have current information.
+            FSAreaSearch* area_search_floater = LLFloaterReg::getTypedInstance<FSAreaSearch>("area_search");
+            if (area_search_floater)
+            {
+                area_search_floater->updateObjectCosts(objectId, objectCost, linkCost, physicsCost, linkPhysicsCost);
+            }
+            // </FS:Cron> area search
         }
         else
         {

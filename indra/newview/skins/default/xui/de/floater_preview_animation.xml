@@ -3,10 +3,20 @@
 	<floater.string name="Title">
 		Animation: [NAME]
 	</floater.string>
-	<text name="desc txt" width="140">
+	<text name="desc txt" width="90">
 		Beschreibung:
 	</text>
-	<line_editor left="108" name="desc" width="160"/>
+	<line_editor name="desc"/>
 	<button label="Inworld abspielen" label_selected="Stopp" name="Inworld" tool_tip="Diese Animation so wiedergeben, dass andere sie sehen können."/>
 	<button label="Lokal wiedergeben" label_selected="Stopp" name="Locally" tool_tip="Diese Animation so wiedergeben, dass nur Sie sie sehen."/>
+	<text name="AdvancedStatsLeft">
+Priorität: [PRIORITY]
+Dauer: [DURATION]s
+Schleife: [IS_LOOP]
+	</text>
+	<text name="AdvancedStatsRight">
+Einblenden: [EASE_IN]s
+Ausblenden: [EASE_OUT]s
+Gelenke: [NUM_JOINTS]
+	</text>
 </floater>

@@ -5145,6 +5145,24 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Divide">
 		Podziel
 	</string>
+	<string name="LMB">
+		LPM
+	</string>
+	<string name="MMB">
+		ŚPM
+	</string>
+	<string name="RMB">
+		PPM
+	</string>
+	<string name="MB4">
+		Mysz4
+	</string>
+	<string name="MB5">
+		Mysz5
+	</string>
+	<string name="Double LMB">
+		Podwójny LPM
+	</string>
 	<string name="BeaconParticle">
 		Emitery cząsteczek (niebieski)
 	</string>

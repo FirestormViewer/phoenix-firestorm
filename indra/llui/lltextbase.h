@@ -497,7 +497,7 @@ public:
 	S32						getCursorPos() { return mCursorPos; }
 // [/SL:KB
 	bool					setCursorPos(S32 cursor_pos, bool keep_cursor_offset = false);
-	void					startOfLine();
+	virtual void			startOfLine(); // <FS> Added virtual modifier
 	void					endOfLine();
 	void					startOfDoc();
 	void					endOfDoc();

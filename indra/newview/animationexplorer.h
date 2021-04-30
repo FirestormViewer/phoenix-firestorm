@@ -65,6 +65,7 @@ public:
 // options to preview, stop animations and revoke animation permissions
 // --------------------------------------------------------------------------
 
+class LLAvatarName;
 class LLButton;
 class LLCheckBoxCtrl;
 class LLMessageSystem;
@@ -94,6 +95,9 @@ class AnimationExplorer
 		void requestNameCallback(LLMessageSystem* msg);		// object name query callback
 
 	protected:
+		void onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name);
+		void updateListEntry(const LLUUID& id, const std::string& name);
+
 		LLScrollListCtrl* mAnimationScrollList;
 		LLButton* mStopButton;
 		LLButton* mRevokeButton;
@@ -111,6 +115,9 @@ class AnimationExplorer
 
 		std::vector<LLUUID> mRequestedIDs;			// list of object IDs we requested named for
 		std::map<LLUUID, std::string> mKnownIDs;		// known list of names for object IDs
+
+		typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+		avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 
 		void draw();
 		void update();								// request list update from RecentAnimationList
