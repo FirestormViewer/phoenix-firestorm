@@ -132,9 +132,6 @@ if (LINUX)
   #<FS:TS> Huh? Where'd that target come from?
   #add_dependencies(viewer linux-crash-logger-strip-target)
   add_dependencies(viewer linux-crash-logger)
-elseif (DARWIN)
-  add_subdirectory(${VIEWER_PREFIX}mac_crash_logger)
-  add_dependencies(viewer mac-crash-logger)
 elseif (WINDOWS)
   # cmake EXISTS requires an absolute path, see indra/cmake/Variables.cmake
   if (EXISTS ${VIEWER_DIR}win_setup)

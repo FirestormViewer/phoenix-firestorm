@@ -1467,20 +1467,14 @@ class DarwinManifest(ViewerManifest):
 
                 # our apps
                 executable_path = {}
-                for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
-                                         # plugin launcher
-                                         (os.path.join("llplugin", "slplugin"), "SLPlugin.app"),
-                                         ):
-                    self.path2basename(os.path.join(os.pardir,
-                                                    app_bld_dir, self.args['configuration']),
-                                       app)
-                    executable_path[app] = \
-                        self.dst_path_of(os.path.join(app, "Contents", "MacOS"))
+                self.path2basename(os.path.join(os.pardir, os.path.join("llplugin", "slplugin"), self.args['configuration']), "SLPlugin.app")
+                executable_path["SLPlugin.app"] = \
+                    self.dst_path_of(os.path.join("SLPlugin.app", "Contents", "MacOS"))
 
                     # our apps dependencies on shared libs
                     # for each app, for each dylib we collected in dylibs,
                     # create a symlink to the real copy of the dylib.
-                    resource_path = self.dst_path_of(os.path.join(app, "Contents", "Resources"))
+                    resource_path = self.dst_path_of(os.path.join("SLPlugin.app", "Contents", "Resources"))
                     for libfile in dylibs:
                         src = os.path.join(os.pardir, os.pardir, os.pardir, libfile)
                         dst = os.path.join(resource_path, libfile)
@@ -1736,43 +1730,19 @@ class DarwinManifest(ViewerManifest):
                     signed=False
                     sign_attempts=3
                     sign_retry_wait=15
-                    #<FS:TS> The order of these is critical. When two things need signing and one is contained within the
-                    # other, they must be signed from the innermost out.
-                    things_to_sign = ['Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework',
-                                        'Resources/SLPlugin.app/Contents/Frameworks/DullahanHelper.app',
-                                        'Resources/SLPlugin.app',
-                                        'Resources/SLVoice',
-                                        'Resources/mac-crash-logger.app']
+                    libvlc_path = app_in_dmg + "/Contents/Resources/llplugin/media_plugin_libvlc.dylib"
+                    cef_path = app_in_dmg + "/Contents/Resources/llplugin/media_plugin_cef.dylib"
+                    slplugin_path = app_in_dmg + "/Contents/Resources/SLPlugin.app/Contents/MacOS/SLPlugin"
+                    greenlet_path = app_in_dmg + "/Contents/Resources/updater/greenlet/_greenlet.so"
                     while (not signed) and (sign_attempts > 0):
                         try:
                             sign_attempts-=1
-                            #<FS:TS> This is ugly as hell, but it's the only way to make sure that every dylib in the
-                            # entire package gets signed, as required for notarization. Apparently the --deep option
-                            # isn't sufficient any more. Don't ask me why.
-                            contents_dir = os.path.join(app_in_dmg, 'Contents')
-                            try:
-                                all_dylibs = subprocess.check_output(['find', contents_dir, '-name', '*.dylib', '-print'])
-                            except subprocess.CalledProcessError as err:
-                                sys.exit("failed to get list of dylib files")
-                            for dylib in all_dylibs.split('\n'):
-                                if dylib: # ignore any empty lines
-                                    self.run_command(
-                                       ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
-                                        '--keychain', viewer_keychain, '--sign', identity,
-                                        dylib])
-                            for item in things_to_sign:
-                                # Note: See blurb above about names of keychains
-                                sign_path = os.path.join(contents_dir, item)
-                                print ("Signing %s" % sign_path)
-                                self.run_command(
-                                   ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
-                                    '--keychain', viewer_keychain, '--sign', identity,
-                                    sign_path])
-                            print ("Signing main app bundle %s" % app_in_dmg)
-                            self.run_command(
-                               ['codesign', '--verbose', '--deep', '--force', '--option=runtime',
-                                '--keychain', viewer_keychain, '--sign', identity,
-                                app_in_dmg])
+                            # Note: See blurb above about names of keychains
+                            self.run_command(['codesign', '--force', '--timestamp','--keychain', viewer_keychain, '--sign', identity, libvlc_path])
+                            self.run_command(['codesign', '--force', '--timestamp', '--keychain', viewer_keychain, '--sign', identity, cef_path])
+                            self.run_command(['codesign', '--force', '--timestamp', '--keychain', viewer_keychain, '--sign', identity, greenlet_path])
+                            self.run_command(['codesign', '--verbose', '--deep', '--force', '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, slplugin_path])
+                            self.run_command(['codesign', '--verbose', '--deep', '--force', '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, app_in_dmg])
                             signed=True # if no exception was raised, the codesign worked
                         except ManifestError as err:
                             if sign_attempts:
@@ -1783,6 +1753,7 @@ class DarwinManifest(ViewerManifest):
                                 print ("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
                                 raise
                     self.run_command(['spctl', '-a', '-texec', '-vvvv', app_in_dmg])
+                    self.run_command([self.src_path_of("installers/darwin/apple-notarize.sh"), app_in_dmg])
 
         finally:
             # Unmount the image even if exceptions from any of the above 
@@ -1838,7 +1809,7 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(dst="bin"):
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
-            self.path2basename("../llplugin/slplugin", "SLPlugin") 
+            self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP
             # with self.prefix(src="../viewer_components/manager", dst=""):
