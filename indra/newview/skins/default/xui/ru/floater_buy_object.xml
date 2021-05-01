@@ -12,6 +12,9 @@
 	<floater.string name="no_modify_text">
 		(не изменяется)
 	</floater.string>
+	<floater.string name="multiple_selected">
+		Множественный выбор
+	</floater.string>
 	<floater.string name="no_transfer_text">
 		(не передается)
 	</floater.string>
