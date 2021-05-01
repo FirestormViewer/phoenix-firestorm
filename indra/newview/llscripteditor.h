@@ -45,6 +45,10 @@ public:
 	
 	// LLView override
 	virtual void	draw();
+
+	// <FS> Improved Home-key behavior
+	// LLTextBase override
+	virtual void	startOfLine();
 	
 	void	initKeywords();
 	void	loadKeywords();
@@ -67,8 +71,9 @@ private:
 	void	drawLineNumbers();
 	/* virtual */ void	updateSegments();
 	/* virtual */ void	drawSelectionBackground();
-	void	loadKeywords(const std::string& filename_keywords,
-						 const std::string& filename_colors);
+	// <FS:Ansariel> Doesn't exist
+	//void	loadKeywords(const std::string& filename_keywords,
+	//					 const std::string& filename_colors);
 	
 	LLKeywords	mKeywords;
 	bool		mShowLineNumbers;

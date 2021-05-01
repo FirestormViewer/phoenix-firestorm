@@ -1633,14 +1633,20 @@
 	</notification>
 	<notification name="PauseForUpdate">
 		Для входа необходима версия [VERSION].
+Примечания к выпуску: [URL]
+
 Нажмите OK для загрузки и установки.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Версия [VERSION] загружена и готова к установке.
+Примечания к выпуску: [URL]
+
 Нажмите OK для установки.
 	</notification>
 	<notification name="PromptOptionalUpdate">
 		Версия [VERSION] загружена и готова к установке.
+Примечания к выпуску: [URL]
+
 Продолжить?
 		<usetemplate canceltext="Не сейчас" name="yesnocancelbuttons" notext="Пропустить" yestext="Установить"/>
 	</notification>
@@ -4879,6 +4885,10 @@ URL: [AUDIOURL]
 			<button name="Deny" text="Отказать"/>
 			<ignore name="ignore" text="Подтвердить отправку кому-либо списка моих текущих ограничений RLV."/>
 		</form>
+	</notification>
+	<notification name="PreferenceControlsDefaults">
+		Вы хотите восстановить значения по умолчанию для элементов управления?
+		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Текущий режим" yestext="Все режимы"/>
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Будут удалены журналы предыдущих разговоров и все резервные копии этих файлов.

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="Caméra" name="lst_action" />
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="Regard en haut" />
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="Regard en bas" />
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="Avance de la caméra" />
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="Recul de la caméra" />
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="Avance rapide de la caméra" />
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="Recul rapide de la caméra" />
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="Rotation de la caméra vers le haut" />
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="Rotation de la caméra vers le bas" />
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="Pan de la caméra vers le haut" />
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="Pan de la caméra vers le bas" />
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="Pan de la caméra à gauche" />
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="Pan de la caméra à droite" />
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="Zoom avant de la caméra" />
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="Zoom arrière de la caméra" />
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="La caméra tourne dans le sens inverse des aiguilles d'une montre" value="Rotation de la caméra vers la gauche" />
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="La caméra tourne dans le sens des aiguilles d'une montre" value="Rotation de la caméra vers la droite" />
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Caméra avant assis" />
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Caméra arrière assis" />
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Rotation de la caméra vers le haut" />
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Rotation de la caméra vers le bas" />
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="La caméra tourne dans le sens inverse des aiguilles d'une montre autour de l'avatar en position assise" value="Rotation vers la gauche" />
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="La caméra tourne dans le sens des aiguilles d'une montre autour de l'avatar en position assise" value="Rotation vers la droite" />
+	</rows>
+</contents>

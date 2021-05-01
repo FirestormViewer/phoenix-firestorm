@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="media_actions">
+		<columns label="Звук и Медиа" name="lst_action"/>
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="Воспроизвести/приостановить мультимедиа"/>
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="Воспроизвести/остановить все мультимедиа"/>
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="Голос"/>
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="Переключить Голос"/>
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="Начать Чат"/>
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="Начать Жест"/>
+	</rows>
+</contents>

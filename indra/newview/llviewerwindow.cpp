@@ -237,12 +237,14 @@
 
 #if LL_WINDOWS
 #include <tchar.h> // For Unicode conversion methods
+#include "llwindowwin32.h" // For AltGr handling
 #endif
 
 #include "utilitybar.h"		// <FS:Zi> Support for the classic V1 style buttons in some skins
 #include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
 #include "llnetmap.h"
 #include "lggcontactsets.h"
+#include "fspanellogin.h"
 
 #include "lltracerecording.h"
 
@@ -2605,7 +2607,6 @@ void LLViewerWindow::shutdownGL()
 LLViewerWindow::~LLViewerWindow()
 {
 	LL_INFOS() << "Destroying Window" << LL_ENDL;
-	gDebugWindowProc = TRUE; // event catching, disable once we figure out cause for exit crashes
 	destroyWindow();
 
 	delete mDebugText;
@@ -2696,6 +2697,14 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 		// round up when converting coordinates to make sure there are no gaps at edge of window
 		LLView::sForceReshape = display_scale_changed;
 		mRootView->reshape(llceil((F32)width / mDisplayScale.mV[VX]), llceil((F32)height / mDisplayScale.mV[VY]));
+        if (display_scale_changed)
+        {
+            // Needs only a 'scale change' update, everything else gets handled by LLLayoutStack::updateClass()
+            // <FS:Ansariel> [FS Login Panel]
+            //LLPanelLogin::reshapePanel();
+            FSPanelLogin::reshapePanel();
+            // </FS:Ansariel> [FS Login Panel]
+        }
 		LLView::sForceReshape = FALSE;
 
 		// clear font width caches
@@ -3183,9 +3192,11 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
         // of character handling.
         // Alt Gr can be additionally modified by Shift
         const MASK alt_gr = MASK_CONTROL | MASK_ALT;
+        LLWindowWin32 *window = static_cast<LLWindowWin32*>(mWindow);
+        U32 raw_key = window->getRawWParam();
         if ((mask & alt_gr) != 0
-            && key >= 0x30
-            && key <= 0x5A
+            && ((raw_key >= 0x30 && raw_key <= 0x5A) //0-9, plus normal chartacters
+                || (raw_key >= 0xBA && raw_key <= 0xE4)) // Misc/OEM characters that can be covered by AltGr, ex: -, =, ~
             && (GetKeyState(VK_RMENU) & 0x8000) != 0
             && (GetKeyState(VK_RCONTROL) & 0x8000) == 0) // ensure right control is not pressed, only left one
         {

@@ -729,11 +729,16 @@ FSPanelSearchPeople::FSPanelSearchPeople() : FSSearchPanelBase()
 , mStartSearch(0)
 , mResultsReceived(0)
 , mResultsContent()
+, mAvatarNameCallbackConnection()
 {
 }
 
 FSPanelSearchPeople::~FSPanelSearchPeople()
 {
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
 }
 
 BOOL FSPanelSearchPeople::postBuild()
@@ -776,6 +781,24 @@ void FSPanelSearchPeople::find()
 		return;
 	}
 
+	if (LLUUID::validate(text))
+	{
+		LLUUID id(text);
+
+		mSearchResults->deleteAllItems();
+		mSearchResults->setCommentText(LLTrans::getString("searching"));
+		mResultsReceived = 0;
+		mNumResultsReturned = 0;
+
+		if (mAvatarNameCallbackConnection.connected())
+		{
+			mAvatarNameCallbackConnection.disconnect();
+		}
+		mAvatarNameCallbackConnection = LLAvatarNameCache::get(id, boost::bind(&FSPanelSearchPeople::onAvatarNameCallback, this, _1, _2));
+
+		return;
+	}
+
 	LLStringUtil::replaceChar(text, '.', ' ');
 
 	mResultsReceived = 0;
@@ -784,7 +807,7 @@ void FSPanelSearchPeople::find()
 		mQueryID.setNull();
 	}
 	mQueryID.generate();
-	
+
 	if (mStartSearch < 0)
 	{
 		mStartSearch = 0;
@@ -993,6 +1016,50 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 		self->onSelectItem();
+	}
+}
+
+void FSPanelSearchPeople::onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name)
+{
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
+
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_people");
+
+	if (av_name.getAccountName() != "(?\?\?).(?\?\?)")
+	{
+		LLSD content;
+		LLSD data;
+		data["id"] = id;
+
+		data["columns"][0]["column"] = "icon";
+		data["columns"][0]["type"] = "icon";
+		data["columns"][0]["value"] = "icon_avatar_offline.tga";
+
+		data["columns"][1]["name"] = "username";
+		data["columns"][1]["value"] = av_name.getUserName();
+
+		content["name"] = av_name.getUserName();
+
+		search_results->addElement(data);
+
+		mResultsContent[id.asString()] = content;
+		mResultsReceived = 1;
+		mNumResultsReturned = 1;
+
+		search_results->setEnabled(TRUE);
+		search_results->selectFirstItem();
+		search_results->setFocus(TRUE);
+		onSelectItem();
+	}
+	else
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = getChild<LLUICtrl>("people_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 }
 

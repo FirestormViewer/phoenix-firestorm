@@ -1131,6 +1131,9 @@ void LLIMModel::LLIMSession::buildHistoryFileName()
 			}
 			// </FS:Ansariel> [Legacy IM logfile names]
 		}
+
+        // user's account name can change, but filenames and session names are account name based
+        LLConversationLog::getInstance()->verifyFilename(mSessionID, mHistoryFileName, av_name.getCompleteName());
 	}
 	else if (isGroupChat())
 	{

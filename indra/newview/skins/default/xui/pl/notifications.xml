@@ -1589,14 +1589,20 @@ Pobierz ją z https://secondlife.com/support/downloads/
 	</notification>
 	<notification name="PauseForUpdate">
 		Do zalogowania się wymagana jest wersja [VERSION].
+Informacje o wydaniu: [URL]
+
 Kliknij OK, aby pobrać i zainstalować.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
+Informacje o wydaniu: [URL]
+
 Kliknij OK, aby zainstalować.
 	</notification>
 	<notification name="PromptOptionalUpdate">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
+Informacje o wydaniu: [URL]
+
 Kontynuować?
 		<usetemplate canceltext="Nie teraz" name="yesnocancelbuttons" notext="Pomiń" yestext="Instaluj" />
 	</notification>
@@ -4767,6 +4773,10 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="PreferenceChatClearLog">
 		Ta opcja usunie dzienniki poprzednich rozmów i wszelkie kopie zapasowe tego pliku.
 		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="PreferenceControlsDefaults">
+		Czy chcesz przywrócić domyślne ustawienia klawiszy sterowania?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Obecny tryb" yestext="Wszystkie tryby" />
 	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
 		Ta opcja usunie logi wszystkich poprzednich rozmów. Nie będzie to miało wpływu na listę rozmów odbytych w przeszłości. Wszystkie pliki z przyrostkami .txt oraz txt.backup w folderze [FOLDER] zostaną usunięte.
