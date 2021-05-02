@@ -73,73 +73,6 @@ static void exceptionTerminateHandler()
 	gOldTerminateHandler(); // call old terminate() handler
 }
 
-// <FS:ND> try to autodected installed pepper flash (Chrome)
-void exportFlashVars()
-{
-	if(	getenv( "FS_FLASH_PLUGIN" ) && getenv( "FS_FLASH_VERSION" ) ) // User already set those enviroment variables in their shell or in the firestorm launcher
-		return;
-
-	char const* pathChecks[] = {
-		"/usr/lib64/chromium-browser/PepperFlash/", // Gentoo
-		"/usr/lib32/chromium-browser/PepperFlash/", // Gentoo
-		"/opt/google/chrome/PepperFlash/", // Mint 17.3 / XBuntu 14.04, probably works with all Ubuntu flavors of that version.
-		"/usr/lib/chromium/PepperFlash/", // Slackware
-		"/usr/lib64/chromium/PepperFlash/", // Slackware
-		"/opt/firestorm/PepperFlash/", // In case someone likes to extract pepperflash from a chrome installer on their own, give them a choice with a predef. directory
-		NULL
-	};
-
-	std::string strExpectedArch = "ia32";
-#if ADDRESS_SIZE == 64
-	strExpectedArch = "x64";
-#endif
-	
-	for( int i = 0; pathChecks[i]; ++i )
-	{
-		std::string strPath = pathChecks[i];
-		std::string strManifest =  strPath + "manifest.json";
-		std::string strPlugin = strPath + "libpepflashplayer.so";
-		if( !LLFile::isfile( strManifest ) )
-			continue;
-		if( !LLFile::isfile( strPlugin ) )
-			continue;
-
-		std::ifstream file;
-		file.open( strManifest, std::ios::in );
-		if( !file.is_open() )
-		{
-			LL_WARNS( "Flash" ) << "Cannot open " << strManifest << LL_ENDL;
-			continue;
-		}
-		
-		Json::Value root;
-		Json::Reader reader;
-		if (!reader.parse(file,root))
-			continue;
-
-		std::string strArch; // ia32 or x64
-		std::string strVersion;
-
-		if( root.isMember( "version" ) )
-			strVersion = root[ "version" ].asString();
-		if( root.isMember( "x-ppapi-arch" ) )
-			strArch = root[ "x-ppapi-arch" ].asString();
-			
-		if( strExpectedArch != strArch )
-		{
-			LL_WARNS( "Flash" ) << "Arch mismatch expecting: " << strExpectedArch << " got: " << strArch << LL_ENDL;
-			continue;
-		}
-
-		LL_INFOS( "Flash" ) << "Arch: " << strArch << " version: " << strVersion << " plugin " << strPlugin << LL_ENDL;
-	
-		setenv( "FS_FLASH_PLUGIN", strPlugin.c_str(), 0 );
-		setenv( "FS_FLASH_VERSION", strVersion.c_str(), 0 );
-		break;
-	}
-}
-// </FS:ND>
-
 int main( int argc, char **argv ) 
 {
 #if LL_SOLARIS && defined(__sparc)
@@ -157,7 +90,6 @@ int main( int argc, char **argv )
 	viewer_app_ptr->setErrorHandler(LLAppViewer::handleViewerCrash);
 
 	unsetenv( "LD_PRELOAD" ); // <FS:ND/> Get rid of any preloading, we do not want this to happen during startup of plugins.
-	exportFlashVars(); // <FS:ND/> Try to autodetect installed pepper flash.
 	
 	bool ok = viewer_app_ptr->init();
 	if(!ok)
