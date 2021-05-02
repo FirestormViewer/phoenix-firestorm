@@ -344,6 +344,7 @@ set(viewer_SOURCE_FILES
     llfloaterdeleteprefpreset.cpp
     llfloaterdestinations.cpp
     llfloaterdisplayname.cpp
+    llfloatereditenvironmentbase.cpp
     llfloatereditextdaycycle.cpp
     llfloaterenvironmentadjust.cpp
     llfloaterevent.cpp
@@ -1115,6 +1116,7 @@ set(viewer_HEADER_FILES
     llfloaterdeleteprefpreset.h
     llfloaterdestinations.h
     llfloaterdisplayname.h
+    llfloatereditenvironmentbase.h
     llfloatereditextdaycycle.h
     llfloaterenvironmentadjust.h
     llfloaterevent.h
@@ -2256,6 +2258,8 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/Release/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll
+      ${SHARED_LIB_STAGING_DIR}/Release/uriparser.dll
+      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/uriparser.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/SLVoice.exe
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libsndfile-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxoal.dll

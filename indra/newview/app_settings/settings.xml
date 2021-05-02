@@ -8326,7 +8326,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://map.secondlife.com.s3.amazonaws.com/</string>
+      <string>https://map.secondlife.com/</string>
     </map>
     <key>CurrentMapServerURL</key>
     <map>
@@ -18845,7 +18845,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Value</key>
             <real>1</real>
         </map>
-    <key>PoolSizeVAssetStorage</key>
+    <key>PoolSizeAssetStorage</key>
         <map>
         <key>Comment</key>
             <string>Coroutine Pool size for AssetStorage requests</string>
