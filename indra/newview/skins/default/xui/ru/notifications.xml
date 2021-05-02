@@ -1633,14 +1633,20 @@
 	</notification>
 	<notification name="PauseForUpdate">
 		Для входа необходима версия [VERSION].
+Примечания к выпуску: [URL]
+
 Нажмите OK для загрузки и установки.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Версия [VERSION] загружена и готова к установке.
+Примечания к выпуску: [URL]
+
 Нажмите OK для установки.
 	</notification>
 	<notification name="PromptOptionalUpdate">
 		Версия [VERSION] загружена и готова к установке.
+Примечания к выпуску: [URL]
+
 Продолжить?
 		<usetemplate canceltext="Не сейчас" name="yesnocancelbuttons" notext="Пропустить" yestext="Установить"/>
 	</notification>

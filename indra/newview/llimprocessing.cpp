@@ -1280,7 +1280,19 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 // group is not blocked, but we still need to check agent that sent the invitation
                 // and we have no agent's id
                 // Note: server sends username "first.last".
-                is_muted |= LLMuteList::getInstance()->isMuted(name);
+                // <FS:Ansariel> Fix broken mute check for avatars without last name:
+                //               Names without last names are stored with capital first letter
+                //               in the mute list, but they arrive here completely in lower case.
+                //               So we need to change the first letter to upper case in order to
+                //               make the mute check actually work.
+                //is_muted |= LLMuteList::getInstance()->isMuted(name);
+                std::string check_name(name);
+                if (!check_name.empty() && check_name.find('.') == std::string::npos)
+                {
+                    check_name[0] = toupper(check_name[0]);
+                }
+                is_muted |= LLMuteList::getInstance()->isMuted(check_name);
+                // </FS:Ansariel>
             }
             if (is_do_not_disturb || is_muted)
             {
