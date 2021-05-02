@@ -7,7 +7,7 @@
 		Boutons de la souris
 	</floater.string>
 	<floater.string name="basic_description">
-		Appuyez sur une touche ou un bouton de la souris pour régler votre déclencheur..
+		Appuyez sur une touche ou un bouton de la souris pour régler votre déclencheur.
 Saisie autorisée : [INPUT].
 	</floater.string>
 	<floater.string name="reserved_by_menu">
@@ -17,7 +17,7 @@ Saisie autorisée : [INPUT].
 		Appuyez sur une touche ou un bouton de la souris pour régler votre déclencheur.
 Saisie autorisée : [INPUT].
 	</text>
-	<check_box label="Appliquer à tous" name="apply_all" tool_tip="Viewer uses different control combinations depending on what you are doing in world, setting this will apply your change to all combinations"/>
+	<check_box label="Appliquer à tous" name="apply_all" tool_tip="La visionneuse utilise différentes combinaisons de commandes en fonction de ce que vous faites en ligne. En cochant cette option, vous appliquerez vos modifications à toutes les combinaisons."/>
 	<button label="Vide" name="SetEmpty"/>
 	<button label="Défaut" name="Default"/>
 	<button label="Annuler" name="Cancel"/>
