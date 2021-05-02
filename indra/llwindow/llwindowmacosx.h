@@ -116,6 +116,8 @@ public:
 	/*virtual*/ void openFile(const std::string& file_name);
 	/*virtual*/ void setTitle(const std::string& title);
 
+	static std::vector<std::string> getDisplaysResolutionList();
+
 	static std::vector<std::string> getDynamicFallbackFontList();
 
 	// Provide native key event data

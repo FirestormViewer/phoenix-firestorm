@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="media_actions">
+		<columns label="Son et médias" name="lst_action" />
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="Lecture/Pause des médias" />
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="Lecture/arrêt de tous les médias" />
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="Chat vocal" />
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="Activer le chat vocal" />
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="Démarrer le chat vocal" />
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="Faire des gestes" />
+	</rows>
+</contents>

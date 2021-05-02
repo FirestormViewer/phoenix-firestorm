@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<columns label="Действие" name="lst_action"/>
+	<columns label="Основное управление" name="lst_ctrl1"/>
+	<columns label="Альтернатива 1" name="lst_ctrl2"/>
+	<columns label="Альтернатива 2" name="lst_ctrl3"/>
+</contents>

@@ -243,7 +243,7 @@ void LLFloaterAvatarPicker::onBtnFindUUID()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResultsUUID");
 	search_results->deleteAllItems();
-	search_results->setCommentText("searching");
+	search_results->setCommentText(getString("searching"));
 
 	if (mFindUUIDAvatarNameCacheConnection.connected())
 	{
