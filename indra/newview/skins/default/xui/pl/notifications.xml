@@ -618,7 +618,7 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 	</notification>
 	<notification name="UnsupportedHardware">
 		Niestety Twój komputer nie spełnia minimalnych wymogów sprzętowych dla poprawnego działania [APP_NAME]. Możesz odczuwać bardzo niską wydajność operacyjną. Niestety, portal pomocy [SUPPORT_SITE] nie jest w stanie zapewnić wsparcia technicznego dla Twojego systemu.
-
+[MINSPECS]
 Odwiedzić [_URL], aby uzyskać więcej informacji?
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
@@ -3830,6 +3830,9 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 	</global>
 	<global name="UnsupportedGPU">
 		- Twoja karta graficzna nie spełnia minimalnych wymagań.
+	</global>
+	<global name="UnsupportedCPU">
+		- Twój procesor nie spełnia minimalnych wymagań.
 	</global>
 	<global name="UnsupportedRAM">
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.
