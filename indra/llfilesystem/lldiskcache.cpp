@@ -79,34 +79,25 @@ void LLDiskCache::purge()
 #else
     std::string cache_path(mCacheDir);
 #endif
-    // <FS:Ansariel> Optimize asset simple disk cache
-    //if (boost::filesystem::is_directory(cache_path))
-    for (S32 i = 0; i < 16; i++)
+    if (boost::filesystem::is_directory(cache_path))
     {
-#if LL_WINDOWS
-        cache_path = cache_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
-#else
-        cache_path = cache_path + gDirUtilp->getDirDelimiter() + subdirs[i];
-#endif
-    // </FS:Ansariel>
-        if (boost::filesystem::is_directory(cache_path))
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path), {}))
         {
-            for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+            if (boost::filesystem::is_regular_file(entry))
             {
-                if (boost::filesystem::is_regular_file(entry))
+                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
-                    {
-                        uintmax_t file_size = boost::filesystem::file_size(entry);
-                        const std::string file_path = entry.path().string();
-                        const std::time_t file_time = boost::filesystem::last_write_time(entry);
+                    uintmax_t file_size = boost::filesystem::file_size(entry);
+                    const std::string file_path = entry.path().string();
+                    const std::time_t file_time = boost::filesystem::last_write_time(entry);
 
-                        file_info.push_back(file_info_t(file_time, { file_size, file_path }));
-                    }
+                    file_info.push_back(file_info_t(file_time, { file_size, file_path }));
                 }
             }
         }
-    } // <FS:Ansariel> Optimize asset simple disk cache
+    }
 
     std::sort(file_info.begin(), file_info.end(), [](file_info_t& x, file_info_t& y)
     {
@@ -309,30 +300,21 @@ void LLDiskCache::clearCache()
 #else
     std::string cache_path(mCacheDir);
 #endif
-    // <FS:Ansariel> Optimize asset simple disk cache
-    //if (boost::filesystem::is_directory(cache_path))
-    for (S32 i = 0; i < 16; i++)
+    if (boost::filesystem::is_directory(cache_path))
     {
-#if LL_WINDOWS
-        cache_path = cache_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
-#else
-        cache_path = cache_path + gDirUtilp->getDirDelimiter() + subdirs[i];
-#endif
-    // </FS:Ansariel>
-        if (boost::filesystem::is_directory(cache_path))
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
         {
-            for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+            if (boost::filesystem::is_regular_file(entry))
             {
-                if (boost::filesystem::is_regular_file(entry))
+                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
-                    {
-                        boost::filesystem::remove(entry);
-                    }
+                    boost::filesystem::remove(entry);
                 }
             }
         }
-    } // <FS:Ansariel> Optimize asset simple disk cache
+    }
 }
 
 uintmax_t LLDiskCache::dirFileSize(const std::string dir)
@@ -353,30 +335,21 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
 #else
     std::string dir_path(dir);
 #endif
-    // <FS:Ansariel> Optimize asset simple disk cache
-    //if (boost::filesystem::is_directory(dir_path))
-    for (S32 i = 0; i < 16; i++)
+    if (boost::filesystem::is_directory(dir_path))
     {
-#if LL_WINDOWS
-        dir_path = dir_path + utf8str_to_utf16str(gDirUtilp->getDirDelimiter() + subdirs[i]);
-#else
-        dir_path = dir_path + gDirUtilp->getDirDelimiter() + subdirs[i];
-#endif
-    // </FS:Ansariel>
-        if (boost::filesystem::is_directory(dir_path))
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path), {}))
         {
-            for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path), {}))
+            if (boost::filesystem::is_regular_file(entry))
             {
-                if (boost::filesystem::is_regular_file(entry))
+                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
-                    {
-                        total_file_size += boost::filesystem::file_size(entry);
-                    }
+                    total_file_size += boost::filesystem::file_size(entry);
                 }
             }
         }
-    } // <FS:Ansariel> Optimize asset simple disk cache
+    }
 
     return total_file_size;
 }
