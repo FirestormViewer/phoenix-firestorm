@@ -636,7 +636,7 @@ O objeto pode estar fora de alcance ou ter sido deletado.
 
 Consultar [_URL] para mais informações?
 		<url name="url" option="0">
-			http://secondlife.com/support/sysreqs.php?lang=pt
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="O hardware do meu computador não é suportado" name="okcancelignore" notext="Não" yestext="Sim"/>
 	</notification>

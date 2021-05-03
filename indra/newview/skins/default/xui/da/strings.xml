@@ -5,7 +5,7 @@
      that are returned from one component and may appear in many places-->
 <strings>
 	<string name="SUPPORT_SITE">
-		Second Life Support Portal
+		Firestorm Support Portal
 	</string>
 	<string name="StartupDetectingHardware">
 		Detekterer hardware...

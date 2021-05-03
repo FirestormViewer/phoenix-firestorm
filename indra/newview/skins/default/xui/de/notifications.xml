@@ -722,7 +722,7 @@ Das Objekt ist möglicherweise außer Reichweite oder wurde gelöscht.
 
 Weitere Informationen finden Sie auf [_URL].
 		<url name="url" option="0">
-			http://secondlife.com/support/sysreqs.php?lang=de
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="Meine Hardware wird nicht unterstützt" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
