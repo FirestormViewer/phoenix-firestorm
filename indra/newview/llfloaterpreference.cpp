@@ -1238,7 +1238,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		// </FS:ND>
 	}
 	// <FS:Zi> Support for tab/subtab links like:
-    //         secondlife:///app/openfloater/preferences?tab=backup
+	//         secondlife:///app/openfloater/preferences?tab=backup
 	//         secondlife:///app/openfloater/preferences?tab=colors&subtab=tab-minimap
 	if (key.has("tab"))
 	{
@@ -1247,14 +1247,16 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		if (key.has("subtab"))
 		{
 			LLTabContainer* tab_containerp = findChild<LLTabContainer>("pref core");
-			LLTabContainer* tabs = tab_containerp->getCurrentPanel()->findChild<LLTabContainer>("tabs");
-
-			if (tabs)
+			if (tab_containerp)
 			{
-				LLPanel* panel = tabs->getPanelByName(key["subtab"]);
-				if (panel)
+				LLTabContainer* tabs = tab_containerp->getCurrentPanel()->findChild<LLTabContainer>("tabs");
+				if (tabs)
 				{
-					tabs->selectTabPanel(panel);
+					LLPanel* panel = tabs->getPanelByName(key["subtab"].asString());
+					if (panel)
+					{
+						tabs->selectTabPanel(panel);
+					}
 				}
 			}
 		}
