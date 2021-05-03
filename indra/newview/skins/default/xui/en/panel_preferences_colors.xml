@@ -17,7 +17,7 @@
 	 bottom="-1"
 	 left="1"
 	 right="-1"
-	 name="color_tabs"
+	 name="tabs"
 	 tab_min_width="50"
 	 tab_position="top" >
 

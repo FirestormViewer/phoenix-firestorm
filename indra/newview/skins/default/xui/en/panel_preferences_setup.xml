@@ -9,10 +9,8 @@
  width="540"
  label="Setup"
  name="Input panel">
-    <!-- <FS:Zi> Do not change the name of this layout stack, it's referenced in LLPanelPreference -->
-    <!-- <FS:PP> However, it seems to be commented out in llfloaterpreference.cpp because of FIRE-6340 and FIRE-6567; Changed to tab container (7 Feb 2015) -->
     <tab_container
-     name="max_bandwidth_layout"
+     name="tabs"
      tab_min_width="50"
      tab_position="top"
      label="Setup"
