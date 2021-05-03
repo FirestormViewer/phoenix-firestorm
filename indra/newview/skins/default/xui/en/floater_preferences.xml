@@ -88,7 +88,7 @@ https://accounts.secondlife.com/change_email/
           layout="topleft"
           left_pad="2"
           top_delta="0"
-          name="stream_copy_btn"
+          name="copy_search_slurl_btn"
           tool_tip="Copy search query as SLURL"
           width="28">
           <button.commit_callback
