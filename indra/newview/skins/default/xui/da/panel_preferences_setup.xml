@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Opsætning" name="Input panel">
-	<tab_container name="max_bandwidth_layout">
+	<tab_container name="tabs">
 		<panel label="Netværk" name="tab-conn">
 			<text name="Maximum bandwidth">
 				Maksimum båndbredde ([http://wiki.firestormviewer.org/fs_speedtest need a suggestion?]):
