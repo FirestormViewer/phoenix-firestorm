@@ -93,7 +93,7 @@ https://accounts.secondlife.com/change_email/
           width="28">
           <button.commit_callback
             function="Pref.CopySearchAsSLURL" />
-	</button>
+        </button>
     </panel>
 
     <tab_container
