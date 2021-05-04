@@ -635,7 +635,7 @@
 
 要造訪 [_URL] 獲取進一步資訊？
 		<url name="url">
-			http://www.secondlife.com/corporate/sysreqs.php
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="我的電腦硬體並不支援" name="okcancelignore" notext="否" yestext="是"/>
 	</notification>

@@ -2839,26 +2839,14 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>open-libndofdev</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>246ed298944fd5200e4cac3703d6e075</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.9.183150124-linux-183150124.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>db8a7126178e7230fd6917a28cd67bd7</string>
+              <string>88fb222412b98a7f371d6bf2ff42a973</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.9.183150121-linux64-183150121.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.211211036-linux64-211211036.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3370,9 +3358,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>df570f2b9c0087438604a8ba4dc37a85</string>
+              <string>0d6832fd958ec127f089e683c9b67169</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/uriparser-0.8.0.1-linux64-180841550.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/uriparser-0.9.4-linux64-211210958.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

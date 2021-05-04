@@ -725,7 +725,7 @@ L$ が不足しているのでこのグループに参加することができ�
 
 [_URL] に移動して確認をしますか？
 		<url name="url" option="0">
-			http://secondlife.com/support/sysreqs.php?lang=ja
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="使用中のコンピューターのハードウェアがサポートされていないとき" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>

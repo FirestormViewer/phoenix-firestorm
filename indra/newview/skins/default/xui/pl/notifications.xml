@@ -619,6 +619,8 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 	<notification name="UnsupportedHardware">
 		Niestety Twój komputer nie spełnia minimalnych wymogów sprzętowych dla poprawnego działania [APP_NAME]. Możesz odczuwać bardzo niską wydajność operacyjną. Niestety, portal pomocy [SUPPORT_SITE] nie jest w stanie zapewnić wsparcia technicznego dla Twojego systemu.
 
+[MINSPECS]
+
 Odwiedzić [_URL], aby uzyskać więcej informacji?
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
@@ -1589,14 +1591,20 @@ Pobierz ją z https://secondlife.com/support/downloads/
 	</notification>
 	<notification name="PauseForUpdate">
 		Do zalogowania się wymagana jest wersja [VERSION].
+Informacje o wydaniu: [URL]
+
 Kliknij OK, aby pobrać i zainstalować.
 	</notification>
 	<notification name="OptionalUpdateReady">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
+Informacje o wydaniu: [URL]
+
 Kliknij OK, aby zainstalować.
 	</notification>
 	<notification name="PromptOptionalUpdate">
 		Wersja [VERSION] została pobrana i jest gotowa do zainstalowania.
+Informacje o wydaniu: [URL]
+
 Kontynuować?
 		<usetemplate canceltext="Nie teraz" name="yesnocancelbuttons" notext="Pomiń" yestext="Instaluj" />
 	</notification>
@@ -3824,6 +3832,9 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 	</global>
 	<global name="UnsupportedGPU">
 		- Twoja karta graficzna nie spełnia minimalnych wymagań.
+	</global>
+	<global name="UnsupportedCPU">
+		- Twój procesor nie spełnia minimalnych wymagań.
 	</global>
 	<global name="UnsupportedRAM">
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.

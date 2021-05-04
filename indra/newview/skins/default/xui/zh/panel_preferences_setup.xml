@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="設定" name="Input panel">
-	<tab_container name="max_bandwidth_layout">
+	<tab_container name="tabs">
 		<panel label="網路" name="tab-conn">
 			<text name="Maximum bandwidth">
 				最大頻寬 ([http://wiki.firestormviewer.org/fs_speedtest 你需要一个建议?]):

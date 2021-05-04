@@ -692,7 +692,7 @@ Nesne aralık dışında ya da silinmiş olabilir.
 
 Daha fazla bilgi için [_URL] adresini ziyaret etmek ister misiniz?
 		<url name="url">
-			http://www.secondlife.com/corporate/sysreqs.php
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="Bilgisayar donanımım desteklenmiyor" name="okcancelignore" notext="Hayır" yestext="Evet"/>
 	</notification>

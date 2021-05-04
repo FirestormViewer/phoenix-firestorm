@@ -67,7 +67,7 @@ https://accounts.secondlife.com/change_email/
          left="0"
          max_length_bytes="255"
          name="search_prefs_edit"
-         right="-1"
+         right="-30"
          text_pad_left="6"
          tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the setting's name or comment."
          top="0">
@@ -82,6 +82,18 @@ https://accounts.secondlife.com/change_email/
           rect.width="12"
           rect.bottom="-1" />
         </search_editor>
+        <button
+          height="18"
+          image_overlay="Copy"
+          layout="topleft"
+          left_pad="2"
+          top_delta="0"
+          name="copy_search_slurl_btn"
+          tool_tip="Copy search query as SLURL"
+          width="28">
+          <button.commit_callback
+            function="Pref.CopySearchAsSLURL" />
+        </button>
     </panel>
 
     <tab_container
