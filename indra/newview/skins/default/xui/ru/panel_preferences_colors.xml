@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Цвета" name="colors_panel">
-	<tab_container label="Настройки цветов" name="color_tabs">
+	<tab_container label="Настройки цветов" name="tabs">
 		<panel label="Цвет чата" name="tab-chat">
 			<text name="font_colors">
 				Сообщения чата:

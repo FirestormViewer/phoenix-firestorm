@@ -1850,11 +1850,13 @@ Unable to write file [[FILE]]
    type="alertmodal">
 Just so you know, your computer may not meet [APP_NAME]&apos;s minimum system requirements. You may experience poor performance. Unfortunately, the [SUPPORT_SITE] can't provide technical support for unsupported system configurations.
 
+[MINSPECS]
+
 Visit [_URL] for more information?
     <tag>confirm</tag>
     <url option="0" name="url">
 
-			http://www.secondlife.com/corporate/sysreqs.php
+			https://wiki.firestormviewer.org/fs_system_requirements
     </url>
     <usetemplate
      ignoretext="My computer hardware is not supported"
@@ -10293,6 +10295,10 @@ If you continue to have problems, please visit the [SUPPORT_SITE].
 
   <global name="UnsupportedGPU">
 - Your graphics card does not meet the minimum requirements.
+  </global>
+
+  <global name="UnsupportedCPU">
+- Your CPU does not meet the minimum requirements.
   </global>
 
   <global name="UnsupportedRAM">

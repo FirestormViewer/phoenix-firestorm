@@ -33,8 +33,8 @@
         (no transfer)
     </floater.string>
     <floater.string
-      name="mupliple_selected">
-        Mupliple selection
+      name="multiple_selected">
+        Multiple selection
     </floater.string>
     <scroll_list
      background_visible="true"
