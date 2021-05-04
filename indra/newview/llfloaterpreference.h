@@ -292,6 +292,9 @@ public:
 	void saveGraphicsPreset(const std::string& preset);
 	// </FS:Ansariel>
 
+	// <FS:Zi> Support preferences search SLURLs
+	void onCopySearch();
+
 private:
 
 	void onDeleteTranscripts();
