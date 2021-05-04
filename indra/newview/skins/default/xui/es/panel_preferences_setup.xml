@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Configuración" name="Input panel">
-	<tab_container name="max_bandwidth_layout">
+	<tab_container name="tabs">
 		<panel label="Conexión" name="tab-conn">
 			<text name="Maximum bandwidth">
 				Ancho de banda máximo ([http://wiki.firestormviewer.org/fs_speedtest qué necesita una sugerencia?]):

@@ -718,9 +718,11 @@ Das Objekt ist möglicherweise außer Reichweite oder wurde gelöscht.
 	<notification name="UnsupportedHardware">
 		Ihr Computer entspricht leider nicht den Mindestanforderungen von [APP_NAME]. Dies kann zur Folge haben, dass das Programm nicht sehr gut ausgeführt wird. Bei nicht unterstützten Systemkonfigurationen kann Ihnen unser [SUPPORT_SITE] leider nicht helfen.
 
+[MINSPECS]
+
 Weitere Informationen finden Sie auf [_URL].
 		<url name="url" option="0">
-			http://secondlife.com/support/sysreqs.php?lang=de
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="Meine Hardware wird nicht unterstützt" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
@@ -3977,6 +3979,9 @@ Möchten Sie die Treiber-Webseite von Intel besuchen?
 	</global>
 	<global name="UnsupportedRAMAmount">
 		510
+	</global>
+	<global name="UnsupportedCPU">
+		- Ihr Prozessor entspricht nicht den Mindestanforderungen.
 	</global>
 	<global name="UnsupportedGPU">
 		- Ihre Grafikkarte entspricht nicht den Mindestanforderungen.

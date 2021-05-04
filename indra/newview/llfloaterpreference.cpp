@@ -142,6 +142,7 @@
 #include "lfsimfeaturehandler.h"
 #include "llaudioengine.h" // <FS:Ansariel> Output device selection
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
+#include "llclipboard.h"	// <FS:Zi> Support preferences search SLURLs
 #include "lleventtimer.h"
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -489,6 +490,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	// <FS:Ansariel> Improved graphics preferences
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreference::updateMaxNonImpostors, this));
 	// </FS:Ansariel>
+
+	// <FS:Zi> Support preferences search SLURLs
+	mCommitCallbackRegistrar.add("Pref.CopySearchAsSLURL",		boost::bind(&LLFloaterPreference::onCopySearch, this));
+	// </FS_ZI>
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -1232,6 +1237,38 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 			tabcontainer->selectFirstTab();
 		// </FS:ND>
 	}
+	// <FS:Zi> Support for tab/subtab links like:
+	//         secondlife:///app/openfloater/preferences?tab=backup
+	//         secondlife:///app/openfloater/preferences?tab=colors&subtab=tab-minimap
+	if (key.has("tab"))
+	{
+		selectPanel(key["tab"]);
+
+		if (key.has("subtab"))
+		{
+			LLTabContainer* tab_containerp = findChild<LLTabContainer>("pref core");
+			if (tab_containerp)
+			{
+				LLTabContainer* tabs = tab_containerp->getCurrentPanel()->findChild<LLTabContainer>("tabs");
+				if (tabs)
+				{
+					LLPanel* panel = tabs->getPanelByName(key["subtab"].asString());
+					if (panel)
+					{
+						tabs->selectTabPanel(panel);
+					}
+				}
+			}
+		}
+	}
+	// Support preferences search SLURLs:
+	// secondlife:///app/openfloater/preferences?search=%23%20of%20lines
+	else if (key.has("search"))
+	{
+		mFilterEdit->setText(key["search"].asString());
+		onUpdateFilterTerm(true);
+	}
+	// </FS:Zi>
 }
 
 void LLFloaterPreference::onRenderOptionEnable()
@@ -2279,6 +2316,14 @@ void LLFloaterPreference::handleDynamicTextureMemoryChanged()
 	}
 }
 // </FS:Ansariel>
+
+// <FS:Zi> Support preferences search SLURLs
+void LLFloaterPreference::onCopySearch()
+{
+	std::string searchQuery = "secondlife:///app/openfloater/preferences?search=" + LLURI::escape(mFilterEdit->getText());
+	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(searchQuery), 0, searchQuery.size());
+}
+// </FS:Zi>
 
 void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 {

@@ -890,11 +890,11 @@ void LLCacheName::Impl::processPendingReplies()
 			{
 				if (reply->mIsGroup)
 				{
-					(reply->mSignal)(reply->mID, "(???)", true);
+					(reply->mSignal)(reply->mID, "(\?\?\?)", true);
 				}
 				else
 				{
-					(reply->mSignal)(reply->mID, "(???).(???)", false);
+					(reply->mSignal)(reply->mID, "(\?\?\?).(\?\?\?)", false);
 				}
 
 				// Assuming we don't need to send a reply to the simulator
