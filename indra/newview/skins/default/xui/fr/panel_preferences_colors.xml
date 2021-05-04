@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Couleurs" name="colors_panel">
-	<tab_container label="Couleurs" name="color_tabs">
+	<tab_container label="Couleurs" name="tabs">
 		<panel label="Couleurs du Chat" name="tab-chat">
 			<text name="font_colors">Messages :</text>
 			<text name="user_label">Mes messages</text>

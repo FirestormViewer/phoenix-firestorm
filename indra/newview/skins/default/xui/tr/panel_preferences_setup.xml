@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ayarlar" name="Input panel">
-	<tab_container name="max_bandwidth_layout">
+	<tab_container name="tabs">
 		<panel label="Ağ" name="tab-conn">
 			<text name="Maximum bandwidth">
 				Maksimum bant genişliği ([http://wiki.firestormviewer.org/fs_speedtest Bir öneri gerekiyor?]):
