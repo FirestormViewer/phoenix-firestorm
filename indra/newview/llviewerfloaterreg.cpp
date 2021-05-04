@@ -228,7 +228,9 @@ public:
 		}
 
 		const std::string floater_name = LLURI::unescape(params[0].asString());
-		LLFloaterReg::showInstance(floater_name);
+		// <FS:Zi> Support passing arguments to opened floater like secondlife:///app/openfloater/{NAME}?tab=msg&subtab=xyz
+		// LLFloaterReg::showInstance(floater_name);
+		LLFloaterReg::showInstance(floater_name, query_map);
 
 		return true;
 	}
