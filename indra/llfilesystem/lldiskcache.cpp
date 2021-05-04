@@ -115,7 +115,15 @@ void LLDiskCache::purge()
         if (file_size_total > mMaxSizeBytes)
         {
             action = "DELETE:";
-            boost::filesystem::remove(entry.second.second);
+            // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
+            //boost::filesystem::remove(entry.second.second);
+            boost::system::error_code ec;
+            boost::filesystem::remove(entry.second.second, ec);
+            if (ec.failed())
+            {
+                LL_WARNS() << "Failed to delete cache file " << entry.second.second << ": " << ec.message() << LL_ENDL;
+            }
+            // </FS:Ansariel>
         }
         else
         {
@@ -310,7 +318,15 @@ void LLDiskCache::clearCache()
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    boost::filesystem::remove(entry);
+                    // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
+                    //boost::filesystem::remove(entry);
+                    boost::system::error_code ec;
+                    boost::filesystem::remove(entry, ec);
+                    if (ec.failed())
+                    {
+                        LL_WARNS() << "Failed to delete cache file " << entry << ": " << ec.message() << LL_ENDL;
+                    }
+                    // </FS:Ansariel>
                 }
             }
         }
