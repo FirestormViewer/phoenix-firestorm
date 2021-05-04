@@ -591,6 +591,7 @@ class LLPanelPreferenceOpensim : public LLPanelPreference
 {
 public:
 	LLPanelPreferenceOpensim();
+	~LLPanelPreferenceOpensim();
 
 #ifdef OPENSIM
 // <FS:AW  grid management>
@@ -599,6 +600,7 @@ public:
 	/*virtual*/ void cancel();
 
 protected:
+	boost::signals2::connection mGridListChangedCallbackConnection;
 
 	void onClickAddGrid();
 	void addedGrid(bool success);

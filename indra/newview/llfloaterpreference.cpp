@@ -6377,7 +6377,8 @@ static LLPanelInjector<LLPanelPreferenceOpensim> t_pref_opensim("panel_preferenc
 
 #ifdef OPENSIM
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
-	mGridListControl(NULL)
+	mGridListControl(NULL),
+	mGridListChangedCallbackConnection()
 {
 	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickClearDebugSearchURL, this));
 	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickPickDebugSearchURL, this));
@@ -6386,6 +6387,14 @@ LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind( &LLPanelPreferenceOpensim::onClickRefreshGrid, this));
 	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind( &LLPanelPreferenceOpensim::onClickRemoveGrid, this));
 	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&LLPanelPreferenceOpensim::onClickSaveGrid, this));
+}
+
+LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
+{
+	if (mGridListChangedCallbackConnection.connected())
+	{
+		mGridListChangedCallbackConnection.disconnect();
+	}
 }
 
 BOOL LLPanelPreferenceOpensim::postBuild()
@@ -6402,6 +6411,7 @@ BOOL LLPanelPreferenceOpensim::postBuild()
 	mEditorGridMessage = findChild<LLLineEditor>("message_edit");
 	mGridListControl = getChild<LLScrollListCtrl>("grid_list");
 	mGridListControl->setCommitCallback(boost::bind(&LLPanelPreferenceOpensim::onSelectGrid, this));
+	mGridListChangedCallbackConnection = LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::addedGrid, this, _1));
 	refreshGridList();
 
 	return LLPanelPreference::postBuild();
@@ -6409,7 +6419,7 @@ BOOL LLPanelPreferenceOpensim::postBuild()
 
 void LLPanelPreferenceOpensim::onSelectGrid()
 {
-	LLSD  grid_info;
+	LLSD grid_info;
 	std::string grid = mGridListControl->getSelectedValue();
 	LLGridManager::getInstance()->getGridData(grid, grid_info);
 	
@@ -6439,13 +6449,11 @@ void LLPanelPreferenceOpensim::cancel()
 
 void LLPanelPreferenceOpensim::onClickAddGrid()
 {
-
 	std::string new_grid = gSavedSettings.getString("OpensimPrefsAddGrid");
 
 	if (!new_grid.empty())
 	{
 		getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
-		LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::addedGrid, this, _1));
 		LLGridManager::getInstance()->addGrid(new_grid);
 	}
 }
@@ -6493,11 +6501,7 @@ void LLPanelPreferenceOpensim::onClickRefreshGrid()
 {
 	std::string grid = mGridListControl->getSelectedValue();
 	getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
-	LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::refreshGridList, this, _1));
-	// <FS:Beq> FIRE-13223 grid info refresh does not update properly when applied to currently active grid
-	// LLGridManager::getInstance()->reFetchGrid(grid);
 	LLGridManager::getInstance()->reFetchGrid(grid, (grid == LLGridManager::getInstance()->getGrid()) );
-	// </FS:Beq>
 }
 
 void LLPanelPreferenceOpensim::onClickRemoveGrid()
@@ -6525,7 +6529,6 @@ bool LLPanelPreferenceOpensim::removeGridCB(const LLSD& notification, const LLSD
 	{
 		std::string grid = notification["payload"].asString();
 		getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
-		/*mGridListChanged =*/ LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::refreshGridList, this, _1));
 		LLGridManager::getInstance()->removeGrid(grid);
 	}
 	return false;
@@ -6593,7 +6596,8 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 void no_cb()
 { }
 
-LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
+LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
+	mGridListChangedCallbackConnection()
 {
 	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&no_cb));
 	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&no_cb));

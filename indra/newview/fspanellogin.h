@@ -114,6 +114,8 @@ private:
 	static std::string credentialName();
 
 private:
+	boost::signals2::connection mGridListChangedCallbackConnection;
+
 	void updateLoginButtons();
 
 	void			(*mCallback)(S32 option, void *userdata);

@@ -184,7 +184,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	mPasswordLength(0),
 	mLocationLength(0),
 	mShowFavorites(false),
-	mInitialized(false)
+	mInitialized(false),
+	mGridListChangedCallbackConnection()
 {
 	setBackgroundVisible(FALSE);
 	setBackgroundOpaque(TRUE);
@@ -387,6 +388,11 @@ void FSPanelLogin::addFavoritesToStartLocation()
 
 FSPanelLogin::~FSPanelLogin()
 {
+	if (mGridListChangedCallbackConnection.connected())
+	{
+		mGridListChangedCallbackConnection.disconnect();
+	}
+
 	FSPanelLogin::sInstance = NULL;
 
 	// Controls having keyboard focus by default
@@ -1113,14 +1119,18 @@ void FSPanelLogin::onSelectServer()
 	LLComboBox* server_combo = getChild<LLComboBox>("server_combo");
 	LLSD server_combo_val = server_combo->getSelectedValue();
 #if OPENSIM && !SINGLEGRID
-	LL_INFOS("AppInit") << "grid "<<(!server_combo_val.isUndefined()?server_combo_val.asString():server_combo->getValue().asString())<< LL_ENDL;
+	LL_INFOS("AppInit") << "grid " << (!server_combo_val.isUndefined() ? server_combo_val.asString() : server_combo->getValue().asString()) << LL_ENDL;
 	if (server_combo_val.isUndefined() && sPendingNewGridURI.empty())
 	{
 		sPendingNewGridURI = server_combo->getValue().asString();
 		LLStringUtil::trim(sPendingNewGridURI);
-		LL_INFOS("AppInit") << "requesting unknown grid "<< sPendingNewGridURI << LL_ENDL;
+		LL_INFOS("AppInit") << "requesting unknown grid " << sPendingNewGridURI << LL_ENDL;
 		// Previously unknown gridname was entered
-		LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&FSPanelLogin::gridListChanged, this, _1));
+		if (mGridListChangedCallbackConnection.connected())
+		{
+			mGridListChangedCallbackConnection.disconnect();
+		}
+		mGridListChangedCallbackConnection = LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&FSPanelLogin::gridListChanged, this, _1));
 		LLGridManager::getInstance()->addGrid(sPendingNewGridURI);
 	}
 	else
@@ -1452,6 +1462,11 @@ std::string FSPanelLogin::credentialName()
 
 void FSPanelLogin::gridListChanged(bool success)
 {
+	if (mGridListChangedCallbackConnection.connected())
+	{
+		mGridListChangedCallbackConnection.disconnect();
+	}
+
 	updateServer();
 	sPendingNewGridURI.clear(); // success or fail we clear the pending URI as we will not get another callback.
 }
