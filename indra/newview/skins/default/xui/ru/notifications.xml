@@ -638,7 +638,7 @@
 
 Найти более подробную информацию на [_URL]?
 		<url name="url">
-			http://www.secondlife.com/corporate/sysreqs.php
+			https://wiki.firestormviewer.org/fs_system_requirements
 		</url>
 		<usetemplate ignoretext="Оборудование моего компьютера не поддерживается" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
