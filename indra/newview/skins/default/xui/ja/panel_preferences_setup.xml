@@ -5,7 +5,7 @@
 		ネットワーク：
 	</text>
 	-->
-	<tab_container name="max_bandwidth_layout" label="セットアップ">
+	<tab_container name="tabs" label="セットアップ">
 		<panel label="接続" name="tab-conn">
 			<text name="Maximum bandwidth">
 				最大帯域幅 ([http://wiki.firestormviewer.org/fs_speedtest 適正な値を設定するには？]):

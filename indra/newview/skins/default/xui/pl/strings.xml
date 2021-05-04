@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<string name="SUPPORT_SITE">
-		Portal Pomocy Second Life
+		Portal Pomocy Firestorma
 	</string>
 	<string name="StartupDetectingHardware">
 		Detekcja konfiguracji sprzętowej...
@@ -1609,6 +1609,9 @@ http://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		Przeciągnij landmark tutaj aby dodać go do swoich ulubionych.
+	</string>
+	<string name="MarketplaceNoListing">
+		Nie masz jeszcze żadnych przedmiotów na Marketplace.
 	</string>
 	<string name="MarketplaceNoMatchingItems">
 		Niczego nie znaleziono. Sprawdź pisownię i spróbuj ponownie.
@@ -4675,10 +4678,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Zablokowałeś/aś tego Rezydenta. Wysłanie wiadomości odblokuje go automatycznie.
 	</string>
 	<string name="generic">
-		Błąd zapytania, proszę spróbować później
+		Zamknij i ponownie otwórz rozmowę - lub przeloguj się i spróbuj ponownie.
 	</string>
 	<string name="generic_request_error">
-		Błąd. Spróbuj ponownie za kilka minut.
+		Zamknij i ponownie otwórz rozmowę - lub przeloguj się i spróbuj ponownie.
 	</string>
 	<string name="insufficient_perms_error">
 		Nie masz wystarczających uprawnień.
