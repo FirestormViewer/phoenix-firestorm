@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Сеть и файлы" name="Input panel">
-	<tab_container name="max_bandwidth_layout">
+	<tab_container name="tabs">
 		<panel label="Подключение" name="tab-conn">
 			<text name="Maximum bandwidth">
 				Максимальная пропускная способность ([http://wiki.firestormviewer.org/fs_speedtest Нужны подсказки?] (На английском)):
