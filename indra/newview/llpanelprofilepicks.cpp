@@ -43,6 +43,7 @@
 #include "llpanelavatar.h"
 #include "llpanelprofile.h"
 #include "llparcel.h"
+#include "llstartup.h"
 #include "lltabcontainer.h"
 #include "lltextbox.h"
 #include "lltexteditor.h"

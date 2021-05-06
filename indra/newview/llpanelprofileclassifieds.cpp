@@ -48,6 +48,7 @@
 #include "llparcel.h"
 #include "llregistry.h"
 #include "llscrollcontainer.h"
+#include "llstartup.h"
 #include "llstatusbar.h"
 #include "lltabcontainer.h"
 #include "lltexteditor.h"
