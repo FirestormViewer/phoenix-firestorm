@@ -735,6 +735,7 @@ LLAppViewer* LLAppViewer::sInstance = NULL;
 LLTextureCache* LLAppViewer::sTextureCache = NULL;
 LLImageDecodeThread* LLAppViewer::sImageDecodeThread = NULL;
 LLTextureFetch* LLAppViewer::sTextureFetch = NULL;
+FSPurgeDiskCacheThread* LLAppViewer::sPurgeDiskCacheThread = NULL; // <FS:Ansariel> Regular disk cache cleanup
 
 std::string getRuntime()
 {
@@ -2442,6 +2443,7 @@ bool LLAppViewer::cleanup()
 	sTextureFetch->shutdown();
 	sTextureCache->shutdown();
 	sImageDecodeThread->shutdown();
+	sPurgeDiskCacheThread->shutdown(); // <FS:Ansariel> Regular disk cache cleanup
 
 	sTextureFetch->shutDownTextureCacheThread() ;
 	sTextureFetch->shutDownImageDecodeThread() ;
@@ -2464,6 +2466,10 @@ bool LLAppViewer::cleanup()
     sImageDecodeThread = NULL;
 	delete mFastTimerLogThread;
 	mFastTimerLogThread = NULL;
+	// <FS:Ansariel> Regular disk cache cleanup
+	delete sPurgeDiskCacheThread;
+	sPurgeDiskCacheThread = NULL;
+	// </FS:Ansariel>
 
 	if (LLFastTimerView::sAnalyzePerformance)
 	{
@@ -2584,6 +2590,7 @@ bool LLAppViewer::initThreads()
 													sImageDecodeThread,
 													enable_threads && true,
 													app_metrics_qa_mode);
+	LLAppViewer::sPurgeDiskCacheThread = new FSPurgeDiskCacheThread(); // <FS:Ansariel> Regular disk cache cleanup
 
 	if (LLTrace::BlockTimer::sLog || LLTrace::BlockTimer::sMetricLog)
 	{
@@ -5059,6 +5066,8 @@ bool LLAppViewer::initCache()
 			LLDiskCache::getInstance()->purge();
 		}
 	}
+	// <FS:Ansariel> Regular disk cache cleanup
+	LLAppViewer::getPurgeDiskCacheThread()->start();
 
 	// <FS:Ansariel> FIRE-13066
 	if (mPurgeTextures && !read_only)

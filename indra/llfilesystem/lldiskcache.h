@@ -188,4 +188,17 @@ class LLDiskCache :
         bool mEnableCacheDebugInfo;
 };
 
+// <FS:Ansariel> Regular disk cache cleanup
+class FSPurgeDiskCacheThread : public LLThread
+{
+public:
+    FSPurgeDiskCacheThread::FSPurgeDiskCacheThread();
+
+protected:
+    void run() override;
+
+private:
+    LLTimer mTimer;
+};
+// </FS:Ansariel>
 #endif // _LLDISKCACHE
