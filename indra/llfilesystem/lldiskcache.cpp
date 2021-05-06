@@ -43,7 +43,9 @@
 static const char* subdirs = "0123456789abcdef";
 
 LLDiskCache::LLDiskCache(const std::string cache_dir,
-                         const int max_size_bytes,
+                         // <FS:Ansariel> Fix integer overflow
+                         //const int max_size_bytes,
+                         const uintmax_t max_size_bytes,
                          const bool enable_cache_debug_info) :
     mCacheDir(cache_dir),
     mMaxSizeBytes(max_size_bytes),

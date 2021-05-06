@@ -4969,7 +4969,9 @@ bool LLAppViewer::initCache()
     const unsigned int cache_total_size_mb = gSavedSettings.getU32("CacheSize");
     const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
     const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
-    const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+    // <FS:Ansariel> Fix integer overflow
+    //const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024 * 1024;
 	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableCacheDebugInfo");
 	// <FS:Ansariel> Don't ignore cache path for asset cache; Moved further down until cache path has been set correctly
 	//const std::string cache_dir = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name);
