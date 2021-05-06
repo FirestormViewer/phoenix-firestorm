@@ -43,7 +43,6 @@
 #include "lllineeditor.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
-#include "llstartup.h"
 #include "llpanelavatar.h"
 #include "llparcel.h"
 #include "llregistry.h"
