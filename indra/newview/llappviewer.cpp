@@ -4966,9 +4966,12 @@ bool LLAppViewer::initCache()
 
     // note that the maximum size of this cache is defined as a percentage of the 
     // total cache size - the 'CacheSize' pref - for all caches. 
-    const unsigned int cache_total_size_mb = gSavedSettings.getU32("CacheSize");
-    const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
-    const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
+    // <FS:Ansariel> Better asset cache size control
+    //const unsigned int cache_total_size_mb = gSavedSettings.getU32("CacheSize");
+    //const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
+    //const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
+    const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
+    // </FS:Ansariel>
     // <FS:Ansariel> Fix integer overflow
     //const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
     const uintmax_t disk_cache_bytes = disk_cache_mb * 1024 * 1024;

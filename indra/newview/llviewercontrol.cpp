@@ -92,6 +92,7 @@
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "llavataractions.h"
+#include "lldiskcache.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"
@@ -1062,6 +1063,15 @@ void handlePlayBentoIdleAnimationChanged(const LLSD& newValue)
 }
 // </FS:Zi>
 
+// <FS:Ansariel> Better asset cache size control
+void handleDiskCacheSizeChanged(const LLSD& newValue)
+{
+	const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
+	const U64 disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+	LLDiskCache::getInstance()->setMaxSiteBytes(disk_cache_bytes);
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1316,6 +1326,9 @@ void settings_setup_listeners()
 
 	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 	gSavedSettings.getControl("FSPlayDefaultBentoAnimation")->getSignal()->connect(boost::bind(&handlePlayBentoIdleAnimationChanged, _2));
+
+	// <FS:Ansariel> Better asset cache size control
+	gSavedSettings.getControl("FSDiskCacheSize")->getSignal()->connect(boost::bind(&handleDiskCacheSizeChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

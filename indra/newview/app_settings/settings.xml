@@ -2933,7 +2933,7 @@
     <key>DiskCachePercentOfTotal</key>
     <map>
       <key>Comment</key>
-      <string>The percent of total cache size (defined by CacheSize) to use for the disk cache</string>
+      <string>The percent of total cache size (defined by CacheSize) to use for the disk cache (UNUSED)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -2951,6 +2951,17 @@
       <string>String</string>
       <key>Value</key>
       <string>cache</string>
+    </map>
+    <key>FSDiskCacheSize</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls amount of hard drive space reserved for local asset caching in MB</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>2048</integer>
     </map>
     <key>CacheLocation</key>
     <map>
@@ -2988,7 +2999,7 @@
     <key>CacheSize</key>
     <map>
       <key>Comment</key>
-      <string>Controls amount of hard drive space reserved for local file caching in MB</string>
+      <string>Controls amount of hard drive space reserved for local texture caching in MB</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
