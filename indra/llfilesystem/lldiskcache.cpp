@@ -64,7 +64,7 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
 
 void LLDiskCache::purge()
 {
-    if (mEnableCacheDebugInfo)
+    //if (mEnableCacheDebugInfo)
     {
         LL_INFOS() << "Total dir size before purge is " << dirFileSize(mCacheDir) << LL_ENDL;
     }
@@ -104,7 +104,7 @@ void LLDiskCache::purge()
         return x.first > y.first;
     });
 
-    LL_INFOS() << "Purging cache to a maximum of " << mMaxSizeBytes << " bytes" << LL_ENDL;
+    //LL_INFOS() << "Purging cache to a maximum of " << mMaxSizeBytes << " bytes" << LL_ENDL;
 
     uintmax_t file_size_total = 0;
     for (file_info_t& entry : file_info)
@@ -144,7 +144,7 @@ void LLDiskCache::purge()
         }
     }
 
-    if (mEnableCacheDebugInfo)
+    //if (mEnableCacheDebugInfo)
     {
         auto end_time = std::chrono::high_resolution_clock::now();
         auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
