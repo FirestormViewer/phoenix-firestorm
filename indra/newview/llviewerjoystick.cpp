@@ -555,12 +555,16 @@ void LLViewerJoystick::updateStatus()
 
 	ndof_update(mNdofDev);
 
-	for (int i=0; i<6; i++)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// for (int i=0; i<6; i++)
+	for (int i = 0; i < MAX_JOYSTICK_AXES; i++)
 	{
 		mAxes[i] = (F32) mNdofDev->axes[i] / mNdofDev->axes_max;
 	}
 
-	for (int i=0; i<16; i++)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// for (int i=0; i<16; i++)
+	for (int i = 0; i < MAX_JOYSTICK_BUTTONS; i++)
 	{
 		mBtn[i] = mNdofDev->buttons[i];
 	}
@@ -571,7 +575,9 @@ void LLViewerJoystick::updateStatus()
 // -----------------------------------------------------------------------------
 F32 LLViewerJoystick::getJoystickAxis(U32 axis) const
 {
-	if (axis < 6)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// if (axis < 6)
+	if (axis < MAX_JOYSTICK_AXES)
 	{
 		return mAxes[axis];
 	}
@@ -581,7 +587,9 @@ F32 LLViewerJoystick::getJoystickAxis(U32 axis) const
 // -----------------------------------------------------------------------------
 U32 LLViewerJoystick::getJoystickButton(U32 button) const
 {
-	if (button < 16)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// if (button < 16)
+	if (button < MAX_JOYSTICK_BUTTONS)
 	{
 		return mBtn[button];
 	}
@@ -1510,3 +1518,25 @@ void LLViewerJoystick::setSNDefaults()
 	gSavedSettings.setF32("BuildFeathering", 12.f);
 	gSavedSettings.setF32("FlycamFeathering", 5.f);
 }
+
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+U32 LLViewerJoystick::getNumOfJoystickAxes() const
+{
+#if LIB_NDOF
+	// return number of axes or the maximum supported number of axes, whichever is smaller
+	return llmin((U32) mNdofDev->axes_count, (U32) MAX_JOYSTICK_AXES);
+#else
+	return MAX_JOYSTICK_AXES;
+#endif
+}
+
+U32 LLViewerJoystick::getNumOfJoystickButtons() const
+{
+#if LIB_NDOF
+	// return number of buttons or the maximum supported number of buttons, whichever is smaller
+	return llmin((U32) mNdofDev->btn_count, (U32) MAX_JOYSTICK_BUTTONS);
+#else
+	return MAX_JOYSTICK_BUTTONS;
+#endif
+}
+// </FS:Zi>
