@@ -36,6 +36,14 @@
 #define NDOF_HotPlugResult S32
 #endif
 
+// <FS:Zi> FIRE-14344 - Using the same numbers all over the place is a bad idea, so let's
+//                      define them here in case we need to change them at some point. Better
+//                      would be to have it all figured out at runtime, but a lot of the code
+//                      expects a fixed size of options, so that needs bigger changes :/
+#define MAX_JOYSTICK_AXES		8
+#define MAX_JOYSTICK_BUTTONS	16
+// </FS:Zi>
+
 typedef enum e_joystick_driver_state
 {
 	JDS_UNINITIALIZED,
@@ -93,8 +101,12 @@ protected:
 #endif
 	
 private:
-	F32						mAxes[6];
-	long					mBtn[16];
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+//	F32						mAxes[6];
+//	long					mBtn[16];
+	F32						mAxes[MAX_JOYSTICK_AXES];
+	long					mBtn[MAX_JOYSTICK_BUTTONS];
+// </FS:Zi>
 	EJoystickDriverState	mDriverState;
 	NDOF_Device				*mNdofDev;
 	bool					mResetFlag;
@@ -106,6 +118,12 @@ private:
 	
 	static F32				sLastDelta[7];
 	static F32				sDelta[7];
+
+// FIRE-14344 - Add button preview and allow for more than 6 axes
+public:
+	U32 getNumOfJoystickAxes() const;
+	U32 getNumOfJoystickButtons() const;
+// </FS.Zi>
 };
 
 #endif
