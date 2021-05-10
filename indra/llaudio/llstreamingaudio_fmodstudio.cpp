@@ -155,11 +155,22 @@ void LLStreamingAudio_FMODSTUDIO::update()
     bool diskbusy;
     FMOD_OPENSTATE open_state;
 
-    if (Check_FMOD_Error(mCurrentInternetStreamp->getOpenState(open_state, &progress, &starving, &diskbusy), "FMOD::Sound::getOpenState") || open_state == FMOD_OPENSTATE_ERROR)
+    // <FS:Ansariel> Verbose stream playback error logging
+    //if (Check_FMOD_Error(mCurrentInternetStreamp->getOpenState(open_state, &progress, &starving, &diskbusy), "FMOD::Sound::getOpenState") || open_state == FMOD_OPENSTATE_ERROR)
+    if (Check_FMOD_Error(mCurrentInternetStreamp->getOpenState(open_state, &progress, &starving, &diskbusy), "FMOD::Sound::getOpenState"))
+    // </FS:Ansariel>
     {
         stop();
         return;
     }
+    // <FS:Ansariel> Verbose stream playback error logging
+    else if (open_state == FMOD_OPENSTATE_ERROR)
+    {
+        LL_WARNS() << "Internet stream openstate error: progress = " << progress << " - starving = " << starving << " - diskbusy = " << diskbusy << LL_ENDL;
+        stop();
+        return;
+    }
+    // </FS:Ansariel>
     else if (open_state == FMOD_OPENSTATE_READY)
     {
         // Stream is live
