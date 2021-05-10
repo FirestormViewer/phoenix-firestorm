@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloatergrouptitles.h"
+#include "fscommon.h"
 #include "llfiltereditor.h"
 #include "llgroupactions.h"
 #include "llscrolllistctrl.h"
@@ -103,6 +104,17 @@ BOOL FSFloaterGroupTitles::postBuild()
 	refreshGroupTitles();
 
 	return TRUE;
+}
+
+BOOL FSFloaterGroupTitles::handleKeyHere(KEY key, MASK mask)
+{
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
+	{
+		mFilterEditor->setFocus(TRUE);
+		return true;
+	}
+
+	return LLFloater::handleKeyHere(key, mask);
 }
 
 void FSFloaterGroupTitles::changed(LLGroupChange gc)

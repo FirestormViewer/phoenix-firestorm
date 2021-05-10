@@ -199,10 +199,18 @@ BOOL FSFloaterContacts::tick()
 
 BOOL FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
 {
-	if (FSCommon::isFilterEditorKeyCombo(key, mask) && getActiveTabName() == FRIENDS_TAB_NAME && gSavedSettings.getBOOL("FSContactListShowSearch"))
+	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		mFriendFilter->setFocus(TRUE);
-		return TRUE;
+		if (getActiveTabName() == FRIENDS_TAB_NAME && gSavedSettings.getBOOL("FSContactListShowSearch"))
+		{
+			mFriendFilter->setFocus(TRUE);
+			return TRUE;
+		}
+		else if (getActiveTabName() == GROUP_TAB_NAME)
+		{
+			mGroupFilter->setFocus(TRUE);
+			return true;
+		}
 	}
 
 	if (mask == MASK_CONTROL && key == 'W' && getHost())

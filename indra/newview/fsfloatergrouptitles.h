@@ -58,6 +58,8 @@ public:
 	virtual ~FSFloaterGroupTitles();
 
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	virtual void changed(LLGroupChange gc);
 	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
