@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloatergrouptitles.h"
+#include "llfiltereditor.h"
 #include "llgroupactions.h"
 #include "llscrolllistctrl.h"
 #include "lltrans.h"
@@ -34,7 +35,7 @@
 /////////////////////////////////////////////////////
 // FSGroupTitlesObserver class
 //
-FSGroupTitlesObserver::FSGroupTitlesObserver(const LLGroupData& group_data, FSFloaterGroupTitles* parent) :
+FSGroupTitlesObserver::FSGroupTitlesObserver(const LLGroupData& group_data, LLHandle<FSFloaterGroupTitles> parent) :
 	LLGroupMgrObserver(group_data.mID),
 	mGroupData(group_data),
 	mParent(parent)
@@ -49,9 +50,9 @@ FSGroupTitlesObserver::~FSGroupTitlesObserver()
 
 void FSGroupTitlesObserver::changed(LLGroupChange gc)
 {
-	if (mParent)
+	if (!mParent.isDead())
 	{
-		mParent->processGroupTitleResults(mGroupData);
+		mParent.get()->processGroupTitleResults(mGroupData);
 	}
 }
 
@@ -60,7 +61,9 @@ void FSGroupTitlesObserver::changed(LLGroupChange gc)
 // FSGroupTitles class
 //
 FSFloaterGroupTitles::FSFloaterGroupTitles(const LLSD& key) :
-	LLFloater(key)
+	LLFloater(key),
+	mFilterSubString(LLStringUtil::null),
+	mFilterSubStringOrig(LLStringUtil::null)
 {
 	// Register observer and event listener
 	LLGroupMgr::getInstance()->addObserver(this);
@@ -85,14 +88,17 @@ BOOL FSFloaterGroupTitles::postBuild()
 	mRefreshButton = getChild<LLButton>("btnRefresh");
 	mInfoButton = getChild<LLButton>("btnInfo");
 	mTitleList = getChild<LLScrollListCtrl>("title_list");
+	mFilterEditor = getChild<LLFilterEditor>("filter_input");
 
 	mActivateButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
 	mRefreshButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::refreshGroupTitles, this));
 	mInfoButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::openGroupInfo, this));
 	mTitleList->setDoubleClickCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
 	mTitleList->setCommitCallback(boost::bind(&FSFloaterGroupTitles::selectedTitleChanged, this));
+	mFilterEditor->setCommitCallback(boost::bind(&FSFloaterGroupTitles::onFilterEdit, this, _2));
 
 	mTitleList->sortByColumn("title_sort_column", TRUE);
+	mTitleList->setFilterColumn(0);
 
 	refreshGroupTitles();
 
@@ -231,7 +237,7 @@ void FSFloaterGroupTitles::refreshGroupTitles()
 	for (std::vector<LLGroupData>::iterator it = gAgent.mGroups.begin(); it != gAgent.mGroups.end(); ++it)
 	{
 		LLGroupData& group_data = *it;
-		FSGroupTitlesObserver* roleObserver = new FSGroupTitlesObserver(group_data, this);
+		FSGroupTitlesObserver* roleObserver = new FSGroupTitlesObserver(group_data, getDerivedHandle<FSFloaterGroupTitles>());
 		mGroupTitleObserverMap[group_data.mID] = roleObserver;
 		LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);
 	}
@@ -255,4 +261,23 @@ void FSFloaterGroupTitles::openGroupInfo()
 		LLUUID group_id = selected_item->getColumn(mTitleList->getColumn("group_id")->mIndex)->getValue().asUUID();
 		LLGroupActions::show(group_id);
 	}
+}
+
+void FSFloaterGroupTitles::onFilterEdit(const std::string& search_string)
+{
+	mFilterSubStringOrig = search_string;
+	LLStringUtil::trimHead(mFilterSubStringOrig);
+	// Searches are case-insensitive
+	std::string search_upper = mFilterSubStringOrig;
+	LLStringUtil::toUpper(search_upper);
+
+	if (mFilterSubString == search_upper)
+	{
+		return;
+	}
+
+	mFilterSubString = search_upper;
+
+	// Apply new filter.
+	mTitleList->setFilterString(mFilterSubStringOrig);
 }
