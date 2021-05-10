@@ -20,7 +20,7 @@
 	 value="No friends" />
     <string
      name="no_filtered_groups_msg"
-     value="Didn't find what you're looking for? Try [secondlife:///app/search/groups/[SEARCH_TERM] Search]." />
+     value="No groups containing &quot;[SEARCH_TERM]&quot; found." />
 	<string
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />

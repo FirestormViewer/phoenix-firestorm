@@ -72,6 +72,7 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mFriendsList(NULL),
 	mGroupList(NULL),
 	mFriendFilter(NULL),
+	mGroupFilter(NULL),
 	mFriendFilterSubString(LLStringUtil::null),
 	mFriendFilterSubStringOrig(LLStringUtil::null),
 	mAllowRightsChange(true),
@@ -153,7 +154,10 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupsTab->childSetAction("titles_btn",	boost::bind(&FSFloaterContacts::onGroupTitlesButtonClicked,		this));
 	mGroupsTab->childSetAction("invite_btn",	boost::bind(&FSFloaterContacts::onGroupInviteButtonClicked,		this));
 	mGroupsTab->setDefaultBtn("chat_btn");
-	
+
+	mGroupFilter = mGroupsTab->getChild<LLFilterEditor>("group_filter_input");
+	mGroupFilter->setCommitCallback(boost::bind(&FSFloaterContacts::onGroupFilterEdit, this, _2));
+
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
 	gSavedSettings.getControl("FSFriendListFullNameFormat")->getSignal()->connect(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
@@ -1356,5 +1360,16 @@ void FSFloaterContacts::resetFriendFilter()
 {
 	mFriendFilter->setText(LLStringUtil::null);
 	onFriendFilterEdit("");
+}
+
+void FSFloaterContacts::onGroupFilterEdit(const std::string& search_string)
+{
+	mGroupList->setNameFilter(search_string);
+}
+
+void FSFloaterContacts::resetGroupFilter()
+{
+	mGroupFilter->setText(LLStringUtil::null);
+	onGroupFilterEdit("");
 }
 // EOF
