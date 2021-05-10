@@ -106,6 +106,13 @@ BOOL FSFloaterGroupTitles::postBuild()
 	return TRUE;
 }
 
+void FSFloaterGroupTitles::onOpen(const LLSD& key)
+{
+	LLFloater::onOpen(key);
+
+	mTitleList->setFocus(TRUE);
+}
+
 BOOL FSFloaterGroupTitles::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
