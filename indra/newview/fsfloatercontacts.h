@@ -67,7 +67,6 @@ public:
 	void					sortFriendList();
 	void					onDisplayNameChanged();
 	void					resetFriendFilter();
-	void					resetGroupFilter();
 
 private:
 	typedef std::vector<LLScrollListItem*> listitem_vec_t;

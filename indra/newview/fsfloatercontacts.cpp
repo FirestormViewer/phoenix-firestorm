@@ -1366,10 +1366,4 @@ void FSFloaterContacts::onGroupFilterEdit(const std::string& search_string)
 {
 	mGroupList->setNameFilter(search_string);
 }
-
-void FSFloaterContacts::resetGroupFilter()
-{
-	mGroupFilter->setText(LLStringUtil::null);
-	onGroupFilterEdit("");
-}
 // EOF
