@@ -866,7 +866,9 @@ void LLFloaterModelPreview::draw()
 	{
 		if ( mModelPreview->getLoadState() == LLModelLoader::ERROR_MATERIALS )
 		{
-			childSetTextArg("status", "[STATUS]", getString("status_material_mismatch"));
+			// <FS:Beq> cleanup/improve errors - this error is effectively duplicated, the unused one was actually better
+			// childSetTextArg("status", "[STATUS]", getString("status_material_mismatch"));
+			childSetTextArg("status", "[STATUS]", getString("mesh_status_invalid_material_list"));
 		}
 		else
 		if ( mModelPreview->getLoadState() > LLModelLoader::ERROR_MODEL )
@@ -877,6 +879,13 @@ void LLFloaterModelPreview::draw()
 		if ( mModelPreview->getLoadState() == LLModelLoader::ERROR_PARSING )
 		{
 			childSetTextArg("status", "[STATUS]", getString("status_parse_error"));
+			toggleCalculateButton(false);
+		}
+		// <FS:Beq> improve error reporting
+		else
+		if ( mModelPreview->getLoadState() == LLModelLoader::ERROR_LOD_MODEL_MISMATCH )
+		{
+			childSetTextArg("status", "[STATUS]", getString("status_lod_model_mismatch"));
 			toggleCalculateButton(false);
 		}
         else

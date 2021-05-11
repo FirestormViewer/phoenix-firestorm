@@ -644,14 +644,15 @@ void LLModelPreview::rebuildUploadData()
             }
             if (!found_model && mModel[lod][model_ind] && !mModel[lod][model_ind]->mSubmodelID)
             {
-                if (mImporterDebug)
+                // <FS:Beq> this is not debug, this is an important/useful error advisory
+                // if (mImporterDebug) 
                 {
                     std::ostringstream out;
                     out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
                     LL_INFOS() << out.str() << LL_ENDL;
                     LLFloaterModelPreview::addStringToLog(out, true);
                 }
-                load_state = LLModelLoader::ERROR_MATERIALS;
+                load_state = LLModelLoader::ERROR_LOD_MODEL_MISMATCH;
                 mFMP->childDisable("calculate_btn");
             }
         }
