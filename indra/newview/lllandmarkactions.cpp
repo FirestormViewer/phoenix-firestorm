@@ -327,11 +327,18 @@ void LLLandmarkActions::getSLURLfromPosGlobalAndLocal(const LLVector3d& global_p
 // </FS:Beq>
 void LLLandmarkActions::getSLURLfromPosGlobal(const LLVector3d& global_pos, slurl_callback_t cb, bool escaped /* = true */)
 {
-	std::string sim_name;
-	bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal(global_pos, sim_name);
-	if (gotSimName)
+	// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+	//std::string sim_name;
+	//bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal(global_pos, sim_name);
+	//if (gotSimName)
+	//{
+	//  std::string slurl = LLSLURL(sim_name, global_pos).getSLURLString();
+
+	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(global_pos);
+	if (sim_info)
 	{
-	  std::string slurl = LLSLURL(sim_name, global_pos).getSLURLString();
+		std::string slurl = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), global_pos).getSLURLString();
+	// </FS:Beq pp Oren>
 		cb(slurl);
 
 		return;
@@ -389,19 +396,34 @@ void LLLandmarkActions::onRegionResponseSLURL(slurl_callback_t cb,
 										 bool escaped,
 										 const std::string& url)
 {
-	std::string sim_name;
+// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+//	std::string sim_name;
+//	std::string slurl;
+//	bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal(global_pos, sim_name);
+//	if (gotSimName)
+//	{
+//		// <FS:Ansariel> Debug...
+//		if (sim_name.empty())
+//		{
+//			LL_WARNS() << "Requested sim name is empty!" << LL_ENDL;
+//		}
+//		// </FS:Ansariel>
+//	  slurl = LLSLURL(sim_name, global_pos).getSLURLString();
+//	}
+
 	std::string slurl;
-	bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal(global_pos, sim_name);
-	if (gotSimName)
+	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(global_pos);
+	if (sim_info)
 	{
 		// <FS:Ansariel> Debug...
-		if (sim_name.empty())
+		if (sim_info->getName().empty())
 		{
 			LL_WARNS() << "Requested sim name is empty!" << LL_ENDL;
 		}
 		// </FS:Ansariel>
-	  slurl = LLSLURL(sim_name, global_pos).getSLURLString();
+		slurl = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), global_pos).getSLURLString();
 	}
+// </FS:Beq pp Oren>
 	else
 	{
 		slurl = "";

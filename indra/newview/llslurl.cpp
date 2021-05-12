@@ -363,10 +363,16 @@ LLSLURL::LLSLURL(const std::string& grid,
 
 // create a slurl from a global position
 LLSLURL::LLSLURL(const std::string& region, 
+		 const LLVector3d& region_origin,	// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
 		 const LLVector3d& global_position)
 {
-  *this = LLSLURL(LLGridManager::getInstance()->getGridId(),
-		  region, global_position);
+	*this = LLSLURL(LLGridManager::getInstance()->getGridId(),
+		// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+		//   region, global_position);
+		  region,
+		  region_origin,
+		  global_position);
+		// </FS:Beq pp Oren>
 }
 
 LLSLURL::LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb)
