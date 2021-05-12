@@ -25661,5 +25661,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+  <key>FSImageDecodeThreads</key>
+  <map>
+    <key>Comment</key>
+    <string>Amount of threads to use for image decoding. 0 = autodetect, 1 = 0ff, >1 number of threads. Needs restart</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>1</integer>
   </map>
+</map>
 </llsd>
