@@ -1384,10 +1384,6 @@ std::string LLGridManager::getAppSLURLBase(const std::string& grid)
 	{
 		ret = mGridList[grid][GRID_APP_SLURL_BASE].asString();
 	}
-	else if (grid == INWORLDZ_URI)
-	{
-		ret = "inworldz:///app";
-	}
 	else
 	{
 		std::string app_base;

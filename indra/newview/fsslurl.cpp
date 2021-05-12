@@ -59,11 +59,6 @@ const char* LLSLURL::SLURL_REGION_PATH           = "region";
 const char* LLSLURL::SIM_LOCATION_HOME           = "home";
 const char* LLSLURL::SIM_LOCATION_LAST           = "last";
 
-// Inworldz special
-const char* LLSLURL::SLURL_INWORLDZ_SCHEME       = "inworldz";
-const char* LLSLURL::SLURL_IW_SCHEME             = "iw";
-const char* LLSLURL::PLACES_INWORLDZ_COM         = "places.inworldz.com";
-
 // resolve a simstring from a slurl
 LLSLURL::LLSLURL(const std::string& slurl)
 : mHypergrid(false)
@@ -244,55 +239,6 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				path_array.insert(0, slurl_uri.hostNameAndPort());
 			}
 		}
-		else if (slurl_uri.scheme() == LLSLURL::SLURL_INWORLDZ_SCHEME ||
-			slurl_uri.scheme() == LLSLURL::SLURL_IW_SCHEME)
-		{
-			LL_DEBUGS("SLURL") << "inworldz scheme" << LL_ENDL;
-
-			mGrid = INWORLDZ_URI;
-			
-			if (path_array[0].asString() == LLSLURL::SLURL_APP_PATH)
-			{
-				// it's in the form iw://<grid>/(app)
-				// so parse the grid name to derive the grid ID
-				if (!slurl_uri.hostNameAndPort().empty())
-				{
-					LL_DEBUGS("SLURL") << "(inworldz|iw)://<grid>/app" << LL_ENDL;
-
-					mGrid = LLGridManager::getInstance()->getGridByProbing(slurl_uri.hostNameAndPort());
-					if (mGrid.empty())
-					{
-						mGrid = LLGridManager::getInstance()->getGridByProbing(slurl_uri.hostName());
-					}
-				}
-				else if (path_array[0].asString() == LLSLURL::SLURL_APP_PATH)
-				{
-					LL_DEBUGS("SLURL") << "(inworldz|iw):///app" << LL_ENDL;
-
-					// for app style slurls, where no grid name is specified, assume the currently
-					// selected or logged in grid.
-					mGrid = LLGridManager::getInstance()->getGridId();
-				}
-				
-				if (mGrid.empty() && LLStartUp::getStartupState() == STATE_STARTED)
-				{
-					// we couldn't find the grid in the grid manager, so bail
-					LL_WARNS("SLURL")<<"unable to find grid"<<LL_ENDL;
-					return;
-				}
-
-				mType = APP;
-				path_array.erase(0);
-			}
-			else
-			{
-				// it wasn't a /inworldz/<region> or /app/<params>, so it must be iw://<region>
-				// therefore the hostname will be the region name, and it's a location type
-				mType = LOCATION;
-				// 'normalize' it so the region name is in fact the head of the path_array
-				path_array.insert(0, slurl_uri.hostName());
-			}
-		}
 		else if((slurl_uri.scheme() == LLSLURL::SLURL_HTTP_SCHEME)
 		        || (slurl_uri.scheme() == LLSLURL::SLURL_HTTPS_SCHEME)
 		        || (slurl_uri.scheme() == LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME)
@@ -308,13 +254,6 @@ LLSLURL::LLSLURL(const std::string& slurl)
 					mGrid = MAINGRID;
 				else
 					mGrid = default_grid;
-			}
-			// places.inworldz.com isn't your regular everyday slurl
-			else if (slurl_uri.hostName() == LLSLURL::PLACES_INWORLDZ_COM)
-			{
-				// likewise, places.inworldz.com implies inworldz and a location
-				mGrid = INWORLDZ_URI;
-				mType = LOCATION;
 			}
 			else
 			{
@@ -402,7 +341,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				LL_DEBUGS("SLURL") << "It's a location hop"  << LL_ENDL;
 				mType = LOCATION;
 			}
-			else if (slurl_uri.hostName() != LLSLURL::PLACES_INWORLDZ_COM)
+			else
 			{
 				LL_DEBUGS("SLURL") << "Not a valid https/http/x-grid-location-info slurl " <<  slurl << LL_ENDL;
 				// not a valid https/http/x-grid-location-info slurl, so it'll likely just be a URL
