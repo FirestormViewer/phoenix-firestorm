@@ -59,7 +59,7 @@ public:
 
 		auto status = pReq->getStatus();
 
-		return status  == LLQueuedThread::STATUS_INPROGRESS || status == LLQueuedThread::STATUS_INPROGRESS;
+		return status  == LLQueuedThread::STATUS_QUEUED || status == LLQueuedThread::STATUS_INPROGRESS;
 	}
 
 	bool runCondition()
