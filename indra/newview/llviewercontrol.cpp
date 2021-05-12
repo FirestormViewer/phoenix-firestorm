@@ -1068,7 +1068,7 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 {
 	const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
 	const U64 disk_cache_bytes = disk_cache_mb * 1024 * 1024;
-	LLDiskCache::getInstance()->setMaxSiteBytes(disk_cache_bytes);
+	LLDiskCache::getInstance()->setMaxSizeBytes(disk_cache_bytes);
 }
 // </FS:Ansariel>
 

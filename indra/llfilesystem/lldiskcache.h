@@ -144,7 +144,7 @@ class LLDiskCache :
         const std::string getCacheInfo();
 
         // <FS:Ansariel> Better asset cache size control
-        void setMaxSiteBytes(uintmax_t size) { mMaxSizeBytes = size; }
+        void setMaxSizeBytes(uintmax_t size) { mMaxSizeBytes = size; }
 
     private:
         /**
