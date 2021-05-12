@@ -94,6 +94,7 @@ public:
 	 * @brief Creates SLURL for given global position.
 	 */
 	static void getSLURLfromPosGlobal(const LLVector3d& global_pos, slurl_callback_t cb, bool escaped = true);
+	static void getSLURLfromPosGlobalAndLocal(const LLVector3d& global_pos, const LLVector3& region_pos, slurl_callback_t cb, bool escaped = true);// <FS:Beq> FIRE-30534 - changes related to var regions in opensim
 
 	static void getRegionNameAndCoordsFromPosGlobal(const LLVector3d& global_pos, region_name_and_coords_callback_t cb);
 

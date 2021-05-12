@@ -286,7 +286,45 @@ void LLLandmarkActions::createLandmarkHere()
 
 	createLandmarkHere(landmark_name, landmark_desc, folder_id);
 }
+// <FS:Beq> FIRE-30534 - changes related to var regions in opensim
+void LLLandmarkActions::getSLURLfromPosGlobalAndLocal(const LLVector3d& global_pos, const LLVector3& region_pos, slurl_callback_t cb, bool escaped /* = true */)
+{
+	std::string sim_name;
+	LLVector3d tmp_global_pos{global_pos};
+	tmp_global_pos.mdV[VX] -= region_pos.mV[VX];
+	tmp_global_pos.mdV[VY] -= region_pos.mV[VY];
+	tmp_global_pos.mdV[VZ] -= region_pos.mV[VZ];
 
+	bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal(tmp_global_pos, sim_name);
+	if (gotSimName)
+	{
+	  std::string slurl = LLSLURL(sim_name, region_pos).getSLURLString();
+		cb(slurl);
+		return;
+	}
+	else
+	{
+		auto regionp = gAgent.getRegion();
+		U64 new_region_handle{};
+		if(regionp)
+		{
+			new_region_handle = to_region_handle( tmp_global_pos, regionp->getOriginGlobal(), regionp->getWidth() );
+		}
+		else
+		{
+			new_region_handle = to_region_handle( tmp_global_pos );
+		}
+
+		LLWorldMapMessage::url_callback_t url_cb = boost::bind(&LLLandmarkActions::onRegionResponseSLURL,
+														cb,
+														global_pos,
+														escaped,
+														_2);
+
+		LLWorldMapMessage::getInstance()->sendHandleRegionRequest(new_region_handle, url_cb, std::string("unused"), false);
+	}
+}
+// </FS:Beq>
 void LLLandmarkActions::getSLURLfromPosGlobal(const LLVector3d& global_pos, slurl_callback_t cb, bool escaped /* = true */)
 {
 	std::string sim_name;
@@ -300,8 +338,19 @@ void LLLandmarkActions::getSLURLfromPosGlobal(const LLVector3d& global_pos, slur
 	}
 	else
 	{
-		U64 new_region_handle = to_region_handle(global_pos);
-
+		// <FS:Beq> FIRE-30534 - changes related to var regions in opensim
+		// U64 new_region_handle = to_region_handle(global_pos);
+		auto regionp = gAgent.getRegion();
+		U64 new_region_handle{};
+		if(regionp)
+		{
+			new_region_handle = to_region_handle( global_pos, regionp->getOriginGlobal(), regionp->getWidth() );
+		}
+		else
+		{
+			new_region_handle = to_region_handle( global_pos );
+		}
+		// </FS:Beq>
 		LLWorldMapMessage::url_callback_t url_cb = boost::bind(&LLLandmarkActions::onRegionResponseSLURL,
 														cb,
 														global_pos,
@@ -413,7 +462,12 @@ void LLLandmarkActions::copySLURLtoClipboard(const LLUUID& landmarkInventoryItem
 	{
 		LLVector3d global_pos;
 		landmark->getGlobalPos(global_pos);
-		LLLandmarkActions::getSLURLfromPosGlobal(global_pos,&copy_slurl_to_clipboard_callback,true);
+		// <FS:Beq> FIRE-30534 - changes related to var regions in opensim
+		// LLLandmarkActions::getSLURLfromPosGlobal(global_pos,&copy_slurl_to_clipboard_callback,true);
+		LLVector3 region_pos;
+		region_pos = landmark->getRegionPos();
+		LLLandmarkActions::getSLURLfromPosGlobalAndLocal(global_pos, region_pos, &copy_slurl_to_clipboard_callback,true);
+		// </FS:Beq>
 	}
 }
 
