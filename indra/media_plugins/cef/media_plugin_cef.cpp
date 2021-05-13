@@ -526,16 +526,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mCEFLib->setOnJSDialogCallback(std::bind(&MediaPluginCEF::onJSDialogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 				
 				dullahan::dullahan_settings settings;
-#if LL_WINDOWS
-				// As of CEF version 83+, for Windows versions, we need to tell CEF 
-				// where the host helper process is since this DLL is not in the same
-				// dir as the executable that loaded it (SLPlugin.exe). The code in 
-				// Dullahan that tried to figure out the location automatically uses 
-				// the location of the exe which isn't helpful so we tell it explicitly.
-				char cur_dir_str[MAX_PATH];
-				GetCurrentDirectoryA(MAX_PATH, cur_dir_str);
-				settings.host_process_path = std::string(cur_dir_str);
-#endif
 				settings.accept_language_list = mHostLanguage;
 				settings.background_color = 0xffffffff;
 				settings.cache_enabled = true;
@@ -984,7 +974,7 @@ void MediaPluginCEF::checkEditState()
 void MediaPluginCEF::setVolume()
 {
 	//mVolumeCatcher.setVolume(mCurVolume);
-#if 0// (DULLAHAN_VERSION_MAJOR*100 + DULLAHAN_VERSION_MINOR) >= 108
+#if (DULLAHAN_VERSION_MAJOR*100 + DULLAHAN_VERSION_MINOR) >= 108
 	mCEFLib->setVolume(mCurVolume);
 #else
 	mVolumeCatcher.setVolume(mCurVolume);
