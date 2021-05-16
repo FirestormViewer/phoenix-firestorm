@@ -116,9 +116,9 @@ void LLVfxManager::runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams)
 	     endEffect = boost::make_filter_iterator(pred, m_Effects.end(), m_Effects.end());
 	while (itEffect != endEffect)
 	{
-		LLVisualEffect* pEffect = *itEffect;
+		LLVisualEffect* pEffect = *itEffect++;
 		if (pParams)
-			pParams->step(++itEffect == endEffect);
+			pParams->step(itEffect == endEffect);
 		pEffect->run(pParams);
 	}
 }
