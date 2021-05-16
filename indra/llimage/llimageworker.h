@@ -31,6 +31,9 @@
 #include "llpointer.h"
 #include "llworkerthread.h"
 
+ // <FS:ND/> Image thread pool
+class PoolWorkerThread;
+
 class LLImageDecodeThread : public LLQueuedThread
 {
 public:
@@ -50,9 +53,10 @@ public:
 	public:
 		ImageRequest(handle_t handle, LLImageFormatted* image,
 					 U32 priority, S32 discard, BOOL needs_aux,
-					 LLImageDecodeThread::Responder* responder);
+					 LLImageDecodeThread::Responder* responder, LLImageDecodeThread *aQueue);
 
 		/*virtual*/ bool processRequest();
+		bool processRequestIntern();
 		/*virtual*/ void finishRequest(bool completed);
 
 		// Used by unit tests to check the consitency of the request instance
@@ -66,13 +70,18 @@ public:
 		// output
 		LLPointer<LLImageRaw> mDecodedImageRaw;
 		LLPointer<LLImageRaw> mDecodedImageAux;
+		LLImageDecodeThread * mQueue; // <FS:ND> Image thread pool from CoolVL
 		BOOL mDecodedRaw;
 		BOOL mDecodedAux;
 		LLPointer<LLImageDecodeThread::Responder> mResponder;
 	};
 	
 public:
-	LLImageDecodeThread(bool threaded = true);
+	// <FS:ND> Image thread pool from CoolVL
+	//LLImageDecodeThread(bool threaded = true);
+	LLImageDecodeThread(bool threaded = true, U32 aSubThreads = 0 );
+	// </FS:ND>
+
 	virtual ~LLImageDecodeThread();
 
 	handle_t decodeImage(LLImageFormatted* image,
@@ -99,6 +108,11 @@ private:
 	typedef std::list<creation_info> creation_list_t;
 	creation_list_t mCreationList;
 	LLMutex* mCreationMutex;
+
+	// <FS:ND> Image thread pool from CoolVL
+	std::vector< std::shared_ptr< PoolWorkerThread > > mThreadPool;
+	bool enqueRequest(ImageRequest*);
+	// <FS:ND>
 };
 
 #endif
