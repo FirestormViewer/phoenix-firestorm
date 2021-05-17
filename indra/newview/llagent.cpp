@@ -4586,7 +4586,19 @@ bool LLAgent::teleportBridgeLocal(LLVector3& pos_local)
 
 bool LLAgent::teleportBridgeGlobal(const LLVector3d& pos_global)
 {
-	U64 region_handle = to_region_handle(pos_global);
+	// <FS:Beq> FIRE-30534 VarRegion fixes
+	// U64 region_handle = to_region_handle(pos_global);
+	U64 region_handle{};
+	auto regionp = getRegion();
+	if(regionp)
+	{
+		region_handle = to_region_handle(pos_global, regionp->getOriginGlobal(), regionp->getWidth());
+	}
+	else
+	{
+		region_handle = to_region_handle(pos_global);
+	}
+	// </FS:Beq>
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 
 	return teleportBridgeLocal(pos_local);
@@ -5064,23 +5076,83 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 	{
 		return;
 	}
+	// <FS:Beq> FIRE-30534 Var Region tp / map locaton fixes
+// 	U64 handle = to_region_handle(pos_global);
+// 	bool isLocal = (regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY]));
+// 	LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
+// 	if(regionp && info)
+// 	{
+// 		LLVector3d region_origin = info->getGlobalOrigin();
+// 		LLVector3 pos_local(
+// 			(F32)(pos_global.mdV[VX] - region_origin.mdV[VX]),
+// 			(F32)(pos_global.mdV[VY] - region_origin.mdV[VY]),
+// 			(F32)(pos_global.mdV[VZ]));
+// // <FS:CR> Aurora-sim var region teleports
+// 		//teleportRequest(handle, pos_local);
+// 		teleportRequest(info->getHandle(), pos_local);
+// // </FS:CR>
+// 	}
+// 	else if(regionp && teleportCore(isLocal))
+// 	{
+// 		// send the message
+// 		LLMessageSystem* msg = gMessageSystem;
+// 		msg->newMessageFast(_PREHASH_TeleportLocationRequest);
+// 		msg->nextBlockFast(_PREHASH_AgentData);
+// 		msg->addUUIDFast(_PREHASH_AgentID, getID());
+// 		msg->addUUIDFast(_PREHASH_SessionID, getSessionID());
 
-	U64 handle = to_region_handle(pos_global);
-	bool isLocal = (regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY]));
-	LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
-	if(regionp && info)
+// 		msg->nextBlockFast(_PREHASH_Info);
+// 		// <FS:Ansariel> FIRE-17262: Wrong local teleports on a large opensim region (apparently need to divide by grid unit size)
+// 		F32 width = REGION_WIDTH_METERS;// regionp->getWidth();
+// 		LLVector3 pos(fmod((F32)pos_global.mdV[VX], width),
+// 					  fmod((F32)pos_global.mdV[VY], width),
+// 					  (F32)pos_global.mdV[VZ]);
+// 		F32 region_x = (F32)(pos_global.mdV[VX]);
+// 		F32 region_y = (F32)(pos_global.mdV[VY]);
+// 		U64 region_handle = to_region_handle_global(region_x, region_y);
+// 		msg->addU64Fast(_PREHASH_RegionHandle, region_handle);
+// 		msg->addVector3Fast(_PREHASH_Position, pos);
+// 		pos.mV[VX] += 1;
+// 		msg->addVector3Fast(_PREHASH_LookAt, pos);
+
+// 		LL_WARNS("Teleport") << "Sending deprecated(?) TeleportLocationRequest."
+// 							 << " pos_global " << pos_global
+// 							 << " region_x " << region_x
+// 							 << " region_y " << region_y
+// 							 << " region_handle " << region_handle
+// 							 << LL_ENDL; 
+
+// 		sendReliableMessage();
+	auto region_origin { regionp->getOriginGlobal() };
+	LLVector3 pos_local{};
+	U64 handle { to_region_handle(pos_global, region_origin, regionp->getWidth()) };
+	bool is_local { regionp->getHandle() == handle };
+	if(is_local)
 	{
-		LLVector3d region_origin = info->getGlobalOrigin();
-		LLVector3 pos_local(
+		pos_local.set(
 			(F32)(pos_global.mdV[VX] - region_origin.mdV[VX]),
 			(F32)(pos_global.mdV[VY] - region_origin.mdV[VY]),
 			(F32)(pos_global.mdV[VZ]));
-// <FS:CR> Aurora-sim var region teleports
-		//teleportRequest(handle, pos_local);
-		teleportRequest(info->getHandle(), pos_local);
-// </FS:CR>
+		LL_INFOS("Teleport") << "Local in-region TP:"
+							 << " pos_global " << pos_global
+							 << " region " << region_origin
+							 << " local " << pos_local
+							 << " region_handle " << handle
+							 << LL_ENDL;
 	}
-	else if(regionp && teleportCore(isLocal))
+	else
+	{
+		// determine non-local region location as best we can using global coords
+		// In SL we have uniform region size. This is normal.
+		// In opensim the handle will resolve to a 256m quantised world tile which the server maps back to a region
+		// it "should" also compensate for the local coords. Handle has been "correctly" determined already so we use global % 256
+		static const auto width{LLWorld::getInstance()->getRegionWidthInMeters()};
+		pos_local.set( fmod((F32)pos_global.mdV[VX], width),
+					   fmod((F32)pos_global.mdV[VY], width),
+					   (F32)pos_global.mdV[VZ] );
+	}
+
+	if(teleportCore(is_local)) // Rather a pointless if as teleportCore currently always returns true
 	{
 		// send the message
 		LLMessageSystem* msg = gMessageSystem;
@@ -5090,30 +5162,23 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		msg->addUUIDFast(_PREHASH_SessionID, getSessionID());
 
 		msg->nextBlockFast(_PREHASH_Info);
-		// <FS:Ansariel> FIRE-17262: Wrong local teleports on a large opensim region (apparently need to divide by grid unit size)
-		F32 width = REGION_WIDTH_METERS;// regionp->getWidth();
-		LLVector3 pos(fmod((F32)pos_global.mdV[VX], width),
-					  fmod((F32)pos_global.mdV[VY], width),
-					  (F32)pos_global.mdV[VZ]);
-		F32 region_x = (F32)(pos_global.mdV[VX]);
-		F32 region_y = (F32)(pos_global.mdV[VY]);
-		U64 region_handle = to_region_handle_global(region_x, region_y);
-		msg->addU64Fast(_PREHASH_RegionHandle, region_handle);
-		msg->addVector3Fast(_PREHASH_Position, pos);
-		pos.mV[VX] += 1;
-		msg->addVector3Fast(_PREHASH_LookAt, pos);
-
-		LL_WARNS("Teleport") << "Sending deprecated(?) TeleportLocationRequest."
-							 << " pos_global " << pos_global
-							 << " region_x " << region_x
-							 << " region_y " << region_y
-							 << " region_handle " << region_handle
-							 << LL_ENDL; 
+		msg->addU64Fast(_PREHASH_RegionHandle, handle);
+		msg->addVector3Fast(_PREHASH_Position, pos_local);
+		pos_local.mV[VX] += 1;
+		msg->addVector3Fast(_PREHASH_LookAt, pos_local);
 
 		sendReliableMessage();
+		LL_INFOS("Teleport") << "Sending deprecated TeleportLocationRequest."
+							 << " pos_global " << pos_global
+							 << " region coord (" << (pos_global.mdV[VX] - pos_local.mV[VX])
+							 << "," << (pos_global.mdV[VY] - pos_local.mV[VY])
+							 << " pos_local " << pos_local
+							 << ") region_handle " << handle
+							 << LL_ENDL; 
+	// </FS:Beq>
 	}
 // <FS:TT> Client LSL Bridge
-	if (FSLSLBridge::instance().canUseBridge() && isLocal)
+	if (FSLSLBridge::instance().canUseBridge() && is_local)
 	{
 		teleportBridgeGlobal(pos_global);
 	}
@@ -5154,6 +5219,37 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global, const LLVe
 //}
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
+// <FS:Beq> FIRE-30534 VarRegion TP fixes
+// void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global, const LLVector3& look_at)
+// {
+// 	mbTeleportKeepsLookAt = look_at.isExactlyZero();
+
+// 	if(!gAgentCamera.isfollowCamLocked())
+// 	{
+// 		gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);	// detach camera form avatar, so it keeps direction
+// 	}
+
+// 	U64 region_handle = to_region_handle(pos_global);
+// // <FS:CR> Aurora-sim var region teleports
+// 	LLSimInfo* simInfo = LLWorldMap::instance().simInfoFromHandle(region_handle);
+// 	if (simInfo)
+// 	{
+// 		region_handle = simInfo->getHandle();
+// 	}
+// // </FS:CR>
+// 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
+// 	teleportRequest(region_handle, pos_local, look_at);
+
+// // <FS:TT> Client LSL Bridge
+// 	if (FSLSLBridge::instance().canUseBridge())
+// 	{
+// 		if (region_handle == to_region_handle(getPositionGlobal()))
+// 		{
+// 			teleportBridgeLocal(pos_local);
+// 		}
+// 	}
+// // </FS:TT>
+// }
 void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global, const LLVector3& look_at)
 {
 	mbTeleportKeepsLookAt = look_at.isExactlyZero();
@@ -5163,28 +5259,34 @@ void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global, const LL
 		gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);	// detach camera form avatar, so it keeps direction
 	}
 
-	U64 region_handle = to_region_handle(pos_global);
-// <FS:CR> Aurora-sim var region teleports
-	LLSimInfo* simInfo = LLWorldMap::instance().simInfoFromHandle(region_handle);
-	if (simInfo)
+	U64 region_handle{};
+	auto regionp = getRegion();
+	if(regionp)
 	{
-		region_handle = simInfo->getHandle();
+		region_handle = to_region_handle(pos_global, regionp->getOriginGlobal(), regionp->getWidth());
 	}
-// </FS:CR>
-	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
-	teleportRequest(region_handle, pos_local, look_at);
+	else
+	{
+		region_handle = to_region_handle(pos_global);
+	}
+// Beq Note: if region_handle was obtained to the nearest 256m tile map lookup might give us a better result.
+
+	LLVector3 pos_within_target_region = (LLVector3)(pos_global - from_region_handle(region_handle));
+	teleportRequest(region_handle, pos_within_target_region, look_at);
 
 // <FS:TT> Client LSL Bridge
-	if (FSLSLBridge::instance().canUseBridge())
+	if ( FSLSLBridge::instance().canUseBridge() )
 	{
-		if (region_handle == to_region_handle(getPositionGlobal()))
+		// refresh regionp 
+		regionp = getRegion();
+		if( regionp && ( region_handle == regionp->getHandle() ) ) 
 		{
-			teleportBridgeLocal(pos_local);
+			teleportBridgeLocal(pos_within_target_region);
 		}
 	}
 // </FS:TT>
 }
-
+// </FS:Beq>
 LLAgent::ETeleportState	LLAgent::getTeleportState() const
 {
     return (mTeleportRequest && (mTeleportRequest->getStatus() == LLTeleportRequest::kFailed)) ? 

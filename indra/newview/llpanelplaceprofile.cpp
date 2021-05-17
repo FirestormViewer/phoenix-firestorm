@@ -410,9 +410,14 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 	parcel_data.name = parcel->getName();
 	parcel_data.sim_name = region->getName();
 	parcel_data.snapshot_id = parcel->getSnapshotID();
-	mPosRegion.setVec((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
-					  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
-					  (F32)pos_global.mdV[VZ]);
+	// <FS:Beq> FIRE-30768, FIRE-30534 more OS Var region fixups
+	// mPosRegion.setVec((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
+	// 				  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
+	// 				  (F32)pos_global.mdV[VZ]);
+	auto region_origin = region->getOriginGlobal();
+	mPosRegion.setVec(LLVector3(pos_global - region_origin));
+	LL_DEBUGS("SLURL") << "LM INFO: global " << pos_global << " region_orig " << region_origin << " pos_region " << mPosRegion << LL_ENDL;
+	// </FS:Beq>
 	parcel_data.global_x = pos_global.mdV[VX];
 	parcel_data.global_y = pos_global.mdV[VY];
 	parcel_data.global_z = pos_global.mdV[VZ];

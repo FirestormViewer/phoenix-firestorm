@@ -679,7 +679,10 @@ void LLFloaterExperienceProfile::onClickLocation()
     if(region)
     {
         LLTextBox* child = getChild<LLTextBox>(EDIT TF_SLURL);
-		mLocationSLURL = LLSLURL(region->getName(), gAgent.getPositionGlobal()).getSLURLString();
+        // <FS:Beq> FIRE-30768: SLURL's don't work in VarRegions (Patch from Oren)
+        //mLocationSLURL = LLSLURL(region->getName(), gAgent.getPositionGlobal()).getSLURLString();
+        mLocationSLURL = LLSLURL(region->getName(), region->getOriginGlobal(), gAgent.getPositionGlobal()).getSLURLString();
+        // </FS:Beq>
         child->setText(mLocationSLURL);
         onFieldChanged();
     }
