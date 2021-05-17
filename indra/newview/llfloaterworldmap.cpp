@@ -713,10 +713,16 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 	{
 		return;
 	}
-
-	LLVector3 pos_region((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
-					  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
-					  (F32)pos_global.mdV[VZ]);
+	// <FS:Beq> VarRegion slurl shenanigans
+	// agent_x = ll_round(region_pos.mV[VX]);
+	// agent_y = ll_round(region_pos.mV[VY]);
+	// agent_z = ll_round(region_pos.mV[VZ]);
+	// LLVector3 pos_region((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
+	// 				  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
+	// 				  (F32)pos_global.mdV[VZ]);
+	auto region_origin = region->getOriginGlobal();
+	auto pos_region = LLVector3(pos_global - region_origin);
+	// </FS:Beq>
 
 	LLSD body;
 	std::string url = region->getCapability("RemoteParcelRequest");
