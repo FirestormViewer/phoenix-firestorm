@@ -71,8 +71,12 @@ public:
 	LLSLURL(const std::string& grid, const std::string& region);
 	LLSLURL(const std::string& region, const LLVector3& position);
 	LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position);
-	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position);
-	LLSLURL(const std::string& region, const LLVector3d& global_position);
+	// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+	// LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position);
+	// LLSLURL(const std::string& region, const LLVector3d& global_position);
+	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& region_origin, const LLVector3d& global_position);
+	LLSLURL(const std::string& region, const LLVector3d& region_origin, const LLVector3d& global_position);
+	// </FS:Beq pp Oren>
 	LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb);
 	
 	SLURL_TYPE getType() const { return mType; }

@@ -34,6 +34,7 @@
 #include "llinventory.h"
 #include "lllandmark.h"
 #include "llparcel.h"
+#include "llregionhandle.h" // <FS:Beq/> Var region support
 
 #include "llcombobox.h"
 #include "llfiltereditor.h"
@@ -486,6 +487,14 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 					mPosGlobal = LLVector3d(key["x"].asReal(),
 											key["y"].asReal(),
 											key["z"].asReal());
+					// <FS:Beq> Var region support
+					if(key.has("ox"))
+					{
+						auto region_handle = to_region_handle(key["ox"].asInteger(), key["oy"].asInteger());
+						mPlaceProfile->displayParcelInfo(LLUUID(), region_handle, mPosGlobal);
+					}
+					else
+					// </FS:Beq>
 					mPlaceProfile->displayParcelInfo(LLUUID(), mPosGlobal);
 				}
 

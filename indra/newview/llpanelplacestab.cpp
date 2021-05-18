@@ -60,14 +60,20 @@ void LLPanelPlacesTab::onRegionResponse(const LLVector3d& landmark_global_pos,
 										const LLUUID& snapshot_id,
 										bool teleport)
 {
-	std::string sim_name;
-	bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal( landmark_global_pos, sim_name );
+	// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+	//std::string sim_name;
+	//bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal( landmark_global_pos, sim_name );
+	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(landmark_global_pos);
 
 	std::string sl_url;
-	if ( gotSimName )
+	//if ( gotSimName )
+	if (sim_info)
 	{
-		sl_url = LLSLURL(sim_name, landmark_global_pos).getSLURLString();
+		//sl_url = LLSLURL(sim_name, landmark_global_pos).getSLURLString();
+		sl_url = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), landmark_global_pos).getSLURLString();
 	}
+	// </FS:Beq pp Oren>
+
 	else
 	{
 		sl_url = "";

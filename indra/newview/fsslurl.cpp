@@ -469,29 +469,46 @@ LLSLURL::LLSLURL(const std::string& region, const LLVector3& position, bool hype
 	*this = LLSLURL(LLGridManager::getInstance()->getGrid(), region, position);
 }
 
+// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
 // create a slurl from a global position
-LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hypergrid)
-: mHypergrid(hypergrid)
-{
+//LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hypergrid)
+//: mHypergrid(hypergrid)
+//{
 // <FS:CR> Aurora-sim var region teleports
 	//*this = LLSLURL(grid,
 	//	  region, LLVector3(global_position.mdV[VX],
 	//			    global_position.mdV[VY],
 	//			    global_position.mdV[VZ]));
-	S32 x = ll_round( (F32)fmod( (F32)global_position.mdV[VX], (F32)REGION_WIDTH_METERS ) );
-	S32 y = ll_round( (F32)fmod( (F32)global_position.mdV[VY], (F32)REGION_WIDTH_METERS ) );
-	S32 z = ll_round( (F32)global_position.mdV[VZ] );
+//	S32 x = ll_round( (F32)fmod( (F32)global_position.mdV[VX], (F32)REGION_WIDTH_METERS ) );
+//	S32 y = ll_round( (F32)fmod( (F32)global_position.mdV[VY], (F32)REGION_WIDTH_METERS ) );
+//	S32 z = ll_round( (F32)global_position.mdV[VZ] );
 
-	*this = LLSLURL(grid, region, LLVector3(x, y, z));
+//	*this = LLSLURL(grid, region, LLVector3(x, y, z));
 // </FS:CR>
+//}
+//
+// create a slurl from a global position
+//LLSLURL::LLSLURL(const std::string& region, const LLVector3d& global_position, bool hypergrid)
+//: mHypergrid(hypergrid)
+//{
+//	*this = LLSLURL(LLGridManager::getInstance()->getGrid(), region, global_position);
+//}
+
+// create a slurl from a global position
+LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& region_origin, const LLVector3d& global_position, bool hypergrid)
+	: mHypergrid(hypergrid)
+{
+	LLVector3 local_position = LLVector3(global_position - region_origin);
+	*this = LLSLURL(grid, region, local_position);
 }
 
 // create a slurl from a global position
-LLSLURL::LLSLURL(const std::string& region, const LLVector3d& global_position, bool hypergrid)
-: mHypergrid(hypergrid)
+LLSLURL::LLSLURL(const std::string& region, const LLVector3d& region_origin, const LLVector3d& global_position, bool hypergrid)
+	: mHypergrid(hypergrid)
 {
-	*this = LLSLURL(LLGridManager::getInstance()->getGrid(), region, global_position);
+	*this = LLSLURL(LLGridManager::getInstance()->getGrid(), region, region_origin, global_position);
 }
+// </FS:Beq pp Oren>
 
 LLSLURL::LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb)
 : mHypergrid(false)
