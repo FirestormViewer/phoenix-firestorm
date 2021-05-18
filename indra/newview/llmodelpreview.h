@@ -139,6 +139,7 @@ public:
     void setTexture(U32 name) { mTextureName = name; }
 
     void setPhysicsFromLOD(S32 lod);
+    void setPhysicsFromPreset(S32 preset);// <FS:Beq/> FIRE-30963 - better physics defaults
     BOOL render();
     void update();
     void genBuffers(S32 lod, bool skinned);

@@ -923,7 +923,38 @@ void LLModelPreview::setPhysicsFromLOD(S32 lod)
         updateStatusMessages();
     }
 }
+// <FS:Beq> FIRE-30963 - better physics defaults
+void LLModelPreview::setPhysicsFromPreset(S32 preset)
+{
+    assert_main_thread();
 
+    mPhysicsSearchLOD = -1;
+    mLODFile[LLModel::LOD_PHYSICS].clear();
+    mFMP->childSetValue("physics_file", mLODFile[LLModel::LOD_PHYSICS]);
+    mVertexBuffer[LLModel::LOD_PHYSICS].clear();
+    if(preset == 1)
+    {
+        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+        loadModel( gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, "cube_phys.dae"), LLModel::LOD_PHYSICS);
+    }
+    else if(preset == 2)
+    {
+        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+        loadModel( gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, "hex_phys.dae"), LLModel::LOD_PHYSICS);
+    }
+    else if(preset == 3)
+    {
+        auto ud_physics = gSavedSettings.getString("FSPhysicsPresetUser1");
+        LL_INFOS() << "Loading User defined Physics Preset [" << ud_physics << "]" << LL_ENDL;
+        if (ud_physics != "" && gDirUtilp->fileExists(ud_physics))
+        {
+            // loading physics from file
+            mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+            loadModel( gDirUtilp->getExpandedFilename(LL_PATH_NONE, gDirUtilp->getDirName(ud_physics), gDirUtilp->getBaseFileName(ud_physics, false)), LLModel::LOD_PHYSICS);
+        }
+    }
+}
+// </FS:Beq>
 void LLModelPreview::clearIncompatible(S32 lod)
 {
     //Don't discard models if specified model is the physic rep

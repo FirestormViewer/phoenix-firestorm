@@ -1139,8 +1139,21 @@ void LLFloaterModelPreview::onPhysicsUseLOD(LLUICtrl* ctrl, void* userdata)
 	S32 file_mode = iface->getItemCount() - 1;
 	if (which_mode < file_mode)
 	{
-		S32 which_lod = num_lods - which_mode;
-		sInstance->mModelPreview->setPhysicsFromLOD(which_lod);
+		// <FS:Beq> FIRE-30963 Support pre-defined physics shapes (initially cube)
+		// S32 which_lod = num_lods - which_mode;
+		// sInstance->mModelPreview->setPhysicsFromLOD(which_lod);
+		if(which_mode >= num_lods)
+		{
+			// which_mode is between the last LOD entry and file selection
+			// so it is a preset
+			sInstance->mModelPreview->setPhysicsFromPreset(which_mode-num_lods);
+		}
+		else
+		{
+			S32 which_lod = num_lods - which_mode;
+			sInstance->mModelPreview->setPhysicsFromLOD(which_lod);
+		}
+		// </FS:Beq>
 	}
 
 	LLModelPreview *model_preview = sInstance->mModelPreview;
@@ -1747,7 +1760,7 @@ void LLFloaterModelPreview::setCtrlLoadFromFile(S32 lod)
         LLComboBox* lod_combo = findChild<LLComboBox>("physics_lod_combo");
         if (lod_combo)
         {
-            lod_combo->setCurrentByIndex(5);
+            lod_combo->setCurrentByIndex(lod_combo->getItemCount() - 1); // <FS:Beq/> FIRE-30963 - better physics defaults
         }
     }
     else
