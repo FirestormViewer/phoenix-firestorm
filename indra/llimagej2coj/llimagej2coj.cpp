@@ -26,12 +26,14 @@
 
 #include "linden_common.h"
 #include "llimagej2coj.h"
+#define OPENJPEG2
 
 // this is defined so that we get static linking.
 #include "openjpeg.h"
+#ifndef OPENJPEG2
 #include "cio.h"
+#endif
 #include "event.h"
-#define OPENJPEG2
 
 #include "lltimer.h"
 
@@ -178,7 +180,11 @@ std::string LLImageJ2COJ::getEngineInfo() const
 #elif defined OPJ_PACKAGE_VERSION
 	return std::string("OpenJPEG: " OPJ_PACKAGE_VERSION ", Runtime: ") + opj_version();
 #else
+#ifdef OPENJPEG2
+	return llformat("OpenJPEG: %i.%i.%i, Runtime: %s", OPJ_VERSION_MAJOR, OPJ_VERSION_MINOR, OPJ_VERSION_BUILD, opj_version());
+#else
 	return std::string("OpenJPEG Runtime: ") + opj_version();
+#endif
 #endif
 }
 

@@ -151,7 +151,9 @@ S32 LLFileSystem::getFileSize(const LLUUID& file_id, const LLAssetType::EType fi
 BOOL LLFileSystem::read(U8* buffer, S32 bytes)
 {
     FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
-    BOOL success = TRUE;
+    // <FS:Ansariel> Cache fixes
+    //BOOL success = TRUE;
+    BOOL success = FALSE;
 
     std::string id;
     mFileID.toString(id);
@@ -186,14 +188,18 @@ BOOL LLFileSystem::read(U8* buffer, S32 bytes)
     LLFILE* file = LLFile::fopen(filename, "rb");
     if (file)
     {
-        fseek(file, mPosition, SEEK_SET);
-        mBytesRead = fread(buffer, 1, bytes, file);
-        fclose(file);
-
-        mPosition += mBytesRead;
-        if (!mBytesRead)
+        if (fseek(file, mPosition, SEEK_SET) == 0)
         {
-            success = FALSE;
+            mBytesRead = fread(buffer, 1, bytes, file);
+            fclose(file);
+
+            mPosition += mBytesRead;
+            // It probably would be correct to check for mBytesRead == bytes,
+            // but that will break avatar rezzing...
+            if (mBytesRead)
+            {
+                success = TRUE;
+            }
         }
     }
     // </FS:Ansariel>
@@ -284,10 +290,10 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "a+b");
         if (ofs)
         {
-            fwrite(buffer, 1, bytes, ofs);
+            S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
             mPosition = ftell(ofs);
             fclose(ofs);
-            success = TRUE;
+            success = (bytes_written == bytes);
         }
     }
     else if (mMode == READ_WRITE)
@@ -295,21 +301,23 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "r+b");
         if (ofs)
         {
-            fseek(ofs, mPosition, SEEK_SET);
-            fwrite(buffer, 1, bytes, ofs);
-            mPosition = ftell(ofs);
-            fclose(ofs);
-            success = TRUE;
+            if (fseek(ofs, mPosition, SEEK_SET) == 0)
+            {
+                S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+                mPosition = ftell(ofs);
+                fclose(ofs);
+                success = (bytes_written == bytes);
+            }
         }
         else
         {
             ofs = LLFile::fopen(filename, "wb");
             if (ofs)
             {
-                fwrite(buffer, 1, bytes, ofs);
+                S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
                 mPosition = ftell(ofs);
                 fclose(ofs);
-                success = TRUE;
+                success = (bytes_written == bytes);
             }
         }
     }
@@ -318,10 +326,10 @@ BOOL LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "wb");
         if (ofs)
         {
-            fwrite(buffer, 1, bytes, ofs);
+            S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
             mPosition = ftell(ofs);
             fclose(ofs);
-            success = TRUE;
+            success = (bytes_written == bytes);
         }
     }
     // </FS:Ansariel>

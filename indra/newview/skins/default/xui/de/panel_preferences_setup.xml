@@ -47,7 +47,10 @@
 		</panel>
 		<panel label="Verzeichnisse" name="tab-dir">
 			<text name="cache_size_label_l">
-				Cache-Größe ([http://wiki.firestormviewer.org/cache Empfehlungen anzeigen?]):
+				Textur-Cache-Größe ([http://wiki.firestormviewer.org/cache Empfehlungen anzeigen?]):
+			</text>
+			<text name="asset_cache_size_label_l">
+				Asset-Cache-Größe :
 			</text>
 			<button label="Inventar-Cache löschen" width="137" name="ClearInventoryCache"/>
 			<text name="Cache location">

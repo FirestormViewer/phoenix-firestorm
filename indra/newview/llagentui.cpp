@@ -72,7 +72,10 @@ void LLAgentUI::buildSLURL(LLSLURL& slurl, const bool escaped /*= true*/)
 		else
 #endif
 // </FS:CR>
-		return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+		// <FS:Oren> FIRE-30768: SLURL's don't work in VarRegions
+		//return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+		return_slurl = LLSLURL(regionp->getName(), regionp->getOriginGlobal(), gAgent.getPositionGlobal());
+		// </FS:Oren>	
 	}
 	slurl = return_slurl;
 }

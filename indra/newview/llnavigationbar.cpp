@@ -672,8 +672,11 @@ void LLNavigationBar::onTeleportFinished(const LLVector3d& global_agent_pos)
 	 */
 		LLAgentUI::buildLocationString(location, LLAgentUI::LOCATION_FORMAT_NO_MATURITY,
 					gAgent.getPosAgentFromGlobal(global_agent_pos));
-	std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), global_agent_pos).getSLURLString());
-	
+	// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+	//std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), global_agent_pos).getSLURLString());
+	std::string tooltip (LLSLURL(gAgent.getRegion()->getName(), gAgent.getRegion()->getOriginGlobal(), global_agent_pos).getSLURLString());
+	// </FS:Beq pp Oren>
+
 	LLLocationHistoryItem item (location,
 			global_agent_pos, tooltip,TYPED_REGION_SLURL);// we can add into history only TYPED location
 	//Touch it, if it is at list already, add new location otherwise
@@ -760,7 +763,10 @@ void LLNavigationBar::onRegionNameResponse(
 		LLVector3d region_pos = from_region_handle(region_handle);
 		LLVector3d global_pos = region_pos + (LLVector3d) local_coords;
 
-		LL_INFOS() << "Teleporting to: " << LLSLURL(region_name,	global_pos).getSLURLString()  << LL_ENDL;
+		// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+		//LL_INFOS() << "Teleporting to: " << LLSLURL(region_name,	global_pos).getSLURLString()  << LL_ENDL;
+		LL_INFOS() << "Teleporting to: " << LLSLURL(region_name, region_pos, global_pos).getSLURLString()  << LL_ENDL;
+		// </FS:Beq pp Oren>
 		gAgent.teleportViaLocation(global_pos);
 	}
 	else if (gSavedSettings.getBOOL("SearchFromAddressBar"))
