@@ -43,8 +43,6 @@
 static const char* subdirs = "0123456789abcdef";
 
 LLDiskCache::LLDiskCache(const std::string cache_dir,
-                         // <FS:Ansariel> Fix integer overflow
-                         //const int max_size_bytes,
                          const uintmax_t max_size_bytes,
                          const bool enable_cache_debug_info) :
     mCacheDir(cache_dir),
@@ -117,15 +115,12 @@ void LLDiskCache::purge()
         if (file_size_total > mMaxSizeBytes)
         {
             action = "DELETE:";
-            // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
-            //boost::filesystem::remove(entry.second.second);
             boost::system::error_code ec;
             boost::filesystem::remove(entry.second.second, ec);
             if (ec.failed())
             {
                 LL_WARNS() << "Failed to delete cache file " << entry.second.second << ": " << ec.message() << LL_ENDL;
             }
-            // </FS:Ansariel>
         }
         else
         {
@@ -320,15 +315,12 @@ void LLDiskCache::clearCache()
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
-                    //boost::filesystem::remove(entry);
                     boost::system::error_code ec;
                     boost::filesystem::remove(entry, ec);
                     if (ec.failed())
                     {
                         LL_WARNS() << "Failed to delete cache file " << entry << ": " << ec.message() << LL_ENDL;
                     }
-                    // </FS:Ansariel>
                 }
             }
         }
