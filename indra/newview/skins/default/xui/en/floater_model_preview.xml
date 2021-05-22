@@ -17,6 +17,7 @@
   <string name="status_parse_error">Error: Dae parsing issue - see log for details.</string>
   <string name="status_bind_shape_orientation">Warning: bind shape matrix is not in standard X-forward orientation.</string>
   <string name="status_material_mismatch">Error: Material of model is not a subset of reference model.</string>
+  <string name="status_lod_model_mismatch">Error: LOD Model has no parent.</string>
   <string name="status_reading_file">Loading...</string>
   <string name="status_generating_meshes">Generating Meshes...</string>
   <string name="status_vertex_number_overflow">Error: Vertex number is more than 65535, aborted!</string>
@@ -787,6 +788,9 @@
                         <combo_item name="physics_medium"> Medium </combo_item>
                         <combo_item name="physics_low">    Low    </combo_item>
                         <combo_item name="physics_lowest"> Lowest </combo_item>
+                        <combo_item name="physics_cube"> Cube </combo_item>
+                        <combo_item name="physics_hex"> Hexagon </combo_item>
+                        <combo_item name="physics_ud"> User Defined </combo_item>
                         <combo_item name="load_from_file"> From file   </combo_item>
                     </combo_box>
                     <line_editor
@@ -1414,12 +1418,35 @@
          <check_box
          control_name="FSMeshUploadAutoShowWeightsWhenEnabled"
          follows="top|left"
-         top_pad="8"
-         left="24"
+         left_pad="5"
          width="300"
          label="Auto-preview weights"
          tool_tip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
+         <text
+          follows="left|top"
+          layout="topleft"
+          left="24"
+          height="12"
+          name="mesh_preview_ud_preset_label"
+          top_pad="10"
+          width="200">
+          Physics User Defined Preset:
+        </text>
+         <line_editor
+         control_name="FSPhysicsPresetUser1"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         top_delta="-7"
+         layout="topleft"
+         left_pad="5"
+         max_length_chars="4096"
+         name="ud_physics"
+         tool_tip="Full system path to a simple Collada mesh definition to be used for physics."
+         width="270" />
         <text
          follows="left|top"
          layout="topleft"

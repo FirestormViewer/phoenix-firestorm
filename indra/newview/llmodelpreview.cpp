@@ -644,14 +644,15 @@ void LLModelPreview::rebuildUploadData()
             }
             if (!found_model && mModel[lod][model_ind] && !mModel[lod][model_ind]->mSubmodelID)
             {
-                if (mImporterDebug)
+                // <FS:Beq> this is not debug, this is an important/useful error advisory
+                // if (mImporterDebug) 
                 {
                     std::ostringstream out;
                     out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
                     LL_INFOS() << out.str() << LL_ENDL;
                     LLFloaterModelPreview::addStringToLog(out, true);
                 }
-                load_state = LLModelLoader::ERROR_MATERIALS;
+                load_state = LLModelLoader::ERROR_LOD_MODEL_MISMATCH;
                 mFMP->childDisable("calculate_btn");
             }
         }
@@ -922,7 +923,38 @@ void LLModelPreview::setPhysicsFromLOD(S32 lod)
         updateStatusMessages();
     }
 }
+// <FS:Beq> FIRE-30963 - better physics defaults
+void LLModelPreview::setPhysicsFromPreset(S32 preset)
+{
+    assert_main_thread();
 
+    mPhysicsSearchLOD = -1;
+    mLODFile[LLModel::LOD_PHYSICS].clear();
+    mFMP->childSetValue("physics_file", mLODFile[LLModel::LOD_PHYSICS]);
+    mVertexBuffer[LLModel::LOD_PHYSICS].clear();
+    if(preset == 1)
+    {
+        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+        loadModel( gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, "cube_phys.dae"), LLModel::LOD_PHYSICS);
+    }
+    else if(preset == 2)
+    {
+        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+        loadModel( gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, "hex_phys.dae"), LLModel::LOD_PHYSICS);
+    }
+    else if(preset == 3)
+    {
+        auto ud_physics = gSavedSettings.getString("FSPhysicsPresetUser1");
+        LL_INFOS() << "Loading User defined Physics Preset [" << ud_physics << "]" << LL_ENDL;
+        if (ud_physics != "" && gDirUtilp->fileExists(ud_physics))
+        {
+            // loading physics from file
+            mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+            loadModel( gDirUtilp->getExpandedFilename(LL_PATH_NONE, gDirUtilp->getDirName(ud_physics), gDirUtilp->getBaseFileName(ud_physics, false)), LLModel::LOD_PHYSICS);
+        }
+    }
+}
+// </FS:Beq>
 void LLModelPreview::clearIncompatible(S32 lod)
 {
     //Don't discard models if specified model is the physic rep
@@ -2365,10 +2397,7 @@ void LLModelPreview::updateStatusMessages()
 
         //fmp->childSetEnabled("physics_optimize", !use_hull);
 
-        // <FS:Ansariel> Enable mesh analysis in SL only for now
-        //bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty();
-        bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty() && LLGridManager::instance().isInSecondLife();
-        // </FS:Ansariel>
+        bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty();
         //enable = enable && !use_hull && fmp->childGetValue("physics_optimize").asBoolean();
 
         //enable/disable "analysis" UI
@@ -2402,13 +2431,10 @@ void LLModelPreview::updateStatusMessages()
                 fmp->childEnable("Simplify");
             }
 
-            // <FS:Ansariel> Enable mesh analysis in SL only for now
-            //if (phys_tris || phys_hulls > 0)
-            //{
-            //    fmp->childEnable("Decompose");
-            //}
-            fmp->childSetEnabled("Decompose", (phys_tris || phys_hulls > 0) && LLGridManager::instance().isInSecondLife());
-            // </FS:Ansariel>
+            if (phys_tris || phys_hulls > 0)
+            {
+               fmp->childEnable("Decompose");
+            }
         }
         else
         {

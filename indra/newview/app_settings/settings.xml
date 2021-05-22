@@ -9399,6 +9399,17 @@
     <key>Value</key>
     <string>salt_and_pepper.jpg</string>
   </map>
+  <key>FSPhysicsPresetUser1</key>
+  <map>
+    <key>Comment</key>
+    <string>full system path to a user provided physics mesh (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string></string>
+  </map>
   <key>MigrateCacheDirectory</key>
   <map>
       <key>Comment</key>
