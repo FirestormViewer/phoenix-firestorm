@@ -960,15 +960,15 @@
                       left_pad="40"
                       name="pass_method_header"
                       height="15"
-                      width="41">
+                      width="79">
                       Passes:
                     </text>
                     <text
                       follows="top|left"
-                      left_pad="40"
+                      left_pad="2"
                       name="Detail Scale label"
                       height="15"
-                      width="80">
+                      width="100">
                       Detail scale:
                     </text>
                     <text
@@ -1909,7 +1909,7 @@ Analysed:
         name="show_joint_positions"
         word_wrap="down"
         left_pad="0"
-        width="65"/>
+        width="70"/>
         <check_box
         follows="top|left"
         label="Joint Pos. Overrides"
@@ -1917,7 +1917,7 @@ Analysed:
         layout="topleft"
         name="show_joint_overrides"
         left_pad="5"
-        width="100">
+        width="110">
       </check_box>
     </panel>
     <!-- ========== NOTE MESSAGE ========== -->
