@@ -6,22 +6,35 @@
  mouse_opaque="true"
  name="groups"
  width="355">
+	<filter_editor
+	 follows="left|top|right"
+	 height="23"
+	 layout="topleft"
+	 left="6"
+	 label="Filter Groups"
+	 max_length_bytes="35"
+	 name="group_filter_input"
+	 top="3"
+	 right="-86" />
 	<view_border
-	 top="-1"
+	 top_pad="3"
 	 bottom="25"
 	 left="6"
 	 width="262"
-	 follows="left|top|right|bottom"
+	 height="245"
+	 layout="topleft"
+	 follows="all"
 	 bevel_style="in"
 	 name="info_border" />
 	<group_list
 	 allow_select="true"
-	 bottom="26"
-	 follows="left|top|right|bottom"
+	 follows="all"
 	 left="7"
+	 height="245"
+	 layout="topleft"
 	 name="group_list"
 	 color="ScrollBgWriteableColor"
-	 top="-1"
+	 top_delta="0"
 	 width="260" />
 	<text
 	 type="string"
@@ -34,61 +47,69 @@
 	 name="groupcount">
 	</text>
 	<button
-	 top="-1"
+	 top="2"
 	 follows="top|right"
 	 height="22"
 	 label="IM/Call"
-	 left_delta="267"
+	 layout="topleft"
+	 right="-1"
 	 name="chat_btn"
 	 tool_tip="Open Instant Message session"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 top_delta="25"
 	 follows="top|right"
 	 height="22"
 	 label="Profile"
+	 layout="topleft"
 	 name="info_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 top_delta="25"
 	 follows="top|right"
 	 height="22"
 	 label="Group Titles"
+	 layout="topleft"
 	 name="titles_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 top_delta="25"
 	 follows="top|right"
 	 height="22"
 	 label="Activate"
+	 layout="topleft"
 	 name="activate_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 top_delta="25"
 	 follows="top|right"
 	 height="22"
 	 label="Leave"
+	 layout="topleft"
 	 name="leave_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-35"
+	 top_delta="35"
 	 follows="top|right"
 	 height="22"
 	 label="Create..."
+	 layout="topleft"
 	 name="create_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 top_delta="25"
 	 follows="top|right"
 	 height="22"
 	 label="Search..."
+	 layout="topleft"
 	 name="search_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 top_delta="25"
 	 follows="top|right"
 	 height="22"
 	 label="Invite..."
+	 layout="topleft"
 	 name="invite_btn"
 	 width="80" />
 </panel>

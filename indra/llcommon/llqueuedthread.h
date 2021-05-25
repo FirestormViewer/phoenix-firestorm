@@ -67,6 +67,7 @@ public:
 		FLAG_AUTO_COMPLETE = 1,
 		FLAG_AUTO_DELETE = 2, // child-class dependent
 		FLAG_ABORT = 4
+		,FLAG_ASYNC = 8 // <FS:ND/> Image thread pool from CoolVL
 	};
 
 	typedef U32 handle_t;

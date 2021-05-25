@@ -7,6 +7,7 @@
 	<button label="Отменить" label_selected="Отменить" name="Cancel"/>
 	<panel name="search_panel">
 		<search_editor label="Поиск настроек" name="search_prefs_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в названии параметра или комментариях."/>
+		<button name="copy_search_slurl_btn" tool_tip="Копировать поисковый запрос как SLURL"/>
 	</panel>
 	<tab_container name="pref core">
 		<panel label="Общие" name="general"/>

@@ -3876,6 +3876,16 @@ void LLStartUp::setStartSLURL(const LLSLURL& slurl)
 	gSavedSettings.setString("LoginLocation", LLSLURL::SIM_LOCATION_LAST);
 	break;
       }
+	// <FS:Ansariel> Support adding grids via SLURL
+#if OPENSIM && !SINGLEGRID
+	case LLSLURL::APP:
+		if (slurl.getAppCmd() == "gridmanager")
+		{
+			LLURLDispatcher::dispatch(getStartSLURL().getSLURLString(), "clicked", NULL, false);
+			break;
+		}
+#endif
+	// </FS:Ansariel>
     default:
 			LLGridManager::getInstance()->setGridChoice(slurl.getGrid());
 			break;

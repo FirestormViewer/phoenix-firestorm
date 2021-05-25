@@ -16,14 +16,25 @@
  
 	<floater.string name="NoGroupTitle" value="&lt;No group title&gt;"/>
 
+	<filter_editor
+	 follows="left|top|right"
+	 height="23"
+	 layout="topleft"
+	 left="5"
+	 label="Filter Group Titles"
+	 max_length_bytes="20"
+	 name="filter_input"
+	 top="5"
+	 right="-5" />
+
 	<scroll_list
 	 name="title_list"
 	 follows="all"
 	 draw_heading="true"
 	 layout="topleft"
-	 width="240"
+	 right="-5"
 	 left="5"
-	 height="265">
+	 height="238">
 		<column
 		 name="grouptitle"
 		 sort_column="title_sort_column"

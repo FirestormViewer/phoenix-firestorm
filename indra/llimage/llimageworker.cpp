@@ -29,13 +29,100 @@
 #include "llimageworker.h"
 #include "llimagedxt.h"
 
+ // <FS:ND> Image thread pool from CoolVL
+#include "boost/thread.hpp"
+std::atomic< U32 > s_ChildThreads;
+
+class PoolWorkerThread : public LLThread
+{
+public:
+	PoolWorkerThread(std::string name) : LLThread(name),
+		mCurrentRequest(NULL)
+	{
+	}
+	virtual void run()
+	{
+		while (!isQuitting())
+		{
+			auto *pReq = mCurrentRequest.exchange(nullptr);
+
+			if (pReq)
+				pReq->processRequestIntern();
+			checkPause();
+		}
+	}
+	bool isBusy()
+	{
+		auto *pReq = mCurrentRequest.load();
+		if (!pReq)
+			return false;
+
+		auto status = pReq->getStatus();
+
+		return status  == LLQueuedThread::STATUS_QUEUED || status == LLQueuedThread::STATUS_INPROGRESS;
+	}
+
+	bool runCondition()
+	{
+		return mCurrentRequest != NULL;
+	}
+
+	bool setRequest(LLImageDecodeThread::ImageRequest* req)
+	{
+		LLImageDecodeThread::ImageRequest* pOld{ nullptr };
+		bool bSuccess = mCurrentRequest.compare_exchange_strong(pOld, req);
+		wake();
+
+		return bSuccess;
+	}
+
+private:
+	std::atomic< LLImageDecodeThread::ImageRequest * > mCurrentRequest;
+};
+// </FS:ND>
+
 //----------------------------------------------------------------------------
 
 // MAIN THREAD
-LLImageDecodeThread::LLImageDecodeThread(bool threaded)
+LLImageDecodeThread::LLImageDecodeThread(bool threaded, U32 aSubThreads)
 	: LLQueuedThread("imagedecode", threaded)
 {
 	mCreationMutex = new LLMutex();
+
+	// <FS:ND> Image thread pool from CoolVL
+	if (aSubThreads == 0)
+	{
+		aSubThreads = boost::thread::hardware_concurrency();
+		if (!aSubThreads)
+			aSubThreads = 4U; // Use a sane default: 4 cores
+		if (aSubThreads > 8U)
+		{
+			// Using number of (virtual) cores - 1 (for the main image worker
+			// thread) - 1 (for the viewer main loop thread), further bound to
+			// a maximum of 32 threads (more than that is totally useless, even
+			// when flying over main land with 512m draw distance).
+			aSubThreads = llmin(aSubThreads - 2U, 32U);
+		}
+		else if (aSubThreads > 2U)
+		{
+			// Using number of (virtual) cores - 1 (for the main image worker
+			// thread).
+			--aSubThreads;
+		}
+	}
+	else if (aSubThreads == 1) // Disable if only 1
+		aSubThreads = 0;
+
+	s_ChildThreads = aSubThreads;
+	for (U32 i = 0; i < aSubThreads; ++i)
+	{
+		std::stringstream strm;
+		strm << "imagedecodethread" << (i + 1);
+
+		mThreadPool.push_back(std::make_shared< PoolWorkerThread>(strm.str()));
+		mThreadPool[i]->start();
+	}
+	// </FS:ND>
 }
 
 //virtual 
@@ -53,9 +140,12 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 		 iter != mCreationList.end(); ++iter)
 	{
 		creation_info& info = *iter;
+		// ImageRequest* req = new ImageRequest(info.handle, info.image,
+		//				     info.priority, info.discard, info.needs_aux,
+		//				     info.responder);
 		ImageRequest* req = new ImageRequest(info.handle, info.image,
-						     info.priority, info.discard, info.needs_aux,
-						     info.responder);
+			info.priority, info.discard, info.needs_aux,
+			info.responder, this);
 
 		bool res = addRequest(req);
 		if (!res)
@@ -95,15 +185,21 @@ LLImageDecodeThread::Responder::~Responder()
 
 LLImageDecodeThread::ImageRequest::ImageRequest(handle_t handle, LLImageFormatted* image, 
 												U32 priority, S32 discard, BOOL needs_aux,
-												LLImageDecodeThread::Responder* responder)
+												LLImageDecodeThread::Responder* responder,
+												LLImageDecodeThread *aQueue)
 	: LLQueuedThread::QueuedRequest(handle, priority, FLAG_AUTO_COMPLETE),
 	  mFormattedImage(image),
 	  mDiscardLevel(discard),
 	  mNeedsAux(needs_aux),
 	  mDecodedRaw(FALSE),
 	  mDecodedAux(FALSE),
-	  mResponder(responder)
+	  mResponder(responder),
+      mQueue( aQueue ) // <FS:ND/> Image thread pool from CoolVL
 {
+	//<FS:ND> Image thread pool from CoolVL
+	if (s_ChildThreads > 0)
+		mFlags |= FLAG_ASYNC;
+	// </FS:ND>
 }
 
 LLImageDecodeThread::ImageRequest::~ImageRequest()
@@ -118,6 +214,21 @@ LLImageDecodeThread::ImageRequest::~ImageRequest()
 
 // Returns true when done, whether or not decode was successful.
 bool LLImageDecodeThread::ImageRequest::processRequest()
+{
+	// <FS:ND> Image thread pool from CoolVL
+
+	// If not async, decode using this thread
+	if ((mFlags & FLAG_ASYNC) == 0)
+		return processRequestIntern();
+
+	// Try to dispatch to a new thread, if this isn't possible decode on this thread
+	if (!mQueue->enqueRequest(this))
+		return processRequestIntern();
+	return true;
+	// </FS:ND>
+}
+
+bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 {
 	const F32 decode_time_slice = .1f;
 	bool done = true;
@@ -172,6 +283,15 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 		mDecodedAux = done && mDecodedImageAux->getData();
 	}
 
+	//<FS:ND> Image thread pool from CoolVL
+	if (mFlags & FLAG_ASYNC)
+	{
+		setStatus(STATUS_COMPLETE);
+		finishRequest(true);
+		// always autocomplete
+		mQueue->completeRequest(mHashKey);
+	}
+	// </FS:ND>
 	return done;
 }
 
@@ -190,4 +310,17 @@ void LLImageDecodeThread::ImageRequest::finishRequest(bool completed)
 bool LLImageDecodeThread::ImageRequest::tut_isOK()
 {
 	return mResponder.notNull();
+}
+
+bool LLImageDecodeThread::enqueRequest(ImageRequest * req)
+{
+	for (auto &pThread : mThreadPool)
+	{
+		if (!pThread->isBusy())
+		{
+			if( pThread->setRequest(req) )
+				return true;
+		}
+	}
+	return false;
 }

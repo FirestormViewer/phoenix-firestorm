@@ -33,20 +33,21 @@
 #include "llgroupmgr.h"
 
 class FSFloaterGroupTitles;
+class LLFilterEditor;
 class LLScrollListCtrl;
 
 class FSGroupTitlesObserver : LLGroupMgrObserver
 {
 
 public:
-	FSGroupTitlesObserver(const LLGroupData& group_data, FSFloaterGroupTitles* parent);
+	FSGroupTitlesObserver(const LLGroupData& group_data, LLHandle<FSFloaterGroupTitles> parent);
 	virtual ~FSGroupTitlesObserver();
 
 	virtual void changed(LLGroupChange gc);
 
 protected:
-	FSFloaterGroupTitles*	mParent;
-	LLGroupData		mGroupData;
+	LLHandle<FSFloaterGroupTitles>	mParent;
+	LLGroupData						mGroupData;
 };
 
 class FSFloaterGroupTitles : public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
@@ -57,6 +58,9 @@ public:
 	virtual ~FSFloaterGroupTitles();
 
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	virtual void changed(LLGroupChange gc);
 	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
@@ -73,11 +77,16 @@ private:
 	void activateGroupTitle();
 	void selectedTitleChanged();
 	void openGroupInfo();
+	void onFilterEdit(const std::string& search_string);
 
 	LLButton*			mActivateButton;
 	LLButton*			mRefreshButton;
 	LLButton*			mInfoButton;
 	LLScrollListCtrl*	mTitleList;
+	LLFilterEditor*		mFilterEditor;
+
+	std::string			mFilterSubString;
+	std::string			mFilterSubStringOrig;
 
 	typedef std::map<LLUUID, FSGroupTitlesObserver*> observer_map_t;
 	observer_map_t		mGroupTitleObserverMap;

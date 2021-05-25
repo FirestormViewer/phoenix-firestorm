@@ -43,7 +43,6 @@
       Add new grid
     </text>
     <line_editor
-      control_name="OpensimPrefsAddGrid"
       border_style="line"
       border_thickness="1"
       follows="left|top"
@@ -222,20 +221,6 @@
 		  name="login_page_edit"
 		  top_delta="0"
 		  width="300" />
-		  <button
-			  visible="false"
-			  enabled_control="FSEditGrid"
-			  follows="left|top"
-			  height="16"
-			  label="Save"
-			  layout="topleft"
-			  left_pad="2"
-			  name="save_grid"
-			  top_delta="0"
-			  width="45">
-			  <button.commit_callback
-			  function="Pref.SaveGrid" />
-		  </button>
 		  <text
 			  top_pad="2"
 			  follows="left|top"
