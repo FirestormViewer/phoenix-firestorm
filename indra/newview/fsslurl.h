@@ -52,11 +52,6 @@ public:
 	static const char* SIM_LOCATION_LAST;
 	static const char* SLURL_APP_PATH;
 	static const char* SLURL_REGION_PATH; 
- 
-	// Inworldz special
-	static const char* SLURL_INWORLDZ_SCHEME;
-	static const char* SLURL_IW_SCHEME;
-	static const char* PLACES_INWORLDZ_COM;
 
 	enum SLURL_TYPE
 	{
@@ -73,8 +68,12 @@ public:
 	LLSLURL(const std::string& grid, const std::string& region, bool hypergrid = false);
 	LLSLURL(const std::string& region, const LLVector3& position, bool hypergrid = false);
 	LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position, bool hypergrid = false);
-	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hypergrid = false);
 	LLSLURL(const std::string& region, const LLVector3d& global_position, bool hypergrid = false);
+// <FS:Beq> FIRE-30768: SLURL's don't work in VarRegions (patch from Oren)
+// LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hypergrid = false);
+	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& region_origin, const LLVector3d& global_position, bool hypergrid = false);
+	LLSLURL(const std::string& region, const LLVector3d& region_origin, const LLVector3d& global_position, bool hypergrid = false);
+// </FS:Beq>
 	LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb);
 	LLSLURL(const LLSD& path_array, bool from_app);
 

@@ -32,6 +32,10 @@
 
 class LLCheckBoxCtrl;
 class LLComboBox;
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+class LLIconCtrl;
+class LLStatView;
+// </FS:Zi>
 
 class LLFloaterJoystick : public LLFloater
 {
@@ -54,6 +58,8 @@ protected:
 	void onClose(bool app_quitting);
 	void onClickCloseBtn(bool app_quitting);
 
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	void updateAxesAndButtons();
 private:
 
 	LLFloaterJoystick(const LLSD& data);
@@ -96,10 +102,12 @@ private:
     bool mHasDeviceList;
 
 	// stats view 
-	LLStatBar* mAxisStatsBar[6];
-
-	// <FS:Zi> FIRE-14344 - show joystick buttons
-	LLTextBase* mJoystickButtons;
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// LLStatBar* mAxisStatsBar[6];
+	LLStatBar** mAxisStatsBar;
+	LLIconCtrl** mButtonsLights;
+	LLStatView** mAxisViews;
+	// </FS:Zi>
 };
 
 #endif

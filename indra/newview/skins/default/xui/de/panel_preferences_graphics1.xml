@@ -135,6 +135,7 @@
 		<slider label="Zusätzliche Textur-Speicherbuffer-Reserve (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Prozentsatz des gesamten Videospeichers, der zum Zwischenspeichern von geladenen Texturen verwendet wird, die aktuell nicht dargestellt werden."/>
 		<slider label="Physische Videospeicher-Reserve (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Prozentsatz des gesamten Videospeichers, der für andere Zwecke reserviert wird."/>
 		<spinner label="Nebeldistanzverhältnis:" name="fog"/>
+		<spinner label="Parallelität Textur-Dekodierung:" name="image_decode_threads" tool_tip="Die Anzahl an Threads, für zur Dekodierung von Texturen verwendet wird. 0 = Automatisch ermitteln, 1 = Synchron, 2+ = Benutzerdefiniert. (Empfohlen: 0 oder 1)"/>
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">

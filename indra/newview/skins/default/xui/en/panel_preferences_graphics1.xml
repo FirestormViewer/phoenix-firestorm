@@ -1085,6 +1085,22 @@
          name="fog"
          top_pad="7"
          width="262" />
+        <spinner
+         control_name="FSImageDecodeThreads"
+         decimal_digits="0"
+         increment="1"
+         follows="left|top"
+         height="22"
+         label="Image decode concurrency:"
+         label_width="198"
+         layout="topleft"
+         left="10"
+         max_val="64"
+         min_val="0"
+         name="image_decode_threads"
+         tool_tip="The number of threads to use for decoding images. 0 = Auto, 1 = Synchronous, 2+ = user specified. (0 or 1 are recommended)"
+         top_pad="7"
+         width="262" />
     </panel>
 
 <!--Rendering-->

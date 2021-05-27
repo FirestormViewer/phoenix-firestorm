@@ -589,33 +589,36 @@ private:
 // <FS:AW  opensim preferences>
 class LLPanelPreferenceOpensim : public LLPanelPreference
 {
+	LOG_CLASS(LLPanelPreferenceOpensim);
+
 public:
 	LLPanelPreferenceOpensim();
+	~LLPanelPreferenceOpensim();
 
 #ifdef OPENSIM
-// <FS:AW  grid management>
-	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel();
 
 protected:
+	boost::signals2::connection mGridListChangedCallbackConnection;
+	boost::signals2::connection mGridAddedCallbackConnection;
+
+	void onOpen(const LLSD& key);
+	/*virtual*/ BOOL postBuild();
 
 	void onClickAddGrid();
 	void addedGrid(bool success);
 	void onClickClearGrid();
 	void onClickRefreshGrid();
-	void onClickSaveGrid();
 	void onClickRemoveGrid();
 	void onSelectGrid();
 	bool removeGridCB(const LLSD& notification, const LLSD& response);
-// </FS:AW  grid management>
-// <FS:AW  opensim search support>
 	void onClickClearDebugSearchURL();
 	void onClickPickDebugSearchURL();
-// </FS:AW  opensim search support>
 
 	void refreshGridList(bool success = true);
 	LLScrollListCtrl* mGridListControl;
+
 private:
 	LLLineEditor* mEditorGridName;
 	LLLineEditor* mEditorGridURI;
@@ -627,9 +630,9 @@ private:
 	LLLineEditor* mEditorPassword;
 	LLLineEditor* mEditorSearch;
 	LLLineEditor* mEditorGridMessage;
-#endif
 
-	LOG_CLASS(LLPanelPreferenceOpensim);
+	std::string mCurrentGrid;
+#endif
 };
 // </FS:AW  opensim preferences>
 

@@ -50,6 +50,7 @@
 #include "llpanelplaceprofile.h"
 #include "llpanellandmarkinfo.h"
 #include "llparcel.h"
+#include "llregionhandle.h" // <FS:Beq/> Var region support
 #include "llteleporthistorystorage.h"
 #include "llviewercontrol.h"
 #include "llviewermessage.h"
@@ -355,7 +356,15 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 										key["z"].asReal());
 
 				mPanelPlaceInfo->setParcelDetailLoadedCallback(boost::bind(&FSFloaterPlaceDetails::processParcelDetails, this, _1));
-				mPanelPlaceInfo->displayParcelInfo(LLUUID(), mGlobalPos);
+				if(key.has("ox"))
+				{
+					auto region_handle = to_region_handle(key["ox"].asInteger(), key["oy"].asInteger());
+					mPanelPlaceInfo->displayParcelInfo(LLUUID(), region_handle, mGlobalPos);
+				}
+				else
+				{
+					mPanelPlaceInfo->displayParcelInfo(LLUUID(), mGlobalPos);
+				}
 			}
 
 			updateVerbs();

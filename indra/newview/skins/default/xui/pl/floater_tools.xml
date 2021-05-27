@@ -86,7 +86,7 @@
 		<combo_box.item label="Siatka: Lokalna" name="Local"/>
 		<combo_box.item label="Siatka: Względna" name="Reference"/>
 	</combo_box>
-	<check_box label="Rozciągaj obie strony" name="checkbox uniform"/>
+	<check_box label="Rozciągaj obie strony" name="checkbox uniform" width="145" />
 	<check_box label="Rozciągaj tekstury" name="checkbox stretch textures"/>
 	<check_box label="Przyciągaj do siatki" name="checkbox snap to grid"/>
 	<check_box label="Edytuj oś jak gł. obiekt" name="checkbox actual root"/>
