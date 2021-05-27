@@ -177,22 +177,14 @@ public:
         TEXTURE_GAMMA,                      //  "texture_gamma"
         SPECULAR_COLOR,                     //  "specular_color"
         ENVIRONMENT_INTENSITY,              //  "env_intensity"
-		
-// <FS:CR> Import Vignette from Exodus
-		EXO_RENDER_VIGNETTE,
-		EXO_RENDER_SCREEN,
-// </FS:CR> Import Vignette from Exodus
 
         AVATAR_MATRIX,                      //  "matrixPalette"
         AVATAR_TRANSLATION,                 //  "translationPalette"
-// [RLVa:KB] - @setsphere
-		RLV_EFFECT_MODE,
-		RLV_EFFECT_PARAM1,
-		RLV_EFFECT_PARAM2,
-		RLV_EFFECT_PARAM3,
-		RLV_EFFECT_PARAM4,
-		RLV_EFFECT_PARAM5,
-// [/RLVa:KB]
+
+        // <FS:CR> Import Vignette from Exodus
+        EXO_RENDER_VIGNETTE,                //  "exo_vignette"
+        EXO_RENDER_SCREEN,                  //  "exo_screen"
+        // </FS:CR> Import Vignette from Exodus
 
         WATER_SCREENTEX,                    //  "screenTex"
         WATER_SCREENDEPTH,                  //  "screenDepth"
@@ -219,6 +211,15 @@ public:
         WATER_SUN_ANGLE2,                   //  "sunAngle2"
 
         WL_CAMPOSLOCAL,                     //  "camPosLocal"
+
+        // [RLVa:KB] - @setsphere
+        RLV_EFFECT_MODE,                    //  "rlvEffectMode"
+        RLV_EFFECT_PARAM1,                  //  "rlvEffectParam1"
+        RLV_EFFECT_PARAM2,                  //  "rlvEffectParam2"
+        RLV_EFFECT_PARAM3,                  //  "rlvEffectParam3"
+        RLV_EFFECT_PARAM4,                  //  "rlvEffectParam4"
+        RLV_EFFECT_PARAM5,                  //  "rlvEffectParam5"
+        // [/RLVa:KB]
 
         AVATAR_WIND,                        //  "gWindDir"
         AVATAR_SINWAVE,                     //  "gSinWaveParams"
