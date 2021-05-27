@@ -45,6 +45,7 @@ public:
 	void play(const LLSD& param);
 	// <FS:Ansariel> Improved animation preview
 	//void showAdvanced();
+	/*virtual*/ void refreshFromItem();
 
 protected:
 	
