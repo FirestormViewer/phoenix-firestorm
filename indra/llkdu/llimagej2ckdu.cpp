@@ -32,7 +32,7 @@
 #include "llpointer.h"
 #include "llmath.h"
 #include "llkdumem.h"
-
+#include "fstelemetry.h"	// <FS:Beq> instrument image decodes
 #define kdu_xxxx "kdu_block_coding.h"
 #include "include_kdu_xxxx.h"
 
@@ -287,6 +287,7 @@ void transfer_bytes(kdu_byte *dest, kdu_line_buf &src, int gap, int precision);
 // as well, when that still existed, with keep_codestream true and MODE_FAST.
 void LLImageJ2CKDU::setupCodeStream(LLImageJ2C &base, bool keep_codestream, ECodeStreamMode mode)
 {
+	FSZone;	// <FS:Beq> instrument image decodes
 	S32 data_size = base.getDataSize();
 	S32 max_bytes = (base.getMaxBytes() ? base.getMaxBytes() : data_size);
 
@@ -436,6 +437,7 @@ bool LLImageJ2CKDU::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int bloc
 // decodeImpl() usage matters for production.
 bool LLImageJ2CKDU::initDecode(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, ECodeStreamMode mode, S32 first_channel, S32 max_channel_count, int discard_level, int* region)
 {
+	FSZone;	// <FS:Beq> instrument image decodes
 	base.resetLastError();
 
 	// *FIX: kdu calls our callback function if there's an error, and then bombs.
@@ -519,6 +521,7 @@ bool LLImageJ2CKDU::initDecode(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 // Returns true to mean done, whether successful or not.
 bool LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
+	FSZone;	// <FS:Beq> instrument image decodes
 	ECodeStreamMode mode = MODE_FAST;
 
 	LLTimer decode_timer;

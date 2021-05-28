@@ -25,6 +25,7 @@
  */
 
 #include "linden_common.h"
+#include "fstelemetry.h" 	// <FS:Beq> instrument image decodes
 #include "llimagej2coj.h"
 #define OPENJPEG2
 
@@ -258,10 +259,11 @@ bool LLImageJ2COJ::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int block
 bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
 	// <FS:Techwolf Lupindo> texture comment metadata reader
+	FSZone;	// <FS:Beq> instrument image decodes
 	U8* c_data = base.getData();
 	S32 c_size =  base.getDataSize();
 	S32 position = 0;
-
+	
 	while (position < 1024 && position < (c_size - 7)) // the comment field should be in the first 1024 bytes.
 	{
 		if (c_data[position] == 0xff && c_data[position + 1] == 0x64)
