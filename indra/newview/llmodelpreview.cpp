@@ -424,7 +424,7 @@ bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFace
 				std::ostringstream out;
 				out << "material " << ref->mMaterialList[i] 
 					<< " not found in lod adding placeholder";
-				LL_DEBUGS("MESHSKININFO") << out << LL_ENDL;
+				LL_DEBUGS("MESHSKININFO") << out.str() << LL_ENDL;
 				if (mImporterDebug)
 				{
 					LLFloaterModelPreview::addStringToLog(out, false);
@@ -458,8 +458,8 @@ bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFace
 	if (lod->mMaterialList.size() != ref->mMaterialList.size())
 	{
 		std::ostringstream out;
-		out << "Material of LOD model " << lod->getName() << " has more materials than a reference" << ref->getName() << ".";
-		LL_INFOS("MESHSKININFO") << out << LL_ENDL;
+		out << "Material of LOD model " << lod->getName() << " has more materials than the reference " << ref->getName() << ".";
+		LL_INFOS("MESHSKININFO") << out.str() << LL_ENDL;
 		LLFloaterModelPreview::addStringToLog(out, true);
 		return false;
 	}
@@ -3371,6 +3371,7 @@ BOOL LLModelPreview::render()
 
 	gGL.loadIdentity();
 	gPipeline.enableLightsPreview();
+	gObjectPreviewProgram.uniform4fv(LLShaderMgr::AMBIENT, 1, LLPipeline::PreviewAmbientColor.mV); // <FS:Beq> pass ambient setting to shader
 
 	LLQuaternion camera_rot = LLQuaternion(mCameraPitch, LLVector3::y_axis) *
 		LLQuaternion(mCameraYaw, LLVector3::z_axis);
