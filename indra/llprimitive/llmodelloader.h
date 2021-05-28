@@ -87,7 +87,7 @@ public:
 		DONE,
 		WARNING_BIND_SHAPE_ORIENTATION,
 		ERROR_PARSING, //basically loading failed
-		ERROR_MATERIALS,
+		ERROR_MATERIALS_NOT_A_SUBSET, // <FS:Beq/> FIRE-30965 - better error differentiation
 		ERROR_PASSWORD_REQUIRED,
 		ERROR_NEED_MORE_MEMORY,
 		ERROR_INVALID_FILE,
@@ -96,6 +96,7 @@ public:
 		ERROR_OUT_OF_RANGE,
 		ERROR_FILE_VERSION_INVALID,
 		ERROR_LOD_MODEL_MISMATCH, // <FS:Beq/> clean up and improve error reporting
+		ERROR_HIGH_LOD_MODEL_MISSING, // <FS:Beq/> clean up and improve error reporting
 		ERROR_MODEL // this error should always be last in this list, error code is passed as ERROR_MODEL+error_code
 	} eLoadState;
 
