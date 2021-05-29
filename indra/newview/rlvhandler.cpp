@@ -2050,14 +2050,44 @@ void RlvBehaviourToggleHandler<RLV_BHVR_PAY>::onCommandToggle(ERlvBehaviour eBhv
 	}
 }
 
-// Handles: @setoverlay=n|y toggles
+// Handles: @setoverlay=n|y
 template<> template<>
-void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETOVERLAY>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	if (fHasBhvr)
-		LLVfxManager::instance().addEffect(new RlvOverlayEffect(gRlvHandler.getCurrentObject()));
-	else
-		LLVfxManager::instance().removeEffect<RlvOverlayEffect>(gRlvHandler.getCurrentObject());
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
+	{
+		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+		{
+			LLVfxManager::instance().addEffect(new RlvOverlayEffect(gRlvHandler.getCurrentObject()));
+		}
+		else
+		{
+			LLVfxManager::instance().removeEffect<RlvOverlayEffect>(gRlvHandler.getCurrentObject());
+		}
+	}
+
+	// Refresh overlay effects according to object hierarchy
+	std::list<LLVisualEffect*> effects;
+	if (LLVfxManager::instance().getEffects<RlvOverlayEffect>(effects))
+	{
+		auto itActiveEffect = std::find_if(effects.begin(), effects.end(), [](const LLVisualEffect* pEffect) { return pEffect->getEnabled(); });
+		if (effects.end() == itActiveEffect)
+		{
+			// If nothing is active just pick the first one to activate
+			itActiveEffect = effects.begin();
+		}
+
+		const LLUUID idActiveRootObj = (effects.end() != itActiveEffect) ? Rlv::getObjectRootId((*itActiveEffect)->getId()) : LLUUID::null;
+		for (LLVisualEffect* pEffect : effects)
+		{
+			bool isActive = (idActiveRootObj.isNull() && pEffect == effects.front()) || (Rlv::getObjectRootId(pEffect->getId()) == idActiveRootObj);
+			int nPriority = (isActive) ? 256 - Rlv::getObjectLinkNumber(pEffect->getId()) : pEffect->getPriority();
+			LLVfxManager::instance().updateEffect(pEffect, isActive, nPriority);
+		}
+	}
+
+	return eRet;
 }
 
 // Handles: @setsphere=n|y

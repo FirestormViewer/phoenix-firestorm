@@ -40,6 +40,7 @@ RlvOverlayEffect::RlvOverlayEffect(const LLUUID& idRlvObj)
 	, m_fBlockTouch(false)
 	, m_Color(LLColor3(c_DefaultColor))
 {
+	m_fEnabled = false;
 }
 
 RlvOverlayEffect::~RlvOverlayEffect()

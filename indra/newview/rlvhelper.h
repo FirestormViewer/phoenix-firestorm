@@ -695,6 +695,9 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 namespace Rlv
 {
 	void forceAtmosphericShadersIfAvailable();
+
+	int           getObjectLinkNumber(const LLUUID& idObj);
+	const LLUUID& getObjectRootId(const LLUUID& idObj);
 }
 
 // ============================================================================
