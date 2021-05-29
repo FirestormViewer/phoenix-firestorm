@@ -2057,7 +2057,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETOVERLAY>::onCommandToggle(ERlvBehavio
 	if (fHasBhvr)
 		LLVfxManager::instance().addEffect(new RlvOverlayEffect(gRlvHandler.getCurrentObject()));
 	else
-		LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
+		LLVfxManager::instance().removeEffect<RlvOverlayEffect>(gRlvHandler.getCurrentObject());
 }
 
 // Handles: @setsphere=n|y
@@ -2091,7 +2091,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 		}
 		else
 		{
-			LLVfxManager::instance().removeEffect(gRlvHandler.getCurrentObject());
+			LLVfxManager::instance().removeEffect<RlvSphereEffect>(gRlvHandler.getCurrentObject());
 		}
 	}
 	return eRet;

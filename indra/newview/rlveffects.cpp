@@ -50,7 +50,7 @@ RlvOverlayEffect::~RlvOverlayEffect()
 // static
 ERlvCmdRet RlvOverlayEffect::onAlphaValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvOverlayEffect* pEffect = dynamic_cast<RlvOverlayEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvOverlayEffect* pEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(idRlvObj))
 	{
 		pEffect->m_nAlpha = (newValue) ? boost::get<float>(newValue.value()) : c_DefaultAlpha;
 	}
@@ -60,7 +60,7 @@ ERlvCmdRet RlvOverlayEffect::onAlphaValueChanged(const LLUUID& idRlvObj, const b
 // static
 ERlvCmdRet RlvOverlayEffect::onBlockTouchValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvOverlayEffect* pEffect = dynamic_cast<RlvOverlayEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvOverlayEffect* pEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(idRlvObj))
 	{
 		pEffect->m_fBlockTouch = (newValue) ? boost::get<bool>(newValue.value()) : false;
 	}
@@ -69,7 +69,7 @@ ERlvCmdRet RlvOverlayEffect::onBlockTouchValueChanged(const LLUUID& idRlvObj, co
 // static
 ERlvCmdRet RlvOverlayEffect::onColorValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvOverlayEffect* pEffect = dynamic_cast<RlvOverlayEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvOverlayEffect* pEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(idRlvObj))
 	{
 		pEffect->m_Color = LLColor3( (newValue) ? boost::get<LLVector3>(newValue.value()).mV : c_DefaultColor);
 	}
@@ -79,7 +79,7 @@ ERlvCmdRet RlvOverlayEffect::onColorValueChanged(const LLUUID& idRlvObj, const b
 // static
 ERlvCmdRet RlvOverlayEffect::onTextureChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvOverlayEffect* pEffect = dynamic_cast<RlvOverlayEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvOverlayEffect* pEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(idRlvObj))
 	{
 		if (newValue)
 			pEffect->setImage(boost::get<LLUUID>(newValue.value()));
@@ -189,7 +189,7 @@ RlvSphereEffect::~RlvSphereEffect()
 // static
 ERlvCmdRet RlvSphereEffect::onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		pEffect->m_eMode = (ESphereMode)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultMode);
 	}
@@ -199,7 +199,7 @@ ERlvCmdRet RlvSphereEffect::onModeChanged(const LLUUID& idRlvObj, const boost::o
 // static
 ERlvCmdRet RlvSphereEffect::onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		pEffect->m_eOrigin = (ESphereOrigin)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultOrigin);
 	}
@@ -209,7 +209,7 @@ ERlvCmdRet RlvSphereEffect::onOriginChanged(const LLUUID& idRlvObj, const boost:
 // static
 ERlvCmdRet RlvSphereEffect::onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		LLVector4 vecColor = (newValue) ? LLVector4(boost::get<LLVector3>(newValue.value()), 1.0f) : LLVector4(c_SphereDefaultColor);
 		if (!pEffect->m_nTweenDuration)
@@ -223,7 +223,7 @@ ERlvCmdRet RlvSphereEffect::onColorChanged(const LLUUID& idRlvObj, const boost::
 // static
 ERlvCmdRet RlvSphereEffect::onDistMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		float nDistanceMin = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultDistance;
 		if (!pEffect->m_nTweenDuration)
@@ -237,7 +237,7 @@ ERlvCmdRet RlvSphereEffect::onDistMinChanged(const LLUUID& idRlvObj, const boost
 // static
 ERlvCmdRet RlvSphereEffect::onDistMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		float nDistanceMax = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultDistance;
 		if (!pEffect->m_nTweenDuration)
@@ -251,7 +251,7 @@ ERlvCmdRet RlvSphereEffect::onDistMaxChanged(const LLUUID& idRlvObj, const boost
 // static
 ERlvCmdRet RlvSphereEffect::onDistExtendChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		pEffect->m_eDistExtend = (ESphereDistExtend)((newValue) ? boost::get<int>(newValue.value()) : c_SphereDefaultDistanceExtend);
 	}
@@ -261,7 +261,7 @@ ERlvCmdRet RlvSphereEffect::onDistExtendChanged(const LLUUID& idRlvObj, const bo
 // static
 ERlvCmdRet RlvSphereEffect::onParamsChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		LLVector4 params = LLVector4((newValue) ? boost::get<LLVector4>(newValue.value()).mV : c_SphereDefaultColor);
 		if (!pEffect->m_nTweenDuration)
@@ -275,7 +275,7 @@ ERlvCmdRet RlvSphereEffect::onParamsChanged(const LLUUID& idRlvObj, const boost:
 // static
 ERlvCmdRet RlvSphereEffect::onTweenDurationChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		pEffect->m_nTweenDuration = (newValue) ? boost::get<float>(newValue.value()) : 0;
 	}
@@ -285,7 +285,7 @@ ERlvCmdRet RlvSphereEffect::onTweenDurationChanged(const LLUUID& idRlvObj, const
 // static
 ERlvCmdRet RlvSphereEffect::onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		float nValueMin = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultAlpha;;
 		if (!pEffect->m_nTweenDuration)
@@ -299,7 +299,7 @@ ERlvCmdRet RlvSphereEffect::onValueMinChanged(const LLUUID& idRlvObj, const boos
 // static
 ERlvCmdRet RlvSphereEffect::onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
-	if (RlvSphereEffect* pEffect = dynamic_cast<RlvSphereEffect*>(LLVfxManager::instance().getEffect(idRlvObj)))
+	if (RlvSphereEffect* pEffect = LLVfxManager::instance().getEffect<RlvSphereEffect>(idRlvObj))
 	{
 		float nValueMax = (newValue) ? boost::get<float>(newValue.value()) : c_SphereDefaultAlpha;
 		if (!pEffect->m_nTweenDuration)
