@@ -159,12 +159,11 @@ protected:
 	 */
 public:
 	bool            addEffect(LLVisualEffect* pEffectInst);
-	LLVisualEffect* getEffect(const LLUUID& idEffect) const;
-	template<typename T> T* getEffect(const LLUUID& idEffect) const { return dynamic_cast<T*>(getEffect(idEffect)); }
-	LLVisualEffect* getEffect(EVisualEffect eCode) const;
-	template<typename T> T* getEffect(EVisualEffect eCode) const { return dynamic_cast<T*>(getEffect(eCode)); }
-	bool            hasEffect(EVisualEffect eCode) const         { return getEffect(eCode); }
-	bool            removeEffect(const LLUUID& idEffect);
+	LLVisualEffect* getEffect(EVisualEffect eCode, const LLUUID& idEffect) const;
+	template<typename T> T* getEffect(const LLUUID& idEffect) const { return dynamic_cast<T*>(getEffect(T::EffectCode, idEffect)); }
+	bool            hasEffect(EVisualEffect eCode) const;
+	bool            removeEffect(EVisualEffect eCode, const LLUUID& idEffect);
+	template<typename T> bool removeEffect(const LLUUID& idEffect) { return removeEffect(T::EffectCode, idEffect); }
 	void            runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams = nullptr);
 	void            runEffect(EVisualEffectType eType, LLVisualEffectParams* pParams = nullptr);
 protected:
@@ -175,5 +174,14 @@ protected:
 protected:
 	std::set<LLVisualEffect*> m_Effects;
 };
+
+// ============================================================================
+// Inlined member functions
+//
+
+inline bool LLVfxManager::hasEffect(EVisualEffect eCode) const
+{
+	return m_Effects.end() != std::find_if(m_Effects.begin(), m_Effects.end(), [eCode](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode; });
+}
 
 // ============================================================================

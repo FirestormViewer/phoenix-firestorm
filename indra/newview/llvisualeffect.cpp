@@ -75,30 +75,25 @@ LLVfxManager::LLVfxManager()
 
 bool LLVfxManager::addEffect(LLVisualEffect* pEffectInst)
 {
-	if (m_Effects.end() != m_Effects.find(pEffectInst))
+	// Effect IDs can be reused across effects but should be unique for all effect instances sharing the same effect code
+	auto itEffect = std::find_if(m_Effects.begin(), m_Effects.end(), [pEffectInst](const LLVisualEffect* pEffect) { return pEffect->getCode() == pEffectInst->getCode() && pEffect->getId() == pEffectInst->getId(); });
+	llassert(m_Effects.end() == itEffect);
+	if (m_Effects.end() != itEffect)
 		return false;
 
 	m_Effects.insert(pEffectInst);
-
 	return true;
 }
 
-LLVisualEffect* LLVfxManager::getEffect(const LLUUID& idEffect) const
+LLVisualEffect* LLVfxManager::getEffect(EVisualEffect eCode, const LLUUID& idEffect) const
 {
-	auto itEffect = std::find_if(m_Effects.begin(), m_Effects.end(), [&idEffect](const LLVisualEffect* pEffect) { return pEffect->getId() == idEffect; });
+	auto itEffect = std::find_if(m_Effects.begin(), m_Effects.end(), [eCode, &idEffect](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode && pEffect->getId() == idEffect; });
 	return (m_Effects.end() != itEffect) ? *itEffect : nullptr;
 }
 
-LLVisualEffect* LLVfxManager::getEffect(EVisualEffect eCode) const
+bool LLVfxManager::removeEffect(EVisualEffect eCode, const LLUUID& idEffect)
 {
-	// NOTE: returns the first found but there could be more
-	auto itEffect = std::find_if(m_Effects.begin(), m_Effects.end(), [eCode](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode; });
-	return (m_Effects.end() != itEffect) ? *itEffect : nullptr;
-}
-
-bool LLVfxManager::removeEffect(const LLUUID& idEffect)
-{
-	auto itEffect = std::find_if(m_Effects.begin(), m_Effects.end(), [&idEffect](const LLVisualEffect* pEffect) { return pEffect->getId() == idEffect; });
+	auto itEffect = std::find_if(m_Effects.begin(), m_Effects.end(), [eCode, &idEffect](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode && pEffect->getId() == idEffect; });
 	if (m_Effects.end() == itEffect)
 		return false;
 
