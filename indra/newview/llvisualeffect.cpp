@@ -69,7 +69,6 @@ LLVector4 LLTweenableValueLerp<LLVector4>::get()
 //
 
 LLVfxManager::LLVfxManager()
-	: m_Effects(&cmpEffect)
 {
 }
 
@@ -81,7 +80,7 @@ bool LLVfxManager::addEffect(LLVisualEffect* pEffectInst)
 	if (m_Effects.end() != itEffect)
 		return false;
 
-	m_Effects.insert(pEffectInst);
+	m_Effects.insert(std::upper_bound(m_Effects.begin(), m_Effects.end(), pEffectInst, cmpEffect), pEffectInst);
 	return true;
 }
 
@@ -143,6 +142,18 @@ void LLVfxManager::runEffect(std::function<bool(const LLVisualEffect*)> predicat
 	}
 }
 
+void  LLVfxManager::updateEffect(LLVisualEffect* pEffect, bool fEnabled, U32 nPriority)
+{
+	llassert(m_Effects.end() != std::find(m_Effects.begin(), m_Effects.end(), pEffect));
+
+	if ( (pEffect->getEnabled() != fEnabled) || (pEffect->getPriority() != nPriority) )
+	{
+		pEffect->setEnabled(fEnabled);
+		pEffect->setPriority(nPriority);
+		std::sort(m_Effects.begin(), m_Effects.end(), cmpEffect);
+	}
+}
+
 // static
 bool LLVfxManager::cmpEffect(const LLVisualEffect* pLHS, const LLVisualEffect* pRHS)
 {
@@ -150,7 +161,7 @@ bool LLVfxManager::cmpEffect(const LLVisualEffect* pLHS, const LLVisualEffect* p
 	{
 		// Sort by code, then priority, then memory address
 		return (pLHS->getCode() == pRHS->getCode()) ? (pLHS->getPriority() == pRHS->getPriority() ? pLHS < pRHS
-		                                                                                          : pLHS->getPriority() < pRHS->getPriority())
+		                                                                                          : pLHS->getPriority() > pRHS->getPriority())
 			                                        : pLHS->getCode() < pRHS->getCode();
 	}
 	return (pLHS);

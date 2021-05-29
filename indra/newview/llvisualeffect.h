@@ -71,6 +71,7 @@ struct LLShaderEffectParams : LLVisualEffectParams
 
 class LLVisualEffect
 {
+	friend class LLVfxManager;
 public:
 	LLVisualEffect(LLUUID id, EVisualEffect eCode, EVisualEffectType eType)
 		: m_id(id), m_eCode(eCode), m_eType(eType)
@@ -83,9 +84,11 @@ public:
 	U32               getPriority() const { return m_nPriority; }
 	EVisualEffectType getType() const     { return m_eType;}
 	void              setEnabled(bool enable) { m_fEnabled = enable; }
-	void              setPriority(U32 priority) { m_nPriority = priority; }
 
 	virtual void      run(const LLVisualEffectParams* pParams) = 0;
+
+protected:
+	void              setPriority(U32 priority) { m_nPriority = priority; }
 
 	/*
 	 * Member variables
@@ -172,6 +175,7 @@ public:
 	template<typename T> bool removeEffect(const LLUUID& idEffect) { return removeEffect(T::EffectCode, idEffect); }
 	void            runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams = nullptr);
 	void            runEffect(EVisualEffectType eType, LLVisualEffectParams* pParams = nullptr);
+	void            updateEffect(LLVisualEffect* pEffect, bool fEnabled, U32 nPriority);
 protected:
 	void            runEffect(std::function<bool(const LLVisualEffect*)> fnFilter, LLVisualEffectParams* pParams);
 	static bool     cmpEffect(const LLVisualEffect* pLHS, const LLVisualEffect* pRHS);
@@ -180,7 +184,7 @@ protected:
 	 * Member variables
 	 */
 protected:
-	std::set<LLVisualEffect*, decltype(&cmpEffect)> m_Effects;
+	std::vector<LLVisualEffect*> m_Effects;
 };
 
 // ============================================================================
