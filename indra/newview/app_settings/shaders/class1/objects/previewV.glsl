@@ -25,6 +25,7 @@
 
 uniform mat3 normal_matrix;
 uniform mat4 texture_matrix0;
+uniform vec4 ambient_color; // <FS:Beq/> add ambient color to preview shader
 uniform mat4 modelview_matrix;
 uniform mat4 modelview_projection_matrix;
 
@@ -87,7 +88,7 @@ void main()
 	
 	vec3 norm = normalize(normal_matrix * normal);
 
-	vec4 col = vec4(0,0,0,1);
+	vec4 col = ambient_color; // <FS:Beq/> add ambient color to preview shader
 
 	// Collect normal lights (need to be divided by two, as we later multiply by 2)
 	col.rgb += light_diffuse[1].rgb * calcDirectionalLight(norm, light_position[1].xyz);
