@@ -52,22 +52,41 @@ BOOL LLFloaterHowTo::postBuild()
 void LLFloaterHowTo::onOpen(const LLSD& key)
 {
     LLFloaterWebContent::Params p(key);
-    std::string url = gSavedSettings.getString("GuidebookURL");
-    p.url = LLWeb::expandURLSubstitutions(url, LLSD());
+    if (!p.url.isProvided() || p.url.getValue().empty())
+    {
+        std::string url = gSavedSettings.getString("GuidebookURL");
+        p.url = LLWeb::expandURLSubstitutions(url, LLSD());
+    }
     p.show_chrome = false;
 
     LLFloaterWebContent::onOpen(p);
 
-    // Elements from LLFloaterWebContent did not pick up restored size (save_rect) of LLFloaterHowTo
-    // set the stack size and position (alternative to preferred_media_size)
-    LLLayoutStack *stack = getChild<LLLayoutStack>("stack1");
-    LLRect stack_rect = stack->getRect();
-    stack->reshape(STACK_WIDTH, STACK_HEIGHT);
-    stack->setOrigin(stack_rect.mLeft, stack_rect.mTop - STACK_HEIGHT);
-    stack->updateLayout();
+    if (p.preferred_media_size().isEmpty())
+    {
+        // Elements from LLFloaterWebContent did not pick up restored size (save_rect) of LLFloaterHowTo
+        // set the stack size and position (alternative to preferred_media_size)
+        LLLayoutStack *stack = getChild<LLLayoutStack>("stack1");
+        LLRect stack_rect = stack->getRect();
+        stack->reshape(STACK_WIDTH, STACK_HEIGHT);
+        stack->setOrigin(stack_rect.mLeft, stack_rect.mTop - STACK_HEIGHT);
+        stack->updateLayout();
+    }
 }
 
 LLFloaterHowTo* LLFloaterHowTo::getInstance()
 {
     return LLFloaterReg::getTypedInstance<LLFloaterHowTo>("how_to");
+}
+
+BOOL LLFloaterHowTo::handleKeyHere(KEY key, MASK mask)
+{
+	BOOL handled = FALSE;
+
+	if (KEY_F1 == key )
+	{
+		closeFloater();
+		handled = TRUE;
+	}
+
+	return handled;
 }

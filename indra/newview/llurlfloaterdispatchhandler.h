@@ -1,6 +1,6 @@
 /** 
- * @file llfloaterhowto.h
- * @brief A variant of web floater meant to open guidebook
+ * @file llurlfloaterdispatchhandler.h
+ * @brief Handles URLFloater generic message from server
  *
  * $LicenseInfo:firstyear=2021&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -24,35 +24,26 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLFLOATERHOWTO_H
-#define LL_LLFLOATERHOWTO_H
+#ifndef LL_LLURLFLOATERDISPATCHHANDLER_H
+#define LL_LLURLFLOATERDISPATCHHANDLER_H
 
-#include "llfloaterwebcontent.h"
+#include "lldispatcher.h"
 
-class LLMediaCtrl;
-
-
-class LLFloaterHowTo :
-    public LLFloaterWebContent
+class LLUrlFloaterDispatchHandler : public LLDispatchHandler
 {
 public:
-    LOG_CLASS(LLFloaterHowTo);
+    LOG_CLASS(LLUrlFloaterDispatchHandler);
 
-    typedef LLFloaterWebContent::Params Params;
+    LLUrlFloaterDispatchHandler();
+    virtual ~LLUrlFloaterDispatchHandler();
 
-    LLFloaterHowTo(const Params& key);
+    virtual bool operator()(const LLDispatcher *, const std::string& key, const LLUUID& invoice, const sparam_t& strings) override;
 
-    void onOpen(const LLSD& key) override;
-
-    BOOL handleKeyHere(KEY key, MASK mask) override;
-
-    static LLFloaterHowTo* getInstance();
-
-    bool matchesKey(const LLSD& key) override { return true; /*single instance*/ };
+    static void registerInDispatcher();
 
 private:
-    BOOL postBuild() override;
+    static LLUrlFloaterDispatchHandler sUrlDispatchhandler;
 };
 
-#endif  // LL_LLFLOATERHOWTO_H
+#endif  // LL_LLURLFLOATERDISPATCHHANDLER_H
 

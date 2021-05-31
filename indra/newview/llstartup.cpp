@@ -2660,9 +2660,6 @@ bool idle_startup()
 			// on with this install.
 			gSavedSettings.setBOOL("ShowStartLocation", TRUE);
 
-            // <FS:Ansariel> Disabled...
-            //LLFloaterReg::toggleInstanceOrBringToFront("how_to");
-
 			// <FS:Ansariel> [FS Communication UI]
 			LLFloaterReg::toggleInstanceOrBringToFront("fs_im_container");
 			// </FS:Ansariel> [FS Communication UI]
