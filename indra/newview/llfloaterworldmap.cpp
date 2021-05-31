@@ -713,10 +713,16 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 	{
 		return;
 	}
-
-	LLVector3 pos_region((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
-					  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
-					  (F32)pos_global.mdV[VZ]);
+	// <FS:Beq> VarRegion slurl shenanigans
+	// agent_x = ll_round(region_pos.mV[VX]);
+	// agent_y = ll_round(region_pos.mV[VY]);
+	// agent_z = ll_round(region_pos.mV[VZ]);
+	// LLVector3 pos_region((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
+	// 				  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
+	// 				  (F32)pos_global.mdV[VZ]);
+	auto region_origin = region->getOriginGlobal();
+	auto pos_region = LLVector3(pos_global - region_origin);
+	// </FS:Beq>
 
 	LLSD body;
 	std::string url = region->getCapability("RemoteParcelRequest");
@@ -1022,7 +1028,12 @@ void LLFloaterWorldMap::updateLocation()
 		return; // invalid location
 	}
 	std::string sim_name;
-	gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal( pos_global, sim_name );
+	// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+	//gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal( pos_global, sim_name );
+	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
+	if (sim_info)
+		sim_name = sim_info->getName();
+	// </FS:Beq pp Oren>
 	if ((status != LLTracker::TRACKING_NOTHING) &&
 		(status != mTrackedStatus || pos_global != mTrackedLocation || sim_name != mTrackedSimName))
 	{
@@ -1055,12 +1066,16 @@ void LLFloaterWorldMap::updateLocation()
 
 			childSetValue("location", RlvStrings::getString(RlvStringKeys::Hidden::Region));
 		}
-		else if (gotSimName)
+// <FS:Beq pp Oren> FORE-30768 Slurls in Var regions are b0rked
+		// else if (gotSimName)
+		else if (sim_info)
 // [/RLVa:KB]
 //		if ( gotSimName )
 		{
-			mSLURL = LLSLURL(sim_name, pos_global);
+			// mSLURL = LLSLURL(sim_name, pos_global);
+			mSLURL = LLSLURL(sim_info->getName(), sim_info->getGlobalOrigin(), pos_global);
 		}
+// </FS:Beq pp Oren>
 		else
 		{	// Empty SLURL will disable the "Copy SLURL to clipboard" button
 			mSLURL = LLSLURL();

@@ -189,6 +189,7 @@ void LLRemoteParcelInfoProcessor::regionParcelInfoCoro(std::string url,
 
     LLSD bodyData;
 
+	LL_DEBUGS("ParcelRequest") << "Remote Parcel Request for " << regionId << "local: " << posRegion << "remote: " << posGlobal << LL_ENDL;// <FS:Beq> FIRE-30534 - changes related to var regions in opensim
     bodyData["location"] = ll_sd_from_vector3(posRegion);
     if (!regionId.isNull())
     {
@@ -196,6 +197,7 @@ void LLRemoteParcelInfoProcessor::regionParcelInfoCoro(std::string url,
     }
     if (!posGlobal.isExactlyZero())
     {
+		// <FS:Beq> Note: leave this to_region_handle at 256 grid cell resolution, let OpenSim Server resolve
         U64 regionHandle = to_region_handle(posGlobal);
         bodyData["region_handle"] = ll_sd_from_U64(regionHandle);
     }

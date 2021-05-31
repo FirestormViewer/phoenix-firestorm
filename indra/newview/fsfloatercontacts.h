@@ -120,6 +120,7 @@ private:
 															EAcceptance* accept,
 															std::string& tooltip_msg);
 	void					onFriendFilterEdit(const std::string& search_string);
+	void					onGroupFilterEdit(const std::string& search_string);
 
 	// friend buttons
 	void					onViewProfileButtonClicked();
@@ -128,7 +129,6 @@ private:
 	void					onPayButtonClicked();
 	void					onDeleteFriendButtonClicked();
 	void					onAddFriendWizButtonClicked(LLUICtrl* ctrl);
-	void					onContactSetsButtonClicked();
 	void					onMapButtonClicked();
 	
 	// group buttons
@@ -144,6 +144,7 @@ private:
 
 	LLTabContainer*			mTabContainer;
 	LLFilterEditor*			mFriendFilter;
+	LLFilterEditor*			mGroupFilter;
 	LLPanel*				mFriendsTab;
 	FSScrollListCtrl*		mFriendsList;
 	LLPanel*				mGroupsTab;

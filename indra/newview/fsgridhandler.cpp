@@ -29,6 +29,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llcommandhandler.h"
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -36,6 +37,7 @@
 #include "llviewercontrol.h"
 #include "llsdserialize.h"
 #include "llsecapi.h"
+#include "llstartup.h"
 
 #include "lltrans.h"
 #include "llweb.h"
@@ -48,6 +50,7 @@
 #include "llstartup.h"
 
 #include "fscorehttputil.h"
+#include "fspanellogin.h"
 #include "lfsimfeaturehandler.h"	// <COLOSI opensim multi-currency support />
 
 void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
@@ -819,7 +822,6 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 			if (list_changed)
 			{
 				mGridListChangedSignal(true);
-				mGridListChangedSignal.disconnect_all_slots();
 			}
 		}
 	}
@@ -841,7 +843,6 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 	if (FAIL == state)
 	{
 		mGridListChangedSignal(false);
-		mGridListChangedSignal.disconnect_all_slots();
 	}
 
 	if (grid_entry)
@@ -1384,10 +1385,6 @@ std::string LLGridManager::getAppSLURLBase(const std::string& grid)
 	{
 		ret = mGridList[grid][GRID_APP_SLURL_BASE].asString();
 	}
-	else if (grid == INWORLDZ_URI)
-	{
-		ret = "inworldz:///app";
-	}
 	else
 	{
 		std::string app_base;
@@ -1422,3 +1419,61 @@ std::string LLGridManager::getAppSLURLBase(const std::string& grid)
 	LL_DEBUGS("GridManager") << "App slurl base: " << ret << " - grid = " << grid << LL_ENDL;
 	return ret;
 }
+
+class FSGridManagerCommandHandler : public LLCommandHandler
+{
+public:
+	// not allowed from outside the app
+	FSGridManagerCommandHandler() : LLCommandHandler("gridmanager", UNTRUSTED_THROTTLE),
+		mDownloadConnection()
+	{ }
+
+	~FSGridManagerCommandHandler()
+	{
+		if (mDownloadConnection.connected())
+		{
+			mDownloadConnection.disconnect();
+		}
+	}
+
+	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
+	{
+		if (params.size() < 2)
+		{
+			return false;
+		}
+
+		if (params[0].asString() == "addgrid")
+		{
+			std::string login_uri = LLURI::unescape(params[1].asString());
+			mDownloadConnection = LLGridManager::instance().addGridListChangedCallback(boost::bind(&FSGridManagerCommandHandler::handleGridDownloadComplete, this, _1));
+			LLGridManager::instance().addGrid(login_uri);
+			return true;
+		}
+
+		return false;
+	}
+
+private:
+	boost::signals2::connection mDownloadConnection;
+
+	void handleGridDownloadComplete(bool success)
+	{
+		if (mDownloadConnection.connected())
+		{
+			mDownloadConnection.disconnect();
+		}
+
+		if (success)
+		{
+			LLGridManager::getInstance()->saveGridList();
+			if (LLStartUp::getStartupState() <= STATE_LOGIN_WAIT)
+			{
+				FSPanelLogin::updateServer();
+			}
+		}
+	}
+};
+
+// Creating the object registers with the dispatcher.
+FSGridManagerCommandHandler gFSGridManagerCommandHandler;

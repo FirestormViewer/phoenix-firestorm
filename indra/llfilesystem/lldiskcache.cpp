@@ -43,7 +43,9 @@
 static const char* subdirs = "0123456789abcdef";
 
 LLDiskCache::LLDiskCache(const std::string cache_dir,
-                         const int max_size_bytes,
+                         // <FS:Ansariel> Fix integer overflow
+                         //const int max_size_bytes,
+                         const uintmax_t max_size_bytes,
                          const bool enable_cache_debug_info) :
     mCacheDir(cache_dir),
     mMaxSizeBytes(max_size_bytes),
@@ -64,7 +66,7 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
 
 void LLDiskCache::purge()
 {
-    if (mEnableCacheDebugInfo)
+    //if (mEnableCacheDebugInfo)
     {
         LL_INFOS() << "Total dir size before purge is " << dirFileSize(mCacheDir) << LL_ENDL;
     }
@@ -144,7 +146,7 @@ void LLDiskCache::purge()
         }
     }
 
-    if (mEnableCacheDebugInfo)
+    //if (mEnableCacheDebugInfo)
     {
         auto end_time = std::chrono::high_resolution_clock::now();
         auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
@@ -369,3 +371,27 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
 
     return total_file_size;
 }
+
+// <FS:Ansariel> Regular disk cache cleanup
+FSPurgeDiskCacheThread::FSPurgeDiskCacheThread() :
+    LLThread("PurgeDiskCacheThread", nullptr)
+{
+}
+
+void FSPurgeDiskCacheThread::run()
+{
+    constexpr F64 CHECK_INTERVAL = 60;
+    mTimer.setTimerExpirySec(CHECK_INTERVAL);
+    mTimer.start();
+
+    do
+    {
+        if (mTimer.checkExpirationAndReset(CHECK_INTERVAL))
+        {
+            LLDiskCache::instance().purge();
+        }
+
+        ms_sleep(100);
+    } while (!isQuitting());
+}
+// </FS:Ansariel>

@@ -735,6 +735,7 @@ LLAppViewer* LLAppViewer::sInstance = NULL;
 LLTextureCache* LLAppViewer::sTextureCache = NULL;
 LLImageDecodeThread* LLAppViewer::sImageDecodeThread = NULL;
 LLTextureFetch* LLAppViewer::sTextureFetch = NULL;
+FSPurgeDiskCacheThread* LLAppViewer::sPurgeDiskCacheThread = NULL; // <FS:Ansariel> Regular disk cache cleanup
 
 std::string getRuntime()
 {
@@ -1882,8 +1883,13 @@ bool LLAppViewer::doFrame()
 				S32 work_pending = 0;
 				S32 io_pending = 0;
 				F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
-
+				// <FS:Beq> instrument image decodes
+				{
+					FSZoneN("updateTextureThreads");
+					// FSPlot("max_time_ms",max_time);
+				// <FS:Beq/>
 				work_pending += updateTextureThreads(max_time);
+				}	// <FS:Beq/> instrument image decodes
 
 				{
 					LL_RECORD_BLOCK_TIME(FTM_LFS);
@@ -2442,6 +2448,7 @@ bool LLAppViewer::cleanup()
 	sTextureFetch->shutdown();
 	sTextureCache->shutdown();
 	sImageDecodeThread->shutdown();
+	sPurgeDiskCacheThread->shutdown(); // <FS:Ansariel> Regular disk cache cleanup
 
 	sTextureFetch->shutDownTextureCacheThread() ;
 	sTextureFetch->shutDownImageDecodeThread() ;
@@ -2464,6 +2471,10 @@ bool LLAppViewer::cleanup()
     sImageDecodeThread = NULL;
 	delete mFastTimerLogThread;
 	mFastTimerLogThread = NULL;
+	// <FS:Ansariel> Regular disk cache cleanup
+	delete sPurgeDiskCacheThread;
+	sPurgeDiskCacheThread = NULL;
+	// </FS:Ansariel>
 
 	if (LLFastTimerView::sAnalyzePerformance)
 	{
@@ -2577,13 +2588,18 @@ bool LLAppViewer::initThreads()
 
 	LLLFSThread::initClass(enable_threads && false);
 
+	//<FS:ND> Image thread pool from CoolVL
+	U32 imageThreads = gSavedSettings.getU32("FSImageDecodeThreads");
+	// </FS:ND>
+
 	// Image decoding
-	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true);
+	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true, imageThreads);
 	LLAppViewer::sTextureCache = new LLTextureCache(enable_threads && true);
 	LLAppViewer::sTextureFetch = new LLTextureFetch(LLAppViewer::getTextureCache(),
 													sImageDecodeThread,
 													enable_threads && true,
 													app_metrics_qa_mode);
+	LLAppViewer::sPurgeDiskCacheThread = new FSPurgeDiskCacheThread(); // <FS:Ansariel> Regular disk cache cleanup
 
 	if (LLTrace::BlockTimer::sLog || LLTrace::BlockTimer::sMetricLog)
 	{
@@ -3818,6 +3834,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	// CPU
 	info["CPU"] = gSysCPU.getCPUString();
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
+	info["CONCURRENCY"] = LLSD::Integer((S32)boost::thread::hardware_concurrency());	// <FS:Beq> Add hardware concurrency to info
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
 	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
@@ -4959,11 +4976,16 @@ bool LLAppViewer::initCache()
 
     // note that the maximum size of this cache is defined as a percentage of the 
     // total cache size - the 'CacheSize' pref - for all caches. 
-    const unsigned int cache_total_size_mb = gSavedSettings.getU32("CacheSize");
-    const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
-    const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
-    const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
-	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableCacheDebugInfo");
+    // <FS:Ansariel> Better asset cache size control
+    //const unsigned int cache_total_size_mb = gSavedSettings.getU32("CacheSize");
+    //const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
+    //const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
+    const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
+    // </FS:Ansariel>
+    // <FS:Ansariel> Fix integer overflow
+    //const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
 	// <FS:Ansariel> Don't ignore cache path for asset cache; Moved further down until cache path has been set correctly
 	//const std::string cache_dir = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name);
 	//LLDiskCache::initParamSingleton(cache_dir, disk_cache_bytes, enable_cache_debug_info);
@@ -5059,6 +5081,8 @@ bool LLAppViewer::initCache()
 			LLDiskCache::getInstance()->purge();
 		}
 	}
+	// <FS:Ansariel> Regular disk cache cleanup
+	LLAppViewer::getPurgeDiskCacheThread()->start();
 
 	// <FS:Ansariel> FIRE-13066
 	if (mPurgeTextures && !read_only)

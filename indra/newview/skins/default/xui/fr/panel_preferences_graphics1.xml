@@ -89,6 +89,7 @@
 			<slider label="Réserve supplémentaire de mémoire tampon (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé aux textures chargées en cache qui ne sont actuellement pas affichées."/>
 			<slider label="Réserve de mémoire vidéo physique (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé à un autre usage."/>
 			<spinner label="Ratio de distance du brouillard :" name="fog"/>
+			<spinner label="Décodage des images :" name="image_decode_threads" tool_tip="Le nombre de threads à utiliser pour le décodage des images. 0 = Auto, 1 = Synchrone, 2+ = spécifié par l'utilisateur. (0 ou 1 sont recommandés)"/>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>

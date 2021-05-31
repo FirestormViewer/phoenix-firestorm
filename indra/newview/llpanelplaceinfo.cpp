@@ -173,7 +173,7 @@ void LLPanelPlaceInfo::displayParcelInfo(const LLUUID& region_id,
 	mPosRegion.setVec((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
 					  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
 					  (F32)pos_global.mdV[VZ]);
-
+					  
 	LLSD body;
 	std::string url = region->getCapability("RemoteParcelRequest");
 	if (!url.empty())
@@ -186,6 +186,29 @@ void LLPanelPlaceInfo::displayParcelInfo(const LLUUID& region_id,
 		mDescEditor->setText(getString("server_update_text"));
 	}
 }
+// <FS:Beq> FIRE-30768, FIRE-30534 more OS Var region fixups
+void LLPanelPlaceInfo::displayParcelInfo(const LLUUID& region_id,
+										 const U64 region_handle,
+										 const LLVector3d& pos_global)
+{
+	auto region_origin = from_region_handle(region_handle);
+	mPosRegion.setVec(LLVector3(pos_global - region_origin));
+	LLViewerRegion* region = gAgent.getRegion();
+	if (!region)
+		return;
+	LLSD body;
+	std::string url = region->getCapability("RemoteParcelRequest");
+	if (!url.empty())
+	{
+        LLRemoteParcelInfoProcessor::getInstance()->requestRegionParcelInfo(url,
+            region_id, mPosRegion, pos_global, getObserverHandle());
+	}
+	else
+	{
+		mDescEditor->setText(getString("server_update_text"));
+	}
+}
+// </FS:Beq>
 
 // virtual
 void LLPanelPlaceInfo::setErrorStatus(S32 status, const std::string& reason)

@@ -938,8 +938,8 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					{
 						region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1));
 						LLVector3d agentPos = gAgent.getPositionGlobal();
-						agent_x = ll_round((F32)fmod(agentPos.mdV[VX], (F64)REGION_WIDTH_METERS));
-						agent_y = ll_round((F32)fmod(agentPos.mdV[VY], (F64)REGION_WIDTH_METERS));
+						agent_x = ll_round((F32)agentPos.mdV[VX]);
+						agent_y = ll_round((F32)agentPos.mdV[VY]);
 						agent_z = ll_round((F32)agentPos.mdV[VZ]);
 						if (!sFSCmdLineMapToKeepPos)
 						{
