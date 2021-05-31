@@ -371,7 +371,7 @@
          left="26"
          top_pad="15"
          name="auto_unmute_label"
-         width="230">
+         width="430">
             Automatically unmute after teleport:
         </text>
         <check_box
