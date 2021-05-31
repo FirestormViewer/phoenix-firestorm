@@ -175,9 +175,34 @@ LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted*
 	U32 priority, S32 discard, BOOL needs_aux, Responder* responder)
 {
 	FSZoneC(tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
-	LLMutexLock lock(mCreationMutex);
+	// <FS:Beq> De-couple texture threading from mainloop
+	// LLMutexLock lock(mCreationMutex);
+	// handle_t handle = generateHandle();
+	// mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
 	handle_t handle = generateHandle();
-	mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
+	// If we have a thread pool dispatch this directly.
+	// Note: addRequest could cause the handling to take place on the fetch thread, this is unlikely to be an issue. 
+	// if this is an actual problem we move the fallback to here and place the unfulfilled request into the legacy queue
+	if (s_ChildThreads > 0)
+	{
+		FSZoneNC("DecodeDecoupled", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+		ImageRequest* req = new ImageRequest(handle, image,
+			priority, discard, needs_aux,
+			responder, this);
+		bool res = addRequest(req);
+		if (!res)
+		{
+			LL_WARNS() << "Decode request not added because we are exiting." << LL_ENDL;
+			return 0;
+		}
+	}
+	else
+	{
+		FSZoneNC("DecodeQueued", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+		LLMutexLock lock(mCreationMutex);
+		mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
+	}
+	// </FS:Beq>
 	return handle;
 }
 
