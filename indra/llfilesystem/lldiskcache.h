@@ -126,6 +126,13 @@ class LLDiskCache :
         /**
          * Purge the oldest items in the cache so that the combined size of all files
          * is no bigger than mMaxSizeBytes.
+         *
+         * WARNING: purge() is called by LLPurgeDiskCacheThread. As such it must
+         * NOT touch any LLDiskCache data without introducing and locking a mutex!
+         *
+         * Purging the disk cache involves nontrivial work on the viewer's
+         * filesystem. If called on the main thread, this causes a noticeable
+         * freeze.
          */
         void purge();
 
@@ -191,17 +198,12 @@ class LLDiskCache :
         bool mEnableCacheDebugInfo;
 };
 
-// <FS:Ansariel> Regular disk cache cleanup
-class FSPurgeDiskCacheThread : public LLThread
+class LLPurgeDiskCacheThread : public LLThread
 {
 public:
-    FSPurgeDiskCacheThread();
+    LLPurgeDiskCacheThread();
 
 protected:
     void run() override;
-
-private:
-    LLTimer mTimer;
 };
-// </FS:Ansariel>
 #endif // _LLDISKCACHE
