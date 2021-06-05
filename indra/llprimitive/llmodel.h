@@ -187,7 +187,7 @@ public:
 	
 	//reorder face list based on mMaterialList in this and reference so 
 	//order matches that of reference (material ordering touchup)
-	bool matchMaterialOrder(LLModel* ref, int& refFaceCnt, int& modelFaceCnt );
+	// bool matchMaterialOrder(LLModel* ref, int& refFaceCnt, int& modelFaceCnt ); // <FS:Beq/> FIRE-30965 error handling improvements (function relocated)
 	bool isMaterialListSubset( LLModel* ref );
 	bool needToAddFaces( LLModel* ref, int& refFaceCnt, int& modelFaceCnt );
 	
