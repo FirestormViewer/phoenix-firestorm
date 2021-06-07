@@ -864,7 +864,7 @@ void LLFloaterModelPreview::draw()
 
 	if (!mModelPreview->mLoading)
 	{
-		if ( mModelPreview->getLoadState() == LLModelLoader::ERROR_MATERIALS )
+		if ( mModelPreview->getLoadState() == LLModelLoader::ERROR_MATERIALS_NOT_A_SUBSET )// <FS:Beq/> Improve error reporting
 		{
 			// <FS:Beq> cleanup/improve errors - this error is effectively duplicated, the unused one was actually better
 			// childSetTextArg("status", "[STATUS]", getString("status_material_mismatch"));

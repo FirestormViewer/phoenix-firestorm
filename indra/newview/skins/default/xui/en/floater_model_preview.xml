@@ -1492,6 +1492,16 @@
          label="Model Edge"
          tool_tip="Edge color for the model in preview window on the Mesh uploader"
          name="mesh_preview_edge_color"/>
+         <color_swatch
+         control_name="PreviewAmbientColor"
+         follows="top|left"
+         left_pad="24"
+         height="64"
+         width="120"
+         can_apply_immediately="true"
+         label="Ambient Light"
+         tool_tip="Ambient light level in preview window (also affects animation preview etc)"
+         name="preview_ambient_color"/>
          <text
          type="string"
          length="1"

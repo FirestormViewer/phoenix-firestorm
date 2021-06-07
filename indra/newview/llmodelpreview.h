@@ -200,7 +200,7 @@ public:
     bool mHasDegenerate;
 
 protected:
-
+    bool				matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFaceCnt, int& modelFaceCnt );	// <FS:Beq/> FIRE-30965 Cleanup mesh material parsing 
     static void			loadedCallback(LLModelLoader::scene& scene, LLModelLoader::model_list& model_list, S32 lod, void* opaque);
     static void			stateChangedCallback(U32 state, void* opaque);
 

@@ -25,7 +25,7 @@
  */
 
 #include "linden_common.h"
-
+#include "fstelemetry.h" // <FS:Beq> add telemetry support.
 #include "llimageworker.h"
 #include "llimagedxt.h"
 
@@ -135,7 +135,12 @@ LLImageDecodeThread::~LLImageDecodeThread()
 // virtual
 S32 LLImageDecodeThread::update(F32 max_time_ms)
 {
+	FSZoneC(tracy::Color::Blue); // <FS:Beq/> instrument image decodes
 	LLMutexLock lock(mCreationMutex);
+	// <FS:Beq> instrument image decodes
+	{
+	FSZoneC(tracy::Color::Blue1);
+	// </FS:Beq>
 	for (creation_list_t::iterator iter = mCreationList.begin();
 		 iter != mCreationList.end(); ++iter)
 	{
@@ -155,16 +160,49 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 		}
 	}
 	mCreationList.clear();
+	// <FS:Beq> instrument image decodes
+	}
+	{
+	FSZoneC(tracy::Color::Blue2);
+	// </FS:Beq>
 	S32 res = LLQueuedThread::update(max_time_ms);
+	// FSPlot("img_decode_pending", (int64_t)res); 	// <FS:Beq/> instrument image decodes
 	return res;
+	} 	// <FS:Beq/> instrument image decodes
 }
 
 LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted* image, 
 	U32 priority, S32 discard, BOOL needs_aux, Responder* responder)
 {
-	LLMutexLock lock(mCreationMutex);
+	FSZoneC(tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+	// <FS:Beq> De-couple texture threading from mainloop
+	// LLMutexLock lock(mCreationMutex);
+	// handle_t handle = generateHandle();
+	// mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
 	handle_t handle = generateHandle();
-	mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
+	// If we have a thread pool dispatch this directly.
+	// Note: addRequest could cause the handling to take place on the fetch thread, this is unlikely to be an issue. 
+	// if this is an actual problem we move the fallback to here and place the unfulfilled request into the legacy queue
+	if (s_ChildThreads > 0)
+	{
+		FSZoneNC("DecodeDecoupled", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+		ImageRequest* req = new ImageRequest(handle, image,
+			priority, discard, needs_aux,
+			responder, this);
+		bool res = addRequest(req);
+		if (!res)
+		{
+			LL_WARNS() << "Decode request not added because we are exiting." << LL_ENDL;
+			return 0;
+		}
+	}
+	else
+	{
+		FSZoneNC("DecodeQueued", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+		LLMutexLock lock(mCreationMutex);
+		mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
+	}
+	// </FS:Beq>
 	return handle;
 }
 
@@ -230,10 +268,19 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 
 bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 {
-	const F32 decode_time_slice = .1f;
+	// <FS:Beq> allow longer timeout for async and add instrumentation
+	// const F32 decode_time_slice = .1f;
+	FSZoneC(tracy::Color::DarkOrange); 
+	F32 decode_time_slice = .1f;
+	if(mFlags & FLAG_ASYNC)
+	{
+		decode_time_slice = 10.0f;// long time out as this is not an issue with async
+	}
+	// </FS:Beq>
 	bool done = true;
 	if (!mDecodedRaw && mFormattedImage.notNull())
 	{
+		FSZoneC(tracy::Color::DarkOrange1); // <FS:Beq> instrument the image decode pipeline
 		// Decode primary channels
 		if (mDecodedImageRaw.isNull())
 		{
@@ -272,6 +319,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 	}
 	if (done && mNeedsAux && !mDecodedAux && mFormattedImage.notNull())
 	{
+		FSZoneC(tracy::Color::DarkOrange2); // <FS:Beq> instrument the image decode pipeline
 		// Decode aux channel
 		if (!mDecodedImageAux)
 		{
@@ -282,7 +330,12 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 		done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
 		mDecodedAux = done && mDecodedImageAux->getData();
 	}
-
+	// <FS:Beq> report timeout on async thread (which leads to worker abort errors)
+	if(!done)
+	{
+		LL_WARNS("ImageDecode") << "Image decoding failed to complete with time slice=" << decode_time_slice << LL_ENDL;
+	}
+	// </FS:Beq>
 	//<FS:ND> Image thread pool from CoolVL
 	if (mFlags & FLAG_ASYNC)
 	{

@@ -25,6 +25,11 @@
 		<check_box label="Aktiviert" name="enable_media"/>
 		<slider label="Voice-Chat" name="Voice Volume"/>
 		<check_box label="Aktiviert" name="enable_voice_check_volume"/>
+		<text name="auto_unmute_label">
+			Stummschaltung nach Teleport automatisch aufheben:
+		</text>
+		<check_box name="FSAutoUnmuteAmbient" label="Umgebung" tool_tip="Automatisch Stummschaltung für Umgebungsgeräusche nach Teleport aufheben, falls stummgeschaltet (Standard: Aus)"/>
+		<check_box name="FSAutoUnmuteSounds" label="Klänge" tool_tip="Automatisch Stummschaltung für Klänge nach Teleport aufheben, falls stummgeschaltet (Standard: Aus)"/>
 		<text name="friends_logon_sounds_label">
 			Klang abspielen wenn sich Freunde:
 		</text>

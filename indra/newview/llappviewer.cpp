@@ -1879,8 +1879,13 @@ bool LLAppViewer::doFrame()
 				S32 work_pending = 0;
 				S32 io_pending = 0;
 				F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
-
+				// <FS:Beq> instrument image decodes
+				{
+					FSZoneN("updateTextureThreads");
+					// FSPlot("max_time_ms",max_time);
+				// <FS:Beq/>
 				work_pending += updateTextureThreads(max_time);
+				}	// <FS:Beq/> instrument image decodes
 
 				{
 					LL_RECORD_BLOCK_TIME(FTM_LFS);
@@ -3827,6 +3832,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	// CPU
 	info["CPU"] = gSysCPU.getCPUString();
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
+	info["CONCURRENCY"] = LLSD::Integer((S32)boost::thread::hardware_concurrency());	// <FS:Beq> Add hardware concurrency to info
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
 	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
