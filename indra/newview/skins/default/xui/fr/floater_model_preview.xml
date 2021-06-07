@@ -290,6 +290,10 @@
 				</text>
 				<check_box label="Activation automatique des poids" tool_tip="Régler automatiquement le poids des mesh avec les informations de rigging" name="mesh_preview_auto_weights"/>
 				<check_box label="Visualisation automatique des poids" tool_tip="Visualiser automatiquement les poids dans l'aperçu des meshes avec les info de rigging" name="mesh_preview_auto_show_weights"/>
+				<text name="mesh_preview_ud_preset_label">
+					Physique défini par l'utilisateur :
+				</text>
+				<line_editor name="ud_physics" tool_tip="Chemin d'accès complet vers un fichier Collada à utiliser pour les propriétés physiques."/>
 				<text name="mesh_preview_colors_label">
 					Couleurs de l'aperçu des modèles :
 				</text>

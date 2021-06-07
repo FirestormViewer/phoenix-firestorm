@@ -185,6 +185,8 @@
          name="mesh_preview_canvas_color"/>
         <color_swatch label="Грани модели" tool_tip="Цвет граней модели в окне предварительного просмотра"
          name="mesh_preview_edge_color"/>
+        <color_swatch label="Окружающий свет" tool_tip="Уровень окружающего освещения в окне предварительного просмотра (также влияет на предварительный просмотр анимации и т.д.)"
+         name="preview_ambient_color"/>
         <text name="physics_settings_label">
          Физика:
         </text>

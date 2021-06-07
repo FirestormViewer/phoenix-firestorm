@@ -6,7 +6,7 @@
 			<slider label="Volume principal" name="System Volume"/>
 			<check_box label="Muet lorsque minimisé" name="mute_when_minimized"/>
 			<slider label="Interface" name="UI Volume"/>
-			<slider label="Ambiant" name="Wind Volume"/>
+			<slider label="Ambiance" name="Wind Volume"/>
 			<check_box name="collisions_audio_play_btn" tool_tip="Activer cette option pour entendre les sons produits par les collisions" label="Activer les sons des collisions"/>
 			<slider label="Effets sonores" name="SFX Volume"/>
 			<check_box name="gesture_audio_play_btn" tool_tip="Activer cette option pour entendre les sons produits par les gestes des résidents" label="Activer les sons des gestes"/>
@@ -16,6 +16,9 @@
 			<check_box label="Actif" name="enable_media"/>
 			<slider label="Chat vocal" name="Voice Volume"/>
 			<check_box label="Actif" name="enable_voice_check_volume"/>
+			<text name="auto_unmute_label">Réactiver le son après une téléportation :</text>
+			<check_box name="FSAutoUnmuteAmbient" label="Ambiance" tool_tip="Réactivation automatique des sons d'ambiance après une téléportation si le son est coupé (par défaut : désactivé)."/>
+			<check_box name="FSAutoUnmuteSounds" label="Effets sonores" tool_tip="Réactivation automatique des effets sonores après une téléportation si le son est coupé (par défaut : désactivé)"/>
 			<text name="friends_logon_sounds_label">Jouer un son quand mes amis :</text>
 			<check_box name="friends_notify_online_sound" label="Se connectent" width="110"/>
 			<check_box name="friends_notify_offline_sound" label="Se déconnectent"/>
