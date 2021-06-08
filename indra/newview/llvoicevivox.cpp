@@ -1438,6 +1438,11 @@ void LLVivoxVoiceClient::logoutOfVivox(bool wait)
 
                 result = llcoro::suspendUntilEventOnWithTimeout(mVivoxPump, LOGOUT_ATTEMPT_TIMEOUT, timeoutResult);
 
+                if (sShuttingDown)
+                {
+                    break;
+                }
+
                 LL_DEBUGS("Voice") << "event=" << ll_stream_notation_sd(result) << LL_ENDL;
                 // Don't get confused by prior queued events -- note that it's
                 // very important that mVivoxPump is an LLEventMailDrop, which
@@ -1873,7 +1878,7 @@ bool LLVivoxVoiceClient::waitForChannel()
 
         if (sShuttingDown)
         {
-            logoutOfVivox(true);
+            logoutOfVivox(false);
             return false;
         }
 
@@ -1968,9 +1973,9 @@ bool LLVivoxVoiceClient::waitForChannel()
 
         mIsProcessingChannels = false;
 
-        logoutOfVivox(true);
+        logoutOfVivox(!sShuttingDown /*bool wait*/);
 
-        if (mRelogRequested)
+        if (mRelogRequested && !sShuttingDown)
         {
             LL_DEBUGS("Voice") << "Relog Requested, restarting provisioning" << LL_ENDL;
             if (!provisionVoiceAccount())
