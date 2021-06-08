@@ -39,6 +39,29 @@ inline U64 to_region_handle(const U32 x_origin, const U32 y_origin)
 	return region_handle;
 }
 
+// <FS:Beq> FIRE-30534 Overload that takes explicit region origin and width to improve Var Region identification.
+inline U64 to_region_handle(const LLVector3d& pos_global, const LLVector3d& agent_region_origin, const F32 width)
+{
+	U32 global_x { static_cast<U32>( pos_global.mdV[VX] ) };
+	U32 global_y { static_cast<U32>( pos_global.mdV[VY] ) };
+
+	U32 agent_region_origin_x { static_cast<U32>( agent_region_origin.mdV[VX] ) };
+	U32 agent_region_origin_y { static_cast<U32>( agent_region_origin.mdV[VY] ) };
+
+	if(	agent_region_origin_x <  global_x && ( agent_region_origin_x + width ) > global_x &&
+		agent_region_origin_y <  global_y && ( agent_region_origin_y + width ) > global_y )
+	{
+		// target is local to current region we can make a more informed guess
+		return to_region_handle( agent_region_origin_x, agent_region_origin_y );
+	}
+	// fallback to legacy 256m tile-based guess and let the region server / map work it out.
+	global_x -= global_x % 256;
+	global_y -= global_y % 256;
+
+	return to_region_handle( global_x, global_y );
+}
+// </FS:Beq>
+
 inline U64 to_region_handle(const LLVector3d& pos_global)
 {
 	U32 global_x = (U32)pos_global.mdV[VX];

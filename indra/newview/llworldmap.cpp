@@ -380,6 +380,7 @@ LLSimInfo* LLWorldMap::simInfoFromHandle(const U64 handle)
 		if(x >= checkRegionX && x < (checkRegionX + info->mSizeX) &&
 			y >= checkRegionY && y < (checkRegionY + info->mSizeY))
 		{
+			LL_DEBUGS("WorldMap") << "VarRegion match for map tile (" << x << "," << y << ") in " << info->mSizeX << "x" << info->mSizeY << " region at (" << checkRegionX << "," << checkRegionY << ")" << LL_ENDL;// <FS:Beq/> FIRE-30534 - changes related to var regions in opensim
 			return info;
 		}
 // </FS:CR> Aurora Sim
@@ -466,7 +467,7 @@ bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, 
 	else
 	{
 		U64 handle = to_region_handle(x_world, y_world);
- 		//LL_INFOS("WorldMap") << "Map sim : " << name << ", ID : " << image_id.getString() << LL_ENDL;
+ 		LL_DEBUGS("WorldMap") << "Map sim : " << name << ", ID : " << image_id.getString() << ", HANDLE : " << handle << LL_ENDL;// <FS:Beq> FIRE-30534 - changes related to var regions in opensim
 		// Insert the region in the region map of the world map
 		// Loading the LLSimInfo object with what we got and insert it in the map
 		LLSimInfo* siminfo = LLWorldMap::getInstance()->simInfoFromHandle(handle);

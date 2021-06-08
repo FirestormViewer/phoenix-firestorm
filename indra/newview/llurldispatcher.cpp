@@ -283,9 +283,12 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
 #endif // OPENSIM
 // </FS:AW optional opensim support>
 
-	LLVector3d global_pos = from_region_handle(region_handle);
-	global_pos += LLVector3d(slurl.getPosition());
-
+	// <FS:Beq> make Var Regions work
+	// LLVector3d global_pos = from_region_handle(region_handle);
+	// global_pos += LLVector3d(slurl.getPosition());
+	LLVector3d origin_pos = from_region_handle(region_handle); 
+	LLVector3d global_pos{origin_pos + LLVector3d(slurl.getPosition())};
+	// </FS:Beq>
 	if (teleport)
 	{	
 		gAgent.teleportViaLocation(global_pos);
@@ -302,6 +305,10 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
 		key["x"] = global_pos.mdV[VX];
 		key["y"] = global_pos.mdV[VY];
 		key["z"] = global_pos.mdV[VZ];
+		// <FS:Beq> support Var regions
+		key["ox"] = origin_pos.mdV[VX];
+		key["oy"] = origin_pos.mdV[VY];
+		// </FS:Beq>
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);

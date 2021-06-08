@@ -255,6 +255,7 @@
          border_visible="false"
          h_pad="0"
          max_length="1000"
+         trusted_content="false"
          parse_urls="true"
          v_pad="0"
          word_wrap="true"

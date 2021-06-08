@@ -49,6 +49,7 @@
 #include "lllandmarkactions.h"
 #include "lllandmarklist.h"
 #include "llpathfindingmanager.h"
+#include "llworld.h" // <FS:Beq pp Oren/> FIRE-30768: SLURL's don't work in VarRegions
 #include "llpathfindingnavmesh.h"
 #include "llpathfindingnavmeshstatus.h"
 #include "llteleporthistory.h"
@@ -775,13 +776,24 @@ void LLLocationInputCtrl::onLocationPrearrange(const LLSD& data)
 			//mFullTitile format - region_name[, parcel_name] (local_x,local_y, local_z)
 			if (new_item_titles.insert(result->mFullTitle).second)
 			{
-				LLSD value;
-				value["item_type"] = TELEPORT_HISTORY;
-				value["global_pos"] = result->mGlobalPos.getValue();
-				std::string region_name = result->mTitle.substr(0, result->mTitle.find(','));
-				//TODO*: add Surl to teleportitem or parse region name from title
-				value["tooltip"] = LLSLURL(region_name, result->mGlobalPos).getSLURLString();
-				add(result->getTitle(), value); 
+				// <FS:Beq pp Oren> FIRE-30768: SLURL's don't work in VarRegions
+				LLViewerRegion* regionp = LLWorld::instance().getRegionFromID(result->mRegionID);
+				if (regionp)
+				{
+					LLSD value;
+					value["item_type"] = TELEPORT_HISTORY;
+					value["global_pos"] = result->mGlobalPos.getValue();
+					std::string region_name = result->mTitle.substr(0, result->mTitle.find(','));
+					//TODO*: add Surl to teleportitem or parse region name from title
+					//value["tooltip"] = LLSLURL(region_name, result->mGlobalPos).getSLURLString();
+					value["tooltip"] = LLSLURL(region_name, regionp->getOriginGlobal(), result->mGlobalPos).getSLURLString();
+					add(result->getTitle(), value);
+				}
+				else
+				{
+					LL_WARNS("LocationInputCtrl") << "unable to resolve region " << result->mRegionID << LL_ENDL;
+				}
+				// </FS:Beq pp Oren>
 			}
 			result = std::find_if(result + 1, th_items.end(), boost::bind(
 									&LLLocationInputCtrl::findTeleportItemsByTitle, this,

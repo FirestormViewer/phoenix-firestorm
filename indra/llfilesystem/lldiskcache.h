@@ -86,7 +86,9 @@ class LLDiskCache :
                      * The maximum size of the cache in bytes - Based on the
                      * setting at 'CacheSize' and 'DiskCachePercentOfTotal'
                      */
-                    const int max_size_bytes,
+                    // <FS:Ansariel> Fix integer overflow
+                    //const int max_size_bytes,
+                    const uintmax_t max_size_bytes,
                     /**
                      * A flag that enables extra cache debugging so that
                      * if there are bugs, we can ask uses to enable this
@@ -141,6 +143,9 @@ class LLDiskCache :
          */
         const std::string getCacheInfo();
 
+        // <FS:Ansariel> Better asset cache size control
+        void setMaxSizeBytes(uintmax_t size) { mMaxSizeBytes = size; }
+
     private:
         /**
          * Utility function to gather the total size the files in a given
@@ -188,4 +193,17 @@ class LLDiskCache :
         bool mEnableCacheDebugInfo;
 };
 
+// <FS:Ansariel> Regular disk cache cleanup
+class FSPurgeDiskCacheThread : public LLThread
+{
+public:
+    FSPurgeDiskCacheThread();
+
+protected:
+    void run() override;
+
+private:
+    LLTimer mTimer;
+};
+// </FS:Ansariel>
 #endif // _LLDISKCACHE

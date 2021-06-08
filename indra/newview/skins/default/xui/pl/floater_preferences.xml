@@ -10,6 +10,7 @@ https://accounts.secondlife.com/change_email/
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
 	<panel name="search_panel">
 		<search_editor label="Szukaj w ustawieniach" name="search_prefs_edit" tool_tip="Wprowadź w tym miejscu interesującą Cię frazę. Wyniki będą wyświetlane dla pasujących fragmentów nazw lub komentarzy przypisanych do ustawień." />
+		<button name="copy_search_slurl_btn" tool_tip="Skopiuj wyszukiwane hasło jako SLURL" />
 	</panel>
 	<tab_container name="pref core">
 		<panel label="Ogólne" name="general"/>
