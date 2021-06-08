@@ -146,7 +146,7 @@ namespace
             
             // <FS:ND> We don't send log files
             // sBugSplatSender->sendAdditionalFile(
-            //     WCSTR(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "SecondLife.log")));
+            //     WCSTR(LLError::logFileName()));
             // </FS:ND>
 
             // sBugSplatSender->sendAdditionalFile(
