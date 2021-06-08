@@ -4,6 +4,7 @@
   <string name="status_parse_error">Ошибка: Проблема при анализе файла DAE – см. подробности в журнале.</string>
   <string name="status_bind_shape_orientation">Предупреждение: форма матрицы стандартно не ориентирована по координате X.</string>
   <string name="status_material_mismatch">Ошибка: Материал модели не входит в эталонную модель.</string>
+  <string name="status_lod_model_mismatch">Ошибка: Уровень детализации модели не имеет родителя.</string>
   <string name="status_reading_file">Загрузка...</string>
   <string name="status_generating_meshes">Создаются меши...</string>
   <string name="status_vertex_number_overflow">Ошибка: Число вершин превышает 65535, Прервано!</string>
@@ -103,6 +104,9 @@
             <combo_item name="physics_medium">Средний</combo_item>
             <combo_item name="physics_low">Низкий</combo_item>
             <combo_item name="physics_lowest">Низший</combo_item>
+            <combo_item name="physics_cube">Куб</combo_item>
+            <combo_item name="physics_hex">Шестиугольник</combo_item>
+            <combo_item name="physics_ud">Определенные</combo_item>
             <combo_item name="load_from_file">Из файла</combo_item>
           </combo_box>
           <button label="Обзор..." name="physics_browse"/>
@@ -167,6 +171,10 @@
         <check_box label="Автоматический просмотр весов"
          tool_tip="Автоматически показывать веса в предпросмотре для ригованых мешей"
          name="mesh_preview_auto_show_weights"/>
+        <text name="mesh_preview_ud_preset_label">
+          Предустановки физики:
+        </text>
+        <line_editor name="ud_physics" tool_tip="Полный системный путь к простому определению сетки Collada для использования в физике."/>
         <text name="mesh_preview_colors_label">
          Цвета предварительного просмотра:
         </text>
@@ -177,6 +185,8 @@
          name="mesh_preview_canvas_color"/>
         <color_swatch label="Грани модели" tool_tip="Цвет граней модели в окне предварительного просмотра"
          name="mesh_preview_edge_color"/>
+        <color_swatch label="Окружающий свет" tool_tip="Уровень окружающего освещения в окне предварительного просмотра (также влияет на предварительный просмотр анимации и т.д.)"
+         name="preview_ambient_color"/>
         <text name="physics_settings_label">
          Физика:
         </text>

@@ -3956,6 +3956,13 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 			gSavedPerAccountSettings.setBOOL("FSRenderFriendsOnly", FALSE);
 		}
 		// </FS:Beq>
+		// <FS:Beq pp Becca> FIRE-30947: Auto-Unmute
+		if (gSavedSettings.getBOOL("MuteSounds") && gSavedSettings.getBOOL("FSAutoUnmuteSounds"))
+			gSavedSettings.setBOOL("MuteSounds", FALSE);
+
+		if (gSavedSettings.getBOOL("MuteAmbient") && gSavedSettings.getBOOL("FSAutoUnmuteAmbient"))
+			gSavedSettings.setBOOL("MuteAmbient", FALSE);
+		// </FS:Beq pp Becca>		
 		if (gAgent.getTeleportKeepsLookAt())
 		{
 			// *NOTE: the LookAt data we get from the sim here doesn't

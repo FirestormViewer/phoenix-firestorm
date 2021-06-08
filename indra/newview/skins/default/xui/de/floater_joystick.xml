@@ -22,6 +22,53 @@
 	<check_box label="Avatar" name="JoystickAvatarEnabled"/>
 	<check_box label="Bauen" name="JoystickBuildEnabled"/>
 	<check_box label="Flycam" name="JoystickFlycamEnabled"/>
+	<text name="joystick_monitor_label">
+		Joystick-Monitor
+	</text>
+	<icon name="button_light_0" tool_tip="Joystick-Button 0"/>
+	<icon name="button_light_1" tool_tip="Joystick-Button 1"/>
+	<icon name="button_light_2" tool_tip="Joystick-Button 2"/>
+	<icon name="button_light_3" tool_tip="Joystick-Button 3"/>
+	<icon name="button_light_4" tool_tip="Joystick-Button 4"/>
+	<icon name="button_light_5" tool_tip="Joystick-Button 5"/>
+	<icon name="button_light_6" tool_tip="Joystick-Button 6"/>
+	<icon name="button_light_7" tool_tip="Joystick-Button 7"/>
+	<icon name="button_light_8" tool_tip="Joystick-Button 8"/>
+	<icon name="button_light_9" tool_tip="Joystick-Button 9"/>
+	<icon name="button_light_10" tool_tip="Joystick-Button 10"/>
+	<icon name="button_light_11" tool_tip="Joystick-Button 11"/>
+	<icon name="button_light_12" tool_tip="Joystick-Button 12"/>
+	<icon name="button_light_13" tool_tip="Joystick-Button 13"/>
+	<icon name="button_light_14" tool_tip="Joystick-Button 14"/>
+	<icon name="button_light_15" tool_tip="Joystick-Button 15"/>
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+			<stat_view name="axis_view_0">
+				<stat_bar label="Achse 0" name="axis0"/>
+			</stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="Achse 1" name="axis1"/>
+			</stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="Achse 2" name="axis2"/>
+			</stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="Achse 3" name="axis3"/>
+			</stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="Achse 4" name="axis4"/>
+			</stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="Achse 5" name="axis5"/>
+			</stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="Achse 6" name="axis6"/>
+			</stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="Achse 7" name="axis7"/>
+			</stat_view>
+		</container_view>
+	</scroll_container>
 	<text name="XScale">
 		X-Skala
 	</text>
@@ -70,12 +117,4 @@
 	<button label="SpaceNavigator-Standards" name="SpaceNavigatorDefaults"/>
 	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
-	<stat_view label="Joystick-Monitor" name="axis_view">
-		<stat_bar label="Achse 0" name="axis0"/>
-		<stat_bar label="Achse 1" name="axis1"/>
-		<stat_bar label="Achse 2" name="axis2"/>
-		<stat_bar label="Achse 3" name="axis3"/>
-		<stat_bar label="Achse 4" name="axis4"/>
-		<stat_bar label="Achse 5" name="axis5"/>
-	</stat_view>
 </floater>

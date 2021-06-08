@@ -13,6 +13,9 @@
 	<string name="status_material_mismatch">
 		Fehler: Das Material des Modells ist keine Teilmenge des Referenzmodells.
 	</string>
+	<string name="status_lod_model_mismatch">
+		Fehler: LOD-Model hat keinen Vorgänger.
+	</string>
 	<string name="status_reading_file">
 		Laden...
 	</string>
@@ -239,6 +242,15 @@
 						<combo_item name="physics_lowest">
 							Niedrigste
 						</combo_item>
+						<combo_item name="physics_cube">
+							Würfel
+						</combo_item>
+						<combo_item name="physics_hex">
+							Hexagon
+						</combo_item>
+						<combo_item name="physics_ud">
+							Benutzerdefiniert
+						</combo_item>
 						<combo_item name="load_from_file">
 							Aus Datei
 						</combo_item>
@@ -369,6 +381,10 @@
 				</text>
 				<check_box label="Gewichte automatisch aktivieren" tool_tip="Automatisch die Gewichte für Netze mit Rigging-Informationen aktivieren" name="mesh_preview_auto_weights"/>
 				<check_box label="Automatische Vorschau für Gewichte" tool_tip="Zeigt automatisch die Gewichte für Netze mit Rigging-Informationen in der Vorschau" name="mesh_preview_auto_show_weights"/>
+				<text name="mesh_preview_ud_preset_label" width="220">
+					Benutzerdefinierte Physik-Einstellungen:
+				</text>
+				<line_editor name="ud_physics" tool_tip="Dateipfad zu einer einfachen Collada Mesh-Definition, die für Physik verwendet wird." />
 				<text name="mesh_preview_colors_label">
 					Farben für Modell-Upload:
 				</text>
@@ -377,6 +393,7 @@
 				</text>
 				<color_swatch label="Hintergrund" tool_tip="Hintergrundfarbe für den Uploader" name="mesh_preview_canvas_color"/>
 				<color_swatch label="Modell-Kanten" tool_tip="Farbe für Kanten des Modells im Vorschau-Fenster" name="mesh_preview_edge_color"/>
+				<color_swatch label="Umgebungslicht" tool_tip="Umgebungslicht im Vorschau-Fenster (hat ebenfalls Auswirkung u.a. auf Vorschau für Animationsupload)" name="preview_ambient_color"/>
 				<text name="physics_settings_label">
 					Physik:
 				</text>
