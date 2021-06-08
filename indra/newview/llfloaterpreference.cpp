@@ -6637,6 +6637,10 @@ LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
 	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind(&no_cb));
 	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind(&no_cb));
 }
+LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
+{
+}
+
 #endif
 // <FS:AW optional opensim support>
 
