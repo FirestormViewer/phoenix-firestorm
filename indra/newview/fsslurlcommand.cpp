@@ -32,9 +32,13 @@
 #include "llcommandhandler.h"
 #include "llfloatersettingsdebug.h"
 #include "llgroupactions.h"
+#include "llgroupmgr.h"
 #include "lllogchat.h"
 #include "llnotificationsutil.h"
+#include "llspeakers.h"
 
+#include "fsfloaterimcontainer.h"
+#include "fsfloaterim.h"
 
 class FSSlurlCommandHandler : public LLCommandHandler
 {
@@ -138,19 +142,101 @@ public:
 
 		if (verb == "groupjoin")
 		{
-			LLGroupActions::join(LLUUID(target_id));
+			LLGroupActions::join(target_id);
 			return true;
 		}
 
 		if (verb == "groupleave")
 		{
-			LLGroupActions::leave(LLUUID(target_id));
+			LLGroupActions::leave(target_id);
 			return true;
 		}
 
 		if (verb == "groupactivate")
 		{
-			LLGroupActions::activate(LLUUID(target_id));
+			LLGroupActions::activate(target_id);
+			return true;
+		}
+
+		// please someone tell me there is an easier way to get the group UUID of the
+		// currently focused group, or transfer the UUID through the context menu somehow - Zi
+		LLFloater* focused_floater = gFloaterView->getFocusedFloater();
+
+		FSFloaterIM* floater_im;
+
+		// let's guess that the user has tabbed IMs
+		FSFloaterIMContainer* floater_container = dynamic_cast<FSFloaterIMContainer*>(focused_floater);
+
+		if (floater_container)
+		{
+			// get the active sub-floater inside the tabbed IMs
+			floater_im = dynamic_cast<FSFloaterIM*>(floater_container->getActiveFloater());
+		}
+		else
+		{
+			// no tabbed IMs or torn-off group floater, try if this is already what we wanted
+			floater_im = dynamic_cast<FSFloaterIM*>(focused_floater);
+		}
+
+		// still not an IM floater, give up
+		if (!floater_im)
+		{
+			return true;
+		}
+
+		// get the group's UUID
+		LLUUID group_id = floater_im->getKey();
+
+		// is this actually a valid IM session?
+		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(group_id);
+		if (!session)
+		{
+			return true;
+		}
+
+		// is this actually a valid group IM session?
+		if (!session->isGroupSessionType())
+		{
+			return true;
+		}
+
+		// finally! let's see what we came here to do
+
+		if (verb == "groupchatallow")
+		{
+			// no safety checks, just allow
+			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+			speaker_mgr->allowTextChat(target_id, true);
+
+			return true;
+		}
+
+		if (verb == "groupchatforbid")
+		{
+			// no safety checks, just mute
+			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+			speaker_mgr->allowTextChat(target_id, false);
+
+			return true;
+		}
+
+		if (verb == "groupeject")
+		{
+			// no safety checks, just eject
+			LLGroupActions::ejectFromGroup(group_id, target_id);
+			return true;
+		}
+
+		if (verb == "groupban")
+		{
+			std::vector<LLUUID> ids;
+			ids.push_back(target_id);
+
+			// no safety checks, just ban
+			LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, group_id, LLGroupMgr::BAN_CREATE, ids);
+			LLGroupMgr::getInstance()->sendGroupMemberEjects(group_id, ids);
+			LLGroupMgr::getInstance()->sendGroupMembersRequest(group_id);
+
 			return true;
 		}
 

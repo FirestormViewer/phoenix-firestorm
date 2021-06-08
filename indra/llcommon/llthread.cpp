@@ -37,7 +37,7 @@
 #include "llexception.h"
 #include "fstelemetry.h" // <FS:Beq> allow thread naming
 
-#if LL_LINUX || LL_SOLARIS
+#if LL_LINUX
 #include <sched.h>
 #endif
 

@@ -2153,6 +2153,14 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("FS.LeaveGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupleave", true));
 	registrar.add("FS.ActivateGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupactivate", true));
 
+	// hook up moderation tools
+	// if someone knows how to pass a parameter to these, let me know! - Zi
+	// also, I wish I could pass the group session id through these calls, but LLTextBase does not know it - Zi
+	registrar.add("FS.AllowGroupChat", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupchatallow", true));
+	registrar.add("FS.ForbidGroupChat", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupchatforbid", true));
+	registrar.add("FS.EjectGroupMember", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupeject", true));
+	registrar.add("FS.BanGroupMember", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/groupban", true));
+
 	enable_registrar.add("FS.WaitingForGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
 	enable_registrar.add("FS.HaveGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_CHK_HAVE_GROUP_DATA));
 	enable_registrar.add("FS.EnableJoinGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_CHK_CAN_JOIN_GROUP));
@@ -2200,6 +2208,16 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
                 unblockButton->setVisible(is_blocked);
             }
         }
+
+		// <FS:Zi> hide the moderation tools in the context menu unless we are in a group IM floater
+		LLFloater* parent_floater = getParentByType<LLFloater>();
+		if (!parent_floater || parent_floater->getName() != "panel_im")
+		{
+			menu->getChild<LLView>("GroupModerationSubmenu")->setVisible(false);
+			menu->getChild<LLView>("GroupModerationSeparator")->setVisible(false);
+		}
+		// </FS:Zi>
+
         menu->show(x, y);
         LLMenuGL::showPopup(this, menu, x, y);
     }
