@@ -1,21 +1,20 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2011, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
-#ifndef RLV_FLOATERS_H
-#define RLV_FLOATERS_H
+#pragma once
 
 #include "llfloater.h"
 
@@ -25,7 +24,9 @@
 // ============================================================================
 // Foward declarations
 //
+class LLChatEntry;
 class LLComboBox;
+class LLLayoutPanel;
 class LLTextEditor;
 
 // ============================================================================
@@ -150,21 +151,23 @@ private:
 public:
 	BOOL postBuild() override;
 	void onClose(bool fQuitting) override;
-	
+
 	/*
 	 * Member functions
 	 */
 protected:
 	void addCommandReply(const std::string& strCommand, const std::string& strReply);
 	void onInput(LLUICtrl* ctrl, const LLSD& param);
+	void reshapeLayoutPanel();
 
 	/*
 	 * Member variables
 	 */
 protected:
-	LLTextEditor* m_pOutputText;
+	LLTextEditor*  m_pOutputText = nullptr;
+	LLLayoutPanel* m_pInputPanel = nullptr;
+	LLChatEntry*   m_pInputEdit = nullptr;
+	int            m_nInputEditPad = 0;
 };
 
 // ============================================================================
-
-#endif // RLV_FLOATERS_H
