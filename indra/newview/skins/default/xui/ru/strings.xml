@@ -60,8 +60,9 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_RELEASE_NOTES_URL]
 	</string>
 	<string name="AboutSystem">
-		CPU: [CPU]
+Процессор: [CPU]
 Память RAM: [MEMORY_MB] МБ
+Потоки декодирования изображений: [CONCURRENCY]
 Версия ОС: [OS_VERSION]
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]
 Видеокарта: [GRAPHICS_CARD]

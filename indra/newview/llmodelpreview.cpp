@@ -368,6 +368,118 @@ U32 LLModelPreview::calcResourceCost()
     return (U32)streaming_cost;
 }
 
+// <FS:Beq> relocate from llmodel and rewrite so it does what it is meant to
+// Material matching should work as the comment below states (subsets are allowed)
+// prior to this a mess in multiple places meant that all LODs are forced to carry unwanted triangles for unused materials
+bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFaceCnt, int& modelFaceCnt )
+{
+	//Is this a subset?
+	//LODs cannot currently add new materials, e.g.
+	//1. ref = a,b,c lod1 = d,e => This is not permitted
+	//2. ref = a,b,c lod1 = c => This would be permitted
+	
+	LL_INFOS("MESHSKININFO") << "In matchMaterialOrder." << LL_ENDL;
+	bool isASubset = lod->isMaterialListSubset( ref );
+	if ( !isASubset )
+	{
+		LL_INFOS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
+		std::ostringstream out;
+		out << "LOD model " << lod->getName() << "'s materials are not a subset of the High LOD (reference) model " << ref->getName();
+		LL_INFOS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+		return false;
+	}
+
+	LL_DEBUGS("MESHSKININFO") << "subset check passed." << LL_ENDL;
+	std::map<std::string, U32> index_map;
+	
+	//build a map of material slot names to face indexes
+	bool reorder = false;
+	auto max_lod_mats =  lod->mMaterialList.size();
+
+	for ( U32 i = 0; i < ref->mMaterialList.size(); i++ )
+	{
+		// create the reference map for later
+		index_map[ref->mMaterialList[i]] = i;
+		LL_DEBUGS("MESHSKININFO") << "setting reference material " <<  ref->mMaterialList[i] << " as index " << i << LL_ENDL;
+		if( i >= max_lod_mats ||  lod->mMaterialList[i] != ref->mMaterialList[i] )
+		{
+			// i is already out of range of the original material sets in this LOD OR is not matching.
+			LL_DEBUGS("MESHSKININFO") << "mismatch at " << i << " " << ref->mMaterialList[i] 
+									 << " != " << ((i >= max_lod_mats)? "Out-of-range":lod->mMaterialList[i]) << LL_ENDL;
+			// we have a misalignment/ordering
+			// check that ref[i] is in cur and if not add a blank
+			U32 j{0};
+			for ( ; j < max_lod_mats; j++ )
+			{
+				if( i != j && lod->mMaterialList[j] == ref->mMaterialList[i] )
+				{
+					LL_DEBUGS("MESHSKININFO") << "material " << ref->mMaterialList[i] 
+											<< " found at " << j << LL_ENDL;
+					// we found it but in the wrong place.
+					reorder = true;
+					break;
+				}
+			}
+			if( j >= max_lod_mats )
+			{
+				std::ostringstream out;
+				out << "material " << ref->mMaterialList[i] 
+					<< " not found in lod adding placeholder";
+				LL_DEBUGS("MESHSKININFO") << out.str() << LL_ENDL;
+				if (mImporterDebug)
+				{
+					LLFloaterModelPreview::addStringToLog(out, false);
+				}
+			// The material is not in the submesh, add a placeholder.
+				// this is appended to the existing data so we'll need to reorder
+				// Note that this placeholder will be eliminated on the writeData (upload) and replaced with
+				// "NoGeometry" in the LLSD
+				reorder = true; 
+				LLVolumeFace face;
+
+				face.resizeIndices(3);
+				face.resizeVertices(1);
+				face.mPositions->clear();
+				face.mNormals->clear();
+				face.mTexCoords->setZero();
+				memset(face.mIndices, 0, sizeof(U16)*3);
+				lod->addFace(face);
+				lod->mMaterialList.push_back( ref->mMaterialList[i] );
+			}
+		}
+		//if any material name does not match reference, we need to reorder
+	}
+	LL_DEBUGS("MESHSKININFO") << "finished parsing materials" << LL_ENDL; 
+	for ( U32 i = 0; i < lod->mMaterialList.size(); i++ )
+	{
+		LL_DEBUGS("MESHSKININFO") << "lod material " <<  lod->mMaterialList[i] << " has index " << i << LL_ENDL;    
+	}
+	// Sanity check. We have added placeholders for any mats in ref that are not in this.
+	// the mat count MUST be equal now.
+	if (lod->mMaterialList.size() != ref->mMaterialList.size())
+	{
+		std::ostringstream out;
+		out << "Material of LOD model " << lod->getName() << " has more materials than the reference " << ref->getName() << ".";
+		LL_INFOS("MESHSKININFO") << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+		return false;
+	}
+
+
+	// <FS:Beq> Fix up material matching badness
+	// if (reorder &&  (base_mat == cur_mat)) //don't reorder if material name sets don't match
+	if ( reorder )
+	{
+		LL_INFOS("MESHSKININFO") << "re-ordering." << LL_ENDL;
+		lod->sortVolumeFacesByMaterialName();
+		lod->mMaterialList = ref->mMaterialList;
+	}
+	
+	return true;
+}
+//</FS:Beq> 
+
 void LLModelPreview::rebuildUploadData()
 {
     assert_main_thread();
@@ -582,7 +694,7 @@ void LLModelPreview::rebuildUploadData()
             if (!high_lod_model)
             {
                 LLFloaterModelPreview::addStringToLog("Model " + instance.mLabel + " has no High Lod (LOD3).", true);
-                load_state = LLModelLoader::ERROR_MATERIALS;
+                load_state = LLModelLoader::ERROR_HIGH_LOD_MODEL_MISSING; // <FS:Beq/> FIRE-30965 Cleanup braindead mesh parsing error handlers
                 mFMP->childDisable("calculate_btn");
             }
             else
@@ -592,10 +704,13 @@ void LLModelPreview::rebuildUploadData()
                     int refFaceCnt = 0;
                     int modelFaceCnt = 0;
                     llassert(instance.mLOD[i]);
-                    if (instance.mLOD[i] && !instance.mLOD[i]->matchMaterialOrder(high_lod_model, refFaceCnt, modelFaceCnt))
+                    // <FS:Beq> Fix material matching algorithm to work as per design
+                    // if (instance.mLOD[i] && !instance.mLOD[i]->matchMaterialOrder(high_lod_model, refFaceCnt, modelFaceCnt))
+                    if (instance.mLOD[i] && !matchMaterialOrder(instance.mLOD[i],high_lod_model, refFaceCnt, modelFaceCnt))
+                    // </FS:Beq>
                     {
                         LLFloaterModelPreview::addStringToLog("Model " + instance.mLabel + " has mismatching materials between lods." , true);
-                        load_state = LLModelLoader::ERROR_MATERIALS;
+                        load_state = LLModelLoader::ERROR_MATERIALS_NOT_A_SUBSET; // <FS:Beq/> more descriptive errors
                         mFMP->childDisable("calculate_btn");
                     }
                 }
@@ -644,14 +759,15 @@ void LLModelPreview::rebuildUploadData()
             }
             if (!found_model && mModel[lod][model_ind] && !mModel[lod][model_ind]->mSubmodelID)
             {
-                if (mImporterDebug)
+                // <FS:Beq> this is not debug, this is an important/useful error advisory
+                // if (mImporterDebug) 
                 {
                     std::ostringstream out;
                     out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
                     LL_INFOS() << out.str() << LL_ENDL;
                     LLFloaterModelPreview::addStringToLog(out, true);
                 }
-                load_state = LLModelLoader::ERROR_MATERIALS;
+                load_state = LLModelLoader::ERROR_LOD_MODEL_MISMATCH;
                 mFMP->childDisable("calculate_btn");
             }
         }
@@ -663,7 +779,12 @@ void LLModelPreview::rebuildUploadData()
         // encountered issues
         setLoadState(load_state);
     }
-    else if (getLoadState() == LLModelLoader::ERROR_MATERIALS
+    // <FS:Beq> FIRE-30965 Cleanup braindead mesh parsing error handlers
+    // else if (getLoadState() == LLModelLoader::ERROR_MATERIALS
+        else if (getLoadState() == LLModelLoader::ERROR_MATERIALS_NOT_A_SUBSET 
+             || getLoadState() == LLModelLoader::ERROR_HIGH_LOD_MODEL_MISSING
+             || getLoadState() == LLModelLoader::ERROR_LOD_MODEL_MISMATCH
+    // </FS:Beq>
              || getLoadState() == LLModelLoader::WARNING_BIND_SHAPE_ORIENTATION)
     {
         // This is only valid for these two error types because they are 
@@ -922,7 +1043,38 @@ void LLModelPreview::setPhysicsFromLOD(S32 lod)
         updateStatusMessages();
     }
 }
+// <FS:Beq> FIRE-30963 - better physics defaults
+void LLModelPreview::setPhysicsFromPreset(S32 preset)
+{
+    assert_main_thread();
 
+    mPhysicsSearchLOD = -1;
+    mLODFile[LLModel::LOD_PHYSICS].clear();
+    mFMP->childSetValue("physics_file", mLODFile[LLModel::LOD_PHYSICS]);
+    mVertexBuffer[LLModel::LOD_PHYSICS].clear();
+    if(preset == 1)
+    {
+        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+        loadModel( gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, "cube_phys.dae"), LLModel::LOD_PHYSICS);
+    }
+    else if(preset == 2)
+    {
+        mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+        loadModel( gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, "hex_phys.dae"), LLModel::LOD_PHYSICS);
+    }
+    else if(preset == 3)
+    {
+        auto ud_physics = gSavedSettings.getString("FSPhysicsPresetUser1");
+        LL_INFOS() << "Loading User defined Physics Preset [" << ud_physics << "]" << LL_ENDL;
+        if (ud_physics != "" && gDirUtilp->fileExists(ud_physics))
+        {
+            // loading physics from file
+            mPhysicsSearchLOD = LLModel::LOD_PHYSICS;
+            loadModel( gDirUtilp->getExpandedFilename(LL_PATH_NONE, gDirUtilp->getDirName(ud_physics), gDirUtilp->getBaseFileName(ud_physics, false)), LLModel::LOD_PHYSICS);
+        }
+    }
+}
+// </FS:Beq>
 void LLModelPreview::clearIncompatible(S32 lod)
 {
     //Don't discard models if specified model is the physic rep
@@ -1841,7 +1993,7 @@ void LLModelPreview::updateStatusMessages()
         LLModel* model_high_lod = instance.mLOD[LLModel::LOD_HIGH];
         if (!model_high_lod)
         {
-            setLoadState(LLModelLoader::ERROR_MATERIALS);
+            setLoadState(LLModelLoader::ERROR_HIGH_LOD_MODEL_MISSING); // <FS:Beq/> FIRE-30965 Cleanup braindead mesh parsing error handlers
             mFMP->childDisable("calculate_btn");
             continue;
         }
@@ -1851,7 +2003,7 @@ void LLModelPreview::updateStatusMessages()
             LLModel* lod_model = instance.mLOD[i];
             if (!lod_model)
             {
-                setLoadState(LLModelLoader::ERROR_MATERIALS);
+                setLoadState(LLModelLoader::ERROR_LOD_MODEL_MISMATCH); // <FS:Beq/> FIRE-30965 Cleanup braindead mesh parsing error handlers
                 mFMP->childDisable("calculate_btn");
             }
             else
@@ -2365,10 +2517,7 @@ void LLModelPreview::updateStatusMessages()
 
         //fmp->childSetEnabled("physics_optimize", !use_hull);
 
-        // <FS:Ansariel> Enable mesh analysis in SL only for now
-        //bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty();
-        bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty() && LLGridManager::instance().isInSecondLife();
-        // </FS:Ansariel>
+        bool enable = (phys_tris > 0 || phys_hulls > 0) && fmp->mCurRequest.empty();
         //enable = enable && !use_hull && fmp->childGetValue("physics_optimize").asBoolean();
 
         //enable/disable "analysis" UI
@@ -2402,13 +2551,10 @@ void LLModelPreview::updateStatusMessages()
                 fmp->childEnable("Simplify");
             }
 
-            // <FS:Ansariel> Enable mesh analysis in SL only for now
-            //if (phys_tris || phys_hulls > 0)
-            //{
-            //    fmp->childEnable("Decompose");
-            //}
-            fmp->childSetEnabled("Decompose", (phys_tris || phys_hulls > 0) && LLGridManager::instance().isInSecondLife());
-            // </FS:Ansariel>
+            if (phys_tris || phys_hulls > 0)
+            {
+               fmp->childEnable("Decompose");
+            }
         }
         else
         {
@@ -3227,6 +3373,7 @@ BOOL LLModelPreview::render()
 
     gGL.loadIdentity();
     gPipeline.enableLightsPreview();
+    gObjectPreviewProgram.uniform4fv(LLShaderMgr::AMBIENT, 1, LLPipeline::PreviewAmbientColor.mV); // <FS:Beq> pass ambient setting to shader
 
     LLQuaternion camera_rot = LLQuaternion(mCameraPitch, LLVector3::y_axis) *
         LLQuaternion(mCameraYaw, LLVector3::z_axis);

@@ -3219,7 +3219,7 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 
 	if (success)
 	{
-		gObjectPreviewProgram.mName = "Simple Shader";
+		gObjectPreviewProgram.mName = "Preview Shader"; // <FS:Beq> update preview shader name
 		gObjectPreviewProgram.mFeatures.calculatesLighting = false;
 		gObjectPreviewProgram.mFeatures.calculatesAtmospherics = false;
 		gObjectPreviewProgram.mFeatures.hasGamma = false;

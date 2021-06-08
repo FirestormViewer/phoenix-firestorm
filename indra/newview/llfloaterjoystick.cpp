@@ -45,6 +45,11 @@
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+#include "llspinctrl.h"
+#include "lliconctrl.h"
+// </FS:Zi>
+
 #if LL_WINDOWS && !LL_MESA_HEADLESS
 // Require DirectInput version 8
 #define DIRECTINPUT_VERSION 0x0800
@@ -52,18 +57,20 @@
 #include <dinput.h>
 #endif
 
-// <FS:Zi> FIRE-14344 - show joystick buttons
-const std::string JOYSTICK_BUTTON_ON ( "\xE2\xAC\xA4" ); // U+2B24 BLACK LARGE CIRCLE
-const std::string JOYSTICK_BUTTON_OFF( "\xE2\x97\xAF" ); // U+25EF WHITE LARGE CIRCLE
-// </FS:Zi>
-
 static LLTrace::SampleStatHandle<>	sJoystickAxis0("Joystick axis 0"),
 									sJoystickAxis1("Joystick axis 1"),
 									sJoystickAxis2("Joystick axis 2"),
 									sJoystickAxis3("Joystick axis 3"),
 									sJoystickAxis4("Joystick axis 4"),
-									sJoystickAxis5("Joystick axis 5");
-static LLTrace::SampleStatHandle<>* sJoystickAxes[6] = 
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+//  								sJoystickAxis5("Joystick axis 5");
+// static LLTrace::SampleStatHandle<>* sJoystickAxes[6] =
+									sJoystickAxis5("Joystick axis 5"),
+									sJoystickAxis6("Joystick axis 6"),
+									sJoystickAxis7("Joystick axis 7");
+
+static LLTrace::SampleStatHandle<>* sJoystickAxes[MAX_JOYSTICK_AXES] =
+// </FS:Zi>
 {
 	&sJoystickAxis0,
 	&sJoystickAxis1,
@@ -71,6 +78,11 @@ static LLTrace::SampleStatHandle<>* sJoystickAxes[6] =
 	&sJoystickAxis3,
 	&sJoystickAxis4,
 	&sJoystickAxis5
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	,
+	&sJoystickAxis6,
+	&sJoystickAxis7
+// </FS_Zi>
 };
 
 #if LL_WINDOWS && !LL_MESA_HEADLESS
@@ -100,6 +112,12 @@ LLFloaterJoystick::LLFloaterJoystick(const LLSD& data)
 	: LLFloater(data),
     mHasDeviceList(false)
 {
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	mAxisStatsBar = new LLStatBar*[MAX_JOYSTICK_AXES];
+	mAxisViews = new LLStatView*[MAX_JOYSTICK_AXES];
+	mButtonsLights = new LLIconCtrl*[MAX_JOYSTICK_BUTTONS];
+	// </FS:Zi>
+
     if (!LLViewerJoystick::getInstance()->isJoystickInitialized())
     {
         LLViewerJoystick::getInstance()->init(false);
@@ -125,7 +143,9 @@ void LLFloaterJoystick::draw()
 	}
 	// </FS:Zi>
 
-	for (U32 i = 0; i < 6; i++)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// for (U32 i = 0; i < 6; i++)
+	for (U32 i = 0; i < joystick->getNumOfJoystickAxes(); i++)
 	{
 		F32 value = joystick->getJoystickAxis(i);
 		// <FS:Zi> FIRE-14344 - using the frame interval seems to break the graphs
@@ -143,21 +163,19 @@ void LLFloaterJoystick::draw()
 		}
 	}
 
-	// <FS:Zi> FIRE-14344 - show joystick buttons
-	std::string buttons;
-	for (U32 i = 0; i < 16; i++)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	if (mJoystickEnabled)
 	{
-		U32 value = joystick->getJoystickButton(i);
-		if (value == 0)
+		// dim = button present but not pushed, white = button currently pushed
+		const LLColor4& bright = LLUIColorTable::instance().getColor("White").get();
+		const LLColor4& dim    = LLUIColorTable::instance().getColor("Gray").get();
+
+		for (U32 i = 0; i < joystick->getNumOfJoystickButtons(); i++)
 		{
-			buttons += JOYSTICK_BUTTON_OFF;
-		}
-		else
-		{
-			buttons += JOYSTICK_BUTTON_ON;
+			U32 value = joystick->getJoystickButton(i);
+			mButtonsLights[i]->setColor(value ? bright : dim);
 		}
 	}
-	mJoystickButtons->setText(buttons);
 	// </FS:Zi>
 
 	LLFloater::draw();
@@ -168,12 +186,14 @@ BOOL LLFloaterJoystick::postBuild()
 	center();
 	// <FS:CR> Micro Save on calls to gSavedSettings
 	//F32 range = gSavedSettings.getBOOL("Cursor3D") ? 128.f : 2.f;
-	// <FS:Zi> FIRE-14344 - use 1.f for the graph  ranges instead of 128.f : 2.f to get better resolution -
+	// <FS:Zi> FIRE-14344 - use 0.5f for the graph  ranges instead of 128.f : 2.f to get better autoscaling -
 	//         needs testing with an actual absolute pointer device if the range scales in a useful way when
 	//         not starting at 128.f
-	F32 range = 1.f;
+	F32 range = 0.5f;
 
-	for (U32 i = 0; i < 6; i++)
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	// for (U32 i = 0; i < 6; i++)
+	for (U32 i = 0; i < MAX_JOYSTICK_AXES; i++)
 	{
 		std::string stat_name(llformat("Joystick axis %d", i));
 		std::string axisname = llformat("axis%d", i);
@@ -183,8 +203,23 @@ BOOL LLFloaterJoystick::postBuild()
 			mAxisStatsBar[i]->setStat(stat_name);
 			mAxisStatsBar[i]->setRange(-range, range);
 		}
+		// <FS:Zi> FIRE-14344 - cache axis view widgets for faster lookup later
+		mAxisViews[i] = getChild<LLStatView>(llformat("axis_view_%d", i));
+
+		// set number of axes on spinners
+		LLSpinCtrl* spin;
+		spin = getChild<LLSpinCtrl>(llformat("JoystickAxis%d", i));
+		spin->setMaxValue(MAX_JOYSTICK_AXES - 1);
+		// </FS:Zi>
 	}
-	
+
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	for (U32 i = 0; i < MAX_JOYSTICK_BUTTONS; i++)
+	{
+		mButtonsLights[i] = getChild<LLIconCtrl>(llformat("button_light_%d", i));
+	}
+	// </FS:Zi>
+
 	mJoysticksCombo = getChild<LLComboBox>("joystick_combo");
 	childSetCommitCallback("joystick_combo",onCommitJoystickEnabled,this);
 	mCheckFlycamEnabled = getChild<LLCheckBoxCtrl>("JoystickFlycamEnabled");
@@ -194,17 +229,20 @@ BOOL LLFloaterJoystick::postBuild()
 	childSetAction("cancel_btn", onClickCancel, this);
 	childSetAction("ok_btn", onClickOK, this);
 
-	// <FS:Zi> FIRE-14344 - show joystick buttons
-	mJoystickButtons = getChild<LLTextBase>("joystick_buttons");
-
 	refresh();
 	refreshListOfDevices();
+	updateAxesAndButtons();	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
 	return TRUE;
 }
 
 LLFloaterJoystick::~LLFloaterJoystick()
 {
 	// Children all cleaned up by default view destructor.
+
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	delete[] mAxisStatsBar;
+	delete[] mButtonsLights;
+	delete[] mAxisViews;
 }
 
 
@@ -462,6 +500,11 @@ void LLFloaterJoystick::onCommitJoystickEnabled(LLUICtrl*, void *joy_panel)
     LL_DEBUGS("Joystick") << "Selected " << device_id << " as joystick." << LL_ENDL;
 
     self->refreshListOfDevices();
+
+	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+	self->mJoystickEnabled = joystick_enabled;
+	self->updateAxesAndButtons();
+	// </FS:Zi>
 }
 
 void LLFloaterJoystick::onClickRestoreSNDefaults(void *joy_panel)
@@ -514,3 +557,32 @@ void LLFloaterJoystick::onClose(bool app_quitting)
 		cancel();
 	}
 }
+
+// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
+void LLFloaterJoystick::updateAxesAndButtons()
+{
+	U8 axes = 0;
+	U8 buttons = 0;
+
+	if(mJoystickEnabled)
+	{
+		axes    = LLViewerJoystick::getInstance()->getNumOfJoystickAxes();
+		buttons = LLViewerJoystick::getInstance()->getNumOfJoystickButtons();
+	}
+
+	for(U8 i = 0; i < MAX_JOYSTICK_AXES; i++)
+	{
+		mAxisViews[i]->setDisplayChildren(i < axes);
+		mAxisViews[i]->reshape(0, 0, false);
+	}
+
+	// dim = button present but not pushed, dark = button not present on this joystick
+	static const LLColor4& dark = LLUIColorTable::instance().getColor("DkGray").get();
+	static const LLColor4& dim  = LLUIColorTable::instance().getColor("Gray").get();
+
+	for(U8 i = 0; i < MAX_JOYSTICK_BUTTONS; i++)
+	{
+		mButtonsLights[i]->setColor(i < buttons ? dim : dark);
+	}
+}
+// </FS:Zi>
