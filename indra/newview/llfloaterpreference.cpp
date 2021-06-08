@@ -6391,7 +6391,6 @@ LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 
 LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
 {
-#ifdef OPENSIM
 	if (mGridListChangedCallbackConnection.connected())
 	{
 		mGridListChangedCallbackConnection.disconnect();
@@ -6401,7 +6400,6 @@ LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
 	{
 		mGridAddedCallbackConnection.disconnect();
 	}
-#endif
 }
 
 BOOL LLPanelPreferenceOpensim::postBuild()
