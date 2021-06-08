@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- name="groups">
+<panel name="groups">
+	<filter_editor label="Gruppen filtern" name="group_filter_input" right="-91"/>
 	<view_border
 	 width="257"
 	 name="info_border" />

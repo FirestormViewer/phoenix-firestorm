@@ -89,6 +89,7 @@
 			<slider label="Réserve supplémentaire de mémoire tampon (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé aux textures chargées en cache qui ne sont actuellement pas affichées."/>
 			<slider label="Réserve de mémoire vidéo physique (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé à un autre usage."/>
 			<spinner label="Ratio de distance du brouillard :" name="fog"/>
+			<spinner label="Décodage des images :" name="image_decode_threads" tool_tip="Le nombre de threads à utiliser pour le décodage des images. 0 = Auto, 1 = Synchrone, 2+ = spécifié par l'utilisateur. (0 ou 1 sont recommandés)"/>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>
@@ -115,7 +116,6 @@
 			<check_box label="Voir en mode fil de fer" name="Wireframe"/>
 			<check_box label="Activer les sources lumineuses portées (Face Lights)" tool_tip="Ce paramètre activera toutes les sources de lumière que les avatars portent, comme les 'Face Lights'." name="Render Attached Lights"/>
 			<check_box label="Rendu des particules portées" name="Render Attached Particles"/>
-			<check_box label="Activer le masquage des objets pour les effets de distorsion de l'eau" name="dist_occl" tool_tip="S'il est activé, le masquage des objets est réactivé lors de la génération des effets de distorsion de l'eau. L'affichage est plus précis sans masquage, mais cela peut dégrader considérablement les performances."/>
 			<slider width="480" label_width="340" label="Temporisation de mise en cache de l'univers" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText" left_delta="480">sec.</text>
 			<slider width="480" label_width="340" label="Qualité des ombres" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>

@@ -59,6 +59,7 @@ class LLTextureFetch;
 class LLWatchdogTimeout;
 class LLViewerJoystick;
 class LLViewerRegion; // <FS:Beq/>
+class FSPurgeDiskCacheThread; // <FS:Ansariel> Regular disk cache cleanup
 
 extern LLTrace::BlockTimerStatHandle FTM_FRAME;
 
@@ -118,6 +119,7 @@ public:
 	static LLTextureCache* getTextureCache() { return sTextureCache; }
 	static LLImageDecodeThread* getImageDecodeThread() { return sImageDecodeThread; }
 	static LLTextureFetch* getTextureFetch() { return sTextureFetch; }
+	static FSPurgeDiskCacheThread* getPurgeDiskCacheThread() { return sPurgeDiskCacheThread; } // <FS:Ansariel> Regular disk cache cleanup
 
 	static U32 getTextureCacheVersion() ;
 	static U32 getObjectCacheVersion() ;
@@ -252,7 +254,6 @@ private:
 	bool initConfiguration(); // Initialize settings from the command line/config file.
 	void initStrings();       // Initialize LLTrans machinery
 	bool initCache(); // Initialize local client cache.
-	void checkMemory() ;
 
 	// We have switched locations of both Mac and Windows cache, make sure
 	// files migrate and old cache is cleared out.
@@ -307,6 +308,7 @@ private:
 	static LLTextureCache* sTextureCache; 
 	static LLImageDecodeThread* sImageDecodeThread; 
 	static LLTextureFetch* sTextureFetch;
+	static FSPurgeDiskCacheThread* sPurgeDiskCacheThread; // <FS:Ansariel> Regular disk cache cleanup
 
 	S32 mNumSessions;
 
@@ -340,8 +342,6 @@ private:
 
 	// <FS:Ansariel> Get rid of unused LLAllocator
     //LLAllocator mAlloc;
-
-	LLFrameTimer mMemCheckTimer;
 
 	// llcorehttp library init/shutdown helper
 	LLAppCoreHttp mAppCoreHttp;
