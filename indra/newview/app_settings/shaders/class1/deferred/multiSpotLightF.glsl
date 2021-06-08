@@ -187,12 +187,7 @@ void main()
 		
 		
 	vec3 diff_tex = texture2DRect(diffuseRect, frag.xy).rgb;
-// <FS:Beq> Colour space and shader fixes for BUG-228586 (Rye)
-    // // SL-12005 Projector light pops as we get closer, more objectionable than being in wrong color space.
-    // //          We can't switch to linear here unless we do it everywhere*
-	// // *gbuffer is sRGB, convert to linear whenever sampling from it
-    // diff_tex.rgb = srgb_to_linear(diff_tex.rgb);
-// </FS:Beq>
+
 	vec3 dlit = vec3(0, 0, 0);
 	
 	

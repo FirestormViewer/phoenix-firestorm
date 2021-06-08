@@ -23,6 +23,11 @@
 			<check_box label="Włączone" name="enable_media"/>
 			<slider label="Rozmowy głosowe" name="Voice Volume"/>
 			<check_box label="Włączone" name="enable_voice_check_volume"/>
+			<text name="auto_unmute_label">
+				Wyłącz wyciszenie po teleportacji:
+			</text>
+			<check_box name="FSAutoUnmuteAmbient" label="Otoczenie" tool_tip="Automatycznie wyłącz wyciszenie otoczenia po teleportacji, jeśli jest wyciszone (domyślnie: wyłączone)" />
+			<check_box name="FSAutoUnmuteSounds" label="Efekty dźwiękowe" tool_tip="Automatycznie wyłącz wyciszenie efektów dźwiękowych po teleportacji, jeśli są wyciszone (domyślnie: wyłączone)" />
 			<text name="friends_logon_sounds_label">
 				Odtwórz dźwięk gdy moi znajomi:
 			</text>

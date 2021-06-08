@@ -18,6 +18,11 @@
 			<check_box label="Включено" name="enable_media"/>
 			<slider label="Голосовой чат" name="Voice Volume"/>
 			<check_box label="Включено" name="enable_voice_check_volume"/>
+			<text name="auto_unmute_label" width="300">
+				Автоматически включать звук после телепортации:
+			</text>
+			<check_box name="FSAutoUnmuteAmbient" label="Окружение" tool_tip="Автоматически включать звуки окружения после телепортации, если звук отключен (по умолчанию: выключено)" width="95"/>
+			<check_box name="FSAutoUnmuteSounds" label="Звуковые эффекты" tool_tip="Автоматически включать Звуковые эффекты после телепортации, если звук отключен (по умолчанию: выключено)" width="95"/>
 			<text name="friends_logon_sounds_label">
 				Воспроизводить звук, когда друзья:
 			</text>
