@@ -459,10 +459,15 @@ public:
 		{
 			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagTextChat);
 		}
-		else if (param == "toggle_allow_text_chat")
+		else if (param == "allow_text_chat")
 		{
 			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			speaker_mgr->toggleAllowTextChat(getAvatarId());
+			speaker_mgr->allowTextChat(getAvatarId(), true);
+		}
+		else if (param == "forbid_text_chat")
+		{
+			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+			speaker_mgr->allowTextChat(getAvatarId(), false);
 		}
 		else if (param == "group_mute")
 		{
@@ -482,7 +487,15 @@ public:
 		}
 		else if (param == "ban_member")
 		{
-			banGroupMember(getAvatarId());
+			// <FS:Zi> don't do safety checks as participant list is broken, just ban
+			// banGroupMember(getAvatarId());
+			std::vector<LLUUID> ids;
+			ids.push_back(getAvatarId());
+
+			LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, mSessionID, LLGroupMgr::BAN_CREATE, ids);
+			LLGroupMgr::getInstance()->sendGroupMemberEjects(mSessionID, ids);
+			LLGroupMgr::getInstance()->sendGroupMembersRequest(mSessionID);
+			// </FS:Zi>
 		}
 	}
 
