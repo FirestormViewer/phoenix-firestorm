@@ -197,7 +197,7 @@ class LLDiskCache :
 class FSPurgeDiskCacheThread : public LLThread
 {
 public:
-    FSPurgeDiskCacheThread::FSPurgeDiskCacheThread();
+    FSPurgeDiskCacheThread();
 
 protected:
     void run() override;

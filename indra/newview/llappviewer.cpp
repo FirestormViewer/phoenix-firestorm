@@ -90,6 +90,7 @@
 #include "llsdutil_math.h"
 #include "lllocationhistory.h"
 #include "llfasttimerview.h"
+#include "lltelemetry.h"
 #include "llvector4a.h"
 #include "llviewermenufile.h"
 #include "llvoicechannel.h"
@@ -285,9 +286,9 @@
 
 #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
 
-#if (LL_LINUX || LL_SOLARIS) && LL_GTK
+#if LL_LINUX && LL_GTK
 #include "glib.h"
-#endif // (LL_LINUX || LL_SOLARIS) && LL_GTK
+#endif // (LL_LINUX) && LL_GTK
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1278,6 +1279,46 @@ bool LLAppViewer::init()
 		}
 	}
 
+#if LL_WINDOWS && ADDRESS_SIZE == 64
+    if (gGLManager.mIsIntel)
+    {
+        // Check intel driver's version
+        // Ex: "3.1.0 - Build 8.15.10.2559";
+        std::string version = ll_safe_string((const char *)glGetString(GL_VERSION));
+
+        const boost::regex is_intel_string("[0-9].[0-9].[0-9] - Build [0-9]{1,2}.[0-9]{2}.[0-9]{2}.[0-9]{4}");
+
+        if (boost::regex_search(version, is_intel_string))
+        {
+            // Valid string, extract driver version
+            std::size_t found = version.find("Build ");
+            std::string driver = version.substr(found + 6);
+            S32 v1, v2, v3, v4;
+            S32 count = sscanf(driver.c_str(), "%d.%d.%d.%d", &v1, &v2, &v3, &v4);
+            if (count > 0 && v1 <= 10)
+            {
+                LL_INFOS("AppInit") << "Detected obsolete intel driver: " << driver << LL_ENDL;
+                LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedIntelDriver");
+                std::string gpu_name = ll_safe_string((const char *)glGetString(GL_RENDERER));
+                details.setArg("[VERSION]", driver);
+                details.setArg("[GPUNAME]", gpu_name);
+                S32 button = OSMessageBox(details.getString(),
+                                          LLStringUtil::null,
+                                          OSMB_YESNO);
+                if (OSBTN_YES == button && gViewerWindow)
+                {
+                    std::string url = LLWeb::escapeURL(LLTrans::getString("IntelDriverPage"));
+                    if (gViewerWindow->getWindow())
+                    {
+                        gViewerWindow->getWindow()->spawnWebBrowser(url, false);
+                    }
+                }
+            }
+        }
+    }
+#endif
+
+    // Obsolete? mExpectedGLVersion is always zero
 #if LL_WINDOWS
 	if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
 	{
@@ -1517,55 +1558,13 @@ void LLAppViewer::initMaxHeapSize()
 
 	//F32 max_heap_size_gb = llmin(1.6f, (F32)gSavedSettings.getF32("MaxHeapSize")) ;
 	F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize") ;
-	BOOL enable_mem_failure_prevention = (BOOL)gSavedSettings.getBOOL("MemoryFailurePreventionEnabled") ;
 // <FS:Ansariel> Enable low memory checks on 32bit builds
 #if ADDRESS_SIZE == 64
 	max_heap_size_gb = F32Gigabytes(128);
-	enable_mem_failure_prevention = FALSE;
 #endif
 // </FS:Ansariel>
 
-	LLMemory::initMaxHeapSizeGB(max_heap_size_gb, enable_mem_failure_prevention) ;
-}
-
-void LLAppViewer::checkMemory()
-{
-	const static F32 MEMORY_CHECK_INTERVAL = 1.0f ; //second
-	//const static F32 MAX_QUIT_WAIT_TIME = 30.0f ; //seconds
-	//static F32 force_quit_timer = MAX_QUIT_WAIT_TIME + MEMORY_CHECK_INTERVAL ;
-
-	// <FS:Ansariel> Enable low memory checks on 32bit builds
-	//if(!gGLManager.mDebugGPU)
-	//{
-	//	return ;
-	//}
-#if ADDRESS_SIZE == 32
-	static LLCachedControl<bool> mem_failure_prevention(gSavedSettings, "MemoryFailurePreventionEnabled");
-	if (!mem_failure_prevention)
-#endif
-	{
-		return ;
-	}
-	// </FS:Ansariel>
-
-	if(MEMORY_CHECK_INTERVAL > mMemCheckTimer.getElapsedTimeF32())
-	{
-		return ;
-	}
-	mMemCheckTimer.reset() ;
-
-		//update the availability of memory
-		LLMemory::updateMemoryInfo() ;
-
-	bool is_low = LLMemory::isMemoryPoolLow() ;
-
-	LLPipeline::throttleNewMemoryAllocation(is_low) ;
-
-	if(is_low)
-	{
-		// <FS:Ansariel> Causes spammy log output
-		//LLMemory::logMemoryInfo() ;
-	}
+	LLMemory::initMaxHeapSizeGB(max_heap_size_gb);
 }
 
 static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
@@ -1672,9 +1671,6 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-
-	//check memory availability information
-	checkMemory() ;
 
 	{
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
@@ -1872,8 +1868,13 @@ bool LLAppViewer::doFrame()
 				S32 work_pending = 0;
 				S32 io_pending = 0;
 				F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
-
+				// <FS:Beq> instrument image decodes
+				{
+					FSZoneN("updateTextureThreads");
+					// FSPlot("max_time_ms",max_time);
+				// <FS:Beq/>
 				work_pending += updateTextureThreads(max_time);
+				}	// <FS:Beq/> instrument image decodes
 
 				{
 					LL_RECORD_BLOCK_TIME(FTM_LFS);
@@ -1957,6 +1958,8 @@ bool LLAppViewer::doFrame()
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
     FSFrameMark; // <FS:Beq> Tracy support delineate Frame
+    LLPROFILE_UPDATE();
+
 	return ! LLApp::isRunning();
 }
 
@@ -3797,6 +3800,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	// CPU
 	info["CPU"] = gSysCPU.getCPUString();
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
+	info["CONCURRENCY"] = LLSD::Integer((S32)boost::thread::hardware_concurrency());	// <FS:Beq> Add hardware concurrency to info
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
 	info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));

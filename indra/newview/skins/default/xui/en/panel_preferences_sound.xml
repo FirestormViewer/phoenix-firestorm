@@ -370,6 +370,38 @@
          layout="topleft"
          left="26"
          top_pad="15"
+         name="auto_unmute_label"
+         width="430">
+            Automatically unmute after teleport:
+        </text>
+        <check_box
+         control_name="FSAutoUnmuteAmbient"
+         name="FSAutoUnmuteAmbient"
+         label="Ambient"
+         tool_tip="Automatically unmute Ambient after teleporting, if muted (default: off)"
+         layout="topleft"
+         top_pad="5"
+         left_delta="5"
+         height="16"
+         width="85" />
+        <check_box
+         control_name="FSAutoUnmuteSounds"
+         name="FSAutoUnmuteSounds"
+         label="Sound Effects"
+         tool_tip="Automatically unmute Sound Effects after teleporting, if muted (default: off)"
+         layout="topleft"
+         left_pad="0"
+         height="18"
+         width="85" />
+      
+      <text
+         type="string"
+         length="1"
+         follows="top|left"
+         height="15"
+         layout="topleft"
+         left="26"
+         top_pad="15"
          name="friends_logon_sounds_label"
          width="225">
             Play a sound when my friends:

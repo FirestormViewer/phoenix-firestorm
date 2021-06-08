@@ -1220,7 +1220,13 @@ bool LLModel::isMaterialListSubset( LLModel* ref )
 {
 	int refCnt = ref->mMaterialList.size();
 	int modelCnt = mMaterialList.size();
-	
+	// <FS:Beq> FIRE-30965 Cleanup braindead mesh parsing error handlers
+	if(modelCnt > refCnt)
+	{
+		// this model cannot be a strict subset if it has more materials than the reference
+		return FALSE;
+	}
+	// </FS:Beq>
 	for (U32 src = 0; src < modelCnt; ++src)
 	{				
 		bool foundRef = false;
@@ -1264,77 +1270,80 @@ bool LLModel::needToAddFaces( LLModel* ref, int& refFaceCnt, int& modelFaceCnt )
 	return changed;
 }
 
-bool LLModel::matchMaterialOrder(LLModel* ref, int& refFaceCnt, int& modelFaceCnt )
-{
-	//Is this a subset?
-	//LODs cannot currently add new materials, e.g.
-	//1. ref = a,b,c lod1 = d,e => This is not permitted
-	//2. ref = a,b,c lod1 = c => This would be permitted
+// <FS:Beq> FIRE-30965 Improve mesh upload error handling
+// function moved to llmodelpreview
+// bool LLModel::matchMaterialOrder(LLModel* ref, int& refFaceCnt, int& modelFaceCnt )
+// {
+// 	//Is this a subset?
+// 	//LODs cannot currently add new materials, e.g.
+// 	//1. ref = a,b,c lod1 = d,e => This is not permitted
+// 	//2. ref = a,b,c lod1 = c => This would be permitted
 	
-	bool isASubset = isMaterialListSubset( ref );
-	if ( !isASubset )
-	{
-		LL_INFOS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
-		return false;
-	}
+// 	bool isASubset = isMaterialListSubset( ref );
+// 	if ( !isASubset )
+// 	{
+// 		LL_INFOS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
+// 		return false;
+// 	}
 
-    if (mMaterialList.size() > ref->mMaterialList.size())
-    {
-        LL_INFOS("MESHSKININFO") << "Material of model has more materials than a reference." << LL_ENDL;
-        // We passed isMaterialListSubset, so materials are a subset, but subset isn't supposed to be
-        // larger than original and if we keep going, reordering will cause a crash
-        return false;
-    }
+//     if (mMaterialList.size() > ref->mMaterialList.size())
+//     {
+//         LL_INFOS("MESHSKININFO") << "Material of model has more materials than a reference." << LL_ENDL;
+//         // We passed isMaterialListSubset, so materials are a subset, but subset isn't supposed to be
+//         // larger than original and if we keep going, reordering will cause a crash
+//         return false;
+//     }
 	
-	std::map<std::string, U32> index_map;
+// 	std::map<std::string, U32> index_map;
 	
-	//build a map of material slot names to face indexes
-	bool reorder = false;
+// 	//build a map of material slot names to face indexes
+// 	bool reorder = false;
 
-	std::set<std::string> base_mat;
-	std::set<std::string> cur_mat;
+// 	std::set<std::string> base_mat;
+// 	std::set<std::string> cur_mat;
 
-	for (U32 i = 0; i < mMaterialList.size(); i++)
-	{
-		index_map[ref->mMaterialList[i]] = i;
-		//if any material name does not match reference, we need to reorder
-		reorder |= ref->mMaterialList[i] != mMaterialList[i];
-		base_mat.insert(ref->mMaterialList[i]);
-		cur_mat.insert(mMaterialList[i]);
-	}
+// 	for (U32 i = 0; i < mMaterialList.size(); i++)
+// 	{
+// 		index_map[ref->mMaterialList[i]] = i;
+// 		//if any material name does not match reference, we need to reorder
+// 		reorder |= ref->mMaterialList[i] != mMaterialList[i];
+// 		base_mat.insert(ref->mMaterialList[i]);
+// 		cur_mat.insert(mMaterialList[i]);
+// 	}
 
 
-	if (reorder &&  (base_mat == cur_mat)) //don't reorder if material name sets don't match
-	{
-		std::vector<LLVolumeFace> new_face_list;
-		new_face_list.resize(mMaterialList.size());
+// 	if (reorder &&  (base_mat == cur_mat)) //don't reorder if material name sets don't match
+// 	{
+// 		std::vector<LLVolumeFace> new_face_list;
+// 		new_face_list.resize(mMaterialList.size());
 
-		std::vector<std::string> new_material_list;
-		new_material_list.resize(mMaterialList.size());
+// 		std::vector<std::string> new_material_list;
+// 		new_material_list.resize(mMaterialList.size());
 
-		//rebuild face list so materials have the same order 
-		//as the reference model
-		for (U32 i = 0; i < mMaterialList.size(); ++i)
-		{ 
-			U32 ref_idx = index_map[mMaterialList[i]];
+// 		//rebuild face list so materials have the same order 
+// 		//as the reference model
+// 		for (U32 i = 0; i < mMaterialList.size(); ++i)
+// 		{ 
+// 			U32 ref_idx = index_map[mMaterialList[i]];
 
-			if (i < mVolumeFaces.size())
-			{
-				new_face_list[ref_idx] = mVolumeFaces[i];
-			}
-			new_material_list[ref_idx] = mMaterialList[i];
-		}
+// 			if (i < mVolumeFaces.size())
+// 			{
+// 				new_face_list[ref_idx] = mVolumeFaces[i];
+// 			}
+// 			new_material_list[ref_idx] = mMaterialList[i];
+// 		}
 
-		llassert(new_material_list == ref->mMaterialList);
+// 		llassert(new_material_list == ref->mMaterialList);
 		
-		mVolumeFaces = new_face_list;
+// 		mVolumeFaces = new_face_list;
 
-		//override material list with reference model ordering
-		mMaterialList = ref->mMaterialList;
-	}
+// 		//override material list with reference model ordering
+// 		mMaterialList = ref->mMaterialList;
+// 	}
 	
-	return true;
-}
+// 	return true;
+// }
+// </FS:Beq>
 
 bool LLModel::loadSkinInfo(LLSD& header, std::istream &is)
 {

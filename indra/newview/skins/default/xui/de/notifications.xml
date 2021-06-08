@@ -3969,6 +3969,11 @@ Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT
 
 Sollte das Problem fortbestehen, finden Sie weitere Hilfestellung unter [SUPPORT_SITE].
 	</global>
+	<global name="UnsupportedIntelDriver">
+		Der installierte Intel-Grafikkartentreiber für [GPUNAME], Version [VERSION], ist erheblich veraltet und dafür bekannt, eine Vielzahl von Programmabstürzen zu verursachen. Es wird dringend geraten, auf eine aktuelle Treiberversion zu aktualisieren.
+
+Möchten Sie die Treiber-Webseite von Intel besuchen?
+	</global>
 	<global name="UnsupportedCPUAmount">
 		796
 	</global>

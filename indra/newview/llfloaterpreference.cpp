@@ -6391,7 +6391,6 @@ LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 
 LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
 {
-#ifdef OPENSIM
 	if (mGridListChangedCallbackConnection.connected())
 	{
 		mGridListChangedCallbackConnection.disconnect();
@@ -6401,7 +6400,6 @@ LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
 	{
 		mGridAddedCallbackConnection.disconnect();
 	}
-#endif
 }
 
 BOOL LLPanelPreferenceOpensim::postBuild()
@@ -6637,6 +6635,10 @@ LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
 	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind(&no_cb));
 	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind(&no_cb));
 }
+LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
+{
+}
+
 #endif
 // <FS:AW optional opensim support>
 

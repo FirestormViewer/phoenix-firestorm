@@ -213,6 +213,7 @@
         </text>
         <color_swatch label="Tło" tool_tip="Kolor tła przesyłania modelu" name="mesh_preview_canvas_color" />
         <color_swatch label="Krawędź modelu" tool_tip="Kolor krawędzi modelu w oknie podglądu podczas przesyłania meszu" name="mesh_preview_edge_color" />
+        <color_swatch label="Światła otoczenia" tool_tip="Poziom oświetlenia otoczenia w oknie podglądu (wpływa również na podgląd animacji itp.)" name="preview_ambient_color" />
         <text name="physics_settings_label">
             Fizyka:
         </text>
