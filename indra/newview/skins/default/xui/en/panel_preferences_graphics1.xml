@@ -380,6 +380,14 @@
          name="Reflections"
          width="150">
           <combo_box.item
+           label="None (opaque)"
+           name="-2"
+           value="-2"/>
+          <combo_box.item
+           label="None (transparent)"
+           name="-1"
+           value="-1"/>
+          <combo_box.item
            label="Minimal"
            name="0"
            value="0"/>
@@ -1085,6 +1093,22 @@
          name="fog"
          top_pad="7"
          width="262" />
+        <spinner
+         control_name="FSImageDecodeThreads"
+         decimal_digits="0"
+         increment="1"
+         follows="left|top"
+         height="22"
+         label="Image decode concurrency:"
+         label_width="198"
+         layout="topleft"
+         left="10"
+         max_val="64"
+         min_val="0"
+         name="image_decode_threads"
+         tool_tip="The number of threads to use for decoding images. 0 = Auto, 1 = Synchronous, 2+ = user specified. (0 or 1 are recommended)"
+         top_pad="7"
+         width="262" />
     </panel>
 
 <!--Rendering-->
@@ -1347,16 +1371,6 @@
          function="Advanced.HandleAttachedLightParticles"
          parameter="RenderAttachedParticles"/>
         </check_box>
-        <check_box
-        follows="top|left"
-        layout="topleft"
-        left="20"
-        top_pad="9"
-        control_name="FSAllowWaterDistortionOcclusion"
-        label="Occlude objects for water distortion map"
-        name="dist_occl"
-        tool_tip="If allowed, object occlusion will be restored for generation of the water distortion maps. Visuals are more correct without occlusion, but this can have a significant impact on rendering performance."
-        />
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"

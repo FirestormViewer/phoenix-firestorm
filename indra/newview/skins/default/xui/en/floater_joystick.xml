@@ -201,80 +201,186 @@
      left="289"
      name="JoystickFlycamEnabled"
      width="60" />
-    <stat_view
-     height="270"
-     label="Joystick Monitor"
-     layout="topleft"
-     left="359"
-     name="axis_view"
-     show_label="true"
-     top="143"
-     width="200">
-        <stat_bar
-         bar_max="2"
-         bar_min="-2"
-				 show_bar="true"
-         label="Axis 0"
-         label_spacing="1"
-         layout="topleft"
-         left="0"
-         name="axis0"
-         tick_spacing="0.5"
-         top="20"
-         width="0" />
-        <stat_bar
-         bar_max="2"
-         bar_min="-2"
-				 show_bar="true"
-         label="Axis 1"
-         label_spacing="1"
-         layout="topleft"
-         name="axis1"
-         tick_spacing="0.5" />
-        <stat_bar
-         bar_max="2"
-         bar_min="-2"
-				 show_bar="true"
-         label="Axis 2"
-         label_spacing="1"
-         layout="topleft"
-         name="axis2"
-         tick_spacing="0.5" />
-        <stat_bar
-         bar_max="2"
-         bar_min="-2"
-				 show_bar="true"
-         label="Axis 3"
-         label_spacing="1"
-         layout="topleft"
-         name="axis3"
-         tick_spacing="0.5" />
-        <stat_bar
-         bar_max="2"
-         bar_min="-2"
-				 show_bar="true"
-         label="Axis 4"
-         label_spacing="1"
-         layout="topleft"
-         name="axis4"
-         tick_spacing="0.5" />
-        <stat_bar
-         bar_max="2"
-         bar_min="-2"
-         label="Axis 5"
-				 show_bar="true"				 
-         label_spacing="1"
-         layout="topleft"
-         name="axis5"
-         tick_spacing="0.5" />
-    </stat_view>
+
+    <!-- <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes -->
     <text
-      type="string"
-      halign="center"
-      length="16"
-      name="joystick_buttons"
-      text_color="White"
-      top_pad="1" />
+     follows="all"
+     halign="center"
+     height="16"
+     layout="topleft"
+     left="350"
+     name="joystick_monitor_label"
+     top="116"
+     width="210">
+      Joystick Monitor
+    </text>
+
+    <icon image_name="lag_status_good.tga" height="10" left_delta="10" name="button_light_0"  width="10" tool_tip="Joystick Button 0"  top_pad="2" />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_1"  width="10" tool_tip="Joystick Button 1"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_2"  width="10" tool_tip="Joystick Button 2"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_3"  width="10" tool_tip="Joystick Button 3"  />
+
+    <icon image_name="lag_status_good.tga" height="10" left_pad="4"    name="button_light_4"  width="10" tool_tip="Joystick Button 4"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_5"  width="10" tool_tip="Joystick Button 5"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_6"  width="10" tool_tip="Joystick Button 6"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_7"  width="10" tool_tip="Joystick Button 7"  />
+
+    <icon image_name="lag_status_good.tga" height="10" left_pad="4"    name="button_light_8"  width="10" tool_tip="Joystick Button 8"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_9"  width="10" tool_tip="Joystick Button 9"  />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_10" width="10" tool_tip="Joystick Button 10" />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_11" width="10" tool_tip="Joystick Button 11" />
+
+    <icon image_name="lag_status_good.tga" height="10" left_pad="4"    name="button_light_12" width="10" tool_tip="Joystick Button 12" />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_13" width="10" tool_tip="Joystick Button 13" />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_14" width="10" tool_tip="Joystick Button 14" />
+    <icon image_name="lag_status_good.tga" height="10" left_pad="1"    name="button_light_15" width="10" tool_tip="Joystick Button 15" />
+
+    <scroll_container
+     height="270"
+     name="joystick_monitor_axes_scroller"
+     top_pad="3"
+     left="350"
+     width="211">
+
+    <container_view
+     background_visible="false"
+     follows="all"
+     name="joystick_monitor_axes_container"
+     width="196">
+
+    <!-- Zi: One stat_view for each axis so we can hide them individually -->
+    <stat_view
+     name="axis_view_0"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 0"
+       layout="topleft"
+       left="0"
+       name="axis0"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_1"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 1"
+       layout="topleft"
+       left="0"
+       name="axis1"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_2"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 2"
+       layout="topleft"
+       left="0"
+       name="axis2"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_3"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 3"
+       layout="topleft"
+       left="0"
+       name="axis3"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_4"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 4"
+       layout="topleft"
+       left="0"
+       name="axis4"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_5"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 5"
+       layout="topleft"
+       left="0"
+       name="axis5"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_6"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 6"
+       layout="topleft"
+       left="0"
+       name="axis6"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    <stat_view
+     name="axis_view_7"
+     show_label="false">
+      <stat_bar
+       bar_max="2"
+       bar_min="-2"
+       show_bar="true"
+       label="Axis 7"
+       layout="topleft"
+       left="0"
+       name="axis7"
+       tick_spacing="0.5"
+       top="20"
+       width="0" />
+    </stat_view>
+
+    </container_view>
+    </scroll_container>
+    <!-- </FS:Zi> -->
+
     <text
      type="string"
      length="1"

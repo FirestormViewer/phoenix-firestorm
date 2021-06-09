@@ -297,7 +297,9 @@ public:
 	void updateSpeakers(const LLSD& update);
 	void setSpeakers(const LLSD& speakers);
 
-	void toggleAllowTextChat(const LLUUID& speaker_id);
+	// <FS:Zi> make text chat block in groups not a toggle to prevent accidental unmuting
+	// void toggleAllowTextChat(const LLUUID& speaker_id);
+	void allowTextChat(const LLUUID& speaker_id, bool allow);
 
 	/**
 	 * Mutes/Unmutes avatar for current group voice chat.

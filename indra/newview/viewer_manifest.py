@@ -172,6 +172,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             # <FS:AO> Include firestorm resources
             with self.prefix(src_dst="fs_resources"):
                 self.path("*.lsltxt")
+                self.path("*.dae") # <FS:Beq> FIRE-30963 - better physics defaults
 
             # skins
             with self.prefix(src_dst="skins"):

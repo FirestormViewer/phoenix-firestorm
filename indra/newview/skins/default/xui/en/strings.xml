@@ -51,6 +51,7 @@ You are in [REGION]
 	<string name="AboutSystem">
 CPU: [CPU]
 Memory: [MEMORY_MB] MB
+Concurrency: [CONCURRENCY]
 OS Version: [OS_VERSION]
 Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]
 Graphics Card: [GRAPHICS_CARD]

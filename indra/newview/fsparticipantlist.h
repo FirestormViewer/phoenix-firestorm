@@ -179,7 +179,7 @@ protected:
 		bool checkContextMenuItem(const LLSD& userdata);
 
 		void sortParticipantList(const LLSD& userdata);
-		void toggleAllowTextChat(const LLSD& userdata);
+		void allowTextChat(const LLSD& userdata);
 		void toggleMute(const LLSD& userdata, U32 flags);
 		void toggleMuteText(const LLSD& userdata);
 		void toggleMuteVoice(const LLSD& userdata);

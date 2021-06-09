@@ -180,6 +180,7 @@
 #include "pipeline.h"
 #include "llappviewer.h"
 #include "llfasttimerview.h"
+#include "lltelemetry.h"
 #include "llfloatermap.h"
 #include "llweb.h"
 #include "llvoiceclient.h"
@@ -810,6 +811,8 @@ bool idle_startup()
 			}
 
 			#if LL_WINDOWS
+                LLPROFILE_STARTUP();
+
 				// On the windows dev builds, unpackaged, the message.xml file will 
 				// be located in indra/build-vc**/newview/<config>/app_settings.
 				std::string message_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"message.xml");
@@ -3904,6 +3907,16 @@ void LLStartUp::setStartSLURL(const LLSLURL& slurl)
 	gSavedSettings.setString("LoginLocation", LLSLURL::SIM_LOCATION_LAST);
 	break;
       }
+	// <FS:Ansariel> Support adding grids via SLURL
+#if OPENSIM && !SINGLEGRID
+	case LLSLURL::APP:
+		if (slurl.getAppCmd() == "gridmanager")
+		{
+			LLURLDispatcher::dispatch(getStartSLURL().getSLURLString(), "clicked", NULL, false);
+			break;
+		}
+#endif
+	// </FS:Ansariel>
     default:
 			LLGridManager::getInstance()->setGridChoice(slurl.getGrid());
 			break;

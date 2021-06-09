@@ -92,6 +92,7 @@
      word_wrap="true"
      top_pad="4"
      use_ellipses="true"
+     trusted_content="false"
      width="220">This is my second life description and I really think it is great. But for some reason my description is super extra long because I like to talk a whole lot
     </text>
     <slider

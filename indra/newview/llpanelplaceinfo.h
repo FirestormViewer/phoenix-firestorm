@@ -85,6 +85,11 @@ public:
 	// Sends a request to the server.
 	void displayParcelInfo(const LLUUID& region_id,
 						   const LLVector3d& pos_global);
+	// <FS:Beq> FIRE-30768, FIRE-30534 more OS Var region fixups
+	void displayParcelInfo(const LLUUID& region_id,
+						   const U64 region_handle,
+						   const LLVector3d& pos_global);
+	// </FS:Beq>
 
 	/*virtual*/ void setErrorStatus(S32 status, const std::string& reason);
 
