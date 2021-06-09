@@ -3,7 +3,7 @@
 	<tab_container name="tabs">
 		<panel label="Подключение" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Максимальная пропускная способность ([http://wiki.firestormviewer.org/fs_speedtest Нужны подсказки?] (На английском)):
+				Максимальная пропускная способность ([https://wiki.firestormviewer.org/fs_speedtest Нужны подсказки?] (На английском)):
 			</text>
 			<text name="NetworkPrefText3">
 				Кабель
