@@ -78,6 +78,8 @@
 		Odbicia w wodzie:
 	</text>
 	<combo_box name="Reflections">
+		<combo_box.item label="Żadne; nieprzezroczyste" name="-2" />
+		<combo_box.item label="Żadne; przezroczyste" name="-1" />
 		<combo_box.item label="Minimalne" name="0" />
 		<combo_box.item label="Teren i drzewa" name="1" />
 		<combo_box.item label="Wszystkie obiekty statyczne" name="2" />

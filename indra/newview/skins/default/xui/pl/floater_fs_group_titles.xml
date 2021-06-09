@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="Tytuły grup">
 	<floater.string name="NoGroupTitle" value="&lt;Brak tytułu grupy&gt;" />
+	<filter_editor label="Filtruj tytuły grup" name="filter_input" />
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Tytuł" />
 		<column name="groupname" label="Grupa" />

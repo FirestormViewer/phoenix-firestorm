@@ -113,7 +113,7 @@
 		</layout_panel>
 	</layout_stack>
 	<button
-	 top="1"
+	 top="2"
 	 follows="top|right"
 	 layout="topleft"
 	 height="22"

@@ -48,6 +48,8 @@
 			Wasserreflexionen:
 		</text>
 		<combo_box initial_value="true" label="Wasserreflexionen" name="Reflections">
+			<combo_box.item label="Keine (undurchsichtig)" name="-2"/>
+			<combo_box.item label="Keine (transparent)" name="-1"/>
 			<combo_box.item label="Minimal" name="0"/>
 			<combo_box.item label="Terrain und Bäume" name="1"/>
 			<combo_box.item label="Alle statischen Objekte" name="2"/>
@@ -135,6 +137,7 @@
 		<slider label="Zusätzliche Textur-Speicherbuffer-Reserve (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Prozentsatz des gesamten Videospeichers, der zum Zwischenspeichern von geladenen Texturen verwendet wird, die aktuell nicht dargestellt werden."/>
 		<slider label="Physische Videospeicher-Reserve (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Prozentsatz des gesamten Videospeichers, der für andere Zwecke reserviert wird."/>
 		<spinner label="Nebeldistanzverhältnis:" name="fog"/>
+		<spinner label="Parallelität Textur-Dekodierung:" name="image_decode_threads" tool_tip="Die Anzahl an Threads, für zur Dekodierung von Texturen verwendet wird. 0 = Automatisch ermitteln, 1 = Synchron, 2+ = Benutzerdefiniert. (Empfohlen: 0 oder 1)"/>
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">
@@ -173,7 +176,6 @@
 		<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
 		<check_box label="Angehängte Lichter rendern" tool_tip="Diese Option aktiviert alle Lichtquellen, die Avatare angehängt haben, wie z.B. Facelights. Nützlich, um beispielsweise Facelights zu deaktivieren falls notwendig." name="Render Attached Lights"/>
 		<check_box label="Angehängte Partikel rendern" name="Render Attached Particles"/>
-		<check_box label="Objekt-Verdeckung für Wasser-Verzerrungseffekte aktivieren" name="dist_occl" tool_tip="Falls aktiviert, wird die Objekt-Verdeckung bei der Generierung der Wasser-Verzerrungseffekte wieder aktiviert. Die Darstellung ist ohne Verdeckung exakter, allerdings kann sich hierdurch die Performance signifikant verschlechtern."/>
 		<slider name="MaxFPS" label="FPS:"/>
 		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
 		<text name="PrecachingDelayText" width="60">

@@ -79,6 +79,7 @@
 #include "llslurl.h"
 #include "llstartup.h"
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
+#include "llvisualeffect.h"
 #include "rlvactions.h"
 #include "rlvcommon.h"
 // [/RLVa:KB]
@@ -92,6 +93,7 @@
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "llavataractions.h"
+#include "lldiskcache.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"
@@ -215,14 +217,14 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 bool handleSetShaderChanged(const LLSD& newvalue)
 // </FS:Ansariel>
 {
-// [RLVa:KB] - @setenv
-	if ( (!RlvActions::canChangeEnvironment()) && (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")) && (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) )
+// [RLVa:KB] - @setenv and @setsphere
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canChangeEnvironment() || (LLVfxManager::instance().hasEffect(EVisualEffect::RlvSphere))) &&
+		 (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))&& (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) )
 	{
 		gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
 		return true;
 	}
 // [/RLVa:KB]
-
 
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
@@ -520,21 +522,9 @@ static bool handleRenderLocalLightsChanged(const LLSD& newvalue)
 	return true;
 }
 
-// [RLVa:KB] - @setsphere
-static bool handleWindLightAtmosShadersChanged(const LLSD& newvalue)
-{
-	LLRenderTarget::sUseFBO = newvalue.asBoolean() && LLPipeline::sUseDepthTexture;
-	handleSetShaderChanged(LLSD());
-	return true;
-}
-// [/RLVa:KB]
-
 static bool handleRenderDeferredChanged(const LLSD& newvalue)
 {
-//	LLRenderTarget::sUseFBO = newvalue.asBoolean();
-// [RLVa:KB] - @setsphere
-	LLRenderTarget::sUseFBO	= newvalue.asBoolean() || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
-// [/RLVa:KB]
+	LLRenderTarget::sUseFBO = newvalue.asBoolean();
 	if (gPipeline.isInit())
 	{
 		LLPipeline::refreshCachedSettings();
@@ -556,10 +546,7 @@ static bool handleRenderDeferredChanged(const LLSD& newvalue)
 //
 static bool handleRenderBumpChanged(const LLSD& newval)
 {
-//	LLRenderTarget::sUseFBO = newval.asBoolean();
-// [RLVa:KB] - @setsphere
-	LLRenderTarget::sUseFBO	= newval.asBoolean() || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
-// [/RLVa:KB]
+	LLRenderTarget::sUseFBO = newval.asBoolean();
 	if (gPipeline.isInit())
 	{
 		gPipeline.updateRenderBump();
@@ -1062,6 +1049,15 @@ void handlePlayBentoIdleAnimationChanged(const LLSD& newValue)
 }
 // </FS:Zi>
 
+// <FS:Ansariel> Better asset cache size control
+void handleDiskCacheSizeChanged(const LLSD& newValue)
+{
+	const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
+	const U64 disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+	LLDiskCache::getInstance()->setMaxSizeBytes(disk_cache_bytes);
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1089,10 +1085,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderGlow")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderGlowResolutionPow")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
 	gSavedSettings.getControl("RenderAvatarCloth")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-//	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-// [RLVa:KB] - @setsphere
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleWindLightAtmosShadersChanged, _2));
-// [/RLVa:KB]
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderGammaFull")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderVolumeLODFactor")->getSignal()->connect(boost::bind(&handleVolumeLODChanged, _2));
 	gSavedSettings.getControl("RenderAvatarLODFactor")->getSignal()->connect(boost::bind(&handleAvatarLODChanged, _2));
@@ -1316,6 +1309,9 @@ void settings_setup_listeners()
 
 	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 	gSavedSettings.getControl("FSPlayDefaultBentoAnimation")->getSignal()->connect(boost::bind(&handlePlayBentoIdleAnimationChanged, _2));
+
+	// <FS:Ansariel> Better asset cache size control
+	gSavedSettings.getControl("FSDiskCacheSize")->getSignal()->connect(boost::bind(&handleDiskCacheSizeChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

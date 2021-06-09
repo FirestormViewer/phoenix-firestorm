@@ -149,14 +149,20 @@
      label="Moderator Options"
      layout="topleft"
      name="Moderator Options">
-      <menu_item_check
+      <menu_item_call
        label="Allow text chat"
        layout="topleft"
        name="AllowTextChat">
-        <on_check function="AvatarIcon.Check" parameter="is_allowed_text_chat" />
-        <on_click function="AvatarIcon.Action" parameter="toggle_allow_text_chat" />
+        <on_click function="AvatarIcon.Action" parameter="allow_text_chat" />
         <on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" />
-      </menu_item_check>
+      </menu_item_call>
+      <menu_item_call
+       label="Forbid text chat"
+       layout="topleft"
+       name="ForbidTextChat">
+        <on_click function="AvatarIcon.Action" parameter="forbid_text_chat" />
+        <on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" />
+      </menu_item_call>
       <menu_item_call
        label="Mute this participant"
        layout="topleft"

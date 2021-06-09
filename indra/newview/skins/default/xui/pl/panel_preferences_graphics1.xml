@@ -48,6 +48,8 @@
 				Odbicia w wodzie:
 			</text>
 			<combo_box name="Reflections">
+				<combo_box.item label="Żadne (nieprzezroczyste)" name="-2" />
+				<combo_box.item label="Żadne (przezroczyste)" name="-1" />
 				<combo_box.item label="Minimalne" name="0"/>
 				<combo_box.item label="Teren i drzewa" name="1"/>
 				<combo_box.item label="Wszystkie obiekty statyczne" name="2"/>
@@ -121,6 +123,7 @@
 			<slider label="Dodatkowy zapas pamięci podręcznej tekstur (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Procent fizycznej pamięci wideo zarezerwowanej dla tekstur ładowanych do pamięci podręcznej, które obecnie nie są wyświetlane." />
 			<slider label="Fizyczny zapas pamięci wideo (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Procent fizycznej pamięci wideo zarezerwowanej do innego użytku." />
 			<spinner label="Stosunek odległości dla mgły:" name="fog"/>
+			<spinner label="Wątki dekodowania obrazów:" name="image_decode_threads" tool_tip="Liczba wątków używanych do dekodowania obrazów. 0 = Auto, 1 = Synchroniczne, 2+ = określone przez użytkownika. Zalecane 0 lub 1." />
 		</panel>
 		<panel name="Rendering">
 			<text name="World Updating">
@@ -156,7 +159,6 @@
 			<check_box label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<check_box label="Włącz doczepiane światła (np. twarzy)" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." name="Render Attached Lights"/>
 			<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particles"/>
-			<check_box label="Okluzja obiektów dla map zniekształceń wody" name="dist_occl" tool_tip="Gdy opcja jest zaznaczona, to okluzja obiektów zostanie przywrócona dla generowania map zniekształceń wody. Grafika jest bardziej poprawna bez okluzji, ale może ona mieć znaczący wpływ na wydajność renderowania." />
 			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
 			<text name="PrecachingDelayText">
 				sekund

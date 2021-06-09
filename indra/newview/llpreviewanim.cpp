@@ -235,4 +235,28 @@ void LLPreviewAnim::onClose(bool app_quitting)
 //        }
 //    }
 //}
+
+// virtual
+void LLPreviewAnim::refreshFromItem()
+{
+	LLPreview::refreshFromItem();
+
+	const LLInventoryItem* item = getItem();
+	if (item)
+	{
+		pMotion = gAgentAvatarp->createMotion(item->getAssetUUID()); // preload the animation
+
+		if (pMotion)
+		{
+			LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
+			LLTextBox* stats_box_right = getChild<LLTextBox>("AdvancedStatsRight");
+			stats_box_left->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
+			stats_box_left->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
+			stats_box_left->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
+			stats_box_right->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
+			stats_box_right->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
+			stats_box_right->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
+		}
+	}
+}
 // </FS:Ansariel>

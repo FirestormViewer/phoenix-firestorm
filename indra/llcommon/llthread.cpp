@@ -35,8 +35,9 @@
 #include "lltrace.h"
 #include "lltracethreadrecorder.h"
 #include "llexception.h"
+#include "fstelemetry.h" // <FS:Beq> allow thread naming
 
-#if LL_LINUX || LL_SOLARIS
+#if LL_LINUX
 #include <sched.h>
 #endif
 
@@ -140,7 +141,10 @@ void LLThread::threadRun()
 
     // for now, hard code all LLThreads to report to single master thread recorder, which is known to be running on main thread
     mRecorder = new LLTrace::ThreadRecorder(*LLTrace::get_master_thread_recorder());
-
+    // <FS:Beq> - Add threadnames to telemetry
+    LL_INFOS("THREAD") << "Started thread " << mName << LL_ENDL;
+    FSThreadName( mName.c_str() );
+    // </FS:Beq>
     // Run the user supplied function
     do 
     {
