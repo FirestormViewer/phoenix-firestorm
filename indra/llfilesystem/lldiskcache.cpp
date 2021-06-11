@@ -85,8 +85,8 @@ void LLDiskCache::purge()
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
-        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path), {}))
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
         {
             if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
             {
@@ -338,8 +338,8 @@ void LLDiskCache::clearCache()
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
-        //for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
         {
             if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
             {
@@ -381,8 +381,8 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
     if (boost::filesystem::is_directory(dir_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
-        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path), {}))
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path, ec), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path, ec), {}))
         {
             if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
             {
