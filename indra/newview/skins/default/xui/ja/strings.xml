@@ -662,7 +662,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="AssetUploadServerUnavaliable">サービスが利用できないか、アップロードのタイムアウト上限に達しています。</string>
 	<string name="AssetUploadRequestInvalid">
 アップロードの要求中にエラーが発生しました。この問題を解決するには、次のページを参照して下さい。
-http://www.firestormviewer.org/support
+https://www.firestormviewer.org/support
 	</string>
 	
 	<!-- Settings errors -->

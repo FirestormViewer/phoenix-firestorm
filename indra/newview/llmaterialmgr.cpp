@@ -477,7 +477,10 @@ void LLMaterialMgr::onGetAllResponse(bool success, const LLSD& content, const LL
 	std::istringstream content_stream(content_string);
 
 	LLSD response_data;
-	U32 uzip_result = LLUZipHelper::unzip_llsd(response_data, content_stream, content_binary.size());
+	// <FS:Beq pp Rye> Use new variant unzip_llsd
+	// U32 uzip_result = LLUZipHelper::unzip_llsd(response_data, content_stream, content_binary.size());
+	U32 uzip_result = LLUZipHelper::unzip_llsd(response_data, content_binary.data(), content_binary.size());
+	// </FS:Beq pp Rye>
 	if (uzip_result != LLUZipHelper::ZR_OK)
 	{
 		LL_WARNS("Materials") << "Cannot unzip LLSD binary content: " << uzip_result << LL_ENDL;

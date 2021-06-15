@@ -35,6 +35,7 @@ public:
 	RlvOverlayEffect(const LLUUID& idRlvObj);
 	~RlvOverlayEffect();
 
+	static const EVisualEffect EffectCode = EVisualEffect::RlvOverlay;
 public:
 	bool hitTest(const LLCoordGL& ptMouse) const;
 	void run(const LLVisualEffectParams*) override;
@@ -70,6 +71,7 @@ public:
 	RlvSphereEffect(const LLUUID& idRlvObj);
 	~RlvSphereEffect();
 
+	static const EVisualEffect EffectCode = EVisualEffect::RlvSphere;
 public:
 	void run(const LLVisualEffectParams* pParams) override;
 	static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);

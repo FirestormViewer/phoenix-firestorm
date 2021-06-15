@@ -66,9 +66,9 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
 // WARNING: purge() is called by LLPurgeDiskCacheThread. As such it must
 // NOT touch any LLDiskCache data without introducing and locking a mutex!
 
-// Interaction through the filesystem itself should be safe. Letâ€™s say thread
+// Interaction through the filesystem itself should be safe. Let’s say thread
 // A is accessing the cache file for reading/writing and thread B is trimming
-// the cache. Letâ€™s also assume using llifstream to open a file and
+// the cache. Let’s also assume using llifstream to open a file and
 // boost::filesystem::remove are not atomic (which will be pretty much the
 // case).
 
@@ -98,6 +98,7 @@ void LLDiskCache::purge()
         LL_INFOS() << "Total dir size before purge is " << dirFileSize(mCacheDir) << LL_ENDL;
     }
 
+    boost::system::error_code ec;
     auto start_time = std::chrono::high_resolution_clock::now();
 
     typedef std::pair<std::time_t, std::pair<uintmax_t, std::string>> file_info_t;
@@ -108,19 +109,27 @@ void LLDiskCache::purge()
 #else
     std::string cache_path(mCacheDir);
 #endif
-    if (boost::filesystem::is_directory(cache_path))
+    if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
-        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path), {}))
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry))
+            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    uintmax_t file_size = boost::filesystem::file_size(entry);
+                    uintmax_t file_size = boost::filesystem::file_size(entry, ec);
+                    if (ec.failed())
+                    {
+                        continue;
+                    }
                     const std::string file_path = entry.path().string();
-                    const std::time_t file_time = boost::filesystem::last_write_time(entry);
+                    const std::time_t file_time = boost::filesystem::last_write_time(entry, ec);
+                    if (ec.failed())
+                    {
+                        continue;
+                    }
 
                     file_info.push_back(file_info_t(file_time, { file_size, file_path }));
                 }
@@ -144,7 +153,6 @@ void LLDiskCache::purge()
         if (file_size_total > mMaxSizeBytes)
         {
             action = "DELETE:";
-            boost::system::error_code ec;
             boost::filesystem::remove(entry.second.second, ec);
             if (ec.failed())
             {
@@ -277,9 +285,15 @@ void LLDiskCache::updateFileAccessTime(const std::string& file_path)
     // current time
     const std::time_t cur_time = std::time(nullptr);
 
+    boost::system::error_code ec;
 #if LL_WINDOWS
     // file last write time
-    const std::time_t last_write_time = boost::filesystem::last_write_time(utf8str_to_utf16str(file_path));
+    const std::time_t last_write_time = boost::filesystem::last_write_time(utf8str_to_utf16str(file_path), ec);
+    if (ec.failed())
+    {
+        LL_WARNS() << "Failed to read last write time for cache file " << file_path << ": " << ec.message() << LL_ENDL;
+        return;
+    }
 
     // delta between cur time and last time the file was written
     const std::time_t delta_time = cur_time - last_write_time;
@@ -288,11 +302,16 @@ void LLDiskCache::updateFileAccessTime(const std::string& file_path)
     // before the last one
     if (delta_time > time_threshold)
     {
-        boost::filesystem::last_write_time(utf8str_to_utf16str(file_path), cur_time);
+        boost::filesystem::last_write_time(utf8str_to_utf16str(file_path), cur_time, ec);
     }
 #else
     // file last write time
-    const std::time_t last_write_time = boost::filesystem::last_write_time(file_path);
+    const std::time_t last_write_time = boost::filesystem::last_write_time(file_path, ec);
+    if (ec.failed())
+    {
+        LL_WARNS() << "Failed to read last write time for cache file " << file_path << ": " << ec.message() << LL_ENDL;
+        return;
+    }
 
     // delta between cur time and last time the file was written
     const std::time_t delta_time = cur_time - last_write_time;
@@ -301,9 +320,14 @@ void LLDiskCache::updateFileAccessTime(const std::string& file_path)
     // before the last one
     if (delta_time > time_threshold)
     {
-        boost::filesystem::last_write_time(file_path, cur_time);
+        boost::filesystem::last_write_time(file_path, cur_time, ec);
     }
 #endif
+
+    if (ec.failed())
+    {
+        LL_WARNS() << "Failed to update last write time for cache file " << file_path << ": " << ec.message() << LL_ENDL;
+    }
 }
 
 const std::string LLDiskCache::getCacheInfo()
@@ -329,22 +353,22 @@ void LLDiskCache::clearCache()
      * the component files but it's called infrequently so it's
      * likely just fine
      */
+    boost::system::error_code ec;
 #if LL_WINDOWS
     std::wstring cache_path(utf8str_to_utf16str(mCacheDir));
 #else
     std::string cache_path(mCacheDir);
 #endif
-    if (boost::filesystem::is_directory(cache_path))
+    if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
-        //for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path), {}))
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry))
+            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    boost::system::error_code ec;
                     boost::filesystem::remove(entry, ec);
                     if (ec.failed())
                     {
@@ -369,22 +393,27 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
      * so if performance is ever an issue, optimizing this or removing it altogether,
      * is an easy win.
      */
+    boost::system::error_code ec;
 #if LL_WINDOWS
     std::wstring dir_path(utf8str_to_utf16str(dir));
 #else
     std::string dir_path(dir);
 #endif
-    if (boost::filesystem::is_directory(dir_path))
+    if (boost::filesystem::is_directory(dir_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
-        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path), {}))
+        //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path, ec), {}))
+        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry))
+            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    total_file_size += boost::filesystem::file_size(entry);
+                    uintmax_t file_size = boost::filesystem::file_size(entry, ec);
+                    if (!ec.failed())
+                    {
+                        total_file_size += file_size;
+                    }
                 }
             }
         }
