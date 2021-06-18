@@ -5146,10 +5146,16 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		// In SL we have uniform region size. This is normal.
 		// In opensim the handle will resolve to a 256m quantised world tile which the server maps back to a region
 		// it "should" also compensate for the local coords. Handle has been "correctly" determined already so we use global % 256
-		static const auto width{LLWorld::getInstance()->getRegionWidthInMeters()};
+		static const F32 width = REGION_WIDTH_METERS;// Note: reverted back to previous hardcode 256 for non-local. Whilst this appears incorrect server side logic expects %256 and will overshoot otherwise.
 		pos_local.set( fmod((F32)pos_global.mdV[VX], width),
 					   fmod((F32)pos_global.mdV[VY], width),
 					   (F32)pos_global.mdV[VZ] );
+		LL_INFOS("Teleport") << "Non-local TP:"
+							 << " pos_global " << pos_global
+							 << " region " << region_origin
+							 << " local " << pos_local
+							 << " region_handle " << handle
+							 << LL_ENDL;
 	}
 
 	if(teleportCore(is_local)) // Rather a pointless if as teleportCore currently always returns true
