@@ -901,9 +901,11 @@ void RlvHandler::onSitOrStand(bool fSitting)
 	}
 	else if ( (!fSitting) && (m_fPendingGroundSit) )
 	{
-		m_fPendingGroundSit = false;
 		gAgent.setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
 		send_agent_update(TRUE, TRUE);
+
+		m_fPendingGroundSit = false;
+		m_idPendingSitActor = m_idPendingUnsitActor;
 	}
 
 	if (isAgentAvatarValid())
@@ -911,9 +913,15 @@ void RlvHandler::onSitOrStand(bool fSitting)
 		const LLViewerObject* pSitObj = static_cast<const LLViewerObject*>(gAgentAvatarp->getParent());
 		const LLUUID& idSitObj = (pSitObj) ? pSitObj->getID() : LLUUID::null;
 		if (fSitting)
-			RlvBehaviourNotifyHandler::instance().onSit(idSitObj, true /* Apparently we shouldn't track legal vs 'illegal' (ground) sits */);
+		{
+			RlvBehaviourNotifyHandler::instance().onSit(idSitObj, !gRlvHandler.hasBehaviourExcept(RLV_BHVR_SIT, m_idPendingSitActor));
+			m_idPendingSitActor.setNull();
+		}
 		else
-			RlvBehaviourNotifyHandler::instance().onStand(idSitObj, !gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, getCurrentObject()));
+		{
+			RlvBehaviourNotifyHandler::instance().onStand(idSitObj, !gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, m_idPendingUnsitActor));
+			m_idPendingUnsitActor.setNull();
+		}
 	}
 }
 
@@ -2748,6 +2756,9 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					send_agent_update(TRUE, TRUE);	// See behaviour notes on why we have to force an agent update here
+
+					gRlvHandler.m_idPendingSitActor.setNull();
+					gRlvHandler.m_idPendingUnsitActor = gRlvHandler.getCurrentObject();
 				}
 			}
 			break;
@@ -3199,13 +3210,19 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SITGROUND>::onCommand(const RlvCommand& rlvC
 
 	if (!gAgentAvatarp->isSitting())
 	{
-		gRlvHandler.m_fPendingGroundSit = false;
 		gAgent.setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+
+		gRlvHandler.m_fPendingGroundSit = false;
+		gRlvHandler.m_idPendingSitActor = gRlvHandler.getCurrentObject();
+		gRlvHandler.m_idPendingUnsitActor.setNull();
 	}
 	else if (gAgentAvatarp->getParent())
 	{
-		gRlvHandler.m_fPendingGroundSit = true;
 		gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+
+		gRlvHandler.m_fPendingGroundSit = true;
+		gRlvHandler.m_idPendingSitActor.setNull();
+		gRlvHandler.m_idPendingUnsitActor = gRlvHandler.getCurrentObject();
 	}
 	send_agent_update(TRUE, TRUE);
 
@@ -3246,6 +3263,9 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 		gMessageSystem->addUUIDFast(_PREHASH_TargetID, pObj->mID);
 		gMessageSystem->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
 		pObj->getRegion()->sendReliableMessage();
+
+		gRlvHandler.m_idPendingSitActor = gRlvHandler.getCurrentObject();
+		gRlvHandler.m_idPendingUnsitActor.setNull();
 	}
 	else
 	{
