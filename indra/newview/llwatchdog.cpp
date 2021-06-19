@@ -233,18 +233,31 @@ void LLWatchdog::run()
 	if(current_run_delta > (WATCHDOG_SLEEP_TIME_USEC * TIME_ELAPSED_MULTIPLIER))
 	{
 		LL_INFOS() << "Watchdog thread delayed: resetting entries." << LL_ENDL;
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
 		std::for_each(mSuspects.begin(), 
 			mSuspects.end(), 
-			std::mem_fun(&LLWatchdogEntry::reset)
+			std::mem_fn(&LLWatchdogEntry::reset)
 			);
+// [/SL:KB]
+//		std::for_each(mSuspects.begin(), 
+//			mSuspects.end(), 
+//			std::mem_fun(&LLWatchdogEntry::reset)
+//			);
 	}
 	else
 	{
+// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
 		SuspectsRegistry::iterator result = 
 			std::find_if(mSuspects.begin(), 
 				mSuspects.end(), 
-				std::not1(std::mem_fun(&LLWatchdogEntry::isAlive))
+				std::not1(std::mem_fn(&LLWatchdogEntry::isAlive))
 				);
+// [/SL:KB]
+//		SuspectsRegistry::iterator result = 
+//			std::find_if(mSuspects.begin(), 
+//				mSuspects.end(), 
+//				std::not1(std::mem_fun(&LLWatchdogEntry::isAlive))
+//				);
 		if(result != mSuspects.end())
 		{
 			// error!!!

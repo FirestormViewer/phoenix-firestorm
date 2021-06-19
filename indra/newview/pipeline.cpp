@@ -1118,6 +1118,13 @@ void LLPipeline::updateRenderDeferred()
                       RenderAvatarVP &&
                       WindLightUseAtmosShaders &&
                       (bool) LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred");
+// [RLVa:KB] - @setsphere
+	if (!sRenderDeferred && RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE) && WindLightUseAtmosShaders)
+	{
+		LLRenderTarget::sUseFBO = true;
+		LLPipeline::sUseDepthTexture = true;
+	}
+// [/RLVa:KB]
 }
 
 // static
@@ -4497,7 +4504,7 @@ void LLPipeline::renderGeom(LLCamera& camera, bool forceVBOUpdate)
 				gGL.loadMatrix(gGLModelView);
 				LLGLSLShader::bindNoShader();
 // [RLVa:KB] - @setsphere
-				if (LLPipeline::RenderDeferred || !LLRenderTarget::sUseFBO || !LLPipeline::sUseDepthTexture)
+				if (LLPipeline::sRenderDeferred || !LLRenderTarget::sUseFBO || !LLPipeline::sUseDepthTexture)
 				{
 					doOcclusion(camera);
 				}
@@ -6633,7 +6640,7 @@ void LLPipeline::enableLightsDynamic()
 		{
 			gPipeline.enableLightsAvatar();
 		}
-		else if (gAgentAvatarp->mSpecialRenderMode >= 1)  // anim preview
+		else if (gAgentAvatarp->mSpecialRenderMode == 2)  // anim preview
 		{
 			gPipeline.enableLightsAvatarEdit(LLColor4(0.7f, 0.6f, 0.3f, 1.f));
 		}

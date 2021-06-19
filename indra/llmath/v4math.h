@@ -471,13 +471,7 @@ inline LLVector4 operator-(const LLVector4 &a)
 // [RLVa:KB] - RlvBehaviourModifierCompMin/Max
 inline bool operator<(const LLVector4& lhs, const LLVector4& rhs)
 {
-	return (lhs.mV[0] < rhs.mV[0]
-		|| (lhs.mV[0] == rhs.mV[0]
-			&& (lhs.mV[1] < rhs.mV[1]
-				|| ((lhs.mV[1] == rhs.mV[1])
-					&& lhs.mV[2] < rhs.mV[2]
-						|| ((lhs.mV[2] == rhs.mV[2])
-							&& lhs.mV[3] < rhs.mV[3])))));
+	return std::tie(lhs.mV[0], lhs.mV[1], lhs.mV[2], rhs.mV[3]) < std::tie(rhs.mV[0], rhs.mV[1], rhs.mV[2], rhs.mV[3]);
 }
 // [/RLVa:KB]
 

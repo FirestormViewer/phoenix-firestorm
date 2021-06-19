@@ -694,6 +694,14 @@ ERlvAttachGroupType rlvAttachGroupFromString(const std::string& strGroup);
 std::string rlvGetFirstParenthesisedText(const std::string& strText, std::string::size_type* pidxMatch = NULL);
 std::string rlvGetLastParenthesisedText(const std::string& strText, std::string::size_type* pidxStart = NULL);
 
+namespace Rlv
+{
+	void forceAtmosphericShadersIfAvailable();
+
+	int           getObjectLinkNumber(const LLUUID& idObj);
+	const LLUUID& getObjectRootId(const LLUUID& idObj);
+}
+
 // ============================================================================
 // Inlined class member functions
 //
