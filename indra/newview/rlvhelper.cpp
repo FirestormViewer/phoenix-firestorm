@@ -138,6 +138,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETDEBUG, RLV_OPTION_NONE>("setdebug"));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETENV, RLV_OPTION_NONE>("setenv"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("share", RLV_BHVR_SHARE, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SHOWHOVERTEXT>("showhovertext"));

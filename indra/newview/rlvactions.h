@@ -90,6 +90,16 @@ public:
 	static bool canChangeActiveGroup(const LLUUID& idRlvObject = LLUUID::null);
 
 	/*
+	 * Returns true if the user is allowed to give inventory to at least one (unspecified) avatar (used to blanket ban use of 'Share' if the user cannot give items to *anyone*)
+	 */
+	static bool canGiveInventory();
+
+	/*
+	 * Returns true if the user is allowed to give the specified avatar inventory
+	 */
+	static bool canGiveInventory(const LLUUID& idAgent);
+
+	/*
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
 	 */
 	static bool canReceiveIM(const LLUUID& idSender);

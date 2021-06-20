@@ -61,6 +61,7 @@
 #include "llworld.h"
 #include "llpanelface.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -1641,6 +1642,14 @@ bool LLToolDragAndDrop::handleGiveDragAndDrop(LLUUID dest_agent, LLUUID session_
 											  EAcceptance* accept,
 											  const LLSD& dest)
 {
+// [RLVa:KB] - @share
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory(dest_agent)) )
+	{
+		*accept = ACCEPT_NO_LOCKED;
+		return true;
+	}
+// [/RLVa:KB]
+
 	// check the type
 	switch(cargo_type)
 	{
@@ -2463,6 +2472,12 @@ EAcceptance LLToolDragAndDrop::dad3dGiveInventoryObject(
 	}
 	if( obj && avatar )
 	{
+// [RLVa:KB] - @share
+		if ( (obj) && (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory(obj->getID())) )
+		{
+			return ACCEPT_NO_LOCKED;
+		}
+// [/RLVa:KB]
 		if(drop)
 		{
 			LLGiveInventory::doGiveInventoryItem(obj->getID(), item );
@@ -2489,6 +2504,12 @@ EAcceptance LLToolDragAndDrop::dad3dGiveInventory(
 	{
 		return ACCEPT_NO;
 	}
+// [RLVa:KB] - @share
+	if ( (obj) && (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory(obj->getID())) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
 	if (drop && obj)
 	{
 		LLGiveInventory::doGiveInventoryItem(obj->getID(), item);
@@ -2502,6 +2523,12 @@ EAcceptance LLToolDragAndDrop::dad3dGiveInventoryCategory(
 	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
 {
 	LL_DEBUGS() << "LLToolDragAndDrop::dad3dGiveInventoryCategory()" << LL_ENDL;
+// [RLVa:KB] - @share
+	if ( (obj) && (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory(obj->getID())) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
 	if(drop && obj)
 	{
 		LLViewerInventoryItem* item;

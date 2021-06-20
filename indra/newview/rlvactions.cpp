@@ -133,6 +133,20 @@ bool RlvActions::canChangeActiveGroup(const LLUUID& idRlvObject)
 	return (idRlvObject.isNull()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, idRlvObject);
 }
 
+bool RlvActions::canGiveInventory()
+{
+	// User can give at least one (unspecified) avatar inventory if:
+	//   - not specifically restricted from giving inventory (or at least one exception exists)
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHARE)) || (gRlvHandler.hasException(RLV_BHVR_SHARE));
+}
+
+bool RlvActions::canGiveInventory(const LLUUID& idAgent)
+{
+	// User can give another avatar inventory if:
+	//   - not specifically restricted from giving inventory (or the target is an exception)
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHARE)) || (gRlvHandler.isException(RLV_BHVR_SHARE, idAgent));
+}
+
 // Little helper function to check the IM exclusion range for @recvim, @sendim and @startim (returns: min_dist <= (pos user - pos target) <= max_dist)
 static bool rlvCheckAvatarIMDistance(const LLUUID& idAvatar, ERlvBehaviourModifier eModDistMin, ERlvBehaviourModifier eModDistMax)
 {
