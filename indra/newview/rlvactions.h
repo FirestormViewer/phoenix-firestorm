@@ -33,6 +33,8 @@ class LLVOAvatar;
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
 //
 
+enum class ERlvCheckType { All, Some, None };
+
 class RlvActions
 {
 	// ======
@@ -254,6 +256,11 @@ public:
 	 * Returns true if the user can buy an object set for sale
 	 */
 	static bool canBuyObject(const LLUUID& idObj);
+
+	/*
+	 * Returns true if the user can edit all, some, or nothing (used to bail early, or to skip expensive selection checks)
+	 */
+	static bool canEdit(ERlvCheckType eCheckType);
 
 	/*
 	 * Returns true if the user can edit the specified object (with an optional relative offset)

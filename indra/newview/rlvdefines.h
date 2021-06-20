@@ -157,7 +157,9 @@ enum ERlvBehaviour {
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
 	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
+	RLV_BHVR_EDITATTACH,
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_EDITWORLD,
 	RLV_BHVR_VIEWTRANSPARENT,
 	RLV_BHVR_VIEWWIREFRAME,
 	RLV_BHVR_PAY,					// "pay"

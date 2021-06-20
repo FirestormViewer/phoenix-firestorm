@@ -102,7 +102,9 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis_except",	RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_EDIT, RLV_OPTION_NONE_OR_EXCEPTION>("edit"));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("editattach", RLV_BHVR_EDITATTACH));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("editworld", RLV_BHVR_EDITWORLD));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_VIEWTRANSPARENT, RLV_OPTION_NONE>("viewtransparent", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_VIEWWIREFRAME, RLV_OPTION_NONE>("viewwireframe", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));

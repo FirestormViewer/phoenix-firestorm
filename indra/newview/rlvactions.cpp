@@ -419,19 +419,53 @@ bool RlvActions::canBuyObject(const LLUUID& idObj)
 	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
 }
 
-// Handles: @edit and @editobj
+// Handles: @edit, @editobj, @editattach and @editworld
+bool RlvActions::canEdit(ERlvCheckType eCheckType)
+{
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	switch (eCheckType)
+	{
+		case ERlvCheckType::All:
+			// No edit restrictions of any kind
+			return
+				!rlvHandler.hasBehaviour(RLV_BHVR_EDIT) && !rlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ) &&
+				!rlvHandler.hasBehaviour(RLV_BHVR_EDITATTACH) && !rlvHandler.hasBehaviour(RLV_BHVR_EDITWORLD);
+
+		case ERlvCheckType::Some:
+			// Not @edit restricted (or at least one exception) and either not @editattach or not @editworld restricted
+			return
+				(!rlvHandler.hasBehaviour(RLV_BHVR_EDIT) || rlvHandler.hasException(RLV_BHVR_EDIT)) &&
+				(!rlvHandler.hasBehaviour(RLV_BHVR_EDITATTACH) || rlvHandler.hasBehaviour(RLV_BHVR_EDITWORLD));
+
+		case ERlvCheckType::None:
+			// Either @edit restricted with no exceptions or @editattach and @editworld restricted at the same time
+			return
+				(rlvHandler.hasBehaviour(RLV_BHVR_EDIT) && !rlvHandler.hasException(RLV_BHVR_EDIT)) ||
+				(rlvHandler.hasBehaviour(RLV_BHVR_EDITATTACH) && rlvHandler.hasBehaviour(RLV_BHVR_EDITWORLD));
+
+		default:
+			RLV_ASSERT(false);
+			return false;
+	}
+}
+
+// Handles: @edit, @editobj, @editattach and @editworld
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
 	// User can edit the specified object if:
 	//   - not generally restricted from editing (or the object's root is an exception)
 	//   - not specifically restricted from editing this object's root
+	//   - it's an attachment   and not restricted from editing attachments
+	//     it's a rezzed object and not restricted from editing any world objects
 
 	// NOTE-RLVa: edit checks should *never* be subject to @fartouch distance checks since we don't have the pick offset so
 	//            instead just implicitly rely on the presence of a (transient) selection
 	return
 		(pObj) &&
 		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDIT)) || (RlvHandler::instance().isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID())) ) &&
-		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITOBJ)) || (!RlvHandler::instance().isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())) );
+		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITOBJ)) || (!RlvHandler::instance().isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())) ) &&
+		( (pObj->isAttachment()) ? !RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITATTACH)
+			                     : !RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITWORLD) );
 }
 
 // Handles: @fartouch and @interact
