@@ -38,6 +38,7 @@
 #include "lltooltip.h"
 
 #include "llagent.h"
+#include "llagentpicksinfo.h"
 #include "llavatarnamecache.h"
 #include "llclipboard.h"
 #include "llinventorybridge.h"
@@ -533,6 +534,8 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
 	//mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
 	//mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::onMoreTextBoxClicked, this));
 	//addChild(mMoreTextBox);
+	//LLRect rect = mMoreTextBox->getRect();
+	//mMoreTextBox->setRect(LLRect(rect.mLeft - rect.getWidth(), rect.mTop, rect.mRight, rect.mBottom));
 	if (p.chevron_button.isProvided())
 	{
 		LLButton::Params chevron_button_params(p.chevron_button);
@@ -546,6 +549,8 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
 		mMoreCtrl = LLUICtrlFactory::create<LLTextBox> (more_button_params);
 		((LLTextBox*)mMoreCtrl)->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::onMoreTextBoxClicked, this));
 		addChild(mMoreCtrl);
+		LLRect rect = mMoreCtrl->getRect();
+		mMoreCtrl->setRect(LLRect(rect.mLeft - rect.getWidth(), rect.mTop, rect.mRight, rect.mBottom));
 	}
 	// </FS:Ansariel>
 
@@ -1371,6 +1376,10 @@ bool LLFavoritesBarCtrl::enableSelected(const LLSD& userdata)
     {
         return isClipboardPasteable();
     }
+    else if (param == "create_pick")
+    {
+        return !LLAgentPicksInfo::getInstance()->isPickLimitReached();
+    }
 
     return false;
 }
@@ -1422,6 +1431,13 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 			LLFloaterReg::showInstance("world_map", "center");
 		}
 	}
+    else if (action == "create_pick")
+    {
+        LLSD args;
+        args["type"] = "create_pick";
+        args["item_id"] = item->getUUID();
+        LLFloaterSidePanelContainer::showPanel("places", args);
+    }
 	else if (action == "cut")
 	{
 	}
@@ -1437,6 +1453,20 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 	{
 		gInventory.removeItem(mSelectedItemID);
 	}
+    else if (action == "rename")
+    {
+        LLSD args;
+        args["NAME"] = item->getName();
+
+        LLSD payload;
+        payload["id"] = mSelectedItemID;
+
+        LLNotificationsUtil::add("RenameLandmark", args, payload, boost::bind(onRenameCommit, _1, _2));
+    }
+	else if (action == "move_to_landmarks")
+	{
+		change_item_parent(mSelectedItemID, gInventory.findCategoryUUIDForType(LLFolderType::FT_LANDMARK));
+	}
 
 	// Pop-up the overflow menu again (it gets hidden whenever the user clicks a context menu item).
 	// See EXT-4217 and STORM-207.
@@ -1447,6 +1477,28 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 		showDropDownMenu();
 		menu->resetScrollPositionOnShow(true);
 	}
+}
+
+bool LLFavoritesBarCtrl::onRenameCommit(const LLSD& notification, const LLSD& response)
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    if (0 == option)
+    {
+        LLUUID id = notification["payload"]["id"].asUUID();
+        LLInventoryItem *item = gInventory.getItem(id);
+        std::string landmark_name = response["new_name"].asString();
+        LLStringUtil::trim(landmark_name);
+
+        if (!landmark_name.empty() && item && item->getName() != landmark_name)
+        {
+            LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(item);
+            new_item->rename(landmark_name);
+            new_item->updateServer(FALSE);
+            gInventory.updateItem(new_item);
+        }
+    }
+
+    return false;
 }
 
 BOOL LLFavoritesBarCtrl::isClipboardPasteable() const
