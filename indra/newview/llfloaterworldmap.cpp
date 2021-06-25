@@ -701,7 +701,7 @@ void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const
 	LLTracker::trackLocation(pos_global, parcel_data.name.empty() ? getString("UnnamedParcel") : parcel_data.name, full_name);
 }
 
-void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
+void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global, const LLVector3d& region_origin)
 {
 	if (pos_global == mRequestedGlobalPos)
 	{
@@ -713,16 +713,8 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 	{
 		return;
 	}
-	// <FS:Beq> VarRegion slurl shenanigans
-	// agent_x = ll_round(region_pos.mV[VX]);
-	// agent_y = ll_round(region_pos.mV[VY]);
-	// agent_z = ll_round(region_pos.mV[VZ]);
-	// LLVector3 pos_region((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
-	// 				  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
-	// 				  (F32)pos_global.mdV[VZ]);
-	auto region_origin = region->getOriginGlobal();
+
 	auto pos_region = LLVector3(pos_global - region_origin);
-	// </FS:Beq>
 
 	LLSD body;
 	std::string url = region->getCapability("RemoteParcelRequest");
@@ -738,7 +730,6 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 		LLRemoteParcelInfoProcessor::instance().requestRegionParcelInfo(url,
 																		region->getRegionID(), pos_region, pos_global,
 																		mParcelInfoObserver->getObserverHandle() );
-
 
 	}
 	else
@@ -903,7 +894,7 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 	{
 		mShowParcelInfo = true;
-		requestParcelInfo(pos_global);
+		requestParcelInfo(pos_global, sim_info->getGlobalOrigin());
 	}
 	else
 	{

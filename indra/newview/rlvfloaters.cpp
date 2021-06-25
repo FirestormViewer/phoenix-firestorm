@@ -19,6 +19,7 @@
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llavatarnamecache.h"
+#include <llchatentry.h>
 #include "llclipboard.h"
 #include "llcombobox.h"
 #include "llinventoryfunctions.h"
@@ -733,7 +734,7 @@ static const char s_strRlvConsoleDisabled[] = "RLVa is disabled";
 static const char s_strRlvConsoleInvalid[] = "Invalid command";
 
 RlvFloaterConsole::RlvFloaterConsole(const LLSD& sdKey)
-	: LLFloater(sdKey), m_pOutputText(nullptr)
+	: LLFloater(sdKey)
 {
 }
 
@@ -743,11 +744,14 @@ RlvFloaterConsole::~RlvFloaterConsole()
 
 BOOL RlvFloaterConsole::postBuild()
 {
-	LLLineEditor* pInputEdit = getChild<LLLineEditor>("console_input");
-	pInputEdit->setEnableLineHistory(true);
-	pInputEdit->setCommitCallback(boost::bind(&RlvFloaterConsole::onInput, this, _1, _2));
-	pInputEdit->setFocus(true);
-	pInputEdit->setCommitOnFocusLost(false);
+	m_pInputEdit = getChild<LLChatEntry>("console_input");
+	m_pInputEdit->setCommitCallback(boost::bind(&RlvFloaterConsole::onInput, this, _1, _2));
+	m_pInputEdit->setTextExpandedCallback(boost::bind(&RlvFloaterConsole::reshapeLayoutPanel, this));
+	m_pInputEdit->setFocus(true);
+	m_pInputEdit->setCommitOnFocusLost(false);
+
+	m_pInputPanel = getChild<LLLayoutPanel>("input_panel");
+	m_nInputEditPad = m_pInputPanel->getRect().getHeight() - m_pInputEdit->getRect().getHeight();
 
 	m_pOutputText = getChild<LLTextEditor>("console_output");
 	m_pOutputText->appendText(s_strRlvConsolePrompt, false);
@@ -769,12 +773,12 @@ void RlvFloaterConsole::addCommandReply(const std::string& strCommand, const std
 
 void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
 {
-	LLLineEditor* pInputEdit = static_cast<LLLineEditor*>(pCtrl);
+	LLChatEntry* pInputEdit = static_cast<LLChatEntry*>(pCtrl);
 	std::string strInput = pInputEdit->getText();
 	LLStringUtil::trim(strInput);
 
 	m_pOutputText->appendText(strInput, false);
-	pInputEdit->clear();
+	pInputEdit->setText(LLStringUtil::null);
 
 	if (!rlv_handler_t::isEnabled())
 	{
@@ -829,6 +833,11 @@ void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
 	}
 
 	m_pOutputText->appendText(s_strRlvConsolePrompt, true);
+}
+
+void RlvFloaterConsole::reshapeLayoutPanel()
+{
+	m_pInputPanel->reshape(m_pInputPanel->getRect().getWidth(), m_pInputEdit->getRect().getHeight() + m_nInputEditPad, FALSE);
 }
 
 // ============================================================================

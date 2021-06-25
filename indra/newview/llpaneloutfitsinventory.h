@@ -38,7 +38,6 @@ class LLPanelWearing;
 class LLMenuGL;
 class LLSidepanelAppearance;
 class LLTabContainer;
-class LLSaveOutfitComboBtn;
 class LLInventoryCategoriesObserver; // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
 
 class LLPanelOutfitsInventory : public LLPanel
@@ -53,6 +52,7 @@ public:
 	
 	void onSearchEdit(const std::string& string);
 	void onSave();
+	void saveOutfit(bool as_new = false);
 	
 	bool onSaveCommit(const LLSD& notification, const LLSD& response);
 
@@ -66,6 +66,8 @@ public:
 
 	static LLPanelOutfitsInventory* findInstance();
 
+	void openApearanceTab(const std::string& tab_name);
+
 	// <FS:Ansariel> Show avatar complexity in appearance floater
 	void updateAvatarComplexity(U32 complexity, const std::map<LLUUID, U32>& item_complexity, const std::map<LLUUID, U32>& temp_item_complexity, U32 body_parts_complexity);
 
@@ -75,7 +77,6 @@ protected:
 private:
 	LLTabContainer*			mAppearanceTabs;
 	std::string 			mFilterSubString;
-	std::auto_ptr<LLSaveOutfitComboBtn> mSaveComboBtn;
 
 	// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
 	LLInventoryCategoriesObserver* mCategoriesObserver;

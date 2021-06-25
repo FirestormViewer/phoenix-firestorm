@@ -2,8 +2,7 @@
 <teleport_messages>
 	<message_set name="errors">
 		<message name="invalid_tport">
-			Bei der Bearbeitung Ihrer Teleport-Anfrage ist ein Problem aufgetreten. Sie müssen sich zum Teleportieren eventuell neu anmelden.
-Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_SITE].
+			Teleport-Anfragen sind auf 6 pro Minute beschränkt. Falls Sie Probleme beim Teleportieren haben, warten Sie eine Minute und versuchen es erneut. Falls das Problem weiterhin besteht, melden Sie sich neu an.
 		</message>
 		<message name="invalid_region_handoff">
 			Bei der Bearbeitung Ihres Regionswechsels ist ein Problem aufgetreten. Sie müssen eventuell neu anmelden, um die Region wechseln zu können.

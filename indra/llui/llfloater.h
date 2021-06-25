@@ -178,6 +178,9 @@ public:
 								label_v_padding,	// <FS:Zi> Make vertical label padding a per-skin option
 								legacy_header_height; // HACK see initFromXML()
 
+		Optional<F32>			rel_x,
+								rel_y;
+
 		// Images for top-right controls
 		Optional<LLUIImage*>	close_image,
 								snooze_image,		// <FS:Ansariel> FIRE-11724: Snooze group chat
@@ -546,6 +549,9 @@ private:
 	BOOL			mHasBeenDraggedWhileMinimized;
 	S32				mPreviousMinimizedBottom;
 	S32				mPreviousMinimizedLeft;
+
+	F32				mDefaultRelativeX;
+	F32				mDefaultRelativeY;
 
 	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
 	bool			mHostedFloaterShowtitlebar;

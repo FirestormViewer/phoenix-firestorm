@@ -84,7 +84,7 @@
             name="title"
             text_color="LtGray"
             top="0"
-            value="Edit Outfit"
+            value="Edit Outfit Parts"
             use_ellipses="true"
             width="360" />
 
@@ -547,22 +547,26 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                         layout="topleft"
                         name="save_btn"
                         top="0"
-                        width="155" />
-                <button
-                        follows="bottom|right"
-                        height="23"
-                        name="save_flyout_btn"
-                        label=""
-                        layout="topleft"
-                        left_pad="-20"
-                        tab_stop="false"
-                        top="0"
-                        image_selected="SegmentedBtn_Right_Selected_Press"
-                        image_unselected="SegmentedBtn_Right_Off"
-                        image_pressed="SegmentedBtn_Right_Press"
-                        image_pressed_selected="SegmentedBtn_Right_Selected_Press"
-                        image_overlay="Arrow_Small_Up"
-                        width="20"/>
+                        right="-1" />
+            </layout_panel>
+            <layout_panel
+               follows="bottom|left|right"
+               height="23"
+               layout="bottomleft"
+               left_pad="3"
+               mouse_opaque="false"
+               name="save_as_btn_lp"
+               auto_resize="true"
+               width="156">
+              <button
+                   follows="bottom|left|right"
+                   height="23"
+                   label="Save as..."
+                   layout="topleft"
+                   name="save_as_btn"
+                   top="0"
+                   left="1"
+                   right="-1" />
             </layout_panel>
             <layout_panel
                     follows="bottom|left|right"
@@ -572,7 +576,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                     mouse_opaque="false"
                     name="revert_btn_lp"
                     auto_resize="true"
-                    width="147">
+                    width="156">
                 <button
                         follows="bottom|left|right"
                         height="23"
@@ -582,7 +586,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                         name="revert_btn"
                         top="0"
                         tool_tip="Revert to last saved version"
-                        width="147" />
+                        right="-1" />
             </layout_panel>
         </layout_stack>
     </panel>

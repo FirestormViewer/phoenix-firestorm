@@ -941,6 +941,13 @@ Bitte versuchen Sie es erneut.
 	<notification name="CannotCreateLandmarkNotOwner">
 		Sie können hier keine Landmarke erstellen, da der Landeigentümer dies verboten hat.
 	</notification>
+	<notification label="Ordner erstellen" name="CreateLandmarkFolder">
+		Namen für den Ordner eingeben:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		„Rekompilieren“ nicht möglich.
 Objekt mit Skript wählen.
@@ -996,8 +1003,7 @@ Es wurde keine Suche durchgeführt.
 [REASON]
 	</notification>
 	<notification name="invalid_tport">
-		Bei der Bearbeitung Ihrer Teleport-Anfrage ist ein Problem aufgetreten. Sie müssen sich zum Teleportieren eventuell neu anmelden.
-Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_SITE].
+		Teleport-Anfragen sind auf 6 pro Minute beschränkt. Falls Sie Probleme beim Teleportieren haben, warten Sie eine Minute und versuchen es erneut. Falls das Problem weiterhin besteht, melden Sie sich neu an.
 	</notification>
 	<notification name="invalid_region_handoff">
 		Bei der Bearbeitung Ihres Regionswechsels ist ein Problem aufgetreten. Sie müssen eventuell neu anmelden, um die Region wechseln zu können.
@@ -1306,6 +1312,13 @@ nach
 	</notification>
 	<notification label="Geste umbenennen" name="RenameGesture">
 		Neuer Gesten-Name:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification label="Landmarke umbenennen" name="RenameLandmark">
+		Neuer Name für [NAME]
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
@@ -1760,10 +1773,6 @@ Fortfahren?
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="GroupDepart">
-		Sie haben die Gruppe „&lt;nolink&gt;[group_name]&lt;/nolink&gt;“ verlassen.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Sie sind gegenwärtig Mitglied der Gruppe „&lt;nolink&gt;[GROUP]&lt;/nolink&gt;“. Erneutes Beitreten kostet [AMOUNT] L$.
 Diese Gruppe verlassen?
@@ -2126,7 +2135,9 @@ Fortfahren?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Region, die Sie besuchen möchten, besitzt eine Alterseinstufung, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SLM_UPDATE_FOLDER">
@@ -2158,7 +2169,9 @@ Fortfahren?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Region, die Sie besuchen möchten, besitzt eine Alterseinstufung, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
@@ -2207,7 +2220,9 @@ Fortfahren?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		Die Inhaltseinstufung des Landes, das Sie in Besitz nehmen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Alterseinstufung des Landes, das Sie in Besitz nehmen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
@@ -2232,7 +2247,9 @@ Fortfahren?
 		</form>
 	</notification>
 	<notification name="LandBuyAccessBlocked">
-		Die Inhaltseinstufung des Landes, das Sie kaufen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Alterseinstufung des Landes, das Sie kaufen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
@@ -2979,7 +2996,9 @@ Hier funktionieren nur Skripts, die dem Landeigentümer gehören.
 		Öffentliches Land kann nur in der Region in Besitz genommen werden, in der Sie sich befinden.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		Die Region, die Sie besuchen möchten, besitzt eine Alterseinstufung, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+
+Vollständige Informationen zu Alterseinstufungen finden Sie [https://community.secondlife.com/knowledgebase/deutsche-knowledge-base/inhaltseinstufungen-r90/ hier].
 	</notification>
 	<notification name="RegionAboutToShutdown">
 		Die Region, die Sie gerade betreten möchte, fährt gerade herunter.
@@ -3583,7 +3602,7 @@ Ihr aktueller Kontostand von [BALANCE] L$ reicht nicht aus, um [COUNT] Gegenstä
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Hochladen"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
-		Möchten Sie Ihre Teleport-Liste löschen?
+		Möchten Sie die gesamte Teleport-Liste aller besuchten Orte löschen? Diese Aktion kann nicht rückgängig gemacht werden!
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="BottomTrayButtonCanNotBeShown">
@@ -4725,6 +4744,16 @@ Wählen Sie eine kleinere Landfläche aus.
 	<notification name="OutfitPhotoLoadError">
 		[REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="AddPaymentMethod">
+		Wählen Sie einen L$-Betrag auf der folgenden
+Seite und klicken Sie auf Kaufen. Sie haben die
+Möglichkeit an der Kasse eine Zahlungsmethode
+zu hinterlegen.
+		<form name="form">
+			<button name="Continue" text="Fortfahren"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
 	</notification>
 	<notification name="FailedToFindSettings">
 		Die Einstellungen für [NAME] konnten nicht aus der Datenbank geladen werden.

@@ -63,7 +63,7 @@
             <menu_item_call.on_click
              function="PromptShowURL"
              name="script_library_url"
-             parameter="WebLaunchExternalTarget,http://wiki.firestormviewer.org/doku.php?id=start" />
+             parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/doku.php?id=start" />
        </menu_item_call>
        <menu_item_call
         label="Troubleshooting"
@@ -71,7 +71,7 @@
            <menu_item_call.on_click
             function="PromptShowURL"
             name="wiki_troubleshooting_url"
-            parameter="WebLaunchExternalTarget,http://wiki.firestormviewer.org/firestorm_troubleshooting" />
+            parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_troubleshooting" />
        </menu_item_call>
 <!--
        <menu_item_separator />
@@ -82,13 +82,6 @@
             <menu_item_call.on_click
              function="Help.ToggleHowTo"
              parameter="" />
-        </menu_item_call>
-        <menu_item_call
-           label="Quickstart"
-           name="Quickstart">
-            <menu_item_call.on_click
-            function="Advanced.ShowURL"
-            parameter="http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Quickstart/ta-p/1087919"/>
         </menu_item_call>
 		<menu_item_separator/>
         <menu_item_call

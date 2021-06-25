@@ -17,9 +17,11 @@
 #include "llviewerprecompiledheaders.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
+#include "llfeaturemanager.h"
 #include "llgesturemgr.h"
 #include "llnotificationsutil.h"
 #include "llviewerobjectlist.h"
+#include "pipeline.h"
 
 //<FS:TS> FIRE-4453 bridge detached by the RLV command @remattach=force
 #include "fslslbridge.h"
@@ -223,16 +225,16 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("camunlock", RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 
 	// Overlay
-	RlvBehaviourInfo* pSetOverlayBhvr = new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETOVERLAY, RLV_OPTION_NONE_OR_MODIFIER>("setoverlay");
+	RlvBehaviourInfo* pSetOverlayBhvr = new RlvBehaviourProcessor<RLV_BHVR_SETOVERLAY>("setoverlay");
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayAlpha, typeid(float), "alpha", &RlvOverlayEffect::onAlphaValueChanged);
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTexture, typeid(LLUUID), "texture", &RlvOverlayEffect::onTextureChanged);
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTint, typeid(LLVector3), "tint", &RlvOverlayEffect::onColorValueChanged);
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTouch, typeid(LLVector3), "touch", &RlvOverlayEffect::onBlockTouchValueChanged);
 	addEntry(pSetOverlayBhvr);
-	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween"));
 
 	// Sphere
-	RlvBehaviourInfo* pSetSphereBhvr = new RlvBehaviourProcessor<RLV_BHVR_SETSPHERE>("setsphere", RlvBehaviourInfo::BHVR_EXPERIMENTAL);
+	RlvBehaviourInfo* pSetSphereBhvr = new RlvBehaviourProcessor<RLV_BHVR_SETSPHERE>("setsphere");
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereMode, typeid(int), "mode", &RlvSphereEffect::onModeChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereOrigin, typeid(int), "origin", &RlvSphereEffect::onOriginChanged);
 	pSetSphereBhvr->addModifier(ERlvLocalBhvrModifier::SphereColor, typeid(LLVector3), "color", &RlvSphereEffect::onColorChanged);
@@ -2041,6 +2043,43 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 		return strText.substr(idxIt + 1, idxEnd - idxIt - 1);
 	}
 	return std::string();
+}
+
+// =========================================================================
+// Various helper functions
+//
+
+namespace Rlv
+{
+	void forceAtmosphericShadersIfAvailable()
+	{
+		if ( (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")) && (!LLPipeline::WindLightUseAtmosShaders) )
+		{
+			// Triggers handleSetShaderChanged() which will do the actual work for us
+			gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
+		}
+	}
+
+	int getObjectLinkNumber(const LLUUID& idObj)
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(idObj);
+		const LLViewerObject* pRootObj = (pObj) ? pObj->getRootEdit() : nullptr;
+		if ( (!pRootObj) || (pRootObj->getChildren().empty()) )
+			return 0;
+		else if (pRootObj == pObj)
+			return 1;
+		return 2 + std::distance(pRootObj->getChildren().begin(), std::find(pRootObj->getChildren().begin(), pRootObj->getChildren().end(), pObj));
+	}
+
+	const LLUUID& getObjectRootId(const LLUUID& idObj)
+	{
+		if (const LLViewerObject* pObj = gObjectList.findObject(idObj))
+		{
+			pObj = pObj->getRootEdit();
+			return pObj->getID();
+		}
+		return idObj;
+	}
 }
 
 // =========================================================================
