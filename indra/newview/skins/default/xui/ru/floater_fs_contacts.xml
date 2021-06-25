@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="imcontacts" title="Контакты">
 	<string name="no_friends" value="Нет друзей" />
-	<string name="no_filtered_groups_msg" value="Не нашли то, что вы ищете?? Попробуйте [secondlife:///app/search/groups/[SEARCH_TERM] поиск]." />
+	<string name="no_filtered_groups_msg" value="Не найдено групп, содержащих &quot;[SEARCH_TERM]&quot;." />
 	<string name="no_groups_msg" value="Ищите группы, в которые можно вступить? Попробуйте [secondlife:///app/search/groups поиск]." />
 	<tab_container name="friends_and_groups">
 		<panel label="Друзья" name="friends_panel" />

@@ -131,10 +131,12 @@
 #include "llpanelpick.h"
 #include "llpanelgrouplandmoney.h"
 #include "llpanelgroupnotices.h"
+#include "llparcel.h"
 #include "llpreview.h"
 #include "llpreviewscript.h"
 #include "llproxy.h"
 #include "llproductinforequest.h"
+#include "llqueryflags.h"
 #include "llselectmgr.h"
 #include "llsky.h"
 #include "llstatview.h"
@@ -145,6 +147,7 @@
 #include "lltoolmgr.h"
 #include "lltrans.h"
 #include "llui.h"
+#include "lluiusage.h"
 #include "llurldispatcher.h"
 #include "llurlentry.h"
 #include "llslurl.h"
@@ -273,7 +276,6 @@ extern std::string gWindowTitle;
 static bool gGotUseCircuitCodeAck = false;
 static std::string sInitialOutfit;
 static std::string sInitialOutfitGender;	// "male" or "female"
-static boost::signals2::connection sWearablesLoadedCon;
 
 static bool gUseCircuitCallbackCalled = false;
 
@@ -2392,28 +2394,26 @@ bool idle_startup()
 	//---------------------------------------------------------------------
 	if (STATE_INVENTORY_SEND == LLStartUp::getStartupState())
 	{
-		// <FS:Ansariel> Moved before inventory creation. Otherwise the responses
-		//               from the money balance request and mutelist request
-		//               seem to get lost under certain conditions
-		// request mute list
-		LL_INFOS() << "Requesting Mute List" << LL_ENDL;
-		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
-		display_startup();
-		// Get L$ and ownership credit information
-		LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
-		LLStatusBar::sendMoneyBalanceRequest();
-
 		display_startup();
 
+        // request mute list
+        LL_INFOS() << "Requesting Mute List" << LL_ENDL;
+        LLMuteList::getInstance()->requestFromServer(gAgent.getID());
+
+        // Get L$ and ownership credit information
+        LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
+        LLStatusBar::sendMoneyBalanceRequest();
+
+        display_startup();
+		// <FS:Ansariel> Moved before inventory creation.
 		// request all group information
 		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Requesting Agent Data during startup" << LL_ENDL;
 		gAgent.sendAgentDataUpdateRequest();
 		display_startup();
 		// </FS:Ansariel>
-
-		display_startup();
 		// Inform simulator of our language preference
 		LLAgentLanguage::update();
+
 		display_startup();
 		// unpack thin inventory
 		LLSD response = LLLoginInstance::getInstance()->getResponse();
@@ -2595,17 +2595,7 @@ bool idle_startup()
 		LLLandmark::registerCallbacks(msg);
 		display_startup();
 
-		// <FS:Ansariel> Moved before inventory creation. Otherwise the responses
-		//               from the money balance request and mutelist request
-		//               seem to get lost under certain conditions
-		//// request mute list
-		//LL_INFOS() << "Requesting Mute List" << LL_ENDL;
-		//LLMuteList::getInstance()->requestFromServer(gAgent.getID());
-		//display_startup();
-		//// Get L$ and ownership credit information
-		//LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
-		//LLStatusBar::sendMoneyBalanceRequest();
-		//display_startup();
+		// <FS:Ansariel> Moved before inventory creation.
 		//// request all group information
 		//LL_INFOS() << "Requesting Agent Data" << LL_ENDL;
 		//gAgent.sendAgentDataUpdateRequest();
@@ -2673,9 +2663,7 @@ bool idle_startup()
 			// on with this install.
 			gSavedSettings.setBOOL("ShowStartLocation", TRUE);
 
-			// Open Conversation floater on first login.
 			// <FS:Ansariel> [FS Communication UI]
-			//LLFloaterReg::toggleInstanceOrBringToFront("im_container");
 			LLFloaterReg::toggleInstanceOrBringToFront("fs_im_container");
 			// </FS:Ansariel> [FS Communication UI]
 
@@ -3133,6 +3121,16 @@ bool idle_startup()
 		LLPathfindingManager::getInstance()->initSystem();
 
 		gAgentAvatarp->sendHoverHeight();
+
+		// look for parcels we own
+		send_places_query(LLUUID::null,
+			LLUUID::null,
+			"",
+			DFQ_AGENT_OWNED,
+			LLParcel::C_ANY,
+			"");
+
+		LLUIUsage::instance().clear();
 
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
@@ -3619,11 +3617,6 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 	}
 	else
 	{
-		// FIXME SH-3860 - this creates a race condition, where COF
-		// changes (base outfit link added) after appearance update
-		// request has been submitted.
-		sWearablesLoadedCon = gAgentWearables.addLoadedCallback(LLStartUp::saveInitialOutfit);
-
 		bool do_copy = true;
 		bool do_append = false;
 		LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
@@ -3640,23 +3633,6 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 #endif
 // </FS:Ansariel> [Legacy Bake]
 	gAgentWearables.sendDummyAgentWearablesUpdate();
-}
-
-//static
-void LLStartUp::saveInitialOutfit()
-{
-	if (sInitialOutfit.empty()) {
-		LL_DEBUGS() << "sInitialOutfit is empty" << LL_ENDL;
-		return;
-	}
-	
-	if (sWearablesLoadedCon.connected())
-	{
-		LL_DEBUGS("Avatar") << "sWearablesLoadedCon is connected, disconnecting" << LL_ENDL;
-		sWearablesLoadedCon.disconnect();
-	}
-	LL_DEBUGS("Avatar") << "calling makeNewOutfitLinks( \"" << sInitialOutfit << "\" )" << LL_ENDL;
-	LLAppearanceMgr::getInstance()->makeNewOutfitLinks(sInitialOutfit,false);
 }
 
 std::string& LLStartUp::getInitialOutfitName()

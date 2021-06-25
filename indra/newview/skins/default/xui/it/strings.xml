@@ -200,7 +200,7 @@ Voice Server Version: [VOICE_VERSION]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Il viewer utilizzato non è più in grado di accedere a Second Life. Visitare questa pagina per scaricare un nuovo viewer:
-http://firestormviewer.org/download
+https://www.firestormviewer.org/downloads/
 
 Per maggiori informazioni, consultare le domande frequenti alla pagina:
 http://secondlife.com/viewer-access-faq
@@ -819,7 +819,7 @@ Provare ad accedere nuovamente tra un minuto.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 		Errore nella richiesta di invio. Visitare
-http://www.firestormviewer.org/support per avere aiuto nella soluzione.
+https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="texture">
 		texture

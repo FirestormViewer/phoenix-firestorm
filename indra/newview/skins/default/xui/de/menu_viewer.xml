@@ -6,6 +6,9 @@
 		</menu_item_call>
 		<menu_item_call label="Marktplatz-Auflistungen..." name="MarketplaceListings"/>
 		<menu_item_call label="L$ kaufen" name="Buy and Sell L$"/>
+		<menu_item_call label="[Membership]" name="Membership">
+			<menu_item_call.on_click function="Advanced.ShowURL" parameter="https://secondlife.com/my/account/membership.php?lang=de-DE"/>
+		</menu_item_call>
 
 		<menu_item_check label="Inventar" name="Inventory"/>
 		<menu_item_call label="Neues Inventar-Fenster" name="NewInventoryWindow"/>
@@ -14,7 +17,28 @@
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
 		<menu_item_call label="Profil" name="Profile"/>
-		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
+		<menu_item_check label="Aktuelles Outfit" name="NowWearing"/>
+		<menu_item_check label="Outfits" name="ChangeOutfit"/>
+		<menu label="Ausziehen" name="Take Off &gt;">
+			<menu label="Kleidung" name="Clothes &gt;">
+				<menu_item_call label="Hemd" name="Shirt"/>
+				<menu_item_call label="Hose" name="Pants"/>
+				<menu_item_call label="Rock" name="Skirt"/>
+				<menu_item_call label="Schuhe" name="Shoes"/>
+				<menu_item_call label="Strümpfe" name="Socks"/>
+				<menu_item_call label="Jacke" name="Jacket"/>
+				<menu_item_call label="Handschuhe" name="Gloves"/>
+				<menu_item_call label="Unterhemd" name="Self Undershirt"/>
+				<menu_item_call label="Unterhose" name="Self Underpants"/>
+				<menu_item_call label="Tätowierung" name="Self Tattoo"/>
+				<menu_item_call label="Physik" name="Self Physics"/>
+				<menu_item_call label="Alpha" name="Self Alpha"/>
+				<menu_item_call label="Alle Kleider" name="All Clothes"/>
+			</menu>
+			<menu label="HUD" name="Avatar Detach HUD"/>
+			<menu label="Abnehmen" name="Avatar Detach"/>
+			<menu_item_call label="Alles abnehmen" name="Detach All"/>
+		</menu>
 		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
 		<menu_item_call label="Schwebehöhe" name="HoverHeight"/>
 		<menu label="Bewegung" name="Movement">
@@ -103,6 +127,7 @@
 		<menu_item_call label="Region/Grundbesitz" name="RegionEstate"/>
 		<menu_item_call label="Dieses Land kaufen" name="Buy Land"/>
 		<menu_item_call label="Mein Land" name="My Land"/>
+		<menu_item_call label="Mein Linden Home" name="Linden Home"/>
 		<menu label="Anzeigen" name="LandShow">
 			<menu_item_check label="Bannlinien" name="Ban Lines"/>
 			<menu_item_check label="Ortungssignale" name="beacons"/>

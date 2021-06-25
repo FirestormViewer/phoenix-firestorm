@@ -3,7 +3,7 @@
 	<tab_container name="tabs">
 		<panel label="Подключение" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Максимальная пропускная способность ([http://wiki.firestormviewer.org/fs_speedtest Нужны подсказки?] (На английском)):
+				Максимальная пропускная способность ([https://wiki.firestormviewer.org/fs_speedtest Нужны подсказки?] (На английском)):
 			</text>
 			<text name="NetworkPrefText3">
 				Кабель
@@ -42,7 +42,16 @@
 		</panel>
 		<panel label="Каталоги" name="tab-dir">
 			<text name="cache_size_label_l">
-				Размер кэша ([http://wiki.firestormviewer.org/cache Нужны подсказки?] (На английском)):
+				Размер кэша текстур ([https://wiki.firestormviewer.org/cache Нужны подсказки?] (На английском)):
+			</text>
+			<text name="text_box5">
+				МБ
+			</text>
+			<text name="asset_cache_size_label_l">
+				Размер кэша активов:
+			</text>
+			<text name="asset_text_box5">
+				МБ
 			</text>
 			<button label="Очистить кэш инвентаря" name="ClearInventoryCache" left="380" width="150"/>
 			<text name="Cache location">

@@ -811,7 +811,7 @@ mogą być dołączane do notek.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 		Błąd podczas przesyłania. Odwiedź
-http://www.firestormviewer.org/support aby uzyskać pomoc.
+https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="SettingValidationError">
 		Walidacja nie powiodła się - importowanie ustawień [NAME]

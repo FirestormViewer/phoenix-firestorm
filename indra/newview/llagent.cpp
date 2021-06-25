@@ -110,6 +110,7 @@
 // [/RLVa:KB]
 
 // Firestorm includes
+#include "fsfloaternearbychat.h"
 #include "fslslbridge.h"
 #include "llpresetsmanager.h"
 #include "NACLantispam.h"
@@ -424,6 +425,7 @@ LLAgent::LLAgent() :
 	mTeleportFinishedSlot(),
 	mTeleportFailedSlot(),
 	mIsMaturityRatingChangingDuringTeleport(false),
+	mTPNeedsNeabyChatSeparator(false),
 	mMaturityRatingChange(0U),
 	mIsDoSendMaturityPreferenceToServer(false),
 	mMaturityPreferenceRequestId(0U),
@@ -4738,12 +4740,19 @@ void LLAgent::clearTeleportRequest()
         LLVoiceClient::getInstance()->setHidden(FALSE);
     }
 	mTeleportRequest.reset();
+    mTPNeedsNeabyChatSeparator = false;
 }
 
 void LLAgent::setMaturityRatingChangeDuringTeleport(U8 pMaturityRatingChange)
 {
 	mIsMaturityRatingChangingDuringTeleport = true;
 	mMaturityRatingChange = pMaturityRatingChange;
+}
+
+void LLAgent::sheduleTeleportIM()
+{
+    // is supposed to be called during teleport so we are still waiting for parcel
+    mTPNeedsNeabyChatSeparator = true;
 }
 
 bool LLAgent::hasPendingTeleportRequest()
@@ -4793,6 +4802,12 @@ void LLAgent::startTeleportRequest()
 void LLAgent::handleTeleportFinished()
 {
     LL_INFOS("Teleport") << "Agent handling teleport finished." << LL_ENDL;
+    if (mTPNeedsNeabyChatSeparator)
+    {
+        // parcel is ready at this point
+        addTPNearbyChatSeparator();
+        mTPNeedsNeabyChatSeparator = false;
+    }
 	clearTeleportRequest();
     mTeleportCanceled.reset();
 	if (mIsMaturityRatingChangingDuringTeleport)
@@ -4855,6 +4870,47 @@ void LLAgent::handleTeleportFailed()
 		LLNotificationsUtil::add("PreferredMaturityChanged", args);
 		mIsMaturityRatingChangingDuringTeleport = false;
 	}
+
+    mTPNeedsNeabyChatSeparator = false;
+}
+
+/*static*/
+void LLAgent::addTPNearbyChatSeparator()
+{
+    LLViewerRegion* agent_region = gAgent.getRegion();
+    LLParcel* agent_parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+    if (!agent_region || !agent_parcel)
+    {
+        return;
+    }
+
+    // <FS:Ansariel> [FS communication UI]
+    //LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+    FSFloaterNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat");
+    // </FS:Ansariel> [FS communication UI]
+    if (nearby_chat)
+    {
+        std::string location_name;
+        LLAgentUI::ELocationFormat format = LLAgentUI::LOCATION_FORMAT_NO_MATURITY;
+
+        // Might be better to provide slurl to chat
+        if (!LLAgentUI::buildLocationString(location_name, format))
+        {
+            location_name = "Teleport to new region"; // Shouldn't happen
+        }
+
+        LLChat chat;
+        chat.mFromName = location_name;
+        chat.mMuted = FALSE;
+        chat.mFromID = LLUUID::null;
+        chat.mSourceType = CHAT_SOURCE_TELEPORT;
+        chat.mChatStyle = CHAT_STYLE_TELEPORT_SEP;
+        chat.mText = "";
+
+        LLSD args;
+        args["do_not_log"] = TRUE;
+        nearby_chat->addMessage(chat, true, args);
+    }
 }
 
 /*static*/
@@ -5146,10 +5202,16 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		// In SL we have uniform region size. This is normal.
 		// In opensim the handle will resolve to a 256m quantised world tile which the server maps back to a region
 		// it "should" also compensate for the local coords. Handle has been "correctly" determined already so we use global % 256
-		static const auto width{LLWorld::getInstance()->getRegionWidthInMeters()};
+		static const F32 width = REGION_WIDTH_METERS;// Note: reverted back to previous hardcode 256 for non-local. Whilst this appears incorrect server side logic expects %256 and will overshoot otherwise.
 		pos_local.set( fmod((F32)pos_global.mdV[VX], width),
 					   fmod((F32)pos_global.mdV[VY], width),
 					   (F32)pos_global.mdV[VZ] );
+		LL_INFOS("Teleport") << "Non-local TP:"
+							 << " pos_global " << pos_global
+							 << " region " << region_origin
+							 << " local " << pos_local
+							 << " region_handle " << handle
+							 << LL_ENDL;
 	}
 
 	if(teleportCore(is_local)) // Rather a pointless if as teleportCore currently always returns true

@@ -21,7 +21,8 @@
 	<menu_item_check label="Blokuj głos" name="Block Unblock"/>
 	<menu_item_check label="Blokuj tekst" name="Mute Text"/>
 	<context_menu label="Opcje moderatora" name="Moderator Options">
-		<menu_item_check label="Zezwól na czat tekstowy" name="AllowTextChat" />
+		<menu_item_call label="Zezwól na czat tekstowy" name="AllowTextChat" />
+		<menu_item_call label="Zabroń czatu tekstowego" name="ForbidTextChat" />
 		<menu_item_call label="Wycisz tego rozmówcę" name="ModerateVoiceMuteSelected" />
 		<menu_item_call label="Odblokuj tego rozmówcę" name="ModerateVoiceUnMuteSelected" />
 	</context_menu>

@@ -35,6 +35,7 @@
 #include "lluictrlfactory.h"
 #include "lltabcontainer.h"
 #include "llaccordionctrltab.h"
+#include "lluiusage.h"
 
 static LLDefaultChildRegistry::Register<LLUICtrl> r("ui_ctrl");
 
@@ -290,6 +291,7 @@ LLUICtrl::commit_signal_t::slot_type LLUICtrl::initCommitCallback(const CommitCa
 	else
 	{
 		std::string function_name = cb.function_name;
+		setFunctionName(function_name);
 		commit_callback_t* func = (CommitCallbackRegistry::getValue(function_name));
 		if (func)
 		{
@@ -430,7 +432,19 @@ BOOL LLUICtrl::canFocusChildren() const
 void LLUICtrl::onCommit()
 {
 	if (mCommitSignal)
-	(*mCommitSignal)(this, getValue());
+	{
+		if (!mFunctionName.empty())
+		{
+			LL_DEBUGS("UIUsage") << "calling commit function " << mFunctionName << LL_ENDL;
+			LLUIUsage::instance().logCommand(mFunctionName);
+			LLUIUsage::instance().logControl(getPathname());
+		}
+		else
+		{
+			//LL_DEBUGS("UIUsage") << "calling commit function " << "UNKNOWN" << LL_ENDL;
+		}
+		(*mCommitSignal)(this, getValue());
+	}
 }
 
 //virtual
@@ -615,6 +629,12 @@ void LLUICtrl::setMakeInvisibleControlVariable(LLControlVariable* control)
 		// </FS:Zi>
 	}
 }
+
+void LLUICtrl::setFunctionName(const std::string& function_name)
+{
+	mFunctionName = function_name;
+}
+
 // static
 bool LLUICtrl::controlListener(const LLSD& newvalue, LLHandle<LLUICtrl> handle, std::string type)
 {

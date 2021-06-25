@@ -31,6 +31,7 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llclipboard.h"
+#include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "lllandmarkactions.h"
 #include "lllocationinputctrl.h"
@@ -476,10 +477,7 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 
 			if(landmark == NULL)
 			{
-				// <FS:Ansariel> FIRE-817: Separate place details floater
-				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
-				// </FS:Ansariel>
+				LLFloaterReg::showInstance("add_landmark");
 			}
 			else
 			{

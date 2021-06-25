@@ -27,7 +27,6 @@
 				<text name="login_page_text">
 					Strona logowania:
 				</text>
-				<button label="Zapisz" name="save_grid" />
 				<text name="helper_uri_text">
 					URI pomocy:
 				</text>
