@@ -117,6 +117,45 @@
   </menu_item_check>
     <menu_item_separator
      layout="topleft" />
+    <!-- <FS:Zi> Add group moderation to agent URLs so we can moderate users that don't show
+                 in the participants list for some reason -->
+    <context_menu
+     label="Moderator Options"
+     layout="topleft"
+     name="GroupModerationSubmenu">
+      <menu_item_call
+       label="Allow text chat"
+       layout="topleft"
+       name="AllowGroupChat">
+        <on_click function="FS.AllowGroupChat" />
+        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+      </menu_item_call>
+      <menu_item_call
+       label="Forbid text chat"
+       layout="topleft"
+       name="ForbidGroupChat">
+        <on_click function="FS.ForbidGroupChat" />
+        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+      </menu_item_call>
+      <menu_item_call
+       label="Ban member"
+       layout="topleft"
+       name="BanGroupMember">
+        <on_click function="FS.BanGroupMember" />
+        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+      </menu_item_call>
+      <menu_item_call
+       label="Eject member"
+       layout="topleft"
+       name="BanEjectMember">
+        <on_click function="FS.EjectGroupMember" />
+        <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
+      </menu_item_call>
+    </context_menu>
+    <menu_item_separator
+     name="GroupModerationSeparator"
+     layout="topleft" />
+    <!-- </FS:Zi> -->
     <menu_item_call
      label="Copy Name to clipboard"
      layout="topleft"

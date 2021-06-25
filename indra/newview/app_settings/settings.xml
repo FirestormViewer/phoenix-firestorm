@@ -6925,6 +6925,17 @@
       <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
 	  -->
     </map>
+    <key>GuidebookURL</key>
+    <map>
+      <key>Comment</key>
+      <string>URL for Guidebook content</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>http://guidebooks.secondlife.io/welcome/index.html</string>
+    </map>
     <key>HighResSnapshot</key>
     <map>
       <key>Comment</key>
@@ -10776,9 +10787,9 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Color4</string>
     <key>Value</key>
     <array>
-      <real>0.0</real>
-      <real>0.0</real>
-      <real>0.0</real>
+      <real>0.3</real>
+      <real>0.3</real>
+      <real>0.3</real>
       <real>1.0</real>
     </array>
   </map>
@@ -18080,7 +18091,8 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>VivoxVadSensitivity</key>
   <map>
     <key>Comment</key>
-    <string>A dimensionless value between 0 and 100, indicating the 'sensitivity of the VAD'. Increasing this value corresponds to decreasing the sensitivity of the VAD and 0 is turned off altogether</string>
+    <string>
+      A dimensionless value between 0 and 100, indicating the 'sensitivity of the VAD'. Increasing this value corresponds to decreasing the sensitivity of the VAD and 0 is turned off altogether</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -25701,7 +25713,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
   <key>FSAutoUnmuteSounds</key>
     <map>

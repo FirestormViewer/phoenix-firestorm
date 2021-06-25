@@ -819,10 +819,15 @@ void LLIMSpeakerMgr::updateSpeakers(const LLSD& update)
 	}
 }
 
-void LLIMSpeakerMgr::toggleAllowTextChat(const LLUUID& speaker_id)
+// <FS:Zi> make text chat block in groups not a toggle to prevent accidental unmuting
+// void LLIMSpeakerMgr::toggleAllowTextChat(const LLUUID& speaker_id)
+void LLIMSpeakerMgr::allowTextChat(const LLUUID& speaker_id, bool allow)
 {
-	LLPointer<LLSpeaker> speakerp = findSpeaker(speaker_id);
-	if (!speakerp) return;
+	// <FS:Zi> Don't test for presence in the group participants list, as the list
+	//         is unreliable and this leads to situations where people can't be
+	//         chat muted at all anymore
+	// LLPointer<LLSpeaker> speakerp = findSpeaker(speaker_id);
+	// if (!speakerp) return;
 
 	std::string url = gAgent.getRegionCapability("ChatSessionRequest");
 	LLSD data;
@@ -831,8 +836,10 @@ void LLIMSpeakerMgr::toggleAllowTextChat(const LLUUID& speaker_id)
 	data["params"] = LLSD::emptyMap();
 	data["params"]["agent_id"] = speaker_id;
 	data["params"]["mute_info"] = LLSD::emptyMap();
+	// <FS:Zi> make text chat block in groups not a toggle to prevent accidental unmuting
 	//current value represents ability to type, so invert
-	data["params"]["mute_info"]["text"] = !speakerp->mModeratorMutedText;
+	// data["params"]["mute_info"]["text"] = !speakerp->mModeratorMutedText;
+	data["params"]["mute_info"]["text"] = !allow;
 
     LLCoros::instance().launch("LLIMSpeakerMgr::moderationActionCoro",
         boost::bind(&LLIMSpeakerMgr::moderationActionCoro, this, url, data));

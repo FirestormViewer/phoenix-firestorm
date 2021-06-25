@@ -140,6 +140,7 @@ public:
 		mMinUserNameWidth(0),
 		mUserNameFont(NULL),
 		mUserNameTextBox(NULL),
+		mNeedsTimeBox(true),
 		mTimeBoxTextBox(NULL),
 		mHeaderLayoutStack(NULL),
 		mAvatarNameCacheConnection()
@@ -459,10 +460,15 @@ public:
 		{
 			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagTextChat);
 		}
-		else if (param == "toggle_allow_text_chat")
+		else if (param == "allow_text_chat")
 		{
 			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			speaker_mgr->toggleAllowTextChat(getAvatarId());
+			speaker_mgr->allowTextChat(getAvatarId(), true);
+		}
+		else if (param == "forbid_text_chat")
+		{
+			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+			speaker_mgr->allowTextChat(getAvatarId(), false);
 		}
 		else if (param == "group_mute")
 		{
@@ -482,7 +488,15 @@ public:
 		}
 		else if (param == "ban_member")
 		{
-			banGroupMember(getAvatarId());
+			// <FS:Zi> don't do safety checks as participant list is broken, just ban
+			// banGroupMember(getAvatarId());
+			std::vector<LLUUID> ids;
+			ids.push_back(getAvatarId());
+
+			LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, mSessionID, LLGroupMgr::BAN_CREATE, ids);
+			LLGroupMgr::getInstance()->sendGroupMemberEjects(mSessionID, ids);
+			LLGroupMgr::getInstance()->sendGroupMembersRequest(mSessionID);
+			// </FS:Zi>
 		}
 	}
 
@@ -689,7 +703,18 @@ public:
 		// Make sure we use the correct font style for everything after the display name
 		mNameStyleParams.font.style = style_params.font.style;
 
-		if (chat.mFromName.empty()
+		if (mSourceType == CHAT_SOURCE_TELEPORT
+			&& chat.mChatStyle == CHAT_STYLE_TELEPORT_SEP)
+		{
+			mFrom = chat.mFromName;
+			mNeedsTimeBox = false;
+			mUserNameTextBox->setValue(mFrom);
+			updateMinUserNameWidth();
+			LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
+			setTransparentColor(sep_color);
+			mTimeBoxTextBox->setVisible(FALSE);
+		}
+		else  if (chat.mFromName.empty()
 			//|| mSourceType == CHAT_SOURCE_SYSTEM
 			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 			|| (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
@@ -822,8 +847,12 @@ public:
 				}
 				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 				break;
-			case CHAT_SOURCE_UNKNOWN: 
+			case CHAT_SOURCE_TELEPORT:
+				icon->setValue(LLSD("Command_Destinations_Icon"));
+				break;
+			case CHAT_SOURCE_UNKNOWN:
 				icon->setValue(LLSD("Unknown_Icon"));
+				break;
 		}
 
 		// In case the message came from an object, save the object info
@@ -857,7 +886,7 @@ public:
 		S32 user_name_width = user_name_rect.getWidth();
 		S32 time_box_width = mTimeBoxTextBox->getRect().getWidth();
 
-		if (!mTimeBoxTextBox->getVisible() && user_name_width > mMinUserNameWidth)
+		if (mNeedsTimeBox && !mTimeBoxTextBox->getVisible() && user_name_width > mMinUserNameWidth)
 		{
 			user_name_rect.mRight -= time_box_width;
 			mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
@@ -1135,6 +1164,8 @@ protected:
 
 	LLStyle::Params		mNameStyleParams;
 
+	bool				mNeedsTimeBox;
+
 private:
 	boost::signals2::connection mAvatarNameCacheConnection;
 };
@@ -1359,6 +1390,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
+	bool teleport_separator = chat.mSourceType == CHAT_SOURCE_TELEPORT;
 	// We graying out chat history by graying out messages that contains full date in a time string
 	if (message_from_log && !is_conversation_log)
 	{
@@ -1423,7 +1455,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLStyle::Params timestamp_style(body_message_params);
 
 		// out of the timestamp
-		if (args["show_time"].asBoolean())
+		if (args["show_time"].asBoolean() && !teleport_separator)
 		{
 			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
 			timestamp_style.color(timestamp_color);
@@ -1533,6 +1565,13 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				}
 				prependNewLineState = false;
 			}
+			else if (teleport_separator)
+			{
+				std::string tp_text = LLTrans::getString("teleport_preamble_compact_chat");
+				appendText(tp_text + " <nolink>" + chat.mFromName + "</nolink>",
+					prependNewLineState, body_message_params);
+				prependNewLineState = false;
+			}
 			else
 			{
 				appendText("<nolink>" + chat.mFromName + "</nolink>" + delimiter,
@@ -1553,7 +1592,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLDate new_message_time = LLDate::now();
 		bool needs_header_text = false;
 
-		if (mLastFromName == chat.mFromName 
+		if (!teleport_separator
+			&& mLastFromName == chat.mFromName
 			&& mLastFromID == chat.mFromID
 			&& mLastMessageTime.notNull() 
 			&& (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
@@ -1577,7 +1617,14 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				p.top_pad = 0;
 			else
 				p.top_pad = mTopHeaderPad;
-			p.bottom_pad = mBottomHeaderPad;
+			if (teleport_separator)
+			{
+				p.bottom_pad = mBottomSeparatorPad;
+			}
+			else
+			{
+				p.bottom_pad = mBottomHeaderPad;
+			}
 			if (!view)
 			{
 				LL_WARNS() << "Failed to create header from " << mMessageHeaderFilename << ": can't append to history" << LL_ENDL;
@@ -1663,7 +1710,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	}
 
 	// usual messages showing
-	else
+	else if (!teleport_separator)
 	{
 		std::string message = irc_me ? chat.mText.substr(3) : chat.mText;
 

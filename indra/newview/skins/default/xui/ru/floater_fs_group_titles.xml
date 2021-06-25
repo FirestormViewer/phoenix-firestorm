@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="Титулы групп">
 	<floater.string name="NoGroupTitle" value="&lt;Нет титула группы&gt;" />
+	<filter_editor label="Фильтр Титулов групп" name="filter_input"/>
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Титул" />
 		<column name="groupname" label="Группа" />

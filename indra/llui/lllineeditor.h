@@ -292,6 +292,9 @@ public:
 
 	void			resetContextMenu() { setContextMenu(NULL); };
 
+	void			setBgImage(LLPointer<LLUIImage> image) { mBgImage = image; }
+	void			setBgImageFocused(LLPointer<LLUIImage> image) { mBgImageFocused = image; }
+
 	// <FS:Ansariel> Make these protected
 	void			removeChar();
 	void			removeWord(bool prev);

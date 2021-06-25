@@ -17,6 +17,12 @@
 			<text name="color_label">
 				Farbe:
 			</text>
+			<text name="sun_azimuth_label">
+				Azimut:
+			</text>
+			<text name="sun_elevation_label">
+				Höhenwinkel:
+			</text>
 			<text name="glow_focus_label">
 				Leuchtfokus:
 			</text>
@@ -42,6 +48,12 @@
 					</text>
 					<text name="scale_label">
 						Skalierung:
+					</text>
+					<text name="moon_azimuth_label">
+						Azimut:
+					</text>
+					<text name="moon_elevation_label">
+						Höhenwinkel:
 					</text>
 					<text name="brightness_label">
 						Helligkeit:

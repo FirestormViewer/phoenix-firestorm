@@ -703,7 +703,7 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	
 	registrar.add("ParticipantList.Sort", boost::bind(&FSParticipantList::FSParticipantListMenu::sortParticipantList, this, _2));
-	registrar.add("ParticipantList.ToggleAllowTextChat", boost::bind(&FSParticipantList::FSParticipantListMenu::toggleAllowTextChat, this, _2));
+	registrar.add("ParticipantList.AllowTextChat", boost::bind(&FSParticipantList::FSParticipantListMenu::allowTextChat, this, _2));
 	registrar.add("ParticipantList.ToggleMuteText", boost::bind(&FSParticipantList::FSParticipantListMenu::toggleMuteText, this, _2));
 // [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
 	registrar.add("ParticipantList.Eject", boost::bind(&LLGroupActions::ejectFromGroup, mParent.mSpeakerMgr->getSessionID(), mUUIDs.front()));
@@ -780,14 +780,13 @@ void FSParticipantList::FSParticipantListMenu::sortParticipantList(const LLSD& u
 	}
 }
 
-void FSParticipantList::FSParticipantListMenu::toggleAllowTextChat(const LLSD& userdata)
+void FSParticipantList::FSParticipantListMenu::allowTextChat(const LLSD& userdata)
 {
-
 	LLIMSpeakerMgr* mgr = dynamic_cast<LLIMSpeakerMgr*>(mParent.mSpeakerMgr);
 	if (mgr)
 	{
 		const LLUUID speaker_id = mUUIDs.front();
-		mgr->toggleAllowTextChat(speaker_id);
+		mgr->allowTextChat(speaker_id, userdata.asString() == "allow");
 	}
 }
 

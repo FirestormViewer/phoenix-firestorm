@@ -749,7 +749,7 @@ void LLVivoxVoiceClient::voiceControlCoro()
 			gSavedSettings.getControl("VivoxVadNoiseFloor")->getSignal()->connect(boost::bind(&LLVivoxVoiceClient::onVADSettingsChange, this));
 			gSavedSettings.getControl("VivoxVadSensitivity")->getSignal()->connect(boost::bind(&LLVivoxVoiceClient::onVADSettingsChange, this));
 
-			if (mTuningMode)
+            if (mTuningMode)
             {
                 performMicTuning();
             }

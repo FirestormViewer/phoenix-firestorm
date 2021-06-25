@@ -78,6 +78,10 @@
 #include "llfloaterreg.h"
 
 #include "boost/lexical_cast.hpp"
+// <FS:Beq pp Rye> Reduce temporaries and copes in decoding mesh headers
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
+// </FS:Beq pp Rye>
 
 #ifndef LL_WINDOWS
 #include "netdb.h"
@@ -1901,27 +1905,35 @@ EMeshProcessingResult LLMeshRepoThread::headerReceived(const LLVolumeParams& mes
 	U32 header_size = 0;
 	if (data_size > 0)
 	{
-        std::istringstream stream;
-        try
-        {
-            std::string res_str((char*)data, data_size);
+		// <FS:Beq pp Rye> Reduce temporaries and copes in decoding mesh headers
+        // std::istringstream stream;
+        // try
+        // {
+        //     std::string res_str((char*)data, data_size);
 
-            std::string deprecated_header("<? LLSD/Binary ?>");
+        //     std::string deprecated_header("<? LLSD/Binary ?>");
 
-            if (res_str.substr(0, deprecated_header.size()) == deprecated_header)
-            {
-                res_str = res_str.substr(deprecated_header.size() + 1, data_size);
-                header_size = deprecated_header.size() + 1;
-            }
-            data_size = res_str.size();
+        //     if (res_str.substr(0, deprecated_header.size()) == deprecated_header)
+        //     {
+        //         res_str = res_str.substr(deprecated_header.size() + 1, data_size);
+        //         header_size = deprecated_header.size() + 1;
+        //     }
+        //     data_size = res_str.size();
 
-            stream.str(res_str);
-        }
-        catch (std::bad_alloc&)
-        {
-            // out of memory, we won't be able to process this mesh
-            return MESH_OUT_OF_MEMORY;
-        }
+        //     stream.str(res_str);
+        // }
+        // catch (std::bad_alloc&)
+        // {
+        //     // out of memory, we won't be able to process this mesh
+        //     return MESH_OUT_OF_MEMORY;
+        // }
+		U32 dsize = data_size;
+		char* result_ptr = strip_deprecated_header((char*)data, dsize, &header_size);
+
+		data_size = dsize;
+
+		boost::iostreams::stream<boost::iostreams::array_source> stream(result_ptr, data_size);
+		// </FS:Beq pp Rye> 
 
 		if (!LLSDSerialize::fromBinary(header, stream, data_size))
 		{
@@ -1990,19 +2002,22 @@ EMeshProcessingResult LLMeshRepoThread::lodReceived(const LLVolumeParams& mesh_p
 	}
 
 	LLPointer<LLVolume> volume = new LLVolume(mesh_params, LLVolumeLODGroup::getVolumeScaleFromDetail(lod));
-	std::istringstream stream;
-	try
-	{
-		std::string mesh_string((char*)data, data_size);
-		stream.str(mesh_string);
-	}
-	catch (std::bad_alloc&)
-	{
-		// out of memory, we won't be able to process this mesh
-		return MESH_OUT_OF_MEMORY;
-	}
+	// <FS:Beq pp Rye> Reduce temporaries and copes in decoding mesh headers
+	// std::istringstream stream;
+	// try
+	// {
+	// 	std::string mesh_string((char*)data, data_size);
+	// 	stream.str(mesh_string);
+	// }
+	// catch (std::bad_alloc&)
+	// {
+	// 	// out of memory, we won't be able to process this mesh
+	// 	return MESH_OUT_OF_MEMORY;
+	// }
 
-	if (volume->unpackVolumeFaces(stream, data_size))
+	// if (volume->unpackVolumeFaces(stream, data_size))
+	if (volume->unpackVolumeFaces(data, data_size))
+	// </FS:Beq pp Rye>
 	{
 		if (volume->getNumFaces() > 0)
 		{
@@ -2032,10 +2047,13 @@ bool LLMeshRepoThread::skinInfoReceived(const LLUUID& mesh_id, U8* data, S32 dat
 	{
         try
         {
-            std::string res_str((char*)data, data_size);
-            std::istringstream stream(res_str);
+            // <FS:Beq pp Rye> Reduce temporaries and copes in decoding mesh headers
+            // std::string res_str((char*)data, data_size);
+            // std::istringstream stream(res_str);
 
-            U32 uzip_result = LLUZipHelper::unzip_llsd(skin, stream, data_size);
+            // U32 uzip_result = LLUZipHelper::unzip_llsd(skin, stream, data_size);
+            U32 uzip_result = LLUZipHelper::unzip_llsd(skin, data, data_size);
+            // </FS:Beq pp Rye>
             if (uzip_result != LLUZipHelper::ZR_OK)
             {
                 LL_WARNS(LOG_MESH) << "Mesh skin info parse error.  Not a valid mesh asset!  ID:  " << mesh_id
@@ -2073,10 +2091,13 @@ bool LLMeshRepoThread::decompositionReceived(const LLUUID& mesh_id, U8* data, S3
     {
         try
         {
-            std::string res_str((char*)data, data_size);
-            std::istringstream stream(res_str);
+            // <FS:Beq pp Rye> Reduce temporaries and copes in decoding mesh headers
+            // std::string res_str((char*)data, data_size);
+            // std::istringstream stream(res_str);
 
-            U32 uzip_result = LLUZipHelper::unzip_llsd(decomp, stream, data_size);
+            // U32 uzip_result = LLUZipHelper::unzip_llsd(decomp, stream, data_size);
+            U32 uzip_result = LLUZipHelper::unzip_llsd(decomp, data, data_size);
+            // <FS:Beq pp Rye>
             if (uzip_result != LLUZipHelper::ZR_OK)
             {
                 LL_WARNS(LOG_MESH) << "Mesh decomposition parse error.  Not a valid mesh asset!  ID:  " << mesh_id
@@ -2085,7 +2106,7 @@ bool LLMeshRepoThread::decompositionReceived(const LLUUID& mesh_id, U8* data, S3
                 return false;
             }
         }
-        catch (std::bad_alloc&)
+        catch (const std::bad_alloc&) // <FS:Beq pp Rye/> const cos const!
         {
             LL_WARNS(LOG_MESH) << "Out of memory for mesh ID " << mesh_id << " of size: " << data_size << LL_ENDL;
             return false;
@@ -2122,20 +2143,22 @@ EMeshProcessingResult LLMeshRepoThread::physicsShapeReceived(const LLUUID& mesh_
 		volume_params.setSculptID(mesh_id, LL_SCULPT_TYPE_MESH);
 		LLPointer<LLVolume> volume = new LLVolume(volume_params,0);
 
-        std::istringstream stream;
-        try
-        {
-            std::string mesh_string((char*)data, data_size);
-            stream.str(mesh_string);
-        }
-        catch (std::bad_alloc&)
-        {
-            // out of memory, we won't be able to process this mesh
-            delete d;
-            return MESH_OUT_OF_MEMORY;
-        }
+		// <FS:Beq pp Rye> Reduce temporaries and copes in decoding mesh headers
+        // std::istringstream stream;
+        // try
+        // {
+        //     std::string mesh_string((char*)data, data_size);
+        //     stream.str(mesh_string);
+        // }
+        // catch (std::bad_alloc&)
+        // {
+        //     // out of memory, we won't be able to process this mesh
+        //     delete d;
+        //     return MESH_OUT_OF_MEMORY;
+        // }
 
-		if (volume->unpackVolumeFaces(stream, data_size))
+		// if (volume->unpackVolumeFaces(stream, data_size))
+		if (volume->unpackVolumeFaces(data, data_size))
 		{
 			//load volume faces into decomposition buffer
 			S32 vertex_count = 0;
