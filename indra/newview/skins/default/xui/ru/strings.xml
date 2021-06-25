@@ -851,7 +851,7 @@ support@secondlife.com.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 Ошибка в запросе на загрузку.  Пожалуйста, посетите
-http://www.firestormviewer.org/support за помощь в решении этой проблемы.
+https://www.firestormviewer.org/support за помощь в решении этой проблемы.
 	</string>
 	<string name="SettingValidationError">
 		Ошибка при импорте настроек [NAME]

@@ -60,11 +60,23 @@
 					<text name="star_brightness_label">
 						Helligkeit Sterne:
 					</text>
+					<text name="sun_azimuth_label">
+						Azimut:
+					</text>
+					<text name="sun_elevation_label">
+						Höhenwinkel:
+					</text>
 					<check_box label="Beacon anzeigen" name="sunbeacon"/>
 				</layout_panel>
 				<layout_panel name="lp_4">
 					<text name="label">
 						Mond:
+					</text>
+					<text name="moon_azimuth_label">
+						Azimut:
+					</text>
+					<text name="moon_elevation_label">
+						Höhenwinkel:
 					</text>
 					<check_box label="Beacon anzeigen" name="moonbeacon"/>
 				</layout_panel>

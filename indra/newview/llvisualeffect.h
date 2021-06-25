@@ -73,6 +73,7 @@ struct LLShaderEffectParams : LLVisualEffectParams
 
 class LLVisualEffect
 {
+	friend class LLVfxManager;
 public:
 	LLVisualEffect(LLUUID id, EVisualEffect eCode, EVisualEffectType eType)
 		: m_id(id), m_eCode(eCode), m_eType(eType)
@@ -80,11 +81,16 @@ public:
 	virtual ~LLVisualEffect() {}
 
 	EVisualEffect     getCode() const     { return m_eCode;}
+	bool              getEnabled() const  { return m_fEnabled; }
 	const LLUUID&     getId() const       { return m_id;}
 	U32               getPriority() const { return m_nPriority; }
 	EVisualEffectType getType() const     { return m_eType;}
+	void              setEnabled(bool enable) { m_fEnabled = enable; }
 
 	virtual void      run(const LLVisualEffectParams* pParams) = 0;
+
+protected:
+	void              setPriority(U32 priority) { m_nPriority = priority; }
 
 	/*
 	 * Member variables
@@ -93,7 +99,8 @@ protected:
 	LLUUID            m_id;
 	EVisualEffect     m_eCode;
 	EVisualEffectType m_eType;
-	U32               m_nPriority;
+	bool              m_fEnabled = true;
+	U32               m_nPriority = 0;
 };
 
 // ============================================================================
@@ -160,20 +167,34 @@ protected:
 	 */
 public:
 	bool            addEffect(LLVisualEffect* pEffectInst);
-	LLVisualEffect* getEffect(const LLUUID& idEffect) const;
-	template<typename T> T* getEffect(const LLUUID& idEffect) const { return dynamic_cast<T*>(getEffect(idEffect)); }
-	LLVisualEffect* getEffect(EVisualEffect eCode) const;
-	template<typename T> T* getEffect(EVisualEffect eCode) const { return dynamic_cast<T*>(getEffect(eCode)); }
-	bool            removeEffect(const LLUUID& idEffect);
+	LLVisualEffect* getEffect(EVisualEffect eCode, const LLUUID& idEffect) const;
+	template<typename T> T* getEffect(const LLUUID& idEffect) const { return dynamic_cast<T*>(getEffect(T::EffectCode, idEffect)); }
+	bool            getEffects(std::list<LLVisualEffect*>& effectList, std::function<bool(const LLVisualEffect*)> fnFilter);
+	template<typename T> bool getEffects(std::list<LLVisualEffect*>& effectList) { return getEffects(effectList, [](const LLVisualEffect* pEffect) { return pEffect->getCode() == T::EffectCode; }); }
+	bool            hasEffect(EVisualEffect eCode) const;
+	bool            removeEffect(EVisualEffect eCode, const LLUUID& idEffect);
+	template<typename T> bool removeEffect(const LLUUID& idEffect) { return removeEffect(T::EffectCode, idEffect); }
 	void            runEffect(EVisualEffect eCode, LLVisualEffectParams* pParams = nullptr);
 	void            runEffect(EVisualEffectType eType, LLVisualEffectParams* pParams = nullptr);
+	void            updateEffect(LLVisualEffect* pEffect, bool fEnabled, U32 nPriority);
 protected:
+	void            runEffect(std::function<bool(const LLVisualEffect*)> fnFilter, LLVisualEffectParams* pParams);
+	static bool     cmpEffect(const LLVisualEffect* pLHS, const LLVisualEffect* pRHS);
 
 	/*
 	 * Member variables
 	 */
 protected:
-	std::set<LLVisualEffect*> m_Effects;
+	std::vector<LLVisualEffect*> m_Effects;
 };
+
+// ============================================================================
+// Inlined member functions
+//
+
+inline bool LLVfxManager::hasEffect(EVisualEffect eCode) const
+{
+	return m_Effects.end() != std::find_if(m_Effects.begin(), m_Effects.end(), [eCode](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode; });
+}
 
 // ============================================================================

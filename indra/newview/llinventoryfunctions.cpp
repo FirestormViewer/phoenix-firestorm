@@ -884,69 +884,48 @@ void show_item_profile(const LLUUID& item_uuid)
 
 void show_item_original(const LLUUID& item_uuid)
 {
-	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
-	//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
-	//if (!floater_inventory)
-	//{
-	//	LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
-	//	return;
-	//}
+    LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+    if (!floater_inventory)
+    {
+        LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
+        return;
+    }
+    LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+    if (sidepanel_inventory)
+    {
+        LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+        if (main_inventory)
+        {
+            main_inventory->resetFilters();
+        }
+        reset_inventory_filter();
 
-	////sidetray inventory panel
-	//LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+        if (!LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("inventory")->isInVisibleChain())
+        {
+            LLFloaterReg::toggleInstanceOrBringToFront("inventory");
+        }
 
-	//bool do_reset_inventory_filter = !floater_inventory->isInVisibleChain();
-
-	//LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	//if (!active_panel) 
-	//{
-	//	//this may happen when there is no floatera and other panel is active in inventory tab
-
-	//	if	(sidepanel_inventory)
-	//	{
-	//		sidepanel_inventory->showInventoryPanel();
-	//	}
-	//}
-	//
-	//active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	//if (!active_panel) 
-	//{
-	//	return;
-	//}
-	//active_panel->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
-	//
-	//if(do_reset_inventory_filter)
-	//{
-	//	reset_inventory_filter();
-	//}
-
-	LLFloaterReg::showInstance("inventory");
-	LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-	sidepanel_inventory->showInventoryPanel();
-	LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
-	main_inventory->showAllItemsPanel();
-	main_inventory->resetFilters();
-	main_inventory->onFilterEdit("");
-	LLUUID linked_item_id = gInventory.getLinkedItemID(item_uuid);
-	bool in_inbox = (gInventory.isObjectDescendentOf(linked_item_id, gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX)));
-	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-
-	if (in_inbox && !show_inbox)
-	{
-		LLInventoryPanel * inventory_panel = NULL;
-		sidepanel_inventory->openInbox();
-		inventory_panel = sidepanel_inventory->getInboxPanel();
-
-		if (inventory_panel)
-		{
-			inventory_panel->setSelection(linked_item_id, TAKE_FOCUS_YES);
-		}
-	}
-	else
-	{
-		main_inventory->getActivePanel()->setSelection(linked_item_id, TAKE_FOCUS_YES);
-	}
-	// </FS:Ansariel>
+        const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
+        // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+        // if (gInventory.isObjectDescendentOf(gInventory.getLinkedItemID(item_uuid), inbox_id))
+        if (gInventory.isObjectDescendentOf(gInventory.getLinkedItemID(item_uuid), inbox_id) && !gSavedSettings.getBOOL("FSShowInboxFolder"))
+        // </FS:Ansariel>
+        {
+            if (sidepanel_inventory->getInboxPanel())
+            {
+                sidepanel_inventory->openInbox();
+                sidepanel_inventory->getInboxPanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+            }
+        }
+        else
+        {
+            sidepanel_inventory->selectAllItemsPanel();
+            if (sidepanel_inventory->getActivePanel())
+            {
+                sidepanel_inventory->getActivePanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
+            }
+        }
+    }
 }
 
 
@@ -1983,6 +1962,26 @@ bool validate_marketplacelistings(LLInventoryCategory* cat, validation_callback_
     update_marketplace_category(cat->getUUID());
     gInventory.notifyObservers();
     return result && !has_bad_items;
+}
+
+void change_item_parent(const LLUUID& item_id, const LLUUID& new_parent_id)
+{
+	LLInventoryItem* inv_item = gInventory.getItem(item_id);
+	if (inv_item)
+	{
+		LLInventoryModel::update_list_t update;
+		LLInventoryModel::LLCategoryUpdate old_folder(inv_item->getParentUUID(), -1);
+		update.push_back(old_folder);
+		LLInventoryModel::LLCategoryUpdate new_folder(new_parent_id, 1);
+		update.push_back(new_folder);
+		gInventory.accountForUpdate(update);
+
+		LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(inv_item);
+		new_item->setParent(new_parent_id);
+		new_item->updateParentOnServer(FALSE);
+		gInventory.updateItem(new_item);
+		gInventory.notifyObservers();
+	}
 }
 
 ///----------------------------------------------------------------------------

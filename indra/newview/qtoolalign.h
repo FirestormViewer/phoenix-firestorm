@@ -13,8 +13,7 @@ class LLViewerObject;
 class LLPickInfo;
 class LLToolSelectRect;
 
-class QToolAlign
-:	public LLTool, public LLSingleton<QToolAlign>
+class QToolAlign : public LLTool, public LLSingleton<QToolAlign>
 {
 	LLSINGLETON(QToolAlign);
 	virtual ~QToolAlign();
@@ -30,16 +29,16 @@ public:
 	static void pickCallback(const LLPickInfo& pick_info);
 
 private:
-	void            align();
-	void            computeManipulatorSize();
-	void            renderManipulators();
-	BOOL            findSelectedManipulator(S32 x, S32 y);
-	
-	LLBBox          mBBox;
-	F32             mManipulatorSize;
-	S32             mHighlightedAxis;
-	F32             mHighlightedDirection;
-	BOOL            mForce;
+	void			align();
+	void			computeManipulatorSize();
+	void			renderManipulators();
+	BOOL			findSelectedManipulator(S32 x, S32 y);
+
+	LLBBox			mBBox;
+	F32				mManipulatorSize;
+	S32				mHighlightedAxis;
+	F32				mHighlightedDirection;
+	BOOL			mForce;
 };
 
 #endif // Q_QTOOLALIGN_H

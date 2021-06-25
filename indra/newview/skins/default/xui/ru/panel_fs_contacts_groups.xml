@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="groups">
+	<filter_editor label="Фильтр групп" name="group_filter_input"/>
 	<button label="ЛС/Звонок" name="chat_btn" tool_tip="Открыть сессию ЛС"/>
 	<button label="Профиль" name="info_btn"/>
 	<button label="Титулы" name="titles_btn"/>
