@@ -86,7 +86,6 @@ public:
 	void selectAllItemsPanel();
 	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
 	void showAllItemsPanel();
-	void resetFilters();
 	// </FS:Ansariel>
 
 	const std::string& getFilterText() const { return mFilterText; }
@@ -100,6 +99,8 @@ public:
 	static void newWindow();
 
 	void toggleFindOptions();
+
+    void resetFilters();
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -135,8 +136,6 @@ protected:
 	void doToSelected(const LLSD& userdata);
 	void closeAllFolders();
 	void doCreate(const LLSD& userdata);
-	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
-	//void resetFilters(); // Moved to public
 
 	// <FS:Zi> Sort By menu handlers
 	void setSortBy(const LLSD& userdata);
@@ -218,7 +217,9 @@ protected:
 private:
 	LLDragAndDropButton*		mTrashButton;
 	LLToggleableMenu*			mMenuGearDefault;
+	LLToggleableMenu*			mMenuVisibility;
 	LLMenuButton*				mGearMenuButton;
+	LLMenuButton*				mVisibilityMenuButton;
 	LLHandle<LLView>			mMenuAddHandle;
 
 	// <FS:Zi> Inventory Collapse and Expand Buttons

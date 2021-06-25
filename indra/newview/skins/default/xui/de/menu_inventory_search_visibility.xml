@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_search_visibility">
+	<menu_item_check label="Papierkorb durchsuchen" name="search_trash"/>
+	<menu_item_check label="Bibliothek durchsuchen" name="search_library"/>
+	<menu_item_check label="Verknüpfungen einschließen" name="include_links"/>
+</toggleable_menu>

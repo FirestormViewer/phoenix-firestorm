@@ -1185,6 +1185,9 @@
      name="ChatToastAgentNameColor"
      reference="EmphasisColor" />
     <color
+     name="ChatTeleportSeparatorColor"
+     reference="Black" />
+    <color
      name="ChatTimestampColor"
      reference="White" />
     <color

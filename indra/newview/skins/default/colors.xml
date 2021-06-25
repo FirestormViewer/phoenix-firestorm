@@ -1125,6 +1125,9 @@
      name="ChatToastAgentNameColor"
      reference="EmphasisColor" />
     <color
+     name="ChatTeleportSeparatorColor"
+     reference="Black" />
+    <color
      name="ChatTimestampColor"
      reference="White" />
     <color
@@ -1266,6 +1269,9 @@
   <color
     name="OutfitGalleryItemUnselected"
     value="0.4 0.4 0.4 1" />
+  <color
+    name="AddPaymentPanel"
+    value="0.27 0.27 0.27 1" />
 
   <!-- <FS:CR> Script Editor Colors -->
   <color

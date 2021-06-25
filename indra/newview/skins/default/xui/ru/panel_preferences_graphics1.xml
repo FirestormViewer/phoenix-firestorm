@@ -51,6 +51,8 @@
 				Отражения в воде:
 			</text>
 			<combo_box name="Reflections">
+				<combo_box.item label="Нет (непрозрачная)" name="-2"/>
+				<combo_box.item label="Нет (прозрачная)" name="-1"/>
 				<combo_box.item label="Минимальные" name="0"/>
 				<combo_box.item label="Земля и деревья" name="1"/>
 				<combo_box.item label="Все статические объекты" name="2"/>

@@ -1654,6 +1654,7 @@ void remove_inventory_category(
 			LLNotificationsUtil::add("CannotRemoveProtectedCategories");
 			return;
 		}
+
 		// <FS:Ansariel> [UDP-Msg]
 		if (AISAPI::isAvailable())
 		{
