@@ -1142,7 +1142,7 @@ void LLFloaterModelPreview::onPhysicsUseLOD(LLUICtrl* ctrl, void* userdata)
 		// <FS:Beq> FIRE-30963 Support pre-defined physics shapes (initially cube)
 		// S32 which_lod = num_lods - which_mode;
 		// sInstance->mModelPreview->setPhysicsFromLOD(which_lod);
-		if(which_mode >= num_lods)
+		if(which_mode > num_lods)
 		{
 			// which_mode is between the last LOD entry and file selection
 			// so it is a preset
