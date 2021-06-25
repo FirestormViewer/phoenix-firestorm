@@ -48,6 +48,8 @@
 			Wasserreflexionen:
 		</text>
 		<combo_box initial_value="true" label="Wasserreflexionen" name="Reflections">
+			<combo_box.item label="Keine (undurchsichtig)" name="-2"/>
+			<combo_box.item label="Keine (transparent)" name="-1"/>
 			<combo_box.item label="Minimal" name="0"/>
 			<combo_box.item label="Terrain und Bäume" name="1"/>
 			<combo_box.item label="Alle statischen Objekte" name="2"/>

@@ -1099,7 +1099,13 @@ protected:
 	void createVolumeFaces();
 public:
 	virtual bool unpackVolumeFaces(std::istream& is, S32 size);
+// <FS:Beq pp Rye> Add non-allocating variants of of unpackVolumeFaces
+	bool unpackVolumeFaces(U8* in_data, S32 size);
+private:
+	bool unpackVolumeFacesInternal(const LLSD& mdl);
 
+public:
+// </FS:Beq pp Rye>
 	virtual void setMeshAssetLoaded(BOOL loaded);
 	virtual BOOL isMeshAssetLoaded();
 

@@ -378,14 +378,14 @@ bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFace
 	//1. ref = a,b,c lod1 = d,e => This is not permitted
 	//2. ref = a,b,c lod1 = c => This would be permitted
 	
-	LL_INFOS("MESHSKININFO") << "In matchMaterialOrder." << LL_ENDL;
+	LL_DEBUGS("MESHSKININFO") << "In matchMaterialOrder." << LL_ENDL;
 	bool isASubset = lod->isMaterialListSubset( ref );
 	if ( !isASubset )
 	{
-		LL_INFOS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
+		LL_DEBUGS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
 		std::ostringstream out;
 		out << "LOD model " << lod->getName() << "'s materials are not a subset of the High LOD (reference) model " << ref->getName();
-		LL_INFOS() << out.str() << LL_ENDL;
+		LL_DEBUGS() << out.str() << LL_ENDL;
 		LLFloaterModelPreview::addStringToLog(out, true);
 		return false;
 	}
@@ -471,7 +471,7 @@ bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFace
 	// if (reorder &&  (base_mat == cur_mat)) //don't reorder if material name sets don't match
 	if ( reorder )
 	{
-		LL_INFOS("MESHSKININFO") << "re-ordering." << LL_ENDL;
+		LL_DEBUGS("MESHSKININFO") << "re-ordering." << LL_ENDL;
 		lod->sortVolumeFacesByMaterialName();
 		lod->mMaterialList = ref->mMaterialList;
 	}

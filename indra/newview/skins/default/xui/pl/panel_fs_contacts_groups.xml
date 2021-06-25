@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="groups">
+	<filter_editor label="Filtruj grupy" name="group_filter_input" />
 	<button label="IM/Dzwoń" name="chat_btn" tool_tip="Otwórz sesję IM"/>
 	<button label="Profil" name="info_btn"/>
 	<button label="Tytuły grup" name="titles_btn"/>

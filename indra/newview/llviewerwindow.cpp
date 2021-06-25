@@ -7199,10 +7199,15 @@ void LLPickInfo::fetchResults()
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 	if ( (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY)) && (hit_object) && (!hit_object->isHUDAttachment()) )
 	{
-		if (auto* pOverlayEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(EVisualEffect::RlvOverlay))
+		std::list<LLVisualEffect*> effects;
+		LLVfxManager::instance().getEffects<RlvOverlayEffect>(effects);
+		for (const LLVisualEffect* pEffect : effects)
 		{
-			if (pOverlayEffect->hitTest(mMousePt))
+			if (pEffect->getEnabled() && static_cast<const RlvOverlayEffect*>(pEffect)->hitTest(mMousePt))
+			{
 				hit_object = nullptr;
+				break;
+			}
 		}
 	}
 // [/RLVa:KB]

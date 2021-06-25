@@ -24,7 +24,6 @@
 
 const F32 MANIPULATOR_SIZE = 5.0f;
 const F32 MANIPULATOR_SELECT_SIZE = 20.0f;
-const F32 FUDGE = 0.001f;  // because of SL precision/rounding
 
 QToolAlign::QToolAlign()
 :	LLTool(std::string("Align"))
@@ -45,12 +44,13 @@ BOOL QToolAlign::handleMouseDown(S32 x, S32 y, MASK mask)
 	{
 		gViewerWindow->pickAsync(x, y, mask, pickCallback);
 	}
-		
+
 	return TRUE;
 }
 
 void QToolAlign::pickCallback(const LLPickInfo& pick_info)
 {
+	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 	LLViewerObject* object = pick_info.getObject();
 
 	if (object)
@@ -63,31 +63,30 @@ void QToolAlign::pickCallback(const LLPickInfo& pick_info)
 		if (pick_info.mKeyMask & MASK_SHIFT)
 		{
 			// If object not selected, select it
-			if ( !object->isSelected() )
+			if (!object->isSelected())
 			{
-				LLSelectMgr::getInstance()->selectObjectAndFamily(object);
+				select_mgr->selectObjectAndFamily(object);
 			}
 			else
 			{
-				LLSelectMgr::getInstance()->deselectObjectAndFamily(object);
+				select_mgr->deselectObjectAndFamily(object);
 			}
 		}
 		else
 		{
-			LLSelectMgr::getInstance()->deselectAll();
-			LLSelectMgr::getInstance()->selectObjectAndFamily(object);
+			select_mgr->deselectAll();
+			select_mgr->selectObjectAndFamily(object);
 		}
-		
 	}
 	else
 	{
 		if (pick_info.mKeyMask != MASK_SHIFT)
 		{
-			LLSelectMgr::getInstance()->deselectAll();
+			select_mgr->deselectAll();
 		}
 	}
 
-	LLSelectMgr::getInstance()->promoteSelectionToRoot();
+	select_mgr->promoteSelectionToRoot();
 }
 
 void QToolAlign::handleSelect()
@@ -182,7 +181,7 @@ BOOL QToolAlign::handleHover(S32 x, S32 y, MASK mask)
 	{
 		mForce = TRUE;
 	}
-	
+
 	gViewerWindow->setCursor(UI_CURSOR_ARROW);
 	return findSelectedManipulator(x, y);
 }
@@ -235,15 +234,16 @@ void render_cone_bbox(LLBBox bbox)
 // should this be cached in the selection manager?  yes.
 LLBBox get_selection_axis_aligned_bbox()
 {
-	LLBBox selection_bbox = LLSelectMgr::getInstance()->getBBoxOfSelection();
+	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
+	LLBBox selection_bbox = select_mgr->getBBoxOfSelection();
 	LLVector3 position = selection_bbox.getPositionAgent();
-	
+
 	LLBBox axis_aligned_bbox = LLBBox(position, LLQuaternion(), LLVector3(), LLVector3());
 	axis_aligned_bbox.addPointLocal(LLVector3());
 
 	// cycle over the nodes in selection
-	for (LLObjectSelection::iterator selection_iter = LLSelectMgr::getInstance()->getSelection()->begin();
-		 selection_iter != LLSelectMgr::getInstance()->getSelection()->end();
+	for (LLObjectSelection::iterator selection_iter = select_mgr->getSelection()->begin();
+		 selection_iter != select_mgr->getSelection()->end();
 		 ++selection_iter)
 	{
 		LLSelectNode *select_node = *selection_iter;
@@ -257,7 +257,6 @@ LLBBox get_selection_axis_aligned_bbox()
 		}
 	}
 
-	
 	return axis_aligned_bbox;
 }
 
@@ -274,7 +273,7 @@ void QToolAlign::computeManipulatorSize()
 	{
 		F32 distance = dist_vec(gAgentCamera.getCameraPositionAgent(), mBBox.getCenterAgent());
 
-		if (distance > FUDGE)
+		if (distance > F_ALMOST_ZERO)
 		{
 			// range != zero
 			F32 fraction_of_fov = MANIPULATOR_SIZE / camera->getViewHeightInPixels();
@@ -304,7 +303,7 @@ void QToolAlign::renderManipulators()
 	computeManipulatorSize();
 	LLVector3 bbox_center = mBBox.getCenterAgent();
 	LLVector3 bbox_scale = mBBox.getMaxLocal() - mBBox.getMinLocal();
-	
+
 	for (S32 axis = VX; axis <= VZ; axis++)
 	{
 		for (F32 direction = -1.0f; direction <= 1.0f; direction += 2.0f)
@@ -355,7 +354,8 @@ BOOL QToolAlign::canAffectSelection()
 	// and it does not have any sitting agents. In case of editing linked parts,
 	// the object itself has to be modifiable.
 	static LLCachedControl<bool> edit_linked_parts(gSavedSettings, "EditLinkedParts");
-	BOOL can_scale = LLSelectMgr::getInstance()->getSelection()->getObjectCount() != 0;
+	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
+	BOOL can_scale = select_mgr->getSelection()->getObjectCount() != 0;
 	if (can_scale)
 	{
 		struct f : public LLSelectedObjectFunctor
@@ -365,7 +365,7 @@ BOOL QToolAlign::canAffectSelection()
 				return (!edit_linked_parts || objectp->permModify()) && objectp->permMove() && !objectp->isSeat();
 			}
 		} func;
-		can_scale = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);
+		can_scale = select_mgr->getSelection()->applyToObjects(&func);
 	}
 	return can_scale;
 }
@@ -399,9 +399,9 @@ BOOL bbox_overlap(LLBBox bbox1, LLBBox bbox2)
 
 	LLVector3 half_extent = (bbox1.getExtentLocal() + bbox2.getExtentLocal()) / 2.0f;
 
-	return ((fabs(delta.mV[VX]) < half_extent.mV[VX] - FUDGE) &&
-			(fabs(delta.mV[VY]) < half_extent.mV[VY] - FUDGE) &&
-			(fabs(delta.mV[VZ]) < half_extent.mV[VZ] - FUDGE));
+	return ((fabs(delta.mV[VX]) < half_extent.mV[VX] - F_ALMOST_ZERO) &&
+			(fabs(delta.mV[VY]) < half_extent.mV[VY] - F_ALMOST_ZERO) &&
+			(fabs(delta.mV[VZ]) < half_extent.mV[VZ] - F_ALMOST_ZERO));
 }
 
 // used to sort bboxes before packing
@@ -430,15 +430,17 @@ public:
 
 void QToolAlign::align()
 {
+	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
+
 	// no linkset parts, please
-	LLSelectMgr::getInstance()->promoteSelectionToRoot();
-	
+	select_mgr->promoteSelectionToRoot();
+
 	std::vector<LLPointer<LLViewerObject> > objects;
 	std::map<LLPointer<LLViewerObject>, LLBBox > original_bboxes;
-	
+
 	// cycle over the nodes in selection and collect them into an array
-	for (LLObjectSelection::root_iterator selection_iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
-		 selection_iter != LLSelectMgr::getInstance()->getSelection()->root_end();
+	for (LLObjectSelection::root_iterator selection_iter = select_mgr->getSelection()->root_begin();
+		 selection_iter != select_mgr->getSelection()->root_end();
 		 ++selection_iter)
 	{
 		LLSelectNode *select_node = *selection_iter;
@@ -448,7 +450,7 @@ void QToolAlign::align()
 			if (object)
 			{
 				LLVector3 position = object->getPositionAgent();
-	
+
 				LLBBox bbox = LLBBox(position, LLQuaternion(), LLVector3(), LLVector3());
 				bbox.addPointLocal(LLVector3());
 
@@ -463,7 +465,7 @@ void QToolAlign::align()
 					LLViewerObject* child = *it;
 					bbox.addBBoxAgent(child->getBoundingBoxAgent());
 				}
-				
+
 				objects.push_back(object);
 				original_bboxes[object] = bbox;
 			}
@@ -486,7 +488,7 @@ void QToolAlign::align()
 		LLBBox target_bbox = mBBox;
 		LLVector3 target_corner = target_bbox.getCenterAgent() - 
 			direction * target_bbox.getExtentLocal() / 2.0f;
-	
+
 		LLViewerObject* object = objects[i];
 
 		LLBBox this_bbox = original_bboxes[object];
@@ -573,7 +575,6 @@ void QToolAlign::align()
 
 		object->setPosition(new_position);
 	}
-	
-	
-	LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
+
+	select_mgr->sendMultipleUpdate(UPD_POSITION);
 }

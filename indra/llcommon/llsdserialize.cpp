@@ -34,6 +34,10 @@
 #include <iostream>
 #include "apr_base64.h"
 
+// <FS:Beq pp Rye> Add non-allocating variants of unzip_llsd	
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
+// </FS:Beq pp Rye>
 #ifdef LL_USESYSTEMLIBS
 # include <zlib.h>
 #else
@@ -2178,59 +2182,222 @@ std::string zip_llsd(LLSD& data)
 // and deserializes from that copy using LLSDSerialize
 LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is, S32 size)
 {
+	// <FS:Beq pp Rye> Add non-allocating variants of unzip_llsd	
+	// U8* result = NULL;
+	// U32 cur_size = 0;
+	// z_stream strm;
+		
+	// const U32 CHUNK = 65536;
+
+	// 	U8 *in = new(std::nothrow) U8[size];
+	// 	if (!in)
+	// 	{
+	// 		return ZR_MEM_ERROR;
+	// 	}
+	// 	is.read((char*) in, size); 
+
+	// 	U8 out[CHUNK];
+			
+	// 	strm.zalloc = Z_NULL;
+	// 	strm.zfree = Z_NULL;
+	// 	strm.opaque = Z_NULL;
+	// 	strm.avail_in = size;
+	// 	strm.next_in = in;
+
+	// 	S32 ret = inflateInit(&strm);
+		
+	// 	do
+	// 	{
+	// 		strm.avail_out = CHUNK;
+	// 		strm.next_out = out;
+	// 		ret = inflate(&strm, Z_NO_FLUSH);
+	// 		if (ret == Z_STREAM_ERROR)
+	// 		{
+	// 			LL_DEBUGS() << "Unzip error: Z_STREAM_ERROR" << LL_ENDL;	// <FS>
+	// 			inflateEnd(&strm);
+	// 			// free(result);
+	// 			if( result )
+	// 				free(result);
+	// 			delete [] in;
+	// 			return ZR_DATA_ERROR;
+	// 		}
+			
+	// 		switch (ret)
+	// 		{
+	// 		case Z_NEED_DICT:
+	// 			ret = Z_DATA_ERROR;
+	// 		case Z_DATA_ERROR:
+	// 		case Z_MEM_ERROR:
+	// 			LL_DEBUGS() << "Unzip error: " << ret << LL_ENDL;	// <FS>
+	// 			inflateEnd(&strm);
+	// 			// free(result);
+	// 			if( result )
+	// 				free(result);
+	// 			delete [] in;
+	// 			return ZR_MEM_ERROR;
+	// 			break;
+	// 		}
+
+	// 		U32 have = CHUNK-strm.avail_out;
+
+	// 		U8* new_result = (U8*)realloc(result, cur_size + have);
+	// 		if (new_result == NULL)
+	// 		{
+	// 			inflateEnd(&strm);
+	// 			if (result)
+	// 			{
+	// 				free(result);
+	// 			}
+	// 			delete[] in;
+	// 			return ZR_MEM_ERROR;
+	// 		}
+	// 		result = new_result;
+	// 		memcpy(result+cur_size, out, have);
+	// 		cur_size += have;
+
+	// 	} while (ret == Z_OK);
+
+	// 	inflateEnd(&strm);
+	// 	delete [] in;
+
+	// 	if (ret != Z_STREAM_END)
+	// 	{
+	// 		LL_DEBUGS() << "Unzip error: !Z_STREAM_END" << LL_ENDL;	// <FS>
+	// 		// free(result);
+	// 		if( result )
+	// 			free(result);
+	// 		return ZR_DATA_ERROR;
+	// 	}
+
+	// 	//result now points to the decompressed LLSD block
+	// 	{
+	// 		std::istringstream istr;
+	// 		// Since we are using this for meshes, data we are dealing with tend to be large.
+	// 		// So string can potentially fail to allocate, make sure this won't cause problems
+	// 		try
+	// 		{
+	// 			std::string res_str((char*)result, cur_size);
+
+	// 			std::string deprecated_header("<? LLSD/Binary ?>");
+
+	// 			if (res_str.substr(0, deprecated_header.size()) == deprecated_header)
+	// 			{
+	// 				res_str = res_str.substr(deprecated_header.size() + 1, cur_size);
+	// 			}
+	// 			cur_size = res_str.size();
+
+	// 			istr.str(res_str);
+	// 		}
+	// #ifdef LL_WINDOWS
+	// 		catch (std::length_error)
+	// 		{
+	// 			// free(result);
+	// 			if( result )
+	// 				free(result);
+	// 			return ZR_SIZE_ERROR;
+	// 		}
+	// #endif
+	// 		catch (std::bad_alloc&)
+	// 		{
+	// 			// free(result);
+	// 			if( result )
+	// 				free(result);
+	// 			return ZR_MEM_ERROR;
+	// 		}
+
+	// 		if (!LLSDSerialize::fromBinary(data, istr, cur_size, UNZIP_LLSD_MAX_DEPTH))
+	// 		{
+	// 			// free(result);
+	// 			if( result )
+	// 				free(result);
+	// 			return ZR_PARSE_ERROR;
+	// 		}
+	// 	}
+
+	// 	// free(result);
+	// 	if( result )
+	// 		free(result);
+	// 	return ZR_OK;
+	std::unique_ptr<U8[]> in;
+	try
+	{
+		in = std::unique_ptr<U8[]>(new U8[size]);
+	}
+	catch(const std::bad_alloc&)
+	{
+		return ZR_MEM_ERROR;
+	}
+	is.read((char*) in.get(), size); 
+
+	return unzip_llsd(data, in.get(), size);
+}
+
+LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, const U8* in, S32 size)
+{
 	U8* result = NULL;
 	U32 cur_size = 0;
 	z_stream strm;
 		
-	const U32 CHUNK = 65536;
+	constexpr U32 CHUNK = 1024 * 256;
 
-	U8 *in = new(std::nothrow) U8[size];
-	if (!in)
+	static thread_local std::unique_ptr<U8[]> out;
+	if (!out)
 	{
-		return ZR_MEM_ERROR;
+		try
+		{
+			out = std::unique_ptr<U8[]>(new U8[CHUNK]);
+		}
+		catch (const std::bad_alloc&)
+		{
+			return ZR_MEM_ERROR;
+		}
 	}
-	is.read((char*) in, size); 
-
-	U8 out[CHUNK];
 		
 	strm.zalloc = Z_NULL;
 	strm.zfree = Z_NULL;
 	strm.opaque = Z_NULL;
 	strm.avail_in = size;
-	strm.next_in = in;
+	strm.next_in = const_cast<U8*>(in);
 
 	S32 ret = inflateInit(&strm);
-	
+	switch (ret)
+	{
+	case Z_STREAM_ERROR:
+		return ZR_DATA_ERROR;
+	case Z_VERSION_ERROR:
+		return ZR_VERSION_ERROR;
+	case Z_MEM_ERROR:
+		return ZR_MEM_ERROR;
+	}
+
 	do
 	{
 		strm.avail_out = CHUNK;
-		strm.next_out = out;
+		strm.next_out = out.get();
 		ret = inflate(&strm, Z_NO_FLUSH);
-		if (ret == Z_STREAM_ERROR)
-		{
-			LL_DEBUGS() << "Unzip error: Z_STREAM_ERROR" << LL_ENDL;	// <FS>
-			inflateEnd(&strm);
-			// free(result);
-			if( result )
-				free(result);
-			delete [] in;
-			return ZR_DATA_ERROR;
-		}
-		
 		switch (ret)
 		{
 		case Z_NEED_DICT:
-			ret = Z_DATA_ERROR;
 		case Z_DATA_ERROR:
-		case Z_MEM_ERROR:
-			LL_DEBUGS() << "Unzip error: " << ret << LL_ENDL;	// <FS>
+		{
 			inflateEnd(&strm);
-			// free(result);
-			if( result )
-				free(result);
-			delete [] in;
+			free(result);
+			return ZR_DATA_ERROR;
+		}
+		case Z_STREAM_ERROR:
+		case Z_BUF_ERROR:
+		{
+			inflateEnd(&strm);
+			free(result);
+			return ZR_BUFFER_ERROR;
+		}
+
+		case Z_MEM_ERROR:
+		{
+			inflateEnd(&strm);
+			free(result);
 			return ZR_MEM_ERROR;
-			break;
+		}
 		}
 
 		U32 have = CHUNK-strm.avail_out;
@@ -2243,101 +2410,190 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 			{
 				free(result);
 			}
-			delete[] in;
 			return ZR_MEM_ERROR;
 		}
 		result = new_result;
-		memcpy(result+cur_size, out, have);
+		memcpy(result+cur_size, out.get(), have);
 		cur_size += have;
 
-	} while (ret == Z_OK);
+	} while (ret == Z_OK && ret != Z_STREAM_END);
 
 	inflateEnd(&strm);
-	delete [] in;
 
 	if (ret != Z_STREAM_END)
 	{
-		LL_DEBUGS() << "Unzip error: !Z_STREAM_END" << LL_ENDL;	// <FS>
-		// free(result);
-		if( result )
-			free(result);
+		free(result);
 		return ZR_DATA_ERROR;
 	}
 
 	//result now points to the decompressed LLSD block
 	{
-		std::istringstream istr;
-		// Since we are using this for meshes, data we are dealing with tend to be large.
-		// So string can potentially fail to allocate, make sure this won't cause problems
-		try
-		{
-			std::string res_str((char*)result, cur_size);
+		char* result_ptr = strip_deprecated_header((char*)result, cur_size);
 
-			std::string deprecated_header("<? LLSD/Binary ?>");
-
-			if (res_str.substr(0, deprecated_header.size()) == deprecated_header)
-			{
-				res_str = res_str.substr(deprecated_header.size() + 1, cur_size);
-			}
-			cur_size = res_str.size();
-
-			istr.str(res_str);
-		}
-#ifdef LL_WINDOWS
-		catch (std::length_error)
+		boost::iostreams::stream<boost::iostreams::array_source> istrm(result_ptr, cur_size);
+		
+		if (!LLSDSerialize::fromBinary(data, istrm, cur_size, UNZIP_LLSD_MAX_DEPTH))
 		{
-			// free(result);
-			if( result )
-				free(result);
-			return ZR_SIZE_ERROR;
-		}
-#endif
-		catch (std::bad_alloc&)
-		{
-			// free(result);
-			if( result )
-				free(result);
-			return ZR_MEM_ERROR;
-		}
-
-		if (!LLSDSerialize::fromBinary(data, istr, cur_size, UNZIP_LLSD_MAX_DEPTH))
-		{
-			// free(result);
-			if( result )
-				free(result);
+			free(result);
 			return ZR_PARSE_ERROR;
 		}
 	}
 
-	// free(result);
-	if( result )
-		free(result);
+	free(result);
 	return ZR_OK;
 }
+// </FS:Beq pp Rye> 
 //This unzip function will only work with a gzip header and trailer - while the contents
 //of the actual compressed data is the same for either format (gzip vs zlib ), the headers
 //and trailers are different for the formats.
 U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32 size )
 {
+// <FS:Beq pp Rye> Add non-allocating variants of unzip_llsd	
+// 	if (size == 0)
+// 	{
+// 		LL_WARNS() << "No data to unzip." << LL_ENDL;
+// 		return NULL;
+// 	}
+
+// 	U8* result = NULL;
+// 	U32 cur_size = 0;
+// 	z_stream strm;
+		
+// 	const U32 CHUNK = 0x4000;
+
+// 	U8 *in = new(std::nothrow) U8[size];
+// 	if (in == NULL)
+// 	{
+// 		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
+// 		return NULL;
+// 	}
+// 	is.read((char*) in, size); 
+
+// 	U8 out[CHUNK];
+		
+// 	strm.zalloc = Z_NULL;
+// 	strm.zfree = Z_NULL;
+// 	strm.opaque = Z_NULL;
+// 	strm.avail_in = size;
+// 	strm.next_in = in;
+
+// 	valid = true; // <FS:ND/> Default is all okay.
+// 	S32 ret = inflateInit2(&strm,  windowBits | ENABLE_ZLIB_GZIP );
+// 	do
+// 	{
+// 		strm.avail_out = CHUNK;
+// 		strm.next_out = out;
+// 		ret = inflate(&strm, Z_NO_FLUSH);
+// 		if (ret == Z_STREAM_ERROR)
+// 		{
+// 			inflateEnd(&strm);
+// 			// free(result);
+// 			if( result )
+// 				free(result);
+// 			delete [] in;
+// 			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
+// 			valid = false;
+// 		}
+		
+// 		switch (ret)
+// 		{
+// 		case Z_NEED_DICT:
+// 			ret = Z_DATA_ERROR;
+// 		case Z_DATA_ERROR:
+// 		case Z_MEM_ERROR:
+// 			inflateEnd(&strm);
+// 			// free(result);
+// 			if( result )
+// 				free(result);
+// 			delete [] in;
+// 			valid = false;
+// 			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
+// 			break;
+// 		}
+
+// 		if( valid ) {// <FS:ND> in case this stream is invalid, do not pass the already freed buffer to realloc.
+			
+// 		U32 have = CHUNK-strm.avail_out;
+
+// 		U8* new_result = (U8*) realloc(result, cur_size + have);
+// 		if (new_result == NULL)
+// 		{
+// 			LL_WARNS() << "Failed to unzip LLSD NavMesh block: can't reallocate memory, current size: " << cur_size
+// 				<< " bytes; requested " << cur_size + have
+// 				<< " bytes; total syze: ." << size << " bytes."
+// 				<< LL_ENDL;
+// 			inflateEnd(&strm);
+// 			if (result)
+// 			{
+// 				free(result);
+// 			}
+// 			delete[] in;
+// 			valid = false;
+// 			return NULL;
+// 		}
+// 		result = new_result;
+// 		memcpy(result+cur_size, out, have);
+// 		cur_size += have;
+
+// 		} // </FS:ND>
+
+// 	} while (ret == Z_OK);
+
+// 	inflateEnd(&strm);
+// 	delete [] in;
+
+// 	if (ret != Z_STREAM_END)
+// 	{
+// 		// <FS:ND> result might have been freed above. And calling free with a null pointer is not defined.
+// 		// free(result);
+// 		if( result )
+// 			free(result);
+// 		// </FS:ND>
+		
+// 		valid = false;
+// 		return NULL;
+// 	}
+
+// 	//result now points to the decompressed LLSD block
+// 	{
+// 		outsize= cur_size;
+// 		valid = true;		
+// 	}
+
+// 	return result;
+// }
 	if (size == 0)
 	{
 		LL_WARNS() << "No data to unzip." << LL_ENDL;
-		return NULL;
+		return nullptr;
+	}
+	std::unique_ptr<U8[]> in;
+	try
+	{
+		in = std::make_unique<U8[]>(size);
+	}
+	catch (const std::bad_alloc&)
+	{
+		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
+		return nullptr;
 	}
 
+	is.read((char*) in.get(), size); 
+	return unzip_llsdNavMesh(valid, outsize, in.get(), size);
+}
+
+U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, const U8* in, S32 size )
+{
+	if (size == 0)
+	{
+		LL_WARNS() << "No data to unzip." << LL_ENDL;
+		return nullptr;
+	}
 	U8* result = NULL;
 	U32 cur_size = 0;
 	z_stream strm;
 		
 	const U32 CHUNK = 0x4000;
-
-	U8 *in = new(std::nothrow) U8[size];
-	if (in == NULL)
-	{
-		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
-		return NULL;
-	}
-	is.read((char*) in, size); 
 
 	U8 out[CHUNK];
 		
@@ -2345,9 +2601,9 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 	strm.zfree = Z_NULL;
 	strm.opaque = Z_NULL;
 	strm.avail_in = size;
-	strm.next_in = in;
+	strm.next_in = const_cast<U8*>(in);
 
-	valid = true; // <FS:ND/> Default is all okay.
+	
 	S32 ret = inflateInit2(&strm,  windowBits | ENABLE_ZLIB_GZIP );
 	do
 	{
@@ -2357,32 +2613,23 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 		if (ret == Z_STREAM_ERROR)
 		{
 			inflateEnd(&strm);
-			// free(result);
-			if( result )
-				free(result);
-			delete [] in;
-			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
-			valid = false;
+			free(result);
+			return NULL;
 		}
 		
 		switch (ret)
 		{
 		case Z_NEED_DICT:
 			ret = Z_DATA_ERROR;
+			// [[fallthrough]]; // <FS:Beq> TODO when we have C++17 compilation.
 		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
 			inflateEnd(&strm);
-			// free(result);
-			if( result )
-				free(result);
-			delete [] in;
+			free(result);
 			valid = false;
-			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
-			break;
+			return NULL;
 		}
 
-		if( valid ) {// <FS:ND> in case this stream is invalid, do not pass the already freed buffer to realloc.
-			
 		U32 have = CHUNK-strm.avail_out;
 
 		U8* new_result = (U8*) realloc(result, cur_size + have);
@@ -2397,7 +2644,6 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 			{
 				free(result);
 			}
-			delete[] in;
 			valid = false;
 			return NULL;
 		}
@@ -2405,21 +2651,13 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 		memcpy(result+cur_size, out, have);
 		cur_size += have;
 
-		} // </FS:ND>
-
 	} while (ret == Z_OK);
 
 	inflateEnd(&strm);
-	delete [] in;
 
 	if (ret != Z_STREAM_END)
 	{
-		// <FS:ND> result might have been freed above. And calling free with a null pointer is not defined.
-		// free(result);
-		if( result )
-			free(result);
-		// </FS:ND>
-		
+		free(result);
 		valid = false;
 		return NULL;
 	}
@@ -2433,4 +2671,22 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 	return result;
 }
 
+char* strip_deprecated_header(char* in, U32& cur_size, U32* header_size)
+{
+	const char* deprecated_header = "<? LLSD/Binary ?>";
+	constexpr size_t deprecated_header_size = 17;
 
+	if (cur_size > deprecated_header_size
+		&& memcmp(in, deprecated_header, deprecated_header_size) == 0)
+	{
+		in = in + deprecated_header_size;
+		cur_size = cur_size - deprecated_header_size;
+		if (header_size)
+		{
+			*header_size = deprecated_header_size + 1;
+		}
+	}
+
+	return in;
+}
+// </FS:Beq pp Rye>

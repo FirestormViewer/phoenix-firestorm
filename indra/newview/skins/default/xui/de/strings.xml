@@ -881,7 +881,7 @@ nächsten Eigentümer angehängt werden.
 	</string>
 	<string name="AssetUploadRequestInvalid">
 Fehler in der Upload-Anforderung. Bitte besuchen Sie
-http://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
+https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="SettingValidationError">
 		Validierung für das Importieren der Einstellungen [NAME] fehlgeschlagen
