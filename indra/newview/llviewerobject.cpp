@@ -523,7 +523,7 @@ S32 LLViewerObject::getNumVisibleFaces() const
 	{ 
 		for (int i = 0;i < mDrawable->getNumFaces();i++)
 		{
-			if(mDrawable->getFace(i)->getTextureEntry()->getAlpha() == 0.f)
+			if(mDrawable->getFace(i)->getTextureEntry()->getAlpha() != 0.f)
 				v++;
 		} 
 	}
