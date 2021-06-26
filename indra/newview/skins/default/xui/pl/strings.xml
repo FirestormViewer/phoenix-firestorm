@@ -1797,6 +1797,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Scripts" value=" Skrypty,"/>
 	<string name="Sounds" value=" Dźwięki,"/>
 	<string name="Textures" value=" Tekstury,"/>
+	<string name="Settings" value=" Otoczenia," />
 	<string name="Snapshots" value=" Zdjęcia,"/>
 	<string name="No Filters" value="Nie "/>
 	<string name="Since Logoff" value=" - od wylogowania"/>
@@ -2804,9 +2805,6 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="UploadingCosts">
 		Przesyłanie [NAME] kosztuje [AMOUNT]L$
-	</string>
-	<string name="BuyingCosts">
-		Cena zakupu tego wynosi [AMOUNT]L$
 	</string>
 	<string name="UnknownFileExtension">
 		Nieznane rozszerzenie pliku [.%s]
@@ -4734,6 +4732,9 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 	<string name="unread_chat_multiple">
 		[SOURCES] powiedział/a coś nowego
 	</string>
+	<string name="teleport_preamble_compact_chat">
+		Jesteś teraz w
+	</string>
 	<string name="session_initialization_timed_out_error">
 		Inicjalizacja sesji wygasła
 	</string>
@@ -4803,9 +4804,6 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 	<string name="to publish a classified ad">
 		publikacja reklamy
 	</string>
-	<string name="giving">
-		Dajesz [AMOUNT]L$
-	</string>
 	<string name="uploading_costs">
 		Przesyłanie kosztuje [AMOUNT]L$
 	</string>
@@ -4813,10 +4811,13 @@ Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pom
 		To kosztuje [AMOUNT]L$
 	</string>
 	<string name="buying_selected_land">
-		Kupno wybranej działki za [AMOUNT]L$
+		Działka kosztuje
 	</string>
 	<string name="this_object_costs">
-		Ten obiekt kosztuje [AMOUNT]L$
+		Obiekt kosztuje
+	</string>
+	<string name="giving">
+		Chcesz dać
 	</string>
 	<string name="group_role_everyone">
 		Każdy
@@ -5107,6 +5108,12 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 	</string>
 	<string name="InternalMembership">
 		Wewnętrzne
+	</string>
+	<string name="MembershipUpgradeText">
+		Przejdź na Premium
+	</string>
+	<string name="MembershipPremiumText">
+		Moje członkostwo Premium
 	</string>
 	<string name="DeleteItems">
 		Usunąć zaznaczone obiekty?
