@@ -3,7 +3,7 @@
 	<tab_container name="tabs">
 		<panel label="Połączenie" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Maksymalna przepustowość ([http://wiki.firestormviewer.org/fs_speedtest potrzebujesz sugestii?]):
+				Maksymalna przepustowość ([https://wiki.firestormviewer.org/fs_speedtest potrzebujesz sugestii?]):
 			</text>
 			<text name="NetworkPrefText3">
 				Światłowód

@@ -33,6 +33,7 @@
 #include "llpanelteleporthistory.h"
 #include "llbutton.h"
 #include "llfiltereditor.h"
+#include "llmenubutton.h"
 
 FSFloaterTeleportHistory::FSFloaterTeleportHistory(const LLSD& seed)
 	: LLFloater(seed),
@@ -53,14 +54,6 @@ BOOL FSFloaterTeleportHistory::postBuild()
 	{
 		mHistoryPanel->setIsStandAlone(true);
 
-		mHistoryPanel->mTeleportBtn = getChild<LLButton>("teleport_btn");
-		mHistoryPanel->mShowOnMapBtn = getChild<LLButton>("map_btn");
-		mHistoryPanel->mShowProfile = getChild<LLButton>("profile_btn");
-
-		mHistoryPanel->mTeleportBtn->setClickedCallback(boost::bind(&LLTeleportHistoryPanel::onTeleport, mHistoryPanel));
-		mHistoryPanel->mShowProfile->setClickedCallback(boost::bind(&LLTeleportHistoryPanel::onShowProfile, mHistoryPanel));
-		mHistoryPanel->mShowOnMapBtn->setClickedCallback(boost::bind(&LLTeleportHistoryPanel::onShowOnMap, mHistoryPanel));
-
 		mFilterEditor = getChild<LLFilterEditor>("Filter");
 		if (mFilterEditor)
 		{
@@ -74,6 +67,12 @@ BOOL FSFloaterTeleportHistory::postBuild()
 
 		getChildView("history_placeholder")->addChild(mHistoryPanel);
 		mHistoryPanel->onSearchEdit("");
+
+		mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
+		mGearMenuButton->setMouseDownCallback(boost::bind(&FSFloaterTeleportHistory::onGearMenuClick, this));
+
+		mSortingMenuButton = getChild<LLMenuButton>("sorting_menu_btn");
+		mSortingMenuButton->setMouseDownCallback(boost::bind(&FSFloaterTeleportHistory::onSortingMenuClick, this));
 	}
 	else
 	{
@@ -116,4 +115,14 @@ BOOL FSFloaterTeleportHistory::handleKeyHere(KEY key, MASK mask)
 	}
 
 	return LLFloater::handleKeyHere(key, mask);
+}
+
+void FSFloaterTeleportHistory::onGearMenuClick()
+{
+	mGearMenuButton->setMenu(mHistoryPanel->getSelectionMenu(), LLMenuButton::MP_BOTTOM_LEFT);
+}
+
+void FSFloaterTeleportHistory::onSortingMenuClick()
+{
+	mSortingMenuButton->setMenu(mHistoryPanel->getSortingMenu(), LLMenuButton::MP_BOTTOM_LEFT);
 }

@@ -179,7 +179,7 @@ protected:
 	void			cacheLandmarkPosition();
 
 	// <FS:Ansariel> Parcel details on map
-	void			requestParcelInfo(const LLVector3d& pos_global);
+	void			requestParcelInfo(const LLVector3d& pos_global, const LLVector3d& region_origin);
 	LLVector3d		mRequestedGlobalPos;
 	bool			mShowParcelInfo;
 	FSWorldMapParcelInfoObserver* mParcelInfoObserver;

@@ -165,7 +165,8 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mViewsInitialized(VIEWS_UNINITIALIZED),
 	mInvFVBridgeBuilder(NULL),
 	mInventoryViewModel(p.name),
-	mGroupedItemBridge(new LLFolderViewGroupedItemBridge)
+	mGroupedItemBridge(new LLFolderViewGroupedItemBridge),
+	mFocusSelection(false)
 {
 	mInvFVBridgeBuilder = &INVENTORY_BRIDGE_BUILDER;
 
@@ -1475,6 +1476,7 @@ void LLInventoryPanel::setSelectCallback(const boost::function<void (const std::
 void LLInventoryPanel::clearSelection()
 {
 	mSelectThisID.setNull();
+	mFocusSelection = false;
 }
 
 LLInventoryPanel::selected_items_t LLInventoryPanel::getSelectedItems() const
@@ -2070,15 +2072,17 @@ void LLInventoryPanel::setSelectionByID( const LLUUID& obj_id, BOOL    take_keyb
         }
     }
 
-	if(itemp && itemp->getViewModelItem())
+	if(itemp && itemp->getViewModelItem() && itemp->passedFilter())
 	{
 		itemp->arrangeAndSet(TRUE, take_keyboard_focus);
 		mSelectThisID.setNull();
+		mFocusSelection = false;
 		return;
 	}
 	else
 	{
 		// save the desired item to be selected later (if/when ready)
+		mFocusSelection = take_keyboard_focus;
 		mSelectThisID = obj_id;
 	}
 }
@@ -2087,7 +2091,7 @@ void LLInventoryPanel::updateSelection()
 {
 	if (mSelectThisID.notNull())
 	{
-		setSelectionByID(mSelectThisID, false);
+		setSelectionByID(mSelectThisID, mFocusSelection);
 	}
 }
 

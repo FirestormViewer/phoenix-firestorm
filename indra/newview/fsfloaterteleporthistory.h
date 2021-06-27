@@ -32,6 +32,7 @@
 
 class LLFilterEditor;
 class LLTeleportHistoryPanel;
+class LLMenuButton;
 
 class FSFloaterTeleportHistory : public LLFloater
 {
@@ -47,9 +48,13 @@ public:
 
 private:
 	void onFilterEdit(const std::string& search_string, bool force_filter);
+	void onGearMenuClick();
+	void onSortingMenuClick();
 
 	LLTeleportHistoryPanel*	mHistoryPanel;
 	LLFilterEditor*			mFilterEditor;
+	LLMenuButton*				mGearMenuButton;
+	LLMenuButton*				mSortingMenuButton;
 };
 
 #endif // FS_FLOATERTELEPORTHISTORY_H

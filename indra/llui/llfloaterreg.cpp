@@ -75,6 +75,12 @@ void LLFloaterReg::addWithFileCallback(const std::string& name, const LLFloaterF
 // [/SL:KB]
 
 //static
+bool LLFloaterReg::isRegistered(const std::string& name)
+{
+    return sBuildMap.find(name) != sBuildMap.end();
+}
+
+//static
 LLFloater* LLFloaterReg::getLastFloaterInGroup(const std::string& name)
 {
 	const std::string& groupname = sGroupMap[name];

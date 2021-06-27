@@ -27,7 +27,6 @@
 				<text name="login_page_text">
 					Страница входа:
 				</text>
-				<button label="Сохранить" name="save_grid" />
 				<text name="helper_uri_text">
 					URI помощи:
 				</text>

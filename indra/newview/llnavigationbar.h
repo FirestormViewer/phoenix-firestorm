@@ -137,6 +137,7 @@ private:
 	//void onHomeButtonClicked();
 	void onForwardButtonClicked(LLUICtrl* ctrl);
 	void onHomeButtonClicked(LLUICtrl* ctrl);
+	void onLandmarksButtonClicked();
 	void onLocationSelection();
 	void onLocationPrearrange(const LLSD& data);
 	void onSearchCommit();
@@ -173,6 +174,7 @@ private:
 	LLPullButton*				mBtnBack;
 	LLPullButton*				mBtnForward;
 	LLButton*					mBtnHome;
+	LLButton*					mBtnLandmarks;
 	LLSearchComboBox*			mSearchComboBox;
 	LLLocationInputCtrl*		mCmbLocation;
 	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control

@@ -92,6 +92,8 @@
 		Вода отражает:
 	</text>
 	<combo_box name="Reflections">
+		<combo_box.item label="Нет; непрозрачно" name="-2"/>
+		<combo_box.item label="Нет; прозрачно" name="-1"/>
 		<combo_box.item label="Минимум" name="0"/>
 		<combo_box.item label="Ландшафт и деревья" name="1"/>
 		<combo_box.item label="Все статичные объекты" name="2"/>

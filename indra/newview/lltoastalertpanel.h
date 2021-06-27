@@ -82,9 +82,16 @@ private:
 
 	struct ButtonData
 	{
+		ButtonData()
+		// <FS:Zi> Linux compile fix
+		// : mWidth(0)
+		: mWidth(0), mButton(nullptr)
+		{}
+		
 		LLButton* mButton;
 		std::string mURL;
 		U32 mURLExternal;
+		S32 mWidth;
 	};
 	std::vector<ButtonData> mButtonData;
 
