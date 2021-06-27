@@ -9,6 +9,7 @@
 Obiekty: [NUM_OBJECTS], primy: [NUM_PRIMS]
 
 Strony: [NUM_FACES]
+Widoczne: [NUM_VISIBLE_FACES]
 Wierzchołki: [NUM_VERTICES]
 Trójkąty: [NUM_TRIANGLES]
 Złożoność: [COMPLEXITY]

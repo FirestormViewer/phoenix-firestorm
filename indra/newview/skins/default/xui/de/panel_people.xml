@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="Leute" name="people_panel">
-	<string name="no_recent_people" value="Hier sind keine Leute. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
+	<string name="no_recent_people" value="Hier sind keine Leute."/>
 	<string name="no_filtered_recent_people" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
 	<string name="no_one_near" value="Es ist niemand in der Nähe. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
 	<string name="no_one_filtered_near" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
 	<string name="no_friends_online" value="Keine Freunde online"/>
 	<string name="no_friends" value="Keine Freunde"/>
 	<string name="no_friends_msg">
-		Verwenden Sie die [secondlife:///app/search/people Suche], um Freunde zu finden. Oder klicken Sie mit rechts auf einen Einwohner und fügen Sie diesen als Freund hinzu.
-Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
+		Um jemanden als Freund hinzuzufügen, klicken Sie mit rechts auf deren Avatar oder Namen.
+
+Sie suchen nach Orten mit mehr Leuten?
+
+[secondlife:///app/floater/destinations Ziele] enthält Orte, die vom Grid-Betreiber ausgewählt wurden.
+
+[secondlife:///app/search/ Suche] lässt Sie das Grid nach bestimmten Schlüsselwörtern durchsuchen.
 	</string>
 	<string name="no_filtered_friends_msg">
 		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche].
 	</string>
 	<string name="no_filtered_groups_msg" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/groups/[SEARCH_TERM] Suche]."/>
-	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche]."/>
+	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche].">
+		Sie sind kein Mitglied einer Gruppe.
+
+Lernen Sie über [https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ Gruppen].
+	</string>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
 	<string name="GroupCountWithInfo" value="Du gehörst zu [COUNT] Gruppen, und kannst [REMAINING] weiteren beitreten. [secondlife:/// Erhöhe dein Limit]"/>

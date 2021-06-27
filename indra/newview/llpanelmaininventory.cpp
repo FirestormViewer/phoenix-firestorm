@@ -125,6 +125,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	  mSavedFolderState(NULL),
 	  mFilterText(""),
 	  mMenuGearDefault(NULL),
+	  mMenuVisibility(NULL),
 	  mMenuAddHandle(),
 	  mNeedUploadCost(true),
 	  mSearchTypeCombo(NULL) // <FS:Ansariel> Properly initialize this
@@ -316,6 +317,18 @@ BOOL LLPanelMainInventory::postBuild()
 				// </FS:Ansariel>
 			}
 		}
+		if(mActivePanel)
+		{
+			if(savedFilterState.has(mActivePanel->getFilter().getName()))
+			{
+				LLSD items = savedFilterState.get(mActivePanel->getFilter().getName());
+				LLInventoryFilter::Params p;
+				LLParamSDParser parser;
+				parser.readSD(items, p);
+				mActivePanel->getFilter().setSearchVisibilityTypes(p);
+			}
+		}
+
 	}
 
 	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
@@ -330,6 +343,7 @@ BOOL LLPanelMainInventory::postBuild()
 	// </FS:Zi> Filter dropdown
 
 	mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
+	mVisibilityMenuButton = getChild<LLMenuButton>("options_visibility_btn");
 
 	initListCommandsHandlers();
 	const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
@@ -354,6 +368,9 @@ BOOL LLPanelMainInventory::postBuild()
 LLPanelMainInventory::~LLPanelMainInventory( void )
 {
 	// Save the filters state.
+	// Some params types cannot be saved this way
+	// for example, LLParamSDParser doesn't know about U64,
+	// so some FilterOps params should be revised.
 	LLSD filterRoot;
 	LLInventoryPanel* all_items_panel = getChild<LLInventoryPanel>(ALL_ITEMS);
 	if (all_items_panel)
@@ -1612,6 +1629,10 @@ void LLPanelMainInventory::initListCommandsHandlers()
 	LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mMenuAddHandle = menu->getHandle();
 
+	mMenuVisibility = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_search_visibility.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	mVisibilityMenuButton->setMenu(mMenuVisibility);
+	mVisibilityMenuButton->setMenuPosition(LLMenuButton::MP_BOTTOM_LEFT);
+
 	// Update the trash button when selected item(s) get worn or taken off.
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&LLPanelMainInventory::updateListCommands, this));
 }
@@ -1809,6 +1830,21 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		}
 		LLFloaterReg::showInstance("linkreplace", params);
 	}
+
+	if (command_name == "toggle_search_trash")
+	{
+		mActivePanel->getFilter().toggleSearchVisibilityTrash();
+	}
+
+	if (command_name == "toggle_search_library")
+	{
+		mActivePanel->getFilter().toggleSearchVisibilityLibrary();
+	}
+
+	if (command_name == "include_links")
+	{
+		mActivePanel->getFilter().toggleSearchVisibilityLinks();
+	}		
 }
 
 void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
@@ -1962,6 +1998,21 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 	{
 		return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
 	}
+
+	if (command_name == "toggle_search_trash")
+	{
+		return (mActivePanel->getFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_TRASH) != 0;
+	}
+
+	if (command_name == "toggle_search_library")
+	{
+		return (mActivePanel->getFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LIBRARY) != 0;
+	}
+
+	if (command_name == "include_links")
+	{
+		return (mActivePanel->getFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LINKS) != 0;	
+	}	
 
 	if (command_name == "add_objects_on_double_click")
 	{

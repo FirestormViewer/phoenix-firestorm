@@ -1,5 +1,5 @@
 /** 
- * @file llsaveoutfitcombobtn.h
+ * @file llflyoutcombobtn.h
  * @brief Represents outfit save/save as combo button.
  *
  * $LicenseInfo:firstyear=2010&license=viewerlgpl$

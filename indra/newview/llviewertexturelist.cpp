@@ -259,6 +259,7 @@ LLViewerTextureList::~LLViewerTextureList()
 
 void LLViewerTextureList::shutdown()
 {
+	LL_WARNS() << "Shutdown called" << LL_ENDL;
 	// clear out preloads
 	mImagePreloads.clear();
 

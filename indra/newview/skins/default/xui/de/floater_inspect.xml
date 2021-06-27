@@ -12,6 +12,7 @@
 [NUM_OBJECTS] Objekte, [NUM_PRIMS] Prims
 
 Flächen: [NUM_FACES]
+Sichtbar: [NUM_VISIBLE_FACES]
 Vertices: [NUM_VERTICES]
 Dreiecke: [NUM_TRIANGLES]
 Komplex.: [COMPLEXITY]

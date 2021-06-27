@@ -100,6 +100,7 @@
 		<combo_box.item value="filter_separator" label="------------" />
 		<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
 	</combo_box>
+	<menu_button name="options_visibility_btn" tool_tip="Sichtbarkeitseinstellungen für Suchergebnisse anzeigen"/>
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="Inventar" name="All Items"/>
 		<recent_inventory_panel label="Aktuell" name="Recent Items"/>

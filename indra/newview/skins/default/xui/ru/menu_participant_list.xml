@@ -15,11 +15,12 @@
 	<menu_item_check label="Заблокировать текст" name="MuteText"/>
 	<context_menu label="Опции модератора" name="Moderator Options">
 		<menu_item_call label="Выкинуть из группы" name="EjectSelected"/>
-		<menu_item_check label="Разрешить текстовый чат" name="AllowTextChat"/>
-		<menu_item_call label="Отключение этого участника" name="ModerateVoiceMuteSelected"/>
-		<menu_item_call label="Отменить отключение участника" name="ModerateVoiceUnMuteSelected"/>
-		<menu_item_call label="Отключение всех" name="ModerateVoiceMute"/>
-		<menu_item_call label="Отменить отключение всех" name="ModerateVoiceUnmute"/>
+		<menu_item_call label="Разрешить текстовый чат" name="AllowTextChat"/>
+		<menu_item_call label="Запретить текстовый чат" name="ForbidTextChat"/>
+		<menu_item_call label="Запретить голосовой чат" name="ModerateVoiceMuteSelected"/>
+		<menu_item_call label="Разрешить голосовой чат" name="ModerateVoiceUnMuteSelected"/>
+		<menu_item_call label="Запретить всем голосовой чат" name="ModerateVoiceMute"/>
+		<menu_item_call label="Разрешить всем голосовой чат" name="ModerateVoiceUnmute"/>
 	</context_menu>
 	<menu_item_call label="Забанить" name="BanMember" />
 </context_menu>

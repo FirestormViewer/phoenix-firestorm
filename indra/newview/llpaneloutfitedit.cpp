@@ -58,7 +58,6 @@
 #include "llmenubutton.h"
 #include "llpaneloutfitsinventory.h"
 #include "lluiconstants.h"
-#include "llsaveoutfitcombobtn.h"
 #include "llscrolllistctrl.h"
 #include "lltextbox.h"
 #include "lltoggleablemenu.h"
@@ -84,6 +83,8 @@ const U64 ATTACHMENT_MASK = (1LL << LLInventoryType::IT_ATTACHMENT) | (1LL << LL
 const U64 ALL_ITEMS_MASK = WEARABLE_MASK | ATTACHMENT_MASK;
 
 static const std::string REVERT_BTN("revert_btn");
+static const std::string SAVE_AS_BTN("save_as_btn");
+static const std::string SAVE_BTN("save_btn");
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -569,11 +570,12 @@ BOOL LLPanelOutfitEdit::postBuild()
 	mGearMenu = LLPanelOutfitEditGearMenu::create();
 	mGearMenuBtn->setMenu(mGearMenu);
 
+	getChild<LLButton>(SAVE_BTN)->setCommitCallback(boost::bind(&LLPanelOutfitEdit::saveOutfit, this, false));
+	getChild<LLButton>(SAVE_AS_BTN)->setCommitCallback(boost::bind(&LLPanelOutfitEdit::saveOutfit, this, true));
+
 	// <FS:Ansariel> Show avatar complexity in appearance floater
 	mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
 	mAvatarComplexityAddingLabel = getChild<LLTextBox>("avatar_complexity_adding_label");
-
-	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this));
 
 	onOutfitChanging(gAgentWearables.isCOFChangeInProgress());
 	return TRUE;
@@ -1254,10 +1256,8 @@ void LLPanelOutfitEdit::updateVerbs()
 	bool outfit_locked = LLAppearanceMgr::getInstance()->isOutfitLocked();
 	bool has_baseoutfit = LLAppearanceMgr::getInstance()->getBaseOutfitUUID().notNull();
 
-	mSaveComboBtn->setSaveBtnEnabled(!outfit_locked && outfit_is_dirty);
+	getChildView(SAVE_BTN)->setEnabled(!outfit_locked && outfit_is_dirty);
 	getChildView(REVERT_BTN)->setEnabled(outfit_is_dirty && has_baseoutfit);
-
-	mSaveComboBtn->setMenuItemEnabled("save_outfit", !outfit_locked && outfit_is_dirty);
 
 	mStatus->setText(outfit_is_dirty ? getString("unsaved_changes") : getString("now_editing"));
 
@@ -1442,6 +1442,15 @@ void LLPanelOutfitEdit::saveListSelection()
 		}
 		mInventoryItemsPanel->getRootFolder()->scrollToShowSelection();
 	}
+}
+
+void LLPanelOutfitEdit::saveOutfit(bool as_new)
+{
+	LLPanelOutfitsInventory* panel_outfits_inventory = LLPanelOutfitsInventory::findInstance();
+	if (panel_outfits_inventory)
+	{
+		panel_outfits_inventory->saveOutfit(as_new);
+	} 	
 }
 
 // <FS:Ansariel> Show avatar complexity in appearance floater
