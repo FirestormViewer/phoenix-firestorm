@@ -38,7 +38,6 @@ class LLPanelWearing;
 class LLMenuGL;
 class LLSidepanelAppearance;
 class LLTabContainer;
-class LLSaveOutfitComboBtn;
 
 class LLPanelOutfitsInventory : public LLPanel
 {
@@ -52,6 +51,7 @@ public:
 	
 	void onSearchEdit(const std::string& string);
 	void onSave();
+	void saveOutfit(bool as_new = false);
 	
 	bool onSaveCommit(const LLSD& notification, const LLSD& response);
 
@@ -59,16 +59,14 @@ public:
 
 	static LLPanelOutfitsInventory* findInstance();
 
+	void openApearanceTab(const std::string& tab_name);
+
 protected:
 	void updateVerbs();
 
 private:
 	LLTabContainer*			mAppearanceTabs;
 	std::string 			mFilterSubString;
-// [SL:KB] - Patch: Viewer-Build | Checked: Catznip-6.6
-	std::unique_ptr<LLSaveOutfitComboBtn> mSaveComboBtn;
-// [/SL:KB]
-//	std::auto_ptr<LLSaveOutfitComboBtn> mSaveComboBtn;
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// tab panels                                                                   //
