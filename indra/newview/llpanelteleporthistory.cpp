@@ -1235,6 +1235,12 @@ void LLTeleportHistoryPanel::onGearMenuAction(const LLSD& userdata)
         LLLandmarkActions::getSLURLfromPosGlobal(globalPos,
             boost::bind(&LLTeleportHistoryPanel::gotSLURLCallback, _1));
     }
+    // <FS:Ansariel> FIRE-31025: Clear TP history doesn't work anymore
+    else if ("clear_history" == command_name)
+    {
+        onRemoveSelected();
+    }
+    // </FS:Ansariel>
 }
 
 bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const
