@@ -208,6 +208,13 @@ void LLLandmarksPanel::onShowOnMap()
 		return;
 	}
 
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	// Disable the "Map" button because loading landmark can take some time.
+	// During this time the button is useless. It will be enabled on callback finish
+	// or upon switching to other item.
+	mShowOnMapBtn->setEnabled(FALSE);
+	// </FS:Ansariel>
+
 	doActionOnCurSelectedLandmark(boost::bind(&LLLandmarksPanel::doShowOnMap, this, _1));
 }
 
@@ -293,6 +300,16 @@ void LLLandmarksPanel::updateVerbs()
 	{
 		sRemoveBtn->setEnabled(isActionEnabled("delete") && (isFolderSelected() || isLandmarkSelected()));
 	}
+
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	if (!isTabVisible())
+		return;
+
+	bool landmark_selected = isLandmarkSelected();
+	mTeleportBtn->setEnabled(landmark_selected && isActionEnabled("teleport"));
+	mShowProfile->setEnabled(landmark_selected && isActionEnabled("more_info"));
+	mShowOnMapBtn->setEnabled(landmark_selected && isActionEnabled("show_on_map"));
+	// </FS:Ansariel>
 }
 
 void LLLandmarksPanel::setItemSelected(const LLUUID& obj_id, BOOL take_keyboard_focus)
@@ -1071,6 +1088,7 @@ void LLLandmarksPanel::doShowOnMap(LLLandmark* landmark)
 		LLFloaterReg::showInstance("world_map", "center");
 	}
 
+	mShowOnMapBtn->setEnabled(TRUE); // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
 	mGearLandmarkMenu->setItemEnabled("show_on_map", TRUE);
 }
 

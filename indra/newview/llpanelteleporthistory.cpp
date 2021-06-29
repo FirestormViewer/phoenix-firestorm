@@ -661,6 +661,22 @@ void LLTeleportHistoryPanel::updateVerbs()
 	{
 		sRemoveBtn->setEnabled(true);
 	}
+
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	if (!mLastSelectedFlatlList)
+	{
+		mTeleportBtn->setEnabled(false);
+		mShowProfile->setEnabled(false);
+		mShowOnMapBtn->setEnabled(false);
+		return;
+	}
+
+	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+
+	mTeleportBtn->setEnabled(NULL != itemp);
+	mShowProfile->setEnabled(NULL != itemp);
+	mShowOnMapBtn->setEnabled(NULL != itemp);
+	// </FS:Ansariel>
 }
 
 // virtual
