@@ -32,7 +32,7 @@
      top="1"
      left="4"
      name="combo_sets"
-     width="204" />
+     width="190" />
     <button
      top_delta="0"
      follows="top|right"
@@ -65,7 +65,7 @@
      width="20" />
 	<avatar_list
      left="4"
-     right="-85"
+     right="-99"
      top="20"
      bottom="-3"
 	 follows="all"
@@ -86,10 +86,10 @@
 	 layout="topleft"
 	 height="22"
 	 label="Add..."
-	 left_delta="270"
+	 left_delta="256"
 	 name="add_btn"
 	 tool_tip="Add an avatar to the current contact set"
-	 width="80" />
+	 width="94" />
     <button
      top_pad="3"
      follows="top|right"
@@ -98,7 +98,7 @@
      label="Remove..."
      name="remove_btn"
      tool_tip="Remove this avatar from the current contact set"
-     width="80" />
+     width="94" />
 	<button
 	 top_pad="3"
 	 follows="top|right"
@@ -107,7 +107,7 @@
 	 label="Profile..."
 	 name="profile_btn"
 	 tool_tip="Open this avatar's profile"
-	 width="80" />
+	 width="94" />
     <button
      top_pad="3"
      follows="top|right"
@@ -116,7 +116,7 @@
      label="IM..."
      name="start_im_btn"
      tool_tip="Begin an instant message conversation"
-     width="80" />
+     width="94" />
 	<button
 	 top_pad="3"
 	 follows="top|right"
@@ -125,7 +125,7 @@
 	 label="Teleport..."
 	 name="offer_teleport_btn"
 	 tool_tip="Offer a teleport to your current location"
-	 width="80" />
+	 width="94" />
 	<button
 	 top_pad="10"
 	 follows="top|right"
@@ -134,7 +134,7 @@
 	 label="Set Alias..."
 	 name="set_pseudonym_btn"
 	 tool_tip="Give this avatar a pseudonym"
-	 width="80" />
+	 width="94" />
 	<button
 	 top_pad="3"
 	 follows="top|right"
@@ -143,7 +143,7 @@
 	 label="Rem Alias..."
 	 name="remove_pseudonym_btn"
 	 tool_tip="Remove an avatar's pseudonym"
-	 width="80" />
+	 width="94" />
 	<button
 	 top_pad="3"
 	 follows="top|right"
@@ -152,7 +152,7 @@
 	 label="Rem DN..."
 	 name="remove_displayname_btn"
 	 tool_tip="Remove an avatar's display name"
-	 width="80" />
+	 width="94" />
     <text
      top_pad="10"
      left_delta="2"
@@ -160,7 +160,7 @@
      layout="topleft"
      height="20"
      name="member_count"
-     width="80">
+     width="94">
     Members: [COUNT]
     </text>
 </panel>
