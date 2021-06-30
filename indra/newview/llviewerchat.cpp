@@ -66,6 +66,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
 	{
 		switch(chat.mSourceType)
 		{
+			case CHAT_SOURCE_TELEPORT: // <FS:Ansariel> FIRE-31034: New teleport info system message ignoring system chat color
 			case CHAT_SOURCE_SYSTEM:
 				r_color = LLUIColorTable::instance().getColor("SystemChatColor"); 
 				break;
