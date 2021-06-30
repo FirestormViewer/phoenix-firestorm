@@ -581,7 +581,8 @@ void send_viewer_stats(bool include_preferences)
 	fail["invalid"] = (S32) gMessageSystem->mInvalidOnCircuitPackets;
 	fail["missing_updater"] = (S32) LLAppViewer::instance()->isUpdaterMissing();
 
-	body["ui"] = LLUIUsage::instance().asLLSD();
+	// <FS:Ansariel> We do not need to send UI usage stats according to Jess...
+	//body["ui"] = LLUIUsage::instance().asLLSD();
 		
 	body["stats"]["voice"] = LLVoiceVivoxStats::getInstance()->read();
 
