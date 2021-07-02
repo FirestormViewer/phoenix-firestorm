@@ -13,7 +13,4 @@
 		<accordion_tab name="1_month_and_older" title="1 месяц назад и раньше"/>
 		<accordion_tab name="6_months_and_older" title="6 месяцев назад и раньше"/>
 	</accordion>
-	<panel name="bottom_panel">
-		<menu_button name="gear_btn" tool_tip="Показать дополнительные параметры"/>
-	</panel>
 </panel>

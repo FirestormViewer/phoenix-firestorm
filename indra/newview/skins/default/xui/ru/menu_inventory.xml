@@ -115,8 +115,8 @@
 	<menu_item_call label="Надеть" name="Wearable And Object Wear"/>
 	<menu_item_call label="Найти в общем виде" name="Show in Main Panel"/>
 	<menu_item_call label="Добавить" name="Wearable Add"/>
-	<menu label="Прикрепить" name="Attach To"/>
-	<menu label="Прикрепить к HUD" name="Attach To HUD"/>
+	<menu label="Прикрепить к" name="Attach To"/>
+	<menu label="Прикрепить на экран" name="Attach To HUD"/>
 	<menu_item_call label="Коснуться" name="Attachment Touch"/>
 	<menu_item_call label="Редактировать" name="Wearable Edit"/>
 	<menu_item_call label="Обновить текстуру" name="Texture Refresh Attachment" />
