@@ -1,0 +1,26 @@
+LLWearable version 22
+RASL - Eyes - Spring Green
+
+	permissions 0
+	{
+		base_mask	00082000
+		owner_mask	00082000
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	ef5ac61a-72b0-48a6-843f-adb506d7ba86
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	ef5ac61a-72b0-48a6-843f-adb506d7ba86
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 3
+parameters 2
+98 1
+99 0
+textures 1
+3 865e5c74-5e50-1036-58d2-1af9e2a50388

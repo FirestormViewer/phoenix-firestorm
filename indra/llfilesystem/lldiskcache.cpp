@@ -321,6 +321,27 @@ const std::string LLDiskCache::getCacheInfo()
     return cache_info.str();
 }
 
+// <FS:Beq>
+void LLDiskCache::prepopulateCacheWithStatic(const std::string& from_folder)
+{
+    if(gDirUtilp->fileExists(from_folder))
+    {
+        auto assets_to_copy = gDirUtilp->getFilesInDir(from_folder);
+        for(auto from_asset_file : assets_to_copy)
+        {
+            LL_INFOS("LLDiskCache") << "Copying static asset " << from_asset_file << " to cache from " << from_folder << LL_ENDL;
+            from_asset_file = from_folder + gDirUtilp->getDirDelimiter() + from_asset_file;
+            // we store static assets as UUID.asset_type the asset_type is not used in the current simple cache format  
+            auto to_asset_file = metaDataToFilepath(gDirUtilp->getBaseFileName(from_asset_file, true), LLAssetType::AT_UNKNOWN, std::string());
+            if( LLFile::copy(from_asset_file, to_asset_file) != true )
+            {
+                LL_WARNS("LLDiskCache") << "Failed to copy " << from_asset_file << " to " << to_asset_file << LL_ENDL;
+            }
+        }
+    }
+}
+// </FS:Beq>
+
 void LLDiskCache::clearCache()
 {
     /**
@@ -356,6 +377,16 @@ void LLDiskCache::clearCache()
                 }
             }
         }
+// <FS:Beq> add static assets into the new cache after clear
+        // For everything we populate FS specific assets to allow future updates
+    	auto static_assets_folder = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "fs_static_assets");
+        prepopulateCacheWithStatic(static_assets_folder);
+#ifdef OPENSIM
+        // For OPENSIM we need to populate the static assets
+    	static_assets_folder = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "static_assets");
+        prepopulateCacheWithStatic(static_assets_folder);
+#endif    
+// </FS:Beq>
     }
 }
 
