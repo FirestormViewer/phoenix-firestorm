@@ -131,6 +131,11 @@ class LLDiskCache :
          */
         void purge();
 
+        // <FS:Beq>
+        // copy from distribution into cache to replace static content
+        void LLDiskCache::prepopulateCacheWithStatic(const std::string& from_folder);
+        // </FS:Beq>
+
         /**
          * Clear the cache by removing all the files in the specified cache
          * directory individually. Only the files that contain a prefix defined
