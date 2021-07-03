@@ -15,9 +15,7 @@
 		<check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。" />
 		<check_box label="スクリプトが通信を行う時パーティクルを発生" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。" />
 		<check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。" />
-		<!--
-
-		-->
+		<check_box label="デフォルトの Bento アニメーション" name="play_default_bento_idle_animation_toggle" tool_tip="ここにチェックを入れると、デフォルトのプライオリティ０の Bento アニメーションを再生し、他の Bento アニメーションが動作していない時に、手、羽根、口、尻尾などの動きを停止、自然な状態にします。" />
 		<check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
 		<check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
 		<!-- 
@@ -33,6 +31,8 @@
 			<combo_box.item label="フライトアシスト＝中" name="flight_moderate"/>
 			<combo_box.item label="フライトアシスト＝強" name="flight_strong"/>
 		</combo_box>
+		<slider name="manual_environment_change_transition_period" label="環境遷移時間:" tool_tip="手動で環境を変更した場合に、現在の設定から変化していく時間を秒単位で設定します。０にすると瞬時に切り替わるようになります。" />
+		<check_box name="EnvironmentPersistAcrossLogin" label="セッションを越えて環境設定を保持" tool_tip="次回ログイン時にも現在の環境設定を保持するようにします。"/>
 		
     </panel>
 
@@ -235,16 +235,18 @@
 			スクリプトエディタのフォント:
 		</text>
 		<combo_box name="FSScriptingFontName" tool_tip="LSLスクリプトエディタで使用するフォントの名前">
-             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
-             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
-        </combo_box>
-        <combo_box name="FSScriptingFontSize" tool_tip="LSLスクリプトエディタで使用するフォントの大きさ">
-             <combo_item name="Monospace" label="Monospace"/>
-             <combo_item name="Scripting" label="Scripting"/>
-             <combo_item name="Small" label="小"/>
-             <combo_item name="Medium" label="中"/>
-             <combo_item name="Large" label="大"/>
-        </combo_box>
+			<combo_item name="Monospace" value="Monospace" label="Monospace"/>
+			<combo_item name="Scripting" value="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
+		</combo_box>
+		<combo_box name="FSScriptingFontSize" tool_tip="LSLスクリプトエディタで使用するフォントの大きさ">
+			<combo_item name="Monospace" label="Monospace"/>
+			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item name="Small" label="小"/>
+			<combo_item name="Medium" label="中"/>
+			<combo_item name="Large" label="大"/>
+		</combo_box>
 		<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox" />
 		<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox" />
 		<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox" />

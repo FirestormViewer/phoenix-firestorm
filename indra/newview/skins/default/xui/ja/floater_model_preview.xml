@@ -10,6 +10,9 @@
 	<string name="status_material_mismatch">
 		エラー：モデルの材料は参考モデルのサブセットではありません。
 	</string>
+	<string name="status_lod_model_mismatch">
+		エラー：LOD モデルにペアレントがありません。
+	</string>
 	<string name="status_reading_file">
 		ローディング...
 	</string>
@@ -61,6 +64,18 @@
 	<string name="phys_status_vertex_limit_exceeded">
 		一部の物理的な外殻構造が頂点の制限を超えます。
 	</string>
+	<string name="phys_status_hull_limit_exceeded">
+		いくつかのモデルが外殻構造の制限（256）を越えています。もっと単純化して下さい。
+	</string>
+	<string name="phys_status_degenerate_triangles">
+		物理メッシュが細かすぎます。細かく薄い三角形を除去してみて下さい。（プレビューをご参照下さい。）
+	</string>
+	<string name="phys_status_no_havok">
+		このバージョンは Havok 対応ではありません。従ってセカンドライフに物理アップロードするのはお勧めできません。その結果は予測不可能なものとなります。
+	</string>
+	<string name="phys_status_unknown_error">
+		不明のエラーが発生しました。
+	</string>
 	<string name="layer_all">
 		全て
 	</string>
@@ -73,6 +88,24 @@
 	<string name="tbd">
 		未定
 	</string>
+	
+	<!-- Warnings and info from model loader-->
+	<string name="TooManyJoint">
+		ジョイントが多すぎてスキニングが無効化されました： [JOINTS], 最大値：[MAX]
+	</string>
+	<string name="UnrecognizedJoint">
+		不明なジョイント [NAME] に連結されました
+	</string>
+	<string name="UnknownJoints">
+		[COUNT] 個の不明なジョイントによりスキニングが無効化されました
+	</string>
+	<string name="ModelLoaded">
+		モデル [MODEL_NAME] がロードされました
+	</string>
+	<string name="IncompleteTC">
+		テクスチャの座標データが不完全です。
+	</string>
+	
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
 			<text name="name_label">
@@ -173,11 +206,20 @@
 						<combo_item name="physics_lowest">
 							最低
 						</combo_item>
+						<combo_item name="physics_cube">
+							立方体
+						</combo_item>
+						<combo_item name="physics_hex">
+							六角形
+						</combo_item>
+						<combo_item name="physics_ud">
+							ユーザー定義
+						</combo_item>
 						<combo_item name="load_from_file">
 							ファイルから
 						</combo_item>
 					</combo_box>
-					<button label="参照" name="physics_browse"/>
+					<button label="参照..." name="physics_browse"/>
 				</panel>
 				<panel name="physics analysis">
 					<text name="method_label">
@@ -243,29 +285,86 @@
 					[X] X [Y] X [Z]
 				</text>
 				<check_box label="テクスチャを含む" name="upload_textures"/>
+			</panel>
+			<panel label="オーバーライド" name="rigging_panel" title="リグ">
+				<check_box label="スキンの重さを含む" name="upload_skin" />
+				<check_box label="ジョイントポジションを含む" name="upload_joints" />
+				<check_box label="ジョイント位置が定義されている場合、スケールをロック" name="lock_scale_if_joint_position" />
+				<!--
 				<text name="include_label">
 					アバターモデル専用：
 				</text>
-				<check_box label="スキンの重さを含む" name="upload_skin"/>
-				<check_box label="ジョイントポジションを含む" name="upload_joints"/>
-				<check_box label="ジョイント位置が定義されている場合、スケールをロック" name="lock_scale_if_joint_position"/>
 				<check_box label="アバターのシェイプを変形する" name="deform" />
 				<radio_group name="deform_base">
 					<radio_item label="男性" name="0" />
 					<radio_item label="女性" name="1" />
 					<radio_item label="男性（痩せぎす）" name="2" />
 				</radio_group>
+				-->
 				<text name="pelvis_offset_label">
 					Z オフセット（アバターを上下調整）：
 				</text>
-				<spinner name="pelvis_offset" value="0.0"/>
+				<spinner name="pelvis_offset" />
+				<text name="skin_too_many_joints">
+					スキニングされたジョイントが多すぎます
+				</text>
+				<text name="skin_unknown_joint">
+					モデルに不明のジョイントがあります
+				</text>
+				<text name="joints_descr">
+					ジョイント：
+				</text>
+				<text name="conflicts_description">
+					[CONFLICTS] 件のコンフリクトが [JOINTS_COUNT] 個のジョイントで発生しています
+				</text>
+				<text name="pos_overrides_descr">
+					次のジョイントでポジションのオーバーライドが発生しています：'[JOINT]':
+				</text>
+			</panel>
+			<panel label="ログ" name="logs_panel">
+				<!-- FS:Beq Add control for vberbose logging -->
+				<check_box label="詳細なログを表示" name="verbose_logging" />
+				<!-- FS:Beq/ -->
+				<text_editor name="log_text" />
+			</panel>
+			<panel label="プレビュー設定" name="mesh_preview_settings_panel">
+				<text name="mesh_upload_behaviour_label">
+					モデルアップロードの挙動設定：
+				</text>
+				<check_box label="重さを自動設定" tool_tip="自動的にメッシュの重さを、リグ情報と共に有効化します" name="mesh_preview_auto_weights"/>
+				<check_box label="重さを自動プレビュー" tool_tip="自動的にメッシュの重さを、リグ情報と共に表示します" name="mesh_preview_auto_show_weights"/>
+				<text name="mesh_preview_ud_preset_label">
+					ユーザー定義プリセットの物理：
+				</text>
+				<line_editor name="ud_physics" tool_tip="物理モデルに使用される単純なコラーダメッシュへのフル・システムパスです。" />
+				<text name="mesh_preview_colors_label">
+					モデルアップロードをプレビューする色：
+				</text>
+				<text name="user_label">
+					一般：
+				</text>
+				<color_swatch label="背景" tool_tip="メッシュのアップロードに使用するカンバスの色です" name="mesh_preview_canvas_color"/>
+				<color_swatch label="モデルの縁" tool_tip="メッシュアップローダーでプレビューウィンドウに表示されるモデルの縁の色です" name="mesh_preview_edge_color"/>
+				<color_swatch label="環境の光" tool_tip="プレビューウィンドウ内の環境の光のレベルです。（アニメーションのプレビューなどにも影響します。）" name="preview_ambient_color"/>
+				<text name="physics_settings_label">
+					物理：
+				</text>
+				<color_swatch label="物理的な境界" tool_tip="メッシュアップローダーでプレビューウィンドウに表示される物理的三角形の縁の色です" name="mesh_preview_physics_edge_color"/>
+				<color_swatch label="物理的塗りつぶし" tool_tip="メッシュアップローダーで、プレビューウィンドウに表示される物理モデルの塗りつぶしの色です" name="mesh_preview_physics_fill_color"/>
+				<text name="physics_issues_setting_label">
+					物理的問題：
+				</text>
+				<color_swatch label="不良な三角形の縁" tool_tip="メッシュアップローダーでプレビューウィンドウに表示される三角形の品質を低下させる縁の色です" name="mesh_preview_degenerate_edge_color"/>
+				<color_swatch label="不良な三角形の塗りつぶし" tool_tip="メッシュアップローダーでプレビューウィンドウに表示される三角形の品質を低下させる塗りつぶしの色です" name="mesh_degenerate_fill_color"/>
 			</panel>
 		</tab_container>
+
 		<panel name="weights_and_warning_panel">
 			<button label="ウェイトと料金の計算" name="calculate_btn" tool_tip="ウェイトと料金の計算"/>
 			<button label="取り消し" name="cancel_btn"/>
 			<button label="アップロード" name="ok_btn" tool_tip="シミュレーターにアップロード"/>
 			<button label="設定をクリアしてフォームをリセット" name="reset_btn"/>
+			<!-- ========== WEIGHTS ==========-->
 			<text name="upload_fee">
 				アップロード料金：L$ [FEE]
 			</text>
@@ -281,6 +380,62 @@
 			<text name="server_weight">
 				サーバー負荷：[SIM]
 			</text>
+			<!-- =========== Cost breakdown ======== -->
+			<panel name="price_breakdown_panel" width="150">
+				<text name="price_breakdown_title">
+					コスト明細
+				</text>
+				<view_border name="price_breakdown_border" width="140"/>
+				<text name="price_breakdown_labels" left="3" width="100">
+ダウンロード：
+物理効果：
+インスタンス：
+テクスチャ：
+モデル：
+				</text>
+				<text name="price_breakdown">
+					[STREAMING]
+					[PHYSICS]
+					[INSTANCES]
+					[TEXTURES]
+					[MODEL]
+				</text>
+			</panel>
+			<panel name="physics_costs_panel" width="120">
+				<text name="physics_breakdown_title">
+					物理効果のコスト
+				</text>
+				<text name="physics_breakdown_labels">
+					基本外殻構造：
+					メッシュ：
+					解析結果：
+				</text>
+			</panel>
+			<!-- FS:Beq relocate the preview controls to be sensible -->
+			<panel name="preview_controls_panel" width="260" left_pad="62">
+				<panel name="preview_controls_inner_panel">
+					<text name="preview_controls_title">
+						プレビュー制御
+					</text>
+					<combo_box name="preview_lod_combo" tool_tip="プレビュー表示の LOD 設定">
+						<combo_item name="high">   高   </combo_item>
+						<combo_item name="medium"> 中 </combo_item>
+						<combo_item name="low">    低    </combo_item>
+						<combo_item name="lowest"> 最低 </combo_item>
+					</combo_box>
+				</panel>
+				<check_box label="稜" name="show_edges" />
+				<check_box label="テクスチャ" name="show_textures" />
+				<check_box label="UV ガイド" name="show_uv_guide" />
+				<check_box label="物理効果s" name="show_physics" />
+				<text name="exploder_label">
+					プレビュースプレッド：
+				</text>
+				<check_box label="スキンの重さ" name="show_skin_weight" />
+				<check_box label="ジョイント" name="show_joint_positions" />
+				<check_box label="ジョイント位置のオーバーライド" name="show_joint_overrides" />
+			</panel>
+			<!-- ========== NOTE MESSAGE ========== -->
 			<text name="warning_title">
 				ご注意：
 			</text>
@@ -291,35 +446,10 @@
 				[STATUS]
 			</text>
 		</panel>
+		<!-- /FS:Beq -->
 	</panel>
 	<text name="lod_label">
 		プレビュー：
 	</text>
-	<panel name="right_panel">
-		<combo_box name="preview_lod_combo" tool_tip="プレビュー表示の LOD 設定">
-			<combo_item name="high">
-				高
-			</combo_item>
-			<combo_item name="medium">
-				中
-			</combo_item>
-			<combo_item name="low">
-				低
-			</combo_item>
-			<combo_item name="lowest">
-				最低
-			</combo_item>
-		</combo_box>
-		<text name="label_display">
-			ディスプレイ...
-		</text>
-		<check_box label="稜" name="show_edges"/>
-		<check_box label="物理効果" name="show_physics"/>
-		<check_box label="テクスチャ" name="show_textures"/>
-		<check_box label="スキンの重さ" name="show_skin_weight"/>
-		<check_box label="ジョイント" name="show_joint_positions"/>
-		<text name="physics_explode_label">
-			プレビュースプレッド：
-		</text>
-	</panel>
+	<panel name="preview_panel" />
 </floater>

@@ -92,6 +92,7 @@
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			（再起動が必要）
 		</text>
+		<check_box label="会話ウィンドウと旧式の通知リストを自動リサイズ" name="FSLegacyNotificationWellAutoResize" tool_tip="ここにチェックを入れると、会話ウィンドウや旧式の通知リストに項目が追加になったり削除されたりするのに合わせてサイズを自動調整します。" />
 		<check_box label="Linuxで既に使用されているショートカットを再配置（Linuxのみ、再起動が必要）" name="FSRemapLinuxShortcuts" tool_tip="ここにチェックを入れるとLinux OSで既に使用されているショートカット（Ctrl-Alt-Fx など）を再配置します。" />
 		<check_box label="統計ウィンドウにフォーカスが移動しないようにする" name="FSStatisticsNoFocus" tool_tip="ここにチェックを入れると他のウィンドウを閉じた時に、統計ウィンドウにフォーカスが遷移しないようにすることができます（但し、アイテムの表示レイアウトを変更したような場合はチェックを入れてもフォーカスが移ります）。" />
 		<slider label="ボタンの点滅回数：" tool_tip="何回ボタンを点滅させるかを設定します。" name="ButtonsFlashCount" />
@@ -117,6 +118,20 @@
 		<check_box label="メニュー検索を表示" name="show_search_menu_check"/>
 		<check_box label="リンデンドルの残高を表示" name="FSShowCurrencyBalanceInStatusbar" />
 		<check_box label="ステータスバーのメニューアイコンにマウスをロールオーバーでポップアップを表示" name="FSStatusBarMenuButtonPopupOnRollover" />
+		<text name="statusbar_timeformat_textbox">
+			 時刻の形式:
+		</text>
+		<combo_box name="FSStatusBarTimeFormat" tool_tip="メインメニューバーで使用する時刻形式を選択します。">
+			<combo_box.item label="言語デフォルト" name="Language" />
+			<combo_box.item label="12 時間制" name="12_Hour" />
+			<combo_box.item label="12 時間制：秒あり" name="12_Hour_Seconds" />
+			<combo_box.item label="12 時間制：タイムゾーンあり" name="12_Hour_TZ" />
+			<combo_box.item label="12 時間制：秒・タイムゾーンあり" name="12_Hour_TZ_Seconds" />
+			<combo_box.item label="24 時間制" name="24_Hour" />
+			<combo_box.item label="24 時間制：秒あり" name="24_Hour_Seconds" />
+			<combo_box.item label="24 時間制：タイムゾーンあり" name="24_Hour_TZ" />
+			<combo_box.item label="24 時間制：秒・タイムゾーンあり" name="24_Hour_TZ_Seconds" />
+		</combo_box>
 		
 		<text name="navfav_textbox">
 			ナビゲーション＆お気に入りバー：
@@ -136,6 +151,7 @@
 		<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックする時に、無視リストが自動的に開かないようにします。" />
 		<check_box label="「コミュニケーション」メニューの「フレンド」と「所属グループ」を[SHORT_VIEWER_GENERATION]形式のウィンドウで開く" name="FSUseV2Friends" tool_tip="ここにチェックを入れると、「フレンド」や「所属グループ」を「人」パネルで開くようになります。チェックを入れない場合は、「連絡先」パネルで開きます。"/>
 		<check_box label="古いタイプのオブジェクト・プロパティを使用" name="FSUseLegacyObjectProperties" tool_tip="ここにチェックを入れると、オブジェクトのプロパティを開く時に、古いタイプのオブジェクト・プロパティが使用されます。"/>
+		<check_box label="小さいカメラウィンドウを使用" name="FSUseSmallCameraFloater" tool_tip="ここにチェックを入れると、旧式の、プリセットコントロールのない小さなカメラウィンドウが利用できるようになります。" />
 		<text name="standalone_textbox">
 			次の項目に独立したウィンドウを使用:
 		</text>

@@ -4,11 +4,11 @@
 
 	<tab_container name="tabs">
 	
-		<panel name="EnvironmentTab" label="WindLight">
+		<panel name="EnvironmentTab" label="自然環境">
 
 			<panel name="PT_WL_Settings">
 				<text name="T_WL_Settings" >
-					Windlight 設定
+					自然環境設定
 				</text>
 			</panel>
 
@@ -17,19 +17,19 @@
 			</panel>
 
 			<panel name="P_WL_Sky_Water">
-				<text name="WL Sky">
-					WLの空
+				<text name="WL Sky" tool_tip="空の事前設定です。">
+					空
 				</text>
 				<combo_box name="WLPresetsCombo" />
 				<button name="WLPrevPreset" />
 				<button name="WLNextPreset" />
-				<text name="WL Water" tool_tip="WindLightの水の事前設定です。">
-					WLの水
+				<text name="WL Water" tool_tip="水の事前設定です。">
+					水
 				</text>
 				<combo_box name="WaterPresetsCombo" />
 				<button name="WWPrevPreset" />
 				<button name="WWNextPreset" />
-				<text name="Day Cycle" tool_tip="WindLightのデイサイクルの事前設定です。">
+				<text name="Day Cycle" tool_tip="デイサイクルの事前設定です。">
 					デイサイクル
 				</text>
 				<combo_box name="DCPresetsCombo" />
@@ -40,15 +40,17 @@
 				<button label="雲を停止" name="PauseClouds" tool_tip="雲のアニメーションを停止します。" />
 			</panel>
 			
+			<!--
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="その日の時間を変更します。※注意！　この設定は通常、WindLightの事前設定を初期設定に戻します。特定の事前設定で太陽の位置を変更したい場合は、下のメニューにある「新しい空の事前設定」または「空の事前設定を編集」を選択して下さい。" />
 				<multi_slider name="WLSunPos" tool_tip="この機能は必ずしも正確に機能しない場合があります。もし調整が難しいようでしたら、「新しい空の事前設定」または「空の事前設定を編集」をご利用下さい。" />
 				<button name="ResetToRegionDefault" tool_tip="WindLightのオプションを地域のデフォルトにリセットします。" />
 			</panel>
+			-->
 
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
-					WindLight クィック設定
+					クィック自然環境設定
 				</text>
 				<view_border name="horiz_separator1" />
 				<button name="Sunrise" label="日の出" />
@@ -243,6 +245,7 @@
 			<panel name="P_DoF_Settings">
 				<check_box label="被写界深度（DOF）を有効にする" name="UseDepthofField" tool_tip="この設定は「写真の焦点が合っているように見える被写体側の距離の範囲」（Wikipedia）を決める「被写界深度」を決定するものです。この機能を無効にするとフレームレートのスピードが向上します。もしこの機能を有効にできない場合は、「光と影」タブの「高度な照明モデル」を有効にして下さい。" />
 				<check_box label="水中でも被写界深度（DOF）を有効にする" tool_tip="通常は、上のチェックボックスにチェックが入っている場合でも、被写界深度（DOF）は無効になります。この設定はその制約を取り払うものです。注意しておきたいのは、水中にいる時は、狙っている対象を Alt クリックして、手動でカメラのフォーカスをし直さないといけなくなる場合があるということです。" name="UseDoFUnderwater" />
+				<check_box label="DOF フォーカスがポインターに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（DOF）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。" />
 				<check_box label="現在のビューワ画面の画角（FOV）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（FOV）を表示します。ビューワの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（FOV）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（FOV）を有しています。画角（FOV）を調整するには、下のスライダーを使用します。画角（FOV）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="MIC_Show_FOV" />
 			</panel>
 
