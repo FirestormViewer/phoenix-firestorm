@@ -344,6 +344,7 @@ void LLDiskCache::prepopulateCacheWithStatic(const std::string& from_folder)
 
 void LLDiskCache::clearCache()
 {
+    LL_INFOS() << "clearing cache " << mCacheDir << LL_ENDL;
     /**
      * See notes on performance in dirFileSize(..) - there may be
      * a quicker way to do this by operating on the parent dir vs
@@ -377,17 +378,18 @@ void LLDiskCache::clearCache()
                 }
             }
         }
-// <FS:Beq> add static assets into the new cache after clear
+        // <FS:Beq> add static assets into the new cache after clear
         // For everything we populate FS specific assets to allow future updates
-    	auto static_assets_folder = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "fs_static_assets");
+        auto static_assets_folder = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "fs_static_assets");
         prepopulateCacheWithStatic(static_assets_folder);
 #ifdef OPENSIM
         // For OPENSIM we need to populate the static assets
-    	static_assets_folder = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "static_assets");
+        static_assets_folder = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "static_assets");
         prepopulateCacheWithStatic(static_assets_folder);
 #endif    
-// </FS:Beq>
+        // </FS:Beq>			
     }
+    LL_INFOS() << "Cleared cache " << mCacheDir << LL_ENDL;
 }
 
 uintmax_t LLDiskCache::dirFileSize(const std::string dir)
