@@ -42,9 +42,9 @@
 	<!-- ## Zi: Filter Links Menu -->
 	
 	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
-	<menu_item_check name="inventory_filter_only_modify" label="修正可能のみ" />
-	<menu_item_check name="inventory_filter_only_copy" label="コピー可能のみ" />
-	<menu_item_check name="inventory_filter_only_transfer" label="転送可能のみ" />
+	<menu_item_check name="inventory_filter_only_modify" label="修正可のみ" />
+	<menu_item_check name="inventory_filter_only_copy" label="コピー可のみ" />
+	<menu_item_check name="inventory_filter_only_transfer" label="再販・プレゼント可のみ" />
 	<!-- </FS:Zi> -->
 	
 	<menu_item_call label="ごみ箱を空にする" name="empty_trash"/>

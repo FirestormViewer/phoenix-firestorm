@@ -6519,8 +6519,8 @@ Secondlife.com のサポートセクションから
 	<string name="ImportingWindlightBulk">Windlight をインポート中...</string>
 	
 	<!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
-	<string name="FSObjectInventoryNoElements">エレメントなし</string>
-	<string name="FSObjectInventoryOneElement">1 エレメント</string>
-	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] エレメント</string>
+	<string name="FSObjectInventoryNoElements">アイテムなし</string>
+	<string name="FSObjectInventoryOneElement">1 個のアイテム</string>
+	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] 個のアイテム</string>
 	
 </strings>

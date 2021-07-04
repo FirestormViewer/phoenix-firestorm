@@ -1544,13 +1544,13 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 		</form>
 	</notification>
 	<notification name="AgentComplexityWithVisibility">
-		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] は [AGENT_COMPLEXITY] です。
+		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 アバターの複雑度] は [AGENT_COMPLEXITY] です。
 [OVERLIMIT_MSG]
 		<usetemplate ignoretext="アバターの複雑度が高すぎる場合は警告する" name="notifyignore"/>
 	</notification>
 
 	<notification name="AgentComplexity">
-		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] は [AGENT_COMPLEXITY] です。
+		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 アバターの複雑度] は [AGENT_COMPLEXITY] です。
 		<usetemplate ignoretext="アバターの複雑さの変更について警告する" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">

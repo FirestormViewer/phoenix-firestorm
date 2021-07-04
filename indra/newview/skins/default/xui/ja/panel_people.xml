@@ -9,7 +9,7 @@
 	<string name="no_friends" value="フレンドはいません"/>
 	<string name="no_friends_msg">
 		誰かを友だちとして追加するには、対象のアバターかその名前を右クリックしてください。
-もっと人のいる場所をお探しですか？ [secondlife:///app/floater/destinations Destination Guide] にはグリッドのオペレータスタッフが選んだ場所が掲載されています。
+もっと人のいる場所をお探しですか？ [secondlife:///app/floater/destinations 行き先ガイド] にはグリッドのオペレータスタッフが選んだ場所が掲載されています。
 [secondlife:///app/search/ Search] では、キーワードに一致した場所をグリッド全体から検索できます。
 	</string>
 	<string name="no_filtered_friends_msg">
@@ -22,7 +22,7 @@
 	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。"/>
 	<string name="no_groups_msg">
 		あなたはどこのグループにも属していません。
-		[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ groups] でグループを探してみて下さい。
+		[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ グループ] でグループを探してみて下さい。
 	</string>
 	<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
 	<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
