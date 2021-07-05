@@ -196,6 +196,8 @@ class LLDiskCache :
          * various parts of the code
          */
         bool mEnableCacheDebugInfo;
+        
+        std::vector<std::string> mSkipList;  // <FS:Beq/> Vector of "static" untouchable assets that should never be purged
 };
 
 // <FS:Ansariel> Regular disk cache cleanup
