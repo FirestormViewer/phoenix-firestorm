@@ -1346,6 +1346,20 @@ class DarwinManifest(ViewerManifest):
         chardetdir = os.path.join(pkgdir, "lib", "python", "chardet")
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
+        with self.prefix(src="", dst="Contents"):  # everything goes in Contents
+            bugsplat_db = self.args.get('bugsplat')
+            if bugsplat_db:
+                # Inject BugsplatServerURL into Info.plist if provided.
+                Info_plist = self.dst_path_of("Info.plist")
+                Info = plistlib.readPlist(Info_plist)
+                # https://www.bugsplat.com/docs/platforms/os-x#configuration
+                Info["BugsplatServerURL"] = \
+                     "https://{}.bugsplat.com/".format(bugsplat_db)
+                self.put_in_file(
+                    plistlib.writePlistToString(Info),
+                    os.path.basename(Info_plist),
+                    "Info.plist")
+
         with self.prefix(dst="Contents"):  # everything goes in Contents
             # self.path("Info.plist", dst="Info.plist")
 

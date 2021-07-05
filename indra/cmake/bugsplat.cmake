@@ -17,7 +17,7 @@ if (BUGSPLAT_DB)
     elseif (DARWIN)
       find_library(BUGSPLAT_LIBRARIES BugsplatMac
         PATHS "${ARCH_PREBUILT_DIRS_RELEASE}")
-      message(FATAL_ERROR "Bugsplat for OSX not fully implemented, please adapt llappdelegate-objc.mm to honor options of sending user name and settings.xml.")
+      message( "Bugsplat for OSX not fully implemented, please adapt llappdelegate-objc.mm to honor options of sending user name and settings.xml.")
     else (WINDOWS)
       message(FATAL_ERROR "Bugsplat for Linux not implemented.")
 

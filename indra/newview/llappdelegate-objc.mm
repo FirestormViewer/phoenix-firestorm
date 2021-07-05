@@ -69,8 +69,8 @@
 	// Engage BugsplatStartupManager *before* calling initViewer() to handle
 	// any crashes during initialization.
 	// https://www.bugsplat.com/docs/platforms/os-x#initialization
-	[BugsplatStartupManager sharedManager].autoSubmitCrashReport = YES;
-	[BugsplatStartupManager sharedManager].askUserDetails = NO;
+	[BugsplatStartupManager sharedManager].autoSubmitCrashReport = NO;
+	[BugsplatStartupManager sharedManager].askUserDetails = YES;
 	[BugsplatStartupManager sharedManager].delegate = self;
 	[[BugsplatStartupManager sharedManager] start];
 #endif
@@ -289,23 +289,24 @@ struct AttachmentInfo
 
 - (NSArray<BugsplatAttachment *> *)attachmentsForBugsplatStartupManager:(BugsplatStartupManager *)bugsplatStartupManager
 {
-    const CrashMetadata& metadata(CrashMetadata_instance());
+    //const CrashMetadata& metadata(CrashMetadata_instance());
 
     // Since we must do very similar processing for each of several file
     // pathnames, start by collecting them into a vector so we can iterate
     // instead of spelling out the logic for each.
-    std::vector<AttachmentInfo> info{
-        AttachmentInfo(metadata.logFilePathname,      "text/plain"),
-        AttachmentInfo(metadata.userSettingsPathname, "text/xml"),
-        AttachmentInfo(metadata.accountSettingsPathname, "text/xml"),
-        AttachmentInfo(metadata.staticDebugPathname,  "text/xml")
-    };
+    //std::vector<AttachmentInfo> info{
+    //    AttachmentInfo(metadata.logFilePathname,      "text/plain"),
+    //    AttachmentInfo(metadata.userSettingsPathname, "text/xml"),
+    //    AttachmentInfo(metadata.accountSettingsPathname, "text/xml"),
+    //    AttachmentInfo(metadata.staticDebugPathname,  "text/xml")
+    //};
+    std::vector<AttachmentInfo> info{};
 
     // We "happen to know" that info[0].basename is "SecondLife.old" -- due to
     // the fact that BugsplatMac only notices a crash during the viewer run
     // following the crash. Replace .old with .log to reduce confusion.
-    info[0].basename = 
-        boost::filesystem::path(info[0].pathname).stem().string() + ".log";
+    // info[0].basename = 
+    //    boost::filesystem::path(info[0].pathname).stem().string() + ".log";
 
     NSMutableArray *attachments = [[NSMutableArray alloc] init];
 
@@ -341,6 +342,9 @@ struct AttachmentInfo
 {
     // TODO: message string from NSError
     infos("Could not send crash report to BugSplat");
+    NSString *pStr = [NSString stringWithFormat:@"%@", error];
+std::string bar = std::string([pStr UTF8String]);
+    infos(bar);
 }
 
 #endif // LL_BUGSPLAT
