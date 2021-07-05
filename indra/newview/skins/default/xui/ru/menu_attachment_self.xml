@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Attachment Pie">
 	<menu_item_call label="Коснуться" name="Attachment Object Touch"/>
+	<!--menu_item_call label="Встать" name="Stand Up"/>-->
 	<menu_item_call label="Редактировать" name="Edit..."/>
 	<menu_item_call label="Отсоеденить" name="Detach"/>
 	<context_menu label="Сохранить как" name="Export Menu">
@@ -9,12 +10,36 @@
 	</context_menu>
 	<menu_item_call label="Сесть" name="Sit Down Here"/>
 	<menu_item_call label="Встать" name="Stand Up"/>
+	<menu_item_call label="Сейчас ношу..." name="NowWearing"/>
 	<menu_item_call label="Сменить комплект" name="Change Outfit"/>
-	<menu_item_call label="Редактировать комплект" name="Edit Outfit"/>
-	<menu_item_call label="Изменить фигуру" name="Edit My Shape"/>
+	<menu_item_call label="Изменить фигуру" name="Edit Shape"/>
+	<menu_item_call label="Редактировать комплект" name="Edit Outfit Parts"/>
 	<menu_item_call label="Высота над землей" name="Hover Height"/>
-	<menu_item_call label="Сброс скелета" name="Reset Skeleton"/>
-	<menu_item_call label="Восстановить скелет и анимации" name="Reset Skeleton And Animations"/>
+	<context_menu label="Снять" name="Take Off &gt;">
+		<context_menu label="Одежду" name="Clothes &gt;">
+			<menu_item_call label="Рубашку" name="Shirt"/>
+			<menu_item_call label="Штаны" name="Pants"/>
+			<menu_item_call label="Юбку" name="Skirt"/>
+			<menu_item_call label="Обувь" name="Shoes"/>
+			<menu_item_call label="Носки" name="Socks"/>
+			<menu_item_call label="Пиджак" name="Jacket"/>
+			<menu_item_call label="Перчатки" name="Gloves"/>
+			<menu_item_call label="Майку" name="Self Undershirt"/>
+			<menu_item_call label="Трусы" name="Self Underpants"/>
+			<menu_item_call label="Тату" name="Self Tattoo"/>
+			<menu_item_call label="Физику" name="Self Physics"/>
+			<menu_item_call label="Альфу" name="Self Alpha"/>
+			<menu_item_call label="Всю Одежду" name="All Clothes"/>
+		</context_menu>
+		<context_menu label="Экран" name="Detach Self HUD" />
+		<context_menu label="Отсоединить" name="Detach Self" />
+		<menu_item_call label="Отсоединить Все" name="Detach All"/>
+	</context_menu>
+	<menu_item_call label="Сесть/встать" name="Sit stand"/>
+	<menu_item_call label="Летать/посадка" name="Fly land"/>
+	<menu_item_call label="Остановить анимации" name="Stop Animating My Avatar"/>
+	<menu_item_call label="Сброс Скелета" name="Reset Skeleton"/>
+	<menu_item_call label="Сброс Скелета и анимаций" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Сброс Mesh LOD" name="Reset Mesh LOD"/>
 	<menu_item_call label="Друзья" name="Friends..."/>
 	<menu_item_call label="Группы" name="Groups..."/>
@@ -22,10 +47,10 @@
 	<menu_item_call label="Дамп XML" name="Dump XML"/>
 	<menu_item_call label="Профиль Объекта" name="Object Inspect"/>
 	<menu_item_call label="Инспектировать" name="Object_Inspect_Floater"/>
-	<menu_item_call label="Информация о скриптах" name="ScriptInfo"/>
+	<menu_item_call label="О скриптах" name="ScriptInfo"/>
 	<menu_item_call label="Не отображать" name="Derender"/>
 	<menu_item_call label="Не отображать всегда" name="DerenderPermanent"/>
-	<menu_item_call label="Отладка" name="Debug..."/>
+	<menu_item_call label="Показ текстур" name="Debug..."/>
 	<menu_item_call label="Обновить текстуру" name="Texture Refresh"/>
 	<menu_item_call label="Бросить" name="Drop"/>
 	<menu_item_call label="Заблокировать владельца частиц" name="Mute Particle"/>

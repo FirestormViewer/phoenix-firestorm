@@ -58,15 +58,21 @@
 			<check_box label="メディアブラウザのポップアップを有効にする" name="media_popup_enabled" />
 			<button label="プロキシ設定を調整" name="set_proxy" />
 			<text name="home_page_label_l">
-				ブラウザのホームページ:
+				ブラウザのホームページ：
 			</text>
 		</panel>
 		
 		<panel label="ディレクトリ" name="tab-dir">
 			<text name="cache_size_label_l">
-				キャッシュサイズ ([https://wiki.firestormviewer.org/cache 推奨設定を確認しますか？]):
+				テクスチャのキャッシュサイズ ([https://wiki.firestormviewer.org/cache 推奨設定を確認しますか？])：
 			</text>
 			<text name="text_box5">
+				MB
+			</text>
+			<text name="asset_cache_size_label_l">
+				アセットキャッシュのサイズ：
+			</text>
+			<text name="asset_text_box5">
 				MB
 			</text>
 			<button label="持ち物のキャッシュクリア" name="ClearInventoryCache" />
@@ -78,7 +84,7 @@
 			<button label="初期化" name="reset_cache"/>
 			<button label="キャッシュクリア" name="clear_cache"/>
 			<text name="Sound Cache location">
-				サウンドキャッシュの場所:
+				サウンドキャッシュの場所：
 			</text>
 			<line_editor name="FSSoundCacheLocation" />
 			<button label="開く" name="open_sound_cache" />

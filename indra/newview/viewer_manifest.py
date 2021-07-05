@@ -116,6 +116,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("beams")
                 self.path("beamsColors")
 
+                # <FS:Beq> package static_assets folder
+                if self.fs_is_opensim():
+                    self.path("static_assets")
+                self.path("fs_static_assets")
+                # </FS:Beq>
+
                 # include the extracted packages information (see BuildPackagesInfo.cmake)
                 self.path(src=os.path.join(self.args['build'],"packages-info.txt"), dst="packages-info.txt")
                 # CHOP-955: If we have "sourceid" or "viewer_channel" in the

@@ -1,0 +1,63 @@
+LLWearable version 22
+RASL M LEARN EYEBROWSHAPER
+
+	permissions 0
+	{
+		base_mask	7fffffff
+		owner_mask	7fffffff
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	79908808-d272-49a8-864a-d133a10931e9
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	79908808-d272-49a8-864a-d133a10931e9
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 2
+parameters 39
+16 .76
+31 .62
+112 0
+113 0
+114 0
+115 0
+119 0
+130 0
+131 0
+132 0
+133 0
+134 0
+135 0
+136 0
+137 .5
+140 0
+141 0
+142 0
+143 -4
+166 0
+167 0
+168 0
+169 0
+177 0
+181 -1
+182 -1
+183 -1
+184 0
+192 0
+674 -1
+750 0
+752 .5
+754 .5
+755 0
+757 -1.18
+762 0
+763 0
+785 0
+789 0
+textures 1
+4 7ca39b4c-bd19-4699-aff7-f93fd03d3e7b

@@ -5013,8 +5013,10 @@ bool LLAppViewer::initCache()
 			gSavedSettings.setBOOL("PurgeCacheOnNextStartup", false);
 			LL_INFOS("AppCache") << "Scheduling texture purge, based on PurgeCache* settings." << LL_ENDL;
 			mPurgeCache = true;
-			// STORM-1141 force purgeAllTextures to get called to prevent a crash here. -brad
-			texture_cache_mismatch = true;
+			// <FS:Beq> No longer needed
+			// // STORM-1141 force purgeAllTextures to get called to prevent a crash here. -brad
+			// texture_cache_mismatch = true;
+			// </FS:Beq>
 		}
 
 		// <FS> If the J2C has changed since the last run, clear the cache
@@ -5085,7 +5087,7 @@ bool LLAppViewer::initCache()
 	LLAppViewer::getPurgeDiskCacheThread()->start();
 
 	// <FS:Ansariel> FIRE-13066
-	if (mPurgeTextures && !read_only)
+	if (!mPurgeCache && mPurgeTextures && !read_only) // <FS:Beq> no need to purge textures if we already purged the cache above
 	{
 		LL_INFOS("AppCache") << "Purging Texture Cache..." << LL_ENDL;
 		LLSplashScreen::update(LLTrans::getString("StartupClearingTextureCache"));
