@@ -228,7 +228,7 @@
      left="0"
      name="favorite"
      image_drag_indication="Accordion_ArrowOpened_Off"
-     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+     tool_tip="Drag Landmarks here for quick access to your favorite places!"
      width="1024">
         <label
          follows="left|top"
@@ -238,7 +238,7 @@
          left="10"
          name="favorites_bar_label"
          text_color="LtGray"
-         tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+         tool_tip="Drag Landmarks here for quick access to your favorite places!"
 	     valign="bottom"
          width="102">
           Favorites Bar
