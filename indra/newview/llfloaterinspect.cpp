@@ -348,6 +348,7 @@ void LLFloaterInspect::refresh()
 	LLResMgr& res_mgr = LLResMgr::instance();
 	LLSelectMgr& sel_mgr = LLSelectMgr::instance();
 	S32 fcount = 0;
+	S32 fcount_visible = 0;
 	S32 tcount = 0;
 	S32 vcount = 0;
 	S32 objcount = 0;
@@ -383,6 +384,7 @@ void LLFloaterInspect::refresh()
 		LLSelectNode* obj = *iter;
 		LLSD row;
 		std::string owner_name, creator_name;
+		auto vobj{obj->getObject()};
 
 		if (obj->mCreationDate == 0)
 		{	// Don't have valid information from the server, so skip this one
@@ -462,12 +464,12 @@ void LLFloaterInspect::refresh()
 			mCreatorNameCacheConnection = LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetCreatorNameCallback, this));
 		}
 		
-		row["id"] = obj->getObject()->getID();
+		row["id"] = vobj->getID();
 		row["columns"][0]["column"] = "object_name";
 		row["columns"][0]["type"] = "text";
 		// make sure we're either at the top of the link chain
 		// or top of the editable chain, for attachments
-		if(!(obj->getObject()->isRoot() || obj->getObject()->isRootEdit()))
+		if(!(vobj->isRoot() || vobj->isRootEdit()))
 		{
 			row["columns"][0]["value"] = std::string("   ") + obj->mName;
 		}
@@ -495,17 +497,17 @@ void LLFloaterInspect::refresh()
 		row["columns"][5]["value"] = llformat("%d", timestamp);
 		// </FS:Ansariel>
 		// PoundLife - Improved Object Inspect
-		res_mgr.getIntegerString(format_res_string, obj->getObject()->getNumFaces());
+		res_mgr.getIntegerString(format_res_string, vobj->getNumFaces());
 		row["columns"][6]["column"] = "facecount";
 		row["columns"][6]["type"] = "text";
 		row["columns"][6]["value"] = format_res_string;
 
-		res_mgr.getIntegerString(format_res_string, obj->getObject()->getNumVertices());
+		res_mgr.getIntegerString(format_res_string, vobj->getNumVertices());
 		row["columns"][7]["column"] = "vertexcount";
 		row["columns"][7]["type"] = "text";
 		row["columns"][7]["value"] = format_res_string;
 
-		res_mgr.getIntegerString(format_res_string, obj->getObject()->getNumIndices() / 3);
+		res_mgr.getIntegerString(format_res_string, vobj->getNumIndices() / 3);
 		row["columns"][8]["column"] = "trianglecount";
 		row["columns"][8]["type"] = "text";
 		row["columns"][8]["value"] = format_res_string;
@@ -513,7 +515,7 @@ void LLFloaterInspect::refresh()
 		// Poundlife - Get VRAM
 		U32 texture_memory = 0;
 		U32 vram_memory = 0;
-		getObjectTextureMemory(obj->getObject(), texture_memory, vram_memory);
+		getObjectTextureMemory(vobj, texture_memory, vram_memory);
 		res_mgr.getIntegerString(format_res_string, texture_memory / 1024);
 		row["columns"][9]["column"] = "tramcount";
 		row["columns"][9]["type"] = "text";
@@ -526,15 +528,15 @@ void LLFloaterInspect::refresh()
 
 		row["columns"][11]["column"] = "facecount_sort";
 		row["columns"][11]["type"] = "text";
-		row["columns"][11]["value"] = LLSD::Integer(obj->getObject()->getNumFaces());
+		row["columns"][11]["value"] = LLSD::Integer(vobj->getNumFaces());
 
 		row["columns"][12]["column"] = "vertexcount_sort";
 		row["columns"][12]["type"] = "text";
-		row["columns"][12]["value"] = LLSD::Integer(obj->getObject()->getNumVertices());
+		row["columns"][12]["value"] = LLSD::Integer(vobj->getNumVertices());
 
 		row["columns"][13]["column"] = "trianglecount_sort";
 		row["columns"][13]["type"] = "text";
-		row["columns"][13]["value"] = LLSD::Integer(obj->getObject()->getNumIndices() / 3);
+		row["columns"][13]["value"] = LLSD::Integer(vobj->getNumIndices() / 3);
 
 		row["columns"][14]["column"] = "tramcount_sort";
 		row["columns"][14]["type"] = "text";
@@ -546,9 +548,11 @@ void LLFloaterInspect::refresh()
 
 		primcount = sel_mgr.getSelection()->getObjectCount();
 		objcount = sel_mgr.getSelection()->getRootObjectCount();
-		fcount += obj->getObject()->getNumFaces();
-		tcount += obj->getObject()->getNumIndices() / 3;
-		vcount += obj->getObject()->getNumVertices();
+		fcount += vobj->getNumFaces();
+		fcount_visible += vobj->getNumVisibleFaces();
+		tcount += vobj->getNumIndices() / 3;
+		vcount += vobj->getNumVertices();
+
 		// PoundLife - END
 		mObjectList->addElement(row, ADD_TOP);
 	}
@@ -613,6 +617,8 @@ void LLFloaterInspect::refresh()
 	args["NUM_OBJECTS"] = format_res_string;
 	res_mgr.getIntegerString(format_res_string, primcount);
 	args["NUM_PRIMS"] = format_res_string;
+	res_mgr.getIntegerString(format_res_string, fcount_visible);
+	args["NUM_VISIBLE_FACES"] = format_res_string;
 	res_mgr.getIntegerString(format_res_string, fcount);
 	args["NUM_FACES"] = format_res_string;
 	res_mgr.getIntegerString(format_res_string, vcount);

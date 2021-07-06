@@ -25,6 +25,7 @@
 [NUM_OBJECTS] objects, [NUM_PRIMS] prims
 
 Faces: [NUM_FACES]
+Visible: [NUM_VISIBLE_FACES]
 Vertices: [NUM_VERTICES]
 Triangles: [NUM_TRIANGLES]
 Complex.: [COMPLEXITY]

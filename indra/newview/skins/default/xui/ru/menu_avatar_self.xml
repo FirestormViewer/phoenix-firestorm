@@ -18,12 +18,14 @@
 			<menu_item_call label="Альфа" name="Self Alpha"/>
 			<menu_item_call label="Все" name="All Clothes"/>
 		</context_menu>
+		<context_menu label="Экран" name="Object Detach HUD"/>
 		<context_menu label="Отделить" name="Object Detach"/>
 		<menu_item_call label="Отделить все" name="Detach All"/>
 	</context_menu>
-	<menu_item_call label="Сменить комплект" name="Chenge Outfit"/>
-	<menu_item_call label="Править комплект" name="Edit Outfit"/>
-	<menu_item_call label="Править форму" name="Edit My Shape"/>
+	<menu_item_call label="Сейчас ношу..." name="NowWearing"/>
+	<menu_item_call label="Комплекты" name="Chenge Outfit"/>
+    <menu_item_call label="Править форму" name="Edit My Shape"/>
+    <menu_item_call label="Править комплект" name="Edit Outfit Parts"/>
 	<menu_item_call label="Высота" name="Hover Height"/>
 	<menu_item_call label="Сброс скелета" name="Reset Skeleton"/>
 	<menu_item_call label="Сброс скелета и анимаций" name="Reset Skeleton And Animations"/>
@@ -32,7 +34,7 @@
 	<menu_item_call label="Группы" name="Groups..."/>
 	<menu_item_call label="Профиль" name="Profile..."/>
 	<menu_item_call label="О скриптах" name="ScriptInfo"/>
-	<menu_item_call label="Отладка" name="Debug..."/>
+	<menu_item_call label="Показать текстуры" name="Debug..."/>
 	<menu_item_call label="Обновить текстуру" name="Texture Refresh"/>
 	<menu_item_call label="Дамп XML" name="Dump XML"/>
 	<menu_item_call label="Блокировать владельца частиц" name="Mute Particle"/>

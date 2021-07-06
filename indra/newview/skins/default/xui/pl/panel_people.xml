@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ludzie" name="people_panel">
-	<string name="no_recent_people" value="Brak ostatnich rozmówców. Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/search/people Wyszukiwarki] lub [secondlife:///app/worldmap Mapy Świata]." />
+	<string name="no_recent_people" value="Brak ostatnich rozmówców." />
 	<string name="no_filtered_recent_people" value="Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/people/[SEARCH_TERM] Wyszukiwarki]." />
 	<string name="no_one_near" value="Nie ma nikogo w pobliżu. Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/search/people Wyszukiwarki] lub [secondlife:///app/worldmap Mapy Świata]." />
 	<string name="no_one_filtered_near" value="Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/people/[SEARCH_TERM] Wyszukiwarki]." />
 	<string name="no_friends_online" value="Brak dostępnych znajomych" />
 	<string name="no_friends" value="Brak znajomych" />
 	<string name="no_friends_msg">
-		Wyszukaj znajomych poprzez [secondlife:///app/search/people Wyszukiwarkę] lub kliknij prawym przyciskiem myszki na Rezydencie i zaproponuj znajomość.
-Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata].
+		Aby dodać kogoś jako znajomego kliknij prawym przyciskiem myszy na jego awatarze lub imieniu.
+
+Szukasz miejsc z większą liczbą osób?
+
+[secondlife:///app/floater/destinations Cele podróży] zawierają lokalizacje wybrane przez personel operatora świata.
+
+[secondlife:///app/search/ Wyszukiwarka] pozwala przeszukać cały świat pod kątem określonych słów kluczowych.
 	</string>
 	<string name="no_filtered_friends_msg">
 		Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/people/[SEARCH_TERM] Wyszukiwarki].
 	</string>
 	<string name="no_filtered_groups_msg" value="Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/groups/[SEARCH_TERM] Wyszukiwarki]." />
-	<string name="no_groups_msg" value="Chcesz dołączyć do jakiejś grupy? Spróbuj użyć [secondlife:///app/search/groups Wyszukiwarki]." />
+	<string name="no_groups_msg">
+		Nie należysz do żadnej grupy.
+
+Dowiedz się więcej o [https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ grupach].
+	</string>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)" />
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie teleportuje, przeciąganie z Shiftem przesuwa)" />
 	<string name="GroupCountWithInfo" value="Należysz do [COUNT] grup i możesz jeszcze dołączyć do [REMAINING]. [secondlife:/// Podnieś swój limit!]" />

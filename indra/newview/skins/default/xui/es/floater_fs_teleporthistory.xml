@@ -11,7 +11,7 @@
 					<layout_panel name="chat_btn_lp">
 						<button label="Mapa" name="map_btn" tool_tip="Mostrar el área correspondiente en el mapa mundial"/>
 					</layout_panel>
-					<layout_panel name="chat_btn_lp">
+					<layout_panel name="profile_btn_lp">
 						<button label="Perfil" name="profile_btn" tool_tip="Mostrar el perfil de este lugar"/>
 					</layout_panel>
 				</layout_stack>

@@ -254,7 +254,7 @@
 				Teleportar a mi base (uso: cmd)
 			</text>
 			<text name="FSCmdLineMapTo_txt">
-				Telep. al sim X (uso: cmd nombredelsim)
+				Telep. al sim (uso: cmd nombredelsim)
 			</text>
 			<check_box label="Usar misma posición entre sims" name="toggle"/>
 		</panel>

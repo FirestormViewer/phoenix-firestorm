@@ -11,7 +11,27 @@
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
 		<menu_item_call label="Mój profil" name="Profile"/>
-		<menu_item_check label="Mój wygląd" name="ChangeOutfit"/>
+		<menu_item_call label="Mój wygląd" name="NowWearing" />
+		<menu_item_check label="Moje stroje" name="ChangeOutfit"/>
+		<menu label="Zdejmij" name="Take Off &gt;">
+			<menu label="Ubrania" name="Clothes &gt;">
+				<menu_item_call label="Koszulę" name="Shirt" />
+				<menu_item_call label="Spodnie" name="Pants" />
+				<menu_item_call label="Spódnicę" name="Skirt" />
+				<menu_item_call label="Buty" name="Shoes" />
+				<menu_item_call label="Skarpetki" name="Socks" />
+				<menu_item_call label="Kurtkę" name="Jacket" />
+				<menu_item_call label="Rękawiczki" name="Gloves" />
+				<menu_item_call label="Podkoszulek" name="Self Undershirt" />
+				<menu_item_call label="Bieliznę" name="Self Underpants" />
+				<menu_item_call label="Tatuaż" name="Self Tattoo" />
+				<menu_item_call label="Fizykę" name="Self Physics" />
+				<menu_item_call label="Warstwę alpha" name="Self Alpha" />
+				<menu_item_call label="Wszystko" name="All Clothes" />
+			</menu>
+			<menu label="Odłącz" name="Avatar Detach" />
+			<menu_item_call label="Odłącz wszystko" name="Detach All" />
+		</menu>
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu_item_call label="Uniesienie" name="HoverHeight" />
 		<menu label="Ruch" name="Movement">
@@ -96,6 +116,7 @@
 		<menu_item_call label="Ustaw Miejsce Startu tu, gdzie stoję" name="Set Home to Here"/>
 		<menu_item_call label="Kup działkę" name="Buy Land"/>
 		<menu_item_call label="Moje działki" name="My Land"/>
+		<menu_item_call label="Mój dom (Linden Home)" name="Linden Home" />
 		<menu label="Pokaż więcej" name="LandShow">
 			<menu_item_check label="Linie zakazu" name="Ban Lines"/>
 			<menu_item_check label="Emitery" name="beacons" shortcut=""/>

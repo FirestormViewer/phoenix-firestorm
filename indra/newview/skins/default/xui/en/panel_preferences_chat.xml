@@ -2348,7 +2348,7 @@
 	  height="14"
 	  name="FSCmdLineMapTo_txt"
 	  width="280">
-	  Teleport to region x (usage: cmd regionname | x y z)
+	  Teleport to region (usage: cmd regionname | x y z)
 	</text>
 	<line_editor
 	  enabled_control="FSCmdLine"

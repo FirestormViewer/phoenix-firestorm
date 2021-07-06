@@ -22,6 +22,8 @@
 				</layout_panel>
 				<layout_panel name="lp_3">
 					<text name="label">Солнце:</text>
+					<text name="sun_azimuth_label">Азимут:</text>
+					<text name="sun_elevation_label">Высота:</text>
 					<check_box label="Показать Маяк" name="sunbeacon"/>
 					<text name="scale_label">Масштаб:</text>
 					<text name="glow_focus_label">Фокус Сияния:</text>
@@ -30,6 +32,8 @@
 				</layout_panel>
 				<layout_panel name="lp_4">
 					<text name="label">Луна:</text>
+					<text name="moon_azimuth_label">Азимут:</text>
+					<text name="moon_elevation_label">Высота:</text>
 					<check_box label="Показать Маяк" name="moonbeacon"/>
 				</layout_panel>
 			</layout_stack>

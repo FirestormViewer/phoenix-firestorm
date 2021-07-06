@@ -8,6 +8,7 @@
 	<button label="取り消し" label_selected="取り消し" name="Cancel"/>
 	<panel name="search_panel">
 		<search_editor label="設定の検索" name="search_prefs_edit" tool_tip="検索したい内容をここに入力してください。設定の名前またはコメントに部分的に一致する結果が表示されます。"/>
+		<button name="copy_search_slurl_btn" tool_tip="検索クエリを SLURL としてコピーします" />
 	</panel>
 	<tab_container name="pref core">
 		<panel label="一般" name="general"/>
@@ -17,6 +18,7 @@
 		<panel label="サウンドとメディア" name="audio"/>
 		<panel label="セットアップ" name="input"/>
 		<panel label="移動と表示" name="move"/>
+		<panel label="コントロール" name="controls" />
 		<panel label="通知" name="msgs"/>
 		<panel label="プライバシー" name="im"/>
 		<panel label="アドバンス" name="advanced1"/>

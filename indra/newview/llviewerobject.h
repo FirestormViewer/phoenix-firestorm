@@ -199,6 +199,7 @@ public:
 	virtual U32 getNumVertices() const;
 	virtual U32 getNumIndices() const;
 	S32 getNumFaces() const { return mNumFaces; }
+	S32 getNumVisibleFaces() const;
 
 	// Graphical stuff for objects - maybe broken out into render class later?
 	virtual void updateTextures();

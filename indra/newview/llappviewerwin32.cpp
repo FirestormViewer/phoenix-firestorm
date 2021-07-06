@@ -1259,7 +1259,10 @@ DWORD WINAPI purgeThread( LPVOID lpParameter )
 	::FindClose( hFindHandle );
 
 	for( auto dir : vctDirs )
+	{
+		LL_INFOS("CachePurge") << "Removing an old cache" << LL_ENDL;
 		deleteCacheDirectory( dir );
+	}
 
 	return 0;
 }

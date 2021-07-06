@@ -543,7 +543,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                 <button
                         follows="bottom|left|right"
                         height="23"
-                        label="Save changes"
+                        label="Save"
                         left="1"
                         layout="topleft"
                         name="save_btn"
