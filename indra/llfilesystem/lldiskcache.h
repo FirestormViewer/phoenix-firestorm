@@ -133,7 +133,7 @@ class LLDiskCache :
 
         // <FS:Beq>
         // copy from distribution into cache to replace static content
-        void prepopulateCacheWithStatic(const std::string& from_folder);
+        void prepopulateCacheWithStatic();
         // </FS:Beq>
 
         /**
