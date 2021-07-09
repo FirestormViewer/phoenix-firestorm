@@ -385,8 +385,6 @@
                     top_delta="0"
                     width="215"
                     can_edit_text="true"/>                           
-                </layout_panel>
-            </layout_stack>
         </layout_panel>
     </layout_stack>
 </panel>                
