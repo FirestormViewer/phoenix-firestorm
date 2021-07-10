@@ -5,14 +5,12 @@
 			<text name="sun_stars_label">
 				Sonne &amp; Sterne
 			</text>
+			<check_box label="Beacon anzeigen" name="sunbeacon" right="-80"/>
 			<text name="position_label">
 				Position:
 			</text>
 			<text name="image_label">
-				Bild:
-			</text>
-			<text name="scale_label">
-				Skalierung:
+				Bild &amp; Skalierung:
 			</text>
 			<text name="color_label">
 				Farbe:
@@ -30,37 +28,29 @@
 				Leuchtgröße:
 			</text>
 			<text name="star_brightness_label">
-				Helligkeit Sterne:
+				Hellig. Sterne:
 			</text>
-			<check_box label="Beacon anzeigen" name="sunbeacon" right="-80"/>
 		</layout_panel>
-		<layout_panel name="moon_layout_main">
-			<layout_stack name="moon_ls">
-				<layout_panel name="moon_layout">
-					<text name="moon_label">
-						Mond
-					</text>
-					<text name="position_label">
-						Position:
-					</text>
-					<text name="image_label">
-						Bild:
-					</text>
-					<text name="scale_label">
-						Skalierung:
-					</text>
-					<text name="moon_azimuth_label">
-						Azimut:
-					</text>
-					<text name="moon_elevation_label">
-						Höhenwinkel:
-					</text>
-					<text name="brightness_label">
-						Helligkeit:
-					</text>
-					<check_box label="Beacon anzeigen" name="moonbeacon" right="-80"/>
-				</layout_panel>
-			</layout_stack>
+		<layout_panel name="moon_layout">
+			<text name="moon_label">
+				Mond
+			</text>
+			<check_box label="Beacon anzeigen" name="moonbeacon" right="-80"/>
+			<text name="position_label">
+				Position:
+			</text>
+			<text name="moon_image_label">
+				Bild &amp; Skalierung:
+			</text>
+			<text name="moon_azimuth_label">
+				Azimut:
+			</text>
+			<text name="moon_elevation_label">
+				Höhenwinkel:
+			</text>
+			<text name="brightness_label">
+				Helligkeit:
+			</text>
 		</layout_panel>
 	</layout_stack>
 </panel>
