@@ -18,6 +18,7 @@
 #include "llagent.h"
 #include "llimview.h"
 #include "llviewercamera.h"
+#include "llvisualeffect.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
 
@@ -131,6 +132,20 @@ bool RlvActions::canChangeActiveGroup(const LLUUID& idRlvObject)
 	// User can change their active group if:
 	//   - not specifically restricted (by another object that the one specified) from changing their active group
 	return (idRlvObject.isNull()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, idRlvObject);
+}
+
+bool RlvActions::canGiveInventory()
+{
+	// User can give at least one (unspecified) avatar inventory if:
+	//   - not specifically restricted from giving inventory (or at least one exception exists)
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHARE)) || (gRlvHandler.hasException(RLV_BHVR_SHARE));
+}
+
+bool RlvActions::canGiveInventory(const LLUUID& idAgent)
+{
+	// User can give another avatar inventory if:
+	//   - not specifically restricted from giving inventory (or the target is an exception)
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHARE)) || (gRlvHandler.isException(RLV_BHVR_SHARE, idAgent));
 }
 
 // Little helper function to check the IM exclusion range for @recvim, @sendim and @startim (returns: min_dist <= (pos user - pos target) <= max_dist)
@@ -385,6 +400,11 @@ bool RlvActions::canChangeEnvironment(const LLUUID& idRlvObject)
 	return (idRlvObject.isNull()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETENV, idRlvObject);
 }
 
+bool RlvActions::hasPostProcess()
+{
+	return LLVfxManager::instance().hasEffect(EVisualEffect::RlvSphere);
+}
+
 // ============================================================================
 // World interaction
 //
@@ -407,19 +427,53 @@ bool RlvActions::canBuyObject(const LLUUID& idObj)
 	return (!RlvHandler::instance().hasBehaviour(RLV_BHVR_BUY));
 }
 
-// Handles: @edit and @editobj
+// Handles: @edit, @editobj, @editattach and @editworld
+bool RlvActions::canEdit(ERlvCheckType eCheckType)
+{
+	RlvHandler& rlvHandler = RlvHandler::instance();
+	switch (eCheckType)
+	{
+		case ERlvCheckType::All:
+			// No edit restrictions of any kind
+			return
+				!rlvHandler.hasBehaviour(RLV_BHVR_EDIT) && !rlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ) &&
+				!rlvHandler.hasBehaviour(RLV_BHVR_EDITATTACH) && !rlvHandler.hasBehaviour(RLV_BHVR_EDITWORLD);
+
+		case ERlvCheckType::Some:
+			// Not @edit restricted (or at least one exception) and either not @editattach or not @editworld restricted
+			return
+				(!rlvHandler.hasBehaviour(RLV_BHVR_EDIT) || rlvHandler.hasException(RLV_BHVR_EDIT)) &&
+				(!rlvHandler.hasBehaviour(RLV_BHVR_EDITATTACH) || rlvHandler.hasBehaviour(RLV_BHVR_EDITWORLD));
+
+		case ERlvCheckType::None:
+			// Either @edit restricted with no exceptions or @editattach and @editworld restricted at the same time
+			return
+				(rlvHandler.hasBehaviour(RLV_BHVR_EDIT) && !rlvHandler.hasException(RLV_BHVR_EDIT)) ||
+				(rlvHandler.hasBehaviour(RLV_BHVR_EDITATTACH) && rlvHandler.hasBehaviour(RLV_BHVR_EDITWORLD));
+
+		default:
+			RLV_ASSERT(false);
+			return false;
+	}
+}
+
+// Handles: @edit, @editobj, @editattach and @editworld
 bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
 	// User can edit the specified object if:
 	//   - not generally restricted from editing (or the object's root is an exception)
 	//   - not specifically restricted from editing this object's root
+	//   - it's an attachment   and not restricted from editing attachments
+	//     it's a rezzed object and not restricted from editing any world objects
 
 	// NOTE-RLVa: edit checks should *never* be subject to @fartouch distance checks since we don't have the pick offset so
 	//            instead just implicitly rely on the presence of a (transient) selection
 	return
 		(pObj) &&
 		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDIT)) || (RlvHandler::instance().isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID())) ) &&
-		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITOBJ)) || (!RlvHandler::instance().isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())) );
+		( (!RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITOBJ)) || (!RlvHandler::instance().isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())) ) &&
+		( (pObj->isAttachment()) ? !RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITATTACH)
+			                     : !RlvHandler::instance().hasBehaviour(RLV_BHVR_EDITWORLD) );
 }
 
 // Handles: @fartouch and @interact
@@ -464,6 +518,12 @@ bool RlvActions::canGroundSit()
 	//   - not prevented from sitting
 	//   - not prevented from standing up or not currently sitting
 	return (!hasBehaviour(RLV_BHVR_SIT)) && (canStand());
+}
+
+bool RlvActions::canGroundSit(const LLUUID& idRlvObjExcept)
+{
+	// See canGroundSit() but disregard any restrictions held by the issuing object
+	return (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_SIT, idRlvObjExcept)) && (canStand(idRlvObjExcept));
 }
 
 bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/)
@@ -519,8 +579,8 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	//  (2) Attachment (on another avatar)
 	//        - a) not prevented from touching any object
 	//        - b) not specifically prevented from touching that object
-	//        - d) not prevented from touching attachments (or the attachment is an exception)
-	//        - e) not prevented from touching other avatar's attachments (or the attachment is an exception)
+	//        - d) not prevented from touching attachments (or the attachment and/or its wearer is/are an exception)
+	//        - e) not prevented from touching other avatar's attachments (or the attachment is worn by a specific avatar on the exception list)
 	//        - h) not prevented from touching faraway objects (or the attachment's center + pick offset is within range)
 	//        - i) specifically allowed to touch that object (overrides all restrictions)
 	//  (3) Attachment (on own avatar)
@@ -538,7 +598,7 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	// NOTE-RLVa: * touch restrictions apply linkset-wide (as opposed to, for instance, hover text which is object-specific) but only the root object's restrictions are tested
 	//            * @touchall affects world objects and world attachments (self and others') but >not< HUD attachments
 	//            * @fartouch distance matches against the specified object + pick offset (so >not< the linkset root)
-	//            * @touchattachother exceptions are only checked under the general @touchattach exceptions
+	//            * @touchattachother exceptions change when they specify an avatar id (=block all) or an object id (=allow indiviual - see general @touchattach exceptions)
 	//            * @touchattachself exceptions are only checked under the general @touchattach exceptions
 	//            * @touchme in any object of a linkset affects that entire linkset (= if you can specifically touch one prim in a linkset you can touch that entire linkset)
 	const LLUUID& idRoot = (pObj) ? pObj->getRootEdit()->getID() : LLUUID::null;
@@ -551,12 +611,23 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 		( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!rlvHandler.isException(RLV_BHVR_TOUCHTHIS, idRoot, ERlvExceptionCheck::Permissive)) );
 	if (fCanTouch)
 	{
-		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
+		if (!pObj->isAttachment())
 		{
-			// Rezzed or attachment worn by other - test for (1.c), (2.d), (2.e) and (1/2.h)
+			// Rezzed object - test for (1.c) and (1.h)
 			fCanTouch =
-				( (!pObj->isAttachment()) ? (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, ERlvExceptionCheck::Permissive))
-				                          : ((!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive)) ) &&
+				( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (rlvHandler.isException(RLV_BHVR_TOUCHWORLD, idRoot, ERlvExceptionCheck::Permissive)) ) &&
+				( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
+		}
+		else if (!pObj->permYouOwner())
+		{
+			// Attachment worn by other - test for (2.d), (2.e) and (2.h)
+			const LLUUID& idAttachAgent = static_cast<LLViewerObject*>(pObj->getRoot())->getID();
+			fCanTouch =
+				(
+				    ( (!rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH) && !rlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER)) ||
+					  (rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idRoot, ERlvExceptionCheck::Permissive) || rlvHandler.isException(RLV_BHVR_TOUCHATTACH, idAttachAgent, ERlvExceptionCheck::Permissive)) ) &&
+					(!rlvHandler.isException(RLV_BHVR_TOUCHATTACHOTHER, idAttachAgent))
+				) &&
 				( (!rlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
 		}
 		else if (!pObj->isHUDAttachment())

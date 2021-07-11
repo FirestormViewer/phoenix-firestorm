@@ -82,9 +82,14 @@ private:
 									const std::string& item_name = std::string(),
 									bool is_folder = false);
 
-	static void commitGiveInventoryItem(const LLUUID& to_agent,
+// [RLVa:KB] - @share
+	static bool commitGiveInventoryItem(const LLUUID& to_agent,
 									const LLInventoryItem* item,
 									const LLUUID &im_session_id = LLUUID::null);
+// [/RLVa:KB]
+//	static void commitGiveInventoryItem(const LLUUID& to_agent,
+//									const LLInventoryItem* item,
+//									const LLUUID &im_session_id = LLUUID::null);
 
 	// give inventory category functionality
 	static bool handleCopyProtectedCategory(const LLSD& notification, const LLSD& response);

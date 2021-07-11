@@ -6565,6 +6565,19 @@ BOOL LLCallingCardBridge::dragOrDrop(MASK mask, BOOL drop,
 	BOOL rv = FALSE;
 	if(item)
 	{
+// [RLVa:KB] - @share
+		if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory(item->getCreatorUUID())) )
+		{
+			if (drop)
+			{
+				RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Share, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));
+			}
+			// We should return false but our caller uses the return value as both 'will accept' *and* 'was handled' so
+			// returning false will result in the dropped item being moved when it is blocked.
+			return true;
+		}
+// [/RLVa:KB]
+
 		// check the type
 		switch(cargo_type)
 		{

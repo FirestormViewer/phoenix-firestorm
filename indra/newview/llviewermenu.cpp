@@ -3638,17 +3638,19 @@ bool enable_object_edit()
 	} 
 	else if (LLSelectMgr::getInstance()->selectGetAllValidAndObjectsFound())
 	{
-//		enable = true;
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		bool fRlvCanEdit = (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ));
-		if (!fRlvCanEdit)
+// [RLVa:KB] - @edit*
+		if (RlvActions::isRlvEnabled() && !RlvActions::canEdit(ERlvCheckType::All))
 		{
 			LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
 			RlvSelectIsEditable f;
-			fRlvCanEdit = (hSel.notNull()) && ((hSel->getFirstRootNode(&f, TRUE)) == NULL);
+			enable = (hSel.notNull()) && (!hSel->getFirstRootNode(&f, true));
 		}
-		enable = fRlvCanEdit;
+		else
+		{
+			enable = true;
+		}
 // [/RLVa:KB]
+//		enable = true;
 	}
 
 	return enable;
