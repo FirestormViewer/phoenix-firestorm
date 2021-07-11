@@ -121,7 +121,7 @@
             layout="topleft"
             left="20"
             top_delta="45"
-            width="80">
+            width="90">
             Azimuth:
           </text>
           <slider
@@ -143,9 +143,9 @@
             name="sun_elevation_label"
             height="10"
             layout="topleft"
-            left_delta="-85"
+            left="20"
             top_delta="22"
-            width="80">
+            width="90">
             Elevation:
           </text>
           <slider
@@ -167,9 +167,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-85"
+                    left="20"
                     top_delta="22"
-                    width="80">
+                    width="90">
                 Glow Focus:
             </text>
             <slider
@@ -191,9 +191,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-85"
+                    left="20"
                     top_delta="22"
-                    width="80">
+                    width="90">
                 Glow Size:
             </text>
             <slider
@@ -215,9 +215,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-85"
+                    left="20"
                     top_delta="22"
-                    width="80">
+                    width="90">
                 Star Brightness:
             </text>
             <slider
@@ -320,7 +320,7 @@
                     layout="topleft"
                     left="20"
                     top_delta="160"
-                    width="80">
+                    width="90">
                     Azimuth:
                   </text>
                   <slider
@@ -342,9 +342,9 @@
                     name="moon_elevation_label"
                     height="10"
                     layout="topleft"
-                    left_delta="-85"
+                    left="20"
                     top_delta="22"
-                    width="80">
+                    width="90">
                     Elevation:
                   </text>
                   <slider
@@ -366,9 +366,9 @@
                     follows="left|top"
                     height="10"
                     layout="topleft"
-                    left_delta="-85"
+                    left="20"
                     top_delta="22"
-                    width="80">
+                    width="90">
                     Brightness:
                   </text>
                   <slider
