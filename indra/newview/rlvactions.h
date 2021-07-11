@@ -236,6 +236,10 @@ public:
 	 */
 	static bool canChangeEnvironment(const LLUUID& idRlvObject = LLUUID::null);
 
+	/*
+	 * Returns true if a postprocessing shader is currently active
+	 */
+	static bool hasPostProcess();
 
 	// =================
 	// World interaction
