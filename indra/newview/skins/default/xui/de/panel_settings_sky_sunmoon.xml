@@ -28,7 +28,7 @@
 				Leuchtgröße:
 			</text>
 			<text name="star_brightness_label">
-				Hellig. Sterne:
+				Helligk. Sterne:
 			</text>
 		</layout_panel>
 		<layout_panel name="moon_layout">
