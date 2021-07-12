@@ -2089,7 +2089,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETOVERLAY>::onCommand(const RlvCommand&
 	}
 
 	// Refresh overlay effects according to object hierarchy
-	std::list<LLVisualEffect*> effects;
+	std::list<RlvOverlayEffect*> effects;
 	if (LLVfxManager::instance().getEffects<RlvOverlayEffect>(effects))
 	{
 		auto itActiveEffect = std::find_if(effects.begin(), effects.end(), [](const LLVisualEffect* pEffect) { return pEffect->getEnabled(); });
@@ -2100,15 +2100,28 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETOVERLAY>::onCommand(const RlvCommand&
 		}
 
 		const LLUUID idActiveRootObj = (effects.end() != itActiveEffect) ? Rlv::getObjectRootId((*itActiveEffect)->getId()) : LLUUID::null;
-		for (LLVisualEffect* pEffect : effects)
+		for (RlvOverlayEffect* pEffect : effects)
 		{
 			bool isActive = (idActiveRootObj.isNull() && pEffect == effects.front()) || (Rlv::getObjectRootId(pEffect->getId()) == idActiveRootObj);
 			int nPriority = (isActive) ? 256 - Rlv::getObjectLinkNumber(pEffect->getId()) : pEffect->getPriority();
 			LLVfxManager::instance().updateEffect(pEffect, isActive, nPriority);
+			pEffect->setBlockTouch(gRlvHandler.hasBehaviour(pEffect->getId(), RLV_BHVR_SETOVERLAY_TOUCH));
 		}
 	}
 
 	return eRet;
+}
+
+// Handles: @setoverlay_touch=n
+template<> template<>
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETOVERLAY_TOUCH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	if (RlvOverlayEffect* pOverlayEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(rlvCmd.getObjectID()))
+	{
+		pOverlayEffect->setBlockTouch( RLV_TYPE_ADD == rlvCmd.getParamType() );
+	}
+
+	return RLV_RET_SUCCESS;
 }
 
 // Handles: @setsphere=n|y

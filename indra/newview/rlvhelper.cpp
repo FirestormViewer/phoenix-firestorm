@@ -228,8 +228,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayAlpha, typeid(float), "alpha", &RlvOverlayEffect::onAlphaValueChanged);
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTexture, typeid(LLUUID), "texture", &RlvOverlayEffect::onTextureChanged);
 	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTint, typeid(LLVector3), "tint", &RlvOverlayEffect::onColorValueChanged);
-	pSetOverlayBhvr->addModifier(ERlvLocalBhvrModifier::OverlayTouch, typeid(LLVector3), "touch", &RlvOverlayEffect::onBlockTouchValueChanged);
 	addEntry(pSetOverlayBhvr);
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SETOVERLAY_TOUCH>("setoverlay_touch"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETOVERLAY_TWEEN>("setoverlay_tween"));
 
 	// Sphere
