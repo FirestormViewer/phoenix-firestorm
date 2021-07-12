@@ -34,7 +34,7 @@ class LLVOAvatar;
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
 //
 
-enum class ERlvCheckType { All, Some, None };
+enum class ERlvCheckType { All, Some, Nothing };
 
 class RlvActions
 {
