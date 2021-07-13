@@ -70,6 +70,8 @@ static void expand_all_folders(LLFolderView* root_folder);
 static bool has_expanded_folders(LLFolderView* root_folder);
 static bool has_collapsed_folders(LLFolderView* root_folder);
 static void toggle_restore_menu(LLMenuGL* menu, BOOL visible, BOOL enabled);
+// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+static bool category_has_descendents(LLPlacesInventoryPanel* inventory_list);
 
 /**
  * Functor counting expanded and collapsed folders in folder view tree to know
@@ -197,6 +199,9 @@ void LLLandmarksPanel::onSearchEdit(const std::string& string)
 
 	if (sFilterSubString != string)
 		sFilterSubString = string;
+
+	// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+	updateShowFolderState();
 }
 
 // virtual
@@ -324,6 +329,27 @@ void LLLandmarksPanel::setItemSelected(const LLUUID& obj_id, BOOL take_keyboard_
 	root->setSelection(item, FALSE, take_keyboard_focus);
 	root->scrollToShowSelection();
 }
+
+// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+void LLLandmarksPanel::updateShowFolderState()
+{
+	if (!mLandmarksInventoryPanel)
+	{
+		return;
+	}
+
+	bool show_all_folders = mLandmarksInventoryPanel->getFilterSubString().empty();
+	if (show_all_folders)
+	{
+		show_all_folders = category_has_descendents(mLandmarksInventoryPanel);
+	}
+
+	mLandmarksInventoryPanel->setShowFolderState(show_all_folders ?
+		LLInventoryFilter::SHOW_ALL_FOLDERS :
+		LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS
+	);
+}
+// </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////
 // PROTECTED METHODS
@@ -1272,6 +1298,19 @@ void toggle_restore_menu(LLMenuGL *menu, BOOL visible, BOOL enabled)
 		}
 	}
 }
+
+// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+static bool category_has_descendents(LLPlacesInventoryPanel* inventory_list)
+{
+	LLViewerInventoryCategory* category = gInventory.getCategory(inventory_list->getRootFolderID());
+	if (category)
+	{
+		return category->getDescendentCount() > 0;
+	}
+
+	return false;
+}
+// </FS:Ansariel>
 
 LLFavoritesPanel::LLFavoritesPanel()
 	:	LLLandmarksPanel(false)
