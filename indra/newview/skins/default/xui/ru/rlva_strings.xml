@@ -141,6 +141,16 @@
 			<key>value</key>
 			<string>Невозможно отобразить диалоговое окно или текстовое поле скрипта из-за ограничений RLV</string>
 		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно поделиться инвентарем с [RECIPIENT] из-за ограничений RLV.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>Невозможно поделиться инвентарем из-за ограничений RLV.</string>
+		</map>
 		<key>blocked_startim</key>
 		<map>
 			<key>value</key>
