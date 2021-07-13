@@ -994,11 +994,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c96fbccf3db01230832d8795318ee627</string>
+              <string>ab6f79c425524500d638807a3aee0115</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.09-darwin-211252249.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.01-darwin-211941804.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>65d60415962cf65918c4fabe379ad43a</string>
+              <string>729a2844a0de06d454f8de47d3a9cb10</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.09-linux64-211101316.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.01-linux64-211941750.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
