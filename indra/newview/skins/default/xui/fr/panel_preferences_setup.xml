@@ -34,6 +34,12 @@
 		<panel label="Dossiers" name="tab-dir">
 			<text name="cache_size_label_l">Taille du cache ([https://wiki.firestormviewer.org/cache Besoin d'aide ?]) :</text>
 			<text name="text_box5">Mo</text>
+			<text name="asset_cache_size_label_l">
+				Cache des ressources de données (actifs) :
+			</text>
+			<text name="asset_text_box5">
+				Mo
+			</text>
 			<button label="Vider le cache de l'inventaire" name="ClearInventoryCache" left="350" width="180"/>
 			<text name="Cache location">Emplacement du cache :</text>
 			<button label="Ouvrir" label_selected="Ouvrir" name="open_cache"/>
