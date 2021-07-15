@@ -21,6 +21,7 @@
 		<combo_box.item value="filter_type_textures" label="Textures"/>
 		<combo_box.item value="filter_type_snapshots" label="Photos"/>
 		<combo_box.item value="filter_type_meshes" label="Meshs"/>
+		<combo_box.item value="filter_type_settings" label="Paramètres" />
 		<combo_box.item value="filter_type_custom" label="Personnalisé..."/>
 	</combo_box>	
 	<tab_container name="inventory filter tabs">

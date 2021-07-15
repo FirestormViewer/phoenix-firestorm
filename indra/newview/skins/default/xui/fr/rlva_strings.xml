@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Caché)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Parcelle cachée)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Région cachée)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** IM bloqué par votre viewer</string>
+			<key>description</key>
+			<string>Affiché à la place du message original lorsqu'un IM entrant est bloqué.</string>
+			<key>label</key>
+			<string>IM entrant bloqué (local)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** IM bloqué par le viewer de l'expéditeur</string>
+			<key>description</key>
+			<string>Affiché (et envoyé à l'interlocuteur distant) lorsqu'un im sortant est bloqué.</string>
+			<key>label</key>
+			<string>IM sortant bloqué (local + distant)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @list or @except as an IM query (if enabled) -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** L'autre partie vous demande respectueusement de vous occuper de vos affaires. (les lapins m'ont fait faire ça !)</string>
+			<key>description</key>
+			<string>Envoyé à la partie distante lorsque vous refusez sa demande de lister vos restrictions RLV actives.)</string>
+			<key>label</key>
+			<string>commandes @list et @except (distantes)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party as a suffix to @list to inform them there might be more information -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>(Utilisez @except pour voir la liste des exceptions actives.)</string>
+			<key>description</key>
+			<string>Envoyé à la partie distante en tant que suffixe à @list pour l'informer de la manière de demander vos exceptions.</string>
+			<key>label</key>
+			<string>Suffixe de commande @list (distant)</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** L'autre partie n'est pas soumise à une restriction @startim.</string>
+			<key>description</key>
+			<string>Envoyé à la partie distante lorsqu'elle tente de fermer de force votre conversation en IM avec elle (et qu'une telle session n'existe pas).</string>
+			<key>label</key>
+			<string>Commande @stopim sans session (à distance)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** La session a été terminée pour l'autre partie</string>
+			<key>description</key>
+			<string>Envoyé à la partie distante lorsqu'elle tente de fermer de force la conversation IM (et qu'elle existe)</string>
+			<key>label</key>
+			<string>Commande @stopim avec une session active (à distance)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] a clos à distance la conversation en IM avec @stopim</string>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'utiliser le pilote automatique en raison des restrictions RLV</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'effectuer l'action en raison de restrictions RLV</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de changer de groupe actif en raison d'une restriction RLV ; repasse en mode "[GROUP_SLURL]"</string>
+		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'effectuer l'action d'inventaire demandée en raison d'un dossier verrouillé RLV.</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de voir la présence d'avatars proches en raison des restrictions RLV</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>La tentative d'attacher '[OBJECT]' a été refusée en raison de restrictions RLV.</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>'[OBJECT]' s'est vu refuser la permission de vous téléporter en raison des restrictions RLV</string>
+		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'afficher une boîte de dialogue ou de texte de script en raison de restrictions RLV</string>
+		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de partager l'inventaire avec [RECIPIENT] en raison de restrictions RLV.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de partager l'inventaire en raison des restrictions RLV.</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de démarrer une session IM avec [RECIPIENT] en raison de restrictions RLV</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de commencer la conférence avec [RECIPIENT] en raison de restrictions RLV</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'initier la téléportation en raison des restrictions RLV</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>Impossible de proposer la téléportation en raison des restrictions RLV</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'ouvrir [TYPE] en raison de restrictions RLV</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>Impossible d'activer le mode filaire en raison des restrictions RLV</string>
+		</map>
+
+		<!-- Sent as "Busy" messages to the remote party -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>Le résident auquel vous avez envoyé un IM est empêché de les lire pour le moment, veuillez réessayer plus tard.</string>
+			<key>description</key>
+			<string>Envoyé à la partie distante lorsque son IM était bloqué</string>
+			<key>label</key>
+			<string>Message IM entrant bloqué (à distance)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>Le résident est actuellement empêché d'accepter. Veuillez réessayer plus tard.</string>
+			<key>description</key>
+			<string>Envoyé à la partie distante lorsque son offre ou sa demande de téléportation était bloquée.</string>
+			<key>label</key>
+			<string>Offre/demande de téléportation bloquée (à distance)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+	</map>
+
+	<!-- Generic names used to replace resident names when @shownames restricted -->
+	<key>anonyms</key>
+	<array>
+		<string>Un résident</string>
+		<string>Ce résident</string>
+		<string>Ce résident</string>
+		<string>Un individu</string>
+		<string>Cet individu</string>
+		<string>Cet individu</string>
+		<string>Une personne</string>
+		<string>Cette personne</string>
+		<string>Cette personne</string>
+		<string>Un étranger</string>
+		<string>Cet étranger</string>
+		<string>Cet étranger</string>
+		<string>Un être</string>
+		<string>Cet être</string>
+		<string>Cet être</string>
+		<string>Un agent</string>
+		<string>Cet agent</string>
+		<string>Cet agent</string>
+		<string>Une âme</string>
+		<string>Cette âme</string>
+		<string>Cette âme</string>
+		<string>Quelqu'un</string>
+		<string>Certaines personnes</string>
+		<string>Quelqu'un</string>
+		<string>Le mystérieux</string>
+		<string>Un être inconnu</string>
+		<string>Une personne non identifiée</string>
+		<string>Une personne inconnue</string>
+	</array>
+
+</map>
+</llsd>
