@@ -87,6 +87,9 @@ public:
 
 	void resetSelection();
 
+	// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+	void updateShowFolderState();
+
 protected:
 	/**
 	 * @return true - if current selected panel is not null and selected item is a landmark

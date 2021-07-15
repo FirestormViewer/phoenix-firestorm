@@ -59,15 +59,6 @@ ERlvCmdRet RlvOverlayEffect::onAlphaValueChanged(const LLUUID& idRlvObj, const b
 }
 
 // static
-ERlvCmdRet RlvOverlayEffect::onBlockTouchValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
-{
-	if (RlvOverlayEffect* pEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(idRlvObj))
-	{
-		pEffect->m_fBlockTouch = (newValue) ? boost::get<bool>(newValue.value()) : false;
-	}
-	return RLV_RET_SUCCESS;
-}
-// static
 ERlvCmdRet RlvOverlayEffect::onColorValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue)
 {
 	if (RlvOverlayEffect* pEffect = LLVfxManager::instance().getEffect<RlvOverlayEffect>(idRlvObj))

@@ -8,4 +8,14 @@
 	</text>
 	<button label="Запустить публично" label_selected="Остановить" name="Inworld" tool_tip="Запустить анимацию аватара, чтоб ее видели все вокруг"/>
 	<button label="Запустить для себя" label_selected="Остановить" name="Locally" tool_tip="Запустить анимацию аватара, чтоб ее видели только вы"/>
+	<text name="AdvancedStatsLeft">
+Приоритет: [PRIORITY]
+Длительн.: [DURATION]с
+Цикл: [IS_LOOP]
+	</text>
+	<text name="AdvancedStatsRight">
+Запуск: [EASE_IN]с
+Останов: [EASE_OUT]с
+Суставы: [NUM_JOINTS]
+	</text>
 </floater>
