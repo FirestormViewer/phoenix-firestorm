@@ -5,7 +5,7 @@
 	</string>
 	<text name="title_label" value="Szczegóły landmarka" />
 	<text name="name_label" value="Nazwa:" />
-	<text name="folder_label" value="Lokalizacja:" />
+	<text name="folder_label" value="Zapisz landmark w:" />
 	<text name="new_folder_textbox">
 		[secondlife:/// Stwórz nowy folder]
 	</text>
