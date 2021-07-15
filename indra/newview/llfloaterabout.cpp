@@ -239,6 +239,7 @@ void LLFloaterAbout::fetchServerReleaseNotesCoro(std::string cap_url)
 
     httpOpts->setWantHeaders(true);
     httpOpts->setFollowRedirects(false);
+    httpOpts->setSSLVerifyPeer(false); // We want this data even if SSL verification fails
 
     LLSD result = httpAdapter->getAndSuspend(httpRequest, cap_url, httpOpts);
 

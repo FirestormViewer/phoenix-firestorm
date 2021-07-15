@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Teleport History Item Context Menu">
+<toggleable_menu name="Teleport History Item Menu">
 	<menu_item_call label="Телепорт" name="Teleport"/>
 	<menu_item_call label="Подробнее" name="More Information"/>
-	<menu_item_call label="Копировать SLurl в буфер" name="CopyToClipboard"/>
-</context_menu>
+	<menu_item_call label="Показать на Карте" name="show_on_map"/>
+	<menu_item_call label="Копировать SLurl" name="CopyToClipboard"/>
+</toggleable_menu>

@@ -3,8 +3,6 @@
 	<string name="meters">Metri</string>
 	<string name="feet">Piedi</string>
 	<string name="height">Altezza:</string>
-	<string name="heigth_label_color" translate="false">White_50</string>
-	<string name="heigth_value_label_color" translate="false">White</string>
 	<text name="avatar_height"/>
 	<tab_container name="wearable_accordion">
 		<panel name="shape_body_tab_holder" title="Corpo">

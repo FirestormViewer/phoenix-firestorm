@@ -310,7 +310,7 @@
 				Teleport do Miejsca Startu (użycie: cmd)
 			</text>
 			<text name="FSCmdLineMapTo_txt">
-				Teleport do regionu x (użycie: cmd nazwa | x y z)
+				Teleport do regionu (użycie: cmd nazwa | x y z)
 			</text>
 			<check_box label="Ta sama pozycja między regionami" name="toggle" />
 		</panel>

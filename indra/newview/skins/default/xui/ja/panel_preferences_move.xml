@@ -62,6 +62,7 @@
 			<check_box label="構えてからジャンプしたり、着地のポーズをしてから動き出すのをやめる" name="FSIgnoreFinishAnimation" />
 			<check_box label="画面上でアバターが後ろ向きに歩くのを許可する。（SLの仕様により、ローカルでのみ有効）" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="ここにチェックを入れると、後ろ向きに歩き出したアバターが、あなたの画面上ではそのまま後ろ向きに歩くように見えるようになります。この設定はあなたのビューワでの見せ方だけに影響しており、実際にアバターがそのような動きをしているわけではありません。動き出した時にその方向に振り返るのはセカンドライフ・ビューワのデフォルトの動きです。アバターがAOを使用していると、この動きをオーバーライドし、強制的にアバターを進行方向に振り返らせる可能性があります。" />
 			<check_box label="選択したオブジェクトの方にアバターが向くようにする" name="FSTurnAvatarToSelectedObject" tool_tip="選択しているオブジェクトの方向にアバターが顔をむけるようにします" />
+			<slider label="アバターの振り返る速度" name="av_turn_spd" tool_tip="アバターが振り返るのに想定される比率を 0〜100 のパーセンテージで変更します。大きな値を設定するほど、ぞんざいでぎこちない動きになります。" />
 			<text name="Region_Crossing_Movement_Label">
 				SIM を跨ぐ時の動作:
 			</text>
@@ -109,6 +110,7 @@
 			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
 			<check_box label="テレポートした時に世界地図を閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時に世界地図が自動的に閉じる機能をオフにします。"/>
 			<check_box label="テレポートした後も「フレンドのみ表示」機能を維持する" name="FSRenderFriendsOnlyPersistsTP" tool_tip="「フレンドのみ表示」機能が自動的にキャンセルされないようにします。（デフォルトはオフ）" />
+			<check_box label="テレポートした元の地域の SLURL を報告" name="FSShowBackSLURL" />
 		</panel>
 		
 		<!-- Map & Minimap -->

@@ -4101,7 +4101,7 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
     }
 
     llcoro::suspend();
-    if (LLApp::isQuitting())
+    if (LLApp::isExiting())
     {
         return;
     }
@@ -4168,7 +4168,7 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
 
         LLSD result = httpAdapter->postAndSuspend(httpRequest, url, postData);
 
-        if (LLApp::isQuitting())
+        if (LLApp::isExiting())
         {
             return;
         }
@@ -4208,7 +4208,7 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAd
                 LL_WARNS("Avatar") << "Bake retry #" << retryCount << " in " << timeout << " seconds." << LL_ENDL;
 
                 llcoro::suspendUntilTimeout(timeout); 
-                if (LLApp::isQuitting())
+                if (LLApp::isExiting())
                 {
                     return;
                 }
@@ -4894,6 +4894,17 @@ public:
 	}
 	virtual void done()
 	{
+        if (mComplete.size() <= 0)
+        {
+            // Ex: timeout
+            LL_WARNS() << "Failed to load data. Removing observer " << LL_ENDL;
+            gInventory.removeObserver(this);
+            doOnIdleOneTime(mCallable);
+
+            delete this;
+            return;
+        }
+
 		// What we do here is get the complete information on the
 		// items in the requested category, and set up an observer
 		// that will wait for that to happen.

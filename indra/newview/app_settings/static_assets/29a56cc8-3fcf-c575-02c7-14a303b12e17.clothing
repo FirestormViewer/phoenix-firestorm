@@ -1,0 +1,29 @@
+LLWearable version 22
+RASL F SHOP JEANS
+
+	permissions 0
+	{
+		base_mask	7fffffff
+		owner_mask	7fffffff
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	79908808-d272-49a8-864a-d133a10931e9
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	79908808-d272-49a8-864a-d133a10931e9
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 11
+parameters 5
+619 1
+624 1
+824 1
+825 1
+826 1
+textures 1
+17 a77d7374-e4be-d4e3-9010-423a976d5da8

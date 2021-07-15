@@ -4553,8 +4553,9 @@ void LLSelectMgr::convertTransient()
 
 void LLSelectMgr::deselectAllIfTooFar()
 {
-// [RLVa:KB] - Checked: RLVa-1.3.0
-	if ( (!mSelectedObjects->isEmpty()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ))) )
+// [RLVa:KB] - @edit*
+	// Continuously verify the selection as soon as there is at least one prim we shouldn't be able to edit
+	if ( !mSelectedObjects->isEmpty() && RlvActions::isRlvEnabled() && !RlvActions::canEdit(ERlvCheckType::All) )
 	{
 		struct NotTransientOrFocusedMediaOrEditable : public LLSelectedNodeFunctor
 		{

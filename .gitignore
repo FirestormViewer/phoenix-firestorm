@@ -8,6 +8,7 @@
 *.rej
 *.swp
 *.tar.bz2
+*.code-workspace
 *~
 
 # Specific paths and/or names
@@ -108,3 +109,4 @@ my_autobuild.xml
 compile_commands.json
 # ignore tracy for now
 indra/tracy
+firestorm.code-workspace

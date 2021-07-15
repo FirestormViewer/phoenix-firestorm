@@ -661,6 +661,22 @@ void LLTeleportHistoryPanel::updateVerbs()
 	{
 		sRemoveBtn->setEnabled(true);
 	}
+
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	if (!mLastSelectedFlatlList)
+	{
+		mTeleportBtn->setEnabled(false);
+		mShowProfile->setEnabled(false);
+		mShowOnMapBtn->setEnabled(false);
+		return;
+	}
+
+	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+
+	mTeleportBtn->setEnabled(NULL != itemp);
+	mShowProfile->setEnabled(NULL != itemp);
+	mShowOnMapBtn->setEnabled(NULL != itemp);
+	// </FS:Ansariel>
 }
 
 // virtual
@@ -1235,6 +1251,12 @@ void LLTeleportHistoryPanel::onGearMenuAction(const LLSD& userdata)
         LLLandmarkActions::getSLURLfromPosGlobal(globalPos,
             boost::bind(&LLTeleportHistoryPanel::gotSLURLCallback, _1));
     }
+    // <FS:Ansariel> FIRE-31025: Clear TP history doesn't work anymore
+    else if ("clear_history" == command_name)
+    {
+        onRemoveSelected();
+    }
+    // </FS:Ansariel>
 }
 
 bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const

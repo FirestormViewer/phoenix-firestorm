@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_teleport_history_timezone">
+	<menu_item_check name="teleport_history_tz_local" label="Lokalnie" />
+</toggleable_menu>

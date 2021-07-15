@@ -734,6 +734,14 @@ void LLAvatarActions::csr(const LLUUID& id, std::string name)
 //static 
 void LLAvatarActions::share(const LLUUID& id)
 {
+// [RLVa:KB] - @share
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory(id)) )
+	{
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Share, LLSD().with("RECIPIENT", id));
+		return;
+	}
+// [/RLVa:KB]
+
 	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV))
 	{
@@ -987,9 +995,33 @@ namespace action_give_inventory
 	 * @param avatar_names - avatar names request to be sent.
 	 * @param avatar_uuids - avatar names request to be sent.
 	 */
-	static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names, LLInventoryPanel* panel = NULL)
+//	static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names, LLInventoryPanel* panel = NULL)
+// [RLVa:KB] - @share
+	static void give_inventory(uuid_vec_t avatar_uuids, std::vector<LLAvatarName> avatar_names, LLInventoryPanel* panel = NULL)
+// [/RLVa:KB]
 	{
 		llassert(avatar_names.size() == avatar_uuids.size());
+
+// [RLVa:KB] - @share
+		if ( (RlvActions::isRlvEnabled()) && (RlvActions::hasBehaviour(RLV_BHVR_SHARE)) )
+		{
+			for (int idxAvatar = avatar_uuids.size() - 1; idxAvatar >= 0; idxAvatar--)
+			{
+				if (!RlvActions::canGiveInventory(avatar_uuids[idxAvatar]))
+				{
+					RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Share, LLSD().with("RECIPIENT", LLSLURL("agent", avatar_uuids[idxAvatar], "completename").getSLURLString()));
+
+					avatar_uuids.erase(avatar_uuids.begin() + idxAvatar);
+					avatar_names.erase(avatar_names.begin() + idxAvatar);
+				}
+			}
+		}
+
+		if (avatar_uuids.empty())
+		{
+			return;
+		}
+// [/RLVa:KB]
 
 		const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs(panel);
 		if (inventory_selected_uuids.empty())
@@ -1116,6 +1148,14 @@ std::set<LLUUID> LLAvatarActions::getInventorySelectedUUIDs(LLInventoryPanel* ac
 //static
 void LLAvatarActions::shareWithAvatars(LLView * panel)
 {
+// [RLVa:KB] - @share
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canGiveInventory()) )
+	{
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::ShareGeneric);
+		return;
+	}
+// [/RLVa:KB]
+
 	using namespace action_give_inventory;
 
 	LLFloater* root_floater = gFloaterView->getParentFloater(panel);

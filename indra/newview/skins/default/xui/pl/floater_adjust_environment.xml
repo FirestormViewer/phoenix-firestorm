@@ -48,6 +48,12 @@
 					<text name="label">
 						Słońce:
 					</text>
+					<text name="sun_azimuth_label">
+						Azymut:
+					</text>
+					<text name="sun_elevation_label">
+						Elewacja:
+					</text>
 					<check_box label="Pokaż emiter" name="sunbeacon" />
 					<text name="scale_label">
 						Rozmiar:
@@ -65,6 +71,12 @@
 				<layout_panel name="lp_4">
 					<text name="label">
 						Księżyc:
+					</text>
+					<text name="moon_azimuth_label">
+						Azymut:
+					</text>
+					<text name="moon_elevation_label">
+						Elewacja:
 					</text>
 					<check_box label="Pokaż emiter" name="moonbeacon" />
 				</layout_panel>

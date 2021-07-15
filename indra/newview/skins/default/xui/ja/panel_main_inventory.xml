@@ -29,6 +29,7 @@
 		<combo_box.item value="filter_separator" label="------------" />
 		<combo_box.item value="filter_type_custom" label="カスタマイズ..." />
 	</combo_box>
+	<menu_button tool_tip="可視性オプションを表示" name="options_visibility_btn" />
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="インベントリ" name="All Items"/>
 		<recent_inventory_panel label="最新" name="Recent Items"/>

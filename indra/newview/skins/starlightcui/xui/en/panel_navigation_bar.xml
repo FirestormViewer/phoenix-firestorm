@@ -233,7 +233,7 @@
      left="0"
      name="favorite"
      image_drag_indication="Accordion_ArrowOpened_Off"
-     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+     tool_tip="Drag Landmarks here for quick access to your favorite places!"
      width="1024">
               <!-- More button actually is a text box. -->
               <!-- FS:Ansariel: This widget has a different name because it is a more_button.

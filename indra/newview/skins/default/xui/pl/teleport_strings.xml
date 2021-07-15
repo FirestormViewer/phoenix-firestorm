@@ -2,8 +2,7 @@
 <teleport_messages>
 	<message_set name="errors">
 		<message name="invalid_tport">
-			Przepraszamy, ale pojawił się błąd podczas Twojej próby teleportacji. Aby ponowić teleportację, wyloguj się i zaloguj ponownie.
-Jeżeli nadal otrzymujesz komunikat o błędzie teleportacji, sprawdź [SUPPORT_SITE].
+			Próby teleportacji są ograniczone do 6 na minutę. Jeśli masz problemy odczekaj minutę i spróbuj ponownie się teleportować. Jeśli problem będzie się powtarzał wyloguj się i zaloguj ponownie.
 		</message>
 		<message name="invalid_region_handoff">
 			Przepraszamy, ale pojawił się błąd podczas próby zmiany regionu. Aby ponowić próbę przejścia na drugi region, wyloguj się i zaloguj ponownie.

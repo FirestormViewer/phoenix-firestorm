@@ -81,7 +81,7 @@
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BadInstallation">
-		[APP_NAME] をアップデート中にエラーが発生しました。  ビューワの [https://www.firestormviewer.org/downloads 最新バージョンをダウンロード] してください。
+		[APP_NAME] のインストールに失敗しました。ビューワの [https://www.firestormviewer.org/downloads 最新バージョンをダウンロード] して、もう一度インストールし直してください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
@@ -546,6 +546,17 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="MustAgreeToLogIn">
 		[CURRENT_GRID] へのログインを続けるには、取引条件、プライバシーポリシー、及び利用規約に同意してください。
 	</notification>
+	<notification name="CouldNotBuyCurrency">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
+	<notification name="CouldNotBuyCurrencyOS">
+[TITLE]
+[MESSAGE]
+		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
+	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		アウトフィットを装着できません。
 アウトフィットフォルダに衣類、身体部位、アタッチメントがありません。
@@ -721,7 +732,9 @@ L$ が不足しているのでこのグループに参加することができ�
 		ファイル [[FILE]] を書き込めません。
 	</notification>
 	<notification name="UnsupportedHardware">
-		お使いのコンピューターは [APP_NAME] の必要最低限の動作環境を満たしていません。 パフォーマンスの低下を感じるかもしれません。 恐れ入りますが [SUPPORT_SITE] ではサポート対象外のシステムに関する技術的サポートは行っておりません。
+お使いのコンピューターは [APP_NAME] の必要最低限の動作環境を満たしていません。 パフォーマンスの低下を感じるかもしれません。 恐れ入りますが [SUPPORT_SITE] ではサポート対象外のシステムに関する技術的サポートは行っておりません。
+		
+[MINSPECS]
 
 [_URL] に移動して確認をしますか？
 		<url name="url" option="0">
@@ -968,6 +981,13 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="CannotCreateLandmarkNotOwner">
 		土地の所有者が許可していないため、ランドマークを作成することはできません。
 	</notification>
+	<notification label="Create folder" name="CreateLandmarkFolder">
+		フォルダの名前を選択して下さい：
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		「リコンパイル」できません。
 スクリプトのオブジェクトを選択してください。
@@ -1021,8 +1041,7 @@ L$ が不足しているのでこのグループに参加することができ�
 [REASON]
 	</notification>
 	<notification name="invalid_tport">
-		テレポート処理中に問題が発生しました。 ログインし直す必要があるかもしれません。
-このメッセージが何度も出る場合は、[SUPPORT_SITE] をご確認ください。
+		テレポートできるのは１分間に６回までの制限があります。もしテレポートで問題を抱えている場合は、もう１分待ってから再度テレポートしてみて下さい。問題が解消しないようであれば一度ログアウトして、ログインし直して下さい。
 	</notification>
 	<notification name="invalid_region_handoff">
 		リージョン間の移動中に問題が発生しました。 ログインし直す必要があるかもしれません。
@@ -1348,6 +1367,15 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 			<button name="Cancel" text="取り消し" />
 		</form>
 	</notification>
+	
+	<notification label="ランドマークの名前を変更" name="RenameLandmark">
+		[NAME] の名前を選択して下さい
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	
 	<notification name="RemoveFromFriends">
 		フレンドリストから &lt;nolink&gt;[NAME]&lt;/nolink&gt; を削除しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
@@ -1516,13 +1544,13 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 		</form>
 	</notification>
 	<notification name="AgentComplexityWithVisibility">
-		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] は [AGENT_COMPLEXITY] です。
+		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 アバターの複雑度] は [AGENT_COMPLEXITY] です。
 [OVERLIMIT_MSG]
 		<usetemplate ignoretext="アバターの複雑度が高すぎる場合は警告する" name="notifyignore"/>
 	</notification>
 
 	<notification name="AgentComplexity">
-		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] は [AGENT_COMPLEXITY] です。
+		あなたの [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 アバターの複雑度] は [AGENT_COMPLEXITY] です。
 		<usetemplate ignoretext="アバターの複雑さの変更について警告する" name="notifyignore"/>
 	</notification>
 	<notification name="HUDComplexityWarning">
@@ -1580,6 +1608,13 @@ F1 キーを押してください。
 		現在のグリッド（[CURRENT_GRID]）とはグリッド（[GRID]）が異なるため、[SLURL] にテレポートできませんでした。   ビューワを閉じてからもう一度お試しください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	
+	<notification name="GeneralCertificateErrorShort">
+サーバーに接続できませんでした。
+[REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
 	<notification name="GeneralCertificateError">
 		サーバーに接続できませんでした。
 [REASON]
@@ -1738,17 +1773,23 @@ https://secondlife.com/support/downloads/ からダウンロードしてくだ�
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PauseForUpdate">
-		ログインするには、バージョン [VERSION] が必要です。
+ログインするには、バージョン [VERSION] が必要です。
+リリースノート：[URL]
+
 [OK] をクリックして、ダウンロードとインストールを開始します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OptionalUpdateReady">
-		バージョン [VERSION] のダウンロードが完了し、インストールの準備ができました。
+バージョン [VERSION] のダウンロードが完了し、インストールの準備ができました。
+リリースノート：[URL]
+
 [OK] をクリックして、インストールを開始します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PromptOptionalUpdate">
-		バージョン [VERSION] のダウンロードが完了し、インストールの準備ができました。
+バージョン [VERSION] のダウンロードが完了し、インストールの準備ができました。
+リリースノート：[URL]
+
 続けますか？
 		<usetemplate canceltext="あとで" name="yesnocancelbuttons" notext="スキップ" yestext="インストール"/>
 	</notification>
@@ -1807,9 +1848,7 @@ https://secondlife.com/support/downloads/ からダウンロードしてくだ�
 グループから脱退しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
-	<notification name="GroupDepart">
-		グループ &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos; を抜けました。
-	</notification>
+
 	<notification name="GroupLeaveConfirmMemberWithFee">
 現在、あなたは &lt;nolink&gt;[GROUP]&lt;/nolink&gt; グループのメンバーです。再度入会する場合は L$[AMOUNT] の費用がかかります。
 グループから脱退しますか？
@@ -2167,7 +2206,9 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 		<usetemplate name="okcancelbuttons" notext="Cancel" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		これから訪問しようとしている地域には、あなたの現在のレーティング設定を越えるコンテンツがあります。レーティング設定の変更は、「アバター」＞「 環境設定」＞「一般」で行えます。
+		これから訪問しようとしている地域には、あなたの現在のレーティング設定を越えるレーティングが設定されています。「アバター」＞「 環境設定」＞「一般」からこの設定を変更して下さい。
+		
+レーティングに関する詳しい情報は、[https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ ここ]で見つかります。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="EstateChangeCovenant">
@@ -2203,7 +2244,9 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		訪問しようとしている地域（リージョン）には現在の環境設定を超えるコンテンツが含まれています。「ミー」 &gt; 「環境設定」 &gt; 「一般」を選択して、環境設定を変更できます。
+		訪問しようとしている地域（リージョン）には現在最大に設定されているレーティングを超えるレーティングが設定されています。「アバター」＞「環境設定」＞「一般」からこの設定を変更してください。
+		
+レーティングに関する詳しい情報は、[https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ ここ]で見つかります。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
@@ -2244,15 +2287,17 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
-		今後、[RATING] コンテンツ付きの地域（リージョン）を訪問しようとしているという通知を受け取りません。後でメニューバーの「ミー」 &gt; 「環境設定」 &gt; 「一般」を使用して、コンテンツの環境設定を変更できます。
+		今後、[RATING] コンテンツ付きの地域（リージョン）を訪問しようとしているという通知を受け取りません。後でメニューバーの「アバター」＞「環境設定」＞「一般」を使用して、コンテンツの環境設定を変更できます。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MaturityChangeError">
-		現在、[PREFERRED_MATURITY] コンテンツを表示するように環境設定を変更できませんでした。あなたの環境設定は、[ACTUAL_MATURITY] コンテンツを表示するようにリセットされました。メニューバーの「ミー」 &gt; 「環境設定」 &gt; 「一般」を使用して、もう一度環境設定を変更できます。
+		現在、[PREFERRED_MATURITY] コンテンツを表示するように環境設定を変更できませんでした。あなたの環境設定は、[ACTUAL_MATURITY] コンテンツを表示するようにリセットされました。メニューバーの「アバター」＞「環境設定」＞「一般」を使用して、もう一度環境設定を変更できます。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		取得しようとしている土地には現在の環境設定を超えるレーティング区分が含まれています。「ミー」 &gt; 「環境設定」 &gt; 「一般」を選択して、環境設定を変更できます。
+		取得しようとしている土地には現在の環境設定を超えるレーティング区分が含まれています。「アバター」＞「環境設定」＞「一般」をからこの設定を変更できます。
+		
+レーティングに関する詳しい情報は、[https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ ここ]で見つかります。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
@@ -3117,7 +3162,9 @@ URL: [AUDIOURL]
 		そのリージョンにいないと公共の土地を取得することはできません。
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		訪問しようとしている地域（リージョン）には現在の環境設定を超えるコンテンツが含まれています。「ミー」 &gt; 「環境設定」 &gt; 「一般」を選択して、環境設定を変更できます。
+		訪問しようとしている地域（リージョン）には現在最大に設定されているレーティングを超えるレーティングが設定されています。「アバター」＞「環境設定」＞「一般」からこの設定を変更してください。
+レーティングに関する詳しい情報は[https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ ここ]で見つかります。
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RegionAboutToShutdown">
 		あなたが入ろうとしている地域はこれからシャットダウンするところです。
@@ -3697,8 +3744,14 @@ M キーを押して変更します。
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
 		[COUNT] 個のアイテムをアップロードすることにより、合計 L$[COST] のコストがかかります。アップロードを続けますか？
-		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="アップロード"/>
+		<usetemplate ignoretext="一括アップロードを確認" name="okcancelignore" notext="取り消し" yestext="アップロード"/>
 	</notification>
+	
+	<notification name="NotEnoughMoneyForBulkUpload">
+現在の残高 L$[BALANCE] では [COUNT] 個のアイテムをアップロードするのに必要な合計 L$[COST] に足りません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
 	<notification name="BulkUploadNoCompatibleFiles">
 		選択されたファイルの一括アップロードはできません。
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -3712,7 +3765,7 @@ M キーを押して変更します。
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="アップロード"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
-		テレポート履歴を削除しますか？
+		あなたがこれまで訪れた場所の記録が全て失われます。この操作は取り消すことができません。削除を実行してもよろしいですか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="BottomTrayButtonCanNotBeShown">
@@ -3791,9 +3844,14 @@ M キーを押して変更します。
 容姿の更新は[TIME]秒後に送信されました。
 [STATUS]
 	</notification>
+	
+	<notification name="AvatarRezSelfBakeForceUpdateNotification">
+ビューワーはあなたが雲状態で表示されるかもしれないことを検知し、現在自動的にこの問題を解決しようとしています。
+	</notification>
+	
 	<notification name="AvatarRezCloudNotification">
 		（ [EXISTENCE] 秒）
-アバター「 NAME 」がクラウドになりました。
+アバター「 NAME 」が雲状態になりました。
 	</notification>
 	<notification name="AvatarRezArrivedNotification">
 		（ [EXISTENCE] 秒）
@@ -3801,7 +3859,7 @@ M キーを押して変更します。
 	</notification>
 	<notification name="AvatarRezLeftCloudNotification">
 		（ [EXISTENCE] 秒）
-アバター「 [NAME] 」が [TIME] 秒でクラウド状態から出現します。
+アバター「 [NAME] 」が [TIME] 秒で雲状態から脱しました。
 	</notification>
 	<notification name="AvatarRezEnteredAppearanceNotification">
 		（ [EXISTENCE] 秒）
@@ -4083,11 +4141,25 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 		選択されたオブジェクトはナビメッシュに影響を与えます。オブジェクトをフレキシブルパスに変更すると、ナビメッシュから削除されます。
 		<usetemplate ignoretext="選択されたオブジェクトはナビメッシュに影響を与えます。オブジェクトをフレキシブルパスに変更すると、ナビメッシュから削除されます。" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
+	
+	<global name="UnsupportedShaderRequirements">
+[APP_NAME] のハードウェア必要条件を満たしていないようです。[APP_NAME] は、OpenGL 2.0 以降のシェーダーに対応している必要があります。もしこの要件が満たされているのであれば、ご利用のグラフィックカードのドライバが最新になっているか、また OS のサービスパックやパッチが最新になっているかご確認ください。
+
+この問題が何度も起きる場合は、[SUPPORT_SITE] をご確認ください。
+	</global>
+	
 	<global name="UnsupportedGLRequirements">
 		[APP_NAME] に必要なハードウェアがないようです。 [APP_NAME] にはマルチテクスチャをサポートする OpenGL グラフィックカードが必要です。 お使いのグラフィックカードの最新ドライバがインストールされているかどうか、オペレーティングシステムのサービスパックとパッチが入っているかをご確認ください。
 
 この問題が何度も起きる場合は、[SUPPORT_SITE] をご確認ください。
 	</global>
+	
+	<global name="UnsupportedIntelDriver">
+インストールされている [GPUNAME] のインテル製グラフィックドライバのバージョン [VERSION] は極めて古いものとなっており、プログラムのクラッシュを高い頻度で引き起こすことが知られています。最新のインテル製ドライバにアップグレードすることを強くお勧めします。
+
+インテルドライバのウェブサイトを確認しますか？
+	</global>
+	
 	<global name="UnsupportedCPUAmount">
 		796
 	</global>
@@ -4095,11 +4167,21 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 		510
 	</global>
 	<global name="UnsupportedGPU">
-		- あなたのグラフィックカードは必須動作環境の条件を満たしていません。
+		- あなたのグラフィックカードは必要動作環境の条件を満たしていません。
 	</global>
+	
+	<global name="UnsupportedCPU">
+		- あなたの CPU は必要動作環境の条件を満たしていません。
+	</global>
+	
 	<global name="UnsupportedRAM">
-		- あなたのシステムメモリは必須動作環境の条件を満たしていません。
+		- あなたのシステムメモリは必要動作環境の条件を満たしていません。
 	</global>
+	
+	 <global name="LLLeapUpdaterFailure">
+アップデートサービス [UPDATER_APP] の起動に失敗しました。ビューワが正しくインストールされていること、アプリの起動に必要な権限設定がされていることを確認してください。この問題が何度も起きる場合は、[SUPPORT_SITE] をご確認ください。
+	</global>
+	
 	<global name="You can only set your &apos;Home Location&apos; on your land or at a mainland Infohub.">
 		自分の土地をお持ちの場合、「ホーム」に設定できます。
 お持ちでない場合は、地図で「インフォハブ」をお探しください。
@@ -4632,7 +4714,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		テキストを追加できません!
 	</notification>
 	<notification name="AssetServerTimeoutObjReturn">
-		資産サーバーがタイムリーに応答しませんでした。オブジェクトが sim に返されました。
+		資産サーバーがタイムリーに応答しませんでした。オブジェクトが地域に返されました。
 	</notification>
 	<notification name="RegionDisablePhysicsShapes">
 		このリージョンでは、物理的シェイプが有効にされていません。
@@ -5062,6 +5144,12 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		これにより、過去の会話のログ、およびそのファイルのすべてのバックアップが削除されます。
 		<usetemplate ignoretext="以前の会話のログを削除する前に確認してください。" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
+	
+	<notification name="PreferenceControlsDefaults">
+		コントロールの値を全てデフォルトに戻してよいですか？
+		<usetemplate canceltext="取り消し" name="yesnocancelbuttons" notext="現在のモード" yestext="全てのモード"/>
+	</notification>
+	
 	<notification name="PreferenceChatDeleteTranscripts">
 	この操作によって以前のすべての会話のテキストが全て削除されます。過去の会話リストは影響を受けません。[FOLDER]フォルダにある「.txt」と「txt.backup」の拡張子の全てのファイルが削除されます。
 		<usetemplate ignoretext="会話記録を削除する前に確認。" name="okcancelignore" notext="キャンセル" yestext="OK"/>
@@ -5073,6 +5161,21 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 	<notification name="DefaultObjectPermissions">
 		デフォルトのオブジェクト権限を保存するときに問題が発生しました: [REASON]。後でデフォルトの権限を設定してください。
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
+	<notification name="OutfitPhotoLoadError">
+		[REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
+	<notification name="AddPaymentMethod">
+次のページで L$ の金額を選択して
+「注文を確定」ボタンをクリックしてください。
+チェックアウト時の支払方法が追加されます。
+		<form name="form">
+			<button name="Continue" text="続ける"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
 	</notification>
 	
 	<!-- <FS:Zi> Add float LSL color entry widgets -->
@@ -5448,4 +5551,18 @@ Firestorm ビューワを利用して行った通貨の購入は、ユーザー�
 
 「共有された環境」と「デイサイクル依存」のものは選択できませんのでご注意下さい！
 	</notification>
+	
+	<notification name="CantCreateInventoryName">
+		次の持ち物アイテムを作成できません：[NAME]
+	</notification>
+	
+	<notification name="WindlightBulkImportFinished">
+		Windlight の一括インポートが完了しました。
+	</notification>
+	
+	<notification name = "FSAOScriptedNotification">
+		Firestorm の AO メッセージ：[AO_MESSAGE]
+		<usetemplate ignoretext="Firestorm の AO がスクリプト入りオブジェクトからのアクセスを受けた場合に警告" name="notifyignore"/>
+	</notification>
+	
 </notifications>

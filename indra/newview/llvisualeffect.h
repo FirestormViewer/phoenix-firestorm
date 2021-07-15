@@ -170,7 +170,7 @@ public:
 	LLVisualEffect* getEffect(EVisualEffect eCode, const LLUUID& idEffect) const;
 	template<typename T> T* getEffect(const LLUUID& idEffect) const { return dynamic_cast<T*>(getEffect(T::EffectCode, idEffect)); }
 	bool            getEffects(std::list<LLVisualEffect*>& effectList, std::function<bool(const LLVisualEffect*)> fnFilter);
-	template<typename T> bool getEffects(std::list<LLVisualEffect*>& effectList) { return getEffects(effectList, [](const LLVisualEffect* pEffect) { return pEffect->getCode() == T::EffectCode; }); }
+	template<typename T> bool getEffects(std::list<T*>& effectList);
 	bool            hasEffect(EVisualEffect eCode) const;
 	bool            removeEffect(EVisualEffect eCode, const LLUUID& idEffect);
 	template<typename T> bool removeEffect(const LLUUID& idEffect) { return removeEffect(T::EffectCode, idEffect); }
@@ -195,6 +195,25 @@ protected:
 inline bool LLVfxManager::hasEffect(EVisualEffect eCode) const
 {
 	return m_Effects.end() != std::find_if(m_Effects.begin(), m_Effects.end(), [eCode](const LLVisualEffect* pEffect) { return pEffect->getCode() == eCode; });
+}
+
+template<typename T>
+inline bool LLVfxManager::getEffects(std::list<T*>& effectList)
+{
+	effectList.clear();
+
+	std::function<bool(const LLVisualEffect*)> fnFilter = [](const LLVisualEffect* pEffect) { return pEffect->getCode() == T::EffectCode; };
+	auto itEffect = boost::make_filter_iterator(fnFilter, m_Effects.begin(), m_Effects.end()),
+	     endEffect = boost::make_filter_iterator(fnFilter, m_Effects.end(), m_Effects.end());
+	while (itEffect != endEffect)
+	{
+		if (T* pEffect = dynamic_cast<T*>(*itEffect++))
+		{
+			effectList.push_back(pEffect);
+		}
+	}
+
+	return effectList.size();
 }
 
 // ============================================================================

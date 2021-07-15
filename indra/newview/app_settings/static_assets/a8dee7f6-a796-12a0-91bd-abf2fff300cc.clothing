@@ -1,0 +1,34 @@
+LLWearable version 22
+RASL F LEARN SWEATER (RED)
+
+	permissions 0
+	{
+		base_mask	7fffffff
+		owner_mask	7fffffff
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	79908808-d272-49a8-864a-d133a10931e9
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	79908808-d272-49a8-864a-d133a10931e9
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 8
+parameters 9
+606 1
+607 1
+608 1
+609 1
+780 1
+834 1
+835 1
+836 1
+877 0
+textures 2
+13 5c657bbe-1a1d-30e4-e5b3-27b1a4656ea8
+14 c78e709f-a23e-928a-b1cf-3ab8446c1e2b
