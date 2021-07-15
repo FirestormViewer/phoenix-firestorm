@@ -324,7 +324,7 @@
 				Teleport nach Hause (Befehl: cmd)
 			</text>
 			<text name="FSCmdLineMapTo_txt">
-				Teleport zu Region x (cmd regionname | x y z)
+				Teleport zu Region (cmd regionname | x y z)
 			</text>
 			<check_box label="Selbe Position auf neuer Region" name="toggle"/>
 		</panel>

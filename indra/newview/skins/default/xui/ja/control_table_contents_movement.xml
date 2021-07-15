@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+    <rows name="move_actions">
+        <columns label="動作" name="lst_action" />
+    </rows>
+    <rows name="walk_to">
+        <columns name="lst_action" tool_tip="マウスカーソルが指している場所に向かって歩きます。" value="向かって歩く" />
+    </rows>
+    <rows name="teleport_to">
+        <columns name="lst_action" tool_tip="マウスカーソルが指している場所にテレポートしますが、全ての場所が直接そこにテレポートすることを許可しているわけではないので、その場合は近くの場所にテレポートすることになります。" value="テレポートする" />
+    </rows>
+    <rows name="push_forward">
+        <columns name="lst_action" value="前に向かって進む" />
+    </rows>
+    <rows name="push_backward">
+        <columns name="lst_action" value="後ろ向きに進む" />
+    </rows>
+    <rows name="turn_left">
+        <columns name="lst_action" value="左" />
+    </rows>
+    <rows name="turn_right">
+        <columns name="lst_action" value="右" />
+    </rows>
+    <rows name="slide_left">
+        <columns name="lst_action" value="左側に攻撃" />
+    </rows>
+    <rows name="slide_right">
+        <columns name="lst_action" value="右側に攻撃" />
+    </rows>
+    <rows name="jump">
+        <columns name="lst_action" value="ジャンプ/上に" />
+    </rows>
+    <rows name="push_down">
+        <columns name="lst_action" value="下に" />
+    </rows>
+    <rows name="run_forward">
+        <columns name="lst_action" value="前向きに走る" />
+    </rows>
+    <rows name="run_backward">
+        <columns name="lst_action" value="後ろ向きに走る" />
+    </rows>
+    <rows name="run_left">
+        <columns name="lst_action" value="左向きに走る" />
+    </rows>
+    <rows name="run_right">
+        <columns name="lst_action" value="右向きに走る" />
+    </rows>
+    <rows name="toggle_run">
+        <columns name="lst_action" value="走る" />
+    </rows>
+    <rows name="toggle_fly">
+        <columns name="lst_action" value="飛行を開始/停止" />
+    </rows>
+    <rows name="toggle_sit">
+        <columns name="lst_action" value="座る/立つ" />
+    </rows>
+    <rows name="stop_moving">
+        <columns name="lst_action" value="動作を停止" />
+    </rows>
+</contents>

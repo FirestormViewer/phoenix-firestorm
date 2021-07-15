@@ -12,6 +12,7 @@
 [NUM_OBJECTS] объектов, [NUM_PRIMS] примов
 
 Граней: [NUM_FACES]
+Видимых: [NUM_VISIBLE_FACES]
 Вершин: [NUM_VERTICES]
 Треуг.: [NUM_TRIANGLES]
 Сложн.: [COMPLEXITY]

@@ -65,13 +65,17 @@
 	
 	<!-- Alerts -->
 	
-	<panel label="メッセージ表示" name="tab-alerts">
-		<text name="show_label" width="300">
-			常に表示するメッセージ：
+	<panel label="通知" name="tab-alerts">
+		<text name="show_label" tool_tip="ビューワに表示されている通知の一覧です。通知を表示するには、左側のマークをチェックして下さい。チェックを外すと通知が非表示になります。" width="300">
+			表示または非表示にするビューワの通知：
 		</text>
-		<text name="dont_show_label">
-			表示しないメッセージ：
-		</text>
+		<filter_editor label="通知をフィルター" name="popup_filter" tool_tip="関心のあるキーワードをここに入力して下さい。部分一致しｈた検索結果が表示されます。" />
+		<!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
+		<scroll_list name="all_popups">
+		<!-- using a blank padding column to make things look prettier, since "halign" doesn't seem to work for checkboxes -Zi -->
+			<column label="表示" name="alert_enabled_check" />
+			<column label="通知" name="alert_label" />
+		</scroll_list>
 	</panel>
 </tab_container>
 </panel>

@@ -9,10 +9,33 @@
 	</context_menu>
 	<menu_item_call label="Usiądź tutaj" name="Sit Down Here"/>
 	<menu_item_call label="Wstań" name="Stand Up"/>
-	<menu_item_call label="Mój wygląd" name="Change Outfit"/>
-	<menu_item_call label="Edytuj mój strój" name="Edit Outfit"/>
-	<menu_item_call label="Edytuj mój kształt" name="Edit My Shape"/>
+	<menu_item_call label="Mój wygląd" name="NowWearing" />
+	<menu_item_call label="Zmień strój" name="Change Outfit" />
+	<menu_item_call label="Edytuj kształt" name="Edit Shape" />
+	<menu_item_call label="Edytuj strój" name="Edit Outfit Parts" />
 	<menu_item_call label="Uniesienie" name="Hover Height"/>
+	<context_menu label="Zdejmij" name="Take Off &gt;">
+		<context_menu label="Ubranie" name="Clothes &gt;">
+			<menu_item_call label="Koszula" name="Shirt" />
+			<menu_item_call label="Spodnie" name="Pants" />
+			<menu_item_call label="Spódnica" name="Skirt" />
+			<menu_item_call label="Buty" name="Shoes" />
+			<menu_item_call label="Skarpetki" name="Socks" />
+			<menu_item_call label="Kurtka" name="Jacket" />
+			<menu_item_call label="Rękawiczki" name="Gloves" />
+			<menu_item_call label="Podkoszulek" name="Self Undershirt" />
+			<menu_item_call label="Bielizna" name="Self Underpants" />
+			<menu_item_call label="Tatuaż" name="Self Tattoo" />
+			<menu_item_call label="Fizyka" name="Self Physics" />
+			<menu_item_call label="Warstwa alpha" name="Self Alpha"/>
+			<menu_item_call label="Wszystkie ubrania" name="All Clothes" />
+		</context_menu>
+		<context_menu label="Odłącz" name="Detach Self" />
+		<menu_item_call label="Odłącz wszystko" name="Detach All" />
+	</context_menu>
+	<menu_item_call label="Usiądź / wstań" name="Sit stand" />
+	<menu_item_call label="Lataj / wyląduj" name="Fly land" />
+	<menu_item_call label="Zatrzymaj animacje" name="Stop Animating My Avatar" />
 	<menu_item_call label="Reset szkieletu" name="Reset Skeleton"/>
 	<menu_item_call label="Reset szkieletu i animacji" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Reset detali meszu" name="Reset Mesh LOD" />

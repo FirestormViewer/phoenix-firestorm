@@ -29,6 +29,11 @@
 		<check_box label="有効" name="enable_media"/>
 		<slider label="ボイスチャット" name="Voice Volume"/>
 		<check_box label="有効" name="enable_voice_check_volume"/>
+		<text name="auto_unmute_label">
+			テレポート後にミュート解除：
+		</text>
+		<check_box name="FSAutoUnmuteAmbient" label="環境音" tool_tip="環境音がミュートされていた場合、テレポート後自動的にミュートを解除します。（デフォルトはオフ）" />
+		<check_box name="FSAutoUnmuteSounds" label="効果音" tool_tip="効果音がミュートされていた場合、テレポート後自動的にミュートを解除します。（デフォルトはオフ）" />
 		<text name="friends_logon_sounds_label">
 			フレンドのステータスが変わったら通知音:
 		</text>
@@ -128,17 +133,15 @@
 			<radio_item label="アバターの位置から聞く" name="1"/>
 		</radio_group>
 		<check_box label="話すときにアバターの口を動かす" name="enable_lip_sync"/>
-        <check_box label="アバターの頭上にボイスビジュアライザーを表示" name="FSShowVoiceVisualizer" tool_tip="アバターの頭上にボイス・インジケータ（白い点）を表示します。" />
+		<check_box label="アバターの頭上にボイスビジュアライザーを表示" name="FSShowVoiceVisualizer" tool_tip="アバターの頭上にボイス・インジケータ（白い点）を表示します。" />
+		<check_box label="自分のアバターの頭上にボイスビジュアライザーを表示" name="FSShowMyOwnVoiceVisualizer" />
+		<check_box label="ボイスビジュアライザーに点を表示" tool_tip="ここにチェックを入れると、ボイスビジュアライザーのパーツとして白い点が表示されるようになります。チェックを外すと、会話している時にボイスの波形のみが表示されます。" name="FSShowVoiceVisualizerWithDot" />
 		<check_box label="コールする時にボイスビジュアライザーを表示" name="Show_Voice_Visualizers_In_Calls" tool_tip="アバター間またはグループ内でコールする時にボイス・インジケータを表示し、インワールドで口を動かすようにします"/>
 		<check_box label="会話タブでボイスチャンネルの状態を表示" tool_tip="会話ウィンドウのタブに現在のボイスチャンネルの状態を表示します" name="FSShowConversationVoiceStateIndicator" />
 		<check_box label="グループのボイス会話を全て自動的に拒否" name="VoiceCallsRejectGroup" />
 		<check_box label="カンファレンスのボイス会話を全て自動的に拒否" name="VoiceCallsRejectAdHoc" />
 		<check_box label="一対一のアバター同士のボイス会話を全て自動的に拒否" name="VoiceCallsRejectP2P" />
 		<check_box label="ボイスのオン・オフ切り替えに使用するトリガーキー：" name="push_to_talk_toggle_check" tool_tip="トグルモードの時にトリガーキーを一回押すごとにマイクのオン・オフ設定が切り替えられます。トグルモードではないときは、トリガーキーを押した状態の時のみあなたの声が相手に聞こえます。"/>
-		<line_editor label="プッシュ・トゥ・スピークのトリガー" name="modifier_combo"/>
-		<button label="キー設定" name="set_voice_hotkey_button"/>
-		<button tool_tip="キー設定の内容をクリアします" name="clear_voice_hotkey_button" />
-		<button name="set_voice_middlemouse_button" tool_tip="マウスの中央ボタンにリセット"/>
 		<button label="入力・出力機器" name="device_settings_btn"/>
 		<panel label="機器の設定" name="device_settings_panel">
 			<panel.string name="default_text">

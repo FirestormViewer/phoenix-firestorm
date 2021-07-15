@@ -6,7 +6,7 @@
         <pie_slice label="Обновить текстуру" name="Texture Refresh"/>
         <pie_slice label="О скриптах" name="ScriptInfo"/>
         <pie_slice label="Коснуться" name="Attachment Object Touch"/>
-        <pie_menu name="DerenderMenu" label="Не отобразать &gt;">
+        <pie_menu name="DerenderMenu" label="Не отображать &gt;">
             <pie_slice label="Временно" name="Derender"/>
             <pie_slice label="Всегда" name="DerenderPermanent"/>
         </pie_menu>
@@ -14,6 +14,7 @@
             <pie_slice label="Backup" name="Backup"/>
             <pie_slice label="Collada" name="Collada"/>
         </pie_menu>
+        <pie_slice label="Инспектировать" name="Avatar Inspect"/>
         <pie_slice label="Отладка" name="Debug..."/>
     </pie_menu>
     <pie_slice label="Сесть" name="Sit Down Here"/>

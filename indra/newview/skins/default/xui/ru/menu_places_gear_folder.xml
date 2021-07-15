@@ -10,7 +10,4 @@
 	<menu_item_call label="Удалить" name="delete"/>
 	<menu_item_call label="Развернуть" name="expand"/>
 	<menu_item_call label="Свернуть" name="collapse"/>
-	<menu_item_call label="Развернуть все папки" name="expand_all"/>
-	<menu_item_call label="Свернуть все папки" name="collapse_all"/>
-	<menu_item_check label="Сортировать по дате" name="sort_by_date"/>
 </toggleable_menu>

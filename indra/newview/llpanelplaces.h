@@ -104,6 +104,7 @@ private:
 	bool onOverflowMenuItemEnable(const LLSD& param);
 	void onCreateLandmarkButtonClicked(const LLUUID& folder_id);
 	void onBackButtonClicked();
+	void onProfileButtonClicked(); // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
     void onGearMenuClick();
     void onSortingMenuClick();
     void onAddMenuClick();
@@ -140,6 +141,7 @@ private:
 	LLButton*					mCancelBtn;
 	LLButton*					mCloseBtn;
 	LLMenuButton*				mOverflowBtn;
+	LLButton*					mPlaceInfoBtn; // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
 
     // Top menu
     LLMenuButton*				mGearMenuButton;

@@ -91,7 +91,7 @@ Dummy Name replaced at run time
       </text_editor>
     </panel>
     <panel
-      height="885"
+      height="905"
       border="true"
       label="Firestorm Credits"
       help_topic="about_fscredits_tab"
@@ -124,7 +124,7 @@ Dummy Name replaced at run time
                  top="0"
                  width="450"
                  wrap="true">
-Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience. We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team. Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.
 
 The Firestorm Development Team:
                 </text>
@@ -169,14 +169,14 @@ Albatroz Hird, Alexie Birman, Andromeda Rage, Angeldark Raymaker, Animats, Armin
                 </text>
                 <text
                  follows="top|left"
-                 height="25"
+                 height="35"
                  layout="topleft"
                  left="5"
                  name="fs_support_intro"
                  top_pad="8"
                  width="450"
                  wrap="true">
-Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
+Special thanks to our Firestorm Support Team, Beta Testers, wiki editors, educators and translators:
                 </text>
                 <text
                  enabled="false"
@@ -201,14 +201,14 @@ Afrika Burton, Albatroz Hird, Alexru Resident, alison Seesaw, AnaLucia Loon, Ang
                  top_pad="8"
                  width="450"
                  wrap="true">
-Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+Firestorm includes Starlight, modified for Firestorm. It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface. For further details see &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
 UI Artists and Designers:
                 </text>
                 <text
                  enabled="false"
                  follows="top|left"
-                 height="75"
+                 height="85"
                  bg_readonly_color="Transparent"
                  left="5"
                  text_color="LtGray"
@@ -243,7 +243,7 @@ Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, H
 APR Copyright (C) 2011 The Apache Software Foundation
 Collada DOM Copyright 2006 Sony Computer Entertainment Inc.
 cURL Copyright (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
-DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
+DBus/dbus-glib Copyright (C) 2002, 2003 CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
 expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
 FMOD Sound System, Copyright (C) Firelight Technologies Pty, Ltd., 1994-2020
 FreeType Copyright (C) 1996-2002, 2006 David Turner, Robert Wilhelm, and Werner Lemberg.
@@ -266,7 +266,7 @@ Second Life Viewer uses Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc
 
 This software contains source code provided by NVIDIA Corporation.
 
-All rights reserved.  See licenses.txt for details.
+All rights reserved. See licenses.txt for details.
 
 Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
       </text_editor>

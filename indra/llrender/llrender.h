@@ -480,6 +480,7 @@ public:
 	static U32 sUIVerts;
 	static bool sGLCoreProfile;
 	static bool sNsightDebugSupport;
+	static LLVector2 sUIGLScaleFactor;
 
 private:
 	friend class LLLightState;

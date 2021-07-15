@@ -9,6 +9,12 @@
 	<floater.string name="maturity_icon_adult">
 		"Parcel_R_Dark"
 	</floater.string>
+	<floater.string name="Hours">
+		[HOURS] 時間
+	</floater.string>
+	<floater.string name="Hour">
+		時間
+	</floater.string>
 	<floater.string name="Minutes">
 		[MINUTES] 分
 	</floater.string>
@@ -20,6 +26,9 @@
 	</floater.string>
 	<floater.string name="Remaining">
 		残り
+	</floater.string>
+	<floater.string name="Always">
+		常時
 	</floater.string>
 	<tab_container name="landtab">
 		<panel label="一般" name="land_general_panel">
@@ -71,15 +80,12 @@
 			<text name="Name:">
 				名前：
 			</text>
-			<line_editor name="Name" />
 			<text name="UUID:">
 				区画ID：
 			</text>
-			<line_editor name="UUID" />
 			<text name="Description:">
 				説明：
 			</text>
-			<text_editor name="Description" />
 			<text name="LandType">
 				種類：
 			</text>
@@ -291,7 +297,6 @@
 			<button label="オブジェクトを返却する" name="Return objects..." />
 			<name_list name="owner list">
 				<name_list.columns label="種類" name="type" />
-				<name_list.columns name="online_status" />
 				<name_list.columns label="名前"  name="name" />
 				<name_list.columns label="数" name="count" />
 				<name_list.columns label="最新" name="mostrecent" />
@@ -394,7 +399,7 @@
 				他の区画にいるアバターへの許可：
 			</text>
 			<check_box label="この区画にいるアバターに会ってチャットできる" name="SeeAvatarsCheck" tool_tip="他の区画のアバターが、この区画にいるアバターに会ってチャットすることを許可し、あなたもそれらアバターに会ってチャットできるようにします。" />
-			<texture_picker name="snapshot_ctrl" tool_tip="Click to choose a picture" />
+			<texture_picker name="snapshot_ctrl" tool_tip="クリックして写真を選択して下さい" />
 			<text name="Snapshot:">
 				スナップショット：
 			</text>
@@ -455,7 +460,6 @@
 			<text name="MusicURL:">
 				音楽 URL：
 			</text>
-			<combo_box name="music_url" />
 			<button name="stream_add_btn" tool_tip="音楽ストリームURLをストリームリストに追加します。" />
 			<button name="stream_delete_btn" tool_tip="音楽ストリームURLをストリームリストから削除します。" />
 			<button name="stream_copy_btn" tool_tip="音楽ストリームURLをクリップボードにコピーします。" />
@@ -478,17 +482,14 @@
 		
 		<panel label="アクセス" name="land_access_panel">
 			<panel.string name="access_estate_defined">
-				（不動産に限定）
+				（不動産で定義）
 			</panel.string>
 			<panel.string name="estate_override">
 				1 つ以上のオプションが、不動産レベルで設定されています
 			</panel.string>
 			<check_box name="public_access" label="パブリックアクセスを許可（このオプションをオフにすると立入禁止ラインが作成されます）" />
-			<text name="Only Allow">
-				次の住人にのみアクセスを許可：
-			</text>
-			<check_box label="支払情情報が登録されている [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="支払情報が登録されていないと、この区画にアクセスすることはできません。詳細については、[SUPPORT_SITE] をご覧ください。" />
 			<check_box label="18 才以上である [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="この区画にアクセスするには、18 才以上でなければなりません。詳細については、[SUPPORT_SITE] をご覧ください。" />
+			<check_box label="支払情情報が登録されている [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="支払情報が登録されていないと、この区画にアクセスすることはできません。詳細については、[SUPPORT_SITE] をご覧ください。" />
 			<check_box label="グループのアクセスを許可：[GROUP]" name="GroupCheck" tool_tip="「一般」タブで、グループを選択してください。" />
 			<check_box label="入場許可を販売：" name="PassCheck" tool_tip="この区画への一時的なアクセスを許可します。" />
 			<combo_box name="pass_combo">
@@ -497,6 +498,9 @@
 			</combo_box>
 			<spinner label="価格（L$）：" name="PriceSpin" />
 			<spinner label="アクセス時間：" name="HoursSpin" />
+			<text name="OwnerLimited">
+				（この不動産のオーナーがこれらの選択肢を制限していることもあります。）
+			</text>
 			<panel name="Allowed_layout_panel">
 				<text label="常に許可" name="AllowedText">
 					立入を許可された住人 ([COUNT]/[MAX])
@@ -509,7 +513,10 @@
 				<text label="禁止" name="BanCheck">
 					立入を禁止された住人 ([COUNT]/[MAX])
 				</text>
-				<name_list name="BannedList" tool_tip="（合計 [LISTED] 人、最大 [MAX] 人）" />
+				<name_list name="BannedList" tool_tip="（合計 [LISTED] 人、最大 [MAX] 人）">
+					<columns label="名前" name="name" />
+					<columns label="期間" name="duration" />
+				</name_list>
 				<button label="追加" name="add_banned" />
 				<button label="削除" label_selected="Remove" name="remove_banned" />
 			</panel>
