@@ -80,6 +80,7 @@ bool LLFileSystem::getExists(const LLUUID& file_id, const LLAssetType::EType fil
     return false;
 }
 
+// static
 bool LLFileSystem::removeFile(const LLUUID& file_id, const LLAssetType::EType file_type, int suppress_error /*= 0*/)
 {
     FSZoneC(tracy::Color::Gold); // <FS:Beq> measure cache performance
@@ -107,6 +108,7 @@ bool LLFileSystem::renameFile(const LLUUID& old_file_id, const LLAssetType::ETyp
     new_file_id.toString(new_id_str);
     const std::string new_filename =  LLDiskCache::getInstance()->metaDataToFilepath(new_id_str, new_file_type, extra_info);
 
+    // Rename needs the new file to not exist.
     LLFileSystem::removeFile(new_file_id, new_file_type, ENOENT);
 
     if (LLFile::rename(old_filename, new_filename) != 0)

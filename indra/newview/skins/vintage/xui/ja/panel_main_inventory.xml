@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Things" name="main inventory panel">
-	<panel.string name="Itemcount">
-	</panel.string>
 	<panel.string name="ItemcountFetching">
 		[ITEM_COUNT] 個のアイテムを取得中です... [FILTER]
 	</panel.string>
@@ -9,6 +7,7 @@
 		[ITEM_COUNT] 個のアイテム　[FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
+		[ITEM_COUNT] 個のアイテムを取得しました　[FILTER]
 	</panel.string>
 
 	<menu_bar name="inventory_menu_bar">
@@ -16,16 +15,13 @@
 			<menu_item_call name="inventory_open" label="開く" />
 			<menu_item_call name="inventory_share" label="共有" />
 			<menu_item_call name="replace_links" label="リンクを修正" />
-			<menu_item_separator />
 			<menu_item_call name="inventory_new_window" label="新しいインベントリウィンドウ" />
-			<menu_item_separator />
+			<menu_item_check label="保護フォルダ" name="Protected Folders" />
 			<menu_item_check label="ダブルクリックしてオブジェクトを追加装着" name="add_inv_toggle" />
 			<menu_item_check label="ダブルクリックして服装を追加装着" name="add_invclothing_toggle" />
-			<menu_item_separator />
 			<menu_item_call name="inventory_show_filters" label="フィルターを表示" />
 			<menu_item_call name="inventory_reset_filters" label="フィルターをリセット" />
 			<menu_item_call name="inventory_close_all_folders" label="すべてのフォルダを閉じる" />
-			<menu_item_separator />
 			<menu_item_call name="inventory_empty_trash" label="ごみ箱を空にする" />
 		</menu>
 
@@ -46,6 +42,7 @@
 				<menu_item_call name="inventory_new_underpants" label="新しいパンツ" />
 				<menu_item_call name="inventory_new_tattoo" label="新しいタトゥ" />
 				<menu_item_call name="inventory_new_alpha" label="新しいアルファマスク" />
+				<menu_item_call name="inventory_new_universal" label="新しいユニバーサル" />
 				<menu_item_call name="inventory_new_physics" label="新規の物理作用" />
 			</menu>
 			<menu name="inventory_new_body_parts" label="新しい身体部位">
@@ -65,7 +62,6 @@
 		<menu label="並べ替え" name="inventory_sort_menu">
 			<menu_item_check name="inventory_sort_by_name" label="名前で並べ替え" />
 			<menu_item_check name="inventory_sort_by_date" label="日付で並べ替え" />
-			<menu_item_separator />
 			<menu_item_check name="inventory_sort_folders_by_name" label="フォルダを常に名前順に並べる" />
 			<menu_item_check name="inventory_sort_system_on_top" label="システムフォルダを上にソートする" />
 		</menu>
@@ -75,16 +71,13 @@
 			<menu_item_check name="inventory_search_by_creator" label="クリエイター" />
 			<menu_item_check name="inventory_search_by_description" label="説明" />
 			<menu_item_check name="inventory_search_by_uuid" label="UUID" />
-			<menu_item_separator />
 			<menu_item_check name="inventory_search_by_all" label="すべて含める" />
-			<menu_item_separator />
 			<menu_item_check name="inventory_filter_show_links" label="リンクを表示" />
 			<menu_item_check name="inventory_filter_only_links" label="リンクのみ表示" />
 			<menu_item_check name="inventory_filter_hide_links" label="リンクを表示しない" />
-			<!-- Not implemented yet
-			<menu_item_separator />
-			<menu_item_check name="inventory_show_partial_results" label="Show Partial Search Results" />
-			-->
+			<menu_item_check name="inventory_filter_only_modify" label="修正可のみ" />
+			<menu_item_check name="inventory_filter_only_copy" label="コピー可のみ" />
+			<menu_item_check name="inventory_filter_only_transfer" label="再販・プレゼント可のみ" />
 		</menu>
 
 	</menu_bar>
@@ -110,9 +103,12 @@
 		<combo_box.item value="filter_type_textures" label="テクスチャ" />
 		<combo_box.item value="filter_type_snapshots" label="スナップショット" />
 		<combo_box.item value="filter_type_meshes" label="メッシュ" />
+		<combo_box.item value="filter_type_settings" label="自然環境設定" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="カスタマイズ..." />
 	</combo_box>
+	
+	<menu_button tool_tip="検索のフィルターオプションを表示" name="options_visibility_btn" />
 
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="インベントリ" name="All Items" />
@@ -120,13 +116,8 @@
 		<worn_inventory_panel label="装着中" name="Worn Items" />
 	</tab_container>
 
-	<text name="ItemcountText">
+	<text name="ItemcountText" tool_tip="[ITEMS] 個のアイテム、 [CATEGORIES]個のフォルダ">
 		アイテム
 	</text>
 
-	<!-- keep the buttons so the code doesn't complain about missing controls -Zi -->
-	<panel name="hide_buttons" >
-		<menu_button name="options_gear_btn" />
-		<dnd_button name="trash_btn" />
-	</panel>
 </panel>

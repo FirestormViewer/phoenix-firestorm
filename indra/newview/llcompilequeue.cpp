@@ -449,7 +449,7 @@ void LLFloaterCompileQueue::processExperienceIdResults(LLSD result, LLUUID paren
 bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloater,
     const LLPointer<LLViewerObject> &object, LLInventoryObject* inventory, LLEventPump &pump)
 {
-    if (LLApp::isQuitting())
+    if (LLApp::isExiting())
     {
         // Reply from coroutine came on shutdown
         // We are quiting, don't start any more coroutines!

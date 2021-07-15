@@ -136,6 +136,11 @@ class LLDiskCache :
          */
         void purge();
 
+        // <FS:Beq>
+        // copy from distribution into cache to replace static content
+        void prepopulateCacheWithStatic();
+        // </FS:Beq>
+
         /**
          * Clear the cache by removing all the files in the specified cache
          * directory individually. Only the files that contain a prefix defined
@@ -196,6 +201,8 @@ class LLDiskCache :
          * various parts of the code
          */
         bool mEnableCacheDebugInfo;
+        
+        std::vector<std::string> mSkipList;  // <FS:Beq/> Vector of "static" untouchable assets that should never be purged
 };
 
 class LLPurgeDiskCacheThread : public LLThread

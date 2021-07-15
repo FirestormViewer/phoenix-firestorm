@@ -61,14 +61,19 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
         LLFile::mkdir(dirname);
     }
     // </FS:Ansariel>
+    // <FS:Beq> add static assets into the new cache after clear.
+    // Only missing entries are copied on init, skiplist is setup
+    // For everything we populate FS specific assets to allow future updates
+    prepopulateCacheWithStatic();
+    // </FS:Beq>
 }
 
 // WARNING: purge() is called by LLPurgeDiskCacheThread. As such it must
 // NOT touch any LLDiskCache data without introducing and locking a mutex!
 
-// Interaction through the filesystem itself should be safe. Letâ€™s say thread
+// Interaction through the filesystem itself should be safe. Let’s say thread
 // A is accessing the cache file for reading/writing and thread B is trimming
-// the cache. Letâ€™s also assume using llifstream to open a file and
+// the cache. Let’s also assume using llifstream to open a file and
 // boost::filesystem::remove are not atomic (which will be pretty much the
 // case).
 
@@ -144,6 +149,11 @@ void LLDiskCache::purge()
 
     LL_INFOS() << "Purging cache to a maximum of " << mMaxSizeBytes << " bytes" << LL_ENDL;
 
+    // <FS:Beq> Extra accounting to track the retention of static assets
+    int keep{0};
+    int del{0};
+    int skip{0};
+    // </FS:Beq>
     uintmax_t file_size_total = 0;
     for (file_info_t& entry : file_info)
     {
@@ -153,14 +163,31 @@ void LLDiskCache::purge()
         if (file_size_total > mMaxSizeBytes)
         {
             action = "DELETE:";
-            boost::filesystem::remove(entry.second.second, ec);
-            if (ec.failed())
+            // <FS:Beq> Make sure static assets are not eliminated
+            auto uuid_as_string = gDirUtilp->getBaseFileName(entry.second.second,true);
+            uuid_as_string = uuid_as_string.substr(mCacheFilenamePrefix.size() + 1, 36);// skip "sl_cache_" and trailing "_N"        
+            // LL_INFOS() << "checking UUID=" <<uuid_as_string<< LL_ENDL;
+            if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) != mSkipList.end())
             {
-                LL_WARNS() << "Failed to delete cache file " << entry.second.second << ": " << ec.message() << LL_ENDL;
+                // this is one of our protected items so no purging
+                action = "STATIC:";
+                skip++;
+                updateFileAccessTime(entry.second.second); // force these to the front of the list next time so that purge size works 
+            }
+            else 
+            {
+                del++;    // Extra accounting to track the retention of static assets
+            // </FS:Beq>
+                boost::filesystem::remove(entry.second.second, ec);
+                if (ec.failed())
+                {
+                    LL_WARNS() << "Failed to delete cache file " << entry.second.second << ": " << ec.message() << LL_ENDL;
+                }
             }
         }
         else
         {
+            keep++;    // <FS:Beq/> Extra accounting to track the retention of static assets
             action = "  KEEP:";
         }
 
@@ -184,6 +211,7 @@ void LLDiskCache::purge()
         auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         LL_INFOS() << "Total dir size after purge is " << dirFileSize(mCacheDir) << LL_ENDL;
         LL_INFOS() << "Cache purge took " << execute_time << " ms to execute for " << file_info.size() << " files" << LL_ENDL;
+        LL_INFOS() << "Deleted: " << del << " Skipped: " << skip << " Kept: " << keep << LL_ENDL;    // <FS:Beq/> Extra accounting to track the retention of static assets
     }
 }
 
@@ -345,8 +373,57 @@ const std::string LLDiskCache::getCacheInfo()
     return cache_info.str();
 }
 
+// <FS:Beq> Copy static items into cache and add to the skip list that prevents their purging
+// Note that there is no de-duplication nor other validation of the list.
+void LLDiskCache::prepopulateCacheWithStatic()
+{
+    mSkipList.clear();
+
+    std::vector<std::string> from_folders;
+    from_folders.emplace_back(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "fs_static_assets"));
+#ifdef OPENSIM
+    from_folders.emplace_back(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "static_assets"));
+#endif
+
+    for (const auto& from_folder : from_folders)
+    {
+        if (gDirUtilp->fileExists(from_folder))
+        {
+            auto assets_to_copy = gDirUtilp->getFilesInDir(from_folder);
+            for (auto from_asset_file : assets_to_copy)
+            {
+                from_asset_file = from_folder + gDirUtilp->getDirDelimiter() + from_asset_file;
+                // we store static assets as UUID.asset_type the asset_type is not used in the current simple cache format
+                auto uuid_as_string{ gDirUtilp->getBaseFileName(from_asset_file, true) };
+                auto to_asset_file = metaDataToFilepath(uuid_as_string, LLAssetType::AT_UNKNOWN, std::string());
+                if (!gDirUtilp->fileExists(to_asset_file))
+                {
+                    if (mEnableCacheDebugInfo)
+                    {
+                        LL_INFOS("LLDiskCache") << "Copying static asset " << from_asset_file << " to cache from " << from_folder << LL_ENDL;
+                    }
+                    if (!LLFile::copy(from_asset_file, to_asset_file))
+                    {
+                        LL_WARNS("LLDiskCache") << "Failed to copy " << from_asset_file << " to " << to_asset_file << LL_ENDL;
+                    }
+                }
+                if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) == mSkipList.end())
+                {
+                    if (mEnableCacheDebugInfo)
+                    {
+                        LL_INFOS("LLDiskCache") << "Adding " << uuid_as_string << " to skip list" << LL_ENDL;
+                    }
+                    mSkipList.emplace_back(uuid_as_string);
+                }
+            }
+        }
+    }
+}
+// </FS:Beq>
+
 void LLDiskCache::clearCache()
 {
+    LL_INFOS() << "clearing cache " << mCacheDir << LL_ENDL;
     /**
      * See notes on performance in dirFileSize(..) - there may be
      * a quicker way to do this by operating on the parent dir vs
@@ -377,7 +454,10 @@ void LLDiskCache::clearCache()
                 }
             }
         }
+        // <FS:Beq> add static assets into the new cache after clear
+        prepopulateCacheWithStatic();
     }
+    LL_INFOS() << "Cleared cache " << mCacheDir << LL_ENDL;
 }
 
 uintmax_t LLDiskCache::dirFileSize(const std::string dir)

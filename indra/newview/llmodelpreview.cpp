@@ -3002,14 +3002,33 @@ void LLModelPreview::lookupLODModelFiles(S32 lod)
     S32 next_lod = (lod - 1 >= LLModel::LOD_IMPOSTOR) ? lod - 1 : LLModel::LOD_PHYSICS;
 
     std::string lod_filename = mLODFile[LLModel::LOD_HIGH];
-    std::string ext = ".dae";
-    std::string::size_type i = lod_filename.rfind(ext);
-    if (i != std::string::npos)
+    // <FS:Beq> BUG-230890 fix case-sensitive filename handling
+    // std::string ext = ".dae";
+    // std::string::size_type i = lod_filename.rfind(ext);
+    // if (i != std::string::npos)
+    // {
+    //     lod_filename.replace(i, lod_filename.size() - ext.size(), getLodSuffix(next_lod) + ext);
+    // }
+    // Note: we cannot use gDirUtilp here because the getExtension forces a tolower which would then break uppercase extensions on Linux/Mac
+    std::size_t offset = lod_filename.find_last_of('.');
+	std::string ext = (offset == std::string::npos || offset == 0) ? "" : lod_filename.substr(offset+1);
+    lod_filename = gDirUtilp->getDirName(lod_filename) + gDirUtilp->getDirDelimiter() + gDirUtilp->getBaseFileName(lod_filename, true) + getLodSuffix(next_lod) + "." + ext;
+    std::ostringstream out;
+    out << "Looking for file: " << lod_filename << " for LOD " << next_lod;
+    LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
+    if(mImporterDebug)
     {
-        lod_filename.replace(i, lod_filename.size() - ext.size(), getLodSuffix(next_lod) + ext);
+        LLFloaterModelPreview::addStringToLog(out, true);
     }
+    out.str("");
+    // </FS:Beq>
     if (gDirUtilp->fileExists(lod_filename))
     {
+        // <FS:Beq> extra logging is helpful here, so add to log tab
+        out << "Auto Loading LOD" << next_lod << " from " << lod_filename;
+        LL_INFOS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
+        // </FS:Beq>
         LLFloaterModelPreview* fmp = LLFloaterModelPreview::sInstance;
         if (fmp)
         {

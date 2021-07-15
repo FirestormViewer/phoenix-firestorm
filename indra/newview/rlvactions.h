@@ -34,6 +34,8 @@ class LLVOAvatar;
 // RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
 //
 
+enum class ERlvCheckType { All, Some, Nothing };
+
 class RlvActions
 {
 	// ======
@@ -89,6 +91,16 @@ public:
 	 * Returns true if the user is allowed to change their currently active group
 	 */
 	static bool canChangeActiveGroup(const LLUUID& idRlvObject = LLUUID::null);
+
+	/*
+	 * Returns true if the user is allowed to give inventory to at least one (unspecified) avatar (used to blanket ban use of 'Share' if the user cannot give items to *anyone*)
+	 */
+	static bool canGiveInventory();
+
+	/*
+	 * Returns true if the user is allowed to give the specified avatar inventory
+	 */
+	static bool canGiveInventory(const LLUUID& idAgent);
 
 	/*
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
@@ -225,6 +237,10 @@ public:
 	 */
 	static bool canChangeEnvironment(const LLUUID& idRlvObject = LLUUID::null);
 
+	/*
+	 * Returns true if a postprocessing shader is currently active
+	 */
+	static bool hasPostProcess();
 
 	// =================
 	// World interaction
@@ -247,6 +263,11 @@ public:
 	static bool canBuyObject(const LLUUID& idObj);
 
 	/*
+	 * Returns true if the user can edit all, some, or nothing (used to bail early, or to skip expensive selection checks)
+	 */
+	static bool canEdit(ERlvCheckType eCheckType);
+
+	/*
 	 * Returns true if the user can edit the specified object (with an optional relative offset)
 	 */
 	static bool canEdit(const LLViewerObject* pObj);
@@ -255,6 +276,7 @@ public:
 	 * Returns true if the user can sit on the ground
 	 */
 	static bool canGroundSit();
+	static bool canGroundSit(const LLUUID& idRlvObjExcept);
 
 	/*
 	 * Returns true if the user can interact with the specified object (with an optional relative offset)
