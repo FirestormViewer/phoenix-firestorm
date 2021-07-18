@@ -90,8 +90,8 @@
 				<combo_box.item label="何もしない" name="0"/>
 				<combo_box.item label="その場所に移動" name="1"/>
 				<combo_box.item label="その場所にテレポート" name="2"/>
-				<combo_box.commit_callback function="Pref.ClickActionChange"/>
 			</combo_box>
+			<check_box label="スクリプト入りのオブジェクトにもダブルクリックテレポートできるようにする" name="FSAllowDoubleClickOnScriptedObjects" />
 			<button label="ジョイスティック設定" name="joystick_setup_button"/>
 		</panel>
 		
