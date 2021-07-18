@@ -414,26 +414,47 @@ void LLDiskCache::clearCache()
 #endif
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
+    LL_INFOS() << "is a directory: " << mCacheDir << LL_ENDL;
         // <FS:Ansariel> Optimize asset simple disk cache
         //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
-        for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
+        // <FS:TS> FIRE-31070: Crash on clearing cache on macOS and Linux
+        //         On Unix-like operating systems, the recursive_directory_iterator gets very unhappy if you
+        //         delete a file out from under it in a for loop. This restructuring to a while loop and
+        //         manually incrementing the iterator avoids the problem. Note that the iterator must be
+        //         incremented *before* deleting the file.
+        boost::filesystem::recursive_directory_iterator entry(cache_path, ec);
+        boost::filesystem::recursive_directory_iterator cache_end;
+        while (entry != cache_end)
         {
-            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
+            const boost::filesystem::path& remove_entry = entry->path();
+            if (boost::filesystem::is_regular_file(remove_entry, ec) && !ec.failed())
             {
-                if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
+                if (remove_entry.string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
                     // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
                     //boost::filesystem::remove(entry);
-                    boost::filesystem::remove(entry, ec);
+                    const boost::filesystem::path remove_path = remove_entry;
+                    ++entry;
+                    boost::filesystem::remove(remove_path, ec);
                     if (ec.failed())
                     {
-                        LL_WARNS() << "Failed to delete cache file " << entry << ": " << ec.message() << LL_ENDL;
+                        LL_WARNS() << "Failed to delete cache file " << remove_path.string() << ": " << ec.message() << LL_ENDL;
                     }
                     // </FS:Ansariel>
                 }
+                else
+                {
+                    ++entry;
+                }
             }
+            else
+            {
+                ++entry;
+            }
+            // </FS:TS> FIRE-31070
         }
         // <FS:Beq> add static assets into the new cache after clear
+    LL_INFOS() << "prepopulating new cache " << LL_ENDL;
         prepopulateCacheWithStatic();
     }
     LL_INFOS() << "Cleared cache " << mCacheDir << LL_ENDL;
