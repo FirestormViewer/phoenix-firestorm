@@ -31,7 +31,7 @@
 	</fs_scroll_list>
 	<button name="remove_btn" label="選択した項目をリストから除外" />
 	<button name="remove_temp_btn" label="現在の設定をクリア" />
-	<button name="play_btn" label="サウンドを再生" tool_tip="選択したサウンドを再生します。一度に１つのサウンドしか選択・再生できません。" />
-	<button name="stop_btn" label="サウンドを停止" tool_tip="現在再生されているサウンドを停止します。" />
+	<button name="play_btn" label="サウンド再生" tool_tip="選択したサウンドを再生します。一度に１つのサウンドしか選択・再生できません。" />
+	<button name="stop_btn" label="サウンド停止" tool_tip="現在再生されているサウンドを停止します。" />
 	<button name="close_btn" label="閉じる" />
 </floater>
