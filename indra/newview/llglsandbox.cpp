@@ -82,7 +82,7 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 	// Block rectangle selection if:
 	//   - prevented from editing anything at all
 	//   - prevented from interacting at all
-	if (RlvActions::isRlvEnabled() && (RlvActions::canEdit(ERlvCheckType::None) || RlvActions::hasBehaviour(RLV_BHVR_INTERACT)) )
+	if (RlvActions::isRlvEnabled() && (RlvActions::canEdit(ERlvCheckType::Nothing) || RlvActions::hasBehaviour(RLV_BHVR_INTERACT)) )
 	{
 		return;
 	}
