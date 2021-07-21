@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="create_landmark" title="Créer un repère">
+	<string name="favorites_bar">
+		Barre des favoris
+	</string>
+	<text name="title_label" value="Détails du repère" />
+	<text name="name_label" value="Nom :" />
+	<text name="folder_label" value="Emplacement :" />
+	<text name="new_folder_textbox">
+		[secondlife:/// Créer un nouveau dossier]
+	</text>
+	<text name="notes_label" value="Notes :" />
+	<button label="Annuler" name="cancel_btn" />
+</floater>

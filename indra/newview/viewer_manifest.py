@@ -116,6 +116,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("beams")
                 self.path("beamsColors")
 
+                # <FS:Beq> package static_assets folder
+                if self.fs_is_opensim():
+                    self.path("static_assets")
+                self.path("fs_static_assets")
+                # </FS:Beq>
+
                 # include the extracted packages information (see BuildPackagesInfo.cmake)
                 self.path(src=os.path.join(self.args['build'],"packages-info.txt"), dst="packages-info.txt")
                 # CHOP-955: If we have "sourceid" or "viewer_channel" in the
@@ -782,11 +788,6 @@ class WindowsManifest(ViewerManifest):
                 self.path("libvlccore.dll")
                 self.path("plugins/")
 
-        # pull in the crash logger from other projects
-        # tag:"crash-logger" here as a cue to the exporter
-        self.path(src='../win_crash_logger/%s/windows-crash-logger.exe' % self.args['configuration'],
-                  dst="win_crash_logger.exe")
-
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 
@@ -1346,6 +1347,20 @@ class DarwinManifest(ViewerManifest):
         chardetdir = os.path.join(pkgdir, "lib", "python", "chardet")
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
 
+        with self.prefix(src="", dst="Contents"):  # everything goes in Contents
+            bugsplat_db = self.args.get('bugsplat')
+            if bugsplat_db:
+                # Inject BugsplatServerURL into Info.plist if provided.
+                Info_plist = self.dst_path_of("Info.plist")
+                Info = plistlib.readPlist(Info_plist)
+                # https://www.bugsplat.com/docs/platforms/os-x#configuration
+                Info["BugsplatServerURL"] = \
+                     "https://{}.bugsplat.com/".format(bugsplat_db)
+                self.put_in_file(
+                    plistlib.writePlistToString(Info),
+                    os.path.basename(Info_plist),
+                    "Info.plist")
+
         with self.prefix(dst="Contents"):  # everything goes in Contents
             # self.path("Info.plist", dst="Info.plist")
 
@@ -1474,10 +1489,8 @@ class DarwinManifest(ViewerManifest):
 
                 # our apps
                 executable_path = {}
-                for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
-                                         # plugin launcher
-                                         (os.path.join("llplugin", "slplugin"), "SLPlugin.app"),
-                                         ):
+                embedded_apps = [ (os.path.join("llplugin", "slplugin"), "SLPlugin.app") ]
+                for app_bld_dir, app in embedded_apps:
                     self.path2basename(os.path.join(os.pardir,
                                                     app_bld_dir, self.args['configuration']),
                                        app)

@@ -160,16 +160,9 @@ void LLFloaterCreateLandmark::populateFoldersList(const LLUUID &folder_id)
 	mFolderCombo->removeall();
 
 	// Put the "My Favorites" folder first in list.
-	LLUUID favorites_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
-	LLViewerInventoryCategory* favorites_cat = gInventory.getCategory(favorites_id);
-	if (!favorites_cat)
-	{
-		LL_WARNS() << "Cannot find the favorites folder" << LL_ENDL;
-	}
-	else
-	{
-		mFolderCombo->add(getString("favorites_bar"), favorites_cat->getUUID());
-	}
+	// <FS:PP> Code moved below because of:
+	// FIRE-31031 New Create Landmark Floater: Default to Landmarks Folder
+	// </FS:PP>
 
 	// Add the "Landmarks" category. 
 	const LLViewerInventoryCategory* lmcat = gInventory.getCategory(mLandmarksID);
@@ -182,6 +175,19 @@ void LLFloaterCreateLandmark::populateFoldersList(const LLUUID &folder_id)
 		std::string cat_full_name = LLPanelLandmarkInfo::getFullFolderName(lmcat);
 		mFolderCombo->add(cat_full_name, lmcat->getUUID());
 	}
+
+	// <FS:PP> FIRE-31031 New Create Landmark Floater: Default to Landmarks Folder
+	LLUUID favorites_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
+	LLViewerInventoryCategory* favorites_cat = gInventory.getCategory(favorites_id);
+	if (!favorites_cat)
+	{
+		LL_WARNS() << "Cannot find the favorites folder" << LL_ENDL;
+	}
+	else
+	{
+		mFolderCombo->add(getString("favorites_bar"), favorites_cat->getUUID());
+	}
+	// </FS:PP>
 
 	typedef std::vector<folder_pair_t> folder_vec_t;
 	folder_vec_t folders;

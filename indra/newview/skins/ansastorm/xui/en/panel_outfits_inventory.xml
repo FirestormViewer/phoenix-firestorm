@@ -106,7 +106,7 @@
                     <button
                          follows="bottom|left|right"
                          height="23"
-                         label="Save As"
+                         label="Save"
                          left="4"
                          layout="topleft"
                          name="save_btn"

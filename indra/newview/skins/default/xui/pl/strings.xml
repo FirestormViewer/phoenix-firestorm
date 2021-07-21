@@ -7,7 +7,7 @@
 		Detekcja konfiguracji sprzętowej...
 	</string>
 	<string name="StartupLoading">
-		Ładowanie [APP_NAME]...
+		Ładowanie przeglądarki [APP_NAME]...
 	</string>
 	<string name="StartupClearingCache">
 		Czyszczenie bufora danych...
@@ -1513,7 +1513,7 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 		Nowa spódnica
 	</string>
 	<string name="create_new_alpha">
-		Nowe alpha
+		Nowa warstwa alpha
 	</string>
 	<string name="create_new_tattoo">
 		Nowy tatuaż

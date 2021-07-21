@@ -242,8 +242,8 @@ bool LLWeb::useExternalBrowser(const std::string &url)
 		std::string uri_string = up.host();
 
 		// <FS:Ansariel> FIRE-20796: Grid check status page ignores opening SL links in internal browser setting
-		//boost::regex pattern = boost::regex("\\b(lindenlab.com|secondlife.com)$", boost::regex::perl|boost::regex::icase);
-		boost::regex pattern = boost::regex("\\b(lindenlab.com|secondlife.com|secondlifegrid.net|secondlife-status.statuspage.io)$", boost::regex::perl|boost::regex::icase);
+		//boost::regex pattern = boost::regex("\\b(lindenlab.com|secondlife.com|secondlife.io)$", boost::regex::perl|boost::regex::icase);
+		boost::regex pattern = boost::regex("\\b(lindenlab.com|secondlife.com|secondlife.io|secondlifegrid.net|secondlife-status.statuspage.io)$", boost::regex::perl|boost::regex::icase);
 		// </FS:Ansariel>
 		boost::match_results<std::string::const_iterator> matches;
 		return !(boost::regex_search(uri_string, matches, pattern));

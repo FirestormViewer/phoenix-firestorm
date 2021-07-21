@@ -587,7 +587,8 @@ void send_viewer_stats(bool include_preferences)
 	LLSD& validation_info = inventory["validation_info"];
 	gInventory.mValidationInfo->asLLSD(validation_info);
 
-	body["ui"] = LLUIUsage::instance().asLLSD();
+	// <FS:Ansariel> We do not need to send UI usage stats according to Jess...
+	//body["ui"] = LLUIUsage::instance().asLLSD();
 		
 	body["stats"]["voice"] = LLVoiceVivoxStats::getInstance()->read();
 

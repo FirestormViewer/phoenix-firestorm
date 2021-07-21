@@ -41,6 +41,7 @@
 		<text_editor name="aux1" value="Dodatkowe pole informacji 1" />
 		<text_editor name="aux2" value="Dodatkowe pole informacji 2" />
 		<text_editor name="location" value="Informacje o lokalizacji" />
+		<text_editor name="desc" value="Otwierasz te drzwi kluczem wyobraźni. Poza nimi jest inny wymiar: wymiar dźwięku, wymiar wzroku, wymiar umysłu. Wkraczasz w krainę cienia i substancji, rzeczy i idei; właśnie przekroczyłeś strefę mroku. To, co zobaczysz, jest prawdziwe; postacie na ekranie nie są aktorami. To prawdziwe osoby, którzy, złożywszy swoje roszczenia w prawdziwym sądzie ds. drobnych roszczeń, zostali przekonani, aby zrezygnowali z pozwów i osiedlili się tutaj, na tym forum... Sądzie Ludowym." />
 		<button label="Otwórz profil" name="people_profile_btn" />
 		<button label="Wyślij wiadomość" name="people_message_btn" />
 		<button label="Nowy znajomy/a" name="people_friend_btn" />

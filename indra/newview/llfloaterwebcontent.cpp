@@ -117,9 +117,6 @@ BOOL LLFloaterWebContent::postBuild()
 	// initialize the URL history using the system URL History manager
 	initializeURLHistory();
 
-	// if "Develop" Menu open, sety a flag and change things to be more useful for devs
-	mDevelopMode = gSavedSettings.getBOOL("QAMode");
-
 	return TRUE;
 }
 

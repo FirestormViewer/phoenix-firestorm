@@ -1,0 +1,28 @@
+LLWearable version 22
+RASL SOCKS BLUE
+
+	permissions 0
+	{
+		base_mask	7fffffff
+		owner_mask	7fffffff
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	79908808-d272-49a8-864a-d133a10931e9
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	79908808-d272-49a8-864a-d133a10931e9
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 7
+parameters 4
+617 1
+818 1
+819 1
+820 1
+textures 1
+12 0f2bfcbd-7853-6386-bffe-90cf9cf54a04

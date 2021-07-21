@@ -18,6 +18,58 @@
 	<check_box label="アバター" left="131" name="JoystickAvatarEnabled"/>
 	<check_box label="造る" left="201" name="JoystickBuildEnabled"/>
 	<check_box label="フライ・カメラ" left="271" name="JoystickFlycamEnabled"/>
+	<!-- <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes -->
+	<text name="joystick_monitor_label">
+		ジョイスティックモニタ
+	</text>
+	
+	<icon name="button_light_0" tool_tip="ジョイスティックボタン 0" />
+	<icon name="button_light_1" tool_tip="ジョイスティックボタン 1" />
+	<icon name="button_light_2"  tool_tip="ジョイスティックボタン 2" />
+	<icon name="button_light_3"  tool_tip="ジョイスティックボタン 3" />
+	<icon name="button_light_4" tool_tip="ジョイスティックボタン 4" />
+	<icon name="button_light_5" tool_tip="ジョイスティックボタン 5" />
+	<icon name="button_light_6" tool_tip="ジョイスティックボタン 6" />
+	<icon name="button_light_7" tool_tip="ジョイスティックボタン 7" />
+	<icon name="button_light_8" tool_tip="ジョイスティックボタン 8" />
+	<icon name="button_light_9" ool_tip="ジョイスティックボタン 9" />
+	<icon name="button_light_10" tool_tip="ジョイスティックボタン 10" />
+	<icon name="button_light_11" tool_tip="ジョイスティックボタン 11" />
+	<icon name="button_light_12" tool_tip="ジョイスティックボタン 12" />
+	<icon name="button_light_13" tool_tip="ジョイスティックボタン 13" />
+	<icon name="button_light_14" tool_tip="ジョイスティックボタン 14" />
+	<icon name="button_light_15" tool_tip="ジョイスティックボタン 15" />
+	
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+		<!-- Zi: One stat_view for each axis so we can hide them individually -->
+			<stat_view name="axis_view_0">
+				<stat_bar label="軸 0" name="axis0" />
+			</stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="軸 1" name="axis1" />
+			</stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="軸 2" name="axis2" />
+			</stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="軸 3" name="axis3" />
+			</stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="軸 4" name="axis4" />
+			</stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="軸 5" name="axis5" />
+			</stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="軸 6" name="axis6" />
+			</stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="軸 7" name="axis7" />
+			</stat_view>
+		</container_view>
+	</scroll_container>
+	<!-- </FS:Zi> -->
 	<text left="5" name="XScale" width="120">
 		Xスケール
 	</text>
@@ -105,15 +157,4 @@
 	<button label="SpaceNavigatorのデフォルト設定" left="330" name="SpaceNavigatorDefaults" width="210"/>
 	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="取り消し" label_selected="取り消し" name="cancel_btn"/>
-	<stat_view label="ジョイスティック・モニター" name="axis_view">
-		<stat_bar label="軸 0" name="axis0"/>
-		<stat_bar label="軸 1" name="axis1"/>
-		<stat_bar label="軸 2" name="axis2"/>
-		<stat_bar label="軸 3" name="axis3"/>
-		<stat_bar label="軸 4" name="axis4"/>
-		<stat_bar label="軸 5" name="axis5"/>
-	</stat_view>
-	<string name="NoDevice">
-		デバイスは検出されませんでした
-	</string>
 </floater>

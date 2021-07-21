@@ -25,6 +25,8 @@
 	<string name="StartupRequireDriverUpdate">
 		グラフィックを初期化できませんでした。グラフィックドライバを更新してください。
 	</string>
+	
+	<!-- about dialog/support string-->
 	<string name="AboutOSXHiDPI">
 		HiDPI 表示モード: [HIDPI]
 	</string>
@@ -34,15 +36,21 @@
 	<string name="BuildConfiguration">
 		ビルド構成
 	</string>
+	
+	<!--  progress -->
 	<string name="ProgressRestoring">
 		復元中です...
 	</string>
 	<string name="ProgressChangingResolution">
 		解像度を変更中です...
 	</string>
+	
+	<!-- Legacy strings, almost never used -->
 	<string name="Fullbright">
 		明るさ全開（レガシー）
 	</string>
+	
+	<!-- Login -->
 	<string name="LoginInProgress">
 		ログイン中です。[APP_NAME]の表示がフリーズする場合があります。  しばらくお待ちください。
 	</string>
@@ -121,8 +129,14 @@
 	<string name="CertBasicConstraints">
 		サーバーの証明書チェーンに証明書が多すぎます。  グリッド管理者にご連絡ください。
 	</string>
+	<string name="CertInvalid">
+		証明書を読み込めませんでした。グリッド管理者にご連絡ください。
+	</string>
 	<string name="CertInvalidSignature">
 		グリッドサーバーが返した証明書の署名を認証できませんでした。グリッドの管理者にお問い合わせください。
+	</string>
+	<string name="CertAllocationFailure">
+		証明書に OpenSSL のメモリを割り当てるのに失敗しました。
 	</string>
 	<string name="LoginFailedNoNetwork">
 		ネットワークエラー：接続を確立できませんでした。お使いのネットワーク接続をご確認ください。
@@ -1148,6 +1162,11 @@ https://www.firestormviewer.org/support
 	<string name="Mainland / Full Region">
 		メインランド / フルリージョン
 	</string>
+	<string name="Linden Homes / Full Region">
+		リンデンホーム / フルリージョン
+	</string>
+	
+	<!-- File load/save dialogs -->
 	<string name="all_files">
 		全てのファイル
 	</string>
@@ -1205,25 +1224,24 @@ https://www.firestormviewer.org/support
 	<string name="dictionary_files">
 		辞書
 	</string>
-	
-	<!-- added Jun.30, 2013 -->
 	<string name="backup_files">
 		オブジェクトのバックアップ
 	</string>
-	<!-- added Jun.30, 2013 -->
+	<string name="collada_files">
+		COLLADA モデル
+	</string>
+	<string name="csv_files">
+		CSV
+	</string>
+	<string name="recompile_script_verb">
+		リコンパイル
+	</string>
 	
-	<string name="AvatarSetNotAway">
-		一時退席中解除
+	<!-- LSL Usage Hover Tips -->
+	<string name="LSLTipSleepTime">
+		スクリプトを [SLEEP_TIME] 秒間スリープ
 	</string>
-	<string name="AvatarSetAway">
-		一時退席中
-	</string>
-	<string name="AvatarSetNotBusy">
-		取り込み中解除
-	</string>
-	<string name="AvatarSetBusy">
-		取り込み中
-	</string>
+	<!-- (FS:CR) LSL Hover Tips have been moved into scriptlibrary_*.xml so they can be dynamically updated -->
 	
 	<!-- Wearable Types -->
 	<string name="shape">
@@ -1271,6 +1289,9 @@ https://www.firestormviewer.org/support
 	<string name="tattoo">
 		タトゥ
 	</string>
+	<string name="universal">
+		ユニバーサル
+	</string>
 	<string name="physics">
 		物理作用
 	</string>
@@ -1280,6 +1301,17 @@ https://www.firestormviewer.org/support
 	<string name="none">
 		なし
 	</string>
+	<string name="sky">
+		空
+	</string>
+	<string name="water">
+		水
+	</string>
+	<string name="day">
+		デイサイクル
+	</string>
+	
+	<!-- Not Worn Wearable Types -->
 	<string name="shirt_not_worn">
 		シャツ未着用
 	</string>
@@ -1313,12 +1345,17 @@ https://www.firestormviewer.org/support
 	<string name="tattoo_not_worn">
 		タトゥー未着用
 	</string>
+	<string name="universal_not_worn">
+		ユニバーサル未着用
+	</string>
 	<string name="physics_not_worn">
 		物理作用なし
 	</string>
 	<string name="invalid_not_worn">
 		無効
 	</string>
+	
+	<!-- Create new wearable of the specified type -->
 	<string name="create_new_shape">
 		新しいシェイプを作成
 	</string>
@@ -1364,15 +1401,23 @@ https://www.firestormviewer.org/support
 	<string name="create_new_tattoo">
 		新しいタトゥを作成
 	</string>
+	<string name="create_new_universal">
+		新しいユニバーサルを作成
+	</string>
 	<string name="create_new_physics">
 		新しい物理作用を作成
 	</string>
 	<string name="create_new_invalid">
 		無効
 	</string>
+	
+	<!-- Wearable List-->
 	<string name="NewWearable">
 		新しい [WEARABLE_ITEM]
 	</string>
+	
+	<!-- LLGroupNotify -->
+	<!-- used in the construction of a Group Notice blue dialog box, buttons, tooltip etc. Seems to be no longer utilized by code in Viewer 2.0 -->
 	<string name="next">
 		次へ
 	</string>
@@ -1400,6 +1445,10 @@ https://www.firestormviewer.org/support
 	<string name="GroupNotifySaveAttachment">
 		添付アイテムを保存
 	</string>
+	<string name="GroupNotifySender">
+		送信者：[SENDER], [GROUPNAME]
+	</string>
+	
 	<string name="TeleportOffer">
 		テレポートを送る
 	</string>
@@ -1409,6 +1458,8 @@ https://www.firestormviewer.org/support
 	<string name="OverflowInfoChannelString">
 		あなたにはさらに %d 通の通知があります
 	</string>
+	
+	<!-- body parts -->
 	<string name="BodyPartsRightArm">
 		右腕
 	</string>
@@ -1430,6 +1481,8 @@ https://www.firestormviewer.org/support
 	<string name="BodyPartsEnhancedSkeleton">
 		拡張スケルトン
 	</string>
+	
+	<!-- slider -->
 	<string name="GraphicsQualityLow">
 		低
 	</string>
@@ -1439,9 +1492,13 @@ https://www.firestormviewer.org/support
 	<string name="GraphicsQualityHigh">
 		高
 	</string>
+	
+	<!-- mouselook -->
 	<string name="LeaveMouselook">
 		ESC キーを押してワールドビューに戻ります
 	</string>
+	
+	<!-- inventory -->
 	<string name="InventoryNoMatchingItems">
 		お探しのものは見つかりましたか？ [secondlife:///app/search/all/[SEARCH_TERM] 検索] をお試しください。
 	</string>
@@ -1450,6 +1507,9 @@ https://www.firestormviewer.org/support
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		ここにランドマークをドラッグしてお気に入りに追加します。
+	</string>
+	<string name="MarketplaceNoListing">
+		まだ商品リストがありません。
 	</string>
 	<string name="MarketplaceNoMatchingItems">
 		アイテムが見つかりませんでした。検索文字列のスペルを確認して、もう一度やり直してください。
@@ -1634,6 +1694,8 @@ https://www.firestormviewer.org/support
 	<string name="PermNo">
 		いいえ
 	</string>
+	
+	<!-- Gestures labels -->
 	<string name="Chat Message" value="チャット："/>
 	<string name="Sound" value=" サウンド："/>
 	<string name="Wait" value=" --- 待機：:"/>
@@ -1644,6 +1706,8 @@ https://www.firestormviewer.org/support
 	<string name="HelloAvatar" value=" やあ、アバター！"/>
 	<string name="ViewAllGestures" value="  すべて表示 &gt;&gt;"/>
 	<string name="GetMoreGestures" value="ショッピング &gt;&gt;"/>
+	
+	<!-- inventory filter -->
 	<string name="Animations" value="アニメーション、"/>
 	<string name="Calling Cards" value="コーリングカード、"/>
 	<string name="Clothing" value="衣類、"/>
@@ -1654,9 +1718,18 @@ https://www.firestormviewer.org/support
 	<string name="Scripts" value="スクリプト、"/>
 	<string name="Sounds" value="サウンド、"/>
 	<string name="Textures" value="テクスチャ、"/>
+	<string name="Settings" value=" 自然環境設定、" />
 	<string name="Snapshots" value="スナップショット、"/>
 	<string name="No Filters" value="いいえ "/>
 	<string name="Since Logoff" value=" - ログオフ以来"/>
+	<!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
+	<string name="Modifiable" value="修正可" />
+	<string name="Copyable" value="コピー可" />
+	<string name="Transferable" value="再販可" />
+	<string name="PermissionsFilter" value=" - [PERMISSIONS] のみ" />
+	<!-- </FS:Zi> -->
+	
+	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">
 		インベントリ
 	</string>
@@ -1756,12 +1829,19 @@ https://www.firestormviewer.org/support
 	<string name="InvFolder All">
 		全員
 	</string>
+	<string name="InvFolder My Suitcase">
+		自分のスーツケース
+	</string>
+	
 	<string name="no_attachments">
 		着用しているアタッチメントはありません
 	</string>
 	<string name="Attachments remain">
 		アタッチメント（残りのスロット数：[COUNT]）
 	</string>
+	
+	<!-- inventory FVBridge -->
+	<!--  This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->
 	<string name="Buy">
 		買う
 	</string>
@@ -2463,6 +2543,8 @@ https://www.firestormviewer.org/support
 	<string name="ATTACH_HIND_RFOOT">
 		右後足
 	</string>
+	
+	<!-- script editor -->
 	<string name="CursorPos">
 		[LINE] 行目、[COLUMN] 列目
 	</string>
@@ -2481,9 +2563,31 @@ https://www.firestormviewer.org/support
 	<string name="PanelContentsNewScript">
 		新規スクリプト
 	</string>
+	
+	<!-- panel preferences general -->
 	<string name="DoNotDisturbModeResponseDefault">
 		メッセージを送った住人は、誰にも邪魔をされたくないため現在「取り込み中」モードです。  あなたのメッセージは、あとで確認できるように IM パネルに表示されます。
 	</string>
+	<string name="AutoResponseModeDefault">
+		メッセージを送った住人は、[APP_NAME] ビューワの「自動応答モード」を起動しています。これは、その住人が今は誰にも邪魔をされたくないことを意味しています。あなたのメッセージはあとで確認できるように IM パネルに表示されます。
+	</string>
+	<string name="AutoResponseModeNonFriendsDefault">
+		メッセージを送った住人は、[APP_NAME] ビューワの「自動応答モード」を起動しています。これは、その住人が今は誰にも邪魔をされたくないことを意味しています。あなたのメッセージはあとで確認できるように IM パネルに表示されます。
+	</string>
+	<string name="RejectTeleportOffersResponseDefault">
+		メッセージを送った住人は、[APP_NAME] ビューワの「全てのテレポートを拒否モード」を起動しています。これは、その住人が今はテレポートを受け入れたり、テレポートを送ったりして誰にも邪魔をされたくないことを意味しています。IM を送ること自体は可能です。
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		メッセージを送った住人は、[APP_NAME] ビューワの「フレンド申請拒否モード」を起動しています。これは、その住人が今はフレンド申請を受け付けることで誰にも邪魔をされたくないことを意味しています。IM を送ること自体は可能です。
+	</string>
+	<string name="MutedAvatarsResponseDefault">
+		メッセージを送った住人は、あなたがどのようなメッセージを送ることに対してもブロックしています。
+	</string>
+	<string name="AwayAvatarResponseDefault">
+		メッセージを送った住人は現在 AFK（離席中）です。あなたのメッセージはあとで確認できるように IM パネルに表示されます。.
+	</string>
+	
+	<!-- Mute -->
 	<string name="MuteByName">
 		（名称別）
 	</string>
@@ -2502,18 +2606,24 @@ https://www.firestormviewer.org/support
 	<string name="RegionNoCovenant">
 		この不動産には約款がありません。
 	</string>
+	
+	<!-- Region/Estate Covenant -->
 	<string name="RegionNoCovenantOtherOwner">
 		この不動産には約款がありません。 この不動産上の土地は不動産所有者により販売され、Linden Lab は販売しません。  販売に関するお問い合わせは、不動産所有者までお願い致します。
 	</string>
 	<string name="covenant_last_modified" value="最終修正日："/>
 	<string name="none_text" value=" （なし） "/>
 	<string name="never_text" value=" （無） "/>
+	
+	<!--Region Details-->
 	<string name="GroupOwned">
 		グループ所有
 	</string>
 	<string name="Public">
 		パブリック
 	</string>
+	
+	<!-- Environment settings -->
 	<string name="LocalSettings">
 		ローカル設定
 	</string>
@@ -2541,12 +2651,16 @@ https://www.firestormviewer.org/support
 	<string name="EnvironmentTransparent">
 		透明
 	</string>
+	
+	<!-- panel classified -->
 	<string name="ClassifiedClicksTxt">
 		クリック数： [TELEPORT] テレポート、 [MAP] 地図、 [PROFILE] プロフィール
 	</string>
 	<string name="ClassifiedUpdateAfterPublish">
 		（掲載後更新）
 	</string>
+	
+	<!-- panel picks -->
 	<string name="NoPicksClassifiedsText">
 		ピックやクラシファイド広告を作成していません。 作成するには、下にある「プラス」ボタンをクリックします。
 	</string>
@@ -2634,6 +2748,8 @@ https://www.firestormviewer.org/support
 	<string name="ViewerObjectContents">
 		内容
 	</string>
+	
+	<!-- Viewer menu -->
 	<string name="AcquiredItems">
 		取得アイテム
 	</string>
@@ -2642,9 +2758,6 @@ https://www.firestormviewer.org/support
 	</string>
 	<string name="UploadingCosts">
 		[NAME] のアップロード料金は L$[AMOUNT] です
-	</string>
-	<string name="BuyingCosts">
-		これを L$[AMOUNT] で購入します
 	</string>
 	<string name="UnknownFileExtension">
 		不明の拡張子： %s
@@ -4575,10 +4688,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		この住人をブロックしています。 メッセージを送ると、ブロックが自動的に解除されます。
 	</string>
 	<string name="generic">
-		リクエスト中にエラーが発生しました。あとでもう一度お試しください。
+		会話ウィンドウを一度閉じて開き直して下さい。またはリログしてもう一度お試しください。
 	</string>
 	<string name="generic_request_error">
-		要求中にエラーが発生しました。後でもう一度試してください。
+		会話ウィンドウを一度閉じて開き直して下さい。またはリログしてもう一度お試しください。
 	</string>
 	<string name="insufficient_perms_error">
 		あなたには充分な権限がありません。
@@ -4628,11 +4741,14 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="unread_chat_multiple">
 		[SOURCES] は何か新しいことを言いました。
 	</string>
+	<string name="teleport_preamble_compact_chat">
+		あなたは今、
+	</string>
 	<string name="session_initialization_timed_out_error">
 		セッションの初期化がタイムアウトしました
 	</string>
 	<string name="Home position set.">
-		家の配置の設定。
+		ホームポジションが設定されました。
 	</string>
 	<string name="voice_morphing_url">
 		https://secondlife.com/destination/voice-island
@@ -4705,9 +4821,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="to publish a classified ad">
 		クラシファイド広告を掲載する
 	</string>
-	<string name="giving">
-		L$[AMOUNT] を渡します
-	</string>
 	<string name="uploading_costs">
 		アップロード料金は L$[AMOUNT] です
 	</string>
@@ -4715,10 +4828,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		料金は L$[AMOUNT] です
 	</string>
 	<string name="buying_selected_land">
-		選択した土地を L$ [AMOUNT] で購入します
+		この土地の費用
 	</string>
 	<string name="this_object_costs">
-		このオブジェクトは L$[AMOUNT] です
+		このアイテムの費用
+	</string>
+	<string name="giving">
+		支払おうとしています
 	</string>
 	<string name="group_role_everyone">
 		全員
@@ -4737,6 +4853,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 
 嫌がらせの報告
 	</string>
+	
+	<!-- names for new inventory items-->
 	<string name="New Shape">
 		新しいシェイプ
 	</string>
@@ -4821,6 +4939,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Common Gestures">
 		一般的ジェスチャー
 	</string>
+	
+	<!-- gestures -->
 	<string name="Male - Excuse me">
 		男性 - すみません
 	</string>
@@ -4913,6 +5033,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="New Day">新しいデイサイクル</string>
 	<string name="New Water">新しい水</string>
 	<string name="New Sky">新しい空</string>
+	<string name="New Settings">新しい自然環境設定</string>
 
 	<string name="/bow">
 		/おじぎする
@@ -4995,6 +5116,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="dance8">
 		ダンス8
 	</string>
+	
+	<!-- birth date format shared by avatar inspector and profile panels -->
 	<string name="AvatarBirthDateFormat">
 		[year,datetime,slt]/[mthnum,datetime,slt]/[day,datetime,slt]
 	</string>
@@ -5013,6 +5136,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="outfit_photo_verify_dimensions_error">
 		写真の大きさが検証できません。写真サイズがピッカーに表示されるまでお待ち下さい。
 	</string>
+	
+	<!-- language specific white-space characters, delimiters, spacers, item separation symbols -->
 	<string name="words_separator" value=","/>
 	<string name="server_is_down">
 		大変申し訳ございませんが、予期しない問題が発生しました。
@@ -5020,6 +5145,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	サービスに関する既知の問題については、https://secondlife-status.statuspage.io をご覧ください。
 問題が引き続き発生する場合は、お使いのネットワークやファイアウォールの設定を調べてください。
 	</string>
+	
+	<!-- overriding datetime formating.
+	didn't translate if this is not needed for current localization
+	-->
 	<string name="dateTimeWeekdaysNames">
 		日曜日:月曜日:火曜日:水曜日:木曜日:金曜日:土曜日
 	</string>
@@ -5041,9 +5170,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="dateTimePM">
 		PM
 	</string>
+	
+	<!--  currency formatting -->
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
 	</string>
+	
+	<!-- Group Profile roles and powers -->
 	<string name="Group Ban">
 		グループへの立入禁止
 	</string>
@@ -5086,15 +5219,25 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Chat" value=" チャット：">
 		チャット
 	</string>
+	
+	<!-- SL Membership -->
 	<string name="BaseMembership">
-		ベース
+		無料会員
 	</string>
 	<string name="PremiumMembership">
-		プレミアム
+		プレミアム会員
 	</string>
 	<string name="Premium PlusMembership">
-		プレミアムプラス
+		プレミアムプラス会員
 	</string>
+	<string name="MembershipUpgradeText">
+		プレミアム会員にアップグレード
+	</string>
+	<string name="MembershipPremiumText">
+		プレミアム会員資格
+	</string>
+	
+	<!-- Question strings for delete items notifications -->
 	<string name="DeleteItems">
 		選択したアイテムを削除しますか
 	</string>
@@ -5104,6 +5247,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="EmptyOutfitText">
 		このアウトフィットにはアイテムがありません
 	</string>
+	
+	<!-- External editor status codes -->
 	<string name="ExternalEditorNotSet">
 		環境変数 LL_SCRIPT_EDITOR を設定するか、ExternalEditor 設定を使ってエディターを選択します。
 	</string>
@@ -5118,12 +5263,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExternalEditorFailedToRun">
 		外部エディターを実行できませんでした。
 	</string>
+	
+	<!--  Machine translation of chat messahes -->
 	<string name="TranslationFailed">
 		翻訳できませんでした：[REASON]
 	</string>
 	<string name="TranslationResponseParseError">
 		翻訳の応答にエラーが発生しました。
 	</string>
+	
+	<!-- Key names begin -->
 	<string name="Esc">
 		Esc
 	</string>
@@ -5433,6 +5582,16 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Z">
 		Z
 	</string>
+	
+	<!-- Mouse button names (short) begin -->
+	<string name="LMB">LMB</string>
+	<string name="MMB">MMB</string>
+	<string name="RMB">RMB</string>
+	<string name="MB4">MB4</string>
+	<string name="MB5">MB5</string>
+	<string name="Double LMB">Double LMB</string>
+	
+	<!-- llviewerwindow -->
 	<string name="BeaconParticle">
 		パーティクル源ビーコン（青）を表示中
 	</string>
@@ -5967,7 +6126,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
-	<string name="MovelockEnabled">ムーブメントロックが有効になりました</string>
+	<string name="MovelockEnabled">「アバター」＞「ムーブメント」＞「ムーブメントをロック」が有効になりました</string>
 
 	<string name="BusyResponse">
 		取り込み時の自動応答
@@ -6189,8 +6348,10 @@ Secondlife.com のサポートセクションから
 		不明：通常の範囲を超えています。デバッグ設定で「RenderQualityPerformance」を確認して下さい。
 	</string>
 	
+	<string name="fsbridge_cant_create_disabled">
+		環境設定で「LSL クライアントブリッジ」が無効化されていると、[APP_NAME] は LSL ブリッジを作成できません。</string>
 	<string name="fsbridge_no_library">
-		Firestorm は LSL ブリッジを作成できませんでした。ライブラリを有効にしてリログして下さい。
+		[APP_NAME] は LSL ブリッジを作成できませんでした。ライブラリを有効にしてリログして下さい。
 	</string>
 	<string name="fsbridge_already_creating">
 		現在ブリッジを作成中ですので、別のインスタンスを開始することはできません。２，３分待ってからもう一度お試し下さい。
@@ -6199,19 +6360,19 @@ Secondlife.com のサポートセクションから
 		現在ブリッジを作成中です。この処理には時間がかかることがあります。お待ち下さい。
 	</string>
 	<string name="fsbridge_failure_creation_bad_name">
-		ブリッジは作成されませんでした。ブリッジの名前が正しくありません。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+		ブリッジは作成されませんでした。ブリッジの名前が正しくありません。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
 	</string>
 	<string name="fsbridge_failure_creation_null">
-		ブリッジは作成されませんでした。ブリッジがインベントリにみつかりません。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+		ブリッジは作成されませんでした。ブリッジがインベントリにみつかりません。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
 	</string>
 	<string name="fsbridge_failure_attach_wrong_object">
-		ブリッジを装着できませんでした。このブリッジは現行バージョンのものではありません。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+		ブリッジを装着できませんでした。このブリッジは現行バージョンのものではありません。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
 	</string>
 	<string name="fsbridge_failure_attach_wrong_location">
-		ブリッジを装着できませんでした。ブリッジがインベントリ内の正しい場所にみつかりませんでした。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+		ブリッジを装着できませんでした。ブリッジがインベントリ内の正しい場所にみつかりませんでした。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
 	</string>
 	<string name="fsbridge_failure_attach_point_in_use">
-	ブリッジを装着できませんでした。何か別のものがブリッジの装着ポイントを使用しています。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+	ブリッジを装着できませんでした。何か別のものがブリッジの装着ポイントを使用しています。[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
 	</string>
 	<string name="fsbridge_failure_not_found">
 		ブリッジのオブジェクトがみつかりませんでした。作成処理を進めることができませんので中止します。
@@ -6220,11 +6381,19 @@ Secondlife.com のサポートセクションから
 		ブリッジのインベントリに想定外のアイテムが入っています。
 	</string>
 	<string name="fsbridge_warning_not_finished">
-		ブリッジの作成が完了していません。ブリッジを使用するには、Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行う必要があるかもしれません。
+		ブリッジの作成が完了していません。ブリッジを使用するには、[APP_NAME] のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行う必要があるかもしれません。
 	</string>
-  <string name="fsbridge_detached">ブリッジが外されました。</string>
-  <string name="fsbridge_created">ブリッジが作成されました。</string>
-
+	<string name="fsbridge_detached">ブリッジが外されました。</string>
+	<string name="fsbridge_created">ブリッジが作成されました。</string>
+	
+	<!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
+	<string name="FSAOEnabled">[APP_NAME] の AO が有効化されました。</string>
+	<string name="FSAODisabled">[APP_NAME] の AO が無効化されました。</string>
+	<string name="FSAOPausedScript">スクリプト入りの装着物により停止されました。</string>
+	<string name="FSAOResumedScript">スクリプト入りの装着物により復帰しました。</string>
+	<string name="FSAOStandsPausedScript">スクリプト入りの装着物により、Stand のアニメーションが停止されました。</string>
+	<string name="FSAOStandsResumedScript">スクリプト入りの装着物により、Stand のアニメーションが復帰しました。</string>
+  
   <!-- <FS:Zi> Quick preferences default options -->
   <string name="QP Draw Distance">描画距離</string>
   <string name="QP Max Particles">最大パーティクル数</string>
@@ -6328,10 +6497,30 @@ Secondlife.com のサポートセクションから
 	<string name="Pie_av_render_never">表示しない</string>
 	<string name="Pie_av_render_fully">完全表示</string>
 
-	<string name="Nametag_Complexity_Label">表示の複雑さ: [COMPLEXITY]</string>
+	<string name="Nametag_Complexity_Label">表示の複雑さ：[COMPLEXITY]</string>
+	<string name="Nametag_Texture_Area_Label">テクスチャの範囲； [TEXTURE_AREA] m²</string>
 	
 	<string name="font_unknown">不明なフォント</string>
 	<string name="mode_unknown">不明なモード</string>
 	<string name="mode_settings_hybrid.xml">ハイブリッド</string>
 	<string name="mode_settings_text.xml">テキスト</string>
+	
+	
+	<string name="Asset_Uploading">アップロード中...
+[ASSET_NAME]
+	</string>
+	<string name="Yes">はい</string>
+	<string name="No">いいえ</string>
+	<string name="FSUrlEntryWearLabel">持ち物フォルダを装着</string>
+	<string name="TexturePickerOutfitHeader">アウトフィットの写真</string>
+	<string name="unknown_script">（不明のスクリプト）</string>
+	<string name="FSAreaSearch_Cost_Label">L$[COST]</string>
+	
+	<string name="ImportingWindlightBulk">Windlight をインポート中...</string>
+	
+	<!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+	<string name="FSObjectInventoryNoElements">アイテムなし</string>
+	<string name="FSObjectInventoryOneElement">1 個のアイテム</string>
+	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] 個のアイテム</string>
+	
 </strings>

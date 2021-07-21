@@ -3378,7 +3378,11 @@ void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y, S3
 		CURSOR_WIDTH + MOUSE_CURSOR_PADDING * 2, 
 		CURSOR_HEIGHT + MOUSE_CURSOR_PADDING * 2);
 	menu->translateIntoRectWithExclusion( menu_region_rect, mouse_rect );
-	if (menu->getRect().mTop > menu_region_rect.mTop)
+	// <FS:Ansariel> FIRE-31065: Make sure menu is shown on the screen properly
+	//if (menu->getRect().mTop > menu_region_rect.mTop)
+	if (menu->getRect().mTop > menu_region_rect.mTop ||
+		menu->getRect().mBottom < menu_region_rect.mBottom)
+	// </FS:Ansariel>
 	{
 		// not enough space: align with top, ignore exclusion
 		menu->translateIntoRect( menu_region_rect );

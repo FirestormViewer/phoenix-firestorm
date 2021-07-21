@@ -1,0 +1,52 @@
+LLWearable version 22
+RASL M EXPLORE SKIN (LOUIS)
+
+	permissions 0
+	{
+		base_mask	7fffffff
+		owner_mask	7fffffff
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	79908808-d272-49a8-864a-d133a10931e9
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	79908808-d272-49a8-864a-d133a10931e9
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 1
+parameters 26
+108 0
+110 0
+111 .75
+116 0
+117 0
+150 0
+162 0
+163 0
+165 0
+700 .25
+701 0
+702 0
+703 0
+704 0
+705 .5
+706 .6
+707 0
+708 0
+709 0
+710 0
+711 .5
+712 0
+713 .7
+714 0
+715 0
+775 0
+textures 3
+0 186d9ce8-d1bd-b0d9-4c1e-e2d0faf4d6ca
+5 959fdef8-ca08-4059-5468-0431a14b11fe
+6 a2200068-757a-6b58-6693-02129927627e
