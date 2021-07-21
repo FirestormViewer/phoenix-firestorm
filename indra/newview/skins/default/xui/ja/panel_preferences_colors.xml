@@ -171,13 +171,13 @@
 		<panel label="ミニマップ" name="tab-minimap">
 			<slider label="背景の不透明度:" name="FSMiniMapOpacity" />
 			<text name="netmap_pickradius_color_textbox">
-				選択する半径:
+				選択半径の色：
 			</text>
 			<color_swatch name="MapPickRadiusColor" tool_tip="ミニマップ上で選択する範囲の色を制御します。選択する範囲の大きさは「選択範囲」の設定で調整できます。" />
 			<text name="netmap_pickradius_opacity_textbox">
 				不透明度：
 			</text>
-			<slider name="MapPickRadiusTransparency" />
+			<slider name="MapPickRadiusTransparency" tool_tip="ミニマップ上で選択する範囲の色の不透明度を制御します。選択する範囲の大きさは「選択範囲」の設定で調整できます。" />
 			<text name="netmap_dots_textbox">
 				ミニマップの点:
 			</text>
