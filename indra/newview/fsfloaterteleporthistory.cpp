@@ -54,6 +54,15 @@ BOOL FSFloaterTeleportHistory::postBuild()
 	{
 		mHistoryPanel->setIsStandAlone(true);
 
+		mHistoryPanel->mTeleportBtn = getChild<LLButton>("teleport_btn");
+		mHistoryPanel->mShowOnMapBtn = getChild<LLButton>("map_btn");
+		mHistoryPanel->mShowProfile = getChild<LLButton>("profile_btn");
+
+		mHistoryPanel->mTeleportBtn->setClickedCallback(boost::bind(&LLTeleportHistoryPanel::onTeleport, mHistoryPanel));
+		mHistoryPanel->mShowProfile->setClickedCallback(boost::bind(&LLTeleportHistoryPanel::onShowProfile, mHistoryPanel));
+		mHistoryPanel->mShowOnMapBtn->setClickedCallback(boost::bind(&LLTeleportHistoryPanel::onShowOnMap, mHistoryPanel));
+
+
 		mFilterEditor = getChild<LLFilterEditor>("Filter");
 		if (mFilterEditor)
 		{

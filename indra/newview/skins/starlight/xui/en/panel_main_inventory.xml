@@ -46,7 +46,7 @@
    height="21"
    top="18"
    left="10"
-   follows="top|right"
+   follows="top|left"
    layout="topleft">
 
   <combo_box.item value="filter_type_all" label="All Types" />

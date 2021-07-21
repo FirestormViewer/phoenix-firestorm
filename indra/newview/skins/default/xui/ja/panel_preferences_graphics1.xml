@@ -59,6 +59,8 @@
 			水の反射：
 		</text>
 		<combo_box label="水の反射" name="Reflections">
+			<combo_box.item label="なし (不透明)" name="-2" />
+			<combo_box.item label="なし (透明)" name="-1" />
 			<combo_box.item label="最小" name="0"/>
 			<combo_box.item label="地形と樹木" name="1"/>
 			<combo_box.item label="すべての静止オブジェクト" name="2"/>
@@ -154,7 +156,12 @@
             （0/1.0でデフォルト、低いほど明るい）
         </text>
         <slider label="テクスチャメモリ（MB）：" name="GraphicsCardTextureMemory" tool_tip="テクスチャに割り当てられたメモリの量。ビデオカードの既定値から512MBまで拡張可能。この値を下げるとパフォーマンスが向上しますが、テクスチャの精度が落ちることがあります。この値を512MBを越えて設定することはお勧めしません。ご利用のグラフィックカードが512MB以上に対応している場合でも、メインメモリがビューワに影響を与え、SLの動作が不安定になることがあります。" />
+        <check_box label="動的テクスチャメモリを有効化" name="FSDynamicTextureMemory" tool_tip="動的テクスチャメモリ計算を可能にします。（64ビットのビューワで。AMD, NVIDIA のGPU使用時に、最低512MB のビデオメモリが割り当てられている場合にのみ有効です。）" />
+        <slider label="最小ビューワテクスチャメモリバッファ (MB):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="テクスチャに割り当てられるメモリの量の最低値です。これは、利用可能なビデオメモリの量を超えたとしても、ここで指定した量のメモリを常にテクスチャが使用することを可能にします。指定した量とリザーブされているメモリの量が物理的なビデオメモリの量を超える場合にはキャップがかかるようになっています。" />
+        <slider label="追加テクスチャメモリキャッシュのリザーブ (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="読み込みはされたもののまだ表示されていないテクスチャををキャッシュするためにリザーブしておく物理ビデオメモリのパーセンテージを設定します。" />
+        <slider label="物理ビデオメモリ・リザーブ (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="物理ビデオメモリを他の用途で使用するために何パーセント確保しておくかを設定します。" />
         <spinner label="フォグの距離比率" name="fog" />
+        <spinner label="画像デコードの同時実行数:" name="image_decode_threads" tool_tip="画像をデコードする際に使用するスレッドの数を設定します。０＝自動、１＝同期、２＋＝ユーザー設定で、０か１が推奨されます。" />
 		
     </panel>
 	
@@ -227,6 +234,7 @@
 		<check_box label="被写体深度を利用する（この設定をすると、カメラのフォーカスが当たっていない部分がぼやけます。）" name="UseDoF" />
 		<check_box label="編集モード中でも有効にする" name="RenderDepthOfFieldInEditMode" />
 		<check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
+		<check_box label="DOF フォーカスがポインタに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（DOF）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。" />
         <slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="DOF効果を得るためのカメラのF値（絞り）" />
         <slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="DOF効果を得るための焦点距離（単位はミリ）" />
         <slider label="カメラの視野角（画角）：" name="Camera FOV" tool_tip="DOF効果を得るためのカメラの垂直画角（単位は度）" />

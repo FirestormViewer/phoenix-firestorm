@@ -2033,7 +2033,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	
 	if (!LLAppViewer::instance()->restoreErrorTrap())
 	{
-		LL_WARNS("Window") << " Someone took over my signal/exception handler (post createWindow)!" << LL_ENDL;
+        // this always happens, so downgrading it to INFO
+		LL_INFOS("Window") << " Someone took over my signal/exception handler (post createWindow; normal)" << LL_ENDL;
 	}
 
 	const bool do_not_enforce = false;
@@ -3010,7 +3011,7 @@ void LLViewerWindow::draw()
 	static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
 	if (!renderUIBuffer)
 	{
-		LLUI::getInstance()->mDirtyRect = getWindowRectScaled();
+		LLView::sDirtyRect = getWindowRectScaled();
 	}
 
 	// HACK for timecode debugging
@@ -7199,11 +7200,11 @@ void LLPickInfo::fetchResults()
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 	if ( (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY)) && (hit_object) && (!hit_object->isHUDAttachment()) )
 	{
-		std::list<LLVisualEffect*> effects;
+		std::list<RlvOverlayEffect*> effects;
 		LLVfxManager::instance().getEffects<RlvOverlayEffect>(effects);
-		for (const LLVisualEffect* pEffect : effects)
+		for (const RlvOverlayEffect* pEffect : effects)
 		{
-			if (pEffect->getEnabled() && static_cast<const RlvOverlayEffect*>(pEffect)->hitTest(mMousePt))
+			if (pEffect->getEnabled() && pEffect->hitTest(mMousePt))
 			{
 				hit_object = nullptr;
 				break;

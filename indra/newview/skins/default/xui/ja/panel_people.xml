@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="人" name="people_panel">
-	<string name="no_recent_people" value="最近交流した人はいません。 一緒に何かする仲間をお探しですか？ [secondlife:///app/search/people 検索] か [secondlife:///app/worldmap 世界地図] をお試しください。"/>
+	<string name="no_recent_people" value="最近交流した人はいません。"/>
 	<string name="no_filtered_recent_people" value="お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。"/>
 	<string name="no_one_near" value="近くに誰もいません。 一緒に何かする仲間をお探しですか？ [secondlife:///app/search/people 検索] か [secondlife:///app/worldmap 世界地図] をお試しください。"/>
 	<string name="no_one_filtered_near" value="お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。"/>
 	<string name="no_friends_online" value="オンラインのフレンドはいません"/>
 	<string name="no_friends" value="フレンドはいません"/>
 	<string name="no_friends_msg">
-		友達を見つけるには、[secondlife:///app/search/people 検索] をするか、住人を右クリックしてフレンド登録してください。
-一緒に何かする仲間をお探しですか？ [secondlife:///app/worldmap 世界地図] をお試しください。
+		誰かを友だちとして追加するには、対象のアバターかその名前を右クリックしてください。
+もっと人のいる場所をお探しですか？ [secondlife:///app/floater/destinations 行き先ガイド] にはグリッドのオペレータスタッフが選んだ場所が掲載されています。
+[secondlife:///app/search/ Search] では、キーワードに一致した場所をグリッド全体から検索できます。
 	</string>
 	<string name="no_filtered_friends_msg">
 		お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。
@@ -19,10 +20,13 @@
 	<string name="groups_filter_label" value="グループをフィルター"/>
 	-->
 	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。"/>
-	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。"/>
-		<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
-		<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
-		<string name="GroupCountWithInfo" value="あなたは[COUNT]グループに属しているので、まだ[REMAINING]参加できます。 [secondlife:/// もっと必要ですか？]"/>
+	<string name="no_groups_msg">
+		あなたはどこのグループにも属していません。
+		[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ グループ] でグループを探してみて下さい。
+	</string>
+	<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
+	<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
+	<string name="GroupCountWithInfo" value="あなたは[COUNT]グループに属しているので、まだ[REMAINING]参加できます。 [secondlife:/// もっと必要ですか？]"/>
 	<panel.string name="empty_list">
 		連絡先セットに何も登録がありません。
 	</panel.string>

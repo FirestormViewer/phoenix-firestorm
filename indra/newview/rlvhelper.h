@@ -625,11 +625,13 @@ public:
 	 * Event handlers
 	 */
 public:
-	static void	onWear(LLWearableType::EType eType, bool fAllowed);
-	static void	onTakeOff(LLWearableType::EType eType, bool fAllowed);
-	static void	onAttach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
-	static void	onDetach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
-	static void	onReattach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
+	static void onWear(LLWearableType::EType eType, bool fAllowed);
+	static void onTakeOff(LLWearableType::EType eType, bool fAllowed);
+	static void onAttach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
+	static void onDetach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
+	static void onReattach(const LLViewerJointAttachment* pAttachPt, bool fAllowed);
+	       void onSit(const LLUUID& idObj, bool fAllowed);
+	       void onStand(const LLUUID& idObj, bool fAllowed);
 protected:
 	void		onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet, bool fInternal);
 

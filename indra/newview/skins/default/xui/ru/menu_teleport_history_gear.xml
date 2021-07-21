@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="Teleport History Gear Context Menu">
+<toggleable_menu name="Teleport History Gear Context Menu">
 	<menu_item_call label="Открыть все папки" name="Expand all folders"/>
 	<menu_item_call label="Закрыть все папки" name="Collapse all folders"/>
 	<menu name="TPHistoryTimeZone" label="Выбрать время...">
@@ -12,4 +12,4 @@
 		<menu_item_check name="Show Date" label="Дату" />
 	</menu>
 	<menu_item_call label="Очистить историю телепортаций" name="Clear Teleport History"/>
-</menu>
+</toggleable_menu>

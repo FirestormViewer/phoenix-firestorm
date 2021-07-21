@@ -86,6 +86,16 @@
 			<key>value</key>
 			<string>Skript-Dialog oder Textbox kann aufgrund von RLV-Einschränkungen nicht angezeigt werden.</string>
 		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>Inventar konnte aufgrund von RLV-Einschränkungen nicht mit [RECIPIENT] geteilt werden.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>Inventar konnte aufgrund von RLV-Einschränkungen nicht geteilt werden.</string>
+		</map>
 		<key>blocked_startim</key>
 		<map>
 			<key>value</key>

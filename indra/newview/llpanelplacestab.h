@@ -58,6 +58,7 @@ public:
 
 	bool isTabVisible(); // Check if parent TabContainer is visible.
 
+	void setPanelPlacesButtons(LLPanelPlaces* panel); // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
 	void onRegionResponse(const LLVector3d& landmark_global_pos,
 										U64 region_handle,
 										const std::string& url,
@@ -70,6 +71,12 @@ public:
 	void setRemoveBtn(LLButton* trash_btn) { sRemoveBtn = trash_btn; }
 
 protected:
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	LLButton*				mTeleportBtn;
+	LLButton*				mShowOnMapBtn;
+	LLButton*				mShowProfile;
+	// </FS:Ansariel>
+
 	// Search string for filtering landmarks and teleport history locations
 	static std::string		sFilterSubString;
 	static LLButton*		sRemoveBtn;

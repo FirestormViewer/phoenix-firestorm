@@ -141,6 +141,16 @@
 			<key>value</key>
 			<string>Unable to show script dialog or textbox due to RLV restrictions</string>
 		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>Unable to share inventory with [RECIPIENT] due to RLV restrictions.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>Unable to share inventory due to RLV restrictions.</string>
+		</map>
 		<key>blocked_startim</key>
 		<map>
 			<key>value</key>

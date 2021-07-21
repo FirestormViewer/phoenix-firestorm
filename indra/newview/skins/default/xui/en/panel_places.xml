@@ -318,6 +318,41 @@
 			name="lp2"
 			auto_resize="true"
 			width="116">
+
+		<!--*********************** Profile button ***********************-->		
+				
+				<layout_stack
+		     	follows="bottom|left|right"
+				height="23"
+				layout="topleft"
+				mouse_opaque="false"
+				name="bottom_bar_profile_ls"
+				left="0"
+				orientation="horizontal"
+				top="0"
+				width="110">		
+					<layout_panel
+					follows="bottom|left|right"
+					height="23"
+					layout="bottomleft"
+					left_pad="3"			
+					mouse_opaque="false"
+					name="profile_btn_lp"
+				    auto_resize="true"
+					width="102">
+						<button
+				         follows="bottom|left|right"
+				         height="23"
+				         label="Profile"
+				         layout="topleft"
+						 mouse_opaque="false"
+				         name="profile_btn"
+				         left="1"
+				         tool_tip="Show place profile"
+				         top="0"
+				         width="101" />		
+					</layout_panel>
+				</layout_stack>
 		
 		<!--*********************** Close button ***********************-->
 				

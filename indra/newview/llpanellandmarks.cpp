@@ -70,6 +70,8 @@ static void expand_all_folders(LLFolderView* root_folder);
 static bool has_expanded_folders(LLFolderView* root_folder);
 static bool has_collapsed_folders(LLFolderView* root_folder);
 static void toggle_restore_menu(LLMenuGL* menu, BOOL visible, BOOL enabled);
+// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+static bool category_has_descendents(LLPlacesInventoryPanel* inventory_list);
 
 /**
  * Functor counting expanded and collapsed folders in folder view tree to know
@@ -197,6 +199,9 @@ void LLLandmarksPanel::onSearchEdit(const std::string& string)
 
 	if (sFilterSubString != string)
 		sFilterSubString = string;
+
+	// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+	updateShowFolderState();
 }
 
 // virtual
@@ -207,6 +212,13 @@ void LLLandmarksPanel::onShowOnMap()
 		LL_WARNS() << "There are no selected list. No actions are performed." << LL_ENDL;
 		return;
 	}
+
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	// Disable the "Map" button because loading landmark can take some time.
+	// During this time the button is useless. It will be enabled on callback finish
+	// or upon switching to other item.
+	mShowOnMapBtn->setEnabled(FALSE);
+	// </FS:Ansariel>
 
 	doActionOnCurSelectedLandmark(boost::bind(&LLLandmarksPanel::doShowOnMap, this, _1));
 }
@@ -293,6 +305,16 @@ void LLLandmarksPanel::updateVerbs()
 	{
 		sRemoveBtn->setEnabled(isActionEnabled("delete") && (isFolderSelected() || isLandmarkSelected()));
 	}
+
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	if (!isTabVisible())
+		return;
+
+	bool landmark_selected = isLandmarkSelected();
+	mTeleportBtn->setEnabled(landmark_selected && isActionEnabled("teleport"));
+	mShowProfile->setEnabled(landmark_selected && isActionEnabled("more_info"));
+	mShowOnMapBtn->setEnabled(landmark_selected && isActionEnabled("show_on_map"));
+	// </FS:Ansariel>
 }
 
 void LLLandmarksPanel::setItemSelected(const LLUUID& obj_id, BOOL take_keyboard_focus)
@@ -307,6 +329,27 @@ void LLLandmarksPanel::setItemSelected(const LLUUID& obj_id, BOOL take_keyboard_
 	root->setSelection(item, FALSE, take_keyboard_focus);
 	root->scrollToShowSelection();
 }
+
+// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+void LLLandmarksPanel::updateShowFolderState()
+{
+	if (!mLandmarksInventoryPanel)
+	{
+		return;
+	}
+
+	bool show_all_folders = mLandmarksInventoryPanel->getFilterSubString().empty();
+	if (show_all_folders)
+	{
+		show_all_folders = category_has_descendents(mLandmarksInventoryPanel);
+	}
+
+	mLandmarksInventoryPanel->setShowFolderState(show_all_folders ?
+		LLInventoryFilter::SHOW_ALL_FOLDERS :
+		LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS
+	);
+}
+// </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////
 // PROTECTED METHODS
@@ -1071,6 +1114,7 @@ void LLLandmarksPanel::doShowOnMap(LLLandmark* landmark)
 		LLFloaterReg::showInstance("world_map", "center");
 	}
 
+	mShowOnMapBtn->setEnabled(TRUE); // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
 	mGearLandmarkMenu->setItemEnabled("show_on_map", TRUE);
 }
 
@@ -1254,6 +1298,19 @@ void toggle_restore_menu(LLMenuGL *menu, BOOL visible, BOOL enabled)
 		}
 	}
 }
+
+// <FS:Ansariel> FIRE-31051: Hide empty folders in Places floater when filtering
+static bool category_has_descendents(LLPlacesInventoryPanel* inventory_list)
+{
+	LLViewerInventoryCategory* category = gInventory.getCategory(inventory_list->getRootFolderID());
+	if (category)
+	{
+		return category->getDescendentCount() > 0;
+	}
+
+	return false;
+}
+// </FS:Ansariel>
 
 LLFavoritesPanel::LLFavoritesPanel()
 	:	LLLandmarksPanel(false)
