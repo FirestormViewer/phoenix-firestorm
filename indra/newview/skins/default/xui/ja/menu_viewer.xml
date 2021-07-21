@@ -10,16 +10,38 @@
 		<menu_item_call label="マーケティングプレイスのリスト..." name="MarketplaceListings"/>
 		<menu_item_call label="L$ の購入" name="Buy and Sell L$"/>
 		
-		<menu_item_call label="持ち物" name="NewInventoryWindow"/>
 		<menu_item_check label="持ち物" name="Inventory"/>
+		<menu_item_call label="新規持ち物ウィンドウ" name="NewInventoryWindow"/>
 		<menu_item_check label="保護フォルダ" name="Protected Folders" />
 		<menu_item_check label="お気に入りの服やHUD" name="WearableFavorites" />
 		<menu_item_call label="ピック..." name="Picks"/>
 		<menu_item_call label="体験..." name="Experiences"/>
 		<menu_item_call label="スクリプト…" name="MyScripts"/>
 		<menu_item_call label="プロフィール" name="Profile"/>
-		<menu_item_check label="容姿" name="ChangeOutfit"/>
+		<menu_item_call label="装着中..." name="NowWearing" />
+		<menu_item_check label="アウトフィット" name="ChangeOutfit"/>
+		<menu label="取り外す" name="Take Off &gt;">
+			<menu label="衣類" name="Clothes &gt;">
+				<menu_item_call label="シャツ" name="Shirt" />
+				<menu_item_call label="パンツ" name="Pants" />
+				<menu_item_call label="スカート" name="Skirt" />
+				<menu_item_call label="靴" name="Shoes" />
+				<menu_item_call label="靴下" name="Socks" />
+				<menu_item_call  label="ジャケット" name="Jacket" />
+				<menu_item_call label="手袋" name="Gloves" />
+				<menu_item_call label="下着シャツ" name="Self Undershirt" />
+				<menu_item_call label="下着パンツ" name="Self Underpants" />
+				<menu_item_call label="タトゥ" name="Self Tattoo" />
+				<menu_item_call label="物理作用" name="Self Physics" />
+				<menu_item_call label="アルファ" name="Self Alpha" />
+				<menu_item_call label="すべての衣類" name="All Clothes" />
+			</menu>
+			<menu label="HUD" name="Avatar Detach HUD" />
+			<menu label="取り外す" name="Avatar Detach" />
+			<menu_item_call label="すべて取り外す" name="Detach All" />
+		</menu>
 		<menu_item_call label="アバターを選択..." name="Avatar Picker"/>
+		<menu_item_call label="ホバーの高さ" name="HoverHeight" />
 		
 		<menu label="ムーブメント" name="Movement">
 			<menu_item_call label="座る" name="Sit Down Here"/>
@@ -121,6 +143,7 @@
 		<menu_item_call label="現在地をホームに設定" name="Set Home to Here"/>
 		<menu_item_call label="この土地を購入" name="Buy Land"/>
 		<menu_item_call label="自分の土地" name="My Land"/>
+		<menu_item_call label="リンデンホーム..." name="Linden Home" />
 		<menu label="表示" name="LandShow">
 			<menu_item_check label="立入禁止ライン" name="Ban Lines"/>
 			<menu_item_check label="ビーコン（標識）" name="beacons"/>
@@ -140,11 +163,17 @@
 			<menu_item_call label="自分の環境..." name="my_environs" />
 			<menu_item_call label="環境の個人設定..." name="adjustment_tool" />
 			<menu_item_check label="雲の動きを停止" name="pause_clouds" />
+			<menu label="一括インポート" name="WL Bulk Import">
+				<menu_item_call label="デイサイクル..." name="WL Bulk Import Days" />
+				<menu_item_call label="空の設定..." name="WL Bulk Import Skies" />
+				<menu_item_call label="水の設定..." name="WL Bulk Import Water" />
+			</menu>
 		</menu>
 
 		<menu name="photo_and_video" label="写真と動画">
 				<menu_item_call label="フォトツール" name="phototools_item_call" />
 				<menu_item_call label="カメラツール" name="cameratools_item_call" />
+				<menu_item_check label="DOF フォーカスをロック" name="lock_focus_point" />
 		</menu>
 		<menu_item_call label="エリアサーチ" name="area_search"/>
 		<menu_item_call label="サウンドエクスプローラ" name="Sound Explorer"/>
@@ -328,6 +357,7 @@
 			<menu_item_check label="アルファ" name="Rendering Type Alpha"/>
 			<menu_item_check label="木" name="Rendering Type Tree"/>
 			<menu_item_check label="アバター" name="Rendering Type Character"/>
+			<menu_item_check label="アニメッシュ" name="Rendering Type Control Avatar" />
 			<menu_item_check label="サーフェスパッチ" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="空" name="Rendering Type Sky"/>
 			<menu_item_check label="水" name="Rendering Type Water"/>
@@ -361,7 +391,9 @@
 			
 			<!-- This second, alternative shortcut for Show Advanced Menu is for backward compatibility.  The main shortcut has been changed so it's Linux-friendly, where the old shortcut is typically eaten by the window manager. -->
 
+			<!--
 			<menu_item_check label="アドバンスメニューを表示 - レガシーのショートカット" name="Show Advanced Menu - legacy shortcut"/>
+			-->
 			<menu_item_check label="ダブルックリックテレポート" name="DoubleClick Teleport"/>						
 			<menu_item_check label="常に走る" name="Always Run"/>
 			<menu_item_check label="飛ぶ" name="Fly" shortcut="Home"/>
@@ -421,6 +453,10 @@
 			<menu_item_check label="カーソルを乗せた場所の色を表示する" name="Show Color Under Cursor"/>
 			<menu_item_check label="メモリを表示：" name="Show Memory"/>
 			<menu_item_check label="オブジェクトのアップデートを表示する" name="Show Updates"/>
+		</menu>
+		<menu label="プロファイリングと遠隔測定" name="Enable / Disable telemetry capture">
+			<menu_item_check label="プロファイリング" name="Profiling" />
+			<menu_item_check label="接続次第開始" name="Start when telemetry client connects" />
 		</menu>
 		<menu label="エラー実行" name="Force Errors">
 			<menu_item_call label="ブレークポイント" name="Force Breakpoint"/>
@@ -489,6 +525,9 @@
 			<menu_item_check label="アニメーションテクスチャ" name="Animation Textures"/>
 			<menu_item_check label="テクスチャを無効にする" name="Disable Textures"/>
 			<menu_item_call label="全てのアニメーションメッシュを表示しない" name="Derender Animesh" />
+			<menu_item_check label="環境を無効にする" name="Disable Ambient" />
+			<menu_item_check label="太陽光を無効にする" name="Disable Sunlight" />
+			<menu_item_check label="自分の照明を無効にする" name="Disable Local Lights" />
 			<menu_item_check label="フル解像度テクスチャ (危険)" name="Full Res Textures"/>
 			<menu_item_check label="装着された光源を描画する" name="Render Attached Lights"/>
 			<menu_item_check label="取り付けられたパーティクルを描画する" name="Render Attached Particles"/>

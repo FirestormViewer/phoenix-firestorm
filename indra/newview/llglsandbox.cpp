@@ -78,13 +78,11 @@ const F32 PARCEL_POST_HEIGHT = 0.666f;
 // Returns true if you got at least one object
 void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 {
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+// [RLVa:KB] - @edit* and @interact
 	// Block rectangle selection if:
-	//   - prevented from editing and no exceptions are set (see below for the case where exceptions are set)
+	//   - prevented from editing anything at all
 	//   - prevented from interacting at all
-	if ( (rlv_handler_t::isEnabled()) && 
-		 ( ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) && (!gRlvHandler.hasException(RLV_BHVR_EDIT))) || 
-		   (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) ) )
+	if (RlvActions::isRlvEnabled() && (RlvActions::canEdit(ERlvCheckType::Nothing) || RlvActions::hasBehaviour(RLV_BHVR_INTERACT)) )
 	{
 		return;
 	}

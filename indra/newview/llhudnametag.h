@@ -40,10 +40,8 @@
 #include <set>
 #include <vector>
 
-#include "lluiimage.h"
-
-class LLDrawable;
 class LLHUDNameTag;
+class LLUIImage;
 
 struct llhudnametag_further_away
 {
@@ -173,6 +171,8 @@ private:
 	EVertAlignment	mVertAlignment;
 	S32				mLOD;
 	BOOL			mHidden;
+	LLPointer<LLUIImage> mRoundedRectImgp;
+	LLPointer<LLUIImage> mRoundedRectTopImgp;
 
 	static BOOL    sDisplayText ;
 	static std::set<LLPointer<LLHUDNameTag> > sTextObjects;
@@ -180,11 +180,6 @@ private:
 //	static std::vector<LLPointer<LLHUDNameTag> > sVisibleHUDTextObjects;
 	typedef std::set<LLPointer<LLHUDNameTag> >::iterator TextObjectIterator;
 	typedef std::vector<LLPointer<LLHUDNameTag> >::iterator VisibleTextObjectIterator;
-
-	// <FS:Ansariel> Performance improvement
-	LLUIImagePtr	mRoundedRectImg;
-	LLUIImagePtr	mRoundedRectTopImg;
-	// </FS:Ansariel>
 };
 
 #endif

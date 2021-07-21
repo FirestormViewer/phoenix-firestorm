@@ -129,6 +129,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SENDGESTURE,
 	RLV_BHVR_PERMISSIVE,			// "permissive"
 	RLV_BHVR_NOTIFY,				// "notify"
+	RLV_BHVR_SHARE,
 	RLV_BHVR_SHOWINV,				// "showinv"
 	RLV_BHVR_SHOWMINIMAP,			// "showminimap"
 	RLV_BHVR_SHOWWORLDMAP,			// "showworldmap"
@@ -156,7 +157,9 @@ enum ERlvBehaviour {
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
 	RLV_BHVR_BUY,					// "buy"
 	RLV_BHVR_EDIT,					// "edit"
+	RLV_BHVR_EDITATTACH,
 	RLV_BHVR_EDITOBJ,				// "editobj"
+	RLV_BHVR_EDITWORLD,
 	RLV_BHVR_VIEWTRANSPARENT,
 	RLV_BHVR_VIEWWIREFRAME,
 	RLV_BHVR_PAY,					// "pay"
@@ -176,6 +179,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETGROUP,				// "setgroup"
 	RLV_BHVR_UNSIT,					// "unsit"
 	RLV_BHVR_SIT,					// "sit"
+	RLV_BHVR_SITGROUND,
 	RLV_BHVR_SITTP,					// "sittp"
 	RLV_BHVR_STANDTP,				// "standtp"
 	RLV_BHVR_SETDEBUG,				// "setdebug"
@@ -248,6 +252,7 @@ enum ERlvBehaviour {
 	// Effects
 	RLV_BHVR_SETSPHERE,				// Gives an object exclusive control of the 'vision spheres' effect
 	RLV_BHVR_SETOVERLAY,			// Gives an object exclusive control of the overlay
+	RLV_BHVR_SETOVERLAY_TOUCH,		// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
 	RLV_BHVR_SETOVERLAY_TWEEN,		// Animate between the current overlay settings and the supplied values
 
 	RLV_BHVR_COUNT,
@@ -288,7 +293,6 @@ enum class ERlvLocalBhvrModifier
 	OverlayAlpha,						// Transparency level of the overlay texture (in addition to the texture's own alpha channel)
 	OverlayTexture,						// Specifies the UUID of the overlay texture
 	OverlayTint,						// The tint that's applied to the overlay texture
-	OverlayTouch,						// Determines whether the overlay texture's alpha channel will be used to allow/block world interaction
 	// @setsphere
 	SphereMode,                         // The type of effect that will apply to any pixel that intersects with the sphere (e.g. blend, blur, ...)
 	SphereOrigin,                       // The origin of the sphere can either be the avatar or the camera position
@@ -459,6 +463,8 @@ namespace RlvStringKeys
 		/*inline*/ constexpr boost::string_view RecvIm = make_string_view("blocked_recvim");
 		/*inline*/ constexpr boost::string_view RecvImRemote = make_string_view("blocked_recvim_remote");
 		/*inline*/ constexpr boost::string_view SendIm = make_string_view("blocked_sendim");
+		/*inline*/ constexpr boost::string_view Share = make_string_view("blocked_share");
+		/*inline*/ constexpr boost::string_view ShareGeneric = make_string_view("blocked_share_generic");
 		/*inline*/ constexpr boost::string_view StartConference = make_string_view("blocked_startconf");
 		/*inline*/ constexpr boost::string_view StartIm = make_string_view("blocked_startim");
 		/*inline*/ constexpr boost::string_view Teleport = make_string_view("blocked_teleport");
@@ -476,6 +482,8 @@ namespace RlvStringKeys
 		constexpr const char RecvIm[] = "blocked_recvim";
 		constexpr const char RecvImRemote[] = "blocked_recvim_remote";
 		constexpr const char SendIm[] = "blocked_sendim";
+		constexpr const char Share[] = "blocked_share";
+		constexpr const char ShareGeneric[] = "blocked_share_generic";
 		constexpr const char StartConference[] = "blocked_startconf";
 		constexpr const char StartIm[] = "blocked_startim";
 		constexpr const char Teleport[] = "blocked_teleport";

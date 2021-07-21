@@ -49,7 +49,7 @@
 	<panel name="save_revert_button_bar">
 		<layout_stack name="button_bar_ls">
 			<layout_panel name="save_btn_lp">
-				<button label="Zapisz zmiany" name="save_btn"/>
+				<button label="Zapisz" name="save_btn"/>
 			</layout_panel>
 			<layout_panel name="save_as_btn_lp">
 				<button label="Zapisz jako" name="save_as_btn" />

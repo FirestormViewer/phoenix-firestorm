@@ -358,8 +358,9 @@ void LLThread::setQuitting()
     {
         mStatus = QUITTING;
     }
+    // It's only safe to remove mRunCondition if all locked threads were notified
+    mRunCondition->broadcast();
     mDataLock->unlock();
-    wake();
 }
 
 // static

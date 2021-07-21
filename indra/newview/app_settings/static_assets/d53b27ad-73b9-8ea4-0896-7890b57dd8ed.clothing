@@ -1,0 +1,33 @@
+LLWearable version 22
+RASL M EXPLORE TANK DOWN (WHITE)
+
+	permissions 0
+	{
+		base_mask	7fffffff
+		owner_mask	7fffffff
+		group_mask	00000000
+		everyone_mask	00000000
+		next_owner_mask	00082000
+		creator_id	79908808-d272-49a8-864a-d133a10931e9
+		owner_id	79908808-d272-49a8-864a-d133a10931e9
+		last_owner_id	79908808-d272-49a8-864a-d133a10931e9
+		group_id	00000000-0000-0000-0000-000000000000
+	}
+	sale_info	0
+	{
+		sale_type	not
+		sale_price	10
+	}
+type 5
+parameters 9
+625 0
+638 0
+806 1
+807 1
+808 1
+814 1
+815 .99
+816 .05
+869 0
+textures 1
+2 87eb957f-4152-8e94-df39-644e5d94f7b5

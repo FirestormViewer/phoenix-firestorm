@@ -4097,6 +4097,9 @@ Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
 		[FNAME] nie może zostać zaktualizowany, ponieważ plik nie może zostać znaleziony.
 Aktualizacje dla tego pliku wyłączone.
 	</notification>
+	<notification name="NoTransNoSaveToContents">
+		Nie można zapisać &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; do zawartości obiektu, ponieważ nie masz uprawnień do przeniesienia praw własności obiektu.
+	</notification>
 	<notification name="LocalBitmapsUpdateFailedFinal">
 		[FNAME] nie mógł zostać otwarty lub zdekodowany [NRETRIES] razy i został uznany za uszkodzony.
 Aktualizacje dla tego pliku wyłączone.

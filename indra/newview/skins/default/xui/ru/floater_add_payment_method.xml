@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_add_payment_method">
+	<panel name="wrapper_panel">
+		<text name="title_txt">
+			Добавьте способ оплаты, чтобы купить Linden-доллары и получить больше удовольствия от Second Life.
+		</text>
+		<button label="Начать" name="continue_btn" width="140"/>
+		<button label="Позже" name="close_btn" width="90"/>
+		<text name="image_left_desc">
+			Создайте любимый аватар. Выбирайте из миллионов товаров в магазинах и на Торговой площадке Second Life. Ваш стиль здесь.
+		</text>
+		<text name="image_center_desc">
+			Делайте пожертвования любимым исполнителям и ведущим. Ваша поддержка помогает им создавать отличные впечатления.
+		</text>
+		<text name="image_right_desc">
+			Сделайте дом своей мечты. Благодаря миллионам предметов, доступных для покупки, вы можете сделать свое убежище уникальным.
+		</text>
+	</panel>
+</floater>

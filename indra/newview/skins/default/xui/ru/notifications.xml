@@ -874,6 +874,13 @@
 	<notification name="CannotCreateLandmarkNotOwner">
 		Вы не можете создать закладку потому что владелец земли не разрешает этого.
 	</notification>
+	<notification label="Создать папку" name="CreateLandmarkFolder">
+		Выберите имя для папки:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		Невозможно произвести перекомпиляцию.
 Выберите объект со сценарием.
@@ -927,8 +934,7 @@
 [REASON]
 	</notification>
 	<notification name="invalid_tport">
-		При запросе телепортации возникла проблема. Возможно, для телепортации придется повторить вход в программу.
-Если данное сообщение повторится, посетите сайт [SUPPORT_SITE].
+		Количество попыток телепортации ограничено до 6 в минуту. Если у вас возникли проблемы, подождите минуту и попробуйте телепортироваться снова. Если проблема не исчезнет, выйдите из системы и войдите снова.
 	</notification>
 	<notification name="invalid_region_handoff">
 		При пересечении границы региона возникла проблема. Возможно, для пересечения границы придется повторить вход в программу.
@@ -1243,6 +1249,13 @@
 	</notification>
 	<notification label="Переименовать жест" name="RenameGesture">
 		Новое имя жеста:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification label="Rename Landmark" name="RenameLandmark">
+		Выберите новое имя для [NAME]
 		<form name="form">
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Отмена"/>
@@ -2056,7 +2069,9 @@
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		Вы пытаетесь посетить регион, контент в котором не соответствует вашим настройкам.  Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+		Регион, который вы собираетесь посетить, имеет рейтинг зрелости, превышающий ваш максимальный уровень зрелости. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+
+Полную информацию о рейтингах зрелости можно найти [https://community.secondlife.com/t5/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9/%D0%A0%D0%B5%D0%B9%D1%82%D0%B8%D0%BD%D0%B3%D0%B8-%D0%B7%D1%80%D0%B5%D0%BB%D0%BE%D1%81%D1%82%D0%B8/ta-p/1613715 здесь].
 	</notification>
 	<notification name="SLM_UPDATE_FOLDER">
 		[MESSAGE]
@@ -2090,7 +2105,9 @@
 		У нас возникли технические трудности с вашим входом в, потому что ваши настройки не синхронизированы с сервером.
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		Вы пытаетесь посетить регион, контент в котором не соответствует вашим настройкам. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+		Регион, который вы собираетесь посетить, имеет рейтинг зрелости, превышающий ваш максимальный уровень зрелости. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+
+Полную информацию о рейтингах зрелости можно найти [https://community.secondlife.com/t5/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9/%D0%A0%D0%B5%D0%B9%D1%82%D0%B8%D0%BD%D0%B3%D0%B8-%D0%B7%D1%80%D0%B5%D0%BB%D0%BE%D1%81%D1%82%D0%B8/ta-p/1613715 здесь].
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		Вы пытаетесь посетить регион, контент в котором имеет рейтинг [REGIONMATURITY] и предназначен только для взрослых.
@@ -2134,7 +2151,9 @@
 		Не удалось изменить ваши настройки так, чтобы вы могли видеть контент с рейтингом [PREFERRED_MATURITY]. Ваши теперешние настройки разрешают просматривать контент [ACTUAL_MATURITY]. Попробуйте изменить настройки снова с помощью команд меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		Вы претендуете на землю, рейтинг зрелости контента на которой не соответствует вашим настройкам. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+		Регион, который вы собираетесь посетить, имеет рейтинг зрелости, превышающий ваш максимальный уровень зрелости. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+
+Полную информацию о рейтингах зрелости можно найти [https://community.secondlife.com/t5/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9/%D0%A0%D0%B5%D0%B9%D1%82%D0%B8%D0%BD%D0%B3%D0%B8-%D0%B7%D1%80%D0%B5%D0%BB%D0%BE%D1%81%D1%82%D0%B8/ta-p/1613715 здесь].
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		На эту землю могут претендовать только взрослые.
@@ -2159,6 +2178,8 @@
 	</notification>
 	<notification name="LandBuyAccessBlocked">
 		Вы пытаетесь купить землю, рейтинг зрелости контента на которой не соответствует вашим настройкам. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+
+Полную информацию о рейтингах зрелости можно найти [https://community.secondlife.com/t5/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9/%D0%A0%D0%B5%D0%B9%D1%82%D0%B8%D0%BD%D0%B3%D0%B8-%D0%B7%D1%80%D0%B5%D0%BB%D0%BE%D1%81%D1%82%D0%B8/ta-p/1613715 здесь].
 	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Эту землю могут купить только взрослые.
@@ -2969,7 +2990,9 @@ URL: [AUDIOURL]
 		Вы можете претендовать на публичную землю только в регионе, в котором вы находитесь.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		Вы пытаетесь посетить регион, контент в котором не соответствует вашим настройкам.  Попробуйте изменить настройки в меню &quot;Я &gt; Настройки &gt; Общие&quot;.
+		Регион, который вы собираетесь посетить, имеет рейтинг зрелости, превышающий ваш максимальный уровень зрелости. Попробуйте изменить настройки в меню &quot;Аватар &gt; Настройки &gt; Общие&quot;.
+
+Полную информацию о рейтингах зрелости можно найти [https://community.secondlife.com/t5/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9/%D0%A0%D0%B5%D0%B9%D1%82%D0%B8%D0%BD%D0%B3%D0%B8-%D0%B7%D1%80%D0%B5%D0%BB%D0%BE%D1%81%D1%82%D0%B8/ta-p/1613715 здесь].
 	</notification>
 	<notification name="RegionAboutToShutdown">
 		Регион, в который вы пытаетесь попасть, сейчас недоступен
@@ -3568,7 +3591,7 @@ URL: [AUDIOURL]
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Загрузить"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
-		Вы действительно хотите удалить историю телепортаций?
+		Это приведет к удалению всего списка мест, которые вы посетили, и его нельзя будет отменить. Продолжать?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="BottomTrayButtonCanNotBeShown">
@@ -4917,6 +4940,15 @@ URL: [AUDIOURL]
 	</notification>
 	<notification name="OutfitPhotoLoadError">
 		[REASON]
+	</notification>
+	<notification name="AddPaymentMethod">
+На следующей странице выберите сумму L$ и
+нажмите кнопку «Разместить заказ». Вы сможете
+добавить способ оплаты при оформлении заказа.
+		<form name="form">
+			<button name="Continue" text="Продолжить"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Цвет LSL был скопирован в буфер обмена. Теперь вы можете вставить его в сценарий, чтобы использовать.

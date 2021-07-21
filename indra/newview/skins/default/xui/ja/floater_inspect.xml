@@ -9,6 +9,7 @@
 [NUM_OBJECTS] オブジェクト, [NUM_PRIMS] プリム
 
 面: [NUM_FACES]
+可視面: [NUM_VISIBLE_FACES]
 頂点: [NUM_VERTICES]
 三角形: [NUM_TRIANGLES]
 複雑さ: [COMPLEXITY]
