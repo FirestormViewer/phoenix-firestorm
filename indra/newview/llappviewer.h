@@ -59,7 +59,7 @@ class LLTextureFetch;
 class LLWatchdogTimeout;
 class LLViewerJoystick;
 class LLPurgeDiskCacheThread;
-class LLViewerRegion; // <FS:Beq/>
+class LLViewerRegion;
 
 extern LLTrace::BlockTimerStatHandle FTM_FRAME;
 
