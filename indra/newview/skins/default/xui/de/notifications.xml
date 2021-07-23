@@ -640,7 +640,8 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
 	<notification name="ChangeSkin">
 		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
-		<usetemplate name="okcancelbuttons" notext="OK" yestext="Neustart"/>
+Möchten Sie den Viewer schließen und anschließend manuell neu starten, um die Änderung wirksam werden zu lassen?
+		<usetemplate name="okcancelbuttons" notext="Später" yestext="Jetzt beenden"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Die Sprachänderung tritt nach Neustart von [APP_NAME] in Kraft.

@@ -542,7 +542,8 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 	</notification>
 	<notification name="ChangeSkin">
 		Nowa skórka pojawi się po restarcie aplikacji [APP_NAME].
-		<usetemplate name="okcancelbuttons" yestext="Restartuj"/>
+Czy chcesz zamknąć przeglądarkę i uruchomić ją ponownie, ręcznie, aby zastosować tę zmianę?
+		<usetemplate name="okcancelbuttons" notext="Później" yestext="Zamknij teraz"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Zmiana języka zadziała po restarcie [APP_NAME].
@@ -1136,7 +1137,7 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 	<notification name="YouHaveBeenLoggedOut">
 		Nastąpiło wylogowanie z [CURRENT_GRID]
 [MESSAGE]
-		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pokaż IM/czat"/>
+		<usetemplate name="okcancelbuttons" notext="Zakończ" yestext="Pokaż IM/czat"/>
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Nie możesz kupić działek dla grupy.
@@ -2304,8 +2305,8 @@ Przenieść obiekty szafy?
 		<usetemplate ignoretext="Potwierdź dodanie uczestników rozmowy" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmQuit">
-		Na pewno chcesz zakończyć?
-		<usetemplate ignoretext="Na pewno chcesz zakończyć?" name="okcancelignore" notext="Nie kończ" yestext="Wyłącz"/>
+		Na pewno chcesz zakończyć sesję i wyłączyć przeglądarkę?
+		<usetemplate ignoretext="Na pewno chcesz zakończyć sesję?" name="okcancelignore" notext="Anuluj" yestext="Zakończ"/>
 	</notification>
 	<notification name="ConfirmRestoreToybox">
 		Ta akcja przywróci domyślny układ przycisków i pasków.
