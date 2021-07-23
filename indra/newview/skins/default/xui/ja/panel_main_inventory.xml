@@ -26,6 +26,7 @@
 		<combo_box.item value="filter_type_textures" label="テクスチャ" />
 		<combo_box.item value="filter_type_snapshots" label="スナップショット" />
 		<combo_box.item value="filter_type_meshes" label="メッシュ" />
+		<combo_box.item value="filter_type_settings" label="自然環境設定" />
 		<combo_box.item value="filter_separator" label="------------" />
 		<combo_box.item value="filter_type_custom" label="カスタマイズ..." />
 	</combo_box>

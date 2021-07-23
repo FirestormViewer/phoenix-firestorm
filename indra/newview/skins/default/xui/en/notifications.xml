@@ -1639,10 +1639,11 @@ This debug setting change will take effect after you restart [APP_NAME].
    name="ChangeSkin"
    type="alertmodal">
 The new skin will appear after restarting [APP_NAME].
+Would you like to shutdown the viewer and launch it manually again in order to apply this change?
     <usetemplate
      name="okcancelbuttons"
-     notext="OK"
-     yestext="Restart"/>
+     notext="Later"
+     yestext="Shutdown now"/>
   </notification>
 
   <notification

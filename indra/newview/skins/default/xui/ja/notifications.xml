@@ -674,7 +674,7 @@ L$ が不足しているのでこのグループに参加することができ�
 	</notification>
 	<notification name="DeleteNotecard">
 		ノートカードを削除しますか?
-		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+		<usetemplate ignoretext="ノートカードの削除を確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="LoadPreviousReportScreenshot">
 		以前のスクリーンショットをレポートに使用しますか?
@@ -2697,6 +2697,12 @@ Linden Lab
 		紛失物の中身をすべて削除しますか？
 		<usetemplate ignoretext="紛失物フォルダを空にする前の確認" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
+	
+	<notification name="ConfirmReplaceLink">
+'[TYPE]' タイプの身体部位のリンクを適合しないタイプのアイテムで置き換えようとしています。
+このまま実行してもよろしいですか？
+		<usetemplate ignoretext="リンクを置き換える前に確認" name="okcancelignore" notext="いいえ" yestext="はい"/>
+	</notification>
 	<notification name="CopySLURL">
 		次の SLurl がクリップボードにコピーされました：
  [SLURL]
@@ -3798,7 +3804,7 @@ M キーを押して変更します。
 次の住人と共有しますか？
 
 [RESIDENTS]
-		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+		<usetemplate ignoretext="アイテムを共有する前に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
 		フォルダは一度に 1 つしか共有できません。
@@ -3888,7 +3894,7 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 
 ボイスチャットによるコミュニケーションが利用できません。
 [https://wiki.firestormviewer.org/fs_voice]
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate ignoretext="ビューワーがボイスサーバーに接続できなかった時に警告" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
 		ボイスサーバーに接続できません。ボイスチャットによるコミュニケーションが利用できません。お使いのネットワークやファイアウォールの設定を確認してください。
@@ -4193,11 +4199,11 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 	<!-- <FS:AW>  opensim search support-->
 	<notification name="ConfirmClearDebugSearchURL">
 		デバッグ検索のURLをクリアしてよろしいですか？
-		<usetemplate name="okcancelignore" notext="取り消し" yestext="OK"/>
+		<usetemplate  ignoretext="デバッグ検索の URL をクリアすることを確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmPickDebugSearchURL">
 		現在の検索URLをデバッグ検索URLとして選択してよろしいですか？
-		<usetemplate ignoretext="Confirm picking debug search url" name="okcancelignore" notext="取り消し" yestext="OK"/>
+		<usetemplate ignoretext="デバッグ検索 URL の選択を確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
 	<!-- </FS:AW>  opensim search support-->
 	
@@ -4415,6 +4421,11 @@ AO セット "[AO_SET_NAME]" の名前を変更できません。
 	</notification>
 	<!-- ## Zi: Debug Settings Editor -->
 
+	<notification name="DefaultLabelMissing">
+		<usetemplate ignoretext="LSL スクリプトにデフォルトラベルのない switch ステートメントがあります。" name="notifyignore"/>
+デフォルト値のない switch() ステートメントの挙動が以前は正しいものとならなかったため修正されました。詳しくは JIRA で FIRE-17710 をご確認下さい。
+	</notification>
+
 	<notification name="TeleportToAvatarNotPossible">
 		このアバターへのテレポートはできません。正確な位置が不明なためです。
 	</notification>
@@ -4429,7 +4440,6 @@ AO セット "[AO_SET_NAME]" の名前を変更できません。
 	</notification>
 
 	<!-- <FS:Zi> Viewer version popup -->
-<!-- Commented out because without an update it would show false information!
 	<notification name="FirstJoinSupportGroup2">
 Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 
@@ -4445,7 +4455,6 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 			<ignore name="ignore" text="Phoenix/Firestorm サポート・グループに参加した時" />
 		</form>
 	</notification>
--->
 	<!-- <FS:Zi> Viewer version popup -->
 
 	<notification name="ConfirmScriptModify">
@@ -5140,6 +5149,17 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 	<notification name="LargePrimAgentIntersect">
 		他の住人と交差する大きなプリムは作成できません。他の住人がここから移動したときに再試行してください。
 	</notification>
+	
+	<notification name="RLVaListRequested" label="[NAME_LABEL] からの制限依頼">
+[NAME_SLURL] に現在有効になっている RLV の制限一覧を送るよう依頼がありました。
+		<form name="form">
+			<button name="Allow" text="許可" />
+			<button name="Always Allow" text="常に許可" />
+			<button name="Deny" text="拒否" />
+			<ignore name="ignore" text="現在の RLV 制限一覧を誰かに送る前に確認" />
+		</form>
+	</notification>
+	
 	<notification name="PreferenceChatClearLog">
 		これにより、過去の会話のログ、およびそのファイルのすべてのバックアップが削除されます。
 		<usetemplate ignoretext="以前の会話のログを削除する前に確認してください。" name="okcancelignore" notext="取り消し" yestext="OK"/>
