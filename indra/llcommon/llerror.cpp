@@ -544,6 +544,8 @@ namespace
     protected:
 		Globals();
 	public:
+		std::ostringstream messageStream;
+		bool messageStreamInUse;
 		std::string mFatalMessage;
 
 		void addCallSite(LLError::CallSite&);
@@ -563,6 +565,7 @@ namespace
 		: mSettingsConfig(new SettingsConfig())
 	{
 	}
+
 
     Globals* Globals::getInstance()
     {
