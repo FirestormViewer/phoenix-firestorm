@@ -326,6 +326,10 @@ void LLViewerTextureList::shutdown()
 	mLoadingStreamList.clear();
 	mCreateTextureList.clear();
 	mFastCacheList.clear();
+
+	// <FS:ND> FIRE-30851, need to clear this cache too, so static dtor will not do it
+	mImagesWithChangedPriorities.clear();
+	// </FS:ND>
 	
 	mUUIDMap.clear();
 	

@@ -559,7 +559,7 @@
 	</notification>
 	<notification name="ChangeSkin">
 		Смена темы вступит в силу после перезапуска [APP_NAME].
-		<usetemplate name="okcancelbuttons" notext="Ok" yestext="Перезапуск"/>
+		<usetemplate name="okcancelbuttons" notext="Позже" yestext="Перезапуск"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Смена языка вступит в силу после перезапуска [APP_NAME].
@@ -1807,7 +1807,7 @@
 	</notification>
 	<notification name="GroupLimitInfoPlus">
 		Резиденты с Базовым аккаунтом могут присоединиться к [MAX_BASIC] группам.
-Премиум аккаунт разрешает до [MAX_PREMIUM]. Премиум Плюс аккаунт разрешает до [MAX_PREMIUM_PLUS]. 
+Премиум аккаунт разрешает до [MAX_PREMIUM]. Премиум Плюс аккаунт разрешает до [MAX_PREMIUM_PLUS].
 [https://secondlife.com/my/account/membership.php? Узнайте больше или расширьте свой аккаунт]
 		<usetemplate name="okbutton" yestext="Закрыть"/>
 	</notification>
