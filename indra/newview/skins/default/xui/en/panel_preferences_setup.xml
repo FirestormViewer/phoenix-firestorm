@@ -350,6 +350,7 @@
 		 name="media_popup_enabled"
 		 width="200"/>
 
+		<!--
 		<button
 		 label="Adjust proxy settings"
 		 follows="left|top"
@@ -363,6 +364,19 @@
 			<button.commit_callback
 			  function="Pref.Proxy" />
 		</button>
+		-->
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="20"
+		 layout="topleft"
+		 left="15"
+		 name="proxy_settings_label"
+		 top_pad="5"
+		 width="500">
+		   Your system's existing proxy settings will be used.
+		</text>
 		
 		<text
 		 type="string"
