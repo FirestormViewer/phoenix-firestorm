@@ -9,8 +9,8 @@
 	<menu label="Pomoc" name="Help">
 		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
 		<menu_item_call label="Rozwiązywanie problemów" name="Troubleshooting"/>
-		<!-- <menu_item_call label="Samouczek" name="How To"/>
-		<menu_item_call label="Baza wiedzy" name="Knowledge Base"/>
+		<menu_item_call label="Samouczek" name="How To"/>
+		<!-- <menu_item_call label="Baza wiedzy" name="Knowledge Base"/>
 		<menu_item_call label="Wiki Second Life" name="Wiki"/>
 		<menu_item_call label="Forum społecznościowe" name="Community Forums"/>
 		<menu_item_call label="Portal wsparcia" name="Support portal"/>
