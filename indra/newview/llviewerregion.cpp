@@ -194,7 +194,7 @@ public:
         mLandp(NULL)
 	{}
 
-	void buildCapabilityNames(LLSD& capabilityNames);
+	static void buildCapabilityNames(LLSD& capabilityNames);
 
 	// The surfaces and other layers
 	LLSurface*	mLandp;
@@ -267,6 +267,12 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
     // This loop is used for retrying a capabilities request.
     do
     {
+        if (STATE_WORLD_INIT > LLStartUp::getStartupState())
+        {
+            LL_INFOS("AppInit", "Capabilities") << "Aborting capabilities request, reason: returned to login screen" << LL_ENDL;
+            return;
+        }
+
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed
         {
@@ -317,6 +323,12 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
 
         // <FS:Ansariel> Fix seed cap retry count
         //++mSeedCapAttempts;
+
+        if (STATE_WORLD_INIT > LLStartUp::getStartupState())
+        {
+            LL_INFOS("AppInit", "Capabilities") << "Aborting capabilities request, reason: returned to login screen" << LL_ENDL;
+            return;
+        }
 
         if (LLApp::isExiting())
         {
@@ -3139,6 +3151,7 @@ void LLViewerRegion::unpackRegionHandshake()
 	mRegionTimer.reset(); //reset region timer.
 }
 
+// static
 void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 {
 	capabilityNames.append("AbuseCategories");
