@@ -612,6 +612,8 @@ Remarque : cela videra le cache.
 	</notification>
 	<notification name="ChangeSkin">
 		Le nouveau thème apparaîtra après le redémarrage de [APP_NAME].
+Voulez-vous arrêter le visualiseur et le relancer manuellement afin d'appliquer cette modification ?
+		<usetemplate name="okcancelbuttons" notext="Plus tard" yestext="Quitter maintenant"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Le changement de langue sera effectué au redémarrage de [APP_NAME].

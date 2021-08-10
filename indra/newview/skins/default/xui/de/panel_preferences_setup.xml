@@ -40,7 +40,10 @@
 			<check_box label="Plugins aktivieren" name="browser_plugins_enabled"/>
 			<check_box label="Javascript aktivieren" name="browser_javascript_enabled"/>
 			<check_box label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
-			<button label="Proxy-Einstellungen ändern" label_selected="Proxy-Einstellungen ändern" name="set_proxy"/>
+			<!-- <button label="Proxy-Einstellungen ändern" label_selected="Proxy-Einstellungen ändern" name="set_proxy"/> -->
+			<text name="proxy_settings_label">
+				Es werden die Proxy-Einstellungen des Systems verwendet.
+			</text>
 			<text name="home_page_label_l">
 				Browser-Startseite:
 			</text>
