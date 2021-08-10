@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_ladmark_gear">
 	<menu_item_call label="Телепортироваться" name="teleport"/>
+	<menu_item_call label="Показать на карте" name="show_on_map"/>
 	<menu_item_call label="Поделиться" name="share"/>
 	<menu_item_call label="Смотреть / Править" name="more_info"/>
 	<menu_item_call label="Переместить в Закладки" name="Move to Landmarks"/>
 	<menu_item_call label="Переместить в Избранное" name="Move to Favorites"/>
-	<menu_item_call label="Показать на карте" name="show_on_map"/>
 	<menu_item_call label="Копировать SLurl" name="copy_slurl"/>
 	<menu_item_call label="Создать место" name="create_pick"/>
 	<menu_item_call label="Восстановить объект" name="restore_item"/>
