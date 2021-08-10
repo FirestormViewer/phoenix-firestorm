@@ -814,9 +814,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>856ba0e5b7be4bf683cf2849bce845e0</string>
+              <string>49fff41e17e06cdf9eb0c737d20df52f</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/72458/699860/dullahan-1.7.0.202011160759_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-552313.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/83411/779825/dullahan-1.12.2.202106220202_91.1.21_g9dd45fe_chromium-91.0.4472.114-darwin64-560751.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -826,9 +826,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9a586d333b3c35389b29c7e8c7ebcc8f</string>
+              <string>f51f324d50a2461cda273e84fa65e0ad</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows-203261227.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/83413/779836/dullahan-1.12.2.202106220213_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows-560751.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>698e79226d0fb3b935509769a36bffd4</string>
+              <string>d3df46f6592715c75df2bf520c1ad68b</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows64-203261222.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/83412/779840/dullahan-1.12.2.202106220213_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows64-560751.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -859,7 +859,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.7.0.202011161603_81.3.10_gb223419_chromium-81.0.4044.138</string>
+        <string>1.12.2.202106220213_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
       </map>
       <key>elfio</key>
       <map>
