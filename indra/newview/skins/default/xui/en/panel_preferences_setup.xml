@@ -313,7 +313,7 @@
 		 initial_value="true"
 		 control_name="BrowserJavascriptEnabled"
 		 label="Enable Javascript"
-		 left_delta="0"
+		 left="25"
 		 mouse_opaque="true"
 		 name="browser_javascript_enabled"
 		 radio_style="false"
