@@ -31,7 +31,6 @@
 				<combo_box.item label="Dziesięć okien" name="web_10"/>
 			</combo_box>
 			<button label="Wyczyść bufor przeglądarki WWW" name="ClearWebBrowserCache" width="195"/>
-			<check_box label="Włącz wtyczki" name="browser_plugins_enabled"/>
 			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
 			<!-- <button label="Dostosuj ustawienia proxy" label_selected="Dostosuj ustawienia proxy" name="set_proxy"/> -->
