@@ -4959,7 +4959,7 @@ bool LLAppViewer::initCache()
     // </FS:Ansariel>
     // <FS:Ansariel> Fix integer overflow
     //const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
-    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
 	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
 
 	bool texture_cache_mismatch = false;
