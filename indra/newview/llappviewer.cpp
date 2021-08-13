@@ -4266,7 +4266,11 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["FirstRunThisInstall"] = gSavedSettings.getBOOL("FirstRunThisInstall");
     gDebugInfo["StartupState"] = LLStartUp::getStartupStateString();
 
-	std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
+	// <FS:ND> FIRE-31153, do not use gViewerWindow->getWindow which equals nullptr at this point
+	//std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
+	std::vector<std::string> resolutions = LLWindow::getDisplaysResolutionList();
+	// </FS:ND>
+
 	for (auto res_iter : resolutions)
 	{
 		gDebugInfo["DisplayInfo"].append(res_iter);
