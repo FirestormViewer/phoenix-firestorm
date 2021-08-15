@@ -438,7 +438,7 @@ public:
 	bool		isVisuallyMuted();
 	bool 		isInMuteList() const;
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-	bool        isRlvSilhouette();
+	bool        isRlvSilhouette() const;
 // [/RLVa:KB]
 	void		forceUpdateVisualMuteSettings();
 
@@ -455,10 +455,7 @@ public:
 
 protected:
 	// If you think you need to access this outside LLVOAvatar, you probably want getOverallAppearance()
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-	VisualMuteSettings  getVisualMuteSettings()						{ return (!isRlvSilhouette()) ? mVisuallyMuteSetting : AV_DO_NOT_RENDER; };
-// [/RLVa:KB]
-//	VisualMuteSettings  getVisualMuteSettings()						{ return mVisuallyMuteSetting;	};
+	VisualMuteSettings  getVisualMuteSettings()						{ return mVisuallyMuteSetting;	};
 
 public:
 
@@ -581,7 +578,10 @@ public:
 	static void	resetImpostors();
 	static void updateImpostors();
 	LLRenderTarget mImpostor;
-	BOOL		mNeedsImpostorUpdate;
+// [RLVa:KB] - Checked: RLVa-2.4 (@setcam_avdist)
+	mutable BOOL mNeedsImpostorUpdate;
+// [/RLVa:KB]
+//	BOOL		mNeedsImpostorUpdate;
 	S32			mLastImpostorUpdateReason;
 	F32SecondsImplicit mLastImpostorUpdateFrameTime;
     const LLVector3*  getLastAnimExtents() const { return mLastAnimExtents; }
