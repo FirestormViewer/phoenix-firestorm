@@ -74,7 +74,8 @@
 //#include "llpanellogin.h"
 #include "fspanellogin.h"
 // </FS:Ansariel> [FS Login Panel]
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llspellcheck.h"
 #include "llslurl.h"
 #include "llstartup.h"

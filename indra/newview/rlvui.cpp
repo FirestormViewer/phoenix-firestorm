@@ -23,7 +23,8 @@
 #include "llmoveview.h"					// Movement panel (contains "Stand" and "Stop Flying" buttons)
 #include "llnavigationbar.h"			// Navigation bar
 #include "llparcel.h"
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llteleporthistory.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
@@ -114,8 +115,10 @@ void RlvUIEnabler::onToggleShowLoc()
 
 	if (LLNavigationBar::instanceExists())
 		LLNavigationBar::instance().refreshLocationCtrl();
-	if (LLPanelTopInfoBar::instanceExists())
-		LLPanelTopInfoBar::instance().update();
+	// <FS:Zi> We don't use the mini location panel in Firestorm
+	// if (LLPanelTopInfoBar::instanceExists())
+	// 	LLPanelTopInfoBar::instance().update();
+	// </FS:Zi> We don't use the mini location panel in Firestorm
 
 	if (!fEnable)
 	{
