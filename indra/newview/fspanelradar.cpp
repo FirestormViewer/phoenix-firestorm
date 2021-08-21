@@ -389,7 +389,8 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 		row_data["columns"][6]["column"] = "has_notes";
 		row_data["columns"][6]["type"] = "icon";
-		row_data["columns"][6]["value"] = (entry["has_notes"].asBoolean() ? notesColumnIcon : "");
+		row_data["columns"][6]["value"] = (entry["notes"].asBoolean() ? notesColumnIcon : "");
+		row_data["columns"][6]["tool_tip"] = entry["notes"].asString();
 
 		row_data["columns"][7]["column"] = "age";
 		row_data["columns"][7]["value"] = entry["age"];

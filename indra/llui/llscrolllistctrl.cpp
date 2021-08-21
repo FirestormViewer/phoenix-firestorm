@@ -1905,7 +1905,9 @@ BOOL LLScrollListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 		LLScrollListCell* hit_cell = hit_item->getColumn(column_index);
 		if (!hit_cell) return FALSE;
 		if (hit_cell 
-			&& hit_cell->isText()
+			// <FS:Zi> Why would we restrict tool tips to text fields only?
+			//         Having them on non-text fields seems really useful
+			// && hit_cell->isText()
 			&& hit_cell->needsToolTip())
 		{
 			S32 row_index = getItemIndex(hit_item);
