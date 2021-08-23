@@ -2704,7 +2704,11 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		&& !(disable_all_render_types) && !isSelf())
 	// </FS:CR>
 	{
-		return;
+        if (!mIsControlAvatar)
+        {
+            idleUpdateNameTag( mLastRootPos );
+        }
+        return;
 	}
 
     // Update should be happening max once per frame.
@@ -3399,14 +3403,12 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 		fRlvShowAvName = (fRlvShowAvTag) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, getID()));
 	}
 // [/RLVa:KB]
-	BOOL visible_avatar = isVisible() || mNeedsAnimUpdate;
 	BOOL visible_chat = useChatBubbles && (mChats.size() || mTyping);
 	BOOL visible_typing = useTypingBubbles && mTyping;
 	BOOL render_name =	visible_chat ||
 				visible_typing ||
-		                (visible_avatar &&
 // [RLVa:KB] - Checked: RLVa-2.0.1
-						(fRlvShowAvTag) &&
+						((fRlvShowAvTag) &&
 // [/RLVa:KB]
 		                ((sRenderName == RENDER_NAME_ALWAYS) ||
 		                 (sRenderName == RENDER_NAME_FADE && time_visible < NAME_SHOW_TIME)));
@@ -11606,6 +11608,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
     LLVOVolume::texture_cost_t& textures,
     U32& cost,
     hud_complexity_list_t& hud_complexity_list,
+    object_complexity_list_t& object_complexity_list,
     // <FS:Ansariel> Show per-item complexity in COF
     std::map<LLUUID, U32>& item_complexity,
     std::map<LLUUID, U32>& temp_item_complexity)
@@ -11628,12 +11631,12 @@ void LLVOAvatar::accountRenderComplexityForObject(
                             F32 attachment_volume_cost = 0;
                             F32 attachment_texture_cost = 0;
                             F32 attachment_children_cost = 0;
-                const F32 animated_object_attachment_surcharge = 1000;
+                            const F32 animated_object_attachment_surcharge = 1000;
 
-                if (attached_object->isAnimatedObject())
-                {
-                    attachment_volume_cost += animated_object_attachment_surcharge;
-                }
+                            if (attached_object->isAnimatedObject())
+                            {
+                                attachment_volume_cost += animated_object_attachment_surcharge;
+                            }
 							attachment_volume_cost += volume->getRenderCost(textures);
 
 							const_child_list_t children = volume->getChildren();
@@ -11667,6 +11670,15 @@ void LLVOAvatar::accountRenderComplexityForObject(
                                                    << LL_ENDL;
                             // Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
                             cost += (U32)llclamp(attachment_total_cost, MIN_ATTACHMENT_COMPLEXITY, max_attachment_complexity);
+
+                            if (isSelf())
+                            {
+                                LLObjectComplexity object_complexity;
+                                object_complexity.objectName = attached_object->getAttachmentItemName();
+                                object_complexity.objectId = attached_object->getAttachmentItemID();
+                                object_complexity.objectCost = attachment_total_cost;
+                                object_complexity_list.push_back(object_complexity);
+                            }
 
 							// <FS:Ansariel> Show per-item complexity in COF
 							if (isSelf())
@@ -11775,6 +11787,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
 		LLVOVolume::texture_cost_t textures;
 		hud_complexity_list_t hud_complexity_list;
+        object_complexity_list_t object_complexity_list;
+
 		//<FS:Beq> BOM constrain number of bake requests when BOM not supported
 		// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
 		for (U8 baked_index = 0; baked_index < getNumBakes(); baked_index++)
@@ -11822,8 +11836,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
             {
                 accountRenderComplexityForObject(volp, max_attachment_complexity,
                                                  // <FS:Ansariel> Show per-item complexity in COF
-                                                 //textures, cost, hud_complexity_list);
-                                                 textures, cost, hud_complexity_list, item_complexity, temp_item_complexity);
+                                                 //textures, cost, hud_complexity_list, object_complexity_list);
+                                                 textures, cost, hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity);
                                                  // </FS:Ansariel>
             }
         }
@@ -11849,8 +11863,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                 const LLViewerObject* attached_object = attachment_iter->get();
                 accountRenderComplexityForObject(attached_object, max_attachment_complexity,
                                                  // <FS:Ansariel> Show per-item complexity in COF
-                                                 //textures, cost, hud_complexity_list);
-                                                 textures, cost, hud_complexity_list, item_complexity, temp_item_complexity);
+                                                 //textures, cost, hud_complexity_list, object_complexity_list);
+                                                 textures, cost, hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity);
                                                  // </FS:Ansariel>
 			}
 		}
@@ -11912,12 +11926,12 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		mVisualComplexity = cost;
 		mVisualComplexityStale = false;
 
-        static LLCachedControl<U32> show_my_complexity_changes(gSavedSettings, "ShowMyComplexityChanges", 20);
-
-        if (isSelf() && show_my_complexity_changes)
+        if (isSelf())
         {
             // Avatar complexity
             LLAvatarRenderNotifier::getInstance()->updateNotificationAgent(mVisualComplexity);
+
+            LLAvatarRenderNotifier::getInstance()->setObjectComplexityList(object_complexity_list);
 
             // HUD complexity
             LLHUDRenderNotifier::getInstance()->updateNotificationHUD(hud_complexity_list);

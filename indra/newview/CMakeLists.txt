@@ -397,9 +397,11 @@ set(viewer_SOURCE_FILES
     llfloaterpathfindinglinksets.cpp
     llfloaterpathfindingobjects.cpp
     llfloaterpay.cpp
+    llfloaterperformance.cpp
     llfloaterperms.cpp
     llfloaterpostprocess.cpp
     llfloaterpreference.cpp
+    llfloaterpreferencesgraphicsadvanced.cpp
     llfloaterpreferenceviewadvanced.cpp
     llfloaterpreviewtrash.cpp
     llfloaterproperties.cpp
@@ -1176,9 +1178,11 @@ set(viewer_HEADER_FILES
     llfloaterpathfindinglinksets.h
     llfloaterpathfindingobjects.h
     llfloaterpay.h
+    llfloaterperformance.h
     llfloaterperms.h
     llfloaterpostprocess.h
     llfloaterpreference.h
+    llfloaterpreferencesgraphicsadvanced.h
     llfloaterpreferenceviewadvanced.h
     llfloaterpreviewtrash.h
     llfloaterproperties.h

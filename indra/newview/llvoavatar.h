@@ -311,6 +311,7 @@ public:
                                                      LLVOVolume::texture_cost_t& textures,
                                                      U32& cost,
                                                      hud_complexity_list_t& hud_complexity_list,
+                                                     object_complexity_list_t& object_complexity_list,
                                                      // <FS:Ansariel> Show per-item complexity in COF
                                                      std::map<LLUUID, U32>& item_complexity,
                                                      std::map<LLUUID, U32>& temp_item_complexity);
