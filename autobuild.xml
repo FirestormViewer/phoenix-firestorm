@@ -1944,9 +1944,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dce2cc624e216eb991412ec0c5538cf9</string>
+              <string>94f8c766d77d68e0b8b1ac783b6a02dc</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.1-linux64-210652339.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.2-linux64-212351600.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
