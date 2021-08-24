@@ -31,6 +31,8 @@
 #include "llinitparam.h"
 
 const S32 MAX_KEY_BINDINGS = 128; // was 60
+const S32 keybindings_xml_version = 1;
+const std::string script_mouse_handler_name = "script_trigger_lbutton";
 
 class LLNamedFunction
 {
@@ -100,7 +102,7 @@ public:
 							third_person,
 							sitting,
 							edit_avatar;
-
+		Optional<S32> xml_version; // 'xml', because 'version' appears to be reserved
 		Keys();
 	};
 
@@ -124,7 +126,8 @@ public:
     BOOL            handleMouse(LLWindow *window_impl, LLCoordGL pos, MASK mask, EMouseClickType clicktype, BOOL down);
     void            scanMouse();
 
-    bool            isMouseBindUsed(const EMouseClickType mouse, const MASK mask = MASK_NONE, const S32 mode = MODE_THIRD_PERSON);
+    bool            isMouseBindUsed(const EMouseClickType mouse, const MASK mask, const S32 mode) const;
+    bool            isLMouseHandlingDefault(const S32 mode) const { return mLMouseDefaultHandling[mode]; }
 
 private:
     bool            scanKey(const std::vector<LLKeyboardBinding> &binding,
@@ -163,6 +166,7 @@ private:
     // to send what we think function wants based on collection of bools (mKeyRepeated, mKeyLevel, mKeyDown)
     std::vector<LLKeyboardBinding>	mKeyBindings[MODE_COUNT];
     std::vector<LLMouseBinding>		mMouseBindings[MODE_COUNT];
+    bool							mLMouseDefaultHandling[MODE_COUNT]; // Due to having special priority
 
 	typedef std::map<U32, U32> key_remap_t;
 	key_remap_t		mRemapKeys[MODE_COUNT];
