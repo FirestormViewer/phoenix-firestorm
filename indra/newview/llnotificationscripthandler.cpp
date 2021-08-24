@@ -96,7 +96,7 @@ void LLScriptHandler::addToastWithNotification(const LLNotificationPtr& notifica
 }
 
 //--------------------------------------------------------------------------
-bool LLScriptHandler::processNotification(const LLNotificationPtr& notification)
+bool LLScriptHandler::processNotification(const LLNotificationPtr& notification, bool should_log)
 {
 	if(mChannel.isDead())
 	{
@@ -109,7 +109,7 @@ bool LLScriptHandler::processNotification(const LLNotificationPtr& notification)
 		initChannel();
 	}
 	
-	if (notification->canLogToIM())
+	if (should_log && notification->canLogToIM())
 	{
 		LLHandlerUtil::logToIMP2P(notification);
 	}

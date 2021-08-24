@@ -933,6 +933,7 @@ public:
 	LLNotificationPtr add(const LLNotification::Params& p);
 
 	void add(const LLNotificationPtr pNotif);
+	void load(const LLNotificationPtr pNotif);
 	void cancel(LLNotificationPtr pNotif);
 	void cancelByName(const std::string& name);
 	void cancelByOwner(const LLUUID ownerId);
@@ -1132,6 +1133,11 @@ private:
 	}
 
 	void onAdd(LLNotificationPtr p) 
+	{
+		mHistory.push_back(p);
+	}
+
+	void onLoad(LLNotificationPtr p) 
 	{
 		mHistory.push_back(p);
 	}

@@ -156,7 +156,7 @@ void LLPersistentNotificationStorage::loadNotifications()
 		// <FS:Ansariel> FIRE-11339: Persisted group notifications get logged to IM on each login
 		notification->setIsFromStorage(true);
 
-		instance.add(notification);
+		instance.load(notification);
 
 		// hide script floaters so they don't confuse the user and don't overlap startup toast
 		LLScriptFloaterManager::getInstance()->setFloaterVisible(notification->getID(), false);
