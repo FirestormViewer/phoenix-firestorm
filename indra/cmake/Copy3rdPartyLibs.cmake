@@ -79,7 +79,7 @@ if(WINDOWS)
 
     # Filenames are different for 32/64 bit BugSplat file and we don't
     # have any control over them so need to branch.
-    if (BUGSPLAT_DB)
+    if (USE_BUGSPLAT)
       if(ADDRESS_SIZE EQUAL 32)
         set(release_files ${release_files} BugSplat.dll)
         set(release_files ${release_files} BugSplatRc.dll)
@@ -89,7 +89,7 @@ if(WINDOWS)
         set(release_files ${release_files} BugSplatRc64.dll)
         set(release_files ${release_files} BsSndRpt64.exe)
       endif(ADDRESS_SIZE EQUAL 32)
-    endif (BUGSPLAT_DB)
+    endif (USE_BUGSPLAT)
 
     set(release_files ${release_files} growl++.dll growl.dll )
     if (FMODSTUDIO)

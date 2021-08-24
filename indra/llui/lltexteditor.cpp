@@ -2193,6 +2193,13 @@ void LLTextEditor::showContextMenu(S32 x, S32 y, bool set_cursor_pos)
 		mContextMenu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>("menu_text_editor.xml", 
 																				LLMenuGL::sMenuContainer, 
 																				LLMenuHolderGL::child_registry_t::instance());
+		// <FS:Beq> FIRE-31081 defend against null this prt exception in setItemVisible found in BugSplat
+		if(!mContextMenu)
+		{
+			LL_WARNS() << "Failed to create context menu 'menu_text_editor'" << LL_ENDL;
+			return;
+		}
+		// </FS:Beq>
 	}
 
 	// Route menu to this class

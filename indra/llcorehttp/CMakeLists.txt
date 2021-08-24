@@ -17,6 +17,7 @@ include(LLAddBuildTest)
 include(LLMessage)
 include(LLCommon)
 include(Tut)
+include(bugsplat)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 

@@ -19,20 +19,7 @@ Ctrl キーを押しながらメンバー名をクリックすると
 			<panel.string name="donation_area">
 				[AREA] 平方メートル
 			</panel.string>
-			
-			<panel.string
-             name="power_folder_icon" translate="false">
-                Inv_FolderClosed
-            </panel.string>
-            <panel.string
-             name="power_all_have_icon" translate="false">
-                Checkbox_On
-            </panel.string>
-            <panel.string
-             name="power_partial_icon" translate="false">
-                Checkbox_Off
-            </panel.string>
-			
+
 			<filter_editor label="メンバーを選別" name="filter_input"/>
 			<name_list name="member_list">
 				<name_list.columns label="メンバー" name="name"/>
@@ -86,19 +73,6 @@ Ctrl キーを押しながらメンバー名をクリックすると
 				役割に含まれたメンバーに、このグループで特定の
 活動を行うことを許可する能力。さまざまな能力が提供されます。
 			</panel.string>
-			
-			<panel.string
-             name="power_folder_icon" translate="false">
-                Inv_FolderClosed
-            </panel.string>
-            <panel.string
-             name="power_all_have_icon" translate="false">
-                Checkbox_On
-            </panel.string>
-            <panel.string
-             name="power_partial_icon" translate="false">
-                Checkbox_Off
-            </panel.string>
 			
 			<filter_editor label="能力を選別" name="filter_input"/>
 			<scroll_list name="action_list" tool_tip="詳細を見るには、能力を選んでください。">

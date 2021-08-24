@@ -2391,6 +2391,14 @@
              parameter="WebLaunchExternalTarget,https://teamup.com/ksxdajnbw9mvw7cbwz" />
         </menu_item_call>
 
+        <menu_item_call
+         label="Guidebook"
+         name="How To">
+            <menu_item_call.on_click
+             function="Help.ToggleHowTo"
+             parameter="" />
+        </menu_item_call>
+
 <!--       <menu_item_call
          label="Second Life Help"
          name="Second Life Help">
@@ -3865,6 +3873,18 @@
              name="Force Software Exception">
                 <menu_item_call.on_click
                  function="Advanced.ForceErrorSoftwareException" />
+            </menu_item_call>
+            <menu_item_call
+             label="Force a Crash in a Coroutine"
+             name="Force a Crash in a Coroutine">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorCoroutineCrash" />
+            </menu_item_call>
+            <menu_item_call
+             label="Force a Crash in a Thread"
+             name="Force a Crash in a Thread">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorThreadCrash" />
             </menu_item_call>
             <menu_item_call
              label="Force Disconnect Viewer"

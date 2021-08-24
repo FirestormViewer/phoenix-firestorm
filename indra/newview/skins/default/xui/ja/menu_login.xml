@@ -9,6 +9,13 @@
 	<menu label="ヘルプ" name="Help">
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki" />
 		<menu_item_call label="不具合の解決" name="Troubleshooting" />
+		<menu_item_call label="ハウツー..." name="How To" />
+		<menu_item_call label="ナレッジベース" name="Knowledge Base" />
+		<menu_item_call label="Second Life Wiki" name="Wiki" />
+		<menu_item_call label="コミュニティフォーラム" name="Community Forums" />
+		<menu_item_call label="サポートポータル" name="Support portal" />
+		<menu_item_call label="[SECOND_LIFE] ニュース" name="Second Life News" />  
+		<menu_item_call label="[SECOND_LIFE] ブログ" name="Second Life Blogs" />
 		<menu_item_call label="バグの報告" name="Report Bug" />
 		<menu_item_separator/>
 		<menu_item_call label="[APP_NAME] について" name="About Second Life"/>

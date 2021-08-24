@@ -528,7 +528,7 @@ void FSRadar::updateRadarList()
 
 		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
-			entry["has_notes"] = ent->hasNotes();
+			entry["notes"] = ent->getNotes();
 			entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
 			if (ent->hasAlertAge())
 			{
@@ -547,7 +547,7 @@ void FSRadar::updateRadarList()
 		}
 		else
 		{
-			entry["has_notes"] = false;
+			entry["notes"] = LLStringUtil::null;
 			entry["age"] = "---";
 		}
 

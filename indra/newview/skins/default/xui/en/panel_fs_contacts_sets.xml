@@ -32,7 +32,7 @@
      top="1"
      left="4"
      name="combo_sets"
-     width="204" />
+     width="197" />
     <button
      top_delta="0"
      follows="top|right"
@@ -63,11 +63,20 @@
      name="remove_set_btn"
      tool_tip="Remove selected contact set"
      width="20" />
+	<view_border
+	 top="22"
+	 left="4"
+	 right="-92"
+	 bottom="-26"
+	 layout="topleft"
+	 follows="all"
+	 bevel_style="in"
+	 name="info_border" />
 	<avatar_list
-     left="4"
-     right="-85"
-     top="20"
-     bottom="-3"
+     left="6"
+     width="255"
+     top="25"
+     bottom="-29"
 	 follows="all"
 	 layout="topleft"
      show_profile_btn="true"
@@ -86,7 +95,7 @@
 	 layout="topleft"
 	 height="22"
 	 label="Add..."
-	 left_delta="270"
+	 left="269"
 	 name="add_btn"
 	 tool_tip="Add an avatar to the current contact set"
 	 width="80" />
@@ -154,11 +163,11 @@
 	 tool_tip="Remove an avatar's display name"
 	 width="80" />
     <text
-     top_pad="10"
-     left_delta="2"
-     follows="top|right"
+     bottom="-4"
+     left="6"
+     follows="bottom|left"
      layout="topleft"
-     height="20"
+     height="14"
      name="member_count"
      width="80">
     Members: [COUNT]

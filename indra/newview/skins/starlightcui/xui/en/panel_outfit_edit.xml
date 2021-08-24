@@ -549,21 +549,25 @@ It is calculated as border_size + 2*UIResizeBarOverlap
                         name="save_btn"
                         top="0"
                         width="155" />
+            </layout_panel>
+            <layout_panel
+                    follows="bottom|left|right"
+                    height="23"
+                    layout="bottomleft"
+                    left_pad="3"
+                    mouse_opaque="false"
+                    name="save_as_btn_lp"
+                    auto_resize="true"
+                    width="156">
                 <button
-                        follows="bottom|right"
+                        follows="bottom|left|right"
                         height="23"
-                        name="save_flyout_btn"
-                        label=""
-                        layout="topleft"
-                        left_pad="-20"
-                        tab_stop="false"
+                        label="Save as..."
+                        left="1"
+                        right="-1"
                         top="0"
-                        image_selected="SegmentedBtn_Right_Selected_Press"
-                        image_unselected="SegmentedBtn_Right_Off"
-                        image_pressed="SegmentedBtn_Right_Press"
-                        image_pressed_selected="SegmentedBtn_Right_Selected_Press"
-                        image_overlay="Arrow_Small_Up"
-                        width="20"/>
+                        layout="topleft"
+                        name="save_as_btn" />
             </layout_panel>
             <layout_panel
                     follows="bottom|left|right"

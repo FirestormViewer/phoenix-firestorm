@@ -148,10 +148,6 @@ void LLHUDText::renderText()
 
 	mOffsetY = lltrunc(mHeight * ((mVertAlignment == ALIGN_VERT_CENTER) ? 0.5f : 1.f));
 
-	// *TODO: cache this image
-	// <FS:Ansariel> Performance improvement
-	//LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
-
 	// *TODO: make this a per-text setting
 	// <FS:Ansariel> Performance improvement
 	//LLColor4 bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");

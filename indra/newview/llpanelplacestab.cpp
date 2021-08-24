@@ -48,6 +48,15 @@ bool LLPanelPlacesTab::isTabVisible()
 	return true;
 }
 
+// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+void LLPanelPlacesTab::setPanelPlacesButtons(LLPanelPlaces* panel)
+{
+	mTeleportBtn = panel->getChild<LLButton>("teleport_btn");
+	mShowOnMapBtn = panel->getChild<LLButton>("map_btn");
+	mShowProfile = panel->getChild<LLButton>("profile_btn");
+}
+// </FS:Ansariel>
+
 void LLPanelPlacesTab::onRegionResponse(const LLVector3d& landmark_global_pos,
 										U64 region_handle,
 										const std::string& url,

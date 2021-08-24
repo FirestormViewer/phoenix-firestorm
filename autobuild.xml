@@ -814,9 +814,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>77d2bc0c26c5047ac9f8126f8fa5aa0f</string>
+              <string>49fff41e17e06cdf9eb0c737d20df52f</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80680/760744/dullahan-1.7.0.202104220619_81.3.10_gb223419_chromium-81.0.4044.138-darwin64-558653.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/83411/779825/dullahan-1.12.2.202106220202_91.1.21_g9dd45fe_chromium-91.0.4472.114-darwin64-560751.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -826,9 +826,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9a586d333b3c35389b29c7e8c7ebcc8f</string>
+              <string>f51f324d50a2461cda273e84fa65e0ad</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows-203261227.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/83413/779836/dullahan-1.12.2.202106220213_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows-560751.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>698e79226d0fb3b935509769a36bffd4</string>
+              <string>d3df46f6592715c75df2bf520c1ad68b</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.8.0.202011211324_81.3.10_gb223419_chromium-81.0.4044.138-windows64-203261222.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/83412/779840/dullahan-1.12.2.202106220213_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows64-560751.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -859,7 +859,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.7.0.202104220629_81.3.10_gb223419_chromium-81.0.4044.138</string>
+        <string>1.12.2.202106220213_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
       </map>
       <key>elfio</key>
       <map>
@@ -994,11 +994,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c96fbccf3db01230832d8795318ee627</string>
+              <string>ab6f79c425524500d638807a3aee0115</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.09-darwin-211252249.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.01-darwin-211941804.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>65d60415962cf65918c4fabe379ad43a</string>
+              <string>1e176ba9a76fe209ce4703db2026ad85</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.01.09-linux64-211101316.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.02-linux64-212130644.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1022,11 +1022,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>215de14980a03774795de8cde24f1ad5</string>
+              <string>0335fa6ca762097c85b3090ce2614c3c</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.09-windows-211090925.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.02-windows-212102333.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1036,18 +1036,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a55f9ae859a5a60285f0c6c764729194</string>
+              <string>793ba69b7a5ea8fa12ec1a86d5ebd9e2</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.01.09-windows64-211090927.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.02-windows64-212102335.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.01.09</string>
+        <string>2.02.02</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1842,9 +1842,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8d0ad384de8fbbc9083cac20258fcb0c</string>
+              <string>3b8b0f54c851f136e2a92e1c6ba724a5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.1-darwin64-210931415.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.1-darwin64-211970151.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1854,9 +1854,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dce2cc624e216eb991412ec0c5538cf9</string>
+              <string>94f8c766d77d68e0b8b1ac783b6a02dc</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.1-linux64-210652339.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.2-linux64-212351600.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1866,9 +1866,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
+              <string>e88372fa10b83c6900443dcc12c12338</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1878,9 +1878,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
+              <string>e88372fa10b83c6900443dcc12c12338</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -2315,18 +2315,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>40a87f5d505a141b2ec79513a6197c35</string>
+              <string>0a6349b11c8e9d34f0c80b8081736e75</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/76516/728250/llca-202102021657.555615-common-555615.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/79438/751815/llca-202104010215.557744-common-557744.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
         <key>version</key>
-        <string>202102021657.555615</string>
+        <string>202104010215.557744</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -2449,9 +2449,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2aa4ec0d72bbe4b755730f1bf92b39e7</string>
+              <string>ba49274838d4c6bbd612db969b04e607</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.542327-darwin64-542327.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.561414-darwin64-561414.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2473,9 +2473,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad9aba5e2c43a37b6530a0d2de64df1c</string>
+              <string>30de712d424f179d89dd00c01ded7257</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.542327-windows-542327.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.561414-windows-561414.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2485,16 +2485,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>46689ff1442a8eccac3a7f3258308e1e</string>
+              <string>abac12c4a12441704fa8884f1ca043d8</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.542327-windows64-542327.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.561414-windows64-561414.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.542327</string>
+        <string>1.0.561414</string>
       </map>
       <key>mesa</key>
       <map>

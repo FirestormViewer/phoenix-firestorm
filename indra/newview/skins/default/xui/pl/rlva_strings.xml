@@ -129,6 +129,16 @@
 				<key>value</key>
 				<string>Nie można wyświetlić okna dialogowego lub pola tekstowego skryptu ze względu na ograniczenia RLV</string>
 			</map>
+			<key>blocked_share</key>
+			<map>
+				<key>value</key>
+				<string>Nie można udostępnić przedmiotów z [RECIPIENT] ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_share_generic</key>
+			<map>
+				<key>value</key>
+				<string>Nie można udostępnić przedmiotów ze względu na ograniczenia RLV</string>
+			</map>
 			<key>blocked_startim</key>
 			<map>
 				<key>value</key>

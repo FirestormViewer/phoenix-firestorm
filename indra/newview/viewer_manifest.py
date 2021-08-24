@@ -116,6 +116,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("beams")
                 self.path("beamsColors")
 
+                # <FS:Beq> package static_assets folder
+                if self.fs_is_opensim():
+                    self.path("static_assets")
+                self.path("fs_static_assets")
+                # </FS:Beq>
+
                 # include the extracted packages information (see BuildPackagesInfo.cmake)
                 self.path(src=os.path.join(self.args['build'],"packages-info.txt"), dst="packages-info.txt")
                 # CHOP-955: If we have "sourceid" or "viewer_channel" in the
@@ -719,11 +725,9 @@ class WindowsManifest(ViewerManifest):
 
             # CEF files common to all configurations
             with self.prefix(src=os.path.join(pkgdir, 'resources')):
-                self.path("cef.pak")
-                self.path("cef_100_percent.pak")
-                self.path("cef_200_percent.pak")
-                self.path("cef_extensions.pak")
-                self.path("devtools_resources.pak")
+                self.path("chrome_100_percent.pak")
+                self.path("chrome_200_percent.pak")
+                self.path("resources.pak")
                 self.path("icudtl.dat")
 
             with self.prefix(src=os.path.join(pkgdir, 'resources', 'locales'), dst='locales'):
@@ -1337,6 +1341,20 @@ class DarwinManifest(ViewerManifest):
         urllib3dir = os.path.join(pkgdir, "lib", "python", "urllib3")
         chardetdir = os.path.join(pkgdir, "lib", "python", "chardet")
         idnadir = os.path.join(pkgdir, "lib", "python", "idna")
+
+        with self.prefix(src="", dst="Contents"):  # everything goes in Contents
+            bugsplat_db = self.args.get('bugsplat')
+            if bugsplat_db:
+                # Inject BugsplatServerURL into Info.plist if provided.
+                Info_plist = self.dst_path_of("Info.plist")
+                Info = plistlib.readPlist(Info_plist)
+                # https://www.bugsplat.com/docs/platforms/os-x#configuration
+                Info["BugsplatServerURL"] = \
+                     "https://{}.bugsplat.com/".format(bugsplat_db)
+                self.put_in_file(
+                    plistlib.writePlistToString(Info),
+                    os.path.basename(Info_plist),
+                    "Info.plist")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
             # self.path("Info.plist", dst="Info.plist")

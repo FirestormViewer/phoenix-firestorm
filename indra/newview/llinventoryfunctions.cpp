@@ -893,11 +893,13 @@ void show_item_original(const LLUUID& item_uuid)
     LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
     if (sidepanel_inventory)
     {
-        LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
-        if (main_inventory)
-        {
-            main_inventory->resetFilters();
-        }
+        // <FS:Ansariel> FIRE-31037: "Recent" inventory filter gets reset when using "Show Original"
+        //LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+        //if (main_inventory)
+        //{
+        //    main_inventory->resetFilters();
+        //}
+        // </FS:Ansariel>
         reset_inventory_filter();
 
         if (!LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("inventory")->isInVisibleChain())

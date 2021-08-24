@@ -7,7 +7,6 @@
 			</text>
 			<check_box label="Özel port" name="connection_port_enabled"/>
 			<spinner label="Port numarası:" name="connection_port" width="160" label_width="85"/>
-			<check_box label="Eklentileri etkinleştir" name="browser_plugins_enabled"/>
 			<check_box label="Çerezleri kabul et" name="cookies_enabled"/>
 			<check_box label="Javascript&apos;i etkinleştir" name="browser_javascript_enabled"/>
 			<check_box label="Ortam tarayıcısı açılır pencerelerini etkinleştir" name="media_popup_enabled"/>

@@ -6,9 +6,9 @@
 	label="Things"
 	layout="topleft"
 	min_height="100"
-	min_width="140"
+	min_width="240"
 	name="main inventory panel"
-	width="328">
+	width="330">
 	<panel.string
 	name="Itemcount">
 	</panel.string>
@@ -543,7 +543,7 @@
 		name="filter_combo_box"
 		height="16"
 		left_pad="4"
-		follows="top|left|right"
+		follows="top|left"
 		layout="topleft"
 		right="-34"
 		top_delta="-2">
@@ -567,7 +567,7 @@
 		<combo_box.item value="filter_type_custom" label="Custom..." />
 	</combo_box>
 	<menu_button
-		follows="top|left|right"
+		follows="top|left"
 		tool_tip="Show search visibility options"
 		height="16"
 		image_overlay="Inv_Toolbar_SearchVisibility"

@@ -3,4 +3,21 @@
 	<filter_editor label="Teleport-Liste filtern" name="Filter"/>
 	<menu_button tool_tip="Optionen anzeigen" name="options_gear_btn"/>
 	<menu_button tool_tip="Sortieroptionen anzeigen" name="sorting_menu_btn"/>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleportieren" name="teleport_btn" tool_tip="Zu ausgewähltem Standort teleportieren"/>
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Karte" name="map_btn" tool_tip="Den entsprechenden Standort auf der Karte anzeigen"/>
+					</layout_panel>
+					<layout_panel name="profile_btn_lp">
+						<button label="Profil" name="profile_btn" tool_tip="Ortsprofil anzeigen"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+	</panel>
 </floater>

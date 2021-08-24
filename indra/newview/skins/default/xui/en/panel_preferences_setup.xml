@@ -311,23 +311,9 @@
 		 follows="left|top"
 		 height="16"
 		 initial_value="true"
-		 control_name="BrowserPluginsEnabled"
-		 label="Enable plugins"
-		 left="25"
-		 mouse_opaque="true"
-		 name="browser_plugins_enabled"
-		 radio_style="false"
-		 width="200"
-		 top_pad="5"/>
-
-		<check_box
-		 enabled="true"
-		 follows="left|top"
-		 height="16"
-		 initial_value="true"
 		 control_name="BrowserJavascriptEnabled"
 		 label="Enable Javascript"
-		 left_delta="0"
+		 left="25"
 		 mouse_opaque="true"
 		 name="browser_javascript_enabled"
 		 radio_style="false"
@@ -350,6 +336,7 @@
 		 name="media_popup_enabled"
 		 width="200"/>
 
+		<!--
 		<button
 		 label="Adjust proxy settings"
 		 follows="left|top"
@@ -363,6 +350,19 @@
 			<button.commit_callback
 			  function="Pref.Proxy" />
 		</button>
+		-->
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="20"
+		 layout="topleft"
+		 left="15"
+		 name="proxy_settings_label"
+		 top_pad="5"
+		 width="500">
+		   Your system's existing proxy settings will be used.
+		</text>
 		
 		<text
 		 type="string"

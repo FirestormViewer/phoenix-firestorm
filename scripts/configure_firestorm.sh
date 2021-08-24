@@ -364,6 +364,7 @@ else
 fi
 
 
+CHANNEL_SIMPLE="$CHANNEL"
 if [ -z $CHANNEL ] ; then
     if [ $TARGET_PLATFORM == "darwin" ] ; then
         CHANNEL="private-`hostname -s` "
@@ -503,7 +504,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         else
             VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
         fi
-        CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=ON"
+        CRASH_REPORTING="-DRELEASE_CRASH_REPORTING=ON"
+        if [ ! -z $CHANNEL_SIMPLE ]
+        then
+            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=firestorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:]`
+        fi
     else
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=OFF"
     fi

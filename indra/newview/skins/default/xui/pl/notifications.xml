@@ -322,9 +322,6 @@ Jesteś już w [group_count] grupach, a maksymalny dozwolony limit to [max_group
 		Nie możesz dołączyć do &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos;:
 Grupa nie umożliwia już swobodnego dołączania.
 	</notification>
-	<notification name="JoinGroupSuccess">
-		Zostałeś/aś dodany/a do grupy.
-	</notification>
 	<notification name="JoinGroupInsufficientFunds">
 		Nie można przekazać wymaganej opłaty wstępu ([membership_fee] L$).
 	</notification>
@@ -545,7 +542,8 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 	</notification>
 	<notification name="ChangeSkin">
 		Nowa skórka pojawi się po restarcie aplikacji [APP_NAME].
-		<usetemplate name="okcancelbuttons" yestext="Restartuj"/>
+Czy chcesz zamknąć przeglądarkę i uruchomić ją ponownie, ręcznie, aby zastosować tę zmianę?
+		<usetemplate name="okcancelbuttons" notext="Później" yestext="Zamknij teraz"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Zmiana języka zadziała po restarcie [APP_NAME].
@@ -848,6 +846,12 @@ Spróbuj jeszcze raz później.
 	<notification name="CannotCreateLandmarkNotOwner">
 		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel działki nie pozwala na to.
 	</notification>
+	<notification label="Utwórz folder" name="CreateLandmarkFolder">
+		Wybierz nazwę folderu:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		&apos;Rekompilacja&apos; nie powiodła się.
 
@@ -902,8 +906,7 @@ Nowe zapytanie: [FINALQUERY]
 [REASON]
 	</notification>
 	<notification name="invalid_tport">
-		Niestety, pojawił się błąd podczas próby teleportacji. Proponujemy wylogowanie się i spróbowanie teleportacji ponownie.
-Jeżeli nadal otrzymujesz tę wiadomość proponujemy odwiedzić stronę [SUPPORT_SITE].
+		Próby teleportacji są ograniczone do 6 na minutę. Jeśli masz problemy odczekaj minutę i spróbuj ponownie się teleportować. Jeśli problem będzie się powtarzał wyloguj się i zaloguj ponownie.
 	</notification>
 	<notification name="invalid_region_handoff">
 		Niestety, pojawił się błąd podczas próby przedostania się na drugi region. Proponujemy wylogowanie się i spróbowanie przedostania się na drugi region ponownie.
@@ -1134,7 +1137,7 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 	<notification name="YouHaveBeenLoggedOut">
 		Nastąpiło wylogowanie z [CURRENT_GRID]
 [MESSAGE]
-		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pokaż IM/czat"/>
+		<usetemplate name="okcancelbuttons" notext="Zakończ" yestext="Pokaż IM/czat"/>
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Nie możesz kupić działek dla grupy.
@@ -1211,6 +1214,12 @@ do
 		Nowa nazwa gestu:
 		<form name="form">
 			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification label="Zmień nazwę Landmarka" name="RenameLandmark">
+		Wybierz nową nazwę dla [NAME]
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
 		</form>
 	</notification>
 	<notification name="RemoveFromFriends">
@@ -1662,9 +1671,6 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 Chcesz ją opuścić?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
-	<notification name="GroupDepart">
-		Opuściłeś/aś grupę &apos;&lt;nolink&gt;[group_name]&lt;/nolink&gt;&apos;.
-	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Ponowne dołączenie będzie kosztować [AMOUNT] L$.
 Chcesz ją opuścić?
@@ -2018,10 +2024,14 @@ Czy chcesz kontynuować?
 		Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		Region, który próbujesz odwiedzić zawiera treści przekraczające Twoje bieżące preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+		Region, który próbujesz odwiedzić, ma klasyfikację treści przekraczającą Twoje maksymalne preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+
+Pełne informacje na temat klasyfikacji treści można znaleźć [https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ tutaj].
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		Region, który próbujesz odwiedzić zawiera treści przekraczające Twoje bieżące preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+		Region, który próbujesz odwiedzić, ma klasyfikację treści przekraczającą Twoje maksymalne preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+
+Pełne informacje na temat klasyfikacji treści można znaleźć [https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ tutaj].
 	</notification>
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
 		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
@@ -2075,9 +2085,13 @@ Czy chcesz kontynuować?
 	</notification>
 	<notification name="LandClaimAccessBlocked">
 		Ziemia, którą próbujesz odzyskać ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
+
+Pełne informacje na temat klasyfikacji treści można znaleźć [https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ tutaj].
 	</notification>
 	<notification name="LandBuyAccessBlocked">
 		Ziemia, którą próbujesz kupić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
+
+Pełne informacje na temat klasyfikacji treści można znaleźć [https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ tutaj].
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
 		Tylko dorośli mogą odzyskać tą ziemię.
@@ -2291,8 +2305,8 @@ Przenieść obiekty szafy?
 		<usetemplate ignoretext="Potwierdź dodanie uczestników rozmowy" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmQuit">
-		Na pewno chcesz zakończyć?
-		<usetemplate ignoretext="Na pewno chcesz zakończyć?" name="okcancelignore" notext="Nie kończ" yestext="Wyłącz"/>
+		Na pewno chcesz zakończyć sesję i wyłączyć przeglądarkę?
+		<usetemplate ignoretext="Na pewno chcesz zakończyć sesję?" name="okcancelignore" notext="Anuluj" yestext="Zakończ"/>
 	</notification>
 	<notification name="ConfirmRestoreToybox">
 		Ta akcja przywróci domyślny układ przycisków i pasków.
@@ -2865,7 +2879,9 @@ Nie możesz tutaj latać.
 		Tylko publiczne działki w tym regionie, co Ty, mogą być przejęte.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		Region, który próbujesz odwiedzić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
+		Region, który próbujesz odwiedzić, ma klasyfikację treści przekraczającą Twoje maksymalne preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+
+Pełne informacje na temat klasyfikacji treści można znaleźć [https://community.secondlife.com/knowledgebase/english/maturity-ratings-r52/ tutaj].
 	</notification>
 	<notification name="RegionAboutToShutdown">
 		Region, do którego próbujesz się dostać, właśnie się wyłącza.
@@ -3458,7 +3474,7 @@ to ustawienie lub wybrać inną nazwę.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Prześlij"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
-		Czy na pewno chcesz usunąć historię teleportacji?
+		Spowoduje to usunięcie całej listy odwiedzonych przez Ciebie miejsc i nie będzie można tego cofnąć. Kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="BottomTrayButtonCanNotBeShown">
@@ -4081,6 +4097,9 @@ Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
 	<notification name="LocalBitmapsUpdateFileNotFound">
 		[FNAME] nie może zostać zaktualizowany, ponieważ plik nie może zostać znaleziony.
 Aktualizacje dla tego pliku wyłączone.
+	</notification>
+	<notification name="NoTransNoSaveToContents">
+		Nie można zapisać &lt;nolink&gt;'[OBJ_NAME]'&lt;/nolink&gt; do zawartości obiektu, ponieważ nie masz uprawnień do przeniesienia praw własności obiektu.
 	</notification>
 	<notification name="LocalBitmapsUpdateFailedFinal">
 		[FNAME] nie mógł zostać otwarty lub zdekodowany [NRETRIES] razy i został uznany za uszkodzony.
@@ -4798,6 +4817,15 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		Wystąpił problem z zapisywaniem domyślnych zezwoleń obiektu: [REASON]. Spróbuj ustawić je ponownie później.
+	</notification>
+	<notification name="AddPaymentMethod">
+		Na następnej stronie wybierz kwotę L$
+i kliknij przycisk składania zamówienia.
+Będziesz mógł/a dodać metodę płatności w kasie. 
+		<form name="form">
+			<button name="Continue" text="Kontyntynuj" />
+			<button name="Cancel" text="Anuluj" />
+		</form>
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.

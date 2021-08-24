@@ -39,10 +39,10 @@ public:
 public:
 	bool hitTest(const LLCoordGL& ptMouse) const;
 	void run(const LLVisualEffectParams*) override;
+	void setBlockTouch(bool block_touch)                { m_fBlockTouch = block_touch; }
 	void tweenAlpha(float endAlpha, double duration)    { m_nAlpha.start(endAlpha, duration); }
 	void tweenColor(LLColor3 endColor, double duration) { m_Color.start(endColor, duration); }
 	static ERlvCmdRet onAlphaValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onBlockTouchValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onColorValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 	static ERlvCmdRet onTextureChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:

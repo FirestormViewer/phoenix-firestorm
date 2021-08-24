@@ -3,11 +3,11 @@
 	<menu_item_call label="Заменить" name="wear_replace"/>
 	<menu_item_call label="Надеть" name="wear_wear"/>
 	<menu_item_call label="Добавить" name="wear_add"/>
-	<context_menu label="Присоединить" name="wearable_attach_to"/>
-	<context_menu label="Присоединить к HUD" name="wearable_attach_to_hud"/>
+	<context_menu label="Прикрепить к" name="wearable_attach_to"/>
+	<context_menu label="Прикрепить на экран" name="wearable_attach_to_hud"/>
 	<menu_item_call label="Коснуться" name="touch"/>
 	<menu_item_call label="Изменить" name="edit"/>
-	<menu_item_call label="Снять / отсоединить" name="take_off_or_detach"/>
+	<menu_item_call label="Снять/Отсоединить" name="take_off_or_detach"/>
 	<menu_item_call label="Отсоединить" name="detach"/>
 	<menu_item_call label="Снять" name="take_off"/>
 	<menu_item_call label="Профиль объекта" name="object_profile"/>

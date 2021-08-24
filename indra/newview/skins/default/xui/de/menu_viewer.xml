@@ -261,6 +261,7 @@
 		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
 		<menu_item_call label="Stundenplan Firestorm-Klassen" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Firestorm-Eventkalender" name="Firestorm Events Calendar"/>
+		<menu_item_call label="Anweisungen..." name="How To"/>
 		<menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
 		<menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
@@ -439,8 +440,10 @@
 			<menu_item_call label="LLError erzwingen und abstürzen" name="Force LLError And Crash"/>
 			<menu_item_call label="Erzwinge fehlerhaften Speicherzugriff" name="Force Bad Memory Access"/>
 			<menu_item_call label="Endlosschleife erzwingen" name="Force Infinite Loop"/>
-			<menu_item_call label="Treiber-Crash erzwingen" name="Force Driver Carsh"/>
+			<menu_item_call label="Treiber-Absturz erzwingen" name="Force Driver Carsh"/>
 			<menu_item_call label="Softwareausnahme erzwingen" name="Force Software Exception"/>
+			<menu_item_call label="Absturz in Coroutine erzwingen" name="Force a Crash in a Coroutine"/>
+			<menu_item_call label="Absturz in Thread erzwingen" name="Force a Crash in a Thread"/>
 			<menu_item_call label="Verbindungsabbruch erzwingen" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Speicherverlust simulieren" name="Memory Leaking Simulation"/>
 		</menu>

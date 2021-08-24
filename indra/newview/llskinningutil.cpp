@@ -141,7 +141,7 @@ void LLSkinningUtil::scrubInvalidJoints(LLVOAvatar *avatar, LLMeshSkinInfo* skin
 //    for (U32 j = 0; j < count; ++j)
 //    {
 //        S32 joint_num = skin->mJointNums[j];
-//        LLJoint * joint = NULL;
+//        LLJoint *joint = NULL;
 //        if (joint_num >= 0 && joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS)
 //        {
 //            joint = avatar->getJoint(joint_num);
@@ -204,7 +204,7 @@ void LLSkinningUtil::initSkinningMatrixPalette(
     for (U32 j = 0; j < count; ++j)
     {
         S32 joint_num = skin->mJointNums[j];
-        LLJoint * joint = NULL;
+        LLJoint *joint = NULL;
         if (joint_num >= 0 && joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS)
         {
             joint = avatar->getJoint(joint_num);

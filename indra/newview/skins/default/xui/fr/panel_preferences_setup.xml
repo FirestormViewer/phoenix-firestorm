@@ -24,7 +24,6 @@
 				<combo_box.item label="Dix fenêtres" name="web_10"/>
 			</combo_box>
 			<button label="Vider le cache du navigateur" width="190" name="ClearWebBrowserCache"/>
-			<check_box label="Activer les plugins" name="browser_plugins_enabled"/>
 			<check_box label="Accepter les cookies" name="cookies_enabled"/>
 			<check_box label="Activer JavaScript" name="browser_javascript_enabled"/>
 			<check_box label="Activer les pop-up dans le navigateur" name="media_popup_enabled"/>
@@ -34,6 +33,12 @@
 		<panel label="Dossiers" name="tab-dir">
 			<text name="cache_size_label_l">Taille du cache ([https://wiki.firestormviewer.org/cache Besoin d'aide ?]) :</text>
 			<text name="text_box5">Mo</text>
+			<text name="asset_cache_size_label_l">
+				Cache des ressources de données (actifs) :
+			</text>
+			<text name="asset_text_box5">
+				Mo
+			</text>
 			<button label="Vider le cache de l'inventaire" name="ClearInventoryCache" left="350" width="180"/>
 			<text name="Cache location">Emplacement du cache :</text>
 			<button label="Ouvrir" label_selected="Ouvrir" name="open_cache"/>

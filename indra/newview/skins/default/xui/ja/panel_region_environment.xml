@@ -53,7 +53,7 @@
 							<text name="select_environment_label">自然環境を選択</text>
 							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="持ち物を使う" name="btn_select_inventory"/>
-							<button label="カスタマイズ" name="btn_edit"/>
+							<button label="デイサイクルをカスタマイズ" name="btn_edit"/>
 							<check_box label="区画所有者が環境を上書きすることがあります" name="chk_allow_override"/>
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">

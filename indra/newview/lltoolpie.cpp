@@ -698,7 +698,14 @@ bool LLToolPie::walkToClickedLocation()
         }
 // [/RLVa:KB]
 
-        gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+        // <FS:PP> FIRE-31135 Do not reset camera position for "click to walk"
+        // gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+        static LLCachedControl<bool> sResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+        if (sResetCameraOnMovement)
+        {
+            gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+        }
+        // </FS:PP>
 
         if (mAutoPilotDestination) { mAutoPilotDestination->markDead(); }
         mAutoPilotDestination = (LLHUDEffectBlob *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BLOB, FALSE);
@@ -1605,7 +1612,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 
 BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 {
-	if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("ShowHoverTips")) return TRUE;
+	static LLCachedControl<bool> show_hover_tips(*LLUI::getInstance()->mSettingGroups["config"], "ShowHoverTips", true);
+	if (!show_hover_tips) return TRUE;
 	if (!mHoverPick.isValid()) return TRUE;
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
 #ifdef RLV_EXTENSION_CMD_INTERACT
