@@ -124,7 +124,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 		else if (type == APT_NOTES)
 		{
 			LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
-			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID)
+			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
 				mNotes = avatar_notes->notes;
 				LLStringUtil::trim(mNotes);
