@@ -1293,14 +1293,6 @@ bool LLModel::needToAddFaces( LLModel* ref, int& refFaceCnt, int& modelFaceCnt )
 //         // larger than original and if we keep going, reordering will cause a crash
 //         return false;
 //     }
-
-    if (mMaterialList.size() > ref->mMaterialList.size())
-    {
-        LL_INFOS("MESHSKININFO") << "Material of model has more materials than a reference." << LL_ENDL;
-        // We passed isMaterialListSubset, so materials are a subset, but subset isn't supposed to be
-        // larger than original and if we keep going, reordering will cause a crash
-        return false;
-    }
 	
 // 	std::map<std::string, U32> index_map;
 	

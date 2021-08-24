@@ -326,6 +326,18 @@ bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFace
 		return false;
 	}
 
+	if (lod->mMaterialList.size() > ref->mMaterialList.size())
+	{
+		LL_DEBUGS("MESHSKININFO") << "Material of model has more materials than a reference." << LL_ENDL;
+		std::ostringstream out;
+		out << "LOD model " << lod->getName() << " has more materials than the High LOD (reference) model " << ref->getName();
+		LL_DEBUGS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+		// We passed isMaterialListSubset, so materials are a subset, but subset isn't supposed to be
+		// larger than original and if we keep going, reordering will cause a crash
+		return false;
+	}
+
 	LL_DEBUGS("MESHSKININFO") << "subset check passed." << LL_ENDL;
 	std::map<std::string, U32> index_map;
 	
