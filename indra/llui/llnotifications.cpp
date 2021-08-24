@@ -500,8 +500,7 @@ LLNotification::LLNotification(const LLSDParamAdapter<Params>& p) :
 	mResponderObj(NULL),
 	mId(p.id.isProvided() ? p.id : LLUUID::generateNewID()),
 	mOfferFromAgent(p.offer_from_agent),
-    mIsDND(p.is_dnd),
-	mIsFromStorage(false)// <FS:Ansariel> FIRE-11339: Persisted group notifications get logged to IM on each login
+    mIsDND(p.is_dnd)
 {
 	if (p.functor.name.isChosen())
 	{
