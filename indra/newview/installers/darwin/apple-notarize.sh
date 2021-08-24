@@ -6,12 +6,12 @@ if [ -f "$CONFIG_FILE" ]; then
     zip_file=${app_file/app/zip}
     ditto -c -k --keepParent "$app_file" "$zip_file"
     if [ -f "$zip_file" ]; then
-        requestUUID=$(xcrun altool --notarize-app --primary-bundle-id "com.secondlife.viewer" \
-                                --username $USERNAME \
-                                --password $PASSWORD \
-                                --asc-provider $ASC_PROVIDER \
-                                --file "$zip_file" 2>&1 \
-                    | awk '/RequestUUID/ { print $NF; }')
+        res=$(xcrun altool --notarize-app --primary-bundle-id "com.secondlife.viewer" \
+                                   --username $USERNAME \
+                                   --password $PASSWORD \
+                                   --asc-provider $ASC_PROVIDER \
+                                   --file "$zip_file" 2>&1)
+        requestUUID=$(echo $res | awk '/RequestUUID/ { print $NF; }')
 
         echo "Apple Notarization RequestUUID: $requestUUID"
 
@@ -36,8 +36,13 @@ if [ -f "$CONFIG_FILE" ]; then
             if [["$status" == "success"]]; then
                 xcrun stapler staple "$app_file"
             elif [["$status" == "invalid"]]; then
+                echo "Notarization error: failed to process the app file"
                 exit 1
             fi
+        else
+            echo "Notarization error: couldn't get request UUID"
+            echo $res
+            exit 1
         fi
     fi
 fi

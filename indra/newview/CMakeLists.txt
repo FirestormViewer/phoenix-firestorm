@@ -2361,9 +2361,10 @@ if (WINDOWS)
     if (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
-	
-    add_dependencies(${VIEWER_BINARY_NAME} SLPlugin)
 
+    add_dependencies(${VIEWER_BINARY_NAME}
+      SLPlugin
+    )
 
     # sets the 'working directory' for debugging from visual studio.
     # Condition for version can be moved to requirements once build agents will be updated (see TOOL-3865)
@@ -2718,10 +2719,6 @@ if (DARWIN)
     )
 
   add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_libvlc media_plugin_cef)
-
-  if (NOT USE_BUGSPLAT)
-      add_dependencies(${VIEWER_BINARY_NAME} mac-crash-logger)
-  endif (NOT USE_BUGSPLAT)
 
   if (ENABLE_SIGNING)
       set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")
