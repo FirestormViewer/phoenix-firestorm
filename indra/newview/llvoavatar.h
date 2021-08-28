@@ -515,8 +515,8 @@ private:
 	mutable bool		mCachedInMuteList;
 	mutable F64			mCachedMuteListUpdateTime;
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-	mutable bool mCachedIsRlvSilhouette = false;
-	mutable F64  mCachedRlvSilhouetteUpdateTime = 0.f;
+	mutable bool        mCachedIsRlvSilhouette = false;
+	mutable F64         mCachedRlvSilhouetteUpdateTime = 0.f;
 // [/RLVa:KB]
 
 	VisualMuteSettings		mVisuallyMuteSetting;			// Always or never visually mute this AV
