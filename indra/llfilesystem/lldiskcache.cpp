@@ -71,7 +71,7 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
 
 void LLDiskCache::purge()
 {
-    //if (mEnableCacheDebugInfo)
+    if (mEnableCacheDebugInfo)
     {
         LL_INFOS() << "Total dir size before purge is " << dirFileSize(mCacheDir) << LL_ENDL;
     }
@@ -181,7 +181,7 @@ void LLDiskCache::purge()
         }
     }
 
-    //if (mEnableCacheDebugInfo)
+    if (mEnableCacheDebugInfo)
     {
         auto end_time = std::chrono::high_resolution_clock::now();
         auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
