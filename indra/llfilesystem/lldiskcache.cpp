@@ -93,7 +93,7 @@ void LLDiskCache::purge()
         //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
         for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
+            if (!ec.failed() && (boost::filesystem::is_regular_file(entry, ec) && !ec.failed()))
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
@@ -485,7 +485,7 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
         //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path, ec), {}))
         for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
+            if (!ec.failed() && (boost::filesystem::is_regular_file(entry, ec) && !ec.failed()))
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
