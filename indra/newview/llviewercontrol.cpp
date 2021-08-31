@@ -74,7 +74,8 @@
 //#include "llpanellogin.h"
 #include "fspanellogin.h"
 // </FS:Ansariel> [FS Login Panel]
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llspellcheck.h"
 #include "llslurl.h"
 #include "llstartup.h"
@@ -1053,7 +1054,7 @@ void handlePlayBentoIdleAnimationChanged(const LLSD& newValue)
 void handleDiskCacheSizeChanged(const LLSD& newValue)
 {
 	const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
-	const U64 disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+	const U64 disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
 	LLDiskCache::getInstance()->setMaxSizeBytes(disk_cache_bytes);
 }
 // </FS:Ansariel>

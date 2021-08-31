@@ -1932,9 +1932,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3b8b0f54c851f136e2a92e1c6ba724a5</string>
+              <string>e99b86fc3ed48a778580dd1449f8f33b</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.1-darwin64-211970151.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.2-darwin-212431232.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1944,9 +1944,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dce2cc624e216eb991412ec0c5538cf9</string>
+              <string>94f8c766d77d68e0b8b1ac783b6a02dc</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.1-linux64-210652339.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.2-linux64-212351600.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1956,9 +1956,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
+              <string>e88372fa10b83c6900443dcc12c12338</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1968,9 +1968,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1cd284c85b5f05fff6b286e85b55ebf2</string>
+              <string>e88372fa10b83c6900443dcc12c12338</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.1-windows-210862059.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>

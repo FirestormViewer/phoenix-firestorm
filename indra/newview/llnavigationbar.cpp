@@ -42,7 +42,8 @@
 #include "lllandmarkactions.h"
 #include "lllocationhistory.h"
 #include "lllocationinputctrl.h"
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llteleporthistory.h"
 #include "llresizebar.h"
 #include "llsearchcombobox.h"
@@ -842,7 +843,8 @@ void LLNavigationBar::onNavigationButtonHeldUp(LLButton* nav_button)
 void LLNavigationBar::handleLoginComplete()
 {
 	LLTeleportHistory::getInstance()->handleLoginComplete();
-	LLPanelTopInfoBar::instance().handleLoginComplete();
+	// <FS:Zi> We don't use the mini location panel in Firestorm
+	// LLPanelTopInfoBar::instance().handleLoginComplete();
 	gStatusBar->handleLoginComplete();
 	mCmbLocation->handleLoginComplete();
 	// <FS:Ansariel> Commented out because we don't have the LL viewer layout
