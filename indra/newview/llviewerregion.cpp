@@ -321,19 +321,18 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
         regionp = NULL;
         result = httpAdapter->postAndSuspend(httpRequest, url, capabilityNames);
 
-        // <FS:Ansariel> Fix seed cap retry count
-        //++mSeedCapAttempts;
-
         if (STATE_WORLD_INIT > LLStartUp::getStartupState())
         {
             LL_INFOS("AppInit", "Capabilities") << "Aborting capabilities request, reason: returned to login screen" << LL_ENDL;
             return;
         }
 
-        if (LLApp::isExiting())
+        if (LLApp::isExiting() || gDisconnected)
         {
             return;
         }
+
+        ++mSeedCapAttempts;
 
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed
@@ -452,7 +451,7 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCompleteCoro(U64 regionHandle)
             break;  // no retry
         }
 
-        if (LLApp::isExiting())
+        if (LLApp::isExiting() || gDisconnected)
         {
             break;
         }
@@ -560,7 +559,7 @@ void LLViewerRegionImpl::requestSimulatorFeatureCoro(std::string url, U64 region
             continue;  
         }
 
-        if (LLApp::isExiting())
+        if (LLApp::isExiting() || gDisconnected)
         {
             break;
         }
