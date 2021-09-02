@@ -149,7 +149,7 @@ void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* 
 	}
 }
 
-const char* DEFAULT_LOGIN_PAGE = "http://phoenixviewer.com/app/loginV3/";
+const char* DEFAULT_LOGIN_PAGE = "https://phoenixviewer.com/app/loginV3/";
 
 const char* SYSTEM_GRID_SLURL_BASE = "secondlife://%s/secondlife/";
 const char* MAIN_GRID_SLURL_BASE = "http://maps.secondlife.com/secondlife/";
