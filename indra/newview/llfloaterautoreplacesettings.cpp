@@ -64,6 +64,7 @@
 #include "llnotificationhandler.h"
 #include "llnotificationmanager.h"
 #include "llnotificationsutil.h"
+#include "llviewercontrol.h"
 
 
 LLFloaterAutoReplaceSettings::LLFloaterAutoReplaceSettings(const LLSD& key)

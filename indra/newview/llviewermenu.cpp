@@ -3868,6 +3868,8 @@ bool check_avatar_render_mode(U32 mode)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_ALWAYS_RENDER;
 // [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
+		case 4:
+				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_RENDER_NORMALLY;
 		default:
 			return false;
 	}
