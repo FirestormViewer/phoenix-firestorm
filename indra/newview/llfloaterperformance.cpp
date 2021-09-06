@@ -334,19 +334,21 @@ void LLFloaterPerformance::populateNearbyList()
     getNearbyAvatars(valid_nearby_avs);
 
     std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
+    auto render_max = FSTelemetry::RecordObjectTime<LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
     while (char_iter != valid_nearby_avs.end())
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
         if (avatar && (LLVOAvatar::AOA_INVISIBLE != avatar->getOverallAppearance()))
         {
-            S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);;
+            S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
+            auto render_av  = FSTelemetry::RecordObjectTime<LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
             LLSD item;
             item["id"] = avatar->getID();
             LLSD& row = item["columns"];
             row[0]["column"] = "complex_visual";
             row[0]["type"] = "bar";
             LLSD& value = row[0]["value"];
-            value["ratio"] = (F32)complexity_short / mNearbyMaxComplexity * 1000;
+            value["ratio"] = (double)render_av / render_max;
             value["bottom"] = BAR_BOTTOM_PAD;
             value["left_pad"] = BAR_LEFT_PAD;
             value["right_pad"] = BAR_RIGHT_PAD;

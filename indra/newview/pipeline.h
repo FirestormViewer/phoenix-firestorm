@@ -621,6 +621,8 @@ public:
 	static bool				sUseDepthTexture;
 // [/RLVa:KB]
 
+	static U32				sShowTrueARC; // <FS:Beq/> True when we have the TrueArc overlay active.
+
 	static LLTrace::EventStatHandle<S64> sStatBatchSize;
 
 	//screen texture

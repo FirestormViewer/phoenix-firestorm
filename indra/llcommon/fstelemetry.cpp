@@ -28,4 +28,11 @@
 namespace FSTelemetry
 {
 	bool	active{false};
+
+    int 	RecordSceneTime::writeBuffer{0};
+
+    bool 	RecordSceneTime::collectionEnabled{true};
+
+	std::array< typename RecordSceneTime::StatsArray, 2 > RecordSceneTime::stats{ {} };
+
 }
