@@ -1917,18 +1917,12 @@ class LinuxManifest(ViewerManifest):
             self.path( "v8_context_snapshot.bin" )
 
         with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
-            self.path( "cef.pak" )
-            self.path( "cef_extensions.pak" )
-            self.path( "cef_100_percent.pak" )
-            self.path( "cef_200_percent.pak" )
-            self.path( "devtools_resources.pak" )
+            self.path( "chrome_100_percent.pak" )
+            self.path( "chrome_200_percent.pak" )
             self.path( "icudtl.dat" )
         with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="lib"):
-            self.path( "cef.pak" )
-            self.path( "cef_extensions.pak" )
-            self.path( "cef_100_percent.pak" )
-            self.path( "cef_200_percent.pak" )
-            self.path( "devtools_resources.pak" )
+            self.path( "chrome_100_percent.pak" )
+            self.path( "chrome_200_percent.pak" )
             self.path( "icudtl.dat" )
 
         with self.prefix(src=os.path.join(pkgdir, 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
