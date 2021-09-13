@@ -1902,7 +1902,7 @@ class LinuxManifest(ViewerManifest):
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("lib", "swiftshader") ):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst="lib" ):
             self.path( "*.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
@@ -1919,10 +1919,12 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="bin"):
             self.path( "chrome_100_percent.pak" )
             self.path( "chrome_200_percent.pak" )
+            self.path( "resources.pak" )
             self.path( "icudtl.dat" )
         with self.prefix(src=os.path.join(pkgdir, 'resources'), dst="lib"):
             self.path( "chrome_100_percent.pak" )
             self.path( "chrome_200_percent.pak" )
+            self.path( "resources.pak" )
             self.path( "icudtl.dat" )
 
         with self.prefix(src=os.path.join(pkgdir, 'resources', 'locales'), dst=os.path.join('bin', 'locales')):
