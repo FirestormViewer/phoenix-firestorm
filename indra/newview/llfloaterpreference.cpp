@@ -167,7 +167,7 @@
 
 // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 #include "llfiltereditor.h"
-
+#include "llviewershadermgr.h"
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 char const* const VISIBILITY_DEFAULT = "default";
@@ -5330,6 +5330,25 @@ BOOL FSPanelPreferenceBackup::postBuild()
 	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
 	// </FS:Zi>
 	
+	// <FS:Beq>
+	#if !defined OPENSIM
+	// Note: Windlight setting restore is enabled in OPENSIM bulds irrespective of grid (or pre-login)
+	// windlights settings folders are not grid specific and thus neither is the restore.
+	// if windlight folders existsed they will be backed up on all builds but for SL only builds they will not be restored.
+
+	LLScrollListCtrl* globalFoldersScrollList = getChild<LLScrollListCtrl>("restore_global_folders_list");
+	std::vector<LLScrollListItem*> globalFoldersList = globalFoldersScrollList->getAllData();
+	for (const auto item : globalFoldersList)
+	{
+		// if it is windlight related remove it.
+		if (item->getValue().asString().rfind("windlight",0) == 0)
+		{
+			LL_INFOS() << "removing windlight folder (no longer used in SL) : " << item->getValue().asString() << " index: " << globalFoldersScrollList->getItemIndex(item) << LL_ENDL;
+			globalFoldersScrollList->deleteSingleItem(globalFoldersScrollList->getItemIndex(item));
+		}
+	}
+	#endif
+	// </FS:Beq>
 	return LLPanelPreference::postBuild();
 }
 

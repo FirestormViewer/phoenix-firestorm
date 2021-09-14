@@ -333,19 +333,21 @@ void LLFloaterPerformance::populateNearbyList()
     getNearbyAvatars(valid_nearby_avs);
 
     std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
+    auto render_max = FSTelemetry::RecordObjectTime<LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
     while (char_iter != valid_nearby_avs.end())
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
         if (avatar && (LLVOAvatar::AOA_INVISIBLE != avatar->getOverallAppearance()))
         {
-            S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);;
+            S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
+            auto render_av  = FSTelemetry::RecordObjectTime<LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
             LLSD item;
             item["id"] = avatar->getID();
             LLSD& row = item["columns"];
             row[0]["column"] = "complex_visual";
             row[0]["type"] = "bar";
             LLSD& value = row[0]["value"];
-            value["ratio"] = (F32)complexity_short / mNearbyMaxComplexity * 1000;
+            value["ratio"] = (double)render_av / render_max;
             value["bottom"] = BAR_BOTTOM_PAD;
             value["left_pad"] = BAR_LEFT_PAD;
             value["right_pad"] = BAR_RIGHT_PAD;
@@ -502,24 +504,24 @@ void LLFloaterPerformance::onCustomAction(const LLSD& userdata, const LLUUID& av
 {
     const std::string command_name = userdata.asString();
 
-    S32 new_setting = 0;
+    LLVOAvatar::VisualMuteSettings new_setting = LLVOAvatar::AV_RENDER_NORMALLY;
     if ("default" == command_name)
     {
-        new_setting = S32(LLVOAvatar::AV_RENDER_NORMALLY);
+        new_setting = LLVOAvatar::AV_RENDER_NORMALLY;
     }
     else if ("never" == command_name)
     {
-        new_setting = S32(LLVOAvatar::AV_DO_NOT_RENDER);
+        new_setting = LLVOAvatar::AV_DO_NOT_RENDER;
     }
     else if ("always" == command_name)
     {
-        new_setting = S32(LLVOAvatar::AV_ALWAYS_RENDER);
+        new_setting = LLVOAvatar::AV_ALWAYS_RENDER;
     }
 
     LLVOAvatar *avatarp = find_avatar(av_id);
     if (avatarp)
     {
-        avatarp->setVisualMuteSettings(LLVOAvatar::VisualMuteSettings(new_setting));
+        avatarp->setVisualMuteSettings(new_setting);
     }
     else
     {
@@ -541,19 +543,19 @@ bool LLFloaterPerformance::isActionChecked(const LLSD& userdata, const LLUUID& a
     // </FS:Ansariel>
     if ("default" == command_name)
     {
-        return (visual_setting == S32(LLVOAvatar::AV_RENDER_NORMALLY));
+        return (visual_setting == LLVOAvatar::AV_RENDER_NORMALLY);
     }
     else if ("non_default" == command_name)
     {
-        return (visual_setting != S32(LLVOAvatar::AV_RENDER_NORMALLY));
+        return (visual_setting != LLVOAvatar::AV_RENDER_NORMALLY);
     }
     else if ("never" == command_name)
     {
-        return (visual_setting == S32(LLVOAvatar::AV_DO_NOT_RENDER));
+        return (visual_setting == LLVOAvatar::AV_DO_NOT_RENDER);
     }
     else if ("always" == command_name)
     {
-        return (visual_setting == S32(LLVOAvatar::AV_ALWAYS_RENDER));
+        return (visual_setting == LLVOAvatar::AV_ALWAYS_RENDER);
     }
     return false;
 }

@@ -1012,12 +1012,7 @@ void MediaPluginCEF::checkEditState()
 
 void MediaPluginCEF::setVolume()
 {
-	//mVolumeCatcher.setVolume(mCurVolume);
-#if 0//(DULLAHAN_VERSION_MAJOR*100 + DULLAHAN_VERSION_MINOR) >= 108
-	mCEFLib->setVolume(mCurVolume);
-#else
 	mVolumeCatcher.setVolume(mCurVolume);
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

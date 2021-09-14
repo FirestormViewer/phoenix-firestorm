@@ -1182,7 +1182,7 @@ set(viewer_HEADER_FILES
     llfloaterperms.h
     llfloaterpostprocess.h
     llfloaterpreference.h
-    llfloaterpreferencesgraphicsadvanced.h
+    # llfloaterpreferencesgraphicsadvanced.h
     llfloaterpreferenceviewadvanced.h
     llfloaterpreviewtrash.h
     llfloaterproperties.h

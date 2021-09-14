@@ -1631,6 +1631,9 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
+	{
+	FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_FRAME);
+
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 // <FS:Beq> telemetry enabling. 
@@ -1828,6 +1831,7 @@ bool LLAppViewer::doFrame()
 			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime", -1);
 			if(yield_time >= 0)
 			{
+				FSTelemetry::RecordSceneTime T ( FSTelemetry::SceneStatType::RENDER_SLEEP );
 				LL_RECORD_BLOCK_TIME(FTM_YIELD);
 				ms_sleep(yield_time);
 			}
@@ -1922,6 +1926,7 @@ bool LLAppViewer::doFrame()
 			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
+				FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_FPSLIMIT);
 				F32 min_frame_time = 1.f / (F32)max_fps;
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
@@ -1961,6 +1966,9 @@ bool LLAppViewer::doFrame()
 	}
     FSFrameMark; // <FS:Beq> Tracy support delineate Frame
     LLPROFILE_UPDATE();
+	}
+	FSTelemetry::RecordSceneTime::toggleBuffer();
+	FSTelemetry::RecordObjectTime<LLVOAvatar*>::toggleBuffer();
 
 	return ! LLApp::isRunning();
 }

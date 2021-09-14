@@ -2731,7 +2731,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_MiniMap_Tooltip">Show nearby people (CTRL+SHIFT+M)</string>
   <string name="Command_Move_Tooltip">Moving your avatar</string>
   <string name="Command_People_Tooltip">Friends, groups, and nearby people (CTRL+SHIFT+A)</string>
-  <string name="Command_Performance_Tooltip">Improve graphics speed</string>
+  <string name="Command_Performance_Tooltip">Tune graphics settings</string>
   <string name="Command_Picks_Tooltip">Places to show as favorites in your profile</string>
   <string name="Command_Places_Tooltip">Places you've saved (ALT+H)</string>
   <string name="Command_Preferences_Tooltip">Preferences (CTRL+P)</string>

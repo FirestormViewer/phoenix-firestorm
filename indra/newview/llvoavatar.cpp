@@ -11691,8 +11691,8 @@ void LLVOAvatar::accountRenderComplexityForObject(
 								{
 									temp_item_complexity.insert(std::make_pair(attached_object->getID(), (U32)attachment_total_cost));
 								}
-							}
 							// </FS:Ansariel>
+							}
 						}
 					}
 				}

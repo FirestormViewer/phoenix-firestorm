@@ -198,7 +198,6 @@
 	      function="Avatar.SetImpostorMode"
 	      parameter="0" />
       </menu_item_check>
-
   <menu_item_call
      enabled="false"
      label="Block Particle Owner"
