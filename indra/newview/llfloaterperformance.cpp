@@ -157,10 +157,68 @@ void LLFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
 void LLFloaterPerformance::draw()
 {
     const S32 NUM_PERIODS = 50;
+    static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
 
     if (mUpdateTimer->hasExpired())
     {
-        getChild<LLTextBox>("fps_value")->setValue((S32)llround(LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS)));
+       	LLStringUtil::format_map_t args;
+
+        auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
+        getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
+        auto tot_frame_time_ns = 1000000000/fps;
+        auto tot_avatar_time = FSTelemetry::RecordObjectTime<LLVOAvatar*>::getSum(FSTelemetry::ObjStatType::RENDER_COMBINED);
+        auto tot_huds_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_HUDS);
+        auto tot_sleep_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_SLEEP);
+        auto tot_ui_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_UI);
+        auto tot_idle_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_IDLE);
+        auto tot_limit_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_FPSLIMIT);
+        auto tot_swap_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_SWAP);
+
+        // once the rest is extracted what is left is the scene cost (we don't include non-render activities such as network here prlloy should.)
+        auto tot_scene_time = tot_frame_time_ns - tot_avatar_time - tot_huds_time - tot_ui_time - tot_sleep_time - tot_limit_time - tot_swap_time;
+        // remove time spent sleeping for fps limit or out of focus.
+        tot_frame_time_ns -= tot_limit_time;
+        tot_frame_time_ns -= tot_sleep_time;
+
+        if(tot_frame_time_ns == 0)
+        {
+            LL_WARNS("performance") << "things went wrong, quit while we can." << LL_ENDL;
+            return;
+        }
+        auto pct_avatar_time = (tot_avatar_time*100)/tot_frame_time_ns;
+        auto pct_huds_time = (tot_huds_time*100)/tot_frame_time_ns;
+        auto pct_ui_time = (tot_ui_time*100)/tot_frame_time_ns;
+        auto pct_idle_time = (tot_idle_time*100)/tot_frame_time_ns;
+        auto pct_swap_time = (tot_swap_time*100)/tot_frame_time_ns;
+        auto pct_scene_time = (tot_scene_time*100)/tot_frame_time_ns;
+
+        args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
+        args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
+        args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
+        args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
+        args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
+        args["SCENE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_time));
+        args["FPSCAP"] = llformat("%02u", (U32)max_fps);
+
+        getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
+        getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
+        
+        auto textbox = getChild<LLTextBox>("fps_sleep_warning");
+        if(tot_sleep_time > 0) // We are sleeping because view is not focussed
+        {
+            textbox->setVisible(true);
+            textbox->setText(getString("focus_fps"));
+        }
+        else if (tot_limit_time > 0)
+        {
+            textbox->setVisible(true);
+            textbox->setText(getString("limit_fps", args));
+        }
+        else
+        {
+            textbox->setVisible(false);
+        }
+
         if (mHUDsPanel->getVisible())
         {
             populateHUDList();
@@ -339,7 +397,7 @@ void LLFloaterPerformance::populateNearbyList()
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
         if (avatar && (LLVOAvatar::AOA_INVISIBLE != avatar->getOverallAppearance()))
         {
-            S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
+            // S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
             auto render_av  = FSTelemetry::RecordObjectTime<LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
             LLSD item;
             item["id"] = avatar->getID();
@@ -354,7 +412,7 @@ void LLFloaterPerformance::populateNearbyList()
 
             row[1]["column"] = "complex_value";
             row[1]["type"] = "text";
-            row[1]["value"] = std::to_string(complexity_short);
+            row[1]["value"] = llformat("%.2f",((double)render_av / 1000000));
             row[1]["font"]["name"] = "SANSSERIF";
 
             row[2]["column"] = "name";

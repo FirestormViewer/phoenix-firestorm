@@ -583,8 +583,12 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 
 	LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
 	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
-	if (oa == LLVOAvatar::AOA_INVISIBLE ||
-		(impostor && oa == LLVOAvatar::AOA_JELLYDOLL))
+	// <FS:Beq> plain old impostors are passing through the shadow pipeline
+	// if (oa == LLVOAvatar::AOA_INVISIBLE ||
+	// 	(impostor && oa == LLVOAvatar::AOA_JELLYDOLL))
+	// Note: Impostors should not cast shadows, also all JDs are impostor nowadays so we do not need the extra check at all.
+	if (impostor || (oa == LLVOAvatar::AOA_INVISIBLE) )
+	// </FS:Beq>
 	{
 		// No shadows for jellydolled or invisible avs.
 		return;

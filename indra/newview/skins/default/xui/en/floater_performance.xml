@@ -6,6 +6,18 @@
  save_rect="true"
  title="Improve Graphics Speed"
  width="580">
+ <floater.string name="frame_stats">
+  Scenery:[SCENE_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% TASKS:[IDLE_FRAME_PCT]%
+</floater.string>
+ <floater.string name="limit_fps">
+  FPS capped at [FPSCAP]
+</floater.string>
+ <floater.string name="av_frame_pct">
+[AV_FRAME_PCT]%
+</floater.string>
+ <floater.string name="focus_fps">
+   In Background
+</floater.string>
   <panel
    bevel_style="none"
    follows="left|top"
@@ -23,7 +35,7 @@
      border="false"
      bevel_style="none"
      follows="left|top"
-     height="40"
+     height="55"
      width="560"
      name="fps_subpanel"
      layout="topleft"
@@ -50,45 +62,68 @@
        left_pad="3"
        top="13"
        name="fps_lbl"
-       width="450">
+       width="150">
           frames per second
       </text>
       <text
-       follows="left|top"
-       text_color="White"
-       height="20"
-       layout="topleft"
-       left="395"
-       top="7"
-       name="fps_desc1_lbl"
-       width="150">
-        Allow 5-10 seconds for
-      </text>
+      follows="left|top"
+      font="SansSerifLarge"
+      text_color="DrYellow"
+      height="28"
+      layout="topleft"
+      left_pad="10"
+      name="fps_sleep_warning"
+      top="8"
+      width="150">
+     </text>
       <text
-       follows="left|top"
-       text_color="White"
-       height="20"
-       layout="topleft"
-       top_pad="-3"
-       name="fps_desc2_lbl"
-       width="150">
-        changes to take full effect.
-      </text>
-    </panel>
-  </panel>
-  <panel
-   bevel_style="none"
+      follows="left|top"
+      text_color="White"
+      height="20"
+      layout="topleft"
+      left="395"
+      top="7"
+      name="fps_desc1_lbl"
+      width="150">
+      Allow 5-10 seconds for
+    </text>
+    <text
+    follows="left|top"
+    text_color="White"
+    height="20"
+    layout="topleft"
+    top_pad="-3"
+    name="fps_desc2_lbl"
+    width="150">
+    changes to take full effect.
+  </text>
+  <text
    follows="left|top"
-   height="540"
-   width="580"
-   name="panel_performance_main"
-   visible="true"
+   font="MonospaceMedium"
+   text_color="White"
+   height="20"
    layout="topleft"
-   left="0"   
-   top="60">    
-    <panel
-     bg_alpha_color="PanelGray"
-     background_visible="true"
+   left="20"
+   top="38"
+   name="frame_breakdown"
+   width="520">
+Frame breakdown will appear here.
+  </text>
+</panel>
+</panel>
+<panel
+bevel_style="none"
+follows="left|top"
+height="540"
+width="580"
+name="panel_performance_main"
+visible="true"
+layout="topleft"
+left="0"   
+top="60">    
+<panel
+bg_alpha_color="PanelGray"
+background_visible="true"
      background_opaque="false"
      border="true"
      bevel_style="none"
@@ -166,9 +201,35 @@
        left="10"
        name="avatars_nearby_desc"
        top_pad="0"
-       width="395">
+       width="305">
           Manage which nearby avatars are fully displayed.
       </text>
+      <text
+       follows="left|top"
+       font="SansSerifSmall"
+       text_color="White"
+       height="28"
+       layout="topleft"
+       left_pad="50"
+       name="avatars_frme_pct_lbl"
+       top="8"
+       width="75">
+Time spent
+drawing 
+avatars
+      </text>
+      <text
+      follows="left|top"
+      font="SansSerifHuge"
+      text_color="White"
+      height="20"
+      layout="topleft"
+      left_pad="10"
+      top="14"
+      name="av_frame_stats"
+      width="62">
+         00%
+     </text>
       <icon
        height="16"
        width="16"
