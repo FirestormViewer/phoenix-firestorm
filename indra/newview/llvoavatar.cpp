@@ -12100,7 +12100,7 @@ LLVOAvatar::AvatarOverallAppearance LLVOAvatar::getOverallAppearance() const
 	}
 	else // !isSelf()
 	{
-		if (isInMuteList())
+		if (isInMuteList())	
 		{
 			result = AOA_INVISIBLE;
 		}

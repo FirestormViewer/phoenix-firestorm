@@ -90,6 +90,7 @@ namespace FSTelemetry
         RENDER_MESHREPO,
         RENDER_FPSLIMIT,
         RENDER_FPS,
+        RENDER_IDLE,
 		STATS_COUNT
 	};
     

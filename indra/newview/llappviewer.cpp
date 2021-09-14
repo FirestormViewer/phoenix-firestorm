@@ -1770,6 +1770,8 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
+				FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_IDLE);
+
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 
 				LL_RECORD_BLOCK_TIME(FTM_IDLE);
@@ -1831,7 +1833,6 @@ bool LLAppViewer::doFrame()
 			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime", -1);
 			if(yield_time >= 0)
 			{
-				FSTelemetry::RecordSceneTime T ( FSTelemetry::SceneStatType::RENDER_SLEEP );
 				LL_RECORD_BLOCK_TIME(FTM_YIELD);
 				ms_sleep(yield_time);
 			}
@@ -1849,6 +1850,7 @@ bool LLAppViewer::doFrame()
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
 				{
+					FSTelemetry::RecordSceneTime T ( FSTelemetry::SceneStatType::RENDER_SLEEP );
 					ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
