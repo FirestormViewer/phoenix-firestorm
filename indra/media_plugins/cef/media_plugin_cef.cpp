@@ -141,6 +141,10 @@ MediaPluginBase(host_send_func, host_user_data)
 	mPickedFiles.clear();
 	mCurVolume = 0.0;
 
+#ifdef LL_LINUX
+	mDisableGPU = true;
+#endif
+	
 	mCEFLib = new dullahan();
 
 	setVolume();
