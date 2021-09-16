@@ -1902,7 +1902,7 @@ class LinuxManifest(ViewerManifest):
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst="lib" ):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("lib", "swiftshader") ):
             self.path( "*.so" )
 
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
