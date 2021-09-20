@@ -261,6 +261,7 @@ LLMenuItemCallGL* gAutorespondNonFriendsMenu = NULL;
 
 // File Menu
 void handle_compress_image(void*);
+void handle_compress_file_test(void*);
 
 
 // Edit menu
@@ -2478,6 +2479,21 @@ class LLAdvancedCompressImage : public view_listener_t
 		handle_compress_image(NULL);
 		return true;
 	}
+};
+
+
+
+////////////////////////
+// COMPRESS FILE TEST //
+////////////////////////
+
+class LLAdvancedCompressFileTest : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        handle_compress_file_test(NULL);
+        return true;
+    }
 };
 
 
@@ -11935,6 +11951,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedToggleShowObjectUpdates(), "Advanced.ToggleShowObjectUpdates");
 	view_listener_t::addMenu(new LLAdvancedCheckShowObjectUpdates(), "Advanced.CheckShowObjectUpdates");
 	view_listener_t::addMenu(new LLAdvancedCompressImage(), "Advanced.CompressImage");
+    view_listener_t::addMenu(new LLAdvancedCompressFileTest(), "Advanced.CompressFileTest");
 	view_listener_t::addMenu(new LLAdvancedShowDebugSettings(), "Advanced.ShowDebugSettings");
 	view_listener_t::addMenu(new LLAdvancedEnableViewAdminOptions(), "Advanced.EnableViewAdminOptions");
 	view_listener_t::addMenu(new LLAdvancedToggleViewAdminOptions(), "Advanced.ToggleViewAdminOptions");

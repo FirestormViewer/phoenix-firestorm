@@ -5207,6 +5207,12 @@
             <menu_item_call.on_click
              function="Advanced.CompressImage" />
         </menu_item_call>
+      <menu_item_call
+       label="Compress File Test"
+       name="Compress File Test">
+        <menu_item_call.on_click
+         function="Advanced.CompressFileTest" />
+      </menu_item_call>
 
       <menu_item_call
          label="Enable Visual Leak Detector"
