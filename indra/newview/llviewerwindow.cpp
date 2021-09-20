@@ -141,7 +141,8 @@
 #include "llmoveview.h"
 #include "llnavigationbar.h"
 #include "llnotificationhandler.h"
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llpopupview.h"
 #include "llpreviewtexture.h"
 #include "llprogressview.h"
@@ -7108,7 +7109,8 @@ void LLViewerWindow::setUIVisibility(bool visible)
 
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
-	LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
+	// <FS:Zi> We don't use the mini location panel in Firestorm
+	// LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
 	mRootView->getChildView("status_bar_container")->setVisible(visible);
 
 	// <FS:Zi> hide utility bar if we are on a skin that uses it, e.g. Vintage

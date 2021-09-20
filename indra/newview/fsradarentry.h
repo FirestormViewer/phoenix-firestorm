@@ -41,9 +41,10 @@ public:
 	~FSRadarEntry();
 
 	LLUUID		getId() const { return mID; }
-	std::string	getName() const { return mName; }
-	std::string	getUserName() const { return mUserName; }
-	std::string	getDisplayName() const { return mDisplayName; }
+	const std::string& getName() const { return mName; }
+	const std::string& getUserName() const { return mUserName; }
+	const std::string& getDisplayName() const { return mDisplayName; }
+	const std::string& getNotes() const { return mNotes; }
 	F32			getRange() const { return mRange; }
 	LLVector3d	getGlobalPos() const { return mGlobalPos; }
 	LLUUID		getRegion() const { return mRegion; }
@@ -54,7 +55,6 @@ public:
 	time_t		getLastZOffsetTime() const { return mLastZOffsetTime; }
 	bool		getIsLinden() const { return mIsLinden; }
 	bool		getIgnore() const { return mIgnore; }
-	bool		hasNotes() const { return mHasNotes; }
 	bool		hasAlertAge() const { return mAlertAge; }
 	bool		hasAgeAlertPerformed() const { return mAgeAlertPerformed; }
 
@@ -72,6 +72,7 @@ private:
 	std::string mName;
 	std::string mUserName;
 	std::string mDisplayName;
+	std::string mNotes;
 	F32			mRange;
 	LLVector3d	mGlobalPos;
 	LLUUID		mRegion;
@@ -82,7 +83,6 @@ private:
 	time_t		mLastZOffsetTime;
 	bool		mIsLinden;
 	bool		mIgnore;
-	bool		mHasNotes;
 	bool		mAlertAge;
 	bool		mAgeAlertPerformed;
 

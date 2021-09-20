@@ -1449,6 +1449,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="BodyPartsRightLeg">
 		Jambe droite
 	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		Squelette amélioré
+	</string>
 	<string name="GraphicsQualityLow">
 		Faible
 	</string>

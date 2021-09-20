@@ -66,7 +66,8 @@
 // </FS:Ansariel> [FS Communication UI]
 #include "llspeakers.h"
 #include "llnotificationsutil.h"
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llparcel.h"
 #include "llrendersphere.h"
 #include "llscriptruntimeperms.h"
@@ -2618,10 +2619,12 @@ void LLAgent::endAnimationUpdateUI()
 		LLNavigationBar::instance().getView()->setVisible(TRUE);
 		gStatusBar->setVisibleForMouselook(true);
 
-		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
-		{
-			LLPanelTopInfoBar::getInstance()->setVisible(TRUE);
-		}
+		// <FS:Zi> We don't use the mini location panel in Firestorm
+		// if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
+		// {
+		// 	LLPanelTopInfoBar::getInstance()->setVisible(TRUE);
+		// }
+		// </FS:Zi>
 
 		LLChicletBar::getInstance()->setVisible(TRUE);
 
@@ -2780,7 +2783,8 @@ void LLAgent::endAnimationUpdateUI()
 		LLNavigationBar::instance().getView()->setVisible(FALSE);
 		gStatusBar->setVisibleForMouselook(false);
 
-		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
+		// <FS:Zi> We don't use the mini location panel in Firestorm
+		// LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
 
 		LLChicletBar::getInstance()->setVisible(FALSE);
 
