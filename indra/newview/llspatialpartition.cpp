@@ -970,7 +970,9 @@ void LLSpatialGroup::destroyGL(bool keep_occlusion)
 		// <FS:Ansariel> Reset VB during TP
 		if (is_tree_group && drawable->getVObj())
 		{
-			((LLVOTree*)drawable->getVObj().get())->destroyVB();
+			auto votree = dynamic_cast<LLVOTree*>(drawable->getVObj().get());
+			if (votree)
+				votree->destroyVB();
 		}
 		// </FS:Ansariel>
 	}

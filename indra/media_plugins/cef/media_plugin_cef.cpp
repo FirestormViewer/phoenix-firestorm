@@ -141,6 +141,10 @@ MediaPluginBase(host_send_func, host_user_data)
 	mPickedFiles.clear();
 	mCurVolume = 0.0;
 
+#ifdef LL_LINUX
+	mDisableGPU = true;
+#endif
+	
 	mCEFLib = new dullahan();
 
 	setVolume();
@@ -533,9 +537,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mCEFLib->setOnCursorChangedCallback(std::bind(&MediaPluginCEF::onCursorChangedCallback, this, std::placeholders::_1));
 				mCEFLib->setOnRequestExitCallback(std::bind(&MediaPluginCEF::onRequestExitCallback, this));
 				mCEFLib->setOnJSDialogCallback(std::bind(&MediaPluginCEF::onJSDialogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-#ifndef LL_LINUX
 				mCEFLib->setOnJSBeforeUnloadCallback(std::bind(&MediaPluginCEF::onJSBeforeUnloadCallback, this));
-#endif
 				
 				dullahan::dullahan_settings settings;
 #if LL_WINDOWS
