@@ -29,7 +29,8 @@
 
 #include "llchiclet.h"
 #include "lllayoutstack.h"
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llsyswellwindow.h"
 #include "llfloaternotificationstabbed.h"
 
@@ -325,6 +326,8 @@ S32 LLChicletBar::getChicletPanelShrinkHeadroom() const
 
 void LLChicletBar::fitWithTopInfoBar()
 {
+	// <FS:Zi> We don't use the mini location panel in Firestorm
+	#if 0
 	LLPanelTopInfoBar& top_info_bar = LLPanelTopInfoBar::instance();
 
 	LLRect rect = getRect();
@@ -351,6 +354,8 @@ void LLChicletBar::fitWithTopInfoBar()
 
 	setRect(rect);
 	LLPanel::reshape(width, rect.getHeight(), false);
+	#endif
+	// </FS:Zi>
 }
 
 // <FS:Ansariel> Option to hide IM/Group chat chiclets

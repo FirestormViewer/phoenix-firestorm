@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="Outfit Gallery">
 	<string name="outfit_photo_string">
-		Zdjęcie stroju: "[OUTFIT_NAME]"
+		Zdjecie stroju: "[OUTFIT_NAME]"
 	</string>
 	<string name="no_outfits_msg">
 		Nie ma jeszcze żadnych strojów. Spróbuj [secondlife:///app/search/all/ Wyszukiwarki]

@@ -50,7 +50,6 @@
 				<combo_box.item label="10画面まで" name="web_10"/>
 			</combo_box>
 			<button label="ブラウザキャッシュをクリア" name="ClearWebBrowserCache" />
-			<check_box label="プラグインを有効にする" name="browser_plugins_enabled" />
 			<!--
 			<check_box label="Cookie を受け入れる" name="cookies_enabled" />
 			-->

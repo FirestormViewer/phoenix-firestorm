@@ -953,7 +953,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>http://phoenixviewer.com/app/loginV3/</string>
+            <string>https://phoenixviewer.com/app/loginV3/</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.aditi.lindenlab.com/cgi-bin/login.cgi</string>
@@ -986,7 +986,7 @@
             <string>agent</string>
         </array>
         <key>loginpage</key>
-        <string>http://phoenixviewer.com/app/loginV3/</string>
+        <string>https://phoenixviewer.com/app/loginV3/</string>
         <key>loginuri</key>
         <array>
             <string>https://login.agni.lindenlab.com/cgi-bin/login.cgi</string>

@@ -48,7 +48,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mAge(-1),
 	mIsLinden(false),
 	mIgnore(false),
-	mHasNotes(false),
+	mNotes(LLStringUtil::null),
 	mAlertAge(false),
 	mAgeAlertPerformed(false),
 	mAvatarNameCallbackConnection()
@@ -124,9 +124,10 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 		else if (type == APT_NOTES)
 		{
 			LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
-			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID)
+			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
-				mHasNotes = !avatar_notes->notes.empty();
+				mNotes = avatar_notes->notes;
+				LLStringUtil::trim(mNotes);
 			}
 		}
 	}
