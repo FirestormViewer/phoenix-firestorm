@@ -38,12 +38,11 @@
 #include "llfloatersnapshot.h" // FIXME: replace with a snapshot storage model
 #include "llpanelsnapshot.h"
 #include "llpostcard.h"
+#include "llregex.h"
 #include "llsnapshotlivepreview.h"
 #include "llviewercontrol.h" // gSavedSettings
 #include "llviewerwindow.h"
 #include "llviewerregion.h"
-
-#include <boost/regex.hpp>
 
 #include "llviewernetwork.h"
 
@@ -268,14 +267,14 @@ void LLPanelSnapshotPostcard::onSend()
 
 	boost::regex email_format("[A-Za-z0-9.%+-_]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}(,[ \t]*[A-Za-z0-9.%+-_]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})*");
 
-	if (to.empty() || !boost::regex_match(to, email_format))
+	if (to.empty() || !ll_regex_match(to, email_format))
 	{
 		LLNotificationsUtil::add("PromptRecipientEmail");
 		return;
 	}
 
 	// <FS:Ansariel> For OpenSim compatibility
-	if (!LLGridManager::instance().isInSecondLife() && (mAgentEmail.empty() || !boost::regex_match(mAgentEmail, email_format)))
+	if (!LLGridManager::instance().isInSecondLife() && (mAgentEmail.empty() || !ll_regex_match(mAgentEmail, email_format)))
 	{
 		LLNotificationsUtil::add("PromptSelfEmail");
 		return;
