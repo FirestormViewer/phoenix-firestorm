@@ -4264,7 +4264,11 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["FirstRunThisInstall"] = gSavedSettings.getBOOL("FirstRunThisInstall");
     gDebugInfo["StartupState"] = LLStartUp::getStartupStateString();
 
-	std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
+	// <FS:ND> FIRE-31153, do not use gViewerWindow->getWindow which equals nullptr at this point
+	//std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
+	std::vector<std::string> resolutions = LLWindow::getDisplaysResolutionList();
+	// </FS:ND>
+
 	for (auto res_iter : resolutions)
 	{
 		gDebugInfo["DisplayInfo"].append(res_iter);
@@ -4958,7 +4962,7 @@ bool LLAppViewer::initCache()
     //const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
     const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
     // </FS:Ansariel>
-    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024 * 1024;
+    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
 	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
 
 	bool texture_cache_mismatch = false;

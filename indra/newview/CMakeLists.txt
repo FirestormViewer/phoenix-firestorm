@@ -612,7 +612,7 @@ set(viewer_SOURCE_FILES
     llpanelteleporthistory.cpp
     llpaneltiptoast.cpp
     llpanelvoiceeffect.cpp
-    llpaneltopinfobar.cpp
+    #llpaneltopinfobar.cpp # <FS:Zi> unused
     llpanelpulldown.cpp
     llpanelvoicedevicesettings.cpp
     llpanelvolume.cpp
@@ -1378,7 +1378,7 @@ set(viewer_HEADER_FILES
     llpanelpulldown.h
     llpanelvoicedevicesettings.h
     llpanelvoiceeffect.h
-    llpaneltopinfobar.h
+    #llpaneltopinfobar.h # <FS:Zi> unused
     llpanelvolume.h
     llpanelvolumepulldown.h
     llpanelwearing.h

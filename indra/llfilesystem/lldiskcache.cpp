@@ -98,7 +98,7 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
 // asset will have to be re-requested.
 void LLDiskCache::purge()
 {
-    //if (mEnableCacheDebugInfo)
+    if (mEnableCacheDebugInfo)
     {
         LL_INFOS() << "Total dir size before purge is " << dirFileSize(mCacheDir) << LL_ENDL;
     }
@@ -120,7 +120,7 @@ void LLDiskCache::purge()
         //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(cache_path, ec), {}))
         for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(cache_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
+            if (!ec.failed() && (boost::filesystem::is_regular_file(entry, ec) && !ec.failed()))
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
@@ -205,7 +205,7 @@ void LLDiskCache::purge()
         }
     }
 
-    //if (mEnableCacheDebugInfo)
+    if (mEnableCacheDebugInfo)
     {
         auto end_time = std::chrono::high_resolution_clock::now();
         auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
@@ -506,7 +506,7 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
         //for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(dir_path, ec), {}))
         for (auto& entry : boost::make_iterator_range(boost::filesystem::recursive_directory_iterator(dir_path, ec), {}))
         {
-            if (boost::filesystem::is_regular_file(entry, ec) && !ec.failed())
+            if (!ec.failed() && (boost::filesystem::is_regular_file(entry, ec) && !ec.failed()))
             {
                 if (entry.path().string().find(mCacheFilenamePrefix) != std::string::npos)
                 {

@@ -10,7 +10,6 @@
 			<text name="Web:">
 				網頁:
 			</text>
-			<check_box label="啟用外掛" name="browser_plugins_enabled"/>
 			<check_box label="接受 cookies" name="cookies_enabled"/>
 			<check_box label="啟用 Javascript" name="browser_javascript_enabled"/>
 			<check_box label="啟用媒體瀏覽的突顯式視窗" name="media_popup_enabled"/>

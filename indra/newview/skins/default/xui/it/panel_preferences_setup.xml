@@ -37,7 +37,6 @@
 				<combo_box.item label="Dieci finestre" name="web_10"/>
 			</combo_box>
 			<button label="Cancella cache browser" name="ClearWebBrowserCache"/>
-			<check_box label="Abilita plugin" name="browser_plugins_enabled"/>
 			<check_box label="Accetta cookie" name="cookies_enabled"/>
 			<check_box label="Abilita Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Consenti pop-up nel browser" name="media_popup_enabled"/>

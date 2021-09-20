@@ -19,7 +19,6 @@
 				<combo_box.item label="Cinco ventanas" name="web_5"/>
 				<combo_box.item label="Diez ventanas" name="web_10"/>
 			</combo_box>
-			<check_box label="Activar plugins" name="browser_plugins_enabled"/>
 			<check_box label="Aceptar las &apos;cookies&apos;" name="cookies_enabled"/>
 			<check_box label="Activar Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Permitir las ventanas emergentes en el navegador" name="media_popup_enabled"/>

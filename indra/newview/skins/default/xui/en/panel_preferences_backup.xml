@@ -306,22 +306,22 @@ Settings groups to be restored (backup will always save all):
         <!-- We must have this entry before the other windlight entries to have the
              windlight/ base folder created. Since we can't hide rows make it so the
              user can't deselect it at least -->
-        <row enabled="false" name="restore_folders_row_windlight">
+        <row enabled="false" name="restore_folders_row_windlight" value="windlight">
             <column type="checkbox" name="restore_global_folders_check" value="true" enabled="false" />
             <column name="restore_global_folders_label">Windlight (Mandatory)</column>
             <column name="value">windlight</column>
         </row>
-        <row name="restore_folders_row_daycycles">
+        <row name="restore_folders_row_daycycles" value="windlight_daycycles">
             <column type="checkbox" name="restore_global_folders_check" value="true" />
             <column name="restore_global_folders_label">Windlight Day Cycles</column>
             <column name="value">windlight/days</column>
         </row>
-        <row name="restore_folders_row_skies">
+        <row name="restore_folders_row_skies" value="windlight_skies">
             <column type="checkbox" name="restore_global_folders_check" value="true" />
             <column name="restore_global_folders_label">Windlight Skies</column>
             <column name="value">windlight/skies</column>
         </row>
-        <row name="restore_folders_row_waters">
+        <row name="restore_folders_row_waters" value="windlight_water">
             <column type="checkbox" name="restore_global_folders_check" value="true" />
             <column name="restore_global_folders_label">Windlight Waters</column>
             <column name="value">windlight/water</column>
