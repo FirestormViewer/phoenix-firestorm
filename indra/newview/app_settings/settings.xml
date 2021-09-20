@@ -24235,7 +24235,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://phoenixviewer.com/app/loginV3/secondlifegrid.xml</string>
+      <string>https://phoenixviewer.com/app/loginV3/secondlifegrid.xml</string>
     </map>
     <key>FSIgnoreAdHocSessions</key>
     <map>
