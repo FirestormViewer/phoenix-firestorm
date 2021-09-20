@@ -535,6 +535,8 @@ public:
 };
 
 void initializeSecHandler();
+
+void clearSecHandler();
 				
 // retrieve a security api depending on the api type
 LLPointer<LLSecAPIHandler> getSecHandler(const std::string& handler_type);
