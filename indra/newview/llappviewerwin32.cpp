@@ -144,8 +144,6 @@ namespace
             // second instance does not have own log files
             if (!LLAppViewer::instance()->isSecondInstance())
             {
-                // send the main viewer log file
-                // widen to wstring, convert to __wchar_t, then pass c_str()
                 // <FS:ND> We don't send log files
                 // sBugSplatSender->sendAdditionalFile(
                 //     WCSTR(LLError::logFileName()));
