@@ -11,7 +11,27 @@
 		<menu_item_call label="Favoris..." name="Picks"/>
 		<menu_item_call label="Expériences..." name="Experiences"/>
 		<menu_item_call label="Profil..." name="Profile"/>
-		<menu_item_check label="Apparence..." name="ChangeOutfit"/>
+		<menu_item_call label="Mon apparence" name="NowWearing" />
+		<menu_item_check label="Tenues" name="ChangeOutfit"/>
+		<menu label="Enlever" name="Take Off &gt;">
+			<menu label="Vêtements" name="Clothes &gt;">
+				<menu_item_call label="Chemise" name="Shirt" />
+				<menu_item_call label="Pantalons" name="Pants" />
+				<menu_item_call label="Jupe" name="Skirt" />
+				<menu_item_call label="Chaussures" name="Shoes" />
+				<menu_item_call label="Chaussettes" name="Socks" />
+				<menu_item_call label="Veste" name="Jacket" />
+				<menu_item_call label="Gants" name="Gloves" />
+				<menu_item_call label="Maillot de corps" name="Self Undershirt" />
+				<menu_item_call label="Caleçon" name="Self Underpants" />
+				<menu_item_call label="Tatouage" name="Self Tattoo" />
+				<menu_item_call label="Physiques" name="Self Physics" />
+				<menu_item_call label="Couches alpha" name="Self Alpha" />
+				<menu_item_call label="Tous les vêtements" name="All Clothes" />
+			</menu>
+			<menu label="Détacher" name="Avatar Detach" />
+			<menu_item_call label="Tout détacher" name="Detach All" />
+		</menu>
 		<menu_item_call label="Choisir un avatar..." name="Avatar Picker"/>
 		<menu label="Déplacements" name="Movement">
 			<menu_item_call label="M&apos;asseoir" name="Sit Down Here"/>
@@ -40,7 +60,7 @@
 		</menu>
 		<menu_item_call label="Photo" name="Take Snapshot"/>
 		<menu_item_call label="Suivi des transactions" name="money_tracker"/>
-		<menu_item_call label="Pose Stand..." name="pose_stand"/>
+		<menu_item_call label="Stand de pose..." name="pose_stand"/>
 		<menu_item_call label="Préférences..." name="Preferences"/>
 		<menu_item_call label="Boutons de la barre d'outils" name="Toolbar Buttons"/>
 		<menu_item_check label="Afficher les éléments HUD" name="Show HUD Attachments"/>
@@ -97,6 +117,7 @@
 		<menu_item_call label="Définir le domicile ici" name="Set Home to Here"/>
 		<menu_item_call label="Acheter ce terrain" name="Buy Land"/>
 		<menu_item_call label="Mes terrains..." name="My Land"/>
+		<menu_item_call label="Ma maison (Linden Home)" name="Linden Home"/>
 		<menu label="Afficher" name="LandShow">
 			<menu_item_check label="Lignes d&apos;interdiction" name="Ban Lines"/>
 			<menu_item_check label="Balises" name="beacons"/>
@@ -233,6 +254,7 @@
 		<menu_item_call label="Rejoindre un groupe d'aide Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Horaires des classes Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Calendrier des évènements Firestorm" name="Firestorm Events Calendar"/>
+		<menu_item_call label="Guide" name="How To"/>
 		<menu_item_call label="Aide [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="À propos de [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_check label="Consulter l'état de la grille" name="Grid Status"/>

@@ -7,7 +7,6 @@
 			</text>
 			<check_box label="Speciel port" name="connection_port_enabled"/>
 			<spinner label="Port nummer:" name="connection_port"/>
-			<check_box label="Aktivér plugins" name="browser_plugins_enabled"/>
 			<check_box label="Acceptér cookies" name="cookies_enabled"/>
 			<check_box label="Aktivér Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Tilad media browser pop-ups" name="media_popup_enabled"/>

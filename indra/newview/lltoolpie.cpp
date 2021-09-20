@@ -698,7 +698,14 @@ bool LLToolPie::walkToClickedLocation()
         }
 // [/RLVa:KB]
 
-        gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+        // <FS:PP> FIRE-31135 Do not reset camera position for "click to walk"
+        // gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+        static LLCachedControl<bool> sResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+        if (sResetCameraOnMovement)
+        {
+            gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+        }
+        // </FS:PP>
 
         if (mAutoPilotDestination) { mAutoPilotDestination->markDead(); }
         mAutoPilotDestination = (LLHUDEffectBlob *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BLOB, FALSE);

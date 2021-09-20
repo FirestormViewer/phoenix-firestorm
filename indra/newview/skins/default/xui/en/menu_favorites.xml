@@ -13,6 +13,18 @@
          parameter="open" />
     </menu_item_call>
     <menu_item_call
+     label="Show on Map"
+     layout="topleft"
+     name="Show On Map">
+        <menu_item_call.on_click
+         function="Favorites.DoToSelected"
+         parameter="show_on_map" />
+    </menu_item_call>
+
+    <menu_item_separator
+     layout="topleft" />
+
+    <menu_item_call
      label="View/Edit Landmark"
      layout="topleft"
      name="Landmark Open">
@@ -27,14 +39,6 @@
         <menu_item_call.on_click
          function="Favorites.DoToSelected"
          parameter="move_to_landmarks" />
-    </menu_item_call>
-    <menu_item_call
-     label="Show on Map"
-     layout="topleft"
-     name="Show On Map">
-        <menu_item_call.on_click
-         function="Favorites.DoToSelected"
-         parameter="show_on_map" />
     </menu_item_call>
     <menu_item_call
      label="Copy SLurl"

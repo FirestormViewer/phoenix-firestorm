@@ -24,7 +24,6 @@
 				<combo_box.item label="Dix fenêtres" name="web_10"/>
 			</combo_box>
 			<button label="Vider le cache du navigateur" width="190" name="ClearWebBrowserCache"/>
-			<check_box label="Activer les plugins" name="browser_plugins_enabled"/>
 			<check_box label="Accepter les cookies" name="cookies_enabled"/>
 			<check_box label="Activer JavaScript" name="browser_javascript_enabled"/>
 			<check_box label="Activer les pop-up dans le navigateur" name="media_popup_enabled"/>

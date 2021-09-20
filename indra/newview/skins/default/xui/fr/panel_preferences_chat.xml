@@ -17,6 +17,7 @@
 			<check_box name="FSMarkObjects" label="Renommer les objets sans nom qui parlent avec '(aucun nom)' pour éviter les confusions"/>
 			<check_box label="Rediriger les messages émis avec llOwnerSay dans la fenêtre de débogage de script" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
 			<check_box label="Afficher des bulles de discussion" name="bubble_text_chat"/>
+			<check_box label="Ne pas afficher les discussions dans la console de discussions à proximité et les toasts" name="FSBubblesHideConsoleAndToasts"/>
 			<check_box label="Afficher l'indicateur de saisie de texte dans les bulles de discussion" name="bubble_text_typing"/>
 			<check_box label="Afficher l'indicateur de saisie de texte dans le nom flottant au-dessus des avatars" name="FSShowTypingStateInNameTag"/>
 			<check_box name="FSSecondsinChatTimestamps" label="Afficher les secondes dans les timestamps [HH:MM:SS]"/>

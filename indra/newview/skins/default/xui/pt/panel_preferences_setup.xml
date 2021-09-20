@@ -10,7 +10,6 @@
 			<text name="Web:">
 				Web:
 			</text>
-			<check_box label="Habilitar plugins" name="browser_plugins_enabled"/>
 			<check_box label="Aceitar cookies" name="cookies_enabled"/>
 			<check_box label="Habilitar Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Ativar pop-ups no navegador de mídia" name="media_popup_enabled"/>

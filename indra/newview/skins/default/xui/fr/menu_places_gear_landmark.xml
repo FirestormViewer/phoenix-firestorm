@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_ladmark_gear">
 	<menu_item_call label="Téléporter" name="teleport"/>
-	<menu_item_call label="Plus d'informations" name="more_info"/>
 	<menu_item_call label="Voir sur la carte" name="show_on_map"/>
+	<menu_item_call label="Plus d'informations" name="more_info"/>
 	<menu_item_call label="Créer un repère" name="add_landmark"/>
 	<menu_item_call label="Créer un dossier" name="add_folder"/>
 	<menu_item_call label="Restaurer l'objet" name="restore_item"/>
