@@ -4835,6 +4835,12 @@ Bitte kopieren Sie diese in Ihr Inventar und versuchen Sie es erneut.
 	<notification name="TrackLoadMismatch">
 		Der Pfad konnte nicht aus [TRACK1] in [TRACK2] geladen werden.
 	</notification>
+	<notification name="CompressionTestResults">
+		Test-Ergebnis für gip-Level 6 Datei-Komprimierung für [FILE] mit Größe [SIZE] KB:
+Packen: [PACK_TIME]s [PSIZE]KB
+Entpacken: [UNPACK_TIME]s [USIZE]KB
+    <tag>fail</tag>
+  </notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		
