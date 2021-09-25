@@ -472,7 +472,8 @@ void LLFloaterPerformance::populateNearbyList()
 
             // S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
             auto render_av  = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
-            auto is_slow = avatar->isTooSlow();
+            auto is_slow = avatar->isTooSlow(true);
+            // auto is_slow_without_shadows = avatar->isTooSlow();
 
             LLSD item;
             item["id"] = avatar->getID();

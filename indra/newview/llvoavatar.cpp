@@ -601,7 +601,7 @@ bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonIm
 F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
-
+U64 LLVOAvatar::sRenderTimeCap_ns {0};
 // const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df"); - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
@@ -4696,7 +4696,7 @@ void LLVOAvatar::updateFootstepSounds()
 void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
-	bool slow = isTooSlow();
+	bool slow = isTooSlow();// the geometry alone is forcing this to be slow so we must imposter
 	if (mDrawable.notNull()
 		&& slow
         && isVisible() 
@@ -9124,37 +9124,71 @@ BOOL LLVOAvatar::isFullyLoaded() const
 }
 
 // <FS:Beq> use Avatar Render Time as complexity metric
+void LLVOAvatar::markARTStale()
+{
+	// mark stale and set the frameupdate to now so that we can wait at least one frame.
+	mARTStale=true;
+	mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+}
+
+// default will test only the geometry (combined=false).
+// this allows us to disable shadows separately on complex avatars.
 //virtual
-bool LLVOAvatar::isTooSlow() const
+bool LLVOAvatar::isTooSlow(bool combined) const
 {
 	static LLCachedControl<bool> use_render_time(gSavedSettings, "RenderAvatarUseART");
 	auto now = LLTimer::getElapsedSeconds();
-	if( ( mLastARTTime > 0 ) && ( now > (mLastARTTime + 2.0) ) ) //TODO(Beq) make this a constant. how frequently do we decloak to refresh the render time
+	auto abuse_constness = const_cast<LLVOAvatar*>(this);
+
+	if( mARTStale )
 	{
-		// LL_INFOS() << this->getFullname() << " timer expired need refresh mLastARTTime=" << mLastARTTime << " time now="<<now << "("<<now-mLastARTTime<< ")" << LL_ENDL;
-		// cached ART is stale
-		const_cast<LLVOAvatar*>(this)->mLastARTTime = 0;
-		return false; // force a render
-	}
-	else if (mLastARTTime == 0)
-	{
-		static LLCachedControl<F32> render_time_cap(gSavedSettings, "RenderAvatarMaxART");
-		auto render_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_COMBINED);
-		if( (render_time_cap > 0.0) && (render_time >= llround(render_time_cap*1000000)) )
+		if (LLFrameTimer::getFrameCount() - mLastARTUpdateFrame < 2 )
 		{
-			const_cast<LLVOAvatar*>(this)->mLastARTTime = gFrameTimeSeconds;
-			const_cast<LLVOAvatar*>(this)->mLastART = render_time;
-			// LL_INFOS() << this->getFullname() << " (imposter) mLastART too high =" << mLastART << " vs ("<< llround(render_time_cap*1000000) << " set @ " << mLastARTTime << LL_ENDL;
-			return true;
-		}
-		else
-		{
-			// LL_INFOS() << this->getFullname() << " good render time " << LL_ENDL;
+			LL_INFOS() << this->getFullname() << " marked stale " << LL_ENDL;
+			// we've not had a chance to update yet (allow now+1 to be certain a full frame has passed)
 			return false;
 		}
+
+		abuse_constness->mARTStale = false;
+		abuse_constness->mARTCapped = false;
+		LL_INFOS() << this->getFullname() << " refreshed ART combined = " << mRenderTime << " @ " << mLastARTUpdateFrame << LL_ENDL;
 	}
-	// timer has not expired and time is non zero so must be true.
-	return true;
+
+	// Either we're not stale or we've updated.
+	U64 render_time;
+	U64 render_geom_time;
+
+	if(!mARTCapped)
+	{
+		// no cap, so we use the live values
+		render_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_COMBINED);
+		render_geom_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_GEOMETRY);
+	}
+	else
+	{
+		// use the cached values.
+		render_time = mRenderTime;
+		render_geom_time = mGeomTime;		
+	}
+	if( (LLVOAvatar::sRenderTimeCap_ns > 0) && (render_time >= LLVOAvatar::sRenderTimeCap_ns) ) 
+	{
+		if(!mARTCapped)
+		{			
+			// if we weren't capped, we are now
+			abuse_constness->mRenderTime = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_COMBINED);
+			abuse_constness->mGeomTime = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_GEOMETRY);
+			abuse_constness->mARTStale = false;
+			abuse_constness->mARTCapped = true;
+			abuse_constness->mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+			LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << render_time << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+		}
+		// return true only if that is the case in the context of the combined/geom_only flag.
+		return combined ? true : (render_geom_time >= LLVOAvatar::sRenderTimeCap_ns);
+	}
+
+	LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << render_time << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+	abuse_constness->mARTCapped = false;
+	return false;
 }
 // </FS:Beq>
 
@@ -11452,10 +11486,9 @@ BOOL LLVOAvatar::isImpostor()
 {
 	return (
 			isVisuallyMuted() || 
-			(
-			 (sLimitNonImpostors || isTooSlow() ) && 
-			 (mUpdatePeriod > 1) 
-			);
+			( (sLimitNonImpostors || isTooSlow(false) ) && 
+			  (mUpdatePeriod > 1) ) 
+	);
 }
 
 BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
@@ -11470,7 +11503,7 @@ BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 	}
 	static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
 	
-	if (isTooSlow() && render_jellys_As_imposters)
+	if (isTooSlow(false) && render_jellys_As_imposters)
 	{
 		return true;
 	}

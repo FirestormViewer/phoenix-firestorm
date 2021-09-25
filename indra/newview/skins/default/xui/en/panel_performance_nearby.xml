@@ -101,7 +101,7 @@
     label_width="165"
     layout="topleft"
     min_val="0.01"
-    max_val="10.0"
+    max_val="50.0"
     name="RenderAvatarMaxART"
     show_text="false"
     left_delta="-304"

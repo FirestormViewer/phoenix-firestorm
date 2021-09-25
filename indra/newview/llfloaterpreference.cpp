@@ -2879,9 +2879,17 @@ void LLAvatarComplexityControls::updateMaxRenderTime(LLSliderCtrl* slider, LLTex
 	// Called when the IndirectMaxComplexity control changes
 	// Responsible for fixing the slider label (IndirectMaxComplexityText) and setting RenderAvatarMaxComplexity
 	auto indirect_value = slider->getValue().asReal();
-	
 	gSavedSettings.setF32("RenderAvatarMaxART", indirect_value);
-	setRenderTimeText(indirect_value, value_label, short_val);
+	if(indirect_value == slider->getMaxValue())
+	{
+		LLVOAvatar::sRenderTimeCap_ns = 0;
+		setRenderTimeText(0.0, value_label, short_val);
+	}
+	else
+	{
+		LLVOAvatar::sRenderTimeCap_ns = llround(indirect_value * 1000000);
+		setRenderTimeText(indirect_value, value_label, short_val);
+	}
 }
 
 void LLAvatarComplexityControls::setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val)

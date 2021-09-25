@@ -355,6 +355,7 @@ public:
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
 	static BOOL		sDebugAvatarRotation;
+	static U64		sRenderTimeCap_ns; // nanosecond time limit for avatar rendering 0 is unlimited. 
 	static LLPartSysData sCloud;
 
 	//--------------------------------------------------------------------
@@ -368,7 +369,7 @@ public:
 	//--------------------------------------------------------------------
 public:
 	BOOL			isFullyLoaded() const;
-	virtual bool 	isTooSlow() const;
+	virtual bool 	isTooSlow(bool combined = false) const;
 	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
 	bool 			visualParamWeightsAreDefault();
 	virtual bool	getIsCloud() const;
@@ -390,6 +391,7 @@ public:
 	void 			logMetricsTimerRecord(const std::string& phase_name, F32 elapsed, bool completed);
 
     void            calcMutedAVColor();
+	void			markARTStale();
 
 protected:
 	LLViewerStats::PhaseMap& getPhases() { return mPhases; }
@@ -407,8 +409,11 @@ private:
 	LLColor4		mMutedAVColor;
 	LLFrameTimer	mFullyLoadedTimer;
 	LLFrameTimer	mRuthTimer;
-	F64SecondsImplicit	mLastARTTime{0};
-	U64				mLastART{0};
+	U32				mLastARTUpdateFrame{0};
+	U64				mRenderTime{0};
+	U64				mGeomTime{0};
+	bool			mARTStale{true};
+	bool			mARTCapped{false};
 
 private:
 	LLViewerStats::PhaseMap mPhases;
@@ -1192,7 +1197,7 @@ public:
 	// COF version of last appearance message received for this av.
 	S32 mLastUpdateReceivedCOFVersion;
 
-	U64 getLastART() const { return mLastART; }
+	U64 getLastART() const { return mRenderTime; }
 
 /**                    Diagnostics
  **                                                                            **

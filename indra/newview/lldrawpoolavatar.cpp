@@ -587,7 +587,8 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	// if (oa == LLVOAvatar::AOA_INVISIBLE ||
 	// 	(impostor && oa == LLVOAvatar::AOA_JELLYDOLL))
 	// Note: Impostors should not cast shadows, also all JDs are impostor nowadays so we do not need the extra check at all.
-	if (impostor || (oa == LLVOAvatar::AOA_INVISIBLE) )
+	// also no shadows if the shadows are causing this avatar to breach the limit.
+	if ( avatarp->isTooSlow(true) || impostor || (oa == LLVOAvatar::AOA_INVISIBLE) )
 	// </FS:Beq>
 	{
 		// No shadows for jellydolled or invisible avs.
