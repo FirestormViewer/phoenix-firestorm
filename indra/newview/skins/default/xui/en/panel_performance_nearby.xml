@@ -58,6 +58,7 @@
   </text>
   <slider
     control_name="IndirectMaxComplexity"
+    visible="false"
     tool_tip="Controls at what point a visually complex avatar is drawn as a JellyDoll"
     follows="left|top"
     height="16"
@@ -76,6 +77,7 @@
   </slider>
   <text
     type="string"
+    visible="false"
     length="1"
     follows="left|top"
     height="16"
@@ -87,6 +89,50 @@
     width="65">
     0
   </text>
+  <slider
+    control_name="RenderAvatarMaxART"
+    tool_tip="Controls when a visually complex avatar is considered to be taking too long to render"
+    follows="left|top"
+    height="16"
+    initial_value="10.0"
+    increment="0.01"
+    label="Maximum render time (ms)"
+    text_color="White"
+    label_width="165"
+    layout="topleft"
+    min_val="0.01"
+    max_val="10.0"
+    name="RenderAvatarMaxART"
+    show_text="false"
+    left_delta="-304"
+    top_delta="-16"
+    width="300">
+  </slider>
+  <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="16"
+    layout="topleft"
+    top_delta="0"
+    left_delta="304"
+    text_color="White"
+    name="RenderAvatarMaxARTText"
+    width="65">
+    0
+  </text>
+  <check_box
+  control_name="FSAutoTuneFPS"
+  height="16"
+  initial_value="false"
+  label="Auto tune for FPS"
+  layout="topleft"
+  left_pad="5"
+  name="AutoTuneFPS"
+  top_delta="0"
+  tool_tip="FS will attempt to adjust settings to meet the target FPS."
+  width="50">
+ </check_box>
   <name_list
     column_padding="0"
     draw_stripes="true"

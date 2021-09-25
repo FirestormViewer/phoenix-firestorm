@@ -368,6 +368,7 @@ public:
 	//--------------------------------------------------------------------
 public:
 	BOOL			isFullyLoaded() const;
+	virtual bool 	isTooSlow() const;
 	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
 	bool 			visualParamWeightsAreDefault();
 	virtual bool	getIsCloud() const;
@@ -406,6 +407,8 @@ private:
 	LLColor4		mMutedAVColor;
 	LLFrameTimer	mFullyLoadedTimer;
 	LLFrameTimer	mRuthTimer;
+	F64SecondsImplicit	mLastARTTime{0};
+	U64				mLastART{0};
 
 private:
 	LLViewerStats::PhaseMap mPhases;
@@ -1188,6 +1191,8 @@ public:
 
 	// COF version of last appearance message received for this av.
 	S32 mLastUpdateReceivedCOFVersion;
+
+	U64 getLastART() const { return mLastART; }
 
 /**                    Diagnostics
  **                                                                            **

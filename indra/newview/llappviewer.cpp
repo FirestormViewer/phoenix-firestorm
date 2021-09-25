@@ -1970,7 +1970,7 @@ bool LLAppViewer::doFrame()
     LLPROFILE_UPDATE();
 	}
 	FSTelemetry::RecordSceneTime::toggleBuffer();
-	FSTelemetry::RecordObjectTime<LLVOAvatar*>::toggleBuffer();
+	FSTelemetry::RecordObjectTime<const LLVOAvatar*>::toggleBuffer();
 
 	return ! LLApp::isRunning();
 }

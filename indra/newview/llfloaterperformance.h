@@ -65,6 +65,8 @@ private:
 
     void updateMaxComplexity();
     void updateComplexityText();
+    void updateMaxRenderTime();
+    void updateMaxRenderTimeText();
 
     void getNearbyAvatars(std::vector<LLCharacter*> &valid_nearby_avs);
 
@@ -84,6 +86,7 @@ private:
     S32 mNearbyMaxComplexity;
 
     boost::signals2::connection	mComplexityChangedSignal;
+    boost::signals2::connection	mMaxARTChangedSignal;
 };
 
 #endif // LL_LLFLOATERPERFORMANCE_H

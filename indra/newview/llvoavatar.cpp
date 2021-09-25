@@ -4696,11 +4696,13 @@ void LLVOAvatar::updateFootstepSounds()
 void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
+	bool slow = isTooSlow();
 	if (mDrawable.notNull()
+		&& slow
         && isVisible() 
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
-        && (sLimitNonImpostors || visually_muted)
+        && (sLimitNonImpostors || visually_muted || slow) // <FS:Beq> imposter slow avatars irrespective of nonimposter setting.
         && !mNeedsAnimUpdate 
         && !sFreezeCounter)
 	{
@@ -4712,8 +4714,11 @@ void LLVOAvatar::computeUpdatePeriod()
 		const S32 UPDATE_RATE_SLOW = 64;
 		const S32 UPDATE_RATE_MED = 48;
 		const S32 UPDATE_RATE_FAST = 32;
-		
-		if (visually_muted)
+		if(slow)
+		{
+			mUpdatePeriod = UPDATE_RATE_FAST;
+		}
+		else if (visually_muted)
 		{   // visually muted avatars update at lowest rate
 			mUpdatePeriod = UPDATE_RATE_SLOW;
 		}
@@ -9118,6 +9123,41 @@ BOOL LLVOAvatar::isFullyLoaded() const
 //	return (mRenderUnloadedAvatar || mFullyLoaded);
 }
 
+// <FS:Beq> use Avatar Render Time as complexity metric
+//virtual
+bool LLVOAvatar::isTooSlow() const
+{
+	static LLCachedControl<bool> use_render_time(gSavedSettings, "RenderAvatarUseART");
+	auto now = LLTimer::getElapsedSeconds();
+	if( ( mLastARTTime > 0 ) && ( now > (mLastARTTime + 2.0) ) ) //TODO(Beq) make this a constant. how frequently do we decloak to refresh the render time
+	{
+		// LL_INFOS() << this->getFullname() << " timer expired need refresh mLastARTTime=" << mLastARTTime << " time now="<<now << "("<<now-mLastARTTime<< ")" << LL_ENDL;
+		// cached ART is stale
+		const_cast<LLVOAvatar*>(this)->mLastARTTime = 0;
+		return false; // force a render
+	}
+	else if (mLastARTTime == 0)
+	{
+		static LLCachedControl<F32> render_time_cap(gSavedSettings, "RenderAvatarMaxART");
+		auto render_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_COMBINED);
+		if( (render_time_cap > 0.0) && (render_time >= llround(render_time_cap*1000000)) )
+		{
+			const_cast<LLVOAvatar*>(this)->mLastARTTime = gFrameTimeSeconds;
+			const_cast<LLVOAvatar*>(this)->mLastART = render_time;
+			// LL_INFOS() << this->getFullname() << " (imposter) mLastART too high =" << mLastART << " vs ("<< llround(render_time_cap*1000000) << " set @ " << mLastARTTime << LL_ENDL;
+			return true;
+		}
+		else
+		{
+			// LL_INFOS() << this->getFullname() << " good render time " << LL_ENDL;
+			return false;
+		}
+	}
+	// timer has not expired and time is non zero so must be true.
+	return true;
+}
+// </FS:Beq>
+
 bool LLVOAvatar::isTooComplex() const
 {
 	bool too_complex;
@@ -10132,7 +10172,6 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	//bool enable_verbose_dumps = gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
 	static LLCachedControl<bool> enable_verbose_dumps(gSavedSettings, "DebugAvatarAppearanceMessage");
 	// </FS:CR>
-	std::string dump_prefix = getFullname() + "_" + (isSelf()?"s":"o") + "_";
 	if (gSavedSettings.getBOOL("BlockAvatarAppearanceMessages"))
 	{
 		LL_WARNS() << "Blocking AvatarAppearance message" << LL_ENDL;
@@ -10145,6 +10184,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	parseAppearanceMessage(mesgsys, *contents);
 	if (enable_verbose_dumps)
 	{
+		std::string dump_prefix = getFullname() + "_" + (isSelf()?"s":"o") + "_";
 		dumpAppearanceMsgParams(dump_prefix + "appearance_msg", *contents);
 	}
 
@@ -10426,6 +10466,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 
 	updateMeshTextures();
 	updateMeshVisibility();
+	markARTStale();
 
 }
 
@@ -11409,7 +11450,12 @@ void LLVOAvatar::updateImpostors()
 // virtual
 BOOL LLVOAvatar::isImpostor()
 {
-	return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
+	return (
+			isVisuallyMuted() || 
+			(
+			 (sLimitNonImpostors || isTooSlow() ) && 
+			 (mUpdatePeriod > 1) 
+			);
 }
 
 BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
@@ -11419,6 +11465,12 @@ BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 		return false;
 	}
 	if (isVisuallyMuted())
+	{
+		return true;
+	}
+	static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
+	
+	if (isTooSlow() && render_jellys_As_imposters)
 	{
 		return true;
 	}
@@ -11712,6 +11764,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
                         LLHUDComplexity hud_object_complexity;
                         hud_object_complexity.objectName = attached_object->getAttachmentItemName();
                         hud_object_complexity.objectId = attached_object->getAttachmentItemID();
+						hud_object_complexity.objectPtr = attached_object;
                         std::string joint_name;
                         gAgentAvatarp->getAttachedPointName(attached_object->getAttachmentItemID(), joint_name);
                         hud_object_complexity.jointName = joint_name;

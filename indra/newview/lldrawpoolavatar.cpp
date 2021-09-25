@@ -579,7 +579,7 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	{
 		return;
 	}
-	FSTelemetry::RecordObjectTime<LLVOAvatar*> T(avatarp, FSTelemetry::ObjStatType::RENDER_SHADOWS);
+	FSTelemetry::RecordObjectTime<const LLVOAvatar*> T(avatarp, FSTelemetry::ObjStatType::RENDER_SHADOWS);
 
 	LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
 	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
@@ -1500,7 +1500,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
-	FSTelemetry::RecordObjectTime<LLVOAvatar*> T(avatarp, FSTelemetry::ObjStatType::RENDER_GEOMETRY);
+	FSTelemetry::RecordObjectTime<const LLVOAvatar*> T(avatarp, FSTelemetry::ObjStatType::RENDER_GEOMETRY);
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);

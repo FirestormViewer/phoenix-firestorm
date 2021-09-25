@@ -129,7 +129,13 @@ BOOL LLFloaterPerformance::postBuild()
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateComplexityText, this));
     mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxComplexity, this));
 
+    updateMaxRenderTime();
+    updateMaxRenderTimeText();
+    mMaxARTChangedSignal = gSavedSettings.getControl("RenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateMaxRenderTimeText, this));
+    mNearbyPanel->getChild<LLSliderCtrl>("RenderAvatarMaxART")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
+
     LLAvatarComplexityControls::setIndirectMaxArc();
+
 
     return TRUE;
 }
@@ -157,7 +163,10 @@ void LLFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
 void LLFloaterPerformance::draw()
 {
     const S32 NUM_PERIODS = 50;
-    static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
+    static LLCachedControl<U32> fps_cap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
+    static LLCachedControl<U32> target_fps(gSavedSettings, "FSTargetFPS"); // desired FPS
+    static LLCachedControl<bool> auto_tune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
+    static LLCachedControl<F32> max_render_cost(gSavedSettings, "RenderAvatarMaxART", 0);    
 
     if (mUpdateTimer->hasExpired())
     {
@@ -166,8 +175,9 @@ void LLFloaterPerformance::draw()
         auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
         auto tot_frame_time_ns = 1000000000/fps;
-        auto tot_avatar_time = FSTelemetry::RecordObjectTime<LLVOAvatar*>::getSum(FSTelemetry::ObjStatType::RENDER_COMBINED);
-        auto tot_huds_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_HUDS);
+        auto target_frame_time_ns = 1000000000/(target_fps==0?1:target_fps);
+        auto tot_avatar_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::getSum(FSTelemetry::ObjStatType::RENDER_COMBINED);
+        auto tot_huds_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_HUDS) ;
         auto tot_sleep_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_SLEEP);
         auto tot_ui_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_UI);
         auto tot_idle_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_IDLE);
@@ -198,27 +208,82 @@ void LLFloaterPerformance::draw()
         args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
         args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
         args["SCENE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_time));
-        args["FPSCAP"] = llformat("%02u", (U32)max_fps);
+        args["FPSCAP"] = llformat("%02u", (U32)fps_cap);
+        args["FPSTARGET"] = llformat("%02u", (U32)target_fps);
 
         getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
+        getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
         getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
         
-        auto textbox = getChild<LLTextBox>("fps_sleep_warning");
+        auto textbox = getChild<LLTextBox>("fps_warning");
         if(tot_sleep_time > 0) // We are sleeping because view is not focussed
         {
             textbox->setVisible(true);
             textbox->setText(getString("focus_fps"));
+            textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
         }
         else if (tot_limit_time > 0)
         {
             textbox->setVisible(true);
             textbox->setText(getString("limit_fps", args));
+            textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
+        }
+        else if(auto_tune)
+        {
+            textbox->setVisible(true);
+            textbox->setText(getString("tuning_fps", args));
+            textbox->setColor(LLUIColorTable::instance().getColor("green"));
         }
         else
         {
             textbox->setVisible(false);
         }
 
+        if( auto_tune )
+        {
+            auto av_render_max = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
+
+            // if( target_frame_time_ns <= tot_frame_time_ns )
+            // {
+            //     U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time;
+            //     if( non_avatar_time_ns < target_frame_time_ns )
+            //     {
+            //         F32 target_avatar_time_ms {F32(target_frame_time_ns-non_avatar_time_ns)/1000000};
+            //         gSavedSettings.setF32( "RenderAvatarMaxART",  target_avatar_time_ms / LLVOAvatar::sMaxNonImpostors );
+            //         LL_INFOS() << "AUTO_TUNE: Target frame time:"<<target_frame_time_ns/1000000 << " (non_avatar is " << non_avatar_time_ns/1000000 << ") Avatar budget=" << max_render_cost << " x " << LLVOAvatar::sMaxNonImpostors << LL_ENDL;
+            //     }
+            // }
+
+            if( target_frame_time_ns <= tot_frame_time_ns )
+            {
+                LL_INFOS() << "AUTO_TUNE: adapting frame rate" << LL_ENDL;
+                U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time;
+                LL_INFOS() << "AUTO_TUNE: adapting frame rate: target_frame=" << target_frame_time_ns << " nonav_frame_time=" << non_avatar_time_ns << " headroom=" << target_frame_time_ns - non_avatar_time_ns << LL_ENDL;
+                if( non_avatar_time_ns < target_frame_time_ns )
+                {
+                    U64 target_avatar_time_ns {target_frame_time_ns-non_avatar_time_ns};
+                    LL_INFOS() << "AUTO_TUNE: avatar_budget:" << target_avatar_time_ns << LL_ENDL;
+                    if(target_avatar_time_ns < tot_avatar_time)
+                    {
+                        F32 new_render_limit = (F32)(av_render_max-100000)/1000000;
+                        if(new_render_limit >= max_render_cost)
+                        {
+                            // we caught a bad frame possibly with a forced refresh render.
+                            new_render_limit = max_render_cost - 0.1;  
+                        }
+                        gSavedSettings.setF32( "RenderAvatarMaxART",  new_render_limit);
+                        LL_INFOS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit << LL_ENDL;
+                    }
+                    LL_INFOS() << "AUTO_TUNE: Target frame time:"<<target_frame_time_ns/1000000 << " (non_avatar is " << non_avatar_time_ns/1000000 << ") Max cost limited=" << max_render_cost << LL_ENDL;
+                }
+            }
+            else 
+                if( target_frame_time_ns > (tot_frame_time_ns + max_render_cost))
+            {
+                // if we have more space to spare let's shift up little in the hope we'll restore an avatar.
+                gSavedSettings.setF32( "RenderAvatarMaxART",  max_render_cost + 0.5 );
+            }
+        }
         if (mHUDsPanel->getVisible())
         {
             populateHUDList();
@@ -290,14 +355,15 @@ void LLFloaterPerformance::populateHUDList()
         row[0]["column"] = "complex_visual";
         row[0]["type"] = "bar";
         LLSD& value = row[0]["value"];
-        value["ratio"] = (F32)obj_cost_short / max_complexity * 1000;
+        value["ratio"] = (F32)hud_render_time / huds_max_render_time;
         value["bottom"] = BAR_BOTTOM_PAD;
         value["left_pad"] = BAR_LEFT_PAD;
         value["right_pad"] = BAR_RIGHT_PAD;
 
         row[1]["column"] = "complex_value";
         row[1]["type"] = "text";
-        row[1]["value"] = std::to_string(obj_cost_short);
+        LL_INFOS() << "HUD : hud[" << hud_ptr << " time:" << hud_render_time <<" total_time:" << huds_max_render_time << LL_ENDL;
+        row[1]["value"] = llformat("%.2f",((double)hud_render_time / 1000000000));
         row[1]["font"]["name"] = "SANSSERIF";
  
         row[2]["column"] = "name";
@@ -386,19 +452,28 @@ void LLFloaterPerformance::populateNearbyList()
     mNearbyList->clearRows();
     mNearbyList->updateColumns(true);
 
-    static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0);
+    static LLCachedControl<F32> max_render_cost(gSavedSettings, "RenderAvatarMaxART", 0);
+    updateMaxRenderTime();
+    updateMaxRenderTimeText();
+
     std::vector<LLCharacter*> valid_nearby_avs;
     getNearbyAvatars(valid_nearby_avs);
 
     std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
-    auto render_max = FSTelemetry::RecordObjectTime<LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
+    auto render_max = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
     while (char_iter != valid_nearby_avs.end())
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
-        if (avatar && (LLVOAvatar::AOA_INVISIBLE != avatar->getOverallAppearance()))
+        if (avatar)
         {
+            auto overall_appearance = avatar->getOverallAppearance();
+            if(overall_appearance == LLVOAvatar::AOA_INVISIBLE)
+                continue;
+
             // S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
-            auto render_av  = FSTelemetry::RecordObjectTime<LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
+            auto render_av  = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
+            auto is_slow = avatar->isTooSlow();
+
             LLSD item;
             item["id"] = avatar->getID();
             LLSD& row = item["columns"];
@@ -412,8 +487,17 @@ void LLFloaterPerformance::populateNearbyList()
 
             row[1]["column"] = "complex_value";
             row[1]["type"] = "text";
-            row[1]["value"] = llformat("%.2f",((double)render_av / 1000000));
+            if(is_slow)
+            {
+                row[1]["value"] = llformat("%.2f", ((double)avatar->getLastART() / 1000000));
+            }
+            else
+            {
+                row[1]["value"] = llformat("%.2f",((double)render_av / 1000000));
+            }
+
             row[1]["font"]["name"] = "SANSSERIF";
+            row[1]["width"] = "50";
 
             row[2]["column"] = "name";
             row[2]["type"] = "text";
@@ -438,7 +522,7 @@ void LLFloaterPerformance::populateNearbyList()
                     else
                     {
                         std::string color = "white";
-                        if (LLVOAvatar::AOA_JELLYDOLL == avatar->getOverallAppearance())
+                        if (is_slow || LLVOAvatar::AOA_JELLYDOLL == overall_appearance)
                         {
                             color = "LabelDisabledColor";
                             LLScrollListBar* bar = dynamic_cast<LLScrollListBar*>(av_item->getColumn(0));
@@ -447,7 +531,7 @@ void LLFloaterPerformance::populateNearbyList()
                                 bar->setColor(LLUIColorTable::instance().getColor(color));
                             }
                         }
-                        else if (LLVOAvatar::AOA_NORMAL == avatar->getOverallAppearance())
+                        else if (LLVOAvatar::AOA_NORMAL == overall_appearance)
                         {
                             color = LLAvatarActions::isFriend(avatar->getID()) ? "ConversationFriendColor" : "white";
                         }
@@ -530,6 +614,22 @@ void LLFloaterPerformance::updateMaxComplexity()
     LLAvatarComplexityControls::updateMax(
         mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity"),
         mNearbyPanel->getChild<LLTextBox>("IndirectMaxComplexityText"), 
+        true);
+}
+
+void LLFloaterPerformance::updateMaxRenderTime()
+{
+    LLAvatarComplexityControls::updateMaxRenderTime(
+        mNearbyPanel->getChild<LLSliderCtrl>("RenderAvatarMaxART"),
+        mNearbyPanel->getChild<LLTextBox>("RenderAvatarMaxARTText"), 
+        true);
+}
+
+void LLFloaterPerformance::updateMaxRenderTimeText()
+{
+    LLAvatarComplexityControls::setRenderTimeText(
+        gSavedSettings.getF32("RenderAvatarMaxART"),
+        mNearbyPanel->getChild<LLTextBox>("RenderAvatarMaxARTText", true), 
         true);
 }
 
