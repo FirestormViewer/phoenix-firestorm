@@ -43,6 +43,7 @@
 #if LL_GTK
 extern "C" {
 # include "gtk/gtk.h"
+#error "Direct use of GTK is deprecated"
 }
 #include <locale.h>
 #endif // LL_GTK
