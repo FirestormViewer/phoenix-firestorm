@@ -1372,6 +1372,9 @@ class DarwinManifest(ViewerManifest):
                 CEF_framework = "Chromium Embedded Framework.framework"
                 self.path2basename(relpkgdir, CEF_framework)
                 CEF_framework = self.dst_path_of(CEF_framework)
+                if self.args.get('bugsplat'):
+                    self.path2basename(relpkgdir, "BugsplatMac.framework")
+
 
             # most everything goes in the Resources directory
             with self.prefix(dst="Resources"):
