@@ -1008,11 +1008,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1e176ba9a76fe209ce4703db2026ad85</string>
+              <string>ec9764f86fe7159e8f790b9776d16730</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.02-linux64-212130644.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.03-linux64-212712203.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
