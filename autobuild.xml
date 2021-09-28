@@ -1022,11 +1022,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0335fa6ca762097c85b3090ce2614c3c</string>
+              <string>6b29171a8abb4d42f86ce690aa7dec9d</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.02-windows-212102333.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.03-windows-212710809.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1036,11 +1036,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>793ba69b7a5ea8fa12ec1a86d5ebd9e2</string>
+              <string>cef62e1955314778f08310ed4195cc35</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.02-windows64-212102335.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.03-windows64-212710811.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
