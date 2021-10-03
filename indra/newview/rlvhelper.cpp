@@ -704,6 +704,10 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, co
 	{
 		return false;
 	}
+	catch (const std::out_of_range&)
+	{
+		return false;
+	}
 }
 
 // ============================================================================
@@ -811,6 +815,10 @@ bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int&
 	{
 		return false;
 	}
+	catch (const std::out_of_range&)
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -831,6 +839,10 @@ bool RlvCommandOptionHelper::parseOption<bool>(const std::string& strOption, boo
 		ss >> std::boolalpha >> fOption;
 		return !ss.fail();
 	}
+	catch (const std::out_of_range&)
+	{
+		return false;
+	}
 }
 
 template<>
@@ -841,6 +853,10 @@ bool RlvCommandOptionHelper::parseOption<float>(const std::string& strOption, fl
 		nOption = std::stof(strOption);
 	}
 	catch (const std::invalid_argument&)
+	{
+		return false;
+	}
+	catch (const std::out_of_range&)
 	{
 		return false;
 	}
