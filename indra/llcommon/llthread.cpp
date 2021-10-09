@@ -35,7 +35,6 @@
 #include "lltrace.h"
 #include "lltracethreadrecorder.h"
 #include "llexception.h"
-#include "fstelemetry.h" // <FS:Beq> allow thread naming
 
 #if LL_LINUX
 #include <sched.h>
@@ -136,6 +135,8 @@ void LLThread::threadRun()
     set_thread_name(-1, mName.c_str());
 #endif
 
+    LL_PROFILER_SET_THREAD_NAME( mName.c_str() );
+
     // this is the first point at which we're actually running in the new thread
     mID = currentID();
 
@@ -143,14 +144,16 @@ void LLThread::threadRun()
     mRecorder = new LLTrace::ThreadRecorder(*LLTrace::get_master_thread_recorder());
     // <FS:Beq> - Add threadnames to telemetry
     LL_INFOS("THREAD") << "Started thread " << mName << LL_ENDL;
-    FSThreadName( mName.c_str() );
+    LL_PROFILER_SET_THREAD_NAME( mName.c_str() );
     // </FS:Beq>
     // Run the user supplied function
     do 
     {
         try
         {
+            LL_PROFILER_THREAD_BEGIN(mName.c_str())
             run();
+            LL_PROFILER_THREAD_END(mName.c_str())
         }
         catch (const LLContinueError &e)
         {
@@ -335,6 +338,8 @@ bool LLThread::runCondition(void)
 // Stop thread execution if requested until unpaused.
 void LLThread::checkPause()
 {
+    LL_PROFILER_THREAD_BEGIN(mName.c_str())
+
     mDataLock->lock();
 
     // This is in a while loop because the pthread API allows for spurious wakeups.
@@ -347,6 +352,8 @@ void LLThread::checkPause()
     }
     
     mDataLock->unlock();
+
+    LL_PROFILER_THREAD_END(mName.c_str())
 }
 
 //============================================================================
@@ -378,12 +385,16 @@ void LLThread::yield()
 
 void LLThread::wake()
 {
+    LL_PROFILER_THREAD_BEGIN(mName.c_str())
+
     mDataLock->lock();
     if(!shouldSleep())
     {
         mRunCondition->signal();
     }
     mDataLock->unlock();
+
+    LL_PROFILER_THREAD_END(mName.c_str())
 }
 
 void LLThread::wakeLocked()

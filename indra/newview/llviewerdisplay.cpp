@@ -1399,7 +1399,7 @@ bool setup_hud_matrices(const LLRect& screen_region)
 
 void render_ui(F32 zoom_factor, int subfield)
 {
-    LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
+	LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 
 	LLGLState::checkStates();
 	
@@ -1414,7 +1414,7 @@ void render_ui(F32 zoom_factor, int subfield)
 	
 	if(LLSceneMonitor::getInstance()->needsUpdate())
 	{
-        LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_SCENE_MON);
+		LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_SCENE_MON);
 		gGL.pushMatrix();
 		gViewerWindow->setup2DRender();
 		LLSceneMonitor::getInstance()->compare();
@@ -1422,62 +1422,70 @@ void render_ui(F32 zoom_factor, int subfield)
 		gGL.popMatrix();
 	}
 
-    // Finalize scene
-    gPipeline.renderFinalize();
+	// Finalize scene
+	gPipeline.renderFinalize();
 
-	{// <FS:Beq/> give unique scope 
+	{
+		// SL-15709
+		// NOTE: Tracy only allows one ZoneScoped per function.
+		// Solutions are:
+		// 1. Use a new scope
+		// 2. Use named zones
+		// 3. Use transient zones
 		LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
-    	render_hud_elements();
+    render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 		if (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY))
 		{
 			LLVfxManager::instance().runEffect(EVisualEffect::RlvOverlay);
 		}
 // [/RLVa:KB]
-	render_hud_attachments();
-	} // <FS:Beq/> unique scope
-	LLGLSDefault gls_default;
-	LLGLSUIDefault gls_ui;
-	{
-		gPipeline.disableLights();
-	}
+		render_hud_attachments();
 
-	{
-		gGL.color4f(1,1,1,1);
-		if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+		LLGLSDefault gls_default;
+		LLGLSUIDefault gls_ui;
 		{
-			if (!gDisconnected)
+			gPipeline.disableLights();
+		}
+
+		{
+			gGL.color4f(1,1,1,1);
+			if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
 			{
-                LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_3D);
-				render_ui_3d();
+				if (!gDisconnected)
+				{
+					LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_3D);
+					render_ui_3d();
+					LLGLState::checkStates();
+				}
+				else
+				{
+					render_disconnected_background();
+				}
+
+				LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_2D);
+				render_ui_2d();
 				LLGLState::checkStates();
 			}
-			else
+			gGL.flush();
+
 			{
-				render_disconnected_background();
+				LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_DEBUG_TEXT);
+				gViewerWindow->setup2DRender();
+				gViewerWindow->updateDebugText();
+				gViewerWindow->drawDebugText();
 			}
 
-            LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_2D);
-			render_ui_2d();
-			LLGLState::checkStates();
+			LLVertexBuffer::unbind();
 		}
-		gGL.flush();
 
+		if (!gSnapshot)
 		{
-            LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_DEBUG_TEXT);
-			gViewerWindow->setup2DRender();
-			gViewerWindow->updateDebugText();
-			gViewerWindow->drawDebugText();
+			set_current_modelview(saved_view);
+			gGL.popMatrix();
 		}
 
-		LLVertexBuffer::unbind();
-	}
-
-	if (!gSnapshot)
-	{
-		set_current_modelview(saved_view);
-		gGL.popMatrix();
-	}
+	} // Tracy integration
 }
 
 static LLTrace::BlockTimerStatHandle FTM_SWAP("Swap");
