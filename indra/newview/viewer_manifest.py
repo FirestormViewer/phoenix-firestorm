@@ -1386,7 +1386,7 @@ class DarwinManifest(ViewerManifest):
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
                 self.path("VivoxAUP.txt")
-
+                self.path("LGPL-license.txt")
                 with self.prefix(src=pkgdir,dst=""):
                     self.path("ca-bundle.crt")
 
@@ -1618,7 +1618,7 @@ class DarwinManifest(ViewerManifest):
         if ("package" in self.args['actions'] or 
             "unpacked" in self.args['actions']):
             self.run_command_shell('strip -S %(viewer_binary)r' %
-                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
+                            { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
 # </FS:Ansariel> construct method VMP trampoline crazy VMP launcher juggling shamelessly replaced with old version
 
     def package_finish(self):
@@ -1676,8 +1676,6 @@ class DarwinManifest(ViewerManifest):
             for s,d in list({self.get_dst_prefix():app_name + ".app",
                         #os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.png"): "background.png",
-                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
-                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox Acceptable Use Policy.txt",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items()):
                 print ("Copying to dmg", s, d)
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
