@@ -2055,6 +2055,7 @@ class LinuxManifest(ViewerManifest):
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="bin"):
                   self.path("SLVoice")
                   self.path("win32")
+                  self.path("win64")
 
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
                   self.path("libortp.so")
