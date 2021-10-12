@@ -1635,24 +1635,35 @@ bool LLAppViewer::doFrame()
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
-// <FS:Beq> telemetry enabling. 
+// <FS:Beq> profiling enablement. 
 // This ifdef is optional but better to avoid even low overhead code in main loop where not needed.
-#ifdef FS_HAS_TELEMETRY_SUPPORT
+#ifdef TRACY_ENABLE
 	static bool one_time{false};
-	static LLCachedControl<bool> profiling_enabled_when_connected(gSavedSettings, "FSTelemetryEnableWhenConnected");
+	static LLCachedControl<bool> defer_profiling(gSavedSettings, "DeferProfilingUntilConnected");
 	if( !one_time && (gFrameCount % 10 == 0) )
 	{
-		if(!FSTelemetry::active && profiling_enabled_when_connected && FSTelemetryIsConnected)
+
+		// LL_INFOS() << "Profiler active: " <<  (LLProfiler::active?"True":"False") << LL_ENDL;
+		// LL_INFOS() << "deferred_profiling: " <<  (defer_profiling?"True":"False") << LL_ENDL;
+		// LL_INFOS() << "connected: " <<  (LL_PROFILE_IS_CONNECTED?"True":"False") << LL_ENDL;
+
+		if( ( !LLProfiler::active ) && ( defer_profiling && LL_PROFILE_IS_CONNECTED ) )
 		{
-			FSTelemetry::active = true;
-			gSavedSettings.setBOOL("FSTelemetryActive", TRUE); // keep the setting in sync.
+			LLProfiler::active = true;
+			gSavedSettings.setBOOL( "ProfilingActive", LLProfiler::active );
 			one_time=true; // prevent reset race if we disable manually.
 			LL_INFOS() << "Profiler or collector connected" << LL_ENDL;
 		}
-		else if(!profiling_enabled_when_connected)
+		if( !defer_profiling )
 		{
 			// no point in checking if we are not waiting.
+			// TODO(Beq): At the moment we have only two options
+			// 1) start capturing immediately
+			// 2) start capturing only when a profiler is connected
+			// Ideally we could have another flag to control profiling at start
+			// this would then allow a fully manual enablement.
 			one_time = true;
+			LL_INFOS() << "Manual profiling control selected" << LL_ENDL;
 		}
 	}
 #endif
@@ -1678,7 +1689,7 @@ bool LLAppViewer::doFrame()
 	LL_CLEAR_CALLSTACKS();
 
 	{
-		LL_PROFILE_ZONE_NAMED( "df processMiscNativeEvents" )
+		// LL_PROFILE_ZONE_NAMED( "df processMiscNativeEvents" ) // <FS:Beq/> remove misplaced zone marker (see FTM_MESSAGES)
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
 		if (restore_rendering_masks)
@@ -3222,6 +3233,16 @@ bool LLAppViewer::initConfiguration()
 			mForceGraphicsLevel = graphicslevel;
         }
 	}
+
+	// <FS:Beq> Start profiling immediately unless deferred.
+#ifdef TRACE_ENABLE
+	if(!gSavedSettings.getBOOL("DeferProfilingUntilConnected"))
+	{
+		gSavedSettings.setBOOL( "ProfilingActive", true );
+		LLProfiling::active = true;
+	}
+#endif
+	// </FS:Beq>
 
 	LLFastTimerView::sAnalyzePerformance = gSavedSettings.getBOOL("AnalyzePerformance");
 	gAgentPilot.setReplaySession(gSavedSettings.getBOOL("ReplaySession"));

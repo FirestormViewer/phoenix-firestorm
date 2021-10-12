@@ -36,6 +36,12 @@
 #define LL_PROFILER_CONFIGURATION           LL_PROFILER_CONFIG_FAST_TIMER
 #endif
 
+// <FS:Beq> active switch for deferred profiling
+namespace LLProfiler
+{
+    extern bool active;
+}
+// </FS:Beq>
 #if defined(LL_PROFILER_CONFIGURATION) && (LL_PROFILER_CONFIGURATION > LL_PROFILER_CONFIG_NONE)
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY || LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
         #define TRACY_ENABLE         1
@@ -57,13 +63,19 @@
         #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name )
         #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ) // C string
         #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name )   // C string
-        // <FS:Beq> revert change that obscures custom FTM zones.
-        // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped // Want descriptive names; was: ZoneNamedN( ___tracy_scoped_zone, #name, true );
-        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, true )
+        // <FS:Beq> revert change that obscures custom FTM zones. We may want to may FTM Zones unique in future.
+        // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped // Want descriptive names; was: ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active );
+        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active )
         // </FS:Beq>
-        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true )
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
-        #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
+
+        // <FS:Beq>
+        // #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true )
+        // #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
+        // #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
+        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active )
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ) // RGB
+        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ) // <FS:Beq/> Enable deferred collection through filters
+        // </FS:Beq>
 
         #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val )
         #define LL_PROFILE_ZONE_TEXT( text, size )      ZoneText( text, size )
@@ -73,7 +85,7 @@
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
 
         // <FS:Beq> Additional FS Tracy macros
-        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, true ) // <FS:Beq> Additional Tracy macro
+        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active ) // <FS:Beq/> Additional Tracy macro
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
         #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot(name,prev);TracyPlot( name, value)
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected
@@ -114,11 +126,16 @@
 
         // <FS:Beq> revert change that obscures custom FTM zones.
         // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped                                          const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
-        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, true );    const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
+        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active );    const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
         // </FS:Beq>
-        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true );
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
-        #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
+        // <FS:Beq>
+        // #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true )
+        // #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
+        // #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
+        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active );
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ) // RGB
+        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ) // <FS:Beq/> Enable deferred collection through filters
+        // </FS:Beq>
 
         #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val )
         #define LL_PROFILE_ZONE_TEXT( text, size )      ZoneText( text, size )
@@ -127,7 +144,7 @@
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
         // <FS:Beq> Additional FS Tracy macros 
-        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, true )
+        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active )
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
         #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot( name, prev );TracyPlot( name, value )
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected
