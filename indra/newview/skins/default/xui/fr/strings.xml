@@ -1772,6 +1772,9 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="InvFolder Merchant Outbox">
 		Boîte d&apos;envoi vendeur
 	</string>
+	<string name="InvFolder Settings">
+		Paramètres
+	</string>
 	<string name="InvFolder Friends">
 		Amis
 	</string>
