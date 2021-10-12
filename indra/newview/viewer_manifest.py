@@ -1208,8 +1208,8 @@ class DarwinManifest(ViewerManifest):
                     # our apps dependencies on shared libs
                     # for each app, for each dylib we collected in dylibs,
                     # create a symlink to the real copy of the dylib.
-                    with self.prefix(dst=os.path.join(app, "Contents", "Resources")):
-                        for libfile in dylibs:
+                    # with self.prefix(dst=os.path.join(app, "Contents", "Resources")):
+                        # for libfile in dylibs:
                             # self.relsymlinkf(os.path.join(libfile_parent, libfile))
 
                 # # Dullahan helper apps go inside SLPlugin.app
