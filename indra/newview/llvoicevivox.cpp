@@ -520,20 +520,29 @@ bool LLVivoxVoiceClient::writeString(const std::string &str)
 // <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
 // Vivox does not support Linux anymore and the SDK SLVoice for Linux uses is old and according to LL
 // will stop working 'soon' (as of 2016-07-17). See also FIRE-19663
-bool viewerUsesWineForVoice()
+
+enum class EWineMode{ eNoWine, e32Bit, e64Bit };
+EWineMode viewerUsesWineForVoice()
 {
 #ifndef LL_LINUX
-    return false;
+    return EWineMode::eNoWine;
 #else
-    static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "FSLinuxEnableWin32VoiceProxy" );
+    static LLCachedControl<bool> sEnable32BitVoiceChat(gSavedSettings, "FSLinuxEnableWin32VoiceProxy" );
+    static LLCachedControl<bool> sEnable64BitVoiceChat(gSavedSettings, "FSLinuxEnableWin64VoiceProxy" );
 
-    return sEnableVoiceChat;
+	if( sEnable64BitVoiceChat )
+		return EWineMode::e64Bit;
+	if( sEnable32BitVoiceChat )
+		return EWineMode::e32Bit;
+
+	
+    return EWineMode::eNoWine;
 #endif
 }
 
 bool viewerChoosesConnectionHandles()
 {
-    return viewerUsesWineForVoice();
+    return viewerUsesWineForVoice() != EWineMode::eNoWine;
 }
 // </FS:ND>
 
@@ -881,10 +890,18 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
         std::string exe_path = gDirUtilp->getExecutableDir();
         // <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
         //gDirUtilp->append(exe_path, "SLVoice");
-        if( !viewerUsesWineForVoice() )
-            gDirUtilp->append(exe_path, "SLVoice"); // native version
-        else
-            gDirUtilp->append(exe_path, "win32/SLVoice.exe"); // use bundled win32 version
+        switch( viewerUsesWineForVoice() )
+		{
+			case EWineMode::eNoWine:
+				gDirUtilp->append(exe_path, "SLVoice"); // native version
+				break;
+			case EWineMode::e32Bit:
+				gDirUtilp->append(exe_path, "win32/SLVoice.exe"); // use bundled win32 version
+				break;
+			case EWineMode::e64Bit:
+				gDirUtilp->append(exe_path, "win64/SLVoice.exe"); // use bundled win64 version
+				break;
+		}
         // </FS:ND>
 #endif
         // See if the vivox executable exists
@@ -897,7 +914,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             // <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
             params.executable = exe_path;
 
-            if( !viewerUsesWineForVoice() )
+            if( EWineMode::eNoWine == viewerUsesWineForVoice()  )
                 params.executable = exe_path;
             else
             {

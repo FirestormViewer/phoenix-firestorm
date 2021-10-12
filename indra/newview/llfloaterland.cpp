@@ -921,7 +921,10 @@ void LLPanelLandGeneral::refresh()
 			if (!url.empty())
 			{
 				LLUUID region_id = regionp->getRegionID();
-				LLVector3d pos_global = regionp->getCenterGlobal();
+				// <FS:Beq> FIRE-31213 - from Ubit Umarov - Correct position calcs to work with var regions
+				// LLVector3d pos_global = regionp->getCenterGlobal();
+				LLVector3d pos_global = regionp->getOriginGlobal(); 
+				// </FS:Beq>
 				LLRemoteParcelInfoProcessor::instance().requestRegionParcelInfo( url, region_id, parcel->getCenterpoint(), pos_global, getObserverHandle() );
 			}
 			else
