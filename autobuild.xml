@@ -814,9 +814,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>499ae3458342185b47e6f1261d71891f</string>
+              <string>45dedb5b09995cd794304150e94fcf21</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/86091/796295/dullahan-1.12.2.202108121937_91.1.21_g9dd45fe_chromium-91.0.4472.114-darwin64-562751.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87950/806969/dullahan-1.12.2.202109170444_91.1.21_g9dd45fe_chromium-91.0.4472.114-darwin64-563968.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -826,9 +826,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4fa5ded4475264305a058423e553e6ad</string>
+              <string>d0fd9d7086699da4bb5ccc935622a717</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/86096/796319/dullahan-1.12.2.202108121946_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows-562751.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/88276/809277/dullahan-1.12.2.202109230751_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows-563968.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -838,9 +838,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d4c5214819c901afc916e47f8715f3a7</string>
+              <string>7e8c3ccd420ff5aef24ff72d609ba394</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/86095/796323/dullahan-1.12.2.202108121946_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows64-562751.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/88275/809281/dullahan-1.12.2.202109230751_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows64-563968.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -859,7 +859,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.12.2.202108121946_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
+        <string>1.12.2.202109230751_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
       </map>
       <key>elfio</key>
       <map>

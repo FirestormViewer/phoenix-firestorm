@@ -1,4 +1,9 @@
 #!/bin/sh
+if [[ $SKIP_NOTARIZATION == "true" ]]; then
+    echo "Skipping notarization"
+    exit 0
+fi
+
 CONFIG_FILE="$build_secrets_checkout/code-signing-osx/notarize_creds.sh"
 if [ -f "$CONFIG_FILE" ]; then
     source $CONFIG_FILE
