@@ -696,9 +696,11 @@ BOOL LLPanelScriptLimitsRegionMemory::StartRequestChain()
 			getChild<LLUICtrl>("loading_text")->setValue(LLSD(msg_wrong_region));
 			return FALSE;
 		}
-		
-		LLVector3d pos_global = region->getCenterGlobal();
-		
+		// <FS:Beq> FIRE-31213 - from Ubit Umarov - Correct position calcs to work with var regions
+		// LLVector3d pos_global = region->getCenterGlobal();
+		LLVector3d pos_global = region->getOriginGlobal(); 
+		// </FS:Beq>
+
 		LLSD body;
 		std::string url = region->getCapability("RemoteParcelRequest");
 		if (!url.empty())
