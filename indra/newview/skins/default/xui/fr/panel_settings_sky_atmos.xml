@@ -1,2 +1,51 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Atmosphère et éclairage" name="panel_settings_sky_atmos"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Atmosphère et lumières" name="panel_settings_sky_atmos">
+	<layout_stack name="main_ls">
+		<layout_panel name="top_lp">
+			<text name="ambient_color_label">
+				Couleur ambiante :
+			</text>
+			<text name="blue_horizon_label">
+				Horizon de bleu :
+			</text>
+			<text name="blue_density_label">
+				Densité du bleu :
+			</text>
+		</layout_panel>
+		<layout_panel name="bottom_lp">
+			<layout_stack name="atmosphere1">
+				<layout_panel name="left_lp">
+					<text name="haze_horizon_label">
+						Horizon de brume :
+					</text>
+					<text name="haze_density_label">
+						Densité de brume :
+					</text>
+					<text name="moisture_level_label">
+						Niveau d'humidité :
+					</text>
+					<text name="droplet_radius_label">
+						Rayon des gouttes :
+					</text>
+					<text name="ice_level_label">
+						Niveau de la glace :
+					</text>
+				</layout_panel>
+				<layout_panel name="right_lp">
+					<text name="density_multiplier_label">
+						Facteur de densité :
+					</text>
+					<text name="distance_multiplier_label">
+						Facteur de dist.:
+					</text>
+					<text name="maximum_altitude_label">
+						Altitude maximale :
+					</text>
+					<text name="scene_gamma_label">
+						Gamma de scène :
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>
