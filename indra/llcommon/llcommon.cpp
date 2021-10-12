@@ -33,7 +33,8 @@
 #include "lltracethreadrecorder.h"
 #include "llcleanup.h"
 
-#if (TRACY_ENABLE)
+// <FS:Beq/> #if (TRACY_ENABLE)
+#if (TRACY_ENABLE) && LL_PROFILER_ENABLE_TRACY_MEMORY
 // Override new/delete for tracy memory profiling
 void *operator new(size_t size)
 {

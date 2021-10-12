@@ -260,14 +260,11 @@ set(llcommon_HEADER_FILES
     u64.h
     StackWalker.h
     )
+    
+# <FS:Beq/> Tracy Profiler support
+list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
-# <FS:Beq> Tracy Profiler support
-list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
-#if (USE_TRACY)
-#  MESSAGE(STATUS "Linking fstracyclient.cpp")
-#  list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
-#endif()
 
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp

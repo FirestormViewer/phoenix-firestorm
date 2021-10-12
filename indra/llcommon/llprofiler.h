@@ -45,9 +45,11 @@
 //      #define TRACY_ONLY_LOCALHOST 1
         #define TRACY_ONLY_IPV4      1
         #include "Tracy.hpp"
-
-        // Mutually exclusive with detailed memory tracing
-        #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
+// <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
+        //// GPU Mutually exclusive with detailed memory tracing
+        // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
+    #define LL_PROFILER_ENABLE_TRACY_MEMORY 1
+    #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
     #endif
 
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY
