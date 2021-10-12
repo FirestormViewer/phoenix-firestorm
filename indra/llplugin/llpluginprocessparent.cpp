@@ -194,6 +194,7 @@ void LLPluginProcessParent::shutdown()
             && state != STATE_ERROR)
         {
             (*it).second->setState(STATE_GOODBYE);
+            (*it).second->mOwner = NULL;
         }
         if (state != STATE_DONE)
         {
@@ -414,7 +415,10 @@ void LLPluginProcessParent::idle(void)
 			mMessagePipe->pumpOutput();
 			
 			// Only do input processing here if this instance isn't in a pollset.
-			if(!mPolledInput)
+			// If viewer and plugin are both shutting down, don't process further
+			// input, viewer won't be able to handle it.
+			if(!mPolledInput
+			   && !(mState >= STATE_GOODBYE && LLApp::isExiting()))
 			{
 				mMessagePipe->pumpInput();
 			}
