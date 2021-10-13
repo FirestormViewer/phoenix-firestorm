@@ -91,6 +91,7 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llviewernetwork.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 const F32 FORCE_SIMPLE_RENDER_AREA = 512.f;
 const F32 FORCE_CULL_AREA = 8.f;
@@ -6360,7 +6361,7 @@ static LLTrace::BlockTimerStatHandle FTM_REBUILD_MESH_FLUSH("Flush Mesh");
 void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 {
 	llassert(group);
-	LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_VB);// <FS:Beq> move out one scope (but are these even useful as dupes?)
+	// LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_VB);// <FS:Beq> High volume remove (roughly 1000:1 ratio to inside the if statement)
 	if (group && group->hasState(LLSpatialGroup::MESH_DIRTY) && !group->hasState(LLSpatialGroup::GEOM_DIRTY))
 	{
 		// LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_VB);// <FS:Beq> move out one scope (but are these even useful as dupes?)
@@ -6382,6 +6383,19 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 			if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL) && !drawablep->isState(LLDrawable::RIGGED) )
 			{
 				LLVOVolume* vobj = drawablep->getVOVolume();
+				LLVOVolume* rootAtt{};
+				if(vobj->isAttachment())
+				{
+					auto par = (LLVOVolume*)vobj->getParent();
+					rootAtt = vobj;
+					while( par->isAttachment() )
+					{
+						rootAtt = par;
+						par = (LLVOVolume*)par->getParent();
+					}
+					LL_INFOS() << "recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << LL_ENDL;
+				}
+				FSPerfStats::RecordAttachmentTime<U32> T(rootAtt?rootAtt->getAttachmentItemID().getCRC32():0, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
 				//<FS:Beq> avoid unfortunate sleep during trylock by static check
 				//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
 				static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");

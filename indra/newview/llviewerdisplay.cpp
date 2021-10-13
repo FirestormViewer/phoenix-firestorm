@@ -85,6 +85,7 @@
 // [/RLVa:KB]
 #include "llpresetsmanager.h"
 #include "fsdata.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
@@ -1192,7 +1193,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 void render_hud_attachments()
 {
-	FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_HUDS);
+	FSPerfStats::RecordSceneTime T (FSPerfStats::SceneStatType::RENDER_HUDS);
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.pushMatrix();
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
@@ -1400,7 +1401,7 @@ bool setup_hud_matrices(const LLRect& screen_region)
 
 void render_ui(F32 zoom_factor, int subfield)
 {
-	FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_UI);
+	FSPerfStats::RecordSceneTime T (FSPerfStats::SceneStatType::RENDER_UI);
     LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 
 	LLGLState::checkStates();
@@ -1486,7 +1487,7 @@ static LLTrace::BlockTimerStatHandle FTM_SWAP("Swap");
 
 void swap()
 {
-	FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_SWAP);
+	FSPerfStats::RecordSceneTime T (FSPerfStats::SceneStatType::RENDER_SWAP);
 	LL_RECORD_BLOCK_TIME(FTM_SWAP);
 
 	if (gDisplaySwapBuffers)

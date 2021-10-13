@@ -59,6 +59,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if LL_LINUX
 // Work-around spurious used before init warning on Vector4a
@@ -642,6 +643,20 @@ void renderFace(LLDrawable* drawable, LLFace *face)
     LLVOVolume* vobj = drawable->getVOVolume();
     if (vobj)
     {
+		LLVOVolume* rootAtt{};
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+		if(vobj->isAttachment())
+		{
+			auto par = (LLVOVolume*)vobj->getParent();
+			rootAtt = vobj;
+			while( par->isAttachment() )
+			{
+				rootAtt = par;
+				par = (LLVOVolume*)par->getParent();
+			}
+			// LL_INFOS() << "recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << LL_ENDL;
+			if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+		}
         LLVolume* volume = NULL;
 
         if (drawable->isState(LLDrawable::RIGGED))

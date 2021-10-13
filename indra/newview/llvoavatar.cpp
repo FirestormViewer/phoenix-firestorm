@@ -134,6 +134,7 @@
 #include "fslslbridge.h" // <FS:PP> Movelock position refresh
 
 #include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -6928,6 +6929,7 @@ const LLUUID& LLVOAvatar::getID() const
 LLJoint *LLVOAvatar::getJoint( const JointKey &name )
 // </FS:ND>
 {
+	FSZone;
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 	//joint_map_t::iterator iter = mJointMap.find( name );
 
@@ -9161,8 +9163,8 @@ bool LLVOAvatar::isTooSlow(bool combined) const
 	if(!mARTCapped)
 	{
 		// no cap, so we use the live values
-		render_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_COMBINED);
-		render_geom_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_GEOMETRY);
+		render_time = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_COMBINED);
+		render_geom_time = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_GEOMETRY);
 	}
 	else
 	{
@@ -9175,8 +9177,8 @@ bool LLVOAvatar::isTooSlow(bool combined) const
 		if(!mARTCapped)
 		{			
 			// if we weren't capped, we are now
-			abuse_constness->mRenderTime = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_COMBINED);
-			abuse_constness->mGeomTime = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(this,FSTelemetry::ObjStatType::RENDER_GEOMETRY);
+			abuse_constness->mRenderTime = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_COMBINED);
+			abuse_constness->mGeomTime = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_GEOMETRY);
 			abuse_constness->mARTStale = false;
 			abuse_constness->mARTCapped = true;
 			abuse_constness->mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
@@ -10500,8 +10502,6 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 
 	updateMeshTextures();
 	updateMeshVisibility();
-	markARTStale();
-
 }
 
 LLViewerTexture* LLVOAvatar::getBakedTexture(const U8 te)
@@ -11682,6 +11682,7 @@ void LLVOAvatar::updateVisualComplexity()
 	LL_DEBUGS("AvatarRender") << "avatar " << getID() << " appearance changed" << LL_ENDL;
 	// Set the cache time to in the past so it's updated ASAP
 	mVisualComplexityStale = true;
+	markARTStale();
 }
 
 // Account for the complexity of a single top-level object associated

@@ -48,6 +48,7 @@
 #include "lldrawpoolwater.h"
 #include "llspatialpartition.h"
 #include "llglcommonfunc.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 BOOL LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
 
@@ -352,6 +353,27 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 			{
 				LLDrawInfo& params = **k;
+				// <FS:Beq> Capture render times
+				std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+				if(params.mFace)
+				{
+					LLViewerObject* rootAtt{};
+					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+					
+					if(vobj->isAttachment())
+					{
+						auto par = (LLViewerObject*)vobj->getParent();
+						rootAtt = vobj;
+						while( par->isAttachment() )
+						{
+							rootAtt = par;
+							par = (LLViewerObject*)par->getParent();
+						}
+						LL_INFOS() << "recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << " as " << rootAtt->getAttachmentItemID().getCRC32() << LL_ENDL;
+						if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+					}
+				}
+				// </FS:Beq>
 				
 				if (params.mParticle)
 				{
@@ -678,6 +700,28 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					// </FS:Beq>
 					continue;
 				}
+
+				// <FS:Beq> Capture render times
+				std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+				if(params.mFace)
+				{
+					LLViewerObject* rootAtt{};
+					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+					
+					if(vobj->isAttachment())
+					{
+						auto par = (LLViewerObject*)vobj->getParent();
+						rootAtt = vobj;
+						while( par->isAttachment() )
+						{
+							rootAtt = par;
+							par = (LLViewerObject*)par->getParent();
+						}
+						LL_INFOS() << "ALPHA recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << " as " << rootAtt->getAttachmentItemID().getCRC32() << LL_ENDL;
+						if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+					}
+				}
+				// </FS:Beq>
 
 				// Fix for bug - NORSPEC-271
 				// If the face is more than 90% transparent, then don't update the Depth buffer for Dof

@@ -1,6 +1,6 @@
 /** 
- * @file fstelemetry.cpp
- * @brief fstelemetry Telemetry abstraction for FS
+ * @file fsperfstats.cpp
+ * @brief Stats collection to support perf floater and auto tune
  *
  * $LicenseInfo:firstyear=2021&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -24,9 +24,13 @@
  * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
-#include "fstelemetry.h"
-namespace FSTelemetry
+#include "fsperfstats.h"
+namespace FSPerfStats
 {
-	bool	active{false};
+    int 	RecordSceneTime::writeBuffer{0};
+
+    bool 	RecordSceneTime::collectionEnabled{true};
+
+	std::array< typename RecordSceneTime::StatsArray, 2 > RecordSceneTime::stats{ {} };
 
 }

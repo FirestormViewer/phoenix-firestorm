@@ -55,6 +55,7 @@
 #include "m3math.h"
 #include "m4math.h"
 #include "llmatrix4a.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if !LL_DARWIN && !LL_LINUX
 extern PFNGLWEIGHTPOINTERARBPROC glWeightPointerARB;
@@ -222,6 +223,7 @@ int compare_int(const void *a, const void *b)
 //--------------------------------------------------------------------
 U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 {
+	FSZone;
 	if (!mValid || !mMesh || !mFace || !mVisible || 
 		!mFace->getVertexBuffer() ||
 		mMesh->getNumFaces() == 0 ||
@@ -229,6 +231,22 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 	{
 		return 0;
 	}
+
+
+	auto vobj = mFace->getViewerObject();
+	if(vobj && !vobj->asAvatar() && vobj->getAvatar()->isSelf())
+	{
+		LLViewerObject * vtop = vobj;
+		LLViewerObject * par  = (LLViewerObject *) vobj->getParent();
+
+		while (par && !(par->asAvatar()))
+		{
+			vtop = par;
+			par = (LLViewerObject *)vtop->getParent();
+		}
+		vobj = vtop;
+	}
+	FSPerfStats::RecordAttachmentTime<U32> T(vobj?vobj->getAttachmentItemID().getCRC32():0, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
 
 	U32 triangle_count = 0;
 

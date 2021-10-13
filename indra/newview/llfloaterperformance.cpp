@@ -46,6 +46,7 @@
 #include "pipeline.h"
 #include "llviewercontrol.h"
 #include "fsavatarrenderpersistence.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 const F32 REFRESH_INTERVAL = 1.0f;
 const S32 BAR_LEFT_PAD = 2;
@@ -176,13 +177,13 @@ void LLFloaterPerformance::draw()
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
         auto tot_frame_time_ns = 1000000000/fps;
         auto target_frame_time_ns = 1000000000/(target_fps==0?1:target_fps);
-        auto tot_avatar_time = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::getSum(FSTelemetry::ObjStatType::RENDER_COMBINED);
-        auto tot_huds_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_HUDS) ;
-        auto tot_sleep_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_SLEEP);
-        auto tot_ui_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_UI);
-        auto tot_idle_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_IDLE);
-        auto tot_limit_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_FPSLIMIT);
-        auto tot_swap_time = FSTelemetry::RecordSceneTime::get(FSTelemetry::SceneStatType::RENDER_SWAP);
+        auto tot_avatar_time = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::getSum(FSPerfStats::ObjStatType::RENDER_COMBINED);
+        auto tot_huds_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_HUDS) ;
+        auto tot_sleep_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_SLEEP);
+        auto tot_ui_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_UI);
+        auto tot_idle_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_IDLE);
+        auto tot_limit_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_FPSLIMIT);
+        auto tot_swap_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_SWAP);
 
         // once the rest is extracted what is left is the scene cost (we don't include non-render activities such as network here prlloy should.)
         auto tot_scene_time = tot_frame_time_ns - tot_avatar_time - tot_huds_time - tot_ui_time - tot_sleep_time - tot_limit_time - tot_swap_time;
@@ -241,7 +242,7 @@ void LLFloaterPerformance::draw()
 
         if( auto_tune )
         {
-            auto av_render_max = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
+            auto av_render_max = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::getMax(FSPerfStats::ObjStatType::RENDER_COMBINED);
 
             // if( target_frame_time_ns <= tot_frame_time_ns )
             // {
@@ -344,10 +345,12 @@ void LLFloaterPerformance::populateHUDList()
         max_complexity = llmax(max_complexity, (*iter).objectsCost);
     }
    
+    auto huds_max_render_time = FSPerfStats::RecordObjectTime<LLHUDObject*>::getMax(FSPerfStats::ObjStatType::RENDER_GEOMETRY);
     for (iter = complexity_list.begin(); iter != end; ++iter)
     {
-        LLHUDComplexity hud_object_complexity = *iter;        
-        S32 obj_cost_short = llmax((S32)hud_object_complexity.objectsCost / 1000, 1);
+        LLHUDComplexity hud_object_complexity = *iter;     
+        auto hud_ptr = hud_object_complexity.objectPtr;
+        auto hud_render_time = FSPerfStats::RecordObjectTime<const LLViewerObject*>::get(hud_ptr, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
         LLSD item;
         item["special_id"] = hud_object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
@@ -404,10 +407,13 @@ void LLFloaterPerformance::populateObjectList()
         max_complexity = llmax(max_complexity, (*iter).objectCost);
     }
 
+    auto max_render_time = FSPerfStats::RecordAttachmentTime<U32>::getMax(FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+
     for (iter = complexity_list.begin(); iter != end; ++iter)
     {
         LLObjectComplexity object_complexity = *iter;        
-        S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
+        // S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
+        auto attach_render_time = FSPerfStats::RecordAttachmentTime<U32>::get(object_complexity.objectId.getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY);
         LLSD item;
         item["special_id"] = object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
@@ -415,14 +421,15 @@ void LLFloaterPerformance::populateObjectList()
         row[0]["column"] = "complex_visual";
         row[0]["type"] = "bar";
         LLSD& value = row[0]["value"];
-        value["ratio"] = (F32)obj_cost_short / max_complexity * 1000;
+        value["ratio"] = (F32)attach_render_time / max_render_time;
         value["bottom"] = BAR_BOTTOM_PAD;
         value["left_pad"] = BAR_LEFT_PAD;
         value["right_pad"] = BAR_RIGHT_PAD;
 
         row[1]["column"] = "complex_value";
         row[1]["type"] = "text";
-        row[1]["value"] = std::to_string(obj_cost_short);
+        // row[1]["value"] = std::to_string(obj_cost_short);
+        row[1]["value"] = llformat("%.3f",((double)attach_render_time / 1000000));
         row[1]["font"]["name"] = "SANSSERIF";
 
         row[2]["column"] = "name";
@@ -460,7 +467,7 @@ void LLFloaterPerformance::populateNearbyList()
     getNearbyAvatars(valid_nearby_avs);
 
     std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
-    auto render_max = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::getMax(FSTelemetry::ObjStatType::RENDER_COMBINED);
+    auto render_max = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::getMax(FSPerfStats::ObjStatType::RENDER_COMBINED);
     while (char_iter != valid_nearby_avs.end())
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
@@ -471,7 +478,7 @@ void LLFloaterPerformance::populateNearbyList()
                 continue;
 
             // S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
-            auto render_av  = FSTelemetry::RecordObjectTime<const LLVOAvatar*>::get(avatar,FSTelemetry::ObjStatType::RENDER_COMBINED);
+            auto render_av  = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(avatar,FSPerfStats::ObjStatType::RENDER_COMBINED);
             auto is_slow = avatar->isTooSlow(true);
             // auto is_slow_without_shadows = avatar->isTooSlow();
 
