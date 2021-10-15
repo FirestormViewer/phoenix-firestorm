@@ -822,7 +822,7 @@ LLAppViewer::LLAppViewer()
 	std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
 #   endif // ! LL_BUGSPLAT
 	mDumpPath = logdir;
-	setMiniDumpDir(logdir);
+
 	setDebugFileNames(logdir);
 }
 
@@ -2379,7 +2379,9 @@ bool LLAppViewer::cleanup()
 	if (LLConversationLog::instanceExists())
 	{
 		LLConversationLog::instance().cache();
-	}
+    }
+
+    clearSecHandler();
 
 	if (mPurgeCacheOnExit)
 	{
