@@ -2562,7 +2562,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
 else (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
-    linux-crash-logger
+    #linux-crash-logger
     SLPlugin
     media_plugin_cef
     #media_plugin_gstreamer010
