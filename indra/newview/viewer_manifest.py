@@ -1448,6 +1448,8 @@ class DarwinManifest(ViewerManifest):
                 # in our bundled sub-apps. For each of these we'll create a
                 # symlink from sub-app/Contents/Resources to the real .dylib.
                 # Need to get the llcommon dll from any of the build directories as well.
+                libfile_parent = self.get_dst_prefix()
+                libfile = "libllcommon.dylib"
                 dylibs = []
                 for libfile in (
                                 "libapr-1.0.dylib",
