@@ -5546,7 +5546,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 			}
 		}
 		
-		if (type == LLRenderPass::PASS_ALPHA)
+		// if (type == LLRenderPass::PASS_ALPHA) // <FS:Beq> allow tracking through pipeline
 		{ //for alpha sorting
 			facep->setDrawInfo(draw_info);
 		}
@@ -5783,6 +5783,14 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			{
 				continue;
 			}
+
+			std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+			// <FS:Beq> Capture render times
+			if(vobj->isAttachment())
+			{
+				T= trackMyAttachment(vobj);
+			}
+			// </FS:Beq>
 
 //<FS:Beq> Stop doing stupid stuff we don;t need to.
 // Moving this inside a debug enabled check
@@ -6382,20 +6390,14 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 
 			if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL) && !drawablep->isState(LLDrawable::RIGGED) )
 			{
+				FSZoneN("Rebuild all non-Rigged")
 				LLVOVolume* vobj = drawablep->getVOVolume();
-				LLVOVolume* rootAtt{};
+				std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+
 				if(vobj->isAttachment())
 				{
-					auto par = (LLVOVolume*)vobj->getParent();
-					rootAtt = vobj;
-					while( par->isAttachment() )
-					{
-						rootAtt = par;
-						par = (LLVOVolume*)par->getParent();
-					}
-					LL_INFOS() << "recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << LL_ENDL;
+					T = trackMyAttachment(vobj);
 				}
-				FSPerfStats::RecordAttachmentTime<U32> T(rootAtt?rootAtt->getAttachmentItemID().getCRC32():0, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
 				//<FS:Beq> avoid unfortunate sleep during trylock by static check
 				//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
 				static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
@@ -6808,10 +6810,18 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		U32 indices_index = 0;
 		U16 index_offset = 0;
 
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+		LLViewerObject * lastVObj{nullptr};
 		while (face_iter < i)
 		{
 			//update face indices for new buffer
 			facep = *face_iter;
+			LLViewerObject* vobj = facep->getViewerObject();
+			if(vobj && vobj != lastVObj && vobj->isAttachment())
+			{
+				T = trackMyAttachment(vobj);
+				lastVObj = vobj;
+			}			
 			if (buffer.isNull())
 			{
 				// Bulk allocation failed
@@ -7027,8 +7037,12 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 			else if (is_alpha)
 			{
 				// can we safely treat this as an alpha mask?
-				if (facep->getFaceColor().mV[3] <= 0.f)
+				// <FS:Beq> Nothing actually sets facecolor use the TE alpha instead.
+				// if (facep->getFaceColor().mV[3] <= 0.f)
+				if (te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f)
+				// </FS:Beq>
 				{ //100% transparent, don't render unless we're highlighting transparent
+					FSZoneN("facep->alpha -> invisible");
 					registerFace(group, facep, LLRenderPass::PASS_ALPHA_INVISIBLE);
 				}
 				else if (facep->canRenderAsMask())

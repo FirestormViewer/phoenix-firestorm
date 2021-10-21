@@ -84,10 +84,9 @@
         <name_list.columns
          label=""
          name="complex_value"
-         width="40" />
+         width="80" />
         <name_list.columns
          label=""
          name="name"/>
   </name_list>
 </panel>
-

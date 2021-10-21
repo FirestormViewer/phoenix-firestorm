@@ -9157,38 +9157,38 @@ bool LLVOAvatar::isTooSlow(bool combined) const
 	}
 
 	// Either we're not stale or we've updated.
-	U64 render_time;
-	U64 render_geom_time;
+	U64 render_time_raw;
+	U64 render_geom_time_raw;
 
 	if(!mARTCapped)
 	{
 		// no cap, so we use the live values
-		render_time = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_COMBINED);
-		render_geom_time = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+		render_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, this->getID(), FSPerfStats::StatType_t::RENDER_COMBINED);
+		render_geom_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, this->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
 	}
 	else
 	{
 		// use the cached values.
-		render_time = mRenderTime;
-		render_geom_time = mGeomTime;		
+		render_time_raw = mRenderTime;
+		render_geom_time_raw = mGeomTime;		
 	}
-	if( (LLVOAvatar::sRenderTimeCap_ns > 0) && (render_time >= LLVOAvatar::sRenderTimeCap_ns) ) 
+	if( (LLVOAvatar::sRenderTimeCap_ns > 0) && (FSPerfStats::raw_to_ns(render_time_raw) >= LLVOAvatar::sRenderTimeCap_ns) ) 
 	{
 		if(!mARTCapped)
 		{			
 			// if we weren't capped, we are now
-			abuse_constness->mRenderTime = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_COMBINED);
-			abuse_constness->mGeomTime = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(this,FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+			abuse_constness->mRenderTime = render_time_raw;
+			abuse_constness->mGeomTime = render_geom_time_raw;
 			abuse_constness->mARTStale = false;
 			abuse_constness->mARTCapped = true;
 			abuse_constness->mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
-			LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << render_time << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+			LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
 		}
 		// return true only if that is the case in the context of the combined/geom_only flag.
-		return combined ? true : (render_geom_time >= LLVOAvatar::sRenderTimeCap_ns);
+		return combined ? true : (render_geom_time_raw >= LLVOAvatar::sRenderTimeCap_ns);
 	}
 
-	LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << render_time << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+	LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
 	abuse_constness->mARTCapped = false;
 	return false;
 }

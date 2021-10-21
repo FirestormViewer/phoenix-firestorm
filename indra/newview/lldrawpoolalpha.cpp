@@ -342,6 +342,7 @@ void LLDrawPoolAlpha::render(S32 pass)
 
 void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
 {
+	FSZone;
 	for (LLCullResult::sg_iterator i = gPipeline.beginAlphaGroups(); i != gPipeline.endAlphaGroups(); ++i)
 	{
 		LLSpatialGroup* group = *i;
@@ -354,23 +355,13 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
 			{
 				LLDrawInfo& params = **k;
 				// <FS:Beq> Capture render times
-				std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+				std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 				if(params.mFace)
 				{
-					LLViewerObject* rootAtt{};
 					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-					
 					if(vobj->isAttachment())
 					{
-						auto par = (LLViewerObject*)vobj->getParent();
-						rootAtt = vobj;
-						while( par->isAttachment() )
-						{
-							rootAtt = par;
-							par = (LLViewerObject*)par->getParent();
-						}
-						LL_INFOS() << "recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << " as " << rootAtt->getAttachmentItemID().getCRC32() << LL_ENDL;
-						if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+						T = trackMyAttachment(vobj);					
 					}
 				}
 				// </FS:Beq>
@@ -499,6 +490,7 @@ void LLDrawPoolAlpha::RestoreTexSetup(bool tex_setup)
 
 void LLDrawPoolAlpha::renderSimples(U32 mask, std::vector<LLDrawInfo*>& simples)
 {
+	FSZone;
     gPipeline.enableLightsDynamic();
     simple_shader->bind();
 	simple_shader->bindTexture(LLShaderMgr::BUMP_MAP, LLViewerFetchedTexture::sFlatNormalImagep);
@@ -509,6 +501,15 @@ void LLDrawPoolAlpha::renderSimples(U32 mask, std::vector<LLDrawInfo*>& simples)
     bool use_shaders = gPipeline.canUseVertexShaders();
     for (LLDrawInfo* draw : simples)
     {
+		// <FS:Beq> Capture render times
+		FSZoneN("Simples");
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
+		if(vobj && vobj->isAttachment())
+		{
+			T = trackMyAttachment(vobj);
+		}
+		// </FS:Beq>
         bool tex_setup = TexSetup(draw, use_shaders, false, simple_shader);
         LLGLEnableFunc stencil_test(GL_STENCIL_TEST, draw->mSelected, &LLGLCommonFunc::selected_stencil_test);
 		gGL.blendFunc((LLRender::eBlendFactor) draw->mBlendFuncSrc, (LLRender::eBlendFactor) draw->mBlendFuncDst, mAlphaSFactor, mAlphaDFactor);
@@ -527,6 +528,15 @@ void LLDrawPoolAlpha::renderFullbrights(U32 mask, std::vector<LLDrawInfo*>& full
     bool use_shaders = gPipeline.canUseVertexShaders();
     for (LLDrawInfo* draw : fullbrights)
     {
+		// <FS:Beq> Capture render times
+		FSZoneN("Fullbrights");
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
+		if(vobj && vobj->isAttachment())
+		{
+			T = trackMyAttachment(vobj);
+		}
+		// </FS:Beq>
         bool tex_setup = TexSetup(draw, use_shaders, false, fullbright_shader);
 
         LLGLEnableFunc stencil_test(GL_STENCIL_TEST, draw->mSelected, &LLGLCommonFunc::selected_stencil_test);
@@ -547,6 +557,16 @@ void LLDrawPoolAlpha::renderMaterials(U32 mask, std::vector<LLDrawInfo*>& materi
     bool use_shaders = gPipeline.canUseVertexShaders();
     for (LLDrawInfo* draw : materials)
     {
+		// <FS:Beq> Capture render times
+		FSZoneN("Materials");
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
+		if(vobj && vobj->isAttachment())
+		{
+			T = trackMyAttachment(vobj);
+		}
+		// </FS:Beq>
+
         U32 mask = draw->mShaderMask;
 
 		llassert(mask < LLMaterial::SHADER_COUNT);
@@ -629,6 +649,16 @@ void LLDrawPoolAlpha::renderEmissives(U32 mask, std::vector<LLDrawInfo*>& emissi
     bool use_shaders = gPipeline.canUseVertexShaders();
     for (LLDrawInfo* draw : emissives)
     {
+		// <FS:Beq> Capture render times
+		FSZoneN("Emissives");
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
+		if(vobj && vobj->isAttachment())
+		{
+			T = trackMyAttachment(vobj);
+		}
+		// </FS:Beq>
+
         bool tex_setup = TexSetup(draw, use_shaders, false, emissive_shader);
         drawEmissive(mask, draw);
         RestoreTexSetup(tex_setup);
@@ -702,23 +732,14 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 				}
 
 				// <FS:Beq> Capture render times
-				std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+				std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 				if(params.mFace)
 				{
-					LLViewerObject* rootAtt{};
 					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 					
 					if(vobj->isAttachment())
 					{
-						auto par = (LLViewerObject*)vobj->getParent();
-						rootAtt = vobj;
-						while( par->isAttachment() )
-						{
-							rootAtt = par;
-							par = (LLViewerObject*)par->getParent();
-						}
-						LL_INFOS() << "ALPHA recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << " as " << rootAtt->getAttachmentItemID().getCRC32() << LL_ENDL;
-						if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+						T = trackMyAttachment(vobj);
 					}
 				}
 				// </FS:Beq>

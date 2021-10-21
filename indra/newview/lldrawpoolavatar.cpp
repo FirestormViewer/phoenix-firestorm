@@ -581,7 +581,7 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	{
 		return;
 	}
-	FSPerfStats::RecordObjectTime<const LLVOAvatar*> T(avatarp, FSPerfStats::ObjStatType::RENDER_SHADOWS);
+	FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_SHADOWS);
 
 	LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
 	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
@@ -1504,7 +1504,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
-	FSPerfStats::RecordObjectTime<const LLVOAvatar*> T(avatarp, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+	FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
@@ -2282,21 +2282,11 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 		}
 	
 		auto self = avatar->isSelf();
-		LLViewerObject * parentAttachment{nullptr};
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 		if(self && vobj->isAttachment())
 		{
-			LLViewerObject * vtop = vobj;
-			LLViewerObject * par  = (LLViewerObject *) vobj->getParent();
-
-			while (par && !(par->asAvatar()))
-			{
-				vtop = par;
-				par = (LLViewerObject *)vtop->getParent();
-			}
-			parentAttachment = vtop;
+			T = trackMyAttachment(vobj);
 		}
-		FSPerfStats::RecordAttachmentTime<U32> T(parentAttachment?parentAttachment->getAttachmentItemID().getCRC32():0, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
-
 		
 		LLVolume* volume = vobj->getVolume();
 		S32 te = face->getTEOffset();
@@ -2612,7 +2602,13 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 			{
 				continue;
 			}
-
+			// <FS:Beq> Capture render times
+			std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};			
+			if(vobj->isAttachment())
+			{
+				T = trackMyAttachment(vobj);
+			}
+			// </FS:Beq>
 			LLVolume* volume = vobj->getVolume();
 			S32 te = face->getTEOffset();
 

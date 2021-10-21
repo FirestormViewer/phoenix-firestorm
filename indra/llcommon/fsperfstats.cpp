@@ -27,10 +27,10 @@
 #include "fsperfstats.h"
 namespace FSPerfStats
 {
-    int 	RecordSceneTime::writeBuffer{0};
-
-    bool 	RecordSceneTime::collectionEnabled{true};
-
-	std::array< typename RecordSceneTime::StatsArray, 2 > RecordSceneTime::stats{ {} };
+    std::atomic<int> 	StatsRecorder::writeBuffer{0};
+    bool 	            StatsRecorder::collectionEnabled{true};
+	std::array<StatsRecorder::StatsTypeMatrix,2>  StatsRecorder::statsDoubleBuffer{ {} };
+    std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::max{ {} };
+    std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::sum{ {} };
 
 }

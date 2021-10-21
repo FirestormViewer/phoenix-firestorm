@@ -36,6 +36,7 @@
 #include "llspatialpartition.h"
 #include "llviewershadermgr.h"
 #include "llrender.h"
+#include "fsperfstats.h"
 
 static LLGLSLShader* simple_shader = NULL;
 static LLGLSLShader* fullbright_shader = NULL;
@@ -152,6 +153,18 @@ void LLDrawPoolGlow::render(S32 pass)
 
 void LLDrawPoolGlow::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
+	// <FS:Beq> Capture render times
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+	if(params.mFace)
+	{
+		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+		
+		if(vobj->isAttachment())
+		{
+			T = trackMyAttachment(vobj);
+		}
+	}
+	// </FS:Beq>
 	//gGL.diffuseColor4ubv(params.mGlowColor.mV);
 	LLRenderPass::pushBatch(params, mask, texture, batch_textures);
 }

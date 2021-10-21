@@ -233,20 +233,12 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 	}
 
 
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 	auto vobj = mFace->getViewerObject();
-	if(vobj && !vobj->asAvatar() && vobj->getAvatar()->isSelf())
+	if( vobj && vobj->isAttachment() )
 	{
-		LLViewerObject * vtop = vobj;
-		LLViewerObject * par  = (LLViewerObject *) vobj->getParent();
-
-		while (par && !(par->asAvatar()))
-		{
-			vtop = par;
-			par = (LLViewerObject *)vtop->getParent();
-		}
-		vobj = vtop;
+		T = trackMyAttachment(vobj);
 	}
-	FSPerfStats::RecordAttachmentTime<U32> T(vobj?vobj->getAttachmentItemID().getCRC32():0, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
 
 	U32 triangle_count = 0;
 

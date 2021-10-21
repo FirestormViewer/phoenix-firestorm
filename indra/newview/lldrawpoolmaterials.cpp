@@ -141,23 +141,14 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 		LLDrawInfo& params = **i;
 
 		// <FS:Beq> Capture render times
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 		if(params.mFace)
 		{
-			LLViewerObject* rootAtt{};
 			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 			
 			if(vobj->isAttachment())
 			{
-				auto par = (LLViewerObject*)vobj->getParent();
-				rootAtt = vobj;
-				while( par->isAttachment() )
-				{
-					rootAtt = par;
-					par = (LLViewerObject*)par->getParent();
-				}
-				LL_INFOS() << "MATERIALS recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << " as " << rootAtt->getAttachmentItemID().getCRC32() << LL_ENDL;
-				if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+				T = trackMyAttachment(vobj);
 			}
 		}
 		// </FS:Beq>
@@ -196,6 +187,18 @@ void LLDrawPoolMaterials::bindNormalMap(LLViewerTexture* tex)
 
 void LLDrawPoolMaterials::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
+	// <FS:Beq> Capture render times
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+	if(params.mFace)
+	{
+		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+		
+		if(vobj->isAttachment())
+		{
+			T = trackMyAttachment(vobj);
+		}
+	}
+	// </FS:Beq>
 	applyModelMatrix(params);
 	
 	bool tex_setup = false;

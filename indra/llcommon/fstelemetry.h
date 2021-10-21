@@ -43,6 +43,8 @@
 #define FSZoneN( name ) ZoneNamedN( ___tracy_scoped_zone, name, FSTelemetry::active)
 #define FSZoneC( color ) ZoneNamedC( ___tracy_scoped_zone, color, FSTelemetry::active)
 #define FSZoneNC( name, color ) ZoneNamedNC( ___tracy_scoped_zone, name, color, FSTelemetry::active)
+#define FSZoneText( text, size ) ZoneText( text, size )
+#define FSZoneValue( num_uint64 ) ZoneValue( num_uint64 )
 #define FSPlot( name, value ) TracyPlot( name, value)
 #define FSFrameMark FrameMark
 #define FSThreadName( name ) tracy::SetThreadName( name )
@@ -58,10 +60,12 @@
 #define FSZoneN( name ) 
 #define FSZoneC( color ) 
 #define FSZoneNC( name, color )
+#define FSZoneText( text, size )
+#define FSZoneValue( num_uint64 )
 #define FSPlot( name, value ) 
 #define FSFrameMark 
 #define FSThreadName( name ) 
-#define FSMessageL ( message )
+#define FSMessageL( message )
 #define FSTelemetryIsConnected
 #endif // TRACY_ENABLE
 

@@ -643,19 +643,10 @@ void renderFace(LLDrawable* drawable, LLFace *face)
     LLVOVolume* vobj = drawable->getVOVolume();
     if (vobj)
     {
-		LLVOVolume* rootAtt{};
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 		if(vobj->isAttachment())
 		{
-			auto par = (LLVOVolume*)vobj->getParent();
-			rootAtt = vobj;
-			while( par->isAttachment() )
-			{
-				rootAtt = par;
-				par = (LLVOVolume*)par->getParent();
-			}
-			// LL_INFOS() << "recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << LL_ENDL;
-			if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+			T = trackMyAttachment(vobj);
 		}
         LLVolume* volume = NULL;
 
@@ -1255,6 +1246,11 @@ bool LLFace::canRenderAsMask()
 	{
 		return false;
 	}
+
+	// <FS:Beq> shortcircuit fully alpha faces
+	if(getViewerObject()->isHUDAttachment()){return false;};
+	if(te->getAlpha() == 0.0f && (te->getGlow() == 0.f)){FSZoneN("beqshortcircuit invisible");return true;}
+	// </FS:Beq>
 	
 	LLMaterial* mat = te->getMaterialParams();
 	if (mat && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)

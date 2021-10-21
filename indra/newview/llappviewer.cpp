@@ -1633,7 +1633,7 @@ bool LLAppViewer::frame()
 bool LLAppViewer::doFrame()
 {
 	{
-	FSPerfStats::RecordSceneTime T (FSPerfStats::SceneStatType::RENDER_FRAME);
+	FSPerfStats::RecordSceneTime T (const LLUUID{}, FSPerfStats::StatType_t::RENDER_FRAME);
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
@@ -1771,7 +1771,7 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
-				FSPerfStats::RecordSceneTime T (FSPerfStats::SceneStatType::RENDER_IDLE);
+				FSPerfStats::RecordSceneTime T (const LLUUID{}, FSPerfStats::StatType_t::RENDER_IDLE);
 
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 
@@ -1851,7 +1851,7 @@ bool LLAppViewer::doFrame()
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
 				{
-					FSPerfStats::RecordSceneTime T ( FSPerfStats::SceneStatType::RENDER_SLEEP );
+					FSPerfStats::RecordSceneTime T ( LLUUID{}, FSPerfStats::StatType_t::RENDER_SLEEP );
 					ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
@@ -1929,7 +1929,7 @@ bool LLAppViewer::doFrame()
 			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
-				FSPerfStats::RecordSceneTime T (FSPerfStats::SceneStatType::RENDER_FPSLIMIT);
+				FSPerfStats::RecordSceneTime T (const LLUUID{}, FSPerfStats::StatType_t::RENDER_FPSLIMIT);
 				F32 min_frame_time = 1.f / (F32)max_fps;
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
@@ -1970,9 +1970,7 @@ bool LLAppViewer::doFrame()
     FSFrameMark; // <FS:Beq> Tracy support delineate Frame
     LLPROFILE_UPDATE();
 	}
-	FSPerfStats::RecordSceneTime::toggleBuffer();
-	FSPerfStats::RecordObjectTime<const LLVOAvatar*>::toggleBuffer();
-	FSPerfStats::RecordAttachmentTime<U32>::toggleBuffer();
+	FSPerfStats::StatsRecorder::endFrame();
 
 	return ! LLApp::isRunning();
 }

@@ -148,12 +148,16 @@
     width="540">
         <name_list.columns
          label=""
-         name="complex_visual"
+         name="art_visual"
          width="90" />
         <name_list.columns
          label=""
+         name="art_value"
+         width="80" />
+        <name_list.columns
+         label=""
          name="complex_value"
-         width="50" />
+         width="40" />
         <name_list.columns
          label=""
          name="name"/>

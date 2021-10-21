@@ -453,24 +453,15 @@ void LLRenderPass::applyModelMatrix(const LLDrawInfo& params)
 
 void LLRenderPass::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
+	FSZone;
 	// <FS:Beq> Capture render times
-	LLViewerObject* rootAtt{};
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>> T{};
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 	if(params.mFace)
 	{
-		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-		
+		LLViewerObject* vobj = params.mFace->getViewerObject();
 		if(vobj->isAttachment())
 		{
-			auto par = (LLViewerObject*)vobj->getParent();
-			rootAtt = vobj;
-			while( par->isAttachment() )
-			{
-				rootAtt = par;
-				par = (LLViewerObject*)par->getParent();
-			}
-			LL_INFOS() << "pushBatch recording time for ATT@" << rootAtt << " " << (rootAtt?rootAtt->getAttachmentItemName():"null") << " as " << rootAtt->getAttachmentItemID().getCRC32() << LL_ENDL;
-			if(rootAtt){T = std::unique_ptr<FSPerfStats::RecordAttachmentTime<U32>>(new FSPerfStats::RecordAttachmentTime<U32>(rootAtt->getAttachmentItemID().getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY));}
+			T = trackMyAttachment( vobj );
 		}
 	}
 	// </FS:Beq>

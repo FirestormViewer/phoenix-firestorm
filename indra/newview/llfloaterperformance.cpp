@@ -53,6 +53,10 @@ const S32 BAR_LEFT_PAD = 2;
 const S32 BAR_RIGHT_PAD = 5;
 const S32 BAR_BOTTOM_PAD = 9;
 
+constexpr auto AvType       {FSPerfStats::ObjType_t::OT_AVATAR};
+constexpr auto AttType      {FSPerfStats::ObjType_t::OT_ATTACHMENT};
+constexpr auto HudType      {FSPerfStats::ObjType_t::OT_HUD};
+constexpr auto SceneType    {FSPerfStats::ObjType_t::OT_GENERAL};
 class LLExceptionsContextMenu : public LLListContextMenu
 {
 public:
@@ -164,44 +168,58 @@ void LLFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
 void LLFloaterPerformance::draw()
 {
     const S32 NUM_PERIODS = 50;
+    constexpr auto NANOS = 1000000000;
+    constexpr auto MICROS = 1000000;
+    constexpr auto MILLIS = 1000;
+    
+
     static LLCachedControl<U32> fps_cap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
     static LLCachedControl<U32> target_fps(gSavedSettings, "FSTargetFPS"); // desired FPS
     static LLCachedControl<bool> auto_tune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
     static LLCachedControl<F32> max_render_cost(gSavedSettings, "RenderAvatarMaxART", 0);    
 
+    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
     if (mUpdateTimer->hasExpired())
     {
        	LLStringUtil::format_map_t args;
 
         auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
-        auto tot_frame_time_ns = 1000000000/fps;
-        auto target_frame_time_ns = 1000000000/(target_fps==0?1:target_fps);
-        auto tot_avatar_time = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::getSum(FSPerfStats::ObjStatType::RENDER_COMBINED);
-        auto tot_huds_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_HUDS) ;
-        auto tot_sleep_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_SLEEP);
-        auto tot_ui_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_UI);
-        auto tot_idle_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_IDLE);
-        auto tot_limit_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_FPSLIMIT);
-        auto tot_swap_time = FSPerfStats::RecordSceneTime::get(FSPerfStats::SceneStatType::RENDER_SWAP);
+        auto tot_frame_time_ns = NANOS/fps;
+        auto target_frame_time_ns = NANOS/(target_fps==0?1:target_fps);
+        auto tot_avatar_time_raw = FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
+        auto tot_huds_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_HUDS);
+        auto tot_sleep_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_SLEEP);
+        auto tot_ui_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_UI);
+        auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE);
+        auto tot_limit_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FPSLIMIT);
+        auto tot_swap_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_SWAP);
 
-        // once the rest is extracted what is left is the scene cost (we don't include non-render activities such as network here prlloy should.)
-        auto tot_scene_time = tot_frame_time_ns - tot_avatar_time - tot_huds_time - tot_ui_time - tot_sleep_time - tot_limit_time - tot_swap_time;
+        auto tot_avatar_time_ns = FSPerfStats::raw_to_ns( tot_avatar_time_raw );
+        auto tot_huds_time_ns = FSPerfStats::raw_to_ns( tot_huds_time_raw );
+        auto tot_sleep_time_ns = FSPerfStats::raw_to_ns( tot_sleep_time_raw );
+        auto tot_ui_time_ns = FSPerfStats::raw_to_ns( tot_ui_time_raw );
+        auto tot_idle_time_ns = FSPerfStats::raw_to_ns( tot_idle_time_raw );
+        auto tot_limit_time_ns = FSPerfStats::raw_to_ns( tot_limit_time_raw );
+        auto tot_swap_time_ns = FSPerfStats::raw_to_ns( tot_swap_time_raw );
+
+        // once the rest is extracted what is left is the scene cost
+        auto tot_scene_time_ns = tot_frame_time_ns - tot_avatar_time_ns - tot_huds_time_ns - tot_ui_time_ns - tot_sleep_time_ns - tot_limit_time_ns - tot_swap_time_ns - tot_idle_time_ns;
         // remove time spent sleeping for fps limit or out of focus.
-        tot_frame_time_ns -= tot_limit_time;
-        tot_frame_time_ns -= tot_sleep_time;
+        tot_frame_time_ns -= tot_limit_time_ns;
+        tot_frame_time_ns -= tot_sleep_time_ns;
 
         if(tot_frame_time_ns == 0)
         {
             LL_WARNS("performance") << "things went wrong, quit while we can." << LL_ENDL;
             return;
         }
-        auto pct_avatar_time = (tot_avatar_time*100)/tot_frame_time_ns;
-        auto pct_huds_time = (tot_huds_time*100)/tot_frame_time_ns;
-        auto pct_ui_time = (tot_ui_time*100)/tot_frame_time_ns;
-        auto pct_idle_time = (tot_idle_time*100)/tot_frame_time_ns;
-        auto pct_swap_time = (tot_swap_time*100)/tot_frame_time_ns;
-        auto pct_scene_time = (tot_scene_time*100)/tot_frame_time_ns;
+        auto pct_avatar_time = (tot_avatar_time_ns * 100)/tot_frame_time_ns;
+        auto pct_huds_time = (tot_huds_time_ns * 100)/tot_frame_time_ns;
+        auto pct_ui_time = (tot_ui_time_ns * 100)/tot_frame_time_ns;
+        auto pct_idle_time = (tot_idle_time_ns * 100)/tot_frame_time_ns;
+        auto pct_swap_time = (tot_swap_time_ns * 100)/tot_frame_time_ns;
+        auto pct_scene_time = (tot_scene_time_ns * 100)/tot_frame_time_ns;
 
         args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
         args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
@@ -217,13 +235,13 @@ void LLFloaterPerformance::draw()
         getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
         
         auto textbox = getChild<LLTextBox>("fps_warning");
-        if(tot_sleep_time > 0) // We are sleeping because view is not focussed
+        if(tot_sleep_time_raw > 0) // We are sleeping because view is not focussed
         {
             textbox->setVisible(true);
             textbox->setText(getString("focus_fps"));
             textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
         }
-        else if (tot_limit_time > 0)
+        else if (tot_limit_time_raw > 0)
         {
             textbox->setVisible(true);
             textbox->setText(getString("limit_fps", args));
@@ -242,11 +260,11 @@ void LLFloaterPerformance::draw()
 
         if( auto_tune )
         {
-            auto av_render_max = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::getMax(FSPerfStats::ObjStatType::RENDER_COMBINED);
+            auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
 
             // if( target_frame_time_ns <= tot_frame_time_ns )
             // {
-            //     U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time;
+            //     U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_raw;
             //     if( non_avatar_time_ns < target_frame_time_ns )
             //     {
             //         F32 target_avatar_time_ms {F32(target_frame_time_ns-non_avatar_time_ns)/1000000};
@@ -255,33 +273,41 @@ void LLFloaterPerformance::draw()
             //     }
             // }
 
+            // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
             if( target_frame_time_ns <= tot_frame_time_ns )
             {
                 LL_INFOS() << "AUTO_TUNE: adapting frame rate" << LL_ENDL;
-                U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time;
-                LL_INFOS() << "AUTO_TUNE: adapting frame rate: target_frame=" << target_frame_time_ns << " nonav_frame_time=" << non_avatar_time_ns << " headroom=" << target_frame_time_ns - non_avatar_time_ns << LL_ENDL;
+                U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
+                LL_INFOS() << "AUTO_TUNE: adapting frame rate: target_frame=" << target_frame_time_ns << " nonav_frame_time=" << non_avatar_time_ns << " headroom=" << (S64)target_frame_time_ns - non_avatar_time_ns << LL_ENDL;
+                // If the target frame time < non avatar frame time then we can pototentially reach it.
                 if( non_avatar_time_ns < target_frame_time_ns )
                 {
                     U64 target_avatar_time_ns {target_frame_time_ns-non_avatar_time_ns};
                     LL_INFOS() << "AUTO_TUNE: avatar_budget:" << target_avatar_time_ns << LL_ENDL;
-                    if(target_avatar_time_ns < tot_avatar_time)
+                    if(target_avatar_time_ns < tot_avatar_time_ns)
                     {
-                        F32 new_render_limit = (F32)(av_render_max-100000)/1000000;
-                        if(new_render_limit >= max_render_cost)
+                        F32 new_render_limit_ms = (F32)(FSPerfStats::raw_to_ms(av_render_max_raw)-0.1);
+                        if(new_render_limit_ms >= max_render_cost)
                         {
                             // we caught a bad frame possibly with a forced refresh render.
-                            new_render_limit = max_render_cost - 0.1;  
+                            new_render_limit_ms = max_render_cost - 0.1;  
                         }
-                        gSavedSettings.setF32( "RenderAvatarMaxART",  new_render_limit);
-                        LL_INFOS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit << LL_ENDL;
+                        gSavedSettings.setF32( "RenderAvatarMaxART",  new_render_limit_ms);
+                        LL_INFOS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit_ms << LL_ENDL;
                     }
-                    LL_INFOS() << "AUTO_TUNE: Target frame time:"<<target_frame_time_ns/1000000 << " (non_avatar is " << non_avatar_time_ns/1000000 << ") Max cost limited=" << max_render_cost << LL_ENDL;
+                    LL_INFOS() << "AUTO_TUNE: Target frame time:"<<target_frame_time_ns/1000000 << "ms (non_avatar is " << non_avatar_time_ns/1000000 << "ms) Max cost limited=" << max_render_cost << LL_ENDL;
+                }
+                else
+                {
+                    // TODO(Beq): Set advisory text for further actions
+                    LL_INFOS() << "AUTO_TUNE: Unachievable target . Target frame time:"<<target_frame_time_ns/1000000 << "ms (non_avatar is " << non_avatar_time_ns/1000000 << "ms)" << LL_ENDL;
+                    textbox->setColor(LLUIColorTable::instance().getColor("red"));
                 }
             }
             else 
                 if( target_frame_time_ns > (tot_frame_time_ns + max_render_cost))
             {
-                // if we have more space to spare let's shift up little in the hope we'll restore an avatar.
+                // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
                 gSavedSettings.setF32( "RenderAvatarMaxART",  max_render_cost + 0.5 );
             }
         }
@@ -339,18 +365,20 @@ void LLFloaterPerformance::populateHUDList()
     hud_complexity_list_t::iterator iter = complexity_list.begin();
     hud_complexity_list_t::iterator end = complexity_list.end();
 
+    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
+
     U32 max_complexity = 0;
     for (; iter != end; ++iter)
     {
         max_complexity = llmax(max_complexity, (*iter).objectsCost);
     }
    
-    auto huds_max_render_time = FSPerfStats::RecordObjectTime<LLHUDObject*>::getMax(FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+    auto huds_max_render_time_raw = FSPerfStats::StatsRecorder::getMax(HudType, FSPerfStats::StatType_t::RENDER_GEOMETRY);
     for (iter = complexity_list.begin(); iter != end; ++iter)
     {
         LLHUDComplexity hud_object_complexity = *iter;     
         auto hud_ptr = hud_object_complexity.objectPtr;
-        auto hud_render_time = FSPerfStats::RecordObjectTime<const LLViewerObject*>::get(hud_ptr, FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+        auto hud_render_time_raw = FSPerfStats::StatsRecorder::get(HudType, hud_ptr->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
         LLSD item;
         item["special_id"] = hud_object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
@@ -358,15 +386,15 @@ void LLFloaterPerformance::populateHUDList()
         row[0]["column"] = "complex_visual";
         row[0]["type"] = "bar";
         LLSD& value = row[0]["value"];
-        value["ratio"] = (F32)hud_render_time / huds_max_render_time;
+        value["ratio"] = (F32)hud_render_time_raw / huds_max_render_time_raw;
         value["bottom"] = BAR_BOTTOM_PAD;
         value["left_pad"] = BAR_LEFT_PAD;
         value["right_pad"] = BAR_RIGHT_PAD;
 
         row[1]["column"] = "complex_value";
         row[1]["type"] = "text";
-        LL_INFOS() << "HUD : hud[" << hud_ptr << " time:" << hud_render_time <<" total_time:" << huds_max_render_time << LL_ENDL;
-        row[1]["value"] = llformat("%.2f",((double)hud_render_time / 1000000000));
+        LL_INFOS() << "HUD : hud[" << hud_ptr << " time:" << hud_render_time_raw <<" total_time:" << huds_max_render_time_raw << LL_ENDL;
+        row[1]["value"] = llformat( "%.3f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
  
         row[2]["column"] = "name";
@@ -401,41 +429,48 @@ void LLFloaterPerformance::populateObjectList()
     object_complexity_list_t::iterator iter = complexity_list.begin();
     object_complexity_list_t::iterator end = complexity_list.end();
 
+    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
+
     U32 max_complexity = 0;
     for (; iter != end; ++iter)
     {
         max_complexity = llmax(max_complexity, (*iter).objectCost);
     }
 
-    auto max_render_time = FSPerfStats::RecordAttachmentTime<U32>::getMax(FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+    auto att_max_render_time_raw = FSPerfStats::StatsRecorder::getMax(AttType, FSPerfStats::StatType_t::RENDER_COMBINED);
 
     for (iter = complexity_list.begin(); iter != end; ++iter)
     {
         LLObjectComplexity object_complexity = *iter;        
-        // S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
-        auto attach_render_time = FSPerfStats::RecordAttachmentTime<U32>::get(object_complexity.objectId.getCRC32(), FSPerfStats::ObjStatType::RENDER_GEOMETRY);
+        S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
+        auto attach_render_time_raw = FSPerfStats::StatsRecorder::get(AttType, object_complexity.objectId, FSPerfStats::StatType_t::RENDER_COMBINED);
         LLSD item;
         item["special_id"] = object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
         LLSD& row = item["columns"];
-        row[0]["column"] = "complex_visual";
+        row[0]["column"] = "art_visual";
         row[0]["type"] = "bar";
         LLSD& value = row[0]["value"];
-        value["ratio"] = (F32)attach_render_time / max_render_time;
+        value["ratio"] = (F32)attach_render_time_raw / att_max_render_time_raw;
         value["bottom"] = BAR_BOTTOM_PAD;
         value["left_pad"] = BAR_LEFT_PAD;
         value["right_pad"] = BAR_RIGHT_PAD;
 
-        row[1]["column"] = "complex_value";
+        row[1]["column"] = "art_value";
         row[1]["type"] = "text";
         // row[1]["value"] = std::to_string(obj_cost_short);
-        row[1]["value"] = llformat("%.3f",((double)attach_render_time / 1000000));
+        row[1]["value"] = llformat( "%.4f", FSPerfStats::raw_to_us(attach_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
 
-        row[2]["column"] = "name";
+        row[2]["column"] = "complex_value";
         row[2]["type"] = "text";
-        row[2]["value"] = object_complexity.objectName;
+        row[2]["value"] = std::to_string(obj_cost_short);
         row[2]["font"]["name"] = "SANSSERIF";
+
+        row[3]["column"] = "name";
+        row[3]["type"] = "text";
+        row[3]["value"] = object_complexity.objectName;
+        row[3]["font"]["name"] = "SANSSERIF";
 
         LLScrollListItem* obj = mObjectList->addElement(item);
         if (obj)
@@ -467,7 +502,7 @@ void LLFloaterPerformance::populateNearbyList()
     getNearbyAvatars(valid_nearby_avs);
 
     std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
-    auto render_max = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::getMax(FSPerfStats::ObjStatType::RENDER_COMBINED);
+    auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
     while (char_iter != valid_nearby_avs.end())
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
@@ -477,40 +512,46 @@ void LLFloaterPerformance::populateNearbyList()
             if(overall_appearance == LLVOAvatar::AOA_INVISIBLE)
                 continue;
 
-            // S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
-            auto render_av  = FSPerfStats::RecordObjectTime<const LLVOAvatar*>::get(avatar,FSPerfStats::ObjStatType::RENDER_COMBINED);
+            S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
+            auto render_av_raw  = FSPerfStats::StatsRecorder::get(AvType, avatar->getID(),FSPerfStats::StatType_t::RENDER_COMBINED);
             auto is_slow = avatar->isTooSlow(true);
             // auto is_slow_without_shadows = avatar->isTooSlow();
 
             LLSD item;
             item["id"] = avatar->getID();
             LLSD& row = item["columns"];
-            row[0]["column"] = "complex_visual";
+            row[0]["column"] = "art_visual";
             row[0]["type"] = "bar";
             LLSD& value = row[0]["value"];
-            value["ratio"] = (double)render_av / render_max;
+            value["ratio"] = (double)render_av_raw / av_render_max_raw;
             value["bottom"] = BAR_BOTTOM_PAD;
             value["left_pad"] = BAR_LEFT_PAD;
             value["right_pad"] = BAR_RIGHT_PAD;
 
-            row[1]["column"] = "complex_value";
+            row[1]["column"] = "art_value";
             row[1]["type"] = "text";
             if(is_slow)
             {
-                row[1]["value"] = llformat("%.2f", ((double)avatar->getLastART() / 1000000));
+                row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_ms( avatar->getLastART() ) );
             }
             else
             {
-                row[1]["value"] = llformat("%.2f",((double)render_av / 1000000));
+                row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_ms( render_av_raw ) );
             }
-
             row[1]["font"]["name"] = "SANSSERIF";
             row[1]["width"] = "50";
 
-            row[2]["column"] = "name";
+            row[2]["column"] = "complex_value";
             row[2]["type"] = "text";
-            row[2]["value"] = avatar->getFullname();
+            row[2]["value"] = std::to_string(complexity_short);
             row[2]["font"]["name"] = "SANSSERIF";
+            row[2]["width"] = "50";
+
+
+            row[3]["column"] = "name";
+            row[3]["type"] = "text";
+            row[3]["value"] = avatar->getFullname();
+            row[3]["font"]["name"] = "SANSSERIF";
 
             LLScrollListItem* av_item = mNearbyList->addElement(item);
             if(av_item)
