@@ -25,7 +25,6 @@
  */
 
 #include "linden_common.h"
-#include "fstelemetry.h" // <FS:Beq> add telemetry support.
 #include "llimageworker.h"
 #include "llimagedxt.h"
 

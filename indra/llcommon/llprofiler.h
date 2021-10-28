@@ -99,11 +99,8 @@ namespace LLProfiler
 
         #define LL_RECORD_BLOCK_TIME(name)                                                                  const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
         #define LL_PROFILE_ZONE_NAMED(name)             // LL_PROFILE_ZONE_NAMED is a no-op when Tracy is disabled
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) // LL_RECORD_BLOCK_TIME(name)
         #define LL_PROFILE_ZONE_SCOPED                  // LL_PROFILE_ZONE_SCOPED is a no-op when Tracy is disabled
-        // <FS:Beq> Fix mismatch across ifdef
-        // #define LL_PROFILE_ZONE_COLOR(name,color)
-        #define LL_PROFILE_ZONE_COLOR(color) 
-        // </FS:Beq>
 
         #define LL_PROFILE_ZONE_NUM( val )              (void)( val );                // Not supported
         #define LL_PROFILE_ZONE_TEXT( text, size )      (void)( text ); void( size ); // Not supported
@@ -112,10 +109,10 @@ namespace LLProfiler
         #define LL_PROFILE_ZONE_INFO(name)              (void)(name); // Not supported
         #define LL_PROFILE_ZONE_WARN(name)              (void)(name); // Not supported
         // <FS:Beq> Additional FS Tracy macros
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) 
-        #define LL_PROFILE_PLOT( name, value )          
-        #define LL_PROFILE_PLOT_SQ( name, prev, value ) 
-        #define LL_PROFILE_IS_CONNECTED                 
+        #define LL_PROFILE_ZONE_COLOR(color)
+        #define LL_PROFILE_PLOT( name, value )
+        #define LL_PROFILE_PLOT_SQ( name, prev, value )
+        #define LL_PROFILE_IS_CONNECTED
         // </FS:Beq>
     #endif
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
@@ -143,7 +140,7 @@ namespace LLProfiler
         #define LL_PROFILE_ZONE_ERR(name)               LL_PROFILE_ZONE_NAMED_COLOR( name, 0XFF0000  )  // RGB yellow
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
-        // <FS:Beq> Additional FS Tracy macros 
+        // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active )
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
         #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot( name, prev );TracyPlot( name, value )
@@ -152,7 +149,28 @@ namespace LLProfiler
     #endif
 #else
     #define LL_PROFILER_FRAME_END
-    #define LL_PROFILER_SET_THREAD_NAME( name ) (void)(name)
+    #define LL_PROFILER_SET_THREAD_NAME(name)
+    #define LL_PROFILER_THREAD_BEGIN(name)
+    #define LL_PROFILER_THREAD_END(name)
+
+    #define LL_RECORD_BLOCK_TIME(name)
+    #define LL_PROFILE_ZONE_NAMED(name)
+    #define LL_PROFILE_ZONE_NAMED_COLOR(name,color)
+    #define LL_PROFILE_ZONE_SCOPED
+
+    #define LL_PROFILE_ZONE_NUM(val)
+    #define LL_PROFILE_ZONE_TEXT(text, size)
+
+    #define LL_PROFILE_ZONE_ERR(name)
+    #define LL_PROFILE_ZONE_INFO(name)
+    #define LL_PROFILE_ZONE_WARN(name)
+
+    // <FS:Ansariel> Additional FS Tracy macros
+    #define LL_PROFILE_ZONE_COLOR(color)
+    #define LL_PROFILE_PLOT( name, value )
+    #define LL_PROFILE_PLOT_SQ( name, prev, value )
+    #define LL_PROFILE_IS_CONNECTED
+    // </FS:Ansariel>
 #endif // LL_PROFILER
 
 #endif // LL_PROFILER_H
