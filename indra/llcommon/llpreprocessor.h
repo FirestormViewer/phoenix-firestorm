@@ -40,6 +40,12 @@
 #define LL_BIG_ENDIAN 1
 #endif
 
+//<FS:ND> FIRE-31221 workaround for newer glibc versions, patch from Lance Corrimal
+// Figure out GLIBC version - 2.34 needs an additional include as a build fix
+#if (__GLIBC__*1000 + __GLIBC_MINOR__) >= 2034
+#include <bits/pthread_stack_min.h>
+#endif
+// </FS:Nd>
 
 // Per-compiler switches
 
