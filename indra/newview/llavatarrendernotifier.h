@@ -48,7 +48,6 @@ struct LLHUDComplexity
         objectName = "";
         objectsCost = 0;
         objectsCount = 0;
-        objectPtr = nullptr;
         texturesCost = 0;
         texturesCount = 0;
         largeTexturesCount = 0;
@@ -62,7 +61,6 @@ struct LLHUDComplexity
     U32 texturesCost;
     U32 texturesCount;
     U32 largeTexturesCount;
-    const LLViewerObject * objectPtr;
     F64Bytes texturesMemoryTotal;
 };
 
