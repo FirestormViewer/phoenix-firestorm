@@ -1682,6 +1682,10 @@ configure_file(
 list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
 # </FS:TS>
 
+  # <FS:Beq> Performance stast support
+  list(APPEND viewer_SOURCE_FILES fsperfstats.cpp)
+  list(APPEND viewer_HEADER_FILES fsperfstats.h)
+  # </FS:Beq> 
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 #build_data.json creation moved to viewer_manifest.py MAINT-6413

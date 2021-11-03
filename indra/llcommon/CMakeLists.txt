@@ -264,10 +264,6 @@ set(llcommon_HEADER_FILES
     list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
     endif()
     # </FS:Beq> Tracy Profiler support
-    # <FS:Beq> Performance stast support
-    list(APPEND llcommon_SOURCE_FILES fsperfstats.cpp)
-    list(APPEND llcommon_HEADER_FILES fsperfstats.h)
-    # </FS:Beq> 
     
     # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
 SET( llcommon_ND_SOURCE_FILES
