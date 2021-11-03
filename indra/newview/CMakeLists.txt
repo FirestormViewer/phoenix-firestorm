@@ -397,7 +397,8 @@ set(viewer_SOURCE_FILES
     llfloaterpathfindinglinksets.cpp
     llfloaterpathfindingobjects.cpp
     llfloaterpay.cpp
-    llfloaterperformance.cpp
+    # llfloaterperformance.cpp <FS:Beq/> replaced with fs version due to large changes and likelihood that LL version will not release.
+    fsfloaterperformance.cpp 
     llfloaterperms.cpp
     llfloaterpostprocess.cpp
     llfloaterpreference.cpp
@@ -1178,7 +1179,8 @@ set(viewer_HEADER_FILES
     llfloaterpathfindinglinksets.h
     llfloaterpathfindingobjects.h
     llfloaterpay.h
-    llfloaterperformance.h
+    # llfloaterperformance.h <FS:Beq/> replaced with fs version due to large changes and likelihood that LL version will not release.
+    fsfloaterperformance.h
     llfloaterperms.h
     llfloaterpostprocess.h
     llfloaterpreference.h

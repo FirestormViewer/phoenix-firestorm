@@ -35,12 +35,17 @@
 #include "llfeaturemanager.h"
 #include "llfloaterpreference.h" // LLAvatarComplexityControls
 #include "llfloaterreg.h"
+#include "llmoveview.h" // for LLPanelStandStopFlying
 #include "llnamelistctrl.h"
 #include "llradiogroup.h"
+#include "llselectmgr.h"
 #include "llsliderctrl.h"
 #include "lltextbox.h"
+#include "llcombobox.h"
 #include "lltrans.h"
 #include "llviewerobjectlist.h"
+#include "llviewerjoystick.h"
+#include "llviewermediafocus.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h" 
 #include "pipeline.h"
@@ -70,13 +75,16 @@ protected:
         LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
         registrar.add("Settings.SetRendering", boost::bind(&LLFloaterPerformance::onCustomAction, mFloaterPerformance, _2, mUUIDs.front()));
         enable_registrar.add("Settings.IsSelected", boost::bind(&LLFloaterPerformance::isActionChecked, mFloaterPerformance, _2, mUUIDs.front()));
-        LLContextMenu* menu = createFromFile("menu_avatar_rendering_settings.xml");
+        registrar.add("Avatar.Extended", boost::bind(&LLFloaterPerformance::onExtendedAction, mFloaterPerformance, _2, mUUIDs.front()));
+        LLContextMenu* menu = createFromFile("menu_perf_avatar_rendering_settings.xml");
 
         return menu;
     }
 
     LLFloaterPerformance* mFloaterPerformance;
 };
+
+
 
 LLFloaterPerformance::LLFloaterPerformance(const LLSD& key)
 :   LLFloater(key),
@@ -100,16 +108,26 @@ BOOL LLFloaterPerformance::postBuild()
     mComplexityPanel = getChild<LLPanel>("panel_performance_complexity");
     mSettingsPanel = getChild<LLPanel>("panel_performance_preferences");
     mHUDsPanel = getChild<LLPanel>("panel_performance_huds");
+    mAutoTunePanel = getChild<LLPanel>("panel_performance_autotune");
 
     getChild<LLPanel>("nearby_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mNearbyPanel));
     getChild<LLPanel>("complexity_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mComplexityPanel));
     getChild<LLPanel>("settings_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mSettingsPanel));
     getChild<LLPanel>("huds_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mHUDsPanel));
+    auto tgt_panel = getChild<LLPanel>("target_subpanel");
+    if(tgt_panel)
+    {
+        tgt_panel->getChild<LLButton>("target_button")->setCommitCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+        // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setShowCursorHand(false);
+        // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setSoundFlags(LLView::MOUSE_UP);
+        // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setClickedCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+    }
 
     initBackBtn(mNearbyPanel);
     initBackBtn(mComplexityPanel);
     initBackBtn(mSettingsPanel);
     initBackBtn(mHUDsPanel);
+    initBackBtn(mAutoTunePanel);
 
     mHUDList = mHUDsPanel->getChild<LLNameListCtrl>("hud_list");
     mHUDList->setNameListType(LLNameListCtrl::SPECIAL);
@@ -129,15 +147,18 @@ BOOL LLFloaterPerformance::postBuild()
     mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->set(!LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR));
     mNearbyList = mNearbyPanel->getChild<LLNameListCtrl>("nearby_list");
     mNearbyList->setRightMouseDownCallback(boost::bind(&LLFloaterPerformance::onAvatarListRightClick, this, _1, _2, _3));
+    
+    mNearbyCombo = mComplexityPanel->getChild<LLComboBox>("avatar_name_combo");
+    mNearbyCombo->setCommitCallback(boost::bind(&LLFloaterPerformance::onClickFocusAvatar, this));
 
     updateComplexityText();
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateComplexityText, this));
     mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxComplexity, this));
 
     updateMaxRenderTime();
-    updateMaxRenderTimeText();
-    mMaxARTChangedSignal = gSavedSettings.getControl("RenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateMaxRenderTimeText, this));
-    mNearbyPanel->getChild<LLSliderCtrl>("RenderAvatarMaxART")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
+    // updateMaxRenderTimeText();
+    mMaxARTChangedSignal = gSavedSettings.getControl("FSRenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
+    mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
 
     LLAvatarComplexityControls::setIndirectMaxArc();
 
@@ -173,41 +194,67 @@ void LLFloaterPerformance::draw()
     constexpr auto MILLIS = 1000;
     
 
-    static LLCachedControl<U32> fps_cap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
-    static LLCachedControl<U32> target_fps(gSavedSettings, "FSTargetFPS"); // desired FPS
-    static LLCachedControl<bool> auto_tune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
-    static LLCachedControl<F32> max_render_cost(gSavedSettings, "RenderAvatarMaxART", 0);    
+    static LLCachedControl<U32> fpsCap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
+    static LLCachedControl<U32> targetFPS(gSavedSettings, "FSTargetFPS"); // desired FPS
+    // static LLCachedControl<bool> autoTune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
+    static LLCachedControl<U32> maxRenderCost(gSavedSettings, "FSRenderAvatarMaxART");    
+    if(maxRenderCost != FSPerfStats::renderAvatarMaxART)
+    {
+        gSavedSettings.setU32("FSRenderAvatarMaxART", FSPerfStats::renderAvatarMaxART);
+    }
 
     static auto freq_divisor = get_timer_info().mClockFrequencyInv;
     if (mUpdateTimer->hasExpired())
     {
+         
+ 
        	LLStringUtil::format_map_t args;
 
         auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
         auto tot_frame_time_ns = NANOS/fps;
-        auto target_frame_time_ns = NANOS/(target_fps==0?1:target_fps);
+        auto target_frame_time_ns = NANOS/(targetFPS==0?1:targetFPS);
+
+        FSPerfStats::bufferToggleLock.lock(); // prevent toggle for a moment
+
+        // cumulative avatar time (includes idle processing, attachments and base av)
         auto tot_avatar_time_raw = FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
-        auto tot_huds_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_HUDS);
+        // cumulative avatar render specific time (a bit arbitrary as the processing is too.)
+        auto tot_avatar_render_time_raw = tot_avatar_time_raw - FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_IDLE);
+        // the time spent this frame on the "display()" call. Treated as "tot time rendering"
+        auto tot_render_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_DISPLAY);
+        // sleep time is basically forced sleep when window out of focus 
         auto tot_sleep_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_SLEEP);
+        // time spent on UI
         auto tot_ui_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_UI);
+        // cumulative time spent rendering HUDS
+        auto tot_huds_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_HUDS);
+        // "idle" time. This is the time spent in the idle poll section of the main loop, we DO NOT subtract the avatar time accumulated here as it was removed form the avatar time above
         auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE);
+        // similar to sleep time, induced by FPS limit
         auto tot_limit_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FPSLIMIT);
+        // swap time is time spent in swap buffer
         auto tot_swap_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_SWAP);
 
-        auto tot_avatar_time_ns = FSPerfStats::raw_to_ns( tot_avatar_time_raw );
-        auto tot_huds_time_ns = FSPerfStats::raw_to_ns( tot_huds_time_raw );
-        auto tot_sleep_time_ns = FSPerfStats::raw_to_ns( tot_sleep_time_raw );
-        auto tot_ui_time_ns = FSPerfStats::raw_to_ns( tot_ui_time_raw );
-        auto tot_idle_time_ns = FSPerfStats::raw_to_ns( tot_idle_time_raw );
-        auto tot_limit_time_ns = FSPerfStats::raw_to_ns( tot_limit_time_raw );
-        auto tot_swap_time_ns = FSPerfStats::raw_to_ns( tot_swap_time_raw );
+        FSPerfStats::bufferToggleLock.unlock(); 
 
-        // once the rest is extracted what is left is the scene cost
-        auto tot_scene_time_ns = tot_frame_time_ns - tot_avatar_time_ns - tot_huds_time_ns - tot_ui_time_ns - tot_sleep_time_ns - tot_limit_time_ns - tot_swap_time_ns - tot_idle_time_ns;
-        // remove time spent sleeping for fps limit or out of focus.
-        tot_frame_time_ns -= tot_limit_time_ns;
-        tot_frame_time_ns -= tot_sleep_time_ns;
+
+        auto unreliable = false; // if there is something to skew the stats such as sleep of fps cap
+        auto tot_avatar_time_ns         = FSPerfStats::raw_to_ns( tot_avatar_time_raw );
+        auto tot_huds_time_ns           = FSPerfStats::raw_to_ns( tot_huds_time_raw );
+        auto tot_ui_time_ns             = FSPerfStats::raw_to_ns( tot_ui_time_raw );
+
+        // auto tot_sleep_time_ns          = FSPerfStats::raw_to_ns( tot_sleep_time_raw );
+        // auto tot_limit_time_ns          = FSPerfStats::raw_to_ns( tot_limit_time_raw );
+
+        // auto tot_render_time_ns         = FSPerfStats::raw_to_ns( tot_render_time_raw );
+        auto tot_idle_time_ns           = FSPerfStats::raw_to_ns( tot_idle_time_raw );
+        auto tot_swap_time_ns           = FSPerfStats::raw_to_ns( tot_swap_time_raw );
+        auto tot_non_av_render_time_ns  = FSPerfStats::raw_to_ns( tot_render_time_raw - tot_avatar_render_time_raw);
+
+        // // remove time spent sleeping for fps limit or out of focus.
+        // tot_frame_time_ns -= tot_limit_time_ns;
+        // tot_frame_time_ns -= tot_sleep_time_ns;
 
         if(tot_frame_time_ns == 0)
         {
@@ -219,16 +266,23 @@ void LLFloaterPerformance::draw()
         auto pct_ui_time = (tot_ui_time_ns * 100)/tot_frame_time_ns;
         auto pct_idle_time = (tot_idle_time_ns * 100)/tot_frame_time_ns;
         auto pct_swap_time = (tot_swap_time_ns * 100)/tot_frame_time_ns;
-        auto pct_scene_time = (tot_scene_time_ns * 100)/tot_frame_time_ns;
+        auto pct_non_av_render_time = (tot_non_av_render_time_ns * 100)/tot_frame_time_ns;
+        pct_avatar_time = llclamp(pct_avatar_time,0.,100.);
+        pct_huds_time = llclamp(pct_huds_time,0.,100.);
+        pct_ui_time = llclamp(pct_ui_time,0.,100.);
+        pct_idle_time = llclamp(pct_idle_time,0.,100.);
+        pct_swap_time = llclamp(pct_swap_time,0.,100.);
+        pct_non_av_render_time = llclamp(pct_non_av_render_time,0.,100.);
 
         args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
         args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
         args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
         args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
         args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
-        args["SCENE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_time));
-        args["FPSCAP"] = llformat("%02u", (U32)fps_cap);
-        args["FPSTARGET"] = llformat("%02u", (U32)target_fps);
+        args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_non_av_render_time));
+        args["TOT_FRAME_TIME"] = llformat("%02u", (U32)llround(tot_frame_time_ns/1000000));
+        args["FPSCAP"] = llformat("%02u", (U32)fpsCap);
+        args["FPSTARGET"] = llformat("%02u", (U32)targetFPS);
 
         getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
         getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
@@ -240,14 +294,16 @@ void LLFloaterPerformance::draw()
             textbox->setVisible(true);
             textbox->setText(getString("focus_fps"));
             textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
+            unreliable = true;
         }
         else if (tot_limit_time_raw > 0)
         {
             textbox->setVisible(true);
             textbox->setText(getString("limit_fps", args));
             textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
+            unreliable = true;
         }
-        else if(auto_tune)
+        else if(FSPerfStats::autoTune)
         {
             textbox->setVisible(true);
             textbox->setText(getString("tuning_fps", args));
@@ -258,59 +314,32 @@ void LLFloaterPerformance::draw()
             textbox->setVisible(false);
         }
 
-        if( auto_tune )
+        if( FSPerfStats::autoTune && !unreliable )
         {
-            auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
-
-            // if( target_frame_time_ns <= tot_frame_time_ns )
-            // {
-            //     U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_raw;
-            //     if( non_avatar_time_ns < target_frame_time_ns )
-            //     {
-            //         F32 target_avatar_time_ms {F32(target_frame_time_ns-non_avatar_time_ns)/1000000};
-            //         gSavedSettings.setF32( "RenderAvatarMaxART",  target_avatar_time_ms / LLVOAvatar::sMaxNonImpostors );
-            //         LL_INFOS() << "AUTO_TUNE: Target frame time:"<<target_frame_time_ns/1000000 << " (non_avatar is " << non_avatar_time_ns/1000000 << ") Avatar budget=" << max_render_cost << " x " << LLVOAvatar::sMaxNonImpostors << LL_ENDL;
-            //     }
-            // }
+            // the tuning itself is managed from another thread but we can report progress here
 
             // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
             if( target_frame_time_ns <= tot_frame_time_ns )
             {
-                LL_INFOS() << "AUTO_TUNE: adapting frame rate" << LL_ENDL;
                 U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
-                LL_INFOS() << "AUTO_TUNE: adapting frame rate: target_frame=" << target_frame_time_ns << " nonav_frame_time=" << non_avatar_time_ns << " headroom=" << (S64)target_frame_time_ns - non_avatar_time_ns << LL_ENDL;
                 // If the target frame time < non avatar frame time then we can pototentially reach it.
                 if( non_avatar_time_ns < target_frame_time_ns )
                 {
-                    U64 target_avatar_time_ns {target_frame_time_ns-non_avatar_time_ns};
-                    LL_INFOS() << "AUTO_TUNE: avatar_budget:" << target_avatar_time_ns << LL_ENDL;
-                    if(target_avatar_time_ns < tot_avatar_time_ns)
-                    {
-                        F32 new_render_limit_ms = (F32)(FSPerfStats::raw_to_ms(av_render_max_raw)-0.1);
-                        if(new_render_limit_ms >= max_render_cost)
-                        {
-                            // we caught a bad frame possibly with a forced refresh render.
-                            new_render_limit_ms = max_render_cost - 0.1;  
-                        }
-                        gSavedSettings.setF32( "RenderAvatarMaxART",  new_render_limit_ms);
-                        LL_INFOS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit_ms << LL_ENDL;
-                    }
-                    LL_INFOS() << "AUTO_TUNE: Target frame time:"<<target_frame_time_ns/1000000 << "ms (non_avatar is " << non_avatar_time_ns/1000000 << "ms) Max cost limited=" << max_render_cost << LL_ENDL;
+                    textbox->setColor(LLUIColorTable::instance().getColor("orange"));
                 }
                 else
                 {
                     // TODO(Beq): Set advisory text for further actions
-                    LL_INFOS() << "AUTO_TUNE: Unachievable target . Target frame time:"<<target_frame_time_ns/1000000 << "ms (non_avatar is " << non_avatar_time_ns/1000000 << "ms)" << LL_ENDL;
                     textbox->setColor(LLUIColorTable::instance().getColor("red"));
                 }
             }
-            else 
-                if( target_frame_time_ns > (tot_frame_time_ns + max_render_cost))
+            else if( target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART))
             {
                 // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
-                gSavedSettings.setF32( "RenderAvatarMaxART",  max_render_cost + 0.5 );
+                textbox->setColor(LLUIColorTable::instance().getColor("green"));
             }
         }
+
         if (mHUDsPanel->getVisible())
         {
             populateHUDList();
@@ -342,6 +371,7 @@ void LLFloaterPerformance::hidePanels()
     mComplexityPanel->setVisible(FALSE);
     mHUDsPanel->setVisible(FALSE);
     mSettingsPanel->setVisible(FALSE);
+    mAutoTunePanel->setVisible(FALSE);
 }
 
 void LLFloaterPerformance::initBackBtn(LLPanel* panel)
@@ -377,8 +407,7 @@ void LLFloaterPerformance::populateHUDList()
     for (iter = complexity_list.begin(); iter != end; ++iter)
     {
         LLHUDComplexity hud_object_complexity = *iter;     
-        auto hud_ptr = hud_object_complexity.objectPtr;
-        auto hud_render_time_raw = FSPerfStats::StatsRecorder::get(HudType, hud_ptr->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
+        auto hud_render_time_raw = FSPerfStats::StatsRecorder::get(HudType, hud_object_complexity.objectId, FSPerfStats::StatType_t::RENDER_GEOMETRY);
         LLSD item;
         item["special_id"] = hud_object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
@@ -393,7 +422,7 @@ void LLFloaterPerformance::populateHUDList()
 
         row[1]["column"] = "complex_value";
         row[1]["type"] = "text";
-        LL_INFOS() << "HUD : hud[" << hud_ptr << " time:" << hud_render_time_raw <<" total_time:" << huds_max_render_time_raw << LL_ENDL;
+        // LL_INFOS() << "HUD : hud[" << hud_ptr << " time:" << hud_render_time_raw <<" total_time:" << huds_max_render_time_raw << LL_ENDL;
         row[1]["value"] = llformat( "%.3f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
  
@@ -419,8 +448,14 @@ void LLFloaterPerformance::populateHUDList()
 
 void LLFloaterPerformance::populateObjectList()
 {
+    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
+
     S32 prev_pos = mObjectList->getScrollPos();
-    LLUUID prev_selected_id = mObjectList->getSelectedSpecialId();
+    auto prev_selected_id = mObjectList->getSelectedSpecialId();
+
+   	std::string current_sort_col = mObjectList->getSortColumnName();
+	BOOL current_sort_asc = mObjectList->getSortAscending();
+  
     mObjectList->clearRows();
     mObjectList->updateColumns(true);
 
@@ -429,7 +464,6 @@ void LLFloaterPerformance::populateObjectList()
     object_complexity_list_t::iterator iter = complexity_list.begin();
     object_complexity_list_t::iterator end = complexity_list.end();
 
-    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
 
     U32 max_complexity = 0;
     for (; iter != end; ++iter)
@@ -437,52 +471,60 @@ void LLFloaterPerformance::populateObjectList()
         max_complexity = llmax(max_complexity, (*iter).objectCost);
     }
 
-    auto att_max_render_time_raw = FSPerfStats::StatsRecorder::getMax(AttType, FSPerfStats::StatType_t::RENDER_COMBINED);
-
-    for (iter = complexity_list.begin(); iter != end; ++iter)
     {
-        LLObjectComplexity object_complexity = *iter;        
-        S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
-        auto attach_render_time_raw = FSPerfStats::StatsRecorder::get(AttType, object_complexity.objectId, FSPerfStats::StatType_t::RENDER_COMBINED);
-        LLSD item;
-        item["special_id"] = object_complexity.objectId;
-        item["target"] = LLNameListCtrl::SPECIAL;
-        LLSD& row = item["columns"];
-        row[0]["column"] = "art_visual";
-        row[0]["type"] = "bar";
-        LLSD& value = row[0]["value"];
-        value["ratio"] = (F32)attach_render_time_raw / att_max_render_time_raw;
-        value["bottom"] = BAR_BOTTOM_PAD;
-        value["left_pad"] = BAR_LEFT_PAD;
-        value["right_pad"] = BAR_RIGHT_PAD;
-
-        row[1]["column"] = "art_value";
-        row[1]["type"] = "text";
-        // row[1]["value"] = std::to_string(obj_cost_short);
-        row[1]["value"] = llformat( "%.4f", FSPerfStats::raw_to_us(attach_render_time_raw) );
-        row[1]["font"]["name"] = "SANSSERIF";
-
-        row[2]["column"] = "complex_value";
-        row[2]["type"] = "text";
-        row[2]["value"] = std::to_string(obj_cost_short);
-        row[2]["font"]["name"] = "SANSSERIF";
-
-        row[3]["column"] = "name";
-        row[3]["type"] = "text";
-        row[3]["value"] = object_complexity.objectName;
-        row[3]["font"]["name"] = "SANSSERIF";
-
-        LLScrollListItem* obj = mObjectList->addElement(item);
-        if (obj)
+        std::lock_guard<std::mutex> guard{FSPerfStats::bufferToggleLock};
+        auto att_max_render_time_raw = FSPerfStats::StatsRecorder::getMax(AttType, FSPerfStats::StatType_t::RENDER_COMBINED);
+        LL_DEBUGS("PerfFloater") << "Attachments for frame : " << gFrameCount << " Max:" << att_max_render_time_raw << LL_ENDL;
+        for (iter = complexity_list.begin(); iter != end; ++iter)
         {
-            LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(1));
-            if (value_text)
+            LLObjectComplexity object_complexity = *iter;        
+            S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
+
+            auto& attID{object_complexity.objectId};
+            auto& attName{object_complexity.objectName};
+            auto attach_render_time_raw = FSPerfStats::StatsRecorder::get(AttType, attID, FSPerfStats::StatType_t::RENDER_COMBINED);
+            LL_DEBUGS("PerfFloater") << "Att: " << attName << " (" << attID.asString() << ") Cost: " << FSPerfStats::raw_to_us(attach_render_time_raw) << LL_ENDL;
+            LLSD item;
+            item["special_id"] = attID;
+            item["target"] = LLNameListCtrl::SPECIAL;
+            LLSD& row = item["columns"];
+            row[0]["column"] = "art_visual";
+            row[0]["type"] = "bar";
+            LLSD& value = row[0]["value"];
+            value["ratio"] = ((F32)attach_render_time_raw) / att_max_render_time_raw;
+            value["bottom"] = BAR_BOTTOM_PAD;
+            value["left_pad"] = BAR_LEFT_PAD;
+            value["right_pad"] = BAR_RIGHT_PAD;
+
+            row[1]["column"] = "art_value";
+            row[1]["type"] = "text";
+            // row[1]["value"] = std::to_string(obj_cost_short);
+            row[1]["value"] = llformat( "%.4f", FSPerfStats::raw_to_us(attach_render_time_raw) );
+            row[1]["font"]["name"] = "SANSSERIF";
+
+            row[2]["column"] = "complex_value";
+            row[2]["type"] = "text";
+            row[2]["value"] = std::to_string(obj_cost_short);
+            row[2]["font"]["name"] = "SANSSERIF";
+
+            row[3]["column"] = "name";
+            row[3]["type"] = "text";
+            row[3]["value"] = attName;
+            row[3]["font"]["name"] = "SANSSERIF";
+
+            LLScrollListItem* obj = mObjectList->addElement(item);
+            if (obj)
             {
-                value_text->setAlignment(LLFontGL::HCENTER);
+                LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(1));
+                if (value_text)
+                {
+                    value_text->setAlignment(LLFontGL::HCENTER);
+                }
             }
         }
     }
-    mObjectList->sortByColumnIndex(1, FALSE);
+    LL_DEBUGS("PerfFloater") << "Attachments for frame : " << gFrameCount << " COMPLETED" << LL_ENDL;
+    mNearbyList->sortByColumn(current_sort_col, current_sort_asc);
     mObjectList->setScrollPos(prev_pos);
     mObjectList->selectItemBySpecialId(prev_selected_id);
 }
@@ -491,18 +533,33 @@ void LLFloaterPerformance::populateNearbyList()
 {
     S32 prev_pos = mNearbyList->getScrollPos();
     LLUUID prev_selected_id = mNearbyList->getStringUUIDSelectedItem();
+   	std::string current_sort_col = mNearbyList->getSortColumnName();
+	BOOL current_sort_asc = mNearbyList->getSortAscending();
+    if(current_sort_col == "art_visual")
+    {
+        current_sort_col = "art_value";
+        current_sort_asc = false;
+    }
+
     mNearbyList->clearRows();
     mNearbyList->updateColumns(true);
 
-    static LLCachedControl<F32> max_render_cost(gSavedSettings, "RenderAvatarMaxART", 0);
+    static LLCachedControl<U32> maxRenderCost(gSavedSettings, "FSRenderAvatarMaxART", 0);
     updateMaxRenderTime();
-    updateMaxRenderTimeText();
+    // updateMaxRenderTimeText();
 
     std::vector<LLCharacter*> valid_nearby_avs;
     getNearbyAvatars(valid_nearby_avs);
 
     std::vector<LLCharacter*>::iterator char_iter = valid_nearby_avs.begin();
+
+    FSPerfStats::bufferToggleLock.lock();
     auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
+    FSPerfStats::bufferToggleLock.unlock();
+
+    FSPlot("max ART", (int64_t)av_render_max_raw);
+    FSPlot("Num av", (int64_t)valid_nearby_avs.size());
+
     while (char_iter != valid_nearby_avs.end())
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(*char_iter);
@@ -513,9 +570,12 @@ void LLFloaterPerformance::populateNearbyList()
                 continue;
 
             S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
+
+            FSPerfStats::bufferToggleLock.lock();
             auto render_av_raw  = FSPerfStats::StatsRecorder::get(AvType, avatar->getID(),FSPerfStats::StatType_t::RENDER_COMBINED);
-            auto is_slow = avatar->isTooSlow(true);
-            // auto is_slow_without_shadows = avatar->isTooSlow();
+            FSPerfStats::bufferToggleLock.unlock();
+
+            auto is_slow = avatar->isTooSlowWithShadows();
 
             LLSD item;
             item["id"] = avatar->getID();
@@ -523,6 +583,8 @@ void LLFloaterPerformance::populateNearbyList()
             row[0]["column"] = "art_visual";
             row[0]["type"] = "bar";
             LLSD& value = row[0]["value"];
+            // The ratio used in the bar is the current cost, as soon as we take action this changes so we keep the 
+            // pre-tune value for the numerical column and sorting.
             value["ratio"] = (double)render_av_raw / av_render_max_raw;
             value["bottom"] = BAR_BOTTOM_PAD;
             value["left_pad"] = BAR_LEFT_PAD;
@@ -532,11 +594,11 @@ void LLFloaterPerformance::populateNearbyList()
             row[1]["type"] = "text";
             if(is_slow)
             {
-                row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_ms( avatar->getLastART() ) );
+                row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_us( avatar->getLastART() ) );
             }
             else
             {
-                row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_ms( render_av_raw ) );
+                row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_us( render_av_raw ) );
             }
             row[1]["font"]["name"] = "SANSSERIF";
             row[1]["width"] = "50";
@@ -547,21 +609,47 @@ void LLFloaterPerformance::populateNearbyList()
             row[2]["font"]["name"] = "SANSSERIF";
             row[2]["width"] = "50";
 
-
-            row[3]["column"] = "name";
+            row[3]["column"] = "state";
             row[3]["type"] = "text";
-            row[3]["value"] = avatar->getFullname();
+            if(is_slow)
+            {
+                if( avatar->isTooSlowWithoutShadows() )
+                {
+                    row[3]["value"] = std::string{"I"};
+                }
+                else
+                {
+                    row[3]["value"] = std::string{"S"};
+                }
+            }
+            else
+            {
+                row[3]["value"] = std::string{" "};
+            }
+            
             row[3]["font"]["name"] = "SANSSERIF";
+
+            row[4]["column"] = "name";
 
             LLScrollListItem* av_item = mNearbyList->addElement(item);
             if(av_item)
             {
-                LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(1));
+                LLScrollListText* art_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(1));
+                if (art_text)
+                {
+                    art_text->setAlignment(LLFontGL::RIGHT);
+                }
+                LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(2));
                 if (value_text)
                 {
-                    value_text->setAlignment(LLFontGL::HCENTER);
+                    value_text->setAlignment(LLFontGL::RIGHT);
                 }
-                LLScrollListText* name_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(2));
+                LLScrollListText* state_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(3));
+                if (state_text)
+                {
+                    state_text->setAlignment(LLFontGL::HCENTER);
+                }
+                LLScrollListText* name_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(4));
                 if (name_text)
                 {
                     if (avatar->isSelf())
@@ -591,7 +679,7 @@ void LLFloaterPerformance::populateNearbyList()
         }
         char_iter++;
     }
-    mNearbyList->sortByColumnIndex(1, FALSE);
+    mNearbyList->sortByColumn(current_sort_col, current_sort_asc);
     mNearbyList->setScrollPos(prev_pos);
     mNearbyList->selectByID(prev_selected_id);
 }
@@ -650,6 +738,11 @@ void LLFloaterPerformance::onClickHideAvatars()
     LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR);
 }
 
+void LLFloaterPerformance::onClickFocusAvatar()
+{
+    FSPerfStats::StatsRecorder::setFocusAv(mNearbyCombo->getSelectedValue().asUUID());
+}
+
 void LLFloaterPerformance::onClickExceptions()
 {
     // <FS:Ansariel> [FS Persisted Avatar Render Settings]
@@ -669,16 +762,16 @@ void LLFloaterPerformance::updateMaxComplexity()
 void LLFloaterPerformance::updateMaxRenderTime()
 {
     LLAvatarComplexityControls::updateMaxRenderTime(
-        mNearbyPanel->getChild<LLSliderCtrl>("RenderAvatarMaxART"),
-        mNearbyPanel->getChild<LLTextBox>("RenderAvatarMaxARTText"), 
+        mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART"),
+        mNearbyPanel->getChild<LLTextBox>("FSRenderAvatarMaxARTText"), 
         true);
 }
 
 void LLFloaterPerformance::updateMaxRenderTimeText()
 {
     LLAvatarComplexityControls::setRenderTimeText(
-        gSavedSettings.getF32("RenderAvatarMaxART"),
-        mNearbyPanel->getChild<LLTextBox>("RenderAvatarMaxARTText", true), 
+        gSavedSettings.getU32("FSRenderAvatarMaxART"),
+        mNearbyPanel->getChild<LLTextBox>("FSRenderAvatarMaxARTText", true), 
         true);
 }
 
@@ -778,6 +871,155 @@ void LLFloaterPerformance::onAvatarListRightClick(LLUICtrl* ctrl, S32 x, S32 y)
     {
         selected_uuids.push_back(list->getCurrentID());
         mContextMenu->show(ctrl, selected_uuids, x, y);
+    }
+}
+
+
+void LLFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& av_id)
+{
+    const std::string command_name = userdata.asString();
+
+	LLViewerObject* objectp = gObjectList.findObject(av_id);
+	if (!objectp)
+    {
+        return;
+    }
+    auto avp = objectp->asAvatar();
+    if ("inspect" == command_name)
+    {
+		for (LLVOAvatar::attachment_map_t::iterator iter = avp->mAttachmentPoints.begin(); 
+			 iter != avp->mAttachmentPoints.end();
+			 ++iter)
+		{
+			LLViewerJointAttachment* attachment = iter->second;
+
+			if (!attachment)
+			{
+				continue;
+			}
+
+			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+				 attachment_iter != attachment->mAttachedObjects.end();
+				 ++attachment_iter)
+			{
+				LLViewerObject* attached_object = attachment_iter->get();
+				
+				if ( attached_object && !attached_object->isDead() )
+				{
+                    LLSelectMgr::getInstance()->selectObjectAndFamily(attached_object);
+				}
+			}
+		}
+        LLFloaterReg::showInstance("inspect");
+    }
+    else if ("zoom" == command_name)
+    {
+        // Disable flycam if active.  Without this, the requested look-at doesn't happen because the flycam code overrides all other camera motion.
+        bool fly_cam_status(LLViewerJoystick::getInstance()->getOverrideCamera());
+        if (fly_cam_status)
+        {
+            LLViewerJoystick::getInstance()->setOverrideCamera(false);
+            LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
+            // *NOTE: Above may not be the proper way to disable flycam.  What I really want to do is just be able to move the camera and then leave the flycam in the the same state it was in, just moved to the new location. ~Cron
+        }
+
+        LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true); // Fixes an edge case where if the user has JUST disabled flycam themselves, the camera gets stuck waiting for input.
+
+        gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+
+        gAgentCamera.setLookAt(LOOKAT_TARGET_SELECT, objectp);
+
+        // Place the camera looking at the object, along the line from the camera to the object,
+        //  and sufficiently far enough away for the object to fill 3/4 of the screen,
+        //  but not so close that the bbox's nearest possible vertex goes inside the near clip.
+        // Logic C&P'd from LLViewerMediaFocus::setCameraZoom() and then edited as needed
+
+        LLBBox bbox = objectp->getBoundingBoxAgent();
+        LLVector3d center(gAgent.getPosGlobalFromAgent(bbox.getCenterAgent()));
+        F32 height;
+        F32 width;
+        F32 depth;
+        F32 angle_of_view;
+        F32 distance;
+
+        LLVector3d target_pos(center);
+        LLVector3d camera_dir(gAgentCamera.getCameraPositionGlobal() - target_pos);
+        camera_dir.normalize();
+
+        // We need the aspect ratio, and the 3 components of the bbox as height, width, and depth.
+        F32 aspect_ratio(LLViewerMediaFocus::getBBoxAspectRatio(bbox, LLVector3(camera_dir), &height, &width, &depth));
+        F32 camera_aspect(LLViewerCamera::getInstance()->getAspect());
+
+        // We will normally use the side of the volume aligned with the short side of the screen (i.e. the height for 
+        // a screen in a landscape aspect ratio), however there is an edge case where the aspect ratio of the object is 
+        // more extreme than the screen.  In this case we invert the logic, using the longer component of both the object
+        // and the screen.  
+        bool invert((camera_aspect > 1.0f && aspect_ratio > camera_aspect) || (camera_aspect < 1.0f && aspect_ratio < camera_aspect));
+
+        // To calculate the optimum viewing distance we will need the angle of the shorter side of the view rectangle.
+        // In portrait mode this is the width, and in landscape it is the height.
+        // We then calculate the distance based on the corresponding side of the object bbox (width for portrait, height for landscape)
+        // We will add half the depth of the bounding box, as the distance projection uses the center point of the bbox.
+        if (camera_aspect < 1.0f || invert)
+        {
+            angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect());
+            distance = width * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+        }
+        else
+        {
+            angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView());
+            distance = height * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+        }
+
+        distance += depth * 0.5;
+
+        // Verify that the bounding box isn't inside the near clip.  Using OBB-plane intersection to check if the
+        // near-clip plane intersects with the bounding box, and if it does, adjust the distance such that the
+        // object doesn't clip.
+        LLVector3d bbox_extents(bbox.getExtentLocal());
+        LLVector3d axis_x = LLVector3d(1, 0, 0) * bbox.getRotation();
+        LLVector3d axis_y = LLVector3d(0, 1, 0) * bbox.getRotation();
+        LLVector3d axis_z = LLVector3d(0, 0, 1) * bbox.getRotation();
+        //Normal of nearclip plane is camera_dir.
+        F32 min_near_clip_dist = bbox_extents.mdV[0] * (camera_dir * axis_x) + bbox_extents.mdV[1] * (camera_dir * axis_y) + bbox_extents.mdV[2] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
+        F32 camera_to_near_clip_dist(LLViewerCamera::getInstance()->getNear());
+        F32 min_camera_dist(min_near_clip_dist + camera_to_near_clip_dist);
+        if (distance < min_camera_dist)
+        {
+            // Camera is too close to object, some parts MIGHT clip.  Move camera away to the position where clipping barely doesn't happen.
+            distance = min_camera_dist;
+        }
+
+        LLVector3d camera_pos(target_pos + camera_dir * distance);
+
+        if (camera_dir == LLVector3d::z_axis || camera_dir == LLVector3d::z_axis_neg)
+        {
+            // If the direction points directly up, the camera will "flip" around.
+            // We try to avoid this by adjusting the target camera position a 
+            // smidge towards current camera position
+            // *NOTE: this solution is not perfect.  All it attempts to solve is the
+            // "looking down" problem where the camera flips around when it animates
+            // to that position.  You still are not guaranteed to be looking at the
+            // object in the correct orientation.  What this solution does is it will
+            // put the camera into position keeping as best it can the current 
+            // orientation with respect to the direction wanted.  In other words, if
+            // before zoom the object appears "upside down" from the camera, after
+            /// zooming it will still be upside down, but at least it will not flip.
+            LLVector3d cur_camera_pos = LLVector3d(gAgentCamera.getCameraPositionGlobal());
+            LLVector3d delta = (cur_camera_pos - camera_pos);
+            F64 len = delta.length();
+            delta.normalize();
+            // Move 1% of the distance towards original camera location
+            camera_pos += 0.01 * len * delta;
+        }
+
+        gAgentCamera.setCameraPosAndFocusGlobal(camera_pos, target_pos, objectp->getID());
+
+        // *TODO: Re-enable joystick flycam if we disabled it earlier...  Have to find some form of callback as re-enabling at this point causes the camera motion to not happen. ~Cron
+        //if (fly_cam_status)
+        //{
+        //	LLViewerJoystick::getInstance()->toggleFlycam();
+        //}
     }
 }
 

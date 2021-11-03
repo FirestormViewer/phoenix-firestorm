@@ -31,6 +31,7 @@
 
 class LLCharacter;
 class LLNameListCtrl;
+class LLComboBox;
 
 class LLFloaterPerformance : public LLFloater
 {
@@ -51,6 +52,7 @@ public:
 
     void onCustomAction (const LLSD& userdata, const LLUUID& av_id);
     bool isActionChecked(const LLSD& userdata, const LLUUID& av_id);
+    void onExtendedAction(const LLSD& userdata, const LLUUID& av_id);
 
 private:
     void initBackBtn(LLPanel* panel);
@@ -62,6 +64,7 @@ private:
     void onChangeQuality(const LLSD& data);
     void onClickHideAvatars();
     void onClickExceptions();
+    void onClickFocusAvatar();
 
     void updateMaxComplexity();
     void updateComplexityText();
@@ -75,9 +78,11 @@ private:
     LLPanel* mComplexityPanel;
     LLPanel* mHUDsPanel;
     LLPanel* mSettingsPanel;
+    LLPanel* mAutoTunePanel;
     LLNameListCtrl* mHUDList;
     LLNameListCtrl* mObjectList;
     LLNameListCtrl* mNearbyList;
+    LLComboBox* mNearbyCombo;
 
     LLListContextMenu* mContextMenu;
 

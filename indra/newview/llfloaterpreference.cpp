@@ -2874,36 +2874,30 @@ void LLAvatarComplexityControls::setText(U32 value, LLTextBox* text_box, bool sh
 	}
 }
 
+// <FS:Beq> redner time controls
 void LLAvatarComplexityControls::updateMaxRenderTime(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val)
 {
 	// Called when the IndirectMaxComplexity control changes
 	// Responsible for fixing the slider label (IndirectMaxComplexityText) and setting RenderAvatarMaxComplexity
-	auto indirect_value = slider->getValue().asReal();
-	gSavedSettings.setF32("RenderAvatarMaxART", indirect_value);
-	if(indirect_value == slider->getMaxValue())
-	{
-		LLVOAvatar::sRenderTimeCap_ns = 0;
-		setRenderTimeText(0.0, value_label, short_val);
-	}
-	else
-	{
-		LLVOAvatar::sRenderTimeCap_ns = llround(indirect_value * 1000000);
-		setRenderTimeText(indirect_value, value_label, short_val);
-	}
+	auto indirect_value = slider->getValue().asInteger();
+	gSavedSettings.setU32("FSRenderAvatarMaxART", indirect_value);
+
+	LLVOAvatar::sRenderTimeLimit_ns = indirect_value * 1000;
+	setRenderTimeText(indirect_value, value_label, short_val);
 }
 
-void LLAvatarComplexityControls::setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val)
+void LLAvatarComplexityControls::setRenderTimeText(U32 value, LLTextBox* text_box, bool short_val)
 {
-	if (0.0 == value)
+	if (0 == value)
 	{
 		text_box->setText(LLTrans::getString("no_limit"));
 	}
 	else
 	{
-		text_box->setText(llformat("%.2f", value));
+		text_box->setText(llformat("%u", value));
 	}
 }
-
+// </FS:Beq>
 void LLFloaterPreference::updateMaxComplexity()
 {
 	// Called when the IndirectMaxComplexity control changes

@@ -90,19 +90,19 @@
     0
   </text>
   <slider
-    control_name="RenderAvatarMaxART"
+    control_name="FSRenderAvatarMaxART"
     tool_tip="Controls when a visually complex avatar is considered to be taking too long to render"
     follows="left|top"
     height="16"
-    initial_value="10.0"
-    increment="0.01"
-    label="Maximum render time (ms)"
+    initial_value="10000"
+    increment="10"
+    label="Maximum render time (microsecs)"
     text_color="White"
     label_width="165"
     layout="topleft"
-    min_val="0.01"
-    max_val="50.0"
-    name="RenderAvatarMaxART"
+    min_val="0.00"
+    max_val="50000"
+    name="FSRenderAvatarMaxART"
     show_text="false"
     left_delta="-304"
     top_delta="-16"
@@ -117,30 +117,19 @@
     top_delta="0"
     left_delta="304"
     text_color="White"
-    name="RenderAvatarMaxARTText"
+    name="FSRenderAvatarMaxARTText"
     width="65">
     0
   </text>
-  <check_box
-  control_name="FSAutoTuneFPS"
-  height="16"
-  initial_value="false"
-  label="Auto tune for FPS"
-  layout="topleft"
-  left_pad="5"
-  name="AutoTuneFPS"
-  top_delta="0"
-  tool_tip="FS will attempt to adjust settings to meet the target FPS."
-  width="50">
- </check_box>
   <name_list
-    column_padding="0"
+    column_padding="1"
     draw_stripes="true"
+    draw_heading="true"
     height="280"
     left="20"
     follows="left|top"
     layout="topleft"
-    sort_column="complex_value"
+    sort_column="art_value"
     short_names="true"
     name="nearby_list"
     name_column="name"
@@ -148,18 +137,26 @@
     width="540">
         <name_list.columns
          label=""
+         tool_tip="bar graph showing current render time (includes auto-tuning) as % of slowest."
          name="art_visual"
          width="90" />
-        <name_list.columns
-         label=""
+         <name_list.columns
+         label="ART (μs)"
+         tool_tip="Avater Render Time. Actual time taken to render this avatar before any auto-tuning (in microseconds)."
          name="art_value"
          width="80" />
-        <name_list.columns
-         label=""
+         <name_list.columns
+         label="ARC"
+         tool_tip="Old school complexity (ARC) based on standard SL rules."
          name="complex_value"
          width="40" />
-        <name_list.columns
+         <name_list.columns
          label=""
+         tool_tip="Shows any auto-tuning. I=Imposter S=no shadow."
+         name="state"
+         width="15" />
+        <name_list.columns
+         label="Name"
          name="name"/>
   </name_list>
   <text
