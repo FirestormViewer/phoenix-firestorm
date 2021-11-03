@@ -355,7 +355,7 @@ public:
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
 	static BOOL		sDebugAvatarRotation;
-	static U64		sRenderTimeCap_ns; // nanosecond time limit for avatar rendering 0 is unlimited. 
+	static U64		sRenderTimeLimit_ns; // <FS:Beq/> nanosecond time limit for avatar rendering 0 is unlimited. 
 	static LLPartSysData sCloud;
 
 	//--------------------------------------------------------------------
@@ -369,7 +369,17 @@ public:
 	//--------------------------------------------------------------------
 public:
 	BOOL			isFullyLoaded() const;
-	virtual bool 	isTooSlow(bool combined = false) const;
+	// <FS:Beq> check and return current state relative to limits
+	// default will test only the geometry (combined=false).
+	// this allows us to disable shadows separately on complex avatars.
+	inline bool 	isTooSlowWithShadows() const {return mTooSlow;};
+	inline bool 	isTooSlowWithoutShadows() const {return mTooSlowWithoutShadows;};
+	inline bool 	isTooSlow(bool combined = false) const 
+	{
+		return(combined?mTooSlow:mTooSlowWithoutShadows);
+	}
+	void LLVOAvatar::updateTooSlow();
+	// </FS:Beq>
 	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
 	bool 			visualParamWeightsAreDefault();
 	virtual bool	getIsCloud() const;
@@ -414,6 +424,10 @@ private:
 	U64				mGeomTime{0};
 	bool			mARTStale{true};
 	bool			mARTCapped{false};
+	// <FS:Beq> variables to hold "slowness" status
+	bool			mTooSlow{false};
+	bool			mTooSlowWithoutShadows{false};
+	// </FS:Beq>
 
 private:
 	LLViewerStats::PhaseMap mPhases;

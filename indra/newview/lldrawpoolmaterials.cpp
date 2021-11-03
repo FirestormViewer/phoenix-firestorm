@@ -136,19 +136,19 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
 	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 	
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)
 	{
 		LLDrawInfo& params = **i;
 
 		// <FS:Beq> Capture render times
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
 		if(params.mFace)
 		{
 			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 			
-			if(vobj->isAttachment())
+			if( vobj && vobj->isAttachment() )
 			{
-				T = trackMyAttachment(vobj);
+				trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
 			}
 		}
 		// </FS:Beq>
@@ -187,18 +187,6 @@ void LLDrawPoolMaterials::bindNormalMap(LLViewerTexture* tex)
 
 void LLDrawPoolMaterials::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
-	// <FS:Beq> Capture render times
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-	if(params.mFace)
-	{
-		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-		
-		if(vobj->isAttachment())
-		{
-			T = trackMyAttachment(vobj);
-		}
-	}
-	// </FS:Beq>
 	applyModelMatrix(params);
 	
 	bool tex_setup = false;

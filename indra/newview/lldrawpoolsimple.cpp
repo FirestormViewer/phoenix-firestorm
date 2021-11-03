@@ -153,18 +153,6 @@ void LLDrawPoolGlow::render(S32 pass)
 
 void LLDrawPoolGlow::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
-	// <FS:Beq> Capture render times
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-	if(params.mFace)
-	{
-		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-		
-		if(vobj->isAttachment())
-		{
-			T = trackMyAttachment(vobj);
-		}
-	}
-	// </FS:Beq>
 	//gGL.diffuseColor4ubv(params.mGlowColor.mV);
 	LLRenderPass::pushBatch(params, mask, texture, batch_textures);
 }
@@ -237,7 +225,7 @@ void LLDrawPoolSimple::render(S32 pass)
 	LLGLDisable blend(GL_BLEND);
 	
 	{ //render simple
-		LL_RECORD_BLOCK_TIME(FTM_RENDER_SIMPLE);
+ 		LL_RECORD_BLOCK_TIME(FTM_RENDER_SIMPLE);
 		gPipeline.enableLightsDynamic();
 
 		if (mShaderLevel > 0)

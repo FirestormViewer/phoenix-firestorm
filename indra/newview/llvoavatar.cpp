@@ -602,7 +602,7 @@ bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonIm
 F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
-U64 LLVOAvatar::sRenderTimeCap_ns {0};
+U64 LLVOAvatar::sRenderTimeLimit_ns {0}; // <FS:Beq/> time limit used for render time control
 // const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df"); - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
@@ -2697,7 +2697,10 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		LL_INFOS() << "Warning!  Idle on dead avatar" << LL_ENDL;
 		return;
 	}	
-
+	// <FS:Beq> record time and refresh "tooSlow" status
+	FSPerfStats::RecordAvatarTime T(getID(), FSPerfStats::StatType_t::RENDER_IDLE); // per avatar "idle" time.
+	updateTooSlow();
+	// </FS:Beq>;
 	// <FS:CR> Use LLCachedControl
 	static LLCachedControl<bool> disable_all_render_types(gSavedSettings, "DisableAllRenderTypes");
 	if (!(gPipeline.hasRenderType(mIsControlAvatar ? LLPipeline::RENDER_TYPE_CONTROL_AV : LLPipeline::RENDER_TYPE_AVATAR))
@@ -2741,7 +2744,7 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		//</FS:Beq>
 	}
     
-    LLScopedContextString str("avatar_idle_update " + getFullname());
+    // LLScopedContextString str("avatar_idle_update " + getFullname()); // <FS:Beq> remove unused scoped string
     
 	checkTextureLoading() ;
 	
@@ -4212,6 +4215,7 @@ void LLVOAvatar::slamPosition()
 
 bool LLVOAvatar::isVisuallyMuted()
 {
+	FSZone; // <FS:Beq/> Tracy accounting for imposter testing.
 	bool muted = false;
 
 	// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
@@ -4264,6 +4268,7 @@ bool LLVOAvatar::isVisuallyMuted()
 
 bool LLVOAvatar::isInMuteList() const
 {
+	FSZone; // <FS:Beq/> Tracy accounting for imposter testing.
 	bool muted = false;
 	F64 now = LLFrameTimer::getTotalSeconds();
 	if (now < mCachedMuteListUpdateTime)
@@ -4697,13 +4702,13 @@ void LLVOAvatar::updateFootstepSounds()
 void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
-	bool slow = isTooSlow();// the geometry alone is forcing this to be slow so we must imposter
+	bool slow = isTooSlowWithoutShadows();// <FS:Beq/> the geometry alone is forcing this to be slow so we must imposter
 	if (mDrawable.notNull()
 		&& slow
         && isVisible() 
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
-        && (sLimitNonImpostors || visually_muted || slow) // <FS:Beq> imposter slow avatars irrespective of nonimposter setting.
+        && (sLimitNonImpostors || visually_muted || slow) // <FS:Beq/> imposter slow avatars irrespective of nonimposter setting.
         && !mNeedsAnimUpdate 
         && !sFreezeCounter)
 	{
@@ -5577,6 +5582,7 @@ bool LLVOAvatar::shouldAlphaMask()
 //-----------------------------------------------------------------------------
 U32 LLVOAvatar::renderSkinned()
 {
+	FSZone; // <FS:Beq/> Tracy accounting for imposter testing.
 	U32 num_indices = 0;
 
 	if (!mIsBuilt)
@@ -5813,6 +5819,7 @@ U32 LLVOAvatar::renderSkinned()
 
 U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 {
+	FSZone; // <FS:Beq/> Tracy accounting for render tracking
 	U32 num_indices = 0;
 	if( isWearingWearableType( LLWearableType::WT_SKIRT ) && (isUIAvatar() || isTextureVisible(TEX_SKIRT_BAKED)) )
 	{
@@ -5865,6 +5872,7 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 //-----------------------------------------------------------------------------
 U32 LLVOAvatar::renderRigid()
 {
+	FSZone; // <FS:Beq/> Tracy accounting for render tracking
 	U32 num_indices = 0;
 
 	if (!mIsBuilt)
@@ -5914,6 +5922,7 @@ U32 LLVOAvatar::renderRigid()
 
 U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 {
+	FSZone; // <FS:Beq/> Tracy accounting for render tracking
 	if (!mImpostor.isComplete())
 	{
 		return 0;
@@ -9126,43 +9135,48 @@ BOOL LLVOAvatar::isFullyLoaded() const
 }
 
 // <FS:Beq> use Avatar Render Time as complexity metric
+// markARTStale - Mark stale and set the frameupdate to now so that we can wait at least one frame to get a revised number.
 void LLVOAvatar::markARTStale()
 {
-	// mark stale and set the frameupdate to now so that we can wait at least one frame.
 	mARTStale=true;
 	mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
 }
 
-// default will test only the geometry (combined=false).
-// this allows us to disable shadows separately on complex avatars.
-//virtual
-bool LLVOAvatar::isTooSlow(bool combined) const
+// Udpate Avatar state based on render time
+void LLVOAvatar::updateTooSlow()
 {
-	static LLCachedControl<bool> use_render_time(gSavedSettings, "RenderAvatarUseART");
+	FSZone;
+    static LLCachedControl<bool> autoTune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
 	auto now = LLTimer::getElapsedSeconds();
-	auto abuse_constness = const_cast<LLVOAvatar*>(this);
+
+	// mTooSlow - Is the avatar flagged as being slow (includes shadow time)
+	// mTooSlowWithoutShadows - Is the avatar flagged as being slow even with shadows removed.
+	// mARTStale - the rendertime we have is stale because of an update. We need to force a re-render to re-assess slowness
 
 	if( mARTStale )
 	{
-		if (LLFrameTimer::getFrameCount() - mLastARTUpdateFrame < 2 )
+		if ( LLFrameTimer::getFrameCount() - mLastARTUpdateFrame < 5 ) 
 		{
-			LL_INFOS() << this->getFullname() << " marked stale " << LL_ENDL;
-			// we've not had a chance to update yet (allow now+1 to be certain a full frame has passed)
-			return false;
+			// LL_INFOS() << this->getFullname() << " marked stale " << LL_ENDL;
+			// we've not had a chance to update yet (allow a few to be certain a full frame has passed)
+			return;
 		}
 
-		abuse_constness->mARTStale = false;
-		abuse_constness->mARTCapped = false;
-		LL_INFOS() << this->getFullname() << " refreshed ART combined = " << mRenderTime << " @ " << mLastARTUpdateFrame << LL_ENDL;
+		mARTStale = false;
+		mTooSlow = false;
+		mTooSlowWithoutShadows = false;
+		// LL_INFOS() << this->getFullname() << " refreshed ART combined = " << mRenderTime << " @ " << mLastARTUpdateFrame << LL_ENDL;
 	}
 
 	// Either we're not stale or we've updated.
+
 	U64 render_time_raw;
 	U64 render_geom_time_raw;
 
-	if(!mARTCapped)
+	if( !mTooSlow ) 
 	{
-		// no cap, so we use the live values
+		// we are fully rendered, so we use the live values
+		std::lock_guard<std::mutex> lock{FSPerfStats::bufferToggleLock};
 		render_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, this->getID(), FSPerfStats::StatType_t::RENDER_COMBINED);
 		render_geom_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, this->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
 	}
@@ -9172,25 +9186,31 @@ bool LLVOAvatar::isTooSlow(bool combined) const
 		render_time_raw = mRenderTime;
 		render_geom_time_raw = mGeomTime;		
 	}
-	if( (LLVOAvatar::sRenderTimeCap_ns > 0) && (FSPerfStats::raw_to_ns(render_time_raw) >= LLVOAvatar::sRenderTimeCap_ns) ) 
+	if( (LLVOAvatar::sRenderTimeLimit_ns > 0) && 
+		(FSPerfStats::raw_to_ns(render_time_raw) >= LLVOAvatar::sRenderTimeLimit_ns) ) 
 	{
-		if(!mARTCapped)
+		if( !mTooSlow )
 		{			
 			// if we weren't capped, we are now
-			abuse_constness->mRenderTime = render_time_raw;
-			abuse_constness->mGeomTime = render_geom_time_raw;
-			abuse_constness->mARTStale = false;
-			abuse_constness->mARTCapped = true;
-			abuse_constness->mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
-			LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+			mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+			mRenderTime = render_time_raw;
+			mGeomTime = render_geom_time_raw;
+			mARTStale = false;
+			mTooSlow = true;
 		}
-		// return true only if that is the case in the context of the combined/geom_only flag.
-		return combined ? true : (render_geom_time_raw >= LLVOAvatar::sRenderTimeCap_ns);
+		// LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+		mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= LLVOAvatar::sRenderTimeLimit_ns);
 	}
-
-	LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
-	abuse_constness->mARTCapped = false;
-	return false;
+	else
+	{
+	// LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+		mTooSlow = false;
+		mTooSlowWithoutShadows = false;	
+	}
+	if(mTooSlow)
+	{
+		FSPerfStats::tunedAvatars++; // <FS:Beq> increment the number of avatars that have been tweaked.
+	}
 }
 // </FS:Beq>
 
@@ -11484,11 +11504,14 @@ void LLVOAvatar::updateImpostors()
 // virtual
 BOOL LLVOAvatar::isImpostor()
 {
+// <FS:Beq> render time handling using tooSlow()
+// 	return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
 	return (
 			isVisuallyMuted() || 
-			( (sLimitNonImpostors || isTooSlow(false) ) && 
+			( (sLimitNonImpostors || isTooSlowWithoutShadows() ) && 
 			  (mUpdatePeriod > 1) ) 
 	);
+// </FS:Beq>
 }
 
 BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
@@ -11501,12 +11524,14 @@ BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 	{
 		return true;
 	}
+// <FS:Beq> render time handling using tooSlow()
 	static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
 	
-	if (isTooSlow(false) && render_jellys_As_imposters)
+	if (isTooSlowWithoutShadows() && render_jellys_As_imposters)
 	{
 		return true;
 	}
+// </FS:Beq>
 	return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
 }
 
@@ -11798,7 +11823,6 @@ void LLVOAvatar::accountRenderComplexityForObject(
                         LLHUDComplexity hud_object_complexity;
                         hud_object_complexity.objectName = attached_object->getAttachmentItemName();
                         hud_object_complexity.objectId = attached_object->getAttachmentItemID();
-						hud_object_complexity.objectPtr = attached_object;
                         std::string joint_name;
                         gAgentAvatarp->getAttachedPointName(attached_object->getAttachmentItemID(), joint_name);
                         hud_object_complexity.jointName = joint_name;

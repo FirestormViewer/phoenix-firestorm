@@ -5762,6 +5762,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 		LL_RECORD_BLOCK_TIME(FTM_REBUILD_VOLUME_FACE_LIST);
 
 		//get all the faces into a list
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 		for (LLSpatialGroup::element_iter drawable_iter = group->getDataBegin(); 
              drawable_iter != group->getDataEnd(); ++drawable_iter)
 		{
@@ -5784,13 +5785,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				continue;
 			}
 
-			std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-			// <FS:Beq> Capture render times
-			if(vobj->isAttachment())
-			{
-				T= trackMyAttachment(vobj);
-			}
-			// </FS:Beq>
 
 //<FS:Beq> Stop doing stupid stuff we don;t need to.
 // Moving this inside a debug enabled check
@@ -5802,6 +5796,12 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			{
 				continue;
 			}
+			// <FS:Beq> Capture render times
+			if(vobj->isAttachment())
+			{
+				trackAttachments( vobj, drawablep->isState(LLDrawable::RIGGED),&ratPtr);
+			}
+			// </FS:Beq>
 
 			LLVolume* volume = vobj->getVolume();
 			if (volume)
@@ -6384,6 +6384,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 		
 		U32 buffer_count = 0;
 
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> capture render times
 		for (LLSpatialGroup::element_iter drawable_iter = group->getDataBegin(); drawable_iter != group->getDataEnd(); ++drawable_iter)
 		{
 			LLDrawable* drawablep = (LLDrawable*)(*drawable_iter)->getDrawable();
@@ -6392,12 +6393,12 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 			{
 				FSZoneN("Rebuild all non-Rigged")
 				LLVOVolume* vobj = drawablep->getVOVolume();
-				std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-
-				if(vobj->isAttachment())
+				// <FS:Beq> capture render times
+				if( vobj && vobj->isAttachment() )
 				{
-					T = trackMyAttachment(vobj);
+					trackAttachments( vobj, drawablep->isState(LLDrawable::RIGGED), &ratPtr );
 				}
+				// </FS:Beq>
 				//<FS:Beq> avoid unfortunate sleep during trylock by static check
 				//if(debugLoggingEnabled("AnimatedObjectsLinkset"))
 				static auto debug_logging_on = debugLoggingEnabled("AnimatedObjectsLinkset");
@@ -6810,18 +6811,18 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		U32 indices_index = 0;
 		U16 index_offset = 0;
 
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-		LLViewerObject * lastVObj{nullptr};
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr; // <FS:Beq/> capture render times
 		while (face_iter < i)
 		{
 			//update face indices for new buffer
 			facep = *face_iter;
 			LLViewerObject* vobj = facep->getViewerObject();
-			if(vobj && vobj != lastVObj && vobj->isAttachment())
+			// <FS:Beq> capture render times
+			if(vobj && vobj->isAttachment())
 			{
-				T = trackMyAttachment(vobj);
-				lastVObj = vobj;
-			}			
+				trackAttachments(vobj, LLPipeline::sShadowRender, &ratPtr);
+			}
+			// </FS:Beq>
 			if (buffer.isNull())
 			{
 				// Bulk allocation failed

@@ -232,14 +232,15 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 		return 0;
 	}
 
-
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
+ // <FS:Beq> render time capture
+ // TODO(Beq) This path does not appear to have attachments. Prove this then remove.
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
 	auto vobj = mFace->getViewerObject();
 	if( vobj && vobj->isAttachment() )
 	{
-		T = trackMyAttachment(vobj);
+		trackAttachments( vobj, mFace->isState(LLFace::RIGGED), &ratPtr );
 	}
-
+// </FS:Beq>
 	U32 triangle_count = 0;
 
 	S32 diffuse_channel = LLDrawPoolAvatar::sDiffuseChannel;

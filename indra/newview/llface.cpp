@@ -643,11 +643,13 @@ void renderFace(LLDrawable* drawable, LLFace *face)
     LLVOVolume* vobj = drawable->getVOVolume();
     if (vobj)
     {
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-		if(vobj->isAttachment())
-		{
-			T = trackMyAttachment(vobj);
-		}
+		// <FS:Beq> Placeholder - This function emits drawcalls but is only used in one place and not useful for stats.
+		// TODO(Beq) if we need this consider moving it to llSelectMgr loop instead to reduce overhead.
+		// std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
+		// if(vobj->isAttachment())
+		// {
+		// 		trackAttachments(vobj, LLPipeline::sShadowRender, &ratPtr);
+		// }
         LLVolume* volume = NULL;
 
         if (drawable->isState(LLDrawable::RIGGED))

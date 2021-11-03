@@ -590,7 +590,7 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	// 	(impostor && oa == LLVOAvatar::AOA_JELLYDOLL))
 	// Note: Impostors should not cast shadows, also all JDs are impostor nowadays so we do not need the extra check at all.
 	// also no shadows if the shadows are causing this avatar to breach the limit.
-	if ( avatarp->isTooSlow(true) || impostor || (oa == LLVOAvatar::AOA_INVISIBLE) )
+	if ( avatarp->isTooSlowWithShadows() || impostor || (oa == LLVOAvatar::AOA_INVISIBLE) )
 	// </FS:Beq>
 	{
 		// No shadows for jellydolled or invisible avs.
@@ -1492,6 +1492,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	}
 	else
 	{
+		FSZoneN("Find avatarp"); // <FS:Beq/> Tracy markup
 		const LLFace *facep = mDrawFace[0];
 		if (!facep->getDrawable())
 		{
@@ -1507,7 +1508,10 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
 
 	// <FS:Zi> Add avatar hitbox debug
+	{
+		FSZoneN("cached control renderhitboxes");
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
+
 	if (render_hitbox && pass == 2)
 	{
 		FSZoneN("render_hitbox");
@@ -1589,8 +1593,11 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 			}
 		}
 	}
-	// </FS:Zi>
-
+	}// </FS:Zi>
+// <FS:Beq> rendertime Tracy annotations
+{
+	FSZoneN("check fully_loaded"); 
+// </FS:Beq>
 	if (!single_avatar && !avatarp->isFullyLoaded() )
 	{
 		FSZoneN("avatar not loaded");
@@ -1616,9 +1623,14 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		// don't render please
 		return;
 	}
+}// <FS:Beq/> rendertime Tracy annotations
 
 	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor() && !single_avatar;
 
+// <FS:Beq> rendertime Tracy annotations
+{
+	FSZoneN("check appearance");
+// </FS:Beq> 
 	if (( /*avatarp->isInMuteList() // <FS:Ansariel> Partially undo MAINT-5700: Draw imposter for muted avatars
 		  ||*/ impostor 
 		  || (LLVOAvatar::AOA_NORMAL != avatarp->getOverallAppearance() && !avatarp->needsImpostorUpdate()) ) && pass != 0)
@@ -1626,6 +1638,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{ //don't draw anything but the impostor for impostored avatars
 		return;
 	}
+}// <FS:Beq/> rendertime Tracy annotations
 	
 	if (pass == 0 && !impostor && LLPipeline::sUnderWaterRender)
 	{ //don't draw foot shadows under water
@@ -2258,6 +2271,7 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 
 	stop_glerror();
 
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};// <FS:Beq/> Perf stats capture
 	for (U32 i = 0; i < mRiggedFace[type].size(); ++i)
 	{
 		LLFace* face = mRiggedFace[type][i];
@@ -2281,12 +2295,12 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			continue;
 		}
 	
-		auto self = avatar->isSelf();
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};
-		if(self && vobj->isAttachment())
+		// <FS:Beq> Capture render times
+		if(vobj->isAttachment())
 		{
-			T = trackMyAttachment(vobj);
+			trackAttachments( vobj, true, &ratPtr);
 		}
+		// </FS:Beq>
 		
 		LLVolume* volume = vobj->getVolume();
 		S32 te = face->getTEOffset();
@@ -2582,10 +2596,14 @@ static LLTrace::BlockTimerStatHandle FTM_RIGGED_VBO("Rigged VBO");
 void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 {
 	LL_RECORD_BLOCK_TIME(FTM_RIGGED_VBO);
-
+	// <FS:Beq> render stats collection
+	if(!avatar)return; // in theory this never happens...right
+	FSPerfStats::RecordAvatarTime T( avatar->getID(), ( (LLPipeline::sShadowRender)?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ) );
+	// </FS:Beq>
 	//update rigged vertex buffers
 	for (U32 type = 0; type < NUM_RIGGED_PASSES; ++type)
 	{
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};			
 		for (U32 i = 0; i < mRiggedFace[type].size(); ++i)
 		{
 			FSZoneN("updateRiggedVBO");
@@ -2603,10 +2621,9 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 				continue;
 			}
 			// <FS:Beq> Capture render times
-			std::unique_ptr<FSPerfStats::RecordAttachmentTime> T{};			
 			if(vobj->isAttachment())
 			{
-				T = trackMyAttachment(vobj);
+				trackAttachments( vobj, true, &ratPtr );
 			}
 			// </FS:Beq>
 			LLVolume* volume = vobj->getVolume();
