@@ -1,6 +1,8 @@
 /** 
- * @file llfloaterperformance.h
+ * @file fsfloaterperformance.h
  *
+ * This is forked directly from an early access release of llfloaterperformance.h
+ * 
  * $LicenseInfo:firstyear=2021&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2021, Linden Research, Inc.
@@ -23,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLFLOATERPERFORMANCE_H
-#define LL_LLFLOATERPERFORMANCE_H
+#ifndef FS_FLOATERPERFORMANCE_H
+#define FS_FSFLOATERPERFORMANCE_H
 
 #include "llfloater.h"
 #include "lllistcontextmenu.h"
@@ -94,4 +96,4 @@ private:
     boost::signals2::connection	mMaxARTChangedSignal;
 };
 
-#endif // LL_LLFLOATERPERFORMANCE_H
+#endif // FS_FLOATERPERFORMANCE_H

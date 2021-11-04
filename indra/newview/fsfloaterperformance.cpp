@@ -24,7 +24,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "llfloaterperformance.h"
+#include "fsfloaterperformance.h"
 
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -229,8 +229,8 @@ void LLFloaterPerformance::draw()
         auto tot_ui_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_UI);
         // cumulative time spent rendering HUDS
         auto tot_huds_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_HUDS);
-        // "idle" time. This is the time spent in the idle poll section of the main loop, we DO NOT subtract the avatar time accumulated here as it was removed form the avatar time above
-        auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE);
+        // "idle" time. This is the time spent in the idle poll section of the main loop, we DO remove the avatar idel time as the avatar number we display is the total avatar time inclusive of idle processing.
+        auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE) - FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_IDLE);
         // similar to sleep time, induced by FPS limit
         auto tot_limit_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FPSLIMIT);
         // swap time is time spent in swap buffer
@@ -459,10 +459,10 @@ void LLFloaterPerformance::populateObjectList()
     mObjectList->clearRows();
     mObjectList->updateColumns(true);
 
-    object_complexity_list_t complexity_list = LLAvatarRenderNotifier::getInstance()->getObjectComplexityList();
+    object_complexity_list_t attachment_list = LLAvatarRenderNotifier::getInstance()->getObjectComplexityList();
 
-    object_complexity_list_t::iterator iter = complexity_list.begin();
-    object_complexity_list_t::iterator end = complexity_list.end();
+    object_complexity_list_t::iterator iter = attachment_list.begin();
+    object_complexity_list_t::iterator end = attachment_list.end();
 
 
     U32 max_complexity = 0;
@@ -471,17 +471,20 @@ void LLFloaterPerformance::populateObjectList()
         max_complexity = llmax(max_complexity, (*iter).objectCost);
     }
 
+
+    // for consistency  we lock the buffer while we build the list. In theory this is uncontended as th ebuffer should only toggle on end of frame
     {
         std::lock_guard<std::mutex> guard{FSPerfStats::bufferToggleLock};
         auto att_max_render_time_raw = FSPerfStats::StatsRecorder::getMax(AttType, FSPerfStats::StatType_t::RENDER_COMBINED);
+        auto att_sum_render_time_raw = FSPerfStats::StatsRecorder::getSum(AttType, FSPerfStats::StatType_t::RENDER_COMBINED);
         LL_DEBUGS("PerfFloater") << "Attachments for frame : " << gFrameCount << " Max:" << att_max_render_time_raw << LL_ENDL;
-        for (iter = complexity_list.begin(); iter != end; ++iter)
+        for (iter = attachment_list.begin(); iter != end; ++iter)
         {
-            LLObjectComplexity object_complexity = *iter;        
-            S32 obj_cost_short = llmax((S32)object_complexity.objectCost / 1000, 1);
+            LLObjectComplexity attachment_complexity = *iter;        
+            S32 obj_cost_short = llmax((S32)attachment_complexity.objectCost / 1000, 1);
 
-            auto& attID{object_complexity.objectId};
-            auto& attName{object_complexity.objectName};
+            auto& attID{attachment_complexity.objectId};
+            auto& attName{attachment_complexity.objectName};
             auto attach_render_time_raw = FSPerfStats::StatsRecorder::get(AttType, attID, FSPerfStats::StatType_t::RENDER_COMBINED);
             LL_DEBUGS("PerfFloater") << "Att: " << attName << " (" << attID.asString() << ") Cost: " << FSPerfStats::raw_to_us(attach_render_time_raw) << LL_ENDL;
             LLSD item;
@@ -522,11 +525,19 @@ void LLFloaterPerformance::populateObjectList()
                 }
             }
         }
+
+        auto textbox = getChild<LLTextBox>("tot_att_count");
+        LLStringUtil::format_map_t args;
+        args["TOT_ATT"] = llformat("%d", (int64_t)attachment_list.size());
+        args["TOT_ATT_TIME"] = llformat("%.2f", FSPerfStats::raw_to_us(att_sum_render_time_raw));
+        textbox->setText(getString("tot_att_template", args));
     }
     LL_DEBUGS("PerfFloater") << "Attachments for frame : " << gFrameCount << " COMPLETED" << LL_ENDL;
     mNearbyList->sortByColumn(current_sort_col, current_sort_asc);
     mObjectList->setScrollPos(prev_pos);
     mObjectList->selectItemBySpecialId(prev_selected_id);
+
+
 }
 
 void LLFloaterPerformance::populateNearbyList()
@@ -555,10 +566,11 @@ void LLFloaterPerformance::populateNearbyList()
 
     FSPerfStats::bufferToggleLock.lock();
     auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
+    auto av_render_tot_raw = FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
     FSPerfStats::bufferToggleLock.unlock();
 
-    FSPlot("max ART", (int64_t)av_render_max_raw);
-    FSPlot("Num av", (int64_t)valid_nearby_avs.size());
+    // FSPlot("max ART", (int64_t)av_render_max_raw);
+    // FSPlot("Num av", (int64_t)valid_nearby_avs.size());
 
     while (char_iter != valid_nearby_avs.end())
     {
@@ -682,6 +694,12 @@ void LLFloaterPerformance::populateNearbyList()
     mNearbyList->sortByColumn(current_sort_col, current_sort_asc);
     mNearbyList->setScrollPos(prev_pos);
     mNearbyList->selectByID(prev_selected_id);
+
+    auto textbox = getChild<LLTextBox>("tot_av_count");
+    LLStringUtil::format_map_t args;
+    args["TOT_AV"] = llformat("%d", (int64_t)valid_nearby_avs.size());
+    args["TOT_AV_TIME"] = llformat("%.2f", FSPerfStats::raw_to_us(av_render_tot_raw));
+    textbox->setText(getString("tot_av_template", args));
 }
 
 void LLFloaterPerformance::getNearbyAvatars(std::vector<LLCharacter*> &valid_nearby_avs)
