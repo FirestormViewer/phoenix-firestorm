@@ -34,7 +34,7 @@
 #include <unordered_map>
 #include <mutex>
 #include "lluuid.h"
-#include "lltimer.h"
+#include "llfasttimer.h"
 #include "blockingconcurrentqueue.h"
 #include "llapp.h"
 #include "fstelemetry.h"
@@ -298,7 +298,7 @@ namespace FSPerfStats
     public:
         StatsRecord stat;
 
-        RecordTime( const LLUUID& av, const LLUUID& id, StatType_t type, bool isRiggedAtt=false):start{LLTimer::getCurrentClockCount()},
+        RecordTime( const LLUUID& av, const LLUUID& id, StatType_t type, bool isRiggedAtt=false):start{LLTrace::BlockTimer::getCPUClockCount64()},
                                                                                               stat{type, ObjTypeDiscriminator, std::move(av), std::move(id), 0, isRiggedAtt}{
             FSZoneC(tracy::Color::Orange);
         #ifdef USAGE_TRACKING
@@ -364,7 +364,7 @@ namespace FSPerfStats
             }
         #endif
 
-            stat.time = LLTimer::getCurrentClockCount() - start;
+            stat.time = LLTrace::BlockTimer::getCPUClockCount64() - start;
             
         #ifdef ATTACHMENT_TRACKING
             static char obstr[36];
@@ -382,9 +382,9 @@ namespace FSPerfStats
 	};
 
     
-    inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) * get_timer_info().mClockFrequencyInv; };
-    inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) * get_timer_info().mClockFrequencyInv; };
-    inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) * get_timer_info().mClockFrequencyInv; };
+    inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
+    inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
+    inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
 
     using RecordSceneTime = RecordTime<ObjType_t::OT_GENERAL>;
     using RecordAvatarTime = RecordTime<ObjType_t::OT_AVATAR>;

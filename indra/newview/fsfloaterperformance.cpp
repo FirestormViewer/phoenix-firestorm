@@ -212,11 +212,12 @@ void LLFloaterPerformance::draw()
 
         auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
-        auto tot_frame_time_ns = NANOS/fps;
+        // auto tot_frame_time_ns = NANOS/fps;
         auto target_frame_time_ns = NANOS/(targetFPS==0?1:targetFPS);
 
         FSPerfStats::bufferToggleLock.lock(); // prevent toggle for a moment
 
+        auto tot_frame_time_ns = FSPerfStats::raw_to_ns(FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FRAME));
         // cumulative avatar time (includes idle processing, attachments and base av)
         auto tot_avatar_time_raw = FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
         // cumulative avatar render specific time (a bit arbitrary as the processing is too.)
