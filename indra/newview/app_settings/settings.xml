@@ -24235,7 +24235,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://phoenixviewer.com/app/loginV3/secondlifegrid.xml</string>
+      <string>https://phoenixviewer.com/app/loginV3/secondlifegrid.xml</string>
     </map>
     <key>FSIgnoreAdHocSessions</key>
     <map>
@@ -25166,6 +25166,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Use Win32 SLVoice.exe for voice. Needs wine (https://www.winehq.org/) installed, as SLVoice.exe is started inside wine.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSLinuxEnableWin64VoiceProxy</key>
+    <map>
+      <key>Comment</key>
+      <string>Use Win64 SLVoice.exe for voice. Needs wine (https://www.winehq.org/) installed, as SLVoice.exe is started inside wine.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
