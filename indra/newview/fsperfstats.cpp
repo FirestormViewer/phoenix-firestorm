@@ -101,6 +101,8 @@ namespace FSPerfStats
         if( sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] != 0 || sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] != 0 )
         {
             unreliable = true;
+            lastStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)];
+            lastStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)];
         }
 
         if(!unreliable)
