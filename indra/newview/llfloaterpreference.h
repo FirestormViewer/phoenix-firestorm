@@ -479,8 +479,10 @@ class LLAvatarComplexityControls
   public: 
 	static void updateMax(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val = false);
 	static void setText(U32 value, LLTextBox* text_box, bool short_val = false);
+	// <FS:Beq> for render time support
 	static void updateMaxRenderTime(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val = false);
-	static void setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val = false);
+	static void setRenderTimeText(U32 value, LLTextBox* text_box, bool short_val = false); 
+	// </FS:Beq>
 	static void setIndirectControls();
 	static void setIndirectMaxNonImpostors();
 	static void setIndirectMaxArc();

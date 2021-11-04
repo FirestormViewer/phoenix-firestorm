@@ -105,7 +105,8 @@
 #include "llfloaterpathfindingconsole.h"
 #include "llfloaterpathfindinglinksets.h"
 #include "llfloaterpay.h"
-#include "llfloaterperformance.h"
+// #include "llfloaterperformance.h" <FS:Beq/> rename to fs as ll version no released
+#include "fsfloaterperformance.h"
 #include "llfloaterperms.h"
 #include "llfloaterpostprocess.h"
 #include "llfloaterpreference.h"

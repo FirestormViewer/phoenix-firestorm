@@ -286,6 +286,7 @@
 #include "fsassetblacklist.h"
 
 #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if LL_LINUX && LL_GTK
 #include "glib.h"
@@ -1570,6 +1571,7 @@ void LLAppViewer::initMaxHeapSize()
 }
 
 static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
+static LLTrace::BlockTimerStatHandle FTM_MESSAGES2("System Messages2");
 static LLTrace::BlockTimerStatHandle FTM_SLEEP("Sleep");
 static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
 
@@ -1632,7 +1634,7 @@ bool LLAppViewer::frame()
 bool LLAppViewer::doFrame()
 {
 	{
-	FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_FRAME);
+	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
@@ -1715,7 +1717,7 @@ bool LLAppViewer::doFrame()
 
 		if (gViewerWindow)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+			LL_RECORD_BLOCK_TIME(FTM_MESSAGES2);
 			if (!restoreErrorTrap())
 			{
 				LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
@@ -1738,7 +1740,10 @@ bool LLAppViewer::doFrame()
 		// canonical per-frame event
 		mainloop.post(newFrame);
 		// give listeners a chance to run
+		{
+			FSZoneN("Main:Coro");
 		llcoro::suspend();
+		}
 
 		if (!LLApp::isExiting())
 		{
@@ -1755,6 +1760,8 @@ bool LLAppViewer::doFrame()
 				&& (gHeadlessClient || !gViewerWindow->getShowProgress())
 				&& !gFocusMgr.focusLocked())
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+				FSZoneN("Main:JoystickKeyboard");
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
                 gViewerInput.scanMouse();
@@ -1770,7 +1777,7 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
-				FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_IDLE);
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
 
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 
@@ -1782,6 +1789,7 @@ bool LLAppViewer::doFrame()
 
 			if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
 			{
+				FSZoneN("Shutdown:SaveSnapshot");
 				pauseMainloopTimeout();
 				saveFinalSnapshot();
 				disconnectViewer();
@@ -1792,6 +1800,7 @@ bool LLAppViewer::doFrame()
 			// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
 			if (!LLApp::isExiting() && !gHeadlessClient && gViewerWindow)
 			{
+				FSZoneN("Main:Display");
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
@@ -1815,8 +1824,11 @@ bool LLAppViewer::doFrame()
 				// </FS:Ansariel>
 
 				pingMainloopTimeout("Main:Snapshot");
+				{
+					FSZoneN("Main:Snapshot");
 				LLFloaterSnapshot::update(); // take snapshots
 				LLFloaterOutfitSnapshot::update();
+				}
 				gGLActive = FALSE;
 			}
 		}
@@ -1844,13 +1856,13 @@ bool LLAppViewer::doFrame()
 					|| !gFocusMgr.getAppHasFocus()))
 			{
 				// Sleep if we're not rendering, or the window is minimized.
-				static LLCachedControl<S32> s_bacground_yeild_time(gSavedSettings, "BackgroundYieldTime", 40);
+				static LLCachedControl<S32> s_bacground_yeild_time(gSavedSettings, "back", 40);
 				S32 milliseconds_to_sleep = llclamp((S32)s_bacground_yeild_time, 0, 1000);
 				// don't sleep when BackgroundYieldTime set to 0, since this will still yield to other threads
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
 				{
-					FSTelemetry::RecordSceneTime T ( FSTelemetry::SceneStatType::RENDER_SLEEP );
+					FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_SLEEP );
 					ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
@@ -1928,7 +1940,7 @@ bool LLAppViewer::doFrame()
 			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
-				FSTelemetry::RecordSceneTime T (FSTelemetry::SceneStatType::RENDER_FPSLIMIT);
+				FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_FPSLIMIT );
 				F32 min_frame_time = 1.f / (F32)max_fps;
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
@@ -1969,9 +1981,7 @@ bool LLAppViewer::doFrame()
     FSFrameMark; // <FS:Beq> Tracy support delineate Frame
     LLPROFILE_UPDATE();
 	}
-	FSTelemetry::RecordSceneTime::toggleBuffer();
-	FSTelemetry::RecordObjectTime<const LLVOAvatar*>::toggleBuffer();
-
+	FSPerfStats::StatsRecorder::endFrame();
 	return ! LLApp::isRunning();
 }
 
@@ -5783,6 +5793,7 @@ void LLAppViewer::idle()
 
         if (!(logoutRequestSent() && hasSavedFinalSnapshot()))
 		{
+			FSPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
 			gObjectList.update(gAgent);
 		}
 	}

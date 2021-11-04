@@ -256,13 +256,14 @@ set(llcommon_HEADER_FILES
     StackWalker.h
     )
 
-# <FS:ND> Add all nd* files. memory pool, intrinsics, ...
-# <FS:Beq> Tracy Profiler support
-list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
-if (USE_TRACY_PROFILER)
-  list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
-endif()
-
+    # <FS:Beq> Tracy Profiler support
+    list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
+    if (USE_TRACY_PROFILER)
+    list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
+    endif()
+    # </FS:Beq> Tracy Profiler support
+    
+    # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp
 	 nd/ndlogthrottle.cpp

@@ -1,6 +1,8 @@
 /** 
- * @file llfloaterperformance.h
+ * @file fsfloaterperformance.h
  *
+ * This is forked directly from an early access release of llfloaterperformance.h
+ * 
  * $LicenseInfo:firstyear=2021&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2021, Linden Research, Inc.
@@ -23,14 +25,15 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLFLOATERPERFORMANCE_H
-#define LL_LLFLOATERPERFORMANCE_H
+#ifndef FS_FLOATERPERFORMANCE_H
+#define FS_FSFLOATERPERFORMANCE_H
 
 #include "llfloater.h"
 #include "lllistcontextmenu.h"
 
 class LLCharacter;
 class LLNameListCtrl;
+class LLComboBox;
 
 class LLFloaterPerformance : public LLFloater
 {
@@ -51,6 +54,7 @@ public:
 
     void onCustomAction (const LLSD& userdata, const LLUUID& av_id);
     bool isActionChecked(const LLSD& userdata, const LLUUID& av_id);
+    void onExtendedAction(const LLSD& userdata, const LLUUID& av_id);
 
 private:
     void initBackBtn(LLPanel* panel);
@@ -62,6 +66,7 @@ private:
     void onChangeQuality(const LLSD& data);
     void onClickHideAvatars();
     void onClickExceptions();
+    void onClickFocusAvatar();
 
     void updateMaxComplexity();
     void updateComplexityText();
@@ -75,9 +80,11 @@ private:
     LLPanel* mComplexityPanel;
     LLPanel* mHUDsPanel;
     LLPanel* mSettingsPanel;
+    LLPanel* mAutoTunePanel;
     LLNameListCtrl* mHUDList;
     LLNameListCtrl* mObjectList;
     LLNameListCtrl* mNearbyList;
+    LLComboBox* mNearbyCombo;
 
     LLListContextMenu* mContextMenu;
 
@@ -89,4 +96,4 @@ private:
     boost::signals2::connection	mMaxARTChangedSignal;
 };
 
-#endif // LL_LLFLOATERPERFORMANCE_H
+#endif // FS_FLOATERPERFORMANCE_H

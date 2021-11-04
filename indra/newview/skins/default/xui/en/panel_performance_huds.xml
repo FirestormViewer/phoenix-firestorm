@@ -66,7 +66,7 @@
    left="20"
    name="huds_desc2"
    width="540">
-    Note: Using a HUD's minimize button does not detach it. 
+    Note: Using a HUD's minimize button does not detach it. Use the X to remove it.
   </text>
   <name_list
     column_padding="0"
@@ -84,10 +84,9 @@
         <name_list.columns
          label=""
          name="complex_value"
-         width="40" />
+         width="80" />
         <name_list.columns
          label=""
          name="name"/>
   </name_list>
 </panel>
-

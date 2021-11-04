@@ -211,7 +211,7 @@
 #include "llenvironment.h"
 
 #include "llstacktrace.h"
-
+#include "fsperfstats.h"
 #if LL_WINDOWS
 #include "lldxhardware.h"
 #endif
@@ -2157,6 +2157,10 @@ bool idle_startup()
 		gAgent.addRegionChangedCallback(boost::bind(&update_static_eyes));
 		update_static_eyes();
 		// </FS:KC>
+
+		// <FS:Beq>
+		gAgent.addRegionChangedCallback(boost::bind(&FSPerfStats::StatsRecorder::clearStats));
+		// </FS:Beq>
 
 		// *Note: this is where gWorldMap used to be initialized.
 
@@ -4260,6 +4264,10 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	// unpack login data needed by the application
 	text = response["agent_id"].asString();
 	if(!text.empty()) gAgentID.set(text);
+	// <FS:Beq> Performance floater initialisation
+	FSPerfStats::StatsRecorder::setEnabled(gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled"));
+    FSPerfStats::StatsRecorder::setFocusAv(gAgentID);
+	// </FS:Beq>
 //	gDebugInfo["AgentID"] = text;
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
 	if (gCrashSettings.getBOOL("CrashSubmitName"))

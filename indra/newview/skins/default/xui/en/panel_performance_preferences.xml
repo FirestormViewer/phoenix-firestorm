@@ -362,17 +362,6 @@
    width="350">
     Reducing or turning off water effects can greatly improve frame rate.
   </text>
-  <check_box
-    control_name="RenderTransparentWater"
-    height="16"
-    initial_value="true"
-    label="Transparent Water"
-    layout="topleft"
-    name="TransparentWater"
-    top_delta="24"
-    left="157"
-    width="280">
-  </check_box>
   <text
     type="string"
     length="1"
