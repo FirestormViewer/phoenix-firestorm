@@ -24,6 +24,12 @@
  <floater.string name="focus_fps">
    In Background
 </floater.string>
+<floater.string name="tot_av_template">
+  Total: [TOT_AV] ([TOT_AV_TIME]μs)
+</floater.string>
+<floater.string name="tot_att_template">
+  Total: [TOT_ATT] ([TOT_ATT_TIME]μs)
+</floater.string>
   <panel
    bevel_style="none"
    follows="left|top"

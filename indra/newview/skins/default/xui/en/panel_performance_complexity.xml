@@ -41,8 +41,21 @@
    left="20"
    top_pad="10"
    name="attachments_title"
-   width="195">
-    Avatar complexity 
+   width="250">
+    Avatar attachment complexity 
+  </text>
+  <text
+   follows="right|top"
+   font="SansSerifLarge"
+   text_color="White"
+   height="20"
+   layout="topleft"
+   right="-40"
+   top_delta="0"
+   name="tot_att_count"
+   halign="right"
+   width="200">
+   Total: 50 (120000.10μs)
   </text>
   <text
   follows="left|top"
