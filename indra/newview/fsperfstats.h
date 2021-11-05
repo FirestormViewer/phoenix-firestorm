@@ -57,6 +57,10 @@ namespace FSPerfStats
 #ifdef USAGE_TRACKING
     extern std::atomic<int64_t> inUse;
     extern std::atomic<int64_t> inUseAvatar;
+    extern std::atomic<int64_t> inUseScene;
+    extern std::atomic<int64_t> inUseAttachment;
+    extern std::atomic<int64_t> inUseAttachmentRigged;
+    extern std::atomic<int64_t> inUseAttachmentUnRigged;
 #endif
     extern std::atomic<int64_t> tunedAvatars;
     extern U32 targetFPS; // desired FPS
@@ -101,8 +105,8 @@ namespace FSPerfStats
         LLUUID      avID;
         LLUUID      objID;
         uint64_t    time;
-        uint32_t    count;
         bool        isRigged;
+        bool        isHUD;
     };
 
     class StatsRecorder{
@@ -211,7 +215,7 @@ namespace FSPerfStats
 
             if(ot == ObjType_t::OT_ATTACHMENT)
             {
-                if( !upd.isRigged )
+                if( !upd.isRigged && !upd.isHUD )
                 {
                     // For all attachments that are not rigged we add them to the avatar (for all avatars) cost.
                     doUpd(avKey, ObjType_t::OT_AVATAR, type, val);
@@ -219,6 +223,10 @@ namespace FSPerfStats
                 if( avKey == focusAv )
                 {
                 // For attachments that are for the focusAv (self for now) we record them for the attachment/complexity view
+                    if(upd.isHUD)
+                    {
+                        ot = ObjType_t::OT_HUD;
+                    }
                     // LL_INFOS("perfstats") << "frame: " << gFrameCount << " Attachment update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << LL_ENDL;
                     doUpd(key, ot, type, val);
                 }
@@ -263,12 +271,13 @@ namespace FSPerfStats
             auto& instance {StatsRecorder::getInstance()};
             FSThreadName( "PerfStats" );
 
-            while( !LLApp::isExiting() )
+            while( enabled() && !LLApp::isExiting() )
             {
                 FSZone("perf batch");
-                auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(5));
+                auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
                 if(count)
                 {
+                    FSZoneValue(count);
                     // LL_INFOS("perfstats") << "processing " << count << " updates." << LL_ENDL;
                     for(auto i =0; i < count; i++)
                     {
@@ -298,21 +307,30 @@ namespace FSPerfStats
     public:
         StatsRecord stat;
 
-        RecordTime( const LLUUID& av, const LLUUID& id, StatType_t type, bool isRiggedAtt=false):start{LLTrace::BlockTimer::getCPUClockCount64()},
-                                                                                              stat{type, ObjTypeDiscriminator, std::move(av), std::move(id), 0, isRiggedAtt}{
+        RecordTime( const LLUUID& av, const LLUUID& id, StatType_t type, bool isRiggedAtt=false, bool isHUDAtt=false):
+                    start{LLTrace::BlockTimer::getCPUClockCount64()},
+                    stat{type, ObjTypeDiscriminator, std::move(av), std::move(id), 0, isRiggedAtt, isHUDAtt}
+        {
             FSZoneC(tracy::Color::Orange);
         #ifdef USAGE_TRACKING
             if(stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT)
             {
-                if(FSPerfStats::inUse){FSZoneText("OVERLAP ATT",11);}
                 if(!stat.isRigged && FSPerfStats::inUseAvatar){FSZoneText("OVERLAP AVATAR",14);}
 
-                FSPlot("InUse", (int64_t)FSPerfStats::inUse);
-                FSPlot("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
+                FSPlotSq("InUse", (int64_t)FSPerfStats::inUse, (int64_t)FSPerfStats::inUse+1);
                 FSPerfStats::inUse++;
-                if( !stat.isRigged ) {FSPerfStats::inUseAvatar++;};
-                FSPlot("InUse", (int64_t)FSPerfStats::inUse);
-                FSPlot("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
+                FSPlotSq("InUseAttachment", (int64_t)FSPerfStats::inUseAttachment, (int64_t)FSPerfStats::inUseAttachment+1);
+                FSPerfStats::inUseAttachment++;
+                if (stat.isRigged)
+                {
+                    FSPlotSq("InUseAttachmentRigged", (int64_t)FSPerfStats::inUseAttachmentRigged,(int64_t)FSPerfStats::inUseAttachmentRigged+1);
+                    FSPerfStats::inUseAttachmentRigged++;
+                }
+                else
+                {
+                    FSPlotSq("InUseAttachmentUnRigged", (int64_t)FSPerfStats::inUseAttachmentUnRigged,(int64_t)FSPerfStats::inUseAttachmentUnRigged+1);
+                    FSPerfStats::inUseAttachmentUnRigged++;
+                }            
             }
         #endif
 
@@ -322,6 +340,12 @@ namespace FSPerfStats
         RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
         {
             FSZone;
+            #ifdef USAGE_TRACKING
+            FSPlotSq("InUseScene", (int64_t)FSPerfStats::inUseScene, (int64_t)FSPerfStats::inUseScene+1);
+            FSPerfStats::inUseScene++;
+            FSPlotSq("InUse", (int64_t)FSPerfStats::inUse, (int64_t)FSPerfStats::inUse+1);
+            FSPerfStats::inUse++;
+            #endif
         };
 
         template < typename = std::enable_if_t<ObjTypeDiscriminator == ObjType_t::OT_AVATAR> >
@@ -332,9 +356,11 @@ namespace FSPerfStats
         #ifdef USAGE_TRACKING
             if(FSPerfStats::inUseAvatar){FSZoneText("OVERLAP AVATAR",14);}
 
-            FSPlot("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
+            FSPlotSq("InUseAv", (int64_t)FSPerfStats::inUseAvatar, (int64_t)FSPerfStats::inUseAvatar+1);
             FSPerfStats::inUseAvatar++;
-            FSPlot("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
+            FSPlotSq("InUse", (int64_t)FSPerfStats::inUse, (int64_t)FSPerfStats::inUse+1);
+            FSPerfStats::inUse++;
+
         #endif
 
         };
@@ -350,20 +376,34 @@ namespace FSPerfStats
             FSZoneC(tracy::Color::Red);
             
         #ifdef USAGE_TRACKING
+            FSPlotSq("InUse", (int64_t)FSPerfStats::inUse,(int64_t)FSPerfStats::inUse-1);
+            --FSPerfStats::inUse;
             if (stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT)
             {
-                FSPlot("InUse", (int64_t)FSPerfStats::inUse);
-                --FSPerfStats::inUse;
-                FSPlot("InUse", (int64_t)FSPerfStats::inUse);
+                FSPlotSq("InUseAttachment", (int64_t)FSPerfStats::inUseAttachment,(int64_t)FSPerfStats::inUseAttachment-1);
+                --FSPerfStats::inUseAttachment;
+                if (stat.isRigged)
+                {
+                    FSPlotSq("InUseAttachmentRigged", (int64_t)FSPerfStats::inUseAttachmentRigged,(int64_t)FSPerfStats::inUseAttachmentRigged-1);
+                    --FSPerfStats::inUseAttachmentRigged;
+                }
+                else
+                {
+                    FSPlotSq("InUseAttachmentUnRigged", (int64_t)FSPerfStats::inUseAttachmentUnRigged,(int64_t)FSPerfStats::inUseAttachmentUnRigged-1);
+                    --FSPerfStats::inUseAttachmentUnRigged;
+                }
             }
-            if( ( stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT && !stat.isRigged ) || stat.objType == FSPerfStats::ObjType_t::OT_AVATAR )
+            if (stat.objType == FSPerfStats::ObjType_t::OT_GENERAL)
             {
-                FSPlot("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
+                FSPlotSq("InUseScene", (int64_t)FSPerfStats::inUseScene,(int64_t)FSPerfStats::inUseScene-1);
+                --FSPerfStats::inUseScene;
+            }
+            if( stat.objType == FSPerfStats::ObjType_t::OT_AVATAR )
+            {
+                FSPlotSq("InUseAv", (int64_t)FSPerfStats::inUseAvatar, (int64_t)FSPerfStats::inUseAvatar-1);
                 --FSPerfStats::inUseAvatar;
-                FSPlot("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
             }
         #endif
-
             stat.time = LLTrace::BlockTimer::getCPUClockCount64() - start;
             
         #ifdef ATTACHMENT_TRACKING
@@ -389,6 +429,7 @@ namespace FSPerfStats
     using RecordSceneTime = RecordTime<ObjType_t::OT_GENERAL>;
     using RecordAvatarTime = RecordTime<ObjType_t::OT_AVATAR>;
     using RecordAttachmentTime = RecordTime<ObjType_t::OT_ATTACHMENT>;
+    using RecordHudAttachmentTime = RecordTime<ObjType_t::OT_HUD>;
      
 };// namespace FSPerfStats
 
@@ -421,6 +462,7 @@ static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPt
             FSZoneNC( "trackAttachments:new", tracy::Color::Red );
             auto& str = rootAtt->getAttachmentItemName();
             FSZoneText(str.c_str(), str.size());
+            FSZoneText(isRigged?"Rigged  ":"Unrigged",8);
             static char avStr[36];
             av.toStringFast(avStr);
             static char obStr[4];
@@ -429,9 +471,12 @@ static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPt
             FSZoneText( obStr, 4);
             #endif
             if(*ratPtrp){ratPtrp->reset();}; // deliberately reset to ensure destruction before construction of replacement.
-            *ratPtrp = std::make_unique<FSPerfStats::RecordAttachmentTime>( av, obj, ( (LLPipeline::sShadowRender)?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ), isRigged );
+            *ratPtrp = std::make_unique<FSPerfStats::RecordAttachmentTime>( av, 
+                                                                            obj,
+                                                                            ( (LLPipeline::sShadowRender)?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ), 
+                                                                            isRigged, 
+                                                                            rootAtt->isHUDAttachment());
         }
-        (*ratPtrp)->stat.count++;
 	}
 	return;
 };

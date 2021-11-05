@@ -37,6 +37,10 @@ namespace FSPerfStats
  #ifdef USAGE_TRACKING
     std::atomic<int64_t> inUse{0};
     std::atomic<int64_t> inUseAvatar{0};
+    std::atomic<int64_t> inUseScene{0};
+    std::atomic<int64_t> inUseAttachment{0};
+    std::atomic<int64_t> inUseAttachmentRigged{0};
+    std::atomic<int64_t> inUseAttachmentUnRigged{0};
 #endif
     std::atomic<int64_t> tunedAvatars{0};
     U32 targetFPS; // desired FPS
@@ -51,7 +55,7 @@ namespace FSPerfStats
 
     std::atomic<int> 	StatsRecorder::writeBuffer{0};
     bool 	            StatsRecorder::collectionEnabled{true};
-    LLUUID       StatsRecorder::focusAv{LLUUID::null};
+    LLUUID              StatsRecorder::focusAv{LLUUID::null};
 	std::array<StatsRecorder::StatsTypeMatrix,2>  StatsRecorder::statsDoubleBuffer{ {} };
     std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::max{ {} };
     std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::sum{ {} };
