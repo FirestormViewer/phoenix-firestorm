@@ -46,7 +46,10 @@
 #define FSZoneText( text, size ) ZoneText( text, size )
 #define FSZoneValue( num_uint64 ) ZoneValue( num_uint64 )
 #define FSPlot( name, value ) TracyPlot( name, value)
+#define FSPlotSq( name, lastval, newval ) TracyPlot( name, lastval);TracyPlot( name, newval); 
 #define FSFrameMark FrameMark
+#define FSFrameMarkStart( name ) FrameMarkStart( name )
+#define FSFrameMarkEnd( name ) FrameMarkEnd( name )
 #define FSThreadName( name ) tracy::SetThreadName( name )
 #define FSMessageL ( message ) tracy::Profiler::Message( message, 0 )
 #define FSTelemetryIsConnected TracyIsConnected
@@ -63,7 +66,10 @@
 #define FSZoneText( text, size )
 #define FSZoneValue( num_uint64 )
 #define FSPlot( name, value ) 
+#define FSPlotSq( name, lastval, newval ) 
 #define FSFrameMark 
+#define FSFrameMarkStart( name ) 
+#define FSFrameMarkEnd( name ) 
 #define FSThreadName( name ) 
 #define FSMessageL( message )
 #define FSTelemetryIsConnected
