@@ -4,7 +4,7 @@
  layout="topleft"
  name="performance"
  save_rect="true"
- title="Improve Graphics Speed"
+ title="Improve Graphics Speed (Experimental)"
  width="580">
  <floater.string name="frame_stats">
   Frame: [TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% TASKS:[IDLE_FRAME_PCT]%

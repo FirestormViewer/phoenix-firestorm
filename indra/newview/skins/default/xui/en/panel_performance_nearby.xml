@@ -42,8 +42,7 @@ top="0">
    top_pad="10"
    name="av_nearby_title"
    width="205">
-    Avatars nearby
-  </text>
+    Avatars nearby</text>
   <text
    follows="right|top"
    font="SansSerifLarge"
@@ -165,7 +164,7 @@ top="0">
          width="40" />
          <name_list.columns
          label=""
-         tool_tip="Shows any auto-tuning. I=Imposter S=no shadow."
+         tool_tip="Shows any tuning. I=Imposter S=no shadow."
          name="state"
          width="15" />
         <name_list.columns

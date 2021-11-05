@@ -139,7 +139,6 @@ BOOL LLFloaterPerformance::postBuild()
     mObjectList->setHoverIconName("StopReload_Off");
     mObjectList->setIconClickedCallback(boost::bind(&LLFloaterPerformance::detachItem, this, _1));
 
-    mSettingsPanel->getChild<LLButton>("advanced_btn")->setCommitCallback(boost::bind(&LLFloaterPerformance::onClickAdvanced, this));
     mSettingsPanel->getChild<LLRadioGroup>("graphics_quality")->setCommitCallback(boost::bind(&LLFloaterPerformance::onChangeQuality, this, _2));
 
     mNearbyPanel->getChild<LLButton>("exceptions_btn")->setCommitCallback(boost::bind(&LLFloaterPerformance::onClickExceptions, this));
@@ -243,7 +242,8 @@ void LLFloaterPerformance::draw()
         auto unreliable = false; // if there is something to skew the stats such as sleep of fps cap
         auto tot_avatar_time_ns         = FSPerfStats::raw_to_ns( tot_avatar_time_raw );
         auto tot_huds_time_ns           = FSPerfStats::raw_to_ns( tot_huds_time_raw );
-        auto tot_ui_time_ns             = FSPerfStats::raw_to_ns( tot_ui_time_raw );
+        // UI time includes HUD time so dedut that before we calc percentages
+        auto tot_ui_time_ns             = FSPerfStats::raw_to_ns( tot_ui_time_raw - tot_huds_time_raw);
 
         // auto tot_sleep_time_ns          = FSPerfStats::raw_to_ns( tot_sleep_time_raw );
         // auto tot_limit_time_ns          = FSPerfStats::raw_to_ns( tot_limit_time_raw );
@@ -251,7 +251,8 @@ void LLFloaterPerformance::draw()
         // auto tot_render_time_ns         = FSPerfStats::raw_to_ns( tot_render_time_raw );
         auto tot_idle_time_ns           = FSPerfStats::raw_to_ns( tot_idle_time_raw );
         auto tot_swap_time_ns           = FSPerfStats::raw_to_ns( tot_swap_time_raw );
-        auto tot_non_av_render_time_ns  = FSPerfStats::raw_to_ns( tot_render_time_raw - tot_avatar_render_time_raw);
+        auto tot_scene_time_ns  = FSPerfStats::raw_to_ns( tot_render_time_raw - tot_avatar_render_time_raw - tot_swap_time_raw - tot_ui_time_raw);
+
 
         // // remove time spent sleeping for fps limit or out of focus.
         // tot_frame_time_ns -= tot_limit_time_ns;
@@ -267,20 +268,20 @@ void LLFloaterPerformance::draw()
         auto pct_ui_time = (tot_ui_time_ns * 100)/tot_frame_time_ns;
         auto pct_idle_time = (tot_idle_time_ns * 100)/tot_frame_time_ns;
         auto pct_swap_time = (tot_swap_time_ns * 100)/tot_frame_time_ns;
-        auto pct_non_av_render_time = (tot_non_av_render_time_ns * 100)/tot_frame_time_ns;
+        auto pct_scene_render_time = (tot_scene_time_ns * 100)/tot_frame_time_ns;
         pct_avatar_time = llclamp(pct_avatar_time,0.,100.);
         pct_huds_time = llclamp(pct_huds_time,0.,100.);
         pct_ui_time = llclamp(pct_ui_time,0.,100.);
         pct_idle_time = llclamp(pct_idle_time,0.,100.);
         pct_swap_time = llclamp(pct_swap_time,0.,100.);
-        pct_non_av_render_time = llclamp(pct_non_av_render_time,0.,100.);
+        pct_scene_render_time = llclamp(pct_scene_render_time,0.,100.);
 
         args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
         args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
         args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
         args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
         args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
-        args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_non_av_render_time));
+        args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_render_time));
         args["TOT_FRAME_TIME"] = llformat("%02u", (U32)llround(tot_frame_time_ns/1000000));
         args["FPSCAP"] = llformat("%02u", (U32)fpsCap);
         args["FPSTARGET"] = llformat("%02u", (U32)targetFPS);
@@ -410,10 +411,12 @@ void LLFloaterPerformance::populateHUDList()
         LLHUDComplexity hud_object_complexity = *iter;     
         auto hud_render_time_raw = FSPerfStats::StatsRecorder::get(HudType, hud_object_complexity.objectId, FSPerfStats::StatType_t::RENDER_GEOMETRY);
         LLSD item;
+        S32 obj_cost_short = llmax((S32)hud_object_complexity.objectsCost / 1000, 1);
+
         item["special_id"] = hud_object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
         LLSD& row = item["columns"];
-        row[0]["column"] = "complex_visual";
+        row[0]["column"] = "art_visual";
         row[0]["type"] = "bar";
         LLSD& value = row[0]["value"];
         value["ratio"] = (F32)hud_render_time_raw / huds_max_render_time_raw;
@@ -421,25 +424,44 @@ void LLFloaterPerformance::populateHUDList()
         value["left_pad"] = BAR_LEFT_PAD;
         value["right_pad"] = BAR_RIGHT_PAD;
 
-        row[1]["column"] = "complex_value";
+        row[1]["column"] = "art_value";
         row[1]["type"] = "text";
-        // LL_INFOS() << "HUD : hud[" << hud_ptr << " time:" << hud_render_time_raw <<" total_time:" << huds_max_render_time_raw << LL_ENDL;
         row[1]["value"] = llformat( "%.3f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
+
+        
  
-        row[2]["column"] = "name";
+        row[2]["column"] = "complex_value";
         row[2]["type"] = "text";
-        row[2]["value"] = hud_object_complexity.objectName;
-        row[2]["font"]["name"] = "SANSSERIF";
+        row[2]["value"] = std::to_string(obj_cost_short);
+        row[2]["font"]["name"] = "SANSSERIF";                
+
+        row[3]["column"] = "name";
+        row[3]["type"] = "text";
+        row[3]["value"] = hud_object_complexity.objectName;
+        row[3]["font"]["name"] = "SANSSERIF";
 
         LLScrollListItem* obj = mHUDList->addElement(item);
         if (obj)
         {
-            LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(1));
-            if (value_text)
-            {
-                value_text->setAlignment(LLFontGL::HCENTER);
-            }
+                // ART value
+                LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(1));
+                if (value_text)
+                {
+                    value_text->setAlignment(LLFontGL::RIGHT);
+                }
+                // ARC value
+                value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(2));
+                if (value_text)
+                {
+                    value_text->setAlignment(LLFontGL::RIGHT);
+                }
+                // name
+                value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(3));
+                if (value_text)
+                {
+                    value_text->setAlignment(LLFontGL::LEFT);
+                }
         }
     }
     mHUDList->sortByColumnIndex(1, FALSE);
@@ -519,10 +541,17 @@ void LLFloaterPerformance::populateObjectList()
             LLScrollListItem* obj = mObjectList->addElement(item);
             if (obj)
             {
+                // ART value
                 LLScrollListText* value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(1));
                 if (value_text)
                 {
-                    value_text->setAlignment(LLFontGL::HCENTER);
+                    value_text->setAlignment(LLFontGL::RIGHT);
+                }
+                // ARC value
+                value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(2));
+                if (value_text)
+                {
+                    value_text->setAlignment(LLFontGL::RIGHT);
                 }
             }
         }
@@ -733,15 +762,15 @@ void LLFloaterPerformance::detachItem(const LLUUID& item_id)
     LLAppearanceMgr::instance().removeItemFromAvatar(item_id);
 }
 
-void LLFloaterPerformance::onClickAdvanced()
-{
-    LLFloaterPreference* instance = LLFloaterReg::getTypedInstance<LLFloaterPreference>("preferences");
-    if (instance)
-    {
-        instance->saveSettings();
-    }
-    LLFloaterReg::showInstance("prefs_graphics_advanced");
-}
+// void LLFloaterPerformance::onClickAdvanced()
+// {
+//     LLFloaterPreference* instance = LLFloaterReg::getTypedInstance<LLFloaterPreference>("preferences");
+//     if (instance)
+//     {
+//         instance->saveSettings();
+//     }
+//     LLFloaterReg::showInstance("prefs_graphics_advanced");
+// }
 
 void LLFloaterPerformance::onChangeQuality(const LLSD& data)
 {

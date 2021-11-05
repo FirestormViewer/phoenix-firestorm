@@ -42,114 +42,185 @@
    top_pad="10"
    name="settings_title"
    width="300">
-    Graphics settings
+   Graphics settings
   </text>
-  <button
-    follows="top|left"
-    height="23"
-    label="Open Advanced Settings"
-    layout="topleft"
-    left="360"
-    name="advanced_btn"
-    top_delta="0"
-    width="200"/>
   <view_border
-    bevel_style="in"
-    height="0"
-    layout="topleft"
-    name="border1"
-    left="20"
-    top_pad="8"
-    width="540"/>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   text_color="White"
-   height="18"
-   layout="topleft"
-   top_pad="30"
-   name="quality_lbl"
-   width="100">
-    Shortcuts
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   text_color="White"
-   height="18"
-   layout="topleft"
-   left_pad="40"
-   name="fastest_lbl"
-   width="40">
-    Fastest
-  </text>
-  <radio_group
-   control_name="RenderQualityPerformance"
-   follows="top|left"
-   draw_border="false"
-   height="25"
-   layout="topleft"
-   left_pad="5"
-   name="graphics_quality"
-   top_delta="0"
-   width="243">
-    <radio_item
-     height="16"
-     layout="topleft"
-     left="3"
-     name="0"
-     top="0"
-     width="7" />
-    <radio_item
-     height="16"
-     layout="topleft"
-     left_pad="30"
-     name="1"
-     width="7" />
-    <radio_item
-     height="16"
-     layout="topleft"
-     left_pad="30"
-     name="2"
-     width="7" />
-    <radio_item
-     height="16"
-     layout="topleft"
-     left_pad="30"
-     name="3"
-     width="7" />
-    <radio_item
-     height="16"
-     layout="topleft"
-     left_pad="30"
-     name="4"
-     width="7" />
-    <radio_item
-     height="16"
-     layout="topleft"
-     left_pad="30"
-     name="5"
-     width="7" />
-    <radio_item
-     height="16"
-     layout="topleft"
-     left_pad="30"
-     name="6"
-     width="7" />
-  </radio_group>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   text_color="White"
-   height="18"
-   layout="topleft"
-   left_pad="10"
-   top_delta="1"
-   name="quality_lbl"
-   width="70">
-    Best quality
-  </text>
-  <text
+  bevel_style="in"
+  height="0"
+  layout="topleft"
+  name="border1"
+  left="20"
+  top_pad="8"
+  width="540"/>
+<text
+  follows="left|top"
+  font="SansSerifSmall"
+  text_color="White"
+  height="18"
+  layout="topleft"
+  top_pad="20"
+  left="20"
+  name="quality_lbl"
+  width="100">
+  Quality vs speed
+</text>
+<text
+type="string"
+length="1"
+follows="left|top"
+height="12"
+layout="topleft"
+left_pad="40"
+name="FasterText"
+top_delta="0"
+width="40">
+Faster
+</text>
+<icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_delta="48"
+ name="LowGraphicsDivet"
+ top_delta="-2"
+ width="2" />
+ <icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_pad="41"
+ name="LowMidGraphicsDivet"
+ top_delta="0"
+ width="2" />
+ <icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_pad="41"
+ name="MidGraphicsDivet"
+ top_delta="0"
+ width="2" />
+ <icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_pad="41"
+ name="MidHighGraphicsDivet"
+ top_delta="0"
+ width="2" />
+ <icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_pad="41"
+ name="HighGraphicsDivet"
+ top_delta="0"
+ width="2" />
+ <icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_pad="41"
+ name="HighUltraGraphicsDivet"
+ top_delta="0"
+ width="2" />
+ <icon
+ color="Slidermark"
+ height="14"
+ image_name="Rounded_Square"
+ layout="topleft"
+ left_pad="41"
+ name="UltraGraphicsDivet"
+ top_delta="0"
+ width="2" />
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  height="12"
+  layout="topleft"
+  left_delta="20"
+  name="BetterText"
+  top_delta="0"
+  width="100">
+   Better Quality
+ </text>
+ <slider
+ control_name="RenderQualityPerformance"
+ decimal_digits="0"
+ follows="left|top"
+ height="16"
+ increment="1"
+ initial_value="0"
+ layout="topleft"
+ left_delta="-285"
+ max_val="6"
+ name="QualityPerformanceSelection"
+ show_text="false"
+ top_delta="-1"
+  width="275">
+   <slider.commit_callback
+      function="Pref.QualityPerformance"/>
+ </slider>
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  halign="center"
+  height="12"
+  layout="topleft"
+  left="190"
+  name="ShadersPrefText"
+  top_delta="20"
+  width="80">
+   Low
+ </text>
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  halign="center"
+  height="12"
+  layout="topleft"
+  left_delta="87"
+  name="ShadersPrefText2"
+  top_delta="0"
+  width="80">
+   Mid
+ </text>
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  halign="center"
+  height="12"
+  layout="topleft"
+  left_delta="87"
+  name="ShadersPrefText3"
+  top_delta="0"
+  width="80">
+   High
+ </text>
+ <text
+  type="string"
+  length="1"
+  follows="left|top"
+  halign="center"
+  height="12"
+  layout="topleft"
+  left_delta="85"
+  name="ShadersPrefText4"
+  top_delta="0"
+  width="80">
+   Ultra
+ </text>
+<text
    follows="left|top"
    font="SansSerifSmall"
    text_color="White"
@@ -158,8 +229,8 @@
    top_pad="15"
    left="160"
    name="quality_desc"
-   width="380">
-    Choosing a shortcut will reset all manual changes you have made.
+   width="450">
+    Choosing a preset will reset all manual changes you have made.
   </text>
   <view_border
     bevel_style="in"
@@ -201,19 +272,20 @@
     increment="8"
     initial_value="160"
     label_width="90"
+    slider_label.halign="right"
     layout="topleft"
-    min_val="64"
-    max_val="512"
+    min_val="32"
+    max_val="1024"
     name="draw_distance"
     left_pad="5"
-    width="250" />
+    width="310" />
   <text
     type="string"
     length="1"
     follows="left|top"
     height="12"
     layout="topleft"
-    left_pad="1"
+    left_pad="-8"
     top_delta="0"
     name="draw_distance_m"
     width="20">
@@ -225,7 +297,7 @@
    text_color="White"
    height="18"
    layout="topleft"
-   left_pad="10"
+   left_pad="0"
    top_delta="1"
    name="farther_lbl"
    width="40">
@@ -240,8 +312,8 @@
    top_pad="15"
    left="160"
    name="distance_desc1"
-   width="350">
-    To see more land when you zoom out, increase the distance.
+   width="450">
+     Keep this low for better performance, increase it to see further afield.
   </text>
   <view_border
     bevel_style="in"
@@ -272,30 +344,10 @@
    top_delta="0"
    left="160"
    name="enhancements_desc"
-   width="350">
-    Each enhancement improves realism but can reduce speed.
+   width="450">
+Reducing / eliminating shadows can be a boost to FPS but impacts
+the ambience and appearance of the scene.
   </text>
-  <check_box
-    control_name="WindLightUseAtmosShaders"
-    height="16"
-    initial_value="true"
-    label="Atmospheric shaders"
-    layout="topleft"
-    name="atmospheric_shaders"
-    top_pad="5"
-    left="157"
-    width="280">
-  </check_box>
-  <check_box
-    control_name="RenderDeferred"
-    height="16"
-    initial_value="true"
-    label="Advanced Lighting"
-    layout="topleft"
-    name="advanced_lighting_model"
-    top_delta="24"
-    width="280">
-  </check_box>  
   <text
     type="string"
     length="1"
@@ -305,15 +357,15 @@
     left="160"
     name="RenderShadowDetailText"
     text_readonly_color="LabelDisabledColor"
-    top_pad="10"
+    top_pad="20"
     width="128">
-    Shadows:
+    Shadow sources:
   </text>
   <combo_box
    control_name="RenderShadowDetail"
    height="18"
    layout="topleft"
-   left_delta="150"
+   right="-20"
    top_delta="0"
    name="ShadowDetail"
    width="150">
@@ -359,8 +411,8 @@
    top_delta="0"
    left="160"
    name="water_desc"
-   width="350">
-    Reducing or turning off water effects can greatly improve frame rate.
+   width="450">
+    Reducing water effects quality can greatly improve frame rate.
   </text>
   <text
     type="string"
@@ -379,7 +431,7 @@
     control_name="RenderReflectionDetail"
     height="18"
     layout="topleft"
-    left_delta="150"
+    right="-20"
     top_delta="0"
     name="Reflections"
     width="150">
@@ -436,107 +488,28 @@
    follows="left|top"
    font="SansSerifSmall"
    text_color="White"
-   height="18"
+   height="48"
    layout="topleft"
    top_delta="0"
    left="160"
    name="photo_desc"
    width="350">
-    Maximum detail is good for photos, but can slow frame rate.
+Photographers need high quality, but this is often
+at the cost of frame rate. Firestorm phototools can
+help you find the right balance.
   </text>
-  <spinner
-   control_name="RenderVolumeLODFactor"
-   follows="left|top"
-   height="23"
-   increment="0.125"
-   label="Distance detail:"
-   label_width="95"
-   layout="topleft"
-   max_val="4"
-   min_val="0"
-   name="render_volume_lod"
-   top_pad="10"
-   width="150" />
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   top_delta="3"
-   left_pad="10"
-   name="photo_desc"
-   width="180">
-      (Enter value between 0.0 and 4.0)
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   top="78"
-   left="213"
-   name="1_lbl"
-   width="7">
-    1
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   left_pad="31"
-   name="2_lbl"
-   width="7">
-    2
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   left_pad="30"
-   name="3_lbl"
-   width="7">
-    3
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   left_pad="30"
-   name="4_lbl"
-   width="7">
-    4
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   left_pad="30"
-   name="5_lbl"
-   width="7">
-    5
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   left_pad="30"
-   name="6_lbl"
-   width="7">
-      6
-  </text>
-  <text
-   follows="left|top"
-   font="SansSerifSmall"
-   height="18"
-   layout="topleft"
-   left_pad="30"
-   name="7_lbl"
-   width="7">
-    7
-  </text>
+  <button
+  name="open_phototools"
+  label="Phototools"
+  tool_tip="Open the dedicated photo tools for advanced photo settings."
+  top_delta="0"
+  right="-20"
+  height="23"
+  width="120"
+  follows="bottom|right"
+  layout="topleft">
+  <button.init_callback
+          function="Button.SetFloaterToggle"
+          parameter="phototools_camera"/>
+  </button>
 </panel>
