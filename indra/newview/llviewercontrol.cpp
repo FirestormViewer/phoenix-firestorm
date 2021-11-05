@@ -1092,6 +1092,11 @@ void handleFPSTuningStrategyChanged(const LLSD& newValue)
 	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
 	FSPerfStats::fpsTuningStrategy = newval;
 }
+void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled");
+	FSPerfStats::StatsRecorder::setEnabled(newval);
+}
 // </FS:Beq>
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1355,6 +1360,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
 	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handlePerfSmoothingPeriodsChanged, _2));
 	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
+	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
 	// </FS:Beq>
 }
 

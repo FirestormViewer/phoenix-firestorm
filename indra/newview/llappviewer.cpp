@@ -1633,7 +1633,8 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
-	{
+// <FS:Beq> Perfstats collection Frame boundary
+{
 	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
@@ -1670,6 +1671,7 @@ bool LLAppViewer::doFrame()
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
 
 	LL_RECORD_BLOCK_TIME(FTM_FRAME);
+	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 	LLTrace::BlockTimer::processTimes();
 	LLTrace::get_frame_recording().nextPeriod();
 	LLTrace::BlockTimer::logStats();
@@ -1678,8 +1680,9 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-
+	} // <FS:Beq/> perf stats
 	{
+		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
 		if (restore_rendering_masks)
@@ -1744,7 +1747,7 @@ bool LLAppViewer::doFrame()
 			FSZoneN("Main:Coro");
 		llcoro::suspend();
 		}
-
+		}// <FS:Beq> ensure we have the entire top scope of frame covered
 		if (!LLApp::isExiting())
 		{
 			pingMainloopTimeout("Main:JoystickKeyboard");
@@ -1825,6 +1828,7 @@ bool LLAppViewer::doFrame()
 
 				pingMainloopTimeout("Main:Snapshot");
 				{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
 					FSZoneN("Main:Snapshot");
 				LLFloaterSnapshot::update(); // take snapshots
 				LLFloaterOutfitSnapshot::update();
