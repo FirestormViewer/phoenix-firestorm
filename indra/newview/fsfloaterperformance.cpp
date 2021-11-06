@@ -202,7 +202,6 @@ void LLFloaterPerformance::draw()
         gSavedSettings.setU32("FSRenderAvatarMaxART", FSPerfStats::renderAvatarMaxART);
     }
 
-    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
     if (mUpdateTimer->hasExpired())
     {
          
@@ -397,8 +396,6 @@ void LLFloaterPerformance::populateHUDList()
     hud_complexity_list_t::iterator iter = complexity_list.begin();
     hud_complexity_list_t::iterator end = complexity_list.end();
 
-    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
-
     U32 max_complexity = 0;
     for (; iter != end; ++iter)
     {
@@ -471,8 +468,6 @@ void LLFloaterPerformance::populateHUDList()
 
 void LLFloaterPerformance::populateObjectList()
 {
-    static auto freq_divisor = get_timer_info().mClockFrequencyInv;
-
     S32 prev_pos = mObjectList->getScrollPos();
     auto prev_selected_id = mObjectList->getSelectedSpecialId();
 

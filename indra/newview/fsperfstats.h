@@ -38,6 +38,7 @@
 #include "blockingconcurrentqueue.h"
 #include "llapp.h"
 #include "fstelemetry.h"
+#include "pipeline.h"
 
 // Additional logging options. These can skew inworld numbers so onyl use for debugging and tracking issues
 #ifdef  FS_HAS_TELEMETRY_SUPPORT
@@ -275,7 +276,7 @@ namespace FSPerfStats
 
             while( enabled() && !LLApp::isExiting() )
             {
-                FSZone("perf batch");
+                FSZoneN("perf batch");
                 auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
                 if(count)
                 {
@@ -338,7 +339,8 @@ namespace FSPerfStats
 
         };
 
-        template < typename = std::enable_if_t<ObjTypeDiscriminator == ObjType_t::OT_GENERAL> >
+        template < ObjType_t OD = ObjTypeDiscriminator,
+                   std::enable_if_t<OD == ObjType_t::OT_GENERAL> * = nullptr>
         RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
         {
             FSZone;
@@ -350,7 +352,8 @@ namespace FSPerfStats
             #endif
         };
 
-        template < typename = std::enable_if_t<ObjTypeDiscriminator == ObjType_t::OT_AVATAR> >
+        template < ObjType_t OD = ObjTypeDiscriminator,
+                   std::enable_if_t<OD == ObjType_t::OT_AVATAR> * = nullptr>
         RecordTime( const LLUUID & av, StatType_t type ):RecordTime<ObjTypeDiscriminator>(std::move(av), LLUUID::null, type)
         {
             FSZoneC(tracy::Color::Purple);

@@ -4055,7 +4055,7 @@ void LLPipeline::postSort(LLCamera& camera)
 
 		if (hasRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA))
 		{
-			FSZone("Collect Alpha groups");
+			FSZoneN("Collect Alpha groups");
 			LLSpatialGroup::draw_map_t::iterator alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA);
 			
 			if (alpha != group->mDrawMap.end())
