@@ -118,7 +118,7 @@ public:
 	
 	// last 4 chars for quick ref - Very lightweight, no nul-term added - provide your own, ensure min 4 bytes.
 # define hexnybl(N) (N)>9?((N)-10)+'a':(N)+'0'
-	inline char * LLUUID::toShortString(char *out) const
+	inline char * toShortString(char *out) const
 	{
 		FSZone;
 		out[0] = hexnybl(mData[14]>>4);
@@ -128,7 +128,7 @@ public:
 		return out;
 	}
 	// full uuid - Much lighterweight than default, no allocation, or nul-term added - provide your own, ensure min 36 bytes.
-	inline char * LLUUID::toStringFast(char *out) const
+	inline char * toStringFast(char *out) const
 	{
 		FSZone;
 		out[0]  = hexnybl(mData[0]>>4);

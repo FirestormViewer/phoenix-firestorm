@@ -378,7 +378,7 @@ public:
 	{
 		return(combined?mTooSlow:mTooSlowWithoutShadows);
 	}
-	void LLVOAvatar::updateTooSlow();
+	void 			updateTooSlow();
 	// </FS:Beq>
 	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
 	bool 			visualParamWeightsAreDefault();

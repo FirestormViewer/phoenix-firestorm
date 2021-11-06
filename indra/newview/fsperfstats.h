@@ -70,6 +70,8 @@ namespace FSPerfStats
     extern std::mutex bufferToggleLock;
     extern bool autoTune;
 
+    constexpr U64 ART_UNLIMITED{50000};
+
     extern U32 smoothingPeriods; // number of frames to smooth over.
 
    	enum class ObjType_t{
@@ -150,7 +152,7 @@ namespace FSPerfStats
             return max[getReadBufferIndex()][static_cast<size_t>(otype)][static_cast<size_t>(type)];
         }
 
-        static void StatsRecorder::updateAvatarParams();
+        static void updateAvatarParams();
     private:
         StatsRecorder();
 
