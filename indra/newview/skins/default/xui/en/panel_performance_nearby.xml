@@ -149,12 +149,12 @@ top="0">
     width="540">
         <name_list.columns
          label=""
-         tool_tip="bar graph showing current render time (includes auto-tuning) as % of slowest."
+         tool_tip="Bar graph showing current render time (includes auto-tuning) as % of slowest."
          name="art_visual"
          width="90" />
          <name_list.columns
          label="ART (μs)"
-         tool_tip="Avater Render Time. Actual time taken to render this avatar before any auto-tuning (in microseconds)."
+         tool_tip="Avatar Render Time. Actual time taken to render this avatar before any auto-tuning (in microseconds)."
          name="art_value"
          width="80" />
          <name_list.columns
@@ -164,7 +164,7 @@ top="0">
          width="40" />
          <name_list.columns
          label=""
-         tool_tip="Shows any tuning. I=Imposter S=no shadow."
+         tool_tip="Shows any tuning. I=Impostor, S=no shadow."
          name="state"
          width="15" />
         <name_list.columns
@@ -269,5 +269,5 @@ top="0">
      value="2"
      width="160" />
   </radio_group>
- 
+
 </panel>
