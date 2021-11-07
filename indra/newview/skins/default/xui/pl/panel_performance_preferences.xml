@@ -37,7 +37,7 @@
 		Dalej
 	</text>
 	<text name="distance_desc1">
-		Utrzymuj je niskie, aby uzyskać lepszą wydajność. Zwiększ je, aby widzieć dalej.
+		Utrzymuj niskie, aby uzyskać lepszą wydajność. Zwiększ, aby widzieć dalej.
 	</text>
 	<text name="environment_lbl">
 		Otoczenie
@@ -76,9 +76,9 @@ ale wpływa na atmosferę i wygląd sceny.
 		Fotografia
 	</text>
 	<text name="photo_desc">
-Fotografowie potrzebują wysokiej jakości, ale często
+Fotografowie wymagają lepszej jakości, często
 dzieje się to kosztem liczby klatek na sekundę.
-Narzędzia Firestorma pomogą Ci znaleźć równowagę.
+Narzędzia Firestorma pomogą znaleźć równowagę.
 	</text>
 	<button name="open_phototools" label="Fotograf" tool_tip="Otwórz dedykowane narzędzia do zdjęć, aby dostroić zaawansowane ustawienia obrazu." />
 </panel>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="performance" title="Popraw szybkość grafiki (eksperymentalne)">
 	<floater.string name="frame_stats">
-		Klatki: [TOT_FRAME_TIME]ms - Sceneria:[SCENERY_FRAME_PCT]% Awatary:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDy:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% ZADANIA:[IDLE_FRAME_PCT]%
+		Klatki: [TOT_FRAME_TIME]ms - Scena:[SCENERY_FRAME_PCT]% Awatary:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDy:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% ZADANIA:[IDLE_FRAME_PCT]%
 	</floater.string>
 	<floater.string name="limit_fps">
-		FPS ograniczone do [FPSCAP] fps
+		Limit FPS: [FPSCAP] fps
 	</floater.string>
 	<floater.string name="tuning_fps">
-		Autostrojenie do [FPSTARGET] fps
+		Strojenie do [FPSTARGET] fps
 	</floater.string>
 	<floater.string name="focus_fps">
 		W tle
@@ -37,7 +37,7 @@
 			<text name="settings_lbl">
 				Autostrojenie klatek
 			</text>
-			<check_box label="Autostrojenie FPS" name="AutoTuneFPS" tool_tip="FS spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
+			<check_box label="Autostrojenie" name="AutoTuneFPS" tool_tip="FS spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
 			<text name="settings_desc">
 				Autostrojenie ustawień, by utrzymać FPS.
 			</text>
