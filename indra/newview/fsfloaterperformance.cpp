@@ -154,8 +154,6 @@ BOOL LLFloaterPerformance::postBuild()
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateComplexityText, this));
     mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxComplexity, this));
 
-    updateMaxRenderTime();
-    // updateMaxRenderTimeText();
     mMaxARTChangedSignal = gSavedSettings.getControl("FSRenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
     mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
 
@@ -194,13 +192,7 @@ void LLFloaterPerformance::draw()
     
 
     static LLCachedControl<U32> fpsCap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
-    static LLCachedControl<U32> targetFPS(gSavedSettings, "FSTargetFPS"); // desired FPS
-    // static LLCachedControl<bool> autoTune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
-    static LLCachedControl<U32> maxRenderCost(gSavedSettings, "FSRenderAvatarMaxART");    
-    if(maxRenderCost != FSPerfStats::renderAvatarMaxART)
-    {
-        gSavedSettings.setU32("FSRenderAvatarMaxART", FSPerfStats::renderAvatarMaxART);
-    }
+    static LLCachedControl<U32> targetFPS(gSavedSettings, "FSTargetFPS"); // desired FPS 
 
     if (mUpdateTimer->hasExpired())
     {
@@ -334,9 +326,9 @@ void LLFloaterPerformance::draw()
                     textbox->setColor(LLUIColorTable::instance().getColor("red"));
                 }
             }
-            else if( target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART))
+            else if( target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART_ns))
             {
-                // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
+                // if we have more time to spare. Display this (the service will update things)
                 textbox->setColor(LLUIColorTable::instance().getColor("green"));
             }
         }
@@ -426,7 +418,7 @@ void LLFloaterPerformance::populateHUDList()
         row[1]["value"] = llformat( "%.3f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
 
-        
+
  
         row[2]["column"] = "complex_value";
         row[2]["type"] = "text";
@@ -579,10 +571,6 @@ void LLFloaterPerformance::populateNearbyList()
 
     mNearbyList->clearRows();
     mNearbyList->updateColumns(true);
-
-    static LLCachedControl<U32> maxRenderCost(gSavedSettings, "FSRenderAvatarMaxART", 0);
-    updateMaxRenderTime();
-    // updateMaxRenderTimeText();
 
     std::vector<LLCharacter*> valid_nearby_avs;
     getNearbyAvatars(valid_nearby_avs);
@@ -813,7 +801,7 @@ void LLFloaterPerformance::updateMaxRenderTime()
 void LLFloaterPerformance::updateMaxRenderTimeText()
 {
     LLAvatarComplexityControls::setRenderTimeText(
-        gSavedSettings.getU32("FSRenderAvatarMaxART"),
+        gSavedSettings.getF32("FSRenderAvatarMaxART"),
         mNearbyPanel->getChild<LLTextBox>("FSRenderAvatarMaxARTText", true), 
         true);
 }

@@ -63,17 +63,20 @@ namespace FSPerfStats
     extern std::atomic<int64_t> inUseAttachmentRigged;
     extern std::atomic<int64_t> inUseAttachmentUnRigged;
 #endif
+// Note if changing these, they should correspond with the log range of the correpsonding sliders
+    constexpr U64 ART_UNLIMITED_NANOS{50000000};
+    constexpr U64 ART_MINIMUM_NANOS{100000};
+    constexpr U64 ART_MIN_ADJUST_UP_NANOS{10000};
+    constexpr U64 ART_MIN_ADJUST_DOWN_NANOS{10000}; 
+    constexpr F32 PREFERRED_DD{180};
+
     extern std::atomic<int64_t> tunedAvatars;
     extern U32 targetFPS; // desired FPS
-    extern U32 renderAvatarMaxART;
+    extern U64 renderAvatarMaxART_ns;
     extern U32 fpsTuningStrategy;
     extern U32 lastGlobalPrefChange;
     extern std::mutex bufferToggleLock;
     extern bool autoTune;
-
-    constexpr U64 ART_UNLIMITED{50000};
-
-    extern U32 smoothingPeriods; // number of frames to smooth over.
 
    	enum class ObjType_t{
 		OT_GENERAL=0, // Also Unknown. Used for n/a type stats such as scenery
@@ -152,7 +155,8 @@ namespace FSPerfStats
         {
             return max[getReadBufferIndex()][static_cast<size_t>(otype)][static_cast<size_t>(type)];
         }
-
+        static void updateSettingsFromRenderCostLimit();
+        static void updateRenderCostLimitFromSettings();
         static void updateAvatarParams();
     private:
         StatsRecorder();

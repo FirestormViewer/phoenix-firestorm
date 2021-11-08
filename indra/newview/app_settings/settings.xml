@@ -25794,11 +25794,11 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>Render Time Limit in microseconds (0.0 = no limit)</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
-      <string>U32</string>
+      <string>F32</string>
       <key>Value</key>
-      <integer>50</integer>
+      <integer>4.699</integer>
     </map>
     <key>FSTuningFPSStrategy</key>
     <map>

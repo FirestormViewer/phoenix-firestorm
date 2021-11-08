@@ -602,7 +602,6 @@ bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonIm
 F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
-U64 LLVOAvatar::sRenderTimeLimit_ns {0}; // <FS:Beq/> time limit used for render time control
 // const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df"); - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
@@ -4704,7 +4703,6 @@ void LLVOAvatar::computeUpdatePeriod()
 	bool visually_muted = isVisuallyMuted();
 	bool slow = isTooSlowWithoutShadows();// <FS:Beq/> the geometry alone is forcing this to be slow so we must imposter
 	if (mDrawable.notNull()
-		&& slow
         && isVisible() 
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
@@ -9186,8 +9184,8 @@ void LLVOAvatar::updateTooSlow()
 		render_time_raw = mRenderTime;
 		render_geom_time_raw = mGeomTime;		
 	}
-	if( (LLVOAvatar::sRenderTimeLimit_ns > 0) && 
-		(FSPerfStats::raw_to_ns(render_time_raw) >= LLVOAvatar::sRenderTimeLimit_ns) ) 
+	if( (FSPerfStats::renderAvatarMaxART_ns > 0) && 
+		(FSPerfStats::raw_to_ns(render_time_raw) >= FSPerfStats::renderAvatarMaxART_ns) ) 
 	{
 		if( !mTooSlow )
 		{			
@@ -9199,7 +9197,7 @@ void LLVOAvatar::updateTooSlow()
 			mTooSlow = true;
 		}
 		// LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
-		mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= LLVOAvatar::sRenderTimeLimit_ns);
+		mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= FSPerfStats::renderAvatarMaxART_ns);
 	}
 	else
 	{
@@ -11525,6 +11523,7 @@ BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 		return true;
 	}
 // <FS:Beq> render time handling using tooSlow()
+	// return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
 	static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
 	
 	if (isTooSlowWithoutShadows() && render_jellys_As_imposters)

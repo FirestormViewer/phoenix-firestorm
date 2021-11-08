@@ -510,6 +510,6 @@ help you find the right balance.
   layout="topleft">
   <button.init_callback
           function="Button.SetFloaterToggle"
-          parameter="phototools_camera"/>
+          parameter="phototools"/>
   </button>
 </panel>

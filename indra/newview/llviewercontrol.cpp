@@ -1071,21 +1071,15 @@ void handleAutoTuneFPSChanged(const LLSD& newValue)
 {
 	const auto newval = gSavedSettings.getBOOL("FSAutoTuneFPS");
 	FSPerfStats::autoTune = newval;
-	if(gSavedSettings.getU32("FSRenderAvatarMaxART") == 0)
+	if(newval && FSPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
 	{
-		gSavedSettings.setU32("FSRenderAvatarMaxART",50000);
+		gSavedSettings.setF32("FSRenderAvatarMaxART",log10(FSPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
 	}
 }
 
 void handleRenderAvatarMaxARTChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getU32("FSRenderAvatarMaxART");
-	FSPerfStats::renderAvatarMaxART = newval;
-}
-void handlePerfSmoothingPeriodsChanged(const LLSD& newValue)
-{
-	const auto newval = gSavedSettings.getU32("FSPerfFloaterSmoothingPeriods");
-	FSPerfStats::smoothingPeriods = newval;
+	FSPerfStats::StatsRecorder::updateRenderCostLimitFromSettings();
 }
 void handleFPSTuningStrategyChanged(const LLSD& newValue)
 {
@@ -1358,7 +1352,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSTargetFPS")->getSignal()->connect(boost::bind(&handleTargetFPSChanged, _2));
 	gSavedSettings.getControl("FSAutoTuneFPS")->getSignal()->connect(boost::bind(&handleAutoTuneFPSChanged, _2));
 	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
-	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handlePerfSmoothingPeriodsChanged, _2));
 	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
 	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
 	// </FS:Beq>

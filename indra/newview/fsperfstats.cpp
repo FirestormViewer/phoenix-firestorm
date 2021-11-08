@@ -42,16 +42,14 @@ namespace FSPerfStats
     std::atomic<int64_t> inUseAttachmentRigged{0};
     std::atomic<int64_t> inUseAttachmentUnRigged{0};
 #endif
+    
     std::atomic<int64_t> tunedAvatars{0};
     U32 targetFPS; // desired FPS
-    U32 renderAvatarMaxART{50000}; // highest render time we'll allow without culling features
+    U64 renderAvatarMaxART_ns{(U64)(ART_UNLIMITED_NANOS)}; // highest render time we'll allow without culling features
     U32 fpsTuningStrategy{0}; // linked to FSTuningFPSStrategy
     U32 lastGlobalPrefChange{0}; 
     std::mutex bufferToggleLock{};
     bool autoTune{false};
-
-    U32 smoothingPeriods{1}; // number of frames to smooth over.
-
 
     std::atomic<int> 	StatsRecorder::writeBuffer{0};
     bool 	            StatsRecorder::collectionEnabled{true};
@@ -68,8 +66,8 @@ namespace FSPerfStats
 
         FSPerfStats::targetFPS = gSavedSettings.getU32("FSTargetFPS");
         FSPerfStats::autoTune = gSavedSettings.getBOOL("FSAutoTuneFPS");
-        FSPerfStats::renderAvatarMaxART = gSavedSettings.getBOOL("FSRenderAvatarMaxART");
-        FSPerfStats::smoothingPeriods = gSavedSettings.getU32("FSPerfFloaterSmoothingPeriods");
+
+        updateRenderCostLimitFromSettings();
 
         t.detach();
     }
@@ -81,6 +79,7 @@ namespace FSPerfStats
         using ST = StatType_t;
 
         bool unreliable{false};
+        LLCachedControl<U32> smoothingPeriods(gSavedSettings, "FSPerfFloaterSmoothingPeriods");
 
         auto& sceneStats = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null];
         auto& lastStats = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null];
@@ -226,11 +225,42 @@ namespace FSPerfStats
         }
     }
 
+    // static 
+    void StatsRecorder::updateSettingsFromRenderCostLimit()
+    {
+        static LLCachedControl<F32> maxRenderCost_us(gSavedSettings, "FSRenderAvatarMaxART");    
+        if( (F32)maxRenderCost_us != log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) )
+        {
+            if( FSPerfStats::renderAvatarMaxART_ns != 0 )
+            {
+                gSavedSettings.setF32( "FSRenderAvatarMaxART", log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) );
+            }
+            else
+            {
+                gSavedSettings.setF32( "FSRenderAvatarMaxART",log10( FSPerfStats::ART_UNLIMITED_NANOS/1000 ) );
+            }
+        }        
+    }
+
+    // static
+    void StatsRecorder::updateRenderCostLimitFromSettings()
+    {
+	    const auto newval = gSavedSettings.getF32("FSRenderAvatarMaxART");
+	    if(newval < log10(FSPerfStats::ART_UNLIMITED_NANOS/1000))
+	    {
+    		FSPerfStats::renderAvatarMaxART_ns = pow(10,newval)*1000;
+    	}
+    	else
+    	{
+		    FSPerfStats::renderAvatarMaxART_ns = 0;
+	    };        
+    }
 
     // static
     void StatsRecorder::updateAvatarParams()
     {
-        LLCachedControl<F32> drawDistance(gSavedSettings, "RenderFarClip");
+        static LLCachedControl<F32> drawDistance(gSavedSettings, "RenderFarClip");
+
         auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(ObjType_t::OT_AVATAR, FSPerfStats::StatType_t::RENDER_COMBINED);
         // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
         // cumulative avatar time (includes idle processing, attachments and base av)
@@ -244,21 +274,24 @@ namespace FSPerfStats
         // the time spent this frame on the "doFrame" call. Treated as "tot time for frame"
         auto tot_frame_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FRAME);
 
-        if(tot_sleep_time_raw != 0 || tot_limit_time_raw !=0 )
+        if( tot_sleep_time_raw != 0 )
         {
-            // Note: we do not average sleep and fpslimit, therefore we cannot reliably use them here.
+            // Note: we do not average sleep 
             // if at some point we need to, the averaging will need to take this into account or 
             // we forever think we're in the background due to residuals.
             LL_DEBUGS() << "No tuning when not in focus" << LL_ENDL;
             return;
         }
 
-        // LL_INFOS() << "Effective FPS:" << (1000000/FSPerfStats::raw_to_us(tot_frame_time_raw)) << " Target:" << targetFPS << LL_ENDL;
-   
         // The frametime budget we have based on the target FPS selected
-        auto target_frame_time_raw = (U64)llround(get_timer_info().mClockFrequency/(targetFPS==0?1:targetFPS));
+        auto target_frame_time_raw = (U64)llround((F64)LLTrace::BlockTimer::countsPerSecond()/(targetFPS==0?1:targetFPS));
         // LL_INFOS() << "Effective FPS(raw):" << tot_frame_time_raw << " Target:" << target_frame_time_raw << LL_ENDL;
 
+        if( tot_limit_time_raw != 0)
+        {
+            // This could be problematic.
+            tot_frame_time_raw -= tot_limit_time_raw;
+        }
         // 1) Is the target frame tim lower than current?
         if( target_frame_time_raw <= tot_frame_time_raw )
         {
@@ -276,22 +309,27 @@ namespace FSPerfStats
                 {
                     if(FSPerfStats::fpsTuningStrategy == 1)
                     {
-                        // 1 - hack the water to opaque. all non opaque have a significan t hit, this is a big boost.
+                        // 1 - hack the water to opaque. all non opaque have a significant hit, this is a big boost for (arguably) a minor visual hit.
+                        // the other reflection options make comparatively little change and iof this overshoots we'll be stepping back up later
                         if(LLPipeline::RenderReflectionDetail != -2)
                         {
                             gSavedSettings.setS32("RenderReflectionDetail", -2);
                             FSPerfStats::lastGlobalPrefChange = gFrameCount;
+                            return;
                         }
                         else // deliberately "else" here so we only do these in steps
                         {
                             // step down the DD by 10m per update
                             auto new_dd = (drawDistance>42)?(drawDistance - 10) : 32;
-                            gSavedSettings.setF32("RenderFarClip", new_dd);
-                            FSPerfStats::lastGlobalPrefChange = gFrameCount;
+                            if(new_dd != drawDistance)
+                            {
+                                gSavedSettings.setF32("RenderFarClip", new_dd);
+                                FSPerfStats::lastGlobalPrefChange = gFrameCount;
+                                return;
+                            }
                         }
                     }
                 }
-                // slam the avatar time to 0 "imposter all the things"
                 target_avatar_time_raw = 0;
             }
             else
@@ -304,47 +342,47 @@ namespace FSPerfStats
             {
                 // we need to spend less time drawing avatars to meet our budget
                 // Note: working in usecs now cos reasons.
-                U32 new_render_limit_us {0};
+                auto new_render_limit_ns {renderAvatarMaxART_ns};
                 // max render this frame may be higher than the last (cos new entrants and jitter) so make sure we are heading in the right direction
-                if(FSPerfStats::raw_to_us(av_render_max_raw) < renderAvatarMaxART)
+                if(FSPerfStats::raw_to_ns(av_render_max_raw) < renderAvatarMaxART_ns)
                 {
-                    new_render_limit_us = FSPerfStats::raw_to_us(av_render_max_raw);
+                    new_render_limit_ns = FSPerfStats::raw_to_ns(av_render_max_raw);
                 }
                 else
                 {
-                    new_render_limit_us = renderAvatarMaxART;
+                    new_render_limit_ns = renderAvatarMaxART_ns;
                 }
-                new_render_limit_us -= 100;
-                // bounce at the bottom to prevent "no limit"
-                if(new_render_limit_us <= 0 || new_render_limit_us >1000000)
-                {
-                    new_render_limit_us = 100;
-                }
+                new_render_limit_ns -= FSPerfStats::ART_MIN_ADJUST_DOWN_NANOS;
+
+                // bounce at the bottom to prevent "no limit" 
+                new_render_limit_ns = std::max((U64)new_render_limit_ns, (U64)FSPerfStats::ART_MINIMUM_NANOS);
+
                 // assign the new value
-                renderAvatarMaxART = new_render_limit_us;
-                // LL_DEBUGS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit_us << LL_ENDL;
+                renderAvatarMaxART_ns = new_render_limit_ns;
+                // LL_DEBUGS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit_ns << LL_ENDL;
             }
-            // LL_DEBUGS() << "AUTO_TUNE: Target frame time:"<< FSPerfStats::raw_to_us(target_frame_time_raw) << "usecs (non_avatar is " << FSPerfStats::raw_to_us(non_avatar_time_raw) << "usecs) Max cost limited=" << renderAvatarMaxART << LL_ENDL;
+            // LL_DEBUGS() << "AUTO_TUNE: Target frame time:"<< FSPerfStats::raw_to_us(target_frame_time_raw) << "usecs (non_avatar is " << FSPerfStats::raw_to_us(non_avatar_time_raw) << "usecs) Max cost limited=" << renderAvatarMaxART_ns << LL_ENDL;
         }
-        else if( FSPerfStats::raw_to_us(target_frame_time_raw) > (FSPerfStats::raw_to_us(tot_frame_time_raw) + renderAvatarMaxART) )
+        else if( FSPerfStats::raw_to_ns(target_frame_time_raw) > (FSPerfStats::raw_to_ns(tot_frame_time_raw) + renderAvatarMaxART_ns) )
         {
-            if( FSPerfStats::tunedAvatars > 0 )
+            if( FSPerfStats::tunedAvatars >= 0 )
             {
                 // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
-                renderAvatarMaxART += 10;
+                renderAvatarMaxART_ns += FSPerfStats::ART_MIN_ADJUST_UP_NANOS;
             }
-            if(drawDistance < 180.) // TODO(Beq) make this less arbitrary
+            if( drawDistance < FSPerfStats::PREFERRED_DD ) // TODO(Beq) make this less arbitrary
             {
                 gSavedSettings.setF32("RenderFarClip", drawDistance + 10.);
             }
-            if( (FSPerfStats::raw_to_us(target_frame_time_raw) * 1.5) > FSPerfStats::raw_to_us(tot_frame_time_raw) &&
+            if( (target_frame_time_raw * 1.5) > tot_frame_time_raw &&
                 FSPerfStats::tunedAvatars == 0 &&
-                drawDistance >= 128. )
+                drawDistance >= FSPerfStats::PREFERRED_DD )
             {
                 // if everything else is "max" and we have 50% headroom let's knock the water quality up a notch at a time.
                 auto water = gSavedSettings.getS32("RenderReflectionDetail");
                 gSavedSettings.setS32("RenderReflectionDetail", water+1);                
             }
         }
-    }
+        updateSettingsFromRenderCostLimit();
+   }
 }
