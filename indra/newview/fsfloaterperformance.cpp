@@ -151,9 +151,6 @@ BOOL FSFloaterPerformance::postBuild()
     mNearbyList = mNearbyPanel->getChild<LLNameListCtrl>("nearby_list");
     mNearbyList->setRightMouseDownCallback(boost::bind(&FSFloaterPerformance::onAvatarListRightClick, this, _1, _2, _3));
     
-    mNearbyCombo = mComplexityPanel->getChild<LLComboBox>("avatar_name_combo");
-    mNearbyCombo->setCommitCallback(boost::bind(&FSFloaterPerformance::onClickFocusAvatar, this));
-
     updateComplexityText();
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&FSFloaterPerformance::updateComplexityText, this));
     mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxComplexity, this));
@@ -190,11 +187,10 @@ void FSFloaterPerformance::draw()
 {
     const S32 NUM_PERIODS = 50;
     constexpr auto NANOS = 1000000000;
-    constexpr auto MICROS = 1000000;
-    constexpr auto MILLIS = 1000;
 
     static LLCachedControl<U32> fpsCap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
     static LLCachedControl<U32> targetFPS(gSavedSettings, "FSTargetFPS"); // desired FPS 
+    static LLCachedControl<U32> tuningStrategy(gSavedSettings, "FSTuningFPSStrategy"); 
 
     if (mUpdateTimer->hasExpired())
     {
@@ -202,7 +198,7 @@ void FSFloaterPerformance::draw()
 
         auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
-        // auto tot_frame_time_ns = NANOS/fps;
+
         auto target_frame_time_ns = NANOS/(targetFPS==0?1:targetFPS);
 
         FSPerfStats::bufferToggleLock.lock(); // prevent toggle for a moment
@@ -220,7 +216,7 @@ void FSFloaterPerformance::draw()
         auto tot_ui_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_UI);
         // cumulative time spent rendering HUDS
         auto tot_huds_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_HUDS);
-        // "idle" time. This is the time spent in the idle poll section of the main loop, we DO remove the avatar idel time as the avatar number we display is the total avatar time inclusive of idle processing.
+        // "idle" time. This is the time spent in the idle poll section of the main loop, we DO remove the avatar idle time as the avatar number we display is the total avatar time inclusive of idle processing.
         auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE) - FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_IDLE);
         // similar to sleep time, induced by FPS limit
         auto tot_limit_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FPSLIMIT);
@@ -421,7 +417,7 @@ void FSFloaterPerformance::populateHUDList()
 
         row[1]["column"] = "art_value";
         row[1]["type"] = "text";
-        row[1]["value"] = llformat( "%.3f",FSPerfStats::raw_to_us(hud_render_time_raw) );
+        row[1]["value"] = llformat( "%.2f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
 
         row[2]["column"] = "complex_value";
@@ -515,7 +511,7 @@ void FSFloaterPerformance::populateObjectList()
             row[1]["column"] = "art_value";
             row[1]["type"] = "text";
             // row[1]["value"] = std::to_string(obj_cost_short);
-            row[1]["value"] = llformat( "%.4f", FSPerfStats::raw_to_us(attach_render_time_raw) );
+            row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_us(attach_render_time_raw) );
             row[1]["font"]["name"] = "SANSSERIF";
 
             row[2]["column"] = "complex_value";

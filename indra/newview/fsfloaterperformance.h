@@ -26,7 +26,7 @@
  */
 
 #ifndef FS_FLOATERPERFORMANCE_H
-#define FS_FSFLOATERPERFORMANCE_H
+#define FS_FLOATERPERFORMANCE_H
 
 #include "llfloater.h"
 #include "lllistcontextmenu.h"

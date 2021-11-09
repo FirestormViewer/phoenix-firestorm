@@ -181,8 +181,11 @@ namespace FSPerfStats
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
             using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
+            #ifdef FS_HAS_TELEMETRY
             static char avstr[36];
             static char obstr[36];
+            #endif
+            
             if(upd.statType == StatType_t::RENDER_DONE && upd.objType == ObjType_t::OT_GENERAL && upd.time == 0)
             {
                 // LL_INFOS("perfstats") << "End of Frame Toggle Buffer:" << gFrameCount << LL_ENDL;

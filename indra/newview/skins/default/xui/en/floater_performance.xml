@@ -85,7 +85,7 @@
       layout="topleft"
       left_pad="10"
       name="fps_warning"
-      top="8"
+      top="13"
       width="150">
      </text>
       <text
@@ -94,7 +94,7 @@
       height="40"
       layout="topleft"
       left="395"
-      top="7"
+      top="5"
       name="fps_desc1_lbl"
       width="150"
       wrap="true">

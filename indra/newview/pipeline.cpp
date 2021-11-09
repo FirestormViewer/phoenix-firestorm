@@ -391,8 +391,6 @@ bool	LLPipeline::sRenderTextures = true;
 bool	LLPipeline::sUseDepthTexture = false;
 // [/RLVa:KB]
 
-static U32				sShowTrueARC; // <FS:Beq/> True when we have the TrueArc overlay active.
-
 // EventHost API LLPipeline listener.
 static LLPipelineListener sPipelineListener;
 
