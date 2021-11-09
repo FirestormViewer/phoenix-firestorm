@@ -9144,13 +9144,13 @@ void LLVOAvatar::markARTStale()
 void LLVOAvatar::updateTooSlow()
 {
 	FSZone;
-    static LLCachedControl<bool> autoTune(gSavedSettings, "FSAutoTuneFPS"); // auto tune enabled?
-	auto now = LLTimer::getElapsedSeconds();
+	static LLCachedControl<bool> alwaysRenderFriends(gSavedSettings, "AlwaysRenderFriends");
+	const auto id = getID();
 
 	// mTooSlow - Is the avatar flagged as being slow (includes shadow time)
 	// mTooSlowWithoutShadows - Is the avatar flagged as being slow even with shadows removed.
 	// mARTStale - the rendertime we have is stale because of an update. We need to force a re-render to re-assess slowness
-
+	
 	if( mARTStale )
 	{
 		if ( LLFrameTimer::getFrameCount() - mLastARTUpdateFrame < 5 ) 
@@ -9175,8 +9175,8 @@ void LLVOAvatar::updateTooSlow()
 	{
 		// we are fully rendered, so we use the live values
 		std::lock_guard<std::mutex> lock{FSPerfStats::bufferToggleLock};
-		render_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, this->getID(), FSPerfStats::StatType_t::RENDER_COMBINED);
-		render_geom_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, this->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
+		render_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, id, FSPerfStats::StatType_t::RENDER_COMBINED);
+		render_geom_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, id, FSPerfStats::StatType_t::RENDER_GEOMETRY);
 	}
 	else
 	{
@@ -9187,7 +9187,7 @@ void LLVOAvatar::updateTooSlow()
 	if( (FSPerfStats::renderAvatarMaxART_ns > 0) && 
 		(FSPerfStats::raw_to_ns(render_time_raw) >= FSPerfStats::renderAvatarMaxART_ns) ) 
 	{
-		if( !mTooSlow )
+		if( !mTooSlow ) // if we were previously not slow (with or without shadows.)
 		{			
 			// if we weren't capped, we are now
 			mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
@@ -9196,8 +9196,16 @@ void LLVOAvatar::updateTooSlow()
 			mARTStale = false;
 			mTooSlow = true;
 		}
-		// LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") mLastART too high = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
-		mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= FSPerfStats::renderAvatarMaxART_ns);
+		if(!mTooSlowWithoutShadows) // if we were not previously above the full impostor cap
+		{
+			bool render_friend_or_exception =  	( alwaysRenderFriends && LLAvatarTracker::instance().isBuddy( id ) ) ||
+												( getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER ); 
+			if(!render_friend_or_exception)
+			{
+				// Note: slow rendering Friends still get their shadows zapped.
+				mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= FSPerfStats::renderAvatarMaxART_ns);
+			}
+		}
 	}
 	else
 	{
@@ -11506,8 +11514,8 @@ BOOL LLVOAvatar::isImpostor()
 // 	return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
 	return (
 			isVisuallyMuted() || 
-			( (sLimitNonImpostors || isTooSlowWithoutShadows() ) && 
-			  (mUpdatePeriod > 1) ) 
+			isTooSlowWithoutShadows() ||
+			(sLimitNonImpostors && (mUpdatePeriod > 1) ) 
 	);
 // </FS:Beq>
 }
@@ -11524,9 +11532,9 @@ BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 	}
 // <FS:Beq> render time handling using tooSlow()
 	// return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
-	static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
+	// static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
 	
-	if (isTooSlowWithoutShadows() && render_jellys_As_imposters)
+	if (isTooSlowWithoutShadows())
 	{
 		return true;
 	}
@@ -12061,6 +12069,7 @@ void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
 	mLastImpostorUpdateReason = 7;
+	markARTStale();// <FS:Beq> Force a refresh of the ART to take into account new setting.
 
     // <FS:Ansariel> [FS Persisted Avatar Render Settings]
     //LLRenderMuteList::getInstance()->saveVisualMuteSetting(getID(), S32(set));
