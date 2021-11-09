@@ -52,6 +52,7 @@
 #include "llviewercontrol.h"
 #include "fsavatarrenderpersistence.h"
 #include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "fslslbridge.h"
 
 const F32 REFRESH_INTERVAL = 1.0f;
 const S32 BAR_LEFT_PAD = 2;
@@ -392,7 +393,13 @@ void FSFloaterPerformance::populateHUDList()
     auto huds_max_render_time_raw = FSPerfStats::StatsRecorder::getMax(HudType, FSPerfStats::StatType_t::RENDER_GEOMETRY);
     for (iter = complexity_list.begin(); iter != end; ++iter)
     {
-        LLHUDComplexity hud_object_complexity = *iter;     
+        LLHUDComplexity hud_object_complexity = *iter;
+
+        if (hud_object_complexity.objectName == FSLSLBridge::instance().currentFullName())
+        {
+            continue;
+        }
+
         auto hud_render_time_raw = FSPerfStats::StatsRecorder::get(HudType, hud_object_complexity.objectId, FSPerfStats::StatType_t::RENDER_GEOMETRY);
         LLSD item;
         S32 obj_cost_short = llmax((S32)hud_object_complexity.objectsCost / 1000, 1);
