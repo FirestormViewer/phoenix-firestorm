@@ -25798,7 +25798,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>4.699</integer>
+      <real>4.699</real>
     </map>
     <key>FSTuningFPSStrategy</key>
     <map>
