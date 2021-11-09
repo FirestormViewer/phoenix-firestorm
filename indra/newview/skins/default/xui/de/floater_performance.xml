@@ -83,7 +83,7 @@ für Avatare
 		</panel>
 		<panel name="huds_subpanel">
 			<text name="huds_lbl">
-				Aktive  HUDs
+				Aktive HUDs
 			</text>
 			<text name="huds_desc">
 				Entfernen von HUDs kann Geschwindigkeit verbessern.
