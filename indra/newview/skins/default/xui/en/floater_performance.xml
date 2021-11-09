@@ -91,24 +91,15 @@
       <text
       follows="left|top"
       text_color="White"
-      height="20"
+      height="40"
       layout="topleft"
       left="395"
       top="7"
       name="fps_desc1_lbl"
-      width="150">
-      Allow 5-10 seconds for
+      width="150"
+      wrap="true">
+      Allow 5-10 seconds for changes to take full effect.
     </text>
-    <text
-    follows="left|top"
-    text_color="White"
-    height="20"
-    layout="topleft"
-    top_pad="-3"
-    name="fps_desc2_lbl"
-    width="150">
-    changes to take full effect.
-  </text>
   <text
    follows="left|top"
    font="MonospaceMedium"
@@ -144,7 +135,7 @@ Frame breakdown will appear here.
       left="10"
       name="settings_lbl"
       top="7"
-      width="180">
+      width="240">
       Auto-Tune Frame Rate
     </text>
     <check_box
@@ -153,10 +144,10 @@ Frame breakdown will appear here.
     initial_value="false"
     label="Auto tune for FPS"
     layout="topleft"
-    left_pad="100"
+    left_pad="40"
     name="AutoTuneFPS"
     top_delta="0"
-    tool_tip="FS will attempt to adjust settings to meet the target FPS."
+    tool_tip="The viewer will attempt to adjust settings to meet the target FPS."
     width="50">
    </check_box>  
     <text
@@ -195,7 +186,7 @@ Frame breakdown will appear here.
       name="target_fps"
       control_name="FSTargetFPS"
       font="SansSerifLarge"
-      tooltip="Target FPS - The desired FPS level. The system will attempt to achieve this by adjusting your graphics settings."
+      tooltip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
       layout="topleft"
       follows="left|right|top"
       right="-55"
@@ -220,7 +211,7 @@ Frame breakdown will appear here.
       image_selected="Arrow_Right_Off"
       image_pressed="Arrow_Right_Off"
       image_unselected="Arrow_Right_Off"
-      right="-12"
+      right="-20"
       is_toggle="true">
     </button>
   </panel>
@@ -315,7 +306,7 @@ top="115">
       left="10"
       name="avatars_nearby_desc"
       top_pad="0"
-      width="305">
+      width="345">
       Manage which nearby avatars are fully displayed.
     </text>
     <text
@@ -324,7 +315,7 @@ top="115">
     text_color="White"
     height="28"
     layout="topleft"
-    left_pad="50"
+    left_pad="10"
     name="avatars_frme_pct_lbl"
        top="8"
        width="75">
@@ -433,7 +424,7 @@ avatars
        left="10"
        name="huds_desc"
        top_pad="0"
-       width="305">
+       width="345">
           Removing unnecessary HUDs may improve speed.
       </text>
       <text
@@ -442,7 +433,7 @@ avatars
       text_color="White"
       height="28"
       layout="topleft"
-      left_pad="50"
+      left_pad="10"
       name="huds_frme_pct_lbl"
       top="8"
       width="75">

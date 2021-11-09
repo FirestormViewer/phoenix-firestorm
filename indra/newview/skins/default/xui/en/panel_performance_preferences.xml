@@ -56,12 +56,13 @@
   follows="left|top"
   font="SansSerifSmall"
   text_color="White"
-  height="18"
+  height="36"
   layout="topleft"
   top_pad="20"
   left="20"
   name="quality_lbl"
-  width="100">
+  width="100"
+  wrap="true">
   Quality vs speed
 </text>
 <text
@@ -244,12 +245,13 @@ Faster
    follows="left|top"
    font="SansSerifSmall"
    text_color="White"
-   height="18"
+   height="36"
    layout="topleft"
    top_pad="20"
    left="20"
    name="distance_lbl"
-   width="100">
+   width="100"
+   wrap="true">
     Visibility distance
   </text>
   <text
@@ -260,7 +262,8 @@ Faster
    layout="topleft"
    left_pad="40"
    name="faster_lbl"
-   width="40">
+   width="40"
+   top_delta="0">
     Faster
   </text>
   <slider
@@ -495,7 +498,7 @@ the ambience and appearance of the scene.
    name="photo_desc"
    width="350">
 Photographers need high quality, but this is often
-at the cost of frame rate. Firestorm phototools can
+at the cost of frame rate. [APP_NAME] phototools can
 help you find the right balance.
   </text>
   <button
