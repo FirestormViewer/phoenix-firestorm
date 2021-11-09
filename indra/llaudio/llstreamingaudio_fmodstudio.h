@@ -80,6 +80,8 @@ private:
     bool mNewMetadata;
     LLSD mMetadata;
     // </DKO> Streamtitle display
+
+    bool mWasAlreadyPlaying;
 };
 
 
