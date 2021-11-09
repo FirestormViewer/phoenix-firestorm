@@ -62,10 +62,10 @@ constexpr auto AvType       {FSPerfStats::ObjType_t::OT_AVATAR};
 constexpr auto AttType      {FSPerfStats::ObjType_t::OT_ATTACHMENT};
 constexpr auto HudType      {FSPerfStats::ObjType_t::OT_HUD};
 constexpr auto SceneType    {FSPerfStats::ObjType_t::OT_GENERAL};
-class LLExceptionsContextMenu : public LLListContextMenu
+class FSExceptionsContextMenu : public LLListContextMenu
 {
 public:
-    LLExceptionsContextMenu(LLFloaterPerformance* floater_settings)
+    FSExceptionsContextMenu(FSFloaterPerformance* floater_settings)
         :   mFloaterPerformance(floater_settings)
     {}
 protected:
@@ -73,35 +73,35 @@ protected:
     {
         LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
         LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-        registrar.add("Settings.SetRendering", boost::bind(&LLFloaterPerformance::onCustomAction, mFloaterPerformance, _2, mUUIDs.front()));
-        enable_registrar.add("Settings.IsSelected", boost::bind(&LLFloaterPerformance::isActionChecked, mFloaterPerformance, _2, mUUIDs.front()));
-        registrar.add("Avatar.Extended", boost::bind(&LLFloaterPerformance::onExtendedAction, mFloaterPerformance, _2, mUUIDs.front()));
+        registrar.add("Settings.SetRendering", boost::bind(&FSFloaterPerformance::onCustomAction, mFloaterPerformance, _2, mUUIDs.front()));
+        enable_registrar.add("Settings.IsSelected", boost::bind(&FSFloaterPerformance::isActionChecked, mFloaterPerformance, _2, mUUIDs.front()));
+        registrar.add("Avatar.Extended", boost::bind(&FSFloaterPerformance::onExtendedAction, mFloaterPerformance, _2, mUUIDs.front()));
         LLContextMenu* menu = createFromFile("menu_perf_avatar_rendering_settings.xml");
 
         return menu;
     }
 
-    LLFloaterPerformance* mFloaterPerformance;
+    FSFloaterPerformance* mFloaterPerformance;
 };
 
 
 
-LLFloaterPerformance::LLFloaterPerformance(const LLSD& key)
+FSFloaterPerformance::FSFloaterPerformance(const LLSD& key)
 :   LLFloater(key),
     mUpdateTimer(new LLTimer()),
     mNearbyMaxComplexity(0)
 {
-    mContextMenu = new LLExceptionsContextMenu(this);
+    mContextMenu = new FSExceptionsContextMenu(this);
 }
 
-LLFloaterPerformance::~LLFloaterPerformance()
+FSFloaterPerformance::~FSFloaterPerformance()
 {
     mComplexityChangedSignal.disconnect();
     delete mContextMenu;
     delete mUpdateTimer;
 }
 
-BOOL LLFloaterPerformance::postBuild()
+BOOL FSFloaterPerformance::postBuild()
 {
     mMainPanel = getChild<LLPanel>("panel_performance_main");
     mNearbyPanel = getChild<LLPanel>("panel_performance_nearby");
@@ -110,17 +110,17 @@ BOOL LLFloaterPerformance::postBuild()
     mHUDsPanel = getChild<LLPanel>("panel_performance_huds");
     mAutoTunePanel = getChild<LLPanel>("panel_performance_autotune");
 
-    getChild<LLPanel>("nearby_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mNearbyPanel));
-    getChild<LLPanel>("complexity_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mComplexityPanel));
-    getChild<LLPanel>("settings_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mSettingsPanel));
-    getChild<LLPanel>("huds_subpanel")->setMouseDownCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mHUDsPanel));
+    getChild<LLPanel>("nearby_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mNearbyPanel));
+    getChild<LLPanel>("complexity_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mComplexityPanel));
+    getChild<LLPanel>("settings_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mSettingsPanel));
+    getChild<LLPanel>("huds_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mHUDsPanel));
     auto tgt_panel = getChild<LLPanel>("target_subpanel");
-    if(tgt_panel)
+    if (tgt_panel)
     {
-        tgt_panel->getChild<LLButton>("target_button")->setCommitCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+        tgt_panel->getChild<LLButton>("target_button")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
         // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setShowCursorHand(false);
         // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setSoundFlags(LLView::MOUSE_UP);
-        // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setClickedCallback(boost::bind(&LLFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+        // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setClickedCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
     }
 
     initBackBtn(mNearbyPanel);
@@ -132,38 +132,37 @@ BOOL LLFloaterPerformance::postBuild()
     mHUDList = mHUDsPanel->getChild<LLNameListCtrl>("hud_list");
     mHUDList->setNameListType(LLNameListCtrl::SPECIAL);
     mHUDList->setHoverIconName("StopReload_Off");
-    mHUDList->setIconClickedCallback(boost::bind(&LLFloaterPerformance::detachItem, this, _1));
+    mHUDList->setIconClickedCallback(boost::bind(&FSFloaterPerformance::detachItem, this, _1));
 
     mObjectList = mComplexityPanel->getChild<LLNameListCtrl>("obj_list");
     mObjectList->setNameListType(LLNameListCtrl::SPECIAL);
     mObjectList->setHoverIconName("StopReload_Off");
-    mObjectList->setIconClickedCallback(boost::bind(&LLFloaterPerformance::detachItem, this, _1));
+    mObjectList->setIconClickedCallback(boost::bind(&FSFloaterPerformance::detachItem, this, _1));
 
-    mSettingsPanel->getChild<LLRadioGroup>("graphics_quality")->setCommitCallback(boost::bind(&LLFloaterPerformance::onChangeQuality, this, _2));
+    mSettingsPanel->getChild<LLRadioGroup>("graphics_quality")->setCommitCallback(boost::bind(&FSFloaterPerformance::onChangeQuality, this, _2));
 
-    mNearbyPanel->getChild<LLButton>("exceptions_btn")->setCommitCallback(boost::bind(&LLFloaterPerformance::onClickExceptions, this));
-    mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->setCommitCallback(boost::bind(&LLFloaterPerformance::onClickHideAvatars, this));
+    mNearbyPanel->getChild<LLButton>("exceptions_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::onClickExceptions, this));
+    mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->setCommitCallback(boost::bind(&FSFloaterPerformance::onClickHideAvatars, this));
     mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->set(!LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR));
     mNearbyList = mNearbyPanel->getChild<LLNameListCtrl>("nearby_list");
-    mNearbyList->setRightMouseDownCallback(boost::bind(&LLFloaterPerformance::onAvatarListRightClick, this, _1, _2, _3));
+    mNearbyList->setRightMouseDownCallback(boost::bind(&FSFloaterPerformance::onAvatarListRightClick, this, _1, _2, _3));
     
     mNearbyCombo = mComplexityPanel->getChild<LLComboBox>("avatar_name_combo");
-    mNearbyCombo->setCommitCallback(boost::bind(&LLFloaterPerformance::onClickFocusAvatar, this));
+    mNearbyCombo->setCommitCallback(boost::bind(&FSFloaterPerformance::onClickFocusAvatar, this));
 
     updateComplexityText();
-    mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateComplexityText, this));
-    mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxComplexity, this));
+    mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&FSFloaterPerformance::updateComplexityText, this));
+    mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxComplexity, this));
 
-    mMaxARTChangedSignal = gSavedSettings.getControl("FSRenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
-    mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
+    mMaxARTChangedSignal = gSavedSettings.getControl("FSRenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&FSFloaterPerformance::updateMaxRenderTime, this));
+    mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxRenderTime, this));
 
     LLAvatarComplexityControls::setIndirectMaxArc();
-
 
     return TRUE;
 }
 
-void LLFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
+void FSFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
 {
     hidePanels();
     mMainPanel->setVisible(FALSE);
@@ -183,22 +182,19 @@ void LLFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
     }
 }
 
-void LLFloaterPerformance::draw()
+void FSFloaterPerformance::draw()
 {
     const S32 NUM_PERIODS = 50;
     constexpr auto NANOS = 1000000000;
     constexpr auto MICROS = 1000000;
     constexpr auto MILLIS = 1000;
-    
 
     static LLCachedControl<U32> fpsCap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
     static LLCachedControl<U32> targetFPS(gSavedSettings, "FSTargetFPS"); // desired FPS 
 
     if (mUpdateTimer->hasExpired())
     {
-         
- 
-       	LLStringUtil::format_map_t args;
+        LLStringUtil::format_map_t args;
 
         auto fps = LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS, NUM_PERIODS);
         getChild<LLTextBox>("fps_value")->setValue((S32)llround(fps));
@@ -228,7 +224,6 @@ void LLFloaterPerformance::draw()
         auto tot_swap_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_SWAP);
 
         FSPerfStats::bufferToggleLock.unlock(); 
-
 
         auto unreliable = false; // if there is something to skew the stats such as sleep of fps cap
         auto tot_avatar_time_ns         = FSPerfStats::raw_to_ns( tot_avatar_time_raw );
@@ -282,7 +277,7 @@ void LLFloaterPerformance::draw()
         getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
         
         auto textbox = getChild<LLTextBox>("fps_warning");
-        if(tot_sleep_time_raw > 0) // We are sleeping because view is not focussed
+        if (tot_sleep_time_raw > 0) // We are sleeping because view is not focussed
         {
             textbox->setVisible(true);
             textbox->setText(getString("focus_fps"));
@@ -296,7 +291,7 @@ void LLFloaterPerformance::draw()
             textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
             unreliable = true;
         }
-        else if(FSPerfStats::autoTune)
+        else if (FSPerfStats::autoTune)
         {
             textbox->setVisible(true);
             textbox->setText(getString("tuning_fps", args));
@@ -307,16 +302,16 @@ void LLFloaterPerformance::draw()
             textbox->setVisible(false);
         }
 
-        if( FSPerfStats::autoTune && !unreliable )
+        if (FSPerfStats::autoTune && !unreliable )
         {
             // the tuning itself is managed from another thread but we can report progress here
 
             // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
-            if( target_frame_time_ns <= tot_frame_time_ns )
+            if (target_frame_time_ns <= tot_frame_time_ns)
             {
                 U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
                 // If the target frame time < non avatar frame time then we can pototentially reach it.
-                if( non_avatar_time_ns < target_frame_time_ns )
+                if (non_avatar_time_ns < target_frame_time_ns)
                 {
                     textbox->setColor(LLUIColorTable::instance().getColor("orange"));
                 }
@@ -326,7 +321,7 @@ void LLFloaterPerformance::draw()
                     textbox->setColor(LLUIColorTable::instance().getColor("red"));
                 }
             }
-            else if( target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART_ns))
+            else if (target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART_ns))
             {
                 // if we have more time to spare. Display this (the service will update things)
                 textbox->setColor(LLUIColorTable::instance().getColor("green"));
@@ -352,13 +347,13 @@ void LLFloaterPerformance::draw()
     LLFloater::draw();
 }
 
-void LLFloaterPerformance::showMainPanel()
+void FSFloaterPerformance::showMainPanel()
 {
     hidePanels();
     mMainPanel->setVisible(TRUE);
 }
 
-void LLFloaterPerformance::hidePanels()
+void FSFloaterPerformance::hidePanels()
 {
     mNearbyPanel->setVisible(FALSE);
     mComplexityPanel->setVisible(FALSE);
@@ -367,16 +362,16 @@ void LLFloaterPerformance::hidePanels()
     mAutoTunePanel->setVisible(FALSE);
 }
 
-void LLFloaterPerformance::initBackBtn(LLPanel* panel)
+void FSFloaterPerformance::initBackBtn(LLPanel* panel)
 {
-    panel->getChild<LLButton>("back_btn")->setCommitCallback(boost::bind(&LLFloaterPerformance::showMainPanel, this));
+    panel->getChild<LLButton>("back_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showMainPanel, this));
 
     panel->getChild<LLTextBox>("back_lbl")->setShowCursorHand(false);
     panel->getChild<LLTextBox>("back_lbl")->setSoundFlags(LLView::MOUSE_UP);
-    panel->getChild<LLTextBox>("back_lbl")->setClickedCallback(boost::bind(&LLFloaterPerformance::showMainPanel, this));
+    panel->getChild<LLTextBox>("back_lbl")->setClickedCallback(boost::bind(&FSFloaterPerformance::showMainPanel, this));
 }
 
-void LLFloaterPerformance::populateHUDList()
+void FSFloaterPerformance::populateHUDList()
 {
     S32 prev_pos = mHUDList->getScrollPos();
     LLUUID prev_selected_id = mHUDList->getSelectedSpecialId();
@@ -418,12 +413,10 @@ void LLFloaterPerformance::populateHUDList()
         row[1]["value"] = llformat( "%.3f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
 
-
- 
         row[2]["column"] = "complex_value";
         row[2]["type"] = "text";
         row[2]["value"] = std::to_string(obj_cost_short);
-        row[2]["font"]["name"] = "SANSSERIF";                
+        row[2]["font"]["name"] = "SANSSERIF";
 
         row[3]["column"] = "name";
         row[3]["type"] = "text";
@@ -453,19 +446,20 @@ void LLFloaterPerformance::populateHUDList()
                 }
         }
     }
+
     mHUDList->sortByColumnIndex(1, FALSE);
     mHUDList->setScrollPos(prev_pos);
     mHUDList->selectItemBySpecialId(prev_selected_id);
 }
 
-void LLFloaterPerformance::populateObjectList()
+void FSFloaterPerformance::populateObjectList()
 {
     S32 prev_pos = mObjectList->getScrollPos();
     auto prev_selected_id = mObjectList->getSelectedSpecialId();
 
-   	std::string current_sort_col = mObjectList->getSortColumnName();
-	BOOL current_sort_asc = mObjectList->getSortAscending();
-  
+    std::string current_sort_col = mObjectList->getSortColumnName();
+    BOOL current_sort_asc = mObjectList->getSortAscending();
+
     mObjectList->clearRows();
     mObjectList->updateColumns(true);
 
@@ -474,13 +468,11 @@ void LLFloaterPerformance::populateObjectList()
     object_complexity_list_t::iterator iter = attachment_list.begin();
     object_complexity_list_t::iterator end = attachment_list.end();
 
-
     U32 max_complexity = 0;
     for (; iter != end; ++iter)
     {
         max_complexity = llmax(max_complexity, (*iter).objectCost);
     }
-
 
     // for consistency  we lock the buffer while we build the list. In theory this is uncontended as th ebuffer should only toggle on end of frame
     {
@@ -549,21 +541,21 @@ void LLFloaterPerformance::populateObjectList()
         args["TOT_ATT_TIME"] = llformat("%.2f", FSPerfStats::raw_to_us(att_sum_render_time_raw));
         textbox->setText(getString("tot_att_template", args));
     }
+
     LL_DEBUGS("PerfFloater") << "Attachments for frame : " << gFrameCount << " COMPLETED" << LL_ENDL;
     mNearbyList->sortByColumn(current_sort_col, current_sort_asc);
     mObjectList->setScrollPos(prev_pos);
     mObjectList->selectItemBySpecialId(prev_selected_id);
-
-
 }
 
-void LLFloaterPerformance::populateNearbyList()
+void FSFloaterPerformance::populateNearbyList()
 {
     S32 prev_pos = mNearbyList->getScrollPos();
     LLUUID prev_selected_id = mNearbyList->getStringUUIDSelectedItem();
-   	std::string current_sort_col = mNearbyList->getSortColumnName();
-	BOOL current_sort_asc = mNearbyList->getSortAscending();
-    if(current_sort_col == "art_visual")
+    std::string current_sort_col = mNearbyList->getSortColumnName();
+    BOOL current_sort_asc = mNearbyList->getSortAscending();
+    
+    if (current_sort_col == "art_visual")
     {
         current_sort_col = "art_value";
         current_sort_asc = false;
@@ -591,8 +583,10 @@ void LLFloaterPerformance::populateNearbyList()
         if (avatar)
         {
             auto overall_appearance = avatar->getOverallAppearance();
-            if(overall_appearance == LLVOAvatar::AOA_INVISIBLE)
+            if (overall_appearance == LLVOAvatar::AOA_INVISIBLE)
+            {
                 continue;
+            }
 
             S32 complexity_short = llmax((S32)avatar->getVisualComplexity() / 1000, 1);
 
@@ -617,7 +611,7 @@ void LLFloaterPerformance::populateNearbyList()
 
             row[1]["column"] = "art_value";
             row[1]["type"] = "text";
-            if(is_slow)
+            if (is_slow)
             {
                 row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_us( avatar->getLastART() ) );
             }
@@ -636,9 +630,9 @@ void LLFloaterPerformance::populateNearbyList()
 
             row[3]["column"] = "state";
             row[3]["type"] = "text";
-            if(is_slow)
+            if (is_slow)
             {
-                if( avatar->isTooSlowWithoutShadows() )
+                if (avatar->isTooSlowWithoutShadows())
                 {
                     row[3]["value"] = std::string{"I"};
                 }
@@ -651,13 +645,13 @@ void LLFloaterPerformance::populateNearbyList()
             {
                 row[3]["value"] = std::string{" "};
             }
-            
+
             row[3]["font"]["name"] = "SANSSERIF";
 
             row[4]["column"] = "name";
 
             LLScrollListItem* av_item = mNearbyList->addElement(item);
-            if(av_item)
+            if (av_item)
             {
                 LLScrollListText* art_text = dynamic_cast<LLScrollListText*>(av_item->getColumn(1));
                 if (art_text)
@@ -715,7 +709,7 @@ void LLFloaterPerformance::populateNearbyList()
     textbox->setText(getString("tot_av_template", args));
 }
 
-void LLFloaterPerformance::getNearbyAvatars(std::vector<LLCharacter*> &valid_nearby_avs)
+void FSFloaterPerformance::getNearbyAvatars(std::vector<LLCharacter*> &valid_nearby_avs)
 {
     static LLCachedControl<F32> render_far_clip(gSavedSettings, "RenderFarClip", 64);
     mNearbyMaxComplexity = 0;
@@ -740,22 +734,12 @@ void LLFloaterPerformance::getNearbyAvatars(std::vector<LLCharacter*> &valid_nea
     }
 }
 
-void LLFloaterPerformance::detachItem(const LLUUID& item_id)
+void FSFloaterPerformance::detachItem(const LLUUID& item_id)
 {
     LLAppearanceMgr::instance().removeItemFromAvatar(item_id);
 }
 
-// void LLFloaterPerformance::onClickAdvanced()
-// {
-//     LLFloaterPreference* instance = LLFloaterReg::getTypedInstance<LLFloaterPreference>("preferences");
-//     if (instance)
-//     {
-//         instance->saveSettings();
-//     }
-//     LLFloaterReg::showInstance("prefs_graphics_advanced");
-// }
-
-void LLFloaterPerformance::onChangeQuality(const LLSD& data)
+void FSFloaterPerformance::onChangeQuality(const LLSD& data)
 {
     LLFloaterPreference* instance = LLFloaterReg::getTypedInstance<LLFloaterPreference>("preferences");
     if (instance)
@@ -764,17 +748,17 @@ void LLFloaterPerformance::onChangeQuality(const LLSD& data)
     }
 }
 
-void LLFloaterPerformance::onClickHideAvatars()
+void FSFloaterPerformance::onClickHideAvatars()
 {
     LLPipeline::toggleRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR);
 }
 
-void LLFloaterPerformance::onClickFocusAvatar()
+void FSFloaterPerformance::onClickFocusAvatar()
 {
     FSPerfStats::StatsRecorder::setFocusAv(mNearbyCombo->getSelectedValue().asUUID());
 }
 
-void LLFloaterPerformance::onClickExceptions()
+void FSFloaterPerformance::onClickExceptions()
 {
     // <FS:Ansariel> [FS Persisted Avatar Render Settings]
     //LLFloaterReg::showInstance("avatar_render_settings");
@@ -782,7 +766,7 @@ void LLFloaterPerformance::onClickExceptions()
     // </FS:Ansariel>
 }
 
-void LLFloaterPerformance::updateMaxComplexity()
+void FSFloaterPerformance::updateMaxComplexity()
 {
     LLAvatarComplexityControls::updateMax(
         mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity"),
@@ -790,7 +774,7 @@ void LLFloaterPerformance::updateMaxComplexity()
         true);
 }
 
-void LLFloaterPerformance::updateMaxRenderTime()
+void FSFloaterPerformance::updateMaxRenderTime()
 {
     LLAvatarComplexityControls::updateMaxRenderTime(
         mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART"),
@@ -798,7 +782,7 @@ void LLFloaterPerformance::updateMaxRenderTime()
         true);
 }
 
-void LLFloaterPerformance::updateMaxRenderTimeText()
+void FSFloaterPerformance::updateMaxRenderTimeText()
 {
     LLAvatarComplexityControls::setRenderTimeText(
         gSavedSettings.getF32("FSRenderAvatarMaxART"),
@@ -806,7 +790,7 @@ void LLFloaterPerformance::updateMaxRenderTimeText()
         true);
 }
 
-void LLFloaterPerformance::updateComplexityText()
+void FSFloaterPerformance::updateComplexityText()
 {
     LLAvatarComplexityControls::setText(gSavedSettings.getU32("RenderAvatarMaxComplexity"),
         mNearbyPanel->getChild<LLTextBox>("IndirectMaxComplexityText", true), 
@@ -831,7 +815,7 @@ static LLVOAvatar* find_avatar(const LLUUID& id)
     }
 }
 
-void LLFloaterPerformance::onCustomAction(const LLSD& userdata, const LLUUID& av_id)
+void FSFloaterPerformance::onCustomAction(const LLSD& userdata, const LLUUID& av_id)
 {
     const std::string command_name = userdata.asString();
 
@@ -863,8 +847,7 @@ void LLFloaterPerformance::onCustomAction(const LLSD& userdata, const LLUUID& av
     }
 }
 
-
-bool LLFloaterPerformance::isActionChecked(const LLSD& userdata, const LLUUID& av_id)
+bool FSFloaterPerformance::isActionChecked(const LLSD& userdata, const LLUUID& av_id)
 {
     const std::string command_name = userdata.asString();
 
@@ -891,56 +874,55 @@ bool LLFloaterPerformance::isActionChecked(const LLSD& userdata, const LLUUID& a
     return false;
 }
 
-void LLFloaterPerformance::onAvatarListRightClick(LLUICtrl* ctrl, S32 x, S32 y)
+void FSFloaterPerformance::onAvatarListRightClick(LLUICtrl* ctrl, S32 x, S32 y)
 {
     LLNameListCtrl* list = dynamic_cast<LLNameListCtrl*>(ctrl);
     if (!list) return;
     list->selectItemAt(x, y, MASK_NONE);
     uuid_vec_t selected_uuids;
 
-    if((list->getCurrentID().notNull()) && (list->getCurrentID() != gAgentID))
+    if ((list->getCurrentID().notNull()) && (list->getCurrentID() != gAgentID))
     {
         selected_uuids.push_back(list->getCurrentID());
         mContextMenu->show(ctrl, selected_uuids, x, y);
     }
 }
 
-
-void LLFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& av_id)
+void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& av_id)
 {
     const std::string command_name = userdata.asString();
 
-	LLViewerObject* objectp = gObjectList.findObject(av_id);
-	if (!objectp)
+    LLViewerObject* objectp = gObjectList.findObject(av_id);
+    if (!objectp)
     {
         return;
     }
     auto avp = objectp->asAvatar();
     if ("inspect" == command_name)
     {
-		for (LLVOAvatar::attachment_map_t::iterator iter = avp->mAttachmentPoints.begin(); 
-			 iter != avp->mAttachmentPoints.end();
-			 ++iter)
-		{
-			LLViewerJointAttachment* attachment = iter->second;
+        for (LLVOAvatar::attachment_map_t::iterator iter = avp->mAttachmentPoints.begin(); 
+             iter != avp->mAttachmentPoints.end();
+             ++iter)
+        {
+            LLViewerJointAttachment* attachment = iter->second;
 
-			if (!attachment)
-			{
-				continue;
-			}
+            if (!attachment)
+            {
+                continue;
+            }
 
-			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-				 attachment_iter != attachment->mAttachedObjects.end();
-				 ++attachment_iter)
-			{
-				LLViewerObject* attached_object = attachment_iter->get();
-				
-				if ( attached_object && !attached_object->isDead() )
-				{
+            for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+                 attachment_iter != attachment->mAttachedObjects.end();
+                 ++attachment_iter)
+            {
+                LLViewerObject* attached_object = attachment_iter->get();
+
+                if ( attached_object && !attached_object->isDead() )
+                {
                     LLSelectMgr::getInstance()->selectObjectAndFamily(attached_object);
-				}
-			}
-		}
+                }
+            }
+        }
         LLFloaterReg::showInstance("inspect");
     }
     else if ("zoom" == command_name)
@@ -1012,7 +994,7 @@ void LLFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         LLVector3d axis_y = LLVector3d(0, 1, 0) * bbox.getRotation();
         LLVector3d axis_z = LLVector3d(0, 0, 1) * bbox.getRotation();
         //Normal of nearclip plane is camera_dir.
-        F32 min_near_clip_dist = bbox_extents.mdV[0] * (camera_dir * axis_x) + bbox_extents.mdV[1] * (camera_dir * axis_y) + bbox_extents.mdV[2] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
+        F32 min_near_clip_dist = bbox_extents.mdV[VX] * (camera_dir * axis_x) + bbox_extents.mdV[VY] * (camera_dir * axis_y) + bbox_extents.mdV[VZ] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
         F32 camera_to_near_clip_dist(LLViewerCamera::getInstance()->getNear());
         F32 min_camera_dist(min_near_clip_dist + camera_to_near_clip_dist);
         if (distance < min_camera_dist)

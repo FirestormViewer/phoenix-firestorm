@@ -35,11 +35,11 @@ class LLCharacter;
 class LLNameListCtrl;
 class LLComboBox;
 
-class LLFloaterPerformance : public LLFloater
+class FSFloaterPerformance : public LLFloater
 {
 public:
-    LLFloaterPerformance(const LLSD& key);
-    virtual ~LLFloaterPerformance();
+    FSFloaterPerformance(const LLSD& key);
+    virtual ~FSFloaterPerformance();
 
     /*virtual*/ BOOL postBuild();
     /*virtual*/ void draw();
@@ -62,7 +62,6 @@ private:
     void populateObjectList();
     void populateNearbyList();
 
-    void onClickAdvanced();
     void onChangeQuality(const LLSD& data);
     void onClickHideAvatars();
     void onClickExceptions();
