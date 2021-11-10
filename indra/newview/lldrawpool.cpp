@@ -50,6 +50,7 @@
 #include "lldrawpoolwlsky.h"
 #include "llglslshader.h"
 #include "llglcommonfunc.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 S32 LLDrawPool::sNumDrawPools = 0;
 
@@ -388,10 +389,21 @@ void LLRenderPass::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL t
 {					
 	LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];
 	
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Perf stats 
 	for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 	{
 		LLDrawInfo *pparams = *k;
 		if (pparams) {
+			// <FS:Beq> Capture render times
+			if(pparams->mFace)
+			{
+				LLViewerObject* vobj = pparams->mFace->getViewerObject();
+				if(vobj->isAttachment())
+				{
+					trackAttachments( vobj, pparams->mFace->isState(LLFace::RIGGED),&ratPtr);
+				}
+			}
+			// </FS:Beq>
 			pushBatch(*pparams, mask, texture);
 		}
 	}
@@ -404,11 +416,22 @@ void LLRenderPass::renderTexture(U32 type, U32 mask, BOOL batch_textures)
 
 void LLRenderPass::pushBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)	
 	{
 		LLDrawInfo* pparams = *i;
 		if (pparams) 
 		{
+			// <FS:Beq> Capture render times
+			if(pparams->mFace)
+			{
+				LLViewerObject* vobj = pparams->mFace->getViewerObject();
+				if(vobj->isAttachment())
+				{
+					trackAttachments( vobj, pparams->mFace->isState(LLFace::RIGGED),&ratPtr);
+				}
+			}
+			// </FS:Beq>
 			pushBatch(*pparams, mask, texture, batch_textures);
 		}
 	}
@@ -416,11 +439,22 @@ void LLRenderPass::pushBatches(U32 type, U32 mask, BOOL texture, BOOL batch_text
 
 void LLRenderPass::pushMaskBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)	
 	{
 		LLDrawInfo* pparams = *i;
 		if (pparams) 
 		{
+			// <FS:Beq> Capture render times
+			if((*pparams).mFace)
+			{
+				LLViewerObject* vobj = (*pparams).mFace->getViewerObject();
+				if(vobj->isAttachment())
+				{
+					trackAttachments( vobj, (*pparams).mFace->isState(LLFace::RIGGED),&ratPtr);
+				}
+			}
+			// </FS:Beq>
 			if (LLGLSLShader::sCurBoundShaderPtr)
 			{
 				LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(pparams->mAlphaMaskCutoff);

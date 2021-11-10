@@ -165,6 +165,11 @@ endif (WINDOWS)
 if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
 
+
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0 )
+    message( FATAL_ERROR "GCC greater 9.4.0 is not supported. Recompile boost for support of GCC 10.0.0 and up." )
+  endif()
+
   # <FS:ND/>
   # And another hack for FORTIFY_SOURCE. Some distributions (for example Gentoo) define FORTIFY_SOURCE by default.
   # Check if this is the case, if yes, do not define it again.

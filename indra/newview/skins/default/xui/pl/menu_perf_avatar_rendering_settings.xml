@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Settings">
+	<menu_item_check label="Zawsze z pełnymi detalami" name="always_render" />
+	<menu_item_check label="Nigdy z pełnymi detalami" name="never_render" />
+	<menu_item_check label="Usuń z wyjątków" name="default" />
+	<menu_item_call label="Inspekcja awatara" name="inspect" />
+	<menu_item_call label="Przybliż do awatara" tool_tip="Przesuń kamerę tak, aby zobaczyć tego awatara." name="zoom" />
+</context_menu>

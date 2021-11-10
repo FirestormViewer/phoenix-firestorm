@@ -3342,7 +3342,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
                 // ToUnicodeEx changes buffer state on OS below Win10, which is undesirable,
                 // but since we already did a TranslateMessage() in gatherInput(), this
                 // should have no negative effect
-                int res = ToUnicodeEx(key, 0, keyboard_state, chars, char_count, 1 << 2 /*do not modify buffer flag*/, layout);
+                    // ToUnicodeEx works with virtual key codes
+                    int res = ToUnicodeEx(raw_key, 0, keyboard_state, chars, char_count, 1 << 2 /*do not modify buffer flag*/, layout);
                 if (res == 1 && chars[0] >= 0x20)
                 {
                     // Let it fall through to character handler and get a WM_CHAR.
@@ -3819,13 +3820,13 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 	}
 }
 
-static LLTrace::BlockTimerStatHandle ftm("Update UI");
+static LLTrace::BlockTimerStatHandle FTM_UPDATE_UI("Update UI"); // <FS:Beq/> rename to sensible symbol
 
 // Update UI based on stored mouse position from mouse-move
 // event processing.
 void LLViewerWindow::updateUI()
 {
-	LL_RECORD_BLOCK_TIME(ftm);
+	LL_RECORD_BLOCK_TIME(FTM_UPDATE_UI); // <FS:Beq/> rename to sensible symbol
 
 	static std::string last_handle_msg;
 

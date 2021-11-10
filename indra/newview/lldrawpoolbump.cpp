@@ -47,6 +47,7 @@
 #include "pipeline.h"
 #include "llspatialpartition.h"
 #include "llviewershadermgr.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 //#include "llimagebmp.h"
 //#include "../tools/imdebug/imdebug.h"
@@ -640,13 +641,22 @@ void LLDrawPoolBump::endFullbrightShiny()
 }
 
 void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL texture = TRUE)
-{					
+{			
+	FSZone;		
 	LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];	
 	
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k) 
 	{
 		LLDrawInfo& params = **k;
+		// <FS:Beq> Capture render times
+		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 		
+		if( vobj && vobj->isAttachment() )
+		{
+			trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+		}
+		// </FS:Beq>		
 		applyModelMatrix(params);
 
 		if (params.mGroup)
@@ -888,10 +898,21 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
 
 	U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_COLOR;
 	
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;
-
+		// <FS:Beq> Capture render times
+		if(params.mFace)
+		{
+			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+			
+			if(vobj && vobj->isAttachment())
+			{
+				trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+			}
+		}
+		// </FS:Beq>
 		gDeferredBumpProgram.setMinimumAlpha(params.mAlphaMaskCutoff);
 		LLDrawPoolBump::bindBumpMap(params, bump_channel);
 		pushBatch(params, mask, TRUE);
@@ -1499,9 +1520,21 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
 	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
 	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;
+		// <FS:Beq> Capture render times
+		if(params.mFace)
+		{
+			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+			
+			if( vobj && vobj->isAttachment() )
+			{
+				trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+			}
+		}
+		// </FS:Beq>
 
 		if (LLDrawPoolBump::bindBumpMap(params))
 		{
@@ -1512,6 +1545,7 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
 
 void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
+	FSZone;
 	applyModelMatrix(params);
 
 	bool tex_setup = false;

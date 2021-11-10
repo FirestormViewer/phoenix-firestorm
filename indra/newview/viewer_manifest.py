@@ -1448,6 +1448,8 @@ class DarwinManifest(ViewerManifest):
                 # in our bundled sub-apps. For each of these we'll create a
                 # symlink from sub-app/Contents/Resources to the real .dylib.
                 # Need to get the llcommon dll from any of the build directories as well.
+                libfile_parent = self.get_dst_prefix()
+                libfile = "libllcommon.dylib"
                 dylibs = []
                 for libfile in (
                                 "libapr-1.0.dylib",
@@ -1829,7 +1831,7 @@ class LinuxManifest(ViewerManifest):
 
         with self.prefix(dst="bin"):
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
-            self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
+            #self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP

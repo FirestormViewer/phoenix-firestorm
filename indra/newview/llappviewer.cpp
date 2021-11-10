@@ -286,6 +286,7 @@
 #include "fsassetblacklist.h"
 
 #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if LL_LINUX && LL_GTK
 #include "glib.h"
@@ -1579,6 +1580,7 @@ void LLAppViewer::initMaxHeapSize()
 }
 
 static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
+static LLTrace::BlockTimerStatHandle FTM_MESSAGES2("System Messages2");
 static LLTrace::BlockTimerStatHandle FTM_SLEEP("Sleep");
 static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
 
@@ -1640,6 +1642,10 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
+// <FS:Beq> Perfstats collection Frame boundary
+{
+	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
+
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 // <FS:Beq> telemetry enabling. 
@@ -1674,6 +1680,7 @@ bool LLAppViewer::doFrame()
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
 
 	LL_RECORD_BLOCK_TIME(FTM_FRAME);
+	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 	LLTrace::BlockTimer::processTimes();
 	LLTrace::get_frame_recording().nextPeriod();
 	LLTrace::BlockTimer::logStats();
@@ -1682,8 +1689,9 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-
+	} // <FS:Beq/> perf stats
 	{
+		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
 		if (restore_rendering_masks)
@@ -1721,7 +1729,7 @@ bool LLAppViewer::doFrame()
 
 		if (gViewerWindow)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+			LL_RECORD_BLOCK_TIME(FTM_MESSAGES2);
 			if (!restoreErrorTrap())
 			{
 				LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
@@ -1744,8 +1752,11 @@ bool LLAppViewer::doFrame()
 		// canonical per-frame event
 		mainloop.post(newFrame);
 		// give listeners a chance to run
+		{
+			FSZoneN("Main:Coro");
 		llcoro::suspend();
-
+		}
+		}// <FS:Beq> ensure we have the entire top scope of frame covered
 		if (!LLApp::isExiting())
 		{
 			pingMainloopTimeout("Main:JoystickKeyboard");
@@ -1761,6 +1772,8 @@ bool LLAppViewer::doFrame()
 				&& (gHeadlessClient || !gViewerWindow->getShowProgress())
 				&& !gFocusMgr.focusLocked())
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+				FSZoneN("Main:JoystickKeyboard");
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
                 gViewerInput.scanMouse();
@@ -1776,6 +1789,8 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 
 				LL_RECORD_BLOCK_TIME(FTM_IDLE);
@@ -1786,6 +1801,7 @@ bool LLAppViewer::doFrame()
 
 			if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
 			{
+				FSZoneN("Shutdown:SaveSnapshot");
 				pauseMainloopTimeout();
 				saveFinalSnapshot();
 				disconnectViewer();
@@ -1796,6 +1812,7 @@ bool LLAppViewer::doFrame()
 			// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
 			if (!LLApp::isExiting() && !gHeadlessClient && gViewerWindow)
 			{
+				FSZoneN("Main:Display");
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
@@ -1819,8 +1836,12 @@ bool LLAppViewer::doFrame()
 				// </FS:Ansariel>
 
 				pingMainloopTimeout("Main:Snapshot");
+				{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+					FSZoneN("Main:Snapshot");
 				LLFloaterSnapshot::update(); // take snapshots
 				LLFloaterOutfitSnapshot::update();
+				}
 				gGLActive = FALSE;
 			}
 		}
@@ -1854,6 +1875,7 @@ bool LLAppViewer::doFrame()
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
 				{
+					FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_SLEEP );
 					ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
@@ -1931,6 +1953,7 @@ bool LLAppViewer::doFrame()
 			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
+				FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_FPSLIMIT );
 				F32 min_frame_time = 1.f / (F32)max_fps;
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
@@ -1970,7 +1993,8 @@ bool LLAppViewer::doFrame()
 	}
     FSFrameMark; // <FS:Beq> Tracy support delineate Frame
     LLPROFILE_UPDATE();
-
+	}
+	FSPerfStats::StatsRecorder::endFrame();
 	return ! LLApp::isRunning();
 }
 
@@ -5819,6 +5843,7 @@ void LLAppViewer::idle()
 
         if (!(logoutRequestSent() && hasSavedFinalSnapshot()))
 		{
+			FSPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
 			gObjectList.update(gAgent);
 		}
 	}
