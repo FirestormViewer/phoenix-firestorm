@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel bevel_style="none"
   follows="left|top"
-  height="530"
+  height="585"
   width="580"
   name="panel_performance_huds"
   layout="topleft"
@@ -77,7 +77,7 @@
     column_padding="1"
     draw_stripes="true"
     draw_heading="true"
-    height="380"
+    height="435"
     follows="left|top"
     layout="topleft"
     name="hud_list"

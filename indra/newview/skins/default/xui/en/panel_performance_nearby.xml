@@ -2,7 +2,7 @@
 <panel
 bevel_style="none"
 follows="left|top"
-height="530"
+height="585"
 width="580"
 name="panel_performance_nearby"
 layout="topleft"
@@ -137,7 +137,7 @@ top="0">
     column_padding="1"
     draw_stripes="true"
     draw_heading="true"
-    height="280"
+    height="335"
     left="20"
     follows="left|top"
     layout="topleft"
