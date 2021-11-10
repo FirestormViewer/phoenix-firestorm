@@ -1804,6 +1804,12 @@ bool LLAppViewer::doFrame()
 				FSZoneN("Shutdown:SaveSnapshot");
 				pauseMainloopTimeout();
 				saveFinalSnapshot();
+
+                if (LLVoiceClient::instanceExists())
+                {
+                    LLVoiceClient::getInstance()->terminate();
+                }
+
 				disconnectViewer();
 				resumeMainloopTimeout();
 			}
