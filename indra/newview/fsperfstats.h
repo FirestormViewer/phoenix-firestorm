@@ -68,6 +68,7 @@ namespace FSPerfStats
     constexpr U64 ART_MINIMUM_NANOS{100000};
     constexpr U64 ART_MIN_ADJUST_UP_NANOS{10000};
     constexpr U64 ART_MIN_ADJUST_DOWN_NANOS{10000}; 
+
     constexpr F32 PREFERRED_DD{180};
 
     extern std::atomic<int64_t> tunedAvatars;
@@ -161,6 +162,7 @@ namespace FSPerfStats
     private:
         StatsRecorder();
 
+        static int countNearbyAvatars(S32 distance);
 // StatsArray is a uint64_t for each possible statistic type.
         using StatsArray    = std::array<uint64_t, static_cast<size_t>(FSPerfStats::StatType_t::STATS_COUNT)>;
         using StatsMap      = std::unordered_map<LLUUID, StatsArray, FSUUIDHash>;

@@ -79,7 +79,7 @@ private:
     LLPanel* mComplexityPanel;
     LLPanel* mHUDsPanel;
     LLPanel* mSettingsPanel;
-    //LLPanel* mAutoTunePanel; // Doesn't exist
+    LLPanel* mAutoTunePanel;
     LLNameListCtrl* mHUDList;
     LLNameListCtrl* mObjectList;
     LLNameListCtrl* mNearbyList;

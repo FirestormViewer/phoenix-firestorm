@@ -109,29 +109,24 @@ BOOL FSFloaterPerformance::postBuild()
     mComplexityPanel = getChild<LLPanel>("panel_performance_complexity");
     mSettingsPanel = getChild<LLPanel>("panel_performance_preferences");
     mHUDsPanel = getChild<LLPanel>("panel_performance_huds");
-    // Doesn't exist
-    //mAutoTunePanel = getChild<LLPanel>("panel_performance_autotune");
+    mAutoTunePanel = getChild<LLPanel>("panel_performance_autotune");
 
     getChild<LLPanel>("nearby_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mNearbyPanel));
     getChild<LLPanel>("complexity_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mComplexityPanel));
     getChild<LLPanel>("settings_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mSettingsPanel));
     getChild<LLPanel>("huds_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mHUDsPanel));
-    // Doesn't exist
-    //auto tgt_panel = getChild<LLPanel>("target_subpanel");
-    //if (tgt_panel)
-    //{
-    //    tgt_panel->getChild<LLButton>("target_button")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
-    //    // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setShowCursorHand(false);
-    //    // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setSoundFlags(LLView::MOUSE_UP);
-    //    // tgt_panel->getChild<LLTextBox>("fwd_lbl")->setClickedCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
-    //}
+
+    auto tgt_panel = getChild<LLPanel>("target_subpanel");
+    if (tgt_panel)
+    {
+       tgt_panel->getChild<LLButton>("target_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+    }
 
     initBackBtn(mNearbyPanel);
     initBackBtn(mComplexityPanel);
     initBackBtn(mSettingsPanel);
     initBackBtn(mHUDsPanel);
-    // Doesn't exist
-    //initBackBtn(mAutoTunePanel);
+    initBackBtn(mAutoTunePanel);
 
     mHUDList = mHUDsPanel->getChild<LLNameListCtrl>("hud_list");
     mHUDList->setNameListType(LLNameListCtrl::SPECIAL);
@@ -359,14 +354,12 @@ void FSFloaterPerformance::hidePanels()
     mComplexityPanel->setVisible(FALSE);
     mHUDsPanel->setVisible(FALSE);
     mSettingsPanel->setVisible(FALSE);
-    // Doesn't exist
-    //mAutoTunePanel->setVisible(FALSE);
+    mAutoTunePanel->setVisible(FALSE);
 }
 
 void FSFloaterPerformance::initBackBtn(LLPanel* panel)
 {
     panel->getChild<LLButton>("back_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showMainPanel, this));
-
     panel->getChild<LLTextBox>("back_lbl")->setShowCursorHand(false);
     panel->getChild<LLTextBox>("back_lbl")->setSoundFlags(LLView::MOUSE_UP);
     panel->getChild<LLTextBox>("back_lbl")->setClickedCallback(boost::bind(&FSFloaterPerformance::showMainPanel, this));

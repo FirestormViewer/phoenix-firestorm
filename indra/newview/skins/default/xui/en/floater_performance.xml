@@ -3,6 +3,7 @@
  height="652"
  layout="topleft"
  name="performance"
+ help_topic="fs_performance_floater"
  save_rect="true"
  title="Improve Graphics Speed (Experimental)"
  width="580">
@@ -200,7 +201,6 @@ Frame breakdown will appear here.
       min_val="1"
       width="40"
       label="" />
-      <!--
       <button
       height="16"
       width="16"
@@ -215,7 +215,6 @@ Frame breakdown will appear here.
       right="-20"
       is_toggle="true">
     </button>
-    -->
   </panel>
 </panel>
 <panel
@@ -498,7 +497,6 @@ HUDs
     name="panel_performance_huds"
     visible="false"
     top="115" />
-  <!--
   <panel
     filename="panel_performance_autotune.xml"
     follows="all"
@@ -507,5 +505,4 @@ HUDs
     name="panel_performance_autotune"
     visible="false"
     top="115" />
-  -->
 </floater>

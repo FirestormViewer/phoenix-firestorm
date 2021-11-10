@@ -29,6 +29,9 @@
 #include "fsperfstats.h"
 #include "llcontrol.h"
 #include "pipeline.h"
+#include "llagentcamera.h"
+#include "llvoavatar.h"
+#include "llworld.h"
 
 extern LLControlGroup gSavedSettings;
 
@@ -256,10 +259,38 @@ namespace FSPerfStats
 	    };        
     }
 
+    //static
+    int StatsRecorder::countNearbyAvatars(S32 distance)
+    {
+        const auto our_pos = gAgentCamera.getCameraPositionGlobal();
+
+       	std::vector<LLVector3d> positions;
+	    uuid_vec_t avatar_ids;
+        LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, our_pos, distance);
+        return positions.size();
+	}
+
     // static
     void StatsRecorder::updateAvatarParams()
     {
         static LLCachedControl<F32> drawDistance(gSavedSettings, "RenderFarClip");
+        static LLCachedControl<F32> userMinDrawDistance(gSavedSettings, "FSAutoTuneRenderFarClipMin");
+        static LLCachedControl<F32> userTargetDrawDistance(gSavedSettings, "FSAutoTuneRenderFarClipTarget");
+        static LLCachedControl<F32> impostorDistance(gSavedSettings, "FSAutoTuneImpostorFarAwayDistance");
+        static LLCachedControl<bool> impostorDistanceTuning(gSavedSettings, "FSAutoTuneImpostorByDistEnabled");
+        static LLCachedControl<U32> maxNonImpostors (gSavedSettings, "IndirectMaxNonImpostors");
+
+        if(impostorDistanceTuning)
+        {
+            // if we have less than the user's "max Non-Impostors" avatars within the desired range then adjust the limit.
+            // also adjusts back up again for nearby crowds.
+            auto count = countNearbyAvatars(std::min(drawDistance, impostorDistance));
+            if( count != maxNonImpostors )
+            {
+                gSavedSettings.setU32("IndirectMaxNonImpostors", (count < LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER)?count : LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER);
+                LL_DEBUGS("AutoTune") << "There are " << count << "avatars within " << std::min(drawDistance, impostorDistance) << "m of the camera" << LL_ENDL;
+            }
+        }
 
         auto av_render_max_raw = FSPerfStats::StatsRecorder::getMax(ObjType_t::OT_AVATAR, FSPerfStats::StatType_t::RENDER_COMBINED);
         // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
@@ -320,7 +351,7 @@ namespace FSPerfStats
                         else // deliberately "else" here so we only do these in steps
                         {
                             // step down the DD by 10m per update
-                            auto new_dd = (drawDistance>42)?(drawDistance - 10) : 32;
+                            auto new_dd = (drawDistance-10>userMinDrawDistance)?(drawDistance - 10) : userMinDrawDistance;
                             if(new_dd != drawDistance)
                             {
                                 gSavedSettings.setF32("RenderFarClip", new_dd);
@@ -370,13 +401,13 @@ namespace FSPerfStats
                 // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
                 renderAvatarMaxART_ns += FSPerfStats::ART_MIN_ADJUST_UP_NANOS;
             }
-            if( drawDistance < FSPerfStats::PREFERRED_DD ) // TODO(Beq) make this less arbitrary
+            if( drawDistance < userTargetDrawDistance ) 
             {
                 gSavedSettings.setF32("RenderFarClip", drawDistance + 10.);
             }
             if( (target_frame_time_raw * 1.5) > tot_frame_time_raw &&
                 FSPerfStats::tunedAvatars == 0 &&
-                drawDistance >= FSPerfStats::PREFERRED_DD )
+                drawDistance >= userTargetDrawDistance)
             {
                 // if everything else is "max" and we have 50% headroom let's knock the water quality up a notch at a time.
                 auto water = gSavedSettings.getS32("RenderReflectionDetail");
