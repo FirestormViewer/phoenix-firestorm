@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel bevel_style="none"
   follows="left|top"
-  height="585"
+  height="530"
   width="580"
   name="panel_performance_complexity"
   layout="topleft"
@@ -89,7 +89,7 @@ You may remove your own attachments quickly and easily by hitting the 'X'.
     column_padding="1"
     draw_stripes="true"
     draw_heading="true"
-    height="435"
+    height="379"
     follows="left|top"
     sort_column="1"
     sort_ascending="false"

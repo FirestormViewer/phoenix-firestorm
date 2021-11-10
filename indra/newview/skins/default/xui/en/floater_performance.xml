@@ -115,16 +115,6 @@ Frame breakdown will appear here.
   </text>
   </panel>
   <panel
-  bevel_style="none"
-  follows="left|top"
-  height="540"
-  width="580"
-  name="panel_performance_main"
-  visible="true"
-  layout="topleft"
-  left="0"
-  top="60">
-  <panel
   bg_alpha_color="PanelGray"
   background_visible="true" 
   background_opaque="false"
@@ -226,6 +216,17 @@ Frame breakdown will appear here.
       is_toggle="true">
     </button>
   </panel>
+</panel>
+<panel
+bevel_style="none"
+follows="left|top"
+height="540"
+width="580"
+name="panel_performance_main"
+visible="true"
+layout="topleft"
+left="0"   
+top="115">    
       <panel
       bg_alpha_color="PanelGray"
       background_visible="true"
@@ -464,7 +465,6 @@ HUDs
        right="-20"/>
     </panel>
   </panel>
-</panel>
   <panel
     filename="panel_performance_nearby.xml"
     follows="all"
@@ -472,7 +472,7 @@ HUDs
     left="0"
     name="panel_performance_nearby"
     visible="false"
-    top="60" />
+    top="115" />
   <panel
     filename="panel_performance_complexity.xml"
     follows="all"
@@ -480,7 +480,7 @@ HUDs
     left="0"
     name="panel_performance_complexity"
     visible="false"
-    top="60" />
+    top="115" />
   <panel
     filename="panel_performance_preferences.xml"
     follows="all"
@@ -488,7 +488,7 @@ HUDs
     left="0"
     name="panel_performance_preferences"
     visible="false"
-    top="60" />
+    top="115" />
   <panel
     filename="panel_performance_huds.xml"
     follows="all"
@@ -496,7 +496,7 @@ HUDs
     left="0"
     name="panel_performance_huds"
     visible="false"
-    top="60" />
+    top="115" />
   <panel
     filename="panel_performance_autotune.xml"
     follows="all"
@@ -504,5 +504,5 @@ HUDs
     left="0"
     name="panel_performance_autotune"
     visible="false"
-    top="60" />
+    top="115" />
 </floater>

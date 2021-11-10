@@ -2,7 +2,7 @@
 <panel
  bevel_style="none"
  follows="left|top"
- height="585"
+ height="530"
  width="580"
  name="panel_performance_preferences"
  layout="topleft"
