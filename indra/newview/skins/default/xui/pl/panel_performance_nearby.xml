@@ -9,7 +9,7 @@
 	<text name="av_nearby_desc">
 		Ukryj najbardziej złożone awatary, aby zwiększyć szybkość.
 	</text>
-	<slider tool_tip="Kontroluje, w którym momencie wizualnie złożony awatar jest zastępowany przez JellyDoll" label="Maksymalna złożoność (K)" name="IndirectMaxComplexity" />
+	<slider tool_tip="Kontroluje, w którym momencie wizualnie złożony awatar jest zastępowany przez awatar zastępczy" label="Maksymalna złożoność (K)" name="IndirectMaxComplexity" />
 	<slider tool_tip="Kontroluje, kiedy określa się, że renderowanie złożonego wizualnie awatara trwa zbyt długo (jednostka: mikrosekundy)" label="Maks. czas renderowania (μs)" name="FSRenderAvatarMaxART" />
 	<text name="FSRenderAvatarMaxARTText">
 		bez limitu
@@ -17,7 +17,7 @@
 	<name_list name="nearby_list">
 		<name_list.columns tool_tip="Wykres słupkowy pokazujący aktualny czas renderowania (w tym autodostrajanie) jako % najwolniejszego." name="art_visual" />
 		<name_list.columns tool_tip="Czas renderowania awatara (Avatar Render Time, ART). Rzeczywisty czas potrzebny na wyrenderowanie tego awatara przed automatycznym dostrajaniem (w mikrosekundach)." name="art_value" />
-		<name_list.columns tool_tip="Oldschoolowa złożoność (ARC) oparta na standardowych zasadach SL." name="complex_value" />
+		<name_list.columns tool_tip="Złożoność (ARC) oparta na standardowych zasadach SL." name="complex_value" />
 		<name_list.columns tool_tip="Pokazuje jakiekolwiek strojenie. I=Awatar zastępczy, S=brak cienia." name="state" />
 		<name_list.columns label="Imię" name="name"/>
 	</name_list>

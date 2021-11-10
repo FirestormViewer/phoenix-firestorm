@@ -78,7 +78,7 @@ ale wpływa na atmosferę i wygląd sceny.
 	<text name="photo_desc">
 Fotografowie wymagają lepszej jakości, często
 dzieje się to kosztem liczby klatek na sekundę.
-Narzędzia Firestorma pomogą znaleźć równowagę.
+Narzędzia [APP_NAME] pomogą znaleźć równowagę.
 	</text>
 	<button name="open_phototools" label="Fotograf" tool_tip="Otwórz dedykowane narzędzia do zdjęć, aby dostroić zaawansowane ustawienia obrazu." />
 </panel>

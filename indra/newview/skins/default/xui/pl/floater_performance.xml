@@ -24,10 +24,7 @@
 				klatek na sekundę
 			</text>
 			<text name="fps_desc1_lbl">
-				Poczekaj 5-10 sekund, by
-			</text>
-			<text name="fps_desc2_lbl">
-				nastąpiły zmiany.
+				Poczekaj 5-10 sekund, by nastąpiły zmiany.
 			</text>
 			<text name="frame_breakdown">
 				Tutaj pojawi się analiza klatek.
@@ -37,7 +34,7 @@
 			<text name="settings_lbl">
 				Autostrojenie klatek
 			</text>
-			<check_box label="Autostrojenie" name="AutoTuneFPS" tool_tip="FS spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
+			<check_box label="Autostrojenie" name="AutoTuneFPS" tool_tip="Przeglądarka spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
 			<text name="settings_desc">
 				Autostrojenie ustawień, by utrzymać FPS.
 			</text>
@@ -45,7 +42,7 @@
 				<combo_box.item label="Dostrój tylko awatary" name="av_only" />
 				<combo_box.item label="Awatary i scena" name="av_and_scene" />
 			</combo_box>
-			<spinner name="target_fps" tooltip="Docelowa liczba FPS — żądany poziom klatek na sekundę. System spróbuje go osiągnąć dostosowując ustawienia grafiki." />
+			<spinner name="target_fps" tooltip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">    
