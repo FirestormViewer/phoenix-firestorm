@@ -116,10 +116,11 @@ BOOL FSFloaterPerformance::postBuild()
     getChild<LLPanel>("settings_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mSettingsPanel));
     getChild<LLPanel>("huds_subpanel")->setMouseDownCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mHUDsPanel));
 
-    auto tgt_panel = getChild<LLPanel>("target_subpanel");
+    auto tgt_panel = findChild<LLPanel>("target_subpanel");
     if (tgt_panel)
     {
        tgt_panel->getChild<LLButton>("target_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+       tgt_panel->getChild<LLComboBox>("FSTuningFPSStrategy")->setCurrentByIndex(gSavedSettings.getU32("FPSTuningFPSStrategy"));
     }
 
     initBackBtn(mNearbyPanel);
