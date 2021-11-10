@@ -102,7 +102,7 @@ Distant Avatars
   name="distant_av_advice"
   width="450">
 Avatars that are further away still have a high impact.
-Control how far away an avatar should before being optimized.
+Set the distance from camera beyond which an avatar will be optimized.
 </text>
 <view_border
   bevel_style="in"
