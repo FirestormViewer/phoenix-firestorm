@@ -56,12 +56,13 @@ Auto Tune Preferences
     follows="left|top"
     font="SansSerifSmall"
     text_color="White"
-    height="18"
+    height="40"
     layout="topleft"
     top_pad="20"
     left="20"
     name="quality_lbl"
-    width="100">
+    width="100"
+    wrap="true">
 Distant Avatars
   </text>
   <check_box
@@ -166,6 +167,6 @@ Visibility distance tuning limits
   name="distance_desc1"
   wrap="true"
   width="400">
-When adjusting scene parameters, autotune will optimise draw distance to between the minimum and the preferred.
+When adjusting scene parameters, autotune will optimize draw distance to between the minimum and the preferred.
 </text>
 </panel>
