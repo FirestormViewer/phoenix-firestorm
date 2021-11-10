@@ -1860,7 +1860,7 @@ bool LLAppViewer::doFrame()
 					|| !gFocusMgr.getAppHasFocus()))
 			{
 				// Sleep if we're not rendering, or the window is minimized.
-				static LLCachedControl<S32> s_bacground_yeild_time(gSavedSettings, "back", 40);
+				static LLCachedControl<S32> s_bacground_yeild_time(gSavedSettings, "BackgroundYieldTime", 40);
 				S32 milliseconds_to_sleep = llclamp((S32)s_bacground_yeild_time, 0, 1000);
 				// don't sleep when BackgroundYieldTime set to 0, since this will still yield to other threads
 				// of equal priority on Windows
