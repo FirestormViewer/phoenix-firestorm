@@ -13,7 +13,6 @@
 	</text>
 	<name_list name="hud_list">
 		<name_list.columns name="art_value" label="Время (μs)" tool_tip="Время, затраченное на рендеринг этого HUD (микросекунды) "/>
-		<name_list.columns name="complex_value" label="ARC" tool_tip="Сложность (ARC) на основе стандартных правил."/>
 		<name_list.columns name="name" label="Имя" tool_tip="Нажмите 'X' чтобы отсоединить"/>
 	</name_list>
 </panel>
