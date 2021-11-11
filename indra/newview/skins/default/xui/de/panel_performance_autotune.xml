@@ -24,4 +24,12 @@ Tuning-Limit
 	<text name="distance_desc1">
 		Beim Anpassen der Szenerie-Parameter wird Auto-Anpassung die Sichtweite zwischen dem Minimum und der Präferenz optimieren.
 	</text>
+	<text name="sundry_lbl">
+		Verschiedene Einstellungen
+	</text>
+	<check_box label="Optimierung von eigenem Avatar erlauben" name="alow_self_impostor" tool_tip="Falls aktiviert, kann der Viewer den eigenen Avatar als Impostor darstellen." />
+	<check_box label="Optimierte Renderzeit anzeigen" name="show_tuned_art" tool_tip="Falls aktiviert, wird in der Zeit-Spalte die aktuelle Renderzeit und nicht die Renderzeit vor Optimierung angezeigt." />
+	<text name="sundry_desc1">
+Diese Optionen kontrollieren eher subtile Einstellungen. In der Online-Hilfe finden sich weitere Informationen darüber, was diese genau bedeuten.
+	</text>
 </panel>

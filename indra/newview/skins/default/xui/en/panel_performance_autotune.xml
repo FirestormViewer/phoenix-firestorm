@@ -208,10 +208,10 @@ height="19"
 label="Show optimized render time"
 layout="topleft"
 follows="top|left"
-left_pad="40"
+left_delta="0"
 name="show_tuned_art"
 tool_tip="When enabled the Time column shows the current render time not the pre-tuning render time."
-top_delta="0"
+top_pad="0"
 width="190"
 label_wrap="true" />
 <text
