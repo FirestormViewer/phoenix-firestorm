@@ -9145,6 +9145,7 @@ void LLVOAvatar::updateTooSlow()
 {
 	FSZone;
 	static LLCachedControl<bool> alwaysRenderFriends(gSavedSettings, "AlwaysRenderFriends");
+	static LLCachedControl<bool> allowSelfImpostor(gSavedSettings, "FSAllowSelfImpostor");
 	const auto id = getID();
 
 	// mTooSlow - Is the avatar flagged as being slow (includes shadow time)
@@ -9200,7 +9201,7 @@ void LLVOAvatar::updateTooSlow()
 		{
 			bool render_friend_or_exception =  	( alwaysRenderFriends && LLAvatarTracker::instance().isBuddy( id ) ) ||
 												( getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER ); 
-			if(!render_friend_or_exception)
+			if( (!isSelf() || allowSelfImpostor) && !render_friend_or_exception  )
 			{
 				// Note: slow rendering Friends still get their shadows zapped.
 				mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= FSPerfStats::renderAvatarMaxART_ns);

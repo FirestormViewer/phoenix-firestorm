@@ -551,6 +551,7 @@ void FSFloaterPerformance::populateObjectList()
 
 void FSFloaterPerformance::populateNearbyList()
 {
+    static LLCachedControl<bool> showTunedART(gSavedSettings, "FSShowTunedART");
     S32 prev_pos = mNearbyList->getScrollPos();
     LLUUID prev_selected_id = mNearbyList->getStringUUIDSelectedItem();
     std::string current_sort_col = mNearbyList->getSortColumnName();
@@ -612,7 +613,7 @@ void FSFloaterPerformance::populateNearbyList()
 
             row[1]["column"] = "art_value";
             row[1]["type"] = "text";
-            if (is_slow)
+            if (is_slow && !showTunedART)
             {
                 row[1]["value"] = llformat( "%.2f", FSPerfStats::raw_to_us( avatar->getLastART() ) );
             }

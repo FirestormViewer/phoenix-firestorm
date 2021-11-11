@@ -153,7 +153,7 @@ top="0">
          name="art_visual"
          width="90" />
          <name_list.columns
-         label="ART (μs)"
+         label="Time (μs)"
          tool_tip="Avatar Render Time. Actual time taken to render this avatar before any auto-tuning (in microseconds)."
          name="art_value"
          width="80" />
@@ -215,7 +215,7 @@ top="0">
   <check_box
     height="16"
     initial_value="true"
-    label="Hide avatars completely (good for landscape photos)"
+    label="Hide avatars completely."
     layout="topleft"
     name="hide_avatars"
     top_delta="15"
