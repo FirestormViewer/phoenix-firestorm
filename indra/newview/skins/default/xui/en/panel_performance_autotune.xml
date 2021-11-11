@@ -185,7 +185,7 @@ height="36"
 layout="topleft"
 top_pad="20"
 left="20"
-name="distance_lbl"
+name="sundry_lbl"
 width="100"
 wrap="true">
 Sundry Settings

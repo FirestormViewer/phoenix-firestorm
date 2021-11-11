@@ -16,7 +16,7 @@
 	</text>
 	<name_list name="nearby_list">
 		<name_list.columns tool_tip="Wykres słupkowy pokazujący aktualny czas renderowania (w tym autodostrajanie) jako % najwolniejszego." name="art_visual" />
-		<name_list.columns tool_tip="Czas renderowania awatara (Avatar Render Time, ART). Rzeczywisty czas potrzebny na wyrenderowanie tego awatara przed automatycznym dostrajaniem (w mikrosekundach)." name="art_value" />
+		<name_list.columns label="Czas (μs)" tool_tip="Czas renderowania awatara (Avatar Render Time, ART). Rzeczywisty czas potrzebny na wyrenderowanie tego awatara przed automatycznym dostrajaniem (w mikrosekundach)." name="art_value" />
 		<name_list.columns tool_tip="Złożoność (ARC) oparta na standardowych zasadach SL." name="complex_value" />
 		<name_list.columns tool_tip="Pokazuje jakiekolwiek strojenie. I=Awatar zastępczy, S=brak cienia." name="state" />
 		<name_list.columns label="Imię" name="name"/>
@@ -26,7 +26,7 @@
 	</text>
 	<button label="Wyjątki..." name="exceptions_btn" />
 	<check_box label="Znajomi zawsze z pełnymi detalami" name="display_friends" />
-	<check_box label="Całkowicie ukryj awatary (dobre do zdjęć krajobrazu)" name="hide_avatars" />
+	<check_box label="Całkowicie ukryj awatary" name="hide_avatars" />
 	<text name="name_tags_textbox">
 		Imiona:
 	</text>

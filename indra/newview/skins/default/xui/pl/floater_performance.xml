@@ -27,7 +27,7 @@
 				Poczekaj 5-10 sekund, by nastąpiły zmiany.
 			</text>
 			<text name="frame_breakdown">
-				Tutaj pojawi się analiza klatek.
+				[----------------- Tutaj pojawi się analiza klatek. -----------------]
 			</text>
 		</panel>
 		<panel name="target_subpanel">
@@ -45,7 +45,7 @@
 			<spinner name="target_fps" tooltip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
 		</panel>
 	</panel>
-	<panel name="panel_performance_main">    
+	<panel name="panel_performance_main">
 		<panel name="settings_subpanel">
 			<text name="settings_lbl">
 				Ustawienia grafiki
