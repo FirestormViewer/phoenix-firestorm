@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
 bevel_style="none"
-follows="left|top"
+follows="left|top|right"
 height="530"
 width="580"
 name="panel_performance_nearby"
@@ -139,7 +139,7 @@ top="0">
     draw_heading="true"
     height="280"
     left="20"
-    follows="left|top"
+    follows="left|top|right"
     layout="topleft"
     sort_column="art_value"
     short_names="true"

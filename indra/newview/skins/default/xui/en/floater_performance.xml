@@ -6,6 +6,10 @@
  help_topic="fs_performance_floater"
  save_rect="true"
  title="Improve Graphics Speed (Experimental)"
+ can_resize="true"
+ min_height="652"
+ max_height="652"
+ min_width="580"
  width="580">
  <floater.string name="frame_stats">
   Frame: [TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% TASKS:[IDLE_FRAME_PCT]%
@@ -33,7 +37,7 @@
 </floater.string>
   <panel
    bevel_style="none"
-   follows="left|top"
+   follows="left|top|right"
    height="600"
    width="580"
    name="panel_top"
@@ -47,7 +51,7 @@
      background_opaque="false"
      border="false"
      bevel_style="none"
-     follows="left|top"
+     follows="left|top|right"
      height="55"
      width="560"
      name="fps_subpanel"
@@ -90,7 +94,7 @@
       width="150">
      </text>
       <text
-      follows="left|top"
+      follows="top|right"
       text_color="White"
       height="40"
       layout="topleft"
@@ -102,7 +106,7 @@
       Allow 5-10 seconds for changes to take full effect.
     </text>
   <text
-   follows="left|top"
+   follows="left|top|right"
    font="MonospaceMedium"
    text_color="White"
    height="20"
@@ -121,7 +125,7 @@
   background_opaque="false"
   border="false"
   bevel_style="none"
-  follows="left|top"
+  follows="left|top|right"
   height="55"
   width="560"
   name="target_subpanel"
@@ -142,6 +146,7 @@
     </text>
     <check_box
     control_name="FSAutoTuneFPS"
+    follows="top|right"
     height="16"
     initial_value="false"
     label="Auto tune for FPS"
@@ -165,7 +170,7 @@
       Automatically adjust settings to maintain FPS
     </text>
     <combo_box
-    follows="left|top"
+    follows="top|right"
     font="SansSerif"
     text_color="White"
     height="20"
@@ -190,7 +195,7 @@
       font="SansSerifLarge"
       tooltip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
       layout="topleft"
-      follows="left|right|top"
+      follows="right|top"
       right="-55"
       top_pad="-32"
       height="40"
@@ -220,7 +225,7 @@
 </panel>
 <panel
 bevel_style="none"
-follows="left|top"
+follows="left|top|right"
 height="540"
 width="580"
 name="panel_performance_main"
@@ -231,57 +236,57 @@ top="115">
       <panel
       bg_alpha_color="PanelGray"
       background_visible="true"
-           background_opaque="false"
-           border="true"
-           bevel_style="none"
-           follows="left|top"
-           height="50"
-           width="560"
-           name="settings_subpanel"
-           layout="topleft"
-           left="10"
-           top_pad="10">
-              <text
-               follows="left|top"
-               font="SansSerifLarge"
-               text_color="White"
-               height="20"
-               layout="topleft"
-               left="10"
-               name="settings_lbl"
-               top="7"
-               width="180">
-                Graphics settings
-              </text>
-              <text
-               follows="left|top"
-               font="SansSerif"
-               text_color="White"
-               height="20"
-               layout="topleft"
-               left="10"
-               name="settings_desc"
-               top_pad="0"
-               width="395">
-                Choose settings for distance, water, lighting and more.
-              </text>
-              <icon
-               height="16"
-               width="16"
-               image_name="Arrow_Right_Off"
-               mouse_opaque="true"
-               name="icon_arrow3"
-               follows="right|top"
-               top="19"
-               right="-20"/>
-            </panel>
+      background_opaque="false"
+      border="true"
+      bevel_style="none"
+      follows="left|top|right"
+      height="50"
+      width="560"
+      name="settings_subpanel"
+      layout="topleft"
+      left="10"
+      top_pad="10">
+        <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="settings_lbl"
+          top="7"
+          width="180">
+          Graphics settings
+        </text>
+        <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="settings_desc"
+          top_pad="0"
+          width="395">
+          Choose settings for distance, water, lighting and more.
+        </text>
+        <icon
+          height="16"
+          width="16"
+          image_name="Arrow_Right_Off"
+          mouse_opaque="true"
+          name="icon_arrow3"
+          follows="right|top"
+          top="19"
+          right="-20"/>
+      </panel>
       <panel
       bg_alpha_color="PanelGray"
       background_visible="true"
       background_opaque="false"
       border="true"
       bevel_style="none"
-      follows="left|top"
+      follows="left|top|right"
       height="50"
       width="560"
       name="nearby_subpanel"
@@ -312,7 +317,7 @@ top="115">
       Manage which nearby avatars are fully displayed.
     </text>
     <text
-    follows="left|top"
+    follows="top|right"
     font="SansSerifSmall"
     text_color="White"
     height="28"
@@ -326,7 +331,7 @@ drawing
 avatars
       </text>
       <text
-      follows="left|top"
+      follows="top|right"
       font="SansSerifHuge"
       text_color="White"
       height="20"
@@ -353,7 +358,7 @@ avatars
      background_opaque="false"
      border="true"
      bevel_style="none"
-     follows="left|top"
+     follows="left|top|right"
      height="50"
      width="560"
      name="complexity_subpanel"
@@ -399,7 +404,7 @@ avatars
      background_opaque="false"
      border="true"
      bevel_style="none"
-     follows="left|top"
+     follows="left|top|right"
      height="50"
      width="560"
      name="huds_subpanel"
@@ -430,7 +435,7 @@ avatars
           Removing unnecessary HUDs may improve speed.
       </text>
       <text
-      follows="left|top"
+      follows="top|right"
       font="SansSerifSmall"
       text_color="White"
       height="28"
@@ -444,7 +449,7 @@ drawing
 HUDs
      </text>
      <text
-     follows="left|top"
+     follows="top|right"
      font="SansSerifHuge"
      text_color="White"
      height="20"
