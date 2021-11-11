@@ -93,11 +93,6 @@
       tool_tip="Time taken to render this HUD (microseconds)"
       width="80" />
     <name_list.columns 
-      label="ARC"
-      name="complex_value"
-      tool_tip="Complexity (ARC) based on standard rules."
-      width="40" />
-    <name_list.columns 
       label="Name"
       tool_tip="Click the 'X' to detach"
       name="name" />

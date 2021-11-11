@@ -396,7 +396,6 @@ void FSFloaterPerformance::populateHUDList()
 
         auto hud_render_time_raw = FSPerfStats::StatsRecorder::get(HudType, hud_object_complexity.objectId, FSPerfStats::StatType_t::RENDER_GEOMETRY);
         LLSD item;
-        S32 obj_cost_short = llmax((S32)hud_object_complexity.objectsCost / 1000, 1);
 
         item["special_id"] = hud_object_complexity.objectId;
         item["target"] = LLNameListCtrl::SPECIAL;
@@ -414,15 +413,10 @@ void FSFloaterPerformance::populateHUDList()
         row[1]["value"] = llformat( "%.2f",FSPerfStats::raw_to_us(hud_render_time_raw) );
         row[1]["font"]["name"] = "SANSSERIF";
 
-        row[2]["column"] = "complex_value";
+        row[2]["column"] = "name";
         row[2]["type"] = "text";
-        row[2]["value"] = std::to_string(obj_cost_short);
+        row[2]["value"] = hud_object_complexity.objectName;
         row[2]["font"]["name"] = "SANSSERIF";
-
-        row[3]["column"] = "name";
-        row[3]["type"] = "text";
-        row[3]["value"] = hud_object_complexity.objectName;
-        row[3]["font"]["name"] = "SANSSERIF";
 
         LLScrollListItem* obj = mHUDList->addElement(item);
         if (obj)
@@ -433,12 +427,7 @@ void FSFloaterPerformance::populateHUDList()
                 {
                     value_text->setAlignment(LLFontGL::RIGHT);
                 }
-                // ARC value
-                value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(2));
-                if (value_text)
-                {
-                    value_text->setAlignment(LLFontGL::RIGHT);
-                }
+
                 // name
                 value_text = dynamic_cast<LLScrollListText*>(obj->getColumn(3));
                 if (value_text)
