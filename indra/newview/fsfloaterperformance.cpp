@@ -120,7 +120,7 @@ BOOL FSFloaterPerformance::postBuild()
     if (tgt_panel)
     {
        tgt_panel->getChild<LLButton>("target_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
-       tgt_panel->getChild<LLComboBox>("FSTuningFPSStrategy")->setCurrentByIndex(gSavedSettings.getU32("FPSTuningFPSStrategy"));
+       tgt_panel->getChild<LLComboBox>("FSTuningFPSStrategy")->setCurrentByIndex(gSavedSettings.getU32("FSTuningFPSStrategy"));
     }
 
     initBackBtn(mNearbyPanel);
