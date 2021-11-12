@@ -59,6 +59,8 @@
 // void drawBoxOutline(const LLVector3& pos,const LLVector3& size);	// llspatialpartition.cpp
 // </FS:Zi>
 #include "llnetmap.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
+
 
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
 static U32 sBufferUsage = GL_STREAM_DRAW_ARB;
@@ -604,9 +606,14 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
     {
         return;
     }
+    FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_SHADOWS);
+
     LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
     BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
-    if (impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
+    // <FS:Beq> no shadows if the shadows are causing this avatar to breach the limit.
+    //if (impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
+    if (avatarp->isTooSlowWithShadows() || impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
+    // </FS:Beq>
     {
         // No shadows for impostored (including jellydolled) or invisible avs.
         return;
@@ -1545,6 +1552,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 {
 	if (pass == -1)
 	{
+		LL_PROFILE_ZONE_NAMED("pass -1");
 		for (S32 i = 1; i < getNumPasses(); i++)
 		{ //skip foot shadows
 			prerender();
@@ -1561,7 +1569,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		return;
 	}
 
-	LLVOAvatar *avatarp = NULL;
+	LLVOAvatar *avatarp { nullptr };
 
 	if (single_avatar)
 	{
@@ -1569,6 +1577,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	}
 	else
 	{
+		LL_PROFILE_ZONE_NAMED("Find avatarp"); // <FS:Beq/> Tracy markup
 		const LLFace *facep = mDrawFace[0];
 		if (!facep->getDrawable())
 		{
@@ -1581,13 +1590,18 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
+	FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
 
     LL_RECORD_BLOCK_TIME(FTM_RENDER_CHARACTERS);
 
 	// <FS:Zi> Add avatar hitbox debug
+	{
+		LL_PROFILE_ZONE_NAMED("cached control renderhitboxes");
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
+
 	if (render_hitbox && pass == 2)
 	{
+		LL_PROFILE_ZONE_NAMED("render_hitbox");
 		LLGLSLShader* current_shader_program = NULL;
 
 		// load the debug output shader
@@ -1666,10 +1680,14 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 			}
 		}
 	}
-	// </FS:Zi>
-
+	}// </FS:Zi>
+// <FS:Beq> rendertime Tracy annotations
+{
+	LL_PROFILE_ZONE_NAMED("check fully_loaded"); 
+// </FS:Beq>
 	if (!single_avatar && !avatarp->isFullyLoaded() )
 	{
+		LL_PROFILE_ZONE_NAMED("avatar not loaded");
 		if (pass==0 && (!gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) || LLViewerPartSim::getMaxPartCount() <= 0))
 		{
 			// debug code to draw a sphere in place of avatar
@@ -1692,9 +1710,14 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		// don't render please
 		return;
 	}
+}// <FS:Beq/> rendertime Tracy annotations
 
 	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor() && !single_avatar;
 
+// <FS:Beq> rendertime Tracy annotations
+{
+	LL_PROFILE_ZONE_NAMED("check appearance");
+// </FS:Beq> 
 	if (( /*avatarp->isInMuteList() // <FS:Ansariel> Partially undo MAINT-5700: Draw imposter for muted avatars
 		  ||*/ impostor 
 		  || (LLVOAvatar::AOA_NORMAL != avatarp->getOverallAppearance() && !avatarp->needsImpostorUpdate()) ) && pass != 0)
@@ -1702,6 +1725,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{ //don't draw anything but the impostor for impostored avatars
 		return;
 	}
+}// <FS:Beq/> rendertime Tracy annotations
 	
 	if (pass == 0 && !impostor && LLPipeline::sUnderWaterRender)
 	{ //don't draw foot shadows under water
@@ -1717,6 +1741,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 0)
 	{
+		LL_PROFILE_ZONE_NAMED("pass 0");
 		if (!LLPipeline::sReflectionRender)
 		{
 			LLVOAvatar::sNumVisibleAvatars++;
@@ -1725,6 +1750,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 //		if (impostor || (LLVOAvatar::AV_DO_NOT_RENDER == avatarp->getVisualMuteSettings() && !avatarp->needsImpostorUpdate()))
 		if (impostor || (LLVOAvatar::AOA_NORMAL != avatarp->getOverallAppearance() && !avatarp->needsImpostorUpdate()))
 		{
+			LL_PROFILE_ZONE_NAMED("render impostor");
 			if (LLPipeline::sRenderDeferred && !LLPipeline::sReflectionRender && avatarp->mImpostor.isComplete()) 
 			{
 				// <FS:Ansariel> FIRE-9179: Crash fix
@@ -1750,6 +1776,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 1)
 	{
+		LL_PROFILE_ZONE_NAMED("render rigid meshes (eyeballs)");
 		// render rigid meshes (eyeballs) first
 		avatarp->renderRigid();
 		return;
@@ -1757,12 +1784,15 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 3)
 	{
+		LL_PROFILE_ZONE_NAMED("pass 3");
 		if (is_deferred_render)
 		{
+			LL_PROFILE_ZONE_NAMED("deferred rigged simple");
 			renderDeferredRiggedSimple(avatarp);
 		}
 		else
 		{
+			LL_PROFILE_ZONE_NAMED("non-deferred rigged");
 			renderRiggedSimple(avatarp);
 
 			if (LLPipeline::sRenderDeferred)
@@ -1786,12 +1816,15 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 4)
 	{
+		LL_PROFILE_ZONE_NAMED("pass 4");
 		if (is_deferred_render)
 		{
+			LL_PROFILE_ZONE_NAMED("deferred rigged bump");
 			renderDeferredRiggedBump(avatarp);
 		}
 		else
 		{
+			LL_PROFILE_ZONE_NAMED("non-deferred fullbright");
 			renderRiggedFullbright(avatarp);
 		}
 
@@ -1800,6 +1833,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (is_deferred_render && pass >= 5 && pass <= 21)
 	{
+		LL_PROFILE_ZONE_NAMED("deferred passes 5-21");
 		S32 p = pass-5;
 
 		if (p != 1 &&
@@ -1807,6 +1841,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 			p != 9 &&
 			p != 13)
 		{
+			LL_PROFILE_ZONE_NAMED("deferred rigged material");
 			renderDeferredRiggedMaterial(avatarp, p);
 		}
 		return;
@@ -1817,6 +1852,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 5)
 	{
+		LL_PROFILE_ZONE_NAMED("rigged shiny");
 		renderRiggedShinySimple(avatarp);
 				
 		return;
@@ -1824,6 +1860,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 6)
 	{
+		LL_PROFILE_ZONE_NAMED("rigged FB shiny");
 		renderRiggedFullbrightShiny(avatarp);
 		return;
 	}
@@ -1832,10 +1869,12 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		if (pass == 7)
 		{
+			LL_PROFILE_ZONE_NAMED("pass 7 rigged Alpha");
 			renderRiggedAlpha(avatarp);
 
 			if (LLPipeline::sRenderDeferred && !is_post_deferred_render)
 			{ //render transparent materials under water
+				LL_PROFILE_ZONE_NAMED("rigged Alpha Blend");
 				LLGLEnable blend(GL_BLEND);
 
 				gGL.setColorMask(true, true);
@@ -1856,6 +1895,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 		if (pass == 8)
 		{
+			LL_PROFILE_ZONE_NAMED("pass 8 rigged FB Alpha");
 			renderRiggedFullbrightAlpha(avatarp);
 			return;
 		}
@@ -1872,6 +1912,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 			}
 
 			{
+				LL_PROFILE_ZONE_NAMED("post deferred rigged Alpha");
 				LLGLEnable blend(GL_BLEND);
 				renderDeferredRiggedMaterial(avatarp, p);
 			}
@@ -1879,6 +1920,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		}
 		else if (pass == 9)
 		{
+			LL_PROFILE_ZONE_NAMED("pass 9 - rigged glow");
 			renderRiggedGlow(avatarp);
 			return;
 		}
@@ -1886,6 +1928,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if (pass == 13)
 	{
+		LL_PROFILE_ZONE_NAMED("pass 13 - rigged glow");
 		renderRiggedGlow(avatarp);
 		
 		return;
@@ -1893,6 +1936,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	
 	if ((sShaderLevel >= SHADER_LEVEL_CLOTH))
 	{
+		LL_PROFILE_ZONE_NAMED("shader level > CLOTH");
 		LLMatrix4 rot_mat;
 		LLViewerCamera::getInstance()->getMatrixToLocal(rot_mat);
 		LLMatrix4 cfr(OGL_TO_CFR_ROTATION);
@@ -1918,6 +1962,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 
 	if( !single_avatar || (avatarp == single_avatar) )
 	{
+		LL_PROFILE_ZONE_NAMED("renderSkinned");
 		avatarp->renderSkinned();
 	}
 }
@@ -2236,6 +2281,7 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 
     LLUUID lastMeshId;
 
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};// <FS:Beq/> Perf stats capture
 	for (U32 i = 0; i < mRiggedFace[type].size(); ++i)
 	{
         LL_PROFILE_ZONE_NAMED("Render Rigged Face");
@@ -2259,7 +2305,14 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 		{
 			continue;
 		}
-
+	
+		// <FS:Beq> Capture render times
+		if(vobj->isAttachment())
+		{
+			trackAttachments( vobj, true, &ratPtr);
+		}
+		// </FS:Beq>
+		
 		LLVolume* volume = vobj->getVolume();
 		S32 te = face->getTEOffset();
 
@@ -2536,11 +2589,15 @@ static LLTrace::BlockTimerStatHandle FTM_RIGGED_VBO("Rigged VBO");
 void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 {
 	LL_RECORD_BLOCK_TIME(FTM_RIGGED_VBO);
-
+	// <FS:Beq> render stats collection
+	if(!avatar)return; // in theory this never happens...right
+	FSPerfStats::RecordAvatarTime T( avatar->getID(), ( (LLPipeline::sShadowRender)?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ) );
+	// </FS:Beq>
 	//update rigged vertex buffers
 	for (U32 type = 0; type < NUM_RIGGED_PASSES; ++type)
 	{
         LL_PROFILE_ZONE_NAMED("Pass");
+		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};			
 		for (U32 i = 0; i < mRiggedFace[type].size(); ++i)
 		{
             LL_PROFILE_ZONE_NAMED("Face");
@@ -2557,7 +2614,12 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 			{
 				continue;
 			}
-
+			// <FS:Beq> Capture render times
+			if(vobj->isAttachment())
+			{
+				trackAttachments( vobj, true, &ratPtr );
+			}
+			// </FS:Beq>
 			LLVolume* volume = vobj->getVolume();
 			S32 te = face->getTEOffset();
 

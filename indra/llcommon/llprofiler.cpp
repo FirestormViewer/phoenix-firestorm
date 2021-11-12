@@ -28,4 +28,5 @@
 namespace LLProfiler
 {
 	bool	active{false};
+
 }

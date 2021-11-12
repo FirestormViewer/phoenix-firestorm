@@ -48,6 +48,7 @@
 #include "lldrawpoolwater.h"
 #include "llspatialpartition.h"
 #include "llglcommonfunc.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 BOOL LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
 
@@ -329,6 +330,7 @@ void LLDrawPoolAlpha::render(S32 pass)
 
 void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
 {
+	LL_PROFILE_ZONE_SCOPED;
 	for (LLCullResult::sg_iterator i = gPipeline.beginAlphaGroups(); i != gPipeline.endAlphaGroups(); ++i)
 	{
 		LLSpatialGroup* group = *i;
@@ -337,9 +339,20 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
 		{
 			LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[LLRenderPass::PASS_ALPHA];	
 
+			std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 			{
 				LLDrawInfo& params = **k;
+				// <FS:Beq> Capture render times
+				if(params.mFace)
+				{
+					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+					if(vobj->isAttachment())
+					{
+						trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+					}
+				}
+				// </FS:Beq>
 				
 				if (params.mParticle)
 				{
@@ -461,8 +474,17 @@ void LLDrawPoolAlpha::renderFullbrights(U32 mask, std::vector<LLDrawInfo*>& full
     fullbright_shader->bind();
     fullbright_shader->uniform1f(LLShaderMgr::EMISSIVE_BRIGHTNESS, 1.0f);
     
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq> Render time Stats collection
     for (LLDrawInfo* draw : fullbrights)
     {
+		// <FS:Beq> Capture render times
+		LL_PROFILE_ZONE_NAMED("Fullbrights");
+		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
+		if(vobj && vobj->isAttachment())
+		{
+			trackAttachments( vobj, draw->mFace->isState(LLFace::RIGGED), &ratPtr );
+		}
+		// </FS:Beq>
         bool tex_setup = TexSetup(draw, false, fullbright_shader);
 
         LLGLEnableFunc stencil_test(GL_STENCIL_TEST, draw->mSelected, &LLGLCommonFunc::selected_stencil_test);
@@ -508,8 +530,18 @@ void LLDrawPoolAlpha::renderEmissives(U32 mask, std::vector<LLDrawInfo*>& emissi
     // don't touch color, add to alpha (glow)
 	gGL.blendFunc(LLRender::BF_ZERO, LLRender::BF_ONE, LLRender::BF_ONE, LLRender::BF_ONE); 
  
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
     for (LLDrawInfo* draw : emissives)
     {
+		// <FS:Beq> Capture render times
+		LL_PROFILE_ZONE_NAMED("Emissives");
+		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
+		if(vobj && vobj->isAttachment())
+		{
+			trackAttachments( vobj, draw->mFace->isState(LLFace::RIGGED), &ratPtr );
+		}
+		// </FS:Beq>
+
         bool tex_setup = TexSetup(draw, false, emissive_shader);
         drawEmissive(mask, draw);
         RestoreTexSetup(tex_setup);
@@ -567,6 +599,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 
 			LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[LLRenderPass::PASS_ALPHA];
 
+			std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 			{
                 LL_PROFILE_ZONE_NAMED("ra - push batch")
@@ -582,6 +615,18 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					// </FS:Beq>
 					continue;
 				}
+
+				// <FS:Beq> Capture render times
+				if(params.mFace)
+				{
+					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+					
+					if(vobj->isAttachment())
+					{
+						trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+					}
+				}
+				// </FS:Beq>
 
 				// Fix for bug - NORSPEC-271
 				// If the face is more than 90% transparent, then don't update the Depth buffer for Dof
@@ -732,7 +777,9 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					gGL.matrixMode(LLRender::MM_MODELVIEW);
 				}
 			}
-
+			// <FS:Beq> performance stats
+			ratPtr.reset(); // force the final batch to terminate to avoid double counting on the subsidiary batches for FB and Emmissives
+			// </FS:Beq>
 
             bool rebind = false;
             if (batch_fullbrights)

@@ -138,7 +138,7 @@ public:                                     \
 	{
         LL_PROFILE_ZONE_SCOPED;
 	#if defined(LL_WINDOWS)
-        void* ret = _aligned_malloc(size, align);
+        void* ret = (_aligned_malloc)(size, align);
 	#else
         char* aligned = NULL;
 		void* mem = malloc( size + (align - 1) + sizeof(void*) );
@@ -160,7 +160,7 @@ public:                                     \
         LL_PROFILE_ZONE_SCOPED;
         LL_PROFILE_FREE(ptr);
 	#if defined(LL_WINDOWS)
-		(_aligned_free)(ptr); // <FS:Beq/> reinstate parens to avoid the recursive #define (not nice)
+		(_aligned_free)(ptr);
 	#else
 		if (ptr)
 		{

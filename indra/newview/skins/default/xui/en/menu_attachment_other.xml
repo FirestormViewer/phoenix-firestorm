@@ -169,18 +169,18 @@
    <menu_item_separator />
     
       <menu_item_check
-        name="RenderNormally"
-        label="Render Normally">
+        name="AlwaysRenderFully"
+        label="Always Display Full Detail">
         <menu_item_check.on_check
           function="Avatar.CheckImpostorMode"
-          parameter="0" />
+          parameter="2" />
 	    <menu_item_check.on_click
 	      function="Avatar.SetImpostorMode"
-	      parameter="0" />
+	      parameter="2" />
       </menu_item_check>
       <menu_item_check
         name="DoNotRender"
-        label="Do Not Render">
+        label="Never Display Full Detail">
         <menu_item_check.on_check
           function="Avatar.CheckImpostorMode"
           parameter="1" />
@@ -189,14 +189,14 @@
 	      parameter="1" />
       </menu_item_check>
       <menu_item_check
-        name="AlwaysRenderFully"
-        label="Render Fully">
-        <menu_item_check.on_check
+        name="RenderNormally"
+        label="Remove From Display Exceptions">
+        <menu_item_check.on_visible
           function="Avatar.CheckImpostorMode"
-          parameter="2" />
+          parameter="4" />
 	    <menu_item_check.on_click
 	      function="Avatar.SetImpostorMode"
-	      parameter="2" />
+	      parameter="0" />
       </menu_item_check>
 
   <menu_item_call

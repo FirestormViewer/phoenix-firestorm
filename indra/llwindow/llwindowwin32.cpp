@@ -1795,8 +1795,6 @@ const	S32   max_format  = (S32)num_formats - 1;
 		return FALSE;
 	}
 
-	// LL_PROFILER_GPU_CONTEXT // <FS:Beq/> Move this the other side of the init
-
 	if (!gGLManager.initGL())
 	{
 		close();
@@ -1804,7 +1802,7 @@ const	S32   max_format  = (S32)num_formats - 1;
 		return FALSE;
 	}
 	
-	LL_PROFILER_GPU_CONTEXT // <FS:Beq/> Tracy context now after the init
+	LL_PROFILER_GPU_CONTEXT
 
 	// Disable vertical sync for swap
     toggleVSync(enable_vsync);
