@@ -183,7 +183,7 @@ namespace FSPerfStats
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
             using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
-            #ifdef FS_HAS_TELEMETRY
+            #ifdef FS_HAS_TELEMETRY_SUPPORT
             static char avstr[36];
             static char obstr[36];
             #endif
@@ -285,11 +285,9 @@ namespace FSPerfStats
 
             while( enabled() && !LLApp::isExiting() )
             {
-                FSZoneN("perf batch");
                 auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
                 if(count)
                 {
-                    FSZoneValue(count);
                     // LL_INFOS("perfstats") << "processing " << count << " updates." << LL_ENDL;
                     for(auto i =0; i < count; i++)
                     {
