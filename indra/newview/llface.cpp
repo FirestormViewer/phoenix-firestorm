@@ -130,6 +130,7 @@ void planarProjection(LLVector2 &tc, const LLVector4a& normal,
 
 void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	mLastUpdateTime = gFrameTimeSeconds;
 	mLastMoveTime = 0.f;
 	mLastSkinTime = gFrameTimeSeconds;
@@ -1283,12 +1284,10 @@ bool LLFace::canRenderAsMask()
 }
 
 
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_VOLUME("Volume VB Cache");
-
 //static 
 void LLFace::cacheFaceInVRAM(const LLVolumeFace& vf)
 {
-	LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_VOLUME);
+    LL_PROFILE_ZONE_SCOPED;
 	U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 |
 				LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_NORMAL;
 	
@@ -1354,41 +1353,13 @@ void push_for_transform(LLVertexBuffer* buff, U32 source_count, U32 dest_count)
 	}
 }
 
-static LLTrace::BlockTimerStatHandle FTM_FACE_GET_GEOM("Face Geom");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_POSITION("Position");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_NORMAL("Normal");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_TEXTURE("Texture");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_COLOR("Color");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_EMISSIVE("Emissive");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_WEIGHTS("Weights");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_TANGENT("Binormal");
-
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK("Face Feedback");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK_POSITION("Feedback Position");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK_NORMAL("Feedback  Normal");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK_TEXTURE("Feedback  Texture");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK_COLOR("Feedback  Color");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK_EMISSIVE("Feedback  Emissive");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_FEEDBACK_BINORMAL("Feedback Binormal");
-
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_INDEX("Index");
-static LLTrace::BlockTimerStatHandle FTM_FACE_GEOM_INDEX_TAIL("Tail");
-static LLTrace::BlockTimerStatHandle FTM_FACE_POSITION_STORE("Pos");
-static LLTrace::BlockTimerStatHandle FTM_FACE_TEXTURE_INDEX_STORE("TexIdx");
-static LLTrace::BlockTimerStatHandle FTM_FACE_POSITION_PAD("Pad");
-static LLTrace::BlockTimerStatHandle FTM_FACE_TEX_DEFAULT("Default");
-static LLTrace::BlockTimerStatHandle FTM_FACE_TEX_QUICK("Quick");
-static LLTrace::BlockTimerStatHandle FTM_FACE_TEX_QUICK_NO_XFORM("No Xform");
-static LLTrace::BlockTimerStatHandle FTM_FACE_TEX_QUICK_XFORM("Xform");
-static LLTrace::BlockTimerStatHandle FTM_FACE_TEX_QUICK_PLANAR("Quick Planar");
-
 BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 							   const S32 &f,
 								const LLMatrix4& mat_vert_in, const LLMatrix3& mat_norm_in,
 								const U16 &index_offset,
 								bool force_rebuild)
 {
-	LL_RECORD_BLOCK_TIME(FTM_FACE_GET_GEOM);
+    LL_PROFILE_ZONE_SCOPED;
 	llassert(verify());
 
 	if (volume.getNumVolumeFaces() <= f) {
@@ -1549,7 +1520,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	// INDICES
 	if (full_rebuild)
 	{
-		LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_INDEX);
+        LL_PROFILE_ZONE_NAMED("getGeometryVolume - indices");
 		mVertexBuffer->getIndexStrider(indicesp, mIndicesIndex, mIndicesCount, map_range);
 
 		volatile __m128i* dst = (__m128i*) indicesp.get();
@@ -1565,7 +1536,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		}
 
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_INDEX_TAIL);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - indices tail");
 			U16* idx = (U16*) dst;
 
 			for (S32 i = end*8; i < num_indices; ++i)
@@ -1632,7 +1603,8 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		!volume.isUnique()) //source volume is NOT flexi
 	{ //use transform feedback to pack vertex buffer
 		//gGLDebugLoggingEnabled = TRUE;
-		LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_FEEDBACK);
+
+        LL_PROFILE_ZONE_NAMED("getGeometryVolume - transform feedback");
 		LLGLEnable discard(GL_RASTERIZER_DISCARD);
 		LLVertexBuffer* buff = (LLVertexBuffer*) vf.mVertexBuffer.get();
 
@@ -1650,7 +1622,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_pos)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_FEEDBACK_POSITION);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf position");
 			gTransformPositionProgram.bind();
 
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_VERTEX, mGeomIndex, mGeomCount);
@@ -1675,7 +1647,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_color)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_FEEDBACK_COLOR);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf color");
 			gTransformColorProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_COLOR, mGeomIndex, mGeomCount);
@@ -1691,7 +1663,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_emissive)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_FEEDBACK_EMISSIVE);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf emissive");
 			gTransformColorProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_EMISSIVE, mGeomIndex, mGeomCount);
@@ -1712,7 +1684,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_normal)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_FEEDBACK_NORMAL);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf normal");
 			gTransformNormalProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_NORMAL, mGeomIndex, mGeomCount);
@@ -1725,7 +1697,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_tangent)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_TANGENT);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf tangent");
 			gTransformTangentProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_TANGENT, mGeomIndex, mGeomCount);
@@ -1738,7 +1710,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_tcoord)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_FEEDBACK_TEXTURE);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf tcoord");
 			gTransformTexCoordProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_TEXCOORD0, mGeomIndex, mGeomCount);
@@ -1777,7 +1749,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_tcoord)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_TEXTURE);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tcoord");
 									
 			//bump setup
 			LLVector4a binormal_dir( -sin_ang, cos_ang, 0.f );
@@ -1907,12 +1879,12 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 				if (texgen != LLTextureEntry::TEX_GEN_PLANAR)
 				{
-					LL_RECORD_BLOCK_TIME(FTM_FACE_TEX_QUICK);
+                    LL_PROFILE_ZONE_NAMED("getGeometryVolume - texgen");
 					if (!do_tex_mat)
 					{
 						if (!do_xform)
 						{
-							LL_RECORD_BLOCK_TIME(FTM_FACE_TEX_QUICK_NO_XFORM);
+                            LL_PROFILE_ZONE_NAMED("ggv - texgen 1");
 
 							// <FS:ND> Don't round up, or there's high risk to write past buffer
 
@@ -1925,7 +1897,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						}
 						else
 						{
-							LL_RECORD_BLOCK_TIME(FTM_FACE_TEX_QUICK_XFORM);
+                            LL_PROFILE_ZONE_NAMED("ggv - texgen 2");
 							F32* dst = (F32*) tex_coords0.get();
 							LLVector4a* src = (LLVector4a*) vf.mTexCoords;
 
@@ -1965,9 +1937,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						for (S32 i = 0; i < num_vertices; i++)
 						{	
 							LLVector2 tc(vf.mTexCoords[i]);
-							//LLVector4a& norm = vf.mNormals[i];
-							//LLVector4a& center = *(vf.mCenter);
-
+							
 							LLVector3 tmp(tc.mV[0], tc.mV[1], 0.f);
 							tmp = tmp * *mTextureMatrix;
 							tc.mV[0] = tmp.mV[0];
@@ -1978,7 +1948,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 				}
 				else
 				{ //no bump, tex gen planar
-					LL_RECORD_BLOCK_TIME(FTM_FACE_TEX_QUICK_PLANAR);
+                    LL_PROFILE_ZONE_NAMED("getGeometryVolume - texgen planar");
 					if (do_tex_mat)
 					{
 						for (S32 i = 0; i < num_vertices; i++)
@@ -2023,7 +1993,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			}
 			else
 			{ //bump mapped or has material, just do the whole expensive loop
-				LL_RECORD_BLOCK_TIME(FTM_FACE_TEX_DEFAULT);
+                LL_PROFILE_ZONE_NAMED("getGeometryVolume - texgen default");
 
 				std::vector<LLVector2> bump_tc;
 		
@@ -2183,7 +2153,6 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			LLVector4a* end = src+num_vertices;
 			//LLVector4a* end_64 = end-4;
 
-			//LL_RECORD_TIME_BLOCK(FTM_FACE_GEOM_POSITION);
 			llassert(num_vertices > 0);
 		
 			mVertexBuffer->getVertexStrider(vert, mGeomIndex, mGeomCount, map_range);
@@ -2220,53 +2189,19 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 			LLVector4a tmp;
 
-			{
-				//LL_RECORD_TIME_BLOCK(FTM_FACE_POSITION_STORE);
-
-				/*if (num_vertices > 4)
-				{ //more than 64 bytes
-					while (src < end_64)
-					{	
-						_mm_prefetch((char*)src + 64, _MM_HINT_T0);
-						_mm_prefetch((char*)dst + 64, _MM_HINT_T0);
-
-						mat_vert.affineTransform(*src, res0);
-						tmp.setSelectWithMask(mask, texIdx, res0);
-						tmp.store4a((F32*) dst);
-
-						mat_vert.affineTransform(*(src+1), res1);
-						tmp.setSelectWithMask(mask, texIdx, res1);
-						tmp.store4a((F32*) dst+4);
-
-						mat_vert.affineTransform(*(src+2), res2);
-						tmp.setSelectWithMask(mask, texIdx, res2);
-						tmp.store4a((F32*) dst+8);
-
-						mat_vert.affineTransform(*(src+3), res3);
-						tmp.setSelectWithMask(mask, texIdx, res3);
-						tmp.store4a((F32*) dst+12);
-
-						dst += 16;
-						src += 4;
-					}
-				}*/
-
-				while (src < end)
-				{	
-					mat_vert.affineTransform(*src++, res0);
-					tmp.setSelectWithMask(mask, texIdx, res0);
-					tmp.store4a((F32*) dst);
-					dst += 4;
-				}
+			
+			while (src < end)
+			{	
+				mat_vert.affineTransform(*src++, res0);
+				tmp.setSelectWithMask(mask, texIdx, res0);
+				tmp.store4a((F32*) dst);
+				dst += 4;
 			}
-
+			
+			while (dst < end_f32)
 			{
-				//LL_RECORD_TIME_BLOCK(FTM_FACE_POSITION_PAD);
-				while (dst < end_f32)
-				{
-					res0.store4a((F32*) dst);
-					dst += 4;
-				}
+				res0.store4a((F32*) dst);
+				dst += 4;
 			}
 
 			if (map_range)
@@ -2300,7 +2235,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		
 		if (rebuild_tangent)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_TANGENT);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tangent");
 			mVertexBuffer->getTangentStrider(tangent, mGeomIndex, mGeomCount, map_range);
 			F32* tangents = (F32*) tangent.get();
 			
@@ -2336,7 +2271,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	
 		if (rebuild_weights && vf.mWeights)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_WEIGHTS);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - weight");
 			mVertexBuffer->getWeight4Strider(wght, mGeomIndex, mGeomCount, map_range);
 			// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
 			//F32* weights = (F32*) wght.get();
@@ -2354,7 +2289,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_color && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_COLOR) )
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_COLOR);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - color");
 			mVertexBuffer->getColorStrider(colors, mGeomIndex, mGeomCount, map_range);
 
 			LLVector4a src;
@@ -2385,7 +2320,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_emissive)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_EMISSIVE);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - emissive");
 			LLStrider<LLColor4U> emissive;
 			mVertexBuffer->getEmissiveStrider(emissive, mGeomIndex, mGeomCount, map_range);
 

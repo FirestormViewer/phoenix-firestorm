@@ -46,7 +46,7 @@ class LLWindow;
 #define MEGA_BYTES_TO_BYTES(x) ((x) << 20)
 
 //============================================================================
-class LLImageGL : public LLRefCount, public LLTrace::MemTrackable<LLImageGL>
+class LLImageGL : public LLRefCount
 {
 	friend class LLTexUnit;
 public:
@@ -342,6 +342,8 @@ public:
     LLWindow* mWindow;
     void* mContext;
     LLAtomicBool mFinished;
+
+    std::queue<std::function<void()>> mPendingCallbackQ;
 
     static LLImageGLThread* sInstance;
 };

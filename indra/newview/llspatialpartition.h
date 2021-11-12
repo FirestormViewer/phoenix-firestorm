@@ -67,14 +67,14 @@ void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLCo
 void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color);
 //</FS:BEQ>
 
-class LLDrawInfo : public LLRefCount, public LLTrace::MemTrackableNonVirtual<LLDrawInfo, 16>
+class LLDrawInfo : public LLRefCount
 {
+    LL_ALIGN_NEW;
 protected:
 	~LLDrawInfo();	
 	
 public:
 	LLDrawInfo(const LLDrawInfo& rhs)
-	:	LLTrace::MemTrackableNonVirtual<LLDrawInfo, 16>("LLDrawInfo")
 	{
 		*this = rhs;
 	}

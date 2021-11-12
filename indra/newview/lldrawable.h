@@ -59,16 +59,13 @@ const U32 SILHOUETTE_HIGHLIGHT = 0;
 
 // All data for new renderer goes into this class.
 LL_ALIGN_PREFIX(16)
-class LLDrawable 
-:	public LLViewerOctreeEntryData,
-	public LLTrace::MemTrackable<LLDrawable, 16>
+class LLDrawable
+    : public LLViewerOctreeEntryData
 {
+    LL_ALIGN_NEW;
 public:
 	LLDrawable(const LLDrawable& rhs) 
-	:	LLTrace::MemTrackable<LLDrawable, 16>("LLDrawable"),
-		LLViewerOctreeEntryData(rhs),
-		mLastSkinningMatCacheFrame(0),
-		mCacheSize(0)
+        : LLViewerOctreeEntryData(rhs)
 	{
 		*this = rhs;
 	}
@@ -80,12 +77,6 @@ public:
 	}
 
 	static void initClass();
-
-	//<FS:Beq>	per frame matrix cache
-	LL_ALIGN_16(LLMatrix4a* mSkinningMatCache);
-	U32 mLastSkinningMatCacheFrame;
-	U32 mCacheSize;
-	//</FS:Beq>
 
 	LLDrawable(LLViewerObject *vobj, bool new_entry = false);
 	

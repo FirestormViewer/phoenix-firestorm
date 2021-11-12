@@ -61,9 +61,6 @@
 #include "llselectmgr.h"
 // </FS:Beq>
 
-static LLTrace::BlockTimerStatHandle FTM_FRUSTUM_CULL("Frustum Culling");
-static LLTrace::BlockTimerStatHandle FTM_CULL_REBOUND("Cull Rebound Partition");
-
 extern bool gShiftFrame;
 
 static U32 sZombieGroups = 0;
@@ -415,11 +412,6 @@ void LLSpatialGroup::rebuildMesh()
 	}
 }
 
-static LLTrace::BlockTimerStatHandle FTM_REBUILD_VBO("VBO Rebuilt");
-static LLTrace::BlockTimerStatHandle FTM_ADD_GEOMETRY_COUNT("Add Geometry");
-static LLTrace::BlockTimerStatHandle FTM_CREATE_VB("Create VB");
-static LLTrace::BlockTimerStatHandle FTM_GET_GEOMETRY("Get Geometry");
-
 void LLSpatialPartition::rebuildGeom(LLSpatialGroup* group)
 {
 	if (group->isDead() || !group->hasState(LLSpatialGroup::GEOM_DIRTY))
@@ -433,7 +425,7 @@ void LLSpatialPartition::rebuildGeom(LLSpatialGroup* group)
 		group->mLastUpdateViewAngle = group->mViewAngle;
 	}
 	
-	LL_RECORD_BLOCK_TIME(FTM_REBUILD_VBO);	
+    LL_PROFILE_ZONE_SCOPED;
 
 	group->clearDrawMap();
 	
@@ -441,15 +433,12 @@ void LLSpatialPartition::rebuildGeom(LLSpatialGroup* group)
 	U32 index_count = 0;
 	U32 vertex_count = 0;
 
-	{
-		LL_RECORD_BLOCK_TIME(FTM_ADD_GEOMETRY_COUNT);
-		addGeometryCount(group, vertex_count, index_count);
-	}
-
+    addGeometryCount(group, vertex_count, index_count);
+	
 	if (vertex_count > 0 && index_count > 0)
 	{ //create vertex buffer containing volume geometry for this node
 		{
-			LL_RECORD_BLOCK_TIME(FTM_CREATE_VB);
+
 			group->mBuilt = 1.f;
 			if (group->mVertexBuffer.isNull() ||
 				!group->mVertexBuffer->isWriteable() ||
@@ -464,7 +453,6 @@ void LLSpatialPartition::rebuildGeom(LLSpatialGroup* group)
 					group->mVertexBuffer = NULL;
 					group->mBufferMap.clear();
 				}
-				stop_glerror();
 			}
 			else
 			{
@@ -477,13 +465,11 @@ void LLSpatialPartition::rebuildGeom(LLSpatialGroup* group)
 					group->mVertexBuffer = NULL;
 					group->mBufferMap.clear();
 				}
-				stop_glerror();
 			}
 		}
 
 		if (group->mVertexBuffer)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_GET_GEOMETRY);
 			getGeometry(group);
 		}
 	}
@@ -1507,12 +1493,12 @@ void LLSpatialPartition::resetVertexBuffers()
 
 BOOL LLSpatialPartition::getVisibleExtents(LLCamera& camera, LLVector3& visMin, LLVector3& visMax)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLVector4a visMina, visMaxa;
 	visMina.load3(visMin.mV);
 	visMaxa.load3(visMax.mV);
 
 	{
-		LL_RECORD_BLOCK_TIME(FTM_CULL_REBOUND);		
 		LLSpatialGroup* group = (LLSpatialGroup*) mOctree->getListener(0);
 		group->rebound();
 	}
@@ -1534,11 +1520,11 @@ BOOL LLSpatialPartition::visibleObjectsInFrustum(LLCamera& camera)
 
 S32 LLSpatialPartition::cull(LLCamera &camera, std::vector<LLDrawable *>* results, BOOL for_select)
 {
+    LL_PROFILE_ZONE_SCOPED;
 #if LL_OCTREE_PARANOIA_CHECK
 	((LLSpatialGroup*)mOctree->getListener(0))->checkStates();
 #endif
 	{
-		LL_RECORD_BLOCK_TIME(FTM_CULL_REBOUND);		
 		LLSpatialGroup* group = (LLSpatialGroup*) mOctree->getListener(0);
 		group->rebound();
 	}
@@ -1555,37 +1541,32 @@ S32 LLSpatialPartition::cull(LLCamera &camera, std::vector<LLDrawable *>* result
 	
 S32 LLSpatialPartition::cull(LLCamera &camera, bool do_occlusion)
 {
+    LL_PROFILE_ZONE_SCOPED;
 #if LL_OCTREE_PARANOIA_CHECK
 	((LLSpatialGroup*)mOctree->getListener(0))->checkStates();
 #endif
-	{
-		LL_RECORD_BLOCK_TIME(FTM_CULL_REBOUND);		
-		LLSpatialGroup* group = (LLSpatialGroup*) mOctree->getListener(0);
-		group->rebound();
-	}
+	LLSpatialGroup* group = (LLSpatialGroup*) mOctree->getListener(0);
+	group->rebound();
 
 #if LL_OCTREE_PARANOIA_CHECK
 	((LLSpatialGroup*)mOctree->getListener(0))->validate();
 #endif
 
-	if (LLPipeline::sShadowRender)
-	{
-		LL_RECORD_BLOCK_TIME(FTM_FRUSTUM_CULL);
-		LLOctreeCullShadow culler(&camera);
-		culler.traverse(mOctree);
-	}
-	else if (mInfiniteFarClip || !LLPipeline::sUseFarClip)
-	{
-		LL_RECORD_BLOCK_TIME(FTM_FRUSTUM_CULL);		
-		LLOctreeCullNoFarClip culler(&camera);
-		culler.traverse(mOctree);
-	}
-	else
-	{
-		LL_RECORD_BLOCK_TIME(FTM_FRUSTUM_CULL);		
-		LLOctreeCull culler(&camera);
-		culler.traverse(mOctree);
-	}
+    if (LLPipeline::sShadowRender)
+    {
+        LLOctreeCullShadow culler(&camera);
+        culler.traverse(mOctree);
+    }
+    else if (mInfiniteFarClip || !LLPipeline::sUseFarClip)
+    {
+        LLOctreeCullNoFarClip culler(&camera);
+        culler.traverse(mOctree);
+    }
+    else
+    {
+        LLOctreeCull culler(&camera);
+        culler.traverse(mOctree);
+    }
 	
 	return 0;
 }
@@ -4261,8 +4242,7 @@ LLDrawInfo::LLDrawInfo(U16 start, U16 end, U32 count, U32 offset,
 					   LLViewerTexture* texture, LLVertexBuffer* buffer,
 					   bool selected,
 					   BOOL fullbright, U8 bump, BOOL particle, F32 part_size)
-:	LLTrace::MemTrackableNonVirtual<LLDrawInfo, 16>("LLDrawInfo"),
-	mVertexBuffer(buffer),
+:	mVertexBuffer(buffer),
 	mTexture(texture),
 	mTextureMatrix(NULL),
 	mModelMatrix(NULL),

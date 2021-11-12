@@ -63,22 +63,13 @@ protected:
 // 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 LL_ALIGN_PREFIX(16)
-class LLTexLayerParamAlpha : public LLTexLayerParam
+class alignas(16) LLTexLayerParamAlpha : public LLTexLayerParam
 {
+    LL_ALIGN_NEW
 public:
 	LLTexLayerParamAlpha( LLTexLayerInterface* layer );
 	LLTexLayerParamAlpha( LLAvatarAppearance* appearance );
 	/*virtual*/ ~LLTexLayerParamAlpha();
-
-	void* operator new(size_t size)
-	{
-		return ll_aligned_malloc_16(size);
-	}
-
-	void operator delete(void* ptr)
-	{
-		ll_aligned_free_16(ptr);
-	}
 
 	/*virtual*/ LLViewerVisualParam* cloneParam(LLWearable* wearable = NULL) const;
 
@@ -157,9 +148,9 @@ private:
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-LL_ALIGN_PREFIX(16)
-class LLTexLayerParamColor : public LLTexLayerParam
+class alignas(16) LLTexLayerParamColor : public LLTexLayerParam
 {
+    LL_ALIGN_NEW
 public:
 	enum EColorOperation
 	{
@@ -171,16 +162,6 @@ public:
 
 	LLTexLayerParamColor( LLTexLayerInterface* layer );
 	LLTexLayerParamColor( LLAvatarAppearance* appearance );
-
-	void* operator new(size_t size)
-	{
-		return ll_aligned_malloc_16(size);
-	}
-
-	void operator delete(void* ptr)
-	{
-		ll_aligned_free_16(ptr);
-	}
 
 	/* virtual */ ~LLTexLayerParamColor();
 
@@ -216,8 +197,8 @@ protected:
 	//virtual void onGlobalColorChanged() {}
 	virtual void onGlobalColorChanged(bool upload_bake) {}
 private:
-	LL_ALIGN_16(LLVector4a				mAvgDistortionVec);
-} LL_ALIGN_POSTFIX(16);
+	LLVector4a				mAvgDistortionVec;
+};
 
 class LLTexLayerParamColorInfo : public LLViewerVisualParamInfo
 {

@@ -111,6 +111,8 @@
 #include "llinventoryobserver.h"
 #include "fscommon.h"
 
+LLSelectMgr* LLSimpleton<LLSelectMgr>::sInstance = nullptr;
+
 LLViewerObject* getSelectedParentObject(LLViewerObject *object) ;
 //
 // Consts
@@ -226,8 +228,6 @@ void LLSelectMgr::cleanupGlobals()
 	LLSelectMgr::getInstance()->clearSelections();
 }
 
-// Build time optimization, generate this function once here
-template class LLSelectMgr* LLSingleton<class LLSelectMgr>::getInstance();
 //-----------------------------------------------------------------------------
 // LLSelectMgr()
 //-----------------------------------------------------------------------------

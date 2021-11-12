@@ -117,11 +117,9 @@ LLDrawable *LLVOWater::createDrawable(LLPipeline *pipeline)
 	return mDrawable;
 }
 
-static LLTrace::BlockTimerStatHandle FTM_UPDATE_WATER("Update Water");
-
 BOOL LLVOWater::updateGeometry(LLDrawable *drawable)
 {
-	LL_RECORD_BLOCK_TIME(FTM_UPDATE_WATER);
+    LL_PROFILE_ZONE_SCOPED;
 	LLFace *face;
 
 	if (drawable->getNumFaces() < 1)

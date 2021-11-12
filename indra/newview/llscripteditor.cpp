@@ -146,11 +146,9 @@ void LLScriptEditor::initKeywords()
 	mKeywords.initialize(LLSyntaxIdLSL::getInstance()->getKeywordsXML());
 }
 
-LLTrace::BlockTimerStatHandle FTM_SYNTAX_HIGHLIGHTING("Syntax Highlighting");
-
 void LLScriptEditor::loadKeywords()
 {
-	LL_RECORD_BLOCK_TIME(FTM_SYNTAX_HIGHLIGHTING);
+    LL_PROFILE_ZONE_SCOPED;
 	mKeywords.processTokens();
 	
 	segment_vec_t segment_list;
@@ -170,7 +168,7 @@ void LLScriptEditor::loadKeywords(const std::string& filename,
 								const std::vector<std::string>& tooltips,
 								const LLColor3& color)
 {
-	LL_RECORD_BLOCK_TIME(FTM_SYNTAX_HIGHLIGHTING);
+	LL_PROFILE_ZONE_SCOPED;
 	if (mKeywords.loadFromLegacyFile(filename))
 	{
 		S32 count = llmin(funcs.size(), tooltips.size());
@@ -196,7 +194,7 @@ void LLScriptEditor::updateSegments()
 {
 	if (mReflowIndex < S32_MAX && mKeywords.isLoaded() && mParseOnTheFly)
 	{
-		LL_RECORD_BLOCK_TIME(FTM_SYNTAX_HIGHLIGHTING);
+        LL_PROFILE_ZONE_SCOPED;
 		// HACK:  No non-ascii keywords for now
 		segment_vec_t segment_list;
 		mKeywords.findSegments(&segment_list, getWText(), mDefaultColor.get(), *this);

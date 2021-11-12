@@ -329,6 +329,14 @@ static bool handleAnisotropicChanged(const LLSD& newvalue)
 	return true;
 }
 
+static bool handleVSyncChanged(const LLSD& newvalue)
+{
+#if LL_WINDOWS
+    gViewerWindow->getWindow()->toggleVSync(newvalue.asBoolean());
+#endif
+    return true;
+}
+
 static bool handleVolumeLODChanged(const LLSD& newvalue)
 {
 	LLVOVolume::sLODFactor = llclamp((F32) newvalue.asReal(), 0.01f, MAX_LOD_FACTOR);
@@ -1104,6 +1112,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderAutoMaskAlphaNonDeferred")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
 	gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&handleRenderBumpChanged, _2));
 	gSavedSettings.getControl("RenderMaxVBOSize")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
+    gSavedSettings.getControl("RenderVSyncEnable")->getSignal()->connect(boost::bind(&handleVSyncChanged, _2));
 	gSavedSettings.getControl("RenderDeferredNoise")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
 	gSavedSettings.getControl("RenderDebugGL")->getSignal()->connect(boost::bind(&handleRenderDebugGLChanged, _2));
 	gSavedSettings.getControl("RenderDebugPipeline")->getSignal()->connect(boost::bind(&handleRenderDebugPipelineChanged, _2));

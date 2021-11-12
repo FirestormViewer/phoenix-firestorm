@@ -1307,8 +1307,6 @@ void gl_rect_2d_simple( S32 width, S32 height )
 	// </FS:Ansariel>
 }
 
-static LLTrace::BlockTimerStatHandle FTM_RENDER_SEGMENTED_RECT ("Render segmented rectangle");
-
 void gl_segmented_rect_2d_tex(const S32 left, 
 							  const S32 top, 
 							  const S32 right, 
@@ -1318,7 +1316,7 @@ void gl_segmented_rect_2d_tex(const S32 left,
 							  const S32 border_size, 
 							  const U32 edges)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_SEGMENTED_RECT);
+    LL_PROFILE_ZONE_SCOPED;
 
 	S32 width = llabs(right - left);
 	S32 height = llabs(top - bottom);
@@ -1552,7 +1550,7 @@ void gl_segmented_rect_2d_fragment_tex(const LLRect& rect,
 	const F32 end_fragment, 
 	const U32 edges)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_SEGMENTED_RECT);
+    LL_PROFILE_ZONE_SCOPED;
 	const S32 left = rect.mLeft;
 	const S32 right = rect.mRight;
 	const S32 top = rect.mTop;
@@ -1814,7 +1812,7 @@ void gl_segmented_rect_2d_fragment_tex(const LLRect& rect,
 void gl_segmented_rect_3d_tex(const LLRectf& clip_rect, const LLRectf& center_uv_rect, const LLRectf& center_draw_rect, 
 							 const LLVector3& width_vec, const LLVector3& height_vec)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_SEGMENTED_RECT);
+    LL_PROFILE_ZONE_SCOPED;
 
 	// <FS:Ansariel> Remove QUADS rendering mode
 	//gGL.begin(LLRender::QUADS);

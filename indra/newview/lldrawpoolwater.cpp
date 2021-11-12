@@ -344,7 +344,8 @@ void LLDrawPoolWater::render(S32 pass)
 // for low end hardware
 void LLDrawPoolWater::renderOpaqueLegacyWater()
 {
-	LLVOSky *voskyp = gSky.mVOSkyp;
+    LL_PROFILE_ZONE_SCOPED;
+    LLVOSky *voskyp = gSky.mVOSkyp;
 
 	LLGLSLShader* shader = NULL;
 	if (LLGLSLShader::sNoFixedFunction)
@@ -451,6 +452,7 @@ void LLDrawPoolWater::renderOpaqueLegacyWater()
 
 void LLDrawPoolWater::renderReflection(LLFace* face)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLVOSky *voskyp = gSky.mVOSkyp;
 
 	if (!voskyp)
@@ -479,6 +481,7 @@ void LLDrawPoolWater::renderReflection(LLFace* face)
 
 void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& light_diffuse, const LLVector3& light_dir, F32 light_exp)
 {
+    LL_PROFILE_ZONE_SCOPED;
     // <FS:Ansariel> Factor out instance() calls
     LLEnvironment& environment = LLEnvironment::instance();
     LLViewerCamera& camera = LLViewerCamera::instance();
@@ -693,7 +696,8 @@ void LLDrawPoolWater::shade2(bool edge, LLGLSLShader* shader, const LLColor3& li
 
 void LLDrawPoolWater::shade()
 {
-	if (!deferred_render)
+    LL_PROFILE_ZONE_SCOPED;
+    if (!deferred_render)
 	{
 		gGL.setColorMask(true, true);
 	}
