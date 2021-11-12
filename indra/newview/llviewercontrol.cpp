@@ -107,7 +107,7 @@
 #include "llviewerregion.h"
 #include "NACLantispam.h"
 #include "nd/ndlogthrottle.h"
-
+#include "fsperfstats.h"
 // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 #include "llanimationstates.h"
 
@@ -1059,6 +1059,40 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 }
 // </FS:Ansariel>
 
+// <FS:Beq> perrf floater stuffs
+void handleTargetFPSChanged(const LLSD& newValue)
+{
+	const auto targetFPS = gSavedSettings.getU32("FSTargetFPS");
+	FSPerfStats::targetFPS = targetFPS;
+}
+
+// <FS:Beq> perrf floater stuffs
+void handleAutoTuneFPSChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSAutoTuneFPS");
+	FSPerfStats::autoTune = newval;
+	if(newval && FSPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
+	{
+		gSavedSettings.setF32("FSRenderAvatarMaxART",log10(FSPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
+	}
+}
+
+void handleRenderAvatarMaxARTChanged(const LLSD& newValue)
+{
+	FSPerfStats::StatsRecorder::updateRenderCostLimitFromSettings();
+}
+void handleFPSTuningStrategyChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
+	FSPerfStats::fpsTuningStrategy = newval;
+}
+void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled");
+	FSPerfStats::StatsRecorder::setEnabled(newval);
+}
+// </FS:Beq>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1313,6 +1347,14 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Better asset cache size control
 	gSavedSettings.getControl("FSDiskCacheSize")->getSignal()->connect(boost::bind(&handleDiskCacheSizeChanged, _2));
+
+	// <FS:Beq> perf floater controls
+	gSavedSettings.getControl("FSTargetFPS")->getSignal()->connect(boost::bind(&handleTargetFPSChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneFPS")->getSignal()->connect(boost::bind(&handleAutoTuneFPSChanged, _2));
+	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
+	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
+	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
+	// </FS:Beq>
 }
 
 #if TEST_CACHED_CONTROL

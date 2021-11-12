@@ -14,17 +14,5 @@
         </layout_panel>
       </layout_stack>
     </layout_panel>
-    <layout_panel name="parent_panel3">
-      <layout_stack name="images_stack">
-        <layout_panel name="images_container">
-          <text name="image_caption_left">
-            Ваш первый шаг - остров обучения. Найти портал выхода!
-          </text>
-          <text name="image_caption_right">
-            Тогда исследуйте Социальный остров и познакомьтесь с другими новыми жителями!
-          </text>
-        </layout_panel>
-      </layout_stack>
-    </layout_panel>
   </layout_stack>
 </panel>

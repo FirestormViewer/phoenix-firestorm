@@ -1142,6 +1142,7 @@ public:
 	
 	virtual S32 frustumCheck(const LLViewerOctreeGroup* group)
 	{
+		LL_PROFILE_ZONE_SCOPED;
 		S32 res = AABBInFrustumNoFarClipGroupBounds(group);
 		if (res != 0)
 		{
@@ -1152,6 +1153,7 @@ public:
 
 	virtual S32 frustumCheckObjects(const LLViewerOctreeGroup* group)
 	{
+		LL_PROFILE_ZONE_SCOPED;
 		S32 res = AABBInFrustumNoFarClipObjectBounds(group);
 		if (res != 0)
 		{
@@ -1162,6 +1164,7 @@ public:
 
 	virtual void processGroup(LLViewerOctreeGroup* base_group)
 	{
+		LL_PROFILE_ZONE_SCOPED;
 		LLSpatialGroup* group = (LLSpatialGroup*)base_group;
 		if (group->needsUpdate() ||
 			group->getVisible(LLViewerCamera::sCurCameraID) < LLDrawable::getCurrentFrame() - 1)

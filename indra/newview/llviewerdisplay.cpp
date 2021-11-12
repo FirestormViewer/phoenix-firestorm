@@ -85,6 +85,7 @@
 // [/RLVa:KB]
 #include "llpresetsmanager.h"
 #include "fsdata.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
@@ -280,6 +281,7 @@ static LLTrace::BlockTimerStatHandle FTM_EEP_UPDATE("Env Update");
 // Paint the display!
 void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 {
+	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_DISPLAY); // <FS:Beq/> render time capture - This is the main stat for overall rendering.
 	LL_RECORD_BLOCK_TIME(FTM_RENDER);
 
 	LLViewerCamera& camera = LLViewerCamera::instance(); // <FS:Ansariel> Factor out calls to getInstance
@@ -1192,6 +1194,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 void render_hud_attachments()
 {
+	FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_HUDS); // <FS:Beq/> render time capture - Primary contributor to HUDs (though these end up in render batches)
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.pushMatrix();
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
@@ -1399,6 +1402,7 @@ bool setup_hud_matrices(const LLRect& screen_region)
 
 void render_ui(F32 zoom_factor, int subfield)
 {
+	FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_UI ); // <FS:Beq/> render time capture - Primary UI stat can have HUD time overlap (TODO)
 	LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 
 	LLGLState::checkStates();
@@ -1492,6 +1496,7 @@ static LLTrace::BlockTimerStatHandle FTM_SWAP("Swap");
 
 void swap()
 {
+	FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_SWAP ); // <FS:Beq/> render time capture - Swap buffer time - can signify excessive data transfer to/from GPU
 	LL_RECORD_BLOCK_TIME(FTM_SWAP);
 
 	if (gDisplaySwapBuffers)

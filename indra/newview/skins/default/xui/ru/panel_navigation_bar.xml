@@ -21,8 +21,8 @@
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="favorites_bar_visibility_panel">
-			<favorites_bar name="favorite" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам в Second Life!">
-				<label name="favorites_bar_label" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам в Second Life!">
+			<favorites_bar name="favorite" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам!">
+				<label name="favorites_bar_label" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам!">
 					Избранные закладки
 				</label>
 				<chevron_button name="more_btn" tool_tip="Показать больше в 'Избранные'"/>

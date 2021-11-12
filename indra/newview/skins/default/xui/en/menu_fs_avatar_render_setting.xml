@@ -3,15 +3,15 @@
 	layout="topleft"
 	name="Avatar Render Settings Menu">
 	<menu_item_call
-		label="Render Normally (removes from list)"
+		label="Always Full Detail"
 		layout="topleft"
-		name="av_render_normal">
+		name="av_render_always">
 		<menu_item_call.on_click
 			function="Avatar.ChangeRenderSetting"
-			parameter="0" />
+			parameter="2" />
 	</menu_item_call>
 	<menu_item_call
-		label="Do Not Render"
+		label="Never Full Detail"
 		layout="topleft"
 		name="av_render_never">
 		<menu_item_call.on_click
@@ -19,11 +19,11 @@
 			parameter="1" />
 	</menu_item_call>
 	<menu_item_call
-		label="Render Fully"
+		label="Remove From Exceptions"
 		layout="topleft"
-		name="av_render_always">
+		name="av_render_normal">
 		<menu_item_call.on_click
 			function="Avatar.ChangeRenderSetting"
-			parameter="2" />
+			parameter="0" />
 	</menu_item_call>
 </context_menu>
