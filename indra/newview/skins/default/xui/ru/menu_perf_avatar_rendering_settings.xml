@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Settings">
+	<menu_item_check label="Всегда полностью" name="always_render"/>
+	<menu_item_check label="Никогда полностью" name="never_render"/>
+	<menu_item_check label="Удалить из исключений" name="default"/>
+	<menu_item_call label="Инспектировать аватар" name="inspect"/>
+	<menu_item_call label="Приблизить к аватару" tool_tip="переместите камеру, чтобы просмотреть этот аватар." name="zoom"/>
+</context_menu>
