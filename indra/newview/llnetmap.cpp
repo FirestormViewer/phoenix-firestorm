@@ -288,6 +288,9 @@ void LLNetMap::setScale( F32 scale )
 
 void LLNetMap::draw()
 {
+    LL_PROFILE_ZONE_SCOPED;
+ 	static LLFrameTimer map_timer;
+
 	// <FS:Ansariel>: Synchronize netmap scale throughout instances
 	if (mScale != sScale)
 	{
@@ -302,7 +305,6 @@ void LLNetMap::draw()
 	}
 // <FS:Ansariel> Aurora Sim
 
-	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);

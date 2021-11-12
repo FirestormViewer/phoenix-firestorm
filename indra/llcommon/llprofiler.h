@@ -36,12 +36,8 @@
 #define LL_PROFILER_CONFIGURATION           LL_PROFILER_CONFIG_FAST_TIMER
 #endif
 
-// <FS:Beq> active switch for deferred profiling
-namespace LLProfiler
-{
-    extern bool active;
-}
-// </FS:Beq>
+extern thread_local bool gProfilerEnabled;
+
 #if defined(LL_PROFILER_CONFIGURATION) && (LL_PROFILER_CONFIGURATION > LL_PROFILER_CONFIG_NONE)
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY || LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
         #define TRACY_ENABLE         1
@@ -60,7 +56,7 @@ namespace LLProfiler
 
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY
         #define LL_PROFILER_FRAME_END                   FrameMark
-        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name )
+        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
         #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ) // C string
         #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name )   // C string
         // <FS:Beq> revert change that obscures custom FTM zones. We may want to may FTM Zones unique in future.
@@ -120,7 +116,7 @@ namespace LLProfiler
     #endif
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
         #define LL_PROFILER_FRAME_END                   FrameMark
-        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name )
+        #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
         #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ) // C string
         #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name )   // C string
 

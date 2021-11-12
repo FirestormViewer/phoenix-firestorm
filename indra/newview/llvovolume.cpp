@@ -3747,7 +3747,7 @@ const LLMeshSkinInfo* LLVOVolume::getSkinInfo() const
 {
     if (getVolume())
     {
-        return gMeshRepo.getSkinInfo(getVolume()->getParams().getSculptID(), this);
+        return gMeshRepo.getSkinInfo(getMeshID(), this);
     }
     else
     {
@@ -5043,10 +5043,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 	LLMatrix4a mat[kMaxJoints];
 	U32 maxJoints = LLSkinningUtil::getMeshJointCount(skin);
-	//<FS:Beq> Skinning Matrix caching
-	//LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4)mat, maxJoints, skin, avatar);
-	LLSkinningUtil::initSkinningMatrixPalette(mat, maxJoints, skin, avatar);
-	//</FS:Beq>
+    LLSkinningUtil::initSkinningMatrixPalette(mat, maxJoints, skin, avatar);
 
     S32 rigged_vert_count = 0;
     S32 rigged_face_count = 0;
@@ -5062,8 +5059,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 		if ( weight )
 		{
             LLSkinningUtil::checkSkinWeights(weight, dst_face.mNumVertices, skin);
-			LLMatrix4a bind_shape_matrix;
-			bind_shape_matrix.loadu(skin->mBindShapeMatrix);
+			const LLMatrix4a& bind_shape_matrix = skin->mBindShapeMatrix;
 
 			LLVector4a* pos = dst_face.mPositions;
 

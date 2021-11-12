@@ -680,11 +680,7 @@ void LLFeatureManager::applyBaseMasks()
 	}
 
 	// now all those wacky ones
-	if (!gGLManager.mHasFragmentShader)
-	{
-		maskFeatures("NoPixelShaders");
-	}
-	if (!gGLManager.mHasVertexShader || !mGPUSupported)
+	if (!mGPUSupported)
 	{
 		maskFeatures("NoVertexShaders");
 	}

@@ -1617,8 +1617,15 @@ BOOL LLViewerWindow::handleCloseRequest(LLWindow *window)
 
 void LLViewerWindow::handleQuit(LLWindow *window)
 {
-	LL_INFOS() << "Window forced quit" << LL_ENDL;
-	LLAppViewer::instance()->forceQuit();
+	if (gNonInteractive)
+	{
+		LLAppViewer::instance()->requestQuit();
+	}
+	else
+	{
+		LL_INFOS() << "Window forced quit" << LL_ENDL;
+		LLAppViewer::instance()->forceQuit();
+	}
 }
 
 void LLViewerWindow::handleResize(LLWindow *window,  S32 width,  S32 height)
@@ -2069,6 +2076,16 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 	
 	LLFontManager::initClass();
+	// Init font system, load default fonts and generate basic glyphs
+	// currently it takes aprox. 0.5 sec and we would load these fonts anyway
+	// before login screen.
+	LLFontGL::initClass( gSavedSettings.getF32("FontScreenDPI"),
+		mDisplayScale.mV[VX],
+		mDisplayScale.mV[VY],
+		gDirUtilp->getAppRODataDir(),
+		gSavedSettings.getString("FSFontSettingsFile"),
+		gSavedSettings.getF32("FSFontSizeAdjustment"));
+
 
 	//
 	// We want to set this stuff up BEFORE we initialize the pipeline, so we can turn off
@@ -2145,20 +2162,10 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		
 	// Init the image list.  Must happen after GL is initialized and before the images that
 	// LLViewerWindow needs are requested.
-	LLImageGL::initClass(LLViewerTexture::MAX_GL_IMAGE_CATEGORY) ;
+	LLImageGL::initClass(mWindow, LLViewerTexture::MAX_GL_IMAGE_CATEGORY) ;
 	gTextureList.init();
 	LLViewerTextureManager::init() ;
 	gBumpImageList.init();
-	
-	// Init font system, but don't actually load the fonts yet
-	// because our window isn't onscreen and they take several
-	// seconds to parse.
-	LLFontGL::initClass( gSavedSettings.getF32("FontScreenDPI"),
-								mDisplayScale.mV[VX],
-								mDisplayScale.mV[VY],
-								gDirUtilp->getAppRODataDir(),
-								gSavedSettings.getString("FSFontSettingsFile"),
-								gSavedSettings.getF32("FSFontSizeAdjustment"));
 	
 	// Create container for all sub-views
 	LLView::Params rvp;
@@ -2245,6 +2252,8 @@ void LLViewerWindow::initBase()
 	LL_DEBUGS("AppInit") << "initializing edit menu" << LL_ENDL;
 	initialize_edit_menu();
 	initialize_spellcheck_menu(); // <FS:Zi> Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them
+
+    LLFontGL::loadCommonFonts();
 
 	// <FS:Ansariel> Move console further down in the view hierarchy to not float in front of floaters!
 	// Console
@@ -2374,6 +2383,14 @@ void LLViewerWindow::initBase()
 
 void LLViewerWindow::initWorldUI()
 {
+	if (gNonInteractive)
+	{
+		gIMMgr = LLIMMgr::getInstance();
+		LLNavigationBar::getInstance();
+		gFloaterView->pushVisibleAll(FALSE);
+		return;
+	}
+	
 	S32 height = mRootView->getRect().getHeight();
 	S32 width = mRootView->getRect().getWidth();
 	LLRect full_window(0, height, width, 0);
@@ -2384,25 +2401,28 @@ void LLViewerWindow::initWorldUI()
 	//getRootView()->sendChildToFront(gFloaterView);
 	//getRootView()->sendChildToFront(gSnapshotFloaterView);
 
-	// <FS:Ansariel> Group notices, IMs and chiclets position
-	//LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
-	LLPanel* chiclet_container;
-	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+	if (!gNonInteractive)
 	{
-		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
-		getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		// <FS:Ansariel> Group notices, IMs and chiclets position
+		//LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+		LLPanel* chiclet_container;
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+		{
+			chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+			getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		}
+		else
+		{
+			getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+			chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
+		}
+		// </FS:Ansariel> Group notices, IMs and chiclets position
+		LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
+		chiclet_bar->setShape(chiclet_container->getLocalRect());
+		chiclet_bar->setFollowsAll();
+		chiclet_container->addChild(chiclet_bar);
+		chiclet_container->setVisible(TRUE);
 	}
-	else
-	{
-		getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
-		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
-	}
-	// </FS:Ansariel> Group notices, IMs and chiclets position
-	LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
-	chiclet_bar->setShape(chiclet_container->getLocalRect());
-	chiclet_bar->setFollowsAll();
-	chiclet_container->addChild(chiclet_bar);
-	chiclet_container->setVisible(TRUE);
 
 	LLRect morph_view_rect = full_window;
 	morph_view_rect.stretch( -STATUS_BAR_HEIGHT );
@@ -2514,77 +2534,81 @@ void LLViewerWindow::initWorldUI()
 		}
 		gToolBarView->setVisible(TRUE);
 	}
-// <FS:AW  opensim destinations and avatar picker>
-// 	LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-// 	if (destinations)
-// 	{
-// 		destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-// 		std::string url = gSavedSettings.getString("DestinationGuideURL");
-// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
-// 		destinations->navigateTo(url, "text/html");
-// 	}
-// 	LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-// 	if (avatar_picker)
-// 	{
-// 		avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-// 		std::string url = gSavedSettings.getString("AvatarPickerURL");
-// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
-// 		avatar_picker->navigateTo(url, "text/html");
-// 	}
-	std::string destination_guide_url;
+
+	if (!gNonInteractive)
+	{
+		// <FS:AW  opensim destinations and avatar picker>
+		// LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+		// if (destinations)
+		// {
+		// 	destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+		// 	std::string url = gSavedSettings.getString("DestinationGuideURL");
+		// 	url = LLWeb::expandURLSubstitutions(url, LLSD());
+		// 	destinations->navigateTo(url, "text/html");
+		// }
+		// LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+		// if (avatar_picker)
+		// {
+		// 	avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+		// 	std::string url = gSavedSettings.getString("AvatarPickerURL");
+		// 	url = LLWeb::expandURLSubstitutions(url, LLSD());
+		// 	avatar_picker->navigateTo(url, "text/html");
+		// }
+		std::string destination_guide_url;
 #ifdef OPENSIM // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+			if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+			{
+				destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+			}
 		}
-	}
-	else
+		else
 #endif // OPENSIM  // <FS:AW optional opensim support>
-	{
-		destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
-	}
-
-	if(!destination_guide_url.empty())
-	{	
-		LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-		if (destinations)
 		{
-			destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-			destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
-			LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
-			destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
+			destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
 		}
-	}
 
-	std::string avatar_picker_url;
+		if(!destination_guide_url.empty())
+		{	
+			LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+			if (destinations)
+			{
+				destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+				destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
+				LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
+				destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
+			}
+		}
+
+		std::string avatar_picker_url;
 #ifdef OPENSIM // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+			if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+			{
+				avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+			}
 		}
-	}
-	else
+		else
 #endif // OPENSIM  // <FS:AW optional opensim support>
-	{
-		avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
-	}
-
-	if(!avatar_picker_url.empty())
-	{	
-		LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-		if (avatar_picker)
 		{
-			avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-			avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
-			LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
-			avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+			avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
 		}
- 	}
-// </FS:AW  opensim destinations and avatar picker>
+
+		if(!avatar_picker_url.empty())
+		{	
+			LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+			if (avatar_picker)
+			{
+				avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+				avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
+				LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
+				avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+			}
+		}
+		// </FS:AW  opensim destinations and avatar picker>
+	}
 
 	// <FS:Zi> Autohide main chat bar if applicable
 	BOOL visible=!gSavedSettings.getBOOL("AutohideChatBar");
@@ -2847,7 +2871,7 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 			mWindow->setMinSize(min_window_width, min_window_height);
 
 			LLCoordScreen window_rect;
-			if (mWindow->getSize(&window_rect))
+			if (!gNonInteractive && mWindow->getSize(&window_rect))
 			{
 			// Only save size if not maximized
 				gSavedSettings.setU32("WindowWidth", window_rect.mX);
@@ -4263,8 +4287,15 @@ void LLViewerWindow::updateLayout()
 
 void LLViewerWindow::updateMouseDelta()
 {
+#if LL_WINDOWS
+    LLCoordCommon delta; 
+    mWindow->getCursorDelta(&delta);
+    S32 dx = delta.mX;
+    S32 dy = delta.mY;
+#else
 	S32 dx = lltrunc((F32) (mCurrentMousePoint.mX - mLastMousePoint.mX) * LLUI::getScaleFactor().mV[VX]);
 	S32 dy = lltrunc((F32) (mCurrentMousePoint.mY - mLastMousePoint.mY) * LLUI::getScaleFactor().mV[VY]);
+#endif
 
 	//RN: fix for asynchronous notification of mouse leaving window not working
 	LLCoordWindow mouse_pos;
@@ -4516,14 +4547,14 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 				gGL.diffuseColor4fv(color.mV);
 				//decomp has physics mesh, render that mesh
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
 			{
 				LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				glPolygonOffset(offset_factor, offset_units);
 				gGL.diffuseColor4fv(line_color.mV);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
 
 		}
@@ -4548,10 +4579,10 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				gGL.diffuseColor4fv(color.mV);
 				//decomp has physics mesh, render that mesh
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				gGL.diffuseColor4fv(line_color.mV);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
 		}
 	}//End depth test for hidden geometry
@@ -4566,7 +4597,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glPolygonOffset(offset_factor, offset_units);
 			gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 		}
 		{
 			gGL.diffuseColor4fv(line_color.mV);
@@ -4574,7 +4605,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glPolygonOffset(offset_factor, offset_units);
 			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 		}
 	}
 	else
@@ -4598,11 +4629,11 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			gGL.diffuseColor4fv(color.mV);
 			//decomp has physics mesh, render that mesh
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			gGL.diffuseColor4fv(line_color.mV);
 			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 		}
 	}
 
@@ -4730,16 +4761,11 @@ void renderNonMeshHullPhysics(LLVOVolume* vovolume, LLVolume* volume, LLColor4 c
 
 		llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
 
-		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
 		gGL.diffuseColor4fv(color.mV);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 	}
 	else
 	{
@@ -5011,11 +5037,11 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 			{
 				gGL.diffuseColor4fv(line_color.mV);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
 				gGL.diffuseColor4fv(color.mV);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 			}
 			else
 			{
@@ -6525,6 +6551,7 @@ void LLViewerWindow::setup3DRender()
 
 void LLViewerWindow::setup3DViewport(S32 x_offset, S32 y_offset)
 {
+	LL_PROFILE_ZONE_SCOPED
 	gGLViewport[0] = mWorldViewRectRaw.mLeft + x_offset;
 	gGLViewport[1] = mWorldViewRectRaw.mBottom + y_offset;
 	gGLViewport[2] = mWorldViewRectRaw.getWidth();
@@ -6780,8 +6807,6 @@ void LLViewerWindow::initFonts(F32 zoom_factor)
 								gDirUtilp->getAppRODataDir(),
 								gSavedSettings.getString("FSFontSettingsFile"),
 								gSavedSettings.getF32("FSFontSizeAdjustment"));
-	// Force font reloads, which can be very slow
-	LLFontGL::loadDefaultFonts();
 }
 
 void LLViewerWindow::requestResolutionUpdate()

@@ -1646,9 +1646,7 @@ void pushVerts(LLVolume* volume)
 	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 	{
 		const LLVolumeFace& face = volume->getVolumeFace(i);
-		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mPositions, NULL, face.mNumIndices, face.mIndices);
-		LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mNumVertices, face.mPositions, NULL, face.mNumIndices, face.mIndices);
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mPositions, NULL, face.mNumIndices, face.mIndices);
 	}
 }
 
@@ -2415,7 +2413,12 @@ void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLCo
 		if (!decomp->mBaseHullMesh.empty())
 		{
 			gGL.diffuseColor4fv(color.mV);
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mBaseHullMesh.mPositions, decomp->mBaseHullMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mBaseHullMesh.mPositions);
+
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            gGL.diffuseColor4fv(line_color.mV);
+            LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mBaseHullMesh.mPositions);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		else
 		{
@@ -2435,13 +2438,11 @@ void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLCo
 void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color)
 {
 	gGL.diffuseColor4fv(color.mV);
-	LLVertexBuffer::drawArrays(LLRender::TRIANGLES, mesh.mPositions, mesh.mNormals);
-	LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
+	LLVertexBuffer::drawArrays(LLRender::TRIANGLES, mesh.mPositions);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glPolygonOffset(3.f, 3.f);
 	gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
 	gGL.diffuseColor4fv(line_color.mV);
-	LLVertexBuffer::drawArrays(LLRender::TRIANGLES, mesh.mPositions, mesh.mNormals);
+	LLVertexBuffer::drawArrays(LLRender::TRIANGLES, mesh.mPositions);
 	gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
@@ -2511,6 +2512,9 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume)
 	gGL.pushMatrix();
 	gGL.multMatrix((F32*) volume->getRelativeXform().mMatrix);
 		
+    LLGLEnable(GL_POLYGON_OFFSET_LINE);
+    glPolygonOffset(3.f, 3.f);
+
 	if (type == LLPhysicsShapeBuilderUtil::PhysicsShapeSpecification::USER_MESH)
 	{
 		//<FS:Beq> FIRE-23053 Physics shape display fixes
@@ -2540,12 +2544,12 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume)
 			{ 
 				//decomp has physics mesh, render that mesh
 				gGL.diffuseColor4fv(color.mV);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 								
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				gGL.diffuseColor4fv(line_color.mV);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
 			else
 			{ //no mesh or decomposition, render base hull
@@ -2675,16 +2679,12 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume)
 				LLVertexBuffer::unbind();
 
 				llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
-							
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-				//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+				
+                LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 				
 				gGL.diffuseColor4fv(color.mV);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-				//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 				
 			}
 			else
@@ -2764,11 +2764,11 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume)
 			{
 				gGL.diffuseColor4fv(line_color.mV);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+				LLVertexBuffer::drawElements(LLRender::TRIANGLES,phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
 				gGL.diffuseColor4fv(color.mV);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 			}
 			else
 			{
@@ -3310,7 +3310,7 @@ void renderRaycast(LLDrawable* drawablep)
 						if (LLGLSLShader::sNoFixedFunction)
 						{
 							gGL.diffuseColor4f(0.f, 1.f, 1.f, 0.5f);
-							LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mNumVertices, face.mPositions, NULL, face.mNumIndices, face.mIndices);
+							LLVertexBuffer::drawElements(LLRender::TRIANGLES, face.mPositions, NULL, face.mNumIndices, face.mIndices);
 						}
 						else
 						{
@@ -3319,7 +3319,7 @@ void renderRaycast(LLDrawable* drawablep)
 							gGL.diffuseColor4f(0,1,1,0.5f);
 							glVertexPointer(3, GL_FLOAT, sizeof(LLVector4a), face.mPositions);
 							gGL.syncMatrices();
-						LL_PROFILER_GPU_ZONEC( "gl.DrawElements", 0x60FF60 );
+							LL_PROFILER_GPU_ZONEC( "gl.DrawElements", 0x60FF60 );
 							glDrawElements(GL_TRIANGLES, face.mNumIndices, GL_UNSIGNED_SHORT, face.mIndices);
 						// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
 						}

@@ -356,7 +356,6 @@ S32		LLPipeline::sUseOcclusion = 0;
 bool	LLPipeline::sDelayVBUpdate = true;
 bool	LLPipeline::sAutoMaskAlphaDeferred = true;
 bool	LLPipeline::sAutoMaskAlphaNonDeferred = false;
-bool	LLPipeline::sDisableShaders = false;
 bool	LLPipeline::sRenderTransparentWater = true;
 bool	LLPipeline::sRenderBump = true;
 bool	LLPipeline::sBakeSunlight = false;
@@ -377,7 +376,6 @@ bool	LLPipeline::sRenderAttachedLights = true;
 bool	LLPipeline::sRenderAttachedParticles = true;
 bool	LLPipeline::sRenderDeferred = false;
 S32		LLPipeline::sVisibleLightCount = 0;
-F32		LLPipeline::sMinRenderSize = 0.f;
 bool	LLPipeline::sRenderingHUDs;
 F32     LLPipeline::sDistortionWaterClipPlaneMargin = 1.0125f;
 F32 LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
@@ -525,6 +523,10 @@ void LLPipeline::init()
 	sRenderParticles = true; // <FS:LO> flag to hold correct, user selected, status of particles
 
 	if (gSavedSettings.getBOOL("DisableAllRenderTypes"))
+	{
+		clearAllRenderTypes();
+	}
+	else if (gNonInteractive)
 	{
 		clearAllRenderTypes();
 	}
@@ -1298,6 +1300,12 @@ void LLPipeline::refreshCachedSettings()
 	RenderAutoHideSurfaceAreaLimit = gSavedSettings.getF32("RenderAutoHideSurfaceAreaLimit");
 	RenderSpotLight = nullptr;
 	updateRenderDeferred();
+
+	if (gNonInteractive)
+	{
+		LLVOAvatar::sMaxNonImpostors = 1;
+		LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
+	}
 }
 
 void LLPipeline::releaseGLBuffers()
@@ -1541,10 +1549,7 @@ void LLPipeline::restoreGL()
 
 bool LLPipeline::canUseVertexShaders()
 {
-	if (sDisableShaders ||
-		!gGLManager.mHasVertexShader ||
-		!gGLManager.mHasFragmentShader ||
-		(assertInitialized() && mVertexShadersLoaded != 1) )
+	if ((assertInitialized() && mVertexShadersLoaded != 1) )
 	{
 		return false;
 	}
@@ -1556,8 +1561,7 @@ bool LLPipeline::canUseVertexShaders()
 
 bool LLPipeline::canUseWindLightShaders() const
 {
-	return (!LLPipeline::sDisableShaders &&
-			gWLSkyProgram.mProgramObject != 0 &&
+	return (gWLSkyProgram.mProgramObject != 0 &&
 			LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_WINDLIGHT) > 1);
 }
 
@@ -2046,6 +2050,7 @@ void LLPipeline::createObject(LLViewerObject* vobj)
 
 void LLPipeline::resetFrameStats()
 {
+	LL_PROFILE_ZONE_SCOPED
 	assertInitialized();
 
 	sCompiles        = 0;
@@ -2282,6 +2287,7 @@ void LLPipeline::grabReferences(LLCullResult& result)
 
 void LLPipeline::clearReferences()
 {
+	LL_PROFILE_ZONE_SCOPED
 	sCull = NULL;
 	mGroupSaveQ1.clear();
 }
@@ -2709,13 +2715,6 @@ void LLPipeline::markNotCulled(LLSpatialGroup* group, LLCamera& camera)
 	const F32 MINIMUM_PIXEL_AREA = 16.f;
 
 	if (group->mPixelArea < MINIMUM_PIXEL_AREA)
-	{
-		return;
-	}
-
-	const LLVector4a* bounds = group->getBounds();
-	if (sMinRenderSize > 0.f && 
-			llmax(llmax(bounds[1][0], bounds[1][1]), bounds[1][2]) < sMinRenderSize)
 	{
 		return;
 	}
@@ -3655,7 +3654,6 @@ void LLPipeline::stateSort(LLSpatialGroup* group, LLCamera& camera)
 			group->mLastUpdateDistance = group->mDistance;
 		}
 	}
-
 }
 
 void LLPipeline::stateSort(LLSpatialBridge* bridge, LLCamera& camera, BOOL fov_changed)
@@ -3969,6 +3967,27 @@ void renderSoundHighlights(LLDrawable* drawablep)
 }
 }
 
+void LLPipeline::touchTextures(LLDrawInfo* info)
+{
+    LL_PROFILE_ZONE_SCOPED;
+    for (auto& tex : info->mTextureList)
+    {
+        if (tex.notNull())
+        {
+            LLImageGL* gl_tex = tex->getGLTexture();
+            if (gl_tex && gl_tex->updateBindStats(gl_tex->mTextureMemory))
+            {
+                tex->setActive();
+            }
+        }
+    }
+
+    if (info->mTexture.notNull())
+    {
+        info->mTexture->addTextureStats(info->mVSize);
+    }
+}
+
 void LLPipeline::postSort(LLCamera& camera)
 {
 	LL_RECORD_BLOCK_TIME(FTM_STATESORT_POSTSORT);
@@ -4022,20 +4041,14 @@ void LLPipeline::postSort(LLCamera& camera)
 			
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = src_vec.begin(); k != src_vec.end(); ++k)
 			{
-				if (sMinRenderSize > 0.f)
-				{
-					LLVector4a bounds;
-					bounds.setSub((*k)->mExtents[1],(*k)->mExtents[0]);
-
-					if (llmax(llmax(bounds[0], bounds[1]), bounds[2]) > sMinRenderSize)
-					{
-						sCull->pushDrawInfo(j->first, *k);
-					}
-				}
-				else
-				{
-					sCull->pushDrawInfo(j->first, *k);
-				}
+                LLDrawInfo* info = *k;
+				
+				sCull->pushDrawInfo(j->first, info);
+                if (!sShadowRender && !sReflectionRender)
+                {
+                    touchTextures(info);
+                    addTrianglesDrawn(info->mCount, info->mDrawMode);
+                }
 			}
 		}
 
@@ -4175,7 +4188,10 @@ void LLPipeline::postSort(LLCamera& camera)
 	{
 		mSelectedFaces.clear();
 
-		LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
+		if (!gNonInteractive)
+		{
+			LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
+		}
 
 		// Draw face highlights for selected faces.
 		if (LLSelectMgr::getInstance()->getTEMode())
@@ -8741,8 +8757,6 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
 
     LLEnvironment& environment = LLEnvironment::instance();
     LLSettingsSky::ptr_t sky = environment.getCurrentSky();
-
-    static_cast<LLSettingsVOSky*>(sky.get())->updateShader(&shader);
 }
 
 LLColor3 pow3f(LLColor3 v, F32 f)

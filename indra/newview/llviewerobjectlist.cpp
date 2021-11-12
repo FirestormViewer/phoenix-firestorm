@@ -80,6 +80,7 @@
 #include "llfloaterperms.h"
 #include "llvocache.h"
 #include "llcorehttputil.h"
+#include "llstartup.h"
 
 #include <algorithm>
 #include <iterator>
@@ -342,7 +343,7 @@ LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry*
 
 	LLDataPacker *cached_dpp = entry->getDP();
 
-	if (!cached_dpp)
+	if (!cached_dpp || gNonInteractive)
 	{
 		return NULL; //nothing cached.
 	}

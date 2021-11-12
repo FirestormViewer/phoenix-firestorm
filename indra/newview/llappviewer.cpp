@@ -766,7 +766,6 @@ LLAppViewer::LLAppViewer()
 	mFastTimerLogThread(NULL),
 	mSettingsLocationList(NULL),
 	mIsFirstRun(false),
-	//mMinMicroSecPerFrame(0.f),	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
@@ -1051,8 +1050,6 @@ bool LLAppViewer::init()
 	LLNotifications::instance();
 	LL_INFOS("InitInfo") << "Notifications initialized." << LL_ENDL ;
 
-    writeSystemInfo();
-
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
@@ -1178,6 +1175,9 @@ bool LLAppViewer::init()
 	initWindow();
 	LL_INFOS("InitInfo") << "Window is initialized." << LL_ENDL ;
 
+    // writeSystemInfo can be called after window is initialized (gViewerWindow non-null)
+    writeSystemInfo();
+
 	// initWindow also initializes the Feature List, so now we can initialize this global.
 	LLCubeMap::sUseCubeMaps = LLFeatureManager::getInstance()->isFeatureAvailable("RenderCubeMap");
 
@@ -1201,19 +1201,6 @@ bool LLAppViewer::init()
 			OSMB_OK);
 		return 0;
 	}
-
-    // If we don't have the right shader requirements.
-    if (!gGLManager.mHasShaderObjects
-        || !gGLManager.mHasVertexShader
-        || !gGLManager.mHasFragmentShader)
-    {
-        LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedShaderRequirements");
-        OSMessageBox(
-            details.getString(),
-            LLStringUtil::null,
-            OSMB_OK);
-        return 0;
-    }
 
 	// Without SSE2 support we will crash almost immediately, warn here.
 	if (!gSysCPU.hasSSE2())
@@ -1530,12 +1517,6 @@ bool LLAppViewer::init()
 	joystick = LLViewerJoystick::getInstance();
 	joystick->setNeedsReset(true);
 	/*----------------------------------------------------------------------*/
-
-	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
-	//gSavedSettings.getControl("FramePerSecondLimit")->getSignal()->connect(boost::bind(&LLAppViewer::onChangeFrameLimit, this, _2));
-	//onChangeFrameLimit(gSavedSettings.getLLSD("FramePerSecondLimit"));
-	// </FS:Ansariel>
-
 	// Load User's bindings
 	loadKeyBindings();
 
@@ -1825,25 +1806,6 @@ bool LLAppViewer::doFrame()
 
 				display();
 
-				// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
-				//static U64 last_call = 0;
-				//if (!gTeleportDisplay)
-				//{
-				//	// Frame/draw throttling, controlled by FramePerSecondLimit
-				//	U64 elapsed_time = LLTimer::getTotalTime() - last_call;
-				//	if (elapsed_time < mMinMicroSecPerFrame)
-				//	{
-				//		LL_PROFILE_ZONE_WARN("Sleep1")
-				//		// llclamp for when time function gets funky
-				//		U64 sleep_time = llclamp(mMinMicroSecPerFrame - elapsed_time, (U64)1, (U64)1e6);
-				//  	LL_PROFILE_ZONE_NAMED( "df Snapshot" )
-				//		micro_sleep(sleep_time, 0);
-				//	}
-				//}
-				//last_call = LLTimer::getTotalTime();
-				// </FS:Ansariel>
-
-			}
 				{
 					LL_PROFILE_ZONE_NAMED( "df Snapshot" )
 					pingMainloopTimeout("Main:Snapshot");
@@ -1851,6 +1813,7 @@ bool LLAppViewer::doFrame()
 					LLFloaterOutfitSnapshot::update();
 					gGLActive = FALSE;
 				}
+			}
 		}
 
 		{
@@ -1874,6 +1837,14 @@ bool LLAppViewer::doFrame()
 				ms_sleep(yield_time);
 			}
 
+			if (gNonInteractive)
+			{
+				S32 non_interactive_ms_sleep_time = 100;
+				LLAppViewer::getTextureCache()->pause();
+				LLAppViewer::getImageDecodeThread()->pause();
+				ms_sleep(non_interactive_ms_sleep_time);
+			}
+
 			// yield cooperatively when not running as foreground window
 			// and when not quiting (causes trouble at mac's cleanup stage)
 			if (!LLApp::isExiting()
@@ -1881,8 +1852,8 @@ bool LLAppViewer::doFrame()
 					|| !gFocusMgr.getAppHasFocus()))
 			{
 				// Sleep if we're not rendering, or the window is minimized.
-				static LLCachedControl<S32> s_bacground_yeild_time(gSavedSettings, "BackgroundYieldTime", 40);
-				S32 milliseconds_to_sleep = llclamp((S32)s_bacground_yeild_time, 0, 1000);
+				static LLCachedControl<S32> s_background_yield_time(gSavedSettings, "BackgroundYieldTime", 40);
+				S32 milliseconds_to_sleep = llclamp((S32)s_background_yield_time, 0, 1000);
 				// don't sleep when BackgroundYieldTime set to 0, since this will still yield to other threads
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
@@ -2793,7 +2764,7 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 			LL_INFOS("Settings") << "Attempting to load settings for the group " << file.name()
 			    << " - from location " << location_key << LL_ENDL;
 
-			LLControlGroup* settings_group = LLControlGroup::getInstance(file.name);
+			auto settings_group = LLControlGroup::getInstance(file.name);
 			if(!settings_group)
 			{
 				LL_WARNS("Settings") << "No matching settings group for name " << file.name() << LL_ENDL;
@@ -2888,6 +2859,38 @@ namespace
     }
 } // anonymous namespace
 
+// Set a named control temporarily for this session, as when set via the command line --set option.
+// Name can be specified as "<control_group>.<control_name>", with default group being Global.
+bool tempSetControl(const std::string& name, const std::string& value)
+{
+	std::string name_part;
+	std::string group_part;
+	LLControlVariable* control = NULL;
+
+	// Name can be further split into ControlGroup.Name, with the default control group being Global
+	size_t pos = name.find('.');
+	if (pos != std::string::npos)
+	{
+		group_part = name.substr(0, pos);
+		name_part = name.substr(pos+1);
+		LL_INFOS() << "Setting " << group_part << "." << name_part << " to " << value << LL_ENDL;
+		auto g = LLControlGroup::getInstance(group_part);
+		if (g) control = g->getControl(name_part);
+	}
+	else
+	{
+		LL_INFOS() << "Setting Global." << name << " to " << value << LL_ENDL;
+		control = gSavedSettings.getControl(name);
+	}
+
+	if (control)
+	{
+		control->setValue(value, false);
+		return true;
+	}
+	return false;
+}
+
 bool LLAppViewer::initConfiguration()
 {
 	//Load settings files list
@@ -2933,7 +2936,7 @@ bool LLAppViewer::initConfiguration()
 	// load defaults overide here. Can not use settings_files.xml as path is different then above loading of defaults.
 	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, llformat("fsdata_defaults.%s.xml", LLVersionInfo::getInstance()->getShortVersion().c_str()));
 	std::string fsdata_global = "Global";
-	LLControlGroup* settings_group = LLControlGroup::getInstance(fsdata_global);
+	std::shared_ptr<LLControlGroup> settings_group = LLControlGroup::getInstance(fsdata_global);
 	if(settings_group && settings_group->loadFromFile(fsdata_defaults, set_defaults))
 	{
 		LL_INFOS() << "Loaded settings file " << fsdata_defaults << LL_ENDL;
@@ -2950,12 +2953,7 @@ bool LLAppViewer::initConfiguration()
 #ifndef	LL_RELEASE_FOR_DOWNLOAD
 	// provide developer build only overrides for these control variables that are not
 	// persisted to settings.xml
-	LLControlVariable* c = gSavedSettings.getControl("ShowConsoleWindow");
-	if (c)
-	{
-		c->setValue(true, false);
-	}
-	c = gSavedSettings.getControl("AllowMultipleViewers");
+	LLControlVariable* c = gSavedSettings.getControl("AllowMultipleViewers");
 	if (c)
 	{
 		c->setValue(true, false);
@@ -3123,9 +3121,10 @@ bool LLAppViewer::initConfiguration()
 		disableCrashlogger();
 	}
 
+	gNonInteractive = gSavedSettings.getBOOL("NonInteractive");
 	// Handle initialization from settings.
 	// Start up the debugging console before handling other options.
-	if (gSavedSettings.getBOOL("ShowConsoleWindow"))
+	if (gSavedSettings.getBOOL("ShowConsoleWindow") && !gNonInteractive)
 	{
 		initConsole();
 	}
@@ -3158,33 +3157,9 @@ bool LLAppViewer::initConfiguration()
             {
                 const std::string& name = *itr;
                 const std::string& value = *(++itr);
-                std::string name_part;
-                std::string group_part;
-				LLControlVariable* control = NULL;
-
-				// Name can be further split into ControlGroup.Name, with the default control group being Global
-				size_t pos = name.find('.');
-				if (pos != std::string::npos)
-				{
-					group_part = name.substr(0, pos);
-					name_part = name.substr(pos+1);
-					LL_INFOS() << "Setting " << group_part << "." << name_part << " to " << value << LL_ENDL;
-					LLControlGroup* g = LLControlGroup::getInstance(group_part);
-					if (g) control = g->getControl(name_part);
-				}
-				else
-				{
-					LL_INFOS() << "Setting Global." << name << " to " << value << LL_ENDL;
-					control = gSavedSettings.getControl(name);
-				}
-
-                if (control)
+                if (!tempSetControl(name,value))
                 {
-                    control->setValue(value, false);
-                }
-                else
-                {
-					LL_WARNS() << "Failed --set " << name << ": setting name unknown." << LL_ENDL;
+                    LL_WARNS() << "Failed --set " << name << ": setting name unknown." << LL_ENDL;
                 }
             }
         }
@@ -3290,6 +3265,19 @@ bool LLAppViewer::initConfiguration()
 			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
 		}
 	}
+
+	if (gNonInteractive)
+	{
+		tempSetControl("AllowMultipleViewers", "TRUE");
+		tempSetControl("SLURLPassToOtherInstance", "FALSE");
+		tempSetControl("RenderWater", "FALSE");
+		tempSetControl("FlyingAtExit", "FALSE");
+		tempSetControl("WindowWidth", "1024");
+		tempSetControl("WindowHeight", "200");
+		LLError::setEnabledLogTypesMask(0);
+		llassert_always(!gSavedSettings.getBOOL("SLURLPassToOtherInstance"));
+	}
+
 
 	// Handle slurl use. NOTE: Don't let SL-55321 reappear.
 	// This initial-SLURL logic, up through the call to
@@ -4327,16 +4315,15 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["FirstLogin"] = LLSD::Boolean(gAgent.isFirstLogin());
 	gDebugInfo["FirstRunThisInstall"] = gSavedSettings.getBOOL("FirstRunThisInstall");
     gDebugInfo["StartupState"] = LLStartUp::getStartupStateString();
-
-	// <FS:ND> FIRE-31153, do not use gViewerWindow->getWindow which equals nullptr at this point
-	//std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
-	std::vector<std::string> resolutions = LLWindow::getDisplaysResolutionList();
-	// </FS:ND>
-
-	for (auto res_iter : resolutions)
-	{
-		gDebugInfo["DisplayInfo"].append(res_iter);
-	}
+    
+    if (gViewerWindow)
+    {
+        std::vector<std::string> resolutions = gViewerWindow->getWindow()->getDisplaysResolutionList();
+        for (auto res_iter : resolutions)
+        {
+            gDebugInfo["DisplayInfo"].append(res_iter);
+        }
+    }
 
 	writeDebugInfo(); // Save out debug_info.log early, in case of crash.
 }
@@ -5583,6 +5570,7 @@ void LLAppViewer::idle()
 	LLNotificationsUI::LLToast::updateClass();
 	LLSmoothInterpolation::updateInterpolants();
 	LLMortician::updateClass();
+    LLImageGL::updateClass();
 	LLFilePickerThread::clearDead();  //calls LLFilePickerThread::notify()
 	LLDirPickerThread::clearDead();
 	F32 dt_raw = idle_timer.getElapsedTimeAndResetF32();
@@ -6426,21 +6414,6 @@ void LLAppViewer::disconnectViewer()
 	// parcel info requests while disconnected.
 	LLUrlEntryParcel::setDisconnected(gDisconnected);
 }
-
-// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
-//bool LLAppViewer::onChangeFrameLimit(LLSD const & evt)
-//{
-//	if (evt.asInteger() > 0)
-//	{
-//		mMinMicroSecPerFrame = (U64)(1000000.0f / F32(evt.asInteger()));
-//	}
-//	else
-//	{
-//		mMinMicroSecPerFrame = 0;
-//	}
-//	return false;
-//}
-// </FS:Ansariel>
 
 void LLAppViewer::forceErrorLLError()
 {

@@ -78,13 +78,34 @@ public:
 	BOOL setSize(LLCoordWindow size);
 	virtual void setMinSize(U32 min_width, U32 min_height, bool enforce_immediately = true);
 	virtual BOOL switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL disable_vsync, const LLCoordScreen * const posp = NULL) = 0;
-	virtual BOOL setCursorPosition(LLCoordWindow position) = 0;
+
+    //create a new GL context that shares a namespace with this Window's main GL context and make it current on the current thread
+    // returns a pointer to be handed back to destroySharedConext/makeContextCurrent
+    virtual void* createSharedContext() = 0;
+    //make the given context current on the current thread
+    virtual void makeContextCurrent(void* context) = 0;
+    //destroy the given context that was retrieved by createSharedContext()
+    //Must be called on the same thread that called createSharedContext()
+    virtual void destroySharedContext(void* context) = 0;
+
+
+    virtual BOOL setCursorPosition(LLCoordWindow position) = 0;
 	virtual BOOL getCursorPosition(LLCoordWindow *position) = 0;
+#if LL_WINDOWS
+    virtual BOOL getCursorDelta(LLCoordCommon* delta) = 0;
+#endif
 	virtual void showCursor() = 0;
 	virtual void hideCursor() = 0;
 	virtual BOOL isCursorHidden() = 0;
 	virtual void showCursorFromMouseMove() = 0;
 	virtual void hideCursorUntilMouseMove() = 0;
+
+    // Provide a way to set the Viewer window title after the
+    // windows has been created. The initial use case for this
+    // is described in SL-16102 (update window title with agent 
+    // name, location etc. for non-interactive viewer) but it
+    // may also be useful in other cases.
+    virtual void setTitle(const std::string& title);
 
 	// These two functions create a way to make a busy cursor instead
 	// of an arrow when someone's busy doing something. Draw an
@@ -169,12 +190,6 @@ public:
 
 	// Get system UI size based on DPI (for 96 DPI UI size should be 1.0)
 	virtual F32 getSystemUISize() { return 1.0f; }
-
-	// <FS:TT> Window Title Access
-	//this needs to be overridden for all platforms
-	virtual void setTitle(const std::string& win_title) {};
-	// </FS:TT>
-
 
 	static std::vector<std::string> getDisplaysResolutionList();
 

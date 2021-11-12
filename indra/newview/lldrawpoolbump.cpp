@@ -684,6 +684,7 @@ BOOL LLDrawPoolBump::bindBumpMap(LLFace* face, S32 channel)
 //static
 BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, F32 vsize, S32 channel)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	//Note: texture atlas does not support bump texture now.
 	LLViewerFetchedTexture* tex = LLViewerTextureManager::staticCastToFetchedTexture(texture) ;
 	if(!tex)
@@ -700,7 +701,7 @@ BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, F32 vsi
 		break;
 	case BE_BRIGHTNESS: 
 	case BE_DARKNESS:
-		bump = gBumpImageList.getBrightnessDarknessImage( tex, bump_code );		
+		bump = gBumpImageList.getBrightnessDarknessImage( tex, bump_code );
 		break;
 
 	default:
@@ -716,12 +717,13 @@ BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, F32 vsi
 	{
 		if (channel == -2)
 		{
-			gGL.getTexUnit(1)->bind(bump);
-			gGL.getTexUnit(0)->bind(bump);
+			gGL.getTexUnit(1)->bindFast(bump);
+			gGL.getTexUnit(0)->bindFast(bump);
 		}
 		else
 		{
-			gGL.getTexUnit(channel)->bind(bump);
+            // NOTE: do not use bindFast here (see SL-16222)
+            gGL.getTexUnit(channel)->bind(bump);
 		}
 
 		return TRUE;
@@ -1072,6 +1074,7 @@ void LLBumpImageList::updateImages()
 // Note: the caller SHOULD NOT keep the pointer that this function returns.  It may be updated as more data arrives.
 LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedTexture* src_image, U8 bump_code )
 {
+    LL_PROFILE_ZONE_SCOPED;
 	llassert( (bump_code == BE_BRIGHTNESS) || (bump_code == BE_DARKNESS) );
 
 	LLViewerTexture* bump = NULL;
@@ -1512,6 +1515,7 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
 
 void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	applyModelMatrix(params);
 
 	bool tex_setup = false;
@@ -1522,7 +1526,7 @@ void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL 
 		{
 			if (params.mTextureList[i].notNull())
 			{
-				gGL.getTexUnit(i)->bind(params.mTextureList[i], TRUE);
+				gGL.getTexUnit(i)->bindFast(params.mTextureList[i]);
 			}
 		}
 	}
@@ -1537,13 +1541,6 @@ void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL 
 			}
 			else
 			{
-				if (!LLGLSLShader::sNoFixedFunction)
-				{
-					gGL.getTexUnit(1)->activate();
-					gGL.matrixMode(LLRender::MM_TEXTURE);
-					gGL.loadMatrix((GLfloat*) params.mTextureMatrix->mMatrix);
-				}
-
 				gGL.getTexUnit(0)->activate();
 				gGL.matrixMode(LLRender::MM_TEXTURE);
 				gGL.loadMatrix((GLfloat*) params.mTextureMatrix->mMatrix);
@@ -1560,8 +1557,7 @@ void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL 
 		{
 			if (params.mTexture.notNull())
 			{
-				gGL.getTexUnit(diffuse_channel)->bind(params.mTexture);
-				params.mTexture->addTextureStats(params.mVSize);		
+				gGL.getTexUnit(diffuse_channel)->bindFast(params.mTexture);
 			}
 			else
 			{
@@ -1574,10 +1570,10 @@ void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL 
 	{
 		params.mGroup->rebuildMesh();
 	}
-	params.mVertexBuffer->setBuffer(mask);
-	params.mVertexBuffer->drawRange(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
-	gPipeline.addTrianglesDrawn(params.mCount, params.mDrawMode);
-	if (tex_setup)
+	params.mVertexBuffer->setBufferFast(mask);
+	params.mVertexBuffer->drawRangeFast(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
+
+    if (tex_setup)
 	{
 		if (mShiny)
 		{
@@ -1585,12 +1581,6 @@ void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL 
 		}
 		else
 		{
-			if (!LLGLSLShader::sNoFixedFunction)
-			{
-				gGL.getTexUnit(1)->activate();
-				gGL.matrixMode(LLRender::MM_TEXTURE);
-				gGL.loadIdentity();
-			}
 			gGL.getTexUnit(0)->activate();
 			gGL.matrixMode(LLRender::MM_TEXTURE);
 		}

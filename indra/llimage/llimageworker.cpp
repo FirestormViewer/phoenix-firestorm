@@ -25,7 +25,6 @@
  */
 
 #include "linden_common.h"
-#include "fstelemetry.h" // <FS:Beq> add telemetry support.
 #include "llimageworker.h"
 #include "llimagedxt.h"
 
@@ -135,7 +134,7 @@ LLImageDecodeThread::~LLImageDecodeThread()
 // virtual
 S32 LLImageDecodeThread::update(F32 max_time_ms)
 {
-	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue); // <FS:Beq/> instrument image decodes
+    LL_PROFILE_ZONE_SCOPED;
 	LLMutexLock lock(mCreationMutex);
 	// <FS:Beq> instrument image decodes
 	{
@@ -174,7 +173,7 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted* image, 
 	U32 priority, S32 discard, BOOL needs_aux, Responder* responder)
 {
-	LL_PROFILE_ZONE_COLOR(tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+    LL_PROFILE_ZONE_SCOPED;
 	// <FS:Beq> De-couple texture threading from mainloop
 	// LLMutexLock lock(mCreationMutex);
 	// handle_t handle = generateHandle();
@@ -270,7 +269,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 {
 	// <FS:Beq> allow longer timeout for async and add instrumentation
 	// const F32 decode_time_slice = .1f;
-	LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange); 
+	LL_PROFILE_ZONE_SCOPED;
 	F32 decode_time_slice = .1f;
 	if(mFlags & FLAG_ASYNC)
 	{
@@ -350,6 +349,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 
 void LLImageDecodeThread::ImageRequest::finishRequest(bool completed)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	if (mResponder.notNull())
 	{
 		bool success = completed && mDecodedRaw && (!mNeedsAux || mDecodedAux);

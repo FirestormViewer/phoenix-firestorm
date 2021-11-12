@@ -89,6 +89,9 @@ public:
 	std::vector<record_list_t> mFreeList;
 	std::vector<U32> mMissCount;
 
+	//used to avoid calling glGenBuffers for every VBO creation
+	static U32 sNamePool[1024];
+	static U32 sNameIdx;
 };
 
 
@@ -127,7 +130,7 @@ public:
 	static LLVBOPool sDynamicCopyVBOPool;
 	static LLVBOPool sStreamIBOPool;
 	static LLVBOPool sDynamicIBOPool;
-	
+
 	static std::list<U32> sAvailableVAOName;
 	static U32 sCurVAOName;
 
@@ -143,11 +146,8 @@ public:
 	static void initClass(bool use_vbo, bool no_vbo_mapping);
 	static void cleanupClass();
 	static void setupClientArrays(U32 data_mask);
-	static void pushPositions(U32 mode, const LLVector4a* pos, U32 count);
-	static void drawArrays(U32 mode, const std::vector<LLVector3>& pos, const std::vector<LLVector3>& norm);
-	// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-	//static void drawElements(U32 mode, const LLVector4a* pos, const LLVector2* tc, S32 num_indices, const U16* indicesp);
-	static void drawElements(U32 mode, const S32 num_vertices, const LLVector4a* pos, const LLVector2* tc, S32 num_indices, const U16* indicesp);
+	static void drawArrays(U32 mode, const std::vector<LLVector3>& pos);
+	static void drawElements(U32 mode, const LLVector4a* pos, const LLVector2* tc, S32 num_indices, const U16* indicesp);
 
  	static void unbind(); //unbind any bound vertex buffer
 
@@ -209,13 +209,17 @@ protected:
 
 	virtual ~LLVertexBuffer(); // use unref()
 
-	virtual void setupVertexBuffer(U32 data_mask); // pure virtual, called from mapBuffer()
+	virtual void setupVertexBuffer(U32 data_mask);
+    void setupVertexBufferFast(U32 data_mask);
+
 	void setupVertexArray();
 	
 	void	genBuffer(U32 size);
 	void	genIndices(U32 size);
 	bool	bindGLBuffer(bool force_bind = false);
+    bool	bindGLBufferFast();
 	bool	bindGLIndices(bool force_bind = false);
+    bool    bindGLIndicesFast();
 	bool	bindGLArray();
 	void	releaseBuffer();
 	void	releaseIndices();
@@ -238,6 +242,8 @@ public:
 
 	// set for rendering
 	virtual void	setBuffer(U32 data_mask); 	// calls  setupVertexBuffer() if data_mask is not 0
+    void	setBufferFast(U32 data_mask); 	// calls setupVertexBufferFast(), assumes data_mask is not 0 among other assumptions
+
 	void flush(); //flush pending data to GL memory
 	// allocate buffer
 	bool	allocateBuffer(S32 nverts, S32 nindices, bool create);
@@ -292,6 +298,9 @@ public:
 	void draw(U32 mode, U32 count, U32 indices_offset) const;
 	void drawArrays(U32 mode, U32 offset, U32 count) const;
 	void drawRange(U32 mode, U32 start, U32 end, U32 count, U32 indices_offset) const;
+
+    //implementation for inner loops that does no safety checking
+    void drawRangeFast(U32 mode, U32 start, U32 end, U32 count, U32 indices_offset) const;
 
 	//for debugging, validate data in given range is valid
 	void validateRange(U32 start, U32 end, U32 count, U32 offset) const;
@@ -364,11 +373,6 @@ public:
 	static U32 sIndexCount;
 	static U32 sBindCount;
 	static U32 sSetCount;
-
-// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-private:
-	static LLVertexBuffer* sUtilityBuffer;
-// </FS:Ansariel>
 };
 
 

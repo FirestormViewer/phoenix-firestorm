@@ -718,7 +718,7 @@ void LLModelPreview::rebuildUploadData()
                 bool upload_skinweights = fmp && fmp->childGetValue("upload_skin").asBoolean();
                 if (upload_skinweights && high_lod_model->mSkinInfo.mJointNames.size() > 0)
                 {
-                    LLQuaternion bind_rot = LLSkinningUtil::getUnscaledQuaternion(high_lod_model->mSkinInfo.mBindShapeMatrix);
+                    LLQuaternion bind_rot = LLSkinningUtil::getUnscaledQuaternion(LLMatrix4(high_lod_model->mSkinInfo.mBindShapeMatrix));
                     LLQuaternion identity;
                     if (!bind_rot.isEqualEps(identity, 0.01f))
                     {
@@ -3605,7 +3605,7 @@ BOOL LLModelPreview::render()
                                         }
 
                                         gGL.diffuseColor4ubv(hull_colors[i].mV);
-                                        LLVertexBuffer::drawArrays(LLRender::TRIANGLES, physics.mMesh[i].mPositions, physics.mMesh[i].mNormals);
+                                        LLVertexBuffer::drawArrays(LLRender::TRIANGLES, physics.mMesh[i].mPositions);
 
                                         if (explode > 0.f)
                                         {
@@ -3794,7 +3794,7 @@ BOOL LLModelPreview::render()
                                 LLJoint *joint = getPreviewAvatar()->getJoint(skin->mJointNums[j]);
                                 if (joint)
                                 {
-                                    const LLVector3& jointPos = skin->mAlternateBindMatrix[j].getTranslation();
+                                    const LLVector3& jointPos = LLVector3(skin->mAlternateBindMatrix[j].getTranslation());
                                     if (joint->aboveJointPosThreshold(jointPos))
                                     {
                                         bool override_changed;
@@ -3838,15 +3838,10 @@ BOOL LLModelPreview::render()
                             //build matrix palette
 
                             LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-                            //<FS:Beq> use Mat4a part of the caching changes, no point in using the cache itself in the preview though.
-                            //LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, joint_count,
-                            //    skin, getPreviewAvatar());
                             LLSkinningUtil::initSkinningMatrixPalette(mat, joint_count,
                                 skin, getPreviewAvatar());
-                            //</FS:Beq>
 
-                            LLMatrix4a bind_shape_matrix;
-                            bind_shape_matrix.loadu(skin->mBindShapeMatrix);
+                            const LLMatrix4a& bind_shape_matrix = skin->mBindShapeMatrix;
                             U32 max_joints = LLSkinningUtil::getMaxJointCount();
                             for (U32 j = 0; j < buffer->getNumVerts(); ++j)
                             {

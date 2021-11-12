@@ -1143,9 +1143,8 @@ private:
 //-----------------------------------------------------------------------------
 F32 gpu_benchmark()
 {
-	if (!gGLManager.mHasShaderObjects || !gGLManager.mHasTimerQuery)
-	{ // don't bother benchmarking the fixed function
-      // or venerable drivers which don't support accurate timing anyway
+	if (!gGLManager.mHasTimerQuery)
+	{ // don't bother benchmarking venerable drivers which don't support accurate timing anyway
       // and are likely to be correctly identified by the GPU table already.
 		return -1.f;
 	}
@@ -1241,7 +1240,7 @@ F32 gpu_benchmark()
     delete [] pixels;
 
 	//make a dummy triangle to draw with
-	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, GL_STREAM_DRAW_ARB);
+	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX, GL_STREAM_DRAW_ARB);
 
 	if (!buff->allocateBuffer(3, 0, true))
 	{
@@ -1251,7 +1250,6 @@ F32 gpu_benchmark()
 	}
 
 	LLStrider<LLVector3> v;
-	LLStrider<LLVector2> tc;
 
 	if (! buff->getVertexStrider(v))
 	{

@@ -118,13 +118,16 @@ BOOL LLViewerDynamicTexture::render()
 //-----------------------------------------------------------------------------
 void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 {
+	if (!gNonInteractive)
+	{
 	// <FS:Beq> changes to support higher resolution rendering in the preview
-	////only images up to 512x512 are supported
-	//llassert(mFullHeight <= 512);
-	//llassert(mFullWidth <= 512);
-	llassert(mFullWidth <= static_cast<S32>(gPipeline.mBake.getWidth()));
-	llassert(mFullHeight <= static_cast<S32>(gPipeline.mBake.getHeight()));
-	// </FS:Beq>
+		////only images up to 512x512 are supported
+		//llassert(mFullHeight <= 512);
+		//llassert(mFullWidth <= 512);
+		llassert(mFullWidth <= static_cast<S32>(gPipeline.mBake.getWidth()));
+		llassert(mFullHeight <= static_cast<S32>(gPipeline.mBake.getHeight()));
+		// </FS:Beq>
+	}
 
 	if (gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete())
 	{ //using offscreen render target, just use the bottom left corner

@@ -2860,6 +2860,10 @@ void translateFailure(LLChat chat, LLSD toastArgs, int status, const std::string
 
 void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 {
+	if (gNonInteractive)
+	{
+		return;
+	}
 	LLChat	chat;
 	std::string		mesg;
 	std::string		from_name;
@@ -5064,8 +5068,8 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		F32 stat_value;
 		msg->getU32("Stat", "StatID", stat_id, i);
 		msg->getF32("Stat", "StatValue", stat_value, i);
-		LLStatViewer::SimMeasurementSampler* measurementp = LLStatViewer::SimMeasurementSampler::getInstance((ESimStatID)stat_id);
-		
+		auto measurementp = LLStatViewer::SimMeasurementSampler::getInstance((ESimStatID)stat_id);
+
 		if (measurementp )
 		{
 			measurementp->sample(stat_value);

@@ -243,8 +243,6 @@ void LLDrawable::markDead()
 
 LLVOVolume* LLDrawable::getVOVolume() const
 {
-	LL_PROFILE_ZONE_SCOPED
-
 	LLViewerObject* objectp = mVObjp;
 	if ( !isDead() && objectp && (objectp->getPCode() == LL_PCODE_VOLUME))
 	{
