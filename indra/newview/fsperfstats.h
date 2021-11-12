@@ -187,7 +187,7 @@ namespace FSPerfStats
             static char avstr[36];
             static char obstr[36];
             #endif
-            
+
             if(upd.statType == StatType_t::RENDER_DONE && upd.objType == ObjType_t::OT_GENERAL && upd.time == 0)
             {
                 // LL_INFOS("perfstats") << "End of Frame Toggle Buffer:" << gFrameCount << LL_ENDL;
@@ -207,9 +207,11 @@ namespace FSPerfStats
             auto type {upd.statType};
             auto val {upd.time};
 
+            #ifdef FS_HAS_TELEMETRY_SUPPORT
             FSZoneText(key.toStringFast(obstr),36);
             FSZoneText(avKey.toStringFast(avstr),36);
             FSZoneValue(val);
+            #endif
 
             if(ot == ObjType_t::OT_GENERAL)
             {

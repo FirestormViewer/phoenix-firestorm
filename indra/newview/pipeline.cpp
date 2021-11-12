@@ -3987,7 +3987,7 @@ void LLPipeline::postSort(LLCamera& camera)
 	LL_PUSH_CALLSTACKS();
 	//rebuild drawable geometry
 	{
-		FSZoneN("PostSort: rebuildGeom")
+		FSZoneN("PostSort: rebuildGeom");
 	for (LLCullResult::sg_iterator i = sCull->beginDrawableGroups(); i != sCull->endDrawableGroups(); ++i)
 	{
 		LLSpatialGroup* group = *i;
@@ -4106,11 +4106,12 @@ void LLPipeline::postSort(LLCamera& camera)
 		glBeginQueryARB(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, mMeshDirtyQueryObject);
 	}*/
 	{
-		FSZoneN("rebuild delayed upd groups")	}
+		FSZoneN("rebuild delayed upd groups");
 	//pack vertex buffers for groups that chose to delay their updates
 	for (LLSpatialGroup::sg_vector_t::iterator iter = mMeshDirtyGroup.begin(); iter != mMeshDirtyGroup.end(); ++iter)
 	{
 		(*iter)->rebuildMesh();
+	}
 	}
 	}
 
@@ -4122,7 +4123,7 @@ void LLPipeline::postSort(LLCamera& camera)
 	mMeshDirtyGroup.clear();
 
 	{
-		FSZoneN("sort alpha groups")
+		FSZoneN("sort alpha groups");
 	if (!sShadowRender)
 	{
 		std::sort(sCull->beginAlphaGroups(), sCull->endAlphaGroups(), LLSpatialGroup::CompareDepthGreater());

@@ -1377,7 +1377,7 @@ void LLViewerOctreeCull::traverse(const OctreeNode* n)
 	}
 	else
 	{
-		FSZoneN("Check inside?")
+		FSZoneN("Check inside?");
 		mRes = frustumCheck(group);
 				
 		if (mRes)
