@@ -41,7 +41,7 @@
 #include "pipeline.h"
 
 // Additional logging options. These can skew inworld numbers so onyl use for debugging and tracking issues
-#ifdef  FS_HAS_TELEMETRY_SUPPORT
+#ifdef TRACY_ENABLE
 // USAGE_TRACKING - displays overlapping stats that may imply double counting.
 // ATTACHMENT_TRACKING - displays detailed tracking info for Avatar and Attachment. very heavy overhead.
 // #define USAGE_TRACKING
@@ -183,7 +183,7 @@ namespace FSPerfStats
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
             using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
-            #ifdef FS_HAS_TELEMETRY_SUPPORT
+            #ifdef TRACY_ENABLE
             static char avstr[36];
             static char obstr[36];
             #endif
@@ -207,7 +207,7 @@ namespace FSPerfStats
             auto type {upd.statType};
             auto val {upd.time};
 
-            #ifdef FS_HAS_TELEMETRY_SUPPORT
+            #ifdef TRACY_ENABLE
             LL_PROFILE_ZONE_TEXT(key.toStringFast(obstr), 36);
             LL_PROFILE_ZONE_TEXT(avKey.toStringFast(avstr), 36);
             LL_PROFILE_ZONE_NUM(val);
