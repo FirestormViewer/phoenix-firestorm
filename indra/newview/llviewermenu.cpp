@@ -9573,7 +9573,7 @@ protected:
 	{
 		BOOL checked = gSavedSettings.getBOOL( "ProfilingActive" );
 		gSavedSettings.setBOOL( "ProfilingActive", !checked );
-		LLProfiler::active = !checked;
+		gProfilerEnabled = !checked;
 		return true;
 	}
 };
