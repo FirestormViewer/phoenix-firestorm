@@ -1167,7 +1167,6 @@ void LLPipeline::updateRenderDeferred()
                       RenderDeferred &&
                       LLRenderTarget::sUseFBO &&
                       LLPipeline::sRenderBump &&
-                      LLPipeline::sRenderTransparentWater &&
                       RenderAvatarVP &&
                       WindLightUseAtmosShaders &&
                       (bool) LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred");
@@ -6564,21 +6563,19 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
                 continue;
             }
 
-			LLVector3 light_pos(light->getRenderPosition());
-			LLVector4 light_pos_gl(light_pos, 1.0f);
-	
-			F32 light_radius = llmax(light->getLightRadius(), 0.001f);
-            F32 size = light_radius * (sRenderDeferred ? 1.5f : 1.0f);
+            LLVector3 light_pos(light->getRenderPosition());
+            LLVector4 light_pos_gl(light_pos, 1.0f);
 
-            if (size <= 0.001f)
+            F32 adjusted_radius = light->getLightRadius() * (sRenderDeferred ? 1.5f : 1.0f);
+            if (adjusted_radius <= 0.001f)
             {
                 continue;
             }
 
-			F32 x = (3.f * (1.f + (light->getLightFalloff() * 2.0f))); // why this magic?  probably trying to match a historic behavior.
-			F32 linatten = x / (light_radius); // % of brightness at radius
+            F32 x = (3.f * (1.f + (light->getLightFalloff() * 2.0f)));  // why this magic?  probably trying to match a historic behavior.
+            F32 linatten = x / adjusted_radius;                         // % of brightness at radius
 
-			mHWLightColors[cur_light] = light_color;
+            mHWLightColors[cur_light] = light_color;
 			LLLightState* light_state = gGL.getLight(cur_light);
 			
 			light_state->setPosition(light_pos_gl);
@@ -6587,7 +6584,7 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 			light_state->setConstantAttenuation(0.f);
 			if (sRenderDeferred)
 			{
-				light_state->setLinearAttenuation(size);
+				light_state->setLinearAttenuation(linatten);
 				light_state->setQuadraticAttenuation(light->getLightFalloff(DEFERRED_LIGHT_FALLOFF) + 1.f); // get falloff to match for forward deferred rendering lights
 			}
 			else
@@ -9547,7 +9544,13 @@ inline float sgn(float a)
 void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 {
     LL_PROFILE_ZONE_SCOPED;
-    if (LLPipeline::sWaterReflections && assertInitialized() && LLDrawPoolWater::sNeedsReflectionUpdate)
+
+    if (!assertInitialized())
+    {
+        return;
+    }
+
+    if (LLPipeline::sWaterReflections && LLDrawPoolWater::sNeedsReflectionUpdate)
     {
         bool skip_avatar_update = false;
         if (!isAgentAvatarValid() || gAgentCamera.getCameraAnimating() || gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK || !LLVOAvatar::sVisibleInFirstPerson)
@@ -9767,18 +9770,12 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
                 //clip out geometry on the same side of water as the camera w/ enough margin to not include the water geo itself,
                 // but not so much as to clip out parts of avatars that should be seen under the water in the distortion map
-                LLPlane plane(-pnorm, water_dist);
+                LLPlane plane(-pnorm, camera_is_underwater ? -water_height : water_dist);
                 LLGLUserClipPlane clip_plane(plane, saved_modelview, saved_projection);
 
                 gGL.setColorMask(true, true);
                 mWaterDis.clear();
                 gGL.setColorMask(true, false);
-
-                // ignore clip plane if we're underwater and viewing distortion map of objects above waterline
-                if (camera_is_underwater)
-                {
-                    clip_plane.disable();
-                }
 
                 if (reflection_detail >= WATER_REFLECT_NONE_WATER_TRANSPARENT)
                 {
@@ -9831,6 +9828,29 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         }
 
         LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
+    }
+    else
+    {
+        // Initial sky pass is still needed even if water reflection is not rendering
+        bool camera_is_underwater = LLViewerCamera::getInstance()->cameraUnderWater();
+        if (!camera_is_underwater)
+        {
+            gPipeline.pushRenderTypeMask();
+            {
+                gPipeline.andRenderTypeMask(
+                    LLPipeline::RENDER_TYPE_SKY,
+                    LLPipeline::RENDER_TYPE_WL_SKY,
+                    LLPipeline::END_RENDER_TYPES);
+
+                LLCamera camera = camera_in;
+                camera.setFar(camera_in.getFar() * 0.75f);
+
+                updateCull(camera, mSky);
+                stateSort(camera, mSky);
+                renderGeom(camera, TRUE);
+            }
+            gPipeline.popRenderTypeMask();
+        }
     }
 }
 
