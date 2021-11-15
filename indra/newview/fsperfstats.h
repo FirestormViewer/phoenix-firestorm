@@ -183,11 +183,11 @@ namespace FSPerfStats
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
             using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
-            #ifdef FS_HAS_TELEMETRY
+            #ifdef FS_HAS_TELEMETRY_SUPPORT
             static char avstr[36];
             static char obstr[36];
             #endif
-            
+
             if(upd.statType == StatType_t::RENDER_DONE && upd.objType == ObjType_t::OT_GENERAL && upd.time == 0)
             {
                 // LL_INFOS("perfstats") << "End of Frame Toggle Buffer:" << gFrameCount << LL_ENDL;
@@ -207,9 +207,11 @@ namespace FSPerfStats
             auto type {upd.statType};
             auto val {upd.time};
 
+            #ifdef FS_HAS_TELEMETRY_SUPPORT
             FSZoneText(key.toStringFast(obstr),36);
             FSZoneText(avKey.toStringFast(avstr),36);
             FSZoneValue(val);
+            #endif
 
             if(ot == ObjType_t::OT_GENERAL)
             {
@@ -285,11 +287,9 @@ namespace FSPerfStats
 
             while( enabled() && !LLApp::isExiting() )
             {
-                FSZoneN("perf batch");
                 auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
                 if(count)
                 {
-                    FSZoneValue(count);
                     // LL_INFOS("perfstats") << "processing " << count << " updates." << LL_ENDL;
                     for(auto i =0; i < count; i++)
                     {

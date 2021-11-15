@@ -82,7 +82,7 @@ namespace FSPerfStats
         using ST = StatType_t;
 
         bool unreliable{false};
-        LLCachedControl<U32> smoothingPeriods(gSavedSettings, "FSPerfFloaterSmoothingPeriods");
+        static LLCachedControl<U32> smoothingPeriods(gSavedSettings, "FSPerfFloaterSmoothingPeriods");
 
         auto& sceneStats = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null];
         auto& lastStats = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null];

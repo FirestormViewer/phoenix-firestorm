@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">Назад</text>
+	<text name="huds_title">Ваши HUDы</text>
+	<text name="huds_desc1">
+		Отсоединение неиспользуемых HUD-ов экономит память и может ускорить работу программы.
+	</text>
+	<text name="huds_desc2">
+		HUD часто содержат много скриптов, а также приводят к задержкам на стороне сервера.
+	</text>
+	<text name="huds_desc3">
+		Примечание. Кнопка сворачивания HUD не отсоединяет его. Используйте X, чтобы удалить его.
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns name="art_value" label="Время (μs)" tool_tip="Время, затраченное на рендеринг этого HUD (микросекунды) "/>
+		<name_list.columns name="name" label="Имя" tool_tip="Нажмите 'X' чтобы отсоединить"/>
+	</name_list>
+</panel>

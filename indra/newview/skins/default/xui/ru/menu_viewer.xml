@@ -141,6 +141,7 @@
 			<menu_item_check label="Права участка" name="Parcel Properties"/>
 			<menu_item_check label="Расширенное меню" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_check label="Увеличить скорость графики ..." name="Performance"/>
 		<menu_item_call label="Телепортироваться домой" name="Teleport Home"/>
 
 		<menu label="Окружающая среда" name="Environment">

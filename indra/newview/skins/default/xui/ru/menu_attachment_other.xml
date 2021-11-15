@@ -8,7 +8,7 @@
 	<menu_item_call label="Звонок" name="Call"/>
 	<menu_item_call label="Пригласить в группу" name="Invite..."/>
 	<menu_item_call label="Сброс скелета" name="Reset Skeleton"/>
-	<menu_item_call label="Восстановить скелет и анимации" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Сброс скелета и анимации" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Сброс Mesh LOD" name="Reset Mesh LOD" />
 	<context_menu label="Управление" name="Annoyance">
 		<menu_item_call label="Заблокировать" name="Avatar Mute"/>
@@ -21,19 +21,16 @@
 	<menu_item_call label="Приблизить" name="Zoom In"/>
 	<menu_item_call label="Заплатить" name="Pay..."/>
 	<menu_item_call label="Профиль объекта" name="Object Inspect"/>
-	<menu_item_check label="Нормальное отображение" name="Normal"/>
-	<menu_item_check label="Упростить всегда" name="Always use impostor"/>
-	<menu_item_check label="Никогда не упрощать" name="Never use impostor"/>
+	<menu_item_check name="AlwaysRenderFully" label="Всегда отображать полностью"/>
+	<menu_item_check name="DoNotRender" label="Никогда не отображать"/>
+	<menu_item_check name="RenderNormally" label="Удалить из исключений отображения"/>
 	<menu_item_call label="Блокировать владельца частиц" name="Mute Particle"/>
 	<menu_item_call label="Инспектировать" name="Object_Inspect_Floater"/>
 	<menu_item_call label="Информация о скриптах" name="ScriptInfo"/>
 	<menu_item_call label="Не отображать" name="Derender"/>
-	<menu_item_call label="Не отображать всегда" name="DerenderPermanent"/>
-	<menu_item_call label="Отладка" name="Debug..."/>
+	<menu_item_call label="Не отображать + ЧС" name="DerenderPermanent"/>
+	<menu_item_call label="Показать текстуры" name="Debug..."/>
 	<menu_item_call label="Обновить текстуру" name="Texture Refresh"/>
-	<menu_item_check name="RenderNormally" label="Отображать Нормально"/>
-	<menu_item_check name="DoNotRender" label="Не отображать"/>
-	<menu_item_check name="AlwaysRenderFully" label="Отображать Полностью"/>
 	<context_menu label="Сохранить как" name="Export Menu">
 		<menu_item_call label="Backup" name="Backup"/>
 		<menu_item_call label="Collada" name="Collada"/>

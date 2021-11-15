@@ -36,63 +36,63 @@
 				Frame-Aufschlüsselung erfolgt hier.
 			</text>
 		</panel>
-		<panel name="panel_performance_main">
-			<panel name="target_subpanel">
-				<text name="settings_lbl">
-					Auto-Anpassung Ziel-FPS
-				</text>
-				<check_box label="Auto-Anpassung" name="AutoTuneFPS" tool_tip="Der Viewer wird automatisch versuchen, die Ziel-FPS zu erreichen." />
-				<text name="settings_desc">
-					Einstellungen automatisch für FPS anpassen.
-				</text>
-				<combo_box name="FSTuningFPSStrategy">
-					<combo_box.item label="Nur Avatar-Einstellungen" name="av_only" />
-					<combo_box.item label="Avatar und Szenerie" name="av_and_scene" />
-				</combo_box>
-				<spinner name="target_fps" tooltip="Ziel-FPS - Der Viewer wird automatisch versuchen, die gewünschte FPS durch Anpassung der Einstellungen zu erreichen." />
-			</panel>
-			<panel name="settings_subpanel">
-				<text name="settings_lbl">
-					Grafik-Einstellungen
-				</text>
-				<text name="settings_desc">
-					Einstellungen für Distanz, Wasser, Beleuchtung uvm.
-				</text>
-			</panel>
-			<panel name="nearby_subpanel">
-				<text name="avatars_nearby_lbl">
-					Avatar in der Nähe
-				</text>
-				<text name="avatars_nearby_desc">
-					Einstellen, welche Avatare vollständig dargestellt werden.
-				</text>
-				<text name="avatars_frme_pct_lbl">
+		<panel name="target_subpanel">
+			<text name="settings_lbl">
+				Auto-Anpassung Ziel-FPS
+			</text>
+			<check_box label="Auto-Anpassung" name="AutoTuneFPS" tool_tip="Der Viewer wird automatisch versuchen, die Ziel-FPS zu erreichen." />
+			<text name="settings_desc">
+				Einstellungen automatisch für FPS anpassen.
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="Nur Avatar-Einstellungen" name="av_only" />
+				<combo_box.item label="Avatar und Szenerie" name="av_and_scene" />
+			</combo_box>
+			<spinner name="target_fps" tooltip="Ziel-FPS - Der Viewer wird automatisch versuchen, die gewünschte FPS durch Anpassung der Einstellungen zu erreichen." />
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				Grafik-Einstellungen
+			</text>
+			<text name="settings_desc">
+				Einstellungen für Distanz, Wasser, Beleuchtung uvm.
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				Avatar in der Nähe
+			</text>
+			<text name="avatars_nearby_desc">
+				Einstellen, welche Avatare vollständig dargestellt werden.
+			</text>
+			<text name="avatars_frme_pct_lbl">
 Benötigte
 Renderzeit
 für Avatare
-				</text>
-			</panel>
-			<panel name="complexity_subpanel">
-				<text name="complexity_lbl">
-					Eigene Avatar-Komplexität
-				</text>
-				<text name="complexity_info">
-					Sei ein guter Einwohner - verwalte den Einfluss des eigenen Avatars.
-				</text>
-			</panel>
-			<panel name="huds_subpanel">
-				<text name="huds_lbl">
-					Aktive HUDs
-				</text>
-				<text name="huds_desc">
-					Entfernen von HUDs kann Geschwindigkeit verbessern.
-				</text>
-				<text name="huds_frme_pct_lbl">
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				Eigene Avatar-Komplexität
+			</text>
+			<text name="complexity_info">
+				Sei ein guter Einwohner - verwalte den Einfluss des eigenen Avatars.
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				Aktive HUDs
+			</text>
+			<text name="huds_desc">
+				Entfernen von HUDs kann Geschwindigkeit verbessern.
+			</text>
+			<text name="huds_frme_pct_lbl">
 Benötigte
 Renderzeit
 für HUDs
-				</text>
-			</panel>
+			</text>
 		</panel>
 	</panel>
 </floater>

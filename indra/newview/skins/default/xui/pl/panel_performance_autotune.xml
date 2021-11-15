@@ -23,4 +23,12 @@ Określ odległość po której awatar zostanie zoptymalizowany.
 	<text name="distance_desc1">
 		Podczas przetwarzania sceny autostrojenie zoptymalizuje pole widzenia między minimalnym a preferowanym.
 	</text>
+	<text name="sundry_lbl">
+		Różne
+	</text>
+	<check_box label="Optymalizacja własnego awatara" name="alow_self_impostor" tool_tip="Przeglądarka będzie mogła renderować własny awatar jako awatar zastępczy." />
+	<check_box label="Zoptymalizowany czas renderowania" name="show_tuned_art" tool_tip="Kolumna Czas będzie pokazywać bieżący czas renderowania, a nie czas renderowania przed dostrajaniem." />
+	<text name="sundry_desc1">
+		Te opcje kontrolują dość subtelne ustawienia. Skorzystaj z pomocy online, aby uzyskać więcej informacji.
+	</text>
 </panel>

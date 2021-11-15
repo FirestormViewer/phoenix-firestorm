@@ -6415,7 +6415,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 
 			if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL) && !drawablep->isState(LLDrawable::RIGGED) )
 			{
-				FSZoneN("Rebuild all non-Rigged")
+				FSZoneN("Rebuild all non-Rigged");
 				LLVOVolume* vobj = drawablep->getVOVolume();
 				// <FS:Beq> capture render times
 				if( vobj && vobj->isAttachment() )
