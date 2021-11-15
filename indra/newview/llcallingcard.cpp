@@ -265,6 +265,7 @@ S32 LLAvatarTracker::addBuddyList(const LLAvatarTracker::buddy_map_t& buds)
 			LLAvatarName av_name;
 			LLAvatarNameCache::get(agent_id, &av_name);
 
+			addChangedMask(LLFriendObserver::ADD, agent_id); // <FS:Ansariel> Re-added because we need it for the legacy contact list
 			LL_DEBUGS() << "Added buddy " << agent_id
 					<< ", " << (mBuddyInfo[agent_id]->isOnline() ? "Online" : "Offline")
 					<< ", TO: " << mBuddyInfo[agent_id]->getRightsGrantedTo()
