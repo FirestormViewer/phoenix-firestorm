@@ -91,10 +91,13 @@ protected:
 
 	bool enableSelected(const LLSD& userdata);
 	void doToSelected(const LLSD& userdata);
+	static bool onRenameCommit(const LLSD& notification, const LLSD& response);
 	BOOL isClipboardPasteable() const;
 	void pasteFromClipboard() const;
 	
 	void showDropDownMenu();
+
+	void onMoreTextBoxClicked();
 
 	LLHandle<LLView> mOverflowMenuHandle;
 	LLHandle<LLView> mContextMenuHandle;
@@ -162,6 +165,9 @@ private:
 	LLInventoryModel::item_array_t mItems;
 
 	BOOL mTabsHighlightEnabled;
+
+	S32 mMouseX;
+	S32 mMouseY;
 
 	boost::signals2::connection mEndDragConnection;
 };

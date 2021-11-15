@@ -128,10 +128,12 @@
 #include "llpanelpick.h"
 #include "llpanelgrouplandmoney.h"
 #include "llpanelgroupnotices.h"
+#include "llparcel.h"
 #include "llpreview.h"
 #include "llpreviewscript.h"
 #include "llproxy.h"
 #include "llproductinforequest.h"
+#include "llqueryflags.h"
 #include "llselectmgr.h"
 #include "llsky.h"
 #include "llstatview.h"
@@ -142,6 +144,7 @@
 #include "lltoolmgr.h"
 #include "lltrans.h"
 #include "llui.h"
+#include "lluiusage.h"
 #include "llurldispatcher.h"
 #include "llurlentry.h"
 #include "llslurl.h"
@@ -176,6 +179,7 @@
 #include "pipeline.h"
 #include "llappviewer.h"
 #include "llfasttimerview.h"
+#include "lltelemetry.h"
 #include "llfloatermap.h"
 #include "llweb.h"
 #include "llvoiceclient.h"
@@ -231,7 +235,6 @@ extern S32 gStartImageHeight;
 static bool gGotUseCircuitCodeAck = false;
 static std::string sInitialOutfit;
 static std::string sInitialOutfitGender;	// "male" or "female"
-static boost::signals2::connection sWearablesLoadedCon;
 
 static bool gUseCircuitCallbackCalled = false;
 
@@ -530,6 +533,8 @@ bool idle_startup()
 			}
 
 			#if LL_WINDOWS
+                LLPROFILE_STARTUP();
+
 				// On the windows dev builds, unpackaged, the message.xml file will 
 				// be located in indra/build-vc**/newview/<config>/app_settings.
 				std::string message_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"message.xml");
@@ -1692,8 +1697,20 @@ bool idle_startup()
 	if (STATE_INVENTORY_SEND == LLStartUp::getStartupState())
 	{
 		display_startup();
+
+        // request mute list
+        LL_INFOS() << "Requesting Mute List" << LL_ENDL;
+        LLMuteList::getInstance()->requestFromServer(gAgent.getID());
+
+        // Get L$ and ownership credit information
+        LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
+        LLStatusBar::sendMoneyBalanceRequest();
+
+        display_startup();
+
 		// Inform simulator of our language preference
 		LLAgentLanguage::update();
+
 		display_startup();
 		// unpack thin inventory
 		LLSD response = LLLoginInstance::getInstance()->getResponse();
@@ -1860,14 +1877,6 @@ bool idle_startup()
 		LLLandmark::registerCallbacks(msg);
 		display_startup();
 
-		// request mute list
-		LL_INFOS() << "Requesting Mute List" << LL_ENDL;
-		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
-		display_startup();
-		// Get L$ and ownership credit information
-		LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
-		LLStatusBar::sendMoneyBalanceRequest();
-		display_startup();
 		// request all group information
 		LL_INFOS() << "Requesting Agent Data" << LL_ENDL;
 		gAgent.sendAgentDataUpdateRequest();
@@ -1932,10 +1941,6 @@ bool idle_startup()
 			// Set the show start location to true, now that the user has logged
 			// on with this install.
 			gSavedSettings.setBOOL("ShowStartLocation", TRUE);
-
-			// Open Conversation floater on first login.
-			LLFloaterReg::toggleInstanceOrBringToFront("im_container");
-
 		}
 
 		display_startup();
@@ -2292,6 +2297,16 @@ bool idle_startup()
 		LLPathfindingManager::getInstance()->initSystem();
 
 		gAgentAvatarp->sendHoverHeight();
+
+		// look for parcels we own
+		send_places_query(LLUUID::null,
+			LLUUID::null,
+			"",
+			DFQ_AGENT_OWNED,
+			LLParcel::C_ANY,
+			"");
+
+		LLUIUsage::instance().clear();
 
 		return TRUE;
 	}
@@ -2728,11 +2743,6 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 	}
 	else
 	{
-		// FIXME SH-3860 - this creates a race condition, where COF
-		// changes (base outfit link added) after appearance update
-		// request has been submitted.
-		sWearablesLoadedCon = gAgentWearables.addLoadedCallback(LLStartUp::saveInitialOutfit);
-
 		bool do_copy = true;
 		bool do_append = false;
 		LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
@@ -2744,23 +2754,6 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 
 	gAgent.setOutfitChosen(TRUE);
 	gAgentWearables.sendDummyAgentWearablesUpdate();
-}
-
-//static
-void LLStartUp::saveInitialOutfit()
-{
-	if (sInitialOutfit.empty()) {
-		LL_DEBUGS() << "sInitialOutfit is empty" << LL_ENDL;
-		return;
-	}
-	
-	if (sWearablesLoadedCon.connected())
-	{
-		LL_DEBUGS("Avatar") << "sWearablesLoadedCon is connected, disconnecting" << LL_ENDL;
-		sWearablesLoadedCon.disconnect();
-	}
-	LL_DEBUGS("Avatar") << "calling makeNewOutfitLinks( \"" << sInitialOutfit << "\" )" << LL_ENDL;
-	LLAppearanceMgr::getInstance()->makeNewOutfitLinks(sInitialOutfit,false);
 }
 
 std::string& LLStartUp::getInitialOutfitName()
@@ -3573,11 +3566,6 @@ bool process_login_success_response()
 	}
 
 	// Request the map server url
-	// Non-agni grids have a different default location.
-	if (!LLGridManager::getInstance()->isInProductionGrid())
-	{
-		gSavedSettings.setString("MapServerURL", "http://test.map.secondlife.com.s3.amazonaws.com/");
-	}
 	std::string map_server_url = response["map-server-url"];
 	if(!map_server_url.empty())
 	{

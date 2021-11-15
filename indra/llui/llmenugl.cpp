@@ -79,7 +79,7 @@ const U32 LEFT_PAD_PIXELS = 3;
 const U32 LEFT_WIDTH_PIXELS = 15;
 const U32 LEFT_PLAIN_PIXELS = LEFT_PAD_PIXELS + LEFT_WIDTH_PIXELS;
 
-const U32 RIGHT_PAD_PIXELS = 2;
+const U32 RIGHT_PAD_PIXELS = 7;
 const U32 RIGHT_WIDTH_PIXELS = 15;
 const U32 RIGHT_PLAIN_PIXELS = RIGHT_PAD_PIXELS + RIGHT_WIDTH_PIXELS;
 
@@ -95,7 +95,7 @@ const std::string SEPARATOR_NAME("separator");
 const std::string VERTICAL_SEPARATOR_LABEL( "|" );
 
 const std::string LLMenuGL::BOOLEAN_TRUE_PREFIX( "\xE2\x9C\x94" ); // U+2714 HEAVY CHECK MARK
-const std::string LLMenuGL::BRANCH_SUFFIX( "\xE2\x96\xB6" ); // U+25B6 BLACK RIGHT-POINTING TRIANGLE
+const std::string LLMenuGL::BRANCH_SUFFIX( "\xe2\x96\xb8" ); // U+25B6 BLACK RIGHT-POINTING TRIANGLE
 const std::string LLMenuGL::ARROW_UP  ("^^^^^^^");
 const std::string LLMenuGL::ARROW_DOWN("vvvvvvv");
 
@@ -3276,7 +3276,7 @@ void hide_top_view( LLView* view )
 // x and y are the desired location for the popup, in the spawning_view's
 // coordinate frame, NOT necessarily the mouse location
 // static
-void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y)
+void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y, S32 mouse_x, S32 mouse_y)
 {
 	const S32 CURSOR_HEIGHT = 22;		// Approximate "normal" cursor size
 	const S32 CURSOR_WIDTH = 12;
@@ -3307,12 +3307,6 @@ void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y)
 		}
 	}
 
-	// Save click point for detecting cursor moves before mouse-up.
-	// Must be in local coords to compare with mouseUp events.
-	// If the mouse doesn't move, the menu will stay open ala the Mac.
-	// See also LLContextMenu::show()
-	S32 mouse_x, mouse_y;
-
 	// Resetting scrolling position
 	if (menu->isScrollable() && menu->isScrollPositionOnShowReset())
 	{
@@ -3323,7 +3317,18 @@ void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y)
 	menu->needsArrange();
 	menu->arrangeAndClear();
 
-	LLUI::getInstance()->getMousePositionLocal(menu->getParent(), &mouse_x, &mouse_y);
+	if ((mouse_x == 0) || (mouse_y == 0))
+
+	{
+		// Save click point for detecting cursor moves before mouse-up.
+		// Must be in local coords to compare with mouseUp events.
+		// If the mouse doesn't move, the menu will stay open ala the Mac.
+		// See also LLContextMenu::show()
+
+		LLUI::getInstance()->getMousePositionLocal(menu->getParent(), &mouse_x, &mouse_y);
+	}
+	
+	
 	LLMenuHolderGL::sContextMenuSpawnPos.set(mouse_x,mouse_y);
 
 	const LLRect menu_region_rect = LLMenuGL::sMenuContainer->getRect();

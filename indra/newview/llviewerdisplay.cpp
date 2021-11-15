@@ -479,6 +479,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gAgent.setTeleportState( LLAgent::TELEPORT_ARRIVING );
 			gAgent.setTeleportMessage(
 				LLAgent::sTeleportProgressMessages["arriving"]);
+			gAgent.sheduleTeleportIM();
 			gTextureList.mForceResetTextureStats = TRUE;
 			gAgentCamera.resetView(TRUE, TRUE);
 			
@@ -761,10 +762,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				glViewport(0,0,512,512);
 				LLVOAvatar::updateFreezeCounter() ;
 
-				if(!LLPipeline::sMemAllocationThrottled)
-				{		
-					LLVOAvatar::updateImpostors();
-				}
+				LLVOAvatar::updateImpostors();
 
 				set_current_projection(proj);
 				set_current_modelview(mod);

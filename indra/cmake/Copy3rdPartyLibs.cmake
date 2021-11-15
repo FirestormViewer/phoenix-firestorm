@@ -61,6 +61,7 @@ if(WINDOWS)
         nghttp2.dll
         glod.dll
         libhunspell.dll
+        uriparser.dll
         )
 
     # Filenames are different for 32/64 bit BugSplat file and we don't
@@ -94,7 +95,7 @@ if(WINDOWS)
         MESSAGE(STATUS "MSVC_VERSION ${MSVC_VERSION}")
     elseif (MSVC_VERSION EQUAL 1800) # VisualStudio 2013, which is (sigh) VS 12
         set(MSVC_VER 120)
-    elseif (MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1930) # Visual Studio 2017 + 2019
+    elseif (MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1940) # Visual Studio 2017 through 2022
         set(MSVC_VER 140)
     else (MSVC80)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
@@ -165,6 +166,9 @@ elseif(DARWIN)
         libnghttp2.dylib
         libnghttp2.14.dylib
         libnghttp2.14.19.0.dylib
+        liburiparser.dylib
+        liburiparser.1.dylib
+        liburiparser.1.0.27.dylib
        )
 
     if (FMODSTUDIO)
