@@ -59,6 +59,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if LL_LINUX
 // Work-around spurious used before init warning on Vector4a
@@ -642,6 +643,13 @@ void renderFace(LLDrawable* drawable, LLFace *face)
     LLVOVolume* vobj = drawable->getVOVolume();
     if (vobj)
     {
+		// <FS:Beq> Placeholder - This function emits drawcalls but is only used in one place and not useful for stats.
+		// TODO(Beq) if we need this consider moving it to llSelectMgr loop instead to reduce overhead.
+		// std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
+		// if(vobj->isAttachment())
+		// {
+		// 		trackAttachments(vobj, LLPipeline::sShadowRender, &ratPtr);
+		// }
         LLVolume* volume = NULL;
 
         if (drawable->isState(LLDrawable::RIGGED))
@@ -1240,6 +1248,11 @@ bool LLFace::canRenderAsMask()
 	{
 		return false;
 	}
+
+	// <FS:Beq> shortcircuit fully alpha faces
+	if(getViewerObject()->isHUDAttachment()){return false;};
+	if(te->getAlpha() == 0.0f && (te->getGlow() == 0.f)){FSZoneN("beqshortcircuit invisible");return true;}
+	// </FS:Beq>
 	
 	LLMaterial* mat = te->getMaterialParams();
 	if (mat && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)

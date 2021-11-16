@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">
+		Wstecz
+	</text>
+	<text name="settings_title">
+		Ustawienia grafiki
+	</text>
+	<text name="quality_lbl">
+		Jakość vs szybkość
+	</text>
+	<text name="FasterText">
+		Szybko
+	</text>
+	<text name="BetterText">
+		Lepsza jakość
+	</text>
+	<text name="ShadersPrefText">
+		Nis
+	</text>
+	<text name="ShadersPrefText2">
+		Śre
+	</text>
+	<text name="ShadersPrefText3">
+		Wys
+	</text>
+	<text name="quality_desc">
+		Wybranie ustawienia zresetuje wszystkie ręcznie wprowadzone zmiany.
+	</text>
+	<text name="distance_lbl">
+		Pole widzenia
+	</text>
+	<text name="faster_lbl">
+		Szybko
+	</text>
+	<text name="farther_lbl">
+		Dalej
+	</text>
+	<text name="distance_desc1">
+		Utrzymuj niskie, aby uzyskać lepszą wydajność. Zwiększ, aby widzieć dalej.
+	</text>
+	<text name="environment_lbl">
+		Otoczenie
+	</text>
+	<text name="enhancements_desc">
+Redukcja / eliminacja cieni może zwiększyć liczbę klatek na sekundę,
+ale wpływa na atmosferę i wygląd sceny.
+	</text>
+	<text name="RenderShadowDetailText">
+		Źródła cieni:
+	</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="Brak" name="0" />
+		<combo_box.item label="Słońce/Księżyc" name="1" />
+		<combo_box.item label="Słońce/Księżyc + inne źródła" name="2" />
+	</combo_box>
+	<text name="water_lbl">
+		Woda
+	</text>
+	<text name="water_desc">
+		Obniżenie jakości efektów wody może poprawić liczbę klatek na sekundę.
+	</text>
+	<text name="ReflectionsText">
+		Odbicia w wodzie:
+	</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="Żadne; nieprzezroczyste" name="-2" />
+		<combo_box.item label="Żadne; przezroczyste" name="-1" />
+		<combo_box.item label="Minimalne" name="0" />
+		<combo_box.item label="Teren i drzewa" name="1" />
+		<combo_box.item label="Wszystkie obiekty statyczne" name="2" />
+		<combo_box.item label="Wszystkie awatary i obiekty" name="3" />
+		<combo_box.item label="Wszystko" name="4" />
+	</combo_box>
+	<text name="photo_lbl">
+		Fotografia
+	</text>
+	<text name="photo_desc">
+Fotografowie wymagają lepszej jakości, często
+dzieje się to kosztem liczby klatek na sekundę.
+Narzędzia [APP_NAME] pomogą znaleźć równowagę.
+	</text>
+	<button name="open_phototools" label="Fotograf" tool_tip="Otwórz dedykowane narzędzia do zdjęć, aby dostroić zaawansowane ustawienia obrazu." />
+</panel>

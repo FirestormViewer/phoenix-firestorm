@@ -30,6 +30,9 @@
 #define LL_llavatarrendernotifier_H
 
 #include "llnotificationptr.h"
+#include "llviewerobject.h"
+#include "llhudobject.h"
+
 
 class LLViewerRegion;
 

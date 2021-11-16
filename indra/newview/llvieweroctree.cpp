@@ -1361,6 +1361,7 @@ bool LLViewerOctreeCull::earlyFail(LLViewerOctreeGroup* group)
 //virtual 
 void LLViewerOctreeCull::traverse(const OctreeNode* n)
 {
+	FSZone;
 	LLViewerOctreeGroup* group = (LLViewerOctreeGroup*) n->getListener(0);
 
 	if (earlyFail(group))
@@ -1371,14 +1372,17 @@ void LLViewerOctreeCull::traverse(const OctreeNode* n)
 	if (mRes == 2 || 
 		(mRes && group->hasState(LLViewerOctreeGroup::SKIP_FRUSTUM_CHECK)))
 	{	//fully in, just add everything
+		FSZoneN("AllInside");
 		OctreeTraveler::traverse(n);
 	}
 	else
 	{
+		FSZoneN("Check inside?");
 		mRes = frustumCheck(group);
 				
 		if (mRes)
 		{ //at least partially in, run on down
+			FSZoneN("PartiallyIn");
 			OctreeTraveler::traverse(n);
 		}
 

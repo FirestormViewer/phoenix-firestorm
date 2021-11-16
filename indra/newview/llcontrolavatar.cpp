@@ -80,6 +80,7 @@ void LLControlAvatar::initInstance()
 
 const LLVOAvatar *LLControlAvatar::getAttachedAvatar() const
 {
+    FSZone;
 	if (mRootVolp && mRootVolp->isAttachment())
 	{
 		return mRootVolp->getAvatarAncestor();
@@ -89,6 +90,7 @@ const LLVOAvatar *LLControlAvatar::getAttachedAvatar() const
 
 LLVOAvatar *LLControlAvatar::getAttachedAvatar()
 {
+    FSZone;
 	if (mRootVolp && mRootVolp->isAttachment())
 	{
 		return mRootVolp->getAvatarAncestor();

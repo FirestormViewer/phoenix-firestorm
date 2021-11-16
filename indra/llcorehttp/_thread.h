@@ -35,6 +35,7 @@
 
 #include "apr.h" // thread-related functions
 #include "_refcounted.h"
+#include "fstelemetry.h"
 
 namespace LLCoreInt
 {
@@ -54,6 +55,10 @@ private:
 
 	void run()
 		{ // THREAD CONTEXT
+			// <FS:Beq> - Add threadnames 
+			LL_INFOS("THREAD") << "Started unnamed HTTP thread " << LL_ENDL;
+			FSThreadName( "HTTP" );
+			// </FS:Beq>
 
 			// Take out additional reference for the at_exit handler
 			addRef();

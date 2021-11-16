@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="Popraw szybkość grafiki (eksperymentalne)">
+	<floater.string name="frame_stats">
+		Klatki: [TOT_FRAME_TIME]ms - Scena:[SCENERY_FRAME_PCT]% Awatary:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDy:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% ZADANIA:[IDLE_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="limit_fps">
+		Limit FPS: [FPSCAP] fps
+	</floater.string>
+	<floater.string name="tuning_fps">
+		Strojenie do [FPSTARGET] fps
+	</floater.string>
+	<floater.string name="focus_fps">
+		W tle
+	</floater.string>
+	<floater.string name="tot_av_template">
+		Łącznie: [TOT_AV] ([TOT_AV_TIME]μs)
+	</floater.string>
+	<floater.string name="tot_att_template">
+		Łącznie: [TOT_ATT] ([TOT_ATT_TIME]μs)
+	</floater.string>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				klatek na sekundę
+			</text>
+			<text name="fps_desc1_lbl">
+				Poczekaj 5-10 sekund, by nastąpiły zmiany.
+			</text>
+			<text name="frame_breakdown">
+				[----------------- Tutaj pojawi się analiza klatek. -----------------]
+			</text>
+		</panel>
+		<panel name="target_subpanel">
+			<text name="settings_lbl">
+				Autostrojenie klatek
+			</text>
+			<check_box label="Autostrojenie" name="AutoTuneFPS" tool_tip="Przeglądarka spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
+			<text name="settings_desc">
+				Autostrojenie ustawień, by utrzymać FPS.
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="Dostrój tylko awatary" name="av_only" />
+				<combo_box.item label="Awatary i scena" name="av_and_scene" />
+			</combo_box>
+			<spinner name="target_fps" tooltip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				Ustawienia grafiki
+			</text>
+			<text name="settings_desc">
+				Wybierz ustawienia odległości, wody, oświetlenia itd.
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				Awatary w pobliżu
+			</text>
+			<text name="avatars_nearby_desc">
+				Ustaw, które awatary są w pełni wyświetlane.
+			</text>
+			<text name="avatars_frme_pct_lbl">
+Czas
+rysowania
+awatarów
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				Złożoność awatara
+			</text>
+			<text name="complexity_info">
+				Bądź dobrą osobą. Zajmij się złożonością swojego awatara.
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				Aktywne HUDy
+			</text>
+			<text name="huds_desc">
+				Usunięcie zbędnych HUDów poprawi szybkość.
+			</text>
+			<text name="huds_frme_pct_lbl">
+Czas
+rysowania
+HUDów
+			</text>
+		</panel>
+	</panel>
+</floater>

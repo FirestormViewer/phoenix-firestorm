@@ -1,6 +1,8 @@
 /** 
- * @file llfloaterperformance.h
+ * @file fsfloaterperformance.h
  *
+ * This is forked directly from an early access release of llfloaterperformance.h
+ * 
  * $LicenseInfo:firstyear=2021&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2021, Linden Research, Inc.
@@ -23,20 +25,21 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLFLOATERPERFORMANCE_H
-#define LL_LLFLOATERPERFORMANCE_H
+#ifndef FS_FLOATERPERFORMANCE_H
+#define FS_FLOATERPERFORMANCE_H
 
 #include "llfloater.h"
 #include "lllistcontextmenu.h"
 
 class LLCharacter;
 class LLNameListCtrl;
+class LLComboBox;
 
-class LLFloaterPerformance : public LLFloater
+class FSFloaterPerformance : public LLFloater
 {
 public:
-    LLFloaterPerformance(const LLSD& key);
-    virtual ~LLFloaterPerformance();
+    FSFloaterPerformance(const LLSD& key);
+    virtual ~FSFloaterPerformance();
 
     /*virtual*/ BOOL postBuild();
     /*virtual*/ void draw();
@@ -51,6 +54,7 @@ public:
 
     void onCustomAction (const LLSD& userdata, const LLUUID& av_id);
     bool isActionChecked(const LLSD& userdata, const LLUUID& av_id);
+    void onExtendedAction(const LLSD& userdata, const LLUUID& av_id);
 
 private:
     void initBackBtn(LLPanel* panel);
@@ -58,13 +62,15 @@ private:
     void populateObjectList();
     void populateNearbyList();
 
-    void onClickAdvanced();
     void onChangeQuality(const LLSD& data);
     void onClickHideAvatars();
     void onClickExceptions();
+    void onClickFocusAvatar();
 
     void updateMaxComplexity();
     void updateComplexityText();
+    void updateMaxRenderTime();
+    void updateMaxRenderTimeText();
 
     void getNearbyAvatars(std::vector<LLCharacter*> &valid_nearby_avs);
 
@@ -73,9 +79,11 @@ private:
     LLPanel* mComplexityPanel;
     LLPanel* mHUDsPanel;
     LLPanel* mSettingsPanel;
+    LLPanel* mAutoTunePanel;
     LLNameListCtrl* mHUDList;
     LLNameListCtrl* mObjectList;
     LLNameListCtrl* mNearbyList;
+    LLComboBox* mNearbyCombo;
 
     LLListContextMenu* mContextMenu;
 
@@ -84,6 +92,7 @@ private:
     S32 mNearbyMaxComplexity;
 
     boost::signals2::connection	mComplexityChangedSignal;
+    boost::signals2::connection	mMaxARTChangedSignal;
 };
 
-#endif // LL_LLFLOATERPERFORMANCE_H
+#endif // FS_FLOATERPERFORMANCE_H

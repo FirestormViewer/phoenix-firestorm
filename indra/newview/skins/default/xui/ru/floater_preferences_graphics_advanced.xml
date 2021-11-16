@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="prefs_graphics_advanced" title="ДОПОЛНИТЕЛЬНЫЕ НАСТРОЙКИ ГРАФИКИ">
+<floater name="prefs_graphics_advanced" title="Расширенные настройки графики">
 	<text name="GeneralText">
 		Общие
 	</text>

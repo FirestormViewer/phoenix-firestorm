@@ -72,7 +72,8 @@ mSystem(system),
 mCurrentInternetStreamp(NULL),
 mStreamGroup(NULL),
 mFMODInternetStreamChannelp(NULL),
-mGain(1.0f)
+mGain(1.0f),
+mWasAlreadyPlaying(false)
 {
     // Number of milliseconds of audio to buffer for the audio card.
     // Must be larger than the usual Second Life frame stutter time.
@@ -158,18 +159,14 @@ void LLStreamingAudio_FMODSTUDIO::update()
     if (Check_FMOD_Error(mCurrentInternetStreamp->getOpenState(open_state, &progress, &starving, &diskbusy), "FMOD::Sound::getOpenState"))
     {
         LL_WARNS() << "Internet stream openstate error: open_state = " << open_state << " - progress = " << progress << " - starving = " << starving << " - diskbusy = " << diskbusy << LL_ENDL;
+        bool was_playing = mWasAlreadyPlaying;
         stop();
-        return;
-    }
-    else if (open_state == FMOD_OPENSTATE_ERROR)
-    {
-        // Actually we might not get into this case at all since according to the
-        // FMOD API doc, one should check the result of getOpenState for further
-        // details, which most likely means if open_state is FMOD_OPENSTATE_ERROR,
-        // calling getOpenState will return anything but FMOD_OK and we end up in
-        // the if-case above.
-        LL_WARNS() << "Internet stream openstate error: progress = " << progress << " - starving = " << starving << " - diskbusy = " << diskbusy << LL_ENDL;
-        stop();
+        // Try to restart previously playing stream on socket error
+        if (open_state == FMOD_OPENSTATE_ERROR && was_playing)
+        {
+            LL_WARNS() << "Stream was playing before - trying to restart" << LL_ENDL;
+            start(mURL);
+        }
         return;
     }
     else if (open_state == FMOD_OPENSTATE_READY)
@@ -183,6 +180,14 @@ void LLStreamingAudio_FMODSTUDIO::update()
             // Reset volume to previously set volume
             setGain(getGain());
             Check_FMOD_Error(mFMODInternetStreamChannelp->setPaused(false), "FMOD::Channel::setPaused");
+            mWasAlreadyPlaying = true;
+        }
+    }
+    else if (open_state == FMOD_OPENSTATE_PLAYING)
+    {
+        if (!mWasAlreadyPlaying)
+        {
+            mWasAlreadyPlaying = true;
         }
     }
 
@@ -317,6 +322,7 @@ void LLStreamingAudio_FMODSTUDIO::update()
 void LLStreamingAudio_FMODSTUDIO::stop()
 {
     mPendingURL.clear();
+    mWasAlreadyPlaying = false;
 
     if (mFMODInternetStreamChannelp)
     {

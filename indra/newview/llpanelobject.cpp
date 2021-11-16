@@ -1142,7 +1142,7 @@ void LLPanelObject::getState( )
 		mSpinScaleY->setMaxValue(OBJECT_MAX_HOLE_SIZE_Y);
 		break;
 	default:
-		if (editable)
+		if (editable && single_volume)
 		{
 			// <FS> Make sure to use the correct values for the LL default types. These
 			//      should be handled by the explicit cases and the ones in this if-condition.

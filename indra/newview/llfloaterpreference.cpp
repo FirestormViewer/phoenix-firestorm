@@ -165,9 +165,11 @@
 #endif
 // </FS:LO>
 
+#include "fsperfstats.h"// <FS:Beq/> perfstats
+
 // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 #include "llfiltereditor.h"
-
+#include "llviewershadermgr.h"
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 char const* const VISIBILITY_DEFAULT = "default";
@@ -426,7 +428,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mGotPersonalInfo(false),
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
-	mAvatarDataInitialized(false)
+	mAvatarDataInitialized(false),
+	mSearchDataDirty(true)
 {
 	LLConversationLog::instance().addObserver(this);
 
@@ -2874,6 +2877,24 @@ void LLAvatarComplexityControls::setText(U32 value, LLTextBox* text_box, bool sh
 	}
 }
 
+// <FS:Beq> redner time controls
+void LLAvatarComplexityControls::updateMaxRenderTime(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val)
+{
+	setRenderTimeText((F32)(FSPerfStats::renderAvatarMaxART_ns/1000), value_label, short_val);
+}
+
+void LLAvatarComplexityControls::setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val)
+{
+	if (0 == value)
+	{
+		text_box->setText(LLTrans::getString("no_limit"));
+	}
+	else
+	{
+		text_box->setText(llformat("%.0f", value));
+	}
+}
+// </FS:Beq>
 void LLFloaterPreference::updateMaxComplexity()
 {
 	// Called when the IndirectMaxComplexity control changes
@@ -3199,6 +3220,11 @@ void LLFloaterPreference::updateClickActionViews()
 	getChild<LLComboBox>("double_click_action_combo")->setValue(dbl_click_to_teleport ? 2 : (int)dbl_click_to_walk);
 }
 
+void LLFloaterPreference::updateSearchableItems()
+{
+    mSearchDataDirty = true;
+}
+
 void LLFloaterPreference::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
 {
 	LLUIColorTable::instance().setColor(param.asString(), LLColor4(ctrl->getValue()));
@@ -3473,7 +3499,7 @@ BOOL LLPanelPreference::postBuild()
 
 	//////////////////////PanelSetup ///////////////////
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	//if (hasChild("max_bandwidth"), TRUE)
+	//if (hasChild("max_bandwidth", TRUE))
 	//{
 	//	mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
 	//	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
@@ -4284,10 +4310,19 @@ void LLPanelPreferenceControls::populateControlTable()
         filename = "control_table_contents_columns_basic.xml";
         break;
     default:
-        // Either unknown mode or MODE_SAVED_SETTINGS
-        // It doesn't have UI or actual settings yet
-        LL_INFOS() << "Unimplemented mode" << LL_ENDL;
-        return;
+        {
+            // Either unknown mode or MODE_SAVED_SETTINGS
+            // It doesn't have UI or actual settings yet
+            LL_WARNS() << "Unimplemented mode" << LL_ENDL;
+
+            // Searchable columns were removed, mark searchables for an update
+            LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+            if (instance)
+            {
+                instance->updateSearchableItems();
+            }
+            return;
+        }
     }
     addControlTableColumns(filename);
 
@@ -4318,8 +4353,15 @@ void LLPanelPreferenceControls::populateControlTable()
     }
     else
     {
-        LL_INFOS() << "Unimplemented mode" << LL_ENDL;
-        return;
+        LL_WARNS() << "Unimplemented mode" << LL_ENDL;
+    }
+
+    // Searchable columns were removed and readded, mark searchables for an update
+    // Note: at the moment tables/lists lack proper llsearchableui support
+    LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+    if (instance)
+    {
+        instance->updateSearchableItems();
     }
 }
 
@@ -4562,7 +4604,12 @@ void LLPanelPreferenceControls::setKeyBind(const std::string &control, EMouseCli
                 break;
             }
         }
-        mConflictHandler[mode].registerControl(control, index, click, key, mask, true);
+        // At the moment 'ignore_mask' mask is mostly ignored, a placeholder
+        // Todo: implement it since it's preferable for things like teleport to match
+        // mask exactly but for things like running to ignore additional masks
+        // Ideally this needs representation in keybindings UI
+        bool ignore_mask = true;
+        mConflictHandler[mode].registerControl(control, index, click, key, mask, ignore_mask);
     }
     else if (!set)
     {
@@ -4890,6 +4937,12 @@ void LLFloaterPreference::onUpdateFilterTerm(bool force)
 	if( !mSearchData || (mSearchData->mLastFilter == seachValue && !force))
 		return;
 
+    if (mSearchDataDirty)
+    {
+        // Data exists, but is obsolete, regenerate
+        collectSearchableItems();
+    }
+
 	mSearchData->mLastFilter = seachValue;
 
 	if( !mSearchData->mRootTab )
@@ -4987,6 +5040,7 @@ void LLFloaterPreference::collectSearchableItems()
 
 		collectChildren( this, ll::prefs::PanelDataPtr(), pRootTabcontainer );
 	}
+	mSearchDataDirty = false;
 }
 
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b

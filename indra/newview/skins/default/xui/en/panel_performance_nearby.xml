@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- bevel_style="none"
- follows="left|top"
- height="530"
- width="580"
- name="panel_performance_nearby"
- layout="topleft"
- left="0"
- top="0">
+bevel_style="none"
+follows="left|top|right"
+height="530"
+width="580"
+name="panel_performance_nearby"
+layout="topleft"
+left="0"
+top="0">
   <button
     height="16"
     width="16"
@@ -42,7 +42,19 @@
    top_pad="10"
    name="av_nearby_title"
    width="205">
-    Avatars nearby
+    Avatars nearby</text>
+  <text
+   follows="right|top"
+   font="SansSerifLarge"
+   text_color="White"
+   height="20"
+   layout="topleft"
+   right="-40"
+   top_delta="0"
+   name="tot_av_count"
+   halign="right"
+   width="200">
+   Total: 50 (120000.10μs)
   </text>
   <text
    follows="left|top"
@@ -58,7 +70,8 @@
   </text>
   <slider
     control_name="IndirectMaxComplexity"
-    tool_tip="Controls at what point a visually complex avatar is drawn as a JellyDoll"
+    visible="false"
+    tool_tip="Controls at what point a visually complex avatar is drawn as a Impostor"
     follows="left|top"
     height="16"
     initial_value="101"
@@ -76,6 +89,7 @@
   </slider>
   <text
     type="string"
+    visible="false"
     length="1"
     follows="left|top"
     height="16"
@@ -87,14 +101,47 @@
     width="65">
     0
   </text>
+  <slider
+    control_name="FSRenderAvatarMaxART"
+    tool_tip="Controls when a visually complex avatar is considered to be taking too long to render (unit: microseconds)"
+    follows="left|top"
+    height="16"
+    initial_value="4.7"
+    increment="0.01"
+    label="Maximum render time (μs)"
+    text_color="White"
+    label_width="165"
+    layout="topleft"
+    min_val="2"
+    max_val="4.7"
+    name="FSRenderAvatarMaxART"
+    show_text="false"
+    left_delta="-304"
+    top_delta="-16"
+    width="490">
+  </slider>
+  <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="16"
+    layout="topleft"
+    top_delta="0"
+    left_pad="5"
+    text_color="White"
+    name="FSRenderAvatarMaxARTText"
+    width="65">
+    no limit
+  </text>
   <name_list
-    column_padding="0"
+    column_padding="1"
     draw_stripes="true"
+    draw_heading="true"
     height="280"
     left="20"
-    follows="left|top"
+    follows="left|top|right"
     layout="topleft"
-    sort_column="complex_value"
+    sort_column="art_value"
     short_names="true"
     name="nearby_list"
     name_column="name"
@@ -102,14 +149,26 @@
     width="540">
         <name_list.columns
          label=""
-         name="complex_visual"
+         tool_tip="Bar graph showing current render time (includes auto-tuning) as % of slowest."
+         name="art_visual"
          width="90" />
-        <name_list.columns
-         label=""
+         <name_list.columns
+         label="Time (μs)"
+         tool_tip="Avatar Render Time. Actual time taken to render this avatar before any auto-tuning (in microseconds)."
+         name="art_value"
+         width="80" />
+         <name_list.columns
+         label="ARC"
+         tool_tip="Complexity (ARC) based on standard rules."
          name="complex_value"
-         width="50" />
-        <name_list.columns
+         width="40" />
+         <name_list.columns
          label=""
+         tool_tip="Shows any tuning. I=Impostor, S=no shadow."
+         name="state"
+         width="15" />
+        <name_list.columns
+         label="Name"
          name="name"/>
   </name_list>
   <text
@@ -156,7 +215,7 @@
   <check_box
     height="16"
     initial_value="true"
-    label="Hide avatars completely (good for landscape photos)"
+    label="Hide avatars completely."
     layout="topleft"
     name="hide_avatars"
     top_delta="15"
@@ -210,5 +269,5 @@
      value="2"
      width="160" />
   </radio_group>
- 
+
 </panel>

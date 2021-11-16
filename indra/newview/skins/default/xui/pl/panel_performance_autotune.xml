@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">
+		Wstecz
+	</text>
+	<text name="settings_title">
+		Opcje autostrojenia
+	</text>
+	<text name="quality_lbl">
+		Odległe awatary
+	</text>
+	<check_box label="Optymalizacja oparta na odległości" name="FSAutoTuneImpostorByDistEnabled" tool_tip="Przeglądarka dostosuje ustawienie MaxNonImpostors, aby ograniczyć w pełni renderowane awatary do tych w sprecyzowanym promieniu." />
+	<spinner label="Najdalszy pełny awatar" name="ffa_autotune" />
+	<text name="distant_av_advice">
+Awatary, które są dalej, nadal wpływają na renderowanie.
+Określ odległość po której awatar zostanie zoptymalizowany.
+	</text>
+	<text name="distance_lbl">
+		Limity dostrajania pola widzenia
+	</text>
+	<spinner label="Minimalna odległość" name="min_dd_autotune" />
+	<spinner label="Preferowana odległość" name="pref_dd_autotune" />
+	<text name="distance_desc1">
+		Podczas przetwarzania sceny autostrojenie zoptymalizuje pole widzenia między minimalnym a preferowanym.
+	</text>
+	<text name="sundry_lbl">
+		Różne
+	</text>
+	<check_box label="Optymalizacja własnego awatara" name="alow_self_impostor" tool_tip="Przeglądarka będzie mogła renderować własny awatar jako awatar zastępczy." />
+	<check_box label="Zoptymalizowany czas renderowania" name="show_tuned_art" tool_tip="Kolumna Czas będzie pokazywać bieżący czas renderowania, a nie czas renderowania przed dostrajaniem." />
+	<text name="sundry_desc1">
+		Te opcje kontrolują dość subtelne ustawienia. Skorzystaj z pomocy online, aby uzyskać więcej informacji.
+	</text>
+</panel>
