@@ -600,6 +600,7 @@ public:
     static bool				sDistortionRender;
 	static bool				sImpostorRender;
 	static bool				sImpostorRenderAlphaDepthPass;
+	static bool				sShowJellyDollAsImpostor;
 	static bool				sUnderWaterRender;
 	static bool				sRenderGlow;
 	static bool				sTextureBindTest;

@@ -55,6 +55,7 @@
 #include "m3math.h"
 #include "m4math.h"
 #include "llmatrix4a.h"
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if !LL_DARWIN && !LL_LINUX
 extern PFNGLWEIGHTPOINTERARBPROC glWeightPointerARB;
@@ -222,6 +223,7 @@ int compare_int(const void *a, const void *b)
 //--------------------------------------------------------------------
 U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 {
+	FSZone;
 	if (!mValid || !mMesh || !mFace || !mVisible || 
 		!mFace->getVertexBuffer() ||
 		mMesh->getNumFaces() == 0 ||
@@ -230,6 +232,15 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 		return 0;
 	}
 
+ // <FS:Beq> render time capture
+ // TODO(Beq) This path does not appear to have attachments. Prove this then remove.
+	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
+	auto vobj = mFace->getViewerObject();
+	if( vobj && vobj->isAttachment() )
+	{
+		trackAttachments( vobj, mFace->isState(LLFace::RIGGED), &ratPtr );
+	}
+// </FS:Beq>
 	U32 triangle_count = 0;
 
 	S32 diffuse_channel = LLDrawPoolAvatar::sDiffuseChannel;

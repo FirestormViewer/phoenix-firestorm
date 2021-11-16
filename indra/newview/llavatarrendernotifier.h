@@ -30,6 +30,9 @@
 #define LL_llavatarrendernotifier_H
 
 #include "llnotificationptr.h"
+#include "llviewerobject.h"
+#include "llhudobject.h"
+
 
 class LLViewerRegion;
 
@@ -63,6 +66,25 @@ struct LLHUDComplexity
 
 typedef std::list<LLHUDComplexity> hud_complexity_list_t;
 
+struct LLObjectComplexity
+{
+    LLObjectComplexity()
+    {
+        reset();
+    }
+    void reset()
+    {
+        objectId = LLUUID::null;
+        objectName = "";
+        objectCost = 0;
+    }
+    LLUUID objectId;
+    std::string objectName;
+    U32 objectCost;
+};
+
+typedef std::list<LLObjectComplexity> object_complexity_list_t;
+
 // Class to notify user about drastic changes in agent's render weights or if other agents
 // reported that user's agent is too 'heavy' for their settings
 class LLAvatarRenderNotifier : public LLSingleton<LLAvatarRenderNotifier>
@@ -76,6 +98,9 @@ public:
 	void updateNotificationRegion(U32 agentcount, U32 overLimit);
     void updateNotificationState();
 	void updateNotificationAgent(U32 agentComplexity);
+
+    void setObjectComplexityList(object_complexity_list_t object_list) { mObjectComplexityList = object_list; }
+    object_complexity_list_t getObjectComplexityList() { return mObjectComplexityList; }
 
 private:
 
@@ -109,6 +134,8 @@ private:
     // Used to detect changes in voavatar's rezzed status.
     // If value decreases - there were changes in outfit.
     S32 mLastOutfitRezStatus;
+
+    object_complexity_list_t mObjectComplexityList;
 };
 
 // Class to notify user about heavy set of HUD
@@ -120,6 +147,9 @@ class LLHUDRenderNotifier : public LLSingleton<LLHUDRenderNotifier>
 public:
     void updateNotificationHUD(hud_complexity_list_t complexity);
     bool isNotificationVisible();
+
+    hud_complexity_list_t getHUDComplexityList() { return mHUDComplexityList; }
+    S32 getHUDsCount() { return mHUDsCount; }
 
 private:
     enum EWarnLevel
@@ -141,6 +171,8 @@ private:
     EWarnLevel mReportedHUDWarning;
     LLHUDComplexity mLatestHUDComplexity;
     LLFrameTimer mHUDPopUpDelayTimer;
+    hud_complexity_list_t mHUDComplexityList;
+    S32 mHUDsCount;
 };
 
 #endif /* ! defined(LL_llavatarrendernotifier_H) */

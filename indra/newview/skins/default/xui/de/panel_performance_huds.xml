@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">
+		Zurück
+	</text>
+	<text name="huds_title">
+		Aktive HUDs
+	</text>
+	<text name="huds_desc1">
+		Das Entfernen unbenötigter HUDs spart Speicher und kann den Viewer schneller machen.
+	</text>
+	<text name="huds_desc2">
+		HUDs enthalten oftmals viele Skripte und erzeugen zudem Serverseitigen Lag.
+	</text>
+	<text name="huds_desc3">
+		Hinweis: Minimieren-Buttons von HUDs entfernt diese nicht. Entfernen duch Klick auf „X“.
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns label="Zeit (μs)" name="art_value" tool_tip="Benötigte Zeit in Millisekunden zum Rendern des HUD." />
+		<name_list.columns label="Name" tool_tip="Zum Entfernen auf „X“ klicken." name="name" />
+	</name_list>
+</panel>

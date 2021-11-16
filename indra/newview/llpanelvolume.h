@@ -41,6 +41,7 @@ class LLButton;
 class LLViewerObject;
 class LLComboBox;
 class LLColorSwatchCtrl;
+class LLVOVolume;
 
 class LLPanelVolume : public LLPanel
 {
@@ -85,6 +86,9 @@ public:
     void            onFSCopyFeatures();
     void            onFSPasteFeatures();
     // </FS>
+
+    static void    setLightTextureID(const LLUUID &asset_id, const LLUUID &item_id, LLVOVolume* volobjp);
+
 
 protected:
 	void			getState();
