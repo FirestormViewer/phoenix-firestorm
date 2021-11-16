@@ -300,7 +300,10 @@ const std::string LLFloater360Capture::getSelectedQualityTooltip()
 // and this code provides a single point of reference for its' location
 const std::string LLFloater360Capture::getHTMLBaseFolder()
 {
-    std::string folder_name = gDirUtilp->getSkinDir();
+    // <FS:Ansariel> It's in the default skin folder...
+    //std::string folder_name = gDirUtilp->getSkinDir();
+    std::string folder_name = gDirUtilp->getDefaultSkinDir();
+    // </FS:Ansariel>
     folder_name += gDirUtilp->getDirDelimiter();
     folder_name += "html";
     folder_name += gDirUtilp->getDirDelimiter();
