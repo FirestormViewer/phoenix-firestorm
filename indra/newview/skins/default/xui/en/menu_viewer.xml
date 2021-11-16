@@ -555,7 +555,7 @@
              parameter="snapshot" />
         </menu_item_call>
         <menu_item_call
-         label="360 snapshot"
+         label="360° Snapshot"
          name="Capture 360">
             <menu_item_call.on_click
              function="Floater.Show"
@@ -4681,7 +4681,7 @@
                  function="Advanced.DumpRegionObjectCache" />
             </menu_item_call>
         
-<menu_item_call
+            <menu_item_call
              label="Interest List: Full Update"
              name="Interest List: Full Update"
              shortcut="alt|shift|I">

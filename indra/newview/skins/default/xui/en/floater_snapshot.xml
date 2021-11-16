@@ -455,7 +455,7 @@
      height="23"
      image_selected="Toolbar_Middle_Selected"
      image_unselected="Toolbar_Middle_Off"
-     label="Take a 360 snapshot"
+     label="Take 360° snapshot"
      layout="topleft"
      left="-125"
      name="360_label"

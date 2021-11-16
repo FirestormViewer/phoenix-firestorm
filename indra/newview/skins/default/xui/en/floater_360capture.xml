@@ -7,7 +7,7 @@
          name="360capture"
          help_topic="360capture"
          save_rect="true"
-         title="360 Snapshot"
+         title="360° Snapshot"
          width="800">
   <panel layout="topleft"
        background_visible="true"
@@ -24,6 +24,7 @@
        height="16"
        layout="topleft"
        left="10"
+       name="quality_level_label"
        top="10"
        width="100">
       Quality level
