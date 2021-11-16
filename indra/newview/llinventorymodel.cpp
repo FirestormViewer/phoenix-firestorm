@@ -4523,7 +4523,7 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		{
 			LL_WARNS("Inventory") << "item " << item_id << " name [" << item->getName() << "] has null parent id!" << LL_ENDL;
 		}
-		else if (error_count < MAX_VERBOSE_ERRORS)
+		else
 		{
 			cat_array_t* cats;
 			item_array_t* items;
