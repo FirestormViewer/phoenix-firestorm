@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">
+		Wstecz
+	</text>
+	<text name="huds_title">
+		Aktywne HUDy
+	</text>
+	<text name="huds_desc1">
+		Odłączenie nieużywanych HUDów oszczędza pamięć i może przyspieszyć przeglądarkę.
+	</text>
+	<text name="huds_desc2">
+		HUDy są często mocno oskryptowane i przyczyniają się do lagów serwera.
+	</text>
+	<text name="huds_desc3">
+		Uwaga: Minimalizacja HUDa nie powoduje jego odłączenia. Użyj X, aby go usunąć.
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns label="Czas (μs)" name="art_value" tool_tip="Czas potrzebny na renderowanie tego HUDa (mikrosekundy)" />
+		<name_list.columns label="Nazwa" tool_tip="Kliknij 'X', aby odłączyć" name="name" />
+	</name_list>
+</panel>

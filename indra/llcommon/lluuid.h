@@ -29,10 +29,11 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <cstring> // <FS:Beq> for std::memmove
 #include "stdtypes.h"
 #include "llpreprocessor.h"
 #include <boost/functional/hash.hpp>
-
+#include "fstelemetry.h"
 class LLMutex;
 
 const S32 UUID_BYTES = 16;
@@ -56,7 +57,9 @@ public:
 	explicit LLUUID(const char *in_string); // Convert from string.
 	explicit LLUUID(const std::string& in_string); // Convert from string.
 	LLUUID(const LLUUID &in);
+	LLUUID(LLUUID&& rhs) noexcept { FSZone; std::memmove(mData, rhs.mData, sizeof(mData));};
 	LLUUID &operator=(const LLUUID &rhs);
+	LLUUID &operator=(LLUUID &&rhs) noexcept {FSZone; std::memmove(mData, rhs.mData, sizeof(mData));return *this;};
 
 	~LLUUID();
 
@@ -112,6 +115,61 @@ public:
 	void toString(std::string& out) const;
 	void toCompressedString(char *out) const;	// Does not allocate memory, needs 17 characters (including \0)
 	void toCompressedString(std::string& out) const;
+	
+	// last 4 chars for quick ref - Very lightweight, no nul-term added - provide your own, ensure min 4 bytes.
+# define hexnybl(N) (N)>9?((N)-10)+'a':(N)+'0'
+	inline char * toShortString(char *out) const
+	{
+		FSZone;
+		out[0] = hexnybl(mData[14]>>4);
+		out[1] = hexnybl(mData[14]&15);
+		out[2] = hexnybl(mData[15]>>4);
+		out[3] = hexnybl(mData[15]&15);
+		return out;
+	}
+	// full uuid - Much lighterweight than default, no allocation, or nul-term added - provide your own, ensure min 36 bytes.
+	inline char * toStringFast(char *out) const
+	{
+		FSZone;
+		out[0]  = hexnybl(mData[0]>>4);
+		out[1]  = hexnybl(mData[0]&15);
+		out[2]  = hexnybl(mData[1]>>4);
+		out[3]  = hexnybl(mData[1]&15);
+		out[4]  = hexnybl(mData[2]>>4);
+		out[5]  = hexnybl(mData[2]&15);
+		out[6]  = hexnybl(mData[3]>>4);
+		out[7]  = hexnybl(mData[3]&15);
+		out[8]  = '-';
+		out[9]  = hexnybl(mData[4]>>4);
+		out[10] = hexnybl(mData[4]&15);
+		out[11] = hexnybl(mData[5]>>4);
+		out[12] = hexnybl(mData[5]&15);
+		out[13] = '-';
+		out[14] = hexnybl(mData[6]>>4);
+		out[15] = hexnybl(mData[6]&15);
+		out[16] = hexnybl(mData[7]>>4);
+		out[17] = hexnybl(mData[7]&15);
+		out[18] = '-';
+		out[19] = hexnybl(mData[8]>>4);
+		out[20] = hexnybl(mData[8]&15);
+		out[21] = hexnybl(mData[9]>>4);
+		out[22] = hexnybl(mData[9]&15);
+		out[23] = '-';
+		out[24] = hexnybl(mData[10]>>4);
+		out[25] = hexnybl(mData[10]&15);
+		out[26] = hexnybl(mData[11]>>4);
+		out[27] = hexnybl(mData[11]&15);
+		out[28] = hexnybl(mData[12]>>4);
+		out[29] = hexnybl(mData[12]&15);
+		out[30] = hexnybl(mData[13]>>4);
+		out[31] = hexnybl(mData[13]&15);
+		out[32] = hexnybl(mData[14]>>4);
+		out[33] = hexnybl(mData[14]&15);
+		out[34] = hexnybl(mData[15]>>4);
+		out[35] = hexnybl(mData[15]&15);
+		return out;
+	}
+
 
 	std::string asString() const;
 	std::string getString() const;

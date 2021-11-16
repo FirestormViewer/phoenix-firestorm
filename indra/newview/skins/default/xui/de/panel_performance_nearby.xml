@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">
+		Zurück
+	</text>
+	<text name="av_nearby_title">
+		Avatare in der Nähe
+	</text>
+	<text name="tot_av_count">
+		Gesamt: 50 (120000.10μs)
+	</text>
+	<text name="av_nearby_desc">
+		Komplexeste Avatare verstecken, um Geschwindigkeit zu erhören
+	</text>
+	<slider tool_tip="Definiert, aber welcher Komplexität ein Avatar als Impostor dargestellt wird" label="Max. Komplexität (K)" name="IndirectMaxComplexity" />
+	<slider tool_tip="Definiert, aber wann ein Avatar als zu komplex zum Darstellen erachtet wird (Einheit: Mikrosekunden)" label="Max. Renderzeit (μs)" name="FSRenderAvatarMaxART" />
+	<text name="FSRenderAvatarMaxARTText">
+		Kein Limit
+	</text>
+	<name_list name="nearby_list">
+		<name_list.columns tool_tip="Balkendiagram der benötigten Renderzeit (inkl. Auto-Anpassung) in Prozent, basierend auf dem Langsamsten." name="art_visual" />
+		<name_list.columns tool_tip="Avatar-Renderzeit (ART). Tatsächlich benötigte Zeit in Mikrosekunden für die Darstellung des Avatars vor Auto-Anpassung." name="art_value" />
+		<name_list.columns tool_tip="Avatar-Komplexität (ARC) basierend auf Standard-Berechnung." name="complex_value" />
+		<name_list.columns tool_tip="Zeigt Auto-Anpassung: I = Impostor, S = Kein Schatten." name="state" />
+		<name_list.columns label="Name" name="name"/>
+	</name_list>
+	<text name="av_nearby_desc2">
+		Per Rechts-Klick auf einen Avatar kann auch die Darstellung angepasst werden.
+	</text>
+	<button label="Ausnahmen..." name="exceptions_btn" />
+	<check_box label="Freunde immer komplett darstellen" name="display_friends" />
+	<check_box label="Alle Avatare verstecken (Gut für Landschaftsaufnahmen) " name="hide_avatars" />
+	<text name="name_tags_textbox">
+		Avatar namen:
+	</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="An" name="radio" />
+		<radio_item label="Aus" name="radio2" />
+		<radio_item label="Kurz anzeigen" name="radio3" />
+	</radio_group>
+</panel>

@@ -28,4 +28,5 @@
 namespace FSTelemetry
 {
 	bool	active{false};
+
 }

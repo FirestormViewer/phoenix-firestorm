@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">
+		Wstecz
+	</text>
+	<text name="av_nearby_title">
+		Awatary w pobliżu
+	</text>
+	<text name="av_nearby_desc">
+		Ukryj najbardziej złożone awatary, aby zwiększyć szybkość.
+	</text>
+	<slider tool_tip="Kontroluje, w którym momencie wizualnie złożony awatar jest zastępowany przez awatar zastępczy" label="Maksymalna złożoność (K)" name="IndirectMaxComplexity" />
+	<slider tool_tip="Kontroluje, kiedy określa się, że renderowanie złożonego wizualnie awatara trwa zbyt długo (jednostka: mikrosekundy)" label="Maks. czas renderowania (μs)" name="FSRenderAvatarMaxART" />
+	<text name="FSRenderAvatarMaxARTText">
+		bez limitu
+	</text>
+	<name_list name="nearby_list">
+		<name_list.columns tool_tip="Wykres słupkowy pokazujący aktualny czas renderowania (w tym autodostrajanie) jako % najwolniejszego." name="art_visual" />
+		<name_list.columns label="Czas (μs)" tool_tip="Czas renderowania awatara (Avatar Render Time, ART). Rzeczywisty czas potrzebny na wyrenderowanie tego awatara przed automatycznym dostrajaniem (w mikrosekundach)." name="art_value" />
+		<name_list.columns tool_tip="Złożoność (ARC) oparta na standardowych zasadach SL." name="complex_value" />
+		<name_list.columns tool_tip="Pokazuje jakiekolwiek strojenie. I=Awatar zastępczy, S=brak cienia." name="state" />
+		<name_list.columns label="Imię" name="name"/>
+	</name_list>
+	<text name="av_nearby_desc2">
+		Możesz kliknąć PPM na awatarze w świecie, aby sterować wyświetlaniem.
+	</text>
+	<button label="Wyjątki..." name="exceptions_btn" />
+	<check_box label="Znajomi zawsze z pełnymi detalami" name="display_friends" />
+	<check_box label="Całkowicie ukryj awatary" name="hide_avatars" />
+	<text name="name_tags_textbox">
+		Imiona:
+	</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="Wyłącz" name="radio" />
+		<radio_item label="Włącz" name="radio2" />
+		<radio_item label="Pokaż na chwilę" name="radio3" />
+	</radio_group>
+</panel>

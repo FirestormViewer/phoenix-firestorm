@@ -241,10 +241,11 @@ BOOL LLWearableData::getWearableIndex(const LLWearable *wearable, U32& index_fou
 U32 LLWearableData::getClothingLayerCount() const
 {
 	U32 count = 0;
+    LLWearableType *wr_inst = LLWearableType::getInstance();
 	for (S32 i = 0; i < LLWearableType::WT_COUNT; i++)
 	{
 		LLWearableType::EType type = (LLWearableType::EType)i;
-		if (LLWearableType::getAssetType(type)==LLAssetType::AT_CLOTHING)
+		if (wr_inst->getAssetType(type)==LLAssetType::AT_CLOTHING)
 		{
 			count += getWearableCount(type);
 		}
@@ -254,7 +255,7 @@ U32 LLWearableData::getClothingLayerCount() const
 
 BOOL LLWearableData::canAddWearable(const LLWearableType::EType type) const
 {
-	LLAssetType::EType a_type = LLWearableType::getAssetType(type);
+    LLAssetType::EType a_type = LLWearableType::getInstance()->getAssetType(type);
 	if (a_type==LLAssetType::AT_CLOTHING)
 	{
 		if (type == LLWearableType::WT_PHYSICS) return (getWearableCount(type) < 1); // <FS:Ansariel> Don't add physics layer

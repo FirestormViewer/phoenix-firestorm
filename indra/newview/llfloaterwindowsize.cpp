@@ -34,11 +34,9 @@
 #include "llcombobox.h"
 #include "llfloater.h"
 #include "llfloaterreg.h"
+#include "llregex.h"
 #include "lluictrl.h"
 #include "llviewercontrol.h"
-
-// System libraries
-#include <boost/regex.hpp>
 
 // Extract from strings of the form "<width> x <height>", e.g. "640 x 480".
 bool extractWindowSizeFromString(const std::string& instr, U32 *width, U32 *height)
@@ -46,7 +44,7 @@ bool extractWindowSizeFromString(const std::string& instr, U32 *width, U32 *heig
 	boost::cmatch what;
 	// matches (any number)(any non-number)(any number)
 	const boost::regex expression("([0-9]+)[^0-9]+([0-9]+)");
-	if (boost::regex_match(instr.c_str(), what, expression))
+	if (ll_regex_match(instr.c_str(), what, expression))
 	{
 		*width = atoi(what[1].first);
 		*height = atoi(what[2].first);
