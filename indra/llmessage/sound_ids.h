@@ -286,9 +286,4 @@ extern const LLUUID SND_STONE_DIRT_04;
 extern const LLUUID SND_STONE_STONE_02;
 extern const LLUUID SND_STONE_STONE_04;
 
-// NaCl - Antispam Registry
-extern const std::string COLLISION_SOUNDS[];
-extern const int COLLISION_SOUNDS_SIZE;
-// NaCl End
-
 #endif

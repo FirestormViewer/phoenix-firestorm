@@ -89,6 +89,7 @@ public:
 	//void				saveTextureToFile(const std::vector<std::string>& filenames);
 	void				saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback, uuid_vec_t remaining_ids = uuid_vec_t());
 	// </FS:Ansariel>
+    void                saveMultipleToFile(const std::string& file_name = "");
 	
 	static void			onSaveAsBtn(LLUICtrl* ctrl, void* data);
 

@@ -35,8 +35,6 @@
 #include <map>
 #include <string>
 
-#include <boost/shared_ptr.hpp>
-
 namespace LLNotificationsUI {
 
 class LLToast;
@@ -60,10 +58,10 @@ public:
 	void onChat(const LLChat& msg, const LLSD &args);
 
 	// <FS:Ansariel> Getter for mChatHandler
-	boost::shared_ptr<class LLFloaterIMNearbyChatHandler> getChatHandler() const { return mChatHandler; }
+	std::shared_ptr<class LLFloaterIMNearbyChatHandler> getChatHandler() const { return mChatHandler; }
 
 private:
-	boost::shared_ptr<class LLFloaterIMNearbyChatHandler> mChatHandler;
+	std::shared_ptr<class LLFloaterIMNearbyChatHandler> mChatHandler;
 	std::vector<LLNotificationChannelPtr> mChannels;
 };
 

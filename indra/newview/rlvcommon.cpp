@@ -22,6 +22,7 @@
 #include "llimview.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
+#include "llregex.h"
 #include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
@@ -43,7 +44,6 @@
 #include <boost/algorithm/string/predicate.hpp> // icontains
 #include <boost/algorithm/string/regex.hpp> // regex_replace_all
 #include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp>
 
 
 // ============================================================================
@@ -220,7 +220,7 @@ bool RlvSettings::isCompatibilityModeObject(const LLUUID& idRlvObject)
 					for (const std::string& strCompatName : s_CompatItemNames)
 					{
 					    boost::regex regexp(strCompatName, boost::regex::perl | boost::regex::icase);
-						if (boost::regex_match(strAttachName, regexp))
+						if (ll_regex_match(strAttachName, regexp))
 						{
 							fCompatMode = true;
 							break;

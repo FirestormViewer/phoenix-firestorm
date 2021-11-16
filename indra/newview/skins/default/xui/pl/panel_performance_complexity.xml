@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_complexity">
+	<text name="back_lbl">
+		Wstecz
+	</text>
+	<text name="attachments_title">
+		Złożoność dodatków awatara
+	</text>
+	<text name="attachments_desc1">
+		Dodatki sprawiają, że awatar jest bardziej złożony i renderuje się wolniej.
+	</text>
+	<text name="attachments_desc2">
+		Ten ekran umożliwia przeglądanie dodatków Twojego awatara.
+	</text>
+	<text name="attachments_desc3">
+		Możesz szybko i łatwo usunąć własne dodatki klikając na 'X'.
+	</text>
+	<name_list name="obj_list">
+		<name_list.columns label="Czas (μs)" name="art_value" tool_tip="Czas potrzebny na renderowanie tego dodatku (mikrosekundy)" />
+		<name_list.columns name="complex_value" tool_tip="Złożoność przedmiotu (ARC)" />
+		<name_list.columns label="Nazwa dodatku" tool_tip="Kliknij 'X', aby odłączyć" name="name" />
+	</name_list>
+</panel>

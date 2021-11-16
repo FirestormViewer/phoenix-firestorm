@@ -587,10 +587,10 @@ void LLStatusBar::refresh()
 	
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
 	static LLCachedControl<bool> fsStatusBarShowFPS(gSavedSettings, "FSStatusBarShowFPS");
-	if (fsStatusBarShowFPS && mFPSUpdateTimer.getElapsedTimeF32() > 0.5f)
+	if (fsStatusBarShowFPS && mFPSUpdateTimer.getElapsedTimeF32() > 1.f)
 	{
 		mFPSUpdateTimer.reset();
-		mFPSText->setText(llformat("%.1f", LLTrace::get_frame_recording().getPeriodMeanPerSec(LLStatViewer::FPS)));
+		mFPSText->setText(llformat("%.1f", LLTrace::get_frame_recording().getPeriodMedianPerSec(LLStatViewer::FPS)));
 	}
 	// </FS:Ansariel>
 

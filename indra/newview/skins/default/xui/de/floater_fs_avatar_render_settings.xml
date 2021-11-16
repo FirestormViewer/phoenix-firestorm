@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarrendersettings" title="Avatar-Anzeigeeinstellungen">
+<floater name="avatarrendersettings" title="Avatar-Anzeigeausnahmen">
 	<floater.string name="av_render_never">
 		Niemals
 	</floater.string>
 	<floater.string name="av_render_always">
-		Komplett
+		Immer
 	</floater.string>
 	<filter_editor label="Avatare filtern" name="filter_input"/>
 	<menu_button name="plus_btn" tool_tip="Person zur Liste hinzufügen"/>
 	<name_list name="avatar_list">
 		<name_list.columns label="Name" name="name"/>
-		<name_list.columns label="Anzeigeeinstellung" name="render_setting" width="125"/>
+		<name_list.columns label="Komplette Details" name="render_setting" width="125"/>
 	</name_list>
 	<button name="close_btn" label="Schließen"/>
 </floater>

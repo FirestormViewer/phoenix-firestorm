@@ -5252,6 +5252,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_People_Label">
 		Ludzie
 	</string>
+	<string name="Command_Performance_Label">
+		Szybkość grafiki
+	</string>
 	<string name="Command_Picks_Label">
 		Miejsca
 	</string>
@@ -5434,6 +5437,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_People_Tooltip">
 		Znajomi, grupy i ludzie w pobliżu (CTRL+SHIFT+A)
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Dostosuj ustawienia grafiki
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Miejsca, które są pokazywane jako ulubione w Twoim profilu
