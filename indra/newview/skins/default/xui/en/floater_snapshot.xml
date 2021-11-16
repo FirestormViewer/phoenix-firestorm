@@ -418,7 +418,7 @@
    height="21"
    layout="topleft"
    name="img_info_border"
-   top_pad="0"
+   top_pad="5"
    right="-130"
    follows="left|top|right"
    left_delta="0"/>
@@ -450,19 +450,15 @@
     width="50">
        [SIZE] KB
    </text>
-   <text
-    follows="right|top"
-    font="SansSerifSmall"
-    height="14"
-    layout="topleft"
-    left="-130"
-    length="1"
-    halign="right"
-    name="360_label"
-    text_color="0.3 0.82 1 1"
-    top_delta="0"
-    type="string"
-    width="115">
-    Take a 360 snapshot
-   </text>
+    <button
+     follows="right|top"
+     height="23"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
+     label="Take a 360 snapshot"
+     layout="topleft"
+     left="-125"
+     name="360_label"
+     top_delta="-5"
+     width="120"/>
 </floater>

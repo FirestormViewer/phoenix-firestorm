@@ -1129,9 +1129,12 @@ BOOL LLFloaterSnapshot::postBuild()
     getChild<LLButton>("retract_btn")->setCommitCallback(boost::bind(&LLFloaterSnapshot::onExtendFloater, this));
     getChild<LLButton>("extend_btn")->setCommitCallback(boost::bind(&LLFloaterSnapshot::onExtendFloater, this));
 
-    getChild<LLTextBox>("360_label")->setSoundFlags(LLView::MOUSE_UP);
-    getChild<LLTextBox>("360_label")->setShowCursorHand(false);
-    getChild<LLTextBox>("360_label")->setClickedCallback(boost::bind(&LLFloaterSnapshot::on360Snapshot, this));
+    // <FS:Ansariel> Better 360 snapshot button
+    //getChild<LLTextBox>("360_label")->setSoundFlags(LLView::MOUSE_UP);
+    //getChild<LLTextBox>("360_label")->setShowCursorHand(false);
+    //getChild<LLTextBox>("360_label")->setClickedCallback(boost::bind(&LLFloaterSnapshot::on360Snapshot, this));
+    getChild<LLButton>("360_label")->setCommitCallback(boost::bind(&LLFloaterSnapshot::on360Snapshot, this));
+    // </FS:Ansariel>
 
 	// Filters
 	LLComboBox* filterbox = getChild<LLComboBox>("filters_combobox");

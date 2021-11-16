@@ -7,7 +7,7 @@
          name="360capture"
          help_topic="360capture"
          save_rect="true"
-         title="360 SNAPSHOT"
+         title="360 Snapshot"
          width="800">
   <panel layout="topleft"
        background_visible="true"
