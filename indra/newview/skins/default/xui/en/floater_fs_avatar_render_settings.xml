@@ -2,7 +2,7 @@
 <floater
  name="avatarrendersettings"
  help_topic="fs_avatar_render_settings"
- title="Avatar Render Settings"
+ title="Avatar Display Exceptions"
  min_width="350"
  min_height="320"
  width="450"
@@ -18,7 +18,7 @@
 		Never
 	</floater.string>
 	<floater.string name="av_render_always">
-		Fully
+		Always
 	</floater.string>
 	<filter_editor
 	 follows="left|top|right"
@@ -66,7 +66,7 @@
 		 label="Name"
 		 name="name" />
 		<name_list.columns
-		 label="Render Setting"
+		 label="Full detail"
 		 name="render_setting"
 		 width="100" />
 	</name_list>

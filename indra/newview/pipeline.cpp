@@ -370,6 +370,7 @@ bool	LLPipeline::sReflectionRender = false;
 bool    LLPipeline::sDistortionRender = false;
 bool	LLPipeline::sImpostorRender = false;
 bool	LLPipeline::sImpostorRenderAlphaDepthPass = false;
+bool	LLPipeline::sShowJellyDollAsImpostor = true;
 bool	LLPipeline::sUnderWaterRender = false;
 bool	LLPipeline::sTextureBindTest = false;
 bool	LLPipeline::sRenderFrameTest = false;
@@ -1195,6 +1196,7 @@ void LLPipeline::refreshCachedSettings()
 	LLPipeline::sAutoMaskAlphaDeferred = gSavedSettings.getBOOL("RenderAutoMaskAlphaDeferred");
 	LLPipeline::sAutoMaskAlphaNonDeferred = gSavedSettings.getBOOL("RenderAutoMaskAlphaNonDeferred");
 	LLPipeline::sUseFarClip = gSavedSettings.getBOOL("RenderUseFarClip");
+	LLPipeline::sShowJellyDollAsImpostor = gSavedSettings.getBOOL("RenderJellyDollsAsImpostors");
 	LLVOAvatar::sMaxNonImpostors = gSavedSettings.getU32("RenderAvatarMaxNonImpostors");
 	LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
 	LLPipeline::sDelayVBUpdate = gSavedSettings.getBOOL("RenderDelayVBUpdate");
@@ -2829,6 +2831,7 @@ void LLPipeline::doOcclusion(LLCamera& camera, LLRenderTarget& source, LLRenderT
 
 void LLPipeline::doOcclusion(LLCamera& camera)
 {
+	FSZoneN("doOcclusion");
 	if (LLPipeline::sUseOcclusion > 1 && !LLSpatialPartition::sTeleportRequested && 
 		(sCull->hasOcclusionGroups() || LLVOCachePartition::sNeedsOcclusionCheck))
 	{
@@ -3544,6 +3547,8 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 	//LLVertexBuffer::unbind();
 
 	grabReferences(result);
+	{
+		FSZoneN("checkOcclusionAndRebuildMesh");
 	for (LLCullResult::sg_iterator iter = sCull->beginDrawableGroups(); iter != sCull->endDrawableGroups(); ++iter)
 	{
 		LLSpatialGroup* group = *iter;
@@ -3567,9 +3572,11 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 			}
 		}
 	}
+	}
 
 	if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD)
 	{
+		FSZoneN("WorldCamera");
 		LLSpatialGroup* last_group = NULL;
 		BOOL fov_changed = LLViewerCamera::getInstance()->isDefaultFOVChanged();
 		for (LLCullResult::bridge_iterator i = sCull->beginVisibleBridge(); i != sCull->endVisibleBridge(); ++i)
@@ -3603,7 +3610,8 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 			last_group->mLastUpdateDistance = last_group->mDistance;
 		}
 	}
-
+	{
+		FSZoneN("StateSort: visible groups");
 	for (LLCullResult::sg_iterator iter = sCull->beginVisibleGroups(); iter != sCull->endVisibleGroups(); ++iter)
 	{
 		LLSpatialGroup* group = *iter;
@@ -3622,7 +3630,7 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 				group->rebuildMesh();
 			}
 		}
-	}
+	}}
 	
 	{
 		LL_RECORD_BLOCK_TIME(FTM_STATESORT_DRAWABLE);
@@ -3978,6 +3986,8 @@ void LLPipeline::postSort(LLCamera& camera)
 
 	LL_PUSH_CALLSTACKS();
 	//rebuild drawable geometry
+	{
+		FSZoneN("PostSort: rebuildGeom");
 	for (LLCullResult::sg_iterator i = sCull->beginDrawableGroups(); i != sCull->endDrawableGroups(); ++i)
 	{
 		LLSpatialGroup* group = *i;
@@ -3996,6 +4006,8 @@ void LLPipeline::postSort(LLCamera& camera)
 
 	
 	//build render map
+	{
+		FSZoneN("build render map");
 	for (LLCullResult::sg_iterator i = sCull->beginVisibleGroups(); i != sCull->endVisibleGroups(); ++i)
 	{
 		LLSpatialGroup* group = *i;
@@ -4041,6 +4053,7 @@ void LLPipeline::postSort(LLCamera& camera)
 
 		if (hasRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA))
 		{
+			FSZoneN("Collect Alpha groups");
 			LLSpatialGroup::draw_map_t::iterator alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA);
 			
 			if (alpha != group->mDrawMap.end())
@@ -4065,6 +4078,7 @@ void LLPipeline::postSort(LLCamera& camera)
 				}
 			}
 		}
+	}
 	}
 	
 	//flush particle VB
@@ -4091,11 +4105,14 @@ void LLPipeline::postSort(LLCamera& camera)
 		
 		glBeginQueryARB(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, mMeshDirtyQueryObject);
 	}*/
-
+	{
+		FSZoneN("rebuild delayed upd groups");
 	//pack vertex buffers for groups that chose to delay their updates
 	for (LLSpatialGroup::sg_vector_t::iterator iter = mMeshDirtyGroup.begin(); iter != mMeshDirtyGroup.end(); ++iter)
 	{
 		(*iter)->rebuildMesh();
+	}
+	}
 	}
 
 	/*if (use_transform_feedback)
@@ -4105,12 +4122,17 @@ void LLPipeline::postSort(LLCamera& camera)
 	
 	mMeshDirtyGroup.clear();
 
+	{
+		FSZoneN("sort alpha groups");
 	if (!sShadowRender)
 	{
 		std::sort(sCull->beginAlphaGroups(), sCull->endAlphaGroups(), LLSpatialGroup::CompareDepthGreater());
 	}
+	}
 
 	LL_PUSH_CALLSTACKS();
+	{
+	FSZoneN("beacon rendering flags");
 	// only render if the flag is set. The flag is only set if we are in edit mode or the toggle is set in the menus
 	// Ansariel: Make beacons also show when beacons floater is closed.
 	if (/*LLFloaterReg::instanceVisible("beacons") &&*/ !sShadowRender)
@@ -4164,6 +4186,7 @@ void LLPipeline::postSort(LLCamera& camera)
 			forAllVisibleDrawables(renderSoundHighlights);
 		}
 	}
+	}
 	LL_PUSH_CALLSTACKS();
 	// If managing your telehub, draw beacons at telehub and currently selected spawnpoint.
 	if (LLFloaterTelehub::renderBeacons())
@@ -4173,6 +4196,7 @@ void LLPipeline::postSort(LLCamera& camera)
 
 	if (!sShadowRender)
 	{
+		FSZoneN("Render face highlights");
 		mSelectedFaces.clear();
 
 		LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
@@ -11241,9 +11265,11 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
                               << " is " << ( too_complex ? "" : "not ") << "too complex"
                               << LL_ENDL;
 
+	bool too_slow = avatar->isTooSlowWithoutShadows(); // <FS:Beq/> only if we really have to do we imposter.
+
 	pushRenderTypeMask();
 	
-	if (visually_muted || too_complex)
+	if ( !too_slow && ( visually_muted || too_complex ) )
 	{
 		andRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR,
 							LLPipeline::RENDER_TYPE_CONTROL_AV,

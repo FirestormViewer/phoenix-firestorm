@@ -45,6 +45,7 @@
 #include "llnotificationsutil.h"
 #include "llnotificationmanager.h"
 #include "llpanelgroup.h"
+#include "llregex.h"
 #include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "llslurl.h"
@@ -58,7 +59,6 @@
 #include "llviewerregion.h"
 #include "llvoavatarself.h"
 
-#include <boost/regex.hpp>
 #include "boost/lexical_cast.hpp"
 
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
@@ -146,7 +146,7 @@ static std::string clean_name_from_task_im(const std::string& msg,
     boost::smatch match;
     static const boost::regex returned_exp(
         "(.*been returned to your inventory lost and found folder by )(.+)( (from|near).*)");
-    if (boost::regex_match(msg, match, returned_exp))
+    if (ll_regex_match(msg, match, returned_exp))
     {
         // match objects are 1-based for groups
         std::string final = match[1].str();

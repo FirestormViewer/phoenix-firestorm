@@ -785,7 +785,7 @@ void LLCrashLogger::init_curl()
         }
 
         CRYPTO_set_locking_callback(ssl_locking_callback);
-        CRYPTO_THREADID_set_callback(ssl_thread_id_callback);
+        (void)CRYPTO_THREADID_set_callback(ssl_thread_id_callback);
     }
 }
 

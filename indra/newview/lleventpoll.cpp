@@ -50,7 +50,7 @@ namespace LLEventPolling
 namespace Details
 {
 
-    class LLEventPollImpl: public boost::enable_shared_from_this<LLEventPollImpl>
+    class LLEventPollImpl: public std::enable_shared_from_this<LLEventPollImpl>
     {
     public:
         LLEventPollImpl(const LLHost &sender);
@@ -320,7 +320,7 @@ namespace Details
 LLEventPoll::LLEventPoll(const std::string&	poll_url, const LLHost& sender):
     mImpl()
 { 
-    mImpl = boost::make_shared<LLEventPolling::Details::LLEventPollImpl>(sender);
+    mImpl = std::make_shared<LLEventPolling::Details::LLEventPollImpl>(sender);
     mImpl->start(poll_url);
 }
 
