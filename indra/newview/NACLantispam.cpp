@@ -10,7 +10,6 @@
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "llworld.h"
-#include "sound_ids.h"
 #include <time.h>
 #include <boost/regex.hpp>
 
@@ -206,11 +205,6 @@ NACLAntiSpamRegistry::NACLAntiSpamRegistry() :
 	for (S32 queue = 0; queue < ANTISPAM_QUEUE_MAX; ++queue)
 	{
 		mQueues[queue] = new NACLAntiSpamQueue(mGlobalTime, mGlobalAmount);
-	}
-
-	for (S32 i = 0; i < COLLISION_SOUNDS_SIZE; ++i)
-	{
-		mCollisionSounds.insert(LLUUID(COLLISION_SOUNDS[i]));
 	}
 }
 
@@ -638,11 +632,6 @@ void NACLAntiSpamRegistry::purgeGlobalEntries()
 		delete it->second;
 	}
 	mGlobalEntries.clear();
-}
-
-bool NACLAntiSpamRegistry::isCollisionSound(const LLUUID& sound_id)
-{
-	return (mCollisionSounds.find(sound_id) != mCollisionSounds.end());
 }
 
 void NACLAntiSpamRegistry::processObjectPropertiesFamily(LLMessageSystem* msg)

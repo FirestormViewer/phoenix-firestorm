@@ -285,11 +285,6 @@ const LLUUID SND_STONE_DIRT_04			("c8091652-e04b-4a11-84ba-15dba06e7a1b");
 const LLUUID SND_STONE_STONE_02			("ba4ef5ac-7435-4240-b826-c24ba8fa5a78");
 const LLUUID SND_STONE_STONE_04			("ea296329-0f09-4993-af1b-e6784bab1dc9");
 
-// NaCl - Antispam Registry. The following sounds will be ignored for purposes of spam protection. They have been gathered from wiki documentation of frequent official sounds.
-const std::string COLLISION_SOUNDS[] ={"dce5fdd4-afe4-4ea1-822f-dd52cac46b08","51011582-fbca-4580-ae9e-1a5593f094ec","68d62208-e257-4d0c-bbe2-20c9ea9760bb","75872e8c-bc39-451b-9b0b-042d7ba36cba","6a45ba0b-5775-4ea8-8513-26008a17f873","992a6d1b-8c77-40e0-9495-4098ce539694","2de4da5a-faf8-46be-bac6-c4d74f1e5767","6e3fb0f7-6d9c-42ca-b86b-1122ff562d7d","14209133-4961-4acc-9649-53fc38ee1667","bc4a4348-cfcc-4e5e-908e-8a52a8915fe6","9e5c1297-6eed-40c0-825a-d9bcd86e3193","e534761c-1894-4b61-b20c-658a6fb68157","8761f73f-6cf9-4186-8aaa-0948ed002db1","874a26fd-142f-4173-8c5b-890cd846c74d","0e24a717-b97e-4b77-9c94-b59a5a88b2da","75cf3ade-9a5b-4c4d-bb35-f9799bda7fb2","153c8bf7-fb89-4d89-b263-47e58b1b4774","55c3e0ce-275a-46fa-82ff-e0465f5e8703","24babf58-7156-4841-9a3f-761bdbb8e237","aca261d8-e145-4610-9e20-9eff990f2c12","0642fba6-5dcf-4d62-8e7b-94dbb529d117","25a863e8-dc42-4e8a-a357-e76422ace9b5","9538f37c-456e-4047-81be-6435045608d4","8c0f84c3-9afd-4396-b5f5-9bca2c911c20","be582e5d-b123-41a2-a150-454c39e961c8","c70141d4-ba06-41ea-bcbc-35ea81cb8335","7d1826f4-24c4-4aac-8c2e-eff45df37783","063c97d3-033a-4e9b-98d8-05c8074922cb","00000000-0000-0000-0000-000000000120"};
-const int COLLISION_SOUNDS_SIZE=29;
-// NaCl End
-
 
 
 // extra guids

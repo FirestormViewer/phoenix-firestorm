@@ -6,7 +6,7 @@
  help_topic="fs_performance_floater"
  save_rect="true"
  title="Improve Graphics Speed (Experimental)"
- can_resize="true"
+ can_resize="false"
  min_height="652"
  max_height="652"
  min_width="580"
@@ -18,7 +18,7 @@
   FPS capped at [FPSCAP] fps
 </floater.string>
 <floater.string name="tuning_fps">
-  Auto Tune target [FPSTARGET] fps
+Target [FPSTARGET] fps
 </floater.string>
  <floater.string name="av_frame_pct">
 [AV_FRAME_PCT]%
@@ -101,7 +101,7 @@
       left="395"
       top="5"
       name="fps_desc1_lbl"
-      width="150"
+      width="160"
       wrap="true">
       Allow 5-10 seconds for changes to take full effect.
     </text>

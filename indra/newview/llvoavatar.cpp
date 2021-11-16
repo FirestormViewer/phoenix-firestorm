@@ -10046,7 +10046,7 @@ void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, 
 	S32 u8_value = F32_to_U8(value,viewer_param->getMinWeight(),viewer_param->getMaxWeight());
 	apr_file_printf(file, "\t\t<param id=\"%d\" name=\"%s\" display=\"%s\" value=\"%.3f\" u8=\"%d\" type=\"%s\" wearable=\"%s\" group=\"%d\"/>\n",
 					viewer_param->getID(), viewer_param->getName().c_str(), viewer_param->getDisplayName().c_str(), value, u8_value, type_string.c_str(),
-					LLWearableType::getTypeName(LLWearableType::EType(wtype)).c_str(),
+					LLWearableType::getInstance()->getTypeName(LLWearableType::EType(wtype)).c_str(),
 					viewer_param->getGroup());
 	}
 	
@@ -10385,13 +10385,13 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	{
 		//Wolfspirit: Read the UUID, system and Texturecolor
 		const LLTEContents& tec = contents.mTEContents;
-		const LLUUID tag_uuid = ((LLUUID*)tec.image_data)[TEX_HEAD_BODYPAINT];
+		const LLUUID tag_uuid = tec.image_data[TEX_HEAD_BODYPAINT];
 		bool new_system = (tec.glow[TEX_HEAD_BODYPAINT]);
 
 		//WS: Write them into an LLSD map
 		mClientTagData["uuid"] = tag_uuid.asString();
 		mClientTagData["id_based"] = new_system;
-		mClientTagData["tex_color"] = LLColor4U(tec.colors).getValue();
+		mClientTagData["tex_color"] = tec.colors[TEX_HEAD_BODYPAINT].getValue();
 
 		//WS: Clear mNameString to force a rebuild
 		mNameIsSet = false;
@@ -10909,6 +10909,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 {
 // </FS:CR>
 	LLAPRFile outfile;
+    LLWearableType *wr_inst = LLWearableType::getInstance();
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
 	std::string fullpath = filenames[0];
@@ -10932,7 +10933,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 		{
 			for (S32 type = LLWearableType::WT_SHAPE; type < LLWearableType::WT_COUNT; type++)
 			{
-				const std::string& wearable_name = LLWearableType::getTypeName((LLWearableType::EType)type);
+				const std::string& wearable_name = wr_inst->getTypeName((LLWearableType::EType)type);
 				apr_file_printf( file, "\n\t\t<!-- wearable: %s -->\n", wearable_name.c_str() );
 
 				for (LLVisualParam* param = getFirstVisualParam(); param; param = getNextVisualParam())

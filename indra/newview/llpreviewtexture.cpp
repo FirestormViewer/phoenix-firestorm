@@ -53,6 +53,7 @@
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
 #include "lluictrlfactory.h"
+#include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "lllineeditor.h"
 #include "lltexteditor.h"
@@ -466,6 +467,62 @@ void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenam
 
 	// <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once
 	saveMultiple(remaining_ids);
+}
+
+
+void LLPreviewTexture::saveMultipleToFile(const std::string& file_name)
+{
+    std::string texture_location(gSavedSettings.getString("TextureSaveLocation"));	
+    std::string texture_name = file_name.empty() ? getItem()->getName() : file_name;
+    
+    std::string filepath;
+    S32 i = 0;
+    S32 err = 0;
+    std::string extension(".png");
+    // <FS:Ansariel> Allow to use user-defined default save format for textures
+    if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+    {
+        extension = ".tga";
+    }
+    // </FS:PP>
+    do
+    {
+        filepath = texture_location;
+        filepath += gDirUtilp->getDirDelimiter();
+        filepath += texture_name;
+
+        if (i != 0)
+        {
+            filepath += llformat("_%.3d", i);
+        }
+
+        filepath += extension;
+
+        llstat stat_info;
+        err = LLFile::stat( filepath, &stat_info );
+        i++;
+    } while (-1 != err);  // Search until the file is not found (i.e., stat() gives an error).
+    
+    
+    mSaveFileName = filepath;
+    mLoadingFullImage = TRUE;
+    getWindow()->incBusyCount();
+
+    mImage->forceToSaveRawImage(0);//re-fetch the raw image if the old one is removed.
+    // <FS:Ansariel> Allow to use user-defined default save format for textures
+    //mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSavePNG,
+    //    0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    if (gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+    {
+        mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSavePNG,
+            0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    }
+    else
+    {
+        mImage->setLoadedCallback(LLPreviewTexture::onFileLoadedForSaveTGA,
+            0, TRUE, FALSE, new LLUUID(mItemUUID), &mCallbackTextureList);
+    }
+    // </FS:Ansariel>
 }
 
 // virtual
