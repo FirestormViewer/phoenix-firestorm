@@ -1179,13 +1179,14 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	}
 
 	// updating inventory
+    LLWearableType* wearable_type_inst = LLWearableType::getInstance();
 
 	// TODO: Removed check for ensuring that teens don't remove undershirt and underwear. Handle later
 	// note: shirt is the first non-body part wearable item. Update if wearable order changes.
 	// This loop should remove all clothing, but not any body parts
 	for (S32 j = 0; j < (S32)LLWearableType::WT_COUNT; j++)
 	{
-		if (LLWearableType::getAssetType((LLWearableType::EType)j) == LLAssetType::AT_CLOTHING)
+		if (wearable_type_inst->getAssetType((LLWearableType::EType)j) == LLAssetType::AT_CLOTHING)
 		{
 			removeWearable((LLWearableType::EType)j, true, 0);
 		}
@@ -1205,7 +1206,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 			new_wearable->setName(new_item->getName());
 			new_wearable->setItemID(new_item->getUUID());
 
-			if (LLWearableType::getAssetType(type) == LLAssetType::AT_BODYPART)
+			if (wearable_type_inst->getAssetType(type) == LLAssetType::AT_BODYPART)
 			{
 				// exactly one wearable per body part
 				setWearable(type,0,new_wearable);
@@ -1304,7 +1305,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 //			if ((old_wearable->getAssetID() == new_wearable->getAssetID()) &&
 //				(old_item_id == new_item->getUUID()))
 //			{
-//				LL_DEBUGS() << "No change to wearable asset and item: " << LLWearableType::getTypeName(type) << LL_ENDL;
+//				LL_DEBUGS() << "No change to wearable asset and item: " << LLWearableType::getInstance()->getTypeName(type) << LL_ENDL;
 //				return;
 //			}
 //			
@@ -1767,7 +1768,7 @@ void LLAgentWearables::editWearable(const LLUUID& item_id)
 		return;
 	}
 
-	const BOOL disable_camera_switch = LLWearableType::getDisableCameraSwitch(wearable->getType());
+	const BOOL disable_camera_switch = LLWearableType::getInstance()->getDisableCameraSwitch(wearable->getType());
 	LLPanel* panel = LLFloaterSidePanelContainer::getPanel("appearance");
 	LLSidepanelAppearance::editWearable(wearable, panel, disable_camera_switch);
 }
@@ -1905,11 +1906,11 @@ void LLAgentWearables::sendAgentWearablesUpdate()
 		}
 		else
 		{
-			//LL_INFOS() << "Not wearing wearable type " << LLWearableType::getTypeName((LLWearableType::EType)i) << LL_ENDL;
+			//LL_INFOS() << "Not wearing wearable type " << LLWearableType::getInstance()->getTypeName((LLWearableType::EType)i) << LL_ENDL;
 			gMessageSystem->addUUIDFast(_PREHASH_ItemID, LLUUID::null);
 		}
 
-		LL_DEBUGS() << "       " << LLWearableType::getTypeLabel((LLWearableType::EType)type) << ": " << (wearable ? wearable->getAssetID() : LLUUID::null) << LL_ENDL;
+		LL_DEBUGS() << "       " << LLWearableType::getInstance()->getTypeLabel((LLWearableType::EType)type) << ": " << (wearable ? wearable->getAssetID() : LLUUID::null) << LL_ENDL;
 	}
 	gAgent.sendReliableMessage();
 }
@@ -2007,7 +2008,7 @@ void LLAgentWearables::processAgentInitialWearablesUpdate(LLMessageSystem* mesgs
 			}
 			else
 			{
-				LLAssetType::EType asset_type = LLWearableType::getAssetType(type);
+				LLAssetType::EType asset_type = LLWearableType::getInstance()->getAssetType(type);
 				if (asset_type == LLAssetType::AT_NONE)
 				{
 					continue;
@@ -2020,7 +2021,7 @@ void LLAgentWearables::processAgentInitialWearablesUpdate(LLMessageSystem* mesgs
 				outfit->add(wearable_data);
 			}
 			
-			LL_DEBUGS() << "       " << LLWearableType::getTypeLabel(type) << LL_ENDL;
+			LL_DEBUGS() << "       " << LLWearableType::getInstance()->getTypeLabel(type) << LL_ENDL;
 		}
 		
 		// Get the complete information on the items in the inventory and set up an observer
@@ -2048,7 +2049,7 @@ void LLAgentWearables::recoverMissingWearable(const LLWearableType::EType type, 
 {
 	// Try to recover by replacing missing wearable with a new one.
 	LLNotificationsUtil::add("ReplacedMissingWearable");
-	LL_DEBUGS() << "Wearable " << LLWearableType::getTypeLabel(type) << " could not be downloaded.  Replaced inventory item with default wearable." << LL_ENDL;
+	LL_DEBUGS() << "Wearable " << LLWearableType::getInstance()->getTypeLabel(type) << " could not be downloaded.  Replaced inventory item with default wearable." << LL_ENDL;
 	LLViewerWearable* new_wearable = LLWearableList::instance().createNewWearable(type, gAgentAvatarp);
 
 	setWearable(type,index,new_wearable);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">Назад</text>
+	<text name="av_nearby_title">Аватары рядом</text>
+	<text name="tot_av_count">Всего: 50 (120000.10μs)</text>
+	<text name="av_nearby_desc">Скройте самые сложные аватары, чтобы увеличить скорость.</text>
+	<slider name="IndirectMaxComplexity" label="Максимальная сложность (K)" tool_tip="Определяет, в какой момент визуально сложный аватар отображается как силуэт."/>
+	<slider name="FSRenderAvatarMaxART" label="Макс. время рендеринга (μs)" tool_tip="Управляет, когда считается, что визуально сложный аватар занимает слишком много времени для рендеринга. (единица: микросекунды)"/>
+	<text name="FSRenderAvatarMaxARTText">неогр.</text>
+	<name_list name="nearby_list">
+		<name_list.columns name="art_visual" tool_tip="Гистограмма, показывающая текущее время рендеринга (включая автонастройку) в % от самого медленного."/>
+		<name_list.columns name="art_value" label="Время (μs)" tool_tip="Время рендеринга аватара. Фактическое время, затраченное на визуализацию этого аватара до любой автонастройки (в микросекундах)."/>
+		<name_list.columns name="complex_value" label="ARC" tool_tip="Сложность (ARC) на основе стандартных правил."/>
+		<name_list.columns name="state" tool_tip="Показывает любой тюнинг. I=Силуэт, S=нет тени."/>
+		<name_list.columns name="name" label="Имя" />
+	</name_list>
+	<text name="av_nearby_desc2">
+		Вы можете щелкнуть ПКМ на аватар в мире, чтобы управлять отображением.
+	</text>
+	<button label="Исключения..." name="exceptions_btn"/>
+	<check_box label="Всегда отображать друзей во всех подробностях" name="display_friends"/>
+	<check_box label="Полностью скрыть аватары" name="hide_avatars"/>
+	<text name="name_tags_textbox">Бейджи:</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="Выкл." name="radio"/>
+		<radio_item label="Вкл." name="radio2"/>
+		<radio_item label="Показать вкратце" name="radio3"/>
+	</radio_group>
+</panel>

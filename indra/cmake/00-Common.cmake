@@ -82,7 +82,7 @@ if (WINDOWS)
   # CP changed to only append the flag for 32bit builds - on 64bit builds,
   # locally at least, the build output is spammed with 1000s of 'D9002'
   # warnings about this switch being ignored.
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")  
   # <FS:ND> Remove this, it's no option to cl.exe and causes a massive amount of warnings.
   #if( ADDRESS_SIZE EQUAL 32 )
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
