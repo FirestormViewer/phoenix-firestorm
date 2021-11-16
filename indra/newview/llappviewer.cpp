@@ -738,7 +738,7 @@ LLAppViewer* LLAppViewer::sInstance = NULL;
 LLTextureCache* LLAppViewer::sTextureCache = NULL;
 LLImageDecodeThread* LLAppViewer::sImageDecodeThread = NULL;
 LLTextureFetch* LLAppViewer::sTextureFetch = NULL;
-FSPurgeDiskCacheThread* LLAppViewer::sPurgeDiskCacheThread = NULL; // <FS:Ansariel> Regular disk cache cleanup
+LLPurgeDiskCacheThread* LLAppViewer::sPurgeDiskCacheThread = NULL;
 
 std::string getRuntime()
 {
@@ -2478,7 +2478,7 @@ bool LLAppViewer::cleanup()
 	sTextureFetch->shutdown();
 	sTextureCache->shutdown();
 	sImageDecodeThread->shutdown();
-	sPurgeDiskCacheThread->shutdown(); // <FS:Ansariel> Regular disk cache cleanup
+	sPurgeDiskCacheThread->shutdown();
 
 	sTextureFetch->shutDownTextureCacheThread() ;
 	sTextureFetch->shutDownImageDecodeThread() ;
@@ -2501,10 +2501,8 @@ bool LLAppViewer::cleanup()
     sImageDecodeThread = NULL;
 	delete mFastTimerLogThread;
 	mFastTimerLogThread = NULL;
-	// <FS:Ansariel> Regular disk cache cleanup
 	delete sPurgeDiskCacheThread;
 	sPurgeDiskCacheThread = NULL;
-	// </FS:Ansariel>
 
 	if (LLFastTimerView::sAnalyzePerformance)
 	{
@@ -2607,7 +2605,7 @@ bool LLAppViewer::initThreads()
 													sImageDecodeThread,
 													enable_threads && true,
 													app_metrics_qa_mode);
-	LLAppViewer::sPurgeDiskCacheThread = new FSPurgeDiskCacheThread(); // <FS:Ansariel> Regular disk cache cleanup
+	LLAppViewer::sPurgeDiskCacheThread = new LLPurgeDiskCacheThread();
 
 	if (LLTrace::BlockTimer::sLog || LLTrace::BlockTimer::sMetricLog)
 	{
@@ -5005,8 +5003,11 @@ void LLAppViewer::migrateCacheDirectory()
 //static
 U32 LLAppViewer::getTextureCacheVersion()
 {
-	//viewer texture cache version, change if the texture cache format changes.
-	const U32 TEXTURE_CACHE_VERSION = 8;
+	// Viewer texture cache version, change if the texture cache format changes.
+	// 2021-03-10 Bumping up by one to help obviate texture cache issues with
+	//            Simple Cache Viewer - see SL-14985 for more information
+	//const U32 TEXTURE_CACHE_VERSION = 8;
+	const U32 TEXTURE_CACHE_VERSION = 9;
 
 	return TEXTURE_CACHE_VERSION ;
 }
@@ -5039,8 +5040,6 @@ bool LLAppViewer::initCache()
     //const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
     const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
     // </FS:Ansariel>
-    // <FS:Ansariel> Fix integer overflow
-    //const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
     const uintmax_t disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
 	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
 
@@ -5134,7 +5133,6 @@ bool LLAppViewer::initCache()
 			LLDiskCache::getInstance()->purge();
 		}
 	}
-	// <FS:Ansariel> Regular disk cache cleanup
 	LLAppViewer::getPurgeDiskCacheThread()->start();
 
 	// <FS:Ansariel> FIRE-13066
