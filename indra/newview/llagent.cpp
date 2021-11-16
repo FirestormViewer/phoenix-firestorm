@@ -3471,10 +3471,7 @@ bool LLAgent::requestGetCapability(const std::string &capName, httpCallback_t cb
 {
     std::string url;
 
-    // <FS:Ansariel> FIRE-21323: Crashfix
-    //url = getRegion()->getCapability(capName);
-    url = getRegion() ? getRegion()->getCapability(capName) : "";
-    // </FS:Ansariel>
+    url = getRegionCapability(capName);
 
     if (url.empty())
     {
