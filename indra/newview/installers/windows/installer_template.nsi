@@ -762,13 +762,13 @@ Push $2
     Delete  "$2\AppData\Roaming\Firestorm\typed_locations.txt"
 # Delete files in \Users\<User>\AppData\Local\Firestorm
     ${If} ${ISOPENSIM} == "0"
-        ${if} ${IS64BIT} == "0"
+        ${If} ${IS64BIT} == "0"
             RMDir /r "$2\AppData\Local\Firestorm"				#Delete the Havok cache folder
         ${Else}
             RMDir /r "$2\AppData\Local\Firestorm_x64"			#Delete the OpenSim cache folder
         ${EndIf}
     ${Else}
-        ${if} ${IS64BIT} == "0"
+        ${If} ${IS64BIT} == "0"
             RMDir /r "$2\AppData\Local\FirestormOS"			#Delete the Havok cache folder
         ${Else}
             RMDir /r "$2\AppData\Local\FirestormOS_x64"		#Delete the OpenSim cache folder
