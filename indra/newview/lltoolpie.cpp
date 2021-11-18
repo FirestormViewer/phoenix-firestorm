@@ -687,18 +687,21 @@ bool LLToolPie::walkToClickedLocation()
         mPick.mPosGlobal = gAgent.getPositionGlobal() + LLVector3d(LLViewerCamera::instance().getAtAxis()) * SELF_CLICK_WALK_DISTANCE;
     }
 
-    if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
-        (mPick.mObjectID.notNull() && !mPick.mPosGlobal.isExactlyZero()))
-    {
+//    if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+//        (mPick.mObjectID.notNull() && !mPick.mPosGlobal.isExactlyZero()))
 // [RLVa:KB] - Checked: RLVa-2.0.0
-        if (RlvActions::isRlvEnabled() && !RlvActions::canTeleportToLocal(mPick.mPosGlobal))
-        {
-            RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
-            mPick = saved_pick;
-            return false;
-        }
-// [/RLVa:KB]
+	bool fValidPick = ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+		(mPick.mObjectID.notNull() && !mPick.mPosGlobal.isExactlyZero()));
 
+	if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
+	{
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
+		fValidPick = false;
+	}
+
+	if (fValidPick)
+// [/RLVa:KB]
+    {
         // <FS:PP> FIRE-31135 Do not reset camera position for "click to walk"
         // gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
         static LLCachedControl<bool> sResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
