@@ -736,22 +736,22 @@ bool run_forward(EKeystate s)
         }
         if (!gAgent.getRunning())
         {
+// [RLVa:KB] - @temprun
+			gAgent.setTempRun();
+// [/RLVa:KB]
 //            gAgent.setRunning();
 //            gAgent.sendWalkRun(true);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.setTempRun();
-// [/RLVa:KB]
         }
     }
     else if(KEYSTATE_UP == s)
     {
         if (gAgent.mDoubleTapRunMode == LLAgent::DOUBLETAP_FORWARD)
             gAgent.mDoubleTapRunMode = LLAgent::DOUBLETAP_NONE;
+// [RLVa:KB] - @temprun
+		gAgent.clearTempRun();
+// [/RLVa:KB]
 //        gAgent.clearRunning();
 //        gAgent.sendWalkRun(false);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.clearTempRun();
-// [/RLVa:KB]
     }
     agent_push_forward(s);
     return true;
@@ -767,22 +767,22 @@ bool run_backward(EKeystate s)
         }
         if (!gAgent.getRunning())
         {
+// [RLVa:KB] - @temprun
+			gAgent.setTempRun();
+// [/RLVa:KB]
 //            gAgent.setRunning();
 //            gAgent.sendWalkRun(true);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.setTempRun();
-// [/RLVa:KB]
         }
     }
     else if (KEYSTATE_UP == s)
     {
         if (gAgent.mDoubleTapRunMode == LLAgent::DOUBLETAP_BACKWARD)
             gAgent.mDoubleTapRunMode = LLAgent::DOUBLETAP_NONE;
+// [RLVa:KB] - @temprun
+		gAgent.clearTempRun();
+// [/RLVa:KB]
 //        gAgent.clearRunning();
 //        gAgent.sendWalkRun(false);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.clearTempRun();
-// [/RLVa:KB]
     }
     agent_push_backward(s);
     return true;
@@ -798,22 +798,22 @@ bool run_left(EKeystate s)
         }
         if (!gAgent.getRunning())
         {
+// [RLVa:KB] - @temprun
+			gAgent.setTempRun();
+// [/RLVa:KB]
 //            gAgent.setRunning();
 //            gAgent.sendWalkRun(true);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.setTempRun();
-// [/RLVa:KB]
         }
     }
     else if (KEYSTATE_UP == s)
     {
         if (gAgent.mDoubleTapRunMode == LLAgent::DOUBLETAP_SLIDELEFT)
             gAgent.mDoubleTapRunMode = LLAgent::DOUBLETAP_NONE;
+// [RLVa:KB] - @temprun
+		gAgent.clearTempRun();
+// [/RLVa:KB]
 //        gAgent.clearRunning();
 //        gAgent.sendWalkRun(false);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.clearTempRun();
-// [/RLVa:KB]
     }
     agent_slide_left(s);
     return true;
@@ -829,22 +829,22 @@ bool run_right(EKeystate s)
         }
         if (!gAgent.getRunning())
         {
+// [RLVa:KB] - @temprun
+			gAgent.setTempRun();
+// [/RLVa:KB]
 //            gAgent.setRunning();
 //            gAgent.sendWalkRun(true);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.setTempRun();
-// [/RLVa:KB]
         }
     }
     else if (KEYSTATE_UP == s)
     {
         if (gAgent.mDoubleTapRunMode == LLAgent::DOUBLETAP_SLIDERIGHT)
             gAgent.mDoubleTapRunMode = LLAgent::DOUBLETAP_NONE;
+// [RLVa:KB] - @temprun
+		gAgent.clearTempRun();
+// [/RLVa:KB]
 //        gAgent.clearRunning();
 //        gAgent.sendWalkRun(false);
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-            gAgent.clearTempRun();
-// [/RLVa:KB]
     }
     agent_slide_right(s);
     return true;
@@ -856,19 +856,21 @@ bool toggle_run(EKeystate s)
     bool run = gAgent.getAlwaysRun();
     if (run)
     {
-        gAgent.clearAlwaysRun();
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-//        gAgent.clearRunning();
+// [RLVa:KB] - @alwaysrun
+		gAgent.clearAlwaysRun();
 // [/RLVa:KB]
+//        gAgent.clearAlwaysRun();
+//        gAgent.clearRunning();
     }
     else
     {
-        gAgent.setAlwaysRun();
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-//        gAgent.setRunning();
+// [RLVa:KB] - @alwaysrun
+		gAgent.setAlwaysRun();
 // [/RLVa:KB]
+//        gAgent.setAlwaysRun();
+//        gAgent.setRunning();
     }
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+//    gAgent.sendWalkRun(!run);
 //    gAgent.sendWalkRun(!run);
 // [/RLVa:KB]
 	return true;
