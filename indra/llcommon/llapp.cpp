@@ -46,7 +46,6 @@
 #include "llstl.h" // for DeletePointer()
 #include "llstring.h"
 #include "lleventtimer.h"
-
 #include "stringize.h"
 #include "llcleanup.h"
 #include "llevents.h"

@@ -66,6 +66,8 @@ const F32 NUDGE_TIME = 0.25f;  // in seconds
 const S32 NUDGE_FRAMES = 2;
 const F32 ORBIT_NUDGE_RATE = 0.05f;  // fraction of normal speed
 
+const LLKeyData agent_control_lbutton(CLICK_LEFT, KEY_NONE, MASK_NONE, true);
+
 struct LLKeybindFunctionData
 {
     LLKeybindFunctionData(boost::function<bool(EKeystate keystate)> function, bool global)
@@ -1057,8 +1059,8 @@ REGISTER_KEYBOARD_ACTION("toggle_pause_media", toggle_pause_media);
 REGISTER_KEYBOARD_ACTION("toggle_enable_media", toggle_enable_media);
 REGISTER_KEYBOARD_ACTION("teleport_to", teleport_to);
 REGISTER_KEYBOARD_ACTION("walk_to", walk_to);
-REGISTER_KEYBOARD_GLOBAL_ACTION("toggle_voice", toggle_voice);
-REGISTER_KEYBOARD_GLOBAL_ACTION("voice_follow_key", voice_follow_key);
+REGISTER_KEYBOARD_ACTION("toggle_voice", toggle_voice);
+REGISTER_KEYBOARD_ACTION("voice_follow_key", voice_follow_key);
 REGISTER_KEYBOARD_ACTION(script_mouse_handler_name, script_trigger_lbutton);
 #undef REGISTER_KEYBOARD_ACTION
 
@@ -1757,10 +1759,6 @@ bool LLViewerInput::scanMouse(EMouseClickType click, EMouseState state) const
     bool res = false;
     S32 mode = getMode();
     MASK mask = gKeyboard->currentMask(TRUE);
-
-    // By default mouse clicks require exact mask
-    // Todo: support for mIgnoreMasks because some functions like teleports
-    // expect to be canceled, but for voice it's prefered to ignore mask.
     res = scanMouse(mMouseBindings[mode], mMouseBindings[mode].size(), click, mask, state, false);
 
     // No user defined actions found or those actions can't handle the key/button,

@@ -1478,7 +1478,6 @@ void LLFloaterEditExtDayCycle::reblendSettings()
             mSkyBlender->setPosition(position);
         }
     }
-    }
 
     if (mWaterBlender)
     {
