@@ -2451,6 +2451,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour e
 		RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(RLV_BHVR_SETCAM_UNLOCK, !fHasCamUnlock);
 
 	gRlvHandler.setCameraOverride(fHasBhvr);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDIST)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMAX)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMIN)->setPrimaryObject(idRlvObject);
@@ -3909,7 +3910,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 
 	// (Compatibility: RLV-1.16.1 will execute @getoutfit=<channel> if <layer> is invalid while we just return failure)
 	LLWearableType::EType wtType = LLWearableType::WT_INVALID;
-	if ( (rlvCmd.hasOption()) && ((wtType = LLWearableType::typeNameToType(rlvCmd.getOption())) == LLWearableType::WT_INVALID) )
+	if ( (rlvCmd.hasOption()) && ((wtType = LLWearableType::getInstance()->typeNameToType(rlvCmd.getOption())) == LLWearableType::WT_INVALID) )
 		return RLV_RET_FAILED_OPTION;
 
 	const LLWearableType::EType wtRlvTypes[] =
@@ -3929,7 +3930,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 			// (nor do we hide a layer if the issuing object is the only one that has this layer locked)
 			bool fWorn = (gAgentWearables.getWearableCount(wtRlvTypes[idxType]) > 0) && 
 				( (!RlvSettings::getHideLockedLayers()) || 
-				  (LLAssetType::AT_BODYPART == LLWearableType::getAssetType(wtRlvTypes[idxType])) ||
+				  (LLAssetType::AT_BODYPART == LLWearableType::getInstance()->getAssetType(wtRlvTypes[idxType])) ||
 				  (RlvForceWear::isForceRemovable(wtRlvTypes[idxType], true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
@@ -3970,7 +3971,7 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& s
 		{
 			if (!strReply.empty())
 				strReply.push_back(',');
-			strReply.append(LLWearableType::getTypeName(wtType));
+			strReply.append(LLWearableType::getInstance()->getTypeName(wtType));
 		}
 	}
 	return RLV_RET_SUCCESS;

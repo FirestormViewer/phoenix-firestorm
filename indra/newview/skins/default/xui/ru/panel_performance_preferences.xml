@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">Назад</text>
+	<text name="settings_title">Настройки графики</text>
+	<text name="quality_lbl">Качество или скорость</text>
+	<text name="FasterText">Быстро</text>
+	<text name="BetterText">Качество</text>
+	<text name="ShadersPrefText">Низкий</text>
+	<text name="ShadersPrefText2">Средний</text>
+	<text name="ShadersPrefText3">Высокий</text>
+	<text name="ShadersPrefText4">Ультра</text>
+	<text name="quality_desc">Выбор предустановки приведет к сбросу всех внесенных изменений.</text>
+	<text name="distance_lbl">Расстояние видимости</text>
+	<text name="faster_lbl">Быстро</text>
+	<text name="draw_distance_m">м</text>
+	<text name="farther_lbl" width="50">Дальше</text>
+	<text name="distance_desc1">Ставь меньше для лучшей скорости, увеличь чтобы видеть дальше.</text>
+	<text name="environment_lbl">Окр.среда</text>
+	<text name="enhancements_desc">
+Уменьшение/устранение теней может повысить FPS, но влияет на
+атмосферу и внешний вид сцены.
+	</text>
+	<text name="RenderShadowDetailText">Источники тени:</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="Нет" name="0"/>
+		<combo_box.item label="Солнце/Луна" name="1"/>
+		<combo_box.item label="Солнце/Луна + Прожекторы" name="2"/>
+	</combo_box>
+	<text name="water_lbl">Вода</text>
+	<text name="water_desc">Уменьшение эффектов может улучшить частоту кадров.</text>
+	<text name="ReflectionsText">Отражения в воде:</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="Ничто; непрозрачная" name="-2"/>
+		<combo_box.item label="Ничто; прозрачная" name="-1"/>
+		<combo_box.item label="Минимально" name="0" value="0"/>
+		<combo_box.item label="Ландшафт и деревья" name="1"/>
+		<combo_box.item label="Все статичные объекты" name="2"/>
+		<combo_box.item label="Все аватары и объекты" name="3"/>
+		<combo_box.item label="Всё" name="4"/>
+	</combo_box>
+	<text name="photo_lbl">Фотография</text>
+	<text name="photo_desc">
+Фотографам нужно высокое качество, но это
+снижает частоту кадров. Фотоинструменты
+[APP_NAME] могут помочь вам найти правильный баланс.
+	</text>
+	<button name="open_phototools" label="Фотоинструменты" tool_tip="Откройте специальные инструменты для работы с фотографиями для расширенных настроек фотографий."/>
+</panel>

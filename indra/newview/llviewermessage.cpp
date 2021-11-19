@@ -38,6 +38,7 @@
 #include "llfollowcamparams.h"
 #include "llinventorydefines.h"
 #include "lllslconstants.h"
+#include "llmaterialtable.h"
 #include "llregionhandle.h"
 #include "llsd.h"
 #include "llsdserialize.h"
@@ -4827,11 +4828,11 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// </FS>
 
 	// NaCl - Antispam Registry
- 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
-	static LLCachedControl<bool> FSPlayCollisionSounds(gSavedSettings, "FSPlayCollisionSounds");
-	if (NACLAntiSpamRegistry::instance().isCollisionSound(sound_id))
+	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
+	static LLCachedControl<bool> EnableCollisionSounds(gSavedSettings, "EnableCollisionSounds");
+	if (LLMaterialTable::basic.isCollisionSound(sound_id))
 	{
-		if (!FSPlayCollisionSounds)
+		if (!EnableCollisionSounds)
 		{
 			return;
 		}
@@ -4880,28 +4881,32 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	{
 		return;
 	}
-	
-	// AO: Hack for legacy radar script interface compatibility. Interpret certain
+
+	// <FS:AO> Hack for legacy radar script interface compatibility. Interpret certain
 	// sound assets as a request for a full radar update to a channel
-	if ((owner_id == gAgent.getID()) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
+	if ((owner_id == gAgentID) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
 	{
-		FSRadar* radar = FSRadar::getInstance();
-		if (radar)
-		{
-			radar->requestRadarChannelAlertSync();
-		}
+		FSRadar::getInstance()->requestRadarChannelAlertSync();
 		return;
 	}
-		
+	// </FS:AO>
+
 	// Don't play sounds from gestures if they are not enabled.
 	// ...TS: Unless they're your own.
 	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
 		(owner_id != gAgent.getID()) &&
 		(owner_id == object_id)) return;
 
-  // NaCl - Sound Explorer
+	// NaCl - Antispam Registry
+	//if (LLMaterialTable::basic.isCollisionSound(sound_id) && !gSavedSettings.getBOOL("EnableCollisionSounds"))
+	//{
+	//	return;
+	//}
+	// NaCl End
+
+	// NaCl - Sound Explorer
 	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global, object_id);
-  // NaCl End
+	// NaCl End
 }
 
 void process_preload_sound(LLMessageSystem *msg, void **user_data)

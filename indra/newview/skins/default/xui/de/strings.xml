@@ -5902,6 +5902,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_People_Label">
 		Leute
 	</string>
+	<string name="Command_Performance_Label">
+		Grafikgeschwindigkeit
+	</string>
 	<string name="Command_Picks_Label">
 		Auswahlen
 	</string>
@@ -6103,6 +6106,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_People_Tooltip">
 		Freunde, Gruppen und Leute in der Nähe
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Grafikgeschwindigkeit verbessern
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Orte, die in Ihrem Profil als Favoriten angezeigt werden sollen

@@ -194,7 +194,7 @@ public:
         mLandp(NULL)
 	{}
 
-	void buildCapabilityNames(LLSD& capabilityNames);
+	static void buildCapabilityNames(LLSD& capabilityNames);
 
 	// The surfaces and other layers
 	LLSurface*	mLandp;
@@ -267,6 +267,12 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
     // This loop is used for retrying a capabilities request.
     do
     {
+        if (STATE_WORLD_INIT > LLStartUp::getStartupState())
+        {
+            LL_INFOS("AppInit", "Capabilities") << "Aborting capabilities request, reason: returned to login screen" << LL_ENDL;
+            return;
+        }
+
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed
         {
@@ -315,13 +321,19 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
         regionp = NULL;
         result = httpAdapter->postAndSuspend(httpRequest, url, capabilityNames);
 
-        // <FS:Ansariel> Fix seed cap retry count
-        //++mSeedCapAttempts;
+        if (STATE_WORLD_INIT > LLStartUp::getStartupState())
+        {
+            LL_INFOS("AppInit", "Capabilities") << "Aborting capabilities request, reason: returned to login screen" << LL_ENDL;
+            return;
+        }
 
-        if (LLApp::isExiting())
+        if (LLApp::isExiting() || gDisconnected)
         {
             return;
         }
+
+        // <FS:Ansariel> Fix seed cap retry count
+        //++mSeedCapAttempts;
 
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed
@@ -440,7 +452,7 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCompleteCoro(U64 regionHandle)
             break;  // no retry
         }
 
-        if (LLApp::isExiting())
+        if (LLApp::isExiting() || gDisconnected)
         {
             break;
         }
@@ -548,7 +560,7 @@ void LLViewerRegionImpl::requestSimulatorFeatureCoro(std::string url, U64 region
             continue;  
         }
 
-        if (LLApp::isExiting())
+        if (LLApp::isExiting() || gDisconnected)
         {
             break;
         }
@@ -3030,7 +3042,6 @@ void LLViewerRegion::unpackRegionHandshake()
 		mProductName = productName;
 	}
 
-
 	mCentralBakeVersion = region_protocols & 1; // was (S32)gSavedSettings.getBOOL("UseServerTextureBaking");
 	LLVLComposition *compp = getComposition();
 	if (compp)
@@ -3139,6 +3150,7 @@ void LLViewerRegion::unpackRegionHandshake()
 	mRegionTimer.reset(); //reset region timer.
 }
 
+// static
 void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 {
 	capabilityNames.append("AbuseCategories");

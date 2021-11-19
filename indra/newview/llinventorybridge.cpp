@@ -795,7 +795,7 @@ void hide_context_entries(LLMenuGL& menu,
 			found = !(is_entry_separator && is_previous_entry_separator);
 			is_previous_entry_separator = is_entry_separator;
 		}
-		
+
 		if (!found)
 		{
 			if (!menu_item->getLastVisible())
@@ -6039,11 +6039,20 @@ void LLTextureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		getClipboardEntries(true, items, disabled_items, flags);
 
 		items.push_back(std::string("Texture Separator"));
-		items.push_back(std::string("Save As"));
-		if (!canSaveTexture())
-		{
-			disabled_items.push_back(std::string("Save As"));
-		}
+		
+        if ((flags & ITEM_IN_MULTI_SELECTION) != 0)
+        {
+            items.push_back(std::string("Save Selected As"));
+        }
+        else
+        {
+            items.push_back(std::string("Save As"));
+            if (!canSaveTexture())
+            {
+                disabled_items.push_back(std::string("Save As"));
+            }
+        }
+        items.push_back(std::string("Wearable And Object Separator")); // <FS:Ansariel> Add separator
 
 // [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
 		if (rlv_handler_t::isEnabled())
@@ -6076,6 +6085,23 @@ void LLTextureBridge::performAction(LLInventoryModel* model, std::string action)
 			preview_texture->saveAs();
 		}
 	}
+    else if ("save_selected_as" == action)
+    {
+        openItem();
+        if (canSaveTexture())
+        {
+            LLPreviewTexture* preview_texture = LLFloaterReg::getTypedInstance<LLPreviewTexture>("preview_texture", mUUID);
+            if (preview_texture)
+            {
+                preview_texture->saveMultipleToFile(mFileName);
+            }
+        }
+        else
+        {
+            LL_WARNS() << "You don't have permission to save " << getName() << " to disk." << LL_ENDL;
+        }
+
+    }
 	else LLItemBridge::performAction(model, action);
 }
 
@@ -7599,7 +7625,7 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 // [/RLVa:KB]
 					}
 
-					if (LLWearableType::getAllowMultiwear(mWearableType))
+					if (LLWearableType::getInstance()->getAllowMultiwear(mWearableType))
 					{
 						items.push_back(std::string("Wearable Add"));
 						if (!gAgentWearables.canAddWearable(mWearableType))
@@ -8456,6 +8482,7 @@ void LLFolderViewGroupedItemBridge::groupFilterContextMenu(folder_view_item_dequ
             disabled_items.push_back(std::string("Wearable Add"));
             disabled_items.push_back(std::string("Attach To"));
             disabled_items.push_back(std::string("Attach To HUD"));
+            disabled_items.push_back(std::string("Wearable And Object Separator")); // <FS:Ansariel> Add separator
         }
     }
 	disable_context_entries_if_present(menu, disabled_items);

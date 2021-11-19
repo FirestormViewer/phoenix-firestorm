@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_complexity">
+	<text name="back_lbl">Назад</text>
+	<text name="attachments_title">Сложность прикреплений</text>
+	<text name="tot_att_count">Всего: 50 (120000.10μs)</text>
+	<text name="attachments_desc1">Прикрепления делают ваш аватар более сложным и медленным для рендеринга.</text>
+	<text name="attachments_desc2">Этот экран позволяет вам просматривать прикрепления вашего собственного аватара.</text>
+	<text name="attachments_desc3">Вы можете быстро и легко удалить свои собственные прикрепления, нажав 'X'.</text>
+	<name_list name="obj_list">
+		<name_list.columns name="art_value" label="Время (μs)" tool_tip="Время, затраченное на рендеринг этого прикрепления (микросекунды)"/>
+		<name_list.columns name="complex_value" label="ARC" tool_tip="Сложность предмета (ARC)" />
+		<name_list.columns name="name" label="Имя прикрепления" tool_tip="Нажмите 'X', чтобы отсоединить"/>
+	</name_list>
+</panel>

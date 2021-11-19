@@ -113,8 +113,6 @@ public:
 	void clearAllQueues();
 	void purgeAllQueues();
 
-	bool isCollisionSound(const LLUUID& sound_id);
-
 	void processObjectPropertiesFamily(LLMessageSystem* msg);
 
 private:

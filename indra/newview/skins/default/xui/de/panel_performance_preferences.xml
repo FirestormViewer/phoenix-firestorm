@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">
+		Zurück
+	</text>
+	<text name="settings_title">
+		Grafik-Einstellungen
+	</text>
+	<text name="quality_lbl">
+		Qualität vs. Geschwindigkeit
+	</text>
+	<text name="FasterText">
+		Schnell
+	</text>
+	<text name="BetterText">
+		Qualität
+	</text>
+	<text name="ShadersPrefText">
+		Niedrig
+	</text>
+	<text name="ShadersPrefText2">
+		Mittel
+	</text>
+	<text name="ShadersPrefText3">
+		Hoch
+	</text>
+	<text name="ShadersPrefText4">
+		Ultra
+	</text>
+	<text name="quality_desc">
+		Auswahl einer Voreinstellung setzt alle manuellen Anpassungen zurück.
+	</text>
+	<text name="distance_lbl">
+		Distanz Sichtbarkeit
+	</text>
+	<text name="faster_lbl">
+		Schnell
+	</text>
+	<text name="farther_lbl">
+		Weiter
+	</text>
+	<text name="distance_desc1">
+		Für bessere Performance niedrig halten, Erhöhen für weitere Sichtbarkeit.
+	</text>
+	<text name="environment_lbl">
+		Umgebung
+	</text>
+	<text name="enhancements_desc">
+Reduzieren / Entfernen von Schatten kann die FPS deutlich erhöhren,
+beeinflusst aber das Ambiente und Aussehen der Szenerie.
+	</text>
+	<text name="RenderShadowDetailText">
+		Schatten-Quellen:
+	</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="Keine" name="0" />
+		<combo_box.item label="Sonne/Mond" name="1" />
+		<combo_box.item label="Sonne/Mond + Projektoren" name="2" />
+	</combo_box>
+	<text name="water_lbl">
+		Wasser
+	</text>
+	<text name="water_desc">
+		Reduzieren der Wasser-Qualität kann die FPS deutlich erhöhen.
+	</text>
+	<text name="ReflectionsText">
+		Wasser-Reflektionen:
+	</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="Keine (undurchsichtig)" name="-2" />
+		<combo_box.item label="Keine (transparent)" name="-1" />
+		<combo_box.item label="Minimal" name="0" />
+		<combo_box.item label="Terrain und Bäume" name="1" />
+		<combo_box.item label="Alle statischen Objekte" name="2" />
+		<combo_box.item label="Alle Avatare und Objekte" name="3" />
+		<combo_box.item label="Alles" name="4" />
+	</combo_box>
+	<text name="photo_lbl">
+		Fotografie
+	</text>
+	<text name="photo_desc">
+Fotografen benötigen hohe Qualität, allerdings
+häuftig auf Kosten der Performance. Fototools
+können helfen, die richtige Balance zu finden.
+	</text>
+	<button name="open_phototools" label="Fototools" tool_tip="Öffnet dedizierte Fototools für fortgeschrittene Einstellungen." />
+</panel>

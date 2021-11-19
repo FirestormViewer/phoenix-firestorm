@@ -221,13 +221,16 @@
 			</pie_menu>
 			<pie_menu
 				name="RenderMenu"
-				label="Render &gt;">
+				label="Display &gt;">
 				<pie_slice
 					name="RenderNormally"
 					label="Normally">
 					<pie_slice.on_click
 						function="Avatar.SetImpostorMode"
 						parameter="0" />
+					<pie_slice.on_visible
+						function="Avatar.CheckImpostorMode"
+						parameter="4" />
 				</pie_slice>
 				<pie_slice
 					name="DoNotRender"

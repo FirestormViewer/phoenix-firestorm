@@ -228,12 +228,15 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 	BOOL ret = FALSE ;
 	for( S32 order = 0; order < ORDER_COUNT; order++ )
 	{
+		FSZone;
 		for (instance_list_t::iterator iter = LLViewerDynamicTexture::sInstances[order].begin();
 			 iter != LLViewerDynamicTexture::sInstances[order].end(); ++iter)
 		{
+			FSZone;
 			LLViewerDynamicTexture *dynamicTexture = *iter;
 			if (dynamicTexture->needsRender())
-			{				
+			{		
+				FSZoneN("needsRender");		
 				glClear(GL_DEPTH_BUFFER_BIT);
 				gDepthDirty = TRUE;
 								
@@ -241,13 +244,19 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
                 dynamicTexture->setBoundTarget(use_fbo ? &gPipeline.mBake : nullptr);
 				dynamicTexture->preRender();	// Must be called outside of startRender()
 				result = FALSE;
+				{
+					FSZoneN("DynTexture->render");
 				if (dynamicTexture->render())
 				{
 					ret = TRUE ;
 					result = TRUE;
 					sNumRenders++;
 				}
+				}
+				{
+					FSZoneN("flush");
 				gGL.flush();
+				}
 				LLVertexBuffer::unbind();
 				dynamicTexture->setBoundTarget(nullptr);
 				dynamicTexture->postRender(result);

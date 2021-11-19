@@ -5545,6 +5545,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Command_People_Label">
 		Люди
 	</string>
+	<string name="Command_Performance_Label">
+		Скорость графики
+	</string>
 	<string name="Command_Picks_Label">
 		Места
 	</string>
@@ -5727,6 +5730,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="Command_People_Tooltip">
 		Друзья, группы и люди поблизости (CTRL+SHIFT+A)
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Настройте параметры графики
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Места, которые будут показаны в вашем профиле как избранное

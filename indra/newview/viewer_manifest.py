@@ -1448,6 +1448,8 @@ class DarwinManifest(ViewerManifest):
                 # in our bundled sub-apps. For each of these we'll create a
                 # symlink from sub-app/Contents/Resources to the real .dylib.
                 # Need to get the llcommon dll from any of the build directories as well.
+                libfile_parent = self.get_dst_prefix()
+                libfile = "libllcommon.dylib"
                 dylibs = []
                 for libfile in (
                                 "libapr-1.0.dylib",
@@ -1588,8 +1590,10 @@ class DarwinManifest(ViewerManifest):
                                        dylibexecutable)
 
                     # copy LibVLC plugin itself
-                    self.path2basename("../media_plugins/libvlc/" + self.args['configuration'],
-                                       "media_plugin_libvlc.dylib")
+                    dylibexecutable = 'media_plugin_libvlc.dylib'
+                    self.path2basename("../media_plugins/libvlc/" + self.args['configuration'], dylibexecutable)
+                    # add @rpath for the correct LibVLC subfolder
+                    self.run_command(['install_name_tool', '-add_rpath', '@loader_path/lib', self.dst_path_of(dylibexecutable)])
 
                     # copy LibVLC dynamic libraries
                     with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'packages', 'lib', 'release' ), dst="lib"):
@@ -1762,7 +1766,7 @@ class DarwinManifest(ViewerManifest):
                             self.run_command(['codesign', '--force', '--timestamp', '--keychain', viewer_keychain, '--sign', identity, cef_path])
                             self.run_command(['codesign', '--force', '--timestamp', '--keychain', viewer_keychain, '--sign', identity, greenlet_path])
                             self.run_command(['codesign', '--verbose', '--deep', '--force', '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, slplugin_path])
-                            self.run_command(['codesign', '--verbose', '--deep', '--force', '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, app_in_dmg])
+                            self.run_command(['codesign', '--verbose', '--deep', '--force', '--entitlements', self.src_path_of("slplugin.entitlements"), '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, app_in_dmg])
                             signed=True # if no exception was raised, the codesign worked
                         except ManifestError as err:
                             if sign_attempts:
@@ -1829,7 +1833,7 @@ class LinuxManifest(ViewerManifest):
 
         with self.prefix(dst="bin"):
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
-            self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
+            #self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP
