@@ -671,17 +671,7 @@ BOOL LLWindowMacOSX::createContext(int x, int y, int width, int height, int bits
 	}
 
 	// Disable vertical sync for swap
-	GLint frames_per_swap = 0;
-	if (!enable_vsync)
-	{
-		frames_per_swap = 0;
-	}
-	else
-	{
-		frames_per_swap = 1;
-	}
-	
-	CGLSetParameter(mContext, kCGLCPSwapInterval, &frames_per_swap);
+    toggleVSync(enable_vsync);
 
 	//enable multi-threaded OpenGL
 	if (sUseMultGL)
@@ -1995,6 +1985,21 @@ void LLWindowMacOSX::destroySharedContext(void* context)
     CGLDestroyContext(sc->mContext);
 
     delete sc;
+}
+
+void LLWindowMacOSX::toggleVSync(bool enable_vsync)
+{
+    GLint frames_per_swap = 0;
+    if (!enable_vsync)
+    {
+        frames_per_swap = 0;
+    }
+    else
+    {
+        frames_per_swap = 1;
+    }
+    
+    CGLSetParameter(mContext, kCGLCPSwapInterval, &frames_per_swap);
 }
 
 void LLWindowMacOSX::interruptLanguageTextInput()

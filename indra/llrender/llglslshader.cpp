@@ -978,6 +978,19 @@ void LLGLSLShader::bind()
     }
 }
 
+void LLGLSLShader::bind(bool rigged)
+{
+    if (rigged)
+    {
+        llassert(mRiggedVariant);
+        mRiggedVariant->bind();
+    }
+    else
+    {
+        bind();
+    }
+}
+
 void LLGLSLShader::unbind()
 {
     LL_PROFILE_ZONE_SCOPED;

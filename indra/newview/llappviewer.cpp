@@ -1638,6 +1638,11 @@ bool LLAppViewer::doFrame()
 	// <FS:Beq> Perfstats collection Frame boundary
 	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
 
+    if (!LLWorld::instanceExists())
+    {
+        LLWorld::createInstance();
+    }
+
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 // <FS:Beq> profiling enablement. 

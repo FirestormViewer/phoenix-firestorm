@@ -56,6 +56,7 @@
 #include "llviewertexture.h"
 #include "llvoavatar.h"
 #include "llsculptidsize.h"
+#include "llmeshrepository.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -74,6 +75,7 @@ static LLStaticHashedString sTextureIndexIn("texture_index_in");
 static LLStaticHashedString sColorIn("color_in");
 
 BOOL LLFace::sSafeRenderSelect = TRUE; // FALSE
+
 
 #define DOTVEC(a,b) (a.mV[0]*b.mV[0] + a.mV[1]*b.mV[1] + a.mV[2]*b.mV[2])
 
@@ -205,14 +207,7 @@ void LLFace::destroy()
 
 	if (mDrawPoolp)
 	{
-		if (this->isState(LLFace::RIGGED) && (mDrawPoolp->getType() == LLDrawPool::POOL_CONTROL_AV || mDrawPoolp->getType() == LLDrawPool::POOL_AVATAR))
-		{
-			((LLDrawPoolAvatar*) mDrawPoolp)->removeRiggedFace(this);
-		}
-		else
-		{
-			mDrawPoolp->removeFace(this);
-		}
+		mDrawPoolp->removeFace(this);
 		mDrawPoolp = NULL;
 	}
 
@@ -1380,7 +1375,9 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		return FALSE;
 	}
 
-	const LLVolumeFace &vf = volume.getVolumeFace(f);
+    bool rigged = isState(RIGGED);
+
+    const LLVolumeFace &vf = volume.getVolumeFace(f);
 	S32 num_vertices = (S32)vf.mNumVertices;
 	S32 num_indices = (S32) vf.mNumIndices;
 	
@@ -1564,13 +1561,6 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		}
 	}
 	
-	LLMatrix4a mat_normal;
-	mat_normal.loadu(mat_norm_in);
-	// <FS:Beq> FIX incorrect transformation
-	LLMatrix4a mat_tan; 
-	mat_tan.loadu(mat_vert_in);	
-	// </FS:Beq>
-	
 	F32 r = 0, os = 0, ot = 0, ms = 0, mt = 0, cos_ang = 0, sin_ang = 0;
 	bool do_xform = false;
 	if (rebuild_tcoord)
@@ -1605,6 +1595,45 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		}
 	}
 	
+    const LLMeshSkinInfo* skin = nullptr;
+    LLMatrix4a mat_vert;
+    LLMatrix4a mat_normal;
+
+    // prepare mat_vert
+    if (rebuild_pos)
+    {
+        if (rigged)
+        { //override with bind shape matrix if rigged
+            skin = mSkinInfo;
+            mat_vert = skin->mBindShapeMatrix;
+        }
+        else
+        {
+            mat_vert.loadu(mat_vert_in);
+        }
+    }
+
+    if (rebuild_normal || rebuild_tangent)
+    { //override mat_normal with inverse of skin->mBindShapeMatrix
+        LL_PROFILE_ZONE_NAMED("getGeometryVolume - norm mat override");
+        if (rigged)
+        {
+            if (skin == nullptr)
+            {
+                skin = mSkinInfo;
+            }
+
+            //TODO -- cache this (check profile marker above)?
+            glh::matrix4f m((F32*) skin->mBindShapeMatrix.getF32ptr());
+            m = m.inverse().transpose();
+            mat_normal.loadu(m.m);
+        }
+        else
+        {
+            mat_normal.loadu(mat_norm_in);
+        }
+    }
+
 	static LLCachedControl<bool> use_transform_feedback(gSavedSettings, "RenderUseTransformFeedback", false);
 
 #ifdef GL_TRANSFORM_FEEDBACK_BUFFER
@@ -1862,7 +1891,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 					do_xform = false;
 				}
 
-				if (getVirtualSize() >= MIN_TEX_ANIM_SIZE || isState(LLFace::RIGGED))
+				if (getVirtualSize() >= MIN_TEX_ANIM_SIZE) // || isState(LLFace::RIGGED))
 				{ //don't override texture transform during tc bake
 					tex_mode = 0;
 				}
@@ -2128,10 +2157,8 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						LLVector4a t;
 						tangent_to_object.rotate(binormal_dir, t);
 						LLVector4a binormal;
-						// <FS:Beq> FIX incorrect transformation
-						// mat_normal.rotate(t, binormal);
-						mat_tan.rotate(t, binormal);
-						// </FS:Beq>
+						mat_normal.rotate(t, binormal);
+						
 						//VECTORIZE THIS
 						if (mDrawablep->isActive())
 						{
@@ -2170,9 +2197,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		
 			mVertexBuffer->getVertexStrider(vert, mGeomIndex, mGeomCount, map_range);
 			
-			LLMatrix4a mat_vert;
-			mat_vert.loadu(mat_vert_in);
-
+			
 			F32* dst = (F32*) vert.get();
 			F32* end_f32 = dst+mGeomCount*4;
 
@@ -2223,10 +2248,10 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			}
 		}
 
-		
 		if (rebuild_normal)
 		{
-			//LL_RECORD_BLOCK_TIME(FTM_FACE_GEOM_NORMAL);
+            LL_PROFILE_ZONE_NAMED("getGeometryVolume - normal");
+
 			mVertexBuffer->getNormalStrider(norm, mGeomIndex, mGeomCount, map_range);
 			F32* normals = (F32*) norm.get();
 			LLVector4a* src = vf.mNormals;
@@ -2264,10 +2289,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			while (src < end)
 			{
 				LLVector4a tangent_out;
-				// <FS:Beq> FIX incorrect transformation
-				// mat_normal.rotate(*src, tangent_out);
-				mat_tan.rotate(*src, tangent_out);
-				// </FS:Beq>
+				mat_normal.rotate(*src, tangent_out);
 				tangent_out.normalize3fast();
 				tangent_out.setSelectWithMask(mask, *src, tangent_out);
 				tangent_out.store4a(tangents);
@@ -2915,56 +2937,6 @@ void LLFace::clearVertexBuffer()
 	mVertexBuffer = NULL;
 }
 
-//static
-U32 LLFace::getRiggedDataMask(U32 type)
-{
-	static const U32 rigged_data_mask[] = {
-		LLDrawPoolAvatar::RIGGED_MATERIAL_MASK,
-		LLDrawPoolAvatar::RIGGED_MATERIAL_ALPHA_VMASK,
-		LLDrawPoolAvatar::RIGGED_MATERIAL_ALPHA_MASK_MASK,
-		LLDrawPoolAvatar::RIGGED_MATERIAL_ALPHA_EMISSIVE_MASK,
-		LLDrawPoolAvatar::RIGGED_SPECMAP_VMASK,
-		LLDrawPoolAvatar::RIGGED_SPECMAP_BLEND_MASK,
-		LLDrawPoolAvatar::RIGGED_SPECMAP_MASK_MASK,
-		LLDrawPoolAvatar::RIGGED_SPECMAP_EMISSIVE_MASK,
-		LLDrawPoolAvatar::RIGGED_NORMMAP_VMASK,
-		LLDrawPoolAvatar::RIGGED_NORMMAP_BLEND_MASK,
-		LLDrawPoolAvatar::RIGGED_NORMMAP_MASK_MASK,
-		LLDrawPoolAvatar::RIGGED_NORMMAP_EMISSIVE_MASK,
-		LLDrawPoolAvatar::RIGGED_NORMSPEC_VMASK,
-		LLDrawPoolAvatar::RIGGED_NORMSPEC_BLEND_MASK,
-		LLDrawPoolAvatar::RIGGED_NORMSPEC_MASK_MASK,
-		LLDrawPoolAvatar::RIGGED_NORMSPEC_EMISSIVE_MASK,
-		LLDrawPoolAvatar::RIGGED_SIMPLE_MASK,
-		LLDrawPoolAvatar::RIGGED_FULLBRIGHT_MASK,
-		LLDrawPoolAvatar::RIGGED_SHINY_MASK,
-		LLDrawPoolAvatar::RIGGED_FULLBRIGHT_SHINY_MASK,
-		LLDrawPoolAvatar::RIGGED_GLOW_MASK,
-		LLDrawPoolAvatar::RIGGED_ALPHA_MASK,
-		LLDrawPoolAvatar::RIGGED_FULLBRIGHT_ALPHA_MASK,
-		LLDrawPoolAvatar::RIGGED_DEFERRED_BUMP_MASK,						 
-		LLDrawPoolAvatar::RIGGED_DEFERRED_SIMPLE_MASK,
-	};
-
-	llassert(type < sizeof(rigged_data_mask)/sizeof(U32));
-
-	return rigged_data_mask[type];
-}
-
-U32 LLFace::getRiggedVertexBufferDataMask() const
-{
-	U32 data_mask = 0;
-	for (U32 i = 0; i < mRiggedIndex.size(); ++i)
-	{
-		if (mRiggedIndex[i] > -1)
-		{
-			data_mask |= LLFace::getRiggedDataMask(i);
-		}
-	}
-
-	return data_mask;
-}
-
 S32 LLFace::getRiggedIndex(U32 type) const
 {
 	if (mRiggedIndex.empty())
@@ -2977,19 +2949,7 @@ S32 LLFace::getRiggedIndex(U32 type) const
 	return mRiggedIndex[type];
 }
 
-void LLFace::setRiggedIndex(U32 type, S32 index)
+U64 LLFace::getSkinHash()
 {
-	if (mRiggedIndex.empty())
-	{
-		mRiggedIndex.resize(LLDrawPoolAvatar::NUM_RIGGED_PASSES);
-		for (U32 i = 0; i < mRiggedIndex.size(); ++i)
-		{
-			mRiggedIndex[i] = -1;
-		}
-	}
-
-	llassert(type < mRiggedIndex.size());
-
-	mRiggedIndex[type] = index;
+    return mSkinInfo ? mSkinInfo->mHash : 0;
 }
-

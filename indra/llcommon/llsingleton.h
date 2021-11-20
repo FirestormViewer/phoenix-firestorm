@@ -900,10 +900,14 @@ public:
     static inline T& instance() { return *getInstance(); }
     static inline bool instanceExists() { return sInstance != nullptr; }
 
-    static void deleteSingleton() { 
-        delete sInstance; 
-        sInstance = nullptr; 
+    static void deleteSingleton()
+    {
+        delete sInstance;
+        sInstance = nullptr;
     }
 };
+
+template <class T>
+T* LLSimpleton<T>::sInstance{ nullptr };
 
 #endif

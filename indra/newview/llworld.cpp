@@ -69,8 +69,6 @@
 #include "fscommon.h"
 #include "llselectmgr.h"
 
-LLWorld* LLSimpleton<LLWorld>::sInstance = nullptr;
-
 //
 // Globals
 //

@@ -1328,7 +1328,7 @@ void LLRender::syncLightState()
 
 void LLRender::syncMatrices()
 {
-	static const U32 name[] = 
+    static const U32 name[] = 
 	{
 		LLShaderMgr::MODELVIEW_MATRIX,
 		LLShaderMgr::PROJECTION_MATRIX,
