@@ -8,6 +8,7 @@
      button_alignment="left"
      button_display_mode="icons_only"
      button_layout_style="fill">
+     <command name="howto"/>
      <command name="chat"/>
      <command name="speak"/>
      <command name="voice"/>

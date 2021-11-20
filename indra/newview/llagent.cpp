@@ -5458,11 +5458,22 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 	{
 		std::vector<LLUUID> anim_ids;
 
+		// <FS:Zi> assume we need to restore the default standing animation
+		bool restore_stand_animation = true;
+
 		for ( LLVOAvatar::AnimIterator anim_it =
 			      gAgentAvatarp->mPlayingAnimations.begin();
 		      anim_it != gAgentAvatarp->mPlayingAnimations.end();
 		      anim_it++)
 		{
+			// <FS:Zi> don't restore stand animation when ground sitting because it is not needed
+			// and an AO would not play a standing animation on top of the ground sit
+			if (anim_it->first == ANIM_AGENT_SIT_GROUND_CONSTRAINED)
+			{
+				restore_stand_animation = false;
+			}
+			// </FS:Zi>
+
 			if ((anim_it->first == ANIM_AGENT_DO_NOT_DISTURB)||
 				(anim_it->first == ANIM_AGENT_SIT_GROUND_CONSTRAINED))
 			{
@@ -5502,7 +5513,14 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 
 		// re-assert at least the default standing animation, because
 		// viewers get confused by avs with no associated anims.
-		sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+
+		// <FS:Zi> Only restore stand animation when the avatar was not sitting on ground
+		// sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+		if (restore_stand_animation)
+		{
+			sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+		}
+		// </FS:Zi>
 
 		// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 		if (gSavedSettings.getBOOL("FSPlayDefaultBentoAnimation"))

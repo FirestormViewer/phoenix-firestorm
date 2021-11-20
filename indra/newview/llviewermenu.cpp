@@ -3864,19 +3864,13 @@ bool check_avatar_render_mode(U32 mode)
 	switch (mode) 
 	{
 		case 0:
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_RENDER_NORMALLY;
-// [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
 		case 1:
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_DO_NOT_RENDER;
-// [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
 		case 2:
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_ALWAYS_RENDER;
-// [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
 		case 4:
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) != LLVOAvatar::AV_RENDER_NORMALLY;

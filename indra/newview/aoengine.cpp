@@ -532,6 +532,23 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 		return animation;
 	}
 
+	// if we are asked to stop-override the same motion as the currently running one, don't
+	// return the overridden animation to be stopped, so we can stop the Linden animation
+	// without killing our overrider when logging in or re-enabling
+	if (mLastMotion == pMotion && !start)
+	{
+		LL_DEBUGS("AOEngine") << "Not overriding motion " << gAnimLibrary.animationName(motion)
+			<< " within same state." << LL_ENDL;
+
+		// when stopping a sit motion make sure to stop the cycle point cover-up animation
+		if (motion == ANIM_AGENT_SIT)
+		{
+			gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
+		}
+
+		return animation;
+	}
+
 	// we don't distinguish between these two
 	if (motion == ANIM_AGENT_SIT_GROUND)
 	{
@@ -562,7 +579,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 //				gAgentAvatarp->LLCharacter::stopMotion(motion);
 //			}
 //		}
-		return animation;
+		return LLUUID::null;
 	}
 
 	mAnimationChangedSignal(LLUUID::null);
@@ -756,6 +773,13 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			return animation;
 		}
 
+		// stop the underlying Linden Lab motion, in case it's still running.
+		// frequently happens with sits, so we keep it only for those currently.
+		if (motion == ANIM_AGENT_SIT)
+		{
+			stopAllSitVariants();
+		}
+
 		if (motion != mCurrentSet->getMotion())
 		{
 			LL_WARNS("AOEngine") << "trying to stop-override motion " <<  gAnimLibrary.animationName(motion)
@@ -776,13 +800,6 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			gAgentAvatarp->LLCharacter::stopMotion(animation);
 			setStateCycleTimer(state);
 			return LLUUID::null;
-		}
-
-		// stop the underlying Linden Lab motion, in case it's still running.
-		// frequently happens with sits, so we keep it only for those currently.
-		if (mLastMotion == ANIM_AGENT_SIT)
-		{
-			stopAllSitVariants();
 		}
 	}
 

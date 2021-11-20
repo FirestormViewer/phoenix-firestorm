@@ -2400,13 +2400,16 @@
              parameter="WebLaunchExternalTarget,https://teamup.com/ksxdajnbw9mvw7cbwz" />
         </menu_item_call>
 
-        <menu_item_call
+        <menu_item_check
          label="Guidebook"
          name="How To">
-            <menu_item_call.on_click
+            <menu_item_check.on_click
              function="Help.ToggleHowTo"
              parameter="" />
-        </menu_item_call>
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="guidebook" />
+        </menu_item_check>
 
 <!--       <menu_item_call
          label="Second Life Help"
