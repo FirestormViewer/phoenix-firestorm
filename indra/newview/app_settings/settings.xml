@@ -203,7 +203,7 @@
   <key>FSAvatarTurnSpeed</key>
   <map>
     <key>Comment</key>
-    <string>Modify the speed at which the avatar responds to turning movements. 0-100 percent of max rate</string>
+    <string>Modify the speed at which the avatar responds to turning movements. 0-100 percent of max rate. Default is 0.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
