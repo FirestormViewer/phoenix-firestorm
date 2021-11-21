@@ -390,7 +390,9 @@ void AOEngine::enable(bool enable)
 			LL_DEBUGS("AOEngine") << "Enabling animation state " << state->mName << LL_ENDL;
 
 			// do not stop underlying sit animations when re-enabling the AO
-			if (mLastOverriddenMotion != ANIM_AGENT_SIT_GROUND_CONSTRAINED && mLastOverriddenMotion != ANIM_AGENT_SIT)
+			if (mLastOverriddenMotion != ANIM_AGENT_SIT_GROUND &&
+			    mLastOverriddenMotion != ANIM_AGENT_SIT_GROUND_CONSTRAINED &&
+			    mLastOverriddenMotion != ANIM_AGENT_SIT)
 			{
 				gAgent.sendAnimationRequest(mLastOverriddenMotion, ANIM_REQUEST_STOP);
 			}
@@ -549,12 +551,6 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 		return animation;
 	}
 
-	// we don't distinguish between these two
-	if (motion == ANIM_AGENT_SIT_GROUND)
-	{
-		motion = ANIM_AGENT_SIT_GROUND_CONSTRAINED;
-	}
-
 	// map the requested motion to an animation state, taking underwater
 	// swimming into account where applicable
 	AOSet::AOState* state = getStateForMotion(motion);
@@ -672,7 +668,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 		}
 
 		// scripted seats that use ground_sit as animation need special treatment
-		if (motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED)
+		if (motion == ANIM_AGENT_SIT_GROUND || motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED)
 		{
 			const LLViewerObject* agentRoot = dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
 			if (agentRoot && agentRoot->getID() != gAgentID)
@@ -733,7 +729,8 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			}
 		}
 		// special treatment for "transient animations" because the viewer needs the Linden animation to know the agent's state
-		else if (motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
+		else if (motion == ANIM_AGENT_SIT_GROUND ||
+				motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
 				motion == ANIM_AGENT_PRE_JUMP ||
 				motion == ANIM_AGENT_STANDUP ||
 				motion == ANIM_AGENT_LAND ||
@@ -790,7 +787,8 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 		mCurrentSet->setMotion(LLUUID::null);
 
 		// again, special treatment for "transient" animations to make sure our own animation gets stopped properly
-		if (motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
+		if (motion == ANIM_AGENT_SIT_GROUND ||
+			motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
 			motion == ANIM_AGENT_PRE_JUMP ||
 			motion == ANIM_AGENT_STANDUP ||
 			motion == ANIM_AGENT_LAND ||
