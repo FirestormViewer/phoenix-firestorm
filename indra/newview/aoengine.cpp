@@ -442,6 +442,10 @@ void AOEngine::enable(bool enable)
 
 			gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
 			mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+
+			// remember to ignore this motion once in the overrider so stopping the Linden motion
+			// will not trigger a stop of the override animation
+			mIgnoreMotionStopOnce = mLastMotion;
 		}
 	}
 	else
@@ -530,13 +534,14 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 		return LLUUID::null;
 	}
 
-	// if we are asked to stop-override the same motion as the currently running one, don't
-	// return the overridden animation to be stopped, so we can stop the Linden animation
+	// ignore stopping this motion once so we can stop the Linden animation
 	// without killing our overrider when logging in or re-enabling
-	if (mLastMotion == motion && !start)
+	if (!start && motion == mIgnoreMotionStopOnce)
 	{
 		LL_DEBUGS("AOEngine") << "Not stop-overriding motion " << gAnimLibrary.animationName(motion)
 			<< " within same state." << LL_ENDL;
+
+		mIgnoreMotionStopOnce = LLUUID::null;
 
 		// when stopping a sit motion make sure to stop the cycle point cover-up animation
 		if (motion == ANIM_AGENT_SIT)
