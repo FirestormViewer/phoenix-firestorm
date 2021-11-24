@@ -373,7 +373,7 @@ void AOEngine::enableStands(bool enable_stands)
 
 void AOEngine::enable(bool enable)
 {
-	LL_DEBUGS("AOEngine") << "using " << mLastMotion << " enable " << enable << LL_ENDL;
+	LL_DEBUGS("AOEngine") << "using " << gAnimLibrary.animationName(mLastMotion) << " enable " << enable << LL_ENDL;
 	mEnabled = enable;
 
 	if (!mCurrentSet)
@@ -437,7 +437,7 @@ void AOEngine::enable(bool enable)
 			}
 			else
 			{
-				LL_WARNS("AOEngine") << "Unhandled last motion id " << mLastMotion << LL_ENDL;
+				LL_WARNS("AOEngine") << "Unhandled last motion id " << gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			}
 
 			gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
@@ -497,7 +497,7 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 
 const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 {
-	LL_DEBUGS("AOEngine") << "override(" << pMotion << "," << start << ")" << LL_ENDL;
+	LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(pMotion) << "," << start << ")" << LL_ENDL;
 
 	LLUUID animation;
 
@@ -539,7 +539,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 	// without killing our overrider when logging in or re-enabling
 	if (mLastMotion == pMotion && !start)
 	{
-		LL_DEBUGS("AOEngine") << "Not overriding motion " << gAnimLibrary.animationName(motion)
+		LL_DEBUGS("AOEngine") << "Not stop-overriding motion " << gAnimLibrary.animationName(motion)
 			<< " within same state." << LL_ENDL;
 
 		// when stopping a sit motion make sure to stop the cycle point cover-up animation
@@ -556,7 +556,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 	AOSet::AOState* state = getStateForMotion(motion);
 	if (!state)
 	{
-		LL_DEBUGS("AOEngine") << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << ")." << LL_ENDL;
+		LL_DEBUGS("AOEngine") << "No current AO state for motion " << gAnimLibrary.animationName(motion) << LL_ENDL;
 //		This part of the code was added to capture an edge case where animations got stuck
 //		However, it seems it isn't needed anymore and breaks other, more important cases.
 //		So we disable this code for now, unless bad things happen and the stuck animations
