@@ -499,8 +499,6 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 {
 	LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(motion) << "," << start << ")" << LL_ENDL;
 
-	LLUUID animation;
-
 	if (!mEnabled)
 	{
 		if (start && mCurrentSet)
@@ -517,19 +515,19 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 				}
 			}
 		}
-		return animation;
+		return LLUUID::null;
 	}
 
 	if (mSets.empty())
 	{
 		LL_DEBUGS("AOEngine") << "No sets loaded. Skipping overrider." << LL_ENDL;
-		return animation;
+		return LLUUID::null;
 	}
 
 	if (!mCurrentSet)
 	{
 		LL_DEBUGS("AOEngine") << "No current AO set chosen. Skipping overrider." << LL_ENDL;
-		return animation;
+		return LLUUID::null;
 	}
 
 	// if we are asked to stop-override the same motion as the currently running one, don't
@@ -546,7 +544,7 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 			gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
 		}
 
-		return animation;
+		return LLUUID::null;
 	}
 
 	// map the requested motion to an animation state, taking underwater
@@ -635,6 +633,8 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 		}
 	}
 
+	LLUUID animation;
+
 	mCurrentSet->stopTimer();
 	if (start)
 	{
@@ -647,7 +647,7 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 			mInMouselook)
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-			return animation;
+			return LLUUID::null;
 		}
 
 		// Don't override start and turning stands if stand override is disabled
@@ -655,14 +655,14 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 			(motion == ANIM_AGENT_STAND || motion == ANIM_AGENT_TURNRIGHT || motion == ANIM_AGENT_TURNLEFT))
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, stands disabled) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-			return animation;
+			return LLUUID::null;
 		}
 
 		// Do not start override sits if not selected
 		if (!mCurrentSet->getSitOverride() && motion == ANIM_AGENT_SIT)
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, sit override stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-			return animation;
+			return LLUUID::null;
 		}
 
 		// scripted seats that use ground_sit as animation need special treatment
@@ -672,7 +672,7 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 			if (agentRoot && agentRoot->getID() != gAgentID)
 			{
 				LL_DEBUGS("AOEngine") << "Ground sit animation playing but sitting on a prim - disabling overrider." << LL_ENDL;
-				return animation;
+				return LLUUID::null;
 			}
 		}
 
@@ -688,10 +688,7 @@ const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 			mCurrentSet->setMotion(motion);
 		}
 
-		if (animation.isNull())
-		{
-			animation = mCurrentSet->getAnimationForState(state);
-		}
+		animation = mCurrentSet->getAnimationForState(state);
 
 		if (state->mCurrentAnimationID.notNull())
 		{
