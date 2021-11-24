@@ -495,13 +495,11 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 	}
 }
 
-const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
+const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 {
-	LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(pMotion) << "," << start << ")" << LL_ENDL;
+	LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(motion) << "," << start << ")" << LL_ENDL;
 
 	LLUUID animation;
-
-	LLUUID motion = pMotion;
 
 	if (!mEnabled)
 	{
@@ -537,7 +535,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 	// if we are asked to stop-override the same motion as the currently running one, don't
 	// return the overridden animation to be stopped, so we can stop the Linden animation
 	// without killing our overrider when logging in or re-enabling
-	if (mLastMotion == pMotion && !start)
+	if (mLastMotion == motion && !start)
 	{
 		LL_DEBUGS("AOEngine") << "Not stop-overriding motion " << gAnimLibrary.animationName(motion)
 			<< " within same state." << LL_ENDL;
