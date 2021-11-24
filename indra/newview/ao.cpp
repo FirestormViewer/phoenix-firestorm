@@ -428,7 +428,7 @@ LLScrollListItem* FloaterAO::addAnimation(const std::string& name)
 	LLSD row;
 	row["columns"][0]["column"] = "icon";
 	row["columns"][0]["type"] = "icon";
-	row["columns"][0]["value"] = "Inv_Animation";
+	row["columns"][0]["value"] = "FSAO_Animation_Stopped";
 
 	row["columns"][1]["column"] = "animation_name";
 	row["columns"][1]["type"] = "text";
@@ -809,8 +809,8 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
 
 	if (mCurrentBoldItem)
 	{
-		LLScrollListText* column = (LLScrollListText*)mCurrentBoldItem->getColumn(1);
-		column->setFontStyle(LLFontGL::NORMAL);
+		((LLScrollListIcon*)mCurrentBoldItem->getColumn(0))->setValue("FSAO_Animation_Stopped");
+		((LLScrollListText*)mCurrentBoldItem->getColumn(1))->setFontStyle(LLFontGL::NORMAL);
 
 		mCurrentBoldItem = nullptr;
 	}
@@ -832,8 +832,8 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
 		{
 			mCurrentBoldItem = item;
 
-			LLScrollListText* column = (LLScrollListText*)mCurrentBoldItem->getColumn(1);
-			column->setFontStyle(LLFontGL::BOLD);
+			((LLScrollListIcon*)mCurrentBoldItem->getColumn(0))->setValue("FSAO_Animation_Playing");
+			((LLScrollListText*)mCurrentBoldItem->getColumn(1))->setFontStyle(LLFontGL::BOLD);
 
 			return;
 		}

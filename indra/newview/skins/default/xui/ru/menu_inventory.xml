@@ -112,6 +112,7 @@
 	<menu_item_call label="Активировать" name="Activate"/>
 	<menu_item_call label="Деактивировать" name="Deactivate"/>
 	<menu_item_call label="Сохранить как" name="Save As"/>
+	<menu_item_call label="Сохранить в" name="Save Selected As"/>
 	<menu_item_call label="Надеть" name="Wearable And Object Wear"/>
 	<menu_item_call label="Найти в общем виде" name="Show in Main Panel"/>
 	<menu_item_call label="Добавить" name="Wearable Add"/>
