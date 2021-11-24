@@ -178,6 +178,7 @@ void FloaterAO::updateList()
 		}
 	}
 
+	U32 selected_index = 0;
 	for (U32 index = 0; index < mSetList.size(); ++index)
 	{
 		std::string setName = mSetList[index]->getName();
@@ -185,13 +186,16 @@ void FloaterAO::updateList()
 		mSetSelectorSmall->add(setName, &mSetList[index], ADD_BOTTOM, TRUE);
 		if (setName.compare(currentSetName) == 0)
 		{
+			selected_index = index;
 			mSelectedSet = AOEngine::instance().selectSetByName(currentSetName);
-			mSetSelector->selectNthItem(index);
-			mSetSelectorSmall->selectNthItem(index);
 			updateSetParameters();
 			updateAnimationList();
 		}
 	}
+
+	mSetSelector->selectNthItem(selected_index);
+	mSetSelectorSmall->selectNthItem(selected_index);
+
 	enableSetControls(TRUE);
 	if (mSetSelector->getSelectedItemLabel().empty())
 	{
