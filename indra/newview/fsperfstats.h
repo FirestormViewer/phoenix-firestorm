@@ -44,8 +44,8 @@
 #ifdef TRACY_ENABLE
 // USAGE_TRACKING - displays overlapping stats that may imply double counting.
 // ATTACHMENT_TRACKING - displays detailed tracking info for Avatar and Attachment. very heavy overhead.
-// #define USAGE_TRACKING
-// #define ATTACHMENT_TRACKING
+#define USAGE_TRACKING
+#define ATTACHMENT_TRACKING
 #else
 #undef USAGE_TRACKING
 #undef ATTACHMENT_TRACKING
@@ -286,13 +286,15 @@ namespace FSPerfStats
 
             if (ot == ObjType_t::OT_ATTACHMENT)
             {
-                if( !upd.isRigged && !upd.isHUD )
+                if( !upd.isHUD ) // don't include HUD cost in self.
                 {
+                    LL_PROFILE_ZONE_NAMED("Att as Av")
                     // For all attachments that are not rigged we add them to the avatar (for all avatars) cost.
                     doUpd(avKey, ObjType_t::OT_AVATAR, type, val);
                 }
                 if( avKey == focusAv )
                 {
+                    LL_PROFILE_ZONE_NAMED("Att as Att")
                 // For attachments that are for the focusAv (self for now) we record them for the attachment/complexity view
                     if(upd.isHUD)
                     {
@@ -301,10 +303,10 @@ namespace FSPerfStats
                     // LL_INFOS("perfstats") << "frame: " << gFrameCount << " Attachment update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << LL_ENDL;
                     doUpd(key, ot, type, val);
                 }
-                else
-                {
-                    // LL_INFOS("perfstats") << "frame: " << gFrameCount << " non-self Att update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << " for av " << avKey.asString() << LL_ENDL;
-                }
+                // else
+                // {
+                //     // LL_INFOS("perfstats") << "frame: " << gFrameCount << " non-self Att update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << " for av " << avKey.asString() << LL_ENDL;
+                // }
             }
         }
 
@@ -339,11 +341,12 @@ namespace FSPerfStats
         {
             StatsRecord upd[10];
             auto& instance {StatsRecorder::getInstance()};
-            LL_PROFILER_THREAD_BEGIN("PerfStats");
+            LL_PROFILER_SET_THREAD_NAME("PerfStats");
 
             while( enabled() && !LLApp::isExiting() )
             {
                 auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
+                LL_PROFILER_THREAD_BEGIN("PerfStats");
                 if(count)
                 {
                     // LL_INFOS("perfstats") << "processing " << count << " updates." << LL_ENDL;
@@ -352,8 +355,8 @@ namespace FSPerfStats
                         instance.processUpdate(upd[i]);
                     }
                 }
+                LL_PROFILER_THREAD_END("PerfStats");
             }
-            LL_PROFILER_THREAD_END("PerfStats");
         }
 
         Queue q;
@@ -384,7 +387,7 @@ namespace FSPerfStats
         #ifdef USAGE_TRACKING
             if(stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT)
             {
-                if(!stat.isRigged && FSPerfStats::inUseAvatar){FSZoneText("OVERLAP AVATAR",14);}
+                if(!stat.isRigged && FSPerfStats::inUseAvatar){LL_PROFILE_ZONE_TEXT("OVERLAP AVATAR",14);}
 
                 LL_PROFILE_PLOT_SQ("InUse", (int64_t)FSPerfStats::inUse, (int64_t)FSPerfStats::inUse+1);
                 FSPerfStats::inUse++;
@@ -425,7 +428,7 @@ namespace FSPerfStats
             LL_PROFILE_ZONE_COLOR(tracy::Color::Purple);
 
         #ifdef USAGE_TRACKING
-            if(FSPerfStats::inUseAvatar){FSZoneText("OVERLAP AVATAR",14);}
+            if(FSPerfStats::inUseAvatar){LL_PROFILE_ZONE_TEXT("OVERLAP AVATAR",14);}
 
             LL_PROFILE_PLOT_SQ("InUseAv", (int64_t)FSPerfStats::inUseAvatar, (int64_t)FSPerfStats::inUseAvatar+1);
             FSPerfStats::inUseAvatar++;
