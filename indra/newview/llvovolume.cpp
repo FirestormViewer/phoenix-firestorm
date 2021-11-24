@@ -5063,6 +5063,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	LLMatrix4a mat[kMaxJoints];
 	U32 maxJoints = LLSkinningUtil::getMeshJointCount(skin);
     LLSkinningUtil::initSkinningMatrixPalette(mat, maxJoints, skin, avatar);
+    const LLMatrix4a bind_shape_matrix = skin->mBindShapeMatrix;
 
     S32 rigged_vert_count = 0;
     S32 rigged_face_count = 0;
@@ -5078,7 +5079,6 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 		if ( weight )
 		{
             LLSkinningUtil::checkSkinWeights(weight, dst_face.mNumVertices, skin);
-			const LLMatrix4a& bind_shape_matrix = skin->mBindShapeMatrix;
 
 			LLVector4a* pos = dst_face.mPositions;
 
@@ -5606,34 +5606,6 @@ void LLVolumeGeometryManager::getGeometry(LLSpatialGroup* group)
 
 }
 
-static LLDrawPoolAvatar* get_avatar_drawpool(LLViewerObject* vobj)
-{
-	LLVOAvatar* avatar = vobj->getAvatar();
-					
-	if (avatar)
-	{
-		LLDrawable* drawable = avatar->mDrawable;
-		if (drawable && drawable->getNumFaces() > 0)
-		{
-			LLFace* face = drawable->getFace(0);
-			if (face)
-			{
-				LLDrawPool* drawpool = face->getPool();
-				if (drawpool)
-				{
-					if (drawpool->getType() == LLDrawPool::POOL_AVATAR
-						|| drawpool->getType() == LLDrawPool::POOL_CONTROL_AV)
-					{
-						return (LLDrawPoolAvatar*) drawpool;
-					}
-				}
-			}
-		}
-	}
-
-	return NULL;
-}
-
 void handleRenderAutoMuteByteLimitChanged(const LLSD& new_value)
 {
 	static LLCachedControl<U32> render_auto_mute_byte_limit(gSavedSettings, "RenderAutoMuteByteLimit", 0U);
@@ -6054,10 +6026,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						else
 						{
                             // <FS:ND> Even more crash avoidance ...
-                            // if (te->getColor().mV[3] > 0.f)
-                            if (te && te->getColor().mV[3] > 0.f)
+                            // if (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f)
+                            if (te && (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f))
                             // </FS:ND>
-
                             { //only treat as alpha in the pipeline if < 100% transparent
                                 drawablep->setState(LLDrawable::HAS_ALPHA);
                                 add_face(sAlphaFaces, alpha_count, facep);

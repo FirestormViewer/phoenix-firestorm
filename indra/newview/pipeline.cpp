@@ -2515,6 +2515,15 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 	// <FS:Ansariel> Factor out instance() call
 	LLWorld& world = LLWorld::instance();
 
+    if (planep != nullptr)
+    {
+        camera.setUserClipPlane(*planep);
+    }
+    else
+    {
+        camera.disableUserClipPlane();
+    }
+
 	grabReferences(result);
 
 	sCull->clear();
@@ -2569,11 +2578,6 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 		mCubeVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
 	}
 	
-    if (!sReflectionRender)
-    {
-        camera.disableUserClipPlane();
-    }
-
 	for (LLWorld::region_list_t::const_iterator iter = world.getRegionList().begin(); // <FS:Ansariel> Factor out instance() call
 			iter != world.getRegionList().end(); ++iter)
 	{
