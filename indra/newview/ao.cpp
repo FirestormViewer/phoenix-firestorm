@@ -470,6 +470,15 @@ void FloaterAO::onSelectState()
 			if (item)
 			{
 				item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
+
+				// update currently playing animation if we are looking at the currently running state in the UI
+				if (mSelectedSet->getMotion() == mSelectedState->mRemapID &&
+				    mSelectedState->mCurrentAnimationID == mSelectedState->mAnimations[index].mAssetUUID)
+				{
+					mCurrentBoldItem = item;
+					((LLScrollListIcon*)item->getColumn(0))->setValue("FSAO_Animation_Playing");
+					((LLScrollListText*)item->getColumn(1))->setFontStyle(LLFontGL::BOLD);
+				}
 			}
 		}
 
