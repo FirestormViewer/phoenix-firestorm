@@ -1996,10 +1996,11 @@ void LLFloater::onClickCloseBtn(bool app_quitting)
 		auto floaterlist = LLFloaterReg::getAllFloatersInGroup(this);
 		for (auto floater : floaterlist)
 		{
-			floater->closeFloater();
+			if (floater != this)
+			{
+				floater->closeFloater();
+			}
 		}
-
-		return;
 	}
 	// </FS:Ansariel>
 
