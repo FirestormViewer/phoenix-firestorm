@@ -215,14 +215,11 @@ void LLDrawPoolWater::render(S32 pass)
 	gGL.getTexUnit(2)->enable(LLTexUnit::TT_TEXTURE);
 	gGL.getTexUnit(2)->bind(mWaterImagep[1]) ;
 
-	// <FS:Ansariel> Factor out instance() calls
-	LLViewerCamera& camera = LLViewerCamera::instance();
-
-	LLVector3 camera_up = camera.getUpAxis(); // <FS:Ansariel> Factor out instance() calls
+	LLVector3 camera_up = LLViewerCamera::getInstance()->getUpAxis();
 	F32 up_dot = camera_up * LLVector3::z_axis;
 
 	LLColor4 water_color;
-	if (camera.cameraUnderWater()) // <FS:Ansariel> Factor out instance() calls
+	if (LLViewerCamera::getInstance()->cameraUnderWater())
 	{
 		water_color.setVec(1.f, 1.f, 1.f, 0.4f);
 	}
@@ -297,7 +294,7 @@ void LLDrawPoolWater::render(S32 pass)
 
 		gGL.matrixMode(LLRender::MM_TEXTURE);
 		gGL.loadIdentity();
-		LLMatrix4 camera_mat = camera.getModelview(); // <FS:Ansariel> Factor out instance() calls
+		LLMatrix4 camera_mat = LLViewerCamera::getInstance()->getModelview();
 		LLMatrix4 camera_rot(camera_mat.getMat3());
 		camera_rot.invert();
 
@@ -645,7 +642,7 @@ void LLDrawPoolWater::renderWater()
 
         shader->uniform3fv(LLShaderMgr::WATER_SPECULAR, 1, light_diffuse.mV);
         shader->uniform1f(LLShaderMgr::WATER_SPECULAR_EXP, light_exp);
-        if (environment.isCloudScrollPaused())
+        if (LLEnvironment::instance().isCloudScrollPaused())
         {
             static const std::array<F32, 2> zerowave {{0.0f, 0.0f}};
 
@@ -673,11 +670,11 @@ void LLDrawPoolWater::renderWater()
         shader->uniform1f(LLShaderMgr::WATER_SUN_ANGLE2, 0.1f + 0.2f * sunAngle);
         shader->uniform1i(LLShaderMgr::WATER_EDGE_FACTOR, edge ? 1 : 0);
 
-        LLVector4 rotated_light_direction = environment.getRotatedLightNorm();
+        LLVector4 rotated_light_direction = LLEnvironment::instance().getRotatedLightNorm();
         shader->uniform4fv(LLViewerShaderMgr::LIGHTNORM, 1, rotated_light_direction.mV);
         shader->uniform3fv(LLShaderMgr::WL_CAMPOSLOCAL, 1, LLViewerCamera::getInstance()->getOrigin().mV);
 
-        if (underwater)
+        if (LLViewerCamera::getInstance()->cameraUnderWater())
         {
             shader->uniform1f(LLShaderMgr::WATER_REFSCALE, pwater->getScaleBelow());
         }
