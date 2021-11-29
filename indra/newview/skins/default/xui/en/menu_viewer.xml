@@ -3379,6 +3379,15 @@
                  function="File.EnableCloseWindow" />
             </menu_item_call>
             <menu_item_call
+             label="Close Window Group"
+             name="Close Window Group"
+             shortcut="control|alt|W">
+                <menu_item_call.on_click
+                 function="File.CloseWindowGroup" />
+                <menu_item_call.on_enable
+                 function="File.EnableCloseWindowGroup" />
+            </menu_item_call>
+            <menu_item_call
              label="Close All Windows"
              name="Close All Windows"
              shortcut="control|shift|W">
