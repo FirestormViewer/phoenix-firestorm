@@ -385,6 +385,7 @@
             <menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_call label="Fenster schließen" name="Close Window"/>
+			<menu_item_call label="Fenstergruppe schließen" name="Close Window Group"/>
 			<menu_item_call label="Alle Fenster schließen" name="Close All Windows"/>
 			<menu_item_call label="Foto auf Datenträger" name="Snapshot to Disk"/>
 			<menu_item_call label="Mouselook" name="Mouselook"/>

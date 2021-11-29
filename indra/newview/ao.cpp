@@ -178,6 +178,7 @@ void FloaterAO::updateList()
 		}
 	}
 
+	U32 selected_index = 0;
 	for (U32 index = 0; index < mSetList.size(); ++index)
 	{
 		std::string setName = mSetList[index]->getName();
@@ -185,13 +186,16 @@ void FloaterAO::updateList()
 		mSetSelectorSmall->add(setName, &mSetList[index], ADD_BOTTOM, TRUE);
 		if (setName.compare(currentSetName) == 0)
 		{
+			selected_index = index;
 			mSelectedSet = AOEngine::instance().selectSetByName(currentSetName);
-			mSetSelector->selectNthItem(index);
-			mSetSelectorSmall->selectNthItem(index);
 			updateSetParameters();
 			updateAnimationList();
 		}
 	}
+
+	mSetSelector->selectNthItem(selected_index);
+	mSetSelectorSmall->selectNthItem(selected_index);
+
 	enableSetControls(TRUE);
 	if (mSetSelector->getSelectedItemLabel().empty())
 	{
@@ -466,6 +470,15 @@ void FloaterAO::onSelectState()
 			if (item)
 			{
 				item->setUserdata(&mSelectedState->mAnimations[index].mInventoryUUID);
+
+				// update currently playing animation if we are looking at the currently running state in the UI
+				if (mSelectedSet->getMotion() == mSelectedState->mRemapID &&
+				    mSelectedState->mCurrentAnimationID == mSelectedState->mAnimations[index].mAssetUUID)
+				{
+					mCurrentBoldItem = item;
+					((LLScrollListIcon*)item->getColumn(0))->setValue("FSAO_Animation_Playing");
+					((LLScrollListText*)item->getColumn(1))->setFontStyle(LLFontGL::BOLD);
+				}
 			}
 		}
 

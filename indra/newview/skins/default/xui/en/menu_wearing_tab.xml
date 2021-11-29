@@ -47,6 +47,9 @@
      name="show_original">
         <on_click
          function="Wearing.ShowOriginal" />
+        <on_enable
+         function="RLV.EnableIfNot"
+         parameter="showinv"/>
     </menu_item_call>
     <menu_item_call
      label="Edit Outfit"

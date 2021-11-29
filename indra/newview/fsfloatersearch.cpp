@@ -57,6 +57,7 @@
 #include "llparcel.h"
 #include "llproductinforequest.h"
 #include "llqueryflags.h"
+#include "llregionhandle.h"
 #include "llremoteparcelrequest.h"
 #include "lltimer.h"
 #include "lltrans.h"
@@ -64,6 +65,7 @@
 #include "llviewergenericmessage.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
+#include "llworldmapmessage.h"
 #include "message.h"
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
@@ -82,8 +84,9 @@ void fillSearchComboBox(LLSearchComboBox* search_combo);
 class FSSearchRemoteParcelInfoObserver : public LLRemoteParcelInfoObserver
 {
 public:
-	FSSearchRemoteParcelInfoObserver(FSFloaterSearch* floater) : LLRemoteParcelInfoObserver(),
-		mParent(floater)
+	FSSearchRemoteParcelInfoObserver(FSFloaterSearch* floater, bool for_events) : LLRemoteParcelInfoObserver(),
+		mParent(floater),
+		mForEvents(for_events)
 	{}
 
 	~FSSearchRemoteParcelInfoObserver()
@@ -102,7 +105,14 @@ public:
 	{
 		if (mParent)
 		{
-			mParent->displayParcelDetails(parcel_data);
+			if (mForEvents)
+			{
+				mParent->displayEventParcelImage(parcel_data);
+			}
+			else
+			{
+				mParent->displayParcelDetails(parcel_data);
+			}
 		}
 		mParcelIDs.erase(parcel_data.parcel_id);
 		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(parcel_data.parcel_id, this);
@@ -125,6 +135,7 @@ public:
 private:
 	std::set<LLUUID>	mParcelIDs;
 	FSFloaterSearch*	mParent;
+	bool				mForEvents;
 };
 
 ///// Avatar Properties Observer /////
@@ -234,13 +245,15 @@ SearchQuery::SearchQuery()
 FSFloaterSearch::FSFloaterSearch(const Params& key)
 :	LLFloater(key)
 {
-	mRemoteParcelObserver = new FSSearchRemoteParcelInfoObserver(this);
+	mRemoteParcelObserver = new FSSearchRemoteParcelInfoObserver(this, false);
+	mRemoteParcelEventLocationObserver = new FSSearchRemoteParcelInfoObserver(this, true);
 	mAvatarPropertiesObserver = new FSSearchAvatarPropertiesObserver(this);
 }
 
 FSFloaterSearch::~FSFloaterSearch()
 {
 	delete mRemoteParcelObserver;
+	delete mRemoteParcelEventLocationObserver;
 	delete mAvatarPropertiesObserver;
 	gGenericDispatcher.addHandler("classifiedclickthrough", nullptr);
 }
@@ -312,6 +325,7 @@ BOOL FSFloaterSearch::postBuild()
 	mDetailAux2 =		getChild<LLTextEditor>("aux2");
 	mDetailLocation =	getChild<LLTextEditor>("location");
 	mDetailSnapshot =	getChild<LLTextureCtrl>("snapshot");
+	mDetailSnapshotParcel = getChild<LLTextureCtrl>("snapshot_parcel");
 	mDetailMaturity =	getChild<LLIconCtrl>("maturity_icon");
 	mTabContainer =		getChild<LLTabContainer>("ls_tabs");
 
@@ -348,6 +362,18 @@ void FSFloaterSearch::onTabChange()
 	else
 	{
 		mDetailsPanel->setVisible(mHasSelection);
+	}
+
+	if (active_panel == mPanelPeople || active_panel == mPanelGroups)
+	{
+		mDetailSnapshotParcel->setVisible(FALSE);
+		mDetailSnapshot->setVisible(TRUE);
+	}
+	else if (active_panel == mPanelPlaces || active_panel == mPanelLand ||
+		active_panel == mPanelEvents || active_panel == mPanelClassifieds)
+	{
+		mDetailSnapshot->setVisible(FALSE);
+		mDetailSnapshotParcel->setVisible(TRUE);
 	}
 }
 
@@ -457,7 +483,7 @@ void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 	mDetailAux1->setValue(getString("string.traffic", map));
 	mDetailAux2->setValue(getString("string.area", map));
 	mDetailLocation->setValue(getString("string.location", map));
-	mDetailSnapshot->setValue(parcel_data.snapshot_id);
+	mDetailSnapshotParcel->setValue(parcel_data.snapshot_id);
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
 	setLoadingProgress(false);
@@ -539,7 +565,7 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 		mParcelGlobal = c_info->pos_global;
 		mDetailTitle->setValue(c_info->name);
 		mDetailDesc->setValue(c_info->description);
-		mDetailSnapshot->setValue(c_info->snapshot_id);
+		mDetailSnapshotParcel->setValue(c_info->snapshot_id);
 		mDetailAux1->setValue(getString("string.listing_price", map));
 		mDetailLocation->setValue(getString("string.slurl", map));
 		childSetVisible("teleport_btn", true);
@@ -587,9 +613,34 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
 	mDetailDesc->setValue(eventDesc);
 	mDetailAux1->setValue(getString("string.duration", map));
 	mDetailLocation->setValue(getString("string.location", map));
+	mDetailSnapshotParcel->setValue(LLUUID::null);
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
 	childSetVisible("event_reminder_btn", true);
+
+	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(simName, boost::bind(&FSFloaterSearch::regionHandleCallback, this, _1, eventGlobalPos), "", false);
+}
+
+void FSFloaterSearch::regionHandleCallback(U64 region_handle, LLVector3d pos_global)
+{
+	std::string url = gAgent.getRegionCapability("RemoteParcelRequest");
+	if (!url.empty())
+	{
+		auto region_origin = from_region_handle(region_handle);
+		LLVector3 pos_region(LLVector3(pos_global - region_origin));
+
+		LLRemoteParcelInfoProcessor::getInstance()->requestRegionParcelInfo(url,
+			LLUUID::null, pos_region, pos_global, mRemoteParcelEventLocationObserver->getObserverHandle());
+	}
+	else
+	{
+		setLoadingProgress(false);
+	}
+}
+
+void FSFloaterSearch::displayEventParcelImage(const LLParcelData& parcel_data)
+{
+	mDetailSnapshotParcel->setValue(parcel_data.snapshot_id);
 	setLoadingProgress(false);
 }
 
