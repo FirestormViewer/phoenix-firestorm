@@ -26,8 +26,9 @@
 using Mutex = LLCoros::Mutex;
 using Lock  = LLCoros::LockType;
 
-LL::WorkQueue::WorkQueue(const std::string& name):
-    super(makeName(name))
+LL::WorkQueue::WorkQueue(const std::string& name, size_t capacity):
+    super(makeName(name)),
+    mQueue(capacity)
 {
     // TODO: register for "LLApp" events so we can implicitly close() on
     // viewer shutdown.
@@ -38,12 +39,28 @@ void LL::WorkQueue::close()
     mQueue.close();
 }
 
+size_t LL::WorkQueue::size()
+{
+    return mQueue.size();
+}
+
+bool LL::WorkQueue::isClosed()
+{
+    return mQueue.isClosed();
+}
+
+bool LL::WorkQueue::done()
+{
+    return mQueue.done();
+}
+
 void LL::WorkQueue::runUntilClose()
 {
     try
     {
         for (;;)
         {
+            LL_PROFILE_ZONE_SCOPED;
             callWork(mQueue.pop());
         }
     }
@@ -74,10 +91,11 @@ bool LL::WorkQueue::runOne()
 
 bool LL::WorkQueue::runUntil(const TimePoint& until)
 {
+    LL_PROFILE_ZONE_SCOPED;
     // Should we subtract some slop to allow for typical Work execution time?
     // How much slop?
-    Work work;
-    while (TimePoint::clock::now() < until && mQueue.tryPopUntil(until, work))
+    // runUntil() is simply a time-bounded runPending().
+    for (Work work; TimePoint::clock::now() < until && mQueue.tryPop(work); )
     {
         callWork(work);
     }
@@ -127,4 +145,14 @@ void LL::WorkQueue::callWork(const Work& work)
 void LL::WorkQueue::error(const std::string& msg)
 {
     LL_ERRS("WorkQueue") << msg << LL_ENDL;
+}
+
+void LL::WorkQueue::checkCoroutine(const std::string& method)
+{
+    // By convention, the default coroutine on each thread has an empty name
+    // string. See also LLCoros::logname().
+    if (LLCoros::getName().empty())
+    {
+        LLTHROW(Error("Do not call " + method + " from a thread's default coroutine"));
+    }
 }
