@@ -16,7 +16,6 @@ include(DBusGlib)
 include(DragDrop)
 include(EXPAT)
 include(FMODSTUDIO)
-include(GLOD)
 include(Hunspell)
 include(JsonCpp)
 include(LLAppearance)
@@ -31,6 +30,7 @@ include(LLInventory)
 include(LLKDU)
 include(LLLogin)
 include(LLMath)
+include(LLMeshOptimizer)
 include(LLMessage)
 include(LLPhysicsExtensions)
 include(LLPlugin)
@@ -79,7 +79,6 @@ endif(FMODSTUDIO)
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
-    ${GLOD_INCLUDE_DIR}
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
@@ -89,6 +88,7 @@ include_directories(
     ${LLKDU_INCLUDE_DIRS}
     ${LLINVENTORY_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
+    ${LLMESHOPTIMIZER_INCLUDE_DIRS}
     ${LLMESSAGE_INCLUDE_DIRS}
     ${LLPLUGIN_INCLUDE_DIRS}
     ${LLPRIMITIVE_INCLUDE_DIRS}
@@ -2260,9 +2260,6 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapr-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libaprutil-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapriconv-1.dll
-      ${SHARED_LIB_STAGING_DIR}/Release/glod.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/glod.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/glod.dll
       ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
@@ -2491,6 +2488,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLCHARACTER_LIBRARIES}
     ${LLIMAGE_LIBRARIES}
     ${LLINVENTORY_LIBRARIES}
+    ${LLMESHOPTIMIZER_LIBRARIES}
     ${LLMESSAGE_LIBRARIES}
     ${LLPLUGIN_LIBRARIES}
     ${LLPRIMITIVE_LIBRARIES}
@@ -2517,7 +2515,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
     ${OPENAL_LIBRARIES}
-    ${GLOD_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${JSONCPP_LIBRARIES}
     ${SDL_LIBRARY}
