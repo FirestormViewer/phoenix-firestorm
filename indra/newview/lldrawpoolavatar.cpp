@@ -511,11 +511,8 @@ void LLDrawPoolAvatar::beginImpostor()
 		LLVOAvatar::sNumVisibleAvatars = 0;
 	}
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gImpostorProgram.bind();
-		gImpostorProgram.setMinimumAlpha(0.01f);
-	}
+	gImpostorProgram.bind();
+	gImpostorProgram.setMinimumAlpha(0.01f);
 
 	gPipeline.enableLightsFullbright();
 	sDiffuseChannel = 0;
@@ -525,10 +522,7 @@ void LLDrawPoolAvatar::endImpostor()
 {
     LL_PROFILE_ZONE_SCOPED
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gImpostorProgram.unbind();
-	}
+	gImpostorProgram.unbind();
 	gPipeline.enableLightsDynamic();
 }
 
@@ -536,7 +530,7 @@ void LLDrawPoolAvatar::beginRigid()
 {
     LL_PROFILE_ZONE_SCOPED
 
-	if (gPipeline.canUseVertexShaders())
+	if (gPipeline.shadersLoaded())
 	{
 		if (LLPipeline::sUnderWaterRender)
 		{
@@ -684,7 +678,7 @@ void LLDrawPoolAvatar::beginSkinned()
 	}
 	else
 	{
-		if(gPipeline.canUseVertexShaders())
+		if(gPipeline.shadersLoaded())
 		{
 			// software skinning, use a basic shader for windlight.
 			// TODO: find a better fallback method for software skinning.
@@ -700,10 +694,7 @@ void LLDrawPoolAvatar::beginSkinned()
 		}
 	}
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
-	}
+	sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
 }
 
 void LLDrawPoolAvatar::endSkinned()
@@ -721,7 +712,7 @@ void LLDrawPoolAvatar::endSkinned()
 	}
 	else
 	{
-		if(gPipeline.canUseVertexShaders())
+		if(gPipeline.shadersLoaded())
 		{
 			// software skinning, use a basic shader for windlight.
 			// TODO: find a better fallback method for software skinning.
@@ -827,11 +818,8 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		LLGLSLShader* current_shader_program = NULL;
 
 		// load the debug output shader
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			current_shader_program = LLGLSLShader::sCurBoundShaderPtr;
-			gDebugProgram.bind();
-		}
+		current_shader_program = LLGLSLShader::sCurBoundShaderPtr;
+		gDebugProgram.bind();
 
 		// set up drawing mode and remove any textures used
 		LLGLEnable blend(GL_BLEND);
@@ -893,13 +881,10 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.end();
 
 		// unload debug shader
-		if (LLGLSLShader::sNoFixedFunction)
+		gDebugProgram.unbind();
+		if (current_shader_program)
 		{
-			gDebugProgram.unbind();
-			if (current_shader_program)
-			{
-				current_shader_program->bind();
-			}
+			current_shader_program->bind();
 		}
 	}
 	}// </FS:Zi>

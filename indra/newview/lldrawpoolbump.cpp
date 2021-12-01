@@ -391,7 +391,6 @@ void LLDrawPoolBump::bindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& di
 				// the cube map in the one pass shiny shaders
 				cube_channel = shader->enableTexture(LLViewerShaderMgr::ENVIRONMENT_MAP, LLTexUnit::TT_CUBE_MAP);
 				cube_map->enableTexture(cube_channel);
-				cube_map->enableTextureCoords(1);
 				diffuse_channel = shader->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 			}
 			else
@@ -410,9 +409,6 @@ void LLDrawPoolBump::bindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& di
 			gGL.getTexUnit(0)->disable();
 			cube_map->enable(0);
 			gGL.getTexUnit(0)->bind(cube_map);
-
-			gGL.getTexUnit(0)->setTextureColorBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_TEX_COLOR);
-			gGL.getTexUnit(0)->setTextureAlphaBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_VERT_ALPHA);
 		}
 	}
 }
@@ -545,7 +541,6 @@ void LLDrawPoolBump::beginFullbrightShiny()
 		gGL.getTexUnit(1)->disable();
 		cube_channel = shader->enableTexture(LLViewerShaderMgr::ENVIRONMENT_MAP, LLTexUnit::TT_CUBE_MAP);
 		cube_map->enableTexture(cube_channel);
-		cube_map->enableTextureCoords(1);
 		diffuse_channel = shader->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 
 		gGL.getTexUnit(cube_channel)->bind(cube_map);
@@ -601,21 +596,9 @@ void LLDrawPoolBump::endFullbrightShiny()
 	if( cube_map )
 	{
 		cube_map->disable();
-
-        /*if (diffuse_channel != 0)
-		{
-			shader->disableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
-		}
-		gGL.getTexUnit(0)->activate();
-		gGL.getTexUnit(0)->enable(LLTexUnit::TT_TEXTURE);*/
-
 		shader->unbind();
-		//gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
 	}
 	
-	//gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-	//gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
-
 	diffuse_channel = -1;
 	cube_channel = 0;
 	mShiny = FALSE;
@@ -762,23 +745,9 @@ void LLDrawPoolBump::renderBump(U32 pass)
 //static
 void LLDrawPoolBump::endBump(U32 pass)
 {
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gObjectBumpProgram.unbind();
-	}
-	else
-	{
-		// Disable texture blending on unit 1
-		gGL.getTexUnit(1)->activate();
-		gGL.getTexUnit(1)->disable();
-		gGL.getTexUnit(1)->setTextureBlendType(LLTexUnit::TB_MULT);
+    gObjectBumpProgram.unbind();
 
-		// Disable texture blending on unit 0
-		gGL.getTexUnit(0)->activate();
-		gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
-	}
-	
-	gGL.setSceneBlendType(LLRender::BT_ALPHA);
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
 }
 
 S32 LLDrawPoolBump::getNumDeferredPasses()
@@ -1591,7 +1560,7 @@ void LLDrawPoolInvisible::render(S32 pass)
 { //render invisiprims
 	LL_RECORD_BLOCK_TIME(FTM_RENDER_INVISIBLE);
   
-	if (gPipeline.canUseVertexShaders())
+	if (gPipeline.shadersLoaded())
 	{
 		gOcclusionProgram.bind();
 	}
@@ -1603,7 +1572,7 @@ void LLDrawPoolInvisible::render(S32 pass)
 	gGL.setColorMask(true, false);
 	glStencilMask(0xFFFFFFFF);
 
-	if (gPipeline.canUseVertexShaders())
+	if (gPipeline.shadersLoaded())
 	{
 		gOcclusionProgram.unbind();
 	}

@@ -935,10 +935,7 @@ void LLViewerObjectList::renderObjectBeacons()
 
 	LLGLSUIDefault gls_ui;
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.bind();
-	}
+	gUIProgram.bind();
 
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -1032,10 +1029,7 @@ void LLViewerObjectList::renderObjectBeacons()
 void LLSky::renderSunMoonBeacons(const LLVector3& pos_agent, const LLVector3& direction, LLColor4 color)
 {
 	LLGLSUIDefault gls_ui;
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.bind();
-	}
+	gUIProgram.bind();
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 	LLVector3 pos_end;

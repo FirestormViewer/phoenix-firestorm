@@ -5750,11 +5750,6 @@ U32 LLVOAvatar::renderSkinned()
 		bool should_alpha_mask = shouldAlphaMask();
 		LLGLState test(GL_ALPHA_TEST, should_alpha_mask);
 		
-		if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
-		{
-			gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
-		}
-		
 		BOOL first_pass = TRUE;
 		if (!LLDrawPoolAvatar::sSkipOpaque)
 		{
@@ -5801,11 +5796,6 @@ U32 LLVOAvatar::renderSkinned()
 			}
 		}
 
-		if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
-		{
-			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
-		}
-
 		if (!LLDrawPoolAvatar::sSkipTransparent || LLPipeline::sImpostorRender)
 		{
 			LLGLState blend(GL_BLEND, !mIsDummy);
@@ -5822,21 +5812,21 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 	U32 num_indices = 0;
 	if( isWearingWearableType( LLWearableType::WT_SKIRT ) && (isUIAvatar() || isTextureVisible(TEX_SKIRT_BAKED)) )
 	{
-		gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.25f);
+        gGL.flush();
 		LLViewerJoint* skirt_mesh = getViewerJoint(MESH_ID_SKIRT);
 		if (skirt_mesh)
 		{
 			num_indices += skirt_mesh->render(mAdjustedPixelArea, FALSE);
 		}
 		first_pass = FALSE;
-		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+        gGL.flush();
 	}
 
 	if (!isSelf() || gAgent.needsRenderHead() || LLPipeline::sShadowRender)
 	{
 		if (LLPipeline::sImpostorRender)
 		{
-			gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
+            gGL.flush();
 		}
 		
 		if (isTextureVisible(TEX_HEAD_BAKED))
@@ -5859,7 +5849,7 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 		}
 		if (LLPipeline::sImpostorRender)
 		{
-			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+            gGL.flush();
 		}
 	}
 	
@@ -5892,11 +5882,6 @@ U32 LLVOAvatar::renderRigid()
 	bool should_alpha_mask = shouldAlphaMask();
 	LLGLState test(GL_ALPHA_TEST, should_alpha_mask);
 
-	if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
-	{
-		gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
-	}
-
 	if (isTextureVisible(TEX_EYES_BAKED) || (getOverallAppearance() == AOA_JELLYDOLL && !isControlAvatar()) || isUIAvatar())
 	{
 		LLViewerJoint* eyeball_left = getViewerJoint(MESH_ID_EYEBALL_LEFT);
@@ -5911,11 +5896,6 @@ U32 LLVOAvatar::renderRigid()
 		}
 	}
 
-	if (should_alpha_mask && !LLGLSLShader::sNoFixedFunction)
-	{
-		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
-	}
-	
 	return num_indices;
 }
 
@@ -5967,7 +5947,7 @@ U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 	}
 	{
 	LLGLEnable test(GL_ALPHA_TEST);
-	gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.f);
+    gGL.flush();
 
 	gGL.color4ubv(color.mV);
 	gGL.getTexUnit(diffuse_channel)->bind(&mImpostor);

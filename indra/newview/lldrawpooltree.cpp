@@ -68,7 +68,7 @@ void LLDrawPoolTree::beginRenderPass(S32 pass)
 		shader = &gTreeProgram;
 	}
 
-	if (gPipeline.canUseVertexShaders())
+	if (gPipeline.shadersLoaded())
 	{
 		shader->bind();
 		shader->setMinimumAlpha(0.5f);
@@ -77,7 +77,7 @@ void LLDrawPoolTree::beginRenderPass(S32 pass)
 	else
 	{
 		gPipeline.enableLightsDynamic();
-		gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.5f);
+		gGL.flush();
 	}
 }
 
@@ -90,7 +90,7 @@ void LLDrawPoolTree::render(S32 pass)
 		return;
 	}
 
-	LLGLState test(GL_ALPHA_TEST, LLGLSLShader::sNoFixedFunction ? 0 : 1);
+	LLGLState test(GL_ALPHA_TEST, 0);
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	if( (LLPipeline::sRenderTextures) )
@@ -140,7 +140,7 @@ void LLDrawPoolTree::endRenderPass(S32 pass)
 	
 	if (mShaderLevel <= 0)
 	{
-		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+        gGL.flush();
 	}
 }
 

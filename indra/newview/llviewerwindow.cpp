@@ -654,12 +654,6 @@ public:
 		{
 			LLTrace::Recording& last_frame_recording = LLTrace::get_frame_recording().getLastRecording();
 
-			if (gPipeline.getUseVertexShaders() == 0)
-			{
-				addText(xpos, ypos, "Shaders Disabled");
-				ypos += y_inc;
-			}
-
 			if (gGLManager.mHasATIMemInfo)
 			{
 				S32 meminfo[4];
@@ -2209,20 +2203,6 @@ void LLViewerWindow::initGLDefaults()
 {
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
-	if (!LLGLSLShader::sNoFixedFunction)
-	{ //initialize fixed function state
-		glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-
-		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LLColor4::black.mV);
-		glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LLColor4::white.mV);
-
-		// lights for objects
-		glShadeModel( GL_SMOOTH );
-
-		gGL.getTexUnit(0)->enable(LLTexUnit::TT_TEXTURE);
-		gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
-	}
-
 	glPixelStorei(GL_PACK_ALIGNMENT,1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
@@ -3006,10 +2986,7 @@ void LLViewerWindow::drawDebugText()
 	gGL.color4f(1,1,1,1);
 	gGL.pushMatrix();
 	gGL.pushUIMatrix();
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.bind();
-	}
+	gUIProgram.bind();
 	{
 		// scale view by UI global scale factor and aspect ratio correction factor
 		gGL.scaleUI(mDisplayScale.mV[VX], mDisplayScale.mV[VY], 1.f);
@@ -3019,10 +2996,7 @@ void LLViewerWindow::drawDebugText()
 	gGL.popMatrix();
 
 	gGL.flush();
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.unbind();
-	}
+	gUIProgram.unbind();
 }
 
 void LLViewerWindow::draw()
@@ -3071,10 +3045,7 @@ void LLViewerWindow::draw()
 	// Draw all nested UI views.
 	// No translation needed, this view is glued to 0,0
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.bind();
-	}
+	gUIProgram.bind();
 
 	gGL.pushMatrix();
 	LLUI::pushMatrix();
@@ -3250,14 +3221,9 @@ void LLViewerWindow::draw()
 	LLUI::popMatrix();
 	gGL.popMatrix();
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.unbind();
-	}
+	gUIProgram.unbind();
 
-//#if LL_DEBUG
 	LLView::sIsDrawing = FALSE;
-//#endif
 }
 
 // <FS:TT> Window Title Access
@@ -4566,25 +4532,10 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 				gGL.diffuseColor4fv(line_color.mV);
 				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
-
 		}
 		else
 		{
-			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-			if (!LLGLSLShader::sNoFixedFunction)
-			{
-				// </FS:Ansariel>
-				LLGLEnable fog(GL_FOG);
-				glFogi(GL_FOG_MODE, GL_LINEAR);
-				float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
-				LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
-				glFogf(GL_FOG_START, d);
-				glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
-				glFogfv(GL_FOG_COLOR, fogCol.mV);
-				// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-			}
-			// </FS:Ansariel>
-			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+			gGL.flush();
 			{
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				gGL.diffuseColor4fv(color.mV);
@@ -4620,21 +4571,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 	}
 	else
 	{
-		// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-		if (!LLGLSLShader::sNoFixedFunction)
-		{
-			// </FS:Ansariel>
-			LLGLEnable fog(GL_FOG);
-			glFogi(GL_FOG_MODE, GL_LINEAR);
-			float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
-			LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
-			glFogf(GL_FOG_START, d);
-			glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
-			glFogfv(GL_FOG_COLOR, fogCol.mV);
-			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-		}
-		// </FS:Ansariel>
-		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+		gGL.flush();
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			gGL.diffuseColor4fv(color.mV);
@@ -4769,7 +4706,7 @@ void renderNonMeshHullPhysics(LLVOVolume* vovolume, LLVolume* volume, LLColor4 c
 		gGL.diffuseColor4fv(line_color.mV);
 		LLVertexBuffer::unbind();
 
-		llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
+		llassert(LLGLSLShader::sCurBoundShader != 0);
 
 		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
@@ -5043,32 +4980,24 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		{
 			// TODO: (Beq) refactor this!! yet another flavour of drawing the same crap. Can we ratioanlise the arguments
 			// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-			if (LLGLSLShader::sNoFixedFunction)
-			{
-				gGL.diffuseColor4fv(line_color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//llassert(LLGLSLShader::sCurBoundShader != 0);
+			//LLVertexBuffer::unbind();
+			//glVertexPointer(3, GL_FLOAT, 16, phys_volume->mHullPoints);
+			//gGL.diffuseColor4fv(line_color.mV);
+			//gGL.syncMatrices();
+			//glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
 
-				gGL.diffuseColor4fv(color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-			}
-			else
-			{
-				// </FS:Ansariel>
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
-				LLVertexBuffer::unbind();
-				glVertexPointer(3, GL_FLOAT, 16, phys_volume->mHullPoints);
-				gGL.diffuseColor4fv(line_color.mV);
-				gGL.syncMatrices();
-				glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
+			//gGL.diffuseColor4fv(color.mV);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
+			gGL.diffuseColor4fv(line_color.mV);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
-				gGL.diffuseColor4fv(color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-			}
+			gGL.diffuseColor4fv(color.mV);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 			// </FS:Ansariel>
 		}
 		else

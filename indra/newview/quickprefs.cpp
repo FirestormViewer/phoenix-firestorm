@@ -208,7 +208,6 @@ void FloaterQuickPrefs::initCallbacks()
 		gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
-		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("FSRenderVignette")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderShadowSplitExponent")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
@@ -1044,7 +1043,6 @@ void FloaterQuickPrefs::refreshSettings()
 						bumpshiny &&
 						shaders &&
 						gGLManager.mHasFramebufferObject &&
-						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
 
 	mCtrlDeferred->setEnabled(enabled);
@@ -1119,23 +1117,6 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlReflectionDetail->setEnabled(FALSE);
 		mCtrlReflectionDetail->setValue(FALSE);
-	}
-
-	// disabled av
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarVP"))
-	{
-		//deferred needs AvatarVP, disable deferred
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-
-		mCtrlDeferred->setEnabled(FALSE);
-		mCtrlDeferred->setValue(FALSE);
 	}
 
 	// <FS:CR> FIRE-9630 - Vignette UI controls

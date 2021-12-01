@@ -243,9 +243,6 @@ void LLDrawPoolWater::render(S32 pass)
 	glTexGenfv(GL_S, GL_OBJECT_PLANE, tp0);
 	glTexGenfv(GL_T, GL_OBJECT_PLANE, tp1);
 
-	gGL.getTexUnit(1)->setTextureColorBlend(LLTexUnit::TBO_MULT, LLTexUnit::TBS_TEX_COLOR, LLTexUnit::TBS_PREV_COLOR);
-	gGL.getTexUnit(1)->setTextureAlphaBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_PREV_ALPHA);
-
 	gGL.getTexUnit(0)->activate();
 	
 	glClearStencil(1);
@@ -303,8 +300,6 @@ void LLDrawPoolWater::render(S32 pass)
 		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		LLOverrideFaceColor overrid(this, 1.f, 1.f, 1.f,  0.5f*up_dot);
 
-		gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
-
 		for (std::vector<LLFace*>::iterator iter = mDrawFace.begin();
 			 iter != mDrawFace.end(); iter++)
 		{
@@ -320,8 +315,6 @@ void LLDrawPoolWater::render(S32 pass)
 				face->renderIndexed();
 			}
 		}
-
-		gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
 
 		gSky.mVOSkyp->getCubeMap()->disable();
 		
@@ -340,8 +333,6 @@ void LLDrawPoolWater::render(S32 pass)
 		glStencilFunc(GL_NOTEQUAL, 0, 0xFFFFFFFF);
 		renderReflection(refl_face);
 	}
-
-	gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
 }
 
 // for low end hardware
@@ -356,19 +347,16 @@ void LLDrawPoolWater::renderOpaqueLegacyWater()
     }
 
 	LLGLSLShader* shader = NULL;
-	if (LLGLSLShader::sNoFixedFunction)
+	if (LLPipeline::sUnderWaterRender)
 	{
-		if (LLPipeline::sUnderWaterRender)
-		{
-			shader = &gObjectSimpleNonIndexedTexGenWaterProgram;
-		}
-		else
-		{
-			shader = &gObjectSimpleNonIndexedTexGenProgram;
-		}
-
-		shader->bind();
+		shader = &gObjectSimpleNonIndexedTexGenWaterProgram;
 	}
+	else
+	{
+		shader = &gObjectSimpleNonIndexedTexGenProgram;
+	}
+
+	shader->bind();
 
 	stop_glerror();
 
@@ -454,7 +442,6 @@ void LLDrawPoolWater::renderOpaqueLegacyWater()
 	}
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-	gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
 }
 
 

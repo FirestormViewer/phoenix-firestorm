@@ -740,19 +740,6 @@
           Avatar Rendering:
         </text>
         <check_box
-         control_name="RenderAvatarVP"
-         height="16"
-         initial_value="true"
-         label="Hardware skinning"
-         layout="topleft"
-         left_delta="0"
-         name="AvatarVertexProgram"
-         top_pad="5"
-         width="256">
-          <check_box.commit_callback
-           function="Pref.RenderOptionUpdate" />
-        </check_box>
-        <check_box
          control_name="RenderAvatarCloth"
          height="16"
          initial_value="true"
@@ -760,7 +747,7 @@
          layout="topleft"
          left_delta="0"
          name="AvatarCloth"
-         top_pad="1"
+         top_pad="5"
          width="256" />
       <!-- <FS:LO> remove orphaned code left over from EEP
         <text

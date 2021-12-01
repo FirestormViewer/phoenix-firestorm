@@ -2033,12 +2033,17 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
-    LLAtmosphere::cleanupClass();
+	// Since we don't know what functions are going to be queued by
+	// onCleanup(), we have to assume they might rely on some of the things
+	// we're about to destroy below. Run them first.
+	mOnCleanup();
+
+	LLAtmosphere::cleanupClass();
 
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
-     LLNotifications::instance().clear();
+	 LLNotifications::instance().clear();
 
 	// workaround for DEV-35406 crash on shutdown
 	LLEventPumps::instance().reset();
@@ -2079,14 +2084,14 @@ bool LLAppViewer::cleanup()
 	// to ensure shutdown order
 	LLMortician::setZealous(TRUE);
 
-    // Give any remaining SLPlugin instances a chance to exit cleanly.
-    LLPluginProcessParent::shutdown();
+	// Give any remaining SLPlugin instances a chance to exit cleanly.
+	LLPluginProcessParent::shutdown();
 
 	disconnectViewer();
-    LLViewerCamera::deleteSingleton();
+	LLViewerCamera::deleteSingleton();
 
 	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
-	
+
 	if (gKeyboard)
 	{
 		gKeyboard->resetKeys();
@@ -2195,16 +2200,16 @@ bool LLAppViewer::cleanup()
 
 	if (gAudiop)
 	{
-        // be sure to stop the internet stream cleanly BEFORE destroying the interface to stop it.
-        gAudiop->stopInternetStream();
-        // shut down the streaming audio sub-subsystem first, in case it relies on not outliving the general audio subsystem.
+		// be sure to stop the internet stream cleanly BEFORE destroying the interface to stop it.
+		gAudiop->stopInternetStream();
+		// shut down the streaming audio sub-subsystem first, in case it relies on not outliving the general audio subsystem.
 		// <FS> FMOD fixes
-        // LLStreamingAudioInterface *sai = gAudiop->getStreamingAudioImpl();
+		// LLStreamingAudioInterface *sai = gAudiop->getStreamingAudioImpl();
 		// delete sai;
 		// gAudiop->setStreamingAudioImpl(NULL);
 
-        // shut down the audio subsystem
-        gAudiop->shutdown();
+		// shut down the audio subsystem
+		gAudiop->shutdown();
 
 		delete gAudiop;
 		gAudiop = NULL;
@@ -2279,11 +2284,11 @@ bool LLAppViewer::cleanup()
 	delete gKeyboard;
 	gKeyboard = NULL;
 
-    if (LLViewerJoystick::instanceExists())
-    {
-        // Turn off Space Navigator and similar devices
-        LLViewerJoystick::getInstance()->terminate();
-    }
+	if (LLViewerJoystick::instanceExists())
+	{
+		// Turn off Space Navigator and similar devices
+		LLViewerJoystick::getInstance()->terminate();
+	}
 
 	LL_INFOS() << "Cleaning up Objects" << LL_ENDL;
 
@@ -2326,11 +2331,11 @@ bool LLAppViewer::cleanup()
 	// Store the time of our current logoff
 	gSavedPerAccountSettings.setU32("LastLogoff", time_corrected());
 
-    if (LLEnvironment::instanceExists())
-    {
-        //Store environment settings if nessesary
-        LLEnvironment::getInstance()->saveToSettings();
-    }
+	if (LLEnvironment::instanceExists())
+	{
+		//Store environment settings if necessary
+		LLEnvironment::getInstance()->saveToSettings();
+	}
 
 	// Must do this after all panels have been deleted because panels that have persistent rects
 	// save their rects on delete.
@@ -2416,7 +2421,7 @@ bool LLAppViewer::cleanup()
 		LLConversationLog::instance().cache();
     }
 
-    clearSecHandler();
+	clearSecHandler();
 
 	if (mPurgeCacheOnExit)
 	{
@@ -2460,13 +2465,13 @@ bool LLAppViewer::cleanup()
 		}
 	}
 
-    if (mPurgeUserDataOnExit)
-    {
-        // Ideally we should not save anything from this session since it is going to be purged now,
-        // but this is a very 'rare' case (user deleting himself), not worth overcomplicating 'save&cleanup' code
-        std::string user_path = gDirUtilp->getOSUserAppDir() + gDirUtilp->getDirDelimiter() + LLStartUp::getUserId();
-        gDirUtilp->deleteDirAndContents(user_path);
-    }
+	if (mPurgeUserDataOnExit)
+	{
+		// Ideally we should not save anything from this session since it is going to be purged now,
+		// but this is a very 'rare' case (user deleting himself), not worth overcomplicating 'save&cleanup' code
+		std::string user_path = gDirUtilp->getOSUserAppDir() + gDirUtilp->getDirDelimiter() + LLStartUp::getUserId();
+		gDirUtilp->deleteDirAndContents(user_path);
+	}
 
 	// Delete workers first
 	// shotdown all worker threads before deleting them in case of co-dependencies
@@ -2490,11 +2495,11 @@ bool LLAppViewer::cleanup()
 
 	//MUST happen AFTER SUBSYSTEM_CLEANUP(LLCurl)
 	delete sTextureCache;
-    sTextureCache = NULL;
+	sTextureCache = NULL;
 	delete sTextureFetch;
-    sTextureFetch = NULL;
+	sTextureFetch = NULL;
 	delete sImageDecodeThread;
-    sImageDecodeThread = NULL;
+	sImageDecodeThread = NULL;
 	delete mFastTimerLogThread;
 	mFastTimerLogThread = NULL;
 	// <FS:Ansariel> Regular disk cache cleanup
@@ -2557,15 +2562,15 @@ bool LLAppViewer::cleanup()
 	// make sure nothing uses applyProxySettings by this point.
 	LL_INFOS() << "Cleaning up LLProxy." << LL_ENDL;
 	SUBSYSTEM_CLEANUP(LLProxy);
-    LLCore::LLHttp::cleanup();
+	LLCore::LLHttp::cleanup();
 
 	ll_close_fail_log();
 
 	LLError::LLCallStacks::cleanup();
 
-    LLEnvironment::deleteSingleton();
-    LLSelectMgr::deleteSingleton();
-    LLViewerEventRecorder::deleteSingleton();
+	LLEnvironment::deleteSingleton();
+	LLSelectMgr::deleteSingleton();
+	LLViewerEventRecorder::deleteSingleton();
 
 	// It's not at first obvious where, in this long sequence, a generic cleanup
 	// call OUGHT to go. So let's say this: as we migrate cleanup from
@@ -2578,8 +2583,7 @@ bool LLAppViewer::cleanup()
 	// deleteSingleton() methods.
 	LLSingletonBase::deleteAll();
 
-
-    LL_INFOS() << "Goodbye!" << LL_ENDL;
+	LL_INFOS() << "Goodbye!" << LL_ENDL;
 
 	removeDumpDir();
 
