@@ -109,7 +109,6 @@
 		<text name="AvatarRenderingText">
 			アバターレンダリング：
 		</text>
-		<check_box label="ハードウェアスキニング" name="AvatarVertexProgram"/>
 		<check_box label="アバターの布" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			地形詳細：

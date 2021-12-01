@@ -89,7 +89,6 @@
 			Avatar-Darstellung:
 		</text>
 		<check_box label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
-		<check_box label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
 		<check_box label="Avatar-Kleidung" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Terraindetails:
