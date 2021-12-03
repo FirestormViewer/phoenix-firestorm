@@ -5454,6 +5454,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		}
 	}
 
+    F32 vsize = facep->getVirtualSize(); //TODO -- adjust by texture scale?
 
 	if (index < FACE_DO_NOT_BATCH_TEXTURES && idx >= 0)
 	{
@@ -5467,10 +5468,12 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 			{
 				batchable = true;
 				draw_vec[idx]->mTextureList[index] = tex;
+                draw_vec[idx]->mTextureListVSize[index] = vsize;
 			}
 			else if (draw_vec[idx]->mTextureList[index] == tex)
 			{ //this face's texture index can be used with this batch
 				batchable = true;
+                draw_vec[idx]->mTextureListVSize[index] = llmax(vsize, draw_vec[idx]->mTextureListVSize[index]);
 			}
 		}
 		else
@@ -5501,12 +5504,14 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 	{
 		draw_vec[idx]->mCount += facep->getIndicesCount();
 		draw_vec[idx]->mEnd += facep->getGeomCount();
-		draw_vec[idx]->mVSize = llmax(draw_vec[idx]->mVSize, facep->getVirtualSize());
+		draw_vec[idx]->mVSize = llmax(draw_vec[idx]->mVSize, vsize);
 
 		if (index < FACE_DO_NOT_BATCH_TEXTURES && index >= draw_vec[idx]->mTextureList.size())
 		{
 			draw_vec[idx]->mTextureList.resize(index+1);
 			draw_vec[idx]->mTextureList[index] = tex;
+            draw_vec[idx]->mTextureListVSize.resize(index + 1);
+            draw_vec[idx]->mTextureListVSize[index] = vsize;
 		}
 		draw_vec[idx]->validate();
 		update_min_max(draw_vec[idx]->mExtents[0], draw_vec[idx]->mExtents[1], facep->mExtents[0]);
@@ -5521,7 +5526,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		LLPointer<LLDrawInfo> draw_info = new LLDrawInfo(start,end,count,offset, tex, 
 			facep->getVertexBuffer(), selected, fullbright, bump);
 		draw_info->mGroup = group;
-		draw_info->mVSize = facep->getVirtualSize();
+		draw_info->mVSize = vsize;
 		draw_vec.push_back(draw_info);
 		draw_info->mTextureMatrix = tex_mat;
 		draw_info->mModelMatrix = model_mat;
@@ -5596,6 +5601,8 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		{ //initialize texture list for texture batching
 			draw_info->mTextureList.resize(index+1);
 			draw_info->mTextureList[index] = tex;
+            draw_info->mTextureListVSize.resize(index + 1);
+            draw_info->mTextureListVSize[index] = vsize;
 		}
 		draw_info->validate();
 	}

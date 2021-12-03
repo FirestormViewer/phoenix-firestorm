@@ -94,12 +94,13 @@ void LLDrawPoolTree::render(S32 pass)
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	if( (LLPipeline::sRenderTextures) )
-		gGL.getTexUnit(sDiffTex)->bind( mTexturep );
+		gGL.getTexUnit(sDiffTex)->bindFast( mTexturep );
 	else
-		gGL.getTexUnit(sDiffTex)->bind( LLViewerFetchedTexture::sDefaultDiffuseImagep );
+		gGL.getTexUnit(sDiffTex)->bindFast( LLViewerFetchedTexture::sDefaultDiffuseImagep );
 // [/SL:KB]
-//	gGL.getTexUnit(sDiffTex)->bind(mTexturep);
-				
+//	gGL.getTexUnit(sDiffTex)->bindFast(mTexturep);
+    gPipeline.touchTexture(mTexturep, 1024.f * 1024.f); // <=== keep Linden tree textures at full res
+
 	for (std::vector<LLFace*>::iterator iter = mDrawFace.begin();
 		 iter != mDrawFace.end(); iter++)
 	{
@@ -122,9 +123,8 @@ void LLDrawPoolTree::render(S32 pass)
 				gPipeline.mMatrixOpCount++;
 			}
 
-			buff->setBuffer(LLDrawPoolTree::VERTEX_DATA_MASK);
-			buff->drawRange(LLRender::TRIANGLES, 0, buff->getNumVerts()-1, buff->getNumIndices(), 0); 
-			gPipeline.addTrianglesDrawn(buff->getNumIndices());
+			buff->setBufferFast(LLDrawPoolTree::VERTEX_DATA_MASK);
+			buff->drawRangeFast(LLRender::TRIANGLES, 0, buff->getNumVerts()-1, buff->getNumIndices(), 0); 
 		}
 	}
 }

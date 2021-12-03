@@ -48,7 +48,6 @@ class LLTextureEntry;
 class LLVertexProgram;
 class LLViewerTexture;
 class LLGeometryManager;
-class LLTextureAtlasSlot;
 class LLDrawInfo;
 class LLMeshSkinInfo;
 

@@ -74,18 +74,6 @@ static const GLint sGLAddressMode[] =
 	GL_CLAMP_TO_EDGE
 };
 
-static const GLenum sGLCompareFunc[] =
-{
-	GL_NEVER,
-	GL_ALWAYS,
-	GL_LESS,
-	GL_LEQUAL,
-	GL_EQUAL,
-	GL_NOTEQUAL,
-	GL_GEQUAL,
-	GL_GREATER
-};
-
 const U32 immediate_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_COLOR | LLVertexBuffer::MAP_TEXCOORD0;
 
 static const GLenum sGLBlendFactor[] =
@@ -105,10 +93,7 @@ static const GLenum sGLBlendFactor[] =
 };
 
 LLTexUnit::LLTexUnit(S32 index)
-	: mCurrTexType(TT_NONE), mCurrBlendType(TB_MULT), 
-	mCurrColorOp(TBO_MULT), mCurrAlphaOp(TBO_MULT),
-	mCurrColorSrc1(TBS_TEX_COLOR), mCurrColorSrc2(TBS_PREV_COLOR),
-	mCurrAlphaSrc1(TBS_TEX_ALPHA), mCurrAlphaSrc2(TBS_PREV_ALPHA),
+	: mCurrTexType(TT_NONE),
     mCurrColorScale(1), mCurrAlphaScale(1), mCurrTexture(0), mTexColorSpace(TCS_LINEAR),
 	mHasMipMaps(false),
 	mIndex(index)
@@ -199,7 +184,11 @@ void LLTexUnit::bindFast(LLTexture* texture)
     mCurrTexture = gl_tex->getTexName();
     if (!mCurrTexture)
     {
-        mCurrTexture = LLImageGL::sDefaultGLTexture->getTexName();
+        LL_PROFILE_ZONE_NAMED("MISSING TEXTURE");
+        //if deleted, will re-generate it immediately
+        texture->forceImmediateUpdate();
+        gl_tex->forceUpdateBindStats();
+        texture->bindDefaultImage(mIndex);
     }
     glBindTexture(sGLTextureType[gl_tex->getTarget()], mCurrTexture);
     mHasMipMaps = gl_tex->mHasMipMaps;
@@ -855,8 +844,6 @@ LLRender::LLRender()
 		mCurrColorMask[i] = true;
 	}
 
-	mCurrAlphaFunc = CF_DEFAULT;
-	mCurrAlphaFuncVal = 0.01f;
 	mCurrBlendColorSFactor = BF_UNDEF;
 	mCurrBlendAlphaSFactor = BF_UNDEF;
 	mCurrBlendColorDFactor = BF_UNDEF;

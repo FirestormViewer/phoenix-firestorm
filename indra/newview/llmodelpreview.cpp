@@ -1861,12 +1861,6 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
         end = which_lod;
     }
 
-    LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-    if (shader)
-    {
-        shader->unbind();
-    }
-
     for (S32 lod = start; lod >= end; --lod)
     {
         if (which_lod == -1)
@@ -2025,12 +2019,6 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
     }
 
     mResourceCost = calcResourceCost();
-
-    LLVertexBuffer::unbind();
-    if (shader)
-    {
-        shader->bind();
-    }
     refresh(); // <FS:ND/> refresh once to make sure render gets called with the updated vbos
 }
 
@@ -2963,6 +2951,8 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
                 *(index_strider++) = vf.mIndices[i];
             }
 
+            vb->flush();
+
             mVertexBuffer[lod][mdl].push_back(vb);
 
             vertex_count += num_vertices;
@@ -3523,6 +3513,11 @@ BOOL LLModelPreview::render()
             genBuffers(mPreviewLOD, skin_weight);
         }
 
+        if (physics && mVertexBuffer[LLModel::LOD_PHYSICS].empty())
+        {
+            genBuffers(LLModel::LOD_PHYSICS, false);
+        }
+
         if (!skin_weight)
         {
             for (LLMeshUploadThread::instance_list::iterator iter = mUploadData.begin(); iter != mUploadData.end(); ++iter)
@@ -3598,6 +3593,7 @@ BOOL LLModelPreview::render()
                         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                         gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
                     }
+                    buffer->flush();
                 }
                 gGL.popMatrix();
             }
@@ -3691,11 +3687,6 @@ BOOL LLModelPreview::render()
 
                         if (render_mesh)
                         {
-                            if (mVertexBuffer[LLModel::LOD_PHYSICS].empty())
-                            {
-                                genBuffers(LLModel::LOD_PHYSICS, false);
-                            }
-
                             U32 num_models = mVertexBuffer[LLModel::LOD_PHYSICS][model].size();
                             if (pass > 0){
                                 for (U32 i = 0; i < num_models; ++i)
@@ -3718,6 +3709,8 @@ BOOL LLModelPreview::render()
 
                                     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                                     gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+
+                                    buffer->flush();
                                 }
                             }
                         }
@@ -3768,11 +3761,6 @@ BOOL LLModelPreview::render()
 
                                 if (physics.mHull.empty())
                                 {
-                                    if (mVertexBuffer[LLModel::LOD_PHYSICS].empty())
-                                    {
-                                        genBuffers(LLModel::LOD_PHYSICS, false);
-                                    }
-
                                     U32 num_models = mVertexBuffer[LLModel::LOD_PHYSICS][model].size();
                                     for (U32 v = 0; v < num_models; ++v)
                                     {
@@ -3807,6 +3795,8 @@ BOOL LLModelPreview::render()
                                                 buffer->draw(LLRender::POINTS, 3, i);
                                             }
                                         }
+
+                                        buffer->flush();
                                     }
                                 }
                             }
