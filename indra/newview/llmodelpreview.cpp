@@ -2019,7 +2019,6 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
     }
 
     mResourceCost = calcResourceCost();
-    refresh(); // <FS:ND/> refresh once to make sure render gets called with the updated vbos
 }
 
 void LLModelPreview::updateStatusMessages()
