@@ -581,9 +581,6 @@ support@secondlife.com.
 	<string name="TooltipPrimEquivalentЗагрузка">
 		, Загрузка влияния на землю...
 	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, влияние на землю недоступно
-	</string>
 	<string name="TooltipDistance">
 		Расстояние: [DISTANCE] м
 	</string>
