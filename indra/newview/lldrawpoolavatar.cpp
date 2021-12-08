@@ -808,17 +808,13 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
     LL_RECORD_BLOCK_TIME(FTM_RENDER_CHARACTERS);
 
 	// <FS:Zi> Add avatar hitbox debug
-	{
-		LL_PROFILE_ZONE_NAMED("cached control renderhitboxes");
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
-
 	if (render_hitbox && pass == 2)
 	{
 		LL_PROFILE_ZONE_NAMED("render_hitbox");
-		LLGLSLShader* current_shader_program = NULL;
 
 		// load the debug output shader
-		current_shader_program = LLGLSLShader::sCurBoundShaderPtr;
+		LLGLSLShader* current_shader_program = LLGLSLShader::sCurBoundShaderPtr;
 		gDebugProgram.bind();
 
 		// set up drawing mode and remove any textures used
@@ -829,9 +825,9 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.diffuseColor4f(avatar_color.mV[VRED], avatar_color.mV[VGREEN], avatar_color.mV[VBLUE], avatar_color.mV[VALPHA]);
 		gGL.setLineWidth(2.0f);
 
-		LLQuaternion rot = avatarp->getRotationRegion();
-		LLVector3 pos = avatarp->getPositionAgent();
-		LLVector3 size = avatarp->getScale();
+		const LLQuaternion& rot = avatarp->getRotationRegion();
+		const LLVector3& pos = avatarp->getPositionAgent();
+		const LLVector3& size = avatarp->getScale();
 		
 		// drawBoxOutline partly copied from llspatialpartition.cpp below
 
@@ -853,7 +849,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.vertex3fv((pos + v4).mV);
 		gGL.vertex3fv((pos + v4).mV);
 		gGL.vertex3fv((pos + v1).mV);
-		
+
 		//bottom
 		gGL.vertex3fv((pos - v1).mV);
 		gGL.vertex3fv((pos - v2).mV);
@@ -863,11 +859,11 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.vertex3fv((pos - v4).mV);
 		gGL.vertex3fv((pos - v4).mV);
 		gGL.vertex3fv((pos - v1).mV);
-		
+
 		//right
 		gGL.vertex3fv((pos + v1).mV);
 		gGL.vertex3fv((pos - v3).mV);
-				
+
 		gGL.vertex3fv((pos + v4).mV);
 		gGL.vertex3fv((pos - v2).mV);
 
@@ -887,7 +883,8 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 			current_shader_program->bind();
 		}
 	}
-	}// </FS:Zi>
+	// </FS:Zi>
+
 // <FS:Beq> rendertime Tracy annotations
 {
 	LL_PROFILE_ZONE_NAMED("check fully_loaded"); 
