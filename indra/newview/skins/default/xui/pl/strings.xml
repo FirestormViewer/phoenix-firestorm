@@ -544,9 +544,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipPrimEquivalentLoading">
 		, sprawdzanie wpływu na działkę...
 	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, wpływ na działkę niedostępny
-	</string>
 	<string name="TooltipDistance">
 		Odległość: [DISTANCE] m
 	</string>

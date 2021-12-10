@@ -573,9 +573,6 @@ Provare ad accedere nuovamente tra un minuto.
 	<string name="TooltipPrimEquivalentLoading">
 		, carico impatto...
 	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, impatto non disp.
-	</string>
 	<string name="TooltipDistance">
 		Distanza: [DISTANCE] m
 	</string>
