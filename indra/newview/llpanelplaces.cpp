@@ -360,8 +360,9 @@ BOOL LLPanelPlaces::postBuild()
 		mTabContainer->setCommitCallback(boost::bind(&LLPanelPlaces::onTabSelected, this));
 	}
 
-    mButtonsContainer = getChild<LLPanel>("button_layout_panel");
-    //mButtonsContainer->setVisible(FALSE); // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+    // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+    //mButtonsContainer = getChild<LLPanel>("button_layout_panel");
+    //mButtonsContainer->setVisible(FALSE);
     mFilterContainer = getChild<LLLayoutStack>("top_menu_panel");
 
 	mFilterEditor = getChild<LLFilterEditor>("Filter");
@@ -1128,7 +1129,8 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 		return;
 
 	mTabContainer->setVisible(!visible);
-	mButtonsContainer->setVisible(visible);
+	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+	//mButtonsContainer->setVisible(visible);
 	mFilterContainer->setVisible(!visible);
 
 	if (mPlaceInfoType == AGENT_INFO_TYPE ||

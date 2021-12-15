@@ -125,7 +125,7 @@ private:
 	LLFilterEditor*				mFilterEditor;
 	LLPanelPlacesTab*			mActivePanel;
 	LLTabContainer*				mTabContainer;
-	LLPanel*					mButtonsContainer;
+	//LLPanel*					mButtonsContainer; // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
 	LLLayoutStack*				mFilterContainer;
 	LLPanelPlaceProfile*		mPlaceProfile;
 	LLPanelLandmarkInfo*		mLandmarkInfo;
