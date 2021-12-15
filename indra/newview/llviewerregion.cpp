@@ -332,7 +332,8 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
             return;
         }
 
-        ++mSeedCapAttempts;
+        // <FS:Ansariel> Fix seed cap retry count
+        //++mSeedCapAttempts;
 
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed

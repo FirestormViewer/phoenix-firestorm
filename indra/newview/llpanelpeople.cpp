@@ -807,7 +807,7 @@ BOOL LLPanelPeople::postBuild()
 	if (mContactSetList)
 	{
 		mContactSetList->setCommitCallback(boost::bind(&LLPanelPeople::updateButtons, this));
-		mContactSetList->setDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
+		mContactSetList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 		mContactSetList->setNoItemsCommentText(getString("empty_list"));
 		mContactSetList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 		generateCurrentContactList();

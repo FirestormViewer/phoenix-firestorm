@@ -593,9 +593,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipPrimEquivalentLoading">
 		, bestimme Auswirkung auf Land...
 	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, Auswirkung auf Land nicht verfügbar
-	</string>
 	<string name="TooltipDistance">
 		Entfernung: [DISTANCE] m
 	</string>
