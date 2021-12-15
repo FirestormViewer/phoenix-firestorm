@@ -79,6 +79,7 @@
 #include "fsfloaterplacedetails.h"
 #include "fscommon.h"
 #include "rlvactions.h"
+#include "rlvhandler.h"
 
 // Constants
 static const F32 PLACE_INFO_UPDATE_INTERVAL = 3.0;
@@ -1395,6 +1396,7 @@ void LLPanelPlaces::updateVerbs()
 	mCloseBtn->setVisible(is_create_landmark_visible && !isLandmarkEditModeOn);
 	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
 	mPlaceInfoBtn->setVisible(!is_place_info_visible && !is_create_landmark_visible && !isLandmarkEditModeOn && !is_pick_panel_visible);
+	mShowOnMapBtn->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
 
 	bool show_options_btn = is_place_info_visible && !is_create_landmark_visible && !isLandmarkEditModeOn;
 	mOverflowBtn->setVisible(show_options_btn);
@@ -1417,13 +1419,18 @@ void LLPanelPlaces::updateVerbs()
 		}
 		// <FS:Ansariel> FIRE-9536: Teleport button disabled if standalone TP history & sidepanel TP history detail
 		//else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
-		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE || mPlaceInfoType == TELEPORT_HISTORY_INFO_TYPE)
+		//{
+		//	mTeleportBtn->setEnabled(have_3d_pos);
+		//}
+		else if (mPlaceInfoType == LANDMARK_INFO_TYPE)
 		{
-			// <FS:Ansariel> FIRE-21863: TP restrictions can be circumvented via parcel SLURL
-			//mTeleportBtn->setEnabled(have_3d_pos);
-			mTeleportBtn->setEnabled(have_3d_pos && RlvActions::canTeleportToLocation());
-			// </FS:Ansariel>
+			mTeleportBtn->setEnabled(have_3d_pos && !gRlvHandler.hasBehaviour(RLV_BHVR_TPLM));
 		}
+		else if (mPlaceInfoType == REMOTE_PLACE_INFO_TYPE || mPlaceInfoType == TELEPORT_HISTORY_INFO_TYPE)
+		{
+			mTeleportBtn->setEnabled(have_3d_pos && RlvActions::canTeleportToLocation());
+		}
+		// </FS:Ansariel>
 	}
 	else
 	{
