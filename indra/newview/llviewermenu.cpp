@@ -1461,9 +1461,52 @@ class LLAdvancedDumpScriptedCamera : public view_listener_t
 class LLAdvancedDumpRegionObjectCache : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
-{
+	{
 		handle_dump_region_object_cache(NULL);
 		return true;
+	}
+};
+
+class LLAdvancedInterestListFullUpdate : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLSD request;
+		LLSD body;
+		static bool using_360 = false;
+
+		if (using_360)
+		{
+			body["mode"] = LLSD::String("default");
+		}
+		else
+		{
+			body["mode"] = LLSD::String("360");
+		}
+		using_360 = !using_360;
+
+        if (gAgent.requestPostCapability("InterestList", body, [](const LLSD& response)
+        {
+            LL_INFOS("360Capture") <<
+                "InterestList capability responded: \n" <<
+                ll_pretty_print_sd(response) <<
+                LL_ENDL;
+        }))
+        {
+            LL_INFOS("360Capture") <<
+                "Successfully posted an InterestList capability request with payload: \n" <<
+                ll_pretty_print_sd(body) <<
+                LL_ENDL;
+            return true;
+        }
+        else
+        {
+            LL_INFOS("360Capture") <<
+                "Unable to post an InterestList capability request with payload: \n" <<
+                ll_pretty_print_sd(body) <<
+                LL_ENDL;
+            return false;
+        }
 	}
 };
 
@@ -2645,11 +2688,10 @@ class LLAdvancedLeaveAdminStatus : public view_listener_t
 // Advanced > Debugging //
 //////////////////////////
 
-
 class LLAdvancedForceErrorBreakpoint : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
-	{
+	{		
 		force_error_breakpoint(NULL);
 		return true;
 	}
@@ -3880,19 +3922,13 @@ bool check_avatar_render_mode(U32 mode)
 	switch (mode) 
 	{
 		case 0:
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_RENDER_NORMALLY;
-// [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
 		case 1:
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_DO_NOT_RENDER;
-// [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
 		case 2:
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) == LLVOAvatar::AV_ALWAYS_RENDER;
-// [/RLVa:KB]
 //				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
 		case 4:
 				return FSAvatarRenderPersistence::instance().getAvatarRenderSettings(avatar->getID()) != LLVOAvatar::AV_RENDER_NORMALLY;
@@ -11866,6 +11902,7 @@ void initialize_menus()
 	// Advanced > World
 	view_listener_t::addMenu(new LLAdvancedDumpScriptedCamera(), "Advanced.DumpScriptedCamera");
 	view_listener_t::addMenu(new LLAdvancedDumpRegionObjectCache(), "Advanced.DumpRegionObjectCache");
+	view_listener_t::addMenu(new LLAdvancedInterestListFullUpdate(), "Advanced.InterestListFullUpdate");
 
 	// Advanced > UI
 	commit.add("Advanced.WebBrowserTest", boost::bind(&handle_web_browser_test,	_2));	// sigh! this one opens the MEDIA browser

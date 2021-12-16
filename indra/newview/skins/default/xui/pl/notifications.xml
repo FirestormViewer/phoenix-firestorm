@@ -1156,6 +1156,9 @@ Zaproponować znajomość [NAME]?
 	</notification>
 	<notification label="Nowa lista autokorekty" name="AddAutoReplaceList">
 		Nazwa nowej listy:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
 	</notification>
 	<notification label="Zmiana nazwy listy autokorekty" name="RenameAutoReplaceList">
 		Nazwa '[DUPNAME]' jest w użyciu

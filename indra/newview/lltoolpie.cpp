@@ -693,18 +693,21 @@ bool LLToolPie::walkToClickedLocation()
         mPick.mPosGlobal = gAgent.getPositionGlobal() + LLVector3d(LLViewerCamera::instance().getAtAxis()) * SELF_CLICK_WALK_DISTANCE;
     }
 
-    if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
-        (mPick.mObjectID.notNull() && !mPick.mPosGlobal.isExactlyZero()))
-    {
+//    if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+//        (mPick.mObjectID.notNull() && !mPick.mPosGlobal.isExactlyZero()))
 // [RLVa:KB] - Checked: RLVa-2.0.0
-        if (RlvActions::isRlvEnabled() && !RlvActions::canTeleportToLocal(mPick.mPosGlobal))
-        {
-            RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
-            mPick = saved_pick;
-            return false;
-        }
-// [/RLVa:KB]
+	bool fValidPick = ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+		(mPick.mObjectID.notNull() && !mPick.mPosGlobal.isExactlyZero()));
 
+	if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
+	{
+		RlvUtil::notifyBlocked(RlvStringKeys::Blocked::AutoPilot);
+		fValidPick = false;
+	}
+
+	if (fValidPick)
+// [/RLVa:KB]
+    {
         // <FS:PP> FIRE-31135 Do not reset camera position for "click to walk"
         // gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
         static LLCachedControl<bool> sResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
@@ -1488,35 +1491,25 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				// Display the PE weight for an object if mesh is enabled
 				if (gMeshRepo.meshRezEnabled())
 				{
-					// Ansariel: What a bummer! PE is only available for
-					//           objects in the same region as you!
-					if (hover_object->getRegion() && gAgent.getRegion() &&
-						hover_object->getRegion()->getRegionID() == gAgent.getRegion()->getRegionID())
+					S32 link_cost = LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
+					if (link_cost > 0)
 					{
-						S32 link_cost = LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
-						if (link_cost > 0)
-						{
-							args.clear();
-							args["PEWEIGHT"] = llformat("%d", link_cost);
-							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
-						}
+						args.clear();
+						args["PEWEIGHT"] = llformat("%d", link_cost);
+						tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
+					}
 /// <FS:CR> Don't show loading on vanila OpenSim (some grids have it, not not vanilla) If they have it, it will
 /// show eventually
 #ifdef OPENSIM
-						else if (LLGridManager::getInstance()->isInOpenSim())
-						{
-							// Do nothing at all.
-						}
+					else if (LLGridManager::getInstance()->isInOpenSim())
+					{
+						// Do nothing at all.
+					}
 #endif
 // </FS:CR>
-						else
-						{
-							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentLoading"));
-						}
-					}
 					else
 					{
-						tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentUnavailable"));
+						tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentLoading"));
 					}
 				}
 

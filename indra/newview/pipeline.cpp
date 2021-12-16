@@ -823,19 +823,24 @@ void LLPipeline::resizeScreenTexture()
 		GLuint resY = gViewerWindow->getWorldViewHeightRaw();
 	
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+		GLuint scaledResX = resX;
+		GLuint scaledResY = resY;
 		if ( (RenderResolutionDivisor > 1) && (RenderResolutionDivisor < resX) && (RenderResolutionDivisor < resY) )
 		{
-			resX /= RenderResolutionDivisor;
-			resY /= RenderResolutionDivisor;
+			scaledResX /= RenderResolutionDivisor;
+			scaledResY /= RenderResolutionDivisor;
 		}
 		else if (RenderResolutionMultiplier > 0.f && RenderResolutionMultiplier < 1.f)
 		{
-			resX *= RenderResolutionMultiplier;
-			resY *= RenderResolutionMultiplier;
+			scaledResX *= RenderResolutionMultiplier;
+			scaledResY *= RenderResolutionMultiplier;
 		}
 // [/SL:KB]
 
-		if (gResizeScreenTexture || (resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
+//		if (gResizeScreenTexture || (resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
+// [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
+		if (gResizeScreenTexture || (scaledResX != mScreen.getWidth()) || (scaledResY != mScreen.getHeight()))
+// [/SL:KB]
 		{
 			releaseScreenBuffers();
             releaseShadowTargets();

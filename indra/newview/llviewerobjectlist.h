@@ -253,7 +253,9 @@ protected:
 
 private:
     static void reportObjectCostFailure(LLSD &objectList);
-    void fetchObjectCostsCoro(std::string url);
+    // <FS:Ansariel> FIRE-5496: Missing LI for objects outside agent's region
+    //void fetchObjectCostsCoro(std::string url);
+    void fetchObjectCostsCoro(std::string url, uuid_set_t staleObjects);
 
     static void reportPhysicsFlagFailure(LLSD &obejectList);
     void fetchPhisicsFlagsCoro(std::string url);

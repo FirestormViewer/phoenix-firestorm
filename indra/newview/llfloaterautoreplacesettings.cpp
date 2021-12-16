@@ -420,6 +420,14 @@ void LLFloaterAutoReplaceSettings::onNewList()
 bool LLFloaterAutoReplaceSettings::callbackNewListName(const LLSD& notification, const LLSD& response)
 {
 	LL_DEBUGS("AutoReplace")<<"called"<<LL_ENDL;
+
+	// <FS:Ansariel> FIRE-31256: Add Cancel button for new auto-replace list dialog
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option != 0)
+	{
+		return false;
+	}
+	// </FS:Ansariel>
 	
 	LLSD newList = notification["payload"]["list"];
 

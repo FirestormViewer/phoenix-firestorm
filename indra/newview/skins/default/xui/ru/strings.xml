@@ -38,7 +38,7 @@
 		Инициализация графики не удалась. Пожалуйста, обновите драйвер видеокарты!
 	</string>
 	<string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2].[VIEWER_VERSION_3] ([CHANNEL] [ADDRESS_SIZE]бит / [SIMD])
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]бит / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
@@ -580,9 +580,6 @@ support@secondlife.com.
 	</string>
 	<string name="TooltipPrimEquivalentЗагрузка">
 		, Загрузка влияния на землю...
-	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, влияние на землю недоступно
 	</string>
 	<string name="TooltipDistance">
 		Расстояние: [DISTANCE] м

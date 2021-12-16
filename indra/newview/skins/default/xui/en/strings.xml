@@ -299,7 +299,6 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipPrimCount">Prims: [COUNT]</string>
 	<string name="TooltipPrimEquivalent">, Land Impact: [PEWEIGHT]</string>
 	<string name="TooltipPrimEquivalentLoading">, loading Land Impact...</string>
-	<string name="TooltipPrimEquivalentUnavailable">, Land Impact unavailable</string>
 	<string name="TooltipDistance">Distance: [DISTANCE] m</string>
 	<string name="TooltipPosition">Position: [POSITION]</string>
 
@@ -2645,6 +2644,8 @@ Try enclosing path to the editor with double quotes.
 
   <!-- commands -->
 
+  <string 
+name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_AboutLand_Label">About land</string>
   <string name="Command_Appearance_Label">Appearance</string>
   <string name="Command_Avatar_Label">Avatar</string>
@@ -2711,6 +2712,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_DAO_Label">Derender Animesh</string>
   <string name="Command_Beacons_Label">Beacons</string>
 
+  <string 
+name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
   <string name="Command_Avatar_Tooltip">Choose a complete avatar</string>

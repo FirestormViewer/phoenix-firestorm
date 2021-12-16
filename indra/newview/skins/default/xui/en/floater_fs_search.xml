@@ -140,6 +140,17 @@
 		name="snapshot"
 		top_pad="4"
 		width="280"/>
+		<texture_picker
+		enabled="false"
+		fallback_image="default_land_picture.j2c"
+		follows="left|top|right"
+		height="210"
+		layout="topleft"
+		left_delta="0"
+		name="snapshot_parcel"
+		top_delta="0"
+		visible="false"
+		width="280"/>
 		<text_editor
 		left="20"
 		top_pad="2"
