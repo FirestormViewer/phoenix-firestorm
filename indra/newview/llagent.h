@@ -1036,6 +1036,8 @@ public:
 	void 			sendAgentUserInfoRequest();
 
 // IM to Email and Online visibility
+	// <FS:Ansariel> Keep this for OpenSim
+	//void			sendAgentUpdateUserInfo(const std::string& directory_visibility);
 	void			sendAgentUpdateUserInfo(bool im_to_email, const std::string& directory_visibility);
 	// <FS:Ansariel> [Legacy Bake]
 	void 			dumpSentAppearance(const std::string& dump_prefix);
@@ -1044,9 +1046,13 @@ public:
 
 private:
     void            requestAgentUserInfoCoro(std::string capurl);
+    // <FS:Ansariel> Keep this for OpenSim
+    //void            updateAgentUserInfoCoro(std::string capurl, std::string directory_visibility);
     void            updateAgentUserInfoCoro(std::string capurl, bool im_via_email, std::string directory_visibility);
     // DEPRECATED: may be removed when User Info cap propagates 
     void 			sendAgentUserInfoRequestMessage();
+    // <FS:Ansariel> Keep this for OpenSim
+    //void            sendAgentUpdateUserInfoMessage(const std::string& directory_visibility);
     void            sendAgentUpdateUserInfoMessage(bool im_via_email, const std::string& directory_visibility);
 
 	//--------------------------------------------------------------------

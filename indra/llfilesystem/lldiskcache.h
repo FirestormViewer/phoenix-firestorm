@@ -86,8 +86,6 @@ class LLDiskCache :
                      * The maximum size of the cache in bytes - Based on the
                      * setting at 'CacheSize' and 'DiskCachePercentOfTotal'
                      */
-                    // <FS:Ansariel> Fix integer overflow
-                    //const int max_size_bytes,
                     const uintmax_t max_size_bytes,
                     /**
                      * A flag that enables extra cache debugging so that
@@ -128,6 +126,13 @@ class LLDiskCache :
         /**
          * Purge the oldest items in the cache so that the combined size of all files
          * is no bigger than mMaxSizeBytes.
+         *
+         * WARNING: purge() is called by LLPurgeDiskCacheThread. As such it must
+         * NOT touch any LLDiskCache data without introducing and locking a mutex!
+         *
+         * Purging the disk cache involves nontrivial work on the viewer's
+         * filesystem. If called on the main thread, this causes a noticeable
+         * freeze.
          */
         void purge();
 
@@ -200,17 +205,12 @@ class LLDiskCache :
         std::vector<std::string> mSkipList;  // <FS:Beq/> Vector of "static" untouchable assets that should never be purged
 };
 
-// <FS:Ansariel> Regular disk cache cleanup
-class FSPurgeDiskCacheThread : public LLThread
+class LLPurgeDiskCacheThread : public LLThread
 {
 public:
-    FSPurgeDiskCacheThread();
+    LLPurgeDiskCacheThread();
 
 protected:
     void run() override;
-
-private:
-    LLTimer mTimer;
 };
-// </FS:Ansariel>
 #endif // _LLDISKCACHE

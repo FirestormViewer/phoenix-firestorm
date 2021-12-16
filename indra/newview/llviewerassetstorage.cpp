@@ -303,10 +303,7 @@ void LLViewerAssetStorage::storeAssetData(
         legacy->mUpCallback = callback;
         legacy->mUserData = user_data;
 
-        // <FS:Ansariel> Fix broken asset upload
-        //LLFileSystem file(asset_id, asset_type, LLFileSystem::WRITE);
         LLFileSystem file(asset_id, asset_type, LLFileSystem::APPEND);
-        // </FS:Ansariel>
 
         const S32 buf_size = 65536;
         U8 copy_buf[buf_size];

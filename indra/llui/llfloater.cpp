@@ -1738,7 +1738,7 @@ BOOL LLFloater::handleKeyUpHere(KEY key, MASK mask)
 		mShiftPressed = false;
 	}
 
-	return LLPanel::handleKeyHere(key, mask);
+	return LLPanel::handleKeyUpHere(key, mask);
 }
 // </FS:Ansariel>
 

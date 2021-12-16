@@ -3708,7 +3708,8 @@ BOOL LLScrollListCtrl::operateOnAll(EOperation op)
 void LLScrollListCtrl::setFocus(BOOL b)
 {
 	// for tabbing into pristine scroll lists (Finder)
-	if (!getFirstSelected())
+	//if (!getFirstSelected())
+	if (!getFirstSelected() && !getEnabled()) // <FS:LO> make disabled lists not jump to the top on clicking an element in them.
 	{
 		selectFirstItem();
 		//onCommit(); // SJB: selectFirstItem() will call onCommit() if appropriate

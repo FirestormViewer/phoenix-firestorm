@@ -1834,11 +1834,53 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 			
 			S32 offset = getLineOffsetFromDocIndex(mCursorPos);
 
-			S32 spaces_needed = SPACES_PER_TAB - (offset % SPACES_PER_TAB);
-			for( S32 i=0; i < spaces_needed; i++ )
+			// <FS:Ansariel> Allow Shift-Tab to tab-remove in text editors
+			// Modified version from removeCharOrTab()
+			if (mask & MASK_SHIFT)
 			{
-				addChar( ' ' );
+				S32 chars_to_remove = 0;
+
+				LLWString text = getWText();
+				if (mEnableTabRemove && text[mCursorPos - 1] == ' ')
+				{
+					// Try to remove a "tab"
+					S32 offset = getLineOffsetFromDocIndex(mCursorPos);
+					if (offset > 0)
+					{
+						chars_to_remove = offset % SPACES_PER_TAB;
+						if (chars_to_remove == 0)
+						{
+							chars_to_remove = SPACES_PER_TAB;
+						}
+
+						for (S32 i = 0; i < chars_to_remove; i++)
+						{
+							if (text[mCursorPos - i - 1] != ' ')
+							{
+								// Fewer than a full tab's worth of spaces, so
+								// just delete a single character.
+								chars_to_remove = 1;
+								break;
+							}
+						}
+					}
+				}
+
+				for (S32 i = 0; i < chars_to_remove; i++)
+				{
+					setCursorPos(mCursorPos - 1);
+					remove(mCursorPos, 1, FALSE);
+				}
 			}
+			else
+			{
+			// </FS:Ansariel>
+				S32 spaces_needed = SPACES_PER_TAB - (offset % SPACES_PER_TAB);
+				for (S32 i = 0; i < spaces_needed; i++)
+				{
+					addChar(' ');
+				}
+			} // <FS:Ansariel> Allow Shift-Tab to tab-remove in text editors
 		}
 		break;
 		

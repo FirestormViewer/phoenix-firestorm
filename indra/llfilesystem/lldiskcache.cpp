@@ -31,6 +31,7 @@
  */
 
 #include "linden_common.h"
+#include "llapp.h"
 #include "llassettype.h"
 #include "lldir.h"
 #include <boost/filesystem.hpp>
@@ -43,8 +44,6 @@
 static const char* subdirs = "0123456789abcdef";
 
 LLDiskCache::LLDiskCache(const std::string cache_dir,
-                         // <FS:Ansariel> Fix integer overflow
-                         //const int max_size_bytes,
                          const uintmax_t max_size_bytes,
                          const bool enable_cache_debug_info) :
     mCacheDir(cache_dir),
@@ -69,6 +68,34 @@ LLDiskCache::LLDiskCache(const std::string cache_dir,
     // </FS:Beq>
 }
 
+// WARNING: purge() is called by LLPurgeDiskCacheThread. As such it must
+// NOT touch any LLDiskCache data without introducing and locking a mutex!
+
+// Interaction through the filesystem itself should be safe. Let’s say thread
+// A is accessing the cache file for reading/writing and thread B is trimming
+// the cache. Let’s also assume using llifstream to open a file and
+// boost::filesystem::remove are not atomic (which will be pretty much the
+// case).
+
+// Now, A is trying to open the file using llifstream ctor. It does some
+// checks if the file exists and whatever else it might be doing, but has not
+// issued the call to the OS to actually open the file yet. Now B tries to
+// delete the file: If the file has been already marked as in use by the OS,
+// deleting the file will fail and B will continue with the next file. A can
+// safely continue opening the file. If the file has not yet been marked as in
+// use, B will delete the file. Now A actually wants to open it, operation
+// will fail, subsequent check via llifstream.is_open will fail, asset will
+// have to be re-requested. (Assuming here the viewer will actually handle
+// this situation properly, that can also happen if there is a file containing
+// garbage.)
+
+// Other situation: B is trimming the cache and A wants to read a file that is
+// about to get deleted. boost::filesystem::remove does whatever it is doing
+// before actually deleting the file. If A opens the file before the file is
+// actually gone, the OS call from B to delete the file will fail since the OS
+// will prevent this. B continues with the next file. If the file is already
+// gone before A finally gets to open it, this operation will fail and the
+// asset will have to be re-requested.
 void LLDiskCache::purge()
 {
     if (mEnableCacheDebugInfo)
@@ -151,15 +178,12 @@ void LLDiskCache::purge()
             {
                 del++;    // Extra accounting to track the retention of static assets
             // </FS:Beq>
-            // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
-                //boost::filesystem::remove(entry.second.second);
                 boost::filesystem::remove(entry.second.second, ec);
                 if (ec.failed())
                 {
                     LL_WARNS() << "Failed to delete cache file " << entry.second.second << ": " << ec.message() << LL_ENDL;
                 }
             }
-            // </FS:Ansariel>
         }
         else
         {
@@ -431,8 +455,6 @@ void LLDiskCache::clearCache()
             {
                 if (remove_entry.string().find(mCacheFilenamePrefix) != std::string::npos)
                 {
-                    // <FS:Ansariel> Do not crash if we cannot delete the file for some reason
-                    //boost::filesystem::remove(entry);
                     const boost::filesystem::path remove_path = remove_entry;
                     ++entry;
                     boost::filesystem::remove(remove_path, ec);
@@ -440,7 +462,6 @@ void LLDiskCache::clearCache()
                     {
                         LL_WARNS() << "Failed to delete cache file " << remove_path.string() << ": " << ec.message() << LL_ENDL;
                     }
-                    // </FS:Ansariel>
                 }
                 else
                 {
@@ -502,26 +523,17 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
     return total_file_size;
 }
 
-// <FS:Ansariel> Regular disk cache cleanup
-FSPurgeDiskCacheThread::FSPurgeDiskCacheThread() :
+LLPurgeDiskCacheThread::LLPurgeDiskCacheThread() :
     LLThread("PurgeDiskCacheThread", nullptr)
 {
 }
 
-void FSPurgeDiskCacheThread::run()
+void LLPurgeDiskCacheThread::run()
 {
-    constexpr F64 CHECK_INTERVAL = 60;
-    mTimer.setTimerExpirySec(CHECK_INTERVAL);
-    mTimer.start();
+    constexpr std::chrono::seconds CHECK_INTERVAL{60};
 
-    do
+    while (LLApp::instance()->sleep(CHECK_INTERVAL))
     {
-        if (mTimer.checkExpirationAndReset(CHECK_INTERVAL))
-        {
-            LLDiskCache::instance().purge();
-        }
-
-        ms_sleep(100);
-    } while (!isQuitting());
+        LLDiskCache::instance().purge();
+    }
 }
-// </FS:Ansariel>
