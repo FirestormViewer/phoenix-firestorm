@@ -1753,8 +1753,7 @@ void LLViewerFetchedTexture::scheduleCreateTexture()
         if (preCreateTexture())
         {
             mNeedsCreateTexture = TRUE;
-#if LL_WINDOWS //flip to 0 to revert to single-threaded OpenGL texture uploads
-            auto mainq = mMainQueue.lock();
+            auto mainq = LLImageGLThread::sEnabled ? mMainQueue.lock() : nullptr;
             if (mainq)
             {
                 mainq->postTo(
@@ -1780,7 +1779,6 @@ void LLViewerFetchedTexture::scheduleCreateTexture()
                     });
             }
             else
-#endif
             {
                 gTextureList.mCreateTextureList.insert(this);
                 unref();

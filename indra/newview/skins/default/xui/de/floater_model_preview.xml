@@ -172,7 +172,6 @@
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
-					<item name="MeshOpt" label="Pro Fläche generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_high"/>
@@ -187,7 +186,6 @@
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
-					<item name="MeshOpt" label="Pro Fläche generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
 					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
@@ -203,7 +201,6 @@
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
-					<item name="MeshOpt" label="Pro Fläche generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
 					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
@@ -219,7 +216,6 @@
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
-					<item name="MeshOpt" label="Pro Fläche generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
 					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>

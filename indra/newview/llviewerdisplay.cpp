@@ -798,21 +798,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		
 		stop_glerror();
 
-		S32 water_clip = 0;
-		if ((LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_ENVIRONMENT) > 1) &&
-			 (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_WATER) || 
-			  gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_VOIDWATER)))
-		{
-			if (camera.cameraUnderWater()) // <FS:Ansariel> Factor out calls to getInstance
-			{
-				water_clip = -1;
-			}
-			else
-			{
-				water_clip = 1;
-			}
-		}
-		
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Cull");
 		
 		//Increment drawable frame counter
@@ -833,8 +818,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		static LLCullResult result;
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-		LLPipeline::sUnderWaterRender = camera.cameraUnderWater(); // <FS:Ansariel> Factor out calls to getInstance
-		gPipeline.updateCull(camera, result, water_clip); // <FS:Ansariel> Factor out calls to getInstance
+		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
+		gPipeline.updateCull(*LLViewerCamera::getInstance(), result);
 		stop_glerror();
 
 		LLGLState::checkStates();
@@ -1255,7 +1240,7 @@ void render_hud_attachments()
 		LLSpatialGroup::sNoDelete = TRUE;
 
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-		gPipeline.updateCull(hud_cam, result, 0, NULL, true);
+		gPipeline.updateCull(hud_cam, result, NULL, true);
 
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_BUMP);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_SIMPLE);

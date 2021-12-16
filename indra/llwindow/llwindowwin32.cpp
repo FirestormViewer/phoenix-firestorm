@@ -958,49 +958,22 @@ BOOL LLWindowWin32::getFullscreen()
 
 BOOL LLWindowWin32::getPosition(LLCoordScreen *position)
 {
-	RECT window_rect;
-
-	if (!mWindowHandle ||
-		!GetWindowRect(mWindowHandle, &window_rect) ||
-		NULL == position)
-	{
-		return FALSE;
-	}
-
-	position->mX = window_rect.left;
-	position->mY = window_rect.top;
+    position->mX = mRect.left;
+	position->mY = mRect.top;
 	return TRUE;
 }
 
 BOOL LLWindowWin32::getSize(LLCoordScreen *size)
 {
-	RECT window_rect;
-
-	if (!mWindowHandle ||
-		!GetWindowRect(mWindowHandle, &window_rect) ||
-		NULL == size)
-	{
-		return FALSE;
-	}
-
-	size->mX = window_rect.right - window_rect.left;
-	size->mY = window_rect.bottom - window_rect.top;
+	size->mX = mRect.right - mRect.left;
+	size->mY = mRect.bottom - mRect.top;
 	return TRUE;
 }
 
 BOOL LLWindowWin32::getSize(LLCoordWindow *size)
 {
-	RECT client_rect;
-
-	if (!mWindowHandle ||
-		!GetClientRect(mWindowHandle, &client_rect) ||
-		NULL == size)
-	{
-		return FALSE;
-	}
-
-	size->mX = client_rect.right - client_rect.left;
-	size->mY = client_rect.bottom - client_rect.top;
+	size->mX = mClientRect.right - mClientRect.left;
+	size->mY = mClientRect.bottom - mClientRect.top;
 	return TRUE;
 }
 
@@ -1027,14 +1000,17 @@ BOOL LLWindowWin32::setSizeImpl(const LLCoordScreen size)
 		return FALSE;
 	}
 
-	WINDOWPLACEMENT placement;
-	placement.length = sizeof(WINDOWPLACEMENT);
+    mWindowThread->post([=]()
+        {
+            WINDOWPLACEMENT placement;
+            placement.length = sizeof(WINDOWPLACEMENT);
 
-	if (!GetWindowPlacement(mWindowHandle, &placement)) return FALSE;
-
-	placement.showCmd = SW_RESTORE;
-
-	if (!SetWindowPlacement(mWindowHandle, &placement)) return FALSE;
+            if (GetWindowPlacement(mWindowHandle, &placement))
+            {
+                placement.showCmd = SW_RESTORE;
+                SetWindowPlacement(mWindowHandle, &placement);
+            }
+        });
 
 	moveWindow(position, size);
 	return TRUE;
@@ -1046,7 +1022,7 @@ BOOL LLWindowWin32::setSizeImpl(const LLCoordWindow size)
 	DWORD dw_ex_style = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
 	DWORD dw_style = WS_OVERLAPPEDWINDOW;
 
-	AdjustWindowRectEx(&window_rect, dw_style, FALSE, dw_ex_style);
+    AdjustWindowRectEx(&window_rect, dw_style, FALSE, dw_ex_style);
 
 	return setSizeImpl(LLCoordScreen(window_rect.right - window_rect.left, window_rect.bottom - window_rect.top));
 }
@@ -1681,7 +1657,8 @@ void LLWindowWin32::recreateWindow(RECT window_rect, DWORD dw_ex_style, DWORD dw
     std::promise<std::pair<HWND, HDC>> promise;
     // What follows must be done on the window thread.
     auto window_work =
-        [self=mWindowThread,
+        [this,
+         self=mWindowThread,
          oldHandle,
          // bind CreateWindowEx() parameters by value instead of
          // back-referencing LLWindowWin32 members
@@ -1731,7 +1708,9 @@ void LLWindowWin32::recreateWindow(RECT window_rect, DWORD dw_ex_style, DWORD dw
                 self->mWindowHandle = handle;
                 self->mhDC = GetDC(handle);
             }
-                
+            
+            updateWindowRect();
+
             // It's important to wake up the future either way.
             promise.set_value(std::make_pair(self->mWindowHandle, self->mhDC));
             LL_DEBUGS("Window") << "recreateWindow(): window_work done" << LL_ENDL;
@@ -1870,7 +1849,10 @@ void LLWindowWin32::moveWindow( const LLCoordScreen& position, const LLCoordScre
 	// THIS CAUSES DEV-15484 and DEV-15949 
 	//ShowWindow(mWindowHandle, SW_RESTORE);
 	// NOW we can call MoveWindow
-	MoveWindow(mWindowHandle, position.mX, position.mY, size.mX, size.mY, TRUE);
+    mWindowThread->post([=]()
+        {
+            MoveWindow(mWindowHandle, position.mX, position.mY, size.mX, size.mY, TRUE);
+        });
 }
 
 void LLWindowWin32::setTitle(const std::string& title)
@@ -1878,7 +1860,11 @@ void LLWindowWin32::setTitle(const std::string& title)
     // <FS:TT>
     // TODO: Do we need to use the wide string version of this call
     // to support non-ascii usernames (and region names?)
-    //SetWindowTextA(mWindowHandle, title.c_str());
+    //mWindowThread->post([=]()
+    //    {
+    //        SetWindowTextA(mWindowHandle, title.c_str());
+    //    });
+
 
     // Set the window title
     if (title.empty())
@@ -1891,7 +1877,10 @@ void LLWindowWin32::setTitle(const std::string& title)
         mWindowTitle[255] = 0;
     }
 
-    SetWindowText(mWindowHandle, mWindowTitle);
+    mWindowThread->post([=]()
+        {
+            SetWindowText(mWindowHandle, mWindowTitle);
+        });
     // </FS:TT>
 }
 
@@ -2941,12 +2930,19 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             return 0;
         }
 
+        case WM_MOVE:
+        {
+            window_imp->updateWindowRect();
+            return 0;
+        }
         case WM_SIZE:
         {
             LL_PROFILE_ZONE_NAMED("mwp - WM_SIZE");
+            window_imp->updateWindowRect();
             S32 width = S32(LOWORD(l_param));
             S32 height = S32(HIWORD(l_param));
 
+            
             if (debug_window_proc)
             {
                 BOOL maximized = (w_param == SIZE_MAXIMIZED);
@@ -3113,12 +3109,12 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 }
             }
         }
+
         //list of messages we get often that we don't care to log about
         case WM_NCHITTEST:
         case WM_NCMOUSEMOVE:
         case WM_NCMOUSELEAVE:
         case WM_MOVING:
-        case WM_MOVE:
         case WM_WINDOWPOSCHANGING:
         case WM_WINDOWPOSCHANGED:
         break;
@@ -3357,50 +3353,53 @@ void LLWindowWin32::setMouseClipping( BOOL b )
 
 BOOL LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
 {
-	BOOL success = FALSE;
+    BOOL success = FALSE;
 
-	RECT client_rect;
-	if( mWindowHandle && GetClientRect(mWindowHandle, &client_rect) )
-	{
-		POINT top_left;
-		top_left.x = client_rect.left;
-		top_left.y = client_rect.top;
-		ClientToScreen(mWindowHandle, &top_left); 
+    RECT client_rect;
+    if (mWindowHandle && GetClientRect(mWindowHandle, &client_rect))
+    {
+        POINT top_left;
+        top_left.x = client_rect.left;
+        top_left.y = client_rect.top;
+        ClientToScreen(mWindowHandle, &top_left);
 
-		POINT bottom_right;
-		bottom_right.x = client_rect.right;
-		bottom_right.y = client_rect.bottom;
-		ClientToScreen(mWindowHandle, &bottom_right); 
+        POINT bottom_right;
+        bottom_right.x = client_rect.right;
+        bottom_right.y = client_rect.bottom;
+        ClientToScreen(mWindowHandle, &bottom_right);
 
-		SetRect( rectp,
-			top_left.x,
-			top_left.y,
-			bottom_right.x,
-			bottom_right.y );
+        SetRect(rectp,
+            top_left.x,
+            top_left.y,
+            bottom_right.x,
+            bottom_right.y);
 
-		success = TRUE;
-	}
+        success = TRUE;
+    }
 
-	return success;
+    return success;
 }
 
 void LLWindowWin32::flashIcon(F32 seconds)
 {
-	if (mWindowHandle && (GetFocus() != mWindowHandle || GetForegroundWindow() != mWindowHandle))
-	{
-		FLASHWINFO flash_info;
+    if (mWindowHandle && (GetFocus() != mWindowHandle || GetForegroundWindow() != mWindowHandle))
+    {
+        mWindowThread->post([=]()
+            {
+                FLASHWINFO flash_info;
 
-		flash_info.cbSize = sizeof(FLASHWINFO);
-		flash_info.hwnd = mWindowHandle;
-		flash_info.dwFlags = FLASHW_TRAY;
-		// <FS:Ansariel> FIRE-23498: Tray icon flash functions randomly
-		//flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
-		//flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
-		flash_info.uCount = UINT(ll_round(seconds / ICON_FLASH_TIME));
-		flash_info.dwTimeout = DWORD(ll_round(1000.f * ICON_FLASH_TIME)); // milliseconds
-		// </FS:Ansariel>
-		FlashWindowEx(&flash_info);
-	}
+                flash_info.cbSize = sizeof(FLASHWINFO);
+                flash_info.hwnd = mWindowHandle;
+                flash_info.dwFlags = FLASHW_TRAY;
+                // <FS:Ansariel> FIRE-23498: Tray icon flash functions randomly
+                //flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
+                //flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+                flash_info.uCount = UINT(ll_round(seconds / ICON_FLASH_TIME));
+                flash_info.dwTimeout = DWORD(ll_round(1000.f * ICON_FLASH_TIME)); // milliseconds
+                // </FS:Ansariel>
+                FlashWindowEx(&flash_info);
+            });
+    }
 }
 
 F32 LLWindowWin32::getGamma()
@@ -3865,13 +3864,19 @@ void *LLWindowWin32::getPlatformWindow()
 
 void LLWindowWin32::bringToFront()
 {
-	BringWindowToTop(mWindowHandle);
+    mWindowThread->post([=]()
+        {
+            BringWindowToTop(mWindowHandle);
+        });
 }
 
 // set (OS) window focus back to the client
 void LLWindowWin32::focusClient()
 {
-	SetFocus ( mWindowHandle );
+    mWindowThread->post([=]()
+        {
+            SetFocus(mWindowHandle);
+        });
 }
 
 void LLWindowWin32::allowLanguageTextInput(LLPreeditor *preeditor, BOOL b)
@@ -4722,5 +4727,23 @@ void LLWindowWin32::kickWindowThread(HWND windowHandle)
                             << ", " << WM_DUMMY_
                             << ", " << wparam << ")" << std::dec << LL_ENDL;
         PostMessage(windowHandle, WM_DUMMY_, wparam, 0x1337);
+    }
+}
+
+void LLWindowWin32::updateWindowRect()
+{
+    LL_PROFILE_ZONE_SCOPED;
+    //called from window thread
+    RECT rect;
+    RECT client_rect;
+    
+    if (GetWindowRect(mWindowHandle, &rect) &&
+        GetClientRect(mWindowHandle, &client_rect))
+    {
+        post([=] 
+            {
+                mRect = rect;
+                mClientRect = client_rect;
+            });
     }
 }

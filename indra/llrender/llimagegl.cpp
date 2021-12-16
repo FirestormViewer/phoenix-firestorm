@@ -71,8 +71,10 @@ F32 LLImageGL::sLastFrameTime			= 0.f;
 BOOL LLImageGL::sAllowReadBackRaw       = FALSE ;
 LLImageGL* LLImageGL::sDefaultGLTexture = NULL ;
 bool LLImageGL::sCompressTextures = false;
-
 std::set<LLImageGL*> LLImageGL::sImageList;
+
+
+bool LLImageGLThread::sEnabled = false;
 
 //****************************************************************************************************
 //The below for texture auditing use only
@@ -182,11 +184,15 @@ BOOL is_little_endian()
 }
 
 //static 
-void LLImageGL::initClass(LLWindow* window, S32 num_catagories, BOOL skip_analyze_alpha /* = false */)
+void LLImageGL::initClass(LLWindow* window, S32 num_catagories, BOOL skip_analyze_alpha /* = false */, bool multi_threaded /* = false */)
 {
     LL_PROFILE_ZONE_SCOPED;
 	sSkipAnalyzeAlpha = skip_analyze_alpha;
-    LLImageGLThread::createInstance(window);
+
+    if (multi_threaded)
+    {
+        LLImageGLThread::createInstance(window);
+    }
 }
 
 //static 
@@ -558,12 +564,6 @@ bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
 			return false;
 		}
 		
-		if (mTexName)
-		{
-// 			LL_WARNS() << "Setting Size of LLImageGL with existing mTexName = " << mTexName << LL_ENDL;
-			destroyGLTexture();
-		}
-
 		// pickmask validity depends on old image size, delete it
 		freePickMask();
 
@@ -1519,13 +1519,6 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
     if (mUseMipMaps)
     {
         mAutoGenMips = gGLManager.mHasMipMapGeneration;
-#if LL_DARWIN
-        // On the Mac GF2 and GF4MX drivers, auto mipmap generation doesn't work right with alpha-only textures.
-        if (gGLManager.mIsGF2or4MX && (mFormatInternal == GL_ALPHA8) && (mFormatPrimary == GL_ALPHA))
-        {
-            mAutoGenMips = FALSE;
-        }
-#endif
     }
 
     mCurrentDiscardLevel = discard_level;
@@ -2283,6 +2276,7 @@ LLImageGLThread::LLImageGLThread(LLWindow* window)
     , mWindow(window)
 {
     LL_PROFILE_ZONE_SCOPED;
+    sEnabled = true;
     mFinished = false;
 
     mContext = mWindow->createSharedContext();

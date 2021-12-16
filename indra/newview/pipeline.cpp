@@ -998,7 +998,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		if (!addDeferredAttachments(mDeferredScreen)) return false;
 	
 		GLuint screenFormat = GL_RGBA16;
-		if (gGLManager.mIsATI)
+		if (gGLManager.mIsAMD)
 		{
 			screenFormat = GL_RGBA12;
 		}
@@ -2485,7 +2485,7 @@ bool LLPipeline::getVisibleExtents(LLCamera& camera, LLVector3& min, LLVector3& 
 
 static LLTrace::BlockTimerStatHandle FTM_CULL("Object Culling");
 
-void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_clip, LLPlane* planep, bool hud_attachments)
+void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, LLPlane* planep, bool hud_attachments)
 {
 	static LLCachedControl<bool> use_occlusion(gSavedSettings,"UseOcclusion");
 	static bool can_use_occlusion = LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") 
@@ -2580,7 +2580,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, S32 water_cl
 		LLVOCachePartition* vo_part = region->getVOCachePartition();
 		if(vo_part)
 		{
-            bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe; // && 0 > water_clip
+            bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe;
 			vo_part->cull(camera, do_occlusion_cull);
 		}
 	}
@@ -9471,6 +9471,10 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
     if (LLPipeline::sWaterReflections && LLDrawPoolWater::sNeedsReflectionUpdate)
     {
+        //disable occlusion culling for reflection/refraction passes (save setting to restore later)
+        S32 occlude = LLPipeline::sUseOcclusion;
+        LLPipeline::sUseOcclusion = 0;
+
         bool skip_avatar_update = false;
         if (!isAgentAvatarValid() || gAgentCamera.getCameraAnimating() || gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK || !LLVOAvatar::sVisibleInFirstPerson)
         {
@@ -9507,21 +9511,19 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         //plane params
         LLPlane plane;
         LLVector3 pnorm;
-        S32 water_clip = 0;
-        if (!camera_is_underwater)
+
+        if (camera_is_underwater)
         {
-            //camera is above water, clip plane points up
-            pnorm.setVec(0,0,1);
-            plane.setVec(pnorm, -water_height);
-            water_clip = 1;
+            //camera is below water, cull above water
+            pnorm.setVec(0, 0, 1);
         }
         else
         {
-            //camera is below water, clip plane points down
-            pnorm = LLVector3(0,0,-1);
-            plane.setVec(pnorm, water_height);
-            water_clip = -1;
+            //camera is above water, cull below water
+            pnorm = LLVector3(0, 0, -1);
         }
+
+        plane.setVec(LLVector3(0, 0, water_height), pnorm);
 
         if (!camera_is_underwater)
         {
@@ -9620,7 +9622,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
                             LLGLUserClipPlane clip_plane(plane, mReflectionModelView, saved_projection);
                             LLGLDisable cull(GL_CULL_FACE);
-                            updateCull(camera, mReflectedObjects, -water_clip, &plane);
+                            updateCull(camera, mReflectedObjects, &plane);
                             stateSort(camera, mReflectedObjects);
                             renderGeom(camera);
                         }
@@ -9685,11 +9687,29 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                 mWaterDis.clear();
                 gGL.setColorMask(true, false);
 
-                F32 water_dist = water_height * LLPipeline::sDistortionWaterClipPlaneMargin;
+                F32 water_dist = water_height;
 
                 //clip out geometry on the same side of water as the camera w/ enough margin to not include the water geo itself,
                 // but not so much as to clip out parts of avatars that should be seen under the water in the distortion map
-                LLPlane plane(-pnorm, camera_is_underwater ? -water_height : water_dist);
+                LLPlane plane;
+
+                if (camera_is_underwater)
+                {
+                    //nudge clip plane below water to avoid visible holes in objects intersecting water surface
+                    water_dist /= LLPipeline::sDistortionWaterClipPlaneMargin;
+                    //camera is below water, clip plane points up
+                    pnorm.setVec(0, 0, -1);
+                }
+                else
+                {
+                    //nudge clip plane above water to avoid visible holes in objects intersecting water surface
+                    water_dist *= LLPipeline::sDistortionWaterClipPlaneMargin;
+                    //camera is above water, clip plane points down
+                    pnorm = LLVector3(0, 0, 1);
+                }
+
+                plane.setVec(LLVector3(0, 0, water_dist), pnorm);
+
                 LLGLUserClipPlane clip_plane(plane, saved_modelview, saved_projection);
 
                 gGL.setColorMask(true, true);
@@ -9698,7 +9718,7 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
 
                 if (reflection_detail >= WATER_REFLECT_NONE_WATER_TRANSPARENT)
                 {
-                    updateCull(camera, mRefractedObjects, water_clip, &plane);
+                    updateCull(camera, mRefractedObjects, &plane);
                     stateSort(camera, mRefractedObjects);
                     renderGeom(camera);
                 }
@@ -9741,6 +9761,9 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
         }
 
         LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
+
+        // restore occlusion culling
+        LLPipeline::sUseOcclusion = occlude;
     }
     else
     {
@@ -9848,7 +9871,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
 {
     LL_RECORD_BLOCK_TIME(FTM_SHADOW_RENDER);
 
-    //clip out geometry on the same side of water as the camera
+    //disable occlusion culling for shadow passes (save setting to restore later)
     S32 occlude = LLPipeline::sUseOcclusion;
     if (!use_occlusion)
     {

@@ -1291,7 +1291,7 @@ bool LLAppViewer::init()
 		{
 			url = LLTrans::getString("NvidiaDriverPage");
 		}
-		else if (gGLManager.mIsATI)
+		else if (gGLManager.mIsAMD)
 		{
 			url = LLTrans::getString("AMDDriverPage");
 		}

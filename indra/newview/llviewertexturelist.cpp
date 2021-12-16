@@ -1502,7 +1502,7 @@ S32Megabytes LLViewerTextureList::getMaxVideoRamSetting(bool get_recommended, fl
 		//  - it's going to be swapping constantly regardless
 		S32Megabytes max_vram(gGLManager.mVRAM);
 
-		if(gGLManager.mIsATI)
+		if(gGLManager.mIsAMD)
 		{
 			//shrink the availabe vram for ATI cards because some of them do not handel texture swapping well.
 			//<FS:TS> Add debug to not shrink
@@ -1611,12 +1611,12 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 	// </FS:Ansariel>
 
 	S32Megabytes fb_mem = llmax(VIDEO_CARD_FRAMEBUFFER_MEM, vb_mem/4);
-	//<FS:TS> The memory reported by ATI cards is actually the texture
+	//<FS:TS> The memory reported by AMD cards is actually the texture
 	//	memory in use, already corrected for the framebuffer and
 	//	VBO pools. Don't back it out a second time.
 	//mMaxResidentTexMemInMegaBytes = (vb_mem - fb_mem) ; //in MB
 	mMaxResidentTexMemInMegaBytes = vb_mem; //in MB
-	if(!gGLManager.mIsATI)
+	if(!gGLManager.mIsAMD)
 	{
 		mMaxResidentTexMemInMegaBytes -= fb_mem; //in MB
 	}
