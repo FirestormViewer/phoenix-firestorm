@@ -52,7 +52,6 @@ protected:
 	
 	LLUUID	mItemID; // Not an item id, but a playing asset id
 	bool	mDidStart;
-	LLMotion* pMotion;
 	// <FS:Ansariel> Improved animation preview
 	//LLTextBox* pAdvancedStatsTextBox;
 };

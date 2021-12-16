@@ -1391,6 +1391,7 @@ bool LLAppViewer::init()
 //	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#elif LL_DARWIN
 //	// explicitly run the system Python interpreter on SLVersionChecker.py
+//	// Keep using python2 until SLVersionChecker is converted to python3.
 //	updater.executable = "python";
 //	updater_file = "SLVersionChecker.py";
 //	updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file));
@@ -2199,6 +2200,8 @@ bool LLAppViewer::cleanup()
 
 	if (gAudiop)
 	{
+        LL_INFOS() << "Shutting down audio" << LL_ENDL;
+
         // be sure to stop the internet stream cleanly BEFORE destroying the interface to stop it.
         gAudiop->stopInternetStream();
         // shut down the streaming audio sub-subsystem first, in case it relies on not outliving the general audio subsystem.
