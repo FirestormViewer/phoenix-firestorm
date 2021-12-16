@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="Preferenze">
-	<floater.string name="email_unverified_tooltip">
-		Per abilitare l&apos;invio di IM tramite e-mail, verificare il proprio indirizzo e-mail visitando
-https://accounts.secondlife.com/change_email/
-	</floater.string>
-	<floater.string name="LoginToChange">
-		Accedi per modificare
-	</floater.string>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 	<panel name="search_panel">
 		<search_editor label="Ricerca Impostazioni" name="search_prefs_edit" tool_tip="Digita qui il termine della tua ricerca. I risultati verranno mostrati secondo la concordanza parziale o totale con il nome dell&apos;impostazione."/>
