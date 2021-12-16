@@ -5632,7 +5632,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>DoubleClickTeleport</key>
+    <key>DoubleClickTeleport</key> 
     <map>
       <key>Comment</key>
       <string>Enable double-click to teleport where allowed (afects minimap and people panel)</string>
@@ -11724,7 +11724,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-    <key>RenderHiDPI</key>
+   <key>RenderHiDPI</key>
   <map>
     <key>Comment</key>
     <string>Enable support for HiDPI displays, like Retina (MacOS X ONLY, requires restart)</string>
@@ -14723,7 +14723,7 @@ Change of this parameter will affect the layout of buttons in notification toast
             <string>Boolean</string>
         <key>Value</key>
             <integer>0</integer>
-    </map>
+    </map> 
     <key>NearbyListShowIcons</key>
     <map>
       <key>Comment</key>
@@ -17714,7 +17714,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
-  <key>RenderDelayVBUpdate</key>
+    <key>RenderDelayVBUpdate</key>
     <map>
       <key>Comment</key>
       <string>Delay vertex buffer updates until just before rendering</string>

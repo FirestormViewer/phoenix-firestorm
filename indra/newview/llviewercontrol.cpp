@@ -186,9 +186,9 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
     if (LLStartUp::getStartupState() >= STATE_STARTED)
     {
         F32 draw_distance = (F32)newvalue.asReal();
-        gAgentCamera.mDrawDistance = draw_distance;
-        LLWorld::getInstance()->setLandFarClip(draw_distance);
-        return true;
+	gAgentCamera.mDrawDistance = draw_distance;
+	LLWorld::getInstance()->setLandFarClip(draw_distance);
+	return true;
     }
     return false;
 }

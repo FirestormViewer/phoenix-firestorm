@@ -198,7 +198,7 @@ namespace {
         {
             return LLError::getEnabledLogTypesMask() & 0x04;
         }
-
+        
         LL_FORCE_INLINE std::string createBoldANSI()
         {
             std::string ansi_code;
@@ -224,10 +224,10 @@ namespace {
         LL_FORCE_INLINE std::string createANSI(const std::string& color)
         {
             std::string ansi_code;
-            ansi_code += '\033';
-            ansi_code += "[";
+            ansi_code  += '\033';
+            ansi_code  += "[";
             ansi_code += "38;5;";
-            ansi_code += color;
+            ansi_code  += color;
             ansi_code += "m";
 
             return ansi_code;
@@ -267,7 +267,7 @@ namespace {
             else
             {
                 LL_PROFILE_ZONE_NAMED("fprintf");
-                fprintf(stderr, "%s\n", message.c_str());
+                 fprintf(stderr, "%s\n", message.c_str());
             }
 #if LL_WINDOWS 
 	fflush(stderr); //Now using a buffer. flush is required. 
