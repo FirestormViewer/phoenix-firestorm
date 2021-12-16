@@ -681,7 +681,7 @@ static void settings_modify()
 	LLPipeline::sRenderDeferred = LLPipeline::sRenderTransparentWater && LLPipeline::sRenderBump && gSavedSettings.getBOOL("RenderDeferred");
 //    LLRenderTarget::sUseFBO = LLPipeline::sRenderDeferred && gSavedSettings.getBOOL("RenderAvatarVP");
 // [RLVa:KB] - @setsphere
-	LLRenderTarget::sUseFBO				= (gSavedSettings.getBOOL("RenderDeferred") && gSavedSettings.getBOOL("RenderAvatarVP")) || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
+	LLRenderTarget::sUseFBO				= (LLPipeline::sRenderDeferred && gSavedSettings.getBOOL("RenderAvatarVP")) || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
 // [/RLVa:KB]
 	LLVOSurfacePatch::sLODFactor		= gSavedSettings.getF32("RenderTerrainLODFactor");
 	LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor; //square lod factor to get exponential range of [1,4]
