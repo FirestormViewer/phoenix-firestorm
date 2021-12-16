@@ -555,7 +555,7 @@ class LLManifest(object, metaclass=LLManifestRegistry):
         Runs an external command.  
         Raises ManifestError exception if the command returns a nonzero status.
         """
-        print "Running command:", command
+        print("Running command:", command)
         sys.stdout.flush()
         try:
             subprocess.check_call(command, shell=True)
