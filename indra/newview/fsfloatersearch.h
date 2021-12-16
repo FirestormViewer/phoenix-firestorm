@@ -42,7 +42,7 @@
 #include "llscrolllistctrl.h"
 #include "lltabcontainer.h"
 
-class LLRemoteParcelInfoObserver;
+class FSSearchRemoteParcelInfoObserver;
 class LLAvatarPropertiesObserver;
 class LLGroupMgrObserver;
 class LLSearchEditor;
@@ -360,6 +360,7 @@ public:
 							 U32 eventFlags,
 							 U32 eventCover,
 							 LLVector3d eventGlobalPos);
+	void displayEventParcelImage(const LLParcelData& parcel_data);
 	void setLoadingProgress(bool started);
 
 	template <class T>
@@ -386,7 +387,10 @@ private:
 	void onBtnTeleport();
 	void onBtnMap();
 
-	LLRemoteParcelInfoObserver* mRemoteParcelObserver;
+	void regionHandleCallback(U64 region_handle, LLVector3d pos_global);
+
+	FSSearchRemoteParcelInfoObserver* mRemoteParcelObserver;
+	FSSearchRemoteParcelInfoObserver* mRemoteParcelEventLocationObserver;
 	LLAvatarPropertiesObserver* mAvatarPropertiesObserver;
 	LLGroupMgrObserver* mGroupPropertiesRequest;
 
@@ -405,6 +409,7 @@ private:
 	LLTextEditor*	mDetailAux2;
 	LLTextEditor*	mDetailLocation;
 	LLTextureCtrl*	mDetailSnapshot;
+	LLTextureCtrl*	mDetailSnapshotParcel;
 	LLIconCtrl*		mDetailMaturity;
 	LLTabContainer*	mTabContainer;
 	FSPanelProfile*	mPanelProfile;

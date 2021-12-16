@@ -89,6 +89,7 @@
 #include "llwearablelist.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
+#include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -885,6 +886,13 @@ void show_item_profile(const LLUUID& item_uuid)
 
 void show_item_original(const LLUUID& item_uuid)
 {
+    // <FS:Ansariel> Don't show if @showinv=n
+    if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV))
+    {
+        return;
+    }
+    // </FS:Ansariel>
+
     LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
     if (!floater_inventory)
     {

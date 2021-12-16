@@ -281,6 +281,11 @@
 		scale.right="144"
 		scale.bottom="3" />
 
+	<!-- FS:Zi: FIRE-29572 - Add icon to currently playing animation in the FS AO -->
+	<texture name="FSAO_Animation_Playing" file_name="widgets/ScrollArrow_Right.png" preload="false" />
+	<texture name="FSAO_Animation_Stopped" file_name="legacy/inv_item_animation.tga" preload="false" />
+	<!-- END FS:Zi: FIRE-29572 -->
+
 	<!-- Direct delivery icon for Received Items folder -->
 	<texture name="Inv_InboxOpen"   file_name="legacy/inv_folder_plain_open.tga" />
 	<texture name="Inv_InboxClosed"   file_name="legacy/inv_folder_plain_closed.tga" />

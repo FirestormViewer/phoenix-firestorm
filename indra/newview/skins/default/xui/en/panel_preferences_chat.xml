@@ -1126,10 +1126,38 @@
 		 height="18"
 		 label="Email me IMs when I'm offline ([EMAIL])"
 		 name="send_im_to_email" />
+		<text
+		 font="SansSerifSmall"
+		 follows="left|top"
+		 height="18"
+		 layout="topleft"
+		 left_delta="5"
+		 length="1"
+		 name="email_settings"
+		 skip_link_underline="true"
+		 top_delta="5"
+		 type="string"
+		 width="400">
+		 [https://accounts.secondlife.com/change_email Open email notification settings for offline IMs]
+		</text>
+		<text
+		 font="SansSerifSmall"
+		 follows="left|top"
+		 height="18"
+		 layout="topleft"
+		 length="1"
+		 name="email_settings_login_to_change"
+		 skip_link_underline="true"
+		 top_delta="0"
+		 type="string"
+		 width="400">
+		 Login to change offline IMs to Email settings
+		</text>
 		<check_box
 		 layout="topleft"
 		 follows="left|top"
 		 top_pad="-1"
+		 left_delta="-5"
 		 width="400"
 		 height="18"
 		 name="FSShowIMInChatHistory"

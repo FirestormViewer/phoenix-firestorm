@@ -1790,7 +1790,9 @@ void LLWindowSDL::gatherInput()
 		    if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
 			    SDLReallyCaptureInput(TRUE);
 
-		    if (event.key.keysym.unicode)
+			// <FS:Zi> FIRE-11512 - Fix accelerator keys sometimes typing things into text entry fields, like alt+h, ctrl+shift+1 ...
+		    // if (event.key.keysym.unicode)
+		    if ((gKeyboard->currentMask(false) & (MASK_ALT | MASK_CONTROL)) == 0 && event.key.keysym.unicode)
 		    {
 			    handleUnicodeUTF16(event.key.keysym.unicode,
 					       gKeyboard->currentMask(FALSE));

@@ -7,7 +7,7 @@
 		Limit FPS: [FPSCAP] fps
 	</floater.string>
 	<floater.string name="tuning_fps">
-		Strojenie do [FPSTARGET] fps
+		Cel: [FPSTARGET] fps
 	</floater.string>
 	<floater.string name="focus_fps">
 		W tle

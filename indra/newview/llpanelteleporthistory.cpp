@@ -50,6 +50,8 @@
 #include <boost/algorithm/string/replace.hpp>
 //</FS:Beq>
 #include "llviewercontrol.h"
+#include "rlvactions.h"
+#include "rlvhandler.h"
 
 #include "fsfloaterplacedetails.h"
 
@@ -673,9 +675,9 @@ void LLTeleportHistoryPanel::updateVerbs()
 
 	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
 
-	mTeleportBtn->setEnabled(NULL != itemp);
+	mTeleportBtn->setEnabled(NULL != itemp && RlvActions::canTeleportToLocation());
 	mShowProfile->setEnabled(NULL != itemp);
-	mShowOnMapBtn->setEnabled(NULL != itemp);
+	mShowOnMapBtn->setEnabled(NULL != itemp && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
 	// </FS:Ansariel>
 }
 
@@ -1318,6 +1320,17 @@ bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const
             return false;
         }
         LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+        // <FS:Ansariel> RLVa fix
+        if ("teleport" == command_name)
+        {
+            return itemp && RlvActions::canTeleportToLocation();
+        }
+        else if ("show_on_map" == command_name)
+        {
+            return itemp && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP);
+        }
+        // </FS:Ansariel>
+
         return itemp != NULL;
     }
 

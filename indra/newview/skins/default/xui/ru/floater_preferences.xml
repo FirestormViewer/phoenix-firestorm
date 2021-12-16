@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="Настройки">
-	<floater.string name="LoginToChange">
-		Войдите для изменений
-	</floater.string>
 	<button label="Применить" label_selected="Применить" name="Apply"/>
 	<button label="Отменить" label_selected="Отменить" name="Cancel"/>
 	<panel name="search_panel">

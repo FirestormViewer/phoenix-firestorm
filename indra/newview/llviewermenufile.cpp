@@ -683,6 +683,47 @@ class LLFileCloseWindow : public view_listener_t
 	}
 };
 
+// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
+class FSFileEnableCloseWindowGroup : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool frontmost_fl_exists = (NULL != gFloaterView->getFrontmostClosableFloater());
+		bool frontmost_snapshot_fl_exists = (NULL != gSnapshotFloaterView->getFrontmostClosableFloater());
+
+		return !LLNotificationsUI::LLToast::isAlertToastShown() && (frontmost_fl_exists || frontmost_snapshot_fl_exists);
+	}
+};
+
+class FSFileCloseWindowGroup : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool frontmost_fl_exists = (NULL != gFloaterView->getFrontmostClosableFloater());
+		LLFloater* snapshot_floater = gSnapshotFloaterView->getFrontmostClosableFloater();
+
+		if (snapshot_floater && (!frontmost_fl_exists || snapshot_floater->hasFocus()))
+		{
+			snapshot_floater->closeFloater();
+			if (gFocusMgr.getKeyboardFocus() == NULL)
+			{
+				gFloaterView->focusFrontFloater();
+			}
+		}
+		else
+		{
+			auto floaterlist = LLFloaterReg::getAllFloatersInGroup(gFloaterView->getFrontmostClosableFloater());
+			for (auto floater : floaterlist)
+			{
+				floater->closeFloater();
+			}
+		}
+		if (gMenuHolder) gMenuHolder->hideMenus();
+		return true;
+	}
+};
+// </FS:Ansariel>
+
 class LLFileEnableCloseAllWindows : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -1151,6 +1192,11 @@ void init_menu_file()
 	// <FS:Ansariel> FIRE-30632: Bulk Windlight import
 	view_listener_t::addCommit(new FSFileImportWindlightBulk(), "File.ImportWindlightBulk");
 	view_listener_t::addEnable(new FSFileEnableImportWindlightBulk(), "File.EnableImportWindlightBulk");
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
+	view_listener_t::addCommit(new FSFileCloseWindowGroup(), "File.CloseWindowGroup");
+	view_listener_t::addEnable(new FSFileEnableCloseWindowGroup(), "File.EnableCloseWindowGroup");
 	// </FS:Ansariel>
 
 	// "File.SaveTexture" moved to llpanelmaininventory so that it can be properly handled.

@@ -177,8 +177,8 @@
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 для сильного затухания, 1 для отключения затухания" name="FSIMChatHistoryFade"/>
 			<check_box name="FSShowMessageCountInWindowTitle" label="Показать кол-во непрочитанных ЛС в заголовке окна Firestorm"/>
-			<check_box name="FSAnnounceIncomingIM" label="Сообщить мне о новых IM, как только отправитель начинает писать"/>
-			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Мигание вкладок IM, когда ваши друзья 'в сети' или 'не в сети'"/>
+			<check_box name="FSAnnounceIncomingIM" label="Сообщить мне о новых ЛС, как только отправитель начинает писать"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Мигание вкладок ЛС, когда ваши друзья 'в сети' или 'не в сети'"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="Мигание вкладки общего чата при поступлении сообщений" tool_tip="Мерцание вкладки общего чата при поступлении новых сообщений. Необходимо, чтоб вкладка общего чата была прикреплена к общему окну разговоров"/>
 			<check_box name="FSNotifyIMFlash" label="Мигание вкладки ЛС при поступлении новых сообщений" tool_tip="Мигание вкладки ЛС при поступлении новых сообщений. Необходимо, чтоб вкладка ЛС была прикреплена к общему окну разговоров"/>
 			<check_box name="FSReportMutedGroupChat" label="Сообщить отключеный групповой чат в общий чат"/>

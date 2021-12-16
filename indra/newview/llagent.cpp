@@ -3471,10 +3471,7 @@ bool LLAgent::requestGetCapability(const std::string &capName, httpCallback_t cb
 {
     std::string url;
 
-    // <FS:Ansariel> FIRE-21323: Crashfix
-    //url = getRegion()->getCapability(capName);
-    url = getRegion() ? getRegion()->getCapability(capName) : "";
-    // </FS:Ansariel>
+    url = getRegionCapability(capName);
 
     if (url.empty())
     {
@@ -5448,11 +5445,22 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 	{
 		std::vector<LLUUID> anim_ids;
 
+		// <FS:Zi> assume we need to restore the default standing animation
+		bool restore_stand_animation = true;
+
 		for ( LLVOAvatar::AnimIterator anim_it =
 			      gAgentAvatarp->mPlayingAnimations.begin();
 		      anim_it != gAgentAvatarp->mPlayingAnimations.end();
 		      anim_it++)
 		{
+			// <FS:Zi> don't restore stand animation when ground sitting because it is not needed
+			// and an AO would not play a standing animation on top of the ground sit
+			if (anim_it->first == ANIM_AGENT_SIT_GROUND_CONSTRAINED)
+			{
+				restore_stand_animation = false;
+			}
+			// </FS:Zi>
+
 			if ((anim_it->first == ANIM_AGENT_DO_NOT_DISTURB)||
 				(anim_it->first == ANIM_AGENT_SIT_GROUND_CONSTRAINED))
 			{
@@ -5492,7 +5500,14 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 
 		// re-assert at least the default standing animation, because
 		// viewers get confused by avs with no associated anims.
-		sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+
+		// <FS:Zi> Only restore stand animation when the avatar was not sitting on ground
+		// sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+		if (restore_stand_animation)
+		{
+			sendAnimationRequest(ANIM_AGENT_STAND, ANIM_REQUEST_START);
+		}
+		// </FS:Zi>
 
 		// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 		if (gSavedSettings.getBOOL("FSPlayDefaultBentoAnimation"))
@@ -5650,27 +5665,31 @@ void LLAgent::requestAgentUserInfoCoro(std::string capurl)
         return;
     }
 
-    bool im_via_email;
-    bool is_verified_email;
     std::string email;
     std::string dir_visibility;
 
-    im_via_email = result["im_via_email"].asBoolean();
-    is_verified_email = result["is_verified"].asBoolean();
+    // <FS:Ansariel> Keep this for OpenSim
+    bool im_via_email = false;
+    if (!LLGridManager::instance().isInSecondLife())
+    {
+        im_via_email = result["im_via_email"].asBoolean();
+    }
+    // </FS:Ansariel>
     email = result["email"].asString();
     dir_visibility = result["directory_visibility"].asString();
 
     // TODO: This should probably be changed.  I'm not entirely comfortable 
     // having LLAgent interact directly with the UI in this way.
-    // <FS:Ansariel> Show email address in preferences (FIRE-1071)
-    //LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, is_verified_email);
-    LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, is_verified_email, email);
+    // <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep IM to email setting for OpenSim
+    //LLFloaterPreference::updateUserInfo(dir_visibility);
+    LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, email);
     // </FS:Ansariel>
     LLFloaterSnapshot::setAgentEmail(email);
 }
 
-void LLAgent::sendAgentUpdateUserInfo(bool im_via_email, const std::string& directory_visibility)
-{
+// <FS:Ansariel> Keep this for OpenSim
+//void LLAgent::sendAgentUpdateUserInfo(const std::string& directory_visibility)
+void LLAgent::sendAgentUpdateUserInfo(bool im_via_email, const std::string& directory_visibility){
     std::string cap;
 
     if (getID().isNull())
@@ -5682,15 +5701,21 @@ void LLAgent::sendAgentUpdateUserInfo(bool im_via_email, const std::string& dire
     if (!cap.empty())
     {
         LLCoros::instance().launch("updateAgentUserInfoCoro",
+            // <FS:Ansariel> Keep this for OpenSim
+            //boost::bind(&LLAgent::updateAgentUserInfoCoro, this, cap, directory_visibility));
             boost::bind(&LLAgent::updateAgentUserInfoCoro, this, cap, im_via_email, directory_visibility));
     }
     else
     {
+        // <FS:Ansariel> Keep this for OpenSim
+        //sendAgentUpdateUserInfoMessage(directory_visibility);
         sendAgentUpdateUserInfoMessage(im_via_email, directory_visibility);
     }
 }
 
 
+// <FS:Ansariel> Keep this for OpenSim
+//void LLAgent::updateAgentUserInfoCoro(std::string capurl, std::string directory_visibility)
 void LLAgent::updateAgentUserInfoCoro(std::string capurl, bool im_via_email, std::string directory_visibility)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
@@ -5702,8 +5727,11 @@ void LLAgent::updateAgentUserInfoCoro(std::string capurl, bool im_via_email, std
 
     httpOpts->setFollowRedirects(true);
     LLSD body(LLSDMap
-        ("dir_visibility",  LLSD::String(directory_visibility))
-        ("im_via_email",    LLSD::Boolean(im_via_email)));
+        ("dir_visibility",  LLSD::String(directory_visibility)));
+
+    // <FS:Ansariel> Keep this for OpenSim
+    if (!LLGridManager::instance().isInSecondLife())
+        body.insert("im_via_email", LLSD::Boolean(im_via_email));
 
     LLSD result = httpAdapter->postAndSuspend(httpRequest, capurl, body, httpOpts, httpHeaders);
 
@@ -5731,6 +5759,8 @@ void LLAgent::sendAgentUserInfoRequestMessage()
     sendReliableMessage();
 }
 
+// <FS:Ansariel> Keep this for OpenSim
+//void LLAgent::sendAgentUpdateUserInfoMessage(const std::string& directory_visibility)
 void LLAgent::sendAgentUpdateUserInfoMessage(bool im_via_email, const std::string& directory_visibility)
 {
     gMessageSystem->newMessageFast(_PREHASH_UpdateUserInfo);
@@ -5738,7 +5768,10 @@ void LLAgent::sendAgentUpdateUserInfoMessage(bool im_via_email, const std::strin
     gMessageSystem->addUUIDFast(_PREHASH_AgentID, getID());
     gMessageSystem->addUUIDFast(_PREHASH_SessionID, getSessionID());
     gMessageSystem->nextBlockFast(_PREHASH_UserData);
-    gMessageSystem->addBOOLFast(_PREHASH_IMViaEMail, im_via_email);
+    // <FS:Ansariel> Keep this for OpenSim
+    if (!LLGridManager::instance().isInSecondLife())
+        gMessageSystem->addBOOLFast(_PREHASH_IMViaEMail, im_via_email);
+    // </FS:Ansariel>
     gMessageSystem->addString("DirectoryVisibility", directory_visibility);
     gAgent.sendReliableMessage();
 

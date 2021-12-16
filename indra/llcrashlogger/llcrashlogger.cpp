@@ -726,7 +726,7 @@ bool LLCrashLogger::init()
 #if LL_WINDOWS
 		Sleep(1000);
 #else
-        sleep(1);
+        ::sleep(1);
 #endif 
         locked = mKeyMaster.checkMaster();
     }
