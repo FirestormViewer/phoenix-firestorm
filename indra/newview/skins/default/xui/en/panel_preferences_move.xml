@@ -546,15 +546,15 @@
          increment="0.5"
          initial_value="0.00"
          layout="topleft"
-         label_width="150"
-         label="Avatar Rotation Turn Speed"
+         label_width="170"
+         label="Avatar Rotation Turn Speed:"
          top_pad="2"
          max_val="100.0"
          min_val="0.0"
          name="av_turn_spd"
-         tool_tip="Alters the rate at which your avatar responds to turning. 0-100 as estimated percentage of max turn rate. High values will be snappy/jerky"
+         tool_tip="Alters the rate at which your avatar responds to turning. 0-100 as estimated percentage of max turn rate. 0 is default. High values will be snappy/jerky"
          show_text="true"
-         width="275" />
+         width="320" />
         <text
          follows="left|top"
          type="string"

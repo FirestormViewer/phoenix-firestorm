@@ -254,7 +254,7 @@
 		<menu_item_call label="Rejoindre un groupe d'aide Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Horaires des classes Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Calendrier des évènements Firestorm" name="Firestorm Events Calendar"/>
-		<menu_item_call label="Guide" name="How To"/>
+		<menu_item_check label="Guide" name="How To"/>
 		<menu_item_call label="Aide [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="À propos de [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_check label="Consulter l'état de la grille" name="Grid Status"/>

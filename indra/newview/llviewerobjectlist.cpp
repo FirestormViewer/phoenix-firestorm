@@ -1152,23 +1152,63 @@ void LLViewerObjectList::fetchObjectCosts()
 	// issue http request for stale object physics costs
 	if (!mStaleObjectCost.empty())
 	{
-		LLViewerRegion* regionp = gAgent.getRegion();
+		// <FS:Ansariel> FIRE-5496: Missing LI for objects outside agent's region
+		//LLViewerRegion* regionp = gAgent.getRegion();
 
-		if (regionp)
+		//if (regionp)
+		//{
+		//	std::string url = regionp->getCapability("GetObjectCost");
+
+		//	if (!url.empty())
+		//	{
+  //              LLCoros::instance().launch("LLViewerObjectList::fetchObjectCostsCoro",
+  //                  boost::bind(&LLViewerObjectList::fetchObjectCostsCoro, this, url));
+		//	}
+		//	else
+		//	{
+		//		mStaleObjectCost.clear();
+		//		mPendingObjectCost.clear();
+		//	}
+		//}
+
+		std::map<LLViewerRegion*, uuid_set_t> regionObjectMap{};
+
+		// Swap it for thread safety since we're going to iterate over it
+		uuid_set_t staleObjectCostIds{};
+		staleObjectCostIds.swap(mStaleObjectCost);
+
+		for (const auto& staleObjectId : staleObjectCostIds)
 		{
-			std::string url = regionp->getCapability("GetObjectCost");
+			LLViewerObject* staleObject = findObject(staleObjectId);
+			if (staleObject && staleObject->getRegion())
+			{
+				if (regionObjectMap.find(staleObject->getRegion()) == regionObjectMap.end())
+				{
+					regionObjectMap.insert(std::make_pair(staleObject->getRegion(), uuid_set_t()));
+				}
+
+				regionObjectMap[staleObject->getRegion()].insert(staleObjectId);
+			}
+		}
+
+		for (auto region : regionObjectMap)
+		{
+			std::string url = region.first->getCapability("GetObjectCost");
 
 			if (!url.empty())
 			{
-                LLCoros::instance().launch("LLViewerObjectList::fetchObjectCostsCoro",
-                    boost::bind(&LLViewerObjectList::fetchObjectCostsCoro, this, url));
+				LLCoros::instance().launch("LLViewerObjectList::fetchObjectCostsCoro",
+					boost::bind(&LLViewerObjectList::fetchObjectCostsCoro, this, url, region.second));
 			}
 			else
 			{
-				mStaleObjectCost.clear();
-				mPendingObjectCost.clear();
+				for (const auto& objectId : region.second)
+				{
+					mPendingObjectCost.erase(objectId);
+				}
 			}
 		}
+		// </FS:Ansariel>
 	}
 }
 
@@ -1183,7 +1223,9 @@ void LLViewerObjectList::reportObjectCostFailure(LLSD &objectList)
 }
 
 
-void LLViewerObjectList::fetchObjectCostsCoro(std::string url)
+// <FS:Ansariel> FIRE-5496: Missing LI for objects outside agent's region
+//void LLViewerObjectList::fetchObjectCostsCoro(std::string url)
+void LLViewerObjectList::fetchObjectCostsCoro(std::string url, uuid_set_t staleObjects)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
@@ -1194,11 +1236,16 @@ void LLViewerObjectList::fetchObjectCostsCoro(std::string url)
 
     uuid_set_t diff;
 
-    std::set_difference(mStaleObjectCost.begin(), mStaleObjectCost.end(),
-        mPendingObjectCost.begin(), mPendingObjectCost.end(), 
-        std::inserter(diff, diff.begin()));
+    // <FS:Ansariel> FIRE-5496: Missing LI for objects outside agent's region
+    //std::set_difference(mStaleObjectCost.begin(), mStaleObjectCost.end(),
+    //    mPendingObjectCost.begin(), mPendingObjectCost.end(), 
+    //    std::inserter(diff, diff.begin()));
 
-    mStaleObjectCost.clear();
+    //mStaleObjectCost.clear();
+    std::set_difference(staleObjects.begin(), staleObjects.end(),
+        mPendingObjectCost.begin(), mPendingObjectCost.end(),
+        std::inserter(diff, diff.begin()));
+    // </FS:Ansariel>
 
     if (diff.empty())
     {
@@ -1265,7 +1312,7 @@ void LLViewerObjectList::fetchObjectCostsCoro(std::string url)
 
             // <FS:Cron> area search
             // Update area search to have current information.
-            FSAreaSearch* area_search_floater = LLFloaterReg::getTypedInstance<FSAreaSearch>("area_search");
+            FSAreaSearch* area_search_floater = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
             if (area_search_floater)
             {
                 area_search_floater->updateObjectCosts(objectId, objectCost, linkCost, physicsCost, linkPhysicsCost);
