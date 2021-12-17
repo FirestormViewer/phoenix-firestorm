@@ -3383,7 +3383,7 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
     static LLCachedControl<F32> NAME_SHOW_TIME(gSavedSettings, "RenderNameShowTime"); // seconds
     static LLCachedControl<F32> FADE_DURATION(gSavedSettings, "RenderNameFadeDuration"); // seconds
     static LLCachedControl<bool> use_chat_bubbles(gSavedSettings, "UseChatBubbles");
-    static LLCachedControl<bool> useTypingBubbles(gSavedSettings, "UseTypingBubbles");
+    static LLCachedControl<bool> use_typing_bubbles(gSavedSettings, "UseTypingBubbles");
 
 // [RLVa:KB] - Checked: RLVa-2.0.1
 	bool fRlvShowAvTag = true, fRlvShowAvName = true;
@@ -3393,8 +3393,8 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 		fRlvShowAvName = (fRlvShowAvTag) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, getID()));
 	}
 // [/RLVa:KB]
-	bool visible_chat = useChatBubbles && (mChats.size() || mTyping);
-	bool visible_typing = useTypingBubbles && mTyping;
+	bool visible_chat = use_chat_bubbles && (mChats.size() || mTyping);
+	bool visible_typing = use_typing_bubbles && mTyping;
 	bool render_name =	visible_chat ||
 				visible_typing ||
 // [RLVa:KB] - Checked: RLVa-2.0.1
