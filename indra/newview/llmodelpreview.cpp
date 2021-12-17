@@ -1495,8 +1495,8 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
         LLVector4a::memcpyNonAliased16((F32*)(combined_normals + combined_positions_shift), (F32*)face.mNormals, copy_bytes);
 
         // tex coords
-        copy_bytes = (face.mNumVertices * sizeof(LLVector2) + 0xF) & ~0xF;
-        LLVector4a::memcpyNonAliased16((F32*)(combined_tex_coords + combined_positions_shift), (F32*)face.mTexCoords, copy_bytes);
+        copy_bytes = face.mNumVertices * sizeof(LLVector2);
+        memcpy((void*)(combined_tex_coords + combined_positions_shift), (void*)face.mTexCoords, copy_bytes);
 
         combined_positions_shift += face.mNumVertices;
 
@@ -1922,15 +1922,6 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                     {
                         genMeshOptimizerPerFace(base, target_model, face_idx, indices_decimator, lod_error_threshold, false);
                     }
-                }
-            }
-            
-            if (model_meshopt_mode == MESH_OPTIMIZER)
-            {
-                // Run meshoptimizer for each face
-                for (U32 face_idx = 0; face_idx < base->getNumVolumeFaces(); ++face_idx)
-                {
-                    genMeshOptimizerPerFace(base, target_model, face_idx, indices_decimator, lod_error_threshold, false);
                 }
             }
 
