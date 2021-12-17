@@ -613,6 +613,18 @@
         <string>cubemaptoequirectangular</string>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>eb62a7040c7579569e06e5a61a7831d5</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/cubemaptoequirectangular-1.1.0-linux64-213500938.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1707,6 +1719,18 @@
         <string>jpegencoderbasic</string>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>fd8060aa3c920e0fc63e7ecbea67bc5e</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/jpegencoderbasic-1.0-linux64-213500937.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3287,6 +3311,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>threejs</string>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>d37be064bd851276dab423d723cb9b7d</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/threejs-0.132.2-linux64-213500940.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
