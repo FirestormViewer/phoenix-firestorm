@@ -97,9 +97,9 @@ public:
 	/*virtual*/ void changed(const LLUUID& session_id, U32 mask) {};
 
 	// static data update, called from message handler
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//static void updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email);
-	static void updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep for OpenSim
+	//static void updateUserInfo(const std::string& visibility);
+	static void updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 
 	// refresh all the graphics preferences menus
 	static void refreshEnabledGraphics();
@@ -228,9 +228,9 @@ public:
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
 	void enableHistory();
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//void setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email);
-	void setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep for OpenSim
+	//void setPersonalInfo(const std::string& visibility);
+	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
 	// <FS:Ansariel> Improved graphics preferences
@@ -306,6 +306,7 @@ private:
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
 	bool mGotPersonalInfo;
+	// <FS:Ansariel> Keep it for OpenSim
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
 	bool mAvatarDataInitialized;

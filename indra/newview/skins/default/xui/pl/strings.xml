@@ -544,9 +544,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipPrimEquivalentLoading">
 		, sprawdzanie wpływu na działkę...
 	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, wpływ na działkę niedostępny
-	</string>
 	<string name="TooltipDistance">
 		Odległość: [DISTANCE] m
 	</string>
@@ -5201,6 +5198,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="ParticleHiding">
 		Ukryj cząsteczki
 	</string>
+	<string name="Command_360_Capture_Label">
+		Zdjęcie 360°
+	</string>
 	<string name="Command_AboutLand_Label">
 		O działce
 	</string>
@@ -5377,6 +5377,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Beacons_Label">
 		Emitery
+	</string>
+	<string name="Command_360_Capture_Tooltip">
+		Uchwyć równoprostokątny obraz 360°
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
