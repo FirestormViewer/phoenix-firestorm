@@ -426,6 +426,7 @@ std::string LLFloaterPreference::sSkin = "";
 LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	: LLFloater(key),
 	mGotPersonalInfo(false),
+	// <FS:Ansariel> Keep this for OpenSim
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
 	mAvatarDataInitialized(false),
@@ -748,7 +749,11 @@ BOOL LLFloaterPreference::postBuild()
 	// </FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
 
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setEnabled(FALSE);
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setVisible(FALSE);
+	childSetVisible("email_settings", false);
+	childSetEnabled("email_settings", false);
+	childSetVisible("email_settings_login_to_change", true);
 
 	// <FS:Kadah> Load the list of font settings
 	populateFontSelectionCombo();
@@ -969,9 +974,12 @@ void LLFloaterPreference::apply()
 	
 	if (mGotPersonalInfo)
 	{ 
+		// <FS:Ansariel> Keep this for OpenSim
 		bool new_im_via_email = getChild<LLUICtrl>("send_im_to_email")->getValue().asBoolean();
 		bool new_hide_online = getChild<LLUICtrl>("online_visibility")->getValue().asBoolean();		
 	
+		// <FS:Ansariel> Keep this for OpenSim
+		//if (new_hide_online != mOriginalHideOnlineStatus)
 		if ((new_im_via_email != mOriginalIMViaEmail)
 			||(new_hide_online != mOriginalHideOnlineStatus))
 		{
@@ -987,6 +995,8 @@ void LLFloaterPreference::apply()
 			 //Update showonline value, otherwise multiple applys won't work
 				mOriginalHideOnlineStatus = new_hide_online;
 			}
+			// <FS:Ansariel> Keep this for OpenSim
+			//gAgent.sendAgentUpdateUserInfo(mDirectoryVisibility);
 			gAgent.sendAgentUpdateUserInfo(new_im_via_email,mDirectoryVisibility);
 		}
 	}
@@ -1553,16 +1563,16 @@ void LLFloaterPreference::onBtnCancel(const LLSD& userdata)
 }
 
 // static 
-// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-//void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email)
-void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email)
+// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep it for OpenSim
+//void LLFloaterPreference::updateUserInfo(const std::string& visibility)
+void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email)
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 	if (instance)
 	{
-		// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-        //instance->setPersonalInfo(visibility, im_via_email, is_verified_email);
-		instance->setPersonalInfo(visibility, im_via_email, is_verified_email, email);
+		// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep it for OpenSim
+        //instance->setPersonalInfo(visibility);
+		instance->setPersonalInfo(visibility, im_via_email, email);
 	}
 }
 
@@ -2668,12 +2678,13 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
 	return true;
 }
 
-// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-//void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email)
-void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email)
+// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep it for OpenSim
+//void LLFloaterPreference::setPersonalInfo(const std::string& visibility)
+void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email)
 // </FS:Ansariel> Show email address in preferences (FIRE-1071)
 {
 	mGotPersonalInfo = true;
+	// <FS:Ansariel> Keep this for OpenSim
 	mOriginalIMViaEmail = im_via_email;
 	mDirectoryVisibility = visibility;
 	
@@ -2696,16 +2707,6 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChildView("friends_online_notify_checkbox")->setEnabled(TRUE);
 	getChild<LLUICtrl>("online_visibility")->setValue(mOriginalHideOnlineStatus); 	 
 	getChild<LLUICtrl>("online_visibility")->setLabelArg("[DIR_VIS]", mDirectoryVisibility);
-	getChildView("send_im_to_email")->setEnabled(is_verified_email);
-
-    std::string tooltip;
-    if (!is_verified_email)
-        tooltip = getString("email_unverified_tooltip");
-
-    getChildView("send_im_to_email")->setToolTip(tooltip);
-
-    // *TODO: Show or hide verify email text here based on is_verified_email
-    getChild<LLUICtrl>("send_im_to_email")->setValue(im_via_email);
 	getChildView("favorites_on_login_check")->setEnabled(TRUE);
 	//getChildView("log_path_button")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
 	getChildView("chat_font_size")->setEnabled(TRUE);
@@ -2722,15 +2723,29 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	{
 		getChildView("reset_logpath")->setEnabled(TRUE);
 	}
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	std::string display_email(email);
-	if(display_email.size() > 30)
+	// <FS:Ansariel> Keep this for OpenSim
+	if (LLGridManager::instance().isInSecondLife())
 	{
-		display_email.resize(30);
-		display_email += "...";
+		childSetEnabled("email_settings", true);
+		childSetVisible("email_settings", true);
 	}
-	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
-	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
+	else
+	{
+		std::string display_email(email);
+		if (display_email.size() > 30)
+		{
+			display_email.resize(30);
+			display_email += "...";
+		}
+
+		LLCheckBoxCtrl* send_im_to_email = getChild<LLCheckBoxCtrl>("send_im_to_email");
+		send_im_to_email->setVisible(TRUE);
+		send_im_to_email->setEnabled(TRUE);
+		send_im_to_email->setValue(im_via_email);
+		send_im_to_email->setLabelArg("[EMAIL]", display_email);
+	}
+	childSetVisible("email_settings_login_to_change", false);
+	// </FS:Ansariel>
 
 	// <FS:Ansariel> FIRE-420: Show end of last conversation in history
 	getChildView("LogShowHistory")->setEnabled(TRUE);

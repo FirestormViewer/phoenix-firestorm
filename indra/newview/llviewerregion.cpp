@@ -3189,6 +3189,8 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	AISAPI::getCapNames(capabilityNames);
 	} //</FS:Ansariel>
 
+	capabilityNames.append("InterestList");
+
 	capabilityNames.append("GetDisplayNames");
 	capabilityNames.append("GetExperiences");
 	capabilityNames.append("AgentExperiences");

@@ -4697,6 +4697,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 				{
 					LLColor4 color(0.f,1.f,0.f,1.f);
 					gPipeline.addDebugBlip(objectp->getPositionAgent(), color);
+					LL_DEBUGS("MessageBlip") << "Kill blip for local " << local_id << " at " << objectp->getPositionAgent() << LL_ENDL;
 				}
 
 				// Do the kill
@@ -8138,17 +8139,20 @@ void process_user_info_reply(LLMessageSystem* msg, void**)
 				<< "wrong agent id." << LL_ENDL;
 	}
 	
-	BOOL im_via_email;
-	msg->getBOOLFast(_PREHASH_UserData, _PREHASH_IMViaEMail, im_via_email);
+	// <FS:Ansariel> Keep this for OpenSim
+	BOOL im_via_email = FALSE;
+	if (!LLGridManager::instance().isInSecondLife())
+		msg->getBOOLFast(_PREHASH_UserData, _PREHASH_IMViaEMail, im_via_email);
+	// </FS:Ansariel>
 	std::string email;
 	msg->getStringFast(_PREHASH_UserData, _PREHASH_EMail, email);
 	std::string dir_visibility;
 	msg->getString( "UserData", "DirectoryVisibility", dir_visibility);
 
     // For Message based user info information the is_verified is assumed to be false.
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, false);   
-	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, !LLGridManager::instance().isInSecondLife(), email); // Assume verified in OpenSim
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep it for OpenSim
+	//LLFloaterPreference::updateUserInfo(dir_visibility);
+	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, email); // Assume verified in OpenSim
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	LLFloaterSnapshot::setAgentEmail(email);
 }

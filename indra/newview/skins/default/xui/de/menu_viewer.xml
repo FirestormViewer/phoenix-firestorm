@@ -65,6 +65,7 @@
 			<menu_item_call label="LSL-Brücke neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Foto machen" name="Take Snapshot"/>
+		<menu_item_call label="360° Foto" name="Capture 360"/>
 		<menu_item_call label="Money-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
 		<menu_item_call label="Einstellungen" name="Preferences"/>
@@ -385,6 +386,7 @@
             <menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_call label="Fenster schließen" name="Close Window"/>
+			<menu_item_call label="Fenstergruppe schließen" name="Close Window Group"/>
 			<menu_item_call label="Alle Fenster schließen" name="Close All Windows"/>
 			<menu_item_call label="Foto auf Datenträger" name="Snapshot to Disk"/>
 			<menu_item_call label="Mouselook" name="Mouselook"/>
@@ -541,6 +543,7 @@
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
+			<menu_item_call label="Interest-Liste: Vollständiges Update" name="Interest List: Full Update"/>
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">

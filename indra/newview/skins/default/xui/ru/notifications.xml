@@ -1187,6 +1187,7 @@
 		Имя нового списка:
 		<form name="form">
 			<button name="SetName" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
 		</form>
 	</notification>
 	<notification label="Переименовать список автозамены" name="RenameAutoReplaceList">

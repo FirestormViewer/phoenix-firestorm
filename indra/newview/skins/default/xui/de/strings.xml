@@ -593,9 +593,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipPrimEquivalentLoading">
 		, bestimme Auswirkung auf Land...
 	</string>
-	<string name="TooltipPrimEquivalentUnavailable">
-		, Auswirkung auf Land nicht verfügbar
-	</string>
 	<string name="TooltipDistance">
 		Entfernung: [DISTANCE] m
 	</string>
@@ -5842,8 +5839,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_AboutLand_Label">
 		Landinformationen
 	</string>
-	<string name="Command_Appearance_Label">
-		Aussehen
+	<string name="Command_AboutLand_Label">
+		Landinformationen
+	</string>
+	<string name="Command_360_Capture_Label">
+		360° Foto
 	</string>
 	<string name="Command_Avatar_Label">
 		Avatar
@@ -6019,6 +6019,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_ResyncAnimations_Label">
 		Animationen synchronisieren
+	</string>
+	<string name="Command_360_Capture_Tooltip">
+		360° äquirektanguläres Foto aufnehmen
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
