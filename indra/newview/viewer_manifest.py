@@ -79,6 +79,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         with self.prefix(src=pkgdir, dst="app_settings"):
             self.path("dictionaries")
+
+        # <FS:Ansariel> Copy 360 snapshot JavaScripts
+        with self.prefix(src=pkgdir, dst="skins/default/html/common/equirectangular"):
+            self.path("js")
         # </FS:LO>
 
         if self.is_packaging_viewer():
