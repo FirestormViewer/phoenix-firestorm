@@ -2937,17 +2937,41 @@ FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 , mWebBrowser(nullptr)
 , mResetFocusOnLoad(false)
 {
-	// declare a map that transforms a category name into
-	// the URL suffix that is used to search that category
+	// Second Life grids use a different URL format now
 	mCategoryPaths = LLSD::emptyMap();
-	mCategoryPaths["all"]          = "search";
-	mCategoryPaths["people"]       = "search/people";
-	mCategoryPaths["places"]       = "search/places";
-	mCategoryPaths["events"]       = "search/events";
-	mCategoryPaths["groups"]       = "search/groups";
-	mCategoryPaths["wiki"]         = "search/wiki";
-	mCategoryPaths["destinations"] = "destinations";
-	mCategoryPaths["classifieds"]  = "classifieds";
+	if (LLGridManager::getInstance()->isInSecondLife())
+	{
+		// declare a map that transforms a category name into
+		// the parameter list that is used to search that category
+		mCategoryPaths["people"]       = "collection_chosen=people";
+		mCategoryPaths["places"]       = "collection_chosen=places";
+		mCategoryPaths["events"]       = "collection_chosen=events";
+		mCategoryPaths["groups"]       = "collection_chosen=groups";
+		mCategoryPaths["destinations"] = "collection_chosen=destinations";
+
+		mCategoryPaths["classifieds"]  = "search_type=classified";
+		mCategoryPaths["wiki"]         = "search/wiki";						// not sure if this is still a thing in the new search
+
+		mCategoryPaths["all"]          = mCategoryPaths["people"].asString() + "&" +
+										mCategoryPaths["places"].asString() + "&" +
+										mCategoryPaths["events"].asString() + "&" +
+										mCategoryPaths["groups"].asString() + "&" +
+										mCategoryPaths["destinations"].asString();
+	}
+	// OpenSim currently still uses the old URL format
+	else
+	{
+		// declare a map that transforms a category name into
+		// the URL suffix that is used to search that category
+		mCategoryPaths["all"]          = "search";
+		mCategoryPaths["people"]       = "search/people";
+		mCategoryPaths["places"]       = "search/places";
+		mCategoryPaths["events"]       = "search/events";
+		mCategoryPaths["groups"]       = "search/groups";
+		mCategoryPaths["wiki"]         = "search/wiki";
+		mCategoryPaths["destinations"] = "destinations";
+		mCategoryPaths["classifieds"]  = "classifieds";
+	}
 }
 
 BOOL FSPanelSearchWeb::postBuild()
@@ -2963,8 +2987,15 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 		return;
 	}
 
-	// work out the subdir to use based on the requested category
-	LLSD subs = LLSD().with("CATEGORY", (mCategoryPaths.has(p.category) ? mCategoryPaths[p.category].asString() : mCategoryPaths["all"].asString()));
+	// CATEGORY is no longer used as part of the path on Second Life grids
+	LLSD subs = LLSD().with("CATEGORY", "");
+
+	// on OpenSim grids it probably is currently still being used, so keep the old behavior
+	if (!LLGridManager::getInstance()->isInSecondLife())
+	{
+		// work out the subdir to use based on the requested category
+		LLSD subs = LLSD().with("CATEGORY", (mCategoryPaths.has(p.category) ? mCategoryPaths[p.category].asString() : mCategoryPaths["all"].asString()));
+	}
 
 	// add the search query string
 	subs["QUERY"] = LLURI::escape(p.query);
@@ -2980,19 +3011,43 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 
 	// add the user's preferred maturity (can be changed via prefs)
 	std::string maturity;
-	if (gAgent.prefersAdult())
+
+	// on Second Life grids, the maturity level is now a "&maturity" parameter that's not in the provided search URL
+	if (LLGridManager::getInstance()->isInSecondLife())
 	{
-		maturity = "42";  // PG,Mature,Adult
+		if (gAgent.prefersAdult())
+		{
+			maturity = "gma";  // PG,Mature,Adult
+		}
+		else if (gAgent.prefersMature())
+		{
+			maturity = "gm";  // PG,Mature
+		}
+		else
+		{
+			maturity = "g";  // PG
+		}
+
+		// not used on the SL search anymore, so clear out the respective parameter
+		subs["MATURITY"] = "";
 	}
-	else if (gAgent.prefersMature())
-	{
-		maturity = "21";  // PG,Mature
-	}
+	// OpenSim probably still uses the old maturity variant, so keep the old behavior here
 	else
 	{
-		maturity = "13";  // PG
+		if (gAgent.prefersAdult())
+		{
+			maturity = "42";  // PG,Mature,Adult
+		}
+		else if (gAgent.prefersMature())
+		{
+			maturity = "21";  // PG,Mature
+		}
+		else
+		{
+			maturity = "13";  // PG
+		}
+		subs["MATURITY"] = maturity;
 	}
-	subs["MATURITY"] = maturity;
 
 	// add the user's god status
 	subs["GODLIKE"] = gAgent.isGodlike() ? "1" : "0";
@@ -3000,17 +3055,24 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 	// Get the search URL and expand all of the substitutions
 	// (also adds things like [LANGUAGE], [VERSION], [OS], etc.)
 	std::string url;
-	
-#ifdef OPENSIM
-	std::string debug_url = gSavedSettings.getString("SearchURLDebug");
-	if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
+
+	// add the maturity and category variables to the new Second Life search URL
+	if (LLGridManager::getInstance()->isInSecondLife())
 	{
-		url = debug_url;
+		url = LFSimFeatureHandler::instance().searchURL() + "&maturity=" + maturity + "&" + mCategoryPaths[p.category].asString();
 	}
+	// for OpenSim, do the same as in earlier versions
 	else
-#endif // OPENSIM
 	{
-		url = LFSimFeatureHandler::instance().searchURL();
+		std::string debug_url = gSavedSettings.getString("SearchURLDebug");
+		if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
+		{
+			url = debug_url;
+		}
+		else
+		{
+			url = LFSimFeatureHandler::instance().searchURL();
+		}
 	}
 
 	url = LLWeb::expandURLSubstitutions(url, subs);
