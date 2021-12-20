@@ -304,11 +304,11 @@ struct AttachmentInfo
     //};
     std::vector<AttachmentInfo> info{};
 
-    secondLogPath = metadata.secondLogFilePathname;
-    if(!secondLogPath.empty())
-    {
-        info.push_back(AttachmentInfo(secondLogPath,  "text/xml"));
-    }
+    //secondLogPath = metadata.secondLogFilePathname;
+    //if(!secondLogPath.empty())
+    //{
+    //    info.push_back(AttachmentInfo(secondLogPath,  "text/xml"));
+    //}
 
     // We "happen to know" that info[0].basename is "SecondLife.old" -- due to
     // the fact that BugsplatMac only notices a crash during the viewer run

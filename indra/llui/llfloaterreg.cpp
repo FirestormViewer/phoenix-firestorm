@@ -103,6 +103,37 @@ LLFloater* LLFloaterReg::getLastFloaterInGroup(const std::string& name)
 	return NULL;
 }
 
+// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
+//static
+LLFloaterReg::instance_list_t LLFloaterReg::getAllFloatersInGroup(LLFloater* floater)
+{
+	if (floater)
+	{
+		for (const auto& group : sGroupMap)
+		{
+			const std::string& group_name = group.second;
+
+			if (group_name.empty())
+			{
+				continue;
+			}
+
+			instance_list_t& instances = sInstanceMap[group_name];
+
+			for (auto instance : instances)
+			{
+				if (instance == floater)
+				{
+					return sInstanceMap[group_name];
+				}
+			}
+		}
+	}
+
+	return {};
+}
+// </FS:Ansariel>
+
 LLFloater* LLFloaterReg::getLastFloaterCascading()
 {
 	LLRect candidate_rect;

@@ -418,8 +418,8 @@
    height="21"
    layout="topleft"
    name="img_info_border"
-   top_pad="0"
-   right="-10"
+   top_pad="5"
+   right="-130"
    follows="left|top|right"
    left_delta="0"/>
    <text
@@ -430,11 +430,10 @@
     height="14"
     layout="topleft"
     left="220"
-	right="-20"
     halign="left"
     name="image_res_text"
     top_delta="5"
-    width="200">
+    width="250">
        [WIDTH]px (width) x [HEIGHT]px (height)
    </text>
    <text
@@ -442,7 +441,7 @@
     font="SansSerifSmall"
     height="14"
     layout="topleft"
-    left="-65"
+    left="-185"
     length="1"
     halign="right"
     name="file_size_label"
@@ -451,4 +450,15 @@
     width="50">
        [SIZE] KB
    </text>
+    <button
+     follows="right|top"
+     height="23"
+     image_selected="Toolbar_Middle_Selected"
+     image_unselected="Toolbar_Middle_Off"
+     label="Take 360° snapshot"
+     layout="topleft"
+     left="-125"
+     name="360_label"
+     top_delta="-5"
+     width="120"/>
 </floater>

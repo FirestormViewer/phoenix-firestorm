@@ -7,7 +7,7 @@
   FPS ограничен [FPSCAP] к/с
 </floater.string>
 <floater.string name="tuning_fps">
-  Цель автонастр.[FPSTARGET] к/с
+  Цель [FPSTARGET] к/с
 </floater.string>
 <floater.string name="focus_fps">
   Фоновый режим

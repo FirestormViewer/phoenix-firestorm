@@ -205,6 +205,10 @@ class AOEngine
 		LLUUID mLastOverriddenMotion;
 		LLUUID mTransitionId;
 
+		// this motion will be ignored once in the overrider when stopping, fixes a case
+		// where the AO doesn't correctly start up on login or when getting enabled manually
+		LLUUID mIgnoreMotionStopOnce;
+
 		std::vector<AOSet*> mSets;
 		std::vector<AOSet*> mOldSets;
 		AOSet* mCurrentSet;

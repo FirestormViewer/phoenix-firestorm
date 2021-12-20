@@ -290,7 +290,8 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mDefaultRelativeX(p.rel_x),
 	mDefaultRelativeY(p.rel_y),
 	mMinimizeSignal(NULL),
-	mHostedFloaterShowtitlebar(p.hosted_floater_show_titlebar) // <FS:Ansariel> MultiFloater without titlebar for hosted floater
+	mHostedFloaterShowtitlebar(p.hosted_floater_show_titlebar), // <FS:Ansariel> MultiFloater without titlebar for hosted floater
+	mShiftPressed(false) // <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
 //	mNotificationContext(NULL)
 {
 	mPosition.setFloater(*this);
@@ -1717,6 +1718,30 @@ BOOL LLFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 	return was_minimized || LLPanel::handleDoubleClick(x, y, mask);
 }
 
+// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
+//virtual
+BOOL LLFloater::handleKeyHere(KEY key, MASK mask)
+{
+	if (mask == MASK_SHIFT)
+	{
+		mShiftPressed = true;
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
+}
+
+//virtual
+BOOL LLFloater::handleKeyUpHere(KEY key, MASK mask)
+{
+	if (mask == MASK_SHIFT)
+	{
+		mShiftPressed = false;
+	}
+
+	return LLPanel::handleKeyUpHere(key, mask);
+}
+// </FS:Ansariel>
+
 void LLFloater::bringToFront( S32 x, S32 y )
 {
 	if (getVisible() && pointInView(x, y))
@@ -1965,6 +1990,20 @@ void LLFloater::onClickClose( LLFloater* self )
 
 void LLFloater::onClickCloseBtn(bool app_quitting)
 {
+	// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
+	if (mShiftPressed)
+	{
+		auto floaterlist = LLFloaterReg::getAllFloatersInGroup(this);
+		for (auto floater : floaterlist)
+		{
+			if (floater != this)
+			{
+				floater->closeFloater();
+			}
+		}
+	}
+	// </FS:Ansariel>
+
 	closeFloater(false);
 }
 

@@ -221,7 +221,7 @@
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
 		<menu_item_call label="Solución de problemas" name="Troubleshooting"/>
 		<menu_item_call label="Unirse al Grupo de Soporte de Firestorm" name="firestorm_support_group"/>
-		<menu_item_call label="Cómo..." name="How To"/>
+		<menu_item_check label="Cómo..." name="How To"/>
 		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Acerca de [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Tutorial" name="Tutorial"/>

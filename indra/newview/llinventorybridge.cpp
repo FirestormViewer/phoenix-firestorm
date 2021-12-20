@@ -795,7 +795,7 @@ void hide_context_entries(LLMenuGL& menu,
 			found = !(is_entry_separator && is_previous_entry_separator);
 			is_previous_entry_separator = is_entry_separator;
 		}
-		
+
 		if (!found)
 		{
 			if (!menu_item->getLastVisible())
@@ -6052,7 +6052,7 @@ void LLTextureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
                 disabled_items.push_back(std::string("Save As"));
             }
         }
-
+        items.push_back(std::string("Wearable And Object Separator")); // <FS:Ansariel> Add separator
 
 // [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
 		if (rlv_handler_t::isEnabled())
@@ -8482,6 +8482,7 @@ void LLFolderViewGroupedItemBridge::groupFilterContextMenu(folder_view_item_dequ
             disabled_items.push_back(std::string("Wearable Add"));
             disabled_items.push_back(std::string("Attach To"));
             disabled_items.push_back(std::string("Attach To HUD"));
+            disabled_items.push_back(std::string("Wearable And Object Separator")); // <FS:Ansariel> Add separator
         }
     }
 	disable_context_entries_if_present(menu, disabled_items);
