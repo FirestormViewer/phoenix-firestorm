@@ -62,15 +62,15 @@ FSPanelContactSets::~FSPanelContactSets()
 
 BOOL FSPanelContactSets::postBuild()
 {
-	childSetAction("add_set_btn",			boost::bind(&FSPanelContactSets::onClickAddSet,			this));
-	childSetAction("remove_set_btn",		boost::bind(&FSPanelContactSets::onClickRemoveSet,		this));
-	childSetAction("config_btn",			boost::bind(&FSPanelContactSets::onClickConfigureSet,	this, _1));
-	childSetAction("add_btn",				boost::bind(&FSPanelContactSets::onClickAddAvatar,		this, _1));
-	childSetAction("remove_btn",			boost::bind(&FSPanelContactSets::onClickRemoveAvatar,	this));
-	childSetAction("profile_btn",			boost::bind(&FSPanelContactSets::onClickOpenProfile,	this));
-	childSetAction("start_im_btn",			boost::bind(&FSPanelContactSets::onClickStartIM,		this));
-	childSetAction("offer_teleport_btn",	boost::bind(&FSPanelContactSets::onClickOfferTeleport,	this));
-	childSetAction("set_pseudonym_btn",		boost::bind(&FSPanelContactSets::onClickSetPseudonym,	this));
+	childSetAction("add_set_btn",			boost::bind(&FSPanelContactSets::onClickAddSet,				this));
+	childSetAction("remove_set_btn",		boost::bind(&FSPanelContactSets::onClickRemoveSet,			this));
+	childSetAction("config_btn",			boost::bind(&FSPanelContactSets::onClickConfigureSet,		this, _1));
+	childSetAction("add_btn",				boost::bind(&FSPanelContactSets::onClickAddAvatar,			this, _1));
+	childSetAction("remove_btn",			boost::bind(&FSPanelContactSets::onClickRemoveAvatar,		this));
+	childSetAction("profile_btn",			boost::bind(&FSPanelContactSets::onClickOpenProfile,		this));
+	childSetAction("start_im_btn",			boost::bind(&FSPanelContactSets::onClickStartIM,			this));
+	childSetAction("offer_teleport_btn",	boost::bind(&FSPanelContactSets::onClickOfferTeleport,		this));
+	childSetAction("set_pseudonym_btn",		boost::bind(&FSPanelContactSets::onClickSetPseudonym,		this));
 	childSetAction("remove_pseudonym_btn",	boost::bind(&FSPanelContactSets::onClickRemovePseudonym,	this));
 	childSetAction("remove_displayname_btn", boost::bind(&FSPanelContactSets::onClickRemoveDisplayName,	this));
 
@@ -80,6 +80,7 @@ BOOL FSPanelContactSets::postBuild()
 
 	mAvatarList = getChild<LLAvatarList>("contact_list");
 	mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
+	mAvatarList->setItemDoubleClickCallback(boost::bind(&FSPanelContactSets::onClickStartIM, this));
 	mAvatarList->setNoItemsCommentText(getString("empty_list"));
 	mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	generateAvatarList(mContactSetCombo->getValue().asString());

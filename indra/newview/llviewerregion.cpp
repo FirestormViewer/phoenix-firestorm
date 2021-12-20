@@ -332,7 +332,8 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
             return;
         }
 
-        ++mSeedCapAttempts;
+        // <FS:Ansariel> Fix seed cap retry count
+        //++mSeedCapAttempts;
 
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed
@@ -3187,6 +3188,8 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("IncrementCOFVersion");
 	AISAPI::getCapNames(capabilityNames);
 	} //</FS:Ansariel>
+
+	capabilityNames.append("InterestList");
 
 	capabilityNames.append("GetDisplayNames");
 	capabilityNames.append("GetExperiences");
