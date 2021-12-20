@@ -135,10 +135,26 @@ public:
 	// Text may be unicode (utf8 encoded)
 	bool textInput(const std::string &text, MASK modifiers, LLSD native_key_data);
 	
+    static std::string sOIDcookieUrl;
+    static std::string sOIDcookieName;
+    static std::string sOIDcookieValue;
+    static std::string sOIDcookieHost;
+    static std::string sOIDcookiePath;
+    static bool sOIDcookieHttpOnly;
+    static bool sOIDcookieSecure;
+    void storeOpenIDCookie(const std::string url,
+        const std::string name, const std::string value,
+        const std::string host, const std::string path,
+        bool httponly, bool secure);
+
+    void injectOpenIDCookie();
+
 	void setCookie(std::string uri, std::string name, std::string value, std::string domain, std::string path, bool httponly, bool secure);
 
 	void loadURI(const std::string &uri);
 	
+	void executeJavaScript(const std::string &code);
+
 	// "Loading" means uninitialized or any state prior to fully running (processing commands)
 	bool isPluginLoading(void) { return mPlugin?mPlugin->isLoading():false; };
 
@@ -199,6 +215,8 @@ public:
 	void	setLanguageCode(const std::string &language_code);
 	void	setPluginsEnabled(const bool enabled);
 	void	setJavascriptEnabled(const bool enabled);
+	void	setWebSecurityDisabled(const bool disabled);
+	void	setFileAccessFromFileUrlsEnabled(const bool enabled);
 	void	setTarget(const std::string &target);
 	
 	///////////////////////////////////

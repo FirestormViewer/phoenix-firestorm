@@ -373,7 +373,7 @@ void AOEngine::enableStands(bool enable_stands)
 
 void AOEngine::enable(bool enable)
 {
-	LL_DEBUGS("AOEngine") << "using " << mLastMotion << " enable " << enable << LL_ENDL;
+	LL_DEBUGS("AOEngine") << "using " << gAnimLibrary.animationName(mLastMotion) << " enable " << enable << LL_ENDL;
 	mEnabled = enable;
 
 	if (!mCurrentSet)
@@ -390,7 +390,9 @@ void AOEngine::enable(bool enable)
 			LL_DEBUGS("AOEngine") << "Enabling animation state " << state->mName << LL_ENDL;
 
 			// do not stop underlying sit animations when re-enabling the AO
-			if (mLastOverriddenMotion != ANIM_AGENT_SIT_GROUND_CONSTRAINED && mLastOverriddenMotion != ANIM_AGENT_SIT)
+			if (mLastOverriddenMotion != ANIM_AGENT_SIT_GROUND &&
+			    mLastOverriddenMotion != ANIM_AGENT_SIT_GROUND_CONSTRAINED &&
+			    mLastOverriddenMotion != ANIM_AGENT_SIT)
 			{
 				gAgent.sendAnimationRequest(mLastOverriddenMotion, ANIM_REQUEST_STOP);
 			}
@@ -435,11 +437,15 @@ void AOEngine::enable(bool enable)
 			}
 			else
 			{
-				LL_WARNS("AOEngine") << "Unhandled last motion id " << mLastMotion << LL_ENDL;
+				LL_WARNS("AOEngine") << "Unhandled last motion id " << gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			}
 
 			gAgent.sendAnimationRequest(animation, ANIM_REQUEST_START);
 			mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+
+			// remember to ignore this motion once in the overrider so stopping the Linden motion
+			// will not trigger a stop of the override animation
+			mIgnoreMotionStopOnce = mLastMotion;
 		}
 	}
 	else
@@ -493,13 +499,9 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 	}
 }
 
-const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
+const LLUUID AOEngine::override(const LLUUID& motion, bool start)
 {
-	LL_DEBUGS("AOEngine") << "override(" << pMotion << "," << start << ")" << LL_ENDL;
-
-	LLUUID animation;
-
-	LLUUID motion = pMotion;
+	LL_DEBUGS("AOEngine") << "override(" << gAnimLibrary.animationName(motion) << "," << start << ")" << LL_ENDL;
 
 	if (!mEnabled)
 	{
@@ -517,25 +519,37 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 				}
 			}
 		}
-		return animation;
+		return LLUUID::null;
 	}
 
 	if (mSets.empty())
 	{
 		LL_DEBUGS("AOEngine") << "No sets loaded. Skipping overrider." << LL_ENDL;
-		return animation;
+		return LLUUID::null;
 	}
 
 	if (!mCurrentSet)
 	{
 		LL_DEBUGS("AOEngine") << "No current AO set chosen. Skipping overrider." << LL_ENDL;
-		return animation;
+		return LLUUID::null;
 	}
 
-	// we don't distinguish between these two
-	if (motion == ANIM_AGENT_SIT_GROUND)
+	// ignore stopping this motion once so we can stop the Linden animation
+	// without killing our overrider when logging in or re-enabling
+	if (!start && motion == mIgnoreMotionStopOnce)
 	{
-		motion = ANIM_AGENT_SIT_GROUND_CONSTRAINED;
+		LL_DEBUGS("AOEngine") << "Not stop-overriding motion " << gAnimLibrary.animationName(motion)
+			<< " within same state." << LL_ENDL;
+
+		mIgnoreMotionStopOnce = LLUUID::null;
+
+		// when stopping a sit motion make sure to stop the cycle point cover-up animation
+		if (motion == ANIM_AGENT_SIT)
+		{
+			gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
+		}
+
+		return LLUUID::null;
 	}
 
 	// map the requested motion to an animation state, taking underwater
@@ -543,7 +557,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 	AOSet::AOState* state = getStateForMotion(motion);
 	if (!state)
 	{
-		LL_DEBUGS("AOEngine") << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << ")." << LL_ENDL;
+		LL_DEBUGS("AOEngine") << "No current AO state for motion " << gAnimLibrary.animationName(motion) << LL_ENDL;
 //		This part of the code was added to capture an edge case where animations got stuck
 //		However, it seems it isn't needed anymore and breaks other, more important cases.
 //		So we disable this code for now, unless bad things happen and the stuck animations
@@ -562,7 +576,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 //				gAgentAvatarp->LLCharacter::stopMotion(motion);
 //			}
 //		}
-		return animation;
+		return LLUUID::null;
 	}
 
 	mAnimationChangedSignal(LLUUID::null);
@@ -624,6 +638,8 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 		}
 	}
 
+	LLUUID animation;
+
 	mCurrentSet->stopTimer();
 	if (start)
 	{
@@ -636,7 +652,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			mInMouselook)
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-			return animation;
+			return LLUUID::null;
 		}
 
 		// Don't override start and turning stands if stand override is disabled
@@ -644,24 +660,24 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			(motion == ANIM_AGENT_STAND || motion == ANIM_AGENT_TURNRIGHT || motion == ANIM_AGENT_TURNLEFT))
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, stands disabled) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-			return animation;
+			return LLUUID::null;
 		}
 
 		// Do not start override sits if not selected
 		if (!mCurrentSet->getSitOverride() && motion == ANIM_AGENT_SIT)
 		{
 			LL_DEBUGS("AOEngine") << "(enabled AO, sit override stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
-			return animation;
+			return LLUUID::null;
 		}
 
 		// scripted seats that use ground_sit as animation need special treatment
-		if (motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED)
+		if (motion == ANIM_AGENT_SIT_GROUND || motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED)
 		{
 			const LLViewerObject* agentRoot = dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
 			if (agentRoot && agentRoot->getID() != gAgentID)
 			{
 				LL_DEBUGS("AOEngine") << "Ground sit animation playing but sitting on a prim - disabling overrider." << LL_ENDL;
-				return animation;
+				return LLUUID::null;
 			}
 		}
 
@@ -677,10 +693,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			mCurrentSet->setMotion(motion);
 		}
 
-		if (animation.isNull())
-		{
-			animation = mCurrentSet->getAnimationForState(state);
-		}
+		animation = mCurrentSet->getAnimationForState(state);
 
 		if (state->mCurrentAnimationID.notNull())
 		{
@@ -716,7 +729,8 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			}
 		}
 		// special treatment for "transient animations" because the viewer needs the Linden animation to know the agent's state
-		else if (motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
+		else if (motion == ANIM_AGENT_SIT_GROUND ||
+				motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
 				motion == ANIM_AGENT_PRE_JUMP ||
 				motion == ANIM_AGENT_STANDUP ||
 				motion == ANIM_AGENT_LAND ||
@@ -756,6 +770,13 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			return animation;
 		}
 
+		// stop the underlying Linden Lab motion, in case it's still running.
+		// frequently happens with sits, so we keep it only for those currently.
+		if (motion == ANIM_AGENT_SIT)
+		{
+			stopAllSitVariants();
+		}
+
 		if (motion != mCurrentSet->getMotion())
 		{
 			LL_WARNS("AOEngine") << "trying to stop-override motion " <<  gAnimLibrary.animationName(motion)
@@ -766,7 +787,8 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 		mCurrentSet->setMotion(LLUUID::null);
 
 		// again, special treatment for "transient" animations to make sure our own animation gets stopped properly
-		if (motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
+		if (motion == ANIM_AGENT_SIT_GROUND ||
+			motion == ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
 			motion == ANIM_AGENT_PRE_JUMP ||
 			motion == ANIM_AGENT_STANDUP ||
 			motion == ANIM_AGENT_LAND ||
@@ -776,13 +798,6 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, bool start)
 			gAgentAvatarp->LLCharacter::stopMotion(animation);
 			setStateCycleTimer(state);
 			return LLUUID::null;
-		}
-
-		// stop the underlying Linden Lab motion, in case it's still running.
-		// frequently happens with sits, so we keep it only for those currently.
-		if (mLastMotion == ANIM_AGENT_SIT)
-		{
-			stopAllSitVariants();
 		}
 	}
 

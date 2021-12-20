@@ -1250,6 +1250,7 @@ Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
 		Name für neue Liste:
 		<form name="form">
 			<button name="SetName" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
 	<notification label="Automatische Ersetzungsliste umbenennen" name="RenameAutoReplaceList">
@@ -5524,4 +5525,10 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 	<notification name="WindlightBulkImportFinished">
 		Mehrfach-Import von Windlight abgeschlossen.
 	</notification>
+	<notification name="AttachedRiggedObjectToHUD">
+		Der Anhang „[NAME]“ enthält geriggtes Mesh, ist aber am HUD-Punkt „[HUD_POINT]“ angehängt. Das bedeutet, dass Sie es korrekt sehen werden, alle anderen werden es hingegen gar nicht sehen. Denken Sie darüber nach, den Anhang zu entfernen und an einem regulären Punkt am Körper anzuhängen.
+   <usetemplate
+    ignoretext="Warn me when a rigged attachment is worn on a HUD attachment point"
+    name="notifyignore"/>
+  </notification>
 </notifications>

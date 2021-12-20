@@ -88,6 +88,8 @@ public:
 	void showAllItemsPanel();
 	// </FS:Ansariel>
 
+	bool isRecentItemsPanelSelected();
+
 	const std::string& getFilterText() const { return mFilterText; }
 	
 	void setSelectCallback(const LLFolderView::signal_t::slot_type& cb);

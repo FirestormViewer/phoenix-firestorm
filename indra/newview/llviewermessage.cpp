@@ -38,6 +38,7 @@
 #include "llfollowcamparams.h"
 #include "llinventorydefines.h"
 #include "lllslconstants.h"
+#include "llmaterialtable.h"
 #include "llregionhandle.h"
 #include "llsd.h"
 #include "llsdserialize.h"
@@ -4696,6 +4697,7 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 				{
 					LLColor4 color(0.f,1.f,0.f,1.f);
 					gPipeline.addDebugBlip(objectp->getPositionAgent(), color);
+					LL_DEBUGS("MessageBlip") << "Kill blip for local " << local_id << " at " << objectp->getPositionAgent() << LL_ENDL;
 				}
 
 				// Do the kill
@@ -4827,11 +4829,11 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// </FS>
 
 	// NaCl - Antispam Registry
- 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
-	static LLCachedControl<bool> FSPlayCollisionSounds(gSavedSettings, "FSPlayCollisionSounds");
-	if (NACLAntiSpamRegistry::instance().isCollisionSound(sound_id))
+	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
+	static LLCachedControl<bool> EnableCollisionSounds(gSavedSettings, "EnableCollisionSounds");
+	if (LLMaterialTable::basic.isCollisionSound(sound_id))
 	{
-		if (!FSPlayCollisionSounds)
+		if (!EnableCollisionSounds)
 		{
 			return;
 		}
@@ -4880,28 +4882,32 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	{
 		return;
 	}
-	
-	// AO: Hack for legacy radar script interface compatibility. Interpret certain
+
+	// <FS:AO> Hack for legacy radar script interface compatibility. Interpret certain
 	// sound assets as a request for a full radar update to a channel
-	if ((owner_id == gAgent.getID()) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
+	if ((owner_id == gAgentID) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
 	{
-		FSRadar* radar = FSRadar::getInstance();
-		if (radar)
-		{
-			radar->requestRadarChannelAlertSync();
-		}
+		FSRadar::getInstance()->requestRadarChannelAlertSync();
 		return;
 	}
-		
+	// </FS:AO>
+
 	// Don't play sounds from gestures if they are not enabled.
 	// ...TS: Unless they're your own.
 	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
 		(owner_id != gAgent.getID()) &&
 		(owner_id == object_id)) return;
 
-  // NaCl - Sound Explorer
+	// NaCl - Antispam Registry
+	//if (LLMaterialTable::basic.isCollisionSound(sound_id) && !gSavedSettings.getBOOL("EnableCollisionSounds"))
+	//{
+	//	return;
+	//}
+	// NaCl End
+
+	// NaCl - Sound Explorer
 	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global, object_id);
-  // NaCl End
+	// NaCl End
 }
 
 void process_preload_sound(LLMessageSystem *msg, void **user_data)
@@ -8133,17 +8139,20 @@ void process_user_info_reply(LLMessageSystem* msg, void**)
 				<< "wrong agent id." << LL_ENDL;
 	}
 	
-	BOOL im_via_email;
-	msg->getBOOLFast(_PREHASH_UserData, _PREHASH_IMViaEMail, im_via_email);
+	// <FS:Ansariel> Keep this for OpenSim
+	BOOL im_via_email = FALSE;
+	if (!LLGridManager::instance().isInSecondLife())
+		msg->getBOOLFast(_PREHASH_UserData, _PREHASH_IMViaEMail, im_via_email);
+	// </FS:Ansariel>
 	std::string email;
 	msg->getStringFast(_PREHASH_UserData, _PREHASH_EMail, email);
 	std::string dir_visibility;
 	msg->getString( "UserData", "DirectoryVisibility", dir_visibility);
 
     // For Message based user info information the is_verified is assumed to be false.
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, false);   
-	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, !LLGridManager::instance().isInSecondLife(), email); // Assume verified in OpenSim
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep it for OpenSim
+	//LLFloaterPreference::updateUserInfo(dir_visibility);
+	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, email); // Assume verified in OpenSim
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	LLFloaterSnapshot::setAgentEmail(email);
 }

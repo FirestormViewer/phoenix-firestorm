@@ -933,6 +933,8 @@ public:
 	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
 	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
 	// </FS:Techwolf Lupindo>
+
+	bool mCheckRigOnHUD = true;		// <FS:Zi> Warn the user when they wear a rigged item on a HUD attachment point
 };
 
 ///////////////////

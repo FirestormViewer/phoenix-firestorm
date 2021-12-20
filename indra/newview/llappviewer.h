@@ -58,8 +58,8 @@ class LLImageDecodeThread;
 class LLTextureFetch;
 class LLWatchdogTimeout;
 class LLViewerJoystick;
+class LLPurgeDiskCacheThread;
 class LLViewerRegion;
-class FSPurgeDiskCacheThread; // <FS:Ansariel> Regular disk cache cleanup
 
 extern LLTrace::BlockTimerStatHandle FTM_FRAME;
 
@@ -111,7 +111,6 @@ public:
 
 	virtual bool restoreErrorTrap() = 0; // Require platform specific override to reset error handling mechanism.
 	                                     // return false if the error trap needed restoration.
-	virtual void initCrashReporting(bool reportFreeze = false) = 0; // What to do with crash report?
 	static void handleViewerCrash(); // Hey! The viewer crashed. Do this, soon.
     void checkForCrash();
     
@@ -119,7 +118,7 @@ public:
 	static LLTextureCache* getTextureCache() { return sTextureCache; }
 	static LLImageDecodeThread* getImageDecodeThread() { return sImageDecodeThread; }
 	static LLTextureFetch* getTextureFetch() { return sTextureFetch; }
-	static FSPurgeDiskCacheThread* getPurgeDiskCacheThread() { return sPurgeDiskCacheThread; } // <FS:Ansariel> Regular disk cache cleanup
+	static LLPurgeDiskCacheThread* getPurgeDiskCacheThread() { return sPurgeDiskCacheThread; }
 
 	static U32 getTextureCacheVersion() ;
 	static U32 getObjectCacheVersion() ;
@@ -307,7 +306,7 @@ private:
 	static LLTextureCache* sTextureCache; 
 	static LLImageDecodeThread* sImageDecodeThread; 
 	static LLTextureFetch* sTextureFetch;
-	static FSPurgeDiskCacheThread* sPurgeDiskCacheThread; // <FS:Ansariel> Regular disk cache cleanup
+	static LLPurgeDiskCacheThread* sPurgeDiskCacheThread;
 
 	S32 mNumSessions;
 

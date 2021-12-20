@@ -232,7 +232,7 @@ void FSRadar::updateRadarList()
 	mRadarOffsetRequests.clear();
 	mRadarEntriesData.clear();
 	mAvatarStats.clear();
-	
+
 	//STEP 1: Update our basic data model: detect Avatars & Positions in our defined range
 	std::vector<LLVector3d> positions;
 	uuid_vec_t avatar_ids;
@@ -375,12 +375,20 @@ void FSRadar::updateRadarList()
 				mRadarOffsetRequests.push_back(avId);
 				ent->mLastZOffsetTime = now;
 			}
-		}	
+		}
 		F32 avRange = (avPos[VZ] != AVATAR_UNKNOWN_Z_OFFSET ? dist_vec(avPos, posSelf) : AVATAR_UNKNOWN_RANGE);
 		ent->mRange = avRange;
 		ent->mGlobalPos = avPos;
 		ent->mRegion = avRegion;
-		
+
+		// Double-check range here since limiting range on calling LLWorld::getAvatars does
+		// not work if other avatar is beyond draw distance and above 1020m height. Need to
+		// use LSL bridge result to filter those out.
+		if (sLimitRange && avRange > sNearMeRange)
+		{
+			continue;
+		}
+
 		//
 		//2b. Process newly detected avatars
 		//
@@ -436,7 +444,7 @@ void FSRadar::updateRadarList()
 				}
 			}
 		}
-		
+
 		//
 		// 2c. Process previously detected avatars
 		//
@@ -504,7 +512,7 @@ void FSRadar::updateRadarList()
 				mRadarEnterAlerts.push_back(avId);
 			}
 		}
-		
+
 		//
 		//2d. Prepare data for presentation view for this avatar
 		//
@@ -569,7 +577,7 @@ void FSRadar::updateRadarList()
 				range_color = colortable.getColor("AvatarListItemBeyondShoutRange", LLColor4::white);
 			}
 		}
-		else 
+		else
 		{
 			range_color = colortable.getColor("AvatarListItemBeyondShoutRange", LLColor4::white);
 		}
@@ -642,11 +650,11 @@ void FSRadar::updateRadarList()
 		entry_data["options"] = entry_options;
 		mRadarEntriesData.push_back(entry_data);
 	} // End STEP 2, all model/presentation row processing complete.
-	
+
 	//
 	//STEP 3, process any bulk actions that require the whole model to be known first
 	//
-	
+
 	//
 	//3a. dispatch requests for ZOffset updates, working around minimap's inaccurate height
 	//
@@ -680,7 +688,7 @@ void FSRadar::updateRadarList()
 		mRadarOffsetRequests.clear();
 		mRadarLastBulkOffsetRequestTime = now;
 	}
-	
+
 	//
 	//3b: process alerts for avatars that where here last frame, but gone this frame (ie, they left)
 	//    as well as dispatch all earlier detected alerts for crossing range thresholds.
@@ -787,7 +795,7 @@ void FSRadar::updateRadarList()
 	//
 	//STEP 4: Cache our current model data, so we can compare it with the next fresh group of model data for fast change detection.
 	//
-	
+
 	mLastRadarSweep.clear();
 	em_it_end = mEntryList.end();
 	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)

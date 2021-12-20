@@ -134,6 +134,7 @@
 #include "fslslbridge.h" // <FS:PP> Movelock position refresh
 
 #include "fsdiscordconnect.h" // <FS:LO> tapping a place that happens on landing in world to start up discord
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -601,7 +602,6 @@ bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonIm
 F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
-
 // const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df"); - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
@@ -2696,7 +2696,10 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		LL_INFOS() << "Warning!  Idle on dead avatar" << LL_ENDL;
 		return;
 	}	
-
+	// <FS:Beq> record time and refresh "tooSlow" status
+	FSPerfStats::RecordAvatarTime T(getID(), FSPerfStats::StatType_t::RENDER_IDLE); // per avatar "idle" time.
+	updateTooSlow();
+	// </FS:Beq>;
 	// <FS:CR> Use LLCachedControl
 	static LLCachedControl<bool> disable_all_render_types(gSavedSettings, "DisableAllRenderTypes");
 	if (!(gPipeline.hasRenderType(mIsControlAvatar ? LLPipeline::RENDER_TYPE_CONTROL_AV : LLPipeline::RENDER_TYPE_AVATAR))
@@ -2704,7 +2707,11 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		&& !(disable_all_render_types) && !isSelf())
 	// </FS:CR>
 	{
-		return;
+        if (!mIsControlAvatar)
+        {
+            idleUpdateNameTag( mLastRootPos );
+        }
+        return;
 	}
 
     // Update should be happening max once per frame.
@@ -2736,7 +2743,7 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		//</FS:Beq>
 	}
     
-    LLScopedContextString str("avatar_idle_update " + getFullname());
+    // LLScopedContextString str("avatar_idle_update " + getFullname()); // <FS:Beq> remove unused scoped string
     
 	checkTextureLoading() ;
 	
@@ -3399,14 +3406,12 @@ void LLVOAvatar::idleUpdateNameTag(const LLVector3& root_pos_last)
 		fRlvShowAvName = (fRlvShowAvTag) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, getID()));
 	}
 // [/RLVa:KB]
-	BOOL visible_avatar = isVisible() || mNeedsAnimUpdate;
 	BOOL visible_chat = useChatBubbles && (mChats.size() || mTyping);
 	BOOL visible_typing = useTypingBubbles && mTyping;
 	BOOL render_name =	visible_chat ||
 				visible_typing ||
-		                (visible_avatar &&
 // [RLVa:KB] - Checked: RLVa-2.0.1
-						(fRlvShowAvTag) &&
+						((fRlvShowAvTag) &&
 // [/RLVa:KB]
 		                ((sRenderName == RENDER_NAME_ALWAYS) ||
 		                 (sRenderName == RENDER_NAME_FADE && time_visible < NAME_SHOW_TIME)));
@@ -4209,6 +4214,7 @@ void LLVOAvatar::slamPosition()
 
 bool LLVOAvatar::isVisuallyMuted()
 {
+	FSZone; // <FS:Beq/> Tracy accounting for imposter testing.
 	bool muted = false;
 
 	// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
@@ -4225,7 +4231,14 @@ bool LLVOAvatar::isVisuallyMuted()
 	// * check against the render cost and attachment limits
 	if (!isSelf())
 	{
-		if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+		if (isRlvSilhouette())
+		{
+			muted = true;
+		}
+		else if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+// [/RLVa:KB]
+//		if (mVisuallyMuteSetting == AV_ALWAYS_RENDER)
 		{
 			muted = false;
 		}
@@ -4244,12 +4257,6 @@ bool LLVOAvatar::isVisuallyMuted()
         //    muted = true;
         //}
 		// </FS:Ansariel>
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-		else if (isRlvSilhouette())
-		{
-			muted = true;
-		}
-// [/RLVa:KB]
 		else 
 		{
 			muted = isTooComplex();
@@ -4261,6 +4268,7 @@ bool LLVOAvatar::isVisuallyMuted()
 
 bool LLVOAvatar::isInMuteList() const
 {
+	FSZone; // <FS:Beq/> Tracy accounting for imposter testing.
 	bool muted = false;
 	F64 now = LLFrameTimer::getTotalSeconds();
 	if (now < mCachedMuteListUpdateTime)
@@ -4279,9 +4287,9 @@ bool LLVOAvatar::isInMuteList() const
 }
 
 // [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-bool LLVOAvatar::isRlvSilhouette()
+bool LLVOAvatar::isRlvSilhouette() const
 {
-	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDIST))
+	if (!RlvActions::hasBehaviour(RLV_BHVR_SETCAM_AVDIST))
 		return false;
 
 	static RlvCachedBehaviourModifier<float> s_nSetCamAvDist(RLV_MODIFIER_SETCAM_AVDIST);
@@ -4289,14 +4297,14 @@ bool LLVOAvatar::isRlvSilhouette()
 	const F64 now = LLFrameTimer::getTotalSeconds();
 	if (now >= mCachedRlvSilhouetteUpdateTime)
 	{
-		const F64 SECONDS_BETWEEN_NEARBY_UPDATES = .5f;
+		const F64 SECONDS_BETWEEN_SILHOUETTE_UPDATES = .5f;
 		bool fIsRlvSilhouette = dist_vec_squared(gAgent.getPositionGlobal(), getPositionGlobal()) > s_nSetCamAvDist() * s_nSetCamAvDist();
 		if (fIsRlvSilhouette != mCachedIsRlvSilhouette)
 		{
 			mCachedIsRlvSilhouette = fIsRlvSilhouette;
 			mNeedsImpostorUpdate = TRUE;
 		}
-		mCachedRlvSilhouetteUpdateTime = now + SECONDS_BETWEEN_NEARBY_UPDATES;
+		mCachedRlvSilhouetteUpdateTime = now + SECONDS_BETWEEN_SILHOUETTE_UPDATES;
 	}
 	return mCachedIsRlvSilhouette;
 }
@@ -4694,11 +4702,12 @@ void LLVOAvatar::updateFootstepSounds()
 void LLVOAvatar::computeUpdatePeriod()
 {
 	bool visually_muted = isVisuallyMuted();
+	bool slow = isTooSlowWithoutShadows();// <FS:Beq/> the geometry alone is forcing this to be slow so we must imposter
 	if (mDrawable.notNull()
         && isVisible() 
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
-        && (sLimitNonImpostors || visually_muted)
+        && (sLimitNonImpostors || visually_muted || slow) // <FS:Beq/> imposter slow avatars irrespective of nonimposter setting.
         && !mNeedsAnimUpdate 
         && !sFreezeCounter)
 	{
@@ -4710,8 +4719,11 @@ void LLVOAvatar::computeUpdatePeriod()
 		const S32 UPDATE_RATE_SLOW = 64;
 		const S32 UPDATE_RATE_MED = 48;
 		const S32 UPDATE_RATE_FAST = 32;
-		
-		if (visually_muted)
+		if(slow)
+		{
+			mUpdatePeriod = UPDATE_RATE_FAST;
+		}
+		else if (visually_muted)
 		{   // visually muted avatars update at lowest rate
 			mUpdatePeriod = UPDATE_RATE_SLOW;
 		}
@@ -5569,6 +5581,7 @@ bool LLVOAvatar::shouldAlphaMask()
 //-----------------------------------------------------------------------------
 U32 LLVOAvatar::renderSkinned()
 {
+	FSZone; // <FS:Beq/> Tracy accounting for imposter testing.
 	U32 num_indices = 0;
 
 	if (!mIsBuilt)
@@ -5805,6 +5818,7 @@ U32 LLVOAvatar::renderSkinned()
 
 U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 {
+	FSZone; // <FS:Beq/> Tracy accounting for render tracking
 	U32 num_indices = 0;
 	if( isWearingWearableType( LLWearableType::WT_SKIRT ) && (isUIAvatar() || isTextureVisible(TEX_SKIRT_BAKED)) )
 	{
@@ -5857,6 +5871,7 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 //-----------------------------------------------------------------------------
 U32 LLVOAvatar::renderRigid()
 {
+	FSZone; // <FS:Beq/> Tracy accounting for render tracking
 	U32 num_indices = 0;
 
 	if (!mIsBuilt)
@@ -5906,6 +5921,7 @@ U32 LLVOAvatar::renderRigid()
 
 U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 {
+	FSZone; // <FS:Beq/> Tracy accounting for render tracking
 	if (!mImpostor.isComplete())
 	{
 		return 0;
@@ -6921,6 +6937,7 @@ const LLUUID& LLVOAvatar::getID() const
 LLJoint *LLVOAvatar::getJoint( const JointKey &name )
 // </FS:ND>
 {
+	FSZone;
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 	//joint_map_t::iterator iter = mJointMap.find( name );
 
@@ -9116,6 +9133,95 @@ BOOL LLVOAvatar::isFullyLoaded() const
 //	return (mRenderUnloadedAvatar || mFullyLoaded);
 }
 
+// <FS:Beq> use Avatar Render Time as complexity metric
+// markARTStale - Mark stale and set the frameupdate to now so that we can wait at least one frame to get a revised number.
+void LLVOAvatar::markARTStale()
+{
+	mARTStale=true;
+	mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+}
+
+// Udpate Avatar state based on render time
+void LLVOAvatar::updateTooSlow()
+{
+	FSZone;
+	static LLCachedControl<bool> alwaysRenderFriends(gSavedSettings, "AlwaysRenderFriends");
+	static LLCachedControl<bool> allowSelfImpostor(gSavedSettings, "FSAllowSelfImpostor");
+	const auto id = getID();
+
+	// mTooSlow - Is the avatar flagged as being slow (includes shadow time)
+	// mTooSlowWithoutShadows - Is the avatar flagged as being slow even with shadows removed.
+	// mARTStale - the rendertime we have is stale because of an update. We need to force a re-render to re-assess slowness
+	
+	if( mARTStale )
+	{
+		if ( LLFrameTimer::getFrameCount() - mLastARTUpdateFrame < 5 ) 
+		{
+			// LL_INFOS() << this->getFullname() << " marked stale " << LL_ENDL;
+			// we've not had a chance to update yet (allow a few to be certain a full frame has passed)
+			return;
+		}
+
+		mARTStale = false;
+		mTooSlow = false;
+		mTooSlowWithoutShadows = false;
+		// LL_INFOS() << this->getFullname() << " refreshed ART combined = " << mRenderTime << " @ " << mLastARTUpdateFrame << LL_ENDL;
+	}
+
+	// Either we're not stale or we've updated.
+
+	U64 render_time_raw;
+	U64 render_geom_time_raw;
+
+	if( !mTooSlow ) 
+	{
+		// we are fully rendered, so we use the live values
+		std::lock_guard<std::mutex> lock{FSPerfStats::bufferToggleLock};
+		render_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, id, FSPerfStats::StatType_t::RENDER_COMBINED);
+		render_geom_time_raw = FSPerfStats::StatsRecorder::get(FSPerfStats::ObjType_t::OT_AVATAR, id, FSPerfStats::StatType_t::RENDER_GEOMETRY);
+	}
+	else
+	{
+		// use the cached values.
+		render_time_raw = mRenderTime;
+		render_geom_time_raw = mGeomTime;		
+	}
+	if( (FSPerfStats::renderAvatarMaxART_ns > 0) && 
+		(FSPerfStats::raw_to_ns(render_time_raw) >= FSPerfStats::renderAvatarMaxART_ns) ) 
+	{
+		if( !mTooSlow ) // if we were previously not slow (with or without shadows.)
+		{			
+			// if we weren't capped, we are now
+			mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+			mRenderTime = render_time_raw;
+			mGeomTime = render_geom_time_raw;
+			mARTStale = false;
+			mTooSlow = true;
+		}
+		if(!mTooSlowWithoutShadows) // if we were not previously above the full impostor cap
+		{
+			bool render_friend_or_exception =  	( alwaysRenderFriends && LLAvatarTracker::instance().isBuddy( id ) ) ||
+												( getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER ); 
+			if( (!isSelf() || allowSelfImpostor) && !render_friend_or_exception  )
+			{
+				// Note: slow rendering Friends still get their shadows zapped.
+				mTooSlowWithoutShadows = (FSPerfStats::raw_to_ns(render_geom_time_raw) >= FSPerfStats::renderAvatarMaxART_ns);
+			}
+		}
+	}
+	else
+	{
+	// LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << FSPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+		mTooSlow = false;
+		mTooSlowWithoutShadows = false;	
+	}
+	if(mTooSlow)
+	{
+		FSPerfStats::tunedAvatars++; // <FS:Beq> increment the number of avatars that have been tweaked.
+	}
+}
+// </FS:Beq>
+
 bool LLVOAvatar::isTooComplex() const
 {
 	bool too_complex;
@@ -9918,7 +10024,7 @@ void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, 
 	S32 u8_value = F32_to_U8(value,viewer_param->getMinWeight(),viewer_param->getMaxWeight());
 	apr_file_printf(file, "\t\t<param id=\"%d\" name=\"%s\" display=\"%s\" value=\"%.3f\" u8=\"%d\" type=\"%s\" wearable=\"%s\" group=\"%d\"/>\n",
 					viewer_param->getID(), viewer_param->getName().c_str(), viewer_param->getDisplayName().c_str(), value, u8_value, type_string.c_str(),
-					LLWearableType::getTypeName(LLWearableType::EType(wtype)).c_str(),
+					LLWearableType::getInstance()->getTypeName(LLWearableType::EType(wtype)).c_str(),
 					viewer_param->getGroup());
 	}
 	
@@ -10130,7 +10236,6 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	//bool enable_verbose_dumps = gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
 	static LLCachedControl<bool> enable_verbose_dumps(gSavedSettings, "DebugAvatarAppearanceMessage");
 	// </FS:CR>
-	std::string dump_prefix = getFullname() + "_" + (isSelf()?"s":"o") + "_";
 	if (gSavedSettings.getBOOL("BlockAvatarAppearanceMessages"))
 	{
 		LL_WARNS() << "Blocking AvatarAppearance message" << LL_ENDL;
@@ -10143,6 +10248,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	parseAppearanceMessage(mesgsys, *contents);
 	if (enable_verbose_dumps)
 	{
+		std::string dump_prefix = getFullname() + "_" + (isSelf()?"s":"o") + "_";
 		dumpAppearanceMsgParams(dump_prefix + "appearance_msg", *contents);
 	}
 
@@ -10257,13 +10363,13 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 	{
 		//Wolfspirit: Read the UUID, system and Texturecolor
 		const LLTEContents& tec = contents.mTEContents;
-		const LLUUID tag_uuid = ((LLUUID*)tec.image_data)[TEX_HEAD_BODYPAINT];
+		const LLUUID tag_uuid = tec.image_data[TEX_HEAD_BODYPAINT];
 		bool new_system = (tec.glow[TEX_HEAD_BODYPAINT]);
 
 		//WS: Write them into an LLSD map
 		mClientTagData["uuid"] = tag_uuid.asString();
 		mClientTagData["id_based"] = new_system;
-		mClientTagData["tex_color"] = LLColor4U(tec.colors).getValue();
+		mClientTagData["tex_color"] = tec.colors[TEX_HEAD_BODYPAINT].getValue();
 
 		//WS: Clear mNameString to force a rebuild
 		mNameIsSet = false;
@@ -10424,7 +10530,6 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 
 	updateMeshTextures();
 	updateMeshVisibility();
-
 }
 
 LLViewerTexture* LLVOAvatar::getBakedTexture(const U8 te)
@@ -10782,6 +10887,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 {
 // </FS:CR>
 	LLAPRFile outfile;
+    LLWearableType *wr_inst = LLWearableType::getInstance();
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
 	std::string fullpath = filenames[0];
@@ -10805,7 +10911,7 @@ void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filena
 		{
 			for (S32 type = LLWearableType::WT_SHAPE; type < LLWearableType::WT_COUNT; type++)
 			{
-				const std::string& wearable_name = LLWearableType::getTypeName((LLWearableType::EType)type);
+				const std::string& wearable_name = wr_inst->getTypeName((LLWearableType::EType)type);
 				apr_file_printf( file, "\n\t\t<!-- wearable: %s -->\n", wearable_name.c_str() );
 
 				for (LLVisualParam* param = getFirstVisualParam(); param; param = getNextVisualParam())
@@ -11407,7 +11513,14 @@ void LLVOAvatar::updateImpostors()
 // virtual
 BOOL LLVOAvatar::isImpostor()
 {
-	return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
+// <FS:Beq> render time handling using tooSlow()
+// 	return isVisuallyMuted() || (sLimitNonImpostors && (mUpdatePeriod > 1));
+	return (
+			isVisuallyMuted() || 
+			isTooSlowWithoutShadows() ||
+			(sLimitNonImpostors && (mUpdatePeriod > 1) ) 
+	);
+// </FS:Beq>
 }
 
 BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
@@ -11420,6 +11533,15 @@ BOOL LLVOAvatar::shouldImpostor(const F32 rank_factor)
 	{
 		return true;
 	}
+// <FS:Beq> render time handling using tooSlow()
+	// return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
+	// static LLCachedControl<bool> render_jellys_As_imposters(gSavedSettings, "RenderJellyDollsAsImpostors");
+	
+	if (isTooSlowWithoutShadows())
+	{
+		return true;
+	}
+// </FS:Beq>
 	return sLimitNonImpostors && (mVisibilityRank > sMaxNonImpostors * rank_factor);
 }
 
@@ -11595,6 +11717,7 @@ void LLVOAvatar::updateVisualComplexity()
 	LL_DEBUGS("AvatarRender") << "avatar " << getID() << " appearance changed" << LL_ENDL;
 	// Set the cache time to in the past so it's updated ASAP
 	mVisualComplexityStale = true;
+	markARTStale();
 }
 
 // Account for the complexity of a single top-level object associated
@@ -11606,6 +11729,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
     LLVOVolume::texture_cost_t& textures,
     U32& cost,
     hud_complexity_list_t& hud_complexity_list,
+    object_complexity_list_t& object_complexity_list,
     // <FS:Ansariel> Show per-item complexity in COF
     std::map<LLUUID, U32>& item_complexity,
     std::map<LLUUID, U32>& temp_item_complexity)
@@ -11628,12 +11752,12 @@ void LLVOAvatar::accountRenderComplexityForObject(
                             F32 attachment_volume_cost = 0;
                             F32 attachment_texture_cost = 0;
                             F32 attachment_children_cost = 0;
-                const F32 animated_object_attachment_surcharge = 1000;
+                            const F32 animated_object_attachment_surcharge = 1000;
 
-                if (attached_object->isAnimatedObject())
-                {
-                    attachment_volume_cost += animated_object_attachment_surcharge;
-                }
+                            if (attached_object->isAnimatedObject())
+                            {
+                                attachment_volume_cost += animated_object_attachment_surcharge;
+                            }
 							attachment_volume_cost += volume->getRenderCost(textures);
 
 							const_child_list_t children = volume->getChildren();
@@ -11668,6 +11792,15 @@ void LLVOAvatar::accountRenderComplexityForObject(
                             // Limit attachment complexity to avoid signed integer flipping of the wearer's ACI
                             cost += (U32)llclamp(attachment_total_cost, MIN_ATTACHMENT_COMPLEXITY, max_attachment_complexity);
 
+                            if (isSelf())
+                            {
+                                LLObjectComplexity object_complexity;
+                                object_complexity.objectName = attached_object->getAttachmentItemName();
+                                object_complexity.objectId = attached_object->getAttachmentItemID();
+                                object_complexity.objectCost = attachment_total_cost;
+                                object_complexity_list.push_back(object_complexity);
+                            }
+
 							// <FS:Ansariel> Show per-item complexity in COF
 							if (isSelf())
 							{
@@ -11679,8 +11812,8 @@ void LLVOAvatar::accountRenderComplexityForObject(
 								{
 									temp_item_complexity.insert(std::make_pair(attached_object->getID(), (U32)attachment_total_cost));
 								}
-							}
 							// </FS:Ansariel>
+							}
 						}
 					}
 				}
@@ -11775,6 +11908,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		U32 cost = VISUAL_COMPLEXITY_UNKNOWN;
 		LLVOVolume::texture_cost_t textures;
 		hud_complexity_list_t hud_complexity_list;
+        object_complexity_list_t object_complexity_list;
+
 		//<FS:Beq> BOM constrain number of bake requests when BOM not supported
 		// for (U8 baked_index = 0; baked_index < BAKED_NUM_INDICES; baked_index++)
 		for (U8 baked_index = 0; baked_index < getNumBakes(); baked_index++)
@@ -11822,8 +11957,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
             {
                 accountRenderComplexityForObject(volp, max_attachment_complexity,
                                                  // <FS:Ansariel> Show per-item complexity in COF
-                                                 //textures, cost, hud_complexity_list);
-                                                 textures, cost, hud_complexity_list, item_complexity, temp_item_complexity);
+                                                 //textures, cost, hud_complexity_list, object_complexity_list);
+                                                 textures, cost, hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity);
                                                  // </FS:Ansariel>
             }
         }
@@ -11849,9 +11984,61 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                 const LLViewerObject* attached_object = attachment_iter->get();
                 accountRenderComplexityForObject(attached_object, max_attachment_complexity,
                                                  // <FS:Ansariel> Show per-item complexity in COF
-                                                 //textures, cost, hud_complexity_list);
-                                                 textures, cost, hud_complexity_list, item_complexity, temp_item_complexity);
+                                                 //textures, cost, hud_complexity_list, object_complexity_list);
+                                                 textures, cost, hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity);
                                                  // </FS:Ansariel>
+
+				// <FS:Zi> FIRE-31330: Check if this attachment is on the HUD and contains rigged mesh.
+				//         No need for isSelf() as HUD attachments always are owned by us.
+				//         NOTE: This function should be revised once we have better information
+				//         about pending/loaded rigging data and moved to a more appropriate
+				//         place in the code. For now, this is a good spot as the complexity calculation
+				//         gets updated when rigging data arrives, so we can reliably identify rigged
+				//         attachments where the skinning information took a while to load.
+				if (attached_object->isHUDAttachment() && attached_object->mCheckRigOnHUD)
+				{
+					// check if the root object is rigged
+					bool is_rigged = attached_object->isRiggedMesh();
+
+					// if not, check if any of its children is rigged
+					if (!is_rigged)
+					{
+						LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
+						for (auto childp : child_list)
+						{
+							if (childp && childp->isRiggedMesh())
+							{
+								is_rigged = true;
+								break;
+							}
+						}
+					}
+
+					// if it is rigged, display the warning dialog once per object
+					if (is_rigged)
+					{
+						// can't use attached_object as it is const, so grab it from the iterator instead
+						attachment_iter->get()->mCheckRigOnHUD = false;
+
+						LLSD args;
+
+						LLViewerInventoryItem* inv_object = gInventory.getItem(attached_object->getAttachmentItemID());
+
+						if (inv_object)
+						{
+							args["NAME"] = inv_object->getName();
+						}
+						else
+						{
+							args["NAME"] = LLTrans::getString("Unknown");
+						}
+
+						// can't use attached_object as it is const, so grab it from the iterator instead
+						args["HUD_POINT"] = LLTrans::getString(getTargetAttachmentPoint(attachment_iter->get())->getName());
+						LLNotificationsUtil::add("AttachedRiggedObjectToHUD", args);
+					}
+				}
+				// </FS:Zi>
 			}
 		}
 
@@ -11912,12 +12099,12 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		mVisualComplexity = cost;
 		mVisualComplexityStale = false;
 
-        static LLCachedControl<U32> show_my_complexity_changes(gSavedSettings, "ShowMyComplexityChanges", 20);
-
-        if (isSelf() && show_my_complexity_changes)
+        if (isSelf())
         {
             // Avatar complexity
             LLAvatarRenderNotifier::getInstance()->updateNotificationAgent(mVisualComplexity);
+
+            LLAvatarRenderNotifier::getInstance()->setObjectComplexityList(object_complexity_list);
 
             // HUD complexity
             LLHUDRenderNotifier::getInstance()->updateNotificationHUD(hud_complexity_list);
@@ -11937,6 +12124,7 @@ void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
 	mLastImpostorUpdateReason = 7;
+	markARTStale();// <FS:Beq> Force a refresh of the ART to take into account new setting.
 
     // <FS:Ansariel> [FS Persisted Avatar Render Settings]
     //LLRenderMuteList::getInstance()->saveVisualMuteSetting(getID(), S32(set));
@@ -12089,7 +12277,7 @@ LLVOAvatar::AvatarOverallAppearance LLVOAvatar::getOverallAppearance() const
 	}
 	else // !isSelf()
 	{
-		if (isInMuteList())
+		if (isInMuteList())	
 		{
 			result = AOA_INVISIBLE;
 		}
@@ -12116,23 +12304,19 @@ void LLVOAvatar::calcMutedAVColor()
     std::string change_msg;
     LLUUID av_id(getID());
 
-    if (getVisualMuteSettings() == AV_DO_NOT_RENDER)
+// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
+	if (isRlvSilhouette())
+	{
+		new_color = LLColor4::silhouette;
+		change_msg = " not rendered: color is silhouette";
+	}
+    else if (getVisualMuteSettings() == AV_DO_NOT_RENDER)
+// [/RLVa:KB]
+//    if (getVisualMuteSettings() == AV_DO_NOT_RENDER)
     {
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-		 if (isRlvSilhouette())
-		 {
-			 new_color = LLColor4::silhouette;
-			 change_msg = " not rendered: color is silhouette";
-		 }
-		 else
-		 {
-// [/RLVa:KB]
-			// explicitly not-rendered avatars are light grey
-			 new_color = LLColor4::grey4;
-			 change_msg = " not rendered: color is grey4";
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-		 }
-// [/RLVa:KB]
+        // explicitly not-rendered avatars are light grey
+        new_color = LLColor4::grey4;
+        change_msg = " not rendered: color is grey4";
     }
     else if (LLMuteList::getInstance()->isMuted(av_id)) // the user blocked them
     {
@@ -12146,14 +12330,8 @@ void LLVOAvatar::calcMutedAVColor()
         change_msg = " simple imposter ";
     }
 #ifdef COLORIZE_JELLYDOLLS
-//    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
-// [RLVa:KB] - Checked: RLVa-2.2 (@setcam_avdist)
-    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 || mMutedAVColor == LLColor4::silhouette)
-#else
-    else if (mMutedAVColor == LLColor4::silhouette)
-#endif
-// [/RLVa:KB]
-   {
+    else if ( mMutedAVColor == LLColor4::white || mMutedAVColor == LLColor4::grey3 || mMutedAVColor == LLColor4::grey4 )
+	{
         // select a color based on the first byte of the agents uuid so any muted agent is always the same color
         F32 color_value = (F32) (av_id.mData[0]);
         F32 spectrum = (color_value / 256.0);          // spectrum is between 0 and 1.f
@@ -12172,8 +12350,7 @@ void LLVOAvatar::calcMutedAVColor()
 		new_color.normalize();
         new_color *= 0.28f;            // Tone it down
 	}
-// <FS:Ansariel> RLVa fix
-//#endif
+#endif
     else
     {
 		new_color = LLColor4::grey4;

@@ -33,6 +33,7 @@
 #include <iphlpapi.h>
 #endif
 
+#include "llapp.h"
 #include "lldefs.h"
 #include "llerror.h"
 
@@ -44,7 +45,7 @@
 #include "lltimer.h"
 #include "llthread.h"
 #include "llmutex.h"
-
+#include "fstelemetry.h"
 const LLUUID LLUUID::null;
 const LLTransactionID LLTransactionID::tnull;
 
@@ -155,6 +156,7 @@ U32 janky_fast_random_seeded_bytes(U32 seed, U32 val)
 // Common to all UUID implementations
 void LLUUID::toString(std::string& out) const
 {
+	FSZone;
 	out = llformat(
 		"%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
 		(U8)(mData[0]),
@@ -217,6 +219,7 @@ BOOL LLUUID::set(const char* in_string, BOOL emit)
 
 BOOL LLUUID::set(const std::string& in_string, BOOL emit)
 {
+	FSZone;
 	BOOL broken_format = FALSE;
 
 	// empty strings should make NULL uuid
@@ -1027,6 +1030,7 @@ LLUUID::LLUUID()
 // Copy constructor
  LLUUID::LLUUID(const LLUUID& rhs)
 {
+	FSZone;
 	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *tmp = (U32 *)mData;
 	//U32 *rhstmp = (U32 *)rhs.mData;
@@ -1045,6 +1049,7 @@ LLUUID::LLUUID()
 // Assignment
  LLUUID& LLUUID::operator=(const LLUUID& rhs)
 {
+	FSZone;
 	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//// No need to check the case where this==&rhs.  The branch is slower than the write.
 	//U32 *tmp = (U32 *)mData;

@@ -147,7 +147,7 @@
 	 height="16"
 	 width="16"
 	 layout="topleft"
-	 control_name="FSPlayCollisionSounds"
+	 control_name="EnableCollisionSounds"
 	 disabled_control="MuteAudio"
 	/>
 	<slider

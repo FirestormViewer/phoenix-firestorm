@@ -141,6 +141,7 @@
 			<menu_item_check label="Права участка" name="Parcel Properties"/>
 			<menu_item_check label="Расширенное меню" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_check label="Увеличить скорость графики ..." name="Performance"/>
 		<menu_item_call label="Телепортироваться домой" name="Teleport Home"/>
 
 		<menu label="Окружающая среда" name="Environment">
@@ -307,7 +308,7 @@
 		<menu_item_call label="Вступить в группу поддержки Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Расписание обучений Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Календарь Событий Firestorm" name="Firestorm Events Calendar"/>
-		<menu_item_call label="Обучение" name="How To"/>
+		<menu_item_check label="Обучение" name="How To"/>
 		<!-- <menu_item_call label="Second Life Help" name="Second Life Help"/> -->
 		<menu_item_call label="[CURRENT_GRID] помощь" name="current_grid_help"/>
 		<menu_item_call label="О [CURRENT_GRID]" name="current_grid_about"/>
@@ -418,6 +419,7 @@
 			<menu_item_check label="Всегда бежать" name="Always Run"/>
 			<menu_item_check label="Лететь" name="Fly"/>
 			<menu_item_call label="Закрыть окно" name="Close Window"/>
+			<menu_item_call label="Закрыть группу окон" name="Close Window Group"/>
 			<menu_item_call label="Закрыть все окна" name="Close All Windows"/>
 			<menu_item_call label="Снимок на диск" name="Snapshot to Disk"/>
 			<menu_item_call label="Вид от первого лица" name="Mouselook"/>

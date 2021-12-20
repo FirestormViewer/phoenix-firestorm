@@ -59,7 +59,6 @@
 #include "llslurl.h"
 #include "llrender.h"
 
-#include "llvoiceclient.h"	// for push-to-talk button handling
 #include "stringize.h"
 
 //
@@ -1158,6 +1157,9 @@ BOOL LLViewerWindow::handleAnyMouseClick(LLWindow *window, LLCoordGL pos, MASK m
 	x = ll_round((F32)x / mDisplayScale.mV[VX]);
 	y = ll_round((F32)y / mDisplayScale.mV[VY]);
 
+    // Handle non-consuming global keybindings, like voice 
+    gViewerInput.handleGlobalBindsMouse(clicktype, mask, down);
+
 	// only send mouse clicks to UI if UI is visible
 	if(gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
 	{	
@@ -1678,6 +1680,10 @@ void LLViewerWindow::handleFocusLost(LLWindow *window)
 
 BOOL LLViewerWindow::handleTranslatedKeyDown(KEY key,  MASK mask, BOOL repeated)
 {
+    // Handle non-consuming global keybindings, like voice 
+    // Never affects event processing.
+    gViewerInput.handleGlobalBindsKeyDown(key, mask);
+
 	if (gAwayTimer.getElapsedTimeF32() > LLAgent::MIN_AFK_TIME)
 	{
 		gAgent.clearAFK();
@@ -1702,6 +1708,10 @@ BOOL LLViewerWindow::handleTranslatedKeyDown(KEY key,  MASK mask, BOOL repeated)
 
 BOOL LLViewerWindow::handleTranslatedKeyUp(KEY key,  MASK mask)
 {
+    // Handle non-consuming global keybindings, like voice 
+    // Never affects event processing.
+    gViewerInput.handleGlobalBindsKeyUp(key, mask);
+
 	// Let the inspect tool code check for ALT key to set LLToolSelectRect active instead LLToolCamera
 	LLToolCompInspect * tool_inspectp = LLToolCompInspect::getInstance();
 	if (LLToolMgr::getInstance()->getCurrentTool() == tool_inspectp)
@@ -3332,7 +3342,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
                 // ToUnicodeEx changes buffer state on OS below Win10, which is undesirable,
                 // but since we already did a TranslateMessage() in gatherInput(), this
                 // should have no negative effect
-                int res = ToUnicodeEx(key, 0, keyboard_state, chars, char_count, 1 << 2 /*do not modify buffer flag*/, layout);
+                    // ToUnicodeEx works with virtual key codes
+                    int res = ToUnicodeEx(raw_key, 0, keyboard_state, chars, char_count, 1 << 2 /*do not modify buffer flag*/, layout);
                 if (res == 1 && chars[0] >= 0x20)
                 {
                     // Let it fall through to character handler and get a WM_CHAR.
@@ -3809,13 +3820,13 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 	}
 }
 
-static LLTrace::BlockTimerStatHandle ftm("Update UI");
+static LLTrace::BlockTimerStatHandle FTM_UPDATE_UI("Update UI"); // <FS:Beq/> rename to sensible symbol
 
 // Update UI based on stored mouse position from mouse-move
 // event processing.
 void LLViewerWindow::updateUI()
 {
-	LL_RECORD_BLOCK_TIME(ftm);
+	LL_RECORD_BLOCK_TIME(FTM_UPDATE_UI); // <FS:Beq/> rename to sensible symbol
 
 	static std::string last_handle_msg;
 
@@ -6402,6 +6413,104 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	}
 	
 	return ret;
+}
+
+BOOL LLViewerWindow::simpleSnapshot(LLImageRaw* raw, S32 image_width, S32 image_height, const int num_render_passes)
+{
+    gDisplaySwapBuffers = FALSE;
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    setCursor(UI_CURSOR_WAIT);
+
+    BOOL prev_draw_ui = gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI) ? TRUE : FALSE;
+    if (prev_draw_ui != false)
+    {
+        LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
+    }
+
+    LLPipeline::sShowHUDAttachments = FALSE;
+    LLRect window_rect = getWorldViewRectRaw();
+
+    S32 original_width = LLPipeline::sRenderDeferred ? gPipeline.mDeferredScreen.getWidth() : gViewerWindow->getWorldViewWidthRaw();
+    S32 original_height = LLPipeline::sRenderDeferred ? gPipeline.mDeferredScreen.getHeight() : gViewerWindow->getWorldViewHeightRaw();
+
+    LLRenderTarget scratch_space;
+    U32 color_fmt = GL_RGBA;
+    const bool use_depth_buffer = true;
+    const bool use_stencil_buffer = true;
+    if (scratch_space.allocate(image_width, image_height, color_fmt, use_depth_buffer, use_stencil_buffer))
+    {
+        if (gPipeline.allocateScreenBuffer(image_width, image_height))
+        {
+            mWorldViewRectRaw.set(0, image_height, image_width, 0);
+
+            scratch_space.bindTarget();
+        }
+        else
+        {
+            scratch_space.release();
+            gPipeline.allocateScreenBuffer(original_width, original_height);
+        }
+    }
+
+    // we render the scene more than once since this helps
+    // greatly with the objects not being drawn in the 
+    // snapshot when they are drawn in the scene. This is 
+    // evident when you set this value via the debug setting
+    // called 360CaptureNumRenderPasses to 1. The theory is
+    // that the missing objects are caused by the sUseOcclusion
+    // property in pipeline but that the use in pipeline.cpp
+    // lags by a frame or two so rendering more than once
+    // appears to help a lot.
+    for (int i = 0; i < num_render_passes; ++i)
+    {
+        // turning this flag off here prohibits the screen swap
+        // to present the new page to the viewer - this stops
+        // the black flash in between captures when the number
+        // of render passes is more than 1. We need to also
+        // set it here because code in LLViewerDisplay resets
+        // it to TRUE each time.
+        gDisplaySwapBuffers = FALSE;
+
+        // actually render the scene
+        const U32 subfield = 0;
+        const bool do_rebuild = true;
+        const F32 zoom = 1.0;
+        const bool for_snapshot = TRUE;
+        display(do_rebuild, zoom, subfield, for_snapshot);
+    }
+
+    glReadPixels(
+        0, 0,
+        image_width,
+        image_height,
+        GL_RGB, GL_UNSIGNED_BYTE,
+        raw->getData()
+    );
+    stop_glerror();
+
+    gDisplaySwapBuffers = FALSE;
+    gDepthDirty = TRUE;
+
+    if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        if (prev_draw_ui != false)
+        {
+            LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
+        }
+    }
+
+    LLPipeline::sShowHUDAttachments = TRUE;
+
+    setCursor(UI_CURSOR_ARROW);
+
+    gPipeline.resetDrawOrders();
+    mWorldViewRectRaw = window_rect;
+    scratch_space.flush();
+    scratch_space.release();
+    gPipeline.allocateScreenBuffer(original_width, original_height);
+
+    return true;
 }
 
 void LLViewerWindow::destroyWindow()

@@ -3129,6 +3129,10 @@ Would you be my friend?
        index="0"
        name="SetName"
        text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
     </form>
   </notification>
 
@@ -13732,4 +13736,13 @@ Firestorm Animation Overrider: [AO_MESSAGE]
     name="notifyignore"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="AttachedRiggedObjectToHUD"
+   type="alertmodal">
+An attachment named "[NAME]" contains rigged mesh but is attached to the HUD point "[HUD_POINT]". This means you will see it rendered correctly, but everyone else is not going to be able see it at all. You might want to consider taking it off and re-attaching it to a regular body attachment point.
+   <usetemplate
+    ignoretext="Warn me when a rigged attachment is worn on a HUD attachment point"
+    name="notifyignore"/>
+  </notification>
 </notifications>

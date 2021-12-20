@@ -228,8 +228,15 @@ Ansariel Hiller
 	SL-13364
 	SL-13858
 	SL-13697
+	SL-14939
+	SL-14940
+	SL-14941
 	SL-13395
 	SL-3136
+	SL-15200
+	SL-15226
+	SL-15227
+	SL-15398
 Aralara Rajal
 Arare Chantilly
 	CHUIBUG-191
@@ -272,6 +279,7 @@ Beq Janus
 	SL-13583
 	SL-14766
 	SL-14927
+	SL-11300
 Beth Walcher
 Bezilon Kasei
 Biancaluce Robbiani
@@ -812,6 +820,7 @@ Jonathan Yap
 	STORM-2142
 	STORM-2145
 	SL-10089
+	BUG-229818
 Kadah Coba
 	STORM-1060
     STORM-1843

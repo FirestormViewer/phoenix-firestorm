@@ -351,7 +351,7 @@
    height="21"
    layout="topleft"
    name="img_info_border"
-   top_pad="0"
+   top_pad="5"
    right="-10"
    follows="left|top|right"
    left_delta="0"/>

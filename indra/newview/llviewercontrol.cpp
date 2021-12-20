@@ -107,7 +107,7 @@
 #include "llviewerregion.h"
 #include "NACLantispam.h"
 #include "nd/ndlogthrottle.h"
-
+#include "fsperfstats.h"
 // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 #include "llanimationstates.h"
 
@@ -231,9 +231,34 @@ bool handleSetShaderChanged(const LLSD& newvalue)
 	gBumpImageList.destroyGL();
 	gBumpImageList.restoreGL();
 
+    if (gPipeline.isInit())
+    {
+        // ALM depends onto atmospheric shaders, state might have changed
+        bool old_state = LLPipeline::sRenderDeferred;
+        LLPipeline::refreshCachedSettings();
+        gPipeline.updateRenderDeferred();
+        if (old_state != LLPipeline::sRenderDeferred)
+        {
+            gPipeline.releaseGLBuffers();
+            gPipeline.createGLBuffers();
+            gPipeline.resetVertexBuffers();
+        }
+    }
+
 	// else, leave terrain detail as is
 	LLViewerShaderMgr::instance()->setShaders();
 	return true;
+}
+
+static bool handleAvatarVPChanged(const LLSD& newvalue)
+{
+    LLRenderTarget::sUseFBO = newvalue.asBoolean()
+                                && gSavedSettings.getBOOL("RenderObjectBump")
+                                && gSavedSettings.getBOOL("RenderTransparentWater")
+                                && gSavedSettings.getBOOL("RenderDeferred");
+
+    handleSetShaderChanged(LLSD());
+    return true;
 }
 
 static bool handleRenderPerfTestChanged(const LLSD& newvalue)
@@ -275,7 +300,10 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
 
 bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
 {
-	LLRenderTarget::sUseFBO = newvalue.asBoolean();
+    LLRenderTarget::sUseFBO = newvalue.asBoolean() 
+                                && gSavedSettings.getBOOL("RenderObjectBump") 
+                                && gSavedSettings.getBOOL("RenderAvatarVP") 
+                                && gSavedSettings.getBOOL("RenderDeferred");
 	if (gPipeline.isInit())
 	{
 		gPipeline.updateRenderTransparentWater();
@@ -547,7 +575,10 @@ static bool handleRenderDeferredChanged(const LLSD& newvalue)
 //
 static bool handleRenderBumpChanged(const LLSD& newval)
 {
-	LLRenderTarget::sUseFBO = newval.asBoolean();
+    LLRenderTarget::sUseFBO = newval.asBoolean() 
+                                && gSavedSettings.getBOOL("RenderTransparentWater") 
+                                && gSavedSettings.getBOOL("RenderAvatarVP")
+                                && gSavedSettings.getBOOL("RenderDeferred");
 	if (gPipeline.isInit())
 	{
 		gPipeline.updateRenderBump();
@@ -1059,6 +1090,40 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 }
 // </FS:Ansariel>
 
+// <FS:Beq> perrf floater stuffs
+void handleTargetFPSChanged(const LLSD& newValue)
+{
+	const auto targetFPS = gSavedSettings.getU32("FSTargetFPS");
+	FSPerfStats::targetFPS = targetFPS;
+}
+
+// <FS:Beq> perrf floater stuffs
+void handleAutoTuneFPSChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSAutoTuneFPS");
+	FSPerfStats::autoTune = newval;
+	if(newval && FSPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
+	{
+		gSavedSettings.setF32("FSRenderAvatarMaxART",log10(FSPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
+	}
+}
+
+void handleRenderAvatarMaxARTChanged(const LLSD& newValue)
+{
+	FSPerfStats::StatsRecorder::updateRenderCostLimitFromSettings();
+}
+void handleFPSTuningStrategyChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
+	FSPerfStats::fpsTuningStrategy = newval;
+}
+void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled");
+	FSPerfStats::StatsRecorder::setEnabled(newval);
+}
+// </FS:Beq>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1073,7 +1138,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("OctreeAttachmentSizeFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
 	gSavedSettings.getControl("RenderMaxTextureIndex")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderUseTriStrips")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
+	gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&handleAvatarVPChanged, _2));
 	gSavedSettings.getControl("RenderUIBuffer")->getSignal()->connect(boost::bind(&handleWindowResized, _2));
 	gSavedSettings.getControl("RenderDepthOfField")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
 	gSavedSettings.getControl("RenderFSAASamples")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
@@ -1313,6 +1378,14 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Better asset cache size control
 	gSavedSettings.getControl("FSDiskCacheSize")->getSignal()->connect(boost::bind(&handleDiskCacheSizeChanged, _2));
+
+	// <FS:Beq> perf floater controls
+	gSavedSettings.getControl("FSTargetFPS")->getSignal()->connect(boost::bind(&handleTargetFPSChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneFPS")->getSignal()->connect(boost::bind(&handleAutoTuneFPSChanged, _2));
+	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
+	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
+	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
+	// </FS:Beq>
 }
 
 #if TEST_CACHED_CONTROL

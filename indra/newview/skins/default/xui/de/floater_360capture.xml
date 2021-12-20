@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="360capture" title="360° Foto">
+	<panel name="ui_panel_left">
+		<text name="quality_level_label">
+			Qualität
+		</text>
+		<radio_group name="360_quality_selection">
+			<radio_item label="Vorschau (schnell)" name="preview_quality" tool_tip="Vorschau-Qualität"/>
+			<radio_item label="Mittel" name="medium_quality" tool_tip="Mittlere Qualität"/>
+			<radio_item label="Hoch" name="high_quality" tool_tip="Hohe Qualität"/>
+			<radio_item label="Höchste" name="maximum_quality" tool_tip="Höchste Qualität"/>
+		</radio_group>
+		<check_box label="Alle Avatare ausblenden" name="360_hide_avatar"/>
+		<button label="360° Bild erzeugen" name="capture_button"/>
+		<button label="Speichern unter..." name="save_local_button"/>
+	</panel>
+	<panel name="ui_panel_right">
+		<text name="statusbar">
+			Auf das Bild klicken und bewegen um Ansicht zu schwenken.
+		</text>
+	</panel>
+</floater>

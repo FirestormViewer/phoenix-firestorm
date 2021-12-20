@@ -97,9 +97,9 @@ public:
 	/*virtual*/ void changed(const LLUUID& session_id, U32 mask) {};
 
 	// static data update, called from message handler
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//static void updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email);
-	static void updateUserInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep for OpenSim
+	//static void updateUserInfo(const std::string& visibility);
+	static void updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 
 	// refresh all the graphics preferences menus
 	static void refreshEnabledGraphics();
@@ -119,13 +119,12 @@ public:
 	void getControlNames(std::vector<std::string>& names);
 	// updates click/double-click action controls depending on values from settings.xml
 	void updateClickActionViews();
+    void updateSearchableItems();
 
-// <FS:CR> Make onBtnOk() public for settings backup panel
-//protected:
-	void		onBtnOK(const LLSD& userdata);
-protected:
-// </FS:CR>
-	void		onBtnCancel(const LLSD& userdata);
+    void		onBtnOK(const LLSD& userdata);
+    void		onBtnCancel(const LLSD& userdata);
+
+protected:	
 
 	//void		onClickClearCache();			// Clear viewer texture cache, file cache on next startup // AO: was protected, moved to public
 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
@@ -229,9 +228,9 @@ public:
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
 	void enableHistory();
-	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//void setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email);
-	void setPersonalInfo(const std::string& visibility, bool im_via_email, bool is_verified_email, const std::string& email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep for OpenSim
+	//void setPersonalInfo(const std::string& visibility);
+	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
 	// <FS:Ansariel> Improved graphics preferences
@@ -301,11 +300,13 @@ private:
 	void onDeleteTranscriptsResponse(const LLSD& notification, const LLSD& response);
 	void updateDeleteTranscriptsButton();
 	void updateMaxComplexity();
+    void updateComplexityText();
 	static bool loadFromFilename(const std::string& filename, std::map<std::string, std::string> &label_map);
 
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
 	bool mGotPersonalInfo;
+	// <FS:Ansariel> Keep it for OpenSim
 	bool mOriginalIMViaEmail;
 	bool mLanguageChanged;
 	bool mAvatarDataInitialized;
@@ -320,6 +321,9 @@ private:
 
 	LLSearchEditor *mFilterEdit;
 	std::unique_ptr< ll::prefs::SearchData > mSearchData;
+	bool mSearchDataDirty;
+
+    boost::signals2::connection	mComplexityChangedSignal;
 
 	void onUpdateFilterTerm( bool force = false );
 	void collectSearchableItems();
@@ -473,37 +477,15 @@ private:
 	S32 mEditingMode;
 };
 
-class LLFloaterPreferenceGraphicsAdvanced : public LLFloater
-{
-  public: 
-	LLFloaterPreferenceGraphicsAdvanced(const LLSD& key);
-	~LLFloaterPreferenceGraphicsAdvanced();
-	/*virtual*/ BOOL postBuild();
-	void onOpen(const LLSD& key);
-	void onClickCloseBtn(bool app_quitting);
-	void disableUnavailableSettings();
-	void refreshEnabledGraphics();
-	void refreshEnabledState();
-	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
-	void updateMaxNonImpostors();
-	void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
-	void updateMaxComplexity();
-	void setMaxComplexityText(U32 value, LLTextBox* text_box);
-	static void setIndirectControls();
-	static void setIndirectMaxNonImpostors();
-	static void setIndirectMaxArc();
-	void refresh();
-	// callback for when client modifies a render option
-	void onRenderOptionEnable();
-    void onAdvancedAtmosphericsEnable();
-	LOG_CLASS(LLFloaterPreferenceGraphicsAdvanced);
-};
-
 class LLAvatarComplexityControls
 {
   public: 
-	static void updateMax(LLSliderCtrl* slider, LLTextBox* value_label);
-	static void setText(U32 value, LLTextBox* text_box);
+	static void updateMax(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val = false);
+	static void setText(U32 value, LLTextBox* text_box, bool short_val = false);
+	// <FS:Beq> for render time support
+	static void updateMaxRenderTime(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val = false);
+	static void setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val = false); 
+	// </FS:Beq>
 	static void setIndirectControls();
 	static void setIndirectMaxNonImpostors();
 	static void setIndirectMaxArc();

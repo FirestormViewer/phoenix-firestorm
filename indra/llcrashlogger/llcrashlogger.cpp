@@ -726,7 +726,7 @@ bool LLCrashLogger::init()
 #if LL_WINDOWS
 		Sleep(1000);
 #else
-        sleep(1);
+        ::sleep(1);
 #endif 
         locked = mKeyMaster.checkMaster();
     }
@@ -785,7 +785,7 @@ void LLCrashLogger::init_curl()
         }
 
         CRYPTO_set_locking_callback(ssl_locking_callback);
-        CRYPTO_THREADID_set_callback(ssl_thread_id_callback);
+        (void)CRYPTO_THREADID_set_callback(ssl_thread_id_callback);
     }
 }
 

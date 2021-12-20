@@ -65,6 +65,7 @@
 			<menu_item_call label="LSL-Brücke neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Foto machen" name="Take Snapshot"/>
+		<menu_item_call label="360° Foto" name="Capture 360"/>
 		<menu_item_call label="Money-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
 		<menu_item_call label="Einstellungen" name="Preferences"/>
@@ -136,6 +137,7 @@
 			<menu_item_check label="Koordinaten" name="Coordinates"/>
 			<menu_item_check label="Parzelleneigenschaften" name="Parcel Properties"/>
 			<menu_item_check label="Menü „Erweitert“" name="Show Advanced Menu"/>
+			<menu_item_check label="Grafikgeschwindigkeit verbessern..." name="Performance"/>
 		</menu>
 		<menu_item_call label="Nach Hause teleportieren" name="Teleport Home"/>
 		<menu_item_call label="Diesen Ort als Zuhause festlegen" name="Set Home to Here"/>
@@ -261,7 +263,7 @@
 		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
 		<menu_item_call label="Stundenplan Firestorm-Klassen" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Firestorm-Eventkalender" name="Firestorm Events Calendar"/>
-		<menu_item_call label="Anweisungen..." name="How To"/>
+		<menu_item_check label="Anweisungen..." name="How To"/>
 		<menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
 		<menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
@@ -384,6 +386,7 @@
             <menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_call label="Fenster schließen" name="Close Window"/>
+			<menu_item_call label="Fenstergruppe schließen" name="Close Window Group"/>
 			<menu_item_call label="Alle Fenster schließen" name="Close All Windows"/>
 			<menu_item_call label="Foto auf Datenträger" name="Snapshot to Disk"/>
 			<menu_item_call label="Mouselook" name="Mouselook"/>
@@ -540,6 +543,7 @@
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
+			<menu_item_call label="Interest-Liste: Vollständiges Update" name="Interest List: Full Update"/>
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">

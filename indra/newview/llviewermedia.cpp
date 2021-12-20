@@ -1314,7 +1314,13 @@ void LLViewerMedia::getOpenIDCookieCoro(std::string url)
 				// down.
 				std::string cefUrl(std::string(inst->mOpenIDURL.mURI) + "://" + std::string(inst->mOpenIDURL.mAuthority));
 
-				media_instance->getMediaPlugin()->setCookie(cefUrl, cookie_name, cookie_value, cookie_host, cookie_path, httponly, secure);
+				media_instance->getMediaPlugin()->setCookie(cefUrl, cookie_name, cookie_value, cookie_host, 
+                    cookie_path, httponly, secure);
+
+                // Now that we have parsed the raw cookie, we must store it so that each new media instance
+                // can also get a copy and faciliate logging into internal SL sites.
+				media_instance->getMediaPlugin()->storeOpenIDCookie(cefUrl, cookie_name, cookie_value, 
+                    cookie_host, cookie_path, httponly, secure);
 			}
 		}
 	}
@@ -1787,8 +1793,16 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 			media_source->cookies_enabled( cookies_enabled || clean_browser);
 
 			// collect 'javascript enabled' setting from prefs and send to embedded browser
-			bool javascript_enabled = gSavedSettings.getBOOL( "BrowserJavascriptEnabled" );
-			media_source->setJavascriptEnabled( javascript_enabled || clean_browser);
+			bool javascript_enabled = gSavedSettings.getBOOL("BrowserJavascriptEnabled");
+			media_source->setJavascriptEnabled(javascript_enabled || clean_browser);
+
+			// collect 'web security disabled' (see Chrome --web-security-disabled) setting from prefs and send to embedded browser
+			bool web_security_disabled = gSavedSettings.getBOOL("BrowserWebSecurityDisabled");
+			media_source->setWebSecurityDisabled(web_security_disabled || clean_browser);
+
+			// collect setting indicates if local file access from file URLs is allowed from prefs and send to embedded browser
+			bool file_access_from_file_urls = gSavedSettings.getBOOL("BrowserFileAccessFromFileUrls");
+			media_source->setFileAccessFromFileUrlsEnabled(file_access_from_file_urls || clean_browser);
 
 			// As of SL-15559 PDF files do not load in CEF v91 we enable plugins
 			// but explicitly disable Flash (PDF support in CEF is now treated as a plugin)
@@ -1866,6 +1880,7 @@ bool LLViewerMediaImpl::initializePlugin(const std::string& media_type)
 
 	if (media_source)
 	{
+		media_source->injectOpenIDCookie();
 		media_source->setDisableTimeout(gSavedSettings.getBOOL("DebugPluginDisableTimeout"));
 		media_source->setLoop(mMediaLoop);
 		media_source->setAutoScale(mMediaAutoScale);
@@ -1945,6 +1960,15 @@ void LLViewerMediaImpl::loadURI()
 			// No relevant previous media play state -- if we're loading the URL, we want to start playing.
 			start();
 		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+void LLViewerMediaImpl::executeJavaScript(const std::string& code)
+{
+	if (mMediaSource)
+	{
+		mMediaSource->executeJavaScript(code);
 	}
 }
 
@@ -3276,8 +3300,19 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 
 		case LLViewerMediaObserver::MEDIA_EVENT_FILE_DOWNLOAD:
 		{
-			//llinfos << "Media event - file download requested - filename is " << self->getFileDownloadFilename() << llendl;
-			LLNotificationsUtil::add("MediaFileDownloadUnsupported");
+			LL_DEBUGS("Media") << "Media event - file download requested - filename is " << plugin->getFileDownloadFilename() << LL_ENDL;
+			// pick a file from SAVE FILE dialog
+
+			// need a better algorithm that this or else, pass in type of save type
+			// from event that initiated it - this is okay for now - only thing
+			// that saves is 360s
+			std::string suggested_filename = plugin->getFileDownloadFilename();
+			LLFilePicker::ESaveFilter filter = LLFilePicker::FFSAVE_ALL;
+			if (suggested_filename.find(".jpg") != std::string::npos || suggested_filename.find(".jpeg") != std::string::npos)
+				filter = LLFilePicker::FFSAVE_JPEG;
+			if (suggested_filename.find(".png") != std::string::npos)
+				filter = LLFilePicker::FFSAVE_PNG;
+			init_threaded_picker_save_dialog(plugin, filter, suggested_filename);
 		}
 		break;
 

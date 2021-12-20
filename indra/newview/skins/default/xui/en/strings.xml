@@ -299,7 +299,6 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipPrimCount">Prims: [COUNT]</string>
 	<string name="TooltipPrimEquivalent">, Land Impact: [PEWEIGHT]</string>
 	<string name="TooltipPrimEquivalentLoading">, loading Land Impact...</string>
-	<string name="TooltipPrimEquivalentUnavailable">, Land Impact unavailable</string>
 	<string name="TooltipDistance">Distance: [DISTANCE] m</string>
 	<string name="TooltipPosition">Position: [POSITION]</string>
 
@@ -2645,6 +2644,8 @@ Try enclosing path to the editor with double quotes.
 
   <!-- commands -->
 
+  <string 
+name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_AboutLand_Label">About land</string>
   <string name="Command_Appearance_Label">Appearance</string>
   <string name="Command_Avatar_Label">Avatar</string>
@@ -2665,6 +2666,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_MiniMap_Label">Mini-map</string>
   <string name="Command_Move_Label">Walk / run / fly</string>
   <string name="Command_People_Label">People</string>
+  <string name="Command_Performance_Label">Graphics speed</string>
   <string name="Command_Picks_Label">Picks</string>
   <string name="Command_Places_Label">Places</string>
   <string name="Command_Preferences_Label">Preferences</string>
@@ -2710,6 +2712,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_DAO_Label">Derender Animesh</string>
   <string name="Command_Beacons_Label">Beacons</string>
 
+  <string 
+name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
   <string name="Command_Avatar_Tooltip">Choose a complete avatar</string>
@@ -2730,6 +2734,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_MiniMap_Tooltip">Show nearby people (CTRL+SHIFT+M)</string>
   <string name="Command_Move_Tooltip">Moving your avatar</string>
   <string name="Command_People_Tooltip">Friends, groups, and nearby people (CTRL+SHIFT+A)</string>
+  <string name="Command_Performance_Tooltip">Tune graphics settings</string>
   <string name="Command_Picks_Tooltip">Places to show as favorites in your profile</string>
   <string name="Command_Places_Tooltip">Places you've saved (ALT+H)</string>
   <string name="Command_Preferences_Tooltip">Preferences (CTRL+P)</string>
@@ -2928,7 +2933,7 @@ Try enclosing path to the editor with double quotes.
   <string name="preset_combo_label">-Empty list-</string>
   <string name="Default">Default</string>
   <string name="none_paren_cap">(None)</string>
-  <string name="no_limit">No Limit</string>
+  <string name="no_limit">No limit</string>
   
   <string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
       The physics shape contains triangles which are too small. Try simplifying the physics model.

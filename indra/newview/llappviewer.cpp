@@ -286,6 +286,7 @@
 #include "fsassetblacklist.h"
 
 #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
+#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if LL_LINUX && LL_GTK
 #include "glib.h"
@@ -675,13 +676,13 @@ static void settings_to_globals()
 
 static void settings_modify()
 {
-//	LLRenderTarget::sUseFBO				= gSavedSettings.getBOOL("RenderDeferred");
-// [RLVa:KB] - @setsphere
-	LLRenderTarget::sUseFBO				= gSavedSettings.getBOOL("RenderDeferred") || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
-// [/RLVa:KB]
 	LLPipeline::sRenderTransparentWater	= gSavedSettings.getBOOL("RenderTransparentWater");
 	LLPipeline::sRenderBump				= gSavedSettings.getBOOL("RenderObjectBump");
-	LLPipeline::sRenderDeferred		= LLPipeline::sRenderTransparentWater && LLPipeline::sRenderBump && gSavedSettings.getBOOL("RenderDeferred");
+	LLPipeline::sRenderDeferred = LLPipeline::sRenderTransparentWater && LLPipeline::sRenderBump && gSavedSettings.getBOOL("RenderDeferred");
+//    LLRenderTarget::sUseFBO = LLPipeline::sRenderDeferred && gSavedSettings.getBOOL("RenderAvatarVP");
+// [RLVa:KB] - @setsphere
+	LLRenderTarget::sUseFBO				= (LLPipeline::sRenderDeferred && gSavedSettings.getBOOL("RenderAvatarVP")) || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
+// [/RLVa:KB]
 	LLVOSurfacePatch::sLODFactor		= gSavedSettings.getF32("RenderTerrainLODFactor");
 	LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor; //square lod factor to get exponential range of [1,4]
 	gDebugGL = gSavedSettings.getBOOL("RenderDebugGL") || gDebugSession;
@@ -737,7 +738,7 @@ LLAppViewer* LLAppViewer::sInstance = NULL;
 LLTextureCache* LLAppViewer::sTextureCache = NULL;
 LLImageDecodeThread* LLAppViewer::sImageDecodeThread = NULL;
 LLTextureFetch* LLAppViewer::sTextureFetch = NULL;
-FSPurgeDiskCacheThread* LLAppViewer::sPurgeDiskCacheThread = NULL; // <FS:Ansariel> Regular disk cache cleanup
+LLPurgeDiskCacheThread* LLAppViewer::sPurgeDiskCacheThread = NULL;
 
 std::string getRuntime()
 {
@@ -800,8 +801,6 @@ LLAppViewer::LLAppViewer()
 
 	gLoggedInTime.stop();
 
-	initLoggingAndGetLastDuration();
-
 	processMarkerFiles();
 	//
 	// OK to write stuff to logs now, we've now crash reported if necessary
@@ -822,7 +821,7 @@ LLAppViewer::LLAppViewer()
 	std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
 #   endif // ! LL_BUGSPLAT
 	mDumpPath = logdir;
-	setMiniDumpDir(logdir);
+
 	setDebugFileNames(logdir);
 }
 
@@ -858,14 +857,10 @@ bool LLAppViewer::init()
 	// Start of the application
 	//
 
-	// <FS:Ansariel> Move further down after translation system has been initialized
-	//// initialize LLWearableType translation bridge.
-	//// Memory will be cleaned up in ::cleanupClass()
-	//LLWearableType::initParamSingleton(new LLUITranslationBridge());
-
+    // <FS:Ansariel> Move further down after translation system has been initialized
     //LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
     //LLSettingsType::initClass(trans);
-	// </FS:Ansariel>
+    // </FS:Ansariel>
 
 	// initialize SSE options
 	LLVector4a::initClass();
@@ -968,6 +963,7 @@ bool LLAppViewer::init()
 // </FS>
 	init_default_trans_args();
 
+    // inits from settings.xml and from strings.xml
 	if (!initConfiguration())
 		return false;
 
@@ -1041,10 +1037,9 @@ bool LLAppViewer::init()
 
 	// <FS:Ansariel> Moved down here translation system has been initialized
 	// initialize LLWearableType translation bridge.
-	// Memory will be cleaned up in ::cleanupClass()
-	LLWearableType::initParamSingleton(new LLUITranslationBridge());
-
+	// Will immediately use LLTranslationBridge to init LLWearableDictionary
 	LLTranslationBridge::ptr_t trans = std::make_shared<LLUITranslationBridge>();
+	LLWearableType::initParamSingleton(trans);
 	LLSettingsType::initParamSingleton(trans);
 	// </FS:Ansariel>
 
@@ -1300,19 +1295,27 @@ bool LLAppViewer::init()
             if (count > 0 && v1 <= 10)
             {
                 LL_INFOS("AppInit") << "Detected obsolete intel driver: " << driver << LL_ENDL;
-                LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedIntelDriver");
-                std::string gpu_name = ll_safe_string((const char *)glGetString(GL_RENDERER));
-                details.setArg("[VERSION]", driver);
-                details.setArg("[GPUNAME]", gpu_name);
-                S32 button = OSMessageBox(details.getString(),
-                                          LLStringUtil::null,
-                                          OSMB_YESNO);
-                if (OSBTN_YES == button && gViewerWindow)
+
+                if (!gViewerWindow->getInitAlert().empty() // graphic initialization crashed on last run
+                    || LLVersionInfo::getInstance()->getChannelAndVersion() != gLastRunVersion // viewer was updated
+                    || mNumSessions % 20 == 0 //periodically remind user to update driver
+                    )
                 {
-                    std::string url = LLWeb::escapeURL(LLTrans::getString("IntelDriverPage"));
-                    if (gViewerWindow->getWindow())
+                    LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedIntelDriver");
+                    std::string gpu_name = ll_safe_string((const char *)glGetString(GL_RENDERER));
+                    LL_INFOS("AppInit") << "Notifying user about obsolete intel driver for " << gpu_name << LL_ENDL;
+                    details.setArg("[VERSION]", driver);
+                    details.setArg("[GPUNAME]", gpu_name);
+                    S32 button = OSMessageBox(details.getString(),
+                        LLStringUtil::null,
+                        OSMB_YESNO);
+                    if (OSBTN_YES == button && gViewerWindow)
                     {
-                        gViewerWindow->getWindow()->spawnWebBrowser(url, false);
+                        std::string url = LLWeb::escapeURL(LLTrans::getString("IntelDriverPage"));
+                        if (gViewerWindow->getWindow())
+                        {
+                            gViewerWindow->getWindow()->spawnWebBrowser(url, false);
+                        }
                     }
                 }
             }
@@ -1374,9 +1377,9 @@ bool LLAppViewer::init()
 	gGLActive = FALSE;
 
 	// <FS:Ansariel> Disable updater
-//#if LL_RELEASE_FOR_DOWNLOAD
-//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
-//    {
+//#if LL_RELEASE_FOR_DOWNLOAD 
+//	if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//	{
 //	LLProcess::Params updater;
 //	updater.desc = "updater process";
 //	// Because it's the updater, it MUST persist beyond the lifespan of the
@@ -1540,6 +1543,13 @@ bool LLAppViewer::init()
 	// Load User's bindings
 	loadKeyBindings();
 
+#if LL_WINDOWS
+    if (!mSecondInstance)
+    {
+        gDirUtilp->deleteDirAndContents(gDirUtilp->getDumpLogsDirPath());
+    }
+#endif
+
 	return true;
 }
 
@@ -1570,6 +1580,7 @@ void LLAppViewer::initMaxHeapSize()
 }
 
 static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
+static LLTrace::BlockTimerStatHandle FTM_MESSAGES2("System Messages2");
 static LLTrace::BlockTimerStatHandle FTM_SLEEP("Sleep");
 static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
 
@@ -1631,6 +1642,10 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
+// <FS:Beq> Perfstats collection Frame boundary
+{
+	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
+
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
 	LLSD newFrame;
 // <FS:Beq> telemetry enabling. 
@@ -1665,6 +1680,7 @@ bool LLAppViewer::doFrame()
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
 
 	LL_RECORD_BLOCK_TIME(FTM_FRAME);
+	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 	LLTrace::BlockTimer::processTimes();
 	LLTrace::get_frame_recording().nextPeriod();
 	LLTrace::BlockTimer::logStats();
@@ -1673,8 +1689,9 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-
+	} // <FS:Beq/> perf stats
 	{
+		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered
 		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
 		// Check if we need to restore rendering masks.
 		if (restore_rendering_masks)
@@ -1712,7 +1729,7 @@ bool LLAppViewer::doFrame()
 
 		if (gViewerWindow)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+			LL_RECORD_BLOCK_TIME(FTM_MESSAGES2);
 			if (!restoreErrorTrap())
 			{
 				LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
@@ -1735,8 +1752,11 @@ bool LLAppViewer::doFrame()
 		// canonical per-frame event
 		mainloop.post(newFrame);
 		// give listeners a chance to run
+		{
+			FSZoneN("Main:Coro");
 		llcoro::suspend();
-
+		}
+		}// <FS:Beq> ensure we have the entire top scope of frame covered
 		if (!LLApp::isExiting())
 		{
 			pingMainloopTimeout("Main:JoystickKeyboard");
@@ -1752,6 +1772,8 @@ bool LLAppViewer::doFrame()
 				&& (gHeadlessClient || !gViewerWindow->getShowProgress())
 				&& !gFocusMgr.focusLocked())
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+				FSZoneN("Main:JoystickKeyboard");
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
                 gViewerInput.scanMouse();
@@ -1767,6 +1789,8 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 
 				LL_RECORD_BLOCK_TIME(FTM_IDLE);
@@ -1777,8 +1801,15 @@ bool LLAppViewer::doFrame()
 
 			if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
 			{
+				FSZoneN("Shutdown:SaveSnapshot");
 				pauseMainloopTimeout();
 				saveFinalSnapshot();
+
+                if (LLVoiceClient::instanceExists())
+                {
+                    LLVoiceClient::getInstance()->terminate();
+                }
+
 				disconnectViewer();
 				resumeMainloopTimeout();
 			}
@@ -1787,6 +1818,7 @@ bool LLAppViewer::doFrame()
 			// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
 			if (!LLApp::isExiting() && !gHeadlessClient && gViewerWindow)
 			{
+				FSZoneN("Main:Display");
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
@@ -1810,8 +1842,12 @@ bool LLAppViewer::doFrame()
 				// </FS:Ansariel>
 
 				pingMainloopTimeout("Main:Snapshot");
+				{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
+					FSZoneN("Main:Snapshot");
 				LLFloaterSnapshot::update(); // take snapshots
 				LLFloaterOutfitSnapshot::update();
+				}
 				gGLActive = FALSE;
 			}
 		}
@@ -1845,6 +1881,7 @@ bool LLAppViewer::doFrame()
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
 				{
+					FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_SLEEP );
 					ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
@@ -1922,6 +1959,7 @@ bool LLAppViewer::doFrame()
 			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
+				FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_FPSLIMIT );
 				F32 min_frame_time = 1.f / (F32)max_fps;
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
@@ -1961,7 +1999,8 @@ bool LLAppViewer::doFrame()
 	}
     FSFrameMark; // <FS:Beq> Tracy support delineate Frame
     LLPROFILE_UPDATE();
-
+	}
+	FSPerfStats::StatsRecorder::endFrame();
 	return ! LLApp::isRunning();
 }
 
@@ -2379,7 +2418,9 @@ bool LLAppViewer::cleanup()
 	if (LLConversationLog::instanceExists())
 	{
 		LLConversationLog::instance().cache();
-	}
+    }
+
+    clearSecHandler();
 
 	if (mPurgeCacheOnExit)
 	{
@@ -2437,7 +2478,7 @@ bool LLAppViewer::cleanup()
 	sTextureFetch->shutdown();
 	sTextureCache->shutdown();
 	sImageDecodeThread->shutdown();
-	sPurgeDiskCacheThread->shutdown(); // <FS:Ansariel> Regular disk cache cleanup
+	sPurgeDiskCacheThread->shutdown();
 
 	sTextureFetch->shutDownTextureCacheThread() ;
 	sTextureFetch->shutDownImageDecodeThread() ;
@@ -2460,10 +2501,8 @@ bool LLAppViewer::cleanup()
     sImageDecodeThread = NULL;
 	delete mFastTimerLogThread;
 	mFastTimerLogThread = NULL;
-	// <FS:Ansariel> Regular disk cache cleanup
 	delete sPurgeDiskCacheThread;
 	sPurgeDiskCacheThread = NULL;
-	// </FS:Ansariel>
 
 	if (LLFastTimerView::sAnalyzePerformance)
 	{
@@ -2566,7 +2605,7 @@ bool LLAppViewer::initThreads()
 													sImageDecodeThread,
 													enable_threads && true,
 													app_metrics_qa_mode);
-	LLAppViewer::sPurgeDiskCacheThread = new FSPurgeDiskCacheThread(); // <FS:Ansariel> Regular disk cache cleanup
+	LLAppViewer::sPurgeDiskCacheThread = new LLPurgeDiskCacheThread();
 
 	if (LLTrace::BlockTimer::sLog || LLTrace::BlockTimer::sMetricLog)
 	{
@@ -2634,78 +2673,90 @@ void errorCallback(LLError::ELevel level, const std::string &error_string)
 
 void LLAppViewer::initLoggingAndGetLastDuration()
 {
-	//
-	// Set up logging defaults for the viewer
-	//
-	LLError::initForApplication( gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "")
+    //
+    // Set up logging defaults for the viewer
+    //
+    LLError::initForApplication( gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "")
                                 ,gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "")
                                 );
-	LLError::addGenericRecorder(&errorCallback);
-	//LLError::setTimeFunction(getRuntime);
+    LLError::addGenericRecorder(&errorCallback);
+    //LLError::setTimeFunction(getRuntime);
 
-	// <FS:Ansariel> Remove old CEF log file (defined in dullahan.h)
-	LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef_log.txt"));
 
-	// Remove the last ".old" log file.
-	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     APP_NAME + ".old");
-	LLFile::remove(old_log_file);
+    if (mSecondInstance)
+    {
+        LLFile::mkdir(gDirUtilp->getDumpLogsDirPath());
+ 
+        LLUUID uid;
+        uid.generate();
+        LLError::logToFile(gDirUtilp->getDumpLogsDirPath(uid.asString() + ".log"));
+    }
+    else
+    {
+        // <FS:Ansariel> Remove old CEF log file (defined in dullahan.h)
+        LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "cef_log.txt"));
 
-	// Get name of the log file
-	std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     APP_NAME + ".log");
- 	/*
-	 * Before touching any log files, compute the duration of the last run
-	 * by comparing the ctime of the previous start marker file with the ctime
-	 * of the last log file.
-	 */
-	std::string start_marker_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, START_MARKER_FILE_NAME);
-	llstat start_marker_stat;
-	llstat log_file_stat;
-	std::ostringstream duration_log_stream; // can't log yet, so save any message for when we can below
-	int start_stat_result = LLFile::stat(start_marker_file_name, &start_marker_stat);
-	int log_stat_result = LLFile::stat(log_file, &log_file_stat);
-	if ( 0 == start_stat_result && 0 == log_stat_result )
-	{
-		int elapsed_seconds = log_file_stat.st_ctime - start_marker_stat.st_ctime;
-		// only report a last run time if the last viewer was the same version
-		// because this stat will be counted against this version
-		if ( markerIsSameVersion(start_marker_file_name) )
-		{
-			gLastExecDuration = elapsed_seconds;
-		}
-		else
-		{
-			duration_log_stream << "start marker from some other version; duration is not reported";
-			gLastExecDuration = -1;
-		}
-	}
-	else
-	{
-		// at least one of the LLFile::stat calls failed, so we can't compute the run time
-		duration_log_stream << "duration stat failure; start: "<< start_stat_result << " log: " << log_stat_result;
-		gLastExecDuration = -1; // unknown
-	}
-	std::string duration_log_msg(duration_log_stream.str());
+        // Remove the last ".old" log file.
+        std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+            APP_NAME + ".log");
+        LLFile::remove(old_log_file);
 
-	// Create a new start marker file for comparison with log file time for the next run
-	LLAPRFile start_marker_file ;
-	start_marker_file.open(start_marker_file_name, LL_APR_WB);
-	if (start_marker_file.getFileHandle())
-	{
-		recordMarkerVersion(start_marker_file);
-		start_marker_file.close();
-	}
+        // Get name of the log file
+        std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
+            APP_NAME + ".log");
+        /*
+        * Before touching any log files, compute the duration of the last run
+        * by comparing the ctime of the previous start marker file with the ctime
+        * of the last log file.
+        */
+        std::string start_marker_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, START_MARKER_FILE_NAME);
+        llstat start_marker_stat;
+        llstat log_file_stat;
+        std::ostringstream duration_log_stream; // can't log yet, so save any message for when we can below
+        int start_stat_result = LLFile::stat(start_marker_file_name, &start_marker_stat);
+        int log_stat_result = LLFile::stat(log_file, &log_file_stat);
+        if (0 == start_stat_result && 0 == log_stat_result)
+        {
+            int elapsed_seconds = log_file_stat.st_ctime - start_marker_stat.st_ctime;
+            // only report a last run time if the last viewer was the same version
+            // because this stat will be counted against this version
+            if (markerIsSameVersion(start_marker_file_name))
+            {
+                gLastExecDuration = elapsed_seconds;
+            }
+            else
+            {
+                duration_log_stream << "start marker from some other version; duration is not reported";
+                gLastExecDuration = -1;
+            }
+        }
+        else
+        {
+            // at least one of the LLFile::stat calls failed, so we can't compute the run time
+            duration_log_stream << "duration stat failure; start: " << start_stat_result << " log: " << log_stat_result;
+            gLastExecDuration = -1; // unknown
+        }
+        std::string duration_log_msg(duration_log_stream.str());
 
-	// Rename current log file to ".old"
-	LLFile::rename(log_file, old_log_file);
+        // Create a new start marker file for comparison with log file time for the next run
+        LLAPRFile start_marker_file;
+        start_marker_file.open(start_marker_file_name, LL_APR_WB);
+        if (start_marker_file.getFileHandle())
+        {
+            recordMarkerVersion(start_marker_file);
+            start_marker_file.close();
+        }
 
-	// Set the log file to SecondLife.log
-	LLError::logToFile(log_file);
-	if (!duration_log_msg.empty())
-	{
-		LL_WARNS("MarkerFile") << duration_log_msg << LL_ENDL;
-	}
+        // Rename current log file to ".old"
+        LLFile::rename(log_file, old_log_file);
+
+        // Set the log file to SecondLife.log
+        LLError::logToFile(log_file);
+        if (!duration_log_msg.empty())
+        {
+            LL_WARNS("MarkerFile") << duration_log_msg << LL_ENDL;
+        }
+    }
 }
 
 bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
@@ -3659,6 +3710,15 @@ bool LLAppViewer::initWindow()
 
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
+#if LL_WINDOWS && LL_BUGSPLAT
+    // bugsplat does not create dump folder and debug logs are written directly
+    // to logs folder, so it conflicts with main instance
+    if (mSecondInstance)
+    {
+        return;
+    }
+#endif
+
     //Try to do the minimum when writing data during a crash.
     std::string* debug_filename;
     debug_filename = ( isStatic
@@ -4161,7 +4221,7 @@ void LLAppViewer::writeSystemInfo()
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
 
 	// <FS:ND> we don't want this (otherwise set filename to Firestorm.old/log
-// #if LL_WINDOWS
+// #if LL_WINDOWS && !LL_BUGSPLAT
 // 	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
 // #else
 //     //Not ideal but sufficient for good reporting.
@@ -4530,6 +4590,7 @@ void LLAppViewer::processMarkerFiles()
 	// - Other Crash (SecondLife.error_marker present)
 	// These checks should also remove these files for the last 2 cases if they currently exist
 
+	std::ostringstream marker_log_stream;
 	bool marker_is_same_version = true;
 	// first, look for the marker created at startup and deleted on a clean exit
 	mMarkerFileName = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,MARKER_FILE_NAME);
@@ -4540,7 +4601,7 @@ void LLAppViewer::processMarkerFiles()
 		marker_is_same_version = markerIsSameVersion(mMarkerFileName);
 
 		// now test to see if this file is locked by a running process (try to open for write)
-		LL_DEBUGS("MarkerFile") << "Checking exec marker file for lock..." << LL_ENDL;
+		marker_log_stream << "Checking exec marker file for lock...";
 		mMarkerFile.open(mMarkerFileName, LL_APR_WB);
 		// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
 		//apr_file_t* fMarker = mMarkerFile.getFileHandle() ;
@@ -4548,7 +4609,7 @@ void LLAppViewer::processMarkerFiles()
 		// </FS:ND>
 		if (!fMarker)
 		{
-			LL_INFOS("MarkerFile") << "Exec marker file open failed - assume it is locked." << LL_ENDL;
+			marker_log_stream << "Exec marker file open failed - assume it is locked.";
 			mSecondInstance = true; // lock means that instance is running.
 		}
 		else
@@ -4556,7 +4617,7 @@ void LLAppViewer::processMarkerFiles()
 			// We were able to open it, now try to lock it ourselves...
 			if (apr_file_lock(fMarker, APR_FLOCK_NONBLOCK | APR_FLOCK_EXCLUSIVE) != APR_SUCCESS)
 			{
-				LL_WARNS_ONCE("MarkerFile") << "Locking exec marker failed." << LL_ENDL;
+				marker_log_stream << "Locking exec marker failed.";
 				mSecondInstance = true; // lost a race? be conservative
 				mMarkerFile.close(); // <FS:ND/> Cannot lock the file and take ownership. Don't keep it open
 			}
@@ -4564,9 +4625,13 @@ void LLAppViewer::processMarkerFiles()
 			{
 				// No other instances; we've locked this file now, so record our version; delete on quit.
 				recordMarkerVersion(mMarkerFile);
-				LL_DEBUGS("MarkerFile") << "Exec marker file existed but was not locked; rewritten." << LL_ENDL;
+				marker_log_stream << "Exec marker file existed but was not locked; rewritten.";
 			}
 		}
+		initLoggingAndGetLastDuration();
+
+		std::string marker_log_msg(marker_log_stream.str());
+		LL_INFOS("MarkerFile") << marker_log_msg << LL_ENDL;
 
 		if (mSecondInstance)
 		{
@@ -4585,6 +4650,7 @@ void LLAppViewer::processMarkerFiles()
 	}
 	else // marker did not exist... last exec (if any) did not freeze
 	{
+		initLoggingAndGetLastDuration();
 		// Create the marker file for this execution & lock it; it will be deleted on a clean exit
 		apr_status_t s;
 		s = mMarkerFile.open(mMarkerFileName, LL_APR_WB, TRUE);
@@ -4710,8 +4776,18 @@ void LLAppViewer::removeDumpDir()
 {
     //Call this routine only on clean exit.  Crash reporter will clean up
     //its locking table for us.
-    std::string dump_dir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
-    gDirUtilp->deleteDirAndContents(dump_dir);
+    if (gDirUtilp->dumpDirExists()) // Check if dump dir was created this run
+    {
+        std::string dump_dir = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, "");
+        gDirUtilp->deleteDirAndContents(dump_dir);
+    }
+
+    if (mSecondInstance && !isError())
+    {
+        std::string log_filename = LLError::logFileName();
+        LLError::logToFile("");
+        LLFile::remove(log_filename);
+    }
 }
 
 void LLAppViewer::forceQuit()
@@ -4927,8 +5003,11 @@ void LLAppViewer::migrateCacheDirectory()
 //static
 U32 LLAppViewer::getTextureCacheVersion()
 {
-	//viewer texture cache version, change if the texture cache format changes.
-	const U32 TEXTURE_CACHE_VERSION = 8;
+	// Viewer texture cache version, change if the texture cache format changes.
+	// 2021-03-10 Bumping up by one to help obviate texture cache issues with
+	//            Simple Cache Viewer - see SL-14985 for more information
+	//const U32 TEXTURE_CACHE_VERSION = 8;
+	const U32 TEXTURE_CACHE_VERSION = 9;
 
 	return TEXTURE_CACHE_VERSION ;
 }
@@ -4961,8 +5040,6 @@ bool LLAppViewer::initCache()
     //const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
     const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
     // </FS:Ansariel>
-    // <FS:Ansariel> Fix integer overflow
-    //const unsigned int disk_cache_bytes = disk_cache_mb * 1024 * 1024;
     const uintmax_t disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
 	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
 
@@ -5056,7 +5133,6 @@ bool LLAppViewer::initCache()
 			LLDiskCache::getInstance()->purge();
 		}
 	}
-	// <FS:Ansariel> Regular disk cache cleanup
 	LLAppViewer::getPurgeDiskCacheThread()->start();
 
 	// <FS:Ansariel> FIRE-13066
@@ -5771,6 +5847,7 @@ void LLAppViewer::idle()
 
         if (!(logoutRequestSent() && hasSavedFinalSnapshot()))
 		{
+			FSPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
 			gObjectList.update(gAgent);
 		}
 	}

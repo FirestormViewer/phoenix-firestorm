@@ -88,4 +88,5 @@
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
+	<button label="360° Foto machen" name="360_label"/>
 </floater>

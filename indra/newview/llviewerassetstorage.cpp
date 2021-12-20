@@ -303,10 +303,7 @@ void LLViewerAssetStorage::storeAssetData(
         legacy->mUpCallback = callback;
         legacy->mUserData = user_data;
 
-        // <FS:Ansariel> Fix broken asset upload
-        //LLFileSystem file(asset_id, asset_type, LLFileSystem::WRITE);
         LLFileSystem file(asset_id, asset_type, LLFileSystem::APPEND);
-        // </FS:Ansariel>
 
         const S32 buf_size = 65536;
         U8 copy_buf[buf_size];
@@ -516,6 +513,12 @@ void LLViewerAssetStorage::assetRequestCoro(
             boost::bind(&LLViewerAssetStorage::capsRecvForRegion, this, _1, capsRecv.getName()));
         
         llcoro::suspendUntilEventOn(capsRecv);
+
+        if (LLApp::isExiting() || !gAssetStorage)
+        {
+            return;
+        }
+
         LL_WARNS_ONCE("ViewerAsset") << "capsRecv got event" << LL_ENDL;
         LL_WARNS_ONCE("ViewerAsset") << "region " << gAgent.getRegion() << " mViewerAssetUrl " << mViewerAssetUrl << LL_ENDL;
     }

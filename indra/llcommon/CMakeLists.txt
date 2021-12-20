@@ -9,7 +9,6 @@ include(Linking)
 include(Boost)
 include(LLSharedLibs)
 include(JsonCpp)
-include(GoogleBreakpad)
 include(Copy3rdPartyLibs)
 include(ZLIB)
 include(URIPARSER)
@@ -19,7 +18,6 @@ include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIRS}
-    ${BREAKPAD_INCLUDE_DIRECTORIES}
     ${URIPARSER_INCLUDE_DIRS}
     )
 
@@ -210,9 +208,9 @@ set(llcommon_HEADER_FILES
     llqueuedthread.h
     llrand.h
     llrefcount.h
+    llregex.h
     llregistry.h
     llrun.h
-    llrefcount.h
     llsafehandle.h
     llsd.h
     llsdjson.h
@@ -258,13 +256,14 @@ set(llcommon_HEADER_FILES
     StackWalker.h
     )
 
-# <FS:ND> Add all nd* files. memory pool, intrinsics, ...
-# <FS:Beq> Tracy Profiler support
-list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
-if (USE_TRACY_PROFILER)
-  list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
-endif()
-
+    # <FS:Beq> Tracy Profiler support
+    list(APPEND llcommon_SOURCE_FILES fstelemetry.cpp)
+    if (USE_TRACY_PROFILER)
+    list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
+    endif()
+    # </FS:Beq> Tracy Profiler support
+    
+    # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp
 	 nd/ndlogthrottle.cpp
@@ -329,7 +328,6 @@ endif(NOT WORD_SIZE EQUAL 32)
 
 target_link_libraries(
     llcommon
-    ${BREAKPAD_EXCEPTION_HANDLER_LIBRARIES}
     ${APRUTIL_LIBRARIES}
     ${APR_LIBRARIES}
     ${EXPAT_LIBRARIES}

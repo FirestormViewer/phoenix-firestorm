@@ -82,7 +82,7 @@ if (WINDOWS)
   # CP changed to only append the flag for 32bit builds - on 64bit builds,
   # locally at least, the build output is spammed with 1000s of 'D9002'
   # warnings about this switch being ignored.
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")  
   # <FS:ND> Remove this, it's no option to cl.exe and causes a massive amount of warnings.
   #if( ADDRESS_SIZE EQUAL 32 )
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
@@ -164,6 +164,11 @@ endif (WINDOWS)
 
 if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
+
+
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0 )
+    message( FATAL_ERROR "GCC greater 9.4.0 is not supported. Recompile boost for support of GCC 10.0.0 and up." )
+  endif()
 
   # <FS:ND/>
   # And another hack for FORTIFY_SOURCE. Some distributions (for example Gentoo) define FORTIFY_SOURCE by default.

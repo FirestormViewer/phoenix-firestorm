@@ -8,11 +8,11 @@ on run (volumeName)
 		tell disk (volumeName as string)
 			open
 
-			set theXOrigin to 400
-			set theYOrigin to 100
-			set theWidth to 500
-			set theHeight to 600
-			set iconSize to 100
+			set theXOrigin to 200
+			set theYOrigin to 200
+			set theWidth to 340
+			set theHeight to 240
+			set iconSize to 55
 
 			set theBottomRightX to (theXOrigin + theWidth)
 			set theBottomRightY to (theYOrigin + theHeight)
@@ -28,15 +28,9 @@ on run (volumeName)
 				set file_list to every file
 				repeat with i in file_list
 					if the name of i is "Applications" then
-						set the position of i to {345, 200}
+						set the position of i to {200, 90}
 					else if the name of i ends with ".app" then
-						set the position of i to {145, 200}
-					else if the name of i is "LGPL License.txt" then
-						set the position of i to {145, 400}
-						set the extension hidden of i to true
-					else if the name of i is "Vivox Acceptable Use Policy.txt" then
-						set the position of i to {345, 400}
-						set the extension hidden of i to true
+						set the position of i to {50, 90}
 					end if
 				end repeat
 			-- This close-open hack is nessesary to save positions on 10.6 Snow Leopard

@@ -170,6 +170,12 @@
 			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Otwórz okno Rozmów, gdy pojawia się wiadomość offline"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
+			<text name="email_settings">
+				[https://accounts.secondlife.com/change_email Pokaż opcje powiadomień e-mail dla IM-ów offline]
+			</text>
+			<text name="email_settings_login_to_change">
+				Zaloguj się, by ustawić opcje e-mail dla IM-ów offline
+			</text>
 			<check_box name="FSShowIMInChatHistory" label="Pokazuj IMy i czaty grup w oknie czatu w pobliżu"/>
 			<check_box name="FSLogIMInChatHistory" label="Zapisuj IMy i czaty grup w czacie w pobliżu"/>
 			<text name="FSIMChatHistoryFade_label" width="315">
