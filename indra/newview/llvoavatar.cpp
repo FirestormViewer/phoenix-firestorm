@@ -12004,9 +12004,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 					if (!is_rigged)
 					{
 						LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
-						for (auto iter : child_list)
+						for (auto childp : child_list)
 						{
-							auto childp = iter;
 							if (childp && childp->isRiggedMesh())
 							{
 								is_rigged = true;
@@ -12035,7 +12034,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 						}
 
 						// can't use attached_object as it is const, so grab it from the iterator instead
-						args["HUD_POINT"] = getTargetAttachmentPoint(attachment_iter->get())->getName();
+						args["HUD_POINT"] = LLTrans::getString(getTargetAttachmentPoint(attachment_iter->get())->getName());
 						LLNotificationsUtil::add("AttachedRiggedObjectToHUD", args);
 					}
 				}
