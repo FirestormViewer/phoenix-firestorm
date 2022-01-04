@@ -3712,7 +3712,7 @@ URL: [AUDIOURL]
 Отключите любую функцию SIP ALG в вашем маршрутизаторе.
 
 Голосовая связь будет недоступна.
-[https://wiki.firestormviewer.org/fs_voice]
+https://wiki.firestormviewer.org/fs_voice
 		<usetemplate ignoretext="Возникли проблемы соединения с голосовым сервером" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">

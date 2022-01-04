@@ -3594,7 +3594,7 @@ Porty, które muszą być otwarte dla połączeń głosowych, to:
 Proszę sprawdź swoją sieć i ustawienia firewall.
 Wyłącz wszelkie funkcjonalności SIP ALG (Application Layer Gateway) w swoim routerze.
 
-[https://wiki.firestormviewer.org/fs_voice]
+https://wiki.firestormviewer.org/fs_voice
 		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" />
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
