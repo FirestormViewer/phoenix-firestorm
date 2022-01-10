@@ -2087,7 +2087,7 @@ class LinuxManifest(ViewerManifest):
                 [os.path.join(self.get_dst_prefix(), dir) for dir in ('bin', 'lib')] +
                 # <FS:Ansariel> Remove VMP
                 # ['-type', 'f', '!', '-name', '*.py',
-                ['-type', 'f', "!", "-name", "*.dat", "!", "-name", "*.pak", "!", "-name", "*.bin",
+                ['-type', 'f', "!", "-name", "*.dat", "!", "-name", "*.pak", "!", "-name", "*.bin", "!", "-name", "*.lib", "!", "-name", "*.pdb",
                 # </FS:Ansariel> Remove VMP
                  '!', '-name', 'update_install', '-exec', 'strip', '-S', '{}', ';'])
 
