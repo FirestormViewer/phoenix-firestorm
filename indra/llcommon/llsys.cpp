@@ -247,6 +247,14 @@ LLOSInfo::LLOSInfo() :
 				ubr = data;
 			}
 		}
+
+		// <FS:Ansariel> Windows 11 detection
+		if (mBuild >= 22000)
+		{
+			mMajorVer = 11;
+			LLStringUtil::replaceString(mOSStringSimple, "10", "11");
+		}
+		// </FS:Ansariel>
 	}
 
 	mOSString = mOSStringSimple;
