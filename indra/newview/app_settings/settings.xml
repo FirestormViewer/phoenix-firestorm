@@ -11134,7 +11134,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>PushToTalkToggle</key>
     <map>
       <key>Comment</key>
-      <string>Should the push-to-talk button behave as a toggle</string>
+      <string>Should the push-to-talk toolbar button behave as a toggle</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -15720,6 +15720,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>TextureFetchMinTimeToLog</key>
+    <map>
+      <key>Comment</key>
+      <string>If texture fetching time exceeds this value, texture fetch tester will log info</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>2.0</real>
+    </map>
   <key>TextureFetchFakeFailureRate</key>
   <map>
     <key>Comment</key>
@@ -15821,6 +15832,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>32</integer>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>TextureListFetchingThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>If the ratio between fetched and all textures in the list is greater than this threshold, which we assume that almost all textures are fetched</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.97</real>
     </map>
     <key>TextureLoadFullRes</key>
     <map>
