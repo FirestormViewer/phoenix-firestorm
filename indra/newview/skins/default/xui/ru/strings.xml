@@ -5482,6 +5482,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="ParticleHiding">
 		Сокрытие частиц
 	</string>
+	<string name="Command_360_Capture_Label">
+		360° Снимок
+	</string>
 	<string name="Command_AboutLand_Label">
 		О земле
 	</string>
@@ -5667,6 +5670,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="Command_Beacons_Label">
 		Маяки
+	</string>
+	<string name="Command_360_Capture_Tooltip">
+		Создание равнопрямоугольного изображения в формате 360°
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Информация о посещаемой вами земле

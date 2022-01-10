@@ -260,7 +260,11 @@ LLOSInfo::LLOSInfo() :
             // Query WMI's Win32_OperatingSystem for OS string. Slow
             // and likely to return 'compatibility' string.
             // Check presence of dlls/libs or may be their version.
-            mOSStringSimple = "Microsoft Windows 10/11";
+            // <FS:Ansariel> Windows 11 detection
+            //mOSStringSimple = "Microsoft Windows 10/11";
+            mMajorVer = 11;
+            LLStringUtil::replaceString(mOSStringSimple, "10", "11");
+            // </FS:Ansariel>
         }
 	}
 

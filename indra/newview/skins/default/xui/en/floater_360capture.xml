@@ -5,7 +5,7 @@
          min_height="300"
          min_width="400"
          name="360capture"
-         help_topic="360capture"
+         help_topic="fs_360_snapshot"
          save_rect="true"
          title="360° Snapshot"
          width="800">

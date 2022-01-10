@@ -11987,6 +11987,58 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
                                                  //textures, cost, hud_complexity_list, object_complexity_list);
                                                  textures, cost, hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity);
                                                  // </FS:Ansariel>
+
+				// <FS:Zi> FIRE-31330: Check if this attachment is on the HUD and contains rigged mesh.
+				//         No need for isSelf() as HUD attachments always are owned by us.
+				//         NOTE: This function should be revised once we have better information
+				//         about pending/loaded rigging data and moved to a more appropriate
+				//         place in the code. For now, this is a good spot as the complexity calculation
+				//         gets updated when rigging data arrives, so we can reliably identify rigged
+				//         attachments where the skinning information took a while to load.
+				if (attached_object->isHUDAttachment() && attached_object->mCheckRigOnHUD)
+				{
+					// check if the root object is rigged
+					bool is_rigged = attached_object->isRiggedMesh();
+
+					// if not, check if any of its children is rigged
+					if (!is_rigged)
+					{
+						LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
+						for (auto childp : child_list)
+						{
+							if (childp && childp->isRiggedMesh())
+							{
+								is_rigged = true;
+								break;
+							}
+						}
+					}
+
+					// if it is rigged, display the warning dialog once per object
+					if (is_rigged)
+					{
+						// can't use attached_object as it is const, so grab it from the iterator instead
+						attachment_iter->get()->mCheckRigOnHUD = false;
+
+						LLSD args;
+
+						LLViewerInventoryItem* inv_object = gInventory.getItem(attached_object->getAttachmentItemID());
+
+						if (inv_object)
+						{
+							args["NAME"] = inv_object->getName();
+						}
+						else
+						{
+							args["NAME"] = LLTrans::getString("Unknown");
+						}
+
+						// can't use attached_object as it is const, so grab it from the iterator instead
+						args["HUD_POINT"] = LLTrans::getString(getTargetAttachmentPoint(attachment_iter->get())->getName());
+						LLNotificationsUtil::add("AttachedRiggedObjectToHUD", args);
+					}
+				}
+				// </FS:Zi>
 			}
 		}
 

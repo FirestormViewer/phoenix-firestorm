@@ -6,6 +6,7 @@ if (WINDOWS)
   # On Windows, explicitly avoid Cygwin Python.
 
   if (DEFINED ENV{VIRTUAL_ENV})
+    message(STATUS "Detected VirtualEnv")
     find_program(PYTHON_EXECUTABLE
       NAMES python.exe
       PATHS
@@ -13,6 +14,7 @@ if (WINDOWS)
       NO_DEFAULT_PATH
       )
   else()
+    message(STATUS "Trying to find Python")
     find_program(PYTHON_EXECUTABLE
       NAMES python.exe
       NO_DEFAULT_PATH # added so that cmake does not find cygwin python
@@ -40,6 +42,8 @@ endif (WINDOWS)
 
 if (NOT PYTHON_EXECUTABLE)
   message(FATAL_ERROR "No Python interpreter found")
+else (NOT PYTHON_EXECUTABLE)
+  message(STATUS "Python executable: ${PYTHON_EXECUTABLE}")
 endif (NOT PYTHON_EXECUTABLE)
 
 mark_as_advanced(PYTHON_EXECUTABLE)

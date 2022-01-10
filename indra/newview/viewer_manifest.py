@@ -79,6 +79,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         with self.prefix(src=pkgdir, dst="app_settings"):
             self.path("dictionaries")
+
+        # <FS:Ansariel> Copy 360 snapshot JavaScripts
+        with self.prefix(src=pkgdir, dst="skins/default/html/common/equirectangular"):
+            self.path("js")
         # </FS:LO>
 
         if self.is_packaging_viewer():
@@ -209,7 +213,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     #         Initially the HTML/JS code to render equirectangular
                     #         images for the 360 capture feature but more to follow.
                     with self.prefix(src="*/html", dst="*/html"):
-                        self.path("*/*/*/*.js")
+                        #self.path("*/*/*/*.js") # <FS:Ansariel> Copied outside packaging and from packages directory already
                         self.path("*/*/*.html")
 
             #build_data.json.  Standard with exception handling is fine.  If we can't open a new file for writing, we have worse problems
