@@ -9633,7 +9633,7 @@ Please check your network and firewall setup.
 Disable any SIP ALG feature in your router.
 
 Voice communications will not be available.
-[https://wiki.firestormviewer.org/fs_voice]
+https://wiki.firestormviewer.org/fs_voice
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate

@@ -3725,7 +3725,7 @@ Bitte prüfen Sie Ihre Netzwerk- und Firewall-Konfiguration.
 Deaktivieren Sie alle SIP ALG-Funktionen in Ihrem Router. 
 
 Voice-Kommunikation ist leider nicht verfügbar.
-[https://wiki.firestormviewer.org/fs_voice]
+https://wiki.firestormviewer.org/fs_voice
 		<usetemplate name="okignore" yestext="OK" ignoretext="Warnen, wenn keine Verbindung zum Voice-Server hergestellt werden kann."/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
