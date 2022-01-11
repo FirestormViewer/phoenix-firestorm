@@ -37,7 +37,7 @@
 #include "sound_ids.h"
 #include "raytrace.h"
 
-#include "aoengine.h"			// ## Zi: Animation Overrider
+#include "aoengine.h"			// <FS:Zi> Animation Overrider
 #include "llagent.h" //  Get state values from here
 #include "llagentbenefits.h"
 #include "llagentcamera.h"
@@ -596,7 +596,6 @@ private:
 //-----------------------------------------------------------------------------
 // Static Data
 //-----------------------------------------------------------------------------
-S32 LLVOAvatar::sFreezeCounter = 0;
 U32 LLVOAvatar::sMaxNonImpostors = 12; // Set from RenderAvatarMaxNonImpostors
 bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonImpostors is 0 (unlimited)
 F32 LLVOAvatar::sRenderDistance = 256.f;
@@ -4708,8 +4707,7 @@ void LLVOAvatar::computeUpdatePeriod()
         && (!isSelf() || visually_muted)
         && !isUIAvatar()
         && (sLimitNonImpostors || visually_muted || slow) // <FS:Beq/> imposter slow avatars irrespective of nonimposter setting.
-        && !mNeedsAnimUpdate 
-        && !sFreezeCounter)
+        && !mNeedsAnimUpdate)
 	{
 		const LLVector4a* ext = mDrawable->getSpatialExtents();
 		LLVector4a size;
@@ -11266,23 +11264,6 @@ LLHost LLVOAvatar::getObjectHost() const
 	else
 	{
 		return LLHost();
-	}
-}
-
-//static
-void LLVOAvatar::updateFreezeCounter(S32 counter)
-{
-	if(counter)
-	{
-		sFreezeCounter = counter;
-	}
-	else if(sFreezeCounter > 0)
-	{
-		sFreezeCounter--;
-	}
-	else
-	{
-		sFreezeCounter = 0;
 	}
 }
 

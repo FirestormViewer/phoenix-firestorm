@@ -761,9 +761,6 @@ mogą być dołączane do notek.
 	<string name="GroupNameNone">
 		(brak danych)
 	</string>
-	<string name="AvalineCaller">
-		Avaline [ORDER]
-	</string>
 	<string name="AssetErrorNone">
 		Brak błędu
 	</string>

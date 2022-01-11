@@ -769,9 +769,6 @@ Provare ad accedere nuovamente tra un minuto.
 	<string name="GroupNameNone">
 		(nessuno)
 	</string>
-	<string name="AvalineCaller">
-		Chiamante Avaline [ORDER]
-	</string>
 	<string name="AssetErrorNone">
 		Nessun errore
 	</string>

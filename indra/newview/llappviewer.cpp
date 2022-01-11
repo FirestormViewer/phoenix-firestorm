@@ -3921,9 +3921,18 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["AUDIO_DRIVER_VERSION"] = gAudiop ? LLSD(gAudiop->getDriverName(want_fullname)) : "Undefined";
 	if(LLVoiceClient::getInstance()->voiceEnabled())
 	{
-		LLVoiceVersionInfo version = LLVoiceClient::getInstance()->getVersion();
+        LLVoiceVersionInfo version = LLVoiceClient::getInstance()->getVersion();
+        const std::string build_version = version.mBuildVersion;
 		std::ostringstream version_string;
-		version_string << version.serverType << " " << version.serverVersion << std::endl;
+        if (std::equal(build_version.begin(), build_version.begin() + version.serverVersion.size(),
+                       version.serverVersion.begin()))
+        {  // Normal case: Show type and build version.
+            version_string << version.serverType << " " << build_version << std::endl;
+        }
+        else
+        {  // Mismatch: Show both versions.
+            version_string << version.serverVersion << "/" << build_version << std::endl;
+        }
 		info["VOICE_VERSION"] = version_string.str();
 	}
 	else
@@ -5013,6 +5022,15 @@ U32 LLAppViewer::getTextureCacheVersion()
 }
 
 //static
+U32 LLAppViewer::getDiskCacheVersion()
+{
+    // Viewer disk cache version intorduced in Simple Cache Viewer, change if the cache format changes.
+    const U32 DISK_CACHE_VERSION = 1;
+
+    return DISK_CACHE_VERSION ;
+}
+
+//static
 U32 LLAppViewer::getObjectCacheVersion()
 {
 	// Viewer object cache version, change if object update
@@ -5119,7 +5137,13 @@ bool LLAppViewer::initCache()
 
 	if (!read_only)
 	{
-		if (mPurgeCache)
+        if (gSavedSettings.getS32("DiskCacheVersion") != LLAppViewer::getDiskCacheVersion())
+        {
+            LLDiskCache::getInstance()->clearCache();
+            gSavedSettings.setS32("DiskCacheVersion", LLAppViewer::getDiskCacheVersion());
+        }
+        
+        if (mPurgeCache)
 		{
 			LLSplashScreen::update(LLTrans::getString("StartupClearingCache"));
 			purgeCache();
@@ -6379,10 +6403,7 @@ void LLAppViewer::disconnectViewer()
 	}
 	// <FS:Ansariel>
 
-	// <FS:Ansariel> Wrong instance check
-	//if (LLSelectMgr::getInstance())
 	if (LLSelectMgr::instanceExists())
-	// </FS:Ansariel
 	{
 		LLSelectMgr::getInstance()->deselectAll();
 	}
