@@ -40,6 +40,7 @@
 #include "llagent.h"
 #include "llbutton.h"
 #include "llcombobox.h"
+#include "llfloaterreg.h"
 #include "llfocusmgr.h"
 #include "llmeshrepository.h"
 #include "llnotificationsutil.h"
@@ -393,6 +394,17 @@ void LLFloaterModelPreview::initModelPreview()
 	mModelPreview->setPreviewTarget(PREVIEW_CAMERA_DISTANCE);
 	mModelPreview->setDetailsCallback(boost::bind(&LLFloaterModelPreview::setDetails, this, _1, _2, _3));
 	mModelPreview->setModelUpdatedCallback(boost::bind(&LLFloaterModelPreview::modelUpdated, this, _1));
+}
+
+//static
+bool LLFloaterModelPreview::showModelPreview()
+{
+    LLFloaterModelPreview* fmp = (LLFloaterModelPreview*)LLFloaterReg::getInstance("upload_model");
+    if (fmp && !fmp->isModelLoading())
+    {
+        fmp->loadHighLodModel();
+    }
+    return true;
 }
 
 void LLFloaterModelPreview::onUploadOptionChecked(LLUICtrl* ctrl)
