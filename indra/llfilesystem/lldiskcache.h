@@ -153,6 +153,8 @@ class LLDiskCache :
          */
         const std::string getCacheInfo();
 
+        void removeOldVFSFiles();
+
         // <FS:Ansariel> Better asset cache size control
         void setMaxSizeBytes(uintmax_t size) { mMaxSizeBytes = size; }
 
