@@ -752,6 +752,13 @@ bool LLToolPie::teleportToClickedLocation()
     LLViewerObject* objp = mHoverPick.getObject();
     LLViewerObject* parentp = objp ? objp->getRootEdit() : NULL;
 
+    if (objp->getAvatar() == gAgentAvatarp
+        || objp == gAgentAvatarp) // ex: nametag
+    {
+        // Don't teleport to self, teleporting to other avatars is fine
+        return false;
+    }
+
     bool is_in_world = mHoverPick.mObjectID.notNull() && objp && !objp->isHUDAttachment();
     bool is_land = mHoverPick.mPickType == LLPickInfo::PICK_LAND;
     bool pos_non_zero = !mHoverPick.mPosGlobal.isExactlyZero();
