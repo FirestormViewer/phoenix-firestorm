@@ -28,7 +28,7 @@
 	<button label="Alias setzen" name="set_pseudonym_btn" tool_tip="Legt ein Pseudoynm für diesen Avatar fest" width="85"/>
 	<button label="Alias entf." name="remove_pseudonym_btn" tool_tip="Entfernt das Pseudonym eines Avatars" width="85"/>
 	<button label="AN entf." name="remove_displayname_btn" tool_tip="Entfernt den Anzeigenamen eines Avatars" width="85"/>
-	<text name="member_count" width="85">
+	<text name="member_count">
 		Mitglieder: [COUNT]
 	</text>
 </panel>

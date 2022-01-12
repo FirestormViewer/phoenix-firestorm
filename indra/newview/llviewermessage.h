@@ -330,5 +330,6 @@ private:
 // </FS:Ansariel>
 
 void process_feature_disabled_message(LLMessageSystem* msg, void**);
+void fs_report_region_restart_to_channel(S32 seconds); // <FS:PP> Announce region restart to a defined chat channel
 
 #endif
