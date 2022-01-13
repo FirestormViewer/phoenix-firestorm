@@ -613,6 +613,18 @@
         <string>cubemaptoequirectangular</string>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>eb62a7040c7579569e06e5a61a7831d5</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/cubemaptoequirectangular-1.1.0-linux64-213500938.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1060,11 +1072,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>225762175d2ed102e270082edc7c2e25</string>
+              <string>1a6c06c99d67296794b39183387f458d</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.04-linux64-213452351.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.05-linux64-220101141.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1074,11 +1086,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6bb2a0ae244a87a5f73b85d938054fb5</string>
+              <string>126b2476f65ee4947fec1f754fc9dca9</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.04-windows-213441411.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.05-windows-220101109.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1088,18 +1100,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>82c73a8ee40c39bca782d73cb9e276e9</string>
+              <string>891c91e7868bf2e103691bae2ef493eb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.04-windows64-213441412.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.05-windows64-220101110.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.04</string>
+        <string>2.02.05</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1613,6 +1625,18 @@
         <string>jpegencoderbasic</string>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>fd8060aa3c920e0fc63e7ecbea67bc5e</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/jpegencoderbasic-1.0-linux64-213500937.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3249,6 +3273,18 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>threejs</string>
         <key>platforms</key>
         <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>d37be064bd851276dab423d723cb9b7d</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/threejs-0.132.2-linux64-213500940.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3743,7 +3779,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       <key>canonical_repo</key>
       <string>https://bitbucket.org/lindenlab/viewer</string>
       <key>copyright</key>
-      <string>Copyright (c) 2021, The Phoenix Firestorm Project, Inc.</string>
+      <string>Copyright (c) 2022, The Phoenix Firestorm Project, Inc.</string>
       <key>description</key>
       <string>Firestorm Viewer</string>
       <key>license</key>

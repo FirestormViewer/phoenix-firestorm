@@ -68,4 +68,5 @@
 	<text name="file_size_label">
 		[SIZE] КБ
 	</text>
+	<button label="360° снимок" name="360_label"/>
 </floater>
