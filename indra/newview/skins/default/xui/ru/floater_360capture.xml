@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="360capture" title="360° Снимок">
+	<panel name="ui_panel_left">
+		<text name="quality_level_label">Качество</text>
+		<radio_group name="360_quality_selection">
+			<radio_item label="Просмотр (быстро)" name="preview_quality" tool_tip="Качество предварительного просмотра"/>
+			<radio_item label="Среднее" name="medium_quality" tool_tip="Среднее качество"/>
+			<radio_item label="Высокое" name="high_quality" tool_tip="Высокое качество"/>
+			<radio_item label="Максимум" name="maximum_quality" tool_tip="Максимум качества"/>
+		</radio_group>
+		<check_box label="Скрыть все аватары" name="360_hide_avatar"/>
+		<button label="Создать 360° изображение" name="capture_button"/>
+		<button label="Сохранить как..." name="save_local_button"/>
+	</panel>
+	<panel name="ui_panel_right">
+		<text name="statusbar">Нажмите и перетащите изображение для панорамирования</text>
+	</panel>
+</floater>

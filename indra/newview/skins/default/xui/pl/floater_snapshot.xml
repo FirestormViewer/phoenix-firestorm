@@ -82,4 +82,5 @@
 	<text name="image_res_text">
 		[WIDTH]px (szerokość) x [HEIGHT]px (wysokość)
 	</text>
+	<button label="Zrób zdjęcie 360°" name="360_label" />
 </floater>

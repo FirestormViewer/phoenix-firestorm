@@ -67,6 +67,7 @@
 		</menu>
 
 		<menu_item_call label="Снимок" name="Take Snapshot"/>
+		<menu_item_call label="360° Снимок" name="Capture 360"/>
 		<menu_item_call label="Отслеживание денег" name="money_tracker"/>
 		<menu_item_call label="Поза редактирования..." name="pose_stand"/>
 

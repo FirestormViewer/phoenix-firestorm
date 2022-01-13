@@ -1145,10 +1145,7 @@ BOOL LLTextBase::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLTextBase::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
-	// <FS:Beq> FIRE-23523 left click does not work on notifications with embedded links	
-	// if (hasMouseCapture() && cur_segment && cur_segment->handleMouseUp(x, y, mask))
-	if (cur_segment && cur_segment->handleMouseUp(x, y, mask))
-	// </FS:Beq>
+	if (hasMouseCapture() && cur_segment && cur_segment->handleMouseUp(x, y, mask))
 	{
 		// Did we just click on a link?
 		if (mURLClickSignal
