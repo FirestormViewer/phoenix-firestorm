@@ -224,6 +224,7 @@ void LLSpatialGroup::validateDrawMap()
 
 BOOL LLSpatialGroup::updateInGroup(LLDrawable *drawablep, BOOL immediate)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	drawablep->updateSpatialExtents();
 
 	OctreeNode* parent = mOctreeNode->getOctParent();
@@ -871,6 +872,7 @@ LLSpatialPartition::~LLSpatialPartition()
 
 LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	drawablep->updateSpatialExtents();
 
 	//keep drawable from being garbage collected
@@ -896,6 +898,7 @@ LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
 
 BOOL LLSpatialPartition::remove(LLDrawable *drawablep, LLSpatialGroup *curp)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	if (!curp->removeObject(drawablep))
 	{
 		OCT_ERRS << "Failed to remove drawable from octree!" << LL_ENDL;
@@ -912,6 +915,7 @@ BOOL LLSpatialPartition::remove(LLDrawable *drawablep, LLSpatialGroup *curp)
 
 void LLSpatialPartition::move(LLDrawable *drawablep, LLSpatialGroup *curp, BOOL immediate)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	// sanity check submitted by open source user bushing Spatula
 	// who was seeing crashing here. (See VWR-424 reported by Bunny Mayne)
 	if (!drawablep)
@@ -1614,10 +1618,14 @@ void renderOctree(LLSpatialGroup* group)
 			gGL.flush();
 			gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 			gGL.flush();
+
+            LLVOAvatar* lastAvatar = nullptr;
+            U64 lastMeshId = 0;
+
 			for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
 			{
 				LLDrawable* drawable = (LLDrawable*)(*i)->getDrawable();
-				if(!drawable)
+				if(!drawable || drawable->getNumFaces() == 0)
 				{
 					continue;
 				}
@@ -1628,6 +1636,27 @@ void renderOctree(LLSpatialGroup* group)
 					gGL.translatef(trans.mV[0], trans.mV[1], trans.mV[2]);
 				}
 				
+                LLFace* face = drawable->getFace(0);
+                bool rigged = face->isState(LLFace::RIGGED);
+                gDebugProgram.bind(rigged);
+
+                gGL.diffuseColor4f(1, 0, 0, 1);
+
+                if (rigged)
+                {
+                    gGL.pushMatrix();
+                    gGL.loadMatrix(gGLModelView);
+                    if (lastAvatar != face->mAvatar ||
+                        lastMeshId != face->mSkinInfo->mHash)
+                    {
+                        if (!LLRenderPass::uploadMatrixPalette(face->mAvatar, face->mSkinInfo))
+                        {
+                            continue;
+                        }
+                        lastAvatar = face->mAvatar;
+                        lastMeshId = face->mSkinInfo->mHash;
+                    }
+                }
 				for (S32 j = 0; j < drawable->getNumFaces(); j++)
 				{
 					LLFace* face = drawable->getFace(j);
@@ -1646,12 +1675,17 @@ void renderOctree(LLSpatialGroup* group)
 							continue;
 						}
 
-						face->getVertexBuffer()->setBuffer(LLVertexBuffer::MAP_VERTEX);
+						face->getVertexBuffer()->setBuffer(LLVertexBuffer::MAP_VERTEX | (rigged ? LLVertexBuffer::MAP_WEIGHT4 : 0));
 						//drawBox((face->mExtents[0] + face->mExtents[1])*0.5f,
 						//		(face->mExtents[1]-face->mExtents[0])*0.5f);
 						face->getVertexBuffer()->draw(LLRender::TRIANGLES, face->getIndicesCount(), face->getIndicesStart());
 					}
 				}
+
+                if (rigged)
+                {
+                    gGL.popMatrix();
+                }
 
 				if (!group->getSpatialPartition()->isBridge())
 				{
@@ -1659,6 +1693,7 @@ void renderOctree(LLSpatialGroup* group)
 				}
 			}
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            gDebugProgram.bind(); // make sure non-rigged variant is bound
 			gGL.diffuseColor4f(1,1,1,1);
 		}
 	}
@@ -2837,6 +2872,8 @@ void renderBatchSize(LLDrawInfo* params)
     bool bind = false;
     if (params->mAvatar)
     { 
+        gGL.pushMatrix();
+        gGL.loadMatrix(gGLModelView);
         bind = true;
         old_shader->mRiggedVariant->bind();
         LLRenderPass::uploadMatrixPalette(*params);
@@ -2848,6 +2885,7 @@ void renderBatchSize(LLDrawInfo* params)
 
     if (bind)
     {
+        gGL.popMatrix();
         old_shader->bind();
     }
 }
@@ -4141,7 +4179,8 @@ LLDrawInfo::LLDrawInfo(U16 start, U16 end, U32 count, U32 offset,
 {
 	mVertexBuffer->validateRange(mStart, mEnd, mCount, mOffset);
 	
-	mDebugColor = (rand() << 16) + rand();
+    mDebugColor = (rand() << 16) + rand();
+    ((U8*)&mDebugColor)[3] = 200;
 }
 
 LLDrawInfo::~LLDrawInfo()	

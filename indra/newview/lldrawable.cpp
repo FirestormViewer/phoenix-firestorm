@@ -1761,6 +1761,17 @@ void LLDrawable::updateFaceSize(S32 idx)
 	}
 }
 
+LLDrawable* LLDrawable::getRoot()
+{
+    LLDrawable* ret = this;
+    while (!ret->isRoot())
+    {
+        ret = ret->getParent();
+    }
+
+    return ret;
+}
+
 LLBridgePartition::LLBridgePartition(LLViewerRegion* regionp)
 : LLSpatialPartition(0, FALSE, 0, regionp) 
 { 

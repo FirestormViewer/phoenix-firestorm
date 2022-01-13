@@ -1562,7 +1562,7 @@ void LLVOAvatar::calculateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
                             continue;
                         }
                         LLDrawable* drawable = attached_object->mDrawable;
-                        if (drawable && !drawable->isState(LLDrawable::RIGGED))
+                        if (drawable && !drawable->isState(LLDrawable::RIGGED | LLDrawable::RIGGED_CHILD)) // <-- don't extend bounding box if any rigged objects are present
                         {
                             LLSpatialBridge* bridge = drawable->getSpatialBridge();
                             if (bridge)
@@ -2985,6 +2985,14 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 	}//if ( voiceEnabled )
 }		
 
+static void override_bbox(LLDrawable* drawable, LLVector4a* extents)
+{
+    LL_PROFILE_ZONE_SCOPED;
+    drawable->setSpatialExtents(extents[0], extents[1]);
+    drawable->setPositionGroup(LLVector4a(0, 0, 0));
+    drawable->movePartition();
+}
+
 void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 {
     LL_PROFILE_ZONE_SCOPED;
@@ -3025,21 +3033,34 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 				
 				if (visibleAttachment && attached_object && !attached_object->isDead() && attachment->getValid())
 				{
-					// if selecting any attachments, update all of them as non-damped
-					if (LLSelectMgr::getInstance()->getSelection()->getObjectCount() && LLSelectMgr::getInstance()->getSelection()->isAttachment())
-					{
-						gPipeline.updateMoveNormalAsync(attached_object->mDrawable);
-					}
-					else
-					{
-						gPipeline.updateMoveDampedAsync(attached_object->mDrawable);
-					}
-					
-					LLSpatialBridge* bridge = attached_object->mDrawable->getSpatialBridge();
-					if (bridge)
-					{
-						gPipeline.updateMoveNormalAsync(bridge);
-					}
+
+                    //override rigged attachments' octree spatial extents with this avatar's bounding box
+                    LLSpatialBridge* bridge = attached_object->mDrawable->getSpatialBridge();
+                    bool rigged = false;
+                    if (bridge)
+                    {
+                        //transform avatar bounding box into attachment's coordinate frame
+                        LLVector4a extents[2];
+                        bridge->transformExtents(mDrawable->getSpatialExtents(), extents);
+
+                        if (attached_object->mDrawable->isState(LLDrawable::RIGGED | LLDrawable::RIGGED_CHILD))
+                        {
+                            rigged = true;
+                            override_bbox(attached_object->mDrawable, extents);
+                        }
+                    }
+
+                    
+                    attached_object->mDrawable->makeActive();
+                    attached_object->mDrawable->updateXform(TRUE);
+                    
+                    if (!rigged)
+                    {
+                        if (bridge)
+                        {
+                            gPipeline.updateMoveNormalAsync(bridge);
+                        }
+                    }
 					attached_object->updateText();	
 				}
 			}
