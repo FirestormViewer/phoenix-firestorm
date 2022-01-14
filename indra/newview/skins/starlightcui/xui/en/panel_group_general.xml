@@ -94,6 +94,7 @@ Hover your mouse over the options for more help.
      height="80"
      layout="topleft"
      max_length="511"
+     parse_urls="true"
      name="charter"
      top="105"
      right="-4"

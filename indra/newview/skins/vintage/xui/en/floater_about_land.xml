@@ -176,6 +176,7 @@
              left="10"
              name="Description:"
              spellcheck="true"
+             parse_urls="true"
              width="100">
                 Description:
             </text>
