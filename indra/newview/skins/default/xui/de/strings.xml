@@ -232,7 +232,7 @@ Voice-Serverversion: [VOICE_VERSION]
 		http://secondlife.com/download
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
-		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
+		Mit dem von Ihnen verwendeten Viewer ist der Zugriff nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
 https://www.firestormviewer.org/choose-your-platform/
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
@@ -240,7 +240,7 @@ http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">Grid-Notfall Login-Fehler.
 
-Falls Sie denken, diese Meldung ist falsch, wenden Sie sich bitte an den Support des entsprechenden Grids.
+Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich bitte an den Support des entsprechenden Grids.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Optionales Viewer-Update verfügbar: [VERSION]
