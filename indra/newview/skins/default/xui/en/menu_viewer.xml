@@ -486,6 +486,18 @@
 	            <menu_item_call.on_click
                 function="Tools.Undeform" />
 	        </menu_item_call>
+            <menu_item_call 
+               label="Reset skeleton"
+               name="Reset Skeleton">
+               <menu_item_call.on_click
+                function="Avatar.ResetSkeleton" />
+            </menu_item_call>
+            <menu_item_call 
+                label="Reset skeleton and animations"
+                name="Reset Skeleton And Animations">
+                <menu_item_call.on_click
+                 function="Avatar.ResetSelfSkeletonAndAnimations" />
+            </menu_item_call>
 	        <menu_item_call
 	         label="Force Appearance Update (Rebake)"
 	         name="Rebake Texture"
