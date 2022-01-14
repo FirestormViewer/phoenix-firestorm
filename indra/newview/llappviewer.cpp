@@ -3870,9 +3870,28 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
-	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
-	//std::string drvinfo = gDXHardware.getDriverVersionWMI();
-	std::string drvinfo = gDXHardware.getDriverVersionWMI(gGLManager.mGLVendorShort);
+    std::string drvinfo;
+
+    if (gGLManager.mIsIntel)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_INTEL);
+    }
+    else if (gGLManager.mIsNVIDIA)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_NVIDIA);
+    }
+    else if (gGLManager.mIsATI)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_AMD);
+    }
+
+    if (drvinfo.empty())
+    {
+        // Generic/substitute windows driver? Unknown vendor?
+        LL_WARNS("DriverVersion") << "Vendor based driver search failed, searching for any driver" << LL_ENDL;
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_ANY);
+    }
+
 	if (!drvinfo.empty())
 	{
 		info["GRAPHICS_DRIVER_VERSION"] = drvinfo;
@@ -5803,6 +5822,13 @@ void LLAppViewer::idle()
 		}
 	}
 
+
+    // Update layonts, handle mouse events, tooltips, e t c
+    // updateUI() needs to be called even in case viewer disconected
+    // since related notification still needs handling and allows
+    // opening chat.
+    gViewerWindow->updateUI();
+
 	if (gDisconnected)
     {
 		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
@@ -5814,8 +5840,6 @@ void LLAppViewer::idle()
 		// </FS:CR>
 		return;
     }
-
-    gViewerWindow->updateUI();
 
 	if (gTeleportDisplay)
     {

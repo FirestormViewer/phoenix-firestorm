@@ -180,7 +180,7 @@ J2C 解碼器版本： [J2C_VERSION]
 	<string name="LoginFailedNoNetwork">
 		網路錯誤：無法建立連線，請檢查網路連線是否正常。
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		登入失敗。
 	</string>
 	<string name="Quit">

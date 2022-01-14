@@ -3,7 +3,7 @@
 include(APR)
 include(Boost)
 include(EXPAT)
-include(ZLIB)
+include(ZLIBNG)
 include(Tracy) # <FS:Beq> Tracy profiler
 
 # <FS:Beq> Add Tracy profiler support
