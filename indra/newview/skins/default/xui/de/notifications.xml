@@ -4832,6 +4832,11 @@ Bitte kopieren Sie diese in Ihr Inventar und versuchen Sie es erneut.
 	<notification name="TrackLoadMismatch">
 		Der Pfad konnte nicht aus [TRACK1] in [TRACK2] geladen werden.
 	</notification>
+	<notification name="CompressionTestResults">
+		Test-Ergebnis für gzip-Level 6 Komprimierung für [FILE] mit einer Größe von [SIZE] KB:
+Packen: [PACK_TIME]s [PSIZE]KB
+Entpacken: [UNPACK_TIME]s [USIZE]KB
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		
