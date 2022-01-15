@@ -127,7 +127,7 @@ static void prepare_alpha_shader(LLGLSLShader* shader, bool textureGamma, bool d
 
 void LLDrawPoolAlpha::renderPostDeferred(S32 pass) 
 { 
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     deferred_render = TRUE;
 
     // first pass, regular forward alpha rendering
@@ -191,7 +191,7 @@ static void prepare_forward_shader(LLGLSLShader* shader, F32 minimum_alpha)
 
 void LLDrawPoolAlpha::render(S32 pass)
 {
-    LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 
     simple_shader = (LLPipeline::sImpostorRender) ? &gObjectSimpleImpostorProgram :
         (LLPipeline::sUnderWaterRender) ? &gObjectSimpleWaterProgram : &gObjectSimpleProgram;
@@ -488,7 +488,7 @@ void LLDrawPoolAlpha::renderRiggedEmissives(U32 mask, std::vector<LLDrawInfo*>& 
     for (LLDrawInfo* draw : emissives)
     {
 		// <FS:Beq> Capture render times
-		LL_PROFILE_ZONE_NAMED("Emissives");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("Emissives");
 		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
 		if(vobj && vobj->isAttachment())
 		{
@@ -513,7 +513,7 @@ void LLDrawPoolAlpha::renderRiggedEmissives(U32 mask, std::vector<LLDrawInfo*>& 
 
 void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     BOOL initialized_lighting = FALSE;
 	BOOL light_enabled = TRUE;
 
@@ -523,7 +523,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only)
 
     for (LLCullResult::sg_iterator i = gPipeline.beginAlphaGroups(); i != gPipeline.endAlphaGroups(); ++i)
 	{
-        LL_PROFILE_ZONE_NAMED("renderAlpha - group");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("renderAlpha - group");
 		LLSpatialGroup* group = *i;
 		llassert(group);
 		llassert(group->getSpatialPartition());
@@ -558,7 +558,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only)
 			std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 			{
-                LL_PROFILE_ZONE_NAMED("ra - push batch")
+                LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("ra - push batch")
 				LLDrawInfo& params = **k;
                 U32 have_mask = params.mVertexBuffer->getTypeMask() & mask;
 				if (have_mask != mask)

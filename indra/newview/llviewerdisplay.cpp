@@ -235,7 +235,7 @@ void display_stats()
 	// </FS:Ansariel>
 	if (fps_log_freq > 0.f && gRecentFPSTime.getElapsedTimeF32() >= fps_log_freq)
 	{
-		LL_PROFILE_ZONE_NAMED("DS - FPS");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("DS - FPS");
 		F32 fps = gRecentFrameCount / fps_log_freq;
 		LL_INFOS() << llformat("FPS: %.02f", fps) << LL_ENDL;
 		gRecentFrameCount = 0;
@@ -248,7 +248,7 @@ void display_stats()
 	// </FS:Ansariel>
 	if (mem_log_freq > 0.f && gRecentMemoryTime.getElapsedTimeF32() >= mem_log_freq)
 	{
-		LL_PROFILE_ZONE_NAMED("DS - Memory");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("DS - Memory");
 		gMemoryAllocated = U64Bytes(LLMemory::getCurrentRSS());
 		U32Megabytes memory = gMemoryAllocated;
 		LL_INFOS() << "MEMORY: " << memory << LL_ENDL;
@@ -258,7 +258,7 @@ void display_stats()
     F32 asset_storage_log_freq = gSavedSettings.getF32("AssetStorageLogFrequency");
     if (asset_storage_log_freq > 0.f && gAssetStorageLogTime.getElapsedTimeF32() >= asset_storage_log_freq)
     {
-		LL_PROFILE_ZONE_NAMED("DS - Asset Storage");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("DS - Asset Storage");
         gAssetStorageLogTime.reset();
         gAssetStorage->logAssetStorageInfo();
     }
@@ -752,7 +752,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	
 	if (!gDisconnected)
 	{
-		LL_PROFILE_ZONE_NAMED("display - 1");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("display - 1");
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Update");
 		if (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_HUD))
 		{ //don't draw hud objects in this frame
@@ -828,7 +828,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Swap");
 		
 		{ 
-			LL_PROFILE_ZONE_NAMED("display - 2")
+			LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("display - 2")
 			if (gResizeScreenTexture)
 			{
 				gResizeScreenTexture = FALSE;
@@ -880,7 +880,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		//if (!for_snapshot)
 		{
-			LL_PROFILE_ZONE_NAMED("display - 3")
+			LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("display - 3")
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Imagery");
 			gPipeline.generateWaterReflection(camera); // <FS:Ansariel> Factor out calls to getInstance
 			gPipeline.generateHighlight(camera); // <FS:Ansariel> Factor out calls to getInstance
@@ -938,7 +938,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		//
 		LLAppViewer::instance()->pingMainloopTimeout("Display:StateSort");
 		{
-			LL_PROFILE_ZONE_NAMED("display - 3")
+			LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("display - 4")
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 			gPipeline.stateSort(camera, result); // <FS:Ansariel> Factor out calls to getInstance
 			stop_glerror();
@@ -963,7 +963,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		{
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Sky");
-			LL_RECORD_BLOCK_TIME(FTM_UPDATE_SKY);	
+			LL_PROFILE_ZONE_NAMED_CATEGORY_ENVIRONMENT("update sky"); //LL_RECORD_BLOCK_TIME(FTM_UPDATE_SKY);	
 			gSky.updateSky();
 		}
 
@@ -1051,7 +1051,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		if (!(LLAppViewer::instance()->logoutRequestSent() && LLAppViewer::instance()->hasSavedFinalSnapshot())
 				&& !gRestoreGL)
 		{
-			LL_PROFILE_ZONE_NAMED("display - 4")
+			LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("display - 5")
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 
 			// <FS:Ansariel> gSavedSettings replacement
@@ -1386,7 +1386,7 @@ bool setup_hud_matrices(const LLRect& screen_region)
 void render_ui(F32 zoom_factor, int subfield)
 {
 	FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_UI ); // <FS:Beq/> render time capture - Primary UI stat can have HUD time overlap (TODO)
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI; //LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 
 	LLGLState::checkStates();
 	
@@ -1418,7 +1418,7 @@ void render_ui(F32 zoom_factor, int subfield)
 		// 1. Use a new scope
 		// 2. Use named zones
 		// 3. Use transient zones
-		LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
+		LL_PROFILE_ZONE_NAMED_CATEGORY_UI("HUD"); //LL_RECORD_BLOCK_TIME(FTM_RENDER_HUD);
     render_hud_elements();
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 		if (RlvActions::hasBehaviour(RLV_BHVR_SETOVERLAY))
@@ -1440,7 +1440,7 @@ void render_ui(F32 zoom_factor, int subfield)
 			{
 				if (!gDisconnected)
 				{
-					LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_3D);
+					LL_PROFILE_ZONE_NAMED_CATEGORY_UI("UI 3D"); //LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_3D);
 					render_ui_3d();
 					LLGLState::checkStates();
 				}
@@ -1449,7 +1449,7 @@ void render_ui(F32 zoom_factor, int subfield)
 					render_disconnected_background();
 				}
 
-				LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_2D);
+				LL_PROFILE_ZONE_NAMED_CATEGORY_UI("UI 2D"); //LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_2D);
 				render_ui_2d();
 				LLGLState::checkStates();
 			}

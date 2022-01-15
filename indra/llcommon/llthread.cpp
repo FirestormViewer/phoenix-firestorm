@@ -374,14 +374,14 @@ void LLThread::setQuitting()
 // <FS:Beq> give this a better chance to inline 
 // LLThread::id_t LLThread::currentID()
 // {
-//     LL_PROFILE_ZONE_SCOPED
+//     LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
 //     return std::this_thread::get_id();
 // }
 
 // static
 void LLThread::yield()
 {
-    LL_PROFILE_ZONE_SCOPED
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
     std::this_thread::yield();
 }
 
@@ -401,7 +401,7 @@ void LLThread::wake()
 
 void LLThread::wakeLocked()
 {
-    LL_PROFILE_ZONE_SCOPED
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
     if(!shouldSleep())
     {
         mRunCondition->signal();
@@ -410,13 +410,13 @@ void LLThread::wakeLocked()
 
 void LLThread::lockData()
 {
-    LL_PROFILE_ZONE_SCOPED
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
     mDataLock->lock();
 }
 
 void LLThread::unlockData()
 {
-    LL_PROFILE_ZONE_SCOPED
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD
     mDataLock->unlock();
 }
 

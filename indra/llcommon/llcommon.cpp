@@ -43,7 +43,7 @@ void *operator new(size_t size)
     void* ptr;
     if (gProfilerEnabled)
     {
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_MEMORY;
         ptr = (malloc)(size);
     }
     else
@@ -63,7 +63,7 @@ void operator delete(void *ptr) noexcept
     TracyFree(ptr);
     if (gProfilerEnabled)
     {
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_MEMORY;
         (free)(ptr);
     }
     else

@@ -434,7 +434,7 @@ private:
 
 void LLLayoutStack::updateLayout()
 {	
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 
 	if (!mNeedsLayout) return;
 

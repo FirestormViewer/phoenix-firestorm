@@ -178,7 +178,7 @@ U64 LLViewerObjectList::getIndex(const U32 local_id,
 
 BOOL LLViewerObjectList::removeFromLocalIDTable(const LLViewerObject* objectp)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 
 	if(objectp && objectp->getRegion())
 	{
@@ -339,7 +339,7 @@ static LLTrace::BlockTimerStatHandle FTM_PROCESS_OBJECTS("Process Objects");
 
 LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry* entry, LLViewerRegion* regionp)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 
 	LLDataPacker *cached_dpp = entry->getDP();
 
@@ -940,7 +940,7 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 
 void LLViewerObjectList::update(LLAgent &agent)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	// <FS:Ansariel> Speed up debug settings
 	static LLCachedControl<bool> velocityInterpolate(gSavedSettings, "VelocityInterpolate");
 	static LLCachedControl<bool> pingInterpolate(gSavedSettings, "PingInterpolate");
@@ -1470,7 +1470,7 @@ void LLViewerObjectList::clearDebugText()
 
 void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	// <FS:Beq> FIRE-30694 DeadObject Spam - handle new_dead_object properly and closer to source
 	// bool new_dead_object = true;
 	if (mDeadObjects.find(objectp->mID) != mDeadObjects.end())
@@ -1534,7 +1534,7 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 
 void LLViewerObjectList::removeDrawable(LLDrawable* drawablep)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
 
 	if (!drawablep)
 	{
@@ -1769,7 +1769,7 @@ void LLViewerObjectList::removeFromActiveList(LLViewerObject* objectp)
 
 void LLViewerObjectList::updateActive(LLViewerObject *objectp)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
 
 	if (objectp->isDead())
 	{
@@ -1884,7 +1884,7 @@ void LLViewerObjectList::onPhysicsFlagsFetchFailure(const LLUUID& object_id)
 
 void LLViewerObjectList::shiftObjects(const LLVector3 &offset)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	// This is called when we shift our origin when we cross region boundaries...
 	// We need to update many object caches, I'll document this more as I dig through the code
 	// cleaning things out...
@@ -2153,7 +2153,7 @@ void LLViewerObjectList::renderObjectBounds(const LLVector3 &center)
 
 void LLViewerObjectList::generatePickList(LLCamera &camera)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 
 		LLViewerObject *objectp;
 		S32 i;
@@ -2432,7 +2432,7 @@ LLViewerObject *LLViewerObjectList::replaceObject(const LLUUID &id, const LLPCod
 
 S32 LLViewerObjectList::findReferences(LLDrawable *drawablep) const
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
 
 	LLViewerObject *objectp;
 	S32 num_refs = 0;
@@ -2497,7 +2497,7 @@ void LLViewerObjectList::orphanize(LLViewerObject *childp, U32 parent_id, U32 ip
 
 void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 
 	if (objectp->isDead())
 	{

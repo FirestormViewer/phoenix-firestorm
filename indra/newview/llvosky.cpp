@@ -510,7 +510,7 @@ void LLVOSky::cacheEnvironment(LLSettingsSky::ptr_t psky,AtmosphericsVars& atmos
 
 void LLVOSky::calc()
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_ENVIRONMENT;
     LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
     cacheEnvironment(psky,m_atmosphericsVars);
 
@@ -681,7 +681,7 @@ bool LLVOSky::updateSky()
 		return TRUE;
 	}
 
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_ENVIRONMENT;
 
 	static S32 next_frame = 0;
 
@@ -719,7 +719,7 @@ bool LLVOSky::updateSky()
 	}
     else if (mCubeMapUpdateStage == NUM_CUBEMAP_FACES)
 	{
-        LL_PROFILE_ZONE_NAMED("updateSky - forced");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_ENVIRONMENT("updateSky - forced");
         LLSkyTex::stepCurrent();
 
         bool is_alm_wl_sky = gPipeline.canUseWindLightShaders();
@@ -780,7 +780,7 @@ bool LLVOSky::updateSky()
     // run 0 to 5 faces, each face in own frame
     else if (mCubeMapUpdateStage >= 0 && mCubeMapUpdateStage < NUM_CUBEMAP_FACES)
 	{
-        LL_PROFILE_ZONE_NAMED("updateSky - create");
+		LL_PROFILE_ZONE_NAMED_CATEGORY_ENVIRONMENT("updateSky - create");
         S32 side = mCubeMapUpdateStage;
         // CPU hungry part, createSkyTexture() is math heavy
         // Prior to EEP it was mostly per tile, but since EPP it is per face.
@@ -972,7 +972,7 @@ void LLVOSky::setBloomTextures(const LLUUID& bloom_texture, const LLUUID& bloom_
 
 BOOL LLVOSky::updateGeometry(LLDrawable *drawable)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
 	if (mFace[FACE_REFLECTION] == NULL)
 	{
 		LLDrawPoolWater *poolp = (LLDrawPoolWater*) gPipeline.getPool(LLDrawPool::POOL_WATER);

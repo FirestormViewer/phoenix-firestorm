@@ -1654,7 +1654,7 @@ bool LLAppViewer::doFrame()
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
 	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 	{
-        LL_PROFILE_ZONE_NAMED("df LLTrace");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df LLTrace");
         if (LLFloaterReg::instanceVisible("block_timers"))
         {
             LLTrace::BlockTimer::processTimes();
@@ -1696,6 +1696,7 @@ bool LLAppViewer::doFrame()
 		}
 		// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
+		LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df processMiscNativeEvents" )
 		pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
 		if (gViewerWindow)
@@ -1705,7 +1706,7 @@ bool LLAppViewer::doFrame()
 		}
 
 		{
-			LL_PROFILE_ZONE_NAMED( "df gatherInput" )
+			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df gatherInput" )
 			pingMainloopTimeout("Main:GatherInput");
 		}
 
@@ -1732,12 +1733,12 @@ bool LLAppViewer::doFrame()
 		}
 
 		{
-			LL_PROFILE_ZONE_NAMED( "df mainloop" )
+			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df mainloop" )
 			// canonical per-frame event
 			mainloop.post(newFrame);
 		}
 		{
-			LL_PROFILE_ZONE_NAMED( "df suspend" )
+			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df suspend" )
 			// give listeners a chance to run
 			llcoro::suspend();
 		}
@@ -1759,7 +1760,7 @@ bool LLAppViewer::doFrame()
 				&& !gFocusMgr.focusLocked())
 			{
 				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
-				LL_PROFILE_ZONE_NAMED( "df JoystickKeyboard" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df JoystickKeyboard" )
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
                 gViewerInput.scanMouse();
@@ -1776,23 +1777,23 @@ bool LLAppViewer::doFrame()
 			// Update state based on messages, user input, object idle.
 			{
 				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
-				LL_PROFILE_ZONE_NAMED( "df pauseMainloopTimeout" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df pauseMainloopTimeout" )
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 			}
 
 			{
-				LL_RECORD_BLOCK_TIME(FTM_IDLE);
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
 				idle();
 			}
 
 			{
-				LL_PROFILE_ZONE_NAMED( "df resumeMainloopTimeout" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df resumeMainloopTimeout" )
 				resumeMainloopTimeout();
 			}
 
 			if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
 			{
-				LL_PROFILE_ZONE_NAMED("Shutdown:SaveSnapshot");
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Shutdown:SaveSnapshot");
 				pauseMainloopTimeout();
 				saveFinalSnapshot();
 
@@ -1809,7 +1810,7 @@ bool LLAppViewer::doFrame()
 			// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
 			if (!LLApp::isExiting() && !gHeadlessClient && gViewerWindow)
 			{
-				LL_PROFILE_ZONE_NAMED("df Display")
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df Display" )
 				pingMainloopTimeout("Main:Display");
 				gGLActive = TRUE;
 
@@ -1817,7 +1818,7 @@ bool LLAppViewer::doFrame()
 
 				{
 					FSPerfStats::RecordSceneTime T(FSPerfStats::StatType_t::RENDER_IDLE);
-					LL_PROFILE_ZONE_NAMED("df Snapshot")
+					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Snapshot")
 					pingMainloopTimeout("Main:Snapshot");
 					LLFloaterSnapshot::update(); // take snapshots
 					LLFloaterOutfitSnapshot::update();
@@ -1827,7 +1828,7 @@ bool LLAppViewer::doFrame()
 		}
 
 		{
-			LL_PROFILE_ZONE_NAMED( "df pauseMainloopTimeout2" )
+			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df pauseMainloopTimeout2" )
 			pingMainloopTimeout("Main:Sleep");
 
 			pauseMainloopTimeout();
@@ -1896,7 +1897,7 @@ bool LLAppViewer::doFrame()
 				F32 max_time = llmin(gFrameIntervalSeconds.value() *10.f, 1.f);
 				// <FS:Beq> instrument image decodes
 				{
-					LL_PROFILE_ZONE_NAMED("updateTextureThreads");
+					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("updateTextureThreads");
 					// FSPlot("max_time_ms",max_time);
 				// <FS:Beq/>
 				work_pending += updateTextureThreads(max_time);
@@ -1918,27 +1919,27 @@ bool LLAppViewer::doFrame()
 			}
 
 			{
-				LL_PROFILE_ZONE_NAMED( "df gMeshRepo" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df gMeshRepo" )
 				gMeshRepo.update() ;
 			}
 
 			if(!total_work_pending) //pause texture fetching threads if nothing to process.
 			{
-				LL_PROFILE_ZONE_NAMED( "df getTextureCache" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df getTextureCache" )
 				LLAppViewer::getTextureCache()->pause();
 				LLAppViewer::getImageDecodeThread()->pause();
 				LLAppViewer::getTextureFetch()->pause();
 			}
 			if(!total_io_pending) //pause file threads if nothing to process.
 			{
-				LL_PROFILE_ZONE_NAMED( "df LLVFSThread" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df LLVFSThread" )
 				LLLFSThread::sLocal->pause();
 			}
 
 			//texture fetching debugger
 			if(LLTextureFetchDebugger::isEnabled())
 			{
-				LL_PROFILE_ZONE_NAMED( "df tex_fetch_debugger_instance" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df tex_fetch_debugger_instance" )
 				LLFloaterTextureFetchDebugger* tex_fetch_debugger_instance =
 					LLFloaterReg::findTypedInstance<LLFloaterTextureFetchDebugger>("tex_fetch_debugger");
 				if(tex_fetch_debugger_instance)
@@ -1965,7 +1966,7 @@ bool LLAppViewer::doFrame()
 			frameTimer.reset();
 			// </FS:Ansariel>
 			{
-				LL_PROFILE_ZONE_NAMED( "df resumeMainloopTimeout" )
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df resumeMainloopTimeout" )
 				resumeMainloopTimeout();
 			}
 			pingMainloopTimeout("Main:End");
@@ -5612,6 +5613,7 @@ static LLTrace::BlockTimerStatHandle FTM_HUD_EFFECTS("HUD Effects");
 ///////////////////////////////////////////////////////
 void LLAppViewer::idle()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
 	pingMainloopTimeout("Main:Idle");
 
 	// Update frame timers
@@ -5705,7 +5707,7 @@ void LLAppViewer::idle()
 
 	if (!gDisconnected)
 	{
-		LL_RECORD_BLOCK_TIME(FTM_NETWORK);
+		LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("network"); //LL_RECORD_BLOCK_TIME(FTM_NETWORK);
 		// Update spaceserver timeinfo
 	    LLWorld::getInstance()->setSpaceTimeUSec(LLWorld::getInstance()->getSpaceTimeUSec() + LLUnits::Seconds::fromValue(dt_raw));
 
@@ -5738,7 +5740,7 @@ void LLAppViewer::idle()
 							|| (agent_force_update_time > (1.0f / (F32) AGENT_FORCE_UPDATES_PER_SECOND));
 		if (force_update || (agent_update_time > (1.0f / (F32) AGENT_UPDATES_PER_SECOND)))
 		{
-			LL_RECORD_BLOCK_TIME(FTM_AGENT_UPDATE);
+			LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK; //LL_RECORD_BLOCK_TIME(FTM_AGENT_UPDATE);
 			// Send avatar and camera info
 			mLastAgentControlFlags = gAgent.getControlFlags();
 			mLastAgentForceUpdate = force_update ? 0 : agent_force_update_time;
@@ -5987,8 +5989,10 @@ void LLAppViewer::idle()
 	// Here, particles are updated and drawables are moved.
 	//
 
-	LL_RECORD_BLOCK_TIME(FTM_WORLD_UPDATE);
-	gPipeline.updateMove();
+	{
+		LL_PROFILE_ZONE_NAMED_CATEGORY_APP("world update"); //LL_RECORD_BLOCK_TIME(FTM_WORLD_UPDATE);
+		gPipeline.updateMove();
+	}
 
 	LLWorld::getInstance()->updateParticles();
 
@@ -6027,7 +6031,7 @@ void LLAppViewer::idle()
 	LLAvatarRenderInfoAccountant::getInstance()->idle();
 
 	{
-		LL_RECORD_BLOCK_TIME(FTM_AUDIO_UPDATE);
+		LL_PROFILE_ZONE_NAMED_CATEGORY_APP("audio update"); //LL_RECORD_BLOCK_TIME(FTM_AUDIO_UPDATE);
 
 		if (gAudiop)
 		{
@@ -6269,6 +6273,7 @@ static LLTrace::BlockTimerStatHandle FTM_CHECK_REGION_CIRCUIT("Check Region Circ
 
 void LLAppViewer::idleNetwork()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	pingMainloopTimeout("idleNetwork");
 
 	gObjectList.mNumNewObjects = 0;
@@ -6277,7 +6282,7 @@ void LLAppViewer::idleNetwork()
 	static LLCachedControl<bool> speedTest(gSavedSettings, "SpeedTest");
 	if (!speedTest)
 	{
-		LL_RECORD_BLOCK_TIME(FTM_IDLE_NETWORK); // decode
+		LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("idle network"); //LL_RECORD_BLOCK_TIME(FTM_IDLE_NETWORK); // decode
 
 		LLTimer check_message_timer;
 		//  Read all available packets from network

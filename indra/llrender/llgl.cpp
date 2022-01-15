@@ -1873,7 +1873,7 @@ void LLGLState::checkTextureChannels(const std::string& msg)
 LLGLState::LLGLState(LLGLenum state, S32 enabled) :
 	mState(state), mWasEnabled(FALSE), mIsEnabled(FALSE)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
 	switch (state)
 	{
 		case GL_ALPHA_TEST:
@@ -1930,7 +1930,7 @@ void LLGLState::setEnabled(S32 enabled)
 
 LLGLState::~LLGLState() 
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
 	stop_glerror();
 	if (mState)
 	{
@@ -2189,7 +2189,7 @@ void LLGLNamePool::cleanup()
 
 GLuint LLGLNamePool::allocate()
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
 #if LL_GL_NAME_POOLING
 	for (name_list_t::iterator iter = mNameList.begin(); iter != mNameList.end(); ++iter)
 	{

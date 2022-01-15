@@ -179,7 +179,7 @@ namespace FSPerfStats
 
         void processUpdate(const StatsRecord& upd)
         {
-            LL_PROFILE_ZONE_SCOPED;
+            LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
             using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
@@ -253,7 +253,7 @@ namespace FSPerfStats
 
         static inline void doUpd(const LLUUID& key, ObjType_t ot, StatType_t type, uint64_t val)
         {
-            LL_PROFILE_ZONE_SCOPED;
+            LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             using ST = StatType_t;
             StatsMap& stm {statsDoubleBuffer[writeBuffer][static_cast<size_t>(ot)]};
             auto& thisAsset = stm[key];
@@ -352,7 +352,7 @@ namespace FSPerfStats
                    std::enable_if_t<OD == ObjType_t::OT_GENERAL> * = nullptr>
         RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
         {
-            LL_PROFILE_ZONE_SCOPED;
+            LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             #ifdef USAGE_TRACKING
             LL_PROFILE_PLOT_SQ("InUseScene", (int64_t)FSPerfStats::inUseScene, (int64_t)FSPerfStats::inUseScene+1);
             FSPerfStats::inUseScene++;
@@ -454,7 +454,7 @@ static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPt
     const T* rootAtt{vobj};
     if (rootAtt->isAttachment())
     {
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 
         while( !rootAtt->isRootEdit() )
         {

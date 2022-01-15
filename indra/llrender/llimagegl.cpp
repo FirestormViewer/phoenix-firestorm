@@ -186,7 +186,7 @@ BOOL is_little_endian()
 //static 
 void LLImageGL::initClass(LLWindow* window, S32 num_catagories, BOOL skip_analyze_alpha /* = false */, bool multi_threaded /* = false */)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	sSkipAnalyzeAlpha = skip_analyze_alpha;
 
     if (multi_threaded)
@@ -198,7 +198,7 @@ void LLImageGL::initClass(LLWindow* window, S32 num_catagories, BOOL skip_analyz
 //static 
 void LLImageGL::cleanupClass() 
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     LLImageGLThread::deleteSingleton();
 }
 
@@ -282,7 +282,7 @@ S32 LLImageGL::dataFormatComponents(S32 dataformat)
 // static
 void LLImageGL::updateStats(F32 current_time)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	sLastFrameTime = current_time;
 	sBoundTextureMemory = sCurBoundTextureMemory;
 	sCurBoundTextureMemory = S32Bytes(0);
@@ -674,7 +674,7 @@ void LLImageGL::setExplicitFormat( LLGLint internal_format, LLGLenum primary_for
 
 void LLImageGL::setImage(const LLImageRaw* imageraw)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	llassert((imageraw->getWidth() == getWidth(mCurrentDiscardLevel)) &&
 			 (imageraw->getHeight() == getHeight(mCurrentDiscardLevel)) &&
 			 (imageraw->getComponents() == getComponents()));
@@ -684,7 +684,7 @@ void LLImageGL::setImage(const LLImageRaw* imageraw)
 
 BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips, S32 usename)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	bool is_compressed = false;
 
     switch (mFormatPrimary)
@@ -1079,7 +1079,7 @@ void LLImageGL::postAddToAtlas()
 
 BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S32 x_pos, S32 y_pos, S32 width, S32 height, BOOL force_fast_update)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	if (!width || !height)
 	{
 		return TRUE;
@@ -1176,7 +1176,7 @@ BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S3
 
 BOOL LLImageGL::setSubImage(const LLImageRaw* imageraw, S32 x_pos, S32 y_pos, S32 width, S32 height, BOOL force_fast_update)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	return setSubImage(imageraw->getData(), imageraw->getWidth(), imageraw->getHeight(), x_pos, y_pos, width, height, force_fast_update);
 }
 
@@ -1199,7 +1199,7 @@ BOOL LLImageGL::setSubImageFromFrameBuffer(S32 fb_x, S32 fb_y, S32 x_pos, S32 y_
 // static
 void LLImageGL::generateTextures(S32 numTextures, U32 *textures)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	glGenTextures(numTextures, textures);
 }
 
@@ -1215,7 +1215,7 @@ void LLImageGL::deleteTextures(S32 numTextures, const U32 *textures)
 // static
 void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 width, S32 height, U32 pixformat, U32 pixtype, const void* pixels, bool allow_compression)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     bool use_scratch = false;
     U32* scratch = NULL;
     if (LLRender::sGLCoreProfile)
@@ -1317,7 +1317,7 @@ void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 widt
 
     stop_glerror();
     {
-        LL_PROFILE_ZONE_NAMED("glTexImage2D");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glTexImage2D");
         glTexImage2D(target, miplevel, intformat, width, height, 0, pixformat, pixtype, use_scratch ? scratch : pixels);
     }
     stop_glerror();
@@ -1332,7 +1332,7 @@ void LLImageGL::setManualImage(U32 target, S32 miplevel, S32 intformat, S32 widt
 //the texture is assiciate with some image by calling glTexImage outside LLImageGL
 BOOL LLImageGL::createGLTexture()
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     checkActiveThread();
 
 	if (gGLManager.mIsDisabled)
@@ -1366,7 +1366,7 @@ BOOL LLImageGL::createGLTexture()
 
 BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S32 usename/*=0*/, BOOL to_create, S32 category)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     checkActiveThread();
 
 	if (gGLManager.mIsDisabled)
@@ -1481,7 +1481,7 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S
 
 BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_hasmips, S32 usename)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     checkActiveThread();
 
     llassert(data_in);
@@ -1545,7 +1545,7 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
     if (! on_main_thread())
     {
         {
-            LL_PROFILE_ZONE_NAMED("cglt - sync");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - sync");
             if (gGLManager.mHasSync)
             {
                 auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
@@ -1563,7 +1563,7 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
             mMainQueue,
             [=]()
             {
-                LL_PROFILE_ZONE_NAMED("cglt - delete callback");
+                LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - delete callback");
                 if (old_texname != 0)
                 {
                     LLImageGL::deleteTextures(1, &old_texname);
@@ -2275,7 +2275,7 @@ LLImageGLThread::LLImageGLThread(LLWindow* window)
     : ThreadPool("LLImageGL", 1, 1024*1024)
     , mWindow(window)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     sEnabled = true;
     mFinished = false;
 
@@ -2285,7 +2285,7 @@ LLImageGLThread::LLImageGLThread(LLWindow* window)
 
 void LLImageGLThread::run()
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     // We must perform setup on this thread before actually servicing our
     // WorkQueue, likewise cleanup afterwards.
     mWindow->makeContextCurrent(mContext);

@@ -390,7 +390,7 @@ LLRenderPass::~LLRenderPass()
 
 void LLRenderPass::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL texture)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];
 	
 	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Perf stats 
@@ -416,7 +416,7 @@ void LLRenderPass::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL t
 
 void LLRenderPass::renderRiggedGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL texture)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
@@ -441,7 +441,7 @@ void LLRenderPass::renderRiggedGroup(LLSpatialGroup* group, U32 type, U32 mask, 
 
 void LLRenderPass::pushBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)	
 	{
@@ -465,7 +465,7 @@ void LLRenderPass::pushBatches(U32 type, U32 mask, BOOL texture, BOOL batch_text
 
 void LLRenderPass::pushRiggedBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
     mask |= LLVertexBuffer::MAP_WEIGHT4;
@@ -488,7 +488,7 @@ void LLRenderPass::pushRiggedBatches(U32 type, U32 mask, BOOL texture, BOOL batc
 
 void LLRenderPass::pushMaskBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)	
 	{
@@ -513,7 +513,7 @@ void LLRenderPass::pushMaskBatches(U32 type, U32 mask, BOOL texture, BOOL batch_
 
 void LLRenderPass::pushRiggedMaskBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
     for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)
@@ -559,7 +559,7 @@ void LLRenderPass::applyModelMatrix(const LLDrawInfo& params)
 
 void LLRenderPass::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     if (!params.mCount)
     {
         return;

@@ -133,7 +133,7 @@ void planarProjection(LLVector2 &tc, const LLVector4a& normal,
 
 void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 	mLastUpdateTime = gFrameTimeSeconds;
 	mLastMoveTime = 0.f;
 	mLastSkinTime = gFrameTimeSeconds;
@@ -245,7 +245,7 @@ void LLFace::setPool(LLFacePool* pool)
 
 void LLFace::setPool(LLFacePool* new_pool, LLViewerTexture *texturep)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	if (!new_pool)
 	{
@@ -335,7 +335,7 @@ void LLFace::setSpecularMap(LLViewerTexture* tex)
 
 void LLFace::dirtyTexture()
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	LLDrawable* drawablep = getDrawable();
 
@@ -559,7 +559,7 @@ void LLFace::updateCenterAgent()
 
 void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	if (mDrawablep == NULL || mDrawablep->getSpatialGroup() == NULL)
 	{
@@ -635,7 +635,7 @@ void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
 
 void renderFace(LLDrawable* drawable, LLFace *face)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
     LLVOVolume* vobj = drawable->getVOVolume();
     if (vobj)
@@ -930,7 +930,7 @@ bool less_than_max_mag(const LLVector4a& vec)
 BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
                              const LLMatrix4& mat_vert_in, BOOL global_volume)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	//get bounding box
 	if (mDrawablep->isState(LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION | LLDrawable::REBUILD_RIGGED))
@@ -1241,7 +1241,7 @@ bool LLFace::canRenderAsMask()
 
 	// <FS:Beq> shortcircuit fully alpha faces
 	if (getViewerObject()->isHUDAttachment()) { return false; }
-	if (te->getAlpha() == 0.0f && (te->getGlow() == 0.f)) { LL_PROFILE_ZONE_NAMED("beqshortcircuit invisible"); return true; }
+	if (te->getAlpha() == 0.0f && (te->getGlow() == 0.f)) { return true; }
 	// </FS:Beq>
 	
 	LLMaterial* mat = te->getMaterialParams();
@@ -1280,7 +1280,7 @@ bool LLFace::canRenderAsMask()
 //static 
 void LLFace::cacheFaceInVRAM(const LLVolumeFace& vf)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 	U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 |
 				LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_NORMAL;
 	
@@ -1352,7 +1352,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 								const U16 &index_offset,
 								bool force_rebuild)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 	llassert(verify());
 
 	if (volume.getNumVolumeFaces() <= f) {
@@ -1515,7 +1515,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	// INDICES
 	if (full_rebuild)
 	{
-        LL_PROFILE_ZONE_NAMED("getGeometryVolume - indices");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - indices");
 		mVertexBuffer->getIndexStrider(indicesp, mIndicesIndex, mIndicesCount, map_range);
 
 		volatile __m128i* dst = (__m128i*) indicesp.get();
@@ -1531,7 +1531,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		}
 
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - indices tail");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - indices tail");
 			U16* idx = (U16*) dst;
 
 			for (S32 i = end*8; i < num_indices; ++i)
@@ -1600,7 +1600,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
     if (rebuild_normal || rebuild_tangent)
     { //override mat_normal with inverse of skin->mBindShapeMatrix
-        LL_PROFILE_ZONE_NAMED("getGeometryVolume - norm mat override");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - norm mat override");
         if (rigged)
         {
             if (skin == nullptr)
@@ -1631,7 +1631,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	{ //use transform feedback to pack vertex buffer
 		//gGLDebugLoggingEnabled = TRUE;
 
-        LL_PROFILE_ZONE_NAMED("getGeometryVolume - transform feedback");
+        LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - transform feedback");
 		LLGLEnable discard(GL_RASTERIZER_DISCARD);
 		LLVertexBuffer* buff = (LLVertexBuffer*) vf.mVertexBuffer.get();
 
@@ -1649,7 +1649,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_pos)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf position");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tf position");
 			gTransformPositionProgram.bind();
 
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_VERTEX, mGeomIndex, mGeomCount);
@@ -1674,7 +1674,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_color)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf color");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tf color");
 			gTransformColorProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_COLOR, mGeomIndex, mGeomCount);
@@ -1690,7 +1690,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_emissive)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf emissive");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tf emissive");
 			gTransformColorProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_EMISSIVE, mGeomIndex, mGeomCount);
@@ -1711,7 +1711,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_normal)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf normal");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tf normal");
 			gTransformNormalProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_NORMAL, mGeomIndex, mGeomCount);
@@ -1724,7 +1724,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_tangent)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf tangent");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tf tangent");
 			gTransformTangentProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_TANGENT, mGeomIndex, mGeomCount);
@@ -1737,7 +1737,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_tcoord)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tf tcoord");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tf tcoord");
 			gTransformTexCoordProgram.bind();
 			
 			mVertexBuffer->bindForFeedback(0, LLVertexBuffer::TYPE_TEXCOORD0, mGeomIndex, mGeomCount);
@@ -1776,7 +1776,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_tcoord)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tcoord");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tcoord");
 									
 			//bump setup
 			LLVector4a binormal_dir( -sin_ang, cos_ang, 0.f );
@@ -1906,12 +1906,12 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 				if (texgen != LLTextureEntry::TEX_GEN_PLANAR)
 				{
-                    LL_PROFILE_ZONE_NAMED("getGeometryVolume - texgen");
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - texgen");
 					if (!do_tex_mat)
 					{
 						if (!do_xform)
 						{
-                            LL_PROFILE_ZONE_NAMED("ggv - texgen 1");
+                            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("ggv - texgen 1");
 
 							// <FS:ND> Don't round up, or there's high risk to write past buffer
 
@@ -1924,7 +1924,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						}
 						else
 						{
-                            LL_PROFILE_ZONE_NAMED("ggv - texgen 2");
+                            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("ggv - texgen 2");
 							F32* dst = (F32*) tex_coords0.get();
 							LLVector4a* src = (LLVector4a*) vf.mTexCoords;
 
@@ -1975,7 +1975,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 				}
 				else
 				{ //no bump, tex gen planar
-                    LL_PROFILE_ZONE_NAMED("getGeometryVolume - texgen planar");
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - texgen planar");
 					if (do_tex_mat)
 					{
 						for (S32 i = 0; i < num_vertices; i++)
@@ -2020,7 +2020,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			}
 			else
 			{ //bump mapped or has material, just do the whole expensive loop
-                LL_PROFILE_ZONE_NAMED("getGeometryVolume - texgen default");
+                LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - texgen default");
 
 				std::vector<LLVector2> bump_tc;
 		
@@ -2235,7 +2235,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_normal)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - normal");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - normal");
 
 			mVertexBuffer->getNormalStrider(norm, mGeomIndex, mGeomCount, map_range);
 			F32* normals = (F32*) norm.get();
@@ -2258,7 +2258,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		
 		if (rebuild_tangent)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - tangent");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - tangent");
 			mVertexBuffer->getTangentStrider(tangent, mGeomIndex, mGeomCount, map_range);
 			F32* tangents = (F32*) tangent.get();
 			
@@ -2291,7 +2291,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	
 		if (rebuild_weights && vf.mWeights)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - weight");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - weight");
 			mVertexBuffer->getWeight4Strider(wght, mGeomIndex, mGeomCount, map_range);
 			// <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
 			//F32* weights = (F32*) wght.get();
@@ -2309,7 +2309,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_color && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_COLOR) )
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - color");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - color");
 			mVertexBuffer->getColorStrider(colors, mGeomIndex, mGeomCount, map_range);
 
 			LLVector4a src;
@@ -2340,7 +2340,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 		if (rebuild_emissive)
 		{
-            LL_PROFILE_ZONE_NAMED("getGeometryVolume - emissive");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_FACE("getGeometryVolume - emissive");
 			LLStrider<LLColor4U> emissive;
 			mVertexBuffer->getEmissiveStrider(emissive, mGeomIndex, mGeomCount, map_range);
 
@@ -2471,7 +2471,7 @@ F32 LLFace::getTextureVirtualSize()
 
 BOOL LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	//VECTORIZE THIS
 	//get area of circle around face
@@ -2752,7 +2752,7 @@ const LLMatrix4& LLFace::getRenderMatrix() const
 
 S32 LLFace::renderElements(const U16 *index_array) const
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	S32 ret = 0;
 	
@@ -2773,7 +2773,7 @@ S32 LLFace::renderElements(const U16 *index_array) const
 
 S32 LLFace::renderIndexed()
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	if(mDrawablep == NULL || mDrawPoolp == NULL)
 	{
@@ -2785,7 +2785,7 @@ S32 LLFace::renderIndexed()
 
 S32 LLFace::renderIndexed(U32 mask)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE
 
 	if (mVertexBuffer.isNull())
 	{

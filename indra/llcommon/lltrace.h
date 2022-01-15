@@ -245,7 +245,7 @@ public:
 
 	void setName(const char* name)
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		mName = name;
 		setKey(name);
 	}
@@ -254,13 +254,13 @@ public:
 
 	StatType<MemAccumulator::AllocationFacet>& allocations() 
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		return static_cast<StatType<MemAccumulator::AllocationFacet>&>(*(StatType<MemAccumulator>*)this);
 	}
 
 	StatType<MemAccumulator::DeallocationFacet>& deallocations() 
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		return static_cast<StatType<MemAccumulator::DeallocationFacet>&>(*(StatType<MemAccumulator>*)this);
 	}
 };
@@ -282,7 +282,7 @@ struct MeasureMem<T, typename T::mem_trackable_tag_t, IS_BYTES>
 {
 	static size_t measureFootprint(const T& value)
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		return sizeof(T) + value.getMemFootprint();
 	}
 };
@@ -292,7 +292,7 @@ struct MeasureMem<T, IS_MEM_TRACKABLE, typename T::is_unit_t>
 {
 	static size_t measureFootprint(const T& value)
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		return U32Bytes(value).value();
 	}
 };
@@ -302,7 +302,7 @@ struct MeasureMem<T*, IS_MEM_TRACKABLE, IS_BYTES>
 {
 	static size_t measureFootprint(const T* value)
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		if (!value)
 		{
 			return 0;
@@ -347,7 +347,7 @@ struct MeasureMem<std::basic_string<T>, IS_MEM_TRACKABLE, IS_BYTES>
 {
 	static size_t measureFootprint(const std::basic_string<T>& value)
 	{
-        LL_PROFILE_ZONE_SCOPED;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 		return value.capacity() * sizeof(T);
 	}
 };
@@ -356,7 +356,7 @@ struct MeasureMem<std::basic_string<T>, IS_MEM_TRACKABLE, IS_BYTES>
 template<typename T>
 inline void claim_alloc(MemStatHandle& measurement, const T& value)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 #if LL_TRACE_ENABLED
 	S32 size = MeasureMem<T>::measureFootprint(value);
 	if(size == 0) return;
@@ -369,7 +369,7 @@ inline void claim_alloc(MemStatHandle& measurement, const T& value)
 template<typename T>
 inline void disclaim_alloc(MemStatHandle& measurement, const T& value)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
 #if LL_TRACE_ENABLED
 	S32 size = MeasureMem<T>::measureFootprint(value);
 	if(size == 0) return;

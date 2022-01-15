@@ -3811,13 +3811,13 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 	}
 }
 
-static LLTrace::BlockTimerStatHandle FTM_UPDATE_UI("Update UI"); // <FS:Beq/> rename to sensible symbol
+static LLTrace::BlockTimerStatHandle ftm("Update UI");
 
 // Update UI based on stored mouse position from mouse-move
 // event processing.
 void LLViewerWindow::updateUI()
 {
-	LL_RECORD_BLOCK_TIME(FTM_UPDATE_UI); // <FS:Beq/> rename to sensible symbol
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI; //LL_RECORD_BLOCK_TIME(ftm);
 
 	static std::string last_handle_msg;
 
@@ -6589,7 +6589,7 @@ void LLViewerWindow::setup3DRender()
 
 void LLViewerWindow::setup3DViewport(S32 x_offset, S32 y_offset)
 {
-	LL_PROFILE_ZONE_SCOPED
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI
 	gGLViewport[0] = mWorldViewRectRaw.mLeft + x_offset;
 	gGLViewport[1] = mWorldViewRectRaw.mBottom + y_offset;
 	gGLViewport[2] = mWorldViewRectRaw.getWidth();
