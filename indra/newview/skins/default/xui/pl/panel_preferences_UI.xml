@@ -220,6 +220,7 @@
         <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
         <check_box label="Nowy sposób powiadamiania o restarcie regionu" name="FSUseNewRegionRestartNotification" />
         <check_box label="Nie trzęś moim ekranem, gdy pojawia się informacja o restarcie regionu" name="FSNoScreenShakeOnRegionRestart" />
+        <check_box label="Wysyłaj info o restarcie regionu na kanał:" width="245" name="FSReportRegionRestartToChat" />
     </panel>
     <panel label="Czcionka" name="UI-font-tab">
         <text name="tooltip_textbox1">

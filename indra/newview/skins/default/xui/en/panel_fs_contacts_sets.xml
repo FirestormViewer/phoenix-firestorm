@@ -169,7 +169,7 @@
      layout="topleft"
      height="14"
      name="member_count"
-     width="80">
+     width="255">
     Members: [COUNT]
     </text>
 </panel>

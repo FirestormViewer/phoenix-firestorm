@@ -225,6 +225,7 @@
         <check_box label="Показывать тоасты над другими окнами" name="FSShowToastsInFront" />
         <check_box label="Использовать новое уведомление перезагрузки региона" name="FSUseNewRegionRestartNotification" />
         <check_box label="Не встряхивать мой экран, при получении уведомления о перезагрузке региона" name="FSNoScreenShakeOnRegionRestart" />
+        <check_box label="Сообщать о рестарте региона в канал:" width="245" name="FSReportRegionRestartToChat" />
     </panel>
     <panel label="Шрифт" name="UI-font-tab">
         <text name="tooltip_textbox1">
