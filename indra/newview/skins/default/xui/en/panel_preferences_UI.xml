@@ -1537,8 +1537,33 @@
        layout="topleft"
        left="15"
        name="FSNoScreenShakeOnRegionRestart"
-       top_pad="5"
+       top_pad="3"
        width="256" />
+      <check_box
+       enabled_control="FSUseNewRegionRestartNotification"
+       control_name="FSReportRegionRestartToChat"
+       height="16"
+       label="Send region restart info to channel:"
+       layout="topleft"
+       left="15"
+       name="FSReportRegionRestartToChat"
+       top_pad="3"
+       width="215" />
+      <spinner
+       top_delta="-4"
+       control_name="FSRegionRestartAnnounceChannel"
+       enabled_control="FSUseNewRegionRestartNotification"
+       decimal_digits="0"
+       layout="topleft"
+       follows="left|top"
+       height="18"
+       left_pad="5"
+       increment="1"
+       initial_value="473405"
+       max_val="16777216"
+       min_val="1"
+       name="FSRegionRestartAnnounceChannel"
+       width="90" />
 	</panel>
 
     <!--Font-->

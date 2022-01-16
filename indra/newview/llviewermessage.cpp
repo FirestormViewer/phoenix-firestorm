@@ -6486,6 +6486,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 
 			make_ui_sound("UISndRestart");
 			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -6740,6 +6741,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 
 			make_ui_sound("UISndRestartOpenSim");
 			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
 			return;
 		}
 		// </FS:Ansariel>
@@ -8766,3 +8768,22 @@ void LLOfferInfo::forceResponse(InventoryOfferResponse response)
 	// </FS:Ansariel>
 }
 
+// <FS:PP> Announce region restart to a defined chat channel
+void fs_report_region_restart_to_channel(S32 seconds)
+{
+	S32 channel = gSavedSettings.getS32("FSRegionRestartAnnounceChannel");
+	if (gSavedSettings.getBOOL("FSUseNewRegionRestartNotification") && gSavedSettings.getBOOL("FSReportRegionRestartToChat") && channel != 0)
+	{
+		LLMessageSystem* msg = gMessageSystem;
+		msg->newMessageFast(_PREHASH_ChatFromViewer);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->nextBlockFast(_PREHASH_ChatData);
+		msg->addStringFast(_PREHASH_Message, "region_restart_in:" + llformat("%d", seconds));
+		msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_WHISPER);
+		msg->addS32("Channel", channel);
+		gAgent.sendReliableMessage();
+	}
+}
+// </FS:PP>
