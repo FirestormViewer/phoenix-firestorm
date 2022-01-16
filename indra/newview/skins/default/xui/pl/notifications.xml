@@ -3594,7 +3594,7 @@ Porty, które muszą być otwarte dla połączeń głosowych, to:
 Proszę sprawdź swoją sieć i ustawienia firewall.
 Wyłącz wszelkie funkcjonalności SIP ALG (Application Layer Gateway) w swoim routerze.
 
-[https://wiki.firestormviewer.org/fs_voice]
+https://wiki.firestormviewer.org/fs_voice
 		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" />
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
@@ -5158,5 +5158,9 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 	<notification name="FSAOScriptedNotification">
 		Animator Firestorma: [AO_MESSAGE]
 		<usetemplate ignoretext="Ostrzegaj mnie, gdy Animator Firestorma jest proszony o dostęp przez oskryptowany obiekt" name="notifyignore" />
+	</notification>
+	<notification name="AttachedRiggedObjectToHUD">
+		Dodatek o nazwie "[NAME]" zawiera riggowany mesz, ale jest dołączony do punktu HUD "[HUD_POINT]". Oznacza to, że Ty co prawda zobaczysz go poprawnie wyrenderowany, ale wszyscy inni nie będą mogli. Rozważ zdjęcie go i ponowne dołączenie do zwykłego punktu doczepienia.
+		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="notifyignore" />
 	</notification>
 </notifications>

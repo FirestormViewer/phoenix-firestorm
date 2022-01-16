@@ -3893,7 +3893,7 @@ UDP: 3478, 3479, 5060, 5062, 6250, 12000-32000
 お使いのルーターの SIP ALG 機能をすべて無効にしてください。
 
 ボイスチャットによるコミュニケーションが利用できません。
-[https://wiki.firestormviewer.org/fs_voice]
+https://wiki.firestormviewer.org/fs_voice
 		<usetemplate ignoretext="ビューワーがボイスサーバーに接続できなかった時に警告" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
