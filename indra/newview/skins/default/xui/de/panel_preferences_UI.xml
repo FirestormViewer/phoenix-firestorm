@@ -233,6 +233,7 @@
 		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
 		<check_box label="Neue Regions-Neustart-Meldung verwenden" name="FSUseNewRegionRestartNotification"/>
 		<check_box label="Bei Regions-Neustart-Meldung Bildschirm nicht wackeln" name="FSNoScreenShakeOnRegionRestart"/>
+		<check_box label="Regions-Neustart-Meldung an Kanal senden:" width="265" name="FSReportRegionRestartToChat" />
 	</panel>
 	<!--Font-->
 	<panel label="Schrift" name="UI-font-tab">
