@@ -83,7 +83,7 @@ showUsage()
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
     echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
-    echo "  --ninja                  : Build using Ninja (Linux only)"
+    echo "  --ninja                  : Build using Ninja"
     echo "  --vscode                 : Exports compile commands for VSCode (Linux only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
@@ -525,11 +525,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         TARGET="Xcode"
     elif [ \( $TARGET_PLATFORM == "linux" \) ] ; then
         OPENAL="-DOPENAL:BOOL=ON"
-        if [ $WANTS_NINJA -eq $TRUE ] ; then
-            TARGET="Ninja"
-        else
-            TARGET="Unix Makefiles"
-        fi
+        TARGET="Unix Makefiles"
         if [ $WANTS_VSCODE -eq $TRUE ] ; then
             VSCODE_FLAGS="-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
             ROOT_DIR=$(dirname $(dirname $(readlink -f $0)))
@@ -543,6 +539,10 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     elif [ \( $TARGET_PLATFORM == "windows" \) ] ; then
         TARGET="${AUTOBUILD_WIN_CMAKE_GEN}"
         UNATTENDED="-DUNATTENDED=ON"
+    fi
+
+    if [ $WANTS_NINJA -eq $TRUE ] ; then
+        TARGET="Ninja"
     fi
 
     cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
