@@ -139,7 +139,7 @@ BOOL FSFloaterPerformance::postBuild()
     mObjectList->setHoverIconName("StopReload_Off");
     mObjectList->setIconClickedCallback(boost::bind(&FSFloaterPerformance::detachItem, this, _1));
 
-    mSettingsPanel->getChild<LLRadioGroup>("graphics_quality")->setCommitCallback(boost::bind(&FSFloaterPerformance::onChangeQuality, this, _2));
+    mSettingsPanel->getChild<LLSliderCtrl>("quality_vs_perf_selection")->setCommitCallback(boost::bind(&FSFloaterPerformance::onChangeQuality, this, _2));
 
     mNearbyPanel->getChild<LLButton>("exceptions_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::onClickExceptions, this));
     mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->setCommitCallback(boost::bind(&FSFloaterPerformance::onClickHideAvatars, this));
@@ -732,11 +732,9 @@ void FSFloaterPerformance::detachItem(const LLUUID& item_id)
 
 void FSFloaterPerformance::onChangeQuality(const LLSD& data)
 {
-    LLFloaterPreference* instance = LLFloaterReg::getTypedInstance<LLFloaterPreference>("preferences");
-    if (instance)
-    {
-        instance->onChangeQuality(data);
-    }
+	U32 level = (U32)(data.asReal());
+	LLFeatureManager::getInstance()->setGraphicsLevel(level, true);
+	refresh();
 }
 
 void FSFloaterPerformance::onClickHideAvatars()
