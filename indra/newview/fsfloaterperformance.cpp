@@ -240,104 +240,106 @@ void FSFloaterPerformance::draw()
         // tot_frame_time_ns -= tot_limit_time_ns;
         // tot_frame_time_ns -= tot_sleep_time_ns;
 
-        if(tot_frame_time_ns == 0)
+        if(tot_frame_time_ns != 0)
         {
-            LL_WARNS("performance") << "things went wrong, quit while we can." << LL_ENDL;
-            return;
-        }
-        auto pct_avatar_time = (tot_avatar_time_ns * 100)/tot_frame_time_ns;
-        auto pct_huds_time = (tot_huds_time_ns * 100)/tot_frame_time_ns;
-        auto pct_ui_time = (tot_ui_time_ns * 100)/tot_frame_time_ns;
-        auto pct_idle_time = (tot_idle_time_ns * 100)/tot_frame_time_ns;
-        auto pct_swap_time = (tot_swap_time_ns * 100)/tot_frame_time_ns;
-        auto pct_scene_render_time = (tot_scene_time_ns * 100)/tot_frame_time_ns;
-        pct_avatar_time = llclamp(pct_avatar_time,0.,100.);
-        pct_huds_time = llclamp(pct_huds_time,0.,100.);
-        pct_ui_time = llclamp(pct_ui_time,0.,100.);
-        pct_idle_time = llclamp(pct_idle_time,0.,100.);
-        pct_swap_time = llclamp(pct_swap_time,0.,100.);
-        pct_scene_render_time = llclamp(pct_scene_render_time,0.,100.);
+            auto pct_avatar_time = (tot_avatar_time_ns * 100)/tot_frame_time_ns;
+            auto pct_huds_time = (tot_huds_time_ns * 100)/tot_frame_time_ns;
+            auto pct_ui_time = (tot_ui_time_ns * 100)/tot_frame_time_ns;
+            auto pct_idle_time = (tot_idle_time_ns * 100)/tot_frame_time_ns;
+            auto pct_swap_time = (tot_swap_time_ns * 100)/tot_frame_time_ns;
+            auto pct_scene_render_time = (tot_scene_time_ns * 100)/tot_frame_time_ns;
+            pct_avatar_time = llclamp(pct_avatar_time,0.,100.);
+            pct_huds_time = llclamp(pct_huds_time,0.,100.);
+            pct_ui_time = llclamp(pct_ui_time,0.,100.);
+            pct_idle_time = llclamp(pct_idle_time,0.,100.);
+            pct_swap_time = llclamp(pct_swap_time,0.,100.);
+            pct_scene_render_time = llclamp(pct_scene_render_time,0.,100.);
 
-        args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
-        args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
-        args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
-        args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
-        args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
-        args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_render_time));
-        args["TOT_FRAME_TIME"] = llformat("%02u", (U32)llround(tot_frame_time_ns/1000000));
-        args["FPSCAP"] = llformat("%02u", (U32)fpsCap);
-        args["FPSTARGET"] = llformat("%02u", (U32)targetFPS);
+            args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
+            args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
+            args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
+            args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
+            args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
+            args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_render_time));
+            args["TOT_FRAME_TIME"] = llformat("%02u", (U32)llround(tot_frame_time_ns/1000000));
+            args["FPSCAP"] = llformat("%02u", (U32)fpsCap);
+            args["FPSTARGET"] = llformat("%02u", (U32)targetFPS);
 
-        getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
-        getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
-        getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
-        
-        auto textbox = getChild<LLTextBox>("fps_warning");
-        if (tot_sleep_time_raw > 0) // We are sleeping because view is not focussed
-        {
-            textbox->setVisible(true);
-            textbox->setText(getString("focus_fps"));
-            textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
-            unreliable = true;
-        }
-        else if (tot_limit_time_raw > 0)
-        {
-            textbox->setVisible(true);
-            textbox->setText(getString("limit_fps", args));
-            textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
-            unreliable = true;
-        }
-        else if (FSPerfStats::autoTune)
-        {
-            textbox->setVisible(true);
-            textbox->setText(getString("tuning_fps", args));
-            textbox->setColor(LLUIColorTable::instance().getColor("green"));
+            getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
+            getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
+            getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
+            
+            auto textbox = getChild<LLTextBox>("fps_warning");
+            if (tot_sleep_time_raw > 0) // We are sleeping because view is not focussed
+            {
+                textbox->setVisible(true);
+                textbox->setText(getString("focus_fps"));
+                textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
+                unreliable = true;
+            }
+            else if (tot_limit_time_raw > 0)
+            {
+                textbox->setVisible(true);
+                textbox->setText(getString("limit_fps", args));
+                textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
+                unreliable = true;
+            }
+            else if (FSPerfStats::autoTune)
+            {
+                textbox->setVisible(true);
+                textbox->setText(getString("tuning_fps", args));
+                textbox->setColor(LLUIColorTable::instance().getColor("green"));
+            }
+            else
+            {
+                textbox->setVisible(false);
+            }
+
+            if (FSPerfStats::autoTune && !unreliable )
+            {
+                // the tuning itself is managed from another thread but we can report progress here
+
+                // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
+                if (target_frame_time_ns <= tot_frame_time_ns)
+                {
+                    U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
+                    // If the target frame time < non avatar frame time then we can pototentially reach it.
+                    if (non_avatar_time_ns < target_frame_time_ns)
+                    {
+                        textbox->setColor(LLUIColorTable::instance().getColor("orange"));
+                    }
+                    else
+                    {
+                        // TODO(Beq): Set advisory text for further actions
+                        textbox->setColor(LLUIColorTable::instance().getColor("red"));
+                    }
+                }
+                else if (target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART_ns))
+                {
+                    // if we have more time to spare. Display this (the service will update things)
+                    textbox->setColor(LLUIColorTable::instance().getColor("green"));
+                }
+            }
+
+            if (mHUDsPanel->getVisible())
+            {
+                populateHUDList();
+            }
+            else if (mNearbyPanel->getVisible())
+            {
+                populateNearbyList();
+                mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->set(!LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR));
+            }
+            else if (mComplexityPanel->getVisible())
+            {
+                populateObjectList();
+            }
         }
         else
         {
-            textbox->setVisible(false);
+            LL_WARNS("performance") << "Scene time 0. Skipping til we have data." << LL_ENDL;
         }
-
-        if (FSPerfStats::autoTune && !unreliable )
-        {
-            // the tuning itself is managed from another thread but we can report progress here
-
-            // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
-            if (target_frame_time_ns <= tot_frame_time_ns)
-            {
-                U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
-                // If the target frame time < non avatar frame time then we can pototentially reach it.
-                if (non_avatar_time_ns < target_frame_time_ns)
-                {
-                    textbox->setColor(LLUIColorTable::instance().getColor("orange"));
-                }
-                else
-                {
-                    // TODO(Beq): Set advisory text for further actions
-                    textbox->setColor(LLUIColorTable::instance().getColor("red"));
-                }
-            }
-            else if (target_frame_time_ns > (tot_frame_time_ns + FSPerfStats::renderAvatarMaxART_ns))
-            {
-                // if we have more time to spare. Display this (the service will update things)
-                textbox->setColor(LLUIColorTable::instance().getColor("green"));
-            }
-        }
-
-        if (mHUDsPanel->getVisible())
-        {
-            populateHUDList();
-        }
-        else if (mNearbyPanel->getVisible())
-        {
-            populateNearbyList();
-            mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->set(!LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR));
-        }
-        else if (mComplexityPanel->getVisible())
-        {
-            populateObjectList();
-        }
-
+        
         mUpdateTimer->setTimerExpirySec(REFRESH_INTERVAL);
     }
     LLFloater::draw();
