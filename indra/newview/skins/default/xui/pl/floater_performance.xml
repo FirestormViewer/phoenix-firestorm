@@ -42,7 +42,7 @@
 				<combo_box.item label="Dostrój tylko awatary" name="av_only" />
 				<combo_box.item label="Awatary i scena" name="av_and_scene" />
 			</combo_box>
-			<spinner name="target_fps" tooltip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
+			<spinner name="target_fps" tool_tip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">

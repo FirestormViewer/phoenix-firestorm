@@ -7,8 +7,6 @@
  save_rect="true"
  title="Improve Graphics Speed (Experimental)"
  can_resize="false"
- min_height="652"
- max_height="652"
  min_width="580"
  width="580">
  <floater.string name="frame_stats">
@@ -172,7 +170,6 @@ Target [FPSTARGET] fps
     <combo_box
     follows="top|right"
     font="SansSerif"
-    text_color="White"
     height="20"
     layout="topleft"
     left_pad="5"
@@ -193,7 +190,7 @@ Target [FPSTARGET] fps
       name="target_fps"
       control_name="FSTargetFPS"
       font="SansSerifLarge"
-      tooltip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
+      tool_tip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
       layout="topleft"
       follows="right|top"
       right="-55"
