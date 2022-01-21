@@ -9622,15 +9622,15 @@ class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
 };
 
 // <FS:Beq> Add telemetry controls to the viewer menus
-class FSTelemetryToggleActive : public view_listener_t
+class LLProfilerToggleActive : public view_listener_t
 {
 protected:
 
 	bool handleEvent(const LLSD& userdata)
 	{
-		BOOL checked = gSavedSettings.getBOOL( "FSTelemetryActive" );
-		gSavedSettings.setBOOL( "FSTelemetryActive", !checked );
-		FSTelemetry::active = !checked;
+		BOOL checked = gSavedSettings.getBOOL( "ProfilingActive" );
+		gSavedSettings.setBOOL( "ProfilingActive", !checked );
+		gProfilerEnabled = !checked;
 		return true;
 	}
 };
@@ -10659,6 +10659,7 @@ class LLViewHighlightTransparent : public view_listener_t
 // [RLVa:KB] - @edit and @viewtransparent
 		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (RlvActions::canHighlightTransparent());
 // [/RLVa:KB]
+        gPipeline.resetVertexBuffers();
 		return true;
 	}
 };
@@ -12011,9 +12012,10 @@ void initialize_menus()
 	//Develop (clear cache immediately)
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
 
+#ifdef TRACY_ENABLE
 	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
-	view_listener_t::addMenu(new FSTelemetryToggleActive(), "Develop.ToggleTelemetry");
-
+	view_listener_t::addMenu(new LLProfilerToggleActive(), "Develop.ToggleProfiling");
+#endif
 	// Admin >Object
 	view_listener_t::addMenu(new LLAdminForceTakeCopy(), "Admin.ForceTakeCopy");
 	view_listener_t::addMenu(new LLAdminHandleObjectOwnerSelf(), "Admin.HandleObjectOwnerSelf");

@@ -78,7 +78,7 @@ namespace FSPerfStats
     // static
     void StatsRecorder::toggleBuffer()
     {
-        FSZone;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
         using ST = StatType_t;
 
         bool unreliable{false};
@@ -161,7 +161,7 @@ namespace FSPerfStats
         auto& statsTypeMatrix = statsDoubleBuffer[writeBuffer];
         for(auto& statsMap : statsTypeMatrix)
         {
-            FSZoneN("Clear stats maps");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("Clear stats maps");
             for(auto& stat_entry : statsMap)
             {
                 std::fill_n(stat_entry.second.begin() ,static_cast<size_t>(ST::STATS_COUNT),0);
@@ -170,7 +170,7 @@ namespace FSPerfStats
         }
         for(int i=0; i< static_cast<size_t>(ObjType_t::OT_COUNT); i++)
         {
-            FSZoneN("clear max/sum");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("clear max/sum");
             max[writeBuffer][i].fill(0);
             sum[writeBuffer][i].fill(0);
         }
@@ -186,13 +186,13 @@ namespace FSPerfStats
     // static 
     void StatsRecorder::clearStatsBuffers()
     {
-        FSZone;
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
         using ST = StatType_t;
 
         auto& statsTypeMatrix = statsDoubleBuffer[writeBuffer];
         for(auto& statsMap : statsTypeMatrix)
         {
-            FSZoneN("Clear stats maps");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("Clear stats maps");
             for(auto& stat_entry : statsMap)
             {
                 std::fill_n(stat_entry.second.begin() ,static_cast<size_t>(ST::STATS_COUNT),0);
@@ -201,7 +201,7 @@ namespace FSPerfStats
         }
         for(int i=0; i< static_cast<size_t>(ObjType_t::OT_COUNT); i++)
         {
-            FSZoneN("clear max/sum");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("clear max/sum");
             max[writeBuffer][i].fill(0);
             sum[writeBuffer][i].fill(0);
         }
@@ -214,7 +214,7 @@ namespace FSPerfStats
         // repeat before we start processing new stuff
         for(auto& statsMap : statsTypeMatrix)
         {
-            FSZoneN("Clear stats maps");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("Clear stats maps");
             for(auto& stat_entry : statsMap)
             {
                 std::fill_n(stat_entry.second.begin() ,static_cast<size_t>(ST::STATS_COUNT),0);
@@ -223,7 +223,7 @@ namespace FSPerfStats
         }
         for(int i=0; i< static_cast<size_t>(ObjType_t::OT_COUNT); i++)
         {
-            FSZoneN("clear max/sum");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("clear max/sum");
             max[writeBuffer][i].fill(0);
             sum[writeBuffer][i].fill(0);
         }

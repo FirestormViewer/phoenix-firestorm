@@ -58,8 +58,6 @@ const F32 MIN_INTERPOLATE_DISTANCE_SQUARED = 0.001f * 0.001f;
 const F32 MAX_INTERPOLATE_DISTANCE_SQUARED = 10.f * 10.f;
 const F32 OBJECT_DAMPING_TIME_CONSTANT = 0.06f;
 
-static LLTrace::BlockTimerStatHandle FTM_CULL_REBOUND("Cull Rebound");
-
 extern bool gShiftFrame;
 
 
@@ -93,17 +91,15 @@ void LLDrawable::incrementVisible()
 
 LLDrawable::LLDrawable(LLViewerObject *vobj, bool new_entry)
 :	LLViewerOctreeEntryData(LLViewerOctreeEntry::LLDRAWABLE),
-	LLTrace::MemTrackable<LLDrawable, 16>("LLDrawable"),
-	mVObjp(vobj),
-	mSkinningMatCache(nullptr),
-	mLastSkinningMatCacheFrame(0),
-	mCacheSize(0)
+	mVObjp(vobj)
 {
 	init(new_entry); 
 }
 
 void LLDrawable::init(bool new_entry)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	// mXform
 	mParent = NULL;
 	mRenderType = 0;
@@ -143,7 +139,7 @@ void LLDrawable::init(bool new_entry)
 
 		llassert(!vo_entry->getGroup()); //not in the object cache octree.
 	}
-
+	
 	llassert(!vo_entry || vo_entry->getEntry() == mEntry);
 
 	initVisible(sCurVisible - 2);//invisible for the current frame and the last frame.
@@ -153,21 +149,6 @@ void LLDrawable::unload()
 {
 	LLVOVolume *pVVol = getVOVolume();
 	pVVol->setNoLOD();
-
-	for (S32 i = 0; i < getNumFaces(); i++)
-	{
-		LLFace* facep = getFace(i);
-		if (facep->isState(LLFace::RIGGED))
-		{
-			LLDrawPoolAvatar* pool = (LLDrawPoolAvatar*)facep->getPool();
-			if (pool) {
-				pool->removeRiggedFace(facep);
-			}
-			facep->setVertexBuffer(NULL);
-		}
-		facep->clearState(LLFace::RIGGED);
-	}
-
 	pVVol->markForUpdate(TRUE);
 }
 
@@ -202,14 +183,8 @@ void LLDrawable::destroy()
 
 	std::for_each(mFaces.begin(), mFaces.end(), DeletePointer());
 	mFaces.clear();
-
-	// <FS:Beq> close up potential memory leak
-	if (mSkinningMatCache)
-	{
-		ll_aligned_free_16(mSkinningMatCache);
-	}
-	// </FS:Beq>
-
+		
+	
 	/*if (!(sNumZombieDrawables % 10))
 	{
 		LL_INFOS() << "- Zombie drawables: " << sNumZombieDrawables << LL_ENDL;
@@ -270,19 +245,13 @@ BOOL LLDrawable::isLight() const
 	}
 }
 
-static LLTrace::BlockTimerStatHandle FTM_CLEANUP_DRAWABLE("Cleanup Drawable");
-static LLTrace::BlockTimerStatHandle FTM_DEREF_DRAWABLE("Deref");
-static LLTrace::BlockTimerStatHandle FTM_DELETE_FACES("Faces");
-
 void LLDrawable::cleanupReferences()
 {
-	LL_RECORD_BLOCK_TIME(FTM_CLEANUP_DRAWABLE);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
 	
-	{
-		LL_RECORD_BLOCK_TIME(FTM_DELETE_FACES);
-		std::for_each(mFaces.begin(), mFaces.end(), DeletePointer());
-		mFaces.clear();
-	}
+	
+	std::for_each(mFaces.begin(), mFaces.end(), DeletePointer());
+	mFaces.clear();
 
 	gObjectList.removeDrawable(this);
 	
@@ -290,12 +259,9 @@ void LLDrawable::cleanupReferences()
 	
 	removeFromOctree();
 
-	{
-		LL_RECORD_BLOCK_TIME(FTM_DEREF_DRAWABLE);
-		// Cleanup references to other objects
-		mVObjp = NULL;
-		mParent = NULL;
-	}
+	// Cleanup references to other objects
+	mVObjp = NULL;
+	mParent = NULL;
 }
 
 void LLDrawable::removeFromOctree()
@@ -340,14 +306,12 @@ S32 LLDrawable::findReferences(LLDrawable *drawablep)
 	return count;
 }
 
-static LLTrace::BlockTimerStatHandle FTM_ALLOCATE_FACE("Allocate Face");
-
 LLFace*	LLDrawable::addFace(LLFacePool *poolp, LLViewerTexture *texturep)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
 	
 	LLFace *face;
 	{
-		LL_RECORD_BLOCK_TIME(FTM_ALLOCATE_FACE);
 		face = new LLFace(this, mVObjp);
 	}
 
@@ -372,13 +336,12 @@ LLFace*	LLDrawable::addFace(LLFacePool *poolp, LLViewerTexture *texturep)
 
 LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	LLFace *face;
 
-	{
-		LL_RECORD_BLOCK_TIME(FTM_ALLOCATE_FACE);
-		face = new LLFace(this, mVObjp);
-	}
-
+	face = new LLFace(this, mVObjp);
+	
 	face->setTEOffset(mFaces.size());
 	face->setTexture(texturep);
 	face->setPoolType(gPipeline.getPoolTypeFromTE(te, texturep));
@@ -396,6 +359,8 @@ LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep)
 
 LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep, LLViewerTexture *normalp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	LLFace *face;
 	face = new LLFace(this, mVObjp);
 	
@@ -417,6 +382,8 @@ LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep,
 
 LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep, LLViewerTexture *normalp, LLViewerTexture *specularp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	LLFace *face;
 	face = new LLFace(this, mVObjp);
 	
@@ -439,6 +406,8 @@ LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep,
 
 void LLDrawable::setNumFaces(const S32 newFaces, LLFacePool *poolp, LLViewerTexture *texturep)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (newFaces == (S32)mFaces.size())
 	{
 		return;
@@ -462,6 +431,8 @@ void LLDrawable::setNumFaces(const S32 newFaces, LLFacePool *poolp, LLViewerText
 
 void LLDrawable::setNumFacesFast(const S32 newFaces, LLFacePool *poolp, LLViewerTexture *texturep)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (newFaces <= (S32)mFaces.size() && newFaces >= (S32)mFaces.size()/2)
 	{
 		return;
@@ -485,6 +456,8 @@ void LLDrawable::setNumFacesFast(const S32 newFaces, LLFacePool *poolp, LLViewer
 
 void LLDrawable::mergeFaces(LLDrawable* src)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	U32 face_count = mFaces.size() + src->mFaces.size();
 
 	mFaces.reserve(face_count);
@@ -518,6 +491,8 @@ void LLDrawable::updateMaterial()
 
 void LLDrawable::makeActive()
 {		
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 #if !LL_RELEASE_FOR_DOWNLOAD
 	if (mVObjp.notNull())
 	{
@@ -581,6 +556,8 @@ void LLDrawable::makeActive()
 
 void LLDrawable::makeStatic(BOOL warning_enabled)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (isState(ACTIVE) && 
 		!isState(ACTIVE_CHILD) && 
 		!mVObjp->isAttachment() && 
@@ -627,6 +604,8 @@ void LLDrawable::makeStatic(BOOL warning_enabled)
 // Returns "distance" between target destination and resulting xfrom
 F32 LLDrawable::updateXform(BOOL undamped)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	BOOL damped = !undamped;
 
 	// Position
@@ -778,6 +757,8 @@ void LLDrawable::moveUpdatePipeline(BOOL moved)
 
 void LLDrawable::movePartition()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	LLSpatialPartition* part = getSpatialPartition();
 	if (part)
 	{
@@ -822,6 +803,8 @@ BOOL LLDrawable::updateMoveUndamped()
 
 void LLDrawable::updatePartition()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (!getVOVolume())
 	{
 		movePartition();
@@ -839,6 +822,8 @@ void LLDrawable::updatePartition()
 
 BOOL LLDrawable::updateMoveDamped()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	F32 dist_squared = updateXform(FALSE);
 
 	mGeneration++;
@@ -862,6 +847,8 @@ BOOL LLDrawable::updateMoveDamped()
 
 void LLDrawable::updateDistance(LLCamera& camera, bool force_update)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (LLViewerCamera::sCurCameraID != LLViewerCamera::CAMERA_WORLD)
 	{
 		LL_WARNS() << "Attempted to update distance for non-world camera." << LL_ENDL;
@@ -972,6 +959,8 @@ void LLDrawable::updateTexture()
 
 BOOL LLDrawable::updateGeometry(BOOL priority)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	llassert(mVObjp.notNull());
 	BOOL res = mVObjp->updateGeometry(this);
 	return res;
@@ -1049,6 +1038,8 @@ const LLVector3& LLDrawable::getBounds(LLVector3& min, LLVector3& max) const
 
 void LLDrawable::updateSpatialExtents()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (mVObjp)
 	{
 		const LLVector4a* exts = getSpatialExtents();
@@ -1177,19 +1168,26 @@ void LLDrawable::setGroup(LLViewerOctreeGroup *groupp)
 	LLViewerOctreeEntryData::setGroup(groupp);
 }
 
+/*
+* Get the SpatialPartition this Drawable should use.  
+* Checks current SpatialPartition assignment and corrects if it is invalid.
+*/
 LLSpatialPartition* LLDrawable::getSpatialPartition()
 { 
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	LLSpatialPartition* retval = NULL;
-	
+
 	if (!mVObjp || 
 		!getVOVolume() ||
 		isStatic())
 	{
-		retval = gPipeline.getSpatialPartition((LLViewerObject*) mVObjp);
+        retval = gPipeline.getSpatialPartition((LLViewerObject*)mVObjp);
 	}
 	else if (isRoot())
 	{
-		if (mSpatialBridge)
+        // determine if the spatial bridge has changed
+        if (mSpatialBridge)
 		{
 			U32 partition_type = mSpatialBridge->asPartition()->mPartitionType;
 			bool is_hud = mVObjp->isHUDAttachment();
@@ -1206,14 +1204,14 @@ LLSpatialPartition* LLDrawable::getSpatialPartition()
 			{
 				// Was/became part of animesh
 				// remove obsolete bridge
-				mSpatialBridge->markDead();
+                mSpatialBridge->markDead();
 				setSpatialBridge(NULL);
 			}
 			else if ((partition_type == LLViewerRegion::PARTITION_AVATAR) != is_attachment)
 			{
 				// Was/became part of avatar
 				// remove obsolete bridge
-				mSpatialBridge->markDead();
+                mSpatialBridge->markDead();
 				setSpatialBridge(NULL);
 			}
 		}
@@ -1224,17 +1222,20 @@ LLSpatialPartition* LLDrawable::getSpatialPartition()
 			{
 				setSpatialBridge(new LLHUDBridge(this, getRegion()));
 			}
-			else if (mVObjp->isAnimatedObject() && mVObjp->getControlAvatar())
-			{
-				setSpatialBridge(new LLControlAVBridge(this, getRegion()));
-			}
+            else if (mVObjp->isAnimatedObject() && mVObjp->getControlAvatar())
+            {
+                setSpatialBridge(new LLControlAVBridge(this, getRegion()));
+            }
 			// check HUD first, because HUD is also attachment
 			else if (mVObjp->isAttachment())
 			{
+                // Attachment
+                // Use AvatarBridge of root object in attachment linkset
 				setSpatialBridge(new LLAvatarBridge(this, getRegion()));
 			}
 			else
 			{
+                // Moving linkset, use VolumeBridge of root object in linkset
 				setSpatialBridge(new LLVolumeBridge(this, getRegion()));
 			}
 		}
@@ -1262,6 +1263,8 @@ LLSpatialBridge::LLSpatialBridge(LLDrawable* root, BOOL render_by_group, U32 dat
 	LLDrawable(root->getVObj(), true),
 	LLSpatialPartition(data_mask, render_by_group, GL_STREAM_DRAW_ARB, regionp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	mBridge = this;
 	mDrawable = root;
 	root->setSpatialBridge(this);
@@ -1307,12 +1310,11 @@ void LLSpatialBridge::destroyTree()
 
 void LLSpatialBridge::updateSpatialExtents()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	LLSpatialGroup* root = (LLSpatialGroup*) mOctree->getListener(0);
 	
-	{
-		LL_RECORD_BLOCK_TIME(FTM_CULL_REBOUND);
-		root->rebound();
-	}
+	root->rebound();
 	
 	const LLVector4a* root_bounds = root->getBounds();
 	LLVector4a offset;
@@ -1407,9 +1409,20 @@ LLCamera LLSpatialBridge::transformCamera(LLCamera& camera)
 
 	ret.setOrigin(delta);
 	ret.setAxes(lookAt, left_axis, up_axis);
-		
+
 	return ret;
 }
+
+void LLSpatialBridge::transformExtents(const LLVector4a* src, LLVector4a* dst)
+{
+    LLMatrix4 mat = mDrawable->getXform()->getWorldMatrix();
+    mat.invert();
+
+    LLMatrix4a world_to_bridge(mat);
+
+    matMulBoundBox(world_to_bridge, src, dst);
+}
+
 
 void LLDrawable::setVisible(LLCamera& camera, std::vector<LLDrawable*>* results, BOOL for_select)
 {
@@ -1470,6 +1483,8 @@ public:
 
 void LLSpatialBridge::setVisible(LLCamera& camera_in, std::vector<LLDrawable*>* results, BOOL for_select)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (!gPipeline.hasRenderType(mDrawableType))
 	{
 		return;
@@ -1567,6 +1582,8 @@ void LLSpatialBridge::setVisible(LLCamera& camera_in, std::vector<LLDrawable*>* 
 
 void LLSpatialBridge::updateDistance(LLCamera& camera_in, bool force_update)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
+
 	if (mDrawable == NULL)
 	{
 		markDead();
@@ -1742,6 +1759,17 @@ void LLDrawable::updateFaceSize(S32 idx)
 	{
 		mVObjp->updateFaceSize(idx);
 	}
+}
+
+LLDrawable* LLDrawable::getRoot()
+{
+    LLDrawable* ret = this;
+    while (!ret->isRoot())
+    {
+        ret = ret->getParent();
+    }
+
+    return ret;
 }
 
 LLBridgePartition::LLBridgePartition(LLViewerRegion* regionp)

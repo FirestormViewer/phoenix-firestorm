@@ -138,8 +138,7 @@ void LLViewerJointAttachment::setupDrawable(LLViewerObject *object)
 	object->mDrawable->mXform.setRotation(current_rot);
 	gPipeline.markMoved(object->mDrawable);
 	gPipeline.markTextured(object->mDrawable); // face may need to change draw pool to/from POOL_HUD
-	object->mDrawable->setState(LLDrawable::USE_BACKLIGHT);
-	
+
 	if(mIsHUDAttachment)
 	{
 		for (S32 face_num = 0; face_num < object->mDrawable->getNumFaces(); face_num++)
@@ -159,7 +158,6 @@ void LLViewerJointAttachment::setupDrawable(LLViewerObject *object)
 		LLViewerObject* childp = *iter;
 		if (childp && childp->mDrawable.notNull())
 		{
-			childp->mDrawable->setState(LLDrawable::USE_BACKLIGHT);
 			gPipeline.markTextured(childp->mDrawable); // face may need to change draw pool to/from POOL_HUD
 			gPipeline.markMoved(childp->mDrawable);
 
@@ -295,7 +293,6 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 		object->mDrawable->mXform.setRotation(cur_rotation);
 		gPipeline.markMoved(object->mDrawable, TRUE);
 		gPipeline.markTextured(object->mDrawable); // face may need to change draw pool to/from POOL_HUD
-		object->mDrawable->clearState(LLDrawable::USE_BACKLIGHT);
 
 		if (mIsHUDAttachment)
 		{
@@ -317,7 +314,6 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 		LLViewerObject* childp = *iter;
 		if (childp && childp->mDrawable.notNull())
 		{
-			childp->mDrawable->clearState(LLDrawable::USE_BACKLIGHT);
 			gPipeline.markTextured(childp->mDrawable); // face may need to change draw pool to/from POOL_HUD
 			if (mIsHUDAttachment)
 			{

@@ -223,11 +223,11 @@ int compare_int(const void *a, const void *b)
 //--------------------------------------------------------------------
 U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 {
-	FSZone;
+	LL_PROFILE_ZONE_SCOPED;
 	if (!mValid || !mMesh || !mFace || !mVisible || 
 		!mFace->getVertexBuffer() ||
 		mMesh->getNumFaces() == 0 ||
-		(LLGLSLShader::sNoFixedFunction && LLGLSLShader::sCurBoundShaderPtr == NULL))
+		LLGLSLShader::sCurBoundShaderPtr == NULL)
 	{
 		return 0;
 	}
@@ -257,7 +257,7 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 
 	stop_glerror();
 	
-	LLGLSSpecular specular(LLColor4(1.f,1.f,1.f,1.f), (mFace->getPool()->getShaderLevel() > 0 || LLGLSLShader::sNoFixedFunction) ? 0.f : mShiny);
+	LLGLSSpecular specular(LLColor4(1.f,1.f,1.f,1.f), 0.f);
 
 	//----------------------------------------------------------------
 	// setup current texture
@@ -276,7 +276,6 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 		else
 		{
 			gGL.diffuseColor4f(0.7f, 0.6f, 0.3f, 1.f);
-			gGL.getTexUnit(diffuse_channel)->setTextureColorBlend(LLTexUnit::TBO_LERP_TEX_ALPHA, LLTexUnit::TBS_TEX_COLOR, LLTexUnit::TBS_PREV_COLOR);
 		}
 	}
 	else if( !is_dummy && layerset )
@@ -339,11 +338,6 @@ U32 LLViewerJointMesh::drawShape( F32 pixelArea, BOOL first_pass, BOOL is_dummy)
 
 	triangle_count += count;
 	
-	if (mTestImageName)
-	{
-		gGL.getTexUnit(diffuse_channel)->setTextureBlendType(LLTexUnit::TB_MULT);
-	}
-
 	return triangle_count;
 }
 
@@ -373,7 +367,6 @@ void LLViewerJointMesh::updateFaceSizes(U32 &num_vertices, U32& num_indices, F32
 //-----------------------------------------------------------------------------
 // updateFaceData()
 //-----------------------------------------------------------------------------
-static LLTrace::BlockTimerStatHandle FTM_AVATAR_FACE("Avatar Face");
 
 void LLViewerJointMesh::updateFaceData(LLFace *face, F32 pixel_area, BOOL damp_wind, bool terse_update)
 {
@@ -394,9 +387,8 @@ void LLViewerJointMesh::updateFaceData(LLFace *face, F32 pixel_area, BOOL damp_w
 	 // since mMesh is being copied into mVertexBuffer every frame
 		return;
 	}
-
-
-	LL_RECORD_BLOCK_TIME(FTM_AVATAR_FACE);
+    
+    LL_PROFILE_ZONE_SCOPED;
 
 	LLStrider<LLVector3> verticesp;
 	LLStrider<LLVector3> normalsp;

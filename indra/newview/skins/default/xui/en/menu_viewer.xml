@@ -3841,20 +3841,20 @@
              name="Profiling">
                 <menu_item_check.on_check
                  function="CheckControl"
-                 parameter="FSTelemetryActive" />
+                 parameter="ProfilingActive" />
                 <menu_item_check.on_click
-                 function="Develop.ToggleTelemetry"
-                 parameter="FSTelemetryActive" />
+                 function="Develop.ToggleProfiling"
+                 parameter="ProfilingActive" />
             </menu_item_check>
             <menu_item_check
              label="Start when connected"
              name="Start when telemetry client connects">
                 <menu_item_check.on_check
                  function="CheckControl"
-                 parameter="FSTelemetryEnableWhenConnected" />
+                 parameter="DeferProfilingUntilConnected" />
                 <menu_item_check.on_click
                  function="ToggleControl"
-                 parameter="FSTelemetryEnableWhenConnected" />
+                 parameter="DeferProfilingUntilConnected" />
             </menu_item_check>
         </menu>
 

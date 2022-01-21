@@ -59,11 +59,12 @@ class LLVOAvatar;
 // as simulators are connected to, viewer_regions are popped off the stack and connected as required
 // as simulators are removed, they are pushed back onto the stack
 
-class LLWorld : public LLSingleton<LLWorld>
+class LLWorld : public LLSimpleton<LLWorld>
 {
-	LLSINGLETON(LLWorld);
 public:
-	void destroyClass();
+    LLWorld();
+
+    void destroyClass();
 
 	void refreshLimits();// <AW: opensim-limits>
 // <FS:CR> Aurora Sim

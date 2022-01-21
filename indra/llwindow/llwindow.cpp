@@ -146,6 +146,12 @@ BOOL LLWindow::canDelete()
 	return TRUE;
 }
 
+//virtual
+void LLWindow::setTitle(const std::string& title)
+{
+    // the action happens in the platform specific impl
+}
+
 // virtual
 void LLWindow::incBusyCount()
 {
@@ -406,7 +412,7 @@ LLWindow* LLWindowManager::createWindow(
 	const std::string& title, const std::string& name, S32 x, S32 y, S32 width, S32 height, U32 flags,
 	BOOL fullscreen, 
 	BOOL clearBg,
-	BOOL disable_vsync,
+	BOOL enable_vsync,
 	BOOL use_gl,
 	BOOL ignore_pixel_depth,
 	//U32 fsaa_samples)
@@ -420,29 +426,29 @@ LLWindow* LLWindowManager::createWindow(
 #if LL_MESA_HEADLESS
 		new_window = new LLWindowMesaHeadless(callbacks,
 			title, name, x, y, width, height, flags, 
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth);
+			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth);
 #elif LL_SDL
 		new_window = new LLWindowSDL(callbacks,
 			title, x, y, width, height, flags, 
-			//fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+			//fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
+			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #elif LL_WINDOWS
 		new_window = new LLWindowWin32(callbacks,
 			title, name, x, y, width, height, flags, 
-			//fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+			//fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
+			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #elif LL_DARWIN
 		new_window = new LLWindowMacOSX(callbacks,
 			title, name, x, y, width, height, flags, 
-			//fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+			//fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
+			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #endif
 	}
 	else
 	{
 		new_window = new LLWindowHeadless(callbacks,
 			title, name, x, y, width, height, flags, 
-			fullscreen, clearBg, disable_vsync, use_gl, ignore_pixel_depth);
+			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth);
 	}
 
 	if (FALSE == new_window->isValid())

@@ -626,8 +626,7 @@ void LLImage::setLastError(const std::string& message)
 U32 LLImageBase::sAllocationErrors;
 
 LLImageBase::LLImageBase()
-:	LLTrace::MemTrackable<LLImageBase>("LLImage"),
-	mData(NULL),
+:	mData(NULL),
 	mDataSize(0),
 	mWidth(0),
 	mHeight(0),
@@ -677,7 +676,6 @@ void LLImageBase::sanityCheck()
 void LLImageBase::deleteData()
 {
 	ll_aligned_free_16(mData);
-	disclaimMem(mDataSize);
 	mDataSize = 0;
 	mData = NULL;
 }
@@ -736,7 +734,6 @@ U8* LLImageBase::allocateData(S32 size)
 		addAllocationError();
 	}
 	mDataSize = size;
-	claimMem(mDataSize);
 
 	return mData;
 }
@@ -757,9 +754,7 @@ U8* LLImageBase::reallocateData(S32 size)
 		ll_aligned_free_16(mData) ;
 	}
 	mData = new_datap;
-	disclaimMem(mDataSize);
 	mDataSize = size;
-	claimMem(mDataSize);
 	mBadBufferAllocation = false;
 	return mData;
 }
@@ -2304,9 +2299,7 @@ void LLImageBase::setDataAndSize(U8 *data, S32 size)
 { 
 	ll_assert_aligned(data, 16);
 	mData = data; 
-	disclaimMem(mDataSize); 
 	mDataSize = size; 
-	claimMem(mDataSize);
 }	
 
 //static

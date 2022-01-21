@@ -86,7 +86,6 @@
 				Dibujo del avatar:
 			</text>
 			<check_box label="Impostores de avatar" name="AvatarImpostors"/>
-			<check_box label="Aplicar piel por hardware" name="AvatarVertexProgram"/>
 			<check_box label="Ropas del avatar" name="AvatarCloth"/>
 			<text name="TerrainDetailText">
 				Detalle del terreno:
