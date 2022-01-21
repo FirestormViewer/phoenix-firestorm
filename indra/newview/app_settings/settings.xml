@@ -11606,6 +11606,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+  <key>RenderClass0MemoryBandwidth</key>
+  <map>
+    <key>Comment</key>
+    <string>Memory bandwidth at which to default to Class 0 in gigabytes per second.  Used as basis for other classes.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>16.0</real>
+  </map>
+  <key>RenderCPUBasis</key>
+  <map>
+    <key>Comment</key>
+    <string>Reference CPU clockspeed to use to bias GPU class (in MHz).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>3000.0</real>
+  </map>
   <key>RenderComplexityColorMin</key>
     <map>
       <key>Comment</key>
