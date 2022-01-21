@@ -38,7 +38,7 @@
 			<combo_box.item label="Только аватары" name="av_only"/>
 			<combo_box.item label="Аватары и сцена" name="av_and_scene"/>
 		</combo_box>
-		<spinner name="target_fps" tooltip="Цель FPS - Желаемый уровень FPS. Программа просмотра попытается добиться этого, изменив настройки графики."/>
+		<spinner name="target_fps" tool_tip="Цель FPS - Желаемый уровень FPS. Программа просмотра попытается добиться этого, изменив настройки графики."/>
 	</panel>
 </panel>
 
