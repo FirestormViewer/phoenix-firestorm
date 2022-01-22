@@ -1993,7 +1993,7 @@ class LinuxManifest(ViewerManifest):
             self.path("libopenal.so", "libopenal.so.1") # Install as versioned file in case it's missing from the 3p- and won't get copied below
             self.path("libopenal.so*")
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
-            self.path("libpangox-1.0.so*")
+            #self.path("libpangox-1.0.so*")
             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
             # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
             # and libfontconfig.so. Before we added support for library-file
@@ -2078,7 +2078,7 @@ class LinuxManifest(ViewerManifest):
                 [os.path.join(self.get_dst_prefix(), dir) for dir in ('bin', 'lib')] +
                 # <FS:Ansariel> Remove VMP
                 # ['-type', 'f', '!', '-name', '*.py',
-                ['-type', 'f', "!", "-name", "*.dat", "!", "-name", "*.pak", "!", "-name", "*.bin",
+                ['-type', 'f', "!", "-name", "*.dat", "!", "-name", "*.pak", "!", "-name", "*.bin", "!", "-name", "*.lib", "!", "-name", "*.pdb",
                 # </FS:Ansariel> Remove VMP
                  '!', '-name', 'update_install', '-exec', 'strip', '-S', '{}', ';'])
 
@@ -2181,7 +2181,7 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
         if self.is_packaging_viewer():
           with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            self.path("libffi*.so*")
+            #self.path("libffi*.so*")
             # vivox 32-bit hack.
             # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
             # and place it in the prebuilt lib/release directory

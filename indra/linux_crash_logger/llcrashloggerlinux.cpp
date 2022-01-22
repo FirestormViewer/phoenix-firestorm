@@ -40,6 +40,7 @@
 
 #if LL_GTK
 # include "gtk/gtk.h"
+#error "Direct use of GTK is deprecated"
 #endif // LL_GTK
 
 #define MAX_LOADSTRING 100

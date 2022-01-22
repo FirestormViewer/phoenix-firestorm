@@ -109,6 +109,7 @@ namespace FSPerfStats
             unreliable = true;
             lastStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)];
             lastStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)];
+            lastStats[static_cast<size_t>(StatType_t::RENDER_FRAME)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_FRAME)]; //  bring over the total frame render time to deal with region crossing overlap issues
         }
 
         if(!unreliable)

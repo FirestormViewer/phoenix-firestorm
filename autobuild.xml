@@ -3,6 +3,62 @@
 <map>
     <key>installables</key>
     <map>
+      <key>glib</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) glib project</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/glib.txt</string>
+        <key>name</key>
+        <string>glib</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>9c93ba8b8af97fc8379f77de77e1540a</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/glib-2.48.0.202301938-linux64-202301938.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.48.0</string>
+      </map>
+      <key>fltk</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) fltk project</string>
+        <key>license</key>
+        <string>LGPL/fltk</string>
+        <key>license_file</key>
+        <string>LICENSES/fltk.txt</string>
+        <key>name</key>
+        <string>fltk</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>81fe1e927e4fe3c5e5f15ce6219ca883</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/fltk-1.3.5.202282121-linux64-202282121.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.3.5</string>
+      </map>
       <key>jemalloc</key>
       <map>
         <key>copyright</key>
@@ -1092,11 +1148,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bde9eb3e53001584edb1af44e3b265a2</string>
+              <string>2db00aa4126d4ee8152fc49b03bb3fe1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.04-darwin-213491614.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.05-darwin-220160006.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1516,46 +1572,6 @@
         </map>
         <key>version</key>
         <string>0.10.6.314267</string>
-      </map>
-      <key>gtk-atk-pango-glib</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (various, see sources)</string>
-        <key>license</key>
-        <string>lgpl</string>
-        <key>license_file</key>
-        <string>LICENSES/gtk-atk-pango-glib.txt</string>
-        <key>name</key>
-        <string>gtk-atk-pango-glib</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>fb047d496c32cc3b9f99793ee6ebb1e3</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/gtk_atk_pango_glib-2.1-linux-180871647.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d918d894430c1d1d869b9f2e06570c65</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/gtk_atk_pango_glib-2.1-linux64-180841902.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>2.1</string>
       </map>
       <key>havok-source</key>
       <map>

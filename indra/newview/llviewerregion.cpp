@@ -1855,13 +1855,8 @@ LLViewerObject* LLViewerRegion::addNewObject(LLVOCacheEntry* entry)
 
 //update object cache if the object receives a full-update or terse update
 //update_type == EObjectUpdateType::OUT_TERSE_IMPROVED or EObjectUpdateType::OUT_FULL
-LLViewerObject* LLViewerRegion::updateCacheEntry(U32 local_id, LLViewerObject* objectp, U32 update_type)
+LLViewerObject* LLViewerRegion::updateCacheEntry(U32 local_id, LLViewerObject* objectp)
 {
-	if(objectp && update_type != (U32)OUT_TERSE_IMPROVED)
-	{
-		return objectp; //no need to access cache
-	}
-
 	LLVOCacheEntry* entry = getCacheEntry(local_id);
 	if (!entry)
 	{
@@ -1873,11 +1868,8 @@ LLViewerObject* LLViewerRegion::updateCacheEntry(U32 local_id, LLViewerObject* o
 		objectp = addNewObject(entry);
 	}
 
-	//remove from cache if terse update
-	if(update_type == (U32)OUT_TERSE_IMPROVED)
-	{
-		killCacheEntry(entry, true);
-	}
+    //remove from cache.
+    killCacheEntry(entry, true);
 
 	return objectp;
 }

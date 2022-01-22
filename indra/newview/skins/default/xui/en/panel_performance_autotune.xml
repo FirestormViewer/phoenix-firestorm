@@ -75,8 +75,7 @@ Distant Avatars
   name="FSAutoTuneImpostorByDistEnabled"
   tool_tip="When enabled the viewer will adjust the MaxNonImpostors setting to limit fully rendered avatars to those within the defined radius."
   top_delta="0"
-  width="190"
-  label_wrap="true" />
+  width="190" />
   <spinner
   control_name="FSAutoTuneImpostorFarAwayDistance"
   height="20"
@@ -200,8 +199,7 @@ left_pad="40"
 name="alow_self_impostor"
 tool_tip="When enabled the viewer may render your own avatar as an impostor."
 top_delta="0"
-width="190"
-label_wrap="true" />
+width="190" />
 <check_box
 control_name="FSShowTunedART"
 height="19"
@@ -212,8 +210,7 @@ left_delta="0"
 name="show_tuned_art"
 tool_tip="When enabled the Time column shows the current render time not the pre-tuning render time."
 top_pad="0"
-width="190"
-label_wrap="true" />
+width="190" />
 <text
   follows="left|top"
   font="SansSerifSmall"
