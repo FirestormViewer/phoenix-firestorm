@@ -3139,14 +3139,14 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLComboBox>("PlayModeUISndNewIncomingGroupIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Group Instant Messages"
 	getChild<LLComboBox>("PlayModeUISndNewIncomingConfIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingConfIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving AdHoc Instant Messages"
 #ifdef OPENSIM
-	auto earPosGroup = getChild<LLRadioGroup>("ear_location");
 	// <FS:Beq> OpenSim has option to not attenuate nearby local voice by distance
-	if(earPosGroup)
+	auto earPosGroup = findChild<LLRadioGroup>("ear_location");
+	if (earPosGroup)
 	{
 		// It seems there is no better way to do this than with magic numbers short of importing the enums in vivoxvoice (which aren't necessarily the same thing).
 		// Index 2 here is the opensim only option to hear nearby chat without attenuation.
 		constexpr int hearNearbyVoiceFullVolume{2};
-		earPosGroup->setIndexEnabled(hearNearbyVoiceFullVolume,LLGridManager::instance().isInOpenSim());
+		earPosGroup->setIndexEnabled(hearNearbyVoiceFullVolume, LLGridManager::instance().isInOpenSim());
 	}
 	// <FS:Beq>
 	getChild<LLTextBox>("textFSRestartOpenSim")->setVisible(TRUE);
