@@ -2020,7 +2020,7 @@ class LinuxManifest(ViewerManifest):
             # particular wildcard specification gets us exactly what the
             # previous call did, without having to explicitly state the
             # version number.
-            self.path("libfontconfig.so.*.*")
+            #self.path("libfontconfig.so.*.*")
 
             self.fs_try_path("libjemalloc.so*")
 
