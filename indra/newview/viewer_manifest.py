@@ -1806,7 +1806,14 @@ class LinuxManifest(ViewerManifest):
     build_data_json_platform = 'lnx'
 
     def construct(self):
+        # <FS:ND> HACK! Force parent to always copy XML/... even when not having configured with --package.
+        # This allows build result to be started without always having to --package and thus waiting for the length tar ball generation --package incurs
+        savedActions = self.args['actions']
+        self.args["actions"].append("package")
+
         super(LinuxManifest, self).construct()
+
+        self.args["actions"] = savedActions # Restore old actions
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -1884,11 +1891,9 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="bin"):
             self.path( "chrome-sandbox" )
             self.path( "dullahan_host" )
-            self.fs_try_path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "v8_context_snapshot.bin" )
         with self.prefix(src=os.path.join(pkgdir, 'bin', 'release'), dst="lib"):
-            self.fs_try_path( "natives_blob.bin" )
             self.path( "snapshot_blob.bin" )
             self.path( "v8_context_snapshot.bin" )
 
@@ -1967,8 +1972,7 @@ class LinuxManifest(ViewerManifest):
         with self.prefix(src=pkgdir, dst="bin"):
             self.path("ca-bundle.crt")
 
-        if self.is_packaging_viewer():
-          with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
             #self.path("libboost_context-mt.so*")
@@ -2024,20 +2028,20 @@ class LinuxManifest(ViewerManifest):
 
             self.fs_try_path("libjemalloc.so*")
 
-          # Vivox runtimes
-          # Currentelly, the 32-bit ones will work with a 64-bit client.
-          with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="bin"):
-                  self.path("SLVoice")
-                  self.path("win32")
-                  self.path("win64")
+            # Vivox runtimes
+            # Currentelly, the 32-bit ones will work with a 64-bit client.
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="bin"):
+            self.path("SLVoice")
+            self.path("win32")
+            self.path("win64")
 
-          with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-                  self.path("libortp.so")
-                  self.path("libsndfile.so.1")
-                  # <FS:TS> Vivox wants this library even if it's present already in the viewer
-                  self.path("libvivoxoal.so.1")
-                  self.path("libvivoxsdk.so")
-                  self.path("libvivoxplatform.so")
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+            self.path("libortp.so")
+            self.path("libsndfile.so.1")
+            # <FS:TS> Vivox wants this library even if it's present already in the viewer
+            self.path("libvivoxoal.so.1")
+            self.path("libvivoxsdk.so")
+            self.path("libvivoxplatform.so")
 
 
     def package_finish(self):
@@ -2189,8 +2193,7 @@ class Linux_x86_64_Manifest(LinuxManifest):
         relpkgdir = os.path.join(pkgdir, "lib", "release")
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
-        if self.is_packaging_viewer():
-          with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             #self.path("libffi*.so*")
             # vivox 32-bit hack.
             # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
