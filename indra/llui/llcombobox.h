@@ -79,6 +79,8 @@ public:
 											text_entry_callback,
 											text_changed_callback;
 
+        Optional<CommitCallbackParam>       mouse_down_callback;
+
 		Optional<EPreferredPosition, PreferredPositionValues>	list_position;
 		
 		// components
@@ -211,6 +213,8 @@ public:
 	void			setTextEntryCallback( commit_callback_t cb ) { mTextEntryCallback = cb; }
 	void			setTextChangedCallback( commit_callback_t cb ) { mTextChangedCallback = cb; }
 
+    boost::signals2::connection setMouseDownCallback( const commit_signal_t::slot_type& cb );
+
 	/**
 	* Connects callback to signal called when Return key is pressed.
 	*/
@@ -248,6 +252,7 @@ private:
 	commit_callback_t	mTextChangedCallback;
 	commit_callback_t	mSelectionCallback;
 	boost::signals2::connection mTopLostSignalConnection;
+    commit_signal_t*	mMouseDownSignal;
 	commit_signal_t		mOnReturnSignal;
 	S32                 mLastSelectedIndex;
 	bool				mForceDisableFulltextSearch; // <FS:Ansariel> Allow fulltext search in comboboxes

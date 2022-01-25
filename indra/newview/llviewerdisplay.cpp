@@ -1150,6 +1150,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		gPipeline.clearReferences();
 
 		gPipeline.rebuildGroups();
+
+        // <FS:Ansariel> [FS performance floater]
+        //gPipeline.autoAdjustSettings();
 	}
 
 	LLAppViewer::instance()->pingMainloopTimeout("Display:FrameStats");

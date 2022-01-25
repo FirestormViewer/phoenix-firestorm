@@ -487,6 +487,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.RememberedUsernames",    boost::bind(&LLFloaterPreference::onClickRememberedUsernames, this));
 	mCommitCallbackRegistrar.add("Pref.SpellChecker",           boost::bind(&LLFloaterPreference::onClickSpellChecker, this));
 	mCommitCallbackRegistrar.add("Pref.Advanced",				boost::bind(&LLFloaterPreference::onClickAdvanced, this));
+    mCommitCallbackRegistrar.add("Pref.AutoAdjustWarning",				boost::bind(&LLFloaterPreference::showAutoAdjustWarning));
 
 	// <FS:Ansariel> Improved graphics preferences
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreference::updateMaxNonImpostors, this));
@@ -3196,6 +3197,23 @@ void LLFloaterPreference::updateClickActionViews()
 void LLFloaterPreference::updateSearchableItems()
 {
     mSearchDataDirty = true;
+}
+
+void LLFloaterPreference::showAutoAdjustWarning()
+{
+    static LLCachedControl<bool> use_auto_adjust(gSavedSettings,"AutoFPS");
+    if (use_auto_adjust)
+    {
+        LLNotificationsUtil::add("AutoFPSConfirmDisable", LLSD(), LLSD(),
+            [](const LLSD&notif, const LLSD&resp)
+        {
+            S32 opt = LLNotificationsUtil::getSelectedOption(notif, resp);
+            if (opt == 0)
+            {
+                gSavedSettings.setBOOL("AutoFPS", FALSE);
+            }
+        });
+    }
 }
 
 void LLFloaterPreference::applyUIColor(LLUICtrl* ctrl, const LLSD& param)

@@ -424,6 +424,10 @@ public:
 	void hideObject( const LLUUID& id );
 	void restoreHiddenObject( const LLUUID& id );
 
+    // <FS:Ansariel> [FS performance floater]
+    //void autoAdjustSettings();
+    //void setAdjustmentTimerExpiry(F32 expiration);
+
 private:
 	void unloadShaders();
 	void addToQuickLookup( LLDrawPool* new_poolp );
@@ -746,7 +750,9 @@ protected:
 	U64						mOldRenderDebugMask;
 	std::stack<U32>			mRenderDebugFeatureStack;
 
-	
+    // <FS:Ansariel> [FS performance floater]
+    //LLTimer* mUpdateTimer;
+
 	/////////////////////////////////////////////
 	//
 	//

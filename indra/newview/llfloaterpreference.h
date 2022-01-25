@@ -121,6 +121,8 @@ public:
 	void updateClickActionViews();
     void updateSearchableItems();
 
+    static void showAutoAdjustWarning();
+
     void		onBtnOK(const LLSD& userdata);
     void		onBtnCancel(const LLSD& userdata);
 
