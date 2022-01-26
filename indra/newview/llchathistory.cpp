@@ -50,6 +50,7 @@
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltrans.h"
 #include "llfloaterreg.h"
+#include "llfloaterreporter.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llmutelist.h"
 #include "llstylemap.h"
@@ -417,6 +418,11 @@ public:
 		{
 			LLAvatarActions::pay(getAvatarId());
 		}
+        else if (level == "report_abuse")
+        {
+            std::string time = getChild<LLTextBox>("time_box")->getValue().asString();
+            LLFloaterReporter::showFromChat(mAvatarID, mFrom, time, mText);
+        }
 		else if(level == "block_unblock")
 		{
 			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagVoiceChat);
@@ -491,6 +497,10 @@ public:
 		{
 			return canModerate(userdata);
 		}
+        else if (level == "report_abuse")
+        {
+            return gAgentID != mAvatarID;
+        }
 // [RLVa:KB] - @pay
 		else if (level == "can_pay")
 		{
@@ -651,6 +661,11 @@ public:
 		mAvatarID = chat.mFromID;
 		mSessionID = chat.mSessionID;
 		mSourceType = chat.mSourceType;
+
+        // To be able to report a message, we need a copy of it's text
+        // and it's easier to store text directly than trying to get
+        // it from a lltextsegment or chat's mEditor
+        mText = chat.mText;
 
 		//*TODO overly defensive thing, source type should be maintained out there
 		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
@@ -1033,6 +1048,7 @@ protected:
 	EChatSourceType		mSourceType;
 	std::string			mFrom;
 	LLUUID				mSessionID;
+    std::string			mText;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 	bool                mShowContextMenu;
 	bool                mShowInfoCtrl;

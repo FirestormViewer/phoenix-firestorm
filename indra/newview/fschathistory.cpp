@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Lesser General PublicatarActions::pay(getAvat
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
@@ -50,6 +50,7 @@
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltrans.h"
 #include "llfloaterreg.h"
+#include "llfloaterreporter.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llstylemap.h"
 #include "llslurl.h"
@@ -452,6 +453,11 @@ public:
 		{
 			LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "about").getSLURLString());
 		}
+		else if (param == "report_abuse")
+		{
+			std::string time = getChild<LLTextBox>("time_box")->getValue().asString();
+			LLFloaterReporter::showFromChat(mAvatarID, mFrom, time, mText);
+		}
 		else if (param == "block_unblock")
 		{
 			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagVoiceChat);
@@ -537,7 +543,11 @@ public:
 		{
 			return canModerate(userdata);
 		}
-// [RLVa:KB] - @pay
+		else if (param == "report_abuse")
+		{
+			return gAgentID != mAvatarID;
+		}
+		// [RLVa:KB] - @pay
 		else if (param == "can_pay")
 		{
 			return RlvActions::canPayAvatar(getAvatarId());
@@ -669,6 +679,11 @@ public:
 		mSourceType = chat.mSourceType;
 		mType = chat.mChatType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		mNameStyleParams = style_params;
+
+		// To be able to report a message, we need a copy of it's text
+		// and it's easier to store text directly than trying to get
+		// it from a lltextsegment or chat's mEditor
+		mText = chat.mText;
 
 		//*TODO overly defensive thing, source type should be maintained out there
 		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
@@ -1151,7 +1166,8 @@ protected:
 	EChatType			mType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 	std::string			mFrom;
 	LLUUID				mSessionID;
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+	std::string			mText;
+	// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 	bool				mShowContextMenu;
 	bool				mShowInfoCtrl;
 // [/RLVa:KB]

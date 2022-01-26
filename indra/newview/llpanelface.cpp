@@ -2539,7 +2539,6 @@ void LLPanelFace::onCommitMaterialsMedia(LLUICtrl* ctrl, void* userdata)
 	self->refreshMedia();
 }
 
-// static
 void LLPanelFace::updateVisibility()
 {	
 	LLRadioGroup* radio_mat_type = getChild<LLRadioGroup>("radio_material_type");
