@@ -14,7 +14,7 @@
 	<context_menu label="Belästigung" name="Remove">
 		<menu_item_call label="Ignorieren" name="Avatar Mute"/>
 		<menu_item_call label="Freischalten" name="Avatar Unmute"/>
-		<menu_item_call label="Melden" name="abuse"/>
+		<menu_item_call label="Missbrauch melden" name="abuse"/>
 		<menu_item_call label="Einfrieren" name="Freeze..."/>
 		<menu_item_call label="Hinauswerfen" name="Eject..."/>	
 	</context_menu>
