@@ -1601,6 +1601,7 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 	if ( check_local_file_access_enabled() == false )
 		return false;
 
+	gViewerWindow->getWindow()->beforeDialog();
 	reset();
 	Fl_Native_File_Chooser::Type flType = Fl_Native_File_Chooser::BROWSE_FILE;
 
@@ -1617,8 +1618,10 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 		setupFilter( flDlg, (ESaveFilter) filter );
 	else
 		setupFilter( flDlg, (ELoadFilter) filter );
-	
+
 	int res = flDlg.show();
+	gViewerWindow->getWindow()->afterDialog();
+
 	if( res == 0 )
 	{
 		int32_t count = flDlg.count();

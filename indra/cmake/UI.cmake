@@ -46,7 +46,7 @@ else (USESYSTEMLIBS)
   if (LINUX)
     set(UI_LIB_NAMES
         libfltk.a
-        freetype
+        libfreetype.a
         )
 
     foreach(libname ${UI_LIB_NAMES})
