@@ -42,16 +42,27 @@
 
 #include "json/reader.h" // <FS:ND/> To parse manifest.json from pepperflash
 
-#if LL_DBUS_ENABLED
-# include "llappviewerlinux_api_dbus.h"
 
-// regrettable hacks to give us better runtime compatibility with older systems inside llappviewerlinux_api.h:
-#define llg_return_if_fail(COND) do{if (!(COND)) return;}while(0)
-#undef g_return_if_fail
-#define g_return_if_fail(COND) llg_return_if_fail(COND)
-// The generated API
-# include "llappviewerlinux_api.h"
-#endif
+#include <gio/gio.h>
+
+#define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"
+#define VIEWERAPI_PATH "/com/secondlife/ViewerAppAPI"
+#define VIEWERAPI_INTERFACE "com.secondlife.ViewerAppAPI"
+
+static const char * DBUS_SERVER = "<node name=\"/com/secondlife/ViewerAppAPI\">\n"
+                                  "  <interface name=\"com.secondlife.ViewerAppAPI\">\n"
+                                  "    <annotation name=\"org.freedesktop.DBus.GLib.CSymbol\" value=\"viewer_app_api\"/>\n"
+                                  "    <method name=\"GoSLURL\">\n"
+                                  "      <annotation name=\"org.freedesktop.DBus.GLib.CSymbol\" value=\"dispatchSLURL\"/>\n"
+                                  "      <arg type=\"s\" name=\"slurl\" direction=\"in\" />\n"
+                                  "    </method>\n"
+                                  "  </interface>\n"
+                                  "</node>";
+
+typedef struct
+{
+    GObject parent;
+} ViewerAppAPI;
 
 namespace
 {
@@ -127,10 +138,6 @@ bool LLAppViewerLinux::init()
 	// libraries likes to use glib functions; in short, do this here
 	// really early in app startup!
 
-#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
-	if (!g_thread_supported ()) g_thread_init (NULL);
-#endif
-	
 	bool success = LLAppViewer::init();
 
 #if LL_SEND_CRASH_REPORTS
@@ -152,40 +159,17 @@ bool LLAppViewerLinux::restoreErrorTrap()
 }
 
 /////////////////////////////////////////
-#if LL_DBUS_ENABLED
+#if LL_GLIB
 
 typedef struct
 {
         GObjectClass parent_class;
 } ViewerAppAPIClass;
 
-static void viewerappapi_init(ViewerAppAPI *server);
-static void viewerappapi_class_init(ViewerAppAPIClass *klass);
-
 ///
 
-// regrettable hacks to give us better runtime compatibility with older systems in general
-static GType llg_type_register_static_simple_ONCE(GType parent_type,
-						  const gchar *type_name,
-						  guint class_size,
-						  GClassInitFunc class_init,
-						  guint instance_size,
-						  GInstanceInitFunc instance_init,
-						  GTypeFlags flags)
-{
-	static GTypeInfo type_info;
-	memset(&type_info, 0, sizeof(type_info));
-
-	type_info.class_size = class_size;
-	type_info.class_init = class_init;
-	type_info.instance_size = instance_size;
-	type_info.instance_init = instance_init;
-
-	return g_type_register_static(parent_type, type_name, &type_info, flags);
-}
-#define llg_intern_static_string(S) (S)
-#define g_intern_static_string(S) llg_intern_static_string(S)
-#define g_type_register_static_simple(parent_type, type_name, class_size, class_init, instance_size, instance_init, flags) llg_type_register_static_simple_ONCE(parent_type, type_name, class_size, class_init, instance_size, instance_init, flags)
+static void viewerappapi_init(ViewerAppAPI *server);
+static void viewerappapi_class_init(ViewerAppAPIClass *klass);
 
 G_DEFINE_TYPE(ViewerAppAPI, viewerappapi, G_TYPE_OBJECT);
 
@@ -193,79 +177,71 @@ void viewerappapi_class_init(ViewerAppAPIClass *klass)
 {
 }
 
-static bool dbus_server_init = false;
-
-void viewerappapi_init(ViewerAppAPI *server)
+static void dispatchSLURL(gchar const *slurl)
 {
-	// Connect to the default DBUS, register our service/API.
+    LL_INFOS() << "Was asked to go to slurl: " << slurl << LL_ENDL;
 
-	if (!dbus_server_init)
-	{
-		GError *error = NULL;
-		
-		server->connection = lldbus_g_bus_get(DBUS_BUS_SESSION, &error);
-		if (server->connection)
-		{
-			lldbus_g_object_type_install_info(viewerappapi_get_type(), &dbus_glib_viewerapp_object_info);
-			
-			lldbus_g_connection_register_g_object(server->connection, VIEWERAPI_PATH, G_OBJECT(server));
-			
-			DBusGProxy *serverproxy = lldbus_g_proxy_new_for_name(server->connection, DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);
-
-			guint request_name_ret_unused;
-			// akin to org_freedesktop_DBus_request_name
-			if (lldbus_g_proxy_call(serverproxy, "RequestName", &error, G_TYPE_STRING, VIEWERAPI_SERVICE, G_TYPE_UINT, 0, G_TYPE_INVALID, G_TYPE_UINT, &request_name_ret_unused, G_TYPE_INVALID))
-			{
-				// total success.
-				dbus_server_init = true;
-			}
-			else 
-			{
-				LL_WARNS() << "Unable to register service name: " << error->message << LL_ENDL;
-			}
-	
-			g_object_unref(serverproxy);
-		}
-		else
-		{
-			g_warning("Unable to connect to dbus: %s", error->message);
-		}
-
-		if (error)
-			g_error_free(error);
-	}
+    std::string url = slurl;
+    LLMediaCtrl* web = NULL;
+    const bool trusted_browser = false;
+    LLURLDispatcher::dispatch(url, "", web, trusted_browser);
 }
 
-// <FS:ND> FIRE-5417; The xml manifest for dbus claims success_rtn is a boolean, not a boolean array
-//gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **success_rtn, GError **error)
-gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean *success_rtn, GError **error)
-// </FS:ND>
+static void DoMethodeCall (GDBusConnection       *connection,
+                                const gchar           *sender,
+                                const gchar           *object_path,
+                                const gchar           *interface_name,
+                                const gchar           *method_name,
+                                GVariant              *parameters,
+                                GDBusMethodInvocation *invocation,
+                                gpointer               user_data)
 {
-	bool success = false;
+    LL_INFOS() << "DBUS message " << method_name << "  from: " << sender << " interface: " << interface_name << LL_ENDL;
+    const gchar *slurl;
 
-	LL_INFOS() << "Was asked to go to slurl: " << slurl << LL_ENDL;
+    g_variant_get (parameters, "(&s)", &slurl);
+    dispatchSLURL(slurl);
+}
 
-	std::string url = slurl;
-	LLMediaCtrl* web = NULL;
-	const bool trusted_browser = false;
-	if (LLURLDispatcher::dispatch(url, "", web, trusted_browser))
-	{
-		// bring window to foreground, as it has just been "launched" from a URL
-		// todo: hmm, how to get there from here?
-		//xxx->mWindow->bringToFront();
-		success = true;
-	}		
+GDBusNodeInfo *gBusNodeInfo = nullptr;
+static const GDBusInterfaceVTable interface_vtable =
+        {
+                DoMethodeCall
+        };
+static void busAcquired(GDBusConnection *connection, const gchar *name, gpointer user_data)
+{
+    auto id = g_dbus_connection_register_object(connection,
+                                                VIEWERAPI_PATH,
+                                                gBusNodeInfo->interfaces[0],
+                                                &interface_vtable,
+                                                NULL,  /* user_data */
+                                                             NULL,  /* user_data_free_func */
+                                                             NULL); /* GError** */
+    g_assert (id > 0);
+}
 
-	// <FS:ND> FIRE-5417; The xml manifest for dbus claims success_rtn is a boolean, not a boolean array
+static void nameAcquired(GDBusConnection *connection, const gchar *name, gpointer user_data)
+{
+}
 
-	// *success_rtn = g_new (gboolean, 1);
-	// (*success_rtn)[0] = (gboolean)success;
+static void nameLost(GDBusConnection *connection, const gchar *name, gpointer user_data)
+{
 
-	*success_rtn = (gboolean)success;
+}
+void viewerappapi_init(ViewerAppAPI *server)
+{
+    gBusNodeInfo = g_dbus_node_info_new_for_xml (DBUS_SERVER, NULL);
+    g_assert (gBusNodeInfo != NULL);
 
-	// </FS:ND>
+    auto owner_id = g_bus_own_name(G_BUS_TYPE_SESSION,
+                                   VIEWERAPI_SERVICE,
+                                   G_BUS_NAME_OWNER_FLAGS_NONE,
+                                   busAcquired,
+                                   nameAcquired,
+                                   nameLost,
+                                   NULL,
+                                   NULL);
 
-	return TRUE; // the invokation succeeded, even if the actual dispatch didn't.
 }
 
 ///
@@ -273,15 +249,6 @@ gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean *succe
 //virtual
 bool LLAppViewerLinux::initSLURLHandler()
 {
-	if (!grab_dbus_syms(DBUSGLIB_DYLIB_DEFAULT_NAME))
-	{
-		return false; // failed
-	}
-
-#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
-	g_type_init();
-#endif
-
 	//ViewerAppAPI *api_server = (ViewerAppAPI*)
 	g_object_new(viewerappapi_get_type(), NULL);
 
@@ -291,51 +258,51 @@ bool LLAppViewerLinux::initSLURLHandler()
 //virtual
 bool LLAppViewerLinux::sendURLToOtherInstance(const std::string& url)
 {
-	if (!grab_dbus_syms(DBUSGLIB_DYLIB_DEFAULT_NAME))
-	{
-		return false; // failed
-	}
+    bool success = false;
 
-	bool success = false;
-	DBusGConnection *bus;
-	GError *error = NULL;
+	auto *pBus = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, nullptr);
 
-#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
-	g_type_init();
-#endif
-	
-	bus = lldbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (bus)
-	{
-		gboolean rtn = FALSE;
-		DBusGProxy *remote_object =
-			lldbus_g_proxy_new_for_name(bus, VIEWERAPI_SERVICE, VIEWERAPI_PATH, VIEWERAPI_INTERFACE);
+    if( !pBus )
+    {
+        LL_WARNS() << "Getting dbus failed." << LL_ENDL;
+        return false;
+    }
 
-		if (lldbus_g_proxy_call(remote_object, "GoSLURL", &error,
-					G_TYPE_STRING, url.c_str(), G_TYPE_INVALID,
-				       G_TYPE_BOOLEAN, &rtn, G_TYPE_INVALID))
-		{
-			success = rtn;
-		}
-		else
-		{
-			LL_INFOS() << "Call-out to other instance failed (perhaps not running): " << error->message << LL_ENDL;
-		}
+    auto pProxy = g_dbus_proxy_new_sync(pBus, G_DBUS_PROXY_FLAGS_NONE, nullptr,
+                                        VIEWERAPI_SERVICE, VIEWERAPI_PATH,
+                                        VIEWERAPI_INTERFACE, nullptr, nullptr);
 
-		g_object_unref(G_OBJECT(remote_object));
-	}
-	else
-	{
-		LL_WARNS() << "Couldn't connect to session bus: " << error->message << LL_ENDL;
-	}
+    if( !pProxy )
+    {
+        LL_WARNS() << "Cannot create new dbus proxy." << LL_ENDL;
+        g_object_unref( pBus );
+        return false;
+    }
 
-	if (error)
-		g_error_free(error);
-	
-	return success;
+    auto *pArgs = g_variant_new( "(s)", url.c_str() );
+    if( !pArgs )
+    {
+        LL_WARNS() << "Cannot create new variant." << LL_ENDL;
+        g_object_unref( pBus );
+        return false;
+    }
+
+    auto pRes  = g_dbus_proxy_call_sync(pProxy,
+                                        "GoSLURL",
+                                        pArgs,
+                                        G_DBUS_CALL_FLAGS_NONE,
+                                        -1, nullptr, nullptr);
+
+
+
+    if( pRes )
+        g_variant_unref( pRes );
+    g_object_unref( pProxy );
+    g_object_unref( pBus );
+    return true;
 }
 
-#else // LL_DBUS_ENABLED
+#else // LL_GLIB
 bool LLAppViewerLinux::initSLURLHandler()
 {
 	return false; // not implemented without dbus
@@ -344,7 +311,7 @@ bool LLAppViewerLinux::sendURLToOtherInstance(const std::string& url)
 {
 	return false; // not implemented without dbus
 }
-#endif // LL_DBUS_ENABLED
+#endif // LL_GLIB
 
 void LLAppViewerLinux::initCrashReporting(bool reportFreeze)
 {
