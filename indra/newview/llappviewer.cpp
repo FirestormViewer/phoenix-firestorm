@@ -1644,6 +1644,12 @@ bool LLAppViewer::doFrame()
 {
 // <FS:Beq> Perfstats collection Frame boundary
 {
+	// and now adjust the visuals from previous frame.
+    if(FSPerfStats::autoTune && FSPerfStats::tunables.tuningFlag != FSPerfStats::Tunables::Nothing)
+    {
+    	FSPerfStats::tunables.applyUpdates();
+    }
+
 	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));

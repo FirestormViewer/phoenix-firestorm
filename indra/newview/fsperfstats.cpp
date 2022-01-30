@@ -49,10 +49,11 @@ namespace FSPerfStats
     std::atomic<int64_t> tunedAvatars{0};
     U32 targetFPS; // desired FPS
     U64 renderAvatarMaxART_ns{(U64)(ART_UNLIMITED_NANOS)}; // highest render time we'll allow without culling features
-    U32 fpsTuningStrategy{0}; // linked to FSTuningFPSStrategy
     U32 lastGlobalPrefChange{0}; 
     std::mutex bufferToggleLock{};
     bool autoTune{false};
+
+    Tunables tunables;
 
     std::atomic<int> 	StatsRecorder::writeBuffer{0};
     bool 	            StatsRecorder::collectionEnabled{true};
@@ -61,6 +62,14 @@ namespace FSPerfStats
     std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::max{ {} };
     std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::sum{ {} };
 
+    void Tunables::applyUpdates()
+    {
+        assert_main_thread();
+        if( tuningFlag & NonImposters ){ gSavedSettings.setU32("IndirectMaxNonImpostors", nonImposters); };
+        if( tuningFlag & ReflectionDetail ){ gSavedSettings.setS32("RenderReflectionDetail", reflectionDetail); };
+        if( tuningFlag & FarClip ){ gSavedSettings.setF32("RenderFarClip", farClip); };
+        resetChanges();
+    }
 
     StatsRecorder::StatsRecorder():q(1024*16),t(&StatsRecorder::run)
     {
@@ -175,7 +184,7 @@ namespace FSPerfStats
             sum[writeBuffer][i].fill(0);
         }
 
-        // and now adjust the visuals.
+        // and now adjust the proxy vars so that the main thread can adjust the visuals.
         if(autoTune)
         {
             updateAvatarParams();
@@ -280,6 +289,7 @@ namespace FSPerfStats
         static LLCachedControl<F32> impostorDistance(gSavedSettings, "FSAutoTuneImpostorFarAwayDistance");
         static LLCachedControl<bool> impostorDistanceTuning(gSavedSettings, "FSAutoTuneImpostorByDistEnabled");
         static LLCachedControl<U32> maxNonImpostors (gSavedSettings, "IndirectMaxNonImpostors");
+        static LLCachedControl<U32> fpsTuningStrategy (gSavedSettings, "FSTuningFPSStrategy");
 
         if(impostorDistanceTuning)
         {
@@ -288,7 +298,7 @@ namespace FSPerfStats
             auto count = countNearbyAvatars(std::min(drawDistance, impostorDistance));
             if( count != maxNonImpostors )
             {
-                gSavedSettings.setU32("IndirectMaxNonImpostors", (count < LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER)?count : LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER);
+                tunables.updateNonImposters( (count < LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER)?count : LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER );
                 LL_DEBUGS("AutoTune") << "There are " << count << "avatars within " << std::min(drawDistance, impostorDistance) << "m of the camera" << LL_ENDL;
             }
         }
@@ -339,13 +349,13 @@ namespace FSPerfStats
                 // we cannnot do this by avatar adjustment alone.
                 if((gFrameCount - FSPerfStats::lastGlobalPrefChange) > 10) // give  changes a short time to take effect.
                 {
-                    if(FSPerfStats::fpsTuningStrategy == 1)
+                    if(fpsTuningStrategy == 1)
                     {
                         // 1 - hack the water to opaque. all non opaque have a significant hit, this is a big boost for (arguably) a minor visual hit.
                         // the other reflection options make comparatively little change and iof this overshoots we'll be stepping back up later
                         if(LLPipeline::RenderReflectionDetail != -2)
                         {
-                            gSavedSettings.setS32("RenderReflectionDetail", -2);
+                            FSPerfStats::tunables.updateReflectionDetail(-2);
                             FSPerfStats::lastGlobalPrefChange = gFrameCount;
                             return;
                         }
@@ -355,7 +365,7 @@ namespace FSPerfStats
                             auto new_dd = (drawDistance-10>userMinDrawDistance)?(drawDistance - 10) : userMinDrawDistance;
                             if(new_dd != drawDistance)
                             {
-                                gSavedSettings.setF32("RenderFarClip", new_dd);
+                                FSPerfStats::tunables.updateFarClip( new_dd );
                                 FSPerfStats::lastGlobalPrefChange = gFrameCount;
                                 return;
                             }
@@ -404,15 +414,14 @@ namespace FSPerfStats
             }
             if( drawDistance < userTargetDrawDistance ) 
             {
-                gSavedSettings.setF32("RenderFarClip", drawDistance + 10.);
+                FSPerfStats::tunables.updateFarClip( drawDistance + 10. );
             }
             if( (target_frame_time_raw * 1.5) > tot_frame_time_raw &&
                 FSPerfStats::tunedAvatars == 0 &&
                 drawDistance >= userTargetDrawDistance)
             {
                 // if everything else is "max" and we have 50% headroom let's knock the water quality up a notch at a time.
-                auto water = gSavedSettings.getS32("RenderReflectionDetail");
-                gSavedSettings.setS32("RenderReflectionDetail", water+1);                
+                FSPerfStats::tunables.updateReflectionDetail( gSavedSettings.getS32("RenderReflectionDetail") + 1 );
             }
         }
         updateSettingsFromRenderCostLimit();
