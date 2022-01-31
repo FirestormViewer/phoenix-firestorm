@@ -3,7 +3,6 @@
 SCRIPT_PATH=`readlink -f $0`
 SCRIPT_PATH=`dirname $SCRIPT_PATH`
 
-
 # All hope is lost if there is no lsb_release command
 command -v lsb_release >/dev/null 2>/dev/null || exit 0
 
@@ -15,6 +14,7 @@ fi
 
 set -e
 
+cd $1
 pushd packaged
 
 wget -q https://github.com/AppImage/AppImages/raw/master/functions.sh -O ./functions.sh
