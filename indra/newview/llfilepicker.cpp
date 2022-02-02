@@ -1588,14 +1588,6 @@ BOOL LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
 	return openFileDialog( filter, blocking, eOpenMultiple );
 }
 
-void setupFilter( Fl_Native_File_Chooser &chooser, LLFilePicker::ESaveFilter filter )
-{
-}
-
-void setupFilter( Fl_Native_File_Chooser &chooser, LLFilePicker::ELoadFilter filter )
-{
-}
-
 bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 {
 	if ( check_local_file_access_enabled() == false )
@@ -1611,13 +1603,182 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 		flType = Fl_Native_File_Chooser::BROWSE_SAVE_FILE; 
 
 	Fl_Native_File_Chooser flDlg;
-	flDlg.title("Pick a file");
-	flDlg.type( flType );
 
-	if( aType == eSaveFile )
-		setupFilter( flDlg, (ESaveFilter) filter );
+	std::string file_dialog_title;
+	std::string file_dialog_filter;
+
+	if (aType == EType::eSaveFile)
+	{
+		std::string file_type("all_files");
+
+		switch ((ESaveFilter) filter)
+		{
+			case FFSAVE_ALL:
+				break;
+			case FFSAVE_TGA:
+				file_type = "targa_image_files";
+				file_dialog_filter = "*.tga";
+				break;
+			case FFSAVE_BMP:
+				file_type = "bitmap_image_files";
+				file_dialog_filter = "*.bmp";
+				break;
+			case FFSAVE_AVI:
+				file_type = "avi_movie_file";
+				file_dialog_filter = "*.avi";
+				break;
+			case FFSAVE_ANIM:
+				file_type = "xaf_animation_file";
+				file_dialog_filter = "*.xaf";
+				break;
+			case FFSAVE_XML:
+				file_type = "xml_file";
+				file_dialog_filter = "*.xml";
+				break;
+			case FFSAVE_COLLADA:
+				file_type = "collada_files";
+				file_dialog_filter = "*.dae";
+				break;
+			case FFSAVE_RAW:
+				file_type = "raw_file";
+				file_dialog_filter = "*.raw";
+				break;
+			case FFSAVE_J2C:
+				file_type = "compressed_image_files";
+				file_dialog_filter = "*.j2c";
+				break;
+			case FFSAVE_PNG:
+				file_type = "png_image_files";
+				file_dialog_filter = "*.png";
+				break;
+			case FFSAVE_JPEG:
+				file_type = "jpeg_image_files";
+				file_dialog_filter = "*.{jpg,jpeg}";
+				break;
+			case FFSAVE_SCRIPT:
+				file_type = "script_files";
+				file_dialog_filter = "*.lsl";
+				break;
+			case FFSAVE_TGAPNG:
+				file_type = "save_texture_image_files";
+				file_dialog_filter = "*.{tga,png}";
+				break;
+			case FFSAVE_WAV:
+				file_type = "sound_files";
+				file_dialog_filter = "*.wav";
+				break;
+
+			// Firestorm additions
+			case FFSAVE_BEAM:
+				file_type = "xml_file";
+				file_dialog_filter = "*.xml";
+				break;
+			case FFSAVE_EXPORT:
+				file_type = "backup_files";
+				file_dialog_filter = "*.oxp";
+				break;
+			case FFSAVE_CSV:
+				file_type = "csv_files";
+				file_dialog_filter = "*.csv";
+				break;
+
+#ifdef _CORY_TESTING
+			case FFSAVE_GEOMETRY:
+				// no file type translation for this, so using the default "all_files" for now
+				file_dialog_filter = "*.slg";
+				break;
+#endif
+		}
+
+		// can't say I like this combining of verb+type, it might not work too well in all languages -Zi
+		file_dialog_title = LLTrans::getString("save_file_verb") + " " + LLTrans::getString(file_type);
+		file_dialog_filter = LLTrans::getString(file_type) + " \t" + file_dialog_filter;
+	}
 	else
-		setupFilter( flDlg, (ELoadFilter) filter );
+	{
+		std::string file_type("all_files");
+
+		switch ((ELoadFilter) filter)
+		{
+			case FFLOAD_ALL:
+				break;
+			case FFLOAD_WAV:
+				file_type = "sound_files";
+				file_dialog_filter = "*.wav";
+				break;
+			case FFLOAD_IMAGE:
+				file_type = "image_files";
+				file_dialog_filter = "*.{tga,bmp,jpg,jpeg,png}";
+				break;
+			case FFLOAD_ANIM:
+				file_type = "animation_files";
+				file_dialog_filter = "*.{bvh,anim}";
+				break;
+			case FFLOAD_XML:
+				file_type = "xml_file";
+				file_dialog_filter = "*.xml";
+				break;
+			case FFLOAD_SLOBJECT:
+				file_type = "xml_file";
+				file_dialog_filter = "*.slobject";
+				break;
+			case FFLOAD_RAW:
+				file_type = "raw_file";
+				file_dialog_filter = "*.raw";
+				break;
+			case FFLOAD_MODEL:
+			case FFLOAD_COLLADA:
+				file_type = "collada_files";
+				file_dialog_filter = "*.dae";
+				break;
+			case FFLOAD_SCRIPT:
+				file_type = "script_files";
+				file_dialog_filter = "*.lsl";
+				break;
+			case FFLOAD_DICTIONARY:
+				file_type = "dictionary_files";
+				file_dialog_filter = "*.{dic,xcu}";
+				break;
+			case FFLOAD_DIRECTORY:
+				file_type = "choose_the_directory";
+				break;
+			case FFLOAD_EXE:
+				file_type = "executable_files";
+				break;
+
+			// Firestorm additions
+			case FFLOAD_IMPORT:
+				file_type = "backup_files";
+				file_dialog_filter = "*.oxp";
+				break;
+
+#ifdef _CORY_TESTING
+			case FFLOAD_GEOMETRY:
+				// no file type translation for this, so using the default "all_files" for now
+				file_dialog_filter = "*.slg";
+				break;
+#endif
+		}
+
+		if (aType == EType::eOpenMultiple)
+		{
+			file_dialog_title = LLTrans::getString("load_files");
+		}
+		else
+		{
+			// can't say I like this combining of verb+type, it might not work too well in all languages -Zi
+			file_dialog_title = LLTrans::getString("load_file_verb") + " " + LLTrans::getString(file_type);
+			file_dialog_filter = LLTrans::getString(file_type) + " \t" + file_dialog_filter;
+		}
+	}
+
+	flDlg.title(file_dialog_title.c_str());
+	flDlg.type(flType);
+
+	if (!file_dialog_filter.empty())
+	{
+		flDlg.filter(file_dialog_filter.c_str());
+	}
 
 	int res = flDlg.show();
 	gViewerWindow->getWindow()->afterDialog();

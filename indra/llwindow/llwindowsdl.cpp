@@ -48,6 +48,10 @@ extern "C" {
 #include <locale.h>
 #endif // LL_GTK
 
+#ifdef LL_GLIB
+#include <glib.h>
+#endif
+
 extern "C" {
 # include "fontconfig/fontconfig.h"
 }
@@ -1992,7 +1996,18 @@ void LLWindowSDL::processMiscNativeEvents()
 	    setlocale(LC_ALL, saved_locale.c_str() );
     }
 #endif // LL_GTK
-
+#if LL_GLIB
+	// Pump until we've nothing left to do or passed 1/15th of a
+	// second pumping for this frame.
+	static LLTimer pump_timer;
+	pump_timer.reset();
+	pump_timer.setTimerExpirySec(1.0f / 15.0f);
+	do
+	{
+		g_main_context_iteration(g_main_context_default(), FALSE);
+	} while( g_main_context_pending(g_main_context_default()) && !pump_timer.hasExpired());
+#endif
+	
     // hack - doesn't belong here - but this is just for debugging
     if (getenv("LL_DEBUG_BLOAT"))
     {

@@ -254,7 +254,7 @@ BOOL LLDirPicker::getDir(std::string* filename, bool blocking)
 #else
     gViewerWindow->getWindow()->beforeDialog();
 	Fl_Native_File_Chooser flDlg;
-	flDlg.title("Pick a dir");
+	flDlg.title(LLTrans::getString("choose_the_directory").c_str());
 	flDlg.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY );
 
 	int res = flDlg.show();

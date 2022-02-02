@@ -1644,6 +1644,12 @@ bool LLAppViewer::doFrame()
 {
 // <FS:Beq> Perfstats collection Frame boundary
 {
+	// and now adjust the visuals from previous frame.
+    if(FSPerfStats::autoTune && FSPerfStats::tunables.tuningFlag != FSPerfStats::Tunables::Nothing)
+    {
+    	FSPerfStats::tunables.applyUpdates();
+    }
+
 	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
@@ -1701,7 +1707,7 @@ bool LLAppViewer::doFrame()
 		}
 		// Check if we need to temporarily enable rendering.
 		//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
-		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
+		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime", -1.f);
 		if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
 		{
 			periodicRenderingTimer.reset();

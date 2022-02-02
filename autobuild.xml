@@ -843,48 +843,6 @@
         <key>version</key>
         <string>5.1.25</string>
       </map>
-      <key>dbus_glib</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (C) Red Hat Inc.</string>
-        <key>description</key>
-        <string>D-Bus bindings for glib</string>
-        <key>license</key>
-        <string>Academic Free License v. 2.1</string>
-        <key>license_file</key>
-        <string>LICENSES/dbus-glib.txt</string>
-        <key>name</key>
-        <string>dbus_glib</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9591dcb7efce2a770d77e907705e1492</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/dbus_glib-0.76-linux-180871236.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5a685a65a7066937ef580dcd5a90f9dc</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/dbus_glib-0.76-linux64-180841549.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>0.76</string>
-      </map>
       <key>dictionaries</key>
       <map>
         <key>copyright</key>

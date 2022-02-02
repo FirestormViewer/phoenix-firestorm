@@ -2067,6 +2067,7 @@ class LinuxManifest(ViewerManifest):
         # name in the tarfile
         realname = self.get_dst_prefix()
         tempname = self.build_path_of(installer_name)
+        self.run_command([self.args["source"] + "/installers/linux/appimage.sh", self.args["build"]] )
         self.run_command(["mv", realname, tempname])
         try:
             # only create tarball if it's a release build.

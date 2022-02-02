@@ -1,6 +1,7 @@
 # -*- cmake -*-
 include(Prebuilt)
 include(FreeType)
+include(GLIB)
 
 if (USESYSTEMLIBS)
   include(FindPkgConfig)
@@ -61,6 +62,7 @@ else (USESYSTEMLIBS)
     endforeach(libname)
 
     set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
+	include_directories ( ${GLIB_INCLUDE_DIRS}  )
   endif (LINUX)
 
   include_directories (
