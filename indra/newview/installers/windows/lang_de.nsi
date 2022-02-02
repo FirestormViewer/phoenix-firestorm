@@ -61,7 +61,7 @@ LangString MissingSSE2 ${LANG_GERMAN} "Dieser PC besitzt möglicherweise keinen 
 ; closesecondlife function (install)
 LangString CloseSecondLifeInstDP ${LANG_GERMAN} "Warten auf die Beendigung von Firestorm ..."
 LangString CloseSecondLifeInstMB ${LANG_GERMAN} "Firestorm kann nicht installiert oder ersetzt werden, wenn es bereits läuft.$\n$\nBeenden Sie, was Sie gerade tun und klicken Sie OK, um Firestorm zu beenden.$\nKlicken Sie ABBRECHEN, um die Installation abzubrechen."
-LangString CloseSecondLifeInstRM ${LANG_GERMAN} "Firestorm konnte einige Dateien einer vorherigen Installation nicht entfernen.$\n$\nKlicken Sie OK um fortzufahren.$\nKlicken Sie ABBRECHEN, um die Installation abzubrechen."
+LangString CloseSecondLifeInstRM ${LANG_GERMAN} "Firestorm konnte einige Dateien einer vorherigen Installation nicht entfernen."
 
 ; closesecondlife function (uninstall)
 LangString CloseSecondLifeUnInstDP ${LANG_GERMAN} "Warten auf die Beendigung von Firestorm ..."
