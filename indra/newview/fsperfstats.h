@@ -74,7 +74,6 @@ namespace FSPerfStats
     extern std::atomic<int64_t> tunedAvatars;
     extern U32 targetFPS; // desired FPS
     extern U64 renderAvatarMaxART_ns;
-    extern U32 fpsTuningStrategy;
     extern U32 lastGlobalPrefChange;
     extern std::mutex bufferToggleLock;
     extern bool autoTune;
@@ -115,6 +114,28 @@ namespace FSPerfStats
         bool        isRigged;
         bool        isHUD;
     };
+
+    struct Tunables
+    {
+        static constexpr U32 Nothing{0};
+        static constexpr U32 NonImposters{1};
+        static constexpr U32 ReflectionDetail{2};
+        static constexpr U32 FarClip{4};
+
+        U32 tuningFlag{0};
+        U32 nonImposters;
+        S32 reflectionDetail;
+        F32 farClip;
+
+        void updateFarClip(F32 nv){farClip=nv; tuningFlag |= FarClip;};
+        void updateNonImposters(U32 nv){nonImposters=nv; tuningFlag |= NonImposters;};
+        void updateReflectionDetail(S32 nv){reflectionDetail=nv; tuningFlag |= ReflectionDetail;};
+
+        void applyUpdates();
+        void resetChanges(){tuningFlag=Nothing;};
+    };
+
+    extern Tunables tunables;
 
     class StatsRecorder{
         using Queue = moodycamel::BlockingConcurrentQueue<StatsRecord>;

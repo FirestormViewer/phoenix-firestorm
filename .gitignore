@@ -112,3 +112,5 @@ compile_commands.json
 # ignore tracy for now
 indra/tracy
 firestorm.code-workspace
+
+.cache/clangd/index/

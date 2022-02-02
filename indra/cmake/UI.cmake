@@ -1,6 +1,7 @@
 # -*- cmake -*-
 include(Prebuilt)
 include(FreeType)
+include(GLIB)
 
 if (USESYSTEMLIBS)
   include(FindPkgConfig)
@@ -46,7 +47,7 @@ else (USESYSTEMLIBS)
   if (LINUX)
     set(UI_LIB_NAMES
         libfltk.a
-        freetype
+        libfreetype.a
         )
 
     foreach(libname ${UI_LIB_NAMES})
@@ -61,6 +62,7 @@ else (USESYSTEMLIBS)
     endforeach(libname)
 
     set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
+	include_directories ( ${GLIB_INCLUDE_DIRS}  )
   endif (LINUX)
 
   include_directories (

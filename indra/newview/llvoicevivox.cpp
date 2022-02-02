@@ -3373,17 +3373,31 @@ void LLVivoxVoiceClient::sendPositionAndVolumeUpdate(void)
 				earVelocity = mAvatarVelocity;
 				earRot = mCameraRot;
 			break;
+// <FS:Beq> reimplement hear voice equally
+			case earLocSpeaker:
+			// we leave EarPos/Vel/Rot as empty
+			LL_DEBUGS("Voice") << "EarLoc Speaker in use" << LL_ENDL;
+			break;
+// </FS:Beq>
 		}
 
+// <FS:Beq> reimplement hear voice equally
+		if(mEarLocation != earLocSpeaker) 
+		{
+			// for all spatial sources we need to do the transform
+// </FS:Beq>
 		l = earRot.getLeftRow();
 		u = earRot.getUpRow();
 		a = earRot.getFwdRow();
 
         pos = earPosition;
 		vel = earVelocity;
-
+		
 		
 		oldSDKTransform(l, u, a, pos, vel);
+// <FS:Beq> reimplement hear voice equally
+		}
+// </FS:Beq>
 		
         if (mHidden)
         {
