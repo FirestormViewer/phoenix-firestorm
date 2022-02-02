@@ -1231,8 +1231,7 @@ Dies ist ein temporärer Fehler. Bitte passen Sie das Kleidungsstück in einigen
 		<usetemplate name="okcancelbuttons" notext="Beenden" yestext="IM &amp; Chat anzeigen"/>
 	</notification>
 	<notification name="InventoryUnusable">
-		Es gibt ein Problem mit Ihrem Inventar. Bitte versuchen Sie zunächst, sich erneut anzumelden. Falls Sie diese Nachricht erneut erhalten, kontaktieren Sie den Support und bitten ihn, die Ursache des Problems zu korrigieren.
-		<usetemplate name="okbutton" yestext="Abmelden"/>
+		Es gab ein Problem mit Ihrem Inventar. Bitte versuchen Sie zunächst, sich erneut anzumelden. Falls Sie diese Nachricht erneut erhalten, kontaktieren Sie den Support, um die Ursache des Problems zu korrigieren.
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Landkauf für Gruppe nicht möglich:
