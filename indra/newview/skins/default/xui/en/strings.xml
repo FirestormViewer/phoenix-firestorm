@@ -655,6 +655,10 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="csv_files">Comma separated values</string>
 	<string name="recompile_script_verb">Recompile</string>
 
+<!-- FS:Zi: add missing file picker translations -->
+	<string name="jpeg_image_files">JPEG Images</string>
+	<string name="executable_files">Executable Program Files</string>
+
   <!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>
 	<!-- (FS:CR) LSL Hover Tips have been moved into scriptlibrary_*.xml so they can be dynamically updated -->

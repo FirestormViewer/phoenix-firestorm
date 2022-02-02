@@ -1,27 +1,34 @@
 # -*- cmake -*-
 include(Prebuilt)
 include(FreeType)
+include(GLIB)
 
 if (USESYSTEMLIBS)
   include(FindPkgConfig)
     
+  if( NOT GTK_VERSION )
+    set( GTK_VERSION 2.0 )
+  endif()
   if (LINUX)
     set(PKGCONFIG_PACKAGES
         atk
         cairo
-        gdk-2.0
+        gdk-${GTK_VERSION}
         gdk-pixbuf-2.0
         glib-2.0
         gmodule-2.0
-        gtk+-2.0
+        gtk+-${GTK_VERSION}
         gthread-2.0
         libpng
         pango
         pangoft2
-        pangox
-        pangoxft
-        sdl
+        sdl2
         )
+	if( GTK_VERSION LESS "3.0" )
+	  LIST( APPEND PKGCONFIG_PACKAGES pangoxft )
+	else()
+	  add_definitions( -DGTK_DISABLE_DEPRECATED)
+	endif()
   endif (LINUX)
 
   foreach(pkg ${PKGCONFIG_PACKAGES})
@@ -31,29 +38,16 @@ if (USESYSTEMLIBS)
     list(APPEND UI_LIBRARIES ${${pkg}_LIBRARIES})
     add_definitions(${${pkg}_CFLAGS_OTHERS})
   endforeach(pkg)
+  list(APPEND UI_LIBRARIES X11)
 else (USESYSTEMLIBS)
   if (LINUX)
-    use_prebuilt_binary(gtk-atk-pango-glib)
+    use_prebuilt_binary(fltk)
   endif (LINUX)
 
   if (LINUX)
     set(UI_LIB_NAMES
-        freetype
-        atk-1.0
-        gdk-x11-2.0
-        gdk_pixbuf-2.0
-        glib-2.0
-        gmodule-2.0
-        gobject-2.0
-        gthread-2.0
-        gtk-x11-2.0
-        pango-1.0
-        pangoft2-1.0
-        pangox-1.0
-        #pangoxft-1.0
-        gio-2.0
-        pangocairo-1.0
-        ffi
+        libfltk.a
+        libfreetype.a
         )
 
     foreach(libname ${UI_LIB_NAMES})
@@ -68,6 +62,7 @@ else (USESYSTEMLIBS)
     endforeach(libname)
 
     set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
+	include_directories ( ${GLIB_INCLUDE_DIRS}  )
   endif (LINUX)
 
   include_directories (
@@ -80,5 +75,5 @@ else (USESYSTEMLIBS)
 endif (USESYSTEMLIBS)
 
 if (LINUX)
-  add_definitions(-DLL_GTK=1 -DLL_X11=1)
+  add_definitions(-DLL_X11=1 -DLL_FLTK=1)
 endif (LINUX)

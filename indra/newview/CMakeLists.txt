@@ -13,7 +13,7 @@ include(BuildPackagesInfo)
 include(BuildVersion)
 include(CMakeCopyIfDifferent)
 include(CubemapToEquirectangularJS)
-include(DBusGlib)
+include(GLIB)
 include(DragDrop)
 include(EXPAT)
 include(FMODSTUDIO)
@@ -1797,7 +1797,6 @@ if (LINUX)
 #         fsversionstrings.h with the right numbers in it.
 #      COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
       )
-    LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
 # [FS] Growl support
     LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
     LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
@@ -2518,7 +2517,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${BOOST_WAVE_LIBRARY} #FS specific
     ${BOOST_THREAD_LIBRARY} #FS specific
     ${BOOST_CONTEXT_LIBRARY}
-    ${DBUSGLIB_LIBRARIES}
+    ${GLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
     ${OPENAL_LIBRARIES}
@@ -2538,6 +2537,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLPHYSICSEXTENSIONS_LIBRARIES}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
+    ${GIO_LIBRARIES}
     )
 
 target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )

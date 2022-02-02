@@ -1421,6 +1421,12 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="recompile_script_verb">
 		Перекомпиляция
 	</string>
+	<string name="jpeg_image_files">
+		Изображения в формате JPEG
+	</string>
+	<string name="executable_files">
+		Исполняемые файлы программы
+	</string>
 	<string name="LSLTipSleepTime">
 		Пауза скрипта на [SLEEP_TIME] секунд.
 	</string>

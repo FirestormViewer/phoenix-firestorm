@@ -48,7 +48,7 @@
 				<combo_box.item label="Nur Avatar-Einstellungen" name="av_only" />
 				<combo_box.item label="Avatar und Szenerie" name="av_and_scene" />
 			</combo_box>
-			<spinner name="target_fps" tooltip="Ziel-FPS - Der Viewer wird automatisch versuchen, die gewünschte FPS durch Anpassung der Einstellungen zu erreichen." />
+			<spinner name="target_fps" tool_tip="Ziel-FPS - Der Viewer wird automatisch versuchen, die gewünschte FPS durch Anpassung der Einstellungen zu erreichen." />
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">
