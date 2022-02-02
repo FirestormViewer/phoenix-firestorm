@@ -1651,10 +1651,6 @@ bool LLAppViewer::doFrame()
 	}
 #endif
 // </FS:Beq>
-	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-	LLTimer periodicRenderingTimer;
-	BOOL restore_rendering_masks = FALSE;
-	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	LLTimer frameTimer;
 
@@ -1678,30 +1674,6 @@ bool LLAppViewer::doFrame()
 	} // <FS:Beq/> perf stats
 	{
 		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered
-		// <FS:Ansariel> MaxFPS Viewer-Chui merge error
-		// Check if we need to restore rendering masks.
-		if (restore_rendering_masks)
-		{
-			gPipeline.popRenderDebugFeatureMask();
-			gPipeline.popRenderTypeMask();
-		}
-		// Check if we need to temporarily enable rendering.
-		//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
-		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime", -1.f);
-		if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
-		{
-			periodicRenderingTimer.reset();
-			restore_rendering_masks = TRUE;
-			gPipeline.pushRenderTypeMask();
-			gPipeline.pushRenderDebugFeatureMask();
-			gPipeline.setAllRenderTypes();
-			gPipeline.setAllRenderDebugFeatures();
-		}
-		else
-		{
-			restore_rendering_masks = FALSE;
-		}
-		// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
 		LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df processMiscNativeEvents" )
 		pingMainloopTimeout("Main:MiscNativeWindowEvents");
