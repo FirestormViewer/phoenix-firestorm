@@ -4019,6 +4019,16 @@ void LLPipeline::postSort(LLCamera& camera)
 					sCull->pushAlphaGroup(group);
 				}
 			}
+
+            LLSpatialGroup::draw_map_t::iterator rigged_alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA_RIGGED);
+
+            if (rigged_alpha != group->mDrawMap.end())
+            { //store rigged alpha groups for LLDrawPoolAlpha prepass (skip distance update, rigged attachments use depth buffer)
+                if (hasRenderType(LLDrawPool::POOL_ALPHA))
+                {
+                    sCull->pushRiggedAlphaGroup(group);
+                }
+            }
 		}
 	}
 	}
@@ -9675,7 +9685,11 @@ void LLPipeline::generateWaterReflection(LLCamera& camera_in)
                 LLColor3 col = LLEnvironment::instance().getCurrentWater()->getWaterFogColor();
                 glClearColor(col.mV[0], col.mV[1], col.mV[2], 0.f);
 
-                LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WATER1;
+                // HACK FIX -- pretend underwater camera is the world camera to fix weird visibility artifacts
+                // during distortion render (doesn't break main render because the camera is the same perspective
+                // as world camera and occlusion culling is disabled for this pass)
+                //LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WATER1;
+                LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 
                 mWaterDis.bindTarget();
                 mWaterDis.getViewport(gGLViewport);
@@ -11512,6 +11526,16 @@ LLCullResult::sg_iterator LLPipeline::beginAlphaGroups()
 LLCullResult::sg_iterator LLPipeline::endAlphaGroups()
 {
 	return sCull->endAlphaGroups();
+}
+
+LLCullResult::sg_iterator LLPipeline::beginRiggedAlphaGroups()
+{
+    return sCull->beginRiggedAlphaGroups();
+}
+
+LLCullResult::sg_iterator LLPipeline::endRiggedAlphaGroups()
+{
+    return sCull->endRiggedAlphaGroups();
 }
 
 bool LLPipeline::hasRenderType(const U32 type) const

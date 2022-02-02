@@ -148,6 +148,9 @@ const F32 MIN_HOVER_Z = -2.0f;
 const F32 MIN_ATTACHMENT_COMPLEXITY = 0.f;
 const F32 DEFAULT_MAX_ATTACHMENT_COMPLEXITY = 1.0e6f;
 
+// Unlike with 'self' avatar, server doesn't inform viewer about
+// expected attachments so viewer has to wait to see if anything
+// else will arrive
 const F32 FIRST_APPEARANCE_CLOUD_MIN_DELAY = 3.f; // seconds
 const F32 FIRST_APPEARANCE_CLOUD_MAX_DELAY = 45.f;
 
@@ -779,7 +782,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 
 	mCurrentGesticulationLevel = 0;
 
-	mFirstSeenTimer.reset();
+    mFirstAppearanceMessageTimer.reset();
 	mRuthTimer.reset();
 	mRuthDebugTimer.reset();
 	mDebugExistenceTimer.reset();
@@ -3037,7 +3040,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
                     //override rigged attachments' octree spatial extents with this avatar's bounding box
                     LLSpatialBridge* bridge = attached_object->mDrawable->getSpatialBridge();
                     bool rigged = false;
-                    if (bridge)
+                    if (bridge && !bridge->isDead())
                     {
                         //transform avatar bounding box into attachment's coordinate frame
                         LLVector4a extents[2];
@@ -3054,13 +3057,21 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
                     attached_object->mDrawable->makeActive();
                     attached_object->mDrawable->updateXform(TRUE);
                     
-                    if (!rigged)
+                    if (bridge && !bridge->isDead())
                     {
-                        if (bridge)
+                        if (!rigged)
                         {
                             gPipeline.updateMoveNormalAsync(bridge);
                         }
+                        else
+                        {
+                            //specialized impl of updateMoveNormalAsync just for rigged attachment SpatialBridge
+                            bridge->setState(LLDrawable::MOVE_UNDAMPED);
+                            bridge->updateMove();
+                            bridge->setState(LLDrawable::EARLY_MOVE);
+                        }
                     }
+
 					attached_object->updateText();	
 				}
 			}
@@ -7248,6 +7259,16 @@ void LLVOAvatar::updateAttachmentOverrides()
 #endif
 }
 
+void LLVOAvatar::notifyAttachmentMeshLoaded()
+{
+    if (!isFullyLoaded())
+    {
+        // We just received mesh or skin info
+        // Reset timer to wait for more potential meshes or changes
+        mFullyLoadedTimer.reset();
+    }
+}
+
 //-----------------------------------------------------------------------------
 // addAttachmentOverridesForObject
 //-----------------------------------------------------------------------------
@@ -9096,7 +9117,7 @@ BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
                 // Note that textures can causes 60s delay on thier own
                 // so this delay might end up on top of textures' delay
                 mFirstUseDelaySeconds = llclamp(
-                    mFirstSeenTimer.getElapsedTimeF32(),
+                    mFirstAppearanceMessageTimer.getElapsedTimeF32(),
                     FIRST_APPEARANCE_CLOUD_MIN_DELAY,
                     FIRST_APPEARANCE_CLOUD_MAX_DELAY);
 
@@ -9987,6 +10008,9 @@ void LLVOAvatar::onFirstTEMessageReceived()
 
         mMeshTexturesDirty = TRUE;
 		gPipeline.markGLRebuild(this);
+
+        mFirstAppearanceMessageTimer.reset();
+        mFullyLoadedTimer.reset();
 	}
 }
 

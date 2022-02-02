@@ -12852,7 +12852,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>2.2</real>
   </map>
-    <key>RenderGLCoreProfile</key>
+    <key>RenderGLContextCoreProfile</key>
     <map>
       <key>Comment</key>
       <string>Don't use a compatibility profile OpenGL context.  Requires restart.</string>
