@@ -191,6 +191,7 @@ public:
 	/*virtual*/ void updateColumns(bool force_update);
 
 	/*virtual*/ void mouseOverHighlightNthItem( S32 index );
+    /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
     bool isSpecialType() { return (mNameListType == SPECIAL); }
 
