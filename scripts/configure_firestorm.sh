@@ -80,7 +80,7 @@ showUsage()
     echo "  --avx                    : Build with Advanced Vector Extensions"
     echo "  --avx2                   : Build with Advanced Vector Extensions 2"
     echo "  --tracy                  : Build with Tracy Profiler support"
-    echo "  --crashreporting         : Build with crash reporting enabled"
+    echo "  --crashreporting         : Build with crash reporting enabled (Windows only)"
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
     echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
@@ -299,6 +299,15 @@ function getopt()
 getArgs $*
 if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
+fi
+
+if [ $TARGET_PLATFORM != "windows" ]
+then
+	if [ $WANTS_CRASHREPORTING -eq $TRUE ]
+	then
+		echo "--crashreporting is not supported on this platform"
+		WANTS_CRASHREPORTING=$FALSE
+	fi
 fi
 
 echo -e "configure_firestorm.sh" > $LOG
