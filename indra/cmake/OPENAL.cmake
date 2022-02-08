@@ -3,7 +3,8 @@ include(Linking)
 include(Prebuilt)
 
 if (LINUX)
-  set(OPENAL ON CACHE BOOL "Enable OpenAL")
+  use_prebuilt_binary(openal) #Always need the .so for voice
+  set(OPENAL OFF CACHE BOOL "Enable OpenAL")
 else (LINUX)
   set(OPENAL OFF CACHE BOOL "Enable OpenAL")
 endif (LINUX)

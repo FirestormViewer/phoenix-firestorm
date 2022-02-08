@@ -528,7 +528,6 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     if [ $TARGET_PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
     elif [ \( $TARGET_PLATFORM == "linux" \) ] ; then
-        OPENAL="-DOPENAL:BOOL=ON"
         TARGET="Unix Makefiles"
         if [ $WANTS_VSCODE -eq $TRUE ] ; then
             VSCODE_FLAGS="-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
