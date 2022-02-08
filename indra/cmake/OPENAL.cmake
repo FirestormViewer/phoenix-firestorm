@@ -10,6 +10,7 @@ else (LINUX)
 endif (LINUX)
 
 if (OPENAL)
+  message( WARNING "Using OpenAL is discouraged due to no maintenance, memory leaks and no support for streaming audio. Switch to fmodstudio if possible" )
   set(OPENAL_LIB_INCLUDE_DIRS "${LIBS_PREBUILT_DIR}/include/AL")
   if (USESYSTEMLIBS)
     include(FindPkgConfig)
