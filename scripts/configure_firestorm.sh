@@ -301,7 +301,7 @@ if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
 
-if [ $TARGET_PLATFORM != "windows" ]
+if [ $TARGET_PLATFORM == "darwin" ]
 then
 	if [ $WANTS_CRASHREPORTING -eq $TRUE ]
 	then

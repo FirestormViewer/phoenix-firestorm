@@ -45,6 +45,12 @@
 
 #include <gio/gio.h>
 
+#if LL_SEND_CRASH_REPORTS
+#include "breakpad/client/linux/handler/exception_handler.h"
+#include "breakpad/common/linux/http_upload.h"
+#include "lldir.h"
+#endif
+
 #define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"
 #define VIEWERAPI_PATH "/com/secondlife/ViewerAppAPI"
 #define VIEWERAPI_INTERFACE "com.secondlife.ViewerAppAPI"
@@ -131,6 +137,20 @@ LLAppViewerLinux::~LLAppViewerLinux()
 {
 }
 
+static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
+{
+   std::map< std::string, std::string> parameters, files;
+   parameters["prod"] = "MyApp";
+   parameters["ver"] = "1.0";
+   parameters["email"] = "fred@bugsplat.com";
+   parameters["comments"] = "BugSplat rocks!";
+   files["upload_file_minidump"] = descriptor.path();
+
+    printf("Dump path: %s\n", descriptor.path() );
+    return succeeded;
+}
+
+
 bool LLAppViewerLinux::init()
 {
 	// g_thread_init() must be called before *any* use of glib, *and*
@@ -143,8 +163,8 @@ bool LLAppViewerLinux::init()
 #if LL_SEND_CRASH_REPORTS
     if (success)
     {
-        LLAppViewer* pApp = LLAppViewer::instance();
-        pApp->initCrashReporting();
+        google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(gDirUtilp->getExpandedFilename(LL_PATH_DUMP,""));
+        google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL, true, -1);
     }
 #endif
 

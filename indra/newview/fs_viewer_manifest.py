@@ -162,3 +162,63 @@ class FSViewerManifest:
         if self.path( src,dst ) == 0:
             self.missing.pop()
 
+    def fs_generate_breakpad_symbols_for_file( self, aFile ):
+        from os import makedirs, remove
+        from os.path import join, isfile
+        import subprocess
+        from shutil import move
+
+        dumpSym = join( self.args["build"], "..", "packages", "bin", "dump_syms" )
+        if not isfile( dumpSym ):
+            return
+
+        symbolFile = aFile +".sym"
+
+        with open( symbolFile, "w") as outfile:
+            subprocess.call( [dumpSym, aFile ], stdout=outfile )
+
+        firstline = open( symbolFile ).readline().strip()
+
+        if firstline != "":
+            module, os, bitness, hash, filename = firstline.split(" ")
+            symbolDir = join( "symbols", filename, hash )
+            try:
+                makedirs( symbolDir )
+            except:
+                pass
+            move( symbolFile, symbolDir )
+
+        if isfile( symbolFile ):
+            remove( symbolFile )
+
+    def fs_save_breakpad_symbols(self, osname):
+        from glob import glob
+        import sys
+        from os.path import isdir
+        from shutil import rmtree
+        import tarfile
+
+        #if isdir( "symbols" ):
+        #    rmtree( "symbols" )
+
+        #files =  glob( "%s/bin/*" % self.args['dest'] )
+        #for f in files:
+        #    self.fs_generate_breakpad_symbols_for_file( f )
+
+        #files =  glob( "%s/lib/*.so" % self.args['dest'] )
+        #for f in files:
+        #    self.fs_generate_breakpad_symbols_for_file( f )
+
+
+        if isdir( "symbols" ):
+            for a in self.args:
+                print("%s: %s" % (a, self.args[a]))
+            symbolsName = "%s/Phoenix_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                         self.fs_channel_legacy_oneword(),
+                                                                         '-'.join( self.args['version'] ),
+                                                                         self.args['viewer_flavor'],
+                                                                         osname,
+                                                                         self.address_size)
+
+            fTar = tarfile.open( symbolsName, "w:bz2")
+            fTar.add("symbols", arcname=".")

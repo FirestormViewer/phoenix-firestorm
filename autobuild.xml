@@ -3,6 +3,34 @@
 <map>
     <key>installables</key>
     <map>
+      <key>breakpad</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) google</string>
+        <key>license</key>
+        <string>BSD</string>
+        <key>license_file</key>
+        <string>LICENSES/google_breakpad.txt</string>
+        <key>name</key>
+        <string>breakpad</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>482c2b25bbfd25edc058a02f82da39b2</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/breakpad-4708e6fb-linux64_bionic-220392253.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.48.0</string>
+      </map>
       <key>glib</key>
       <map>
         <key>copyright</key>
