@@ -1,4 +1,4 @@
-First, make sure gcc-5.4 and g++-5.4 are installed.
+First, make sure gcc-7.5.0 and g++-7.5.0 are installed.
 
 If you want to use licensed FMOD or KDU build libraries (they are optional) you have to provision these yourself.
 If you're licensing these with Phoenix/Firestorm, ask for the libraries for fmod and kdu. Put them into:
