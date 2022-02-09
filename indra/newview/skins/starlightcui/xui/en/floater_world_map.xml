@@ -40,33 +40,7 @@
     left="5"
     name="objects_mapview"
     top="5"
-    width="381"/>
-   <panel
-    follows="right|top"
-    height="40"
-	left="330"
-	top="10"
-    width="60"
-	layout="topleft"
-    bg_opaque_color="Transparent"
-    bg_alpha_color="Transparent"
-	background_visible="true"
-    name="map_details_selection">
-    <button
-     follows="right|top"
-     control_name="StarLightShowMapDetails"
-     height="40"
-	 is_toggle="true"
-	 image_unselected="TabIcon_Open_Off"
-	 image_selected="TabIcon_Close_Off"
-     mouse_opaque="false"
-     left="10"
-     layout="topleft"
-     name="Show Map details"
-     tool_tip="Show or hide details next to the World Map"
-     top="6"
-     width="40"/>
-   </panel>
+    width="386"/>
    <panel
     follows="right|bottom"
     height="20"
@@ -102,6 +76,53 @@
      width="150" />
     </panel>
    </layout_panel>
+
+  <!-- <FS:Zi> FIRE-31376: Splitter panel to show/hide map details -->
+  <layout_panel
+   follows="all"
+   height="512"
+   left_delta="0"
+   min_width="8"
+   name="map_details_splitter"
+   width="8">
+
+   <panel
+    follows="all"
+    height="512"
+    layout="topleft"
+    left="0"
+    top="0"
+    width="8">
+
+    <panel
+     background_visible="true"
+     bg_alpha_color="1.0 1.0 1.0 0.1"
+     follows="all"
+     height="506"
+     layout="topleft"
+     left="1"
+     top="2"
+     width="8"
+    />
+
+    <button
+     control_name="StarLightShowMapDetails"
+     follows="all"
+     height="512"
+     image_unselected="Arrow_Left_Unscaled"
+     image_selected="Arrow_Right_Unscaled"
+     is_toggle="true"
+     layout="topleft"
+     left="0"
+     name="Show Map details"
+     top="0"
+     width="12" />
+
+   </panel>
+
+  </layout_panel>
+  <!-- </FS:Zi> -->
+
   <layout_panel
    follows="right|bottom"
    top="0"	
