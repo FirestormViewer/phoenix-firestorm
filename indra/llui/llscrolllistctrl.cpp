@@ -1547,6 +1547,12 @@ U32 LLScrollListCtrl::searchItems(const LLWString& substring, bool case_sensitiv
             {
                 continue;
             }
+            // <FS:Ansariel> Fix for FS-specific people list (radar)
+            if (isFiltered(item))
+            {
+                continue;
+            }
+            // </FS:Ansariel> Fix for FS-specific people list (radar)
             LLScrollListCell* cellp = item->getColumn(getSearchColumn());
             if (!cellp)
             {
