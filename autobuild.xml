@@ -508,9 +508,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>29eb0d338020242454b77b278c11d3e7</string>
+              <string>401f317fbb67623c97a7b9d8b6627ef1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/boost-1.72-linux64-202021511.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/boost-1.72-linux64_bionic-220402045.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -633,26 +633,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d83896f28716f34b7b49d61a23283c4c</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.180871403-linux-180871403.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>df6fe4c80b96ec20b5ee6f56419e6b9f</string>
+              <string>88ee58d6548deae6c306f125b6461d61</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.202021526-linux64-202021526.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.220402056-linux64_bionic-220402056.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
