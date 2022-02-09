@@ -3276,7 +3276,6 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
             //unblock media plugin
             const std::vector<std::string> empty_response;
             plugin->sendPickFileResponse(empty_response);
-            LLNotificationsUtil::add("MediaFileDownloadUnsupported");
 		}
 		break;
 
