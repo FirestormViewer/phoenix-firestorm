@@ -11,7 +11,7 @@ include(LLMath)
 include(LLMessage)
 include(LLFileSystem)
 
-include_directories(
+include_directories( SYSTEM
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
