@@ -137,19 +137,13 @@ LLAppViewerLinux::~LLAppViewerLinux()
 {
 }
 
+#if LL_SEND_CRASH_REPORTS
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
 {
-   std::map< std::string, std::string> parameters, files;
-   parameters["prod"] = "MyApp";
-   parameters["ver"] = "1.0";
-   parameters["email"] = "fred@bugsplat.com";
-   parameters["comments"] = "BugSplat rocks!";
-   files["upload_file_minidump"] = descriptor.path();
-
     printf("Dump path: %s\n", descriptor.path() );
     return succeeded;
 }
-
+#endif
 
 bool LLAppViewerLinux::init()
 {
