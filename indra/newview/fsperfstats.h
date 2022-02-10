@@ -202,7 +202,6 @@ namespace FSPerfStats
         {
             FSZone;
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
-            using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
             #ifdef FS_HAS_TELEMETRY_SUPPORT
             static char avstr[36];
