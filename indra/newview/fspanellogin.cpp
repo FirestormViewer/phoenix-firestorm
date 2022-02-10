@@ -879,6 +879,7 @@ void FSPanelLogin::loadLoginPage()
 			if (opt == 0)
 			{
 				gSavedSettings.setString("ForceLoginURL", "");
+				loadLoginPage();
 			}
 		});
 		login_page = LLURI(force_login_url);
