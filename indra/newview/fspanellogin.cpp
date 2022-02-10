@@ -873,6 +873,14 @@ void FSPanelLogin::loadLoginPage()
 	std::string force_login_url = gSavedSettings.getString("ForceLoginURL");
 	if ( force_login_url.length() > 0 )
 	{
+		LLNotificationsUtil::add("WarnForceLoginURL", LLSD(), LLSD(), [](const LLSD&notif, const LLSD&resp)
+		{
+			S32 opt = LLNotificationsUtil::getSelectedOption(notif, resp);
+			if (opt == 0)
+			{
+				gSavedSettings.setString("ForceLoginURL", "");
+			}
+		});
 		login_page = LLURI(force_login_url);
 	}
 
