@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="worldmap" title="Карта мира">
 	 <layout_stack name="resizing_stack">
-	 <layout_panel name="map_panel">
-	 <panel name="map_details_selection">
-	<button name="Show Map details" tool_tip="Скрыть или показать обозначения для карты мира"/>
-	   </panel>
-	 </layout_panel>
 	<layout_panel name="map_details_panel">
 	<panel name="layout_panel_1">
 		<text name="events_label">

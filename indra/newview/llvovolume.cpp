@@ -464,7 +464,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 		if (TEM_INVALID == result)
 		{
 			// There's something bogus in the data that we're unpacking.
-			dp->dumpBufferToLog();
 			std::string region_name = "unknown region";
 			if (getRegion())
 			{
