@@ -85,6 +85,7 @@ def proper_windows_path(path, current_platform = sys.platform):
 def get_default_platform(dummy):
     return {'linux2':'linux',
             'linux1':'linux',
+            'linux':'linux',
             'cygwin':'windows',
             'win32':'windows',
             'darwin':'darwin'
