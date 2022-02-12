@@ -24,12 +24,13 @@
  * $/LicenseInfo$
  */
 
-#include "linden_common.h"
-#include "llcrashloggerlinux.h"
-#include "llsdutil.h"
+//#include "linden_common.h"
+//#include "llcrashloggerlinux.h"
+//#include "llsdutil.h"
 
 int main(int argc, char **argv)
 {
+    /*
 	LL_INFOS() << "Starting crash reporter." << LL_ENDL;
 
 	LLCrashLoggerLinux app;
@@ -54,5 +55,6 @@ int main(int argc, char **argv)
 	app.frame();
 	app.cleanup();
 	LL_INFOS() << "Crash reporter finished normally." << LL_ENDL;
+     */
 	return 0;
 }

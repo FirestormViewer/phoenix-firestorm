@@ -51,6 +51,8 @@
 #include "lldir.h"
 #endif
 
+#include "fsversionvalues.h"
+
 #define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"
 #define VIEWERAPI_PATH "/com/secondlife/ViewerAppAPI"
 #define VIEWERAPI_INTERFACE "com.secondlife.ViewerAppAPI"
@@ -145,6 +147,51 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
 }
 #endif
 
+#if LL_SEND_CRASH_REPORTS
+void setupBreadpad()
+{
+    std::string build_data_fname(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "build_data.json"));
+
+    std::string strVersion;
+    std::string strDB;
+
+    llifstream inf(build_data_fname.c_str());
+    if(!inf.is_open())
+    {
+        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, can't read '" << build_data_fname << "'" << LL_ENDL;
+        return;
+    }
+
+    Json::Reader reader;
+    Json::Value build_data;
+    if(!reader.parse(inf, build_data, false))
+    {
+        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, can't parse '" << build_data_fname << "': "
+                             << reader.getFormatedErrorMessages() << LL_ENDL;
+        return;
+    }
+
+    Json::Value BugSplat_DB = build_data["BugSplat DB"];
+    if(!BugSplat_DB)
+    {
+        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, no 'BugSplat DB' entry in '" << build_data_fname
+                             << "'" << LL_ENDL;
+        return;
+    }
+    strVersion = STRINGIZE(
+            LL_VIEWER_VERSION_MAJOR << '.' << LL_VIEWER_VERSION_MINOR << '.' << LL_VIEWER_VERSION_PATCH
+                                    << '.' << LL_VIEWER_VERSION_BUILD);
+    strDB = BugSplat_DB.asString();
+
+
+    google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(
+            gDirUtilp->getExpandedFilename(LL_PATH_DUMP, ""));
+    google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL,
+                                                                                  true, -1);
+}
+
+#endif
+
 bool LLAppViewerLinux::init()
 {
 	// g_thread_init() must be called before *any* use of glib, *and*
@@ -155,11 +202,10 @@ bool LLAppViewerLinux::init()
 	bool success = LLAppViewer::init();
 
 #if LL_SEND_CRASH_REPORTS
-    if (success)
-    {
-        google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(gDirUtilp->getExpandedFilename(LL_PATH_DUMP,""));
-        google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL, true, -1);
-    }
+    S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
+    // Don't ever send? bail out!
+    if (success && nCrashSubmitBehavior != 2 /*CRASH_BEHAVIOR_NEVER_SEND*/)
+        setupBreadpad();
 #endif
 
 	return success;

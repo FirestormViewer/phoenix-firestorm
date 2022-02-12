@@ -3,18 +3,18 @@
 project(linux_crash_logger)
 
 include(00-Common)
-include(GLH)
-include(LLCoreHttp)
-include(LLCommon)
-include(LLCrashLogger)
-include(LLMath)
-include(LLMessage)
-include(LLFileSystem)
-include(LLXML)
+#include(GLH)
+#include(LLCoreHttp)
+#include(LLCommon)
+#include(LLMath)
+#include(LLMessage)
+#include(LLFileSystem)
+#include(LLXML)
 include(Linking)
 include(UI)
-include(FreeType)
-include(Boost)
+#include(FreeType)
+#include(Boost)
+include(CURL)
 
 include_directories(
     ${LLCOREHTTP_INCLUDE_DIRS}
@@ -36,7 +36,6 @@ include_directories(SYSTEM
 
 set(linux_crash_logger_SOURCE_FILES
     linux_crash_logger.cpp
-    llcrashloggerlinux.cpp
     )
 
 set(linux_crash_logger_HEADER_FILES
