@@ -648,7 +648,7 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		llassert(0);
 	}
 
-	if (prefix.empty())
+	if (prefix.empty() && location != LL_PATH_NONE) // <FS:Beq/> avoid pointless warning when LL_PATH_NONE is used. 
 	{
 		LL_WARNS() << ELLPathToString(location)
 				<< ", '" << subdir1 << "', '" << subdir2 << "', '" << in_filename
