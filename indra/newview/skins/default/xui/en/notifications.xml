@@ -13745,4 +13745,17 @@ An attachment named "[NAME]" contains rigged mesh but is attached to the HUD poi
     ignoretext="Warn me when a rigged attachment is worn on a HUD attachment point"
     name="notifyignore"/>
   </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="WarnForceLoginURL"
+   type="alertmodal">
+    <unique/>
+Login splash screen URL is overridden for testing purposes.
+
+Reset the URL to default?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Remind me next time"
+     yestext="Reset"/>
+  </notification>
 </notifications>
