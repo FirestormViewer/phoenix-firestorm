@@ -27,6 +27,12 @@ Other examples:
 	autobuild build -A64 -c ReleaseFS --no-configure -- --clean	# Clean rebuild
 	autobuild build -A64 -c ReleaseFS -- --package		# Complete a build and package it into a tarball
 
+When using the --package switch you can set the XZ_DEFAULTS variable to -T0 to use all available CPU cores
+to create the .tar.xz file. This can significantly reduce the time needed to create the archive, but it will
+use a lot more memory. For example:
+	export XZ_DEFAULTS="-T0"
+	autobuild build -A64 -c ReleaseFS_open -- --package
+
 If you want to build with clang you can call autobuild like this:
    CC=clang CXX=clang++ autobuild configure -A64 -c ReleaseFS
 
