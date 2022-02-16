@@ -558,7 +558,7 @@ bool LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
 	if (width != mWidth || height != mHeight || ncomponents != mComponents)
 	{
 		// Check if dimensions are a power of two!
-		if (!checkSize(width,height))
+		if (!checkSize(width, height))
 		{
 			LL_WARNS() << llformat("Texture has non power of two dimension: %dx%d",width,height) << LL_ENDL;
 			return false;
@@ -682,7 +682,7 @@ void LLImageGL::setImage(const LLImageRaw* imageraw)
 	setImage(rawdata, FALSE);
 }
 
-BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips, S32 usename)
+BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips /* = FALSE */, S32 usename /* = 0 */)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	bool is_compressed = false;
@@ -717,8 +717,14 @@ BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips, S32 usename)
 	
     gGL.getTexUnit(0)->bind(this, false, false, usename);
 
-
-    if (mUseMipMaps)
+    if (data_in == nullptr)
+    {
+        S32 w = getWidth();
+        S32 h = getHeight();
+        LLImageGL::setManualImage(mTarget, 0, mFormatInternal, w, h,
+            mFormatPrimary, mFormatType, (GLvoid*)data_in, mAllowCompression);
+    }
+    else if (mUseMipMaps)
 	{
 		if (data_hasmips)
 		{
@@ -1077,14 +1083,14 @@ void LLImageGL::postAddToAtlas()
 	stop_glerror();	
 }
 
-BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S32 x_pos, S32 y_pos, S32 width, S32 height, BOOL force_fast_update)
+BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S32 x_pos, S32 y_pos, S32 width, S32 height, BOOL force_fast_update /* = FALSE */, bool use_new_name /* = false */)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	if (!width || !height)
 	{
 		return TRUE;
 	}
-	if (mTexName == 0)
+	if (0 == (use_new_name ? mNewTexName : mTexName))
 	{
 		// *TODO: Re-enable warning?  Ran into thread locking issues? DK 2011-02-18
 		//LL_WARNS() << "Setting subimage on image without GL texture" << LL_ENDL;
@@ -1100,7 +1106,7 @@ BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S3
 	// HACK: allow the caller to explicitly force the fast path (i.e. using glTexSubImage2D here instead of calling setImage) even when updating the full texture.
 	if (!force_fast_update && x_pos == 0 && y_pos == 0 && width == getWidth() && height == getHeight() && data_width == width && data_height == height)
 	{
-		setImage(datap, FALSE);
+		setImage(datap, FALSE, use_new_name ? mNewTexName : mTexName);
 	}
 	else
 	{
@@ -1152,12 +1158,11 @@ BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S3
 
 		datap += (y_pos * data_width + x_pos) * getComponents();
 		// Update the GL texture
-		BOOL res = gGL.getTexUnit(0)->bindManual(mBindTarget, mTexName);
+		BOOL res = gGL.getTexUnit(0)->bindManual(mBindTarget, use_new_name ? mNewTexName : mTexName);
 		if (!res) LL_ERRS() << "LLImageGL::setSubImage(): bindTexture failed" << LL_ENDL;
 		stop_glerror();
 
-		glTexSubImage2D(mTarget, 0, x_pos, y_pos, 
-						width, height, mFormatPrimary, mFormatType, datap);
+		glTexSubImage2D(mTarget, 0, x_pos, y_pos, width, height, mFormatPrimary, mFormatType, datap);
 		gGL.getTexUnit(0)->disable();
 		stop_glerror();
 
@@ -1174,10 +1179,10 @@ BOOL LLImageGL::setSubImage(const U8* datap, S32 data_width, S32 data_height, S3
 	return TRUE;
 }
 
-BOOL LLImageGL::setSubImage(const LLImageRaw* imageraw, S32 x_pos, S32 y_pos, S32 width, S32 height, BOOL force_fast_update)
+BOOL LLImageGL::setSubImage(const LLImageRaw* imageraw, S32 x_pos, S32 y_pos, S32 width, S32 height, BOOL force_fast_update /* = FALSE */, bool use_new_name /* = false */)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	return setSubImage(imageraw->getData(), imageraw->getWidth(), imageraw->getHeight(), x_pos, y_pos, width, height, force_fast_update);
+	return setSubImage(imageraw->getData(), imageraw->getWidth(), imageraw->getHeight(), x_pos, y_pos, width, height, force_fast_update, use_new_name);
 }
 
 // Copy sub image from frame buffer
@@ -1364,7 +1369,7 @@ BOOL LLImageGL::createGLTexture()
 	return TRUE ;
 }
 
-BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S32 usename/*=0*/, BOOL to_create, S32 category)
+BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S32 usename/*=0*/, BOOL to_create, S32 category, bool defer_copy)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     checkActiveThread();
@@ -1394,6 +1399,7 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S
 	// Actual image width/height = raw image width/height * 2^discard_level
 	S32 raw_w = imageraw->getWidth() ;
 	S32 raw_h = imageraw->getHeight() ;
+
 	S32 w = raw_w << discard_level;
 	S32 h = raw_h << discard_level;
 
@@ -1476,15 +1482,24 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const LLImageRaw* imageraw, S
 
 	setCategory(category);
  	const U8* rawdata = imageraw->getData();
-	return createGLTexture(discard_level, rawdata, FALSE, usename);
+	return createGLTexture(discard_level, rawdata, FALSE, usename, defer_copy);
 }
 
-BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_hasmips, S32 usename)
+BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_hasmips, S32 usename, bool defer_copy)
+    // Call with void data, vmem is allocated but unitialized
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     checkActiveThread();
 
-    llassert(data_in);
+    if (defer_copy)
+    {
+        data_in = nullptr;
+    }
+    else
+    {
+        llassert(data_in);
+    }
+
     stop_glerror();
 
     if (discard_level < 0)
@@ -1494,7 +1509,8 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
     }
     discard_level = llclamp(discard_level, 0, (S32)mMaxDiscardLevel);
 
-    if (mTexName != 0 && discard_level == mCurrentDiscardLevel)
+    if (!defer_copy // <--- hacky way to force creation of mNewTexName from media texture update
+        && mTexName != 0 && discard_level == mCurrentDiscardLevel)
     {
         // This will only be true if the size has not changed
         return setImage(data_in, data_hasmips);
@@ -1542,36 +1558,12 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
     }
 
     //if we're on the image loading thread, be sure to delete old_texname and update mTexName on the main thread
-    if (! on_main_thread())
+    if (!on_main_thread())
     {
+        if (!defer_copy)
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - sync");
-            if (gGLManager.mHasSync)
-            {
-                auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-                glClientWaitSync(sync, 0, 0);
-                glDeleteSync(sync);
-            }
-            else
-            {
-                glFinish();
-            }
+            syncToMainThread();
         }
-
-        ref();
-        LL::WorkQueue::postMaybe(
-            mMainQueue,
-            [=]()
-            {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - delete callback");
-                if (old_texname != 0)
-                {
-                    LLImageGL::deleteTextures(1, &old_texname);
-                }
-                mTexName = mNewTexName;
-                mNewTexName = 0;
-                unref();
-            });
     }
     else 
     {
@@ -1593,6 +1585,55 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
 
     checkActiveThread();
     return TRUE;
+}
+
+void LLImageGL::syncToMainThread()
+{
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - sync");
+        if (gGLManager.mHasSync)
+        {
+            // post a sync to the main thread (will execute before tex name swap lambda below)
+            auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+            glFlush();
+            LL::WorkQueue::postMaybe(
+                mMainQueue,
+                [=]()
+                {
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - wait sync");
+                    {
+                        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glWaitSync");
+                        glWaitSync(sync, 0, GL_TIMEOUT_IGNORED);
+                    }
+                    {
+                        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glDeleteSync");
+                        glDeleteSync(sync);
+                    }
+                });
+        }
+        else
+        {
+            glFinish();
+        }
+    }
+
+    ref();
+    LL::WorkQueue::postMaybe(
+        mMainQueue,
+        [=]()
+        {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - delete callback");
+            if (mNewTexName != 0)
+            {
+                if (mTexName != 0)
+                {
+                    LLImageGL::deleteTextures(1, &mTexName);
+                }
+                mTexName = mNewTexName;
+                mNewTexName = 0;
+                unref();
+            }
+        });
 }
 
 BOOL LLImageGL::readBackRaw(S32 discard_level, LLImageRaw* imageraw, bool compressed_ok) const
@@ -1722,7 +1763,15 @@ void LLImageGL::destroyGLTexture()
 		mCurrentDiscardLevel = -1 ; //invalidate mCurrentDiscardLevel.
 		mTexName = 0;		
 		mGLTextureCreated = FALSE ;
-	}	
+	}
+
+    // clean up any in-flight name change
+    if (0 != mNewTexName)
+    {
+        // Memory is transient, not tracked by sGlobalTextuerMemory
+        LLImageGL::deleteTextures(1, &mNewTexName);
+        mNewTexName = 0;
+    }
 }
 
 //force to invalidate the gl texture, most likely a sculpty texture
