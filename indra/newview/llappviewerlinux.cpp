@@ -247,14 +247,14 @@ void viewerappapi_init(ViewerAppAPI *server)
     gBusNodeInfo = g_dbus_node_info_new_for_xml (DBUS_SERVER, NULL);
     g_assert (gBusNodeInfo != NULL);
 
-    auto owner_id = g_bus_own_name(G_BUS_TYPE_SESSION,
-                                   VIEWERAPI_SERVICE,
-                                   G_BUS_NAME_OWNER_FLAGS_NONE,
-                                   busAcquired,
-                                   nameAcquired,
-                                   nameLost,
-                                   NULL,
-                                   NULL);
+    g_bus_own_name(G_BUS_TYPE_SESSION,
+                   VIEWERAPI_SERVICE,
+                   G_BUS_NAME_OWNER_FLAGS_NONE,
+                   busAcquired,
+                   nameAcquired,
+                   nameLost,
+                   NULL,
+                   NULL);
 
 }
 
@@ -272,8 +272,6 @@ bool LLAppViewerLinux::initSLURLHandler()
 //virtual
 bool LLAppViewerLinux::sendURLToOtherInstance(const std::string& url)
 {
-    bool success = false;
-
 	auto *pBus = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, nullptr);
 
     if( !pBus )
