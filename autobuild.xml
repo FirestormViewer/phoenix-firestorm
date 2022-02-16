@@ -3,6 +3,34 @@
 <map>
     <key>installables</key>
     <map>
+      <key>breakpad</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) google</string>
+        <key>license</key>
+        <string>BSD</string>
+        <key>license_file</key>
+        <string>LICENSES/google_breakpad.txt</string>
+        <key>name</key>
+        <string>breakpad</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>482c2b25bbfd25edc058a02f82da39b2</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/breakpad-4708e6fb-linux64_bionic-220392253.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.48.0</string>
+      </map>
       <key>glib</key>
       <map>
         <key>copyright</key>
@@ -514,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>29eb0d338020242454b77b278c11d3e7</string>
+              <string>401f317fbb67623c97a7b9d8b6627ef1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/boost-1.72-linux64-202021511.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/boost-1.72-linux64_bionic-220402045.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -639,26 +667,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d83896f28716f34b7b49d61a23283c4c</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.180871403-linux-180871403.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>df6fe4c80b96ec20b5ee6f56419e6b9f</string>
+              <string>88ee58d6548deae6c306f125b6461d61</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.202021526-linux64-202021526.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.220402056-linux64_bionic-220402056.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -962,9 +978,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2f8fdc6950620cee3a526ede27e068aa</string>
+              <string>8d532edd648448d78e6daa0cc5f821f9</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202109282040_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-212711840.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202202071031_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-220380931.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

@@ -47,6 +47,12 @@
 #include <set>
 #include <boost/range.hpp>
 
+// <FS:ND> Suppress warnings about the string fiddling
+#if LL_LINUX
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+// </FS:ND>
+
 // U32
 LLSD ll_sd_from_U32(const U32 val)
 {

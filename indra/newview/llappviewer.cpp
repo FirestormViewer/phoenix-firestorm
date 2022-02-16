@@ -2681,7 +2681,7 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 
         // Remove the last ".old" log file.
         std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-            APP_NAME + ".log");
+            APP_NAME + ".old");
         LLFile::remove(old_log_file);
 
         // Get name of the log file

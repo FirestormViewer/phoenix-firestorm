@@ -3,12 +3,14 @@ include(Linking)
 include(Prebuilt)
 
 if (LINUX)
-  set(OPENAL ON CACHE BOOL "Enable OpenAL")
+  use_prebuilt_binary(openal) #Always need the .so for voice
+  set(OPENAL OFF CACHE BOOL "Enable OpenAL")
 else (LINUX)
   set(OPENAL OFF CACHE BOOL "Enable OpenAL")
 endif (LINUX)
 
 if (OPENAL)
+  message( WARNING "Using OpenAL is discouraged due to no maintenance of the viewers openal integration, possible memory leaks and no support for streaming audio. Switch to fmodstudio if possible" )
   set(OPENAL_LIB_INCLUDE_DIRS "${LIBS_PREBUILT_DIR}/include/AL")
   if (USESYSTEMLIBS)
     include(FindPkgConfig)

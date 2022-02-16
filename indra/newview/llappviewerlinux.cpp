@@ -45,6 +45,12 @@
 
 #include <gio/gio.h>
 
+#if LL_SEND_CRASH_REPORTS
+#include "breakpad/client/linux/handler/exception_handler.h"
+#include "breakpad/common/linux/http_upload.h"
+#include "lldir.h"
+#endif
+
 #define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"
 #define VIEWERAPI_PATH "/com/secondlife/ViewerAppAPI"
 #define VIEWERAPI_INTERFACE "com.secondlife.ViewerAppAPI"
@@ -131,6 +137,14 @@ LLAppViewerLinux::~LLAppViewerLinux()
 {
 }
 
+#if LL_SEND_CRASH_REPORTS
+static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
+{
+    printf("Dump path: %s\n", descriptor.path() );
+    return succeeded;
+}
+#endif
+
 bool LLAppViewerLinux::init()
 {
 	// g_thread_init() must be called before *any* use of glib, *and*
@@ -143,8 +157,8 @@ bool LLAppViewerLinux::init()
 #if LL_SEND_CRASH_REPORTS
     if (success)
     {
-        LLAppViewer* pApp = LLAppViewer::instance();
-        pApp->initCrashReporting();
+        google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(gDirUtilp->getExpandedFilename(LL_PATH_DUMP,""));
+        google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL, true, -1);
     }
 #endif
 
@@ -233,14 +247,14 @@ void viewerappapi_init(ViewerAppAPI *server)
     gBusNodeInfo = g_dbus_node_info_new_for_xml (DBUS_SERVER, NULL);
     g_assert (gBusNodeInfo != NULL);
 
-    auto owner_id = g_bus_own_name(G_BUS_TYPE_SESSION,
-                                   VIEWERAPI_SERVICE,
-                                   G_BUS_NAME_OWNER_FLAGS_NONE,
-                                   busAcquired,
-                                   nameAcquired,
-                                   nameLost,
-                                   NULL,
-                                   NULL);
+    g_bus_own_name(G_BUS_TYPE_SESSION,
+                   VIEWERAPI_SERVICE,
+                   G_BUS_NAME_OWNER_FLAGS_NONE,
+                   busAcquired,
+                   nameAcquired,
+                   nameLost,
+                   NULL,
+                   NULL);
 
 }
 
@@ -258,8 +272,6 @@ bool LLAppViewerLinux::initSLURLHandler()
 //virtual
 bool LLAppViewerLinux::sendURLToOtherInstance(const std::string& url)
 {
-    bool success = false;
-
 	auto *pBus = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, nullptr);
 
     if( !pBus )

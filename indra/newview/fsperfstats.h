@@ -202,7 +202,6 @@ namespace FSPerfStats
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
-            using ST = StatType_t;
             // Note: nullptr is used as the key for global stats
             #ifdef TRACY_ENABLE
             static char avstr[36];
