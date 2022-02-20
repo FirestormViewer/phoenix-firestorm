@@ -2861,8 +2861,10 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
     endif (LINUX)
   endif (USE_BUGSPLAT)
 
-  # for both Bugsplat and Breakpad
-  add_dependencies(llpackage generate_symbols)
+  if (NOT LINUX) #Linux generates symbols via viewer_manifest.py/fs_viewer_manifest.py
+	# for both Bugsplat and Breakpad
+	add_dependencies(llpackage generate_symbols)
+  endif()
 endif ()
 
 if (LL_TESTS)
