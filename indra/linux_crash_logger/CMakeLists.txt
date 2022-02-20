@@ -3,17 +3,8 @@
 project(linux_crash_logger)
 
 include(00-Common)
-#include(GLH)
-#include(LLCoreHttp)
-#include(LLCommon)
-#include(LLMath)
-#include(LLMessage)
-#include(LLFileSystem)
-#include(LLXML)
 include(Linking)
 include(UI)
-#include(FreeType)
-#include(Boost)
 include(CURL)
 
 include_directories(

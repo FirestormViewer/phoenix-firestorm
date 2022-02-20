@@ -24,13 +24,44 @@
  * $/LicenseInfo$
  */
 
-//#include "linden_common.h"
-//#include "llcrashloggerlinux.h"
-//#include "llsdutil.h"
+#include <curl/curl.h>
 
 int main(int argc, char **argv)
 {
-    /*
+	/*
+	curl_global_init(CURL_GLOBAL_ALL);
+
+	auto curl = curl_easy_init();
+	if( curl)
+	{
+		auto form = curl_mime_init(curl);
+		
+		auto field = curl_mime_addpart(form);
+		curl_mime_name(field, "upload_file_minidump");
+		curl_mime_filedata(field, "minidump.dmp");
+
+		field = curl_mime_addpart(form);
+		curl_mime_name(field, "product");
+		curl_mime_data(field, "Firestorm-Releasex64", CURL_ZERO_TERMINATED);
+
+		field = curl_mime_addpart(form);
+		curl_mime_name(field, "version");
+		curl_mime_data(field, "6.4.21.64531", CURL_ZERO_TERMINATED);
+
+		curl_easy_setopt(curl, CURLOPT_URL, "https://fs_test.bugsplat.com/post/bp/crash/crashpad.php");
+		curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+ 
+		auto res = curl_easy_perform(curl);
+
+		if(res != CURLE_OK)
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+ 
+		curl_easy_cleanup(curl);
+
+		curl_mime_free(form);
+	}
+	return 0;
+
 	LL_INFOS() << "Starting crash reporter." << LL_ENDL;
 
 	LLCrashLoggerLinux app;
