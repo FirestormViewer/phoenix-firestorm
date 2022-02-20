@@ -425,11 +425,6 @@ Prøv venligst om lidt igen.
 	<string name="ReleaseNotes">
 		Noter om version
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		Henter...
 	</string>
