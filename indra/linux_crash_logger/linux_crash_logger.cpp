@@ -28,7 +28,6 @@
 
 int main(int argc, char **argv)
 {
-	/*
 	curl_global_init(CURL_GLOBAL_ALL);
 
 	auto curl = curl_easy_init();
@@ -60,7 +59,7 @@ int main(int argc, char **argv)
 
 		curl_mime_free(form);
 	}
-	return 0;
+	/*
 
 	LL_INFOS() << "Starting crash reporter." << LL_ENDL;
 

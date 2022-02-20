@@ -6,6 +6,8 @@ include(00-Common)
 include(Linking)
 include(UI)
 include(CURL)
+include(OpenSSL)
+include(ZLIB)
 
 include_directories(
     ${LLCOREHTTP_INCLUDE_DIRS}
@@ -51,18 +53,14 @@ set(LIBRT_LIBRARY rt)
 
 
 target_link_libraries(linux-crash-logger
-    ${LLCRASHLOGGER_LIBRARIES}
-    ${LLFILESYSTEM_LIBRARIES}
-    ${LLXML_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${LLCOREHTTP_LIBRARIES}
     ${LLCOMMON_LIBRARIES}
     ${BOOST_FIBER_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
     ${UI_LIBRARIES}
-    ${DB_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
+	${CURL_LIBRARIES}
+	${OPENSSL_LIBRARIES}
+	${CRYPTO_LIBRARIES}
+	${ZLIB_LIBRARIES}
     ${LIBRT_LIBRARY}
     )
 
