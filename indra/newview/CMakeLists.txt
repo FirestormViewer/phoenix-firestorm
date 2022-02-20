@@ -2573,6 +2573,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     #media_plugin_gstreamer010
     media_plugin_libvlc
     llcommon
+	linux-crash-logger
     )
 else (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
@@ -2582,6 +2583,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     media_plugin_cef
     #media_plugin_gstreamer010
     llcommon
+	linux-crash-logger
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)
 

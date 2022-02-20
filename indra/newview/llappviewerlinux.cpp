@@ -49,6 +49,7 @@
 #include "breakpad/client/linux/handler/exception_handler.h"
 #include "breakpad/common/linux/http_upload.h"
 #include "lldir.h"
+#include "../llcrashlogger/llcrashlogger.h"
 #endif
 
 #include "fsversionvalues.h"
@@ -140,20 +141,21 @@ LLAppViewerLinux::~LLAppViewerLinux()
 }
 
 #if LL_SEND_CRASH_REPORTS
+std::string gCrashLogger;
+std::string gVersion;
+std::string gBugsplatDB;
+
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
 {
-    printf("Dump path: %s\n", descriptor.path() );
+	if( fork() == 0 )
+		execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(), nullptr );
     return succeeded;
 }
-#endif
 
-#if LL_SEND_CRASH_REPORTS
 void setupBreadpad()
 {
     std::string build_data_fname(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "build_data.json"));
-
-    std::string strVersion;
-    std::string strDB;
+    gCrashLogger =  gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "linux-crash-logger.bin");
 
     llifstream inf(build_data_fname.c_str());
     if(!inf.is_open())
@@ -178,12 +180,13 @@ void setupBreadpad()
                              << "'" << LL_ENDL;
         return;
     }
-    strVersion = STRINGIZE(
+    gVersion = STRINGIZE(
             LL_VIEWER_VERSION_MAJOR << '.' << LL_VIEWER_VERSION_MINOR << '.' << LL_VIEWER_VERSION_PATCH
                                     << '.' << LL_VIEWER_VERSION_BUILD);
-    strDB = BugSplat_DB.asString();
+    gBugsplatDB = BugSplat_DB.asString();
 
-
+	LL_INFOS("BUGSPLAT") << "Initializing with crash logger: " << gCrashLogger << " database: " << gBugsplatDB << " version: " << gVersion << LL_ENDL;
+	
     google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(
             gDirUtilp->getExpandedFilename(LL_PATH_DUMP, ""));
     google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL,
@@ -203,8 +206,9 @@ bool LLAppViewerLinux::init()
 
 #if LL_SEND_CRASH_REPORTS
     S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
-    // Don't ever send? bail out!
-    if (success && nCrashSubmitBehavior != 2 /*CRASH_BEHAVIOR_NEVER_SEND*/)
+
+	// For the first version we just consider always send and create a nice dialog for CRASH_BEHAVIOR_ASK later.
+    if (success && nCrashSubmitBehavior == CRASH_BEHAVIOR_ALWAYS_SEND)
         setupBreadpad();
 #endif
 

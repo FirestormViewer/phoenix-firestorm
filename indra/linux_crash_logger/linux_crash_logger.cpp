@@ -24,67 +24,66 @@
  * $/LicenseInfo$
  */
 
+#include <iostream>
+#include <string>
 #include <curl/curl.h>
 
+/* Called via 
+        execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(), nullptr );
+*/
 int main(int argc, char **argv)
 {
-	curl_global_init(CURL_GLOBAL_ALL);
+    std::cerr << "linux crash logger called: ";
+    for( int i = 1; i < argc; ++i )
+        std::cerr << argv[i] << " ";
 
-	auto curl = curl_easy_init();
-	if( curl)
-	{
-		auto form = curl_mime_init(curl);
-		
-		auto field = curl_mime_addpart(form);
-		curl_mime_name(field, "upload_file_minidump");
-		curl_mime_filedata(field, "minidump.dmp");
+    std::cerr << std::endl;
 
-		field = curl_mime_addpart(form);
-		curl_mime_name(field, "product");
-		curl_mime_data(field, "Firestorm-Releasex64", CURL_ZERO_TERMINATED);
-
-		field = curl_mime_addpart(form);
-		curl_mime_name(field, "version");
-		curl_mime_data(field, "6.4.21.64531", CURL_ZERO_TERMINATED);
-
-		curl_easy_setopt(curl, CURLOPT_URL, "https://fs_test.bugsplat.com/post/bp/crash/crashpad.php");
-		curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
- 
-		auto res = curl_easy_perform(curl);
-
-		if(res != CURLE_OK)
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
- 
-		curl_easy_cleanup(curl);
-
-		curl_mime_free(form);
-	}
-	/*
-
-	LL_INFOS() << "Starting crash reporter." << LL_ENDL;
-
-	LLCrashLoggerLinux app;
-	app.parseCommandOptions(argc, argv);
-
-    LLSD options = LLApp::instance()->getOptionData(
-                        LLApp::PRIORITY_COMMAND_LINE);
-                        //LLApp::PRIORITY_RUNTIME_OVERRIDE);
-
-    
-    if (!(options.has("pid") && options.has("dumpdir")))
+    if( argc < 4 )
     {
-        LL_WARNS() << "Insufficient parameters to crash report." << LL_ENDL;
+        std::cerr << argv[0] << "Not enough arguments" << std::endl;
+        return 1;
     }
 
-	if (! app.init())
-	{
-		LL_WARNS() << "Unable to initialize application." << LL_ENDL;
-		return 1;
-	}
+    std::string dmpFile{ argv[1] };
+    std::string version{ argv[2] };
+    std::string strDb{ argv[3] };
 
-	app.frame();
-	app.cleanup();
-	LL_INFOS() << "Crash reporter finished normally." << LL_ENDL;
-     */
-	return 0;
+
+    std::string url{ "https://" };
+    url += strDb;
+    url += ".bugsplat.com/post/bp/crash/crashpad.php";
+    
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    auto curl = curl_easy_init();
+    if( curl)
+    {
+        auto form = curl_mime_init(curl);
+        
+        auto field = curl_mime_addpart(form);
+        curl_mime_name(field, "upload_file_minidump");
+        curl_mime_filedata(field, dmpFile.c_str() );
+
+        field = curl_mime_addpart(form);
+        curl_mime_name(field, "product");
+        curl_mime_data(field, "Firestorm-Releasex64", CURL_ZERO_TERMINATED);
+
+        field = curl_mime_addpart(form);
+        curl_mime_name(field, "version");
+        curl_mime_data(field, version.c_str(), CURL_ZERO_TERMINATED);
+
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str() );
+        curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+ 
+        auto res = curl_easy_perform(curl);
+
+        if(res != CURLE_OK)
+            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl; 
+ 
+        curl_easy_cleanup(curl);
+
+        curl_mime_free(form);
+    }
+    return 0;
 }
