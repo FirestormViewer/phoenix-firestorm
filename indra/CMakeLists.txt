@@ -112,6 +112,10 @@ if (NOT USE_BUGSPLAT)
 add_subdirectory(${LIBS_OPEN_PREFIX}llcrashlogger)
 endif (NOT USE_BUGSPLAT)
 
+if( LINUX )
+    add_subdirectory(${VIEWER_PREFIX}linux_crash_logger)
+endif()
+
 add_subdirectory(${LIBS_OPEN_PREFIX}llplugin)
 add_subdirectory(${LIBS_OPEN_PREFIX}llui)
 add_subdirectory(${LIBS_OPEN_PREFIX}viewer_components)

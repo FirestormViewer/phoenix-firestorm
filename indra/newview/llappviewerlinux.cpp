@@ -49,7 +49,10 @@
 #include "breakpad/client/linux/handler/exception_handler.h"
 #include "breakpad/common/linux/http_upload.h"
 #include "lldir.h"
+#include "../llcrashlogger/llcrashlogger.h"
 #endif
+
+#include "fsversionvalues.h"
 
 #define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"
 #define VIEWERAPI_PATH "/com/secondlife/ViewerAppAPI"
@@ -138,10 +141,55 @@ LLAppViewerLinux::~LLAppViewerLinux()
 }
 
 #if LL_SEND_CRASH_REPORTS
+std::string gCrashLogger;
+std::string gVersion;
+std::string gBugsplatDB;
+std::string gCrashBehavior;
+
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
 {
-    printf("Dump path: %s\n", descriptor.path() );
+	if( fork() == 0 )
+		execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(),  gCrashBehavior.c_str(), nullptr );
     return succeeded;
+}
+
+void setupBreadpad()
+{
+    std::string build_data_fname(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "build_data.json"));
+    gCrashLogger =  gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "linux-crash-logger.bin");
+
+    llifstream inf(build_data_fname.c_str());
+    if(!inf.is_open())
+    {
+        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, can't read '" << build_data_fname << "'" << LL_ENDL;
+        return;
+    }
+
+    Json::Reader reader;
+    Json::Value build_data;
+    if(!reader.parse(inf, build_data, false))
+    {
+        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, can't parse '" << build_data_fname << "': "
+                             << reader.getFormatedErrorMessages() << LL_ENDL;
+        return;
+    }
+
+    Json::Value BugSplat_DB = build_data["BugSplat DB"];
+    if(!BugSplat_DB)
+    {
+        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, no 'BugSplat DB' entry in '" << build_data_fname
+                             << "'" << LL_ENDL;
+        return;
+    }
+    gVersion = STRINGIZE(
+            LL_VIEWER_VERSION_MAJOR << '.' << LL_VIEWER_VERSION_MINOR << '.' << LL_VIEWER_VERSION_PATCH
+                                    << '.' << LL_VIEWER_VERSION_BUILD);
+    gBugsplatDB = BugSplat_DB.asString();
+
+	LL_INFOS("BUGSPLAT") << "Initializing with crash logger: " << gCrashLogger << " database: " << gBugsplatDB << " version: " << gVersion << LL_ENDL;
+	
+    google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(gDirUtilp->getExpandedFilename(LL_PATH_DUMP, ""));
+    google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL, true, -1);
 }
 #endif
 
@@ -155,11 +203,17 @@ bool LLAppViewerLinux::init()
 	bool success = LLAppViewer::init();
 
 #if LL_SEND_CRASH_REPORTS
-    if (success)
-    {
-        google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(gDirUtilp->getExpandedFilename(LL_PATH_DUMP,""));
-        google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL, true, -1);
-    }
+    S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
+
+	// For the first version we just consider always send and create a nice dialog for CRASH_BEHAVIOR_ASK later.
+    if (success && nCrashSubmitBehavior != CRASH_BEHAVIOR_NEVER_SEND )
+	{
+		if( nCrashSubmitBehavior == CRASH_BEHAVIOR_ASK )
+			gCrashBehavior = "ask";
+		else
+			gCrashBehavior = "send";
+        setupBreadpad();
+	}
 #endif
 
 	return success;

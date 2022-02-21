@@ -207,7 +207,8 @@ class FSViewerManifest:
 
         files =  glob( "%s/lib/*.so" % self.args['dest'] )
         for f in files:
-            self.fs_generate_breakpad_symbols_for_file( f )
+            if f.find( "libcef.so" ) == -1:
+                self.fs_generate_breakpad_symbols_for_file( f )
 
         if isdir( "symbols" ):
             for a in self.args:

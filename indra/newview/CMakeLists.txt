@@ -2573,6 +2573,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     media_plugin_gstreamer10
     #media_plugin_libvlc
     llcommon
+	linux-crash-logger
     )
 else (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
@@ -2582,6 +2583,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     media_plugin_cef
     media_plugin_gstreamer10
     llcommon
+	linux-crash-logger
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)
 
@@ -2731,7 +2733,7 @@ if (DARWIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_libvlc media_plugin_cef)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_libvlc media_plugin_cef linux_crash_logger)
 
   if (ENABLE_SIGNING)
       set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")
