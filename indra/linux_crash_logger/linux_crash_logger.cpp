@@ -27,6 +27,7 @@
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
+#include <FL/fl_ask.H>
 
 /* Called via 
         execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(), nullptr );
@@ -48,7 +49,17 @@ int main(int argc, char **argv)
     std::string dmpFile{ argv[1] };
     std::string version{ argv[2] };
     std::string strDb{ argv[3] };
+	std::string strAsk{ argv[4] };
 
+	if( strAsk == "ask" )
+	{
+		auto choice = fl_choice( "Firestorm has crashed, submit the minidump?", "No", "Yes", nullptr );
+		if( choice == 0 )
+		{
+			std::cerr << "Abort send due to users choice" << std::endl;
+			return 0;
+		}
+	}
 
     std::string url{ "https://" };
     url += strDb;

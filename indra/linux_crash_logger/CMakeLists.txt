@@ -53,15 +53,13 @@ set(LIBRT_LIBRARY rt)
 
 
 target_link_libraries(linux-crash-logger
-    ${LLCOMMON_LIBRARIES}
-    ${BOOST_FIBER_LIBRARY}
-    ${BOOST_CONTEXT_LIBRARY}
     ${UI_LIBRARIES}
 	${CURL_LIBRARIES}
 	${OPENSSL_LIBRARIES}
 	${CRYPTO_LIBRARIES}
 	${ZLIB_LIBRARIES}
     ${LIBRT_LIBRARY}
+	X11
     )
 
 add_custom_target(linux-crash-logger-target ALL

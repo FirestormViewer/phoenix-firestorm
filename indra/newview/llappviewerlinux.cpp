@@ -144,11 +144,12 @@ LLAppViewerLinux::~LLAppViewerLinux()
 std::string gCrashLogger;
 std::string gVersion;
 std::string gBugsplatDB;
+std::string gCrashBehavior;
 
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
 {
 	if( fork() == 0 )
-		execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(), nullptr );
+		execl( gCrashLogger.c_str(), gCrashLogger.c_str(), descriptor.path(), gVersion.c_str(), gBugsplatDB.c_str(),  gCrashBehavior.c_str(), nullptr );
     return succeeded;
 }
 
@@ -187,12 +188,9 @@ void setupBreadpad()
 
 	LL_INFOS("BUGSPLAT") << "Initializing with crash logger: " << gCrashLogger << " database: " << gBugsplatDB << " version: " << gVersion << LL_ENDL;
 	
-    google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(
-            gDirUtilp->getExpandedFilename(LL_PATH_DUMP, ""));
-    google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL,
-                                                                                  true, -1);
+    google_breakpad::MinidumpDescriptor *descriptor = new google_breakpad::MinidumpDescriptor(gDirUtilp->getExpandedFilename(LL_PATH_DUMP, ""));
+    google_breakpad::ExceptionHandler *eh = new google_breakpad::ExceptionHandler(*descriptor, NULL, dumpCallback, NULL, true, -1);
 }
-
 #endif
 
 bool LLAppViewerLinux::init()
@@ -208,8 +206,14 @@ bool LLAppViewerLinux::init()
     S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
 
 	// For the first version we just consider always send and create a nice dialog for CRASH_BEHAVIOR_ASK later.
-    if (success && nCrashSubmitBehavior == CRASH_BEHAVIOR_ALWAYS_SEND)
+    if (success && nCrashSubmitBehavior != CRASH_BEHAVIOR_NEVER_SEND )
+	{
+		if( nCrashSubmitBehavior == CRASH_BEHAVIOR_ASK )
+			gCrashBehavior = "ask";
+		else
+			gCrashBehavior = "send";
         setupBreadpad();
+	}
 #endif
 
 	return success;
