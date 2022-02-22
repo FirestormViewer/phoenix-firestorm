@@ -1828,8 +1828,9 @@ class LinuxManifest(ViewerManifest):
             self.path("install.sh")
 
         with self.prefix(dst="bin"):
+            self.path( os.path.join(os.pardir,'build_data.json'), "build_data.json" )
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
-            #self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
+            self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP
@@ -1850,24 +1851,8 @@ class LinuxManifest(ViewerManifest):
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
-            #self.path("gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
-            self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
+            self.path("gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer.so")
             self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
-
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-            self.path( "plugins.dat" )
-            self.path( "*/*.so" )
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
-            self.path( "libvlc*.so*" )
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-            self.path( "plugins.dat" )
-            self.path( "*/*.so" )
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
-            self.path( "libvlc*.so*" )
 
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):

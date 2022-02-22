@@ -2566,9 +2566,10 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     ${VIEWER_BINARY_NAME}
     SLPlugin
     media_plugin_cef
-    #media_plugin_gstreamer010
-    media_plugin_libvlc
+    media_plugin_gstreamer10
+    #media_plugin_libvlc
     llcommon
+	linux-crash-logger
     )
 else (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
@@ -2576,8 +2577,9 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     #linux-crash-logger
     SLPlugin
     media_plugin_cef
-    #media_plugin_gstreamer010
+    media_plugin_gstreamer10
     llcommon
+	linux-crash-logger
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)
 
@@ -2857,8 +2859,10 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
     endif (LINUX)
   endif (USE_BUGSPLAT)
 
-  # for both Bugsplat and Breakpad
-  add_dependencies(llpackage generate_symbols)
+  if (NOT LINUX) #Linux generates symbols via viewer_manifest.py/fs_viewer_manifest.py
+	# for both Bugsplat and Breakpad
+	add_dependencies(llpackage generate_symbols)
+  endif()
 endif ()
 
 if (LL_TESTS)
