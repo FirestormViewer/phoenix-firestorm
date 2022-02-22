@@ -3976,7 +3976,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	vlc_ver_codec << LIBVLC_VERSION_REVISION;
 	info["LIBVLC_VERSION"] = vlc_ver_codec.str();
 #else
-	info["LIBVLC_VERSION"] = "Usnig gstreamer 1.0";
+	info["LIBVLC_VERSION"] = "Using gstreamer 1.0";
 #endif
 
 	S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
