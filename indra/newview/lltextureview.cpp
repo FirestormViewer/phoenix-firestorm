@@ -519,49 +519,8 @@ public:
 	virtual LLRect getRequiredRect();	// Return the height of this object, given the set options.
 
 private:
-	S32Megabytes getGPUMemoryUsed(); // <FS:Ansariel> Texture memory bars
-
 	LLTextureView* mTextureView;
 };
-
-// <FS:Ansariel> Texture memory bars
-S32Megabytes LLGLTexMemBar::getGPUMemoryUsed()
-{
-    static const F32 GPU_MEMORY_CHECK_WAIT_TIME = 1.0f;
-
-    static LLFrameTimer timer;
-    static S32Megabytes gpu_res = S32Megabytes(0);
-
-    if (timer.getElapsedTimeF32() < GPU_MEMORY_CHECK_WAIT_TIME) //call this once per second.
-    {
-        return gpu_res;
-    }
-    timer.reset();
-
-    if (gGLManager.mHasATIMemInfo)
-    {
-        S32 meminfo[4];
-        glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
-        S32Megabytes free = S32Megabytes(meminfo[0]);
-
-        //glGetIntegerv(GL_VBO_FREE_MEMORY_ATI, meminfo);
-        //S32Megabytes free = free + S32Megabytes(meminfo[0]);
-
-        //glGetIntegerv(GL_RENDERBUFFER_FREE_MEMORY_ATI, meminfo);
-        //S32Megabytes free = free + S32Megabytes(meminfo[0]);
-
-        gpu_res = S32Megabytes(gGLManager.mVRAM) - free;
-    }
-    else if (gGLManager.mHasNVXMemInfo)
-    {
-        S32 free_memory;
-        glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &free_memory);
-        gpu_res = S32Megabytes(gGLManager.mVRAM) - S32Megabytes(free_memory / 1024);
-    }
-
-    return gpu_res;
-}
-	// </FS:Ansariel>
 
 void LLGLTexMemBar::draw()
 {
@@ -616,7 +575,7 @@ void LLGLTexMemBar::draw()
 
 	// <FS:Ansariel> Texture memory bars
 	S32Megabytes gpu, system;
-	S32Megabytes gpu_used = getGPUMemoryUsed();
+	S32Megabytes gpu_used = (S32Megabytes)LLImageGLThread::getFreeVRAMMegabytes();
 
 	// <FS:Ansariel> Texture memory bars
 	//text = llformat("GL Tot: %d/%d MB Bound: %4d/%4d MB FBO: %d MB Raw Tot: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
