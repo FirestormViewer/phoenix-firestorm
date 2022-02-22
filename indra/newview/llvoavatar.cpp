@@ -639,6 +639,7 @@ F32 LLVOAvatar::sUnbakedTime = 0.f;
 F32 LLVOAvatar::sUnbakedUpdateTime = 0.f;
 F32 LLVOAvatar::sGreyTime = 0.f;
 F32 LLVOAvatar::sGreyUpdateTime = 0.f;
+LLPointer<LLViewerTexture> LLVOAvatar::sCloudTexture = NULL;
 
 //-----------------------------------------------------------------------------
 // Helper functions
@@ -1220,6 +1221,7 @@ void LLVOAvatar::initClass()
 
 	LLControlAvatar::sRegionChangedSlot = gAgent.addRegionChangedCallback(&LLControlAvatar::onRegionChanged);
 
+    sCloudTexture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
 	initCloud();
 }
 
@@ -1248,8 +1250,7 @@ void LLVOAvatar::initCloud()
 	// </FS:ND>
 	LLSDSerialize::fromXMLDocument(cloud, in_file);
 	sCloud.fromLLSD(cloud);
-	LLViewerTexture* cloud_texture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
-	sCloud.mPartImageID = cloud_texture->getID();
+	sCloud.mPartImageID = sCloudTexture->getID();
 
 	//Todo: have own image, de-copy-pasta
 	LLSD cloud_muted;
@@ -3316,8 +3317,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 //			particle_parameters.mPartData.mStartColor        = LLColor4(1, 1, 1, 0.5f);
 //			particle_parameters.mPartData.mEndColor          = LLColor4(1, 1, 1, 0.0f);
 //			particle_parameters.mPartData.mStartScale.mV[VX] = 0.8f;
-//			LLViewerTexture* cloud = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
-//			particle_parameters.mPartImageID                 = cloud->getID();
+//			particle_parameters.mPartImageID                 = sCloudTexture->getID();
 //			particle_parameters.mMaxAge                      = 0.f;
 //			particle_parameters.mPattern                     = LLPartSysData::LL_PART_SRC_PATTERN_ANGLE_CONE;
 //			particle_parameters.mInnerAngle                  = F_PI;

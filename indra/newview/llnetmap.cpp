@@ -288,6 +288,10 @@ void LLNetMap::setScale( F32 scale )
 
 void LLNetMap::draw()
 {
+    if (!LLWorld::instanceExists())
+    {
+        return;
+    }
     LL_PROFILE_ZONE_SCOPED;
  	static LLFrameTimer map_timer;
 

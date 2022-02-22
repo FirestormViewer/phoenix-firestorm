@@ -352,9 +352,10 @@ public:
 	static F32		sLODFactor; // user-settable LOD factor
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
-	static BOOL		sDebugAvatarRotation;
 	static U64		sRenderTimeLimit_ns; // <FS:Beq/> nanosecond time limit for avatar rendering 0 is unlimited. 
 	static LLPartSysData sCloud;
+
+    static LLPointer<LLViewerTexture>  sCloudTexture;
 
 	//--------------------------------------------------------------------
 	// Region state
