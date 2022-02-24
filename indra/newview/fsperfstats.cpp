@@ -341,44 +341,51 @@ namespace FSPerfStats
         }
 
         // The frametime budget we have based on the target FPS selected
-        auto target_frame_time_raw = (U64)llround((F64)LLTrace::BlockTimer::countsPerSecond()/(targetFPS==0?1:targetFPS));
+        auto target_frame_time_raw = (U64)llround((F64)LLTrace::BlockTimer::countsPerSecond()/(tunables.userTargetFPS==0?1:tunables.userTargetFPS));
         // LL_INFOS() << "Effective FPS(raw):" << tot_frame_time_raw << " Target:" << target_frame_time_raw << LL_ENDL;
-
+        auto inferredFPS{1000/(U32)std::max(raw_to_ms(tot_frame_time_raw),1.0)};
+        U32 settingsChangeFrequency{inferredFPS > 25?inferredFPS:25};
         if( tot_limit_time_raw != 0)
         {
             // This could be problematic.
             tot_frame_time_raw -= tot_limit_time_raw;
         }
-        // 1) Is the target frame tim lower than current?
+        // 1) Is the target frame time lower than current?
         if( target_frame_time_raw <= tot_frame_time_raw )
         {
+            if(belowTargetFPS == false)
+            {
+                // this is the first frame under. hold fire to add a little hysteresis
+                belowTargetFPS = true;
+                FSPerfStats::lastGlobalPrefChange = gFrameCount;
+            }
             // if so we've got work to do
 
             // how much of the frame was spent on non avatar related work?
             U32 non_avatar_time_raw = tot_frame_time_raw - tot_avatar_time_raw;
 
-            // If the target frame time < non avatar frame time thne adjusting avatars is only goin gto get us so far.
+            // If the target frame time < scene time (estimated as non_avatar time)
             U64 target_avatar_time_raw;
             if(target_frame_time_raw < non_avatar_time_raw)
             {
                 // we cannnot do this by avatar adjustment alone.
-                if((gFrameCount - FSPerfStats::lastGlobalPrefChange) > 10) // give  changes a short time to take effect.
+                if((gFrameCount - FSPerfStats::lastGlobalPrefChange) > settingsChangeFrequency) // give  changes a short time to take effect.
                 {
-                    if(fpsTuningStrategy == 1)
+                    if(tunables.userFPSTuningStrategy == TUNE_SCENE_AND_AVATARS)
                     {
                         // 1 - hack the water to opaque. all non opaque have a significant hit, this is a big boost for (arguably) a minor visual hit.
-                        // the other reflection options make comparatively little change and iof this overshoots we'll be stepping back up later
+                        // the other reflection options make comparatively little change and if this overshoots we'll be stepping back up later
                         if(LLPipeline::RenderReflectionDetail != -2)
                         {
                             FSPerfStats::tunables.updateReflectionDetail(-2);
                             FSPerfStats::lastGlobalPrefChange = gFrameCount;
                             return;
                         }
-                        else // deliberately "else" here so we only do these in steps
+                        else // deliberately "else" here so we only do one of these in any given frame
                         {
                             // step down the DD by 10m per update
-                            auto new_dd = (drawDistance-10>userMinDrawDistance)?(drawDistance - 10) : userMinDrawDistance;
-                            if(new_dd != drawDistance)
+                            auto new_dd = (LLPipeline::RenderFarClip - DD_STEP > tunables.userMinDrawDistance)?(LLPipeline::RenderFarClip - DD_STEP) : tunables.userMinDrawDistance;
+                            if(new_dd != LLPipeline::RenderFarClip)
                             {
                                 FSPerfStats::tunables.updateFarClip( new_dd );
                                 FSPerfStats::lastGlobalPrefChange = gFrameCount;
@@ -386,26 +393,28 @@ namespace FSPerfStats
                             }
                         }
                     }
+                    // if we reach here, we've no more changes to make to tune scenery so we'll resort to agressive Avatar tuning
+                    // Note: moved from outside "if changefrequency elapsed" to stop fallthrough and allow scenery changes time to take effect.
+                    target_avatar_time_raw = 0;
                 }
-                target_avatar_time_raw = 0;
+                else 
+                {
+                    // we made a settings change recently so let's give it time.
+                    return;
+                }
             }
             else
             {
-                // desired avatar budget.
+                // set desired avatar budget.
                 target_avatar_time_raw =  target_frame_time_raw - non_avatar_time_raw;
             }
 
             if( target_avatar_time_raw < tot_avatar_time_raw )
             {
                 // we need to spend less time drawing avatars to meet our budget
-                // Note: working in usecs now cos reasons.
-                auto new_render_limit_ns {renderAvatarMaxART_ns};
+                auto new_render_limit_ns {FSPerfStats::raw_to_ns(av_render_max_raw)};
                 // max render this frame may be higher than the last (cos new entrants and jitter) so make sure we are heading in the right direction
-                if(FSPerfStats::raw_to_ns(av_render_max_raw) < renderAvatarMaxART_ns)
-                {
-                    new_render_limit_ns = FSPerfStats::raw_to_ns(av_render_max_raw);
-                }
-                else
+                if( new_render_limit_ns > renderAvatarMaxART_ns )
                 {
                     new_render_limit_ns = renderAvatarMaxART_ns;
                 }
@@ -415,30 +424,49 @@ namespace FSPerfStats
                 new_render_limit_ns = std::max((U64)new_render_limit_ns, (U64)FSPerfStats::ART_MINIMUM_NANOS);
 
                 // assign the new value
-                renderAvatarMaxART_ns = new_render_limit_ns;
+                if(renderAvatarMaxART_ns != new_render_limit_ns)
+                {
+                    renderAvatarMaxART_ns = new_render_limit_ns;
+                    updateSettingsFromRenderCostLimit();
+                }
                 // LL_DEBUGS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit_ns << LL_ENDL;
             }
             // LL_DEBUGS() << "AUTO_TUNE: Target frame time:"<< FSPerfStats::raw_to_us(target_frame_time_raw) << "usecs (non_avatar is " << FSPerfStats::raw_to_us(non_avatar_time_raw) << "usecs) Max cost limited=" << renderAvatarMaxART_ns << LL_ENDL;
         }
         else if( FSPerfStats::raw_to_ns(target_frame_time_raw) > (FSPerfStats::raw_to_ns(tot_frame_time_raw) + renderAvatarMaxART_ns) )
         {
-            if( FSPerfStats::tunedAvatars >= 0 )
+            if(belowTargetFPS == true)
             {
-                // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
-                renderAvatarMaxART_ns += FSPerfStats::ART_MIN_ADJUST_UP_NANOS;
+                // we reached target, force a pause
+                lastGlobalPrefChange = gFrameCount;
+                belowTargetFPS = false;
             }
-            if( drawDistance < userTargetDrawDistance ) 
+
+            // once we're over the FPS target we slow down further
+            if((gFrameCount - lastGlobalPrefChange) > settingsChangeFrequency*3)
             {
-                FSPerfStats::tunables.updateFarClip( drawDistance + 10. );
-            }
-            if( (target_frame_time_raw * 1.5) > tot_frame_time_raw &&
-                FSPerfStats::tunedAvatars == 0 &&
-                drawDistance >= userTargetDrawDistance)
-            {
-                // if everything else is "max" and we have 50% headroom let's knock the water quality up a notch at a time.
-                FSPerfStats::tunables.updateReflectionDetail( gSavedSettings.getS32("RenderReflectionDetail") + 1 );
+                if( FSPerfStats::tunedAvatars > 0 )
+                {
+                    // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
+                    renderAvatarMaxART_ns += FSPerfStats::ART_MIN_ADJUST_UP_NANOS;
+                    updateSettingsFromRenderCostLimit();
+                    return;
+                }
+                if(tunables.userFPSTuningStrategy == TUNE_SCENE_AND_AVATARS)
+                {
+                    if( LLPipeline::RenderFarClip < tunables.userTargetDrawDistance ) 
+                    {
+                        FSPerfStats::tunables.updateFarClip( std::min(LLPipeline::RenderFarClip + DD_STEP, tunables.userTargetDrawDistance) );
+                        FSPerfStats::lastGlobalPrefChange = gFrameCount;
+                        return;
+                    }
+                    if( (tot_frame_time_raw * 1.5) < target_frame_time_raw )
+                    {
+                        // if everything else is "max" and we have >50% headroom let's knock the water quality up a notch at a time.
+                        FSPerfStats::tunables.updateReflectionDetail( std::min(LLPipeline::RenderReflectionDetail + 1, tunables.userTargetReflections) );
+                    }
+                }
             }
         }
-        updateSettingsFromRenderCostLimit();
    }
 }
