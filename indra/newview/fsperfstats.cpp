@@ -32,6 +32,7 @@
 #include "llagentcamera.h"
 #include "llvoavatar.h"
 #include "llworld.h"
+#include <llthread.h>
 
 extern LLControlGroup gSavedSettings;
 
@@ -47,11 +48,10 @@ namespace FSPerfStats
 #endif
     
     std::atomic<int64_t> tunedAvatars{0};
-    U32 targetFPS; // desired FPS
-    U64 renderAvatarMaxART_ns{(U64)(ART_UNLIMITED_NANOS)}; // highest render time we'll allow without culling features
+    std::atomic<U64> renderAvatarMaxART_ns{(U64)(ART_UNLIMITED_NANOS)}; // highest render time we'll allow without culling features
+    bool belowTargetFPS{false};
     U32 lastGlobalPrefChange{0}; 
     std::mutex bufferToggleLock{};
-    bool autoTune{false};
 
     Tunables tunables;
 
@@ -65,9 +65,51 @@ namespace FSPerfStats
     void Tunables::applyUpdates()
     {
         assert_main_thread();
-        if( tuningFlag & NonImposters ){ gSavedSettings.setU32("IndirectMaxNonImpostors", nonImposters); };
+        // these following variables are proxies for pipeline statics we do not need a two way update (no llviewercontrol handler)
+        if( tuningFlag & NonImpostors ){ gSavedSettings.setU32("IndirectMaxNonImpostors", nonImpostors); };
         if( tuningFlag & ReflectionDetail ){ gSavedSettings.setS32("RenderReflectionDetail", reflectionDetail); };
         if( tuningFlag & FarClip ){ gSavedSettings.setF32("RenderFarClip", farClip); };
+        if( tuningFlag & UserMinDrawDistance ){ gSavedSettings.setF32("FSAutoTuneRenderFarClipMin", userMinDrawDistance); };
+        if( tuningFlag & UserTargetDrawDistance ){ gSavedSettings.setF32("FSAutoTuneRenderFarClipTarget", userTargetDrawDistance); };
+        if( tuningFlag & UserImpostorDistance ){ gSavedSettings.setF32("FSAutoTuneImpostorFarAwayDistance", userImpostorDistance); };
+        if( tuningFlag & UserImpostorDistanceTuningEnabled ){ gSavedSettings.setBOOL("FSAutoTuneImpostorByDistEnabled", userImpostorDistanceTuningEnabled); };
+        if( tuningFlag & UserFPSTuningStrategy ){ gSavedSettings.setU32("FSTuningFPSStrategy", userFPSTuningStrategy); };
+        if( tuningFlag & UserAutoTuneEnabled ){ gSavedSettings.setBOOL("FSAutoTuneFPS", userAutoTuneEnabled); };
+        if( tuningFlag & UserTargetFPS ){ gSavedSettings.setU32("FSTargetFPS", userTargetFPS); };
+        if( tuningFlag & UserTargetReflections ){ gSavedSettings.setS32("FSUserTargetReflections", userTargetReflections); };
+        // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
+        if( tuningFlag & UserARTCutoff ){ gSavedSettings.setF32("FSRenderAvatarMaxART", userARTCutoffSliderValue); };
+        resetChanges();
+    }
+
+    void Tunables::updateRenderCostLimitFromSettings()
+    {
+        assert_main_thread();
+	    const auto newval = gSavedSettings.getF32("FSRenderAvatarMaxART");
+	    if(newval < log10(FSPerfStats::ART_UNLIMITED_NANOS/1000))
+	    {
+    		FSPerfStats::renderAvatarMaxART_ns = pow(10,newval)*1000;
+    	}
+    	else
+    	{
+		    FSPerfStats::renderAvatarMaxART_ns = 0;
+	    };        
+    }
+
+    void Tunables::initialiseFromSettings()
+    {
+        assert_main_thread();
+        // the following variables are two way and have "push" in llviewercontrol 
+        FSPerfStats::tunables.userMinDrawDistance = gSavedSettings.getF32("FSAutoTuneRenderFarClipMin");
+        FSPerfStats::tunables.userTargetDrawDistance = gSavedSettings.getF32("FSAutoTuneRenderFarClipTarget");
+        FSPerfStats::tunables.userImpostorDistance = gSavedSettings.getF32("FSAutoTuneImpostorFarAwayDistance");
+        FSPerfStats::tunables.userImpostorDistanceTuningEnabled = gSavedSettings.getBOOL("FSAutoTuneImpostorByDistEnabled");
+        FSPerfStats::tunables.userFPSTuningStrategy = gSavedSettings.getU32("FSTuningFPSStrategy");
+        FSPerfStats::tunables.userTargetFPS = gSavedSettings.getU32("FSTargetFPS");
+        FSPerfStats::tunables.userTargetReflections = gSavedSettings.getU32("FSUserTargetReflections");
+        FSPerfStats::tunables.userAutoTuneEnabled = gSavedSettings.getBOOL("FSAutoTuneFPS");
+        // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
+        updateRenderCostLimitFromSettings();
         resetChanges();
     }
 
@@ -75,12 +117,7 @@ namespace FSPerfStats
     {
         // create a queue
         // create a thread to consume from the queue
-
-        FSPerfStats::targetFPS = gSavedSettings.getU32("FSTargetFPS");
-        FSPerfStats::autoTune = gSavedSettings.getBOOL("FSAutoTuneFPS");
-
-        updateRenderCostLimitFromSettings();
-
+        tunables.initialiseFromSettings();
         t.detach();
     }
 
@@ -91,8 +128,7 @@ namespace FSPerfStats
         using ST = StatType_t;
 
         bool unreliable{false};
-        static LLCachedControl<U32> smoothingPeriods(gSavedSettings, "FSPerfFloaterSmoothingPeriods");
-
+        FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FRAME);
         auto& sceneStats = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null];
         auto& lastStats = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null];
 
@@ -129,7 +165,7 @@ namespace FSPerfStats
             {
                 auto avg = lastStats[static_cast<size_t>(statEntry)];
                 auto val = sceneStats[static_cast<size_t>(statEntry)];
-                sceneStats[static_cast<size_t>(statEntry)] = avg + (val/smoothingPeriods) - (avg/smoothingPeriods);
+                sceneStats[static_cast<size_t>(statEntry)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
                 // LL_INFOS("scenestats") << "Scenestat: " << static_cast<size_t>(statEntry) << " before=" << avg << " new=" << val << " newavg=" << statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null][static_cast<size_t>(statEntry)] << LL_ENDL;
             }
 
@@ -137,9 +173,9 @@ namespace FSPerfStats
             for(auto& stat_entry : statsMap)
             {
                 auto val = stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)];
-                if(val>smoothingPeriods){
+                if(val > SMOOTHING_PERIODS){
                     auto avg = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_ATTACHMENT)][stat_entry.first][static_cast<size_t>(ST::RENDER_COMBINED)];
-                    stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)] = avg + (val/smoothingPeriods) - (avg/smoothingPeriods);
+                    stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
                 }
             }
 
@@ -150,10 +186,10 @@ namespace FSPerfStats
                 for(auto& stat : avatarStatsToAvg)
                 {
                     auto val = stat_entry.second[static_cast<size_t>(stat)];
-                    if(val>smoothingPeriods)
+                    if(val > SMOOTHING_PERIODS)
                     {
                         auto avg = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_AVATAR)][stat_entry.first][static_cast<size_t>(stat)];
-                        stat_entry.second[static_cast<size_t>(stat)] = avg + (val/smoothingPeriods) - (avg/smoothingPeriods);
+                        stat_entry.second[static_cast<size_t>(stat)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
                     }
                 }
             }
@@ -185,7 +221,7 @@ namespace FSPerfStats
         }
 
         // and now adjust the proxy vars so that the main thread can adjust the visuals.
-        if(autoTune)
+        if(tunables.userAutoTuneEnabled)
         {
             updateAvatarParams();
         }
@@ -241,33 +277,19 @@ namespace FSPerfStats
     // static 
     void StatsRecorder::updateSettingsFromRenderCostLimit()
     {
-        static LLCachedControl<F32> maxRenderCost_us(gSavedSettings, "FSRenderAvatarMaxART");    
-        if( (F32)maxRenderCost_us != log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) )
+        if( tunables.userARTCutoffSliderValue != log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) )
         {
             if( FSPerfStats::renderAvatarMaxART_ns != 0 )
             {
-                gSavedSettings.setF32( "FSRenderAvatarMaxART", log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) );
+                tunables.updateUserARTCutoffSlider(log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) );
             }
             else
             {
-                gSavedSettings.setF32( "FSRenderAvatarMaxART",log10( FSPerfStats::ART_UNLIMITED_NANOS/1000 ) );
+                tunables.updateUserARTCutoffSlider(log10( (F32)FSPerfStats::ART_UNLIMITED_NANOS/1000 ) );
             }
         }        
     }
 
-    // static
-    void StatsRecorder::updateRenderCostLimitFromSettings()
-    {
-	    const auto newval = gSavedSettings.getF32("FSRenderAvatarMaxART");
-	    if(newval < log10(FSPerfStats::ART_UNLIMITED_NANOS/1000))
-	    {
-    		FSPerfStats::renderAvatarMaxART_ns = pow(10,newval)*1000;
-    	}
-    	else
-    	{
-		    FSPerfStats::renderAvatarMaxART_ns = 0;
-	    };        
-    }
 
     //static
     int StatsRecorder::countNearbyAvatars(S32 distance)
@@ -283,23 +305,16 @@ namespace FSPerfStats
     // static
     void StatsRecorder::updateAvatarParams()
     {
-        static LLCachedControl<F32> drawDistance(gSavedSettings, "RenderFarClip");
-        static LLCachedControl<F32> userMinDrawDistance(gSavedSettings, "FSAutoTuneRenderFarClipMin");
-        static LLCachedControl<F32> userTargetDrawDistance(gSavedSettings, "FSAutoTuneRenderFarClipTarget");
-        static LLCachedControl<F32> impostorDistance(gSavedSettings, "FSAutoTuneImpostorFarAwayDistance");
-        static LLCachedControl<bool> impostorDistanceTuning(gSavedSettings, "FSAutoTuneImpostorByDistEnabled");
-        static LLCachedControl<U32> maxNonImpostors (gSavedSettings, "IndirectMaxNonImpostors");
-        static LLCachedControl<U32> fpsTuningStrategy (gSavedSettings, "FSTuningFPSStrategy");
 
-        if(impostorDistanceTuning)
+        if(tunables.userImpostorDistanceTuningEnabled)
         {
             // if we have less than the user's "max Non-Impostors" avatars within the desired range then adjust the limit.
             // also adjusts back up again for nearby crowds.
-            auto count = countNearbyAvatars(std::min(drawDistance, impostorDistance));
-            if( count != maxNonImpostors )
+            auto count = countNearbyAvatars(std::min(LLPipeline::RenderFarClip, tunables.userImpostorDistance));
+            if( count != tunables.nonImpostors )
             {
                 tunables.updateNonImposters( (count < LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER)?count : LLVOAvatar::NON_IMPOSTORS_MAX_SLIDER );
-                LL_DEBUGS("AutoTune") << "There are " << count << "avatars within " << std::min(drawDistance, impostorDistance) << "m of the camera" << LL_ENDL;
+                LL_DEBUGS("AutoTune") << "There are " << count << "avatars within " << std::min(LLPipeline::RenderFarClip, tunables.userImpostorDistance) << "m of the camera" << LL_ENDL;
             }
         }
 

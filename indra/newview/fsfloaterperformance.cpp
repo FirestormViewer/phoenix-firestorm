@@ -54,6 +54,8 @@
 #include "fsperfstats.h" // <FS:Beq> performance stats support
 #include "fslslbridge.h"
 
+extern F32 gSavedDrawDistance;
+
 const F32 REFRESH_INTERVAL = 1.0f;
 const S32 BAR_LEFT_PAD = 2;
 const S32 BAR_RIGHT_PAD = 5;
@@ -155,6 +157,19 @@ BOOL FSFloaterPerformance::postBuild()
     mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxRenderTime, this));
 
     LLAvatarComplexityControls::setIndirectMaxArc();
+    // store the current setting as the users desired reflection detail and DD
+    gSavedSettings.setS32("FSUserTargetReflections", LLPipeline::RenderReflectionDetail);
+    if(!FSPerfStats::tunables.userAutoTuneEnabled)
+    {
+        if (gSavedDrawDistance)
+	    {
+            gSavedSettings.setF32("FSAutoTuneRenderFarClipTarget", gSavedDrawDistance);
+        }
+        else 
+        {
+            gSavedSettings.setF32("FSAutoTuneRenderFarClipTarget", LLPipeline::RenderFarClip);
+        }
+    }
 
     return TRUE;
 }
@@ -284,7 +299,7 @@ void FSFloaterPerformance::draw()
                 textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
                 unreliable = true;
             }
-            else if (FSPerfStats::autoTune)
+            else if (FSPerfStats::tunables.userAutoTuneEnabled)
             {
                 textbox->setVisible(true);
                 textbox->setText(getString("tuning_fps", args));
@@ -295,7 +310,7 @@ void FSFloaterPerformance::draw()
                 textbox->setVisible(false);
             }
 
-            if (FSPerfStats::autoTune && !unreliable )
+            if (FSPerfStats::tunables.userAutoTuneEnabled && !unreliable )
             {
                 // the tuning itself is managed from another thread but we can report progress here
 

@@ -1645,7 +1645,7 @@ bool LLAppViewer::doFrame()
 // <FS:Beq> Perfstats collection Frame boundary
 {
 	// and now adjust the visuals from previous frame.
-    if(FSPerfStats::autoTune && FSPerfStats::tunables.tuningFlag != FSPerfStats::Tunables::Nothing)
+    if(FSPerfStats::tunables.userAutoTuneEnabled && FSPerfStats::tunables.tuningFlag != FSPerfStats::Tunables::Nothing)
     {
     	FSPerfStats::tunables.applyUpdates();
     }

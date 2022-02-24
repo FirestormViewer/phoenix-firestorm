@@ -70,13 +70,17 @@ namespace FSPerfStats
     constexpr U64 ART_MIN_ADJUST_DOWN_NANOS{10000}; 
 
     constexpr F32 PREFERRED_DD{180};
+    constexpr U32 SMOOTHING_PERIODS{50};
+    constexpr U32 DD_STEP{10};
+
+    constexpr U32 TUNE_AVATARS_ONLY{0};
+    constexpr U32 TUNE_SCENE_AND_AVATARS{1};
 
     extern std::atomic<int64_t> tunedAvatars;
-    extern U32 targetFPS; // desired FPS
-    extern U64 renderAvatarMaxART_ns;
+    extern std::atomic<U64> renderAvatarMaxART_ns;
+    extern bool belowTargetFPS;
     extern U32 lastGlobalPrefChange;
     extern std::mutex bufferToggleLock;
-    extern bool autoTune;
 
    	enum class ObjType_t{
 		OT_GENERAL=0, // Also Unknown. Used for n/a type stats such as scenery
@@ -118,21 +122,53 @@ namespace FSPerfStats
     struct Tunables
     {
         static constexpr U32 Nothing{0};
-        static constexpr U32 NonImposters{1};
+        static constexpr U32 NonImpostors{1};
         static constexpr U32 ReflectionDetail{2};
         static constexpr U32 FarClip{4};
+        static constexpr U32 UserMinDrawDistance{8};
+        static constexpr U32 UserTargetDrawDistance{16};
+        static constexpr U32 UserImpostorDistance{32};
+        static constexpr U32 UserImpostorDistanceTuningEnabled{64};
+        static constexpr U32 UserFPSTuningStrategy{128};
+        static constexpr U32 UserAutoTuneEnabled{256};
+        static constexpr U32 UserTargetFPS{512};
+        static constexpr U32 UserARTCutoff{1024};
+        static constexpr U32 UserTargetReflections{2048};
 
-        U32 tuningFlag{0};
-        U32 nonImposters;
-        S32 reflectionDetail;
-        F32 farClip;
 
-        void updateFarClip(F32 nv){farClip=nv; tuningFlag |= FarClip;};
-        void updateNonImposters(U32 nv){nonImposters=nv; tuningFlag |= NonImposters;};
+        U32 tuningFlag{0}; // bit mask for changed settings
+
+        // proxy variables, used to pas the new value to be set via the mainthread
+        U32 nonImpostors{0}; 
+        S32 reflectionDetail{0}; 
+        F32 farClip{0.0}; 
+        F32 userMinDrawDistance{0.0}; 
+        F32 userTargetDrawDistance{0.0};
+        F32 userImpostorDistance{0.0};
+        bool userImpostorDistanceTuningEnabled{false};
+        U32 userFPSTuningStrategy{0};
+        bool userAutoTuneEnabled{false};
+        U32 userTargetFPS{0};
+        F32 userARTCutoffSliderValue{0};
+        S32 userTargetReflections{0}; 
+
+        void updateNonImposters(U32 nv){nonImpostors=nv; tuningFlag |= NonImpostors;};
         void updateReflectionDetail(S32 nv){reflectionDetail=nv; tuningFlag |= ReflectionDetail;};
+        void updateFarClip(F32 nv){farClip=nv; tuningFlag |= FarClip;};
+        void updateUserMinDrawDistance(F32 nv){userMinDrawDistance=nv; tuningFlag |= UserMinDrawDistance;};
+        void updateUserTargetDrawDistance(F32 nv){userTargetDrawDistance=nv; tuningFlag |= UserTargetDrawDistance;};
+        void updateImposterDistance(F32 nv){userImpostorDistance=nv; tuningFlag |= UserImpostorDistance;};
+        void updateImposterDistanceTuningEnabled(bool nv){userImpostorDistanceTuningEnabled=nv; tuningFlag |= UserImpostorDistanceTuningEnabled;};
+        void updateUserFPSTuningStrategy(U32 nv){userFPSTuningStrategy=nv; tuningFlag |= UserFPSTuningStrategy;};
+        void updateTargetFps(U32 nv){userTargetFPS=nv; tuningFlag |= UserTargetFPS;};
+        void updateUserARTCutoffSlider(F32 nv){userARTCutoffSliderValue=nv; tuningFlag |= UserARTCutoff;};
+        void updateUserAutoTuneEnabled(bool nv){userImpostorDistanceTuningEnabled=nv; tuningFlag |= UserImpostorDistanceTuningEnabled;};
+        void updateUserTargetReflections(S32 nv){userTargetReflections=nv; tuningFlag |= UserTargetReflections;};
 
-        void applyUpdates();
         void resetChanges(){tuningFlag=Nothing;};
+        void initialiseFromSettings();
+        void updateRenderCostLimitFromSettings();
+        void applyUpdates();
     };
 
     extern Tunables tunables;
