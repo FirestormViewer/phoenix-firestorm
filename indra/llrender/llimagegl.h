@@ -315,6 +315,9 @@ public:
 	
     void setTexName(GLuint texName) { mTexName = texName; }
 
+    //similar to setTexName, but will call deleteTextures on mTexName if mTexName is not 0 or texname
+    void syncTexName(LLGLuint texname);
+
 	//for debug use: show texture size distribution 
 	//----------------------------------------
 	static S32 sCurTexSizeBar ;
@@ -334,6 +337,9 @@ class LLImageGLThread : public LLSimpleton<LLImageGLThread>, LL::ThreadPool
 public:
     // follows gSavedSettings "RenderGLMultiThreaded"
     static bool sEnabled;
+    
+    // app should call this function periodically
+    static void updateClass();
 
     // free video memory in megabytes
     static std::atomic<S32> sFreeVRAMMegabytes;

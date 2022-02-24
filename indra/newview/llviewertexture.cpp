@@ -1733,7 +1733,6 @@ void LLViewerFetchedTexture::scheduleCreateTexture()
         mNeedsCreateTexture = TRUE;
         if (preCreateTexture())
         {
-            ref();
 #if LL_IMAGEGL_THREAD_CHECK
             //grab a copy of the raw image data to make sure it isn't modified pending texture creation
             U8* data = mRawImage->getData();
@@ -1749,6 +1748,7 @@ void LLViewerFetchedTexture::scheduleCreateTexture()
             auto mainq = LLImageGLThread::sEnabled ? mMainQueue.lock() : nullptr;
             if (mainq)
             {
+                ref();
                 mainq->postTo(
                     mImageQueue,
                     // work to be done on LLImageGL worker thread
@@ -1795,7 +1795,6 @@ void LLViewerFetchedTexture::scheduleCreateTexture()
             else
             {
                 gTextureList.mCreateTextureList.insert(this);
-                unref();
             }
         }
     }

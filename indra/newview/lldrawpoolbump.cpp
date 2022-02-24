@@ -77,6 +77,8 @@ static S32 cube_channel = -1;
 static S32 diffuse_channel = -1;
 static S32 bump_channel = -1;
 
+#define LL_BUMPLIST_MULTITHREADED 0
+
 // static 
 void LLStandardBumpmap::init()
 {
@@ -1083,8 +1085,8 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 			}
 		}
 
-		//if (iter->second->getWidth() != src->getWidth() ||
-		//	iter->second->getHeight() != src->getHeight()) // bump not cached yet or has changed resolution
+		if (iter->second->getWidth() != src->getWidth() ||
+			iter->second->getHeight() != src->getHeight()) // bump not cached yet or has changed resolution
 		{
 			LLPointer<LLImageRaw> dst_image = new LLImageRaw(src->getWidth(), src->getHeight(), 1);
 			U8* dst_data = dst_image->getData();
@@ -1206,6 +1208,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 			{
 				bump->setExplicitFormat(GL_ALPHA8, GL_ALPHA);
 
+#if LL_BUMPLIST_MULTITHREADED
                 auto tex_queue = LLImageGLThread::sEnabled ? sTexUpdateQueue.lock() : nullptr;
 
                 if (tex_queue)
@@ -1222,8 +1225,10 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                             bump_ptr->unref();
                             dst_ptr->unref();
                         });
+
                 }
                 else
+#endif
                 {
                     bump->createGLTexture(0, dst_image);
                 }
@@ -1238,22 +1243,34 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                 auto* bump_ptr = bump.get();
                 auto* dst_ptr = dst_image.get();
 
+#if LL_BUMPLIST_MULTITHREADED
                 bump_ptr->ref();
                 dst_ptr->ref();
+#endif
 
                 bump_ptr->setExplicitFormat(GL_RGBA8, GL_ALPHA);
 
-                auto create_texture = [bump_ptr, dst_ptr]()
+                auto create_texture = [=]()
                 {
+#if LL_IMAGEGL_THREAD_CHECK
+                    bump_ptr->getGLTexture()->mActiveThread = LLThread::currentID();
+#endif
                     LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("bil - create texture deferred");
                     bump_ptr->createGLTexture(0, dst_ptr);
                 };
 
-                auto gen_normal_map = [bump_ptr, dst_ptr]()
+                auto gen_normal_map = [=]()
                 {
+#if LL_IMAGEGL_THREAD_CHECK
+                    bump_ptr->getGLTexture()->mActiveThread = LLThread::currentID();
+#endif
                     LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("bil - generate normal map");
                     if (gNormalMapGenProgram.mProgramObject == 0)
                     {
+#if LL_BUMPLIST_MULTITHREADED
+                        bump_ptr->unref();
+                        dst_ptr->unref();
+#endif
                         return;
                     }
                     gPipeline.mScreen.bindTarget();
@@ -1336,23 +1353,21 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                     gNormalMapGenProgram.unbind();
 
                     //generateNormalMapFromAlpha(dst_image, nrm_image);
-
+#if LL_BUMPLIST_MULTITHREADED
                     bump_ptr->unref();
                     dst_ptr->unref();
+#endif
                 };
 
-                auto main_queue = LLImageGLThread::sEnabled ? sMainQueue.lock() : nullptr;
+#if LL_BUMPLIST_MULTITHREADED
+                auto main_queue = sMainQueue.lock();
 
-                if (main_queue)
+                if (LLImageGLThread::sEnabled)
                 { //dispatch creation to background thread
-                    LLImageRaw* dst_ptr = dst_image;
-                    LLViewerTexture* bump_ptr = bump;
-                    dst_ptr->ref();
-                    bump_ptr->ref();
-
                     main_queue->postTo(sTexUpdateQueue, create_texture, gen_normal_map);
                 }
                 else
+#endif
                 {
                     create_texture();
                     gen_normal_map();
