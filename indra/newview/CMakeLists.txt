@@ -2565,28 +2565,30 @@ if (LINUX)
   set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
-if (NOT ENABLE_MEDIA_PLUGINS)
-  set(COPY_INPUT_DEPENDENCIES
-    ${VIEWER_BINARY_NAME}
-    SLPlugin
-    media_plugin_cef
-    media_plugin_gstreamer10
-    #media_plugin_libvlc
-    llcommon
-	linux-crash-logger
-    )
-else (NOT ENABLE_MEDIA_PLUGINS)
-  set(COPY_INPUT_DEPENDENCIES
-    ${VIEWER_BINARY_NAME}
-    #linux-crash-logger
-    SLPlugin
-    media_plugin_cef
-    media_plugin_gstreamer10
-    llcommon
-	linux-crash-logger
-    )
-endif (NOT ENABLE_MEDIA_PLUGINS)
+  if (NOT ENABLE_MEDIA_PLUGINS)
+	set(COPY_INPUT_DEPENDENCIES
+      ${VIEWER_BINARY_NAME}
+      SLPlugin
+      media_plugin_cef
+      media_plugin_gstreamer10
+      #media_plugin_libvlc
+      llcommon
+	  linux-crash-logger
+      )
+  else (NOT ENABLE_MEDIA_PLUGINS)
+	set(COPY_INPUT_DEPENDENCIES
+      ${VIEWER_BINARY_NAME}
+      #linux-crash-logger
+      SLPlugin
+      media_plugin_cef
+      media_plugin_gstreamer10
+      llcommon
+	  linux-crash-logger
+      )
+  endif (NOT ENABLE_MEDIA_PLUGINS)
 
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
+  
   add_custom_command(
       OUTPUT ${product}.tar.bz2
       COMMAND ${PYTHON_EXECUTABLE}
@@ -2611,7 +2613,6 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         ${COPY_INPUT_DEPENDENCIES}
       )
-
 
   add_custom_command(
     OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.copy_touched
