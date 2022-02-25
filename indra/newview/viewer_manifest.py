@@ -2054,6 +2054,7 @@ class LinuxManifest(ViewerManifest):
         realname = self.get_dst_prefix()
         tempname = self.build_path_of(installer_name)
         self.run_command([self.args["source"] + "/installers/linux/appimage.sh", self.args["build"]] )
+        self.run_command(["mv", self.args["build"] + "/Firestorm-x86_64.AppImage", self.args["build"] + "/" + installer_name + ".AppImage"])
         self.run_command(["mv", realname, tempname])
         try:
             # only create tarball if it's a release build.
