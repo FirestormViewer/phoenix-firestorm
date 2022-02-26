@@ -191,7 +191,7 @@ top="0">
    layout="topleft"
    left="20"
    top_pad="0"
-   name="av_nearby_desc2"
+   name="av_nearby_desc3"
    width="580">
      Note: your own avatar includes viewer overheads. Use the attachment tab to see how you affect others.
   </text>

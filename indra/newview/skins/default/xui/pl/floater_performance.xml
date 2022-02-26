@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="performance" title="Popraw szybkość grafiki (eksperymentalne)">
 	<floater.string name="frame_stats">
-		Klatki: [TOT_FRAME_TIME]ms - Scena:[SCENERY_FRAME_PCT]% Awatary:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDy:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% ZADANIA:[IDLE_FRAME_PCT]%
+		Klatki: [TOT_FRAME_TIME]ms - Scena:[SCENERY_FRAME_PCT]% Awatary:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDy:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Zadania:[IDLE_FRAME_PCT]%
 	</floater.string>
 	<floater.string name="limit_fps">
 		Limit FPS: [FPSCAP] fps
@@ -11,6 +11,12 @@
 	</floater.string>
 	<floater.string name="focus_fps">
 		W tle
+	</floater.string>
+	<floater.string name="info_waitforit">
+		Poczekaj 5-10 sekund, by nastąpiły zmiany.
+	</floater.string>
+	<floater.string name="info_frozen">
+		Statystyki pauzują, gdy FPS jest limitowane lub w tle.
 	</floater.string>
 	<floater.string name="tot_av_template">
 		Łącznie: [TOT_AV] ([TOT_AV_TIME]μs)
@@ -24,25 +30,33 @@
 				klatek na sekundę
 			</text>
 			<text name="fps_desc1_lbl">
-				Poczekaj 5-10 sekund, by nastąpiły zmiany.
+				Statystyki pauzują, gdy FPS jest limitowane lub w tle.
 			</text>
 			<text name="frame_breakdown">
 				[----------------- Tutaj pojawi się analiza klatek. -----------------]
 			</text>
 		</panel>
 		<panel name="target_subpanel">
-			<text name="settings_lbl">
-				Autostrojenie klatek
+			<text name="settings_lbl" tool_tip="Automatycznie dostosuj ustawienia, aby utrzymać FPS. Ustaw docelową żądaną liczbę klatek na sekundę, a przeglądarka spróbuje ją utrzymać dynamicznie zmieniając ustawienia.">
+				Automat:
 			</text>
-			<check_box label="Autostrojenie" name="AutoTuneFPS" tool_tip="Przeglądarka spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
+			<text name="targetfps_desc">
+				Docelowy FPS
+			</text>
+			<spinner name="target_fps" tool_tip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
+			<button name="AutoTuneFPS" tool_tip="Przeglądarka spróbuje dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę." />
+			<check_box label="Ciągłość" name="AutoTuneContinuous" tool_tip="Przeglądarka będzie stale dostosowywać ustawienia, aby osiągnąć docelową liczbę klatek na sekundę, aż do zatrzymania, nawet przy zamkniętym okna. Po wyłączeniu kliknięcie przycisku Autostrojenia spowoduje dostosowanie do bieżących ustawień, a następnie zatrzymanie." />
+			<button name="PrefSaveButton" tool_tip="Zapisz bieżące ustawienia do wartości domyślnych, do wykorzystania w przyszłości." />
+			<button name="PrefLoadButton" tool_tip="Załaduj zapisane wcześniej ustawienia." />
+			<button tool_tip="Załaduj ponownie domyślne ustawienia graficzne dla swojego sprzętu." name="Defaults" />
 			<text name="settings_desc">
-				Autostrojenie ustawień, by utrzymać FPS.
+				Strategia strojenia
 			</text>
 			<combo_box name="FSTuningFPSStrategy">
-				<combo_box.item label="Dostrój tylko awatary" name="av_only" />
+				<combo_box.item label="Tylko awatary" name="av_only" />
 				<combo_box.item label="Awatary i scena" name="av_and_scene" />
 			</combo_box>
-			<spinner name="target_fps" tool_tip="Docelowa liczba FPS — żądany poziom klatek na sekundę. Przeglądarka spróbuje go osiągnąć dostosowując ustawienia grafiki." />
+			<button name="target_btn" tool_tip="Zmień zachowanie strategii strojenia." />
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">

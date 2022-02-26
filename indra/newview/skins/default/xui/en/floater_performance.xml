@@ -224,7 +224,7 @@
           right="-62"
           name="PrefSaveButton"
           top_delta="0"
-          tool_tip="Save the current settings to a deafult for future use."
+          tool_tip="Save the current settings to a default for future use."
           width="24">
           <button.commit_callback
           function="Performance.PrefSave"
