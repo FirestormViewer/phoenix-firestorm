@@ -75,6 +75,7 @@ namespace FSPerfStats
         if( tuningFlag & UserImpostorDistanceTuningEnabled ){ gSavedSettings.setBOOL("FSAutoTuneImpostorByDistEnabled", userImpostorDistanceTuningEnabled); };
         if( tuningFlag & UserFPSTuningStrategy ){ gSavedSettings.setU32("FSTuningFPSStrategy", userFPSTuningStrategy); };
         if( tuningFlag & UserAutoTuneEnabled ){ gSavedSettings.setBOOL("FSAutoTuneFPS", userAutoTuneEnabled); };
+        if( tuningFlag & UserAutoTuneLock ){ gSavedSettings.setBOOL("FSAutoTuneLock", userAutoTuneLock); };
         if( tuningFlag & UserTargetFPS ){ gSavedSettings.setU32("FSTargetFPS", userTargetFPS); };
         if( tuningFlag & UserTargetReflections ){ gSavedSettings.setS32("FSUserTargetReflections", userTargetReflections); };
         // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
@@ -96,6 +97,22 @@ namespace FSPerfStats
 	    };        
     }
 
+    // static 
+    void Tunables::updateSettingsFromRenderCostLimit()
+    {
+        if( userARTCutoffSliderValue != log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) )
+        {
+            if( FSPerfStats::renderAvatarMaxART_ns != 0 )
+            {
+                updateUserARTCutoffSlider(log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) );
+            }
+            else
+            {
+                updateUserARTCutoffSlider(log10( (F32)FSPerfStats::ART_UNLIMITED_NANOS/1000 ) );
+            }
+        }        
+    }
+
     void Tunables::initialiseFromSettings()
     {
         assert_main_thread();
@@ -108,6 +125,7 @@ namespace FSPerfStats
         FSPerfStats::tunables.userTargetFPS = gSavedSettings.getU32("FSTargetFPS");
         FSPerfStats::tunables.userTargetReflections = gSavedSettings.getU32("FSUserTargetReflections");
         FSPerfStats::tunables.userAutoTuneEnabled = gSavedSettings.getBOOL("FSAutoTuneFPS");
+        FSPerfStats::tunables.userAutoTuneLock = gSavedSettings.getBOOL("FSAutoTuneLock");
         // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
         updateRenderCostLimitFromSettings();
         resetChanges();
@@ -274,23 +292,6 @@ namespace FSPerfStats
         }
     }
 
-    // static 
-    void StatsRecorder::updateSettingsFromRenderCostLimit()
-    {
-        if( tunables.userARTCutoffSliderValue != log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) )
-        {
-            if( FSPerfStats::renderAvatarMaxART_ns != 0 )
-            {
-                tunables.updateUserARTCutoffSlider(log10( ( (F32)FSPerfStats::renderAvatarMaxART_ns )/1000 ) );
-            }
-            else
-            {
-                tunables.updateUserARTCutoffSlider(log10( (F32)FSPerfStats::ART_UNLIMITED_NANOS/1000 ) );
-            }
-        }        
-    }
-
-
     //static
     int StatsRecorder::countNearbyAvatars(S32 distance)
     {
@@ -427,7 +428,7 @@ namespace FSPerfStats
                 if(renderAvatarMaxART_ns != new_render_limit_ns)
                 {
                     renderAvatarMaxART_ns = new_render_limit_ns;
-                    updateSettingsFromRenderCostLimit();
+                    tunables.updateSettingsFromRenderCostLimit();
                 }
                 // LL_DEBUGS() << "AUTO_TUNE: avatar_budget adjusted to:" << new_render_limit_ns << LL_ENDL;
             }
@@ -445,11 +446,17 @@ namespace FSPerfStats
             // once we're over the FPS target we slow down further
             if((gFrameCount - lastGlobalPrefChange) > settingsChangeFrequency*3)
             {
+                if(!tunables.userAutoTuneLock)
+                {
+                    // we've reached the target and stayed long enough to consider stable.
+                    // turn off if we are not locked.
+                    tunables.updateUserAutoTuneEnabled(false);
+                }
                 if( FSPerfStats::tunedAvatars > 0 )
                 {
                     // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
                     renderAvatarMaxART_ns += FSPerfStats::ART_MIN_ADJUST_UP_NANOS;
-                    updateSettingsFromRenderCostLimit();
+                    tunables.updateSettingsFromRenderCostLimit();
                     return;
                 }
                 if(tunables.userFPSTuningStrategy == TUNE_SCENE_AND_AVATARS)

@@ -55,6 +55,10 @@ public:
     void onCustomAction (const LLSD& userdata, const LLUUID& av_id);
     bool isActionChecked(const LLSD& userdata, const LLUUID& av_id);
     void onExtendedAction(const LLSD& userdata, const LLUUID& av_id);
+    void resetMaxArtSlider();
+    void savePreset();
+    void loadPreset();
+    void setHardwareDefaults();
 
 private:
     void initBackBtn(LLPanel* panel);

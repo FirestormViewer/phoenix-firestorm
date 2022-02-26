@@ -68,7 +68,7 @@ Distant Avatars
   <check_box
   control_name="FSAutoTuneImpostorByDistEnabled"
   height="19"
-  label="Enable distance based optimization"
+  label="Enable distance-based optimization"
   layout="topleft"
   follows="top|left"
   left_pad="40"
@@ -101,8 +101,9 @@ top_pad="15"
 left="160"
 name="distant_av_advice"
 width="450">
-Avatars that are further away still have a high impact.
+Distant avatars can be automatically optimized regardless of their render cost.
 Set the distance from camera beyond which an avatar will be optimized.
+Note: This setting will force MaxNonImpostors to 1 if nobody is nearby.
 </text>
 <view_border
 bevel_style="in"
@@ -166,7 +167,7 @@ left="160"
 name="distance_desc1"
 wrap="true"
 width="400">
-When adjusting scene parameters, autotune will optimize draw distance to between the minimum and the preferred.
+When adjusting scene parameters, autotune will choose values between the minimum and the preferred draw distances.
 </text>
 <view_border
 bevel_style="in"

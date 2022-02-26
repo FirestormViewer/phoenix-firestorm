@@ -1096,6 +1096,12 @@ void handleTargetFPSChanged(const LLSD& newValue)
 	const auto targetFPS = gSavedSettings.getU32("FSTargetFPS");
 	FSPerfStats::tunables.userTargetFPS = targetFPS;
 }
+// <FS:Beq> perf floater stuffs
+void handleAutoTuneLockChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSAutoTuneLock");
+	FSPerfStats::tunables.userAutoTuneLock = newval;
+}
 
 // <FS:Beq> perrf floater stuffs
 void handleAutoTuneFPSChanged(const LLSD& newValue)
@@ -1406,6 +1412,7 @@ void settings_setup_listeners()
 	// <FS:Beq> perf floater controls
 	gSavedSettings.getControl("FSTargetFPS")->getSignal()->connect(boost::bind(&handleTargetFPSChanged, _2));
 	gSavedSettings.getControl("FSAutoTuneFPS")->getSignal()->connect(boost::bind(&handleAutoTuneFPSChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneLock")->getSignal()->connect(boost::bind(&handleAutoTuneLockChanged, _2));
 	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
 	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
 	gSavedSettings.getControl("FSUserTargetReflections")->getSignal()->connect(boost::bind(&handleUserTargetReflectionsChanged, _2));

@@ -10,7 +10,7 @@
     min_width="580"
     width="580">
   <floater.string name="frame_stats">
-  Frame: [TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% TASKS:[IDLE_FRAME_PCT]%
+  Frame: [TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tasks:[IDLE_FRAME_PCT]%
   </floater.string>
   <floater.string name="limit_fps">
   User Limited @ [FPSCAP] FPS
@@ -155,13 +155,13 @@
           text_color="White"
           height="20"
           layout="topleft"
-          left_pad="0"
+          left_pad="10"
           name="targetfps_desc"
           wrap="true"
           width="140"
           halign="right"
           top_delta="3">
-          Target Frame Rate
+          Target Frame Rate (fps)
       </text>
       <spinner
           name="target_fps"
@@ -170,7 +170,7 @@
           tool_tip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
           layout="topleft"
           follows="right|top"
-          left_pad="35"
+          left_pad="10"
           top_delta="0"
           height="25"
           visible="true"
@@ -200,7 +200,7 @@
           width="72">
       </button>
       <check_box
-          control_name="FSAutoTuneFPSLock"
+          control_name="FSAutoTuneLock"
           follows="top|right"
           height="20"
           initial_value="true"
@@ -211,7 +211,7 @@
           label="Continuous"
           layout="topleft"
           left_pad="5"
-          name="AutoTuneFPS"
+          name="AutoTuneContinuous"
           top_delta="0"
           tool_tip="The viewer will continually adapt the settings to meet the target FPS until stopped even with the floater closed. When disabled clicking the Auto Tune button will adjust for the current settings then stop."
           width="64">
@@ -227,7 +227,7 @@
           tool_tip="Save the current settings to a deafult for future use."
           width="24">
           <button.commit_callback
-          function="Pref.PrefSave"
+          function="Performance.PrefSave"
           parameter="graphic" />
       </button>
       <button
@@ -236,12 +236,12 @@
           image_overlay="Script_Disk_Load"
           layout="topleft"
           right="-34"
-          name="PrefSaveButton"
+          name="PrefLoadButton"
           top_delta="0"
           tool_tip="Load an existing preset."
           width="24">
           <button.commit_callback
-          function="Pref.PrefLoad"
+          function="Performance.PrefLoad"
           parameter="graphic" />
       </button>
       <!--Reset Button-->
@@ -256,7 +256,7 @@
           top_delta="0"
           width="24">
         <button.commit_callback
-          function="Pref.HardwareDefaults" />
+          function="Performance.HardwareDefaults" />
       </button>   
       <text
           follows="left|top"
@@ -264,7 +264,7 @@
           text_color="White"
           height="20"
           layout="topleft"
-          left="10"
+          left="20"
           name="settings_desc"
           top_pad="0"
           wrap="true"
@@ -278,7 +278,7 @@
           font="SansSerif"
           height="20"
           layout="topleft"
-          left_pad="35"
+          left_pad="10"
           control_name="FSTuningFPSStrategy"
           name="FSTuningFPSStrategy"
           top_delta="0"
