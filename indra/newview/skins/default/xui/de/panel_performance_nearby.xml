@@ -27,8 +27,11 @@
 	<text name="av_nearby_desc2">
 		Per Rechts-Klick auf einen Avatar kann auch die Darstellung angepasst werden.
 	</text>
-	<button label="Ausnahmen..." name="exceptions_btn" />
+	<text name="av_nearby_desc3">
+		Hinweis: Für den Einfluss des eigenen Avatars den Reiter "Eigene Avatar-Komplexität" öffnen.
+	</text>
 	<check_box label="Freunde immer komplett darstellen" name="display_friends" />
+	<button label="Ausnahmen..." name="exceptions_btn" />
 	<check_box label="Alle Avatare verstecken (Gut für Landschaftsaufnahmen) " name="hide_avatars" />
 	<text name="name_tags_textbox">
 		Avatar namen:

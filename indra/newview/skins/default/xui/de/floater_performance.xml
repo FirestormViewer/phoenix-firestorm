@@ -18,6 +18,12 @@
 	<floater.string name="focus_fps">
 		Im Hintergrund
 	</floater.string>
+	<floater.string name="info_waitforit">
+		5-10 Sekunden warten auf Effekt der Anpassungen.
+	</floater.string>
+	<floater.string name="info_frozen">
+		Statistik pausiert, wenn FPS begrenzt oder im Hintergrund.
+	</floater.string>
 	<floater.string name="tot_av_template">
 		Gesamt: [TOT_AV] ([TOT_AV_TIME]μs)
 	</floater.string>
@@ -30,25 +36,32 @@
 				Bilder pro Sekunde
 			</text>
 			<text name="fps_desc1_lbl">
-				5-10 Sekunden warten auf Effekt der Anpassungen.
+				Statistik pausiert, wenn FPS begrenzt oder im Hintergrund.
 			</text>
 			<text name="frame_breakdown">
 				Frame-Aufschlüsselung erfolgt hier.
 			</text>
 		</panel>
 		<panel name="target_subpanel">
-			<text name="settings_lbl">
-				Auto-Anpassung Ziel-FPS
+			<text name="settings_lbl" width="140" tool_tip="Automatisch Einstellungen anpassen, um FPS zu halten. Ziel auf die gewünschte Bildrate setzen und der Viewer wird automatisch versuchen diese zu halten, indem Einstellungen angepasst werden.">
+				Auto-Anpassung:
 			</text>
-			<check_box label="Auto-Anpassung" name="AutoTuneFPS" tool_tip="Der Viewer wird automatisch versuchen, die Ziel-FPS zu erreichen." />
+			<text name="targetfps_desc" width="75">
+				Ziel-FPS:
+			</text>
+			<spinner name="target_fps" tool_tip="Ziel-FPS - Der Viewer wird automatisch versuchen, die gewünschte FPS durch Anpassung der Einstellungen zu erreichen." />
+			<check_box label="Auto-Anp." name="AutoTuneFPS" tool_tip="Der Viewer wird automatisch versuchen, die Ziel-FPS zu erreichen." />
+			<check_box label="Kontinuierlich" name="AutoTuneContinuous" tool_tip="Der Viewer wird kontinuierlich Einstellungen anpassen, um die gewünschte Ziel-FPS zu halten, auch wenn das Fenster geschlossen wurde. Falls deaktiviert, werden die Einstellungen durch Klick auf den Anto-Anpassung-Button einmalig angepasst." />
+			<button name="PrefSaveButton" tool_tip="Aktuelle Einstellungen als Standard für zukünftige Verwendung speichern." />
+			<button name="PrefLoadButton" tool_tip="Bestehende Voreinstellung laden." />
+			<button tool_tip="Standardeinstellungen für die erkannte Hardware laden." name="Defaults" />
 			<text name="settings_desc">
-				Einstellungen automatisch für FPS anpassen.
+				Tuning-Strategie:
 			</text>
 			<combo_box name="FSTuningFPSStrategy">
-				<combo_box.item label="Nur Avatar-Einstellungen" name="av_only" />
+				<combo_box.item label="Nur Avatare" name="av_only" />
 				<combo_box.item label="Avatar und Szenerie" name="av_and_scene" />
 			</combo_box>
-			<spinner name="target_fps" tool_tip="Ziel-FPS - Der Viewer wird automatisch versuchen, die gewünschte FPS durch Anpassung der Einstellungen zu erreichen." />
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">
