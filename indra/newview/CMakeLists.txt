@@ -1864,6 +1864,8 @@ if (WINDOWS)
       COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
       )
 
+    set_source_files_properties( llappviewer.cpp llviewermenu.cpp PROPERTIES COMPILE_FLAGS /bigobj )
+
     list(APPEND viewer_HEADER_FILES
          llappviewerwin32.h
          llwindebug.h
