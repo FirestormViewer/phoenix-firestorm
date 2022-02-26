@@ -64,17 +64,17 @@ namespace FSPerfStats
     extern std::atomic<int64_t> inUseAttachmentUnRigged;
 #endif
 // Note if changing these, they should correspond with the log range of the correpsonding sliders
-    constexpr U64 ART_UNLIMITED_NANOS{50000000};
-    constexpr U64 ART_MINIMUM_NANOS{100000};
-    constexpr U64 ART_MIN_ADJUST_UP_NANOS{10000};
-    constexpr U64 ART_MIN_ADJUST_DOWN_NANOS{10000}; 
+    static constexpr U64 ART_UNLIMITED_NANOS{50000000};
+    static constexpr U64 ART_MINIMUM_NANOS{100000};
+    static constexpr U64 ART_MIN_ADJUST_UP_NANOS{10000};
+    static constexpr U64 ART_MIN_ADJUST_DOWN_NANOS{10000}; 
 
-    constexpr F32 PREFERRED_DD{180};
-    constexpr U32 SMOOTHING_PERIODS{50};
-    constexpr U32 DD_STEP{10};
+    static constexpr F32 PREFERRED_DD{180};
+    static constexpr U32 SMOOTHING_PERIODS{50};
+    static constexpr U32 DD_STEP{10};
 
-    constexpr U32 TUNE_AVATARS_ONLY{0};
-    constexpr U32 TUNE_SCENE_AND_AVATARS{1};
+    static constexpr U32 TUNE_AVATARS_ONLY{0};
+    static constexpr U32 TUNE_SCENE_AND_AVATARS{1};
 
     extern std::atomic<int64_t> tunedAvatars;
     extern std::atomic<U64> renderAvatarMaxART_ns;
