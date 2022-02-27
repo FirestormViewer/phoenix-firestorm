@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_nearby">
 	<text name="back_lbl">Назад</text>
 	<text name="av_nearby_title">Аватары рядом</text>
@@ -17,8 +17,11 @@
 	<text name="av_nearby_desc2">
 		Вы можете щелкнуть ПКМ на аватар в мире, чтобы управлять отображением.
 	</text>
-	<button label="Исключения..." name="exceptions_btn"/>
+	<text name="av_nearby_desc3">
+		Примечание. Используйте вкладку Сложность аватара, чтобы видеть как вы влияете на других.
+	</text>
 	<check_box label="Всегда отображать друзей во всех подробностях" name="display_friends"/>
+	<button label="Исключения..." name="exceptions_btn"/>
 	<check_box label="Полностью скрыть аватары" name="hide_avatars"/>
 	<text name="name_tags_textbox">Бейджи:</text>
 	<radio_group name="name_tag_mode">
