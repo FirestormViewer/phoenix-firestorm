@@ -77,7 +77,8 @@ if (LINUX)
       ${LLXML_LIBRARIES}
       ${UI_LIBRARIES}     # for GTK
       ${SDL_LIBRARY}
-      fontconfig          # For FCInit and other FC* functions.
+      libfontconfig.a          # For FCInit and other FC* functions.
+      libfreetype.a
       )
 
   list(APPEND viewer_SOURCE_FILES 

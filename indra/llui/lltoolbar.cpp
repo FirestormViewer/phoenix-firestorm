@@ -1177,7 +1177,8 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 		else
 		{
 			button->setFunctionName(commandp->executeFunctionName());
-			LL_DEBUGS("UIUsage") << "button function name b -> " << commandp->executeFunctionName() << LL_ENDL;			// <FS:Ansariel> Check enabled state of button before executing!
+			LL_DEBUGS("UIUsage") << "button function name b -> " << commandp->executeFunctionName() << LL_ENDL;
+			// <FS:Ansariel> Check enabled state of button before executing!
 			//button->setCommitCallback(executeParam);
 			LLUICtrl::commit_callback_t execute_func = initCommitCallback(executeParam);
 			button->setCommitCallback(boost::bind(&LLToolBarButton::callIfEnabled, button, execute_func, _1, _2));

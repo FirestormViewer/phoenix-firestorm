@@ -4897,13 +4897,16 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 		FSRadar::getInstance()->requestRadarChannelAlertSync();
 		return;
 	}
-	// </FS:AO>
 
-	// Don't play sounds from gestures if they are not enabled.
-	// ...TS: Unless they're your own.
-	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
-		(owner_id != gAgent.getID()) &&
-		(owner_id == object_id)) return;
+	// Do play sounds triggered by avatar, since muting your own
+	// gesture sounds and your own sounds played inworld from 
+	// Inventory can cause confusion.
+	if (object_id == owner_id
+        && owner_id != gAgentID
+        && !gSavedSettings.getBOOL("EnableGestureSounds"))
+	{
+		return;
+	}
 
 	// NaCl - Antispam Registry
 	//if (LLMaterialTable::basic.isCollisionSound(sound_id) && !gSavedSettings.getBOOL("EnableCollisionSounds"))
@@ -6843,7 +6846,7 @@ void mean_name_callback(const LLUUID &id, const LLAvatarName& av_name)
 		LLMeanCollisionData *mcd = *iter;
 		if (mcd->mPerp == id)
 		{
-			mcd->mFullName = av_name.getUserName();
+			mcd->mFullName = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) ? RlvStrings::getAnonym(av_name) : av_name.getUserName();
 		}
 	}
 	// <FS:Ansariel> Instant bump list floater update
@@ -6890,7 +6893,14 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 		{
 			std::string action;
 			LLStringUtil::format_map_t args;
-			args["NAME"] = llformat("secondlife:///app/agent/%s/inspect", perp.asString().c_str());
+			if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				args["NAME"] = llformat("secondlife:///app/agent/%s/inspect", perp.asString().c_str());
+			}
+			else
+			{
+				args["NAME"] = llformat("secondlife:///app/agent/%s/rlvanonym", perp.asString().c_str());
+			}
 
 			switch (type)
 			{
@@ -6924,10 +6934,10 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 			LLMessageSystem* msgs = gMessageSystem;
 			msgs->newMessage(_PREHASH_ScriptDialogReply);
 			msgs->nextBlock(_PREHASH_AgentData);
-			msgs->addUUID(_PREHASH_AgentID, gAgent.getID());
-			msgs->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
+			msgs->addUUID(_PREHASH_AgentID, gAgentID);
+			msgs->addUUID(_PREHASH_SessionID, gAgentSessionID);
 			msgs->nextBlock(_PREHASH_Data);
-			msgs->addUUID(_PREHASH_ObjectID, gAgent.getID());
+			msgs->addUUID(_PREHASH_ObjectID, gAgentID);
 			msgs->addS32(_PREHASH_ChatChannel, gSavedSettings.getS32("FSReportCollisionMessagesChannel"));
 			msgs->addS32(_PREHASH_ButtonIndex, 1);
 			msgs->addString(_PREHASH_ButtonLabel, collision_data.c_str());

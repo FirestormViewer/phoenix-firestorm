@@ -19,34 +19,23 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
            message(STATUS "Revision (from autobuild environment): ${VIEWER_VERSION_REVISION}")
 
         else (DEFINED ENV{revision})
-           find_program(MERCURIAL hg)
-           find_program(SED sed)
-           if (DEFINED MERCURIAL AND DEFINED SED)
+           find_program(GIT git)
+           if (DEFINED GIT )
               execute_process(
-                 # <FS:TS> FIRE-11737: Reverting to old revisions shows tip in build string
-                 #         This command gets the revision number of the current
-                 #         repository tip. This leads to confusion when
-                 #         building an earlier revision. Instead, we use
-                 #         "hg identify -n" to get the local revision number
-                 #         of the actual state of the repository.
-                 #COMMAND ${MERCURIAL} log -r tip:0 --template '\\n'
-                 #COMMAND ${WORDCOUNT} -l
-                 #COMMAND ${SED} "s/ //g"
-                 COMMAND ${MERCURIAL} identify -n
-                 COMMAND ${SED} "s/+//"	# [CR] Strip off any + from the revision number
+                 COMMAND ${GIT} rev-list --count HEAD
                  OUTPUT_VARIABLE VIEWER_VERSION_REVISION
                  OUTPUT_STRIP_TRAILING_WHITESPACE
                  )
               if ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
-                 message(STATUS "Revision (from hg) ${VIEWER_VERSION_REVISION}")
+                 message(STATUS "Revision (from git) ${VIEWER_VERSION_REVISION}")
               else ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
                  message(STATUS "Revision not set (repository not found?); using 0")
                  set(VIEWER_VERSION_REVISION 0 )
               endif ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
-           else (DEFINED MERCURIAL AND DEFINED SED)
-              message(STATUS "Revision not set: 'hg' or 'sed' not found; using 0")
+           else (DEFINED GIT )
+              message(STATUS "Revision not set: 'git' found; using 0")
               set(VIEWER_VERSION_REVISION 0)
-           endif (DEFINED MERCURIAL AND DEFINED SED)
+           endif (DEFINED GIT)
         endif (DEFINED ENV{revision})
         message(STATUS "Building '${VIEWER_CHANNEL}' Version ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
     else ( EXISTS ${VIEWER_VERSION_BASE_FILE} )

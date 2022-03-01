@@ -9,7 +9,7 @@ class FSViewerManifest:
     def fs_splice_grid_substitution_strings( self, subst_strings ):
         ret = subst_strings
 
-        if self.args.has_key( 'grid' ) and self.args['grid'] != None:
+        if 'grid' in self.args and self.args['grid'] != None:
           ret[ 'grid' ] = self.args['grid']
           ret[ 'grid_caps' ] = self.args['grid'].upper()
         else:
@@ -51,15 +51,15 @@ class FSViewerManifest:
                                   stderr=subprocess.PIPE,stdout=subprocess.PIPE)
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com","/t","http://timestamp.verisign.com/scripts/timstamp.dll",self.args['configuration']+"\\"+self.final_exe()],
                                   stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        except Exception, e:
-            print "Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe()
+        except Exception as e:
+            print("Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe())
 
     def fs_sign_win_installer( self, substitution_strings ):
         try:
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        except Exception, e:
-            print "Working directory: %s" % os.getcwd()
-            print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
+        except Exception as e:
+            print("Working directory: %s" % os.getcwd())
+            print("Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file'])
 
     def fs_delete_linux_symbols( self ):
         debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
@@ -76,7 +76,7 @@ class FSViewerManifest:
     def fs_save_linux_symbols( self ):
         #AO: Try to package up symbols
         # New Method, for reading cross platform stack traces on a linux/mac host
-        print( "Packaging symbols" )
+        print("Packaging symbols")
 
         self.fs_save_symbols("linux")
 
@@ -97,7 +97,7 @@ class FSViewerManifest:
                                  ], stderr=subprocess.PIPE,stdout=subprocess.PIPE )
             pdbName = "firestorm-bin-public.pdb"
         except:
-            print( "Cannot run pdbcopy, packaging private symbols" )
+            print("Cannot run pdbcopy, packaging private symbols")
 
         # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
         # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
@@ -162,3 +162,63 @@ class FSViewerManifest:
         if self.path( src,dst ) == 0:
             self.missing.pop()
 
+    def fs_generate_breakpad_symbols_for_file( self, aFile ):
+        from os import makedirs, remove
+        from os.path import join, isfile
+        import subprocess
+        from shutil import move
+
+        dumpSym = join( self.args["build"], "..", "packages", "bin", "dump_syms" )
+        if not isfile( dumpSym ):
+            return
+
+        symbolFile = aFile +".sym"
+
+        with open( symbolFile, "w") as outfile:
+            subprocess.call( [dumpSym, aFile ], stdout=outfile )
+
+        firstline = open( symbolFile ).readline().strip()
+
+        if firstline != "":
+            module, os, bitness, hash, filename = firstline.split(" ")
+            symbolDir = join( "symbols", filename, hash )
+            try:
+                makedirs( symbolDir )
+            except:
+                pass
+            move( symbolFile, symbolDir )
+
+        if isfile( symbolFile ):
+            remove( symbolFile )
+
+    def fs_save_breakpad_symbols(self, osname):
+        from glob import glob
+        import sys
+        from os.path import isdir
+        from shutil import rmtree
+        import tarfile
+
+        if isdir( "symbols" ):
+            rmtree( "symbols" )
+
+        files =  glob( "%s/bin/*" % self.args['dest'] )
+        for f in files:
+            self.fs_generate_breakpad_symbols_for_file( f )
+
+        files =  glob( "%s/lib/*.so" % self.args['dest'] )
+        for f in files:
+            if f.find( "libcef.so" ) == -1:
+                self.fs_generate_breakpad_symbols_for_file( f )
+
+        if isdir( "symbols" ):
+            for a in self.args:
+                print("%s: %s" % (a, self.args[a]))
+            symbolsName = "%s/Phoenix_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                         self.fs_channel_legacy_oneword(),
+                                                                         '-'.join( self.args['version'] ),
+                                                                         self.args['viewer_flavor'],
+                                                                         osname,
+                                                                         self.address_size)
+
+            fTar = tarfile.open( symbolsName, "w:bz2")
+            fTar.add("symbols", arcname=".")

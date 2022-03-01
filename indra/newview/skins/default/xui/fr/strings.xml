@@ -635,11 +635,6 @@ peuvent être joints aux notes.
 	<string name="ReleaseNotes">
 		Notes de version
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		Chargement...
 	</string>

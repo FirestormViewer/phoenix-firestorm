@@ -312,6 +312,7 @@
 			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
 			<menu_item_check label="Statistiken zum Laden von Szenen" name="Scene Load Statistics"/>
+			<menu_item_check label="Grafikleistung verbessern..." name="Performance"/>
 			<menu_item_check label="Informationen zur Avatarkomplexität anzeigen" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">

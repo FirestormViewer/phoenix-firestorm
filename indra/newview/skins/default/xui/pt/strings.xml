@@ -591,11 +591,6 @@ ser anexado às anotações.&quot;
 	<string name="ReleaseNotes">
 		Notas de versão
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		Carregando...
 	</string>
