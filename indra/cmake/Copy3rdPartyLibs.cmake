@@ -223,7 +223,7 @@ elseif(LINUX)
     set(SHARED_LIB_STAGING_DIR_RELWITHDEBINFO   "${SHARED_LIB_STAGING_DIR}")
     set(SHARED_LIB_STAGING_DIR_RELEASE          "${SHARED_LIB_STAGING_DIR}")
 
-    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}/../../lib32/")
     set(vivox_libs
         libsndfile.so.1
         libortp.so
