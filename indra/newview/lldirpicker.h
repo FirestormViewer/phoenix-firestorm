@@ -79,8 +79,11 @@ private:
 	bool check_local_file_access_enabled();
 
 #if LL_LINUX || LL_DARWIN
-	// On Linux we just implement LLDirPicker on top of LLFilePicker
+    // On Linux we just implement LLDirPicker on top of LLFilePicker
+    // <FS:ND> Seems like on OSX too ... Unless FLTK is used, then nope
+#ifndef LL_FLTK
 	LLFilePicker *mFilePicker;
+#endif
 #endif
 
 

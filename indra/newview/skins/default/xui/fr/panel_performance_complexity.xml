@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_complexity">
+	<text name="back_lbl">
+		Retour
+	</text>
+	<text name="attachments_title">
+		Complexité des attachements
+	</text>
+	<text name="attachments_desc1">
+		Les attachements complexifient l'avatar et le rendu est plus lent.
+	</text>
+	<text name="attachments_desc2">
+		Cet écran vous permet de visualiser les attachements de votre avatar.
+	</text>
+	<text name="attachments_desc3">
+		Vous pouvez facilement supprimer vos attachements en cliquant sur le "X".
+	</text>
+	<name_list name="obj_list">
+		<name_list.columns label="Temps (μs)" name="art_value" tool_tip="Temps nécessaire au rendu de l'attachement (microsecondes)" />
+		<name_list.columns name="complex_value" tool_tip="Complexité de l'attachement (ARC)" />
+		<name_list.columns label="Nom de l'attachement" tool_tip="Cliquez sur 'X' pour détacher l'attachement" name="name" />
+	</name_list>
+</panel>

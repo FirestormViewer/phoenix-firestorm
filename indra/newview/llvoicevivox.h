@@ -803,6 +803,7 @@ private:
 	{
 		earLocCamera = 0,		// ear at camera
 		earLocAvatar,			// ear at avatar
+		earLocSpeaker,			// <FS:Beq> re-add equal voice based loosely on original patch from Tigh MacFanatic
 		earLocMixed				// ear at avatar location/camera direction
 	};
 	

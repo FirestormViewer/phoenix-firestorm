@@ -89,10 +89,9 @@ BOOL LLToolFace::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 BOOL LLToolFace::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	mGrabX=x;
-	mGrabY=y;
-
 	gViewerWindow->pickAsync(x, y, mask, pickCallback);
+	mGrabX = x;
+	mGrabY = y;
 	return TRUE;
 }
 

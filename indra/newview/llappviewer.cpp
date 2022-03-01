@@ -146,10 +146,10 @@
 #include "stringize.h"
 #include "llcoros.h"
 #include "llexception.h"
-//#if !LL_LINUX
 #include "cef/dullahan_version.h"
+#if !LL_LINUX
 #include "vlc/libvlc_version.h"
-//#endif // LL_LINUX
+#endif // LL_LINUX
 
 // Third party library includes
 #include <boost/bind.hpp>
@@ -1376,47 +1376,45 @@ bool LLAppViewer::init()
 
 	gGLActive = FALSE;
 
-	// <FS:Ansariel> Disable updater
-//#if LL_RELEASE_FOR_DOWNLOAD 
-//	if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
-//	{
-//	LLProcess::Params updater;
-//	updater.desc = "updater process";
-//	// Because it's the updater, it MUST persist beyond the lifespan of the
-//	// viewer itself.
-//	updater.autokill = false;
-//	std::string updater_file;
+    // <FS:Ansariel> Disable updater
+//#if LL_RELEASE_FOR_DOWNLOAD
+//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//    {
+//        LLProcess::Params updater;
+//        updater.desc = "updater process";
+//        // Because it's the updater, it MUST persist beyond the lifespan of the
+//        // viewer itself.
+//        updater.autokill = false;
+//        std::string updater_file;
 //#if LL_WINDOWS
-//	updater_file = "SLVersionChecker.exe";
-//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
+//        updater_file = "SLVersionChecker.exe";
+//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#elif LL_DARWIN
-//	// explicitly run the system Python interpreter on SLVersionChecker.py
-//	updater.executable = "python";
-//	updater_file = "SLVersionChecker.py";
-//	updater.args.add(gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file));
+//        updater_file = "SLVersionChecker";
+//        updater.executable = gDirUtilp->add(gDirUtilp->getAppRODataDir(), "updater", updater_file);
 //#else
-//	updater_file = "SLVersionChecker";
-//	updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
+//        updater_file = "SLVersionChecker";
+//        updater.executable = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, updater_file);
 //#endif
-//	// add LEAP mode command-line argument to whichever of these we selected
-//	updater.args.add("leap");
-//	// UpdaterServiceSettings
-//    if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
-//    {
-//        // Befor first login, treat this as 'manual' updates,
-//        // updater won't install anything, but required updates
-//        updater.args.add("0");
-//    }
-//    else
-//    {
-//        updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
-//    }
-//	// channel
-//	updater.args.add(LLVersionInfo::instance().getChannel());
-//	// testok
-//	updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
-//	// ForceAddressSize
-//	updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
+//        // add LEAP mode command-line argument to whichever of these we selected
+//        updater.args.add("leap");
+//        // UpdaterServiceSettings
+//        if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+//        {
+//            // Befor first login, treat this as 'manual' updates,
+//            // updater won't install anything, but required updates
+//            updater.args.add("0");
+//        }
+//        else
+//        {
+//            updater.args.add(stringize(gSavedSettings.getU32("UpdaterServiceSetting")));
+//        }
+//        // channel
+//        updater.args.add(LLVersionInfo::instance().getChannel());
+//        // testok
+//        updater.args.add(stringize(gSavedSettings.getBOOL("UpdaterWillingToTest")));
+//        // ForceAddressSize
+//        updater.args.add(stringize(gSavedSettings.getU32("ForceAddressSize")));
 //
 //        try
 //        {
@@ -1434,11 +1432,11 @@ bool LLAppViewer::init()
 //                OSMB_OK);
 //            mUpdaterNotFound = true;
 //        }
-//	}
-//	else
-//	{
-//		LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
-//	}
+//    }
+//    else
+//    {
+//        LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
+//    }
 //
 //    if (mUpdaterNotFound)
 //    {
@@ -1471,14 +1469,14 @@ bool LLAppViewer::init()
 //        }
 //    }
 //
-//	if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
-//	{
-//		LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
-//							 << "lleventhost no longer supported as a dynamic library"
-//							 << LL_ENDL;
-//	}
+//    if (gSavedSettings.getBOOL("QAMode") && gSavedSettings.getS32("QAModeEventHostPort") > 0)
+//    {
+//        LL_WARNS("InitInfo") << "QAModeEventHostPort DEPRECATED: "
+//                             << "lleventhost no longer supported as a dynamic library"
+//                             << LL_ENDL;
+//    }
 //#endif //LL_RELEASE_FOR_DOWNLOAD
-	// </FS:Ansariel>
+    // </FS:Ansariel>
 
 	LLTextUtil::TextHelpers::iconCallbackCreationFunction = create_text_segment_icon_from_url_match;
 
@@ -1644,6 +1642,12 @@ bool LLAppViewer::doFrame()
 {
 // <FS:Beq> Perfstats collection Frame boundary
 {
+	// and now adjust the visuals from previous frame.
+    if(FSPerfStats::tunables.userAutoTuneEnabled && FSPerfStats::tunables.tuningFlag != FSPerfStats::Tunables::Nothing)
+    {
+    	FSPerfStats::tunables.applyUpdates();
+    }
+
 	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
 
 	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
@@ -1701,7 +1705,7 @@ bool LLAppViewer::doFrame()
 		}
 		// Check if we need to temporarily enable rendering.
 		//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
-		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
+		static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime", -1.f);
 		if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
 		{
 			periodicRenderingTimer.reset();
@@ -2069,12 +2073,14 @@ bool LLAppViewer::cleanup()
 	// one because it happens just after mFastTimerLogThread is deleted. This
 	// comment is in case we guessed wrong, so we can move it here instead.
 
+#if LL_LINUX
 	// remove any old breakpad minidump files from the log directory
 	if (! isError())
 	{
 		std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
 		gDirUtilp->deleteFilesInDir(logdir, "*-*-*-*-*.dmp");
 	}
+#endif
 
 	// Kill off LLLeap objects. We can find them all because LLLeap is derived
 	// from LLInstanceTracker.
@@ -2700,7 +2706,7 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 
         // Remove the last ".old" log file.
         std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-            APP_NAME + ".log");
+            APP_NAME + ".old");
         LLFile::remove(old_log_file);
 
         // Get name of the log file
@@ -3963,7 +3969,7 @@ LLSD LLAppViewer::getViewerInfo() const
 //	info["LIBCEF_VERSION"] = "Undefined";
 //#endif
 
-//#if !LL_LINUX
+#if !LL_LINUX
 	std::ostringstream vlc_ver_codec;
 	vlc_ver_codec << LIBVLC_VERSION_MAJOR;
 	vlc_ver_codec << ".";
@@ -3971,9 +3977,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	vlc_ver_codec << ".";
 	vlc_ver_codec << LIBVLC_VERSION_REVISION;
 	info["LIBVLC_VERSION"] = vlc_ver_codec.str();
-//#else
-//	info["LIBVLC_VERSION"] = "Undefined";
-//#endif
+#else
+	info["LIBVLC_VERSION"] = "Using gstreamer 1.0";
+#endif
 
 	S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
 	if (packets_in > 0)
@@ -5533,6 +5539,10 @@ void LLAppViewer::idle()
 	//
 	// Special case idle if still starting up
 	//
+	if (LLStartUp::getStartupState() >= STATE_WORLD_INIT)
+	{
+		update_texture_time();
+	}
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
 		// Skip rest if idle startup returns false (essentially, no world yet)

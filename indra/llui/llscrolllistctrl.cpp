@@ -68,9 +68,10 @@ static LLDefaultChildRegistry::Register<LLScrollListCtrl> r("scroll_list");
 // local structures & classes.
 struct SortScrollListItem
 {
-	SortScrollListItem(const std::vector<std::pair<S32, BOOL> >& sort_orders,const LLScrollListCtrl::sort_signal_t*	sort_signal)
+	SortScrollListItem(const std::vector<std::pair<S32, BOOL> >& sort_orders,const LLScrollListCtrl::sort_signal_t*	sort_signal, bool alternate_sort)
 	:	mSortOrders(sort_orders)
 	,   mSortSignal(sort_signal)
+	,	mAltSort(alternate_sort)
 	{}
 
 	bool operator()(const LLScrollListItem* i1, const LLScrollListItem* i2)
@@ -95,7 +96,14 @@ struct SortScrollListItem
 				}
 				else
 				{
-					sort_result = order * LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
+					if (mAltSort && !cell1->getAltValue().asString().empty() && !cell2->getAltValue().asString().empty())
+					{
+						sort_result = order * LLStringUtil::compareDict(cell1->getAltValue().asString(), cell2->getAltValue().asString());
+					}
+					else
+					{
+						sort_result = order * LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
+					}
 				}
 				if (sort_result != 0)
 				{
@@ -111,6 +119,7 @@ struct SortScrollListItem
 	typedef std::vector<std::pair<S32, BOOL> > sort_order_t;
 	const LLScrollListCtrl::sort_signal_t* mSortSignal;
 	const sort_order_t& mSortOrders;
+	const bool mAltSort;
 };
 
 //---------------------------------------------------------------------------
@@ -219,6 +228,7 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mSearchColumn(p.search_column),
 	mColumnPadding(p.column_padding),
 	mRowPadding(p.row_padding),
+	mAlternateSort(false),
 	mContextMenuType(MENU_NONE),
 	mIsFriendSignal(NULL),
 	// <FS:Ansariel> Fix for FS-specific people list (radar)
@@ -400,8 +410,7 @@ LLScrollListCtrl::~LLScrollListCtrl()
 
 	std::for_each(mItemList.begin(), mItemList.end(), DeletePointer());
 	mItemList.clear();
-	std::for_each(mColumns.begin(), mColumns.end(), DeletePairedPointer());
-	mColumns.clear();
+    clearColumns(); //clears columns and deletes headers
 	delete mIsFriendSignal;
 }
 
@@ -3098,7 +3107,7 @@ void LLScrollListCtrl::updateSort() const
 		std::stable_sort(
 			mItemList.begin(), 
 			mItemList.end(), 
-			SortScrollListItem(mSortColumns,mSortCallback));
+			SortScrollListItem(mSortColumns,mSortCallback, mAlternateSort));
 
 		mSorted = true;
 	}
@@ -3114,7 +3123,7 @@ void LLScrollListCtrl::sortOnce(S32 column, BOOL ascending)
 	std::stable_sort(
 		mItemList.begin(), 
 		mItemList.end(), 
-		SortScrollListItem(sort_column,mSortCallback));
+		SortScrollListItem(sort_column,mSortCallback,mAlternateSort));
 }
 
 void LLScrollListCtrl::dirtyColumns() 
@@ -3480,6 +3489,8 @@ void LLScrollListCtrl::clearColumns()
 
 	// <FS:Ansariel> Reset number of dynamic columns, too
 	mNumDynamicWidthColumns = 0;
+
+    dirtyColumns(); // Clears mColumnsIndexed
 }
 
 void LLScrollListCtrl::setColumnLabel(const std::string& column, const std::string& label)

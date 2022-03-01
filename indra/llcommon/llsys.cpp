@@ -1273,18 +1273,12 @@ BOOL gunzip_file(const std::string& srcfile, const std::string& dstfile)
 	LLFILE *dst = NULL;
 	S32 bytes = 0;
 	tmpfile = dstfile + ".t";
-
-	// <FS:ND> Proper UTF8->UTF16 handling for Windows
-	// src = gzopen(srcfile.c_str(), "rb");
-#if LL_WINDOWS
-	std::string utf8filename = srcfile;
-	llutf16string utf16filename = utf8str_to_utf16str(utf8filename);
-	src = gzopen_w(utf16filename.c_str(), "rb");
+#ifdef LL_WINDOWS
+    llutf16string utf16filename = utf8str_to_utf16str(srcfile);
+    src = gzopen_w(utf16filename.c_str(), "rb");
 #else
-	src = gzopen(srcfile.c_str(), "rb");/* Flawfinder: ignore */
+    src = gzopen(srcfile.c_str(), "rb");
 #endif
-	// </FS:ND>
-	
 	if (! src) goto err;
 	dst = LLFile::fopen(tmpfile, "wb");		/* Flawfinder: ignore */
 	if (! dst) goto err;
@@ -1319,17 +1313,13 @@ BOOL gzip_file(const std::string& srcfile, const std::string& dstfile)
 	S32 bytes = 0;
 	tmpfile = dstfile + ".t";
 
-	// <FS:ND> Proper UTF8->UTF16 handling for Windows
-	// dst = gzopen(tmpfile.c_str(), "wb");		/* Flawfinder: ignore */
-#if LL_WINDOWS
-	std::string utf8filename = tmpfile;
-	llutf16string utf16filename = utf8str_to_utf16str(utf8filename);
-	dst = gzopen_w(utf16filename.c_str(), "wb");
+#ifdef LL_WINDOWS
+    llutf16string utf16filename = utf8str_to_utf16str(tmpfile);
+    dst = gzopen_w(utf16filename.c_str(), "wb");
 #else
-	dst = gzopen(tmpfile.c_str(), "wb");/* Flawfinder: ignore */
+    dst = gzopen(tmpfile.c_str(), "wb");
 #endif
-	// </FS:ND>
-	
+
 	if (! dst) goto err;
 	src = LLFile::fopen(srcfile, "rb");		/* Flawfinder: ignore */
 	if (! src) goto err;

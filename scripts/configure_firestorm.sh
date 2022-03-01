@@ -42,6 +42,7 @@ WANTS_TESTBUILD=$FALSE
 WANTS_TRACY=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_CRASHREPORTING=$FALSE
+WANTS_CACHE=$FALSE
 TARGET_PLATFORM="darwin" # darwin, windows, linux
 BTYPE="Release"
 CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
@@ -49,6 +50,7 @@ LL_ARGS_PASSTHRU=""
 JOBS="0"
 WANTS_NINJA=$FALSE
 WANTS_VSCODE=$FALSE
+USE_VSTOOL=$TRUE
 TESTBUILD_PERIOD="0"
 SINGLEGRID_URI=""
 
@@ -79,12 +81,14 @@ showUsage()
     echo "  --avx                    : Build with Advanced Vector Extensions"
     echo "  --avx2                   : Build with Advanced Vector Extensions 2"
     echo "  --tracy                  : Build with Tracy Profiler support"
-    echo "  --crashreporting         : Build with crash reporting enabled"
+    echo "  --crashreporting         : Build with crash reporting enabled (Windows only)"
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
     echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
     echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
-    echo "  --ninja                  : Build using Ninja (Linux only)"
+    echo "  --ninja                  : Build using Ninja"
     echo "  --vscode                 : Exports compile commands for VSCode (Linux only)"
+    echo "  --compiler-cache         : Try to detect and use compiler cache (needs also --ninja for OSX and Windows)"
+    echo "  --no-vstools             : Do not use vstool to setup project startup properties (windows only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
     echo
@@ -94,7 +98,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache no-vstools jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -133,6 +137,8 @@ getArgs()
           jobs)           JOBS="$OPTARG";;
           ninja)          WANTS_NINJA=$TRUE;;
           vscode)         WANTS_VSCODE=$TRUE;;
+          compiler-cache) WANTS_CACHE=$TRUE;;
+		  no-vstools)     USE_VSTOOL=$FALSE;;
 
           help)           showUsage && exit 0;;
 
@@ -298,6 +304,15 @@ if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
 
+if [ $TARGET_PLATFORM == "darwin" ]
+then
+	if [ $WANTS_CRASHREPORTING -eq $TRUE ]
+	then
+		echo "--crashreporting is not supported on this platform"
+		WANTS_CRASHREPORTING=$FALSE
+	fi
+fi
+
 echo -e "configure_firestorm.sh" > $LOG
 echo -e "       PLATFORM: $TARGET_PLATFORM"                                    | tee -a $LOG
 echo -e "            KDU: `b2a $WANTS_KDU`"                                    | tee -a $LOG
@@ -324,6 +339,7 @@ echo -e "          BUILD: `b2a $WANTS_BUILD`"                                  |
 echo -e "         CONFIG: `b2a $WANTS_CONFIG`"                                 | tee -a $LOG
 echo -e "          NINJA: `b2a $WANTS_NINJA`"                                  | tee -a $LOG
 echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 | tee -a $LOG
+echo -e " COMPILER CACHE: `b2a $WANTS_CACHE`"                                  | tee -a $LOG
 echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a $LOG
 echo -e "          BTYPE: $BTYPE"                                              | tee -a $LOG
 if [ $TARGET_PLATFORM == "linux" -o $TARGET_PLATFORM == "darwin" ] ; then
@@ -507,7 +523,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING=ON"
         if [ ! -z $CHANNEL_SIMPLE ]
         then
-            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=firestorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:] | sed -e 's/_x64//'`
+            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=firestorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:] | sed -e 's/x64//' | sed -e 's/_//g'`
         fi
     else
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=OFF"
@@ -524,12 +540,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     if [ $TARGET_PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
     elif [ \( $TARGET_PLATFORM == "linux" \) ] ; then
-        OPENAL="-DOPENAL:BOOL=ON"
-        if [ $WANTS_NINJA -eq $TRUE ] ; then
-            TARGET="Ninja"
-        else
-            TARGET="Unix Makefiles"
-        fi
+        TARGET="Unix Makefiles"
         if [ $WANTS_VSCODE -eq $TRUE ] ; then
             VSCODE_FLAGS="-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
             ROOT_DIR=$(dirname $(dirname $(readlink -f $0)))
@@ -545,11 +556,32 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
+    if [ $WANTS_NINJA -eq $TRUE ] ; then
+        TARGET="Ninja"
+    fi
+
+    CACHE_OPT=""
+
+    if [ $WANTS_CACHE -eq $TRUE ]
+    then
+        if [ `which ccache 2>/dev/null` ]
+        then
+            echo "Found ccache"
+            CACHE_OPT="-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+        fi
+        if [ `which buildcache 2>/dev/null` ]
+        then
+            echo "Found buildcache"
+            CACHE_OPT="-DCMAKE_C_COMPILER_LAUNCHER=buildcache -DCMAKE_CXX_COMPILER_LAUNCHER=buildcache"
+        fi
+    fi
+
     cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
-          $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+          $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 
-    if [ $TARGET_PLATFORM == "windows" ] ; then
+    if [ $TARGET_PLATFORM == "windows" -a $USE_VSTOOL -eq $TRUE ] ; then
+        echo "Setting startup project via vstool"
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
 fi
