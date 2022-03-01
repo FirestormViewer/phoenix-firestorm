@@ -345,18 +345,6 @@
         <string>SDL</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ff2e4df5bffe0203dc654b111347e617</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL-1.2.15-linux-181412059.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -417,18 +405,6 @@
         <string>apr_suite</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0c53148aa00e51c06fa246c4130915be</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/apr_3p-update-apr/rev/297252/arch/Darwin/installer/apr_suite-1.4.5.297252-darwin-297252.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -440,18 +416,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>161e07b37e2f30da004a0d72d5075ad7</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.180871344-linux-180871344.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -507,18 +471,6 @@
         <string>boost</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>c296845cad075250c1ae2620f175a957</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/boost_3p-update-boost/rev/297445/arch/Darwin/installer/boost-1.57-darwin-297445.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -637,18 +589,6 @@
         <string>colladadom</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>726bc31e562752f081e95e8fcc70e405</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/colladadom_3p-update-colladadom/rev/297450/arch/Darwin/installer/colladadom-2.3.297450-darwin-297450.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -779,18 +719,6 @@
         <string>curl</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ad0061db7188a1b9a974eb0512eeeb8d</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-curl/rev/312763/arch/Darwin/installer/curl-7.47.0.312763-darwin-312763.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -802,18 +730,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cade3843dfd7985f008cc8161daaefb0</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/curl-7.54.1.180871811-linux-180871811.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -856,36 +772,6 @@
         </map>
         <key>version</key>
         <string>7.54.1.563852</string>
-      </map>
-      <key>db</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (c) 1990, 2010 Oracle and/or its affiliates.  All rights reserved.</string>
-        <key>description</key>
-        <string>Berkeley DB (libdb) is a programmatic toolkit that provides embedded database support for both traditional and client/server applications.</string>
-        <key>license</key>
-        <string>bsd</string>
-        <key>license_file</key>
-        <string>LICENSES/db.txt</string>
-        <key>name</key>
-        <string>db</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>1cc7940e500858a9754e9a3cc3ba2237</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/db_3p-update-db/rev/295315/arch/Linux/installer/db-5.1.25-linux-295315.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>5.1.25</string>
       </map>
       <key>dictionaries</key>
       <map>
@@ -983,30 +869,6 @@
         <key>version</key>
         <string>1.12.3.202111032221_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
       </map>
-      <key>elfio</key>
-      <map>
-        <key>license</key>
-        <string>lgpl</string>
-        <key>license_file</key>
-        <string>LICENSES/elfio.txt</string>
-        <key>name</key>
-        <string>elfio</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>031e6315a5c0829c9b9a2ec18aeb7ae3</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-elfio/rev/222074/arch/Linux/installer/elfio-1.0.3-linux-20110225.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-        </map>
-      </map>
       <key>expat</key>
       <map>
         <key>copyright</key>
@@ -1021,18 +883,6 @@
         <string>expat</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>452d1910ef853329cd59858e6c5b2c48</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/297014/arch/Darwin/installer/expat-2.0.1.297014-darwin-297014.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1044,18 +894,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>b20e813b55488e43df5c197f1efd165c</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/expat-2.1.1.180871203-linux-180871203.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1185,18 +1023,6 @@
         <string>fontconfig</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>f7a2a70417ab9d2f999f80604cb4fa48</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/fontconfig-2.11.0-linux-180871443.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -1227,18 +1053,6 @@
         <string>freetype</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>83618d16d974eb0af93926a10ac13297</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/freetype_3p-update-freetype/rev/297053/arch/Darwin/installer/freetype-2.4.4.297053-darwin-297053.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1250,18 +1064,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ced1bc8b28a2e87093b364c2b6d8cb9c</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/freetype-2.4.4.180871412-linux-180871412.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1328,18 +1130,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>da432b959ccd920adca1030ad7f1b6cf</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/glext-68-linux-180871251.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1423,20 +1213,6 @@
         <string>glod</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>94fc457c46e1fb94b31251bd4747d10f</string>
-              <key>hash_algorithm</key>
-              <string>md5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1448,20 +1224,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>3bae1e9a188680a81c1d5b32571538b9</string>
-              <key>hash_algorithm</key>
-              <string>md5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/glod-1.0pre3.180990859-linux-180990859.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1519,18 +1281,6 @@
         <string>googlemock</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>022649e284163b8ee23e3c9a81302fa7</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/googlemock_3p-update-googlemock/rev/297460/arch/Darwin/installer/googlemock-1.7.0.297460-darwin-297460.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1542,18 +1292,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5bc5ddeb97b8498d5141e27092161323</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/googlemock-1.7.0.180871704-linux-180871704.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1607,18 +1345,6 @@
         <string>gstreamer</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>904540d91ea7d577c7bcbb679621f013</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/gstreamer-0.10.6.180871246-linux-180871246.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -1649,18 +1375,6 @@
         <string>havok-source</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5c5b4820999ae9e398801d6a46f45897</string>
-              <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/havok-source_3p-update-havok-source/rev/297312/arch/Darwin/installer/havok_source-2012.1-darwin-297312.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1672,18 +1386,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>03c1c5f7c3e93e905f635ca22b607494</string>
-              <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/p64_3p-havok-source/rev/314226/arch/Linux/installer/havok_source-2012.1-2-linux-314226.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1803,18 +1505,6 @@
         <string>jpeglib</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4d7658997fd0f93a9c55e40e40b1b0e5</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jpeglib_3p-update-jpeglib/rev/296854/arch/Darwin/installer/jpeglib-8c.296854-darwin-296854.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1826,18 +1516,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>a7039c9a9c4461c5f85542f068dc09e5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/jpeglib-8c.180871203-linux-180871203.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -1893,18 +1571,6 @@
         <string>jsoncpp</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>b25a4f480e07c670ffef00c3da578f87</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jsoncpp_3p-update-jsoncpp/rev/297281/arch/Darwin/installer/jsoncpp-0.5.0.297281-darwin-297281.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -1916,18 +1582,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>da45220ec6fcf945f6ca1f11bc7606cf</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/jsoncpp-0.5.0.180872045-linux-180872045.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -2049,18 +1703,6 @@
         <string>libhunspell</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>05eda16106df26a211f8bdd874d1fca5</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/hunspell_3p-update-hunspell/rev/296916/arch/Darwin/installer/libhunspell-1.3.2.296916-darwin-296916.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -2072,18 +1714,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>77996d95cf2f072f4f277a2aaff20456</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/libhunspell-1.3.2.180871248-linux-180871248.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -2139,18 +1769,6 @@
         <string>libndofdev</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>a01b411433dbf8a4b481de9e76d9a652</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libndofdev_3p-update-libndofdev/rev/297264/arch/Darwin/installer/libndofdev-0.1.297264-darwin-297264.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -2205,18 +1823,6 @@
         <string>libpng</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>14cb5c8686a472e9e60179e46cd196f7</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libpng_3p-update-libpng/rev/297708/arch/Darwin/installer/libpng-1.6.8.297708-darwin-297708.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -2228,18 +1834,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>31754947447ec98374b3bf92e29cf68a</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/libpng-1.6.8.180871343-linux-180871343.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -2295,18 +1889,6 @@
         <string>libuuid</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>1b1d83df165c947bea5c60c460277f93</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/libuuid-1.6.2-linux-180871203.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -2337,18 +1919,6 @@
         <string>libxml2</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9303f0dd174129e297eca6cc2eb1ab3f</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libxml_3p-update-libxml/rev/297050/arch/Darwin/installer/libxml2-2.9.1.297050-darwin-297050.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -2360,18 +1930,6 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>b4e676d3d583264f006432510727aa05</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/libxml2-2.9.4.180871340-linux-180871340.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -2426,7 +1984,7 @@
         <key>name</key>
         <string>llappearance_utility</string>
         <key>platforms</key>
-        <map>
+		<map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -2751,18 +2309,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>24c50d563fe8ff10ca819088ffbef7a6</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/nghttp2-1.25.0.180871240-linux-180871240.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -2861,18 +2407,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>ogg_vorbis</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>07fca1531a27915f642a5c1d95008d54</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/oggvorbis_3p-update-oggvorbis/rev/296878/arch/Darwin/installer/ogg_vorbis-1.2.2-1.3.2.296878-darwin-296878.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -2884,18 +2418,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0d3db04b9b10085b100b345c68381cb0</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/ogg_vorbis-1.3.3-1.3.6.183570207-linux-183570207.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -2981,20 +2503,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>openal</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cc0f030e6f4a78e3afd5269165c056b4</string>
-              <key>hash_algorithm</key>
-              <string>md5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/openal-1.12.854-1.1.0.180871246-linux-180871246.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -3051,18 +2559,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>openjpeg</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4e278d789c5d6e448d1e39211d19bf41</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-1.4.201505181816-r27-darwin-201505181816-r27.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3129,18 +2625,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>openssl</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0a77d56769e6075957f614be6575423e</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openssl_3p-update-openssl/rev/297168/arch/Darwin/installer/openssl-1.0.1h.297168-darwin-297168.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3152,18 +2636,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>343f6ace63617546704c4aad9b432312</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/openssl-1.0.2l.180871731-linux-180871731.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -3219,18 +2691,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>pcre</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6d2b38897f1adf354b299345d5fc759b</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/pcre_3p-update-pcre/rev/297155/arch/Darwin/installer/pcre-8.35.-darwin-297155.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3242,18 +2702,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cf1c53b27e5889c7c5963ed06ab23cb2</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/pcre-8.35.180871234-linux-180871234.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -3309,18 +2757,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>slvoice</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>511a9c3fd4b6c76a8a737d06bba1c291</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/oz-426-slvoice/rev/330003/arch/Darwin/installer/slvoice-4.9.0002.27586.330003-darwin-330003.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3481,18 +2917,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>uriparser</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>22608adaf54e8ddc9182a719ba6e2b32</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/uriparser_3p-update-uriparser/rev/299435/arch/Darwin/installer/uriparser-0.8.0.1-darwin-299435.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3504,18 +2928,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6573a190dbdef9b23235beb9b1219bef</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/uriparser-0.8.0.1-linux-180871244.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -3582,18 +2994,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>b7167025f54c044abee21b48476ad4f2</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/viewer_manager-1.0.180871935-linux-180871935.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -3693,18 +3093,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <string>xmlrpc-epi</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ffd3aab8e0c0ff6dadbce49ca2809078</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/xmlrpc-emi_3p-update-xmlrpc-epi/rev/297075/arch/Darwin/installer/xmlrpc_epi-0.54.1.297075-darwin-297075.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
@@ -3716,18 +3104,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0f318372198fb34b3a59b4aa03c40ac7</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.1.180871731-linux-180871731.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -3796,20 +3172,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ee84398d540324533332a048f77bf08a</string>
-              <key>hash_algorithm</key>
-              <string>md5</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/zlib-1.2.8.180871259-linux-180871259.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
