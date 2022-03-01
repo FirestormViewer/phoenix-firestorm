@@ -1759,6 +1759,9 @@ bool LLAppViewer::doFrame()
 		{
 			FSZoneN("Main:Coro");
 		llcoro::suspend();
+		// if one of our coroutines threw an uncaught exception, rethrow it now
+		LLCoros::instance().rethrow();
+
 		}
 		}// <FS:Beq> ensure we have the entire top scope of frame covered
 		if (!LLApp::isExiting())
@@ -6430,12 +6433,6 @@ void LLAppViewer::forceErrorDriverCrash()
 {
    	LL_WARNS() << "Forcing a deliberate driver crash" << LL_ENDL;
 	glDeleteTextures(1, NULL);
-}
-
-void LLAppViewer::forceErrorCoroutineCrash()
-{
-    LL_WARNS() << "Forcing a crash in LLCoros" << LL_ENDL;
-    LLCoros::instance().launch("LLAppViewer::crashyCoro", [] {throw LLException("A deliberate crash from LLCoros"); });
 }
 
 void LLAppViewer::forceErrorThreadCrash()

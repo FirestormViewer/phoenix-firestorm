@@ -829,6 +829,12 @@ public:
 				// </FS:Ansariel>
 
 				addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Cache Read/Write ", LLMeshRepository::sCacheBytesRead/(1024.f*1024.f), LLMeshRepository::sCacheBytesWritten/(1024.f*1024.f)));
+                ypos += y_inc;
+
+                addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Skins/Decompositions Memory", LLMeshRepository::sCacheBytesSkins / (1024.f*1024.f), LLMeshRepository::sCacheBytesDecomps / (1024.f*1024.f)));
+                ypos += y_inc;
+
+                addText(xpos, ypos, llformat("%.3f MB Mesh Headers Memory", LLMeshRepository::sCacheBytesHeaders / (1024.f*1024.f)));
 
 				ypos += y_inc;
 			}
