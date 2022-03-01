@@ -62,6 +62,7 @@
 		<radio_item label="Tylko HTTP" name="1"/>
 	</radio_group>
 	<button label="Zamknij" name="close_btn"/>
+	<button label="Reset czasu pobier." name="reset_time_btn" />
 	<button label="Odcz. cache" name="cacheread_btn"/>
 	<button label="Zapis cache" name="cachewrite_btn"/>
 	<button label="Dekoduj" name="decode_btn"/>
