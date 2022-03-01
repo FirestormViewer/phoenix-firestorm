@@ -49,4 +49,3 @@ set(media_plugin_base_HEADER_FILES
 add_library(media_plugin_base
     ${media_plugin_base_SOURCE_FILES}
     )
-

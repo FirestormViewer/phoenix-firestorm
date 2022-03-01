@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">
+		Retour
+	</text>
+	<text name="av_nearby_title">
+		Avatars à proximité
+	</text>
+	<text name="av_nearby_desc">
+		Masquer les avatars les plus complexes pour gagner en fluidité.
+	</text>
+	<slider tool_tip="Contrôle le moment où un avatar visuellement complexe est dessiné sous forme d'avatar de substitution" label="Complexité maximale (K)" name="IndirectMaxComplexity" />
+	<slider tool_tip="Contrôle quand un avatar visuellement complexe est considéré comme prenant trop de temps pour être rendu (unité : microsecondes)" label="Temps de rendu max. (μs)" name="FSRenderAvatarMaxART" />
+	<text name="FSRenderAvatarMaxARTText">
+		illimité
+	</text>
+	<name_list name="nearby_list">
+		<name_list.columns tool_tip="Graphique à barres montrant le temps de rendu actuel (incluant l'auto-tuning) en % du plus lent." name="art_visual" />
+		<name_list.columns label="Temps (μs)" tool_tip="Temps de rendu de l'avatar (ART). Le temps réel nécessaire au rendu de cet avatar avant tout réglage automatique (en microsecondes)." name="art_value" />
+		<name_list.columns tool_tip="Complexité (ARC) basée sur des règles standard." name="complex_value" />
+		<name_list.columns tool_tip="Indique tout réglage. I=Avatar de substitution, S=pas d'ombre." name="state" />
+		<name_list.columns label="Nom" name="name"/>
+	</name_list>
+	<text name="av_nearby_desc2">
+		Vous pouvez également faire un clic droit sur un avatar pour contr. l'affichage.
+	</text>
+	<button label="Exceptions..." name="exceptions_btn" />
+	<check_box label="Toujours afficher complètement les amis" name="display_friends" />
+	<check_box label="Masquer complètement les avatars." name="hide_avatars" />
+	<text name="name_tags_textbox">
+		Des noms:
+	</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="Non" name="radio" />
+		<radio_item label="Oui" name="radio2" />
+		<radio_item label="Brièvement" name="radio3" />
+	</radio_group>
+</panel>

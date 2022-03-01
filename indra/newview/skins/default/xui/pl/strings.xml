@@ -1365,6 +1365,12 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="recompile_script_verb">
 		Rekompiluj
 	</string>
+	<string name="jpeg_image_files">
+		Obrazy JPEG
+	</string>
+	<string name="executable_files">
+		Pliki wykonywalne
+	</string>
 	<string name="shape">
 		Kształt
 	</string>

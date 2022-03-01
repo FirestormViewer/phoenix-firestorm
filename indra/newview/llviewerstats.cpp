@@ -62,6 +62,7 @@
 #include "llsdutil.h"
 #include "llcorehttputil.h"
 #include "llvoicevivox.h"
+#include "llinventorymodel.h"
 #include "lluiusage.h"
 
 namespace LLStatViewer
@@ -585,6 +586,11 @@ void send_viewer_stats(bool include_preferences)
 	fail["off_circuit"] = (S32) gMessageSystem->mOffCircuitPackets;
 	fail["invalid"] = (S32) gMessageSystem->mInvalidOnCircuitPackets;
 	fail["missing_updater"] = (S32) LLAppViewer::instance()->isUpdaterMissing();
+
+	LLSD &inventory = body["inventory"];
+	inventory["usable"] = gInventory.isInventoryUsable();
+	LLSD& validation_info = inventory["validation_info"];
+	gInventory.mValidationInfo->asLLSD(validation_info);
 
 	// <FS:Ansariel> We do not need to send UI usage stats according to Jess...
 	//body["ui"] = LLUIUsage::instance().asLLSD();

@@ -49,7 +49,7 @@
 						</layout_panel>
 					</layout_stack>
 					<text name="info_deletion">
-						Hinweis: Nach 7 Tagen wird eine Gruppe ohne Mitglieder (ausgenommen des Erstellers) gelöscht!
+						Hinweis: Jede Gruppe mit weniger als zwei Mitglieder wird nach 48 Stunden gelöscht!
 					</text>
 				</layout_panel>
 			</layout_stack>

@@ -885,6 +885,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		}
 		else
 		{
+			args["ONLINE_STATUS"] = true;
 			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		}
 

@@ -613,11 +613,6 @@ support@secondlife.com にお問い合わせください。
 	<string name="ReleaseNotes">
 		リリースノート
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		ローディング...
 	</string>

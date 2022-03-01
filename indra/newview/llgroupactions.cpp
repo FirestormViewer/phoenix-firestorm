@@ -438,6 +438,11 @@ void LLGroupActions::show(const LLUUID& group_id)
 
 	// <FS:Ansariel> Standalone group floaters
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+    //LLFloater *floater = LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("people");
+    //if (!floater->isFrontmost())
+    //{
+    //    floater->setVisibleAndFrontmost(TRUE, params);
+    //}
 	LLFloater* floater = NULL;
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{

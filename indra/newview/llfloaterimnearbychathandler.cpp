@@ -569,7 +569,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 			RlvUtil::filterLocation(tmp_chat.mText);
 			tmp_chat.mRlvLocFiltered = TRUE;
 		}
-		if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) && (!args.has("ONLINE_STATUS") || !args["ONLINE_STATUS"].asBoolean()) )
 		{
 			RlvUtil::filterNames(tmp_chat.mText);
 			tmp_chat.mRlvNamesFiltered = TRUE;
