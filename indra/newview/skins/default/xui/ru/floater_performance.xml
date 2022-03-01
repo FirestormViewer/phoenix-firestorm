@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="performance" title="Увеличить скорость графики (экспериментально)">
+<floater name="performance" title="Увеличить скорость графики (Экспериментально)">
 <floater.string name="frame_stats">
-  Кадр: [TOT_FRAME_TIME]ms - Пейзаж:[SCENERY_FRAME_PCT]% Аватары:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% SWAP:[SWAP_FRAME_PCT]% TASKS:[IDLE_FRAME_PCT]%
+Кадр:[TOT_FRAME_TIME]ms Сцена:[SCENERY_FRAME_PCT]% Аватары:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Задачи:[IDLE_FRAME_PCT]%
 </floater.string>
- <floater.string name="limit_fps">
+<floater.string name="limit_fps">
   FPS ограничен [FPSCAP] к/с
 </floater.string>
 <floater.string name="tuning_fps">
@@ -11,6 +11,12 @@
 </floater.string>
 <floater.string name="focus_fps">
   Фоновый режим
+</floater.string>
+<floater.string name="info_waitforit">
+  Дайте 5-10 секунд чтобы изменения произошли.
+</floater.string>
+<floater.string name="info_frozen">
+  Пауза статистики при ограничении FPS или фоновый режим.
 </floater.string>
 <floater.string name="tot_av_template">
   Всего: [TOT_AV] ([TOT_AV_TIME]μs)
@@ -20,28 +26,30 @@
 </floater.string>
 <panel name="panel_top">
 	<panel name="fps_subpanel">
-		<text name="fps_lbl">
-			кадров в секунду
-		</text>
-		<text name="fps_desc1_lbl">
-			Дайте 5–10 секунд, чтобы изменения применились.
-		</text>
+		<text name="fps_lbl">кадров в секунду</text>
+		<text name="fps_warning">Ограничение @ 000 FPS</text>
+		<text name="fps_desc1_lbl">Пауза статистики при ограничении FPS или фоновый режим.</text>
 		<text name="frame_breakdown">
 [---------------------Здесь появится разбивка кадров.----------------------]
 		</text>
 	</panel>
 	<panel name="target_subpanel">
-		<text name="settings_lbl">Автонастройка FPS</text>
-		<check_box label="Автонастройка" name="AutoTuneFPS" tool_tip="Программа попытается настроить параметры для достижения целевой частоты кадров."/>
-		<text name="settings_desc">Автоподстройка настроек для FPS</text>
+		<text name="settings_lbl" tool_tip="Автоматически настраивайет параметры для поддержания FPS. Установите цель на желаемую частоту кадров, и программа просмотра попытается соответствовать этому, динамически изменяя ваши настройки.">Авто.:</text>
+		<text name="targetfps_desc">Целевая частота (fps)</text>
+		<spinner name="target_fps" tool_tip="Цель FPS - Желаемый уровень FPS. Программа просмотра попытается добиться этого, изменив настройки графики."/>
+		<button name="AutoTuneFPS"  label="Старт" label_selected="Стоп" tool_tip="Программа попытается настроить параметры для достижения целевой частоты кадров."/>
+		<check_box name="AutoTuneContinuous" label="Непрерывно" tool_tip="Программа просмотра будет постоянно изменять настройки для достижения целевого FPS, пока не остановится, даже если окно закрыто. Если функция отключена, нажатие кнопки Автонастройка приведет к настройке текущих параметров, а затем остановится."/>
+		<button name="PrefSaveButton" tool_tip="Сохранить текущие настройки по умолчанию для использования в будущем."/>
+		<button name="PrefLoadButton" tool_tip="Загрузить существующие предустановки."/>
+		<button name="Defaults" tool_tip="Перезагрузить настройки графики по умолчанию для вашего оборудования."/>
+		<text name="settings_desc">Стратегия подстройки</text>
 		<combo_box name="FSTuningFPSStrategy">
 			<combo_box.item label="Только аватары" name="av_only"/>
 			<combo_box.item label="Аватары и сцена" name="av_and_scene"/>
 		</combo_box>
-		<spinner name="target_fps" tool_tip="Цель FPS - Желаемый уровень FPS. Программа просмотра попытается добиться этого, изменив настройки графики."/>
+		<button name="target_btn" tool_tip="Изменить поведение стратегии подстройки."/>
 	</panel>
 </panel>
-
 <panel name="panel_performance_main">
 	<panel name="settings_subpanel">
 		<text name="settings_lbl">Настройки графики</text>
@@ -51,7 +59,7 @@
 		<text name="avatars_nearby_lbl">Аватары рядом</text>
 		<text name="avatars_nearby_desc" >Управляйте отображением ближайших аватаров.</text>
 		<text name="avatars_frme_pct_lbl">
-время
+Время
 отрисовки
 аватаров
 		</text>
@@ -64,7 +72,7 @@
 		<text name="huds_lbl">HUD-ы аватара</text>
 		<text name="huds_desc">Удаление ненужных HUD может улучшить скорость.</text>
 		<text name="huds_frme_pct_lbl">
-время
+Время
 отрисовки
 HUD-ов
 		</text>

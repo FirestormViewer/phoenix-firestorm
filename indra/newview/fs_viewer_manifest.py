@@ -198,17 +198,17 @@ class FSViewerManifest:
         from shutil import rmtree
         import tarfile
 
-        #if isdir( "symbols" ):
-        #    rmtree( "symbols" )
+        if isdir( "symbols" ):
+            rmtree( "symbols" )
 
-        #files =  glob( "%s/bin/*" % self.args['dest'] )
-        #for f in files:
-        #    self.fs_generate_breakpad_symbols_for_file( f )
+        files =  glob( "%s/bin/*" % self.args['dest'] )
+        for f in files:
+            self.fs_generate_breakpad_symbols_for_file( f )
 
-        #files =  glob( "%s/lib/*.so" % self.args['dest'] )
-        #for f in files:
-        #    self.fs_generate_breakpad_symbols_for_file( f )
-
+        files =  glob( "%s/lib/*.so" % self.args['dest'] )
+        for f in files:
+            if f.find( "libcef.so" ) == -1:
+                self.fs_generate_breakpad_symbols_for_file( f )
 
         if isdir( "symbols" ):
             for a in self.args:

@@ -344,7 +344,10 @@ public:
 		switch (curlcode)
 		{
 			case CURLE_SSL_PEER_CERTIFICATE:
+// <FS:ND/> CURLE_SSL_CACERT has been deprecated, the LIBCURL-VERSION_NUM check is probably no checking for the lowest curl vesion this did happen
+#if LIBCURL_VERSION_NUM < 0x075100
 			case CURLE_SSL_CACERT:
+#endif
                 data["certificate"] = mTransaction->getErrorCertData();
 				break;
 

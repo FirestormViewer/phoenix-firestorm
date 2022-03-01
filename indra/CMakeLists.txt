@@ -112,6 +112,10 @@ if (NOT USE_BUGSPLAT)
 add_subdirectory(${LIBS_OPEN_PREFIX}llcrashlogger)
 endif (NOT USE_BUGSPLAT)
 
+if( LINUX )
+    add_subdirectory(${VIEWER_PREFIX}linux_crash_logger)
+endif()
+
 add_subdirectory(${LIBS_OPEN_PREFIX}llplugin)
 add_subdirectory(${LIBS_OPEN_PREFIX}llui)
 add_subdirectory(${LIBS_OPEN_PREFIX}viewer_components)
@@ -158,6 +162,10 @@ endif (USE_BUGSPLAT)
 
 add_subdirectory(${VIEWER_PREFIX}newview)
 add_dependencies(viewer firestorm-bin)
+
+set_target_properties(
+    firestorm-bin PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "..\\..\\indra\\newview")
 
 add_subdirectory(${VIEWER_PREFIX}doxygen EXCLUDE_FROM_ALL)
 

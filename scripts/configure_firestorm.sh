@@ -50,6 +50,7 @@ LL_ARGS_PASSTHRU=""
 JOBS="0"
 WANTS_NINJA=$FALSE
 WANTS_VSCODE=$FALSE
+USE_VSTOOL=$TRUE
 TESTBUILD_PERIOD="0"
 SINGLEGRID_URI=""
 
@@ -87,6 +88,7 @@ showUsage()
     echo "  --ninja                  : Build using Ninja"
     echo "  --vscode                 : Exports compile commands for VSCode (Linux only)"
     echo "  --compiler-cache         : Try to detect and use compiler cache (needs also --ninja for OSX and Windows)"
+    echo "  --no-vstools             : Do not use vstool to setup project startup properties (windows only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
     echo
@@ -96,7 +98,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache no-vstools jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -136,6 +138,7 @@ getArgs()
           ninja)          WANTS_NINJA=$TRUE;;
           vscode)         WANTS_VSCODE=$TRUE;;
           compiler-cache) WANTS_CACHE=$TRUE;;
+		  no-vstools)     USE_VSTOOL=$FALSE;;
 
           help)           showUsage && exit 0;;
 
@@ -520,7 +523,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING=ON"
         if [ ! -z $CHANNEL_SIMPLE ]
         then
-            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=firestorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:] | sed -e 's/_x64//'`
+            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=firestorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:] | sed -e 's/x64//' | sed -e 's/_//g'`
         fi
     else
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=OFF"
@@ -577,7 +580,8 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 
-    if [ $TARGET_PLATFORM == "windows" ] ; then
+    if [ $TARGET_PLATFORM == "windows" -a $USE_VSTOOL -eq $TRUE ] ; then
+        echo "Setting startup project via vstool"
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
 fi

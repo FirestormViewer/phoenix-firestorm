@@ -366,6 +366,7 @@
 			<menu_item_call label="Измерение лагов" name="Lag Meter"/>
 			<menu_item_check label="Окно статистики" name="Statistics Bar"/>
 			<menu_item_check label="Статистика загрузки сцены" name="Scene Load Statistics"/>
+			<menu_item_check label="Увеличить скорость графики ..." name="Performance"/>
 			<menu_item_check label="Показать информацию сложности аватаров" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Подсветка и видимость" name="Highlighting and Visibility">

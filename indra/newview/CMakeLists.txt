@@ -1864,6 +1864,8 @@ if (WINDOWS)
       COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}"
       )
 
+    set_source_files_properties( llappviewer.cpp llviewermenu.cpp PROPERTIES COMPILE_FLAGS /bigobj )
+
     list(APPEND viewer_HEADER_FILES
          llappviewerwin32.h
          llwindebug.h
@@ -2565,26 +2567,30 @@ if (LINUX)
   set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
-if (NOT ENABLE_MEDIA_PLUGINS)
-  set(COPY_INPUT_DEPENDENCIES
-    ${VIEWER_BINARY_NAME}
-    SLPlugin
-    media_plugin_cef
-    #media_plugin_gstreamer010
-    media_plugin_libvlc
-    llcommon
-    )
-else (NOT ENABLE_MEDIA_PLUGINS)
-  set(COPY_INPUT_DEPENDENCIES
-    ${VIEWER_BINARY_NAME}
-    #linux-crash-logger
-    SLPlugin
-    media_plugin_cef
-    #media_plugin_gstreamer010
-    llcommon
-    )
-endif (NOT ENABLE_MEDIA_PLUGINS)
+  if (NOT ENABLE_MEDIA_PLUGINS)
+	set(COPY_INPUT_DEPENDENCIES
+      ${VIEWER_BINARY_NAME}
+      SLPlugin
+      media_plugin_cef
+      media_plugin_gstreamer10
+      #media_plugin_libvlc
+      llcommon
+	  linux-crash-logger
+      )
+  else (NOT ENABLE_MEDIA_PLUGINS)
+	set(COPY_INPUT_DEPENDENCIES
+      ${VIEWER_BINARY_NAME}
+      #linux-crash-logger
+      SLPlugin
+      media_plugin_cef
+      media_plugin_gstreamer10
+      llcommon
+	  linux-crash-logger
+      )
+  endif (NOT ENABLE_MEDIA_PLUGINS)
 
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
+  
   add_custom_command(
       OUTPUT ${product}.tar.bz2
       COMMAND ${PYTHON_EXECUTABLE}
@@ -2609,7 +2615,6 @@ endif (NOT ENABLE_MEDIA_PLUGINS)
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         ${COPY_INPUT_DEPENDENCIES}
       )
-
 
   add_custom_command(
     OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.copy_touched
@@ -2861,8 +2866,10 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
     endif (LINUX)
   endif (USE_BUGSPLAT)
 
-  # for both Bugsplat and Breakpad
-  add_dependencies(llpackage generate_symbols)
+  if (NOT LINUX) #Linux generates symbols via viewer_manifest.py/fs_viewer_manifest.py
+	# for both Bugsplat and Breakpad
+	add_dependencies(llpackage generate_symbols)
+  endif()
 endif ()
 
 if (LL_TESTS)

@@ -29,6 +29,9 @@
         http://secondlife.com/account/request.php
     </panel.string>
     <!-- *NOTE: Custom resize logic for login_html in llpanellogin.cpp -->
+    <string name="ServerComboTooltip">
+        An existing grid or a grid URI
+    </string>
     <web_browser
      name="login_html"
      top="18"

@@ -3,6 +3,34 @@
 <map>
     <key>installables</key>
     <map>
+      <key>gstreamer10</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/gstreamer.txt</string>
+        <key>name</key>
+        <string>gstreamer10</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>01f39ecf80dae64e30402ac384035b3e</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.10.6.294903</string>
+      </map>
       <key>breakpad</key>
       <map>
         <key>copyright</key>
@@ -792,9 +820,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>96dd770f246917589b776300a2d07f9e</string>
+              <string>0bcccd248a5e4084af4026eee439816b</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/curl-7.54.1.212891029-linux64-212891029.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/curl-7.81.0.220511906-linux64_bionic-220511906.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3566,30 +3594,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9f9582031af3b78d6153ec296d6dde9f</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/vlc_bin-2.2.3-linux-201607071822-r16.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5eace400c487011a678493fc520be24d</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/vlc_bin-2.2.3-linux-x64-201610182130-r16.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>

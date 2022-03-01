@@ -805,11 +805,6 @@ nächsten Eigentümer angehängt werden.
 	<string name="ReleaseNotes">
 		Versionshinweise
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		Wird geladen...
 	</string>
