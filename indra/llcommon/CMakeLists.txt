@@ -13,7 +13,7 @@ include(Copy3rdPartyLibs)
 include(ZLIB)
 include(URIPARSER)
 
-include_directories(
+include_directories( SYSTEM
     ${EXPAT_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}

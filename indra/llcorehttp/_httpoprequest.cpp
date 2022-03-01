@@ -508,7 +508,12 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_NOPROGRESS, 1);
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_URL, mReqURL.c_str());
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_PRIVATE, getHandle());
+
+// <FS:ND/> Newer versions of curl are stricter with checkinng Cotent-Encoding: header
+// Aws returns Content-Encoding: binary/octet-stream which is no valid scheme defined by HTTP/1.1 (compress,deflate, gzip)
+#if LIBCURL_VERSION_NUM < 0x075100
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_ENCODING, "");
+#endif
 
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_AUTOREFERER, 1);
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_MAXREDIRS, HTTP_REDIRECTS_DEFAULT);

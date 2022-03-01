@@ -911,6 +911,7 @@ protected:
 		static bool filterNotification(LLNotificationPtr notify);
 		// connect counter updaters to the corresponding signals
 		/*virtual*/ void onAdd(LLNotificationPtr p) { mChiclet->setCounter(++mChiclet->mUreadSystemNotifications); }
+		/*virtual*/ void onLoad(LLNotificationPtr p) { mChiclet->setCounter(++mChiclet->mUreadSystemNotifications); }
 		/*virtual*/ void onDelete(LLNotificationPtr p) { mChiclet->setCounter(--mChiclet->mUreadSystemNotifications); }
 				
 		LLNotificationChiclet* const mChiclet;

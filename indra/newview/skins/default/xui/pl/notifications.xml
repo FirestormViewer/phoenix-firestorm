@@ -5166,4 +5166,10 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 		Dodatek o nazwie "[NAME]" zawiera riggowany mesz, ale jest dołączony do punktu HUD "[HUD_POINT]". Oznacza to, że Ty co prawda zobaczysz go poprawnie wyrenderowany, ale wszyscy inni nie będą mogli. Rozważ zdjęcie go i ponowne dołączenie do zwykłego punktu doczepienia.
 		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="notifyignore" />
 	</notification>
+	<notification name="WarnForceLoginURL">
+		Wygląda na to, że adres URL ekranu logowania jest zastępowany w celach testowych.
+
+Zresetować adres URL do domyślnego?
+		<usetemplate name="okcancelbuttons" notext="Przypomnij mi potem" yestext="Resetuj" />
+	</notification>
 </notifications>

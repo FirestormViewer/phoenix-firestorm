@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """\
 @file viewer_manifest.py
 @author Ryan Williams
@@ -32,6 +32,8 @@ $/LicenseInfo$
 from __future__ import print_function, division
 
 import errno
+import glob
+import itertools
 import json
 import os
 import os.path
@@ -97,7 +99,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 # include the extracted list of contributors
                 contributions_path = "../../doc/contributions.txt"
                 contributor_names = self.extract_names(contributions_path)
-                self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
+                self.put_in_file(contributor_names.encode(), "contributors.txt", src=contributions_path)
 
                 # ... and the default camera position settings
                 self.path("camera")
@@ -149,17 +151,17 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 if sourceid:
                     settings_install['sourceid'] = settings_template['sourceid'].copy()
                     settings_install['sourceid']['Value'] = sourceid
-                    print ("Set sourceid in settings_install.xml to '%s'" % sourceid)
+                    print("Set sourceid in settings_install.xml to '%s'" % sourceid)
 
                 if self.args.get('channel_suffix'):
                     settings_install['CmdLineChannel'] = settings_template['CmdLineChannel'].copy()
                     settings_install['CmdLineChannel']['Value'] = self.channel_with_pkg_suffix()
-                    print ("Set CmdLineChannel in settings_install.xml to '%s'" % self.channel_with_pkg_suffix())
+                    print("Set CmdLineChannel in settings_install.xml to '%s'" % self.channel_with_pkg_suffix())
 
                 if self.args.get('grid'):
                     settings_install['CmdLineGridChoice'] = settings_template['CmdLineGridChoice'].copy()
                     settings_install['CmdLineGridChoice']['Value'] = self.grid()
-                    print ("Set CmdLineGridChoice in settings_install.xml to '%s'" % self.grid())
+                    print("Set CmdLineGridChoice in settings_install.xml to '%s'" % self.grid())
 
                 # put_in_file(src=) need not be an actual pathname; it
                 # only needs to be non-empty
@@ -236,7 +238,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             #we likely no longer need the test, since we will throw an exception above, but belt and suspenders and we get the
             #return code for free.
             if not self.path2basename(os.pardir, "build_data.json"):
-                print ("No build_data.json file")
+                print("No build_data.json file")
 
     def finish_build_data_dict(self, build_data_dict):
         return build_data_dict
@@ -355,13 +357,13 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         return "icons/" + self.channel_type()
 
     def extract_names(self,src):
+        """Extract contributor names from source file, returns string"""
         try:
-            contrib_file = open(src,'r')
+            with open(src, 'r') as contrib_file: 
+                lines = contrib_file.readlines()
         except IOError:
-            print ("Failed to open '%s'" % src)
+            print("Failed to open '%s'" % src)
             raise
-        lines = contrib_file.readlines()
-        contrib_file.close()
 
         # All lines up to and including the first blank line are the file header; skip them
         lines.reverse() # so that pop will pull from first to last line
@@ -397,7 +399,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         """
         Like ln -sf, but uses os.symlink() instead of running ln. This creates
         a symlink at 'dst' that points to 'src' -- see:
-        https://docs.python.org/2/library/os.html#os.symlink
+        https://docs.python.org/3/library/os.html#os.symlink
 
         If you omit 'dst', this creates a symlink with basename(src) at
         get_dst_prefix() -- in other words: put a symlink to this pathname
@@ -459,11 +461,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                         os.remove(dst)
                         os.symlink(src, dst)
                 elif os.path.isdir(dst):
-                    print ("Requested symlink (%s) exists but is a directory; replacing" % dst)
+                    print("Requested symlink (%s) exists but is a directory; replacing" % dst)
                     shutil.rmtree(dst)
                     os.symlink(src, dst)
                 elif os.path.exists(dst):
-                    print ("Requested symlink (%s) exists but is a file; replacing" % dst)
+                    print("Requested symlink (%s) exists but is a file; replacing" % dst)
                     os.remove(dst)
                     os.symlink(src, dst)
                 else:
@@ -471,7 +473,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     raise
         except Exception as err:
             # report
-            print ("Can't symlink %r -> %r: %s: %s" % \
+            print("Can't symlink %r -> %r: %s: %s" % \
                   (dst, src, err.__class__.__name__, err))
             # if caller asked us not to catch, re-raise this exception
             if not catch:
@@ -533,7 +535,7 @@ class WindowsManifest(ViewerManifest):
             else:
                 raise Exception("Directories are not supported by test_CRT_and_copy_action()")
         else:
-            print ("Doesn't exist:", src)
+            print("Doesn't exist:", src)
 
     def test_for_no_msvcrt_manifest_and_copy_action(self, src, dst):
         # This is used to test that no manifest for the msvcrt exists.
@@ -562,7 +564,7 @@ class WindowsManifest(ViewerManifest):
             else:
                 raise Exception("Directories are not supported by test_CRT_and_copy_action()")
         else:
-            print ("Doesn't exist:", src)
+            print("Doesn't exist:", src)
         
     def construct(self):
         super(WindowsManifest, self).construct()
@@ -603,8 +605,8 @@ class WindowsManifest(ViewerManifest):
             try:
                 self.path("glod.dll")
             except RuntimeError as err:
-                print (err.message)
-                print ("Skipping GLOD library (assumming linked statically)")
+                print(err.message)
+                print("Skipping GLOD library (assumming linked statically)")
 
             # Get fmodstudio dll if needed
             if self.args['fmodstudio'] == 'ON':
@@ -803,8 +805,7 @@ class WindowsManifest(ViewerManifest):
         result = ""
         dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1]) and not pair[1].endswith(".pdb") ] #<FS:ND/> Don't include pdb files.
         # sort deepest hierarchy first
-        dest_files.sort(lambda a,b: cmp(a.count(os.path.sep),b.count(os.path.sep)) or cmp(a,b))
-        dest_files.reverse()
+        dest_files.sort(key=lambda f: (f.count(os.path.sep), f), reverse=True)
         out_path = None
         for pkg_file in dest_files:
             rel_file = os.path.normpath(pkg_file.replace(self.get_dst_prefix()+os.path.sep,''))
@@ -827,8 +828,7 @@ class WindowsManifest(ViewerManifest):
             for d in deleted_file_dirs:
                 deleted_dirs.extend(path_ancestors(d))
             # sort deepest hierarchy first
-            deleted_dirs.sort(lambda a,b: cmp(a.count(os.path.sep),b.count(os.path.sep)) or cmp(a,b))
-            deleted_dirs.reverse()
+            deleted_dirs.sort(key=lambda f: (f.count(os.path.sep), f), reverse=True)
             prev = None
             for d in deleted_dirs:
                 if d != prev:   # skip duplicates
@@ -931,25 +931,19 @@ class WindowsManifest(ViewerManifest):
         installer_created=False
         nsis_attempts=3
         nsis_retry_wait=15
-        # <FS:TS> A cute little Python 2/3 compatibility hack, thanks to ESR.
-        # Remove the next four lines if Python 2 compatibiltiy is not needed.
-        try:
-            xrange
-        except NameError:
-            xrange = range
-        for attempt in xrange(nsis_attempts):
+        for attempt in range(nsis_attempts):
             try:
                 self.run_command([NSIS_path, '/V2', self.dst_path_of(tempfile)])
             except ManifestError as err:
                 if attempt+1 < nsis_attempts:
-                    print ("nsis failed, waiting %d seconds before retrying" % nsis_retry_wait, file=sys.stderr)
+                    print("nsis failed, waiting %d seconds before retrying" % nsis_retry_wait, file=sys.stderr)
                     time.sleep(nsis_retry_wait)
                     nsis_retry_wait*=2
             else:
                 # NSIS worked! Done!
                 break
         else:
-            print ("Maximum nsis attempts exceeded; giving up", file=sys.stderr)
+            print("Maximum nsis attempts exceeded; giving up", file=sys.stderr)
             raise
 
         self.fs_sign_win_installer(substitution_strings) # <FS:ND/> Sign files, step two. Sign installer.
@@ -963,10 +957,10 @@ class WindowsManifest(ViewerManifest):
         python  = os.environ.get('PYTHON', sys.executable)
         if os.path.exists(sign_py):
             dst_path = self.dst_path_of(exe)
-            print ("about to run signing of: ", dst_path)
+            print("about to run signing of: ", dst_path)
             self.run_command([python, sign_py, dst_path])
         else:
-            print ("Skipping code signing of %s %s: %s not found" % (self.dst_path_of(exe), exe, sign_py))
+            print("Skipping code signing of %s %s: %s not found" % (self.dst_path_of(exe), exe, sign_py))
 
     def escape_slashes(self, path):
         return path.replace('\\', '\\\\\\\\')
@@ -1349,14 +1343,15 @@ class DarwinManifest(ViewerManifest):
             if bugsplat_db:
                 # Inject BugsplatServerURL into Info.plist if provided.
                 Info_plist = self.dst_path_of("Info.plist")
-                Info = plistlib.readPlist(Info_plist)
-                # https://www.bugsplat.com/docs/platforms/os-x#configuration
-                Info["BugsplatServerURL"] = \
-                     "https://{}.bugsplat.com/".format(bugsplat_db)
-                self.put_in_file(
-                    plistlib.writePlistToString(Info),
-                    os.path.basename(Info_plist),
-                    "Info.plist")
+                with open(Info_plist, 'rb') as f:
+                    Info = plistlib.load(f)
+                    # https://www.bugsplat.com/docs/platforms/os-x#configuration
+                    Info["BugsplatServerURL"] = \
+                        "https://{}.bugsplat.com/".format(bugsplat_db)
+                    self.put_in_file(
+                        plistlib.dumps(Info),
+                        os.path.basename(Info_plist),
+                        "Info.plist")
 
         with self.prefix(dst="Contents"):  # everything goes in Contents
             # self.path("Info.plist", dst="Info.plist")
@@ -1436,10 +1431,10 @@ class DarwinManifest(ViewerManifest):
                         added = [os.path.relpath(d, self.get_dst_prefix())
                                  for s, d in self.file_list[oldlen:]]
                     except MissingError as err:
-                        print ("Warning: "+err.msg, file=sys.stderr)
+                        print("Warning: "+err.msg, file=sys.stderr)
                         added = []
                     if not added:
-                        print ("Skipping %s" % dst)
+                        print("Skipping %s" % dst)
                     return added
 
                 # dylibs is a list of all the .dylib files we expect to need
@@ -1639,7 +1634,7 @@ class DarwinManifest(ViewerManifest):
 
         # mount the image and get the name of the mount point and device node
         try:
-            hdi_output = subprocess.check_output(['hdiutil', 'attach', '-private', sparsename])
+            hdi_output = subprocess.check_output(['hdiutil', 'attach', '-private', sparsename], text=True)
         except subprocess.CalledProcessError as err:
             sys.exit("failed to mount image at '%s'" % sparsename)
             
@@ -1674,7 +1669,7 @@ class DarwinManifest(ViewerManifest):
                         #os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.png"): "background.png",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items()):
-                print ("Copying to dmg", s, d)
+                print("Copying to dmg", s, d)
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
             # <FS:TS> The next two commands *MUST* execute before the loop
@@ -1717,7 +1712,7 @@ class DarwinManifest(ViewerManifest):
             # and invalidate the signatures.
             if 'signature' in self.args:
                 app_in_dmg=os.path.join(volpath,self.app_name()+".app")
-                print ("Attempting to sign '%s'" % app_in_dmg)
+                print("Attempting to sign '%s'" % app_in_dmg)
                 identity = self.args['signature']
                 if identity == '':
                     identity = 'Developer ID Application'
@@ -1733,47 +1728,79 @@ class DarwinManifest(ViewerManifest):
                     keychain_pwd_path = os.path.join(build_secrets_checkout,'code-signing-osx','password.txt')
                     keychain_pwd = open(keychain_pwd_path).read().rstrip()
 
-                    # Note: As of macOS Sierra, keychains are created with names postfixed with '-db' so for example, the
-                    #       SL Viewer keychain would by default be found in ~/Library/Keychains/viewer.keychain-db instead of
-                    #       just ~/Library/Keychains/viewer.keychain in earlier versions.
+                    # Note: As of macOS Sierra, keychains are created with
+                    #       names postfixed with '-db' so for example, the SL
+                    #       Viewer keychain would by default be found in
+                    #       ~/Library/Keychains/viewer.keychain-db instead of
+                    #       just ~/Library/Keychains/viewer.keychain in
+                    #       earlier versions.
                     #
-                    #       Because we have old OS files from previous versions of macOS on the build hosts, the configurations
-                    #       are different on each host. Some have viewer.keychain, some have viewer.keychain-db and some have both.
-                    #       As you can see in the line below, this script expects the Linden Developer cert/keys to be in viewer.keychain.
+                    #       Because we have old OS files from previous
+                    #       versions of macOS on the build hosts, the
+                    #       configurations are different on each host. Some
+                    #       have viewer.keychain, some have viewer.keychain-db
+                    #       and some have both. As you can see in the line
+                    #       below, this script expects the Linden Developer
+                    #       cert/keys to be in viewer.keychain.
                     #
-                    #       To correctly sign builds you need to make sure ~/Library/Keychains/viewer.keychain exists on the host
-                    #       and that it contains the correct cert/key. If a build host is set up with a clean version of macOS Sierra (or later)
-                    #       then you will need to change this line (and the one for 'codesign' command below) to point to right place or else
-                    #       pull in the cert/key into the default viewer keychain 'viewer.keychain-db' and export it to 'viewer.keychain'
+                    #       To correctly sign builds you need to make sure
+                    #       ~/Library/Keychains/viewer.keychain exists on the
+                    #       host and that it contains the correct cert/key. If
+                    #       a build host is set up with a clean version of
+                    #       macOS Sierra (or later) then you will need to
+                    #       change this line (and the one for 'codesign'
+                    #       command below) to point to right place or else
+                    #       pull in the cert/key into the default viewer
+                    #       keychain 'viewer.keychain-db' and export it to
+                    #       'viewer.keychain'
                     viewer_keychain = os.path.join(home_path, 'Library',
                                                    'Keychains', 'viewer.keychain')
                     self.run_command(['security', 'unlock-keychain',
                                       '-p', keychain_pwd, viewer_keychain])
-                    signed=False
-                    sign_attempts=3
                     sign_retry_wait=15
-                    libvlc_path = app_in_dmg + "/Contents/Resources/llplugin/media_plugin_libvlc.dylib"
-                    cef_path = app_in_dmg + "/Contents/Resources/llplugin/media_plugin_cef.dylib"
-                    slplugin_path = app_in_dmg + "/Contents/Resources/SLPlugin.app/Contents/MacOS/SLPlugin"
-                    greenlet_path = app_in_dmg + "/Contents/Resources/updater/greenlet/_greenlet.so"
-                    while (not signed) and (sign_attempts > 0):
+                    resources = app_in_dmg + "/Contents/Resources/"
+                    plain_sign = glob.glob(resources + "llplugin/*.dylib")
+                    deep_sign = [
+                        resources + "updater/SLVersionChecker",
+                        resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
+                        app_in_dmg,
+                        ]
+                    for attempt in range(3):
+                        if attempt: # second or subsequent iteration
+                            print >> sys.stderr, \
+                                ("codesign failed, waiting %d seconds before retrying" %
+                                 sign_retry_wait)
+                            time.sleep(sign_retry_wait)
+                            sign_retry_wait*=2
+
                         try:
-                            sign_attempts-=1
                             # Note: See blurb above about names of keychains
-                            self.run_command(['codesign', '--force', '--timestamp','--keychain', viewer_keychain, '--sign', identity, libvlc_path])
-                            self.run_command(['codesign', '--force', '--timestamp', '--keychain', viewer_keychain, '--sign', identity, cef_path])
-                            self.run_command(['codesign', '--force', '--timestamp', '--keychain', viewer_keychain, '--sign', identity, greenlet_path])
-                            self.run_command(['codesign', '--verbose', '--deep', '--force', '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, slplugin_path])
-                            self.run_command(['codesign', '--verbose', '--deep', '--force', '--entitlements', self.src_path_of("slplugin.entitlements"), '--options', 'runtime', '--keychain', viewer_keychain, '--sign', identity, app_in_dmg])
-                            signed=True # if no exception was raised, the codesign worked
+                            for signee in plain_sign:
+                                self.run_command(
+                                    ['codesign',
+                                     '--force',
+                                     '--timestamp',
+                                     '--keychain', viewer_keychain,
+                                     '--sign', identity,
+                                     signee])
+                            for signee in deep_sign:
+                                self.run_command(
+                                    ['codesign',
+                                     '--verbose',
+                                     '--deep',
+                                     '--force',
+                                     '--entitlements', self.src_path_of("slplugin.entitlements"),
+                                     '--options', 'runtime',
+                                     '--keychain', viewer_keychain,
+                                     '--sign', identity,
+                                     signee])
+                            break # if no exception was raised, the codesign worked
                         except ManifestError as err:
-                            if sign_attempts:
-                                print ("codesign failed, waiting %d seconds before retrying" % sign_retry_wait, file=sys.stderr)
-                                time.sleep(sign_retry_wait)
-                                sign_retry_wait*=2
-                            else:
-                                print ("Maximum codesign attempts exceeded; giving up", file=sys.stderr)
-                                raise
+                            # 'err' goes out of scope
+                            sign_failed = err
+                    else:
+                        print >> sys.stderr, "Maximum codesign attempts exceeded; giving up"
+                        raise sign_failed
                     self.run_command(['spctl', '-a', '-texec', '-vvvv', app_in_dmg])
                     self.run_command([self.src_path_of("installers/darwin/apple-notarize.sh"), app_in_dmg])
 
@@ -1781,7 +1808,7 @@ class DarwinManifest(ViewerManifest):
             # Unmount the image even if exceptions from any of the above 
             self.run_command(['hdiutil', 'detach', '-force', devfile])
 
-        print ("Converting temp disk image to final disk image")
+        print("Converting temp disk image to final disk image")
         self.run_command(['hdiutil', 'convert', sparsename, '-format', 'UDZO',
                           '-imagekey', 'zlib-level=9', '-o', finalname])
         # get rid of the temp file
@@ -1837,8 +1864,9 @@ class LinuxManifest(ViewerManifest):
             self.path("install.sh")
 
         with self.prefix(dst="bin"):
+            self.path( os.path.join(os.pardir,'build_data.json'), "build_data.json" )
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
-            #self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
+            self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
             # <FS:Ansariel> Remove VMP
@@ -1851,7 +1879,7 @@ class LinuxManifest(ViewerManifest):
 
         # Get the icons based on the channel type
         icon_path = self.icon_path()
-        print ("DEBUG: icon_path '%s'" % icon_path)
+        print("DEBUG: icon_path '%s'" % icon_path)
         with self.prefix(src=icon_path) :
             self.path("firestorm_256.png","firestorm_48.png")
             #with self.prefix(dst="res-sdl") :
@@ -1859,24 +1887,8 @@ class LinuxManifest(ViewerManifest):
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
-            #self.path("gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
-            self.path2basename("libvlc", "libmedia_plugin_libvlc.so")
+            self.path("gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer.so")
             self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
-
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-            self.path( "plugins.dat" )
-            self.path( "*/*.so" )
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
-            self.path( "libvlc*.so*" )
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-            self.path( "plugins.dat" )
-            self.path( "*/*.so" )
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib' ), dst="lib"):
-            self.path( "libvlc*.so*" )
 
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
@@ -1965,7 +1977,7 @@ class LinuxManifest(ViewerManifest):
 
         # llcommon
         #if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
-        #    print "Skipping llcommon.so (assuming llcommon was linked statically)"
+        #    print("Skipping llcommon.so (assuming llcommon was linked statically))"
 
         self.path("featuretable_linux.txt")
 
@@ -2050,6 +2062,7 @@ class LinuxManifest(ViewerManifest):
         installer_name = "_".join(installer_name_components)
         #installer_name = self.installer_base_name()
 
+        self.fs_save_breakpad_symbols("linux")
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
         self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
@@ -2067,7 +2080,10 @@ class LinuxManifest(ViewerManifest):
         # name in the tarfile
         realname = self.get_dst_prefix()
         tempname = self.build_path_of(installer_name)
-        self.run_command([self.args["source"] + "/installers/linux/appimage.sh", self.args["build"]] )
+        self.run_command([
+            self.args["source"] + "/installers/linux/appimage.sh", self.args["build"],
+            self.args["build"] + "/Firestorm-x86_64.AppImage", self.args["build"] + "/" + installer_name + ".AppImage"
+        ] )
         self.run_command(["mv", realname, tempname])
         try:
             # only create tarball if it's a release build.
@@ -2078,14 +2094,14 @@ class LinuxManifest(ViewerManifest):
                                   '--numeric-owner', self.fs_linux_tar_excludes(), '-caf',
                                  tempname + '.tar.xz', installer_name])
             else:
-                print ("Skipping %s.tar.xz for non-Release build (%s)" % \
+                print("Skipping %s.tar.xz for non-Release build (%s)" % \
                       (installer_name, self.args['buildtype']))
         finally:
             self.run_command(["mv", tempname, realname])
 
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
-            print ("* Going strip-crazy on the packaged binaries, since this is a RELEASE build")
+            print("* Going strip-crazy on the packaged binaries, since this is a RELEASE build")
             # makes some small assumptions about our packaged dir structure
             self.run_command(
                 ["find"] +
@@ -2159,7 +2175,7 @@ class Linux_i686_Manifest(LinuxManifest):
                 self.path("libtcmalloc.so*") #formerly called google perf tools
                 pass
             except:
-                print ("tcmalloc files not found, skipping")
+                print("tcmalloc files not found, skipping")
                 pass
 
             if self.args['fmodstudio'] == 'ON':
@@ -2168,7 +2184,7 @@ class Linux_i686_Manifest(LinuxManifest):
                     self.path("libfmod.so*")
                     pass
                 except:
-                    print ("Skipping libfmod.so - not found")
+                    print("Skipping libfmod.so - not found")
                     pass
 
         # Vivox runtimes
@@ -2264,9 +2280,9 @@ def symlinkf(src, dst):
 if __name__ == "__main__":
     # Report our own command line so that, in case of trouble, a developer can
     # manually rerun the same command.
-    print('%s \\\n%s' %
+    print(('%s \\\n%s' %
           (sys.executable,
-           ' '.join((("'%s'" % arg) if ' ' in arg else arg) for arg in sys.argv)))
+           ' '.join((("'%s'" % arg) if ' ' in arg else arg) for arg in sys.argv))))
     # fmodstudio and openal can be used simultaneously and controled by environment
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,

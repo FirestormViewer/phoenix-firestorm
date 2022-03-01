@@ -711,7 +711,7 @@ void LLPresetsManager::handleGraphicPresetControlChanged(LLControlVariablePtr co
 
 	if (!mIsLoadingPreset && 
 		(!mIsDrawDistanceSteppingActive || control->getName() != "RenderFarClip") &&
-		(!FSPerfStats::autoTune) )
+		(!FSPerfStats::tunables.userAutoTuneEnabled) )
 	{
 		LL_DEBUGS() << "Trigger graphic preset control changed signal" << LL_ENDL;
 

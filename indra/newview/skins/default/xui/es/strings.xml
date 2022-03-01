@@ -663,11 +663,6 @@ pueden adjuntarse a las notas.
 	<string name="ReleaseNotes">
 		Notas de la versión
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		Cargando...
 	</string>

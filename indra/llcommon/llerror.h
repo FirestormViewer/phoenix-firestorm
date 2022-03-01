@@ -80,7 +80,7 @@ const int LL_ERR_NOERR = 0;
 
 #endif // !_DEBUG
 
-#define llassert_always_msg(func, msg) if (LL_UNLIKELY(!(func))) LL_ERRS() << "ASSERT (" << msg << ")" << LL_ENDL
+#define llassert_always_msg(func, msg) if (LL_UNLIKELY(!(func))) { LL_ERRS() << "ASSERT (" << msg << ")" << LL_ENDL; /*<FS:ND> call abort, this will not be reached but signaled GCC after this line the program exists*/ std::abort(); }
 
 #define llassert_always(func)	llassert_always_msg(func, #func)
 

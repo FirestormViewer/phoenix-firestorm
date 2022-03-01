@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="Améliorer les performances graphiques (expérimental)">
+	<floater.string name="frame_stats">
+		Images: [TOT_FRAME_TIME]ms - Scène:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% Huds:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tâches:[IDLE_FRAME_PCT]%
+	</floater.string>
+	<floater.string name="limit_fps">
+		FPS limité à: [FPSCAP] fps
+	</floater.string>
+	<floater.string name="tuning_fps">
+		Objectif: [FPSTARGET] fps
+	</floater.string>
+	<floater.string name="focus_fps">
+		En arrière-plan
+	</floater.string>
+	<floater.string name="tot_av_template">
+		Total: [TOT_AV] ([TOT_AV_TIME]μs)
+	</floater.string>
+	<floater.string name="tot_att_template">
+		Total: [TOT_ATT] ([TOT_ATT_TIME]μs)
+	</floater.string>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				images par seconde
+			</text>
+			<text name="fps_desc1_lbl">
+				Attendez 5 à 10 secondes pour voir les changements.
+			</text>
+			<text name="frame_breakdown">
+				[----------------- Vous verrez ici l'analyse du cadre. -----------------]
+			</text>
+		</panel>
+		<panel name="target_subpanel">
+			<text name="settings_lbl">
+				Réglage auto de l'affichage
+			</text>
+			<check_box label="Réglage automatique" name="AutoTuneFPS" tool_tip="Le visualiseur tentera d'ajuster les paramètres pour atteindre la fréquence d'images souhaitée.." />
+			<text name="settings_desc">
+				Réglage auto pour maint. le nombre de FPS.
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="Uniquement les avatars" name="av_only" />
+				<combo_box.item label="Avatars et scène" name="av_and_scene" />
+			</combo_box>
+			<spinner name="target_fps" tool_tip="FPS cible - Le niveau de FPS souhaité. Le visualisateur essaiera d'atteindre ce niveau en ajustant vos paramètres graphiques.." />
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				Paramètres graphiques
+			</text>
+			<text name="settings_desc">
+				Sélectionnez les paramètres de distance, d'eau, d'éclairage, etc..
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				Avatars à proximité
+			</text>
+			<text name="avatars_nearby_desc">
+				Définir quels avatars sont entièrement affichés.
+			</text>
+			<text name="avatars_frme_pct_lbl">
+Temps
+Dessin
+Avatars
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				Complexité de l'avatar
+			</text>
+			<text name="complexity_info">
+				Soyez un bon citoyen. Gérez l'impact de votre avatar.
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				Vos HUD actifs
+			</text>
+			<text name="huds_desc">
+				La suppress. des HUD inutiles peut améliorer la fluidité.
+			</text>
+			<text name="huds_frme_pct_lbl">
+Temps
+Dessin
+HUDs
+			</text>
+		</panel>
+	</panel>
+</floater>

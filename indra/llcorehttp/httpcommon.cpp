@@ -289,8 +289,12 @@ CURL *getCurlTemplateHandle()
             check_curl_code(result, CURLOPT_NOSIGNAL);
             result = curl_easy_setopt(curlpTemplateHandle, CURLOPT_NOPROGRESS, 1);
             check_curl_code(result, CURLOPT_NOPROGRESS);
+// <FS:ND/> Newer versions of curl are stricter with checkinng Cotent-Encoding: header
+// Aws returns Content-Encoding: binary/octet-stream which is no valid scheme defined by HTTP/1.1 (compress,deflate, gzip)
+#if LIBCURL_VERSION_NUM < 0x075100
             result = curl_easy_setopt(curlpTemplateHandle, CURLOPT_ENCODING, "");
             check_curl_code(result, CURLOPT_ENCODING);
+#endif
             result = curl_easy_setopt(curlpTemplateHandle, CURLOPT_AUTOREFERER, 1);
             check_curl_code(result, CURLOPT_AUTOREFERER);
             result = curl_easy_setopt(curlpTemplateHandle, CURLOPT_FOLLOWLOCATION, 1);

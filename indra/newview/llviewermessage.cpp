@@ -4890,13 +4890,16 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 		FSRadar::getInstance()->requestRadarChannelAlertSync();
 		return;
 	}
-	// </FS:AO>
 
-	// Don't play sounds from gestures if they are not enabled.
-	// ...TS: Unless they're your own.
-	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
-		(owner_id != gAgent.getID()) &&
-		(owner_id == object_id)) return;
+	// Do play sounds triggered by avatar, since muting your own
+	// gesture sounds and your own sounds played inworld from 
+	// Inventory can cause confusion.
+	if (object_id == owner_id
+        && owner_id != gAgentID
+        && !gSavedSettings.getBOOL("EnableGestureSounds"))
+	{
+		return;
+	}
 
 	// NaCl - Antispam Registry
 	//if (LLMaterialTable::basic.isCollisionSound(sound_id) && !gSavedSettings.getBOOL("EnableCollisionSounds"))

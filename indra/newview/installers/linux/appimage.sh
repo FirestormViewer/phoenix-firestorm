@@ -3,6 +3,8 @@
 SCRIPT_PATH=`readlink -f $0`
 SCRIPT_PATH=`dirname $SCRIPT_PATH`
 
+echo "Trying to build AppImage in directory $1 into file $3"
+
 # All hope is lost if there is no lsb_release command
 command -v lsb_release >/dev/null 2>/dev/null || exit 0
 
@@ -45,3 +47,8 @@ chmod a+x appimagetool-x86_64.AppImage
 ./appimagetool-x86_64.AppImage --appimage-extract
 rm appimagetool-x86_64.AppImage
 ARCH=x86_64 squashfs-root/AppRun packaged
+
+if [ -f $2 ]
+then
+	mv $2 $3
+fi
