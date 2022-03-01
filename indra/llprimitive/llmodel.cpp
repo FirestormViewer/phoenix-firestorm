@@ -1545,7 +1545,10 @@ U32 LLMeshSkinInfo::sizeBytes() const
     res += sizeof(std::vector<std::string>) + sizeof(std::string) * mJointNames.size();
     for (U32 i = 0; i < mJointNames.size(); ++i)
     {
-        res += mJointNames[i].size(); // actual size, not capacity
+        // <FS> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+        //res += mJointNames[i].size(); // actual size, not capacity
+        res += mJointNames[i].mName.size(); // actual size, not capacity
+        // </FS>
     }
 
     res += sizeof(std::vector<S32>) + sizeof(S32) * mJointNums.size();
