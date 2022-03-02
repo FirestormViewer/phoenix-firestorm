@@ -255,6 +255,8 @@ elseif(LINUX)
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0
         libfontconfig.so.1
+        libaprutil-1.so.0
+        libapr-1.so.0
        )
     else (NOT USESYSTEMLIBS)
       set(release_files
