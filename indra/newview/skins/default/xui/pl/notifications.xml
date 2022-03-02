@@ -38,6 +38,11 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 &apos;[DIAGNOSTIC]&apos;
 Upewnij się, że Twoje połączenie z internetem działa.
 	</notification>
+	<notification name="LoginFailedToParse">
+		Przeglądarka otrzymała zniekształconą odpowiedź z serwera. Upewnij się, że połączenie internetowe działa prawidłowo i spróbuj ponownie później.
+
+Jeśli uważasz, że to błąd - skontaktuj się z pomocą techniczną.
+	</notification>
 	<notification name="MessageTemplateNotFound">
 		Szablon komunikatu dla [PATH] nie został odnaleziony.
 	</notification>
@@ -1138,6 +1143,9 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 		Nastąpiło wylogowanie z [CURRENT_GRID]
 [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Zakończ" yestext="Pokaż IM/czat"/>
+	</notification>
+	<notification name="InventoryUnusable">
+		Wystąpił problem podczas ładowania szafy. Spróbuj się wylogować i zalogować ponownie. Jeśli zobaczysz ten komunikat jeszcze raz, to skontaktuj się z pomocą techniczną, aby rozwiązać problem.
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Nie możesz kupić działek dla grupy.
@@ -5146,6 +5154,11 @@ Skopiuj do własnej szafy i spróbuj ponownie.
 	</notification>
 	<notification name="TrackLoadMismatch">
 		Nie można załadować ścieżki z [TRACK1] do [TRACK2].
+	</notification>
+	<notification name="CompressionTestResults">
+Wynik testu kompresji pliku dla gzip na poziomie 6 z [FILE] o rozmiarze [SIZE] KB:
+Pakowanie: [PACK_TIME]s [PSIZE]KB
+Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.
