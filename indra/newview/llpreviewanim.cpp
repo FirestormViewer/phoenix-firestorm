@@ -44,8 +44,7 @@ extern LLAgent gAgent;
 //const S32 ADVANCED_VPAD = 3; // <FS:Ansariel> Improved animation preview
 
 LLPreviewAnim::LLPreviewAnim(const LLSD& key)
-	: LLPreview( key ),
-	pMotion(NULL)
+	: LLPreview( key )
 {
 	mCommitCallbackRegistrar.add("PreviewAnim.Play", boost::bind(&LLPreviewAnim::play, this, _2));
 }
@@ -53,13 +52,6 @@ LLPreviewAnim::LLPreviewAnim(const LLSD& key)
 // virtual
 BOOL LLPreviewAnim::postBuild()
 {
-	const LLInventoryItem* item = getItem();
-	if(item)
-	{
-		pMotion = gAgentAvatarp->createMotion(item->getAssetUUID()); // preload the animation
-		getChild<LLUICtrl>("desc")->setValue(item->getDescription());
-	}
-
 	childSetCommitCallback("desc", LLPreview::onText, this);
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 	// <FS:Ansariel> Improved animation preview
@@ -70,23 +62,11 @@ BOOL LLPreviewAnim::postBuild()
     //pAdvancedStatsTextBox->setVisible(FALSE);
     //LLRect rect = getRect();
     //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
-	if (pMotion)
-	{
-		LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
-		LLTextBox* stats_box_right = getChild<LLTextBox>("AdvancedStatsRight");
-		stats_box_left->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
-		stats_box_left->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
-		stats_box_left->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
-		stats_box_right->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
-		stats_box_right->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
-		stats_box_right->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
-	}
 	// </FS:Ansariel>
 
 	return LLPreview::postBuild();
 }
 
-// static
 // llinventorybridge also calls into here
 void LLPreviewAnim::play(const LLSD& param)
 {
@@ -184,6 +164,34 @@ void LLPreviewAnim::draw()
 }
 
 // virtual
+void LLPreviewAnim::refreshFromItem()
+{
+    const LLInventoryItem* item = getItem();
+    if (!item)
+    {
+        return;
+    }
+
+    // Preload motion
+    // <FS:Ansariel> Improved animation preview
+    //gAgentAvatarp->createMotion(item->getAssetUUID());  
+    LLMotion *motion = gAgentAvatarp->createMotion(item->getAssetUUID());
+    if (motion)
+    {
+        LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
+        LLTextBox* stats_box_right = getChild<LLTextBox>("AdvancedStatsRight");
+        stats_box_left->setTextArg("[PRIORITY]", llformat("%d", motion->getPriority()));
+        stats_box_left->setTextArg("[DURATION]", llformat("%.2f", motion->getDuration()));
+        stats_box_left->setTextArg("[IS_LOOP]", (motion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
+        stats_box_right->setTextArg("[EASE_IN]", llformat("%.2f", motion->getEaseInDuration()));
+        stats_box_right->setTextArg("[EASE_OUT]", llformat("%.2f", motion->getEaseOutDuration()));
+        stats_box_right->setTextArg("[NUM_JOINTS]", llformat("%d", motion->getNumJointMotions()));
+    }
+    // </FS:Ansariel>
+
+    LLPreview::refreshFromItem();
+}
+
 void LLPreviewAnim::cleanup()
 {
 	this->mItemID = LLUUID::null;
@@ -223,8 +231,17 @@ void LLPreviewAnim::onClose(bool app_quitting)
 //        LLRect rect = getRect();
 //        reshape(rect.getWidth(), rect.getHeight() + pAdvancedStatsTextBox->getRect().getHeight() + ADVANCED_VPAD, FALSE);
 //
+//        LLMotion *motion = NULL;
+//        const LLInventoryItem* item = getItem();
+//        if (item)
+//        {
+//            // if motion exists, will return existing one.
+//            // Needed because viewer can purge motions
+//            motion = gAgentAvatarp->createMotion(item->getAssetUUID());
+//        }
+//
 //        // set text
-//        if (pMotion)
+//        if (motion)
 //        {
 //            pAdvancedStatsTextBox->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
 //            pAdvancedStatsTextBox->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
@@ -235,28 +252,4 @@ void LLPreviewAnim::onClose(bool app_quitting)
 //        }
 //    }
 //}
-
-// virtual
-void LLPreviewAnim::refreshFromItem()
-{
-	LLPreview::refreshFromItem();
-
-	const LLInventoryItem* item = getItem();
-	if (item)
-	{
-		pMotion = gAgentAvatarp->createMotion(item->getAssetUUID()); // preload the animation
-
-		if (pMotion)
-		{
-			LLTextBox* stats_box_left = getChild<LLTextBox>("AdvancedStatsLeft");
-			LLTextBox* stats_box_right = getChild<LLTextBox>("AdvancedStatsRight");
-			stats_box_left->setTextArg("[PRIORITY]", llformat("%d", pMotion->getPriority()));
-			stats_box_left->setTextArg("[DURATION]", llformat("%.2f", pMotion->getDuration()));
-			stats_box_left->setTextArg("[IS_LOOP]", (pMotion->getLoop() ? LLTrans::getString("PermYes") : LLTrans::getString("PermNo")));
-			stats_box_right->setTextArg("[EASE_IN]", llformat("%.2f", pMotion->getEaseInDuration()));
-			stats_box_right->setTextArg("[EASE_OUT]", llformat("%.2f", pMotion->getEaseOutDuration()));
-			stats_box_right->setTextArg("[NUM_JOINTS]", llformat("%d", pMotion->getNumJointMotions()));
-		}
-	}
-}
 // </FS:Ansariel>

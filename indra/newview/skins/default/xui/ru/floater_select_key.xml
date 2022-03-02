@@ -9,7 +9,7 @@
 	<floater.string name="reserved_by_menu">
 Комбинация [KEYSTR] зарезервировано меню.
 	</floater.string>
-	<text name="descritption">
+	<text name="description">
 Нажмите клавишу или кнопку мыши для выбора.
 Разрешенный ввод: [INPUT].
 	</text>

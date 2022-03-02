@@ -59,7 +59,29 @@ class LLInventoryCategory;
 class LLMessageSystem;
 class LLInventoryCollectFunctor;
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+///----------------------------------------------------------------------------
+/// LLInventoryValidationInfo 
+///----------------------------------------------------------------------------
+class LLInventoryValidationInfo: public LLRefCount
+{
+public:
+	LLInventoryValidationInfo();
+	void toOstream(std::ostream& os) const;
+	void asLLSD(LLSD& sd) const;
+	
+
+	S32 mFatalErrorCount;
+	S32 mWarningCount;
+	bool mInitialized;
+	bool mFatalNoRootFolder;
+	bool mFatalNoLibraryRootFolder;
+	bool mFatalQADebugMode;
+	std::set<LLFolderType::EType> mMissingRequiredSystemFolders;
+	std::set<LLFolderType::EType> mDuplicateRequiredSystemFolders;
+};
+std::ostream& operator<<(std::ostream& s, const LLInventoryValidationInfo& v);
+
+///----------------------------------------------------------------------------
 // LLInventoryModel
 //
 // Represents a collection of inventory, and provides efficient ways to access 
@@ -67,7 +89,7 @@ class LLInventoryCollectFunctor;
 //   NOTE: This class could in theory be used for any place where you need 
 //   inventory, though it optimizes for time efficiency - not space efficiency, 
 //   probably making it inappropriate for use on tasks.
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+///----------------------------------------------------------------------------
 class LLInventoryModel
 {
 	LOG_CLASS(LLInventoryModel);
@@ -712,19 +734,17 @@ protected:
 	cat_array_t* getUnlockedCatArray(const LLUUID& id);
 	item_array_t* getUnlockedItemArray(const LLUUID& id);
 private:
-#ifdef LL_DEBUG
 	std::map<LLUUID, bool> mCategoryLock;
 	std::map<LLUUID, bool> mItemLock;
-#endif
 	
 	//--------------------------------------------------------------------
 	// Debugging
 	//--------------------------------------------------------------------
 public:
 	void dumpInventory() const;
-#ifdef LL_DEBUG
-	bool validate() const;
-#endif
+	LLPointer<LLInventoryValidationInfo> validate() const;
+	LLPointer<LLInventoryValidationInfo> mValidationInfo;
+	std::string getFullPath(const LLInventoryObject *obj) const;
 
 /**                    Miscellaneous
  **                                                                            **

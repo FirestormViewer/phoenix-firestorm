@@ -220,6 +220,24 @@ private:
 	U32 mSDLSym; // <FS:ND/> Store the SDL Keysym too.
 
 	BOOL mUseLegacyCursors; // <FS:LO> Legacy cursor setting from main program
+
+public:
+#if LL_X11
+    static Display* getSDLDisplay();
+    LLWString const& getPrimaryText() const { return mPrimaryClipboard; }
+    LLWString const& getSecondaryText() const { return mSecondaryClipboard; }
+    void clearPrimaryText()  { mPrimaryClipboard.clear(); }
+    void clearSecondaryText() { mSecondaryClipboard.clear(); }
+private:
+    void initialiseX11Clipboard();
+
+    bool getSelectionText(Atom selection, LLWString& text);
+    bool getSelectionText( Atom selection, Atom type, LLWString &text );
+
+    bool setSelectionText(Atom selection, const LLWString& text);
+#endif
+	LLWString mPrimaryClipboard;
+	LLWString mSecondaryClipboard;
 };
 
 

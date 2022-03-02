@@ -2243,8 +2243,7 @@
              label="Search"
              name="Search">
              <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="search"/>
+                 function="Avatar.ToggleSearch"/>
        </menu_item_call>
 -->
         <menu_item_check
@@ -2255,8 +2254,7 @@
              function="Floater.Visible"
              parameter="search" />
             <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="search" />
+             function="Avatar.ToggleSearch"/>
             </menu_item_check>
 
     	<menu_item_call
@@ -2886,6 +2884,17 @@
                  function="Floater.Toggle"
                  parameter="scene_load_stats" />
             </menu_item_check>
+            <menu_item_check
+            label="Improve graphics speed..."
+            name="Performance">
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="performance" />
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="performance" />
+            </menu_item_check>
+  
       <menu_item_check
         label="Show avatar complexity information"
         name="Avatar Draw Info">
@@ -5242,6 +5251,12 @@
             <menu_item_call.on_click
              function="Advanced.CompressImage" />
         </menu_item_call>
+      <menu_item_call
+       label="Compress File Test"
+       name="Compress File Test">
+        <menu_item_call.on_click
+         function="Advanced.CompressFileTest" />
+      </menu_item_call>
 
       <menu_item_call
          label="Enable Visual Leak Detector"

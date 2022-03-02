@@ -1230,6 +1230,9 @@ Dies ist ein temporärer Fehler. Bitte passen Sie das Kleidungsstück in einigen
 [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Beenden" yestext="IM &amp; Chat anzeigen"/>
 	</notification>
+	<notification name="InventoryUnusable">
+		Es gab ein Problem mit Ihrem Inventar. Bitte versuchen Sie zunächst, sich erneut anzumelden. Falls Sie diese Nachricht erneut erhalten, kontaktieren Sie den Support, um die Ursache des Problems zu korrigieren.
+	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Landkauf für Gruppe nicht möglich:
 Sie sind nicht berechtigt, Land für die aktive Gruppe zu kaufen.
@@ -4832,6 +4835,12 @@ Bitte kopieren Sie diese in Ihr Inventar und versuchen Sie es erneut.
 	<notification name="TrackLoadMismatch">
 		Der Pfad konnte nicht aus [TRACK1] in [TRACK2] geladen werden.
 	</notification>
+	<notification name="CompressionTestResults">
+		Test-Ergebnis für gip-Level 6 Datei-Komprimierung für [FILE] mit Größe [SIZE] KB:
+Packen: [PACK_TIME]s [PSIZE]KB
+Entpacken: [UNPACK_TIME]s [USIZE]KB
+    <tag>fail</tag>
+  </notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		
@@ -5523,8 +5532,12 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 	</notification>
 	<notification name="AttachedRiggedObjectToHUD">
 		Der Anhang „[NAME]“ enthält geriggtes Mesh, ist aber am HUD-Punkt „[HUD_POINT]“ angehängt. Das bedeutet, dass Sie es korrekt sehen werden, alle anderen werden es hingegen gar nicht sehen. Denken Sie darüber nach, den Anhang zu entfernen und an einem regulären Punkt am Körper anzuhängen.
-   <usetemplate
-    ignoretext="Warn me when a rigged attachment is worn on a HUD attachment point"
-    name="notifyignore"/>
-  </notification>
+		<usetemplate ignoretext="Warnen, wenn ein geriggtes Mesh an einem HUD-Punkt angehängt wird." name="notifyignore"/>
+	</notification>
+	<notification name="WarnForceLoginURL">
+		URL der Startseite des Anmeldebildschirms wird für Testzwecke übersteuert.
+
+URL auf Standard zurücksetzen?
+		<usetemplate name="okcancelbuttons" notext="Nächstes Mal erinnern" yestext="Zurücksetzen"/>
+	</notification>
 </notifications>
