@@ -211,7 +211,7 @@ public:
     inline LLJoint* getSkeletonJoint(S32 joint_num) { return mSkeleton[joint_num]; }
     inline size_t getSkeletonJointCount() const { return mSkeleton.size(); }
 
-
+    void 					notifyAttachmentMeshLoaded();
 	void 					addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LLUUID>* meshes_seen = NULL, bool recursive = true);
 	void					removeAttachmentOverridesForObject(const LLUUID& mesh_id);
 	void					removeAttachmentOverridesForObject(LLViewerObject *vo);
@@ -352,9 +352,10 @@ public:
 	static F32		sLODFactor; // user-settable LOD factor
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
-	static BOOL		sDebugAvatarRotation;
 	static U64		sRenderTimeLimit_ns; // <FS:Beq/> nanosecond time limit for avatar rendering 0 is unlimited. 
 	static LLPartSysData sCloud;
+
+    static LLPointer<LLViewerTexture>  sCloudTexture;
 
 	//--------------------------------------------------------------------
 	// Region state
@@ -411,7 +412,7 @@ protected:
 private:
 	BOOL			mFirstFullyVisible;
 	F32				mFirstUseDelaySeconds;
-	LLFrameTimer	mFirstSeenTimer;
+	LLFrameTimer	mFirstAppearanceMessageTimer;
 
 	BOOL			mFullyLoaded;
 	BOOL			mPreviousFullyLoaded;

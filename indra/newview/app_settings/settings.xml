@@ -12895,7 +12895,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>2.2</real>
   </map>
-    <key>RenderGLCoreProfile</key>
+    <key>RenderGLContextCoreProfile</key>
     <map>
       <key>Comment</key>
       <string>Don't use a compatibility profile OpenGL context.  Requires restart.</string>
@@ -18731,17 +18731,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>-1</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>ForcePeriodicRenderingTime</key>
-    <map>
-      <key>Comment</key>
-      <string>Periodically enable all rendering masks for a single frame.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>-1.0</real>
     </map>
     <key>ZoomDirect</key>
     <map>

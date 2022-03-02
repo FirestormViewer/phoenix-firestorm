@@ -2114,6 +2114,8 @@ set(viewer_APPSETTINGS_FILES
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
     packages-info.txt
+    featuretable.txt
+    featuretable_mac.txt
     )
 	
 if (WINDOWS)

@@ -40,6 +40,8 @@
 #include "llface.h"
 #include "llviewercamera.h"
 #include "llvector4a.h"
+#include "llvoavatar.h"
+
 //<FS:Beq> needed to resolve render_hull dep
 #include "llmodel.h"
 //</FS:Beq>
@@ -136,7 +138,7 @@ public:
 	F32  mAlphaMaskCutoff;
 	U8   mDiffuseAlphaMode;
 	bool mSelected;
-    LLVOAvatar* mAvatar = nullptr;
+    LLPointer<LLVOAvatar> mAvatar = nullptr;
     LLMeshSkinInfo* mSkinInfo = nullptr;
 
 
@@ -481,6 +483,9 @@ public:
 	sg_iterator beginAlphaGroups();
 	sg_iterator endAlphaGroups();
 
+    sg_iterator beginRiggedAlphaGroups();
+    sg_iterator endRiggedAlphaGroups();
+
 	bool hasOcclusionGroups() { return mOcclusionGroupsSize > 0; }
 	sg_iterator beginOcclusionGroups();
 	sg_iterator endOcclusionGroups();
@@ -499,6 +504,7 @@ public:
 
 	void pushVisibleGroup(LLSpatialGroup* group);
 	void pushAlphaGroup(LLSpatialGroup* group);
+    void pushRiggedAlphaGroup(LLSpatialGroup* group);
 	void pushOcclusionGroup(LLSpatialGroup* group);
 	void pushDrawableGroup(LLSpatialGroup* group);
 	void pushDrawable(LLDrawable* drawable);
@@ -507,6 +513,7 @@ public:
 	
 	U32 getVisibleGroupsSize()		{ return mVisibleGroupsSize; }
 	U32	getAlphaGroupsSize()		{ return mAlphaGroupsSize; }
+    U32	getRiggedAlphaGroupsSize() { return mRiggedAlphaGroupsSize; }
 	U32	getDrawableGroupsSize()		{ return mDrawableGroupsSize; }
 	U32	getVisibleListSize()		{ return mVisibleListSize; }
 	U32	getVisibleBridgeSize()		{ return mVisibleBridgeSize; }
@@ -520,6 +527,7 @@ private:
 
 	U32					mVisibleGroupsSize;
 	U32					mAlphaGroupsSize;
+    U32                 mRiggedAlphaGroupsSize;
 	U32					mOcclusionGroupsSize;
 	U32					mDrawableGroupsSize;
 	U32					mVisibleListSize;
@@ -527,6 +535,7 @@ private:
 
 	U32					mVisibleGroupsAllocated;
 	U32					mAlphaGroupsAllocated;
+    U32                 mRiggedAlphaGroupsAllocated;
 	U32					mOcclusionGroupsAllocated;
 	U32					mDrawableGroupsAllocated;
 	U32					mVisibleListAllocated;
@@ -538,6 +547,8 @@ private:
 	sg_iterator			mVisibleGroupsEnd;
 	sg_list_t			mAlphaGroups;
 	sg_iterator			mAlphaGroupsEnd;
+    sg_list_t           mRiggedAlphaGroups;
+    sg_iterator         mRiggedAlphaGroupsEnd;
 	sg_list_t			mOcclusionGroups;
 	sg_iterator			mOcclusionGroupsEnd;
 	sg_list_t			mDrawableGroups;
