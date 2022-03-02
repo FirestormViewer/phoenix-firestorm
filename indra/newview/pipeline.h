@@ -416,6 +416,9 @@ public:
 	static void updateRenderDeferred();
 	static void refreshCachedSettings();
 
+    // <FS:Ansariel> [FS performance floater]
+    //static void onToggleAutoFPS();
+
 	void addDebugBlip(const LLVector3& position, const LLColor4& color);
 
 	void hidePermanentObjects( std::vector<U32>& restoreList );
@@ -423,6 +426,7 @@ public:
 	void skipRenderingOfTerrain( bool flag );
 	void hideObject( const LLUUID& id );
 	void restoreHiddenObject( const LLUUID& id );
+    void handleShadowDetailChanged();
 
     // <FS:Ansariel> [FS performance floater]
     //void autoAdjustSettings();
@@ -438,6 +442,7 @@ private:
 	void connectRefreshCachedSettingsSafe(const std::string name);
 	void hideDrawable( LLDrawable *pDrawable );
 	void unhideDrawable( LLDrawable *pDrawable );
+    void skipRenderingShadows();
 
 	// <FS:Ansariel> Reset VB during TP
 	void initDeferredVB();
@@ -953,6 +958,7 @@ public:
 // [/SL:KB]
 	static bool RenderUIBuffer;
 	static S32 RenderShadowDetail;
+    static S32 RenderShadowSplits;
 	static bool RenderDeferredSSAO;
 	static F32 RenderShadowResolutionScale;
 	static bool RenderLocalLights;

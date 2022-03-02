@@ -140,7 +140,7 @@
 
 // NOTE: Keep in sync with indra/newview/skins/default/xui/en/floater_preferences_graphics_advanced.xml
 // NOTE: Unused consts are commented out since some compilers (on macOS) may complain about unused variables.
-//  const S32 WATER_REFLECT_NONE_WATER_OPAQUE       = -2;
+    const S32 WATER_REFLECT_NONE_WATER_OPAQUE       = -2;
     const S32 WATER_REFLECT_NONE_WATER_TRANSPARENT  = -1;
     const S32 WATER_REFLECT_MINIMAL                 =  0;
 //  const S32 WATER_REFLECT_TERRAIN                 =  1;
@@ -161,6 +161,7 @@ F32 LLPipeline::RenderResolutionMultiplier;
 // [/SL:KB]
 bool LLPipeline::RenderUIBuffer;
 S32 LLPipeline::RenderShadowDetail;
+S32 LLPipeline::RenderShadowSplits;
 bool LLPipeline::RenderDeferredSSAO;
 F32 LLPipeline::RenderShadowResolutionScale;
 bool LLPipeline::RenderLocalLights;
@@ -596,6 +597,7 @@ void LLPipeline::init()
 // [/SL:KB]
 	connectRefreshCachedSettingsSafe("RenderUIBuffer");
 	connectRefreshCachedSettingsSafe("RenderShadowDetail");
+    connectRefreshCachedSettingsSafe("RenderShadowSplits");
 	connectRefreshCachedSettingsSafe("RenderDeferredSSAO");
 	connectRefreshCachedSettingsSafe("RenderShadowResolutionScale");
 	connectRefreshCachedSettingsSafe("RenderLocalLights");
@@ -666,6 +668,8 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("CameraDoFResScale");
 	connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
 	gSavedSettings.getControl("RenderAutoHideSurfaceAreaLimit")->getCommitSignal()->connect(boost::bind(&LLPipeline::refreshCachedSettings));
+    // <FS:Ansariel> [FS performance floater]
+    //gSavedSettings.getControl("AutoFPS")->getCommitSignal()->connect(boost::bind(&LLPipeline::onToggleAutoFPS));
 	connectRefreshCachedSettingsSafe("FSRenderVignette");	// <FS:CR> Import Vignette from Exodus
 	// <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
 	connectRefreshCachedSettingsSafe("RenderAttachedLights");
@@ -1217,6 +1221,7 @@ void LLPipeline::refreshCachedSettings()
 // [/SL:KB]
 	RenderUIBuffer = gSavedSettings.getBOOL("RenderUIBuffer");
 	RenderShadowDetail = gSavedSettings.getS32("RenderShadowDetail");
+    RenderShadowSplits = gSavedSettings.getS32("RenderShadowSplits");
 	RenderDeferredSSAO = gSavedSettings.getBOOL("RenderDeferredSSAO");
 	RenderShadowResolutionScale = gSavedSettings.getF32("RenderShadowResolutionScale");
 	RenderLocalLights = gSavedSettings.getBOOL("RenderLocalLights");
@@ -10567,14 +10572,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
 	if (mSunDiffuse == LLColor4::black)
 	{ //sun diffuse is totally black, shadows don't matter
-		LLGLDepthTest depth(GL_TRUE);
-
-		for (S32 j = 0; j < 4; j++)
-		{
-			mShadow[j].bindTarget();
-			mShadow[j].clear();
-			mShadow[j].flush();
-		}
+        skipRenderingShadows();
 	}
 	else
 	{
@@ -10629,7 +10627,8 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
 			std::vector<LLVector3> fp;
 
-			if (!gPipeline.getVisiblePointCloud(shadow_cam, min, max, fp, lightDir))
+			if (!gPipeline.getVisiblePointCloud(shadow_cam, min, max, fp, lightDir)
+                || j > RenderShadowSplits)
 			{
 				//no possible shadow receivers
 				if (!gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_SHADOW_FRUSTA))
@@ -11798,6 +11797,30 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 	}
 }
 
+void LLPipeline::skipRenderingShadows()
+{
+    LLGLDepthTest depth(GL_TRUE);
+
+    for (S32 j = 0; j < 4; j++)
+    {
+        mShadow[j].bindTarget();
+        mShadow[j].clear();
+        mShadow[j].flush();
+    }
+}
+
+void LLPipeline::handleShadowDetailChanged()
+{
+    if (RenderShadowDetail > gSavedSettings.getS32("RenderShadowDetail"))
+    {
+        skipRenderingShadows();
+    }
+    else
+    {
+        LLViewerShaderMgr::instance()->setShaders();
+    }
+}
+
 // <FS:Ansariel> [FS performance floater]
 //const F32 MIN_DRAW_DISTANCE = 64;
 //const F32 MAX_DRAW_DISTANCE = 256;
@@ -11857,10 +11880,17 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 //            {
 //                S32 fps_dif = fps_lower_boundary - fps;
 //                
-//                if (LLPipeline::sRenderDeferred && RenderShadowDetail > 0)
+//                if (sWaterReflections && RenderReflectionDetail > WATER_REFLECT_NONE_WATER_OPAQUE)
 //                {
-//                    S32 shadow_detail = RenderShadowDetail - 1;
-//                    gSavedSettings.setS32("RenderShadowDetail", shadow_detail);
+//                    S32 reflection_detail = llclamp(RenderReflectionDetail - 1, WATER_REFLECT_NONE_WATER_OPAQUE, WATER_REFLECT_MINIMAL);
+//                    gSavedSettings.setS32("RenderReflectionDetail", reflection_detail);
+//                    return;
+//                }
+//                
+//                if (LLPipeline::sRenderDeferred && RenderShadowDetail > 0 && RenderShadowSplits > 0)
+//                {
+//                    S32 shadow_splits = llclamp(RenderShadowSplits - 1, 0, 3);
+//                    gSavedSettings.setS32("RenderShadowSplits", shadow_splits);
 //                    return;
 //                }
 //                
@@ -11894,10 +11924,17 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 //                    update_far_clip(fps_dif);
 //                }
 //
-//                if (LLPipeline::sRenderDeferred && RenderShadowDetail < 2)
+//                if (LLPipeline::sRenderDeferred && RenderShadowDetail > 0 && RenderShadowSplits < 3)
 //                {
-//                    S32 shadow_detail = RenderShadowDetail + 1;
-//                    gSavedSettings.setS32("RenderShadowDetail", shadow_detail);
+//                    S32 shadow_splits = llclamp(RenderShadowSplits + 1, 0, 3);
+//                    gSavedSettings.setS32("RenderShadowSplits", shadow_splits);
+//                    return;
+//                }
+//
+//                if (sWaterReflections && RenderReflectionDetail < WATER_REFLECT_MINIMAL)
+//                {
+//                    S32 reflection_detail = llclamp(RenderReflectionDetail + 1, WATER_REFLECT_NONE_WATER_OPAQUE, WATER_REFLECT_MINIMAL);
+//                    gSavedSettings.setS32("RenderReflectionDetail", reflection_detail);
 //                }
 //            }
 //        }
@@ -11912,6 +11949,16 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 //void LLPipeline::setAdjustmentTimerExpiry(F32 expiration)
 //{
 //    mUpdateTimer->setTimerExpirySec(expiration);
+//}
+//
+//void LLPipeline::onToggleAutoFPS()
+//{
+//    if (!gSavedSettings.getBOOL("AutoFPS"))
+//    {
+//        //reset the number of shadow map splits rendered, when disabling auto-fps
+//        //probably should be removed, if we'll have actual UI control for this setting
+//        gSavedSettings.setS32("RenderShadowSplits", 3);
+//    }
 //}
 // </FS:Ansariel> [FS performance floater]
 

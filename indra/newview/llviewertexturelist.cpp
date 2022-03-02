@@ -207,8 +207,8 @@ static std::string get_texture_list_name()
 void LLViewerTextureList::doPrefetchImages()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	gTextureTimer.start();
-	gTextureTimer.pause();
+    gTextureTimer.start();
+    gTextureTimer.pause();
 
 	if (LLAppViewer::instance()->getPurgeCache())
 	{
