@@ -79,9 +79,17 @@ namespace tut
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
 #endif
+#if __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 #include <tut/tut.hpp>
 #if __clang__
 #pragma clang diagnostic pop
+#endif
+#if __GNUC__
+#pragma GCC diagnostic pop
 #endif
 
 // The functions BELOW this point actually consume tut.hpp functionality.

@@ -36,9 +36,7 @@ if (USE_BUGSPLAT)
 
     if( LINUX )
       set(BUGSPLAT_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/breakpad)
-      # <FS:ND/> Sadly we cannot have the nice things yet and need add_definitions for older cmake
-      #add_compile_definitions(__STDC_FORMAT_MACROS)
-      add_definitions(-D__STDC_FORMAT_MACROS)
+      add_compile_definitions(__STDC_FORMAT_MACROS)
     else()
         set(BUGSPLAT_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/bugsplat)
     endif()
