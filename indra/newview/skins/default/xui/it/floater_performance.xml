@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="Migliora la velocita grafica  (Sperimentale)">
+	<floater.string name="limit_fps">
+		Limita FPS: [FPSCAP] fps
+	</floater.string>
+	<floater.string name="tuning_fps">
+		Obbiett.: [FPSTARGET] fps
+	</floater.string>
+	<floater.string name="focus_fps">
+		Sfondo
+	</floater.string>
+	<floater.string name="tot_av_template">
+		Totale: [TOT_AV] ([TOT_AV_TIME]μs)
+	</floater.string>
+	<floater.string name="tot_att_template">
+		Totale: [TOT_ATT] ([TOT_ATT_TIME]μs)
+	</floater.string>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">
+				fotogr. al secondo
+			</text>
+			<text name="fps_desc1_lbl">
+				Attendi 5-10 Sec per aggiornamento modifiche
+			</text>
+			<text name="frame_breakdown">
+				[------------ La suddivisione del frame apparirà qui ------------]
+			</text>
+		</panel>
+		<panel name="target_subpanel">
+			<text name="settings_lbl">
+				Autoregolazione Frame Rate
+			</text>
+			<check_box label="Autoregolazione" name="AutoTuneFPS" tool_tip="Il programma tenterà di regolare le impostazioni per soddisfare l'FPS target." />
+			<text name="settings_desc">
+				Autoregola impostazioni per mantenere FPS
+			</text>
+			<combo_box name="FSTuningFPSStrategy">
+				<combo_box.item label="Sintonizza solo avatar" name="av_only" />
+				<combo_box.item label="Avatar e scena" name="av_and_scene" />
+			</combo_box>
+			<spinner name="target_fps" tool_tip="Target FPS - Il livello FPS desiderato. Lo spettatore tenterà di raggiungere questo obiettivo regolando le impostazioni grafiche." />
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">
+				Impostazioni grafiche
+			</text>
+			<text name="settings_desc">
+				Scegli impostazioni per distanza, acqua, illuminazione e altro.
+			</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">
+				Avatar nelle vicinanze
+			</text>
+			<text name="avatars_nearby_desc">
+				Gestisci quali avatar vicini vengono visti completamente.
+			</text>
+			<text name="avatars_frme_pct_lbl">
+Tempo trasc.
+a disegnare
+avatar
+			</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">
+				La tua complessita
+			</text>
+			<text name="complexity_info">
+				Sii un buon cittadino. Gestisci l'impatto del tuo avatar.
+			</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl">
+				I tuoi HUD attivi
+			</text>
+			<text name="huds_desc">
+				Rimuovi HUD non necessari. Migliora la velocita.
+			</text>
+			<text name="huds_frme_pct_lbl">
+Tempo trasc.
+a disegnare
+HUD
+			</text>
+		</panel>
+	</panel>
+</floater>

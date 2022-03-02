@@ -500,8 +500,7 @@ LLNotification::LLNotification(const LLSDParamAdapter<Params>& p) :
 	mResponderObj(NULL),
 	mId(p.id.isProvided() ? p.id : LLUUID::generateNewID()),
 	mOfferFromAgent(p.offer_from_agent),
-    mIsDND(p.is_dnd),
-	mIsFromStorage(false)// <FS:Ansariel> FIRE-11339: Persisted group notifications get logged to IM on each login
+    mIsDND(p.is_dnd)
 {
 	if (p.functor.name.isChosen())
 	{
@@ -1708,6 +1707,20 @@ void LLNotifications::add(const LLNotificationPtr pNotif)
 	}
 
 	updateItem(LLSD().with("sigtype", "add").with("id", pNotif->id()), pNotif);
+}
+
+void LLNotifications::load(const LLNotificationPtr pNotif)
+{
+	if (pNotif == NULL) return;
+
+	// first see if we already have it -- if so, that's a problem
+	LLNotificationSet::iterator it=mItems.find(pNotif);
+	if (it != mItems.end())
+	{
+		LL_ERRS() << "Notification loaded a second time to the master notification channel." << LL_ENDL;
+	}
+
+	updateItem(LLSD().with("sigtype", "load").with("id", pNotif->id()), pNotif);
 }
 
 void LLNotifications::cancel(LLNotificationPtr pNotif)

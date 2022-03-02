@@ -53,6 +53,7 @@ extern "C" {
 #include "apr_dso.h"
 }
 
+
 ////////////////////////////////////////////////////
 
 #define DEBUGMSG(...) do {} while(0)
@@ -81,7 +82,7 @@ bool grab_pa_syms(std::string pulse_dso_name)
 	apr_status_t rv;
 	apr_dso_handle_t *sSymPADSOHandle = NULL;
 
-#define LL_PA_SYM(REQUIRED, PASYM, RTN, ...) do{rv = apr_dso_sym((apr_dso_handle_sym_t*)&ll##PASYM, sSymPADSOHandle, #PASYM); if (rv != APR_SUCCESS) {INFOMSG("Failed to grab symbol: %s", #PASYM); if (REQUIRED) sym_error = true;} else DEBUGMSG("grabbed symbol: %s from %p", #PASYM, (void*)ll##PASYM);}while(0)
+#define LL_PA_SYM(REQUIRED, PASYM, RTN, ...) do{rv = apr_dso_sym((apr_dso_handle_sym_t*)&ll##PASYM, sSymPADSOHandle, #PASYM); if (rv != APR_SUCCESS) { if (REQUIRED) sym_error = true;} } while(0);
 
 	//attempt to load the shared library
 	apr_pool_create(&sSymPADSOMemoryPool, NULL);
@@ -216,17 +217,16 @@ void VolumeCatcherImpl::init()
 	mGotSyms = loadsyms("libpulse-mainloop-glib.so.0");
 	if (!mGotSyms) return;
 
-	// better make double-sure glib itself is initialized properly.
-	if (!g_thread_supported ()) g_thread_init (NULL);
-	g_type_init();
-
 	mMainloop = llpa_glib_mainloop_new(g_main_context_default());
+	
 	if (mMainloop)
 	{
 		pa_mainloop_api *api = llpa_glib_mainloop_get_api(mMainloop);
+
 		if (api)
 		{
 			pa_proplist *proplist = llpa_proplist_new();
+
 			if (proplist)
 			{
 				llpa_proplist_sets(proplist, PA_PROP_APPLICATION_ICON_NAME, "multimedia-player");
@@ -236,6 +236,7 @@ void VolumeCatcherImpl::init()
 
 				// plain old pa_context_new() is broken!
 				mPAContext = llpa_context_new_with_proplist(api, NULL, proplist);
+
 				llpa_proplist_free(proplist);
 			}
 		}
@@ -350,6 +351,51 @@ void VolumeCatcherImpl::update_index_volume(U32 index, F32 volume)
 	}
 }
 
+pid_t getParentPid( pid_t aPid )
+{
+	std::stringstream strm;
+	strm << "/proc/" << aPid << "/status";
+	std::ifstream in{ strm.str() };
+
+	if( !in.is_open() )
+		return 0;
+
+	pid_t res {0};
+	while( !in.eof() && res == 0 )
+	{
+		std::string line;
+		line.resize( 1024, 0 );
+		in.getline( &line[0], line.length() );	
+
+		auto i = line.find( "PPid:"  );
+		
+		if( i == std::string::npos )
+			continue;
+		
+		char const *pIn = line.c_str() + 5; // Skip over pid;
+		while( *pIn != 0 && isspace( *pIn ) )
+			   ++pIn;
+
+		if( *pIn )
+			res = atoll( pIn );
+	}
+ 	return res;
+}
+
+
+bool isPluginPid( pid_t aPid )
+{
+	auto myPid = getpid();
+
+	do
+	{
+		if( aPid == myPid )
+			return true;
+		aPid = getParentPid( aPid );
+	} while( aPid > 1 );
+
+	return false;
+}
 
 void callback_discovered_sinkinput(pa_context *context, const pa_sink_input_info *sii, int eol, void *userdata)
 {
@@ -360,11 +406,10 @@ void callback_discovered_sinkinput(pa_context *context, const pa_sink_input_info
 	{
 		pa_proplist *proplist = sii->proplist;
 		pid_t sinkpid = atoll(llpa_proplist_gets(proplist, PA_PROP_APPLICATION_PROCESS_ID));
-		
-		if (sinkpid == getpid()) // does the discovered sinkinput belong to this process?
+
+		if (isPluginPid( sinkpid )) // does the discovered sinkinput belong to this process?
 		{
-			bool is_new = (impl->mSinkInputIndices.find(sii->index) ==
-				       impl->mSinkInputIndices.end());
+			bool is_new = (impl->mSinkInputIndices.find(sii->index) == impl->mSinkInputIndices.end());
 			
 			impl->mSinkInputIndices.insert(sii->index);
 			impl->mSinkInputNumChannels[sii->index] = sii->channel_map.channels;
@@ -387,32 +432,31 @@ void callback_subscription_alert(pa_context *context, pa_subscription_event_type
 	VolumeCatcherImpl *impl = dynamic_cast<VolumeCatcherImpl*>((VolumeCatcherImpl*)userdata);
 	llassert(impl);
 
-	switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
+	switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK)
+	{
         case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
-		if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
-		    PA_SUBSCRIPTION_EVENT_REMOVE)
-		{
-			// forget this sinkinput, if we were caring about it
-			impl->mSinkInputIndices.erase(index);
-			impl->mSinkInputNumChannels.erase(index);
-		}
-		else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
-			 PA_SUBSCRIPTION_EVENT_NEW)
-		{
-			// ask for more info about this new sinkinput
-			pa_operation *op;
-			if ((op = llpa_context_get_sink_input_info(impl->mPAContext, index, callback_discovered_sinkinput, impl)))
+			if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==  PA_SUBSCRIPTION_EVENT_REMOVE)
 			{
-				llpa_operation_unref(op);
+				// forget this sinkinput, if we were caring about it
+				impl->mSinkInputIndices.erase(index);
+				impl->mSinkInputNumChannels.erase(index);
 			}
-		}
-		else
-		{
-			// property change on this sinkinput - we don't care.
-		}
-		break;
+			else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_NEW)
+			{
+				// ask for more info about this new sinkinput
+				pa_operation *op;
+				if ((op = llpa_context_get_sink_input_info(impl->mPAContext, index, callback_discovered_sinkinput, impl)))
+				{
+					llpa_operation_unref(op);
+				}
+			}
+			else
+			{
+				// property change on this sinkinput - we don't care.
+			}
+			break;
 		
-	default:;
+		default:;
 	}
 }
 

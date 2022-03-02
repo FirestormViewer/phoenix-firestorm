@@ -48,6 +48,10 @@ extern "C" {
 #include <locale.h>
 #endif // LL_GTK
 
+#ifdef LL_GLIB
+#include <glib.h>
+#endif
+
 extern "C" {
 # include "fontconfig/fontconfig.h"
 }
@@ -1992,7 +1996,18 @@ void LLWindowSDL::processMiscNativeEvents()
 	    setlocale(LC_ALL, saved_locale.c_str() );
     }
 #endif // LL_GTK
-
+#if LL_GLIB
+	// Pump until we've nothing left to do or passed 1/15th of a
+	// second pumping for this frame.
+	static LLTimer pump_timer;
+	pump_timer.reset();
+	pump_timer.setTimerExpirySec(1.0f / 15.0f);
+	do
+	{
+		g_main_context_iteration(g_main_context_default(), FALSE);
+	} while( g_main_context_pending(g_main_context_default()) && !pump_timer.hasExpired());
+#endif
+	
     // hack - doesn't belong here - but this is just for debugging
     if (getenv("LL_DEBUG_BLOAT"))
     {
@@ -2354,6 +2369,7 @@ void LLWindowSDL::initCursors(BOOL useLegacyCursors) // <FS:LO> Legacy cursor se
 	mSDLCursors[UI_CURSOR_SIZENESW] = makeSDLCursorFromBMP("sizenesw.BMP",17,17);
 	mSDLCursors[UI_CURSOR_SIZEWE] = makeSDLCursorFromBMP("sizewe.BMP",16,14);
 	mSDLCursors[UI_CURSOR_SIZENS] = makeSDLCursorFromBMP("sizens.BMP",17,16);
+    mSDLCursors[UI_CURSOR_SIZEALL] = makeSDLCursorFromBMP("sizeall.BMP", 17, 17);
 	mSDLCursors[UI_CURSOR_NO] = makeSDLCursorFromBMP("llno.BMP",8,8);
 	mSDLCursors[UI_CURSOR_WORKING] = makeSDLCursorFromBMP("working.BMP",12,15);
 	mSDLCursors[UI_CURSOR_TOOLGRAB] = makeSDLCursorFromBMP("lltoolgrab.BMP",2,13);
@@ -2373,6 +2389,7 @@ void LLWindowSDL::initCursors(BOOL useLegacyCursors) // <FS:LO> Legacy cursor se
 	mSDLCursors[UI_CURSOR_TOOLCAMERA] = makeSDLCursorFromBMP("lltoolcamera.BMP",7,5);
 	mSDLCursors[UI_CURSOR_TOOLPAN] = makeSDLCursorFromBMP("lltoolpan.BMP",7,5);
 	mSDLCursors[UI_CURSOR_TOOLZOOMIN] = makeSDLCursorFromBMP("lltoolzoomin.BMP",7,5);
+    mSDLCursors[UI_CURSOR_TOOLZOOMOUT] = makeSDLCursorFromBMP("lltoolzoomout.BMP", 7, 5);
 	mSDLCursors[UI_CURSOR_TOOLPICKOBJECT3] = makeSDLCursorFromBMP("toolpickobject3.BMP",0,0);
 	mSDLCursors[UI_CURSOR_TOOLPLAY] = makeSDLCursorFromBMP("toolplay.BMP",0,0);
 	mSDLCursors[UI_CURSOR_TOOLPAUSE] = makeSDLCursorFromBMP("toolpause.BMP",0,0);

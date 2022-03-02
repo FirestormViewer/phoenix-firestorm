@@ -20,7 +20,7 @@ set(cmake_SOURCE_FILES
     ConfigurePkgConfig.cmake
     CURL.cmake
     Copy3rdPartyLibs.cmake
-    DBusGlib.cmake
+    GLIB.cmake
     DeploySharedLibs.cmake
     Discord.cmake # <FS:LO> Discord rich presence
     DragDrop.cmake

@@ -1272,7 +1272,7 @@ void LLVOAvatarSelf::removeMissingBakedTextures()
 // <FS:Beq> Check whether the BOM capability is different to last time we changed region (even across login)
 void LLVOAvatarSelf::checkBOMRebakeRequired()
 {
-	if(!getRegion())
+	if(getRegion())
 	{
 		auto newBOMStatus = getRegion()->bakesOnMeshEnabled();
 		if(!gSavedSettings.getBOOL("CurrentlyUsingBakesOnMesh") != newBOMStatus)

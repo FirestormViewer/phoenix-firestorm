@@ -3,6 +3,62 @@
 <map>
     <key>installables</key>
     <map>
+      <key>gstreamer10</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/gstreamer.txt</string>
+        <key>name</key>
+        <string>gstreamer10</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>01f39ecf80dae64e30402ac384035b3e</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.10.6.294903</string>
+      </map>
+      <key>breakpad</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) google</string>
+        <key>license</key>
+        <string>BSD</string>
+        <key>license_file</key>
+        <string>LICENSES/google_breakpad.txt</string>
+        <key>name</key>
+        <string>breakpad</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>482c2b25bbfd25edc058a02f82da39b2</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/breakpad-4708e6fb-linux64_bionic-220392253.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2.48.0</string>
+      </map>
       <key>glib</key>
       <map>
         <key>copyright</key>
@@ -514,9 +570,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>29eb0d338020242454b77b278c11d3e7</string>
+              <string>401f317fbb67623c97a7b9d8b6627ef1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/boost-1.72-linux64-202021511.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/boost-1.72-linux64_bionic-220402045.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -639,26 +695,14 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d83896f28716f34b7b49d61a23283c4c</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.180871403-linux-180871403.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>df6fe4c80b96ec20b5ee6f56419e6b9f</string>
+              <string>88ee58d6548deae6c306f125b6461d61</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.202021526-linux64-202021526.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.220402056-linux64_bionic-220402056.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -810,9 +854,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>96dd770f246917589b776300a2d07f9e</string>
+              <string>0bcccd248a5e4084af4026eee439816b</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/curl-7.54.1.212891029-linux64-212891029.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/curl-7.81.0.220511906-linux64_bionic-220511906.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -876,48 +920,6 @@
         </map>
         <key>version</key>
         <string>5.1.25</string>
-      </map>
-      <key>dbus_glib</key>
-      <map>
-        <key>copyright</key>
-        <string>Copyright (C) Red Hat Inc.</string>
-        <key>description</key>
-        <string>D-Bus bindings for glib</string>
-        <key>license</key>
-        <string>Academic Free License v. 2.1</string>
-        <key>license_file</key>
-        <string>LICENSES/dbus-glib.txt</string>
-        <key>name</key>
-        <string>dbus_glib</string>
-        <key>platforms</key>
-        <map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9591dcb7efce2a770d77e907705e1492</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/dbus_glib-0.76-linux-180871236.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5a685a65a7066937ef580dcd5a90f9dc</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/dbus_glib-0.76-linux64-180841549.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>0.76</string>
       </map>
       <key>dictionaries</key>
       <map>
@@ -1004,9 +1006,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2f8fdc6950620cee3a526ede27e068aa</string>
+              <string>8d532edd648448d78e6daa0cc5f821f9</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202109282040_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-212711840.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202202071031_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-220380931.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2399,18 +2401,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>35f42f538f4dc3abdfc2b2c4a915d004</string>
+              <string>95cb09a712b7b61e992fe68ab7bf8c72</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87228/802959/llca-202109010216.563493-common-563493.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92744/837149/llca-202201010217.567162-common-567162.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
         <key>version</key>
-        <string>202109010216.563493</string>
+        <string>202201010217.567162</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -2429,9 +2431,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>14fac452271ebfba37ba5ddcf5bffa54</string>
+              <string>da57838d80cf332f4a3026713a13f086</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/54842/510078/llphysicsextensions_source-1.0.538972-darwin64-538972.tar.bz2</string>
+              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/90708/824484/llphysicsextensions_source-1.0.565754-darwin64-565754.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2453,16 +2455,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f3c066c1aebed8a6519a3e5ce64b9a3c</string>
+              <string>28ad884012aa0bb70cf4101853af2f9a</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/54982/511796/llphysicsextensions_source-1.0.538972-windows-538972.tar.bz2</string>
+              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/90733/824570/llphysicsextensions_source-1.0.565768-windows-565768.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.538972</string>
+        <string>1.0.565768</string>
       </map>
       <key>llphysicsextensions_stub</key>
       <map>
@@ -3500,9 +3502,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c42575ac8997de979eadb082c33a578e</string>
+              <string>b97d0f6570104277de92d0d3f2d1111d</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/81322/765512/uriparser-0.9.4-darwin64-559132.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89474/816487/uriparser-0.9.4-darwin64-564957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3536,9 +3538,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>901b1063556fc6b2575e745eef2bf744</string>
+              <string>e2600c798e220cc98c1cc77341aee00d</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/81323/765528/uriparser-0.9.4-windows-559132.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89476/816496/uriparser-0.9.4-windows-564957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3548,9 +3550,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>962c01d553f286c430102998129fb0d6</string>
+              <string>50d857117d31844fc8b84b07b795fd00</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/81324/765527/uriparser-0.9.4-windows64-559132.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89475/816497/uriparser-0.9.4-windows64-564957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3578,9 +3580,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>33438e15e609794233d88f2ca6f8e476</string>
+              <string>33ed1bb3e24fbd3462da04fb3e917e94</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92307/834951/viewer_manager-2.0.566853-darwin64-566853.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/94814/850320/viewer_manager-3.0.568552-darwin64-568552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3614,9 +3616,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f83512f0ed35abf8b24ce66586099842</string>
+              <string>2ad8e04965ac8bddb7d351abe09bee07</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92304/834942/viewer_manager-2.0.566853-windows-566853.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/94813/850316/viewer_manager-3.0.568552-windows-568552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3627,7 +3629,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>2.0.566853</string>
+        <string>3.0.568552</string>
       </map>
       <key>vlc-bin</key>
       <map>
@@ -3652,30 +3654,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9f9582031af3b78d6153ec296d6dde9f</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/vlc_bin-2.2.3-linux-201607071822-r16.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>5eace400c487011a678493fc520be24d</string>
-              <key>url</key>
-              <string>http://3p.firestormviewer.org/vlc_bin-2.2.3-linux-x64-201610182130-r16.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>

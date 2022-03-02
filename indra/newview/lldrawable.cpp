@@ -54,6 +54,13 @@
 #include "llcontrolavatar.h"
 #include "lldrawpoolavatar.h"
 
+// <FS:ND> Tentatively ignoring mismatched new/delete from the MemTrackableNonVirtual. I think according to the docs
+// they are properly matched
+#if LL_LINUX
+#pragma GCC diagnostic ignored "-Wmismatched-new-delete"
+#endif
+// </FS:ND>
+
 const F32 MIN_INTERPOLATE_DISTANCE_SQUARED = 0.001f * 0.001f;
 const F32 MAX_INTERPOLATE_DISTANCE_SQUARED = 10.f * 10.f;
 const F32 OBJECT_DAMPING_TIME_CONSTANT = 0.06f;
@@ -962,7 +969,7 @@ BOOL LLDrawable::updateGeometry(BOOL priority)
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
 
 	llassert(mVObjp.notNull());
-	BOOL res = mVObjp->updateGeometry(this);
+	BOOL res = mVObjp && mVObjp->updateGeometry(this);
 	return res;
 }
 

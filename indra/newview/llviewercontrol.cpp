@@ -1088,14 +1088,20 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 void handleTargetFPSChanged(const LLSD& newValue)
 {
 	const auto targetFPS = gSavedSettings.getU32("FSTargetFPS");
-	FSPerfStats::targetFPS = targetFPS;
+	FSPerfStats::tunables.userTargetFPS = targetFPS;
+}
+// <FS:Beq> perf floater stuffs
+void handleAutoTuneLockChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSAutoTuneLock");
+	FSPerfStats::tunables.userAutoTuneLock = newval;
 }
 
 // <FS:Beq> perrf floater stuffs
 void handleAutoTuneFPSChanged(const LLSD& newValue)
 {
 	const auto newval = gSavedSettings.getBOOL("FSAutoTuneFPS");
-	FSPerfStats::autoTune = newval;
+	FSPerfStats::tunables.userAutoTuneEnabled = newval;
 	if(newval && FSPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
 	{
 		gSavedSettings.setF32("FSRenderAvatarMaxART",log10(FSPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
@@ -1104,18 +1110,42 @@ void handleAutoTuneFPSChanged(const LLSD& newValue)
 
 void handleRenderAvatarMaxARTChanged(const LLSD& newValue)
 {
-	FSPerfStats::StatsRecorder::updateRenderCostLimitFromSettings();
+	FSPerfStats::tunables.updateRenderCostLimitFromSettings();
 }
-void handleFPSTuningStrategyChanged(const LLSD& newValue)
+
+void handleUserTargetDrawDistanceChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
-	FSPerfStats::fpsTuningStrategy = newval;
+	const auto newval = gSavedSettings.getF32("FSAutoTuneRenderFarClipTarget");
+	FSPerfStats::tunables.userTargetDrawDistance = newval;
 }
+
+void handleUserTargetReflectionsChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getF32("FSUserTargetReflections");
+	FSPerfStats::tunables.userTargetReflections = newval;
+}
+
 void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
 {
 	const auto newval = gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled");
 	FSPerfStats::StatsRecorder::setEnabled(newval);
 }
+void handleUserImpostorByDistEnabledChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getBOOL("FSAutoTuneImpostorByDistEnabled");
+	FSPerfStats::tunables.userImpostorDistanceTuningEnabled = newval;
+}
+void handleUserImpostorDistanceChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getF32("FSAutoTuneImpostorFarAwayDistance");
+	FSPerfStats::tunables.userImpostorDistance = newval;
+}
+void handleFPSTuningStrategyChanged(const LLSD& newValue)
+{
+	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
+	FSPerfStats::tunables.userFPSTuningStrategy = newval;
+}
+
 // </FS:Beq>
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1376,9 +1406,14 @@ void settings_setup_listeners()
 	// <FS:Beq> perf floater controls
 	gSavedSettings.getControl("FSTargetFPS")->getSignal()->connect(boost::bind(&handleTargetFPSChanged, _2));
 	gSavedSettings.getControl("FSAutoTuneFPS")->getSignal()->connect(boost::bind(&handleAutoTuneFPSChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneLock")->getSignal()->connect(boost::bind(&handleAutoTuneLockChanged, _2));
 	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
-	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
 	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
+	gSavedSettings.getControl("FSUserTargetReflections")->getSignal()->connect(boost::bind(&handleUserTargetReflectionsChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneRenderFarClipTarget")->getSignal()->connect(boost::bind(&handleUserTargetDrawDistanceChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneImpostorFarAwayDistance")->getSignal()->connect(boost::bind(&handleUserImpostorDistanceChanged, _2));
+	gSavedSettings.getControl("FSAutoTuneImpostorByDistEnabled")->getSignal()->connect(boost::bind(&handleUserImpostorByDistEnabledChanged, _2));
+	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
 	// </FS:Beq>
 }
 

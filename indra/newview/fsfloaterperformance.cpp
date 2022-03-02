@@ -51,8 +51,12 @@
 #include "pipeline.h"
 #include "llviewercontrol.h"
 #include "fsavatarrenderpersistence.h"
+#include "llpresetsmanager.h"
 #include "fsperfstats.h" // <FS:Beq> performance stats support
 #include "fslslbridge.h"
+#include <llbutton.h>
+
+extern F32 gSavedDrawDistance;
 
 const F32 REFRESH_INTERVAL = 1.0f;
 const S32 BAR_LEFT_PAD = 2;
@@ -119,8 +123,11 @@ BOOL FSFloaterPerformance::postBuild()
     auto tgt_panel = findChild<LLPanel>("target_subpanel");
     if (tgt_panel)
     {
-       tgt_panel->getChild<LLButton>("target_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
-       tgt_panel->getChild<LLComboBox>("FSTuningFPSStrategy")->setCurrentByIndex(gSavedSettings.getU32("FSTuningFPSStrategy"));
+        tgt_panel->getChild<LLButton>("target_btn")->setCommitCallback(boost::bind(&FSFloaterPerformance::showSelectedPanel, this, mAutoTunePanel));
+        tgt_panel->getChild<LLComboBox>("FSTuningFPSStrategy")->setCurrentByIndex(gSavedSettings.getU32("FSTuningFPSStrategy"));
+        tgt_panel->getChild<LLButton>("PrefSaveButton")->setCommitCallback(boost::bind(&FSFloaterPerformance::savePreset, this));
+        tgt_panel->getChild<LLButton>("PrefLoadButton")->setCommitCallback(boost::bind(&FSFloaterPerformance::loadPreset, this));
+        tgt_panel->getChild<LLButton>("Defaults")->setCommitCallback(boost::bind(&FSFloaterPerformance::setHardwareDefaults, this));
     }
 
     initBackBtn(mNearbyPanel);
@@ -146,6 +153,7 @@ BOOL FSFloaterPerformance::postBuild()
     mNearbyPanel->getChild<LLCheckBoxCtrl>("hide_avatars")->set(!LLPipeline::hasRenderTypeControl(LLPipeline::RENDER_TYPE_AVATAR));
     mNearbyList = mNearbyPanel->getChild<LLNameListCtrl>("nearby_list");
     mNearbyList->setRightMouseDownCallback(boost::bind(&FSFloaterPerformance::onAvatarListRightClick, this, _1, _2, _3));
+
     
     updateComplexityText();
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&FSFloaterPerformance::updateComplexityText, this));
@@ -155,9 +163,52 @@ BOOL FSFloaterPerformance::postBuild()
     mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxRenderTime, this));
 
     LLAvatarComplexityControls::setIndirectMaxArc();
+    // store the current setting as the users desired reflection detail and DD
+    gSavedSettings.setS32("FSUserTargetReflections", LLPipeline::RenderReflectionDetail);
+    if(!FSPerfStats::tunables.userAutoTuneEnabled)
+    {
+        if (gSavedDrawDistance)
+	    {
+            gSavedSettings.setF32("FSAutoTuneRenderFarClipTarget", gSavedDrawDistance);
+        }
+        else 
+        {
+            gSavedSettings.setF32("FSAutoTuneRenderFarClipTarget", LLPipeline::RenderFarClip);
+        }
+    }
 
     return TRUE;
 }
+
+void FSFloaterPerformance::resetMaxArtSlider()
+{
+    FSPerfStats::renderAvatarMaxART_ns = 0;
+    FSPerfStats::tunables.updateSettingsFromRenderCostLimit();
+    FSPerfStats::tunables.applyUpdates();
+    updateMaxRenderTime();
+}
+
+void FSFloaterPerformance::savePreset()
+{
+	LLFloaterReg::showInstance("save_pref_preset", "graphic" );
+}
+
+void FSFloaterPerformance::loadPreset()
+{
+	LLFloaterReg::showInstance("load_pref_preset", "graphic");
+    resetMaxArtSlider();
+}
+
+void FSFloaterPerformance::setHardwareDefaults()
+{
+	LLFeatureManager::getInstance()->applyRecommendedSettings();
+	// reset indirects before refresh because we may have changed what they control
+	LLAvatarComplexityControls::setIndirectControls(); 
+	gSavedSettings.setString("PresetGraphicActive", "");
+	LLPresetsManager::getInstance()->triggerChangeSignal();
+    resetMaxArtSlider();
+}
+
 
 void FSFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
 {
@@ -284,7 +335,7 @@ void FSFloaterPerformance::draw()
                 textbox->setColor(LLUIColorTable::instance().getColor("DrYellow"));
                 unreliable = true;
             }
-            else if (FSPerfStats::autoTune)
+            else if (FSPerfStats::tunables.userAutoTuneEnabled)
             {
                 textbox->setVisible(true);
                 textbox->setText(getString("tuning_fps", args));
@@ -295,7 +346,12 @@ void FSFloaterPerformance::draw()
                 textbox->setVisible(false);
             }
 
-            if (FSPerfStats::autoTune && !unreliable )
+            auto button = getChild<LLButton>("AutoTuneFPS");
+            if((bool)button->getToggleState() != FSPerfStats::tunables.userAutoTuneEnabled)
+            {
+                button->toggleState();
+            }
+            if (FSPerfStats::tunables.userAutoTuneEnabled && !unreliable )
             {
                 // the tuning itself is managed from another thread but we can report progress here
 

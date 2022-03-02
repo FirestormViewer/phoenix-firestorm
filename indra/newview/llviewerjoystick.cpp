@@ -493,7 +493,16 @@ void LLViewerJoystick::initDevice(void * preffered_device /*LPDIRECTINPUTDEVICE8
 #if LIB_NDOF
     mLastDeviceUUID = guid;
 
+#ifdef LL_LINUX
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     strncpy(mNdofDev->product, name.c_str(), sizeof(mNdofDev->product));
+#ifdef LL_LINUX
+#pragma GCC diagnostic pop
+#endif
+
+    mNdofDev->product[ sizeof(mNdofDev->product)-1 ] = 0;
     mNdofDev->manufacturer[0] = '\0';
 
     initDevice(preffered_device);

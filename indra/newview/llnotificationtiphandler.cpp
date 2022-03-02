@@ -69,7 +69,7 @@ void LLTipHandler::initChannel()
 }
 
 //--------------------------------------------------------------------------
-bool LLTipHandler::processNotification(const LLNotificationPtr& notification)
+bool LLTipHandler::processNotification(const LLNotificationPtr& notification, bool should_log)
 {
 	if(mChannel.isDead())
 	{

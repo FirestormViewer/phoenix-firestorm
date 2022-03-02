@@ -13,7 +13,7 @@ Zulässige Eingabe: [INPUT].
 	<floater.string name="reserved_by_menu">
 		Kombination [KEYSTR] ist vom Menü reserviert.
 	</floater.string>
-	<text name="descritption">
+	<text name="description">
 		Taste oder Maustaste drücken, um Auslöser zu setzen.
 Zulässige Eingabe: [INPUT].
 	</text>

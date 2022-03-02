@@ -183,15 +183,18 @@ top="0">
    width="580">
      You can also right-click on an avatar in-world to control display.
   </text>
-  <button
-    height="23"
-    label="Exceptions..."
-    layout="topleft"
-    left="460"
-    top_delta="2"
-    name="exceptions_btn"
-    width="100">
-  </button>
+  <text
+   follows="left|top"
+   font="SansSerifSmall"
+   text_color="White"
+   height="18"
+   layout="topleft"
+   left="20"
+   top_pad="0"
+   name="av_nearby_desc3"
+   width="580">
+     Note: Your own avatar includes viewer overheads. Use the attachment tab to see how you affect others.
+  </text>
   <check_box
     control_name="AlwaysRenderFriends"
     height="16"
@@ -200,16 +203,25 @@ top="0">
     label_text.text_color="White"
     layout="topleft"
     name="display_friends"
-    top_pad="3"
+    top_pad="2"
     left="18"
     width="256">
   </check_box>
+  <button
+    height="23"
+    label="Exceptions..."
+    layout="topleft"
+    left="460"
+    top_delta="0"
+    name="exceptions_btn"
+    width="100">
+  </button>
   <view_border
     bevel_style="in"
     height="0"
     layout="topleft"
     name="border"
-    top_pad="15"
+    top_pad="10"
     left="20"
     width="540"/>
   <check_box

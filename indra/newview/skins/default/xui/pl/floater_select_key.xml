@@ -13,7 +13,7 @@ Dozwolone: [INPUT].
 	<floater.string name="reserved_by_menu">
 		Kombinacja [KEYSTR] jest zarezerwowana przez menu.
 	</floater.string>
-	<text name="descritption">
+	<text name="description">
 		Wciśnij klawisz / przycisk myszy, aby ustawić.
 Dozwolone: [INPUT].
 	</text>
