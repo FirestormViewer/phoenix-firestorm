@@ -91,6 +91,11 @@ Détails de l&apos;erreur : La notification, appelée &apos;[_NAME]&apos;, est i
 Veuillez vérifier votre connexion Internet.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="LoginFailedToParse">
+		Le visualiseur a reçu une réponse brouillée du serveur. Assurez-vous que votre connexion Internet fonctionne correctement et réessayez plus tard.
+
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le service d'assistance.
+	</notification>
 	<notification name="MessageTemplateNotFound">
 		Le modèle de message [PATH] est introuvable.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -102,6 +107,9 @@ Veuillez vérifier votre connexion Internet.
 	<notification name="ConfirmNoCopyToOutbox">
 		Vous n&apos;êtes pas autorisé à copier un ou plusieurs de ces articles dans la boîte d&apos;envoi vendeur. Vous pouvez les déplacer ou les laisser.
 		<usetemplate name="okcancelbuttons" notext="Ne pas déplacer les articles" yestext="Déplacer les articles"/>
+	</notification>
+	<notification name="InventoryUnusable">
+		Un problème s'est produit lors du chargement de l'inventaire. Veuillez essayer de vous déconnecter et de vous reconnecter. Si vous voyez à nouveau ce message, veuillez contacter l'assistance pour résoudre le problème.
 	</notification>
 	<notification name="OutboxFolderCreated">
 		Un nouveau dossier a été créé pour chaque article que vous avez transféré vers le niveau supérieur de votre boîte d&apos;envoi vendeur.
@@ -4519,5 +4527,33 @@ Veuillez copier vers votre inventaire puis réessayer
 	</notification>
 	<notification name="TrackLoadMismatch">
 		Impossible de charger la piste de [TRACK1] dans [TRACK2].
+	</notification>
+	<notification name="CompressionTestResults">
+Résultat du test de compression de fichier pour gzip au niveau 6 avec [FILE] de taille [SIZE] KB :
+Compression : [PACK_TIME]s [PSIZE]KB
+Décompression : [UNPACK_TIME]s [USIZE]KB
+	</notification>
+	<notification name="NoValidEnvSettingFound">
+		Aucun paramètre d'environnement valide n'a été sélectionné.
+
+Veuillez noter que "Utiliser l'environnement partagé" et "Basé sur le cycle journalier" ne peuvent pas être sélectionnés !
+	</notification>
+	<notification name="CantCreateInventoryName">
+		Ne peut pas être créé : [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		L'importation par lot des réglages Windlights est terminée.
+	</notification>
+	<notification name="FSAOScriptedNotification">
+		Superviseur d'animation Firestorm : [AO_MESSAGE]
+	</notification>
+	<notification name="AttachedRiggedObjectToHUD">
+		Un objet attaché "[NAME]" contient du mesh lié à l'avatar mais est attaché au point HUD "[HUD_POINT]". Cela signifie que vous le verrez correctement affiché, mais que les autres ne pourront pas le voir. Retirez et de réattachez à un point d'attachement normal du corps.
+	</notification>
+	<notification name="WarnForceLoginURL">
+		L'URL de l'écran d'accueil de connexion est remplacée à des fins de test.
+
+Remettre l'URL par défaut ?
+		<usetemplate name="okcancelbuttons" notext="Rappeler plus tard" yestext="Réinitialiser" />
 	</notification>
 </notifications>
