@@ -35,7 +35,7 @@ Combination [KEYSTR] is reserved by menu.
      height="30"
      layout="topleft"
      left="5"
-     name="descritption"
+     name="description"
      top="25"
      word_wrap="true"
      right="-5">

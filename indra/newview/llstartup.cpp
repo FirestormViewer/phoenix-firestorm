@@ -1791,6 +1791,10 @@ bool idle_startup()
 
 						}
 					}
+                    else if (reason_response == "BadType")
+                    {
+                        LLNotificationsUtil::add("LoginFailedToParse", LLSD(), LLSD(), login_alert_done);
+                    }
 					else if (!message.empty())
 					{
 						// This wasn't a certificate error, so throw up the normal
@@ -2590,6 +2594,17 @@ bool idle_startup()
 		// This method MUST be called before gInventory.findCategoryUUIDForType because of 
 		// gInventory.mIsAgentInvUsable is set to true in the gInventory.buildParentChildMap.
 		gInventory.buildParentChildMap();
+
+		// If buildParentChildMap succeeded, inventory will now be in
+		// a usable state and gInventory.isInventoryUsable() will be
+		// true.
+
+		// if inventory is unusable, show warning.
+		if (!gInventory.isInventoryUsable())
+		{
+			LLNotificationsUtil::add("InventoryUnusable");
+		}
+		
 		gInventory.createCommonSystemCategories();
 
 		// It's debatable whether this flag is a good idea - sets all
@@ -2633,6 +2648,7 @@ bool idle_startup()
 
 		LLStartUp::setStartupState( STATE_MISC );
 		display_startup();
+
 		return FALSE;
 	}
 
@@ -2985,7 +3001,10 @@ bool idle_startup()
 
 		if (gAgent.isOutfitChosen() && (wearables_time > max_wearables_time))
 		{
-			LLNotificationsUtil::add("ClothingLoading");
+			if (gInventory.isInventoryUsable())
+			{
+				LLNotificationsUtil::add("ClothingLoading");
+			}			
 			record(LLStatViewer::LOADING_WEARABLES_LONG_DELAY, wearables_time);
 			LLStartUp::setStartupState( STATE_CLEANUP );
 		}

@@ -9,7 +9,7 @@ class FSViewerManifest:
     def fs_splice_grid_substitution_strings( self, subst_strings ):
         ret = subst_strings
 
-        if self.args.has_key( 'grid' ) and self.args['grid'] != None:
+        if 'grid' in self.args and self.args['grid'] != None:
           ret[ 'grid' ] = self.args['grid']
           ret[ 'grid_caps' ] = self.args['grid'].upper()
         else:
@@ -51,15 +51,15 @@ class FSViewerManifest:
                                   stderr=subprocess.PIPE,stdout=subprocess.PIPE)
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com","/t","http://timestamp.verisign.com/scripts/timstamp.dll",self.args['configuration']+"\\"+self.final_exe()],
                                   stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        except Exception, e:
-            print "Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe()
+        except Exception as e:
+            print("Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe())
 
     def fs_sign_win_installer( self, substitution_strings ):
         try:
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        except Exception, e:
-            print "Working directory: %s" % os.getcwd()
-            print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
+        except Exception as e:
+            print("Working directory: %s" % os.getcwd())
+            print("Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file'])
 
     def fs_delete_linux_symbols( self ):
         debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
@@ -76,7 +76,7 @@ class FSViewerManifest:
     def fs_save_linux_symbols( self ):
         #AO: Try to package up symbols
         # New Method, for reading cross platform stack traces on a linux/mac host
-        print( "Packaging symbols" )
+        print("Packaging symbols")
 
         self.fs_save_symbols("linux")
 
@@ -97,7 +97,7 @@ class FSViewerManifest:
                                  ], stderr=subprocess.PIPE,stdout=subprocess.PIPE )
             pdbName = "firestorm-bin-public.pdb"
         except:
-            print( "Cannot run pdbcopy, packaging private symbols" )
+            print("Cannot run pdbcopy, packaging private symbols")
 
         # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
         # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).

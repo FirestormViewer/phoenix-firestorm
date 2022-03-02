@@ -2401,18 +2401,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>35f42f538f4dc3abdfc2b2c4a915d004</string>
+              <string>95cb09a712b7b61e992fe68ab7bf8c72</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87228/802959/llca-202109010216.563493-common-563493.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92744/837149/llca-202201010217.567162-common-567162.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
         <key>version</key>
-        <string>202109010216.563493</string>
+        <string>202201010217.567162</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -2431,9 +2431,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>14fac452271ebfba37ba5ddcf5bffa54</string>
+              <string>da57838d80cf332f4a3026713a13f086</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/54842/510078/llphysicsextensions_source-1.0.538972-darwin64-538972.tar.bz2</string>
+              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/90708/824484/llphysicsextensions_source-1.0.565754-darwin64-565754.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2455,16 +2455,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f3c066c1aebed8a6519a3e5ce64b9a3c</string>
+              <string>28ad884012aa0bb70cf4101853af2f9a</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/54982/511796/llphysicsextensions_source-1.0.538972-windows-538972.tar.bz2</string>
+              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/90733/824570/llphysicsextensions_source-1.0.565768-windows-565768.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.538972</string>
+        <string>1.0.565768</string>
       </map>
       <key>llphysicsextensions_stub</key>
       <map>
@@ -3502,9 +3502,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c42575ac8997de979eadb082c33a578e</string>
+              <string>b97d0f6570104277de92d0d3f2d1111d</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/81322/765512/uriparser-0.9.4-darwin64-559132.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89474/816487/uriparser-0.9.4-darwin64-564957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3538,9 +3538,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>901b1063556fc6b2575e745eef2bf744</string>
+              <string>e2600c798e220cc98c1cc77341aee00d</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/81323/765528/uriparser-0.9.4-windows-559132.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89476/816496/uriparser-0.9.4-windows-564957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3550,9 +3550,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>962c01d553f286c430102998129fb0d6</string>
+              <string>50d857117d31844fc8b84b07b795fd00</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/81324/765527/uriparser-0.9.4-windows64-559132.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89475/816497/uriparser-0.9.4-windows64-564957.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3580,9 +3580,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>33438e15e609794233d88f2ca6f8e476</string>
+              <string>33ed1bb3e24fbd3462da04fb3e917e94</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92307/834951/viewer_manager-2.0.566853-darwin64-566853.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/94814/850320/viewer_manager-3.0.568552-darwin64-568552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3616,9 +3616,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f83512f0ed35abf8b24ce66586099842</string>
+              <string>2ad8e04965ac8bddb7d351abe09bee07</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92304/834942/viewer_manager-2.0.566853-windows-566853.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/94813/850316/viewer_manager-3.0.568552-windows-568552.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3629,7 +3629,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>2.0.566853</string>
+        <string>3.0.568552</string>
       </map>
       <key>vlc-bin</key>
       <map>

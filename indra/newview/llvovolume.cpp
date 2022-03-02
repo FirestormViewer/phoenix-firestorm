@@ -6302,8 +6302,11 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 				{
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("Rebuild all non-Rigged");
 					LLVOVolume* vobj = drawablep->getVOVolume();
+
+					if (!vobj) continue;
+
 					// <FS:Beq> capture render times
-					if( vobj && vobj->isAttachment() )
+					if (vobj->isAttachment())
 					{
 						trackAttachments( vobj, drawablep->isState(LLDrawable::RIGGED), &ratPtr );
 					}
@@ -6331,6 +6334,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 					}
 
 					LLVolume* volume = vobj->getVolume();
+					if (!volume) continue;
 					for (S32 i = 0; i < drawablep->getNumFaces(); ++i)
 					{
 						LLFace* face = drawablep->getFace(i);
