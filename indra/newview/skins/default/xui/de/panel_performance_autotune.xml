@@ -11,9 +11,10 @@
 	</text>
 	<check_box label="Distanz-basierte Optimierung" name="FSAutoTuneImpostorByDistEnabled" tool_tip="Falls aktiviert wird die Einstellung MaxNonImpostors angepasst, um komplett dargestellte Avatare auf den angegebenen Radius zu beschränken." />
 	<spinner label="Entferntester kompl. Avatar" name="ffa_autotune" />
-	<text name="distant_av_advice">
-Avatare in größerer Entfernung haben weiterhin einen hohen Einfluss.
+	<text name="distant_av_advice" height="68">
+Avatare in größerer Entfernung können automatisch optimiert werden unabhängig ihrer Darstellungskosten.
 Entfernung von der Kamera setzen, ab dem ein Avatar optimiert wird.
+Hinweis: Diese Einstellung setzt MaxNonImpostors auf 1 falls kein Avatar in der Nähe.
 	</text>
 	<text name="distance_lbl">
 		Sichtweiten-
@@ -22,7 +23,7 @@ Tuning-Limit
 	<spinner label="Minimale Distanz" name="min_dd_autotune" />
 	<spinner label="Präferierte Distanz" name="pref_dd_autotune" />
 	<text name="distance_desc1">
-		Beim Anpassen der Szenerie-Parameter wird Auto-Anpassung die Sichtweite zwischen dem Minimum und der Präferenz optimieren.
+		Beim Anpassen der Szenerie-Parameter wird Auto-Anpassung Werte zwischen dem Minimum und der präferierten Sichtweiten wählen.
 	</text>
 	<text name="sundry_lbl">
 		Verschiedene Einstellungen

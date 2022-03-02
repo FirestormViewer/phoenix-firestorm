@@ -35,6 +35,12 @@
 #include "llstring.h"
 #include "llstringtable.h"
 
+// <FS:ND> Suppress warnings about the string fiddling
+#if LL_LINUX
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+// </FS:ND>
+
 // Anonymous enumeration to provide constants in this file.
 // *NOTE: These values may be used in sscanf statements below as their
 // value-1, so search for '2047' if you cange NV_BUFFER_LEN or '63' if

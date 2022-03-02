@@ -127,6 +127,7 @@
 			<menu_item_check label="Propriétés de la parcelle" name="Parcel Properties"/>
 			<menu_item_check label="Menu Avancé" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_check label="Améliorer les performances graphiques..." name="Performance" />
 		<menu_item_call label="Me téléporter chez moi" name="Teleport Home"/>
 		<menu label="Environnement" name="Environment">
 			<menu_item_check label="Aube" name="Sunrise"/>

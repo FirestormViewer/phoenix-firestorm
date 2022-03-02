@@ -805,11 +805,6 @@ nächsten Eigentümer angehängt werden.
 	<string name="ReleaseNotes">
 		Versionshinweise
 	</string>
-	<!--
-	<string name="RELEASE_NOTES_BASE_URL">
-		https://releasenotes.secondlife.com/viewer/
-	</string>
-	-->
 	<string name="LoadingData">
 		Wird geladen...
 	</string>
@@ -1447,6 +1442,12 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	</string>
 	<string name="csv_files">
 		Komma-separierte Werte
+	</string>
+	<string name="jpeg_image_files">
+		JPEG-Bilder
+	</string>
+	<string name="executable_files">
+		Ausführbare Programmdateien
 	</string>
 	<string name="recompile_script_verb">
 		Rekompilieren

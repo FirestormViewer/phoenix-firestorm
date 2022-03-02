@@ -68,15 +68,14 @@ Distant Avatars
   <check_box
   control_name="FSAutoTuneImpostorByDistEnabled"
   height="19"
-  label="Enable distance based optimization"
+  label="Enable distance-based optimization"
   layout="topleft"
   follows="top|left"
   left_pad="40"
   name="FSAutoTuneImpostorByDistEnabled"
   tool_tip="When enabled the viewer will adjust the MaxNonImpostors setting to limit fully rendered avatars to those within the defined radius."
   top_delta="0"
-  width="190"
-  label_wrap="true" />
+  width="190" />
   <spinner
   control_name="FSAutoTuneImpostorFarAwayDistance"
   height="20"
@@ -96,14 +95,16 @@ Distant Avatars
 follows="left|top"
 font="SansSerifSmall"
 text_color="White"
-height="28"
+height="46"
 layout="topleft"
 top_pad="15"
 left="160"
 name="distant_av_advice"
-width="450">
-Avatars that are further away still have a high impact.
+width="450"
+wrap="true">
+Distant avatars can be automatically optimized regardless of their render cost.
 Set the distance from camera beyond which an avatar will be optimized.
+Note: This setting will force MaxNonImpostors to 1 if nobody is nearby.
 </text>
 <view_border
 bevel_style="in"
@@ -167,7 +168,7 @@ left="160"
 name="distance_desc1"
 wrap="true"
 width="400">
-When adjusting scene parameters, autotune will optimize draw distance to between the minimum and the preferred.
+When adjusting scene parameters, autotune will choose values between the minimum and the preferred draw distances.
 </text>
 <view_border
 bevel_style="in"
@@ -200,8 +201,7 @@ left_pad="40"
 name="alow_self_impostor"
 tool_tip="When enabled the viewer may render your own avatar as an impostor."
 top_delta="0"
-width="190"
-label_wrap="true" />
+width="190" />
 <check_box
 control_name="FSShowTunedART"
 height="19"
@@ -212,8 +212,7 @@ left_delta="0"
 name="show_tuned_art"
 tool_tip="When enabled the Time column shows the current render time not the pre-tuning render time."
 top_pad="0"
-width="190"
-label_wrap="true" />
+width="190" />
 <text
   follows="left|top"
   font="SansSerifSmall"

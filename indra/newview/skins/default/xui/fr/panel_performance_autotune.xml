@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">
+		Retour
+	</text>
+	<text name="settings_title">
+		Options de réglage automatique
+	</text>
+	<text name="quality_lbl">
+		Avatars éloignés
+	</text>
+	<check_box label="Optimisation basée sur la distance" name="FSAutoTuneImpostorByDistEnabled" tool_tip="Le visualiseur ajustera le paramètre MaxNonImpostors pour limiter les avatars entièrement rendus à ceux qui se trouvent dans le rayon défini." />
+	<spinner label="Avatar complet le plus loin" name="ffa_autotune" />
+	<text name="distant_av_advice">
+Les avatars qui sont plus éloignés ont toujours un impact élevé.
+Définissez la dist. de la caméra au-delà de laquelle un avatar sera optimisé.
+	</text>
+	<text name="distance_lbl">
+		Réglage de la distance de visibilité
+	</text>
+	<spinner label="Distance minimale" name="min_dd_autotune" />
+	<spinner label="Distance préférée" name="pref_dd_autotune" />
+	<text name="distance_desc1">
+		Lors du réglage des paramètres de la scène, l'autotune optimisera la distance de visibilité entre le minimum et le maximum.
+	</text>
+	<text name="sundry_lbl">
+		Divers
+	</text>
+	<check_box label="Permettre l'optimisation de votre avatar" name="alow_self_impostor" tool_tip="Activée, le visualiseur pourra utiliser un avatar 2D pour votre avatar." />
+	<check_box label="Afficher le temps de rendu optimisé" name="show_tuned_art" tool_tip="Activée, la colonne Temps indique le temps de rendu actuel et non le temps de rendu avant réglage." />
+	<text name="sundry_desc1">
+		Ces options contrôlent des paramètres plus fins. Utilisez la page d'aide en ligne pour obtenir plus d'informations sur leur fonctionnement.
+	</text>
+</panel>

@@ -517,7 +517,10 @@ void LLXMLRPCTransaction::Impl::setHttpStatus(const LLCore::HttpStatus &status)
 		message = LLTrans::getString("ssl_peer_certificate");
 		break;
 
+// <FS:ND/> CURLE_SSL_CACERT has been deprecated, the LIBCURL-VERSION_NUM check is probably no checking for the lowest curl vesion this did happen
+#if LIBCURL_VERSION_NUM < 0x075100
 	case CURLE_SSL_CACERT:
+#endif
 	case CURLE_SSL_CONNECT_ERROR:		
 		message = LLTrans::getString("ssl_connect_error");
 		break;
