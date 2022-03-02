@@ -79,8 +79,6 @@ public:
 											text_entry_callback,
 											text_changed_callback;
 
-        Optional<CommitCallbackParam>       mouse_down_callback;
-
 		Optional<EPreferredPosition, PreferredPositionValues>	list_position;
 		
 		// components
@@ -214,8 +212,6 @@ public:
 	void			setPrearrangeCallback( commit_callback_t cb ) { mPrearrangeCallback = cb; }
 	void			setTextEntryCallback( commit_callback_t cb ) { mTextEntryCallback = cb; }
 	void			setTextChangedCallback( commit_callback_t cb ) { mTextChangedCallback = cb; }
-
-    boost::signals2::connection setMouseDownCallback( const commit_signal_t::slot_type& cb );
 
 	/**
 	* Connects callback to signal called when Return key is pressed.

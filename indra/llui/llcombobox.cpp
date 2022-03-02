@@ -79,7 +79,6 @@ LLComboBox::Params::Params()
 	combo_button("combo_button"),
 	combo_list("combo_list"),
 	combo_editor("combo_editor"),
-    mouse_down_callback("mouse_down_callback"),
 	drop_down_button("drop_down_button")
 {
 	addSynonym(items, "combo_item");
@@ -100,8 +99,7 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
 	mTextChangedCallback(p.text_changed_callback()),
 	mListPosition(p.list_position),
 	mLastSelectedIndex(-1),
-	mLabel(p.label),
-    mMouseDownSignal(NULL)
+	mLabel(p.label)
 {
 	// Text label button
 
@@ -161,11 +159,6 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
 	}
 
 	createLineEditor(p);
-
-    if (p.mouse_down_callback.isProvided())
-    {
-        setMouseDownCallback(initCommitCallback(p.mouse_down_callback));
-    }
 
 	mTopLostSignalConnection = setTopLostCallback(boost::bind(&LLComboBox::hideList, this));
 }
@@ -734,9 +727,6 @@ void LLComboBox::hideList()
 
 void LLComboBox::onButtonMouseDown()
 {
-    if (mMouseDownSignal)
-        (*mMouseDownSignal)( this, 0 );
-
 	if (!mList->getVisible())
 	{
 		// this might change selection, so do it first
@@ -1250,11 +1240,6 @@ BOOL LLComboBox::selectItemRange( S32 first, S32 last )
 	return mList->selectItemRange(first, last);
 }
 
-boost::signals2::connection LLComboBox::setMouseDownCallback( const commit_signal_t::slot_type& cb ) 
-{ 
-    if (!mMouseDownSignal) mMouseDownSignal = new commit_signal_t();
-    return mMouseDownSignal->connect(cb); 
-}
 
 static LLDefaultChildRegistry::Register<LLIconsComboBox> register_icons_combo_box("icons_combo_box");
 
