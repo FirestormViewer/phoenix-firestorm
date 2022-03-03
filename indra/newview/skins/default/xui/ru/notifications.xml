@@ -44,6 +44,11 @@
     &quot;[DIAGNOSTIC]&quot;
 Убедитесь, что подключение к интернету работает нормально.
 	</notification>
+	<notification name="LoginFailedToParse">
+Вьювер получил искаженный ответ от сервера. Пожалуйста, убедитесь, что ваше интернет-соединение работает нормально и повторите попытку позже.
+
+Если вы считаете что это ошибка, обратитесь в службу поддержки.
+	</notification>
 	<notification name="MessageTemplateNotFound">
 		Шаблон сообщения [PATH] не найден.
 	</notification>
@@ -1166,6 +1171,9 @@
 		Вы были отключены от [CURRENT_GRID].
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Выйти" yestext="Смотреть ИМ/Чат"/>
+	</notification>
+	<notification name="InventoryUnusable">
+		Не удалось загрузить ваш инвентарь. Во-первых, попробуйте выйти из системы и войти снова. Если вы снова увидите это сообщение, обратитесь в службу поддержки чтобы решить проблему.
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Невозможно купить землю для группы:
@@ -5269,6 +5277,11 @@ https://wiki.firestormviewer.org/fs_voice
 	</notification>
 	<notification name="TrackLoadMismatch">
 		Невозможно загрузить дорожку из [TRACK1] в [TRACK2].
+	</notification>
+	<notification name="CompressionTestResults">
+Результат теста на сжатие gzip 6 уровня с файлом [FILE] размером [SIZE] КБ:
+Упаковка: [PACK_TIME]с [PSIZE]КБ
+Распаковка: [UNPACK_TIME]с [USIZE]КБ
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Не выбрана допустимая настройка окружающей среды.
