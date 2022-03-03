@@ -3261,13 +3261,11 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 
 		case LLViewerMediaObserver::MEDIA_EVENT_FILE_DOWNLOAD:
 		{
-			// <FS:Ansariel> Fix broken 360 snapshot save
-			//LL_DEBUGS("Media") << "Media event - file download requested - filename is " << plugin->getFileDownloadFilename() << LL_ENDL;
+			LL_DEBUGS("Media") << "Media event - file download requested - filename is " << plugin->getFileDownloadFilename() << LL_ENDL;
 
-            ////unblock media plugin
-            //const std::vector<std::string> empty_response;
-            //plugin->sendPickFileResponse(empty_response);
-			// </FS:Ansariel>
+            //unblock media plugin
+            const std::vector<std::string> empty_response;
+            plugin->sendPickFileResponse(empty_response);
 		}
 		break;
 

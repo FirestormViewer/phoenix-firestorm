@@ -1182,10 +1182,6 @@ void LLMediaCtrl::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
             }
             else
             {
-                // <FS:Ansariel> Fix broken 360 snapshot save
-                const std::vector<std::string> empty_response;
-                self->sendPickFileResponse(empty_response);
-                // </FS:Ansariel>
                 LLNotificationsUtil::add("MediaFileDownloadUnsupported");
             }
 		};
