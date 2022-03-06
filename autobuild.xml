@@ -3282,9 +3282,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a24f2457230e6c1353a5962973383b97</string>
+              <string>f5f4bc956734e53ef99125ae9aae3a87</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64_bionic-220602051.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64_bionic-220651719.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
