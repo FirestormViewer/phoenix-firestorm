@@ -86,10 +86,15 @@ Détails de l&apos;erreur : La notification, appelée &apos;[_NAME]&apos;, est i
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Connexion à [SECOND_LIFE_GRID] impossible.
+		Connexion à [CURRENT_GRID] impossible.
     &apos;[DIAGNOSTIC]&apos;
 Veuillez vérifier votre connexion Internet.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="LoginFailedToParse">
+		Le visualiseur a reçu une réponse brouillée du serveur. Assurez-vous que votre connexion Internet fonctionne correctement et réessayez plus tard.
+
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le service d'assistance.
 	</notification>
 	<notification name="MessageTemplateNotFound">
 		Le modèle de message [PATH] est introuvable.
@@ -102,6 +107,9 @@ Veuillez vérifier votre connexion Internet.
 	<notification name="ConfirmNoCopyToOutbox">
 		Vous n&apos;êtes pas autorisé à copier un ou plusieurs de ces articles dans la boîte d&apos;envoi vendeur. Vous pouvez les déplacer ou les laisser.
 		<usetemplate name="okcancelbuttons" notext="Ne pas déplacer les articles" yestext="Déplacer les articles"/>
+	</notification>
+	<notification name="InventoryUnusable">
+		Un problème s'est produit lors du chargement de l'inventaire. Veuillez essayer de vous déconnecter et de vous reconnecter. Si vous voyez à nouveau ce message, veuillez contacter l'assistance pour résoudre le problème.
 	</notification>
 	<notification name="OutboxFolderCreated">
 		Un nouveau dossier a été créé pour chaque article que vous avez transféré vers le niveau supérieur de votre boîte d&apos;envoi vendeur.
@@ -416,7 +424,7 @@ Votre prix de vente sera de [SALE_PRICE] L$ et la vente sera disponible à [NAME
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ATTENTION : en cliquant sur Vendre à n&apos;importe qui, vous rendez votre terrain disponible à toute la communauté de [SECOND_LIFE], même aux personnes qui ne sont pas dans cette région.
+		ATTENTION : en cliquant sur Vendre à n&apos;importe qui, vous rendez votre terrain disponible à toute la communauté de [CURRENT_GRID], même aux personnes qui ne sont pas dans cette région.
 
 Le terrain sélectionné, de [LAND_SIZE] m², est mis en vente.
 Votre prix de vente sera de [SALE_PRICE]L$ et la vente sera disponible à [NAME].
@@ -520,7 +528,7 @@ Pour ne placer le média que sur une seule face, choisissez Sélectionner une fa
 		Une erreur est survenue lors du chargement de la capture d&apos;écran destinée au rapport, suite au problème suivant : [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Vous devez accepter lestermes et conditions; la Politique de confidentialité et les Conditions d&apos;utilisation de Second Life pour poursuivre votre connexion à [SECOND_LIFE].
+		Vous devez accepter lestermes et conditions; la Politique de confidentialité et les Conditions d&apos;utilisation de Second Life pour poursuivre votre connexion à [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Impossible de mettre cet ensemble.
@@ -543,7 +551,7 @@ La limite de [MAX_ATTACHMENTS] objets joints a été dépassée. Veuillez commen
 		Zut ! Vous avez oublié de fournir certaines informations.
 Vous devez saisir le nom d&apos;utilisateur de votre avatar.
 
-Pour entrer dans [SECOND_LIFE], vous devez disposer d&apos;un compte. Voulez-vous en créer un maintenant ?
+Pour entrer dans [CURRENT_GRID], vous devez disposer d&apos;un compte. Voulez-vous en créer un maintenant ?
 		<url name="url">
 			[create_account_url]
 		</url>
@@ -585,7 +593,7 @@ Voulez-vous vraiment continuer ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		Aller à la page web de [SECOND_LIFE] réservée aux événements ?
+		Aller à la page web de [CURRENT_GRID] réservée aux événements ?
 		<url name="url">
 			http://secondlife.com/events/?lang=fr-FR
 		</url>
@@ -619,7 +627,7 @@ Voulez-vous arrêter le visualiseur et le relancer manuellement afin d'appliquer
 		Le changement de langue sera effectué au redémarrage de [APP_NAME].
 	</notification>
 	<notification name="GoToAuctionPage">
-		Aller à la page web de [SECOND_LIFE] pour voir le détail des enchères ou enchérir ?
+		Aller à la page web de [CURRENT_GRID] pour voir le détail des enchères ou enchérir ?
 		<url name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
@@ -682,7 +690,7 @@ L&apos;objet est peut-être inaccessible ou a peut-être été supprimé.
 		Impossible de télécharger le fichier
 	</notification>
 	<notification label="" name="MediaFileDownloadUnsupported">
-		Vous avez demandé un téléchargement de fichier, qui n’est pas pris en charge dans [SECOND_LIFE].
+		Vous avez demandé un téléchargement de fichier, qui n’est pas pris en charge dans [APP_NAME].
 		<usetemplate ignoretext="M’avertir des téléchargements de fichiers non pris en charge" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="CannotWriteFile">
@@ -1177,7 +1185,7 @@ Fusionner le terrain ?
 Cette erreur est généralement temporaire. Veuillez modifier et sauvegarder l&apos;élément endossable à nouveau d&apos;ici quelques minutes.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Zut. Vous avez été déconnecté(e) de [SECOND_LIFE].
+		Zut. Vous avez été déconnecté(e) de [CURRENT_GRID].
 
 [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Quitter" yestext="Afficher IM et chat"/>
@@ -1416,7 +1424,7 @@ Nous vous conseillons de définir votre domicile ailleurs.
 	</notification>
 	<notification name="ClothingLoading">
 		Vos habits sont en cours de téléchargement.
-Vous pouvez utiliser [SECOND_LIFE] normalement, les autres résidents vous voient correctement.
+Vous pouvez utiliser [APP_NAME] normalement, les autres résidents vous voient correctement.
 		<form name="form">
 			<ignore name="ignore" text="Vos habits prennent du temps à télécharger"/>
 		</form>
@@ -1437,15 +1445,15 @@ Vous pouvez utiliser [SECOND_LIFE] normalement, les autres résidents vous voien
 	<notification name="FirstRun">
 		L&apos;installation de [APP_NAME] est terminée.
 
-Si vous utilisez [SECOND_LIFE] pour la première fois, vous devez ouvrir un compte avant de pouvoir vous connecter.
+Si vous utilisez [CURRENT_GRID] pour la première fois, vous devez ouvrir un compte avant de pouvoir vous connecter.
 		<usetemplate name="okcancelbuttons" notext="Continuer" yestext="Créer un compte..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Nous avons des difficultés à vous connecter. Il y a peut-être un problème avec votre connexion Internet ou la [SECOND_LIFE_GRID].
+		Nous avons des difficultés à vous connecter. Il y a peut-être un problème avec votre connexion Internet ou la [CURRENT_GRID].
 
 Vérifiez votre connexion Internet et réessayez dans quelques minutes, cliquez sur Aide pour consulter la page [SUPPORT_SITE] ou bien sur Téléporter pour essayer d&apos;aller chez vous.
 		<url name="url">
-			http://fr.secondlife.com/support/
+			https://www.firestormviewer.org/support/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -1457,7 +1465,7 @@ Vérifiez votre connexion Internet et réessayez dans quelques minutes, cliquez 
 		Votre personnage va apparaître dans un moment.
 
 Pour marcher, utilisez les flèches de direction.
-Appuyez sur F1 pour obtenir de l&apos;aide ou en savoir plus sur [SECOND_LIFE].
+Appuyez sur F1 pour obtenir de l&apos;aide ou en savoir plus sur [CURRENT_GRID].
 Choisissez un avatar homme ou femme.
 Vous pourrez revenir sur votre décision plus tard.
 		<usetemplate name="okcancelbuttons" notext="Femme" yestext="Homme"/>
@@ -1656,15 +1664,15 @@ Continuer ?
 		<usetemplate ignoretext="Lancer mon navigateur pour gérer mon compte" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Pour apprendre à signaler un problème de sécurité, consultez le Wiki de [SECOND_LIFE].
+		Pour apprendre à signaler un problème de sécurité, consultez le Wiki de [CURRENT_GRID].
 		<usetemplate ignoretext="Lancer mon navigateur pour apprendre comment signaler un problème de sécurité" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Consultez le Wiki sur l&apos;Assurance Qualité de [SECOND_LIFE].
+		Consultez le Wiki sur l&apos;Assurance Qualité de [CURRENT_GRID].
 		<usetemplate ignoretext="Lancer mon navigateur web pour consulter la page Wiki sur l&apos;Assurance Qualité" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Pour signaler des bugs et autres problèmes, utilisez le JIRA de [SECOND_LIFE].
+		Pour signaler des bugs et autres problèmes, utilisez le JIRA de [CURRENT_GRID].
 		<usetemplate ignoretext="Lancer mon navigateur pour utiliser le Public Issue Tracker (JIRA)" name="okcancelignore" notext="Annuler" yestext="Aller sur cette page"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -2364,9 +2372,9 @@ Les descriptions précises nous permettent de traiter les rapports plus rapideme
 
 Il semble que vous souhaitiez reporter une infraction à des droits de propriété intellectuelle. Pour signaler correctement cette infraction :
 
-(1) Remplissez un rapport d&apos;infraction. Vous pouvez soumettre un rapport d&apos;infraction si vous pensez qu&apos;un résident exploite le système de droits de [SECOND_LIFE], par exemple en utilisant un CopyBot ou des outils similaires pour enfreindre des droits de propriété intellectuelle. Notre équipe chargée des infractions mènera une enquête et prendra les mesures nécessaires à l&apos;encontre du résident non respectueux des [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Conditions d&apos;utilisation] ou des [http://secondlife.com/corporate/cs.php Règles communautaires]. Sachez toutefois que l&apos;équipe chargée des infractions ne supprimera pas de contenu à l&apos;intérieur de [SECOND_LIFE].
+(1) Remplissez un rapport d&apos;infraction. Vous pouvez soumettre un rapport d&apos;infraction si vous pensez qu&apos;un résident exploite le système de droits de [CURRENT_GRID], par exemple en utilisant un CopyBot ou des outils similaires pour enfreindre des droits de propriété intellectuelle. Notre équipe chargée des infractions mènera une enquête et prendra les mesures nécessaires à l&apos;encontre du résident non respectueux des [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Conditions d&apos;utilisation] ou des [http://secondlife.com/corporate/cs.php Règles communautaires]. Sachez toutefois que l&apos;équipe chargée des infractions ne supprimera pas de contenu à l&apos;intérieur de [CURRENT_GRID].
 
-(2) Demandez à ce que du contenu à l&apos;intérieur de Second Life soit supprimé. Pour demander à ce que du contenu soit supprimé de [SECOND_LIFE], vous devez soumettre un rapport d&apos;infraction valide, tel que fourni dans notre [http://secondlife.com/corporate/dmca.php Règlement contre les violations des droits d&apos;auteur].
+(2) Demandez à ce que du contenu à l&apos;intérieur de Second Life soit supprimé. Pour demander à ce que du contenu soit supprimé de [CURRENT_GRID], vous devez soumettre un rapport d&apos;infraction valide, tel que fourni dans notre [http://secondlife.com/corporate/dmca.php Règlement contre les violations des droits d&apos;auteur].
 
 Si vous souhaitez toujours reporter cette infraction, veuillez fermer cette fenêtre et soumettre votre rapport.  Vous devrez peut-être sélectionner la catégorie CopyBot ou exploitation abusive des droits.
 
@@ -2516,7 +2524,7 @@ Les paramètres ne seront peut-être pas enregistrés en utilisant les textures 
 		L&apos;accès à cet endroit est limité aux plus de 18 ans.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Pour pouvoir pénétrer dans cette zone, vous devez avoir enregistré vos informations de paiement.  Souhaitez-vous aller sur [SECOND_LIFE] et enregistrer vos informations de paiement ?
+		Pour pouvoir pénétrer dans cette zone, vous devez avoir enregistré vos informations de paiement.  Souhaitez-vous aller sur [CURRENT_GRID] et enregistrer vos informations de paiement ?
 
 [_URL]
 		<url name="url" option="0">
@@ -4519,5 +4527,33 @@ Veuillez copier vers votre inventaire puis réessayer
 	</notification>
 	<notification name="TrackLoadMismatch">
 		Impossible de charger la piste de [TRACK1] dans [TRACK2].
+	</notification>
+	<notification name="CompressionTestResults">
+Résultat du test de compression de fichier pour gzip au niveau 6 avec [FILE] de taille [SIZE] KB :
+Compression : [PACK_TIME]s [PSIZE]KB
+Décompression : [UNPACK_TIME]s [USIZE]KB
+	</notification>
+	<notification name="NoValidEnvSettingFound">
+		Aucun paramètre d'environnement valide n'a été sélectionné.
+
+Veuillez noter que "Utiliser l'environnement partagé" et "Basé sur le cycle journalier" ne peuvent pas être sélectionnés !
+	</notification>
+	<notification name="CantCreateInventoryName">
+		Ne peut pas être créé : [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		L'importation par lot des réglages Windlights est terminée.
+	</notification>
+	<notification name="FSAOScriptedNotification">
+		Superviseur d'animation Firestorm : [AO_MESSAGE]
+	</notification>
+	<notification name="AttachedRiggedObjectToHUD">
+		Un objet attaché "[NAME]" contient du mesh lié à l'avatar mais est attaché au point HUD "[HUD_POINT]". Cela signifie que vous le verrez correctement affiché, mais que les autres ne pourront pas le voir. Retirez et de réattachez à un point d'attachement normal du corps.
+	</notification>
+	<notification name="WarnForceLoginURL">
+		L'URL de l'écran d'accueil de connexion est remplacée à des fins de test.
+
+Remettre l'URL par défaut ?
+		<usetemplate name="okcancelbuttons" notext="Rappeler plus tard" yestext="Réinitialiser" />
 	</notification>
 </notifications>
