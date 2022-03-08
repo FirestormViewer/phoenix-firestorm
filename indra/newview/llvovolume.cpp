@@ -6012,6 +6012,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                             pool->removeFace(facep);
                         }
                         facep->clearState(LLFace::RIGGED);
+                        facep->mAvatar = NULL;
+                        facep->mSkinInfo = NULL;
                     }
                 }
 
