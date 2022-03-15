@@ -252,6 +252,8 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 	mMDCImplCount = 0;
 	mLastRiggingInfoLOD = -1;
 	mResetDebugText = false;
+	mIsLocalMesh = false;
+	mIsLocalMeshUsingScale = false;
 }
 
 LLVOVolume::~LLVOVolume()
@@ -344,6 +346,14 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 	static LLCachedControl<bool> fsEnforceStrictObjectCheck(gSavedSettings, "FSEnforceStrictObjectCheck");
 	bool enfore_strict_object_check = LLGridManager::instance().isInSecondLife() && fsEnforceStrictObjectCheck;
 	// </FS:Ansariel>
+
+	// LOCAL MESH TEMP TODO
+	// local mesh begin // TODO: check if necessary here, or can be granular.
+	if (mIsLocalMesh == true)
+	{
+		return 0;
+	}
+	// local mesh end
 
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);
@@ -4557,6 +4567,7 @@ U32 LLVOVolume::getHighLODTriangleCount()
 U32 LLVOVolume::getLODTriangleCount(S32 lod)
 {
 	U32 ret = 0;
+	return ret; // LOCAL MESH TEMP TODO
 
 	LLVolume* volume = getVolume();
 

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+    positioning="centered"
+    legacy_header_height="18"
+    can_resize="true"
+    can_dock="false"
+    can_close="true"
+    height="300"
+    width="505"
+    min_width="505"
+    min_height="300"
+    layout="topleft"
+    save_rect="true"
+    save_visibility="true"
+    single_instance="false"
+    save_dock_state="false"
+    title="Local Mesh">
+  
+  <scroll_list
+      name="l_name_list"
+      left="10"
+      top="25"
+      width="485"
+      height="223"
+      follows="left|top|right|bottom"
+      column_padding="0"
+      draw_heading="true"
+      multi_select="true"
+      search_column="1"
+      visible="true">
+    <column name="unit_status" label="Status" width="55" />
+    <column name="unit_name" label="Name" dynamicwidth="true" />
+    <column name="unit_lods" label="LODs" width="55" />
+    <column name="unit_objects" label="Objects" width="55" />
+    <column name="unit_id_HIDDEN" label="ID" width="0" />
+  </scroll_list>
+  
+  <text_editor
+    name="text_log"
+    max_length="65536"
+    left="10"
+    top="25"
+    width="485"
+    height="223"    
+    follows="left|top|right|bottom"
+    type="string"
+    embedded_items="false"
+    font="SansSerif"
+    ignore_tab="false"
+    layout="topleft"
+    parse_urls="false"
+    spellcheck="false"
+    read_only="true"
+    word_wrap="false"
+    visible="false">
+  </text_editor>
+
+  <button
+    height="18"
+    label="Apply"
+    layout="topleft"
+    left="10"
+    top="253"
+    name="btn_apply"
+    width="75"
+    visible="true"/>
+  <check_box
+    height="18"
+    label="Apply Scale"
+    layout="topleft"
+    left="90"
+    top="253"
+    name="chkbox_use_scale"
+    width="75"
+    visible="true"
+    follows="bottom"/>
+  <combo_box
+     height="18"
+     layout="topleft"
+     follows="left|top|bottom"
+     name="object_apply_list"
+     left="180"
+     top="253"
+     width="315"
+     visible="true">
+    />
+  </combo_box>
+  
+  <button
+      height="18"
+      label="Add"
+      layout="topleft"
+      left="10"
+      top="275"
+      name="btn_add"
+      width="75"
+      visible="true"/>
+  <check_box
+      height="18"
+      label="Use LODs"
+      layout="topleft"
+      left="90"
+      top="275"
+      name="chkbox_use_lods"
+      width="75"
+      visible="true"
+      follows="bottom"/>
+  <button
+      height="18"
+      label="Remove"
+      layout="topleft"
+      left="180"
+      top="275"
+      name="btn_remove"
+      width="75"
+      visible="true"/>
+  <button
+      height="18"
+      label="Reload"
+      layout="topleft"
+      left="260"
+      top="275"
+      name="btn_reload"
+      width="75"
+      visible="true"/>
+  <button
+      height="18"
+      label="Clear"
+      layout="topleft"
+      left="340"
+      top="275"
+      name="btn_clear"
+      width="75"
+      visible="true"/>
+  <button
+      height="18"
+      label="Show Log"
+      layout="topleft"
+      left="420"
+      top="275"
+      name="btn_showlog"
+      width="75"
+      visible="true"/>
+  
+  </floater>
