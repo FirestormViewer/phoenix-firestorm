@@ -86,7 +86,7 @@
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		無法連接到 [SECOND_LIFE_GRID]。
+		無法連接到 [CURRENT_GRID]。
     （[DIAGNOSTIC]）
 請確定你的網路連線沒有問題。
 		<usetemplate name="okbutton" yestext="確定"/>
@@ -1379,7 +1379,7 @@
 		<usetemplate name="okcancelbuttons" notext="繼續" yestext="建立帳號…"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		連線出現問題。 問題可能出在你的網路連線或 [SECOND_LIFE_GRID]。
+		連線出現問題。 問題可能出在你的網路連線或 [CURRENT_GRID]。
 
 請檢查你的網路連線，幾分鐘後再試一次，或者點按幫助瀏覽 [SUPPORT_SITE]，或點按瞬間傳送試著回到你的家。
 		<url name="url">
@@ -2266,7 +2266,7 @@ SHA1 指紋：[MD5_DIGEST]
 
 你似乎正在舉報有人侵犯智慧財產權。 請確定你舉報內容確鑿無誤：
 
-(1) 違規舉報處理程序。 你若相信有居民利用 [CURRENT_GRID] 權限遂行侵犯智慧財產權，如使用複製機器程式碼(CopyBot)或其他類似複製工具，得以舉報此情事。 違規處理小組會就任何違反[SECOND_LIFE][http://secondlife.com/corporate/tos.php 服務條款]或[http://secondlife.com/corporate/cs.php 社群準則]的行為展開調查，並採取適當處置。 然而，違規處理小組並不受理要求將某內容自[SECOND_LIFE]虛擬世界刪除，這類要求將不予回應。
+(1) 違規舉報處理程序。 你若相信有居民利用 [CURRENT_GRID] 權限遂行侵犯智慧財產權，如使用複製機器程式碼(CopyBot)或其他類似複製工具，得以舉報此情事。 違規處理小組會就任何違反[CURRENT_GRID][http://secondlife.com/corporate/tos.php 服務條款]或[http://secondlife.com/corporate/cs.php 社群準則]的行為展開調查，並採取適當處置。 然而，違規處理小組並不受理要求將某內容自[CURRENT_GRID]虛擬世界刪除，這類要求將不予回應。
 
 (2) DMCA（刪除內容作業程序）。 若欲要求刪除[CURRENT_GRID]內容，你必須按照[http://secondlife.com/corporate/dmca.php DMCA 政策]提出有效的侵權通知。
 

@@ -223,7 +223,7 @@ elseif(LINUX)
     set(SHARED_LIB_STAGING_DIR_RELWITHDEBINFO   "${SHARED_LIB_STAGING_DIR}")
     set(SHARED_LIB_STAGING_DIR_RELEASE          "${SHARED_LIB_STAGING_DIR}")
 
-    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+    set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}/../../lib32/")
     set(vivox_libs
         libsndfile.so.1
         libortp.so
@@ -255,6 +255,8 @@ elseif(LINUX)
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0
         libfontconfig.so.1
+        libaprutil-1.so.0
+        libapr-1.so.0
        )
     else (NOT USESYSTEMLIBS)
       set(release_files

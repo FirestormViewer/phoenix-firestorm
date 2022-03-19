@@ -85,7 +85,7 @@ Detalhes do erro: O aviso &apos;[_NAME]&apos; não foi localizado no arquivo not
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Falha de conexão com o [SECOND_LIFE_GRID].
+		Falha de conexão com o [CURRENT_GRID].
     &apos;[DIAGNOSTIC]&apos;
 Verifique se a conexão à internet está funcionando.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -1387,7 +1387,7 @@ Voltar para [https://www.firestormviewer.org/join-secondlife/ firestormviewer.or
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Criar conta"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Estamos detectando um problema de conexão.  Pode haver um problema com a sua conexão à internet ou com o [SECOND_LIFE_GRID].
+		Estamos detectando um problema de conexão.  Pode haver um problema com a sua conexão à internet ou com o [CURRENT_GRID].
 
 Cheque sua conexão e tente em alguns minutos, clique na Ajuda para acessar o [SUPPORT_SITE], ou tente voltar para casa clicando em &apos;Teletransportar&apos;.
 		<url name="url">

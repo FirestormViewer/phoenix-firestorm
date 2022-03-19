@@ -34,7 +34,7 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 		Instalacja [APP_NAME] jest uszkodzona. Proszę [https://www.firestormviewer.org/downloads pobrać nową kopię] przeglądarki i ponownie ją zainstalować.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Nie można połączyć z [SECOND_LIFE_GRID].
+		Nie można połączyć z [CURRENT_GRID].
 &apos;[DIAGNOSTIC]&apos;
 Upewnij się, że Twoje połączenie z internetem działa.
 	</notification>
@@ -1420,7 +1420,7 @@ Czy chcesz przejść na stronę [https://www.firestormviewer.org/join-secondlife
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź i wyloguj się" />
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
+		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [CURRENT_GRID].
 
 Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kilka minut, połączyć się ze stroną pomocy technicznej ([SUPPORT_SITE]) lub wybrać Teleportuj, by teleportować się do swojego miejsca startu.
 		<form name="form">
@@ -1429,7 +1429,7 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		</form>
 	</notification>
 	<notification name="LoginPacketNeverReceivedNoTP">
-		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
+		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [CURRENT_GRID].
 
 Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kilka minut lub połączyć się ze stroną pomocy technicznej [SUPPORT_SITE].
 		<form name="form">

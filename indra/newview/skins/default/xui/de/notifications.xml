@@ -86,7 +86,7 @@ Fehlerdetails: The notification called &apos;[_NAME]&apos; was not found in noti
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Verbindung nicht möglich zum [SECOND_LIFE_GRID].
+		Verbindung nicht möglich zum [CURRENT_GRID].
     &apos;[DIAGNOSTIC]&apos;
 Stellen Sie sicher, dass Ihre Internetverbindung funktioniert.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -710,7 +710,7 @@ Das Objekt ist möglicherweise außer Reichweite oder wurde gelöscht.
 		Dateidownload nicht möglich
 	</notification>
 	<notification name="MediaFileDownloadUnsupported">
-		Sie haben einen Datei-Download angefordert, der in [SECOND_LIFE] nicht unterstützt wird.
+		Sie haben einen Datei-Download angefordert, der in [APP_NAME] nicht unterstützt wird.
 		<usetemplate ignoretext="Warnung anzeigen, wenn ein Datei-Download nicht unterstützt wird" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="CannotWriteFile">
@@ -1513,11 +1513,11 @@ Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto 
 		<usetemplate name="okcancelbuttons" notext="Weiter" yestext="Konto erstellen..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Es gibt Probleme mit der Verbindung. Möglicherweise besteht ein Problem mit Ihrer Internetverbindung oder dem [SECOND_LIFE_GRID].
+		Es gibt Probleme mit der Verbindung. Möglicherweise besteht ein Problem mit Ihrer Internetverbindung oder dem [CURRENT_GRID].
 
 Überprüfen Sie Ihre Internetverbindung und versuchen Sie es dann erneut, oder klicken Sie auf Hilfe, um zu [SUPPORT_SITE] zu gelangen, oder klicken Sie auf Teleportieren, um nach Hause zu teleportieren.
 		<url name="url">
-			http://de.secondlife.com/support/
+			https://www.firestormviewer.org/support/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -1526,11 +1526,11 @@ Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto 
 		</form>
 	</notification>
 	<notification name="LoginPacketNeverReceivedNoTP">
-		Es gibt Probleme mit der Verbindung. Möglicherweise besteht ein Problem mit Ihrer Internetverbindung oder dem [SECOND_LIFE_GRID].
+		Es gibt Probleme mit der Verbindung. Möglicherweise besteht ein Problem mit Ihrer Internetverbindung oder dem [CURRENT_GRID].
 
 Überprüfen Sie Ihre Internetverbindung und versuchen Sie es dann erneut, oder klicken Sie auf Hilfe, um zu [SUPPORT_SITE] zu gelangen.
 		<url name="url">
-			http://de.secondlife.com/support/
+			https://www.firestormviewer.org/support/
 		</url>
 		<form name="form">
 			<button name="OK" text="OK"/>
