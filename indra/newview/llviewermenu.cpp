@@ -7776,7 +7776,7 @@ class LLAvatarTogglePicks : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        LLFloater* instance = LLAvatarActions::getProfileFloater(gAgent.getID());
+        LLFloater * instance = LLAvatarActions::getProfileFloater(gAgent.getID());
         if (LLFloater::isMinimized(instance) || (instance && !instance->hasFocus() && !instance->getIsChrome()))
         {
             instance->setMinimized(FALSE);

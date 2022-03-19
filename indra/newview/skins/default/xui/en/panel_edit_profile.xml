@@ -252,7 +252,7 @@
          layout="topleft"
          left="4"
          top_pad="-14"
-         max_length="511"
+         max_length="65000"
          name="sl_description_edit"
          right="-4"
          word_wrap="true" />
@@ -432,7 +432,7 @@
        layout="topleft"
        left="4"
        top_pad="-14"
-       max_length="511"
+       max_length="65000"
        name="fl_description_edit"
        right="-4"
        word_wrap="true" />

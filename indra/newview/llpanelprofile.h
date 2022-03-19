@@ -104,6 +104,8 @@ public:
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
+    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
+
 protected:
 	/**
 	 * Process profile related data received from server.
@@ -251,6 +253,8 @@ public:
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
+    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
+
 protected:
 	/*virtual*/ void updateButtons();
 	void onCommitLoad(LLUICtrl* ctrl);
@@ -316,6 +320,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+    void processProperties(const LLAvatarData* avatar_data);
 
 	void resetData();
 
@@ -323,6 +328,8 @@ public:
 	 * Saves changes.
 	 */
 	void apply(LLAvatarData* data);
+
+    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 protected:
 	/*virtual*/ void updateButtons();
@@ -358,6 +365,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+    void processProperties(LLAvatarNotes* avatar_notes);
 
 	void resetData();
 
@@ -383,13 +391,11 @@ protected:
 	void enableCheckboxes(bool enable);
 
 	void applyRights();
-    void updateWarning();
 
     LLCheckBoxCtrl*     mOnlineStatus;
 	LLCheckBoxCtrl*     mMapRights;
 	LLCheckBoxCtrl*     mEditObjectRights;
 	LLTextEditor*       mNotesEditor;
-    LLTextBox*          mCharacterLimitWarning;
 
     std::string			mURLWebProfile;
 
@@ -428,6 +434,10 @@ public:
 
     void showClassified(const LLUUID& classified_id = LLUUID::null, bool edit = false);
 
+    LLAvatarData getAvatarData() { return mAvatarData; };
+
+    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
+
 private:
     void onTabChange();
 
@@ -439,6 +449,13 @@ private:
     LLPanelProfileFirstLife*    mPanelFirstlife;
     LLPanelProfileNotes*         mPanelNotes;
     LLTabContainer*             mTabContainer;
+
+    // Todo: due to server taking minutes to update this needs a more long term storage
+    // to reuse recently saved values if user opens floater again
+    // Storage implementation depends onto how a cap will be implemented, if cap will be
+    // enought to fully update LLAvatarPropertiesProcessor, then this storage can be
+    // implemented there.
+    LLAvatarData mAvatarData;
 };
 
 #endif //LL_LLPANELPROFILE_H
