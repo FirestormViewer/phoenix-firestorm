@@ -167,7 +167,6 @@ set(viewer_SOURCE_FILES
     fsfloaternearbychat.cpp
     fsfloaterplacedetails.cpp
     fsfloaterposestand.cpp
-    fsfloaterprofile.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
@@ -189,13 +188,10 @@ set(viewer_SOURCE_FILES
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
     fspanelblocklist.cpp
-    fspanelclassified.cpp
     fspanelcontactsets.cpp
     fspanelimcontrolpanel.cpp
     fspanellogin.cpp
     fspanelprefs.cpp
-    fspanelprofile.cpp
-    fspanelprofileclassifieds.cpp
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
@@ -944,7 +940,6 @@ set(viewer_HEADER_FILES
     fsfloaternearbychat.h
     fsfloaterplacedetails.h
     fsfloaterposestand.h
-    fsfloaterprofile.h
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
@@ -968,12 +963,9 @@ set(viewer_HEADER_FILES
     fsnearbychatvoicemonitor.h
     fspanelblocklist.h
     fspanelcontactsets.h
-    fspanelclassified.h
     fspanelimcontrolpanel.h
     fspanellogin.h
     fspanelprefs.h
-    fspanelprofile.h
-    fspanelprofileclassifieds.h
     fspanelradar.h
     fsparticipantlist.h
     fspose.h

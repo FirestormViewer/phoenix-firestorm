@@ -85,7 +85,6 @@
 // Firestorm includes
 #include "fsfloaterim.h"
 #include "fsfloaterimcontainer.h"
-#include "fsfloaterprofile.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "fsassetblacklist.h"
@@ -469,9 +468,7 @@ void LLAvatarActions::showProfile(const LLUUID& avatar_id)
 {
 	if (avatar_id.notNull())
 	{
-		// <FS:Ansariel> Profile selection
-		//LLFloaterReg::showInstance("profile", LLSD().with("id", avatar_id));
-		LLFloaterReg::showInstance(gSavedSettings.getBOOL("FSUseOwnProfiles") ? "fs_floater_profile" : "profile", LLSD().with("id", avatar_id));
+		LLFloaterReg::showInstance("profile", LLSD().with("id", avatar_id));
 	}
 }
 
@@ -480,26 +477,11 @@ void LLAvatarActions::showPicks(const LLUUID& avatar_id)
 {
 	if (avatar_id.notNull())
 	{
-		// <FS:Ansariel> Profile selection
-		if (gSavedSettings.getBOOL("FSUseOwnProfiles"))
-		{
-			FSFloaterProfile* profilefloater = dynamic_cast<FSFloaterProfile*>(LLFloaterReg::showInstance("fs_floater_profile", LLSD().with("id", avatar_id)));
-			if (profilefloater)
-			{
-				profilefloater->showPick();
-			}
-		}
-		else
-		{
-		// </FS:Ansariel>
         LLFloaterProfile* profilefloater = dynamic_cast<LLFloaterProfile*>(LLFloaterReg::showInstance("profile", LLSD().with("id", avatar_id)));
         if (profilefloater)
         {
             profilefloater->showPick();
         }
-		// <FS:Ansariel> Profile selection
-		}
-		// </FS:Ansariel>
 	}
 }
 
@@ -508,26 +490,11 @@ void LLAvatarActions::showPick(const LLUUID& avatar_id, const LLUUID& pick_id)
 {
 	if (avatar_id.notNull())
 	{
-		// <FS:Ansariel> Profile selection
-		if (gSavedSettings.getBOOL("FSUseOwnProfiles"))
-		{
-			FSFloaterProfile* profilefloater = dynamic_cast<FSFloaterProfile*>(LLFloaterReg::showInstance("fs_floater_profile", LLSD().with("id", avatar_id)));
-			if (profilefloater)
-			{
-				profilefloater->showPick(pick_id);
-			}
-		}
-		else
-		{
-		// </FS:Ansariel>
         LLFloaterProfile* profilefloater = dynamic_cast<LLFloaterProfile*>(LLFloaterReg::showInstance("profile", LLSD().with("id", avatar_id)));
         if (profilefloater)
         {
             profilefloater->showPick(pick_id);
         }
-		// <FS:Ansariel> Profile selection
-		}
-		// </FS:Ansariel>
 	}
 }
 
@@ -536,26 +503,11 @@ bool LLAvatarActions::isPickTabSelected(const LLUUID& avatar_id)
 {
     if (avatar_id.notNull())
     {
-		// <FS:Ansariel> Profile selection
-		if (gSavedSettings.getBOOL("FSUseOwnProfiles"))
-		{
-			FSFloaterProfile* profilefloater = dynamic_cast<FSFloaterProfile*>(LLFloaterReg::showInstance("fs_floater_profile", LLSD().with("id", avatar_id)));
-			if (profilefloater)
-			{
-				return profilefloater->isPickTabSelected();
-			}
-		}
-		else
-		{
-		// </FS:Ansariel>
         LLFloaterProfile* profilefloater = LLFloaterReg::findTypedInstance<LLFloaterProfile>("profile", LLSD().with("id", avatar_id));
         if (profilefloater)
         {
             return profilefloater->isPickTabSelected();
         }
-		// <FS:Ansariel> Profile selection
-		}
-		// </FS:Ansariel>
     }
     return false;
 }
@@ -565,26 +517,11 @@ void LLAvatarActions::showClassifieds(const LLUUID& avatar_id)
 {
 	if (avatar_id.notNull())
 	{
-		// <FS:Ansariel> Profile selection
-		if (gSavedSettings.getBOOL("FSUseOwnProfiles"))
-		{
-			FSFloaterProfile* profilefloater = dynamic_cast<FSFloaterProfile*>(LLFloaterReg::showInstance("fs_floater_profile", LLSD().with("id", avatar_id)));
-			if (profilefloater)
-			{
-				profilefloater->showClassified();
-			}
-		}
-		else
-		{
-		// </FS:Ansariel>
         LLFloaterProfile* profilefloater = dynamic_cast<LLFloaterProfile*>(LLFloaterReg::showInstance("profile", LLSD().with("id", avatar_id)));
         if (profilefloater)
         {
             profilefloater->showClassified();
         }
-		// <FS:Ansariel> Profile selection
-		}
-		// </FS:Ansariel>
 	}
 }
 
@@ -593,26 +530,11 @@ void LLAvatarActions::showClassified(const LLUUID& avatar_id, const LLUUID& clas
 {
 	if (avatar_id.notNull())
 	{
-		// <FS:Ansariel> Profile selection
-		if (gSavedSettings.getBOOL("FSUseOwnProfiles"))
-		{
-			FSFloaterProfile* profilefloater = dynamic_cast<FSFloaterProfile*>(LLFloaterReg::showInstance("fs_floater_profile", LLSD().with("id", avatar_id)));
-			if (profilefloater)
-			{
-				profilefloater->showClassified(classified_id, edit);
-			}
-		}
-		else
-		{
-		// </FS:Ansariel>
         LLFloaterProfile* profilefloater = dynamic_cast<LLFloaterProfile*>(LLFloaterReg::showInstance("profile", LLSD().with("id", avatar_id)));
         if (profilefloater)
         {
             profilefloater->showClassified(classified_id, edit);
         }
-		// <FS:Ansariel> Profile selection
-		}
-		// </FS:Ansariel>
 	}
 }
 

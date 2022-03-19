@@ -61,7 +61,6 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
-#include "fspanelclassified.h"
 
 //*TODO: verify this limit
 const S32 MAX_AVATAR_CLASSIFIEDS = 100;
@@ -949,14 +948,6 @@ void LLPanelProfileClassified::handleSearchStatResponse(LLUUID classifiedId, LLS
         map + search_map,
         profile + search_profile,
         true);
-
-    // <FS:Ansariel> FIRE-8787: Also update legacy profiles
-    FSPanelClassifiedInfo::setClickThrough(classifiedId,
-        teleport + search_teleport,
-        map + search_map,
-        profile + search_profile,
-        true);
-    // </FS:Ansariel>
 }
 
 void LLPanelProfileClassified::resetData()

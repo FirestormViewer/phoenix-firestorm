@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_profile_web" label="Web">
-	<panel.string name="LoadTime" value="Tempo di caricamento: [TIME] secondi"/>
-</panel>

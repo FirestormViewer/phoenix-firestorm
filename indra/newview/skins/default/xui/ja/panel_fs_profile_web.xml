@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_profile_web" label="ウェブ">
-    <panel.string name="LoadTime" value="読み込み時間: [TIME] 秒"/>
-</panel>
-
