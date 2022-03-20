@@ -13569,7 +13569,7 @@ This Region does not support environmental settings.
  
   <notification
    icon="alertmodal.tga"
-   label="Save Outfit"
+   label="Save Environmental Settings"
    name="SaveSettingAs"
    type="alertmodal">
     <unique/>
