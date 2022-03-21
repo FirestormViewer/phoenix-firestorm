@@ -4,20 +4,23 @@
 		Indietro
 	</text>
 	<text name="attachments_title">
-		Complessita oggetti indossati avatar
+		Complessità attachments
+	</text>
+	<text name="tot_att_count">
+		Totale: 50 (120000.10μs)
 	</text>
 	<text name="attachments_desc1">
-		Gli allegati rendono il tuo avatar piu complesso e lento da renderizzare.
+		Gli attachments rendono il tuo avatar più complesso e lento da renderizzare.
 	</text>
 	<text name="attachments_desc2">
-		Questa schermata ti consente di visualizzare gli allegati del tuo avatar.
+		In questa schermata puoi visualizzare l'elenco dei tuoi attachments.
 	</text>
 	<text name="attachments_desc3">
-		Puoi rimuovere i tuoi allegati rapidamente e facilmente premendo la 'X'.
+		Puoi rimuovere rapidamente un attachment cliccando la 'X'.
 	</text>
 	<name_list name="obj_list">
-		<name_list.columns label="Tempo (μs)" name="art_value" tool_tip="Tempo impiegato per il rendering di questo allegato (microsecondi)" />
-		<name_list.columns name="complex_value" tool_tip="Complessità dell'oggetto (ARC)" />
-		<name_list.columns label="Nome Allegato" tool_tip="Fare clic sulla 'X' per staccare" name="name" />
+		<name_list.columns label="Tempo (μs)" name="art_value" tool_tip="Tempo impiegato per il rendering dell'attachment (microsecondi)." />
+		<name_list.columns label="ARC" name="complex_value" tool_tip="Complessità dell'attachment (ARC)." />
+		<name_list.columns label="Nome attachment" tool_tip="Fai click sulla 'X' per rimuovere l'attachment." name="name" />
 	</name_list>
 </panel>
