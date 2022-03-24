@@ -2,14 +2,14 @@
 <floater name="inspect_group">
 	<string name="PrivateGroup">Groupe privé</string>
 	<string name="FreeToJoin">Inscription gratuite</string>
-	<string name="CostToJoin">[AMOUNT] L$ pour rejoindre</string>
+	<string name="CostToJoin">[AMOUNT] L$ pour adhérer</string>
 	<string name="YouAreMember">Vous êtes membre</string>
 	<text name="group_subtitle">123 membres</text>
 	<text name="group_details">
- A group of folks charged with creating a room with a moose.
- Fear the moose!  Fear it!  And the mongoose too!
+Un groupe de personnes chargées de créer une chambre avec un élan.
+Craignez l'élan !  Craignez-le !  Et la mangouste aussi !
 	</text>
-	<text name="group_cost">L$123 to join</text>
+	<text name="group_cost">123 L$ pour adhérer</text>
 	<button label="Rejoindre" name="join_btn"/>
 	<button label="Quitter" name="leave_btn"/>
 	<button label="Voir le profil" name="view_profile_btn"/>
