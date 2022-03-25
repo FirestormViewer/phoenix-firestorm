@@ -325,10 +325,9 @@ void LLWindowSDL::initialiseX11Clipboard()
 
     XA_CLIPBOARD = XInternAtom(mSDL_Display, "CLIPBOARD", False);
 
-    gSupportedAtoms[0] = XA_STRING;
-
+    gSupportedAtoms[0] = XInternAtom(mSDL_Display, "UTF8_STRING", False);
     gSupportedAtoms[1] = XInternAtom(mSDL_Display, "COMPOUND_TEXT", False);
-    gSupportedAtoms[2] = XInternAtom(mSDL_Display, "UTF8_STRING", False);
+    gSupportedAtoms[2] = XA_STRING;
 
     // TARGETS atom
     XA_TARGETS = XInternAtom(mSDL_Display, "TARGETS", False);
@@ -359,7 +358,7 @@ bool LLWindowSDL::getSelectionText( Atom aSelection, Atom aType, LLWString &text
                                  &remaining, &data);
     if (data && len)
     {
-        text = LLWString(
+		text = LLWString(
                 utf8str_to_wstring(reinterpret_cast< char const *>( data ) )
                 );
         XFree(data);
