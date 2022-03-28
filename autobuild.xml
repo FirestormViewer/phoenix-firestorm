@@ -1144,11 +1144,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>126b2476f65ee4947fec1f754fc9dca9</string>
+              <string>b81336e7824c6cf96a6cd6200333b3f7</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.05-windows-220101109.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.06-windows-220870903.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1158,18 +1158,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>891c91e7868bf2e103691bae2ef493eb</string>
+              <string>cbfb25df1e231a84b0beaf85600efb20</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.05-windows64-220101110.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.06-windows64-220870905.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.05</string>
+        <string>2.02.06</string>
       </map>
       <key>fontconfig</key>
       <map>
