@@ -33,10 +33,7 @@
 			<button label="Wyczyść bufor przeglądarki WWW" name="ClearWebBrowserCache" width="195"/>
 			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
-			<!-- <button label="Dostosuj ustawienia proxy" label_selected="Dostosuj ustawienia proxy" name="set_proxy"/> -->
-			<text name="proxy_settings_label">
-				Zostaną użyte ustawienia proxy Twojego systemu.
-			</text>
+			<button label="Dostosuj ustawienia proxy" label_selected="Dostosuj ustawienia proxy" name="set_proxy"/>
 			<text name="home_page_label_l">
 				Strona startowa:
 			</text>

@@ -62,6 +62,9 @@ namespace
 #ifdef __clang__
 #   pragma clang diagnostic ignored "-Wunused-function"
 #endif
+#if __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 	void test_that_error_h_includes_enough_things_to_compile_a_message()
 	{
 		LL_INFOS() << "!" << LL_ENDL;

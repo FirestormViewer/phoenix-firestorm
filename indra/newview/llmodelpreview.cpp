@@ -4030,6 +4030,7 @@ void LLModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
     if (!mLODFrozen)
     {
         genLODs(lod, 3, enforce_tri_limit);
+        mFMP->refresh(); // <FS:Beq/> BUG-231970 Fix b0rken upload floater refresh
         refresh();
     }
 }

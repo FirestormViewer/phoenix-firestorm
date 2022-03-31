@@ -72,7 +72,7 @@ Fejl detaljer: Beskeden kaldet &apos;[_NAME]&apos; blev ikke fundet i notificati
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Kunne ikke tilslutte til  [SECOND_LIFE_GRID].
+		Kunne ikke tilslutte til  [CURRENT_GRID].
     &apos;[DIAGNOSTIC]&apos;
 Check at Internet forbindelsen fungerer korrekt.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -477,7 +477,7 @@ Du kan bruge [CURRENT_GRID] normalt og andre personer vil se dig korrekt.
 Hvis det er første gang du bruger [CURRENT_GRID], skal du først oprette en konto for at logge på.
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Der er problemer med at koble på.  Der kan være et problem med din Internet forbindelse eller [SECOND_LIFE_GRID].
+		Der er problemer med at koble på.  Der kan være et problem med din Internet forbindelse eller [CURRENT_GRID].
 
 Du kan enten checke din Internet forbindelse og prøve igen om lidt, klikke på Hjælp for at se [SUPPORT_SITE] siden, eller klikke på Teleport for at forsøge at teleportere hjem.
 	</notification>

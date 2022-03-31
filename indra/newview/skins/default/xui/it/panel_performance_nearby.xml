@@ -4,35 +4,41 @@
 		Indietro
 	</text>
 	<text name="av_nearby_title">
-		Avatars nelle vicinanze
+		Avatar nelle vicinanze
+	</text>
+	<text name="tot_av_count">
+		Totale: 50 (120000.10μs)
 	</text>
 	<text name="av_nearby_desc">
-		Nascondi gli avatar piu complessi per aumentare la velocita.
+		Nascondi gli avatar con una complessità elevata per aumentare la velocità.
 	</text>
-	<slider tool_tip="Controlla a che punto un avatar visivamente complesso viene disegnato come impostore" label="Massima complessità (K)" name="IndirectMaxComplexity" />
-	<slider tool_tip="Controlla quando si ritiene che un avatar visivamente complesso richieda troppo tempo per il rendering (unità: microsecondi)" label="Tempo mass. di rendering (μs)" name="FSRenderAvatarMaxART" />
+	<slider tool_tip="Stabilisci a che punto un avatar complesso viene disegnato come 'impostor'." label="Massima complessità (K)" name="IndirectMaxComplexity" />
+	<slider tool_tip="Stabilisci a che punto la complessità di un avatar richiede troppo tempo per il rendering (unità: microsecondi)." label="Tempo massimo per il rendering (μs)" name="FSRenderAvatarMaxART" label_width="200" width="455" />
 	<text name="FSRenderAvatarMaxARTText">
-		senza limiti
+		nessun limite
 	</text>
 	<name_list name="nearby_list">
-		<name_list.columns tool_tip="Grafico a barre che mostra il tempo di rendering corrente (include l'autotuning) come % del più lento." name="art_visual" />
-		<name_list.columns label="Tempo (μs)" tool_tip="Tempo di rendering avatar. Tempo effettivo impiegato per il rendering prima di qualsiasi ottimizzazione automatica (in microsec)." name="art_value" />
-		<name_list.columns tool_tip="Complessita (ARC) basata su regole standard." name="complex_value" />
-		<name_list.columns tool_tip="Mostra qualsiasi sintonizzazione. I=Impostore, S=nessuna ombra." name="state" />
+		<name_list.columns tool_tip="Barra grafica che mostra il tempo di rendering corrente (include l'autotuning) in proporzione del più lento." name="art_visual" />
+		<name_list.columns label="Tempo (μs)" tool_tip="Tempo di rendering dell'avatar. Tempo effettivo impiegato per il rendering dell'avatar prima di qualsiasi ottimizzazione automatica (in microsecondi)." name="art_value" />
+		<name_list.columns label="ARC" tool_tip="Complessità dell'avatar basata sulle regole standard." name="complex_value" />
+		<name_list.columns tool_tip="Mostra modalità di ottimizzazione. I=impostor, S=nessuna ombra." name="state" />
 		<name_list.columns label="Nome" name="name"/>
 	</name_list>
 	<text name="av_nearby_desc2">
-		Puoi anche fare clic destro del mouse su un avatar per contr. la visualizz.
+		Puoi fare anche click destro su un avatar per impostare la modalità di resa.
 	</text>
-	<button label="Eccezioni..." name="exceptions_btn" />
+	<text name="av_nearby_desc3">
+		Il tuo avatar include le risorse per il viewer. Usa la scheda Indossati per vedere il tuo impatto sugli altri.
+	</text>
 	<check_box label="Mostra gli amici sempre con il massimo dettaglio" name="display_friends" />
-	<check_box label="Nascondi completamente gli avatar" name="hide_avatars" />
+	<button label="Eccezioni..." name="exceptions_btn" />
+	<check_box label="Nascondi tutti gli avatar" name="hide_avatars" />
 	<text name="name_tags_textbox">
-		Nomi:
+		Mostra nomi avatar:
 	</text>
-	<radio_group name="name_tag_mode">
-		<radio_item label="Off" name="radio" />
-		<radio_item label="On" name="radio2" />
+	<radio_group name="name_tag_mode" left="150">
+		<radio_item label="No" name="radio" />
+		<radio_item label="Sì" name="radio2" />
 		<radio_item label="Mostra brevemente" name="radio3" />
 	</radio_group>
 </panel>
