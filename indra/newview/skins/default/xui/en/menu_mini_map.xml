@@ -358,9 +358,9 @@
      name="Property Lines">
       <menu_item_check.on_click
        function="Minimap.ToggleOverlay"
-       parameter="MiniMapPropertyLines" />
+       parameter="MiniMapShowPropertyLines" />
       <menu_item_check.on_check
-       control="MiniMapPropertyLines" />
+       control="MiniMapShowPropertyLines" />
     </menu_item_check>
     <menu_item_check
      label="Parcels for Sale"
@@ -371,7 +371,7 @@
       <menu_item_check.on_check
        control="MiniMapForSaleParcels" />
       <menu_item_check.on_enable
-       control="MiniMapPropertyLines" />
+       control="MiniMapShowPropertyLines" />
     </menu_item_check>
     <menu_item_separator />
     <menu_item_check

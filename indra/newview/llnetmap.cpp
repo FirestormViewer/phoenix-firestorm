@@ -37,6 +37,7 @@
 #include "llfocusmgr.h"
 #include "lllocalcliprect.h"
 #include "llrender.h"
+#include "llresmgr.h"
 #include "llui.h"
 #include "lltooltip.h"
 
@@ -52,16 +53,17 @@
 // [/SL:KB]
 #include "llcallingcard.h" // LLAvatarTracker
 #include "llfloaterworldmap.h"
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 #include "llparcel.h"
-// [/SL:KB]
 #include "lltracker.h"
 #include "llsurface.h"
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 #include "lltrans.h"
 // [/SL:KB]
+#include "llurlmatch.h"
+#include "llurlregistry.h"
 #include "llviewercamera.h"
 #include "llviewercontrol.h"
+#include "llviewerparcelmgr.h"
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
 #include "llviewermenu.h"
@@ -107,10 +109,6 @@ const S32 CIRCLE_STEPS = 100;
 LLNetMap::avatar_marks_map_t LLNetMap::sAvatarMarksMap; // <FS:Ansariel>
 F32 LLNetMap::sScale; // <FS:Ansariel> Synchronizing netmaps throughout instances
 
-// <FS:Ansariel> Synchronize tooltips throughout instances
-std::string LLNetMap::sToolTipMsg;
-// </FS:Ansariel> Synchronize tooltips throughout instances
-
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
@@ -138,8 +136,7 @@ LLNetMap::LLNetMap (const Params & p)
 // [/SL:KB]
 	mClosestAgentToCursor(),
 //	mClosestAgentAtLastRightClick(),
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	//mToolTipMsg(),
+	mToolTipMsg(),
 	mPopupMenu(NULL)
 {
 	// <FS:Ansariel> Fixing borked minimap zoom level persistance
@@ -242,8 +239,6 @@ BOOL LLNetMap::postBuild()
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	LLNetMap::updateToolTipMsg();
 	return TRUE;
 }
 
@@ -308,12 +303,10 @@ void LLNetMap::draw()
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
 	static LLUIColor map_frustum_rotating_color = LLUIColorTable::instance().getColor("MapFrustumRotatingColor", LLColor4::white);
+	static LLUIColor map_parcel_outline_color = LLUIColorTable::instance().getColor("MapParcelOutlineColor", LLColor4(LLColor3(LLColor4::yellow), 0.5f));
 	static LLUIColor map_whisper_ring_color = LLUIColorTable::instance().getColor("MapWhisperRingColor", LLColor4::blue); // <FS:LO> FIRE-17460 Add Whisper Chat Ring to Minimap
 	static LLUIColor map_chat_ring_color = LLUIColorTable::instance().getColor("MapChatRingColor", LLColor4::yellow);
 	static LLUIColor map_shout_ring_color = LLUIColorTable::instance().getColor("MapShoutRingColor", LLColor4::red);
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-08-17 (Catznip-3.3)
-	static LLUIColor map_property_line = LLUIColorTable::instance().getColor("MiniMapPropertyLine", LLColor4::white);
-// [/SL:KB]
 	
 	if (mObjectImagep.isNull())
 	{
@@ -382,6 +375,7 @@ void LLNetMap::draw()
 		//S32 region_width = ll_round(LLWorld::getInstance()->getRegionWidthInMeters());
 		S32 region_width = ll_round(REGION_WIDTH_METERS);
 // </FS:CR> Aurora Sim
+        const F32 scale_pixels_per_meter = mScale / region_width;
 
 		for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
 			 iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
@@ -390,8 +384,8 @@ void LLNetMap::draw()
 			// Find x and y position relative to camera's center.
 			LLVector3 origin_agent = regionp->getOriginAgent();
 			LLVector3 rel_region_pos = origin_agent - gAgentCamera.getCameraPositionAgent();
-			F32 relative_x = (rel_region_pos.mV[0] / region_width) * mScale;
-			F32 relative_y = (rel_region_pos.mV[1] / region_width) * mScale;
+			F32 relative_x = rel_region_pos.mV[0] * scale_pixels_per_meter;
+			F32 relative_y = rel_region_pos.mV[1] * scale_pixels_per_meter;
 
 			// background region rectangle
 			F32 bottom =	relative_y;
@@ -583,7 +577,7 @@ void LLNetMap::draw()
 		}
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
-		static LLCachedControl<bool> s_fShowPropertyLines(gSavedSettings, "MiniMapPropertyLines") ;
+		static LLCachedControl<bool> s_fShowPropertyLines(gSavedSettings, "MiniMapShowPropertyLines") ;
 		if ( (s_fShowPropertyLines) && ((mUpdateParcelImage) || (dist_vec_squared2D(mParcelImageCenterGlobal, posCenterGlobal) > 9.0f)) )
 		{
 			mUpdateParcelImage = false;
@@ -598,7 +592,7 @@ void LLNetMap::draw()
 			{
 				const LLViewerRegion* pRegion = *itRegion; LLColor4U clrOverlay;
 				if (pRegion->isAlive())
-					clrOverlay = map_property_line.get();
+					clrOverlay = map_parcel_outline_color.get();
 				else
 					clrOverlay = LLColor4U(255, 128, 128, 255);
 				renderPropertyLinesForRegion(pRegion, clrOverlay);
@@ -611,8 +605,8 @@ void LLNetMap::draw()
 		LLVector3 map_center_agent = gAgent.getPosAgentFromGlobal(mObjectImageCenterGlobal);
 		LLVector3 camera_position = gAgentCamera.getCameraPositionAgent();
 		map_center_agent -= camera_position;
-		map_center_agent.mV[VX] *= mScale/region_width;
-		map_center_agent.mV[VY] *= mScale/region_width;
+		map_center_agent.mV[VX] *= scale_pixels_per_meter;
+		map_center_agent.mV[VY] *= scale_pixels_per_meter;
 
 //		gGL.getTexUnit(0)->bind(mObjectImagep);
 		F32 image_half_width = 0.5f*mObjectMapPixels;
@@ -681,6 +675,15 @@ void LLNetMap::draw()
 			gGL.end();
 		}
 // [/SL:KB]
+
+		// <FS:Ansariel> Replaced with Kitty's implementation
+		//for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
+		//	iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+		//{
+		//	LLViewerRegion* regionp = *iter;
+		//	regionp->renderPropertyLinesOnMinimap(scale_pixels_per_meter, map_parcel_outline_color.get().mV);
+		//}
+		// </FS:Ansariel>
 
 		gGL.popMatrix();
 
@@ -1060,64 +1063,157 @@ BOOL LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	return TRUE;
 }
 
-BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
+BOOL LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
 {
-	if (gDisconnected)
-	{
-		return FALSE;
-	}
+    if (gDisconnected)
+    {
+        return false;
+    }
 
-	// If the cursor is near an avatar on the minimap, a mini-inspector will be
-	// shown for the avatar, instead of the normal map tooltip.
-//	if (handleToolTipAgent(mClosestAgentToCursor))
+    // If the cursor is near an avatar on the minimap, a mini-inspector will be
+    // shown for the avatar, instead of the normal map tooltip.
+//  if (handleToolTipAgent(mClosestAgentToCursor))
 // [RLVa:KB] - Checked: RLVa-1.2.2
-	bool fRlvCanShowName = (mClosestAgentToCursor.notNull()) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mClosestAgentToCursor));
-	if ( (fRlvCanShowName) && (handleToolTipAgent(mClosestAgentToCursor)) )
+    bool fRlvCanShowName = (mClosestAgentToCursor.notNull()) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mClosestAgentToCursor));
+    if ( (fRlvCanShowName) && (handleToolTipAgent(mClosestAgentToCursor)) )
 // [/RLVa:KB]
-	{
-		return TRUE;
-	}
+    {
+        return TRUE;
+    }
 
 // [RLVa:KB] - Checked: RLVa-1.2.2
-	LLStringUtil::format_map_t args; LLAvatarName avName;
-	args["[AGENT]"] = ( (!fRlvCanShowName) && (mClosestAgentToCursor.notNull()) && (LLAvatarNameCache::get(mClosestAgentToCursor, &avName)) ) ? RlvStrings::getAnonym(avName) + "\n" : "";
+    LLStringUtil::format_map_t args; LLAvatarName avName;
+    args["[AGENT]"] = ( (!fRlvCanShowName) && (mClosestAgentToCursor.notNull()) && (LLAvatarNameCache::get(mClosestAgentToCursor, &avName)) ) ? RlvStrings::getAnonym(avName) + "\n" : "";
 // [/RLVa:KB]
 
-	LLRect sticky_rect;
-	std::string region_name;
-	LLViewerRegion*	region = LLWorld::getInstance()->getRegionFromPosGlobal( viewPosToGlobal( x, y ) );
-	if(region)
-	{
-		// set sticky_rect
-		S32 SLOP = 4;
-		localPointToScreen(x - SLOP, y - SLOP, &(sticky_rect.mLeft), &(sticky_rect.mBottom));
-		sticky_rect.mRight = sticky_rect.mLeft + 2 * SLOP;
-		sticky_rect.mTop = sticky_rect.mBottom + 2 * SLOP;
+    LLRect sticky_rect;
+    S32 SLOP = 4;
+    localPointToScreen(x - SLOP, y - SLOP, &(sticky_rect.mLeft), &(sticky_rect.mBottom));
+    sticky_rect.mRight = sticky_rect.mLeft + 2 * SLOP;
+    sticky_rect.mTop   = sticky_rect.mBottom + 2 * SLOP;
 
-//		region_name = region->getName();
+    std::string parcel_name_msg;
+    std::string parcel_sale_price_msg;
+    std::string parcel_sale_area_msg;
+    std::string parcel_owner_msg;
+    std::string region_name_msg;
+
+    LLVector3d      posGlobal = viewPosToGlobal(x, y);
+    LLViewerRegion *region    = LLWorld::getInstance()->getRegionFromPosGlobal(posGlobal);
+    if (region)
+    {
+//      std::string region_name = region->getName();
 // [RLVa:KB] - Checked: RLVa-1.2.2
-		region_name = (RlvActions::canShowLocation()) ? region->getName() : RlvStrings::getString(RlvStringKeys::Hidden::Region);
+        std::string region_name = (RlvActions::canShowLocation()) ? region->getName() : RlvStrings::getString(RlvStringKeys::Hidden::Region);
 // [/RLVa:KB]
-		// <FS:Ansariel> Synchronize tooltips throughout instances
-		//if (!region_name.empty())
-		if (!region_name.empty() && LLNetMap::sToolTipMsg != "[REGION]")
-		{
-			region_name += "\n";
-		}
-	}
+        if (!region_name.empty())
+        {
+            region_name_msg = mRegionNameMsg;
+            LLStringUtil::format(region_name_msg, {{"[REGION_NAME]", region_name}});
+        }
 
-//	LLStringUtil::format_map_t args;
-	args["[REGION]"] = region_name;
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	//std::string msg = mToolTipMsg;
-	std::string msg = LLNetMap::sToolTipMsg;
-	// </FS:Ansariel> Synchronize tooltips throughout instances
-	LLStringUtil::format(msg, args);
-	LLToolTipMgr::instance().show(LLToolTip::Params()
-		.message(msg)
-		.sticky_rect(sticky_rect));
-		
-	return TRUE;
+        // Only show parcel information in the tooltip if property lines are visible. Otherwise, the parcel the tooltip is referring to is
+        // ambiguous.
+        if (gSavedSettings.getBOOL("MiniMapShowPropertyLines"))
+        {
+            LLViewerParcelMgr::getInstance()->setHoverParcel(posGlobal);
+            LLParcel *hover_parcel = LLViewerParcelMgr::getInstance()->getHoverParcel();
+            if (hover_parcel)
+            {
+                //std::string parcel_name = hover_parcel->getName();
+// [RLVa:KB] - Checked: RLVa-1.2.2
+                std::string parcel_name = (RlvActions::canShowLocation()) ? hover_parcel->getName() : RlvStrings::getString(RlvStringKeys::Hidden::Parcel);
+// [/RLVa:KB]
+                if (!parcel_name.empty())
+                {
+                    parcel_name_msg = mParcelNameMsg;
+                    LLStringUtil::format(parcel_name_msg, {{"[PARCEL_NAME]", parcel_name}});
+                }
+
+                const LLUUID      parcel_owner          = hover_parcel->getOwnerID();
+// [RLVa:KB] - Checked: RLVa-1.2.2
+                //std::string       parcel_owner_name_url = LLSLURL("agent", parcel_owner, "inspect").getSLURLString();
+                std::string       parcel_owner_name_url = LLSLURL("agent", parcel_owner, RlvActions::canShowName(RlvActions::SNC_DEFAULT, parcel_owner) ? "inspect" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+                static LLUrlMatch parcel_owner_name_url_match;
+                LLUrlRegistry::getInstance()->findUrl(parcel_owner_name_url, parcel_owner_name_url_match);
+                if (!parcel_owner_name_url_match.empty())
+                {
+                    parcel_owner_msg              = mParcelOwnerMsg;
+                    std::string parcel_owner_name = parcel_owner_name_url_match.getLabel();
+                    LLStringUtil::format(parcel_owner_msg, {{"[PARCEL_OWNER]", parcel_owner_name}});
+                }
+
+                if (hover_parcel->getForSale())
+                {
+                    const LLUUID auth_buyer_id = hover_parcel->getAuthorizedBuyerID();
+                    const LLUUID agent_id      = gAgent.getID();
+                    bool         show_for_sale = auth_buyer_id.isNull() || auth_buyer_id == agent_id || parcel_owner == agent_id;
+                    if (show_for_sale)
+                    {
+                        S32 price        = hover_parcel->getSalePrice();
+                        S32 area         = hover_parcel->getArea();
+                        F32 cost_per_sqm = 0.0f;
+                        if (area > 0)
+                        {
+                            cost_per_sqm = F32(price) / area;
+                        }
+                        std::string formatted_price          = LLResMgr::getInstance()->getMonetaryString(price);
+                        std::string formatted_cost_per_meter = llformat("%.1f", cost_per_sqm);
+                        parcel_sale_price_msg                = mParcelSalePriceMsg;
+                        LLStringUtil::format(parcel_sale_price_msg,
+                                             {{"[PRICE]", formatted_price}, {"[PRICE_PER_SQM]", formatted_cost_per_meter}});
+                        std::string formatted_area = llformat("%d", area);
+                        parcel_sale_area_msg       = mParcelSaleAreaMsg;
+                        LLStringUtil::format(parcel_sale_area_msg, {{"[AREA]", formatted_area}});
+                    }
+                }
+            }
+        }
+    }
+
+    // <FS:Ansariel> Synchronize double click handling throughout instances
+    std::string tool_tip_hint_msg;
+    //if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+    //{
+    //    tool_tip_hint_msg = mAltToolTipHintMsg;
+    //}
+    //else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+    //{
+    //    tool_tip_hint_msg = mToolTipHintMsg;
+    //}
+    switch (gSavedSettings.getS32("FSNetMapDoubleClickAction"))
+    {
+    case 1:
+        tool_tip_hint_msg = mToolTipHintMsg;
+        break;
+    case 2:
+        tool_tip_hint_msg = mAltToolTipHintMsg;
+        break;
+    default:
+        break;
+    }
+    // </FS:Ansariel>
+
+// [RLVa:KB] - Checked: RLVa-1.2.2
+    //LLStringUtil::format_map_t args;
+// [/RLVa:KB]
+    args["[PARCEL_NAME_MSG]"]       = parcel_name_msg.empty() ? "" : parcel_name_msg + '\n';
+    args["[PARCEL_SALE_PRICE_MSG]"] = parcel_sale_price_msg.empty() ? "" : parcel_sale_price_msg + '\n';
+    args["[PARCEL_SALE_AREA_MSG]"]  = parcel_sale_area_msg.empty() ? "" : parcel_sale_area_msg + '\n';
+    args["[PARCEL_OWNER_MSG]"]      = parcel_owner_msg.empty() ? "" : parcel_owner_msg + '\n';
+    args["[REGION_NAME_MSG]"]       = region_name_msg.empty() ? "" : region_name_msg + '\n';
+    args["[TOOL_TIP_HINT_MSG]"]     = tool_tip_hint_msg.empty() ? "" : tool_tip_hint_msg + '\n';
+
+    std::string msg                 = mToolTipMsg;
+    LLStringUtil::format(msg, args);
+    if (msg.back() == '\n')
+    {
+        msg.resize(msg.size() - 1);
+    }
+    LLToolTipMgr::instance().show(LLToolTip::Params().message(msg).sticky_rect(sticky_rect));
+
+    return true;
 }
 
 BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
@@ -1950,26 +2046,6 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 		LLTracker::stopTracking (LLTracker::isTracking(NULL));
 	}
 }
-
-// <FS:Ansariel> Synchronize tooltips throughout instances
-// static
-void LLNetMap::updateToolTipMsg()
-{
-	S32 fsNetMapDoubleClickAction = gSavedSettings.getS32("FSNetMapDoubleClickAction");
-	switch (fsNetMapDoubleClickAction)
-	{
-		case 1:
-			LLNetMap::setToolTipMsg(LLTrans::getString("NetMapDoubleClickShowWorldMapToolTipMsg"));
-			break;
-		case 2:
-			LLNetMap::setToolTipMsg(LLTrans::getString("NetMapDoubleClickTeleportToolTipMsg"));
-			break;
-		default:
-			LLNetMap::setToolTipMsg(LLTrans::getString("NetMapDoubleClickNoActionToolTipMsg"));
-			break;
-	}
-}
-// </FS:Ansariel> Synchronize tooltips throughout instances
 
 // <FS:Ansariel> Synchronize double click handling throughout instances
 void LLNetMap::performDoubleClickAction(LLVector3d pos_global)

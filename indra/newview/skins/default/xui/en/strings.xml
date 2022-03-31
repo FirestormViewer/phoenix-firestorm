@@ -2853,11 +2853,6 @@ name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string
   <string name="UnknownRegion">(unknown region)</string>
   <string name="UnknownPosition">(unknown position)</string>
 
-  <!-- NetMap double click action tooltip messages -->
-  <string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION](Double-click to open Map, shift-drag to pan)</string>
-  <string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Double-click to teleport, shift-drag to pan)</string>
-  <string name="NetMapDoubleClickNoActionToolTipMsg">[REGION]</string>
-
   <!-- Nearby Chat Collision Messages -->
   <string name="Collision_Bump">[NAME] bumped you.</string>
   <string name="Collision_PushObject">[NAME] pushed you with a script.</string>

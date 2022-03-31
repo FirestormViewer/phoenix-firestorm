@@ -788,6 +788,7 @@
                         <combo_item name="physics_medium"> Medium </combo_item>
                         <combo_item name="physics_low">    Low    </combo_item>
                         <combo_item name="physics_lowest"> Lowest </combo_item>
+                        <combo_item name="physics_bounding_box"> Bounding Box </combo_item>
                         <combo_item name="physics_cube"> Cube </combo_item>
                         <combo_item name="physics_hex"> Hexagon </combo_item>
                         <combo_item name="physics_ud"> User Defined </combo_item>

@@ -98,7 +98,6 @@
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"
-#include "llnetmap.h"
 #include "llnotificationsutil.h"
 #include "llpanelplaces.h"
 #include "llstatusbar.h"
@@ -808,13 +807,6 @@ static void handleAutohideChatbarChanged(const LLSD& new_value)
 }
 // </FS:Ansariel>
 
-// <FS:Ansariel> Synchronize tooltips throughout instances
-static void handleNetMapDoubleClickActionChanged()
-{
-	LLNetMap::updateToolTipMsg();
-}
-// </FS:Ansariel> Synchronize tooltips throughout instances
-
 // <FS:Ansariel> Clear places / teleport history search filter
 static void handleUseStandaloneTeleportHistoryFloaterChanged()
 {
@@ -1331,9 +1323,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
 	// NaCl End
 	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&handleAutohideChatbarChanged, _2));
-
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
 
 	// <FS:Ansariel> Clear places / teleport history search filter
 	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloaterChanged));

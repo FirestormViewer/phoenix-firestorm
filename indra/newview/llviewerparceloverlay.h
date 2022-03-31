@@ -72,6 +72,7 @@ public:
 
 	// Returns the number of vertices drawn
 	S32				renderPropertyLines();
+    void			renderPropertyLinesOnMinimap(F32 scale_pixels_per_meter, const F32* parcel_outline_color);
 
 	U8				ownership( const LLVector3& pos) const;
 	U8				parcelLineFlags( const LLVector3& pos) const;
@@ -85,7 +86,7 @@ public:
 
 	void	idleUpdate(bool update_now = false);
 	void	updateGL();
-
+    
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	typedef boost::signals2::signal<void (const LLViewerRegion*)> update_signal_t;
 	static boost::signals2::connection setUpdateCallback(const update_signal_t::slot_type & cb);
