@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map">
-	<floater.string name="ToolTipMsg">[AGENT][REGION](Double-clic pour ouvrir la carte, maintenez shift pour une vue panoramique)</floater.string>
-	<floater.string name="AltToolTipMsg">[REGION](Double -clic pour vous téléporter, maintenez shift pour une vue panoramique)</floater.string>
-	<floater.string name="mini_map_caption">Mini-carte</floater.string>
+	<floater.string name="mini_map_caption">
+         Mini-carte
+	</floater.string>
 	<text label="N" name="floater_map_north">
          N
 	</text>
