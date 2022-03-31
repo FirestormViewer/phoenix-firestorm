@@ -29,5 +29,5 @@
 	<slider name="volume_slider" tool_tip="Voice-Lautstärke"/>
 	<button name="info_btn" tool_tip="Mehr Infos"/>
 	<button name="profile_btn" tool_tip="Profil anzeigen"/>
-	<output_monitor name="speaking_indicator" tool_tip="Zeigt an, dass sich der Avatar in Voice-Reichweite befindet, und wie kräftig er spricht"/>
+	<output_monitor name="speaking_indicator" tool_tip="Voice-Lautstärke"/>
 </panel>
