@@ -2049,7 +2049,10 @@ class LinuxManifest(ViewerManifest):
             self.path("win64")
 
         with self.prefix(src=os.path.join(pkgdir, 'lib32' ), dst="lib32"):
-            self.path("*")
+            self.path("libvivox*")
+            self.path("libortp*")
+            self.path("libsndfile*")
+            self.path("*.crt")
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
@@ -2075,10 +2078,6 @@ class LinuxManifest(ViewerManifest):
         # name in the tarfile
         realname = self.get_dst_prefix()
         tempname = self.build_path_of(installer_name)
-        self.run_command([
-            self.args["source"] + "/installers/linux/appimage.sh", self.args["build"],
-            self.args["build"] + "/Firestorm-x86_64.AppImage", self.args["build"] + "/" + installer_name + ".AppImage"
-        ] )
         self.run_command(["mv", realname, tempname])
         try:
             # only create tarball if it's a release build.
