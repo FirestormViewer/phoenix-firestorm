@@ -159,6 +159,7 @@
 #include "llcheckboxctrl.h"
 #include "llfloatergridstatus.h"
 #include "llfloaterpreference.h"
+#include "llkeyconflict.h"
 #include "lllogininstance.h"
 #include "llscenemonitor.h"
 #include "llsdserialize.h"
@@ -9643,23 +9644,85 @@ class LLToggleShaderControl : public view_listener_t
 };
 
 //[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
-class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
+// This stuff is based on LLPanelPreferenceControls::setKeyBind() and LLPanelPreferenceControls::canKeyBindHandle()
+void setDoubleClickAction(const std::string& control)
+{
+	constexpr LLKeyConflictHandler::ESourceMode mode{ LLKeyConflictHandler::MODE_THIRD_PERSON };
+	constexpr EMouseClickType click{ EMouseClickType::CLICK_DOUBLELEFT };
+	constexpr KEY key{ KEY_NONE };
+	constexpr MASK mask{ MASK_NONE };
+
+	LLKeyConflictHandler conflictHandler;
+	conflictHandler.setLoadMode(mode);
+	conflictHandler.loadFromSettings(mode);
+
+	if (!conflictHandler.canAssignControl(control))
+	{
+		return;
+	}
+
+	bool is_enabled = conflictHandler.canHandleControl(control, click, key, mask);
+	if (!is_enabled)
+	{
+		// find free spot to add data, if no free spot, assign to first
+		S32 index = 0;
+		for (S32 i = 0; i < 3; i++)
+		{
+			if (conflictHandler.getControl(control, i).isEmpty())
+			{
+				index = i;
+				break;
+			}
+		}
+
+		bool ignore_mask = true;
+		conflictHandler.registerControl(control, index, click, key, mask, ignore_mask);
+	}
+	else
+	{
+		// find specific control and reset it
+		for (S32 i = 0; i < 3; i++)
+		{
+			LLKeyData data = conflictHandler.getControl(control, i);
+			if (data.mMouse == click && data.mKey == key && data.mMask == mask)
+			{
+				conflictHandler.clearControl(control, i);
+			}
+		}
+	}
+
+	conflictHandler.saveToSettings();
+}
+
+bool isDoubleClickActionEnabled(const std::string control)
+{
+	constexpr LLKeyConflictHandler::ESourceMode mode{ LLKeyConflictHandler::MODE_THIRD_PERSON };
+	constexpr EMouseClickType click{ EMouseClickType::CLICK_DOUBLELEFT };
+	constexpr KEY key{ KEY_NONE };
+	constexpr MASK mask{ MASK_NONE };
+
+	LLKeyConflictHandler conflictHandler;
+	conflictHandler.loadFromSettings(mode);
+
+	return conflictHandler.canHandleControl(control, click, key, mask);
+}
+
+class FSAdvancedToggleDoubleClickAction: public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		BOOL checked = gSavedSettings.getBOOL("DoubleClickTeleport");
-		if (checked)
-		{
-			gSavedSettings.setBOOL("DoubleClickTeleport", FALSE);
-			report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportDisabled"));
-		}
-		else
-		{
-			gSavedSettings.setBOOL("DoubleClickTeleport", TRUE);
-			gSavedSettings.setBOOL("DoubleClickAutoPilot", FALSE);
-			report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportEnabled"));
-		}
+		const std::string& control = userdata.asStringRef();
+		setDoubleClickAction(control);
 		return true;
+	}
+};
+
+class FSAdvancedCheckEnabledDoubleClickAction : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		const std::string& control = userdata.asStringRef();
+		return isDoubleClickActionEnabled(control);
 	}
 };
 
@@ -11917,7 +11980,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedClickRenderProfile(), "Advanced.ClickRenderProfile");
 	view_listener_t::addMenu(new LLAdvancedClickRenderBenchmark(), "Advanced.ClickRenderBenchmark");
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
-	view_listener_t::addMenu(new LLAdvancedToggleDoubleClickTeleport, "Advanced.ToggleDoubleClickTeleport");
+	view_listener_t::addMenu(new FSAdvancedToggleDoubleClickAction, "Advanced.SetDoubleClickAction");
+	view_listener_t::addMenu(new FSAdvancedCheckEnabledDoubleClickAction, "Advanced.CheckEnabledDoubleClickAction");
 
 	#ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 	view_listener_t::addMenu(new LLAdvancedHandleToggleHackedGodmode(), "Advanced.HandleToggleHackedGodmode");
