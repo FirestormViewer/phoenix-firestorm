@@ -69,6 +69,13 @@ extern "C"
 #include "breakpad/common/linux/http_upload.h"
 #include "lldir.h"
 #include "../llcrashlogger/llcrashlogger.h"
+// <FS:LO> Fix linux compile
+#if LL_USESYSTEMLIBS
+#include "jsoncpp/reader.h" // JSON
+#else
+#include "json/reader.h" // JSON
+#endif
+// </FS:LO>
 #endif
 
 #include "fsversionvalues.h"
