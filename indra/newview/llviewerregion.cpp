@@ -3042,6 +3042,21 @@ void LLViewerRegion::unpackRegionHandshake()
 	}
 
 	mCentralBakeVersion = region_protocols & 1; // was (S32)gSavedSettings.getBOOL("UseServerTextureBaking");
+	// <FS:Beq> Earlier trigger for BOM support on region
+	#ifdef OPENSIM
+	constexpr U64 REGION_SUPPORTS_BOM {(U64)1<<63};
+	if(region_protocols & REGION_SUPPORTS_BOM) // OS sets bit 63 when BOM supported
+	{
+		mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
+		mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
+	}
+	else
+	{
+		mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_LEFT_ARM;
+		mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_HEAD_UNIVERSAL_TATTOO;
+	}
+	#endif
+	// </FS:Beq>
 	LLVLComposition *compp = getComposition();
 	if (compp)
 	{
