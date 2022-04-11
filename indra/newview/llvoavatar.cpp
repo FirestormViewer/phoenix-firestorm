@@ -10289,7 +10289,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 // <FS:Beq> appearance fail fix from Rye
         // if (mLastUpdateReceivedCOFVersion >= thisAppearanceVersion)
         if (appearance_version > 0 && mLastUpdateReceivedCOFVersion >= thisAppearanceVersion)
- // </FS:Beq>
+// </FS:Beq>
         {
             LL_WARNS("Avatar") << "Stale appearance received #" << thisAppearanceVersion <<
                 " attempt to roll back from #" << mLastUpdateReceivedCOFVersion <<
