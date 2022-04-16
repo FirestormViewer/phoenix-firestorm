@@ -6586,6 +6586,14 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		LLFace* facep = *face_iter;
 		LLViewerTexture* tex = facep->getTexture();
         const LLTextureEntry* te = facep->getTextureEntry();
+		// <FS:Beq> Don't batch fully transparent faces
+		if (te && ( te->getAlpha() == 0.f ) && ( te->getGlow() == 0.0 ) && !LLDrawPoolAlpha::sShowDebugAlpha)
+		{
+			facep->setSize(0,0);
+			++face_iter;
+			continue;
+		}
+		// </FS:Beq>
 		LLMaterialPtr mat = te->getMaterialParams();
         LLMaterialID matId = te->getMaterialID();
 
