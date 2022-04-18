@@ -2042,19 +2042,17 @@ class LinuxManifest(ViewerManifest):
 
             # Vivox runtimes
             # Currentelly, the 32-bit ones will work with a 64-bit client.
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="bin"):
+        with self.prefix(src=os.path.join(pkgdir, 'bin32' ), dst="bin"):
             self.path("SLVoice")
+        with self.prefix(src=os.path.join(pkgdir ), dst="bin"):
             self.path("win32")
             self.path("win64")
 
-        with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            self.path("libortp.so")
-            self.path("libsndfile.so.1")
-            # <FS:TS> Vivox wants this library even if it's present already in the viewer
-            self.path("libvivoxoal.so.1")
-            self.path("libvivoxsdk.so")
-            self.path("libvivoxplatform.so")
-
+        with self.prefix(src=os.path.join(pkgdir, 'lib32' ), dst="lib32"):
+            self.path("libvivox*")
+            self.path("libortp*")
+            self.path("libsndfile*")
+            self.path("*.crt")
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
@@ -2080,10 +2078,6 @@ class LinuxManifest(ViewerManifest):
         # name in the tarfile
         realname = self.get_dst_prefix()
         tempname = self.build_path_of(installer_name)
-        self.run_command([
-            self.args["source"] + "/installers/linux/appimage.sh", self.args["build"],
-            self.args["build"] + "/Firestorm-x86_64.AppImage", self.args["build"] + "/" + installer_name + ".AppImage"
-        ] )
         self.run_command(["mv", realname, tempname])
         try:
             # only create tarball if it's a release build.

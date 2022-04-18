@@ -44,4 +44,5 @@
 	</view>
 	<text name="image_res_text">[WIDTH]px (Largeur) x [HEIGHT]px (Hauteur)</text>
 	<text name="file_size_label">[SIZE] Ko</text>
+	<button label="Photo 360°" name="360_label"/>
 </floater>

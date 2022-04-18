@@ -205,7 +205,7 @@ No tutorial is currently available.
    name="LoginFailedNoNetwork"
    type="alertmodal">
     <tag>fail</tag>
-    Could not connect to the [SECOND_LIFE_GRID].
+    Could not connect to the [CURRENT_GRID].
     &apos;[DIAGNOSTIC]&apos;
 Make sure your Internet connection is working properly.
 	<usetemplate
@@ -3797,12 +3797,12 @@ Forgetting the logged-in user requires you to log out.
    name="LoginPacketNeverReceived"
    type="alertmodal">
    <tag>fail</tag>
-We&apos;re having trouble connecting. There may be a problem with your Internet connection or the [SECOND_LIFE_GRID].
+We&apos;re having trouble connecting. There may be a problem with your Internet connection or the [CURRENT_GRID].
 
 You can either check your Internet connection and try again in a few minutes, click Help to view the [SUPPORT_SITE], or click Teleport to attempt to teleport home.
     <url option="1" name="url">
 
-			http://secondlife.com/support/
+			https://www.firestormviewer.org/support/
     </url>
     <form name="form">
       <button
@@ -3826,11 +3826,11 @@ You can either check your Internet connection and try again in a few minutes, cl
    name="LoginPacketNeverReceivedNoTP"
    type="alertmodal">
     <tag>fail</tag>
-We&apos;re having trouble connecting. There may be a problem with your Internet connection or the [SECOND_LIFE_GRID].
+We&apos;re having trouble connecting. There may be a problem with your Internet connection or the [CURRENT_GRID].
 
 You can either check your Internet connection and try again in a few minutes or click Help to view the [SUPPORT_SITE].
     <url option="1" name="url">
-			http://secondlife.com/support/
+			https://www.firestormviewer.org/support/
     </url>
     <form name="form">
       <button
@@ -13570,7 +13570,7 @@ This Region does not support environmental settings.
  
   <notification
    icon="alertmodal.tga"
-   label="Save Outfit"
+   label="Save Environmental Settings"
    name="SaveSettingAs"
    type="alertmodal">
     <unique/>

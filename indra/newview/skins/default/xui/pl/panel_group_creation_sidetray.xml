@@ -49,7 +49,7 @@
 						</layout_panel>
 					</layout_stack>
 					<text name="info_deletion">
-						Uwaga: Po 7 dniach grupa bez członków (poza jej twórcą) zostanie usunięta!
+						Uwaga: grupa, która ma mniej niż 2 członków przez 48 godzin, zostaje usunięta!
 					</text>
 				</layout_panel>
 			</layout_stack>

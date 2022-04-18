@@ -851,6 +851,12 @@
   <color
       name="PathfindingCharacterBeaconColor"
       reference="Red_80" />
+
+<!-- Phototools_Header Added Feb 28 2022 Anastasia Horngold to fix orange headers -->
+  <color
+      name="Phototools_Header"
+      reference="EmphasisColor_13" />
+
     <color
      name="ScriptBgReadOnlyColor"
      reference="SL-TitaniumGray" />

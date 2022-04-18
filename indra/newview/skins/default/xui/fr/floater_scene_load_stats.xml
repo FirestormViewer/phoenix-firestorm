@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Scene Load Statistics" title="STATISTIQUES DE CHARGEMENT DE SCÈNE">
+<floater name="Scene Load Statistics" title="Statistiques de chargement de scène">
 	<button label="Pauser" name="playpause"/>
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
@@ -16,7 +16,11 @@
 				</stat_view>
 				<stat_view label="Texture" name="texture">
 					<stat_bar label="Taux de réussite du cache" name="texture_cache_hits"/>
-					<stat_bar label="Latence de lecture du cache" name="texture_cache_read_latency"/>
+					<stat_bar label="Temps de lecture du cache" name="texture_cache_read_latency"/>
+					<stat_bar label="Temps de décodage du cache" name="texture_decode_latency" />
+					<stat_bar label="Temps du cache en écriture" name="texture_decode_latency" />
+					<stat_bar label="Temps de lecture du cache" name="texture_fetch_latency" />
+					<stat_bar label="Temps de récupér. du cache" name="texture_fetch_time" />
 					<stat_bar label="Nombre" name="numimagesstat"/>
 					<stat_bar label="Nombre brut" name="numrawimagesstat"/>
 				</stat_view>

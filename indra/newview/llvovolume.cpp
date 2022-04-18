@@ -71,6 +71,8 @@
 #include "llmediaentry.h"
 #include "llmediadataclient.h"
 #include "llmeshrepository.h"
+#include "llnotifications.h"
+#include "llnotificationsutil.h"
 #include "llagent.h"
 #include "llviewermediafocus.h"
 #include "lldatapacker.h"
@@ -3152,6 +3154,17 @@ void LLVOVolume::mediaEvent(LLViewerMediaImpl *impl, LLPluginClassMedia* plugin,
 			}
 		}
 		break;
+
+        case LLViewerMediaObserver::MEDIA_EVENT_FILE_DOWNLOAD:
+        {
+            // Media might be blocked, waiting for a file,
+            // send an empty response to unblock it
+            const std::vector<std::string> empty_response;
+            plugin->sendPickFileResponse(empty_response);
+
+            LLNotificationsUtil::add("MediaFileDownloadUnsupported");
+        }
+        break;
 		
 		default:
 		break;
@@ -7073,7 +7086,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 				// can we safely treat this as an alpha mask?
 				// <FS:Beq> Nothing actually sets facecolor use the TE alpha instead.
 				// if (facep->getFaceColor().mV[3] <= 0.f)
-				if (te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f)
+				if ((te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f) && te->getGlow() == 0.0 )
 				// </FS:Beq>
 				{ //100% transparent, don't render unless we're highlighting transparent
 					FSZoneN("facep->alpha -> invisible");

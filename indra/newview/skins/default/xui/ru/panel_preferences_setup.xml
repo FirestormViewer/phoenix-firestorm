@@ -34,10 +34,7 @@
 			<check_box label="Принимать Cookies" name="cookies_enabled"/>
 			<check_box label="Включить Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Включить всплывающие окна медиа" name="media_popup_enabled"/>
-			<!-- <button label="Настройка параметров прокси" label_selected="Настройка параметров прокси" name="set_proxy"/> -->
-			<text name="proxy_settings_label">
-				Будут использованы существующие настройки прокси вашей системы.
-			</text>
+			<button label="Настройка параметров прокси" label_selected="Настройка параметров прокси" name="set_proxy"/>
 			<text name="home_page_label_l">
 				Домашняя страница браузера:
 			</text>
