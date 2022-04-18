@@ -176,7 +176,7 @@ protected:
 	void			onCoordinatesCommit();
 	void		    onCommitSearchResult();
 
-	void			cacheLandmarkPosition();
+    void            onTeleportFinished();
 
 	// <FS:Ansariel> Parcel details on map
 	void			requestParcelInfo(const LLVector3d& pos_global, const LLVector3d& region_origin);
@@ -227,6 +227,8 @@ private:
 	LLCtrlListInterface *	mListFriendCombo;
 	LLCtrlListInterface *	mListLandmarkCombo;
 	LLCtrlListInterface *	mListSearchResults;
+
+    boost::signals2::connection mTeleportFinishConnection;
 };
 
 extern LLFloaterWorldMap* gFloaterWorldMap;
