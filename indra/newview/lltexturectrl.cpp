@@ -96,7 +96,7 @@ bool get_is_predefined_texture(LLUUID asset_id)
     return false;
 }
 
-LLUUID get_copy_free_item_by_asset_id(LLUUID asset_id)
+LLUUID get_copy_free_item_by_asset_id(LLUUID asset_id, bool no_trans_perm)
 {
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
@@ -106,6 +106,8 @@ LLUUID get_copy_free_item_by_asset_id(LLUUID asset_id)
         items,
         LLInventoryModel::INCLUDE_TRASH,
         asset_id_matches);
+    
+    LLUUID res;
     if (items.size())
     {
         for (S32 i = 0; i < items.size(); i++)
@@ -118,12 +120,17 @@ LLUUID get_copy_free_item_by_asset_id(LLUUID asset_id)
                     gAgent.getID(),
                     gAgent.getGroupID()))
                 {
-                    return itemp->getUUID();
+                    bool allow_trans = item_permissions.allowOperationBy(PERM_TRANSFER, gAgent.getID(), gAgent.getGroupID());
+                    if (allow_trans != no_trans_perm)
+                    {
+                        return itemp->getUUID();
+                    }
+                    res = itemp->getUUID();
                 }
             }
         }
     }
-    return LLUUID::null;
+    return res;
 }
 
 bool get_can_copy_texture(LLUUID asset_id)

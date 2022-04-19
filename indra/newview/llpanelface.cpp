@@ -434,6 +434,13 @@ LLPanelFace::~LLPanelFace()
 }
 
 
+void LLPanelFace::draw()
+{
+    updateCopyTexButton();
+
+    LLPanel::draw();
+}
+
 void LLPanelFace::sendTexture()
 {
 	//LLTextureCtrl* mTextureCtrl = getChild<LLTextureCtrl>("texture control");
@@ -1655,7 +1662,6 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         BOOL single_volume = (selected_count == 1);
         // <FS> Extended copy & paste buttons
         //mMenuClipboardColor->setEnabled(editable && single_volume);
-        //mMenuClipboardTexture->setEnabled(editable && single_volume);
         mBtnCopyFaces->setEnabled(editable && single_volume);
         mBtnPasteFaces->setEnabled(editable && !mClipboardParams.emptyMap() && (mClipboardParams.has("color") || mClipboardParams.has("texture")));
 
@@ -1725,6 +1731,23 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 	}
 }
 
+
+void LLPanelFace::updateCopyTexButton()
+{
+    LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
+    // <FS> Extended copy & paste buttons
+    //mMenuClipboardTexture->setEnabled(objectp && objectp->getPCode() == LL_PCODE_VOLUME && objectp->permModify() 
+    //                                                && !objectp->isPermanentEnforced() && !objectp->isInventoryPending() 
+    //                                                && (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1));
+    //std::string tooltip = (objectp && objectp->isInventoryPending()) ? LLTrans::getString("LoadingContents") : getString("paste_options");
+    //mMenuClipboardTexture->setToolTip(tooltip);
+    mBtnCopyFaces->setEnabled(objectp && objectp->getPCode() == LL_PCODE_VOLUME && objectp->permModify()
+        && !objectp->isPermanentEnforced() && !objectp->isInventoryPending()
+        && (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1));
+    std::string tooltip = (objectp && objectp->isInventoryPending()) ? LLTrans::getString("LoadingContents") : getString("paste_options");
+    mBtnCopyFaces->setToolTip(tooltip);
+    // </FS>
+}
 
 void LLPanelFace::refresh()
 {
@@ -3027,7 +3050,12 @@ void LLPanelFace::onCopyTexture()
                             // as result it is Hightly unreliable, leaves little control to user, borderline hack
                             // but there are little options to preserve permissions - multiple inventory
                             // items might reference same asset and inventory search is expensive.
-                            item_id = get_copy_free_item_by_asset_id(id);
+                            bool no_transfer = false;
+                            if (objectp->getInventoryItemByAsset(id))
+                            {
+                                no_transfer = !objectp->getInventoryItemByAsset(id)->getIsFullPerm();
+                            }
+                            item_id = get_copy_free_item_by_asset_id(id, no_transfer);
                             // record value to avoid repeating inventory search when possible
                             asset_item_map[id] = item_id;
                         }
