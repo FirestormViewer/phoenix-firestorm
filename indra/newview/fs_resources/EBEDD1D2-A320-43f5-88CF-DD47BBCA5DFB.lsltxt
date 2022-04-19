@@ -7,7 +7,7 @@
 //
 
     // Bridge platform
-    string BRIDGE_VERSION = "2.27"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.28"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
@@ -48,8 +48,8 @@
     {
         llReleaseURL(gLatestURL);
         gLatestURL = "";
-        // llRequestSecureURL(); // Uncomment this line and comment next one for HTTPS instead of HTTP (experimental)
-        llRequestURL();
+        llRequestSecureURL();
+        // llRequestURL(); -- Uncomment this line and comment the previous one for HTTP instead of HTTPS
     }
 
     detachBridge()

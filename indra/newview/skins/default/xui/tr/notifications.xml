@@ -86,7 +86,7 @@ Hata ayrıntıları: &apos;[_NAME]&apos; adlı bildirim notifications.xml içind
 		<usetemplate name="okbutton" yestext="Tamam"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		[SECOND_LIFE_GRID] ile bağlantı kurulamadı.
+		[CURRENT_GRID] ile bağlantı kurulamadı.
     &apos;[DIAGNOSTIC]&apos;
 İnternet bağlantınızın düzgün çalıştığından emin olun.
 		<usetemplate name="okbutton" yestext="Tamam"/>
@@ -417,7 +417,7 @@ Satış fiyatınız L$ [SALE_PRICE] olacak ve [NAME] için satışa açık olaca
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		DİKKAT: &apos;Herkes için satışa açık&apos; seçeneğinin tıklanması, arazinizi tüm [SECOND_LIFE] topluluğuna açık hale getirir, bu bölgede bulunmayanlar da buna dahildir.
+		DİKKAT: &apos;Herkes için satışa açık&apos; seçeneğinin tıklanması, arazinizi tüm [CURRENT_GRID] topluluğuna açık hale getirir, bu bölgede bulunmayanlar da buna dahildir.
 
 Seçili [LAND_SIZE] m² arazi satışa çıkarılmak üzere ayarlanıyor.
 Satış fiyatınız L$ [SALE_PRICE] olacak ve [NAME] için satışa açık olacaktır.
@@ -521,7 +521,7 @@ Ortamı sadece bir yüze yerleştirmek için, Yüz Seç&apos;i seçin ve ardınd
 		Aşağıdaki nedenden dolayı, bir raporun ekran görüntüsü karşıya yüklenirken bir sorun oluştu: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		[SECOND_LIFE]&apos;ta oturum açmaya devam etmek için Second Life Şartlar ve Koşullar&apos;ı, Gizlilik Politikası&apos;nı ve Hizmet Koşulları&apos;nı kabul etmelisiniz.
+		[CURRENT_GRID]&apos;ta oturum açmaya devam etmek için Second Life Şartlar ve Koşullar&apos;ı, Gizlilik Politikası&apos;nı ve Hizmet Koşulları&apos;nı kabul etmelisiniz.
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Dış görünüm eklenemedi.
@@ -544,7 +544,7 @@ Dış görünüm klasöründe hiç giysi, vücut bölümü ya da aksesuar yok.
 		Hata! Boş bırakılan alan(lar) var.
 Avatarınızın Kullanıcı adını girmeniz gerekmektedir.
 
-[SECOND_LIFE]&apos;a giriş yapmak için bir hesabınız olması gerekir. Şimdi bir hesap oluşturmak ister misiniz?
+[CURRENT_GRID]&apos;a giriş yapmak için bir hesabınız olması gerekir. Şimdi bir hesap oluşturmak ister misiniz?
 		<url name="url">
 			[create_account_url]
 		</url>
@@ -586,7 +586,7 @@ Devam etmek istediğinize emin misiniz?
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		[SECOND_LIFE] etkinlikleri web sayfasına gidilsin mi?
+		[CURRENT_GRID] etkinlikleri web sayfasına gidilsin mi?
 		<url name="url">
 			http://secondlife.com/events/
 		</url>
@@ -618,7 +618,7 @@ Not: Bu işlem önbelleği temizleyecek.
 		Dil değişikliği, [APP_NAME] uygulamasını yeniden başlattıktan sonra geçerli olacak.
 	</notification>
 	<notification name="GoToAuctionPage">
-		Açık arttırma detaylarını görmek veya teklif vermek için [SECOND_LIFE] web sayfasına gidilsin mi?
+		Açık arttırma detaylarını görmek veya teklif vermek için [CURRENT_GRID] web sayfasına gidilsin mi?
 		<url name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
@@ -681,7 +681,7 @@ Nesne aralık dışında ya da silinmiş olabilir.
 		Dosya karşıdan yüklenemiyor.
 	</notification>
 	<notification label="" name="MediaFileDownloadUnsupported">
-		[SECOND_LIFE] içinde desteklenmeyen bir dosya indirmeyi talep ettiniz.
+		[APP_NAME] içinde desteklenmeyen bir dosya indirmeyi talep ettiniz.
 		<usetemplate ignoretext="Desteklenmeyen dosya indirme işlemleri hakkında uyar" name="okignore" yestext="Tamam"/>
 	</notification>
 	<notification name="CannotWriteFile">
@@ -1174,7 +1174,7 @@ Arazi birleştirilsin mi?
 Bu genellikle geçici bir arızadır. Lütfen giyilebilir öğeyi birkaç dakika sonra yeniden özelleştirip kaydedin.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Üzgünüz. [SECOND_LIFE] oturumunuz kapandı.
+		Üzgünüz. [CURRENT_GRID] oturumunuz kapandı.
 
 [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Çık" yestext="Anlık İleti ve Sohbeti Görüntüle"/>
@@ -1419,7 +1419,7 @@ Yeni bir ana konum ayarlamak isteyebilirsiniz.
 	</notification>
 	<notification name="ClothingLoading">
 		Giysileriniz hala karşıdan yükleniyor.
-[SECOND_LIFE]&apos;ı normal şekilde kullanmaya devam edebilirsiniz, diğer insanlar sizi düzgün bir şekilde görecektir.
+[APP_NAME]&apos;ı normal şekilde kullanmaya devam edebilirsiniz, diğer insanlar sizi düzgün bir şekilde görecektir.
 		<form name="form">
 			<ignore name="ignore" text="Giysilerin karşıdan yüklenmesi uzun zaman alıyor"/>
 		</form>
@@ -1440,11 +1440,11 @@ Yeni bir ana konum ayarlamak isteyebilirsiniz.
 	<notification name="FirstRun">
 		[APP_NAME] yüklemesi tamamlandı.
 
-[SECOND_LIFE]&apos;ı ilk kez kullanıyorsanız, oturum açmadan önce bir hesap oluşturmalısınız.
+[CURRENT_GRID]&apos;ı ilk kez kullanıyorsanız, oturum açmadan önce bir hesap oluşturmalısınız.
 		<usetemplate name="okcancelbuttons" notext="Devam" yestext="Hesap Oluştur..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Bağlantıda sorun yaşıyoruz. İnternet bağlantınızda ya da [SECOND_LIFE_GRID] uygulamasında bir problem olabilir.
+		Bağlantıda sorun yaşıyoruz. İnternet bağlantınızda ya da [CURRENT_GRID] uygulamasında bir problem olabilir.
 
 İnternet bağlantınızı kontrol edip bir kaç dakika sonra yeniden bağlanmayı deneyebilir, [SUPPORT_SITE] sayfasına gitmek için Yardım&apos;ı tıklatabilir ya da ana konumunuza ışınlanmak için Işınla&apos;yı tıklatabilirsiniz.
 		<url name="url">
@@ -1460,7 +1460,7 @@ Yeni bir ana konum ayarlamak isteyebilirsiniz.
 		Karakteriniz birazdan görünecek.
 
 Yürümek için ok tuşlarını kullanın.
-Yardım almak ya da [SECOND_LIFE] hakkında daha fazla bilgi edinmek için istediğiniz zaman F1 tuşuna basın.
+Yardım almak ya da [CURRENT_GRID] hakkında daha fazla bilgi edinmek için istediğiniz zaman F1 tuşuna basın.
 Lütfen bir erkek ya da kadın avatar seçin. Fikrinizi daha sonra değiştirebilirsiniz.
 		<usetemplate name="okcancelbuttons" notext="Kadın" yestext="Erkek"/>
 	</notification>
@@ -1657,15 +1657,15 @@ Devam edilsin mi?
 		<usetemplate ignoretext="Hesabımı yönetmek için tarayıcımı başlat" name="okcancelignore" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Bir güvenlik sorununun nasıl bildireceği ile ilgili ayrıntıları öğrenmek için [SECOND_LIFE] Wiki&apos;yi aç.
+		Bir güvenlik sorununun nasıl bildireceği ile ilgili ayrıntıları öğrenmek için [CURRENT_GRID] Wiki&apos;yi aç.
 		<usetemplate ignoretext="Bir Güvenlik Sorununu bildirme şeklini öğrenmek için tarayıcımı başlat" name="okcancelignore" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		[SECOND_LIFE] Wiki&apos;nin Kalite Güvencesi sayfasını ziyaret edin.
+		[CURRENT_GRID] Wiki&apos;nin Kalite Güvencesi sayfasını ziyaret edin.
 		<usetemplate ignoretext="Wiki Kalite Güvencesi sayfasını görüntülemek için tarayıcımı başlat" name="okcancelignore" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Hataları ve diğer sorunları bildirebileceğiniz [SECOND_LIFE] Kamuya Açık Sorun Takip sayfasını ziyaret edin.
+		Hataları ve diğer sorunları bildirebileceğiniz [CURRENT_GRID] Kamuya Açık Sorun Takip sayfasını ziyaret edin.
 		<usetemplate ignoretext="Kamuya Açık Sorun Takip hizmetini kullanmak için tarayıcımı başlat" name="okcancelignore" notext="İptal Et" yestext="Sayfaya git"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -2361,9 +2361,9 @@ Doğru bir anlatım yapılması, kötüye kullanım bildirimlerini dosyalamamız
 
 Fikri mülkiyet ihlali konusunda bir bildirim yapıyorsunuz. Konuyu doğru bir şekilde bildirdiğinizden emin olun:
 
-(1) Kötüye Kullanımı Bildirme Süreci. Bir Second Life Sakininin, CopyBot ya da benzeri bir kopyalama aracı kullanma vb. yollarla, fikri mülkiyet haklarını ihlal edecek şekilde [SECOND_LIFE]&apos;ın verdiği izinleri kötüye kullandığını düşünüyorsanız bir kötüye kullanım bildirimi sunabilirsiniz. Kötüye Kullanımla Mücadele Ekibi [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Hizmet Sözleşmesi] veya [http://secondlife.com/corporate/cs.php Topluluk Standartları] kurallarını ihlal eden davranışları inceleyecek ve uygun disiplin cezalarını verecektir. Ancak, Kötüye Kullanımla Mücadele Ekibi, içeriğin [SECOND_LIFE] ortamından kaldırılma taleplerine yanıt vermeyecektir.
+(1) Kötüye Kullanımı Bildirme Süreci. Bir Second Life Sakininin, CopyBot ya da benzeri bir kopyalama aracı kullanma vb. yollarla, fikri mülkiyet haklarını ihlal edecek şekilde [CURRENT_GRID]&apos;ın verdiği izinleri kötüye kullandığını düşünüyorsanız bir kötüye kullanım bildirimi sunabilirsiniz. Kötüye Kullanımla Mücadele Ekibi [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Hizmet Sözleşmesi] veya [http://secondlife.com/corporate/cs.php Topluluk Standartları] kurallarını ihlal eden davranışları inceleyecek ve uygun disiplin cezalarını verecektir. Ancak, Kötüye Kullanımla Mücadele Ekibi, içeriğin [CURRENT_GRID] ortamından kaldırılma taleplerine yanıt vermeyecektir.
 
-(2) DMCA veya İçerik Kaldırma Süreci. İçeriğin [SECOND_LIFE] ortamından kaldırılmasını talep etmek için,  [http://secondlife.com/corporate/dmca.php DMCA İlkeleri]&apos;nde belirtildiği şekilde geçerli bir ihlal bildirimi sunmuş olmanız GEREKLİDİR.
+(2) DMCA veya İçerik Kaldırma Süreci. İçeriğin [CURRENT_GRID] ortamından kaldırılmasını talep etmek için,  [http://secondlife.com/corporate/dmca.php DMCA İlkeleri]&apos;nde belirtildiği şekilde geçerli bir ihlal bildirimi sunmuş olmanız GEREKLİDİR.
 
 Kötüye kullanım bildirme sürecine devam etmek için, lütfen bu pencereyi kapatın ve bildiriminizi gönderme işlemini tamamlayın. &apos;CopyBot veya İzin İhlali&apos; kategorisini seçmeniz gerekebilir.
 
@@ -2513,7 +2513,7 @@ Ayarlar yerel dokular kullanılarak kaydedilemez.
 		Konum, 18 veya üzeri bir yaşta olanlara kısıtlanmıştır.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Bu alanı ziyaret edebilmek için ödeme bilgilerinizin kayıtlı olması gerekir. [SECOND_LIFE] web sitesine gitmek ve bunu ayarlamak istiyor musunuz?
+		Bu alanı ziyaret edebilmek için ödeme bilgilerinizin kayıtlı olması gerekir. [CURRENT_GRID] web sitesine gitmek ve bunu ayarlamak istiyor musunuz?
 
 [_URL]
 		<url name="url">

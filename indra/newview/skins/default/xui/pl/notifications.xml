@@ -34,9 +34,14 @@ Szczegóły błędu: Błąd o nazwie &apos;[_NAME]&apos; nie został odnaleziony
 		Instalacja [APP_NAME] jest uszkodzona. Proszę [https://www.firestormviewer.org/downloads pobrać nową kopię] przeglądarki i ponownie ją zainstalować.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Nie można połączyć z [SECOND_LIFE_GRID].
+		Nie można połączyć z [CURRENT_GRID].
 &apos;[DIAGNOSTIC]&apos;
 Upewnij się, że Twoje połączenie z internetem działa.
+	</notification>
+	<notification name="LoginFailedToParse">
+		Przeglądarka otrzymała zniekształconą odpowiedź z serwera. Upewnij się, że połączenie internetowe działa prawidłowo i spróbuj ponownie później.
+
+Jeśli uważasz, że to błąd - skontaktuj się z pomocą techniczną.
 	</notification>
 	<notification name="MessageTemplateNotFound">
 		Szablon komunikatu dla [PATH] nie został odnaleziony.
@@ -1139,6 +1144,9 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Zakończ" yestext="Pokaż IM/czat"/>
 	</notification>
+	<notification name="InventoryUnusable">
+		Wystąpił problem podczas ładowania szafy. Spróbuj się wylogować i zalogować ponownie. Jeśli zobaczysz ten komunikat jeszcze raz, to skontaktuj się z pomocą techniczną, aby rozwiązać problem.
+	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
 		Nie możesz kupić działek dla grupy.
 Nie masz praw kupowania działek dla Twojej aktywnej grupy.
@@ -1412,7 +1420,7 @@ Czy chcesz przejść na stronę [https://www.firestormviewer.org/join-secondlife
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Potwierdź i wyloguj się" />
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
+		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [CURRENT_GRID].
 
 Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kilka minut, połączyć się ze stroną pomocy technicznej ([SUPPORT_SITE]) lub wybrać Teleportuj, by teleportować się do swojego miejsca startu.
 		<form name="form">
@@ -1421,7 +1429,7 @@ Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kil
 		</form>
 	</notification>
 	<notification name="LoginPacketNeverReceivedNoTP">
-		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
+		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [CURRENT_GRID].
 
 Możesz sprawdzić swoje połączenie z Internetem i spróbować ponownie za kilka minut lub połączyć się ze stroną pomocy technicznej [SUPPORT_SITE].
 		<form name="form">
@@ -2569,7 +2577,7 @@ URL: [MEDIAURL]
 Domena: [MEDIADOMAIN]
 URL: [MEDIAURL]
 		<form name="form">
-			<button name="Do Now" text="[ACTION] Teraz"/>
+			<button name="Do Now" text="[ACTION] teraz"/>
 			<button name="RememberDomain" text="[CONDITION] Zezwól tej domenie"/>
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
@@ -4824,7 +4832,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="AddPaymentMethod">
 		Na następnej stronie wybierz kwotę L$
 i kliknij przycisk składania zamówienia.
-Będziesz mógł/a dodać metodę płatności w kasie. 
+Będziesz mógł/a dodać metodę płatności w kasie.
 		<form name="form">
 			<button name="Continue" text="Kontyntynuj" />
 			<button name="Cancel" text="Anuluj" />
@@ -5146,6 +5154,11 @@ Skopiuj do własnej szafy i spróbuj ponownie.
 	</notification>
 	<notification name="TrackLoadMismatch">
 		Nie można załadować ścieżki z [TRACK1] do [TRACK2].
+	</notification>
+	<notification name="CompressionTestResults">
+Wynik testu kompresji pliku dla gzip na poziomie 6 z [FILE] o rozmiarze [SIZE] KB:
+Pakowanie: [PACK_TIME]s [PSIZE]KB
+Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.

@@ -2130,7 +2130,7 @@ bool LLVivoxVoiceClient::waitForChannel()
             {
                 LL_INFOS("Voice") << "Session requesting reprovision and login." << LL_ENDL;
                 requestRelog();
-                break;
+                // break;// <FS:Beq/> Fix broken state model
             }
             else if (mNextAudioSession)
             {
@@ -2139,7 +2139,7 @@ bool LLVivoxVoiceClient::waitForChannel()
                 if (!runSession(joinSession)) //suspends
                 {
                     LL_DEBUGS("Voice") << "runSession returned false; leaving inner loop" << LL_ENDL;
-                    break;
+                    // break; <FS:Beq/> Fix broken state model
                 }
                 else
                 {
