@@ -106,6 +106,7 @@
 			<menu_item_separator />
 			<menu_item_check label="Mostra menu Avanzato" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_check label="Migliora velocità grafica..." name="Performance" />
 		<menu_item_call label="Teleport a casa" name="Teleport Home"/>
 		<menu_item_call label="Fissa casa qui" name="Set Home to Here"/>
 		<menu label="Posizione del sole" name="Environment Settings">

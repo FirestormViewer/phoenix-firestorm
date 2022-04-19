@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="360capture" title="Foto panoramica a 360°">
+	<panel name="ui_panel_left">
+		<text name="quality_level_label">
+			Livello qualità
+		</text>
+		<radio_group name="360_quality_selection">
+			<radio_item label="Anteprima (veloce)" name="preview_quality" tool_tip="Qualità anteprima" />
+			<radio_item label="Media" name="medium_quality" tool_tip="Qualità media" />
+			<radio_item label="Alta" name="high_quality" tool_tip="Qualità alta" />
+			<radio_item label="Massima" name="maximum_quality" tool_tip="Qualità massima" />
+		</radio_group>
+		<check_box label="Nascondi tutti gli avatar" name="360_hide_avatar" />
+		<button label="Crea immagine 360°" name="capture_button" />
+		<button label="Salva come..." name="save_local_button" />
+	</panel>
+	<panel name="ui_panel_right">
+		<text name="statusbar">
+			Clicca e trascina per ruotare la panoramica
+		</text>
+	</panel>
+</floater>

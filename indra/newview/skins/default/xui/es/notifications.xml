@@ -83,7 +83,7 @@ Detalles del error: la notificación de nombre &apos;[_NAME]&apos; no se ha enco
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		No se puede conectar con [SECOND_LIFE_GRID].
+		No se puede conectar con [CURRENT_GRID].
     &apos;[DIAGNOSTIC]&apos;
 Asegúrate de que tu conexión a Internet está funcionando adecuadamente.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
@@ -1440,11 +1440,11 @@ Si es la primera vez que usas [CURRENT_GRID], debes crear una cuenta para poder 
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Crear cuenta..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Tenemos problemas de conexión. Puede deberse a un problema de tu conexión a Internet o de [SECOND_LIFE_GRID].
+		Tenemos problemas de conexión. Puede deberse a un problema de tu conexión a Internet o de [CURRENT_GRID].
 
 Puedes revisar tu conexión a Internet y volver a intentarlo en unos minutos, pulsar Ayuda para conectarte a [SUPPORT_SITE], o pulsar Teleporte para intentar teleportarte a tu Base.
 		<url name="url">
-			http://es.secondlife.com/support/
+			https://www.firestormviewer.org/support/
 		</url>
 		<form name="form">
 			<button name="OK" text="Aceptar"/>

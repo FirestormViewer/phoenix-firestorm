@@ -1127,7 +1127,7 @@ void handleUserTargetDrawDistanceChanged(const LLSD& newValue)
 
 void handleUserTargetReflectionsChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getF32("FSUserTargetReflections");
+	const auto newval = gSavedSettings.getS32("FSUserTargetReflections");
 	FSPerfStats::tunables.userTargetReflections = newval;
 }
 

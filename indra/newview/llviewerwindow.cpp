@@ -2505,6 +2505,10 @@ void LLViewerWindow::initWorldUI()
 	LLPanelStandStopFlying* panel_stand_stop_flying	= LLPanelStandStopFlying::getInstance();
 	panel_ssf_container->addChild(panel_stand_stop_flying);
 
+	// <FS:Ansariel> Leave this out for now until somebody wants to adjust the panel_toolbar_view.xml files...
+	//LLPanelHideBeacon* panel_hide_beacon = LLPanelHideBeacon::getInstance();
+	//panel_ssf_container->addChild(panel_hide_beacon);
+
 	panel_ssf_container->setVisible(TRUE);
 
 	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->initialize();

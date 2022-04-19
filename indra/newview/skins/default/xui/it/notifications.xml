@@ -34,7 +34,7 @@ Dettagli errore: La notifica denominata &apos;[_NAME]&apos; non è stata trovata
 		Il programma [APP_NAME] ha riscontrato un&apos;errore durante il tentativo di aggiornamento.  [https://www.firestormviewer.org/downloads Scarica l&apos;ultima versione] del viewer.
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		Non è possibile collegarsi alla [SECOND_LIFE_GRID].
+		Non è possibile collegarsi alla [CURRENT_GRID].
 	&apos;[DIAGNOSTIC]&apos;
 Accertarsi che la connessione Internet stia funzionando correttamente.
 	</notification>
@@ -1379,7 +1379,7 @@ Se questa è la prima volta che usi [CURRENT_GRID], devi creare un account prima
 		<usetemplate name="okcancelbuttons" notext="Continua" yestext="Crea account..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		Ci sono problemi di connessione. È possibile che ci siano problemi con la tua connessione Internet oppure sulla [SECOND_LIFE_GRID].
+		Ci sono problemi di connessione. È possibile che ci siano problemi con la tua connessione Internet oppure sulla [CURRENT_GRID].
 
 Controlla la tua connessione e riprova fra qualche minuto, oppure clicca su Aiuto per visualizzare la pagina [SUPPORT_SITE], oppure clicca su Teleport per tentare il teleport a casa tua.
 		<form name="form">

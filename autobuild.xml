@@ -76,9 +76,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9c93ba8b8af97fc8379f77de77e1540a</string>
+              <string>88b6b9ebc2eda992b721529921c82066</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/glib-2.48.0.202301938-linux64-202301938.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glib-2.56.0.220911433-linux64_bionic-220911433.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1116,11 +1116,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2db00aa4126d4ee8152fc49b03bb3fe1</string>
+              <string>20c867a0327bb653c8fc377b97d68c55</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.05-darwin-220160006.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.06-darwin64-3.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1130,11 +1130,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1a6c06c99d67296794b39183387f458d</string>
+              <string>9aac95d85fd3f044da3fd9dd44ed5ca2</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.05-linux64-220101141.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.06-linux64_bionic-220911506.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1144,11 +1144,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>126b2476f65ee4947fec1f754fc9dca9</string>
+              <string>b81336e7824c6cf96a6cd6200333b3f7</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.05-windows-220101109.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.06-windows-220870903.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1158,18 +1158,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>891c91e7868bf2e103691bae2ef493eb</string>
+              <string>cbfb25df1e231a84b0beaf85600efb20</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.05-windows64-220101110.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.06-windows64-220870905.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.05</string>
+        <string>2.02.06</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -2000,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>94f8c766d77d68e0b8b1ac783b6a02dc</string>
+              <string>c4dd59fbb0709fc4c7b5ab69b20246f8</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.2-linux64-212351600.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.2-linux64_bionic-220911445.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2461,18 +2461,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>95cb09a712b7b61e992fe68ab7bf8c72</string>
+              <string>d6e7ab8483c348f223fd24028e27a52f</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/92744/837149/llca-202201010217.567162-common-567162.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/93933/844890/llca-202202010217.567974-common-567974.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
           </map>
         </map>
         <key>version</key>
-        <string>202201010217.567162</string>
+        <string>202202010217.567974</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -3282,9 +3282,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05c4debd4cccfea620fc7e6f9a190924</string>
+              <string>f5f4bc956734e53ef99125ae9aae3a87</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/slvoice-3.2.0002.10426.302004-linux64-212691952.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64_bionic-220651719.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3520,9 +3520,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>33ed1bb3e24fbd3462da04fb3e917e94</string>
+              <string>1dda5fb3bb649b0ab5a93f22df7cb11e</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/94814/850320/viewer_manager-3.0.568552-darwin64-568552.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/96998/862110/viewer_manager-3.0.569958-darwin64-569958.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3556,9 +3556,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2ad8e04965ac8bddb7d351abe09bee07</string>
+              <string>30d1386d0a6883d898fc56757a789b8b</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/94813/850316/viewer_manager-3.0.568552-windows-568552.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/97002/862130/viewer_manager-3.0.569958-windows-569958.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3569,7 +3569,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>3.0.568552</string>
+        <string>3.0.569958</string>
       </map>
       <key>vlc-bin</key>
       <map>
@@ -3621,7 +3621,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.2.8.538966</string>
+        <string>3.0.16.565299</string>
       </map>
       <key>xmlrpc-epi</key>
       <map>

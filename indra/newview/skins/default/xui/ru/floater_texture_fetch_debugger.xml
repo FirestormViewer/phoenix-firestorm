@@ -65,6 +65,7 @@
 	<button label="Пуск" name="start_btn"/>
 	<button label="Сброс" name="clear_btn"/>
 	<button label="Закрыть" name="close_btn"/>
+	<button label="Сброс время выборки" name="reset_time_btn"/>
 	<button label="Чтение кэша" name="cacheread_btn"/>
 	<button label="Запись в кэш" name="cachewrite_btn"/>
 	<button label="HTTP" name="http_btn"/>

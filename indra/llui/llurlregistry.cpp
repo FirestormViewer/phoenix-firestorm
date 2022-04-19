@@ -75,6 +75,7 @@ LLUrlRegistry::LLUrlRegistry()
 	// LLUrlEntryAgent*Name must appear before LLUrlEntryAgent since 
 	// LLUrlEntryAgent is a less specific (catchall for agent urls)
 	registerUrl(new LLUrlEntryAgent());
+    registerUrl(new LLUrlEntryChat());
 	registerUrl(new LLUrlEntryGroup());
 	registerUrl(new LLUrlEntryParcel());
 	registerUrl(new LLUrlEntryTeleport());
