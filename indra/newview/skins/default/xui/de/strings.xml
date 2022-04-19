@@ -1776,6 +1776,14 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 		Beim Öffnen der Marktplatz-Auflistungen ist ein Fehler aufgetreten.
 Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
 	</string>
+	<string name="InventoryMarketplaceConnectionError">
+		Fehler beim Herstellen der Verbindung mit Marktplatz-Auflistungen.
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+		Fehler beim Herstellen der Verbindung mit Marktplatz-Auflistungen. Ursache: [REASON]
+Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://support.secondlife.com an den Support von Second Life.
+	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Ihr Ordner mit Marktplatz-Auflistungen ist leer.
 	</string>
