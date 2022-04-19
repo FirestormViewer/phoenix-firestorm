@@ -2428,7 +2428,8 @@ void LLAgent::propagate(const F32 dt)
 //-----------------------------------------------------------------------------
 void LLAgent::updateAgentPosition(const F32 dt, const F32 yaw_radians, const S32 mouse_x, const S32 mouse_y)
 {
-	if (mMoveTimer.getStarted() && mMoveTimer.getElapsedTimeF32() > gSavedSettings.getF32("NotMovingHintTimeout"))
+    static LLCachedControl<F32> hint_timeout(gSavedSettings, "NotMovingHintTimeout");
+	if (mMoveTimer.getStarted() && mMoveTimer.getElapsedTimeF32() > hint_timeout)
 	{
 		LLFirstUse::notMoving();
 	}
@@ -2647,7 +2648,8 @@ void LLAgent::endAnimationUpdateUI()
 		gStatusBar->setVisibleForMouselook(true);
 
 		// <FS:Zi> We don't use the mini location panel in Firestorm
-		// if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
+        // static LLCachedControl<bool> show_mini_location_panel(gSavedSettings, "ShowMiniLocationPanel");
+		// if (show_mini_location_panel)
 		// {
 		// 	LLPanelTopInfoBar::getInstance()->setVisible(TRUE);
 		// }
@@ -4694,10 +4696,9 @@ bool LLAgent::teleportCore(bool is_local)
 	// yet if the teleport will succeed.  Look in 
 	// process_teleport_location_reply
 
-	// close the map panel so we can see our destination.
-	// we don't close search floater, see EXT-5840.
-	if (!gSavedSettings.getBOOL("FSDoNotHideMapOnTeleport")) // <FS:Ansariel> FIRE-17779: Option to not close world map on teleport
-	LLFloaterReg::hideInstance("world_map");
+	// <FS:Ansariel> FIRE-17779: Option to not close world map on teleport
+	if (!gSavedSettings.getBOOL("FSDoNotHideMapOnTeleport"))
+		LLFloaterReg::hideInstance("world_map");
 
 	// hide land floater too - it'll be out of date
 	LLFloaterReg::hideInstance("about_land");

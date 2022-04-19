@@ -102,10 +102,10 @@
           text_color="White"
           height="40"
           layout="topleft"
-          left="425"
+          left="420"
           top="5"
           name="fps_desc1_lbl"
-          width="130"
+          width="140"
           wrap="true">
         Stats pause when FPS is limited or in background.
       </text>

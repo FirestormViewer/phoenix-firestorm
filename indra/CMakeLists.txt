@@ -4,7 +4,7 @@
 # other commands to guarantee full compatibility
 # with the version specified
 ## 3.8 added VS_DEBUGGER_WORKING_DIRECTORY support
-cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 
 set(ROOT_PROJECT_NAME "SecondLife" CACHE STRING
     "The root project/makefile/solution name. Defaults to SecondLife.")
@@ -28,9 +28,9 @@ endif (NOT CMAKE_BUILD_TYPE)
 #<FS:AW optional opensim support>
 option(OPENSIM "OpenSim support" OFF)
 if (OPENSIM)
-  add_definitions(-DOPENSIM=1)
+  add_compile_definitions(OPENSIM)
   if (SINGLEGRID)
-    add_definitions(-DSINGLEGRID=1 -DSINGLEGRID_URI=\"${SINGLEGRID_URI}\")
+    add_compile_definitions(SINGLEGRID SINGLEGRID_URI=\"${SINGLEGRID_URI}\")
     message(STATUS "Compiling with OpenSim support - Single Grid version (${SINGLEGRID_URI})")
   else (SINGLEGRID)
     message(STATUS "Compiling with OpenSim support")
@@ -43,7 +43,7 @@ else (OPENSIM)
 endif (OPENSIM)
 
 if (HAVOK_TPV)
-  add_definitions(-DHAVOK_TPV=1)
+  add_compile_definitions(HAVOK_TPV)
   message(STATUS "Compiling with Havok libraries")
 endif (HAVOK_TPV)
 #</FS:AW optional opensim support>
@@ -51,7 +51,7 @@ endif (HAVOK_TPV)
 #<FS:Ansariel> Support for test builds
 option(TESTBUILD "Generating test build" OFF)
 if(TESTBUILD AND TESTBUILDPERIOD)
-  add_definitions(-DTESTBUILD=1 -DTESTBUILDPERIOD=${TESTBUILDPERIOD})
+  add_compile_definitions(TESTBUILD TESTBUILDPERIOD=${TESTBUILDPERIOD})
   message(STATUS "Creating test build version; test period: ${TESTBUILDPERIOD} days")
 endif(TESTBUILD AND TESTBUILDPERIOD)
 #</FS:Ansariel>
@@ -63,11 +63,11 @@ if (USE_AVX_OPTIMIZATION)
   if (USE_AVX2_OPTIMIZATION)
     message(FATAL_ERROR "You cannot use AVX and AVX2 at the same time!")
   else (USE_AVX2_OPTIMIZATION)
-    add_definitions(-DUSE_AVX_OPTIMIZATION=1)
+    add_compile_definitions(USE_AVX_OPTIMIZATION)
     message(STATUS "Compiling with AVX optimizations")
   endif (USE_AVX2_OPTIMIZATION)
 elseif (USE_AVX2_OPTIMIZATION)
-  add_definitions(-DUSE_AVX2_OPTIMIZATION=1)
+  add_compile_definitions(USE_AVX2_OPTIMIZATION)
   message(STATUS "Compiling with AVX2 optimizations")
 else (USE_AVX_OPTIMIZATION)
   message(STATUS "Compiling without AVX optimizations")

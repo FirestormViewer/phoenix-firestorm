@@ -634,6 +634,7 @@ void FSFloaterPerformance::populateNearbyList()
             auto overall_appearance = avatar->getOverallAppearance();
             if (overall_appearance == LLVOAvatar::AOA_INVISIBLE)
             {
+                char_iter++;
                 continue;
             }
 

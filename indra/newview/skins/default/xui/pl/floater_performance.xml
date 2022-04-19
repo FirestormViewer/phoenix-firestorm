@@ -16,7 +16,7 @@
 		Poczekaj 5-10 sekund, by nastąpiły zmiany.
 	</floater.string>
 	<floater.string name="info_frozen">
-		Statystyki pauzują, gdy FPS jest limitowane lub w tle.
+		Statystyki pauzują, gdy FPS ma limit, lub w tle.
 	</floater.string>
 	<floater.string name="tot_av_template">
 		Łącznie: [TOT_AV] ([TOT_AV_TIME]μs)
@@ -30,7 +30,7 @@
 				klatek na sekundę
 			</text>
 			<text name="fps_desc1_lbl">
-				Statystyki pauzują, gdy FPS jest limitowane lub w tle.
+				Statystyki pauzują, gdy FPS ma limit, lub w tle.
 			</text>
 			<text name="frame_breakdown">
 				[----------------- Tutaj pojawi się analiza klatek. -----------------]

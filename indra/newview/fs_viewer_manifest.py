@@ -194,9 +194,13 @@ class FSViewerManifest:
     def fs_save_breakpad_symbols(self, osname):
         from glob import glob
         import sys
-        from os.path import isdir
+        from os.path import isdir, join
         from shutil import rmtree
         import tarfile
+
+        components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        symbolsName = "_".join(components)
+        symbolsName = symbolsName + "_" + self.args["viewer_flavor"] + "-" + osname + "-" + str(self.address_size) + ".tar.bz2"
 
         if isdir( "symbols" ):
             rmtree( "symbols" )
@@ -213,12 +217,7 @@ class FSViewerManifest:
         if isdir( "symbols" ):
             for a in self.args:
                 print("%s: %s" % (a, self.args[a]))
-            symbolsName = "%s/Phoenix_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
-                                                                         self.fs_channel_legacy_oneword(),
-                                                                         '-'.join( self.args['version'] ),
-                                                                         self.args['viewer_flavor'],
-                                                                         osname,
-                                                                         self.address_size)
 
             fTar = tarfile.open( symbolsName, "w:bz2")
             fTar.add("symbols", arcname=".")
+            fTar.add( join( self.args["dest"], "build_data.json" ), arcname="build_data.json" )

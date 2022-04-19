@@ -673,16 +673,12 @@ void LLDrawPoolAlpha::renderEmissives(U32 mask, std::vector<LLDrawInfo*>& emissi
 
 void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 {
-    // <FS:Ansariel> Tweak performance
-    //BOOL batch_fullbrights = gSavedSettings.getBOOL("RenderAlphaBatchFullbrights");
-    //BOOL batch_emissives   = gSavedSettings.getBOOL("RenderAlphaBatchEmissives");
     static LLCachedControl<bool> batch_fullbrights(gSavedSettings, "RenderAlphaBatchFullbrights");
     static LLCachedControl<bool> batch_emissives(gSavedSettings, "RenderAlphaBatchEmissives");
-	// </FS:Ansariel>
-	BOOL initialized_lighting = FALSE;
-	BOOL light_enabled = TRUE;
+	bool initialized_lighting = false;
+	bool light_enabled = true;
 	
-	BOOL use_shaders = gPipeline.canUseVertexShaders();
+	bool use_shaders = gPipeline.canUseVertexShaders();
 		
 	for (LLCullResult::sg_iterator i = gPipeline.beginAlphaGroups(); i != gPipeline.endAlphaGroups(); ++i)
 	{
