@@ -109,28 +109,28 @@ void LLFloaterHoverHeight::onSliderMoved(LLUICtrl* ctrl, void* userData)
 {
     if (isAgentAvatarValid())
     {
-	LLSliderCtrl* sldrCtrl = static_cast<LLSliderCtrl*>(ctrl);
-	F32 value = sldrCtrl->getValueF32();
-	LLVector3 offset(0.0, 0.0, llclamp(value,MIN_HOVER_Z,MAX_HOVER_Z));
-	LL_INFOS("Avatar") << "setting hover from slider moved" << offset[2] << LL_ENDL;
-	// <FS:Ansariel> Legacy baking avatar z-offset
-	//gAgentAvatarp->setHoverOffset(offset, false);
-	if (gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled())
-	{
-		if (sldrCtrl->isMouseHeldDown())
-		{
-			gAgentAvatarp->setHoverOffset(offset, false);
-		}
-		else
-		{
-			gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
-		}
-	}
-	else if (!gAgentAvatarp->isUsingServerBakes())
-	{
-		gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
-	}
-	// </FS:Ansariel>
+        LLSliderCtrl* sldrCtrl = static_cast<LLSliderCtrl*>(ctrl);
+        F32 value = sldrCtrl->getValueF32();
+        LLVector3 offset(0.0, 0.0, llclamp(value,MIN_HOVER_Z,MAX_HOVER_Z));
+        LL_INFOS("Avatar") << "setting hover from slider moved" << offset[2] << LL_ENDL;
+        // <FS:Ansariel> Legacy baking avatar z-offset
+        //gAgentAvatarp->setHoverOffset(offset, false);
+        if (gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled())
+        {
+            if (sldrCtrl->isMouseHeldDown())
+            {
+                gAgentAvatarp->setHoverOffset(offset, false);
+            }
+            else
+            {
+                gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
+            }
+        }
+        else if (!gAgentAvatarp->isUsingServerBakes())
+        {
+            gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
+        }
+        // </FS:Ansariel>
     }
 }
 
