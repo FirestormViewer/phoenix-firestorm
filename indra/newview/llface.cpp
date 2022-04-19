@@ -1233,6 +1233,11 @@ bool LLFace::canRenderAsMask()
 		return true;
 	}
 
+    if (isState(LLFace::RIGGED))
+    { // never auto alpha-mask rigged faces
+        return false;
+    }
+
 	const LLTextureEntry* te = getTextureEntry();
 	if( !te || !getViewerObject() || !getTexture() )
 	{
