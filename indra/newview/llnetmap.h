@@ -66,9 +66,12 @@ protected:
 public:
 	virtual ~LLNetMap();
 
-	static const F32 MAP_SCALE_MIN;
-	static const F32 MAP_SCALE_MID;
-	static const F32 MAP_SCALE_MAX;
+    static const F32 MAP_SCALE_MIN;
+    static const F32 MAP_SCALE_FAR;
+    static const F32 MAP_SCALE_MEDIUM;
+    static const F32 MAP_SCALE_CLOSE;
+    static const F32 MAP_SCALE_VERY_CLOSE;
+    static const F32 MAP_SCALE_MAX;
 
 	/*virtual*/ void	draw();
 	/*virtual*/ BOOL	handleScrollWheel(S32 x, S32 y, S32 clicks);
@@ -127,6 +130,8 @@ private:
 								  const LLColor4& color,
 								  BOOL draw_arrow = TRUE);
 	void			drawRing(const F32 radius, LLVector3 pos_map, const LLUIColor& color);
+    bool            isMouseOnPopupMenu();
+    void            updateAboutLandPopupButton();
 	BOOL			handleToolTipAgent(const LLUUID& avatar_id);
 	static void		showAvatarInspector(const LLUUID& avatar_id);
 
@@ -135,6 +140,7 @@ private:
 	void			createObjectImage();
 	void			createParcelImage();
 
+    F32             getScaleForName(std::string scale_name);
 	void			renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const LLColor4U& clrOverlay);
 // [/SL:KB]
 //	void			createObjectImage();
@@ -157,11 +163,12 @@ private:
 	F32				mObjectMapPixels;		// Width of object map in pixels
 	F32				mDotRadius;				// Size of avatar markers
 
-	bool			mPanning;			// map is being dragged
-	LLVector2		mTargetPan;
-	LLVector2		mCurPan;
-	LLVector2		mStartPan;		// pan offset at start of drag
-	LLCoordGL		mMouseDown;			// pointer position at start of drag
+    bool            mPanning; // map is being dragged
+    bool            mCentering; // map is being re-centered around the agent
+    LLVector2       mCurPan;
+    LLVector2       mStartPan; // pan offset at start of drag
+    LLVector3d      mPopupWorldPos; // world position picked under mouse when context menu is opened
+    LLCoordGL       mMouseDown; // pointer position at start of drag
 
 	LLVector3d		mObjectImageCenterGlobal;
 	LLPointer<LLImageRaw> mObjectRawImagep;
@@ -198,14 +205,18 @@ public:
 // <FS:CR> Minimap improvements
 	void			handleShowProfile(const LLSD& sdParam) const;
 	uuid_vec_t		mClosestAgentsToCursor;
-	LLVector3d		mPosGlobalRightClick;
 	LLUUID			mClosestAgentRightClick;
 	uuid_vec_t		mClosestAgentsRightClick;
 // </FS:CR>
 
 private:
-	void handleZoom(const LLSD& userdata);
-	void handleStopTracking (const LLSD& userdata);
+    bool isZoomChecked(const LLSD& userdata);
+    void setZoom(const LLSD& userdata);
+    void handleStopTracking(const LLSD& userdata);
+    void activateCenterMap(const LLSD& userdata);
+    bool isMapOrientationChecked(const LLSD& userdata);
+    void setMapOrientation(const LLSD& userdata);
+    void popupShowAboutLand(const LLSD& userdata);
 	void handleStartTracking();
 	void handleMark(const LLSD& userdata);
 	void handleClearMark();

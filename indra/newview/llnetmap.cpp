@@ -52,6 +52,7 @@
 #include "llfloatersidepanelcontainer.h"
 // [/SL:KB]
 #include "llcallingcard.h" // LLAvatarTracker
+#include "llfloaterland.h"
 #include "llfloaterworldmap.h"
 #include "llparcel.h"
 #include "lltracker.h"
@@ -92,7 +93,10 @@
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
 const F32 LLNetMap::MAP_SCALE_MIN = 32;
-const F32 LLNetMap::MAP_SCALE_MID = 1024;
+const F32 LLNetMap::MAP_SCALE_FAR = 32;
+const F32 LLNetMap::MAP_SCALE_MEDIUM = 128;
+const F32 LLNetMap::MAP_SCALE_CLOSE = 256;
+const F32 LLNetMap::MAP_SCALE_VERY_CLOSE = 1024;
 const F32 LLNetMap::MAP_SCALE_MAX = 4096;
 
 const F32 MAP_SCALE_ZOOM_FACTOR = 1.04f; // Zoom in factor per click of scroll wheel (4%)
@@ -112,13 +116,13 @@ F32 LLNetMap::sScale; // <FS:Ansariel> Synchronizing netmaps throughout instance
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
 	mBackgroundColor (p.bg_color()),
-	mScale( MAP_SCALE_MID ),
-	mPixelsPerMeter( MAP_SCALE_MID / REGION_WIDTH_METERS ),
+    mScale( MAP_SCALE_MEDIUM ),
+    mPixelsPerMeter( MAP_SCALE_MEDIUM / REGION_WIDTH_METERS ),
 	mObjectMapTPM(0.f),
 	mObjectMapPixels(0.f),
-	mTargetPan(0.f, 0.f),
 	mCurPan(0.f, 0.f),
 	mStartPan(0.f, 0.f),
+    mPopupWorldPos(0.f, 0.f, 0.f),
 	mMouseDown(0, 0),
 	mPanning(false),
 //	mUpdateNow(false),
@@ -177,59 +181,63 @@ LLNetMap::~LLNetMap()
 
 BOOL LLNetMap::postBuild()
 {
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-	
-	registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
-	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
+    LLUICtrl::CommitCallbackRegistry::ScopedRegistrar commitRegistrar;
+    LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enableRegistrar;
+    enableRegistrar.add("Minimap.Zoom.Check", boost::bind(&LLNetMap::isZoomChecked, this, _2));
+    commitRegistrar.add("Minimap.Zoom.Set", boost::bind(&LLNetMap::setZoom, this, _2));
+    commitRegistrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
+    commitRegistrar.add("Minimap.Center.Activate", boost::bind(&LLNetMap::activateCenterMap, this, _2));
+    enableRegistrar.add("Minimap.MapOrientation.Check", boost::bind(&LLNetMap::isMapOrientationChecked, this, _2));
+    commitRegistrar.add("Minimap.MapOrientation.Set", boost::bind(&LLNetMap::setMapOrientation, this, _2));
+    commitRegistrar.add("Minimap.AboutLand", boost::bind(&LLNetMap::popupShowAboutLand, this, _2));
 	// <FS:Ansariel>
-	registrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
-	registrar.add("Minimap.ClearMark", boost::bind(&LLNetMap::handleClearMark, this));
-	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
+	commitRegistrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
+	commitRegistrar.add("Minimap.ClearMark", boost::bind(&LLNetMap::handleClearMark, this));
+	commitRegistrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
 	// </FS:Ansariel>
-	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
-	registrar.add("Minimap.StartTracking", boost::bind(&LLNetMap::handleStartTracking, this));
+	commitRegistrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
+	commitRegistrar.add("Minimap.StartTracking", boost::bind(&LLNetMap::handleStartTracking, this));
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
-	registrar.add("Minimap.ShowProfile", boost::bind(&LLNetMap::handleShowProfile, this, _2));
-	registrar.add("Minimap.TextureType", boost::bind(&LLNetMap::handleTextureType, this, _2));
-	registrar.add("Minimap.ToggleOverlay", boost::bind(&LLNetMap::handleOverlayToggle, this, _2));
+	commitRegistrar.add("Minimap.ShowProfile", boost::bind(&LLNetMap::handleShowProfile, this, _2));
+	commitRegistrar.add("Minimap.TextureType", boost::bind(&LLNetMap::handleTextureType, this, _2));
+	commitRegistrar.add("Minimap.ToggleOverlay", boost::bind(&LLNetMap::handleOverlayToggle, this, _2));
 
-	registrar.add("Minimap.AddFriend", boost::bind(&LLNetMap::handleAddFriend, this));
-	registrar.add("Minimap.AddToContactSet", boost::bind(&LLNetMap::handleAddToContactSet, this));
-	registrar.add("Minimap.RemoveFriend", boost::bind(&LLNetMap::handleRemoveFriend, this));
-	registrar.add("Minimap.IM", boost::bind(&LLNetMap::handleIM, this));
-	registrar.add("Minimap.Call", boost::bind(&LLNetMap::handleCall, this));
-	registrar.add("Minimap.Map", boost::bind(&LLNetMap::handleMap, this));
-	registrar.add("Minimap.Share", boost::bind(&LLNetMap::handleShare, this));
-	registrar.add("Minimap.Pay", boost::bind(&LLNetMap::handlePay, this));
-	registrar.add("Minimap.OfferTeleport", boost::bind(&LLNetMap::handleOfferTeleport, this));
-	registrar.add("Minimap.RequestTeleport", boost::bind(&LLNetMap::handleRequestTeleport, this));
-	registrar.add("Minimap.TeleportToAvatar", boost::bind(&LLNetMap::handleTeleportToAvatar, this));
-	registrar.add("Minimap.GroupInvite", boost::bind(&LLNetMap::handleGroupInvite, this));
-	registrar.add("Minimap.GetScriptInfo", boost::bind(&LLNetMap::handleGetScriptInfo, this));
-	registrar.add("Minimap.BlockUnblock", boost::bind(&LLNetMap::handleBlockUnblock, this));
-	registrar.add("Minimap.Report", boost::bind(&LLNetMap::handleReport, this));
-	registrar.add("Minimap.Freeze", boost::bind(&LLNetMap::handleFreeze, this));
-	registrar.add("Minimap.Eject", boost::bind(&LLNetMap::handleEject, this));
-	registrar.add("Minimap.Kick", boost::bind(&LLNetMap::handleKick, this));
-	registrar.add("Minimap.TeleportHome", boost::bind(&LLNetMap::handleTeleportHome, this));
-	registrar.add("Minimap.EstateBan", boost::bind(&LLNetMap::handleEstateBan, this));
-	registrar.add("Minimap.Derender", boost::bind(&LLNetMap::handleDerender, this, false));
-	registrar.add("Minimap.DerenderPermanent", boost::bind(&LLNetMap::handleDerender, this, true));
+	commitRegistrar.add("Minimap.AddFriend", boost::bind(&LLNetMap::handleAddFriend, this));
+	commitRegistrar.add("Minimap.AddToContactSet", boost::bind(&LLNetMap::handleAddToContactSet, this));
+	commitRegistrar.add("Minimap.RemoveFriend", boost::bind(&LLNetMap::handleRemoveFriend, this));
+	commitRegistrar.add("Minimap.IM", boost::bind(&LLNetMap::handleIM, this));
+	commitRegistrar.add("Minimap.Call", boost::bind(&LLNetMap::handleCall, this));
+	commitRegistrar.add("Minimap.Map", boost::bind(&LLNetMap::handleMap, this));
+	commitRegistrar.add("Minimap.Share", boost::bind(&LLNetMap::handleShare, this));
+	commitRegistrar.add("Minimap.Pay", boost::bind(&LLNetMap::handlePay, this));
+	commitRegistrar.add("Minimap.OfferTeleport", boost::bind(&LLNetMap::handleOfferTeleport, this));
+	commitRegistrar.add("Minimap.RequestTeleport", boost::bind(&LLNetMap::handleRequestTeleport, this));
+	commitRegistrar.add("Minimap.TeleportToAvatar", boost::bind(&LLNetMap::handleTeleportToAvatar, this));
+	commitRegistrar.add("Minimap.GroupInvite", boost::bind(&LLNetMap::handleGroupInvite, this));
+	commitRegistrar.add("Minimap.GetScriptInfo", boost::bind(&LLNetMap::handleGetScriptInfo, this));
+	commitRegistrar.add("Minimap.BlockUnblock", boost::bind(&LLNetMap::handleBlockUnblock, this));
+	commitRegistrar.add("Minimap.Report", boost::bind(&LLNetMap::handleReport, this));
+	commitRegistrar.add("Minimap.Freeze", boost::bind(&LLNetMap::handleFreeze, this));
+	commitRegistrar.add("Minimap.Eject", boost::bind(&LLNetMap::handleEject, this));
+	commitRegistrar.add("Minimap.Kick", boost::bind(&LLNetMap::handleKick, this));
+	commitRegistrar.add("Minimap.TeleportHome", boost::bind(&LLNetMap::handleTeleportHome, this));
+	commitRegistrar.add("Minimap.EstateBan", boost::bind(&LLNetMap::handleEstateBan, this));
+	commitRegistrar.add("Minimap.Derender", boost::bind(&LLNetMap::handleDerender, this, false));
+	commitRegistrar.add("Minimap.DerenderPermanent", boost::bind(&LLNetMap::handleDerender, this, true));
 
-	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-	enable_registrar.add("Minimap.CheckTextureType", boost::bind(&LLNetMap::checkTextureType, this, _2));
+	enableRegistrar.add("Minimap.CheckTextureType", boost::bind(&LLNetMap::checkTextureType, this, _2));
 
-	enable_registrar.add("Minimap.CanAddFriend", boost::bind(&LLNetMap::canAddFriend, this));
-	enable_registrar.add("Minimap.CanRemoveFriend", boost::bind(&LLNetMap::canRemoveFriend, this));
-	enable_registrar.add("Minimap.CanCall", boost::bind(&LLNetMap::canCall, this));
-	enable_registrar.add("Minimap.CanMap", boost::bind(&LLNetMap::canMap, this));
-	enable_registrar.add("Minimap.CanShare", boost::bind(&LLNetMap::canShare, this));
-	enable_registrar.add("Minimap.CanOfferTeleport", boost::bind(&LLNetMap::canOfferTeleport, this));
-	enable_registrar.add("Minimap.CanRequestTeleport", boost::bind(&LLNetMap::canRequestTeleport, this));
-	enable_registrar.add("Minimap.IsBlocked", boost::bind(&LLNetMap::isBlocked, this));
-	enable_registrar.add("Minimap.CanBlock", boost::bind(&LLNetMap::canBlock, this));
-	enable_registrar.add("Minimap.VisibleFreezeEject", boost::bind(&LLNetMap::canFreezeEject, this));
-	enable_registrar.add("Minimap.VisibleKickTeleportHome", boost::bind(&LLNetMap::canKickTeleportHome, this));
+	enableRegistrar.add("Minimap.CanAddFriend", boost::bind(&LLNetMap::canAddFriend, this));
+	enableRegistrar.add("Minimap.CanRemoveFriend", boost::bind(&LLNetMap::canRemoveFriend, this));
+	enableRegistrar.add("Minimap.CanCall", boost::bind(&LLNetMap::canCall, this));
+	enableRegistrar.add("Minimap.CanMap", boost::bind(&LLNetMap::canMap, this));
+	enableRegistrar.add("Minimap.CanShare", boost::bind(&LLNetMap::canShare, this));
+	enableRegistrar.add("Minimap.CanOfferTeleport", boost::bind(&LLNetMap::canOfferTeleport, this));
+	enableRegistrar.add("Minimap.CanRequestTeleport", boost::bind(&LLNetMap::canRequestTeleport, this));
+	enableRegistrar.add("Minimap.IsBlocked", boost::bind(&LLNetMap::isBlocked, this));
+	enableRegistrar.add("Minimap.CanBlock", boost::bind(&LLNetMap::canBlock, this));
+	enableRegistrar.add("Minimap.VisibleFreezeEject", boost::bind(&LLNetMap::canFreezeEject, this));
+	enableRegistrar.add("Minimap.VisibleKickTeleportHome", boost::bind(&LLNetMap::canKickTeleportHome, this));
 // [/SL:KB]
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
@@ -237,9 +245,11 @@ BOOL LLNetMap::postBuild()
 	mParcelOverlayConn = LLViewerParcelOverlay::setUpdateCallback(boost::bind(&LLNetMap::refreshParcelOverlay, this));
 // [/SL:KB]
 
-	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder,
+                                                                          LLViewerMenuHolderGL::child_registry_t::instance());
+    mPopupMenu->setItemEnabled("Re-center map", false);
 
-	return TRUE;
+    return TRUE;
 }
 
 void LLNetMap::setScale( F32 scale )
@@ -302,7 +312,6 @@ void LLNetMap::draw()
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
-	static LLUIColor map_frustum_rotating_color = LLUIColorTable::instance().getColor("MapFrustumRotatingColor", LLColor4::white);
 	static LLUIColor map_parcel_outline_color = LLUIColorTable::instance().getColor("MapParcelOutlineColor", LLColor4(LLColor3(LLColor4::yellow), 0.5f));
 	static LLUIColor map_whisper_ring_color = LLUIColorTable::instance().getColor("MapWhisperRingColor", LLColor4::blue); // <FS:LO> FIRE-17460 Add Whisper Chat Ring to Minimap
 	static LLUIColor map_chat_ring_color = LLUIColorTable::instance().getColor("MapChatRingColor", LLColor4::yellow);
@@ -320,11 +329,25 @@ void LLNetMap::draw()
 	}
 // [/SL:KB]
 
-	static LLUICachedControl<bool> auto_center("MiniMapAutoCenter", true);
-	if (auto_center)
+    static LLUICachedControl<bool> auto_center("MiniMapAutoCenter", true);
+    bool auto_centering = auto_center && !mPanning;
+    mCentering = mCentering && !mPanning;
+
+    if (auto_centering || mCentering)
 	{
-		mCurPan = lerp(mCurPan, mTargetPan, LLSmoothInterpolation::getInterpolant(0.1f));
+        mCurPan = lerp(mCurPan, LLVector2(0.0f, 0.0f) , LLSmoothInterpolation::getInterpolant(0.1f));
 	}
+    bool centered = abs(mCurPan.mV[VX]) < 0.5f && abs(mCurPan.mV[VY]) < 0.5f;
+    if (centered)
+    {
+        mCurPan.mV[0] = 0.0f;
+        mCurPan.mV[1] = 0.0f;
+        mCentering = false;
+    }
+
+    bool can_recenter_map = !(centered || mCentering || auto_centering);
+    mPopupMenu->setItemEnabled("Re-center map", can_recenter_map);
+    updateAboutLandPopupButton();
 
 	// Prepare a scissor region
 	F32 rotation = 0;
@@ -885,47 +908,40 @@ void LLNetMap::draw()
 		F32 horiz_fov = LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect();
 		F32 far_clip_meters = LLViewerCamera::getInstance()->getFar();
 		F32 far_clip_pixels = far_clip_meters * meters_to_pixels;
-
-		F32 half_width_meters = far_clip_meters * tan( horiz_fov / 2 );
-		F32 half_width_pixels = half_width_meters * meters_to_pixels;
 		
-		F32 ctr_x = (F32)center_sw_left;
-		F32 ctr_y = (F32)center_sw_bottom;
+        F32 ctr_x = (F32)center_sw_left;
+        F32 ctr_y = (F32)center_sw_bottom;
 
+        const F32 steps_per_circle = 40.0f;
+        const F32 steps_per_radian = steps_per_circle / F_TWO_PI;
+        const F32 arc_start = -(horiz_fov / 2.0f) + F_PI_BY_TWO;
+        const F32 arc_end = (horiz_fov / 2.0f) + F_PI_BY_TWO;
+        const S32 steps = llmax(1, (S32)((horiz_fov * steps_per_radian) + 0.5f));
 
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+        gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-		// <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
-		static LLUIColor pick_radius_color = LLUIColorTable::instance().getColor("MapPickRadiusColor", map_frustum_color());
-		gGL.color4fv((pick_radius_color()).mV);
-		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
-		// </FS:Ansariel>
+        // <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
+        static LLUIColor pick_radius_color = LLUIColorTable::instance().getColor("MapPickRadiusColor", map_frustum_color());
+        gGL.color4fv((pick_radius_color()).mV);
+        gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
+        // </FS:Ansariel>
 
-		if( rotate_map )
-		{
-			gGL.color4fv((map_frustum_color()).mV);
-
-			gGL.begin( LLRender::TRIANGLES  );
-				gGL.vertex2f( ctr_x, ctr_y );
-				gGL.vertex2f( ctr_x - half_width_pixels, ctr_y + far_clip_pixels );
-				gGL.vertex2f( ctr_x + half_width_pixels, ctr_y + far_clip_pixels );
-			gGL.end();
-		}
-		else
-		{
-			gGL.color4fv((map_frustum_rotating_color()).mV);
-			
-			// If we don't rotate the map, we have to rotate the frustum.
-			gGL.pushMatrix();
-				gGL.translatef( ctr_x, ctr_y, 0 );
-				gGL.rotatef( atan2( LLViewerCamera::getInstance()->getAtAxis().mV[VX], LLViewerCamera::getInstance()->getAtAxis().mV[VY] ) * RAD_TO_DEG, 0.f, 0.f, -1.f);
-				gGL.begin( LLRender::TRIANGLES  );
-					gGL.vertex2f( 0, 0 );
-					gGL.vertex2f( -half_width_pixels, far_clip_pixels );
-					gGL.vertex2f(  half_width_pixels, far_clip_pixels );
-				gGL.end();
-			gGL.popMatrix();
-		}
+        if( rotate_map )
+        {
+            gGL.pushMatrix();
+                gGL.translatef( ctr_x, ctr_y, 0 );
+                gl_washer_segment_2d(far_clip_pixels, 0, arc_start, arc_end, steps, map_frustum_color(), map_frustum_color());
+            gGL.popMatrix();
+        }
+        else
+        {
+            gGL.pushMatrix();
+                gGL.translatef( ctr_x, ctr_y, 0 );
+                // If we don't rotate the map, we have to rotate the frustum.
+                gGL.rotatef( atan2( LLViewerCamera::getInstance()->getAtAxis().mV[VX], LLViewerCamera::getInstance()->getAtAxis().mV[VY] ) * RAD_TO_DEG, 0.f, 0.f, -1.f);
+                gl_washer_segment_2d(far_clip_pixels, 0, arc_start, arc_end, steps, map_frustum_color(), map_frustum_color());
+            gGL.popMatrix();
+        }
 	}
 	
 	gGL.popMatrix();
@@ -1014,6 +1030,65 @@ void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color,
 	}
 }
 
+bool LLNetMap::isMouseOnPopupMenu()
+{
+    if (!mPopupMenu->isOpen())
+    {
+        return false;
+    }
+
+    S32 popup_x;
+    S32 popup_y;
+    LLUI::getInstance()->getMousePositionLocal(mPopupMenu, &popup_x, &popup_y);
+    // *NOTE: Tolerance is larger than it needs to be because the context menu is offset from the mouse when the menu is opened from certain
+    // directions. This may be a quirk of LLMenuGL::showPopup. -Cosmic,2022-03-22
+    constexpr S32 tolerance = 10;
+    // Test tolerance from all four corners, as the popup menu can appear from a different direction if there's not enough space.
+    // Assume the size of the popup menu is much larger than the provided tolerance.
+    // In practice, this is a [tolerance]px margin around the popup menu.
+    for (S32 sign_x = -1; sign_x <= 1; sign_x += 2)
+    {
+        for (S32 sign_y = -1; sign_y <= 1; sign_y += 2)
+        {
+            if (mPopupMenu->pointInView(popup_x + (sign_x * tolerance), popup_y + (sign_y * tolerance)))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void LLNetMap::updateAboutLandPopupButton()
+{
+    if (!mPopupMenu->isOpen())
+    {
+        return;
+    }
+
+    LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosGlobal(mPopupWorldPos);
+    if (!region)
+    {
+        mPopupMenu->setItemEnabled("About Land", false);
+    }
+    else
+    {
+        // Check if the mouse is in the bounds of the popup. If so, it's safe to assume no other hover function will be called, so the hover
+        // parcel can be used to check if location-sensitive tooltip options are available.
+        if (isMouseOnPopupMenu())
+        {
+            LLViewerParcelMgr::getInstance()->setHoverParcel(mPopupWorldPos);
+            LLParcel *hover_parcel = LLViewerParcelMgr::getInstance()->getHoverParcel();
+            bool      valid_parcel = false;
+            if (hover_parcel)
+            {
+                valid_parcel = hover_parcel->getOwnerID().notNull();
+            }
+            mPopupMenu->setItemEnabled("About Land", valid_parcel);
+        }
+    }
+}
+
 LLVector3d LLNetMap::viewPosToGlobal( S32 x, S32 y )
 {
 	x -= ll_round(getRect().getWidth() / 2 + mCurPan.mV[VX]);
@@ -1044,23 +1119,23 @@ LLVector3d LLNetMap::viewPosToGlobal( S32 x, S32 y )
 
 BOOL LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-	// note that clicks are reversed from what you'd think: i.e. > 0  means zoom out, < 0 means zoom in
-	F32 new_scale = mScale * pow(MAP_SCALE_ZOOM_FACTOR, -clicks);
+    // note that clicks are reversed from what you'd think: i.e. > 0  means zoom out, < 0 means zoom in
+    F32 new_scale = mScale * pow(MAP_SCALE_ZOOM_FACTOR, -clicks);
 	F32 old_scale = mScale;
 
-	setScale(new_scale);
+    setScale(new_scale);
 
-	static LLUICachedControl<bool> auto_center("MiniMapAutoCenter", true);
-	if (!auto_center)
-	{
-		// Adjust pan to center the zoom on the mouse pointer
-		LLVector2 zoom_offset;
-		zoom_offset.mV[VX] = x - getRect().getWidth() / 2;
-		zoom_offset.mV[VY] = y - getRect().getHeight() / 2;
-		mCurPan -= zoom_offset * mScale / old_scale - zoom_offset;
-	}
+    static LLUICachedControl<bool> auto_center("MiniMapAutoCenter", true);
+    if (!auto_center)
+    {
+        // Adjust pan to center the zoom on the mouse pointer
+        LLVector2 zoom_offset;
+        zoom_offset.mV[VX] = x - getRect().getWidth() / 2;
+        zoom_offset.mV[VY] = y - getRect().getHeight() / 2;
+        mCurPan -= zoom_offset * mScale / old_scale - zoom_offset;
+    }
 
-	return TRUE;
+    return true;
 }
 
 BOOL LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
@@ -1079,6 +1154,15 @@ BOOL LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
 // [/RLVa:KB]
     {
         return TRUE;
+    }
+
+    // The popup menu uses the hover parcel when it is open and the mouse is on
+    // top of it, with some additional tolerance. Returning early here prevents
+    // fighting over that hover parcel when getting tooltip info in the
+    // tolerance region.
+    if (isMouseOnPopupMenu())
+    {
+        return false;
     }
 
 // [RLVa:KB] - Checked: RLVa-1.2.2
@@ -1587,50 +1671,48 @@ void LLNetMap::createParcelImage()
 }
 // [/SL:KB]
 
-BOOL LLNetMap::handleMouseDown( S32 x, S32 y, MASK mask )
+BOOL LLNetMap::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	if (!(mask & MASK_SHIFT)) return FALSE;
+    // Start panning
+    gFocusMgr.setMouseCapture(this);
 
-	// Start panning
-	gFocusMgr.setMouseCapture(this);
-
-	mStartPan = mCurPan;
-	mMouseDown.mX = x;
-	mMouseDown.mY = y;
-	return TRUE;
+    mStartPan     = mCurPan;
+    mMouseDown.mX = x;
+    mMouseDown.mY = y;
+    return true;
 }
 
-BOOL LLNetMap::handleMouseUp( S32 x, S32 y, MASK mask )
+BOOL LLNetMap::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-	if(abs(mMouseDown.mX-x)<3 && abs(mMouseDown.mY-y)<3)
-		handleClick(x,y,mask);
+    if (abs(mMouseDown.mX - x) < 3 && abs(mMouseDown.mY - y) < 3)
+    {
+        handleClick(x, y, mask);
+    }
 
-	if (hasMouseCapture())
-	{
-		if (mPanning)
-		{
-			// restore mouse cursor
-			S32 local_x, local_y;
-			local_x = mMouseDown.mX + llfloor(mCurPan.mV[VX] - mStartPan.mV[VX]);
-			local_y = mMouseDown.mY + llfloor(mCurPan.mV[VY] - mStartPan.mV[VY]);
-			LLRect clip_rect = getRect();
-			clip_rect.stretch(-8);
-			clip_rect.clipPointToRect(mMouseDown.mX, mMouseDown.mY, local_x, local_y);
-			LLUI::getInstance()->setMousePositionLocal(this, local_x, local_y);
+    if (hasMouseCapture())
+    {
+        if (mPanning)
+        {
+            // restore mouse cursor
+            S32 local_x, local_y;
+            local_x          = mMouseDown.mX + llfloor(mCurPan.mV[VX] - mStartPan.mV[VX]);
+            local_y          = mMouseDown.mY + llfloor(mCurPan.mV[VY] - mStartPan.mV[VY]);
+            LLRect clip_rect = getRect();
+            clip_rect.stretch(-8);
+            clip_rect.clipPointToRect(mMouseDown.mX, mMouseDown.mY, local_x, local_y);
+            LLUI::getInstance()->setMousePositionLocal(this, local_x, local_y);
 
-			// finish the pan
-			mPanning = false;
+            // finish the pan
+            mPanning = false;
 
-			mMouseDown.set(0, 0);
+            mMouseDown.set(0, 0);
+        }
+        gViewerWindow->showCursor();
+        gFocusMgr.setMouseCapture(NULL);
+        return true;
+    }
 
-			// auto centre
-			mTargetPan.setZero();
-		}
-		gViewerWindow->showCursor();
-		gFocusMgr.setMouseCapture(NULL);
-		return TRUE;
-	}
-	return FALSE;
+    return false;
 }
 
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
@@ -1676,9 +1758,9 @@ void LLNetMap::handleShowProfile(const LLSD& sdParam) const
 	{
 		LLSD sdParams;
 		sdParams["type"] = "remote_place";
-		sdParams["x"] = mPosGlobalRightClick.mdV[VX];
-		sdParams["y"] = mPosGlobalRightClick.mdV[VY];
-		sdParams["z"] = mPosGlobalRightClick.mdV[VZ];
+		sdParams["x"] = mPopupWorldPos.mdV[VX];
+		sdParams["y"] = mPopupWorldPos.mdV[VY];
+		sdParams["z"] = mPopupWorldPos.mdV[VZ];
 
 		FSFloaterPlaceDetails::showPlaceDetails(sdParams);
 	}
@@ -1706,10 +1788,10 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (mPopupMenu)
 	{
+		mPopupWorldPos = viewPosToGlobal(x, y);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 		mClosestAgentRightClick = mClosestAgentToCursor;
 		mClosestAgentsRightClick = mClosestAgentsToCursor;
-		mPosGlobalRightClick = viewPosToGlobal(x, y);
 
 		mPopupMenu->setItemVisible("Add to Set Multiple", mClosestAgentsToCursor.size() > 1);
 		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
@@ -1770,10 +1852,10 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mPopupMenu->buildDrawLabels();
 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
-		mPopupMenu->setItemVisible("Stop Tracking", LLTracker::isTracking(0));
+		mPopupMenu->setItemVisible("Stop tracking", LLTracker::isTracking(0));
 		mPopupMenu->setItemVisible("Stop Tracking Separator", LLTracker::isTracking(0));
 // [/SL:KB]
-//		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
+//		mPopupMenu->setItemEnabled("Stop tracking", LLTracker::isTracking(0));
 		LLMenuGL::showPopup(this, mPopupMenu, x, y);
 	}
 	return TRUE;
@@ -1825,6 +1907,27 @@ BOOL LLNetMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 	return TRUE;
 }
 
+F32 LLNetMap::getScaleForName(std::string scale_name)
+{
+    if (scale_name == "very close")
+    {
+        return LLNetMap::MAP_SCALE_VERY_CLOSE;
+    }
+    else if (scale_name == "close")
+    {
+        return LLNetMap::MAP_SCALE_CLOSE;
+    }
+    else if (scale_name == "medium")
+    {
+        return LLNetMap::MAP_SCALE_MEDIUM;
+    }
+    else if (scale_name == "far")
+    {
+        return LLNetMap::MAP_SCALE_FAR;
+    }
+    return 0.0f;
+}
+
 // static
 bool LLNetMap::outsideSlop( S32 x, S32 y, S32 start_x, S32 start_y, S32 slop )
 {
@@ -1842,7 +1945,7 @@ BOOL LLNetMap::handleHover( S32 x, S32 y, MASK mask )
 		{
 			if (!mPanning)
 			{
-				// just started panning, so hide cursor
+                // Just started panning. Hide cursor.
 				mPanning = true;
 				gViewerWindow->hideCursor();
 			}
@@ -1852,62 +1955,40 @@ BOOL LLNetMap::handleHover( S32 x, S32 y, MASK mask )
 
 			// Set pan to value at start of drag + offset
 			mCurPan += delta;
-			mTargetPan = mCurPan;
 
 			gViewerWindow->moveCursorToCenter();
 		}
+	}
 
-		// Doesn't really matter, cursor should be hidden
-		gViewerWindow->setCursor( UI_CURSOR_TOOLPAN );
-	}
-	else
-	{
-		if (mask & MASK_SHIFT)
-		{
-			// If shift is held, change the cursor to hint that the map can be dragged
-			gViewerWindow->setCursor( UI_CURSOR_TOOLPAN );
-		}
-		else
-		{
-			gViewerWindow->setCursor( UI_CURSOR_CROSS );
-		}
-	}
+    if (mask & MASK_SHIFT)
+    {
+        // If shift is held, change the cursor to hint that the map can be
+        // dragged. However, holding shift is not required to drag the map.
+        gViewerWindow->setCursor( UI_CURSOR_TOOLPAN );
+    }
+    else
+    {
+        gViewerWindow->setCursor( UI_CURSOR_CROSS );
+    }
 
 	return TRUE;
 }
 
-void LLNetMap::handleZoom(const LLSD& userdata)
+bool LLNetMap::isZoomChecked(const LLSD &userdata)
 {
-	std::string level = userdata.asString();
-	
-	F32 scale = 0.0f;
-// [SL:KB] - Patch: World-MinimapZoom | Checked: 2012-08-15 (Catznip-3.3)
-	//if (level == "close")
-	//	scale = 2048.f;
-	//else if (level == "medium")
-	//	scale = 512.f;
-	//else if (level == "far")
-	//	scale = 128.f;
-// [/Sl:KB]
-	if (level == std::string("default"))
-	{
-		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-		if(pvar)
-		{
-			pvar->resetToDefault();
-			scale = gSavedSettings.getF32("MiniMapScale");
-		}
-	}
-	else if (level == std::string("close"))
-		scale = LLNetMap::MAP_SCALE_MAX;
-	else if (level == std::string("medium"))
-		scale = LLNetMap::MAP_SCALE_MID;
-	else if (level == std::string("far"))
-		scale = LLNetMap::MAP_SCALE_MIN;
-	if (scale != 0.0f)
-	{
-		setScale(scale);
-	}
+    std::string level = userdata.asString();
+    F32         scale = getScaleForName(level);
+    return scale == mScale;
+}
+
+void LLNetMap::setZoom(const LLSD &userdata)
+{
+    std::string level = userdata.asString();
+    F32         scale = getScaleForName(level);
+    if (scale != 0.0f)
+    {
+        setScale(scale);
+    }
 }
 
 // <FS:Ansariel> Mark avatar feature
@@ -2040,11 +2121,53 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 	if (mPopupMenu)
 	{
 		// <FS:Ansariel> Hide tracking option instead of disabling
-		//mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		mPopupMenu->setItemVisible ("Stop Tracking", false);
+		//mPopupMenu->setItemEnabled ("Stop tracking", false);
+		mPopupMenu->setItemVisible ("Stop tracking", false);
 		// </FS:Ansariel>
 		LLTracker::stopTracking (LLTracker::isTracking(NULL));
 	}
+}
+
+void LLNetMap::activateCenterMap(const LLSD &userdata) { mCentering = true; }
+
+bool LLNetMap::isMapOrientationChecked(const LLSD &userdata)
+{
+    const std::string command_name = userdata.asString();
+    const bool        rotate_map   = gSavedSettings.getBOOL("MiniMapRotate");
+    if (command_name == "north_at_top")
+    {
+        return !rotate_map;
+    }
+
+    if (command_name == "camera_at_top")
+    {
+        return rotate_map;
+    }
+
+    return false;
+}
+
+void LLNetMap::setMapOrientation(const LLSD &userdata)
+{
+    const std::string command_name = userdata.asString();
+    if (command_name == "north_at_top")
+    {
+        gSavedSettings.setBOOL("MiniMapRotate", false);
+    }
+    else if (command_name == "camera_at_top")
+    {
+        gSavedSettings.setBOOL("MiniMapRotate", true);
+    }
+}
+
+void LLNetMap::popupShowAboutLand(const LLSD &userdata)
+{
+    // Update parcel selection. It's important to deselect land first so the "About Land" floater doesn't refresh with the old selection.
+    LLViewerParcelMgr::getInstance()->deselectLand();
+    LLParcelSelectionHandle selection = LLViewerParcelMgr::getInstance()->selectParcelAt(mPopupWorldPos);
+    gMenuHolder->setParcelSelection(selection);
+
+    LLFloaterReg::showInstance("about_land", LLSD(), false);
 }
 
 // <FS:Ansariel> Synchronize double click handling throughout instances
