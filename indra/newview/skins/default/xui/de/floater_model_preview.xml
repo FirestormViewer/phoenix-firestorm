@@ -71,7 +71,7 @@
 		Einige Modelle überschreiten das Hüllen-Limit (256). Probieren Sie Vereinfachen“.
 	</string>
 	<string name="phys_status_degenerate_triangles">
-		Das Physik-Netz ist zu dicht - kleine dünne Dreiecke entfernen (siehe Vorschau)
+		Das Physik-Netz enthält degenerierte Dreiecke. Probieren Sie Analysieren/Vereinfachen.
 	</string>
 	<string name="phys_status_no_havok">
 		Diese Version enthält keine Havok-Unterstützung und wird nicht für das Hochladen von Physik in Second Life empfohlen. Unvorhersehbare Ergebnisse sind möglich!
