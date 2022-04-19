@@ -3207,6 +3207,9 @@ BOOL LLModelPreview::render()
                     fmp->setViewOptionEnabled("show_joint_positions", upload_skin);
                     // </FS:Beq>
                     mFirstSkinUpdate = false;
+                    upload_skin = true;
+                    skin_weight = true;
+                    mViewOption["show_skin_weight"] = true;
                 }
                 // <FS:Beq> BUG-229632 auto enable weights slows manual workflow
                 // fmp->enableViewOption("show_skin_weight");
@@ -4066,6 +4069,7 @@ void LLModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
         genLODs(lod, 3, enforce_tri_limit);
         mFMP->refresh(); // <FS:Beq/> BUG-231970 Fix b0rken upload floater refresh
         refresh();
+        mDirty = true;
     }
 }
 

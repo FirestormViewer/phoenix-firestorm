@@ -240,6 +240,7 @@ bool llHashedUniqueID(unsigned char* id)
 //-----------------------------------------------------------------------------
 #include "../llappviewer.h"
 void LLAppViewer::forceQuit(void) {}
+bool LLAppViewer::isUpdaterMissing() { return true; }
 LLAppViewer * LLAppViewer::sInstance = 0;
 
 //-----------------------------------------------------------------------------
@@ -365,6 +366,7 @@ namespace tut
 			gSavedSettings.declareString("ClientSettingsFile", "test_settings.xml", "", LLControlVariable::PERSIST_NO);
 			gSavedSettings.declareString("NextLoginLocation", "", "", LLControlVariable::PERSIST_NO);
 			gSavedSettings.declareBOOL("LoginLastLocation", FALSE, "", LLControlVariable::PERSIST_NO);
+            gSavedSettings.declareBOOL("CmdLineSkipUpdater", TRUE, "", LLControlVariable::PERSIST_NO);
 
 			LLSD authenticator = LLSD::emptyMap();
 			LLSD identifier = LLSD::emptyMap();

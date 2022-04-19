@@ -904,6 +904,11 @@ LLView* LLNavigationBar::getView()
 	return mView;
 }
 
+bool LLNavigationBar::isRebakeNavMeshAvailable()
+{
+    return mCmbLocation->isNavMeshDirty();
+}
+
 void LLNavigationBar::onRightMouseDown(S32 x,S32 y,MASK mask)
 {
 	// call LLViewerMenu function
