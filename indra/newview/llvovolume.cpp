@@ -7002,7 +7002,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 				// can we safely treat this as an alpha mask?
 				// <FS:Beq> Nothing actually sets facecolor use the TE alpha instead.
 				// if (facep->getFaceColor().mV[3] <= 0.f)
-				if (te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f)
+				if ((te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f) && te->getGlow() == 0.0 )
 				// </FS:Beq>
 				{ //100% transparent, don't render unless we're highlighting transparent
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("facep->alpha -> invisible");

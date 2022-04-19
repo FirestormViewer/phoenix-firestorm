@@ -19,6 +19,9 @@
 	<string name="StartupClearingCache">
 		Vidage du cache...
 	</string>
+	<string name="StartupClearingTextureCache">
+		Nettoyage du cache des textures...
+	</string>
 	<string name="StartupInitializingTextureCache">
 		Initialisation du cache des textures...
 	</string>
@@ -39,6 +42,11 @@ SLURL : &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
+	<string name="AboutPositionRLVShowLoc">
+Vous êtes à [REGION]
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
 	<string name="AboutSystem">
 		CPU : [CPU]
 Mémoire : [MEMORY_MB] Mo
@@ -52,6 +60,28 @@ Mémoire de cartes graphiques : [GRAPHICS_CARD_MEMORY] MB
 	</string>
 	<string name="AboutOGL">
 		Version OpenGL : [OPENGL_VERSION]
+	</string>
+	<string name="AboutSettings">
+Mode de réglage : [MODE]
+Skin du visualiseur: [SKIN] ([THEME])
+Taille de la fenêtre : [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
+Police utilisée : [FONT] ([FONT_SCREEN_DPI] dpi)
+Taille de la police : [FONT_SIZE] pt
+Mise à l'échelle de l'UI : [UI_SCALE_FACTOR]
+Distance d'affichage : [DRAW_DISTANCE] m
+Bande passante : [BANDWIDTH] kbit/s
+Facteur LOD : [LOD]
+Qualité du rendu : [RENDERQUALITY]
+Modèle d'éclairage avancé : [ALMSTATUS]
+	</string>
+	<string name="AboutTextureMemory">
+		Mémoire des textures : [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Mémoire des textures : Dynamique ([TEXTUREMEMORYMIN] Mo min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutCache">
+		Cache disque : [DISK_CACHE_INFO]
 	</string>
 	<string name="AboutOSXHiDPI">
 		Mode d&apos;affichage HiDPI : [HIDPI]
@@ -160,8 +190,14 @@ Version serveur vocal : [VOICE_VERSION]
 	<string name="CertBasicConstraints">
 		Certificats trop nombreux dans la chaîne des certificats du serveur. Contactez l&apos;administrateur de la grille.
 	</string>
+	<string name="CertInvalid">
+		Impossible de charger le certificat. Veuillez contacter votre administrateur de grille.
+	</string>
 	<string name="CertInvalidSignature">
 		Impossible de vérifier la signature de certificat renvoyée par le serveur de la grille.  Contactez l&apos;administrateur de la grille.
+	</string>
+	<string name="CertAllocationFailure">
+		Échec de l'allocation de la mémoire openssl pour le certificat.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Erreur réseau : impossible d&apos;établir la connexion. Veuillez vérifier votre connexion réseau.
@@ -180,9 +216,6 @@ Version serveur vocal : [VOICE_VERSION]
 	</string>
 	<string name="AditiGridLabel">
 		Grille de test bêta Second Life (Aditi)
-	</string>
-	<string name="ViewerDownloadURL">
-		http://secondlife.com/download
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Le client que vous utilisez ne permet plus d&apos;accéder à Second Life. Téléchargez un nouveau client à la page suivante :
@@ -239,7 +272,7 @@ l&apos;Assistance à l&apos;adresse suivante : support@secondlife.com.
 [TIME], heure du Pacifique.
 	</string>
 	<string name="LoginFailedAccountDisabled">
-		Impossible de traiter votre demande à l&apos;heure actuelle. 
+		Impossible de traiter votre demande à l&apos;heure actuelle.
 Pour obtenir de l&apos;aide, veuillez contacter l&apos;Assistance Second Life à la page suivante : http://support.secondlife.com.
 	</string>
 	<string name="LoginFailedTransformError">
@@ -256,7 +289,7 @@ Si vous pensez qu&apos;il s&apos;agit d&apos;une erreur, contactez l&apos;Assist
 		Le simulateur a renvoyé une erreur en réponse à la demande de déconnexion.
 	</string>
 	<string name="LoginFailedPendingLogout">
-		Le système est en train de vous déconnecter. 
+		Le système est en train de vous déconnecter.
 Veuillez réessayer de vous connecter dans une minute.
 	</string>
 	<string name="LoginFailedUnableToCreateSession">
@@ -457,6 +490,39 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="TooltipSLIcon">
 		Il s’agit d’un lien vers une page dans le domaine officiel SecondLife.com ou LindenLab.com.
 	</string>
+	<string name="TooltipFlagScript">
+		Script
+	</string>
+	<string name="TooltipFlagPhysics">
+		Physiques
+	</string>
+	<string name="TooltipFlagTouch">
+		Toucher
+	</string>
+	<string name="TooltipFlagDropInventory">
+		Supprimer l'inventaire
+	</string>
+	<string name="TooltipFlagPhantom">
+		Fantôme
+	</string>
+	<string name="TooltipFlagTemporary">
+		Temporaire
+	</string>
+	<string name="TooltipPrimCount">
+		Prims : [COUNT]
+	</string>
+	<string name="TooltipPrimEquivalent">
+		, Impact sur le terrain : [PEWEIGHT]
+	</string>
+	<string name="TooltipPrimEquivalentLoading">
+		, Impact sur le terrain du chargement...
+	</string>
+	<string name="TooltipDistance">
+		Distance : [DISTANCE] m
+	</string>
+	<string name="TooltipPosition">
+		Position : [POSITION]
+	</string>
 	<string name="TooltipOutboxDragToWorld">
 		Vous ne pouvez pas rezzer (charger) des articles du dossier Annonces de la Place de marché
 	</string>
@@ -498,6 +564,12 @@ Veuillez réessayer de vous connecter dans une minute.
 	</string>
 	<string name="TooltipOutboxMixedStock">
 		tous les articles d&apos;un dossier de stock doivent avoir le même type et droit
+	</string>
+	<string name="TooltipOutfitNotInInventory">
+		Vous pouvez uniquement placer des articles ou des tenues de votre inventaire personnel dans "Mes tenues".
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		Un ou plusieurs articles ne peuvent pas être utilisés dans des "Mes tenues".
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Impossible de déplacer un dossier vers son enfant
@@ -559,6 +631,12 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="TooltipSLAPP">
 		Cliquez pour exécuter la commande secondlife://
 	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Cliquez pour ouvrir la fenêtre des paramètres de débogage pour ce paramètre
+	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Cliquez pour porter le contenu d'un dossier d'inventaire
+	</string>
 	<string name="CurrentURL" value=" URL actuelle : [CurrentURL]"/>
 	<string name="TooltipEmail">
 		Cliquez pour composer un message
@@ -614,13 +692,16 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="BUTTON_HELP">
 		Afficher l&apos;aide
 	</string>
+	<string name="BUTTON_SNOOZE">
+		Veille
+	</string>
 	<string name="TooltipNotecardNotAllowedTypeDrop">
-		Les éléments de ce type ne peuvent pas être attachés 
+		Les éléments de ce type ne peuvent pas être attachés
 aux notes de cette région.
 	</string>
 	<string name="TooltipNotecardOwnerRestrictedDrop">
-		Seuls des éléments avec des autorisation 
-illimitées pour le &apos;prochain propriétaire&apos; 
+		Seuls des éléments avec des autorisation
+illimitées pour le &apos;prochain propriétaire&apos;
 peuvent être joints aux notes.
 	</string>
 	<string name="Searching">
@@ -637,6 +718,12 @@ peuvent être joints aux notes.
 	</string>
 	<string name="LoadingData">
 		Chargement...
+	</string>
+	<string name="LockedFolder">
+		verrouillé
+	</string>
+	<string name="ProtectedFolder">
+		protégé
 	</string>
 	<string name="AvatarNameNobody">
 		(personne)
@@ -696,7 +783,7 @@ peuvent être joints aux notes.
 		Services non disponible ou la durée du chargement est dépassée.
 	</string>
 	<string name="AssetUploadRequestInvalid">
-		Erreur dans la demande de chargement. Veuillez consulter le site : 
+		Erreur dans la demande de chargement. Veuillez consulter le site :
 http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="SettingValidationError">
@@ -803,6 +890,12 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="AvatarMuted">
 		Bloqué(e)
+	</string>
+	<string name="AvatarAutoResponse">
+		Réponse automatique
+	</string>
+	<string name="AvatarTyping">
+		Écrit
 	</string>
 	<string name="anim_express_afraid">
 		Effrayé
@@ -1041,6 +1134,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="minimap_distance">
 		(Distance: [DISTANCE] m)
 	</string>
+	<string name="minimap_no_focus">
+		La caméra ne peut pas faire la mise au point sur l'utilisateur parce qu'il est en dehors de votre distance d'affichage.
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -1049,6 +1145,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="ST_NO_JOINT">
 		Impossible de trouver ROOT ou JOINT.
+	</string>
+	<string name="no_name_object">
+		(sans nom)
 	</string>
 	<string name="NearbyChatTitle">
 		Chat près de moi
@@ -1122,11 +1221,20 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="TeleportYourAgent">
 		Vous téléporter
 	</string>
+	<string name="ManageEstateSilently">
+		Gérez vos biens discrètement
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Modifiez vos animations par défaut
+	</string>
 	<string name="ForceSitAvatar">
 		Forcez votre avatar à s’asseoir
 	</string>
 	<string name="ChangeEnvSettings">
 		Changer vos paramètres d&apos;environnement
+	</string>
+	<string name="SnapshotSavedToDisk">
+		Photo enregistrée : [FILENAME]
 	</string>
 	<string name="NotConnected">
 		Pas connecté(e)
@@ -1176,6 +1284,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="Mainland / Full Region">
 		Continent / Région entière
+	</string>
+	<string name="Linden Homes / Full Region">
+		Maisons Linden / Région entière
 	</string>
 	<string name="all_files">
 		Tous fichiers
@@ -1234,6 +1345,24 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="dictionary_files">
 		Dictionnaires
 	</string>
+	<string name="backup_files">
+		Sauvegardes d'objets
+	</string>
+	<string name="collada_files">
+		Modèles COLLADA
+	</string>
+	<string name="csv_files">
+		Valeurs séparées par des virgules
+	</string>
+	<string name="recompile_script_verb">
+		Recompiler
+	</string>
+	<string name="jpeg_image_files">
+		Images JPEG
+	</string>
+	<string name="executable_files">
+		Fichiers de programmes exécutables
+	</string>
 	<string name="shape">
 		Silhouette
 	</string>
@@ -1290,6 +1419,15 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="none">
 		aucun
+	</string>
+	<string name="sky">
+		Ciel
+	</string>
+	<string name="water">
+		Eau
+	</string>
+	<string name="day">
+		Cycle du jour
 	</string>
 	<string name="shirt_not_worn">
 		Chemise non portée
@@ -1417,6 +1555,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="GroupNotifySaveAttachment">
 		Enregistrer la pièce jointe
 	</string>
+	<string name="GroupNotifySender">
+		Envoyée par [SENDER], [GROUPNAME]
+	</string>
 	<string name="TeleportOffer">
 		Offre de téléportation
 	</string>
@@ -1470,6 +1611,9 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		Faites glisser un repère ici pour l&apos;ajouter à vos Favoris.
+	</string>
+	<string name="MarketplaceNoListing">
+		Vous n'avez pas encore de listing.
 	</string>
 	<string name="MarketplaceNoMatchingItems">
 		Aucun article trouvé. Vérifiez l&apos;orthographe de votre chaîne de recherche et réessayez.
@@ -1674,9 +1818,14 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="Scripts" value=" Scripts,"/>
 	<string name="Sounds" value=" Sons,"/>
 	<string name="Textures" value=" Textures,"/>
+	<string name="Settings" value=" Paramètres," />
 	<string name="Snapshots" value=" Photos,"/>
 	<string name="No Filters" value="Non "/>
 	<string name="Since Logoff" value="depuis la déconnexion"/>
+	<string name="Modifiable" value="Modifiable" />
+	<string name="Copyable" value="Copiable" />
+	<string name="Transferable" value="Transférable" />
+	<string name="PermissionsFilter" value=" - Seulement [PERMISSIONS]" />
 	<string name="InvFolder My Inventory">
 		Mon inventaire
 	</string>
@@ -1775,6 +1924,9 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	</string>
 	<string name="InvFolder All">
 		Tout
+	</string>
+	<string name="InvFolder My Suitcase">
+		Ma valise
 	</string>
 	<string name="no_attachments">
 		Aucun élément attaché porté
@@ -2151,6 +2303,12 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="CompileQueueStart">
 		recompiler
 	</string>
+	<string name="CompileQueuePreprocessing">
+		Prétraitement : [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		Prétraitement du script [SCRIPT] terminé
+	</string>
 	<string name="ResetQueueTitle">
 		Réinitialiser les progrès
 	</string>
@@ -2168,6 +2326,15 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	</string>
 	<string name="NotRunQueueStart">
 		arrêter
+	</string>
+	<string name="DeleteQueueTitle">
+		Supprimer la progression
+	</string>
+	<string name="DeleteQueueStart">
+		Suppression
+	</string>
+	<string name="Compiling">
+		Compilation de [NAME]
 	</string>
 	<string name="CompileSuccessful">
 		Compilation réussie !
@@ -2219,6 +2386,9 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="NoGroupDataFound">
 		Aucune donnée trouvée pour le groupe
 	</string>
+	<string name="AlreadyInGroup">
+		Vous êtes déjà dans ce groupe
+	</string>
 	<string name="IMParentEstate">
 		domaine parent
 	</string>
@@ -2248,6 +2418,9 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	</string>
 	<string name="RegionInfoAllowedGroups">
 		Groupes toujours autorisés : [ALLOWEDGROUPS], max [MAXACCESS])
+	</string>
+	<string name="RegionInfoEstateManagers">
+		Gérants du domaine : ([ESTATEMANAGERS], max [MAXMANAGERS])
 	</string>
 	<string name="RegionInfoBannedResidents">
 		Toujours interdits : ([BANNEDAGENTS], max. [MAXBANNED])
@@ -2393,11 +2566,11 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="ATTACH_BELLY">
 		Estomac
 	</string>
-	<string name="ATTACH_RPEC">
-		Pectoral droit
+	<string name="ATTACH_LEFT_PEC">
+		Pectoraux gauches
 	</string>
-	<string name="ATTACH_LPEC">
-		Pectoral gauche
+	<string name="ATTACH_RIGHT_PEC">
+		Pectoraux droits
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
 		HUD centre 2
@@ -2495,6 +2668,24 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="DoNotDisturbModeResponseDefault">
 		Ce résident a activé Ne pas déranger et verra votre message plus tard.
 	</string>
+	<string name="AutoResponseModeDefault">
+		Le résident auquel vous avez envoyé un message a activé le mode réponse automatique du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé. Votre message sera quand même affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
+	</string>
+	<string name="AutoResponseModeNonFriendsDefault">
+		Le résident auquel vous avez envoyé un message a activé le mode réponse automatique du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé. Votre message sera quand même affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
+	</string>
+	<string name="RejectTeleportOffersResponseDefault">
+		Le résident auquel vous avez envoyé un message a activé le mode rejet de toutes les offres ou demandes de téléportation du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé par les offres ou demandes de téléportations. Vous pouvez quand même lui envoyer un message privé.
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		Le résident auquel vous avez envoyé un message a activé le mode rejet de toutes les demandes d'amitié du visualiseur [APP_NAME], ce qui signifie qu'il a demandé à ne pas être dérangé par les demandes de d'amitié. Vous pouvez quand même lui envoyer un message privé.
+	</string>
+	<string name="MutedAvatarsResponseDefault">
+		Le résident à qui vous avez envoyé un message a bloqué l'envoi de tous message de votre part.
+	</string>
+	<string name="AwayAvatarResponseDefault">
+		Le résident auquel vous avez envoyé un message est actuellement absent. Votre message sera affiché dans la fenêtre de messagerie instantanée pour être consulté ultèrieurement.
+	</string>
 	<string name="MuteByName">
 		(par nom)
 	</string>
@@ -2567,6 +2758,18 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="PicksClassifiedsLoadingText">
 		Chargement...
 	</string>
+	<string name="NoPicksText">
+		Vous n'avez pas créé de favoris.
+	</string>
+	<string name="NoAvatarPicksText">
+		L'utilisateur n'a pas de favoris.
+	</string>
+	<string name="NoClassifiedsText">
+		Vous n'avez pas créé d'annonces. Cliquez sur le bouton Plus ci-dessous pour créer une annonce.
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		L'utilisateur n'a pas d'annonces
+	</string>
 	<string name="MultiPreviewTitle">
 		Prévisualiser
 	</string>
@@ -2591,8 +2794,20 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="InvOfferGaveYou">
 		vous a donné
 	</string>
+	<string name="InvOfferYouDecline">
+		Vous refusez
+	</string>
 	<string name="InvOfferDecline">
 		Vous refusez l&apos;offre [DESC] de [NAME].
+	</string>
+	<string name="InvOfferFrom">
+		de
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		Un objet nommé [OBJECT_NAME] vous a donné cet(te) [OBJECT_TYPE] : [DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] vous a donné cet(te) [OBJECT_TYPE] : [DESC]
 	</string>
 	<string name="GroupMoneyTotal">
 		Total
@@ -2635,9 +2850,6 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	</string>
 	<string name="UploadingCosts">
 		Le chargement de [NAME] coûte [AMOUNT] L$
-	</string>
-	<string name="BuyingCosts">
-		Cet achat coûte [AMOUNT] L$
 	</string>
 	<string name="UnknownFileExtension">
 		Extension de fichier inconnue .%s
@@ -2843,6 +3055,9 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 	<string name="Play Media">
 		Lire/pauser le média
 	</string>
+	<string name="StreamtitleNowPlaying">
+		En cours de lecture :
+	</string>
 	<string name="IntelDriverPage">
 		http://www.intel.com/p/fr_FR/support/detect/graphics
 	</string>
@@ -2850,7 +3065,7 @@ Si vous continuez de recevoir ce message, contactez l’assistance Second Life �
 		http://www.nvidia.com/Download/index.aspx?lang=fr
 	</string>
 	<string name="AMDDriverPage">
-		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+		https://www.amd.com/fr/support
 	</string>
 	<string name="MBCmdLineError">
 		Une erreur est survenue lors de la lecture de la ligne de commande.
@@ -2869,6 +3084,14 @@ Si le problème persiste, vous devrez peut-être complètement désinstaller pui
 	</string>
 	<string name="MBFatalError">
 		Erreur fatale
+	</string>
+	<string name="MBApplicationError">
+		Erreur de l'application - Ne paniquez pas
+	</string>
+	<string name="MBApplicationErrorDetails">
+		Nous sommes désolés, mais [NOM_Application] a planté et doit être fermé. Si vous constatez que ce problème se répète, veuillez contacter notre équipe d'assistance et soumettre le message suivant :
+
+[ERROR_DETAILS]
 	</string>
 	<string name="MBRequiresAltiVec">
 		[APP_NAME] nécessite un microprocesseur AltiVec (version G4 ou antérieure).
@@ -2947,8 +3170,8 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 
 Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	</string>
-	<string name="5 O&apos;Clock Shadow">
-		Peu
+	<string name="5 O'Clock Shadow">
+		Ombre de 5 heures
 	</string>
 	<string name="All White">
 		Tout blancs
@@ -4495,6 +4718,21 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	<string name="OfflineStatus">
 		Hors ligne
 	</string>
+	<string name="not_online_msg">
+		L'utilisateur n'est pas en ligne - le message sera stocké et remis ultérieurement.
+	</string>
+	<string name="not_online_inventory">
+		L'utilisateur n'est pas en ligne - l'inventaire a été sauvegardé.
+	</string>
+	<string name="IM_announce_incoming">
+		Message entrant de [NAME]
+	</string>
+	<string name="IM_autoresponse_sent">
+		Réponse automatique envoyée : [MESSAGE]
+	</string>
+	<string name="IM_autoresponse_item_sent">
+		Élément de réponse automatique envoyé : [ITEM_NAME]
+	</string>
 	<string name="answered_call">
 		Votre appel a fait l&apos;objet d&apos;une réponse
 	</string>
@@ -4534,14 +4772,14 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	<string name="inventory_folder_offered-im">
 		Dossier de l’inventaire [ITEM_NAME] offert
 	</string>
+	<string name="inventory_item_offered_rlv">
+		Article d'inventaire offert à [NAME]
+	</string>
 	<string name="share_alert">
 		Faire glisser les objets de l&apos;inventaire ici
 	</string>
 	<string name="flickr_post_success">
 		Vous avez publié sur Flickr.
-	</string>
-	<string name="twitter_post_success">
-		Vous avez publié sur Twitter.
 	</string>
 	<string name="no_session_message">
 		(Session IM inexistante)
@@ -4612,6 +4850,9 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	<string name="unread_chat_multiple">
 		[SOURCES] ont dit quelque chose de nouveau
 	</string>
+	<string name="teleport_preamble_compact_chat">
+		Vous êtes maintenant à
+	</string>
 	<string name="session_initialization_timed_out_error">
 		Expiration du délai d&apos;initialisation de la session
 	</string>
@@ -4623,6 +4864,9 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	</string>
 	<string name="premium_voice_morphing_url">
 		https://secondlife.com/destination/voice-morphing-premium
+	</string>
+	<string name="lindenhomes_my_home_url">
+		https://land.secondlife.com/fr-Fr/lindenhomes/my-home.php
 	</string>
 	<string name="paid_you_ldollars">
 		[NAME] vous a payé [AMOUNT] L$ [REASON].
@@ -4687,9 +4931,6 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	<string name="to publish a classified ad">
 		pour publier une petite annonce
 	</string>
-	<string name="giving">
-		Donner [AMOUNT] L$
-	</string>
 	<string name="uploading_costs">
 		Le chargement coûte [AMOUNT] L$
 	</string>
@@ -4701,6 +4942,9 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	</string>
 	<string name="this_object_costs">
 		Cet objet coûte [AMOUNT] L$
+	</string>
+	<string name="giving">
+		Vous voulez donner
 	</string>
 	<string name="group_role_everyone">
 		Tous
@@ -4902,6 +5146,9 @@ du rapport d&apos;infraction
 	<string name="New Sky">
 		Nouveau ciel
 	</string>
+	<string name="New Settings">
+		Nouveaux paramètres
+	</string>
 	<string name="/bow">
 		/s&apos;incliner
 	</string>
@@ -5006,19 +5253,19 @@ du rapport d&apos;infraction
 		Malgré nos efforts, une erreur inattendue s’est produite.
 
 Veuillez vous reporter à https://secondlife-status.statuspage.io afin de déterminer si un problème connu existe avec ce service.
-        Si le problème persiste, vérifiez la configuration de votre réseau et de votre pare-feu.
+Si le problème persiste, vérifiez la configuration de votre réseau et de votre pare-feu.
 	</string>
 	<string name="dateTimeWeekdaysNames">
-		Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday
+		Dimanche:Lundi:Mardi:Mercredi:Jeudi:Vendredi:Samedi
 	</string>
 	<string name="dateTimeWeekdaysShortNames">
-		Sun:Mon:Tue:Wed:Thu:Fri:Sat
+		Dim:Lun:Mar:Mer:Jeu:Ven:Sam
 	</string>
 	<string name="dateTimeMonthNames">
-		January:February:March:April:May:June:July:August:September:October:November:December
+			Janvier:Février:Mars:Avril:Mai:Juin:Juillet:Août:Septembre:Octobre:Novembre:Décembre
 	</string>
 	<string name="dateTimeMonthShortNames">
-		Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec
+		Jan:Fév:Mar:Avr:Mai:Juin:Juil:Août:Sep:Oct:Nov:Déc
 	</string>
 	<string name="dateTimeDayFormat">
 		[MDAY]
@@ -5083,6 +5330,12 @@ Veuillez vous reporter à https://secondlife-status.statuspage.io afin de déter
 	<string name="Premium PlusMembership">
 		Premium Plus
 	</string>
+	<string name="MembershipUpgradeText">
+		Passer au compte Premium
+	</string>
+	<string name="MembershipPremiumText">
+		Mon abonnement Premium
+	</string>
 	<string name="DeleteItems">
 		Supprimer les articles sélectionnés ?
 	</string>
@@ -5144,6 +5397,18 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="CapsLock">
 		CapsLock
+	</string>
+	<string name="Left">
+		Flèche Gauche
+	</string>
+	<string name="Right">
+		Flèche Droite
+	</string>
+	<string name="Up">
+		Flèche Haut
+	</string>
+	<string name="Down">
+		Flèche Bas
 	</string>
 	<string name="Home">
 		Début
@@ -5421,6 +5686,9 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Z">
 		Z
 	</string>
+	<string name="Double LMB">
+		Double clic
+	</string>
 	<string name="BeaconParticle">
 		Affichage des balises de particule (bleu)
 	</string>
@@ -5447,6 +5715,9 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="ParticleHiding">
 		Masquage des particules
+	</string>
+	<string name="Command_360_Capture_Label">
+		Photo 360°
 	</string>
 	<string name="Command_AboutLand_Label">
 		À propos du terrain
@@ -5505,11 +5776,11 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Move_Label">
 		Marcher / Courir / Voler
 	</string>
-	<string name="Command_Outbox_Label">
-		Boîte d&apos;envoi vendeur
-	</string>
 	<string name="Command_People_Label">
 		Personnes
+	</string>
+	<string name="Command_Performance_Label">
+		Performance graphique
 	</string>
 	<string name="Command_Picks_Label">
 		Favoris
@@ -5535,47 +5806,35 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Speak_Label">
 		Parler
 	</string>
-	<string name="Command_Twitter_Label">
-		Twitter
-	</string>
 	<string name="Command_View_Label">
 		Caméra
 	</string>
 	<string name="Command_Voice_Label">
-		Paramètres vocaux
+		Discussion vocale à proximité
+	</string>
+	<string name="Command_Quickprefs_Label">
+		Préférences rapides
 	</string>
 	<string name="Command_AO_Label">
 		Remplacement d'animations
 	</string>
-	<string name="Command_Areasearch_Label">
-		Recherche Zonale
-	</string>
-	<string name="Command_Asset_Blacklist_Label">
-		Liste Noire active
-	</string>
-	<string name="Command_Blocklist_Label">
-		Liste noire
-	</string>
-	<string name="Command_Beacons_Label">
-		Balises
+	<string name="Command_Webbrowser_Label">
+		Navigateur web
 	</string>
 	<string name="Command_Default_Chat_Bar_Label">
-		Conversation
+		Chat
 	</string>
-	<string name="Command_Contact_Sets_Label">
-		Cercles de contacts
-	</string>
-	<string name="Command_Conversation_Log_Label">
-		Enregistrement de conversation
-	</string>
-	<string name="Command_Landmark_Here_Label">
-		Creation de repère
+	<string name="Command_Areasearch_Label">
+		Recherche Zonale
 	</string>
 	<string name="Command_Settings_Debug_Label">
 		Paramètres de débogage
 	</string>
-	<string name="Command_Wearable_Favorites_Label">
-		Vêtements préférés
+	<string name="Command_Statistics_Label">
+		Statistiques
+	</string>
+	<string name="Command_Region_Label">
+		Région/Domaine
 	</string>
 	<string name="Command_Fly_Label">
 		Voler
@@ -5583,11 +5842,11 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Groundsit_Label">
 		S'asseoir au sol
 	</string>
-	<string name="Command_Group_Titles_Label">
-		Titres de Groupe
+	<string name="Command_Sound_Explorer_Label">
+		Explorateur de sons
 	</string>
-	<string name="Command_Move_Lock_Label">
-		Immobiliser
+	<string name="Command_Asset_Blacklist_Label">
+		Liste Noire active
 	</string>
 	<string name="Command_Phototools_Label">
 		Outils photo
@@ -5595,41 +5854,59 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Phototools_View_Label">
 		Outils caméra
 	</string>
-	<string name="Command_Quickprefs_Label">
-		Préférences rapides
-	</string>
-	<string name="Command_RegionTracker_Label">
-		Suivi de région
-	</string>
-	<string name="Command_Region_Label">
-		Région/Domaine
-	</string>
-	<string name="Command_ResyncAnimations_Label">
-		Resynchroniser les animations
-	</string>
-	<string name="Command_RFO_Label">
-		Ne montrer que les amis
-	</string>
-	<string name="Command_Snapshot_To_Disk_Label">
-		Photo sur disque
-	</string>
-	<string name="Command_Sound_Explorer_Label">
-		Explorateur de sons
-	</string>
-	<string name="Command_Statistics_Label">
-		Statistiques
-	</string>
-	<string name="Command_Teleport_History_Label">
-		Historique de téléportation
-	</string>
-	<string name="Command_Webbrowser_Label">
-		Navigateur web
+	<string name="Command_Contact_Sets_Label">
+		Cercles de contacts
 	</string>
 	<string name="Command_Mouselook_Label">
 		Vue subjective
 	</string>
+	<string name="Command_Landmark_Here_Label">
+		Creation de repère
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Historique de téléportation
+	</string>
 	<string name="Command_Pose_Stand_Label">
 		Pose Stand
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Photo sur disque
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
+	</string>
+	<string name="Command_Conversation_Log_Label">
+		Enregistrement des conversations
+	</string>
+	<string name="Command_Move_Lock_Label">
+		Immobiliser
+	</string>
+	<string name="Command_Blocklist_Label">
+		Liste noire
+	</string>
+	<string name="Command_ResyncAnimations_Label">
+		Resynchroniser les animations
+	</string>
+	<string name="Command_RegionTracker_Label">
+		Suivi de région
+	</string>
+	<string name="Command_Group_Titles_Label">
+		Titres de Groupe
+	</string>
+	<string name="Command_Wearable_Favorites_Label">
+		Vêtements préférés
+	</string>
+	<string name="Command_RFO_Label">
+		Ne montrer que les amis
+	</string>
+	<string name="Command_DAO_Label">
+		Ne pas afficher les animesh
+	</string>
+	<string name="Command_Beacons_Label">
+		Balises
+	</string>
+	 <string name="Command_360_Capture_Tooltip">
+		Capturez une image équirectangulaire de 360°.
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Information sur le terrain que vous visitez
@@ -5688,11 +5965,11 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Move_Tooltip">
 		Faire bouger votre avatar
 	</string>
-	<string name="Command_Outbox_Tooltip">
-		Transférer des articles vers votre place de marché afin de les vendre.
-	</string>
 	<string name="Command_People_Tooltip">
 		Amis, groupes et personnes près de vous
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Régler les paramètres graphiques
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Lieux à afficher comme favoris dans votre profil
@@ -5718,14 +5995,101 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Speak_Tooltip">
 		Parler aux personnes près de vous en utilisant votre micro
 	</string>
-	<string name="Command_Twitter_Tooltip">
-		Twitter
-	</string>
 	<string name="Command_View_Tooltip">
 		Changer l&apos;angle de la caméra
 	</string>
 	<string name="Command_Voice_Tooltip">
 		Commandes de réglage du volume des appels et des personnes près de vous dans Second Life.
+	</string>
+	<string name="Command_Quickprefs_Tooltip">
+		Préférences rapides pour modifier des paramètres souvent utilisés
+	</string>
+	<string name="Command_AO_Tooltip">
+		Remplacement d'animation
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Ouvre le navigateur web interne (CTRL+SHIFT+Z)
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		Montre ou cache la barre de conversation
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Recherche des objets dans la zone
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Changer les paramètres de débogage du logiciel (CTRL+ALT+SHIFT+S)
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Affiche les statistiques du navigateur (CTRL+SHIFT+1)
+	</string>
+	<string name="Command_Region_Tooltip">
+		Ouvre les outils de gestion région et domaine (ALT+R)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		S'asseoir sur le sol/Se relever (CTRL+ALT+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Ouvre l'explorateur de sons
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Affiche la liste de tous les éléments mis dans la liste noire
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Outils pour la création d'image (ATL+P).
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Contrôles avancés de la caméra (CTRL+SHIFT+C)
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Gestion des cercles de contacts (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Passer en mode Vue subjective (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Crée un repère à votre position actuelle
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Ouverture de l'historique de téléportation (ALT+H)
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Met l'avatar en pose pour ajuster les objets attachés
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Prend un cliché rapide et le sauvegarde sur le disque dur
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Ouvre le radar pour détecter les avatars à proximité
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Ouvre l'historique des conversations pour consulter les transcriptions des conversations passées
+	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Immobilise l'avatar dans sa position actuelle (CTRL+ALT+P)
+	</string>
+	<string name="Command_Blocklist_Tooltip">
+		Ouvre la liste des éléments bloqués/ignorés
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		Synchronise les animations de l'avatar
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		Suivre le statut de différentes régions
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		Modifier le titre de groupe affiché
+	</string>
+	<string name="Command_Wearable_Favorites_Tooltip">
+		Ouvre la liste des vêtements préférés
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Ne montrez que vos amis, tous les autres avatars seront supprimés. Une fois activé, une téléportation est nécessaire pour rétablir la visibilité des autres.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Ne pas afficher les objets animés (aka Animesh) - Ne pas afficher temporairement tous les animesh visibles (attachés et en liberté). Les animesh qui ne sont pas affichés réapparaitront aprés une téléportation
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Montrer les balises
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actuellement dans la barre d&apos;outils du bas
@@ -5736,101 +6100,20 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Toolbar_Right_Tooltip">
 		actuellement dans la barre d&apos;outils de droite
 	</string>
+	<string name="Command_Fly_Tooltip">
+		Voler/Arrêter de voler (HOME)
+	</string>
 	<string name="Command_Stop_Animations_Label">
 		Arrêter l'animation
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
 		Arrêter l'animation
 	</string>
-	<string name="Command_AO_Tooltip">
-		Remplacement d'animation
+	<string name="Command_Discord_Label">
+		Discord
 	</string>
-	<string name="Command_Areasearch_Tooltip">
-		Recherche des objets dans la zone
-	</string>
-	<string name="Command_Asset_Blacklist_Tooltip">
-		Affiche la liste de tous les éléments mis dans la liste noire
-	</string>
-	<string name="Command_Blocklist_Tooltip">
-		Ouvre la liste des éléments bloqués/ignorés
-	</string>
-	<string name="Command_Beacons_Tooltip">
-		Montrer les balises
-	</string>
-	<string name="Command_Default_Chat_Bar_Tooltip">
-		Montre ou cache la barre de conversation
-	</string>
-	<string name="Command_Contact_Sets_Tooltip">
-		Gestion des cercles de contacts (CTRL+ALT+SHIFT+C)
-	</string>
-	<string name="Command_Conversation_Log_Tooltip">
-		Ouvre l'historique des conversations pour consulter les transcriptions des conversations passées
-	</string>
-	<string name="Command_Landmark_Here_Tooltip">
-		Crée un repère à votre position actuelle
-	</string>
-	<string name="Command_Settings_Debug_Tooltip">
-		Changer les paramètres de débogage du logiciel (CTRL+ALT+SHIFT+S)
-	</string>
-	<string name="Command_Wearable_Favorites_Tooltip">
-		Ouvre la liste des vêtements préférés
-	</string>
-	<string name="Command_Fly_Tooltip">
-		Voler/Arrêter de voler (HOME)
-	</string>
-	<string name="Command_Groundsit_Tooltip">
-		S'asseoir sur le sol/Se relever (CTRL+ALT+S)
-	</string>
-	<string name="Command_Group_Titles_Tooltip">
-		Modifier le titre de groupe affiché
-	</string>
-	<string name="Command_Move_Lock_Tooltip">
-		Immobilise l'avatar dans sa position actuelle (CTRL+ALT+P)
-	</string>
-	<string name="Command_Phototools_Tooltip">
-		Outils pour la création d'image (ATL+P).
-	</string>
-	<string name="Command_Phototools_View_Tooltip">
-		Contrôles avancés de la caméra (CTRL+SHIFT+C)
-	</string>
-	<string name="Command_Quickprefs_Tooltip">
-		Préférences rapides pour modifier des paramètres souvent utilisés
-	</string>
-	<string name="Command_RegionTracker_Tooltip">
-		Suivre le statut de différentes régions
-	</string>
-	<string name="Command_Region_Tooltip">
-		Ouvre les outils de gestion région et domaine (ALT+R)
-	</string>
-	<string name="Command_ResyncAnimations_Tooltip">
-		Synchronise les animations de l'avatar
-	</string>
-	<string name="Command_RFO_Tooltip">
-		Ne montrez que vos amis, tous les autres avatars seront supprimés. Une fois activé, une téléportation est nécessaire pour rétablir la visibilité des autres.
-	</string>
-	<string name="Command_Snapshot_To_Disk_Tooltip">
-		Prend un cliché rapide et le sauvegarde sur le disque dur
-	</string>
-	<string name="Command_Sound_Explorer_Tooltip">
-		Ouvre l'explorateur de sons
-	</string>
-	<string name="Command_Statistics_Tooltip">
-		Affiche les statistiques du navigateur (CTRL+SHIFT+1)
-	</string>
-	<string name="Command_Teleport_History_Tooltip">
-		Ouverture de l'historique de téléportation (ALT+H)
-	</string>
-	<string name="Command_Webbrowser_Tooltip">
-		Ouvre le navigateur web interne (CTRL+SHIFT+Z)
-	</string>
-	<string name="Command_Mouselook_Tooltip">
-		Passer en mode Vue subjective (M)
-	</string>
-	<string name="Command_Pose_Stand_Tooltip">
-		Met l'avatar en pose pour ajuster les objets attachés
-	</string>
-	<string name="Command_Radar_Tooltip">
-		Ouvre le radar pour détecter les avatars à proximité
+	<string name="Command_Discord_Tooltip">
+		Discord
 	</string>
 	<string name="Retain%">
 		Garder%
@@ -5886,11 +6169,144 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="snapshot_quality_very_high">
 		Très élevée
 	</string>
+	<string name="IMPrefix">
+		IM :
+	</string>
+	<string name="SanityCheckEquals">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; doit être à [VALUE_1].
+	</string>
+	<string name="SanityCheckNotEquals">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; ne doit pas être à [VALUE_1].
+	</string>
+	<string name="SanityCheckLessThan">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; doit être inférieur à [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThan">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; doit être supérieur à [VALUE_1].
+	</string>
+	<string name="SanityCheckLessThanEquals">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; doit être inférieur ou égal à [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; doit être supérieur ou égal à [VALUE_1].
+	</string>
+	<string name="SanityCheckBetween">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; doit être entre [VALUE_1] et [VALUE_2].
+	</string>
+	<string name="SanityCheckNotBetween">
+		Le contrôle du paramètre &quot;[CONTROL_NAME]&quot; ne doit pas être entre [VALUE_1] et [VALUE_2].
+	</string>
+	<string name="MediaFilterActionAllow">
+		Autoriser
+	</string>
+	<string name="MediaFilterActionDeny">
+		Refuser
+	</string>
+	<string name="MediaFilterConditionAlways">
+		Toujours
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		toujours
+	</string>
+	<string name="MediaFilterConditionNever">
+		Ne jamais
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		ne jamais
+	</string>
+	<string name="MediaFilterMediaContentBlocked">
+		Les médias du domaine [DOMAIN] ont été bloqués.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		Les médias du domaine [DOMAIN] seront toujours joués.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		Les médias du [DOMAIN] ne seront jamais joués.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		Les médias de l'URL [MEDIAURL] seront toujours joués.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		Les médias de l'URL [MEDIAURL] ne seront jamais joués.
+	</string>
+	 <string name="MediaFilterAudioContentBlocked">
+		Le flux audio du domaine [DOMAIN] a été bloqué.
+	 </string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		Le flux audio du domaine [DOMAIN] sera toujours joué.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		Le flux audio du domaine [DOMAIN] ne sera jamais joué.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		Le flux audio de l'URL [MEDIAURL] sera toujours joué.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		Le flux audio de l'URL [MEDIAURL] ne sera jamais joué.
+	</string>
+	<string name="MediaFilterBlacklist">
+		blacklist
+	</string>
+	<string name="MediaFilterWhitelist">
+		whitelist
+	</string>
+	<string name="UnknownRegion">
+		(région inconnue)
+	</string>
+	<string name="UnknownPosition">
+		(position inconnue)
+	</string>
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION](Double clic pour ouvrir la carte,  Maj-glisser pour vous déplacer)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION](Double clic pour vous téléporter,  Maj-glisser pour vous déplacer)
+	</string>
+	<string name="Collision_Bump">
+		[NAME] vous avez été heurté.
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] vous a poussé avec un script.
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] vous a frappé avec un objet.
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] vous a frappé avec un objet scripté.
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] vous a frappé avec un objet physique.
+	</string>
+	<string name="Collision_UnknownType">
+		[NAME] a causé une collision de type inconnu.
+	</string>
+	<string name="MovelockEnabled">
+		Avatar &gt; Mouvement &gt; Movelock est activé</string>
+	<string name="BusyResponse">
+		réponse en cas d'occupation
+	</string>
 	<string name="TeleportMaturityExceeded">
 		Le résident ne peut pas visiter cette région.
 	</string>
 	<string name="UserDictionary">
 		[User]
+	</string>
+	<string name="RLVaPendingRestart">
+		(redémarrage en cours)
+	</string>
+	<string name="RLVaToggleMessageLogin">
+		RLVa a été [STATE] (aucun redémarrage requis)
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RLVa sera [STATE] après que vous ayez redémarré</string>
+	<string name="RLVaToggleEnabled">
+		activé
+	</string>
+	<string name="RLVaToggleDisabled">
+		désactivé
+	</string>
+	<string name="RLVaStatusDisabled">
+		(désactivé)
 	</string>
 	<string name="experience_tools_experience">
 		Expérience
@@ -6022,23 +6438,23 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		La forme physique n’a pas la version correcte. Configurez la version correcte pour le modèle physique.
 	</string>
 	<string name="couldnt_resolve_host">
-		DNS n&apos;a pas pu résoudre le nom d&apos;hôte([HOSTNAME]). 
-Veuillez vérifier que vous parvenez à vous connecter au site www.secondlife.com. 
-Si c&apos;est le cas, et que vous continuez à recevoir ce message d&apos;erreur, veuillez vous 
+		DNS n&apos;a pas pu résoudre le nom d&apos;hôte([HOSTNAME]).
+Veuillez vérifier que vous parvenez à vous connecter au site www.secondlife.com.
+Si c&apos;est le cas, et que vous continuez à recevoir ce message d&apos;erreur, veuillez vous
 rendre à la section Support et signaler ce problème
 	</string>
 	<string name="ssl_peer_certificate">
-		Le serveur d&apos;identification a rencontré une erreur de connexion SSL. 
-Si vous continuez à recevoir ce message d&apos;erreur, 
-veuillez vous rendre à la section Support du site web 
+		Le serveur d&apos;identification a rencontré une erreur de connexion SSL.
+Si vous continuez à recevoir ce message d&apos;erreur,
+veuillez vous rendre à la section Support du site web
 SecondLife.com et signaler ce problème
 	</string>
 	<string name="ssl_connect_error">
-		Ceci est souvent dû à un mauvais réglage de l&apos;horloge de votre ordinateur. 
-Veuillez aller à Tableaux de bord et assurez-vous que l&apos;heure et la date sont réglés 
-correctement. Vérifiez également que votre réseau et votre pare-feu sont configurés 
-correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez vous rendre 
-à la section Support du site web SecondLife.com et signaler ce problème. 
+		Ceci est souvent dû à un mauvais réglage de l&apos;horloge de votre ordinateur.
+Veuillez aller à Tableaux de bord et assurez-vous que l&apos;heure et la date sont réglés
+correctement. Vérifiez également que votre réseau et votre pare-feu sont configurés
+correctement. Si vous continuez à recevoir ce message d&apos;erreur, veuillez vous rendre
+à la section Support du site web SecondLife.com et signaler ce problème.
 
 [https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Base de connaissances]
 	</string>
@@ -6331,7 +6747,7 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="IgnoredAdHocSession">
 		Vous avez été invité à une conférence (ad-hoc) par [AVATAR_NAME], mais la visionneuse l'a automatiquement ignoré à cause de vos réglages.
 	</string>
-  
+
 	<!-- <FS:Ansariel> Radar notifications -->
 	<string name="camera_no_focus">
 		L'appareil photo ne peut pas faire la mise au point sur l'utilisateur [AVATARNAME] parce qu'il est en dehors de votre distance d'affichage.

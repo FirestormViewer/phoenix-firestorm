@@ -127,7 +127,8 @@ public:
 	// teleport to the tracked item, if there is one
 	void			teleport();
 	void			onChangeMaturity();
-	
+
+	void			onClearBtn();
 	
 	//Slapp instigated avatar tracking
 	void			avatarTrackFromSlapp( const LLUUID& id ); 
@@ -147,7 +148,6 @@ protected:
 	void			onComboTextEntry( );
 	void			onSearchTextEntry( );
 
-	void			onClearBtn();
 	void			onClickTeleportBtn();
 	void			onShowTargetBtn();
 	void			onShowAgentBtn();
@@ -176,7 +176,7 @@ protected:
 	void			onCoordinatesCommit();
 	void		    onCommitSearchResult();
 
-	void			cacheLandmarkPosition();
+    void            onTeleportFinished();
 
 	// <FS:Ansariel> Parcel details on map
 	void			requestParcelInfo(const LLVector3d& pos_global, const LLVector3d& region_origin);
@@ -227,9 +227,31 @@ private:
 	LLCtrlListInterface *	mListFriendCombo;
 	LLCtrlListInterface *	mListLandmarkCombo;
 	LLCtrlListInterface *	mListSearchResults;
+
+    boost::signals2::connection mTeleportFinishConnection;
 };
 
 extern LLFloaterWorldMap* gFloaterWorldMap;
+
+
+class LLPanelHideBeacon : public LLPanel
+{
+public:
+	static LLPanelHideBeacon* getInstance();
+
+	LLPanelHideBeacon();
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void setVisible(BOOL visible);
+	/*virtual*/ void draw();
+
+private:
+	static LLPanelHideBeacon* getPanelHideBeacon();
+	void onHideButtonClick();
+	void updatePosition();
+
+	LLButton* mHideButton;
+
+};
 
 #endif
 

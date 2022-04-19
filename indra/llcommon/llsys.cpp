@@ -202,18 +202,6 @@ LLOSInfo::LLOSInfo() :
 		GetSystemInfo(&si); //if it fails get regular system info 
 	//(Warning: If GetSystemInfo it may result in incorrect information in a WOW64 machine, if the kernel fails to load)
 
-	//msdn microsoft finds 32 bit and 64 bit flavors this way..
-	//http://msdn.microsoft.com/en-us/library/ms724429(VS.85).aspx (example code that contains quite a few more flavors
-	//of windows than this code does (in case it is needed for the future)
-	if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) //check for 64 bit
-	{
-		mOSStringSimple += "64-bit ";
-	}
-	else if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
-	{
-		mOSStringSimple += "32-bit ";
-	}
-
 	// Try calling GetVersionEx using the OSVERSIONINFOEX structure.
 	OSVERSIONINFOEX osvi;
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -261,12 +249,24 @@ LLOSInfo::LLOSInfo() :
             // and likely to return 'compatibility' string.
             // Check presence of dlls/libs or may be their version.
             // <FS:Ansariel> Windows 11 detection
-            //mOSStringSimple = "Microsoft Windows 10/11";
+            //mOSStringSimple = "Microsoft Windows 10/11 ";
             mMajorVer = 11;
             LLStringUtil::replaceString(mOSStringSimple, "10", "11");
             // </FS:Ansariel>
         }
-	}
+    }
+
+    //msdn microsoft finds 32 bit and 64 bit flavors this way..
+    //http://msdn.microsoft.com/en-us/library/ms724429(VS.85).aspx (example code that contains quite a few more flavors
+    //of windows than this code does (in case it is needed for the future)
+    if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) //check for 64 bit
+    {
+        mOSStringSimple += "64-bit ";
+    }
+    else if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
+    {
+        mOSStringSimple += "32-bit ";
+    }
 
 	mOSString = mOSStringSimple;
 	if (mBuild > 0)

@@ -4,73 +4,86 @@
 		Indietro
 	</text>
 	<text name="settings_title">
-		Impostazioni Grafiche
+		Impostazioni grafiche
 	</text>
 	<text name="quality_lbl">
-		Qualita vs Velocita
+		Qualità vs velocità
 	</text>
-	<text name="FasterText">
-		Piu veloce
+	<text name="FasterText" width="50">
+		Velocità
 	</text>
-	<text name="BetterText">
-		Piu Qualita
+	<text name="BetterText" width="100">
+		Maggior qualità
+	</text>
+	<text name="ShadersPrefText">
+		Bassa
+	</text>
+	<text name="ShadersPrefText2">
+		Media
+	</text>
+	<text name="ShadersPrefText3">
+		Alta
+	</text>
+	<text name="ShadersPrefText4">
+		Ultra
 	</text>
 	<text name="quality_desc">
-		La scelta di un preset ripristinera tutte le modifiche manuali apportate.
+		Scegliendo uno di questi preset, perderai le modifiche apportate.
 	</text>
 	<text name="distance_lbl">
-		Distanza di Visibilita
+		Distanza di visibilità
 	</text>
-	<text name="faster_lbl">
-		Piu veloce
+	<text name="faster_lbl" width="50">
+		Velocità
 	</text>
-	<text name="farther_lbl">
-		Piu lontano
+	<slider name="draw_distance" width="290" />
+	<text name="farther_lbl" width="50">
+		Distanza
 	</text>
 	<text name="distance_desc1">
-		Un valore basso ha prestazioni migliori, aumentalo per vedere piu lontano.
+		Con un valore basso migliori le prestazioni, con uno alto vedi più lontano.
 	</text>
 	<text name="environment_lbl">
 		Ambiente
 	</text>
 	<text name="enhancements_desc">
-Ridurre/eliminare le ombre puo aumentare gli FPS ma ha
-un impatto su atmosfera e aspetto della scena.
+Riducendo o eliminando le ombre, possono aumentare considerevolmente
+gli FPS, andando però ad impattare sull'aspetto dello scenario.
 	</text>
 	<text name="RenderShadowDetailText">
-		Origine Ombre:
+		Ombre:
 	</text>
 	<combo_box name="ShadowDetail">
-		<combo_box.item label="Nessuno" name="0" />
+		<combo_box.item label="Nessuna" name="0" />
 		<combo_box.item label="Sole/Luna" name="1" />
-		<combo_box.item label="Sole/Luna + altre sorgenti" name="2" />
+		<combo_box.item label="Sole/Luna + Proiettori" name="2" />
 	</combo_box>
 	<text name="water_lbl">
 		Acqua
 	</text>
 	<text name="water_desc">
-Ridurre qualita agli effetti dell'acqua puo migliorare
-notevolmente la frequenza dei fotogrammi.
+Riducendo la qualità degli effetti sull'acqua, possono aumentare
+considerevolmente gli FPS.
 	</text>
 	<text name="ReflectionsText">
-		Riflessi Acqua:
+		Riflessi acqua:
 	</text>
 	<combo_box name="Reflections">
-		<combo_box.item label="None; opaquo" name="-2" />
-		<combo_box.item label="None; transparente" name="-1" />
+		<combo_box.item label="Nessuno (opaco)" name="-2" />
+		<combo_box.item label="Nessuno (trasparente)" name="-1" />
 		<combo_box.item label="Minimo" name="0" />
-		<combo_box.item label="Terra e alberi" name="1" />
+		<combo_box.item label="Terreno e alberi" name="1" />
 		<combo_box.item label="Tutti gli oggetti statici" name="2" />
 		<combo_box.item label="Tutti gli avatar e gli oggetti" name="3" />
-		<combo_box.item label="Qualunque cosa" name="4" />
+		<combo_box.item label="Tutto" name="4" />
 	</combo_box>
 	<text name="photo_lbl">
 		Fotografia
 	</text>
 	<text name="photo_desc">
-I fotografi hanno bisogno di alta qualita, ma spesso
-a discapito del frame rate. [APP_NAME] phototools puo
-aiutarti a trovare il giusto equilibrio.
+I fotografi necessitano di alta qualità a discapito
+degli FPS. [APP_NAME] Phototools può essere molto
+utile per trovare il giusto bilanciamento.
 	</text>
-	<button name="open_phototools" label="Phototools" tool_tip="Apri gli strumenti fotografici dedicati per le impostazioni avanzate delle foto." />
+	<button name="open_phototools" label="Phototools" tool_tip="Apri Phototools per le impostazioni fotografiche avanzate." />
 </panel>

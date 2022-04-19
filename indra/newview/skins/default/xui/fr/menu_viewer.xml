@@ -59,6 +59,7 @@
 			<menu_item_call label="Recréer le Bridge LSL" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Photo" name="Take Snapshot"/>
+		<menu_item_call label="Photos 360°" name="Capture 360"/>
 		<menu_item_call label="Suivi des transactions" name="money_tracker"/>
 		<menu_item_call label="Stand de pose..." name="pose_stand"/>
 		<menu_item_call label="Préférences..." name="Preferences"/>

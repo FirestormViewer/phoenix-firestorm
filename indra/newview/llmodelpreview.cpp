@@ -3123,6 +3123,7 @@ void LLModelPreview::lookupLODModelFiles(S32 lod)
     std::string lod_filename = mLODFile[LLModel::LOD_HIGH];
     // <FS:Beq> BUG-230890 fix case-sensitive filename handling
     // std::string ext = ".dae";
+    // LLStringUtil::toLower(lod_filename_lower);
     // std::string::size_type i = lod_filename.rfind(ext);
     // if (i != std::string::npos)
     // {
@@ -4185,6 +4186,7 @@ void LLModelPreview::onLODMeshOptimizerParamCommit(S32 requested_lod, bool enfor
     if (!mLODFrozen)
     {
         genMeshOptimizerLODs(requested_lod, mode, 3, enforce_tri_limit);
+        mFMP->refresh(); // <FS:Beq/> BUG-231970 Fix b0rken upload floater refresh
         refresh();
     }
 }

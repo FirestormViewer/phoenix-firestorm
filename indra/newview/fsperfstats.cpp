@@ -123,7 +123,7 @@ namespace FSPerfStats
         FSPerfStats::tunables.userImpostorDistanceTuningEnabled = gSavedSettings.getBOOL("FSAutoTuneImpostorByDistEnabled");
         FSPerfStats::tunables.userFPSTuningStrategy = gSavedSettings.getU32("FSTuningFPSStrategy");
         FSPerfStats::tunables.userTargetFPS = gSavedSettings.getU32("FSTargetFPS");
-        FSPerfStats::tunables.userTargetReflections = gSavedSettings.getU32("FSUserTargetReflections");
+        FSPerfStats::tunables.userTargetReflections = gSavedSettings.getS32("FSUserTargetReflections");
         FSPerfStats::tunables.userAutoTuneEnabled = gSavedSettings.getBOOL("FSAutoTuneFPS");
         FSPerfStats::tunables.userAutoTuneLock = gSavedSettings.getBOOL("FSAutoTuneLock");
         // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
