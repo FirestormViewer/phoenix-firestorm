@@ -40,10 +40,10 @@
 	<menu_item_call label="Verfolgung starten" name="Start Tracking"/>
 	<menu_item_call label="Verfolgung abschalten" name="Stop Tracking"/>
 	<menu name="Minimap Zoom" label="Zoom">
-		<menu_item_call label="Nah" name="Zoom Close"/>
-		<menu_item_call label="Mittel" name="Zoom Medium"/>
-		<menu_item_call label="Weit" name="Zoom Far"/>
-		<menu_item_call label="Standard" name="Zoom Default"/>
+		<menu_item_check label="Sehr nah" name="Zoom very close"/>
+		<menu_item_check label="Nah" name="Zoom close"/>
+		<menu_item_check label="Mittel (Standard)" name="Zoom medium"/>
+		<menu_item_check label="Weit" name="Zoom far"/>
 	</menu>
 	<menu name="Minimap Show" label="Anzeigen">
 		<menu_item_check label="Objekte" name="Objects"/>
@@ -55,15 +55,18 @@
 		<menu_item_check label="Terrain-Texturen" name="Terrain Textures"/>
 		<menu_item_check label="Weltkarten-Texturen" name="World Map Textures"/>
 	</menu>
-	<menu_item_check label="Karte drehen" name="Rotate Map"/>
-	<menu_item_check label="Automatisch zentrieren" name="Auto Center"/>
-	
+	<menu_item_check label="Norden oben" name="North at top"/>
+	<menu_item_check label="Kamera oben" name="Camera at top"/>
+	<menu_item_check label="Automatisch zentrieren" name="Auto-center map"/>
+	<menu_item_call label="Karte re-zentrieren" name="Re-center map"/>
+
 	<menu label="Chatdistanz-Markierungen" name="Chat Distance Rings Menu">
 		<menu_item_check label="Chatdistanz-Markierung anzeigen" name="Chat Distance Rings"/>
 		<menu_item_check label="Flüstern anzeigen" name="Whisper Distance Ring"/>
 		<menu_item_check label="Sprechen anzeigen" name="Chat Distance Ring"/>
 		<menu_item_check label="Rufen anzeigen" name="Shout Distance Ring"/>
 	</menu>
+	<menu_item_call label="Landinformationen anzeigen" name="About Land"/>
 	<menu_item_call label="Ortsprofil anzeigen" name="Place Profile"/>
 	<menu_item_call label="Weltkarte" name="World Map"/>
 </menu>
