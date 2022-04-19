@@ -1274,8 +1274,9 @@ void LLVOAvatarSelf::checkBOMRebakeRequired()
 {
 	if(getRegion())
 	{
-		auto newBOMStatus = getRegion()->bakesOnMeshEnabled();
-		if(!gSavedSettings.getBOOL("CurrentlyUsingBakesOnMesh") != newBOMStatus)
+		auto bom_can_be_used_here = getRegion()->bakesOnMeshEnabled();
+		static const LLCachedControl<bool> using_bom(gSavedSettings, "CurrentlyUsingBakesOnMesh", true);
+		if( using_bom != bom_can_be_used_here)
 		{
 			// force a rebake when the last grid we were on (including previous login) had different BOM support
 			// This replicates forceAppearanceUpdate rather than pulling in the whole of llavatarself.
@@ -1284,7 +1285,7 @@ void LLVOAvatarSelf::checkBOMRebakeRequired()
 				doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
 			}
 			// update the setting even if we are in SL so that switch SL to OS and back 
-			gSavedSettings.setBOOL("CurrentlyUsingBakesOnMesh", newBOMStatus);
+			gSavedSettings.setBOOL("CurrentlyUsingBakesOnMesh", bom_can_be_used_here);
 		}
 	}
 }

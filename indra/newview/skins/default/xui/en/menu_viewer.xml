@@ -3353,10 +3353,11 @@
            name="DoubleClick Teleport"
            shortcut="control|shift|D">
             <on_check
-               function="CheckControl"
-               parameter="DoubleClickTeleport" />
+               function="Advanced.CheckEnabledDoubleClickAction"
+               parameter="teleport_to"/>
             <on_click
-               function="Advanced.ToggleDoubleClickTeleport"/>
+               function="Advanced.SetDoubleClickAction"
+               parameter="teleport_to"/>
           </menu_item_check>
           <!--   	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] -->
 
@@ -4795,21 +4796,21 @@
              label="Double-Click Auto-Pilot"
              name="Double-ClickAuto-Pilot">
                 <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DoubleClickAutoPilot" />
+                 function="Advanced.CheckEnabledDoubleClickAction"
+                 parameter="walk_to" />
                 <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DoubleClickAutoPilot" />
+                 function="Advanced.SetDoubleClickAction"
+                 parameter="walk_to" />
             </menu_item_check>
             <menu_item_check
              label="Double-Click Teleport"
              name="DoubleClick Teleport">
                 <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DoubleClickTeleport" />
+                 function="Advanced.CheckEnabledDoubleClickAction"
+                 parameter="teleport_to" />
                 <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DoubleClickTeleport" />
+                 function="Advanced.SetDoubleClickAction"
+                 parameter="teleport_to" />
             </menu_item_check>
             <menu_item_separator />
 

@@ -289,9 +289,9 @@ public:
 	void 			idleUpdateLoadingEffect();
 	void 			idleUpdateWindEffect();
 	void 			idleUpdateNameTag(const LLVector3& root_pos_last);
-	void			idleUpdateNameTagText(BOOL new_name);
+	void			idleUpdateNameTagText(bool new_name);
 	void			idleUpdateNameTagPosition(const LLVector3& root_pos_last);
-	void			idleUpdateNameTagAlpha(BOOL new_name, F32 alpha);
+	void			idleUpdateNameTagAlpha(bool new_name, F32 alpha);
 	// <FS:CR> Colorize tags
 	//LLColor4		getNameTagColor(bool is_friend);
 	LLColor4		getNameTagColor();
@@ -980,8 +980,8 @@ public:
 	// <FS:Ansariel> Get typing status
 	bool			isTyping() const { return mTyping; }
 private:
-	BOOL			mVisibleChat;
-	BOOL			mVisibleTyping;
+	bool			mVisibleChat;
+	bool			mVisibleTyping;
 
 	//--------------------------------------------------------------------
 	// Lip synch morphs
