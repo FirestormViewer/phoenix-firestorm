@@ -57,6 +57,7 @@
 
 extern BOOL gDebugGL;
 extern BOOL gDebugSession;
+extern BOOL gDebugGLSession;
 extern llofstream gFailLog;
 
 #define LL_GL_ERRS LL_ERRS("RenderState")

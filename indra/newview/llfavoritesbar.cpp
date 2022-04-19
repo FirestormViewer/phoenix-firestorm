@@ -1790,7 +1790,7 @@ void LLFavoritesOrderStorage::destroyClass()
 		file.close();
 		LLFile::remove(filename);
 	}
-	if(mSaveOnExit)
+	if(mSaveOnExit || gSavedSettings.getBOOL("UpdateRememberPasswordSetting"))
 	{
 	    LLFavoritesOrderStorage::instance().saveFavoritesRecord(true);
 	}
@@ -2168,7 +2168,7 @@ BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 		}
 	}
 
-	if((items != mPrevFavorites) || name_changed || pref_changed)
+	if((items != mPrevFavorites) || name_changed || pref_changed || gSavedSettings.getBOOL("UpdateRememberPasswordSetting"))
 	{
 	    std::string filename = getStoredFavoritesFilename();
 		if (!filename.empty())
@@ -2189,6 +2189,12 @@ BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 			LLSD user_llsd;
 			S32 fav_iter = 0;
 			mMissingSLURLs.clear();
+
+            LLSD save_pass;
+            save_pass["save_password"] = gSavedSettings.getBOOL("RememberPassword");
+            user_llsd[fav_iter] = save_pass;
+            fav_iter++;
+
 			for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); it++)
 			{
 				LLSD value;

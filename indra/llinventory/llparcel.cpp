@@ -463,13 +463,13 @@ BOOL LLParcel::importAccessEntry(std::istream& input_stream, LLAccessEntry* entr
         }
         else if ("time" == keyword)
         {
-            S32 when(0);
+            S32 when{};
             LLStringUtil::convertToS32(value, when);
             entry->mTime = when;
         }
         else if ("flags" == keyword)
         {
-            U32 setting(0);
+            U32 setting{};
             LLStringUtil::convertToU32(value, setting);
             entry->mFlags = setting;
         }
