@@ -2315,7 +2315,7 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 
 		// <FS:Ansariel> Niran's optimization
 		const LLTextureEntry* tex_entry = face->getTextureEntry();
-		if (tex_entry && tex_entry->getAlpha() == 0.f)
+		if ( (tex_entry && tex_entry->getAlpha() == 0.f) && ( tex_entry->getGlow() == 0.0 ) )
 		{
 			continue;
 		}

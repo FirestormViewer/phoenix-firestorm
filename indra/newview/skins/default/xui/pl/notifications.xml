@@ -2577,7 +2577,7 @@ URL: [MEDIAURL]
 Domena: [MEDIADOMAIN]
 URL: [MEDIAURL]
 		<form name="form">
-			<button name="Do Now" text="[ACTION] Teraz"/>
+			<button name="Do Now" text="[ACTION] teraz"/>
 			<button name="RememberDomain" text="[CONDITION] Zezwól tej domenie"/>
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
@@ -4832,7 +4832,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="AddPaymentMethod">
 		Na następnej stronie wybierz kwotę L$
 i kliknij przycisk składania zamówienia.
-Będziesz mógł/a dodać metodę płatności w kasie. 
+Będziesz mógł/a dodać metodę płatności w kasie.
 		<form name="form">
 			<button name="Continue" text="Kontyntynuj" />
 			<button name="Cancel" text="Anuluj" />

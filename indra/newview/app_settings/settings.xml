@@ -6929,11 +6929,11 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]</string>
+      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]</string>
       <key>Backup</key>
       <integer>0</integer>
       <!-- LL, possibly privacy leaking search string 
-      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
+      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
 	  -->
     </map>
     <key>GuidebookURL</key>
@@ -8254,19 +8254,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>LoginAsGod</key>
-    <map>
-      <key>Comment</key>
-      <string>Attempt to login with god powers (Linden accounts only)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>LoginLocation</key>
@@ -9700,6 +9687,17 @@
       <key>Value</key>
       <integer>1000</integer>
     </map>
+    <key>FakeInitialOutfitName</key>
+    <map>
+      <key>Comment</key>
+      <string>Pretend that this is first time login and specified name was chosen</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
+    </map>
     <key>NearMeRange</key>
     <map>
       <key>Comment</key>
@@ -9797,7 +9795,7 @@
     <key>NoInventoryLibrary</key>
     <map>
       <key>Comment</key>
-      <string>Do not request inventory library.</string>
+      <string>(Deprecated) Do not request inventory library.</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
