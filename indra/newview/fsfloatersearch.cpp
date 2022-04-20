@@ -344,12 +344,7 @@ void FSFloaterSearch::onTabChange()
 		mDetailsPanel->setVisible(false);
 		mPanelWeb->resetFocusOnLoad();
 	}
-	// <KC> If on legacy people search and skin uses full profile preview, hide preview panel
-	else if (active_panel == mPanelPeople && mPanelProfile)
-	{
-		mDetailsPanel->setVisible(false);
-	}
-	else
+	else if (active_panel == mPanelPeople)
 	{
 		mDetailsPanel->setVisible(mHasSelection);
 	}
@@ -392,19 +387,8 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 		switch (type)
 		{
 			case SC_AVATAR:
-				{
-					// <KC> If skin has legacy full profile view, use it
-					if (mPanelProfile)
-					{
-						mPanelProfile->setVisible(true);
-						mPanelProfile->onOpen(LLSD().with("id", selected_item));
-					}
-					else
-					{
-						LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
-						LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
-					}
-				}
+				LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
+				LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
 				break;
 			case SC_GROUP:
 				mGroupPropertiesRequest = new FSSearchGroupInfoObserver(selected_item, this);

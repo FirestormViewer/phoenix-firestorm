@@ -412,7 +412,6 @@ private:
 	LLTextureCtrl*	mDetailSnapshotParcel;
 	LLIconCtrl*		mDetailMaturity;
 	LLTabContainer*	mTabContainer;
-	LLPanelProfile*	mPanelProfile;
 };
 
 #endif // FS_FLOATERSEARCH_H
