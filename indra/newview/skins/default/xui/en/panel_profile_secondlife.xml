@@ -62,7 +62,7 @@ Account: [ACCTTYPE]
      name="name_details_image"
      follows="all"
      layout="topleft"
-     height="160"
+     height="170"
      auto_resize="false"
      user_resize="false">
 
@@ -81,7 +81,7 @@ Account: [ACCTTYPE]
          name="image_panel"
          follows="all"
          layout="topleft"
-         width="160"
+         width="170"
          auto_resize="false"
          user_resize="false">
 
@@ -133,6 +133,15 @@ Account: [ACCTTYPE]
            height="16"
            follows="left|top|right"
            layout="topleft"/>
+
+          <text
+           top_pad="0"
+           left="2"
+           height="16"
+           right="-1"
+           layout="topleft"
+           follows="left|top|right"
+           name="user_key" />
 
           <text
            name="user_age"
