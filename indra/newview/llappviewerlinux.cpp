@@ -40,16 +40,42 @@
 
 #include <exception>
 
-#include "json/reader.h" // <FS:ND/> To parse manifest.json from pepperflash
-
-
 #include <gio/gio.h>
+#include <resolv.h>
+
+#if (__GLIBC__*1000 + __GLIBC_MINOR__) >= 2034
+#pragma message "Compiling with libresolv stubs"
+extern "C"
+{
+  int __res_nquery(res_state statep,
+                   const char *dname, int qclass, int type,
+                   unsigned char *answer, int anslen)
+  {
+    return res_nquery( statep, dname, qclass, type, answer, anslen );
+  }
+
+  int __dn_expand(const unsigned char *msg,
+                  const unsigned char *eomorig,
+                  const unsigned char *comp_dn, char *exp_dn,
+                  int length)
+  {
+    return dn_expand( msg,eomorig,comp_dn,exp_dn,length);
+  }
+}
+#endif
 
 #if LL_SEND_CRASH_REPORTS
 #include "breakpad/client/linux/handler/exception_handler.h"
 #include "breakpad/common/linux/http_upload.h"
 #include "lldir.h"
 #include "../llcrashlogger/llcrashlogger.h"
+// <FS:LO> Fix linux compile
+#if LL_USESYSTEMLIBS
+#include "jsoncpp/reader.h" // JSON
+#else
+#include "json/reader.h" // JSON
+#endif
+// </FS:LO>
 #endif
 
 #include "fsversionvalues.h"
