@@ -3040,7 +3040,13 @@ bool idle_startup()
 
 	if (STATE_CLEANUP == LLStartUp::getStartupState())
 	{
-		set_startup_status(1.0, "", "");
+		// <FS:Ansariel> Disable this in favor of FS performance floater customization
+        //if (gAgent.isFirstLogin())
+        //{
+        //    gSavedSettings.setBOOL("AutoFPS", TRUE);
+        //}
+		// </FS:Ansariel>
+        set_startup_status(1.0, "", "");
 		display_startup();
 
 		if (!mBenefitsSuccessfullyInit)
