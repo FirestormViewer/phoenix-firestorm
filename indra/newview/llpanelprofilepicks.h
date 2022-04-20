@@ -46,7 +46,7 @@ class LLTextEditor;
 * Panel for displaying Avatar's picks.
 */
 class LLPanelProfilePicks
-    : public LLPanelProfileTab
+    : public LLPanelProfilePropertiesProcessorTab
 {
 public:
     LLPanelProfilePicks();
@@ -63,7 +63,7 @@ public:
 
     /*virtual*/ void resetData();
 
-    /*virtual*/ void updateButtons();
+    void updateButtons();
 
     /**
      * Saves changes.
@@ -100,7 +100,7 @@ private:
 
 
 class LLPanelProfilePick
-    : public LLPanelProfileTab
+    : public LLPanelProfilePropertiesProcessorTab
     , public LLRemoteParcelInfoObserver
 {
 public:

@@ -119,6 +119,7 @@ public:
 	//bool         addUnit();
 	void         addUnit();
 	// </FS:Ansariel>
+    LLUUID       addUnit(const std::string &filename);
 	void         delUnit(LLUUID tracking_id);
 	bool 		checkTextureDimensions(std::string filename);
 

@@ -70,7 +70,7 @@ public:
 * Panel for displaying Avatar's picks.
 */
 class LLPanelProfileClassifieds
-    : public LLPanelProfileTab
+    : public LLPanelProfilePropertiesProcessorTab
 {
 public:
     LLPanelProfileClassifieds();
@@ -86,7 +86,7 @@ public:
 
     /*virtual*/ void resetData();
 
-    /*virtual*/ void updateButtons();
+    void updateButtons();
 
     /*virtual*/ void updateData();
 
@@ -116,7 +116,7 @@ private:
 
 
 class LLPanelProfileClassified
-    : public LLPanelProfileTab
+    : public LLPanelProfilePropertiesProcessorTab
 {
 public:
 
@@ -220,7 +220,7 @@ protected:
 
     void resetControls();
 
-    /*virtual*/ void updateButtons();
+    void updateButtons();
     void updateInfoRect();
 
     static std::string createLocationText(

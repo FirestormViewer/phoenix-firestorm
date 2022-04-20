@@ -308,15 +308,6 @@ BOOL FSFloaterSearch::postBuild()
 	mPanelClassifieds	= findChild<FSPanelSearchClassifieds>("panel_ls_classifieds");
 	mPanelWeb			= findChild<FSPanelSearchWeb>("panel_ls_web");
 
-	// <KC> If skin has legacy full profile view, use it
-	mPanelProfile = mPanelPeople->findChild<LLPanelProfile>("panel_profile_view");
-	if (mPanelProfile)
-	{
-		mPanelProfile->setVisible(false);
-		mPanelProfile->setEmbedded(true);
-		mPanelPeople->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
-	}
-
 	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
 	mDetailTitle =		getChild<LLTextEditor>("title");
 	mDetailDesc =		getChild<LLTextEditor>("desc");

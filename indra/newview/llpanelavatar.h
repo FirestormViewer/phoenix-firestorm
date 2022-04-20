@@ -81,7 +81,6 @@ protected:
 */
 class LLPanelProfileTab
     : public LLPanel
-    , public LLAvatarPropertiesObserver
 {
 public:
 
@@ -106,48 +105,61 @@ public:
     virtual void onOpen(const LLSD& key);
 
     /**
-     * Processes data received from server.
-     */
-    virtual void processProperties(void* data, EAvatarProcessorType type) = 0;
-
-    /**
      * Clears all data received from server.
      */
     virtual void resetData(){};
 
     /*virtual*/ ~LLPanelProfileTab();
 
-    void setEmbedded(bool embedded) { mEmbedded = embedded; }
-
 protected:
 
     LLPanelProfileTab();
+
+    enum ELoadingState
+    {
+        PROFILE_INIT,
+        PROFILE_LOADING,
+        PROFILE_LOADED,
+    };
 
 
     // mLoading: false: Initial state, can request
     //           true:  Data requested, skip duplicate requests (happens due to LLUI's habit of repeated callbacks)
     // mLoaded:  false: Initial state, show loading indicator
     //           true:  Data recieved, which comes in a single message, hide indicator
-    bool getIsLoading() { return mLoading; }
-    void setIsLoading() { mLoading = true; }
-    bool getIsLoaded() { return mLoaded; }
-    void resetLoading() { mLoading = false; mLoaded = false; }
+    ELoadingState getLoadingState() { return mLoadingState; }
+    void setIsLoading() { mLoadingState = PROFILE_LOADING; }
+    virtual void setLoaded();
+    void resetLoading() { mLoadingState = PROFILE_INIT; }
 
-    const bool getEmbedded() const { return mEmbedded; }
+    bool getStarted() { return mLoadingState != PROFILE_INIT; }
+    bool getIsLoaded() { return mLoadingState == PROFILE_LOADED; }
 
     const bool getSelfProfile() const { return mSelfProfile; }
 
     void setApplyProgress(bool started);
 
-    virtual void updateButtons();
-
 private:
 
     LLUUID  mAvatarId;
-    bool    mLoading;
-    bool    mLoaded;
-    bool    mEmbedded;
+    ELoadingState    mLoadingState;
     bool    mSelfProfile;
+};
+
+class LLPanelProfilePropertiesProcessorTab
+    : public LLPanelProfileTab
+    , public LLAvatarPropertiesObserver
+{
+public:
+    LLPanelProfilePropertiesProcessorTab();
+    ~LLPanelProfilePropertiesProcessorTab();
+
+    /*virtual*/ void setAvatarId(const LLUUID& avatar_id);
+
+    /**
+     * Processes data received from server via LLAvatarPropertiesObserver.
+     */
+    virtual void processProperties(void* data, EAvatarProcessorType type) = 0;
 };
 
 #endif // LL_LLPANELAVATAR_H

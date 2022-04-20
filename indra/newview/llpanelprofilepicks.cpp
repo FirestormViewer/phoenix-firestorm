@@ -122,7 +122,7 @@ LLPickHandler gPickHandler;
 //-----------------------------------------------------------------------------
 
 LLPanelProfilePicks::LLPanelProfilePicks()
- : LLPanelProfileTab()
+ : LLPanelProfilePropertiesProcessorTab()
  , mPickToSelectOnLoad(LLUUID::null)
  , mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
 {
@@ -144,7 +144,7 @@ void LLPanelProfilePicks::onOpen(const LLSD& key)
 
     resetData();
 
-    if (getSelfProfile() && !getEmbedded())
+    if (getSelfProfile())
     {
         mNewButton->setVisible(TRUE);
         mNewButton->setEnabled(FALSE);
@@ -322,6 +322,7 @@ void LLPanelProfilePicks::processProperties(const LLAvatarPicks* avatar_picks)
         mTabContainer->selectFirstTab();
     }
 
+    setLoaded();
     updateButtons();
 }
 
@@ -333,9 +334,7 @@ void LLPanelProfilePicks::resetData()
 
 void LLPanelProfilePicks::updateButtons()
 {
-    LLPanelProfileTab::updateButtons();
-
-    if (getSelfProfile() && !getEmbedded())
+    if (getSelfProfile())
     {
         // <FS:Ansariel> RLVa support
         //mNewButton->setEnabled(canAddNewPick());
@@ -364,7 +363,7 @@ void LLPanelProfilePicks::updateData()
 {
     // Send picks request only once
     LLUUID avatar_id = getAvatarId();
-    if (!getIsLoading() && avatar_id.notNull())
+    if (!getStarted() && avatar_id.notNull())
     {
         setIsLoading();
         mNoItemsLabel->setValue(LLTrans::getString("PicksClassifiedsLoadingText"));
@@ -404,7 +403,7 @@ bool LLPanelProfilePicks::canDeletePick()
 //-----------------------------------------------------------------------------
 
 LLPanelProfilePick::LLPanelProfilePick()
- : LLPanelProfileTab()
+ : LLPanelProfilePropertiesProcessorTab()
  , LLRemoteParcelInfoObserver()
  , mSnapshotCtrl(NULL)
  , mPickId(LLUUID::null)
@@ -483,7 +482,7 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
 
     resetDirty();
 
-    if (getSelfProfile() && !getEmbedded())
+    if (getSelfProfile())
     {
         mPickName->setEnabled(TRUE);
         mPickDescription->setEnabled(TRUE);
@@ -551,7 +550,7 @@ void LLPanelProfilePick::processProperties(void* data, EAvatarProcessorType type
     mPickDescription->setParseHTML(true);
     mParcelId = pick_info->parcel_id;
     setSnapshotId(pick_info->snapshot_id);
-    if (!getSelfProfile() || getEmbedded())
+    if (!getSelfProfile())
     {
         mSnapshotCtrl->setEnabled(FALSE);
     }
@@ -568,7 +567,7 @@ void LLPanelProfilePick::processProperties(void* data, EAvatarProcessorType type
     // edit the Pick and we have to update Pick info panel.
     // revomeObserver is called from onClickBack
 
-    updateButtons();
+    setLoaded();
 }
 
 void LLPanelProfilePick::apply()

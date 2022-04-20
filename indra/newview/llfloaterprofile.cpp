@@ -62,9 +62,6 @@ BOOL LLFloaterProfile::postBuild()
 {
     mPanelProfile = findChild<LLPanelProfile>(PANEL_PROFILE_VIEW);
 
-    childSetAction("ok_btn", boost::bind(&LLFloaterProfile::onOKBtn, this));
-    childSetAction("cancel_btn", boost::bind(&LLFloaterProfile::onCancelBtn, this));
-
     return TRUE;
 }
 
@@ -81,17 +78,6 @@ bool LLFloaterProfile::isPickTabSelected()
 void LLFloaterProfile::showClassified(const LLUUID& classified_id, bool edit)
 {
     mPanelProfile->showClassified(classified_id, edit);
-}
-
-void LLFloaterProfile::onOKBtn()
-{
-    mPanelProfile->apply();
-    closeFloater();
-}
-
-void LLFloaterProfile::onCancelBtn()
-{
-    closeFloater();
 }
 
 void LLFloaterProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)

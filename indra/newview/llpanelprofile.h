@@ -41,13 +41,15 @@
 
 // class LLPanelProfileSecondLife;
 // class LLPanelProfileWeb;
-// class LLPanelProfileInterests;
 // class LLPanelProfilePicks;
 // class LLPanelProfileFirstLife;
 // class LLPanelProfileNotes;
 
 class LLAvatarName;
+class LLButton;
 class LLCheckBoxCtrl;
+class LLComboBox;
+class LLIconCtrl;
 class LLTabContainer;
 class LLTextBox;
 class LLTextureCtrl;
@@ -60,6 +62,7 @@ class LLTextEditor;
 class LLPanelProfileClassifieds;
 class LLPanelProfilePicks;
 class LLViewerFetchedTexture;
+
 
 /**
 * Panel for displaying Avatar's second life related info.
@@ -76,11 +79,6 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 
 	/**
-	 * Saves changes.
-	 */
-	void apply(LLAvatarData* data);
-
-	/**
 	 * LLFriendObserver trigger
 	 */
 	virtual void changed(U32 mask);
@@ -93,8 +91,6 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-
 	void resetData();
 
 	/**
@@ -104,52 +100,38 @@ public:
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
+    void setProfileImageUploading(bool loading);
+    void setProfileImageUploaded(const LLUUID &image_asset_id);
+
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 protected:
 	/**
 	 * Process profile related data received from server.
 	 */
-	virtual void processProfileProperties(const LLAvatarData* avatar_data);
+	void processProfileProperties(const LLAvatarData* avatar_data);
 
 	/**
 	 * Processes group related data received from server.
 	 */
-	virtual void processGroupProperties(const LLAvatarGroups* avatar_groups);
+	void processGroupProperties(const LLAvatarGroups* avatar_groups);
 
 	/**
 	 * Fills common for Avatar profile and My Profile fields.
 	 */
-	virtual void fillCommonData(const LLAvatarData* avatar_data);
+	void fillCommonData(const LLAvatarData* avatar_data);
 
 	/**
 	 * Fills partner data.
 	 */
-	virtual void fillPartnerData(const LLAvatarData* avatar_data);
+	void fillPartnerData(const LLAvatarData* avatar_data);
 
 	/**
 	 * Fills account status.
 	 */
-	virtual void fillAccountStatus(const LLAvatarData* avatar_data);
+	void fillAccountStatus(const LLAvatarData* avatar_data);
 
-	void onMapButtonClick();
-
-	/**
-	 * Opens "Pay Resident" dialog.
-	 */
-	void pay();
-
-	/**
-	 * Add/remove resident to/from your block list.
-	 * Updates button focus
-	 */
-	void onClickToggleBlock();
-
-	void onAddFriendButtonClick();
-	void onIMButtonClick();
-	void onTeleportButtonClick();
-
-	void onGroupInvite();
+    void fillRightsData();
 
     void onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep);
     static void onImageLoaded(BOOL success,
@@ -178,45 +160,45 @@ protected:
 	void processOnlineStatus(bool online);
 
 private:
-    /*virtual*/ void updateButtons();
-	void onClickSetName();
-	void onCommitTexture();
-	void onCommitMenu(const LLSD& userdata);
+    /*virtual*/ void setLoaded();
+    void onCommitMenu(const LLSD& userdata);
+    bool onEnableMenu(const LLSD& userdata);
+    bool onCheckMenu(const LLSD& userdata);
 	void onAvatarNameCacheSetName(const LLUUID& id, const LLAvatarName& av_name);
+
+    void setDescriptionText(const std::string &text);
+    void onSetDescriptionDirty();
+    void onShowInSearchCallback();
+    void onSaveDescriptionChanges();
+    void onDiscardDescriptionChanges();
+    void onShowAgentPermissionsDialog();
 
 private:
 	typedef std::map<std::string, LLUUID> group_map_t;
 	group_map_t				mGroups;
 	void					openGroupProfile();
 
-	LLTextBox*			mStatusText;
 	LLGroupList*		mGroupList;
-	LLCheckBoxCtrl*		mShowInSearchCheckbox;
-	LLTextureCtrl*		mSecondLifePic;
+    LLComboBox*			mShowInSearchCombo;
+    LLIconCtrl*			mSecondLifePic;
 	LLPanel*			mSecondLifePicLayout;
-	LLTextBase*			mDescriptionEdit;
-	LLButton*			mTeleportButton;
-	LLButton*			mShowOnMapButton;
-	LLButton*			mBlockButton;
-	LLButton*			mUnblockButton;
-    LLUICtrl*           mNameLabel;
-	LLButton*			mDisplayNameButton;
-	LLButton*			mAddFriendButton;
-	LLButton*			mGroupInviteButton;
-	LLButton*			mPayButton;
-	LLButton*			mIMButton;
-	LLMenuButton*		mCopyMenuButton;
-	LLPanel*			mGiveInvPanel;
+    LLTextEditor*		mDescriptionEdit;
+    LLMenuButton*		mAgentActionMenuButton;
+    LLButton*			mSaveDescriptionChanges;
+    LLButton*			mDiscardDescriptionChanges;
+    LLButton*			mSeeOnlineToggle;
+    LLButton*			mSeeOnMapToggle;
+    LLButton*			mEditObjectsToggle;
 	LLMenuButton*		mOverflowButton; // <FS:Ansariel> Gear button
 
+    LLHandle<LLFloater>	mFloaterPermissionsHandle;
+
 	bool				mVoiceStatus;
+    bool				mWaitingForImageUpload;
+    bool				mAllowPublish;
+    std::string			mDescriptionText;
 
 	boost::signals2::connection	mAvatarNameCacheConnection;
-
-	// <FS:Ansariel> RLVa support
-	boost::signals2::connection mRlvBehaviorCallbackConnection;
-	void updateRlvRestrictions(ERlvBehaviour behavior);
-	// </FS:Ansariel>
 };
 
 
@@ -235,14 +217,7 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-
 	void resetData();
-
-	/**
-	 * Saves changes.
-	 */
-	void apply(LLAvatarData* data);
 
 	/**
 	 * Loads web profile.
@@ -256,7 +231,6 @@ public:
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 protected:
-	/*virtual*/ void updateButtons();
 	void onCommitLoad(LLUICtrl* ctrl);
 
 private:
@@ -269,41 +243,6 @@ private:
 
 	boost::signals2::connection	mAvatarNameCacheConnection;
 };
-
-/**
-* Panel for displaying Avatar's interests.
-*/
-class LLPanelProfileInterests
-	: public LLPanelProfileTab
-{
-public:
-	LLPanelProfileInterests();
-	/*virtual*/ ~LLPanelProfileInterests();
-
-	/*virtual*/ void onOpen(const LLSD& key);
-
-	/*virtual*/ BOOL postBuild();
-
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-
-	void resetData();
-
-	/**
-	 * Saves changes.
-	 */
-	virtual void apply();
-
-protected:
-	/*virtual*/ void updateButtons();
-
-private:
-	LLCheckBoxCtrl*	mWantChecks[8];
-	LLCheckBoxCtrl*	mSkillChecks[6];
-	LLLineEditor*	mWantToEditor;
-	LLLineEditor*	mSkillsEditor;
-	LLLineEditor*	mLanguagesEditor;
-};
-
 
 /**
 * Panel for displaying Avatar's first life related info.
@@ -319,26 +258,32 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
     void processProperties(const LLAvatarData* avatar_data);
 
 	void resetData();
 
-	/**
-	 * Saves changes.
-	 */
-	void apply(LLAvatarData* data);
+    void setProfileImageUploading(bool loading);
+    void setProfileImageUploaded(const LLUUID &image_asset_id);
 
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 protected:
-	/*virtual*/ void updateButtons();
-	void onDescriptionFocusReceived();
+	/*virtual*/ void setLoaded();
+
+    void onChangePhoto();
+    void onRemovePhoto();
+    void setDescriptionText(const std::string &text);
+    void onSetDescriptionDirty();
+    void onSaveDescriptionChanges();
+    void onDiscardDescriptionChanges();
 
 	LLTextEditor*	mDescriptionEdit;
-    LLTextureCtrl*  mPicture;
+    LLIconCtrl*		mPicture;
+    LLButton* mChangePhoto;
+    LLButton* mRemovePhoto;
+    LLButton* mSaveChanges;
+    LLButton* mDiscardChanges;
 
-	bool			mIsEditing;
 	std::string		mCurrentDescription;
 };
 
@@ -347,7 +292,6 @@ protected:
  */
 class LLPanelProfileNotes
 	: public LLPanelProfileTab
-	, public LLFriendObserver
 {
 public:
 	LLPanelProfileNotes();
@@ -355,51 +299,28 @@ public:
 
 	virtual void setAvatarId(const LLUUID& avatar_id);
 
-	/**
-	 * LLFriendObserver trigger
-	 */
-	virtual void changed(U32 mask);
-
 	/*virtual*/ void onOpen(const LLSD& key);
 
 	/*virtual*/ BOOL postBuild();
 
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
     void processProperties(LLAvatarNotes* avatar_notes);
 
 	void resetData();
 
 	/*virtual*/ void updateData();
 
-	/**
-	 * Saves changes.
-	 */
-	virtual void apply();
-
-    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-
 protected:
-	/**
-	 * Fills rights data for friends.
-	 */
-	void fillRightsData();
-
-	void rightsConfirmationCallback(const LLSD& notification, const LLSD& response);
-	void confirmModifyRights(bool grant);
-	void onCommitRights();
 	void onCommitNotes();
-	void enableCheckboxes(bool enable);
+    void setNotesText(const std::string &text);
+    void onSetNotesDirty();
+    void onSaveNotesChanges();
+    void onDiscardNotesChanges();
 
-	void applyRights();
-
-    LLCheckBoxCtrl*     mOnlineStatus;
-	LLCheckBoxCtrl*     mMapRights;
-	LLCheckBoxCtrl*     mEditObjectRights;
 	LLTextEditor*       mNotesEditor;
+    LLButton* mSaveChanges;
+    LLButton* mDiscardChanges;
 
-    std::string			mURLWebProfile;
-
-    boost::signals2::connection	mAvatarNameCacheConnection;
+    std::string		mCurrentNotes;
 };
 
 
@@ -417,14 +338,7 @@ public:
 
     /*virtual*/ void updateData();
 
-    /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-
     /*virtual*/ void onOpen(const LLSD& key);
-
-    /**
-     * Saves changes.
-     */
-    void apply();
 
     void showPick(const LLUUID& pick_id = LLUUID::null);
     bool isPickTabSelected();
@@ -443,11 +357,10 @@ private:
 
     LLPanelProfileSecondLife*   mPanelSecondlife;
     LLPanelProfileWeb*          mPanelWeb;
-    LLPanelProfileInterests*    mPanelInterests;
     LLPanelProfilePicks*        mPanelPicks;
     LLPanelProfileClassifieds*  mPanelClassifieds;
     LLPanelProfileFirstLife*    mPanelFirstlife;
-    LLPanelProfileNotes*         mPanelNotes;
+    LLPanelProfileNotes*        mPanelNotes;
     LLTabContainer*             mTabContainer;
 
     // Todo: due to server taking minutes to update this needs a more long term storage
