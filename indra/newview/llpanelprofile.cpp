@@ -1369,6 +1369,14 @@ void LLProfileImagePicker::notify(const std::vector<std::string>& filenames)
     {
         return;
     }
+
+    // <FS:Ansariel> Crash fix
+    if (filenames.empty())
+    {
+        return;
+    }
+    // </FS:Ansariel>
+
     std::string file_path = filenames[0];
     if (file_path.empty())
     {
