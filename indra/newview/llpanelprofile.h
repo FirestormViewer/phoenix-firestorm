@@ -178,6 +178,7 @@ private:
 	group_map_t				mGroups;
 	void					openGroupProfile();
 
+	LLTextBox*			mStatusText; // <FS:Ansariel> Undo LL dumb-down junk
 	LLGroupList*		mGroupList;
     LLComboBox*			mShowInSearchCombo;
     LLIconCtrl*			mSecondLifePic;
@@ -189,7 +190,6 @@ private:
     LLButton*			mSeeOnlineToggle;
     LLButton*			mSeeOnMapToggle;
     LLButton*			mEditObjectsToggle;
-	LLMenuButton*		mOverflowButton; // <FS:Ansariel> Gear button
 
     LLHandle<LLFloater>	mFloaterPermissionsHandle;
 

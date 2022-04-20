@@ -9,6 +9,14 @@
  follows="all"
  layout="topleft"
 >
+    <string
+     name="status_online">
+Online
+    </string>
+    <string
+     name="status_offline">
+Offline
+    </string>
    <string 
     name="AgeFormat">
       Born on: [REG_DATE]
@@ -147,6 +155,7 @@ Account: [ACCTTYPE]
            follows="left|top|right"
            layout="topleft"
            translate="false"
+           icon_positioning="left"
            use_ellipses="true" />
 
           <text
@@ -184,6 +193,16 @@ Account: [ACCTTYPE]
            image_pressed_selected="DropDown_Press"
            image_disabled="DropDown_Disabled"
            name="agent_actions_menu" />
+
+          <text
+           name="status"
+           halign="center"
+           bottom="-4"
+           width="50"
+           right="-1"
+           height="16"
+           follows="right|bottom"
+           layout="topleft"/>
         </layout_panel>
         
         <layout_panel

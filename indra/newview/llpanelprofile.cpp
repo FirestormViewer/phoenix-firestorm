@@ -844,6 +844,11 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mSeeOnMapToggle         = getChild<LLButton>("allow_to_see_on_map");
     mEditObjectsToggle      = getChild<LLButton>("allow_edit_my_objects");
 
+    // <FS:Ansariel> Undo LL dumb-down junk
+    mStatusText = getChild<LLTextBox>("status");
+    mStatusText->setVisible(FALSE);
+    // </FS:Ansariel>
+
     mShowInSearchCombo->setCommitCallback([this](LLUICtrl*, void*) { onShowInSearchCallback(); }, nullptr);
     mGroupList->setDoubleClickCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { LLPanelProfileSecondLife::openGroupProfile(); });
     mGroupList->setReturnCallback([this](LLUICtrl*, const LLSD&) { LLPanelProfileSecondLife::openGroupProfile(); });
@@ -950,6 +955,8 @@ void LLPanelProfileSecondLife::resetData()
     mSeeOnMapToggle->setToggleState(false);
     mEditObjectsToggle->setToggleState(false);
     childSetVisible("permissions_panel", false);
+
+    mStatusText->setVisible(FALSE); // <FS:Ansariel> Undo LL dumb-down junk
 }
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
@@ -1307,6 +1314,16 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
 
 void LLPanelProfileSecondLife::processOnlineStatus(bool online)
 {
+    // <FS:Ansariel> Undo LL dumb-down junk
+    mStatusText->setVisible(isGrantedToSeeOnlineStatus());
+
+    std::string status = getString(online ? "status_online" : "status_offline");
+
+    mStatusText->setValue(status);
+    mStatusText->setColor(online ?
+        LLUIColorTable::instance().getColor("StatusUserOnline") :
+        LLUIColorTable::instance().getColor("StatusUserOffline"));
+    // </FS:Ansariel>
 }
 
 void LLPanelProfileSecondLife::setLoaded()
