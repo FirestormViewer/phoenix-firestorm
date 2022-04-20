@@ -21,4 +21,7 @@
 	<rows name="start_gesture">
 		<columns name="lst_action" value="Geste beginnen" />
 	</rows>
+	<rows name="script_trigger_lbutton">
+		<columns name="lst_action" value="Interagieren (LMB)" />
+	</rows>
 </contents>

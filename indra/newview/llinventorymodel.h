@@ -72,6 +72,8 @@ public:
 
 	S32 mFatalErrorCount;
 	S32 mWarningCount;
+    S32 mLoopCount; // Presence of folders whose ansestors loop onto themselves
+    S32 mOrphanedCount; // Missing or orphaned items, links and folders
 	bool mInitialized;
 	bool mFatalNoRootFolder;
 	bool mFatalNoLibraryRootFolder;
@@ -301,9 +303,14 @@ public:
 
 	// Check if one object has a parent chain up to the category specified by UUID.
 	BOOL isObjectDescendentOf(const LLUUID& obj_id, const LLUUID& cat_id) const;
-
+    
+    enum EAnscestorResult{
+        ANSCESTOR_OK = 0,
+        ANSCESTOR_MISSING = 1,
+        ANSCESTOR_LOOP = 2,
+    };
 	// Follow parent chain to the top.
-	bool getObjectTopmostAncestor(const LLUUID& object_id, LLUUID& result) const;
+    EAnscestorResult getObjectTopmostAncestor(const LLUUID& object_id, LLUUID& result) const;
 
 	// <FS:Ansariel> Re-added because of start folder id
 	// Collect all items in inventory that are linked to item_id.

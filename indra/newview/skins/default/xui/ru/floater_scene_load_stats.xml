@@ -19,8 +19,12 @@
 				<stat_view name="texture" label="Текстура" >
 					<stat_bar name="texture_cache_hits" label="Частота попадания в кэш"/>
 					<stat_bar name="texture_cache_read_latency" label="Задержка чтения кэша"/>
+					<stat_bar name="texture_decode_latency" label="Задержка декодирования кэша"/>
+					<stat_bar name="texture_decode_latency" label="Задержка записи в кэш"/>
+					<stat_bar name="texture_fetch_latency" label="Задержка выборки кэша"/>
+					<stat_bar name="texture_fetch_time" label="Время выборки кэша"/>
 					<stat_bar name="numimagesstat" label="Счетчик"/>
-					<stat_bar name="numrawimagesstat" label="Счетчик Raw"/>
+					<stat_bar name="numrawimagesstat" label="Необработанный счетчик"/>
 				</stat_view>
 				<!--Network Stats-->
 				<stat_view name="network" label="Сеть" >

@@ -845,8 +845,8 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		LL_DEBUGS("import") << "Setting clickaction on " << prim_uuid.asString() << " to " << prim["clickaction"].asInteger() << LL_ENDL;
 		gMessageSystem->newMessageFast(_PREHASH_ObjectClickAction);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object->getLocalID() );
 		gMessageSystem->addU8("ClickAction", (U8)prim["clickaction"].asInteger());
@@ -860,8 +860,8 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		LL_DEBUGS("import") << "Setting name on " << prim_uuid.asString() << " to " << prim_name << LL_ENDL;
 		gMessageSystem->newMessageFast(_PREHASH_ObjectName);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_LocalID, object_local_id);
 		gMessageSystem->addStringFast(_PREHASH_Name, prim_name);
@@ -873,8 +873,8 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		LL_DEBUGS("import") << "Setting description on " << prim_uuid.asString() << " to " << prim["description"].asString() << LL_ENDL;
 		gMessageSystem->newMessageFast(_PREHASH_ObjectDescription);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_LocalID, object_local_id);
 		gMessageSystem->addStringFast(_PREHASH_Description, prim["description"].asString());
@@ -887,8 +887,8 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		LL_DEBUGS("import") << "Setting permissions on " << prim_uuid.asString() << LL_ENDL;
 		gMessageSystem->newMessageFast(_PREHASH_ObjectPermissions);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
 		gMessageSystem->addBOOLFast(_PREHASH_Override, (BOOL)FALSE);
 
@@ -953,8 +953,8 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			LL_DEBUGS("import") << "Setting sale info on " << prim_uuid.asString() << LL_ENDL;
 			gMessageSystem->newMessageFast(_PREHASH_ObjectSaleInfo);
 			gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-			gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+			gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+			gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_LocalID, object->getLocalID());
 			sale_info.packMessage(gMessageSystem);
@@ -1155,8 +1155,8 @@ void FSFloaterImport::setPrimPosition(U8 type, LLViewerObject* object, LLVector3
 {
 	gMessageSystem->newMessage(_PREHASH_MultipleObjectUpdate);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object->getLocalID());
 	gMessageSystem->addU8Fast(_PREHASH_Type, type);
@@ -1298,7 +1298,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 			ci_data->asset_type = asset_type;
 			ci_data->post_asset_upload = false;
 			LLPointer<LLInventoryCallback> cb = new FSCreateItemCallback(ci_data);
-			create_inventory_item(gAgent.getID(), gAgent.getSessionID(),
+			create_inventory_item(gAgentID, gAgentSessionID,
 					      folder_id, LLTransactionID::tnull, name, description, asset_type, inventory_type,
 					      NO_INV_SUBTYPE, PERM_ALL, cb);
 			return;
@@ -1322,7 +1322,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 			ci_data->asset_type = asset_type;
 			ci_data->post_asset_upload = false;
 			LLPointer<LLInventoryCallback> cb = new FSCreateItemCallback(ci_data);
-			create_inventory_item(gAgent.getID(), gAgent.getSessionID(),
+			create_inventory_item(gAgentID, gAgentSessionID,
 					      folder_id, LLTransactionID::tnull, name, description, asset_type, inventory_type,
 					      NO_INV_SUBTYPE, PERM_MOVE | PERM_TRANSFER, cb);
 			return;
@@ -1372,7 +1372,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 			ci_data->asset_type = asset_type;
 			ci_data->post_asset_upload = false;
 			LLPointer<LLInventoryCallback> cb = new FSCreateItemCallback(ci_data);
-			create_inventory_item(gAgent.getID(), gAgent.getSessionID(),
+			create_inventory_item(gAgentID, gAgentSessionID,
 					      folder_id, LLTransactionID::tnull, name, description, asset_type, inventory_type,
 					      NO_INV_SUBTYPE, PERM_ALL, cb);
 			return;
@@ -1495,7 +1495,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 	data->mAssetInfo.setDescription(description);
 	data->mPreferredLocation = folder_type;
 
-	if(!url.empty())
+	if (!url.empty())
 	{
 		if (new_file_agent_inventory)
 		{
@@ -1508,11 +1508,9 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 			body["group_mask"] = LLSD::Integer(LLFloaterPerms::getGroupPerms(perms_prefix));
 			body["everyone_mask"] = LLSD::Integer(LLFloaterPerms::getEveryonePerms(perms_prefix));
 		}
-		
 
-		boost::shared_ptr< LLResourceData> pData( data, resourceDeleter );
-
-		LLCoprocedureManager::instance().enqueueCoprocedure( "FSImporter", "Upload asset", boost::bind( uploadCoroutine, _1, url, body, new_asset_id, asset_type, pData ) );
+		boost::shared_ptr< LLResourceData> pData(data, resourceDeleter);
+		LLCoprocedureManager::instance().enqueueCoprocedure("AssetStorage", "Upload asset", boost::bind( uploadCoroutine, _1, url, body, new_asset_id, asset_type, pData));
 
 		LL_DEBUGS("import") << "Asset upload via capability of " << new_asset_id.asString() << " to " << url << " of " << asset_id.asString() << LL_ENDL;
 	}
@@ -1583,10 +1581,10 @@ void FSFloaterImport::onAssetUploadComplete(const LLUUID& uuid, void* userdata, 
 						LLMessageSystem* msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_MoneyTransferRequest);
 						msg->nextBlockFast(_PREHASH_AgentData);
-						msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-						msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 						msg->nextBlockFast(_PREHASH_MoneyData);
-						msg->addUUIDFast(_PREHASH_SourceID, gAgent.getID());
+						msg->addUUIDFast(_PREHASH_SourceID, gAgentID);
 						msg->addUUIDFast(_PREHASH_DestID, LLUUID::null);
 						msg->addU8("Flags", 0);
 						// we tell the sim how much we were expecting to pay so it
@@ -1613,7 +1611,7 @@ void FSFloaterImport::onAssetUploadComplete(const LLUUID& uuid, void* userdata, 
 					fs_data->post_asset_upload = true;
 					fs_data->post_asset_upload_id = asset_id;
 					LLPointer<LLInventoryCallback> cb = new FSCreateItemCallback(fs_data);
-					create_inventory_item(gAgent.getID(), gAgent.getSessionID(),
+					create_inventory_item(gAgentID, gAgentSessionID,
 							      folder_id, data->mAssetInfo.mTransactionID, data->mAssetInfo.getName(),
 							      data->mAssetInfo.getDescription(), data->mAssetInfo.mType,
 							      data->mInventoryType, fs_data->wearable_type, next_owner_perms,
@@ -2038,7 +2036,7 @@ void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter
 				}
 
 				LLPermissions new_perms;
-				new_perms.init( gAgent.getID(), gAgent.getID(), LLUUID::null, LLUUID::null );
+				new_perms.init( gAgentID, gAgentID, LLUUID::null, LLUUID::null );
 
 				new_perms.initMasks( PERM_ALL, PERM_ALL, everyone_perms, group_perms, next_owner_perms );
 

@@ -13,6 +13,6 @@
 		Sei iscritto
 	</string>
 	<button label="Iscriviti" name="join_btn"/>
-	<button label="Chiudi" name="leave_btn"/>
+	<button label="Abbandona" name="leave_btn"/>
 	<button label="Vedi profilo" name="view_profile_btn"/>
 </floater>

@@ -85,7 +85,7 @@
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="LoginFailedNoNetwork">
-		[SECOND_LIFE_GRID] に接続できませんでした。
+		[CURRENT_GRID] に接続できませんでした。
 「[DIAGNOSTIC]」
 インターネット接続が正常かご確認ください。
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -1564,7 +1564,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 		<usetemplate name="okcancelbuttons" notext="続行" yestext="アカウントを作成..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
-		接続がなかなかできません。 お使いのインターネット接続か、[SECOND_LIFE_GRID] の問題と考えられます。
+		接続がなかなかできません。 お使いのインターネット接続か、[CURRENT_GRID] の問題と考えられます。
 
 インターネット接続を確認してから数分後に再接続するか、ヘルプをクリックして [SUPPORT_SITE] をご覧になるか、テレポートをクリックしてホームに移動してみてください。
 		<url name="url">
@@ -1577,7 +1577,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 		</form>
 	</notification>
 	<notification name="LoginPacketNeverReceivedNoTP">
-		接続がなかなかできません。 お使いのインターネット接続か、[SECOND_LIFE_GRID] の問題と考えられます。
+		接続がなかなかできません。 お使いのインターネット接続か、[CURRENT_GRID] の問題と考えられます。
 
 インターネット接続を確認してから数分後に再接続するか、ヘルプをクリックして [SUPPORT_SITE] をご覧ください。
 		<url name="url">
