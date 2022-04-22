@@ -3230,7 +3230,6 @@ Your current position: [AVATAR_POS]
   <string name="mode_settings_phoenix.xml">Phoenix</string>
   <string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
   <string name="mode_settings_hybrid.xml">Hybrid</string>
-  <string name="mode_settings_latency.xml">Latency</string>
   <string name="mode_settings_text.xml">Text</string>
 
   <string name="Asset_Uploading">Uploading...

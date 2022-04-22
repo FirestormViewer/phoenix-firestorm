@@ -309,10 +309,6 @@
             name="Hybrid"
             value="settings_hybrid.xml" />
            <combo_box.item
-            label="Latency"
-            name="Latency"
-            value="settings_latency.xml" />
-           <combo_box.item
             label="Text"
             name="Text"
             value="settings_text.xml" />
