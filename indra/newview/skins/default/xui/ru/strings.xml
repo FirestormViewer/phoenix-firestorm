@@ -6621,12 +6621,6 @@ ID объекта: [INSPECTING_KEY]
 	<string name="fs_preprocessor_caching_err">
 		Ошибка кэширования подключенного файла '[FILENAME]'
 	</string>
-	<string name="skin_defaults_starlight_location">
-		Отображение вашего текущего местоположения в меню было отключено по умолчанию для серии тем Starlight.
-	</string>
-	<string name="skin_defaults_starlight_navbar">
-		Отображение панели навигации было включено по умолчанию для серии тем Starlight.
-	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] секунд назад
 	</string>

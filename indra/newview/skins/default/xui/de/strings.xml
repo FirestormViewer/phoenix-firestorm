@@ -7034,13 +7034,6 @@ Ihre aktuelle Position: [AVATAR_POS]
 		Fehler beim Cachen der eingebundenen Datei „[FILENAME]“.
 	</string>
 
-	<string name="skin_defaults_starlight_location">
-		Die Anzeige der aktuellen Position in der Menüleiste wurde als Standard für Starlight-Oberflächendesigns deaktiviert.
-	</string>
-	<string name="skin_defaults_starlight_navbar">
-		Die Anzeige der Navigationsleiste wurde als Standard für Starlight-Oberflächendesigns aktiviert.
-	</string>
-
 	<string name="animation_explorer_seconds_ago">
 		Vor [SECONDS] Sekunden
 	</string>
