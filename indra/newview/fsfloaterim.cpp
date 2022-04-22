@@ -411,14 +411,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 					static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
 					std::string skin_indicator(FSInternalSkinCurrent);
 					LLStringUtil::toLower(skin_indicator);
-					if (skin_indicator == "starlight cui")
-					{
-						skin_indicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
-					}
-					else
-					{
-						skin_indicator = skin_indicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
-					}
+					skin_indicator = skin_indicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
 					// </FS:PP>
 					
 					//Address size check
