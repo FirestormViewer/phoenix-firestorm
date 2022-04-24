@@ -81,15 +81,25 @@ if (LINUX)
       libfreetype.a
       )
 
-  list(APPEND viewer_SOURCE_FILES 
-       llkeyboardsdl.cpp 
-       llwindowsdl.cpp
-       )
-  list(APPEND viewer_HEADER_FILES
-       llkeyboardsdl.h
-       llwindowsdl.h
-       )
-
+  if( NOT USE_SDL2 )
+    list(APPEND viewer_SOURCE_FILES
+            llkeyboardsdl.cpp
+            llwindowsdl.cpp
+            )
+    list(APPEND viewer_HEADER_FILES
+            llkeyboardsdl.h
+            llwindowsdl.h
+            )
+  else()
+    list(APPEND viewer_SOURCE_FILES
+            llkeyboardsdl2.cpp
+            llwindowsdl2.cpp
+            )
+    list(APPEND viewer_HEADER_FILES
+            llkeyboardsdl2.h
+            llwindowsdl2.h
+            )
+  endif()
   if (BUILD_HEADLESS)
     set(llwindowheadless_LINK_LIBRARIES
         ${LLCOMMON_LIBRARIES}
@@ -193,9 +203,14 @@ endif (llwindow_HEADER_FILES)
 
 if (SDL_FOUND)
   set_property(TARGET llwindow
-    PROPERTY COMPILE_DEFINITIONS LL_SDL=1
-    )
-endif (SDL_FOUND)
+          PROPERTY COMPILE_DEFINITIONS LL_SDL=1
+          )
+endif ()
+if (SDL2_FOUND)
+  set_property(TARGET llwindow
+          PROPERTY COMPILE_DEFINITIONS LL_SDL2=1 LL_SDL=1
+          )
+endif ()
 
-  target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
+target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
 
