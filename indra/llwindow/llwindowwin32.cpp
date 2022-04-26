@@ -2482,6 +2482,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_SYSKEYDOWN");
             // allow system keys, such as ALT-F4 to be processed by Windows
             eat_keystroke = FALSE;
+            // intentional fall-through here
         }
         case WM_KEYDOWN:
         {
@@ -2506,10 +2507,12 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                         gKeyboard->handleKeyDown(w_param, mask);
                     }
                 });
-                return eat_keystroke;
+            if (eat_keystroke) return 0;    // skip DefWindowProc() handling if we're consuming the keypress 
+            break;
         }
         case WM_SYSKEYUP:
             eat_keystroke = FALSE;
+            // intentional fall-through here
         case WM_KEYUP:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_KEYUP");
@@ -2533,7 +2536,8 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     gKeyboard->handleKeyUp(w_param, mask);
                 }
             });
-            return eat_keystroke;
+            if (eat_keystroke) return 0;    // skip DefWindowProc() handling if we're consuming the keypress 
+            break;
         }
         case WM_IME_SETCONTEXT:
         {

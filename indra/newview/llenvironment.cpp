@@ -1243,6 +1243,10 @@ void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, const LLSe
         mSignalEnvChanged(env, env_version);
 }
 
+void LLEnvironment::setCurrentEnvironmentSelection(LLEnvironment::EnvSelection_t env)
+{
+    mCurrentEnvironment->setEnvironmentSelection(env);
+}
 
 void LLEnvironment::setEnvironment(LLEnvironment::EnvSelection_t env, LLEnvironment::fixedEnvironment_t fixed, S32 env_version)
 {
@@ -1885,8 +1889,22 @@ void LLEnvironment::updateShaderUniforms(LLGLSLShader* shader)
 
 void LLEnvironment::updateSettingsUniforms()
 {
-    updateGLVariablesForSettings(mWaterUniforms, mCurrentEnvironment->getWater());
-    updateGLVariablesForSettings(mSkyUniforms, mCurrentEnvironment->getSky());
+    if (mCurrentEnvironment->getWater())
+    {
+        updateGLVariablesForSettings(mWaterUniforms, mCurrentEnvironment->getWater());
+    }
+    else
+    {
+        LL_WARNS("ENVIRONMENT") << "Failed to update GL variable for water settings, environment is not properly set" << LL_ENDL;
+    }
+    if (mCurrentEnvironment->getSky())
+    {
+        updateGLVariablesForSettings(mSkyUniforms, mCurrentEnvironment->getSky());
+    }
+    else
+    {
+        LL_WARNS("ENVIRONMENT") << "Failed to update GL variable for sky settings, environment is not properly set" << LL_ENDL;
+    }
 }
 
 void LLEnvironment::recordEnvironment(S32 parcel_id, LLEnvironment::EnvironmentInfo::ptr_t envinfo, LLSettingsBase::Seconds transition)

@@ -5744,6 +5744,7 @@ static inline void add_face(T*** list, U32* count, T* face)
     {
         if (count[1] < MAX_FACE_COUNT)
         {
+            face->setDrawOrderIndex(count[1]);
             list[1][count[1]++] = face;
         }
     }
@@ -5751,6 +5752,7 @@ static inline void add_face(T*** list, U32* count, T* face)
     {
         if (count[0] < MAX_FACE_COUNT)
         {
+            face->setDrawOrderIndex(count[0]);
             list[0][count[0]++] = face;
         }
     }
@@ -6012,6 +6014,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                             pool->removeFace(facep);
                         }
                         facep->clearState(LLFace::RIGGED);
+                        facep->mAvatar = NULL;
+                        facep->mSkinInfo = NULL;
                     }
                 }
 
@@ -6430,7 +6434,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 	} 
 }
 
-struct CompareBatchBreakerModified
+struct CompareBatchBreaker
 {
 	bool operator()(const LLFace* const& lhs, const LLFace* const& rhs)
 	{
@@ -6445,18 +6449,23 @@ struct CompareBatchBreakerModified
 		{
 			return lte->getFullbright() < rte->getFullbright();
 		}
-		else if (LLPipeline::sRenderDeferred && lte->getMaterialParams() != rte->getMaterialParams())
-		{
-			return lte->getMaterialParams() < rte->getMaterialParams();
-		}
-		else if (LLPipeline::sRenderDeferred && (lte->getMaterialParams() == rte->getMaterialParams()) && (lte->getShiny() != rte->getShiny()))
+        else if (LLPipeline::sRenderDeferred && lte->getMaterialID() != rte->getMaterialID())
+        {
+            return lte->getMaterialID() < rte->getMaterialID();
+        }
+		else if (lte->getShiny() != rte->getShiny())
 		{
 			return lte->getShiny() < rte->getShiny();
 		}
-		else
+        else if (lhs->getTexture() != rhs->getTexture())
 		{
 			return lhs->getTexture() < rhs->getTexture();
 		}
+        else 
+        {
+            // all else being equal, maintain consistent draw order
+            return lhs->getDrawOrderIndex() < rhs->getDrawOrderIndex();
+        }
 	}
 };
 
@@ -6464,9 +6473,6 @@ struct CompareBatchBreakerRigged
 {
     bool operator()(const LLFace* const& lhs, const LLFace* const& rhs)
     {
-        const LLTextureEntry* lte = lhs->getTextureEntry();
-        const LLTextureEntry* rte = rhs->getTextureEntry();
-
         if (lhs->mAvatar != rhs->mAvatar)
         {
             return lhs->mAvatar < rhs->mAvatar;
@@ -6475,23 +6481,12 @@ struct CompareBatchBreakerRigged
         {
             return lhs->mSkinInfo->mHash < rhs->mSkinInfo->mHash;
         }
-        else if (lhs->getTexture() != rhs->getTexture())
+        else
         {
-            return lhs->getTexture() < rhs->getTexture();
+            // "inherit" non-rigged behavior
+            CompareBatchBreaker comp;
+            return comp(lhs, rhs);
         }
-        else if (lte->getBumpmap() != rte->getBumpmap())
-        {
-            return lte->getBumpmap() < rte->getBumpmap();
-        }
-        else if (LLPipeline::sRenderDeferred && lte->getMaterialID() != rte->getMaterialID())
-        {
-            return lte->getMaterialID() < rte->getMaterialID();
-        }
-        else // if (LLPipeline::sRenderDeferred && (lte->getMaterialParams() == rte->getMaterialParams()) && (lte->getShiny() != rte->getShiny()))
-        {
-            return lte->getShiny() < rte->getShiny();
-        }
-        
     }
 };
 
@@ -6540,7 +6535,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
         else if (!distance_sort)
         {
             //sort faces by things that break batches, not including avatar and mesh id
-            std::sort(faces, faces + face_count, CompareBatchBreakerModified());
+            std::sort(faces, faces + face_count, CompareBatchBreaker());
         }
 		else
 		{

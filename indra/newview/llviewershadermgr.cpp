@@ -102,6 +102,7 @@ LLGLSLShader        gSkinnedObjectSimpleProgram;
 LLGLSLShader		gObjectSimpleImpostorProgram;
 LLGLSLShader        gSkinnedObjectSimpleImpostorProgram;
 LLGLSLShader		gObjectPreviewProgram;
+LLGLSLShader        gPhysicsPreviewProgram;
 LLGLSLShader		gObjectSimpleWaterProgram;
 LLGLSLShader        gSkinnedObjectSimpleWaterProgram;
 LLGLSLShader		gObjectSimpleAlphaMaskProgram;
@@ -765,6 +766,7 @@ void LLViewerShaderMgr::unloadShaders()
 	gObjectSimpleImpostorProgram.unload();
     gSkinnedObjectSimpleImpostorProgram.unload();
 	gObjectPreviewProgram.unload();
+    gPhysicsPreviewProgram.unload();
 	gImpostorProgram.unload();
 	gObjectSimpleAlphaMaskProgram.unload();
     gSkinnedObjectSimpleAlphaMaskProgram.unload();
@@ -1895,6 +1897,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 
             shader->clearPermutations();
             shader->addPermutation("USE_VERTEX_COLOR", "1");
+            shader->addPermutation("HAS_ALPHA_MASK", "1");
             shader->addPermutation("USE_INDEXED_TEX", "1");
             if (use_sun_shadow)
             {
@@ -1971,6 +1974,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
             shader->clearPermutations();
             shader->addPermutation("USE_INDEXED_TEX", "1");
             shader->addPermutation("FOR_IMPOSTOR", "1");
+            shader->addPermutation("HAS_ALPHA_MASK", "1");
             shader->addPermutation("USE_VERTEX_COLOR", "1");
             if (rigged)
             {
@@ -2042,6 +2046,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
             shader[i]->addPermutation("USE_INDEXED_TEX", "1");
             shader[i]->addPermutation("WATER_FOG", "1");
             shader[i]->addPermutation("USE_VERTEX_COLOR", "1");
+            shader[i]->addPermutation("HAS_ALPHA_MASK", "1");
             if (use_sun_shadow)
             {
                 shader[i]->addPermutation("HAS_SHADOW", "1");
@@ -3041,6 +3046,24 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gObjectPreviewProgram.mShaderLevel = mShaderLevel[SHADER_OBJECT];
 		success = gObjectPreviewProgram.createShader(NULL, NULL);
 		gObjectPreviewProgram.mFeatures.hasLighting = true;
+	}
+
+	if (success)
+	{
+		gPhysicsPreviewProgram.mName = "Preview Physics Shader";
+		gPhysicsPreviewProgram.mFeatures.calculatesLighting = false;
+		gPhysicsPreviewProgram.mFeatures.calculatesAtmospherics = false;
+		gPhysicsPreviewProgram.mFeatures.hasGamma = false;
+		gPhysicsPreviewProgram.mFeatures.hasAtmospherics = false;
+		gPhysicsPreviewProgram.mFeatures.hasLighting = false;
+		gPhysicsPreviewProgram.mFeatures.mIndexedTextureChannels = 0;
+		gPhysicsPreviewProgram.mFeatures.disableTextureIndex = true;
+		gPhysicsPreviewProgram.mShaderFiles.clear();
+		gPhysicsPreviewProgram.mShaderFiles.push_back(make_pair("objects/previewPhysicsV.glsl", GL_VERTEX_SHADER_ARB));
+		gPhysicsPreviewProgram.mShaderFiles.push_back(make_pair("objects/previewPhysicsF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gPhysicsPreviewProgram.mShaderLevel = mShaderLevel[SHADER_OBJECT];
+		success = gPhysicsPreviewProgram.createShader(NULL, NULL);
+		gPhysicsPreviewProgram.mFeatures.hasLighting = false;
 	}
 
 	if (success)

@@ -144,7 +144,7 @@ public:
 	LLViewerObject*	getViewerObject()	const	{ return mVObjp; }
 	S32				getLOD()			const	{ return mVObjp.notNull() ? mVObjp->getLOD() : 0; }
 	void			setPoolType(U32 type)		{ mPoolType = type; }
-	S32				getTEOffset()				{ return mTEOffset; }
+	S32				getTEOffset()       const   { return mTEOffset; }
 	LLViewerTexture*	getTexture(U32 ch = LLRender::DIFFUSE_MAP) const;
 
 	void			setViewerObject(LLViewerObject* object);
@@ -241,6 +241,12 @@ public:
 	void	notifyAboutCreatingTexture(LLViewerTexture *texture);
 	void	notifyAboutMissingAsset(LLViewerTexture *texture);
 
+    // used to preserve draw order of faces that are batched together. 
+    // Allows content creators to manipulate linked sets and face ordering 
+    // for consistent alpha sorting results, particularly for rigged attachments
+    void setDrawOrderIndex(U32 index) { mDrawOrderIndex = index; }
+    U32 getDrawOrderIndex() const { return mDrawOrderIndex; }
+
 public: //aligned members
 	LLVector4a		mExtents[2];
 
@@ -312,6 +318,8 @@ private:
 	bool        mHasMedia ;
 	bool        mIsMediaAllowed;
 
+    U32 mDrawOrderIndex = 0; // see setDrawOrderIndex
+	
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	mutable bool                       mShowDiffTexture;
 	mutable LLPointer<LLViewerTexture> mOrigDiffTexture;
