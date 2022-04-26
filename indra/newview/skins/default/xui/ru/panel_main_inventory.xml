@@ -48,14 +48,6 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Дополнительное окно инвентаря"/>
 		</panel>
-		<!-- Used by StarLight skins -->
-		<panel name="collapse_panel">
-			<button label="Свернуть" name="collapse_btn" tool_tip="Свернуть все папки" />
-		</panel>
-		<panel name="expand_panel">
-			<button label="Развернуть" name="expand_btn" tool_tip="Развернуть все папки" />
-		</panel>
-		<!-- / Used by StarLight skins -->
 		<panel name="dummy_panel">
 			<text name="ItemcountText">
 				Элементов

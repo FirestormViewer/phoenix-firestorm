@@ -3,6 +3,36 @@
 <map>
     <key>installables</key>
     <map>
+      <key>SDL2</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) 1997-2022 Sam Lantinga</string>
+        <key>description</key>
+        <string>Simple DirectMedia Layer is a cross-platform multimedia library designed to provide low level access to audio, keyboard, mouse, joystick, 3D hardware via OpenGL, and 2D video framebuffer.</string>
+        <key>license</key>
+        <string>zlib</string>
+        <key>license_file</key>
+        <string>LICENSES/SDL.txt</string>
+        <key>name</key>
+        <string>SDL2</string>
+        <key>platforms</key>
+        <map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f332d752a72cb524eb5db8ee6fdba3da</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64_bionic-221151857.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.2.15</string>
+      </map>
       <key>gstreamer10</key>
       <map>
         <key>copyright</key>

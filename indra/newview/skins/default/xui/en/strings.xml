@@ -3153,10 +3153,6 @@ Your current position: [AVATAR_POS]
   <string name="fs_preprocessor_caching_err">Error caching included file '[FILENAME]'</string>
   <!-- </FS:Cron> -->
 
-  <!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
-  <string name="skin_defaults_starlight_location">Showing your current location in the menu bar was disabled as a default for the Starlight skin series.</string>
-  <string name="skin_defaults_starlight_navbar">Showing the navigation bar was enabled as a default for the Starlight skin series.</string>
-
   <!-- Animation Explorer -->
   <string name="animation_explorer_seconds_ago">[SECONDS] seconds ago</string>
   <string name="animation_explorer_still_playing">Still playing</string>
@@ -3230,7 +3226,6 @@ Your current position: [AVATAR_POS]
   <string name="mode_settings_phoenix.xml">Phoenix</string>
   <string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
   <string name="mode_settings_hybrid.xml">Hybrid</string>
-  <string name="mode_settings_latency.xml">Latency</string>
   <string name="mode_settings_text.xml">Text</string>
 
   <string name="Asset_Uploading">Uploading...
