@@ -6820,14 +6820,6 @@ Votre position actuelle : [AVATAR_POS]
 		Détection de la directive compile-as-Mono outrepassant les préférences.
 	</string>
 
-	<!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
-	<string name="skin_defaults_starlight_location">
-		L'affichage de votre position actuelle dans la barre de menu a été désactivé par défaut pour la série de skin Starlight.
-	</string>
-	<string name="skin_defaults_starlight_navbar">
-		L'affichage de la barre de navigation a été activé par défaut pour la série de skin Starlight.
-	</string>
-
 	<!-- Animation Explorer -->
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] plus tôt
