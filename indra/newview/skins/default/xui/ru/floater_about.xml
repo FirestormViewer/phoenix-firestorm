@@ -21,10 +21,10 @@ Linden это:
 				и переводами от:
 			</text>
 		</panel>
-		<panel label="Firestorm" name="fs_credits_panel" height="860">
+		<panel label="Firestorm" name="fs_credits_panel" height="870">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
-					<text name="firestorm_intro" height="120">
+					<text name="firestorm_intro" height="130">
 						Firestorm является проектом сообщества программистов, имеющих цели на улучшение качества основаных из опыта использования SecondLife (tm) Viewer. Мы объединяем в одно целое вклад разных программистов, которые представляют разные сообщества, в сочетании с кодом Linden Lab и нашим собственным, чтобы создавать хороший, функциональный клиент поддержку которого обеспечивает команда состоящая из волонтеров. Firestorm существует благодаря The Phoenix Firestorm Project, Inc., некомерческой организации.
 
 Команда разработчиков Firestorm:
