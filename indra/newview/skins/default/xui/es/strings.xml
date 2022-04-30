@@ -6111,6 +6111,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="TotalScriptCountChangeIncrease">El total de scripts en la región ha subido de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
 	<string name="TotalScriptCountChangeDecrease">El total de scripts en la región ha bajado de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
 	<string name="preproc_toggle_warning">La conmutación del preprocesador no será efectiva hasta que no cierres y reabras este editor.</string>
+	<string name="skin_defaults_starlight_location">
+		Mostrar tu localizacion actual en la barra de menú ha sido desactivado como opción por defecto en la serie de skins Starlight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Mostrar la barra de navegación ha sido activado como opción por defecto en la serie de skins Starlight.
+	</string>
 	<string name="animation_explorer_seconds_ago">
 		Hace [SECONDS] segundos
 	</string>
