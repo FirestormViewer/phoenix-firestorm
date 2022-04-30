@@ -839,6 +839,14 @@ with the same filename but different name
   <texture name="skin metaharper modern coolocean" file_name="skinspreview/meta_coolocean.jpg" preload="true" />
   <texture name="skin metaharper modern appalachiansky" file_name="skinspreview/meta_appalachia.jpg" preload="true" />
   <texture name="skin metaharper modern blackglass" file_name="skinspreview/meta_blackglass.jpg" preload="true" />
+  <texture name="skin starlight original orange" file_name="skinspreview/slight_orange.jpg" preload="true" />
+  <texture name="skin starlight original teal" file_name="skinspreview/slight_teal.jpg" preload="true" />
+  <texture name="skin starlight mono teal" file_name="skinspreview/slight_mteal.jpg" preload="true" />
+  <texture name="skin starlight nostalgia blue" file_name="skinspreview/slight_nblue.jpg" preload="true" />
+  <texture name="skin starlight silver blue" file_name="skinspreview/slight_sblue.jpg" preload="true" />
+  <texture name="skin starlight silver pink" file_name="skinspreview/slight_spink.jpg" preload="true" />
+  <texture name="skin starlight cui custom dark" file_name="skinspreview/scui_dark.jpg" preload="true" />
+  <texture name="skin starlight cui custom light" file_name="skinspreview/scui_light.jpg" preload="true" />
   <texture name="skin vintage classic" file_name="skinspreview/vintage_classic.jpg" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
