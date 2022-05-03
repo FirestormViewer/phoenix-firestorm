@@ -150,6 +150,7 @@
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
 #include "llfriendcard.h"
+#include "permissionstracker.h"		// <FS:Zi> Permissions Tracker
 #include "tea.h" // <FS:AW opensim currency support>
 #include "NACLantispam.h"
 #include "chatbar_as_cmdline.h"
@@ -4733,6 +4734,8 @@ void process_object_properties(LLMessageSystem *msg, void**user_data)
 	{
 		explorer->requestNameCallback(msg);
 	}
+
+	PermissionsTracker::instance().objectPropertiesCallback(msg);
 }
 // </FS:Techwolf Lupindo> area search
 

@@ -13790,4 +13790,14 @@ Reset the URL to default?
      notext="Remind me next time"
      yestext="Reset"/>
   </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="WarnScriptedCamera"
+   type="notifytip">
+Camera reset might be inhibited by the following objects:
+
+[SOURCES]
+  </notification>
+
 </notifications>
