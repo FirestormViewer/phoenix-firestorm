@@ -718,6 +718,7 @@ LLAppViewer::LLAppViewer()
 	mLogoutMarkerFile(),
 	mReportedCrash(false),
 	mNumSessions(0),
+    mGeneralThreadPool(nullptr),
 	mPurgeCache(false),
 	mPurgeCacheOnExit(false),
 	mPurgeUserDataOnExit(false),
@@ -1156,13 +1157,7 @@ bool LLAppViewer::init()
 	// If we don't have the right GL requirements, exit.
 	if (!gGLManager.mHasRequirements)
 	{
-		// can't use an alert here since we're exiting and
-		// all hell breaks lose.
-		LLUIString details = LLNotifications::instance().getGlobalString("UnsupportedGLRequirements");
-		OSMessageBox(
-			details.getString(),
-			LLStringUtil::null,
-			OSMB_OK);
+        // already handled with a MBVideoDrvErr
 		return 0;
 	}
 
@@ -2014,11 +2009,6 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
-	// Since we don't know what functions are going to be queued by
-	// onCleanup(), we have to assume they might rely on some of the things
-	// we're about to destroy below. Run them first.
-	mOnCleanup();
-
     LLAtmosphere::cleanupClass();
 
 	//ditch LLVOAvatarSelf instance
@@ -2465,6 +2455,10 @@ bool LLAppViewer::cleanup()
 	sTextureCache->shutdown();
 	sImageDecodeThread->shutdown();
 	sPurgeDiskCacheThread->shutdown();
+    if (mGeneralThreadPool)
+    {
+        mGeneralThreadPool->close();
+    }
 
 	sTextureFetch->shutDownTextureCacheThread() ;
 	sTextureFetch->shutDownImageDecodeThread() ;
@@ -2489,6 +2483,8 @@ bool LLAppViewer::cleanup()
 	mFastTimerLogThread = NULL;
 	delete sPurgeDiskCacheThread;
 	sPurgeDiskCacheThread = NULL;
+    delete mGeneralThreadPool;
+    mGeneralThreadPool = NULL;
 
 	if (LLFastTimerView::sAnalyzePerformance)
 	{
@@ -2554,6 +2550,7 @@ bool LLAppViewer::cleanup()
 	LLEnvironment::deleteSingleton();
 	LLSelectMgr::deleteSingleton();
 	LLViewerEventRecorder::deleteSingleton();
+    LLWorld::deleteSingleton();
 
 	// It's not at first obvious where, in this long sequence, a generic cleanup
 	// call OUGHT to go. So let's say this: as we migrate cleanup from
@@ -2572,6 +2569,24 @@ bool LLAppViewer::cleanup()
 
 	// return 0;
 	return true;
+}
+
+void LLAppViewer::initGeneralThread()
+{
+    if (mGeneralThreadPool)
+    {
+        return;
+    }
+
+    LLSD poolSizes{ gSavedSettings.getLLSD("ThreadPoolSizes") };
+    LLSD sizeSpec{ poolSizes["General"] };
+    LLSD::Integer poolSize{ sizeSpec.isInteger() ? sizeSpec.asInteger() : 3 };
+    LL_DEBUGS("ThreadPool") << "Instantiating General pool with "
+        << poolSize << " threads" << LL_ENDL;
+    // We don't want anyone, especially the main thread, to have to block
+    // due to this ThreadPool being full.
+    mGeneralThreadPool = new LL::ThreadPool("General", poolSize, 1024 * 1024);
+    mGeneralThreadPool->start();
 }
 
 bool LLAppViewer::initThreads()
@@ -6339,7 +6354,7 @@ void LLAppViewer::disconnectViewer()
 	// Now we just ask the LLWorld singleton to cleanly shut down.
 	if(LLWorld::instanceExists())
 	{
-		LLWorld::getInstance()->destroyClass();
+		LLWorld::getInstance()->resetClass();
 	}
 	LLVOCache::deleteSingleton();
 

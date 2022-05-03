@@ -64,7 +64,9 @@ class LLWorld : public LLSimpleton<LLWorld>
 public:
     LLWorld();
 
-    void destroyClass();
+    // Clear any objects, regions
+    // Prepares class to be reused or destroyed
+    void resetClass();
 
 	void refreshLimits();// <AW: opensim-limits>
 // <FS:CR> Aurora Sim
