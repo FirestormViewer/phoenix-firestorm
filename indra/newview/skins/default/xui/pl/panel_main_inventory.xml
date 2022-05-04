@@ -49,14 +49,6 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Otwórz dodatkowe okno Szafy"/>
 		</panel>
-		<!-- Used by StarLight skins -->
-		<panel name="collapse_panel">
-			<button label="Zwiń" name="collapse_btn" tool_tip="Zwiń wszystkie foldery" />
-		</panel>
-		<panel name="expand_panel">
-			<button label="Rozwiń" name="expand_btn" tool_tip="Rozwiń wszystkie foldery" />
-		</panel>
-		<!-- / Used by StarLight skins -->
 		<panel name="dummy_panel">
 			<text name="ItemcountText" tool_tip="[ITEMS] przedmiotów, [CATEGORIES] folderów">
 				Elementy

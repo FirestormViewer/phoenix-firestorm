@@ -25,6 +25,7 @@
   <string name="phys_status_hull_limit_exceeded">Некоторые модели превышают предел оболочек (256); попробуйте 'Упрощение'.</string>
   <string name="phys_status_degenerate_triangles">Физика меша слишком плотная; удалить маленькие, тонкие треугольники (смотри просмотр).</string>
   <string name="phys_status_no_havok">Эта версия не поддерживает Havok и не рекомендуется для загрузки физики в Second Life. Результаты могут быть непредсказуемыми.</string>
+  <string name="phys_status_too_thin">Один или несколько размеров меньше 0,5м, корректно будут работать только физические формы, основанные на корпусе (проанализированные).</string>
   <string name="phys_status_unknown_error">Обнаружена нераспознанная ошибка.</string>
   <string name="layer_all">Все</string>
   <string name="decomposing">Анализ...</string>

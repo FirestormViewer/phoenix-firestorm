@@ -43,6 +43,10 @@
 # include "llaudioengine_fmodstudio.h"
 #endif
 
+#ifdef LL_SDL2
+#include "llaudioengine_sdl2.h"
+#endif
+
 #ifdef LL_OPENAL
 #include "llaudioengine_openal.h"
 #endif
@@ -995,6 +999,11 @@ bool idle_startup()
             {
                 gAudiop = (LLAudioEngine *) new LLAudioEngine_FMODSTUDIO(gSavedSettings.getBOOL("FMODProfilerEnable"), gSavedSettings.getU32("FMODResampleMethod"));
             }
+#endif
+
+#ifdef LL_SDL2
+    if( !gAudiop )
+        gAudiop = new LLAudioEngineSDL2();
 #endif
 
 #ifdef LL_OPENAL

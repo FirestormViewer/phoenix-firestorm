@@ -112,10 +112,15 @@ endif (BUILD_HEADLESS)
 add_library (llrender ${llrender_SOURCE_FILES})
 
 if (SDL_FOUND)
-  set_property(TARGET llrender
-    PROPERTY COMPILE_DEFINITIONS LL_SDL=1
-    )
+    set_property(TARGET llrender
+            PROPERTY COMPILE_DEFINITIONS LL_SDL=1
+            )
 endif (SDL_FOUND)
+if (SDL2_FOUND)
+    set_property(TARGET llrender
+            PROPERTY COMPILE_DEFINITIONS LL_SDL2=1 LL_SDL=1
+            )
+endif ()
 
 # Libraries on which this library depends, needed for Linux builds
 # Sort by high-level to low-level
