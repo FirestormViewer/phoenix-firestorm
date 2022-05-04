@@ -31,7 +31,8 @@
          follows="all"
          layout="topleft"
          halign="center"
-         tab_min_width="55"
+         tab_min_width="70"
+         tab_height="30"
          tab_position="top"
         >
             <panel
@@ -60,7 +61,7 @@
             />
             <panel
              name="panel_profile_classifieds"
-             label="Classified"
+             label="Classifieds"
              layout="topleft"
              class="panel_profile_classifieds"
              filename="panel_profile_classifieds.xml"
