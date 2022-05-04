@@ -80,7 +80,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>starlight</string>
+    <string>firestorm</string>
   </map>
 
   <key>SkinCurrentTheme</key>
@@ -106,7 +106,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>Starlight</string>
+    <string>Firestorm</string>
   </map>
 
   <key>FSSkinCurrentThemeReadableName</key>

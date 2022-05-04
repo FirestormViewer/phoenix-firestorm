@@ -10,6 +10,7 @@ include(LLCommon)
 include(LLMath)
 include(LLMessage)
 include(LLFileSystem)
+include(LLWindow)
 
 include_directories( SYSTEM
     ${LLAUDIO_INCLUDE_DIRS}
@@ -74,6 +75,11 @@ if (OPENAL)
     lllistener_openal.h
     )
 endif (OPENAL)
+
+if(SDL2_FOUND)
+    list(APPEND llaudio_SOURCE_FILES llaudioengine_sdl2.cpp )
+    list(APPEND llaudio_HEADER_FILES llaudioengine_sdl2.h   )
+endif()
 
 set_source_files_properties(${llaudio_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)

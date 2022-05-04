@@ -159,6 +159,7 @@ http://secondlife.com/viewer-access-faq</string>
 Please check to make sure you entered the right
     * Username (like bobsmith12 or steller.sunshine)
     * Password
+    * Second Factor Token (if enabled)
 Also, please make sure your Caps Lock key is off.</string>
 	<string name="LoginFailedPasswordChanged">As a security precaution your password has been changed.
 Please go to your account page at http://secondlife.com/password
@@ -218,7 +219,8 @@ Please try logging in again in a minute.</string>
 Please try logging in again in a minute.</string>
 	<string name="LoginFailedLoggingOutSession">The system has begun logging out your last session.
 Please try logging in again in a minute.</string>
-
+        <string name="LoginFailedAuthenticationMFARequired">To continue logging in, enter a new token from your multifactor authentication app.
+If you feel this is an error, please contact support@secondlife.com</string>
 
 	<!-- Disconnection -->
 	<string name="AgentLostConnection">This region may be experiencing trouble.  Please check your connection to the Internet.</string>
@@ -3157,10 +3159,6 @@ Your current position: [AVATAR_POS]
   <string name="fs_preprocessor_caching_err">Error caching included file '[FILENAME]'</string>
   <!-- </FS:Cron> -->
 
-  <!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
-  <string name="skin_defaults_starlight_location">Showing your current location in the menu bar was disabled as a default for the Starlight skin series.</string>
-  <string name="skin_defaults_starlight_navbar">Showing the navigation bar was enabled as a default for the Starlight skin series.</string>
-
   <!-- Animation Explorer -->
   <string name="animation_explorer_seconds_ago">[SECONDS] seconds ago</string>
   <string name="animation_explorer_still_playing">Still playing</string>
@@ -3234,7 +3232,6 @@ Your current position: [AVATAR_POS]
   <string name="mode_settings_phoenix.xml">Phoenix</string>
   <string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
   <string name="mode_settings_hybrid.xml">Hybrid</string>
-  <string name="mode_settings_latency.xml">Latency</string>
   <string name="mode_settings_text.xml">Text</string>
 
   <string name="Asset_Uploading">Uploading...
