@@ -5160,6 +5160,13 @@ Wynik testu kompresji pliku dla gzip na poziomie 6 z [FILE] o rozmiarze [SIZE] K
 Pakowanie: [PACK_TIME]s [PSIZE]KB
 Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 	</notification>
+	<notification name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Kontynuuj" />
+			<button name="cancel" text="Anuluj" />
+		</form>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.
 
