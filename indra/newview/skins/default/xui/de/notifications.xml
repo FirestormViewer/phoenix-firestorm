@@ -5544,4 +5544,9 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 URL auf Standard zurücksetzen?
 		<usetemplate name="okcancelbuttons" notext="Nächstes Mal erinnern" yestext="Zurücksetzen"/>
 	</notification>
+	<notification name="WarnScriptedCamera">
+		Zurücksetzen der Kamera könnte durch folgende Objekte verhindert werden:
+
+[SOURCES]
+	</notification>
 </notifications>
