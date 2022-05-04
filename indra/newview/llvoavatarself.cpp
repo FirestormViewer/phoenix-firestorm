@@ -3147,6 +3147,7 @@ void LLVOAvatarSelf::reportAvatarRezTime() const
 //-- SUNSHINE CLEANUP - not clear we need any of this, may be sufficient to request server appearance in llviewermenu.cpp:handle_rebake_textures()
 void LLVOAvatarSelf::forceBakeAllTextures(bool slam_for_debug)
 {
+	if(!isAgentAvatarValid()){ return; } // <FS:Beq/> Avoid force bak e on invalid avatar pointer (based on similar change by Rye)
 	LL_INFOS() << "TAT: forced full rebake. " << LL_ENDL;
 
 	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)

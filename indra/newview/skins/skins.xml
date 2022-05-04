@@ -79,22 +79,6 @@
 
     <map>
       <key>name</key>
-      <string>Latency (beta)</string>
-      <key>folder</key>
-      <string>latency</string>
-      <key>themes</key>
-      <array>
-        <map>
-          <key>name</key>
-          <string>Extra Plain</string>
-          <key>folder</key>
-          <string/>
-        </map>
-      </array>
-    </map>
-
-    <map>
-      <key>name</key>
       <string>MetaHarper Modern</string>
       <key>folder</key>
       <string>metaharper</string>
@@ -119,74 +103,6 @@
           <string>BlackGlass</string>
           <key>folder</key>
           <string>black_glass</string>
-        </map>
-      </array>
-    </map>
-
-    <map>
-      <key>name</key>
-      <string>StarLight</string>
-      <key>folder</key>
-      <string>starlight</string>
-      <key>themes</key>
-      <array>
-        <map>
-          <key>name</key>
-          <string>Original Orange</string>
-          <key>folder</key>
-          <string>original_orange</string>
-        </map>
-        <map>
-          <key>name</key>
-          <string>Original Teal</string>
-          <key>folder</key>
-          <string>original_teal</string>
-        </map>
-        <map>
-          <key>name</key>
-          <string>Mono Teal</string>
-          <key>folder</key>
-          <string>mono_teal</string>
-        </map>
-        <map>
-          <key>name</key>
-          <string>Nostalgia Blue</string>
-          <key>folder</key>
-          <string>nostalgia_blue</string>
-        </map>
-        <map>
-          <key>name</key>
-          <string>Silver Blue</string>
-          <key>folder</key>
-          <string>silver_blue</string>
-        </map>
-        <map>
-          <key>name</key>
-          <string>Silver Pink</string>
-          <key>folder</key>
-          <string>silver_pink</string>
-        </map>
-      </array>
-    </map>
-
-    <map>
-      <key>name</key>
-      <string>StarLight CUI</string>
-      <key>folder</key>
-      <string>starlightcui</string>
-      <key>themes</key>
-      <array>
-        <map>
-          <key>name</key>
-          <string>Custom Dark</string>
-          <key>folder</key>
-          <string>custom_dark</string>
-        </map>
-        <map>
-          <key>name</key>
-          <string>Custom Light</string>
-          <key>folder</key>
-          <string>custom_light</string>
         </map>
       </array>
     </map>

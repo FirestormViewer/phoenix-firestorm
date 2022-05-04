@@ -492,7 +492,7 @@ bool FSCommon::isDefaultTexture(const LLUUID& asset_id)
 bool FSCommon::isLegacySkin()
 {
 	std::string current_skin = gSavedSettings.getString("FSInternalSkinCurrent");
-	return (current_skin == "Vintage" || current_skin == "Latency");
+	return (current_skin == "Vintage");
 }
 
 bool FSCommon::isFilterEditorKeyCombo(KEY key, MASK mask)
