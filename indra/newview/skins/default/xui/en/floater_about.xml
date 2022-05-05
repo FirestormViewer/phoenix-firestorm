@@ -91,7 +91,7 @@ Dummy Name replaced at run time
       </text_editor>
     </panel>
     <panel
-      height="905"
+      height="847"
       border="true"
       label="Firestorm Credits"
       help_topic="about_fscredits_tab"
@@ -144,7 +144,7 @@ Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Beq Janus, Cinder Roxley, H
                 </text>
                 <text
                  follows="top|left"
-                 height="10"
+                 height="15"
                  layout="topleft"
                  left="5"
                  name="fs_contrib_intro"
@@ -194,15 +194,13 @@ Afrika Burton, Albatroz Hird, Alexru Resident, alison Seesaw, AnaLucia Loon, Ang
                 </text>
                 <text
                  follows="top|left"
-                 height="78"
+                 height="15"
                  layout="topleft"
                  left="5"
                  name="fs_art_intro"
                  top_pad="8"
                  width="450"
                  wrap="true">
-Firestorm includes Starlight, modified for Firestorm. It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface. For further details see &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
-
 UI Artists and Designers:
                 </text>
                 <text

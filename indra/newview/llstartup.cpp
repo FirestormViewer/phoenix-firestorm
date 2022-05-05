@@ -43,6 +43,10 @@
 # include "llaudioengine_fmodstudio.h"
 #endif
 
+#ifdef LL_SDL2
+#include "llaudioengine_sdl2.h"
+#endif
+
 #ifdef LL_OPENAL
 #include "llaudioengine_openal.h"
 #endif
@@ -137,6 +141,7 @@
 #include "llproxy.h"
 #include "llproductinforequest.h"
 #include "llqueryflags.h"
+#include "llsecapi.h"
 #include "llselectmgr.h"
 #include "llsky.h"
 #include "llstatview.h"
@@ -997,6 +1002,11 @@ bool idle_startup()
             }
 #endif
 
+#ifdef LL_SDL2
+    if( !gAudiop )
+        gAudiop = new LLAudioEngineSDL2();
+#endif
+
 #ifdef LL_OPENAL
 #if !LL_WINDOWS
 			// if (NULL == getenv("LL_BAD_OPENAL_DRIVER"))
@@ -1730,10 +1740,10 @@ bool idle_startup()
 			}
 			else 
 			{
-				if (reason_response != "tos") 
+				if (reason_response != "tos"  && reason_response != "mfa_challenge")
 				{
-					// Don't pop up a notification in the TOS case because
-					// LLFloaterTOS::onCancel() already scolded the user.
+					// Don't pop up a notification in the TOS or MFA cases because
+					// the specialized floater has already scolded the user.
 					std::string error_code;
 					if(response.has("errorcode"))
 					{
@@ -4738,6 +4748,17 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	{
 		std::string openid_token = response["openid_token"];
 		LLViewerMedia::getInstance()->openIDSetup(openid_url, openid_token);
+	}
+
+
+	// Only save mfa_hash for future logins if the user wants their info remembered.
+	if(response.has("mfa_hash") && gSavedSettings.getBOOL("RememberUser") && gSavedSettings.getBOOL("RememberPassword"))
+	{
+		std::string grid(LLGridManager::getInstance()->getGridId());
+		std::string user_id(gUserCredential->userID());
+		gSecAPIHandler->addToProtectedMap("mfa_hash", grid, user_id, response["mfa_hash"]);
+		// TODO(brad) - related to SL-17223 consider building a better interface that sync's automatically
+		gSecAPIHandler->syncProtectedMap();
 	}
 
 	// <FS:Ansariel> OpenSim legacy economy support

@@ -289,7 +289,7 @@ void DesktopNotifierLinux::showNotification( const std::string& notification_tit
 
 	m_pLibNotify->mNotificationUpdate( m_pNotification,(gchar*)notification_title.c_str(), (gchar*)notification_message.c_str(), m_strIcon.c_str() );
 
-	m_pLibNotify->mNotificationSetUrgency( m_pNotification, NOTIFY_URGENCY_LOW );
+	m_pLibNotify->mNotificationSetUrgency( m_pNotification, NOTIFY_URGENCY_NORMAL );
 	m_pLibNotify->mNotificationSetCategory( m_pNotification, ( gchar* )notification_type.c_str() );
 	m_pLibNotify->mNotificationSetTimeout( m_pNotification, NOTIFICATION_TIMEOUT_MS ); // NotifyOSD ignores this, sadly.
 

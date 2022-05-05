@@ -54,6 +54,9 @@ vec3 fullbrightScaleSoftClip(vec3 light);
 uniform float minimum_alpha;
 #endif
 
+// <FS> Fullbright fog fix w/ gamma 0 workaround.
+uniform float gamma;
+
 void main() 
 {
 #ifdef HAS_DIFFUSE_LOOKUP
@@ -72,9 +75,15 @@ void main()
 #endif
 
 	color.rgb *= vertex_color.rgb;
-	// <FS> Fullbright fog fix
-	color.rgb = fullbrightAtmosTransport(color.rgb);
-	color.rgb = fullbrightScaleSoftClip(color.rgb);
+	// <FS> Fullbright fog fix w/ gamma 0 workaround.
+	// color.rgb = fullbrightAtmosTransport(color.rgb);
+	// color.rgb = fullbrightScaleSoftClip(color.rgb);
+	if(gamma != 0.)
+	{
+		color.rgb = fullbrightAtmosTransport(color.rgb);
+		color.rgb = fullbrightScaleSoftClip(color.rgb);
+	}
+	// </FS> Fullbright fog fix w/ gamma 0 workaround.
 
 #ifdef WATER_FOG
 	vec3 pos = vary_position;

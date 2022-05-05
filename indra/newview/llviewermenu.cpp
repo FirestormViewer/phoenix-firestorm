@@ -168,6 +168,7 @@
 #include "lltexturecache.h"
 #include "llvovolume.h"
 #include "particleeditor.h"
+#include "permissionstracker.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -5450,6 +5451,9 @@ void handle_reset_camera_angles()
 	// Camera focus and offset with CTRL/SHIFT + Scroll wheel
 	gSavedSettings.getControl("FocusOffsetRearView")->resetToDefault();
 	gSavedSettings.getControl("CameraOffsetRearView")->resetToDefault();
+
+	// warn the user if there is a scripted followcam active that might stop a camera reset
+	PermissionsTracker::instance().warnFollowcam();
 }
 // </FS:Zi>
 

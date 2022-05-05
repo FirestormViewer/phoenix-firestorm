@@ -857,6 +857,7 @@ set(viewer_SOURCE_FILES
     llxmlrpctransaction.cpp
     noise.cpp
     particleeditor.cpp
+    permissionstracker.cpp
     piemenu.cpp
     pieseparator.cpp
     pieslice.cpp
@@ -1630,6 +1631,7 @@ set(viewer_HEADER_FILES
     macmain.h
     noise.h
     particleeditor.h
+    permissionstracker.h
     piemenu.h
     pieseparator.h
     pieslice.h
@@ -2205,10 +2207,15 @@ add_executable(${VIEWER_BINARY_NAME}
     )
 
 if (SDL_FOUND)
-  set_property(TARGET ${VIEWER_BINARY_NAME}
-    PROPERTY COMPILE_DEFINITIONS LL_SDL=1
-    )
+    set_property(TARGET ${VIEWER_BINARY_NAME}
+            PROPERTY COMPILE_DEFINITIONS LL_SDL=1
+            )
 endif (SDL_FOUND)
+if (SDL2_FOUND)
+    set_property(TARGET ${VIEWER_BINARY_NAME}
+            PROPERTY COMPILE_DEFINITIONS LL_SDL2=1 LL_SDL=1
+            )
+endif ()
 
 if (USE_BUGSPLAT)
   set_property(TARGET ${VIEWER_BINARY_NAME}

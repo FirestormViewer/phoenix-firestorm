@@ -1909,7 +1909,11 @@ void LLModelPreview::updateStatusMessages()
         NOHAVOK = 1,
         DEGENERATE = 2,
         TOOMANYHULLS = 4,
-        TOOMANYVERTSINHULL = 8
+// <FS:Beq> fIRE-31602 thin mesh physics warning
+        // TOOMANYVERTSINHULL = 8
+        TOOMANYVERTSINHULL = 8,
+        TOOTHIN = 16
+// </FS:Beq>
     };
 
     assert_main_thread();
@@ -2018,10 +2022,22 @@ void LLModelPreview::updateStatusMessages()
         mMaxTriangleLimit = total_tris[LLModel::LOD_HIGH];
     }
 
+// <FS:Beq> fIRE-31602 thin mesh physics warning
+    static const float CONVEXIFICATION_SIZE_MESH {0.5};
+    auto smallest_axis = llmin(mPreviewScale.mV[0], mPreviewScale.mV[1]);
+    smallest_axis = llmin(smallest_axis, mPreviewScale.mV[2]);
+    smallest_axis *= 2.f;
+    if (smallest_axis < CONVEXIFICATION_SIZE_MESH)
+    {
+        has_physics_error |= PhysicsError::TOOTHIN;
+    }
+// </FS:Beq<
+
     mHasDegenerate = false;
     {//check for degenerate triangles in physics mesh
         U32 lod = LLModel::LOD_PHYSICS;
         const LLVector4a scale(0.5f);
+
         for (U32 i = 0; i < mModel[lod].size() && !mHasDegenerate; ++i)
         { //for each model in the lod
             if (mModel[lod][i] && mModel[lod][i]->mPhysics.mHull.empty())
@@ -2268,6 +2284,14 @@ void LLModelPreview::updateStatusMessages()
             LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Error");
             physStatusIcon->setImage(img);
         }
+// <FS:Beq> fIRE-31602 thin mesh physics warning
+        else if (has_physics_error & PhysicsError::TOOTHIN)
+        {
+            mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_too_thin"));
+            LLUIImagePtr img = LLUI::getUIImage("ModelImport_Status_Warning");
+            physStatusIcon->setImage(img);
+        }
+// </FS:Beq>
         else if (has_physics_error & PhysicsError::NOHAVOK)
         {
             mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_no_havok"));
