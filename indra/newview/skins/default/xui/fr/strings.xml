@@ -348,6 +348,10 @@ Veuillez réessayer de vous connecter dans une minute.
 		Le système a commencé à fermer votre dernière session.
 Veuillez réessayer de vous connecter dans une minute.
 	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Entrez un nouveau jeton à partir de votre application d'authentification pour pouvoir vous connecter
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.com.
+	</string>
 	<string name="AgentLostConnection">
 		Il y a peut-être des problèmes techniques dans cette région.  Veuillez vérifier votre connexion Internet.
 	</string>
