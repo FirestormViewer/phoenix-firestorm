@@ -249,6 +249,7 @@ http://secondlife.com/viewer-access-faq
 Stellen Sie sicher, dass Sie die richtigen Informationen eingegeben haben:
     * Benutzername (wie robertschmidt12 oder warme.sonne)
     * Kennwort
+    * Zwei-Faktor-Token (falls aktiviert)
 Stellen Sie außerdem sicher, dass die Umschaltsperre deaktiviert ist.
 	</string>
 	<string name="LoginFailedPasswordChanged">
@@ -358,6 +359,10 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="LoginFailedLoggingOutSession">
 		Das System hat begonnen, Ihre letzte Sitzung abzumelden.
 Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Um die Anmeldung fortzusetzen, geben Sie bitte ein neues Token aus Ihrer Multifaktor-Authentifizierungs-App ein.
+Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich an support@secondlife.com.
 	</string>
 	<string name="AgentLostConnection">
 		In dieser Region kann es zu Problemen kommen.  Bitte überprüfen Sie Ihre Internetverbindung.

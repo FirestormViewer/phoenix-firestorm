@@ -2019,12 +2019,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples"), //don't use window level anti-aliasing if FBOs are enabled
 		useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 
-	if (!LLViewerShaderMgr::sInitialized)
-	{ //immediately initialize shaders
-		LLViewerShaderMgr::sInitialized = TRUE;
-		LLViewerShaderMgr::instance()->setShaders();
-	}
-
 	if (NULL == mWindow)
 	{
 		LLSplashScreen::update(LLTrans::getString("StartupRequireDriverUpdate"));
@@ -2043,6 +2037,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 #endif
         LLAppViewer::instance()->fastQuit(1);
 	}
+    else if (!LLViewerShaderMgr::sInitialized)
+    {
+        //immediately initialize shaders
+        LLViewerShaderMgr::sInitialized = TRUE;
+        LLViewerShaderMgr::instance()->setShaders();
+    }
 	
 	if (!LLAppViewer::instance()->restoreErrorTrap())
 	{

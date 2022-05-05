@@ -29,6 +29,8 @@
 #include "llfollowcam.h"
 #include "llagent.h"
 
+#include "permissionstracker.h"
+
 //-------------------------------------------------------
 // constants
 //-------------------------------------------------------
@@ -829,11 +831,13 @@ void LLFollowCamMgr::setCameraActive( const LLUUID& source, bool active )
 	if (found_it != mParamStack.end())
 	{
 		mParamStack.erase(found_it);
+		PermissionsTracker::instance().removePermissionsEntry(source, PermissionsTracker::PERM_FOLLOWCAM);
 	}
 	// put on top of stack
 	if(active)
 	{
 		mParamStack.push_back(params);
+		PermissionsTracker::instance().addPermissionsEntry(source, PermissionsTracker::PERM_FOLLOWCAM);
 	}
 }
 
@@ -843,6 +847,8 @@ void LLFollowCamMgr::removeFollowCamParams(const LLUUID& source)
 	LLFollowCamParams* params = getParamsForID(source);
 	mParamMap.erase(source);
 	delete params;
+
+	PermissionsTracker::instance().removePermissionsEntry(source, PermissionsTracker::PERM_FOLLOWCAM);
 }
 
 bool LLFollowCamMgr::isScriptedCameraSource(const LLUUID& source)

@@ -4839,8 +4839,15 @@ Bitte kopieren Sie diese in Ihr Inventar und versuchen Sie es erneut.
 		Test-Ergebnis für gip-Level 6 Datei-Komprimierung für [FILE] mit Größe [SIZE] KB:
 Packen: [PACK_TIME]s [PSIZE]KB
 Entpacken: [UNPACK_TIME]s [USIZE]KB
-    <tag>fail</tag>
-  </notification>
+		<tag>fail</tag>
+	</notification>
+	<notification label="Eingabe MFA-Token" name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Fortsetzen"/>
+			<button name="cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		
@@ -5543,5 +5550,10 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 
 URL auf Standard zurücksetzen?
 		<usetemplate name="okcancelbuttons" notext="Nächstes Mal erinnern" yestext="Zurücksetzen"/>
+	</notification>
+	<notification name="WarnScriptedCamera">
+		Zurücksetzen der Kamera könnte durch folgende Objekte verhindert werden:
+
+[SOURCES]
 	</notification>
 </notifications>
