@@ -5298,16 +5298,19 @@ https://wiki.firestormviewer.org/fs_voice
 		Диспетчер анимаций (AO): [AO_MESSAGE]
 		<usetemplate ignoretext="Предупредить меня, когда к функции Диспетчера анимаций (AO) обращается скриптовый объект" name="notifyignore"/>
 	</notification>
-
 	<notification name="AttachedRiggedObjectToHUD">
 		Предмет с названием "[NAME]" является ригованым мешем, но прикреплен на экран в "[HUD_POINT]". Это значит, что для вас он будет отображаться правильно, но все остальные вообще не смогут его увидеть. Возможно, вы захотите снять его и снова прикрепить к обычной точке крепления на теле.
 		<usetemplate ignoretext="Предупреждать меня когда ригованные вещи прикрепляются на экран пользователя." name="notifyignore"/>
 	</notification>
-
 	<notification name="WarnForceLoginURL">
 		URL-адрес заставки входа в систему переопределен в целях тестирования.
 
 Сбросить URL по умолчанию?
 		<usetemplate name="okcancelbuttons" notext="Напомни мне в следующий раз" yestext="Сбросить"/>
+	</notification>
+	<notification name="WarnScriptedCamera">
+Сброс камеры может быть заблокирован следующими объектами:
+
+[SOURCES]
 	</notification>
 </notifications>
