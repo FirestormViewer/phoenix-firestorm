@@ -51,12 +51,7 @@
 			<text name="mode_selection_text">
 				モード選択
 			</text>
-			<combo_box tool_tip="基本設定を適切に行うために、一番慣れているビューワのタイプを選択して下さい。" name="mode_combo">
-				<combo_box.item label="Firestorm" name="Firestorm"/>
-				<combo_box.item label="Phoenix" name="Phoenix"/>
-				<combo_box.item label="Hybrid" name="Hybrid"/>
-				<combo_box.item label="Latency" name="Latency"/>
-			</combo_box>
+			<combo_box tool_tip="基本設定を適切に行うために、一番慣れているビューワのタイプを選択して下さい。" name="mode_combo" />
 		</layout_panel>
 	</layout_stack>
 </panel>
