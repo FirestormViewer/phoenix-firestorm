@@ -232,6 +232,7 @@ http://secondlife.com/viewer-access-faq
 Upewnij się, że wpisano poprawnie:
     * Login (np. bobsmith12 czy steller.sunshine)
     * Hasło
+    * Token weryfikacji dwuetapowej (gdy włączona)
 Sprawdź też, czy klawisz Caps Lock nie jest wciśnięty.
 	</string>
 	<string name="LoginFailedPasswordChanged">
@@ -341,6 +342,10 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="LoginFailedLoggingOutSession">
 		System rozpoczął wylogowywanie Twojej ostatniej sesji.
 Spróbuj zalogować się ponownie za minutę.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Wprowadź nowy token z aplikacji do uwierzytelniania wieloskładnikowego.
+Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="AgentLostConnection">
 		Ten region może mieć problemy. Sprawdź podłączenie do Internetu.

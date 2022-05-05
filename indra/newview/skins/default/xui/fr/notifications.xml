@@ -5389,4 +5389,9 @@ Veuillez noter que "Utiliser l'environnement partagé" et "Basé sur le cycle jo
 Remettre l'URL par défaut ?
 		<usetemplate name="okcancelbuttons" notext="Rappeler plus tard" yestext="Réinitialiser"/>
 	</notification>
+	<notification name="WarnScriptedCamera">
+La réinitialisation de la caméra peut être empêchée par les objets suivants :
+
+[SOURCES]
+	</notification>
 </notifications>

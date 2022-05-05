@@ -855,6 +855,7 @@ set(viewer_SOURCE_FILES
     llxmlrpctransaction.cpp
     noise.cpp
     particleeditor.cpp
+    permissionstracker.cpp
     piemenu.cpp
     pieseparator.cpp
     pieslice.cpp
@@ -1625,6 +1626,7 @@ set(viewer_HEADER_FILES
     macmain.h
     noise.h
     particleeditor.h
+    permissionstracker.h
     piemenu.h
     pieseparator.h
     pieslice.h
