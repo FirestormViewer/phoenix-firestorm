@@ -13729,6 +13729,27 @@ Unpacking: [UNPACK_TIME]s [USIZE]KB
   </notification>
   
   <notification
+   icon="alertmodal.tga"
+   label="Prompt for MFA Token"
+   name="PromptMFAToken"
+   type="alertmodal">
+    [MESSAGE]
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="token" type="text" width="400" />
+      <button
+       default="true"
+       index="0"
+       name="continue"
+       text="Continue"/>
+      <button
+       index="1"
+       name="cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
    icon="notify.tga"
    name="NoValidEnvSettingFound"
    persist="true"
@@ -13790,4 +13811,14 @@ Reset the URL to default?
      notext="Remind me next time"
      yestext="Reset"/>
   </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="WarnScriptedCamera"
+   type="notifytip">
+Camera reset might be inhibited by the following objects:
+
+[SOURCES]
+  </notification>
+
 </notifications>
