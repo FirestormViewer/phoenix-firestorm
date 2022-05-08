@@ -279,6 +279,7 @@
 			<menu_item_call label="Mesure du lag" name="Lag Meter"/>
 			<menu_item_check label="Barre de statistiques" name="Statistics Bar"/>
 			<menu_item_check label="Statistiques de chargement de scène" name="Scene Load Statistics"/>
+			<menu_item_check label="Améliorer les performances graphiques..." name="Performance"/>
 			<menu_item_check label="Afficher les informations de complexité de l’avatar" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Surbrillance et visibilité" name="Highlighting and Visibility">

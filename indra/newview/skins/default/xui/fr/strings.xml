@@ -238,6 +238,7 @@ http://secondlife.com/viewer-access-faq
 Veuillez vérifier que les éléments ci-dessous ont été correctement saisis :
     * Nom d&apos;utilisateur (par exemple, bobsmith12 ou steller.sunshine)
     * Mot de passe
+    * Jeton de second facteur (si activé)
 Assurez-vous également que la touche Verr. maj n&apos;est pas activée.
 	</string>
 	<string name="LoginFailedPasswordChanged">
