@@ -260,6 +260,10 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
     {
         panel_notes->processProperties(&avatar_notes);
     }
+    if (panel_sl)
+    {
+        panel_sl->processNotesProperties(&avatar_notes);
+    }
 }
 
 //TODO: changes take two minutes to propagate!
@@ -837,6 +841,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
     mSecondLifePicLayout    = getChild<LLPanel>("image_stack");
     mDescriptionEdit        = getChild<LLTextEditor>("sl_description_edit");
+    mNotesSnippet           = getChild<LLTextEditor>("notes_snippet");
     mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu");
     mSaveDescriptionChanges = getChild<LLButton>("save_description_changes");
     mDiscardDescriptionChanges = getChild<LLButton>("discard_description_changes");
@@ -992,6 +997,11 @@ void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
     }
 
     mGroupList->setGroups(mGroups);
+}
+
+void LLPanelProfileSecondLife::processNotesProperties(LLAvatarNotes* avatar_notes)
+{
+    mNotesSnippet->setValue(avatar_notes->notes);
 }
 
 void LLPanelProfileSecondLife::openGroupProfile()
@@ -1645,14 +1655,15 @@ void LLPanelProfileSecondLife::onSetDescriptionDirty()
 
 void LLPanelProfileSecondLife::onShowInSearchCallback()
 {
-    if (mAllowPublish == mShowInSearchCombo->getValue().asBoolean())
+    S32 value = mShowInSearchCombo->getValue().asInteger();
+    if (mAllowPublish == (bool)value)
     {
         return;
     }
     std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
     if (!cap_url.empty())
     {
-        mAllowPublish = mShowInSearchCombo->getValue().asBoolean();
+        mAllowPublish = value;
         LLSD data;
         data["allow_publish"] = mAllowPublish;
         LLCoros::instance().launch("putAgentUserInfoCoro",
