@@ -431,7 +431,7 @@ public:
 				max.setMax(max, *tri->mV[2]);
 			}
 		}
-		else if (!branch->isLeaf())
+		else if (branch->getChildCount() > 0)
 		{ //no data, but child nodes exist
 			LLVolumeOctreeListener* child = (LLVolumeOctreeListener*) branch->getChild(0)->getListener(0);
 
@@ -441,11 +441,7 @@ public:
 		}
 		else
 		{
-			// <FS:NaCl> [Megaprim crash fix]
-			//LL_ERRS() << "Empty leaf" << LL_ENDL;
-			LL_WARNS() << "Empty leaf" << LL_ENDL;
-			return;
-			// </FS:NaCl> [Megaprim crash fix]
+            llassert(!branch->isLeaf()); // Empty leaf
 		}
 
 		for (S32 i = 0; i < branch->getChildCount(); ++i)

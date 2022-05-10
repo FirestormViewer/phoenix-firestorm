@@ -622,6 +622,7 @@ class WindowsManifest(ViewerManifest):
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
             self.path("msvcp140.dll")
             self.path("vcruntime140.dll")
+            self.path_optional("vcruntime140_1.dll")
 
             # SLVoice executable
             with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
@@ -714,6 +715,7 @@ class WindowsManifest(ViewerManifest):
                                               'sharedlibs', 'Release')):
                 self.path("msvcp140.dll")
                 self.path("vcruntime140.dll")
+                self.path_optional("vcruntime140_1.dll")
 
             # CEF files common to all configurations
             with self.prefix(src=os.path.join(pkgdir, 'resources')):

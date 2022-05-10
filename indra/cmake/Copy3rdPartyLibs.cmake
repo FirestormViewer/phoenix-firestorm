@@ -150,6 +150,7 @@ if(WINDOWS)
             msvcp${MSVC_VER}.dll
             #msvcr${MSVC_VER}.dll # <FS:Ansariel> Can't build with older VS versions anyway - no need trying to copy this file
             vcruntime${MSVC_VER}.dll
+            vcruntime${MSVC_VER}_1.dll
             )
         # <FS:Ansariel> Try using the VC runtime redistributables that came with the VS installation first
         if(redist_path AND EXISTS "${redist_path}/${release_msvc_file}")
