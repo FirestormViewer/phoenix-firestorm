@@ -5283,6 +5283,13 @@ https://wiki.firestormviewer.org/fs_voice
 Упаковка: [PACK_TIME]с [PSIZE]КБ
 Распаковка: [UNPACK_TIME]с [USIZE]КБ
 	</notification>
+	<notification name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Продолжить"/>
+			<button name="cancel" text="Отмена"/>
+		</form>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Не выбрана допустимая настройка окружающей среды.
 

@@ -52,6 +52,7 @@
 #include "fscorehttputil.h"
 #include "fspanellogin.h"
 #include "lfsimfeaturehandler.h"	// <COLOSI opensim multi-currency support />
+#include "llmaterialtable.h" // <FS:Beq> FIRE-31628 for access to static var
 
 void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
@@ -1051,6 +1052,7 @@ void LLGridManager::setGridChoice(const std::string& grid)
 		gSavedSettings.setString("CurrentGrid", grid);
 		LLTrans::setDefaultArg("CURRENT_GRID", getGridLabel()); //<FS:AW make CURRENT_GRID a default substitution>
 		updateIsInProductionGrid();
+		LLMaterialTable::basic.replaceCollsionSounds(isInOpenSim()); // <FS:Beq> FIRE-31628 Use OpenSim collision sounds when in OpenSim
 		mReadyToLogin = true;
 	}
 }

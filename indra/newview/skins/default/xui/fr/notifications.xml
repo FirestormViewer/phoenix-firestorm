@@ -5366,6 +5366,13 @@ Résultat du test de compression de fichier pour gzip au niveau 6 avec [FILE] de
 Compression : [PACK_TIME]s [PSIZE]KB
 Décompression : [UNPACK_TIME]s [USIZE]KB
 	</notification>
+	<notification name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Continuer" />
+			<button name="cancel" text="Annuler" />
+		</form>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Aucun paramètre d'environnement valide n'a été sélectionné.
 
