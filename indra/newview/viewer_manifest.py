@@ -613,7 +613,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("alut.dll")
 
             # For textures
-            self.fs_try_path("openjp2.dll")
+            self.path_optional("openjp2.dll")
 
             # Uriparser
             self.path("uriparser.dll")
@@ -1885,7 +1885,7 @@ class LinuxManifest(ViewerManifest):
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
-            self.fs_try_path( "libminigbm.so" )
+            self.path_optional( "libminigbm.so" )
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
@@ -1998,10 +1998,10 @@ class LinuxManifest(ViewerManifest):
             #self.fs_path("libminizip.so")
             self.path("libuuid.so*")
             self.path("libSDL*.so*")
-            self.fs_try_path("libdirectfb*.so*")
-            self.fs_try_path("libfusion*.so*")
-            self.fs_try_path("libdirect*.so*")
-            self.fs_try_path("libopenjpeg.so*")
+            self.path_optional("libdirectfb*.so*")
+            self.path_optional("libfusion*.so*")
+            self.path_optional("libdirect*.so*")
+            self.path_optional("libopenjpeg.so*")
             self.path("libhunspell-1.3.so*")
             self.path("libalut.so*")
             #self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
@@ -2030,7 +2030,7 @@ class LinuxManifest(ViewerManifest):
             # version number.
             #self.path("libfontconfig.so.*.*")
 
-            self.fs_try_path("libjemalloc.so*")
+            self.path_optional("libjemalloc.so*")
 
             # Vivox runtimes
             # Currentelly, the 32-bit ones will work with a 64-bit client.

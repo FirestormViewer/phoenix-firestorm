@@ -155,13 +155,6 @@ class FSViewerManifest:
 
             os.rename("%s/firestorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(), osname, self.address_size), sName)
 
-
-    # New llmanifest is braindead and does not allow any optional files.
-    # For some files likes jemalloc or openjpeg it makes sense to allow them to be abesent
-    def fs_try_path( self, src, dst=None ):
-        if self.path( src,dst ) == 0:
-            self.missing.pop()
-
     def fs_generate_breakpad_symbols_for_file( self, aFile ):
         from os import makedirs, remove
         from os.path import join, isfile
