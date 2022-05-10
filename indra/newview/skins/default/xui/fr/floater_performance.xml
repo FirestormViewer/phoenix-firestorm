@@ -12,6 +12,12 @@
 	<floater.string name="focus_fps">
 		En arrière-plan
 	</floater.string>
+	<floater.string name="info_waitforit">
+		Attendez 5 à 10 s pour voir les changements.
+	</floater.string>
+	<floater.string name="info_frozen">
+		Pause des statistiques lorsque la FPS est limitée ou en arrière-plan.
+	</floater.string>
 	<floater.string name="tot_av_template">
 		Total: [TOT_AV] ([TOT_AV_TIME]μs)
 	</floater.string>
@@ -23,26 +29,37 @@
 			<text name="fps_lbl">
 				images par seconde
 			</text>
+			<text name="fps_warning">
+				Utilisateur limité @ 000FPS
+			</text>
 			<text name="fps_desc1_lbl">
-				Attendez 5 à 10 secondes pour voir les changements.
+				Stats en pause si FPS limitée/en arrière-plan.
 			</text>
 			<text name="frame_breakdown">
 				[----------------- Vous verrez ici l'analyse du cadre. -----------------]
 			</text>
 		</panel>
 		<panel name="target_subpanel">
-			<text name="settings_lbl">
-				Réglage auto de l'affichage
+			<text name="settings_lbl" tool_tip="Ajustement automatique des paramètres pour maintenir la fréquence d'images. Réglez la cible sur la fréquence d'images souhaitée et la visionneuse tentera de s'y conformer en modifiant dynamiquement vos paramètres.">
+				Auto :
 			</text>
-			<check_box label="Réglage automatique" name="AutoTuneFPS" tool_tip="Le visualiseur tentera d'ajuster les paramètres pour atteindre la fréquence d'images souhaitée.." />
+			<text name="targetfps_desc">
+				Fréquence d'images cible (fps)
+			</text>
+			<spinner name="target_fps" tool_tip="FPS cible - Le niveau de FPS souhaité. Le visualisateur essaiera d'atteindre ce niveau en ajustant vos paramètres graphiques.." />
+			<button label="Lancer" label_selected="Stop" name="AutoTuneFPS" tool_tip="La visionneuse tentera d'ajuster les paramètres pour atteindre la FPS cible." width="72" />
+			<check_box label="Continu" name="AutoTuneContinuous" tool_tip="La visionneuse adaptera continuellement les paramètres pour atteindre l'objectif FPS jusqu'à ce qu'elle s'arrête, même avec le flotteur fermé. Lorsqu'il est désactivé, un clic sur le bouton Réglage auto ajustera les paramètres actuels puis s'arrêtera." width="64" />
+			<button name="PrefSaveButton" tool_tip="Sauvegarder les paramètres actuels par défaut pour une utilisation ultérieure."/>
+			<button name="PrefLoadButton" tool_tip="Charger un préréglage existant."/>
+			<button tool_tip="Rechargez les paramètres graphiques par défaut de votre ordinateur." name="Defaults"/>
 			<text name="settings_desc">
-				Réglage auto pour maint. le nombre de FPS.
+				Stratégie de réglage
 			</text>
 			<combo_box name="FSTuningFPSStrategy">
-				<combo_box.item label="Uniquement les avatars" name="av_only" />
+				<combo_box.item label="Avatars seulement" name="av_only" />
 				<combo_box.item label="Avatars et scène" name="av_and_scene" />
 			</combo_box>
-			<spinner name="target_fps" tool_tip="FPS cible - Le niveau de FPS souhaité. Le visualisateur essaiera d'atteindre ce niveau en ajustant vos paramètres graphiques.." />
+			<button name="target_btn" tool_tip="Modifier le comportement de la stratégie de réglage." />
 		</panel>
 	</panel>
 	<panel name="panel_performance_main">
