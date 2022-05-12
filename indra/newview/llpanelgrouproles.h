@@ -357,6 +357,7 @@ public:
 
 	virtual void activate();
 	virtual void update(LLGroupChange gc);
+	virtual void onFilterChanged();				// <FS:Zi> FIRE-31653: add banlist filter editor
 	virtual void draw();
 
 	static void onBanEntrySelect(LLUICtrl* ctrl, void* user_data);
