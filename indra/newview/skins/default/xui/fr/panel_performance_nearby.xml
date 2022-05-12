@@ -7,7 +7,7 @@
 		Avatars à proximité
 	</text>
 	<text name="av_nearby_desc">
-		Masquer les avatars les plus complexes pour gagner en fluidité.
+		Masquez les avatars les plus complexes pour gagner en fluidité.
 	</text>
 	<slider tool_tip="Contrôle le moment où un avatar visuellement complexe est dessiné sous forme d'avatar de substitution" label="Complexité maximale (K)" name="IndirectMaxComplexity" />
 	<slider tool_tip="Contrôle quand un avatar visuellement complexe est considéré comme prenant trop de temps pour être rendu (unité : microsecondes)" label="Temps de rendu max. (μs)" name="FSRenderAvatarMaxART" />
@@ -23,6 +23,9 @@
 	</name_list>
 	<text name="av_nearby_desc2">
 		Vous pouvez également faire un clic droit sur un avatar pour contr. l'affichage.
+	</text>
+	<text name="av_nearby_desc3">
+		Votre avatar inclut le poids de la visionneuse. L'onglet des attachements montre l'effet sur les autres.
 	</text>
 	<button label="Exceptions..." name="exceptions_btn" />
 	<check_box label="Toujours afficher complètement les amis" name="display_friends" />

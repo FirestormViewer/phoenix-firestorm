@@ -74,6 +74,7 @@ Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.
 			<panel.string name="ban_count_template">
 				Bann-Anzahl: [COUNT]/[LIMIT]
 			</panel.string>
+			<filter_editor label="Verbannte Einwohner filtern" name="filter_input"/>
 			<name_list name="ban_list">
 				<name_list.columns label="Einwohner" name="name"/>
 				<name_list.columns label="Bann-Datum" name="ban_date"/>
