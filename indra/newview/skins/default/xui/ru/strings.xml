@@ -258,6 +258,7 @@ http://secondlife.com/viewer-access-faq
 Пожалуйста, проверьте, правильно ли вы ввели
     * Имя пользователя (например bobsmith12 или steller.sunshine)
     * Пароль
+    * Токен второго фактора (если включен)
 Также, пожалуйста, проверьте что режим Caps Lock отключен
 	</string>
 	<string name="LoginFailedPasswordChanged">
@@ -367,6 +368,10 @@ support@secondlife.com.
 	<string name="LoginFailedLoggingOutSession">
 		Система начала выход из вашего последнего сеанса.
 Пожалуйста, попробуйте зайти снова через минуту.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Чтобы продолжить вход в систему, введите новый токен из приложения многофакторной аутентификации.
+Если вы считаете, что это ошибка, пожалуйста, свяжитесь с support@secondlife.com
 	</string>
 	<string name="AgentLostConnection">
 		Возможно, в этом регионе возникли проблемы. Проверьте подключение к Интернету.

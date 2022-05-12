@@ -116,6 +116,12 @@ public:
 	BOOL addRestitution(U8 mcode, const F32 &restitution);
 	BOOL addDamageAndEnergy(U8 mcode, const F32 &hp_mod, const F32 &damage_mod, const F32 &ep_mod);
 
+	// <FS:Beq> FIRE-31628 Use OpenSim collision sounds when in OpenSim
+	#ifdef OPENSIM
+	void replaceCollsionSounds(bool useOpenSim=false);
+	#endif
+	// </FS:Beq>
+
 	LLUUID getDefaultTextureID(const std::string& name);					// LLUUID::null if not found
 	LLUUID getDefaultTextureID(U8 mcode);					// LLUUID::null if not found
 	U8     getMCode(const std::string& name);						// 0 if not found
