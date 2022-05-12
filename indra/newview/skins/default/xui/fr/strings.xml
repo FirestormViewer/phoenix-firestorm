@@ -5332,7 +5332,7 @@ Si le problème persiste, vérifiez la configuration de votre réseau et de votr
 	<string name="PremiumMembership">
 		Premium
 	</string>
-	<string name="Premium PlusMembership">
+	<string name="Premium_PlusMembership">
 		Premium Plus
 	</string>
 	<string name="MembershipUpgradeText">
