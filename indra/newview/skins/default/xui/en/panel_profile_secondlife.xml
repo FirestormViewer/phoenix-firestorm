@@ -133,7 +133,7 @@ Account: [ACCTTYPE]
 
           <text
            top_pad="0"
-           left="2"
+           left_delta="0"
            height="16"
            right="-1"
            layout="topleft"
@@ -179,7 +179,7 @@ Account: [ACCTTYPE]
                follows="left|top|right"
                layout="topleft"
                translate="false"
-               icon_positioning="left
+               icon_positioning="left"
                use_ellipses="true"
                visible="true"/>
             </layout_panel>
@@ -194,7 +194,7 @@ Account: [ACCTTYPE]
               <text
                name="account_info"
                value="Account: (loading...)"
-               top="15"
+               top="0"
                left="0"
                right="-1"
                height="45"
