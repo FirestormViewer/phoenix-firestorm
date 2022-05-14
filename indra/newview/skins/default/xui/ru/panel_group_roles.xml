@@ -58,8 +58,9 @@
 			<panel.string name="ban_count_template">
 				Забанено: [COUNT]/[LIMIT]
 			</panel.string>
+			<filter_editor label="Фильтр Забаненных" name="filter_input"/>
 			<name_list name="ban_list">
-				<name_list.columns label="Пользователь" name="name"/>
+				<name_list.columns label="Житель" name="name"/>
 				<name_list.columns label="Забанен" name="ban_date"/>
 			</name_list>
 			<button label="Забанить" name="ban_create" tool_tip="Забанить пользователя группы"/>
