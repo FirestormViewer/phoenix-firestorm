@@ -2928,14 +2928,12 @@ void LLInventoryModel::buildParentChildMap()
 				// <FS:Beq> FIRE-31634 [OPENSIM] Inventory Validation fails on old and grandfathered inventories
 				// We will report the errors but allow the user to continue.
 				#ifdef OPENSIM
-				if(LLGridManager::getInstance()->isInOpenSim())
+				if (LLGridManager::getInstance()->isInOpenSim())
 				{
 					LLSD args;
 					LLSD grid_info;
 					LLGridManager::getInstance()->getGridData(grid_info);
-					std::string grid_label = LLGridManager::getInstance()->getGridLabel();
-					bool is_opensim = LLGridManager::getInstance()->isInOpenSim();
-					if (is_opensim && grid_info.has("help"))
+					if (grid_info.has("help"))
 					{
 						args["HELP"] = grid_info["help"].asString();
 					}
