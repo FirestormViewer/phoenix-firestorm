@@ -12821,7 +12821,7 @@ Changes won't take effect until after you restart [APP_NAME].
    log_to_chat="false"
    type="alertmodal">
       <usetemplate
-      ignoretext="When the region sets a new currency helper."
+      ignoretext="Warn if inventory validation errors have been detected."
       name="okignore"
       yestext="OK"/>
 Corruption has been found in your inventory. 

@@ -2939,7 +2939,7 @@ void LLInventoryModel::buildParentChildMap()
 					}
 					else
 					{
-						args["HELP"] = "your Grid Operator's support team";
+						args["HELP"] = LLTrans::getString("OpenSimInventoryValidationErrorGenericHelp");
 					}
 					args["ERRORS"] = validation_info->mLog.str();
 					LL_WARNS("Inventory") << "Potentially fatal errors were found during validation:"
