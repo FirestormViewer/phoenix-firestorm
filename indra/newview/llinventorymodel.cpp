@@ -2948,9 +2948,9 @@ void LLInventoryModel::buildParentChildMap()
 										<< "You may not be able to do normal inventory operations in this session."
 										<< "Contact your Grid Operator's support team and provide them with your logs."
 										<< LL_ENDL;
-					LL_WARNS("Inventory") << "### Start of errrors ###" << LL_ENDL;
+					LL_WARNS("Inventory") << "### Start of errors ###" << LL_ENDL;
 					LL_WARNS("Inventory") << validation_info->mLog.str() << LL_ENDL;
-					LL_WARNS("Inventory") << "### End of errrors ###" << LL_ENDL;
+					LL_WARNS("Inventory") << "### End of errors ###" << LL_ENDL;
 					LLNotificationsUtil::add("InventoryValidationFailed", args);
 					mIsAgentInvUsable = true;
 				}
