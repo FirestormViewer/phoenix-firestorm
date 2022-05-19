@@ -1494,6 +1494,7 @@ LLPreviewAnimation::LLPreviewAnimation(S32 width, S32 height) : LLViewerDynamicT
     // on idle overall apperance update will set skirt to visible, so either
     // call early or account for mSpecialRenderMode in updateMeshVisibility
     mDummyAvatar->updateOverallAppearance();
+    mDummyAvatar->hideHair();
     mDummyAvatar->hideSkirt();
 
 	// stop extraneous animations
@@ -1585,6 +1586,7 @@ BOOL	LLPreviewAnimation::render()
 		{
 			LLDrawPoolAvatar *avatarPoolp = (LLDrawPoolAvatar *)face->getPool();
 			avatarp->dirtyMesh();
+            gPipeline.enableLightsPreview();
 			avatarPoolp->renderAvatars(avatarp);  // renders only one avatar
 		}
 	}

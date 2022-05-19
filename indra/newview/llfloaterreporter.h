@@ -116,10 +116,8 @@ private:
 	static void show(const LLUUID& object_id, const std::string& avatar_name = LLStringUtil::null, const LLUUID& experience_id = LLUUID::null);
 
 	void takeScreenshot(bool use_prev_screenshot = false);
-	void sendReportViaCaps(std::string url);
 	void uploadImage();
 	bool validateReport();
-	void setReporterID();
 	LLSD gatherReport();
 	void sendReportViaLegacy(const LLSD & report);
 	void sendReportViaCaps(std::string url, std::string sshot_url, const LLSD & report);
@@ -132,8 +130,6 @@ private:
 	void onAvatarNameCache(const LLUUID& avatar_id, const LLAvatarName& av_name);
 	// <FS:Ansariel> FIRE-15368: Don't include floater in screenshot update
 	void onUpdateScreenshot();
-
-    static void setDescription(const std::string& description);
 
 	static void requestAbuseCategoriesCoro(std::string url, LLHandle<LLFloater> handle);
     static void finishedARPost(const LLSD &);
