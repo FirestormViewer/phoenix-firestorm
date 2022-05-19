@@ -4929,6 +4929,14 @@ https://wiki.firestormviewer.org/fs_voice
 			<ignore name="ignore" text="Подтвердить отправку кому-либо списка моих текущих ограничений RLV."/>
 		</form>
 	</notification>
+	<notification name="InventoryValidationFailed" label="Ошибки проверки инвентаря">
+		<usetemplate name="okignore" ignoretext="Предупреждать, если были обнаружены ошибки проверки инвентаря."/>
+В вашем инвентаре обнаружено повреждение.
+Пожалуйста, свяжитесь с [HELP] со следующим списком проблем.
+Они могут использовать http://opensimulator.org/wiki/inventory чтобы устранить проблемы.
+
+[ERRORS]
+	</notification>
 	<notification name="PreferenceControlsDefaults">
 		Вы хотите восстановить значения по умолчанию для элементов управления?
 		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Текущий режим" yestext="Все режимы"/>

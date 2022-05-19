@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Membres &amp; rôles" name="roles_tab">
-	<panel.string name="default_needs_apply_text">Il y a des modifications non enregistrées</panel.string>
-	<panel.string name="want_apply_text">Voulez-vous les enregistrer ?</panel.string>
+	<panel.string name="default_needs_apply_text">
+		Il y a des modifications non enregistrées
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Voulez-vous les enregistrer ?
+	</panel.string>
 	<tab_container name="roles_tab_container">
 		<panel name="members_sub_tab" label="Membres" tool_tip="Membres">
 			<panel.string name="help_text">
-                 Vous pouvez ajouter ou enlever des rôles assignés aux membres.
- Sélectionnez des noms (en utilisant la touche Ctrl et en 
- cliquant sur leurs noms).
+				Vous pouvez ajouter ou enlever des rôles assignés aux membres.
+Sélectionnez des noms (en utilisant la touche Ctrl et en
+cliquant sur leurs noms).
 			</panel.string>
-			<panel.string name="donation_area">[AREA] m²</panel.string>
 			<filter_editor label="Filtrer des membres" name="filter_input"/>
-			<name_list name="member_list" short_names="false">
+				<name_list name="member_list" short_names="false">
 				<name_list.columns label="Membre" name="name"/>
 				<name_list.columns label="Don" name="donated"/>
 				<name_list.columns label="Statut" name="online"/>
@@ -19,36 +22,44 @@
 			</name_list>
 			<button name="member_invite" label="Inviter"/>
 			<button name="member_eject" label="Éjecter"/>
-			<button label="Bannir" name="member_ban"/>
+			<button name="member_ban" label="Bannir"/>
 			<button name="export_list" label="Exporter"/>
 		</panel>
 		<panel name="roles_sub_tab" label="Rôles" tool_tip="Rôles">
 			<panel.string name="help_text">
-             Les rôles ont un titre et une liste de droits
- que les membres peuvent utiliser. Les membres peuvent appartenir à
- un ou plusieurs rôles. Un groupe peux avoir jusqu'à 10 rôles,
- comprenant les rôles Tous et Propriétaire.
+				Les rôles ont un titre et une liste de droits
+que les membres peuvent utiliser. Les membres peuvent appartenir à
+un ou plusieurs rôles. Un groupe peux avoir jusqu'à 10 rôles,
+comprenant les rôles Tous et Propriétaire.
 			</panel.string>
-			<panel.string name="cant_delete_role">Les rôles 'Tous' et 'Propriétaire' sont spéciaux et ne peuvent être supprimés.</panel.string>
+			<panel.string name="cant_delete_role">
+				Les rôles 'Tous' et 'Propriétaire' sont spéciaux et ne peuvent être supprimés.
+			</panel.string>
 			<filter_editor label="Filtrer les rôles" name="filter_input"/>
 			<scroll_list name="role_list">
 				<scroll_list.columns label="Rôle" name="name"/>
 				<scroll_list.columns label="Titre" name="title"/>
 			</scroll_list>
-			<button name="role_create" label="Nouveau rôle"/>
+			<button name="role_create" label="Nouveau"/>
+			<button name="role_copy" label="Copier"/>
 			<button name="role_delete" label="Supprimer"/>
 		</panel>
 		<panel name="actions_sub_tab" label="Droits" tool_tip="Vous pouvez consulter la description d'un droit et quels rôles et membres peuvent effectuer l'action.">
 			<panel.string name="help_text">
-                 Les droits offrent aux membres de faire des actions
- spécifiques dans ce groupe. Il existe une large liste de droits.
+				Les droits offrent aux membres de faire des actions
+spécifiques dans ce groupe. Il existe une large liste de droits.
 			</panel.string>
 			<filter_editor label="Filtrer les actions" name="filter_input"/>
 			<scroll_list name="action_list" tool_tip="Sélectionner un droit pour afficher plus de détails"/>
 		</panel>
 		<panel label="Résidents bannis" name="banlist_sub_tab" tool_tip="Afficher les résidents bannis de ce groupe.">
-			<panel.string name="help_text">Les résidents bannis ne seront pas autorisés à rejoindre ce groupe.</panel.string>
-			<panel.string name="ban_count_template">Bannis : [COUNT]/[LIMIT]</panel.string>
+			<panel.string name="help_text">
+				Les résidents bannis ne seront pas autorisés à rejoindre ce groupe.
+			</panel.string>
+			<panel.string name="ban_count_template">
+				Bannis : [COUNT]/[LIMIT]
+			</panel.string>
+			<filter_editor label="Filtrer la liste des bannis" name="filter_input"/>
 			<name_list name="ban_list" short_names="false">
 				<name_list.columns label="Résident" name="name"/>
 				<name_list.columns label="Date du bannissement" name="ban_date"/>
@@ -59,38 +70,48 @@
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
-		<text name="assigned_roles_label">Rôles assignés</text>
-		<text name="static2">Droits accordés</text>
+		<text name="assigned_roles_label">
+			Rôles assignés
+		</text>
+		<text name="static2">
+			Droits accordés
+		</text>
 		<scroll_list tool_tip="Consultez l'onglet des droits pour les détails des droits accordés" name="member_allowed_actions"/>
 	</panel>
-	<panel name="members_header">
-		<text_editor name="member_action_description">
-			Ce pouvoir permet « d&apos;expulser des membres de ce groupe ». Seul un propriétaire peut expulser un autre propriétaire.
-		</text_editor>
-	</panel>
 	<panel name="roles_footer">
-		<text name="role_name_label">Nom du rôle</text>
-		<text name="role_title_label">Titre du rôle</text>
+		<text name="role_name_label">
+			Nom du rôle
+		</text>
+		<text name="role_title_label">
+			Titre du rôle
+		</text>
 		<check_box label="Afficher les membres" name="role_visible_in_list" tool_tip="Affiche ou masque à tout le monde les membres possédant ce rôle dans l'onglet Général."/>
-		<text name="description_label">Description</text>
+		<text name="description_label">
+			Description
+		</text>
 		<panel name="group_roles_layout_panel">
-			<text name="assigned_members_label">Membres assignés</text>
+			<text name="assigned_members_label">
+				Membres assignés
+			</text>
 		</panel>
 		<panel name="group_roles_layout_panel2">
-			<text name="allowed_abilities_label">Droits accordés</text>
+			<text name="allowed_abilities_label">
+				Droits accordés
+			</text>
 			<scroll_list name="role_allowed_actions" tool_tip="Consulter l'onglet des droits pour les détails de chaque droit accordé"/>
 		</panel>
 	</panel>
-	<panel name="roles_header">
-		<text_editor name="role_action_description">
-			Ce pouvoir permet « d&apos;expulser des membres de ce groupe ». Seul un propriétaire peut expulser un autre propriétaire.
-		</text_editor>
-	</panel>
 	<panel name="actions_footer">
 		<panel name="action_description_panel">
-			<text_editor name="action_description">Ce droit est 'Éjecter des membres de ce groupe'. Seul un propriétaire peut en éjecter un autre.</text_editor>
+			<text_editor name="action_description">
+				Ce droit est 'Éjecter des membres de ce groupe'. Seul un propriétaire peut en éjecter un autre.
+			</text_editor>
 		</panel>
-		<text name="action_roles_label">Rôles ayant ce droit</text>
-		<text name="action_members_label">Membres ayant ce droit</text>
+		<text name="action_roles_label">
+			Rôles ayant ce droit
+		</text>
+		<text name="action_members_label">
+			Membres ayant ce droit
+		</text>
 	</panel>
 </panel>

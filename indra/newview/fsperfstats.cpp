@@ -186,39 +186,39 @@ namespace FSPerfStats
                 sceneStats[static_cast<size_t>(statEntry)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
                 // LL_INFOS("scenestats") << "Scenestat: " << static_cast<size_t>(statEntry) << " before=" << avg << " new=" << val << " newavg=" << statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_GENERAL)][LLUUID::null][static_cast<size_t>(statEntry)] << LL_ENDL;
             }
-
-            auto& statsMap = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_ATTACHMENT)];
-            for(auto& stat_entry : statsMap)
-            {
-                auto val = stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)];
-                if(val > SMOOTHING_PERIODS){
-                    auto avg = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_ATTACHMENT)][stat_entry.first][static_cast<size_t>(ST::RENDER_COMBINED)];
-                    stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
-                }
-            }
-
-
-            auto& statsMapAv = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_AVATAR)];
-            for(auto& stat_entry : statsMapAv)
-            {
-                for(auto& stat : avatarStatsToAvg)
-                {
-                    auto val = stat_entry.second[static_cast<size_t>(stat)];
-                    if(val > SMOOTHING_PERIODS)
-                    {
-                        auto avg = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_AVATAR)][stat_entry.first][static_cast<size_t>(stat)];
-                        stat_entry.second[static_cast<size_t>(stat)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
-                    }
-                }
-            }
-
-            // swap the buffers
-            if(enabled())
-            {
-                std::lock_guard<std::mutex> lock{bufferToggleLock};
-                writeBuffer ^= 1;
-            }; // note we are relying on atomic updates here. The risk is low and would cause minor errors in the stats display. 
         }
+// Allow attachment times etc to update even when FPS limited or sleeping.
+        auto& statsMap = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_ATTACHMENT)];
+        for(auto& stat_entry : statsMap)
+        {
+            auto val = stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)];
+            if(val > SMOOTHING_PERIODS){
+                auto avg = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_ATTACHMENT)][stat_entry.first][static_cast<size_t>(ST::RENDER_COMBINED)];
+                stat_entry.second[static_cast<size_t>(ST::RENDER_COMBINED)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
+            }
+        }
+
+
+        auto& statsMapAv = statsDoubleBuffer[writeBuffer][static_cast<size_t>(ObjType_t::OT_AVATAR)];
+        for(auto& stat_entry : statsMapAv)
+        {
+            for(auto& stat : avatarStatsToAvg)
+            {
+                auto val = stat_entry.second[static_cast<size_t>(stat)];
+                if(val > SMOOTHING_PERIODS)
+                {
+                    auto avg = statsDoubleBuffer[writeBuffer ^ 1][static_cast<size_t>(ObjType_t::OT_AVATAR)][stat_entry.first][static_cast<size_t>(stat)];
+                    stat_entry.second[static_cast<size_t>(stat)] = avg + (val / SMOOTHING_PERIODS) - (avg / SMOOTHING_PERIODS);
+                }
+            }
+        }
+
+        // swap the buffers
+        if(enabled())
+        {
+            std::lock_guard<std::mutex> lock{bufferToggleLock};
+            writeBuffer ^= 1;
+        }; // note we are relying on atomic updates here. The risk is low and would cause minor errors in the stats display. 
 
         // clean the write maps in all cases.
         auto& statsTypeMatrix = statsDoubleBuffer[writeBuffer];
