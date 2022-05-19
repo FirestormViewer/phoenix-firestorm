@@ -7189,4 +7189,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="FSObjectInventoryElements">
 		[NUM_ELEMENTS] Elemente
 	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		das Support-Team Ihres Grid-Betreibers
+	</string>
 </strings>
