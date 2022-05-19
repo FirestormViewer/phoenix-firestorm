@@ -30,7 +30,7 @@
 
 /* static */
 // <FS:Beq> FIRE-23053 - analysed mesh physics is not correctly displayed for thin meshes
-//void LLPhysicsShapeBuilderUtil::determinePhysicsShape( const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, PhysicsShapeSpecification& specOut )
+//void LLPhysicsShapeBuilderUtil::determinePhysicsShape( const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, PhysicsShapeSpecification& specOut)
 void LLPhysicsShapeBuilderUtil::determinePhysicsShape(const LLPhysicsVolumeParams& volume_params, const LLVector3& scale, bool hasDecomp, PhysicsShapeSpecification& specOut)
 //</FS:Beq>
 {
@@ -194,6 +194,7 @@ void LLPhysicsShapeBuilderUtil::determinePhysicsShape(const LLPhysicsVolumeParam
 
 	if ( volume_params.shouldForceConvex() )
 	{
+        // Server distinguishes between convex of a prim vs isSculpt, but we don't care.
 		specOut.mType = PhysicsShapeSpecification::USER_CONVEX;
 	}	
 	// Make a simpler convex shape if we can.
@@ -202,6 +203,16 @@ void LLPhysicsShapeBuilderUtil::determinePhysicsShape(const LLPhysicsVolumeParam
 	{
 		specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
 	}
+    else if (volume_params.isMeshSculpt() &&
+             // Check overall dimensions, not individual triangles.
+             (scale.mV[0] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
+              scale.mV[1] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
+              scale.mV[2] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE
+              ) )
+    {
+        // Server distinguishes between user-specified or default convex mesh, vs server's thin-triangle override, but we don't.
+        specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
+    }
 	else if ( volume_params.isSculpt() ) // Is a sculpt of any kind (mesh or legacy)
 	{
 		//<FS:Beq> [BUG-134006] Viewer code is not aligned to server code when calculating physics shape for thin objects.
