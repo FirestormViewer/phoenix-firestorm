@@ -6773,4 +6773,5 @@ ID объекта: [INSPECTING_KEY]
 	<string name="FSObjectInventoryNoElements">Нет элементов</string>
 	<string name="FSObjectInventoryOneElement">1 элемент</string>
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] элементов</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">команда поддержки оператора вашей сетки</string>
 </strings>

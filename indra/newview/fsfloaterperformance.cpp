@@ -306,20 +306,11 @@ void FSFloaterPerformance::draw()
             pct_swap_time = llclamp(pct_swap_time,0.,100.);
             pct_scene_render_time = llclamp(pct_scene_render_time,0.,100.);
 
-            args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
-            args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
-            args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
-            args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
-            args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
-            args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_render_time));
+// update the top line status - also check whether we're sleeping/limiting
+
             args["TOT_FRAME_TIME"] = llformat("%02u", (U32)llround(tot_frame_time_ns/1000000));
             args["FPSCAP"] = llformat("%02u", (U32)fpsCap);
             args["FPSTARGET"] = llformat("%02u", (U32)targetFPS);
-
-            getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
-            getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
-            getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
-            
             auto textbox = getChild<LLTextBox>("fps_warning");
             if (tot_sleep_time_raw > 0) // We are sleeping because view is not focussed
             {
@@ -345,7 +336,30 @@ void FSFloaterPerformance::draw()
             {
                 textbox->setVisible(false);
             }
+// pre-fill the args
+            if(!unreliable)
+            {
+                args["AV_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_avatar_time));
+                args["HUDS_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_huds_time));
+                args["UI_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_ui_time));
+                args["IDLE_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_idle_time));
+                args["SWAP_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_swap_time));
+                args["SCENERY_FRAME_PCT"] = llformat("%02u", (U32)llround(pct_scene_render_time));
+            }
+            else
+            {
+                args["AV_FRAME_PCT"] = "--";
+                args["HUDS_FRAME_PCT"] = "--";
+                args["UI_FRAME_PCT"] = "--";
+                args["IDLE_FRAME_PCT"] = "--";
+                args["SWAP_FRAME_PCT"] = "--";
+                args["SCENERY_FRAME_PCT"] = "--";
+            }
 
+            getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
+            getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
+            getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
+            
             auto button = getChild<LLButton>("AutoTuneFPS");
             if((bool)button->getToggleState() != FSPerfStats::tunables.userAutoTuneEnabled)
             {

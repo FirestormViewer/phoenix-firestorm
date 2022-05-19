@@ -84,6 +84,7 @@ public:
 
 	std::set<LLFolderType::EType> mMissingRequiredSystemFolders;
 	std::set<LLFolderType::EType> mDuplicateRequiredSystemFolders;
+	std::ostringstream mLog; // <FS:Beq/> Extra validation logs for OpenSim.
 };
 std::ostream& operator<<(std::ostream& s, const LLInventoryValidationInfo& v);
 

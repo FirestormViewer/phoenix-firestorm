@@ -12815,6 +12815,25 @@ Changes won't take effect until after you restart [APP_NAME].
 
   <notification
    icon="alertmodal.tga"
+   name="InventoryValidationFailed"
+   label="Inventory Validation Errors"
+   log_to_im="true"
+   log_to_chat="false"
+   type="alertmodal">
+      <usetemplate
+      ignoretext="Warn if inventory validation errors have been detected."
+      name="okignore"
+      yestext="OK"/>
+Corruption has been found in your inventory. 
+Please contact [HELP] with the following list of issues.
+They can use http://opensimulator.org/wiki/inventory to fix the issues.
+
+[ERRORS]
+      <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="PreferenceChatClearLog"
    type="alertmodal">
     This will delete the logs of previous conversations, and any backups of that file.
