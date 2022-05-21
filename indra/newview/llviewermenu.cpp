@@ -9742,7 +9742,7 @@ class FSProfilerToggle : public view_listener_t
 	}
 };
 
-class FSProfileCheckVisible : public view_listener_t
+class FSProfilerCheckEnabled : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
@@ -12136,7 +12136,7 @@ void initialize_menus()
 
 	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
 	view_listener_t::addMenu(new FSProfilerToggle(), "Develop.ToggleProfiling");
-	view_listener_t::addMenu(new FSProfileCheckVisible(), "Develop.EnableProfiling");
+	view_listener_t::addMenu(new FSProfilerCheckEnabled(), "Develop.EnableProfiling");
 
 	// Admin >Object
 	view_listener_t::addMenu(new LLAdminForceTakeCopy(), "Admin.ForceTakeCopy");
