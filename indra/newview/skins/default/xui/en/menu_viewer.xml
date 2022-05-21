@@ -3853,8 +3853,9 @@
                  function="CheckControl"
                  parameter="ProfilingActive" />
                 <menu_item_check.on_click
-                 function="Develop.ToggleProfiling"
-                 parameter="ProfilingActive" />
+                 function="Develop.ToggleProfiling" />
+                <menu_item_check.on_enable
+                 function="Develop.EnableProfiling" />
             </menu_item_check>
             <menu_item_check
              label="Start when connected"
