@@ -4765,6 +4765,12 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		{
 			continue;
 		}
+		// <FS:Ansariel> Ignore in SL at least...
+		if (LLGridManager::instance().isInSecondLife() && folder_type == LLFolderType::FT_MY_SUITCASE)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		bool is_automatic = LLFolderType::lookupIsAutomaticType(folder_type);
 		bool is_singleton = LLFolderType::lookupIsSingletonType(folder_type);
 		S32 count_under_root = ft_counts_under_root[folder_type];
