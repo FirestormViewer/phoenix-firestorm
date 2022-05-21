@@ -69,6 +69,8 @@ class LLWindowListener;
 class LLViewerWindowListener;
 class LLVOPartGroup;
 class LLPopupView;
+class LLCubeMap;
+class LLCubeMapArray;
 
 #define PICK_HALF_WIDTH 5
 #define PICK_DIAMETER (2 * PICK_HALF_WIDTH + 1)
@@ -360,6 +362,18 @@ public:
 		BOOL show_ui = TRUE, BOOL show_hud = TRUE, BOOL do_rebuild = FALSE, LLSnapshotModel::ESnapshotLayerType type = LLSnapshotModel::SNAPSHOT_TYPE_COLOR, S32 max_size = MAX_SNAPSHOT_IMAGE_SIZE);
 
     BOOL			simpleSnapshot(LLImageRaw *raw, S32 image_width, S32 image_height, const int num_render_passes);
+
+    
+    
+    // take a cubemap snapshot
+    // origin - vantage point to take the snapshot from
+    // cubearray - cubemap array for storing the results
+    // index - cube index in the array to use (cube index, not face-layer)
+    BOOL cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 index, S32 face);
+
+    
+    // special implementation of simpleSnapshot for reflection maps
+    BOOL			reflectionSnapshot(LLImageRaw* raw, S32 image_width, S32 image_height, const int num_render_passes);
 
     BOOL			thumbnailSnapshot(LLImageRaw *raw, S32 preview_width, S32 preview_height, BOOL show_ui, BOOL show_hud, BOOL do_rebuild, LLSnapshotModel::ESnapshotLayerType type);
 	BOOL			isSnapshotLocSet() const;

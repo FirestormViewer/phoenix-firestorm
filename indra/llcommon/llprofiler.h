@@ -88,8 +88,8 @@ extern thread_local bool gProfilerEnabled;
 // <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
         //// GPU Mutually exclusive with detailed memory tracing
         // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
-    #define LL_PROFILER_ENABLE_TRACY_MEMORY 1
-    #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
+        #define LL_PROFILER_ENABLE_TRACY_MEMORY 1
+        #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
     #endif
 
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY
@@ -117,8 +117,6 @@ extern thread_local bool gProfilerEnabled;
         #define LL_PROFILE_ZONE_ERR(name)               LL_PROFILE_ZONE_NAMED_COLOR( name, 0XFF0000  )  // RGB yellow
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
-        #define LL_PROFILE_ALLOC(ptr, size)             TracyAlloc(ptr, size)
-        #define LL_PROFILE_FREE(ptr)                    TracyFree(ptr)
 
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, gProfilerEnabled ) // <FS:Beq/> Additional Tracy macro
@@ -144,8 +142,6 @@ extern thread_local bool gProfilerEnabled;
         #define LL_PROFILE_ZONE_ERR(name)               (void)(name); // Not supported
         #define LL_PROFILE_ZONE_INFO(name)              (void)(name); // Not supported
         #define LL_PROFILE_ZONE_WARN(name)              (void)(name); // Not supported
-        #define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
-        #define LL_PROFILE_FREE(ptr)                    (void)(ptr);
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)
         #define LL_PROFILE_PLOT( name, value )
@@ -178,8 +174,6 @@ extern thread_local bool gProfilerEnabled;
         #define LL_PROFILE_ZONE_ERR(name)               LL_PROFILE_ZONE_NAMED_COLOR( name, 0XFF0000  )  // RGB yellow
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
-        #define LL_PROFILE_ALLOC(ptr, size)             TracyAlloc(ptr, size)
-        #define LL_PROFILE_FREE(ptr)                    TracyFree(ptr)
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, gProfilerEnabled )
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
@@ -212,6 +206,31 @@ extern thread_local bool gProfilerEnabled;
     #define LL_PROFILE_IS_CONNECTED
     // </FS:Ansariel>
 #endif // LL_PROFILER
+
+#if LL_PROFILER_ENABLE_TRACY_OPENGL
+#define LL_PROFILE_GPU_ZONE(name)        TracyGpuZone(name)
+#define LL_PROFILE_GPU_ZONEC(name,color) TracyGpuZoneC(name,color)
+#define LL_PROFILER_GPU_COLLECT           TracyGpuCollect
+#define LL_PROFILER_GPU_CONTEXT           TracyGpuContext
+
+// disable memory tracking (incompatible with GPU tracing
+#define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
+#define LL_PROFILE_FREE(ptr)                    (void)(ptr);
+#else
+#define LL_PROFILE_GPU_ZONE(name)        (void)name;
+#define LL_PROFILE_GPU_ZONEC(name,color) (void)name;(void)color;
+#define LL_PROFILER_GPU_COLLECT
+#define LL_PROFILER_GPU_CONTEXT
+
+#if LL_PROFILER_CONFIG > 1
+#define LL_PROFILE_ALLOC(ptr, size)             TracyAlloc(ptr, size)
+#define LL_PROFILE_FREE(ptr)                    TracyFree(ptr)
+#else
+#define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
+#define LL_PROFILE_FREE(ptr)                    (void)(ptr);
+#endif
+
+#endif
 
 #include "llprofilercategories.h"
 

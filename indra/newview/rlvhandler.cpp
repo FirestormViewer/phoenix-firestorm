@@ -2167,12 +2167,12 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 				gPipeline.resetVertexBuffers();
 				LLViewerShaderMgr::instance()->setShaders();
 			}
-			else if (!gPipeline.mDeferredLight.isComplete())
+			else if (!gPipeline.mRT->deferredLight.isComplete())
 			{
 				// In case of deferred with no shadows, no ambient occlusion, no depth of field, and no antialiasing
 				gPipeline.releaseGLBuffers();
 				gPipeline.createGLBuffers();
-				RLV_ASSERT(gPipeline.mDeferredLight.isComplete());
+				RLV_ASSERT(gPipeline.mRT->deferredLight.isComplete());
 			}
 		}
 		else

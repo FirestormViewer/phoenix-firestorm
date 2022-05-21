@@ -258,6 +258,7 @@ extern BOOL gDebugClicks;
 extern BOOL gDisplaySwapBuffers;
 extern BOOL gDepthDirty;
 extern BOOL gResizeScreenTexture;
+extern BOOL gCubeSnapshot;
 
 LLViewerWindow	*gViewerWindow = NULL;
 
@@ -6085,8 +6086,8 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 			// </FS:Ansariel>
 			if (scratch_space.allocate(image_width, image_height, color_fmt, true, true))
 			{
-				original_width = gPipeline.mDeferredScreen.getWidth();
-				original_height = gPipeline.mDeferredScreen.getHeight();
+				original_width = gPipeline.mRT->deferredScreen.getWidth();
+				original_height = gPipeline.mRT->deferredScreen.getHeight();
 
 				if (gPipeline.allocateScreenBuffer(image_width, image_height))
 				{
@@ -6372,6 +6373,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
 BOOL LLViewerWindow::simpleSnapshot(LLImageRaw* raw, S32 image_width, S32 image_height, const int num_render_passes)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
     gDisplaySwapBuffers = FALSE;
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -6386,8 +6388,8 @@ BOOL LLViewerWindow::simpleSnapshot(LLImageRaw* raw, S32 image_width, S32 image_
     LLPipeline::sShowHUDAttachments = FALSE;
     LLRect window_rect = getWorldViewRectRaw();
 
-    S32 original_width = LLPipeline::sRenderDeferred ? gPipeline.mDeferredScreen.getWidth() : gViewerWindow->getWorldViewWidthRaw();
-    S32 original_height = LLPipeline::sRenderDeferred ? gPipeline.mDeferredScreen.getHeight() : gViewerWindow->getWorldViewHeightRaw();
+    S32 original_width = LLPipeline::sRenderDeferred ? gPipeline.mRT->deferredScreen.getWidth() : gViewerWindow->getWorldViewWidthRaw();
+    S32 original_height = LLPipeline::sRenderDeferred ? gPipeline.mRT->deferredScreen.getHeight() : gViewerWindow->getWorldViewHeightRaw();
 
     LLRenderTarget scratch_space;
     U32 color_fmt = GL_RGBA;
@@ -6465,6 +6467,125 @@ BOOL LLViewerWindow::simpleSnapshot(LLImageRaw* raw, S32 image_width, S32 image_
     scratch_space.release();
     gPipeline.allocateScreenBuffer(original_width, original_height);
 
+    return true;
+}
+
+void display_cube_face();
+
+BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 cubeIndex, S32 face)
+{
+    // NOTE: implementation derived from LLFloater360Capture::capture360Images() and simpleSnapshot
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
+    LL_PROFILE_GPU_ZONE("cubeSnapshot");
+    llassert(LLPipeline::sRenderDeferred);
+    llassert(!gCubeSnapshot); //assert a snapshot isn't already in progress
+    
+    U32 res = LLRenderTarget::sCurResX;
+
+    llassert(res <= gPipeline.mRT->deferredScreen.getWidth());
+    llassert(res <= gPipeline.mRT->deferredScreen.getHeight());
+
+    // save current view/camera settings so we can restore them afterwards
+    S32 old_occlusion = LLPipeline::sUseOcclusion;
+
+    // set new parameters specific to the 360 requirements
+    LLPipeline::sUseOcclusion = 0;
+    LLViewerCamera* camera = LLViewerCamera::getInstance();
+    
+    LLViewerCamera saved_camera = LLViewerCamera::instance();
+    glh::matrix4f saved_proj = get_current_projection();
+    glh::matrix4f saved_mod = get_current_modelview();
+
+    // camera constants for the square, cube map capture image
+    camera->setAspect(1.0); // must set aspect ratio first to avoid undesirable clamping of vertical FoV
+    camera->setView(F_PI_BY_TWO);
+    camera->yaw(0.0);
+    camera->setOrigin(origin);
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    
+    BOOL prev_draw_ui = gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI) ? TRUE : FALSE;
+    if (prev_draw_ui != false)
+    {
+        LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
+    }
+    BOOL prev_draw_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+    if (prev_draw_particles)
+    {
+        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+    }
+    LLPipeline::sShowHUDAttachments = FALSE;
+    LLRect window_rect = getWorldViewRectRaw();
+
+    mWorldViewRectRaw.set(0, res, res, 0);
+
+    // these are the 6 directions we will point the camera, see LLCubeMapArray::sTargets
+    LLVector3 look_dirs[6] = {
+        LLVector3(1, 0, 0),
+        LLVector3(-1, 0, 0),
+        LLVector3(0, 1, 0),
+        LLVector3(0, -1, 0),
+        LLVector3(0, 0, 1),
+        LLVector3(0, 0, -1)
+    };
+
+    LLVector3 look_upvecs[6] = {
+        LLVector3(0, -1, 0),
+        LLVector3(0, -1, 0),
+        LLVector3(0, 0, 1),
+        LLVector3(0, 0, -1),
+        LLVector3(0, -1, 0),
+        LLVector3(0, -1, 0)
+    };
+
+    // for each of six sides of cubemap
+    //for (int i = 0; i < 6; ++i)
+    int i = face;
+    {
+        // set up camera to look in each direction
+        camera->lookDir(look_dirs[i], look_upvecs[i]);
+
+        // turning this flag off here prohibits the screen swap
+        // to present the new page to the viewer - this stops
+        // the black flash in between captures when the number
+        // of render passes is more than 1. We need to also
+        // set it here because code in LLViewerDisplay resets
+        // it to TRUE each time.
+        gDisplaySwapBuffers = FALSE;
+
+        // actually render the scene
+        gCubeSnapshot = TRUE;
+        display_cube_face();
+        gCubeSnapshot = FALSE;
+    }
+
+    gDisplaySwapBuffers = TRUE;
+
+    if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+    {
+        if (prev_draw_ui != false)
+        {
+            LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
+        }
+    }
+
+    if (prev_draw_particles)
+    {
+        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+    }
+
+    LLPipeline::sShowHUDAttachments = TRUE;
+
+    gPipeline.resetDrawOrders();
+    mWorldViewRectRaw = window_rect;
+    
+    // restore original view/camera/avatar settings settings
+    *camera = saved_camera;
+    set_current_modelview(saved_mod);
+    set_current_projection(saved_proj);
+    LLPipeline::sUseOcclusion = old_occlusion;
+
+    // ====================================================
     return true;
 }
 

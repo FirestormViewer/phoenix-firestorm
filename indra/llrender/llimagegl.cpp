@@ -820,6 +820,7 @@ BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips /* = FALSE */, S32
 
 					if (LLRender::sGLCoreProfile)
 					{
+                        LL_PROFILE_GPU_ZONE("generate mip map");
 						glGenerateMipmap(mTarget);
 					}	
 					stop_glerror();
@@ -1527,6 +1528,7 @@ BOOL LLImageGL::createGLTexture(S32 discard_level, const U8* data_in, BOOL data_
 // Call with void data, vmem is allocated but unitialized
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+    LL_PROFILE_GPU_ZONE("createGLTexture");
     checkActiveThread();
 
     bool main_thread = on_main_thread();
@@ -1696,26 +1698,38 @@ void LLImageGL::syncToMainThread(LLGLuint new_tex_name)
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - sync");
         if (gGLManager.mHasSync)
         {
-            // post a sync to the main thread (will execute before tex name swap lambda below)
-            // glFlush calls here are partly superstitious and partly backed by observation
-            // on AMD hardware
-            glFlush();
-            auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-            glFlush();
-            LL::WorkQueue::postMaybe(
-                mMainQueue,
-                [=]()
-                {
-                    LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - wait sync");
+            if (gGLManager.mIsNVIDIA)
+            {
+                // wait for texture upload to finish before notifying main thread
+                // upload is complete
+                auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+                glFlush();
+                glClientWaitSync(sync, 0, GL_TIMEOUT_IGNORED);
+                glDeleteSync(sync);
+            }
+            else
+            {
+                // post a sync to the main thread (will execute before tex name swap lambda below)
+                // glFlush calls here are partly superstitious and partly backed by observation
+                // on AMD hardware
+                glFlush();
+                auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+                glFlush();
+                LL::WorkQueue::postMaybe(
+                    mMainQueue,
+                    [=]()
                     {
-                        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glWaitSync");
-                        glWaitSync(sync, 0, GL_TIMEOUT_IGNORED);
-                    }
-                    {
-                        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glDeleteSync");
-                        glDeleteSync(sync);
-                    }
-                });
+                        LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("cglt - wait sync");
+                        {
+                            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glWaitSync");
+                            glWaitSync(sync, 0, GL_TIMEOUT_IGNORED);
+                        }
+                        {
+                            LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("glDeleteSync");
+                            glDeleteSync(sync);
+                        }
+                    });
+            }
         }
         else
         {
@@ -1732,7 +1746,10 @@ void LLImageGL::syncToMainThread(LLGLuint new_tex_name)
             syncTexName(new_tex_name);
             unref();
         });
+
+    LL_PROFILER_GPU_COLLECT;
 }
+
 
 void LLImageGL::syncTexName(LLGLuint texname)
 {

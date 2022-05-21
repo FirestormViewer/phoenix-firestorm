@@ -82,6 +82,7 @@ LLGLSLShader	gOcclusionCubeProgram;
 LLGLSLShader	gCustomAlphaProgram;
 LLGLSLShader	gGlowCombineProgram;
 LLGLSLShader	gSplatTextureRectProgram;
+LLGLSLShader	gReflectionMipProgram;
 LLGLSLShader	gGlowCombineFXAAProgram;
 LLGLSLShader	gTwoTextureAddProgram;
 LLGLSLShader	gTwoTextureCompareProgram;
@@ -262,6 +263,7 @@ LLGLSLShader			gRlvSphereProgram;
 // Deferred materials shaders
 LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
 LLGLSLShader			gDeferredMaterialWaterProgram[LLMaterial::SHADER_COUNT*2];
+LLGLSLShader			gDeferredPBROpaqueProgram;
 
 //helper for making a rigged variant of a given shader
 bool make_rigged_variant(LLGLSLShader& shader, LLGLSLShader& riggedShader)
@@ -648,7 +650,6 @@ void LLViewerShaderMgr::setShaders()
     }
 
     if (loaded)
-
     {
         loaded = loadTransformShaders();
         if (loaded)
@@ -759,6 +760,7 @@ void LLViewerShaderMgr::unloadShaders()
 	gCustomAlphaProgram.unload();
 	gGlowCombineProgram.unload();
 	gSplatTextureRectProgram.unload();
+    gReflectionMipProgram.unload();
 	gGlowCombineFXAAProgram.unload();
 	gTwoTextureAddProgram.unload();
 	gTwoTextureCompareProgram.unload();
@@ -983,6 +985,7 @@ BOOL LLViewerShaderMgr::loadBasicShaders()
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/deferredUtil.glsl",                    1) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/shadowUtil.glsl",                      1) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/aoUtil.glsl",                          1) );
+    index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/reflectionProbeF.glsl",                llmax(mShaderLevel[SHADER_DEFERRED], 1)) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightNonIndexedF.glsl",                    mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightAlphaMaskNonIndexedF.glsl",                   mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightFullbrightNonIndexedF.glsl",          mShaderLevel[SHADER_LIGHTING] ) );
@@ -1328,6 +1331,9 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 			gDeferredMaterialProgram[i].unload();
 			gDeferredMaterialWaterProgram[i].unload();
 		}
+
+        gDeferredPBROpaqueProgram.unload();
+
 		return TRUE;
 	}
 
@@ -1519,6 +1525,12 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
             gDeferredMaterialProgram[i].mFeatures.hasGamma = true;
             gDeferredMaterialProgram[i].mFeatures.hasShadows = use_sun_shadow;
             
+            if (mShaderLevel[SHADER_DEFERRED] > 1)
+            {
+                gDeferredMaterialProgram[i].mFeatures.hasReflectionProbes = true;
+                gDeferredMaterialProgram[i].addPermutation("HAS_REFLECTION_PROBES", "1");
+            }
+
             if (has_skin)
             {
                 gDeferredMaterialProgram[i].addPermutation("HAS_SKIN", "1");
@@ -1612,6 +1624,22 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
             success = gDeferredMaterialWaterProgram[i].createShader(NULL, NULL);//&mWLUniforms);
             llassert(success);
 		}
+
+        if (success)
+        {
+            gDeferredPBROpaqueProgram.mName = "Deferred PBR Opaque Shader";
+            gDeferredPBROpaqueProgram.mFeatures.encodesNormal = true;
+            gDeferredPBROpaqueProgram.mFeatures.hasSrgb = true;
+
+            gDeferredPBROpaqueProgram.mShaderFiles.clear();
+            gDeferredPBROpaqueProgram.mShaderFiles.push_back(make_pair("deferred/pbropaqueV.glsl", GL_VERTEX_SHADER_ARB));
+            gDeferredPBROpaqueProgram.mShaderFiles.push_back(make_pair("deferred/pbropaqueF.glsl", GL_FRAGMENT_SHADER_ARB));
+            gDeferredPBROpaqueProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
+            gDeferredPBROpaqueProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+            //gDeferredPBROpaqueProgram.addPermutation("HAS_NORMAL_MAP", "1");
+            success = gDeferredPBROpaqueProgram.createShader(NULL, NULL);
+            llassert(success);
+        }
 	}
 
 	gDeferredMaterialProgram[1].mFeatures.hasLighting = true;
@@ -2202,6 +2230,11 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredFullbrightShinyProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightShinyV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredFullbrightShinyProgram.mShaderFiles.push_back(make_pair("deferred/fullbrightShinyF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gDeferredFullbrightShinyProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        if (gDeferredFullbrightShinyProgram.mShaderLevel >= 2) // TODO : make this a 3 when reflection probes are restricted to class 3
+        {
+            gDeferredFullbrightShinyProgram.addPermutation("HAS_REFLECTION_PROBES", "1");
+            gDeferredFullbrightShinyProgram.mFeatures.hasReflectionProbes = true;
+        }
         success = make_rigged_variant(gDeferredFullbrightShinyProgram, gDeferredSkinnedFullbrightShinyProgram);
 		success = success && gDeferredFullbrightShinyProgram.createShader(NULL, NULL);
 		llassert(success);
@@ -2274,6 +2307,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSoftenProgram.mFeatures.hasGamma = true;
 		gDeferredSoftenProgram.mFeatures.isDeferred = true;
 		gDeferredSoftenProgram.mFeatures.hasShadows = use_sun_shadow;
+        gDeferredSoftenProgram.mFeatures.hasReflectionProbes = true;
 
         gDeferredSoftenProgram.clearPermutations();
 		gDeferredSoftenProgram.mShaderFiles.push_back(make_pair("deferred/softenLightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -2324,6 +2358,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredSoftenWaterProgram.mFeatures.hasGamma = true;
         gDeferredSoftenWaterProgram.mFeatures.isDeferred = true;
         gDeferredSoftenWaterProgram.mFeatures.hasShadows = use_sun_shadow;
+        gDeferredSoftenWaterProgram.mFeatures.hasReflectionProbes = true;
 
         if (ambient_kill)
         {
@@ -3596,7 +3631,6 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
 		}
 	}
 
-
 	if (success)
 	{
 		gTwoTextureAddProgram.mName = "Two Texture Add Shader";
@@ -3771,6 +3805,22 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
 		gAlphaMaskProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];
 		success = gAlphaMaskProgram.createShader(NULL, NULL);
 	}
+
+    if (success)
+    {
+        gReflectionMipProgram.mName = "Reflection Mip Shader";
+        gReflectionMipProgram.mShaderFiles.clear();
+        gReflectionMipProgram.mShaderFiles.push_back(make_pair("interface/splattexturerectV.glsl", GL_VERTEX_SHADER_ARB));
+        gReflectionMipProgram.mShaderFiles.push_back(make_pair("interface/reflectionmipF.glsl", GL_FRAGMENT_SHADER_ARB));
+        gReflectionMipProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];
+        success = gReflectionMipProgram.createShader(NULL, NULL);
+        if (success)
+        {
+            gReflectionMipProgram.bind();
+            gReflectionMipProgram.uniform1i(sScreenMap, 0);
+            gReflectionMipProgram.unbind();
+        }
+    }
 
 	if( !success )
 	{

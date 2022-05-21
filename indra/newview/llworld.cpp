@@ -1262,7 +1262,7 @@ void LLWorld::updateNetStats()
 
 void LLWorld::printPacketsLost()
 {
-	LL_INFOS() << "Simulators:" << LL_ENDL;
+	LL_INFOS() << "Simulators:" << LL_ENDL; 
 	LL_INFOS() << "----------" << LL_ENDL;
 
 	LLCircuitData *cdp = NULL;
@@ -1297,6 +1297,7 @@ F32 LLWorld::getLandFarClip() const
 
 void LLWorld::setLandFarClip(const F32 far_clip)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_ENVIRONMENT;
 // <FS:CR> Aurora Sim
 	//static S32 const rwidth = (S32)REGION_WIDTH_U32;
 	static S32 const rwidth = (S32)getRegionWidthInMeters();

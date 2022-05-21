@@ -43,6 +43,7 @@
 #include "llvertexbuffer.h"
 #include "llbbox.h"
 #include "llrigginginfo.h"
+#include "llreflectionmap.h"
 
 #include "fsregioncross.h" // <FS:JN> Improved region crossing support
 
@@ -865,7 +866,7 @@ protected:
 	F32 mLinksetCost;
 	F32 mPhysicsCost;
 	F32 mLinksetPhysicsCost;
-
+    
 	bool mCostStale;
 	mutable bool mPhysicsShapeUnknown;
 
@@ -927,8 +928,12 @@ private:
 
 	RegionCrossExtrapolate mExtrap; // <FS:JN> improved extrapolator
 
-	// <FS:Techwolf Lupindo> export
 public:
+    // reflection probe state
+    bool mIsReflectionProbe = false;  // if true, this object should register itself with LLReflectionProbeManager
+    LLPointer<LLReflectionMap> mReflectionProbe = nullptr; // reflection probe coupled to this viewer object.  If not null, should be deregistered when this object is destroyed
+
+	// <FS:Techwolf Lupindo> export
 	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
 	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
 	// </FS:Techwolf Lupindo>

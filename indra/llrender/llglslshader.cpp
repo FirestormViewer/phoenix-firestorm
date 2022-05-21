@@ -746,7 +746,7 @@ void LLGLSLShader::mapUniform(GLint index, const vector<LLStaticHashedString> * 
             {
                 //found it
                 mUniform[i] = location;
-                mTexture[i] = mapUniformTextureChannel(location, type);
+                mTexture[i] = mapUniformTextureChannel(location, type, size);
                 return;
             }
         }
@@ -760,7 +760,7 @@ void LLGLSLShader::mapUniform(GLint index, const vector<LLStaticHashedString> * 
                 {
                     //found it
                     mUniform[i+LLShaderMgr::instance()->mReservedUniforms.size()] = location;
-                    mTexture[i+LLShaderMgr::instance()->mReservedUniforms.size()] = mapUniformTextureChannel(location, type);
+                    mTexture[i+LLShaderMgr::instance()->mReservedUniforms.size()] = mapUniformTextureChannel(location, type, size);
                     return;
                 }
             }
@@ -783,16 +783,38 @@ void LLGLSLShader::removePermutation(std::string name)
     mDefines[name].erase();
 }
 
-GLint LLGLSLShader::mapUniformTextureChannel(GLint location, GLenum type)
+GLint LLGLSLShader::mapUniformTextureChannel(GLint location, GLenum type, GLint size)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_SHADER;
 
     if ((type >= GL_SAMPLER_1D_ARB && type <= GL_SAMPLER_2D_RECT_SHADOW_ARB) ||
-        type == GL_SAMPLER_2D_MULTISAMPLE)
+        type == GL_SAMPLER_2D_MULTISAMPLE ||
+        type == GL_SAMPLER_CUBE_MAP_ARRAY_ARB)
     {   //this here is a texture
-        glUniform1iARB(location, mActiveTextureChannels);
-        LL_DEBUGS("ShaderUniform") << "Assigned to texture channel " << mActiveTextureChannels << LL_ENDL;
-        return mActiveTextureChannels++;
+        GLint ret = mActiveTextureChannels;
+        if (size == 1)
+        {
+            glUniform1iARB(location, mActiveTextureChannels);
+            LL_DEBUGS("ShaderUniform") << "Assigned to texture channel " << mActiveTextureChannels << LL_ENDL;
+            mActiveTextureChannels++;
+        }
+        else
+        {
+            //is array of textures, make sequential after this texture
+            GLint channel[32]; // <=== only support up to 32 texture channels
+            llassert(size <= 32);
+            size = llmin(size, 32);
+            for (int i = 0; i < size; ++i)
+            {
+                channel[i] = mActiveTextureChannels++;
+            }
+            glUniform1ivARB(location, size, channel);
+            LL_DEBUGS("ShaderUniform") << "Assigned to texture channel " << 
+                (mActiveTextureChannels-size) << " through " << (mActiveTextureChannels-1) << LL_ENDL;
+        }
+
+        llassert(mActiveTextureChannels <= 32); // too many textures (probably)
+        return ret;
     }
     return -1;
 }
@@ -840,6 +862,9 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 
 	As example where this situation appear see: "Deferred Material Shader 28/29/30/31"
 	And tickets: MAINT-4165, MAINT-4839, MAINT-3568, MAINT-6437
+
+    --- davep TODO -- pretty sure the entire block here is superstitious and that the uniform index has nothing to do with the texture channel
+                texture channel should follow the uniform VALUE
 	*/
 
 
@@ -848,6 +873,7 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 	S32 bumpMap = glGetUniformLocationARB(mProgramObject, "bumpMap");
     S32 altDiffuseMap = glGetUniformLocationARB(mProgramObject, "altDiffuseMap");
 	S32 environmentMap = glGetUniformLocationARB(mProgramObject, "environmentMap");
+    S32 reflectionMap = glGetUniformLocationARB(mProgramObject, "reflectionMap");
 
 	std::set<S32> skip_index;
 
@@ -890,6 +916,12 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 				continue;
 			}
 
+            if (-1 == reflectionMap && std::string(name) == "reflectionMap")
+            {
+                reflectionMap = i;
+                continue;
+            }
+
             if (-1 == altDiffuseMap && std::string(name) == "altDiffuseMap")
 			{
 				altDiffuseMap = i;
@@ -900,8 +932,9 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 		bool specularDiff = specularMap < diffuseMap && -1 != specularMap;
 		bool bumpLessDiff = bumpMap < diffuseMap && -1 != bumpMap;
 		bool envLessDiff = environmentMap < diffuseMap && -1 != environmentMap;
+        bool refLessDiff = reflectionMap < diffuseMap && -1 != reflectionMap;
 
-		if (specularDiff || bumpLessDiff || envLessDiff)
+		if (specularDiff || bumpLessDiff || envLessDiff || refLessDiff)
 		{
 			mapUniform(diffuseMap, uniforms);
 			skip_index.insert(diffuseMap);
@@ -920,6 +953,11 @@ BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 				mapUniform(environmentMap, uniforms);
 				skip_index.insert(environmentMap);
 			}
+
+            if (-1 != reflectionMap) {
+                mapUniform(reflectionMap, uniforms);
+                skip_index.insert(reflectionMap);
+            }
 		}
 	}
 
@@ -1260,6 +1298,30 @@ void LLGLSLShader::uniform1iv(U32 index, U32 count, const GLint* v)
     }
 }
 
+void LLGLSLShader::uniform4iv(U32 index, U32 count, const GLint* v)
+{
+    if (mProgramObject)
+    {
+        if (mUniform.size() <= index)
+        {
+            LL_SHADER_UNIFORM_ERRS() << "Uniform index out of bounds." << LL_ENDL;
+            return;
+        }
+
+        if (mUniform[index] >= 0)
+        {
+            const auto& iter = mValue.find(mUniform[index]);
+            LLVector4 vec(v[0], v[1], v[2], v[3]);
+            if (iter == mValue.end() || shouldChange(iter->second, vec) || count != 1)
+            {
+                glUniform1ivARB(mUniform[index], count, v);
+                mValue[mUniform[index]] = vec;
+            }
+        }
+    }
+}
+
+
 void LLGLSLShader::uniform1fv(U32 index, U32 count, const GLfloat* v)
 {
     if (mProgramObject)
@@ -1492,6 +1554,40 @@ void LLGLSLShader::uniform1i(const LLStaticHashedString& uniform, GLint v)
         if (iter == mValue.end() || shouldChange(iter->second,vec))
         {
             glUniform1iARB(location, v);
+            mValue[location] = vec;
+        }
+    }
+}
+
+void LLGLSLShader::uniform1iv(const LLStaticHashedString& uniform, U32 count, const GLint* v)
+{
+    GLint location = getUniformLocation(uniform);
+
+    if (location >= 0)
+    {
+        LLVector4 vec(v[0], 0, 0, 0);
+        const auto& iter = mValue.find(location);
+        if (iter == mValue.end() || shouldChange(iter->second, vec) || count != 1)
+        {
+            LL_PROFILE_ZONE_SCOPED_CATEGORY_SHADER;
+            glUniform1ivARB(location, count, v);
+            mValue[location] = vec;
+        }
+    }
+}
+
+void LLGLSLShader::uniform4iv(const LLStaticHashedString& uniform, U32 count, const GLint* v)
+{
+    GLint location = getUniformLocation(uniform);
+
+    if (location >= 0)
+    {
+        LLVector4 vec(v[0], v[1], v[2], v[3]);
+        const auto& iter = mValue.find(location);
+        if (iter == mValue.end() || shouldChange(iter->second, vec) || count != 1)
+        {
+            LL_PROFILE_ZONE_SCOPED_CATEGORY_SHADER;
+            glUniform4ivARB(location, count, v);
             mValue[location] = vec;
         }
     }

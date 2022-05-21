@@ -361,6 +361,13 @@ LLViewerObject::~LLViewerObject()
 {
 	deleteTEImages();
 
+    // unhook from reflection probe manager
+    if (mReflectionProbe.notNull())
+    {
+        mReflectionProbe->mViewerObject = nullptr;
+        mReflectionProbe = nullptr;
+    }
+
 	if(mInventory)
 	{
 		mInventory->clear();  // will deref and delete entries
@@ -6193,6 +6200,11 @@ LLViewerObject::ExtraParameter* LLViewerObject::createNewParameterEntry(U16 para
       {
 		  new_block = new LLExtendedMeshParams();
 		  break;
+      }
+      case LLNetworkData::PARAMS_RENDER_MATERIAL:
+      {
+          new_block = new LLRenderMaterialParams();
+          break;
       }
 	  default:
 	  {

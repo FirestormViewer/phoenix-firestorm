@@ -564,6 +564,15 @@ extern PFNGLDEBUGMESSAGEINSERTARBPROC glDebugMessageInsertARB;
 extern PFNGLDEBUGMESSAGECALLBACKARBPROC glDebugMessageCallbackARB;
 extern PFNGLGETDEBUGMESSAGELOGARBPROC glGetDebugMessageLogARB;
 
+// GL_ARB_uniform_buffer_object
+extern PFNGLGETUNIFORMINDICESPROC glGetUniformIndices;
+extern PFNGLGETACTIVEUNIFORMSIVPROC glGetActiveUniformsiv;
+extern PFNGLGETACTIVEUNIFORMNAMEPROC glGetActiveUniformName;
+extern PFNGLGETUNIFORMBLOCKINDEXPROC glGetUniformBlockIndex;
+extern PFNGLGETACTIVEUNIFORMBLOCKIVPROC glGetActiveUniformBlockiv;
+extern PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC glGetActiveUniformBlockName;
+extern PFNGLUNIFORMBLOCKBINDINGPROC glUniformBlockBinding;
+
 #elif LL_DARWIN
 //----------------------------------------------------------------------------
 // LL_DARWIN
@@ -827,14 +836,7 @@ extern void glGetBufferPointervARB (GLenum, GLenum, GLvoid* *);
     #define glGetQueryiv        glGetQueryivARB
     #define glGetQueryObjectiv  glGetQueryObjectivARB
     #include <tracy/TracyOpenGL.hpp>
-
-    #define LL_PROFILER_GPU_ZONEC(name,color) TracyGpuZoneC(name,color);
-    #define LL_PROFILER_GPU_COLLECT           TracyGpuCollect
-    #define LL_PROFILER_GPU_CONTEXT           TracyGpuContext
-#else
-    #define LL_PROFILER_GPU_ZONEC(name,color) (void)name;(void)color;
-    #define LL_PROFILER_GPU_COLLECT
-    #define LL_PROFILER_GPU_CONTEXT
 #endif
+    
 
 #endif // LL_LLGLHEADERS_H

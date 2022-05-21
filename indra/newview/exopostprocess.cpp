@@ -55,9 +55,11 @@ void exoPostProcess::ExodusRenderPostSettingsUpdate()
 }
 void exoPostProcess::ExodusRenderPostUpdate()
 {
+	if (!gPipeline.mRT)
+		return;
+
 	etc1.setVec(0.f, 0.f);
-	etc2.setVec((F32) gPipeline.mScreen.getWidth(),
-				(F32) gPipeline.mScreen.getHeight());
+	etc2.setVec((F32) gPipeline.mRT->screen.getWidth(), (F32) gPipeline.mRT->screen.getHeight());
 	initVB();
 }
 

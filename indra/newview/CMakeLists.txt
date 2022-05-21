@@ -296,6 +296,7 @@ set(viewer_SOURCE_FILES
     lldrawpoolbump.cpp
     lldrawpoolground.cpp
     lldrawpoolmaterials.cpp
+    lldrawpoolpbropaque.cpp
     lldrawpoolsimple.cpp
     lldrawpoolsky.cpp
     lldrawpoolterrain.cpp
@@ -660,6 +661,8 @@ set(viewer_SOURCE_FILES
     llproductinforequest.cpp
     llprogressview.cpp
     llrecentpeople.cpp
+    llreflectionmap.cpp
+    llreflectionmapmanager.cpp
     llregioninfomodel.cpp
     llregionposition.cpp
     llremoteparcelrequest.cpp
@@ -1072,6 +1075,7 @@ set(viewer_HEADER_FILES
     lldrawpoolavatar.h
     lldrawpoolbump.h
     lldrawpoolmaterials.h
+    lldrawpoolpbropaque.h
     lldrawpoolground.h
     lldrawpoolsimple.h
     lldrawpoolsky.h
@@ -1425,6 +1429,8 @@ set(viewer_HEADER_FILES
     llproductinforequest.h
     llprogressview.h
     llrecentpeople.h
+    llreflectionmap.h
+    llreflectionmapmanager.h
     llregioninfomodel.h
     llregionposition.h
     llremoteparcelrequest.h

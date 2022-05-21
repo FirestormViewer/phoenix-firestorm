@@ -56,6 +56,7 @@ class LLSpatialPartition;
 class LLSpatialBridge;
 class LLSpatialGroup;
 class LLViewerRegion;
+class LLReflectionMap;
 
 void pushVerts(LLFace* face, U32 mask);
 //<FS:BEQ> Make helper functions externally visible for use from viewerwindow
@@ -324,6 +325,17 @@ public:
 
 	void drawObjectBox(LLColor4 col);
 
+    LLDrawable* lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
+        BOOL pick_transparent,
+        BOOL pick_rigged,
+        S32* face_hit,                          // return the face hit
+        LLVector4a* intersection = NULL,         // return the intersection point
+        LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
+        LLVector4a* normal = NULL,               // return the surface normal at the intersection point
+        LLVector4a* tangent = NULL             // return the surface tangent at the intersection point
+    );
+
+
 	LLSpatialPartition* getSpatialPartition() {return (LLSpatialPartition*)mSpatialPartition;}
 
 	 //LISTENER FUNCTIONS
@@ -331,12 +343,15 @@ public:
 	virtual void handleRemoval(const TreeNode* node, LLViewerOctreeEntry* face);
 	virtual void handleDestruction(const TreeNode* node);
 	virtual void handleChildAddition(const OctreeNode* parent, OctreeNode* child);
+    virtual void handleChildRemoval(const oct_node* parent, const oct_node* child);
 
 public:
 	LL_ALIGN_16(LLVector4a mViewAngle);
 	LL_ALIGN_16(LLVector4a mLastUpdateViewAngle);
 
 	F32 mObjectBoxSize; //cached mObjectBounds[1].getLength3()
+
+    void dirtyReflectionProbe();
 
 protected:
 	virtual ~LLSpatialGroup();
@@ -362,6 +377,10 @@ public:
 	
 	F32 mPixelArea;
 	F32 mRadius;
+
+    // Reflection Probe associated with this node (if any)
+    LLPointer<LLReflectionMap> mReflectionProbe = nullptr;
+
 
     //used by LLVOAVatar to set render order in alpha draw pool to preserve legacy render order behavior
     LLVOAvatar* mAvatarp = nullptr;

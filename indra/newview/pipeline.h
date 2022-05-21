@@ -38,6 +38,7 @@
 #include "llgl.h"
 #include "lldrawable.h"
 #include "llrendertarget.h"
+#include "llreflectionmapmanager.h"
 
 #include <stack>
 
@@ -293,6 +294,10 @@ public:
 	void setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep);
 
 	void unbindDeferredShader(LLGLSLShader& shader);
+
+    void bindReflectionProbes(LLGLSLShader& shader);
+    void unbindReflectionProbes(LLGLSLShader& shader);
+
 	void renderDeferredLighting(LLRenderTarget* light_target);
 	void postDeferredGammaCorrect(LLRenderTarget* screen_target);
 
@@ -425,6 +430,9 @@ public:
 	void skipRenderingOfTerrain( bool flag );
 	void hideObject( const LLUUID& id );
 	void restoreHiddenObject( const LLUUID& id );
+
+    LLReflectionMapManager mReflectionMapManager;
+    void overrideEnvironmentMap();
 
 private:
 	void unloadShaders();
@@ -585,7 +593,8 @@ public:
 		RENDER_DEBUG_TEXEL_DENSITY		=  0x40000000,
 		RENDER_DEBUG_TRIANGLE_COUNT		=  0x80000000,
 		RENDER_DEBUG_IMPOSTORS			= 0x100000000,
-		RENDER_DEBUG_TEXTURE_SIZE		= 0x200000000
+        RENDER_DEBUG_REFLECTION_PROBES  = 0x200000000,
+		RENDER_DEBUG_TEXTURE_SIZE		= 0x400000000
 	};
 
 public:
@@ -653,20 +662,31 @@ public:
 
 	static LLTrace::EventStatHandle<S64> sStatBatchSize;
 
-	//screen texture
-	U32 					mScreenWidth;
-	U32 					mScreenHeight;
-	
-	LLRenderTarget			mScreen;
-	LLRenderTarget			mUIScreen;
-	LLRenderTarget			mDeferredScreen;
-	LLRenderTarget			mFXAABuffer;
-	LLRenderTarget			mEdgeMap;
-	LLRenderTarget			mDeferredDepth;
-	LLRenderTarget			mOcclusionDepth;
-	LLRenderTarget			mDeferredLight;
-	LLRenderTarget			mHighlight;
-	LLRenderTarget			mPhysicsDisplay;
+    class RenderTargetPack
+    {
+    public:
+        U32 					width = 0;
+        U32 					height = 0;
+
+        //screen texture
+        LLRenderTarget			screen;
+        LLRenderTarget			uiScreen;
+        LLRenderTarget			deferredScreen;
+        LLRenderTarget			fxaaBuffer;
+        LLRenderTarget			edgeMap;
+        LLRenderTarget			deferredDepth;
+        LLRenderTarget			occlusionDepth;
+        LLRenderTarget			deferredLight;
+
+        //sun shadow map
+        LLRenderTarget			shadow[6];
+        LLRenderTarget			shadowOcclusion[6];
+    };
+
+    RenderTargetPack* mRT;
+
+    LLRenderTarget			mHighlight;
+    LLRenderTarget			mPhysicsDisplay;
 
     LLCullResult            mSky;
     LLCullResult            mReflectedObjects;
@@ -681,9 +701,8 @@ public:
 	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
 	LLPointer<LLVertexBuffer> mAuxiliaryVB;
 
-	//sun shadow map
-	LLRenderTarget			mShadow[6];
-	LLRenderTarget			mShadowOcclusion[6];
+    //list of currently bound reflection maps
+    std::vector<LLReflectionMap*> mReflectionMaps;
 
 	std::vector<LLVector3>  mShadowFrustPoints[4];
 	LLVector4			    mShadowError;
@@ -894,6 +913,7 @@ protected:
 	LLDrawPool*					mBumpPool;
 	LLDrawPool*					mMaterialsPool;
 	LLDrawPool*					mWLSkyPool;
+	LLDrawPool*					mPBROpaquePool;
 	// Note: no need to keep an quick-lookup to avatar pools, since there's only one per avatar
 	
 public:

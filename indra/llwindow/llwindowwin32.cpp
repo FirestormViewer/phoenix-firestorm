@@ -1659,6 +1659,8 @@ const	S32   max_format  = (S32)num_formats - 1;
 		swapBuffers();
 	}
 
+    LL_PROFILER_GPU_CONTEXT;
+
 	return TRUE;
 }
 
@@ -1812,6 +1814,7 @@ void* LLWindowWin32::createSharedContext()
 void LLWindowWin32::makeContextCurrent(void* contextPtr)
 {
     wglMakeCurrent(mhDC, (HGLRC) contextPtr);
+    LL_PROFILER_GPU_CONTEXT;
 }
 
 void LLWindowWin32::destroySharedContext(void* contextPtr)
@@ -3651,10 +3654,13 @@ void LLWindowWin32::swapBuffers()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
     ASSERT_MAIN_THREAD();
-    glFlush(); //superstitious flush for maybe frame stall removal?
+    {
+        LL_PROFILE_GPU_ZONE("flush");
+        glFlush(); //superstitious flush for maybe frame stall removal?
+    }
 	SwapBuffers(mhDC);
 
-    LL_PROFILER_GPU_COLLECT
+    LL_PROFILER_GPU_COLLECT;
 }
 
 //

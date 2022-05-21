@@ -193,6 +193,7 @@ protected:
 	static void		onCommitMaterialGloss(			LLUICtrl* ctrl, void* userdata);
 	static void		onCommitMaterialEnv(				LLUICtrl* ctrl, void* userdata);
 	static void		onCommitMaterialMaskCutoff(	LLUICtrl* ctrl, void* userdata);
+	static void		onCommitMaterialID( LLUICtrl* ctrl, void* userdata);
 
 	static void		onCommitMaterialsMedia(	LLUICtrl* ctrl, void* userdata);
 	static void		onCommitMaterialType(	LLUICtrl* ctrl, void* userdata);
@@ -206,6 +207,10 @@ protected:
 	static void		onCommitRepeatsPerMeter(	LLUICtrl* ctrl, void* userinfo);
 	static void		onClickAutoFix(void*);
     static void		onAlignTexture(void*);
+
+    static void		onSaveMaterial(void*);
+    static LLSD     renderMaterialToLLSD(LLUUID uuid, void* userdata);
+    static void     applyMaterialUUID(LLUUID uuid, void*);
 
 	static F32     valueGlow(LLViewerObject* object, S32 face);
 
@@ -261,7 +266,8 @@ private:
 	F32		getCurrentShinyScaleV();
 	F32		getCurrentShinyOffsetU();
 	F32		getCurrentShinyOffsetV();
-	
+	LLUUID	getCurrentMaterialID();
+
 	// <FS:CR> Convenience funcs for diffuse maps
 	F32		getCurrentTextureRot();
 	F32		getCurrentTextureScaleU();
@@ -552,6 +558,7 @@ public:
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setNormalID);
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setSpecularID);
 		DEF_EDIT_MAT_STATE(LLColor4U,	const LLColor4U&,setSpecularLightColor);
+		DEF_EDIT_MAT_STATE(LLUUID, const LLUUID&, setMaterialID);
 	};
 
 	class LLSelectedTE

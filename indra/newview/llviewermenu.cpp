@@ -1249,6 +1249,10 @@ U64 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_IMPOSTORS;
 	}
+    else if ("reflection probes" == info_display)
+    {
+    return LLPipeline::RENDER_DEBUG_REFLECTION_PROBES;
+    }
 	else if ("texture size" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_TEXTURE_SIZE;
@@ -10634,6 +10638,12 @@ void handle_cache_clear_immediately()
 	LLNotificationsUtil::add("ConfirmClearCache", LLSD(), LLSD(), callback_clear_cache_immediately);
 }
 
+void handle_rebuild_reflection_probes()
+{
+    gPipeline.mReflectionMapManager.rebuild();
+}
+
+
 void handle_web_content_test(const LLSD& param)
 {
 	std::string url = param.asString();
@@ -12122,6 +12132,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLDevelopTextureFetchDebugger(), "Develop.SetTexFetchDebugger");
 	//Develop (clear cache immediately)
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
+    //Develop (override environment map)
+    commit.add("Develop.RebuildReflectionProbes", boost::bind(&handle_rebuild_reflection_probes));
 
 #ifdef TRACY_ENABLE
 	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)

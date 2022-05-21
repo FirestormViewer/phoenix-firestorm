@@ -112,6 +112,7 @@ LLPointer<LLObjectMediaDataClient> LLVOVolume::sObjectMediaClient = NULL;
 LLPointer<LLObjectMediaNavigateClient> LLVOVolume::sObjectMediaNavigateClient = NULL;
 
 extern BOOL gGLDebugLoggingEnabled;
+extern BOOL gCubeSnapshot;
 
 // NaCl - Graphics crasher protection
 static bool enableVolumeSAPProtection()
@@ -838,7 +839,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
 	// Update the pixel area of all faces
 
-    if (mDrawable.isNull())
+    if (mDrawable.isNull() || gCubeSnapshot)
     {
         return;
     }
@@ -2348,7 +2349,7 @@ void LLVOVolume::setNumTEs(const U8 num_tes)
 	return ;
 }
 
-//virtual     
+//virtual
 void LLVOVolume::changeTEImage(S32 index, LLViewerTexture* imagep)
 {
 	BOOL changed = (mTEImages[index] != imagep);
@@ -3580,6 +3581,11 @@ F32 LLVOVolume::getSpotLightPriority() const
 
 void LLVOVolume::updateSpotLightPriority()
 {
+    if (gCubeSnapshot)
+    {
+        return;
+    }
+
     F32 r = getLightRadius();
 	LLVector3 pos = mDrawable->getPositionAgent();
 
@@ -5761,6 +5767,8 @@ static inline void add_face(T*** list, U32* count, T* face)
 void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
+    llassert(!gCubeSnapshot);
+
 	if (group->changeLOD())
 	{
 		group->mLastUpdateDistance = group->mDistance;
@@ -5984,6 +5992,32 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					continue;
 				}
 
+#if LL_RELEASE_WITH_DEBUG_INFO
+                const LLUUID pbr_id( "49c88210-7238-2a6b-70ac-92d4f35963cf" );
+                const LLUUID obj_id( vobj->getID() );
+                bool is_pbr = (obj_id == pbr_id);
+#else
+                bool is_pbr = false;
+#endif
+
+                // HACK - make this object a Reflection Probe if a certain UUID is detected
+                static LLCachedControl<std::string> reflection_probe_id(gSavedSettings, "RenderReflectionProbeTextureHackID", "");
+                if (facep->getTextureEntry()->getID() == LLUUID(reflection_probe_id))
+                {
+                    if (!vobj->mIsReflectionProbe)
+                    {
+                        vobj->mIsReflectionProbe = true;
+                        vobj->mReflectionProbe = gPipeline.mReflectionMapManager.registerViewerObject(vobj);
+                    }
+                }
+                else
+                {
+                    // not a refleciton probe any more
+                    vobj->mIsReflectionProbe = false;
+                    vobj->mReflectionProbe = nullptr;
+                }
+                // END HACK
+
 				//ALWAYS null out vertex buffer on rebuild -- if the face lands in a render
 				// batch, it will recover its vertex buffer reference from the spatial group
 				facep->setVertexBuffer(NULL);
@@ -6052,6 +6086,12 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 					BOOL force_simple = (facep->getPixelArea() < FORCE_SIMPLE_RENDER_AREA);
 					U32 type = gPipeline.getPoolTypeFromTE(te, tex);
+
+                    if (is_pbr)
+                    {
+                        type = LLDrawPool::POOL_PBR_OPAQUE;
+                    }
+                    else
 					if (type != LLDrawPool::POOL_ALPHA && force_simple)
 					{
 						type = LLDrawPool::POOL_SIMPLE;

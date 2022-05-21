@@ -299,7 +299,7 @@ ERlvCmdRet RlvSphereEffect::onValueMaxChanged(const LLUUID& idRlvObj, const boos
 void RlvSphereEffect::setShaderUniforms(LLGLSLShader* pShader)
 {
 	pShader->uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, FALSE, get_current_projection().inverse().m);
-	pShader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, gPipeline.mScreen.getWidth(), gPipeline.mScreen.getHeight());
+	pShader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, gPipeline.mRT->screen.getWidth(), gPipeline.mRT->screen.getHeight());
 	pShader->uniform1i(LLShaderMgr::RLV_EFFECT_MODE, llclamp((int)m_eMode, 0, (int)ESphereMode::Count));
 
 	// Pass the sphere origin to the shader
@@ -356,10 +356,10 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 		gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
 	}
 
-	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mDeferredDepth.getUsage());
+	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredDepth.getUsage());
 	if (nDepthChannel > -1)
 	{
-		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mDeferredDepth, TRUE);
+		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mRT->deferredDepth, TRUE);
 	}
 
 	gGL.matrixMode(LLRender::MM_PROJECTION);
@@ -370,7 +370,7 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 	gGL.loadMatrix(gGLModelView);
 
 	LLVector2 tc1(0, 0);
-	LLVector2 tc2((F32)gPipeline.mScreen.getWidth() * 2, (F32)gPipeline.mScreen.getHeight() * 2);
+	LLVector2 tc2((F32)gPipeline.mRT->screen.getWidth() * 2, (F32)gPipeline.mRT->screen.getHeight() * 2);
 	gGL.begin(LLRender::TRIANGLE_STRIP);
 	gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
 	gGL.vertex2f(-1, -1);
@@ -386,7 +386,7 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 	gGL.popMatrix();
 
 	pShader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pParams->m_pSrcBuffer->getUsage());
-	pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mDeferredDepth.getUsage());
+	pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredDepth.getUsage());
 
 	if (pParams->m_pDstBuffer)
 	{

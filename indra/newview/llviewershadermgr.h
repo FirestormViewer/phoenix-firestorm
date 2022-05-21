@@ -161,6 +161,7 @@ extern LLGLSLShader			gOcclusionCubeProgram;
 extern LLGLSLShader			gCustomAlphaProgram;
 extern LLGLSLShader			gGlowCombineProgram;
 extern LLGLSLShader			gSplatTextureRectProgram;
+extern LLGLSLShader			gReflectionMipProgram;
 extern LLGLSLShader			gGlowCombineFXAAProgram;
 extern LLGLSLShader			gDebugProgram;
 extern LLGLSLShader			gClipProgram;
@@ -317,4 +318,6 @@ extern LLGLSLShader			gRlvSphereProgram;
 // Deferred materials shaders
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
 extern LLGLSLShader			gDeferredMaterialWaterProgram[LLMaterial::SHADER_COUNT*2];
+
+extern LLGLSLShader			gDeferredPBROpaqueProgram;
 #endif

@@ -110,6 +110,7 @@ BOOL gResizeScreenTexture = FALSE;
 BOOL gResizeShadowTexture = FALSE;
 BOOL gWindowResized = FALSE;
 BOOL gSnapshot = FALSE;
+BOOL gCubeSnapshot = FALSE;
 BOOL gShaderProfileFrame = FALSE;
 
 // This is how long the sim will try to teleport you before giving up.
@@ -206,7 +207,12 @@ void display_update_camera()
 	// Cut draw distance in half when customizing avatar,
 	// but on the viewer only.
 	F32 final_far = gAgentCamera.mDrawDistance;
-	if (CAMERA_MODE_CUSTOMIZE_AVATAR == gAgentCamera.getCameraMode())
+    if (gCubeSnapshot)
+    {
+        final_far = gSavedSettings.getF32("RenderReflectionProbeDrawDistance");
+    }
+    else if (CAMERA_MODE_CUSTOMIZE_AVATAR == gAgentCamera.getCameraMode())
+        
 	{
 		final_far *= 0.5f;
 	}
@@ -220,8 +226,11 @@ void display_update_camera()
 	LLViewerCamera::getInstance()->setFar(final_far);
 	gViewerWindow->setup3DRender();
 	
-	// Update land visibility too
-	LLWorld::getInstance()->setLandFarClip(final_far);
+    if (!gCubeSnapshot)
+    {
+        // Update land visibility too
+        LLWorld::getInstance()->setLandFarClip(final_far);
+    }
 }
 
 // Write some stats to LL_INFOS()
@@ -1028,19 +1037,19 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
         if (LLPipeline::sRenderDeferred)
         {
-            gPipeline.mDeferredScreen.bindTarget();
+            gPipeline.mRT->deferredScreen.bindTarget();
             glClearColor(1, 0, 1, 1);
-            gPipeline.mDeferredScreen.clear();
+            gPipeline.mRT->deferredScreen.clear();
         }
         else
         {
-            gPipeline.mScreen.bindTarget();
+            gPipeline.mRT->screen.bindTarget();
             if (LLPipeline::sUnderWaterRender && !gPipeline.canUseWindLightShaders())
             {
                 const LLColor4 &col = LLEnvironment::instance().getCurrentWater()->getWaterFogColor();
                 glClearColor(col.mV[0], col.mV[1], col.mV[2], 0.f);
             }
-            gPipeline.mScreen.clear();
+            gPipeline.mRT->screen.clear();
         }
 
         gGL.setColorMask(true, false);
@@ -1114,7 +1123,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderFlush");
 
-        LLRenderTarget &rt = (gPipeline.sRenderDeferred ? gPipeline.mDeferredScreen : gPipeline.mScreen);
+        LLRenderTarget &rt = (gPipeline.sRenderDeferred ? gPipeline.mRT->deferredScreen : gPipeline.mRT->screen);
         rt.flush();
 
         if (rt.sUseFBO)
@@ -1126,7 +1135,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
         if (LLPipeline::sRenderDeferred)
         {
-			gPipeline.renderDeferredLighting(&gPipeline.mScreen);
+			gPipeline.renderDeferredLighting(&gPipeline.mRT->screen);
 		}
 
 		LLPipeline::sUnderWaterRender = FALSE;
@@ -1172,6 +1181,114 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		gShaderProfileFrame = FALSE;
 		LLGLSLShader::finishProfile();
 	}
+}
+
+// WIP simplified copy of display() that does minimal work
+void display_cube_face()
+{
+    LL_RECORD_BLOCK_TIME(FTM_RENDER);
+    LL_PROFILE_GPU_ZONE("display cube face");
+
+    llassert(!gSnapshot);
+    llassert(!gTeleportDisplay);
+    llassert(LLPipeline::sRenderDeferred);
+    llassert(LLStartUp::getStartupState() >= STATE_PRECACHE);
+    llassert(!LLAppViewer::instance()->logoutRequestSent());
+    llassert(!gRestoreGL);
+    llassert(!gUseWireframe);
+
+    bool rebuild = false;
+
+    LLGLSDefault gls_default;
+    LLGLDepthTest gls_depth(GL_TRUE, GL_TRUE, GL_LEQUAL);
+
+    LLVertexBuffer::unbind();
+
+    gPipeline.disableLights();
+
+    gPipeline.mBackfaceCull = TRUE;
+
+    LLViewerCamera::getInstance()->setNear(MIN_NEAR_PLANE);
+    gViewerWindow->setup3DViewport();
+
+    if (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_HUD))
+    { //don't draw hud objects in this frame
+        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_HUD);
+    }
+
+    if (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_HUD_PARTICLES))
+    { //don't draw hud particles in this frame
+        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_HUD_PARTICLES);
+    }
+
+    display_update_camera();
+
+    LLSpatialGroup::sNoDelete = TRUE;
+        
+    S32 occlusion = LLPipeline::sUseOcclusion;
+    LLPipeline::sUseOcclusion = 0; // occlusion data is from main camera point of view, don't read or write it during cube snapshots
+    //gDepthDirty = TRUE; //let "real" render pipe know it can't trust the depth buffer for occlusion data
+
+    static LLCullResult result;
+    LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
+    LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
+    gPipeline.updateCull(*LLViewerCamera::getInstance(), result);
+
+    gGL.setColorMask(true, true);
+    glClearColor(0, 0, 0, 0);
+    gPipeline.generateSunShadow(*LLViewerCamera::getInstance());
+        
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    {
+        LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
+        gPipeline.stateSort(*LLViewerCamera::getInstance(), result);
+
+        if (rebuild)
+        {
+            //////////////////////////////////////
+            //
+            // rebuildPools
+            //
+            //
+            gPipeline.rebuildPools();
+            stop_glerror();
+        }
+    }
+    
+    LLPipeline::sUseOcclusion = occlusion;
+
+    LLAppViewer::instance()->pingMainloopTimeout("Display:RenderStart");
+
+    LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
+
+    gGL.setColorMask(true, true);
+
+    gPipeline.mRT->deferredScreen.bindTarget();
+    glClearColor(1, 0, 1, 1);
+    gPipeline.mRT->deferredScreen.clear();
+        
+    gGL.setColorMask(true, false);
+
+    LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
+
+    gPipeline.renderGeomDeferred(*LLViewerCamera::getInstance());
+
+    gGL.setColorMask(true, true);
+
+    gPipeline.mRT->deferredScreen.flush();
+       
+    gPipeline.renderDeferredLighting(&gPipeline.mRT->screen);
+
+    LLPipeline::sUnderWaterRender = FALSE;
+
+    // Finalize scene
+    gPipeline.renderFinalize();
+
+    LLSpatialGroup::sNoDelete = FALSE;
+    gPipeline.clearReferences();
+
+    gPipeline.rebuildGroups();
 }
 
 void render_hud_attachments()
@@ -1386,7 +1503,7 @@ void render_ui(F32 zoom_factor, int subfield)
 {
 	FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_UI ); // <FS:Beq/> render time capture - Primary UI stat can have HUD time overlap (TODO)
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI; //LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
-
+    LL_PROFILE_GPU_ZONE("ui");
 	LLGLState::checkStates();
 	
 	glh::matrix4f saved_view = get_current_modelview();
@@ -1476,7 +1593,7 @@ void swap()
 {
 	FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_SWAP ); // <FS:Beq/> render time capture - Swap buffer time - can signify excessive data transfer to/from GPU
 	LL_RECORD_BLOCK_TIME(FTM_SWAP);
-
+    LL_PROFILE_GPU_ZONE("swap");
 	if (gDisplaySwapBuffers)
 	{
 		gViewerWindow->getWindow()->swapBuffers();
@@ -1653,7 +1770,7 @@ void render_ui_2d()
             LLView::sIsRectDirty = false;
 			LLRect t_rect;
 
-			gPipeline.mUIScreen.bindTarget();
+			gPipeline.mRT->uiScreen.bindTarget();
 			gGL.setColorMask(true, true);
 			{
 				static const S32 pad = 8;
@@ -1690,7 +1807,7 @@ void render_ui_2d()
 				gViewerWindow->draw();
 			}
 
-			gPipeline.mUIScreen.flush();
+			gPipeline.mRT->uiScreen.flush();
 			gGL.setColorMask(true, false);
 
             LLView::sDirtyRect = t_rect;
@@ -1700,7 +1817,7 @@ void render_ui_2d()
 		LLGLDisable blend(GL_BLEND);
 		S32 width = gViewerWindow->getWindowWidthScaled();
 		S32 height = gViewerWindow->getWindowHeightScaled();
-		gGL.getTexUnit(0)->bind(&gPipeline.mUIScreen);
+		gGL.getTexUnit(0)->bind(&gPipeline.mRT->uiScreen);
 		gGL.begin(LLRender::TRIANGLE_STRIP);
 		gGL.color4f(1,1,1,1);
 		gGL.texCoord2f(0, 0);			gGL.vertex2i(0, 0);

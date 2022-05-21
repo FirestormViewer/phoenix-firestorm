@@ -164,7 +164,7 @@ public:
 
 	BOOL getUseMipMaps() const { return mUseMipMaps; }
 	void setUseMipMaps(BOOL usemips) { mUseMipMaps = usemips; }	
-
+    void setHasMipMaps(BOOL hasmips) { mHasMipMaps = hasmips; }
 	void updatePickMask(S32 width, S32 height, const U8* data_in);
 // [RLVa:KB] - Checked: RLVa-2.2 (@setoverlay)
 	BOOL getMask(const LLVector2 &tc) const;

@@ -375,10 +375,10 @@ void LLFloaterModelPreview::initModelPreview()
 	S32 tex_width = 512;
 	S32 tex_height = 512;
 	// <FS:Beq> Fix up regressions from LL's merge of uploader changes
-	// S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenWidth);
-	// S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenHeight);
-	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenWidth);
-	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenHeight);
+	// S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mRT->width);
+	// S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mRT->height);
+	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mRT->width);
+	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mRT->height);
 	// </FS:Beq>
 	
 	while ((tex_width << 1) <= max_width) // <FS:Beq/> Fix up regressions from LL's merge of uploader changes
