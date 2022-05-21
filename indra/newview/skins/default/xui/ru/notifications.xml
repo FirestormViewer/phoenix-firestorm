@@ -4929,6 +4929,14 @@ https://wiki.firestormviewer.org/fs_voice
 			<ignore name="ignore" text="Подтвердить отправку кому-либо списка моих текущих ограничений RLV."/>
 		</form>
 	</notification>
+	<notification name="InventoryValidationFailed" label="Ошибки проверки инвентаря">
+		<usetemplate name="okignore" ignoretext="Предупреждать, если были обнаружены ошибки проверки инвентаря."/>
+В вашем инвентаре обнаружено повреждение.
+Пожалуйста, свяжитесь с [HELP] со следующим списком проблем.
+Они могут использовать http://opensimulator.org/wiki/inventory чтобы устранить проблемы.
+
+[ERRORS]
+	</notification>
 	<notification name="PreferenceControlsDefaults">
 		Вы хотите восстановить значения по умолчанию для элементов управления?
 		<usetemplate canceltext="Отмена" name="yesnocancelbuttons" notext="Текущий режим" yestext="Все режимы"/>
@@ -5282,6 +5290,13 @@ https://wiki.firestormviewer.org/fs_voice
 Результат теста на сжатие gzip 6 уровня с файлом [FILE] размером [SIZE] КБ:
 Упаковка: [PACK_TIME]с [PSIZE]КБ
 Распаковка: [UNPACK_TIME]с [USIZE]КБ
+	</notification>
+	<notification name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Продолжить"/>
+			<button name="cancel" text="Отмена"/>
+		</form>
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Не выбрана допустимая настройка окружающей среды.

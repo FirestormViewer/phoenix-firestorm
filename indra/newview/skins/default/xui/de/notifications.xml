@@ -4725,6 +4725,14 @@ Wählen Sie eine kleinere Landfläche aus.
 			<ignore name="ignore" text="Bestätigen, bevor eine Liste meiner aktuell aktiven RLV-Restriktionen an jemanden übertragen werden."/>
 		</form>
 	</notification>
+	<notification name="InventoryValidationFailed" label="Inventar-Validierungsfehler">
+		Eine Beschädigung Ihrers Inventars wurde erkannt.
+Bitte kontaktieren Sie [HELP] mit der folgenden Liste an Fehlern.
+Diese können anhand von http://opensimulator.org/wiki/inventory die erkannten Fehler korrigieren.
+
+[ERRORS]
+		<usetemplate ignoretext="Warnen, wenn Fehler bei der Inventar-Validierung festgestellt wurden" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Dadurch werden die Protokolle vorheriger Unterhaltungen und alle Backups dieser Datei gelöscht.
 		<usetemplate ignoretext="Löschen des Protokolls vorheriger Unterhaltungen bestätigen." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
