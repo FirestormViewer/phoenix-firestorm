@@ -4765,8 +4765,8 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		{
 			continue;
 		}
-		// <FS:Ansariel> Ignore in SL at least...
-		if (LLGridManager::instance().isInSecondLife() && folder_type == LLFolderType::FT_MY_SUITCASE)
+		// <FS:Ansariel> Ignore suitcase as it is optional and has no way to verify if it is expected or not on the current grid.
+		if (folder_type == LLFolderType::FT_MY_SUITCASE)
 		{
 			continue;
 		}
