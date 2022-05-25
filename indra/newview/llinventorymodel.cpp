@@ -2417,7 +2417,10 @@ bool LLInventoryModel::loadSkeleton(
 
 		// also delete library cache if inventory cache is purged, so issues with EEP settings going missing
 		// and bridge objects not being found can be resolved
-		inventory_filename = getInvCacheAddres(ALEXANDRIA_LINDEN_ID);
+		// <FS:Beq> correct OS library owner.
+		// inventory_filename = getInvCacheAddres(ALEXANDRIA_LINDEN_ID);
+		inventory_filename = getInvCacheAddres(gInventory.getLibraryOwnerID());
+		// </FS:Beq>
 		if (LLFile::isfile(inventory_filename))
 		{
 			LL_INFOS("LLInventoryModel") << "Purging library cache file: " << inventory_filename << LL_ENDL;
