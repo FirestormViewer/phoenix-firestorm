@@ -107,7 +107,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 
 			if( extras.has("GridStatusRSS"))
 			{
-				mGridStatusRSS = extras["GridStatusRSS"];
+				mGridStatusRSS = extras["GridStatusRSS"].asString();
 			}
 			else
 			{
@@ -115,7 +115,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			}
 			if( extras.has("GridStatus"))
 			{
-				mGridStatusURL = extras["GridStatus"];
+				mGridStatusURL = extras["GridStatus"].asString();
 			}
 			else
 			{
