@@ -3111,7 +3111,10 @@ void LLVOAvatarSelf::outputRezDiagnostics() const
 		}
 	}
 	LL_DEBUGS("Avatar") << "\t Time points for each upload (start / finish)" << LL_ENDL;
-	for (U32 i = 0; i < LLAvatarAppearanceDefines::BAKED_NUM_INDICES; ++i)
+	// <FS:Beq> Missed update for OpenSim BOM
+	// for (U32 i = 0; i < LLAvatarAppearanceDefines::BAKED_NUM_INDICES; ++i)
+	for (U32 i = 0; i < getNumBakes(); ++i)
+	// </FS:Beq>
 	{
 		LL_DEBUGS("Avatar") << "\t\t (" << i << ") \t" << (S32)mDebugBakedTextureTimes[i][0] << " / " << (S32)mDebugBakedTextureTimes[i][1] << LL_ENDL;
 	}
