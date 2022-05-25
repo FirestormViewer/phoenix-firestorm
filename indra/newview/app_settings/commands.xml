@@ -302,8 +302,6 @@
            execute_function="OpenGridStatus"
            is_running_function="Floater.IsOpen"
            is_running_parameters="grid_status"
-           is_enabled_function="GridCheck"
-           is_enabled_parameters="secondlife"
            />
 
 <!-- Firestorm command buttons -->
