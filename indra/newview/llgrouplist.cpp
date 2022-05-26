@@ -422,7 +422,8 @@ mGroupIcon(NULL),
 mGroupNameBox(NULL),
 mInfoBtn(NULL),
 mProfileBtn(NULL),
-mVisibilityBtn(NULL),
+mVisibilityHideBtn(NULL),
+mVisibilityShowBtn(NULL),
 mGroupID(LLUUID::null),
 mForAgent(for_agent)
 {
@@ -460,8 +461,16 @@ BOOL  LLGroupListItem::postBuild()
     mProfileBtn = getChild<LLButton>("profile_btn");
     mProfileBtn->setClickedCallback([this](LLUICtrl *, const LLSD &) { onProfileBtnClick(); });
 
-    mVisibilityBtn = getChild<LLButton>("visibility_btn");
-    mVisibilityBtn->setClickedCallback([this](LLUICtrl *, const LLSD &) { onVisibilityBtnClick(); });
+    mVisibilityHideBtn = findChild<LLButton>("visibility_hide_btn");
+    if (mVisibilityHideBtn)
+    {
+        mVisibilityHideBtn->setClickedCallback([this](LLUICtrl *, const LLSD &) { onVisibilityBtnClick(false); });
+    }
+    mVisibilityShowBtn = findChild<LLButton>("visibility_show_btn");
+    if (mVisibilityShowBtn)
+    {
+        mVisibilityShowBtn->setClickedCallback([this](LLUICtrl *, const LLSD &) { onVisibilityBtnClick(true); });
+    }
 
 	return TRUE;
 }
@@ -481,9 +490,14 @@ void LLGroupListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	{
 		mInfoBtn->setVisible(true);
         mProfileBtn->setVisible(true);
-        if (mForAgent)
+        if (mForAgent && mVisibilityHideBtn)
         {
-            mVisibilityBtn->setVisible(true);
+            LLGroupData agent_gdatap;
+            if (gAgent.getGroupData(mGroupID, agent_gdatap))
+            {
+                mVisibilityHideBtn->setVisible(agent_gdatap.mListInProfile);
+                mVisibilityShowBtn->setVisible(!agent_gdatap.mListInProfile);
+            }
         }
 	}
 
@@ -494,8 +508,12 @@ void LLGroupListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
 	mInfoBtn->setVisible(false);
-    mVisibilityBtn->setVisible(false);
     mProfileBtn->setVisible(false);
+    if (mVisibilityHideBtn)
+    {
+        mVisibilityHideBtn->setVisible(false);
+        mVisibilityShowBtn->setVisible(false);
+    }
 
 	LLPanel::onMouseLeave(x, y, mask);
 }
@@ -585,14 +603,15 @@ void LLGroupListItem::onProfileBtnClick()
 	LLGroupActions::show(mGroupID);
 }
 
-void LLGroupListItem::onVisibilityBtnClick()
+void LLGroupListItem::onVisibilityBtnClick(bool new_visibility)
 {
     LLGroupData agent_gdatap;
     if (gAgent.getGroupData(mGroupID, agent_gdatap))
     {
-        bool new_visibility = !agent_gdatap.mListInProfile;
         gAgent.setUserGroupFlags(mGroupID, agent_gdatap.mAcceptNotices, new_visibility);
         setVisibleInProfile(new_visibility);
+        mVisibilityHideBtn->setVisible(new_visibility);
+        mVisibilityShowBtn->setVisible(!new_visibility);
     }
 }
 

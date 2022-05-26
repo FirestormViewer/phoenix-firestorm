@@ -178,6 +178,7 @@ private:
     void onSaveDescriptionChanges();
     void onDiscardDescriptionChanges();
     void onShowAgentPermissionsDialog();
+    void onOpenNotes();
 
 private:
 	typedef std::map<std::string, LLUUID> group_map_t;
@@ -194,9 +195,12 @@ private:
     LLMenuButton*		mAgentActionMenuButton;
     LLButton*			mSaveDescriptionChanges;
     LLButton*			mDiscardDescriptionChanges;
-    LLButton*			mSeeOnlineToggle;
-    LLButton*			mSeeOnMapToggle;
-    LLButton*			mEditObjectsToggle;
+    LLIconCtrl*			mCanSeeOnlineIcon;
+    LLIconCtrl*			mCantSeeOnlineIcon;
+    LLIconCtrl*			mCanSeeOnMapIcon;
+    LLIconCtrl*			mCantSeeOnMapIcon;
+    LLIconCtrl*			mCanEditObjectsIcon;
+    LLIconCtrl*			mCantEditObjectsIcon;
 
     LLHandle<LLFloater>	mFloaterPermissionsHandle;
 

@@ -847,9 +847,12 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu");
     mSaveDescriptionChanges = getChild<LLButton>("save_description_changes");
     mDiscardDescriptionChanges = getChild<LLButton>("discard_description_changes");
-    mSeeOnlineToggle        = getChild<LLButton>("allow_to_see_online");
-    mSeeOnMapToggle         = getChild<LLButton>("allow_to_see_on_map");
-    mEditObjectsToggle      = getChild<LLButton>("allow_edit_my_objects");
+    mCanSeeOnlineIcon       = getChild<LLIconCtrl>("can_see_online");
+    mCantSeeOnlineIcon      = getChild<LLIconCtrl>("cant_see_online");
+    mCanSeeOnMapIcon        = getChild<LLIconCtrl>("can_see_on_map");
+    mCantSeeOnMapIcon       = getChild<LLIconCtrl>("cant_see_on_map");
+    mCanEditObjectsIcon     = getChild<LLIconCtrl>("can_edit_objects");
+    mCantEditObjectsIcon    = getChild<LLIconCtrl>("cant_edit_objects");
 
     // <FS:Ansariel> Undo LL dumb-down junk
     mStatusText = getChild<LLTextBox>("status");
@@ -862,9 +865,8 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mSaveDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
-    mSeeOnlineToggle->setMouseUpCallback([this](LLUICtrl*, const LLSD&) { onShowAgentPermissionsDialog(); });
-    mSeeOnMapToggle->setMouseUpCallback([this](LLUICtrl*, const LLSD&) { onShowAgentPermissionsDialog(); });
-    mEditObjectsToggle->setMouseUpCallback([this](LLUICtrl*, const LLSD&) { onShowAgentPermissionsDialog(); });
+
+    getChild<LLButton>("open_notes")->setCommitCallback([this](LLUICtrl*, void*) { onOpenNotes(); }, nullptr);
 
     return TRUE;
 }
@@ -958,9 +960,13 @@ void LLPanelProfileSecondLife::resetData()
     mGroups.clear();
     mGroupList->setGroups(mGroups);
 
-    mSeeOnlineToggle->setToggleState(false);
-    mSeeOnMapToggle->setToggleState(false);
-    mEditObjectsToggle->setToggleState(false);
+    mCanSeeOnlineIcon->setVisible(false);
+    mCantSeeOnlineIcon->setVisible(true);
+    mCanSeeOnMapIcon->setVisible(false);
+    mCantSeeOnMapIcon->setVisible(true);
+    mCanEditObjectsIcon->setVisible(false);
+    mCantEditObjectsIcon->setVisible(true);
+
     childSetVisible("permissions_panel", false);
 
     mStatusText->setVisible(FALSE); // <FS:Ansariel> Undo LL dumb-down junk
@@ -1204,16 +1210,25 @@ void LLPanelProfileSecondLife::fillRightsData()
     if (relation)
     {
         S32 rights = relation->getRightsGrantedTo();
+        bool can_see_online = LLRelationship::GRANT_ONLINE_STATUS & rights;
+        bool can_see_on_map = LLRelationship::GRANT_MAP_LOCATION & rights;
+        bool can_edit_objects = LLRelationship::GRANT_MODIFY_OBJECTS & rights;
 
-        mSeeOnlineToggle->setToggleState(LLRelationship::GRANT_ONLINE_STATUS & rights ? TRUE : FALSE);
-        mSeeOnMapToggle->setToggleState(LLRelationship::GRANT_MAP_LOCATION & rights ? TRUE : FALSE);
-        mEditObjectsToggle->setToggleState(LLRelationship::GRANT_MODIFY_OBJECTS & rights ? TRUE : FALSE);
+        mCanSeeOnlineIcon->setVisible(can_see_online);
+        mCantSeeOnlineIcon->setVisible(!can_see_online);
+        mCanSeeOnMapIcon->setVisible(can_see_on_map);
+        mCantSeeOnMapIcon->setVisible(!can_see_on_map);
+        mCanEditObjectsIcon->setVisible(can_edit_objects);
+        mCantEditObjectsIcon->setVisible(!can_edit_objects);
     }
     else
     {
-        mSeeOnlineToggle->setToggleState(false);
-        mSeeOnMapToggle->setToggleState(false);
-        mEditObjectsToggle->setToggleState(false);
+        mCanSeeOnlineIcon->setVisible(false);
+        mCantSeeOnlineIcon->setVisible(true);
+        mCanSeeOnMapIcon->setVisible(false);
+        mCantSeeOnMapIcon->setVisible(true);
+        mCanEditObjectsIcon->setVisible(false);
+        mCantEditObjectsIcon->setVisible(true);
     }
 
     childSetVisible("permissions_panel", NULL != relation);
@@ -1727,6 +1742,23 @@ void LLPanelProfileSecondLife::onShowAgentPermissionsDialog()
     }
 }
 
+void LLPanelProfileSecondLife::onOpenNotes()
+{
+    LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+    if (!parent_floater)
+    {
+        return;
+    }
+
+    LLTabContainer* tab_container = parent_floater->findChild<LLTabContainer>("panel_profile_tabs", TRUE);
+    if (!tab_container)
+    {
+        return;
+    }
+
+    tab_container->selectTabByName(PANEL_NOTES);
+}
+
 //////////////////////////////////////////////////////////////////////////
 // LLPanelProfileWeb
 
@@ -2104,13 +2136,13 @@ void LLPanelProfileNotes::onSaveNotesChanges()
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("notes", mCurrentNotes)));
         
 
-        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", getAvatarId()));
-        if (!floater_profile)
+        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+        if (!parent_floater)
         {
             return;
         }
 
-        LLPanel* panel = floater_profile->findChild<LLPanel>(PANEL_SECONDLIFE, TRUE);
+        LLPanel* panel = parent_floater->findChild<LLPanel>(PANEL_SECONDLIFE, TRUE);
         LLPanelProfileSecondLife *panel_sl = dynamic_cast<LLPanelProfileSecondLife*>(panel);
         if (panel_sl)
         {

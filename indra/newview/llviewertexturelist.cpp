@@ -1458,7 +1458,7 @@ BOOL LLViewerTextureList::createUploadFile(const std::string& filename,
 // note: modifies the argument raw_image!!!!
 LLPointer<LLImageJ2C> LLViewerTextureList::convertToUploadFile(LLPointer<LLImageRaw> raw_image, const S32 max_image_dimentions)
 {
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	raw_image->biasedScaleToPowerOfTwo(max_image_dimentions);
 	LLPointer<LLImageJ2C> compressedImage = new LLImageJ2C();
 	
