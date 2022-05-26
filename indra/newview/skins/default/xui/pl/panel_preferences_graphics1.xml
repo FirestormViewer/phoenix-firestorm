@@ -85,7 +85,6 @@
 			<text name="AvatarRenderingText">
 				Rendering awatarów:
 			</text>
-			<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
 			<check_box label="Elastyczne tkaniny ubrań" name="AvatarCloth"/>
 			<!-- <text name="TerrainDetailText">
 				Szczegóły terenu:

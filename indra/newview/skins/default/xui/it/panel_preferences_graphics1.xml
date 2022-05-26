@@ -85,7 +85,6 @@
 			<text name="AvatarRenderingText">
 				Resa avatar:
 			</text>
-			<check_box label="Aspetto hardware" name="AvatarVertexProgram"/>
 			<check_box label="Abiti avatar" name="AvatarCloth"/>
 			<text name="TerrainDetailText">
 				Dettagli del terreno:

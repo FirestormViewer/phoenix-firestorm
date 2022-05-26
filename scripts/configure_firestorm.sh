@@ -68,8 +68,8 @@ showUsage()
     echo "  --config                 : Generate a new architecture-specific config"
     echo "  --build                  : Build Firestorm"
     echo "  --version                : Update version number"
-    echo "  --chan  [Release|Beta|Private]         : Private is the default, sets channel"
-    echo "  --btype [Release|RelWithDebInfo|Debug] : Release is default, whether to use symbols"
+    echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
+    echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
     echo "  --kdu                    : Build with KDU"
     echo "  --package                : Build installer"
     echo "  --no-package             : Build without installer (Overrides --package)"
@@ -111,7 +111,7 @@ getArgs()
           config)         WANTS_CONFIG=$TRUE;;
           version)        WANTS_VERSION=$TRUE;;
           chan)           CHANNEL="$OPTARG";;
-          btype)          if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) -o \( "$OPTARG" == "Debug" \) ] ; then
+          btype)          if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) ] ; then
                             BTYPE="$OPTARG"
                           fi
                           ;;
@@ -485,9 +485,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         AVX2_OPTIMIZATION="-DUSE_AVX2_OPTIMIZATION:BOOL=OFF"
     fi
     if [ $WANTS_TRACY -eq $TRUE ] ; then
-        TRACY_PROFILER="-DUSE_TRACY_PROFILER:BOOL=ON"
+        TRACY_PROFILER="-DUSE_TRACY:BOOL=ON"
     else
-        TRACY_PROFILER="-DUSE_TRACY_PROFILER:BOOL=OFF"
+        TRACY_PROFILER="-DUSE_TRACY:BOOL=OFF"
     fi   
     if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
         TESTBUILD="-DTESTBUILD:BOOL=ON -DTESTBUILDPERIOD:STRING=$TESTBUILD_PERIOD"

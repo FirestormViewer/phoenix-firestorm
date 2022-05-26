@@ -363,6 +363,8 @@ public:
 	// handle refocusing.
 	static void		closeFrontmostFloater();
 
+    static bool     isQuitRequested() { return sQuitting; }
+
 //	LLNotification::Params contextualNotification(const std::string& name) 
 //	{ 
 //	    return LLNotification::Params(name).context(mNotificationContext); 

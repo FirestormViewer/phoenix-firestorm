@@ -93,6 +93,8 @@ struct LLStopWhenHandled
     template<typename InputIterator>
     result_type operator()(InputIterator first, InputIterator last) const
     {
+        LL_PROFILE_ZONE_SCOPED
+
         for (InputIterator si = first; si != last; ++si)
         {
             try

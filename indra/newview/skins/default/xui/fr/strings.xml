@@ -5365,7 +5365,7 @@ Si le problème persiste, vérifiez la configuration de votre réseau et de votr
 	<string name="PremiumMembership">
 		Premium
 	</string>
-	<string name="Premium PlusMembership">
+	<string name="Premium_PlusMembership">
 		Premium Plus
 	</string>
 	<string name="MembershipUpgradeText">
@@ -7014,5 +7014,8 @@ Votre position actuelle : [AVATAR_POS]
 	</string>
 	<string name="FSObjectInventoryElements">
 		[NUM_ELEMENTS] éléments
+	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		l'équipe d'assistance de votre gestionnaire de grille
 	</string>
 </strings>

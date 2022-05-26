@@ -95,7 +95,6 @@
 			化身呈像：
 		</text>
 		<check_box label="化身假冒者" name="AvatarImpostors"/>
-		<check_box label="硬體換膚" name="AvatarVertexProgram"/>
 		<check_box label="化身衣服" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			地形細節：

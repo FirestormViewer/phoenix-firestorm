@@ -213,11 +213,6 @@ std::string LLGridManager::getGridId(const std::string& grid)
     return std::string();
 }
 
-//LLPointer<LLSecAPIHandler> getSecHandler(const std::string& handler_type)
-//{
-//    return nullptr;
-//}
-
 //-----------------------------------------------------------------------------
 #include "../llviewercontrol.h"
 LLControlGroup gSavedSettings("Global");

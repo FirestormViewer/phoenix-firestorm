@@ -121,7 +121,7 @@ class RlvCachedBehaviourModifier
 public:
 	RlvCachedBehaviourModifier(ERlvBehaviourModifier eModifier)
 	{
-		if ((mCachedModifierPtr = RlvBehaviourModifierCache<T>::getInstance(eModifier)) == nullptr)
+		if ((mCachedModifierPtr = RlvBehaviourModifierCache<T>::getInstance(eModifier).get()) == nullptr)
 			mCachedModifierPtr = new RlvBehaviourModifierCache<T>(eModifier);
 	}
 
