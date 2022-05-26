@@ -1282,7 +1282,7 @@ void LLVOAvatarSelf::checkBOMRebakeRequired()
 			// This replicates forceAppearanceUpdate rather than pulling in the whole of llavatarself.
 			if(!LLGridManager::instance().isInSecondLife())
 			{
-				doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
+				doAfterInterval([](){ if (isAgentAvatarValid()) { gAgentAvatarp->forceBakeAllTextures(true); }}, 5.0);
 			}
 			// update the setting even if we are in SL so that switch SL to OS and back 
 			gSavedSettings.setBOOL("CurrentlyUsingBakesOnMesh", bom_can_be_used_here);
@@ -3111,7 +3111,10 @@ void LLVOAvatarSelf::outputRezDiagnostics() const
 		}
 	}
 	LL_DEBUGS("Avatar") << "\t Time points for each upload (start / finish)" << LL_ENDL;
-	for (U32 i = 0; i < LLAvatarAppearanceDefines::BAKED_NUM_INDICES; ++i)
+	// <FS:Beq> Missed update for OpenSim BOM
+	// for (U32 i = 0; i < LLAvatarAppearanceDefines::BAKED_NUM_INDICES; ++i)
+	for (U32 i = 0; i < getNumBakes(); ++i)
+	// </FS:Beq>
 	{
 		LL_DEBUGS("Avatar") << "\t\t (" << i << ") \t" << (S32)mDebugBakedTextureTimes[i][0] << " / " << (S32)mDebugBakedTextureTimes[i][1] << LL_ENDL;
 	}
@@ -3583,7 +3586,11 @@ void forceAppearanceUpdate()
 	// Trying to rebake immediately after crossing region boundary
 	// seems to be failure prone; adding a delay factor. Yes, this
 	// fix is ad-hoc and not guaranteed to work in all cases.
-	doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
+	// <FS:Beq> Never trust the avatarp lifetime.
+	// doAfterInterval(boost::bind(&LLVOAvatarSelf::forceBakeAllTextures,	gAgentAvatarp.get(), true), 5.0);
+	doAfterInterval([](){ if (isAgentAvatarValid()) { gAgentAvatarp->forceBakeAllTextures(true); }}, 5.0);
+	// </FS:Beq>
+
 }
 
 void CheckAgentAppearanceService_httpFailure( LLSD const &aData )
