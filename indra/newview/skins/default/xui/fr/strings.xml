@@ -238,6 +238,7 @@ http://secondlife.com/viewer-access-faq
 Veuillez vérifier que les éléments ci-dessous ont été correctement saisis :
     * Nom d&apos;utilisateur (par exemple, bobsmith12 ou steller.sunshine)
     * Mot de passe
+    * Jeton de second facteur (si activé)
 Assurez-vous également que la touche Verr. maj n&apos;est pas activée.
 	</string>
 	<string name="LoginFailedPasswordChanged">
@@ -347,6 +348,10 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="LoginFailedLoggingOutSession">
 		Le système a commencé à fermer votre dernière session.
 Veuillez réessayer de vous connecter dans une minute.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Entrez un nouveau jeton à partir de votre application d'authentification pour pouvoir vous connecter
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.com.
 	</string>
 	<string name="AgentLostConnection">
 		Il y a peut-être des problèmes techniques dans cette région.  Veuillez vérifier votre connexion Internet.
@@ -5327,7 +5332,7 @@ Si le problème persiste, vérifiez la configuration de votre réseau et de votr
 	<string name="PremiumMembership">
 		Premium
 	</string>
-	<string name="Premium PlusMembership">
+	<string name="Premium_PlusMembership">
 		Premium Plus
 	</string>
 	<string name="MembershipUpgradeText">
@@ -6976,5 +6981,8 @@ Votre position actuelle : [AVATAR_POS]
 	</string>
 	<string name="FSObjectInventoryElements">
 		[NUM_ELEMENTS] éléments
+	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		l'équipe d'assistance de votre gestionnaire de grille
 	</string>
 </strings>

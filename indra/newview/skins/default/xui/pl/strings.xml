@@ -6489,4 +6489,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="FSObjectInventoryElements">
 		[NUM_ELEMENTS] elementów
 	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		zespół pomocy operatora Twojej Siatki
+	</string>
 </strings>

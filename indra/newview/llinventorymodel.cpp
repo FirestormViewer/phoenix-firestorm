@@ -398,7 +398,50 @@ LLInventoryModel::EAnscestorResult LLInventoryModel::getObjectTopmostAncestor(co
 	result = object->getUUID();
 	return ANSCESTOR_OK;
 }
+// <FS:Beq> [OPENSIM] FIRE-31674 Exclude suitcase and descendents from validation when in OpenSim
+#ifdef OPENSIM
+bool LLInventoryModel::isInSuitcase(const LLInventoryCategory * cat) const
+{
+	if(LLGridManager::getInstance()->isInSecondLife())
+	{
+		return false;
+	}
+    if (!cat)
+    {
+        LL_WARNS(LOG_INV) << "Unable to trace parentage of null cat " << LL_ENDL;
+        return false;
+    }
 
+	auto cat_id = cat->getUUID();
+    std::set<LLUUID> cat_ids{ cat_id }; // loop protection
+	if(cat->getPreferredType() == LLFolderType::FT_MY_SUITCASE)
+		return true;
+    while (cat->getParentUUID().notNull())
+    {
+        LLUUID parent_id = cat->getParentUUID();
+        if (cat_ids.find(parent_id) != cat_ids.end())
+        {
+            LL_WARNS(LOG_INV) << "Detected a loop on a cat " << parent_id << " when searching for ancestor of " << cat_id << LL_ENDL;
+            return false;
+        }
+        cat_ids.insert(parent_id);
+        auto parent_cat = getCategory(parent_id);
+		if (!parent_cat)
+		{
+			LL_WARNS(LOG_INV) << "unable to trace parentage of " << cat_id << ", missing item for uuid " << parent_id << LL_ENDL;
+			return false;
+		}
+        LL_DEBUGS(LOG_INV) << "Parent folder is " << parent_cat->getName() << "; Folder type " << parent_cat->getPreferredType() << LL_ENDL;
+		if(parent_cat->getPreferredType() == LLFolderType::FT_MY_SUITCASE)
+		{
+			return true;
+		}
+		cat = parent_cat;
+		cat_id = cat->getUUID();
+	}
+	return false;
+}
+#endif
 // Get the object by id. Returns NULL if not found.
 LLInventoryObject* LLInventoryModel::getObject(const LLUUID& id) const
 {
@@ -2374,7 +2417,10 @@ bool LLInventoryModel::loadSkeleton(
 
 		// also delete library cache if inventory cache is purged, so issues with EEP settings going missing
 		// and bridge objects not being found can be resolved
-		inventory_filename = getInvCacheAddres(ALEXANDRIA_LINDEN_ID);
+		// <FS:Beq> correct OS library owner.
+		// inventory_filename = getInvCacheAddres(ALEXANDRIA_LINDEN_ID);
+		inventory_filename = getInvCacheAddres(gInventory.getLibraryOwnerID());
+		// </FS:Beq>
 		if (LLFile::isfile(inventory_filename))
 		{
 			LL_INFOS("LLInventoryModel") << "Purging library cache file: " << inventory_filename << LL_ENDL;
@@ -2925,10 +2971,46 @@ void LLInventoryModel::buildParentChildMap()
 			{
 				// Fatal inventory error. Will not be able to engage in many inventory operations.
 				// This should be followed by an error dialog leading to logout.
+				// <FS:Beq> FIRE-31634 [OPENSIM] Inventory Validation fails on old and grandfathered inventories
+				// We will report the errors but allow the user to continue.
+				#ifdef OPENSIM
+				if (LLGridManager::getInstance()->isInOpenSim())
+				{
+					LLSD args;
+					LLSD grid_info;
+					LLGridManager::getInstance()->getGridData(grid_info);
+					if (grid_info.has("help"))
+					{
+						args["HELP"] = grid_info["help"].asString();
+					}
+					else
+					{
+						args["HELP"] = LLTrans::getString("OpenSimInventoryValidationErrorGenericHelp");
+					}
+					args["ERRORS"] = validation_info->mLog.str();
+					LL_WARNS("Inventory") << "Potentially fatal errors were found during validation:"
+										<< "You may not be able to do normal inventory operations in this session."
+										<< "Contact your Grid Operator's support team and provide them with your logs."
+										<< LL_ENDL;
+					LL_WARNS("Inventory") << "### Start of errors ###" << LL_ENDL;
+					LL_WARNS("Inventory") << validation_info->mLog.str() << LL_ENDL;
+					LL_WARNS("Inventory") << "### End of errors ###" << LL_ENDL;
+					LLNotificationsUtil::add("InventoryValidationFailed", args);
+					mIsAgentInvUsable = true;
+				}
+				else
+				{
+				#endif // OPENSIM
+				// </FS:Beq>
 				LL_WARNS("Inventory") << "Fatal errors were found in validate(): unable to initialize inventory! "
 									  << "Will not be able to do normal inventory operations in this session."
 									  << LL_ENDL;
 				mIsAgentInvUsable = false;
+				// <FS:Beq> FIRE-31634 [OPENSIM] Inventory Validation fails on old and grandfathered inventories
+				#ifdef OPENSIM
+				}
+				#endif
+				// </FS:Beq>
 			}
 			else
 			{
@@ -4365,7 +4447,13 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 	if (getLibraryRootFolderID().isNull())
 	{
         // Probably shouldn't be a fatality, inventory can function without a library 
-		LL_WARNS("Inventory") << "Fatal inventory corruption: no library root folder id" << LL_ENDL;
+		// <FS:Beq>  FIRE-31634 [OPENSIM] Better inventory validation logging
+		// LL_WARNS("Inventory") << "Fatal inventory corruption: no library root folder id" << LL_ENDL;
+		std::ostringstream out;
+		out << "No library root folder id";
+		LL_WARNS("Inventory") << "Fatal inventory corruption: " << out.str() << LL_ENDL;
+		validation_info->mLog << out.str() << std::endl;
+		// </FS:Beq>
 		validation_info->mFatalNoLibraryRootFolder = true;
         fatal_errs++;
 	}
@@ -4432,6 +4520,15 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 				warnings++;
 			}
 		}
+		// <FS:Beq> FIRE-31674 Suitcase contents do not need checking. 
+		#ifdef OPENSIM
+		if (isInSuitcase(cat))
+		{
+			LL_DEBUGS("Inventory") << "cat " << cat->getName() << " skipped because it is a child of Suitcase" << LL_ENDL;
+			continue;
+		}
+		#endif
+		// </FS:Beq>
 		cat_array_t* cats;
 		item_array_t* items;
 		getDirectDescendentsOf(cat_id,cats,items);
@@ -4579,6 +4676,15 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		}
 		if (!cat_is_in_library)
 		{
+			// <FS:Beq> FIRE-31674 [OPENSIM] don't count things underneath suitcase
+			#ifdef OPENSIM			
+			if ( isInSuitcase(cat) )
+			{
+					LL_DEBUGS("Inventory") << "Under suitcase cat: " << getFullPath(cat) << " folder_type " << folder_type << LL_ENDL;
+			}
+			else
+			#endif
+			// </FS:Beq>
 			if (getRootFolderID().notNull() && (cat->getUUID()==getRootFolderID() || cat->getParentUUID()==getRootFolderID()))
 			{
 				ft_counts_under_root[folder_type]++;
@@ -4723,6 +4829,12 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		{
 			continue;
 		}
+		// <FS:Ansariel> Ignore suitcase as it is optional and has no way to verify if it is expected or not on the current grid.
+		if (folder_type == LLFolderType::FT_MY_SUITCASE)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		bool is_automatic = LLFolderType::lookupIsAutomaticType(folder_type);
 		bool is_singleton = LLFolderType::lookupIsSingletonType(folder_type);
 		S32 count_under_root = ft_counts_under_root[folder_type];
@@ -4738,11 +4850,19 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		{
 			if (count_under_root==0)
 			{
-				LL_WARNS("Inventory") << "Expected system folder type " << ft << " was not found under root" << LL_ENDL;
+				LL_WARNS("Inventory") << "Expected system folder type " << LLFolderType::lookup(folder_type) << "(" << ft << ") was not found under root" << LL_ENDL; // <FS:Beq/> //<FS:Beq>  FIRE-31634 [OPENSIM] better logging for inventory issues
 				// Need to create, if allowed.
 				if (is_automatic)
 				{
-					LL_WARNS("Inventory") << "Fatal inventory corruption: cannot create system folder of type " << ft << LL_ENDL;
+
+					// <FS:Beq>  FIRE-31634 [OPENSIM] Better inventory validation logging
+					// LL_WARNS("Inventory") << "Fatal inventory corruption: cannot create system folder of type " << LLFolderType::lookup(folder_type) << "(" << ft << ")" << LL_ENDL;
+					std::ostringstream out;
+					out << "Cannot create system folder of type " << LLFolderType::lookup(folder_type) << "(" << ft << ")";
+					LL_WARNS("Inventory") << "Fatal inventory corruption: " << out.str() << LL_ENDL;
+					validation_info->mLog << out.str() << std::endl;
+					// </FS:Beq>
+
                     fatal_errs++;
 					validation_info->mMissingRequiredSystemFolders.insert(folder_type);
 				}
@@ -4754,16 +4874,25 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 			}
 			else if (count_under_root > 1)
 			{
-				LL_WARNS("Inventory") << "Fatal inventory corruption: system folder type has excess copies under root, type " << ft << " count " << count_under_root << LL_ENDL;
+				// LL_WARNS("Inventory") << "Fatal inventory corruption: system folder type has excess copies under root, type " << ft << " count " << count_under_root << LL_ENDL; // <FS:Beq/>  FIRE-31634 [OPENSIM] Better inventory validation logging
 				validation_info->mDuplicateRequiredSystemFolders.insert(folder_type);
                 if (!is_automatic && folder_type != LLFolderType::FT_SETTINGS)
                 {
+					// <FS:Beq>  FIRE-31634 [OPENSIM] Better inventory validation logging
+					// LL_WARNS("Inventory") << "Fatal inventory corruption: system folder type has excess copies under root, type " << LLFolderType::lookup(folder_type) << "(" << ft << ") count " << count_under_root << LL_ENDL; 
+					std::ostringstream out;
+					out << "System folder type has excess copies under root, type " << LLFolderType::lookup(folder_type) << "(" << ft << ") count " << count_under_root;
+					LL_WARNS("Inventory") << "Fatal inventory corruption: " << out.str() << LL_ENDL;
+					validation_info->mLog << out.str() << std::endl;
+					// </FS:Beq>
+
                     // It is a fatal problem or can lead to fatal problems for COF,
                     // outfits, trash and other non-automatic folders.
                     fatal_errs++;
                 }
                 else
                 {
+					LL_WARNS("Inventory") << "Non-Fatal inventory corruption: system folder type has excess copies under root, type " << LLFolderType::lookup(folder_type) << "(" << ft << ") count " << count_under_root << LL_ENDL; // <FS:Beq/>  FIRE-31634 [OPENSIM] Better inventory validation logging
                     // For automatic folders it's not a fatal issue and shouldn't
                     // break inventory or other functionality further
                     // Exception: FT_SETTINGS is not automatic, but only deserves a warning.
@@ -4772,7 +4901,7 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 			}
 			if (count_elsewhere > 0)
 			{
-				LL_WARNS("Inventory") << "Found " << count_elsewhere << " extra folders of type " << ft << " outside of root" << LL_ENDL;
+				LL_WARNS("Inventory") << "Found " << count_elsewhere << " extra folders of type " << LLFolderType::lookup(folder_type) << "(" << ft << ") outside of root" << LL_ENDL; //<FS:Beq/>  FIRE-31634 [OPENSIM] Better inventory validation
 				warnings++;
 			}
 		}

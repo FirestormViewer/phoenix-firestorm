@@ -315,6 +315,7 @@ void LLDrawPoolBump::bindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& di
 			shader->uniform4fv(LLViewerShaderMgr::SHINY_ORIGIN, 1, vec4.mV);			
 			if (shader_level > 1)
 			{
+                cube_map->setMatrix(1);
 				// Make sure that texture coord generation happens for tex unit 1, as that's the one we use for 
 				// the cube map in the one pass shiny shaders
 				cube_channel = shader->enableTexture(LLViewerShaderMgr::ENVIRONMENT_MAP, LLTexUnit::TT_CUBE_MAP);
@@ -323,6 +324,7 @@ void LLDrawPoolBump::bindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& di
 			}
 			else
 			{
+                cube_map->setMatrix(0);
 				cube_channel = shader->enableTexture(LLViewerShaderMgr::ENVIRONMENT_MAP, LLTexUnit::TT_CUBE_MAP);
 				diffuse_channel = -1;
 				cube_map->enable(cube_channel);
@@ -336,6 +338,7 @@ void LLDrawPoolBump::bindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& di
 			diffuse_channel = -1;
 			gGL.getTexUnit(0)->disable();
 			cube_map->enable(0);
+            cube_map->setMatrix(0);
 			gGL.getTexUnit(0)->bind(cube_map);
 		}
 	}
@@ -394,6 +397,7 @@ void LLDrawPoolBump::unbindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& 
         // Moved below shader->disableTexture call to avoid false alarms from auto-re-enable of textures on stage 0
         // MAINT-755
 		cube_map->disable();
+        cube_map->restoreMatrix();
 	}
 }
 
@@ -464,6 +468,7 @@ void LLDrawPoolBump::beginFullbrightShiny()
 		LLVector4 vec4(vec, gShinyOrigin.mV[3]);
 		shader->uniform4fv(LLViewerShaderMgr::SHINY_ORIGIN, 1, vec4.mV);
 
+        cube_map->setMatrix(1);
 		// Make sure that texture coord generation happens for tex unit 1, as that's the one we use for 
 		// the cube map in the one pass shiny shaders
 		gGL.getTexUnit(1)->disable();
@@ -524,6 +529,7 @@ void LLDrawPoolBump::endFullbrightShiny()
 	if( cube_map )
 	{
 		cube_map->disable();
+        cube_map->restoreMatrix();
 		shader->unbind();
 	}
 	

@@ -3182,6 +3182,7 @@ BOOL LLPanelGroupBanListSubTab::postBuildSubTab(LLView* root)
 
 	mBanList->setCommitOnSelectionChange(TRUE);
 	mBanList->setCommitCallback(onBanEntrySelect, this);
+	mBanList->setFilterColumn(0);							// <FS:Zi> FIRE-31653: add banlist filter editor
 
 	mCreateBanButton->setClickedCallback(onCreateBanEntry, this);
 	mCreateBanButton->setEnabled(FALSE);
@@ -3260,6 +3261,13 @@ void LLPanelGroupBanListSubTab::onBanEntrySelect(LLUICtrl* ctrl, void* user_data
 
 void LLPanelGroupBanListSubTab::handleBanEntrySelect()
 {
+	// <FS:Zi> FIRE-31653: disable remove ban button when no entry is selected
+	if (!mBanList->getNumSelected())
+	{
+		mDeleteBanButton->setEnabled(false);
+		return;
+	}
+	// </FS:Zi>
 	if (gAgent.hasPowerInGroup(mGroupID, GP_GROUP_BAN_ACCESS))
 	{
 		mDeleteBanButton->setEnabled(TRUE);
@@ -3434,3 +3442,13 @@ void LLPanelGroupBanListSubTab::setGroupID(const LLUUID& id)
 	setFooterEnabled(FALSE);
 	LLPanelGroupSubTab::setGroupID(id); 
 }
+
+// <FS:Zi> FIRE-31653: add banlist filter editor
+void LLPanelGroupBanListSubTab::onFilterChanged()
+{
+	mBanList->setFilterString(mSearchFilter);
+
+	// disable remove ban button as a change of filter will deselect all entries
+	mDeleteBanButton->setEnabled(false);
+}
+// </FS:Zi> add banlist filter editor
