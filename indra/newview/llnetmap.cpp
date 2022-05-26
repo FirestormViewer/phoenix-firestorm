@@ -145,6 +145,13 @@ LLNetMap::LLNetMap (const Params & p)
 {
 	// <FS:Ansariel> Fixing borked minimap zoom level persistance
 	//mScale = gSavedSettings.getF32("MiniMapScale");
+    if (gAgent.isFirstLogin())
+    {
+        // *HACK: On first run, set this to false for new users, otherwise the
+        // default is true to maintain consistent experience for existing
+        // users.
+        gSavedSettings.setBOOL("MiniMapRotate", false);
+    }
 	//mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
 	//mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
 	setScale(gSavedSettings.getF32("MiniMapScale"));
