@@ -5749,14 +5749,16 @@ void LLVivoxVoiceClient::setVoiceEnabled(bool enabled)
 bool LLVivoxVoiceClient::voiceEnabled(bool no_cache)
 {
 	// <FS:Ansariel> Replace frequently called gSavedSettings
-	//return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+    //return gSavedSettings.getBOOL("EnableVoiceChat") &&
+    //      !gSavedSettings.getBOOL("CmdLineDisableVoice") &&
+    //      !gNonInteractive;
 	if (no_cache)
 	{
-		return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+		return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice") && !gNonInteractive;
 	}
 	static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "EnableVoiceChat");
 	static LLCachedControl<bool> sCmdLineDisableVoice(gSavedSettings, "CmdLineDisableVoice");
-	return sEnableVoiceChat && !sCmdLineDisableVoice;
+	return sEnableVoiceChat && !sCmdLineDisableVoice && !gNonInteractive;
 	// </FS:Ansariel>
 }
 // </FS:Ansariel>

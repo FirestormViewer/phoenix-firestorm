@@ -600,14 +600,6 @@ class WindowsManifest(ViewerManifest):
         # Get shared libs from the shared libs staging directory
         with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                           'sharedlibs', self.args['configuration'])):
-
-            # Mesh 3rd party libs needed for auto LOD and collada reading
-            try:
-                self.path("glod.dll")
-            except RuntimeError as err:
-                print(err.message)
-                print("Skipping GLOD library (assumming linked statically)")
-
             # Get fmodstudio dll if needed
             if self.args['fmodstudio'] == 'ON':
                 if(self.args['configuration'].lower() == 'debug'):
@@ -621,7 +613,7 @@ class WindowsManifest(ViewerManifest):
                 self.path("alut.dll")
 
             # For textures
-            self.fs_try_path("openjp2.dll")
+            self.path_optional("openjp2.dll")
 
             # Uriparser
             self.path("uriparser.dll")
@@ -630,6 +622,7 @@ class WindowsManifest(ViewerManifest):
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
             self.path("msvcp140.dll")
             self.path("vcruntime140.dll")
+            self.path_optional("vcruntime140_1.dll")
 
             # SLVoice executable
             with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
@@ -723,6 +716,7 @@ class WindowsManifest(ViewerManifest):
                                               'sharedlibs', 'Release')):
                 self.path("msvcp140.dll")
                 self.path("vcruntime140.dll")
+                self.path_optional("vcruntime140_1.dll")
 
             # CEF files common to all configurations
             with self.prefix(src=os.path.join(pkgdir, 'resources')):
@@ -1451,7 +1445,6 @@ class DarwinManifest(ViewerManifest):
                                 "libapr-1.0.dylib",
                                 "libaprutil-1.0.dylib",
                                 "libexpat.1.dylib",
-                                "libGLOD.dylib",
                                 # libnghttp2.dylib is a symlink to
                                 # libnghttp2.major.dylib, which is a symlink
                                 # to libnghttp2.version.dylib. Get all of them.
@@ -1895,7 +1888,7 @@ class LinuxManifest(ViewerManifest):
         # CEF files 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             self.path( "libcef.so" )
-            self.fs_try_path( "libminigbm.so" )
+            self.path_optional( "libminigbm.so" )
             
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release', 'swiftshader'), dst=os.path.join("bin", "swiftshader") ):
             self.path( "*.so" )
@@ -2009,10 +2002,10 @@ class LinuxManifest(ViewerManifest):
             #self.fs_path("libminizip.so")
             self.path("libuuid.so*")
             self.path("libSDL*.so*")
-            self.fs_try_path("libdirectfb*.so*")
-            self.fs_try_path("libfusion*.so*")
-            self.fs_try_path("libdirect*.so*")
-            self.fs_try_path("libopenjpeg.so*")
+            self.path_optional("libdirectfb*.so*")
+            self.path_optional("libfusion*.so*")
+            self.path_optional("libdirect*.so*")
+            self.path_optional("libopenjpeg.so*")
             self.path("libhunspell-1.3.so*")
             self.path("libalut.so*")
             #self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
@@ -2041,7 +2034,7 @@ class LinuxManifest(ViewerManifest):
             # version number.
             #self.path("libfontconfig.so.*.*")
 
-            self.fs_try_path("libjemalloc.so*")
+            self.path_optional("libjemalloc.so*")
 
             # Vivox runtimes
             # Currentelly, the 32-bit ones will work with a 64-bit client.
@@ -2128,7 +2121,6 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libaprutil-1.so.0.4.1")
             self.path("libdb*.so")
             self.path("libexpat.so.*")
-            self.path("libGLOD.so")
             self.path("libuuid.so*")
             self.path("libSDL-1.2.so.*")
             self.path("libdirectfb-1.*.so.*")

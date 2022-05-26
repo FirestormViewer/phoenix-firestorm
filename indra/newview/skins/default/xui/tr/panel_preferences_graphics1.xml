@@ -95,7 +95,6 @@
 			Avatar İşleme:
 		</text>
 		<check_box label="Düşük grafik özellikli avatarlar" name="AvatarImpostors"/>
-		<check_box label="Donanım ile kaplama" name="AvatarVertexProgram"/>
 		<check_box label="Avatar giysisi" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Yüzey detayı:

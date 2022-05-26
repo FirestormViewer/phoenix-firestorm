@@ -55,7 +55,6 @@
 			<slider label="  Ciel" name="SkyMeshDetail"/>
 			<text name="AvatarRenderingText">Rendu des avatars :</text>
 			<check_box label="Avatars 2D" name="AvatarImpostors"/>
-			<check_box label="Accél. GPU des avatars" name="AvatarVertexProgram"/>
 			<check_box label="Flexibilité des vêtements" name="AvatarCloth"/>
 			<text name="TerrainDetailText">Détails du terrain :</text>
 			<radio_group name="TerrainDetailRadio">

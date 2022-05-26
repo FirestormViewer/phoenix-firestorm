@@ -96,7 +96,6 @@ rápido
 			Renderização do avatar:
 		</text>
 		<check_box label="Atributos do Avatar" name="AvatarImpostors"/>
-		<check_box label="Melhoria de Hardware" name="AvatarVertexProgram"/>
 		<check_box label="Vestimenta do Avatar" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Detalhe do Terreno:

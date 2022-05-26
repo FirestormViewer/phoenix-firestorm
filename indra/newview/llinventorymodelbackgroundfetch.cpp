@@ -616,8 +616,11 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 						folder_sd["sort_order"]		= LLSD::Integer(sort_order);
 						folder_sd["fetch_folders"]	= LLSD::Boolean(TRUE); //(LLSD::Boolean)sFullFetchStarted;
 						folder_sd["fetch_items"]	= LLSD::Boolean(TRUE);
-				    
-						if (ALEXANDRIA_LINDEN_ID == cat->getOwnerID())
+
+						// <FS:Beq> correct library owner for OpenSim (Rye)
+						// if (ALEXANDRIA_LINDEN_ID == cat->getOwnerID())
+						if (gInventory.getLibraryOwnerID() == cat->getOwnerID())
+						// </FS:Beq>
 						{
 							folder_request_body_lib["folders"].append(folder_sd);
 						}

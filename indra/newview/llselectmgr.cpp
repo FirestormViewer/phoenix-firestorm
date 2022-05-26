@@ -226,8 +226,6 @@ void LLSelectMgr::cleanupGlobals()
 	LLSelectMgr::getInstance()->clearSelections();
 }
 
-// Build time optimization, generate this function once here
-template class LLSelectMgr* LLSingleton<class LLSelectMgr>::getInstance();
 //-----------------------------------------------------------------------------
 // LLSelectMgr()
 //-----------------------------------------------------------------------------
@@ -6096,8 +6094,6 @@ void LLSelectMgr::updateSilhouettes()
 		LLViewerObject* objectp = *iter;
 		objectp->clearChanged(LLXform::MOVED | LLXform::SILHOUETTE);
 	}
-	
-	//gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 }
 
 void LLSelectMgr::updateSelectionSilhouette(LLObjectSelectionHandle object_handle, S32& num_sils_genned, std::vector<LLViewerObject*>& changed_objects)
@@ -6803,7 +6799,6 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &color)
 	{
 		// <FS:Ansariel> Performance improvement
 		LLViewerCamera& camera = LLViewerCamera::instance();
-		LLSelectMgr& selectmgr = LLSelectMgr::instance();
 
 		F32 silhouette_thickness;
 		if (isAgentAvatarValid() && is_hud_object)
@@ -6826,22 +6821,17 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &color)
 			gGL.flush();
 			gGL.blendFunc(LLRender::BF_SOURCE_COLOR, LLRender::BF_ONE);
 			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-			if (!LLGLSLShader::sNoFixedFunction)
-			{
-			// </FS:Ansariel>
-				LLGLEnable fog(GL_FOG);
-				glFogi(GL_FOG_MODE, GL_LINEAR);
-				float d = (camera.getPointOfInterest()-camera.getOrigin()).magVec();
-				LLColor4 fogCol = color * (F32)llclamp((selectmgr.getSelectionCenterGlobal()-gAgentCamera.getCameraPositionGlobal()).magVec()/(selectmgr.getBBoxOfSelection().getExtentLocal().magVec()*4), 0.0, 1.0);
-				glFogf(GL_FOG_START, d);
-				glFogf(GL_FOG_END, d*(1 + (camera.getView() / camera.getDefaultFOV())));
-				glFogfv(GL_FOG_COLOR, fogCol.mV);
-			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-			}
+			//LLGLEnable fog(GL_FOG);
+			//glFogi(GL_FOG_MODE, GL_LINEAR);
+			//float d = (camera.getPointOfInterest()-camera.getOrigin()).magVec();
+			//LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
+			//glFogf(GL_FOG_START, d);
+			//glFogf(GL_FOG_END, d*(1 + (camera.getView() / camera.getDefaultFOV())));
+			//glFogfv(GL_FOG_COLOR, fogCol.mV);
 			// </FS:Ansariel>
 
 			LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE, GL_GEQUAL);
-			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+            gGL.flush();
 			gGL.begin(LLRender::LINES);
 			{
 				gGL.color4f(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE], 0.4f);

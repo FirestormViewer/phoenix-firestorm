@@ -423,15 +423,13 @@ void LLWorldMapView::draw()
 		// Clear the background alpha to 0
 		gGL.flush();
 		gGL.setColorMask(false, true);
-		gGL.setAlphaRejectSettings(LLRender::CF_GREATER_EQUAL, 0.f);
+        gGL.flush();
 		gGL.setSceneBlendType(LLRender::BT_REPLACE);
 		gGL.color4f(0.0f, 0.0f, 0.0f, 0.0f);
 		gl_rect_2d(0, height, width, 0);
 	}
 
 	gGL.flush();
-
-	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 	gGL.setColorMask(true, true);
 
 	// Draw the image tiles
@@ -447,7 +445,6 @@ void LLWorldMapView::draw()
 
 	gGL.flush();
 
-	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 	gGL.setColorMask(true, true);
 
 	// Draw per sim overlayed information (names, mature, offline...)
@@ -686,13 +683,13 @@ void LLWorldMapView::draw()
 	LLGLSUIDefault gls_ui;
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		gGL.setAlphaRejectSettings(LLRender::CF_GREATER_EQUAL, 0.f);
+        gGL.flush();
 		gGL.blendFunc(LLRender::BF_ONE_MINUS_DEST_ALPHA, LLRender::BF_DEST_ALPHA);
 		gGL.color4fv( mBackgroundColor.mV );
 		gl_rect_2d(0, height, width, 0);
 	}
 
-	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+    gGL.flush();
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
 	// Draw item infos if we're not zoomed out too much and there's something to draw

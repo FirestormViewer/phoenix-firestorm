@@ -4810,7 +4810,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 			<ignore name="ignore" text="Potwierdź przed wysłaniem komuś listy moich aktywnych ograniczeń RLV."/>
 		</form>
 	</notification>
-	<notification name="InventoryValidationFailed" label="Inventory Validation Errors">
+	<notification name="InventoryValidationFailed" label="Błędy walidacji Szafy">
 		Rzeczy w Twojej Szafie uległy uszkodzeniu.
 Skontaktuj się z [HELP] z poniższą listą problemów.
 Będzie można użyć http://opensimulator.org/wiki/inventory aby rozwiązać problemy.

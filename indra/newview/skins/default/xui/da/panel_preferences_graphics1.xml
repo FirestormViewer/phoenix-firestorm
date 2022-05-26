@@ -96,7 +96,6 @@
 			Avatar rendering:
 		</text>
 		<check_box initial_value="true" label="Mini-figurer på lang afstand" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Hardware Skinning" name="AvatarVertexProgram"/>
 		<check_box initial_value="true" label="Avatar tøj" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Terræn detaljer:
