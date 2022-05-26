@@ -183,12 +183,11 @@ namespace FSPerfStats
         static inline StatsRecorder& getInstance()
         {
             static StatsRecorder instance;
-            // volatile int dummy{};
             return instance;
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};
         static inline const LLUUID& getFocusAv(){return (focusAv);};
-        static inline void send(StatsRecord&& u){StatsRecorder::getInstance().q.enqueue(u);};
+        static inline void send(StatsRecord&& u){StatsRecorder::getInstance().q.enqueue(std::move(u));};
         static void endFrame(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
         static void clearStats(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 1});};
 

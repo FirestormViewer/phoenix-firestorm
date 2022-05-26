@@ -363,7 +363,7 @@ namespace FSPerfStats
             // if so we've got work to do
 
             // how much of the frame was spent on non avatar related work?
-            U32 non_avatar_time_raw = tot_frame_time_raw - tot_avatar_time_raw;
+            U64 non_avatar_time_raw = tot_frame_time_raw - tot_avatar_time_raw;
 
             // If the target frame time < scene time (estimated as non_avatar time)
             U64 target_avatar_time_raw;
