@@ -504,7 +504,7 @@
 			<menu_item_check label="Schatten von Sonne-/Mond-Projektoren" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO und Schattenglättung" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Globale Beleuchtung (experimentell)" name="Global Illumination"/>
-			<menu_item_check label="GL debuggen" name="Debug GL"/>
+			<menu_item_check label="GL beim nächsten Start debuggen" name="Debug GL"/>
 			<menu_item_check label="Pipeline debuggen" name="Debug Pipeline"/>
 			<menu_item_check label="Automatische Alpha-Masken (aufgeschoben)" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Automatische Alpha-Masken (nicht aufgeschoben)" name="Automatic Alpha Masks (non-deferred)"/>
