@@ -86,13 +86,12 @@ void APIENTRY gl_debug_callback(GLenum source,
                                 const GLchar* message,
                                 GLvoid* userParam)
 {
-
-	if (severity != GL_DEBUG_SEVERITY_HIGH_ARB &&
-		severity != GL_DEBUG_SEVERITY_MEDIUM_ARB &&
-		severity != GL_DEBUG_SEVERITY_LOW_ARB)
-	{ //suppress out-of-spec messages sent by nvidia driver (mostly vertexbuffer hints)
-		return;
-	}
+    if (severity != GL_DEBUG_SEVERITY_HIGH_ARB &&
+        severity != GL_DEBUG_SEVERITY_MEDIUM_ARB &&
+        severity != GL_DEBUG_SEVERITY_LOW_ARB)
+    { //suppress out-of-spec messages sent by nvidia driver (mostly vertexbuffer hints)
+        return;
+    }
 
 	if (severity == GL_DEBUG_SEVERITY_HIGH_ARB)
 	{
