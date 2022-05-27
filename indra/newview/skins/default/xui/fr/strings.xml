@@ -6982,4 +6982,7 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="FSObjectInventoryElements">
 		[NUM_ELEMENTS] éléments
 	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		l'équipe d'assistance de votre gestionnaire de grille
+	</string>
 </strings>

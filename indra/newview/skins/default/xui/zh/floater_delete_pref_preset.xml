@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Delete Pref Preset" title="刪除偏好預設">
+<floater name="delete_pref_preset" title="刪除偏好預設">
 	<string name="title_graphic">
 		刪除顯像預設
 	</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Delete Pref Preset" title="TERCİHLİ ÖN AYARI SİL">
+<floater name="delete_pref_preset" title="TERCİHLİ ÖN AYARI SİL">
 	<string name="title_graphic">
 		Grafik Ön Ayarını Sil
 	</string>

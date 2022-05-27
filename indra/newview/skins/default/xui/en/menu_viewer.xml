@@ -2499,9 +2499,6 @@
             <menu_item_check.on_check
              function="Floater.Visible"
              parameter="grid_status" />
-            <menu_item_check.on_visible
-             function="GridCheck"
-             parameter="secondlife"/>
         </menu_item_check>
         <menu_item_call
              label="Report Abuse"
@@ -3853,8 +3850,9 @@
                  function="CheckControl"
                  parameter="ProfilingActive" />
                 <menu_item_check.on_click
-                 function="Develop.ToggleProfiling"
-                 parameter="ProfilingActive" />
+                 function="Develop.ToggleProfiling" />
+                <menu_item_check.on_enable
+                 function="Develop.EnableProfiling" />
             </menu_item_check>
             <menu_item_check
              label="Start when connected"
