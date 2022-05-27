@@ -3913,7 +3913,7 @@ LLSD LLAppViewer::getViewerInfo() const
     {
         drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_NVIDIA);
     }
-    else if (gGLManager.mIsATI)
+    else if (gGLManager.mIsAMD)
     {
         drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_AMD);
     }
