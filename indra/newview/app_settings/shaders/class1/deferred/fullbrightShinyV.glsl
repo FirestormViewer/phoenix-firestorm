@@ -71,7 +71,7 @@ void main()
 #endif
 
     vary_position = pos.xyz;
-    vary_texcoord0 = (texture_matrix0 * vec4(texcoord0,0,1)).xy;
+	vary_texcoord0 = (texture_matrix0 * vec4(texcoord0,0,1)).xy;
 
 #ifndef HAS_REFLECTION_PROBES	
     vec3 ref = reflect(pos.xyz, -norm);

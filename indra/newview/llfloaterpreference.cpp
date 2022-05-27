@@ -2089,6 +2089,7 @@ void LLFloaterPreference::refreshEnabledState()
 	// <FS:Ansariel> Improved graphics preferences
 	//LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	//LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
+    LLCheckBoxCtrl* ctrl_pbr = getChild<LLCheckBoxCtrl>("UsePBRShaders");
 
 	//// if vertex shaders off, disable all shader related products
 	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
@@ -2225,6 +2226,11 @@ void LLFloaterPreference::refreshEnabledState()
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	ctrl_deferred->setEnabled(enabled);
+
+    //PBR
+    BOOL deferred = gSavedSettings.getBOOL("RenderDeferred");
+    // TODO: add "RenderPBR" to LLFeatureManager
+    ctrl_pbr->setEnabled(deferred);
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");

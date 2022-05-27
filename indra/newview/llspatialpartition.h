@@ -378,13 +378,12 @@ public:
 	F32 mPixelArea;
 	F32 mRadius;
 
-    // Reflection Probe associated with this node (if any)
-    LLPointer<LLReflectionMap> mReflectionProbe = nullptr;
-
-
     //used by LLVOAVatar to set render order in alpha draw pool to preserve legacy render order behavior
     LLVOAvatar* mAvatarp = nullptr;
     U32 mRenderOrder = 0; 
+    // Reflection Probe associated with this node (if any)
+    LLPointer<LLReflectionMap> mReflectionProbe = nullptr;
+
 } LL_ALIGN_POSTFIX(64);
 
 class LLGeometryManager

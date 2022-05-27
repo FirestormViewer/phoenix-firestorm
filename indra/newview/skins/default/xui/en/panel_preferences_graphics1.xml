@@ -320,6 +320,19 @@
           <check_box.commit_callback
          function="Pref.RenderOptionUpdate" />
         </check_box>
+        <check_box
+          control_name="RenderPBR"
+          height="16"
+          initial_value="true"
+          label="Physically Based Rendering"
+          layout="topleft"
+          left_delta="0"
+          name="UsePBRShaders"
+          top_pad="1"
+          width="256">
+           <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
 
         <text
          type="string"
