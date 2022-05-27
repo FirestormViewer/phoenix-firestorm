@@ -36,6 +36,7 @@
 		<check_box label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
 		<check_box label="Erw. Beleuchtungsmodell" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>
+		<check_box label="Physikalisch-bas. Rendering" name="UsePBRShaders"/>
 		<text name="shadows_label">
 			Schatten:
 		</text>
