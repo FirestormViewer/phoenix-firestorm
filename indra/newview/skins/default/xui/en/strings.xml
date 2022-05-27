@@ -3252,4 +3252,5 @@ Your current position: [AVATAR_POS]
   <string name="FSObjectInventoryNoElements">No Elements</string>
   <string name="FSObjectInventoryOneElement">1 Element</string>
   <string name="FSObjectInventoryElements">[NUM_ELEMENTS] Elements</string>
+  <string name="OpenSimInventoryValidationErrorGenericHelp">your Grid Operator's support team</string>
 </strings>

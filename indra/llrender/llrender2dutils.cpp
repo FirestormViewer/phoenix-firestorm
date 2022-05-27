@@ -145,40 +145,15 @@ void gl_rect_2d(S32 left, S32 top, S32 right, S32 bottom, BOOL filled )
 	}
 	else
 	{
-		if( gGLManager.mATIOffsetVerticalLines )
-		{
-			// Work around bug in ATI driver: vertical lines are offset by (-1,-1)
-			gGL.begin( LLRender::LINES );
-
-				// Verticals 
-				gGL.vertex2i(left + 1, top);
-				gGL.vertex2i(left + 1, bottom);
-
-				gGL.vertex2i(right, bottom);
-				gGL.vertex2i(right, top);
-
-				// Horizontals
-				top--;
-				right--;
-				gGL.vertex2i(left, bottom);
-				gGL.vertex2i(right, bottom);
-
-				gGL.vertex2i(left, top);
-				gGL.vertex2i(right, top);
-			gGL.end();
-		}
-		else
-		{
-			top--;
-			right--;
-			gGL.begin( LLRender::LINE_STRIP );
-				gGL.vertex2i(left, top);
-				gGL.vertex2i(left, bottom);
-				gGL.vertex2i(right, bottom);
-				gGL.vertex2i(right, top);
-				gGL.vertex2i(left, top);
-			gGL.end();
-		}
+		top--;
+		right--;
+		gGL.begin( LLRender::LINE_STRIP );
+			gGL.vertex2i(left, top);
+			gGL.vertex2i(left, bottom);
+			gGL.vertex2i(right, bottom);
+			gGL.vertex2i(right, top);
+			gGL.vertex2i(left, top);
+		gGL.end();
 	}
 	stop_glerror();
 }
@@ -296,15 +271,6 @@ void gl_drop_shadow(S32 left, S32 top, S32 right, S32 bottom, const LLColor4 &st
 
 void gl_line_2d(S32 x1, S32 y1, S32 x2, S32 y2 )
 {
-	// Work around bug in ATI driver: vertical lines are offset by (-1,-1)
-	if( (x1 == x2) && gGLManager.mATIOffsetVerticalLines )
-	{
-		x1++;
-		x2++;
-		y1++;
-		y2++;
-	}
-
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	
 	gGL.begin(LLRender::LINES);
@@ -315,15 +281,6 @@ void gl_line_2d(S32 x1, S32 y1, S32 x2, S32 y2 )
 
 void gl_line_2d(S32 x1, S32 y1, S32 x2, S32 y2, const LLColor4 &color )
 {
-	// Work around bug in ATI driver: vertical lines are offset by (-1,-1)
-	if( (x1 == x2) && gGLManager.mATIOffsetVerticalLines )
-	{
-		x1++;
-		x2++;
-		y1++;
-		y2++;
-	}
-
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 	gGL.color4fv( color.mV );
@@ -441,15 +398,7 @@ void gl_draw_scaled_image_with_border(S32 x, S32 y, S32 width, S32 height, LLTex
 
 	if (solid_color)
 	{
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			gSolidColorProgram.bind();
-		}
-		else
-		{
-			gGL.getTexUnit(0)->setTextureColorBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_PREV_COLOR);
-			gGL.getTexUnit(0)->setTextureAlphaBlend(LLTexUnit::TBO_MULT, LLTexUnit::TBS_TEX_ALPHA, LLTexUnit::TBS_VERT_ALPHA);
-		}
+		gSolidColorProgram.bind();
 	}
 
 	if (center_rect.mLeft == 0.f
@@ -792,14 +741,7 @@ void gl_draw_scaled_image_with_border(S32 x, S32 y, S32 width, S32 height, LLTex
 
 	if (solid_color)
 	{
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			gUIProgram.bind();
-		}
-		else
-		{
-			gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
-		}
+		gUIProgram.bind();
 	}
 }
 
@@ -961,10 +903,6 @@ void gl_draw_scaled_rotated_image(S32 x, S32 y, S32 width, S32 height, F32 degre
 
 void gl_stippled_line_3d( const LLVector3& start, const LLVector3& end, const LLColor4& color, F32 phase )
 {
-	phase = fmod(phase, 1.f);
-
-	S32 shift = S32(phase * 4.f) % 4;
-
 	// Stippled line
 	LLGLEnable stipple(GL_LINE_STIPPLE);
 	
@@ -972,11 +910,6 @@ void gl_stippled_line_3d( const LLVector3& start, const LLVector3& end, const LL
 
 	gGL.flush();
 	gGL.setLineWidth(2.5f); // <FS> Line width OGL core profile fix by Rye Mutt
-
-	if (!LLGLSLShader::sNoFixedFunction)
-	{
-		glLineStipple(2, 0x3333 << shift);
-	}
 
 	gGL.begin(LLRender::LINES);
 	{
@@ -1117,52 +1050,16 @@ void gl_ring( F32 radius, F32 width, const LLColor4& center_color, const LLColor
 // Draw gray and white checkerboard with black border
 void gl_rect_2d_checkerboard(const LLRect& rect, GLfloat alpha)
 {
-	if (!LLGLSLShader::sNoFixedFunction)
-	{ 
-	// Initialize the first time this is called.
-	const S32 PIXELS = 32;
-	static GLubyte checkerboard[PIXELS * PIXELS];
-	static BOOL first = TRUE;
-	if( first )
-	{
-		for( S32 i = 0; i < PIXELS; i++ )
-		{
-			for( S32 j = 0; j < PIXELS; j++ )
-			{
-				checkerboard[i * PIXELS + j] = ((i & 1) ^ (j & 1)) * 0xFF;
-			}
-		}
-		first = FALSE;
-	}
-	
-	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+	//polygon stipple is deprecated, use "Checker" texture
+	LLPointer<LLUIImage> img = LLRender2D::getInstance()->getUIImage("Checker");
+	gGL.getTexUnit(0)->bind(img->getImage());
+	gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_WRAP);
+	gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
 
-	// ...white squares
-	gGL.color4f( 1.f, 1.f, 1.f, alpha );
-	gl_rect_2d(rect);
+	LLColor4 color(1.f, 1.f, 1.f, alpha);
+	LLRectf uv_rect(0, 0, rect.getWidth()/32.f, rect.getHeight()/32.f);
 
-	// ...gray squares
-	gGL.color4f( .7f, .7f, .7f, alpha );
-	gGL.flush();
-
-		glPolygonStipple( checkerboard );
-
-		LLGLEnable polygon_stipple(GL_POLYGON_STIPPLE);
-		gl_rect_2d(rect);
-	}
-	else
-	{ //polygon stipple is deprecated, use "Checker" texture
-		LLPointer<LLUIImage> img = LLRender2D::getInstance()->getUIImage("Checker");
-		gGL.getTexUnit(0)->bind(img->getImage());
-		gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_WRAP);
-		gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
-
-		LLColor4 color(1.f, 1.f, 1.f, alpha);
-		LLRectf uv_rect(0, 0, rect.getWidth()/32.f, rect.getHeight()/32.f);
-
-		gl_draw_scaled_image(rect.mLeft, rect.mBottom, rect.getWidth(), rect.getHeight(),
-			img->getImage(), color, uv_rect);
-	}
+	gl_draw_scaled_image(rect.mLeft, rect.mBottom, rect.getWidth(), rect.getHeight(), img->getImage(), color, uv_rect);
 	
 	gGL.flush();
 }
@@ -1307,8 +1204,6 @@ void gl_rect_2d_simple( S32 width, S32 height )
 	// </FS:Ansariel>
 }
 
-static LLTrace::BlockTimerStatHandle FTM_RENDER_SEGMENTED_RECT ("Render segmented rectangle");
-
 void gl_segmented_rect_2d_tex(const S32 left, 
 							  const S32 top, 
 							  const S32 right, 
@@ -1318,7 +1213,7 @@ void gl_segmented_rect_2d_tex(const S32 left,
 							  const S32 border_size, 
 							  const U32 edges)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_SEGMENTED_RECT);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 
 	S32 width = llabs(right - left);
 	S32 height = llabs(top - bottom);
@@ -1552,7 +1447,7 @@ void gl_segmented_rect_2d_fragment_tex(const LLRect& rect,
 	const F32 end_fragment, 
 	const U32 edges)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_SEGMENTED_RECT);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 	const S32 left = rect.mLeft;
 	const S32 right = rect.mRight;
 	const S32 top = rect.mTop;
@@ -1814,7 +1709,7 @@ void gl_segmented_rect_2d_fragment_tex(const LLRect& rect,
 void gl_segmented_rect_3d_tex(const LLRectf& clip_rect, const LLRectf& center_uv_rect, const LLRectf& center_draw_rect, 
 							 const LLVector3& width_vec, const LLVector3& height_vec)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_SEGMENTED_RECT);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 
 	// <FS:Ansariel> Remove QUADS rendering mode
 	//gGL.begin(LLRender::QUADS);

@@ -160,12 +160,15 @@ public:
 
 	const LLFontDescriptor& getFontDesc() const;
 
+	void generateASCIIglyphs();
+
 
 	static void initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::string& fonts_file, F32 size_mod = 0, bool create_gl_textures = true);
 
 	// Load sans-serif, sans-serif-small, etc.
 	// Slow, requires multiple seconds to load fonts.
 	static bool loadDefaultFonts();
+    static void loadCommonFonts();
 	static void	destroyDefaultFonts();
 	static void destroyAllGL();
 
@@ -195,7 +198,6 @@ public:
 	static LLFontGL* getFontOCRA();
 	static LLFontGL* getFontCascadia();
 	// </FS:CR>
-	static LLFontGL* getFontExtChar();
 	static LLFontGL* getFont(const LLFontDescriptor& desc);
 	// Use with legacy names like "SANSSERIF_SMALL" or "OCRA"
 	static LLFontGL* getFontByName(const std::string& name);

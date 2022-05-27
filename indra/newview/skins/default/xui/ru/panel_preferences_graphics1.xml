@@ -88,7 +88,6 @@
 			<text name="AvatarRenderingText">
 				Прорисовка аватара:
 			</text>
-			<check_box label="Аппаратная обработка" name="AvatarVertexProgram"/>
 			<check_box label="Одежда аватара" name="AvatarCloth"/>
 			<!--<text name="TerrainDetailText">
 				Детализация земли:

@@ -76,32 +76,15 @@ void LLDrawPoolSky::render(S32 pass)
 	}
 
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{ //just use the UI shader (generic single texture no lighting)
-		gOneTextureNoColorProgram.bind();
-	}
-	else
-	{
-		// don't use shaders!
-		if (gGLManager.mHasShaderObjects)
-		{
-			// Ironically, we must support shader objects to be
-			// able to use this call.
-			LLGLSLShader::bindNoShader();
-		}
-		mShader = NULL;
-	}
-	
+    //just use the UI shader (generic single texture no lighting)
+	gOneTextureNoColorProgram.bind();
 
 	LLGLSPipelineDepthTestSkyBox gls_skybox(true, false);
 
-	// <FS:Ansariel> Factor out instance() calls
-	LLViewerCamera& camera = LLViewerCamera::instance();
-
-	LLGLEnable fog_enable( (mShaderLevel < 1 && camera.cameraUnderWater()) ? GL_FOG : 0); // <FS:Ansariel> Factor out instance() calls
+	LLGLEnable fog_enable( (mShaderLevel < 1 && LLViewerCamera::getInstance()->cameraUnderWater()) ? GL_FOG : 0);
 	
 	gGL.pushMatrix();
-	LLVector3 origin = camera.getOrigin(); // <FS:Ansariel> Factor out instance() calls
+	LLVector3 origin = LLViewerCamera::getInstance()->getOrigin();
 	gGL.translatef(origin.mV[0], origin.mV[1], origin.mV[2]);
 
 	S32 face_count = (S32)mDrawFace.size();

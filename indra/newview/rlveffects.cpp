@@ -114,10 +114,7 @@ void RlvOverlayEffect::run(const LLVisualEffectParams*)
 {
 	if (m_pImage)
 	{
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			gUIProgram.bind();
-		}
+		gUIProgram.bind();
 
 		int nWidth = gViewerWindow->getWorldViewWidthScaled();
 		int nHeight = gViewerWindow->getWorldViewHeightScaled();
@@ -144,10 +141,7 @@ void RlvOverlayEffect::run(const LLVisualEffectParams*)
 		gGL.flush();
 		gViewerWindow->setup3DRender();
 
-		if (LLGLSLShader::sNoFixedFunction)
-		{
-			gUIProgram.unbind();
-		}
+		gUIProgram.unbind();
 	}
 }
 

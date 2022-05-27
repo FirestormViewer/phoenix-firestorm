@@ -5031,6 +5031,14 @@ Veuillez sélectionner un terrain plus petit.
 			<ignore name="ignore" text="Demander avant d'envoyer à quiconque la liste de mes restrictions actuelles en matière de RLV."/>
 		</form>
 	</notification>
+	<notification name="InventoryValidationFailed" label="Erreurs de validation de l'inventaire">
+		Une corruption a été trouvée dans votre inventaire. 
+Veuillez contacter [HELP] avec la liste de problèmes suivante.
+Ils peuvent utiliser http://opensimulator.org/wiki/inventory pour résoudre les problèmes.
+
+[ERRORS]
+		<usetemplate ignoretext="Lorsque la région définit un nouvel assistant de devise." name="okignore" />
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Cela supprimera les journaux des conversations précédentes, ainsi que toute copie de sauvegarde de ce fichier.
 		<usetemplate ignoretext="Confirmer avant de supprimer le journal des conversations précédentes" name="okcancelignore" notext="Annuler" yestext="OK"/>

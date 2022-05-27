@@ -2610,11 +2610,9 @@ protected:
 	}
 };
 
-static LLTrace::BlockTimerStatHandle FTM_PROCESS_IMPROVED_IM("Process IM");
-
 void process_improved_im(LLMessageSystem *msg, void **user_data)
 {
-    LL_RECORD_BLOCK_TIME(FTM_PROCESS_IMPROVED_IM);
+    LL_PROFILE_ZONE_SCOPED;
 
     LLUUID from_id;
     BOOL from_group;
@@ -2862,6 +2860,10 @@ void translateFailure(LLChat chat, LLSD toastArgs, int status, const std::string
 
 void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 {
+	if (gNonInteractive)
+	{
+		return;
+	}
 	LLChat	chat;
 	std::string		mesg;
 	std::string		from_name;
@@ -4177,10 +4179,9 @@ const F32 THRESHOLD_HEAD_ROT_QDOT = 0.9997f;	// ~= 2.5 degrees -- if its less th
 const F32 MAX_HEAD_ROT_QDOT = 0.99999f;			// ~= 0.5 degrees -- if its greater than this then no need to update head_rot
 												// between these values we delay the updates (but no more than one second)
 
-static LLTrace::BlockTimerStatHandle FTM_AGENT_UPDATE_SEND("Send Message");
-
 void send_agent_update(BOOL force_send, BOOL send_reliable)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	if (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
 	{
 		// We don't care if they want to send an agent update, they're not allowed to until the simulator
@@ -4370,7 +4371,6 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 		}
 		*/
 
-		LL_RECORD_BLOCK_TIME(FTM_AGENT_UPDATE_SEND);
 		// Build the message
 		msg->newMessageFast(_PREHASH_AgentUpdate);
 		msg->nextBlockFast(_PREHASH_AgentData);
@@ -4620,11 +4620,9 @@ void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_
 	}
 }
 
-static LLTrace::BlockTimerStatHandle FTM_PROCESS_OBJECTS("Process Kill Objects");
-
 void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 {
-	LL_RECORD_BLOCK_TIME(FTM_PROCESS_OBJECTS);
+    LL_PROFILE_ZONE_SCOPED;
 
 	LLUUID		id;
 
@@ -5083,8 +5081,8 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		F32 stat_value;
 		msg->getU32("Stat", "StatID", stat_id, i);
 		msg->getF32("Stat", "StatValue", stat_value, i);
-		LLStatViewer::SimMeasurementSampler* measurementp = LLStatViewer::SimMeasurementSampler::getInstance((ESimStatID)stat_id);
-		
+		auto measurementp = LLStatViewer::SimMeasurementSampler::getInstance((ESimStatID)stat_id);
+
 		if (measurementp )
 		{
 			measurementp->sample(stat_value);

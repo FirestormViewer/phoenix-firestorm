@@ -80,6 +80,7 @@
 #include "llfloaterperms.h"
 #include "llvocache.h"
 #include "llcorehttputil.h"
+#include "llstartup.h"
 
 #include <algorithm>
 #include <iterator>
@@ -177,6 +178,8 @@ U64 LLViewerObjectList::getIndex(const U32 local_id,
 
 BOOL LLViewerObjectList::removeFromLocalIDTable(const LLViewerObject* objectp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
+
 	if(objectp && objectp->getRegion())
 	{
 		U32 local_id = objectp->mLocalID;		
@@ -336,9 +339,11 @@ static LLTrace::BlockTimerStatHandle FTM_PROCESS_OBJECTS("Process Objects");
 
 LLViewerObject* LLViewerObjectList::processObjectUpdateFromCache(LLVOCacheEntry* entry, LLViewerRegion* regionp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
+
 	LLDataPacker *cached_dpp = entry->getDP();
 
-	if (!cached_dpp)
+	if (!cached_dpp || gNonInteractive)
 	{
 		return NULL; //nothing cached.
 	}
@@ -934,10 +939,9 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 	LLVOAvatar::cullAvatarsByPixelArea();
 }
 
-static LLTrace::BlockTimerStatHandle FTM_IDLE_COPY("Idle Copy");
-
 void LLViewerObjectList::update(LLAgent &agent)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	// <FS:Ansariel> Speed up debug settings
 	static LLCachedControl<bool> velocityInterpolate(gSavedSettings, "VelocityInterpolate");
 	static LLCachedControl<bool> pingInterpolate(gSavedSettings, "PingInterpolate");
@@ -1012,8 +1016,6 @@ void LLViewerObjectList::update(LLAgent &agent)
 	mNumAvatars = 0;
 	//</FS:Beq>
 	{
-		LL_RECORD_BLOCK_TIME(FTM_IDLE_COPY);
-
  		for (std::vector<LLPointer<LLViewerObject> >::iterator active_iter = mActiveObjects.begin();
 			active_iter != mActiveObjects.end(); active_iter++)
 		{
@@ -1469,6 +1471,7 @@ void LLViewerObjectList::clearDebugText()
 
 void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	// <FS:Beq> FIRE-30694 DeadObject Spam - handle new_dead_object properly and closer to source
 	// bool new_dead_object = true;
 	if (mDeadObjects.find(objectp->mID) != mDeadObjects.end())
@@ -1530,11 +1533,9 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 	// }
 }
 
-static LLTrace::BlockTimerStatHandle FTM_REMOVE_DRAWABLE("Remove Drawable");
-
 void LLViewerObjectList::removeDrawable(LLDrawable* drawablep)
 {
-	LL_RECORD_BLOCK_TIME(FTM_REMOVE_DRAWABLE);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
 
 	if (!drawablep)
 	{
@@ -1769,6 +1770,8 @@ void LLViewerObjectList::removeFromActiveList(LLViewerObject* objectp)
 
 void LLViewerObjectList::updateActive(LLViewerObject *objectp)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
+
 	if (objectp->isDead())
 	{
 		return; // We don't update dead objects!
@@ -1880,12 +1883,9 @@ void LLViewerObjectList::onPhysicsFlagsFetchFailure(const LLUUID& object_id)
 	mPendingPhysicsFlags.erase(object_id);
 }
 
-static LLTrace::BlockTimerStatHandle FTM_SHIFT_OBJECTS("Shift Objects");
-static LLTrace::BlockTimerStatHandle FTM_PIPELINE_SHIFT("Pipeline Shift");
-static LLTrace::BlockTimerStatHandle FTM_REGION_SHIFT("Region Shift");
-
 void LLViewerObjectList::shiftObjects(const LLVector3 &offset)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 	// This is called when we shift our origin when we cross region boundaries...
 	// We need to update many object caches, I'll document this more as I dig through the code
 	// cleaning things out...
@@ -1895,7 +1895,6 @@ void LLViewerObjectList::shiftObjects(const LLVector3 &offset)
 		return;
 	}
 
-	LL_RECORD_BLOCK_TIME(FTM_SHIFT_OBJECTS);
 
 	LLViewerObject *objectp;
 	for (vobj_list_t::iterator iter = mObjects.begin(); iter != mObjects.end(); ++iter)
@@ -1913,15 +1912,9 @@ void LLViewerObjectList::shiftObjects(const LLVector3 &offset)
 		}
 	}
 
-	{
-		LL_RECORD_BLOCK_TIME(FTM_PIPELINE_SHIFT);
 	gPipeline.shiftObjects(offset);
-	}
-
-	{
-		LL_RECORD_BLOCK_TIME(FTM_REGION_SHIFT);
+	
 	LLWorld::getInstance()->shiftRegions(offset);
-}
 }
 
 void LLViewerObjectList::repartitionObjects()
@@ -2161,6 +2154,8 @@ void LLViewerObjectList::renderObjectBounds(const LLVector3 &center)
 
 void LLViewerObjectList::generatePickList(LLCamera &camera)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
+
 		LLViewerObject *objectp;
 		S32 i;
 		// Reset all of the GL names to zero.
@@ -2438,6 +2433,8 @@ LLViewerObject *LLViewerObjectList::replaceObject(const LLUUID &id, const LLPCod
 
 S32 LLViewerObjectList::findReferences(LLDrawable *drawablep) const
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
+
 	LLViewerObject *objectp;
 	S32 num_refs = 0;
 	
@@ -2501,6 +2498,8 @@ void LLViewerObjectList::orphanize(LLViewerObject *childp, U32 parent_id, U32 ip
 
 void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
+
 	if (objectp->isDead())
 	{
 		LL_WARNS() << "Trying to find orphans for dead obj " << objectp->mID 

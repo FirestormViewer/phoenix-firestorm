@@ -1692,7 +1692,7 @@ void LLAgent::resetControlFlags()
 //-----------------------------------------------------------------------------
 void LLAgent::setAFK()
 {
-	if (!gAgent.getRegion())
+	if (gNonInteractive || !gAgent.getRegion())
 	{
 		// Don't set AFK if we're not talking to a region yet.
 		return;

@@ -300,6 +300,9 @@ public:
 	BOOL setIsFlexible(BOOL is_flexible);
 
     const LLMeshSkinInfo* getSkinInfo() const;
+
+    //convenience accessor for mesh ID (which is stored in sculpt id for legacy reasons)
+    const LLUUID& getMeshID() const { return getVolume()->getParams().getSculptID(); }
     
     // Extended Mesh Properties
     U32 getExtendedMeshFlags() const;
@@ -420,6 +423,7 @@ private:
 	S32			mLOD;
 	BOOL		mLODChanged;
 	BOOL		mSculptChanged;
+    BOOL		mColorChanged;
 	F32			mSpotLightPriority;
 	LLMatrix4	mRelativeXform;
 	LLMatrix3	mRelativeXformInvTrans;

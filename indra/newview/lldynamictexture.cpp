@@ -118,13 +118,16 @@ BOOL LLViewerDynamicTexture::render()
 //-----------------------------------------------------------------------------
 void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 {
+	if (!gNonInteractive)
+	{
 	// <FS:Beq> changes to support higher resolution rendering in the preview
-	////only images up to 512x512 are supported
-	//llassert(mFullHeight <= 512);
-	//llassert(mFullWidth <= 512);
-	llassert(mFullWidth <= static_cast<S32>(gPipeline.mBake.getWidth()));
-	llassert(mFullHeight <= static_cast<S32>(gPipeline.mBake.getHeight()));
-	// </FS:Beq>
+		////only images up to 512x512 are supported
+		//llassert(mFullHeight <= 512);
+		//llassert(mFullWidth <= 512);
+		llassert(mFullWidth <= static_cast<S32>(gPipeline.mBake.getWidth()));
+		llassert(mFullHeight <= static_cast<S32>(gPipeline.mBake.getHeight()));
+		// </FS:Beq>
+	}
 
 	if (gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete())
 	{ //using offscreen render target, just use the bottom left corner
@@ -228,15 +231,15 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 	BOOL ret = FALSE ;
 	for( S32 order = 0; order < ORDER_COUNT; order++ )
 	{
-		FSZone;
+		LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 		for (instance_list_t::iterator iter = LLViewerDynamicTexture::sInstances[order].begin();
 			 iter != LLViewerDynamicTexture::sInstances[order].end(); ++iter)
 		{
-			FSZone;
+			LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 			LLViewerDynamicTexture *dynamicTexture = *iter;
 			if (dynamicTexture->needsRender())
 			{		
-				FSZoneN("needsRender");		
+				LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("needsRender");
 				glClear(GL_DEPTH_BUFFER_BIT);
 				gDepthDirty = TRUE;
 								
@@ -245,7 +248,7 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 				dynamicTexture->preRender();	// Must be called outside of startRender()
 				result = FALSE;
 				{
-					FSZoneN("DynTexture->render");
+					LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("DynTexture->render");
 				if (dynamicTexture->render())
 				{
 					ret = TRUE ;
@@ -254,7 +257,7 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 				}
 				}
 				{
-					FSZoneN("flush");
+					LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("flush");
 				gGL.flush();
 				}
 				LLVertexBuffer::unbind();
