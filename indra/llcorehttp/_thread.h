@@ -35,7 +35,7 @@
 
 #include "apr.h" // thread-related functions
 #include "_refcounted.h"
-#include "fstelemetry.h"
+#include "llprofiler.h"
 
 namespace LLCoreInt
 {
@@ -57,7 +57,7 @@ private:
 		{ // THREAD CONTEXT
 			// <FS:Beq> - Add threadnames 
 			LL_INFOS("THREAD") << "Started unnamed HTTP thread " << LL_ENDL;
-			FSThreadName( "HTTP" );
+			LL_PROFILER_THREAD_BEGIN("HTTP");
 			// </FS:Beq>
 
 			// Take out additional reference for the at_exit handler
@@ -67,7 +67,10 @@ private:
 			// run the thread function
 			mThreadFunc(this);
 
-		} // THREAD CONTEXT
+			// <FS:Beq> - Add threadnames 
+			LL_PROFILER_THREAD_END("HTTP");
+			// </FS:Beq>
+	} // THREAD CONTEXT
 
 protected:
 	virtual ~HttpThread()

@@ -320,6 +320,7 @@ private:
 		// Threads:  Ttc
 		virtual void completed(bool success)
 		{
+            LL_PROFILE_ZONE_SCOPED;
 			LLTextureFetchWorker* worker = mFetcher->getWorker(mID);
 			if (worker)
 			{
@@ -344,6 +345,7 @@ private:
 		// Threads:  Ttc
 		virtual void completed(bool success)
 		{
+            LL_PROFILE_ZONE_SCOPED;
 			LLTextureFetchWorker* worker = mFetcher->getWorker(mID);
 			if (worker)
 			{
@@ -368,6 +370,7 @@ private:
 		// Threads:  Tid
 		virtual void completed(bool success, LLImageRaw* raw, LLImageRaw* aux)
 		{
+            LL_PROFILE_ZONE_SCOPED;
 			LLTextureFetchWorker* worker = mFetcher->getWorker(mID);
 			if (worker)
 			{
@@ -1155,6 +1158,11 @@ void LLTextureFetchWorker::startWork(S32 param)
 // Threads:  Ttf
 bool LLTextureFetchWorker::doWork(S32 param)
 {
+    LL_PROFILE_ZONE_SCOPED;
+	if (gNonInteractive)
+	{
+		return true;
+	}
 	static const LLCore::HttpStatus http_not_found(HTTP_NOT_FOUND);						// 404
 	static const LLCore::HttpStatus http_service_unavail(HTTP_SERVICE_UNAVAILABLE);		// 503
 	static const LLCore::HttpStatus http_not_sat(HTTP_REQUESTED_RANGE_NOT_SATISFIABLE);	// 416;

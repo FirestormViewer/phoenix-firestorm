@@ -5031,7 +5031,7 @@ Veuillez sélectionner un terrain plus petit.
 			<ignore name="ignore" text="Demander avant d'envoyer à quiconque la liste de mes restrictions actuelles en matière de RLV."/>
 		</form>
 	</notification>
-	<notification name="InventoryValidationFailed" label="Inventory Validation Errors">
+	<notification name="InventoryValidationFailed" label="Erreurs de validation de l'inventaire">
 		Une corruption a été trouvée dans votre inventaire. 
 Veuillez contacter [HELP] avec la liste de problèmes suivante.
 Ils peuvent utiliser http://opensimulator.org/wiki/inventory pour résoudre les problèmes.

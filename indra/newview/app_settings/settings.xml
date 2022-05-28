@@ -3731,6 +3731,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>BrowserWebSecurityDisabled</key>
+    <map>
+      <key>Comment</key>
+      <string>Disable web security features in the built-in Web browser?</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>ChatBarCustomWidth</key>
     <map>
       <key>Comment</key>
@@ -5461,10 +5472,10 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>DisableVerticalSync</key>
+    <key>RenderVSyncEnable</key>
     <map>
       <key>Comment</key>
-      <string>Update frames as fast as possible (FALSE = update frames between display scans)</string>
+      <string>Update frames between display scans (FALSE = Update frames as fast as possible).</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -5621,7 +5632,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>DoubleClickTeleport</key>
+    <key>DoubleClickTeleport</key> 
     <map>
       <key>Comment</key>
       <string>Enable double-click to teleport where allowed (afects minimap and people panel)</string>
@@ -6017,6 +6028,17 @@
       <string>S32</string>
       <key>Value</key>
         <integer>1</integer>
+    </map>
+    <key>MainWorkTime</key>
+    <map>
+        <key>Comment</key>
+        <string>Max time per frame devoted to mainloop work queue (in milliseconds)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <real>0.1</real>
     </map>
     <key>QueueInventoryFetchTimeout</key>
     <map>
@@ -8868,7 +8890,7 @@
     <key>MaxHeapSize</key>
     <map>
       <key>Comment</key>
-      <string>Maximum heap size (GB)</string>
+      <string>Maximum heap size on 32-bit builds (GB)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -8877,6 +8899,17 @@
       <real>1.6</real>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>MaxHeapSize64</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum heap size on 64-bit builds (GB)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>16.0</real>
     </map>
     <key>MaxPersistentNotifications</key>
     <map>
@@ -9813,6 +9846,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>NonInteractive</key>
+    <map>
+      <key>Comment</key>
+      <string>Run in a semi-headless mode where only logging in and logging out needs to work.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+	  <integer>0</integer>
     </map>
     <key>NonvisibleObjectsInMemoryTime</key>
     <map>
@@ -10859,9 +10903,9 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Color4</string>
     <key>Value</key>
     <array>
-      <real>1.0</real>
-      <real>1.0</real>
-      <real>1.0</real>
+      <real>0.33</real>
+      <real>0.33</real>
+      <real>0.33</real>
       <real>1.0</real>
     </array>
   </map>
@@ -11515,28 +11559,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
 
-    <key>RenderAlphaBatchFullbrights</key>
-    <map>
-      <key>Comment</key>
-      <string>Render fullbright alpha content more efficiently, but with possible visual differences from prev viewers.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>RenderAlphaBatchEmissives</key>
-    <map>
-      <key>Comment</key>
-      <string>Render emissive alpha content more efficiently, but with possible visual differences from prev viewers.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>RenderAnisotropic</key>
     <map>
       <key>Comment</key>
@@ -11721,17 +11743,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
-    <key>RenderAvatarVP</key>
-    <map>
-      <key>Comment</key>
-      <string>Use vertex programs to perform hardware skinning of avatar</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
   <key>RenderCompressTextures</key>
   <map>
     <key>Comment</key>
@@ -11743,7 +11754,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-    <key>RenderHiDPI</key>
+   <key>RenderHiDPI</key>
   <map>
     <key>Comment</key>
     <string>Enable support for HiDPI displays, like Retina (MacOS X ONLY, requires restart)</string>
@@ -12871,7 +12882,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>2.2</real>
   </map>
-    <key>RenderGLCoreProfile</key>
+    <key>RenderGLContextCoreProfile</key>
     <map>
       <key>Comment</key>
       <string>Don't use a compatibility profile OpenGL context.  Requires restart.</string>
@@ -12882,6 +12893,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>RenderGLMultiThreaded</key>
+    <map>
+      <key>Comment</key>
+      <string>Allow OpenGL to use multiple render contexts (reduces frame stutters from loading textures, doesn't play nice with Intel drivers).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>RenderGlow</key>
@@ -13195,7 +13217,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>512</integer>
+      <integer>4096</integer>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -14731,7 +14753,7 @@ Change of this parameter will affect the layout of buttons in notification toast
             <string>Boolean</string>
         <key>Value</key>
             <integer>0</integer>
-    </map>
+    </map> 
     <key>NearbyListShowIcons</key>
     <map>
       <key>Comment</key>
@@ -15930,6 +15952,20 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string />
+    </map>
+    <key>ThreadPoolSizes</key>
+    <map>
+      <key>Comment</key>
+      <string>Map of size overrides for specific thread pools.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>LLSD</string>
+      <key>Value</key>
+      <map>
+        <key>General</key>
+        <integer>4</integer>
+      </map>
     </map>
     <key>ThrottleBandwidthKBPS</key>
     <map>
@@ -17730,19 +17766,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
-  <key>RenderSynchronousOcclusion</key>
-  <map>
-    <key>Comment</key>
-    <string>Don't let occlusion queries get more than one frame behind (block until they complete).</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-    <key>Backup</key>
-    <integer>0</integer>
-  </map>
     <key>RenderDelayVBUpdate</key>
     <map>
       <key>Comment</key>
@@ -18695,17 +18718,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>-1</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>ForcePeriodicRenderingTime</key>
-    <map>
-      <key>Comment</key>
-      <string>Periodically enable all rendering masks for a single frame.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>-1.0</real>
     </map>
     <key>ZoomDirect</key>
     <map>
@@ -22044,6 +22056,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
+    <key>UpdateAppWindowTitleBar</key>
+    <map>
+      <key>Comment</key>
+      <string>Updates the application window title bar with brief information about user/location</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>FSShowServerVersionChangeNotice</key>
     <map>
       <key>Comment</key>
@@ -24814,10 +24837,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSTelemetryEnableWhenConnected</key>
+    <key>DeferProfilingUntilConnected</key>
     <map>
       <key>Comment</key>
-      <string>Enable telemetry as soon as a server connects</string>
+      <string>Enable profiling data collection only after server connects. Lowers memory overhead and allows profiling from a specific point in time</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -24825,10 +24848,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSTelemetryActive</key>
+    <key>ProfilingActive</key>
     <map>
       <key>Comment</key>
-      <string>Enable profiling as soon as a server connects. Off by default and non-persistent. Use with FSTelemetryEnableWhenConnected to initiate on startup</string>
+      <string>notes whether profiling is currently active. Used by the dev menu item</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>

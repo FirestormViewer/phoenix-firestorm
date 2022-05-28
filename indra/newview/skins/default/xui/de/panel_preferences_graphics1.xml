@@ -89,7 +89,6 @@
 			Avatar-Darstellung:
 		</text>
 		<check_box label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
-		<check_box label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
 		<check_box label="Avatar-Kleidung" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Terraindetails:
@@ -109,7 +108,7 @@
 
 	<panel label="Hardware" name="Hardware Settings">
 		<check_box label="Anisotropische Filterung (langsamer, wenn aktiviert)" name="ani" tool_tip="Aktiviert anisotropischen Filter, wodurch die Qualität von Texturen verbessert wird, wenn sie im relativ großen Winkel in Abhängigkeit der Kameraposition betrachtet werden. Üblicherweise erscheinen sie dadurch in größerer Entfernung weniger verwaschen."/>
-		<check_box label="OpenGL Vertex-Buffer-Objekte aktivieren" name="vbo" tool_tip="Wenn Sie über moderne Grafikhardware verfügen, können Sie durch Aktivieren dieser Option die Geschwindigkeit verbessern. Bei alter Hardware sind die VBO oft schlecht implementiert, was zu Abstürzen führen kann, wenn diese Option aktiviert ist."/>
+		<check_box label="VSync aktivieren" name="vsync" tool_tip="Synchronisiert die Bilder pro Sekunde mit der Bildwiederholrate des Monitors, was in einer gleichmäßigeren Performance resultiert."/>
 		<check_box label="Gestreamte VBOs aktivieren" name="vbo_stream" tool_tip="Deaktivieren kann die Performance verbessern, wenn VBOs aktiviert sind, insbesondere auf diversen AMD-GPUs."/>
 		<text name="tc label">
 			S3TC aktivieren:

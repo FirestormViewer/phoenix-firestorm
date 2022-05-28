@@ -403,7 +403,50 @@ LLInventoryModel::EAncestorResult LLInventoryModel::getObjectTopmostAncestor(con
 	result = object->getUUID();
 	return ANCESTOR_OK;
 }
+// <FS:Beq> [OPENSIM] FIRE-31674 Exclude suitcase and descendents from validation when in OpenSim
+#ifdef OPENSIM
+bool LLInventoryModel::isInSuitcase(const LLInventoryCategory * cat) const
+{
+	if(LLGridManager::getInstance()->isInSecondLife())
+	{
+		return false;
+	}
+    if (!cat)
+    {
+        LL_WARNS(LOG_INV) << "Unable to trace parentage of null cat " << LL_ENDL;
+        return false;
+    }
 
+	auto cat_id = cat->getUUID();
+    std::set<LLUUID> cat_ids{ cat_id }; // loop protection
+	if(cat->getPreferredType() == LLFolderType::FT_MY_SUITCASE)
+		return true;
+    while (cat->getParentUUID().notNull())
+    {
+        LLUUID parent_id = cat->getParentUUID();
+        if (cat_ids.find(parent_id) != cat_ids.end())
+        {
+            LL_WARNS(LOG_INV) << "Detected a loop on a cat " << parent_id << " when searching for ancestor of " << cat_id << LL_ENDL;
+            return false;
+        }
+        cat_ids.insert(parent_id);
+        auto parent_cat = getCategory(parent_id);
+		if (!parent_cat)
+		{
+			LL_WARNS(LOG_INV) << "unable to trace parentage of " << cat_id << ", missing item for uuid " << parent_id << LL_ENDL;
+			return false;
+		}
+        LL_DEBUGS(LOG_INV) << "Parent folder is " << parent_cat->getName() << "; Folder type " << parent_cat->getPreferredType() << LL_ENDL;
+		if(parent_cat->getPreferredType() == LLFolderType::FT_MY_SUITCASE)
+		{
+			return true;
+		}
+		cat = parent_cat;
+		cat_id = cat->getUUID();
+	}
+	return false;
+}
+#endif
 // Get the object by id. Returns NULL if not found.
 LLInventoryObject* LLInventoryModel::getObject(const LLUUID& id) const
 {
@@ -2388,7 +2431,10 @@ bool LLInventoryModel::loadSkeleton(
 
 		// also delete library cache if inventory cache is purged, so issues with EEP settings going missing
 		// and bridge objects not being found can be resolved
-		inventory_filename = getInvCacheAddres(ALEXANDRIA_LINDEN_ID);
+		// <FS:Beq> correct OS library owner.
+		// inventory_filename = getInvCacheAddres(ALEXANDRIA_LINDEN_ID);
+		inventory_filename = getInvCacheAddres(gInventory.getLibraryOwnerID());
+		// </FS:Beq>
 		if (LLFile::isfile(inventory_filename))
 		{
 			LL_INFOS("LLInventoryModel") << "Purging library cache file: " << inventory_filename << LL_ENDL;
@@ -4494,6 +4540,15 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 				warning_count++;
 			}
 		}
+		// <FS:Beq> FIRE-31674 Suitcase contents do not need checking. 
+		#ifdef OPENSIM
+		if (isInSuitcase(cat))
+		{
+			LL_DEBUGS("Inventory") << "cat " << cat->getName() << " skipped because it is a child of Suitcase" << LL_ENDL;
+			continue;
+		}
+		#endif
+		// </FS:Beq>
 		cat_array_t* cats;
 		item_array_t* items;
 		getDirectDescendentsOf(cat_id,cats,items);
@@ -4648,6 +4703,15 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		}
 		if (!cat_is_in_library)
 		{
+			// <FS:Beq> FIRE-31674 [OPENSIM] don't count things underneath suitcase
+			#ifdef OPENSIM			
+			if ( isInSuitcase(cat) )
+			{
+					LL_DEBUGS("Inventory") << "Under suitcase cat: " << getFullPath(cat) << " folder_type " << folder_type << LL_ENDL;
+			}
+			else
+			#endif
+			// </FS:Beq>
 			if (getRootFolderID().notNull() && (cat->getUUID()==getRootFolderID() || cat->getParentUUID()==getRootFolderID()))
 			{
 				ft_counts_under_root[folder_type]++;
@@ -4793,6 +4857,12 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 		{
 			continue;
 		}
+		// <FS:Ansariel> Ignore suitcase as it is optional and has no way to verify if it is expected or not on the current grid.
+		if (folder_type == LLFolderType::FT_MY_SUITCASE)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		bool is_automatic = LLFolderType::lookupIsAutomaticType(folder_type);
 		bool is_singleton = LLFolderType::lookupIsSingletonType(folder_type);
 		S32 count_under_root = ft_counts_under_root[folder_type];

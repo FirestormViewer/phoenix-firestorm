@@ -33,7 +33,7 @@
 #include "stdtypes.h"
 #include "llpreprocessor.h"
 #include <boost/functional/hash.hpp>
-#include "fstelemetry.h"
+#include "llprofiler.h"
 class LLMutex;
 
 const S32 UUID_BYTES = 16;
@@ -57,9 +57,9 @@ public:
 	explicit LLUUID(const char *in_string); // Convert from string.
 	explicit LLUUID(const std::string& in_string); // Convert from string.
 	LLUUID(const LLUUID &in);
-	LLUUID(LLUUID&& rhs) noexcept { FSZone; std::memmove(mData, rhs.mData, sizeof(mData));};
+	LLUUID(LLUUID&& rhs) noexcept { LL_PROFILE_ZONE_SCOPED; std::memmove(mData, rhs.mData, sizeof(mData));};
 	LLUUID &operator=(const LLUUID &rhs);
-	LLUUID &operator=(LLUUID &&rhs) noexcept {FSZone; std::memmove(mData, rhs.mData, sizeof(mData));return *this;};
+	LLUUID &operator=(LLUUID &&rhs) noexcept { LL_PROFILE_ZONE_SCOPED; std::memmove(mData, rhs.mData, sizeof(mData));return *this;};
 
 	~LLUUID();
 
@@ -120,7 +120,7 @@ public:
 # define hexnybl(N) (N)>9?((N)-10)+'a':(N)+'0'
 	inline char * toShortString(char *out) const
 	{
-		FSZone;
+		LL_PROFILE_ZONE_SCOPED;
 		out[0] = hexnybl(mData[14]>>4);
 		out[1] = hexnybl(mData[14]&15);
 		out[2] = hexnybl(mData[15]>>4);
@@ -130,7 +130,7 @@ public:
 	// full uuid - Much lighterweight than default, no allocation, or nul-term added - provide your own, ensure min 36 bytes.
 	inline char * toStringFast(char *out) const
 	{
-		FSZone;
+		LL_PROFILE_ZONE_SCOPED;
 		out[0]  = hexnybl(mData[0]>>4);
 		out[1]  = hexnybl(mData[0]&15);
 		out[2]  = hexnybl(mData[1]>>4);
@@ -259,6 +259,17 @@ struct FSUUIDHash
 };
 // </FS:Ansariel> UUID hash calculation
 
+// Adapt boost hash to std hash
+namespace std
+{
+    template<> struct hash<LLUUID>
+    {
+        std::size_t operator()(LLUUID const& s) const noexcept
+        {
+            return boost::hash<LLUUID>()(s);
+        }
+    };
+}
 #endif
 
 

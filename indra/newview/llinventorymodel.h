@@ -316,7 +316,11 @@ public:
     };
 	// Follow parent chain to the top.
     EAncestorResult getObjectTopmostAncestor(const LLUUID& object_id, LLUUID& result) const;
-
+	// <FS:Beq>  FIRE-31674 ignore suitcase contents
+	#ifdef OPENSIM
+	bool isInSuitcase(const LLInventoryCategory * cat) const;
+	#endif
+	// </FS:Beq>
 	// <FS:Ansariel> Re-added because of start folder id
 	// Collect all items in inventory that are linked to item_id.
 	// Assumes item_id is itself not a linked item.

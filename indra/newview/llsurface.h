@@ -165,7 +165,7 @@ public:
 	// +---+---+---+
 	// |SW | S | SE|
 	// +---+---+---+
-	LLSurface *mNeighbors[8]; // Adjacent patches
+	LLSurface *mNeighbors[8]={}; // Adjacent patches <FS:Beq/> ensure initialised.
 
 	U32 mType;				// Useful for identifying derived classes
 	

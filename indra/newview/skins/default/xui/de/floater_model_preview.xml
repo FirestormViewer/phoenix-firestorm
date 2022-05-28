@@ -71,7 +71,7 @@
 		Einige Modelle überschreiten das Hüllen-Limit (256). Probieren Sie Vereinfachen“.
 	</string>
 	<string name="phys_status_degenerate_triangles">
-		Das Physik-Netz ist zu dicht - kleine dünne Dreiecke entfernen (siehe Vorschau)
+		Das Physik-Netz enthält degenerierte Dreiecke. Probieren Sie Analysieren/Vereinfachen.
 	</string>
 	<string name="phys_status_no_havok">
 		Diese Version enthält keine Havok-Unterstützung und wird nicht für das Hochladen von Physik in Second Life empfohlen. Unvorhersehbare Ergebnisse sind möglich!
@@ -109,6 +109,42 @@
 	<string name="IncompleteTC">
 		Daten für Textur-Koordinaten sind unvollständig.
 	</string>
+	<string name="NormalsNaN">
+		NaN beim Laden der Normalen des DAE-Modells gefunden, Modell ungültig.
+	</string>
+	<string name="NegativeScaleTrans">
+		Negative Skalierung erkannt - nicht-unterstützte Transformation. domInstance_geometry: [LABEL]
+	</string>
+	<string name="NegativeScaleNormTrans">
+		Negative Skalierung erkannt - nicht-unterstützte Post-Normalisierungs-Transformation. domInstance_geometry: [LABEL]
+	</string>
+	<string name="CantResolveGeometryUrl">
+		Geometrie-URL kann nicht aufgelöst werden.
+	</string>
+	<string name="ParsingErrorBadElement">
+		Ungültiges Element.
+	</string>
+	<string name="ParsingErrorCantParseScene">
+		Szene kann nicht geparsed werden.
+	</string>
+	<string name="ParsingErrorCorrupt">
+		DAE-Fehler - üblicherweise deutet dieses auf eine defekte Datei hin.
+	</string>
+	<string name="ParsingErrorNoController">
+		Controller kann nicht verifiziert werden.
+	</string>
+	<string name="ParsingErrorNoDoc">
+		Internes Document kann nicht gefunden werden.
+	</string>
+	<string name="ParsingErrorNoRoot">
+		Dokument hat keine Wurzel.
+	</string>
+	<string name="ParsingErrorNoScene">
+		Dokument besitzt keine visual_scene.
+	</string>
+	<string name="ParsingErrorPositionInvalidModel">
+		Netz kann nicht ohne Positionsdaten verarbeitet werden - ungültiges Modell.
+	</string>
 
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
@@ -136,19 +172,13 @@
 				<text initial_value="Scheitelp." name="vertices" value="Scheitelp."/>
 				<text initial_value="Hoch" name="high_label" value="Hoch"/>
 				<combo_box name="lod_source_high">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Aus Datei laden" name="Load from file" value="Aus Datei laden"/>
-					<item label="Generieren" name="Generate" value="Generieren"/>
-					-->
 					<item name="Load from file" label="Aus Datei laden"/>
-					<item name="Generate" label="Generieren"/>
+					<item name="MeshOpt Auto" label="Automatisch generieren"/>
+					<item name="MeshOptCombine" label="Präzise generieren"/>
+					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Dreiecklimit" name="Triangle Limit" value="Dreiecklimit"/>
-					<item label="Fehlerschwelle" name="Error Threshold" value="Fehlerschwelle"/>
-					-->
 					<item name="Triangle Limit" label="Dreiecklimit"/>
 					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
@@ -156,21 +186,14 @@
 				<text initial_value="0" name="high_vertices" value="0"/>
 				<text initial_value="Mittel" name="medium_label" value="Mittel"/>
 				<combo_box name="lod_source_medium">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Aus Datei laden" name="Load from file" value="Aus Datei laden"/>
-					<item label="Generieren" name="Generate" value="Generieren"/>
-					<item label="Detailstufe oben verwenden" name="Use LoD above" value="Detailstufe oben verwenden"/>
-					-->
 					<item name="Load from file" label="Aus Datei laden"/>
-					<item name="Generate" label="Generieren"/>
-					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
+					<item name="MeshOpt Auto" label="Automatisch generieren"/>
+					<item name="MeshOptCombine" label="Präzise generieren"/>
+					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Dreiecklimit" name="Triangle Limit" value="Dreiecklimit"/>
-					<item label="Fehlerschwelle" name="Error Threshold" value="Fehlerschwelle"/>
-					-->
 					<item name="Triangle Limit" label="Dreiecklimit"/>
 					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
@@ -178,21 +201,14 @@
 				<text initial_value="0" name="medium_vertices" value="0"/>
 				<text initial_value="Niedrig" name="low_label" value="Niedrig"/>
 				<combo_box name="lod_source_low">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Aus Datei laden" name="Load from file" value="Aus Datei laden"/>
-					<item label="Generieren" name="Generate" value="Generieren"/>
-					<item label="Detailstufe oben verwenden" name="Use LoD above" value="Detailstufe oben verwenden"/>
-					-->
 					<item name="Load from file" label="Aus Datei laden"/>
-					<item name="Generate" label="Generieren"/>
-					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
+					<item name="MeshOpt Auto" label="Automatisch generieren"/>
+					<item name="MeshOptCombine" label="Präzise generieren"/>
+					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
  				<button label="Auswählen" name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Dreiecklimit" name="Triangle Limit" value="Dreiecklimit"/>
-					<item label="Fehlerschwelle" name="Error Threshold" value="Fehlerschwelle"/>
-					-->
 					<item name="Triangle Limit" label="Dreiecklimit"/>
 					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
@@ -200,21 +216,14 @@
 				<text initial_value="0" name="low_vertices" value="0"/>
 				<text initial_value="Niedrigste" name="lowest_label" value="Niedrigste"/>
 				<combo_box name="lod_source_lowest">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Aus Datei laden" name="Load from file" value="Aus Datei laden"/>
-					<item label="Generieren" name="Generate" value="Generieren"/>
-					<item label="Detailstufe oben verwenden" name="Use LoD above" value="Detailstufe oben verwenden"/>
-					-->
 					<item name="Load from file" label="Aus Datei laden"/>
-					<item name="Generate" label="Generieren"/>
-					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
+					<item name="MeshOpt Auto" label="Automatisch generieren"/>
+					<item name="MeshOptCombine" label="Präzise generieren"/>
+					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
  				<button label="Auswählen" name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
-					<!-- FS:Ansariel: Broken by LL
-					<item label="Dreiecklimit" name="Triangle Limit" value="Dreiecklimit"/>
-					<item label="Fehlerschwelle" name="Error Threshold" value="Fehlerschwelle"/>
-					-->
 					<item name="Triangle Limit" label="Dreiecklimit"/>
 					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>

@@ -407,8 +407,6 @@ void LLLayoutStack::collapsePanel(LLPanel* panel, BOOL collapsed)
 	mNeedsLayout = true;
 }
 
-static LLTrace::BlockTimerStatHandle FTM_UPDATE_LAYOUT("Update LayoutStacks");
-
 class LLImagePanel : public LLPanel
 {
 public:
@@ -436,7 +434,7 @@ private:
 
 void LLLayoutStack::updateLayout()
 {	
-	LL_RECORD_BLOCK_TIME(FTM_UPDATE_LAYOUT);
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
 
 	if (!mNeedsLayout) return;
 
