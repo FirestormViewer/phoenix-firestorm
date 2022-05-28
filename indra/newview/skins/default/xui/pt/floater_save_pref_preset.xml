@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Save Pref Preset" title="SALVAR PREDEFINIÇÃO PREF">
-	<string name="title_graphic">
-		Salvar predefinição de gráficos
-	</string>
-	<string name="title_camera">
-		Salvar predefinição da câmera
-	</string>
+<floater name="save_pref_preset" title="SALVAR PREDEFINIÇÃO PREF">
 	<text name="Preset">
 		Digite um nome para a predefinição ou escolha uma predefinição existente.
 	</text>
