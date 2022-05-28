@@ -25,7 +25,6 @@
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
-		<string>RenderAvatarVP</string>
 		<string>RenderCompressTextures</string>
 		<string>RenderDeferred</string>
 		<string>RenderDeferredSSAO</string>

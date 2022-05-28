@@ -9731,19 +9731,30 @@ class FSAdvancedCheckEnabledDoubleClickAction : public view_listener_t
 };
 
 // <FS:Beq> Add telemetry controls to the viewer menus
-class FSTelemetryToggleActive : public view_listener_t
+class FSProfilerToggle : public view_listener_t
 {
-protected:
-
 	bool handleEvent(const LLSD& userdata)
 	{
-		BOOL checked = gSavedSettings.getBOOL( "FSTelemetryActive" );
-		gSavedSettings.setBOOL( "FSTelemetryActive", !checked );
-		FSTelemetry::active = !checked;
+		BOOL checked = gSavedSettings.getBOOL( "ProfilingActive" );
+		gSavedSettings.setBOOL( "ProfilingActive", !checked );
+		gProfilerEnabled = !checked;
 		return true;
 	}
 };
+
+class FSProfilerCheckEnabled : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+#ifdef TRACY_ENABLE
+		return true;
+#else
+		return false;
+#endif
+	}
+};
 // </FS:Beq>
+
 void menu_toggle_attached_lights(void* user_data)
 {
 	LLPipeline::sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
@@ -10229,9 +10240,9 @@ bool isGridFeatureEnabled(const LLSD& userdata)
 // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
 void openGridStatus()
 {
-	if (LLWeb::useExternalBrowser(DEFAULT_GRID_STATUS_URL))
+	if (LLWeb::useExternalBrowser(LFSimFeatureHandler::instance().gridStatusURL()))
 	{
-		LLWeb::loadURLExternal(DEFAULT_GRID_STATUS_URL);
+		LLWeb::loadURLExternal(LFSimFeatureHandler::instance().gridStatusURL());
 	}
 	else
 	{
@@ -10768,6 +10779,7 @@ class LLViewHighlightTransparent : public view_listener_t
 // [RLVa:KB] - @edit and @viewtransparent
 		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (RlvActions::canHighlightTransparent());
 // [/RLVa:KB]
+        gPipeline.resetVertexBuffers();
 		return true;
 	}
 };
@@ -12123,7 +12135,8 @@ void initialize_menus()
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
 
 	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
-	view_listener_t::addMenu(new FSTelemetryToggleActive(), "Develop.ToggleTelemetry");
+	view_listener_t::addMenu(new FSProfilerToggle(), "Develop.ToggleProfiling");
+	view_listener_t::addMenu(new FSProfilerCheckEnabled(), "Develop.EnableProfiling");
 
 	// Admin >Object
 	view_listener_t::addMenu(new LLAdminForceTakeCopy(), "Admin.ForceTakeCopy");

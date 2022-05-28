@@ -25,7 +25,6 @@
  */
 
 #include "linden_common.h"
-#include "fstelemetry.h" // <FS:Beq> add telemetry support.
 #include "llimageworker.h"
 #include "llimagedxt.h"
 
@@ -135,11 +134,11 @@ LLImageDecodeThread::~LLImageDecodeThread()
 // virtual
 S32 LLImageDecodeThread::update(F32 max_time_ms)
 {
-	FSZoneC(tracy::Color::Blue); // <FS:Beq/> instrument image decodes
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	LLMutexLock lock(mCreationMutex);
 	// <FS:Beq> instrument image decodes
 	{
-	FSZoneC(tracy::Color::Blue1);
+	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue1);
 	// </FS:Beq>
 	for (creation_list_t::iterator iter = mCreationList.begin();
 		 iter != mCreationList.end(); ++iter)
@@ -163,7 +162,7 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 	// <FS:Beq> instrument image decodes
 	}
 	{
-	FSZoneC(tracy::Color::Blue2);
+	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue2);
 	// </FS:Beq>
 	S32 res = LLQueuedThread::update(max_time_ms);
 	// FSPlot("img_decode_pending", (int64_t)res); 	// <FS:Beq/> instrument image decodes
@@ -174,7 +173,7 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted* image, 
 	U32 priority, S32 discard, BOOL needs_aux, Responder* responder)
 {
-	FSZoneC(tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	// <FS:Beq> De-couple texture threading from mainloop
 	// LLMutexLock lock(mCreationMutex);
 	// handle_t handle = generateHandle();
@@ -185,7 +184,7 @@ LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted*
 	// if this is an actual problem we move the fallback to here and place the unfulfilled request into the legacy queue
 	if (s_ChildThreads > 0)
 	{
-		FSZoneNC("DecodeDecoupled", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+		LL_PROFILE_ZONE_NAMED_COLOR("DecodeDecoupled", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
 		ImageRequest* req = new ImageRequest(handle, image,
 			priority, discard, needs_aux,
 			responder, this);
@@ -198,7 +197,7 @@ LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted*
 	}
 	else
 	{
-		FSZoneNC("DecodeQueued", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
+		LL_PROFILE_ZONE_NAMED_COLOR("DecodeQueued", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
 		LLMutexLock lock(mCreationMutex);
 		mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
 	}
@@ -270,7 +269,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 {
 	// <FS:Beq> allow longer timeout for async and add instrumentation
 	// const F32 decode_time_slice = .1f;
-	FSZoneC(tracy::Color::DarkOrange); 
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	F32 decode_time_slice = .1f;
 	if(mFlags & FLAG_ASYNC)
 	{
@@ -280,7 +279,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 	bool done = true;
 	if (!mDecodedRaw && mFormattedImage.notNull())
 	{
-		FSZoneC(tracy::Color::DarkOrange1); // <FS:Beq> instrument the image decode pipeline
+		LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange1); // <FS:Beq> instrument the image decode pipeline
 		// Decode primary channels
 		if (mDecodedImageRaw.isNull())
 		{
@@ -319,7 +318,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 	}
 	if (done && mNeedsAux && !mDecodedAux && mFormattedImage.notNull())
 	{
-		FSZoneC(tracy::Color::DarkOrange2); // <FS:Beq> instrument the image decode pipeline
+		LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange2); // <FS:Beq> instrument the image decode pipeline
 		// Decode aux channel
 		if (!mDecodedImageAux)
 		{
@@ -350,6 +349,7 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 
 void LLImageDecodeThread::ImageRequest::finishRequest(bool completed)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	if (mResponder.notNull())
 	{
 		bool success = completed && mDecodedRaw && (!mNeedsAux || mDecodedAux);

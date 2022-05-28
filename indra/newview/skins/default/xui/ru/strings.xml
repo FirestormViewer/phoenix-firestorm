@@ -258,6 +258,7 @@ http://secondlife.com/viewer-access-faq
 Пожалуйста, проверьте, правильно ли вы ввели
     * Имя пользователя (например bobsmith12 или steller.sunshine)
     * Пароль
+    * Токен второго фактора (если включен)
 Также, пожалуйста, проверьте что режим Caps Lock отключен
 	</string>
 	<string name="LoginFailedPasswordChanged">
@@ -367,6 +368,10 @@ support@secondlife.com.
 	<string name="LoginFailedLoggingOutSession">
 		Система начала выход из вашего последнего сеанса.
 Пожалуйста, попробуйте зайти снова через минуту.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Чтобы продолжить вход в систему, введите новый токен из приложения многофакторной аутентификации.
+Если вы считаете, что это ошибка, пожалуйста, свяжитесь с support@secondlife.com
 	</string>
 	<string name="AgentLostConnection">
 		Возможно, в этом регионе возникли проблемы. Проверьте подключение к Интернету.
@@ -5347,7 +5352,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="PremiumMembership">
 		Премиум
 	</string>
-	<string name="Premium PlusMembership">
+	<string name="Premium_PlusMembership">
 		Премиум Плюс
 	</string>
 	<string name="MembershipUpgradeText">
@@ -6771,4 +6776,5 @@ ID объекта: [INSPECTING_KEY]
 	<string name="FSObjectInventoryNoElements">Нет элементов</string>
 	<string name="FSObjectInventoryOneElement">1 элемент</string>
 	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] элементов</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">команда поддержки оператора вашей сетки</string>
 </strings>

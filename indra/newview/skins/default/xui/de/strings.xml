@@ -5438,7 +5438,7 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 	<string name="PremiumMembership">
 		Premium
 	</string>
-	<string name="Premium PlusMembership">
+	<string name="Premium_PlusMembership">
 		Premium Plus
 	</string>
 	<string name="MembershipUpgradeText">
@@ -7199,5 +7199,8 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="FSObjectInventoryElements">
 		[NUM_ELEMENTS] Elemente
+	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		das Support-Team Ihres Grid-Betreibers
 	</string>
 </strings>

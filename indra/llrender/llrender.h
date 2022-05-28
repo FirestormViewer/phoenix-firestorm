@@ -115,10 +115,7 @@ public:
 		TBO_LERP_VERT_ALPHA,		// Interpolate based on Vertex Alpha (VA): ( Source1 * VA + Source2 * (1-VA) )
 		TBO_LERP_TEX_ALPHA,			// Interpolate based on Texture Alpha (TA): ( Source1 * TA + Source2 * (1-TA) )
 		TBO_LERP_PREV_ALPHA,		// Interpolate based on Previous Alpha (PA): ( Source1 * PA + Source2 * (1-PA) )
-		TBO_LERP_CONST_ALPHA,		// Interpolate based on Const Alpha (CA): ( Source1 * CA + Source2 * (1-CA) )
-		TBO_LERP_VERT_COLOR			// Interpolate based on Vertex Col (VC): ( Source1 * VC + Source2 * (1-VC) )
-										// *Note* TBO_LERP_VERTEX_COLOR only works with setTextureColorBlend(),
-										// and falls back to TBO_LERP_VERTEX_ALPHA for setTextureAlphaBlend().
+		TBO_LERP_CONST_ALPHA		// Interpolate based on Const Alpha (CA): ( Source1 * CA + Source2 * (1-CA) )
 	} eTextureBlendOp;
 
 	typedef enum 
@@ -168,8 +165,19 @@ public:
 	
 	// Binds the LLImageGL to this texture unit 
 	// (automatically enables the unit for the LLImageGL's texture type)
-	bool bind(LLImageGL* texture, bool for_rendering = false, bool forceBind = false);
+	bool bind(LLImageGL* texture, bool for_rendering = false, bool forceBind = false, S32 usename = 0);
     bool bind(LLTexture* texture, bool for_rendering = false, bool forceBind = false);
+
+    // bind implementation for inner loops
+    // makes the following assumptions:
+    //  - No need for gGL.flush() 
+    //  - texture is not null
+    //  - gl_tex->getTexName() is not zero
+    //  - This texture is not being bound redundantly
+    //  - USE_SRGB_DECODE is disabled
+    //  - mTexOptionsDirty is false
+    //  - 
+    void bindFast(LLTexture* texture);
 
 	// Binds a cubemap to this texture unit 
 	// (automatically enables the texture unit for cubemaps)
@@ -187,6 +195,9 @@ public:
 	// (only if there's a texture of the given type currently bound)
 	void unbind(eTextureType type);
 
+    // Fast but unsafe version of unbind
+    void unbindFast(eTextureType type);
+
 	// Sets the addressing mode used to sample the texture
 	// Warning: this stays set for the bound texture forever, 
 	// make sure you want to permanently change the address mode  for the bound texture.
@@ -196,15 +207,6 @@ public:
 	// Warning: this stays set for the bound texture forever, 
 	// make sure you want to permanently change the filtering for the bound texture.
 	void setTextureFilteringOption(LLTexUnit::eTextureFilterOptions option);
-
-	void setTextureBlendType(eTextureBlendType type);
-
-	inline void setTextureColorBlend(eTextureBlendOp op, eTextureBlendSrc src1, eTextureBlendSrc src2 = TBS_PREV_COLOR)
-	{ setTextureCombiner(op, src1, src2, false); }
-
-	// NOTE: If *_COLOR enums are passed to src1 or src2, the corresponding *_ALPHA enum will be used instead.
-	inline void setTextureAlphaBlend(eTextureBlendOp op, eTextureBlendSrc src1, eTextureBlendSrc src2 = TBS_PREV_ALPHA)
-	{ setTextureCombiner(op, src1, src2, true); }
 
 	static U32 getInternalType(eTextureType type);
 
@@ -222,13 +224,6 @@ protected:
 	const S32			mIndex;
 	U32					mCurrTexture;
 	eTextureType		mCurrTexType;
-	eTextureBlendType	mCurrBlendType;
-	eTextureBlendOp		mCurrColorOp;
-	eTextureBlendSrc	mCurrColorSrc1;
-	eTextureBlendSrc	mCurrColorSrc2;
-	eTextureBlendOp		mCurrAlphaOp;
-	eTextureBlendSrc	mCurrAlphaSrc1;
-	eTextureBlendSrc	mCurrAlphaSrc2;
     eTextureColorSpace  mTexColorSpace;
 	S32					mCurrColorScale;
 	S32					mCurrAlphaScale;
@@ -239,7 +234,6 @@ protected:
 	void setAlphaScale(S32 scale);
 	GLint getTextureSource(eTextureBlendSrc src);
 	GLint getTextureSourceType(eTextureBlendSrc src, bool isAlpha = false);
-	void setTextureCombiner(eTextureBlendOp op, eTextureBlendSrc src1, eTextureBlendSrc src2, bool isAlpha = false);
 };
 
 class LLLightState
@@ -371,12 +365,10 @@ public:
 
 	LLRender();
 	~LLRender();
-	void init() ;
+    void init(bool needs_vertex_buffer);
+    void initVertexBuffer();
+    void resetVertexBuffer();
 	void shutdown();
-	// <FS:Ansariel> Reset VB during TP
-	void initVB();
-	void destroyVB();
-	// </FS:Ansariel>
 	
 	// Refreshes renderer state to the cached values
 	// Needed when the render context has changed and invalidated the current state
@@ -445,8 +437,6 @@ public:
 	void setColorMask(bool writeColorR, bool writeColorG, bool writeColorB, bool writeAlpha);
 	void setSceneBlendType(eBlendType type);
 
-	void setAlphaRejectSettings(eCompareFunc func, F32 value = 0.01f);
-
 	// applies blend func to both color and alpha
 	void blendFunc(eBlendFactor sfactor, eBlendFactor dfactor);
 	// applies separate blend functions to color and alpha
@@ -500,8 +490,6 @@ private:
 	U32				mMode;
 	U32				mCurrTextureUnitIndex;
 	bool				mCurrColorMask[4];
-	eCompareFunc			mCurrAlphaFunc;
-	F32				mCurrAlphaFuncVal;
 	F32				mLineWidth; // <FS> Line width OGL core profile fix by Rye Mutt
 	// <FS:Ansariel> Don't ignore OpenGL max line width
 	F32				mMaxLineWidthSmooth;
@@ -534,7 +522,7 @@ extern F32 gGLLastProjection[16];
 extern F32 gGLProjection[16];
 extern S32 gGLViewport[4];
 
-extern LLRender gGL;
+extern thread_local LLRender gGL;
 
 // This rotation matrix moves the default OpenGL reference frame 
 // (-Z at, Y up) to Cory's favorite reference frame (X at, Z up)

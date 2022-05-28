@@ -57,6 +57,7 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 			<panel.string name="ban_count_template">
 				Bany: [COUNT]/[LIMIT]
 			</panel.string>
+			<filter_editor label="Filtruj listę banów" name="filter_input" />
 			<name_list name="ban_list">
 				<name_list.columns label="Rezydent" name="name"/>
 				<name_list.columns label="Zbanowano" name="ban_date"/>

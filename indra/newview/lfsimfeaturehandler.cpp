@@ -31,6 +31,7 @@
 #include "llstatusbar.h"
 #include "llfloaterbuycurrency.h"
 // </COLOSI opensim multi-currency support>
+#include "llfloatergridstatus.h"
 
 LFSimFeatureHandler::LFSimFeatureHandler()
 	: mSupportsExport(false),
@@ -103,6 +104,23 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSayRange = extras.has("say-range") ? extras["say-range"].asInteger() : 20;
 			mShoutRange = extras.has("shout-range") ? extras["shout-range"].asInteger() : 100;
 			mWhisperRange = extras.has("whisper-range") ? extras["whisper-range"].asInteger() : 10;
+
+			if( extras.has("GridStatusRSS"))
+			{
+				mGridStatusRSS = extras["GridStatusRSS"].asString();
+			}
+			else
+			{
+				mGridStatusRSS = "";
+			}
+			if( extras.has("GridStatus"))
+			{
+				mGridStatusURL = extras["GridStatus"].asString();
+			}
+			else
+			{
+				mGridStatusURL = "";
+			}
 
 			if(extras.has("GridURL"))
 			{
@@ -250,20 +268,24 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSimulatorFPSCrit = 20.f;
 			LLWorld::getInstance()->refreshLimits();// reset  prim scales etc.
 
+			bool in_sl{LLGridManager::instance().isInSecondLife()};
+			mGridStatusRSS = (in_sl)? gSavedSettings.getString("GridStatusRSS"):"";
+			mGridStatusURL = (in_sl)? DEFAULT_GRID_STATUS_URL:"";
+			
 			if (LLLoginInstance::getInstance()->hasResponse("search"))
 			{
 				mSearchURL = LLLoginInstance::getInstance()->getResponse("search").asString();
 			}
 			else
 			{
-				mSearchURL = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+				mSearchURL = in_sl ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
 			}
 
 			if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
 			{
 				mDestinationGuideURL = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
 			}
-			else if (LLGridManager::instance().isInSecondLife())
+			else if (in_sl)
 			{
 				mDestinationGuideURL = gSavedSettings.getString("DestinationGuideURL");
 			}
@@ -276,7 +298,7 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			{
 				mAvatarPickerURL = LLLoginInstance::getInstance()->getResponse("avatar-picker-url").asString();
 			}
-			else if (LLGridManager::instance().isInSecondLife())
+			else if (in_sl)
 			{
 				mAvatarPickerURL = gSavedSettings.getString("AvatarPickerURL");
 			}

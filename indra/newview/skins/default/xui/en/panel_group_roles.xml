@@ -360,10 +360,22 @@ things in this group. There&apos;s a broad variety of Abilities.
        name="ban_count_template">
         Ban count: [COUNT]/[LIMIT]
       </panel.string>
+
+      <filter_editor
+       layout="topleft"
+       top="5"
+       left="5"
+       right="-5"
+       height="22"
+       search_button_visible="false"
+       follows="left|top|right"
+       label="Filter Ban List"
+       name="filter_input" />
+
       <name_list
            column_padding="0"
            draw_heading="true"
-           height="136"
+           height="114"
            follows="left|top|right"
            layout="topleft"
            left="0"

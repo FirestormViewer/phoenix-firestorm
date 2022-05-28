@@ -2103,14 +2103,11 @@ void LLFloaterPreference::refreshEnabledState()
 
 	////Deferred/SSAO/Shadows
 	//BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
-	//BOOL transparent_water = LLFeatureManager::getInstance()->isFeatureAvailable("RenderTransparentWater") && gSavedSettings.getBOOL("RenderTransparentWater");
 	//BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	//BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 	//					bumpshiny &&
-	//					transparent_water &&
 	//					shaders && 
 	//					gGLManager.mHasFramebufferObject &&
-	//					gSavedSettings.getBOOL("RenderAvatarVP") &&
 	//					(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	//ctrl_deferred->setEnabled(enabled);
@@ -2190,9 +2187,6 @@ void LLFloaterPreference::refreshEnabledState()
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
 	
-    // Transparent Water
-    LLCheckBoxCtrl* transparent_water_ctrl = getChild<LLCheckBoxCtrl>("TransparentWater");
-
     // <FS:Ansariel> Does not exist
     //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
     //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
@@ -2200,29 +2194,9 @@ void LLFloaterPreference::refreshEnabledState()
     // </FS:Ansariel>
 
 	// Avatar Mode
-	// Enable Avatar Shaders
-	LLCheckBoxCtrl* ctrl_avatar_vp = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
 	// Avatar Render Mode
-	LLCheckBoxCtrl* ctrl_avatar_cloth = getChild<LLCheckBoxCtrl>("AvatarCloth");
-	
-	bool avatar_vp_enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarVP");
-	if (LLViewerShaderMgr::sInitialized)
-	{
-		S32 max_avatar_shader = LLViewerShaderMgr::instance()->mMaxAvatarShaderLevel;
-		avatar_vp_enabled = (max_avatar_shader > 0) ? TRUE : FALSE;
-	}
+    getChild<LLCheckBoxCtrl>("AvatarCloth")->setEnabled(TRUE);
 
-	ctrl_avatar_vp->setEnabled(avatar_vp_enabled);
-	
-	if (gSavedSettings.getBOOL("RenderAvatarVP") == FALSE)
-	{
-		ctrl_avatar_cloth->setEnabled(false);
-	} 
-	else
-	{
-		ctrl_avatar_cloth->setEnabled(true);
-	}
-	
 	/* <FS:LO> remove orphaned code left over from EEP
 	// Vertex Shaders, Global Shader Enable
 	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
@@ -2247,9 +2221,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-						((transparent_water_ctrl && transparent_water_ctrl->get()) ? TRUE : FALSE) &&
 						gGLManager.mHasFramebufferObject &&
-						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	ctrl_deferred->setEnabled(enabled);
@@ -2357,7 +2329,6 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 void LLFloaterPreference::disableUnavailableSettings()
 {	
 	LLComboBox* ctrl_reflections   = getChild<LLComboBox>("Reflections");
-	LLCheckBoxCtrl* ctrl_avatar_vp     = getChild<LLCheckBoxCtrl>("AvatarVertexProgram");
 	LLCheckBoxCtrl* ctrl_avatar_cloth  = getChild<LLCheckBoxCtrl>("AvatarCloth");
 	LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
@@ -2426,29 +2397,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		ctrl_reflections->setValue(FALSE);
 	}
 	
-	// disabled av
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarVP"))
-	{
-		ctrl_avatar_vp->setEnabled(FALSE);
-		ctrl_avatar_vp->setValue(FALSE);
-		
-		ctrl_avatar_cloth->setEnabled(FALSE);
-		ctrl_avatar_cloth->setValue(FALSE);
-
-		//deferred needs AvatarVP, disable deferred
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		ctrl_deferred->setEnabled(FALSE);
-		ctrl_deferred->setValue(FALSE);
-	}
-
 	// disabled cloth
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarCloth"))
 	{

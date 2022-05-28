@@ -208,7 +208,6 @@ void FloaterQuickPrefs::initCallbacks()
 		gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
-		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("FSRenderVignette")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderShadowSplitExponent")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
@@ -1039,14 +1038,11 @@ void FloaterQuickPrefs::refreshSettings()
 	sky_default_button->setEnabled(TRUE);
 
 	BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
-	BOOL transparent_water = LLFeatureManager::getInstance()->isFeatureAvailable("RenderTransparentWater") && gSavedSettings.getBOOL("RenderTransparentWater");
 	BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						bumpshiny &&
-						transparent_water &&
 						shaders &&
 						gGLManager.mHasFramebufferObject &&
-						gSavedSettings.getBOOL("RenderAvatarVP") &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
 
 	mCtrlDeferred->setEnabled(enabled);
@@ -1121,23 +1117,6 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlReflectionDetail->setEnabled(FALSE);
 		mCtrlReflectionDetail->setValue(FALSE);
-	}
-
-	// disabled av
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarVP"))
-	{
-		//deferred needs AvatarVP, disable deferred
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-
-		mCtrlDeferred->setEnabled(FALSE);
-		mCtrlDeferred->setValue(FALSE);
 	}
 
 	// <FS:CR> FIRE-9630 - Vignette UI controls

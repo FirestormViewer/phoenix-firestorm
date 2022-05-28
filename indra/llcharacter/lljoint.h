@@ -38,6 +38,7 @@
 #include "m4math.h"
 #include "llquaternion.h"
 #include "xform.h"
+#include "llmatrix4a.h"
 
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 struct JointKey
@@ -111,8 +112,10 @@ inline bool operator!=(const LLVector3OverrideMap& a, const LLVector3OverrideMap
 //-----------------------------------------------------------------------------
 // class LLJoint
 //-----------------------------------------------------------------------------
+LL_ALIGN_PREFIX(16)
 class LLJoint
 {
+    LL_ALIGN_NEW
 public:
 	// priority levels, from highest to lowest
 	enum JointPriority
@@ -140,15 +143,16 @@ public:
         SUPPORT_EXTENDED
     };
 protected:
-	std::string	mName;
+    // explicit transformation members
+    LL_ALIGN_16(LLMatrix4a          mWorldMatrix);
+    LLXformMatrix       mXform;
+	
+    std::string	mName;
 
 	SupportCategory mSupport;
 
 	// parent joint
 	LLJoint	*mParent;
-
-	// explicit transformation members
-	LLXformMatrix		mXform;
 
     LLVector3       mDefaultPosition;
     LLVector3       mDefaultScale;
@@ -285,6 +289,8 @@ public:
 	const LLMatrix4 &getWorldMatrix();
 	void setWorldMatrix( const LLMatrix4& mat );
 
+    const LLMatrix4a& getWorldMatrix4a();
+
 	void updateWorldMatrixChildren();
 	void updateWorldMatrixParent();
 
@@ -322,6 +328,6 @@ public:
     // These are used in checks of whether a pos/scale override is considered significant.
     bool aboveJointPosThreshold(const LLVector3& pos) const;
     bool aboveJointScaleThreshold(const LLVector3& scale) const;
-};
+} LL_ALIGN_POSTFIX(16);
 #endif // LL_LLJOINT_H
 

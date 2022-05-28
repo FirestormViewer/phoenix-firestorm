@@ -1,6 +1,6 @@
 /** 
- * @file fstelemetry.cpp
- * @brief fstelemetry Telemetry abstraction for FS
+ * @file llprofiler.cpp
+ * @brief llprofiler Telemetry abstraction
  *
  * $LicenseInfo:firstyear=2021&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -24,8 +24,8 @@
  * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
-#include "fstelemetry.h"
-namespace FSTelemetry
+#include "llprofiler.h"
+namespace LLProfiler
 {
 	bool	active{false};
 

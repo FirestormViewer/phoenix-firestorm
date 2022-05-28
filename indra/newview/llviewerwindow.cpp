@@ -654,12 +654,6 @@ public:
 		{
 			LLTrace::Recording& last_frame_recording = LLTrace::get_frame_recording().getLastRecording();
 
-			if (gPipeline.getUseVertexShaders() == 0)
-			{
-				addText(xpos, ypos, "Shaders Disabled");
-				ypos += y_inc;
-			}
-
 			if (gGLManager.mHasATIMemInfo)
 			{
 				S32 meminfo[4];
@@ -1619,8 +1613,15 @@ BOOL LLViewerWindow::handleCloseRequest(LLWindow *window)
 
 void LLViewerWindow::handleQuit(LLWindow *window)
 {
-	LL_INFOS() << "Window forced quit" << LL_ENDL;
-	LLAppViewer::instance()->forceQuit();
+	if (gNonInteractive)
+	{
+		LLAppViewer::instance()->requestQuit();
+	}
+	else
+	{
+		LL_INFOS() << "Window forced quit" << LL_ENDL;
+		LLAppViewer::instance()->forceQuit();
+	}
 }
 
 void LLViewerWindow::handleResize(LLWindow *window,  S32 width,  S32 height)
@@ -1867,6 +1868,7 @@ void LLViewerWindow::handleDataCopy(LLWindow *window, S32 data_type, void *data)
 
 BOOL LLViewerWindow::handleTimerEvent(LLWindow *window)
 {
+    //TODO: just call this every frame from gatherInput instead of using a convoluted 30fps timer callback
 	if (LLViewerJoystick::getInstance()->getOverrideCamera())
 	{
 		LLViewerJoystick::getInstance()->updateStatus();
@@ -2010,18 +2012,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		p.title, p.name, p.x, p.y, p.width, p.height, 0,
 		p.fullscreen, 
 		gHeadlessClient,
-		gSavedSettings.getBOOL("DisableVerticalSync"),
+		gSavedSettings.getBOOL("RenderVSyncEnable"),
 		!gHeadlessClient,
 		p.ignore_pixel_depth,
 		//gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
 		gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples"), //don't use window level anti-aliasing if FBOs are enabled
 		useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
-
-	if (!LLViewerShaderMgr::sInitialized)
-	{ //immediately initialize shaders
-		LLViewerShaderMgr::sInitialized = TRUE;
-		LLViewerShaderMgr::instance()->setShaders();
-	}
 
 	if (NULL == mWindow)
 	{
@@ -2041,6 +2037,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 #endif
         LLAppViewer::instance()->fastQuit(1);
 	}
+    else if (!LLViewerShaderMgr::sInitialized)
+    {
+        //immediately initialize shaders
+        LLViewerShaderMgr::sInitialized = TRUE;
+        LLViewerShaderMgr::instance()->setShaders();
+    }
 	
 	if (!LLAppViewer::instance()->restoreErrorTrap())
 	{
@@ -2079,6 +2081,16 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 	
 	LLFontManager::initClass();
+	// Init font system, load default fonts and generate basic glyphs
+	// currently it takes aprox. 0.5 sec and we would load these fonts anyway
+	// before login screen.
+	LLFontGL::initClass( gSavedSettings.getF32("FontScreenDPI"),
+		mDisplayScale.mV[VX],
+		mDisplayScale.mV[VY],
+		gDirUtilp->getAppRODataDir(),
+		gSavedSettings.getString("FSFontSettingsFile"),
+		gSavedSettings.getF32("FSFontSizeAdjustment"));
+
 
 	//
 	// We want to set this stuff up BEFORE we initialize the pipeline, so we can turn off
@@ -2094,7 +2106,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	}
 	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
 	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
-	gGL.init() ;
+	gGL.init(true);
 	// <FS:Ansariel> Exodus vignette
 	exoPostProcess::getInstance(); // Make sure we've created one of these
 
@@ -2155,22 +2167,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		
 	// Init the image list.  Must happen after GL is initialized and before the images that
 	// LLViewerWindow needs are requested.
-	LLImageGL::initClass(LLViewerTexture::MAX_GL_IMAGE_CATEGORY) ;
+    LLImageGL::initClass(mWindow, LLViewerTexture::MAX_GL_IMAGE_CATEGORY, false, gSavedSettings.getBOOL("RenderGLMultiThreaded"));
 	gTextureList.init();
 	LLViewerTextureManager::init() ;
 	gBumpImageList.init();
 	
-	// Init font system, but don't actually load the fonts yet
-	// because our window isn't onscreen and they take several
-	// seconds to parse.
-	LLFontGL::initClass( gSavedSettings.getF32("FontScreenDPI"),
-								mDisplayScale.mV[VX],
-								mDisplayScale.mV[VY],
-								gDirUtilp->getAppRODataDir(),
-								gSavedSettings.getString("FSFontSettingsFile"),
-								gSavedSettings.getF32("FSFontSizeAdjustment"));
-	
-	// Create container for all sub-views
+    // Create container for all sub-views
 	LLView::Params rvp;
 	rvp.name("root");
 	rvp.rect(mWindowRectScaled);
@@ -2200,29 +2202,6 @@ std::string LLViewerWindow::getLastSnapshotDir()
 
 void LLViewerWindow::initGLDefaults()
 {
-	gGL.setSceneBlendType(LLRender::BT_ALPHA);
-
-	if (!LLGLSLShader::sNoFixedFunction)
-	{ //initialize fixed function state
-		glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-
-		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LLColor4::black.mV);
-		glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LLColor4::white.mV);
-
-		// lights for objects
-		glShadeModel( GL_SMOOTH );
-
-		gGL.getTexUnit(0)->enable(LLTexUnit::TT_TEXTURE);
-		gGL.getTexUnit(0)->setTextureBlendType(LLTexUnit::TB_MULT);
-	}
-
-	glPixelStorei(GL_PACK_ALIGNMENT,1);
-	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-
-	gGL.setAmbientLightColor(LLColor4::black);
-		
-	glCullFace(GL_BACK);
-
 	// RN: Need this for translation and stretch manip.
 	gBox.prerender();
 }
@@ -2255,6 +2234,8 @@ void LLViewerWindow::initBase()
 	LL_DEBUGS("AppInit") << "initializing edit menu" << LL_ENDL;
 	initialize_edit_menu();
 	initialize_spellcheck_menu(); // <FS:Zi> Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them
+
+    LLFontGL::loadCommonFonts();
 
 	// <FS:Ansariel> Move console further down in the view hierarchy to not float in front of floaters!
 	// Console
@@ -2384,6 +2365,14 @@ void LLViewerWindow::initBase()
 
 void LLViewerWindow::initWorldUI()
 {
+	if (gNonInteractive)
+	{
+		gIMMgr = LLIMMgr::getInstance();
+		LLNavigationBar::getInstance();
+		gFloaterView->pushVisibleAll(FALSE);
+		return;
+	}
+	
 	S32 height = mRootView->getRect().getHeight();
 	S32 width = mRootView->getRect().getWidth();
 	LLRect full_window(0, height, width, 0);
@@ -2394,25 +2383,28 @@ void LLViewerWindow::initWorldUI()
 	//getRootView()->sendChildToFront(gFloaterView);
 	//getRootView()->sendChildToFront(gSnapshotFloaterView);
 
-	// <FS:Ansariel> Group notices, IMs and chiclets position
-	//LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
-	LLPanel* chiclet_container;
-	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+	if (!gNonInteractive)
 	{
-		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
-		getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		// <FS:Ansariel> Group notices, IMs and chiclets position
+		//LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+		LLPanel* chiclet_container;
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+		{
+			chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+			getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		}
+		else
+		{
+			getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+			chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
+		}
+		// </FS:Ansariel> Group notices, IMs and chiclets position
+		LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
+		chiclet_bar->setShape(chiclet_container->getLocalRect());
+		chiclet_bar->setFollowsAll();
+		chiclet_container->addChild(chiclet_bar);
+		chiclet_container->setVisible(TRUE);
 	}
-	else
-	{
-		getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
-		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
-	}
-	// </FS:Ansariel> Group notices, IMs and chiclets position
-	LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
-	chiclet_bar->setShape(chiclet_container->getLocalRect());
-	chiclet_bar->setFollowsAll();
-	chiclet_container->addChild(chiclet_bar);
-	chiclet_container->setVisible(TRUE);
 
 	LLRect morph_view_rect = full_window;
 	morph_view_rect.stretch( -STATUS_BAR_HEIGHT );
@@ -2528,77 +2520,81 @@ void LLViewerWindow::initWorldUI()
 		}
 		gToolBarView->setVisible(TRUE);
 	}
-// <FS:AW  opensim destinations and avatar picker>
-// 	LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-// 	if (destinations)
-// 	{
-// 		destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-// 		std::string url = gSavedSettings.getString("DestinationGuideURL");
-// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
-// 		destinations->navigateTo(url, "text/html");
-// 	}
-// 	LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-// 	if (avatar_picker)
-// 	{
-// 		avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-// 		std::string url = gSavedSettings.getString("AvatarPickerURL");
-// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
-// 		avatar_picker->navigateTo(url, "text/html");
-// 	}
-	std::string destination_guide_url;
+
+	if (!gNonInteractive)
+	{
+		// <FS:AW  opensim destinations and avatar picker>
+		// LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+		// if (destinations)
+		// {
+		// 	destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+		// 	std::string url = gSavedSettings.getString("DestinationGuideURL");
+		// 	url = LLWeb::expandURLSubstitutions(url, LLSD());
+		// 	destinations->navigateTo(url, "text/html");
+		// }
+		// LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+		// if (avatar_picker)
+		// {
+		// 	avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+		// 	std::string url = gSavedSettings.getString("AvatarPickerURL");
+		// 	url = LLWeb::expandURLSubstitutions(url, LLSD());
+		// 	avatar_picker->navigateTo(url, "text/html");
+		// }
+		std::string destination_guide_url;
 #ifdef OPENSIM // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+			if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+			{
+				destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+			}
 		}
-	}
-	else
+		else
 #endif // OPENSIM  // <FS:AW optional opensim support>
-	{
-		destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
-	}
-
-	if(!destination_guide_url.empty())
-	{	
-		LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-		if (destinations)
 		{
-			destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-			destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
-			LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
-			destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
+			destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
 		}
-	}
 
-	std::string avatar_picker_url;
+		if(!destination_guide_url.empty())
+		{	
+			LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+			if (destinations)
+			{
+				destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+				destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
+				LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
+				destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
+			}
+		}
+
+		std::string avatar_picker_url;
 #ifdef OPENSIM // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+			if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+			{
+				avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+			}
 		}
-	}
-	else
+		else
 #endif // OPENSIM  // <FS:AW optional opensim support>
-	{
-		avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
-	}
-
-	if(!avatar_picker_url.empty())
-	{	
-		LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-		if (avatar_picker)
 		{
-			avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-			avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
-			LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
-			avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+			avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
 		}
- 	}
-// </FS:AW  opensim destinations and avatar picker>
+
+		if(!avatar_picker_url.empty())
+		{	
+			LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+			if (avatar_picker)
+			{
+				avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+				avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
+				LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
+				avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
+			}
+		}
+		// </FS:AW  opensim destinations and avatar picker>
+	}
 
 	// <FS:Zi> Autohide main chat bar if applicable
 	BOOL visible=!gSavedSettings.getBOOL("AutohideChatBar");
@@ -2710,7 +2706,7 @@ void LLViewerWindow::shutdownGL()
 
 	LLViewerTextureManager::cleanup() ;
 	SUBSYSTEM_CLEANUP(LLImageGL) ;
-
+    
 	LL_INFOS() << "All textures and llimagegl images are destroyed!" << LL_ENDL ;
 
 	LL_INFOS() << "Cleaning up select manager" << LL_ENDL;
@@ -2861,7 +2857,7 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 			mWindow->setMinSize(min_window_width, min_window_height);
 
 			LLCoordScreen window_rect;
-			if (mWindow->getSize(&window_rect))
+			if (!gNonInteractive && mWindow->getSize(&window_rect))
 			{
 			// Only save size if not maximized
 				gSavedSettings.setU32("WindowWidth", window_rect.mX);
@@ -2986,10 +2982,7 @@ void LLViewerWindow::drawDebugText()
 	gGL.color4f(1,1,1,1);
 	gGL.pushMatrix();
 	gGL.pushUIMatrix();
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.bind();
-	}
+	gUIProgram.bind();
 	{
 		// scale view by UI global scale factor and aspect ratio correction factor
 		gGL.scaleUI(mDisplayScale.mV[VX], mDisplayScale.mV[VY], 1.f);
@@ -2999,10 +2992,7 @@ void LLViewerWindow::drawDebugText()
 	gGL.popMatrix();
 
 	gGL.flush();
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.unbind();
-	}
+	gUIProgram.unbind();
 }
 
 void LLViewerWindow::draw()
@@ -3051,10 +3041,7 @@ void LLViewerWindow::draw()
 	// Draw all nested UI views.
 	// No translation needed, this view is glued to 0,0
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.bind();
-	}
+	gUIProgram.bind();
 
 	gGL.pushMatrix();
 	LLUI::pushMatrix();
@@ -3230,14 +3217,9 @@ void LLViewerWindow::draw()
 	LLUI::popMatrix();
 	gGL.popMatrix();
 
-	if (LLGLSLShader::sNoFixedFunction)
-	{
-		gUIProgram.unbind();
-	}
+	gUIProgram.unbind();
 
-//#if LL_DEBUG
 	LLView::sIsDrawing = FALSE;
-//#endif
 }
 
 // <FS:TT> Window Title Access
@@ -3828,13 +3810,13 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 	}
 }
 
-static LLTrace::BlockTimerStatHandle FTM_UPDATE_UI("Update UI"); // <FS:Beq/> rename to sensible symbol
+static LLTrace::BlockTimerStatHandle ftm("Update UI");
 
 // Update UI based on stored mouse position from mouse-move
 // event processing.
 void LLViewerWindow::updateUI()
 {
-	LL_RECORD_BLOCK_TIME(FTM_UPDATE_UI); // <FS:Beq/> rename to sensible symbol
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI; //LL_RECORD_BLOCK_TIME(ftm);
 
 	static std::string last_handle_msg;
 
@@ -4281,8 +4263,15 @@ void LLViewerWindow::updateLayout()
 
 void LLViewerWindow::updateMouseDelta()
 {
+#if LL_WINDOWS
+    LLCoordCommon delta; 
+    mWindow->getCursorDelta(&delta);
+    S32 dx = delta.mX;
+    S32 dy = delta.mY;
+#else
 	S32 dx = lltrunc((F32) (mCurrentMousePoint.mX - mLastMousePoint.mX) * LLUI::getScaleFactor().mV[VX]);
 	S32 dy = lltrunc((F32) (mCurrentMousePoint.mY - mLastMousePoint.mY) * LLUI::getScaleFactor().mV[VY]);
+#endif
 
 	//RN: fix for asynchronous notification of mouse leaving window not working
 	LLCoordWindow mouse_pos;
@@ -4534,42 +4523,27 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 				gGL.diffuseColor4fv(color.mV);
 				//decomp has physics mesh, render that mesh
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
 			{
 				LLGLEnable offset(GL_POLYGON_OFFSET_LINE);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				glPolygonOffset(offset_factor, offset_units);
 				gGL.diffuseColor4fv(line_color.mV);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
-
 		}
 		else
 		{
-			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-			if (!LLGLSLShader::sNoFixedFunction)
-			{
-				// </FS:Ansariel>
-				LLGLEnable fog(GL_FOG);
-				glFogi(GL_FOG_MODE, GL_LINEAR);
-				float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
-				LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
-				glFogf(GL_FOG_START, d);
-				glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
-				glFogfv(GL_FOG_COLOR, fogCol.mV);
-				// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-			}
-			// </FS:Ansariel>
-			gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+			gGL.flush();
 			{
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				gGL.diffuseColor4fv(color.mV);
 				//decomp has physics mesh, render that mesh
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				gGL.diffuseColor4fv(line_color.mV);
-				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+				LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			}
 		}
 	}//End depth test for hidden geometry
@@ -4584,7 +4558,7 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glPolygonOffset(offset_factor, offset_units);
 			gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 		}
 		{
 			gGL.diffuseColor4fv(line_color.mV);
@@ -4592,35 +4566,21 @@ void renderMeshPhysicsTriangles(const LLColor4& color, const LLColor4& line_colo
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glPolygonOffset(offset_factor, offset_units);
 			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 		}
 	}
 	else
 	{
-		// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-		if (!LLGLSLShader::sNoFixedFunction)
-		{
-			// </FS:Ansariel>
-			LLGLEnable fog(GL_FOG);
-			glFogi(GL_FOG_MODE, GL_LINEAR);
-			float d = (LLViewerCamera::getInstance()->getPointOfInterest() - LLViewerCamera::getInstance()->getOrigin()).magVec();
-			LLColor4 fogCol = color * (F32)llclamp((LLSelectMgr::getInstance()->getSelectionCenterGlobal() - gAgentCamera.getCameraPositionGlobal()).magVec() / (LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal().magVec() * 4), 0.0, 1.0);
-			glFogf(GL_FOG_START, d);
-			glFogf(GL_FOG_END, d*(1 + (LLViewerCamera::getInstance()->getView() / LLViewerCamera::getInstance()->getDefaultFOV())));
-			glFogfv(GL_FOG_COLOR, fogCol.mV);
-			// <FS:Ansariel> Don't use fixed functions when using shader renderer; found by Drake Arconis
-		}
-		// </FS:Ansariel>
-		gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
+		gGL.flush();
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			gGL.diffuseColor4fv(color.mV);
 			//decomp has physics mesh, render that mesh
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			gGL.diffuseColor4fv(line_color.mV);
 			gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
-			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions, decomp->mPhysicsShapeMesh.mNormals);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mPhysicsShapeMesh.mPositions);
 		}
 	}
 
@@ -4746,18 +4706,13 @@ void renderNonMeshHullPhysics(LLVOVolume* vovolume, LLVolume* volume, LLColor4 c
 		gGL.diffuseColor4fv(line_color.mV);
 		LLVertexBuffer::unbind();
 
-		llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
+		llassert(LLGLSLShader::sCurBoundShader != 0);
 
-		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
 		gGL.diffuseColor4fv(color.mV);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-		//LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-
+		LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 	}
 	else
 	{
@@ -5025,32 +4980,24 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 		{
 			// TODO: (Beq) refactor this!! yet another flavour of drawing the same crap. Can we ratioanlise the arguments
 			// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-			if (LLGLSLShader::sNoFixedFunction)
-			{
-				gGL.diffuseColor4fv(line_color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//llassert(LLGLSLShader::sCurBoundShader != 0);
+			//LLVertexBuffer::unbind();
+			//glVertexPointer(3, GL_FLOAT, 16, phys_volume->mHullPoints);
+			//gGL.diffuseColor4fv(line_color.mV);
+			//gGL.syncMatrices();
+			//glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
 
-				gGL.diffuseColor4fv(color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mNumHullPoints, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
-			}
-			else
-			{
-				// </FS:Ansariel>
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShader != 0);
-				LLVertexBuffer::unbind();
-				glVertexPointer(3, GL_FLOAT, 16, phys_volume->mHullPoints);
-				gGL.diffuseColor4fv(line_color.mV);
-				gGL.syncMatrices();
-				glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
+			//gGL.diffuseColor4fv(color.mV);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
+			gGL.diffuseColor4fv(line_color.mV);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 
-				gGL.diffuseColor4fv(color.mV);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glDrawElements(GL_TRIANGLES, phys_volume->mNumHullIndices, GL_UNSIGNED_SHORT, phys_volume->mHullIndices);
-				// <FS:Ansariel> Use a vbo for the static LLVertexBuffer::drawArray/Element functions; by Drake Arconis/Shyotl Kuhr
-			}
+			gGL.diffuseColor4fv(color.mV);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			LLVertexBuffer::drawElements(LLRender::TRIANGLES, phys_volume->mHullPoints, NULL, phys_volume->mNumHullIndices, phys_volume->mHullIndices);
 			// </FS:Ansariel>
 		}
 		else
@@ -6641,6 +6588,7 @@ void LLViewerWindow::setup3DRender()
 
 void LLViewerWindow::setup3DViewport(S32 x_offset, S32 y_offset)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_UI
 	gGLViewport[0] = mWorldViewRectRaw.mLeft + x_offset;
 	gGLViewport[1] = mWorldViewRectRaw.mBottom + y_offset;
 	gGLViewport[2] = mWorldViewRectRaw.getWidth();
@@ -6896,8 +6844,6 @@ void LLViewerWindow::initFonts(F32 zoom_factor)
 								gDirUtilp->getAppRODataDir(),
 								gSavedSettings.getString("FSFontSettingsFile"),
 								gSavedSettings.getF32("FSFontSizeAdjustment"));
-	// Force font reloads, which can be very slow
-	LLFontGL::loadDefaultFonts();
 }
 
 void LLViewerWindow::requestResolutionUpdate()
@@ -6939,7 +6885,7 @@ void LLViewerWindow::restartDisplay(BOOL show_progress_bar)
 	}
 }
 
-BOOL LLViewerWindow::changeDisplaySettings(LLCoordScreen size, BOOL disable_vsync, BOOL show_progress_bar)
+BOOL LLViewerWindow::changeDisplaySettings(LLCoordScreen size, BOOL enable_vsync, BOOL show_progress_bar)
 {
 	//BOOL was_maximized = gSavedSettings.getBOOL("WindowMaximized");
 

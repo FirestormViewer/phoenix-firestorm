@@ -4810,6 +4810,14 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 			<ignore name="ignore" text="Potwierdź przed wysłaniem komuś listy moich aktywnych ograniczeń RLV."/>
 		</form>
 	</notification>
+	<notification name="InventoryValidationFailed" label="Błędy walidacji Szafy">
+		Rzeczy w Twojej Szafie uległy uszkodzeniu.
+Skontaktuj się z [HELP] z poniższą listą problemów.
+Będzie można użyć http://opensimulator.org/wiki/inventory aby rozwiązać problemy.
+
+[ERRORS]
+		<usetemplate ignoretext="Ostrzegaj, jeśli wykryto błędy walidacji Szafy." name="okignore" />
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Ta opcja usunie dzienniki poprzednich rozmów i wszelkie kopie zapasowe tego pliku.
 		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" />
@@ -5159,6 +5167,13 @@ Skopiuj do własnej szafy i spróbuj ponownie.
 Wynik testu kompresji pliku dla gzip na poziomie 6 z [FILE] o rozmiarze [SIZE] KB:
 Pakowanie: [PACK_TIME]s [PSIZE]KB
 Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
+	</notification>
+	<notification name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Kontynuuj" />
+			<button name="cancel" text="Anuluj" />
+		</form>
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.
