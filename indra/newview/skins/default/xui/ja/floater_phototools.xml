@@ -316,7 +316,6 @@
 			<panel name="P_Glow_Quality">
 				<!--
 				<check_box
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 label="Enable Glow Effect (please read the tool tip)"
 				 layout="topleft"
