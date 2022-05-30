@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Chat Options Menu">
+	<menu_item_check label="Mostra Radar" name="nearby_people" />
+	<menu_item_check label="Mostra Voce nelle vicinanze" name="nearby_voice" />
+	<menu_item_check label="Mostra lista Bloccati" name="block_list" />
+	<menu_item_check label="Usa le intestazioni della chat in stile V1" name="plain_text_chat_history" />
+	<menu_item_check label="Mostra le icone del profilo nelle intestazioni della chat" name="chat_header_icons" />
+	<context_menu label="Dimensione font della chat" name="font_size">
+		<menu_item_check label="Piccolo" name="font_size_small" />
+		<menu_item_check label="Medio" name="font_size_medium" />
+		<menu_item_check label="Grande" name="font_size_large" />
+		<menu_item_check label="Enorme" name="font_size_huge" />
+	</context_menu>
+	<menu_item_check label="Mostra un segno (>) davanti ai nomi delle persone che stanno scrivendo" name="typing_chevron" />
+	<menu_item_check label="Mostra notifiche per i nuovi messaggi" name="new_message_notification" />
+	<menu_item_check label="Mostra la barra della chat" name="show_chat_bar" />
+	<menu_item_check label="Mostra Seleziona Canale" name="show_channel_selection" />
+	<menu_item_check label="Mostra tipo di Chat / pulsante Invio" name="show_send_button" />
+	<menu_item_check label="Mostra il pulsante Invio nelle sessioni IM" name="show_im_send_button" />
+</toggleable_menu>

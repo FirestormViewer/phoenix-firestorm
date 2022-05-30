@@ -7,18 +7,18 @@
 		<panel name="tab_classifieds" title="Inserzioni pubblicitarie"/>
 	</tab_container>
 	<panel name="edit_panel">
-		<button name="new_btn" tool_tip="Crea un nuovo luogo preferito o inserzione in questo luogo"/>
+		<button name="new_btn" tool_tip="Crea un preferito o una inserzione in questo luogo"/>
 	</panel>
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">
 			<layout_panel name="info_btn_lp">
-				<button label="Informazioni" name="info_btn" tool_tip="Mostra informazioni sul luogo preferito"/>
+				<button label="Informazioni" name="info_btn" tool_tip="Mostra informazioni sul luogo selezionato"/>
 			</layout_panel>
 			<layout_panel name="teleport_btn_lp">
-				<button label="Teleport" name="teleport_btn" tool_tip="Teleport alla zona corrispondente"/>
+				<button label="Teleport" name="teleport_btn" tool_tip="Teleport al luogo selezionato"/>
 			</layout_panel>
 			<layout_panel name="show_on_map_btn_lp">
-				<button label="Mappa" name="show_on_map_btn" tool_tip="Mostra la zona corrispondente nella mappa del Mondo"/>
+				<button label="Mappa" name="show_on_map_btn" tool_tip="Mostra il luogo selezionato sulla mappa"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

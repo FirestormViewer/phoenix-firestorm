@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="Cameratools" name="phototools_camera_floater">
+<floater title="CameraTools" name="phototools_camera_floater">
 	<floater.string name="rotate_tooltip">
-		Ruota la camera intorno al centro
+		Ruota la camera intorno all'inquadratura
 	</floater.string>
 	<floater.string name="zoom_tooltip">
-		Zoom camera verso il centro
+		Avvicina la camera nell'inquadratura
 	</floater.string>
 	<floater.string name="move_tooltip">
-		Muove camera su, giù, dx, sx
+		Muovi la camera su, giù, a sinistra e a destra
 	</floater.string>
 	<floater.string name="free_mode_title">
-		Vista oggetto
+		Vista Oggetto
 	</floater.string>
+	<string name="inactive_combo_text">
+		Usa Preset
+	</string>
 	<tab_container name="tabs">
-		<panel name="P_Cam_Controls_1" label="Controlli cam 1">
+		<panel name="P_Cam_Controls_1" label="Controlli Cam 1">
 			<panel name="cameracontrolspanel">
 				<panel name="controls1">
 					<panel name="preset_views_list">
 						<panel_camera_item name="front_view">
-							<panel_camera_item.text	 name="front_view_text">
-								Vista fronte
+							<panel_camera_item.text name="front_view_text">
+								Vista Frontale
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="group_view">
-							<panel_camera_item.text	 name="side_view_text">
-								Vista laterale
+							<panel_camera_item.text name="side_view_text">
+								Vista Laterale
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="rear_view">
-							<panel_camera_item.text	 name="rear_view_text">
-								Vista retro
+							<panel_camera_item.text name="rear_view_text">
+								Vista Posteriore
 							</panel_camera_item.text>
 						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="Usa Preset" name="Use preset" />
+						</combo_box>
+						<button name="gear_btn" tool_tip="Preset Camera" />
+						<button label="Posizione..." name="camera_position_btn" />
 					</panel>
 					<panel name="camera_modes_list">
 						<panel_camera_item name="object_view">
 							<panel_camera_item.text	 name="object_view_text">
-								Vista oggetto
+								Vista Oggetto
 							</panel_camera_item.text>
 						</panel_camera_item>
 						<panel_camera_item name="mouselook_view">
 							<panel_camera_item.text name="mouselook_view_text">
-								Vista mouselook
+								Vista Mouselook
 							</panel_camera_item.text>
 						</panel_camera_item>
 					</panel>
@@ -54,14 +62,14 @@
 				<panel name="buttons">
 					<button name="presets_btn" tool_tip="Preset vista"/>
 					<button name="pan_btn" tool_tip="Controlli camera"/>
-					<button name="avatarview_btn" tool_tip="Modi camera"/>
+					<button name="avatarview_btn" tool_tip="Modalità camera"/>
 					<button name="store_camera_view_btn" tool_tip="Salva vista attuale"/>
 					<button name="load_camera_view_btn" tool_tip="Carica vista salvata"/>
 				</panel>
 			</panel>
 			<panel name="P_Cam_Mov_Settings">
 				<text name="T_Cam_Mov_Settings">
-					Impostazioni movimento camera
+					Impostazioni Movimento Camera
 				</text>
 			</panel>
 			<panel name="P_Zoom">
@@ -87,10 +95,10 @@
 				<button name="Reset_Camera_Smoothing" label="R" tool_tip="Ripristina valore"/>
 			</panel>
 		</panel>
-		<panel name="P_Cam_Controls_2" label="Controlli cam 2">
+		<panel name="P_Cam_Controls_2" label="Controlli Cam 2">
 			<panel name="P_Mouse_Movement">
 				<text name="T_Mouse_Movement">
-					Impostazioni movimento mouse
+					Impostazioni Movimento Mouse
 				</text>
 			</panel>
 			<panel name="P_Mouse_Movement_Settings">
@@ -103,7 +111,7 @@
 			</panel>
 			<panel name="P_Additional_Camera_Options">
 				<text name="T_Additional_Camera_Options">
-					Opzioni aggiuntive
+					Opzioni Aggiuntive
 				</text>
 			</panel>
 			<panel name="P_Add_Cam_Opt_Settings">

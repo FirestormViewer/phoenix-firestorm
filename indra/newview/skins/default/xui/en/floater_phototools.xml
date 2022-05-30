@@ -374,7 +374,7 @@
 				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
-					 parameter="default"/>
+					 parameter="region"/>
 				</button>
 			</panel>
 			

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="volumepulldown_floater">
-	<slider label="Principale" label_width="65" name="System Volume"/>
+	<slider label="Generale" name="System Volume"/>
 	<slider label="Pulsanti" name="UI Volume"/>
 	<slider label="Ambiente" name="Wind Volume"/>
-	<check_box name="collisions_audio_play_btn" tool_tip="Abilita suoni dalle collisioni"/>
+	<check_box name="collisions_audio_play_btn" tool_tip="Abilita suoni delle collisioni"/>
 	<slider label="Suoni" name="SFX Volume"/>
-	<check_box name="gesture_audio_play_btn" tool_tip="Attiva suoni dai gesti"/>
+	<check_box name="gesture_audio_play_btn" tool_tip="Abilita suoni dei gesti"/>
 	<slider label="Musica" name="Music Volume"/>
-	<check_box name="enable_music" tool_tip="Attiva streaming musica"/>
-	<slider label="Multimedia" name="Media Volume"/>
-	<check_box name="enable_media" tool_tip="Attiva streaming multimediale"/>
+	<check_box name="enable_music" tool_tip="Abilita streaming musica"/>
+	<slider label="Media" name="Media Volume"/>
+	<check_box name="enable_media" tool_tip="Abilita streaming media"/>
 	<slider label="Voce" name="Voice Volume"/>
-	<check_box name="enable_voice_check" tool_tip="Attiva chat vocale"/>
+	<check_box name="enable_voice_check" tool_tip="Abilita chat vocale"/>
 </panel>

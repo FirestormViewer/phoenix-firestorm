@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Impostazioni" name="Input panel">
+<panel label="Rete e Cartelle" name="Input panel">
 	<tab_container name="tabs">
 		<panel label="Rete" name="tab-conn">
 			<text name="Maximum bandwidth">
@@ -23,7 +23,7 @@
 				Browser web:
 			</text>
 			<radio_group name="preferred_browser_behavior">
-				<radio_item label="Usa il mio browser (Chrome, Firefox, IE) per tutti i link" name="new_external" tool_tip="Usa il browser di sistema per l&apos;aiuto, i link eccetera. Non raccomandato se si lavora a schermo intero."/>
+				<radio_item label="Usa il mio browser (Chrome, Firefox, Edge...) per tutti i link" name="new_external" tool_tip="Usa il browser di sistema per l&apos;aiuto, i link eccetera. Non raccomandato se si lavora a schermo intero."/>
 				<radio_item label="Usa il browser interno per i link di Second Life" name="new_internal" tool_tip="Usa il browser di sistema per l&apos;aiuto, i link eccetera. Il browser interno verrà usato solo per il link LindenLab/SecondLife." />
 				<radio_item label="Usa il browser interno per tutti i link" name="new_internal_all"/>
 			</radio_group>
@@ -37,14 +37,19 @@
 				<combo_box.item label="Dieci finestre" name="web_10"/>
 			</combo_box>
 			<button label="Cancella cache browser" name="ClearWebBrowserCache"/>
-			<check_box label="Accetta cookie" name="cookies_enabled"/>
 			<check_box label="Abilita Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Consenti pop-up nel browser" name="media_popup_enabled"/>
-			<button label="Regola impostazioni proxy" label_selected="Regola impostazioni proxy" name="set_proxy"/>
+			<button label="Regola Impostazioni Proxy" label_selected="Regola Impostazioni Proxy" name="set_proxy"/>
+			<text name="home_page_label_l">
+				Homepage del browser interno al viewer:
+			</text>
 		</panel>
 		<panel label="Cartelle" name="tab-dir">
 			<text name="cache_size_label_l">
 				Dimensioni cache ([https://wiki.firestormviewer.org/cache serve un consiglio?]):
+			</text>
+			<text name="asset_cache_size_label_l">
+				Dimensione cache delle risorse:
 			</text>
 			<button label="Cancella cache inventario" name="ClearInventoryCache" left="350" width="150"/>
 			<text name="Cache location">

@@ -19,6 +19,7 @@
 			<check_box name="FSMarkObjects" label="Per non confondere, segna oggetti con (no name) quando parlano"/>
 			<check_box label="Riporta llOwnerSay alla finestra debug degli script" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
 			<check_box label="Mostra chat in nuvoletta sopra l&apos;avatar" name="bubble_text_chat"/>
+			<check_box label="Non mostrare chat nella console della Chat Locale" name="FSBubblesHideConsoleAndToasts" />
 			<check_box label="Mostra &apos;Sta scrivendo&apos; in nuvoletta sopra l&apos;avatar" name="bubble_text_typing"/>
 			<check_box label="Mostra &apos;Sta scrivendo&apos; col nome sopra l&apos;avatar" name="FSShowTypingStateInNameTag"/>
 			<check_box name="FSSecondsinChatTimestamps" label="Inserisci secondi negli orari [OO:MM:SS]"/>
@@ -34,12 +35,11 @@
 			<text name="text_box4">
 				(secondi)
 			</text>
-			<spinner name="max_chat_count"/>
 			<text name="text_box5">
 				(righe)
 			</text>
 		</panel>
-		<panel label="Finestre chat" name="ChatWindows">
+		<panel label="Finestre Chat" name="ChatWindows">
 			<text name="font_size" width="180">
 				Dimensione font finestra chat:
 			</text>
@@ -55,7 +55,7 @@
 			<check_box label="Mostra fine conversazione precedente" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Aggiungi altro &gt; alle sessioni IM"/>
 			<text name="show_unread_messages_label">
-				 Notifica nuovi messaggi per:
+				Notifica nuovi messaggi per:
 			</text>
 			<check_box name="FSNotifyUnreadChatMessages" label="Chat locale" tool_tip="Mostra una notifica con i numero dei messaggi non letti nella chat locale se i messaggi arrivano quando la finestra chat è scorsa all&apos;indietro per leggere i messaggi precedenti."/>
 			<check_box name="FSNotifyUnreadIMMessages" label="IM e IM di gruppo" tool_tip="Mostra una notifica con i numero dei messaggi non letti nella finestra IM/gruppo se i messaggi arrivano quando la finestra chat è scorsa all&apos;indietro per leggere i messaggi precedenti."/>
@@ -77,7 +77,7 @@
 				<radio_item label="Verticale" name="radio_vertical"/>
 			</radio_group>
 			<text name="req_restart_chattabs">
-				 (richiede riavvio)
+				(richiede riavvio)
 			</text>
 			<text name="FSIMTabNameFormat_label" width="170">
 				Formato nomi per linguette IM:
@@ -93,27 +93,27 @@
 				Nomi:
 			</text>
 			<combo_box name="mod_name_style">
-			<combo_box.item label="Normale" name="normal"/>
-			<combo_box.item label="Grassetto" name="BOLD"/>
-			<combo_box.item label="Corsivo" name="ITALIC"/>
-			<combo_box.item label="Grassetto &amp; corsivo" name="BOLDITALIC"/>
-			<combo_box.item label="Sottolineato" name="UNDERLINE"/>
-			<combo_box.item label="Grassetto &amp; sottolineato" name="BOLDUNDERLINE"/>
-			<combo_box.item label="Corsivo &amp; sottolineato" name="ITALICUNDERLINE"/>
-			<combo_box.item label="Grassetto, corsivo &amp; sottolineato" name="BOLDITALICUNDERLINE"/>
+				<combo_box.item label="Normale" name="normal"/>
+				<combo_box.item label="Grassetto" name="BOLD"/>
+				<combo_box.item label="Corsivo" name="ITALIC"/>
+				<combo_box.item label="Grassetto &amp; corsivo" name="BOLDITALIC"/>
+				<combo_box.item label="Sottolineato" name="UNDERLINE"/>
+				<combo_box.item label="Grassetto &amp; sottolineato" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Corsivo &amp; sottolineato" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Grassetto, corsivo &amp; sottolineato" name="BOLDITALICUNDERLINE"/>
 			</combo_box>
 			<text name="Moderator Text Style">
 				Testo:
 			</text>
 			<combo_box name="mod_text_style">
-			<combo_box.item label="Normale" name="normal"/>
-			<combo_box.item label="Grassetto" name="BOLD"/>
-			<combo_box.item label="Corsivo" name="ITALIC"/>
-			<combo_box.item label="Grassetto &amp; corsivo" name="BOLDITALIC"/>
-			<combo_box.item label="Sottolineato" name="UNDERLINE"/>
-			<combo_box.item label="Grassetto &amp; sottolineato" name="BOLDUNDERLINE"/>
-			<combo_box.item label="Corsivo &amp; sottolineato" name="ITALICUNDERLINE"/>
-			<combo_box.item label="Grassetto, corsivo &amp; sottolineato" name="BOLDITALICUNDERLINE"/>
+				<combo_box.item label="Normale" name="normal"/>
+				<combo_box.item label="Grassetto" name="BOLD"/>
+				<combo_box.item label="Corsivo" name="ITALIC"/>
+				<combo_box.item label="Grassetto &amp; corsivo" name="BOLDITALIC"/>
+				<combo_box.item label="Sottolineato" name="UNDERLINE"/>
+				<combo_box.item label="Grassetto &amp; sottolineato" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Corsivo &amp; sottolineato" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Grassetto, corsivo &amp; sottolineato" name="BOLDITALICUNDERLINE"/>
 			</combo_box>
 			<check_box name="FSMuteAllGroups" label="Disabilita tutte le chat di gruppo"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Quando si disabilita &apos;Ricevi notizie di gruppo&apos; disabilita anche la chat di gruppo"/>
@@ -169,7 +169,13 @@
 			</text>
 			<spinner tool_tip="-1 tutto, 0 niente" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Apri finestra conversazioni quando ci sono messaggi offline"/>
-			<check_box label="Manda IM per Email se offline ([EMAIL])" name="send_im_to_email" />
+			<check_box label="Invia IM alla mia Email quando sono offline ([EMAIL])" name="send_im_to_email" />
+			<text name="email_settings">
+				[https://accounts.secondlife.com/change_email Apri le impostazioni per le e-mail di notifica degli IM offline]
+			</text>
+			<text name="email_settings_login_to_change">
+				Accedi per modificare le impostazioni e-mail per gli IM offline
+			</text>
 			<check_box name="FSShowIMInChatHistory" label="Mostra IM nella finestra chat locale"/>
 			<check_box name="FSLogIMInChatHistory" label="Salva IM nella chat locale"/>
 			<text name="FSIMChatHistoryFade_label">
@@ -185,7 +191,7 @@
 			<check_box name="FSGroupNoticesToIMLog" label="Mostra notifiche di gruppo nella chat di gruppo oltre che con messaggio a scomparsa"/>
 			<check_box name="FSBetterGroupNoticesToIMLog" label="Mostra anche argomento ed autore"/>
 		</panel>
-		<panel label="Radar" name="ChatRadar" >
+		<panel label="Radar" name="ChatRadar">
 			<check_box name="reportChatRangeEnter" label="Segnala quando gli avatar entrano in zona chat"/>
 			<check_box name="PlayModeUISndRadarChatEnter" label="Suona UUID:"/>
 			<button name="Prev_UISndRadarChatEnter" label="S" tool_tip="Anteprima suono."/>
@@ -228,7 +234,7 @@
 			<button name="Prev_UISndRadarAgeAlert" label="S" tool_tip="Anteprima suono."/>
 			<button	 name="Def_UISndRadarAgeAlert" label="R" tool_tip="Ripristina suono predefinito."/>
 		</panel>
-		<panel label="Parole chiave" name="ChatKeywordAlerts">
+		<panel label="Parole Chiave" name="ChatKeywordAlerts">
 			<check_box name="FSKeywordOn" label="Abilita segnalazioni su parole chiave"/>
 			<check_box name="FSKeywordInChat" label="Cerca parole nella chat locale"/>
 			<check_box name="FSKeywordInIM" label="Cerca parole negli IM e nelle chat di gruppo"/>
@@ -247,7 +253,7 @@
 			<button name="Prev_UISndFSKeywordSound" label="S" tool_tip="Anteprima suono."/>
 			<button name="Def_UISndFSKeywordSound" label="R" tool_tip="Ripristina suono predefinito."/>
 		</panel>
-		<panel label="Riga di comando" name="tab-CmdLine" >
+		<panel label="Riga di Comando" name="tab-CmdLine" >
 			<check_box label="Abilita comandi dalla barra chat" name="chat_cmd_toggle"/>.
 			<text name="FSCmdLineCalc_txt">
 				Calcola espressione (uso: cmd SIN(2+2))

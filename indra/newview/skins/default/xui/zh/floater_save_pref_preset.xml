@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Save Pref Preset" title="儲存偏好預設">
-	<string name="title_graphic">
-		儲存顯示預設
-	</string>
-	<string name="title_camera">
-		儲存攝影機預設
-	</string>
+<floater name="save_pref_preset" title="儲存偏好預設">
 	<text name="Preset">
 		輸入預設名稱，或選擇一組現有預設。
 	</text>

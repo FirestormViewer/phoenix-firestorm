@@ -7,24 +7,24 @@
 		<layout_panel name="lp_friend_list">
 			<fs_scroll_list name="friend_list">
 				<fs_scroll_list.column name="icon_online_status" tool_tip="Stato online"/>
-				<fs_scroll_list.column label="Nome utente" name="user_name" tool_tip="Nome utente"/>
-				<fs_scroll_list.column label="Nome visibile" name="display_name" tool_tip="Nome visualizzato del contatto."/>
-				<fs_scroll_list.column label="Nome intero" name="full_name" tool_tip="Nome scelto dal contatto."/>
-				<fs_scroll_list.column name="icon_visible_online" tool_tip="Un amico può vedere se sei online/offline"/>
+				<fs_scroll_list.column label="Nome Utente" name="user_name" tool_tip="Nome utente"/>
+				<fs_scroll_list.column label="Nome Mostrato" name="display_name" tool_tip="Nome mostrato del contatto"/>
+				<fs_scroll_list.column label="Nome Completo" name="full_name" tool_tip="Nome utente + Nome mostrato (se impostato)"/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="il tuo amico può vedere se sei online/offline"/>
 				<fs_scroll_list.column name="icon_visible_map" tool_tip="Il tuo amico ti può trovare sulla mappa"/>
-				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Il tuo amico può modificare, cancellare, o prendere i tuoi oggetti"/>
-				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Lo puoi visualizzare sulla mappa"/>
-				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="È possibile modificare gli oggetti di un amico"/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Il tuo amico può modificare, cancellare e prendere i tuoi oggetti"/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Puoi trovare il tuo amico sulla mappa"/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Puoi modificare, cancellare e prendere gli oggetti del tuo amico"/>
 			</fs_scroll_list>
 		</layout_panel>
 	</layout_stack>
-	<button name="im_btn" label="IM/Chiama" tool_tip="Apri una conversazione privata (Instant message/IM)"/>
+	<button label="IM / Chiama" name="im_btn" tool_tip="Inizia una conversazione privata (IM = Instant Message)"/>
 	<button label="Profilo" name="profile_btn" tool_tip="Apri il profilo dell'amico selezionato"/>
-	<button name="offer_teleport_btn" label="Offri TP" tool_tip="Offri teleport all'amico selezionato"/>
-	<button label="Mappa..." name="map_btn" tool_tip="Mostra posizione dell'amico sulla mappa" />
-	<button label="Paga..." name="pay_btn" tool_tip="Paga L$ ad un amico"/>
-	<button label="Rimuovi..." name="remove_btn" tool_tip="Rimuovi l'amico selezionato dalla tua lista"/>
-	<button label="Aggiungi..." name="add_btn" tool_tip="Chiedi ad un residente se vuole essere tuo amico"/>
+	<button label="Offri TP" name="offer_teleport_btn" tool_tip="Offri teleport all'amico selezionato"/>
+	<button label="Mappa" name="map_btn" tool_tip="Mostra posizione dell'amico sulla mappa" />
+	<button label="Paga" name="pay_btn" tool_tip="Paga L$ all'amico selezionato"/>
+	<button label="Rimuovi" name="remove_btn" tool_tip="Rimuovi l'amico selezionato dalla tua lista"/>
+	<button label="Aggiungi..." name="add_btn" tool_tip="Manda una richiesta di amicizia ad un residente"/>
 	<text name="friend_count">
 		Amici: [COUNT] 
 	</text>

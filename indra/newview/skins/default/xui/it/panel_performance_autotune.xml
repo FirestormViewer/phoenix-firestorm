@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_performance_autotune">
-	<text name="back_lbl">
+	<text name="back_lbl" width="60">
 		Indietro
 	</text>
 	<text name="settings_title">

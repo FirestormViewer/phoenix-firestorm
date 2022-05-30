@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Load Pref Preset" title="CHARGER LE PRÉRÉGLAGE PRÉF.">
+<floater name="load_pref_preset" title="CHARGER LE PRÉRÉGLAGE PRÉF.">
 	<string name="title_graphic">
 		Charger le préréglage de graphique
 	</string>

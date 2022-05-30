@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="media_settings" title="Impostazioni media">
+<floater name="media_settings" title="Impostazioni Media">
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 	<button label="Applica" label_selected="Applica" name="Apply"/>
 </floater>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="whitelist_entry" title="Aggiungi alla lista bianca">
+<floater name="whitelist_entry" title="Aggiungi all'elenco dei consentiti">
 	<text name="media_label">
-		Inserisci un URL o una configurazione URL da aggiungere alla lista dei domini permessi
+		Inserisci un dominio o un URL da aggiungere all'elenco dei consentiti
 	</text>
-	<line_editor name="whitelist_entry" tool_tip="Inserisci un URL o una configurazione URL alla lista bianca"/>
+	<line_editor name="whitelist_entry" tool_tip="Inserisci un dominio o un URL da aggiungere all'elenco dei domini consentiti"/>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>
