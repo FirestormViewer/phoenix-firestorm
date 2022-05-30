@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="quickprefs" title="Preferenze">
+<floater name="quickprefs" title="Preferenze Rapide">
 	<panel name="quickprefs">
 		<layout_stack name="wl_options_stack">
 			<layout_panel name="wl_options_panel">
@@ -13,20 +13,20 @@
 					Max complessità:
 				</text>
 				<text name="IndirectMaxComplexityText">
-					Ness. limite
+					No limiti
 				</text>
 				<text name="WL Sky" tool_tip="Preset ambiente per il cielo">
-					Am. cielo:
+					Cielo:
 				</text>
 				<text name="WL Water" tool_tip="Preset ambiente per l&apos;acqua">
-					Am. acqua:
+					Acqua:
 				</text>
-				<text name="Day Cycle" tool_tip="Preset ambiente per il ciclo giornaliero">
-					Ciclo:
+				<text name="Day Cycle" tool_tip="Preset ambiente per il ciclo giornata">
+					Giornata:
 				</text>
-				<icon name="SkyDayCycle" tool_tip="Cambia l&apos;ora del giorno"/>
-				<button name="ResetToRegionDefault" tool_tip="Ripristina le impostazioni della regione" />
-				<button name="button_edit" tool_tip="Clic per modificare il controlli del pannello" control_name="QuickPrefsEditMode"/>
+				<button name="btn_personal_lighting" label="Illuminazione Personalizzata" />
+				<button name="ResetToRegionDefault" tool_tip="Ripristina le impostazioni dell'ambiente condiviso" />
+				<button name="button_edit" tool_tip="Clic per modificare il controlli del pannello" />
 			</layout_panel>
 		</layout_stack>
 	</panel>

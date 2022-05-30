@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<floater name="floater_avatar_render_settings" title="Impostazioni resa avatar">
+<floater name="floater_avatar_render_settings" title="Impostazioni Resa Avatar">
 	<string name="av_never_render" value="Mai"/>
 	<string name="av_always_render" value="Sempre"/>
 	<filter_editor label="Filtra persone" name="people_filter_input"/>

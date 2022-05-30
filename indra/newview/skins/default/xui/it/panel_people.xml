@@ -37,7 +37,7 @@ Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa
 		Online ([ONLINE])
 	</panel.string>
 	<tab_container name="tabs">
-		<panel label="Nelle vicinanze" name="nearby_panel">
+		<panel label="Nelle Vicinanze" name="nearby_panel">
 			<panel name="nearby_buttons_panel">
 				<filter_editor label="Filtro persone" name="nearby_filter_input"/>
 				<button name="gear_btn" tool_tip="Azioni per la persona selezionata"/>
@@ -52,7 +52,7 @@ Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa
 				<button name="gear_btn" tool_tip="Azioni per la persona selezionata:"/>
 				<menu_button name="friends_view_btn" tool_tip="Opzioni mostra/ordina"/>
 				<button name="friends_add_btn" tool_tip="Offri amicizia a un residente"/>
-				<button name="GlobalOnlineStatusToggle" tool_tip="Commuta visibilità online"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Commuta visibilitÃ  online"/>
 				<dnd_button name="friends_del_btn" tool_tip="Rimuovi la persona selezionata dagli amici"/>
 			</panel>
 			<tab_container name="friends_accordion">
@@ -85,7 +85,7 @@ Stai cercando persone da frequentare? Prova la [secondlife:///app/worldmap Mappa
 		<panel label="Bloccati" name="blocked_panel">
 			<panel label="Residenti e oggetti bloccati" name="panel_block_list_sidetray"/>
 		</panel>
-		<panel label="Set contatti" name="contact_sets_panel">
+		<panel label="Set Contatti" name="contact_sets_panel">
 			<panel name="panel_people_contacts_sidetray" label="Set contatti"/>
 		</panel>
 	</tab_container>

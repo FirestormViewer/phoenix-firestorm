@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="Pulsanti barra strumenti">
+<floater name="Toybox" title="Pulsanti Barra Strumenti">
 	<text name="toybox label 1">
 		Aggiungere o rimuovere pulsanti trascinandoli dentro o fuori dalle barre strumenti.
 	</text>

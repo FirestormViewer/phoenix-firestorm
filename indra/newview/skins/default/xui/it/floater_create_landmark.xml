@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="create_landmark" title="Crea Segnaposto">
+	<string name="favorites_bar">
+		Barra dei preferiti
+	</string>
+	<text name="title_label" value="Dettagli segnaposto" />
+	<text name="name_label" value="Nome:" />
+	<text name="folder_label" value="Salva segnaposto in:" />
+	<text name="new_folder_textbox">
+		[secondlife:/// Crea nuova cartella]
+	</text>
+	<text name="notes_label" value="Note:" />
+	<button label="Annulla" name="cancel_btn" />
+</floater>

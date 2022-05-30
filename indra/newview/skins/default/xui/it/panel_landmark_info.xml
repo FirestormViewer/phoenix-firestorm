@@ -6,16 +6,13 @@
 	<string name="unknown" value="(sconosciuto)"/>
 	<string name="public" value="(pubblico)"/>
 	<string name="server_update_text">
-		Informazioni sul luogo non disponibili senza l&apos;aggiornamento del server.
+		Informazioni sul luogo non disponibili senza l'aggiornamento del server.
 	</string>
 	<string name="server_error_text">
 		Informazioni su questo luogo non disponibili al momento, riprova più tardi.
 	</string>
 	<string name="server_forbidden_text">
 		Informazioni su questo luogo non disponibili a causa delle limitazioni di accesso.  Controlla i tuoi permessi con il proprietario del terreno.
-	</string>
-	<string name="acquired_date">
-		[wkday,datetime,slt] [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</string>
 	<string name="information_text">
 		Traffico: [TRAFFIC] Area: [AREA] m²
@@ -26,19 +23,23 @@
 			<text name="title" value="Profilo del luogo"/>
 		</layout_panel>
 		<layout_panel name="place_info_content">
-			<text name="maturity_value" value="ignoto"/>
+			<text name="parcel_title" value="sconosciuto" />
+			<text name="maturity_value" value="sconosciuto"/>
+			<text name="parcel_owner_label" value="Proprietario:" width="70" />
+			<text name="parcel_owner" value="sconosciuto" />
 			<panel name="description_panel">
 				<expandable_text name="description" value="(caricamento...)"/>
 			</panel>
 			<panel name="landmark_info_panel">
-				<text name="owner_label" value="Proprietario:" width="130"/>
+				<text name="owner_label" value="Proprietario:" width="70"/>
 				<text name="creator_label" value="Creatore:"/>
-				<text name="created_label" value="Creato:"/>
+				<text name="created_label" value="Data:"/>
 			</panel>
 			<panel name="landmark_edit_panel">
 				<text name="title_label" value="Titolo:"/>
 				<text name="notes_label" value="Note:"/>
 				<text name="folder_label" value="Posizione:"/>
+				<button label="Modifica" name="edit_btn" tool_tip="Modifica le informazioni del segnaposto" />
 			</panel>
 		</layout_panel>
 	</layout_stack> 

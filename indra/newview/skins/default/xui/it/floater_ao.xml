@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="animation_overrider" title="Animatore (AO)">
+<floater name="animation_overrider" title="AO">
 	<floater.string name="ao_no_sets_loaded">Nessun AO caricato</floater.string>
 	<floater.string name="ao_no_animations_loaded">Nessuna animazione caricata</floater.string>
 	<floater.string name="ao_dnd_only_on_full_interface">Trascinare una annotazione AO sulla finestra centrale. Clic su ingranaggio per aprirla.</floater.string>

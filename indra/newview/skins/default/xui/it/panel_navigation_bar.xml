@@ -3,27 +3,27 @@
 	<layout_stack name="navigation_favorites_bar_visibility_stack">
 		<layout_panel name="navigation_bar_visibility_panel">
 			<layout_stack name="location_search_layout">
-				<layout_panel name="navigation_buttons_visibility_panel" right="225">
+				<layout_panel name="navigation_buttons_visibility_panel" right="265">
 					<pull_button name="back_btn" tool_tip="Torna al luogo precendente"/>
 					<pull_button name="forward_btn" tool_tip="Vai al luogo seguente"/>
 					<button name="home_btn" tool_tip="Teleport a casa"/>
-					<button name="About_Land" label="Terreno" tool_tip="Apre le informazioni sul terreno" width="60"/>
-					<button name="Sky" label="Cielo" tool_tip="Apre la finestra di modifica del cielo" width="45"/>
+					<button name="About_Land" label="Terreno" tool_tip="Mostra finestra delle informazioni sul terreno" width="55"/>
+					<button name="PersonalLighting" label="Illuminazione" tool_tip="Mostra finestra di illuminazione personalizzata" width="90"/>
 				</layout_panel>
 				<layout_panel name="location_bar_visibility_panel">
 					<location_input label="Posizione" name="location_combo"/>
 				</layout_panel>
 				<layout_panel name="search_bar_visibility_panel">
 					<search_combo_box label="Cerca" name="search_combo_box" tool_tip="Cerca">
-						<combo_editor label="Cerca [CURRENT_GRID]" name="search_combo_editor"/>
+						<combo_editor label="Cerca (MetaVerse)" name="search_combo_editor"/>
 					</search_combo_box>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="favorites_bar_visibility_panel">
-			<favorites_bar name="favorite" tool_tip="Trascina qui i segnaposto per un accesso rapido ai tuoi posti preferiti in Second Life.">
-				<label name="favorites_bar_label" tool_tip="Trascina qui i segnaposto per un accesso rapido ai tuoi posti preferiti in Second Life.">
-					Barra preferiti
+			<favorites_bar name="favorite" tool_tip="Trascina qui i segnaposto per un accesso rapido ai tuoi luoghi preferiti in Second Life">
+				<label name="favorites_bar_label" tool_tip="Trascina qui i segnaposto per un accesso rapido ai tuoi luoghi preferiti in Second Life">
+					Barra Preferiti
 				</label>
 				<chevron_button name="more_btn" tool_tip="Mostra altri preferiti"/>
 			</favorites_bar>

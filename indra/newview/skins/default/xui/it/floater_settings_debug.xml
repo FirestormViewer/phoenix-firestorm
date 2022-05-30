@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings_debug" title="Parametri di debug">
+<floater name="settings_debug" title="Debug Impostazioni">
 	<panel name="debug_settings_search_panel">
 		<search_editor label="Cerca qui" name="search_settings_input" tool_tip="Scrivi i termini che stai cercando. Verranno mostrate anche corrispondenze parziali sul nome o sul commento dell&apos;impostazione."/>
 	</panel>
