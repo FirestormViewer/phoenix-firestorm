@@ -118,6 +118,12 @@
 			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
 			<button label="Permissions de création par défaut" name="fs_default_creation_permissions"/>
 			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>
+			<combo_box name="FSScriptingFontName" tool_tip="Nom de la police utilisée dans l'éditeur de script LSL" />
+			<combo_box name="FSScriptingFontSize" tool_tip="Taille de la police utilisée dans l'éditeur de script LSL">
+				<combo_item name="Small" label="Petite"/>
+				<combo_item name="Medium" label="Moyenne"/>
+				<combo_item name="Large" label="Grande"/>
+			</combo_box>
 			<check_box label="Activer le préprocesseur LSL" tool_tip="Quand coché, le préprocesseur LSL est activé." name="preproc_checkbox"/>
 			<check_box label="Optimiser" tool_tip="Quand coché, le préprocesseur LSL optimisera la place que prennent les scripts." name="preprocoptimizer_checkbox"/>
 			<check_box label="Condition switch()" left_delta="80" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation de la condition switch() pour le contrôle de flux de scripts." name="preprocswitch_checkbox"/>
