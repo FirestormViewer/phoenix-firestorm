@@ -133,7 +133,6 @@
 // <FS:Ansariel> [FS Login Panel]
 #include "llmutelist.h"
 #include "llavatarpropertiesprocessor.h"
-#include "llpanelpick.h"
 #include "llpanelgrouplandmoney.h"
 #include "llpanelgroupnotices.h"
 #include "llparcel.h"
@@ -202,6 +201,7 @@
 #include "llavatariconctrl.h"
 #include "llvoicechannel.h"
 #include "llpathfindingmanager.h"
+#include "llremoteparcelrequest.h"
 // [RLVa:KB] - Checked: RLVa-1.2.0
 #include "rlvhandler.h"
 // [/RLVa:KB]

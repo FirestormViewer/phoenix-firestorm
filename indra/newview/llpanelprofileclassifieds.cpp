@@ -2,9 +2,9 @@
  * @file llpanelprofileclassifieds.cpp
  * @brief LLPanelProfileClassifieds and related class implementations
  *
- * $LicenseInfo:firstyear=2009&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2022, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,7 @@
 #include "llcommandhandler.h" // for classified HTML detail page click tracking
 #include "llcorehttputil.h"
 #include "lldispatcher.h"
+#include "llfloaterclassified.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llfloaterworldmap.h"
@@ -148,15 +149,19 @@ public:
             {
                 LLSD params;
                 params["id"] = c_info->creator_id;
-                params["open_tab_name"] = "panel_picks";
-                params["show_tab_panel"] = "classified_details";
                 params["classified_id"] = c_info->classified_id;
                 params["classified_creator_id"] = c_info->creator_id;
                 params["classified_snapshot_id"] = c_info->snapshot_id;
                 params["classified_name"] = c_info->name;
                 params["classified_desc"] = c_info->description;
                 params["from_search"] = true;
-                LLFloaterSidePanelContainer::showPanel("picks", params);
+
+                LLFloaterClassified* floaterp = LLFloaterReg::getTypedInstance<LLFloaterClassified>("classified", params);
+                if (floaterp)
+                {
+                    floaterp->openFloater(params);
+                    floaterp->setVisibleAndFrontmost();
+                }
             }
         }
     }
@@ -295,11 +300,11 @@ void LLPanelProfileClassifieds::onClickDelete()
     {
         LLUUID classified_id = classified_panel->getClassifiedId();
         LLSD args;
-        args["PICK"] = classified_panel->getClassifiedName();
+        args["CLASSIFIED"] = classified_panel->getClassifiedName();
         LLSD payload;
         payload["classified_id"] = classified_id;
         payload["tab_idx"] = mTabContainer->getCurrentPanelIndex();
-        LLNotificationsUtil::add("DeleteAvatarPick", args, payload,
+        LLNotificationsUtil::add("ProfileDeleteClassified", args, payload,
             boost::bind(&LLPanelProfileClassifieds::callbackDeleteClassified, this, _1, _2));
     }
 }
@@ -428,6 +433,32 @@ void LLPanelProfileClassifieds::updateData()
     }
 }
 
+bool LLPanelProfileClassifieds::hasNewClassifieds()
+{
+    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    {
+        LLPanelProfileClassified* classified_panel = dynamic_cast<LLPanelProfileClassified*>(mTabContainer->getPanelByIndex(tab_idx));
+        if (classified_panel && classified_panel->isNew())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool LLPanelProfileClassifieds::hasUnsavedChanges()
+{
+    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    {
+        LLPanelProfileClassified* classified_panel = dynamic_cast<LLPanelProfileClassified*>(mTabContainer->getPanelByIndex(tab_idx));
+        if (classified_panel && classified_panel->isDirty()) // includes 'new'
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool LLPanelProfileClassifieds::canAddNewClassified()
 {
     return (mTabContainer->getTabCount() < MAX_AVATAR_CLASSIFIEDS);
@@ -438,7 +469,7 @@ bool LLPanelProfileClassifieds::canDeleteClassified()
     return (mTabContainer->getTabCount() > 0);
 }
 
-void LLPanelProfileClassifieds::apply()
+void LLPanelProfileClassifieds::commitUnsavedChanges()
 {
     if (getIsLoaded())
     {
@@ -730,6 +761,7 @@ void LLPanelProfileClassified::processProperties(void* data, EAvatarProcessorTyp
     {
         // see LLPanelProfileClassified::sendUpdate() for notes
         mIsNewWithErrors = false;
+        mIsNew = false;
 
         setClassifiedName(c_info->name);
         setDescription(c_info->description);
@@ -802,7 +834,10 @@ void LLPanelProfileClassified::updateButtons()
     mTeleportBtnCnt->setVisible(!edit_mode);
     mMapBtnCnt->setVisible(!edit_mode);
     mEditBtnCnt->setVisible(!edit_mode);
-    mCancelBtnCnt->setVisible(edit_mode);
+
+    // cancel button should either delete unpublished
+    // classified or not be there at all
+    mCancelBtnCnt->setVisible(edit_mode && !mIsNew);
     mSaveBtnCnt->setVisible(edit_mode);
     mEditButton->setVisible(!edit_mode && getSelfProfile());
 }

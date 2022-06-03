@@ -18,8 +18,11 @@ Online
 Offline
     </string>
    <string 
-    name="AgeFormat">
-      Born on: [REG_DATE]
+    name="name_date_format"
+    value="[NAME], [mth,datetime,slt] [day,datetime,slt], [year,datetime,slt]" />
+   <string
+    name="age_format">
+        Born on: [REG_DATE]
 ([AGE])
    </string>
    <string
@@ -122,7 +125,7 @@ Account: [ACCTTYPE]
            layout="topleft"/>
           
           <text
-           name="user_name"
+           name="user_name_date"
            value="(loading...)"
            top_pad="0"
            left_delta="0"
@@ -159,6 +162,7 @@ Account: [ACCTTYPE]
            follows="left|top|right"
            layout="topleft"
            animate="false"
+           border_size="0"
            orientation="vertical">
             <layout_panel
              name="partner_layout"
@@ -183,7 +187,96 @@ Account: [ACCTTYPE]
                use_ellipses="true"
                visible="true"/>
             </layout_panel>
-
+            <!-- Not in a million years!
+            <layout_panel
+             name="spacer_layout"
+             follows="all"
+             layout="topleft"
+             height="14"
+             auto_resize="false"
+             user_resize="false"
+             visible="true">
+            </layout_panel>
+            <layout_panel
+             name="frind_layout"
+             follows="all"
+             layout="topleft"
+             height="16"
+             auto_resize="false"
+             user_resize="false"
+             visible="false">
+              <text
+               name="frind_text"
+               value="You are friends"
+               text_color="ConversationFriendColor"
+               top="0"
+               left="0"
+               right="-1"
+               height="16"
+               follows="left|top|right"
+               layout="topleft"
+               translate="false"
+               visible="true"/>
+            </layout_panel>
+            <layout_panel
+             name="online_layout"
+             follows="all"
+             layout="topleft"
+             height="16"
+             auto_resize="false"
+             user_resize="false"
+             visible="false">
+              <icon
+               name="online_icon"
+               image_name="Profile_Friend_Online"
+               layout="topleft"
+               follows="left|top"
+               top="0"
+               left="0"
+               height="10"
+               width="10"/>
+              <text
+               name="online_text"
+               value="Online"
+               top="0"
+               left="13"
+               right="-1"
+               height="16"
+               follows="left|top|right"
+               layout="topleft"
+               translate="false"
+               visible="true"/>
+            </layout_panel>
+            <layout_panel
+             name="offline_layout"
+             follows="all"
+             layout="topleft"
+             height="16"
+             auto_resize="false"
+             user_resize="false"
+             visible="false">
+              <icon
+               name="offline_icon"
+               image_name="Profile_Friend_Offline"
+               layout="topleft"
+               follows="left|top"
+               top="0"
+               left="0"
+               height="10"
+               width="10"/>
+              <text
+               name="offline_text"
+               value="Offline"
+               top="0"
+               left="13"
+               right="-1"
+               height="16"
+               follows="left|top|right"
+               layout="topleft"
+               translate="false"
+               visible="true"/>
+            </layout_panel>
+            -->
             <layout_panel
              name="account_layout"
              follows="all"
@@ -250,7 +343,7 @@ Account: [ACCTTYPE]
          user_resize="false">
 
           <icon
-           tool_tip="Can see online status"
+           tool_tip="Friend can see my online status"
            mouse_opaque="true"
            name="can_see_online"
            image_name="Profile_Perm_Online_Enabled"
@@ -263,7 +356,7 @@ Account: [ACCTTYPE]
            left_pad="2" />
           
           <icon
-           tool_tip="Can not see online status"
+           tool_tip="Friend can not see my online status"
            mouse_opaque="true"
            name="cant_see_online"
            image_name="Profile_Perm_Online_Disabled"
@@ -276,7 +369,7 @@ Account: [ACCTTYPE]
            left_pad="2" />
 
           <icon
-           tool_tip="Can see on map"
+           tool_tip="Friend can see me on map"
            mouse_opaque="true"
            name="can_see_on_map"
            image_name="Profile_Perm_Find_Enabled"
@@ -289,7 +382,7 @@ Account: [ACCTTYPE]
            left_pad="2" />
 
           <icon
-           tool_tip="Can not see on map"
+           tool_tip="Friend can not see me on map"
            mouse_opaque="true"
            name="cant_see_on_map"
            image_name="Profile_Perm_Find_Disabled"
@@ -302,7 +395,7 @@ Account: [ACCTTYPE]
            left_pad="2" />
 
           <icon
-           tool_tip="Can edit my objects"
+           tool_tip="Friend can edit my objects"
            mouse_opaque="true"
            name="can_edit_objects"
            image_name="Profile_Perm_Objects_Enabled"
@@ -315,7 +408,7 @@ Account: [ACCTTYPE]
            left_pad="2" />
 
           <icon
-           tool_tip="Can not edit my objects"
+           tool_tip="Friend can not edit my objects"
            mouse_opaque="true"
            name="cant_edit_objects"
            image_name="Profile_Perm_Objects_Disabled"

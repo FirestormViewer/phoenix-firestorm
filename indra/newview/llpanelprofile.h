@@ -2,9 +2,9 @@
 * @file llpanelprofile.h
 * @brief Profile panel
 *
-* $LicenseInfo:firstyear=2009&license=viewerlgpl$
+* $LicenseInfo:firstyear=2022&license=viewerlgpl$
 * Second Life Viewer Source Code
-* Copyright (C) 2010, Linden Research, Inc.
+* Copyright (C) 2022, Linden Research, Inc.
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -76,33 +76,36 @@ public:
 	LLPanelProfileSecondLife();
 	/*virtual*/ ~LLPanelProfileSecondLife();
 
-	/*virtual*/ void onOpen(const LLSD& key);
+	void onOpen(const LLSD& key) override;
 
 	/**
 	 * LLFriendObserver trigger
 	 */
-	virtual void changed(U32 mask);
+	void changed(U32 mask) override;
 
 	// Implements LLVoiceClientStatusObserver::onChange() to enable the call
 	// button when voice is available
-	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
+	void onChange(EStatusType status, const std::string &channelURI, bool proximal) override;
 
-	/*virtual*/ void setAvatarId(const LLUUID& avatar_id);
+	void setAvatarId(const LLUUID& avatar_id) override;
 
-	/*virtual*/ BOOL postBuild();
+	BOOL postBuild() override;
 
 	void resetData();
 
 	/**
 	 * Sends update data request to server.
 	 */
-	/*virtual*/ void updateData();
+	void updateData() override;
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
     void setNotesSnippet(std::string &notes);
     void setProfileImageUploading(bool loading);
     void setProfileImageUploaded(const LLUUID &image_asset_id);
+
+    bool hasUnsavedChanges() override;
+    void commitUnsavedChanges() override;
 
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
@@ -137,7 +140,15 @@ protected:
 	 */
 	void fillAccountStatus(const LLAvatarData* avatar_data);
 
+    /**
+     * Sets permissions specific icon
+     */
     void fillRightsData();
+
+    /**
+     * Fills user name, display name, age.
+     */
+    void fillNameAgeData(const LLAvatarName &av_name, const LLDate &born_on);
 
     void onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep);
     static void onImageLoaded(BOOL success,
@@ -147,8 +158,6 @@ protected:
                               S32 discard_level,
                               BOOL final,
                               void* userdata);
-
-	bool isGrantedToSeeOnlineStatus();
 
 	/**
 	 * Displays avatar's online status if possible.
@@ -163,10 +172,10 @@ protected:
 	 *	- Else: Offline
 	 */
 	void updateOnlineStatus();
-	void processOnlineStatus(bool online);
+	void processOnlineStatus(bool is_friend, bool show_online, bool online);
 
 private:
-    /*virtual*/ void setLoaded();
+    void setLoaded() override;
     void onCommitMenu(const LLSD& userdata);
     bool onEnableMenu(const LLSD& userdata);
     bool onCheckMenu(const LLSD& userdata);
@@ -204,10 +213,12 @@ private:
 
     LLHandle<LLFloater>	mFloaterPermissionsHandle;
 
+    bool				mHasUnsavedDescriptionChanges;
 	bool				mVoiceStatus;
     bool				mWaitingForImageUpload;
     bool				mAllowPublish;
     std::string			mDescriptionText;
+    LLDate				mBornOn;
 
 	boost::signals2::connection	mAvatarNameCacheConnection;
 };
@@ -265,9 +276,9 @@ public:
 	LLPanelProfileFirstLife();
 	/*virtual*/ ~LLPanelProfileFirstLife();
 
-	/*virtual*/ void onOpen(const LLSD& key);
+	void onOpen(const LLSD& key) override;
 
-	/*virtual*/ BOOL postBuild();
+	BOOL postBuild() override;
 
     void processProperties(const LLAvatarData* avatar_data);
 
@@ -276,10 +287,13 @@ public:
     void setProfileImageUploading(bool loading);
     void setProfileImageUploaded(const LLUUID &image_asset_id);
 
+    bool hasUnsavedChanges() override { return mHasUnsavedChanges; }
+    void commitUnsavedChanges() override;
+
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 protected:
-	/*virtual*/ void setLoaded();
+	void setLoaded() override;
 
     void onChangePhoto();
     void onRemovePhoto();
@@ -296,6 +310,7 @@ protected:
     LLButton* mDiscardChanges;
 
 	std::string		mCurrentDescription;
+    bool			mHasUnsavedChanges;
 };
 
 /**
@@ -308,17 +323,20 @@ public:
 	LLPanelProfileNotes();
 	/*virtual*/ ~LLPanelProfileNotes();
 
-	virtual void setAvatarId(const LLUUID& avatar_id);
+	void setAvatarId(const LLUUID& avatar_id) override;
 
-	/*virtual*/ void onOpen(const LLSD& key);
+	void onOpen(const LLSD& key) override;
 
-	/*virtual*/ BOOL postBuild();
+	BOOL postBuild() override;
 
     void processProperties(LLAvatarNotes* avatar_notes);
 
 	void resetData();
 
-	/*virtual*/ void updateData();
+	void updateData() override;
+
+    bool hasUnsavedChanges() override { return mHasUnsavedChanges; }
+    void commitUnsavedChanges() override;
 
 protected:
     void setNotesText(const std::string &text);
@@ -331,6 +349,7 @@ protected:
     LLButton* mDiscardChanges;
 
     std::string		mCurrentNotes;
+    bool			mHasUnsavedChanges;
 };
 
 
@@ -344,17 +363,19 @@ public:
     LLPanelProfile();
     /*virtual*/ ~LLPanelProfile();
 
-    /*virtual*/ BOOL postBuild();
+    BOOL postBuild() override;
 
-    /*virtual*/ void updateData();
+    void updateData() override;
 
-    /*virtual*/ void onOpen(const LLSD& key);
+    void onOpen(const LLSD& key) override;
 
+    void createPick(const LLPickData &data);
     void showPick(const LLUUID& pick_id = LLUUID::null);
     bool isPickTabSelected();
     bool isNotesTabSelected();
-
-    void updateBtnsVisibility();
+    bool hasUnsavedChanges() override;
+    bool hasUnpublishedClassifieds();
+    void commitUnsavedChanges() override;
 
     void showClassified(const LLUUID& classified_id = LLUUID::null, bool edit = false);
 

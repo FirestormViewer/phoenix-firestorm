@@ -2,9 +2,9 @@
 * @file llpanelprofile.cpp
 * @brief Profile panel implementation
 *
-* $LicenseInfo:firstyear=2009&license=viewerlgpl$
+* $LicenseInfo:firstyear=2022&license=viewerlgpl$
 * Second Life Viewer Source Code
-* Copyright (C) 2010, Linden Research, Inc.
+* Copyright (C) 2022, Linden Research, Inc.
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -603,7 +603,7 @@ FSAgentSelfHandler gAgentSelfHandler;
 // </FS:Ansariel>
 
 ///----------------------------------------------------------------------------
-/// LLFloaterInventoryFinder
+/// LLFloaterProfilePermissions
 ///----------------------------------------------------------------------------
 
 class LLFloaterProfilePermissions
@@ -619,14 +619,16 @@ public:
     void changed(U32 mask) override; // LLFriendObserver
 
     void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+    bool hasUnsavedChanges() { return mHasUnsavedPermChanges; }
+
+    void onApplyRights();
 
 private:
     void fillRightsData();
     void rightsConfirmationCallback(const LLSD& notification, const LLSD& response);
     void confirmModifyRights(bool grant);
-    void onCommitRights();
-
-    void onApplyRights();
+    void onCommitSeeOnlineRights();
+    void onCommitEditRights();
     void onCancel();
 
     LLTextBase*         mDescription;
@@ -638,6 +640,7 @@ private:
 
     LLUUID              mAvatarID;
     F32                 mContextConeOpacity;
+    bool                mHasUnsavedPermChanges;
     LLHandle<LLView>    mOwnerHandle;
 
     boost::signals2::connection	mAvatarNameCacheConnection;
@@ -647,6 +650,7 @@ LLFloaterProfilePermissions::LLFloaterProfilePermissions(LLView * owner, const L
     : LLFloater(LLSD())
     , mAvatarID(avatar_id)
     , mContextConeOpacity(0.0f)
+    , mHasUnsavedPermChanges(false)
     , mOwnerHandle(owner->getHandle())
 {
     buildFromFile("floater_profile_permissions.xml");
@@ -670,7 +674,9 @@ BOOL LLFloaterProfilePermissions::postBuild()
     mOkBtn = getChild<LLButton>("perms_btn_ok");
     mCancelBtn = getChild<LLButton>("perms_btn_cancel");
 
-    mEditObjectRights->setCommitCallback([this](LLUICtrl*, void*) { onCommitRights(); }, nullptr);
+    mOnlineStatus->setCommitCallback([this](LLUICtrl*, void*) { onCommitSeeOnlineRights(); }, nullptr);
+    mMapRights->setCommitCallback([this](LLUICtrl*, void*) { mHasUnsavedPermChanges = true; }, nullptr);
+    mEditObjectRights->setCommitCallback([this](LLUICtrl*, void*) { onCommitEditRights(); }, nullptr);
     mOkBtn->setCommitCallback([this](LLUICtrl*, void*) { onApplyRights(); }, nullptr);
     mCancelBtn->setCommitCallback([this](LLUICtrl*, void*) { onCancel(); }, nullptr);
 
@@ -723,7 +729,9 @@ void LLFloaterProfilePermissions::fillRightsData()
     {
         S32 rights = relation->getRightsGrantedTo();
 
-        mOnlineStatus->setValue(LLRelationship::GRANT_ONLINE_STATUS & rights ? TRUE : FALSE);
+        BOOL see_online = LLRelationship::GRANT_ONLINE_STATUS & rights ? TRUE : FALSE;
+        mOnlineStatus->setValue(see_online);
+        mMapRights->setEnabled(see_online);
         mMapRights->setValue(LLRelationship::GRANT_MAP_LOCATION & rights ? TRUE : FALSE);
         mEditObjectRights->setValue(LLRelationship::GRANT_MODIFY_OBJECTS & rights ? TRUE : FALSE);
     }
@@ -738,9 +746,13 @@ void LLFloaterProfilePermissions::rightsConfirmationCallback(const LLSD& notific
     const LLSD& response)
 {
     S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    if (option != 0)
+    if (option != 0) // canceled
     {
         mEditObjectRights->setValue(mEditObjectRights->getValue().asBoolean() ? FALSE : TRUE);
+    }
+    else
+    {
+        mHasUnsavedPermChanges = true;
     }
 }
 
@@ -752,13 +764,39 @@ void LLFloaterProfilePermissions::confirmModifyRights(bool grant)
         boost::bind(&LLFloaterProfilePermissions::rightsConfirmationCallback, this, _1, _2));
 }
 
-void LLFloaterProfilePermissions::onCommitRights()
+void LLFloaterProfilePermissions::onCommitSeeOnlineRights()
+{
+    bool see_online = mOnlineStatus->getValue().asBoolean();
+    mMapRights->setEnabled(see_online);
+    if (see_online)
+    {
+        const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(mAvatarID);
+        if (relation)
+        {
+            S32 rights = relation->getRightsGrantedTo();
+            mMapRights->setValue(LLRelationship::GRANT_MAP_LOCATION & rights ? TRUE : FALSE);
+        }
+        else
+        {
+            closeFloater();
+            LL_INFOS("ProfilePermissions") << "Floater closing since agent is no longer a friend" << LL_ENDL;
+        }
+    }
+    else
+    {
+        mMapRights->setValue(FALSE);
+    }
+    mHasUnsavedPermChanges = true;
+}
+
+void LLFloaterProfilePermissions::onCommitEditRights()
 {
     const LLRelationship* buddy_relationship = LLAvatarTracker::instance().getBuddyInfo(mAvatarID);
 
     if (!buddy_relationship)
     {
-        LL_WARNS("ProfilePermissions") << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
+        LL_WARNS("ProfilePermissions") << "Trying to modify rights for non-friend avatar. Closing floater." << LL_ENDL;
+        closeFloater();
         return;
     }
 
@@ -813,6 +851,7 @@ void LLFloaterProfilePermissions::onCancel()
 LLPanelProfileSecondLife::LLPanelProfileSecondLife()
     : LLPanelProfileTab()
     , mAvatarNameCacheConnection()
+    , mHasUnsavedDescriptionChanges(false)
     , mWaitingForImageUpload(false)
     , mAllowPublish(false)
 {
@@ -867,6 +906,13 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
 
     getChild<LLButton>("open_notes")->setCommitCallback([this](LLUICtrl*, void*) { onOpenNotes(); }, nullptr);
+
+    mCanSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
+    mCantSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
+    mCanSeeOnMapIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
+    mCantSeeOnMapIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
+    mCanEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
+    mCantEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
 
     return TRUE;
 }
@@ -975,12 +1021,15 @@ void LLPanelProfileSecondLife::resetData()
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
 {
     LLUUID avatar_id = getAvatarId();
-    if (!LLAvatarActions::isFriend(avatar_id) && !getSelfProfile())
+    const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+    if ((relationship != NULL || gAgent.isGodlike()) && !getSelfProfile())
     {
-        // subscribe observer to get online status. Request will be sent by LLPanelProfileSecondLife itself.
-        // do not subscribe for friend avatar because online status can be wrong overridden
-        // via LLAvatarData::flags if Preferences: "Only Friends & Groups can see when I am online" is set.
-        processOnlineStatus(avatar_data->flags & AVATAR_ONLINE);
+        // Relies onto friend observer to get information about online status updates.
+        // Once SL-17506 gets implemented, condition might need to become:
+        // (gAgent.isGodlike() || isRightGrantedFrom || flags & AVATAR_ONLINE)
+        processOnlineStatus(relationship != NULL,
+                            gAgent.isGodlike() || relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS),
+                            (avatar_data->flags & AVATAR_ONLINE));
     }
 
     fillCommonData(avatar_data);
@@ -1021,9 +1070,10 @@ void LLPanelProfileSecondLife::openGroupProfile()
 void LLPanelProfileSecondLife::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     mAvatarNameCacheConnection.disconnect();
-    // Should be possible to get this from AgentProfile capability
-    getChild<LLUICtrl>("display_name")->setValue( av_name.getDisplayName() );
-    getChild<LLUICtrl>("user_name")->setValue(av_name.getAccountName());
+    if (getIsLoaded())
+    {
+        fillNameAgeData(av_name, mBornOn);
+    }
 }
 
 void LLPanelProfileSecondLife::setNotesSnippet(std::string &notes)
@@ -1069,21 +1119,59 @@ void LLPanelProfileSecondLife::setProfileImageUploaded(const LLUUID &image_asset
     setProfileImageUploading(false);
 }
 
+bool LLPanelProfileSecondLife::hasUnsavedChanges()
+{
+    LLFloater *floater = mFloaterPermissionsHandle.get();
+    if (floater)
+    {
+        LLFloaterProfilePermissions* perm = dynamic_cast<LLFloaterProfilePermissions*>(floater);
+        if (perm && perm->hasUnsavedChanges())
+        {
+            return true;
+        }
+    }
+    // if floater
+    return mHasUnsavedDescriptionChanges;
+}
+
+void LLPanelProfileSecondLife::commitUnsavedChanges()
+{
+    LLFloater *floater = mFloaterPermissionsHandle.get();
+    if (floater)
+    {
+        LLFloaterProfilePermissions* perm = dynamic_cast<LLFloaterProfilePermissions*>(floater);
+        if (perm && perm->hasUnsavedChanges())
+        {
+            perm->onApplyRights();
+        }
+    }
+    if (mHasUnsavedDescriptionChanges)
+    {
+        onSaveDescriptionChanges();
+    }
+}
+
 void LLPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
 {
     // Refresh avatar id in cache with new info to prevent re-requests
     // and to make sure icons in text will be up to date
     LLAvatarIconIDCache::getInstance()->add(avatar_data->avatar_id, avatar_data->image_id);
 
-    LLStringUtil::format_map_t args;
-    // <FS:Ansariel> Re-add register date
-    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
-    LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)avatar_data->born_on.secondsSinceEpoch()));
-    args["[REG_DATE]"] = birth_date;
-    // </FS:Ansariel>
-    args["[AGE]"] = LLDateUtil::ageFromDate( avatar_data->born_on, LLDate::now());
-    std::string register_date = getString("AgeFormat", args);
-    getChild<LLUICtrl>("user_age")->setValue(register_date);
+    mBornOn = avatar_data->born_on;
+
+    // Should be possible to get user and display names from AgentProfile capability
+    // but at the moment contraining this to limits of LLAvatarData
+    LLAvatarName av_name;
+    if (LLAvatarNameCache::get(avatar_data->avatar_id, &av_name))
+    {
+        fillNameAgeData(av_name, mBornOn);
+    }
+    else if (!mAvatarNameCacheConnection.connected())
+    {
+        // shouldn't happen, but just in case
+        mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
+    }
+
     setDescriptionText(avatar_data->about_text);
 
     if (avatar_data->image_id.notNull())
@@ -1234,6 +1322,32 @@ void LLPanelProfileSecondLife::fillRightsData()
     childSetVisible("permissions_panel", NULL != relation);
 }
 
+void LLPanelProfileSecondLife::fillNameAgeData(const LLAvatarName &av_name, const LLDate &born_on)
+{
+    getChild<LLUICtrl>("display_name")->setValue(av_name.getDisplayName());
+
+    // <FS:Ansariel> Unfuck this...
+    //std::string name_and_date = getString("name_date_format");
+    //LLSD args_name;
+    //args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
+    //args_name["[NAME]"] = av_name.getAccountName();
+    //LLStringUtil::format(name_and_date, args_name);
+    //getChild<LLUICtrl>("user_name_date")->setValue(name_and_date);
+    getChild<LLUICtrl>("user_name_date")->setValue(av_name.getAccountName());
+    // </FS:Ansariel>
+
+    std::string register_date = getString("age_format");
+    LLSD args_age;
+    // <FS:Ansariel> Re-add register date
+    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
+    LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)born_on.secondsSinceEpoch()));
+    args_age["[REG_DATE]"] = birth_date;
+    // </FS:Ansariel>
+    args_age["[AGE]"] = LLDateUtil::ageFromDate(born_on, LLDate::now());
+    LLStringUtil::format(register_date, args_age);
+    getChild<LLUICtrl>("user_age")->setValue(register_date);
+}
+
 void LLPanelProfileSecondLife::onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep)
 {
     LLRect imageRect = mSecondLifePicLayout->getRect();
@@ -1279,10 +1393,7 @@ void LLPanelProfileSecondLife::onImageLoaded(BOOL success,
 // virtual, called by LLAvatarTracker
 void LLPanelProfileSecondLife::changed(U32 mask)
 {
-    if (mask & LLFriendObserver::ONLINE)
-    {
-        updateOnlineStatus();
-    }
+    updateOnlineStatus();
     if (mask != LLFriendObserver::ONLINE)
     {
         fillRightsData();
@@ -1318,37 +1429,36 @@ void LLPanelProfileSecondLife::setAvatarId(const LLUUID& avatar_id)
     }
 }
 
-bool LLPanelProfileSecondLife::isGrantedToSeeOnlineStatus()
-{
-    // set text box visible to show online status for non-friends who has not set in Preferences
-    // "Only Friends & Groups can see when I am online"
-    if (!LLAvatarActions::isFriend(getAvatarId()))
-    {
-        return true;
-    }
-
-    // *NOTE: GRANT_ONLINE_STATUS is always set to false while changing any other status.
-    // When avatar disallow me to see her online status processOfflineNotification Message is received by the viewer
-    // see comments for ChangeUserRights template message. EXT-453.
-    // If GRANT_ONLINE_STATUS flag is changed it will be applied when viewer restarts. EXT-3880
-    const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
-    return relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
-}
-
 // method was disabled according to EXT-2022. Re-enabled & improved according to EXT-3880
 void LLPanelProfileSecondLife::updateOnlineStatus()
 {
-    if (!LLAvatarActions::isFriend(getAvatarId())) return;
-    // For friend let check if he allowed me to see his status
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
-    bool online = relationship->isOnline();
-    processOnlineStatus(online);
+    if (relationship != NULL)
+    {
+        // For friend let check if he allowed me to see his status
+        bool online = relationship->isOnline();
+        bool perm_granted = relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
+        processOnlineStatus(true, perm_granted, online);
+    }
+    // <FS:Ansariel> Undo LL dumb-down junk
+    //else
+    //{
+    //    childSetVisible("spacer_layout", true);
+    //    childSetVisible("frind_layout", false);
+    //    childSetVisible("online_layout", false);
+    //    childSetVisible("offline_layout", false);
+    //}
+    // </FS:Ansariel>
 }
 
-void LLPanelProfileSecondLife::processOnlineStatus(bool online)
+void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_online, bool online)
 {
     // <FS:Ansariel> Undo LL dumb-down junk
-    mStatusText->setVisible(isGrantedToSeeOnlineStatus());
+    //childSetVisible("spacer_layout", false);
+    //childSetVisible("frind_layout", is_friend);
+    //childSetVisible("online_layout", online && show_online);
+    //childSetVisible("offline_layout", !online && show_online);
+    mStatusText->setVisible(show_online);
 
     std::string status = getString(online ? "status_online" : "status_offline");
 
@@ -1666,6 +1776,8 @@ void LLPanelProfileSecondLife::setDescriptionText(const std::string &text)
 {
     mSaveDescriptionChanges->setEnabled(FALSE);
     mDiscardDescriptionChanges->setEnabled(FALSE);
+    mHasUnsavedDescriptionChanges = false;
+
     mDescriptionText = text;
     mDescriptionEdit->setValue(mDescriptionText);
 }
@@ -1674,6 +1786,7 @@ void LLPanelProfileSecondLife::onSetDescriptionDirty()
 {
     mSaveDescriptionChanges->setEnabled(TRUE);
     mDiscardDescriptionChanges->setEnabled(TRUE);
+    mHasUnsavedDescriptionChanges = true;
 }
 
 void LLPanelProfileSecondLife::onShowInSearchCallback()
@@ -1714,6 +1827,7 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
 
     mSaveDescriptionChanges->setEnabled(FALSE);
     mDiscardDescriptionChanges->setEnabled(FALSE);
+    mHasUnsavedDescriptionChanges = false;
 }
 
 void LLPanelProfileSecondLife::onDiscardDescriptionChanges()
@@ -1732,13 +1846,15 @@ void LLPanelProfileSecondLife::onShowAgentPermissionsDialog()
             LLFloaterProfilePermissions * perms = new LLFloaterProfilePermissions(parent_floater, getAvatarId());
             mFloaterPermissionsHandle = perms->getHandle();
             perms->openFloater();
+            perms->setVisibleAndFrontmost(TRUE);
 
             parent_floater->addDependentFloater(mFloaterPermissionsHandle);
         }
     }
     else // already open
     {
-        floater->closeFloater();
+        floater->setMinimized(FALSE);
+        floater->setVisibleAndFrontmost(TRUE);
     }
 }
 
@@ -1903,6 +2019,7 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 
 LLPanelProfileFirstLife::LLPanelProfileFirstLife()
  : LLPanelProfileTab()
+ , mHasUnsavedChanges(false)
 {
 }
 
@@ -1965,6 +2082,14 @@ void LLPanelProfileFirstLife::setProfileImageUploaded(const LLUUID &image_asset_
     setProfileImageUploading(false);
 }
 
+void LLPanelProfileFirstLife::commitUnsavedChanges()
+{
+    if (mHasUnsavedChanges)
+    {
+        onSaveDescriptionChanges();
+    }
+}
+
 void LLPanelProfileFirstLife::onChangePhoto()
 {
     (new LLProfileImagePicker(PROFILE_IMAGE_FL, new LLHandle<LLPanel>(getHandle())))->getFile();
@@ -1993,6 +2118,8 @@ void LLPanelProfileFirstLife::setDescriptionText(const std::string &text)
 {
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
+    mHasUnsavedChanges = false;
+
     mCurrentDescription = text;
     mDescriptionEdit->setValue(mCurrentDescription);
 }
@@ -2001,6 +2128,7 @@ void LLPanelProfileFirstLife::onSetDescriptionDirty()
 {
     mSaveChanges->setEnabled(TRUE);
     mDiscardChanges->setEnabled(TRUE);
+    mHasUnsavedChanges = true;
 }
 
 void LLPanelProfileFirstLife::onSaveDescriptionChanges()
@@ -2019,6 +2147,7 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
+    mHasUnsavedChanges = false;
 }
 
 void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
@@ -2068,6 +2197,7 @@ void LLPanelProfileFirstLife::setLoaded()
 
 LLPanelProfileNotes::LLPanelProfileNotes()
 : LLPanelProfileTab()
+ , mHasUnsavedChanges(false)
 {
 
 }
@@ -2089,6 +2219,14 @@ void LLPanelProfileNotes::updateData()
             LLCoros::instance().launch("requestAgentUserInfoCoro",
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
+    }
+}
+
+void LLPanelProfileNotes::commitUnsavedChanges()
+{
+    if (mHasUnsavedChanges)
+    {
+        onSaveNotesChanges();
     }
 }
 
@@ -2116,6 +2254,8 @@ void LLPanelProfileNotes::setNotesText(const std::string &text)
 {
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
+    mHasUnsavedChanges = false;
+
     mCurrentNotes = text;
     mNotesEditor->setValue(mCurrentNotes);
 }
@@ -2124,6 +2264,7 @@ void LLPanelProfileNotes::onSetNotesDirty()
 {
     mSaveChanges->setEnabled(TRUE);
     mDiscardChanges->setEnabled(TRUE);
+    mHasUnsavedChanges = true;
 }
 
 void LLPanelProfileNotes::onSaveNotesChanges()
@@ -2156,6 +2297,7 @@ void LLPanelProfileNotes::onSaveNotesChanges()
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
+    mHasUnsavedChanges = false;
 }
 
 void LLPanelProfileNotes::onDiscardNotesChanges()
@@ -2209,11 +2351,6 @@ void LLPanelProfile::onTabChange()
     {
         active_panel->updateData();
     }
-    updateBtnsVisibility();
-}
-
-void LLPanelProfile::updateBtnsVisibility()
-{
 }
 
 void LLPanelProfile::onOpen(const LLSD& key)
@@ -2247,8 +2384,6 @@ void LLPanelProfile::onOpen(const LLSD& key)
     resetLoading();
     updateData();
 
-    updateBtnsVisibility();
-
     // Some tabs only request data when opened
     mTabContainer->setCommitCallback(boost::bind(&LLPanelProfile::onTabChange, this));
 }
@@ -2262,6 +2397,11 @@ void LLPanelProfile::updateData()
     {
         setIsLoading();
 
+        mPanelSecondlife->setIsLoading();
+        mPanelPicks->setIsLoading();
+        mPanelFirstlife->setIsLoading();
+        mPanelNotes->setIsLoading();
+
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         if (!cap_url.empty())
         {
@@ -2269,6 +2409,12 @@ void LLPanelProfile::updateData()
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
     }
+}
+
+void LLPanelProfile::createPick(const LLPickData &data)
+{
+    mTabContainer->selectTabPanel(mPanelPicks);
+    mPanelPicks->createPick(data);
 }
 
 void LLPanelProfile::showPick(const LLUUID& pick_id)
@@ -2288,6 +2434,29 @@ bool LLPanelProfile::isPickTabSelected()
 bool LLPanelProfile::isNotesTabSelected()
 {
 	return (mTabContainer->getCurrentPanel() == mPanelNotes);
+}
+
+bool LLPanelProfile::hasUnsavedChanges()
+{
+    return mPanelSecondlife->hasUnsavedChanges()
+        || mPanelPicks->hasUnsavedChanges()
+        || mPanelClassifieds->hasUnsavedChanges()
+        || mPanelFirstlife->hasUnsavedChanges()
+        || mPanelNotes->hasUnsavedChanges();
+}
+
+bool LLPanelProfile::hasUnpublishedClassifieds()
+{
+    return mPanelClassifieds->hasNewClassifieds();
+}
+
+void LLPanelProfile::commitUnsavedChanges()
+{
+    mPanelSecondlife->commitUnsavedChanges();
+    mPanelPicks->commitUnsavedChanges();
+    mPanelClassifieds->commitUnsavedChanges();
+    mPanelFirstlife->commitUnsavedChanges();
+    mPanelNotes->commitUnsavedChanges();
 }
 
 void LLPanelProfile::showClassified(const LLUUID& classified_id, bool edit)

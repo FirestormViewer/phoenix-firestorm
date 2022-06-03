@@ -339,6 +339,7 @@ set(viewer_SOURCE_FILES
     llfloatercamera.cpp
     llfloatercamerapresets.cpp
     llfloaterchatvoicevolume.cpp
+    llfloaterclassified.cpp
     llfloatercolorpicker.cpp
     llfloaterconversationlog.cpp
     llfloaterconversationpreview.cpp
@@ -596,7 +597,6 @@ set(viewer_SOURCE_FILES
     llpanelpeople.cpp
     llpanelpeoplemenus.cpp
     llpanelpermissions.cpp
-    llpanelpick.cpp
     llpanelplaceinfo.cpp
     llpanelplaceprofile.cpp
     llpanelplaces.cpp
@@ -1112,6 +1112,7 @@ set(viewer_HEADER_FILES
     llfloatercamerapresets.h
     llfloatercamera.h
     llfloaterchatvoicevolume.h
+    llfloaterclassified.h
     llfloatercolorpicker.h
     llfloaterconversationlog.h
     llfloaterconversationpreview.h
@@ -1362,7 +1363,6 @@ set(viewer_HEADER_FILES
     llpanelpeople.h
     llpanelpeoplemenus.h
     llpanelpermissions.h
-    llpanelpick.h
     llpanelplaceinfo.h
     llpanelplaceprofile.h
     llpanelplaces.h
