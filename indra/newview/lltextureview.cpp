@@ -576,7 +576,6 @@ void LLGLTexMemBar::draw()
 	// <FS:Ansariel> Texture memory bars
 	S32 bar_left = 0;
 	S32 bar_width = 200;
-	//S32 bar_space = 32;
 	S32 top = line_height*6 - 2 + v_offset;
 	S32 bottom = top - 6;
 	S32 left = bar_left;
@@ -584,56 +583,6 @@ void LLGLTexMemBar::draw()
 	F32 bar_scale;
 	
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-
-	//// GL Mem Bar
-
-	//left = bar_left;
-	//text = "GL";
-	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
-	//										 text_color, LLFontGL::LEFT, LLFontGL::TOP);
-	//
-	//left = bar_left+20;
-	//right = left + bar_width;
-	//
-	//gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f); // grey
-	//gl_rect_2d(left, top, right, bottom);
-
-	//bar_scale = (F32)bar_width / (max_total_mem.value() * 1.5f);
-	//right = left + llfloor(total_mem.value() * bar_scale);
-	//right = llclamp(right, bar_left, bar_left + bar_width);
-	//
-	//color = (total_mem.value() < llfloor(max_total_mem.value() * texmem_lower_bound_scale)) ? LLColor4::green :
-	//	(total_mem.value() < max_total_mem.value()) ? LLColor4::yellow : LLColor4::red;
-	//color[VALPHA] = .75f;
-
-	//gl_rect_2d(left, top, right, bottom, color); // red/yellow/green
-
-	////
-	//bar_left += bar_width + bar_space;
-	////top = bottom - 2; bottom = top - 6;
-	//
-	//// Bound Mem Bar
-
-	//left = bar_left;
-	//text = "Bound";
-	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
-	//								 text_color, LLFontGL::LEFT, LLFontGL::TOP);
-	//left = bar_left + 42;
-	//right = left + bar_width;
-	//
-	//gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
-	//gl_rect_2d(left, top, right, bottom);
-
-	//color = (bound_mem.value() < llfloor(max_bound_mem.value() * texmem_lower_bound_scale)) ? LLColor4::green :
-	//	(bound_mem.value() < max_bound_mem.value()) ? LLColor4::yellow : LLColor4::red;
-	//color[VALPHA] = .75f;
-
-	//bar_scale = (F32)bar_width / (max_bound_mem.value() * 1.5f);
-	//right = left + llfloor(bound_mem.value() * bar_scale);
-
-	//gl_rect_2d(left, top, right, bottom, color);
-
-	//bar_left = left + bar_width + 10;
 
 	// VRAM Mem Bar
 
