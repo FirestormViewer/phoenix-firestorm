@@ -25,6 +25,7 @@
  */
 
 #include "linden_common.h"
+
 #include "llimageworker.h"
 #include "llimagedxt.h"
 
@@ -49,10 +50,6 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	LLMutexLock lock(mCreationMutex);
-	// <FS:Beq> instrument image decodes
-	{
-	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue1);
-	// </FS:Beq>
 	for (creation_list_t::iterator iter = mCreationList.begin();
 		 iter != mCreationList.end(); ++iter)
 	{
@@ -69,15 +66,8 @@ S32 LLImageDecodeThread::update(F32 max_time_ms)
 		}
 	}
 	mCreationList.clear();
-	// <FS:Beq> instrument image decodes
-	}
-	{
-	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue2);
-	// </FS:Beq>
 	S32 res = LLQueuedThread::update(max_time_ms);
-	// FSPlot("img_decode_pending", (int64_t)res); 	// <FS:Beq/> instrument image decodes
 	return res;
-	} 	// <FS:Beq/> instrument image decodes
 }
 
 LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted* image, 
@@ -131,19 +121,11 @@ LLImageDecodeThread::ImageRequest::~ImageRequest()
 // Returns true when done, whether or not decode was successful.
 bool LLImageDecodeThread::ImageRequest::processRequest()
 {
-	// <FS:Beq> allow longer timeout for async and add instrumentation
-	// const F32 decode_time_slice = .1f;
-	LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	F32 decode_time_slice = .1f;
-	if(mFlags & FLAG_ASYNC)
-	{
-		decode_time_slice = 10.0f;// long time out as this is not an issue with async
-	}
-	// </FS:Beq>
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+	const F32 decode_time_slice = .1f;
 	bool done = true;
 	if (!mDecodedRaw && mFormattedImage.notNull())
 	{
-		LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange1); // <FS:Beq> instrument the image decode pipeline
 		// Decode primary channels
 		if (mDecodedImageRaw.isNull())
 		{
@@ -182,7 +164,6 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 	}
 	if (done && mNeedsAux && !mDecodedAux && mFormattedImage.notNull())
 	{
-		LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange2); // <FS:Beq> instrument the image decode pipeline
 		// Decode aux channel
 		if (!mDecodedImageAux)
 		{
@@ -193,12 +174,7 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 		done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
 		mDecodedAux = done && mDecodedImageAux->getData();
 	}
-	// <FS:Beq> report timeout on async thread (which leads to worker abort errors)
-	if(!done)
-	{
-		LL_WARNS("ImageDecode") << "Image decoding failed to complete with time slice=" << decode_time_slice << LL_ENDL;
-	}
-	// </FS:Beq>
+
 	return done;
 }
 
