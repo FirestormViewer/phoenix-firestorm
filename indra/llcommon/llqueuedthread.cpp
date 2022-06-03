@@ -476,15 +476,7 @@ S32 LLQueuedThread::processNextRequest()
 	// safe to access req.
 	if (req)
 	{
-		// <FS:ND> Image thread pool from CoolVL
-		if (req->getFlags() & FLAG_ASYNC)
-		{
-			req->processRequest();
-			return getPending();
-		}
-		// </FS:ND>
-
-		// process request
+		// process request		
 		bool complete = req->processRequest();
 
 		if (complete)

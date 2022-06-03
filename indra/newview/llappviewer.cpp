@@ -2597,12 +2597,8 @@ bool LLAppViewer::initThreads()
 
 	LLLFSThread::initClass(enable_threads && false);
 
-	//<FS:ND> Image thread pool from CoolVL
-	U32 imageThreads = gSavedSettings.getU32("FSImageDecodeThreads");
-	// </FS:ND>
-
 	// Image decoding
-	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true, imageThreads);
+	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true);
 	LLAppViewer::sTextureCache = new LLTextureCache(enable_threads && true);
 	LLAppViewer::sTextureFetch = new LLTextureFetch(LLAppViewer::getTextureCache(),
 													sImageDecodeThread,
