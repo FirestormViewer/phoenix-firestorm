@@ -322,7 +322,6 @@ public:
 	LLCore::HttpRequest::policy_t		mHttpPolicyClass;
 	LLCore::HttpRequest::policy_t		mHttpLegacyPolicyClass; // <FS:Ansariel> [UDP Assets]
 	LLCore::HttpRequest::policy_t		mHttpLargePolicyClass;
-	LLCore::HttpRequest::priority_t		mHttpPriority;
 
 	typedef std::set<LLCore::HttpHandler::ptr_t> http_request_set;
 	http_request_set					mHttpRequestSet;			// Outstanding HTTP requests
@@ -507,7 +506,6 @@ private:
 	LLCore::HttpOptions::ptr_t			mHttpOptions;
 	LLCore::HttpHeaders::ptr_t			mHttpHeaders;
 	LLCore::HttpRequest::policy_t		mHttpPolicyClass;
-	LLCore::HttpRequest::priority_t		mHttpPriority;
 };
 
 // Params related to streaming cost, render cost, and scene complexity tracking.

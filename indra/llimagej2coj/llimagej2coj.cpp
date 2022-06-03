@@ -258,8 +258,8 @@ bool LLImageJ2COJ::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int block
 
 bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	// <FS:Techwolf Lupindo> texture comment metadata reader
-	LL_PROFILE_ZONE_SCOPED;	// <FS:Beq> instrument image decodes
 	U8* c_data = base.getData();
 	S32 c_size =  base.getDataSize();
 	S32 position = 0;

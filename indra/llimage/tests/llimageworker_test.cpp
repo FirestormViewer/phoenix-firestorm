@@ -141,7 +141,7 @@ namespace tut
 			done = false;
 
 			mRequest = new LLImageDecodeThread::ImageRequest(0, 0,
-											 LLQueuedThread::PRIORITY_NORMAL, 0, FALSE,
+											 0, FALSE,
 											 new responder_test(&done));
 		}
 		~imagerequest_test()
@@ -191,45 +191,14 @@ namespace tut
 	template<> template<>
 	void imagedecodethread_object_t::test<1>()
 	{
-		// Test a *non threaded* instance of the class
-		mThread = new LLImageDecodeThread(false);
-		ensure("LLImageDecodeThread: non threaded constructor failed", mThread != NULL);
-		// Test that we start with an empty list right at creation
-		ensure("LLImageDecodeThread: non threaded init state incorrect", mThread->tut_size() == 0);
-		// Insert something in the queue
-		bool done = false;
-		LLImageDecodeThread::handle_t decodeHandle = mThread->decodeImage(NULL, LLQueuedThread::PRIORITY_NORMAL, 0, FALSE, new responder_test(&done));
-		// Verifies we got a valid handle
-		ensure("LLImageDecodeThread: non threaded decodeImage(), returned handle is null", decodeHandle != 0);
-		// Verifies that we do now have something in the queued list
-		ensure("LLImageDecodeThread: non threaded decodeImage() insertion in threaded list failed", mThread->tut_size() == 1);
-		// Trigger queue handling "manually" (on a threaded instance, this is done on the thread loop)
-		S32 res = mThread->update(0);
-		// Verifies that we successfully handled the list
-		ensure("LLImageDecodeThread: non threaded update() list handling test failed", res == 0);
-		// Verifies that the list is now empty
-		ensure("LLImageDecodeThread: non threaded update() list emptying test failed", mThread->tut_size() == 0);
-	}
-
-	template<> template<>
-	void imagedecodethread_object_t::test<2>()
-	{
 		// Test a *threaded* instance of the class
 		mThread = new LLImageDecodeThread(true);
 		ensure("LLImageDecodeThread: threaded constructor failed", mThread != NULL);
-		// Test that we start with an empty list right at creation
-		ensure("LLImageDecodeThread: threaded init state incorrect", mThread->tut_size() == 0);
 		// Insert something in the queue
 		bool done = false;
-		LLImageDecodeThread::handle_t decodeHandle = mThread->decodeImage(NULL, LLQueuedThread::PRIORITY_NORMAL, 0, FALSE, new responder_test(&done));
+		LLImageDecodeThread::handle_t decodeHandle = mThread->decodeImage(NULL, 0, FALSE, new responder_test(&done));
 		// Verifies we get back a valid handle
 		ensure("LLImageDecodeThread:  threaded decodeImage(), returned handle is null", decodeHandle != 0);
-		// Wait a little so to simulate the main thread doing something on its main loop...
-		ms_sleep(500);		// 500 milliseconds
-		// Verifies that the responder has *not* been called yet in the meantime
-		ensure("LLImageDecodeThread: responder creation failed", done == false);
-		// Ask the thread to update: that means tells the queue to check itself and creates work requests
-		mThread->update(1);
 		// Wait till the thread has time to handle the work order (though it doesn't do much per work order...)
 		const U32 INCREMENT_TIME = 500;				// 500 milliseconds
 		const U32 MAX_TIME = 20 * INCREMENT_TIME;	// Do the loop 20 times max, i.e. wait 10 seconds but no more

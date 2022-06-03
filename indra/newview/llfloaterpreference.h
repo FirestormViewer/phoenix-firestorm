@@ -175,8 +175,6 @@ protected:
 
 	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
 	void onShowGroupNoticesTopRightChanged();
-	// <FS:Ansariel> Dynamic texture memory calculation
-	void handleDynamicTextureMemoryChanged();
 
 public:
 	// This function squirrels away the current values of the controls so that

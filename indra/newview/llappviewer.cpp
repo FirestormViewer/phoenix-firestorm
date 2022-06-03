@@ -114,7 +114,6 @@
 // <FS:Ansariel> [FS communication UI]
 #include "fsfloatervoicecontrols.h"
 // </FS:Ansariel> [FS communication UI]
-#include "llfloatertexturefetchdebugger.h"
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0)
 #include "llfloaterscriptrecover.h"
 // [/SL:KB]
@@ -1911,18 +1910,6 @@ bool LLAppViewer::doFrame()
 				LLLFSThread::sLocal->pause();
 			}
 
-			//texture fetching debugger
-			if(LLTextureFetchDebugger::isEnabled())
-			{
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df tex_fetch_debugger_instance" )
-				LLFloaterTextureFetchDebugger* tex_fetch_debugger_instance =
-					LLFloaterReg::findTypedInstance<LLFloaterTextureFetchDebugger>("tex_fetch_debugger");
-				if(tex_fetch_debugger_instance)
-				{
-					tex_fetch_debugger_instance->idle() ;
-				}
-			}
-
 			// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 			static LLCachedControl<U32> max_fps(gSavedSettings, "FramePerSecondLimit");
 			static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
@@ -1942,7 +1929,7 @@ bool LLAppViewer::doFrame()
 			// </FS:Ansariel>
 			{
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df resumeMainloopTimeout" )
-				resumeMainloopTimeout();
+			    resumeMainloopTimeout();
 			}
 			pingMainloopTimeout("Main:End");
 		}
@@ -1995,16 +1982,20 @@ S32 LLAppViewer::updateTextureThreads(F32 max_time)
 
 void LLAppViewer::flushLFSIO()
 {
-	while (1)
-	{
-		S32 pending = LLLFSThread::updateClass(0);
-		if (!pending)
-		{
-			break;
-		}
-		LL_INFOS() << "Waiting for pending IO to finish: " << pending << LL_ENDL;
-		ms_sleep(100);
-	}
+    S32 pending = LLLFSThread::updateClass(0);
+    if (pending > 0)
+    {
+        LL_INFOS() << "Waiting for pending IO to finish: " << pending << LL_ENDL;
+        while (1)
+        {
+            pending = LLLFSThread::updateClass(0);
+            if (!pending)
+            {
+                break;
+            }
+            ms_sleep(100);
+        }
+    }
 }
 
 bool LLAppViewer::cleanup()
@@ -2595,7 +2586,7 @@ bool LLAppViewer::initThreads()
 
 	LLImage::initClass(gSavedSettings.getBOOL("TextureNewByteRange"),gSavedSettings.getS32("TextureReverseByteRange"));
 
-	LLLFSThread::initClass(enable_threads && false);
+	LLLFSThread::initClass(enable_threads && true); // TODO: fix crashes associated with this shutdo
 
 	// Image decoding
 	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true);
@@ -3927,7 +3918,7 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["LOD_FACTOR"] = gSavedSettings.getF32("RenderVolumeLODFactor");
     //info["RENDER_QUALITY"] = (F32)gSavedSettings.getU32("RenderQualityPerformance");
     //info["GPU_SHADERS"] = gSavedSettings.getBOOL("RenderDeferred") ? "Enabled" : "Disabled";
-    //info["TEXTURE_MEMORY"] = gSavedSettings.getS32("TextureMemory");
+    //info["TEXTURE_MEMORY"] = gGLManager.mVRAM;
 	// </FS>
 
 #if LL_DARWIN
@@ -4075,15 +4066,6 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 	// </FS:PP>
 
-	// <FS:Ansariel> FIRE-11768: Include texture memory settings
-	info["TEXTUREMEMORYDYNAMIC"] = LLViewerTextureList::canUseDynamicTextureMemory() && gSavedSettings.getBOOL("FSDynamicTextureMemory");
-	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
-	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
-	info["TEXTUREMEMORYMIN"] = gSavedSettings.getS32("FSDynamicTextureMemoryMinTextureMemory");
-	info["TEXTUREMEMORYCACHERESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryCacheReserve");
-	info["TEXTUREMEMORYGPURESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryGPUReserve");
-	// </FS:Ansariel>
-
 	return info;
 }
 
@@ -4154,17 +4136,6 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
 	if (info.has("BANDWIDTH")) //For added info in help floater
 	{
 		support << "\n" << LLTrans::getString("AboutSettings", args, default_string);
-	}
-	if (info.has("TEXTUREMEMORYDYNAMIC"))
-	{
-		if (info["TEXTUREMEMORYDYNAMIC"].asBoolean())
-		{
-			support << "\n" << LLTrans::getString("AboutTextureMemoryDynamic", args, default_string);
-		}
-		else
-		{
-			support << "\n" << LLTrans::getString("AboutTextureMemory", args, default_string);
-		}
 	}
 	if (info.has("DISK_CACHE_INFO"))
 	{
@@ -5565,10 +5536,6 @@ void LLAppViewer::idle()
 	//
 	// Special case idle if still starting up
 	//
-	if (LLStartUp::getStartupState() >= STATE_WORLD_INIT)
-	{
-		update_texture_time();
-	}
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
 		// Skip rest if idle startup returns false (essentially, no world yet)

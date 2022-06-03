@@ -503,7 +503,7 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
 			std::string name = gDirUtilp->getDirName(me->mFilename);
 			name += gDirUtilp->getDirDelimiter() + me->mTexturesToSave[id];
 			CacheReadResponder* responder = new CacheReadResponder(id, img, name, img_type);
-			LLAppViewer::getTextureCache()->readFromCache(id, LLWorkerThread::PRIORITY_HIGH, 0, 999999, responder);
+			LLAppViewer::getTextureCache()->readFromCache(id, 0, 999999, responder);
 			me->mTexturesToSave.erase(id);
 			me->updateTitleProgress();
 			me->mTimer.reset();

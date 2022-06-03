@@ -13417,17 +13417,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>12.0</real>
     </map>
-    <key>RenderTextureMemoryMultiple</key>
-    <map>
-      <key>Comment</key>
-      <string>Multiple of texture memory value to use (should fit: 0 &lt; value &lt;= 1.0)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>1.0</real>
-    </map>
     <key>FSATIFullTextureMem</key>
     <map>
       <key>Comment</key>
@@ -15589,19 +15578,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
-    <key>TexelPixelRatio</key>
-    <map>
-      <key>Comment</key>
-      <string>texel pixel ratio = texel / pixel</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>1.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>TextureCameraMotionThreshold</key>
     <map>
       <key>Comment</key>
@@ -15727,19 +15703,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>TextureFetchDebuggerEnabled</key>
-    <map>
-      <key>Comment</key>
-      <string>Enable the texture fetching debugger if set</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>TextureFetchMinTimeToLog</key>
     <map>
       <key>Comment</key>
@@ -15762,23 +15725,10 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.0</real>
   </map>
-    <key>TextureFetchSource</key>
+    <key>TextureFetchUpdateMinCount</key>
     <map>
       <key>Comment</key>
-      <string>Debug use: Source to fetch textures</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureFetchUpdateHighPriority</key>
-    <map>
-      <key>Comment</key>
-      <string>Number of high priority textures to update per frame</string>
+      <string>Minimum number of textures to update per frame</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -15787,89 +15737,13 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>32</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>TextureFetchUpdateMaxMediumPriority</key>
-    <map>
-      <key>Comment</key>
-      <string>Maximum number of medium priority textures to update per frame</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>256</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureFetchUpdateMinMediumPriority</key>
-    <map>
-      <key>Comment</key>
-      <string>Minimum number of medium priority textures to update per frame</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>32</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureFetchUpdatePriorityThreshold</key>
-    <map>
-      <key>Comment</key>
-      <string>Threshold under which textures will be considered too low priority and skipped for update</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureFetchUpdateSkipLowPriority</key>
-    <map>
-      <key>Comment</key>
-      <string>Flag indicating if we want to skip textures with too low of a priority</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureFetchUpdatePriorities</key>
-    <map>
-      <key>Comment</key>
-      <string>Number of priority texture to update per frame</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>32</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureListFetchingThreshold</key>
-    <map>
-      <key>Comment</key>
-      <string>If the ratio between fetched and all textures in the list is greater than this threshold, which we assume that almost all textures are fetched</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.97</real>
     </map>
     <key>TextureLoadFullRes</key>
     <map>
       <key>Comment</key>
       <string>If TRUE, always load textures at full resolution (discard = 0). Not persistent. Will cause excessive memory pressure.</string>
       <key>Persist</key>
-      <integer>0</integer>
+      <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -15882,17 +15756,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       </array>
       <key>SanityComment</key>
       <string>This option is only used for debugging purposes and to stress test the cache system. Please do not enable for regular use, as it can lead to severely degraded performance!</string>
-    </map>
-    <key>TextureMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>Amount of memory to use for textures in MB (0 = autodetect)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <key>TextureNewByteRange</key>
     <map>
@@ -25781,50 +25644,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSDynamicTextureMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>If enabled, Firestorm dynamically uses available memory for textures</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSDynamicTextureMemoryCacheReserve</key>
-    <map>
-      <key>Comment</key>
-      <string>Percentage of total physical GPU memory to reserve for textures loaded, but currently not being rendered</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>10</integer>
-    </map>
-    <key>FSDynamicTextureMemoryGPUReserve</key>
-    <map>
-      <key>Comment</key>
-      <string>Percentage of total physical video memory to reserve for other usage</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>10</integer>
-    </map>
-    <key>FSDynamicTextureMemoryMinTextureMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>Minimum amount of GPU memory in Megabytes that should be used for textures (takes reserves and total physical GPU memory into account)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>512</integer>
     </map>
     <key>FSAllowDoubleClickOnScriptedObjects</key>
     <map>

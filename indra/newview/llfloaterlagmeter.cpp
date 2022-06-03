@@ -190,7 +190,7 @@ void LLFloaterLagMeter::determineClient()
 		{
 			mClientCause->setText( getString("client_texture_loading_cause_msg", mStringArgs) );
 		}
-		else if(LLViewerTexture::sBoundTextureMemory > LLViewerTexture::sMaxBoundTextureMemory)
+		else if(LLViewerTexture::isMemoryForTextureLow())
 		{
 			mClientCause->setText( getString("client_texture_memory_cause_msg", mStringArgs) );
 		}

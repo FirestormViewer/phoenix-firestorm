@@ -2831,14 +2831,6 @@ class LLDevelopSetLoggingLevel : public view_listener_t
 	}
 };
 
-class LLDevelopTextureFetchDebugger : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		return gSavedSettings.getBOOL("TextureFetchDebuggerEnabled");
-	}
-};
-
 //////////////////
 // ADMIN MENU   //
 //////////////////
@@ -12129,8 +12121,6 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLDevelopCheckLoggingLevel(), "Develop.CheckLoggingLevel");
 	view_listener_t::addMenu(new LLDevelopSetLoggingLevel(), "Develop.SetLoggingLevel");
 	
-	//Develop (Texture Fetch Debug Console)
-	view_listener_t::addMenu(new LLDevelopTextureFetchDebugger(), "Develop.SetTexFetchDebugger");
 	//Develop (clear cache immediately)
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
 
