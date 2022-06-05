@@ -92,6 +92,17 @@ bool LLModelPreview::sIgnoreLoadedCallback = false;
 // </FS:Beq>
 const F32 SKIN_WEIGHT_CAMERA_DISTANCE = 16.f;
 
+// <FS:Beq> mesh loader suffix configuration
+//static 
+const std::array<std::string,5> LLModelPreview::sSuffixVarNames
+{
+    "FSMeshLowestLodSuffix",
+    "FSMeshLowLodSuffix",
+    "FSMeshMediumLodSuffix",
+    "FSMeshHighLodSuffix",
+    "FSMeshPhysicsSuffix"
+};
+// </FS:Beq>
 LLViewerFetchedTexture* bindMaterialDiffuseTexture(const LLImportMaterial& material)
 {
     LLViewerFetchedTexture *texture = LLViewerTextureManager::getFetchedTexture(material.getDiffuseMap(), FTT_DEFAULT, TRUE, LLGLTexture::BOOST_PREVIEW);
@@ -110,13 +121,19 @@ LLViewerFetchedTexture* bindMaterialDiffuseTexture(const LLImportMaterial& mater
 
 std::string stripSuffix(std::string name)
 {
-    // <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+    // <FS:Beq> Selectable suffixes
     //if ((name.find("_LOD") != -1) || (name.find("_PHYS") != -1))
-    if ((name.find("_LOD") != std::string::npos) || (name.find("_PHYS") != std::string::npos))
-    // </FS:Ansariel>
+    // {
+    //     return name.substr(0, name.rfind('_'));
+    // }
+    for(int i=0; i < LLModel::NUM_LODS; i++)
     {
-        return name.substr(0, name.rfind('_'));
-    }
+        const auto& suffix = gSavedSettings.getString(LLModelPreview::sSuffixVarNames[i]);
+        if (suffix.size() && name.find(suffix) != std::string::npos) 
+        {
+            return name.substr(0, name.rfind('_'));
+        }
+    } // </FS:Beq>
     return name;
 }
 
@@ -125,12 +142,24 @@ std::string getLodSuffix(S32 lod)
     std::string suffix;
     switch (lod)
     {
-    case LLModel::LOD_IMPOSTOR: suffix = "_LOD0"; break;
-    case LLModel::LOD_LOW:      suffix = "_LOD1"; break;
-    case LLModel::LOD_MEDIUM:   suffix = "_LOD2"; break;
-    case LLModel::LOD_PHYSICS:  suffix = "_PHYS"; break;
-    case LLModel::LOD_HIGH:                       break;
+    // <FS:Beq> selectable suffixes
+    // case LLModel::LOD_IMPOSTOR: suffix = "_LOD0"; break;
+    // case LLModel::LOD_LOW:      suffix = "_LOD1"; break;
+    // case LLModel::LOD_MEDIUM:   suffix = "_LOD2"; break;
+    // case LLModel::LOD_PHYSICS:  suffix = "_PHYS"; break;
+    // case LLModel::LOD_HIGH:                       break;
+    case LLModel::LOD_IMPOSTOR: suffix = gSavedSettings.getString("FSMeshLowestLodSuffix"); break;
+    case LLModel::LOD_LOW:      suffix = gSavedSettings.getString("FSMeshLowLodSuffix"); break;
+    case LLModel::LOD_MEDIUM:   suffix = gSavedSettings.getString("FSMeshMediumLodSuffix"); break;
+    case LLModel::LOD_HIGH:     suffix = gSavedSettings.getString("FSMeshHighLodSuffix"); break;
+    case LLModel::LOD_PHYSICS:  suffix = gSavedSettings.getString("FSMeshPhysicsSuffix"); break;
+    default:break;
     }
+    if(suffix.size())
+    {
+        suffix = "_" + suffix;
+    }
+    // </FS:Beq>
     return suffix;
 }
 
@@ -461,8 +490,10 @@ void LLModelPreview::rebuildUploadData()
                     // then the indexed method will be attempted below.
 
                     LLMatrix4 transform;
-
-                    std::string name_to_match = instance.mLabel;
+                    // <FS:Beq> user defined LOD names
+                    // std::string name_to_match = instance.mLabel;
+                    std::string name_to_match = stripSuffix(instance.mLabel);
+                    // </FS:Beq>
                     llassert(!name_to_match.empty());
 
                     int extensionLOD;
@@ -503,7 +534,10 @@ void LLModelPreview::rebuildUploadData()
                         int searchLOD = (i > LLModel::LOD_HIGH) ? LLModel::LOD_HIGH : i;
                         while ((searchLOD <= LLModel::LOD_HIGH) && !lod_model)
                         {
-                            std::string name_to_match = instance.mLabel;
+                            // <FS:Beq> user defined LOD names
+                            // std::string name_to_match = instance.mLabel;
+                            std::string name_to_match = stripSuffix(instance.mLabel);
+                            // </FS:Beq>
                             llassert(!name_to_match.empty());
 
                             std::string toAdd = getLodSuffix(searchLOD);
@@ -536,6 +570,13 @@ void LLModelPreview::rebuildUploadData()
                             {
                                 std::ostringstream out;
                                 out << "Attempting to use model index " << idx;
+                                // <FS:Beq> better debug (watch for dangling single line else)
+                                if(i==4)
+                                {
+                                out << " for PHYS";
+                                }
+                                else
+                                // </FS:Beq>
                                 out << " for LOD" << i;
                                 out << " of " << instance.mLabel;
                                 LL_INFOS() << out.str() << LL_ENDL;
@@ -881,6 +922,12 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     std::map<std::string, std::string> joint_alias_map;
     getJointAliases(joint_alias_map);
 
+    std::array<std::string,LLModel::NUM_LODS> lod_suffix;
+	for(int i=0; i < LLModel::NUM_LODS; i++)
+	{
+		lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
+	}
+
     mModelLoader = new LLDAELoader(
         filename,
         lod,
@@ -894,7 +941,10 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
         joint_alias_map,
         LLSkinningUtil::getMaxJointCount(),
         gSavedSettings.getU32("ImporterModelLimit"),
-        gSavedSettings.getBOOL("ImporterPreprocessDAE"));
+        // <FS:Beq> allow LOD suffix configuration
+        // gSavedSettings.getBOOL("ImporterPreprocessDAE"));
+        gSavedSettings.getBOOL("ImporterPreprocessDAE"),
+        lod_suffix);
 
     if (force_disable_slm)
     {
@@ -1230,7 +1280,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
                         // this actually works like "ImporterLegacyMatching" for this particular LOD
                         for (U32 idx = 0; idx < mModel[loaded_lod].size() && idx < mBaseModel.size(); ++idx)
                         {
-                            std::string name = mBaseModel[idx]->mLabel;
+                            std::string name = stripSuffix(mBaseModel[idx]->mLabel);
                             std::string loaded_name = stripSuffix(mModel[loaded_lod][idx]->mLabel);
 
                             if (loaded_name != name)
@@ -1881,7 +1931,15 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
             volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
             mModel[lod][mdl_idx] = new LLModel(volume_params, 0.f);
 
-            std::string name = base->mLabel + getLodSuffix(lod);
+            // <FS:Beq> Support altenate LOD naming conventions
+            // std::string name = base->mLabel + getLodSuffix(lod);
+            std::string name = stripSuffix(base->mLabel);
+            std::string suffix = getLodSuffix(lod);
+            if ( suffix.size() > 0 )
+            {
+                name += suffix;
+            }
+            // </FS:Beq>
 
             mModel[lod][mdl_idx]->mLabel = name;
             mModel[lod][mdl_idx]->mSubmodelID = base->mSubmodelID;
@@ -3167,7 +3225,7 @@ void LLModelPreview::lookupLODModelFiles(S32 lod)
     // Note: we cannot use gDirUtilp here because the getExtension forces a tolower which would then break uppercase extensions on Linux/Mac
     std::size_t offset = lod_filename.find_last_of('.');
 	std::string ext = (offset == std::string::npos || offset == 0) ? "" : lod_filename.substr(offset+1);
-    lod_filename = gDirUtilp->getDirName(lod_filename) + gDirUtilp->getDirDelimiter() + gDirUtilp->getBaseFileName(lod_filename, true) + getLodSuffix(next_lod) + "." + ext;
+    lod_filename = gDirUtilp->getDirName(lod_filename) + gDirUtilp->getDirDelimiter() + stripSuffix(gDirUtilp->getBaseFileName(lod_filename, true))  + getLodSuffix(next_lod) + "." + ext;
     std::ostringstream out;
     out << "Looking for file: " << lod_filename << " for LOD " << next_lod;
     LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
