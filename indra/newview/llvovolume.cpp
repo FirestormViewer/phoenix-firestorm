@@ -5298,15 +5298,26 @@ LLControlAVBridge::LLControlAVBridge(LLDrawable* drawablep, LLViewerRegion* regi
 
 bool can_batch_texture(LLFace* facep)
 {
-	if (facep->getTextureEntry()->getBumpmap())
-	{ //bump maps aren't worked into texture batching yet
-		return false;
-	}
+	// <FS:Beq> fix batching when materials disabled and alpha none/masked.
+	// if (facep->getTextureEntry()->getBumpmap())
+	// { //bump maps aren't worked into texture batching yet
+	// 	return false;
+	// }
 
-	if (facep->getTextureEntry()->getMaterialParams().notNull())
-	{ //materials don't work with texture batching yet
-		return false;
+	// if (facep->getTextureEntry()->getMaterialParams().notNull())
+	// { //materials don't work with texture batching yet
+	// 	return false;
+	// }
+	const auto te = facep->getTextureEntry();
+	if (LLPipeline::sRenderDeferred && te )
+	{
+		auto mat = te->getMaterialParams();
+		if(mat && (mat->getNormalID() != LLUUID::null || mat->getSpecularID() != LLUUID::null))
+		{
+			return false;
+		}
 	}
+	// </FS:Beq>
 
 	if (facep->getTexture() && facep->getTexture()->getPrimaryFormat() == GL_ALPHA)
 	{ //can't batch invisiprims
