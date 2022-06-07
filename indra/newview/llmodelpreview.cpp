@@ -1541,10 +1541,32 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
 
     if (result_error < 0)
     {
-        LL_WARNS() << "Negative result error from meshoptimizer for model " << target_model->mLabel
+        // <FS:Beq> Log these properly
+        // LL_WARNS() << "Negative result error from meshoptimizer for model " << target_model->mLabel
+        //     << " target Indices: " << target_indices
+        //     << " new Indices: " << new_indices
+        //     << " original count: " << size_indices << LL_ENDL;
+   		std::ostringstream out;
+        out << "Negative result error from meshoptimizer for model " << target_model->mLabel
             << " target Indices: " << target_indices
             << " new Indices: " << new_indices
-            << " original count: " << size_indices << LL_ENDL;
+            << " original count: " << size_indices ;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+    }
+    else 
+    {
+        if (mImporterDebug)
+        {
+            std::ostringstream out;
+            out << "Good result error from meshoptimizer for model " << target_model->mLabel
+                << " target Indices: " << target_indices
+                << " new Indices: " << new_indices
+                << " original count: " << size_indices << " (result error:" << result_error << ")";
+		    LL_DEBUGS() << out.str() << LL_ENDL;
+        	LLFloaterModelPreview::addStringToLog(out, true);
+        }
+        // </FS:Beq>
     }
 
     if (new_indices < 3)
@@ -1608,14 +1630,26 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
                         // Normally this shouldn't happen since the whole point is to reduce amount of vertices
                         // but it might happen if user tries to run optimization with too large triangle or error value
                         // so fallback to 'per face' mode or verify requested limits and copy base model as is.
-                        LL_WARNS() << "Over triangle limit. Failed to optimize in 'per object' mode, falling back to per face variant for"
-                            << " model " << target_model->mLabel
-                            << " target Indices: " << target_indices
-                            << " new Indices: " << new_indices
-                            << " original count: " << size_indices
-                            << " error treshold: " << error_threshold
-                            << LL_ENDL;
-
+                        // <FS:Beq> Log this properly
+                        // LL_WARNS() << "Over triangle limit. Failed to optimize in 'per object' mode, falling back to per face variant for"
+                        //     << " model " << target_model->mLabel
+                        //     << " target Indices: " << target_indices
+                        //     << " new Indices: " << new_indices
+                        //     << " original count: " << size_indices
+                        //     << " error treshold: " << error_threshold
+                        //     << LL_ENDL;
+                        if (mImporterDebug)
+                        {
+                            std::ostringstream out;
+                            out << "Over triangle limit. Failed to optimize in 'per object' mode, falling back to per face variant for"
+                                << " model " << target_model->mLabel
+                                << " target Indices: " << target_indices
+                                << " new Indices: " << new_indices
+                                << " original count: " << size_indices
+                                << " error treshold: " << error_threshold;
+                            LL_DEBUGS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, true);
+                        }
                         // U16 vertices overflow shouldn't happen, but just in case
                         new_indices = 0;
                         valid_faces = 0;
@@ -1752,13 +1786,39 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
 
     if (result_error < 0)
     {
-        LL_WARNS() << "Negative result error from meshoptimizer for face " << face_idx
+        // <FS:Beq> Log these properly
+        // LL_WARNS() << "Negative result error from meshoptimizer for face " << face_idx
+        //     << " of model " << target_model->mLabel
+        //     << " target Indices: " << target_indices
+        //     << " new Indices: " << new_indices
+        //     << " original count: " << size_indices
+        //     << " error treshold: " << error_threshold
+        //     << LL_ENDL;
+   		std::ostringstream out;
+        out << "Negative result error from meshoptimizer for face " << face_idx
             << " of model " << target_model->mLabel
             << " target Indices: " << target_indices
             << " new Indices: " << new_indices
             << " original count: " << size_indices
-            << " error treshold: " << error_threshold
-            << LL_ENDL;
+            << " error treshold: " << error_threshold;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+    }
+    else 
+    {
+        if (mImporterDebug)
+        {
+            std::ostringstream out;
+            out << "Good result error from meshoptimizer for face " << face_idx
+                << " of model " << target_model->mLabel
+                << " target Indices: " << target_indices
+                << " new Indices: " << new_indices
+                << " original count: " << size_indices
+                << " error treshold: " << error_threshold << " (result error:" << result_error << ")";
+		    LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
+        	LLFloaterModelPreview::addStringToLog(out, true);
+        }
+        // </FS:Beq>
     }
 
     LLVolumeFace &new_face = target_model->getVolumeFace(face_idx);
@@ -1773,12 +1833,20 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
         {
             // meshopt_optimizeSloppy() can optimize triangles away even if target_indices is > 2,
             // but optimize() isn't supposed to
-            LL_INFOS() << "No indices generated by meshoptimizer for face " << face_idx
+            // LL_INFOS() << "No indices generated by meshoptimizer for face " << face_idx
+            //     << " of model " << target_model->mLabel
+            //     << " target Indices: " << target_indices
+            //     << " original count: " << size_indices
+            //     << " error treshold: " << error_threshold
+            //     << LL_ENDL;
+            std::ostringstream out;
+            out << "No indices generated by meshoptimizer for face " << face_idx
                 << " of model " << target_model->mLabel
                 << " target Indices: " << target_indices
                 << " original count: " << size_indices
-                << " error treshold: " << error_threshold
-                << LL_ENDL;
+                << " error treshold: " << error_threshold;
+            LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
+        	LLFloaterModelPreview::addStringToLog(out, true);
         }
 
         // Face got optimized away
@@ -1814,14 +1882,19 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
 
 void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 decimation, bool enforce_tri_limit)
 {
-    LL_INFOS() << "Generating lod " << which_lod << " using meshoptimizer" << LL_ENDL;
+    // <FS:Beq> Log things properly
+    // LL_INFOS() << "Generating lod " << which_lod << " using meshoptimizer" << LL_ENDL;
+    std::ostringstream out;
+    out << "Generating lod " << which_lod << " using meshoptimizer";
+    LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
+    LLFloaterModelPreview::addStringToLog(out, false);
     // Allow LoD from -1 to LLModel::LOD_PHYSICS
     if (which_lod < -1 || which_lod > LLModel::NUM_LODS - 1)
     {
-        std::ostringstream out;
+        // std::ostringstream out; // <FS:Beq/> already instantiated
         out << "Invalid level of detail: " << which_lod;
         LL_WARNS() << out.str() << LL_ENDL;
-        LLFloaterModelPreview::addStringToLog(out, false);
+        LLFloaterModelPreview::addStringToLog(out, true); // <FS:Beq/> if you don't flash the log tab on error when do you?
         assert(lod >= -1 && lod < LLModel::NUM_LODS);
         return;
     }
@@ -2042,7 +2115,12 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                         const U32 too_many_vertices = 27000;
                         if (size_vertices > too_many_vertices)
                         {
-                            LL_WARNS() << "Sloppy optimization method failed for a complex model " << target_model->getName() << LL_ENDL;
+                            // <FS:Beq> log this properly. 
+                            // LL_WARNS() << "Sloppy optimization method failed for a complex model " << target_model->getName() << LL_ENDL;
+                            out << "Sloppy optimization method failed for a complex model " << target_model->getName();
+                            LL_WARNS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, true);
+                            // </FS:Beq>
                         }
                         else
                         {
@@ -2076,26 +2154,46 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                             // Fallback to normal method
                             precise_ratio = genMeshOptimizerPerModel(base, target_model, indices_decimator, lod_error_threshold, false);
                         }
-
-                        LL_INFOS() << "Model " << target_model->getName()
+                        // <FS:Beq> Log stuff properly
+                        // LL_INFOS() << "Model " << target_model->getName()
+                        //     << " lod " << which_lod
+                        //     << " resulting ratio " << precise_ratio
+                        //     << " simplified using per model method." << LL_ENDL;
+                        out << "Model " << target_model->getName()
                             << " lod " << which_lod
                             << " resulting ratio " << precise_ratio
-                            << " simplified using per model method." << LL_ENDL;
+                            << " simplified using per model method.";
+                        LL_INFOS() << out.str() << LL_ENDL;
+                        LLFloaterModelPreview::addStringToLog(out, false);
                     }
                     else
                     {
-                        LL_INFOS() << "Model " << target_model->getName()
+                        // <FS:Beq> Log stuff properly
+                        // LL_INFOS() << "Model " << target_model->getName()
+                        //     << " lod " << which_lod
+                        //     << " resulting ratio " << sloppy_ratio
+                        //     << " sloppily simplified using per model method." << LL_ENDL;
+                        out << "Model " << target_model->getName()
                             << " lod " << which_lod
                             << " resulting ratio " << sloppy_ratio
-                            << " sloppily simplified using per model method." << LL_ENDL;
+                            << " sloppily simplified using per model method.";
+                        LL_INFOS() << out.str() << LL_ENDL;
+                        LLFloaterModelPreview::addStringToLog(out, false);
                     }
                 }
                 else
                 {
-                    LL_INFOS() << "Model " << target_model->getName()
-                        << " lod " << which_lod
-                        << " resulting ratio " << precise_ratio
-                        << " simplified using per model method." << LL_ENDL;
+                        // <FS:Beq> Log stuff properly
+                        // LL_INFOS() << "Model " << target_model->getName()
+                        //     << " lod " << which_lod
+                        //     << " resulting ratio " << precise_ratio
+                        //     << " simplified using per model method." << LL_ENDL;
+                        out << "Bad MeshOptimisation result for Model " << target_model->getName()
+                            << " lod " << which_lod
+                            << " resulting ratio " << precise_ratio
+                            << " simplified using per model method.";
+                        LL_WARNS() << out.str() << LL_ENDL;
+                        LLFloaterModelPreview::addStringToLog(out, true);
                 }
             }
 
@@ -4270,7 +4368,7 @@ bool LLModelPreview::lodQueryCallback()
         {
             S32 lod = preview->mLodsQuery.back();
             preview->mLodsQuery.pop_back();
-            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO);
+            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
 
             if (preview->mLookUpLodFiles && (lod == LLModel::LOD_HIGH))
             {
