@@ -222,14 +222,14 @@ namespace FSPerfStats
 
         // clean the write maps in all cases.
         auto& statsTypeMatrix = statsDoubleBuffer[writeBuffer];
-        for(auto& statsMap : statsTypeMatrix)
+        for(auto& statsMapByType : statsTypeMatrix)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("Clear stats maps");
-            for(auto& stat_entry : statsMap)
+            for(auto& stat_entry : statsMapByType)
             {
                 std::fill_n(stat_entry.second.begin() ,static_cast<size_t>(ST::STATS_COUNT),0);
             }
-            statsMap.clear();
+            statsMapByType.clear();
         }
         for(int i=0; i< static_cast<size_t>(ObjType_t::OT_COUNT); i++)
         {

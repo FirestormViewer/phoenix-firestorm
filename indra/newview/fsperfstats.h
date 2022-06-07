@@ -186,15 +186,15 @@ namespace FSPerfStats
             return instance;
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};
-        static inline const LLUUID& getFocusAv(){return (focusAv);};
-        static inline void send(StatsRecord&& u){StatsRecorder::getInstance().q.enqueue(std::move(u));};
+        static inline const LLUUID& getFocusAv(){return focusAv;};
+        static inline void send(StatsRecord && upd){StatsRecorder::getInstance().q.enqueue(std::move(upd));};
         static void endFrame(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
         static void clearStats(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 1});};
 
         static inline void setEnabled(bool on_or_off){collectionEnabled=on_or_off;};
         static inline void enable()     { collectionEnabled=true; };
         static inline void disable()    { collectionEnabled=false; };
-        static inline bool enabled()    { return(collectionEnabled); };
+        static inline bool enabled()    { return collectionEnabled; };
 
         static inline int getReadBufferIndex() { return (writeBuffer ^ 1); };
         // static inline const StatsTypeMatrix& getCurrentStatsMatrix(){ return statsDoubleBuffer[getReadBufferIndex()];}
@@ -234,7 +234,7 @@ namespace FSPerfStats
         static bool collectionEnabled;
 
 
-        void processUpdate(const StatsRecord& upd)
+        void processUpdate(const StatsRecord& upd) const
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
@@ -339,7 +339,7 @@ namespace FSPerfStats
         static void run()
         {
             StatsRecord upd[10];
-            auto& instance {StatsRecorder::getInstance()};
+            auto & instance {StatsRecorder::getInstance()};
             LL_PROFILER_SET_THREAD_NAME("PerfStats");
 
             while( enabled() && !LLApp::isExiting() )
@@ -409,7 +409,7 @@ namespace FSPerfStats
 
         template < ObjType_t OD = ObjTypeDiscriminator,
                    std::enable_if_t<OD == ObjType_t::OT_GENERAL> * = nullptr>
-        RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
+        explicit RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             #ifdef USAGE_TRACKING
@@ -504,6 +504,7 @@ namespace FSPerfStats
 
 // helper functions
 using RATptr = std::unique_ptr<FSPerfStats::RecordAttachmentTime>;
+using RSTptr = std::unique_ptr<FSPerfStats::RecordSceneTime>;
 
 template <typename T>
 static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPtrp)
@@ -544,11 +545,12 @@ static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPt
                 // deliberately reset to ensure destruction before construction of replacement.
                 ratPtrp->reset();
             };
-            *ratPtrp = std::make_unique<FSPerfStats::RecordAttachmentTime>( av, 
-                                                                            obj,
-                                                                            ( (LLPipeline::sShadowRender)?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ), 
-                                                                            isRigged, 
-                                                                            rootAtt->isHUDAttachment());
+            *ratPtrp = std::make_unique<FSPerfStats::RecordAttachmentTime>( 
+                av, 
+                obj,
+                ( LLPipeline::sShadowRender?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ), 
+                isRigged, 
+                rootAtt->isHUDAttachment());
         }
     }
     return;
