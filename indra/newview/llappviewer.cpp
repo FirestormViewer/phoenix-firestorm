@@ -1649,9 +1649,9 @@ bool LLAppViewer::doFrame()
 // </FS:Beq>
 	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	LLTimer frameTimer;
+	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
-	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 	{
         LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df LLTrace");
         if (LLFloaterReg::instanceVisible("block_timers"))
@@ -1667,9 +1667,9 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-	} // <FS:Beq/> perf stats
+	} // <FS:Beq/> perf stats (close NonRender/IDLE tracking starting at event pump)
 	{
-		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered
+		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered (input event and coro)
 
 		LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df processMiscNativeEvents" )
 		pingMainloopTimeout("Main:MiscNativeWindowEvents");
@@ -1717,7 +1717,7 @@ bool LLAppViewer::doFrame()
 			// give listeners a chance to run
 			llcoro::suspend();
 		}
-		}// <FS:Beq> ensure we have the entire top scope of frame covered
+		}// <FS:Beq> ensure we have the entire top scope of frame covered (close input event and coro "idle")
 
 		if (!LLApp::isExiting())
 		{
@@ -1751,12 +1751,12 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
-				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df pauseMainloopTimeout" )
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 			}
 
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
 				idle();
 			}
