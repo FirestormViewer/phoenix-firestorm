@@ -122,6 +122,12 @@ void LLMeshFilePicker::notify(const std::vector<std::string>& filenames)
 	}
 }
 
+// <FS:Beq> support for settings panel of floater
+const void updateUDPhysics(const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter type)
+{
+	gSavedSettings.setString("FSPhysicsPresetUser1", filenames[0]);
+}
+// </FS:Beq>
 //-----------------------------------------------------------------------------
 // LLFloaterModelPreview()
 //-----------------------------------------------------------------------------
@@ -145,6 +151,14 @@ mAvatarTabIndex(0)
 		mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
 	}
 }
+
+// <FS:Beq> support for settings panel of floater
+//static
+void LLFloaterModelPreview::onSelectUDPhysics(LLUICtrl* ctrl, void* userdata)
+{
+	(new LLFilePickerReplyThread(boost::bind(&updateUDPhysics, _1, _2), LLFilePicker::FFLOAD_COLLADA, false))->getFile();
+}
+// </FS:Beq>
 
 //-----------------------------------------------------------------------------
 // postBuild()
@@ -209,6 +223,9 @@ BOOL LLFloaterModelPreview::postBuild()
 	getChild<LLColorSwatchCtrl>("mesh_preview_physics_fill_color")->setCommitCallback(preview_refresh_cb);
 	getChild<LLColorSwatchCtrl>("mesh_preview_degenerate_edge_color")->setCommitCallback(preview_refresh_cb);
 	getChild<LLColorSwatchCtrl>("mesh_preview_degenerate_fill_color")->setCommitCallback(preview_refresh_cb);
+
+	getChild<LLComboBox>("lod_suffix_combo")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onSuffixStandardSelected, this, _1)); //  mesh loader suffix configuration
+	getChild<LLButton>("set_user_def_phys")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onSelectUDPhysics, this, _1)); //  mesh loader suffix configuration
 	// </FS:Beq>
 
 	childDisable("upload_skin");
@@ -1185,6 +1202,75 @@ void LLFloaterModelPreview::onPhysicsUseLOD(LLUICtrl* ctrl, void* userdata)
 	}
 }
 
+// <FS:Beq> mesh loader suffix configuration
+//static
+void LLFloaterModelPreview::onSuffixStandardSelected(LLUICtrl* ctrl, void* userdata)
+{
+	S32 which{0};
+// SL standard LODs are the reverse of every other game engine (LOD0 least detail)
+// SL has no suffix for the HIGH LOD
+	const std::array<std::string,5> sl_suffixes = {
+		"LOD0",
+		"LOD1",
+		"LOD2",
+		"",
+		"PHYS"
+	};
+// Game engines (UE, Unity, CryEngine, Godot, etc.) all use LOD0 as highest. 
+// They typically also label the high with a suffix too
+	const std::array<std::string,5> std_suffixes = {
+		"LOD3",
+		"LOD2",
+		"LOD1",
+		"LOD0",
+		"PHYS"
+	};
+// Human friendly. When making things manually people naturally use names.
+	const std::array<std::string,5> desc_suffixes = {
+		"LOWEST",
+		"LOW",
+		"MED",
+		"HIGH",
+		"PHYS"
+	};
+
+	LLCtrlSelectionInterface* iface = sInstance->childGetSelectionInterface("lod_suffix_combo");
+	if (iface)
+	{
+		which = iface->getFirstSelectedIndex();
+	}
+	else
+	{
+		LL_WARNS() << "no UI element found! nothing changed" << LL_ENDL;
+		return;
+	}
+
+	switch (which)
+	{
+		case 1: // SL
+			for (int i = 0; i < LLModel::NUM_LODS; i++)
+			{
+				gSavedSettings.setString(LLModelPreview::sSuffixVarNames[i], sl_suffixes[i]);
+			}
+			break;
+		case 2: // standard
+			for (int i = 0; i < LLModel::NUM_LODS; i++)
+			{
+				gSavedSettings.setString(LLModelPreview::sSuffixVarNames[i], std_suffixes[i]);
+			}
+			break;
+		case 3: // descriptive english
+			for (int i = 0; i < LLModel::NUM_LODS; i++)
+			{
+				gSavedSettings.setString(LLModelPreview::sSuffixVarNames[i], desc_suffixes[i]);
+			}
+			break;
+		default: 
+			LL_WARNS() << "no standard selected, nothing changed" << LL_ENDL;
+			break;
+	};
+}
+// </FS:Beq>
 //static 
 void LLFloaterModelPreview::onCancel(LLUICtrl* ctrl, void* data)
 {

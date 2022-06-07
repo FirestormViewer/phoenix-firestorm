@@ -218,7 +218,7 @@ void LLModelLoader::setLoadState(U32 state)
 {
 	mStateCallback(state, mOpaqueData);
 }
-
+extern std::string stripSuffix(std::string); // <FS:Beq/> mesh loader suffix configuration
 bool LLModelLoader::loadFromSLM(const std::string& filename)
 { 
 	//only need to populate mScene with data from slm
@@ -320,7 +320,10 @@ bool LLModelLoader::loadFromSLM(const std::string& filename)
 					&& !instance_label.empty())
 				{
 					// restore model names
-					std::string name = instance_label;
+					// <FS:Beq> This is going to get confusing here. We are juggling internal LOD names, with potentially overridden user ones.
+					// std::string name = instance_label;
+					std::string name = stripSuffix(instance_label);
+					// </FS:Beq>
 					switch (lod)
 					{
 					case LLModel::LOD_IMPOSTOR: name += "_LOD0"; break;

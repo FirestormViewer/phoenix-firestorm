@@ -44,8 +44,8 @@
 #ifdef TRACY_ENABLE
 // USAGE_TRACKING - displays overlapping stats that may imply double counting.
 // ATTACHMENT_TRACKING - displays detailed tracking info for Avatar and Attachment. very heavy overhead.
-// #define USAGE_TRACKING
-// #define ATTACHMENT_TRACKING
+#define USAGE_TRACKING
+#define ATTACHMENT_TRACKING
 #else
 #undef USAGE_TRACKING
 #undef ATTACHMENT_TRACKING
@@ -183,19 +183,18 @@ namespace FSPerfStats
         static inline StatsRecorder& getInstance()
         {
             static StatsRecorder instance;
-            // volatile int dummy{};
             return instance;
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};
-        static inline const LLUUID& getFocusAv(){return (focusAv);};
-        static inline void send(StatsRecord&& u){StatsRecorder::getInstance().q.enqueue(u);};
+        static inline const LLUUID& getFocusAv(){return focusAv;};
+        static inline void send(StatsRecord && upd){StatsRecorder::getInstance().q.enqueue(std::move(upd));};
         static void endFrame(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
         static void clearStats(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 1});};
 
         static inline void setEnabled(bool on_or_off){collectionEnabled=on_or_off;};
         static inline void enable()     { collectionEnabled=true; };
         static inline void disable()    { collectionEnabled=false; };
-        static inline bool enabled()    { return(collectionEnabled); };
+        static inline bool enabled()    { return collectionEnabled; };
 
         static inline int getReadBufferIndex() { return (writeBuffer ^ 1); };
         // static inline const StatsTypeMatrix& getCurrentStatsMatrix(){ return statsDoubleBuffer[getReadBufferIndex()];}
@@ -235,7 +234,7 @@ namespace FSPerfStats
         static bool collectionEnabled;
 
 
-        void processUpdate(const StatsRecord& upd)
+        void processUpdate(const StatsRecord& upd) const
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             // LL_INFOS("perfstats") << "processing update:" << LL_ENDL;
@@ -286,13 +285,15 @@ namespace FSPerfStats
 
             if (ot == ObjType_t::OT_ATTACHMENT)
             {
-                if( !upd.isRigged && !upd.isHUD )
+                if( !upd.isHUD ) // don't include HUD cost in self.
                 {
+                    LL_PROFILE_ZONE_NAMED("Att as Av")
                     // For all attachments that are not rigged we add them to the avatar (for all avatars) cost.
                     doUpd(avKey, ObjType_t::OT_AVATAR, type, val);
                 }
                 if( avKey == focusAv )
                 {
+                    LL_PROFILE_ZONE_NAMED("Att as Att")
                 // For attachments that are for the focusAv (self for now) we record them for the attachment/complexity view
                     if(upd.isHUD)
                     {
@@ -301,10 +302,10 @@ namespace FSPerfStats
                     // LL_INFOS("perfstats") << "frame: " << gFrameCount << " Attachment update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << LL_ENDL;
                     doUpd(key, ot, type, val);
                 }
-                else
-                {
-                    // LL_INFOS("perfstats") << "frame: " << gFrameCount << " non-self Att update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << " for av " << avKey.asString() << LL_ENDL;
-                }
+                // else
+                // {
+                //     // LL_INFOS("perfstats") << "frame: " << gFrameCount << " non-self Att update("<< (type==StatType_t::RENDER_GEOMETRY?"GEOMETRY":"SHADOW") << ": " << key.asString() << " = " << val << " for av " << avKey.asString() << LL_ENDL;
+                // }
             }
         }
 
@@ -338,12 +339,13 @@ namespace FSPerfStats
         static void run()
         {
             StatsRecord upd[10];
-            auto& instance {StatsRecorder::getInstance()};
-            LL_PROFILER_THREAD_BEGIN("PerfStats");
+            auto & instance {StatsRecorder::getInstance()};
+            LL_PROFILER_SET_THREAD_NAME("PerfStats");
 
             while( enabled() && !LLApp::isExiting() )
             {
                 auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
+                LL_PROFILER_THREAD_BEGIN("PerfStats");
                 if(count)
                 {
                     // LL_INFOS("perfstats") << "processing " << count << " updates." << LL_ENDL;
@@ -352,8 +354,8 @@ namespace FSPerfStats
                         instance.processUpdate(upd[i]);
                     }
                 }
+                LL_PROFILER_THREAD_END("PerfStats");
             }
-            LL_PROFILER_THREAD_END("PerfStats");
         }
 
         Queue q;
@@ -384,7 +386,7 @@ namespace FSPerfStats
         #ifdef USAGE_TRACKING
             if(stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT)
             {
-                if(!stat.isRigged && FSPerfStats::inUseAvatar){FSZoneText("OVERLAP AVATAR",14);}
+                if(!stat.isRigged && FSPerfStats::inUseAvatar){LL_PROFILE_ZONE_TEXT("OVERLAP AVATAR",14);}
 
                 LL_PROFILE_PLOT_SQ("InUse", (int64_t)FSPerfStats::inUse, (int64_t)FSPerfStats::inUse+1);
                 FSPerfStats::inUse++;
@@ -407,7 +409,7 @@ namespace FSPerfStats
 
         template < ObjType_t OD = ObjTypeDiscriminator,
                    std::enable_if_t<OD == ObjType_t::OT_GENERAL> * = nullptr>
-        RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
+        explicit RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
             #ifdef USAGE_TRACKING
@@ -425,7 +427,7 @@ namespace FSPerfStats
             LL_PROFILE_ZONE_COLOR(tracy::Color::Purple);
 
         #ifdef USAGE_TRACKING
-            if(FSPerfStats::inUseAvatar){FSZoneText("OVERLAP AVATAR",14);}
+            if(FSPerfStats::inUseAvatar){LL_PROFILE_ZONE_TEXT("OVERLAP AVATAR",14);}
 
             LL_PROFILE_PLOT_SQ("InUseAv", (int64_t)FSPerfStats::inUseAvatar, (int64_t)FSPerfStats::inUseAvatar+1);
             FSPerfStats::inUseAvatar++;
@@ -502,6 +504,7 @@ namespace FSPerfStats
 
 // helper functions
 using RATptr = std::unique_ptr<FSPerfStats::RecordAttachmentTime>;
+using RSTptr = std::unique_ptr<FSPerfStats::RecordSceneTime>;
 
 template <typename T>
 static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPtrp)
@@ -542,11 +545,12 @@ static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPt
                 // deliberately reset to ensure destruction before construction of replacement.
                 ratPtrp->reset();
             };
-            *ratPtrp = std::make_unique<FSPerfStats::RecordAttachmentTime>( av, 
-                                                                            obj,
-                                                                            ( (LLPipeline::sShadowRender)?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ), 
-                                                                            isRigged, 
-                                                                            rootAtt->isHUDAttachment());
+            *ratPtrp = std::make_unique<FSPerfStats::RecordAttachmentTime>( 
+                av, 
+                obj,
+                ( LLPipeline::sShadowRender?FSPerfStats::StatType_t::RENDER_SHADOWS : FSPerfStats::StatType_t::RENDER_GEOMETRY ), 
+                isRigged, 
+                rootAtt->isHUDAttachment());
         }
     }
     return;
