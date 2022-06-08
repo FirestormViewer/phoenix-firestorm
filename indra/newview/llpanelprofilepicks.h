@@ -119,7 +119,7 @@ public:
 
     BOOL postBuild() override;
 
-    void setAvatarId(const LLUUID& avatar_id);
+    void setAvatarId(const LLUUID& avatar_id) override;
 
     void setPickId(const LLUUID& id) { mPickId = id; }
     virtual LLUUID& getPickId() { return mPickId; }
@@ -214,9 +214,14 @@ protected:
     void onClickSetLocation();
 
     /**
-     * Callback for "Save" button click
+     * Callback for "Save" and "Create" button click
      */
     void onClickSave();
+
+    /**
+     * Callback for "Save" button click
+     */
+    void onClickCancel();
 
     std::string getLocationNotice();
 
@@ -232,6 +237,8 @@ protected:
     LLTextEditor*       mPickDescription;
     LLButton*           mSetCurrentLocationButton;
     LLButton*           mSaveButton;
+    LLButton*           mCreateButton;
+    LLButton*           mCancelButton;
 
     LLVector3d mPosGlobal;
     LLUUID mParcelId;

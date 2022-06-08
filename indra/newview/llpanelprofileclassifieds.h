@@ -131,7 +131,7 @@ public:
 
     BOOL postBuild() override;
 
-    void onOpen(const LLSD& key);
+    void onOpen(const LLSD& key) override;
 
     void processProperties(void* data, EAvatarProcessorType type) override;
 
@@ -298,9 +298,8 @@ private:
     LLButton*           mSetLocationButton;
     LLButton*           mCancelButton;
 
-    LLPanel*            mMapBtnCnt;
-    LLPanel*            mTeleportBtnCnt;
-    LLPanel*            mEditBtnCnt;
+    LLPanel*            mUtilityBtnCnt;
+    LLPanel*            mPublishBtnsCnt;
     LLPanel*            mSaveBtnCnt;
     LLPanel*            mCancelBtnCnt;
 

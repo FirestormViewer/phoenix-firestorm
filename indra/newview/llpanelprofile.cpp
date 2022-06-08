@@ -59,6 +59,7 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
 #include "llcommandhandler.h"
+#include "llfloaterprofiletexture.h"
 #include "llfloaterreg.h"
 #include "llfilepicker.h"
 #include "llfirstuse.h"
@@ -261,10 +262,6 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
     if (panel_notes)
     {
         panel_notes->processProperties(&avatar_notes);
-    }
-    if (panel_sl)
-    {
-        panel_sl->processNotesProperties(&avatar_notes);
     }
 }
 
@@ -691,6 +688,8 @@ void LLFloaterProfilePermissions::onOpen(const LLSD& key)
         fillRightsData();
     }
 
+    mCancelBtn->setFocus(true);
+
     mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID, boost::bind(&LLFloaterProfilePermissions::onAvatarNameCache, this, _1, _2));
 }
 
@@ -882,7 +881,6 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
     mSecondLifePicLayout    = getChild<LLPanel>("image_panel");
     mDescriptionEdit        = getChild<LLTextEditor>("sl_description_edit");
-    mNotesSnippet           = getChild<LLTextEditor>("notes_snippet");
     mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu");
     mSaveDescriptionChanges = getChild<LLButton>("save_description_changes");
     mDiscardDescriptionChanges = getChild<LLButton>("discard_description_changes");
@@ -895,7 +893,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
 
     // <FS:Ansariel> Undo LL dumb-down junk
     mStatusText = getChild<LLTextBox>("status");
-    mStatusText->setVisible(FALSE);
+    childSetVisible("online_status_layout", false);
     // </FS:Ansariel>
 
     mShowInSearchCombo->setCommitCallback([this](LLUICtrl*, void*) { onShowInSearchCallback(); }, nullptr);
@@ -913,6 +911,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mCantSeeOnMapIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCanEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
+    mSecondLifePic->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentProfileTexture(); });
 
     return TRUE;
 }
@@ -999,6 +998,8 @@ void LLPanelProfileSecondLife::resetData()
 
     // Set default image and 1:1 dimensions for it
     mSecondLifePic->setValue("Generic_Person_Large");
+    mImageId = LLUUID::null;
+
     LLRect imageRect = mSecondLifePicLayout->getRect();
     mSecondLifePicLayout->reshape(imageRect.getHeight(), imageRect.getHeight());
 
@@ -1006,16 +1007,24 @@ void LLPanelProfileSecondLife::resetData()
     mGroups.clear();
     mGroupList->setGroups(mGroups);
 
+    bool own_profile = getSelfProfile();
     mCanSeeOnlineIcon->setVisible(false);
-    mCantSeeOnlineIcon->setVisible(true);
+    mCantSeeOnlineIcon->setVisible(!own_profile);
     mCanSeeOnMapIcon->setVisible(false);
-    mCantSeeOnMapIcon->setVisible(true);
+    mCantSeeOnMapIcon->setVisible(!own_profile);
     mCanEditObjectsIcon->setVisible(false);
-    mCantEditObjectsIcon->setVisible(true);
+    mCantEditObjectsIcon->setVisible(!own_profile);
 
-    childSetVisible("permissions_panel", false);
+    mCanSeeOnlineIcon->setEnabled(false);
+    mCantSeeOnlineIcon->setEnabled(false);
+    mCanSeeOnMapIcon->setEnabled(false);
+    mCantSeeOnMapIcon->setEnabled(false);
+    mCanEditObjectsIcon->setEnabled(false);
+    mCantEditObjectsIcon->setEnabled(false);
 
-    mStatusText->setVisible(FALSE); // <FS:Ansariel> Undo LL dumb-down junk
+    childSetVisible("partner_layout", FALSE);
+
+    childSetVisible("online_status_layout", false); // <FS:Ansariel> Undo LL dumb-down junk
 }
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
@@ -1056,11 +1065,6 @@ void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
     mGroupList->setGroups(mGroups);
 }
 
-void LLPanelProfileSecondLife::processNotesProperties(LLAvatarNotes* avatar_notes)
-{
-    mNotesSnippet->setValue(avatar_notes->notes);
-}
-
 void LLPanelProfileSecondLife::openGroupProfile()
 {
     LLUUID group_id = mGroupList->getSelectedUUID();
@@ -1070,15 +1074,8 @@ void LLPanelProfileSecondLife::openGroupProfile()
 void LLPanelProfileSecondLife::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     mAvatarNameCacheConnection.disconnect();
-    if (getIsLoaded())
-    {
-        fillNameAgeData(av_name, mBornOn);
-    }
-}
-
-void LLPanelProfileSecondLife::setNotesSnippet(std::string &notes)
-{
-    mNotesSnippet->setValue(notes);
+    getChild<LLUICtrl>("display_name")->setValue(av_name.getDisplayName());
+    getChild<LLUICtrl>("user_name")->setValue(av_name.getAccountName());
 }
 
 void LLPanelProfileSecondLife::setProfileImageUploading(bool loading)
@@ -1099,6 +1096,7 @@ void LLPanelProfileSecondLife::setProfileImageUploading(bool loading)
 void LLPanelProfileSecondLife::setProfileImageUploaded(const LLUUID &image_asset_id)
 {
     mSecondLifePic->setValue(image_asset_id);
+    mImageId = image_asset_id;
 
     LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(image_asset_id);
     if (imagep->getFullHeight())
@@ -1114,6 +1112,20 @@ void LLPanelProfileSecondLife::setProfileImageUploaded(const LLUUID &image_asset
             new LLHandle<LLPanel>(getHandle()),
             NULL,
             FALSE);
+    }
+
+    LLFloater *floater = mFloaterProfileTextureHandle.get();
+    if (floater)
+    {
+        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+        if (mImageId.notNull())
+        {
+            texture_view->loadAsset(mImageId);
+        }
+        else
+        {
+            texture_view->resetAsset();
+        }
     }
 
     setProfileImageUploading(false);
@@ -1157,30 +1169,19 @@ void LLPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
     // and to make sure icons in text will be up to date
     LLAvatarIconIDCache::getInstance()->add(avatar_data->avatar_id, avatar_data->image_id);
 
-    mBornOn = avatar_data->born_on;
-
-    // Should be possible to get user and display names from AgentProfile capability
-    // but at the moment contraining this to limits of LLAvatarData
-    LLAvatarName av_name;
-    if (LLAvatarNameCache::get(avatar_data->avatar_id, &av_name))
-    {
-        fillNameAgeData(av_name, mBornOn);
-    }
-    else if (!mAvatarNameCacheConnection.connected())
-    {
-        // shouldn't happen, but just in case
-        mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
-    }
+    fillAgeData(avatar_data->born_on);
 
     setDescriptionText(avatar_data->about_text);
 
     if (avatar_data->image_id.notNull())
     {
         mSecondLifePic->setValue(avatar_data->image_id);
+        mImageId = avatar_data->image_id;
     }
     else
     {
         mSecondLifePic->setValue("Generic_Person_Large");
+        mImageId = LLUUID::null;
     }
 
     // Will be loaded as a LLViewerFetchedTexture::BOOST_UI due to mSecondLifePic
@@ -1293,6 +1294,11 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 
 void LLPanelProfileSecondLife::fillRightsData()
 {
+    if (getSelfProfile())
+    {
+        return;
+    }
+
     const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
     // If true - we are viewing friend's profile, enable check boxes and set values.
     if (relation)
@@ -1308,41 +1314,35 @@ void LLPanelProfileSecondLife::fillRightsData()
         mCantSeeOnMapIcon->setVisible(!can_see_on_map);
         mCanEditObjectsIcon->setVisible(can_edit_objects);
         mCantEditObjectsIcon->setVisible(!can_edit_objects);
+
+        mCanSeeOnlineIcon->setEnabled(true);
+        mCantSeeOnlineIcon->setEnabled(true);
+        mCanSeeOnMapIcon->setEnabled(true);
+        mCantSeeOnMapIcon->setEnabled(true);
+        mCanEditObjectsIcon->setEnabled(true);
+        mCantEditObjectsIcon->setEnabled(true);
     }
     else
     {
         mCanSeeOnlineIcon->setVisible(false);
-        mCantSeeOnlineIcon->setVisible(true);
+        mCantSeeOnlineIcon->setVisible(false);
         mCanSeeOnMapIcon->setVisible(false);
-        mCantSeeOnMapIcon->setVisible(true);
+        mCantSeeOnMapIcon->setVisible(false);
         mCanEditObjectsIcon->setVisible(false);
-        mCantEditObjectsIcon->setVisible(true);
+        mCantEditObjectsIcon->setVisible(false);
     }
-
-    childSetVisible("permissions_panel", NULL != relation);
 }
 
-void LLPanelProfileSecondLife::fillNameAgeData(const LLAvatarName &av_name, const LLDate &born_on)
+void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
 {
-    getChild<LLUICtrl>("display_name")->setValue(av_name.getDisplayName());
-
-    // <FS:Ansariel> Unfuck this...
-    //std::string name_and_date = getString("name_date_format");
-    //LLSD args_name;
-    //args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
-    //args_name["[NAME]"] = av_name.getAccountName();
-    //LLStringUtil::format(name_and_date, args_name);
-    //getChild<LLUICtrl>("user_name_date")->setValue(name_and_date);
-    getChild<LLUICtrl>("user_name_date")->setValue(av_name.getAccountName());
-    // </FS:Ansariel>
+    std::string name_and_date = getString("date_format");
+    LLSD args_name;
+    args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
+    LLStringUtil::format(name_and_date, args_name);
+    getChild<LLUICtrl>("sl_birth_date")->setValue(name_and_date);
 
     std::string register_date = getString("age_format");
     LLSD args_age;
-    // <FS:Ansariel> Re-add register date
-    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
-    LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)born_on.secondsSinceEpoch()));
-    args_age["[REG_DATE]"] = birth_date;
-    // </FS:Ansariel>
     args_age["[AGE]"] = LLDateUtil::ageFromDate(born_on, LLDate::now());
     LLStringUtil::format(register_date, args_age);
     getChild<LLUICtrl>("user_age")->setValue(register_date);
@@ -1353,12 +1353,12 @@ void LLPanelProfileSecondLife::onImageLoaded(BOOL success, LLViewerFetchedTextur
     LLRect imageRect = mSecondLifePicLayout->getRect();
     if (!success || imagep->getFullWidth() == imagep->getFullHeight())
     {
-        mSecondLifePicLayout->reshape(imageRect.getHeight(), imageRect.getHeight());
+        mSecondLifePicLayout->reshape(imageRect.getWidth(), imageRect.getWidth());
     }
     else
     {
         // assume 3:4, for sake of firestorm
-        mSecondLifePicLayout->reshape(imageRect.getHeight() * 4 / 3, imageRect.getHeight());
+        mSecondLifePicLayout->reshape(imageRect.getWidth(), imageRect.getWidth() * 3 / 4);
     }
 }
 
@@ -1443,7 +1443,6 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
     // <FS:Ansariel> Undo LL dumb-down junk
     //else
     //{
-    //    childSetVisible("spacer_layout", true);
     //    childSetVisible("frind_layout", false);
     //    childSetVisible("online_layout", false);
     //    childSetVisible("offline_layout", false);
@@ -1454,11 +1453,10 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
 void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_online, bool online)
 {
     // <FS:Ansariel> Undo LL dumb-down junk
-    //childSetVisible("spacer_layout", false);
     //childSetVisible("frind_layout", is_friend);
     //childSetVisible("online_layout", online && show_online);
     //childSetVisible("offline_layout", !online && show_online);
-    mStatusText->setVisible(show_online);
+    childSetVisible("online_status_layout", show_online);
 
     std::string status = getString(online ? "status_online" : "status_offline");
 
@@ -1665,6 +1663,14 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
                 boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), params));
 
             mSecondLifePic->setValue("Generic_Person_Large");
+            mImageId = LLUUID::null;
+
+            LLFloater *floater = mFloaterProfileTextureHandle.get();
+            if (floater)
+            {
+                LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+                texture_view->resetAsset();
+            }
         }
         else
         {
@@ -1727,7 +1733,7 @@ bool LLPanelProfileSecondLife::onEnableMenu(const LLSD& userdata)
     else if (item_name == "remove_photo")
     {
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
-        return !cap_url.empty() && !mWaitingForImageUpload;
+        return mImageId.notNull() && !cap_url.empty() && !mWaitingForImageUpload;
     }
 
     return false;
@@ -1855,6 +1861,51 @@ void LLPanelProfileSecondLife::onShowAgentPermissionsDialog()
     {
         floater->setMinimized(FALSE);
         floater->setVisibleAndFrontmost(TRUE);
+    }
+}
+
+void LLPanelProfileSecondLife::onShowAgentProfileTexture()
+{
+    if (!getIsLoaded())
+    {
+        return;
+    }
+
+    LLFloater *floater = mFloaterProfileTextureHandle.get();
+    if (!floater)
+    {
+        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+        if (parent_floater)
+        {
+            LLFloaterProfileTexture * texture_view = new LLFloaterProfileTexture(parent_floater);
+            mFloaterProfileTextureHandle = texture_view->getHandle();
+            if (mImageId.notNull())
+            {
+                texture_view->loadAsset(mImageId);
+            }
+            else
+            {
+                texture_view->resetAsset();
+            }
+            texture_view->openFloater();
+            texture_view->setVisibleAndFrontmost(TRUE);
+
+            parent_floater->addDependentFloater(mFloaterProfileTextureHandle);
+        }
+    }
+    else // already open
+    {
+        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+        texture_view->setMinimized(FALSE);
+        texture_view->setVisibleAndFrontmost(TRUE);
+        if (mImageId.notNull())
+        {
+            texture_view->loadAsset(mImageId);
+        }
+        else
+        {
+            texture_view->resetAsset();
+        }
     }
 }
 
@@ -2275,20 +2326,6 @@ void LLPanelProfileNotes::onSaveNotesChanges()
     {
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("notes", mCurrentNotes)));
-        
-
-        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-        if (!parent_floater)
-        {
-            return;
-        }
-
-        LLPanel* panel = parent_floater->findChild<LLPanel>(PANEL_SECONDLIFE, TRUE);
-        LLPanelProfileSecondLife *panel_sl = dynamic_cast<LLPanelProfileSecondLife*>(panel);
-        if (panel_sl)
-        {
-            panel_sl->setNotesSnippet(mCurrentNotes);
-        }
     }
     else
     {

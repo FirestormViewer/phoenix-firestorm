@@ -91,7 +91,7 @@ public:
 
 	BOOL postBuild() override;
 
-	void resetData();
+	void resetData() override;
 
 	/**
 	 * Sends update data request to server.
@@ -100,7 +100,6 @@ public:
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
-    void setNotesSnippet(std::string &notes);
     void setProfileImageUploading(bool loading);
     void setProfileImageUploaded(const LLUUID &image_asset_id);
 
@@ -119,11 +118,6 @@ protected:
 	 * Processes group related data received from server.
 	 */
 	void processGroupProperties(const LLAvatarGroups* avatar_groups);
-
-    /**
-     * Processes notes related data received from server.
-     */
-    void processNotesProperties(LLAvatarNotes* avatar_notes);
 
 	/**
 	 * Fills common for Avatar profile and My Profile fields.
@@ -148,7 +142,7 @@ protected:
     /**
      * Fills user name, display name, age.
      */
-    void fillNameAgeData(const LLAvatarName &av_name, const LLDate &born_on);
+    void fillAgeData(const LLDate &born_on);
 
     void onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep);
     static void onImageLoaded(BOOL success,
@@ -187,6 +181,7 @@ private:
     void onSaveDescriptionChanges();
     void onDiscardDescriptionChanges();
     void onShowAgentPermissionsDialog();
+    void onShowAgentProfileTexture();
     void onOpenNotes();
 
 private:
@@ -200,7 +195,6 @@ private:
     LLIconCtrl*			mSecondLifePic;
 	LLPanel*			mSecondLifePicLayout;
     LLTextEditor*		mDescriptionEdit;
-    LLTextEditor*		mNotesSnippet;
     LLMenuButton*		mAgentActionMenuButton;
     LLButton*			mSaveDescriptionChanges;
     LLButton*			mDiscardDescriptionChanges;
@@ -212,13 +206,14 @@ private:
     LLIconCtrl*			mCantEditObjectsIcon;
 
     LLHandle<LLFloater>	mFloaterPermissionsHandle;
+    LLHandle<LLFloater>	mFloaterProfileTextureHandle;
 
     bool				mHasUnsavedDescriptionChanges;
 	bool				mVoiceStatus;
     bool				mWaitingForImageUpload;
     bool				mAllowPublish;
     std::string			mDescriptionText;
-    LLDate				mBornOn;
+    LLUUID				mImageId;
 
 	boost::signals2::connection	mAvatarNameCacheConnection;
 };
@@ -235,18 +230,18 @@ public:
 	LLPanelProfileWeb();
 	/*virtual*/ ~LLPanelProfileWeb();
 
-	/*virtual*/ void onOpen(const LLSD& key);
+	void onOpen(const LLSD& key) override;
 
-	/*virtual*/ BOOL postBuild();
+	BOOL postBuild() override;
 
-	void resetData();
+	void resetData() override;
 
 	/**
 	 * Loads web profile.
 	 */
-	/*virtual*/ void updateData();
+	void updateData() override;
 
-	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
+	void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event) override;
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
@@ -282,7 +277,7 @@ public:
 
     void processProperties(const LLAvatarData* avatar_data);
 
-	void resetData();
+	void resetData() override;
 
     void setProfileImageUploading(bool loading);
     void setProfileImageUploaded(const LLUUID &image_asset_id);
@@ -331,7 +326,7 @@ public:
 
     void processProperties(LLAvatarNotes* avatar_notes);
 
-	void resetData();
+	void resetData() override;
 
 	void updateData() override;
 

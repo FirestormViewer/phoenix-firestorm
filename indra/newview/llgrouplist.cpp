@@ -50,7 +50,6 @@
 #include "llurlaction.h"
 
 static LLDefaultChildRegistry::Register<LLGroupList> r("group_list");
-S32 LLGroupListItem::sIconWidth = 0;
 
 class LLGroupComparator : public LLFlatListView::ItemComparator
 {
@@ -310,7 +309,10 @@ void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LL
 	item->getChildView("info_btn")->setVisible( false);
 	item->getChildView("profile_btn")->setVisible( false);
 	item->setGroupIconVisible(mShowIcons);
-    item->setVisibleInProfile(visible_in_profile);
+    if (!mShowIcons)
+    {
+        item->setVisibleInProfile(visible_in_profile);
+    }
 	// <FS:Ansariel> Mark groups hidden in profile
 	item->setVisibleInProfile(visible_in_profile);
 	// </FS:Ansariel> Mark groups hidden in profile
@@ -435,13 +437,6 @@ mForAgent(for_agent)
     {
         buildFromFile( "panel_group_list_item_short.xml");
     }
-
-	// Remember group icon width including its padding from the name text box,
-	// so that we can hide and show the icon again later.
-    if (!sIconWidth && mGroupNameBox)
-	{
-		sIconWidth = mGroupNameBox->getRect().mLeft - mGroupIcon->getRect().mLeft;
-	}
 }
 
 LLGroupListItem::~LLGroupListItem()
@@ -471,6 +466,12 @@ BOOL  LLGroupListItem::postBuild()
     {
         mVisibilityShowBtn->setClickedCallback([this](LLUICtrl *, const LLSD &) { onVisibilityBtnClick(true); });
     }
+
+    // Remember group icon width including its padding from the name text box,
+    // so that we can hide and show the icon again later.
+    // Also note that panel_group_list_item and panel_group_list_item_short
+    // have icons of different sizes so we need to figure it per file.
+    mIconWidth = mGroupNameBox->getRect().mLeft - mGroupIcon->getRect().mLeft;
 
 	return TRUE;
 }
@@ -562,7 +563,7 @@ void LLGroupListItem::setGroupIconVisible(bool visible)
 
 	// Move the group name horizontally by icon size + its distance from the group name.
 	LLRect name_rect = mGroupNameBox->getRect();
-	name_rect.mLeft += visible ? sIconWidth : -sIconWidth;
+	name_rect.mLeft += visible ? mIconWidth : -mIconWidth;
 	mGroupNameBox->setRect(name_rect);
 }
 
