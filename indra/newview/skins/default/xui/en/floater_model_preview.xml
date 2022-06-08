@@ -1475,7 +1475,7 @@
            layout="topleft"
            left="24"
            height="12"
-           name="mesh_preview_ud_preset_label"
+           name="lod_suffix_label"
            top_pad="5"
            width="110">
            LOD Suffixes: 
@@ -1498,7 +1498,7 @@
           layout="topleft"
           left="24"
           height="12"
-          name="mesh_preview_ud_preset_label"
+          name="suf_lowest_lab"
           top_pad="10"
           halign="right"
           width="60">
@@ -1549,7 +1549,7 @@
         layout="topleft"
         left_pad="5"
         height="12"
-        name="suf_low_lab"
+        name="suf_medium_lab"
         halign="right"
         width="40">
         Medium: 
@@ -1574,7 +1574,7 @@
         left_pad="5"
         height="12"
         halign="right"
-        name="suf_med_lab"
+        name="suf_high_lab"
         top_delta="5"
         width="40">
         High: 
@@ -1598,7 +1598,7 @@
         layout="topleft"
         left_pad="5"
         height="12"
-        name="suf_low_lab"
+        name="suf_physics_lab"
         top_delta="5"
         width="40">
         Physics: 
@@ -1650,7 +1650,7 @@
          name="set_user_def_phys"
          top_delta="0"
          width="100">
-        </button>        
+        </button>
        <text
          follows="left|top"
          layout="topleft"
