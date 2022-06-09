@@ -1522,11 +1522,6 @@ void LLAppViewer::initMaxHeapSize()
 #else
     F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize64");
 #endif
-// <FS:Ansariel> Enable low memory checks on 32bit builds
-#if ADDRESS_SIZE == 64
-	max_heap_size_gb = F32Gigabytes(128);
-#endif
-// </FS:Ansariel>
 
     LLMemory::initMaxHeapSizeGB(max_heap_size_gb);
 }
