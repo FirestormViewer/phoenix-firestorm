@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Save Pref Preset" title="GUARDAR VALOR PREDEFINIDO PREF">
-	<string name="title_graphic">
-		Guardar valor predefinido gráfico
-	</string>
-	<string name="title_camera">
-		Guardar valor predefinido de cámara
-	</string>
+<floater name="save_pref_preset" title="GUARDAR VALOR PREDEFINIDO PREF">
 	<text name="Preset">
 		Escribe el nombre del valor predefinido o elige un valor predefinido ya existente.
 	</text>

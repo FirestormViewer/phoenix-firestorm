@@ -1,48 +1,66 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Luoghi" name="places panel">
 	<string name="landmarks_tab_title" value="Segnaposto"/>
-	<string name="teleport_history_tab_title" value="Cronologia teleport"/>
-	<filter_editor label="Filtra i luoghi" name="Filter"/>
-	<panel name="button_panel">
-		<layout_stack name="bottom_bar_ls0">
-			<layout_panel name="lp1">
-				<layout_stack name="bottom_bar_ls1">
-					<layout_panel name="teleport_btn_lp">
-						<button label="Teleport" name="teleport_btn" tool_tip="Teleport alla zona selezionata"/>
+	<string name="teleport_history_tab_title" value="Storico teleport"/>
+	<string name="favorites_tab_title" value="Preferiti" />
+	<string name="tooltip_trash_items" value="Elimina il segnaposto o la cartella selezionata" />
+	<string name="tooltip_trash_history" value="Elimina lo storico dei luoghi visitati" />
+	<layout_stack name="places_layout_panel">
+		<layout_panel name="main_panel">
+			<layout_stack name="top_menu_panel">
+				<layout_panel name="filter_panel">
+					<filter_editor label="Filtra i luoghi" name="Filter" />
+				</layout_panel>
+				<layout_panel name="options_gear_btn_panel">
+					<menu_button tool_tip="Mostra opzioni" name="options_gear_btn" />
+				</layout_panel>
+				<layout_panel name="options_sort_btn_panel">
+					<menu_button tool_tip="Mostra le opzioni di ordinamento" name="sorting_menu_btn" />
+				</layout_panel>
+				<layout_panel name="add_btn_panel">
+					<menu_button name="add_menu_btn" tool_tip="Aggiungi un nuovo segnaposto o una cartella" />
+				</layout_panel>
+				<layout_panel name="trash_btn_panel" tool_tip="Elimina il segnaposto o la cartella selezionata" />
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="button_layout_panel">
+			<panel name="button_panel">
+				<layout_stack name="bottom_bar_ls0">	
+					<layout_panel name="lp1">
+						<layout_stack name="bottom_bar_ls1">	
+							<layout_panel name="teleport_btn_lp">
+								<button label="Teleport" name="teleport_btn" tool_tip="Teleport al luogo selezionato" />
+							</layout_panel>
+							<layout_panel name="chat_btn_lp">
+								<button label="Mappa" name="map_btn" tool_tip="Mostra il luogo selezionato sulla mappa" />
+							</layout_panel>
+						</layout_stack>
 					</layout_panel>
-					<layout_panel name="chat_btn_lp">
-						<button label="Mappa" name="map_btn" tool_tip="Mostra la zona corrispondente nella mappa del mondo"/>
+					<layout_panel name="lp_options">
+						<menu_button name="overflow_btn" tool_tip="Mostra altre opzioni" />
+					</layout_panel>
+					<layout_panel name="lp2">
+						<layout_stack name="bottom_bar_profile_ls">
+							<layout_panel name="profile_btn_lp">
+								<button label="Profilo" name="profile_btn" tool_tip="Mostra il profilo del luogo" />
+							</layout_panel>
+						</layout_stack>
+						<layout_stack name="bottom_bar_close_ls3">
+							<layout_panel name="close_btn_lp">
+								<button label="Chiudi" name="close_btn" />
+							</layout_panel>
+						</layout_stack>
+					</layout_panel>
+				</layout_stack>	
+				<layout_stack name="bottom_bar_ls2">
+					<layout_panel name="save_btn_lp">
+						<button label="Salva" name="save_btn" />
+					</layout_panel>
+					<layout_panel name="cancel_btn_lp">
+						<button label="Annulla" name="cancel_btn" />
 					</layout_panel>
 				</layout_stack>
-			</layout_panel>
-			<layout_panel name="lp2">
-				<layout_stack name="bottom_bar_ls3">
-					<layout_panel name="edit_btn_lp">
-						<button label="Modifica" name="edit_btn" tool_tip="Modifica le informazioni del segnaposto"/>
-					</layout_panel>
-					<layout_panel name="overflow_btn_lp">
-						<menu_button label="▼" name="overflow_btn" tool_tip="Mostra ulteriori opzioni"/>
-					</layout_panel>
-				</layout_stack>
-				<layout_stack name="bottom_bar_profile_ls">
-					<layout_panel name="profile_btn_lp">
-						<button label="Profilo" name="profile_btn" tool_tip="Mostra il profilo del luogo"/>
-					</layout_panel>
-				</layout_stack>
-				<layout_stack name="bottom_bar_close_ls3">
-					<layout_panel name="close_btn_lp">
-						<button label="Chiudi" name="close_btn"/>
-					</layout_panel>
-				</layout_stack>
-			</layout_panel>
-		</layout_stack>
-		<layout_stack name="bottom_bar_ls2">
-			<layout_panel name="save_btn_lp">
-				<button label="Salva" name="save_btn"/>
-			</layout_panel>
-			<layout_panel name="cancel_btn_lp">
-				<button label="Annulla" name="cancel_btn"/>
-			</layout_panel>
-		</layout_stack>
-	</panel>
+			</panel>
+		</layout_panel>
+	</layout_stack>
 </panel>

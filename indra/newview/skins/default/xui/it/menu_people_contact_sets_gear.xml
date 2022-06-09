@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_people_contact_sets_gear">
+	<menu_item_call label="Visualizza profilo" name="profile" />
+	<menu_item_call label="Invia IM" name="im" />
+	<menu_item_call label="Offri teleport" name="teleport" />
+	<menu_item_call label="Imposta alias..." name="set_pseudonym" />
+	<menu_item_call label="Rimuovi alias..." name="remove_pseudonym" />
+	<menu_item_call label="Rimuovi nome mostrato..." name="remove_displayname" />
+	<menu_item_call label="Configura set contatti" name="set_config" />
+</toggleable_menu>

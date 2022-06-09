@@ -1,15 +1,56 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sole e Luna" name="panel_settings_sky_hbodies">
-	<layout_stack>
+	<layout_stack name="main_ls">
 		<layout_panel name="sun_layout">
-			<check_box label="Mostra marcatore" name="sunbeacon"/>
+			<text name="sun_stars_label">
+				Sole e Stelle
+			</text>
+			<check_box label="Mostra marcatore" name="sunbeacon" />
+			<text name="position_label">
+				Posizione:
+			</text>
+			<text name="image_label">
+				Immagine e dimensioni:
+			</text>
+			<text name="color_label">
+				Colore:
+			</text>
+			<text name="sun_azimuth_label">
+				Azimut:
+			</text>
+			<text name="sun_elevation_label">
+				Elevazione:
+			</text>
+			<text name="glow_focus_label">
+				Nitidez. bagliore:
+			</text>
+			<text name="glow_size_label">
+				Dimen. bagliore:
+			</text>
+			<text name="star_brightness_label">
+				Luminos. stelle:
+			</text>
 		</layout_panel>
-		<layout_panel>
-			<layout_stack>
-				<layout_panel name="moon_layout">
-					<check_box label="Mostra marcatore" name="moonbeacon"/>
-				</layout_panel>
-			</layout_stack>
+		<layout_panel name="moon_layout">
+			<text name="moon_label">
+				Luna
+			</text>
+			<check_box label="Mostra marcatore" name="moonbeacon" />
+			<text name="position_label">
+				Posizione:
+			</text>
+			<text name="moon_image_label">
+				Immagine e dimensioni:
+			</text>
+			<text name="moon_azimuth_label">
+				Azimut:
+			</text>
+			<text name="moon_elevation_label">
+				Elevazione:
+			</text>
+			<text name="brightness_label">
+				Luminosità:
+			</text>
 		</layout_panel>
 	</layout_stack>
 </panel>

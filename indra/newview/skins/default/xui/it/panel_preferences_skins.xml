@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Aspetto" name="skin_panel">
     <text name="skin_textbox">
-        Aspetto:
+        Skin del viewer:
     </text>
     <text name="skin_textbox1">
         (Richiesto riavvio)

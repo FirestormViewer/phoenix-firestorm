@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="move_actions">
+		<columns label="Movimento" name="lst_action" />
+	</rows>
+	<rows name="walk_to">
+		<columns name="lst_action" tool_tip="Cammina verso il luogo indicato dal cursore del mouse." value="Vai a" />
+	</rows>
+	<rows name="teleport_to">
+		<columns name="lst_action" tool_tip="Teleport nel luogo indicato dal cursore del mouse. Non tutte le posizioni consentono il teleport diretto." value="Teleport a" />
+	</rows>
+	<rows name="push_forward">
+		<columns name="lst_action" value="Vai avanti" />
+	</rows>
+	<rows name="push_backward">
+		<columns name="lst_action" value="Torna indietro" />
+	</rows>
+	<rows name="turn_left">
+		<columns name="lst_action" value="Gira a sinistra" />
+	</rows>
+	<rows name="turn_right">
+		<columns name="lst_action" value="Gira a destra" />
+	</rows>
+	<rows name="slide_left">
+		<columns name="lst_action" value="Vai a sinistra" />
+	</rows>
+	<rows name="slide_right">
+		<columns name="lst_action" value="Vai a destra" />
+	</rows>
+	<rows name="jump">
+		<columns name="lst_action" value="Salto / Su" />
+	</rows>
+	<rows name="push_down">
+		<columns name="lst_action" value="Giù" />
+	</rows>
+	<rows name="run_forward">
+		<columns name="lst_action" value="Corri in avanti" />
+	</rows>
+	<rows name="run_backward">
+		<columns name="lst_action" value="Corri indietro" />
+	</rows>
+	<rows name="run_left">
+		<columns name="lst_action" value="Corri a sinistra" />
+	</rows>
+	<rows name="run_right">
+		<columns name="lst_action" value="Corri a destra" />
+	</rows>
+	<rows name="toggle_run">
+		<columns name="lst_action" value="Corri sempre" />
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="lst_action" value="Vola / Ferma volo" />
+	</rows>
+	<rows name="toggle_sit">
+		<columns name="lst_action" value="Siediti / Alzati" />
+	</rows>
+	<rows name="stop_moving">
+		<columns name="lst_action" value="Stop movimento" />
+	</rows>
+</contents>

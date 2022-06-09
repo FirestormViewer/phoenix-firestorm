@@ -34,7 +34,7 @@
 			<check_box label="Crea flusso di particelle quando si offre un&apos;oggetto ad un altro residente" name="FSCreateGiveInventoryParticleEffect"/>
 			<button label="Organizza lista muti/bloccati" name="block_list"/>
 		</panel>
-		<panel label="Log &amp; trascrizioni" name="tab-logging" >
+		<panel label="Log e Trascrizioni" name="tab-logging" >
 			<text name="logging_label">
 				Salvare:
 			</text>
@@ -70,8 +70,12 @@
 			<check_box label="Non mostrare a nessuno il mio sguardo" name="privatelookat" tool_tip="Fa in modo che gli altri non vedano cosa stai guardando"/>
 			<check_box label="Blocca la rotazione della testa dell&apos;avatar" name="privateLocalLookat" tool_tip="Questa opzione blocca la testa dell&apos;avatar in modo tale da non mostrare dove si sta guardando"/>
 			<check_box label="Non mostrare cosa sto selezionando" name="privatepointat" tool_tip="Questa opzione fa in modo che nessuno veda il punto di selezione"/>
+			<check_box label="Limita la distanza (dalla testa):" width="185" name="LimitLookAt" tool_tip="Vincola lo sguardo intorno alla testa in base a distanza impostata." />
 		</panel>
 		<panel label="Autorisposte 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">
+				Nota: Per attivare i messaggi di risposta automatica, imposta il tuo stato online tramite il menu Comunica > Status
+			</text>
 			<text name="text_box3">
 				Risposta automatica quando Non disponibile (Occupato):
 			</text>

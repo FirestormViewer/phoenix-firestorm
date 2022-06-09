@@ -3266,7 +3266,13 @@ S32 LLAgentCamera::directionToKey(S32 direction)
 void LLAgentCamera::storeCameraPosition()
 {
 	gSavedPerAccountSettings.setVector3d("FSStoredCameraPos", getCameraPositionGlobal());
-	gSavedPerAccountSettings.setVector3d("FSStoredCameraFocus", getFocusTargetGlobal());
+
+	// get a vector pointing forward from the camera view manually, getFocusTargetGlobal() will
+	// not return useful values if the camera is in flycam mode or was just switched out of
+	// flycam  mode and not repositioned after
+	LLVector3d forward = LLVector3d(1.0, 0.0, 0.0) * LLViewerCamera::getInstance()->getQuaternion() + getCameraPositionGlobal();
+	gSavedPerAccountSettings.setVector3d("FSStoredCameraFocus", forward);
+
 	LLUUID stored_camera_focus_object_id = LLUUID::null;
 	if (mFocusObject)
 	{
@@ -3294,6 +3300,15 @@ void LLAgentCamera::loadCameraPosition()
 	{
 		report_to_nearby_chat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
 		return;
+	}
+
+	// switch off flycam mode if needed
+	if (LLViewerJoystick::getInstance()->getOverrideCamera())
+	{
+		handle_toggle_flycam();
+
+		// exiting from flycam usually keeps the camera where it is but here we want it to actually move
+		LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true);
 	}
 
 	unlockView();

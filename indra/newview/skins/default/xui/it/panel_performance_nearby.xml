@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_performance_nearby">
-	<text name="back_lbl">
+	<text name="back_lbl" width="60">
 		Indietro
 	</text>
 	<text name="av_nearby_title">
@@ -14,12 +14,12 @@
 	</text>
 	<slider tool_tip="Stabilisci a che punto un avatar complesso viene disegnato come 'impostor'." label="Massima complessità (K)" name="IndirectMaxComplexity" />
 	<slider tool_tip="Stabilisci a che punto la complessità di un avatar richiede troppo tempo per il rendering (unità: microsecondi)." label="Tempo massimo per il rendering (μs)" name="FSRenderAvatarMaxART" label_width="200" width="455" />
-	<text name="FSRenderAvatarMaxARTText">
+	<text name="FSRenderAvatarMaxARTText" width="75">
 		nessun limite
 	</text>
 	<name_list name="nearby_list">
 		<name_list.columns tool_tip="Barra grafica che mostra il tempo di rendering corrente (include l'autotuning) in proporzione del più lento." name="art_visual" />
-		<name_list.columns label="Tempo (μs)" tool_tip="Tempo di rendering dell'avatar. Tempo effettivo impiegato per il rendering dell'avatar prima di qualsiasi ottimizzazione automatica (in microsecondi)." name="art_value" />
+		<name_list.columns label="Tempo (μs)" tool_tip="Tempo di rendering dell'avatar. Tempo effettivo impiegato per il rendering dell'avatar prima di qualsiasi ottimizzazione automatica (in microsecondi)." name="art_value" width="90" />
 		<name_list.columns label="ARC" tool_tip="Complessità dell'avatar basata sulle regole standard." name="complex_value" />
 		<name_list.columns tool_tip="Mostra modalità di ottimizzazione. I=impostor, S=nessuna ombra." name="state" />
 		<name_list.columns label="Nome" name="name"/>

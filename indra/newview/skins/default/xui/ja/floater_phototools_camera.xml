@@ -84,7 +84,6 @@
 				<!--spinner
 				 name="S_Zoom"
 				 can_edit_text="true"
-				 control_name="CameraAngle"
 				 top_delta="-3"
 				 label_width="0"
 				 left_delta="120"

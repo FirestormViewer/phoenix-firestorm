@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Delete Pref Preset" title="Elimina preset preferenze">
+<floater name="delete_pref_preset" title="Elimina Preset">
 	<string name="title_graphic">
-		Elimina preset grafica
+		Elimina Preset Grafica
 	</string>
 	<string name="title_camera">
-		Elimina preset videocamera
+		Elimina Preset Camera
 	</string>
 	<text name="Preset">
 		Seleziona un preset

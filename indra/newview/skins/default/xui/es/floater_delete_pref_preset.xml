@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Delete Pref Preset" title="ELIMINAR VALOR PREDEFINIDO PREF">
+<floater name="delete_pref_preset" title="ELIMINAR VALOR PREDEFINIDO PREF">
 	<string name="title_graphic">
 		Eliminar valor predefinido gráfico
 	</string>

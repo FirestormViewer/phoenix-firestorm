@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Load Pref Preset" title="載入偏好預設">
+<floater name="load_pref_preset" title="載入偏好預設">
 	<string name="title_graphic">
 		載入顯像預設
 	</string>

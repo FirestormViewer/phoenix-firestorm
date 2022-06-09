@@ -133,45 +133,69 @@ void LLSurfacePatch::disconnectNeighbor(LLSurface *surfacep)
 	U32 i;
 	for (i = 0; i < 8; i++)
 	{
-		if (getNeighborPatch(i))
+		// <FS:Beq> cleanup disconnect logic a bit to see if it helps reduce OpenSim crashes.
+		// if (getNeighborPatch(i))
+		// {
+		// 	if (getNeighborPatch(i)->mSurfacep == surfacep)
+		// 	{
+		if (auto patch = getNeighborPatch(i))
 		{
-			if (getNeighborPatch(i)->mSurfacep == surfacep)
+			if (patch->mSurfacep == surfacep)
 			{
+				// Clean up connected edges
+				switch(i)
+				{
+					case EAST:
+						mConnectedEdge &= ~EAST_EDGE;
+						break;
+					case NORTH:
+						mConnectedEdge &= ~NORTH_EDGE;
+						break;
+					case WEST:
+						mConnectedEdge &= ~WEST_EDGE;
+						break;
+					case SOUTH:
+						mConnectedEdge &= ~SOUTH_EDGE;
+						break;
+				}
+		// </FS:Beq>
 				setNeighborPatch(i, NULL);
 				mNormalsInvalid[i] = TRUE;
 			}
 		}
 	}
 
-	// Clean up connected edges
-	if (getNeighborPatch(EAST))
-	{
-		if (getNeighborPatch(EAST)->mSurfacep == surfacep)
-		{
-			mConnectedEdge &= ~EAST_EDGE;
-		}
-	}
-	if (getNeighborPatch(NORTH))
-	{
-		if (getNeighborPatch(NORTH)->mSurfacep == surfacep)
-		{
-			mConnectedEdge &= ~NORTH_EDGE;
-		}
-	}
-	if (getNeighborPatch(WEST))
-	{
-		if (getNeighborPatch(WEST)->mSurfacep == surfacep)
-		{
-			mConnectedEdge &= ~WEST_EDGE;
-		}
-	}
-	if (getNeighborPatch(SOUTH))
-	{
-		if (getNeighborPatch(SOUTH)->mSurfacep == surfacep)
-		{
-			mConnectedEdge &= ~SOUTH_EDGE;
-		}
-	}
+	// <FS:Beq> cleanup disconnect logic a bit to see if it helps reduce OpenSim crashes.
+	// // Clean up connected edges
+	// if (getNeighborPatch(EAST))
+	// {
+	// 	if (getNeighborPatch(EAST)->mSurfacep == surfacep)
+	// 	{
+	// 		mConnectedEdge &= ~EAST_EDGE;
+	// 	}
+	// }
+	// if (getNeighborPatch(NORTH))
+	// {
+	// 	if (getNeighborPatch(NORTH)->mSurfacep == surfacep)
+	// 	{
+	// 		mConnectedEdge &= ~NORTH_EDGE;
+	// 	}
+	// }
+	// if (getNeighborPatch(WEST))
+	// {
+	// 	if (getNeighborPatch(WEST)->mSurfacep == surfacep)
+	// 	{
+	// 		mConnectedEdge &= ~WEST_EDGE;
+	// 	}
+	// }
+	// if (getNeighborPatch(SOUTH))
+	// {
+	// 	if (getNeighborPatch(SOUTH)->mSurfacep == surfacep)
+	// 	{
+	// 		mConnectedEdge &= ~SOUTH_EDGE;
+	// 	}
+	// }
+	// </FS:Beq>
 }
 
 LLVector3 LLSurfacePatch::getPointAgent(const U32 x, const U32 y) const

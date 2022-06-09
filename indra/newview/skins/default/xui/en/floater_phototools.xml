@@ -374,7 +374,7 @@
 				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
-					 parameter="default"/>
+					 parameter="region"/>
 				</button>
 			</panel>
 			
@@ -3438,7 +3438,7 @@
 					 top_pad="0">
 						<stat_bar
 						 name="fps"
-						 label="Frames Per Seccond"
+						 label="Frames Per Second"
 						 unit_label="fps"
 						 stat="FPS"
 						 bar_min="0"

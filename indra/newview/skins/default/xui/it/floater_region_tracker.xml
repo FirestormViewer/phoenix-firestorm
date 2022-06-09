@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="region_tracker" title="Traccia Regione">
+	<text name="region_label_text" value="Aggiungi regioni dalla Mappa" />
+	<button name="refresh" tool_tip="Ricarica" />
+	<button name="remove" tool_tip="Rimuovi regione" />
+	<button name="open_map" tool_tip="Apri la mappa" />
+	<scroll_list name="region_list" tool_tip="Fai doppio clic su una riga per aprirla sulla mappa del mondo.">
+		<scroll_list.columns name="region_label" label="Etichetta" />
+		<scroll_list.columns name="region_name" label="Regione" />
+	</scroll_list>
+</floater>
