@@ -145,6 +145,15 @@ BOOL	LLPanelVolume::postBuild()
 		getChild<LLUICtrl>("Light Ambiance")->setValidateBeforeCommit( precommitValidate);
 	}
 	
+    // REFLECTION PROBE Parameters
+    {
+        childSetCommitCallback("Reflection Probe", onCommitIsReflectionProbe, this);
+        childSetCommitCallback("Probe Dynamic", onCommitProbe, this);
+        childSetCommitCallback("Probe Volume Type", onCommitProbe, this);
+        childSetCommitCallback("Probe Ambiance", onCommitProbe, this);
+        childSetCommitCallback("Probe Near Clip", onCommitProbe, this);
+    }
+
 	// PHYSICS Parameters
 	{
 		// PhysicsShapeType combobox
@@ -359,6 +368,43 @@ void LLPanelVolume::getState( )
 		getChildView("Light Focus")->setEnabled(false);
 		getChildView("Light Ambiance")->setEnabled(false);
 	}
+
+    // Reflection Probe
+    BOOL is_probe = volobjp && volobjp->isReflectionProbe();
+    getChild<LLUICtrl>("Reflection Probe")->setValue(is_probe);
+    getChildView("Reflection Probe")->setEnabled(editable && single_volume && volobjp);
+
+    bool probe_enabled = is_probe && editable && single_volume;
+
+    getChildView("Probe Dynamic")->setEnabled(probe_enabled);
+    getChildView("Probe Volume Type")->setEnabled(probe_enabled);
+    getChildView("Probe Ambiance")->setEnabled(probe_enabled);
+    getChildView("Probe Near Clip")->setEnabled(probe_enabled);
+
+    if (!probe_enabled)
+    {
+        getChild<LLComboBox>("Probe Volume Type", true)->clear();
+        getChild<LLSpinCtrl>("Probe Ambiance", true)->clear();
+        getChild<LLSpinCtrl>("Probe Near Clip", true)->clear();
+        getChild<LLCheckBoxCtrl>("Probe Dynamic", true)->clear();
+    }
+    else
+    {
+        std::string volume_type;
+        if (volobjp->getReflectionProbeIsBox())
+        {
+            volume_type = "Box";
+        }
+        else
+        {
+            volume_type = "Sphere";
+        }
+
+        getChild<LLComboBox>("Probe Volume Type", true)->setValue(volume_type);
+        getChild<LLSpinCtrl>("Probe Ambiance", true)->setValue(volobjp->getReflectionProbeAmbiance());
+        getChild<LLSpinCtrl>("Probe Near Clip", true)->setValue(volobjp->getReflectionProbeNearClip());
+        getChild<LLCheckBoxCtrl>("Probe Dynamic", true)->setValue(volobjp->getReflectionProbeIsDynamic());
+    }
 
     // Animated Mesh
 	BOOL is_animated_mesh = single_root_volume && root_volobjp && root_volobjp->isAnimatedObject();
@@ -647,6 +693,11 @@ void LLPanelVolume::clearCtrls()
 	getChildView("Light Radius")->setEnabled(false);
 	getChildView("Light Falloff")->setEnabled(false);
 
+    getChildView("Reflection Probe")->setEnabled(false);;
+    getChildView("Probe Volume Type")->setEnabled(false);
+    getChildView("Probe Dynamic")->setEnabled(false);
+    getChildView("Probe Ambiance")->setEnabled(false);
+    getChildView("Probe Near Clip")->setEnabled(false);
     getChildView("Animated Mesh Checkbox Ctrl")->setEnabled(false);
 	getChildView("Flexible1D Checkbox Ctrl")->setEnabled(false);
 	getChildView("FlexNumSections")->setEnabled(false);
@@ -685,6 +736,20 @@ void LLPanelVolume::sendIsLight()
 	BOOL value = getChild<LLUICtrl>("Light Checkbox Ctrl")->getValue();
 	volobjp->setIsLight(value);
 	LL_INFOS() << "update light sent" << LL_ENDL;
+}
+
+void LLPanelVolume::sendIsReflectionProbe()
+{
+    LLViewerObject* objectp = mObject;
+    if (!objectp || (objectp->getPCode() != LL_PCODE_VOLUME))
+    {
+        return;
+    }
+    LLVOVolume* volobjp = (LLVOVolume*)objectp;
+
+    BOOL value = getChild<LLUICtrl>("Reflection Probe")->getValue();
+    volobjp->setIsReflectionProbe(value);
+    LL_INFOS() << "update reflection probe sent" << LL_ENDL;
 }
 
 void LLPanelVolume::sendIsFlexible()
@@ -930,6 +995,27 @@ void LLPanelVolume::onCommitLight( LLUICtrl* ctrl, void* userdata )
 	
 }
 
+//static 
+void LLPanelVolume::onCommitProbe(LLUICtrl* ctrl, void* userdata)
+{
+    LLPanelVolume* self = (LLPanelVolume*)userdata;
+    LLViewerObject* objectp = self->mObject;
+    if (!objectp || (objectp->getPCode() != LL_PCODE_VOLUME))
+    {
+        return;
+    }
+    LLVOVolume* volobjp = (LLVOVolume*)objectp;
+
+
+    volobjp->setReflectionProbeAmbiance((F32)self->getChild<LLUICtrl>("Probe Ambiance")->getValue().asReal());
+    volobjp->setReflectionProbeNearClip((F32)self->getChild<LLUICtrl>("Probe Near Clip")->getValue().asReal());
+    volobjp->setReflectionProbeIsDynamic(self->getChild<LLUICtrl>("Probe Dynamic")->getValue().asBoolean());
+
+    std::string shape_type = self->getChild<LLUICtrl>("Probe Volume Type")->getValue().asString();
+
+    volobjp->setReflectionProbeIsBox(shape_type == "Box");
+}
+
 // static
 void LLPanelVolume::onCommitIsLight( LLUICtrl* ctrl, void* userdata )
 {
@@ -950,6 +1036,15 @@ void LLPanelVolume::setLightTextureID(const LLUUID &asset_id, const LLUUID &item
         volobjp->setLightTextureID(asset_id);
     }
 }
+//----------------------------------------------------------------------------
+
+// static
+void LLPanelVolume::onCommitIsReflectionProbe(LLUICtrl* ctrl, void* userdata)
+{
+    LLPanelVolume* self = (LLPanelVolume*)userdata;
+    self->sendIsReflectionProbe();
+}
+
 //----------------------------------------------------------------------------
 
 // static

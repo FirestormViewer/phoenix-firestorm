@@ -1,5 +1,5 @@
 /**
- * @file class2/deferred/reflectionProbeF.glsl
+ * @file class3/deferred/reflectionProbeF.glsl
  *
  * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -42,6 +42,8 @@ layout (std140, binding = 1) uniform ReflectionProbes
     mat4 refBox[REFMAP_COUNT];
     // list of bounding spheres for reflection probes sorted by distance to camera (closest first)
     vec4 refSphere[REFMAP_COUNT];
+    // extra parameters (currently only .x used for probe ambiance)
+    vec4 refParams[REFMAP_COUNT];
     // index  of cube map in reflectionProbes for a corresponding reflection probe
     // e.g. cube map channel of refSphere[2] is stored in refIndex[2]
     // refIndex.x - cubemap channel in reflectionProbes
@@ -55,9 +57,6 @@ layout (std140, binding = 1) uniform ReflectionProbes
 
     // number of reflection probes present in refSphere
     int refmapCount;
-
-    // intensity of ambient light from reflection probes
-    float reflectionAmbiance;
 };
 
 // Inputs
@@ -75,6 +74,8 @@ bool isAbove(vec3 pos, vec4 plane)
     return (dot(plane.xyz, pos) + plane.w) > 0;
 }
 
+int max_priority = 0;
+
 // return true if probe at index i influences position pos
 bool shouldSampleProbe(int i, vec3 pos)
 {
@@ -87,6 +88,8 @@ bool shouldSampleProbe(int i, vec3 pos)
         {
             return false;
         }
+
+        max_priority = max(max_priority, -refIndex[i].w);
     }
     else
     {
@@ -99,6 +102,8 @@ bool shouldSampleProbe(int i, vec3 pos)
         { //outside bounding sphere
             return false;
         }
+
+        max_priority = max(max_priority, refIndex[i].w);
     }
 
     return true;
@@ -335,7 +340,7 @@ vec3 tapRefMap(vec3 pos, vec3 dir, float lod, vec3 c, float r2, int i)
     }
 }
 
-vec3 sampleProbes(vec3 pos, vec3 dir, float lod)
+vec3 sampleProbes(vec3 pos, vec3 dir, float lod, float minweight)
 {
     float wsum = 0.0;
     vec3 col = vec3(0,0,0);
@@ -344,8 +349,13 @@ vec3 sampleProbes(vec3 pos, vec3 dir, float lod)
     for (int idx = 0; idx < probeInfluences; ++idx)
     {
         int i = probeIndex[idx];
+        if (refIndex[i].w < max_priority)
+        {
+            continue;
+        }
         float r = refSphere[i].w; // radius of sphere volume
         float p = float(abs(refIndex[i].w)); // priority
+        
         float rr = r*r; // radius squred
         float r1 = r * 0.1; // 75% of radius (outer sphere to start interpolating down)
         vec3 delta = pos.xyz-refSphere[i].xyz;
@@ -359,8 +369,8 @@ vec3 sampleProbes(vec3 pos, vec3 dir, float lod)
 
             float atten = 1.0-max(d2-r2, 0.0)/(rr-r2);
             w *= atten;
-            w *= p; // boost weight based on priority
-            col += refcol*w;
+            //w *= p; // boost weight based on priority
+            col += refcol*w*max(minweight, refParams[i].x);
             
             wsum += w;
         }
@@ -383,7 +393,7 @@ vec3 sampleProbes(vec3 pos, vec3 dir, float lod)
                 
                 float w = 1.0/d2;
                 w *= w;
-                col += refcol*w;
+                col += refcol*w*max(minweight, refParams[i].x);
                 wsum += w;
             }
         }
@@ -399,7 +409,7 @@ vec3 sampleProbes(vec3 pos, vec3 dir, float lod)
 
 vec3 sampleProbeAmbient(vec3 pos, vec3 dir, float lod)
 {
-    vec3 col = sampleProbes(pos, dir, lod);
+    vec3 col = sampleProbes(pos, dir, lod, 0.f);
 
     //desaturate
     vec3 hcol = col *0.5;
@@ -413,7 +423,7 @@ vec3 sampleProbeAmbient(vec3 pos, vec3 dir, float lod)
     
     col *= 0.333333;
 
-    return col*reflectionAmbiance;
+    return col;
 
 }
 
@@ -445,12 +455,12 @@ void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv, inout vec3 l
     if (glossiness > 0.0)
     {
         float lod = (1.0-glossiness)*reflection_lods;
-        glossenv = sampleProbes(pos, normalize(refnormpersp), lod);
+        glossenv = sampleProbes(pos, normalize(refnormpersp), lod, 1.f);
     }
 
     if (envIntensity > 0.0)
     {
-        legacyenv = sampleProbes(pos, normalize(refnormpersp), 0.0);
+        legacyenv = sampleProbes(pos, normalize(refnormpersp), 0.0, 1.f);
     }
 }
 
@@ -474,3 +484,4 @@ void applyGlossEnv(inout vec3 color, vec3 glossenv, vec4 spec, vec3 pos, vec3 no
     reflected_color *= (envIntensity*fresnel)*brighten(spec.rgb);
     color = mix(color.rgb, reflected_color, envIntensity);
  }
+

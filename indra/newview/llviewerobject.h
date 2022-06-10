@@ -242,6 +242,7 @@ public:
 	virtual BOOL isMesh() const						{ return FALSE; }
 	virtual BOOL isRiggedMesh() const				{ return FALSE; }
 	virtual BOOL hasLightTexture() const			{ return FALSE; }
+    virtual BOOL isReflectionProbe() const          { return FALSE; }
 
 	// This method returns true if the object is over land owned by
 	// the agent, one of its groups, or it encroaches and 
@@ -286,6 +287,7 @@ public:
 									  S32 face = -1,                          // which face to check, -1 = ALL_SIDES
 									  BOOL pick_transparent = FALSE,
 									  BOOL pick_rigged = FALSE,
+                                      BOOL pick_unselectable = TRUE,
 									  S32* face_hit = NULL,                   // which face was hit
 									  LLVector4a* intersection = NULL,         // return the intersection point
 									  LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
@@ -430,8 +432,6 @@ public:
 	void setMediaPassedWhitelist(BOOL passed);
 
 	void sendMaterialUpdate() const;
-
-	void setCanSelect(BOOL canSelect);
 
 	void setDebugText(const std::string &utf8text);
 	void initHudText();
@@ -693,9 +693,9 @@ public:
 	LLPointer<LLViewerTexture> *mTENormalMaps;
 	LLPointer<LLViewerTexture> *mTESpecularMaps;
 
-	// Selection, picking and rendering variables
-	U32				mGLName;			// GL "name" used by selection code
-	BOOL			mbCanSelect;		// true if user can select this object by clicking
+    // true if user can select this object by clicking under any circumstances (even if pick_unselectable is true)
+    // can likely be factored out
+    BOOL			mbCanSelect;
 
 private:
 	// Grabbed from UPDATE_FLAGS

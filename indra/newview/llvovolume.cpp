@@ -1131,7 +1131,12 @@ LLDrawable *LLVOVolume::createDrawable(LLPipeline *pipeline)
 		// Add it to the pipeline mLightSet
 		gPipeline.setLight(mDrawable, TRUE);
 	}
-	
+
+    if (isReflectionProbe())
+    {
+        updateReflectionProbePtr();
+    }
+
 	updateRadius();
 	bool force_update = true; // avoid non-alpha mDistance update being optimized away
 	mDrawable->updateDistance(*LLViewerCamera::getInstance(), force_update);
@@ -3688,6 +3693,143 @@ F32 LLVOVolume::getLightCutoff() const
 	}
 }
 
+void LLVOVolume::setIsReflectionProbe(BOOL is_probe)
+{
+    BOOL was_probe = isReflectionProbe();
+    if (is_probe != was_probe)
+    {
+        if (is_probe)
+        {
+            setParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE, TRUE, true);
+        }
+        else
+        {
+            setParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE, FALSE, true);
+        }
+    }
+
+    updateReflectionProbePtr();
+}
+
+void LLVOVolume::setReflectionProbeAmbiance(F32 ambiance)
+{
+    LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        if (param_block->getAmbiance() != ambiance)
+        {
+            param_block->setAmbiance(ambiance);
+            parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+        }
+    }
+}
+
+void LLVOVolume::setReflectionProbeNearClip(F32 near_clip)
+{
+    LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        if (param_block->getClipDistance() != near_clip)
+        {
+            param_block->setClipDistance(near_clip);
+            parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+        }
+    }
+}
+
+void LLVOVolume::setReflectionProbeIsBox(bool is_box)
+{
+    LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        if (param_block->getIsBox() != is_box)
+        {
+            param_block->setIsBox(is_box);
+            parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+        }
+    }
+}
+
+void LLVOVolume::setReflectionProbeIsDynamic(bool is_dynamic)
+{
+    LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        if (param_block->getIsDynamic() != is_dynamic)
+        {
+            param_block->setIsDynamic(is_dynamic);
+            parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+        }
+    }
+}
+
+
+BOOL LLVOVolume::isReflectionProbe() const
+{
+    // HACK - make this object a Reflection Probe if a certain UUID is detected
+    static LLCachedControl<std::string> reflection_probe_id(gSavedSettings, "RenderReflectionProbeTextureHackID", "");
+    LLUUID probe_id(reflection_probe_id);
+
+    for (U8 i = 0; i < getNumTEs(); ++i)
+    {
+        if (getTE(i)->getID() == probe_id)
+        {
+            return true;
+        }
+    }
+    // END HACK
+
+    return getParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE);
+}
+
+F32 LLVOVolume::getReflectionProbeAmbiance() const
+{
+    const LLReflectionProbeParams* param_block = (const LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        return param_block->getAmbiance();
+    }
+    else
+    {
+        return 0.f;
+    }
+}
+
+F32 LLVOVolume::getReflectionProbeNearClip() const
+{
+    const LLReflectionProbeParams* param_block = (const LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        return param_block->getClipDistance();
+    }
+    else
+    {
+        return 0.f;
+    }
+}
+
+bool LLVOVolume::getReflectionProbeIsBox() const
+{
+    const LLReflectionProbeParams* param_block = (const LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        return param_block->getIsBox();
+    }
+    
+    return false;
+}
+
+bool LLVOVolume::getReflectionProbeIsDynamic() const
+{
+    const LLReflectionProbeParams* param_block = (const LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
+    if (param_block)
+    {
+        return param_block->getIsDynamic();
+    }
+
+    return false;
+}
+
 U32 LLVOVolume::getVolumeInterfaceID() const
 {
 	if (mVolumeImpl)
@@ -4613,6 +4755,23 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
 			gPipeline.setLight(mDrawable, is_light);
 		}
 	}
+   
+    updateReflectionProbePtr();
+}
+
+void LLVOVolume::updateReflectionProbePtr()
+{
+    if (isReflectionProbe())
+    {
+        if (mReflectionProbe.isNull())
+        {
+            mReflectionProbe = gPipeline.mReflectionMapManager.registerViewerObject(this);
+        }
+    }
+    else if (mReflectionProbe.notNull())
+    {
+        mReflectionProbe = nullptr;
+    }
 }
 
 void LLVOVolume::setSelected(BOOL sel)
@@ -4816,7 +4975,7 @@ LLVector3 LLVOVolume::volumeDirectionToAgent(const LLVector3& dir) const
 }
 
 
-BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
+BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, BOOL pick_unselectable, S32 *face_hitp,
 									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
 {
 	if (!mbCanSelect 
@@ -4825,6 +4984,14 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 	{
 		return FALSE;
 	}
+
+    if (!pick_unselectable)
+    {
+        if (!LLSelectMgr::instance().canSelectObject(this))
+        {
+            return FALSE;
+        }
+    }
 
 	BOOL ret = FALSE;
 
@@ -6010,24 +6177,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 #else
                 bool is_pbr = false;
 #endif
-
-                // HACK - make this object a Reflection Probe if a certain UUID is detected
-                static LLCachedControl<std::string> reflection_probe_id(gSavedSettings, "RenderReflectionProbeTextureHackID", "");
-                if (facep->getTextureEntry()->getID() == LLUUID(reflection_probe_id))
-                {
-                    if (!vobj->mIsReflectionProbe)
-                    {
-                        vobj->mIsReflectionProbe = true;
-                        vobj->mReflectionProbe = gPipeline.mReflectionMapManager.registerViewerObject(vobj);
-                    }
-                }
-                else
-                {
-                    // not a refleciton probe any more
-                    vobj->mIsReflectionProbe = false;
-                    vobj->mReflectionProbe = nullptr;
-                }
-                // END HACK
 
 				//ALWAYS null out vertex buffer on rebuild -- if the face lands in a render
 				// batch, it will recover its vertex buffer reference from the spatial group

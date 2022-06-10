@@ -2913,7 +2913,7 @@ Low ↔ Lwst
              left="10"
              name="Light Checkbox Ctrl"
              tool_tip="Causes object to emit light"
-             top_pad="15"
+             top_pad="10"
              width="60" />
             <color_swatch
              can_apply_immediately="true"
@@ -2949,7 +2949,7 @@ Low ↔ Lwst
              layout="topleft"
              left="10"
              name="Light Intensity"
-             top_pad="3"
+             top_delta="32"
              width="128" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
@@ -3015,6 +3015,70 @@ Low ↔ Lwst
                    min_val="0"
                    mouse_opaque="true"
                    name="Light Ambiance"
+                   width="120" />
+          <check_box
+             height="16"
+             label="Reflection Probe"
+             layout="topleft"
+             left="10"
+             name="Reflection Probe"
+             tool_tip="Adjusts how objects within this volume receive reflections when PBR is enabled"
+             top_pad="9"
+             width="60" />
+          <combo_box
+			   height="19"
+			   top_delta="0"
+         left="144"
+			   follows="left|top"
+			   name="Probe Volume Type"
+			   tool_tip="Choose the probe influence volume"
+			   width="108">
+            <combo_box.item
+             label="Sphere"
+             name="Sphere"
+             value="Sphere" />
+            <combo_box.item
+             label="Box"
+             name="Box"
+             value="Box"/>
+          </combo_box>
+          <check_box
+             height="16"
+             label="Dynamic"
+             layout="topleft"
+			   follows="left|top"
+             left="10"
+             name="Probe Dynamic"
+             tool_tip="When enabled, Avatars will appear in reflections within this probe's influence volume."
+             top_delta="17"
+             width="60" />
+          <spinner top_pad="0"
+                   decimal_digits="3"
+                   follows="left|top"
+                   height="16"
+                   increment="0.05"
+                   initial_value="0"
+                   label="Ambiance"
+                   label_width="55"
+                   left="10"
+                   max_val="1"
+                   min_val="0"
+                   mouse_opaque="true"
+                   name="Probe Ambiance"
+                   width="120" />
+          <spinner top_delta="0"
+                   decimal_digits="3"
+                   follows="left|top"
+                   height="16"
+                   increment="0.05"
+                   initial_value="0"
+                   label="Near Clip"
+                   label_width="55"
+                   left="144"
+                   max_val="1024"
+                   min_val="0"
+                   mouse_opaque="true"
+                   name="Probe Near Clip"
                    width="120" />
           <text
              type="string"

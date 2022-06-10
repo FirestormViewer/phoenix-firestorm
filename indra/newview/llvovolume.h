@@ -156,6 +156,7 @@ public:
 										  S32 face = -1,                        // which face to check, -1 = ALL_SIDES
 										  BOOL pick_transparent = FALSE,
 										  BOOL pick_rigged = FALSE,
+                                          BOOL pick_unselectable = TRUE,
 										  S32* face_hit = NULL,                 // which face was hit
 										  LLVector4a* intersection = NULL,       // return the intersection point
 										  LLVector2* tex_coord = NULL,          // return the texture coordinates of the intersection point
@@ -182,6 +183,9 @@ public:
 
 	/*virtual*/ void	parameterChanged(U16 param_type, bool local_origin);
 	/*virtual*/ void	parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_use, bool local_origin);
+
+    // update mReflectionProbe based on isReflectionProbe()
+    void updateReflectionProbePtr();
 
 	/*virtual*/ U32		processUpdateMessage(LLMessageSystem *mesgsys,
 											void **user_data,
@@ -286,6 +290,19 @@ public:
 	F32 getLightFalloff(const F32 fudge_factor = 1.f) const;
 	F32 getLightCutoff() const;
 	
+    // Reflection Probes
+    void setIsReflectionProbe(BOOL is_probe);
+    void setReflectionProbeAmbiance(F32 ambiance);
+    void setReflectionProbeNearClip(F32 near_clip);
+    void setReflectionProbeIsBox(bool is_box);
+    void setReflectionProbeIsDynamic(bool is_dynamic);
+
+    BOOL isReflectionProbe() const override;
+    F32 getReflectionProbeAmbiance() const;
+    F32 getReflectionProbeNearClip() const;
+    bool getReflectionProbeIsBox() const;
+    bool getReflectionProbeIsDynamic() const;
+
 	// Flexible Objects
 	U32 getVolumeInterfaceID() const;
 	virtual BOOL isFlexible() const;

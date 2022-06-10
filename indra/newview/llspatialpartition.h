@@ -328,6 +328,7 @@ public:
     LLDrawable* lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
         BOOL pick_transparent,
         BOOL pick_rigged,
+        BOOL pick_unselectable,
         S32* face_hit,                          // return the face hit
         LLVector4a* intersection = NULL,         // return the intersection point
         LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
@@ -343,15 +344,12 @@ public:
 	virtual void handleRemoval(const TreeNode* node, LLViewerOctreeEntry* face);
 	virtual void handleDestruction(const TreeNode* node);
 	virtual void handleChildAddition(const OctreeNode* parent, OctreeNode* child);
-    virtual void handleChildRemoval(const oct_node* parent, const oct_node* child);
 
 public:
 	LL_ALIGN_16(LLVector4a mViewAngle);
 	LL_ALIGN_16(LLVector4a mLastUpdateViewAngle);
 
 	F32 mObjectBoxSize; //cached mObjectBounds[1].getLength3()
-
-    void dirtyReflectionProbe();
 
 protected:
 	virtual ~LLSpatialGroup();
@@ -411,6 +409,7 @@ public:
 	LLDrawable* lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 									 BOOL pick_transparent, 
 									 BOOL pick_rigged,
+                                     BOOL pick_unselectable,
 									 S32* face_hit,                          // return the face hit
 									 LLVector4a* intersection = NULL,         // return the intersection point
 									 LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point

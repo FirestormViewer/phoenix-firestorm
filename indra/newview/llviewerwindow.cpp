@@ -3854,7 +3854,7 @@ void LLViewerWindow::updateUI()
 	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_RAYCAST))
 	{
 		gDebugRaycastFaceHit = -1;
-		gDebugRaycastObject = cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE,
+		gDebugRaycastObject = cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE, TRUE,
 											  &gDebugRaycastFaceHit,
 											  &gDebugRaycastIntersection,
 											  &gDebugRaycastTexCoord,
@@ -5299,13 +5299,16 @@ void LLViewerWindow::pickAsync( S32 x,
 								BOOL pick_rigged,
 								BOOL pick_unselectable)
 {
-	BOOL in_build_mode = LLFloaterReg::instanceVisible("build");
-	if (in_build_mode || LLDrawPoolAlpha::sShowDebugAlpha)
-	{
-		// build mode allows interaction with all transparent objects
-		// "Show Debug Alpha" means no object actually transparent
-		pick_transparent = TRUE;
-	}
+	// "Show Debug Alpha" means no object actually transparent
+    BOOL in_build_mode = LLFloaterReg::instanceVisible("build");
+    if (LLDrawPoolAlpha::sShowDebugAlpha)
+    {
+        pick_transparent = TRUE;
+    }
+    else if (in_build_mode && !gSavedSettings.getBOOL("SelectInvisibleObjects"))
+    {
+        pick_transparent = FALSE;
+    }
 
 	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, pick_rigged, FALSE, TRUE, pick_unselectable, callback);
 	schedulePick(pick_info);
@@ -5363,10 +5366,10 @@ void LLViewerWindow::returnEmptyPicks()
 }
 
 // Performs the GL object/land pick.
-LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot, BOOL pick_transparent, BOOL pick_rigged, BOOL pick_particle)
+LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot, BOOL pick_transparent, BOOL pick_rigged, BOOL pick_particle, BOOL pick_unselectable)
 {
 	BOOL in_build_mode = LLFloaterReg::instanceVisible("build");
-	if (in_build_mode || LLDrawPoolAlpha::sShowDebugAlpha)
+	if ((in_build_mode && gSavedSettings.getBOOL("SelectInvisibleObjects")) || LLDrawPoolAlpha::sShowDebugAlpha)
 	{
 		// build mode allows interaction with all transparent objects
 		// "Show Debug Alpha" means no object actually transparent
@@ -5412,6 +5415,7 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 												S32 this_face,
 												BOOL pick_transparent,
 												BOOL pick_rigged,
+                                                BOOL pick_unselectable,
 												S32* face_hit,
 												LLVector4a *intersection,
 												LLVector2 *uv,
@@ -5482,7 +5486,7 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 	{
 		if (this_object->isHUDAttachment()) // is a HUD object?
 		{
-			if (this_object->lineSegmentIntersect(mh_start, mh_end, this_face, pick_transparent, pick_rigged,
+			if (this_object->lineSegmentIntersect(mh_start, mh_end, this_face, pick_transparent, pick_rigged, pick_unselectable,
 												  face_hit, intersection, uv, normal, tangent))
 			{
 				found = this_object;
@@ -5490,7 +5494,7 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 		}
 		else // is a world object
 		{
-			if (this_object->lineSegmentIntersect(mw_start, mw_end, this_face, pick_transparent, pick_rigged,
+			if (this_object->lineSegmentIntersect(mw_start, mw_end, this_face, pick_transparent, pick_rigged, pick_unselectable,
 												  face_hit, intersection, uv, normal, tangent))
 			{
 				found = this_object;
@@ -5511,7 +5515,7 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 // [/RLVa:KB]
 		if (!found) // if not found in HUD, look in world:
 		{
-			found = gPipeline.lineSegmentIntersectInWorld(mw_start, mw_end, pick_transparent, pick_rigged,
+			found = gPipeline.lineSegmentIntersectInWorld(mw_start, mw_end, pick_transparent, pick_rigged, pick_unselectable,
 														  face_hit, intersection, uv, normal, tangent);
 			if (found && !pick_transparent)
 			{
@@ -6168,8 +6172,6 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	F32 depth_conversion_factor_1 = (LLViewerCamera::getInstance()->getFar() + LLViewerCamera::getInstance()->getNear()) / (2.f * LLViewerCamera::getInstance()->getFar() * LLViewerCamera::getInstance()->getNear());
 	F32 depth_conversion_factor_2 = (LLViewerCamera::getInstance()->getFar() - LLViewerCamera::getInstance()->getNear()) / (2.f * LLViewerCamera::getInstance()->getFar() * LLViewerCamera::getInstance()->getNear());
 
-	gObjectList.generatePickList(*LLViewerCamera::getInstance());
-
 	// Subimages are in fact partial rendering of the final view. This happens when the final view is bigger than the screen.
 	// In most common cases, scale_factor is 1 and there's no more than 1 iteration on x and y
 	for (int subimage_y = 0; subimage_y < scale_factor; ++subimage_y)
@@ -6472,7 +6474,7 @@ BOOL LLViewerWindow::simpleSnapshot(LLImageRaw* raw, S32 image_width, S32 image_
 
 void display_cube_face();
 
-BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 cubeIndex, S32 face)
+BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 cubeIndex, S32 face, F32 near_clip, bool dynamic_render)
 {
     // NOTE: implementation derived from LLFloater360Capture::capture360Images() and simpleSnapshot
     LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
@@ -6501,19 +6503,37 @@ BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
     camera->setView(F_PI_BY_TWO);
     camera->yaw(0.0);
     camera->setOrigin(origin);
+    camera->setNear(near_clip);
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
+    U32 dynamic_render_types[] = {
+        LLPipeline::RENDER_TYPE_AVATAR,
+        LLPipeline::RENDER_TYPE_CONTROL_AV,
+        LLPipeline::RENDER_TYPE_PARTICLES
+    };
+    constexpr U32 dynamic_render_type_count = sizeof(dynamic_render_types) / sizeof(U32);
+    bool prev_dynamic_render_type[dynamic_render_type_count];
+
+    
+    if (!dynamic_render)
+    {
+        for (int i = 0; i < dynamic_render_type_count; ++i)
+        {
+            prev_dynamic_render_type[i] = gPipeline.hasRenderType(dynamic_render_types[i]);
+            if (prev_dynamic_render_type[i])
+            {
+                gPipeline.toggleRenderType(dynamic_render_types[i]);
+            }
+        }
+    }
+
     BOOL prev_draw_ui = gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI) ? TRUE : FALSE;
     if (prev_draw_ui != false)
     {
         LLPipeline::toggleRenderDebugFeature(LLPipeline::RENDER_DEBUG_FEATURE_UI);
     }
-    BOOL prev_draw_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
-    if (prev_draw_particles)
-    {
-        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
-    }
+    
     LLPipeline::sShowHUDAttachments = FALSE;
     LLRect window_rect = getWorldViewRectRaw();
 
@@ -6569,9 +6589,15 @@ BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubea
         }
     }
 
-    if (prev_draw_particles)
+    if (!dynamic_render)
     {
-        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+        for (int i = 0; i < dynamic_render_type_count; ++i)
+        {
+            if (prev_dynamic_render_type[i])
+            {
+                gPipeline.toggleRenderType(dynamic_render_types[i]);
+            }
+        }
     }
 
     LLPipeline::sShowHUDAttachments = TRUE;
@@ -7378,7 +7404,7 @@ void LLPickInfo::fetchResults()
 		icon_dist = delta.getLength3().getF32();
 	}
 	LLViewerObject* hit_object = gViewerWindow->cursorIntersect(mMousePt.mX, mMousePt.mY, 512.f,
-									NULL, -1, mPickTransparent, mPickRigged, &face_hit,
+									NULL, -1, mPickTransparent, mPickRigged, mPickUnselectable, &face_hit,
 									&intersection, &uv, &normal, &tangent, &start, &end);
 	
 	mPickPt = mMousePt;
@@ -7539,7 +7565,7 @@ void LLPickInfo::getSurfaceInfo()
 	if (objectp)
 	{
 		if (gViewerWindow->cursorIntersect(ll_round((F32)mMousePt.mX), ll_round((F32)mMousePt.mY), 1024.f,
-										   objectp, -1, mPickTransparent, mPickRigged,
+										   objectp, -1, mPickTransparent, mPickRigged, mPickUnselectable,
 										   &mObjectFace,
 										   &intersection,
 										   &mSTCoords,

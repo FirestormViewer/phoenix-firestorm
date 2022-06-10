@@ -188,6 +188,7 @@ public:
 	LLViewerObject* lineSegmentIntersectInWorld(const LLVector4a& start, const LLVector4a& end,
 												bool pick_transparent,
 												bool pick_rigged,
+                                                bool pick_unselectable,
 												S32* face_hit,                          // return the face hit
 												LLVector4a* intersection = NULL,         // return the intersection point
 												LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
@@ -217,8 +218,9 @@ public:
 	U32         addObject(LLViewerObject *obj);
 
 	void		enableShadows(const bool enable_shadows);
-    void        releaseShadowTargets();
-    void        releaseShadowTarget(U32 index);
+    void        releaseSpotShadowTargets();
+    void        releaseSunShadowTargets();
+    void        releaseSunShadowTarget(U32 index);
 
 // 	void		setLocalLighting(const bool local_lighting);
 // 	bool		isLocalLightingEnabled() const;
@@ -303,7 +305,8 @@ public:
 
 	void generateWaterReflection(LLCamera& camera);
 	void generateSunShadow(LLCamera& camera);
-    LLRenderTarget* getShadowTarget(U32 i);
+    LLRenderTarget* getSunShadowTarget(U32 i);
+    LLRenderTarget* getSpotShadowTarget(U32 i);
 
 	void generateHighlight(LLCamera& camera);
 	void renderHighlight(const LLViewerObject* obj, F32 fade);
@@ -680,11 +683,14 @@ public:
         LLRenderTarget			deferredLight;
 
         //sun shadow map
-        LLRenderTarget			shadow[6];
-        LLRenderTarget			shadowOcclusion[6];
+        LLRenderTarget			shadow[4];
+        LLRenderTarget			shadowOcclusion[4];
     };
 
     RenderTargetPack* mRT;
+
+    LLRenderTarget          mSpotShadow[2];
+    LLRenderTarget          mSpotShadowOcclusion[2];
 
     LLRenderTarget			mHighlight;
     LLRenderTarget			mPhysicsDisplay;
@@ -711,6 +717,7 @@ public:
 	LLVector3			    mShadowFrustOrigin[4];
 	LLCamera			    mShadowCamera[8];
 	LLVector3			    mShadowExtents[4][2];
+    // TODO : separate Sun Shadow and Spot Shadow matrices
 	glh::matrix4f			mSunShadowMatrix[6];
 	glh::matrix4f			mShadowModelview[6];
 	glh::matrix4f			mShadowProjection[6];

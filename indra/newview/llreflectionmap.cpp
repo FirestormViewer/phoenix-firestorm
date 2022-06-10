@@ -35,7 +35,6 @@ extern F32SecondsImplicit gFrameTimeSeconds;
 
 LLReflectionMap::LLReflectionMap()
 {
-    mLastUpdateTime = gFrameTimeSeconds;
 }
 
 void LLReflectionMap::update(U32 resolution, U32 face)
@@ -52,29 +51,7 @@ void LLReflectionMap::update(U32 resolution, U32 face)
     {
         resolution /= 2;
     }
-    gViewerWindow->cubeSnapshot(LLVector3(mOrigin), mCubeArray, mCubeIndex, face);
-}
-
-bool LLReflectionMap::shouldUpdate()
-{
-    const F32 TIMEOUT_INTERVAL = 30.f; // update no less than this often
-    const F32 RENDER_TIMEOUT = 1.f; // don't update if hasn't been used for rendering for this long
-    
-    if (mLastBindTime > gFrameTimeSeconds - RENDER_TIMEOUT)
-    {   
-        if (mLastUpdateTime < gFrameTimeSeconds - TIMEOUT_INTERVAL)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void LLReflectionMap::dirty()
-{
-    mDirty = true;
-    mLastUpdateTime = gFrameTimeSeconds;
+    gViewerWindow->cubeSnapshot(LLVector3(mOrigin), mCubeArray, mCubeIndex, face, getNearClip(), getIsDynamic());
 }
 
 void LLReflectionMap::autoAdjustOrigin()
@@ -140,7 +117,7 @@ void LLReflectionMap::autoAdjustOrigin()
                 {
                     int face = -1;
                     LLVector4a intersection;
-                    LLDrawable* drawable = mGroup->lineSegmentIntersect(bounds[0], corners[i], true, false, &face, &intersection);
+                    LLDrawable* drawable = mGroup->lineSegmentIntersect(bounds[0], corners[i], true, false, true, &face, &intersection);
                     if (drawable != nullptr)
                     {
                         hit = true;
@@ -215,6 +192,47 @@ bool LLReflectionMap::intersects(LLReflectionMap* other)
     return dist < r2;
 }
 
+extern LLControlGroup gSavedSettings;
+
+F32 LLReflectionMap::getAmbiance()
+{
+    static LLCachedControl<F32> minimum_ambiance(gSavedSettings, "RenderReflectionProbeAmbiance", 0.f);
+
+    F32 ret = 0.f;
+    if (mViewerObject && mViewerObject->getVolume())
+    {
+        ret = ((LLVOVolume*)mViewerObject)->getReflectionProbeAmbiance();
+    }
+
+    return llmax(ret, minimum_ambiance());
+}
+
+F32 LLReflectionMap::getNearClip()
+{
+    const F32 MINIMUM_NEAR_CLIP = 0.1f;
+
+    F32 ret = 0.f;
+
+    if (mViewerObject && mViewerObject->getVolume())
+    {
+        ret = ((LLVOVolume*)mViewerObject)->getReflectionProbeNearClip();
+    }
+
+    return llmax(ret, MINIMUM_NEAR_CLIP);
+}
+
+bool LLReflectionMap::getIsDynamic()
+{
+    if (gSavedSettings.getS32("RenderReflectionProbeDetail") > (S32) LLReflectionMapManager::DetailLevel::STATIC_ONLY &&
+        mViewerObject && 
+        mViewerObject->getVolume())
+    {
+        return ((LLVOVolume*)mViewerObject)->getReflectionProbeIsDynamic();
+    }
+
+    return false;
+}
+
 bool LLReflectionMap::getBox(LLMatrix4& box)
 { 
     if (mViewerObject)
@@ -224,25 +242,8 @@ bool LLReflectionMap::getBox(LLMatrix4& box)
         {
             LLVOVolume* vobjp = (LLVOVolume*)mViewerObject;
 
-            U8 profile = volume->getProfileType();
-            U8 path = volume->getPathType();
-
-            if (profile == LL_PCODE_PROFILE_SQUARE &&
-                path == LL_PCODE_PATH_LINE)
+            if (vobjp->getReflectionProbeIsBox())
             {
-                // nope
-                /*box = vobjp->getRelativeXform();
-                box *= vobjp->mDrawable->getRenderMatrix();
-                LLMatrix4 modelview(gGLModelView);
-                box *= modelview;
-                box.invert();*/
-
-                // nope
-                /*box = LLMatrix4(gGLModelView);
-                box *= vobjp->mDrawable->getRenderMatrix();
-                box *= vobjp->getRelativeXform();
-                box.invert();*/
-
                 glh::matrix4f mv(gGLModelView);
                 glh::matrix4f scale;
                 LLVector3 s = vobjp->getScale().scaledVec(LLVector3(0.5f, 0.5f, 0.5f));

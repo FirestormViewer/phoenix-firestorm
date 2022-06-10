@@ -116,6 +116,7 @@ public:
 		PARAMS_MESH     = 0x60,
         PARAMS_EXTENDED_MESH = 0x70,
         PARAMS_RENDER_MATERIAL = 0x80,
+        PARAMS_REFLECTION_PROBE = 0x90,
 	};
 	
 public:
@@ -177,6 +178,50 @@ public:
 	F32 getRadius() const					{ return mRadius; }
 	F32 getFalloff() const					{ return mFalloff; }
 	F32 getCutoff() const					{ return mCutoff; }
+};
+
+extern const F32 REFLECTION_PROBE_MIN_AMBIANCE;
+extern const F32 REFLECTION_PROBE_MAX_AMBIANCE;
+extern const F32 REFLECTION_PROBE_DEFAULT_AMBIANCE;
+extern const F32 REFLECTION_PROBE_MIN_CLIP_DISTANCE;
+extern const F32 REFLECTION_PROBE_MAX_CLIP_DISTANCE;
+extern const F32 REFLECTION_PROBE_DEFAULT_CLIP_DISTANCE;
+
+class LLReflectionProbeParams : public LLNetworkData
+{
+public:
+    enum EFlags : U8
+    {
+        FLAG_BOX_VOLUME     = 0x01, // use a box influence volume
+        FLAG_DYNAMIC        = 0x02, // render dynamic objects (avatars) into this Reflection Probe
+    };
+
+protected:
+    F32 mAmbiance = REFLECTION_PROBE_DEFAULT_AMBIANCE;
+    F32 mClipDistance = REFLECTION_PROBE_DEFAULT_CLIP_DISTANCE;
+    U8 mFlags = 0;
+
+public:
+    LLReflectionProbeParams();
+    /*virtual*/ BOOL pack(LLDataPacker& dp) const;
+    /*virtual*/ BOOL unpack(LLDataPacker& dp);
+    /*virtual*/ bool operator==(const LLNetworkData& data) const;
+    /*virtual*/ void copy(const LLNetworkData& data);
+    // LLSD implementations here are provided by Eddy Stryker.
+    // NOTE: there are currently unused in protocols
+    LLSD asLLSD() const;
+    operator LLSD() const { return asLLSD(); }
+    bool fromLLSD(LLSD& sd);
+
+    void setAmbiance(F32 ambiance) { mAmbiance = llclamp(ambiance, REFLECTION_PROBE_MIN_AMBIANCE, REFLECTION_PROBE_MAX_AMBIANCE); }
+    void setClipDistance(F32 distance) { mClipDistance = llclamp(distance, REFLECTION_PROBE_MIN_CLIP_DISTANCE, REFLECTION_PROBE_MAX_CLIP_DISTANCE); }
+    void setIsBox(bool is_box);
+    void setIsDynamic(bool is_dynamic);
+
+    F32 getAmbiance() const { return mAmbiance; }
+    F32 getClipDistance() const { return mClipDistance; }
+    bool getIsBox() const { return (mFlags & FLAG_BOX_VOLUME) != 0; }
+    bool getIsDynamic() const { return (mFlags & FLAG_DYNAMIC) != 0; }
 };
 
 //-------------------------------------------------

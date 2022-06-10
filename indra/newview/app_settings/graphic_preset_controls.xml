@@ -41,8 +41,10 @@
 		<string>RenderLocalLights</string>
 		<string>RenderMaxPartCount</string>
 		<string>RenderObjectBump</string>
+		<string>RenderPBR</string>
 		<string>RenderQualityPerformance</string>
 		<string>RenderReflectionDetail</string>
+		<string>RenderReflectionProbeDetail</string>
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>

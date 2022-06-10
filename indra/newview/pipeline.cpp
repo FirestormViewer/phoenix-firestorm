@@ -806,7 +806,8 @@ void LLPipeline::requestResizeShadowTexture()
 
 void LLPipeline::resizeShadowTexture()
 {
-    releaseShadowTargets();
+    releaseSunShadowTargets();
+    releaseSpotShadowTargets();
     allocateShadowBuffer(mRT->width, mRT->height);
     gResizeShadowTexture = FALSE;
 }
@@ -839,7 +840,8 @@ void LLPipeline::resizeScreenTexture()
 // [/SL:KB]
 		{
 			releaseScreenBuffers();
-            releaseShadowTargets();
+            releaseSunShadowTargets();
+            releaseSpotShadowTargets();
 		    allocateScreenBuffer(resX,resY);
             gResizeScreenTexture = FALSE;
 		}
@@ -1020,7 +1022,8 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
     {
         mRT->deferredLight.release();
 
-        releaseShadowTargets();
+        releaseSunShadowTargets();
+        releaseSpotShadowTargets();
 
 		mRT->fxaaBuffer.release();
 		mRT->screen.release();
@@ -1063,66 +1066,66 @@ inline U32 BlurHappySize(U32 x, F32 scale) { return U32( x * scale + 16.0f) & ~0
 bool LLPipeline::allocateShadowBuffer(U32 resX, U32 resY)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
-	if (LLPipeline::sRenderDeferred)
-	{
-		S32 shadow_detail = RenderShadowDetail;
+    if (LLPipeline::sRenderDeferred)
+    {
+        S32 shadow_detail = RenderShadowDetail;
 
-		const U32 occlusion_divisor = 3;
+        const U32 occlusion_divisor = 3;
 
-		F32 scale = llmax(0.f,RenderShadowResolutionScale);
-		U32 sun_shadow_map_width  = BlurHappySize(resX, scale);
-		U32 sun_shadow_map_height = BlurHappySize(resY, scale);
+        F32 scale = llmax(0.f, RenderShadowResolutionScale);
+        U32 sun_shadow_map_width = BlurHappySize(resX, scale);
+        U32 sun_shadow_map_height = BlurHappySize(resY, scale);
 
-		if (shadow_detail > 0)
-		{ //allocate 4 sun shadow maps
-			for (U32 i = 0; i < 4; i++)
-			{
-				if (!mRT->shadow[i].allocate(sun_shadow_map_width, sun_shadow_map_height, 0, TRUE, FALSE, LLTexUnit::TT_TEXTURE))
+        if (shadow_detail > 0)
+        { //allocate 4 sun shadow maps
+            for (U32 i = 0; i < 4; i++)
+            {
+                if (!mRT->shadow[i].allocate(sun_shadow_map_width, sun_shadow_map_height, 0, TRUE, FALSE, LLTexUnit::TT_TEXTURE))
                 {
                     return false;
                 }
 
-                if (!mRT->shadowOcclusion[i].allocate(sun_shadow_map_width/occlusion_divisor, sun_shadow_map_height/occlusion_divisor, 0, TRUE, FALSE, LLTexUnit::TT_TEXTURE))
+                if (!mRT->shadowOcclusion[i].allocate(sun_shadow_map_width / occlusion_divisor, sun_shadow_map_height / occlusion_divisor, 0, TRUE, FALSE, LLTexUnit::TT_TEXTURE))
                 {
                     return false;
                 }
-			}
-		}
-		else
-		{
-			for (U32 i = 0; i < 4; i++)
-			{
-                releaseShadowTarget(i);
-			}
-		}
-
-		U32 width = (U32) (resX*scale);
-		U32 height = width;
-
-		if (shadow_detail > 1)
-		{ //allocate two spot shadow maps
-			U32 spot_shadow_map_width = width;
-            U32 spot_shadow_map_height = height;
-			for (U32 i = 4; i < 6; i++)
-			{
-                if (!mRT->shadow[i].allocate(spot_shadow_map_width, spot_shadow_map_height, 0, TRUE, FALSE))
-		{
-                    return false;
-			}
-                if (!mRT->shadowOcclusion[i].allocate(spot_shadow_map_width/occlusion_divisor, height/occlusion_divisor, 0, TRUE, FALSE))
-		{
-			return false;
-		}
-	}
+            }
         }
-	else
-	{
-            for (U32 i = 4; i < 6; i++)
-		{
-                releaseShadowTarget(i);
-		}
-	}
-	}
+        else
+        {
+            for (U32 i = 0; i < 4; i++)
+            {
+                releaseSunShadowTarget(i);
+            }
+        }
+
+        if (!gCubeSnapshot) // hack to not allocate spot shadow maps during ReflectionMapManager init
+        {
+            U32 width = (U32)(resX * scale);
+            U32 height = width;
+
+            if (shadow_detail > 1)
+            { //allocate two spot shadow maps
+                U32 spot_shadow_map_width = width;
+                U32 spot_shadow_map_height = height;
+                for (U32 i = 0; i < 2; i++)
+                {
+                    if (!mSpotShadow[i].allocate(spot_shadow_map_width, spot_shadow_map_height, 0, TRUE, FALSE))
+                    {
+                        return false;
+                    }
+                    if (!mSpotShadowOcclusion[i].allocate(spot_shadow_map_width / occlusion_divisor, height / occlusion_divisor, 0, TRUE, FALSE))
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                releaseSpotShadowTargets();
+            }
+        }
+    }
 
 	return true;
 }
@@ -1323,7 +1326,8 @@ void LLPipeline::releaseLUTBuffers()
 
 void LLPipeline::releaseShadowBuffers()
 {
-    releaseShadowTargets();
+    releaseSunShadowTargets();
+    releaseSpotShadowTargets();
 }
 
 void LLPipeline::releaseScreenBuffers()
@@ -1339,18 +1343,31 @@ void LLPipeline::releaseScreenBuffers()
 }
 		
 		
-void LLPipeline::releaseShadowTarget(U32 index)
+void LLPipeline::releaseSunShadowTarget(U32 index)
 {
+    llassert(index < 4);
     mRT->shadow[index].release();
     mRT->shadowOcclusion[index].release();
 }
 
-void LLPipeline::releaseShadowTargets()
+void LLPipeline::releaseSunShadowTargets()
 {
-	for (U32 i = 0; i < 6; i++)
+	for (U32 i = 0; i < 4; i++)
 	{
-        releaseShadowTarget(i);
+        releaseSunShadowTarget(i);
 	}
+}
+
+void LLPipeline::releaseSpotShadowTargets()
+{
+    if (!gCubeSnapshot) // hack to avoid freeing spot shadows during ReflectionMapManager init
+    {
+        for (U32 i = 0; i < 2; i++)
+        {
+            mSpotShadow[i].release();
+            mSpotShadowOcclusion[i].release();
+        }
+    }
 }
 
 void LLPipeline::createGLBuffers()
@@ -6947,15 +6964,6 @@ void LLPipeline::toggleRenderType(U32 type)
 //static
 void LLPipeline::toggleRenderTypeControl(U32 type)
 {
-	U32 bit = (1<<type);
-	if (gPipeline.hasRenderType(type))
-	{
-		LL_INFOS() << "Toggling render type mask " << std::hex << bit << " off" << std::dec << LL_ENDL;
-	}
-	else
-	{
-		LL_INFOS() << "Toggling render type mask " << std::hex << bit << " on" << std::dec << LL_ENDL;
-	}
 	gPipeline.toggleRenderType(type);
 }
 
@@ -7201,7 +7209,7 @@ LLVOPartGroup* LLPipeline::lineSegmentIntersectParticle(const LLVector4a& start,
 		LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_PARTICLE);
 		if (part && hasRenderType(part->mDrawableType))
 		{
-			LLDrawable* hit = part->lineSegmentIntersect(start, local_end, TRUE, FALSE, face_hit, &position, NULL, NULL, NULL);
+			LLDrawable* hit = part->lineSegmentIntersect(start, local_end, TRUE, FALSE, TRUE, face_hit, &position, NULL, NULL, NULL);
 			if (hit)
 			{
 				drawable = hit;
@@ -7229,6 +7237,7 @@ LLVOPartGroup* LLPipeline::lineSegmentIntersectParticle(const LLVector4a& start,
 LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start, const LLVector4a& end,
 														bool pick_transparent,
 														bool pick_rigged,
+                                                        bool pick_unselectable,
 														S32* face_hit,
 														LLVector4a* intersection,         // return the intersection point
 														LLVector2* tex_coord,            // return the texture coordinates of the intersection point
@@ -7262,7 +7271,7 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 				LLSpatialPartition* part = region->getSpatialPartition(j);
 				if (part && hasRenderType(part->mDrawableType))
 				{
-					LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, face_hit, &position, tex_coord, normal, tangent);
+					LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, pick_unselectable, face_hit, &position, tex_coord, normal, tangent);
 					if (hit)
 					{
 						drawable = hit;
@@ -7319,7 +7328,7 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 			LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_AVATAR);
 			if (part && hasRenderType(part->mDrawableType))
 			{
-				LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, face_hit, &position, tex_coord, normal, tangent);
+				LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, pick_unselectable, face_hit, &position, tex_coord, normal, tangent);
 				if (hit)
 				{
 					LLVector4a delta;
@@ -7407,7 +7416,7 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInHUD(const LLVector4a& start, c
 		LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_HUD);
 		if (part)
 		{
-			LLDrawable* hit = part->lineSegmentIntersect(start, end, pick_transparent, FALSE, face_hit, intersection, tex_coord, normal, tangent);
+			LLDrawable* hit = part->lineSegmentIntersect(start, end, pick_transparent, FALSE, TRUE, face_hit, intersection, tex_coord, normal, tangent);
 			if (hit)
 			{
 				drawable = hit;
@@ -7957,7 +7966,7 @@ void LLPipeline::renderFinalize()
                     LLVector4a result;
                     result.clear();
 
-                    gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE, NULL, &result);
+                    gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE, TRUE, NULL, &result);
 
                     focus_point.set(result.getF32ptr());
                 }
@@ -8511,7 +8520,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
 
 	for (U32 i = 0; i < 4; i++)
 	{
-        LLRenderTarget* shadow_target = getShadowTarget(i);
+        LLRenderTarget* shadow_target = getSunShadowTarget(i);
         if (shadow_target)
         {
 		channel = shader.enableTexture(LLShaderMgr::DEFERRED_SHADOW0+i, LLTexUnit::TT_TEXTURE);
@@ -8519,7 +8528,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
 		if (channel > -1)
 		{
 			stop_glerror();
-                gGL.getTexUnit(channel)->bind(getShadowTarget(i), TRUE);
+                gGL.getTexUnit(channel)->bind(getSunShadowTarget(i), TRUE);
                 gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
 			gGL.getTexUnit(channel)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
 			stop_glerror();
@@ -8531,27 +8540,27 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
 	}
     }
 
-	for (U32 i = 4; i < 6; i++)
-	{
-		channel = shader.enableTexture(LLShaderMgr::DEFERRED_SHADOW0+i);
-		stop_glerror();
-		if (channel > -1)
-		{
-			stop_glerror();
-			LLRenderTarget* shadow_target = getShadowTarget(i);
-			if (shadow_target)
-			{
-				gGL.getTexUnit(channel)->bind(shadow_target, TRUE);
-				gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
-			gGL.getTexUnit(channel)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
-			stop_glerror();
-			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-			stop_glerror();
-		}
-	}
-	}
+    for (U32 i = 4; i < 6; i++)
+    {
+        channel = shader.enableTexture(LLShaderMgr::DEFERRED_SHADOW0 + i);
+        stop_glerror();
+        if (channel > -1)
+        {
+            stop_glerror();
+            LLRenderTarget* shadow_target = getSpotShadowTarget(i-4);
+            if (shadow_target)
+            {
+                gGL.getTexUnit(channel)->bind(shadow_target, TRUE);
+                gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
+                gGL.getTexUnit(channel)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
+                stop_glerror();
+
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+                stop_glerror();
+            }
+        }
+    }
 
 	stop_glerror();
 
@@ -8662,7 +8671,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
 	shader.uniform3fv(LLShaderMgr::DEFERRED_SUN_DIR, 1, mTransformedSunDir.mV);
     shader.uniform3fv(LLShaderMgr::DEFERRED_MOON_DIR, 1, mTransformedMoonDir.mV);
 	shader.uniform2f(LLShaderMgr::DEFERRED_SHADOW_RES, mRT->shadow[0].getWidth(), mRT->shadow[0].getHeight());
-	shader.uniform2f(LLShaderMgr::DEFERRED_PROJ_SHADOW_RES, mRT->shadow[4].getWidth(), mRT->shadow[4].getHeight());
+	shader.uniform2f(LLShaderMgr::DEFERRED_PROJ_SHADOW_RES, mSpotShadow[0].getWidth(), mSpotShadow[0].getHeight());
 	shader.uniform1f(LLShaderMgr::DEFERRED_DEPTH_CUTOFF, RenderEdgeDepthCutoff);
 	shader.uniform1f(LLShaderMgr::DEFERRED_NORM_CUTOFF, RenderEdgeNormCutoff);
 	
@@ -9430,7 +9439,7 @@ void LLPipeline::setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep)
 		shader.uniform1f(LLShaderMgr::PROJECTOR_SHADOW_FADE, 1.f);
 	}
 
-    if (!gCubeSnapshot)
+    //if (!gCubeSnapshot)
 	{
 		LLDrawable* potential = drawablep;
 		//determine if this is a good light for casting shadows
@@ -10021,7 +10030,9 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
         gDeferredShadowCubeProgram.bind();
     }
 
-    LLRenderTarget& occlusion_target = mRT->shadowOcclusion[LLViewerCamera::sCurCameraID - 1];
+    LLRenderTarget& occlusion_target = LLViewerCamera::sCurCameraID >= LLViewerCamera::CAMERA_SPOT_SHADOW0 ?
+        mSpotShadowOcclusion[LLViewerCamera::sCurCameraID - LLViewerCamera::CAMERA_SPOT_SHADOW0] :
+        mRT->shadowOcclusion[LLViewerCamera::sCurCameraID - LLViewerCamera::CAMERA_SUN_SHADOW0];
 
     occlusion_target.bindTarget();
     updateCull(shadow_cam, result);
@@ -10165,7 +10176,9 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
     gGLLastMatrix = NULL;
     gGL.loadMatrix(gGLModelView);
 
-    LLRenderTarget& occlusion_source = mRT->shadow[LLViewerCamera::sCurCameraID - 1];
+    LLRenderTarget& occlusion_source = LLViewerCamera::sCurCameraID >= LLViewerCamera::CAMERA_SPOT_SHADOW0 ?
+        mSpotShadow[LLViewerCamera::sCurCameraID - LLViewerCamera::CAMERA_SPOT_SHADOW0] :
+        mRT->shadow[LLViewerCamera::sCurCameraID - LLViewerCamera::CAMERA_SUN_SHADOW0];
 
     if (occlude > 1)
     {
@@ -10440,9 +10453,16 @@ void LLPipeline::generateHighlight(LLCamera& camera)
 	}
 }
 
-LLRenderTarget* LLPipeline::getShadowTarget(U32 i)
+LLRenderTarget* LLPipeline::getSunShadowTarget(U32 i)
 {
+    llassert(i < 4);
     return &mRT->shadow[i];
+}
+
+LLRenderTarget* LLPipeline::getSpotShadowTarget(U32 i)
+{
+    llassert(i < 2);
+    return &mSpotShadow[i];
 }
 
 static LLTrace::BlockTimerStatHandle FTM_GEN_SUN_SHADOW("Gen Sun Shadow");
@@ -10724,7 +10744,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 				mShadowFrustPoints[j].clear();
 			}
 
-			LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SHADOW0+j);
+			LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SUN_SHADOW0+j);
 
 			//restore render matrices
 			set_current_modelview(saved_view);
@@ -11098,116 +11118,119 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 	{
         if (!gCubeSnapshot) //skip updating spot shadow maps during cubemap updates
         {
-		    LLTrace::CountStatHandle<>* velocity_stat = LLViewerCamera::getVelocityStat();
-		    F32 fade_amt = gFrameIntervalSeconds.value() 
-			    * llmax(LLTrace::get_frame_recording().getLastRecording().getSum(*velocity_stat) / LLTrace::get_frame_recording().getLastRecording().getDuration().value(), 1.0);
+            LLTrace::CountStatHandle<>* velocity_stat = LLViewerCamera::getVelocityStat();
+            F32 fade_amt = gFrameIntervalSeconds.value()
+                * llmax(LLTrace::get_frame_recording().getLastRecording().getSum(*velocity_stat) / LLTrace::get_frame_recording().getLastRecording().getDuration().value(), 1.0);
 
-		    //update shadow targets
-		    for (U32 i = 0; i < 2; i++)
-		    { //for each current shadow
-			    LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SHADOW4+i);
+            //update shadow targets
+            for (U32 i = 0; i < 2; i++)
+            { //for each current shadow
+                LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SPOT_SHADOW0 + i);
 
-			    if (mShadowSpotLight[i].notNull() && 
-				    (mShadowSpotLight[i] == mTargetShadowSpotLight[0] ||
-				    mShadowSpotLight[i] == mTargetShadowSpotLight[1]))
-			    { //keep this spotlight
-				    mSpotLightFade[i] = llmin(mSpotLightFade[i]+fade_amt, 1.f);
-			    }
-			    else
-			    { //fade out this light
-				    mSpotLightFade[i] = llmax(mSpotLightFade[i]-fade_amt, 0.f);
-				
-				    if (mSpotLightFade[i] == 0.f || mShadowSpotLight[i].isNull())
-				    { //faded out, grab one of the pending spots (whichever one isn't already taken)
-					    if (mTargetShadowSpotLight[0] != mShadowSpotLight[(i+1)%2])
-					    {
-						    mShadowSpotLight[i] = mTargetShadowSpotLight[0];
-					    }
-					    else
-					    {
-						    mShadowSpotLight[i] = mTargetShadowSpotLight[1];
-					    }
-				    }
-			    }
-		    }
+                if (mShadowSpotLight[i].notNull() &&
+                    (mShadowSpotLight[i] == mTargetShadowSpotLight[0] ||
+                        mShadowSpotLight[i] == mTargetShadowSpotLight[1]))
+                { //keep this spotlight
+                    mSpotLightFade[i] = llmin(mSpotLightFade[i] + fade_amt, 1.f);
+                }
+                else
+                { //fade out this light
+                    mSpotLightFade[i] = llmax(mSpotLightFade[i] - fade_amt, 0.f);
 
-            for (S32 i = 0; i < 2; i++)
+                    if (mSpotLightFade[i] == 0.f || mShadowSpotLight[i].isNull())
+                    { //faded out, grab one of the pending spots (whichever one isn't already taken)
+                        if (mTargetShadowSpotLight[0] != mShadowSpotLight[(i + 1) % 2])
+                        {
+                            mShadowSpotLight[i] = mTargetShadowSpotLight[0];
+                        }
+                        else
+                        {
+                            mShadowSpotLight[i] = mTargetShadowSpotLight[1];
+                        }
+                    }
+                }
+            }
+        }
+
+        for (S32 i = 0; i < 2; i++)
+        {
+            set_current_modelview(saved_view);
+            set_current_projection(saved_proj);
+
+            if (mShadowSpotLight[i].isNull())
             {
-                set_current_modelview(saved_view);
-                set_current_projection(saved_proj);
+                continue;
+            }
 
-                if (mShadowSpotLight[i].isNull())
-                {
-                    continue;
-                }
+            LLVOVolume* volume = mShadowSpotLight[i]->getVOVolume();
 
-                LLVOVolume* volume = mShadowSpotLight[i]->getVOVolume();
+            if (!volume)
+            {
+                mShadowSpotLight[i] = NULL;
+                continue;
+            }
 
-                if (!volume)
-                {
-                    mShadowSpotLight[i] = NULL;
-                    continue;
-                }
+            LLDrawable* drawable = mShadowSpotLight[i];
 
-                LLDrawable* drawable = mShadowSpotLight[i];
+            LLVector3 params = volume->getSpotLightParams();
+            F32 fov = params.mV[0];
 
-                LLVector3 params = volume->getSpotLightParams();
-                F32 fov = params.mV[0];
+            //get agent->light space matrix (modelview)
+            LLVector3 center = drawable->getPositionAgent();
+            LLQuaternion quat = volume->getRenderRotation();
 
-                //get agent->light space matrix (modelview)
-                LLVector3 center = drawable->getPositionAgent();
-                LLQuaternion quat = volume->getRenderRotation();
+            //get near clip plane
+            LLVector3 scale = volume->getScale();
+            LLVector3 at_axis(0, 0, -scale.mV[2] * 0.5f);
+            at_axis *= quat;
 
-                //get near clip plane
-                LLVector3 scale = volume->getScale();
-                LLVector3 at_axis(0, 0, -scale.mV[2] * 0.5f);
-                at_axis *= quat;
+            LLVector3 np = center + at_axis;
+            at_axis.normVec();
 
-                LLVector3 np = center + at_axis;
-                at_axis.normVec();
+            //get origin that has given fov for plane np, at_axis, and given scale
+            F32 dist = (scale.mV[1] * 0.5f) / tanf(fov * 0.5f);
 
-                //get origin that has given fov for plane np, at_axis, and given scale
-                F32 dist = (scale.mV[1] * 0.5f) / tanf(fov * 0.5f);
+            LLVector3 origin = np - at_axis * dist;
 
-                LLVector3 origin = np - at_axis * dist;
+            LLMatrix4 mat(quat, LLVector4(origin, 1.f));
 
-                LLMatrix4 mat(quat, LLVector4(origin, 1.f));
+            view[i + 4] = glh::matrix4f((F32*)mat.mMatrix);
 
-                view[i + 4] = glh::matrix4f((F32*)mat.mMatrix);
+            view[i + 4] = view[i + 4].inverse();
 
-                view[i + 4] = view[i + 4].inverse();
+            //get perspective matrix
+            F32 near_clip = dist + 0.01f;
+            F32 width = scale.mV[VX];
+            F32 height = scale.mV[VY];
+            F32 far_clip = dist + volume->getLightRadius() * 1.5f;
 
-                //get perspective matrix
-                F32 near_clip = dist + 0.01f;
-                F32 width = scale.mV[VX];
-                F32 height = scale.mV[VY];
-                F32 far_clip = dist + volume->getLightRadius() * 1.5f;
+            F32 fovy = fov * RAD_TO_DEG;
+            F32 aspect = width / height;
 
-                F32 fovy = fov * RAD_TO_DEG;
-                F32 aspect = width / height;
+            proj[i + 4] = gl_perspective(fovy, aspect, near_clip, far_clip);
 
-                proj[i + 4] = gl_perspective(fovy, aspect, near_clip, far_clip);
+            //translate and scale to from [-1, 1] to [0, 1]
+            glh::matrix4f trans(0.5f, 0.f, 0.f, 0.5f,
+                0.f, 0.5f, 0.f, 0.5f,
+                0.f, 0.f, 0.5f, 0.5f,
+                0.f, 0.f, 0.f, 1.f);
 
-                //translate and scale to from [-1, 1] to [0, 1]
-                glh::matrix4f trans(0.5f, 0.f, 0.f, 0.5f,
-                    0.f, 0.5f, 0.f, 0.5f,
-                    0.f, 0.f, 0.5f, 0.5f,
-                    0.f, 0.f, 0.f, 1.f);
+            set_current_modelview(view[i + 4]);
+            set_current_projection(proj[i + 4]);
 
-                set_current_modelview(view[i + 4]);
-                set_current_projection(proj[i + 4]);
+            mSunShadowMatrix[i + 4] = trans * proj[i + 4] * view[i + 4] * inv_view;
 
-                mSunShadowMatrix[i + 4] = trans * proj[i + 4] * view[i + 4] * inv_view;
+            for (U32 j = 0; j < 16; j++)
+            {
+                gGLLastModelView[j] = mShadowModelview[i + 4].m[j];
+                gGLLastProjection[j] = mShadowProjection[i + 4].m[j];
+            }
 
-                for (U32 j = 0; j < 16; j++)
-                {
-                    gGLLastModelView[j] = mShadowModelview[i + 4].m[j];
-                    gGLLastProjection[j] = mShadowProjection[i + 4].m[j];
-                }
+            mShadowModelview[i + 4] = view[i + 4];
+            mShadowProjection[i + 4] = proj[i + 4];
 
-                mShadowModelview[i + 4] = view[i + 4];
-                mShadowProjection[i + 4] = proj[i + 4];
-
+            if (!gCubeSnapshot) //skip updating spot shadow maps during cubemap updates
+            {
                 LLCamera shadow_cam = camera;
                 shadow_cam.setFar(far_clip);
                 shadow_cam.setOrigin(origin);
@@ -11216,15 +11239,17 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
                 stop_glerror();
 
-                mRT->shadow[i + 4].bindTarget();
-                mRT->shadow[i + 4].getViewport(gGLViewport);
-                mRT->shadow[i + 4].clear();
+                //
+                
+                mSpotShadow[i].bindTarget();
+                mSpotShadow[i].getViewport(gGLViewport);
+                mSpotShadow[i].clear();
 
-                U32 target_width = mRT->shadow[i + 4].getWidth();
+                U32 target_width = mSpotShadow[i].getWidth();
 
                 static LLCullResult result[2];
 
-                LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SHADOW0 + i + 4);
+                LLViewerCamera::sCurCameraID = (LLViewerCamera::eCameraID)(LLViewerCamera::CAMERA_SPOT_SHADOW0 + i);
 
                 RenderSpotLight = drawable;
 
@@ -11232,7 +11257,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 
                 RenderSpotLight = nullptr;
 
-                mRT->shadow[i + 4].flush();
+                mSpotShadow[i].flush();
             }
         }
 	}

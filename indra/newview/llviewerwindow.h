@@ -369,7 +369,9 @@ public:
     // origin - vantage point to take the snapshot from
     // cubearray - cubemap array for storing the results
     // index - cube index in the array to use (cube index, not face-layer)
-    BOOL cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 index, S32 face);
+    // face - which cube face to update
+    // near_clip - near clip setting to use
+    BOOL cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 index, S32 face, F32 near_clip, bool render_avatars);
 
     
     // special implementation of simpleSnapshot for reflection maps
@@ -404,7 +406,7 @@ public:
 								BOOL pick_transparent = FALSE,
 								BOOL pick_rigged = FALSE,
 								BOOL pick_unselectable = FALSE);
-	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_rigged = FALSE, BOOL pick_particle = FALSE);
+	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_rigged = FALSE, BOOL pick_particle = FALSE, BOOL pick_unselectable = TRUE);
 	LLHUDIcon* cursorIntersectIcon(S32 mouse_x, S32 mouse_y, F32 depth,
 										   LLVector4a* intersection);
 
@@ -413,6 +415,7 @@ public:
 									S32 this_face = -1,
 									BOOL pick_transparent = FALSE,
 									BOOL pick_rigged = FALSE,
+                                    BOOL pick_unselectable = TRUE,
 									S32* face_hit = NULL,
 									LLVector4a *intersection = NULL,
 									LLVector2 *uv = NULL,

@@ -330,16 +330,11 @@ void handle_reset_view();
 
 void handle_duplicate_in_place(void*);
 
-
 void handle_object_owner_self(void*);
 void handle_object_owner_permissive(void*);
 void handle_object_lock(void*);
 void handle_object_asset_ids(void*);
 void force_take_copy(void*);
-#ifdef _CORY_TESTING
-void force_export_copy(void*);
-void force_import_geometry(void*);
-#endif
 
 void handle_force_parcel_owner_to_me(void*);
 void handle_force_parcel_to_content(void*);
@@ -10279,6 +10274,18 @@ class LLToolsSelectOnlyMovableObjects : public view_listener_t
 	}
 };
 
+class LLToolsSelectInvisibleObjects : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        BOOL cur_val = gSavedSettings.getBOOL("SelectInvisibleObjects");
+
+        gSavedSettings.setBOOL("SelectInvisibleObjects", !cur_val);
+
+        return true;
+    }
+};
+
 class LLToolsSelectBySurrounding : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -11918,6 +11925,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSelectTool(), "Tools.SelectTool");
 	view_listener_t::addMenu(new LLToolsSelectOnlyMyObjects(), "Tools.SelectOnlyMyObjects");
 	view_listener_t::addMenu(new LLToolsSelectOnlyMovableObjects(), "Tools.SelectOnlyMovableObjects");
+    view_listener_t::addMenu(new LLToolsSelectInvisibleObjects(), "Tools.SelectInvisibleObjects");
 	view_listener_t::addMenu(new LLToolsSelectBySurrounding(), "Tools.SelectBySurrounding");
 	view_listener_t::addMenu(new LLToolsShowHiddenSelection(), "Tools.ShowHiddenSelection");
 	view_listener_t::addMenu(new LLToolsShowSelectionLightRadius(), "Tools.ShowSelectionLightRadius");

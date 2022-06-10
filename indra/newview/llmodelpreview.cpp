@@ -30,6 +30,7 @@
 
 #include "llmodelloader.h"
 #include "lldaeloader.h"
+#include "llgltfloader.h"
 #include "llfloatermodelpreview.h"
 
 #include "llagent.h"
@@ -922,29 +923,52 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     std::map<std::string, std::string> joint_alias_map;
     getJointAliases(joint_alias_map);
 
-    std::array<std::string,LLModel::NUM_LODS> lod_suffix;
-	for(int i=0; i < LLModel::NUM_LODS; i++)
-	{
-		lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
-	}
+    // three possible file extensions, .dae .gltf .glb
+    // check for .dae and if not then assume one of the .gl??
+    if (std::string::npos != filename.rfind(".dae"))
+    {
+        // <FS> allow LOD suffix configuration
+        std::array<std::string, LLModel::NUM_LODS> lod_suffix;
+        for (int i = 0; i < LLModel::NUM_LODS; i++)
+        {
+            lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
+        }
+        // </FS>
 
-    mModelLoader = new LLDAELoader(
-        filename,
-        lod,
-        &LLModelPreview::loadedCallback,
-        &LLModelPreview::lookupJointByName,
-        &LLModelPreview::loadTextures,
-        &LLModelPreview::stateChangedCallback,
-        this,
-        mJointTransformMap,
-        mJointsFromNode,
-        joint_alias_map,
-        LLSkinningUtil::getMaxJointCount(),
-        gSavedSettings.getU32("ImporterModelLimit"),
-        // <FS:Beq> allow LOD suffix configuration
-        // gSavedSettings.getBOOL("ImporterPreprocessDAE"));
-        gSavedSettings.getBOOL("ImporterPreprocessDAE"),
-        lod_suffix);
+        mModelLoader = new LLDAELoader(
+            filename,
+            lod,
+            &LLModelPreview::loadedCallback,
+            &LLModelPreview::lookupJointByName,
+            &LLModelPreview::loadTextures,
+            &LLModelPreview::stateChangedCallback,
+            this,
+            mJointTransformMap,
+            mJointsFromNode,
+            joint_alias_map,
+            LLSkinningUtil::getMaxJointCount(),
+            gSavedSettings.getU32("ImporterModelLimit"),
+            // <FS:Beq> allow LOD suffix configuration
+            //gSavedSettings.getBOOL("ImporterPreprocessDAE"));
+            gSavedSettings.getBOOL("ImporterPreprocessDAE"),
+            lod_suffix);
+    }
+    else
+    {
+        mModelLoader = new LLGLTFLoader(
+            filename,
+            lod,
+            &LLModelPreview::loadedCallback,
+            &LLModelPreview::lookupJointByName,
+            &LLModelPreview::loadTextures,
+            &LLModelPreview::stateChangedCallback,
+            this,
+            mJointTransformMap,
+            mJointsFromNode,
+            joint_alias_map,
+            LLSkinningUtil::getMaxJointCount(),
+            gSavedSettings.getU32("ImporterModelLimit"));
+    }
 
     if (force_disable_slm)
     {

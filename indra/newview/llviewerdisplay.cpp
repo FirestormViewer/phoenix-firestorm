@@ -1208,7 +1208,6 @@ void display_cube_face()
 
     gPipeline.mBackfaceCull = TRUE;
 
-    LLViewerCamera::getInstance()->setNear(MIN_NEAR_PLANE);
     gViewerWindow->setup3DViewport();
 
     if (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_HUD))
