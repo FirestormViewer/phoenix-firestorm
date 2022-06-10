@@ -370,7 +370,40 @@
            name="2"
            value="2"/>
         </combo_box>
-
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="RenderReflectionDetailText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Reflections:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeDetail"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ReflectionDetial"
+         width="150">
+          <combo_box.item
+           label="Static Only"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Static &amp; Dynamic"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Realtime"
+           name="2"
+           value="2"/>
+        </combo_box>
         <text
          type="string"
          length="1"

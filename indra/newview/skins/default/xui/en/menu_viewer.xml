@@ -1987,15 +1987,6 @@
                      function="Tools.SelectOnlyMovableObjects"
                      parameter="movable" />
                 </menu_item_check>
-            <menu_item_check
-                 label="Select Invisible Objects"
-                 name="Select Invisible Objects">
-                    <menu_item_check.on_check
-                     control="SelectInvisibleObjects" />
-                    <menu_item_check.on_click
-                     function="Tools.SelectInvisibleObjects"
-                     parameter="invisible" />
-            </menu_item_check>
                 <menu_item_check
                  label="Select Only Locked Objects"
                  name="Select Only Locked Objects">
@@ -2013,6 +2004,15 @@
                     <menu_item_check.on_click
                      function="ToggleControl"
                      parameter="FSSelectCopyableOnly" />
+                </menu_item_check>
+                <menu_item_check
+                 label="Select Invisible Objects"
+                 name="Select Invisible Objects">
+                    <menu_item_check.on_check
+                     control="SelectInvisibleObjects" />
+                    <menu_item_check.on_click
+                     function="Tools.SelectInvisibleObjects"
+                     parameter="invisible" />
                 </menu_item_check>
                 <menu_item_check
                  label="Select By Surrounding"
