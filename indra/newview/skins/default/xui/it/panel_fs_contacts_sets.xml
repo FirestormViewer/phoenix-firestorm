@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		Questo set è vuoto
+	</panel.string>
+	<panel.string name="no_sets">
+		Nessun set
+	</panel.string>
+	<panel.string name="all_sets">
+		Tutti i set
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Alias
+	</panel.string>
+	<panel.string name="non_friends">
+		Non amici
+	</panel.string>
+	<button name="config_btn" tool_tip="Configura il set di contatti selezionato" />
+	<button name="add_set_btn" tool_tip="Aggiungi un nuovo set di contatti" />
+	<button name="remove_set_btn" tool_tip="Elimina il set di contatti selezionato" />
+	<button label="Aggiungi..." name="add_btn" tool_tip="Aggiungi un avatar a questo set di contatti" />
+	<button label="Rimuovi" name="remove_btn" tool_tip="Rimuovi l'avatar selezionato da questo set di contatti" />
+	<button label="Profilo" name="profile_btn" tool_tip="Apri il profilo dell'avatar selezionato" />
+	<button label="IM / Chiama" name="start_im_btn" tool_tip="Invia IM all'avatar selezionato" />
+	<button label="Offri TP" name="offer_teleport_btn" tool_tip="Offri teleport all'avatar selezionato" />
+	<button label="Imposta Alias" name="set_pseudonym_btn" tool_tip="Dai un soprannome all'avatar selezionato" />
+	<button label="Rimuovi Alias" name="remove_pseudonym_btn" tool_tip="Rimuovi il soprannome dall'avatar selezionato" />
+	<button label="Rimuovi NM" name="remove_displayname_btn" tool_tip="Rimuovi il 'Nome Mostrato' dall'avatar selezionato" />
+	<text name="member_count">
+		Membri: [COUNT]
+	</text>
+</panel>

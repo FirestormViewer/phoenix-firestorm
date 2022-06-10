@@ -1,70 +1,104 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Audio e media" name="Preference Media panel">
+<panel label="Audio e Media" name="Preference Media panel">
 	<panel.string name="middle_mouse">
 		Pulsante centrale del mouse
 	</panel.string>
+	<panel.string name="button4_mouse">
+		Pulsante del mouse 4
+	</panel.string>
+	<panel.string name="button5_mouse">
+		Pulsante del mouse 5
+	</panel.string>
 	<tab_container label="Preferenze Firestorm" name="tabs">
 		<panel label="Generale" name="Media Sounds Panel">
-			<slider label="Volume generale" name="System Volume"/>
-			<check_box label="Muto quando riduci ad icona" name="mute_when_minimized"/>
-			<slider label="Interfaccia" name="UI Volume"/>
+			<slider label="Volume Generale" name="System Volume"/>
+			<check_box label="Muta quando riduci ad icona" name="mute_when_minimized"/>
+			<slider label="Pulsanti" name="UI Volume"/>
 			<slider label="Ambiente" name="Wind Volume"/>
-			<check_box name="collisions_audio_play_btn" tool_tip="Abilita i suoni predefiniti per le collisioni" label="Riproduci suono collisioni"/>
-			<slider label="Suoni oggetti" name="SFX Volume"/>
-			<check_box name="gesture_audio_play_btn" tool_tip="Se spuntata, riprodurrà i suoni di tutti i gesti" label="Riproduci suono gesti"/>
+			<check_box name="collisions_audio_play_btn" tool_tip="Abilita i suoni predefiniti per le collisioni" label="Riproduci suoni collisioni"/>
+			<slider label="Effetti Sonori" name="SFX Volume"/>
+			<check_box name="gesture_audio_play_btn" tool_tip="Se spuntata, riprodurrà i suoni di tutti i gesti" label="Riproduci suoni gesti"/>
 			<slider label="Musica" name="Music Volume"/>
 			<check_box label="Abilita" name="enable_music"/>
-			<slider label="Media" name="Media Volume"/>
 			<check_box label="Abilita" name="enable_media"/>
-			<slider label="Volume voce" name="Voice Volume"/>
+			<slider label="Voce" name="Voice Volume"/>
 			<check_box label="Abilita" name="enable_voice_check_volume"/>
-			<text name="friends_logon_sounds_label">
-				Suona quando un amico:
+			<text name="auto_unmute_label">
+				Riattiva automaticamente suoni dopo il teleport:
 			</text>
-			<check_box name="friends_notify_online_sound" label="Entra"/>
-			<check_box name="friends_notify_offline_sound" label="Esce"/>
-			<text name="money_change_threshold_label" tool_tip="Suona quando viene speso o ricevuto denaro oltre la somma qui stabilita.">
+			<check_box name="FSAutoUnmuteAmbient" label="Ambiente" tool_tip="Se disattivati, riattiva automaticamente i suoni ambientali dopo il teleport (default = disattivato)" />
+			<check_box name="FSAutoUnmuteSounds" label="Effetti Sonori" tool_tip="Se disattivati, riattiva automaticamente gli effetti sonori dopo il teleport (default = disattivato)" />
+			<text name="friends_logon_sounds_label">
+				Riproduci suono quando un amico:
+			</text>
+			<check_box name="friends_notify_online_sound" label="Entra in SL"/>
+			<check_box name="friends_notify_offline_sound" label="Esce da SL"/>
+			<text name="money_change_threshold_label" tool_tip="Riproduci un suono quando spendi o ricevi una somma di denaro superiore alla soglia stabilita">
 				Soglia di cambio L$:
 			</text>
+			<panel name="output_device_settings_panel">
+				<panel.string name="output_default_text">
+					Predefinito
+				</panel.string>
+				<panel.string name="output_no_device">
+					Nessun dispositivo
+				</panel.string>
+				<panel.string name="output_name_no_device">
+					Dispositivo senza nome
+				</panel.string>
+				<panel.string name="output_device_unavailable">
+					Dispositivo non disponibile
+				</panel.string>
+				<text name="output_label" width="115">
+					Dispositivo in uscita:
+				</text>
+			</panel>
 		</panel>
 		<panel name="Media Media Panel">
-			<check_box label="Riproduci automaticamente il flusso all&apos;ingresso in regione" name="media_auto_play_btn" tool_tip="Avvia automaticamente i media all&apos;ingresso in una sim."/>
-			<check_box name="media_allowscript_btn" tool_tip="Questa impostazione consente/impedisce di controllare le connessioni multimediali da parte di script di altri utenti" label="Consenti agli script di riprodurre media"/>
+			<text name="media_autoplay_label" width="190">
+				Riproduci media automaticamente
+			</text>
+			<combo_box name="media_auto_play_combo">
+				<item label="Disabilitato" name="autoplay_disabled" />
+				<item label="Abilitato" name="autoplay_enabled" />
+				<!-- <item label="Chiedi" name="autoplay_ask" /> -->
+			</combo_box>
+			<check_box name="media_allowscript_btn" tool_tip="Questa impostazione consente/impedisce di controllare le connessioni multimediali da parte di script di altri utenti" label="Consenti agli script di riprodurre i media"/>
 			<check_box label="Riproduci media indossati da altri avatar" name="media_show_on_others_btn" tool_tip="Non selezionare se non si vogliono ascoltare i media indossati su altri avatar."/>
 			<check_box name="media_filter" tool_tip="Selezionare questa opzione per abilitare il filtro che permette di scegliere se riprodurre file multimediali da un host specifico" label="Attiva filtro media (aumenta la sicurezza)"/>
 			<button label="Gestisci siti media" name="edit_media_lists_button"/>
 			<text name="Media Rolloff" >
-				Distanza di attenuazione audio/media:
+				Attenuazione del volume dei media:
 			</text>
-			<slider name="MediaRollOffMin" label="Inizia a diminuire da:" tool_tip="Distanza minima dalla sorgente per la quale inizia l&apos;effetto di attenuazione."/>
+			<slider name="MediaRollOffMin" label="Inizia a diminuire a:" tool_tip="Distanza minima dalla sorgente per la quale inizia l&apos;effetto di attenuazione."/>
 			<text name="MinMeters">
 				metri
 			</text>
-			<slider name="MediaRollOffMax" label="Sparisce a:" tool_tip="Distanza massima dalla fonte sonora per disattivare completamente l&apos;audio."/>
+			<slider name="MediaRollOffMax" label="Svanisce completamente a:" tool_tip="Distanza massima dalla fonte sonora per disattivare completamente l&apos;audio."/>
 			<text name="MaxMeters">
 				metri
 			</text>
 		</panel>
 		<panel name="Media Music Panel" label="Musica">
-			<check_box name="audio_auto_play_btn" tool_tip="Avvia automaticamene i flussi audio." label="Avvia automaticamente flusso audio"/>
-			<check_box name="FSFadeAudioStream" tool_tip="Usa la dissolvenza quando l&apos;audio del terreno cambia brano" label="Abilita dissolvenza audio:"/>
-			<slider label="Fade in:" name="FSAudioMusicFadeIn" tool_tip="Durata fade in per l&apos;audio del lotto."/>
+			<check_box name="audio_auto_play_btn" tool_tip="Avvia automaticamene la musica della parcella" label="Riproduci musica automaticamente"/>
+			<check_box name="FSFadeAudioStream" tool_tip="Utilizza la dissolvenza della musica quando entri ed esci da una parcella" label="Abilita dissolvenza musica:"/>
+			<slider label="In entrata:" name="FSAudioMusicFadeIn" tool_tip="Durata dell'incremento progressivo del volume della musica quando entri da una parcella." label_width="55"/>
 			<text name="FSAudioMusicFadeInSeconds">
 				secondi
 			</text>
-			<slider label="Fade out:" name="FSAudioMusicFadeOut" tool_tip="Durata fade out per l&apos;audio del lotto."/>
+			<slider label="In uscita:" name="FSAudioMusicFadeOut" tool_tip="Durata della diminuzione progressiva del volume della musica quando esci da una parcella." label_width="55"/>
 			<text name="FSAudioMusicFadeOutSeconds">
 				secondi
 			</text>
 			<text name="show_stream_metadata_text">
-				Mostra notifiche sui titoli stream:
+				Mostra notifiche sui titoli in streaming:
 			</text>
 			<radio_group name="show_stream_metadata">
 				<radio_item label="No" name="radio_off"/>
-				<radio_item label="Annunci" name="radio_toasts"/>
+				<radio_item label="Pop-up" name="radio_toasts"/>
 				<radio_item label="Chat locale" name="radio_chat"/>
 			</radio_group>
-			<check_box name="StreamMetadataAnnounceToChat" label="Trasmetti titoli su un canale:"/>
+			<check_box name="StreamMetadataAnnounceToChat" label="Invia titoli in streaming sul canale:" width="210"/>
 		</panel>
 		<panel label="Voce" name="Media Voice tab">
 			<check_box label="Abilita voce" name="enable_voice_check"/>
@@ -73,20 +107,18 @@
 			<radio_group name="ear_location">
 				<radio_item label="Ascolta voce da posizione camera" name="0"/>
 				<radio_item label="Ascolta voce da posizione avatar" name="1"/>
-				<radio_item label="Ascolta ugualmente da entrambe" name="2"/>
+				<radio_item label="Ascolta voce a tutto volume (solo OpenSim)" name="2"/>
 			</radio_group>
 			<check_box label="Muovi le labbra quando parli" name="enable_lip_sync"/>
 			<check_box label="Mostra indicatore voce sugli avatar" tool_tip="Mostra indicatore (pallino bianco) sopra agli avatar" name="FSShowVoiceVisualizer"/>
-			<check_box label="Visualizza voce nelle chiamate private" tool_tip="Mostra l&apos;indicatore vocale e il movimento delle labbra anche quando si è in una chiamata privata" name="Show_Voice_Visualizers_In_Calls"/>
-			<check_box label="Mostra stato voce nel pannello conversazioni" tool_tip="Mostra lo stato del canale voce nella finestra conversazioni" name="FSShowConversationVoiceStateIndicator"/>
-			<check_box label="Rifiuta automaticamente tutte le chiamate voce di gruppo" name="VoiceCallsRejectGroup"/>
-			<check_box label="Rifiuta automaticamente tutte le chiamate voce in conferenza (ad-hoc)" name="VoiceCallsRejectAdHoc"/>
-			<check_box label="Rifiuta automaticamente tutte le chiamate voce P2P" name="VoiceCallsRejectP2P"/>
-			<check_box label="Accendi/spegni voce con:" name="push_to_talk_toggle_check" tool_tip="Se spuntato, attiva la voce quando il tasto è premuto. Quando il tasto viene lasciato spegne la voce."/>
-			<line_editor label="Scegli tasto-per-parlare" name="modifier_combo"/>
-			<button label="Imposta tasto" name="set_voice_hotkey_button"/>
-			<button tool_tip="Cancella tasto impostato" name="clear_voice_hotkey_button"/>
-			<button name="set_voice_middlemouse_button" tool_tip="Ripristina tasto originale (tasto centrale del mouse)"/>
+			<check_box label="Mostra indicatore voce sul mio avatar" name="FSShowMyOwnVoiceVisualizer" />
+			<check_box label="Mostra il pallino negli indicatori voce" tool_tip="Se questa opzione è abilitata, viene visualizzato un pallino in mezzo agli indicatori voce. Se è disattivata, vengono visualizzate solo le onde vocali." name="FSShowVoiceVisualizerWithDot" />
+			<check_box label="mostra indicatori voce nelle chiamate private e di gruppo" tool_tip="Mostra l&apos;indicatore vocale e il movimento delle labbra anche quando si è in una chiamata privata" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Mostra stato voce sulle schede delle conversazioni" tool_tip="Mostra lo stato del canale voce nella finestra conversazioni (IM e gruppi)" name="FSShowConversationVoiceStateIndicator"/>
+			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale di gruppo" name="VoiceCallsRejectGroup"/>
+			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale in conferenza (ad-hoc)" name="VoiceCallsRejectAdHoc"/>
+			<check_box label="Rifiuta automaticamente gli inviti alla chat vocale P2P (avatar con avatar)" name="VoiceCallsRejectP2P"/>
+			<check_box label="Accendi/spegni il microfono quando premo il pulsante sulla barra degli strumenti" name="push_to_talk_toggle_check" tool_tip="Se questa funzione è attiva, premere e rilasciare UNA VOLTA il pulsante per accendere o spegnere il microfono. Se questa funzione è disattivata, il microfono trasmette la tua voce solo mentre il pulsante viene tenuto premuto."/>
 			<button label="Impostazioni periferiche audio" name="device_settings_btn"/>
 			<panel label="Impostazione periferiche" name="device_settings_panel">
 				<panel.string name="default_text">
@@ -111,7 +143,7 @@
 					Uscita
 				</text>
 				<text name="Volume label">
-					Volume in:
+					Il mio volume:
 				</text>
 				<slider_bar name="mic_volume_slider" tool_tip="Cambia il volume utilizzando questo cursore"/>
 				<text name="wait_text">

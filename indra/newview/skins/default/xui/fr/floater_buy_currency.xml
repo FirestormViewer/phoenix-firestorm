@@ -3,64 +3,76 @@
 	<floater.string name="buy_currency">
 		Achetez [LINDENS] L$ pour environ [LOCALAMOUNT]
 	</floater.string>
-	<text left="5" name="info_need_more" right="-5">
-		Plus de L$ sont requis
-	</text>
-	<text name="contacting">
-		En train de contacter 
-le Lindex...
-	</text>
-	<text left="5" name="info_buying">
-		Acheter des L$
-	</text>
-	<text name="balance_label">
-		J&apos;ai
-	</text>
-	<text name="balance_amount">
-		[AMT] L$
-	</text>
-	<text name="currency_action">
-		Je veux acheter
-	</text>
-	<text left="308" name="currency_label">
-		L$
-	</text>
-	<line_editor label="L$" left_pad="-85" name="currency_amt" width="65">
-		1234
-	</line_editor>
-	<text name="buying_label">
-		Pour
-	</text>
-	<text left_delta="68" name="currency_est" width="138">
-		environ [LOCALAMOUNT]
-	</text>
-	<text name="getting_data" width="138">
-		Estimation en cours...
-	</text>
-	<text name="buy_action">
-		[ACTION]
-	</text>
-	<text name="total_label">
-		Mon nouveau solde sera de
-	</text>
-	<text name="total_amount">
-		[AMT] L$
-	</text>
-	<text name="currency_links">
-		[http://www.secondlife.com/my/account/payment_method_management.php mode de paiement] | [http://www.secondlife.com/my/account/currency.php devise]
-	</text>
-	<text name="exchange_rate_note">
-		Saisissez à nouveau le montant pour voir le taux de change actuel.
-	</text>
-	<text name="purchase_warning_repurchase">
-		Confirmer cet achat n&apos;achète que des L$, pas l&apos;objet.
-	</text>
-	<text bottom_delta="16" name="purchase_warning_notenough">
-		Vous n&apos;achetez pas assez de L$. Veuillez augmenter le montant.
-	</text>
-	<button label="Acheter" name="buy_btn"/>
-	<button label="Annuler" name="cancel_btn"/>
-	<floater.string name="info_cannot_buy" left="160" width="200">
+	<floater.string name="info_cannot_buy">
 		Achat impossible
 	</floater.string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="layout_panel_title">
+			<text left="5" name="info_need_more" right="-5">
+				Plus de L$ sont requis
+			</text>
+			<text left="5" name="info_buying">
+				Acheter des L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_price">
+			<text name="target_price_label">
+				Vous avez besoin de
+			</text>
+			<text name="target_price">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_balance">
+			<text name="balance_label">
+				Vous avez
+			</text>
+			<text name="balance_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_required">
+			<text name="required_label">
+				Vous devez acheter au moins
+			</text>
+			<text name="required_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_action">
+			<text name="currency_action">
+				Vous voulez acheter
+			</text>
+			<text name="currency_est">
+				environ [LOCALAMOUNT]
+			</text>
+			<text name="getting_data">
+				Estimation en cours...
+			</text>
+			<text name="total_label">
+				Votre nouveau solde sera
+			</text>
+			<text name="total_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_msg">
+			<text name="currency_links">
+				[http://www.secondlife.com/my/account/payment_method_management.php mode de paiement] | [http://www.secondlife.com/my/account/currency.php devise]
+			</text>
+			<text name="exchange_rate_note">
+				Saisissez à nouveau le montant pour voir le taux de change actuel.
+			</text>
+			<text name="purchase_warning_repurchase">
+				Confirm. cet achat n'achète que des L$, pas l'objet.
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_buttons">
+			<text name="contacting">
+				Contact avec LindeX...
+			</text>
+			<button label="Acheter" name="buy_btn" />
+			<button label="Annuler" name="cancel_btn" />
+		</layout_panel>
+	</layout_stack>
 </floater>

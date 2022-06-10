@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Load Pref Preset" title="TERCİHLİ ÖN AYARI YÜKLE">
+<floater name="load_pref_preset" title="TERCİHLİ ÖN AYARI YÜKLE">
 	<string name="title_graphic">
 		Grafik Ön Ayarını Yükle
 	</string>

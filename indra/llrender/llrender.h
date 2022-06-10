@@ -366,12 +366,10 @@ public:
 
 	LLRender();
 	~LLRender();
-	void init() ;
+    void init(bool needs_vertex_buffer);
+    void initVertexBuffer();
+    void resetVertexBuffer();
 	void shutdown();
-	// <FS:Ansariel> Reset VB during TP
-	void initVB();
-	void destroyVB();
-	// </FS:Ansariel>
 	
 	// Refreshes renderer state to the cached values
 	// Needed when the render context has changed and invalidated the current state

@@ -3005,6 +3005,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 	if (detailed_update)
 	{
         U32 draw_order = 0;
+        S32 attachment_selected = LLSelectMgr::getInstance()->getSelection()->getObjectCount() && LLSelectMgr::getInstance()->getSelection()->isAttachment();
 		for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
 			 iter != mAttachmentPoints.end();
 			 ++iter)
@@ -3051,7 +3052,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
                     }
 
                     // if selecting any attachments, update all of them as non-damped
-                    if (LLSelectMgr::getInstance()->getSelection()->getObjectCount() && LLSelectMgr::getInstance()->getSelection()->isAttachment())
+                    if (attachment_selected)
                     {
                         gPipeline.updateMoveNormalAsync(attached_object->mDrawable);
                     }

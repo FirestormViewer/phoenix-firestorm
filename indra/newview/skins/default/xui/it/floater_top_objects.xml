@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="Oggetti principali">
+<floater min_width="772" name="top_objects" title="Oggetti in regione">
 	<floater.string name="top_scripts_title">
-		Script pesanti
+		Oggetti con script più pesanti
 	</floater.string>
 	<floater.string name="top_scripts_text">
-		[COUNT] script che impiegano un totale di [TIME] ms e utilizzano [MEMORY] KB
+		[COUNT] script  -  Tempo Totale: [TIME] ms  -  Memoria Totale: [MEMORY] KB
 	</floater.string>
 	<floater.string name="scripts_score_label">
 		Tempo
@@ -13,7 +13,7 @@
 		Oggetti con maggiori collisioni
 	</floater.string>
 	<floater.string name="top_colliders_text">
-		I [COUNT] oggetti che sperimentano il maggior numero di collisioni
+		I [COUNT] oggetti con il maggior numero di collisioni
 	</floater.string>
 	<floater.string name="colliders_score_label">
 		Punteggio
@@ -31,41 +31,36 @@
 		In caricamento...
 	</text>
 	<scroll_list name="objects_list">
-		<scroll_list.columns label="Punteggio" name="score" width="84"/>
-		<scroll_list.columns label="Nome" name="name" width="84"/>
-		<scroll_list.columns label="Proprietario" name="owner" width="84"/>
-		<scroll_list.columns label="Luogo" name="location" width="84"/>
+		<scroll_list.columns label="Punteggio" name="score"/>
+		<scroll_list.columns label="Nome" name="name"/>
+		<scroll_list.columns label="Proprietario" name="owner"/>
+		<scroll_list.columns label="Posizione" name="location"/>
 		<scroll_list.columns label="Lotto" name="parcel"/>
-		<scroll_list.columns label="Data" name="time" width="84"/>
+		<scroll_list.columns label="Data" name="time"/>
 		<scroll_list.columns label="URL" name="URLs"/>
 		<scroll_list.columns label="Memoria (KB)" name="memory"/>
 	</scroll_list>
 	<text name="id_text">
 		ID oggetto:
 	</text>
-	<line_editor font="SansSerifSmall" name="id_editor"/>
-	<button label="Mostra faro" name="show_beacon_btn"/>
+	<button label="Marcatore" name="show_beacon_btn"/>
 	<text name="obj_name_text">
-		Nome dell&apos;oggetto:
+		Nome oggetto:
 	</text>
-	<line_editor font="SansSerifSmall" name="object_name_editor"/>
-	<button label="Filtro" name="filter_object_btn"/>
+	<button label="Filtra" name="filter_object_btn"/>
 	<text name="owner_name_text">
 		Proprietario:
 	</text>
-	<line_editor font="SansSerifSmall" left="90" name="owner_name_editor" width="280"/>
-	<button label="Filtro" name="filter_owner_btn" width="150"/>
+	<button label="Filtra" name="filter_owner_btn"/>
 	<text name="parcel_name_text">
 		Lotto:
 	</text>
 	<button label="Filtra" name="filter_parcel_btn"/>
-	<button label="Aggiorna" name="refresh_btn" width="150"/>
-	<button label="Restituisci selezionato" name="return_selected_btn" width="150"/>
-	<button label="Restituisci tutti" left="170" name="return_all_btn"/>
+	<button label="Aggiorna" name="refresh_btn"/>
+	<button label="Restituisci Selez." name="return_selected_btn"/>
+	<button label="Restituisci Tutti" name="return_all_btn"/>
 	<button label="Teleport" name="teleport_to_btn"/>
 	<button label="Profilo" name="profile_btn"/>
-	<button label="Disabilita selezionato" name="disable_selected_btn" width="150"/>
-	<button label="Disabilita tutti" left="170" name="disable_all_btn"/>
-	<button label="Info script" name="script_info_btn"/>
-	<button label="Espelli" name="estate_kick_btn"/>
+	<button label="Info Script" name="script_info_btn"/>
+	<button label="Espelli Avatar" name="estate_kick_btn"/>
 </floater>

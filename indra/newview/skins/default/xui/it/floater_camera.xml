@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="camera_floater" title="Controlli fotocamera">
+<floater name="camera_floater" title="Controlli Fotocamera">
 	<floater.string name="rotate_tooltip">
-		Ruota la telecamera intorno all&apos;inquadratura
+		Ruota la camera intorno all'inquadratura
 	</floater.string>
 	<floater.string name="zoom_tooltip">
-		Avvicina la telecamera nell&apos;inquadratura
+		Avvicina la camera nell'inquadratura
 	</floater.string>
 	<floater.string name="move_tooltip">
-		Muovi la telecamera su, giù, a sinistra e a destra
+		Muovi la camera su, giù, a sinistra e a destra
 	</floater.string>
+	<floater.string name="free_mode_title">
+		Vista Oggetto
+	</floater.string>
+	<string name="inactive_combo_text">
+		Usa Preset
+	</string>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="Vista Frontale"/>
+		<panel_camera_item name="group_view" tool_tip="Vista Laterale"/>
+		<panel_camera_item name="rear_view" tool_tip="Vista Posteriore"/>
+		<panel_camera_item name="object_view" tool_tip="Vista Oggetto"/>
+		<panel_camera_item name="mouselook_view" tool_tip="Vista Mouselook"/>
+		<panel_camera_item name="reset_view" tool_tip="Ripristina vista"/>
+	</panel>
 	<panel name="zoom">
 		<layout_stack name="camera_view_layout_stack">
 			<layout_panel name="camera_rotate_layout_panel">
@@ -22,14 +36,12 @@
 			</layout_panel>
 		</layout_stack>
 	</panel>
-	<panel name="buttons_view">
-		<panel_camera_item name="front_view" tool_tip="Vista frontale"/>
-		<panel_camera_item name="group_view" tool_tip="Vista laterale"/>
-		<panel_camera_item name="rear_view" tool_tip="Vista posteriore"/>
-	</panel>
-	<panel name="buttons">
-		<panel_camera_item name="object_view" tool_tip="Vista oggetto"/>
-		<panel_camera_item name="mouselook_view" tool_tip="Vista mouselook"/>
-		<panel_camera_item name="reset_view" tool_tip="Ripristina vista"/>
+	<panel name="preset_buttons_panel">
+		<button label="Posizione..." name="camera_position_btn" />
+		<button name="save_preset_btn" tool_tip="Salva come Preset" />
+		<combo_box name="preset_combo">
+			<combo_box.item label="Usa Preset" name="Use preset" />
+		</combo_box>
+		<button name="gear_btn" tool_tip="Preset Camera" />
 	</panel>
 </floater>

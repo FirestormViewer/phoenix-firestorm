@@ -9239,6 +9239,62 @@
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>FSMeshLowestLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Lowest LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>LOD0</string>
+  </map>  
+  <key>FSMeshLowLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Low LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>LOD1</string>
+  </map>  
+  <key>FSMeshMediumLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Medium LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>LOD2</string>
+  </map>  
+  <key>FSMeshHighLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for High LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string></string>
+  </map>  
+  <key>FSMeshPhysicsSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Physics models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>PHYS</string>
+  </map>  
+
   <key>FSMeshUploadAutoEnableWeights</key>
   <map>
     <key>Comment</key>

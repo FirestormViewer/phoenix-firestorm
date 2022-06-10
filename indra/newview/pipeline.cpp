@@ -7482,11 +7482,9 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	mResetVertexBuffers = false;
 
 	mCubeVB = NULL;
-
-	mDeferredVB = NULL;
+    mDeferredVB = NULL;
 	mAuxiliaryVB = NULL;
 	exoPostProcess::instance().destroyVB(); // Will be re-created via updateRenderDeferred()
-	gGL.destroyVB();
 
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
 			iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
@@ -7514,6 +7512,7 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	gSky.resetVertexBuffers();
 
 	LLVOPartGroup::destroyGL();
+	gGL.resetVertexBuffer();
 
 	if ( LLPathingLib::getInstance() )
 	{
@@ -7523,7 +7522,7 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 
 	SUBSYSTEM_CLEANUP(LLVertexBuffer);
 	
-	if (LLVertexBuffer::sGLCount > 0)
+	if (LLVertexBuffer::sGLCount != 0)
 	{
 		LL_WARNS() << "VBO wipe failed -- " << LLVertexBuffer::sGLCount << " buffers remaining." << LL_ENDL;
 	}
@@ -7547,15 +7546,18 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	LLPipeline::sTextureBindTest = gSavedSettings.getBOOL("RenderDebugTextureBind");
 
 	LLVertexBuffer::initClass(LLVertexBuffer::sEnableVBOs, LLVertexBuffer::sDisableVBOMapping);
+    gGL.initVertexBuffer();
+
+    // <FS:Ansariel> Reset VB during TP
+    //mDeferredVB = new LLVertexBuffer(DEFERRED_VB_MASK, 0);
+    //mDeferredVB->allocateBuffer(8, 0, true);
+    initDeferredVB();
+    // </FS:Ansariel>
 
 	LLVOPartGroup::restoreGL();
 
 	// <FS:Ansariel> Reset VB during TP
 	updateRenderDeferred(); // Moved further down because of exoPostProcess creating a new VB
-
-	gGL.initVB();
-
-	initDeferredVB();
 	initAuxiliaryVB();
 	// </FS:Ansariel>
 }

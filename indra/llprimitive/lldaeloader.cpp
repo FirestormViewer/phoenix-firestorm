@@ -116,14 +116,17 @@ std::string colladaVersion[VERSIONTYPE_COUNT+1] =
 	"Unsupported"
 };
 
-static const std::string lod_suffix[LLModel::NUM_LODS] =
-{
-	"_LOD0",
-	"_LOD1",
-	"_LOD2",
-	"",
-	"_PHYS",
-};
+// <FS:Beq> moved to allow configuration
+// static const std::string lod_suffix[LLModel::NUM_LODS] =
+// {
+// 	"_LOD0",
+// 	"_LOD1",
+// 	"_LOD2",
+// 	"",
+// 	"_PHYS",
+// };
+// </FS:Beq>
+
 
 const U32 LIMIT_MATERIALS_OUTPUT = 12;
 
@@ -931,7 +934,11 @@ LLDAELoader::LLDAELoader(
     std::map<std::string, std::string>&		jointAliasMap,
     U32					maxJointsPerMesh,
 	U32					modelLimit,
-    bool				preprocess)
+	// <FS:Beq> mesh loader suffix configuration
+    // bool				preprocess)
+    bool				preprocess,
+	const LODSuffixArray& lod_suffix)
+	// </FS:Beq>
 : LLModelLoader(
 		filename,
 		lod,
@@ -947,11 +954,20 @@ LLDAELoader::LLDAELoader(
   mGeneratedModelLimit(modelLimit),
   mPreprocessDAE(preprocess)
 {
+	// <FS:Beq> mesh loader suffix configuration
+	for(int i=0;i<LLModel::NUM_LODS;i++)
+	{
+  		LLDAELoader::sLODSuffix[i] = lod_suffix[i];
+	}
+	// </FS:Beq>
 }
 
 LLDAELoader::~LLDAELoader()
 {
 }
+
+//static
+LODSuffixArray LLDAELoader::sLODSuffix{};// <FS:Beq/> configurable lod suffixes
 
 struct ModelSort
 {
@@ -2208,8 +2224,17 @@ void LLDAELoader::processElement( daeElement* element, bool& badElement, DAE* da
 						{
 							label += (char)((int)'a' + model->mSubmodelID);
 						}
-
-						model->mLabel = label + lod_suffix[mLod];
+						// <FS:Beq> Support altenate LOD naming conventions
+						// model->mLabel = label + sLODSuffix[mLod];
+						if ( sLODSuffix[mLod].size() > 0 )
+						{
+							model->mLabel = label + '_' + sLODSuffix[mLod];
+						}
+						else
+						{
+							model->mLabel = label;
+						}
+						// </FS:Beq>
 					}
 					else
 					{
@@ -2485,13 +2510,19 @@ std::string LLDAELoader::getElementLabel(daeElement *element)
 // static
 size_t LLDAELoader::getSuffixPosition(std::string label)
 {
-	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+    // <FS:Beq> Selectable suffixes
 	//if ((label.find("_LOD") != -1) || (label.find("_PHYS") != -1))
-	if ((label.find("_LOD") != std::string::npos) || (label.find("_PHYS") != std::string::npos))
-	// </FS:Ansariel>
+	//{
+	// 	return label.rfind('_');
+	//}
+    for(int i=0; i < LLModel::NUM_LODS; i++)
 	{
-		return label.rfind('_');
+    	if (sLODSuffix[i].size() && label.find(sLODSuffix[i]) != std::string::npos)
+    	{
+	        return label.rfind('_');
+	    }
 	}
+	// </FS:Beq>
 	return -1;
 }
 
@@ -2636,8 +2667,17 @@ bool LLDAELoader::loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& mo
 	LLModel* ret = new LLModel(volume_params, 0.f);
 
 	std::string model_name = getLodlessLabel(mesh);
-	ret->mLabel = model_name + lod_suffix[mLod];
-
+	// <FS:Beq> Support altenate LOD naming conventions
+	// ret->mLabel = model_name + sLODSuffix[mLod];
+	if ( sLODSuffix[mLod].size() > 0 )
+	{
+		ret->mLabel = model_name + '_' + sLODSuffix[mLod];
+	}
+	else
+	{
+		ret->mLabel = model_name;
+	}
+	// </FS:Beq>
 	llassert(!ret->mLabel.empty());
 
 	// Like a monkey, ready to be shot into space
@@ -2695,7 +2735,10 @@ bool LLDAELoader::loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& mo
 		{
 			LLModel* next = new LLModel(volume_params, 0.f);
 			next->mSubmodelID = ++submodelID;
-			next->mLabel = model_name + (char)((int)'a' + next->mSubmodelID) + lod_suffix[mLod];
+			// <FS:Beq> configurable lod suffixes
+			// next->mLabel = model_name + (char)((int)'a' + next->mSubmodelID) + lod_suffix[mLod];
+			next->mLabel = model_name + (char)((int)'a' + next->mSubmodelID) + sLODSuffix[mLod];
+			// </FS:Beq>
 			next->getVolumeFaces() = remainder;
 			next->mNormalizedScale = ret->mNormalizedScale;
 			next->mNormalizedTranslation = ret->mNormalizedTranslation;

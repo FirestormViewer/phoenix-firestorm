@@ -657,11 +657,13 @@ F32 LLSpatialPartition::calcDistance(LLSpatialGroup* group, LLCamera& camera)
 		dist = eye.getLength3().getF32();
 	}
 
-#if !LL_RELEASE
-    LL_DEBUGS("RiggedBox") << "calcDistance, group " << group << " camera " << origin << " obj bounds " 
-                           << group->mObjectBounds[0] << ", " << group->mObjectBounds[1] 
-                           << " dist " << dist << " radius " << group->mRadius << LL_ENDL;
-#endif
+	// <FS:Beq> This debug has measurable imapcty even when discarded
+//#if !LL_RELEASE
+    // LL_DEBUGS("RiggedBox") << "calcDistance, group " << group << " camera " << origin << " obj bounds " 
+    //                        << group->mObjectBounds[0] << ", " << group->mObjectBounds[1] 
+    //                        << " dist " << dist << " radius " << group->mRadius << LL_ENDL;
+//#endif
+	// </FS:Beq> 
 
 	if (dist < 16.f)
 	{
