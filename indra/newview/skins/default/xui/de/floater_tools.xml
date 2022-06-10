@@ -487,6 +487,15 @@ Ndrg ↔ Nst
 			<spinner label="Fokus" name="Light Focus"/>
 			<spinner label="Abnehmend" name="Light Falloff"/>
 			<spinner label="Ambiente" name="Light Ambiance"/>
+			
+			<check_box label="Reflexionstest" name="Reflection Probe" tool_tip="Passt an, wie Objekte in diesem Einflussraum Reflexionen erfahren, falls Physikalisch-basiertes Rendering aktiviert ist." />
+			<combo_box name="Probe Volume Type" tool_tip="Einflussraum für Test auswählen">
+				<combo_box.item label="Kugel" name="Sphere" />
+				<combo_box.item label="Quader" name="Box" />
+			</combo_box>
+			<check_box label="Dynamisch" name="Probe Dynamic" tool_tip="Falls aktiviert, sind Avatar in den Reflexionen innerhalb des Einflussraums enthalten." />
+			<spinner label="Umgeb." name="Probe Ambiance" />
+			<spinner label="Nahber." name="Probe Near Clip"/>
 			<text name="label physicsshapetype">
 				Art der physischen Form:
 			</text>
