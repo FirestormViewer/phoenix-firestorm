@@ -182,6 +182,8 @@ private:
     void onDiscardDescriptionChanges();
     void onShowAgentPermissionsDialog();
     void onShowAgentProfileTexture();
+    void onShowTexturePicker();
+    void onCommitProfileImage(const LLUUID& id);
     void onOpenNotes();
 
 private:
@@ -207,6 +209,7 @@ private:
 
     LLHandle<LLFloater>	mFloaterPermissionsHandle;
     LLHandle<LLFloater>	mFloaterProfileTextureHandle;
+    LLHandle<LLFloater>	mFloaterTexturePickerHandle;
 
     bool				mHasUnsavedDescriptionChanges;
 	bool				mVoiceStatus;
@@ -290,8 +293,10 @@ public:
 protected:
 	void setLoaded() override;
 
+    void onUploadPhoto();
     void onChangePhoto();
     void onRemovePhoto();
+    void onCommitPhoto(const LLUUID& id);
     void setDescriptionText(const std::string &text);
     void onSetDescriptionDirty();
     void onSaveDescriptionChanges();
@@ -299,12 +304,16 @@ protected:
 
 	LLTextEditor*	mDescriptionEdit;
     LLIconCtrl*		mPicture;
+    LLButton* mUploadPhoto;
     LLButton* mChangePhoto;
     LLButton* mRemovePhoto;
     LLButton* mSaveChanges;
     LLButton* mDiscardChanges;
 
-	std::string		mCurrentDescription;
+    LLHandle<LLFloater>	mFloaterTexturePickerHandle;
+
+    std::string		mCurrentDescription;
+    LLUUID			mImageId;
     bool			mHasUnsavedChanges;
 };
 
