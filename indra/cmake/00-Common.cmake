@@ -245,9 +245,9 @@ if (DARWIN)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${DARWIN_extra_cstar_flags}")
   # NOTE: it's critical that the optimization flag is put in front.
   # NOTE: it's critical to have both CXX_FLAGS and C_FLAGS covered.
-## Really?? On developer machines too?
-##set(ENABLE_SIGNING TRUE)
-##set(SIGNING_IDENTITY "Developer ID Application:  Phoenix Firestorm Project, Inc., The"")
+
+set(ENABLE_SIGNING TRUE)
+set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, Inc." )
 endif (DARWIN)
 
 
