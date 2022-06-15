@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Esplora Animazioni">
+	<scroll_list name="animation_list">
+		<scroll_list.column label="Riprodotta da" name="played_by" />
+		<scroll_list.column label="Riproduzione" name="played" />
+		<scroll_list.column label="Priorità" name="priority" />
+		<scroll_list.column label="Tempo" name="timestamp" />
+		<scroll_list.column label="ID animazione" name="animation_id" />
+		<scroll_list.column label="ID oggetto" name="object_id" />
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="Ferma" name="stop_btn" />
+		<button label="Ferma e revoca perm." name="stop_and_revoke_btn" />
+		<button label="Revoca perm." name="revoke_btn" />
+		<check_box label="Escludi le mie animaz." name="no_owned_animations_check" tool_tip="Se selezionata, verranno escluse tutte le animazioni del tuo avatar, come quelle dell'AO o quelle predefinite del sistema." />
+	</panel>
+</floater>

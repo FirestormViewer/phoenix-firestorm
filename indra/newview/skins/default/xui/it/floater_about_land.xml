@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterland" title="Informazioni sul terreno">
+<floater name="floaterland" title="Informazioni sul Terreno">
 	<floater.string name="Hours">
 		[HOURS] ore.
 	</floater.string>
@@ -188,7 +188,7 @@ o suddivisa.
 			<text name="region_landtype_lbl">
 				Tipo:
 			</text>
-			<text left="125" name="region_landtype_text">
+			<text left="125" name="region_landtype_text" width="230">
 				Mainland / Homestead
 			</text>
 			<text name="region_maturity_lbl">
@@ -478,5 +478,6 @@ media:
 			</panel>
 		</panel>
 		<panel label="Esperienze" name="land_experiences_panel"/>
+		<panel label="Ambiente" name="land_environment_panel" />
 	</tab_container>
 </floater>

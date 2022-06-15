@@ -377,7 +377,7 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		LLSD filterState;
 		LLInventoryPanel::InventoryState p;
 		all_items_panel->getFilter().toParams(p.filter);
-		//all_items_panel->getRootViewModel().getSorter().toParams(p.sort); // <FS:Ansariel> Causes parser error, also unused (uses debug setting instead)
+		all_items_panel->getRootViewModel().getSorter().toParams(p.sort);
 		if (p.validateBlock(false))
 		{
 			LLParamSDParser().writeSD(filterState, p);
@@ -391,7 +391,7 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		LLSD filterState;
 		LLInventoryPanel::InventoryState p;
 		panel->getFilter().toParams(p.filter);
-		//panel->getRootViewModel().getSorter().toParams(p.sort); // <FS:Ansariel> Causes parser error, also unused (uses debug setting instead)
+		panel->getRootViewModel().getSorter().toParams(p.sort);
 		if (p.validateBlock(false))
 		{
 			LLParamSDParser().writeSD(filterState, p);

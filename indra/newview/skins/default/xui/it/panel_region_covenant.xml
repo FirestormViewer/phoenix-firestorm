@@ -12,8 +12,8 @@
 	<panel.string name="can_not_change">
 		La terra in questa regione non può essere unita/suddivisa.
 	</panel.string>
-	<text name="estate_section_lbl">
-		Proprietà immobiliare
+	<text name="estate_section_lbl" width="150">
+		Proprietà Immobiliare
 	</text>
 	<text name="estate_name_lbl">
 		Nome:
@@ -49,6 +49,9 @@
 	</text>
 	<text name="region_landtype_lbl">
 		Tipo:
+	</text>
+	<text name="region_landtype_text" width="230">
+		Mainland / Homestead
 	</text>
 	<text name="region_maturity_lbl" width="115">
 		Categoria di accesso:

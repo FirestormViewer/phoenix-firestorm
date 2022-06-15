@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_lagmeter" title="Misuratore lag">
+<floater name="floater_lagmeter" title="Misuratore LAG">
 	<floater.string name="max_title_msg">
-		Misuratore lag
+		Misuratore LAG
 	</floater.string>
 	<floater.string name="client_frame_time_window_bg_msg">
 		Normale, finestra in background

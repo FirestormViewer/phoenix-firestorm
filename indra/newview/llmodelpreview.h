@@ -120,6 +120,7 @@ class LLModelPreview : public LLViewerDynamicTexture, public LLMutex
     typedef boost::signals2::signal<void(bool)> model_updated_signal_t;
 
 public:
+    static const std::array<std::string,5> sSuffixVarNames; // <FS:Beq/> mesh loader suffix configuration
 
     typedef enum
     {

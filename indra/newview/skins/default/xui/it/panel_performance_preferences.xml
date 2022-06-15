@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_performance_preferences">
-	<text name="back_lbl">
+	<text name="back_lbl" width="60">
 		Indietro
 	</text>
 	<text name="settings_title">
@@ -12,10 +12,12 @@
 	<text name="FasterText" width="50">
 		Velocità
 	</text>
-	<text name="BetterText" width="100">
+	<icon left_delta="52" name="LowGraphicsDivet" />
+	<text left_delta="12" name="BetterText" width="100">
 		Maggior qualità
 	</text>
-	<text name="ShadersPrefText">
+	<slider left_delta="-277" name="quality_vs_perf_selection" />
+	<text left="173" name="ShadersPrefText">
 		Bassa
 	</text>
 	<text name="ShadersPrefText2">
@@ -36,7 +38,7 @@
 	<text name="faster_lbl" width="50">
 		Velocità
 	</text>
-	<slider name="draw_distance" width="290" />
+	<slider name="draw_distance" left_pad="-5" width="300" />
 	<text name="farther_lbl" width="50">
 		Distanza
 	</text>
@@ -48,7 +50,7 @@
 	</text>
 	<text name="enhancements_desc">
 Riducendo o eliminando le ombre, possono aumentare considerevolmente
-gli FPS, andando però ad impattare sull'aspetto dello scenario.
+gli FPS, andando però ad impattare sull'aspetto della scena.
 	</text>
 	<text name="RenderShadowDetailText">
 		Ombre:
@@ -66,7 +68,7 @@ Riducendo la qualità degli effetti sull'acqua, possono aumentare
 considerevolmente gli FPS.
 	</text>
 	<text name="ReflectionsText">
-		Riflessi acqua:
+		Riflesso sull'Acqua:
 	</text>
 	<combo_box name="Reflections">
 		<combo_box.item label="Nessuno (opaco)" name="-2" />
@@ -82,8 +84,8 @@ considerevolmente gli FPS.
 	</text>
 	<text name="photo_desc">
 I fotografi necessitano di alta qualità a discapito
-degli FPS. [APP_NAME] Phototools può essere molto
+degli FPS. [APP_NAME] PhotoTools può essere molto
 utile per trovare il giusto bilanciamento.
 	</text>
-	<button name="open_phototools" label="Phototools" tool_tip="Apri Phototools per le impostazioni fotografiche avanzate." />
+	<button name="open_phototools" label="PhotoTools" tool_tip="Apri PhotoTools per le impostazioni fotografiche avanzate." />
 </panel>

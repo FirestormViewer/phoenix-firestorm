@@ -2,7 +2,7 @@
 <menu name="Popup">
 	<menu_item_call label="Crea annuncio" name="Marketplace Create Listing"/>
 	<menu_item_call label="Associa annuncio" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Visualizza (aggiorna) annuncio" name="Marketplace Get Listing"/>
+	<menu_item_call label="Visualizza annuncio (aggiorna)" name="Marketplace Get Listing"/>
 	<menu_item_call label="Controlla che non ci siano errori" name="Marketplace Check Listing"/>
 	<menu_item_call label="Modifica annuncio" name="Marketplace Edit Listing"/>
 	<menu_item_call label="Elenca" name="Marketplace List"/>
@@ -18,6 +18,7 @@
 	<menu_item_call label="Svuota Cestino" name="Empty Trash"/>
 	<menu_item_call label="Svuota Oggetti smarriti" name="Empty Lost And Found"/>
 	<menu_item_call label="Nuova cartella" name="New Folder"/>
+	<menu_item_call label="Nuovo abito" name="New Outfit" />
 	<menu_item_call label="Nuovo script" name="New Script"/>
 	<menu_item_call label="Nuova annotazione" name="New Note"/>
 	<menu_item_call label="Nuovo gesto" name="New Gesture"/>
@@ -33,7 +34,7 @@
 		<menu_item_call label="Nuovo slip" name="New Underpants"/>
 		<menu_item_call label="Nuovo alfa" name="New Alpha Mask"/>
 		<menu_item_call label="Nuovo tatuaggio" name="New Tattoo"/>
-		<menu_item_call label="Nuovo Universale" name="New Universal"/>
+		<menu_item_call label="Nuovo universale" name="New Universal"/>
 		<menu_item_call label="Nuova fisica" name="New Physics"/>
 	</menu>
 	<menu label="Nuova parte del corpo" name="New Body Parts">
@@ -41,6 +42,11 @@
 		<menu_item_call label="Nuova pelle" name="New Skin"/>
 		<menu_item_call label="Nuovi capelli" name="New Hair"/>
 		<menu_item_call label="Nuovi occhi" name="New Eyes"/>
+	</menu>
+	<menu label="Nuovo ambiente" name="New Settings">
+		<menu_item_call label="Nuovo cielo" name="New Sky" />
+		<menu_item_call label="Nuova acqua" name="New Water" />
+		<menu_item_call label="Nuovo ciclo giornata" name="New Day Cycle" />
 	</menu>
 	<menu label="Usa come predefinita per" name="upload_def">
 		<menu_item_call label="Immagini caricate" name="Image uploads"/>
@@ -63,11 +69,11 @@
 	<menu_item_call label="Apri segnaposto" name="Landmark Open"/>
 	<menu_item_call label="Apri animazione" name="Animation Open"/>
 	<menu_item_call label="Apri suono" name="Sound Open"/>
-	<menu_item_call label="Sostituisci vestiti" name="Replace Outfit"/>
-	<menu_item_call label="Aggiungi all&apos;abito" name="Add To Outfit"/>
+	<menu_item_call label="Sostituisci abito" name="Replace Outfit"/>
+	<menu_item_call label="Aggiungi all'abito" name="Add To Outfit"/>
 	<menu_item_call label="Indossa oggetti" name="Wear Items"/>
-	<menu_item_call label="Rimuovi dall&apos;abito attuale" name="Remove From Outfit"/>
-	<menu_item_call label="Copia lista abiti in appunti" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Rimuovi dall'abito attuale" name="Remove From Outfit"/>
+	<menu_item_call label="Copia lista vestiti negli appunti" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Trova originale" name="Find Original"/>
 	<menu_item_call label="Elimina oggetto" name="Purge Item"/>
 	<menu_item_call label="Ripristina oggetto" name="Restore Item"/>
@@ -75,8 +81,10 @@
 	<menu_item_call label="Apri originale" name="Open Original"/>
 	<menu_item_call label="Proprietà" name="Properties"/>
 	<menu_item_call label="Rinomina" name="Rename"/>
+	<menu_item_call label="Proteggi" name="ProtectFolder" />
+	<menu_item_call label="Non proteggere" name="UnprotectFolder" />
 	<menu_item_call label="Copia UUID elemento" name="Copy Asset UUID"/>
-	<menu_item_call label="Mostra in lista Tutti" name="Show in Main Panel"/>
+	<menu_item_call label="Mostra in Tutti gli elementi" name="Show in Main Panel"/>
 	<menu_item_call label="Ripristina ultima posizione" name="Restore to Last Position"/>
 	<menu_item_call label="Copia" name="Copy"/>
 	<menu_item_call label="Taglia" name="Cut"/>
@@ -84,33 +92,37 @@
 	<menu_item_call label="Incolla come link" name="Paste As Link"/>
 	<menu_item_call label="Trova tutti i link" name="Find Links"/>
 	<menu_item_call label="Sostituisci link" name="Replace Links"/>
-	<menu_item_call label="Cancella" name="Delete"/>
+	<menu_item_call label="Elimina" name="Delete"/>
 	<menu_item_call label="Elimina link interrotti" name="Cleanup broken Links"/>
-	<menu_item_call label="Sposta in cartella predefinita" name="Move to Default Folder"/>
-	<menu_item_call label="Sposta in oggetti smarriti" name="Move to Lost And Found"/>
+	<menu_item_call label="Sposta nella cartella predefinita" name="Move to Default Folder"/>
+	<menu_item_call label="Sposta in Oggetti smarriti" name="Move to Lost And Found"/>
 	<menu_item_call label="Elimina cartella di sistema" name="Delete System Folder"/>
-	<menu_item_call label="Cartella chat di gruppo" name="Conference Chat Folder"/>
+	<menu_item_call label="Avvia conferenza in chat" name="Conference Chat Folder"/>
 	<menu_item_call label="Suona" name="Sound Play"/>
 	<menu_item_call label="Copia SLurl" name="url_copy"/>
 	<menu_item_call label="Informazioni segnaposto" name="About Landmark"/>
 	<menu_item_call label="Mostra sulla mappa" name="show_on_map"/>
-	<menu_item_call label="Esegui in mondo" name="Animation Play"/>
+	<menu_item_call label="Esegui pubblicamente" name="Animation Play"/>
 	<menu_item_call label="Esegui localmente" name="Animation Audition"/>
 	<menu_item_call label="Invia IM" name="Send Instant Message"/>
-	<menu_item_call label="Offri teletrasporto..." name="Offer Teleport..."/>
-	<menu_item_call label="Richiedi teletrasporto..." name="Request Teleport..."/>
-	<menu_item_call label="Inizia chat di gruppo" name="Conference Chat"/>
+	<menu_item_call label="Offri teleport" name="Offer Teleport..."/>
+	<menu_item_call label="Richiedi teleport" name="Request Teleport..."/>
+	<menu_item_call label="Avvia conferenza in chat" name="Conference Chat"/>
 	<menu_item_call label="Attiva" name="Activate"/>
 	<menu_item_call label="Disattiva" name="Deactivate"/>
 	<menu_item_call label="Salva con nome" name="Save As"/>
+	<menu_item_call label="Salva" name="Save Selected As" />
 	<menu_item_call label="Indossa" name="Wearable And Object Wear"/>
 	<menu_item_call label="Aggiungi" name="Wearable Add"/>
 	<menu label="Attacca a" name="Attach To"/>
-	<menu label="Attacca all&apos;HUD" name="Attach To HUD"/>
+	<menu label="Attacca come HUD" name="Attach To HUD"/>
 	<menu_item_call label="Tocca" name="Attachment Touch" />
 	<menu_item_call label="Modifica" name="Wearable Edit"/>
-	<menu_item_call label="Togli" name="Take Off"/>
+	<menu_item_call label="Ricarica texture" name="Texture Refresh Attachment" />
 	<menu_item_call label="Stacca" name="Detach From Yourself"/>
+	<menu_item_call label="Togli" name="Take Off"/>
+	<menu_item_call label="Appplica solo a me stesso" name="Settings Apply Local" />
+	<menu_item_call label="Appplica al lotto" name="Settings Apply Parcel" />
 	<menu_item_call label="Copia negli annunci Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Sposta negli annunci Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--nessuna opzione--" name="--no options--"/>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="fs_asset_blacklist" title="Lista nera asset">
+<floater name="fs_asset_blacklist" title="Lista Nera (oggetti / avatar de-renderizzati e suoni bloccati)">
 	<floater.string name="asset_object">
-		Oggetti
+		Oggetto
 	</floater.string>
 	<floater.string name="asset_texture">
 		Texture
 	</floater.string>
 	<floater.string name="asset_sound">
-		Suoni
+		Suono
 	</floater.string>
 	<floater.string name="asset_resident">
-		Residente
+		Avatar
 	</floater.string>
 	<floater.string name="asset_unknown">
 		Sconosciuto
@@ -24,6 +24,7 @@
 	<floater.string name="DateFormatString">
 		[day,datetime,local]/[mthnum,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</floater.string>
+	<filter_editor label="Filtro lista nera" name="filter_input" />
 	<fs_scroll_list name="result_list">
 		<columns name="name" label="Nome"/>
 		<columns name="region" label="Regione"/>
@@ -31,7 +32,9 @@
 		<columns name="date" label="Data"/>
 		<columns name="permanent" label="Permanente"/>
 	</fs_scroll_list>	
-	<button name="remove_btn" label="Rimuovi selezione"/>
-	<button name="remove_temp_btn" label="Canc. temporaneo"/>
+	<button name="remove_btn" label="Rimuovi selezionato"/>
+	<button name="remove_temp_btn" label="Rimuovi temporanei"/>
+	<button name="play_btn" label="Play suono" tool_tip="Riproduci il suono selezionato; puoi riprodurre un solo suono alla volta." />
+	<button name="stop_btn" label="Stop suono" tool_tip="Interrompi la riproduzione del suono corrente." />
 	<button name="close_btn" label="Chiudi"/>
 </floater>
