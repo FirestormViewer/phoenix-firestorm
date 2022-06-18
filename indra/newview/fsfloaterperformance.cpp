@@ -70,7 +70,7 @@ constexpr auto SceneType    {FSPerfStats::ObjType_t::OT_GENERAL};
 class FSExceptionsContextMenu : public LLListContextMenu
 {
 public:
-    FSExceptionsContextMenu(FSFloaterPerformance* floater_settings)
+    explicit FSExceptionsContextMenu(FSFloaterPerformance* floater_settings)
         :   mFloaterPerformance(floater_settings)
     {}
 protected:
@@ -250,11 +250,13 @@ void FSFloaterPerformance::draw()
 
         FSPerfStats::bufferToggleLock.lock(); // prevent toggle for a moment
 
-        auto tot_frame_time_ns = FSPerfStats::raw_to_ns(FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FRAME));
+
+        auto tot_frame_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FRAME);
         // cumulative avatar time (includes idle processing, attachments and base av)
         auto tot_avatar_time_raw = FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_COMBINED);
         // cumulative avatar render specific time (a bit arbitrary as the processing is too.)
-        auto tot_avatar_render_time_raw = tot_avatar_time_raw - FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_IDLE);
+        // auto tot_av_idle_time_raw = FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_IDLE);
+        // auto tot_avatar_render_time_raw = tot_avatar_time_raw - tot_av_idle_time_raw;
         // the time spent this frame on the "display()" call. Treated as "tot time rendering"
         auto tot_render_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_DISPLAY);
         // sleep time is basically forced sleep when window out of focus 
@@ -263,8 +265,8 @@ void FSFloaterPerformance::draw()
         auto tot_ui_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_UI);
         // cumulative time spent rendering HUDS
         auto tot_huds_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_HUDS);
-        // "idle" time. This is the time spent in the idle poll section of the main loop, we DO remove the avatar idle time as the avatar number we display is the total avatar time inclusive of idle processing.
-        auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE) - FSPerfStats::StatsRecorder::getSum(AvType, FSPerfStats::StatType_t::RENDER_IDLE);
+        // "idle" time. This is the time spent in the idle poll section of the main loop
+        auto tot_idle_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_IDLE);
         // similar to sleep time, induced by FPS limit
         auto tot_limit_time_raw = FSPerfStats::StatsRecorder::getSceneStat(FSPerfStats::StatType_t::RENDER_FPSLIMIT);
         // swap time is time spent in swap buffer
@@ -273,6 +275,7 @@ void FSFloaterPerformance::draw()
         FSPerfStats::bufferToggleLock.unlock(); 
 
         auto unreliable = false; // if there is something to skew the stats such as sleep of fps cap
+        auto tot_frame_time_ns = FSPerfStats::raw_to_ns(tot_frame_time_raw);
         auto tot_avatar_time_ns         = FSPerfStats::raw_to_ns( tot_avatar_time_raw );
         auto tot_huds_time_ns           = FSPerfStats::raw_to_ns( tot_huds_time_raw );
         // UI time includes HUD time so dedut that before we calc percentages
@@ -282,10 +285,10 @@ void FSFloaterPerformance::draw()
         // auto tot_limit_time_ns          = FSPerfStats::raw_to_ns( tot_limit_time_raw );
 
         // auto tot_render_time_ns         = FSPerfStats::raw_to_ns( tot_render_time_raw );
-        auto tot_idle_time_ns           = FSPerfStats::raw_to_ns( tot_idle_time_raw );
-        auto tot_swap_time_ns           = FSPerfStats::raw_to_ns( tot_swap_time_raw );
-        auto tot_scene_time_ns  = FSPerfStats::raw_to_ns( tot_render_time_raw - tot_avatar_render_time_raw - tot_swap_time_raw - tot_ui_time_raw);
-
+        auto tot_idle_time_ns   = FSPerfStats::raw_to_ns( tot_idle_time_raw );
+        auto tot_swap_time_ns   = FSPerfStats::raw_to_ns( tot_swap_time_raw );
+        auto tot_scene_time_ns  = FSPerfStats::raw_to_ns( tot_render_time_raw - tot_avatar_time_raw - tot_swap_time_raw - tot_ui_time_raw);
+        // auto tot_overhead_time_ns  = FSPerfStats::raw_to_ns( tot_frame_time_raw - tot_render_time_raw - tot_idle_time_raw );
 
         // // remove time spent sleeping for fps limit or out of focus.
         // tot_frame_time_ns -= tot_limit_time_ns;

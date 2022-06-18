@@ -74,7 +74,14 @@
 #define LL_PROFILER_CONFIGURATION           LL_PROFILER_CONFIG_FAST_TIMER
 #endif
 
-extern thread_local bool gProfilerEnabled;
+extern thread_local bool gProfilerEnabled; // <FS:Beq/> This is being used to control memory allocations
+// <FS:Beq> We use the active flag to control deferred profiling. 
+// It is functionally separate to the (poorly named) gProfilerEnabled flag
+namespace LLProfiler 
+{
+    extern bool active;
+}
+// </FS:Beq>
 
 #if defined(LL_PROFILER_CONFIGURATION) && (LL_PROFILER_CONFIGURATION > LL_PROFILER_CONFIG_NONE)
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY || LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
@@ -88,27 +95,29 @@ extern thread_local bool gProfilerEnabled;
 // <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
         //// GPU Mutually exclusive with detailed memory tracing
         // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
-    #define LL_PROFILER_ENABLE_TRACY_MEMORY 1
+    #define LL_PROFILER_ENABLE_TRACY_MEMORY 0
     #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
     #endif
 
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY
         #define LL_PROFILER_FRAME_END                   FrameMark
+        // <FS:Beq> Note: this threadlocal forces memory colelction enabled from the start. It conflicts with deferred profiling.
         #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
+        // </FS:Beq>
         #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ) // C string
         #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name )   // C string
         // <FS:Beq> revert change that obscures custom FTM zones. We may want to may FTM Zones unique in future.
-        // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped // Want descriptive names; was: ZoneNamedN( ___tracy_scoped_zone, #name, gProfilerEnabled );
-        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, gProfilerEnabled )
+        // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped // Want descriptive names; was: ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active );
+        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active )
         // </FS:Beq>
 
         // <FS:Beq>
         // #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true )
         // #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
         // #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
-        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, gProfilerEnabled )
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, gProfilerEnabled ) // RGB
-        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, gProfilerEnabled ) // <FS:Beq/> Enable deferred collection through filters
+        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active )
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ) // RGB
+        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ) // <FS:Beq/> Enable deferred collection through filters
         // </FS:Beq>
 
         #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val )
@@ -121,7 +130,7 @@ extern thread_local bool gProfilerEnabled;
         #define LL_PROFILE_FREE(ptr)                    TracyFree(ptr)
 
         // <FS:Beq> Additional FS Tracy macros
-        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, gProfilerEnabled ) // <FS:Beq/> Additional Tracy macro
+        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active ) // <FS:Beq/> Additional Tracy macro
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
         #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot(name,prev);TracyPlot( name, value)
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected
@@ -161,15 +170,15 @@ extern thread_local bool gProfilerEnabled;
 
         // <FS:Beq> revert change that obscures custom FTM zones.
         // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped                                          const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
-        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, gProfilerEnabled );    const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
+        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active );    const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
         // </FS:Beq>
         // <FS:Beq>
         // #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true )
         // #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
         // #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
-        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, gProfilerEnabled );
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, gProfilerEnabled ) // RGB
-        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, gProfilerEnabled ) // <FS:Beq/> Enable deferred collection through filters
+        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active );
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ) // RGB
+        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ) // <FS:Beq/> Enable deferred collection through filters
         // </FS:Beq>
 
         #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val )
@@ -183,7 +192,7 @@ extern thread_local bool gProfilerEnabled;
         #define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
         #define LL_PROFILE_FREE(ptr)                    (void)(ptr);
         // <FS:Beq> Additional FS Tracy macros
-        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, gProfilerEnabled )
+        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active )
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
         #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot( name, prev );TracyPlot( name, value )
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected

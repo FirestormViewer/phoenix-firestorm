@@ -7510,13 +7510,13 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 	gSky.resetVertexBuffers();
 
 	LLVOPartGroup::destroyGL();
-	gGL.resetVertexBuffer();
 
 	if ( LLPathingLib::getInstance() )
 	{
 		LLPathingLib::getInstance()->cleanupVBOManager();
 	}
 	LLVOPartGroup::destroyGL();
+	gGL.resetVertexBuffer();
 
 	SUBSYSTEM_CLEANUP(LLVertexBuffer);
 	

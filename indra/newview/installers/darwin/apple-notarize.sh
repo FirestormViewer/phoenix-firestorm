@@ -11,7 +11,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
     zip_file=${app_file/app/zip}
     ditto -c -k --keepParent "$app_file" "$zip_file"
     if [[ -f "$zip_file" ]]; then
-        res=$(xcrun altool --notarize-app --primary-bundle-id "com.secondlife.viewer" \
+        res=$(xcrun altool --notarize-app --primary-bundle-id "org.firestormviewer.firestorm" \
                                    --username $USERNAME \
                                    --password $PASSWORD \
                                    --asc-provider $ASC_PROVIDER \
