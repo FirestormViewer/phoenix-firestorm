@@ -160,7 +160,6 @@
         <slider label="追加テクスチャメモリキャッシュのリザーブ (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="読み込みはされたもののまだ表示されていないテクスチャををキャッシュするためにリザーブしておく物理ビデオメモリのパーセンテージを設定します。" />
         <slider label="物理ビデオメモリ・リザーブ (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="物理ビデオメモリを他の用途で使用するために何パーセント確保しておくかを設定します。" />
         <spinner label="フォグの距離比率" name="fog" />
-        <spinner label="画像デコードの同時実行数:" name="image_decode_threads" tool_tip="画像をデコードする際に使用するスレッドの数を設定します。０＝自動、１＝同期、２＋＝ユーザー設定で、０か１が推奨されます。" />
 		
     </panel>
 	
