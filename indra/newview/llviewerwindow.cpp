@@ -6716,7 +6716,6 @@ void LLViewerWindow::stopGL(BOOL save_state)
 
 		// Pause texture decode threads (will get unpaused during main loop)
 		LLAppViewer::getTextureCache()->pause();
-		LLAppViewer::getImageDecodeThread()->pause();
 		LLAppViewer::getTextureFetch()->pause();
 				
 		gSky.destroyGL();

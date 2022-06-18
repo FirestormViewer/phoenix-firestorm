@@ -553,7 +553,7 @@ void LLViewerTexture::getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &p
     {
         gpu_res = (S32Megabytes)gViewerWindow->getWindow()->getAvailableVRAMMegabytes();
         
-        //check main memory, only works for windows.
+        //check main memory, only works for windows and macos.
         LLMemory::updateMemoryInfo();
         physical_res = LLMemory::getAvailableMemKB();
 
@@ -684,6 +684,11 @@ S8 LLViewerTexture::getType() const
 void LLViewerTexture::cleanup()
 {
 	notifyAboutMissingAsset();
+
+    if (LLAppViewer::getTextureFetch())
+    {
+        LLAppViewer::getTextureFetch()->updateRequestPriority(mID, 0.f);
+    }
 
 	mFaceList[LLRender::DIFFUSE_MAP].clear();
 	mFaceList[LLRender::NORMAL_MAP].clear();
@@ -830,14 +835,8 @@ void LLViewerTexture::addTextureStats(F32 virtual_size, BOOL needs_gltexture) co
 	}
 
 	virtual_size *= sTexelPixelRatio;
-	/*if (!mMaxVirtualSizeResetCounter)
-	{
-		//flag to reset the values because the old values are used.
-		resetMaxVirtualSizeResetCounter();
-		mMaxVirtualSize = virtual_size;
-		mNeedsGLTexture = needs_gltexture;
-	}
-	else*/ if (virtual_size > mMaxVirtualSize)
+
+	if (virtual_size > mMaxVirtualSize)
 	{
 		mMaxVirtualSize = virtual_size;
 	}
@@ -1881,6 +1880,12 @@ void LLViewerFetchedTexture::updateVirtualSize()
         return;
     }
 
+    if (sDesiredDiscardBias > 0.f)
+    {
+        // running out of video memory, don't hold onto high res textures in the background
+        mMaxVirtualSize = 0.f;
+    }
+
 	for (U32 ch = 0; ch < LLRender::NUM_TEXTURE_CHANNELS; ++ch)
 	{				
 		llassert(mNumFaces[ch] <= mFaceList[ch].size());
@@ -1969,6 +1974,16 @@ bool LLViewerFetchedTexture::isActiveFetching()
 	return mFetchState > 7 && mFetchState < 10 && monitor_enabled; //in state of WAIT_HTTP_REQ or DECODE_IMAGE.
 }
 
+void LLViewerFetchedTexture::setBoostLevel(S32 level)
+{
+    LLViewerTexture::setBoostLevel(level);
+
+    if (level >= LLViewerTexture::BOOST_HIGH)
+    {
+        mDesiredDiscardLevel = 0;
+    }
+}
+
 bool LLViewerFetchedTexture::updateFetch()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
@@ -2016,6 +2031,11 @@ bool LLViewerFetchedTexture::updateFetch()
         LL_PROFILE_ZONE_NAMED_CATEGORY_TEXTURE("vftuf - in fast cache");
 		return false;
 	}
+    if (mGLTexturep.isNull())
+    { // fix for crash inside getCurrentDiscardLevelForFetching (shouldn't happen but appears to be happening)
+        llassert(false);
+        return false;
+    }
 	
 	S32 current_discard = getCurrentDiscardLevelForFetching();
 	S32 desired_discard = getDesiredDiscardLevel();
@@ -2284,8 +2304,11 @@ bool LLViewerFetchedTexture::updateFetch()
 													   mFetchPriority, mFetchDeltaTime, mRequestDeltaTime, mCanUseHTTP);
 		}
 
-		// if createRequest() failed, we're finishing up a request for this UUID,
-		// wait for it to complete
+        // If createRequest() failed, that means one of two things:
+        // 1. We're finishing up a request for this UUID, so we
+        //    should wait for it to complete
+        // 2. We've failed a request for this UUID, so there is
+        //    no need to create another request
 	}
 	else if (mHasFetcher && !mIsFetching)
 	{

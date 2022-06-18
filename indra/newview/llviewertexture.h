@@ -140,7 +140,7 @@ public:
 	/*virtual*/ bool isActiveFetching();
 	
 	/*virtual*/ const LLUUID& getID() const { return mID; }
-	void setBoostLevel(S32 level);
+	virtual void setBoostLevel(S32 level);
 	S32  getBoostLevel() { return mBoostLevel; }
 	void setTextureListType(S32 tex_type) { mTextureListType = tex_type; }
 	S32 getTextureListType() { return mTextureListType; }
@@ -334,10 +334,10 @@ public:
 	};
 
 public:
-	/*virtual*/ S8 getType() const ;
+	/*virtual*/ S8 getType() const override;
 	FTType getFTType() const;
-	/*virtual*/ void forceImmediateUpdate() ;
-	/*virtual*/ void dump() ;
+	/*virtual*/ void forceImmediateUpdate() override;
+	/*virtual*/ void dump() override;
 
 	// Set callbacks to get called when the image gets updated with higher 
 	// resolution versions.
@@ -375,6 +375,7 @@ public:
 	S32  getDesiredDiscardLevel()			 { return mDesiredDiscardLevel; }
 	void setMinDiscardLevel(S32 discard) 	{ mMinDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel,(S8)discard); }
 
+    void setBoostLevel(S32 level) override;
 	bool updateFetch();
 	bool setDebugFetching(S32 debug_level);
 	bool isInDebug() const { return mInDebug; }
@@ -387,14 +388,14 @@ public:
 	// Override the computation of discard levels if we know the exact output
 	// size of the image.  Used for UI textures to not decode, even if we have
 	// more data.
-	/*virtual*/ void setKnownDrawSize(S32 width, S32 height);
+	/*virtual*/ void setKnownDrawSize(S32 width, S32 height) override;
 
     // Set the debug text of all Viewer Objects associated with this texture
     // to the specified text
     void setDebugText(const std::string& text);
 
 	void setIsMissingAsset(BOOL is_missing = true);
-	/*virtual*/ BOOL isMissingAsset() const { return mIsMissingAsset; }
+	/*virtual*/ BOOL isMissingAsset() const override { return mIsMissingAsset; }
 
 	// returns dimensions of original image for local files (before power of two scaling)
 	// and returns 0 for all asset system images
@@ -437,7 +438,7 @@ public:
 	BOOL        isRawImageValid()const { return mIsRawImageValid ; }	
 	void        forceToSaveRawImage(S32 desired_discard = 0, F32 kept_time = 0.f) ;
 	void        forceToRefetchTexture(S32 desired_discard = 0, F32 kept_time = 60.f);
-	/*virtual*/ void setCachedRawImage(S32 discard_level, LLImageRaw* imageraw) ;
+	/*virtual*/ void setCachedRawImage(S32 discard_level, LLImageRaw* imageraw) override;
 	void        destroySavedRawImage() ;
 	LLImageRaw* getSavedRawImage() ;
 	BOOL        hasSavedRawImage() const ;
@@ -453,14 +454,14 @@ public:
 	void        setInFastCacheList(bool in_list) { mInFastCacheList = in_list; }
 	bool        isInFastCacheList() { return mInFastCacheList; }
 
-	/*virtual*/bool  isActiveFetching(); //is actively in fetching by the fetching pipeline.
+	/*virtual*/bool  isActiveFetching() override; //is actively in fetching by the fetching pipeline.
 
 	// <FS:Techwolf Lupindo> texture comment decoder
 	std::map<std::string,std::string> mComment;
 	// </FS:Techwolf Lupindo>
 	
 protected:
-	/*virtual*/ void switchToCachedImage();
+	/*virtual*/ void switchToCachedImage() override;
 	S32 getCurrentDiscardLevelForFetching() ;
 
 private:
