@@ -3148,7 +3148,7 @@ public:
 
 	}
 
-	void visit(const LLOctreeNode<LLVolumeTriangle>* branch)
+    void visit(const LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>* branch)
 	{
 		LLVolumeOctreeListener* vl = (LLVolumeOctreeListener*) branch->getListener(0);
 
@@ -3190,7 +3190,7 @@ public:
 			}
 
 			gGL.begin(LLRender::TRIANGLES);
-			for (LLOctreeNode<LLVolumeTriangle>::const_element_iter iter = branch->getDataBegin();
+            for (LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>::const_element_iter iter = branch->getDataBegin();
 					iter != branch->getDataEnd();
 					++iter)
 			{
@@ -3913,9 +3913,9 @@ BOOL LLSpatialPartition::isVisible(const LLVector3& v)
 // <FS:ND> Class to watch for any octree changes while iterating. Will catch child insertion/removal as well as data insertion/removal.
 // Template so it can be used for than LLOctreeNode< LLDrawable > if needed
 
-template< typename T > class ndOctreeListener: public LLOctreeListener< T >
+template< typename T, typename T_PTR > class ndOctreeListener: public LLOctreeListener< T, T_PTR >
 {
-	typedef LLOctreeNode< T > tNode;
+	typedef LLOctreeNode< T, T_PTR > tNode;
 	typedef std::vector< LLPointer< LLTreeListener< T > > > tListener;
 
 	tNode *mNode;
@@ -3987,13 +3987,13 @@ public:
 	}
 };
 
-typedef ndOctreeListener< LLViewerOctreeEntry > ndDrawableOctreeListener;
+typedef ndOctreeListener< LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry> > ndDrawableOctreeListener;
 typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
 
 // </FS:ND>
 
 LL_ALIGN_PREFIX(16)
-class LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry>
+class LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry>>
 {
 public:
 	LL_ALIGN_16(LLVector4a mStart);

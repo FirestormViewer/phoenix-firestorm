@@ -387,7 +387,7 @@ BOOL LLTriangleRayIntersect(const LLVector3& vert0, const LLVector3& vert1, cons
 	}
 }
 
-class LLVolumeOctreeRebound : public LLOctreeTravelerDepthFirst<LLVolumeTriangle>
+class LLVolumeOctreeRebound : public LLOctreeTravelerDepthFirst<LLVolumeTriangle, LLVolumeTriangle*>
 {
 public:
 	const LLVolumeFace* mFace;
@@ -397,7 +397,7 @@ public:
 		mFace = face;
 	}
 
-	virtual void visit(const LLOctreeNode<LLVolumeTriangle>* branch)
+    virtual void visit(const LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>* branch)
 	{ //this is a depth first traversal, so it's safe to assum all children have complete
 		//bounding data
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME
@@ -415,8 +415,7 @@ public:
 			min = *(tri->mV[0]);
 			max = *(tri->mV[0]);
 			
-			for (LLOctreeNode<LLVolumeTriangle>::const_element_iter iter = 
-				branch->getDataBegin(); iter != branch->getDataEnd(); ++iter)
+            for (LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>::const_element_iter iter = branch->getDataBegin(); iter != branch->getDataEnd(); ++iter)
 			{ //for each triangle in node
 
 				//stretch by triangles in node
@@ -1641,9 +1640,6 @@ BOOL LLPath::generate(const LLPathParams& params, F32 detail, S32 split,
 			//genNGon(params, llfloor(MIN_DETAIL_FACES * detail), 4.f, 0.f);
 			genNGon(params, llfloor(MIN_DETAIL_FACES * detail));
 
-			F32 t     = 0.f;
-			F32 tStep = 1.0f / mPath.size();
-
 			F32 toggle = 0.5f;
 			for (S32 i=0;i<(S32)mPath.size();i++)
 			{
@@ -1652,7 +1648,6 @@ BOOL LLPath::generate(const LLPathParams& params, F32 detail, S32 split,
 					toggle = -0.5f;
 				else
 					toggle = 0.5f;
-				t += tStep;
 			}
 		}
 
@@ -4947,6 +4942,8 @@ void LLVolumeFace::freeData()
 
 	delete mOctree;
 	mOctree = NULL;
+    mOctreeTriangles.clear();
+    mOctreeTriangles.shrink_to_fit();
 }
 
 BOOL LLVolumeFace::create(LLVolume* volume, BOOL partial_build)
@@ -4956,6 +4953,8 @@ BOOL LLVolumeFace::create(LLVolume* volume, BOOL partial_build)
 	//tree for this face is no longer valid
 	delete mOctree;
 	mOctree = NULL;
+    mOctreeTriangles.clear();
+    mOctreeTriangles.shrink_to_fit();
 
 	LL_CHECK_MEMORY
 	BOOL ret = FALSE ;
@@ -5640,13 +5639,18 @@ void LLVolumeFace::createOctree(F32 scaler, const LLVector4a& center, const LLVe
 	}
 
 	ND_OCTREE_LOG << "Creating octree with scale " << scaler << " mNumIndices " << mNumIndices << ND_OCTREE_LOG_END;
-
-	mOctree = new LLOctreeRoot<LLVolumeTriangle>(center, size, NULL);
+    mOctree = new LLOctreeRoot<LLVolumeTriangle, LLVolumeTriangle*>(center, size, NULL);
 	new LLVolumeOctreeListener(mOctree);
+    // Clear old triangles, but keep the underlying storage pointer
+    mOctreeTriangles.clear();
+    const U32 num_triangles = mNumIndices / 3;
+    // Initialize all the triangles we need
+    mOctreeTriangles.resize(num_triangles);
 
 	for (U32 i = 0; i < mNumIndices; i+= 3)
 	{ //for each triangle
-		LLPointer<LLVolumeTriangle> tri = new LLVolumeTriangle();
+        const U32 triangle_index = i / 3;
+        LLVolumeTriangle* tri = &mOctreeTriangles[triangle_index];
 				
 		const LLVector4a& v0 = mPositions[mIndices[i]];
 		const LLVector4a& v1 = mPositions[mIndices[i+1]];

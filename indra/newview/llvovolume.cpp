@@ -1865,7 +1865,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
         // updates needed, set REBUILD_RIGGED accordingly.
 
         // Without the flag, this will remove unused rigged volumes, which we are not currently very aggressive about.
-        updateRiggedVolume();
+        updateRiggedVolume(false);
     }
 
     LLVolume* volume = mRiggedVolume;
@@ -1927,16 +1927,6 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
         }
     }
 
-    bool rigged = false;
-
-    if (!isAnimatedObject())
-    {
-        rigged = isRiggedMesh() && isAttachment();
-    }
-    else
-    {
-        rigged = isRiggedMesh() && getControlAvatar() && getControlAvatar()->mPlaying;
-    }
 
     if (any_valid_boxes)
     {
@@ -2172,7 +2162,7 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 	
 	if (mDrawable->isState(LLDrawable::REBUILD_RIGGED))
 	{
-		updateRiggedVolume();
+        updateRiggedVolume(false);
 		genBBoxes(FALSE);
 		mDrawable->clearState(LLDrawable::REBUILD_RIGGED);
 	}
@@ -4830,7 +4820,7 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 	{
 		if ((pick_rigged) || (getAvatar() && (getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
 		{
-			updateRiggedVolume(true);
+            updateRiggedVolume(true, LLRiggedVolume::DO_NOT_UPDATE_FACES);
 			volume = mRiggedVolume;
 			transform = false;
 		}
@@ -4905,6 +4895,9 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 				continue;
 			}
 
+            // This calculates the bounding box of the skinned mesh from scratch. It's actually quite expensive, but not nearly as expensive as building a full octree.
+            // rebuild_face_octrees = false because an octree for this face will be built later only if needed for narrow phase picking.
+            updateRiggedVolume(true, i, false);
 			face_hit = volume->lineSegmentIntersect(local_start, local_end, i,
 													&p, &tc, &n, &tn);
 			
@@ -5028,13 +5021,13 @@ void LLVOVolume::clearRiggedVolume()
 	}
 }
 
-void LLVOVolume::updateRiggedVolume(bool force_update)
+void LLVOVolume::updateRiggedVolume(bool force_treat_as_rigged, LLRiggedVolume::FaceIndex face_index, bool rebuild_face_octrees)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
 	//Update mRiggedVolume to match current animation frame of avatar. 
 	//Also update position/size in octree.  
 
-	if ((!force_update) && (!treatAsRigged()))
+    if ((!force_treat_as_rigged) && (!treatAsRigged()))
 	{
 		clearRiggedVolume();
 		
@@ -5063,10 +5056,10 @@ void LLVOVolume::updateRiggedVolume(bool force_update)
 		updateRelativeXform();
 	}
 
-	mRiggedVolume->update(skin, avatar, volume);
+    mRiggedVolume->update(skin, avatar, volume, face_index, rebuild_face_octrees);
 }
 
-void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* volume)
+void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* volume, FaceIndex face_index, bool rebuild_face_octrees)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
 	bool copy = false;
@@ -5097,7 +5090,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 		if (is_paused)
 		{
             S32 frames_paused = LLFrameTimer::getFrameCount() - avatar->getMotionController().getPausedFrame();
-            if (frames_paused > 2)
+            if (frames_paused > 1)
             {
                 return;
             }
@@ -5116,7 +5109,24 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
     S32 rigged_vert_count = 0;
     S32 rigged_face_count = 0;
     LLVector4a box_min, box_max;
-	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
+    S32 face_begin;
+    S32 face_end;
+    if (face_index == DO_NOT_UPDATE_FACES)
+    {
+        face_begin = 0;
+        face_end = 0;
+    }
+    else if (face_index == UPDATE_ALL_FACES)
+    {
+        face_begin = 0;
+        face_end = volume->getNumVolumeFaces();
+    }
+    else
+    {
+        face_begin = face_index;
+        face_end = face_begin + 1;
+    }
+    for (S32 i = face_begin; i < face_end; ++i)
 	{
 		const LLVolumeFace& vol_face = volume->getVolumeFace(i);
 		
@@ -5204,27 +5214,20 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 			}
 
-		// <FS:ND> Crashfix if mExtents is 0
-		if( dst_face.mExtents )
-		// </FS:ND>
-
+            if (rebuild_face_octrees)
 			{
     			delete dst_face.mOctree;
 				dst_face.mOctree = NULL;
 
-				LLVector4a size;
-				size.setSub(dst_face.mExtents[1], dst_face.mExtents[0]);
-				size.splat(size.getLength3().getF32()*0.5f);
-			
 				// <FS:ND> Create a debug log for octree insertions if requested.
 				static LLCachedControl<bool> debugOctree(gSavedSettings,"FSCreateOctreeLog");
 				bool _debugOT( debugOctree );
 				if( _debugOT )
 					nd::octree::debug::gOctreeDebug += 1;
 				// </FS:ND>
-				
-				dst_face.createOctree(1.f);
-			
+
+                dst_face.createOctree();
+
 				// <FS:ND> Reset octree log
 				if( _debugOT )
 					nd::octree::debug::gOctreeDebug -= 1;
@@ -6239,7 +6242,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			else
 			{
 				drawablep->clearState(LLDrawable::RIGGED);
-                vobj->updateRiggedVolume();
+                vobj->updateRiggedVolume(false);
 			}
 		}
 	}
