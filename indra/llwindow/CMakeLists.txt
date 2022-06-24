@@ -213,4 +213,10 @@ if (SDL2_FOUND)
 endif ()
 
 target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
+  
+if (DARWIN)
+  include(CMakeFindFrameworks)
+  find_library(CARBON_LIBRARY Carbon)
+  target_link_libraries(llwindow ${CARBON_LIBRARY})
+endif (DARWIN)
 
