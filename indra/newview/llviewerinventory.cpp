@@ -2102,7 +2102,7 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge,
     else if ("material" == type_name)
     {
         const LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_MATERIAL);
-        create_new_item(NEW_GESTURE_NAME,
+        create_new_item(NEW_MATERIAL_NAME,
             parent_id,
             LLAssetType::AT_MATERIAL,
             LLInventoryType::IT_MATERIAL,
