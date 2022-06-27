@@ -19935,7 +19935,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSParticleChat</key>
 		<map>
 			<key>Comment</key>
-			<string>Speak Particle Info on channel 9000</string>
+			<string>Send Selection Info on channel 9000 when editing objects (does not work if PrivatePointAtTarget is enabled)</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
