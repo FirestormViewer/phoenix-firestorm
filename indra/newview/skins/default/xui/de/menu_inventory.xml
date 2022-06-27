@@ -22,6 +22,7 @@
 	<menu_item_call label="Neues Skript" name="New Script"/>
 	<menu_item_call label="Neue Notizkarte" name="New Note"/>
 	<menu_item_call label="Neue Geste" name="New Gesture"/>
+	<menu_item_call label="Neues Material" name="New Material"/>
 	<menu label="Neue Kleider" name="New Clothes">
 		<menu_item_call label="Neues Hemd" name="New Shirt"/>
 		<menu_item_call label="Neue Hose" name="New Pants"/>

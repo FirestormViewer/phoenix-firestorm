@@ -3755,6 +3755,26 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Texture konnte nicht hochgeladen werden.
 [REASON]
 	</notification>
+	<notification name="CannotUploadMaterial">
+		Es ist ein Problem beim Hochladen der Datei aufgetreten.
+	</notification>
+	<notification label="Material speichern" name="SaveMaterialAs">
+		Material benennen:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="InvalidMaterialName">
+		Bitte geben Sie einen Namen ein!
+	</notification>
+	<notification name="UsavedMaterialChanges">
+		Es existieren ungespeicherte Änderungen.
+		<form name="form">
+			<button name="discard" text="Änderungen verwerfen"/>
+			<button name="keep" text="Bearbeiten fortsetzen"/>
+		</form>
+	</notification>
 	<notification name="LivePreviewUnavailable">
 		Wir können keine Vorschau dieser Textur anzeigen, da sie nicht kopier- und/oder übertragungsfähig ist.
 		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Texturen keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>

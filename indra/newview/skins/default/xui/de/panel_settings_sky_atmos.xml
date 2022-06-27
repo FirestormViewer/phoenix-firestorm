@@ -48,6 +48,10 @@
 						Szenen-Gamma:
 					</text>
 					<slider name="scene_gamma" width="187"/>
+					<text name="probe_ambiance_label" width="120">
+						Umgebung Reflexionstest:
+					</text>
+					<slider name="probe_ambiance" width="187"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

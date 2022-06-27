@@ -1919,6 +1919,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Clothing" value=" Kleidung,"/>
 	<string name="Gestures" value=" Gesten,"/>
 	<string name="Landmarks" value=" Landmarken,"/>
+	<string name="Materials" value=" Materialien,"/>
 	<string name="Notecards" value=" Notizkarten,"/>
 	<string name="Objects" value=" Objekte,"/>
 	<string name="Scripts" value=" Skripte,"/>
@@ -5130,6 +5131,9 @@ Missbrauchsbericht
 	</string>
 	<string name="New Gesture">
 		Neue Geste
+	</string>
+	<string name="New Material">
+		Neues Material
 	</string>
 	<string name="New Script">
 		Neues Skript
