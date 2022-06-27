@@ -538,6 +538,8 @@ public:
         RENDER_TYPE_PASS_NORMSPEC_MASK_RIGGED = LLRenderPass::PASS_NORMSPEC_MASK_RIGGED,
 		RENDER_TYPE_PASS_NORMSPEC_EMISSIVE		= LLRenderPass::PASS_NORMSPEC_EMISSIVE,
         RENDER_TYPE_PASS_NORMSPEC_EMISSIVE_RIGGED = LLRenderPass::PASS_NORMSPEC_EMISSIVE_RIGGED,
+        RENDER_TYPE_PASS_PBR_OPAQUE               = LLRenderPass::PASS_PBR_OPAQUE,
+        RENDER_TYPE_PASS_PBR_OPAQUE_RIGGED        = LLRenderPass::PASS_PBR_OPAQUE_RIGGED,
 		// Following are object types (only used in drawable mRenderType)
 		RENDER_TYPE_HUD = LLRenderPass::NUM_RENDER_TYPES,
 		RENDER_TYPE_VOLUME,
@@ -687,6 +689,13 @@ public:
         LLRenderTarget			shadowOcclusion[4];
     };
 
+    // main full resoltuion render target
+    RenderTargetPack mMainRT;
+
+    // auxillary 512x512 render target pack
+    RenderTargetPack mAuxillaryRT;
+
+    // currently used render target pack
     RenderTargetPack* mRT;
 
     LLRenderTarget          mSpotShadow[2];

@@ -33,14 +33,10 @@
 #include "pipeline.h"
 #include "llviewershadermgr.h"
 #include "llviewercontrol.h"
+#include "llenvironment.h"
 
 extern BOOL gCubeSnapshot;
 extern BOOL gTeleportDisplay;
-
-//#pragma optimize("", off)
-
-// experimental pipeline render target override, if this works, do something less hacky
-LLPipeline::RenderTargetPack gProbeRT;
 
 LLReflectionMapManager::LLReflectionMapManager()
 {
@@ -84,7 +80,11 @@ void LLReflectionMapManager::update()
     if (mTexture.isNull())
     {
         mTexture = new LLCubeMapArray();
-        mTexture->allocate(LL_REFLECTION_PROBE_RESOLUTION, 3, LL_REFLECTION_PROBE_COUNT);
+        // store LL_REFLECTION_PROBE_COUNT+2 cube maps, final two cube maps are used for render target and radiance map generation source)
+        mTexture->allocate(LL_REFLECTION_PROBE_RESOLUTION, 3, LL_REFLECTION_PROBE_COUNT+2);
+
+        mIrradianceMaps = new LLCubeMapArray();
+        mIrradianceMaps->allocate(LL_IRRADIANCE_MAP_RESOLUTION, 3, LL_REFLECTION_PROBE_COUNT);
     }
 
     if (!mRenderTarget.isComplete())
@@ -94,15 +94,6 @@ void LLReflectionMapManager::update()
         const bool use_stencil_buffer = true;
         U32 targetRes = LL_REFLECTION_PROBE_RESOLUTION * 2; // super sample
         mRenderTarget.allocate(targetRes, targetRes, color_fmt, use_depth_buffer, use_stencil_buffer, LLTexUnit::TT_RECT_TEXTURE);
-
-        // hack to allocate render targets using gPipeline code
-        gCubeSnapshot = TRUE;
-        auto* old_rt = gPipeline.mRT;
-        gPipeline.mRT = &gProbeRT;
-        gPipeline.allocateScreenBuffer(targetRes, targetRes);
-        gPipeline.allocateShadowBuffer(targetRes, targetRes);
-        gPipeline.mRT = old_rt;
-        gCubeSnapshot = FALSE;
     }
 
     if (mMipChain.empty())
@@ -118,12 +109,6 @@ void LLReflectionMapManager::update()
         }
     }
 
-    // =============== TODO -- move to an init function  =================
-
-    // naively drop probes every 16m as we move the camera around for now
-    // later, use LLSpatialPartition to manage probes
-    const F32 PROBE_SPACING = 16.f;
-    const U32 MAX_PROBES = 8;
 
     LLVector4a camera_pos;
     camera_pos.load3(LLViewerCamera::instance().getOrigin().mV);
@@ -131,7 +116,7 @@ void LLReflectionMapManager::update()
     // process kill list
     for (auto& probe : mKillList)
     {
-        auto& iter = std::find(mProbes.begin(), mProbes.end(), probe);
+        auto const & iter = std::find(mProbes.begin(), mProbes.end(), probe);
         if (iter != mProbes.end())
         {
             deleteProbe(iter - mProbes.begin());
@@ -152,7 +137,6 @@ void LLReflectionMapManager::update()
     {
         return;
     }
-    const F32 UPDATE_INTERVAL = 5.f;  //update no more than once every 5 seconds
 
     bool did_update = false;
 
@@ -375,7 +359,7 @@ void LLReflectionMapManager::deleteProbe(U32 i)
     // remove from any Neighbors lists
     for (auto& other : probe->mNeighbors)
     {
-        auto& iter = std::find(other->mNeighbors.begin(), other->mNeighbors.end(), probe);
+        auto const & iter = std::find(other->mNeighbors.begin(), other->mNeighbors.end(), probe);
         llassert(iter != other->mNeighbors.end());
         other->mNeighbors.erase(iter);
     }
@@ -403,13 +387,19 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
 {
     mRenderTarget.bindTarget();
     // hacky hot-swap of camera specific render targets
-    auto* old_rt = gPipeline.mRT;
-    gPipeline.mRT = &gProbeRT;
+    gPipeline.mRT = &gPipeline.mAuxillaryRT;
     probe->update(mRenderTarget.getWidth(), face);
-    gPipeline.mRT = old_rt;
+    gPipeline.mRT = &gPipeline.mMainRT;
     mRenderTarget.flush();
 
-    // generate mipmaps
+    S32 targetIdx = LL_REFLECTION_PROBE_COUNT;
+
+    if (probe != mUpdatingProbe)
+    { // this is the "realtime" probe that's updating every frame, use the secondary scratch space channel
+        targetIdx += 1;
+    }
+
+    // downsample to placeholder map
     {
         LLGLDepthTest depth(GL_FALSE, GL_FALSE);
         LLGLDisable cull(GL_CULL_FACE);
@@ -428,7 +418,8 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
 
         S32 mips = log2((F32)LL_REFLECTION_PROBE_RESOLUTION) + 0.5f;
 
-        for (int i = 0; i < mMipChain.size(); ++i)
+        //for (int i = 0; i < mMipChain.size(); ++i)
+        for (int i = 0; i < 1; ++i)
         {
             LL_PROFILE_GPU_ZONE("probe mip");
             mMipChain[i].bindTarget();
@@ -483,6 +474,8 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
             if (mip >= 0)
             {
                 mTexture->bind(0);
+                //glCopyTexSubImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, mip, 0, 0, probe->mCubeIndex * 6 + face, 0, 0, res, res);
+                glCopyTexSubImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, mip, 0, 0, targetIdx * 6 + face, 0, 0, res, res);
                 glCopyTexSubImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, mip, 0, 0, probe->mCubeIndex * 6 + face, 0, 0, res, res);
                 mTexture->unbind();
             }
@@ -494,6 +487,120 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
         gGL.popMatrix();
 
         gReflectionMipProgram.unbind();
+    }
+
+    if (face == 5)
+    {
+        //generate radiance map
+        gRadianceGenProgram.bind();
+        S32 channel = gRadianceGenProgram.enableTexture(LLShaderMgr::REFLECTION_PROBES, LLTexUnit::TT_CUBE_MAP_ARRAY);
+        mTexture->bind(channel);
+        static LLStaticHashedString sSourceIdx("sourceIdx");
+        gRadianceGenProgram.uniform1i(sSourceIdx, targetIdx);
+
+        static LLStaticHashedString sMipLevel("mipLevel");
+
+        for (int i = 1; i < mMipChain.size(); ++i)
+        {
+            for (int cf = 0; cf < 6; ++cf)
+            { // for each cube face
+                LLCoordFrame frame;
+                frame.lookAt(LLVector3(0, 0, 0), LLCubeMapArray::sClipToCubeLookVecs[cf], LLCubeMapArray::sClipToCubeUpVecs[cf]);
+
+                F32 mat[16];
+                frame.getOpenGLRotation(mat);
+                gGL.loadMatrix(mat);
+
+                mMipChain[i].bindTarget();
+                static LLStaticHashedString sRoughness("roughness");
+
+                gRadianceGenProgram.uniform1f(sRoughness, (F32)i / (F32)(mMipChain.size() - 1));
+                gRadianceGenProgram.uniform1f(sMipLevel, llmax((F32)(i - 1), 0.f));
+                if (i > 0)
+                {
+                    gRadianceGenProgram.uniform1i(sSourceIdx, probe->mCubeIndex);
+                }
+                // <FS:Ansariel> Remove QUADS rendering mode
+                //gGL.begin(gGL.QUADS);
+                //gGL.vertex3f(-1, -1, -1);
+                //gGL.vertex3f(1, -1, -1);
+                //gGL.vertex3f(1, 1, -1);
+                //gGL.vertex3f(-1, 1, -1);
+                //gGL.end();
+                gGL.begin(gGL.TRIANGLES);
+                gGL.vertex3f(-1, -1, -1);
+                gGL.vertex3f(1, -1, -1);
+                gGL.vertex3f(1, 1, -1);
+                gGL.vertex3f(-1, -1, -1);
+                gGL.vertex3f(1, 1, -1);
+                gGL.vertex3f(-1, 1, -1);
+                gGL.end();
+                // </FS:Ansariel>
+                gGL.flush();
+
+                S32 res = mMipChain[i].getWidth();
+                glCopyTexSubImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, i, 0, 0, probe->mCubeIndex * 6 + cf, 0, 0, res, res);
+                mMipChain[i].flush();
+            }
+        }
+        gRadianceGenProgram.unbind();
+
+        //generate irradiance map
+        gIrradianceGenProgram.bind();
+        channel = gIrradianceGenProgram.enableTexture(LLShaderMgr::REFLECTION_PROBES, LLTexUnit::TT_CUBE_MAP_ARRAY);
+        mTexture->bind(channel);
+
+        gIrradianceGenProgram.uniform1i(sSourceIdx, probe->mCubeIndex);
+
+        int start_mip = 0;
+        // find the mip target to start with based on irradiance map resolution
+        for (start_mip = 0; start_mip < mMipChain.size(); ++start_mip)
+        {
+            if (mMipChain[start_mip].getWidth() == LL_IRRADIANCE_MAP_RESOLUTION)
+            {
+                break;
+            }
+        }
+
+        for (int i = start_mip; i < mMipChain.size(); ++i)
+        {
+            for (int cf = 0; cf < 6; ++cf)
+            { // for each cube face
+                LLCoordFrame frame;
+                frame.lookAt(LLVector3(0, 0, 0), LLCubeMapArray::sClipToCubeLookVecs[cf], LLCubeMapArray::sClipToCubeUpVecs[cf]);
+
+                F32 mat[16];
+                frame.getOpenGLRotation(mat);
+                gGL.loadMatrix(mat);
+
+                mMipChain[i].bindTarget();
+
+                // <FS:Ansariel> Remove QUADS rendering mode
+                //gGL.begin(gGL.QUADS);
+                //gGL.vertex3f(-1, -1, -1);
+                //gGL.vertex3f(1, -1, -1);
+                //gGL.vertex3f(1, 1, -1);
+                //gGL.vertex3f(-1, 1, -1);
+                //gGL.end();
+                gGL.begin(gGL.TRIANGLES);
+                gGL.vertex3f(-1, -1, -1);
+                gGL.vertex3f(1, -1, -1);
+                gGL.vertex3f(1, 1, -1);
+                gGL.vertex3f(-1, -1, -1);
+                gGL.vertex3f(1, 1, -1);
+                gGL.vertex3f(-1, 1, -1);
+                gGL.end();
+                // </FS:Ansariel>
+                gGL.flush();
+
+                S32 res = mMipChain[i].getWidth();
+                mIrradianceMaps->bind(channel);
+                glCopyTexSubImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, i - start_mip, 0, 0, probe->mCubeIndex * 6 + cf, 0, 0, res, res);
+                mTexture->bind(channel);
+                mMipChain[i].flush();
+            }
+        }
+        gIrradianceGenProgram.unbind();
     }
 }
 
@@ -523,7 +630,7 @@ void LLReflectionMapManager::updateNeighbors(LLReflectionMap* probe)
     
         for (auto& other : probe->mNeighbors)
         {
-            auto& iter = std::find(other->mNeighbors.begin(), other->mNeighbors.end(), probe);
+            auto const & iter = std::find(other->mNeighbors.begin(), other->mNeighbors.end(), probe);
             llassert(iter != other->mNeighbors.end()); // <--- bug davep if this ever happens, something broke badly
             other->mNeighbors.erase(iter);
         }
@@ -577,6 +684,11 @@ void LLReflectionMapManager::updateUniforms()
     S32 count = 0;
     U32 nc = 0; // neighbor "cursor" - index into refNeighbor to start writing the next probe's list of neighbors
 
+    LLEnvironment& environment = LLEnvironment::instance();
+    LLSettingsSky::ptr_t psky = environment.getCurrentSky();
+
+    F32 minimum_ambiance = psky->getReflectionProbeAmbiance();
+
     for (auto* refmap : mReflectionMaps)
     {
         if (refmap == nullptr)
@@ -609,7 +721,7 @@ void LLReflectionMapManager::updateUniforms()
             rpd.refIndex[count][3] = -rpd.refIndex[count][3];
         }
 
-        rpd.refParams[count].set(refmap->getAmbiance(), 0.f, 0.f, 0.f);
+        rpd.refParams[count].set(llmax(minimum_ambiance, refmap->getAmbiance()), 0.f, 0.f, 0.f);
 
         S32 ni = nc; // neighbor ("index") - index into refNeighbor to write indices for current reflection probe's neighbors
         {

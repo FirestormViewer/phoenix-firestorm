@@ -73,6 +73,12 @@ void LLDrawPoolPBROpaque::renderDeferred(S32 pass)
          return;
     }
 
+    const U32 type = LLPipeline::RENDER_TYPE_PASS_PBR_OPAQUE;
+    if (!gPipeline.hasRenderType(type))
+    {
+        return;
+    }
+
     gGL.flush();
 
     LLGLDisable blend(GL_BLEND);
@@ -86,7 +92,55 @@ void LLDrawPoolPBROpaque::renderDeferred(S32 pass)
 
     // TODO: handle under water?
     // if (LLPipeline::sUnderWaterRender)
-    // PASS_SIMPLE or PASS_MATERIAL
-    //pushBatches(LLRenderPass::PASS_SIMPLE, getVertexDataMask() | LLVertexBuffer::MAP_TEXTURE_INDEX, TRUE, TRUE);
-}
+    LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
+    LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)
+    {
+        LLDrawInfo& params = **i;
+
+        //gGL.getTexUnit(0)->activate();
+
+        if (params.mTexture.notNull())
+        {
+            gGL.getTexUnit(0)->bindFast(params.mTexture); // diffuse
+        }
+        else
+        {
+            gGL.getTexUnit(0)->bindFast(LLViewerFetchedTexture::sWhiteImagep);
+        }
+
+        if (params.mNormalMap)
+        {
+            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::BUMP_MAP, params.mNormalMap);
+        }
+        else
+        {
+            // TODO: bind default normal map (???? WTF is it ???)
+        }
+
+        if (params.mSpecularMap)
+        {
+            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::SPECULAR_MAP, params.mSpecularMap); // Packed Occlusion Roughness Metal
+        }
+        else
+        {
+            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::SPECULAR_MAP, LLViewerFetchedTexture::sWhiteImagep);
+        }
+
+        if (params.mEmissiveMap)
+        {
+            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::EMISSIVE_MAP, params.mEmissiveMap); // Packed Occlusion Roughness Metal
+        }
+        else
+        {
+            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::EMISSIVE_MAP, LLViewerFetchedTexture::sWhiteImagep);
+        }
+        
+        gDeferredPBROpaqueProgram.uniform1f(LLShaderMgr::ROUGHNESS_FACTOR, params.mGLTFMaterial->mRoughnessFactor);
+        gDeferredPBROpaqueProgram.uniform1f(LLShaderMgr::METALLIC_FACTOR, params.mGLTFMaterial->mMetallicFactor);
+        gDeferredPBROpaqueProgram.uniform3fv(LLShaderMgr::EMISSIVE_COLOR, 1, params.mGLTFMaterial->mEmissiveColor.mV);
+
+        LLRenderPass::pushBatch(params, getVertexDataMask(), FALSE, FALSE);
+    }
+}

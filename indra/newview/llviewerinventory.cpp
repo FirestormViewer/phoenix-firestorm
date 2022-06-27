@@ -150,6 +150,7 @@ LLLocalizedInventoryItemsDictionary::LLLocalizedInventoryItemsDictionary()
 	mInventoryItemsDict["Invalid Wearable"] = LLTrans::getString("Invalid Wearable");
 
 	mInventoryItemsDict["New Gesture"]		= LLTrans::getString("New Gesture");
+    mInventoryItemsDict["New Material"] = LLTrans::getString("New Material");
 	mInventoryItemsDict["New Script"]		= LLTrans::getString("New Script");
 	mInventoryItemsDict["New Folder"]		= LLTrans::getString("New Folder");
 	mInventoryItemsDict["New Note"]			= LLTrans::getString("New Note");
@@ -2042,6 +2043,7 @@ void remove_folder_contents(const LLUUID& category, bool keep_outfit_links,
 const std::string NEW_LSL_NAME = "New Script"; // *TODO:Translate? (probably not)
 const std::string NEW_NOTECARD_NAME = "New Note"; // *TODO:Translate? (probably not)
 const std::string NEW_GESTURE_NAME = "New Gesture"; // *TODO:Translate? (probably not)
+const std::string NEW_MATERIAL_NAME = "New Material"; // *TODO:Translate? (probably not)
 
 // ! REFACTOR ! Really need to refactor this so that it's not a bunch of if-then statements...
 void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge, const LLSD& userdata, const LLUUID& default_parent_uuid)
@@ -2097,6 +2099,15 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge,
 					  LLInventoryType::IT_GESTURE,
 					  PERM_ALL);	// overridden in create_new_item
 	}
+    else if ("material" == type_name)
+    {
+        const LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_MATERIAL);
+        create_new_item(NEW_GESTURE_NAME,
+            parent_id,
+            LLAssetType::AT_MATERIAL,
+            LLInventoryType::IT_MATERIAL,
+            PERM_ALL);	// overridden in create_new_item
+    }
     else if (("sky" == type_name) || ("water" == type_name) || ("daycycle" == type_name))
     {
         LLSettingsType::type_e stype(LLSettingsType::ST_NONE);

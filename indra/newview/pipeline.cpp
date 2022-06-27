@@ -299,29 +299,33 @@ static LLStaticHashedString sKern("kern");
 static LLStaticHashedString sKernScale("kern_scale");
 
 //----------------------------------------
-std::string gPoolNames[] = 
+#if 0
+std::string gPoolNames[LLDrawPool::NUM_POOL_TYPES] =
 {
 	// Correspond to LLDrawpool enum render type
-	"NONE",
-	"POOL_SIMPLE",
-	"POOL_GROUND",
-	"POOL_FULLBRIGHT",
-	"POOL_BUMP",
-	"POOL_MATERIALS",
-	"POOL_TERRAIN",
-	"POOL_SKY",
-	"POOL_WL_SKY",
-	"POOL_TREE",
-	"POOL_ALPHA_MASK",
-	"POOL_FULLBRIGHT_ALPHA_MASK",
-	"POOL_GRASS",
-	"POOL_INVISIBLE",
-	"POOL_AVATAR",
-	"POOL_VOIDWATER",
-	"POOL_WATER",
-	"POOL_GLOW",
-	"POOL_ALPHA"
+	  "NONE"
+	, "POOL_SIMPLE"
+	, "POOL_GROUND"
+	, "POOL_FULLBRIGHT"
+	, "POOL_BUMP"
+	, "POOL_MATERIALS"
+	, "POOL_TERRAIN"
+	, "POOL_SKY"
+	, "POOL_WL_SKY"
+	, "POOL_TREE"
+	, "POOL_ALPHA_MASK"
+	, "POOL_FULLBRIGHT_ALPHA_MASK"
+	, "POOL_GRASS"
+	, "POOL_INVISIBLE"
+	, "POOL_AVATAR"
+	, "POOL_CONTROL_AV" // Animesh
+	, "POOL_VOIDWATER"
+	, "POOL_WATER"
+	, "POOL_GLOW"
+	, "POOL_ALPHA"
+	, "POOL_PBR_OPAQUE"
 };
+#endif
 
 void drawBox(const LLVector4a& c, const LLVector4a& r);
 void drawBoxOutline(const LLVector3& pos, const LLVector3& size);
@@ -396,8 +400,12 @@ void validate_framebuffer_object();
 // for_impostor -- whether or not these render targets are for an impostor (if true, avoids implicit sRGB conversions)
 bool addDeferredAttachments(LLRenderTarget& target, bool for_impostor = false)
 {
-	return target.addColorAttachment(for_impostor ? GL_RGBA : GL_SRGB8_ALPHA8) && //specular
-			target.addColorAttachment(GL_RGB10_A2); //normal+z
+    bool pbr = gSavedSettings.getBOOL("RenderPBR");
+    bool valid = true
+        && target.addColorAttachment(for_impostor ? GL_RGBA : GL_SRGB8_ALPHA8) // frag-data[1] specular or PBR packed OcclusionRoughnessMetal
+        && target.addColorAttachment(GL_RGB10_A2)                              // frag_data[2] normal+z+fogmask, See: class1\deferred\materialF.glsl & softenlight
+        && (pbr ? target.addColorAttachment(GL_RGBA) : true);                  // frag_data[3] emissive
+    return valid;
 }
 
 LLPipeline::LLPipeline() :
@@ -464,7 +472,7 @@ void LLPipeline::init()
 {
 	refreshCachedSettings();
 
-    mRT = new RenderTargetPack();
+    mRT = &mMainRT;
 
 	gOctreeMaxCapacity = gSavedSettings.getU32("OctreeMaxNodeCapacity");
 	gOctreeMinSize = gSavedSettings.getF32("OctreeMinimumNodeSize");
@@ -763,9 +771,6 @@ void LLPipeline::cleanup()
 	mDeferredVB = NULL;
 
 	mCubeVB = NULL;
-
-    delete mRT;
-    mRT = nullptr;
 }
 
 //============================================================================
@@ -925,6 +930,16 @@ LLPipeline::eFBOStatus LLPipeline::doAllocateScreenBuffer(U32 resX, U32 resY)
 bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
+    if (mRT == &mMainRT)
+    { // hacky -- allocate auxillary buffer
+        gCubeSnapshot = TRUE;
+        mRT = &mAuxillaryRT;
+        U32 res = LL_REFLECTION_PROBE_RESOLUTION * 2;
+        allocateScreenBuffer(res, res, 0);
+        mRT = &mMainRT;
+        gCubeSnapshot = FALSE;
+    }
+
 	// remember these dimensions
 	mRT->width = resX;
 	mRT->height = resY;
@@ -1791,6 +1806,7 @@ U32 LLPipeline::getPoolTypeFromTE(const LLTextureEntry* te, LLViewerTexture* ima
 	}
 		
 	LLMaterial* mat = te->getMaterialParams().get();
+    LLGLTFMaterial* gltf_mat = te->getGLTFMaterial();
 
 	bool color_alpha = te->getColor().mV[3] < 0.999f;
 	bool alpha = color_alpha;
@@ -1824,6 +1840,10 @@ U32 LLPipeline::getPoolTypeFromTE(const LLTextureEntry* te, LLViewerTexture* ima
 	{
 		return LLDrawPool::POOL_BUMP;
 	}
+    else if (gltf_mat && !alpha)
+    {
+        return LLDrawPool::POOL_PBR_OPAQUE;
+    }
 	else if (mat && !alpha)
 	{
 		return LLDrawPool::POOL_MATERIALS;
@@ -8930,6 +8950,12 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget *screen_target)
             soften_shader.uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
             soften_shader.uniform4fv(LLShaderMgr::LIGHTNORM, 1, environment.getClampedLightNorm().mV);
 
+            if(LLPipeline::sRenderPBR)
+            {
+                LLVector3 cameraAtAxis = LLViewerCamera::getInstance()->getAtAxis();
+                soften_shader.uniform3fv(LLShaderMgr::DEFERRED_VIEW_DIR, 1, cameraAtAxis.mV);
+            }
+
             {
                 LLGLDepthTest depth(GL_FALSE);
                 LLGLDisable   blend(GL_BLEND);
@@ -9543,10 +9569,22 @@ void LLPipeline::unbindDeferredShader(LLGLSLShader &shader)
 void LLPipeline::bindReflectionProbes(LLGLSLShader& shader)
 {
     S32 channel = shader.enableTexture(LLShaderMgr::REFLECTION_PROBES, LLTexUnit::TT_CUBE_MAP_ARRAY);
+    bool bound = false;
     if (channel > -1 && mReflectionMapManager.mTexture.notNull())
     {
-        // see comments in class2/deferred/softenLightF.glsl for what these uniforms mean
         mReflectionMapManager.mTexture->bind(channel);
+        bound = true;
+    }
+
+    channel = shader.enableTexture(LLShaderMgr::IRRADIANCE_PROBES, LLTexUnit::TT_CUBE_MAP_ARRAY);
+    if (channel > -1 && mReflectionMapManager.mIrradianceMaps.notNull())
+    {
+        mReflectionMapManager.mIrradianceMaps->bind(channel);
+        bound = true;
+    }
+
+    if (bound)
+    {
         mReflectionMapManager.setUniforms();
 
         F32* m = gGLModelView;

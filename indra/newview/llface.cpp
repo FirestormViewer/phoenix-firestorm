@@ -1476,6 +1476,11 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	LLColor4U color = (tep ? tep->getColor() : LLColor4());
 	// </FS:ND>
 
+    if (tep->getGLTFMaterial())
+    {
+        color = tep->getGLTFMaterial()->mAlbedoColor;
+    }
+
 	if (rebuild_color)
 	{ //decide if shiny goes in alpha channel of color
 		if (tep && 
@@ -1893,10 +1898,11 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			// LLMaterial* mat = tep->getMaterialParams().get();
 			LLMaterial* mat = tep ? tep->getMaterialParams().get() : 0;
 			// </FS:ND>
+            LLGLTFMaterial* gltf_mat = tep->getGLTFMaterial();
 
 			bool do_bump = bump_code && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_TEXCOORD1);
 
-			if (mat && !do_bump)
+			if ((mat || gltf_mat) && !do_bump)
 			{
 				do_bump  = mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_TEXCOORD1)
 					     || mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_TEXCOORD2);
@@ -2129,10 +2135,12 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 					mVertexBuffer->flush();
 				}
 
-				if (!mat && do_bump)
+				if ((!mat && !gltf_mat) && do_bump)
 				{
 					mVertexBuffer->getTexCoord1Strider(tex_coords1, mGeomIndex, mGeomCount, map_range);
 		
+                    mVObjp->getVolume()->genTangents(f);
+
 					for (S32 i = 0; i < num_vertices; i++)
 					{
 						LLVector4a tangent = vf.mTangents[i];

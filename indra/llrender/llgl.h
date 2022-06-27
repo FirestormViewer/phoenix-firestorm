@@ -124,6 +124,7 @@ public:
 	BOOL mHasAnisotropic;
 	BOOL mHasARBEnvCombine;
 	BOOL mHasCubeMap;
+	BOOL mHasCubeMapArray;
 	BOOL mHasDebugOutput;
 	BOOL mHassRGBTexture;
 	BOOL mHassRGBFramebuffer;

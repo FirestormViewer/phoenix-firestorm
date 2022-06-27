@@ -884,6 +884,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="Clothing"      value=" Clothing," />
 	<string name="Gestures"      value=" Gestures," />
 	<string name="Landmarks"     value=" Landmarks," />
+	<string name="Materials"     value=" Materials," />
 	<string name="Notecards"     value=" Notecards," />
 	<string name="Objects"       value=" Objects," />
 	<string name="Scripts"       value=" Scripts," />
@@ -2360,6 +2361,7 @@ Abuse Report</string>
   <string name="New Physics">New Physics</string>
   <string name="Invalid Wearable">Invalid Wearable</string>
   <string name="New Gesture">New Gesture</string>
+  <string name="New Material">New Material</string>
   <string name="New Script">New Script</string>
   <string name="New Note">New Note</string>
   <string name="New Folder">New Folder</string>

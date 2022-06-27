@@ -793,7 +793,14 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 			extra_code_text[extra_code_count++] = strdup("#define shadow2DRect(a,b) vec2(texture(a,b))\n");
 		}
 	}
-	
+
+    // Use alpha float to store bit flags
+    // See: C++: addDeferredAttachment(), shader: frag_data[2]
+    extra_code_text[extra_code_count++] = strdup("#define GBUFFER_FLAG_SKIP_ATMOS   0.0 \n"); // atmo kill
+    extra_code_text[extra_code_count++] = strdup("#define GBUFFER_FLAG_HAS_ATMOS    0.25\n"); // bit 0
+    extra_code_text[extra_code_count++] = strdup("#define GBUFFER_FLAG_HAS_PBR      0.50\n"); // bit 1
+    extra_code_text[extra_code_count++] = strdup("#define GET_GBUFFER_FLAG(flag)    (mod(floor(norm.w/flag),2.0)>0.5)\n");
+
 	if (defines)
 	{
 		for (std::unordered_map<std::string,std::string>::iterator iter = defines->begin(); iter != defines->end(); ++iter)
@@ -1169,14 +1176,19 @@ void LLShaderMgr::initAttribsAndUniforms()
 	llassert(mReservedUniforms.size() == LLShaderMgr::PROJECTOR_AMBIENT_LOD+1);
 
 	mReservedUniforms.push_back("color");
-		
+    mReservedUniforms.push_back("emissiveColor");
+    mReservedUniforms.push_back("metallicFactor");
+    mReservedUniforms.push_back("roughnessFactor");
+    
 	mReservedUniforms.push_back("diffuseMap");
     mReservedUniforms.push_back("altDiffuseMap");
 	mReservedUniforms.push_back("specularMap");
+    mReservedUniforms.push_back("emissiveMap");
 	mReservedUniforms.push_back("bumpMap");
     mReservedUniforms.push_back("bumpMap2");
 	mReservedUniforms.push_back("environmentMap");
     mReservedUniforms.push_back("reflectionProbes");
+    mReservedUniforms.push_back("irradianceProbes");
 	mReservedUniforms.push_back("cloud_noise_texture");
     mReservedUniforms.push_back("cloud_noise_texture_next");
 	mReservedUniforms.push_back("fullbright");
@@ -1223,6 +1235,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("minimum_alpha");
 	mReservedUniforms.push_back("emissive_brightness");
 
+    // Deferred
 	mReservedUniforms.push_back("shadow_matrix");
 	mReservedUniforms.push_back("env_mat");
 	mReservedUniforms.push_back("shadow_clip");
@@ -1247,8 +1260,9 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("depth_cutoff");
 	mReservedUniforms.push_back("norm_cutoff");
 	mReservedUniforms.push_back("shadow_target_width");
+    mReservedUniforms.push_back("view_dir"); // DEFERRED_VIEW_DIR
 	
-	llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH+1);
+	llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_VIEW_DIR+1);
 
 	mReservedUniforms.push_back("tc_scale");
 	mReservedUniforms.push_back("rcp_screen_res");
@@ -1361,6 +1375,7 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("halo_map");
     mReservedUniforms.push_back("moon_brightness");
     mReservedUniforms.push_back("cloud_variance");
+    mReservedUniforms.push_back("reflection_probe_ambiance");
 
     mReservedUniforms.push_back("sh_input_r");
     mReservedUniforms.push_back("sh_input_g");

@@ -5665,10 +5665,26 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 	
 	LLViewerTexture* tex = facep->getTexture();
 
+    
 	U8 index = facep->getTextureIndex();
 
-	LLMaterial* mat = facep->getTextureEntry()->getMaterialParams().get(); 
-	LLMaterialID mat_id = facep->getTextureEntry()->getMaterialID();
+    LLMaterial* mat = nullptr;
+    
+    LLUUID mat_id;
+
+    LLGLTFMaterial* gltf_mat = facep->getTextureEntry()->getGLTFMaterial();
+    if (gltf_mat != nullptr)
+    {
+        mat_id = gltf_mat->getHash(); // TODO: cache this hash
+    }
+    else
+    {
+        mat = facep->getTextureEntry()->getMaterialParams().get();
+        if (mat)
+        {
+            mat_id = facep->getTextureEntry()->getMaterialID().asUUID();
+        }
+    }
 
 	bool batchable = false;
 
@@ -5690,7 +5706,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
 	if (index < FACE_DO_NOT_BATCH_TEXTURES && idx >= 0)
 	{
-		if (mat || draw_vec[idx]->mMaterial)
+		if (mat || gltf_mat || draw_vec[idx]->mMaterial)
 		{ //can't batch textures when materials are present (yet)
 			batchable = false;
 		}
@@ -5722,7 +5738,6 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		draw_vec[idx]->mEnd - draw_vec[idx]->mStart + facep->getGeomCount() <= (U32) gGLManager.mGLMaxVertexRange &&
 		draw_vec[idx]->mCount + facep->getIndicesCount() <= (U32) gGLManager.mGLMaxIndexRange &&
 #endif
-		//draw_vec[idx]->mMaterial == mat &&
 		draw_vec[idx]->mMaterialID == mat_id &&
 		draw_vec[idx]->mFullbright == fullbright &&
 		draw_vec[idx]->mBump == bump &&
@@ -5779,11 +5794,22 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		draw_info->mEnvIntensity = spec;
 		draw_info->mSpecularMap = NULL;
 		draw_info->mMaterial = mat;
+        draw_info->mGLTFMaterial = gltf_mat;
 		draw_info->mShaderMask = shader_mask;
         draw_info->mAvatar = facep->mAvatar;
         draw_info->mSkinInfo = facep->mSkinInfo;
 
-		if (mat)
+        if (gltf_mat)
+        {
+            LLViewerObject* vobj = facep->getViewerObject();
+            U8 te = facep->getTEOffset();
+
+            draw_info->mTexture = vobj->getGLTFAlbedoMap(te);
+            draw_info->mNormalMap = vobj->getGLTFNormalMap(te);
+            draw_info->mSpecularMap = vobj->getGLTFMetallicRoughnessMap(te);
+            draw_info->mEmissiveMap = vobj->getGLTFEmissiveMap(te);
+        }
+        else if (mat)
 		{
 			draw_info->mMaterialID = mat_id;
 
@@ -6170,12 +6196,16 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					continue;
 				}
 
+#if 0
 #if LL_RELEASE_WITH_DEBUG_INFO
                 const LLUUID pbr_id( "49c88210-7238-2a6b-70ac-92d4f35963cf" );
                 const LLUUID obj_id( vobj->getID() );
                 bool is_pbr = (obj_id == pbr_id);
 #else
                 bool is_pbr = false;
+#endif
+#else
+                bool is_pbr = facep->getTextureEntry()->getGLTFMaterial() != nullptr;
 #endif
 
 				//ALWAYS null out vertex buffer on rebuild -- if the face lands in a render
@@ -6319,31 +6349,43 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						if (gPipeline.canUseWindLightShadersOnObjects()
 							&& LLPipeline::sRenderBump)
 						{
-							// <FS:ND> We just skip all of this is there is no te entry. This might get some funny results (which would be a face without te anyway).
-							// if (LLPipeline::sRenderDeferred && te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())
-							if (LLPipeline::sRenderDeferred && te && te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())
-							// </FS:ND>
+							// <FS> Skip if no te entry
+							if (!te)
+								continue;
+
+                            LLGLTFMaterial* gltf_mat = te->getGLTFMaterial();
+
+							if (LLPipeline::sRenderDeferred && 
+                                (gltf_mat != nullptr || (te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())))
 							{
-								LLMaterial* mat = te->getMaterialParams().get();
-								if (mat->getNormalID().notNull())
-								{
-									if (mat->getSpecularID().notNull())
-									{ //has normal and specular maps (needs texcoord1, texcoord2, and tangent)
-                                        add_face(sNormSpecFaces, normspec_count, facep);
-									}
-									else
-									{ //has normal map (needs texcoord1 and tangent)
-                                        add_face(sNormFaces, norm_count, facep);
-									}
-								}
-								else if (mat->getSpecularID().notNull())
-								{ //has specular map but no normal map, needs texcoord2
-                                    add_face(sSpecFaces, spec_count, facep);
-								}
-								else
-								{ //has neither specular map nor normal map, only needs texcoord0
-                                    add_face(sSimpleFaces, simple_count, facep);
-								}									
+                                if (gltf_mat != nullptr)
+                                {
+                                    // all gltf materials have all vertex attributes for now
+                                    add_face(sNormSpecFaces, normspec_count, facep);
+                                }
+                                else
+                                {
+                                    LLMaterial* mat = te->getMaterialParams().get();
+                                    if (mat->getNormalID().notNull())
+                                    {
+                                        if (mat->getSpecularID().notNull())
+                                        { //has normal and specular maps (needs texcoord1, texcoord2, and tangent)
+                                            add_face(sNormSpecFaces, normspec_count, facep);
+                                        }
+                                        else
+                                        { //has normal map (needs texcoord1 and tangent)
+                                            add_face(sNormFaces, norm_count, facep);
+                                        }
+                                    }
+                                    else if (mat->getSpecularID().notNull())
+                                    { //has specular map but no normal map, needs texcoord2
+                                        add_face(sSpecFaces, spec_count, facep);
+                                    }
+                                    else
+                                    { //has neither specular map nor normal map, only needs texcoord0
+                                        add_face(sSimpleFaces, simple_count, facep);
+                                    }
+                                }
 							}
 							else if (te->getBumpmap())
 							{ //needs normal + tangent
@@ -7058,15 +7100,24 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
 			BOOL is_alpha = (facep->getPoolType() == LLDrawPool::POOL_ALPHA) ? TRUE : FALSE;
 		
-			LLMaterial* mat = te->getMaterialParams().get();
+            LLGLTFMaterial* gltf_mat = te->getGLTFMaterial();
 
-			bool can_be_shiny = true;
-			if (mat)
-			{
-				U8 mode = mat->getDiffuseAlphaMode();
-				can_be_shiny = mode == LLMaterial::DIFFUSE_ALPHA_MODE_NONE ||
-								mode == LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE;
-			}
+            LLMaterial* mat = nullptr;
+            bool can_be_shiny = false;
+
+            // ignore traditional material if GLTF material is present
+            if (gltf_mat == nullptr)
+            {
+                mat = te->getMaterialParams().get();
+
+                can_be_shiny = true;
+                if (mat)
+                {
+                    U8 mode = mat->getDiffuseAlphaMode();
+                    can_be_shiny = mode == LLMaterial::DIFFUSE_ALPHA_MODE_NONE ||
+                        mode == LLMaterial::DIFFUSE_ALPHA_MODE_EMISSIVE;
+                }
+            }
 
             F32 te_alpha = te->getColor().mV[3]; 
 			bool use_legacy_bump = te->getBumpmap() && (te->getBumpmap() < 18) && (!mat || mat->getNormalID().isNull());
@@ -7075,10 +7126,15 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
             is_alpha = (is_alpha || transparent) ? TRUE : FALSE;
 
-			if (mat && LLPipeline::sRenderDeferred && !hud_group)
+			if ((gltf_mat || mat) && LLPipeline::sRenderDeferred && !hud_group)
 			{
 				bool material_pass = false;
 
+                if (gltf_mat)
+                { // all other parameters ignored if gltf material is present
+                    registerFace(group, facep, LLRenderPass::PASS_PBR_OPAQUE);
+                }
+                else
 				// do NOT use 'fullbright' for this logic or you risk sending
 				// things without normals down the materials pipeline and will
 				// render poorly if not crash NORSPEC-240,314

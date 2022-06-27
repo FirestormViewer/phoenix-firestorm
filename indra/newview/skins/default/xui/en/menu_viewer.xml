@@ -2190,6 +2190,16 @@
             <menu_item_call.on_visible
             function="File.VisibleUploadModel"/>
             </menu_item_call>
+          <menu_item_call
+           label="Material..."
+           layout="topleft"
+           name="Upload Material">
+            <menu_item_call.on_click
+             function="File.UploadMaterial"
+             parameter="" />
+            <menu_item_call.on_enable
+             function="File.EnableUploadMaterial" />
+          </menu_item_call>
 	   <menu_item_call
              label="Bulk..."
              layout="topleft"
@@ -2213,7 +2223,15 @@
                  parameter="" />
             </menu_item_call>
         </menu>
-        <menu_item_separator/>
+        <menu_item_call
+            label="Material Editor"
+            name="material_editor_menu_item">
+          <menu_item_call.on_click
+              function="Floater.ToggleOrBringToFront"
+              parameter="material_editor" />
+        </menu_item_call>
+
+      <menu_item_separator/>
         <menu_item_call
          enabled="false"
          label="Undo"

@@ -1,9 +1,9 @@
 /** 
- * @file avatarF.glsl
+ * @file radianceGenV.glsl
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2011, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,35 +23,16 @@
  * $/LicenseInfo$
  */
 
-/*[EXTRA_CODE_HERE]*/
+uniform mat4 modelview_matrix;
 
-#ifdef DEFINE_GL_FRAGCOLOR
-out vec4 frag_data[3];
-#else
-#define frag_data gl_FragData
-#endif
+ATTRIBUTE vec3 position;
 
-uniform sampler2D diffuseMap;
+VARYING vec3 vary_dir;
 
-uniform float minimum_alpha;
-
-VARYING vec3 vary_normal;
-VARYING vec2 vary_texcoord0;
-
-vec2 encode_normal(vec3 n);
-
-void main() 
+void main()
 {
-	vec4 diff = texture2D(diffuseMap, vary_texcoord0.xy);
-	
-	if (diff.a < minimum_alpha)
-	{
-		discard;
-	}
-	
-	frag_data[0] = vec4(diff.rgb, 0.0);
-	frag_data[1] = vec4(0,0,0,0);
-	vec3 nvn = normalize(vary_normal);
-	frag_data[2] = vec4(encode_normal(nvn.xyz), 0.0, GBUFFER_FLAG_HAS_ATMOS);
+	gl_Position = vec4(position, 1.0);
+
+	vary_dir = vec3(modelview_matrix * vec4(position, 1.0)).xyz;
 }
 

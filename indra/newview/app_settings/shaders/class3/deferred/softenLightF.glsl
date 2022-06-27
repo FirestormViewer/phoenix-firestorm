@@ -1,5 +1,5 @@
 /**
- * @file class2/deferred/softenLightF.glsl
+ * @file class3/deferred/softenLightF.glsl
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -22,6 +22,31 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
+
+#define DEBUG_PBR_PACKORM0        0 // Rough=0, Metal=0
+#define DEBUG_PBR_PACKORM1        0 // Rough=1, Metal=1
+#define DEBUG_PBR_TANGENT1        1 // Tangent = 1,0,0
+
+#define DEBUG_PBR_RAW_DIFF         0 // Output: use diffuse in G-Buffer
+#define DEBUG_PBR_RAW_SPEC         0 // Output: use spec in G-Buffer
+#define DEBUG_PBR_IRRADIANCE       0 // Output: Diffuse Irradiance
+#define DEBUG_PBR_DIFFUSE          0 // Output: Radiance Lambertian
+#define DEBUG_PBR_ORM              0 // Output: Packed Occlusion Roughness Metal
+#define DEBUG_PBR_ROUGH_PERCEPTUAL 0 // Output: grayscale Perceptual Roughenss
+#define DEBUG_PBR_ROUGH_ALPHA      0 // Output: grayscale Alpha Roughness
+#define DEBUG_PBR_METAL            0 // Output: grayscale metal
+#define DEBUG_PBR_REFLECTANCE      0 // Output: diffuse reflectance
+#define DEBUG_PBR_BRDF_UV          0 // Output: red green BRDF UV         (GGX input)
+#define DEBUG_PBR_BRDF_SCALE_BIAS  0 // Output: red green BRDF Scale Bias (GGX output)
+#define DEBUG_PBR_SPEC             0 // Output: Final spec
+#define DEBUG_PBR_SPEC_REFLECTION  0 // Output: reflection
+#define DEBUG_PBR_NORMAL           0 // Output: passed in normal. To see raw normal map: set DEBUG_PBR_RAW_DIFF 1, and in pbropaqueF set DEBUG_NORMAL_RAW
+#define DEBUG_PBR_VIEW             0 // Output: view_dir
+#define DEBUG_PBR_BRDF             0 // Output: Environment BRDF
+#define DEBUG_PBR_DOT_NV           0 // Output: grayscale dot(Normal,ViewDir)
+#define DEBUG_PBR_DOT_TV           0 // Output:
+#define DEBUG_PBR_DOT_BV           0 // Output:
+#define DEBUG_PBR_FRESNEL          0 // Output: roughness dependent fresnel
 
 #extension GL_ARB_texture_rectangle : enable
 #extension GL_ARB_shader_texture_lod : enable
@@ -85,6 +110,34 @@ vec3 srgb_to_linear(vec3 c);
 vec4 applyWaterFogView(vec3 pos, vec4 color);
 #endif
 
+uniform vec3 view_dir; // PBR
+
+#define getDiffuseLightPBR(n)      ambenv
+#define getSpecularPBR(reflection) glossenv
+
+// Approximate Environment BRDF
+vec2 getGGXApprox( vec2 uv )
+{
+    vec2  st    = vec2(1.) - uv;
+    float d     = (st.x * st.x * 0.5) * (st.y * st.y);
+    float scale = 1.0 - d;
+    float bias  = d;
+    return vec2( scale, bias );
+}
+
+vec2 getGGX( vec2 brdfPoint )
+{
+    // TODO: use GGXLUT
+    // texture2D(GGXLUT, brdfPoint).rg;
+    return getGGXApprox( brdfPoint);
+}
+
+vec3 calcBaseReflect0(float ior)
+{
+    vec3   reflect0 = vec3(pow((ior - 1.0) / (ior + 1.0), 2.0));
+    return reflect0;
+}
+
 void main()
 {
     vec2  tc           = vary_fragcoord.xy;
@@ -131,6 +184,142 @@ void main()
     vec3 legacyenv;
     sampleReflectionProbes(ambenv, glossenv, legacyenv, pos.xyz, norm.xyz, spec.a, envIntensity);
 
+    bool hasPBR = GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_PBR);
+    if (hasPBR)
+    {
+        vec3 colorDiffuse      = vec3(0);
+        vec3 colorEmissive     = vec3(0);
+        vec3 colorSpec         = vec3(0);
+//      vec3 colorClearCoat    = vec3(0);
+//      vec3 colorSheen        = vec3(0);
+//      vec3 colorTransmission = vec3(0);
+
+        vec3 packedORM        = spec.rgb; // Packed: Occlusion Roughness Metal
+#if DEBUG_PBR_PACK_ORM0
+             packedORM        = vec3(0,0,0);
+#endif
+#if DEBUG_PBR_PACK_ORM1
+             packedORM        = vec3(1,1,1);
+#endif
+        float IOR             = 1.5;         // default Index Of Reflection 1.5
+        vec3  reflect0        = vec3(0.04);  // -> incidence reflectance 0.04
+
+        IOR = 0.0; // TODO: Set from glb
+        reflect0 = calcBaseReflect0(IOR);
+
+        float metal      = packedORM.b;
+        vec3  reflect90  = vec3(0);
+        vec3  v          = view_dir;
+        vec3  n          = norm.xyz;
+//      vec3  t          = texture2DRect(tangentMap, tc).rgb;
+#if DEBUG_PBR_TANGENT1
+        vec3  t          = vec3(1,0,0);
+#endif
+        vec3  b          = cross( n,t);
+        vec3  reflectVN  = normalize(reflect(-v,n));
+
+        float dotNV = clamp(dot(n,v),0,1);
+        float dotTV = clamp(dot(n,t),0,1);
+        float dotBV = clamp(dot(n,b),0,1);
+
+        // Reference: getMetallicRoughnessInfo
+        float perceptualRough = packedORM.g;
+        float alphaRough     = perceptualRough * perceptualRough;
+        vec3  colorDiff      = mix( diffuse.rgb, vec3(0)    , metal);
+              reflect0       = mix( reflect0   , diffuse.rgb, metal); // reflect at 0 degrees
+              reflect90      = vec3(1);                               // reflect at 90 degrees
+        float reflectance    = max( max( reflect0.r, reflect0.g ), reflect0.b );
+
+        // Common to RadianceGGX and RadianceLambertian
+        float specWeight = 1.0;
+        vec2  brdfPoint  = clamp(vec2(dotNV, perceptualRough), vec2(0,0), vec2(1,1));
+        vec2  vScaleBias = getGGX( brdfPoint); // Environment BRDF: scale and bias applied to reflect0
+        vec3  fresnelR   = max(vec3(1.0 - perceptualRough), reflect0) - reflect0; // roughness dependent fresnel
+        vec3  kSpec      = reflect0 + fresnelR*pow(1.0 - dotNV, 5.0);
+
+        // Reference: getIBLRadianceGGX
+        vec3 specLight  = getSpecularPBR(reflection);
+#if HAS_IBL
+        kSpec          = mix( kSpec, iridescenceFresnel, iridescenceFactor);
+#endif
+        vec3 FssEssRadiance = kSpec*vScaleBias.x + vScaleBias.y;
+        colorSpec += specWeight * specLight * FssEssRadiance;
+
+        // Reference: getIBLRadianceLambertian
+        vec3  irradiance    = getDiffuseLightPBR(n);
+        vec3  FssEssLambert = specWeight * kSpec * vScaleBias.x + vScaleBias.y; // NOTE: Very similar to FssEssRadiance but with extra specWeight term
+        float Ems          = (1.0 - vScaleBias.x + vScaleBias.y);
+        vec3  avg          = specWeight * (reflect0 + (1.0 - reflect0) / 21.0);
+        vec3  AvgEms       = avg * Ems;
+        vec3  FmsEms       = AvgEms * FssEssLambert / (1.0 - AvgEms);
+        vec3  kDiffuse     = colorDiffuse * (1.0 - FssEssLambert + FmsEms);
+        colorDiffuse      += (FmsEms + kDiffuse) * irradiance;
+
+        color.rgb  = colorDiffuse + colorEmissive + colorSpec;
+
+    #if DEBUG_PBR_BRDF_UV
+        color.rgb = vec3(brdfPoint,0.0);
+    #endif
+    #if DEBUG_PBR_BRDF_SCALE_BIAS
+        color.rgb = vec3(vScaleBias,0.0);
+    #endif
+    #if DEBUG_PBR_FRESNEL
+        color.rgb = fresnelR;
+    #endif
+    #if DEBUG_PBR_RAW_DIFF
+        color.rgb = diffuse.rgb;
+    #endif
+    #if DEBUG_PBR_RAW_SPEC
+        color.rgb = spec.rgb;
+    #endif
+    #if DEBUG_PBR_REFLECTANCE
+        color.rgb = vec3(reflectance);
+    #endif
+    #if DEBUG_PBR_IRRADIANCE
+        color.rgb = irradiance;
+    #endif
+    #if DEBUG_PBR_DIFFUSE
+        color.rgb = colorDiffuse;
+    #endif
+    #if DEBUG_PBR_EMISSIVE
+        color.rgb = colorEmissive;
+    #endif
+    #if DEBUG_PBR_METAL
+        color.rgb = vec3(metal);
+    #endif
+    #if DEBUG_PBR_ROUGH_PERCEPTUAL
+        color.rgb = vec3(perceptualRough);
+    #endif
+    #if DEBUG_PBR_ROUGH_ALPHA
+        color.rgb = vec3(alphaRough);
+    #endif
+    #if DEBUG_PBR_SPEC
+        color.rgb = colorSpec;
+    #endif
+    #if DEBUG_PBR_SPEC_REFLECTION
+        color.rgb = specLight;
+    #endif
+    #if DEBUG_PBR_ORM
+        color.rgb = packedORM;
+    #endif
+    #if DEBUG_PBR_NORMAL
+        color.rgb = norm.xyz;
+    #endif
+    #if DEBUG_PBR_VIEW
+        color.rgb = view_dir;
+    #endif
+    #if DEBUG_PBR_DOT_NV
+        color.rgb = vec3(dotNV);
+    #endif
+    #if DEBUG_PBR_DOT_TV
+        color.rgb = vec3(dotTV);
+    #endif
+    #if DEBUG_PBR_DOT_BV
+        color.rgb = vec3(dotBV);
+    #endif
+    }
+else
+{
     amblit = max(ambenv, amblit);
     color.rgb = amblit*ambocc;
 
@@ -170,7 +359,7 @@ void main()
         applyLegacyEnv(color, legacyenv, spec, pos.xyz, norm.xyz, envIntensity);
     }
 
-    if (norm.w < 0.5)
+    if (GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_ATMOS))
     {
         color = mix(atmosFragLighting(color, additive, atten), fullbrightAtmosTransportFrag(color, additive, atten), diffuse.a);
         color = mix(scaleSoftClipFrag(color), fullbrightScaleSoftClip(color), diffuse.a);
@@ -181,7 +370,7 @@ void main()
     color       = fogged.rgb;
     bloom       = fogged.a;
 #endif
-
+}
     // convert to linear as fullscreen lights need to sum in linear colorspace
     // and will be gamma (re)corrected downstream...
     //color = vec3(ambocc);

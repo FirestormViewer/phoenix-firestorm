@@ -157,6 +157,13 @@
 				function="Inventory.DoCreate"
 				parameter="gesture" />
 		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_material"
+			label="New Material">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="material" />
+		</menu_item_call>
 		<menu
 			name="inventory_new_clothes"
 			label="New Clothes">
