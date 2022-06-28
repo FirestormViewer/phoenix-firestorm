@@ -124,8 +124,8 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	mBakeTextureEnabled(FALSE),
 	mLocalBitmapsAddedCallbackConnection() // <FS:Ansariel> Threaded filepickers
 {
-	buildFromFile("floater_texture_ctrl.xml");
 	mCanApplyImmediately = can_apply_immediately;
+	buildFromFile("floater_texture_ctrl.xml");
 	setCanMinimize(FALSE);
 
 	// <FS:Ansariel> Threaded filepickers

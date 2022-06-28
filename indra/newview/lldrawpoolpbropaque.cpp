@@ -116,7 +116,7 @@ void LLDrawPoolPBROpaque::renderDeferred(S32 pass)
         }
         else
         {
-            // TODO: bind default normal map (???? WTF is it ???)
+            // TODO: bind default normal map (???? WTF is it ??? )
         }
 
         if (params.mSpecularMap)
@@ -130,7 +130,7 @@ void LLDrawPoolPBROpaque::renderDeferred(S32 pass)
 
         if (params.mEmissiveMap)
         {
-            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::EMISSIVE_MAP, params.mEmissiveMap); // Packed Occlusion Roughness Metal
+            gDeferredPBROpaqueProgram.bindTexture(LLShaderMgr::EMISSIVE_MAP, params.mEmissiveMap);
         }
         else
         {
