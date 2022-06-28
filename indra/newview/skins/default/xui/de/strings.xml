@@ -7042,6 +7042,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="fs_preprocessor_caching_err">
 		Fehler beim Cachen der eingebundenen Datei „[FILENAME]“.
 	</string>
+	<string name="fs_preprocessor_truncated">
+		Achtung: Präprozessor-Ausgabe wurde aufgrund exzessiver Textlänge gekürzt. Das Skript wird wahrscheinlich nicht funktionieren.
+	</string>
 
 	<string name="animation_explorer_seconds_ago">
 		Vor [SECONDS] Sekunden

@@ -3155,6 +3155,7 @@ Your current position: [AVATAR_POS]
   <string name="fs_preprocessor_cache_completed">Caching completed for '[FILENAME]'</string>
   <string name="fs_preprocessor_cache_unsafe">Error: script named '[FILENAME]' isn't safe to copy to the filesystem. This include will fail.</string>
   <string name="fs_preprocessor_caching_err">Error caching included file '[FILENAME]'</string>
+  <string name="fs_preprocessor_truncated">Warning: Preprocessor output truncated due to excessive script text size. This script will most likely not work.</string>
   <!-- </FS:Cron> -->
 
   <!-- Animation Explorer -->
