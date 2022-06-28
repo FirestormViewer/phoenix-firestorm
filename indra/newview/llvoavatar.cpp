@@ -12097,7 +12097,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 				//         place in the code. For now, this is a good spot as the complexity calculation
 				//         gets updated when rigging data arrives, so we can reliably identify rigged
 				//         attachments where the skinning information took a while to load.
-				if (attached_object->isHUDAttachment() && attached_object->mCheckRigOnHUD)
+				if (attached_object->isHUDAttachment() && attached_object->mCheckRigOnHUD && !attached_object->isTempAttachment())
 				{
 					// check if the root object is rigged
 					bool is_rigged = attached_object->isRiggedMesh();
