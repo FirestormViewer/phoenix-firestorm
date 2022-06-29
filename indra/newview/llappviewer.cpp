@@ -5099,19 +5099,19 @@ bool LLAppViewer::initCache()
 	const std::string cache_dir_name = gSavedSettings.getString("DiskCacheDirName");
 
 	const U32 MB = 1024 * 1024;
-    const U64 MIN_CACHE_SIZE = 256 * MB;
-	const U64 MAX_CACHE_SIZE = 9984ll * MB;
-    const uintmax_t setting_cache_total_size = (U64)gSavedSettings.getU32("CacheSize") * MB;
+    const uintmax_t MIN_CACHE_SIZE = 256 * MB;
+	const uintmax_t MAX_CACHE_SIZE = 9984ll * MB;
+    const uintmax_t setting_cache_total_size = uintmax_t(gSavedSettings.getU32("CacheSize")) * MB;
     const uintmax_t cache_total_size = llclamp(setting_cache_total_size, MIN_CACHE_SIZE, MAX_CACHE_SIZE);
     // <FS:Ansariel> Better cache size control
-    //const F32 disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
-    //const F32 texture_cache_percent = 100.0 - disk_cache_percent;
+    //const F64 disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
+    //const F6432 texture_cache_percent = 100.0 - disk_cache_percent;
     // </FS:Ansariel>
 
     // note that the maximum size of this cache is defined as a percentage of the 
     // total cache size - the 'CacheSize' pref - for all caches. 
     // <FS:Ansariel> Better cache size control
-    //const uintmax_t disk_cache_size = cache_total_size * disk_cache_percent / 100;
+    //const uintmax_t disk_cache_size = uintmax_t(cache_total_size * disk_cache_percent / 100);
     const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
     const uintmax_t disk_cache_size = disk_cache_mb * 1024ULL * 1024ULL;
     // </FS:Ansariel>

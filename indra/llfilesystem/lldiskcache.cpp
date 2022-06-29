@@ -188,7 +188,6 @@ void LLDiskCache::purge()
             //file_removed.push_back(should_remove);
             file_removed.push_back(action);
         }
-        //std::string action = "";
         if (should_remove)
         {
             boost::filesystem::remove(entry.second.second, ec);
