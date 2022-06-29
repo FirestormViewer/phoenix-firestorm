@@ -1328,7 +1328,8 @@ bool LLAppViewer::init()
 
     // <FS:Ansariel> Disable updater
 //#if LL_RELEASE_FOR_DOWNLOAD
-//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//    // Skip updater if this is a non-interactive instance
+//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
 //    {
 //        LLProcess::Params updater;
 //        updater.desc = "updater process";
@@ -3734,6 +3735,11 @@ bool LLAppViewer::initWindow()
 bool LLAppViewer::isUpdaterMissing()
 {
     return mUpdaterNotFound;
+}
+
+bool LLAppViewer::waitForUpdater()
+{
+    return !gSavedSettings.getBOOL("CmdLineSkipUpdater") && !mUpdaterNotFound && !gNonInteractive;
 }
 
 void LLAppViewer::writeDebugInfo(bool isStatic)
