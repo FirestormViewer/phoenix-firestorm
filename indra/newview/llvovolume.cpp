@@ -111,7 +111,6 @@ S32 LLVOVolume::mRenderComplexity_current = 0;
 LLPointer<LLObjectMediaDataClient> LLVOVolume::sObjectMediaClient = NULL;
 LLPointer<LLObjectMediaNavigateClient> LLVOVolume::sObjectMediaNavigateClient = NULL;
 
-extern BOOL gGLDebugLoggingEnabled;
 extern BOOL gCubeSnapshot;
 
 // NaCl - Graphics crasher protection

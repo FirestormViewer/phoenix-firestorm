@@ -652,8 +652,8 @@ static void settings_modify()
     LLRenderTarget::sUseFBO             = LLPipeline::sRenderDeferred || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
 // [/RLVa:KB]
     LLVOSurfacePatch::sLODFactor        = gSavedSettings.getF32("RenderTerrainLODFactor");
-    LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor; //square lod factor to get exponential range of [1,4]
-    gDebugGL       = gSavedSettings.getBOOL("RenderDebugGL") || gDebugSession;
+    LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor;  // square lod factor to get exponential range of [1,4]
+    gDebugGL       = gDebugGLSession || gDebugSession;
     gDebugPipeline = gSavedSettings.getBOOL("RenderDebugPipeline");
 }
 
@@ -1328,7 +1328,8 @@ bool LLAppViewer::init()
 
     // <FS:Ansariel> Disable updater
 //#if LL_RELEASE_FOR_DOWNLOAD
-//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//    // Skip updater if this is a non-interactive instance
+//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
 //    {
 //        LLProcess::Params updater;
 //        updater.desc = "updater process";
@@ -3258,6 +3259,15 @@ bool LLAppViewer::initConfiguration()
 		ll_init_fail_log(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "test_failures.log"));
 	}
 
+    if (gSavedSettings.getBOOL("RenderDebugGLSession"))
+    {
+        gDebugGLSession = TRUE;
+        gDebugGL = TRUE;
+        // gDebugGL can cause excessive logging
+        // so it's limited to a single session
+        gSavedSettings.setBOOL("RenderDebugGLSession", FALSE);
+    }
+
 	// <FS:TT> Hacking to save the skin and theme for future use.
 	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
 	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
@@ -3727,6 +3737,11 @@ bool LLAppViewer::isUpdaterMissing()
     return mUpdaterNotFound;
 }
 
+bool LLAppViewer::waitForUpdater()
+{
+    return !gSavedSettings.getBOOL("CmdLineSkipUpdater") && !mUpdaterNotFound && !gNonInteractive;
+}
+
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
 #if LL_WINDOWS && LL_BUGSPLAT
@@ -3889,9 +3904,28 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
-	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
-	//std::string drvinfo = gDXHardware.getDriverVersionWMI();
-	std::string drvinfo = gDXHardware.getDriverVersionWMI(gGLManager.mGLVendorShort);
+    std::string drvinfo;
+
+    if (gGLManager.mIsIntel)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_INTEL);
+    }
+    else if (gGLManager.mIsNVIDIA)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_NVIDIA);
+    }
+    else if (gGLManager.mIsAMD)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_AMD);
+    }
+
+    if (drvinfo.empty())
+    {
+        // Generic/substitute windows driver? Unknown vendor?
+        LL_WARNS("DriverVersion") << "Vendor based driver search failed, searching for any driver" << LL_ENDL;
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_ANY);
+    }
+
 	if (!drvinfo.empty())
 	{
 		info["GRAPHICS_DRIVER_VERSION"] = drvinfo;
@@ -5726,6 +5760,13 @@ void LLAppViewer::idle()
 		}
 	}
 
+
+    // Update layonts, handle mouse events, tooltips, e t c
+    // updateUI() needs to be called even in case viewer disconected
+    // since related notification still needs handling and allows
+    // opening chat.
+    gViewerWindow->updateUI();
+
 	if (gDisconnected)
     {
 		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
@@ -5737,8 +5778,6 @@ void LLAppViewer::idle()
 		// </FS:CR>
 		return;
     }
-
-    gViewerWindow->updateUI();
 
 	if (gTeleportDisplay)
     {

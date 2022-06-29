@@ -57,6 +57,7 @@ include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
 include(VulkanGltf)
+include(ZLIBNG)
 include(URIPARSER)
 include(Growl)
 include(ColladaDom)
@@ -2308,10 +2309,6 @@ if (WINDOWS)
       #media_plugin_example # <FS:Ansariel> Don't package example plugin
       )
 
-    if (NOT USE_BUGSPLAT)
-        LIST(APPEND COPY_INPUT_DEPENDENCIES windows-crash-logger)
-    endif (NOT USE_BUGSPLAT)
-
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
         list(APPEND COPY_INPUT_DEPENDENCIES
@@ -2492,14 +2489,14 @@ endif (WINDOWS)
 #
 # We generally want the newest version of the library to provide all symbol
 # resolution.  To that end, when using static archives, the *_PRELOAD_ARCHIVES
-# variables, PNG_PRELOAD_ARCHIVES and ZLIB_PRELOAD_ARCHIVES, get the archives
+# variables, PNG_PRELOAD_ARCHIVES and ZLIBNG_PRELOAD_ARCHIVES, get the archives
 # dumped into the target binary and runtime lookup will find the most
 # modern version.
 
 target_link_libraries(${VIEWER_BINARY_NAME}
     ${LEGACY_STDIO_LIBS}
     ${PNG_PRELOAD_ARCHIVES}
-    ${ZLIB_PRELOAD_ARCHIVES}
+    ${ZLIBNG_PRELOAD_ARCHIVES}
     ${URIPARSER_PRELOAD_ARCHIVES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLAUDIO_LIBRARIES}

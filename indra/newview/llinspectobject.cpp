@@ -28,18 +28,20 @@
 #include "llinspectobject.h"
 
 // Viewer
+#include "llagent.h"            // To standup
 #include "llfloatersidepanelcontainer.h"
 #include "llinspect.h"
 #include "llmediaentry.h"
-#include "llnotificationsutil.h"	// *TODO: Eliminate, add LLNotificationsUtil wrapper
 #include "llselectmgr.h"
 #include "llslurl.h"
 #include "llviewermenu.h"		// handle_object_touch(), handle_buy()
 #include "llviewermedia.h"
 #include "llviewermediafocus.h"
 #include "llviewerobjectlist.h"	// to select the requested object
+#include "llvoavatarself.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
 #include "rlvactions.h"
+#include "rlvhandler.h"
 #include "rlvcommon.h"
 #include "lltoolpie.h"
 // [/RLVa:KB]
@@ -662,7 +664,37 @@ void LLInspectObject::onClickTouch()
 
 void LLInspectObject::onClickSit()
 {
-	handle_object_sit_or_stand();
+    bool is_sitting = false;
+    if (mObjectSelection)
+    {
+        LLSelectNode* node = mObjectSelection->getFirstRootNode();
+        if (node && node->mValid)
+        {
+            LLViewerObject* root_object = node->getObject();
+            if (root_object
+                && isAgentAvatarValid()
+                && gAgentAvatarp->isSitting()
+                && gAgentAvatarp->getRoot() == root_object)
+            {
+                is_sitting = true;
+            }
+        }
+    }
+
+    if (is_sitting)
+    {
+        // <FS:Ansariel> RLVa fix
+        //gAgent.standUp();
+        if (!rlv_handler_t::isEnabled() || RlvActions::canStand())
+        {
+            gAgent.standUp();
+        }
+        // </FS:Ansariel>
+    }
+    else
+    {
+        handle_object_sit(mObjectID);
+    }
 	closeFloater();
 }
 
