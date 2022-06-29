@@ -26,14 +26,25 @@
 
 #pragma once
 
-#include "llfloater.h"
+#include "llpreview.h"
+#include "llvoinventorylistener.h"
+#include "llimagej2c.h"
 
 class LLTextureCtrl;
 
-class LLMaterialEditor : public LLFloater
+namespace tinygltf
+{
+    class Model;
+}
+
+class LLGLTFMaterial;
+
+class LLMaterialEditor : public LLPreview, public LLVOInventoryListener
 {
 public:
 	LLMaterialEditor(const LLSD& key);
+
+    bool setFromGltfModel(tinygltf::Model& model, bool set_textures = false);
 
     // open a file dialog and select a gltf/glb file for import
     void importMaterial();
@@ -41,7 +52,42 @@ public:
     // for live preview, apply current material to currently selected object
     void applyToSelection();
 
+    void getGLTFMaterial(LLGLTFMaterial* mat);
+
+    void setFromGLTFMaterial(LLGLTFMaterial* mat);
+
+    void loadAsset();
+
+    static void onLoadComplete(const LLUUID& asset_uuid, LLAssetType::EType type, void* user_data, S32 status, LLExtStat ext_status);
+
+    void inventoryChanged(LLViewerObject* object, LLInventoryObject::object_list_t* inventory, S32 serial_num, void* user_data) override;
+
+    void saveTexture(LLImageJ2C* img, const std::string& name, const LLUUID& asset_id);
+
+    // save textures to inventory if needed
+    void saveTextures();
+
     void onClickSave();
+
+    // get a dump of the json representation of the current state of the editor UI in GLTF format
+    std::string getGLTFJson(bool prettyprint = true);
+
+    void getGLBData(std::vector<U8>& data);
+
+    void getGLTFModel(tinygltf::Model& model);
+
+    std::string getEncodedAsset();
+
+    bool decodeAsset(const std::vector<char>& buffer);
+
+    bool saveIfNeeded(LLInventoryItem* copyitem = nullptr, bool sync = true);
+
+    static void finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId);
+
+    static void finishTaskUpload(LLUUID itemId, LLUUID newAssetId, LLUUID taskId);
+
+    void refreshFromInventory(const LLUUID& new_item_id = LLUUID::null);
+
     void onClickSaveAs();
     void onSaveAsMsgCallback(const LLSD& notification, const LLSD& response);
     void onClickCancel();
@@ -60,7 +106,8 @@ public:
     void    setAlbedoColor(const LLColor4& color);
 
     F32     getTransparency();
-    
+    void     setTransparency(F32 transparency);
+
     std::string getAlphaMode();
     void setAlphaMode(const std::string& alpha_mode);
 
@@ -98,6 +145,11 @@ public:
     void onCommitNormalTexture(LLUICtrl* ctrl, const LLSD& data);
 
 private:
+    friend class LLMaterialFilePicker;
+
+    LLUUID mAssetID;
+    LLUUID mObjectID;
+
     LLTextureCtrl* mAlbedoTextureCtrl;
     LLTextureCtrl* mMetallicTextureCtrl;
     LLTextureCtrl* mEmissiveTextureCtrl;
@@ -108,6 +160,18 @@ private:
     LLUUID mMetallicTextureUploadId;
     LLUUID mEmissiveTextureUploadId;
     LLUUID mNormalTextureUploadId;
+
+    // last known name of each texture
+    std::string mAlbedoName;
+    std::string mNormalName;
+    std::string mMetallicRoughnessName;
+    std::string mEmissiveName;
+
+    // J2C versions of packed buffers for uploading
+    LLPointer<LLImageJ2C> mAlbedoJ2C;
+    LLPointer<LLImageJ2C> mNormalJ2C;
+    LLPointer<LLImageJ2C> mMetallicRoughnessJ2C;
+    LLPointer<LLImageJ2C> mEmissiveJ2C;
 
     bool mHasUnsavedChanges;
     std::string mMaterialName;
