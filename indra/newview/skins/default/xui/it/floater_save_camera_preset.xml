@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="save_camera_preset" title="Salva Preset Camera">
+	<string name="btn_label_save">
+		Salva
+	</string>
+	<string name="btn_label_replace">
+		Sostituisci
+	</string>
+	<radio_group name="radio_save_preset">
+		<radio_item label="Salva come un nuovo Preset" name="new_preset" />
+		<radio_item label="Sostituisci un Preset" name="replace_preset" />
+	</radio_group> 
+	<button label="Salva" name="save" />
+	<button label="Annulla" name="cancel" />
+</floater>

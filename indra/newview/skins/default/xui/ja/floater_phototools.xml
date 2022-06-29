@@ -304,8 +304,6 @@
 					アスペクト比
 				</text>
 				<slider_bar name="SB_Aspect_Ratio" />
-				<spinner name="S_Aspect_Ratio"
-				 control_name="CameraAspectRatio" />
 				<button	 name="Reset_Aspect_Ratio" label="D" tool_tip="初期設定に戻します。" />
 			</panel>
 
@@ -318,8 +316,6 @@
 			<panel name="P_Glow_Quality">
 				<!--
 				<check_box
-				 control_name="RenderGlow"
-				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 label="Enable Glow Effect (please read the tool tip)"
 				 layout="topleft"
@@ -334,7 +330,6 @@
 				</text>
 				<!--slider_bar
 				 name="SB_Glow_Quality"
-				 control_name="RenderGlowResolutionPow"
 				 follows="top|left"
 				 height="16"
 				 decimal_digits="0"
@@ -647,8 +642,6 @@
 					偏揺れ
 				</text>
 				<slider_bar name="SB_Spin" />
-				<spinner name="S_Spin"
-				 control_name="FlycamAxisScale5" />
 				<button name="Reset_Spin" label="D" tool_tip="初期設定に戻します。" />
 
 				<text name="T_Roll" tool_tip="横に揺れる（ローリング）時の感度を調整します。正確に動かすのが難しい時は、この値を下げてみて下さい。">
@@ -700,7 +693,6 @@
 							<slider name="SB_Zoom2" />
 							<!--spinner
 							 name="S_Zoom2"
-							 control_name="CameraAngle"
 							 top_delta="-3"
 							 label_width="0"
 							 left_delta="120"

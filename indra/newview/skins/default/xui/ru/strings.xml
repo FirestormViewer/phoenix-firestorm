@@ -6626,6 +6626,9 @@ ID объекта: [INSPECTING_KEY]
 	<string name="fs_preprocessor_caching_err">
 		Ошибка кэширования подключенного файла '[FILENAME]'
 	</string>
+	<string name="fs_preprocessor_truncated">
+		Предупреждение: Выходные данные препроцессора усечены из-за чрезмерного размера текста скрипта. Этот скрипт, скорее всего, не будет работать.
+	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] секунд назад
 	</string>

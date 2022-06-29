@@ -8,25 +8,25 @@
 				</text>
 			</panel>
 			<panel name="layout_panel_2">
-				<button name="Show My Location" tool_tip="Centra la mappa sulla posizione dell&apos;avatar"/>
+				<button name="Show My Location" tool_tip="Centra la mappa sulla mia posizione"/>
 				<text name="me_label">
 					Io
 				</text>
 				<text name="person_label">
-					Persona
+					Avatar
 				</text>
 				<text name="land_sale_label">
 					Vendita terreno
 				</text>
 				<text name="auction_label">
-					asta di terreni
+					Terreno all'asta
 				</text>
 				<text name="by_owner_label">
-					dal proprietario
+					Dal proprietario
 				</text>
 				<button name="Go Home" tool_tip="Teleport a casa"/>
 				<text name="Home_label">
-					Casa
+					TP a casa
 				</text>
 				<text name="events_label">
 					Eventi:
@@ -47,22 +47,22 @@
 				</text>
 			</panel>
 			<panel name="layout_panel_4">
-				<combo_box label="Amici" name="friend combo" tool_tip="Mostra amici sulla mappa">
+				<combo_box label="Amici" name="friend combo" tool_tip="Mostra i miei amici sulla mappa">
 					<combo_box.item label="Amici online" name="item1"/>
 				</combo_box>
-				<combo_box label="Segnaposto" name="landmark combo" tool_tip="Punti di riferimento da mostrare sulla mappa">
+				<combo_box label="Segnaposto" name="landmark combo" tool_tip="Mostra i miei segnaposto sulla mappa">
 					<combo_box.item label="I miei segnaposto" name="item1"/>
 				</combo_box>
 				<search_editor label="Regioni per nome" name="location" tool_tip="Digita il nome di una regione"/>
-				<button label="Cerca" name="DoSearch" tool_tip="Cerca la regione"/>
+				<button label="Cerca" name="DoSearch" tool_tip="Cerca la regione sulla mappa"/>
 				<text name="events_label">
-					Luogo:
+					Posizione:
 				</text>
-				<button label="Teleport" name="Teleport" tool_tip="Teleport al luogo selezionato"/>
-				<button label="Copia SLUrl" name="copy_slurl" tool_tip="Copia la posizione attuale come un SLurl da usare nel Web."/>
-				<button label="Elimina" name="Clear" tool_tip="Elimina le linee di monitoraggio e reimposta la mappa"/>
-				<button label="Mostra destinazione" name="Show Destination" tool_tip="Centra la mappa sul luogo selezionato"/>
-				<button label="Segui regione" name="track_region" tool_tip="Aggiunge alla lista delle regioni seguite"/>
+				<button label="Teleport" name="Teleport" tool_tip="Teleport alla posizione del segnalino"/>
+				<button label="Copia SLurl" name="copy_slurl" tool_tip="Copia la mia posizione o quella del segnalino (se impostato) come SLurl"/>
+				<button label="Cancella" name="Clear" tool_tip="Cancella il segnalino"/>
+				<button label="Mostra destinazione" name="Show Destination" tool_tip="Centra la mappa sul segnalino"/>
+				<button label="Traccia regione" name="track_region" tool_tip="Aggiungi regione alla lista di quelle tracciate"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

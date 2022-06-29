@@ -39,6 +39,7 @@ class domController;
 class domSkin;
 class domMesh;
 
+using LODSuffixArray = std::array<std::string,LLModel::NUM_LODS>; // <FS:Beq/> configurable lod suffixes
 class LLDAELoader : public LLModelLoader
 {
 public:
@@ -59,7 +60,11 @@ public:
         std::map<std::string, std::string>& jointAliasMap,
         U32									maxJointsPerMesh,
 		U32									modelLimit,
-        bool								preprocess);
+		// <FS:Beq> configrable lod suffix support
+        // bool								preprocess);
+        bool								preprocess,
+		const LODSuffixArray&	lod_suffix);
+		// </FS:Beq>
 	virtual ~LLDAELoader() ;
 
 	virtual bool OpenFile(const std::string& filename);
@@ -104,6 +109,7 @@ protected:
 	static std::string getLodlessLabel(daeElement *element);
 
 	static std::string preprocessDAE(std::string filename);
+	static LODSuffixArray sLODSuffix; // <FS:Beq/> mesh loader suffix configuration
 
 private:
 	U32 mGeneratedModelLimit; // Attempt to limit amount of generated submodels

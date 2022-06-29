@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="block_list_panel">
+	<panel name="blocked_buttons_panel">
+		<filter_editor label="Filtro" name="blocked_filter_input" />
+		<menu_button name="blocked_gear_btn" tool_tip="Azioni che possono essere eseguite per i residenti o gli oggetti selezionati" />
+		<menu_button name="view_btn" tool_tip="Opzioni di ordinamento" />
+		<menu_button name="plus_btn" tool_tip="Seleziona un residente o un oggetto da bloccare" />
+		<button name="unblock_btn" tool_tip="Rimuovi i residenti o gli oggetti selezionati dall'elenco" />
+	</panel>
+	<text name="block_limit">
+		Bloccati: [COUNT] (max [LIMIT])
+	</text>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Nome" />
+		<fs_scroll_list.columns name="item_type" label="Tipo" />
+	</fs_scroll_list>
+</panel>

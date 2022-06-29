@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="save pref preset" title="優先プリセットを保存">
+<floater name="save_pref_preset" title="優先プリセットを保存">
 	<text name="Preset">
 		プリセットの名前を入力するか、既存のプリセットを選択します。
 	</text>

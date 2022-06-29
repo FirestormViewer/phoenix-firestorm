@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Proxy Settings Floater" title="Impostazioni proxy">
+<floater name="Proxy Settings Floater" title="Impostazioni Proxy">
 	<check_box label="Usa proxy HTTP per le pagine Web" name="web_proxy_enabled"/>
 	<text name="http_proxy_label">
 		Proxy HTTP:

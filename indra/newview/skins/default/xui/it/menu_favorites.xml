@@ -2,9 +2,12 @@
 <menu name="Popup">
 	<menu_item_call label="Teleport" name="Teleport To Landmark"/>
 	<menu_item_call label="Mostra sulla mappa" name="Show On Map"/>
-	<menu_item_call label="Vedi/modifica segnaposto" name="Landmark Open"/>
+	<menu_item_call label="Vedi / Modifica segnaposto" name="Landmark Open"/>
+	<menu_item_call label="Sposta in Segnaposto" name="Move to Landmarks" />
 	<menu_item_call label="Copia SLurl" name="Copy slurl"/>
+	<menu_item_call label="Crea preferito (sul profilo)" name="create_pick" />
 	<menu_item_call label="Copia" name="Landmark Copy"/>
 	<menu_item_call label="Incolla" name="Landmark Paste"/>
+	<menu_item_call label="Rinomina" name="rename" />
 	<menu_item_call label="Elimina" name="Delete"/>
 </menu>

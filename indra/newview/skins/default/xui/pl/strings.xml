@@ -6329,6 +6329,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="fs_preprocessor_caching_err">
 		Błąd podczas buforowania pliku '[FILENAME]'
 	</string>
+	<string name="fs_preprocessor_truncated">
+		Uwaga: Dane wyjściowe preprocesora zostały skrócone z powodu zbyt dużego rozmiaru tekstu skryptu - prawdopodobnie nie zadziała.
+	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] sekund temu
 	</string>

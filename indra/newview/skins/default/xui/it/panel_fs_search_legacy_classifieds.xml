@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Inserzioni" name="panel_ls_classifieds">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Inserisci i termini di ricerca:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_classifieds">
+			<columns label="Nome" name="classified_name" />
+			<columns label="Prezzo di Listino" name="price" />
+		</scroll_list>
+		<button label="Precedente" name="classifieds_back" />
+		<button label="Successiva" name="classifieds_next" />
+	</panel>
+</panel>

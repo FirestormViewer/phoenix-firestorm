@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Load Pref Preset" title="Carica impostazioni grafiche">
+<floater name="load_pref_preset" title="Carica Preset">
 	<string name="title_graphic">
-		Carica preset grafica
+		Carica Preset Grafica
 	</string>
 	<string name="title_camera">
-		Carica preset camera
+		Carica Preset Camera
 	</string>
 	<text name="Preset">
 		Seleziona un preset

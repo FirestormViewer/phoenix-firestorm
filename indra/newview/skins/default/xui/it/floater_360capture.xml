@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<floater name="360capture" title="Foto panoramica a 360°">
+<floater min_width="450" name="360capture" title="Foto Panoramica a 360°">
 	<panel name="ui_panel_left">
 		<text name="quality_level_label">
 			Livello qualità

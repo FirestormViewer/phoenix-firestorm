@@ -42,6 +42,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="AboutSystem">
 		Processore (CPU): [CPU]
 Memoria (Memory): [MEMORY_MB] MB
+Concurrency: [CONCURRENCY]
 Versione SO (OS Version): [OS_VERSION]
 Produttore scheda grafica (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
 Scheda grafica (Graphics Card): [GRAPHICS_CARD]
@@ -77,7 +78,7 @@ RestrainedLove API: [RLV_VERSION]
 libcurl Version: [LIBCURL_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
-LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
+[LIBCEF_VERSION]
 LibVLC Version: [LIBVLC_VERSION]
 Voice Server Version: [VOICE_VERSION]
 	</string>
@@ -1164,7 +1165,7 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 		(anonimo)
 	</string>
 	<string name="NearbyChatTitle">
-		Chat locale
+		Chat Locale
 	</string>
 	<string name="NearbyChatLabel">
 		(Chat locale)
@@ -1417,6 +1418,15 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="none">
 		nessuno
+	</string>
+	<string name="sky">
+		Cielo
+	</string>
+	<string name="water">
+		Acqua
+	</string>
+	<string name="day">
+		Ciclo giornata
 	</string>
 	<string name="shirt_not_worn">
 		Camicia non indossata
@@ -1869,6 +1879,9 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="InvFolder Merchant Outbox">
 		Casella venditore in uscita
 	</string>
+	<string name="InvFolder Settings">
+		Ambienti
+	</string>
 	<string name="InvFolder Friends">
 		Amici
 	</string>
@@ -2253,7 +2266,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		Preprocesso dello script [SCRIPT] completato
 	</string>
 	<string name="ResetQueueTitle">
-		Avanzamento ripristino
+		Avanzamento Ripristino
 	</string>
 	<string name="ResetQueueStart">
 		ripristino
@@ -4807,7 +4820,7 @@ Se non appare nei prossimi minuti, potrebbe essere stato eliminato dal server.
 		per pubblicare un&apos;inserzione
 	</string>
 	<string name="giving">
-		Contributo di L$ [AMOUNT]
+		Vuoi dare
 	</string>
 	<string name="uploading_costs">
 		Il costo per il caricamento è di L$ [AMOUNT]
@@ -4816,10 +4829,10 @@ Se non appare nei prossimi minuti, potrebbe essere stato eliminato dal server.
 		Il costo è L$ [AMOUNT]
 	</string>
 	<string name="buying_selected_land">
-		L&apos;acquisto del terreno prescelto costa L$ [AMOUNT]
+		Questo terreno costa
 	</string>
 	<string name="this_object_costs">
-		Il costo dell&apos;oggetto è L$ [AMOUNT]
+		Questo oggetto costa
 	</string>
 	<string name="group_role_everyone">
 		Tutti
@@ -5090,6 +5103,18 @@ Segnala abuso
 	<string name="dance8">
 		danza8
 	</string>
+	<string name="New Day">
+		Nuovo ciclo giornata
+	</string>
+	<string name="New Water">
+		Nuova acqua
+	</string>
+	<string name="New Sky">
+		Nuovo cielo
+	</string>
+	<string name="New Settings">
+		Nuovo ambiente
+	</string>
 	<string name="AvatarBirthDateFormat">
 		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt]
 	</string>
@@ -5174,11 +5199,11 @@ Segnala abuso
 	<string name="BaseMembership">
 		Base
 	</string>
-	<string name="PremiumMembership">
-		Premium
+	<string name="MembershipUpgradeText">
+		Passa a Premium
 	</string>
-	<string name="Premium_PlusMembership">
-		Premium Plus
+	<string name="MembershipPremiumText">
+		Il mio abbonamento Premium
 	</string>
 	<string name="DeleteItems">
 		Cancellare gli elementi selezionati?
@@ -5246,31 +5271,34 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Dividi
 	</string>
 	<string name="BeaconParticle">
-		Visualizzazione fari particelle (blu)
+		Visualizzazione marcatori particelle (blu)
 	</string>
 	<string name="BeaconPhysical">
-		Visualizzazione fari oggetti fisici (verde)
+		Visualizzazione marcatori oggetti fisici (verde)
 	</string>
 	<string name="BeaconScripted">
-		Visualizzazione fari oggetti scriptati (rosso)
+		Visualizzazione marcatori oggetti scriptati (rosso)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Visualizzazione fari oggetti scriptati con funzione tocco (rosso)
+		Visualizzazione marcatori oggetti scriptati con funzione tocco (rosso)
 	</string>
 	<string name="BeaconSound">
-		Visualizzazione fari suoni (giallo)
+		Visualizzazione marcatori suoni (giallo)
 	</string>
 	<string name="BeaconMedia">
-		Visualizzazione fari multimedia (bianco)
+		Visualizzazione marcatori multimedia (bianco)
 	</string>
 	<string name="ParticleHiding">
 		Particelle nascoste
+	</string>
+	<string name="Command_360_Capture_Label">
+		Foto a 360°
 	</string>
 	<string name="Command_AboutLand_Label">
 		Info sul terreno
 	</string>
 	<string name="Command_Appearance_Label">
-		Aspetto fisico
+		Aspetto
 	</string>
 	<string name="Command_Avatar_Label">
 		Avatar
@@ -5279,7 +5307,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Costruisci
 	</string>
 	<string name="Command_Chat_Label">
-		Chat
+		Conversazioni
 	</string>
 	<string name="Command_Conversations_Label">
 		Conversazioni
@@ -5290,11 +5318,14 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Command_Destinations_Label">
 		Destinazioni
 	</string>
+	<string name="Command_Environments_Label">
+		Ambiente
+	</string>
 	<string name="Command_Gestures_Label">
 		Gesti
 	</string>
 	<string name="Command_Grid_Status_Label">
-		Stato grid
+		Stato Grid
 	</string>
 	<string name="Command_HowTo_Label">
 		Istruzioni
@@ -5306,7 +5337,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Mappa
 	</string>
 	<string name="Command_MarketplaceListings_Label">
-		Annunci marketplace
+		Ann. Marketplace
 	</string>
 	<string name="Command_MiniMap_Label">
 		Minimappa
@@ -5314,14 +5345,14 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Command_Move_Label">
 		Movimento
 	</string>
-	<string name="Command_Outbox_Label">
-		Casella in uscita del rivenditore
-	</string>
 	<string name="Command_People_Label">
 		Persone
 	</string>
+	<string name="Command_Performance_Label">
+		Velocità Grafica
+	</string>
 	<string name="Command_Picks_Label">
-		Preferiti
+		Luoghi Preferiti
 	</string>
 	<string name="Command_Places_Label">
 		Luoghi
@@ -5333,46 +5364,46 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Profilo
 	</string>
 	<string name="Command_Report_Abuse_Label">
-		Segnala abuso
+		Segnala Abuso
 	</string>
 	<string name="Command_Search_Label">
 		Ricerca
 	</string>
 	<string name="Command_Snapshot_Label">
-		Istantanea
+		Scatta Foto
 	</string>
 	<string name="Command_Speak_Label">
 		Parla
 	</string>
 	<string name="Command_View_Label">
-		Controlli fotocamera
+		Controlli Camera
 	</string>
 	<string name="Command_Voice_Label">
 		Voce
 	</string>
 	<string name="Command_Quickprefs_Label">
-		Pref veloci
+		Prefer. Rapide
 	</string>
 	<string name="Command_AO_Label">
-		Animation override
+		Animat. Override
 	</string>
 	<string name="Command_Webbrowser_Label">
-		Web browser
+		Web Browser
 	</string>
 	<string name="Command_Default_Chat_Bar_Label">
 		Chat
 	</string>
 	<string name="Command_Areasearch_Label">
-		Cerca area
+		Cerca Oggetti
 	</string>
 	<string name="Command_Settings_Debug_Label">
-		Imp. debug
+		Debug Impostaz.
 	</string>
 	<string name="Command_Statistics_Label">
 		Statistiche
 	</string>
 	<string name="Command_Region_Label">
-		Regione/Proprietà
+		Regione / Proprietà
 	</string>
 	<string name="Command_Fly_Label">
 		Vola
@@ -5381,61 +5412,64 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Siedi a terra
 	</string>
 	<string name="Command_Sound_Explorer_Label">
-		Esplora suoni
+		Esplora Suoni
 	</string>
 	<string name="Command_Asset_Blacklist_Label">
-		Lista nera asset
+		Lista Nera
 	</string>
 	<string name="Command_Phototools_Label">
-		Phototools
+		PhotoTools
 	</string>
 	<string name="Command_Phototools_View_Label">
-		Phototools camera
+		CameraTools
 	</string>
 	<string name="Command_Contact_Sets_Label">
-		Set di contatti
+		Set Contatti
 	</string>
 	<string name="Command_Mouselook_Label">
 		Mouselook
 	</string>
 	<string name="Command_Landmark_Here_Label">
-		Crea segnaposto
+		Crea Segnaposto
 	</string>
 	<string name="Command_Teleport_History_Label">
-		Storico teleport
+		Storico Teleport
 	</string>
 	<string name="Command_Pose_Stand_Label">
-		Posa eretta
+		Pose Stand
 	</string>
 	<string name="Command_Snapshot_To_Disk_Label">
 		Foto su disco
 	</string>
 	<string name="Command_Conversation_Log_Label">
-		Storico conversazioni
+		Storico Conversaz.
 	</string>
 	<string name="Command_Move_Lock_Label">
 		Blocca movimenti
 	</string>
 	<string name="Command_Blocklist_Label">
-		Lista blocchi
+		Lista Bloccati
 	</string>
 	<string name="Command_ResyncAnimations_Label">
-		Risinc animazioni
+		Risinc. animazioni
 	</string>
 	<string name="Command_RegionTracker_Label">
-		Traccia regione
+		Traccia Regione
 	</string>
 	<string name="Command_Group_Titles_Label">
 		Titoli di gruppo
 	</string>
 	<string name="Command_Wearable_Favorites_Label">
-		Abbig. preferiti
+		Vestiti Preferiti
 	</string>
 	<string name="Command_RFO_Label">
 		Mostra solo amici
 	</string>
 	<string name="Command_Beacons_Label">
-		Fari
+		Marcatori
+	</string>
+	<string name="Command_360_Capture_Tooltip">
+		Cattura foto panoramica a 360°
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informazioni sul terreno che visiti
@@ -5460,6 +5494,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Destinations_Tooltip">
 		Destinazioni interessanti
+	</string>
+	<string name="Command_Environments_Tooltip">
+		Personalizza l'ambiente
 	</string>
 	<string name="Command_Flickr_Tooltip">
 		Carica su Flickr
@@ -5491,11 +5528,11 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Command_Move_Tooltip">
 		Movimento avatar
 	</string>
-	<string name="Command_Outbox_Tooltip">
-		Trasferisci elementi al tuo mercato per la vendita
-	</string>
 	<string name="Command_People_Tooltip">
 		Amici, gruppi e persone vicine
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Auto Tune - Migliora velocità grafica
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Luoghi preferiti nel profilo
@@ -5510,7 +5547,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Modifica o visualizza il tuo profilo
 	</string>
 	<string name="Command_Report_Abuse_Tooltip">
-		Segnala abuso
+		Segnala un abuso
 	</string>
 	<string name="Command_Search_Tooltip">
 		Trova luoghi, eventi, persone
@@ -5522,13 +5559,13 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Parla con persone vicine usando il microfono
 	</string>
 	<string name="Command_View_Tooltip">
-		Modifica angolo fotocamera
+		Modifica angolo della telecamera
 	</string>
 	<string name="Command_Voice_Tooltip">
 		I controlli per il volume per le chiamate e per le persone nelle vicinanze nel mondo virtuale
 	</string>
 	<string name="Command_Quickprefs_Tooltip">
-		Alcune impostazioni da modificare rapidamente 
+		Impostazioni importanti da modificare rapidamente 
 	</string>
 	<string name="Command_AO_Tooltip">
 		Sostituisce le animazioni predefinite
@@ -5558,13 +5595,13 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Apre la lista suoni
 	</string>
 	<string name="Command_Asset_Blacklist_Tooltip">
-		Apre la lista nera degli asset
+		Apre la lista nera delle risorse de-renderizzate
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Attrezzi per una fotografia accurata (Alt+P).
+		Strumenti per una fotografia accurata (Alt+P).
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
-		Controlli avanzati macchina fotografica (Ctrl+Maius+C)
+		Controlli avanzati per la cam (Ctrl+Maius+C)
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
 		Apre lista dei set di contatti (Ctrl+Alt+Maius+C)
@@ -5579,7 +5616,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Apre lo storico dei teleport (Alt+H)
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
-		Posa eretta dell&apos;avatar per sistemare gli oggetti atttaccati
+		Pose statiche dell'avatar per sistemare gli attachments
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Scatta una foto e la salva su disco
@@ -5606,13 +5643,13 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Cambia l&apos;etichetta di gruppo attiva
 	</string>
 	<string name="Command_Wearable_Favorites_Tooltip">
-		Apre la lista degli abiti preferiti
+		Apre la lista dei vestiti preferiti
 	</string>
 	<string name="Command_RFO_Tooltip">
 		Mostra solo gli amici, tutti gli altri avatar saranno rimossi. Per riabilitare la vista degli altri occorre fare un TP.
 	</string>
 	<string name="Command_Beacons_Tooltip">
-		Mostra fari segnalatori
+		Mostra marcatori
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		attualmente nella barra degli strumenti in basso
@@ -6155,7 +6192,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Braccia in su, gambe unite
 	</string>
 	<string name="QP_WL_Region_Default">
-		Predefinito regione
+		Ambiente Condiviso
 	</string>
 	<string name="QP_WL_Day_Cycle_Based">
 		Basato sul ciclo diurno
@@ -6290,10 +6327,10 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		[SECONDS] secondi fa
 	</string>
 	<string name="animation_explorer_still_playing">
-		Still playing
+		In riproduzione
 	</string>
 	<string name="animation_explorer_unknown_priority">
-		sconosciuto
+		Sconosciuta
 	</string>
 	<string name="FriendOnlineNotification">
 		è online.

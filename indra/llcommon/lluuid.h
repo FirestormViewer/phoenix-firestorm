@@ -120,7 +120,7 @@ public:
 # define hexnybl(N) (N)>9?((N)-10)+'a':(N)+'0'
 	inline char * toShortString(char *out) const
 	{
-		LL_PROFILE_ZONE_SCOPED;
+		// LL_PROFILE_ZONE_SCOPED;
 		out[0] = hexnybl(mData[14]>>4);
 		out[1] = hexnybl(mData[14]&15);
 		out[2] = hexnybl(mData[15]>>4);
@@ -130,7 +130,7 @@ public:
 	// full uuid - Much lighterweight than default, no allocation, or nul-term added - provide your own, ensure min 36 bytes.
 	inline char * toStringFast(char *out) const
 	{
-		LL_PROFILE_ZONE_SCOPED;
+		// LL_PROFILE_ZONE_SCOPED;
 		out[0]  = hexnybl(mData[0]>>4);
 		out[1]  = hexnybl(mData[0]&15);
 		out[2]  = hexnybl(mData[1]>>4);

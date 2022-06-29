@@ -28,12 +28,15 @@
 		<slider label="Inizio sparizione testo sopra (in m):" tool_tip="Distanza a cui il testo sopra agli oggetti inizia a sbiadire" name="FSHudTextFadeDistance"/>
 		<slider label="Distanza sparizione testo (in m):" tool_tip="Imposta la distanza a cui il testo sopra agli oggetti diventa totalmente invisibile" name="FSHudTextFadeRange"/>
 	</panel>
-	<panel label="2D sovrapposto" name="ui-2d-overlay">
-		<text name="UI Size:" width="100">
+	<panel label="Sovrapposiz. 2D" name="ui-2d-overlay">
+		<text name="UI Size:" width="95">
 			Grandezza UI:
 		</text>
-		<text name="ScriptDialogsPerObjectLabel" width="180">
-			Quanti menu script per oggetto:
+		<text name="HUD Size:" width="95">
+			Grandezza HUD:
+		</text>
+		<text name="ScriptDialogsPerObjectLabel">
+			Menu script per oggetto:
 		</text>
 		<combo_box name="ScriptDialogPerObjectDropdown">
 			<combo_box.item label="Uno per oggetto" name="ScriptDialogOption_0" />
@@ -59,7 +62,13 @@
 		<check_box label="Usa menu a torta" name="UsePieMenu" tool_tip="Utilizza il menu classico circolare (a torta) invece dei menu rettangolari quando si clicca col destro su avatar, oggetti, terreni o altro" />
 		<check_box label="Abilita animazione testo" name="PieMenuPopupFontEffect" tool_tip="Include il testo del menu nell&apos;animazione all&apos;apertura." />
 		<check_box label="Abilita ombra anello esterno" name="PieMenuOuterRingShade" tool_tip="Aggiunge un&apos;ombra esterna per evidenziare i sotto-menu." />
-		<check_box label="Notifiche dei gruppi in alto a destra" name="ShowGroupNoticesTopRight" tool_tip="Selezionare per impostare tutte le notifiche in alto a destra (Stile V1.x)." />
+		<text name="ShowGroupNoticesTopRightLabel">
+			Posizione avvisi dei gruppi e icone:
+		</text>
+		<radio_group name="ShowGroupNoticesTopRight" tool_tip="Scegli dove visualizzare gli annunci dei gruppi e le icone sullo schermo.">
+			<radio_item label="In basso a Dx" name="radio" />
+			<radio_item label="In alto a Dx" name="radio1" />
+		</radio_group>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(richiede riavvio)
 		</text>
@@ -68,12 +77,13 @@
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(richiede riavvio)
 		</text>
-		 <check_box label="Rimappa le scorciatoie usate da Linux (solo Linux; richiede riavvio)" name="FSRemapLinuxShortcuts" tool_tip="Le scorciatoie da tastiera usate dal sistema operativo Linux (come Ctrl-Alt-Fx) saranno spostate su altri tasti."/>
-		 <check_box label="Impedisci alla finestra statistiche di andare in primo piano" name="FSStatisticsNoFocus" tool_tip="La finestra statistiche non andrà mai in primo piano quando un&apos;altra finestra viene chiusa (le azioni come cambiare la disposizione grafica degli elementi saranno sempre possibili)."/>
+		<check_box label="Ridimensionamento automatico elenchi Conversazioni e Notifiche legacy" name="FSLegacyNotificationWellAutoResize" tool_tip="Se selezionato, Firestorm ridimensionerà automaticamente gli elenchi delle conversazioni e delle notifiche legacy quando vengono aggiunti o rimossi elementi." />
+		<check_box label="Rimappa le scorciatoie usate da Linux (solo Linux; richiede riavvio)" name="FSRemapLinuxShortcuts" tool_tip="Le scorciatoie da tastiera usate dal sistema operativo Linux (come Ctrl-Alt-Fx) saranno spostate su altri tasti."/>
+		<check_box label="Impedisci alla finestra statistiche di andare in primo piano" name="FSStatisticsNoFocus" tool_tip="La finestra statistiche non andrà mai in primo piano quando un&apos;altra finestra viene chiusa (le azioni come cambiare la disposizione grafica degli elementi saranno sempre possibili)."/>
 		<slider label="Lampeggia pulsanti IM:" tool_tip="Quante volte deve lampeggiare un pulsante" name="ButtonsFlashCount"/>
 		<slider label="Velocità:" tool_tip="Con che velocità devono lampeggiare. Viene usata per le notifiche delle IM" name="ButtonFlashRate"/>
 	</panel>
-	<panel name="UI-interface-top-bars" label="Barra superiore">
+	<panel name="UI-interface-top-bars" label="Barra Superiore">
 		<text name="statusbar_textbox">
 			Barra stato:
 		</text>
@@ -82,11 +92,24 @@
 		<check_box label="Apre le statistiche invece dell&apos;indicatore lag" name="FSUseStatsInsteadOfLagMeter"/>
 		<check_box label="Mostra controlli media" name="FSEnableVolumeControls" tool_tip="Firestorm mostrerà il controlli media (volume, media, flussi) nell&apos;angolo in alto a destra dello schermo. Utile spegnerlo, se i controlli sono già compresi nell&apos;interfaccia in qualche altro posto."/>
 		<check_box label="Mostra luogo" name="ShowMenuBarLocation" />
-		<check_box label="Mostra canale del simulatore" name="FSStatusbarShowSimulatorVersion"
-		 enabled_control="ShowMenuBarLocation" tool_tip="Mostra il canale attuale del simulatore (RC Magnum, RC Le Tigre, RC BlueSteel ecc.) nella barra di stato stile V1."/>
+		<check_box label="Mostra canale del simulatore" name="FSStatusbarShowSimulatorVersion" tool_tip="Mostra il canale attuale del simulatore (RC Magnum, RC Le Tigre, RC BlueSteel ecc.) nella barra di stato stile V1."/>
 		<check_box label="Mostra ricerca nei menu" name="show_search_menu_check"/>
 		<check_box label="Mostra saldo denaro" name="FSShowCurrencyBalanceInStatusbar"/>
 		<check_box label="Abilita menu a comparsa sulle icone della barra di stato" name="FSStatusBarMenuButtonPopupOnRollover"/>
+		<text name="statusbar_timeformat_textbox">
+			Orologio:
+		</text>
+		<combo_box name="FSStatusBarTimeFormat" tool_tip="Seleziona il formato dell'ora utilizzato nella barra dei menu.">
+			<combo_box.item label="Default lingua del viewer" name="Language" />
+			<combo_box.item label="12 ore" name="12_Hour" />
+			<combo_box.item label="12 ore con secondi" name="12_Hour_Seconds" />
+			<combo_box.item label="12 ore con fuso orario" name="12_Hour_TZ" />
+			<combo_box.item label="12 ore con secondi e fuso orario" name="12_Hour_TZ_Seconds" />
+			<combo_box.item label="24 ore" name="24_Hour" />
+			<combo_box.item label="24 ore con secondi" name="24_Hour_Seconds" />
+			<combo_box.item label="24 ore con fuso orario" name="24_Hour_TZ" />
+			<combo_box.item label="24 ore con secondi e fuso orario" name="24_Hour_TZ_Seconds" />
+		</combo_box>
 		<text name="navfav_textbox">
 			Barre navigazione/preferiti:
 		</text>
@@ -94,12 +117,13 @@
 		<check_box label="Mostra navigazione e barra dei preferiti" name="ShowNavbarNavigationPanel" />
 		<check_box label="Mostra barra di ricerca" name="ShowSearchTopBar" />
 	</panel>
-	<panel name="UI-interface-windows-tab" label="Finestre interfaccia">
+	<panel name="UI-interface-windows-tab" label="Finestre Interfaccia">
 		<check_box label="Apri direttamente il profilo di un avatar cliccando sul nome" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Firestorm apre direttamente il profilo di un avatar quando si clicca su un link con il suo nome"/>
 		<check_box name="FSUseWebProfiles" label="Usa profili web" tool_tip="Se NON spuntata verranno visualizzati i profili come quelli del viewer 1.x"/>
 		<check_box label="Disabilita apertura automatica delle liste blocco" name="FSDisableBlockListAutoOpen" tool_tip="Disabilita l&apos;apertura automatica della lista dei bloccati quando si stanno bloccando avatar o oggetti."/>
 		<check_box label="&apos;Amici&apos; e &apos;Gruppi&apos; nel menu &apos;Comunica&apos; apre le finestre [SHORT_VIEWER_GENERATION]" name="FSUseV2Friends" tool_tip="Amici e gruppi si vedono tramite il pannello Persone - altrimenti verranno aperti nel pannello Contatti."/>
 		<check_box label="Usa proprietà oggetto vecchio stile" name="FSUseLegacyObjectProperties" tool_tip="Aprendo le proprietà degli oggetti, viene usata la finestra vecchio stile."/>
+		<check_box label="Usa finestra ridotta per la fotocamera" name="FSUseSmallCameraFloater" tool_tip="Se abilitata, verrà utilizzata la finestra della telecamera legacy, più piccola e senza i controlli preimpostati." />
 		<text name="standalone_textbox">
 			Usa finestre singole per:
 		</text>
@@ -122,7 +146,7 @@
 		<check_box label="Nome mostrato" name="FSFriendListColumnShowDisplayName" tool_tip="La lista dei contatti ha una colonna con il nome mostrato (display name) degli amici." width="95"/>
 		<check_box label="Nome completo" name="FSFriendListColumnShowFullName" tool_tip="La lista dei contatti ha una colonna con il nome completo degli amici."/>
 		<text name="textFriendListSortOrder" width="100">
-		 Ordina lista per:
+			Ordina lista per:
 		</text>
 		<radio_group name="FSFriendListSortOrder">
 			<radio_item label="Nome utente" name="username" width="80"/>
@@ -193,35 +217,36 @@
 		<check_box label="Visualizza notifica sopra le altre finestre" name="FSShowToastsInFront" />
 		<check_box label="Usare le nuove notifiche per riavvio regione" name="FSUseNewRegionRestartNotification"/>
 		<check_box label="Non scuotere lo schermo alla comparsa dell&apos;avviso di riavvio della regione" name="FSNoScreenShakeOnRegionRestart"/>
+		<check_box label="Invia info sul riavvio della regione sul canale:" width="260" name="FSReportRegionRestartToChat" />
 	</panel>
 	<panel label="Caratteri" name="UI-font-tab">
 		<text name="tooltip_textbox1">
-		   Tipo carattere:
+			Tipo carattere:
 		</text>
 		<text name="tooltip_textbox2">
-		   (richiesto riavvio)
+			(richiesto riavvio)
 		</text>
 		<text name="tooltip_textbox5">
 		   Grandezza carattere:
 		</text>
 		<text name="tooltip_textbox6" >
-		   pt (Richiesto riavvio)
+			pt (Richiesto riavvio)
 Predefinito 0. Valori più grandi non funzionano bene
 		</text>
 		<text name="tooltip_textbox3">
-		   Distanza massima
+			Distanza massima
 linee della chat:
 		</text>
 		<text name="tooltip_textbox4">
-		   pixel (richiesto riavvio)
+			pixel (richiesto riavvio)
 [VIEWER_GENERATION]-Default 0. V1 Default 2.
 		</text>
 		<text name="Label_FolderItemViewHeight">
-		   Distanza massima 
+			Distanza massima 
 cartelle inventario:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
-		   pixel (richiesto riavvio)
+			pixel (richiesto riavvio)
 [VIEWER_GENERATION]-Default 20. V1 Default 18.
 		</text>
 	</panel>

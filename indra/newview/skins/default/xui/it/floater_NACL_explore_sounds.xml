@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="sound_explorer" title="Suoni">
+<floater name="sound_explorer" title="Esplora Suoni">
 	<floater.string name="Playing">
 		In esecuzione
 	</floater.string>
@@ -14,17 +14,18 @@
 	</floater.string>
 	<check_box name="avatars_chk" label="Avatar" />
 	<check_box name="objects_chk" label="Oggetti" />
-	<check_box name="collision_chk" label="Suoni predefiniti di collisione"/>
-	<check_box name="repeated_asset_chk" label="Asset ripetuto" left_delta="185"/>
+	<check_box name="collision_chk" label="Suoni predef. di collisione"/>
+	<check_box name="repeated_asset_chk" label="Suoni ripetuti"/>
 	<check_box name="pause_chk" label="Pausa log"/>
 	<scroll_list name="sound_list">
-		<columns label="Riproduzione" name="playing"/>
+		<columns label="Riproduzione" name="playing" width="100"/>
 		<columns label="Tipo" name="type"/>
 		<columns label="Proprietario" name="owner"/>
 		<columns label="Suono" name="sound"/>
 	</scroll_list>
-	<button label="Riproduci" name="play_locally_btn"/>
+	<button label="Play in Locale" name="play_locally_btn"/>
+	<button label="Stop in Locale" name="stop_locally_btn" />
 	<button label="Guarda" name="look_at_btn"/>
-	<button label="Lista nera" name="bl_btn"/>
-	<button label="Ferma" name="stop_btn"/>
+	<button label="Lista Nera" name="bl_btn"/>
+	<button label="Stop" name="stop_btn"/>
 </floater>

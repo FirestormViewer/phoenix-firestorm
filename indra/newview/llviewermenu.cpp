@@ -9783,7 +9783,7 @@ class FSProfilerToggle : public view_listener_t
 	{
 		BOOL checked = gSavedSettings.getBOOL( "ProfilingActive" );
 		gSavedSettings.setBOOL( "ProfilingActive", !checked );
-		gProfilerEnabled = !checked;
+		LLProfiler::active = !checked;
 		return true;
 	}
 };

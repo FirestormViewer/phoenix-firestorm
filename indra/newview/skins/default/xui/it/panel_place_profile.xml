@@ -28,16 +28,13 @@
 		Il terreno acquistato in questa regione non può essere unito o suddiviso.
 	</string>
 	<string name="server_update_text">
-		Informazioni sul luogo non disponibili senza l&apos;aggiornamento del server.
+		Informazioni sul luogo non disponibili senza l'aggiornamento del server.
 	</string>
 	<string name="server_error_text">
 		Informazioni su questo luogo non disponibili al momento, riprova più tardi.
 	</string>
 	<string name="server_forbidden_text">
 		Informazioni su questo luogo non disponibili a causa delle limitazioni di accesso. Controlla i tuoi permessi con il proprietario del terreno.
-	</string>
-	<string name="acquired_date">
-		[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
@@ -56,7 +53,7 @@
 						<text name="push_label" value="Spinta:"/>
 						<text name="build_label" value="Costruzione:"/>
 						<text name="scripts_label" value="Script:"/>
-						<text name="damage_label" value="Danni:"/>
+						<text name="damage_label" value="Danno:"/>
 						<text name="see_avatars_label" value="Vedi avatar:"/>
 						<button label="Informazioni sul terreno" name="about_land_btn"/>
 					</panel>
@@ -82,7 +79,7 @@
 				<accordion_tab name="sales_tab" title="In vendita">
 					<panel name="sales_panel">
 						<text name="sales_price_label" value="Prezzo:"/>
-						<text name="area_label" value="Zona:"/>
+						<text name="area_label" value="Area:"/>
 						<text name="traffic_label" value="Traffico:"/>
 						<text name="primitives_label" value="Prim:"/>
 						<text name="parcel_scripts_label" value="Script:"/>

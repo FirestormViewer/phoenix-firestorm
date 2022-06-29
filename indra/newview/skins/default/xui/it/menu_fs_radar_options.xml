@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Mostra la minimappa sopra al radar" name="ShowRadarMinimap"/>
+	<menu_item_check label="Limita i risultati a una distanza specifica" name="LimitRadarByRange"/>
+	<menu_item_check label="Mostra avatar bloccati e nella Lista Nera" name="FSRadarShowMutedAndDerendered"/>
+	<context_menu label="Formato del nome sul radar" name="radarNameFormat">
+		<menu_item_check label="Nome mostrato" name="radarFmtDN"/>
+		<menu_item_check label="Nome utente" name="radarFmtUN"/>
+		<menu_item_check label="Nome mostrato (Nome utente)" name="radarFmtDNUN"/>
+		<menu_item_check label="Nome utente (Nome mostrato)" name="radarFmtUNDN"/>
+	</context_menu>
+	<context_menu label="Colonne visualizzate" name="visible_columns">
+		<menu_item_check label="Voce" name="voice_level"/>
+		<menu_item_check label="Stessa regione" name="in_region"/>
+		<menu_item_check label="Sta scrivendo" name="typing_status"/>
+		<menu_item_check label="Sta seduto" name="sitting_status"/>
+		<menu_item_check label="Info di pagamento" name="flags"/>
+		<menu_item_check label="Note sul profilo" name="has_notes"/>
+		<menu_item_check label="Età" name="age"/>
+		<menu_item_check label="Tempo" name="seen"/>
+	</context_menu>
+	<menu_item_check label="Colora i nomi in base alla distanza" name="radarColorNamesBasedOnDistance"/>
+	<context_menu label="Mostra notifiche" name="report_to_menu">
+		<menu_item_check label="In chat locale" name="radar_nearby_chat"/>
+		<menu_item_check label="A scomparsa" name="radar_nearby_chat"/>
+	</context_menu>
+	<menu_item_check label="Mostra anelli indicanti la distanza raggiunta dalla chat in minimappa" name="MiniMapChatRing"/>
+	<menu_item_check label="Notifica quando qualcuno entra nell'area di disegno" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Notifica quando qualcuno esce dall'area di disegno" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Notifica quando qualcuno entra nell'area della chat locale" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Notifica quando qualcuno esce dall'area della chat locale" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Notifica quando qualcuno entra in regione" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Notifica quando qualcuno esce dalla regione" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Mostra notifiche basate sull'età degli avatar" name="RadarReportAgeAlert"/>
+	<menu_item_check label="Mostra notifiche sugli script in entrata" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Mostra notifiche sugli script in uscita" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="Potenzia il radar utilizzando il Bridge di Firestorm" name="FSRadarEnhanceByBridge"/>
+	<menu_item_call label="Apri la lista dei residenti e degli oggetti bloccati" name="show_blocked_list"/>
+</toggleable_menu>
