@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="money_tracker" title="Traccia transazioni">
+<floater name="money_tracker" title="Transazioni">
 	<name_list name="payment_list">
 		<name_list.columns name="time" label="Data" />
 		<name_list.columns name="name" label="Nome" />

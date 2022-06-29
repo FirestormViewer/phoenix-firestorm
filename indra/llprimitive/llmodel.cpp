@@ -37,7 +37,7 @@
 #ifdef LL_USESYSTEMLIBS
 # include <zlib.h>
 #else
-# include "zlib/zlib.h"
+# include "zlib-ng/zlib.h"
 #endif
 
 extern LLControlGroup gSavedSettings;
@@ -634,10 +634,13 @@ void LLModel::generateNormals(F32 angle_cutoff)
 	}
 }
 
-
+extern std::string stripSuffix(std::string); // <FS:Beq/> mesh loader suffix configuration
 std::string LLModel::getName() const
 {
-    return mRequestedLabel.empty() ? mLabel : mRequestedLabel;
+	// <FS:Beq> remove the LOD suffix when used as the model name.
+    // return mRequestedLabel.empty() ? mLabel : mRequestedLabel;
+    return mRequestedLabel.empty() ? stripSuffix(mLabel) : mRequestedLabel;
+	// </FS:Beq>
 }
 
 //static

@@ -1921,7 +1921,7 @@ erlauben bis zu [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membershi
 wir bitten Sie um Geduld, während Ihr Name im System geändert wird. Es kann einige Tage dauern, bis Ihr [http://wiki.secondlife.com/wiki/Setting_your_display_name neuer Name] in Objekten, Skripts, Suchen usw. erscheint.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
-		Ihr Anzeigename kann leider nicht geändert werden. Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich bitte an unseren Support.
+		Ihr Anzeigename kann leider nicht geändert werden. Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich bitte an den Support des entsprechenden Grids.
 	</notification>
 	<notification name="SetDisplayNameFailedLength">
 		Dieser Name ist leider zu lang. Anzeigenamen können maximal [LENGTH] Zeichen enthalten.
@@ -4844,7 +4844,7 @@ Bitte kopieren Sie diese in Ihr Inventar und versuchen Sie es erneut.
 		Der Pfad konnte nicht aus [TRACK1] in [TRACK2] geladen werden.
 	</notification>
 	<notification name="CompressionTestResults">
-		Test-Ergebnis für gip-Level 6 Datei-Komprimierung für [FILE] mit Größe [SIZE] KB:
+		Test-Ergebnis für gzip-Level 6 Komprimierung für [FILE] mit einer Größe von [SIZE] KB:
 Packen: [PACK_TIME]s [PSIZE]KB
 Entpacken: [UNPACK_TIME]s [USIZE]KB
 		<tag>fail</tag>

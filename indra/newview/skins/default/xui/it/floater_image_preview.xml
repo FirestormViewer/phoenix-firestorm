@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Image Preview" title="Anteprima immagine">
+<floater name="Image Preview" title="Anteprima Immagine">
 	<text name="name_label">
 		Nome:
 	</text>

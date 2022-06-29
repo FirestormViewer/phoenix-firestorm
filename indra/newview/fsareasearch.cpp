@@ -81,6 +81,13 @@ const F32 MIN_DISTANCE_MOVED = 1.0f;
 // timeout to resend object properties request again
 const F32 REQUEST_TIMEOUT = 30.0f;
 
+std::string RLVa_hideNameIfRestricted(std::string const &name)
+{
+	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		return name;
+	else
+		return RlvStrings::getAnonym(name);
+}
 
 F32 calculateObjectDistance(LLVector3d agent_pos, LLViewerObject* object)
 {
@@ -907,10 +914,13 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	std::string object_description = details.description;
 
 	details.name_requested = false;
-	getNameFromUUID(details.ownership_id, true, owner_name, details.group_owned, details.name_requested);
-	getNameFromUUID(details.creator_id, false, creator_name, false, details.name_requested);
-	getNameFromUUID(details.last_owner_id, false, last_owner_name, false, details.name_requested);
-	getNameFromUUID(details.group_id, false, group_name, true, details.name_requested);
+	getNameFromUUID(details.ownership_id, owner_name, details.group_owned, details.name_requested);
+	getNameFromUUID(details.creator_id, creator_name, false, details.name_requested);
+	getNameFromUUID(details.last_owner_id, last_owner_name, false, details.name_requested);
+	getNameFromUUID(details.group_id, group_name, true, details.name_requested);
+
+	owner_name = RLVa_hideNameIfRestricted(owner_name);
+	last_owner_name = RLVa_hideNameIfRestricted(last_owner_name);
 
 	if (mRegexSearch)
 	{
@@ -1042,7 +1052,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 
 	cell_params.column = "owner";
 	cell_params.value = owner_name;
-	row_params.columns.add(cell_params);
+    row_params.columns.add(cell_params);
 
 	cell_params.column = "group";
 	cell_params.value = group_name;
@@ -1105,7 +1115,7 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 	}
 }
 
-void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std::string& name, bool group, bool& name_requested)
+void FSAreaSearch::getNameFromUUID(const LLUUID& id, std::string& name, bool group, bool& name_requested)
 {
 	static const std::string unknown_name = LLTrans::getString("AvatarNameWaiting");
 
@@ -1127,46 +1137,28 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, bool needs_rlva_check, std:
 	else
 	{
 		LLAvatarName av_name;
-		if (LLAvatarNameCache::get(id, &av_name))
-		{
-			if (!needs_rlva_check || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				name = av_name.getCompleteName();
-			}
-			else
-			{
-				name = RlvStrings::getAnonym(av_name);
-			}
-		}
-		else
+		if (!LLAvatarNameCache::get(id, &av_name))
 		{
 			name = unknown_name;
 			if (std::find(mNamesRequested.begin(), mNamesRequested.end(), id) == mNamesRequested.end())
 			{
 				mNamesRequested.push_back(id);
-				boost::signals2::connection cb_connection = LLAvatarNameCache::get(id, boost::bind(&FSAreaSearch::avatarNameCacheCallback, this, _1, _2, needs_rlva_check));
+				boost::signals2::connection cb_connection = LLAvatarNameCache::get(id, boost::bind(&FSAreaSearch::avatarNameCacheCallback, this, _1, _2));
 				mNameCacheConnections.insert(std::make_pair(id, cb_connection)); // mNamesRequested will do the dupe check
 			}
 			name_requested = true;
 		}
+		else
+			name = av_name.getCompleteName();
 	}
 }
 
-void FSAreaSearch::avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name, bool needs_rlva_check)
+void FSAreaSearch::avatarNameCacheCallback(const LLUUID& id, const LLAvatarName& av_name)
 {
-	std::string name;
-	if (!needs_rlva_check || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-	{
-		name = av_name.getCompleteName();
-	}
-	else
-	{
-		name = RlvStrings::getAnonym(av_name);
-	}
-	callbackLoadFullName(id, name);
+	callbackLoadFullName(id, av_name.getCompleteName());
 }
 
-void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& full_name)
+void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& full_name )
 {
 	auto iter = mNameCacheConnections.find(id);
 	if (iter != mNameCacheConnections.end())
@@ -1193,7 +1185,7 @@ void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& ful
 		}
 	}
 
-	mPanelList->updateName(id, full_name);
+    mPanelList->updateName(id, full_name);
 }
 
 void FSAreaSearch::updateCounterText()
@@ -1613,7 +1605,7 @@ void FSPanelAreaSearchList::updateName(const LLUUID& id, const std::string& name
 		if (owner_column && (id == details.owner_id))
 		{
 			LLScrollListText* owner_text = (LLScrollListText*)item->getColumn(owner_column->mIndex);
-			owner_text->setText(name);
+			owner_text->setText(RLVa_hideNameIfRestricted(name));
 			mResultList->setNeedsSort();
 		}
 
@@ -1627,7 +1619,7 @@ void FSPanelAreaSearchList::updateName(const LLUUID& id, const std::string& name
 		if (last_owner_column && (id == details.last_owner_id))
 		{
 			LLScrollListText* last_owner_text = (LLScrollListText*)item->getColumn(last_owner_column->mIndex);
-			last_owner_text->setText(name);
+			last_owner_text->setText(RLVa_hideNameIfRestricted(name));
 			mResultList->setNeedsSort();
 		}
 	}

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="Postęp resetowania">
+<floater name="queue" title="Avanzamento Ripristino">
 	<floater.string name="Starting">
 		Avvio di [START] su [COUNT] oggetti.
 	</floater.string>
 	<floater.string name="Done">
-		Finee.
+		Fine.
 	</floater.string>
 	<floater.string name="Resetting">
 		Ripristino in corso

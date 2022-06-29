@@ -92,6 +92,17 @@ bool LLModelPreview::sIgnoreLoadedCallback = false;
 // </FS:Beq>
 const F32 SKIN_WEIGHT_CAMERA_DISTANCE = 16.f;
 
+// <FS:Beq> mesh loader suffix configuration
+//static 
+const std::array<std::string,5> LLModelPreview::sSuffixVarNames
+{
+    "FSMeshLowestLodSuffix",
+    "FSMeshLowLodSuffix",
+    "FSMeshMediumLodSuffix",
+    "FSMeshHighLodSuffix",
+    "FSMeshPhysicsSuffix"
+};
+// </FS:Beq>
 LLViewerFetchedTexture* bindMaterialDiffuseTexture(const LLImportMaterial& material)
 {
     LLViewerFetchedTexture *texture = LLViewerTextureManager::getFetchedTexture(material.getDiffuseMap(), FTT_DEFAULT, TRUE, LLGLTexture::BOOST_PREVIEW);
@@ -110,13 +121,19 @@ LLViewerFetchedTexture* bindMaterialDiffuseTexture(const LLImportMaterial& mater
 
 std::string stripSuffix(std::string name)
 {
-    // <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+    // <FS:Beq> Selectable suffixes
     //if ((name.find("_LOD") != -1) || (name.find("_PHYS") != -1))
-    if ((name.find("_LOD") != std::string::npos) || (name.find("_PHYS") != std::string::npos))
-    // </FS:Ansariel>
+    // {
+    //     return name.substr(0, name.rfind('_'));
+    // }
+    for(int i=0; i < LLModel::NUM_LODS; i++)
     {
-        return name.substr(0, name.rfind('_'));
-    }
+        const auto& suffix = gSavedSettings.getString(LLModelPreview::sSuffixVarNames[i]);
+        if (suffix.size() && name.find(suffix) != std::string::npos) 
+        {
+            return name.substr(0, name.rfind('_'));
+        }
+    } // </FS:Beq>
     return name;
 }
 
@@ -125,12 +142,24 @@ std::string getLodSuffix(S32 lod)
     std::string suffix;
     switch (lod)
     {
-    case LLModel::LOD_IMPOSTOR: suffix = "_LOD0"; break;
-    case LLModel::LOD_LOW:      suffix = "_LOD1"; break;
-    case LLModel::LOD_MEDIUM:   suffix = "_LOD2"; break;
-    case LLModel::LOD_PHYSICS:  suffix = "_PHYS"; break;
-    case LLModel::LOD_HIGH:                       break;
+    // <FS:Beq> selectable suffixes
+    // case LLModel::LOD_IMPOSTOR: suffix = "_LOD0"; break;
+    // case LLModel::LOD_LOW:      suffix = "_LOD1"; break;
+    // case LLModel::LOD_MEDIUM:   suffix = "_LOD2"; break;
+    // case LLModel::LOD_PHYSICS:  suffix = "_PHYS"; break;
+    // case LLModel::LOD_HIGH:                       break;
+    case LLModel::LOD_IMPOSTOR: suffix = gSavedSettings.getString("FSMeshLowestLodSuffix"); break;
+    case LLModel::LOD_LOW:      suffix = gSavedSettings.getString("FSMeshLowLodSuffix"); break;
+    case LLModel::LOD_MEDIUM:   suffix = gSavedSettings.getString("FSMeshMediumLodSuffix"); break;
+    case LLModel::LOD_HIGH:     suffix = gSavedSettings.getString("FSMeshHighLodSuffix"); break;
+    case LLModel::LOD_PHYSICS:  suffix = gSavedSettings.getString("FSMeshPhysicsSuffix"); break;
+    default:break;
     }
+    if(suffix.size())
+    {
+        suffix = "_" + suffix;
+    }
+    // </FS:Beq>
     return suffix;
 }
 
@@ -461,8 +490,10 @@ void LLModelPreview::rebuildUploadData()
                     // then the indexed method will be attempted below.
 
                     LLMatrix4 transform;
-
-                    std::string name_to_match = instance.mLabel;
+                    // <FS:Beq> user defined LOD names
+                    // std::string name_to_match = instance.mLabel;
+                    std::string name_to_match = stripSuffix(instance.mLabel);
+                    // </FS:Beq>
                     llassert(!name_to_match.empty());
 
                     int extensionLOD;
@@ -503,7 +534,10 @@ void LLModelPreview::rebuildUploadData()
                         int searchLOD = (i > LLModel::LOD_HIGH) ? LLModel::LOD_HIGH : i;
                         while ((searchLOD <= LLModel::LOD_HIGH) && !lod_model)
                         {
-                            std::string name_to_match = instance.mLabel;
+                            // <FS:Beq> user defined LOD names
+                            // std::string name_to_match = instance.mLabel;
+                            std::string name_to_match = stripSuffix(instance.mLabel);
+                            // </FS:Beq>
                             llassert(!name_to_match.empty());
 
                             std::string toAdd = getLodSuffix(searchLOD);
@@ -536,6 +570,13 @@ void LLModelPreview::rebuildUploadData()
                             {
                                 std::ostringstream out;
                                 out << "Attempting to use model index " << idx;
+                                // <FS:Beq> better debug (watch for dangling single line else)
+                                if(i==4)
+                                {
+                                out << " for PHYS";
+                                }
+                                else
+                                // </FS:Beq>
                                 out << " for LOD" << i;
                                 out << " of " << instance.mLabel;
                                 LL_INFOS() << out.str() << LL_ENDL;
@@ -881,6 +922,12 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     std::map<std::string, std::string> joint_alias_map;
     getJointAliases(joint_alias_map);
 
+    std::array<std::string,LLModel::NUM_LODS> lod_suffix;
+	for(int i=0; i < LLModel::NUM_LODS; i++)
+	{
+		lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
+	}
+
     mModelLoader = new LLDAELoader(
         filename,
         lod,
@@ -894,7 +941,10 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
         joint_alias_map,
         LLSkinningUtil::getMaxJointCount(),
         gSavedSettings.getU32("ImporterModelLimit"),
-        gSavedSettings.getBOOL("ImporterPreprocessDAE"));
+        // <FS:Beq> allow LOD suffix configuration
+        // gSavedSettings.getBOOL("ImporterPreprocessDAE"));
+        gSavedSettings.getBOOL("ImporterPreprocessDAE"),
+        lod_suffix);
 
     if (force_disable_slm)
     {
@@ -1230,7 +1280,7 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
                         // this actually works like "ImporterLegacyMatching" for this particular LOD
                         for (U32 idx = 0; idx < mModel[loaded_lod].size() && idx < mBaseModel.size(); ++idx)
                         {
-                            std::string name = mBaseModel[idx]->mLabel;
+                            std::string name = stripSuffix(mBaseModel[idx]->mLabel);
                             std::string loaded_name = stripSuffix(mModel[loaded_lod][idx]->mLabel);
 
                             if (loaded_name != name)
@@ -1491,10 +1541,32 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
 
     if (result_error < 0)
     {
-        LL_WARNS() << "Negative result error from meshoptimizer for model " << target_model->mLabel
+        // <FS:Beq> Log these properly
+        // LL_WARNS() << "Negative result error from meshoptimizer for model " << target_model->mLabel
+        //     << " target Indices: " << target_indices
+        //     << " new Indices: " << new_indices
+        //     << " original count: " << size_indices << LL_ENDL;
+   		std::ostringstream out;
+        out << "Negative result error from meshoptimizer for model " << target_model->mLabel
             << " target Indices: " << target_indices
             << " new Indices: " << new_indices
-            << " original count: " << size_indices << LL_ENDL;
+            << " original count: " << size_indices ;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+    }
+    else 
+    {
+        if (mImporterDebug)
+        {
+            std::ostringstream out;
+            out << "Good result error from meshoptimizer for model " << target_model->mLabel
+                << " target Indices: " << target_indices
+                << " new Indices: " << new_indices
+                << " original count: " << size_indices << " (result error:" << result_error << ")";
+		    LL_DEBUGS() << out.str() << LL_ENDL;
+        	LLFloaterModelPreview::addStringToLog(out, true);
+        }
+        // </FS:Beq>
     }
 
     if (new_indices < 3)
@@ -1558,14 +1630,26 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
                         // Normally this shouldn't happen since the whole point is to reduce amount of vertices
                         // but it might happen if user tries to run optimization with too large triangle or error value
                         // so fallback to 'per face' mode or verify requested limits and copy base model as is.
-                        LL_WARNS() << "Over triangle limit. Failed to optimize in 'per object' mode, falling back to per face variant for"
-                            << " model " << target_model->mLabel
-                            << " target Indices: " << target_indices
-                            << " new Indices: " << new_indices
-                            << " original count: " << size_indices
-                            << " error treshold: " << error_threshold
-                            << LL_ENDL;
-
+                        // <FS:Beq> Log this properly
+                        // LL_WARNS() << "Over triangle limit. Failed to optimize in 'per object' mode, falling back to per face variant for"
+                        //     << " model " << target_model->mLabel
+                        //     << " target Indices: " << target_indices
+                        //     << " new Indices: " << new_indices
+                        //     << " original count: " << size_indices
+                        //     << " error treshold: " << error_threshold
+                        //     << LL_ENDL;
+                        if (mImporterDebug)
+                        {
+                            std::ostringstream out;
+                            out << "Over triangle limit. Failed to optimize in 'per object' mode, falling back to per face variant for"
+                                << " model " << target_model->mLabel
+                                << " target Indices: " << target_indices
+                                << " new Indices: " << new_indices
+                                << " original count: " << size_indices
+                                << " error treshold: " << error_threshold;
+                            LL_DEBUGS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, true);
+                        }
                         // U16 vertices overflow shouldn't happen, but just in case
                         new_indices = 0;
                         valid_faces = 0;
@@ -1702,13 +1786,39 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
 
     if (result_error < 0)
     {
-        LL_WARNS() << "Negative result error from meshoptimizer for face " << face_idx
+        // <FS:Beq> Log these properly
+        // LL_WARNS() << "Negative result error from meshoptimizer for face " << face_idx
+        //     << " of model " << target_model->mLabel
+        //     << " target Indices: " << target_indices
+        //     << " new Indices: " << new_indices
+        //     << " original count: " << size_indices
+        //     << " error treshold: " << error_threshold
+        //     << LL_ENDL;
+   		std::ostringstream out;
+        out << "Negative result error from meshoptimizer for face " << face_idx
             << " of model " << target_model->mLabel
             << " target Indices: " << target_indices
             << " new Indices: " << new_indices
             << " original count: " << size_indices
-            << " error treshold: " << error_threshold
-            << LL_ENDL;
+            << " error treshold: " << error_threshold;
+		LL_WARNS() << out.str() << LL_ENDL;
+		LLFloaterModelPreview::addStringToLog(out, true);
+    }
+    else 
+    {
+        if (mImporterDebug)
+        {
+            std::ostringstream out;
+            out << "Good result error from meshoptimizer for face " << face_idx
+                << " of model " << target_model->mLabel
+                << " target Indices: " << target_indices
+                << " new Indices: " << new_indices
+                << " original count: " << size_indices
+                << " error treshold: " << error_threshold << " (result error:" << result_error << ")";
+		    LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
+        	LLFloaterModelPreview::addStringToLog(out, true);
+        }
+        // </FS:Beq>
     }
 
     LLVolumeFace &new_face = target_model->getVolumeFace(face_idx);
@@ -1723,12 +1833,20 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
         {
             // meshopt_optimizeSloppy() can optimize triangles away even if target_indices is > 2,
             // but optimize() isn't supposed to
-            LL_INFOS() << "No indices generated by meshoptimizer for face " << face_idx
+            // LL_INFOS() << "No indices generated by meshoptimizer for face " << face_idx
+            //     << " of model " << target_model->mLabel
+            //     << " target Indices: " << target_indices
+            //     << " original count: " << size_indices
+            //     << " error treshold: " << error_threshold
+            //     << LL_ENDL;
+            std::ostringstream out;
+            out << "No indices generated by meshoptimizer for face " << face_idx
                 << " of model " << target_model->mLabel
                 << " target Indices: " << target_indices
                 << " original count: " << size_indices
-                << " error treshold: " << error_threshold
-                << LL_ENDL;
+                << " error treshold: " << error_threshold;
+            LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
+        	LLFloaterModelPreview::addStringToLog(out, true);
         }
 
         // Face got optimized away
@@ -1764,14 +1882,19 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
 
 void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 decimation, bool enforce_tri_limit)
 {
-    LL_INFOS() << "Generating lod " << which_lod << " using meshoptimizer" << LL_ENDL;
+    // <FS:Beq> Log things properly
+    // LL_INFOS() << "Generating lod " << which_lod << " using meshoptimizer" << LL_ENDL;
+    std::ostringstream out;
+    out << "Generating lod " << which_lod << " using meshoptimizer";
+    LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
+    LLFloaterModelPreview::addStringToLog(out, false);
     // Allow LoD from -1 to LLModel::LOD_PHYSICS
     if (which_lod < -1 || which_lod > LLModel::NUM_LODS - 1)
     {
-        std::ostringstream out;
+        // std::ostringstream out; // <FS:Beq/> already instantiated
         out << "Invalid level of detail: " << which_lod;
         LL_WARNS() << out.str() << LL_ENDL;
-        LLFloaterModelPreview::addStringToLog(out, false);
+        LLFloaterModelPreview::addStringToLog(out, true); // <FS:Beq/> if you don't flash the log tab on error when do you?
         assert(lod >= -1 && lod < LLModel::NUM_LODS);
         return;
     }
@@ -1881,7 +2004,15 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
             volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
             mModel[lod][mdl_idx] = new LLModel(volume_params, 0.f);
 
-            std::string name = base->mLabel + getLodSuffix(lod);
+            // <FS:Beq> Support altenate LOD naming conventions
+            // std::string name = base->mLabel + getLodSuffix(lod);
+            std::string name = stripSuffix(base->mLabel);
+            std::string suffix = getLodSuffix(lod);
+            if ( suffix.size() > 0 )
+            {
+                name += suffix;
+            }
+            // </FS:Beq>
 
             mModel[lod][mdl_idx]->mLabel = name;
             mModel[lod][mdl_idx]->mSubmodelID = base->mSubmodelID;
@@ -1984,7 +2115,12 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                         const U32 too_many_vertices = 27000;
                         if (size_vertices > too_many_vertices)
                         {
-                            LL_WARNS() << "Sloppy optimization method failed for a complex model " << target_model->getName() << LL_ENDL;
+                            // <FS:Beq> log this properly. 
+                            // LL_WARNS() << "Sloppy optimization method failed for a complex model " << target_model->getName() << LL_ENDL;
+                            out << "Sloppy optimization method failed for a complex model " << target_model->getName();
+                            LL_WARNS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, true);
+                            // </FS:Beq>
                         }
                         else
                         {
@@ -2018,26 +2154,46 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                             // Fallback to normal method
                             precise_ratio = genMeshOptimizerPerModel(base, target_model, indices_decimator, lod_error_threshold, false);
                         }
-
-                        LL_INFOS() << "Model " << target_model->getName()
+                        // <FS:Beq> Log stuff properly
+                        // LL_INFOS() << "Model " << target_model->getName()
+                        //     << " lod " << which_lod
+                        //     << " resulting ratio " << precise_ratio
+                        //     << " simplified using per model method." << LL_ENDL;
+                        out << "Model " << target_model->getName()
                             << " lod " << which_lod
                             << " resulting ratio " << precise_ratio
-                            << " simplified using per model method." << LL_ENDL;
+                            << " simplified using per model method.";
+                        LL_INFOS() << out.str() << LL_ENDL;
+                        LLFloaterModelPreview::addStringToLog(out, false);
                     }
                     else
                     {
-                        LL_INFOS() << "Model " << target_model->getName()
+                        // <FS:Beq> Log stuff properly
+                        // LL_INFOS() << "Model " << target_model->getName()
+                        //     << " lod " << which_lod
+                        //     << " resulting ratio " << sloppy_ratio
+                        //     << " sloppily simplified using per model method." << LL_ENDL;
+                        out << "Model " << target_model->getName()
                             << " lod " << which_lod
                             << " resulting ratio " << sloppy_ratio
-                            << " sloppily simplified using per model method." << LL_ENDL;
+                            << " sloppily simplified using per model method.";
+                        LL_INFOS() << out.str() << LL_ENDL;
+                        LLFloaterModelPreview::addStringToLog(out, false);
                     }
                 }
                 else
                 {
-                    LL_INFOS() << "Model " << target_model->getName()
-                        << " lod " << which_lod
-                        << " resulting ratio " << precise_ratio
-                        << " simplified using per model method." << LL_ENDL;
+                        // <FS:Beq> Log stuff properly
+                        // LL_INFOS() << "Model " << target_model->getName()
+                        //     << " lod " << which_lod
+                        //     << " resulting ratio " << precise_ratio
+                        //     << " simplified using per model method." << LL_ENDL;
+                        out << "Bad MeshOptimisation result for Model " << target_model->getName()
+                            << " lod " << which_lod
+                            << " resulting ratio " << precise_ratio
+                            << " simplified using per model method.";
+                        LL_WARNS() << out.str() << LL_ENDL;
+                        LLFloaterModelPreview::addStringToLog(out, true);
                 }
             }
 
@@ -3180,7 +3336,7 @@ void LLModelPreview::lookupLODModelFiles(S32 lod)
     // Note: we cannot use gDirUtilp here because the getExtension forces a tolower which would then break uppercase extensions on Linux/Mac
     std::size_t offset = lod_filename.find_last_of('.');
 	std::string ext = (offset == std::string::npos || offset == 0) ? "" : lod_filename.substr(offset+1);
-    lod_filename = gDirUtilp->getDirName(lod_filename) + gDirUtilp->getDirDelimiter() + gDirUtilp->getBaseFileName(lod_filename, true) + getLodSuffix(next_lod) + "." + ext;
+    lod_filename = gDirUtilp->getDirName(lod_filename) + gDirUtilp->getDirDelimiter() + stripSuffix(gDirUtilp->getBaseFileName(lod_filename, true))  + getLodSuffix(next_lod) + "." + ext;
     std::ostringstream out;
     out << "Looking for file: " << lod_filename << " for LOD " << next_lod;
     LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
@@ -4251,7 +4407,7 @@ bool LLModelPreview::lodQueryCallback()
         {
             S32 lod = preview->mLodsQuery.back();
             preview->mLodsQuery.pop_back();
-            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO);
+            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
 
             if (preview->mLookUpLodFiles && (lod == LLModel::LOD_HIGH))
             {

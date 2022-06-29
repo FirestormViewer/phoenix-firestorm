@@ -50,7 +50,7 @@ LLPanelLoginListener::LLPanelLoginListener(LLPanelLogin* instance):
 
 void LLPanelLoginListener::onClickConnect(const LLSD&) const
 {
-    mPanel->onClickConnect(NULL);
+    mPanel->onClickConnect(false);
 }
 
 #endif

@@ -202,7 +202,7 @@ Version serveur vocal : [VOICE_VERSION]
 	<string name="LoginFailedNoNetwork">
 		Erreur réseau : impossible d&apos;établir la connexion. Veuillez vérifier votre connexion réseau.
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		Échec de la connexion.
 	</string>
 	<string name="Quit">
@@ -6821,6 +6821,78 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="fs_preprocessor_mono_directive_override">
 		Détection de la directive compile-as-Mono outrepassant les préférences.
 	</string>
+	<!-- LSL Optimizer -->
+	<string name="fs_preprocessor_optimizer_start">
+		Optimisation des fonctions définies par l'utilisateur et des variables globales non référencées.
+	</string>
+	<string name="fs_preprocessor_optimizer_regex_err">
+		Expression régulière non valide : '[WHAT]' ; optimisation LSL ignorée.
+	</string>
+	<string name="fs_preprocessor_optimizer_exception">
+		Exception détectée : '[WHAT]' ; optimisation LSL sautée.
+	</string>
+	<string name="fs_preprocessor_optimizer_unexpected_exception">
+		Exception inattendue dans l'optimiseur LSL ; non appliquée.
+	</string>
+	<!-- LSL Compressor -->
+	<string name="fs_preprocessor_compress_start">
+		Compression du texte du script en supprimant les espaces inutiles.
+	</string>
+	<string name="fs_preprocessor_compress_regex_err">
+		Expression régulière non valide : '[WHAT]' ; la compression LSL est ignorée.
+	</string>
+	<string name="fs_preprocessor_compress_exception">
+		Exception interceptée : '[WHAT]' ; la compression LSL est ignorée.
+	</string>
+	<string name="fs_preprocessor_compress_unexpected_exception">
+		Exception inattendue dans le compresseur LSL ; non appliquée.
+	</string>
+	<!-- LSL Lazy lists -->
+	<string name="fs_preprocessor_lazylist_start">
+		Appliquer la conversion de liste paresseuse.
+	</string>
+	<string name="fs_preprocessor_lazylist_regex_err">
+		Pas une expression régulière valide : '[WHAT]' ; Le convertisseur de liste paresseux a été ignoré.
+	</string>
+	<string name="fs_preprocessor_lazylist_exception">
+		Exception interceptée : '[WHAT]' ; le convertisseur de liste paresseux a été ignoré.
+	</string>
+	<string name="fs_preprocessor_lazylist_unexpected_exception">
+		Exception inattendue dans le convertisseur de liste paresseux ; non appliquée.
+	</string>
+	<!-- LSL switch statement -->
+	<string name="fs_preprocessor_switchstatement_start">
+		Application de la conversion des instructions de commutation.
+	</string>
+	<string name="fs_preprocessor_switchstatement_regex_err">
+		Expression régulière non valide : '[WHAT]' ; Le convertisseur d'instruction de commutation a été ignoré.
+	</string>
+	<string name="fs_preprocessor_switchstatement_exception">
+		Exception interceptée : '[WHAT]' ; Le convertisseur d'instruction de commutation a été ignoré.
+	</string>
+	<string name="fs_preprocessor_switchstatement_unexpected_exception">
+		Exception inattendue dans le convertisseur d'instruction de commutation ; non appliquée.
+	</string>
+	<!-- LSL Cache -->
+	<string name="fs_preprocessor_cache_miss">
+		Mise en cache du fichier inclus : '[FILENAME]'.
+	</string>
+	<string name="fs_preprocessor_cache_invalidated">
+		Le fichier inclus '[FILENAME]' a changé, remise en cache.
+	</string>
+	<string name="fs_preprocessor_cache_completed">
+		La mise en cache est terminée pour '[FILENAME]'.
+	</string>
+	<string name="fs_preprocessor_cache_unsafe">
+		Erreur : le script nommé '[FILENAME]' n'est pas fiable pour être copié dans le système de fichiers. Cet include échouera.
+	</string>
+	<string name="fs_preprocessor_caching_err">
+		Erreur de mise en cache du fichier inclus '[FILENAME]'.
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Avertissement : La sortie du préprocesseur a été tronquée en raison de la taille excessive du texte du script. Ce script ne fonctionnera probablement pas.
+	</string>
+	<!-- </FS:Cron> -->
 
 	<!-- Animation Explorer -->
 	<string name="animation_explorer_seconds_ago">

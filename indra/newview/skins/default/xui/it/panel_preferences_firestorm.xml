@@ -21,6 +21,7 @@
             <check_box label="Quando possibile crea oggetti con il gruppo del terreno" name="grouplandrez" tool_tip="Il viewer cercherà automaticamente di rezzare con il gruppo del terreno se ne fate parte." />
             <check_box label="Crea effetto particelle quando gli script comunicano" name="EffectScriptChatParticles" tool_tip="Gli oggetti con script mostrano delle particelle volanti quando gli script comunicano tra loro"/>
             <check_box label="Disattiva il segnalatore quando l&apos;avatar segnato viene raggiunto (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Se attivato, il segnalatore per indicare l&apos;avatar si disattiva se la distanza è inferiore a 3m. (predefinito)"/>
+            <check_box label="Fix animazione Bento inattiva" name="play_default_bento_idle_animation_toggle" tool_tip="Se questa opzione è abilitata, il viewer esegue l'animazione Bento predefinita con priorità 0, che riporta le mani, le ali, la bocca e la coda nella loro posizione naturale quando nessun'altra animazione Bento è in esecuzione." />
             <check_box label="Disabilita schermata di accesso" name="login_screen_toggle" tool_tip="Disabilita la schermata nera durante l&apos;accesso."/>
             <check_box label="Disabilita schermata di uscita" name="logout_screen_toggle" tool_tip="Disabilita la schermata nera durante la disconnessione" />
             <check_box label="Abilita aumento progressivo distanza disegno" name="FSRenderFarClipStepping" tool_tip="Firestorm aumenterà progressivamente la distanza di disegno dopo un teleport."/>
@@ -33,6 +34,8 @@
                 <combo_box.item label="Assistenza volo: effetto forte" name="flight_strong"/>
                 <combo_box.item label="Assistenza volo: effetto estremo" name="flight_extreme"/>
             </combo_box>
+            <slider name="manual_environment_change_transition_period" label="Tempo di transizione ambiente:" tool_tip="Intervallo di tempo in secondi per le modifiche manuali all'ambiente. Zero = istantaneo." />
+            <check_box name="EnvironmentPersistAcrossLogin" label="Mantieni le impostazioni dell'ambiente tra una sessione e l'altra" tool_tip="Ripristina le impostazioni dell'ambiente corrente al prossimo accesso." />
         </panel>
         <panel label="Protezione" name="ProtectionTab">
             <check_box label="Blocca seduta tramite tasto sinistro del mouse" name="FSBlockClickSit" />
@@ -51,6 +54,7 @@
             </text>
             <check_box label="Nasconde oggetti con una grande texture la cui area superi: " name="RenderVolumeSAProtection" tool_tip="Questo vi protegge da oggetti con texture di grandi dimensioni su superfici molto grandi, spesso progettati per mandare in crash il viewer. Di base è impostato a 5000 metri quadrati, nel caso vi siano problemi di crash dovuti a oggetti troppo grandi consigliamo di aumentare questo valore." />
             <check_box label="Attiva protezione spam" name="UseAntiSpam" />
+            <check_box label="Abilita la protezione antispam anche per gli oggetti di tua proprietà" name="FSUseAntiSpamMine" tool_tip="Abilitando questa opzione, la protezione antispam sarà applicata anche agli oggetti che possiedi."/>
             <text name="AntiSpamText1" width="250">
                 Massimo di righe in un singolo messaggio:
             </text>
@@ -108,7 +112,7 @@
             <check_box label="Permetti al protocollo OpenCollar di abilitare/disabilitare l&apos;AO interno" name="BridgeIntegrationOC"/>
             <check_box label="Permetti al protocollo LockMeister di abilitare/disabilitare l&apos;AO interno" name="BridgeIntegrationLM"/>
         </panel>
-        <panel label="Costr. 1" name="BuildTab">
+        <panel label="Costruisci 1" name="BuildTab">
             <text name="text_box_objprams" width="250">
                 Misure alla creazione
             </text>
@@ -174,8 +178,12 @@
                 Percorso file da includere per il preprocessore:
             </text>
             <button label="Sfoglia" label_selected="Sfoglia" name="SetPreprocInclude"/>
+            <text name="externaleditor_textbox">
+                Editor esterno:
+            </text>
+            <button label="Sfoglia" label_selected="Sfoglia" name="SetExternalEditor" />
         </panel>
-        <panel label="Costr. 2" name="BuildTab2">
+        <panel label="Costruisci 2" name="BuildTab2">
             <check_box label="Evidenzia i prim selezionati" tool_tip="Quando non è spuntata questa casella, i prim editati non verranno messi in evidenza con i contorni gialli/blu. Questa casella non spuntata aumenta le prestazioni del viewer evitando crash quando si selezionano molti oggetti." name="FSBuildPrefsRenderHighlight_toggle" />
             <check_box label="Evidenzia confini del lotto selezionato" name="RenderParcelSelection"/>
             <check_box label="Mostra confini fino all&apos;altezza max costruita" name="FSRenderParcelSelectionToMaxBuildHeight"/>
@@ -200,6 +208,7 @@
             <check_box label="Usa Ctrl+mouse per afferrare e manipolare oggetti" tool_tip="Permette di afferrare e spostare gli oggetti con il mouse e il tasto CTRL." name="FSEnableGrab"/>
             <check_box label="Permetti clic-trascina o clic-scala (Maiusc) di una texture in modalità costruzione" tool_tip="Permette di usare clic-trascina e clic-Maiusc-trascina sulla faccia di una texture in modo costruzione. Opzione sperimentale da usare con cautela." name="FSExperimentalDragTexture"/>
             <check_box label="Anteprima delle animazioni sull&apos;avatar durante il caricamento" tool_tip="Si possono vedere le animazioni durante il caricamento usando il proprio avatar" name="FSUploadAnimationOnOwnAvatar"/>
+            <check_box label="Abilita i dettagli estesi sulle informazioni degli script" tool_tip="Estendi la funzionalità delle informazioni di base sugli script con vari dettagli utili per i costruttori." name="FSScriptInfoExtended" />
         </panel>
         <panel label="Caricamenti" name="UploadsTab">
             <text name="title">

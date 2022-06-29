@@ -4,11 +4,14 @@
     <check_box label="Chiedi sempre prima di inviare" name="checkSendCrashReportsAlwaysAsk" />
     <check_box label="Include il file settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">
-        (contiene il vostro nome utente)
+        (contiene il tuo nome utente)
     </text>
     <check_box label="Includi nome utente" name="checkSendName" />
     <text name="textSendName">
         (per chiedere altre info se necessario)
+    </text>
+    <text name="textRestartRequired">
+        Qualsiasi modifica apportata a queste impostazioni, richiede il riavvio.
     </text>
     <text name="textInformation1" width="500">
         Tutte le spunte forniscono segnalazioni di crash contenenti solo le informazioni del crash.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_voice_controls" title="Controlli voce">
+<floater name="floater_voice_controls" title="Controlli Voce">
 	<string name="title_nearby">
-		Impostazioni voce
+		Voce
 	</string>
 	<string name="title_group">
 		Chiamata di gruppo con [GROUP]
@@ -13,7 +13,7 @@
 		Chiamata con [NAME]
 	</string>
 	<string name="no_one_near">
-		Nessuno nei dintorni ha attivato la funzione voce
+		Nessuno nei dintorni ha attivato la voce
 	</string>
 	<layout_stack name="my_call_stack">
 		<layout_panel name="my_panel">
@@ -22,7 +22,7 @@
 		<layout_panel name="leave_call_panel">
 			<layout_stack name="voice_effect_and_leave_call_stack">
 				<layout_panel name="leave_call_btn_panel">
-					<button label="Abbandona chiamata" name="leave_call_btn"/>
+					<button label="Chiudi chiamata" name="leave_call_btn"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
