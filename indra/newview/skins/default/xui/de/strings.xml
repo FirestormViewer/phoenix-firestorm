@@ -105,6 +105,9 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="AboutTime">
 		[day, datetime, slt]. [month, datetime, slt] [year, datetime, slt] [hour24, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
 	</string>
+	<string name="LocalTime">
+		[day, datetime, local]. [month, datetime, local] [year, datetime, local] [hour24, datetime, local]:[min, datetime, local]:[second,datetime,local]
+	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Fehler beim Abrufen der URL für die Server-Versionshinweise.
 	</string>
@@ -210,7 +213,7 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="LoginFailedNoNetwork">
 		Netzwerkfehler: Verbindung konnte nicht hergestellt werden. Bitte überprüfen Sie Ihre Netzwerkverbindung.
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		Anmeldung fehlgeschlagen
 	</string>
 	<string name="Quit">
@@ -229,11 +232,15 @@ Voice-Serverversion: [VOICE_VERSION]
 		http://secondlife.com/download
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
-		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
+		Mit dem von Ihnen verwendeten Viewer ist der Zugriff nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
 https://www.firestormviewer.org/choose-your-platform/
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq
+	</string>
+	<string name="LoginFailed">Grid-Notfall Login-Fehler.
+
+Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich bitte an den Support des entsprechenden Grids.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Optionales Viewer-Update verfügbar: [VERSION]
@@ -279,9 +286,12 @@ Benutzer mit kostenlosen Konten können sich während dieses Zeitraums nicht bei
 Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich an
 support@secondlife.com.
 	</string>
+	<string name="PacificTime">
+		Pazifik-Zeit
+	</string>
 	<string name="LoginFailedAcountSuspended">
 		Ihr Konto ist erst ab
-[TIME] Pacific Time wieder verfügbar.
+[TIME] wieder verfügbar.
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Ihre Anfrage kann derzeit nicht bearbeitet werden. 
@@ -294,7 +304,7 @@ Wenden Sie sich an support@secondlife.com.
 	<string name="LoginFailedAccountMaintenance">
 		An Ihrem Konto werden gerade kleinere Wartungsarbeiten durchgeführt.
 Ihr Konto ist erst ab
-[TIME] Pacific Time wieder verfügbar.
+[TIME] wieder verfügbar.
 Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich an support@secondlife.com.
 	</string>
 	<string name="LoginFailedPendingLogoutFault">
@@ -7026,6 +7036,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="fs_preprocessor_caching_err">
 		Fehler beim Cachen der eingebundenen Datei „[FILENAME]“.
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Achtung: Präprozessor-Ausgabe wurde aufgrund exzessiver Textlänge gekürzt. Das Skript wird wahrscheinlich nicht funktionieren.
 	</string>
 
 	<string name="animation_explorer_seconds_ago">

@@ -4804,7 +4804,7 @@ Just like in real life, it takes a while for everyone to learn about a new name.
  icon="alertmodal.tga"
  name="SetDisplayNameBlocked"
  type="alert">
-Sorry, you cannot change your display name. If you feel this is in error, please contact Linden Lab support.
+Sorry, you cannot change your display name. If you feel this is in error, please contact the grid support.
   <tag>fail</tag>
   </notification>
 
@@ -13735,7 +13735,8 @@ Unpacking: [UNPACK_TIME]s [USIZE]KB
     <tag>fail</tag>
   </notification>
   
-  <notification
+
+    <notification
    icon="alertmodal.tga"
    label="Prompt for MFA Token"
    name="PromptMFAToken"

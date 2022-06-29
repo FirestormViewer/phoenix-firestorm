@@ -91,9 +91,15 @@ public:
 	BOOL getInfo(BOOL vram_only, bool disable_wmi);
 	// </FS:Ansariel>
 
-	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
-	//std::string getDriverVersionWMI();
-	std::string getDriverVersionWMI(const std::string& vendor);
+    // WMI can return multiple GPU drivers
+    // specify which one to output
+    typedef enum {
+        GPU_INTEL,
+        GPU_NVIDIA,
+        GPU_AMD,
+        GPU_ANY
+    } EGPUVendor;
+	std::string getDriverVersionWMI(EGPUVendor vendor);
 
 	S32 getVRAM() const { return mVRAM; }
 
