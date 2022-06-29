@@ -2776,6 +2776,12 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="NotecardNoPermissions">
 		Ihnen fehlt die Berechtigung zur Anzeige dieser Notizkarte.
 	</notification>
+	<notification name="MaterialMissing">
+		Material wurde nicht in der Datenbank gefunden.
+	</notification>
+	<notification name="MaterialNoPermissions">
+		Ihnen fehlt die Berechtigung zur Anzeige dieses Materials.
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Keine Berechtigung zum Rezzen von Objekten.
 	</notification>
