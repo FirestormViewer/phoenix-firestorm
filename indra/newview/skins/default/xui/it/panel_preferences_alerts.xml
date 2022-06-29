@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Avvisi" name="popups">
+<panel label="Notifiche" name="popups">
 <tab_container name="tabs">
 	<panel label="Mondo" name="tab-world">
-		<check_box label="Avvisa quando escono o entrano L$" name="notify_money_change_checkbox"/>
+		<check_box label="Avvisami quando spendo o ricevo L$" name="notify_money_change_checkbox"/>
 		<check_box name="FSPaymentInfoInChat" label="Mostra in chat locale le transazioni di L$"/>
-		<check_box label="Avvisa se cambia la versione del simulatore al cambio di regione" name="FSShowServerVersionChangeNotice" tool_tip="Mostra un avviso se la versione del simulatore è diversa dopo un TP o un cambio di regione."/>
-		<check_box label="Interroga status.secondlifegrid.net per le ultime notize all&apos;accesso" name="AutoQueryGridStatus"/>
+		<check_box label="Avvisami se cambia la versione del simulatore al cambio di regione" name="FSShowServerVersionChangeNotice" tool_tip="Mostra un avviso se la versione del simulatore è diversa dopo un TP o un cambio di regione."/>
+		<check_box label="Interroga status.secondlifegrid.net per le ultime notize all'accesso" name="AutoQueryGridStatus"/>
 		<check_box label="Abilita notifiche Growl" name="notify_growl_checkbox"/>
 		<check_box label="Abilita notifiche Growl anche se Firestorm è aperto" name="notify_growl_always_checkbox"/>
 		<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="Filtra gli IM duplicati se sono già stati visualizzati come parte di un avviso per parola chiave"/>
 	</panel>
 	<panel label="Persone" name="tab-people">
-		<check_box label="Lampeggia l&apos;icona se si riceve un messaggio e [APP_NAME] non è in primo piano" name="FSFlashOnMessage"/>
-		<check_box label="Lampeggia anche se l&apos;IM arriva da un oggetto" name="FSFlashOnObjectIM"/>
-		<check_box label="Avvisa quando qualcuno cambia il suo Display name" name="FSShowDisplayNameUpdateNotification"/>
-		<check_box label="Avvisa quando si blocca o sblocca qualcuno" name="FSReportBlockToNearbyChat"/>
+		<check_box label="Lampeggia l'icona se ricevo un messaggio e [APP_NAME] non è in primo piano" name="FSFlashOnMessage"/>
+		<check_box label="Lampeggia anche se l'IM arriva da un oggetto" name="FSFlashOnObjectIM"/>
+		<check_box label="Avvisami quando qualcuno cambia il suo Display Name" name="FSShowDisplayNameUpdateNotification"/>
+		<check_box label="Avvisami quando blocco o sblocco qualcuno" name="FSReportBlockToNearbyChat"/>
 		<text name="friends_logon_label">
-			Avvisa quando gli amici entrano o escono:
+			Avvisami quando gli amici entrano o escono da SL:
 		</text>
 		<check_box label="Con un avviso" name="friends_online_notify_checkbox"/>
 		<check_box name="OnlineOfflinetoNearbyChat" label="Nella chat locale e nella console"/>
 		<check_box label="Solo nella chat locale" left_pad="10" name="OnlineOfflinetoNearbyChatHistory"/>
 	</panel>
-	<panel label="Oggetti &amp; script" name="tab-objects">
-		<check_box label="Lampeggia l&apos;icona se si riceve un messaggio da script e [APP_NAME] non è in primo piano" name="FSFlashOnScriptDialog"/>
+	<panel label="Oggetti e Script" name="tab-objects">
+		<check_box label="Lampeggia l'icona se ricevo un messaggio da un oggetto e [APP_NAME] non è in primo piano" name="FSFlashOnScriptDialog"/>
 		<check_box label="Riporta gli avvisi di collisione in chat locale" name="FSCollisionMessagesInChat"/>
 		<check_box label="Mostra gli errori di script in:" name="show_script_errors"/>
 		<radio_group name="show_script_errors_location">
 			<radio_item label="Chat locale" name="script_0"/>
 			<radio_item label="Finestra separata" name="script_1"/>
 		</radio_group>
-		<check_box label="Mostra il totale delle modifiche agli script nella regione:" name="FSReportTotalScriptCountChanges"/>
+		<check_box label="Quando il numero di script in una regione cambia:" name="FSReportTotalScriptCountChanges"/>
 		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Soglia di modifiche agli script nella regione prima della segnalazione [predefinito: 100]"/>
-		<check_box label="Riporta gli avvisi sulle collisioni agli script sul canale" name="FSReportCollisionMessages"/>
+		<check_box label="Riporta le notifiche di collisione agli script sul canale:" name="FSReportCollisionMessages"/>
 		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Canale sui cui riportare gli avvisi di collisione [predefinito: -25000]"/>
 	</panel>
 	<panel label="Inventario" name="tab-inventory">
-		<check_box name="FSShowUploadPaymentToast" label="Avvisa quando mi viene addebitato un caricamento" />
-		<check_box label="Avvisa quando viene creato un segnaposto" name="landmark_created_checkbox"/>
-		<check_box label="Disabilita gli avvisi &apos;oggetto restituito all&apos;inventario&apos;" name="FSDisableReturnObjectNotification"/>
+		<check_box label="Avvisami quando mi viene addebitato un caricamento" name="FSShowUploadPaymentToast" />
+		<check_box label="Avvisami quando viene creato un segnaposto" name="landmark_created_checkbox"/>
+		<check_box label="Disabilita le notifiche 'L'oggetto è stato restituito al tuo inventario'" name="FSDisableReturnObjectNotification"/>
 		<check_box label="Riporta i nomi delle foto salvate nella chat locale" name="FSLogSnapshotsToLocal" />
-		<check_box label="Avvisa quando gli oggetti arrivano troppo velocemente" name="FSNotifyIncomingObjectSpam" />
-		<check_box label="Avvisa quando un altro residente invia oggetti troppo velocemente" name="FSNotifyIncomingObjectSpamFrom" />
-		<slider name="FSOfferThrottleMaxCount" label="Limite oggetti in arrivo in 10 sec:" tool_tip="Soglia massima di oggetti che possono arrivare in 10 secondi [predefinito 5]" />
+		<check_box label="Avvisami quando gli oggetti arrivano troppo velocemente" name="FSNotifyIncomingObjectSpam" />
+		<check_box label="Avvisami quando un altro residente mi invia oggetti troppo velocemente" name="FSNotifyIncomingObjectSpamFrom" />
+		<slider name="FSOfferThrottleMaxCount" label="Limite oggetti in arrivo in 10 sec:" tool_tip="Soglia massima di oggetti che possono arrivare in 10 secondi (default = 5)" />
 	</panel>
 	<panel label="Avvisi" name="tab-alerts">
-		<text name="show_label">
-			Mostra sempre:
+		<text name="show_label" tool_tip="Elenco degli avvisi del viewer. Metti la spunta a sinistra per abilitare l'avviso, rimuovi la spunta per disabilitare l'avviso.">
+			Avvisi del viewer da mostrare o nascondere:
 		</text>
-		<text name="dont_show_label">
-			Non mostrare mai:
-		</text>
+		<filter_editor label="Filtra gli avvisi" name="popup_filter" tool_tip="Digita qui il termine di ricerca che ti interessa. Verranno visualizzati i risultati con corrispondenza totale o parziale." />
+		<scroll_list name="all_popups">
+			<column label="Mostra" name="alert_enabled_check" />
+			<column label="Avviso" name="alert_label" />
+		</scroll_list>
 	</panel>
 </tab_container>
 </panel>

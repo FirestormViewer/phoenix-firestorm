@@ -1,18 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
-	<menu label="Io" name="Me">
+	<menu label="Avatar" name="Me">
 		<menu_item_call label="Account" name="Manage Account"/>
-		<menu_item_call label="Elenchi marketplace..." name="MarketplaceListings"/>
+		<menu_item_call label="Annunci Marketplace" name="MarketplaceListings"/>
 		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Inventario" name="NewInventoryWindow"/>
 		<menu_item_check label="Inventario" name="Inventory"/>
-		<menu_item_check label="Abiti preferiti" name="WearableFavorites"/>
-		<menu_item_call label="Preferiti" name="Picks"/>
+		<menu_item_check label="Cartelle Protette" name="Protected Folders" />
+		<menu_item_check label="Vestiti Preferiti" name="WearableFavorites"/>
+		<menu_item_call label="Luoghi Preferiti" name="Picks"/>
 		<menu_item_call label="Esperienze" name="Experiences"/>
-		<menu_item_call label="I miei Script..." name="MyScripts"/>
-		<menu_item_call label="Profilo" name="Profile"/>
-		<menu_item_check label="Aspetto" name="ChangeOutfit"/>
-		<menu_item_call label="Scelta avatar" name="Avatar Picker"/>
+		<menu_item_call label="Il mio profilo" name="Profile"/>
+		<menu_item_call label="Indossati ora" name="NowWearing" />
+		<menu_item_check label="I miei abiti" name="ChangeOutfit"/>
+		<menu label="Rimuovi" name="Take Off &gt;">
+			<menu label="Indumenti" name="Clothes &gt;">
+				<menu_item_call label="Camicia" name="Shirt" />
+				<menu_item_call label="Pantaloni" name="Pants" />
+				<menu_item_call label="Gonna" name="Skirt" />
+				<menu_item_call label="Scarpe" name="Shoes" />
+				<menu_item_call label="Calze" name="Socks" />
+				<menu_item_call label="Giacca" name="Jacket" />
+				<menu_item_call label="Guanti" name="Gloves" />
+				<menu_item_call label="Canottiera" name="Self Undershirt" />
+				<menu_item_call label="Slip" name="Self Underpants" />
+				<menu_item_call label="Tatuaggio" name="Self Tattoo" />
+				<menu_item_call label="Fisica" name="Self Physics" />
+				<menu_item_call label="Alfa" name="Self Alpha" />
+				<menu_item_call label="Tutti" name="All Clothes" />
+			</menu>
+			<menu label="Stacca" name="Avatar Detach" />
+			<menu_item_call label="Stacca tutti" name="Detach All" />
+		</menu>
+		<menu_item_call label="Seleziona un avatar" name="Avatar Picker"/>
 		<menu label="Movimento" name="Movement">
 			<menu_item_call label="Siediti" name="Sit Down Here"/>
 			<menu_item_check label="Vola" name="Fly"/>
@@ -23,26 +43,28 @@
 			<menu_item_check label="Blocca movimento" name="Move Lock"/>
 			<menu_item_check label="Salto immediato" name="Avatar Ignore Prejump"/>
 		</menu>
-		<menu_item_check label="Controlli movimento" name="Movement Controls"/>
-		<menu_item_check label="Controlli camera" name="Camera Controls"/>
-		<menu label="Salute avatar" name="avhealth">
+		<menu_item_check label="Controlli Movimento" name="Movement Controls"/>
+		<menu_item_check label="Controlli Camera" name="Camera Controls"/>
+		<menu label="Utilità per l'avatar" name="avhealth">
 			<menu_item_call label="Ferma animazioni" name="Stop Animating My Avatar"/>
-			<menu_item_call label="Ferma animazioni &amp; revoca permessi" name="Stop Animating My Avatar With Revoke"/>
-			<menu_item_call label="Undeform Avatar" name="undeform_avatar"/>
+			<menu_item_call label="Ferma animazioni e revoca permessi" name="Stop Animating My Avatar With Revoke"/>
+			<menu_item_call label="Rimuovi deformazioni avatar" name="undeform_avatar"/>
 			<menu_item_call label="Ricarica texture (Rebake)" name="Rebake Texture"/>
-			<menu_item_call label="Ricarica accessori" name="Refresh Attachments"/>
+			<menu_item_call label="Ricarica attachments" name="Refresh Attachments"/>
 			<menu_item_call label="Ripristina avatar maschio (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Ripristina avatar femmina (Character Test)" name="ResetDefaultAvF"/>
 			<menu_item_check label="Mostra info complessità" name="Avatar Draw Info"/>
-			<menu_item_call label="Misura lag" name="Lag Meter"/>
+			<menu_item_call label="I Miei Script" name="MyScripts"/>        <!-- spostato -->
+			<menu_item_call label="Misuratore LAG" name="Lag Meter"/>
 			<menu_item_call label="Ricrea LSL Bridge" name="Recreate LSL Bridge"/>
 		</menu>
-		<menu_item_call label="Scatta foto" name="Take Snapshot"/>
+		<menu_item_call label="Scatta Foto" name="Take Snapshot"/>
+		<menu_item_call label="Foto a 360°" name="Capture 360"/>
 		<menu_item_call label="Transazioni" name="money_tracker"/>
-		<menu_item_call label="Posa in piedi..." name="pose_stand"/>
+		<menu_item_call label="Pose Stand" name="pose_stand"/>
 		<menu_item_call label="Preferenze" name="Preferences"/>
-		<menu_item_call label="Bottoni toolbar" name="Toolbar Buttons"/>
-		<menu_item_check label="Mostra accessori HUD" name="Show HUD Attachments"/>
+		<menu_item_call label="Pulsanti Barra Strumenti" name="Toolbar Buttons"/>
+		<menu_item_check label="Mostra gli HUD" name="Show HUD Attachments"/>
 		<menu_item_check label="Mostra interfaccia" name="Show User Interface"/>
 		<menu_item_call label="Richiedi stato Admin" name="Request Admin Options"/>
 		<menu_item_call label="Esci da stato Admin" name="Leave Admin Options"/>
@@ -54,48 +76,47 @@
 			<menu_item_check name="Do Not Disturb" label="Non disturbare"/>
 			<menu_item_check label="Autorisposta" name="Set Autorespond"/>
 			<menu_item_check label="Autorisposta ai non amici" name="Set Autorespond to non-friends"/>
-			<menu_item_check label="Respingi offerte e richieste teleport" name="Automatically reject teleport offers"/>
-			<menu_item_check label="Respingi inviti a gruppi" name="Reject all group invites"/>
+			<menu_item_check label="Respingi offerte e richieste di teleport" name="Automatically reject teleport offers"/>
+			<menu_item_check label="Respingi inviti ai gruppi" name="Reject all group invites"/>
 			<menu_item_check label="Respingi offerte di amicizia" name="Reject all friendship requests"/>
 		</menu>
 		<menu_item_call label="Amici" name="My Friends"/>
 		<menu_item_check label="Contatti" name="Contacts"/>
-		<menu_item_call label="Set di contatti" name="Contact Sets"/>
+		<menu_item_call label="Set contatti" name="Contact Sets"/>
 		<menu_item_call label="Gruppi" name="My Groups"/>
 		<menu_item_check label="Chat..." name="Nearby Chat"/>
 		<menu_item_check label="Persone" name="People"/>
 		<menu_item_check label="Conversazioni" name="Conversations"/>
 		<menu_item_check label="Gesti" name="Gestures"/>
-		<menu_item_call label="Facebook..." name="Facebook"/>
-		<menu_item_call label="Twitter..." name="Twitter"/>
-		<menu_item_call label="Flickr..." name="Flickr"/>
 		<menu label="Modifica voce" name="VoiceMorphing">
 			<menu_item_check label="Nessuna modifica" name="NoVoiceMorphing"/>
 			<menu_item_check label="Anteprima..." name="Preview"/>
 			<menu_item_call label="Iscrizione..." name="Subscribe"/>
 			<menu_item_call label="Offerta Premium..." name="PremiumPerk"/>
 		</menu>
-		<menu_item_check label="Registro conversazioni..." name="Conversation Log..."/>
+		<menu_item_check label="Registro Conversazioni..." name="Conversation Log..."/>
 		<menu_item_check label="Voce nelle vicinanze" name="Nearby Voice"/>
-		<menu_item_call label="Lista bloccati" name="Block List"/>
+		<menu_item_call label="Lista Bloccati" name="Block List"/>
 	</menu>
 	<menu label="Mondo" name="World">
 		<menu_item_call label="Risinc animazioni" name="Resync Animations"/>
-		<menu_item_call label="Avatar vicini" name="Active Speakers"/>
+		<menu_item_call label="Avatar nelle vicinanze" name="Active Speakers"/>
 		<menu_item_check label="Radar" name="Radar"/>
-		<menu_item_call label="Cronologia teleport" name="Teleport History"/>
+		<menu_item_call label="Cronologia Teleport" name="Teleport History"/>
 		<menu_item_check label="Luoghi" name="Places"/>
 		<menu_item_call label="Destinazioni" name="Destinations"/>
 		<menu_item_call label="Eventi" name="Events"/>
-		<menu_item_check label="Mini mappa" name="Mini-Map"/>
+		<menu_item_check label="Minimappa" name="Mini-Map"/>
 		<menu_item_check label="Mappa" name="World Map"/>
-		<menu_item_check label="Traccia regione" name="Region Tracker"/>
-		<menu_item_call label="Crea segnaposto qui" name="Create Landmark Here"/>
+		<menu_item_check label="Traccia Regione" name="Region Tracker"/>
+		<menu_item_call label="Crea Segnaposto" name="Create Landmark Here"/>
 		<menu_item_call label="Profilo del luogo" name="Place Profile"/>
 		<menu_item_call label="Dettagli terreno" name="About Land"/>
 		<menu_item_call label="Dettagli regione" name="RegionEstate"/>
+		<menu_item_call label="Imposta qui la mia Home" name="Set Home to Here"/>
 		<menu_item_call label="Compra questo terreno" name="Buy Land"/>
-		<menu_item_call label="Mostra terreni posseduti" name="My Land"/>
+		<menu_item_call label="I Miei Terreni" name="My Land"/>
+		<menu_item_call label="La mia casa Linden" name="Linden Home"/>
 		<menu label="Mostra altro" name="LandShow">
 			<menu_item_check label="Linee divieto" name="Ban Lines"/>
 			<menu_item_check label="Marcatori" name="beacons"/>
@@ -103,47 +124,51 @@
 			<menu_item_check label="Proprietari terreno" name="Land Owners"/>
 			<menu_item_check label="Coordinate" name="Coordinates"/>
 			<menu_item_check label="Permessi del lotto" name="Parcel Properties"/>
-			<menu_item_separator />
 			<menu_item_check label="Mostra menu Avanzato" name="Show Advanced Menu"/>
 		</menu>
-		<menu_item_check label="Migliora velocità grafica..." name="Performance" />
+		<menu_item_check label="Migliora Velocità Grafica" name="Performance" />
 		<menu_item_call label="Teleport a casa" name="Teleport Home"/>
-		<menu_item_call label="Fissa casa qui" name="Set Home to Here"/>
-		<menu label="Posizione del sole" name="Environment Settings">
+		<menu label="Ambiente" name="Environment">
 			<menu_item_check label="Alba" name="Sunrise"/>
 			<menu_item_check label="Mezzogiorno" name="Noon"/>
 			<menu_item_check label="Tramonto" name="Sunset"/>
 			<menu_item_check label="Mezzanotte" name="Midnight"/>
-			<menu_item_check label="Usa impostazioni regione" name="Revert to Region Default"/>
+			<menu_item_check label="Usa ambiente condiviso" name="Use Shared Environment"/>
+			<menu_item_call label="I Miei Ambienti..." name="my_environs" />
+			<menu_item_call label="Illuminazione Personalizzata..." name="adjustment_tool" />
+			<menu_item_check label="Nuvole in pausa" name="pause_clouds" />
+			<menu label="Importa in blocco" name="WL Bulk Import">
+				<menu_item_call label="Cicli giornata..." name="WL Bulk Import Days" />
+				<menu_item_call label="Cieli..." name="WL Bulk Import Skies" />
+				<menu_item_call label="Acqua..." name="WL Bulk Import Water" />
+			</menu>
 		</menu>
-		<menu label="Editor ambiente" name="Environment Editor">
+		<!-- <menu label="Editor ambiente" name="Environment Editor">
 			<menu_item_call label="Impostazioni ambiente..."	 name="Environment Settings"/>
 			<menu name="Water Presets" label="Preset acqua">
 				<menu_item_call	 label="Nuovo preset..." name="new_water_preset"/>
 				<menu_item_call	 label="Modifica preset..."	 name="edit_water_preset"/>
-				<menu_item_call	 label="Cancella preset..." name="delete_water_preset"/>
 			</menu>
 			<menu name="Sky Presets" label="Preset cielo">
 				<menu_item_call label="Nuovo preset..." name="new_sky_preset"/>
 				<menu_item_call label="Modifica preset..." name="edit_sky_preset"/>
-				<menu_item_call label="Cancella preset..." name="delete_sky_preset"/>
-			 </menu>
+			</menu>
 			<menu name="Day Presets" label="Preset giorno">
 				<menu_item_call label="Nuovo preset..." name="new_day_preset"/>
 				<menu_item_call label="Modifica preset..." name="edit_day_preset"/>
-				<menu_item_call label="Cancella preset..." name="delete_day_preset"/>
 			</menu>
-		</menu>
+		</menu> -->
 		<menu name="photo_and_video" label="Foto e video">
-			<menu_item_call label="Phototools" name="phototools_item_call"/>
-			<menu_item_call label="Cameratools"	name="cameratools_item_call"/>
+			<menu_item_call label="PhotoTools" name="phototools_item_call"/>
+			<menu_item_call label="CameraTools"	name="cameratools_item_call"/>
+			<menu_item_check label="Blocca messa a fuoco profondità di campo" name="lock_focus_point" />
 		</menu>
-		<menu_item_call label="Cerca area" name="area_search"/>
-		<menu_item_call label="Esplora suoni" name="Sound Explorer"/>
-		<menu_item_call label="Esplora animazioni" name="Animation Explorer"/>
-		<menu_item_call label="Lista nera asset" name="asset_blacklist"/>
-		<menu_item_call label="Impostazioni resa avatar" name="Avatar Render Settings"/>
-		<menu_item_check label="Mostra amici sempre normali" name="Always show Friends normally"/>
+		<menu_item_call label="Cerca Oggetti" name="area_search"/>
+		<menu_item_call label="Esplora Suoni" name="Sound Explorer"/>
+		<menu_item_call label="Esplora Animazioni" name="Animation Explorer"/>
+		<menu_item_call label="Lista Nera" name="asset_blacklist"/>
+		<menu_item_call label="Impostazioni Resa Avatar" name="Avatar Render Settings"/>
+		<menu_item_check label="Mostra amici sempre con il massimo dettaglio" name="Always show Friends normally"/>
 		<menu_item_check label="Mostra solo amici" name="Render Friends Only"/>
 	</menu>
 	<menu label="Costruisci" name="BuildTools">
@@ -180,7 +205,7 @@
 			</menu>
 		</menu>
 		<menu label="Script" name="Scripts">
-			<menu_item_call label="Mostra avvisi/errori" name="Script Debug"/>
+			<menu_item_call label="Mostra avvisi / errori" name="Script Debug"/>
 			<menu_item_call label="Info script (conteggio)" name="Script Info"/>
 			<menu_item_call label="Ricompila (Mono)" name="Mono"/>
 			<menu_item_call label="Ricompila (LSL)" name="LSL"/>
@@ -190,10 +215,10 @@
 			<menu_item_call label="Rimuovi script dalla selezione" name="Remove Scripts From Selection"/>
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
-			<menu_item_call label="Region Objects" name="pathfinding_linksets_menu_item"/>
-			<menu_item_call label="Characters..." name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="View / test..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Rebake region" name="pathfinding_rebake_navmesh_item"/>
+			<menu_item_call label="Oggetti in regione" name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Personaggi..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Visualizza / test..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Rebake regione" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Opzioni" name="Options">
 			<menu_item_check label="Mostra permessi avanzati" name="DebugPermissions"/>
@@ -218,8 +243,8 @@
 			<menu_item_call label="Immagine (L$[COST])..." name="Upload Image"/>
 			<menu_item_call label="Suono (L$[COST])..." name="Upload Sound"/>
 			<menu_item_call label="Animazione (L$[COST])..." name="Upload Animation"/>
-			<menu_item_call label="Modello..." name="Upload Model"/>
-			<menu_item_call label="In blocco..." name="Bulk Upload"/>
+			<menu_item_call label="Modello mesh..." name="Upload Model"/>
+			<menu_item_call label="Importa in blocco..." name="Bulk Upload"/>
 			<menu_item_call label="Importa linkset..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Annulla" name="Undo"/>
@@ -228,8 +253,8 @@
 	<menu label="Contenuti" name="Content">
 		<menu_item_check label="Cerca" name="Search"/>
 		<menu_item_call label="SL Marketplace" name="SL Marketplace"/>
-		<menu_item_call label="L$ Market Data" name="LindenXchange"/>
-		<menu_item_call label="Biblioteca script" name="Script Library"/>
+		<menu_item_call label="Dati di mercato" name="LindenXchange"/>
+		<menu_item_call label="Libreria script" name="Script Library"/>
 		<menu_item_call label="Firestorm Blog" name="Firestorm Blog"/>
 		<menu_item_call label="Firestorm Flickr" name="Firestorm Flickr"/>
 		<menu_item_call label="Firestorm YouTube" name="Firestorm YouTube"/>
@@ -238,21 +263,21 @@
 		<menu_item_call label="Messaggio del giorno" name="Firestorm MoTD"/>
 	</menu>
 	<menu label="Aiuto" name="Help">
-		<menu_item_check label="Abilita suggerimenti interfaccia" name="Enable Hints"/>
+		<menu_item_check label="Abilita i suggerimenti" name="Enable Hints"/>
 		<menu_item_call label="Wiki di Firestorm" name="Firestorm Wiki"/>
-		<menu_item_call label="Soluzione problemi" name="Troubleshooting"/>
-		<menu_item_call label="Iscriviti a Firestorm Support Group" name="firestorm_support_group"/>
+		<menu_item_call label="Risoluzione dei problemi" name="Troubleshooting"/>
+		<menu_item_call label="Gruppi di supporto di Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Calendario lezioni su Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Calendario eventi Firestorm" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Guida" name="How To"/>
+		<menu_item_check label="Guida in linea" name="How To"/>
 		<menu_item_call label="Aiuto su [CURRENT_GRID]" name="current_grid_help"/>
-		<menu_item_call label="A proposito di [CURRENT_GRID]" name="current_grid_about"/>
-		<menu_item_check label="Controlla stato grid" name="Grid Status"/>
-		<menu_item_call label="Segnala abusi" name="Report Abuse"/>
-		<menu_item_call label="Segnala bug" name="Report Bug"/>
+		<menu_item_call label="Informazioni su [CURRENT_GRID]" name="current_grid_about"/>
+		<menu_item_check label="Controlla stato della grid" name="Grid Status"/>
+		<menu_item_call label="Segnala un abuso" name="Report Abuse"/>
+		<menu_item_call label="Segnala un bug" name="Report Bug"/>
 		<menu_item_call label="Urti, spinte, contatti" name="Bumps, Pushes &amp;amp; Hits"/>
-		<menu_item_check label="Abilita tasto info sistema" name="Enable Sysinfo Button"/>
-		<menu_item_call label="A proposito di [APP_NAME]" name="About Second Life"/>
+		<menu_item_check label="Abilita tasto Info di sistema" name="Enable Sysinfo Button"/>
+		<menu_item_call label="Informazioni su [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="RLVa" name="RLVa Main" >
 		<menu label="Debug" name="Debug">
@@ -280,15 +305,16 @@
 		<menu_item_call label="Ricarica texture" name="Rebake Texture"/>
 		<menu_item_call label="Ricarica attachments" name="Refresh Attachments"/>
 		<menu_item_call label="Imposta interfaccia predefinita" name="Set UI Size to Default"/>
-		<menu_item_call label="Dimensione finestra..." name="Set Window Size..."/>
+		<menu_item_call label="Dimensione Finestra..." name="Set Window Size..."/>
 		<menu_item_check label="Limita distanza selezione" name="Limit Select Distance"/>
 		<menu_item_check label="Disabilita limiti camera" name="Disable Camera Distance"/>
 		<menu_item_check label="Foto alta definizione" name="HighResSnapshot"/>
 		<menu_item_check label="Scatta foto senza avvisi" name="QuietSnapshotsToDisk"/>
 		<menu label="Prestazioni" name="Performance Tools">
-			<menu_item_call label="Misura lag" name="Lag Meter"/>
-			<menu_item_check label="Barra statistiche" name="Statistics Bar"/>
-			<menu_item_check label="Statistiche caricamento scena" name="Scene Load Statistics"/>
+			<menu_item_call label="Misuratore LAG" name="Lag Meter"/>
+			<menu_item_check label="Statistiche" name="Statistics Bar"/>
+			<menu_item_check label="Statistiche Caricamento Scena" name="Scene Load Statistics"/>
+			<menu_item_check label="Migliora Velocità Grafica" name="Performance" />
 			<menu_item_check label="Mostra complessità avatar" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Evidenzia e visibilità" name="Highlighting and Visibility">
@@ -333,7 +359,7 @@
 			<menu_item_call label="Importa lista stream XML..." name="media_stream_import"/>
 			<menu_item_call	label="Esporta lista stream XML..." name="media_stream_export"/>
 		</menu>
-		<menu_item_check label="Use Plugin Read Thread" name="Use Plugin Read Thread"/>
+		<menu_item_check label="Usa thread separati per i comandi da plugin esterni" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Vuota cache gruppo" name="ClearGroupCache"/>
 		<menu_item_check label="Mouse fluido" name="Mouse Smoothing"/>
 		<menu_item_call label="Rilascia tasti" name="Release Keys"/>
@@ -344,6 +370,7 @@
 			<menu_item_check label="Corri sempre" name="Always Run"/>
 			<menu_item_check label="Vola" name="Fly"/>
 			<menu_item_call label="Chiudi finestra" name="Close Window"/>
+			<menu_item_call label="Chiudi gruppo di finestre" name="Close Window Group" />
 			<menu_item_call label="Chiudi tutte le finestre" name="Close All Windows"/>
 			<menu_item_call label="Salva foto su disco" name="Snapshot to Disk"/>
 			<menu_item_call label="Mouselook" name="Mouselook"/>
@@ -357,7 +384,7 @@
 		</menu>
 		<menu_item_check label="Sblocca volo" name="Fly Override"/>
 		<menu_item_check label="API RestrainedLove" name="RLV API"/>
-		<menu_item_call label="Mostra impostazioni Debug" name="Debug Settings"/>
+		<menu_item_call label="Mostra impostazioni di debug" name="Debug Settings"/>
 		<menu_item_check label="Mostra menu Sviluppo" name="Debug Mode"/>
 	</menu>
 	<menu label="Sviluppo" name="Develop">
@@ -391,6 +418,10 @@
 			<menu_item_check label="Mostra colore sotto cursore" name="Show Color Under Cursor"/>
 			<menu_item_check label="Mostra Memory" name="Show Memory"/>
 			<menu_item_check label="Mostra Updates to Objects" name="Show Updates"/>
+		</menu>
+		<menu label="Profilazione / Telemetria" name="Enable / Disable telemetry capture">
+			<menu_item_check label="Profilazione" name="Profiling" />
+			<menu_item_check label="Esegui dopo la connessione" name="Start when telemetry client connects" />
 		</menu>
 		<menu label="Forza un errore" name="Force Errors">
 			<menu_item_call label="Forza Breakpoint" name="Force Breakpoint"/>
@@ -560,8 +591,9 @@
 		<menu_item_check label="Texture HTTP" name="HTTP Textures"/>
 		<menu_item_check label="Inventario HTTP" name="HTTP Inventory"/>
 		<menu_item_call label="Comprimi immagini" name="Compress Images"/>
+		<menu_item_call label="Test compressione file" name="Compress File Test" />
 		<menu_item_call label="Abilita Visual Leak Detector" name="Enable Visual Leak Detector"/>
-		<menu_item_check label="Output Debug Minidump" name="Output Debug Minidump"/>
+		<menu_item_check label="Minidump dell'output di debug" name="Output Debug Minidump"/>
 		<menu_item_check label="Finestra terminale (prossimo login)" name="Console Window"/>
 		<menu label="Imposta livello log" name="Set Logging Level">
 			<menu_item_check name="Debug" label="Debug"/>

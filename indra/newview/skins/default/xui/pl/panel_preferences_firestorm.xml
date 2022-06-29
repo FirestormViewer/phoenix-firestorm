@@ -166,11 +166,8 @@
         <text name="text_box_scripting_font" width="150">
             Czcionka edytora skryptów:
         </text>
-        <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL">
-            <combo_item name="Scripting" label="Skryptowanie"/>
-        </combo_box>
+        <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL" />
         <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
-            <combo_item name="Scripting" label="Skryptowanie"/>
             <combo_item name="Small" label="Mała"/>
             <combo_item name="Medium" label="Średnia"/>
             <combo_item name="Large" label="Duża"/>

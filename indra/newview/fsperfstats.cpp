@@ -222,14 +222,14 @@ namespace FSPerfStats
 
         // clean the write maps in all cases.
         auto& statsTypeMatrix = statsDoubleBuffer[writeBuffer];
-        for(auto& statsMap : statsTypeMatrix)
+        for(auto& statsMapByType : statsTypeMatrix)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_STATS("Clear stats maps");
-            for(auto& stat_entry : statsMap)
+            for(auto& stat_entry : statsMapByType)
             {
                 std::fill_n(stat_entry.second.begin() ,static_cast<size_t>(ST::STATS_COUNT),0);
             }
-            statsMap.clear();
+            statsMapByType.clear();
         }
         for(int i=0; i< static_cast<size_t>(ObjType_t::OT_COUNT); i++)
         {
@@ -363,7 +363,7 @@ namespace FSPerfStats
             // if so we've got work to do
 
             // how much of the frame was spent on non avatar related work?
-            U32 non_avatar_time_raw = tot_frame_time_raw - tot_avatar_time_raw;
+            U64 non_avatar_time_raw = tot_frame_time_raw - tot_avatar_time_raw;
 
             // If the target frame time < scene time (estimated as non_avatar time)
             U64 target_avatar_time_raw;

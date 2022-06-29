@@ -3,7 +3,7 @@
 	<floater.string name="empty_slurl">
 		(nessuno)
 	</floater.string>
-	<text name="edit_title" value="Profilo esperienza"/>
+	<text name="edit_title" value="Profilo Esperienza"/>
 	<tab_container name="tab_container">
 		<panel name="panel_experience_info">
 			<scroll_container name="xp_scroll">

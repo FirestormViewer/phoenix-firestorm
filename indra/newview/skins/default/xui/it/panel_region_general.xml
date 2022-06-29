@@ -6,7 +6,7 @@
 	<text name="region_text" left_delta="60">
 		sconosciuta
 	</text>
-	<text name="estate_id_lbl">
+	<text name="estate_id_lbl" right="-92">
 		ID Proprietà: 
 	</text>
 	<line_editor name="estate_id" initial_value="sconosciuto" width="85" />
@@ -16,8 +16,8 @@
 	<text name="version_channel_text" left_delta="60">
 		sconosciuta
 	</text>
-	<text name="grid_position_lbl" width="100">
-		Posizione grid:
+	<text name="grid_position_lbl" right="-75">
+		Pos. grid:
 	</text>
 	<line_editor name="grid_position_x" initial_value="scon"/>
 	<line_editor name="grid_position_y" initial_value="scon"/>

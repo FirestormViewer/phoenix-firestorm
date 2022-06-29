@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Ordina in base al nome" name="sort_name"/>
+	<menu_item_check label="Ordina in base all'username" name="sort_username" />
 	<menu_item_check label="Ordina in base allo stato" name="sort_status"/>
 	<menu_item_check label="Mostra le icone delle persone" name="view_icons"/>
 	<menu_item_check label="Mostra le autorizzazioni concesse" name="view_permissions"/>

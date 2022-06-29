@@ -5966,7 +5966,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://events.secondlife.com/viewer/embed/event/</string>
+      <string>http://events.[GRID]/viewer/embed/event/[EVENT_ID]</string>
     </map>
     <key>FastCacheFetchEnabled</key>
     <map>
@@ -9228,6 +9228,62 @@
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>FSMeshLowestLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Lowest LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>LOD0</string>
+  </map>  
+  <key>FSMeshLowLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Low LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>LOD1</string>
+  </map>  
+  <key>FSMeshMediumLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Medium LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>LOD2</string>
+  </map>  
+  <key>FSMeshHighLodSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for High LOD models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string></string>
+  </map>  
+  <key>FSMeshPhysicsSuffix</key>
+  <map>
+    <key>Comment</key>
+    <string>Suffix to use for Physics models and files (DAE).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>PHYS</string>
+  </map>  
+
   <key>FSMeshUploadAutoEnableWeights</key>
   <map>
     <key>Comment</key>
@@ -11458,6 +11514,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>UpdateRememberPasswordSetting</key>
+    <map>
+      <key>Comment</key>
+      <string>Save 'rememeber password' setting for current user.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   <key>OctreeMaxNodeCapacity</key>
   <map>
     <key>Comment</key>
@@ -12021,10 +12088,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>RenderDebugGL</key>
+    <key>RenderDebugGLSession</key>
     <map>
       <key>Comment</key>
-      <string>Enable strict GL debugging.</string>
+      <string>Enable strict GL debugging on the start of next session.</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
@@ -19800,7 +19867,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSParticleChat</key>
 		<map>
 			<key>Comment</key>
-			<string>Speak Particle Info on channel 9000</string>
+			<string>Send Selection Info on channel 9000 when editing objects (does not work if PrivatePointAtTarget is enabled)</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>

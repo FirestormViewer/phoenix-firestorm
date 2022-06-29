@@ -434,10 +434,9 @@ LLVector3 LLAgentCamera::calcFocusOffset(LLViewerObject *object, LLVector3 origi
 	LLQuaternion obj_rot = object->getRenderRotation();
 	LLVector3 obj_pos = object->getRenderPosition();
 
-	BOOL is_avatar = object->isAvatar();
 	// if is avatar - don't do any funk heuristics to position the focal point
 	// see DEV-30589
-	if (is_avatar)
+	if (object->isAvatar() || (object->isAnimatedObject() && object->getControlAvatar()))
 	{
 		return original_focus_point - obj_pos;
 	}
@@ -562,7 +561,6 @@ LLVector3 LLAgentCamera::calcFocusOffset(LLViewerObject *object, LLVector3 origi
 	// or keep the focus point in the object middle when (relatively) far
 	// NOTE: leave focus point in middle of avatars, since the behavior you want when alt-zooming on avatars
 	// is almost always "tumble about middle" and not "spin around surface point"
-	if (!is_avatar) 
 	{
 		LLVector3 obj_rel = original_focus_point - object->getRenderPosition();
 		
@@ -1521,7 +1519,7 @@ void LLAgentCamera::updateCamera()
 			
 			F32 smoothing = LLSmoothInterpolation::getInterpolant(gSavedSettings.getF32("CameraPositionSmoothing") * SMOOTHING_HALF_LIFE, FALSE);
 					
-			if (!mFocusObject)  // we differentiate on avatar mode 
+			if (mFocusOnAvatar && !mFocusObject) // we differentiate on avatar mode 
 			{
 				// for avatar-relative focus, we smooth in avatar space -
 				// the avatar moves too jerkily w/r/t global space to smooth there.
@@ -3266,7 +3264,13 @@ S32 LLAgentCamera::directionToKey(S32 direction)
 void LLAgentCamera::storeCameraPosition()
 {
 	gSavedPerAccountSettings.setVector3d("FSStoredCameraPos", getCameraPositionGlobal());
-	gSavedPerAccountSettings.setVector3d("FSStoredCameraFocus", getFocusTargetGlobal());
+
+	// get a vector pointing forward from the camera view manually, getFocusTargetGlobal() will
+	// not return useful values if the camera is in flycam mode or was just switched out of
+	// flycam  mode and not repositioned after
+	LLVector3d forward = LLVector3d(1.0, 0.0, 0.0) * LLViewerCamera::getInstance()->getQuaternion() + getCameraPositionGlobal();
+	gSavedPerAccountSettings.setVector3d("FSStoredCameraFocus", forward);
+
 	LLUUID stored_camera_focus_object_id = LLUUID::null;
 	if (mFocusObject)
 	{
@@ -3294,6 +3298,15 @@ void LLAgentCamera::loadCameraPosition()
 	{
 		report_to_nearby_chat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
 		return;
+	}
+
+	// switch off flycam mode if needed
+	if (LLViewerJoystick::getInstance()->getOverrideCamera())
+	{
+		handle_toggle_flycam();
+
+		// exiting from flycam usually keeps the camera where it is but here we want it to actually move
+		LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true);
 	}
 
 	unlockView();

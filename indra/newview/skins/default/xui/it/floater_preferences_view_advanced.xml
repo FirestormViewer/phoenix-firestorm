@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floaterpreferencesviewadvanced" title="Posizione Camera">
+	<text name="camera_offset_lbl">
+		Posizione camera:
+	</text>
+	<text name="focus_offset_lbl">
+		Posizione focus:
+	</text>
+	<text name="offset_scale_lbl">
+		Scala posizione camera:
+	</text>
+	<button label="Salva come Preset..." name="save_preset_btn" />
+	<button label="Chiudi" name="close_btn" />
+</floater>

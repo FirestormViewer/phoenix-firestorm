@@ -131,6 +131,7 @@ Hover your mouse over the options for more help.
      type="string"
      follows="left|top|right"
      max_length="511"
+     parse_urls="true"
      word_wrap="true"
      layout="topleft">
     Group Charter

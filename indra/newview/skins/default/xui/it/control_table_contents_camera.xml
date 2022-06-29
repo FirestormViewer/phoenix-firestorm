@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="Camera" name="lst_action" />
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="Guarda su" />
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="Guarda giù" />
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="Camera in avanti" />
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="Camera indietro" />
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="Camera in avanti veloce" />
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="Camera indietro veloce" />
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="Ruota camera verso l'alto" />
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="Ruota camera verso il basso" />
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="Sposta camera verso l'alto" />
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="Sposta camera verso il basso" />
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="Sposta camera a sinistra" />
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="Sposta camera a destra" />
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="Sposta camera in avanti" />
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="Sposta camera indietro" />
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="Ruota la camera attorno al punto di focus in senso antiorario." value="Ruota camera verso destra" />
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="Ruota la camera attorno al punto di focus in senso orario." value="Ruota camera verso sinistra" />
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Camera in avanti (s)" />
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Camera indietro (s)" />
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Ruota camera verso l'alto (s)" />
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Ruota camera verso il basso (s)" />
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="Ruota la camera attorno al punto di focus in senso antiorario." value="Ruota camera verso destra (s)" />
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="Ruota la camera attorno al punto di focus in senso orario." value="Ruota camera verso sinistra (s)" />
+	</rows>
+</contents>

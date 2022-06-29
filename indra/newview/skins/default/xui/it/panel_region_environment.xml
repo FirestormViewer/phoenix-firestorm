@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ambiente" name="panel_env_info">
 	<string name="str_label_use_default">
-		Usa impostazioni predefinite
+		Usa Impostazioni Predefinite
 	</string>
 	<string name="str_label_use_region">
-		Usa impostazioni regione
+		Usa Impostazioni Regione
 	</string>
 	<string name="str_altitude_desription">
 		Cielo [INDEX]([ALTITUDE]m)
@@ -16,13 +16,13 @@
 		Le impostazioni ambientali non sono disponibili oltre i confini della regione.
 	</string>
 	<string name="str_legacy">
-		Le impostazioni ambientali non sono disponibili per questa regione.
+		Le impostazioni ambientali non sono disponibili in questa regione.
 	</string>
 	<string name="str_disallowed">
-		Il gestore della proprietà immobiliare non permette di cambiare gli ambienti del lotto in questa regione.
+		Il gestore della proprietà immobiliare non permette di cambiare l'ambiente del lotto in questa regione.
 	</string>
 	<string name="str_too_small">
-		Il lotto deve essere di almeno 128 metri quadri per supportare un ambiente.
+		Il lotto deve essere di almeno 128 metri quadri per supportare le funzionalità per l'ambiente.
 	</string>
 	<string name="str_empty">
 		(vuoto)
@@ -30,28 +30,41 @@
 	<string name="str_region_env">
 		(ambiente regione)
 	</string>
-	<layout_stack>
-		<layout_panel name="pnl_environment_disabled">
-			<text name="txt_environment_disabled">
-				...
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text name="region_text_lbl">
+				Regione:
+			</text>
+			<text name="region_text" left_delta="60">
+				sconosciuta
 			</text>
 		</layout_panel>
 		<layout_panel name="pnl_environment_config">
-			<layout_stack>
+			<layout_stack name="ls_environment_config">
 				<layout_panel name="pnl_environment_config">
-					<layout_stack>
+					<layout_stack name="ls_environment_config2">
 						<layout_panel name="pnl_environment_current">
-							<button label="[USEDEFAULT]" name="btn_usedefault"/>
-							<button label="Utilizza Inventario" name="btn_select_inventory"/>
-							<button label="Personalizza" name="btn_edit"/>
-							<check_box label="I proprietari del lotto possono ignorare l’ambiente" name="chk_allow_override"/>
+							<text name="select_environment_label">
+								Seleziona Ambiente
+							</text>
+							<button label="Utilizza Inventario" name="btn_select_inventory" />
+							<button label="Personalizza Ciclo Giornata" name="btn_edit" />
+							<check_box label="Ambiente personalizzabile nei lotti" name="chk_allow_override" />
 						</layout_panel>
 						<layout_panel name="pnl_environment_length">
-							<text name="lbl_apparent_time">
-								[HH]:[MM][AP] ([PRC]%)
+							<text name="day_settings_label">
+								Impostazioni Ciclo Giornata
+							</text>
+							<text name="day_length_label">
+								Durata della giornata (ore)
+							</text>
+							<text name="day_offset_label">
+								Fuso orario (ore)
+							</text>
+							<text name="apparent_time_of_day_label">
+								Ora della giornata:
 							</text>
 						</layout_panel>
-						<layout_panel name="pnl_environment_buttons"/>
 					</layout_stack>
 				</layout_panel>
 				<layout_panel name="pnl_environment_altitudes">
@@ -63,7 +76,7 @@
 						<line_editor name="edt_invname_alt1">
 							Sconosciuto
 						</line_editor>
-						<settings_drop_target name="sdt_alt1" tool_tip="Trascina un’impostazione dall’Inventario a questa casella per selezionarla come cielo corrente."/>
+						<settings_drop_target name="sdt_alt1" tool_tip="Trascina un'ambiente dall’inventario su questa casella per selezionarlo come cielo corrente."/>
 					</panel>
 					<panel name="pnl_alt2">
 						<text name="txt_alt2">
@@ -73,7 +86,7 @@
 						<line_editor name="edt_invname_alt2">
 							Sconosciuto
 						</line_editor>
-						<settings_drop_target name="sdt_alt2" tool_tip="Trascina un’impostazione dall’Inventario a questa casella per selezionarla come cielo corrente."/>
+						<settings_drop_target name="sdt_alt2" tool_tip="Trascina un'ambiente dall’inventario su questa casella per selezionarlo come cielo corrente."/>
 					</panel>
 					<panel name="pnl_alt3">
 						<text name="txt_alt3">
@@ -83,21 +96,19 @@
 						<line_editor name="edt_invname_alt3">
 							Sconosciuto
 						</line_editor>
-						<settings_drop_target name="sdt_alt3" tool_tip="Trascina un’impostazione dall’Inventario a questa casella per selezionarla come cielo corrente."/>
+						<settings_drop_target name="sdt_alt3" tool_tip="Trascina un'ambiente dall’inventario su questa casella per selezionarlo come cielo corrente."/>
 					</panel>
-					<multi_slider initial_value="0" name="sld_altitudes">
-						<slider name="sld1" value="1000"/>
-						<slider name="sld2" value="2000"/>
-						<slider name="sld3" value="3000"/>
-					</multi_slider>
+					<text name="sky_altitudes_label">
+						Altitudini Cielo
+					</text>
 					<panel name="pnl_ground">
 						<text name="txt_ground">
-							Suolo
+							Terreno
 						</text>
 						<line_editor name="edt_invname_ground">
 							Sconosciuto
 						</line_editor>
-						<settings_drop_target name="sdt_ground" tool_tip="Trascina un’impostazione dall’Inventario a questa casella per selezionarla come suolo."/>
+						<settings_drop_target name="sdt_ground" tool_tip="Trascina un'ambiente dall’inventario su questa casella per selezionarlo come terreno."/>
 					</panel>
 					<panel name="pnl_water">
 						<text name="txt_water">
@@ -106,9 +117,9 @@
 						<line_editor name="edt_invname_water">
 							Sconosciuto
 						</line_editor>
-						<settings_drop_target name="sdt_water" tool_tip="Trascina un’impostazione dall’Inventario a questa casella per selezionarla come acqua."/>
+						<settings_drop_target name="sdt_water" tool_tip="Trascina un'ambiente dall’inventario su questa casella per selezionarlo come acqua."/>
 					</panel>
-					<button label="Reimposta" name="btn_rst_altitudes" tool_tip="Reimposta alle altitudini predefinite"/>
+					<button label="Ripristina" name="btn_rst_altitudes" tool_tip="Ripristina alle altitudini predefinite."/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

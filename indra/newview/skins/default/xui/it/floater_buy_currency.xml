@@ -3,55 +3,77 @@
 	<floater.string name="buy_currency">
 		acquistare [LINDENS] L$ per circa [LOCALAMOUNT]
 	</floater.string>
-	<text font="SansSerifLarge" left="5" name="info_need_more" right="-5">
-		Ti servono più L$
-	</text>
-	<text name="contacting">
-		Sto contattando il LindeX...
-	</text>
-	<text name="info_buying">
-		Acquista L$
-	</text>
-	<text name="balance_label">
-		Io ho
-	</text>
-	<text name="balance_amount">
-		[AMT]L$
-	</text>
-	<text name="currency_action" width="45">
-		Voglio acquistare
-	</text>
-	<text name="buying_label">
-		Al prezzo
-	</text>
-	<text name="currency_est">
-		circa [LOCALAMOUNT]
-	</text>
-	<text name="getting_data">
-		Stima in corso...
-	</text>
-	<text name="total_label">
-		Il mio saldo sarà
-	</text>
-	<text name="total_amount">
-		[AMT]L$
-	</text>
-	<text name="currency_links">
-		[http://www.secondlife.com/my/account/payment_method_management.php metodo di pagamento] | [http://www.secondlife.com/my/account/currency.php valuta]
-	</text>
-	<text name="exchange_rate_note">
-		Riscrivi l&apos;importo per vedere l&apos;ultimo tasso di cambio.
-	</text>
-	<text name="purchase_warning_repurchase">
-		La conferma di questo acquisto compra solo L$, non 
-l&apos;oggetto.
-	</text>
-	<text bottom_delta="16" name="purchase_warning_notenough">
-		Non stai acquistando abbastanza L$. Aumenta l&apos;importo.
-	</text>
-	<button label="Acquista" name="buy_btn"/>
-	<button label="Annulla" name="cancel_btn"/>
-	<floater.string name="info_cannot_buy" left="160" font="SansSerifBig">
+	<floater.string name="info_cannot_buy">
 		Impossibile acquistare
 	</floater.string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="layout_panel_title">
+			<text name="info_need_more">
+				Hai bisogno di più L$
+			</text>
+			<text name="info_buying">
+				Acquista L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_price">
+			<text name="target_price_label">
+				Hai bisogno di
+			</text>
+			<text name="target_price">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_balance">
+			<text name="balance_label">
+				Attualmente hai
+			</text>
+			<text name="balance_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_required">
+			<text name="required_label">
+				Dovresti acquistare almeno
+			</text>
+			<text name="required_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_action">
+			<text name="currency_action">
+				Scegli l'importo da acquistare
+			</text>
+			<text name="currency_est">
+				Circa [LOCALAMOUNT]
+			</text>
+			<text name="getting_data">
+				Stima in corso......
+			</text>
+			<text name="total_label">
+				Il tuo nuovo saldo sarà
+			</text>
+			<text name="total_amount">
+				[AMT] L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_msg">
+			<text name="currency_links">
+				[http://www.secondlife.com/my/account/payment_method_management.php metodo di pagamento] | [http://www.secondlife.com/my/account/currency.php valuta]
+			</text>
+			<text name="exchange_rate_note">
+				Inserisci di nuovo l'importo per vedere l'ultimo tasso di cambio.
+			</text>
+			<text name="purchase_warning_repurchase">
+				Dopo aver ricevuto i tuoi L$, dovresti provare
+di nuovo a fare l'acquisto.
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_buttons">
+			<text name="contacting">
+				Sto contattando LindeX...
+			</text>
+			<button label="Acquista" name="buy_btn" />
+			<button label="Annulla" name="cancel_btn" />
+		</layout_panel>
+	</layout_stack>
 </floater>

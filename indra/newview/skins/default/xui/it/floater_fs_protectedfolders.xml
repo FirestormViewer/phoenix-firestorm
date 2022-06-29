@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_protected_folders" title="Cartelle Protette">
+	<floater.string name="UnknownFolder">
+		(cartella sconosciuta)
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Filtro cartelle protette" name="filter_input" />
+		<button name="remove_btn" tool_tip="Rimuovi dalla lista delle cartelle protette" />
+	</panel>
+	<panel name="panel_fs_protected_folders">
+		<scroll_list name="folder_list">
+			<scroll_list.columns label="Nome" name="name" />
+		</scroll_list>
+	</panel>
+</floater>

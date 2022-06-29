@@ -42,8 +42,14 @@
 		<layout_panel name="lp_options_btn">
 			<menu_button tool_tip="Opzioni chat" name="chat_options_btn"/>
 		</layout_panel>
+		<layout_panel name="lp_chat_search_btn">
+			<button name="chat_search_btn" tool_tip="Cerca chat" />
+		</layout_panel>
 		<layout_panel name="support_panel">
 			<check_box label="Specifica versione" name="FSSupportGroupChatPrefix_toggle" tool_tip="Aggiunge la versione del viewer e le info sulla modalità in testa ai messaggi inviati a questo gruppo; questo può aiutare il gruppo di supporto a diagnosticare i problemi e può migliorare l&apos;accuratezza delle risposte"/>
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Specifica versione" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Aggiungi la versione e la skin del viewer, il sistema operativo e lo stato RLVa davanti ai messaggi inviati da te a questo gruppo, il che aiuterà il team di supporto a diagnosticare correttamente i tuoi problemi e a migliorare la precisione nel rispondere alle tue domande. (questo è separato dai gruppi di supporto)" />
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="chat_stack">

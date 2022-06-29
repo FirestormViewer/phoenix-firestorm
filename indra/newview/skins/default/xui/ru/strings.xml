@@ -219,7 +219,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	<string name="LoginFailedNoNetwork">
 		Ошибка сети: не удалось установить соединение. Проверьте подключение к сети.
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		Ошибка входа.
 	</string>
 	<string name="Quit">
@@ -6637,6 +6637,9 @@ ID объекта: [INSPECTING_KEY]
 	</string>
 	<string name="fs_preprocessor_caching_err">
 		Ошибка кэширования подключенного файла '[FILENAME]'
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Предупреждение: Выходные данные препроцессора усечены из-за чрезмерного размера текста скрипта. Этот скрипт, скорее всего, не будет работать.
 	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] секунд назад
