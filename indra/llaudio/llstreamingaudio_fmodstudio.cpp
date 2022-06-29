@@ -543,7 +543,7 @@ bool LLStreamingAudio_FMODSTUDIO::releaseDeadStreams()
         {
             LL_INFOS() << "Closed dead stream" << LL_ENDL;
             delete streamp;
-            mDeadStreams.erase(iter++);
+            iter = mDeadStreams.erase(iter);
         }
         else
         {

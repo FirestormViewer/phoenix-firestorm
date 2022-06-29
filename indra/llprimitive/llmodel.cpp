@@ -1546,28 +1546,6 @@ LLSD LLMeshSkinInfo::asLLSD(bool include_joints, bool lock_scale_if_joint_positi
 	return ret;
 }
 
-U32 LLMeshSkinInfo::sizeBytes() const
-{
-    U32 res = sizeof(LLUUID); // mMeshID
-
-    res += sizeof(std::vector<std::string>) + sizeof(std::string) * mJointNames.size();
-    for (U32 i = 0; i < mJointNames.size(); ++i)
-    {
-        // <FS> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-        //res += mJointNames[i].size(); // actual size, not capacity
-        res += mJointNames[i].mName.size(); // actual size, not capacity
-        // </FS>
-    }
-
-    res += sizeof(std::vector<S32>) + sizeof(S32) * mJointNums.size();
-    res += sizeof(std::vector<LLMatrix4>) + 16 * sizeof(float) * mInvBindMatrix.size();
-    res += sizeof(std::vector<LLMatrix4>) + 16 * sizeof(float) * mAlternateBindMatrix.size();
-    res += 16 * sizeof(float); //mBindShapeMatrix
-    res += sizeof(float) + 3 * sizeof(bool);
-
-    return res;
-}
-
 void LLMeshSkinInfo::updateHash()
 {
     //  get hash of data relevant to render batches
@@ -1600,6 +1578,28 @@ void LLMeshSkinInfo::updateHash()
     hash.raw_digest((U8*) digest);
 
     mHash = digest[0];
+}
+
+U32 LLMeshSkinInfo::sizeBytes() const
+{
+    U32 res = sizeof(LLUUID); // mMeshID
+
+    res += sizeof(std::vector<std::string>) + sizeof(std::string) * mJointNames.size();
+    for (U32 i = 0; i < mJointNames.size(); ++i)
+    {
+        // <FS> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
+        //res += mJointNames[i].size(); // actual size, not capacity
+        res += mJointNames[i].mName.size(); // actual size, not capacity
+        // </FS>
+    }
+
+    res += sizeof(std::vector<S32>) + sizeof(S32) * mJointNums.size();
+    res += sizeof(std::vector<LLMatrix4>) + 16 * sizeof(float) * mInvBindMatrix.size();
+    res += sizeof(std::vector<LLMatrix4>) + 16 * sizeof(float) * mAlternateBindMatrix.size();
+    res += 16 * sizeof(float); //mBindShapeMatrix
+    res += sizeof(float) + 3 * sizeof(bool);
+
+    return res;
 }
 
 LLModel::Decomposition::Decomposition(LLSD& data)
