@@ -6335,6 +6335,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	<string name="skin_defaults_starlight_navbar">
 		Pokazywanie paska nawigacyjnego zostało włączone, to domyślne zachowanie dla skórek linii StarLight.
 	</string>
+	<string name="fs_preprocessor_truncated">
+		Uwaga: Dane wyjściowe preprocesora zostały skrócone z powodu zbyt dużego rozmiaru tekstu skryptu - prawdopodobnie nie zadziała.
+	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] sekund temu
 	</string>

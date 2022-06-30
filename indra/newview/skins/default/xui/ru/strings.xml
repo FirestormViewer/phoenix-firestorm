@@ -6632,6 +6632,9 @@ ID объекта: [INSPECTING_KEY]
 	<string name="skin_defaults_starlight_navbar">
 		Отображение панели навигации было включено по умолчанию для серии тем Starlight.
 	</string>
+	<string name="fs_preprocessor_truncated">
+		Предупреждение: Выходные данные препроцессора усечены из-за чрезмерного размера текста скрипта. Этот скрипт, скорее всего, не будет работать.
+	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] секунд назад
 	</string>
