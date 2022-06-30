@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="CARICAMENTO MODELLO">
+<floater name="Model Preview" title="Caricamento Modello Mesh">
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Errore: Errore elaborazione Dae - vedere il registro per informazioni dettagliate.

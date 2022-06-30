@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="menu_blocked_gear">
+	<menu_item_call label="Sblocca" name="unblock" />
+	<menu_item_check label="Blocca voce" name="BlockVoice" />
+	<menu_item_check label="Blocca chat" name="MuteText" />
+	<menu_item_check label="Blocca particelle" name="BlockObjectParticles" />
+	<menu_item_check label="Blocca suoni oggetti" name="BlockObjectSounds" />
+	<menu_item_call label="Profilo..." name="profile" />
+</context_menu>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_tphistory" title="Storico Teleport">
+	<filter_editor label="Filtro storico teleport" name="Filter" />
+	<menu_button tool_tip="Mostra opzioni" name="options_gear_btn" />
+	<menu_button tool_tip="Mostra le opzioni di ordinamento" name="sorting_menu_btn" />
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleport" name="teleport_btn" tool_tip="Teleport al luogo selezionato" />
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Mappa" name="map_btn" tool_tip="Mostra il luogo selezionato sulla mappa" />
+					</layout_panel>
+					<layout_panel name="profile_btn_lp">
+						<button label="Profilo" name="profile_btn" tool_tip="Mostra il profilo del luogo" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+	</panel>
+</floater>

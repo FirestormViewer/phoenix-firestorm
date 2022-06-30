@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Multi-Selected People Context Menu">
+	<menu_item_call label="Aggiungi agli amici" name="Add Friends"/>
+	<menu_item_call label="Aggiungi ad un set" name="Add to Set"/>
+	<menu_item_call label="Rimuovi dagli amici" name="Remove Friend"/>
+	<menu_item_call label="Invia IM" name="IM"/>
+	<menu_item_call label="Chiama" name="Call"/>
+	<menu name="MarkAvatar" label="Segna...">
+		<menu_item_call label="Rosso" name="MarkRed"/>
+		<menu_item_call label="Verde" name="MarkGreen"/>
+		<menu_item_call label="Blu" name="MarkBlue"/>
+		<menu_item_call label="Viola" name="MarkPurple"/>
+		<menu_item_call label="Giallo" name="MarkYellow"/>
+		<menu_item_call label="Rimuovi questo segno" name="Clear Mark"/>
+		<menu_item_call label="Rimuovi tutti i segni" name="Clear Marks"/>
+	</menu>
+	<menu_item_call label="Condividi" name="Share"/>
+	<menu_item_call label="Paga" name="Pay"/>
+	<menu_item_call label="Offri teleport" name="teleport"/>
+	<menu_item_call label="Immobilizza" name="freeze"/>
+	<menu_item_call label="Espelli dal lotto" name="eject"/>
+	<menu_item_call label="Regione: Espelli" name="kick"/>
+	<menu_item_call label="Regione: Teleport home" name="teleport_home"/>
+	<menu_item_call label="Regione: Ban" name="estate_ban"/>
+	<menu_item_call label="De-renderizza" name="derender"/>
+	<menu_item_call label="De-renderizza + Lista nera" name="derender_permanent"/>
+	<menu label="Impostazioni di resa" name="render_settings">
+		<menu_item_call label="Renderizza normalmente" name="av_render_normal" />
+		<menu_item_call label="Non renderizzare mai" name="av_render_never" />
+		<menu_item_call label="Renderizza sempre completamente" name="av_render_always" />
+	</menu>
+</context_menu>

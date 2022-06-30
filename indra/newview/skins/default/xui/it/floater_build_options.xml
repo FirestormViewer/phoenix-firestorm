@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="build options floater" title="Opzioni griglia">
+<floater name="build options floater" title="Opzioni Griglia">
 	<spinner label="Unità (metri)" name="GridResolution"/>
 	<spinner label="Ampiezza (metri)" name="GridDrawSize"/>
 	<spinner label="Numero decimali" name="DecimalPrecision"/>

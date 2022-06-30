@@ -35,7 +35,7 @@ Dettagli errore: La notifica denominata &apos;[_NAME]&apos; non è stata trovata
 	</notification>
 	<notification name="LoginFailedNoNetwork">
 		Non è possibile collegarsi alla [CURRENT_GRID].
-	&apos;[DIAGNOSTIC]&apos;
+&apos;[DIAGNOSTIC]&apos;
 Accertarsi che la connessione Internet stia funzionando correttamente.
 	</notification>
 	<notification name="MessageTemplateNotFound">
@@ -144,19 +144,19 @@ Motivo: &apos;[ERROR_REASON]&apos; - [ERROR_DESCRIPTION]
 	</notification>
 	<notification name="AlertMerchantListingActivateRequired">
 		Ci sono svariate cartelle di versione oppure nessuna cartella di versione in questo annuncio. In seguito dovrai selezionarne e attivarne una separatamente.
-		<usetemplate ignoretext="Avvisa riguardo all&apos;attivazione della cartella di versione quando creo un annuncio con varie cartelle di versione" name="okignore" />
+		<usetemplate ignoretext="Avvisami riguardo all'attivazione della cartella di versione quando creo un annuncio con varie cartelle di versione" name="okignore" />
 	</notification>
 	<notification name="AlertMerchantStockFolderSplit">
 		Abbiamo diviso gli articoli in magazzino di tipo diverso in cartelle di magazzino separate. In questo modo la tua cartella è ordinata per la pubblicazione nell&apos;annuncio.
-		<usetemplate ignoretext="Avverti quando la cartella di magazzino viene suddivisa prima della pubblicazione dell&apos;annuncio" name="okignore" />
+		<usetemplate ignoretext="Avvisami quando la cartella di magazzino viene suddivisa prima della pubblicazione dell&apos;annuncio" name="okignore" />
 	</notification>
 	<notification name="AlertMerchantStockFolderEmpty">
 		L&apos;annuncio è stato rimosso perché il magazzino è esaurito. Aggiungi altre unità alla cartella di magazzino prima di pubblicare nuovamente l&apos;annuncio.
-		<usetemplate ignoretext="Avverti quando un annuncio viene rimosso perché la cartella di magazzino è vuota" name="okignore" />
+		<usetemplate ignoretext="Avvisami quando un annuncio viene rimosso perché la cartella di magazzino è vuota" name="okignore" />
 	</notification>
 	<notification name="AlertMerchantVersionFolderEmpty">
 		L&apos;annuncio è stato rimosso perché la cartella di versione è vuota. Bisogna aggiungere oggetti alla cartella di versione per ripristinare l&apos;annuncio.
-		<usetemplate ignoretext="Avverti quando un annuncio viene rimosso perché la cartella di versione è vuota" name="okignore" />
+		<usetemplate ignoretext="Avvisami quando un annuncio viene rimosso perché la cartella di versione è vuota" name="okignore" />
 	</notification>
 	<notification name="WriteAnimationFail">
 		C&apos;è stato un problema di scrittura dati dell&apos;animazione. Riprova più tardi.
@@ -619,8 +619,8 @@ Visitare [_URL] per ulteriori informazioni?
 	<notification name="OldGPUDriver">
 		È probabile che ci sia un driver aggiornato per il processore grafico. L&apos;aggiornamento dei driver della grafica può migliorare le prestazioni in maniera significativa.
 
-    Visitare [URL] per cercare un aggiornamento del driver?
-		<usetemplate ignoretext="Driver grafica obsoleto" name="okcancelignore" notext="No" yestext="Sì"/>
+Visitare [URL] per cercare un aggiornamento del driver?
+		<usetemplate ignoretext="Driver grafico obsoleto" name="okcancelignore" notext="No" yestext="Sì"/>
 	</notification>
 	<notification name="UnknownGPU">
 		Il sistema utilizza una scheda grafica che [APP_NAME] non riconosce.
@@ -1836,7 +1836,7 @@ Rimuovere l&apos;alias?
 	</notification>
 	<notification name="TeleportViaSLAPP">
 		Conferma il teleport a &lt;nolink&gt;[LOCATION]&lt;/nolink&gt;?
-		<usetemplate ignoretext="Confermo di voler usare il teleport tramite SLAPP" name="okcancelignore" notext="Annulla" yestext="Teleport"/>
+		<usetemplate ignoretext="Conferma utilizzo teleport tramite SLAPP" name="okcancelignore" notext="Annulla" yestext="Teleport"/>
 	</notification>
 	<notification name="TeleportToPick">
 		Conferma il teleport a [PICK]?
@@ -2229,14 +2229,14 @@ Hai aggiornato l&apos;ubicazione di questo preferito ma gli altri dettagli conse
 Questi elementi verranno trasferiti nel tuo inventario, ma non copiati.
 
 Trasferisci gli elementi nell&apos;inventario?
-		<usetemplate ignoretext="Avvertimi quando tento di spostare elementi per i quali non è consentita la copia da un oggetto" name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Avvisami quando tento di spostare elementi per i quali non è consentita la copia da un oggetto" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="MoveInventoryFromScriptedObject">
 		Hai selezionato elementi dell&apos;inventario non copiabili.  Questi elementi verranno trasferiti nel tuo inventario, non verranno copiati.
 Dato che questo oggetto è scriptato, il trasferimento di questi elementi nel tuo inventario potrebbe causare un malfunzionamento degli script.
 
 Trasferisci gli elementi nell&apos;inventario?
-		<usetemplate ignoretext="Avvertimi se tento di spostare elementi per i quali non è consentita la copia e che potrebbero danneggiare un oggetto scriptato" name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Avvisami se tento di spostare elementi per i quali non è consentita la copia e che potrebbero danneggiare un oggetto scriptato" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="ClickActionNotPayable">
 		Attenzione: l&apos;azione Paga oggetto è stata impostata, ma funzionerà soltanto se si inserisce uno script con un evento money().
@@ -2287,7 +2287,7 @@ Questa azione non può essere annullata.
 			<ignore name="ignore" text="Conferma di cancellazione"/>
 			<button name="No" text="Annulla"/>
 		</form>
-		</notification>
+	</notification>
 	<notification name="DeleteFilteredItems">
 		L'inventario è filtrato e non tutti gli elementi che si stanno per cancellare sono visibili.
 
@@ -3971,7 +3971,6 @@ Valore attuale: [CURRENT_VALUE]
 	<notification name="CacheEmpty">
 		La cache del viewer è vuota. Sono possibili rallentamenti nel framerate e nel caricamento dell&apos;inventario per un breve tempo, mentre vengono caricati i nuovi contenuti.
 	</notification>
-<!-- Commented out because without an update it would show false information!
 	<notification name="FirstJoinSupportGroup2">
 		Benvenuti al gruppo di supporto di Phoenix/Firestorm!
 
@@ -3986,7 +3985,6 @@ Abilitare l&apos;invio automatico della versione?
 			<ignore name="ignore" text="Iscrizione al gruppo di supporto Phoenix/Firestorm" save_option="true" />
 		</form>
 	</notification>
--->
 	<notification name="ConfirmScriptModify">
 		Modificare gli script negli oggetti selezionati?
 		<usetemplate ignoretext="Conferma prima di modificare script nella selezione" name="okcancelignore" notext="Annulla" />
@@ -4725,13 +4723,6 @@ Simulatore precedente: [OLDVERSION]
 		Errore nella RegEx:
 [EWHAT]
 	</notification>
-	<notification name="NoHavok">
-		Alcune funzioni come [FEATURE] non sono comprese nella versione Opensimulator di [APP_NAME]. Per usare [FEATURE], scaricare [APP_NAME] per Second Life da
-[DOWNLOAD_URL]
-		<form name="form">
-			<ignore name="ignore" text="No Havok Warning"/>
-		</form>
-	</notification>
 	<notification name="StreamListExportSuccess">
 		La lista degli stream è stata esportata in XML su [FILENAME].
 	</notification>
@@ -4854,7 +4845,7 @@ L'azione non può essere annullata.
 		Importazione forma fallita. Controllare che [FILENAME] sia un file avatar.
 	</notification>
 	<notification name="AddToMediaList">
-		Inserire un nome di dominio da aggiungere a [LIST]:
+		Inserisci un dominio o un URL da aggiungere alla [LIST]:
 		<form name="form">
 			<button name="Add" text="Aggiungi"/>
 			<button name="Cancel" text="Annulla"/>

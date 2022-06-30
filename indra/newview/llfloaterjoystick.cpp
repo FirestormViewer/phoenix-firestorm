@@ -369,9 +369,7 @@ void LLFloaterJoystick::refreshListOfDevices()
         std::string desc = LLViewerJoystick::getInstance()->getDescription();
         if (!desc.empty())
         {
-            // <FS:Zi> FIRE-30846 - Select the first detected device, don't fall back to 0 which will select "None"
-            // LLSD value = LLSD::Integer(0);
-            LLSD value = LLSD::Integer(1);
+            LLSD value = LLSD::Integer(1); // value for selection
             addDevice(desc, value);
             mHasDeviceList = true;
         }
@@ -471,6 +469,9 @@ void LLFloaterJoystick::onCommitJoystickEnabled(LLUICtrl*, void *joy_panel)
 
     LLSD value = self->mJoysticksCombo->getValue();
     bool joystick_enabled = true;
+    // value is 0 for no device,
+    // 1 for a device on Mac (single device, no list support yet)
+    // binary packed guid for a device on windows (can have multiple devices)
     if (value.isInteger())
     {
         // ndof already has a device selected, we are just setting it enabled or disabled
@@ -479,7 +480,7 @@ void LLFloaterJoystick::onCommitJoystickEnabled(LLUICtrl*, void *joy_panel)
     else
     {
         LLViewerJoystick::getInstance()->initDevice(value);
-        // else joystick is enabled, because combobox holds id of device
+        // else joystick is enabled, because combobox holds id of the device
         joystick_enabled = true;
     }
     gSavedSettings.setBOOL("JoystickEnabled", joystick_enabled);

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floatermedialists" title="Liste Media">
+	<floater.string name="EnterUrlAllow">
+		Inserisci un dominio o un URL da consentire sempre:
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		Inserisci un dominio o un URL da bloccare sempre:
+	</floater.string>
+	<layout_stack name="lists_layout_stack">
+		<layout_panel name="whitelist_layout_panel">
+			<text name="whitelist_text">
+				Domini consentiti:
+			</text>
+			<scroll_list name="whitelist">
+				<column label="Lista bianca" name="list"/>
+			</scroll_list>
+			<layout_stack name="whitelist_buttons_layout_stack">
+				<layout_panel name="whitelist_buttons_panel_add">
+					<button label="Aggiungi..." label_selected="Aggiungi..." name="add_whitelist"/>
+				</layout_panel>
+				<layout_panel name="whitelist_buttons_panel_remove">
+					<button label="Rimuovi" label_selected="Rimuovi" name="remove_whitelist"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="blacklist_layout_panel">
+			<text name="blacklist_text">
+				Domini bloccati:
+			</text>
+			<scroll_list name="blacklist">
+				<column label="Lista nera" name="list"/>
+			</scroll_list>
+			<layout_stack name="blacklist_buttons_layout_stack">
+				<layout_panel name="blacklist_buttons_panel_add">
+					<button label="Aggiungi..." label_selected="Aggiungi..." name="add_blacklist"/>
+				</layout_panel>
+				<layout_panel name="blacklist_buttons_panel_remove">
+					<button label="Rimuovi" label_selected="Rimuovi" name="remove_blacklist"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

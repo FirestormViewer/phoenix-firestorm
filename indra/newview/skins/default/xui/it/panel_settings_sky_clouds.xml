@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Nuvole" name="panel_settings_sky_clouds">
-	<layout_stack>
-		<layout_panel>
-			<slider label="X" name="cloud_density_x"/>
-			<slider label="Y" name="cloud_density_y"/>
-			<slider label="D" name="cloud_density_d"/>
-			<slider label="X" name="cloud_detail_x"/>
-			<slider label="Y" name="cloud_detail_y"/>
-			<slider label="D" name="cloud_detail_d"/>
+	<layout_stack name="main_ls">
+		<layout_panel name="left_lp">
+			<text name="cloud_coverage_label">
+				Nuvolosità:
+			</text>
+			<text name="cloud_scale_label">
+				Dimensioni:
+			</text>
+			<text name="cloud_variance_label">
+				Variabilità:
+			</text>
+			<text name="cloud_scroll_label">
+				Scorrimento nuvole:
+			</text>
+			<text name="cloud_image_label">
+				Immagine nuvole:
+			</text>
+			<text name="cloud_color_label">
+				Colore nuvole:
+			</text>
+		</layout_panel>
+		<layout_panel name="right_lp">
+			<text name="cloud_density_label">
+				Densità nuvole:
+			</text>
+			<slider label="G" name="cloud_density_d" />
+			<text name="cloud_detail_label">
+				Dettaglio nuvole:
+			</text>
 		</layout_panel>
 	</layout_stack>
 </panel>

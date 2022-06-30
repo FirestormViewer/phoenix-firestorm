@@ -125,6 +125,7 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mEditCharter->setCommitCallback(onCommitAny, this);
 		mEditCharter->setFocusReceivedCallback(boost::bind(onFocusEdit, _1, this));
 		mEditCharter->setFocusChangedCallback(boost::bind(onFocusEdit, _1, this));
+        mEditCharter->setContentTrusted(false);
 	}
 	// <FS> set up callbacks for copy URI and name buttons
 	childSetCommitCallback("copy_uri", boost::bind(&LLPanelGroupGeneral::onCopyURI, this), NULL);
@@ -676,7 +677,8 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 
 	if (mEditCharter)
 	{
-		mEditCharter->setText(gdatap->mCharter);
+        mEditCharter->setParseURLs(!mAllowEdit || !can_change_ident);
+        mEditCharter->setText(gdatap->mCharter);
 	}
 	
 	// <FS:Ansariel> Re-add group member list on general panel

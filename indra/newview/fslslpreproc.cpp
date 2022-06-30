@@ -1540,6 +1540,22 @@ void FSLSLPreprocessor::start_process()
 				}
 			}
 		}
+		else
+		{
+			// FIRE-31718: Preprocessor crashes viewer on recursive #include
+
+			// Truncate the resulting preprocessed script to something the text field can handle without
+			// freezing for so long the viewer disconnects. The usual script source code limit is 64kB so
+			// let's play it safe and allow twice as much here. The script is most likely already unusable
+			// at this point due to the preprocessor bailing out with an error earlier, so a truncated
+			// version doesn't hurt more than it already did.
+			if (output.size() > 128 * 1024)
+			{
+				output.resize(128 * 1024);
+				display_error(LLTrans::getString("fs_preprocessor_truncated"));
+			}
+		}
+
 		if (!errored)
 		{
 			if (preprocessor_enabled && use_compression)

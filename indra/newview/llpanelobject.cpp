@@ -2304,6 +2304,18 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 
 	// <FS:Zi> Building spin controls for attachments
 	// partly copied from llmaniptranslate.cpp to get the positioning right
+    //bool is_valid_pos = true;
+    //if (mObject->isAttachment())
+    //{
+    //    LLVector3 delta_pos = mObject->getPositionEdit() - newpos;
+    //    LLVector3d attachment_pos = regionp->getPosGlobalFromRegion(mObject->getPositionRegion() + delta_pos);
+    //    is_valid_pos = LLWorld::getInstance()->positionRegionValidGlobal(attachment_pos);
+    //}
+    //else
+    //{
+    //    is_valid_pos = LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global);
+    //}
+	//if (is_valid_pos)
 	if (mObject->isAttachment())
 	{
 		LLVector3 old_position_local = mObject->getPosition();
@@ -2338,8 +2350,8 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 
 		LLSelectMgr::getInstance()->updateSelectionCenter();
 	}
-	// </FS:Zi> Building spin controls for attachments
 	else if (LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
+	// </FS:Zi> Building spin controls for attachments
 	{
 		// send only if the position is changed, that is, the delta vector is not zero
 		LLVector3d old_pos_global = mObject->getPositionGlobal();

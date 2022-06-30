@@ -199,7 +199,7 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	<string name="LoginFailedNoNetwork">
 		Błąd sieci: Brak połączenia z siecią, sprawdź status swojego połączenia internetowego.
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		Logowanie nie powiodło się.
 	</string>
 	<string name="Quit">
@@ -6328,6 +6328,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="fs_preprocessor_caching_err">
 		Błąd podczas buforowania pliku '[FILENAME]'
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Uwaga: Dane wyjściowe preprocesora zostały skrócone z powodu zbyt dużego rozmiaru tekstu skryptu - prawdopodobnie nie zadziała.
 	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] sekund temu

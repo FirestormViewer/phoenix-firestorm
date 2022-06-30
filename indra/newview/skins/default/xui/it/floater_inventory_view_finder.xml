@@ -2,18 +2,21 @@
 <floater name="Inventory Finder" title="Trova in inventario">
 	<check_box label="Animazioni" name="check_animation"/>
 	<check_box label="Biglietti da visita" name="check_calling_card"/>
-	<check_box label="Abiti" name="check_clothing"/>
+	<check_box label="Vestiti / Parti corpo" name="check_clothing"/>
 	<check_box label="Gesti" name="check_gesture"/>
 	<check_box label="Segnaposto" name="check_landmark"/>
 	<check_box label="Annotazioni" name="check_notecard"/>
-	<check_box label="Modelli mesh" name="check_mesh"/>
 	<check_box label="Oggetti" name="check_object"/>
 	<check_box label="Script" name="check_script"/>
 	<check_box label="Suoni" name="check_sound"/>
 	<check_box label="Texture" name="check_texture"/>
 	<check_box label="Fotografie" name="check_snapshot"/>
+	<check_box label="Ambienti" name="check_settings" />
 	<button label="Tutti" label_selected="Tutti" name="All"/>
 	<button label="Nessuno" label_selected="Nessuno" name="None"/>
+	<check_box label="Mod." name="check_modify" />
+	<check_box label="Cop." name="check_copy" />
+	<check_box label="Trasf." name="check_transfer" />
 	<check_box label="Mostra sempre cartelle" name="check_show_empty"/>
 	<check_box label="Creati da me" name="check_created_by_me" />
 	<check_box label="Creati da altri" name="check_created_by_others" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Fixed Environment" title="Ambiente stabilito">
+<floater name="Fixed Environment" title="Ambiente Fisso">
 	<string name="edit_sky">
 		Modifica cielo:
 	</string>
@@ -8,6 +8,9 @@
 	</string>
 	<layout_stack name="floater_stack">
 		<layout_panel name="info_panel">
+			<text name="info_panel_label">
+				Nome:
+			</text>
 			<button label="Carica" name="btn_load" tool_tip="Carica impostazioni dall’inventario"/>
 			<button label="Importa" name="btn_import" tool_tip="Importa impostazioni legacy dal disco."/>
 		</layout_panel>
@@ -17,7 +20,7 @@
 					<button label="Salva" name="btn_commit"/>
 				</layout_panel>
 				<layout_panel name="revert_btn_lp">
-					<button label="Annulla" name="btn_cancel" tool_tip="Ripristina l&apos;ultima versione salvata"/>
+					<button label="Annulla" name="btn_cancel" tool_tip="Ripristina l'ultima versione salvata"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

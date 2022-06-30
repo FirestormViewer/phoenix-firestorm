@@ -274,7 +274,7 @@
 			<text name="RadarAvatarAgeAlertValueLabel">
                 閾値:
 			</text>
-			<spinner control_name="RadarAvatarAgeAlertValue" name="RadarAvatarAgeAlertValue" tool_tip="レーダーの年齢欄にも色で強調します。無効にするには-1を設定します。" />
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="レーダーの年齢欄にも色で強調します。無効にするには-1を設定します。" />
 			<text name="RadarAvatarAgeAlertValueLabelSuffix">
                 日
 			</text>

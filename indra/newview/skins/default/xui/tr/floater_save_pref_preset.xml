@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<floater name="Save Pref Preset" title="TERCİHLİ ÖN AYAR OLARAK KAYDET">
-	<string name="title_graphic">
-		Grafik Ön Ayarı Olarak Kaydet
-	</string>
-	<string name="title_camera">
-		Kamera Ön Ayarı Olarak Kaydet
-	</string>
+<floater name="save_pref_preset" title="TERCİHLİ ÖN AYAR OLARAK KAYDET">
 	<text name="Preset">
 		Ön ayar için bir ad girin veya mevcut bir ön ayarı seçin.
 	</text>
