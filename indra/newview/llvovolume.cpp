@@ -2353,6 +2353,7 @@ void LLVOVolume::setNumTEs(const U8 num_tes)
 	return ;
 }
 
+
 //virtual
 void LLVOVolume::changeTEImage(S32 index, LLViewerTexture* imagep)
 {
@@ -3692,6 +3693,11 @@ F32 LLVOVolume::getLightCutoff() const
 	}
 }
 
+BOOL LLVOVolume::isReflectionProbe() const
+{
+    return getParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE);
+}
+
 void LLVOVolume::setIsReflectionProbe(BOOL is_probe)
 {
     BOOL was_probe = isReflectionProbe();
@@ -3760,25 +3766,6 @@ void LLVOVolume::setReflectionProbeIsDynamic(bool is_dynamic)
             parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
         }
     }
-}
-
-
-BOOL LLVOVolume::isReflectionProbe() const
-{
-    // HACK - make this object a Reflection Probe if a certain UUID is detected
-    static LLCachedControl<std::string> reflection_probe_id(gSavedSettings, "RenderReflectionProbeTextureHackID", "");
-    LLUUID probe_id(reflection_probe_id);
-
-    for (U8 i = 0; i < getNumTEs(); ++i)
-    {
-        if (getTE(i)->getID() == probe_id)
-        {
-            return true;
-        }
-    }
-    // END HACK
-
-    return getParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE);
 }
 
 F32 LLVOVolume::getReflectionProbeAmbiance() const
@@ -6195,6 +6182,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					continue;
 				}
 
+                // HACK -- brute force this check every time a drawable gets rebuilt
+                vobj->updateTEMaterialTextures(i);
 #if 0
 #if LL_RELEASE_WITH_DEBUG_INFO
                 const LLUUID pbr_id( "49c88210-7238-2a6b-70ac-92d4f35963cf" );
