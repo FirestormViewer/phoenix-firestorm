@@ -670,6 +670,8 @@ BOOL LLWindowMacOSX::createContext(int x, int y, int width, int height, int bits
 		}
 	}
 
+    mRefreshRate = CGDisplayModeGetRefreshRate(CGDisplayCopyDisplayMode(mDisplay));
+
 	// Disable vertical sync for swap
     toggleVSync(enable_vsync);
 
