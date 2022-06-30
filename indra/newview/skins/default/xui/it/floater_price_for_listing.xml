@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="price_for_listing" title="Pubblica annuncio pubblicitario">
+<floater name="price_for_listing" title="Pubblica Annuncio Pubblicitario">
 	<text name="explanation_text">
 		La tua inserzione sarà visibile per una settimana dal giorno della sua pubblicazione.
 

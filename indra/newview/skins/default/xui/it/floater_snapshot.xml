@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Snapshot" title="Fotografa">
+<floater name="Snapshot" title="Scatta Foto">
 	<floater.string name="unknown">
 		sconosciuto
 	</floater.string>
 	<string name="postcard_progress_str">
 		Invio e-mail in corso
-	</string>
-	<string name="facebook_progress_str">
-		Caricamento su Facebook
 	</string>
 	<string name="profile_progress_str">
 		Caricamento in corso
@@ -17,9 +14,6 @@
 	</string>
 	<string name="local_progress_str">
 		Salvataggio sul computer in corso
-	</string>
-	<string name="facebook_succeeded_str">
-		Pubblicazione sul profilo completata
 	</string>
 	<string name="profile_succeeded_str">
 		Immagine caricata
@@ -32,9 +26,6 @@
 	</string>
 	<string name="local_succeeded_str">
 		Salvata sul computer
-	</string>
-	<string name="facebook_failed_str">
-		Pubblicazione sul profilo non riuscita.
 	</string>
 	<string name="profile_failed_str">
 		Caricamento immagine sul feed del profilo non riuscito.
@@ -90,4 +81,5 @@
 	<text name="image_res_text">
 		[WIDTH] px (larghezza) x [HEIGHT] px (altezza)
 	</text>
+	<button label="Foto a 360°" name="360_label" />
 </floater>

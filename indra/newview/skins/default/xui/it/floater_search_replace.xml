@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="search replace" title="Cerca / Sostituisci">
+    <check_box label="Non disting. maius." name="case_text" />
+    <check_box label="Cerca precedente" name="find_previous" />
+    <button label="Cerca" label_selected="Cerca" name="search_btn" />
+    <button label="Sostituisci" label_selected="Sostituisci" name="replace_btn" />
+    <button label="Sostituisci Tutti" label_selected="Sostituisci Tutti" name="replace_all_btn" />
+    <text name="txt">
+        Cerca
+    </text>
+    <text name="txt2">
+        Sostituisci
+    </text>
+</floater>

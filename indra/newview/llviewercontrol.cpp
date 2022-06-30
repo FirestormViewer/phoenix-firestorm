@@ -590,13 +590,6 @@ static bool handleRenderBumpChanged(const LLSD& newval)
 	return true;
 }
 
-static bool handleRenderDebugGLChanged(const LLSD& newvalue)
-{
-	gDebugGL = newvalue.asBoolean() || gDebugSession;
-	gGL.clearErrors();
-	return true;
-}
-
 static bool handleRenderDebugPipelineChanged(const LLSD& newvalue)
 {
 	gDebugPipeline = newvalue.asBoolean();
@@ -1199,7 +1192,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderMaxVBOSize")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
     gSavedSettings.getControl("RenderVSyncEnable")->getSignal()->connect(boost::bind(&handleVSyncChanged, _2));
 	gSavedSettings.getControl("RenderDeferredNoise")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
-	gSavedSettings.getControl("RenderDebugGL")->getSignal()->connect(boost::bind(&handleRenderDebugGLChanged, _2));
 	gSavedSettings.getControl("RenderDebugPipeline")->getSignal()->connect(boost::bind(&handleRenderDebugPipelineChanged, _2));
 	gSavedSettings.getControl("RenderResolutionDivisor")->getSignal()->connect(boost::bind(&handleRenderResolutionDivisorChanged, _2));
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4

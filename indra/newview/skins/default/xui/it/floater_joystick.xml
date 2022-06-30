@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="Configurazione joystick">
+<floater name="Joystick" title="Configurazione Joystick">
 	<check_box label="Abilita Joystick:" name="enable_joystick"/>
 	<text left="120" name="joystick_type" width="380"/>
 	<spinner label="Mapping: asse X" label_width="140" left="12" name="JoystickAxis1" width="180"/>

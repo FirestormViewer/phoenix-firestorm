@@ -111,8 +111,6 @@ S32 LLVOVolume::mRenderComplexity_current = 0;
 LLPointer<LLObjectMediaDataClient> LLVOVolume::sObjectMediaClient = NULL;
 LLPointer<LLObjectMediaNavigateClient> LLVOVolume::sObjectMediaNavigateClient = NULL;
 
-extern BOOL gGLDebugLoggingEnabled;
-
 // NaCl - Graphics crasher protection
 static bool enableVolumeSAPProtection()
 {
@@ -5298,15 +5296,26 @@ LLControlAVBridge::LLControlAVBridge(LLDrawable* drawablep, LLViewerRegion* regi
 
 bool can_batch_texture(LLFace* facep)
 {
-	if (facep->getTextureEntry()->getBumpmap())
-	{ //bump maps aren't worked into texture batching yet
-		return false;
-	}
+	// <FS:Beq> fix batching when materials disabled and alpha none/masked.
+	// if (facep->getTextureEntry()->getBumpmap())
+	// { //bump maps aren't worked into texture batching yet
+	// 	return false;
+	// }
 
-	if (facep->getTextureEntry()->getMaterialParams().notNull())
-	{ //materials don't work with texture batching yet
-		return false;
+	// if (facep->getTextureEntry()->getMaterialParams().notNull())
+	// { //materials don't work with texture batching yet
+	// 	return false;
+	// }
+	const auto te = facep->getTextureEntry();
+	if (LLPipeline::sRenderDeferred && te )
+	{
+		auto mat = te->getMaterialParams();
+		if(mat && (mat->getNormalID() != LLUUID::null || mat->getSpecularID() != LLUUID::null))
+		{
+			return false;
+		}
 	}
+	// </FS:Beq>
 
 	if (facep->getTexture() && facep->getTexture()->getPrimaryFormat() == GL_ALPHA)
 	{ //can't batch invisiprims
@@ -6586,6 +6595,14 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		LLFace* facep = *face_iter;
 		LLViewerTexture* tex = facep->getTexture();
         const LLTextureEntry* te = facep->getTextureEntry();
+		// <FS:Beq> Don't batch fully transparent faces
+		if (te && ( te->getAlpha() == 0.f ) && ( te->getGlow() == 0.0 ) && !LLDrawPoolAlpha::sShowDebugAlpha)
+		{
+			facep->setSize(0,0);
+			++face_iter;
+			continue;
+		}
+		// </FS:Beq>
 		LLMaterialPtr mat = te->getMaterialParams();
         LLMaterialID matId = te->getMaterialID();
 

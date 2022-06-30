@@ -244,7 +244,7 @@
                             layout="topleft"
                             left="5"
                             top_pad="10"
-                            width="100">
+                            width="105">
                         Density Multiplier:
                     </text>
                     <slider
@@ -268,7 +268,7 @@
                             layout="topleft"
                             left="5"
                             top_pad="15"
-                            width="100">
+                            width="105">
                         Distance Multiplier:
                     </text>
                     <slider
@@ -292,7 +292,7 @@
                             layout="topleft"
                             left="5"
                             top_pad="15"
-                            width="100">
+                            width="105">
                         Maximum Altitude:
                     </text>
                     <slider
@@ -316,7 +316,7 @@
                             layout="topleft"
                             left="5"
                             top_pad="15"
-                            width="100">
+                            width="105">
                         Scene Gamma:
                     </text>
                     <slider
@@ -330,7 +330,7 @@
                             max_val="20"
                             name="scene_gamma"
                             top_delta="0"
-                            width="207"
+                            width="219"
                             can_edit_text="true"/>
                 </layout_panel>            
             </layout_stack>                

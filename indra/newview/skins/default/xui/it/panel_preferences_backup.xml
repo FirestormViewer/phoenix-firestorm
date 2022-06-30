@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Backup" name="backup">
+	<text name="backup_path_label" width="92">
+		Percorso backup:
+	</text>
+	<button label="Imposta" name="set_backup_settings_path" />
+	<layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label">
+			<text name="account_specific_label">
+				Ora sei disconnesso. Ricorda che è possibile eseguire il backup e il ripristino delle impostazioni specifiche del tuo account solo dopo aver effettuato l'accesso. Tuttavia, per le impostazioni relative a tutti gli utenti, non è necessario effettuare il login.
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">
+				Gruppi di impostazioni da ripristinare (il backup le salverà sempre tutte):
+			</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="File Condivisi:" name="restore_global_files_label" />
+						<column label="Valore" name="value" />
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_label">Credenziali di accesso</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_label">Colori</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_label">Dialoghi ignorati</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_label">Grid definite dall'utente</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_label">Correzioni automatiche</column>
+						</row>
+						<row name="restore_global_row_quickprefs">
+							<column name="restore_global_files_label">Preferenze rapide</column>
+						</row>
+						<row name="restore_global_row_favorites">
+							<column name="restore_global_files_label">Luoghi preferiti</column>
+						</row>
+						<row name="restore_global_row_controls">
+							<column name="restore_global_files_label">Controlli</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="File Per Account:" name="restore_per_account_files_label" />
+						<column label="Valore" name="value" />
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_label">Lista nera (risorse)</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_label">Set di contatti</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_label">Filtri inventario</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_label">Liste dei media</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_label">Barre degli strumenti</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_label">Volumi chat vocale</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_label">Storico teleport</column>
+						</row>
+						<row name="restore_per_account_row_regiontracker">
+							<column name="restore_per_account_files_label">Regioni tracciate</column>
+						</row>
+						<row name="restore_per_account_row_groupmutes">
+							<column name="restore_per_account_files_label">Chat di gruppo bloccate</column>
+						</row>
+						<row name="restore_per_account_row_avatar_render_settings">
+							<column name="restore_per_account_files_label">Impostaz. resa avatar</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="Cartelle:" name="restore_global_folders_label" />
+						<column label="Valore" name="value" />
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_label">Raggi di selezione</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_label">Colori raggi di selez.</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_label">Controlli ortografici</column>
+						</row>
+						<row name="restore_folders_row_windlight">
+							<column name="restore_global_folders_label">Windlight (obbligatorio)</column>
+						</row>
+						<row name="restore_folders_row_daycycles">
+							<column name="restore_global_folders_label">Windlight: Giornate</column>
+						</row>
+						<row name="restore_folders_row_skies">
+							<column name="restore_global_folders_label">Windlight: Cieli</column>
+						</row>
+						<row name="restore_folders_row_waters">
+							<column name="restore_global_folders_label">Windlight: Acqua</column>
+						</row>
+						<row name="restore_folders_row_presets">
+							<column name="restore_global_folders_label">Preset cam / grafica</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+			</layout_stack>
+			<button label="Seleziona Tutte" name="select_all_button" />
+			<button label="Deseleziona Tutte" name="deselect_all_button" />
+			<check_box label="Ripristina le impostazioni condivise" name="restore_global_settings_checkbox" />
+			<check_box label="Ripristina le impostazioni associate all'account" name="restore_per_account_settings_checkbox" />
+			<button label="Backup Impostazioni" name="backup_settings" width="150" />
+			<button label="Ripristina Impostazioni" name="restore_settings" width="150" />
+		</layout_panel>
+	</layout_stack>
+</panel>

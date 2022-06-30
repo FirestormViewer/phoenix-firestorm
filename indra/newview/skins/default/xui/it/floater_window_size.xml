@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="window_size" title="Dimensione finestra">
+<floater name="window_size" title="Dimensione Finestra">
 	<text name="windowsize_text">
 		Imposta dimensione finestra:
 	</text>

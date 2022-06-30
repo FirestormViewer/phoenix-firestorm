@@ -652,8 +652,8 @@ static void settings_modify()
     LLRenderTarget::sUseFBO             = LLPipeline::sRenderDeferred || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);
 // [/RLVa:KB]
     LLVOSurfacePatch::sLODFactor        = gSavedSettings.getF32("RenderTerrainLODFactor");
-    LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor; //square lod factor to get exponential range of [1,4]
-    gDebugGL       = gSavedSettings.getBOOL("RenderDebugGL") || gDebugSession;
+    LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor;  // square lod factor to get exponential range of [1,4]
+    gDebugGL       = gDebugGLSession || gDebugSession;
     gDebugPipeline = gSavedSettings.getBOOL("RenderDebugPipeline");
 }
 
@@ -1328,7 +1328,8 @@ bool LLAppViewer::init()
 
     // <FS:Ansariel> Disable updater
 //#if LL_RELEASE_FOR_DOWNLOAD
-//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
+//    // Skip updater if this is a non-interactive instance
+//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
 //    {
 //        LLProcess::Params updater;
 //        updater.desc = "updater process";
@@ -1522,11 +1523,6 @@ void LLAppViewer::initMaxHeapSize()
 #else
     F32Gigabytes max_heap_size_gb = (F32Gigabytes)gSavedSettings.getF32("MaxHeapSize64");
 #endif
-// <FS:Ansariel> Enable low memory checks on 32bit builds
-#if ADDRESS_SIZE == 64
-	max_heap_size_gb = F32Gigabytes(128);
-#endif
-// </FS:Ansariel>
 
     LLMemory::initMaxHeapSizeGB(max_heap_size_gb);
 }
@@ -1649,9 +1645,9 @@ bool LLAppViewer::doFrame()
 // </FS:Beq>
 	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	LLTimer frameTimer;
+	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
-	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
 	{
         LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df LLTrace");
         if (LLFloaterReg::instanceVisible("block_timers"))
@@ -1667,9 +1663,9 @@ bool LLAppViewer::doFrame()
 
 	//clear call stack records
 	LL_CLEAR_CALLSTACKS();
-	} // <FS:Beq/> perf stats
+	} // <FS:Beq/> perf stats (close NonRender/IDLE tracking starting at event pump)
 	{
-		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered
+		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered (input event and coro)
 
 		LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df processMiscNativeEvents" )
 		pingMainloopTimeout("Main:MiscNativeWindowEvents");
@@ -1717,7 +1713,7 @@ bool LLAppViewer::doFrame()
 			// give listeners a chance to run
 			llcoro::suspend();
 		}
-		}// <FS:Beq> ensure we have the entire top scope of frame covered
+		}// <FS:Beq> ensure we have the entire top scope of frame covered (close input event and coro "idle")
 
 		if (!LLApp::isExiting())
 		{
@@ -1751,12 +1747,12 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
-				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df pauseMainloopTimeout" )
 				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
 			}
 
 			{
+				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
 				idle();
 			}
@@ -3263,6 +3259,15 @@ bool LLAppViewer::initConfiguration()
 		ll_init_fail_log(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "test_failures.log"));
 	}
 
+    if (gSavedSettings.getBOOL("RenderDebugGLSession"))
+    {
+        gDebugGLSession = TRUE;
+        gDebugGL = TRUE;
+        // gDebugGL can cause excessive logging
+        // so it's limited to a single session
+        gSavedSettings.setBOOL("RenderDebugGLSession", FALSE);
+    }
+
 	// <FS:TT> Hacking to save the skin and theme for future use.
 	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
 	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
@@ -3732,6 +3737,11 @@ bool LLAppViewer::isUpdaterMissing()
     return mUpdaterNotFound;
 }
 
+bool LLAppViewer::waitForUpdater()
+{
+    return !gSavedSettings.getBOOL("CmdLineSkipUpdater") && !mUpdaterNotFound && !gNonInteractive;
+}
+
 void LLAppViewer::writeDebugInfo(bool isStatic)
 {
 #if LL_WINDOWS && LL_BUGSPLAT
@@ -3894,9 +3904,28 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
 
 #if LL_WINDOWS
-	// <FS:Ansariel> FIRE-8264: System info displays wrong driver version on Optimus systems
-	//std::string drvinfo = gDXHardware.getDriverVersionWMI();
-	std::string drvinfo = gDXHardware.getDriverVersionWMI(gGLManager.mGLVendorShort);
+    std::string drvinfo;
+
+    if (gGLManager.mIsIntel)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_INTEL);
+    }
+    else if (gGLManager.mIsNVIDIA)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_NVIDIA);
+    }
+    else if (gGLManager.mIsAMD)
+    {
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_AMD);
+    }
+
+    if (drvinfo.empty())
+    {
+        // Generic/substitute windows driver? Unknown vendor?
+        LL_WARNS("DriverVersion") << "Vendor based driver search failed, searching for any driver" << LL_ENDL;
+        drvinfo = gDXHardware.getDriverVersionWMI(LLDXHardware::GPU_ANY);
+    }
+
 	if (!drvinfo.empty())
 	{
 		info["GRAPHICS_DRIVER_VERSION"] = drvinfo;
@@ -5731,6 +5760,13 @@ void LLAppViewer::idle()
 		}
 	}
 
+
+    // Update layonts, handle mouse events, tooltips, e t c
+    // updateUI() needs to be called even in case viewer disconected
+    // since related notification still needs handling and allows
+    // opening chat.
+    gViewerWindow->updateUI();
+
 	if (gDisconnected)
     {
 		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
@@ -5742,8 +5778,6 @@ void LLAppViewer::idle()
 		// </FS:CR>
 		return;
     }
-
-    gViewerWindow->updateUI();
 
 	if (gTeleportDisplay)
     {

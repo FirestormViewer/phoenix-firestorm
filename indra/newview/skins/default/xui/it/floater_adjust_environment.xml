@@ -1,22 +1,84 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="env_adjust_snapshot" title="Illuminazione personale">
+<floater name="env_adjust_snapshot" title="Illuminazione Personalizzata">
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
-				<layout_panel>
-					<button label="Reimposta" name="btn_reset" tool_tip="Chiudi e reimposta a Ambiente Condiviso"/>
+				<layout_panel name="lp_1">
+					<text name="ambient_lbl">
+						Ambiente:
+					</text>
+					<text name="blue_horizon_lbl">
+						Orizz. blu:
+					</text>
+					<text name="blue_density_lbl">
+						Densità blu:
+					</text>
+					<button label="Ripristina" name="btn_reset" tool_tip="Chiudi e reimposta Ambiente Condiviso"/>
+					<text name="sun_color_lbl">
+						Colore sole:
+					</text>
+					<text name="cloud_color_lbl">
+						Col. nuvole:
+					</text>
 					<text name="cloud_map_label">
-						Immagine nuvola:
+						Imm. nuvole:
+					</text>
+					<text name="water_map_label">
+						Imm. acqua:
 					</text>
 				</layout_panel>
-				<layout_panel>
+				<layout_panel name="lp_2">
+					<text name="haze_horizon_label">
+						Orizzonte foschia:
+					</text>
+					<text name="haze_density_label">
+						Densità foschia:
+					</text>
+					<text name="cloud_coverage_label">
+						Nuvolosità:
+					</text>
+					<text name="cloud_scale_label">
+						Dimensioni nuvole:
+					</text>
+					<text name="scene_gamma_label">
+						Gamma scena:
+					</text>
+				</layout_panel>
+				<layout_panel name="lp_3">
 					<text name="label">
 						Sole:
 					</text>
-					<check_box label="Mostra marcatore" name="sunbeacon"/>
+					<text name="sun_azimuth_label">
+						Azimut:
+					</text>
+					<text name="sun_elevation_label">
+						Elevazione:
+					</text>
+					<check_box label="Mostra marcatore" name="sunbeacon" />
+					<text name="scale_label">
+						Dimensioni:
+					</text>
+					<text name="glow_focus_label">
+						Nitidezza bagliore:
+					</text>
+					<text name="glow_size_label">
+						Dimensioni bagliore:
+					</text>
+					<text name="star_brightness_label">
+						Luminosità stelle:
+					</text>
 				</layout_panel>
-				<layout_panel>
-					<check_box label="Mostra marcatore" name="moonbeacon"/>
+				<layout_panel name="lp_4">
+					<text name="label">
+						Luna:
+					</text>
+					<text name="moon_azimuth_label">
+						Azimut:
+					</text>
+					<text name="moon_elevation_label">
+						Elevazione:
+					</text>
+					<check_box label="Mostra marcatore" name="moonbeacon" />
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

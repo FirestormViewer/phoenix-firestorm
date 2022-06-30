@@ -1471,30 +1471,187 @@
          tool_tip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
          <text
+           follows="left|top"
+           layout="topleft"
+           left="24"
+           height="12"
+           name="lod_suffix_label"
+           top_pad="5"
+           width="110">
+           LOD Suffixes: 
+         </text>
+         <combo_box
+          follows="left|top"
+          height="18"
+          left_pad="0"
+          name="lod_suffix_combo"
+          width="250"
+          top_delta="0"
+          tool_tip="Pick a preset or set your own">
+            <combo_item name="choose_one">Choose a standard or manually edit...</combo_item>
+            <combo_item name="suff_sl">SL Standard (Lowest=LOD0)</combo_item>
+            <combo_item name="suff_unity">Games Engine Standard (Lowest=LOD3)</combo_item>
+            <combo_item name="suff_descriptive">Words (high,med...)</combo_item>
+         </combo_box>
+        <text
           follows="left|top"
           layout="topleft"
           left="24"
           height="12"
-          name="mesh_preview_ud_preset_label"
+          name="suf_lowest_lab"
           top_pad="10"
-          width="200">
-          Physics User Defined Preset:
+          halign="right"
+          width="60">
+          Lowest: 
         </text>
-         <line_editor
-         control_name="FSPhysicsPresetUser1"
-         border_style="line"
-         border_thickness="1"
-         follows="left|top"
-         font="SansSerif"
-         height="23"
-         top_delta="-7"
-         layout="topleft"
-         left_pad="5"
-         max_length_chars="4096"
-         name="ud_physics"
-         tool_tip="Full system path to a simple Collada mesh definition to be used for physics."
-         width="270" />
+        <line_editor
+        control_name="FSMeshLowestLodSuffix"
+        border_style="line"
+        border_thickness="1"
+        follows="left|top"
+        font="SansSerif"
+        height="23"
+        top_delta="-5"
+        layout="topleft"
+        left_pad="5"
+        max_length_chars="10"
+        name="suf_lowest"
+        tool_tip="The Suffix used to identify the Lowest LOD file on disk and models within a file."
+        width="60" />
         <text
+        follows="left|top"
+        layout="topleft"
+        left_pad="5"
+        halign="right"
+        height="12"
+        name="suf_low_lab"
+        top_delta="5"
+        width="40">
+        Low: 
+      </text>
+      <line_editor
+      control_name="FSMeshLowLodSuffix"
+      border_style="line"
+      border_thickness="1"
+      follows="left|top"
+      font="SansSerif"
+      height="23"
+      top_delta="-5"
+      layout="topleft"
+      left_pad="5"
+      max_length_chars="10"
+      name="suf_low"
+      tool_tip="The Suffix used to identify the Low LOD file on disk and models within a file."
+      width="60" />
+      <text
+      follows="left|top"
+      top_delta="5"
+        layout="topleft"
+        left_pad="5"
+        height="12"
+        name="suf_medium_lab"
+        halign="right"
+        width="40">
+        Medium: 
+      </text>
+        <line_editor
+        control_name="FSMeshMediumLodSuffix"
+        border_style="line"
+        border_thickness="1"
+        follows="left|top"
+        font="SansSerif"
+        height="23"
+        top_delta="-5"
+        layout="topleft"
+        left_pad="5"
+        max_length_chars="10"
+        name="suf_medium"
+        tool_tip="The Suffix used to identify the Medium LOD file on disk and models within a file."
+        width="60" />
+        <text
+        follows="left|top"
+        layout="topleft"
+        left_pad="5"
+        height="12"
+        halign="right"
+        name="suf_high_lab"
+        top_delta="5"
+        width="40">
+        High: 
+      </text>
+        <line_editor
+        control_name="FSMeshHighLodSuffix"
+        border_style="line"
+        border_thickness="1"
+        follows="left|top"
+        font="SansSerif"
+        height="23"
+        top_delta="-5"
+        layout="topleft"
+        left_pad="5"
+        max_length_chars="10"
+        name="suf_high"
+        tool_tip="The Suffix used to identify the High LOD file on disk and models within a file."
+        width="60" />
+        <text
+        follows="left|top"
+        layout="topleft"
+        left_pad="5"
+        height="12"
+        name="suf_physics_lab"
+        top_delta="5"
+        width="40">
+        Physics: 
+      </text>
+        <line_editor
+        control_name="FSMeshPhysicsSuffix"
+        border_style="line"
+        border_thickness="1"
+        follows="left|top"
+        font="SansSerif"
+        height="23"
+        top_delta="-5"
+        layout="topleft"
+        left_pad="5"
+        max_length_chars="10"
+        name="suf_physics"
+        tool_tip="The Suffix used to identify the Physics file on disk and models within a file."
+        width="60" />
+        <text
+        follows="left|top"
+        layout="topleft"
+        left="24"
+        height="12"
+        name="mesh_preview_ud_preset_label"
+        top_pad="15"
+        width="170">
+        Physics User Defined Preset:
+      </text>
+        <line_editor
+        control_name="FSPhysicsPresetUser1"
+        border_style="line"
+        border_thickness="1"
+        follows="left|top"
+        font="SansSerif"
+        height="23"
+        top_delta="-5"
+        layout="topleft"
+        left_pad="5"
+        max_length_chars="4096"
+        name="ud_physics"
+        tool_tip="Full system path to a simple Collada mesh definition to be used for physics."
+        width="270" />
+        <button
+         follows="left|top"
+         height="23"
+         label="Browse"
+         label_selected="Browse"
+         left_pad="5"
+         name="set_user_def_phys"
+         top_delta="0"
+         width="100">
+        </button>
+       <text
          follows="left|top"
          layout="topleft"
          left="10"
@@ -1522,7 +1679,7 @@
          control_name="MeshPreviewCanvasColor"
          follows="top|left"
          left_pad="14"
-         height="64"
+         height="48"
          width="120"
          top_delta="-12"
          can_apply_immediately="true"
@@ -1533,7 +1690,7 @@
          control_name="MeshPreviewEdgeColor"
          follows="top|left"
          left_pad="24"
-         height="64"
+         height="48"
          width="120"
          can_apply_immediately="true"
          label="Model Edge"
@@ -1543,7 +1700,7 @@
          control_name="PreviewAmbientColor"
          follows="top|left"
          left_pad="24"
-         height="64"
+         height="48"
          width="120"
          can_apply_immediately="true"
          label="Ambient Light"
@@ -1559,7 +1716,7 @@
          valign="center"
          mouse_opaque="false"
          name="physics_settings_label"
-         top_pad="20"
+         top_pad="10"
          width="100">
          Physics:
         </text>
@@ -1567,7 +1724,7 @@
         control_name="MeshPreviewPhysicsEdgeColor"
         follows="top|left"
         left_pad="14"
-        height="64"
+        height="48"
         can_apply_immediately="true"
         width="120"
         top_delta="-12"
@@ -1577,8 +1734,8 @@
         <color_swatch
         control_name="MeshPreviewPhysicsFillColor"
         follows="top|left"
-        left_pad="20"
-        height="64"
+        left_pad="24"
+        height="48"
         width="120"
         can_apply_immediately="true"
         label="Physics Fill"
@@ -1594,7 +1751,7 @@
         valign="center"
         mouse_opaque="false"
         name="physics_issues_setting_label"
-        top_pad="24"
+        top_pad="10"
         width="100">
         Physics Issues:
       </text>
@@ -1602,7 +1759,7 @@
         control_name="MeshPreviewDegenerateEdgeColor"
         follows="top|left"
         left_pad="14"
-        height="64"
+        height="48"
         width="120"
         top_delta="-12"
         can_apply_immediately="true"
@@ -1613,7 +1770,7 @@
         control_name="MeshPreviewDegenerateFillColor"
         follows="top|left"
         left_pad="24"
-        height="64"
+        height="48"
         width="120"
         can_apply_immediately="true"
         label="Bad Triangle Fill"

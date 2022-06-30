@@ -4,8 +4,10 @@
 		<text name="label_show">
 			Afficher :
 		</text>
+		<check_box label="Btes de délimitation pour les lumières" name="lights_bounding_boxes"/>
 		<check_box label="Balises" name="beacons"/>
 		<check_box label="Surbrillances" name="highlights"/>
+		<check_box label="Infos sur les balises dans la fenêtre" name="FSRenderBeaconText"/>
 		<text name="beacon_width_label" tool_tip="Largeur de la balise">
 			Largeur :
 		</text>
@@ -18,6 +20,9 @@
 		<check_box label="Sources sonores" name="sounds"/>
 		<check_box label="Sources des particules" name="particles"/>
 		<check_box label="Sources des médias" name="moapbeacon"/>
+		<text name="label_objects">
+			Montrer la direction :
+		</text>
 		<check_box label="Soleil" name="sun"/>
 		<check_box label="Lune" name="moon"/>
 	</panel>

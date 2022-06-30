@@ -560,6 +560,7 @@ void LLViewerJoystick::terminate()
 // -----------------------------------------------------------------------------
 void LLViewerJoystick::updateStatus()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 #if LIB_NDOF
 
 	ndof_update(mNdofDev);
@@ -752,6 +753,7 @@ void LLViewerJoystick::resetDeltas(S32 axis[])
 // -----------------------------------------------------------------------------
 void LLViewerJoystick::moveObjects(bool reset)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 	static bool toggle_send_to_sim = false;
 
 	if (!gFocusMgr.getAppHasFocus() || mDriverState != JDS_INITIALIZED
@@ -876,6 +878,7 @@ void LLViewerJoystick::moveObjects(bool reset)
 // -----------------------------------------------------------------------------
 void LLViewerJoystick::moveAvatar(bool reset)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 	if (!gFocusMgr.getAppHasFocus() || mDriverState != JDS_INITIALIZED
 		|| !gSavedSettings.getBOOL("JoystickEnabled") || !gSavedSettings.getBOOL("JoystickAvatarEnabled"))
 	{
@@ -1119,6 +1122,7 @@ void LLViewerJoystick::moveAvatar(bool reset)
 // -----------------------------------------------------------------------------
 void LLViewerJoystick::moveFlycam(bool reset)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 	static LLQuaternion 		sFlycamRotation;
 	static LLVector3    		sFlycamPosition;
 	static F32          		sFlycamZoom;
@@ -1283,6 +1287,7 @@ void LLViewerJoystick::moveFlycam(bool reset)
 // -----------------------------------------------------------------------------
 bool LLViewerJoystick::toggleFlycam()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 	if (!gSavedSettings.getBOOL("JoystickEnabled") || !gSavedSettings.getBOOL("JoystickFlycamEnabled"))
 	{
 		mOverrideCamera = false;
@@ -1319,6 +1324,7 @@ bool LLViewerJoystick::toggleFlycam()
 
 void LLViewerJoystick::scanJoystick()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 	if (mDriverState != JDS_INITIALIZED || !gSavedSettings.getBOOL("JoystickEnabled"))
 	{
 		return;

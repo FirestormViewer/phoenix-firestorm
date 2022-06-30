@@ -165,7 +165,7 @@ WLSkyDetail					1	48
 RenderFSAASamples			1	2
 
 //
-// Medium High Graphics Settings
+// Medium High Graphics Settings (deferred enabled)
 //
 list MidHigh
 RenderAnisotropic			1	1
@@ -187,7 +187,7 @@ RenderTransparentWater		1	1
 RenderTreeLODFactor			1	0.5
 RenderVolumeLODFactor		1	2.0
 WindLightUseAtmosShaders	1	1
-RenderDeferred				1	0
+RenderDeferred				1	1
 RenderDeferredSSAO			1	0
 RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
@@ -195,7 +195,7 @@ WLSkyDetail					1	48
 RenderFSAASamples			1	2
 
 //
-// High Graphics Settings
+// High Graphics Settings (deferred + SSAO)
 //
 list High
 RenderAnisotropic			1	1
@@ -217,15 +217,15 @@ RenderTransparentWater		1	1
 RenderTreeLODFactor			1	0.5
 RenderVolumeLODFactor		1	2.0
 WindLightUseAtmosShaders	1	1
-RenderDeferred				1	0
-RenderDeferredSSAO			1	0
+RenderDeferred				1	1
+RenderDeferredSSAO			1	1
 RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
 RenderFSAASamples			1	2
 
 //
-// High Ultra Graphics Settings (deferred)
+// High Ultra Graphics Settings (deferred + SSAO)
 //
 list HighUltra
 RenderAnisotropic			1	1
@@ -248,7 +248,7 @@ RenderTreeLODFactor			1	0.5
 RenderVolumeLODFactor		1	2.0
 WindLightUseAtmosShaders	1	1
 RenderDeferred				1	1
-RenderDeferredSSAO			1	0
+RenderDeferredSSAO			1	1
 RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
