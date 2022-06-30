@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="Preferencias">
+	<floater.string name="LoginToChange">
+		Inicia sesión para cambiar
+	</floater.string>
+	<button label="Aplicar" label_selected="Aplicar" name="Apply"/>
+	<button label="Aceptar" label_selected="Aceptar" name="OK"/>
+	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
+	<tab_container name="pref core">
+		<panel label="General" name="general"/>
+		<panel label="Chat" name="chat"/>
+		<panel label="Colores" name="colors"/>
+		<panel label="Col. personalizados" name="custom_colors"/>
+		<panel label="Gráficos" name="display"/>
+		<panel label="Sonido y medios" name="audio"/>
+		<panel label="Red y caché" name="input"/>
+		<panel label="Mover y ver" name="move"/>
+		<panel label="Notificaciones" name="msgs"/>
+		<panel label="Privacidad" name="im"/>
+		<panel label="Avanzado" name="advanced1"/>
+		<panel label="Interfaz" name="ui"/>
+		<panel label="Skins" name="skins"/>
+		<panel label="Reporte de fallos" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+		<panel label="OpenSim" name="opensim"/>
+		<panel label="Respaldo" name="backup"/>
+	</tab_container>
+</floater>

@@ -691,7 +691,7 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 
 		// Attach to movement controls.
 		parent->removeChild(this);
-		// <FS:Ansariel> FIRE-9636: Resizable movement controls
+		// <FS:Ansariel> FIRE-9636: Resizable movement controls (for all skins except Starlight/CUI)
 		//move_view->addChild(this);
 		LLView* modes_container = move_view->findChildView("modes_container");
 		if (modes_container)

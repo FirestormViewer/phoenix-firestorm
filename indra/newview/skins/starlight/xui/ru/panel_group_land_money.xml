@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Земля и L$" name="land_money_tab">
+	<panel.string name="help_text">
+		Если общее количество использованной земли не превышает общий взнос, отобразится предупреждение.
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		У вас нет прав для просмотра земли, принадлежащей группе
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		Нет данных
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		У вас нет доступа к финансам группы
+	</panel.string>
+	<panel.string name="loading_txt">
+		Загрузка...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		Не удается задать ваш земельный взнос
+	</panel.string>
+	<panel name="layout_panel_landmoney">
+		<scroll_list name="group_parcel_list">
+			<scroll_list.columns label="Участок" name="name" width="120"/>
+			<scroll_list.columns label="Регион" name="location" width="120"/>
+			<scroll_list.columns label="Тип" name="type" width="90"/>
+			<scroll_list.columns label="Площадь" name="area" width="70"/>
+		</scroll_list>
+		<text name="total_contributed_land_label">
+			Общий взнос:
+		</text>
+		<button label="Карта" label_selected="Карта" name="map_button"/>
+		<text name="total_land_in_use_label">
+			Используется:
+		</text>
+		<text name="land_available_label">
+			Доступно:
+		</text>
+		<text name="your_contribution_label">
+			Ваш взнос:
+		</text>
+		<text name="your_contribution_max_value">
+			(максимум: [AMOUNT])
+		</text>
+		<text name="group_over_limit_text">
+			Необходимо увеличить кредит для использования участков.
+		</text>
+		<text name="group_money_heading">
+			L$ группы
+		</text>
+	</panel>
+	<tab_container name="group_money_tab_container">
+		<panel label="Планирование" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				Загрузка...
+			</text_editor>
+		</panel>
+		<panel label="Подробности" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				Загрузка...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="Раньше"/>
+			<button name="later_details_button" tool_tip="Позже"/>
+		</panel>
+		<panel label="Продажи" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				Загрузка...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="Раньше"/>
+			<button name="later_sales_button" tool_tip="Позже"/>
+		</panel>
+	</tab_container>
+</panel>
