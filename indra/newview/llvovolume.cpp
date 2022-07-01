@@ -1856,7 +1856,7 @@ void LLVOVolume::regenFaces()
 	}
 }
 
-BOOL LLVOVolume::genBBoxes(BOOL force_global)
+BOOL LLVOVolume::genBBoxes(BOOL force_global, BOOL should_update_octree_bounds)
 {
     LL_PROFILE_ZONE_SCOPED;
     BOOL res = TRUE;
@@ -1939,7 +1939,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
 
     if (any_valid_boxes)
     {
-        if (rebuild)
+        if (rebuild && should_update_octree_bounds)
         {
             //get the Avatar associated with this object if it's rigged
             LLVOAvatar* avatar = nullptr;
@@ -2258,12 +2258,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 	}
 	// NaCl End
 
-    if (should_update_octree_bounds || !mDrawable->getSpatialExtents()->isFinite3())
-    {
-        // Generate bounding boxes if needed, and update the object's size in the
-        // octree
-        genBBoxes(FALSE);
-    }
+    should_update_octree_bounds = should_update_octree_bounds || !mDrawable->getSpatialExtents()->isFinite3();
+    // Generate bounding boxes if needed, and update the object's size in the
+    // octree
+    genBBoxes(FALSE, should_update_octree_bounds);
 
 	// Update face flags
 	updateFaceFlags();
