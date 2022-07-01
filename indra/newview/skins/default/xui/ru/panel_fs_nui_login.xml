@@ -42,6 +42,7 @@
               <combo_box.item label="Phoenix" name="Phoenix"/>
               <combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
               <combo_box.item label="Hybrid" name="Hybrid"/>
+              <combo_box.item label="Latency" name="Latency"/>
               <combo_box.item label="Text" name="Text"/>
               -->
               </combo_box>

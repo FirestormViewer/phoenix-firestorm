@@ -217,8 +217,12 @@ set(FLICKR_API_SECRET "846f0958020b553e")
 # Discord client key.
 set(DDISCORD_API_KEY "427641535253708801")
 
-set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")
-set(SIGNING_IDENTITY "" CACHE STRING "Specifies the signing identity to use, if necessary.")
+# FS:ND Don't force this into the cache, that can have some strange effects. Instead make it a normal variable
+#set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")
+set(ENABLE_SIGNING OFF)
+
+# FS:ND Don't force this into the cache here, we set it in 00-Common.make 
+#set(SIGNING_IDENTITY "" CACHE STRING "Specifies the signing identity to use, if necessary.")
 
 set(VERSION_BUILD "0" CACHE STRING "Revision number passed in from the outside")
 set(USESYSTEMLIBS OFF CACHE BOOL "Use libraries from your system rather than Linden-supplied prebuilt libraries.")
