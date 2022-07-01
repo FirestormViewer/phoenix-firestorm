@@ -3401,6 +3401,12 @@ void handle_object_show_original()
     show_item_original(object->getAttachmentItemID());
 }
 
+// <FS:Ansariel> Disable if prevented by RLVa
+bool enable_object_show_original()
+{
+	return !RlvActions::hasBehaviour(RLV_BHVR_SHOWINV);
+}
+// </FS:Ansariel>
 
 static void init_default_item_label(const std::string& item_name)
 {
@@ -12337,6 +12343,8 @@ void initialize_menus()
 	enable.add("Object.EnableBuy", boost::bind(&enable_buy_object));
 	commit.add("Object.ZoomIn", boost::bind(&handle_look_at_selection, "zoom"));
 	enable.add("Object.EnableScriptInfo", boost::bind(&enable_script_info));	// <FS:CR>
+	enable.add("Object.EnableShowOriginal", boost::bind(&enable_object_show_original)); // <FS:Ansariel> Disable if prevented by RLVa
+
 
 	// Attachment pie menu
 	enable.add("Attachment.Label", boost::bind(&onEnableAttachmentLabel, _1, _2));

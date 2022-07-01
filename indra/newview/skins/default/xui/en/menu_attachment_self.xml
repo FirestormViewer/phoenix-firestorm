@@ -19,6 +19,8 @@
      name="Show original">
       <menu_item_call.on_click
        function="Object.ShowOriginal" />
+      <menu_item_call.on_enable
+       function="Object.EnableShowOriginal" />
     </menu_item_call>
     <menu_item_call
      enabled="false"
