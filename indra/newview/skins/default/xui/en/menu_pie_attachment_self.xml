@@ -95,7 +95,12 @@
                     function="Object.EnableExport" />
             </pie_slice>
         </pie_menu>
-        <pie_separator/>
+        <pie_slice
+            label="Show in Inv."
+            name="Show original">
+            <pie_slice.on_click
+                function="Object.ShowOriginal" />
+        </pie_slice>
         <pie_slice
             label="Inspect"
             name="Avatar Inspect">
