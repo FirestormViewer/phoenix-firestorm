@@ -839,6 +839,14 @@ with the same filename but different name
   <texture name="skin metaharper modern coolocean" file_name="skinspreview/meta_coolocean.jpg" preload="true" />
   <texture name="skin metaharper modern appalachiansky" file_name="skinspreview/meta_appalachia.jpg" preload="true" />
   <texture name="skin metaharper modern blackglass" file_name="skinspreview/meta_blackglass.jpg" preload="true" />
+  <texture name="skin starlight original orange" file_name="skinspreview/slight_orange.jpg" preload="true" />
+  <texture name="skin starlight original teal" file_name="skinspreview/slight_teal.jpg" preload="true" />
+  <texture name="skin starlight mono teal" file_name="skinspreview/slight_mteal.jpg" preload="true" />
+  <texture name="skin starlight nostalgia blue" file_name="skinspreview/slight_nblue.jpg" preload="true" />
+  <texture name="skin starlight silver blue" file_name="skinspreview/slight_sblue.jpg" preload="true" />
+  <texture name="skin starlight silver pink" file_name="skinspreview/slight_spink.jpg" preload="true" />
+  <texture name="skin starlight cui custom dark" file_name="skinspreview/scui_dark.jpg" preload="true" />
+  <texture name="skin starlight cui custom light" file_name="skinspreview/scui_light.jpg" preload="true" />
   <texture name="skin vintage classic" file_name="skinspreview/vintage_classic.jpg" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
@@ -1015,13 +1023,16 @@ with the same filename but different name
   <texture name="System_Notification" file_name="icons/SL_Logo.png" preload="true"/>
   <texture name="Icon_Attachment_Small" file_name="icons/Icon_Attachment_Small.png"	preload="true"/>
   <texture name="Icon_Attachment_Large" file_name="icons/Icon_Attachment_Large.png"	preload="true"/>
+  
+<!-- StarLight Textures -->
+
+  <texture name="SpeakBtn_Left_Selected_Press" file_name="widgets/SpeakBtn_Left_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="SpeakBtn_Left_Off" file_name="widgets/SpeakBtn_Left_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="SpeakBtn_Right_Selected_Press" file_name="widgets/SpeakBtn_Right_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
+  <texture name="SpeakBtn_Right_Off" file_name="widgets/SpeakBtn_Right_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
 
 <!-- Firestorm Textures -->
 
-<texture name="SpeakBtn_Left_Selected_Press" file_name="widgets/SpeakBtn_Left_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-<texture name="SpeakBtn_Left_Off" file_name="widgets/SpeakBtn_Left_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-<texture name="SpeakBtn_Right_Selected_Press" file_name="widgets/SpeakBtn_Right_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
-<texture name="SpeakBtn_Right_Off" file_name="widgets/SpeakBtn_Right_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
 <texture name="profile_icon_24x24" file_name="icons/profile_icon_24x24.png" preload="false" />
 <texture name="sale_icon_24x24" file_name="icons/sale_icon_24x24.png" preload="false" />
 <texture name="call_icon_24x24" file_name="icons/call_icon_24x24.png" preload="false" />
