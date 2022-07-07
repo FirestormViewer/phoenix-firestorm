@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel">
+					<pull_button name="back_btn" tool_tip="Вернуться в предыдущую локацию"/>
+					<pull_button name="forward_btn" tool_tip="Идти вперед на одну локацию"/>
+					<button name="home_btn" tool_tip="Телепортироваться домой"/>
+					<button name="About_Land" tool_tip="Открыть окно информации об участке"/>
+					<button name="PersonalLighting" tool_tip="Открыть окно Личное освещение"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Локация" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Поиск" name="search_combo_box" tool_tip="Поиск">
+						<combo_editor label="Поиск (MetaVerse)" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам в Second Life!">
+				<more_button name="more_btn_stl" tool_tip="Показать больше в 'Избранные'">
+					Больше &#9660;
+				</more_button>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
+</panel>

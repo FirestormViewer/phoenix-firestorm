@@ -25,7 +25,10 @@
 					</text>
 					<text name="fs_contrib_intro">Code additionnel pour Firestorm généreusement fourni par :</text>
 					<text name="fs_support_intro">Remerciements particuliers à notre équipe d'aide Firestorm, aux contributeurs wiki, éducateurs et traducteurs :</text>
-					<text name="fs_art_intro">Création de l'interface :</text>
+					<text name="fs_art_intro" height="70">
+ Firestorm intègre Starlight modifié pour Firestorm, développé par des résidents pour les résidents, dans le but d'offrir une interface alternative, plus claire et avec de la chance, plus simple à utiliser. Pour plus de détails, consulter &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;
+ Création de l'interface :
+					</text>
 				</panel>
 			</scroll_container>
 		</panel>
