@@ -23,54 +23,69 @@
  * $/LicenseInfo$
  */
 
-#define PBR_GGX_APPROX            1
-#define DEBUG_PBR_PACKORM0        0 // Rough=0, Metal=0
-#define DEBUG_PBR_PACKORM1        0 // Rough=1, Metal=1
-#define DEBUG_PBR_TANGENT1        1 // Tangent = 1,0,0
-#define DEBUG_PBR_VERT2CAM1       0 // vertex2camera = 0,0,1
+#define PBR_USE_GGX_APPROX         1
+#define PBR_USE_GGX_EMS_HACK       1
+#define PBR_USE_IRRADIANCE_HACK    1
+
+
+#define DEBUG_PBR_PACKORM0         0 // Rough=0, Metal=0
+#define DEBUG_PBR_PACKORM1         0 // Rough=1, Metal=1
+#define DEBUG_PBR_TANGENT1         1 // Tangent = 1,0,0
+#define DEBUG_PBR_VERT2CAM1        0 // vertex2camera = 0,0,1
 
 // Pass input through "as is"
 #define DEBUG_PBR_DIFFUSE_MAP      0 // Output: use diffuse in G-Buffer
 #define DEBUG_PBR_EMISSIVE         0 // Output: Emissive
 #define DEBUG_PBR_METAL            0 // Output: grayscale Metal map
+#define DEBUG_PBR_NORMAL_MAP       0 // Output: Normal -- also need to set DEBUG_NORMAL_MAP in pbropaqueF
 #define DEBUG_PBR_OCCLUSION        0 // Output: grayscale Occlusion map
 #define DEBUG_PBR_ORM              0 // Output: Packed Occlusion Roughness Metal
 #define DEBUG_PBR_ROUGH_PERCEPTUAL 0 // Output: grayscale Perceptual Roughness map
 #define DEBUG_PBR_ROUGH_ALPHA      0 // Output: grayscale Alpha Roughness
 
-#define DEBUG_PBR_DIFFUSE          0 // Output: Radiance Lambertian
-#define DEBUG_PBR_NORMAL           0 // Output: passed in normal. To see raw normal map: set DEBUG_PBR_DIFFUSE_MAP 1, and in pbropaqueF set DEBUG_NORMAL_RAW
 #define DEBUG_PBR_TANGENT          0 // Output: Tangent
 #define DEBUG_PBR_BITANGENT        0 // Output: Bitangent
 #define DEBUG_PBR_DOT_BV           0 // Output: graysacle dot(Bitangent,Vertex2Camera)
-#define DEBUG_PBR_DOT_NV           0 // Output: grayscale dot(Normal   ,Vertex2Camera)
 #define DEBUG_PBR_DOT_TV           0 // Output: grayscale dot(Tangent  ,Vertex2Camera)
 
-#define DEBUG_PBR_BRDF_SCALE_BIAS  0 // Output: red green BRDF Scale Bias (GGX output)
+// IBL Spec
+#define DEBUG_PBR_NORMAL           0 // Output: passed in normal
+#define DEBUG_PBR_V2C_RAW          0 // Output: vertex2camera
+#define DEBUG_PBR_DOT_NV           0 // Output: grayscale dot(Normal   ,Vertex2Camera)
 #define DEBUG_PBR_BRDF_UV          0 // Output: red green BRDF UV         (GGX input)
+#define DEBUG_PBR_BRDF_SCALE_BIAS  0 // Output: red green BRDF Scale Bias (GGX output)
+#define DEBUG_PBR_FRESNEL          0 // Output: roughness dependent fresnel
+#define DEBUG_PBR_KSPEC            0 // Output: K spec
+#define DEBUG_PBR_REFLECTION_DIR   0 // Output: reflection dir
+#define DEBUG_PBR_SPEC_REFLECTION  0 // Output: environment reflection
+#define DEBUG_PBR_FSS_ESS_GGX      0 // Output: FssEssGGX
+#define DEBUG_PBR_SPEC             0 // Output: Final spec
 
-// Diffuse
+// IBL Diffuse
 #define DEBUG_PBR_DIFFUSE_C        0 // Output: diffuse non metal mix
+#define DEBUG_PBR_IRRADIANCE_RAW   0 // Output: Diffuse Irradiance pre-mix
 #define DEBUG_PBR_IRRADIANCE       0 // Output: Diffuse Irradiance
-#define DEBUG_PBR_FE_LAMBERT       0 // Output: FssEssLambert
+#define DEBUG_PBR_FSS_ESS_LAMBERT  0 // Output: FssEssLambert
 #define DEBUG_PBR_EMS              0 // Output: Ems
 #define DEBUG_PBR_AVG              0 // Output: Avg
-#define DEBUG_PBR_EMS_FMS          0 // Output: FmsEms
+#define DEBUG_PBR_FMS_EMS          0 // Output: FmsEms
 #define DEBUG_PBR_DIFFUSE_K        0 // Output: diffuse FssEssLambert + FmsEms
 #define DEBUG_PBR_DIFFUSE_PRE_AO   0 // Output: diffuse pre AO
+#define DEBUG_PBR_DIFFUSE          0 // Output: diffuse post AO
 
-#define DEBUG_PBR_FE_GGX           0 // Output: FssEssGGX
-#define DEBUG_PBR_FRESNEL          0 // Output: roughness dependent fresnel
+// Atmospheric Lighting
+#define DEBUG_PBR_AMBOCC           0 // Output: ambient occlusion
+#define DEBUG_PBR_DIRECT_AMBIENT   0 // Output: da
+#define DEBUG_PBR_SUN_LIT          0 // Ouput: sunlit
+#define DEBUG_PBR_SUN_CONTRIB      0 // Output: sun_contrib
+#define DEBUG_PBR_SKY_ADDITIVE     0 // Output: additive
+#define DEBUG_PBR_SKY_ATTEN        0 // Output: atten
+
 #define DEBUG_PBR_IOR              0 // Output: grayscale IOR
-#define DEBUG_PBR_KSPEC            0 // Output: K spec
 #define DEBUG_PBR_REFLECT0_BASE    0 // Output: black reflect0 default from ior
 #define DEBUG_PBR_REFLECT0_MIX     0 // Output: diffuse reflect0 calculated from ior
 #define DEBUG_PBR_REFLECTANCE      0 // Output: diffuse reflectance -- NOT USED
-#define DEBUG_PBR_REFLECTION       0 // Output: reflection dir
-#define DEBUG_PBR_SPEC             0 // Output: Final spec
-#define DEBUG_PBR_SPEC_REFLECTION  0 // Output: environment reflection
 #define DEBUG_PBR_SPEC_WEIGHT      0 // Output: specWeight
-#define DEBUG_PBR_V2C_RAW          0 // Output: vertex2camera
 #define DEBUG_PBR_V2C_REMAP        0 // Output: vertex2camera (remap [-1,1] -> [0,1])
 #extension GL_ARB_texture_rectangle : enable
 #extension GL_ARB_shader_texture_lod : enable
@@ -151,7 +166,7 @@ vec2 getGGX( vec2 brdfPoint )
 {
     // TODO: use GGXLUT
     // texture2D(GGXLUT, brdfPoint).rg;
-#if PBR_GGX_APPROX
+#if PBR_USE_GGX_APPROX
     return getGGXApprox( brdfPoint);
 #endif
 }
@@ -177,7 +192,6 @@ void main()
     da                = pow(da, light_gamma);
 
     vec4 diffuse     = texture2DRect(diffuseRect, tc);
-         diffuse.rgb = linear_to_srgb(diffuse.rgb); // SL-14035
     vec4 spec        = texture2DRect(specularRect, vary_fragcoord.xy);
 
 
@@ -210,14 +224,23 @@ void main()
     bool hasPBR = GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_PBR);
     if (hasPBR)
     {
+        // 5.22.2. material.pbrMetallicRoughness.baseColorTexture
+        // The first three components (RGB) MUST be encoded with the sRGB transfer function.
+        //
+        // 5.19.7. material.emissiveTexture
+        // This texture contains RGB components encoded with the sRGB transfer function.
+        //
+        // 5.22.5. material.pbrMetallicRoughness.metallicRoughnessTexture
+        // These values MUST be encoded with a linear transfer function.
+
         vec3 colorDiffuse      = vec3(0);
-        vec3 colorEmissive     = texture2DRect(emissiveRect, tc).rgb;
+        vec3 colorEmissive     = spec.rgb; // PBR sRGB Emissive.  See: pbropaqueF.glsl
         vec3 colorSpec         = vec3(0);
 //      vec3 colorClearCoat    = vec3(0);
 //      vec3 colorSheen        = vec3(0);
 //      vec3 colorTransmission = vec3(0);
 
-        vec3 packedORM        = spec.rgb; // Packed: Occlusion Roughness Metal
+        vec3 packedORM        = texture2DRect(emissiveRect, tc).rgb; // PBR linear packed Occlusion, Roughness, Metal. See: pbropaqueF.glsl
 #if DEBUG_PBR_PACK_ORM0
              packedORM        = vec3(0,0,0);
 #endif
@@ -277,6 +300,14 @@ void main()
         vec3  specLight  = vec3(0);
         float gloss      = 1.0 - perceptualRough;
         sampleReflectionProbes(irradiance, specLight, legacyenv, pos.xyz, norm.xyz, gloss, 0.0);
+#if DEBUG_PBR_IRRADIANCE_RAW
+        vec3 debug_irradiance = irradiance;
+#endif
+        irradiance       = max(amblit,irradiance);
+#if PBR_USE_IRRADIANCE_HACK
+        irradiance      += amblit*0.5*vec3(dot(n, light_dir));
+#endif
+        specLight        = srgb_to_linear(specLight);
 #if HAS_IBL
         kSpec          = mix( kSpec, iridescenceFresnel, iridescenceFactor);
 #endif
@@ -286,7 +317,7 @@ void main()
         // Reference: getIBLRadianceLambertian
         vec3  FssEssLambert = specWeight * kSpec * vScaleBias.x + vScaleBias.y; // NOTE: Very similar to FssEssRadiance but with extra specWeight term
         float Ems           = (1.0 - vScaleBias.x + vScaleBias.y);
-#if PBR_GGX_APPROX
+#if PBR_USE_GGX_EMS_HACK
               Ems           = alphaRough; // With GGX approximation Ems = 0 so use substitute
 #endif
         vec3  avg           = specWeight * (reflect0 + (1.0 - reflect0) / 21.0);
@@ -310,6 +341,9 @@ void main()
     #if DEBUG_PBR_METAL
         color.rgb = vec3(metal);
     #endif
+    #if DEBUG_PBR_NORMAL_MAP
+        color.rgb = diffuse.rgb;
+    #endif
     #if DEBUG_PBR_OCCLUSION
         color.rgb = vec3(packedORM.r);
     #endif
@@ -324,7 +358,8 @@ void main()
     #endif
 
     #if DEBUG_PBR_NORMAL
-        color.rgb = norm.xyz;
+        color.rgb = norm.xyz*0.5 + vec3(0.5);
+        color.rgb = srgb_to_linear(color.rgb);
     #endif
     #if DEBUG_PBR_TANGENT
         color.rgb = t;
@@ -347,6 +382,7 @@ void main()
     #endif
     #if DEBUG_PBR_BRDF_UV
         color.rgb = vec3(brdfPoint,0.0);
+        color.rgb = linear_to_srgb(color.rgb);
     #endif
     #if DEBUG_PBR_BRDF_SCALE_BIAS
         color.rgb = vec3(vScaleBias,0.0);
@@ -369,13 +405,13 @@ void main()
     #if DEBUG_PBR_EMS_AVG
         color.rgb = AvgEms;
     #endif
-    #if DEBUG_PBR_EMS_FMS
+    #if DEBUG_PBR_FMS_EMS
         color.rgb = FmsEms;
     #endif
-    #if DEBUG_PBR_FE_GGX
+    #if DEBUG_PBR_FSS_ESS_GGX
         color.rgb = FssEssGGX; // spec
     #endif
-    #if DEBUG_PBR_FE_LAMBERT
+    #if DEBUG_PBR_FSS_ESS_LAMBERT
         color.rgb = FssEssLambert; // diffuse
     #endif
     #if DEBUG_PBR_FRESNEL
@@ -383,6 +419,9 @@ void main()
     #endif
     #if DEBUG_PBR_IOR
         color.rgb = vec3(IOR);
+    #endif
+    #if DEBUG_PBR_IRRADIANCE_RAW
+        color.rgb = debug_irradiance;
     #endif
     #if DEBUG_PBR_IRRADIANCE
         color.rgb = irradiance;
@@ -399,7 +438,7 @@ void main()
     #if DEBUG_PBR_REFLECTANCE
         color.rgb = vec3(reflectance);
     #endif
-    #if DEBUG_PBR_REFLECTION
+    #if DEBUG_PBR_REFLECTION_DIR
         color.rgb = reflect(-v, n);  // NOTE: equivalent to normalize(reflect(pos.xyz, norm.xyz));
     #endif
     #if DEBUG_PBR_SPEC
@@ -411,15 +450,39 @@ void main()
     #if DEBUG_PBR_SPEC_WEIGHT
         color.rgb = vec3(specWeight);
     #endif
+
+#if DEBUG_PBR_AMBOCC
+        color.rgb = vec3(ambocc);
+#endif
+#if DEBUG_PBR_DIRECT_AMBIENT
+        color.rgb = vec3(da);
+#endif
+#if DEBUG_PBR_SKY_ADDITIVE
+        color.rgb = additive;
+#endif
+#if DEBUG_PBR_SKY_ATTEN
+        color.rgb = atten;
+#endif
+
+#if DEBUG_PBR_SUN_LIT
+        color.rgb = sunlit;
+color = srgb_to_linear(color);
+#endif
+#if DEBUG_PBR_SUN_CONTRIB
+        color.rgb = sun_contrib;
+#endif
     #if DEBUG_PBR_V2C_RAW
         color.rgb = v;
     #endif
     #if DEBUG_PBR_V2C_REMAP
         color.rgb = v*0.5 + vec3(0.5);
     #endif
+        frag_color.rgb = color.rgb; // PBR is done in linear
     }
 else
 {
+    diffuse.rgb = linear_to_srgb(diffuse.rgb); // SL-14035
+
     sampleReflectionProbes(ambenv, glossenv, legacyenv, pos.xyz, norm.xyz, spec.a, envIntensity);
 
     amblit = max(ambenv, amblit);
@@ -472,12 +535,12 @@ else
     color       = fogged.rgb;
     bloom       = fogged.a;
 #endif
-}
     // convert to linear as fullscreen lights need to sum in linear colorspace
     // and will be gamma (re)corrected downstream...
     //color = vec3(ambocc);
     //color = ambenv;
     //color.b = diffuse.a;
     frag_color.rgb = srgb_to_linear(color.rgb);
+}
     frag_color.a = bloom;
 }

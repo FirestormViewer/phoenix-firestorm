@@ -29,6 +29,7 @@
 #include "llpreview.h"
 #include "llvoinventorylistener.h"
 #include "llimagej2c.h"
+#include "llviewertexture.h"
 
 class LLTextureCtrl;
 
@@ -80,11 +81,14 @@ public:
 
     bool decodeAsset(const std::vector<char>& buffer);
 
-    bool saveIfNeeded(LLInventoryItem* copyitem = nullptr, bool sync = true);
+    bool saveIfNeeded();
+    static bool saveToInventoryItem(const std::string &buffer, const LLUUID &item_id, const LLUUID &task_id);
 
     static void finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId);
 
     static void finishTaskUpload(LLUUID itemId, LLUUID newAssetId, LLUUID taskId);
+
+    static void finishSaveAs(const LLUUID &oldItemId, const LLUUID &newItemId, const std::string &buffer);
 
     void refreshFromInventory(const LLUUID& new_item_id = LLUUID::null);
 
@@ -99,6 +103,7 @@ public:
 
     LLUUID getAlbedoId();
     void setAlbedoId(const LLUUID& id);
+    void setAlbedoUploadId(const LLUUID& id);
 
     LLColor4 getAlbedoColor();
 
@@ -118,6 +123,7 @@ public:
 
     LLUUID getMetallicRoughnessId();
     void setMetallicRoughnessId(const LLUUID& id);
+    void setMetallicRoughnessUploadId(const LLUUID& id);
 
     F32 getMetalnessFactor();
     void setMetalnessFactor(F32 factor);
@@ -127,17 +133,21 @@ public:
 
     LLUUID getEmissiveId();
     void setEmissiveId(const LLUUID& id);
+    void setEmissiveUploadId(const LLUUID& id);
 
     LLColor4 getEmissiveColor();
     void setEmissiveColor(const LLColor4& color);
 
     LLUUID getNormalId();
     void setNormalId(const LLUUID& id);
+    void setNormalUploadId(const LLUUID& id);
 
     bool getDoubleSided();
     void setDoubleSided(bool double_sided);
 
     void setHasUnsavedChanges(bool value);
+    void setCanSaveAs(BOOL value);
+    void setCanSave(BOOL value);
 
     void onCommitAlbedoTexture(LLUICtrl* ctrl, const LLSD& data);
     void onCommitMetallicTexture(LLUICtrl* ctrl, const LLSD& data);
@@ -166,6 +176,13 @@ private:
     std::string mNormalName;
     std::string mMetallicRoughnessName;
     std::string mEmissiveName;
+
+    // keep pointers to fetched textures or viewer will remove them
+    // if user temporary selects something else with 'apply now'
+    LLPointer<LLViewerFetchedTexture> mAlbedoFetched;
+    LLPointer<LLViewerFetchedTexture> mNormalFetched;
+    LLPointer<LLViewerFetchedTexture> mMetallicRoughnessFetched;
+    LLPointer<LLViewerFetchedTexture> mEmissiveFetched;
 
     // J2C versions of packed buffers for uploading
     LLPointer<LLImageJ2C> mAlbedoJ2C;
