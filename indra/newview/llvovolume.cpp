@@ -347,6 +347,9 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);
+    const bool previously_volume_changed = mVolumeChanged;
+    const bool previously_face_mapping_changed = mFaceMappingChanged;
+    const bool previously_color_changed = mColorChanged;
 
 	// Do base class updates...
 	U32 retval = LLViewerObject::processUpdateMessage(mesgsys, user_data, block_num, update_type, dp);
@@ -409,7 +412,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
                     }
 
 					gPipeline.markTextured(mDrawable);
-                    onDrawableUpdateFromServer();
 					mFaceMappingChanged = TRUE;
 					mTexAnimMode = 0;
 				}
@@ -449,7 +451,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			if (setVolume(volume_params, 0))
 			{
 				markForUpdate(TRUE);
-                onDrawableUpdateFromServer();
 			}
 		}
 
@@ -484,7 +485,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			}
 		}
 		// </FS:Beq>
-        onDrawableUpdateFromServer();
 		if (result & teDirtyBits)
 		{
 			updateTEData();
@@ -537,10 +537,8 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			if (setVolume(volume_params, 0))
 			{
 				markForUpdate(TRUE);
-                onDrawableUpdateFromServer();
 			}
 			S32 res2 = unpackTEMessage(*dp);
-            onDrawableUpdateFromServer();
 			if (TEM_INVALID == res2)
 			{
 				// There's something bogus in the data that we're unpacking.
@@ -621,7 +619,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
                 }
 
 				gPipeline.markTextured(mDrawable);
-                onDrawableUpdateFromServer();
 				mFaceMappingChanged = TRUE;
 				mTexAnimMode = 0;
 			}
@@ -640,7 +637,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				LLDataPackerBinaryBuffer	tdp(tdpbuffer, 1024);
 				mesgsys->getBinaryDataFast(_PREHASH_ObjectData, _PREHASH_TextureEntry, tdpbuffer, 0, block_num, 1024);
 				S32 result = unpackTEMessage(tdp);
-                onDrawableUpdateFromServer();
 				if (result & teDirtyBits)
 				{
 					updateTEData();
@@ -675,6 +671,15 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 	}
 	// ...and clean up any media impls
 	cleanUpMediaImpls();
+
+    if ((
+            (mVolumeChanged && !previously_volume_changed) ||
+            (mFaceMappingChanged && !previously_face_mapping_changed) ||
+            (mColorChanged && !previously_color_changed)
+        )
+        && !mLODChanged) {
+        onDrawableUpdateFromServer();
+    }
 
 	return retval;
 }
