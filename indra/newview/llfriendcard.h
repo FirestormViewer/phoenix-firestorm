@@ -95,9 +95,6 @@ public:
 	 */
 	void syncFriendCardsFolders();
 
-	// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
-	static void createAgentCallingCard();
-
 private:
 	typedef boost::function<void()> callback_t;
 
