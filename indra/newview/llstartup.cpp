@@ -248,7 +248,6 @@
 #include "lggcontactsets.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
-#include "llfriendcard.h"
 #include "llnotificationmanager.h"
 #include "llpresetsmanager.h"
 #include "llprogressview.h"
@@ -3058,9 +3057,6 @@ bool idle_startup()
 
 		// <FS:Ansariel> Favorite Wearables
 		FSFloaterWearableFavorites::initCategory();
-
-		// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
-		LLFriendCardsManager::createAgentCallingCard();
 
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();
