@@ -980,6 +980,9 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="settings blob">
 		Einstellungen
 	</string>
+	<string name="render material">
+		Material
+	</string>
 	<string name="mesh">
 		mesh
 	</string>
