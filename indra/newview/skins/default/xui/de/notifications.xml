@@ -4865,6 +4865,17 @@ Entpacken: [UNPACK_TIME]s [USIZE]KB
 			<button name="cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Unterordner erstellen" name="CreateSubfolder">
+		Name des neuen Ordners:
+		<form name="form">
+			<button default="true" name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="SameFolderRequired">
+		Ausgewählte Objekte müssen sich im selben Ordner befinden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		
