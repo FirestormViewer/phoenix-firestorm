@@ -1028,6 +1028,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+  <key>FSCreateCallingCards</key>
+    <map>
+      <key>Comment</key>
+      <string>Don't create calling cards when friending other avatars (requires restart)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
   <key>FSSupportGroupChatPrefix3</key>
     <map>
       <key>Comment</key>

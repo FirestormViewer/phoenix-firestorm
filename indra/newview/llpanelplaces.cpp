@@ -1122,7 +1122,8 @@ void LLPanelPlaces::togglePickPanel(BOOL visible)
 	if (mPickPanel)
 	{
 		mPickPanel->setVisible(visible);
-		mPlaceProfile->setVisible(!visible);
+		// <FS:Ansariel> FIRE-31687: Place profile overlaps landmark panel in places floater when closing create pick panel
+		//mPlaceProfile->setVisible(!visible);
 		updateVerbs();
 	}
 
