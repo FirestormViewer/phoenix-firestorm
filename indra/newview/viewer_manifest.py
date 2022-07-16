@@ -1748,6 +1748,12 @@ class DarwinManifest(ViewerManifest):
                     #       'viewer.keychain'
                     viewer_keychain = os.path.join(home_path, 'Library',
                                                    'Keychains', 'viewer.keychain')
+                    if not os.path.isfile( viewer_keychain ):
+                        viewer_keychain += "-db"
+
+                    if not os.path.isfile( viewer_keychain ):
+                        raise "No keychain named viewer found"
+                    
                     self.run_command(['security', 'unlock-keychain',
                                       '-p', keychain_pwd, viewer_keychain])
                     sign_retry_wait=15
@@ -1758,11 +1764,14 @@ class DarwinManifest(ViewerManifest):
                     # At least: fmod, growl, GLOD
                     # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
                     plain_sign += glob.glob(resources + "*.dylib")
+                    plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
+                    plain_sign += glob.glob( app_in_dmg + "/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib" )
 
                     deep_sign = [
                         # <FS:ND> Firestorm does not ship SLVersionChecker
                         #resources + "updater/SLVersionChecker",
                         resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
+                        resources + "SLVoice",
                         app_in_dmg,
                         ]
                     for attempt in range(3):
