@@ -23,15 +23,15 @@
  * $/LicenseInfo$
  */
 
-#define PBR_USE_GGX_APPROX         1
-#define PBR_USE_GGX_EMS_HACK       1
+#define PBR_USE_ATMOS              0
+#define PBR_USE_GGX_EMS_HACK       0
 #define PBR_USE_IRRADIANCE_HACK    1
-
 
 #define DEBUG_PBR_PACKORM0         0 // Rough=0, Metal=0
 #define DEBUG_PBR_PACKORM1         0 // Rough=1, Metal=1
 #define DEBUG_PBR_TANGENT1         1 // Tangent = 1,0,0
 #define DEBUG_PBR_VERT2CAM1        0 // vertex2camera = 0,0,1
+#define DEBUG_PBR_SPECLIGHT051     0 // Force specLigh to be 0,0.5,1
 
 // Pass input through "as is"
 #define DEBUG_PBR_DIFFUSE_MAP      0 // Output: use diffuse in G-Buffer
@@ -75,11 +75,12 @@
 
 // Atmospheric Lighting
 #define DEBUG_PBR_AMBOCC           0 // Output: ambient occlusion
-#define DEBUG_PBR_DIRECT_AMBIENT   0 // Output: da
+#define DEBUG_PBR_DA_RAW           0 // Output: da pre pow()
+#define DEBUG_PBR_DA_POW           0 // Output: da post pow()
 #define DEBUG_PBR_SUN_LIT          0 // Ouput: sunlit
 #define DEBUG_PBR_SUN_CONTRIB      0 // Output: sun_contrib
 #define DEBUG_PBR_SKY_ADDITIVE     0 // Output: additive
-#define DEBUG_PBR_SKY_ATTEN        0 // Output: atten
+#define DEBUG_PBR_SKY_ATTEN        0 // Output: greyscale atten.r
 
 #define DEBUG_PBR_IOR              0 // Output: grayscale IOR
 #define DEBUG_PBR_REFLECT0_BASE    0 // Output: black reflect0 default from ior
@@ -104,7 +105,7 @@ out vec4 frag_color;
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
 uniform sampler2DRect normalMap;
-uniform sampler2DRect emissiveRect;
+uniform sampler2DRect emissiveRect; // PBR linear packed Occlusion, Roughness, Metal. See: pbropaqueF.glsl
 
 #if defined(HAS_SUN_SHADOW) || defined(HAS_SSAO)
 uniform sampler2DRect lightMap;
@@ -132,6 +133,7 @@ vec4 getPositionWithDepth(vec2 pos_screen, float depth);
 
 void calcAtmosphericVars(vec3 inPositionEye, vec3 light_dir, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive, out vec3 atten, bool use_ao);
 float getAmbientClamp();
+vec2 getGGX( vec2 brdfPoint );
 vec3  atmosFragLighting(vec3 l, vec3 additive, vec3 atten);
 vec3  scaleSoftClipFrag(vec3 l);
 vec3  fullbrightAtmosTransportFrag(vec3 light, vec3 additive, vec3 atten);
@@ -152,25 +154,6 @@ vec4 applyWaterFogView(vec3 pos, vec4 color);
 
 uniform vec3 view_dir; // PBR
 
-// Approximate Environment BRDF
-vec2 getGGXApprox( vec2 uv )
-{
-    vec2  st    = vec2(1.) - uv;
-    float d     = (st.x * st.x * 0.5) * (st.y * st.y);
-    float scale = 1.0 - d;
-    float bias  = d;
-    return vec2( scale, bias );
-}
-
-vec2 getGGX( vec2 brdfPoint )
-{
-    // TODO: use GGXLUT
-    // texture2D(GGXLUT, brdfPoint).rg;
-#if PBR_USE_GGX_APPROX
-    return getGGXApprox( brdfPoint);
-#endif
-}
-
 vec3 calcBaseReflect0(float ior)
 {
     vec3   reflect0 = vec3(pow((ior - 1.0) / (ior + 1.0), 2.0));
@@ -188,6 +171,9 @@ void main()
 
     vec3  light_dir   = (sun_up_factor == 1) ? sun_dir : moon_dir;
     float da          = clamp(dot(norm.xyz, light_dir.xyz), 0.0, 1.0);
+#if DEBUG_PBR_DA_RAW
+    float debug_da    = da;
+#endif
     float light_gamma = 1.0 / 1.3;
     da                = pow(da, light_gamma);
 
@@ -308,6 +294,10 @@ void main()
         irradiance      += amblit*0.5*vec3(dot(n, light_dir));
 #endif
         specLight        = srgb_to_linear(specLight);
+#if DEBUG_PBR_SPECLIGHT051
+        specLight        = vec3(0,0.5,1.0);
+        irradiance       = specLight;
+#endif
 #if HAS_IBL
         kSpec          = mix( kSpec, iridescenceFresnel, iridescenceFactor);
 #endif
@@ -331,6 +321,16 @@ void main()
         colorDiffuse *= packedORM.r; // Occlusion -- NOTE: pbropaque will need occlusion_strength pre-multiplied into spec.r
 
         color.rgb = colorDiffuse + colorEmissive + colorSpec;
+
+        vec3 sun_contrib = min(da, scol) * sunlit;
+#if PBR_USE_ATMOS
+        color  = linear_to_srgb(color);
+        color += 2.0*sun_contrib;       // 2x = Undo legacy hack of calcAtmosphericVars() returning sunlight.rgb * 0.5;
+        color *= atten.r;
+        color += 2.0*additive;
+        color  = scaleSoftClipFrag(color);
+        color  = srgb_to_linear(color);
+#endif // PBR_USE_ATMOS
 
     #if DEBUG_PBR_DIFFUSE
         color.rgb = colorDiffuse;
@@ -450,32 +450,33 @@ void main()
     #if DEBUG_PBR_SPEC_WEIGHT
         color.rgb = vec3(specWeight);
     #endif
-
-#if DEBUG_PBR_AMBOCC
-        color.rgb = vec3(ambocc);
-#endif
-#if DEBUG_PBR_DIRECT_AMBIENT
-        color.rgb = vec3(da);
-#endif
-#if DEBUG_PBR_SKY_ADDITIVE
-        color.rgb = additive;
-#endif
-#if DEBUG_PBR_SKY_ATTEN
-        color.rgb = atten;
-#endif
-
-#if DEBUG_PBR_SUN_LIT
-        color.rgb = sunlit;
-color = srgb_to_linear(color);
-#endif
-#if DEBUG_PBR_SUN_CONTRIB
-        color.rgb = sun_contrib;
-#endif
     #if DEBUG_PBR_V2C_RAW
         color.rgb = v;
     #endif
     #if DEBUG_PBR_V2C_REMAP
         color.rgb = v*0.5 + vec3(0.5);
+    #endif
+
+    #if DEBUG_PBR_AMBOCC
+        color.rgb = vec3(ambocc);
+    #endif
+    #if DEBUG_PBR_DA_RAW
+        color.rgb = vec3(debug_da);
+    #endif
+    #if DEBUG_PBR_DA_POW
+        color.rgb = vec3(da);
+    #endif
+    #if DEBUG_PBR_SKY_ADDITIVE
+        color.rgb = additive;
+    #endif
+    #if DEBUG_PBR_SKY_ATTEN
+      color.rgb = vec3(atten.r);
+    #endif
+    #if DEBUG_PBR_SUN_LIT
+        color.rgb = sunlit;
+    #endif
+    #if DEBUG_PBR_SUN_CONTRIB
+        color.rgb = sun_contrib;
     #endif
         frag_color.rgb = color.rgb; // PBR is done in linear
     }
