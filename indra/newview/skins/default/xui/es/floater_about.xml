@@ -60,7 +60,7 @@ Los Linden son,
 con contribuciones de código de:
 			</text>
 		</panel>
-		<panel label="Créditos de Firestorm" name="fs_credits_panel" height="860">
+		<panel label="Créditos de Firestorm" name="fs_credits_panel" height="920">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
 					<text name="firestorm_intro" height="120">
