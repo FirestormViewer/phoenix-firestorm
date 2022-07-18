@@ -108,7 +108,7 @@ LLWorld::LLWorld() :
 	mSpaceTimeUSec(0),
 	mLimitsNeedRefresh(true)// <AW: opensim-limits>
 {
-	for (S32 i = 0; i < 8; i++)
+	for (S32 i = 0; i < EDGE_WATER_OBJECTS_COUNT; i++)
 	{
 		mEdgeWaterObjects[i] = NULL;
 	}
@@ -140,7 +140,7 @@ void LLWorld::resetClass()
 	LLViewerPartSim::getInstance()->destroyClass();
 
 	mDefaultWaterTexturep = NULL ;
-	for (S32 i = 0; i < 8; i++)
+	for (S32 i = 0; i < EDGE_WATER_OBJECTS_COUNT; i++)
 	{
 		mEdgeWaterObjects[i] = NULL;
 	}
@@ -1195,6 +1195,8 @@ void LLWorld::clearAllVisibleObjects()
 		//clear all cached visible objects.
 		(*iter)->clearCachedVisibleObjects();
 	}
+    clearHoleWaterObjects();
+    clearEdgeWaterObjects();
 }
 
 void LLWorld::updateParticles()
@@ -1368,7 +1370,7 @@ void LLWorld::precullWaterObjects(LLCamera& camera, LLCullResult* cull, bool inc
     }
 
 	S32 dir;
-	for (dir = 0; dir < 8; dir++)
+	for (dir = 0; dir < EDGE_WATER_OBJECTS_COUNT; dir++)
 	{
 		LLVOWater* waterp = mEdgeWaterObjects[dir];
 		if (waterp && waterp->mDrawable)
@@ -1377,6 +1379,26 @@ void LLWorld::precullWaterObjects(LLCamera& camera, LLCullResult* cull, bool inc
 		    cull->pushDrawable(waterp->mDrawable);
 		}
 	}
+}
+
+void LLWorld::clearHoleWaterObjects()
+{
+    for (std::list<LLPointer<LLVOWater> >::iterator iter = mHoleWaterObjects.begin();
+        iter != mHoleWaterObjects.end(); ++iter)
+    {
+        LLVOWater* waterp = (*iter).get();
+        gObjectList.killObject(waterp);
+    }
+    mHoleWaterObjects.clear();
+}
+
+void LLWorld::clearEdgeWaterObjects()
+{
+    for (S32 i = 0; i < EDGE_WATER_OBJECTS_COUNT; i++)
+    {
+        gObjectList.killObject(mEdgeWaterObjects[i]);
+        mEdgeWaterObjects[i] = NULL;
+    }
 }
 
 void LLWorld::updateWaterObjects()
@@ -1431,13 +1453,7 @@ void LLWorld::updateWaterObjects()
 		}
 	}
 
-	for (std::list<LLPointer<LLVOWater> >::iterator iter = mHoleWaterObjects.begin();
-		 iter != mHoleWaterObjects.end(); ++ iter)
-	{
-		LLVOWater* waterp = (*iter).get();
-		gObjectList.killObject(waterp);
-	}
-	mHoleWaterObjects.clear();
+    clearHoleWaterObjects();
 
 	// Use the water height of the region we're on for areas where there is no region
 	F32 water_height = gAgent.getRegion()->getWaterHeight();
@@ -1496,7 +1512,7 @@ void LLWorld::updateWaterObjects()
 // </FS:CR> Fix water height on regions larger than 2048x2048
 		
 	S32 dir;
-	for (dir = 0; dir < 8; dir++)
+	for (dir = 0; dir < EDGE_WATER_OBJECTS_COUNT; dir++)
 	{
 		S32 dim[2] = { 0 };
 		switch (gDirAxes[dir][0])
