@@ -530,6 +530,7 @@ void LLViewerObject::markDead()
 	}
 }
 
+// <FS:Beq> Add visible (rendered) face count to inspect
 S32 LLViewerObject::getNumVisibleFaces() const 
 { 
 	int v{0}; 
@@ -537,13 +538,16 @@ S32 LLViewerObject::getNumVisibleFaces() const
 	{ 
 		for (int i = 0;i < mDrawable->getNumFaces();i++)
 		{
-			if(mDrawable->getFace(i)->getTextureEntry()->getAlpha() != 0.f)
+			const LLFace* f = mDrawable->getFace(i);
+			if (f && f->getTextureEntry() && f->getTextureEntry()->getAlpha() != 0.0f)
+			{
 				v++;
+			}
 		} 
 	}
 	return v;
 };
-
+// </FS:Beq>
 
 void LLViewerObject::dump() const
 {
