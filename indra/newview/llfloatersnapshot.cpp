@@ -193,20 +193,28 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 	//thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
 	//floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
 	//floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
-	//if(!floaterp->isMinimized())
+	//if (floaterp->hasChild("360_label", TRUE))
 	//{
-	//	floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+	//	floaterp->getChild<LLUICtrl>("360_label")->setVisible(mAdvanced);
+	//}
+	//if (!mSkipReshaping)
+	//{
+	//	thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
+	//	if (!floaterp->isMinimized())
+	//	{
+	//		floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+	//	}
 	//}
 
 	previewp->setFixedThumbnailSize(panel_width, 400);
 	LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
 	floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(mAdvanced);
 	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(mAdvanced);
-    if (floaterp->hasChild("360_label", TRUE))
-    { 
-        floaterp->getChild<LLUICtrl>("360_label")->setVisible(mAdvanced);
-    }
-	if(!floaterp->isMinimized())
+	if (floaterp->hasChild("360_label", TRUE))
+	{
+		floaterp->getChild<LLUICtrl>("360_label")->setVisible(mAdvanced);
+	}
+	if (!mSkipReshaping && !floaterp->isMinimized())
 	{
 		LLView* controls_container = floaterp->getChild<LLView>("controls_container");
 		if (mAdvanced)
@@ -1388,7 +1396,7 @@ S32 LLFloaterSnapshotBase::notify(const LLSD& info)
 
 		// The refresh button is initially hidden. We show it after the first update,
 		// i.e. when preview appears.
-		if (!mRefreshBtn->getVisible())
+		if (mRefreshBtn && !mRefreshBtn->getVisible())
 		{
 			mRefreshBtn->setVisible(true);
 		}
