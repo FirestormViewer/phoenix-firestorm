@@ -49,6 +49,12 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Apri una nuova finestra Inventario"/>
 		</panel>
+		<panel name="collapse_panel">
+			<button label="Comprimi" name="collapse_btn" tool_tip="Chiude tutte le cartelle" />
+		</panel>
+		<panel name="expand_panel">
+			<button label="Espandi" name="expand_btn" tool_tip="Apre tutte le cartelle" />
+		</panel>
 		<panel name="dummy_panel">
 			<text name="ItemcountText" tool_tip="[ITEMS] oggetti, [CATEGORIES] cartelle">
 				Elementi
