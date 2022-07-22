@@ -5697,7 +5697,7 @@ void LLVolumeFace::createOctree(F32 scaler, const LLVector4a& center, const LLVe
 		
 		tri->mRadius = size.getLength3().getF32() * scaler;
 		
-		ND_OCTREE_LOG << "insertion " << i
+		ND_OCTREE_LOG << "insertion " << index
 				<< " tri.mV " << *tri->mV[0] << "/" << *tri->mV[1] << "/" << *tri->mV[2]
 				<< " tri.mIndex " << tri->mIndex[0] << "/" << tri->mIndex[1] << "/" << tri->mIndex[2]
 				<< ND_OCTREE_LOG_END;
