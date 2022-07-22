@@ -200,7 +200,8 @@ LLWorldMapView::LLWorldMapView() :
     mMouseDownY(0),
     mSelectIDStart(0),
     mMapScale(0.f),
-    mTargetMapScale(0.f)
+    mTargetMapScale(0.f),
+    mMapIterpTime(MAP_ITERP_TIME_CONSTANT)
 {
     // LL_INFOS("WorldMap") << "Creating the Map -> LLWorldMapView::LLWorldMapView()" << LL_ENDL;
 
@@ -298,7 +299,7 @@ void LLWorldMapView::setScale(F32 scale, bool snap)
         {
             mMapScale = 0.1f;
         }
-
+        mMapIterpTime = MAP_ITERP_TIME_CONSTANT;
         F32 ratio = (scale / old_scale);
         mPanX *= ratio;
         mPanY *= ratio;
@@ -340,6 +341,7 @@ void LLWorldMapView::translatePan(S32 delta_x, S32 delta_y)
 // static
 void LLWorldMapView::setPan(S32 x, S32 y, BOOL snap)
 {
+    mMapIterpTime = MAP_ITERP_TIME_CONSTANT;
     mTargetPanX = (F32) x;
     mTargetPanY = (F32) y;
     if (snap)
@@ -348,6 +350,13 @@ void LLWorldMapView::setPan(S32 x, S32 y, BOOL snap)
         mPanY = mTargetPanY;
     }
     sVisibleTilesLoaded = false;
+}
+
+// static
+void LLWorldMapView::setPanWithInterpTime(S32 x, S32 y, BOOL snap, F32 interp_time)
+{
+    setPan(x, y, snap);
+    mMapIterpTime = interp_time;
 }
 
 bool LLWorldMapView::showRegionInfo() { return (LLWorldMipmap::scaleToLevel(mMapScale) <= DRAW_SIMINFO_THRESHOLD ? true : false); }
@@ -383,9 +392,9 @@ void LLWorldMapView::draw()
 
 	mVisibleRegions.clear();
 
-	// animate pan if necessary
-    mPanX = lerp(mPanX, mTargetPanX, LLSmoothInterpolation::getInterpolant(MAP_ITERP_TIME_CONSTANT));
-	mPanY = lerp(mPanY, mTargetPanY, LLSmoothInterpolation::getInterpolant(MAP_ITERP_TIME_CONSTANT));
+    // animate pan if necessary
+    mPanX = lerp(mPanX, mTargetPanX, LLSmoothInterpolation::getInterpolant(mMapIterpTime));
+    mPanY = lerp(mPanY, mTargetPanY, LLSmoothInterpolation::getInterpolant(mMapIterpTime));
     
     //RN: snaps to zoom value because interpolation caused jitter in the text rendering
     if (!sZoomTimer.getStarted() && mMapScale != mTargetMapScale)
