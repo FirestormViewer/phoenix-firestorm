@@ -516,7 +516,6 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 					}
 					else
 					{
-						//mWaterPresetsCombo->selectByValue(LLSD(water->getName()));
 						std::string preset_name = water->getName();
 						if (preset_name == "_default_")
 						{
@@ -541,7 +540,7 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 			{
 				mWLPresetsCombo->selectByValue(LLSD(sky->getAssetId()));
 			}
-#ifdef OPENSIM			
+#ifdef OPENSIM
 			else if (LLGridManager::getInstance()->isInOpenSim())
 			{
 				auto preset_name = sky->getName();
@@ -549,7 +548,7 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 				if (preset_name == "_default_")
 				{
 					preset_name = "Default";
-				}				
+				}
 				mWLPresetsCombo->selectByValue(preset_name);
 			}
 #endif
@@ -730,7 +729,7 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 		// Parse the quick preferences settings
 		LLXUIParser parser;
 		parser.readXUI(root, xml, settings_path);
-		
+
 		if (!xml.validateBlock())
 		{
 			LL_WARNS() << "Unable to validate quick preferences from file: " << settings_path << LL_ENDL;
@@ -860,7 +859,7 @@ void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacy_sky, current_water);
 			LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 			LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
-		}		
+		}
 		else
 		{
 			LL_WARNS() << "Legacy windlight conversion failed for " << preset << " existing env unchanged." << LL_ENDL;
@@ -873,7 +872,6 @@ void FloaterQuickPrefs::selectSkyPreset(const LLSD& preset)
 		LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 		LLEnvironment::instance().setManualEnvironment(LLEnvironment::ENV_LOCAL, preset.asUUID());
 	}
-	// LLEnvironment::instance().updateEnvironment(LLEnvironment::TRANSITION_FAST);
 }
 
 void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
@@ -891,7 +889,7 @@ void FloaterQuickPrefs::selectWaterPreset(const LLSD& preset)
 			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, current_sky, legacy_water);
 			LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 			LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
-		}		
+		}
 		else
 		{
 			LL_WARNS() << "Legacy windlight conversion failed for " << preset << " existing env unchanged." << LL_ENDL;
@@ -919,7 +917,7 @@ void FloaterQuickPrefs::selectDayCyclePreset(const LLSD& preset)
 			LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, legacyday);
 			LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL);
 			LLEnvironment::instance().updateEnvironment(static_cast<LLSettingsBase::Seconds>(gSavedSettings.getF32("FSEnvironmentManualTransitionTime")));
-		}		
+		}
 		else
 		{
 			LL_WARNS() << "Legacy windlight conversion failed for " << preset << " existing env unchanged." << LL_ENDL;
@@ -1181,17 +1179,6 @@ void FloaterQuickPrefs::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamT
 	}
 }
 
-// void FloaterQuickPrefs::onSunMoved()
-// {
-
-// 	F32 val = mWLSunPos->getCurSliderValue();
-
-// 	auto env = LLEnvironment::instance().getSelectedEnvironment() == LLEnvironment::ENV_LOCAL)
-// 	auto day = LLEnvironment::instance().getEnvironmentDay(env);
-	
-
-// }
-
 void FloaterQuickPrefs::enableWindlightButtons(bool enable)
 {
 	childSetEnabled("WLPresetsCombo", enable);
@@ -1255,7 +1242,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 	typeMap[ControlTypeColor4]		= "option_color4_control";
 
 	// hide all widget types except for the one the user wants
-	LLUICtrl* widget;
+	LLUICtrl* widget{ nullptr };
 	for (it = typeMap.begin(); it != typeMap.end(); ++it)
 	{
 		if (entry.type != it->first)
@@ -1811,8 +1798,7 @@ void FloaterQuickPrefs::onValuesChanged()
 			mControlsList[mSelectedControl].type = type; // old_parameters.type;
 			mControlsList[mSelectedControl].widget->setValue(var->getValue());
 		}
-		// rebuild controls UI (probably not needed)
-		// updateControls();
+
 		// update our new control
 		updateControl(mSelectedControl, mControlsList[mSelectedControl]);
 	}
