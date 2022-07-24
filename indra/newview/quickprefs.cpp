@@ -278,8 +278,8 @@ void FloaterQuickPrefs::initCallbacks()
 void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLUUID>& daycycle_map)
 {
 	mDayCyclePresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
-	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
-	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_None"), LLSD(PRESET_NAME_NONE));
+	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, FALSE);
+	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_None"), LLSD(PRESET_NAME_NONE), EAddPosition::ADD_BOTTOM, FALSE);
 	mDayCyclePresetsCombo->addSeparator();
 
 	// Add setting presets.
@@ -319,8 +319,8 @@ void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLU
 void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map)
 {
 	mWLPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
-	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
-	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE));
+	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, FALSE);
+	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE), EAddPosition::ADD_BOTTOM, FALSE);
 	mWLPresetsCombo->addSeparator();
 
 	// Add setting presets.
@@ -361,8 +361,8 @@ void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>&
 void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map)
 {
 	mWaterPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
-	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT));
-	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE));
+	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, FALSE);
+	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE), EAddPosition::ADD_BOTTOM, FALSE);
 	mWaterPresetsCombo->addSeparator();
 
 	// Add setting presets.
@@ -441,10 +441,34 @@ void FloaterQuickPrefs::loadPresets()
 	loadDayCyclePresets(daycycle_map);
 }
 
+void FloaterQuickPrefs::setDefaultPresetsEnabled(BOOL enabled)
+{
+	LLScrollListItem* item{ nullptr };
+
+	item = mWLPresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+	if (item) item->setEnabled(enabled);
+
+	item = mWLPresetsCombo->getItemByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+	if (item) item->setEnabled(enabled);
+
+	item = mWaterPresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+	if (item) item->setEnabled(enabled);
+
+	item = mWaterPresetsCombo->getItemByValue(LLSD(PRESET_NAME_DAY_CYCLE));
+	if (item) item->setEnabled(enabled);
+
+	item = mDayCyclePresetsCombo->getItemByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
+	if (item) item->setEnabled(enabled);
+
+	item = mDayCyclePresetsCombo->getItemByValue(LLSD(PRESET_NAME_NONE));
+	if (item) item->setEnabled(enabled);
+}
+
 void FloaterQuickPrefs::setSelectedEnvironment()
 {
 	//LL_INFOS() << "EEP: getSelectedEnvironment: " << LLEnvironment::instance().getSelectedEnvironment() << LL_ENDL;
 
+	setDefaultPresetsEnabled(TRUE);
 	mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
@@ -560,6 +584,8 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 		mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 		mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	}
+
+	setDefaultPresetsEnabled(FALSE);
 }
 
 BOOL FloaterQuickPrefs::postBuild()
