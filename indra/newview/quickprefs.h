@@ -94,6 +94,8 @@ private:
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(bool enable);
 
+	void setDefaultPresetsEnabled(BOOL enabled);
+
 public:
 	/*virtual*/ BOOL postBuild();
 	virtual void onOpen(const LLSD& key);

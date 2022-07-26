@@ -1018,11 +1018,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>20c867a0327bb653c8fc377b97d68c55</string>
+              <string>971a4c8accc851994039ef36785bed38</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.06-darwin64-3.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.07-darwin-222051107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1046,11 +1046,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b81336e7824c6cf96a6cd6200333b3f7</string>
+              <string>611c5389b0354e6b64a7de50b93fafdb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.06-windows-220870903.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.07-windows-222041046.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1060,18 +1060,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cbfb25df1e231a84b0beaf85600efb20</string>
+              <string>1b0b4d70d172c9b1eaac211f051ca599</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.06-windows64-220870905.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.07-windows64-222041047.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.06</string>
+        <string>2.02.07</string>
       </map>
       <key>fontconfig</key>
       <map>
