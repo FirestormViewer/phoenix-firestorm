@@ -5246,9 +5246,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
             if (rebuild_face_octrees)
 			{
-    			delete dst_face.mOctree;
-				dst_face.mOctree = NULL;
-
+                dst_face.destroyOctree();
 				// <FS:ND> Create a debug log for octree insertions if requested.
 				static LLCachedControl<bool> debugOctree(gSavedSettings,"FSCreateOctreeLog");
 				bool _debugOT( debugOctree );

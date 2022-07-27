@@ -618,7 +618,25 @@ BOOL LLFavoritesBarCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 			}
 
 			// check if we are dragging an existing item from the favorites bar
-			if (item && mDragItemId == item->getUUID())
+            bool existing_drop = false;
+            if (item && mDragItemId == item->getUUID())
+            {
+                // There is a chance of mDragItemId being obsolete
+                // ex: can happen if something interrupts viewer, which
+                // results in viewer not geting a 'mouse up' signal
+                for (LLInventoryModel::item_array_t::iterator i = mItems.begin(); i != mItems.end(); ++i)
+                {
+                    LLViewerInventoryItem* currItem = *i;
+
+                    if (currItem->getUUID() == mDragItemId)
+                    {
+                        existing_drop = true;
+                        break;
+                    }
+                }
+            }
+
+            if (existing_drop)
 			{
 				*accept = ACCEPT_YES_SINGLE;
 
@@ -647,6 +665,7 @@ BOOL LLFavoritesBarCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 					if (mItems.empty())
 					{
 						setLandingTab(NULL);
+                        mLastTab = NULL;
 					}
 					handleNewFavoriteDragAndDrop(item, favorites_id, x, y);
 				}
@@ -662,6 +681,12 @@ BOOL LLFavoritesBarCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 
 void LLFavoritesBarCtrl::handleExistingFavoriteDragAndDrop(S32 x, S32 y)
 {
+    if (mItems.empty())
+    {
+        // Isn't supposed to be empty
+        return;
+    }
+
 	// Identify the button hovered and the side to drop
 	LLFavoriteLandmarkButton* dest = dynamic_cast<LLFavoriteLandmarkButton*>(mLandingTab);
 	bool insert_before = true;	
@@ -934,6 +959,7 @@ void LLFavoritesBarCtrl::updateButtons(bool force_update)
 	if(mItems.empty())
 	{
 		mBarLabel->setVisible(TRUE);
+        mLastTab = NULL;
 	}
 	else
 	{
@@ -980,6 +1006,10 @@ void LLFavoritesBarCtrl::updateButtons(bool force_update)
 					dynamic_cast<LLFavoriteLandmarkButton*> (*cur_it);
 			if (button)
 			{
+                if (mLastTab == button)
+                {
+                    mLastTab = NULL;
+                }
 				removeChild(button);
 				delete button;
 			}
@@ -1023,6 +1053,17 @@ void LLFavoritesBarCtrl::updateButtons(bool force_update)
 
 			mLastTab = last_new_button;
 		}
+        if (!mLastTab && mItems.size() > 0)
+        {
+            // mMoreTextBox was removed, so LLFavoriteLandmarkButtons
+            // should be the only ones in the list
+            LLFavoriteLandmarkButton* button = dynamic_cast<LLFavoriteLandmarkButton*> (childs->back());
+            if (button)
+            {
+                mLastTab = button;
+            }
+        }
+
 		mFirstDropDownItem = j;
 		// Chevron button
 		if (mFirstDropDownItem < mItems.size())
