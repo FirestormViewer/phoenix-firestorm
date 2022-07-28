@@ -66,6 +66,12 @@ public:
 	/*virtual*/ BOOL setSizeImpl(LLCoordScreen size);
 	/*virtual*/ BOOL setSizeImpl(LLCoordWindow size);
 	/*virtual*/ BOOL switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL disable_vsync, const LLCoordScreen * const posp = NULL);
+	// <FS:Zi> Make shared context work on Linux for multithreaded OpenGL
+	void* createSharedContext() override;
+	void makeContextCurrent(void* context) override;
+	void destroySharedContext(void* context) override;
+	/*virtual*/ void toggleVSync(bool enable_vsync);
+	// </FS:Zi>
 	/*virtual*/ BOOL setCursorPosition(LLCoordWindow position);
 	/*virtual*/ BOOL getCursorPosition(LLCoordWindow *position);
 	/*virtual*/ void showCursor();
@@ -148,11 +154,6 @@ public:
 	static Display* get_SDL_Display(void);
 #endif // LL_X11	
 
-	void* createSharedContext() override;
-	void makeContextCurrent(void* context) override;
-	void destroySharedContext(void* context) override;
-	void toggleVSync(bool enable_vsync) override;
-	
 protected:
 	LLWindowSDL(LLWindowCallbacks* callbacks,
 		const std::string& title, int x, int y, int width, int height, U32 flags,
