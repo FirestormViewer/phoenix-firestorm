@@ -203,6 +203,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate"
+                 value="Generate" />
             </combo_box>
             <line_editor
              follows="left|top"
@@ -340,6 +344,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate"
+                 value="Generate" />                 
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -481,6 +489,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate"
+                 value="Generate" />                 
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -622,6 +634,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate"
+                 value="Generate" />                 
                 <item
                  name="Use LoD above"
                  label="Use LoD above"

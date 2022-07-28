@@ -44,7 +44,7 @@
 #ifdef TRACY_ENABLE
 // USAGE_TRACKING - displays overlapping stats that may imply double counting.
 // ATTACHMENT_TRACKING - displays detailed tracking info for Avatar and Attachment. very heavy overhead.
-#define USAGE_TRACKING
+// #define USAGE_TRACKING
 #define ATTACHMENT_TRACKING
 #else
 #undef USAGE_TRACKING
