@@ -224,6 +224,10 @@ http://secondlife.com/download
 Pour plus d&apos;informations, consultez la page FAQ ci-dessous :
 http://secondlife.com/viewer-access-faq
 	</string>
+	<string name="LoginFailed">
+		Échec de la connexion d'urgence de la grille.
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le support du réseau.
+	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Mise à jour facultative du client disponible : [VERSION]
 	</string>
