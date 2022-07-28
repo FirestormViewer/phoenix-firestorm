@@ -2587,7 +2587,7 @@ void* LLWindowSDL::createSharedContext()
 			setSize(size);
 		}
 
-		LL_WARNS() << "Creating shared OpenGL context successful!" << LL_ENDL;
+		LL_DEBUGS() << "Creating shared OpenGL context successful!" << LL_ENDL;
 
 		return (void*)sc;
 	}
