@@ -78,7 +78,10 @@ static bool ATIbug = false;
 // be only one object of this class at any time.  Currently this is true.
 static LLWindowSDL *gWindowImplementation = NULL;
 
-
+// extern "C" Bool XineramaIsActive (Display *dpy)
+// {
+// 	return 0;
+// }
 void maybe_lock_display(void)
 {
 	if (gWindowImplementation && gWindowImplementation->Lock_Display) {
@@ -2558,6 +2561,27 @@ std::vector<std::string> LLWindowSDL::getDynamicFallbackFontList()
 
 	rtns.push_back(final_fallback);
 	return rtns;
+}
+
+
+void* LLWindowSDL::createSharedContext()
+{
+  return SDL_GL_CreateContext(mWindow);
+}
+
+void LLWindowSDL::makeContextCurrent(void* contextPtr)
+{
+    LL_PROFILER_GPU_CONTEXT;
+    SDL_GL_MakeCurrent( mWindow, contextPtr );
+}
+
+void LLWindowSDL::destroySharedContext(void* contextPtr)
+{
+  SDL_GL_DeleteContext( contextPtr );
+}
+
+void LLWindowSDL::toggleVSync(bool enable_vsync)
+{
 }
 
 #endif // LL_SDL
