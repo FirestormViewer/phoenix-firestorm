@@ -1798,7 +1798,11 @@ void LLWindowSDL::gatherInput()
 				// invoke handleUnicodeUTF16 in case the user hits return.
 				// Note that we cannot blindly use handleUnicodeUTF16 for each SDL_KEYDOWN. Doing so will create bogus keyboard input (like % for cursor left).
 				if( mKeyVirtualKey == SDLK_RETURN )
+				{
+					// fix return key not working when capslock or numlock are enabled
+					mKeyModifiers &= (~(KMOD_NUM | KMOD_CAPS | KMOD_MODE));
 					handleUnicodeUTF16( mKeyVirtualKey, mKeyModifiers );
+				}
 
 				// part of the fix for SL-13243
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
