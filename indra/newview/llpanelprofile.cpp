@@ -723,7 +723,9 @@ void LLFloaterProfilePermissions::onAvatarNameCache(const LLUUID& agent_id, cons
     mAvatarNameCacheConnection.disconnect();
 
     LLStringUtil::format_map_t args;
-    args["[AGENT_NAME]"] = av_name.getDisplayName();
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //args["[AGENT_NAME]"] = av_name.getDisplayName();
+    args["[AGENT_NAME]"] = av_name.getCompleteName();
     std::string descritpion = getString("description_string", args);
     mDescription->setValue(descritpion);
 }
