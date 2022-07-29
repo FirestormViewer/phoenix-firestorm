@@ -78,7 +78,10 @@ static bool ATIbug = false;
 // be only one object of this class at any time.  Currently this is true.
 static LLWindowSDL *gWindowImplementation = NULL;
 
-
+// extern "C" Bool XineramaIsActive (Display *dpy)
+// {
+// 	return 0;
+// }
 void maybe_lock_display(void)
 {
 	if (gWindowImplementation && gWindowImplementation->Lock_Display) {
@@ -713,6 +716,8 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, mFSAASamples);
 	}
 	
+	// <FS:Zi> Make shared context work on Linux for multithreaded OpenGL
+	SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
 	mWindow = SDL_CreateWindow( mWindowTitle.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, mSDLFlags );
 
 	if( mWindow )
@@ -2559,5 +2564,58 @@ std::vector<std::string> LLWindowSDL::getDynamicFallbackFontList()
 	rtns.push_back(final_fallback);
 	return rtns;
 }
+
+// <FS:Zi> Make shared context work on Linux for multithreaded OpenGL
+class sharedContext
+{
+	public:
+		SDL_GLContext mContext;
+};
+
+void* LLWindowSDL::createSharedContext()
+{
+	sharedContext* sc = new sharedContext();
+	sc->mContext = SDL_GL_CreateContext(mWindow);
+	if (sc->mContext)
+	{
+		SDL_GL_SetSwapInterval(0);
+		SDL_GL_MakeCurrent(mWindow, mContext);
+
+		LLCoordScreen size;
+		if (getSize(&size))
+		{
+			setSize(size);
+		}
+
+		LL_DEBUGS() << "Creating shared OpenGL context successful!" << LL_ENDL;
+
+		return (void*)sc;
+	}
+
+	LL_WARNS() << "Creating shared OpenGL context failed!" << LL_ENDL;
+
+	return nullptr;
+}
+
+void LLWindowSDL::makeContextCurrent(void* context)
+{
+	LL_PROFILER_GPU_CONTEXT;
+	SDL_GL_MakeCurrent(mWindow, ((sharedContext*)context)->mContext);
+}
+
+void LLWindowSDL::destroySharedContext(void* context)
+{
+	sharedContext* sc = (sharedContext*)context;
+
+	SDL_GL_DeleteContext(sc->mContext);
+
+	delete sc;
+}
+
+void LLWindowSDL::toggleVSync(bool enable_vsync)
+{
+	SDL_GL_SetSwapInterval(enable_vsync);
+}
+// </FS:Zi>
 
 #endif // LL_SDL

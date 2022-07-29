@@ -1932,7 +1932,7 @@ jusqu'à [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? 
 Comme dans la vie réelle, il faut quelque temps aux gens pour qu&apos;ils se familiarisent avec un nouveau nom. Veuillez compter quelques jours avant la [http://wiki.secondlife.com/wiki/Setting_your_display_name mise à jour de votre nom] au niveau des objets, scripts, recherches, etc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
-		Impossible de changer de nom d&apos;affichage. Si vous pensez qu&apos;il s&apos;agit d&apos;une erreur, contactez l&apos;Assistance.
+		Impossible de changer de nom d&apos;affichage. Si vous pensez qu&apos;il s&apos;agit d&apos;une erreur, contactez l&apos;Assistance du réseau.
 	</notification>
 	<notification name="SetDisplayNameFailedLength">
 		Le nom saisi est trop long. Le nombre de caractères maximum est de [LENGTH].
@@ -5035,7 +5035,7 @@ Veuillez sélectionner un terrain plus petit.
 		</form>
 	</notification>
 	<notification name="InventoryValidationFailed" label="Erreurs de validation de l'inventaire">
-		Une corruption a été trouvée dans votre inventaire. 
+		Une corruption a été trouvée dans votre inventaire.
 Veuillez contacter [HELP] avec la liste de problèmes suivante.
 Ils peuvent utiliser http://opensimulator.org/wiki/inventory pour résoudre les problèmes.
 

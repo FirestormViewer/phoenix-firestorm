@@ -94,6 +94,9 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	<string name="AboutTime">
 		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] SLT
 	</string>
+	<string name="LocalTime">
+		[day, datetime, local] [month, datetime, local] [year, datetime, local], [hour24, datetime, local]:[min, datetime, local]:[second, datetime, local]
+	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Błąd podczas pobierania informacji o wydaniu.
 	</string>
@@ -218,6 +221,10 @@ https://www.firestormviewer.org/choose-your-platform/
 Więcej informacji w naszym FAQ:
 http://secondlife.com/viewer-access-faq
 	</string>
+	<string name="LoginFailed">
+		Awaria logowania awaryjnego do świata.
+Jeśli uważasz, że to błąd, skontaktuj się z obsługą świata.
+	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Opcjonalna aktualizacja jest dostępna: [VERSION].
 	</string>
@@ -262,9 +269,13 @@ Osoby posiadające darmowe konta nie mogą się teraz zalogować, aby ludzie pos
 Jeśli myślisz, że to błąd skontaktuj się z
 support@secondlife.com
 	</string>
+	<string name="PacificTime">
+		czas pacyficzny
+	</string>
 	<string name="LoginFailedAcountSuspended">
 		Twoje konto jest niedostępne do
-[TIME] czasu pacyficznego.
+[TIME].
+Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="LoginFailedAccountDisabled">
 		Nie jesteśmy w stanie na tą chwilę wykonać Twojego żądania.
@@ -277,7 +288,7 @@ Skontaktuj się z nami: support@secondlife.com
 	<string name="LoginFailedAccountMaintenance">
 		Twoje konto jest w trakcie drobnych konserwacji.
 Nie będzie ono dostępne do
-[TIME] czasu pacyficznego.
+[TIME].
 Jeśli myślisz, że to błąd skontaktuj się z support@secondlife.com
 	</string>
 	<string name="LoginFailedPendingLogoutFault">
@@ -6328,6 +6339,12 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="fs_preprocessor_caching_err">
 		Błąd podczas buforowania pliku '[FILENAME]'
+	</string>
+	<string name="skin_defaults_starlight_location">
+		Pokazywanie Twojej obecnej lokalizacji w pasku menu zostało wyłączone, to domyślne zachowanie dla skórek linii StarLight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Pokazywanie paska nawigacyjnego zostało włączone, to domyślne zachowanie dla skórek linii StarLight.
 	</string>
 	<string name="fs_preprocessor_truncated">
 		Uwaga: Dane wyjściowe preprocesora zostały skrócone z powodu zbyt dużego rozmiaru tekstu skryptu - prawdopodobnie nie zadziała.

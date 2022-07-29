@@ -749,7 +749,9 @@ void LLPipeline::cleanup()
 
 	mFaceSelectImagep = NULL;
 
-	mMovedBridge.clear();
+    mMovedList.clear();
+    mMovedBridge.clear();
+    mShiftList.clear();
 
 	mInitialized = false;
 
@@ -2984,6 +2986,14 @@ void LLPipeline::clearRebuildDrawables()
 		drawablep->clearState(LLDrawable::EARLY_MOVE | LLDrawable::MOVE_UNDAMPED | LLDrawable::ON_MOVE_LIST | LLDrawable::ANIMATED_CHILD);
 	}
 	mMovedList.clear();
+
+    for (LLDrawable::drawable_vector_t::iterator iter = mShiftList.begin();
+        iter != mShiftList.end(); ++iter)
+    {
+        LLDrawable *drawablep = *iter;
+        drawablep->clearState(LLDrawable::EARLY_MOVE | LLDrawable::MOVE_UNDAMPED | LLDrawable::ON_MOVE_LIST | LLDrawable::ANIMATED_CHILD | LLDrawable::ON_SHIFT_LIST);
+    }
+    mShiftList.clear();
 }
 
 void LLPipeline::rebuildPriorityGroups()

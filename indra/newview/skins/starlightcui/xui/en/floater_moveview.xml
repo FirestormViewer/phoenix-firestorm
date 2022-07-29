@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="specified"
+ right="-693"
+ bottom="-50"
+ legacy_header_height="18"
+ bg_opaque_color="SL-CustomBackground"
+ bg_alpha_color="SL-CustomBackground"
+ background_visible="true"
+ background_opaque="false"
+ can_dock="false"
+ can_minimize="false"
+ can_close="false"
+ can_resize="true"
+ height="75"
+ layout="topleft"
+ min_height="82"
+ min_width="86"
+ name="move_floater"
+ help_topic=""
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ chrome="true"
+ show_title="false"
+ width="86">
+    <string
+     name="walk_forward_tooltip">
+        Walk Forward (press Up Arrow or W)
+    </string>
+    <string
+     name="walk_back_tooltip">
+        Walk Backwards (press Down Arrow or S)
+    </string>
+    <string
+     name="walk_left_tooltip">
+        Walk left (press Shift + Left Arrow or A)
+    </string>
+    <string
+     name="walk_right_tooltip">
+        Walk right (press Shift + Right Arrow or D)
+    </string>
+    <string
+     name="run_forward_tooltip">
+        Run Forward (press Up Arrow or W)
+    </string>
+    <string
+     name="run_back_tooltip">
+        Run Backwards (press Down Arrow or S)
+    </string>
+    <string
+     name="run_left_tooltip">
+        Run left (press Shift + Left Arrow or A)
+    </string>
+    <string
+     name="run_right_tooltip">
+        Run right (press Shift + Right Arrow or D)
+    </string>
+    <string
+     name="fly_forward_tooltip">
+        Fly Forward (press Up Arrow or W)
+    </string>
+    <string
+     name="fly_back_tooltip">
+        Fly Backwards (press Down Arrow or S)
+    </string>
+    <string
+     name="fly_left_tooltip">
+        Fly left (press Shift + Left Arrow or A)
+    </string>
+    <string
+     name="fly_right_tooltip">
+        Fly right (press Shift + Right Arrow or D)
+    </string>
+    <string
+     name="fly_up_tooltip">
+        Fly up (press E)
+    </string>
+    <string
+     name="fly_down_tooltip">
+        Fly down (press C)
+    </string>
+    <string
+     name="jump_tooltip">
+        Jump (press E)
+    </string>
+    <string
+     name="crouch_tooltip">
+        Crouch (press C)
+    </string>
+    <string
+     name="walk_title">
+    </string>
+    <string
+     name="run_title">
+    </string>
+    <string
+     name="fly_title">
+    </string>
+    <panel
+     border="false"
+     top="1"
+     follows="all"
+     layout="topleft"
+     left="3"
+     mouse_opaque="false"
+     name="panel_actions"
+     height="72"
+     width="80">
+        <layout_stack
+         border_size="0"
+         top="0"
+         enabled="true"
+         height="72"
+         left="0"
+         mouse_opaque="false"
+         name="ls_vertical"
+         orientation="vertical"
+         width="80"
+         follows="all">
+            <layout_panel
+             mouse_opaque="false"
+             name="lp_row1"
+             user_resize="false"
+             width="80"
+             height="25">
+                <layout_stack
+                 border_size="0"
+                 top="0"
+                 enabled="true"
+                 height="25"
+                 left="0"
+                 mouse_opaque="false"
+                 name="ls_horizontal1"
+                 orientation="horizontal"
+                 width="80"
+                 follows="all">
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col1_1"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <button
+                         height="25"
+                         follows="all"
+                         image_selected="Movement_TurnLeft_On"
+                         image_pressed_selected="Movement_TurnLeft_On"
+                         image_unselected="Movement_TurnLeft_Off"
+                         layout="topleft"
+                         left="0"
+                         name="turn left btn"
+                         width="20"
+                         scale_image="true"
+                         tool_tip="Turn left (press Left Arrow or A)"
+                         top="0"/>
+                    </layout_panel>
+
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col1_2"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <joystick_turn
+                         follows="all"
+                         height="25"
+                         image_selected="Movement_Forward_On"
+                         image_pressed_selected="Movement_Forward_On"
+                         image_unselected="Movement_Forward_Off"
+                         layout="topleft"
+                         left="0"
+                         name="forward btn"
+                         quadrant="up"
+                         width="20"
+                         scale_image="true"
+                         tool_tip="Walk forward (press up arrow or W)"
+                         top="0"/>
+                    </layout_panel>
+
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col1_3"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <button
+                         height="25"
+                         follows="all"
+                         image_selected="Movement_TurnRight_On"
+                         image_pressed_selected="Movement_TurnRight_On"
+                         image_unselected="Movement_TurnRight_Off"
+                         layout="topleft"
+                         left="0"
+                         width="20"
+                         name="turn right btn"
+                         scale_image="true"
+                         tool_tip="Turn right (press Right Arrow or D)"
+                         top="0"/>
+                    </layout_panel>
+
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col1_4"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <button
+                         follows="all"
+                         height="25"
+                         image_selected="Movement_Up_On"
+                         image_pressed_selected="Movement_Up_On"
+                         image_unselected="Movement_Up_Off"
+                         layout="topleft"
+                         left="0"
+                         name="move up btn"
+                         scale_image="true"
+                         tool_tip="Fly up (press E)"
+                         top="0"
+                         width="20"/>
+                    </layout_panel>
+                </layout_stack>
+            </layout_panel>
+
+            <layout_panel
+             mouse_opaque="false"
+             name="lp_row2"
+             user_resize="false"
+             height="25"
+             width="80">
+                <layout_stack
+                 border_size="0"
+                 top="0"
+                 enabled="true"
+                 height="25"
+                 left="0"
+                 mouse_opaque="false"
+                 name="ls_horizontal2"
+                 orientation="horizontal"
+                 width="80"
+                 follows="all">
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col2_1"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <joystick_slide
+                         height="25"
+                         follows="all"
+                         image_selected="Movement_Left_On"
+                         image_pressed_selected="Movement_Left_On"
+                         image_unselected="Movement_Left_Off"
+                         layout="topleft"
+                         left="0"
+                         name="move left btn"
+                         quadrant="left"
+                         width="20"
+                         scale_image="true"
+                         tool_tip="Walk left (press Shift + Left Arrow or A)"
+                         top="0"/>
+                    </layout_panel>
+
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col2_2"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <joystick_turn
+                         follows="all"
+                         height="25"
+                         image_selected="Movement_Backward_On"
+                         image_pressed_selected="Movement_Backward_On"
+                         image_unselected="Movement_Backward_Off"
+                         layout="topleft"
+                         left="0"
+                         name="backward btn"
+                         quadrant="down"
+                         width="20"
+                         scale_image="true"
+                         tool_tip="Walk backward (press down arrow or S)"
+                         top="0"/>
+                    </layout_panel>
+
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col2_3"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <joystick_slide
+                         height="25"
+                         follows="all"
+                         image_selected="Movement_Right_On"
+                         image_pressed_selected="Movement_Right_On"
+                         image_unselected="Movement_Right_Off"
+                         layout="topleft"
+                         left="0"
+                         name="move right btn"
+                         quadrant="right"
+                         width="20"
+                         scale_image="true"
+                         tool_tip="Walk right (press Shift + Right Arrow or D)"
+                         top="0"/>
+                    </layout_panel>
+
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col2_4"
+                     user_resize="false"
+                     height="25"
+                     width="20">
+                        <button
+                         follows="all"
+                         height="25"
+                         image_selected="Movement_Down_On"
+                         image_pressed_selected="Movement_Down_On"
+                         image_unselected="Movement_Down_Off"
+                         layout="topleft"
+                         left="0"
+                         name="move down btn"
+                         scale_image="true"
+                         tool_tip="Fly down (press C)"
+                         top="0"
+                         width="20"/>
+                    </layout_panel>
+                </layout_stack>
+            </layout_panel>
+
+            <layout_panel
+             mouse_opaque="false"
+             name="lp_row3"
+             auto_resize="false"
+             user_resize="false"
+             height="25"
+             width="80">
+                <layout_stack
+                 border_size="0"
+                 top="0"
+                 enabled="true"
+                 height="21"
+                 left="0"
+                 mouse_opaque="false"
+                 name="ls_horizontal3"
+                 orientation="horizontal"
+                 width="80"
+                 follows="all">
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col3_1"
+                     user_resize="false"
+                     height="21"
+                     width="1"/>
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="modes_container"
+                     auto_resize="false"
+                     user_resize="false"
+                     height="21"
+                     width="78">
+                        <!-- Width and height of this panel should be synchronized with panel_stand_stop_flying.xml -->
+                        <panel
+                         mouse_opaque="false"
+                         border="false"
+                         height="21"
+                         layout="topleft"
+                         left="0"
+                         name="panel_modes"
+                         top_pad="2"
+                         width="78">
+                            <button
+                             follows="left|bottom"
+                             height="19"
+                             image_overlay="Move_Walk_Off"
+                             image_selected="PushButton_Selected_Press"
+                             layout="topleft"
+                             name="mode_walk_btn"
+                             left="0"
+                             pad_right="0"
+                             tool_tip="Walking mode"
+                             top="0"
+                             width="26" />
+                            <button
+                             follows="left|bottom"
+                             height="19"
+                             image_overlay="Move_Run_Off"
+                             image_selected="PushButton_Selected_Press"
+                             layout="topleft"
+                             left_pad="0"
+                             name="mode_run_btn"
+                             pad_left="0"
+                             pad_right="0"
+                             tool_tip="Running mode"
+                             top="0"
+                             width="26" />
+                            <button
+                             follows="left|bottom"
+                             height="19"
+                             image_overlay="Move_Fly_Off"
+                             image_selected="PushButton_Selected_Press"
+                             layout="topleft"
+                             left_pad="0"
+                             name="mode_fly_btn"
+                             pad_left="0"
+                             pad_right="0"
+                             tool_tip="Flying mode"
+                             top="0"
+                             width="26" />
+                        </panel>
+                    </layout_panel>
+                    <layout_panel
+                     mouse_opaque="false"
+                     name="lp_col3_3"
+                     user_resize="false"
+                     height="21"
+                     width="1"/>
+                </layout_stack>
+            </layout_panel>
+       </layout_stack>
+    </panel>
+</floater>

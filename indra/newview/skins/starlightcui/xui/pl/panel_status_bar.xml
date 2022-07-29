@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Działka jest na sprzedaż"/>
+		<text tool_tip="Nazwa działki, na której się znajdujesz. Kliknij, aby zobaczyć informacje o działce." name="parcel_info_text" value="(ładowanie...)"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		Utracone pakiety
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		Przepustowość
+	</panel.string>
+	<panel.string name="time">
+		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="Szukaj w menu" name="search_menu_edit" tool_tip="Wprowadź w tym miejscu interesującą Cię frazę. Wyniki będą wyświetlane dla pasujących fragmentów nazw przypisanych do opcji menu." />
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo L$"/>
+		<button label="KUP L$" name="buyL" tool_tip="Kliknij aby kupić więcej L$"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="Pole widzenia"/>
+		<slider tool_tip="Maksymalny dystans rezzowania od kamery (metry)" name="drawdistance"/>
+		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>
+		<button name="stream_toggle_btn" tool_tip="Odtwórz/Zatrzymaj strumień audio tej działki"/>
+		<button name="media_toggle_btn" tool_tip="Odtwórz/Zatrzymaj wszystkie media (Muzyka, Wideo, WWW)"/>
+		<button name="volume_btn" tool_tip="Regulacja głośności"/>
+		<text name="FPSText" tool_tip="Klatki na sekundę (FPS)" />
+	</panel>
+</panel>
