@@ -2449,7 +2449,7 @@ void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
 
 void LLPanelProfileFirstLife::resetData()
 {
-    mDescriptionEdit->setValue(LLStringUtil::null);
+    setDescriptionText(std::string());
     mPicture->setValue("Generic_Person_Large");
     mImageId = LLUUID::null;
 
@@ -2574,7 +2574,7 @@ void LLPanelProfileNotes::onDiscardNotesChanges()
 
 void LLPanelProfileNotes::processProperties(LLAvatarNotes* avatar_notes)
 {
-    mNotesEditor->setValue(avatar_notes->notes);
+    setNotesText(avatar_notes->notes);
     mNotesEditor->setEnabled(TRUE);
     setLoaded();
 }
@@ -2582,7 +2582,7 @@ void LLPanelProfileNotes::processProperties(LLAvatarNotes* avatar_notes)
 void LLPanelProfileNotes::resetData()
 {
     resetLoading();
-    mNotesEditor->setValue(LLStringUtil::null);
+    setNotesText(std::string());
 }
 
 void LLPanelProfileNotes::setAvatarId(const LLUUID& avatar_id)
