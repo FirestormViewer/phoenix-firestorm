@@ -224,7 +224,7 @@ BOOL LLPanelProfilePicks::postBuild()
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
 
     // <FS:Ansariel> Replace hardcoded "Second Life" with grid label
-    LLTextBox* intro_txt = getChild<LLTextBox>("Tell everyone about your favorite places in Second Life.");
+    LLTextBox* intro_txt = getChild<LLTextBox>("header_text");
     intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
     // </FS:Ansariel>
 

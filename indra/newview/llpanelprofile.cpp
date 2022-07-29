@@ -861,6 +861,7 @@ LLPanelProfileSecondLife::LLPanelProfileSecondLife()
     , mHasUnsavedDescriptionChanges(false)
     , mWaitingForImageUpload(false)
     , mAllowPublish(false)
+    , mRlvBehaviorCallbackConnection() // <FS:Ansariel> RLVa support
 {
 }
 
@@ -880,16 +881,26 @@ LLPanelProfileSecondLife::~LLPanelProfileSecondLife()
     {
         mAvatarNameCacheConnection.disconnect();
     }
+
+    // <FS:Ansariel> RLVa support
+    if (mRlvBehaviorCallbackConnection.connected())
+    {
+        mRlvBehaviorCallbackConnection.disconnect();
+    }
+    // </FS:Ansariel>
 }
 
 BOOL LLPanelProfileSecondLife::postBuild()
 {
     mGroupList              = getChild<LLGroupList>("group_list");
-    mShowInSearchCombo      = getChild<LLComboBox>("show_in_search");
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //mShowInSearchCombo      = getChild<LLComboBox>("show_in_search");
+    mShowInSearchCheckbox   = getChild<LLCheckBoxCtrl>("show_in_search");
+    // </FS:Ansariel>
     mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
     mSecondLifePicLayout    = getChild<LLPanel>("image_panel");
     mDescriptionEdit        = getChild<LLTextEditor>("sl_description_edit");
-    mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu");
+    // mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu"); // <FS:Ansariel> Fix LL UI/UX design accident
     mSaveDescriptionChanges = getChild<LLButton>("save_description_changes");
     mDiscardDescriptionChanges = getChild<LLButton>("discard_description_changes");
     mCanSeeOnlineIcon       = getChild<LLIconCtrl>("can_see_online");
@@ -899,19 +910,42 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mCanEditObjectsIcon     = getChild<LLIconCtrl>("can_edit_objects");
     mCantEditObjectsIcon    = getChild<LLIconCtrl>("cant_edit_objects");
 
-    // <FS:Ansariel> Undo LL dumb-down junk
+    // <FS:Ansariel> Fix LL UI/UX design accident
     mStatusText = getChild<LLTextBox>("status");
-    childSetVisible("online_status_layout", false);
+    mCopyMenuButton = getChild<LLMenuButton>("copy_btn");
+    mGroupInviteButton = getChild<LLButton>("group_invite");
+    mDisplayNameButton = getChild<LLButton>("set_name");
+    mImageActionMenuButton = getChild<LLMenuButton>("image_action_btn");
+    mTeleportButton = getChild<LLButton>("teleport");
+    mShowOnMapButton = getChild<LLButton>("show_on_map_btn");
+    mBlockButton = getChild<LLButton>("block");
+    mUnblockButton = getChild<LLButton>("unblock");
+    mAddFriendButton = getChild<LLButton>("add_friend");
+    mPayButton = getChild<LLButton>("pay");
+    mIMButton = getChild<LLButton>("im");
+    mOverflowButton = getChild<LLMenuButton>("overflow_btn");
     // </FS:Ansariel>
 
-    mShowInSearchCombo->setCommitCallback([this](LLUICtrl*, void*) { onShowInSearchCallback(); }, nullptr);
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //mShowInSearchCombo->setCommitCallback([this](LLUICtrl*, void*) { onShowInSearchCallback(); }, nullptr);
+    mShowInSearchCheckbox->setCommitCallback([this](LLUICtrl*, void*) { onShowInSearchCallback(); }, nullptr);
+    mGroupInviteButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("invite_to_group")); }, nullptr);
+    mDisplayNameButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("edit_display_name")); }, nullptr);
+    mTeleportButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("offer_teleport")); }, nullptr);
+    mShowOnMapButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("can_show_on_map")); }, nullptr);
+    mBlockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
+    mUnblockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
+    mAddFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("add_friend")); }, nullptr);
+    mPayButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("pay")); }, nullptr);
+    mIMButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("im")); }, nullptr);
+    // </FS:Ansariel>
     mGroupList->setDoubleClickCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { LLPanelProfileSecondLife::openGroupProfile(); });
     mGroupList->setReturnCallback([this](LLUICtrl*, const LLSD&) { LLPanelProfileSecondLife::openGroupProfile(); });
     mSaveDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
 
-    getChild<LLButton>("open_notes")->setCommitCallback([this](LLUICtrl*, void*) { onOpenNotes(); }, nullptr);
+    //getChild<LLButton>("open_notes")->setCommitCallback([this](LLUICtrl*, void*) { onOpenNotes(); }, nullptr); // <FS:Ansariel> Doesn't exist (anymore)
 
     mCanSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
@@ -920,6 +954,9 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mCanEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mSecondLifePic->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentProfileTexture(); });
+
+    // <FS:Ansariel> RLVa support
+    mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileSecondLife::updateRlvRestrictions, this, _1));
 
     return TRUE;
 }
@@ -936,9 +973,14 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 
     mGroupList->setShowNone(!own_profile);
 
-    childSetVisible("notes_panel", !own_profile);
-    childSetVisible("settings_panel", own_profile);
-    childSetVisible("about_buttons_panel", own_profile);
+    //childSetVisible("notes_panel", !own_profile); // <FS:Ansariel> Doesn't exist (anymore)
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //childSetVisible("settings_panel", own_profile);
+    //childSetVisible("about_buttons_panel", own_profile);
+    mSaveDescriptionChanges->setVisible(own_profile);
+    mDiscardDescriptionChanges->setVisible(own_profile);
+    mShowInSearchCheckbox->setVisible(own_profile);
+    // </FS:Ansariel>
 
     if (own_profile)
     {
@@ -955,15 +997,30 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     enable.add("Profile.EnableItem", [this](LLUICtrl*, const LLSD& userdata) { return onEnableMenu(userdata); });
     enable.add("Profile.CheckItem", [this](LLUICtrl*, const LLSD& userdata) { return onCheckMenu(userdata); });
 
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //if (own_profile)
+    //{
+    //    mAgentActionMenuButton->setMenu("menu_profile_self.xml", LLMenuButton::MP_BOTTOM_RIGHT);
+    //}
+    //else
+    //{
+    //    // Todo: use PeopleContextMenu instead?
+    //    mAgentActionMenuButton->setMenu("menu_profile_other.xml", LLMenuButton::MP_BOTTOM_RIGHT);
+    //}
     if (own_profile)
     {
-        mAgentActionMenuButton->setMenu("menu_profile_self.xml", LLMenuButton::MP_BOTTOM_RIGHT);
+        mImageActionMenuButton->setVisible(TRUE);
+        mImageActionMenuButton->setMenu("menu_fs_profile_image_actions.xml", LLMenuButton::MP_BOTTOM_RIGHT);
     }
     else
     {
-        // Todo: use PeopleContextMenu instead?
-        mAgentActionMenuButton->setMenu("menu_profile_other.xml", LLMenuButton::MP_BOTTOM_RIGHT);
+        mImageActionMenuButton->setVisible(FALSE);
+        LLToggleableMenu* profile_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_profile_overflow.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+        mOverflowButton->setMenu(profile_menu, LLMenuButton::MP_TOP_RIGHT);
     }
+
+    mCopyMenuButton->setMenu("menu_fs_profile_name_field.xml", LLMenuButton::MP_BOTTOM_RIGHT);
+    // </FS:Ansariel>
 
     mDescriptionEdit->setParseHTML(!own_profile);
 
@@ -1008,7 +1065,9 @@ void LLPanelProfileSecondLife::resetData()
     mSecondLifePic->setValue("Generic_Person_Large");
     mImageId = LLUUID::null;
 
-    LLRect imageRect = mSecondLifePicLayout->getRect();
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //LLRect imageRect = mSecondLifePicLayout->getRect();
+    LLRect imageRect = mSecondLifePic->getRect();
     mSecondLifePicLayout->reshape(imageRect.getHeight(), imageRect.getHeight());
 
     setDescriptionText(LLStringUtil::null);
@@ -1017,11 +1076,17 @@ void LLPanelProfileSecondLife::resetData()
 
     bool own_profile = getSelfProfile();
     mCanSeeOnlineIcon->setVisible(false);
-    mCantSeeOnlineIcon->setVisible(!own_profile);
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //mCantSeeOnlineIcon->setVisible(!own_profile);
+    mCantSeeOnlineIcon->setVisible(FALSE);
     mCanSeeOnMapIcon->setVisible(false);
-    mCantSeeOnMapIcon->setVisible(!own_profile);
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //mCantSeeOnMapIcon->setVisible(!own_profile);
+    mCantSeeOnMapIcon->setVisible(FALSE);
     mCanEditObjectsIcon->setVisible(false);
-    mCantEditObjectsIcon->setVisible(!own_profile);
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //mCantEditObjectsIcon->setVisible(!own_profile);
+    mCantEditObjectsIcon->setVisible(FALSE);
 
     mCanSeeOnlineIcon->setEnabled(false);
     mCantSeeOnlineIcon->setEnabled(false);
@@ -1030,9 +1095,28 @@ void LLPanelProfileSecondLife::resetData()
     mCanEditObjectsIcon->setEnabled(false);
     mCantEditObjectsIcon->setEnabled(false);
 
-    childSetVisible("partner_layout", FALSE);
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //childSetVisible("partner_layout", FALSE);
+    mStatusText->setVisible(FALSE);
+    mCopyMenuButton->setVisible(FALSE);
+    mGroupInviteButton->setVisible(!own_profile);
+    if (own_profile && LLAvatarName::useDisplayNames())
+    {
+        mDisplayNameButton->setVisible(TRUE);
+        mDisplayNameButton->setEnabled(TRUE);
+    }
+    mShowOnMapButton->setVisible(!own_profile);
+    mPayButton->setVisible(!own_profile);
+    mTeleportButton->setVisible(!own_profile);
+    mIMButton->setVisible(!own_profile);
+    mAddFriendButton->setVisible(!own_profile);
+    mBlockButton->setVisible(!own_profile);
+    mUnblockButton->setVisible(!own_profile);
+    mGroupList->setShowNone(!own_profile);
+    mOverflowButton->setVisible(!own_profile);
 
-    childSetVisible("online_status_layout", false); // <FS:Ansariel> Undo LL dumb-down junk
+    updateButtons();
+    // </FS:Ansariel>
 }
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
@@ -1056,6 +1140,9 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     fillAccountStatus(avatar_data);
 
     setLoaded();
+
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    updateButtons();
 }
 
 void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avatar_groups)
@@ -1082,8 +1169,12 @@ void LLPanelProfileSecondLife::openGroupProfile()
 void LLPanelProfileSecondLife::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     mAvatarNameCacheConnection.disconnect();
-    getChild<LLUICtrl>("display_name")->setValue(av_name.getDisplayName());
-    getChild<LLUICtrl>("user_name")->setValue(av_name.getAccountName());
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //getChild<LLUICtrl>("display_name")->setValue(av_name.getDisplayName());
+    //getChild<LLUICtrl>("user_name")->setValue(av_name.getAccountName());
+    getChild<LLUICtrl>("complete_name")->setValue(av_name.getCompleteName());
+    mCopyMenuButton->setVisible(TRUE);
+    // </FS:Ansariel>
 }
 
 void LLPanelProfileSecondLife::setProfileImageUploading(bool loading)
@@ -1212,24 +1303,34 @@ void LLPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
     if (getSelfProfile())
     {
         mAllowPublish = avatar_data->flags & AVATAR_ALLOW_PUBLISH;
-        mShowInSearchCombo->setValue((BOOL)mAllowPublish);
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //mShowInSearchCombo->setValue((BOOL)mAllowPublish);
+        mShowInSearchCheckbox->setValue((BOOL)mAllowPublish);
+        // </FS:Ansariel>
     }
 }
 
 void LLPanelProfileSecondLife::fillPartnerData(const LLAvatarData* avatar_data)
 {
-    LLTextBox* partner_text_ctrl = getChild<LLTextBox>("partner_link");
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //LLTextBox* partner_text_ctrl = getChild<LLTextBox>("partner_link");
+    LLTextEditor* partner_text_ctrl = getChild<LLTextEditor>("partner_link");
     if (avatar_data->partner_id.notNull())
     {
-        childSetVisible("partner_layout", TRUE);
-        LLStringUtil::format_map_t args;
-        args["[LINK]"] = LLSLURL("agent", avatar_data->partner_id, "inspect").getSLURLString();
-        std::string partner_text = getString("partner_text", args);
-        partner_text_ctrl->setText(partner_text);
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //childSetVisible("partner_layout", TRUE);
+        //LLStringUtil::format_map_t args;
+        //args["[LINK]"] = LLSLURL("agent", avatar_data->partner_id, "inspect").getSLURLString();
+        //std::string partner_text = getString("partner_text", args);
+        //partner_text_ctrl->setText(partner_text);
+        partner_text_ctrl->setText(LLSLURL("agent", avatar_data->partner_id, "inspect").getSLURLString());
+        // </FS:Ansariel>
     }
     else
     {
-        childSetVisible("partner_layout", FALSE);
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //childSetVisible("partner_layout", FALSE);
+        partner_text_ctrl->setText(getString("no_partner_text"));
     }
 }
 
@@ -1343,14 +1444,21 @@ void LLPanelProfileSecondLife::fillRightsData()
 
 void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
 {
-    std::string name_and_date = getString("date_format");
-    LLSD args_name;
-    args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
-    LLStringUtil::format(name_and_date, args_name);
-    getChild<LLUICtrl>("sl_birth_date")->setValue(name_and_date);
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //std::string name_and_date = getString("date_format");
+    //LLSD args_name;
+    //args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
+    //LLStringUtil::format(name_and_date, args_name);
+    //getChild<LLUICtrl>("sl_birth_date")->setValue(name_and_date);
+    // </FS:Ansariel>
 
     std::string register_date = getString("age_format");
     LLSD args_age;
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
+    LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)born_on.secondsSinceEpoch()));
+    args_age["[REG_DATE]"] = birth_date;
+    // </FS:Ansariel>
     args_age["[AGE]"] = LLDateUtil::ageFromDate(born_on, LLDate::now());
     LLStringUtil::format(register_date, args_age);
     getChild<LLUICtrl>("user_age")->setValue(register_date);
@@ -1358,15 +1466,21 @@ void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
 
 void LLPanelProfileSecondLife::onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep)
 {
-    LLRect imageRect = mSecondLifePicLayout->getRect();
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //LLRect imageRect = mSecondLifePicLayout->getRect();
+    LLRect imageRect = mSecondLifePic->getRect();
     if (!success || imagep->getFullWidth() == imagep->getFullHeight())
     {
-        mSecondLifePicLayout->reshape(imageRect.getWidth(), imageRect.getWidth());
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //mSecondLifePicLayout->reshape(imageRect.getWidth(), imageRect.getWidth());
+        mSecondLifePicLayout->reshape(imageRect.getHeight(), imageRect.getHeight());
     }
     else
     {
         // assume 3:4, for sake of firestorm
-        mSecondLifePicLayout->reshape(imageRect.getWidth(), imageRect.getWidth() * 3 / 4);
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //mSecondLifePicLayout->reshape(imageRect.getWidth(), imageRect.getWidth() * 3 / 4);
+        mSecondLifePicLayout->reshape(imageRect.getHeight() * 4 / 3, imageRect.getHeight());
     }
 }
 
@@ -1406,6 +1520,8 @@ void LLPanelProfileSecondLife::changed(U32 mask)
     {
         fillRightsData();
     }
+
+    updateButtons(); // <FS:Ansariel> Fix LL UI/UX design accident
 }
 
 // virtual, called by LLVoiceClient
@@ -1448,7 +1564,7 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
         bool perm_granted = relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
         processOnlineStatus(true, perm_granted, online);
     }
-    // <FS:Ansariel> Undo LL dumb-down junk
+    // <FS:Ansariel> Fix LL UI/UX design accident
     //else
     //{
     //    childSetVisible("frind_layout", false);
@@ -1460,11 +1576,11 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
 
 void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_online, bool online)
 {
-    // <FS:Ansariel> Undo LL dumb-down junk
+    // <FS:Ansariel> Fix LL UI/UX design accident
     //childSetVisible("frind_layout", is_friend);
     //childSetVisible("online_layout", online && show_online);
     //childSetVisible("offline_layout", !online && show_online);
-    childSetVisible("online_status_layout", show_online);
+    mStatusText->setVisible(show_online);
 
     std::string status = getString(online ? "status_online" : "status_offline");
 
@@ -1481,12 +1597,67 @@ void LLPanelProfileSecondLife::setLoaded()
 
     if (getSelfProfile())
     {
-        mShowInSearchCombo->setEnabled(TRUE);
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //mShowInSearchCombo->setEnabled(TRUE);
+        mShowInSearchCheckbox->setEnabled(TRUE);
+        // </FS:Ansariel>
         mDescriptionEdit->setEnabled(TRUE);
     }
 }
 
+// <FS:Ansariel> Fix LL UI/UX design accident
+void LLPanelProfileSecondLife::updateButtons()
+{
+    if (getSelfProfile())
+    {
+        mShowInSearchCheckbox->setVisible(TRUE);
+        mShowInSearchCheckbox->setEnabled(TRUE);
+        mDescriptionEdit->setEnabled(TRUE);
+    }
+    else
+    {
+        LLUUID av_id = getAvatarId();
+        bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
 
+        if (LLAvatarActions::isFriend(av_id))
+        {
+            // <FS:Ansariel> RLVa support
+            //mTeleportButton->setEnabled(is_buddy_online);
+            const LLRelationship* friend_status = LLAvatarTracker::instance().getBuddyInfo(av_id);
+            bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
+                (gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive) ||
+                    friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION)));
+
+            mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
+            // </FS:Ansariel>
+            //Disable "Add Friend" button for friends.
+            mAddFriendButton->setEnabled(false);
+        }
+        else
+        {
+            // <FS:Ansariel> RLVa support
+            //mTeleportButton->setEnabled(true);
+            bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
+                gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive));
+            mTeleportButton->setEnabled(can_offer_tp);
+            // </FS:Ansariel>
+            mAddFriendButton->setEnabled(true);
+        }
+
+        // <FS:Ansariel> RLVa support
+        //bool enable_map_btn = (is_buddy_online && is_agent_mappable(av_id)) || gAgent.isGodlike();
+        bool enable_map_btn = ((is_buddy_online && is_agent_mappable(av_id)) || gAgent.isGodlike()) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP);
+        // </FS:Ansariel>
+        mShowOnMapButton->setEnabled(enable_map_btn);
+
+        bool enable_block_btn = LLAvatarActions::canBlock(av_id) && !LLAvatarActions::isBlocked(av_id);
+        mBlockButton->setVisible(enable_block_btn);
+
+        bool enable_unblock_btn = LLAvatarActions::isBlocked(av_id);
+        mUnblockButton->setVisible(enable_unblock_btn);
+    }
+}
+// </FS:Ansariel>
 
 class LLProfileImagePicker : public LLFilePickerThread
 {
@@ -1688,6 +1859,44 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
             floaterp->closeFloater();
         }
     }
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    else if (item_name == "add_to_contact_set")
+    {
+        LLAvatarActions::addToContactSet(agent_id);
+    }
+    else if (item_name == "copy_uri")
+    {
+        LLWString wstr = utf8str_to_wstring(LLSLURL("agent", agent_id, "about").getSLURLString());
+        LLClipboard::instance().copyToClipboard(wstr, 0, wstr.size());
+    }
+    else if (item_name == "kick")
+    {
+        LLAvatarActions::kick(agent_id);
+    }
+    else if (item_name == "freeze")
+    {
+        LLAvatarActions::freeze(agent_id);
+    }
+    else if (item_name == "unfreeze")
+    {
+        LLAvatarActions::unfreeze(agent_id);
+    }
+    else if (item_name == "csr")
+    {
+        LLAvatarName av_name;
+        if (!LLAvatarNameCache::get(getAvatarId(), &av_name))
+        {
+            // shouldn't happen, option is supposed to be invisible while name is fetching
+            LL_WARNS() << "Failed to get agent data" << LL_ENDL;
+            return;
+        }
+        LLAvatarActions::csr(getAvatarId(), av_name.getUserName());
+    }
+    else if (item_name == "report")
+    {
+        LLAvatarActions::report(agent_id);
+    }
+    // </FS:Ansariel>
 }
 
 bool LLPanelProfileSecondLife::onEnableMenu(const LLSD& userdata)
@@ -1747,6 +1956,12 @@ bool LLPanelProfileSecondLife::onEnableMenu(const LLSD& userdata)
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         return mImageId.notNull() && !cap_url.empty() && !mWaitingForImageUpload && getIsLoaded();
     }
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    else if (item_name == "kick" || item_name == "freeze" || item_name == "unfreeze" || item_name == "csr")
+    {
+        return gAgent.isGodlike();
+    }
+    // </FS:Ansariel>
 
     return false;
 }
@@ -1809,7 +2024,10 @@ void LLPanelProfileSecondLife::onSetDescriptionDirty()
 
 void LLPanelProfileSecondLife::onShowInSearchCallback()
 {
-    S32 value = mShowInSearchCombo->getValue().asInteger();
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //S32 value = mShowInSearchCombo->getValue().asInteger();
+    S32 value = mShowInSearchCheckbox->getValue().asInteger();
+    // </FS:Ansariel>
     if (mAllowPublish == (bool)value)
     {
         return;
@@ -1940,7 +2158,7 @@ void LLPanelProfileSecondLife::onShowTexturePicker()
                 mImageId,
                 FALSE,
                 FALSE,
-                "SELECT PHOTO",
+                getString("texture_picker_label"), // "SELECT PHOTO", // <FS:Ansariel> Fix LL UI/UX design accident
                 PERM_NONE,
                 PERM_NONE,
                 PERM_NONE,
@@ -2012,6 +2230,24 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
             mSecondLifePic->setValue(mImageId);
         }
 
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(mImageId);
+        if (imagep->getFullHeight())
+        {
+            onImageLoaded(true, imagep);
+        }
+        else
+        {
+            imagep->setLoadedCallback(onImageLoaded,
+                MAX_DISCARD_LEVEL,
+                FALSE,
+                FALSE,
+                new LLHandle<LLPanel>(getHandle()),
+                NULL,
+                FALSE);
+        }
+        // </FS:Ansariel>
+
         LLFloater *floater = mFloaterProfileTextureHandle.get();
         if (floater)
         {
@@ -2032,22 +2268,34 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     }
 }
 
-void LLPanelProfileSecondLife::onOpenNotes()
+// <FS:Ansariel> Doesn't exist (anymore)
+//void LLPanelProfileSecondLife::onOpenNotes()
+//{
+//    LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+//    if (!parent_floater)
+//    {
+//        return;
+//    }
+//
+//    LLTabContainer* tab_container = parent_floater->findChild<LLTabContainer>("panel_profile_tabs", TRUE);
+//    if (!tab_container)
+//    {
+//        return;
+//    }
+//
+//    tab_container->selectTabByName(PANEL_NOTES);
+//}
+// </FS:Ansariel>
+
+// <FS:Ansariel> RLVa support
+void LLPanelProfileSecondLife::updateRlvRestrictions(ERlvBehaviour behavior)
 {
-    LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-    if (!parent_floater)
+    if (behavior == RLV_BHVR_SHOWLOC || behavior == RLV_BHVR_SHOWWORLDMAP)
     {
-        return;
+        updateButtons();
     }
-
-    LLTabContainer* tab_container = parent_floater->findChild<LLTabContainer>("panel_profile_tabs", TRUE);
-    if (!tab_container)
-    {
-        return;
-    }
-
-    tab_container->selectTabByName(PANEL_NOTES);
 }
+// </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////
 // LLPanelProfileWeb
@@ -2298,7 +2546,7 @@ void LLPanelProfileFirstLife::onChangePhoto()
                 mImageId,
                 FALSE,
                 FALSE,
-                "SELECT PHOTO",
+                getString("texture_picker_label"), // "SELECT PHOTO", // <FS:Ansariel> Fix LL UI/UX design accident
                 PERM_NONE,
                 PERM_NONE,
                 PERM_NONE,

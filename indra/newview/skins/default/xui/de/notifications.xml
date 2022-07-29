@@ -598,7 +598,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 		Anzeige &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt; löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="DeleteAvatarPick">
+	<notification name="ProfileDeletePick">
 		Auswahl &lt;nolink&gt;[PICK]&lt;/nolink&gt; löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>

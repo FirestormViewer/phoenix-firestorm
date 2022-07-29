@@ -25,36 +25,39 @@
 	<string name="FSSupp" value="-Support"/>
 	<string name="FSQualityAssurance" value="-Fehlersuche"/>
 	<string name="FSGW" value="-Gateway"/>
+	<string name="texture_picker_label" value="Profil-Foto"/>
 	<text name="name_label" value="Name:"/>
-	<button label="Name:" name="set_name" tool_tip="Anzeigenamen festlegen"/>
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(wird geladen...)"/>
 		<menu_button name="copy_btn" tool_tip="Kopier-Optionen"/>
 	</panel>
+	<button name="set_name" tool_tip="Anzeigenamen festlegen"/>
+	<icon tool_tip="Freund kann meinen Online-Status sehen" name="can_see_online"/>
+	<icon tool_tip="Freund kann meinen Online-Status nicht sehen" name="cant_see_online"/>
+	<icon tool_tip="Freund kann mich auf der Weltkarte finden" name="can_see_on_map"/>
+	<icon tool_tip="Freund kann mich nicht auf der Weltkarte finden" name="cant_see_on_map"/>
+	<icon tool_tip="Freund kann meine Objekte bearbeiten" name="can_edit_objects"/>
+	<icon tool_tip="Freund kann meine Objekte nicht bearbeiten" name="cant_edit_objects"/>
 	<text name="Key:" value="UUID:"/>
 	<text_editor name="user_key" value="(wird geladen...)"/>
 	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Aktionen für Profilbild durchführen"/>
+		</layout_panel>
 		<layout_panel name="label_stack">
-			<text name="status" value="Status unbekannt"/>
 			<text name="label" value="Geburtsdatum:"/>
-			<text_editor name="register_date" value="(wird geladen...)"/>
+			<text_editor name="user_age" value="(wird geladen...)"/>
 			<text name="label2" value="Konto:"/>
 			<text name="partner_label" value="Partner:"/>
 		</layout_panel>
 	</layout_stack>
+	<text name="About:" value="Info:"/>
 	<text name="Groups:" value="Gruppen:"/>
 	<button label="+" label_selected="+" name="group_invite" tool_tip="In Gruppe einladen"/>
-	<layout_stack name="aboutpositioner">
-		<layout_panel name="about_stack">
-			<text name="About:" value="Info:"/>
-		</layout_panel>
-		<layout_panel name="give_stack">
-			<text name="Give item:" value="Teilen:"/>
-			<text name="Give inventory" tool_tip="Legen Sie hier Inventarobjekte ab, um Sie dieser Person zu geben.">
-				Inventarobjekt hier ablegen.
-			</text>
-		</layout_panel>
-	</layout_stack>
+	<text name="Give item:" value="Teilen:"/>
+	<text name="Give inventory" tool_tip="Legen Sie hier Inventarobjekte ab, um Sie dieser Person zu geben.">
+		Inventarobjekt hier ablegen.
+	</text>
 	<layout_stack name="buttonstack">
 		<layout_panel name="left_buttonstack">
 			<button label="Auf Karte anzeigen" label_selected="Auf Karte anzeigen" name="show_on_map_btn" tool_tip="Einwohner auf Karte lokalisieren"/>
@@ -70,5 +73,7 @@
 			<button label="Blockierung aufheben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box label="In Suche anzeigen" tool_tip="Erlaubt es anderen Einwohnern, Sie in Suchergebnissen zu finden" name="show_in_search_checkbox"/>
+	<check_box label="In Suche anzeigen" tool_tip="Erlaubt es anderen Einwohnern, Sie in Suchergebnissen zu finden" name="show_in_search"/>
+	<button name="save_description_changes" label="Speichern"/>
+	<button name="discard_description_changes" label="Verwerfen"/>
 </panel>

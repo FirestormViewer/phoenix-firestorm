@@ -10,596 +10,730 @@
  layout="topleft"
 >
     <string
-     name="status_online">
-Online
+     name="status_online"
+    >
+        Online
     </string>
     <string
-     name="status_offline">
-Offline
+     name="status_offline"
+    >
+        Offline
     </string>
-   <string 
-    name="date_format"
-    value="Born on: [mth,datetime,slt] [day,datetime,slt], [year,datetime,slt]" />
-   <string
-    name="age_format"
-    value="[AGE]" />
-   <string
-    name="partner_text"
-    value="Partner: [LINK]" />
-   <string
-    name="CaptionTextAcctInfo">
-Account: [ACCTTYPE]
+    <string
+     name="CaptionTextAcctInfo"
+    >
+       [ACCTTYPE]
 [PAYMENTINFO]
 [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
     </string>
     <string
+     name="payment_update_link_url"
+    >
+        http://www.secondlife.com/account/billing.php?lang=en
+    </string>
+    <string
+     name="partner_edit_link_url"
+    >
+        http://www.secondlife.com/account/partners.php?lang=en
+    </string>
+    <string
+     name="my_account_link_url"
+     value="http://secondlife.com/account"
+    />
+    <string
+     name="no_partner_text"
+     value="None"
+    />
+    <string
+     name="no_group_text"
+     value="None"
+    />
+    <string
+     name="age_format"
+    >
+        [REG_DATE]
+([AGE])
+    </string>
+    <string
+     name="name_text_args"
+    >
+        [NAME]
+    </string>
+    <string
+     name="display_name_text_args"
+    >
+        [DISPLAY_NAME]
+    </string>
+    <string
      name="FSDev"
-     value=" Developer" />
+     value=" Developer"
+    />
     <string
      name="FSSupp"
-     value=" Support" />
+     value=" Support"
+    />
     <string
-      name="FSQualityAssurance"
-      value=" Bug Hunter" />
+     name="FSQualityAssurance"
+     value=" Bug Hunter"
+    />
     <string
      name="FSGW"
-     value=" Gateway" />
+     value=" Gateway"
+    />
+    <string
+     name="texture_picker_label"
+     value="Profile Picture"
+    />
 
-  <layout_stack
-   name="image_stack"
-   top="8"
-   left="6"
-   bottom="-1"
-   width="160"
-   border_size="0"
-   follows="left|top|bottom"
-   layout="topleft"
-   animate="false"
-   orientation="vertical">
-    <layout_panel
-     name="image_panel"
-     follows="all"
+    <text
+     name="name_label"
+     value="Name:"
+     top="8"
+     left="0"
+     height="20"
+     width="55"
+     follows="left|top"
      layout="topleft"
-     width="160"
-     height="160"
-     auto_resize="false"
-     user_resize="false">
-
-      <icon
-       name="2nd_life_pic"
-       image_name="Generic_Person_Large"
-       layout="topleft"
-       follows="all"
-       interactable="true"
-       top="0"
-       left="2"
-       bottom="-1"
-       right="-1"/>
-
-      <loading_indicator
-       name="image_upload_indicator"
-       top="69"
-       left="69"
-       height="23"
-       width="23"
-       follows="top|left"
-       layout="topleft"
-       visible="false"/>
-    </layout_panel>
-
-    <layout_panel
-     name="basics_panel"
-     follows="all"
+     halign="right"/>
+    <panel
+     name="name_holder"
+     top_delta="0"
+     left_pad="4"
+     right="-88"
+     height="20"
+     follows="left|top|right"
      layout="topleft"
-     height="80"
-     auto_resize="false"
-     user_resize="false"
-        >
-      <line_editor
-       name="user_name"
-       border_thickness="0"
-       use_bg_color="false"
-       background_image_disabled=""
-       background_image_focused=""
-       enabled="false"
-       value="(loading...)"
-       top="4"
-       left="3"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"/>
-
-      <line_editor
-       border_thickness="0"
-       use_bg_color="false"
-       background_image_disabled=""
-       background_image_focused=""
-       enabled="false"
-       top_pad="0"
-       left_delta="0"
-       height="16"
-       right="-1"
-       layout="topleft"
-       follows="left|top|right"
-       name="user_key" />
-
-      <line_editor
-       name="sl_birth_date"
-       border_thickness="0"
-       use_bg_color="false"
-       background_image_disabled=""
-       background_image_focused=""
-       enabled="false"
-       value="(loading...)"
-       top_pad="5"
-       left_delta="0"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"/>
-
-      <line_editor
-       name="user_age"
-       border_thickness="0"
-       use_bg_color="false"
-       background_image_disabled=""
-       background_image_focused=""
-       enabled="false"
-       value="(loading...)"
-       top_pad="0"
-       left_delta="0"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"/>
-    </layout_panel>
-    <layout_panel
-     name="partner_layout"
-     follows="all"
-     layout="topleft"
-     height="30"
-     auto_resize="false"
-     user_resize="false"
-     visible="true">
-      <text
-       type="string"
-       name="partner_link"
-       value="Partner: (loading...)"
-       icon_positioning="left"
-       top="0"
-       left="5"
-       right="-1"
-       height="28"
-       follows="left|top|right"
-       layout="topleft"
-       translate="false"
-       use_ellipses="true"
-       word_wrap="true"
-       visible="true"/>
-    </layout_panel>
-
-    <layout_panel
-     name="partner_spacer_layout"
-     follows="all"
-     layout="topleft"
-     height="5"
-     auto_resize="false"
-     user_resize="false"
-     visible="true">
-    </layout_panel>
-    
-    <!--
-    <layout_panel
-     name="frind_layout"
-     follows="all"
-     layout="topleft"
-     height="16"
-     auto_resize="false"
-     user_resize="false"
-     visible="false">
-      <text
-       name="frind_text"
-       value="You are friends"
-       text_color="ConversationFriendColor"
-       top="0"
-       left="5"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"
-       translate="false"
-       visible="true"/>
-    </layout_panel>
-    <layout_panel
-     name="online_layout"
-     follows="all"
-     layout="topleft"
-     height="16"
-     auto_resize="false"
-     user_resize="false"
-     visible="false">
-      <icon
-       name="online_icon"
-       image_name="Profile_Friend_Online"
-       layout="topleft"
-       follows="left|top"
-       top="0"
-       left="5"
-       height="10"
-       width="10"/>
-      <text
-       name="online_text"
-       value="Online"
-       top="0"
-       left="18"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"
-       translate="false"
-       visible="true"/>
-    </layout_panel>
-    <layout_panel
-     name="offline_layout"
-     follows="all"
-     layout="topleft"
-     height="16"
-     auto_resize="false"
-     user_resize="false"
-     visible="false">
-      <icon
-       name="offline_icon"
-       image_name="Profile_Friend_Offline"
-       layout="topleft"
-       follows="left|top"
-       top="0"
-       left="5"
-       height="10"
-       width="10"/>
-      <text
-       name="offline_text"
-       value="Offline"
-       top="0"
-       left="18"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"
-       translate="false"
-       visible="true"/>
-    </layout_panel>
-    -->
-    <layout_panel
-     name="online_status_layout"
-     follows="all"
-     layout="topleft"
-     height="18"
-     auto_resize="false"
-     user_resize="false"
-     visible="true">
-      <text
-       name="status"
-       top="0"
-       left="5"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"/>
-    </layout_panel>
-
-    <layout_panel
-     name="account_layout"
-     follows="all"
-     layout="topleft"
-     height="60"
-     auto_resize="false"
-     user_resize="false">
-      <text
-       name="account_info"
-       value="Account: (loading...)"
-       top="0"
-       left="5"
-       right="-1"
-       height="58"
-       follows="left|top|right"
-       layout="topleft"
-       word_wrap="true"/>
-    </layout_panel>
-    <layout_panel
-     name="indicator_stack"
-     follows="all"
-     layout="topleft"
-     height="33"
-     auto_resize="false"
-     user_resize="false">
-      <loading_indicator
-       name="progress_indicator"
-       left="67"
-       top="0"
-       height="23"
-       width="23"
-       follows="left|top"
-       layout="topleft"
-       visible="true"/>
-    </layout_panel>
-    <layout_panel
-     name="settings_panel"
-     follows="all"
-     layout="topleft"
-     height="50"
-     auto_resize="false"
-     user_resize="false">
-      <!-- only for self -->
-      <text
-       name="search_label"
-       value="Show my profile in search:"
-       top="1"
-       left="6"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"/>
-      <combo_box
-       name="show_in_search"
-       tool_tip="Let people see you in search results"
-       left="1"
-       top="18"
-       height="23"
-       width="140"
-       follows="left|top"
-       layout="topleft"
-       visible="true"
-       enabled="false">
-        <combo_box.item
-           name="Hide"
-           label="Hide"
-           value="0" />
-        <combo_box.item
-           name="Show"
-           label="Show"
-           value="1" />
-      </combo_box>
-    </layout_panel>
-    
-    <layout_panel
-     name="menu_panel"
-     follows="all"
-     layout="topleft"
-     height="55"
-     auto_resize="false"
-     user_resize="false"
-        >
-      <menu_button
-       layout="topleft"
-       follows="left|top"
-       left="1"
-       top="25"
-       height="25"
-       width="140"
-       label="Actions"
-       halign="left"
-       image_unselected="DropDown_Off"
-       image_selected="DropDown_On"
-       image_pressed="DropDown_Press"
-       image_pressed_selected="DropDown_Press"
-       image_disabled="DropDown_Disabled"
-       name="agent_actions_menu" />
-    </layout_panel>
-  </layout_stack>
-
-  <layout_stack
-   name="main_stack"
-   top="8"
-   left="168"
-   bottom="-1"
-   right="-1"
-   follows="all"
-   layout="topleft"
-   animate="false"
-   orientation="vertical">
-    <layout_panel
-     name="display_name_panel"
-     follows="all"
-     layout="topleft"
-     height="24"
-     auto_resize="false"
-     user_resize="false">
-      <line_editor
-       name="display_name"
-       border_thickness="0"
-       use_bg_color="false"
-       background_image_disabled=""
-       background_image_focused=""
-       enabled="false"
-       value="(loading...)"
-       font="SansSerifBigLarge"
-       top="0"
-       left="6"
-       height="19"
-       right="-86"
-       follows="left|top|right"
-       layout="topleft"/>
-
-      <icon
-       tool_tip="Friend can see my online status"
-       mouse_opaque="true"
-       name="can_see_online"
-       image_name="Profile_Perm_Online_Enabled"
-       layout="topleft"
-       follows="right|top"
-       interactable="true"
-       top="0"
-       right="-61"
-       height="24"
-       width="24"
-       left_pad="2" />
-
-      <icon
-       tool_tip="Friend can not see my online status"
-       mouse_opaque="true"
-       name="cant_see_online"
-       image_name="Profile_Perm_Online_Disabled"
-       layout="topleft"
-       follows="right|top"
-       interactable="true"
-       top="0"
-       right="-61"
-       height="24"
-       width="24"
-       left_pad="2" />
-
-      <icon
-       tool_tip="Friend can see me on map"
-       mouse_opaque="true"
-       name="can_see_on_map"
-       image_name="Profile_Perm_Find_Enabled"
-       layout="topleft"
-       follows="right|top"
-       interactable="true"
-       top="0"
-       right="-30"
-       height="24"
-       width="24"
-       left_pad="2" />
-
-      <icon
-       tool_tip="Friend can not see me on map"
-       mouse_opaque="true"
-       name="cant_see_on_map"
-       image_name="Profile_Perm_Find_Disabled"
-       layout="topleft"
-       follows="right|top"
-       interactable="true"
-       top="0"
-       right="-30"
-       height="24"
-       width="24"
-       left_pad="2" />
-
-      <icon
-       tool_tip="Friend can edit my objects"
-       mouse_opaque="true"
-       name="can_edit_objects"
-       image_name="Profile_Perm_Objects_Enabled"
-       layout="topleft"
-       follows="right|top"
-       interactable="true"
-       top="0"
-       right="-1"
-       height="24"
-       width="24"
-       left_pad="2" />
-
-      <icon
-       tool_tip="Friend can not edit my objects"
-       mouse_opaque="true"
-       name="cant_edit_objects"
-       image_name="Profile_Perm_Objects_Disabled"
-       layout="topleft"
-       follows="right|top"
-       interactable="true"
-       top="0"
-       right="-1"
-       height="24"
-       width="24"
-       left_pad="2" />
-
-    </layout_panel>
-
-    <layout_panel
-     name="about_panel"
-     follows="all"
-     layout="topleft"
-     height="159"
-     auto_resize="true"
-     user_resize="false">
-      <text_editor
-       name="sl_description_edit"
-       trusted_content="false"
-       always_show_icons="true"
-       commit_on_focus_lost="false"
-       enabled="false"
-       top="0"
-       left="2"
-       right="-1"
-       bottom="-1"
-       follows="all"
-       layout="topleft"
-       bg_readonly_color="Transparent"
-       border_visible="true"
-       font="SansSerifSmall"
-       h_pad="2"
-       max_length="65000"
-       parse_urls="true"
-       word_wrap="true"
-        />
-    </layout_panel>
-    <layout_panel
-     name="about_buttons_panel"
-     follows="all"
-     layout="topleft"
-     height="34"
-     auto_resize="false"
-     user_resize="false">
-        <button
-         name="save_description_changes"
-         label="Save"
-         top="1"
-         right="-105"
-         height="20"
-         width="80"
-         enabled="false"
-         follows="top|right"
-         layout="topleft"/>
-        <button
-         name="discard_description_changes"
-         label="Discard"
-         top="1"
-         right="-1"
-         height="20"
-         width="100"
-         enabled="false"
-         follows="top|right"
-         layout="topleft"/>
+     bg_visible="false"
+     border_visible="false">
         <view_border
-         bevel_style="none"
-         height="0"
-         layout="topleft"
          left="0"
-         name="cost_text_border"
-         top_pad="9"
-         width="492"/>
-    </layout_panel>
+         right="-1"
+         height="16"
+         top="0"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border"
+         bevel_style="in"/>
+        <text_editor
+         name="complete_name"
+         value="(loading...)"
+         top="0"
+         left="2"
+         right="-1"
+         height="16"
+         follows="left|top|right"
+         layout="topleft"
+         allow_scroll="false"
+         bg_visible="false"
+         border_visible="false"
+         h_pad="1"
+         v_pad="2"
+         enabled="false"
+         max_length="254"/>
+        <menu_button
+         name="copy_btn"
+         tool_tip="Copy options"
+         height="16"
+         right="-2"
+         top="0"
+         width="16"
+         image_selected="Copy"
+         image_unselected="Copy"
+         image_hover_selected="CopyBright"
+         image_hover_unselected="CopyBright"
+         hover_glow_amount="0.33"
+         chrome="true"
+         tab_stop="false"
+         follows="top|right"
+         layout="topleft"/>
+    </panel>
 
-    <layout_panel
-     name="groups_panel"
+    <button
+     top_delta="-2"
+     left_pad="1"
+     height="20"
+     width="20"
+     layout="topleft"
+     follows="top|right"
+     name="set_name"
+     image_overlay="Edit_Wrench"
+     tool_tip="Set Display Name"
+     visible="false"
+     enabled="false"/>
+
+    <icon
+     tool_tip="Friend can see my online status"
+     mouse_opaque="true"
+     name="can_see_online"
+     image_name="Profile_Perm_Online_Enabled"
+     layout="topleft"
+     follows="right|top"
+     interactable="true"
+     top_delta="-1"
+     right="-61"
+     height="24"
+     width="24"
+     left_pad="2"/>
+
+    <icon
+     tool_tip="Friend can not see my online status"
+     mouse_opaque="true"
+     name="cant_see_online"
+     image_name="Profile_Perm_Online_Disabled"
+     layout="topleft"
+     follows="right|top"
+     interactable="true"
+     top_delta="0"
+     right="-61"
+     height="24"
+     width="24"
+     left_pad="2"/>
+
+    <icon
+     tool_tip="Friend can see me on map"
+     mouse_opaque="true"
+     name="can_see_on_map"
+     image_name="Profile_Perm_Find_Enabled"
+     layout="topleft"
+     follows="right|top"
+     interactable="true"
+     top_delta="0"
+     right="-30"
+     height="24"
+     width="24"
+     left_pad="2"/>
+
+    <icon
+     tool_tip="Friend can not see me on map"
+     mouse_opaque="true"
+     name="cant_see_on_map"
+     image_name="Profile_Perm_Find_Disabled"
+     layout="topleft"
+     follows="right|top"
+     interactable="true"
+     top_delta="0"
+     right="-30"
+     height="24"
+     width="24"
+     left_pad="2"/>
+
+    <icon
+     tool_tip="Friend can edit my objects"
+     mouse_opaque="true"
+     name="can_edit_objects"
+     image_name="Profile_Perm_Objects_Enabled"
+     layout="topleft"
+     follows="right|top"
+     interactable="true"
+     top_delta="0"
+     right="-1"
+     height="24"
+     width="24"
+     left_pad="2"/>
+
+    <icon
+     tool_tip="Friend can not edit my objects"
+     mouse_opaque="true"
+     name="cant_edit_objects"
+     image_name="Profile_Perm_Objects_Disabled"
+     layout="topleft"
+     follows="right|top"
+     interactable="true"
+     top_delta="0"
+     right="-1"
+     height="24"
+     width="24"
+     left_pad="2"/>
+
+    <text
+     top_pad="4"
+     left="0"
+     height="16"
+     width="55"
+     layout="topleft"
+     follows="left|top"
+     name="Key:"
+     halign="right"
+     value="Key:"/>
+
+    <view_border
+     left_pad="4"
+     right="-89"
+     height="16"
+     layout="topleft"
+     follows="left|top|right"
+     name="info_border2"
+     bevel_style="in" />
+    <text_editor
+     bottom_delta="2"
+     left_delta="3"
+     right="-89"
+     height="16"
+     layout="topleft"
+     follows="left|top|right"
+     name="user_key"
+     bg_visible="false"
+     border_visible="false"
+     allow_scroll="false"
+     h_pad="0"
+     v_pad="0"
+     enabled="false"
+     max_length="254"
+     value="(loading...)"/>
+
+    <text
+     left_pad="2"
+     right="-6"
+     height="16"
+     layout="topleft"
+     follows="top|right"
+     name="status"
+     halign="center"/>
+
+    <panel
+     name="indicator_stack"
+     follows="top|right"
+     layout="topleft"
+     top_delta="-5"
+     right="-1"
+     height="23"
+     width="23"
+     visible="false">
+        <loading_indicator
+         name="progress_indicator"
+         top="0"
+         left="0"
+         height="23"
+         width="23"
+         follows="top|right"
+         layout="topleft"/>
+    </panel>
+
+    <layout_stack
+     name="imagepositioner"
+     top_pad="2"
+     left="4"
+     right="-1"
+     height="158"
+     follows="top|left|right"
+     layout="topleft"
+     orientation="horizontal">
+        <layout_panel
+         name="image_action_panel"
+         follows="all"
+         layout="topleft"
+         width="52"
+         height="158"
+         auto_resize="false"
+         user_resize="false">
+            <menu_button
+             right="-1"
+             height="20"
+             width="36"
+             top="0"
+             layout="topleft"
+             follows="top|right"
+             name="image_action_btn"
+             tool_tip="Perform profile picture related actions"
+             image_overlay="OptionsMenu_Off"/>
+        </layout_panel>
+
+        <layout_panel
+         name="image_panel"
+         follows="all"
+         layout="topleft"
+         width="158"
+         height="158"
+         auto_resize="false"
+         user_resize="false">
+            <icon
+             name="2nd_life_pic"
+             top="0"
+             left="0"
+             width="158"
+             height="158"
+             follows="all"
+             layout="topleft"
+             interactable="true"/>
+
+            <loading_indicator
+             name="image_upload_indicator"
+             top="69"
+             left="69"
+             height="23"
+             width="23"
+             follows="top|left"
+             layout="topleft"
+             visible="false"/>
+        </layout_panel>
+
+        <layout_panel
+         name="label_stack"
+         follows="all"
+         layout="topleft"
+         auto_resize="true"
+         user_resize="false">
+            <text
+             name="label"
+             value="Birthdate:"
+             top_pad="2"
+             right="-1"
+             height="16"
+             follows="top|left"
+             layout="topleft"/>
+            <view_border
+             top_pad="0"
+             left_delta="2"
+             right="-4"
+             height="32"
+             name="info_border_register_date"
+             layout="topleft"
+             follows="left|top|right"
+             bevel_style="in"/>
+            <text_editor
+             name="user_age"
+             value="(loading...)"
+             top_delta="0"
+             left_delta="0"
+             right="-4"
+             height="32"
+             follows="top|left|right"
+             layout="topleft"
+             allow_scroll="false"
+             bg_visible="false"
+             border_visible="false"
+             h_pad="3"
+             max_length="254"
+             read_only="true"
+             translate="true"
+             v_pad="2"
+             word_wrap="true"/>
+            <text
+             name="label2"
+             value="Account:"
+             top_pad="5"
+             left_delta="-2"
+             right="-1"
+             height="16"
+             follows="top|left"
+             layout="topleft"/>
+            <view_border
+             top_pad="0"
+             left_delta="2"
+             right="-4"
+             height="45"
+             name="info_border_acc_status_text"
+             layout="topleft"
+             follows="left|top|right"
+             bevel_style="in"/>
+            <text_editor
+             name="account_info"
+             top_delta="0"
+             left_delta="0"
+             right="-4"
+             height="44"
+             follows="top|left|right"
+             layout="topleft"
+             allow_scroll="false"
+             bg_visible="false"
+             border_visible="false"
+             h_pad="3"
+             read_only="true"
+             translate="false"
+             v_pad="2"
+             word_wrap="true"/>
+            <text
+             name="partner_label"
+             value="Partner:"
+             top_pad="5"
+             left_delta="-2"
+             right="-1"
+             height="16"
+             follows="top|left"
+             layout="topleft"/>
+            <view_border
+             top_pad="0"
+             left_delta="2"
+             right="-4"
+             height="20"
+             layout="topleft"
+             follows="left|top|right"
+             name="info_border_partner_text"
+             bevel_style="in"/>
+            <text_editor
+             name="partner_link"
+             top_delta="0"
+             left_delta="0"
+             right="-4"
+             height="20"
+             follows="top|left|right"
+             layout="topleft"
+             allow_scroll="false"
+             bg_visible="false"
+             border_visible="false"
+             parse_urls="true"
+             h_pad="3"
+             read_only="true"
+             translate="false"
+             icon_positioning="left"
+             v_pad="3"
+             max_length="254"/>
+        </layout_panel>
+    </layout_stack>
+
+    <text
+     name="About:"
+     value="About:"
+     top_pad="11"
+     left="0"
+     height="16"
+     width="55"
+     follows="left|top"
+     layout="topleft"
+     halign="right"/>
+    <view_border
+     top_delta="-4"
+     left="59"
+     right="-5"
+     height="103"
+     layout="topleft"
+     follows="all"
+     name="info_border_sl_description_edit"
+     bevel_style="in"/>
+    <text_editor
+     name="sl_description_edit"
+     trusted_content="false"
+     always_show_icons="true"
+     enabled="false"
+     top_delta="1"
+     left="59"
+     right="-6"
+     height="103"
      follows="all"
      layout="topleft"
-     height="159"
-     auto_resize="true"
-     user_resize="false">
-      <text
-       name="group_label"
-       value="Group memberships"
-       top="1"
-       left="2"
-       right="-1"
-       height="16"
-       follows="left|top|right"
-       layout="topleft"/>
-      <group_list
-       name="group_list"
-       top="18"
-       left="2"
-       right="-1"
-       bottom="-1"
-       follows="all"
-       layout="topleft"
-       border_visible="true"
-       color="ScrollBgWriteableColor"
-       for_agent="false"/>
+     bg_readonly_color="Transparent"
+     border_visible="false"
+     font="SansSerifSmall"
+     h_pad="3"
+     max_length="65000"
+     parse_urls="true"
+     word_wrap="true"/>
 
-    </layout_panel>
-  </layout_stack>
+    <text
+     name="Groups:"
+     value="Groups:"
+     top_pad="5"
+     left="0"
+     height="16"
+     width="55"
+     follows="left|bottom"
+     layout="topleft"
+     halign="right"/>
+    <button
+     name="group_invite"
+     label="+"
+     tool_tip="Invite to Group"
+     top_delta="20"
+     left="35"
+     height="20"
+     width="20"
+     follows="left|bottom"
+     layout="topleft"
+     label_selected="+"/>
+    <group_list
+     name="group_list"
+     top_delta="-20"
+     left="59"
+     right="-6"
+     height="82"
+     follows="left|bottom|right"
+     layout="topleft"
+     border_visible="true"
+     for_agent="false"/>
+
+    <text
+     name="Give item:"
+     value="Share:"
+     top_pad="5"
+     left="0"
+     height="16"
+     width="55"
+     follows="left|bottom"
+     layout="topleft"
+     halign="right"/>
+    <view_border
+     name="drop_target_rect_vis"
+     top_delta="0"
+     left="59"
+     right="-6"
+     height="16"
+     follows="left|bottom|right"
+     layout="topleft"
+     bevel_style="in"/>
+    <text
+     name="Give inventory"
+     tool_tip="Drop inventory items here to give them to this person."
+     top_delta="2"
+     left="60"
+     right="-7"
+     height="16"
+     follows="left|bottom|right"
+     layout="topleft"
+     halign="center">
+      Drop inventory item here.
+    </text>
+
+    <layout_stack
+     name="buttonstack"
+     bottom="-1"
+     left="6"
+     right="-6"
+     height="44"
+     follows="left|bottom|right"
+     layout="topleft"
+     orientation="horizontal">
+        <layout_panel
+         name="left_buttonstack"
+         left="2"
+         right="-2"
+         height="44"
+         follows="all"
+         layout="topleft"
+         user_resize="false">
+            <button
+             name="show_on_map_btn"
+             label="Find on Map"
+             tool_tip="Locate the Resident on the map"
+             top="2"
+             left="2"
+             height="20"
+             follows="left|top|right"
+             layout="topleft"
+             label_selected="Find on Map"/>
+            <button
+             name="pay"
+             label="Pay"
+             tool_tip="Pay money to the Resident"
+             top_pad="2"
+             height="20"
+             follows="left|top|right"
+             layout="topleft"
+             label_selected="Pay"/>
+        </layout_panel>
+        <layout_panel
+         name="middle_buttonstack"
+         left="2"
+         right="-2"
+         follows="all"
+         layout="topleft"
+         user_resize="false">
+            <button
+             name="teleport"
+             label="Offer Teleport"
+             tool_tip="Offer a teleport to the Resident"
+             top="2"
+             left="2"
+             height="20"
+             follows="left|top|right"
+             layout="topleft"
+             label_selected="Offer Teleport"/>
+            <button
+             name="im"
+             label="Instant Message"
+             tool_tip="Open instant message session"
+             top_pad="2"
+             height="20"
+             follows="left|top|right"
+             layout="topleft"
+             label_selected="Instant Message"/>
+        </layout_panel>
+        <layout_panel
+         name="right_buttonstack"
+         left="2"
+         right="-2"
+         follows="all"
+         layout="topleft"
+         user_resize="false">
+            <button
+             name="add_friend"
+             label="Add Friend"
+             tool_tip="Offer friendship to the Resident"
+             top="2"
+             left="2"
+             height="20"
+             follows="left|top|right"
+             layout="topleft"
+             label_selected="Add Friend"
+            />
+            <button
+             name="block"
+             label="Block"
+             tool_tip="Block this Resident"
+             top_pad="2"
+             height="20"
+             right="-40"
+             follows="left|top|right"
+             layout="topleft"
+            />
+            <button
+             name="unblock"
+             label="Unblock"
+             tool_tip="Unblock this Resident"
+             top_delta="0"
+             height="20"
+             right="-40"
+             follows="left|top|right"
+             layout="topleft"
+            />
+            <menu_button
+             left_pad="4"
+             height="20"
+             width="36"
+             layout="topleft"
+             follows="top|right"
+             name="overflow_btn"
+             image_overlay="OptionsMenu_Off" />
+        </layout_panel>
+    </layout_stack>
+    <check_box
+     name="show_in_search"
+     label="Show in search"
+     tool_tip="Let people see you in search results"
+     enabled="false"
+     bottom="-28"
+     left="55"
+     height="16"
+     width="130"
+     follows="left|bottom"
+     layout="topleft"
+     visible="false"/>
+    <button
+     name="save_description_changes"
+     label="Save"
+     bottom="-1"
+     right="-108"
+     height="20"
+     width="80"
+     enabled="false"
+     follows="right|bottom"
+     layout="topleft"/>
+    <button
+     name="discard_description_changes"
+     label="Discard"
+     bottom="-1"
+     right="-4"
+     height="20"
+     width="100"
+     enabled="false"
+     follows="right|bottom"
+     layout="topleft"/>
+    <profile_drop_target
+     name="drop_target"
+     top="0"
+     bottom="-1"
+     left="0"
+     right="-1"
+     follows="all"
+     layout="topleft"
+     mouse_opaque="false"/>
 </panel>

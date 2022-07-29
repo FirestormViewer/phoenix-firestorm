@@ -184,20 +184,26 @@ private:
     void onShowAgentProfileTexture();
     void onShowTexturePicker();
     void onCommitProfileImage(const LLUUID& id);
-    void onOpenNotes();
+    //void onOpenNotes(); // <FS:Ansariel> Doesn't exist (anymore)
+
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    void updateButtons();
 
 private:
 	typedef std::map<std::string, LLUUID> group_map_t;
 	group_map_t				mGroups;
 	void					openGroupProfile();
 
-	LLTextBox*			mStatusText; // <FS:Ansariel> Undo LL dumb-down junk
+	LLTextBox*			mStatusText; // <FS:Ansariel> Fix LL UI/UX design accident
 	LLGroupList*		mGroupList;
-    LLComboBox*			mShowInSearchCombo;
-    LLIconCtrl*			mSecondLifePic;
+	// <FS:Ansariel> Fix LL UI/UX design accident
+    //LLComboBox*			mShowInSearchCombo;
+	LLCheckBoxCtrl*		mShowInSearchCheckbox;
+	// </FS:Ansariel>
+	LLIconCtrl*			mSecondLifePic;
 	LLPanel*			mSecondLifePicLayout;
     LLTextEditor*		mDescriptionEdit;
-    LLMenuButton*		mAgentActionMenuButton;
+    //LLMenuButton*		mAgentActionMenuButton; // <FS:Ansariel> Fix LL UI/UX design accident
     LLButton*			mSaveDescriptionChanges;
     LLButton*			mDiscardDescriptionChanges;
     LLIconCtrl*			mCanSeeOnlineIcon;
@@ -206,6 +212,20 @@ private:
     LLIconCtrl*			mCantSeeOnMapIcon;
     LLIconCtrl*			mCanEditObjectsIcon;
     LLIconCtrl*			mCantEditObjectsIcon;
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    LLMenuButton*		mCopyMenuButton;
+    LLButton*			mGroupInviteButton;
+    LLButton*			mDisplayNameButton;
+    LLMenuButton*		mImageActionMenuButton;
+    LLButton*			mTeleportButton;
+    LLButton*			mShowOnMapButton;
+    LLButton*			mBlockButton;
+    LLButton*			mUnblockButton;
+    LLButton*			mAddFriendButton;
+    LLButton*			mPayButton;
+    LLButton*			mIMButton;
+    LLMenuButton*		mOverflowButton;
+    // </FS:Ansariel>
 
     LLHandle<LLFloater>	mFloaterPermissionsHandle;
     LLHandle<LLFloater>	mFloaterProfileTextureHandle;
@@ -219,6 +239,11 @@ private:
     LLUUID				mImageId;
 
 	boost::signals2::connection	mAvatarNameCacheConnection;
+
+    // <FS:Ansariel> RLVa support
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    void updateRlvRestrictions(ERlvBehaviour behavior);
+    // </FS:Ansariel>
 };
 
 

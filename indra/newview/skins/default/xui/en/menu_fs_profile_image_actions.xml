@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu
+ layout="topleft"
+ name="Avatar Profile Image Actions">
+  <menu_item_call
+   label="Upload Photo"
+   layout="topleft"
+   name="upload_photo">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="upload_photo"/>
+    <menu_item_call.on_enable
+    function="Profile.EnableItem"
+     parameter="upload_photo"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Change Photo"
+   layout="topleft"
+   name="change_photo">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="change_photo"/>
+    <menu_item_call.on_enable
+    function="Profile.EnableItem"
+     parameter="change_photo"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Remove Photo"
+   layout="topleft"
+   name="remove_photo">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="remove_photo"/>
+    <menu_item_call.on_enable
+     function="Profile.EnableItem"
+     parameter="remove_photo"/>
+  </menu_item_call>
+</toggleable_menu>
