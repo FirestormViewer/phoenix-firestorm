@@ -232,7 +232,10 @@ void LLFloaterProfileTexture::onTextureLoaded(
 // <FS:Ansariel> Add refresh function
 void LLFloaterProfileTexture::refresh()
 {
-    destroy_texture(mImageID);
-    mImage->forceToRefetchTexture();
+    if (mImageID.notNull() && mImage.notNull())
+    {
+        destroy_texture(mImageID);
+        mImage->forceToRefetchTexture();
+    }
 }
 // </FS:Ansariel>
