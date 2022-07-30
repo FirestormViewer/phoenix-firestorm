@@ -1793,6 +1793,12 @@ void LLWindowSDL::gatherInput()
 				mKeyModifiers = event.key.keysym.mod;
 				mInputType = "keydown";
 
+				// treat all possible Enter/Return keys the same
+				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
+				{
+					mKeyVirtualKey = SDLK_RETURN;
+				}
+
 				gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
 
 				// <FS:ND> Slightly hacky :| To make the viewer honor enter (eg to accept form input) we've to not only send handleKeyDown but also send a
@@ -1815,6 +1821,12 @@ void LLWindowSDL::gatherInput()
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
 				mInputType = "keyup";
+
+				// treat all possible Enter/Return keys the same
+				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
+				{
+					mKeyVirtualKey = SDLK_RETURN;
+				}
 
 				if (SDLCheckGrabbyKeys(mKeyVirtualKey, FALSE) == 0)
 					SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
