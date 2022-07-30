@@ -7,12 +7,16 @@
 					<combo_box label="Użytkownik" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine" name="username_combo" />
 					<line_editor name="password_edit" label="Hasło" />
 					<button label="Zaloguj" name="connect_btn" />
-					<check_box label="Zapamiętaj mnie" name="remember_check" />
+					<text name="sign_up_text">
+						Dołącz
+					</text>
+					<check_box label="Pamiętaj mnie" name="remember_name" tool_tip="Już zapamiętanego użytkownika można zapomnieć w Awatar &gt; Ustawienia &gt; Zaawansowane &gt; Zapamiętani użytkownicy." />
+					<check_box label="Pamiętaj hasło" name="remember_password" />
 					<text name="forgot_password_text">
 						Zapomniałem/am hasła
 					</text>
-					<text name="sign_up_text">
-						Dołącz
+					<text name="forgot_password_text">
+						Pomoc z hasłem
 					</text>
 				</layout_panel>
 			</layout_stack>

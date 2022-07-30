@@ -23,7 +23,7 @@
 <string name="mesh_status_invalid_material_list">Les options du niveau de détail ne sont pas une sous-ensemble d&apos;un modèle de référence.</string>
 <string name="phys_status_vertex_limit_exceeded">Certaines enveloppes physiques dépassent les limites de sommets.</string>
 <string name="phys_status_hull_limit_exceeded">Certains modèles dépassent la limite de la coque (256) ; essayez de "simplifier"..</string>
-<string name="phys_status_degenerate_triangles">Maillage physique trop dense ; supprimez les petits et fins triangles (voir aperçu).</string>
+<string name="phys_status_degenerate_triangles">Le maillage physique est trop dense ou contient des triangles non cohérents. Utilisez Analyser/Simplifier pour résoudre ce problème.</string>
 <string name="phys_status_no_havok">Cette version ne contient pas de support Havok et n'est pas recommandée pour le chargement de physiques dans Second Life. Les résultats peuvent être imprévisibles.</string>
 <string name="phys_status_too_thin">Une ou plusieurs dimensions sont inférieures à 0,5 m, seules les formes physiques basées sur la coque (analysées) fonctionneront correctement.</string>
 <string name="phys_status_unknown_error">Une erreur inconnue a été détectée.</string>
@@ -34,7 +34,22 @@
 <string name="UnrecognizedJoint">Riggé à une articulation au nom inconnu [NAME]</string>
 <string name="UnknownJoints">Skinning désactivé à cause de [COUNT] articulation  inconnues.</string>
 <string name="ModelLoaded">Modèle [MODEL_NAME] chargé</string>
+
 <string name="IncompleteTC">Les données des coordonnées de la texture ne sont pas complètes.</string>
+<string name="PositionNaN">Trouvé NaN lors du chargement des données de position depuis le fichier DAE, modèle invalide.</string>
+<string name="NormalsNaN">Trouvé NaN lors du chargement des normales depuis le fichier DAE, modèle invalide.</string>
+<string name="NegativeScaleTrans">Échelle négative détectée, transformation non prise en charge. domInstance_geometry : [LABEL]</string>
+<string name="NegativeScaleNormTrans">Échelle négative détectée, transformation post-normalisation non prise en charge. domInstance_geometry : [LABEL]</string>
+<string name="CantResolveGeometryUrl">Impossible de résoudre l'URL de la géométrie.</string>
+<string name="ParsingErrorBadElement">Mauvais élément</string>
+<string name="ParsingErrorCantParseScene">La scène n'a pas pu être analysée</string>
+<string name="ParsingErrorCorrupt">Erreur avec le dae - indique traditionnellement un fichier corrompu.</string>
+<string name="ParsingErrorNoController">Impossible de vérifier le contrôleur</string>
+<string name="ParsingErrorNoDoc">Impossible de trouver le document interne</string>
+<string name="ParsingErrorNoRoot">Le document n'a pas de racine</string>
+<string name="ParsingErrorNoScene">Le document n'a pas de visual_scene</string>
+<string name="ParsingErrorPositionInvalidModel">Impossible de traiter le maillage sans données de position. Modèle invalide.</string>
+
 <panel name="left_panel">
 	<panel name="model_name_representation_panel">
 		<text name="name_label">
@@ -62,7 +77,9 @@
 			<text initial_value="Élevé" name="high_label" value="Élevé"/>
 			<combo_box name="lod_source_high">
 				<item label="Depuis un fichier" name="Load from file" value="Depuis un fichier"/>
-				<item label="Génération" name="Generate" value="Génération"/>
+				<item name="MeshOpt Auto" label="Générer Auto" />
+				<item name="MeshOptCombine" label="Générer précis" />
+				<item name="MeshOptSloppy" label="Générer imprécis" />
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_high"/>
 			<combo_box name="lod_mode_high">
@@ -74,7 +91,9 @@
 			<text initial_value="Moyen" name="medium_label" value="Moyen"/>
 			<combo_box name="lod_source_medium">
 				<item label="Depuis un fichier" name="Load from file" value="Depuis un fichier"/>
-				<item label="Génération" name="Generate" value="Génération"/>
+				<item name="MeshOpt Auto" label="Générer Auto" />
+				<item name="MeshOptCombine" label="Générer précis" />
+				<item name="MeshOptSloppy" label="Générer imprécis" />
 				<item label="Niveau de détail du dessus" name="Use LoD above" value="Niveau de détail du dessus"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_medium"/>
@@ -87,7 +106,9 @@
 			<text initial_value="Faible" name="low_label" value="Faible"/>
 			<combo_box name="lod_source_low">
 				<item label="Depuis un fichier" name="Load from file" value="Depuis un fichier"/>
-				<item label="Génération" name="Generate" value="Génération"/>
+				<item name="MeshOpt Auto" label="Générer Auto" />
+				<item name="MeshOptCombine" label="Générer précis" />
+				<item name="MeshOptSloppy" label="Générer imprécis" />
 				<item label="Niveau de détail du dessus" name="Use LoD above" value="Niveau de détail du dessus"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_low"/>
@@ -100,7 +121,9 @@
 			<text initial_value="Le plus faible" name="lowest_label" value="Le plus faible"/>
 			<combo_box name="lod_source_lowest">
 				<item label="Depuis un fichier" name="Load from file" value="Depuis un fichier"/>
-				<item label="Génération" name="Generate" value="Génération"/>
+				<item name="MeshOpt Auto" label="Générer Auto" />
+				<item name="MeshOptCombine" label="Générer précis" />
+				<item name="MeshOptSloppy" label="Générer imprécis" />
 				<item label="Niveau de détail du dessus" name="Use LoD above" value="Niveau de détail du dessus"/>
 			</combo_box>
 			<button label="Parcourir..." name="lod_browse_lowest"/>
@@ -252,10 +275,48 @@
 			</text>
 			<check_box label="Activation automatique des poids" tool_tip="Régler automatiquement le poids des mesh avec les informations de rigging" name="mesh_preview_auto_weights"/>
 			<check_box label="Visualisation automatique des poids" tool_tip="Visualiser automatiquement les poids dans l'aperçu des meshes avec les info de rigging" name="mesh_preview_auto_show_weights"/>
-			<text name="mesh_preview_ud_preset_label">
-				Physique défini par l'utilisateur :
+			<text name="lod_suffix_label">
+				Suffixes LOD :
 			</text>
-			<line_editor name="ud_physics" tool_tip="Chemin d'accès complet vers un fichier Collada à utiliser pour les propriétés physiques."/>
+			<combo_box name="lod_suffix_combo" tool_tip="Choisissez une option ou créez la vôtre">
+				<combo_item name="choose_one">
+					Choisissez un standard ou éditez manuellement...
+				</combo_item>
+				<combo_item name="suff_sl">
+					Standard SL (Le plus bas = LOD0)
+				</combo_item>
+				<combo_item name="suff_unity">
+					Standard moteur de jeu (Le plus bas = LOD3)
+				</combo_item>
+				<combo_item name="suff_descriptive">
+					Mots (haut, moyen...)
+				</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				Le plus bas :
+			</text>
+			<line_editor name="suf_lowest" tool_tip="Le suffixe utilisé pour identifier le fichier LOD le plus bas sur le disque et les modèles dans un fichier."/>
+			<text name="suf_low_lab">
+				Bas :
+			</text>
+			<line_editor name="suf_low" tool_tip="Le suffixe utilisé pour identifier le fichier LOD faible sur le disque et les modèles dans un fichier."/>
+			<text name="suf_medium_lab">
+				Moyen :
+			</text>
+			<line_editor name="suf_medium" tool_tip="Le suffixe utilisé pour identifier le fichier LOD moyen sur le disque et les modèles dans un fichier."/>
+			<text name="suf_high_lab">
+				Élevé :
+			</text>
+			<line_editor name="suf_high" tool_tip="Le suffixe utilisé pour identifier le fichier LOD élevé sur le disque et les modèles dans un fichier."/>
+			<text name="suf_physics_lab">
+				Physiques :
+			</text>
+			<line_editor name="suf_physics" tool_tip="Le suffixe utilisé pour identifier le fichier physique sur le disque et les modèles dans un fichier."/>
+			<text name="mesh_preview_ud_preset_label">
+				Physique prédéfini par l'utilisateur :
+			</text>
+			<line_editor name="ud_physics" tool_tip="Chemin d'accès complet à une définition de maillage Collada simple à utiliser pour le physique."/>
+			<button label_selected="Parcourir" name="set_user_def_phys"/>
 			<text name="mesh_preview_colors_label">
 				Couleurs de l'aperçu des modèles :
 			</text>
