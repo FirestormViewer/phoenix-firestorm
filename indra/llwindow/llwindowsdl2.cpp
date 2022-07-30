@@ -652,6 +652,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	mReallyCapturedCount = 0;
 
 	SDL_SetHint( SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0" );
+	SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 )
 	{
