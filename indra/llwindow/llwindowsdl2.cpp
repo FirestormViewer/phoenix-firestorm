@@ -869,6 +869,10 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	}
 #endif // LL_X11
 
+	// clear screen to black right at the start so it doesn't look like a crash
+	glClearColor(0.0f, 0.0f, 0.0f ,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(mWindow);
 
 	SDL_StartTextInput();
 	//make sure multisampling is disabled by default
