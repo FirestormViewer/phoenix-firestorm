@@ -36,6 +36,7 @@
 #include "lltextureview.h"
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
+#include "llviewermenu.h"
 
 
 
@@ -67,6 +68,9 @@ BOOL LLFloaterProfileTexture::postBuild()
 
     mCloseButton = getChild<LLButton>("close_btn");
     mCloseButton->setCommitCallback([this](LLUICtrl*, void*) { closeFloater(); }, nullptr);
+
+    // <FS:Ansariel> Add refresh function
+    getChild<LLButton>("btn_refresh")->setCommitCallback([this](LLUICtrl*, void*) { refresh(); }, nullptr);
 
 	return TRUE;
 }
@@ -174,8 +178,12 @@ void LLFloaterProfileTexture::loadAsset(const LLUUID &image_id)
 
     mProfileIcon->setValue(image_id);
     mImageID = image_id;
-    mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-    mImageOldBoostLevel = mImage->getBoostLevel();
+    // <FS:Ansariel> Loading speed up fix
+    //mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+    //mImageOldBoostLevel = mImage->getBoostLevel();
+    mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_PREVIEW, LLViewerTexture::LOD_TEXTURE);
+    mImageOldBoostLevel = LLGLTexture::BOOST_NONE;
+    // </FS:Ansariel>
 
     if ((mImage->getFullWidth() * mImage->getFullHeight()) == 0)
     {
@@ -221,3 +229,11 @@ void LLFloaterProfileTexture::onTextureLoaded(
         delete handle;
     }
 }
+
+// <FS:Ansariel> Add refresh function
+void LLFloaterProfileTexture::refresh()
+{
+    destroy_texture(mImageID);
+    mImage->forceToRefetchTexture();
+}
+// </FS:Ansariel>

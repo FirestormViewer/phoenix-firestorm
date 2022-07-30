@@ -46,6 +46,9 @@ public:
     void resetAsset();
     void loadAsset(const LLUUID &image_id);
 
+    // <FS:Ansariel> Add refresh function
+    void refresh();
+
 
     static void onTextureLoaded(
         BOOL success,

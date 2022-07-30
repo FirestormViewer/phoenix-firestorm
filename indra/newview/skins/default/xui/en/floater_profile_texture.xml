@@ -55,6 +55,22 @@
           <layout_panel
            follows="all"
            layout="topleft"
+           name="refresh_panel"
+           auto_resize="false"
+           width="27">
+            <button
+             follows="top|left"
+             height="22"
+             image_overlay="Refresh_Off"
+             layout="topleft"
+             left="5"
+             top="0"
+             name="btn_refresh"
+             width="22" />
+          </layout_panel>
+          <layout_panel
+           follows="all"
+           layout="topleft"
            name="resizer_left"
            auto_resize="true"
            width="1">
@@ -81,6 +97,13 @@
            name="resizer_right"
            auto_resize="true"
            width="1">
+          </layout_panel>
+          <layout_panel
+           follows="all"
+           layout="topleft"
+           name="refresh_counter_panel"
+           auto_resize="false"
+           width="27">
           </layout_panel>
         </layout_stack>
       </layout_panel>
