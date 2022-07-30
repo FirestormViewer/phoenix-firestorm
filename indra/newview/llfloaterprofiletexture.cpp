@@ -57,6 +57,7 @@ LLFloaterProfileTexture::~LLFloaterProfileTexture()
     if (mImage.notNull())
     {
         mImage->setBoostLevel(mImageOldBoostLevel);
+        mImage->forceActive(); // <FS:Ansariel> Make sure it can get discarded
         mImage = NULL;
     }
 }
@@ -158,6 +159,7 @@ void LLFloaterProfileTexture::resetAsset()
     if (mImage.notNull())
     {
         mImage->setBoostLevel(mImageOldBoostLevel);
+        mImage->forceActive(); // <FS:Ansariel> Make sure it can get discarded
         mImage = NULL;
     }
 }
@@ -168,6 +170,7 @@ void LLFloaterProfileTexture::loadAsset(const LLUUID &image_id)
         if (mImage.notNull())
         {
             mImage->setBoostLevel(mImageOldBoostLevel);
+            mImage->forceActive(); // <FS:Ansariel> Make sure it can get discarded
             mImage = NULL;
         }
     }
@@ -178,12 +181,8 @@ void LLFloaterProfileTexture::loadAsset(const LLUUID &image_id)
 
     mProfileIcon->setValue(image_id);
     mImageID = image_id;
-    // <FS:Ansariel> Loading speed up fix
-    //mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-    //mImageOldBoostLevel = mImage->getBoostLevel();
-    mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_PREVIEW, LLViewerTexture::LOD_TEXTURE);
-    mImageOldBoostLevel = LLGLTexture::BOOST_NONE;
-    // </FS:Ansariel>
+    mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+    mImageOldBoostLevel = mImage->getBoostLevel();
 
     if ((mImage->getFullWidth() * mImage->getFullHeight()) == 0)
     {
