@@ -12,6 +12,7 @@
 	<text name="PostProcessText">
 		Низкое
 	</text>
+	<check_box label="Включить VSync" name="vsync" tool_tip="Синхронизирует частоту кадров с частотой обновления монитора, что обеспечивает плавную работу."/>
 	<text name="AvatarText">
 		Аватар
 	</text>
@@ -41,7 +42,6 @@
 		(чем меньше, тем ярче, 0 – яркость по умолчанию)
 	</text>
 	<check_box label="Анизотропная фильтрация (медленнее, если включено)" name="ani"/>
-	<check_box label="Включить буфер вершин объектов OpenGL" name="vbo" tool_tip="Включение этого параметра на современном оборудовании даст увеличение производительности. Однако на старом оборудовании это может привести к сбою приложения."/>
 	<check_box label="Разрешить сжатие текстур (требует перезагрузки)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, что позволяет загружать текстуры большего размера за счет некоторого падения качества цвета."/>
 	<check_box label="Включить поддержку HiDPI дисплея (нужен перезапуск)" name="use HiDPI" tool_tip="Разрешить OpenGL отображение с высоким разрешением."/>
 	<text name="antialiasing label">
@@ -86,7 +86,6 @@
 	<text name="TerrainDetailText">
 		Низкая
 	</text>
-	<check_box label="Аппаратная отрисовка аватаров" name="AvatarVertexProgram"/>
 	<check_box label="Одежда аватара" name="AvatarCloth"/>
 	<text name="ReflectionsText">
 		Вода отражает:
