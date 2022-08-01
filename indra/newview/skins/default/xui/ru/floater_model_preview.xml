@@ -67,6 +67,7 @@
           <item name="MeshOpt Auto" label="Генерировать Авто"/>
           <item name="MeshOptCombine" label="Генерировать Точно"/>
           <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_high"/>
         <combo_box name="lod_mode_high">
@@ -79,6 +80,7 @@
           <item name="MeshOpt Auto" label="Генерировать Авто"/>
           <item name="MeshOptCombine" label="Генерировать Точно"/>
           <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
           <item name="Use LoD above" label="Использовать сверху"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_medium"/>
@@ -91,6 +93,7 @@
           <item name="MeshOpt Auto" label="Генерировать Авто"/>
           <item name="MeshOptCombine" label="Генерировать Точно"/>
           <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
           <item name="Use LoD above" label="Использовать сверху"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_low"/>
@@ -103,6 +106,7 @@
           <item name="MeshOpt Auto" label="Генерировать Авто"/>
           <item name="MeshOptCombine" label="Генерировать Точно"/>
           <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
           <item name="Use LoD above" label="Использовать сверху"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_lowest"/>
