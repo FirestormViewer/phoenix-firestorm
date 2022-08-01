@@ -4,6 +4,9 @@
 		<container_view name="statistics_view">
 			<stat_view label="Basique" name="basic">
 				<stat_bar label="FPS" name="fps"/>
+				<stat_bar name="frame_mean" label="image (moyen)"/>
+				<stat_bar name="frame_median" label="image (médian)"/>
+				<stat_bar name="framet_jitter" label="scintillement"/>
 				<stat_bar label="Données UDP Reçues" name="bandwidth"/>
 				<stat_bar label="Perte de Paquets" name="packet_loss"/>
 				<stat_bar label="Ping Sim" name="ping"/>

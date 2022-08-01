@@ -9,6 +9,7 @@
 	<text name="PostProcessText">
 		Niska
 	</text>
+	<check_box label="Włącz VSync" name="vsync" tool_tip="Synchronizuje liczbę klatek na sekundę z częstotliwością odświeżania monitora, co zapewnia płynne działanie." />
 	<text name="AvatarText">
 		Awatar
 	</text>
@@ -31,7 +32,6 @@
 		(0 = domyślna jasność, niżej = jaśniej)
 	</text>
 	<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani" />
-	<check_box label="Włącz OpenGL Vertex Buffer Object (opis geometrii obiektów)" name="vbo" tool_tip="Włączenie tej opcji na nowoczesnym sprzęcie spowoduje wzrost wydajności. Starszy sprzęt jednak ma często słabe wsparcie dla VBO i mogą wystąpić na nim awarie." />
 	<check_box label="Włącz stratną kompresję tekstur (wymaga restartu)" name="texture compression" tool_tip="Kompresuje tekstury w pamięci wideo. Umożliwi to ładowanie tekstur w wyższej rozdzielczości / większej ich ilości, ale kosztem jakości obrazu." />
 	<check_box label="Włącz wsparcie dla ekranów HiDPI (wymaga restartu)" name="use HiDPI" tool_tip="Włącz funkcje OpenGL dla rysowania w wysokich rozdzielczościach." />
 	<text name="antialiasing label">
@@ -72,7 +72,6 @@
 	<text name="TerrainDetailText">
 		Mało
 	</text>
-	<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram" />
 	<check_box label="Elastyczne tkaniny ubrań" name="AvatarCloth" />
 	<text name="ReflectionsText">
 		Odbicia w wodzie:

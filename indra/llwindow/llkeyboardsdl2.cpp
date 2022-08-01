@@ -63,7 +63,7 @@ LLKeyboardSDL::LLKeyboardSDL()
 	mTranslateKeyMap[SDLK_LCTRL] = KEY_CONTROL;
 	mTranslateKeyMap[SDLK_RCTRL] = KEY_CONTROL;
 	mTranslateKeyMap[SDLK_LALT] = KEY_ALT;
-	mTranslateKeyMap[SDLK_RALT] = KEY_ALT;
+	// mTranslateKeyMap[SDLK_RALT] = KEY_ALT;
 	mTranslateKeyMap[SDLK_HOME] = KEY_HOME;
 	mTranslateKeyMap[SDLK_END] = KEY_END;
 	mTranslateKeyMap[SDLK_PAGEUP] = KEY_PAGE_UP;
@@ -148,7 +148,7 @@ void LLKeyboardSDL::resetMaskKeys()
 		mKeyLevel[KEY_CONTROL] = TRUE;
 	}
 
-	if(mask & KMOD_ALT)
+	if(mask & KMOD_LALT)
 	{
 		mKeyLevel[KEY_ALT] = TRUE;
 	}
@@ -170,7 +170,7 @@ MASK LLKeyboardSDL::updateModifiers(const U32 mask)
 		out_mask |= MASK_CONTROL;
 	}
 
-	if(mask & KMOD_ALT)
+	if(mask & KMOD_LALT)
 	{
 		out_mask |= MASK_ALT;
 	}
@@ -252,7 +252,7 @@ MASK LLKeyboardSDL::currentMask(BOOL for_mouse_event)
 		result |= MASK_SHIFT;
 	if (mask & KMOD_CTRL)
 		result |= MASK_CONTROL;
-	if (mask & KMOD_ALT)
+	if (mask & KMOD_LALT)
 		result |= MASK_ALT;
 
 	// For keyboard events, consider Meta keys equivalent to Control
