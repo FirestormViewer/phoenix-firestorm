@@ -4868,7 +4868,7 @@ bool LLModelPreview::lodQueryCallback()
             preview->mLodsQuery.pop_back();
 // <FS:Beq> Improved LOD generation
 #ifdef USE_GLOD_AS_DEFAULT
-            preview->genLODsUsingGLOD(lod);            
+            preview->genGlodLODs(lod, 3, false);
 #else
             preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
 #endif
