@@ -55,7 +55,7 @@
 static const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 static const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 static const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-static const U32 FS_BRIDGE_MINOR_VERSION = 28;
+static const U32 FS_BRIDGE_MINOR_VERSION = 29;
 static const U32 FS_MAX_MINOR_VERSION = 99;
 static const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 static const std::string FS_STATE_ATTRIBUTE = "state=";
@@ -410,7 +410,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			while (std::getline(strStreamGetScriptInfo, scriptInfoToken, ','))
 			{
 				LLStringUtil::trim(scriptInfoToken);
-				if (scriptInfoArrayCount == 0 || scriptInfoArrayCount == 6 || scriptInfoArrayCount == 11 || scriptInfoArrayCount == 12 || scriptInfoArrayCount == 13 || scriptInfoArrayCount == 14 || scriptInfoArrayCount == 24)
+				if (scriptInfoArrayCount == 0 || scriptInfoArrayCount == 6 || scriptInfoArrayCount == 11 || scriptInfoArrayCount == 12 || scriptInfoArrayCount == 13 || scriptInfoArrayCount == 14 || scriptInfoArrayCount == 25)
 				{
 					// First value, OBJECT_NAME, should be passed from Bridge as encoded in base64
 					// Encoding eliminates problems with special characters and commas for CSV
@@ -433,7 +433,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 				++scriptInfoArrayCount;
 			}
 
-			if (scriptInfoArrayCount == 6 || scriptInfoArrayCount == 26)
+			if (scriptInfoArrayCount == 6 || scriptInfoArrayCount == 27)
 			{
 				LLStringUtil::format_map_t args;
 				args["OBJECT_NAME"] = scriptInfoArray[0].asString();
@@ -452,7 +452,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 					args["PATHFINDING_TEXT"] = "";
 				}
 				report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info"), args));
-				if (scriptInfoArrayCount == 26)
+				if (scriptInfoArrayCount == 27)
 				{
 					LLStringUtil::format_map_t args3;
 					args3["OBJECT_DESC"] = scriptInfoArray[6].asString();
@@ -470,11 +470,12 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 					args3["OBJECT_REZZER_KEY"] = scriptInfoArray[18].asString();
 					args3["OBJECT_GROUP"] = scriptInfoArray[19].asUUID().notNull() ? LLSLURL("group", scriptInfoArray[19].asUUID(), "inspect").getSLURLString() : "---";
 					args3["OBJECT_CREATION_TIME"] = scriptInfoArray[20].asString();
-					args3["OBJECT_PATHFINDING_TYPE"] = scriptInfoArray[21].asString();
-					args3["OBJECT_ATTACHED_POINT"] = (scriptInfoArray[22].asInteger() < 1 || scriptInfoArray[22].asInteger() > 255) ? "---" : LLTrans::getString(LLAvatarAppearance::getAttachmentPointName(scriptInfoArray[22].asInteger()));
-					args3["OBJECT_TEMP_ATTACHED"] = scriptInfoArray[23].asInteger() == 1 ? LLTrans::getString("Yes") : LLTrans::getString("No");
-					args3["AVATAR_POS"] = scriptInfoArray[24].asString();
-					args3["INSPECTING_KEY"] = scriptInfoArray[25].asString();
+					args3["OBJECT_REZ_TIME"] = scriptInfoArray[21].asString();
+					args3["OBJECT_PATHFINDING_TYPE"] = scriptInfoArray[22].asString();
+					args3["OBJECT_ATTACHED_POINT"] = (scriptInfoArray[23].asInteger() < 1 || scriptInfoArray[23].asInteger() > 255) ? "---" : LLTrans::getString(LLAvatarAppearance::getAttachmentPointName(scriptInfoArray[23].asInteger()));
+					args3["OBJECT_TEMP_ATTACHED"] = scriptInfoArray[24].asInteger() == 1 ? LLTrans::getString("Yes") : LLTrans::getString("No");
+					args3["AVATAR_POS"] = scriptInfoArray[25].asString();
+					args3["INSPECTING_KEY"] = scriptInfoArray[26].asString();
 					report_to_nearby_chat(format_string(LLTrans::getString("fsbridge_script_info_ext"), args3));
 				}
 			}

@@ -23,7 +23,7 @@
 <string name="mesh_status_invalid_material_list">Materiały LOD nie są podzbiorem modelu referencyjnego.</string>
 <string name="phys_status_vertex_limit_exceeded">Pewne fizyczne powłoki przekroczyły limit wierzchołków (256); Spróbuj 'analizy'.</string>
 <string name="phys_status_hull_limit_exceeded">Pewne modele przekroczyły limit powłok (256); Spróbuj 'upraszczania'.</string>
-<string name="phys_status_degenerate_triangles">Mesz fizyki zbyt gęsty; Usuń małe cienkie trójkąty (zobacz podgląd)</string>
+<string name="phys_status_degenerate_triangles">Mesz fizyki zbyt gęsty lub ma zdegenerowane trójkąty. Użyj Analizuj/Uprość.</string>
 <string name="phys_status_no_havok">Ta wersja nie zawiera wsparcia Havoka i nie jest zalecana dla przesyłania fizyki do Second Life. Wyniki mogą być nieprzewidywalne.</string>
 <string name="phys_status_too_thin">Jeden z wymiarów ma mniej niż 0.5 m, tylko kształty fizyki oparte na kadłubie (po analizie) zadziałają poprawnie.</string>
 <string name="phys_status_unknown_error">Wykryto nierozpoznany błąd.</string>
@@ -35,6 +35,19 @@
 <string name="UnknownJoints">Teksturowanie wyłączone, zbyt wiele nieznanych stawów ([COUNT])</string>
 <string name="ModelLoaded">Model [MODEL_NAME] załadowany</string>
 <string name="IncompleteTC">Dane współrzędnych tekstury nie są kompletne.</string>
+<string name="PositionNaN">Znaleziono NaN podczas ładowania danych pozycji z DAE, nieprawidłowy model.</string>
+<string name="NormalsNaN">Znaleziono NaN podczas ładowania normalnych z DAE, nieprawidłowy model.</string>
+<string name="NegativeScaleTrans">Wykryto ujemną skalę, nieobsługiwane przekształcenie. domInstance_geometry: [LABEL]</string>
+<string name="NegativeScaleNormTrans">Wykryto ujemną skalę, nieobsługiwane przekształcenie po normalizacji. domInstance_geometry: [LABEL]</string>
+<string name="CantResolveGeometryUrl">Nie można rozpoznać URL geometrii.</string>
+<string name="ParsingErrorBadElement">Zły element</string>
+<string name="ParsingErrorCantParseScene">Nie można przeanalizować sceny</string>
+<string name="ParsingErrorCorrupt">Błąd DAE - zazwyczaj oznacza uszkodzony plik.</string>
+<string name="ParsingErrorNoController">Nie można zweryfikować kontrolera</string>
+<string name="ParsingErrorNoDoc">Nie można znaleźć wewnętrznego dokumentu</string>
+<string name="ParsingErrorNoRoot">Dokument nie ma elementu głównego</string>
+<string name="ParsingErrorNoScene">Dokument nie zawiera visual_scene</string>
+<string name="ParsingErrorPositionInvalidModel">Nie można przetworzyć meszu bez danych pozycji. Nieprawidłowy model.</string>
 <panel name="left_panel">
     <panel name="model_name_representation_panel">
         <text name="name_label">
@@ -49,7 +62,10 @@
             <text initial_value="Wysoki" name="high_label" value="Wysoki" />
             <combo_box name="lod_source_high">
                 <item name="Load from file" label="Ładuj z pliku" />
-                <item name="Generate" label="Generuj" />
+                <item name="MeshOpt Auto" label="Generuj: Auto" />
+                <item name="MeshOptCombine" label="Generuj: Dokładny" />
+                <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_high" />
             <combo_box name="lod_mode_high">
@@ -59,7 +75,10 @@
             <text name="medium_label" initial_value="Średni" value="Średni" />
             <combo_box name="lod_source_medium">
                 <item name="Load from file" label="Ładuj z pliku" />
-                <item name="Generate" label="Generuj" />
+                <item name="MeshOpt Auto" label="Generuj: Auto" />
+                <item name="MeshOptCombine" label="Generuj: Dokładny" />
+                <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_medium" />
@@ -70,7 +89,10 @@
             <text name="low_label" initial_value="Niski" value="Niski" />
             <combo_box name="lod_source_low">
                 <item name="Load from file" label="Ładuj z pliku" />
-                <item name="Generate" label="Generuj" />
+                <item name="MeshOpt Auto" label="Generuj: Auto" />
+                <item name="MeshOptCombine" label="Generuj: Dokładny" />
+                <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_low" />
@@ -81,7 +103,10 @@
             <text initial_value="Najniższy" name="lowest_label" value="Najniższy" />
             <combo_box name="lod_source_lowest">
                 <item name="Load from file" label="Ładuj z pliku" />
-                <item name="Generate" label="Generuj" />
+                <item name="MeshOpt Auto" label="Generuj: Auto" />
+                <item name="MeshOptCombine" label="Generuj: Dokładny" />
+                <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_lowest" />
@@ -202,10 +227,40 @@
         </text>
         <check_box label="Auto-włączanie wag" tool_tip="Automatycznie włącz wagi dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_weights" />
         <check_box label="Auto-podgląd wag" tool_tip="Automatycznie wyświetlaj wagi w podglądzie dla meszy z informacjami o riggowaniu" name="mesh_preview_auto_show_weights" />
+        <text name="lod_suffix_label">
+            Sufiksy LOD:
+        </text>
+        <combo_box name="lod_suffix_combo" tool_tip="Wybierz ustawienie wstępne lub ustaw własne">
+            <combo_item name="choose_one">Wybierz standard lub edytuj ręcznie...</combo_item>
+            <combo_item name="suff_sl">Standard SL (najniższy=LOD0)</combo_item>
+            <combo_item name="suff_unity">Standard silników gier (najniższy=LOD3)</combo_item>
+            <combo_item name="suff_descriptive">Słowa (high, med...)</combo_item>
+        </combo_box>
+        <text name="suf_lowest_lab">
+            Najniższy:
+        </text>
+        <line_editor name="suf_lowest" tool_tip="Sufiks używany do identyfikacji pliku na dysku z najniższym LOD oraz modelami." />
+        <text name="suf_low_lab">
+            Niski:
+        </text>
+        <line_editor name="suf_low" tool_tip="Sufiks używany do identyfikacji pliku na dysku z niskim LOD oraz modelami." />
+        <text name="suf_medium_lab">
+            Średni:
+        </text>
+        <line_editor name="suf_medium" tool_tip="Sufiks używany do identyfikacji pliku na dysku ze średnim LOD oraz modelami." />
+        <text name="suf_high_lab">
+            Wysoki:
+        </text>
+        <line_editor name="suf_high" tool_tip="Sufiks używany do identyfikacji pliku na dysku z wysokim LOD oraz modelami." />
+        <text name="suf_physics_lab">
+            Fizyka:
+        </text>
+        <line_editor name="suf_physics" tool_tip="Sufiks używany do identyfikacji pliku na dysku z fizyką oraz modelami." />
         <text name="mesh_preview_ud_preset_label">
             Fizyka użytkownika:
         </text>
         <line_editor name="ud_physics" tool_tip="Pełna ścieżka systemowa do prostej definicji meszu Collada dla wykorzystania w fizyce." />
+        <button label="Przeglądaj" label_selected="Przeglądaj" name="set_user_def_phys" />
         <text name="mesh_preview_colors_label">
             Kolory podglądu przesyłania:
         </text>

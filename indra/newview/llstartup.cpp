@@ -3118,7 +3118,10 @@ bool idle_startup()
 		FSFloaterWearableFavorites::initCategory();
 
 		// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
-		LLFriendCardsManager::createAgentCallingCard();
+		if (!gSavedSettings.getBOOL("FSCreateCallingCards"))
+		{
+			LLFriendCardsManager::createAgentCallingCard();
+		}
 
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();

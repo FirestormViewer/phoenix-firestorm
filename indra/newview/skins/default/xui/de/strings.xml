@@ -6806,6 +6806,7 @@ Vorheriger Besitzer: [OBJECT_LAST_OWNER_ID]
 Gerezt von: [OBJECT_REZZER_KEY]
 Gruppe: [OBJECT_GROUP]
 Erstellungszeit: [OBJECT_CREATION_TIME]
+Rez-Zeit: [OBJECT_REZ_TIME]
 Pathfinding-Typ: [OBJECT_PATHFINDING_TYPE]
 Angehängt an: [OBJECT_ATTACHED_POINT]
 Temporär angehängt: [OBJECT_TEMP_ATTACHED]
@@ -7055,6 +7056,13 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="fs_preprocessor_truncated">
 		Achtung: Präprozessor-Ausgabe wurde aufgrund exzessiver Textlänge gekürzt. Das Skript wird wahrscheinlich nicht funktionieren.
+	</string>
+
+	<string name="skin_defaults_starlight_location">
+		Die Anzeige der aktuellen Position in der Menüleiste wurde als Standard für Starlight-Oberflächendesigns deaktiviert.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Die Anzeige der Navigationsleiste wurde als Standard für Starlight-Oberflächendesigns aktiviert.
 	</string>
 
 	<string name="animation_explorer_seconds_ago">

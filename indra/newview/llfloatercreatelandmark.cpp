@@ -143,7 +143,9 @@ void LLFloaterCreateLandmark::setLandmarkInfo(const LLUUID &folder_id)
 		mLandmarkTitleEditor->setText(name);
 	}
 
-	LLLandmarkActions::createLandmarkHere(name, "", folder_id.notNull() ? folder_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE));
+	// <FS:Ansariel> FIRE-31689: Landmark initially shown in wrong folder while creating
+	//LLLandmarkActions::createLandmarkHere(name, "", folder_id.notNull() ? folder_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE));
+	LLLandmarkActions::createLandmarkHere(name, "", folder_id.notNull() ? folder_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_LANDMARK));
 }
 
 bool cmp_folders(const folder_pair_t& left, const folder_pair_t& right)

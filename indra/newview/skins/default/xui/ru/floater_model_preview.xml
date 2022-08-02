@@ -23,7 +23,7 @@
   <string name="mesh_status_invalid_material_list">Материалы уровня детализации не входят в эталонную модель.</string>
   <string name="phys_status_vertex_limit_exceeded">Для некоторых физических оболочек превышен лимит вершин(256); попробуйте другой 'Метод Анализа'.</string>
   <string name="phys_status_hull_limit_exceeded">Некоторые модели превышают предел оболочек (256); попробуйте 'Упрощение'.</string>
-  <string name="phys_status_degenerate_triangles">Физика меша слишком плотная; удалить маленькие, тонкие треугольники (смотри просмотр).</string>
+  <string name="phys_status_degenerate_triangles">Физика меша слишком плотная или содержит вырожденные треугольники. Используйте Анализ/Упрощение для решения.</string>
   <string name="phys_status_no_havok">Эта версия не поддерживает Havok и не рекомендуется для загрузки физики в Second Life. Результаты могут быть непредсказуемыми.</string>
   <string name="phys_status_too_thin">Один или несколько размеров меньше 0,5м, корректно будут работать только физические формы, основанные на корпусе (проанализированные).</string>
   <string name="phys_status_unknown_error">Обнаружена нераспознанная ошибка.</string>
@@ -38,6 +38,19 @@
   <string name="UnknownJoints">Текстурирование отключено, слишком много [COUNT] неизвестных суставов</string>
   <string name="ModelLoaded">Модель [MODEL_NAME] загружена</string>
   <string name="IncompleteTC">Данные координат текстуры не полны.</string>
+  <string name="PositionNaN">Обнаружен NaN при загрузке данных о местоположении из DAE-модели, недопустимая модель.</string>
+  <string name="NormalsNaN">Найдено NaN при загрузке нормалей из DAE-модели, недопустимая модель.</string>
+  <string name="NegativeScaleTrans">Обнаружен отрицательный масштаб, неподдерживаемое преобразование. domInstance_geometry: [LABEL]</string>
+  <string name="NegativeScaleNormTrans">Обнаружен отрицательный масштаб, неподдерживаемое преобразование после нормализации. domInstance_geometry: [LABEL]</string>
+  <string name="CantResolveGeometryUrl">Не удается разрешить геометрию URL.</string>
+  <string name="ParsingErrorBadElement">Плохой элемент</string>
+  <string name="ParsingErrorCantParseScene">Сцена не может быть проанализирована</string>
+  <string name="ParsingErrorCorrupt">Ошибка с dae - традиционно указывает на поврежденный файл.</string>
+  <string name="ParsingErrorNoController">Не удалось проверить контроллер</string>
+  <string name="ParsingErrorNoDoc">Не удается найти внутренние документы</string>
+  <string name="ParsingErrorNoRoot">Документ не имеет корня</string>
+  <string name="ParsingErrorNoScene">Документ не имеет visual_scene</string>
+  <string name="ParsingErrorPositionInvalidModel">Невозможно обработать сетку без данных о местоположении. Недопустимая модель.</string>
 
   <panel name="left_panel">
     <panel name="model_name_representation_panel">
@@ -50,8 +63,11 @@
         <text initial_value="Вершины" name="vertices" value="Вершины"/>
         <text initial_value="Высокий" name="high_label" value="Высокий"/>
         <combo_box name="lod_source_high">
-          <item label="Загрузка из файла" name="Load from file"/>
-          <item label="Сгенерировать" name="Generate"/>
+          <item name="Load from file" label="Загрузка из файла"/>
+          <item name="MeshOpt Auto" label="Генерировать Авто"/>
+          <item name="MeshOptCombine" label="Генерировать Точно"/>
+          <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_high"/>
         <combo_box name="lod_mode_high">
@@ -60,9 +76,12 @@
         </combo_box>
         <text initial_value="Средний" name="medium_label" value="Средний"/>
         <combo_box name="lod_source_medium">
-          <item label="Загрузка из файла" name="Load from file"/>
-          <item label="Сгенерировать" name="Generate"/>
-          <item label="Использовать УД выше" name="Use LoD above"/>
+          <item name="Load from file" label="Загрузка из файла"/>
+          <item name="MeshOpt Auto" label="Генерировать Авто"/>
+          <item name="MeshOptCombine" label="Генерировать Точно"/>
+          <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
+          <item name="Use LoD above" label="Использовать сверху"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_medium"/>
         <combo_box name="lod_mode_medium">
@@ -71,9 +90,11 @@
         </combo_box>
         <text initial_value="Низкий" name="low_label" value="Низкий"/>
         <combo_box name="lod_source_low">
-          <item label="Загрузка из файла" name="Load from file"/>
-          <item label="Сгенерировать" name="Generate"/>
-          <item label="Использовать УД выше" name="Use LoD above"/>
+          <item name="MeshOpt Auto" label="Генерировать Авто"/>
+          <item name="MeshOptCombine" label="Генерировать Точно"/>
+          <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
+          <item name="Use LoD above" label="Использовать сверху"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_low"/>
         <combo_box name="lod_mode_low">
@@ -82,9 +103,11 @@
         </combo_box>
         <text initial_value="Низший" name="lowest_label" value="Низший"/>
         <combo_box name="lod_source_lowest">
-          <item label="Загрузка из файла" name="Load from file"/>
-          <item label="Сгенерировать" name="Generate"/>
-          <item label="Использовать УД выше" name="Use LoD above"/>
+          <item name="MeshOpt Auto" label="Генерировать Авто"/>
+          <item name="MeshOptCombine" label="Генерировать Точно"/>
+          <item name="MeshOptSloppy" label="Генерировать Небрежно"/>
+          <item name="Generate" label="Генерировать Надежный"/>
+          <item name="Use LoD above" label="Использовать сверху"/>
         </combo_box>
         <button label="Обзор..." name="lod_browse_lowest"/>
         <combo_box name="lod_mode_lowest">
@@ -172,10 +195,40 @@
         <check_box label="Автоматический просмотр весов"
          tool_tip="Автоматически показывать веса в предпросмотре для ригованых мешей"
          name="mesh_preview_auto_show_weights"/>
+        <text name="lod_suffix_label" width="110">
+            LOD суффиксы:
+        </text>
+        <combo_box name="lod_suffix_combo" width="250" tool_tip="Выберите предустановку или установите свой собственный">
+            <combo_item name="choose_one">Выберите стандарт или отредактируйте вручную...</combo_item>
+            <combo_item name="suff_sl">Стандарт SL (Низший=LOD0)</combo_item>
+            <combo_item name="suff_unity">Стандарт игровых движков (Низший=LOD3)</combo_item>
+            <combo_item name="suff_descriptive">Слова (high,med...)</combo_item>
+        </combo_box>
+        <text name="suf_lowest_lab" width="60">
+            Низший:
+        </text>
+        <line_editor name="suf_lowest" tool_tip="Суффикс, используемый для идентификации файла с низшим уровнем детализации на диске и моделей в файле."/>
+        <text name="suf_low_lab" width="60">
+            Низкий:
+        </text>
+        <line_editor name="suf_low" tool_tip="Суффикс, используемый для идентификации файла с низким уровнем детализации на диске и моделей в файле."/>
+        <text name="suf_medium_lab" width="60">
+            Средний:
+        </text>
+        <line_editor name="suf_medium" tool_tip="Суффикс, используемый для идентификации файла со средним уровнем детализации на диске и моделей в файле."/>
+        <text name="suf_high_lab" width="60">
+            Высокий:
+        </text>
+        <line_editor name="suf_high" tool_tip="Суффикс, используемый для идентификации файла с высоким уровнем детализации на диске и моделей в файле."/>
+        <text name="suf_physics_lab" width="60">
+            Физика:
+        </text>
+        <line_editor name="suf_physics" tool_tip="Суффикс, используемый для идентификации файла физики на диске и моделей в файле."/>
         <text name="mesh_preview_ud_preset_label">
           Предустановки физики:
         </text>
         <line_editor name="ud_physics" tool_tip="Полный системный путь к простому определению сетки Collada для использования в физике."/>
+        <button label="Просмотр" label_selected="Просмотр" name="set_user_def_phys"/>
         <text name="mesh_preview_colors_label">
          Цвета предварительного просмотра:
         </text>
