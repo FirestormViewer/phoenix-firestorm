@@ -65,6 +65,7 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_high" />
             <combo_box name="lod_mode_high">
@@ -77,6 +78,7 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_medium" />
@@ -90,6 +92,7 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_low" />
@@ -103,6 +106,7 @@
                 <item name="MeshOpt Auto" label="Generuj: Auto" />
                 <item name="MeshOptCombine" label="Generuj: Dokładny" />
                 <item name="MeshOptSloppy" label="Generuj: Niestaranny" />
+                <item name="Generate" label="Generuj: Wiarygodny" />
                 <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_lowest" />

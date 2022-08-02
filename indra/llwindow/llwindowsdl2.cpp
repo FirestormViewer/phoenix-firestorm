@@ -869,6 +869,10 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	}
 #endif // LL_X11
 
+	// clear screen to black right at the start so it doesn't look like a crash
+	glClearColor(0.0f, 0.0f, 0.0f ,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(mWindow);
 
 	SDL_StartTextInput();
 	//make sure multisampling is disabled by default
@@ -1779,11 +1783,7 @@ void LLWindowSDL::gatherInput()
 				for( auto key: string )
 				{
 					mKeyVirtualKey = key;
-
-					if( (MASK_CONTROL|MASK_ALT)&mKeyModifiers )
-						gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
-					else
-						handleUnicodeUTF16( key, mKeyModifiers );
+					handleUnicodeUTF16( key, mKeyModifiers );
 				}
 				break;
 			}
@@ -1792,6 +1792,12 @@ void LLWindowSDL::gatherInput()
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
 				mInputType = "keydown";
+
+				// treat all possible Enter/Return keys the same
+				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
+				{
+					mKeyVirtualKey = SDLK_RETURN;
+				}
 
 				gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
 
@@ -1815,6 +1821,12 @@ void LLWindowSDL::gatherInput()
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
 				mInputType = "keyup";
+
+				// treat all possible Enter/Return keys the same
+				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
+				{
+					mKeyVirtualKey = SDLK_RETURN;
+				}
 
 				if (SDLCheckGrabbyKeys(mKeyVirtualKey, FALSE) == 0)
 					SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
@@ -1919,7 +1931,7 @@ void LLWindowSDL::gatherInput()
 					// <FS:ND> I think is is not
 					// SDL_SetWindowSize(mWindow, width, height);
 					//
-					
+
 					mCallbacks->handleResize(this, width, height);
 				}
 				else if( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) // <FS:ND> What about SDL_WINDOWEVENT_ENTER (mouse focus)

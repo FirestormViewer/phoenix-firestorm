@@ -17,6 +17,7 @@ include(GLIB)
 include(DragDrop)
 include(EXPAT)
 include(FMODSTUDIO)
+include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
 include(JPEGEncoderBasic)
 include(JsonCpp)
@@ -84,6 +85,7 @@ endif(FMODSTUDIO)
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
+    ${GLOD_INCLUDE_DIR} # <FS:Beq/> restore GLOD
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
@@ -2283,6 +2285,11 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapr-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libaprutil-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapriconv-1.dll
+      # <FS:Beq> Restore GLOD build dependencies
+      ${SHARED_LIB_STAGING_DIR}/Release/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/Debug/glod.dll
+      # </FS:Beq>
       ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
@@ -2532,6 +2539,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
     ${OPENAL_LIBRARIES}
+    ${GLOD_LIBRARIES} # <FS:Beq/> restore GLOD dependencies    
     ${OPENGL_LIBRARIES}
     ${JSONCPP_LIBRARIES}
     ${SDL_LIBRARY}

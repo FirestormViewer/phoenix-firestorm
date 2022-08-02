@@ -57,6 +57,7 @@ if(WINDOWS)
         libaprutil-1.dll
         libapriconv-1.dll
         nghttp2.dll
+        glod.dll # <FS:Beq> restore GLOD
         libhunspell.dll
         uriparser.dll
         )
@@ -198,6 +199,7 @@ elseif(DARWIN)
         libaprutil-1.0.dylib
         libaprutil-1.dylib
         ${EXPAT_COPY}
+        libGLOD.dylib # <FS:Beq> restore GLOD
         libhunspell-1.3.0.dylib
         libndofdev.dylib
         libnghttp2.dylib

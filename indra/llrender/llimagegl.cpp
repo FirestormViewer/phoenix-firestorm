@@ -2451,6 +2451,16 @@ LLImageGLThread::LLImageGLThread(LLWindow* window)
     mFinished = false;
 
     mContext = mWindow->createSharedContext();
+	
+	// <FS:ND> If context creating is not supported (SDL1), mark texture thread disabled and exit
+	if( !mContext )
+	{
+		sEnabled = false;
+		mFinished = true;
+		return;
+	}
+	// </FS:ND>
+	
     ThreadPool::start();
 }
 
