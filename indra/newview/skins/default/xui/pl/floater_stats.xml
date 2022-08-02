@@ -4,6 +4,9 @@
 		<container_view name="statistics_view">
 			<stat_view label="Podstawowe" name="basic">
 				<stat_bar label="Klatki/sek (FPS)" name="fps"/>
+				<stat_bar name="frame_mean" label="Klatka (średnia)" />
+				<stat_bar name="frame_median" label="Klatka (mediana)" />
+				<stat_bar name="framet_jitter" label="Wahania (jitter)" />
 				<stat_bar label="Otrzymane dane UDP" name="bandwidth"/>
 				<stat_bar label="Utracone pakiety" name="packet_loss"/>
 				<stat_bar label="Ping symulatora" name="ping"/>

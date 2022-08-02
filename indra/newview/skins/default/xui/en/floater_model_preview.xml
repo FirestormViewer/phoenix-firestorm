@@ -203,6 +203,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate Reliable"
+                 value="Generate" />
             </combo_box>
             <line_editor
              follows="left|top"
@@ -340,6 +344,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate Reliable"
+                 value="Generate" />
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -481,6 +489,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate Reliable"
+                 value="Generate" />
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -622,6 +634,10 @@
                  name="MeshOptSloppy"
                  label="Generate Sloppy"
                  value="MeshOptSloppy" />
+                 <item
+                 name="Generate"
+                 label="Generate Reliable"
+                 value="Generate" />
                 <item
                  name="Use LoD above"
                  label="Use LoD above"
@@ -1171,7 +1187,7 @@
        name="modifiers_panel"
        help_topic="upload_model_modifiers">
          <view_border
-          bevel_style="none"  
+          bevel_style="none"
           follows="top|left"
           height="306"
           layout="topleft"
@@ -1478,7 +1494,7 @@
            name="lod_suffix_label"
            top_pad="5"
            width="110">
-           LOD Suffixes: 
+           LOD Suffixes:
          </text>
          <combo_box
           follows="left|top"
@@ -1502,7 +1518,7 @@
           top_pad="10"
           halign="right"
           width="60">
-          Lowest: 
+          Lowest:
         </text>
         <line_editor
         control_name="FSMeshLowestLodSuffix"
@@ -1527,7 +1543,7 @@
         name="suf_low_lab"
         top_delta="5"
         width="40">
-        Low: 
+        Low:
       </text>
       <line_editor
       control_name="FSMeshLowLodSuffix"
@@ -1552,7 +1568,7 @@
         name="suf_medium_lab"
         halign="right"
         width="40">
-        Medium: 
+        Medium:
       </text>
         <line_editor
         control_name="FSMeshMediumLodSuffix"
@@ -1577,7 +1593,7 @@
         name="suf_high_lab"
         top_delta="5"
         width="40">
-        High: 
+        High:
       </text>
         <line_editor
         control_name="FSMeshHighLodSuffix"
@@ -1601,7 +1617,7 @@
         name="suf_physics_lab"
         top_delta="5"
         width="40">
-        Physics: 
+        Physics:
       </text>
         <line_editor
         control_name="FSMeshPhysicsSuffix"

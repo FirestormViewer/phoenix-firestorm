@@ -198,7 +198,8 @@
         left="60"
         top="60"
         right="-60"
-        bottom="-60">
+        bottom="-60"
+        wrap="true">
 The web browser plugin seems to be taking a while to open.
 If the plugin never loads, please visit:
 
