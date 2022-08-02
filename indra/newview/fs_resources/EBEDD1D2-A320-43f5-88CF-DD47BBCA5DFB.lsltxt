@@ -6,160 +6,159 @@
 // Global variables and CONSTANTS
 //
 
-    // Bridge platform
-    string BRIDGE_VERSION = "2.28"; // This should match fslslbridge.cpp
-    string gLatestURL;
-    integer gViewerIsFirestorm;
-    integer gTryHandshakeOnce = TRUE;
-    key gOwner;
+// Bridge platform
+string BRIDGE_VERSION = "2.29"; // This should match fslslbridge.cpp
+string gLatestURL;
+integer gViewerIsFirestorm;
+integer gTryHandshakeOnce = TRUE;
+key gOwner;
 
-    // Teleport
-    float TP_TARGET_DISTANCE = 1.0; // Distance to target when move to target should stop
-    integer MAX_TIME_TO_TP = 10; // (seconds) Should be set to 10 for normal use
-    float TP_TIMER_TICK = 0.05;
-    vector gMttVector; // Target for llMoveToTarget() teleport
-    integer gStartTPTimer;
+// Teleport
+float TP_TARGET_DISTANCE = 1.0; // Distance to target when move to target should stop
+integer MAX_TIME_TO_TP = 10; // (seconds) Should be set to 10 for normal use
+float TP_TIMER_TICK = 0.05;
+vector gMttVector; // Target for llMoveToTarget() teleport
+integer gStartTPTimer;
 
-    // Movelock
-    integer gUseMoveLock;
-    integer gRelockMoveLockAfterMovement;
-    integer gRelockIsUserMoving;
+// Movelock
+integer gUseMoveLock;
+integer gRelockMoveLockAfterMovement;
+integer gRelockIsUserMoving;
 
-    // Flight assist
-    integer gIsFlyingNow;
-    float FLIGHT_CHECK_NORMAL = 0.5;
-    float FLIGHT_CHECK_SLOW = 3.0;
-    float gFlightAssistPushForce;
+// Flight assist
+integer gIsFlyingNow;
+float FLIGHT_CHECK_NORMAL = 0.5;
+float FLIGHT_CHECK_SLOW = 3.0;
+float gFlightAssistPushForce;
 
-    // OpenCollar/LockMeister AO interface
-    integer gAO_EnabledOC;
-    integer gAO_EnabledLM;
-    integer gAO_ChannelOC;
-    integer AO_CHANNEL_LM = -8888;
-    integer gAO_ListenerOC;
-    integer gAO_ListenerLM;
-    key gAO_CollarKey;
+// OpenCollar/LockMeister AO interface
+integer gAO_EnabledOC;
+integer gAO_EnabledLM;
+integer gAO_ChannelOC;
+integer AO_CHANNEL_LM = -8888;
+integer gAO_ListenerOC;
+integer gAO_ListenerLM;
+key gAO_CollarKey;
 
 //
 // Bridge platform helper functions
 //
 
-    requestBridgeURL()
-    {
-        llReleaseURL(gLatestURL);
-        gLatestURL = "";
-        llRequestSecureURL();
-        // llRequestURL(); -- Uncomment this line and comment the previous one for HTTP instead of HTTPS
-    }
+requestBridgeURL()
+{
+    llReleaseURL(gLatestURL);
+    gLatestURL = "";
+    llRequestSecureURL();
+}
 
-    detachBridge()
-    {
-        llReleaseURL(gLatestURL);
-        llRequestPermissions(gOwner, PERMISSION_ATTACH);
-    }
+detachBridge()
+{
+    llReleaseURL(gLatestURL);
+    llRequestPermissions(gOwner, PERMISSION_ATTACH);
+}
 
 //
 // OpenCollar/LockMeister AO interface functions
 //
 
-    aoListenOC(key collarid, integer enabled)
+aoListenOC(key collarid, integer enabled)
+{
+    llListenRemove(gAO_ListenerOC);
+    if (enabled)
     {
-        llListenRemove(gAO_ListenerOC);
-        if (enabled)
-        {
-            gAO_ListenerOC = llListen(gAO_ChannelOC, "", collarid, "");
-            gAO_CollarKey = collarid;
-        }
-        else
-        {
-            gAO_CollarKey = NULL_KEY;
-        }
+        gAO_ListenerOC = llListen(gAO_ChannelOC, "", collarid, "");
+        gAO_CollarKey = collarid;
     }
+    else
+    {
+        gAO_CollarKey = NULL_KEY;
+    }
+}
 
-    aoState(string newstate)
-    {
-        llOwnerSay("<clientAO state="+newstate+">");
-    }
+aoState(string newstate)
+{
+    llOwnerSay("<clientAO state="+newstate+">");
+}
 
-    integrationCheckOC()
+integrationCheckOC()
+{
+    if (gAO_EnabledOC)
     {
-        if (gAO_EnabledOC)
+        if (gAO_ChannelOC != PUBLIC_CHANNEL)
         {
-            if (gAO_ChannelOC != PUBLIC_CHANNEL)
-            {
-                aoListenOC(NULL_KEY, TRUE);
-                llWhisper(gAO_ChannelOC, "OpenCollar?");
-            }
-        }
-        else
-        {
-            aoListenOC(NULL_KEY, FALSE);
+            aoListenOC(NULL_KEY, TRUE);
+            llWhisper(gAO_ChannelOC, "OpenCollar?");
         }
     }
+    else
+    {
+        aoListenOC(NULL_KEY, FALSE);
+    }
+}
 
-    integrationCheckLM()
+integrationCheckLM()
+{
+    if (gAO_EnabledLM)
     {
-        if (gAO_EnabledLM)
-        {
-            gAO_ListenerLM = llListen(AO_CHANNEL_LM, "", NULL_KEY, "");
-        }
-        else
-        {
-            llListenRemove(gAO_ListenerLM);
-        }
+        gAO_ListenerLM = llListen(AO_CHANNEL_LM, "", NULL_KEY, "");
     }
+    else
+    {
+        llListenRemove(gAO_ListenerLM);
+    }
+}
 
 //
 // Teleport Helper functions
 //
 
-    setTimerEvent2(float time)
+setTimerEvent2(float time)
+{
+    if (time <= 0)
     {
-        if (time <= 0)
-        {
-            llSensorRemove();
-        }
-        else
-        {
-            llSensorRepeat("set-Timer-Event-2", NULL_KEY, AGENT_BY_LEGACY_NAME, 0.001, 0.001, time);
-        }
+        llSensorRemove();
     }
+    else
+    {
+        llSensorRepeat("set-Timer-Event-2", NULL_KEY, AGENT_BY_LEGACY_NAME, 0.001, 0.001, time);
+    }
+}
 
 //
 // Flight Assist
 //
 
-    flightHover(integer yes)
+flightHover(integer yes)
+{
+    if (yes)
     {
-        if (yes)
-        {
-            llSetForce((<0.0, 0.0, 9.8> * llGetMass()), 0);
-        }
-        else
-        {
-            llSetForce(ZERO_VECTOR, 1);
-        }
+        llSetForce((<0.0, 0.0, 9.8> * llGetMass()), 0);
     }
+    else
+    {
+        llSetForce(ZERO_VECTOR, 1);
+    }
+}
 
 //
 // Movelock
 //
 
-    movelockMe(integer lock)
+movelockMe(integer lock)
+{
+    if (lock)
     {
-        if (lock)
-        {
-            llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
-            llSetVehicleType(VEHICLE_TYPE_SLED);
-            llSetVehicleFloatParam(VEHICLE_LINEAR_FRICTION_TIMESCALE, 0.05);
-            llSetVehicleFloatParam(VEHICLE_ANGULAR_FRICTION_TIMESCALE, 0.05);
-        }
-        else
-        {
-            llStopMoveToTarget();
-            llSetVehicleType(VEHICLE_TYPE_NONE);
-        }
+        llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
+        llSetVehicleType(VEHICLE_TYPE_SLED);
+        llSetVehicleFloatParam(VEHICLE_LINEAR_FRICTION_TIMESCALE, 0.05);
+        llSetVehicleFloatParam(VEHICLE_ANGULAR_FRICTION_TIMESCALE, 0.05);
     }
+    else
+    {
+        llStopMoveToTarget();
+        llSetVehicleType(VEHICLE_TYPE_NONE);
+    }
+}
 
 //
 // MAIN
@@ -365,8 +364,6 @@ default
         vector targ = gMttVector - loc;
         float dist = llVecMag(targ);
 
-        // llOwnerSay("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
-
         // If we are out of time or distance - stop
         if (dist < TP_TARGET_DISTANCE || llGetUnixTime() - MAX_TIME_TO_TP > gStartTPTimer || gMttVector == loc)
         {
@@ -391,7 +388,6 @@ default
 
     http_request(key httpReqID, string Method, string Body)
     {
-        // llOwnerSay("Received HTTP " + Method + " message. Command body: " + Body);
         if (Method == URL_REQUEST_GRANTED)
         {
             gLatestURL = Body;
@@ -429,11 +425,10 @@ default
                 // Radar-specific command to get high-rez altitude data.
                 // Input is list of UUIDs to query, output is list of UUID:Altitude pairs.
 
-                // Get parameters
                 list tUUIDs = llCSV2List(llList2String(commandList, 1));
                 commandList = []; // Free memory
                 integer tLength = llGetListLength(tUUIDs);
-                key tUUID; // Key for llGetobjectDetails()
+                key tUUID;
                 vector tPos;
                 integer i = 0;
                 list responses;
@@ -507,9 +502,9 @@ default
                 if (extended)
                 {
                     currentPosition = llGetPos();
-                    details = llGetObjectDetails(targetkey, ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME, OBJECT_CHARACTER_TIME, OBJECT_DESC, OBJECT_ROOT, OBJECT_PRIM_COUNT, OBJECT_PRIM_EQUIVALENCE, OBJECT_TOTAL_INVENTORY_COUNT, OBJECT_VELOCITY, OBJECT_POS, OBJECT_ROT, OBJECT_OMEGA, OBJECT_CREATOR, OBJECT_OWNER, OBJECT_LAST_OWNER_ID, OBJECT_REZZER_KEY, OBJECT_GROUP, OBJECT_CREATION_TIME, OBJECT_PATHFINDING_TYPE, OBJECT_ATTACHED_POINT, OBJECT_TEMP_ATTACHED]));
+                    details = llGetObjectDetails(targetkey, ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME, OBJECT_CHARACTER_TIME, OBJECT_DESC, OBJECT_ROOT, OBJECT_PRIM_COUNT, OBJECT_PRIM_EQUIVALENCE, OBJECT_TOTAL_INVENTORY_COUNT, OBJECT_VELOCITY, OBJECT_POS, OBJECT_ROT, OBJECT_OMEGA, OBJECT_CREATOR, OBJECT_OWNER, OBJECT_LAST_OWNER_ID, OBJECT_REZZER_KEY, OBJECT_GROUP, OBJECT_CREATION_TIME, OBJECT_REZ_TIME, OBJECT_PATHFINDING_TYPE, OBJECT_ATTACHED_POINT, OBJECT_TEMP_ATTACHED]));
                     details = details + [currentPosition, targetkey];
-                    elements = 26;
+                    elements = 27;
                 }
                 else
                 {
@@ -522,7 +517,7 @@ default
                     list returnedList = [llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0, llList2Float(details, 5) * 1000.0];
                     if (extended)
                     {
-                        returnedList = returnedList + [llStringToBase64(llStringTrim(llList2String(details, 6), STRING_TRIM)), llList2String(details, 7), llList2Integer(details, 8), llList2Integer(details, 9), llList2Integer(details, 10), llStringToBase64(llList2String(details, 11)), llStringToBase64(llList2String(details, 12) + " (" + (string)llVecDist(llList2Vector(details, 12), currentPosition) + " m)"), llStringToBase64(llList2String(details, 13) + " (" + (string)(RAD_TO_DEG * llRot2Euler(llList2Rot(details, 13))) + ")"), llStringToBase64(llList2String(details, 14)), llList2Key(details, 15), llList2Key(details, 16), llList2Key(details, 17), llList2Key(details, 18), llList2Key(details, 19), llList2String(details, 20), llList2Integer(details, 21), llList2Integer(details, 22), llList2Integer(details, 23), llStringToBase64(llList2String(details, 24)), llList2Key(details, 25)];
+                        returnedList = returnedList + [llStringToBase64(llStringTrim(llList2String(details, 6), STRING_TRIM)), llList2String(details, 7), llList2Integer(details, 8), llList2Integer(details, 9), llList2Integer(details, 10), llStringToBase64(llList2String(details, 11)), llStringToBase64(llList2String(details, 12) + " (" + (string)llVecDist(llList2Vector(details, 12), currentPosition) + " m)"), llStringToBase64(llList2String(details, 13) + " (" + (string)(RAD_TO_DEG * llRot2Euler(llList2Rot(details, 13))) + ")"), llStringToBase64(llList2String(details, 14)), llList2Key(details, 15), llList2Key(details, 16), llList2Key(details, 17), llList2Key(details, 18), llList2Key(details, 19), llList2String(details, 20), llList2String(details, 21), llList2Integer(details, 22), llList2Integer(details, 23), llList2Integer(details, 24), llStringToBase64(llList2String(details, 25)), llList2Key(details, 26)];
                     }
                     llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV(returnedList) + "</bridgeGetScriptInfo>");
                 }

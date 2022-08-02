@@ -21,7 +21,7 @@ Linden это:
 				и переводами от:
 			</text>
 		</panel>
-		<panel label="Firestorm" name="fs_credits_panel" height="870">
+		<panel label="Firestorm" name="fs_credits_panel" height="960">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
 					<text name="firestorm_intro" height="130">
@@ -35,7 +35,7 @@ Linden это:
 					<text name="fs_support_intro">
 						Специальные благодарности для команды поддержки, издателей wiki, учителей и переводчиков:
 					</text>
-					<text name="fs_art_intro">
+					<text name="fs_art_intro" height="90">
 						Firestorm использует Starlight, модифицированный для Firestorm. Он создан пользователями для пользователей, с целью предоставления альтернативного, более ясного и в более легкого в использовании интерфейса. Больше подробностей на &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
 Художники и дизайнеры интерфейса:

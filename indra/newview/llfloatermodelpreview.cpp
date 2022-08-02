@@ -828,6 +828,9 @@ void LLFloaterModelPreview::onLODParamCommit(S32 lod, bool enforce_tri_limit)
     case LLModelPreview::MESH_OPTIMIZER_PRECISE:
         mModelPreview->onLODMeshOptimizerParamCommit(lod, enforce_tri_limit, mode);
         break;
+	case LLModelPreview::GENERATE:
+        mModelPreview->onLODGLODParamCommit(lod, enforce_tri_limit);
+		break;
     default:
         LL_ERRS() << "Only supposed to be called to generate models" << LL_ENDL;
         break;
@@ -1957,6 +1960,7 @@ void LLFloaterModelPreview::onLoDSourceCommit(S32 lod)
 
     S32 index = lod_source_combo->getCurrentIndex();
 	if (index == LLModelPreview::MESH_OPTIMIZER_AUTO
+		|| index == LLModelPreview::GENERATE // <FS:Beq/> Improved LOD generation
         || index == LLModelPreview::MESH_OPTIMIZER_SLOPPY
         || index == LLModelPreview::MESH_OPTIMIZER_PRECISE)
 	{ //rebuild LoD to update triangle counts
