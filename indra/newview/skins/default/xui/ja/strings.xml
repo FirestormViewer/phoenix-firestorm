@@ -141,7 +141,7 @@
 	<string name="LoginFailedNoNetwork">
 		ネットワークエラー：接続を確立できませんでした。お使いのネットワーク接続をご確認ください。
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		ログインに失敗しました。
 	</string>
 	<string name="Quit">
@@ -6440,7 +6440,11 @@ Secondlife.com のサポートセクションから
 	
 	<!-- <FS:Cron> FIRE-9335 -->
 	<!-- <LSL Preprocessor -->
-
+	
+	<!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
+	<string name="skin_defaults_starlight_location">Starlight スキンの初期設定により、メニューバーには現在いる場所が表示されません。</string>
+	<string name="skin_defaults_starlight_navbar">Starlight スキンの初期設定により、ナビゲーションバーが表示されます。</string>
+	
 	<!-- Animation Explorer -->
 	<string name="animation_explorer_seconds_ago">[SECONDS] 秒前</string>
 	<string name="animation_explorer_still_playing">実行中のアニメーション：</string>

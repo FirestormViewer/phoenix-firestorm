@@ -187,7 +187,7 @@ Voice Server Version: [VOICE_VERSION]
 	<string name="LoginFailedNoNetwork">
 		Errore di rete: Non è stato possibile stabilire un collegamento, controllare la connessione.
 	</string>
-	<string name="LoginFailed">
+	<string name="LoginFailedHeader">
 		Accesso non riuscito
 	</string>
 	<string name="Quit">
@@ -6322,6 +6322,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="fs_preprocessor_caching_err">
 		Errore nella prelettura del file incluso &apos;[FILENAME]&apos;
+	</string>
+	<string name="skin_defaults_starlight_location">
+		L&apos;indicazione del luogo attuale nella barra menu è disabilitata in modo predefinito nella serie di impostazioni Starlight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		L&apos;attivazione della barra di navigazione è predefinita nella serie di impostazioni Starlight.
 	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] secondi fa

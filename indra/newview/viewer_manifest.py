@@ -600,6 +600,14 @@ class WindowsManifest(ViewerManifest):
         # Get shared libs from the shared libs staging directory
         with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                           'sharedlibs', self.args['configuration'])):
+
+            # Mesh 3rd party libs needed for auto LOD and collada reading
+            try:
+                self.path("glod.dll")
+            except RuntimeError as err:
+                print (err.message)
+                print ("Skipping GLOD library (assumming linked statically)")
+
             # Get fmodstudio dll if needed
             if self.args['fmodstudio'] == 'ON':
                 if(self.args['configuration'].lower() == 'debug'):
@@ -1442,6 +1450,7 @@ class DarwinManifest(ViewerManifest):
                                 "libapr-1.0.dylib",
                                 "libaprutil-1.0.dylib",
                                 "libexpat.1.dylib",
+                                "libGLOD.dylib",
                                 # libnghttp2.dylib is a symlink to
                                 # libnghttp2.major.dylib, which is a symlink
                                 # to libnghttp2.version.dylib. Get all of them.
@@ -1748,6 +1757,12 @@ class DarwinManifest(ViewerManifest):
                     #       'viewer.keychain'
                     viewer_keychain = os.path.join(home_path, 'Library',
                                                    'Keychains', 'viewer.keychain')
+                    if not os.path.isfile( viewer_keychain ):
+                        viewer_keychain += "-db"
+
+                    if not os.path.isfile( viewer_keychain ):
+                        raise "No keychain named viewer found"
+                    
                     self.run_command(['security', 'unlock-keychain',
                                       '-p', keychain_pwd, viewer_keychain])
                     sign_retry_wait=15
@@ -1758,11 +1773,14 @@ class DarwinManifest(ViewerManifest):
                     # At least: fmod, growl, GLOD
                     # We could selectively sign those, or repackage them and then sign them. For an easy clean sweet we just resign them al
                     plain_sign += glob.glob(resources + "*.dylib")
+                    plain_sign += glob.glob(resources + "llplugin/lib/*.dylib")
+                    plain_sign += glob.glob( app_in_dmg + "/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib" )
 
                     deep_sign = [
                         # <FS:ND> Firestorm does not ship SLVersionChecker
                         #resources + "updater/SLVersionChecker",
                         resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
+                        resources + "SLVoice",
                         app_in_dmg,
                         ]
                     for attempt in range(3):
@@ -2126,6 +2144,7 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libaprutil-1.so.0.4.1")
             self.path("libdb*.so")
             self.path("libexpat.so.*")
+            self.path("libGLOD.so")
             self.path("libuuid.so*")
             self.path("libSDL-1.2.so.*")
             self.path("libdirectfb-1.*.so.*")

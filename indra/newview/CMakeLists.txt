@@ -17,6 +17,7 @@ include(GLIB)
 include(DragDrop)
 include(EXPAT)
 include(FMODSTUDIO)
+include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
 include(JPEGEncoderBasic)
 include(JsonCpp)
@@ -56,6 +57,7 @@ include(UnixInstall)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
+include(ZLIBNG)
 include(URIPARSER)
 include(Growl)
 include(ColladaDom)
@@ -82,6 +84,7 @@ endif(FMODSTUDIO)
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
+    ${GLOD_INCLUDE_DIR} # <FS:Beq/> restore GLOD
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
@@ -2269,6 +2272,11 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapr-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libaprutil-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapriconv-1.dll
+      # <FS:Beq> Restore GLOD build dependencies
+      ${SHARED_LIB_STAGING_DIR}/Release/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/glod.dll
+      ${SHARED_LIB_STAGING_DIR}/Debug/glod.dll
+      # </FS:Beq>
       ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
@@ -2296,10 +2304,6 @@ if (WINDOWS)
       media_plugin_libvlc
       #media_plugin_example # <FS:Ansariel> Don't package example plugin
       )
-
-    if (NOT USE_BUGSPLAT)
-        LIST(APPEND COPY_INPUT_DEPENDENCIES windows-crash-logger)
-    endif (NOT USE_BUGSPLAT)
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
@@ -2481,14 +2485,14 @@ endif (WINDOWS)
 #
 # We generally want the newest version of the library to provide all symbol
 # resolution.  To that end, when using static archives, the *_PRELOAD_ARCHIVES
-# variables, PNG_PRELOAD_ARCHIVES and ZLIB_PRELOAD_ARCHIVES, get the archives
+# variables, PNG_PRELOAD_ARCHIVES and ZLIBNG_PRELOAD_ARCHIVES, get the archives
 # dumped into the target binary and runtime lookup will find the most
 # modern version.
 
 target_link_libraries(${VIEWER_BINARY_NAME}
     ${LEGACY_STDIO_LIBS}
     ${PNG_PRELOAD_ARCHIVES}
-    ${ZLIB_PRELOAD_ARCHIVES}
+    ${ZLIBNG_PRELOAD_ARCHIVES}
     ${URIPARSER_PRELOAD_ARCHIVES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLAUDIO_LIBRARIES}
@@ -2522,6 +2526,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
     ${OPENAL_LIBRARIES}
+    ${GLOD_LIBRARIES} # <FS:Beq/> restore GLOD dependencies    
     ${OPENGL_LIBRARIES}
     ${JSONCPP_LIBRARIES}
     ${SDL_LIBRARY}

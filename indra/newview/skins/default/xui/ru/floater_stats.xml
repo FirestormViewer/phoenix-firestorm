@@ -4,6 +4,9 @@
 		<container_view name="statistics_view">
 			<stat_view label="Базовая" name="basic">
 				<stat_bar label="Кадров/с" name="fps"/>
+				<stat_bar name="frame_mean" label="кадр (значение)"/>
+				<stat_bar name="frame_median" label="кадр (средний)"/>
+				<stat_bar name="framet_jitter" label="дрожание"/>
 				<stat_bar label="Ширина канала" name="bandwidth"/>
 				<stat_bar label="Потери пакетов" name="packet_loss"/>
 				<stat_bar label="Пинг" name="ping"/>

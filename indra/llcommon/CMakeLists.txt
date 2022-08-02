@@ -10,7 +10,7 @@ include(Boost)
 include(LLSharedLibs)
 include(JsonCpp)
 include(Copy3rdPartyLibs)
-include(ZLIB)
+include(ZLIBNG)
 include(URIPARSER)
 include(Tracy)
 
@@ -18,7 +18,7 @@ include_directories( SYSTEM
     ${EXPAT_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
-    ${ZLIB_INCLUDE_DIRS}
+    ${ZLIBNG_INCLUDE_DIRS}
     ${URIPARSER_INCLUDE_DIRS}
     ${TRACY_INCLUDE_DIR}
     )
@@ -130,6 +130,7 @@ set(llcommon_HEADER_FILES
     CMakeLists.txt
 
     chrono.h
+    classic_callback.h
     commoncontrol.h
     ctype_workaround.h
     fix_macros.h
@@ -341,7 +342,7 @@ target_link_libraries(
     ${APR_LIBRARIES}
     ${EXPAT_LIBRARIES}
     ${JSONCPP_LIBRARIES}
-    ${ZLIB_LIBRARIES}
+    ${ZLIBNG_LIBRARIES}
     ${WINDOWS_LIBRARIES}
     ${BOOST_FIBER_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
@@ -377,16 +378,17 @@ if (LL_TESTS)
       ${BOOST_CONTEXT_LIBRARY} 
       ${BOOST_THREAD_LIBRARY} 
       ${BOOST_SYSTEM_LIBRARY})
-  LL_ADD_INTEGRATION_TEST(commonmisc "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(bitpack "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(classic_callback "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(commonmisc "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llbase64 "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llcond "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lldate "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lldeadmantimer "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lldependencies "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llerror "" "${test_libs}")
-  LL_ADD_INTEGRATION_TEST(lleventdispatcher "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lleventcoro "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(lleventdispatcher "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lleventfilter "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llframetimer "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llheteromap "" "${test_libs}")
@@ -404,8 +406,8 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(llstring "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lltrace "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lltreeiterators "" "${test_libs}")
-  LL_ADD_INTEGRATION_TEST(lluri "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llunits "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(lluri "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(stringize "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(threadsafeschedule "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(tuple "" "${test_libs}")

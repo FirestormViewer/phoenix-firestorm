@@ -7,7 +7,7 @@ include(Linking)
 include(UI)
 include(CURL)
 include(OpenSSL)
-include(ZLIB)
+include(ZLIBNG)
 
 include_directories(
     ${LLCOREHTTP_INCLUDE_DIRS}
@@ -54,12 +54,12 @@ set(LIBRT_LIBRARY rt)
 
 target_link_libraries(linux-crash-logger
     ${UI_LIBRARIES}
-	${CURL_LIBRARIES}
-	${OPENSSL_LIBRARIES}
-	${CRYPTO_LIBRARIES}
-	${ZLIB_LIBRARIES}
+    ${CURL_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+    ${CRYPTO_LIBRARIES}
+    ${ZLIBNG_LIBRARIES}
     ${LIBRT_LIBRARY}
-	X11
+    X11
     )
 
 add_custom_target(linux-crash-logger-target ALL

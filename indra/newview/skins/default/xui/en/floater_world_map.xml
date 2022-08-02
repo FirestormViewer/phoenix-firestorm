@@ -104,7 +104,7 @@
     />
 
     <button
-     control_name="FSShowMapDetails"
+     control_name="StarLightShowMapDetails"
      follows="all"
      height="512"
      image_unselected="Arrow_Left_Unscaled"
@@ -128,7 +128,7 @@
    left_delta="0"
    min_width="258"
    height="512"
-   visibility_control="FSShowMapDetails"
+   visibility_control="StarLightShowMapDetails"
    auto_resize="false"
    name="map_details_panel">
    <panel

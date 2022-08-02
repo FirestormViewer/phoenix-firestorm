@@ -326,6 +326,18 @@ LLScrollListItem* LLComboBox::addSeparator(EAddPosition pos)
 	return mList->addSeparator(pos);
 }
 
+// <FS:Ansariel> Get items by value
+LLScrollListItem* LLComboBox::getItemByValue(const LLSD& value)
+{
+	if (mList)
+	{
+		return mList->getItem(value);
+	}
+
+	return nullptr;
+}
+// </FS:Ansariel>
+
 void LLComboBox::sortByName(BOOL ascending)
 {
 	mList->sortOnce(0, ascending);

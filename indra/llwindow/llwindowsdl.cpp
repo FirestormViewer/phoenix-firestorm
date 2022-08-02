@@ -3024,4 +3024,26 @@ std::vector<std::string> LLWindowSDL::getDynamicFallbackFontList()
 	return rtns;
 }
 
+void* LLWindowSDL::createSharedContext()
+{
+  LL_WARNS() << "Not available" << LL_ENDL;
+  return nullptr;
+}
+
+void LLWindowSDL::makeContextCurrent(void* contextPtr)
+{
+  LL_WARNS() << "Not available" << LL_ENDL;
+  LL_PROFILER_GPU_CONTEXT;
+}
+
+void LLWindowSDL::destroySharedContext(void* contextPtr)
+{
+  LL_WARNS() << "Not available" << LL_ENDL;
+}
+
+void LLWindowSDL::toggleVSync(bool enable_vsync)
+{
+  LL_WARNS() << "Not available" << LL_ENDL;
+}
+
 #endif // LL_SDL

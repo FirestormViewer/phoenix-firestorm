@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- Optional parameters:
+  border - show border around panel
+  bg_opaque_image - image name for "in-front" panel look
+  bg_alpha_image - image name for "in-back" or transparent panel look
+-->
+<panel name="panel"
+       bg_opaque_color="SL-CustomBackground"
+       bg_alpha_color="SL-CustomBackground"
+       bg_opaque_image_overlay="SL-CustomBackground_Light"
+       bg_alpha_image_overlay="SL-CustomBackground_Light"
+       background_visible="false"
+       background_opaque="false"
+       chrome="false"
+       accepts_badge="true"/>
