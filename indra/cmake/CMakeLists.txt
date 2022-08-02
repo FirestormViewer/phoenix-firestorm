@@ -40,6 +40,7 @@ set(cmake_SOURCE_FILES
     FreeType.cmake
     GLEXT.cmake
     GLH.cmake
+    GLOD.cmake
 ##  GStreamer010Plugin.cmake
     GoogleMock.cmake
     Growl.cmake

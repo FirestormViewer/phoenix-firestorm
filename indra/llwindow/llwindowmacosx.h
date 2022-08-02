@@ -112,8 +112,8 @@ public:
 	void interruptLanguageTextInput() override;
 	void spawnWebBrowser(const std::string& escaped_url, bool async) override;
 	F32 getSystemUISize() override;
-	/*virtual*/ void openFile(const std::string& file_name);
-	/*virtual*/ void setTitle(const std::string& title);
+	void openFile(const std::string& file_name) override;
+	void setTitle(const std::string& title) override;
 
 	static std::vector<std::string> getDisplaysResolutionList();
 

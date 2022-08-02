@@ -176,6 +176,7 @@
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Generate" label="Zuverlässig generieren"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
@@ -190,6 +191,7 @@
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Generate" label="Zuverlässig generieren"/>
 					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_medium"/>
@@ -205,6 +207,7 @@
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Generate" label="Zuverlässig generieren"/>
 					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
  				<button label="Auswählen" name="lod_browse_low"/>
@@ -220,6 +223,7 @@
 					<item name="MeshOpt Auto" label="Automatisch generieren"/>
 					<item name="MeshOptCombine" label="Präzise generieren"/>
 					<item name="MeshOptSloppy" label="Nachlässig generieren"/>
+					<item name="Generate" label="Zuverlässig generieren"/>
 					<item name="Use LoD above" label="Obiges LoD verwenden"/>
 				</combo_box>
  				<button label="Auswählen" name="lod_browse_lowest"/>
