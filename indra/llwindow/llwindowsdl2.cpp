@@ -1784,10 +1784,12 @@ void LLWindowSDL::gatherInput()
 				{
 					mKeyVirtualKey = key;
 
-					if( (MASK_CONTROL|MASK_ALT)&mKeyModifiers )
-						gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
+					// filter ctrl and left-alt keypresses from line inputs so we don't end up with e.g.
+					// "h" in teleport history filter input after pressing  alt+h to call up the floater
+					if (mKeyModifiers & (MASK_CONTROL | MASK_ALT))
+						gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers);
 					else
-						handleUnicodeUTF16( key, mKeyModifiers );
+						handleUnicodeUTF16(key, mKeyModifiers);
 				}
 				break;
 			}
@@ -1935,7 +1937,7 @@ void LLWindowSDL::gatherInput()
 					// <FS:ND> I think is is not
 					// SDL_SetWindowSize(mWindow, width, height);
 					//
-					
+
 					mCallbacks->handleResize(this, width, height);
 				}
 				else if( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) // <FS:ND> What about SDL_WINDOWEVENT_ENTER (mouse focus)
