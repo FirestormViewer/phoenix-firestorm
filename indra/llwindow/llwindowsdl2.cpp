@@ -652,6 +652,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	mReallyCapturedCount = 0;
 
 	SDL_SetHint( SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0" );
+	SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 )
 	{
@@ -868,6 +869,10 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	}
 #endif // LL_X11
 
+	// clear screen to black right at the start so it doesn't look like a crash
+	glClearColor(0.0f, 0.0f, 0.0f ,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(mWindow);
 
 	SDL_StartTextInput();
 	//make sure multisampling is disabled by default
@@ -1778,11 +1783,7 @@ void LLWindowSDL::gatherInput()
 				for( auto key: string )
 				{
 					mKeyVirtualKey = key;
-
-					if( (MASK_CONTROL|MASK_ALT)&mKeyModifiers )
-						gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
-					else
-						handleUnicodeUTF16( key, mKeyModifiers );
+					handleUnicodeUTF16( key, mKeyModifiers );
 				}
 				break;
 			}
@@ -1792,13 +1793,23 @@ void LLWindowSDL::gatherInput()
 				mKeyModifiers = event.key.keysym.mod;
 				mInputType = "keydown";
 
+				// treat all possible Enter/Return keys the same
+				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
+				{
+					mKeyVirtualKey = SDLK_RETURN;
+				}
+
 				gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
 
 				// <FS:ND> Slightly hacky :| To make the viewer honor enter (eg to accept form input) we've to not only send handleKeyDown but also send a
 				// invoke handleUnicodeUTF16 in case the user hits return.
 				// Note that we cannot blindly use handleUnicodeUTF16 for each SDL_KEYDOWN. Doing so will create bogus keyboard input (like % for cursor left).
 				if( mKeyVirtualKey == SDLK_RETURN )
+				{
+					// fix return key not working when capslock, scrolllock or numlock are enabled
+					mKeyModifiers &= (~(KMOD_NUM | KMOD_CAPS | KMOD_MODE | KMOD_SCROLL));
 					handleUnicodeUTF16( mKeyVirtualKey, mKeyModifiers );
+				}
 
 				// part of the fix for SL-13243
 				if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
@@ -1810,6 +1821,12 @@ void LLWindowSDL::gatherInput()
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
 				mInputType = "keyup";
+
+				// treat all possible Enter/Return keys the same
+				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
+				{
+					mKeyVirtualKey = SDLK_RETURN;
+				}
 
 				if (SDLCheckGrabbyKeys(mKeyVirtualKey, FALSE) == 0)
 					SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
@@ -1914,7 +1931,7 @@ void LLWindowSDL::gatherInput()
 					// <FS:ND> I think is is not
 					// SDL_SetWindowSize(mWindow, width, height);
 					//
-					
+
 					mCallbacks->handleResize(this, width, height);
 				}
 				else if( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) // <FS:ND> What about SDL_WINDOWEVENT_ENTER (mouse focus)

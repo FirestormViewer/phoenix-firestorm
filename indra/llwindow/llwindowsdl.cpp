@@ -3024,8 +3024,6 @@ std::vector<std::string> LLWindowSDL::getDynamicFallbackFontList()
 	return rtns;
 }
 
-#pragma GCC error "Unimplemented. Either disable threaded texture decoding, implent those methods or switch to SDL2."
-
 void* LLWindowSDL::createSharedContext()
 {
   LL_WARNS() << "Not available" << LL_ENDL;

@@ -128,7 +128,6 @@ with the same filename but different name
   <texture name="Checker" file_name="checker.png" preload="false" />
     
   <texture name="Command_AboutLand_Icon"    file_name="toolbar_icons/land.png"         preload="true" />
-  <texture name="Command_ALM_Icon"          file_name="toolbar_icons/alm.png"          preload="true" />
   <texture name="Command_Appearance_Icon"   file_name="toolbar_icons/appearance.png"   preload="true" />
   <texture name="Command_Avatar_Icon"       file_name="toolbar_icons/avatars.png"      preload="true" />
   <texture name="Command_Build_Icon"        file_name="toolbar_icons/build.png"        preload="true" />
@@ -869,7 +868,6 @@ with the same filename but different name
   <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_SettingsOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_SettingsClosed"	file_name="icons/Inv_SysClosed.png" />
-  <texture name="Parcel_Windlight" file_name="icons/Parcel_WindLight.png" preload="false" />
   <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
   <texture name="ao_toggle_18" file_name="toolbar_icons/animation_override.png" preload="false" />
   <texture name="groundsit" file_name="toolbar_icons/groundsit.png" preload="true" />
@@ -914,7 +912,6 @@ with the same filename but different name
   <texture name="Icon_Legacy_Event_PG" file_name="icon_legacy_event.tga" preload="false" />
   <texture name="Icon_Legacy_Event_Mature" file_name="icon_legacy_event_mature.tga" preload="false" />
   <texture name="Icon_Legacy_Event_Adult" file_name="icon_legacy_event_adult.tga" preload="false" />
-  <texture name="Icon_Lightshare" file_name="icons/Icon_Lightshare.png" preload="false" />
   <texture name="ExternalBrowser_Over" file_name="icons/ExternalBrowser_Over.png" preload="false" />
   <texture name="ExternalBrowser_Press" file_name="icons/ExternalBrowser_Press.png" preload="false" />
   <texture name="radar" file_name="toolbar_icons/radar.png" preload="true" />
@@ -956,9 +953,6 @@ with the same filename but different name
 <texture name="Payment_Info_Filled" file_name="legacy/payment_info_filled.tga" preload="false" />
 <texture name="Payment_Info_Used" file_name="legacy/payment_info_used.tga" preload="false" />
   
-  <!-- <exodus> inc in FS -->
-  <texture name="Snapshot_Exodus_Flickr" file_name="snapshot_flickr.png" preload="false" />
-  <!-- </exodus> inc in FS -->
 <!-- FS:Ansariel: Icons for V1 status bar -->
   <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
   <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
@@ -984,8 +978,6 @@ with the same filename but different name
   <texture name="StarLight_Map" file_name="bottomtray/starlight_map.png" preload="true" />
   <texture name="StarLight_Minimap" file_name="bottomtray/starlight_minimap.png" preload="true" />
   <texture name="StarLight_Search" file_name="bottomtray/starlight_search.png" preload="true" />
-  <texture name="StarLight_Build" file_name="bottomtray/starlight_build.png" preload="true" />
-  <texture name="StarLight_Gesture" file_name="bottomtray/starlight_gesture.png" preload="true" />
   <texture name="AddItem_Over" file_name="icons/AddItem_Over.png" preload="false" />
   <texture name="Cam_FreeCam_Off_Pref" file_name="bottomtray/Cam_FreeCam_Off_Pref.png" preload="false" />
   <texture name="Move_Walk_Off_Pref" file_name="bottomtray/Move_Walk_Off_Pref.png" preload="false" />
@@ -1011,72 +1003,4 @@ with the same filename but different name
   <texture name="OutboxPush_Selected_Disabled" file_name="icons/OutboxPush_Selected_Disabled.png" preload="true" />
   <texture name="OutboxPush_Selected_Over" file_name="icons/OutboxPush_Selected_Over.png" preload="true" />
   <texture name="OutboxPush_Selected_Press" file_name="icons/OutboxPush_Selected_Press.png" preload="true" />
-
-<!-- Dolphin Textures -->  
-
-  <texture name="Avatar_Offset" file_name="icons/Arrow_UpDown.png" preload="true" />
-  <texture name="DrawDistance" file_name="icons/Icon_Horizon.png" preload="true" />
-  <texture name="Command_AOMenu_Icon"       file_name="toolbar_icons/ao_toggle_18.png" preload="true" />
-  <texture name="Command_AreaSearch_Icon"   file_name="toolbar_icons/areasearch.png"   preload="true" />
-  <texture name="Command_AOSwitch_Icon"     file_name="toolbar_icons/ao_onoff.png"     preload="true" />
-  <texture name="Command_Machinima_Icon"    file_name="toolbar_icons/video-icon.png"   preload="true" />
-  <texture name="Land_Off" file_name="navbar/Land_Off.png" preload="false" />
-  <texture name="Object_Sculpt" file_name="build/Object_Sculpt.png" preload="false" />
-  <texture name="Object_Sculpt_Selected" file_name="build/Object_Sculpt_Selected.png" preload="false" />
-  <texture name="Snapshot_Flickr" file_name="snapshot_flickr.png" preload="false" />
-<!-- Also in Catznip -->
-  <texture name="Permission_Ungranted" file_name="icons/Permission_Ungranted.png" preload="false" />      
-<!-- Also in RLV -->
-  <texture name="Command_Conversations_Icon" file_name="toolbar_icons/conversations.png" preload="true" /> 
-  
-<!-- Catznip Textures -->  
- 
-  <texture name="Icon_Collapse_Foreground" file_name="windows/Icon_Collapse_Foreground.png" preload="true" />
-  <texture name="Icon_Collapse_Press" file_name="windows/Icon_Collapse_Press.png" preload="true" />
-  <texture name="Arrow_Small_Down" file_name="widgets/Arrow_Small_Down.png" preload="true" />
-  <texture name="Sort" file_name="icons/Sort.png" preload="false" />
-  <texture name="Inv_Collapse" file_name="icons/Inv_Collapse.png" preload="false" />
-  
-<!-- Exodus Textures -->
-
-  <texture name="Corner_Checkbox_Off" file_name="widgets/Corner_Checkbox_Off.png" preload="true" />
-  <texture name="Corner_Checkbox_On" file_name="widgets/Corner_Checkbox_On.png" preload="true" />
-  <texture name="Corner_Checkbox_Disabled" file_name="widgets/Corner_Checkbox_Disabled.png" preload="true" />
-
-  <texture name="Command_Exodus_Advanced_Graphics_Icon"		file_name="exo_toolbar_icons/visuals.png"		preload="true" />
-  <texture name="Command_Exodus_Animation_Overrider_Icon"	file_name="exo_toolbar_icons/animations.png"	preload="true" />
-  <texture name="Command_Exodus_Communicate_Icon"			file_name="exo_toolbar_icons/communicate.png"	preload="true" />
-  <texture name="Command_Exodus_Debug_Settings_Icon"		file_name="exo_toolbar_icons/debug.png"			preload="true" />
-  <texture name="Command_Exodus_Preferences_Icon"			file_name="exo_toolbar_icons/exodus.png"		preload="true" />
-  <texture name="Command_Exodus_Ground_Sit_Icon"			file_name="exo_toolbar_icons/groundsit.png"		preload="true" />
-  <texture name="Command_Exodus_Minimal_Radar_Icon"			file_name="exo_toolbar_icons/miniradar.png"		preload="true" />
-  <texture name="Command_Exodus_Minimal_Statistics_Icon"	file_name="exo_toolbar_icons/ministats.png"		preload="true" />
-  <texture name="Command_Exodus_Quick_Preferences_Icon"		file_name="exo_toolbar_icons/quicktools.png"	preload="true" />
-  <texture name="Command_Exodus_Raid_Advisor_Icon"			file_name="exo_toolbar_icons/raidadvisor.png"	preload="true" />
-  <texture name="Command_Exodus_Redraw_Icon"				file_name="exo_toolbar_icons/redraw.png"		preload="true" />
-  <texture name="Command_Exodus_Set_Home_Icon"				file_name="exo_toolbar_icons/sethome.png"		preload="true" />
-  <texture name="Command_Exodus_Statistics_Icon"			file_name="exo_toolbar_icons/stats.png"			preload="true" />
-  <texture name="Command_Exodus_Teleport_Home_Icon"         file_name="exo_toolbar_icons/teleporthome.png"  preload="true" />
-  <texture name="Command_Exodus_Panic_Icon"                 file_name="exo_toolbar_icons/panic.png"         preload="true" />
-  <texture name="Command_Exodus_Web_Icon"                   file_name="exo_toolbar_icons/web.png"           preload="true" />
-  
-  <texture name="Caret_Top_Icon"           file_name="toolbar_icons/caret_top.png"   preload="true" scale.left="1" scale.top="15" scale.right="23" scale.bottom="1" />
-  <texture name="ComboButton_Up_On_Selected" file_name="widgets/ComboButton_Up_On_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-
-  <texture name="Icon_Left_Align_Foreground" file_name="windows/Icon_Left_Align_Foreground.png" preload="true" />
-  <texture name="Icon_Left_Align_Press" file_name="windows/Icon_Left_Align_Press.png" preload="true" />
-  <texture name="Icon_Center_Align_Foreground" file_name="windows/Icon_Center_Align_Foreground.png" preload="true" />
-  <texture name="Icon_Center_Align_Press" file_name="windows/Icon_Center_Align_Press.png" preload="true" />
-  <texture name="Icon_Right_Align_Foreground" file_name="windows/Icon_Right_Align_Foreground.png" preload="true" />
-  <texture name="Icon_Right_Align_Press" file_name="windows/Icon_Right_Align_Press.png" preload="true" />
-  
-  <texture name="Inv_FolderClosed_White" file_name="icons/Inv_FolderClosed_White.png" preload="false" />
-  <texture name="Inv_FolderOpen_White" file_name="icons/Inv_FolderOpen_White.png" preload="false" />
-  <texture name="Inv_Evon" file_name="icons/Inv_Evon.png" preload="false" />
-  
-  <texture name="Snapshot_Exodus_Flickr_Feature" file_name="snapshot_flickr_feature.png" preload="false" />
-  
-  <texture name="Inventory_Icons" file_name="inventory_icons.png" preload="false" />
-  <texture name="Script_Themes" file_name="script_themes.png" preload="false" />
-  
 </textures>

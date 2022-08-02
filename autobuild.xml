@@ -235,6 +235,72 @@
           </map>
         </map>
       </map>
+      <key>glod</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright 2003 Jonathan Cohen, Nat Duca, David Luebke, Brenden Schubert - Johns Hopkins University and University of Virginia</string>
+        <key>license</key>
+        <string>GLOD Open-Source License   Version 1.0</string>
+        <key>license_file</key>
+        <string>LICENSES/GLOD.txt</string>
+        <key>name</key>
+        <string>glod</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>94fc457c46e1fb94b31251bd4747d10f</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.171101143-darwin64-171101143.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>acc1181cd31ef32c3724eda84ae4b580</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.180990827-linux64-180990827.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>e1f8da12a2b7a6c31830b4bb86d31ed6</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.vs2017-1906061512-windows-vs2017-1906061512.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>e906cf08bfbfbd9d4fc78557e021e7d0</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/glod-1.0pre3.vs2017-1906061512-windows64-vs2017-1906061512.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.0pre3.532346</string>
+      </map>
       <key>gntp-growl</key>
       <map>
         <key>copyright</key>
@@ -552,9 +618,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>401f317fbb67623c97a7b9d8b6627ef1</string>
+              <string>8d96a9d1a9a208b1f48ac677edb7ca4d</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/boost-1.72-linux64_bionic-220402045.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/boost-1.72-linux64-222121224.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -670,9 +736,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88ee58d6548deae6c306f125b6461d61</string>
+              <string>e1a8e9eca2894687b3532474ffc9b326</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.220402056-linux64_bionic-220402056.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.222130404-linux64-222130404.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -800,9 +866,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0bcccd248a5e4084af4026eee439816b</string>
+              <string>bacaa5403be0f1cba52b2250c2c227d9</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/curl-7.81.0.220511906-linux64_bionic-220511906.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/curl-7.81.0.222121724-linux64-222121724.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1934,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0bc56fa68f59537486c75b04646d65a9</string>
+              <string>c68bbfe6c9bd59d182c4d20d966492b4</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/libxml2-2.9.4.180841555-linux64-180841555.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libxml2-2.9.4.222130358-linux64-222130358.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2252,6 +2318,18 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>50d647afc4e510af72f09dcd7a77e920</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/meshoptimizer-0.16.222121104-linux64-222121104.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -2307,6 +2385,18 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>ee4e3a02ad4669a4d84e9c32e509530e</string>
+              <key>url</key>
+              <string>http://3p.firestormviewer.org/minizip_ng-3.0.2.222121607-linux64-222121607.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -2696,9 +2786,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ea82e634334bccf088daf3d15eab07b7</string>
+              <string>cdd9c6c484542a2e1be99149c4f0e75f</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openssl-1.1.1l.212872015-linux64-212872015.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openssl-1.1.1l.222121440-linux64-222121440.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3296,9 +3386,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>15a645809cb2f14074f22e7848bb42cf</string>
+              <string>5ee7cda65cede06190c811e59b3880b0</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/zlib-1.2.8.180841547-linux64-180841547.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/zlib_ng-2.0.5.222121000-linux64-222121000.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
