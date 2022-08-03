@@ -1051,30 +1051,27 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
 
 // <FS:ND> Keyboard handling for Linux.
 #if LL_LINUX
-#if SDL2USED && 0
-	uint32_t native_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
-	uint32_t windows_virtual_key = (uint32_t)(native_key_data["virtual_key_win"].asInteger());
-	uint32_t modifiers = (uint32_t)(native_key_data["modifiers"].asInteger());
-	std::string inputtype = native_key_data["input_type"].asString();
+#if LL_SDL2
 
-	if( native_key == '\n' )
-		native_key = '\r';
-	if(windows_virtual_key =='\n' )
-		windows_virtual_key = '\r';
+	uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());		// this is actually the SDL event.key.keysym.sym;
+	uint32_t native_virtual_key_win = (uint32_t)(native_key_data["virtual_key_win"].asInteger());
+	uint32_t native_modifiers = (uint32_t)(native_key_data["modifiers"].asInteger());
 
-	if( inputtype == "textinput"  )
-		key_event = dullahan::KE_KEY_CHAR;
+	// only for non-printable keysyms, the actual text input is done in unicodeInput() below
+	if (native_virtual_key <= 0x1b || native_virtual_key >= 0x7f)
+	{
+		// set keypad flag, not sure if this even does anything
+		bool keypad = false;
+		if (native_virtual_key_win >= 0x60 && native_virtual_key_win <= 0x6f)
+		{
+			keypad = true;
+		}
 
-	mCEFLib->nativeKeyboardEventSDL2(key_event, native_key, windows_virtual_key, modifiers, false );
- 
-	// <ND> Slightly hacky :| To make CEF honor enter (eg to accept form input) we've to not only send KE_KEY_UP/KE_KEY_DOWN
-	// but also a KE_KEY_CHAR event.
-	// Note that we cannot blindly send a KE_CHAR for each KE_KEY_UP. Doing so will create bogus keyboard input (like % for cursor left).
-	// Adding this just in llwindowsdl does not seem to fire an appropriate unicodeInput event down below, thus repeat this check here again :(
-	if( dullahan::KE_KEY_UP == key_event  && native_key == '\r' )
-		mCEFLib->nativeKeyboardEventSDL2(dullahan::KE_KEY_CHAR, native_key, windows_virtual_key, modifiers, false );
-		
- #else
+		// yes, we send native_virtual_key_win twice because native_virtual_key breaks it
+		mCEFLib->nativeKeyboardEventSDL2(key_event, native_virtual_key_win, native_virtual_key_win, native_modifiers, keypad);
+	}
+
+#else
 
 	uint32_t native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
 	uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
@@ -1082,8 +1079,9 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
 	if( native_scan_code == '\n' )
 		native_scan_code = '\r';
 	mCEFLib->nativeKeyboardEvent(key_event, native_scan_code, native_virtual_key, native_modifiers);
-#endif
-#endif
+
+#endif // LL_SDL2
+#endif // LL_LINUX
 // </FS:ND>
 };
 
@@ -1115,22 +1113,18 @@ void MediaPluginCEF::unicodeInput(std::string event, LLSD native_key_data = LLSD
 	U64 lparam = ll_U32_from_sd(native_key_data["l_param"]);
 	mCEFLib->nativeKeyboardEventWin(msg, wparam, lparam);
 #endif
+
 #if LL_LINUX
-#if SDL2USED && 0
-	uint32_t native_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
-	uint32_t windows_virtual_key = (uint32_t)(native_key_data["virtual_key_win"].asInteger());
-	uint32_t modifiers = (uint32_t)(native_key_data["modifiers"].asInteger());
-	std::string inputtype = native_key_data["input_type"].asString();
+# if LL_SDL2
 
-	if( native_key == '\n' )
-		native_key = '\r';
-	if(windows_virtual_key =='\n' )
-		windows_virtual_key = '\r';
+	uint32_t native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
+	uint32_t native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
+	uint32_t native_modifiers = (uint32_t)(native_key_data["modifiers"].asInteger());
 
-	mCEFLib->nativeKeyboardEventSDL2(dullahan::KE_KEY_CHAR, native_key, windows_virtual_key, modifiers, false );
-#endif
-#endif
-// </FS:ND>
+	mCEFLib->nativeKeyboardEvent(dullahan::KE_KEY_DOWN, native_scan_code, native_virtual_key, native_modifiers);
+
+#endif // LL_SDL2
+#endif // LL_LINUX
 };
 
 ////////////////////////////////////////////////////////////////////////////////
