@@ -289,52 +289,6 @@
     top_delta="16"
     width="335" />
 
-  <slider
-    control_name="RenderFogRatio"
-    follows="left|top"
-    height="16"
-    initial_value="4"
-    decimal_digits="1"
-    label="Fog Distance Ratio:"
-    label_width="185"
-    layout="topleft"
-    left="30"
-    name="fog"
-    min_val="0.5"
-    max_val="10"
-    increment="0.1"
-    top_delta="16"
-    width="332" />
-
-  <slider
-    control_name="RenderGamma"
-    follows="left|top"
-    height="16"
-    initial_value="1"
-    decimal_digits="2"
-    label="Gamma:"
-    label_width="185"
-    layout="topleft"
-    left="30"
-    name="gamma"
-    min_val="0"
-    max_val="2"
-    increment="0.01"
-    top_delta="16"
-    width="332" />
-  <text
-    type="string"
-    length="1"
-    follows="left|top"
-    height="16"
-    layout="topleft"
-    left="30"
-    name="(brightness, lower is brighter)"
-    top_delta="16"
-    width="260">
-      (0 = default brightness, lower = brighter)
-  </text>
-
   <check_box
     control_name="RenderAnisotropic"
     height="16"
@@ -602,20 +556,6 @@
   </check_box>
 
   <check_box
-    control_name="RenderObjectBump"
-    height="16"
-    initial_value="true"
-    label="Bump mapping and shiny"
-    layout="topleft"
-    left="420"
-    name="BumpShiny"
-    top_delta="16"
-    width="300">
-    <check_box.commit_callback
-      function="Pref.RenderOptionUpdate" />
-  </check_box>
-
-  <check_box
     control_name="RenderLocalLights"
     height="16"
     initial_value="true"
@@ -626,52 +566,6 @@
     top_delta="16"
     width="300" />
 
-  <!-- <FS:LO> remove orphaned code left over from EEP
-  <slider
-    control_name="RenderTerrainDetail"
-    follows="left|top"
-    height="16"
-    label="Terrain Detail:"
-    label_width="165"
-    layout="topleft"
-    left="440"
-    show_text="false"
-    initial_value="0"
-    increment="1"
-    min_val="0"
-    max_val="1"
-    name="TerrainDetail"
-    top_delta="16"
-    width="280" >
-    <slider.commit_callback
-      function="Pref.UpdateSliderText"
-      parameter="TerrainDetail" />
-  </slider> -->
-  <text
-    type="string"
-    length="1"
-    follows="left|top"
-    height="16"
-    layout="topleft"
-    top_delta="0"
-    left_delta="284"
-    name="TerrainDetailText"
-    text_readonly_color="LabelDisabledColor"
-    width="65">
-       Low
-  </text>
-
-  <check_box
-    control_name="RenderAvatarCloth"
-    height="16"
-    initial_value="true"
-    label="Avatar cloth"
-    layout="topleft"
-    left="440"
-    name="AvatarCloth"
-    top_delta="16"
-    width="280" />
-
   <text
     type="string"
     length="1"
@@ -681,7 +575,7 @@
     name="ReflectionsText"
     text_readonly_color="LabelDisabledColor"
     top_delta="16"
-    left="440"
+    left="420"
     width="128">
        Water Reflections:
   </text>
@@ -723,20 +617,6 @@
         value="4"/>
   </combo_box>
 
-  <check_box
-    control_name="WindLightUseAtmosShaders"
-    height="16"
-    initial_value="true"
-    label="Atmospheric shaders"
-    layout="topleft"
-    left="440"
-    name="WindLightUseAtmosShaders"
-    top_delta="16"
-    width="280">
-    <check_box.commit_callback
-      function="Pref.RenderOptionUpdate" />
-  </check_box>
-
   <slider
     control_name="WLSkyDetail"
     decimal_digits="0"
@@ -747,7 +627,7 @@
     label="Sky:"
     label_width="145"
     layout="topleft"
-    left="460"
+    left="420"
     min_val="16"
     max_val="128"
     name="SkyMeshDetail"
@@ -773,26 +653,12 @@
   </text>
 
   <check_box
-    control_name="RenderDeferred"
-    height="16"
-    initial_value="true"
-    label="Advanced Lighting Model"
-    layout="topleft"
-    left="460"
-    name="UseLightShaders"
-    top_delta="16"
-    width="260">
-    <check_box.commit_callback
-      function="Pref.RenderOptionUpdate" />
-  </check_box>
-
-  <check_box
     control_name="RenderDeferredSSAO"
     height="16"
     initial_value="true"
     label="Ambient Occlusion"
     layout="topleft"
-    left="480"
+    left="420"
     name="UseSSAO"
     top_delta="16"
     width="240">
@@ -806,7 +672,7 @@
     initial_value="true"
     label="Depth of Field"
     layout="topleft"
-    left="480"
+    left="420"
     name="UseDoF"
     top_delta="16"
     width="240">
@@ -814,29 +680,13 @@
       function="Pref.RenderOptionUpdate" />
   </check_box>
 
-  <!--
-  <check_box
-    control_name="RenderUseAdvancedAtmospherics"
-    height="16"
-    initial_value="true"
-    label="Advanced Atmospherics"
-    layout="topleft"
-    left="480"
-    name="UseAdvancedAtmo"
-    top_delta="16"
-    width="240">
-    <check_box.commit_callback
-      function="Pref.AdvancedAtmosphericsEnable" />
-  </check_box>
-  -->
-
   <text
     type="string"
     length="1"
     follows="left|top"
     height="16"
     layout="topleft"
-    left="480"
+    left="420"
     name="RenderShadowDetailText"
     text_readonly_color="LabelDisabledColor"
     top_delta="16"
@@ -870,7 +720,7 @@
     follows="left|top"
     height="16"
     layout="topleft"
-    left="480"
+    left="420"
     name="RenderReflectionDetailText"
     text_readonly_color="LabelDisabledColor"
     top_delta="16"
@@ -906,7 +756,7 @@
       layout="topleft"
       left="13"
       name="horiz_border"
-      top_pad="21"
+      top="338"
       top_delta="5"
       width="774"/>
   <button
@@ -916,7 +766,7 @@
     layout="topleft"
     left="20"
     name="Defaults"
-    top_delta="10"
+    top_delta="20"
     width="210">
     <button.commit_callback
       function="Pref.HardwareDefaults" />

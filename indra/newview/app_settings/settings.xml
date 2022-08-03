@@ -11717,13 +11717,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderAvatarCloth</key>
     <map>
       <key>Comment</key>
-      <string>Controls if avatars use wavy cloth</string>
+      <string>DEPRECATED - only false supported - Controls if avatars use wavy cloth</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
   <key>RenderComplexityColorMin</key>
     <map>
@@ -12689,19 +12689,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>RenderDeferred</key>
   <map>
     <key>Comment</key>
-    <string>Use deferred rendering pipeline (Advanced Lighting Model).</string>
+    <string>DEPRECATED (only true supported) - Use deferred rendering pipeline (Advanced Lighting Model).</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>RenderDeferredSun</key>
@@ -12942,7 +12942,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderFogRatio</key>
     <map>
       <key>Comment</key>
-      <string>Distance from camera where fog reaches maximum density (fraction or multiple of far clip distance)</string>
+      <string>DEPRECATED - Distance from camera where fog reaches maximum density (fraction or multiple of far clip distance)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -12953,7 +12953,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderGamma</key>
     <map>
       <key>Comment</key>
-      <string>Sets gamma exponent for renderer</string>
+      <string>DEPRECATED - Sets gamma exponent for renderer</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -13358,7 +13358,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderObjectBump</key>
     <map>
       <key>Comment</key>
-      <string>Show bumpmapping on primitives</string>
+      <string>DEPRECATED (only TRUE supported) Show bumpmapping on primitives</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -18723,7 +18723,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>WindLightUseAtmosShaders</key>
     <map>
       <key>Comment</key>
-      <string>Whether to enable or disable WindLight atmospheric shaders.</string>
+      <string>DEPRECATED (only true supported) - Whether to enable or disable WindLight atmospheric shaders.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

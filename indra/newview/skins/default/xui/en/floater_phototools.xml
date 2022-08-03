@@ -62,30 +62,6 @@
 			</panel>
 
 			<panel
-			 name="P_WL_Settings"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="27"
-			 border_visible="true"
-			 background_visible="true">
-				<check_box
-				 control_name="WindLightUseAtmosShaders"
-				 height="16"
-				 initial_value="true"
-				 label="Enable Atmospheric Shaders"
-				 layout="topleft"
-				 left="5"
-				 name="WindLightUseAtmosShaders"
-				 top_pad="8"
-				 tool_tip="This will enable full EEP functionality (atmospheric shaders)."
-				 width="240">
-				</check_box>
-			</panel>
-
-			<panel
 			 name="P_WL_Sky_Water"
 			 follows="top|left"
 			 layout="topleft"
@@ -661,21 +637,9 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="65"
+			 height="45"
 			 border_visible="true"
 			 background_visible="true">
-				<check_box
-				 control_name="RenderDeferred"
-				 height="16"
-				 initial_value="true"
-				 label="Enable Advanced Lighting Model"
-				 layout="topleft"
-				 left="5"
-				 name="RenderDeferred"
-				 top_pad="8"
-				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure Atmospheric Shaders is enabled in tab 'Env'."
-				 width="240">
-				</check_box>
 				<check_box
 				 control_name="RenderLocalLights"
 				 height="16"
@@ -684,7 +648,7 @@
 				 left="5"
 				 name="LocalLights"
 				 tool_tip="This will turn on all in-world lights. If you disable this feature, light from Sun and Moon will still appear. Useful when you wish to eliminate SIM lighting and use only the Sun and Moon light."
-				 top_pad="2"
+				 top_pad="7"
 				 width="240"/>
 				<check_box
 				 follows="top|left"

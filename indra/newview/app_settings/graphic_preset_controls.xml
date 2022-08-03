@@ -20,27 +20,22 @@
 		<string>RenderAttachedParticles</string>
 		<string>RenderAutoMaskAlphaDeferred</string>
 		<string>RenderAutoMaskAlphaNonDeferred</string>
-		<string>RenderAvatarCloth</string>
 		<string>RenderAvatarLODFactor</string>
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
 		<string>RenderCompressTextures</string>
-		<string>RenderDeferred</string>
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
 		<string>RenderDepthOfFieldInEditMode</string>
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
-		<string>RenderFogRatio</string>
 		<string>RenderFSAASamples</string>
-		<string>RenderGamma</string>
 		<string>RenderGlow</string>
 		<string>RenderGlowIterations</string>
 		<string>RenderGlowResolutionPow</string>
 		<string>RenderLocalLights</string>
 		<string>RenderMaxPartCount</string>
-		<string>RenderObjectBump</string>
 		<string>RenderPBR</string>
 		<string>RenderQualityPerformance</string>
 		<string>RenderReflectionDetail</string>
@@ -60,7 +55,6 @@
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
 		<string>TextureMemory</string>
-		<string>WindLightUseAtmosShaders</string>
 		<string>WLSkyDetail</string>
 	</array>
 </llsd>
