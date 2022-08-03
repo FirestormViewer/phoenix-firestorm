@@ -166,6 +166,7 @@ void LLDockableFloater::setMinimized(BOOL minimize)
 	{
 		// minimizing a docked floater just hides it
 		setVisible(FALSE);
+		gFocusMgr.releaseFocusIfNeeded(this); // <FS:Ansariel> FIRE-31882: Release focus or main menu bar would receive it in LLViewerWindow::updateKeyboardFocus()
 	}
 	else
 	{
