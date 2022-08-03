@@ -31,10 +31,7 @@
 			Shader:
 		</text>
 		<check_box label="Transparentes Wasser" name="TransparentWater"/>
-		<check_box label="Bumpmapping und Glanz" name="BumpShiny"/>
 		<check_box label="Lokale Lichtquellen" name="LocalLights"/>
-		<check_box label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
-		<check_box label="Erw. Beleuchtungsmodell" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>
 		<check_box label="Physikalisch-bas. Rendering" name="UsePBRShaders"/>
 		<text name="shadows_label">
@@ -97,15 +94,6 @@
 		<text name="AvatarRenderingText">
 			Avatar-Darstellung:
 		</text>
-		<check_box label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
-		<check_box label="Avatar-Kleidung" name="AvatarCloth"/>
-		<text name="TerrainDetailText">
-			Terraindetails:
-		</text>
-		<radio_group name="TerrainDetailRadio">
-			<radio_item label="Niedrig" name="0"/>
-			<radio_item label="Hoch" name="2"/>
-		</radio_group>
 		<text name="Presets_Label" width="200">
 			Voreinstellungen:
 		</text>
@@ -135,16 +123,11 @@
 			<combo_box.item label="16x" name="16x"/>
 		</combo_box>
 
-		<spinner label="Gamma:" name="gamma"/>
-		<text name="brightness text">
-			(0/1.0 = Standard-Helligkeit, weniger = heller)
-		</text>
 		<slider label="Texturen-Speicherbuffer (MB):" name="GraphicsCardTextureMemory" tool_tip="Speicherplatz, der für Texturen zur Verfügung steht. In der Regel handelt es sich um Grafikkartenspeicher, maximal 512 MB auf 32bit-Systemen und bis zu 2048 MB auf 64bit-Systemen, abhängig vom dedizierten Videospeicher der Grafikkarte. Ein kleinerer Wert kann die Geschwindigkeit erhöhen, aber auch zu Texturunschärfen führen."/>
 		<check_box label="Dynamischen Texturen-Speicherbuffer aktivieren" name="FSDynamicTextureMemory" tool_tip="Aktiviert dynamische Berechnung für den Texturen-Speicherbuffer (nur verfügbar auf 64bit-System und AMD/NVIDIA-GPUs mit mindestens 512 MB Grafikkartenspeicher)"/>
 		<slider label="Minimum Texturen-Speicherbuffer (MB):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Die minimale Speichergröße, die für Texturen verwendet wird. Diese Einstellung stellt sicher, dass jederzeit mindestens die angegebene Größe an Speicher für Texturen verwendet wird, auch wenn diese die Menge an tatsächlich verfügbaren Speicher überschreitet. Falls der eingestellte Wert plus Reserven den physischen Videospeicher übersteigt, wird er entsprechend angepasst."/>
 		<slider label="Zusätzliche Textur-Speicherbuffer-Reserve (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Prozentsatz des gesamten Videospeichers, der zum Zwischenspeichern von geladenen Texturen verwendet wird, die aktuell nicht dargestellt werden."/>
 		<slider label="Physische Videospeicher-Reserve (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Prozentsatz des gesamten Videospeichers, der für andere Zwecke reserviert wird."/>
-		<spinner label="Nebeldistanzverhältnis:" name="fog"/>
 		<spinner label="Parallelität Textur-Dekodierung:" name="image_decode_threads" tool_tip="Die Anzahl an Threads, für zur Dekodierung von Texturen verwendet wird. 0 = Automatisch ermitteln, 1 = Synchron, 2+ = Benutzerdefiniert. (Empfohlen: 0 oder 1)"/>
 	</panel>
 
@@ -172,8 +155,7 @@
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:
 		</text>
-		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls das erweiterte Beleuchtungsmodell nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
-		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls das erweiterte Beleuchtungsmodell aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
+		<check_box label="Alpha-Masken verwenden" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt." name="RenderAutoMaskAlphaDeferred"/>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>

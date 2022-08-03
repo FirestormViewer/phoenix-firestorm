@@ -509,8 +509,7 @@
 			<menu_item_check label="Globale Beleuchtung (experimentell)" name="Global Illumination"/>
 			<menu_item_check label="GL beim nächsten Start debuggen" name="Debug GL"/>
 			<menu_item_check label="Pipeline debuggen" name="Debug Pipeline"/>
-			<menu_item_check label="Automatische Alpha-Masken (aufgeschoben)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatische Alpha-Masken (nicht aufgeschoben)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Automatische Alpha-Masken" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Animationstexturen" name="Animation Textures"/>
 			<menu_item_check label="Texturen deaktivieren" name="Disable Textures"/>
 			<menu_item_check label="Umgebung deaktivieren" name="Disable Ambient"/>
