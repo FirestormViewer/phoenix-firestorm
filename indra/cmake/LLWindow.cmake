@@ -4,6 +4,9 @@ include(Variables)
 include(GLEXT)
 include(Prebuilt)
 
+include_guard()
+
+add_library( sdl INTERFACE IMPORTED )
 if (USESYSTEMLIBS)
   include(FindSDL)
 
@@ -18,11 +21,17 @@ else (USESYSTEMLIBS)
     if( NOT USE_SDL2 )
       use_prebuilt_binary(SDL)
       set (SDL_FOUND TRUE)
-      set (SDL_LIBRARY SDL directfb fusion direct X11)
+	  
+      target_link_libraries (sdl INTERFACE SDL directfb fusion direct X11)
+	  target_compile_definitions( sdl INTERFACE LL_SDL=1 )
+
     else()
       use_prebuilt_binary(SDL2)
       set (SDL2_FOUND TRUE)
-      set (SDL_LIBRARY SDL2 SDL2_mixer X11)
+
+	  target_link_libraries( sdl INTERFACE SDL2 X11 )
+	  target_compile_definitions( sdl INTERFACE LL_SDL2=1 LL_SDL=1 )
+
     endif()
 
   endif (LINUX)

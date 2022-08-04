@@ -61,6 +61,7 @@ if (LINUX)
 
   list(APPEND media_plugin_cef_SOURCE_FILES ${LINUX_VOLUME_CATCHER})
   set(CMAKE_SHARED_LINKER_FLAGS  "-Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../../lib'")
+  list(APPEND media_plugin_cef_LINK_LIBRARIES llwindow )
 elseif (DARWIN)
   list(APPEND media_plugin_cef_SOURCE_FILES mac_volume_catcher_null.cpp)
   find_library(CORESERVICES_LIBRARY CoreServices)
@@ -87,18 +88,6 @@ add_library(media_plugin_cef
 #  ${MEDIA_PLUGIN_BASE_LIBRARIES}
 #)
 
-if (SDL_FOUND)
-  message("SDL_FOUND")
-  set_property(TARGET media_plugin_cef
-          PROPERTY COMPILE_DEFINITIONS LL_SDL=1
-          )
-endif ()
-if (SDL2_FOUND)
-message("SDL2_FOUND")
-set_property(TARGET media_plugin_cef
-          PROPERTY COMPILE_DEFINITIONS LL_SDL2=1 LL_SDL=1
-          )
-endif ()
 
 target_link_libraries(media_plugin_cef
   ${media_plugin_cef_LINK_LIBRARIES}

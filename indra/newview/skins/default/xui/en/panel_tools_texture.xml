@@ -11,6 +11,22 @@
          name="Texture"
          top="0"
          width="295">
+            <panel.string
+             name="paste_error_face_selection_mismatch">
+              When multiple faces are copied, the target object must have the same number of faces selected.
+            </panel.string>
+            <panel.string
+             name="paste_error_object_face_count_mismatch">
+              When all faces of an object are copied, the target object must have the same number of faces.
+            </panel.string>
+            <panel.string
+             name="paste_error_inventory_not_found">
+              One or more texture not found in inventory.
+            </panel.string>
+            <panel.string
+             name="paste_options">
+              Copy Texture Parameters to Clipboard
+            </panel.string>
             <text
              type="string"
              length="1"
@@ -84,7 +100,7 @@
              left_delta="0"
              name="glow"
              top_pad="4"
-             width="80" />
+             width="70" />
             <check_box
              height="19"
              label="Full Bright"
@@ -93,13 +109,40 @@
              name="checkbox fullbright"
              top_pad="4"
              width="81" />
+            <button
+             follows="top|right"
+             height="23"
+             image_overlay="Copy"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             layout="topleft"
+             left="265"
+             name="copy_face_btn"
+             tool_tip="Copy Texture Parameters to Clipboard"
+             top="6"
+             width="25">
+            </button>
+            <button
+             follows="top|right"
+             height="23"
+             image_overlay="Paste"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
+             layout="topleft"
+             name="paste_face_btn"
+             tool_tip="Paste Texture Parameters from Clipboard"
+             top_pad="5"
+             width="25">
+            </button>
             <combo_box
              height="23"
              layout="topleft"
              left="10"
              name="combobox matmedia"
-             top_pad="5"
-             width="100">
+             top="65"
+             width="90">
                 <combo_box.item
                  label="Materials"
                  name="Materials"
@@ -572,12 +615,15 @@
              width="265" />
             <button
              follows="top|left"
-             height="19"
+             height="20"
              layout="topleft"
              left_pad="0"
              image_overlay="Edit_Flip_X"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
              name="flipTextureScaleU"
-             label=""
+             top_delta="1"
              tool_tip="Flip"
              width="16">
                <button.commit_callback
@@ -599,12 +645,15 @@
              width="265" />
             <button
              follows="top|left"
-             height="19"
+             height="20"
              layout="topleft"
              left_pad="0"
              image_overlay="Edit_Flip_X"
+             image_hover_unselected="Toolbar_Middle_Over"
+             image_selected="Toolbar_Middle_Selected"
+             image_unselected="Toolbar_Middle_Off"
              name="flipTextureScaleV"
-             label=""
+             top_delta="1"
              tool_tip="Flip"
              width="16">
                <button.commit_callback
@@ -826,30 +875,13 @@
             <button
              layout="topleft"
              follows="right|top"
-             height="14"
+             height="23"
              left_pad="0"
-             top_delta="-15"
+             top_delta="-10"
              label="Align"
              name="button align textures"
              tool_tip="Align current texture layers"
              width="84" />
-            <button
-             layout="topleft"
-             follows="right|top"
-             top_pad="0"
-             label="Copy"
-             name="copytextures"
-             height="14"
-             width="40" />
-            <button
-             layout="topleft"
-             follows="right|top"
-             height="14"
-             left_pad="4"
-             top_delta="0"
-             label="Paste"
-             name="pastetextures"
-             width="40" />
             <web_browser
              visible="false"
              enabled="false"

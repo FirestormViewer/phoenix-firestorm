@@ -1169,7 +1169,8 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 										   S32 hit_face,
 										   LLInventoryItem* item,
 										   LLToolDragAndDrop::ESource source,
-										   const LLUUID& src_id)
+										   const LLUUID& src_id,
+                                           S32 tex_channel)
 {
 	if (hit_face == -1) return;
 	if (!item)
@@ -1193,7 +1194,8 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 
 	if (gFloaterTools->getVisible() && panel_face)
 	{
-		switch (LLSelectMgr::getInstance()->getTextureChannel())
+        tex_channel = (tex_channel > -1) ? tex_channel : LLSelectMgr::getInstance()->getTextureChannel();
+        switch (tex_channel)
 		{
 
 		case 0:
