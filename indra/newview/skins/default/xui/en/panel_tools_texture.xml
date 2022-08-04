@@ -21,7 +21,7 @@
             </panel.string>
             <panel.string
              name="paste_error_inventory_not_found">
-              One or more textures not found in inventory.
+              One or more texture not found in inventory.
             </panel.string>
             <panel.string
              name="paste_options">
@@ -579,7 +579,7 @@
              left="10"
              name="tex gen"
              text_readonly_color="LabelDisabledColor"
-             top_pad="49"
+             top="205"
              width="140">
                 Mapping
             </text>
@@ -615,7 +615,7 @@
              width="265" />
             <button
              follows="top|left"
-             height="20"
+             height="18"
              layout="topleft"
              left_pad="0"
              image_overlay="Edit_Flip_X"
@@ -645,7 +645,7 @@
              width="265" />
             <button
              follows="top|left"
-             height="20"
+             height="18"
              layout="topleft"
              left_pad="0"
              image_overlay="Edit_Flip_X"
