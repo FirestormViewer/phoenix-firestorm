@@ -1783,7 +1783,13 @@ void LLWindowSDL::gatherInput()
 				for( auto key: string )
 				{
 					mKeyVirtualKey = key;
-					handleUnicodeUTF16( key, mKeyModifiers );
+
+					// filter ctrl and left-alt keypresses from line inputs so we don't end up with e.g.
+					// "h" in teleport history filter input after pressing  alt+h to call up the floater
+					if (mKeyModifiers & (MASK_CONTROL | MASK_ALT))
+						gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers);
+					else
+						handleUnicodeUTF16(key, mKeyModifiers);
 				}
 				break;
 			}

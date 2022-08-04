@@ -3374,6 +3374,39 @@ void handle_object_touch()
 	send_ObjectDeGrab_message(object, pick);
 }
 
+void handle_object_show_original()
+{
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+    if (!object)
+    {
+        return;
+    }
+
+    LLViewerObject *parent = (LLViewerObject*)object->getParent();
+    while (parent)
+    {
+        if(parent->isAvatar())
+        {
+            break;
+        }
+        object = parent;
+        parent = (LLViewerObject*)parent->getParent();
+    }
+
+    if (!object || object->isAvatar())
+    {
+        return;
+    }
+
+    show_item_original(object->getAttachmentItemID());
+}
+
+// <FS:Ansariel> Disable if prevented by RLVa
+bool enable_object_show_original()
+{
+	return !RlvActions::hasBehaviour(RLV_BHVR_SHOWINV);
+}
+// </FS:Ansariel>
 
 static void init_default_item_label(const std::string& item_name)
 {
@@ -12270,6 +12303,7 @@ void initialize_menus()
 	// Object pie menu
 	view_listener_t::addMenu(new LLObjectBuild(), "Object.Build");
 	commit.add("Object.Touch", boost::bind(&handle_object_touch));
+	commit.add("Object.ShowOriginal", boost::bind(&handle_object_show_original));
 	commit.add("Object.SitOrStand", boost::bind(&handle_object_sit_or_stand));
 	commit.add("Object.Delete", boost::bind(&handle_object_delete));
 	view_listener_t::addMenu(new LLObjectAttachToAvatar(true), "Object.AttachToAvatar");
@@ -12311,6 +12345,8 @@ void initialize_menus()
 	enable.add("Object.EnableBuy", boost::bind(&enable_buy_object));
 	commit.add("Object.ZoomIn", boost::bind(&handle_look_at_selection, "zoom"));
 	enable.add("Object.EnableScriptInfo", boost::bind(&enable_script_info));	// <FS:CR>
+	enable.add("Object.EnableShowOriginal", boost::bind(&enable_object_show_original)); // <FS:Ansariel> Disable if prevented by RLVa
+
 
 	// Attachment pie menu
 	enable.add("Attachment.Label", boost::bind(&onEnableAttachmentLabel, _1, _2));
