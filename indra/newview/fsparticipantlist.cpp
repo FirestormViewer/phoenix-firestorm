@@ -803,10 +803,12 @@ void FSParticipantList::FSParticipantListMenu::toggleMute(const LLSD& userdata, 
 		LL_WARNS("Speakers") << "Speaker " << speaker_id << " not found" << LL_ENDL;
 		return;
 	}
-	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(mParent.mAvatarList->getItemByValue(speaker_id));
-	if (NULL == item) return;
 
-	name = item->getAvatarName();
+	// We should have the name in the cache from the LLAvatarList this is used in combination with
+	LLAvatarName avname;
+	if (!LLAvatarNameCache::get(speaker_id, &avname)) return;
+
+	name = avname.getUserName();
 
 	LLMute::EType mute_type;
 	switch (speakerp->mType)
