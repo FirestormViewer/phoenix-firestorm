@@ -2480,6 +2480,10 @@ void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 // 	}
 //	
 // 	buildPopupLists();
+//    if (!mFilterEdit->getText().empty())
+//    {
+//        filterIgnorableNotifications();
+//    }
 // }
 
 // void LLFloaterPreference::onClickDisablePopup()
@@ -2495,6 +2499,10 @@ void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 // 	}
 //	
 // 	buildPopupLists();
+//    if (!mFilterEdit->getText().empty())
+//    {
+//        filterIgnorableNotifications();
+//    }
 // }
 // </FS:Zi>
 
@@ -4937,9 +4945,21 @@ void LLFloaterPreference::onUpdateFilterTerm(bool force)
 		return;
 
 	mSearchData->mRootTab->hightlightAndHide( seachValue );
+    //filterIgnorableNotifications(); // <FS:Ansariel> Using different solution
 	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
 	if( pRoot )
 		pRoot->selectFirstTab();
+}
+
+void LLFloaterPreference::filterIgnorableNotifications()
+{
+    bool visible = getChildRef<LLScrollListCtrl>("enabled_popups").highlightMatchingItems(mFilterEdit->getValue());
+    visible |= getChildRef<LLScrollListCtrl>("disabled_popups").highlightMatchingItems(mFilterEdit->getValue());
+
+    if (visible)
+    {
+        getChildRef<LLTabContainer>("pref core").setTabVisibility(getChild<LLPanel>("msgs"), true);
+    }
 }
 
 void collectChildren( LLView const *aView, ll::prefs::PanelDataPtr aParentPanel, ll::prefs::TabContainerDataPtr aParentTabContainer )
