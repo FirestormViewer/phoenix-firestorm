@@ -2205,17 +2205,6 @@ add_executable(${VIEWER_BINARY_NAME}
     ${viewer_SOURCE_FILES}
     )
 
-if (SDL_FOUND)
-    set_property(TARGET ${VIEWER_BINARY_NAME}
-            PROPERTY COMPILE_DEFINITIONS LL_SDL=1
-            )
-endif (SDL_FOUND)
-if (SDL2_FOUND)
-    set_property(TARGET ${VIEWER_BINARY_NAME}
-            PROPERTY COMPILE_DEFINITIONS LL_SDL2=1 LL_SDL=1
-            )
-endif ()
-
 if (USE_BUGSPLAT)
   set_property(TARGET ${VIEWER_BINARY_NAME}
     PROPERTY COMPILE_DEFINITIONS "${BUGSPLAT_DEFINE}")
@@ -2529,7 +2518,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GLOD_LIBRARIES} # <FS:Beq/> restore GLOD dependencies    
     ${OPENGL_LIBRARIES}
     ${JSONCPP_LIBRARIES}
-    ${SDL_LIBRARY}
+    #${SDL_LIBRARY}
     ${SMARTHEAP_LIBRARY}
     ${UI_LIBRARIES}
     ${WINDOWS_LIBRARIES}

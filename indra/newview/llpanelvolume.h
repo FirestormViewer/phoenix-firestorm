@@ -37,6 +37,7 @@ class LLCheckBoxCtrl;
 class LLTextBox;
 class LLUICtrl;
 class LLButton;
+//class LLMenuButton; // <FS> Extended copy & paste buttons
 class LLViewerObject;
 class LLComboBox;
 class LLColorSwatchCtrl;
@@ -74,8 +75,19 @@ public:
 	void		onLightCancelTexture(const LLSD& data); 
 	void		onLightSelectTexture(const LLSD& data);
 
-    static void    setLightTextureID(const LLUUID &asset_id, const LLUUID &item_id, LLVOVolume* volobjp);
+    void            onCopyFeatures();
+    void            onPasteFeatures();
+    void            onCopyLight();
+    void            onPasteLight();
+ 
+    // <FS> Extended copy & paste buttons
+    //void        menuDoToSelected(const LLSD& userdata);
+    //bool        menuEnableItem(const LLSD& userdata);
+    void            onFSCopyFeatures();
+    void            onFSPasteFeatures();
+    // </FS>
 
+    static void    setLightTextureID(const LLUUID &asset_id, const LLUUID &item_id, LLVOVolume* volobjp);
 
 protected:
 	void			getState();
@@ -123,6 +135,15 @@ protected:
 	LLSpinCtrl*     mSpinPhysicsFriction;
 	LLSpinCtrl*     mSpinPhysicsDensity;
 	LLSpinCtrl*     mSpinPhysicsRestitution;
+
+    // <FS> Extended copy & paste buttons
+    //LLMenuButton*   mMenuClipboardFeatures;
+    //LLMenuButton*   mMenuClipboardLight;
+    LLButton*        mBtnCopyFeatures;
+    LLButton*        mBtnPasteFeatures;
+    // </FS>
+
+    LLSD            mClipboardParams;
 };
 
 #endif
