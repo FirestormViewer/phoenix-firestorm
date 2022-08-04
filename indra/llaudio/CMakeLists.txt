@@ -76,11 +76,6 @@ if (OPENAL)
     )
 endif (OPENAL)
 
-if(SDL2_FOUND)
-    list(APPEND llaudio_SOURCE_FILES llaudioengine_sdl2.cpp )
-    list(APPEND llaudio_HEADER_FILES llaudioengine_sdl2.h   )
-endif()
-
 set_source_files_properties(${llaudio_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 

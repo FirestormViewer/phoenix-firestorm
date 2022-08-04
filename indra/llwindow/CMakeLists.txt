@@ -76,7 +76,7 @@ if (LINUX)
       #${LLWINDOW_LIBRARIES} # <FS:Ansariel> Don't link to itself - causes CMP0038
       ${LLXML_LIBRARIES}
       ${UI_LIBRARIES}     # for GTK
-      ${SDL_LIBRARY}
+	  sdl
       libfontconfig.a          # For FCInit and other FC* functions.
       libfreetype.a
       )
@@ -200,17 +200,6 @@ endif (llwindow_HEADER_FILES)
     ${llwindow_SOURCE_FILES}
     ${viewer_SOURCE_FILES}
     )
-
-if (SDL_FOUND)
-  set_property(TARGET llwindow
-          PROPERTY COMPILE_DEFINITIONS LL_SDL=1
-          )
-endif ()
-if (SDL2_FOUND)
-  set_property(TARGET llwindow
-          PROPERTY COMPILE_DEFINITIONS LL_SDL2=1 LL_SDL=1
-          )
-endif ()
 
 target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
   

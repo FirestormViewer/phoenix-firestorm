@@ -13,16 +13,15 @@
          function="Object.EnableTouch"
          name="EnableTouch"/>
     </menu_item_call>
-    <!--menu_item_call
-     label="Stand Up"
+    <menu_item_call
+     label="Show in inventory"
      layout="topleft"
-     name="Stand Up">
-        <menu_item_call.on_click
-         function="Self.StandUp"
-         parameter="" />
-        <menu_item_call.on_enable
-         function="Self.EnableStandUp" />
-    </menu_item_call-->
+     name="Show original">
+      <menu_item_call.on_click
+       function="Object.ShowOriginal" />
+      <menu_item_call.on_enable
+       function="Object.EnableShowOriginal" />
+    </menu_item_call>
     <menu_item_call
      enabled="false"
      label="Edit"
