@@ -99,8 +99,6 @@ public:
 	LLPanelFace();
 	virtual ~LLPanelFace();
 
-    void draw();
-
 	void			refresh();
     void			refreshMedia();
     void			unloadMedia();

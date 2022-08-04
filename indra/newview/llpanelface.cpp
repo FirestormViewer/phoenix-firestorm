@@ -46,11 +46,11 @@
 #include "llcombobox.h"
 #include "lldrawpoolbump.h"
 #include "llface.h"
-#include "llfloatermediasettings.h"
-#include "llfloaterreg.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h" // gInventory
 #include "llinventorymodelbackgroundfetch.h"
+#include "llfloatermediasettings.h"
+#include "llfloaterreg.h"
 #include "lllineeditor.h"
 #include "llmaterialmgr.h"
 #include "llmediactrl.h"
@@ -406,9 +406,6 @@ BOOL	LLPanelFace::postBuild()
 		mCtrlGlow->setCommitCallback(LLPanelFace::onCommitGlow, this);
 	}
 
-    mTitleMedia = getChild<LLMediaCtrl>("title_media");
-    mTitleMediaText = getChild<LLTextBox>("media_info");
-
     // <FS> Extended copy & paste buttons
     //mMenuClipboardColor = getChild<LLMenuButton>("clipboard_color_params_btn");
     //mMenuClipboardTexture = getChild<LLMenuButton>("clipboard_texture_params_btn");
@@ -417,6 +414,9 @@ BOOL	LLPanelFace::postBuild()
     mBtnPasteFaces = getChild<LLButton>("paste_face_btn");
     mBtnPasteFaces->setCommitCallback(boost::bind(&LLPanelFace::onPasteFaces, this));
     // </FS>
+
+    mTitleMedia = getChild<LLMediaCtrl>("title_media");
+    mTitleMediaText = getChild<LLTextBox>("media_info");
 
 	clearCtrls();
 
@@ -438,16 +438,19 @@ LLPanelFace::LLPanelFace()
     // </FS>
 }
 
-
 LLPanelFace::~LLPanelFace()
 {
     unloadMedia();
 }
 
-
 void LLPanelFace::draw()
 {
     updateCopyTexButton();
+
+    // grab media name/title and update the UI widget
+    // Todo: move it, it's preferable not to update
+    // labels inside draw
+    updateMediaTitle();
 
     LLPanel::draw();
 }
@@ -1942,17 +1945,6 @@ void LLPanelFace::unloadMedia()
     // destroy media source used to grab media title
     if (mTitleMedia)
         mTitleMedia->unloadMediaSource();
-}
-
-void LLPanelFace::draw()
-{
-    // grab media name/title and update the UI widget
-    // Todo: move it, it's preferable not to update
-    // labels inside draw
-    updateMediaTitle();
-
-    //	mCheckSelectIndividual->set(gSavedSettings.getBOOL("EditLinkedParts"));
-    LLPanel::draw();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -4395,14 +4387,6 @@ void LLPanelFace::onPasteFaces()
 }
 // </FS>
 
-
-// TODO: I don't know who put these in or what these are for???
-void LLPanelFace::setMediaURL(const std::string& url)
-{
-}
-void LLPanelFace::setMediaType(const std::string& mime_type)
-{
-}
 
 // static
 void LLPanelFace::onCommitPlanarAlign(LLUICtrl* ctrl, void* userdata)
