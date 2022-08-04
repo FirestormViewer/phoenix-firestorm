@@ -155,6 +155,9 @@ protected:
 	// <FS:Ansariel> Alchemy region tracker
 	void			onTrackRegion();
 
+    // <FS:Ansariel> Use own expand/collapse function
+    //void            onExpandCollapseBtn();
+
 	void			centerOnTarget(BOOL animate);
 	void			updateLocation();
 
