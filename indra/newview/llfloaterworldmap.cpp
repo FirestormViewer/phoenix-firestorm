@@ -45,6 +45,7 @@
 //#include "llfirstuse.h"
 #include "llfloaterreg.h"		// getTypedInstance()
 #include "llfocusmgr.h"
+//#include "lliconctrl.h" // <FS:Ansariel> Use own expand/collapse function
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "llinventorymodelbackgroundfetch.h"
@@ -368,6 +369,9 @@ BOOL LLFloaterWorldMap::postBuild()
 	
 	mCurZoomVal = log(LLWorldMapView::sMapScale/256.f)/log(2.f);
 	getChild<LLUICtrl>("zoom slider")->setValue(mCurZoomVal);
+
+    // <FS:Ansariel> Use own expand/collapse function
+    //getChild<LLPanel>("expand_btn_panel")->setMouseDownCallback(boost::bind(&LLFloaterWorldMap::onExpandCollapseBtn, this));
 	
 	setDefaultBtn(NULL);
 	
@@ -1647,6 +1651,24 @@ void LLFloaterWorldMap::onCopySLURL()
 	
 	LLNotificationsUtil::add("CopySLURL", args);
 }
+
+// <FS:Ansariel> Use own expand/collapse function
+//void LLFloaterWorldMap::onExpandCollapseBtn()
+//{
+//    LLLayoutStack* floater_stack = getChild<LLLayoutStack>("floater_map_stack");
+//    LLLayoutPanel* controls_panel = getChild<LLLayoutPanel>("controls_lp");
+    
+//    bool toggle_collapse = !controls_panel->isCollapsed();
+//    floater_stack->collapsePanel(controls_panel, toggle_collapse);
+//    floater_stack->updateLayout();
+   
+//    std::string image_name = getString(toggle_collapse ? "expand_icon" : "collapse_icon");
+//    std::string tooltip = getString(toggle_collapse ? "expand_tooltip" : "collapse_tooltip");
+//    getChild<LLIconCtrl>("expand_collapse_icon")->setImage(LLUI::getUIImage(image_name));
+//    getChild<LLIconCtrl>("expand_collapse_icon")->setToolTip(tooltip);
+//    getChild<LLPanel>("expand_btn_panel")->setToolTip(tooltip);
+//}
+// </FS:Ansariel>
 
 // <FS:Ansariel> Alchemy region tracker
 void LLFloaterWorldMap::onTrackRegion()

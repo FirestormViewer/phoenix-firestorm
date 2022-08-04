@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Attachment Pie">
 	<menu_item_call label="Berühren" name="Attachment Object Touch"/>
+	<menu_item_call label="In Inventar anzeigen" name="Show original"/>
 	<menu_item_call label="Bearbeiten" name="Edit..."/>
 	<menu_item_call label="Abnehmen" name="Detach"/>
 	<context_menu label="Speichern als" name="Export Menu">
