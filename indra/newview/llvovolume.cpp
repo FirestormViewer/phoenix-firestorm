@@ -347,8 +347,8 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 	bool enfore_strict_object_check = LLGridManager::instance().isInSecondLife() && fsEnforceStrictObjectCheck;
 	// </FS:Ansariel>
 
-	// LOCAL MESH TEMP TODO
-	// local mesh begin // TODO: check if necessary here, or can be granular.
+	// local mesh begin
+	// rationale: we don't want server updates for a local object, cause the server tends to override things.
 	if (mIsLocalMesh == true)
 	{
 		return 0;
@@ -4567,7 +4567,6 @@ U32 LLVOVolume::getHighLODTriangleCount()
 U32 LLVOVolume::getLODTriangleCount(S32 lod)
 {
 	U32 ret = 0;
-	return ret; // LOCAL MESH TEMP TODO
 
 	LLVolume* volume = getVolume();
 
