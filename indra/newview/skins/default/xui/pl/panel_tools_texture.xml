@@ -30,9 +30,9 @@
 		<combo_box.item label="Media" name="Media" />
 	</combo_box>
 	<radio_group name="radio_material_type">
-		<radio_item label="Tekstura (rozproszenie)" name="Texture (diffuse)" />
-		<radio_item label="Powierzchnia (normalne)" name="Bumpiness (normal)" />
-		<radio_item label="Lśnienie (odbicie)" name="Shininess (specular)" />
+		<radio_item label="Tekstura (diffuse)" name="Texture (diffuse)" />
+		<radio_item label="Powierzchnia (normal)" name="Bumpiness (normal)" />
+		<radio_item label="Lśnienie (specular)" name="Shininess (specular)" />
 	</radio_group>
 	<texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz" />
 	<text name="label alphamode">
