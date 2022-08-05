@@ -13862,13 +13862,6 @@ Unpacking: [UNPACK_TIME]s [USIZE]KB
     </form>
   </notification>
 
-<notification
- icon="notifytip.tga"
- name="MaterialCreated"
- type="notifytip">
-Material successfully created.  Asset ID: [ASSET_ID]
-</notification>
-
   <notification
    icon="alertmodal.tga"
    label="Create subfolder"
@@ -13902,6 +13895,13 @@ Material successfully created.  Asset ID: [ASSET_ID]
       name="okbutton"
       yestext="OK"/>
   </notification>
+
+<notification
+ icon="notifytip.tga"
+ name="MaterialCreated"
+ type="notifytip">
+Material successfully created.  Asset ID: [ASSET_ID]
+</notification>
 
   <notification
    icon="notify.tga"
