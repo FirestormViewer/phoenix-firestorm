@@ -125,7 +125,7 @@
 	<text name="selection_empty">
 		Aucune sélection effectuée.
 	</text>
-	<text name="remaining_capacity">
+	<text name="more info label">
 		[secondlife:///app/openfloater/object_weights Plus d&apos;infos]
 	</text>
 	<tab_container name="Object Info Tabs">

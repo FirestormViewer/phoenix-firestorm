@@ -9,10 +9,10 @@
 	</text>
 	<color_swatch label="" name="colorswatch" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
 	<text name="color trans">
-		% de transparence
+		Transparence
 	</text>
 	<text name="glow label">
-		Rayonnement
+		Lueur
 	</text>
 	<check_box label="Lumineux" name="checkbox fullbright"/>
 	<button name="copy_face_btn" tool_tip="Copie les paramètres des textures dans le presse-papiers"/>
