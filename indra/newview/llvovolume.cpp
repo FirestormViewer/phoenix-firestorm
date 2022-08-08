@@ -349,7 +349,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 
 	// local mesh begin
 	// rationale: we don't want server updates for a local object, cause the server tends to override things.
-	if (mIsLocalMesh == true)
+	if (mIsLocalMesh)
 	{
 		return 0;
 	}
