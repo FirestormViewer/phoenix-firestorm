@@ -4893,7 +4893,7 @@ Veuillez sélectionner un terrain plus petit.
 	<notification name="CantDivideLandCantFindParcel">
 		Division du terrain impossible.
 Parcelle introuvable.
-Veuillez utiliser Aide &gt; Signaler un bug pour signaler le problème...
+Veuillez le signaler avec Aide &gt; Signaler un problème...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
 		Division du terrain impossible. La parcelle entière est sélectionnée.

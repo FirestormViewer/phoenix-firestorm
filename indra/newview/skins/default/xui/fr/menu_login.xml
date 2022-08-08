@@ -7,7 +7,7 @@
 	<menu label="Aide" name="Help">
 		<menu_item_call label="Wiki Firestorm" name="Firestorm Wiki"/>
 		<menu_item_call label="Dépannage" name="Troubleshooting"/>
-		<menu_item_call label="Signaler un bug" name="Report Bug"/>
+		<menu_item_call label="Signaler un problème" name="Report Bug"/>
 		<menu_item_call label="À propos de [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Aide [CURRENT_GRID]" name="current_grid_help_login"/>
 		<menu_item_call label="À propos de [CURRENT_GRID]" name="current_grid_about_login"/>
