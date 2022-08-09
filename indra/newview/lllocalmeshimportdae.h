@@ -1,11 +1,11 @@
 /**
- * @file lllocalmeshimportdae.h
+ * @file vjlocalmeshimportdae.h
  * @author Vaalith Jinn
- * @brief Local Mesh Import DAE header
+ * @brief Local Mesh dae importer header
  *
- * $LicenseInfo:firstyear=2011&license=viewerlgpl$
- * Second Life Viewer Source Code
- * Copyright (C) 2011, Linden Research, Inc.
+ * $LicenseInfo:firstyear=2022&license=viewerlgpl$
+ * Local Mesh contribution source code
+ * Copyright (C) 2022, Vaalith Jinn.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
 
