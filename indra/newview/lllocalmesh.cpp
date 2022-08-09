@@ -124,9 +124,10 @@ void LLLocalMeshObject::computeObjectBoundingBox()
 			mObjectBoundingBox.second.mV[array_iter] = std::max(mObjectBoundingBox.second.mV[array_iter], current_bbox_max.mV[array_iter]);
 		}
 	}
+
 }
 
-void LLLocalMeshObject::computeObjectTransform()
+void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
 {
 	// most things here were tactfully stolen from LLModel::normalizeVolumeFaces()
 
@@ -153,6 +154,7 @@ void LLLocalMeshObject::computeObjectTransform()
 	{
 		mObjectScale.mV[vec_iter] = mObjectScale.mV[vec_iter] / mObjectSize.mV[vec_iter];
 	}
+	mObjectSize = mObjectSize * scene_transform;
 }
 
 void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
@@ -765,7 +767,7 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 	if ((!target_object->isAttachment()) && use_scale)
 	{
 		auto scale = mLoadedObjectList[object_index]->getObjectSize();
-		scale *= 0.01; /* NOTE: magic number */
+		// scale *= 0.01; /* NOTE: magic number */
 		target_object->setScale(LLVector3(scale), false);
 	}
 

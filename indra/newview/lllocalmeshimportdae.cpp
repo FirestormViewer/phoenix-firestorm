@@ -94,10 +94,46 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 
 	// fill collada db
 	collada_db = collada_core.getDatabase();
-
 	// NOTE:
-	// do we need version, identity, unit scale, up direction?
-	// doesn't seem like we do, but this here would be the space for them if yes.
+	// do we need version?
+	// doesn't seem like we do, but this here would be the space for it if yes.
+
+	LLMatrix4 scene_transform_base;
+
+	domAsset::domUnit* unit = daeSafeCast<domAsset::domUnit>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUnit::ID())));
+	scene_transform_base.setIdentity();
+	if (unit)
+	{
+		F32 meter = unit->getMeter();
+		scene_transform_base.mMatrix[0][0] = meter;
+		scene_transform_base.mMatrix[1][1] = meter;
+		scene_transform_base.mMatrix[2][2] = meter;
+	}
+
+	//get up axis rotation
+	LLMatrix4 rotation;
+	
+	domUpAxisType up = UPAXISTYPE_Y_UP;  // default in Collada is Y_UP
+	domAsset::domUp_axis* up_axis =
+	daeSafeCast<domAsset::domUp_axis>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUp_axis::ID())));
+	
+	if (up_axis)
+	{
+		up = up_axis->getValue();
+		
+		if (up == UPAXISTYPE_X_UP)
+		{
+			rotation.initRotation(0.0f, 90.0f * DEG_TO_RAD, 0.0f);
+		}
+		else if (up == UPAXISTYPE_Y_UP)
+		{
+			rotation.initRotation(90.0f * DEG_TO_RAD, 0.0f, 0.0f);
+		}
+		
+	}
+	rotation *= scene_transform_base;
+	scene_transform_base = rotation;
+	scene_transform_base.condition();	
 
 	size_t mesh_amount = collada_db->getElementCount(NULL, COLLADA_TYPE_MESH);
 	size_t skin_amount = collada_db->getElementCount(NULL, COLLADA_TYPE_SKIN);
@@ -138,7 +174,7 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 			{
 				pushLog("DAE Importer", "Object loaded successfully.");
 				current_object->computeObjectBoundingBox();
-				current_object->computeObjectTransform();
+				current_object->computeObjectTransform(scene_transform_base);
 				current_object->normalizeFaceValues(mLod);
 				// normalizeFaceValues is necessary for skin calculations down below,
 				// but we also have to do it once per each lod so we'll call it foreach lod.
@@ -448,18 +484,19 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	if (skin_current_bind_matrix)
 	{
 		auto& bind_matrix_value = skin_current_bind_matrix->getValue();
+
+        LLMatrix4 mat4_proxy;
 		for (size_t matrix_i = 0; matrix_i < 4; matrix_i++)
 		{
 			for (size_t matrix_j = 0; matrix_j < 4; matrix_j++)
 			{
-				skininfo.mBindShapeMatrix.mMatrix[matrix_i][matrix_j] = bind_matrix_value[matrix_i + (matrix_j * 4)];
+				mat4_proxy.mMatrix[matrix_i][matrix_j] = bind_matrix_value[matrix_i + (matrix_j * 4)];
 			}
 		}
-
+		skininfo.mBindShapeMatrix.loadu(mat4_proxy);
 		// matrix multiplication order matters, so this is as clean as it gets.
-		LLMatrix4 temp_transformation = normalized_transformation;
-		temp_transformation *= skininfo.mBindShapeMatrix;
-		skininfo.mBindShapeMatrix = temp_transformation;
+		LLMatrix4a transform{normalized_transformation};
+		matMul(transform, skininfo.mBindShapeMatrix, skininfo.mBindShapeMatrix);
 	}
 
 	// setup joint map
@@ -638,7 +675,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 					}
 				}
 
-				skininfo.mInvBindMatrix.push_back(current_matrix);
+				skininfo.mInvBindMatrix.push_back(LLMatrix4a(current_matrix));
 			}
 		}
 	}
@@ -660,10 +697,10 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			break;
 		}
 
-		LLMatrix4 newinverse = skininfo.mInvBindMatrix[jointname_number_iter];
+		LLMatrix4 newinverse = LLMatrix4(skininfo.mInvBindMatrix[jointname_number_iter].getF32ptr());
 		auto joint_translation = joint_transforms[name_lookup].getTranslation();
 		newinverse.setTranslation(joint_translation);
-		skininfo.mAlternateBindMatrix.push_back(newinverse);
+		skininfo.mAlternateBindMatrix.push_back( LLMatrix4a(newinverse) );
 	}
 
 	size_t bind_count = skininfo.mAlternateBindMatrix.size();

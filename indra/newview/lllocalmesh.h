@@ -99,7 +99,7 @@ class LLLocalMeshObject
 	public:
 		// translation and scale
 		void computeObjectBoundingBox();
-		void computeObjectTransform();
+		void computeObjectTransform(const LLMatrix4& scene_transform);
 		void normalizeFaceValues(LLLocalMeshFileLOD lod_iter);
 
 		// applying local object to viewer object
