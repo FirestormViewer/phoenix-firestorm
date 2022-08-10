@@ -5,6 +5,15 @@
 	</panel.string>
 	<layout_stack name="main_pick_stack">
 		<layout_panel name="main_pick_lp">
+			<text name="title_label">
+				Titel:
+			</text>
+			<text name="description_label">
+				Beschreibung:
+			</text>
+			<text name="location_label">
+				Standort:
+			</text>
 			<line_editor name="pick_location">
 				Laden...
 			</line_editor>
