@@ -645,8 +645,8 @@ static void settings_to_globals()
 static void settings_modify()
 {
     LLPipeline::sRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
-    LLPipeline::sRenderBump             = gSavedSettings.getBOOL("RenderObjectBump");
-    LLPipeline::sRenderDeferred         = LLPipeline::sRenderBump && gSavedSettings.getBOOL("RenderDeferred");
+    LLPipeline::sRenderBump = TRUE; // FALSE is deprecated --  gSavedSettings.getBOOL("RenderObjectBump");
+    LLPipeline::sRenderDeferred = TRUE; // FALSE is deprecated --  LLPipeline::sRenderBump&& gSavedSettings.getBOOL("RenderDeferred");
 //    LLRenderTarget::sUseFBO             = LLPipeline::sRenderDeferred;
 // [RLVa:KB] - @setsphere
     LLRenderTarget::sUseFBO             = LLPipeline::sRenderDeferred || (gSavedSettings.getBOOL("WindLightUseAtmosShaders") && LLPipeline::sUseDepthTexture);

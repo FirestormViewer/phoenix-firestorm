@@ -695,6 +695,7 @@ void LLDrawPoolBump::endBump(U32 pass)
 
 S32 LLDrawPoolBump::getNumDeferredPasses()
 { 
+#if 0 //DEPRECATED -- RenderObjectBump should always be TRUE
 	// <FS:PP> Attempt to speed up things a little
 	// if (gSavedSettings.getBOOL("RenderObjectBump"))
 	static LLCachedControl<bool> RenderObjectBump(gSavedSettings, "RenderObjectBump");
@@ -707,6 +708,9 @@ S32 LLDrawPoolBump::getNumDeferredPasses()
 	{
 		return 0;
 	}
+#else 
+    return 1;
+#endif
 }
 
 void LLDrawPoolBump::renderDeferred(S32 pass)

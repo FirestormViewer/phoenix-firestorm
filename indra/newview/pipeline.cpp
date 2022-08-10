@@ -477,7 +477,7 @@ void LLPipeline::init()
 	gOctreeMaxCapacity = gSavedSettings.getU32("OctreeMaxNodeCapacity");
 	gOctreeMinSize = gSavedSettings.getF32("OctreeMinimumNodeSize");
 	sDynamicLOD = gSavedSettings.getBOOL("RenderDynamicLOD");
-	sRenderBump = gSavedSettings.getBOOL("RenderObjectBump");
+    sRenderBump = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("RenderObjectBump");
 	sUseTriStrips = gSavedSettings.getBOOL("RenderUseTriStrips");
 	LLVertexBuffer::sUseStreamDraw = gSavedSettings.getBOOL("RenderUseStreamVBO");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
@@ -597,8 +597,8 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderAvatarMaxNonImpostors");
 	connectRefreshCachedSettingsSafe("RenderDelayVBUpdate");
 	connectRefreshCachedSettingsSafe("UseOcclusion");
-	connectRefreshCachedSettingsSafe("WindLightUseAtmosShaders");
-	connectRefreshCachedSettingsSafe("RenderDeferred");
+	// DEPRECATED -- connectRefreshCachedSettingsSafe("WindLightUseAtmosShaders");
+	// DEPRECATED -- connectRefreshCachedSettingsSafe("RenderDeferred");
     connectRefreshCachedSettingsSafe("RenderPBR");
 	connectRefreshCachedSettingsSafe("RenderDeferredSunWash");
 	connectRefreshCachedSettingsSafe("RenderFSAASamples");
@@ -1156,7 +1156,7 @@ void LLPipeline::updateRenderTransparentWater()
 //static
 void LLPipeline::updateRenderBump()
 {
-	sRenderBump = gSavedSettings.getBOOL("RenderObjectBump");
+    sRenderBump = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("RenderObjectBump");
 }
 
 // static
@@ -1166,8 +1166,7 @@ void LLPipeline::updateRenderDeferred()
                       RenderDeferred &&
                       LLRenderTarget::sUseFBO &&
                       LLPipeline::sRenderBump &&
-                      WindLightUseAtmosShaders &&
-                      (bool) LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred");
+                      WindLightUseAtmosShaders;
     sRenderPBR = sRenderDeferred && gSavedSettings.getBOOL("RenderPBR");
 
     exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
@@ -1203,8 +1202,8 @@ void LLPipeline::refreshCachedSettings()
 			&& gSavedSettings.getBOOL("UseOcclusion") 
 			&& gGLManager.mHasOcclusionQuery) ? 2 : 0;
 	
-	WindLightUseAtmosShaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
-	RenderDeferred = gSavedSettings.getBOOL("RenderDeferred");
+    WindLightUseAtmosShaders = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("WindLightUseAtmosShaders");
+    RenderDeferred = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("RenderDeferred");
 	RenderDeferredSunWash = gSavedSettings.getF32("RenderDeferredSunWash");
 	RenderFSAASamples = gSavedSettings.getU32("RenderFSAASamples");
 	RenderResolutionDivisor = gSavedSettings.getU32("RenderResolutionDivisor");
@@ -3963,6 +3962,7 @@ void LLPipeline::touchTextures(LLDrawInfo* info)
     touchTexture(info->mTexture, info->mVSize);
     touchTexture(info->mSpecularMap, info->mVSize);
     touchTexture(info->mNormalMap, info->mVSize);
+    touchTexture(info->mEmissiveMap, info->mVSize);
 }
 
 void LLPipeline::postSort(LLCamera& camera)

@@ -2086,8 +2086,7 @@ void LLFloaterPreference::onUpdatePopupFilter()
 
 void LLFloaterPreference::refreshEnabledState()
 {
-	// <FS:Ansariel> Improved graphics preferences
-    LLCheckBoxCtrl* ctrl_pbr = getChild<LLCheckBoxCtrl>("UsePBRShaders");
+	LLCheckBoxCtrl* ctrl_pbr = getChild<LLCheckBoxCtrl>("UsePBRShaders");
 
 	F32 mem_multiplier = gSavedSettings.getF32("RenderTextureMemoryMultiple");
 	
@@ -2150,8 +2149,7 @@ void LLFloaterPreference::refreshEnabledState()
 	sky->setEnabled(TRUE);
 
     //PBR
-    BOOL deferred = gSavedSettings.getBOOL("RenderDeferred");
-    ctrl_pbr->setEnabled(deferred && LLFeatureManager::getInstance()->isFeatureAvailable("RenderPBR"));
+    ctrl_pbr->setEnabled(LLFeatureManager::getInstance()->isFeatureAvailable("RenderPBR"));
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
@@ -2260,58 +2258,10 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 void LLFloaterPreference::disableUnavailableSettings()
 {	
 	LLComboBox* ctrl_reflections   = getChild<LLComboBox>("Reflections");
-	// <FS:Ansariel> Doesn't exist anymore
-	//LLCheckBoxCtrl* ctrl_avatar_cloth  = getChild<LLCheckBoxCtrl>("AvatarCloth");
-	//LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
-	//LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
-	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-
-	// disabled windlight
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
-	{
-		// <FS:Ansariel> Doesn't exist anymore
-		//ctrl_wind_light->setEnabled(FALSE);
-		//ctrl_wind_light->setValue(FALSE);
-
-		sky->setEnabled(FALSE);
-
-		//deferred needs windlight, disable deferred
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		// <FS:Ansariel> Doesn't exist anymore
-		//ctrl_deferred->setEnabled(FALSE);
-		//ctrl_deferred->setValue(FALSE);
-	}
-
-	// disabled deferred
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
-		!gGLManager.mHasFramebufferObject)
-	{
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		// <FS:Ansariel> Doesn't exist anymore
-		//ctrl_deferred->setEnabled(FALSE);
-		//ctrl_deferred->setValue(FALSE);
-	}
 	
-	// disabled deferred SSAO
+    // disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
 		ctrl_ssao->setEnabled(FALSE);
