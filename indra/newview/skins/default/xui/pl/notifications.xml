@@ -3633,6 +3633,13 @@ Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dl
 		Nie można wyświetlić podglądu tej tekstury - jest niekopiowalna lub/oraz nietransferowalna.
 		<usetemplate ignoretext="Ostrzegaj, gdy podgląd na żywo nie może wyświetlić niekopiowalnych/nietransferowalnych tekstur" name="okignore" />
 	</notification>
+	<notification name="FacePasteFailed">
+		Wklejanie nie powiodło się. [REASON]
+	</notification>
+	<notification name="FacePasteTexturePermissions">
+		Zastosowano teksturę z ograniczonymi uprawnieniami, obiekt odziedziczy więc te uprawnienia.
+		<usetemplate ignoretext="Wklejanie: zastosowano teksturę z ograniczonymi uprawnieniami" name="notifyignore" />
+	</notification>
 	<notification name="ConfirmLeaveCall">
 		Czy jesteś pewien/pewna, że chcesz zakończyć rozmowę?
 		<usetemplate ignoretext="Potwierdź zanim rozmowa głosowa zostanie zakończona" name="okcancelignore" notext="Nie" yestext="Tak"/>
@@ -5161,6 +5168,15 @@ Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 			<button name="continue" text="Kontynuuj" />
 			<button name="cancel" text="Anuluj" />
 		</form>
+	</notification>
+	<notification label="Utwórz podfolder" name="CreateSubfolder">
+		Nazwij nowy folder:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="SameFolderRequired">
+		Wybrane elementy muszą znajdować się w tym samym folderze.
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.

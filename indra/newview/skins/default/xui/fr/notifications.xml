@@ -3836,6 +3836,15 @@ Texture figée de [RESOLUTION] mise à jour localement pour [BODYREGION] au bout
 		Impossible d&apos;afficher un aperçu de cette texture car il s&apos;agit d&apos;une texture sans copie et/ou transfert.
 		<usetemplate ignoretext="M&apos;avertir que le mode Aperçu en direct n&apos;est pas disponible pour les textures sans copie et/ou transfert" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="FacePasteFailed">
+		Le collage a échoué. [REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FacePasteTexturePermissions">
+		Vous avez appliqué une texture avec des permissions limitées, l'objet héritera des permissions de la texture..
+		<usetemplate ignoretext="Coller : vous avez appliqué une texture avec des permissions limitées" name="notifyignore"/>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmLeaveCall">
 		Voulez-vous vraiment quitter cet appel ?
 		<usetemplate ignoretext="Confirmer avant de quitter l&apos;appel" name="okcancelignore" notext="Non" yestext="Oui"/>
@@ -4887,7 +4896,7 @@ Veuillez sélectionner un terrain plus petit.
 	<notification name="CantDivideLandCantFindParcel">
 		Division du terrain impossible.
 Parcelle introuvable.
-Veuillez utiliser Aide &gt; Signaler un bug pour signaler le problème...
+Veuillez le signaler avec Aide &gt; Signaler un problème...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
 		Division du terrain impossible. La parcelle entière est sélectionnée.

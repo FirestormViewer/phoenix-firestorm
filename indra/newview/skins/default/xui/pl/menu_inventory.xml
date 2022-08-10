@@ -123,6 +123,8 @@
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Stosuj tylko dla mnie" />
 	<menu_item_call name="Settings Apply Parcel" label="Stosuj dla działki" />
+	<menu_item_call label="Utwórz folder z wybranych" name="New folder from selected" />
+	<menu_item_call label="Rozgrupuj elementy folderu" name="Ungroup folder items" />
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>

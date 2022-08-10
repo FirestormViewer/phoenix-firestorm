@@ -4599,7 +4599,7 @@ Wählen Sie eine kleinere Landfläche aus.
 	<notification name="CantDivideLandCantFindParcel">
 		Land kann nicht geteilt werden.
 Parzelle kann nicht gefunden werden.
-Bitte melden Sie den Fehler über „Hilfe“ -&gt; „Fehler melden“.
+Bitte melden Sie das Problem über „Hilfe“ -&gt; „Problem melden“.
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
 		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt.
