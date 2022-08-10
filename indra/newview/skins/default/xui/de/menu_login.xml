@@ -16,7 +16,7 @@
 		<menu_item_call label="Support-Portal" name="Support portal"/>
 		<menu_item_call label="[SECOND_LIFE]-Neuigkeiten" name="Second Life News"/>
 		<menu_item_call label="[SECOND_LIFE]-Blogs" name="Second Life Blogs"/>
-		<menu_item_call label="Fehler melden" name="Report Bug"/>
+		<menu_item_call label="Problem melden" name="Report Bug"/>
 		<menu_item_call label="[APP_NAME]-Hilfe" name="Second Life Help"/>
 		<menu_item_call label="Info über [APP_NAME]" name="About Second Life"/>
 	</menu>

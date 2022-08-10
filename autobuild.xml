@@ -1098,11 +1098,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9aac95d85fd3f044da3fd9dd44ed5ca2</string>
+              <string>21d50d222f005c033452ee3fad44bff1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.06-linux64_bionic-220911506.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.07-linux64_bionic-222191132.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

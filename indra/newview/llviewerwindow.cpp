@@ -3297,8 +3297,9 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
     if (keyboard_focus
         && !gFocusMgr.getKeystrokesOnly())
     {
-        LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(keyboard_focus);
-        if (cur_focus && cur_focus->acceptsTextInput())
+        // <FS:Ansariel> FIRE-31551: This causes aggressive switching into mouselook while any floater has focus
+        //LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(keyboard_focus);
+        //if (cur_focus && cur_focus->acceptsTextInput())
         {
 #ifdef LL_WINDOWS
             // On windows Alt Gr key generates additional Ctrl event, as result handling situations

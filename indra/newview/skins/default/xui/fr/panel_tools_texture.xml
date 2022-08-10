@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Texture" name="Texture">
+	<panel.string name="paste_error_face_selection_mismatch">Lorsque plusieurs faces sont copiées, l'objet cible doit avoir le même nombre de faces sélectionnées.</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">Lorsque toutes les faces d'un objet sont copiées, l'objet cible doit avoir le même nombre de faces.</panel.string>
+	<panel.string name="paste_error_inventory_not_found">Une ou plusieurs textures introuvables dans l'inventaire.</panel.string>
+	<panel.string name="paste_options">Copier les paramètres des textures dans le presse-papiers</panel.string>
 	<text name="color label">
 		Couleur
 	</text>
 	<color_swatch label="" name="colorswatch" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
 	<text name="color trans">
-		% de transparence
+		Transparence
 	</text>
 	<text name="glow label">
-		Rayonnement
+		Lueur
 	</text>
 	<check_box label="Lumineux" name="checkbox fullbright"/>
+	<button name="copy_face_btn" tool_tip="Copie les paramètres des textures dans le presse-papiers"/>
+	<button name="paste_face_btn" tool_tip="Colle les paramètres des textures à partir du presse-papiers"/>
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Matériaux" name="Materials"/>
 		<combo_box.item label="Médias" name="Media"/>
@@ -109,6 +115,4 @@
 	<spinner label="Décalage vertical" name="shinyOffsetV"/>
 	<check_box initial_value="false" label="Aligner les faces Plan" name="checkbox planar align" tool_tip="Aligner les textures sur toutes les faces sélectionnées avec la dernière face sélectionnée. Application de la texture Plan requise."/>
 	<button label="Aligner" label_selected="Aligner les couches de texture actuelles" name="button align textures" tool_tip="Aligner les couches de texture actuelles"/>
-	<button label="Copie" name="copytextures"/>
-	<button label="Collé" name="pastetextures"/>
 </panel>
