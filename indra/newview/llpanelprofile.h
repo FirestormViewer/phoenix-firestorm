@@ -97,6 +97,7 @@ public:
 	 * Sends update data request to server.
 	 */
 	void updateData() override;
+    void refreshName();
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
@@ -395,6 +396,7 @@ public:
     BOOL postBuild() override;
 
     void updateData() override;
+    void refreshName();
 
     void onOpen(const LLSD& key) override;
 
