@@ -724,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4699b8389dfb754da0393ddb5d325722</string>
+              <string>f283a064c30695bd7bf071f1bd481f32</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95882/856117/colladadom-2.3.569219-darwin64-569219.tar.bz2</string>
+			  <string>https://3p.firestormviewer.org/colladadom-2.3.222232011-darwin64-222232011.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -738,7 +738,7 @@
               <key>hash</key>
               <string>e1a8e9eca2894687b3532474ffc9b326</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.222130404-linux64-222130404.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222130404-linux64-222130404.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -750,7 +750,7 @@
               <key>hash</key>
               <string>1c094d709a35b252bba7b6ef1871085c</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -762,7 +762,7 @@
               <key>hash</key>
               <string>a7596da3696fc423ec1bc7d6764c01ab</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
