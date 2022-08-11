@@ -748,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>343e46ea49a08ad6596d3dc702d5b812</string>
+              <string>1c094d709a35b252bba7b6ef1871085c</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95883/856128/colladadom-2.3.569219-windows-569219.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -760,9 +760,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>de5bdfb61b31db56c5fe7d0962ad11e2</string>
+              <string>a7596da3696fc423ec1bc7d6764c01ab</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95884/856129/colladadom-2.3.569219-windows64-569219.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
