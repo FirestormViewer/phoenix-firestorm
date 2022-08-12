@@ -1545,6 +1545,7 @@ void LLMenuItemBranchDownGL::onFocusLost()
 {
     // needed for tab-based selection
     LLMenuItemBranchGL::onFocusLost();
+    // <FS:Ansariel> FIRE-31882 / FIRE-31896 / FIRE-31913 / FIRE-31920: Fix all kind of weird menu focus issues
     //LLMenuGL::setKeyboardMode(FALSE);
     //setHighlight(FALSE);
 }
@@ -1553,6 +1554,7 @@ void LLMenuItemBranchDownGL::setFocus(BOOL b)
 {
     // needed for tab-based selection
     LLMenuItemBranchGL::setFocus(b);
+    // <FS:Ansariel> FIRE-31882 / FIRE-31896 / FIRE-31913 / FIRE-31920: Fix all kind of weird menu focus issues
     //LLMenuGL::setKeyboardMode(b);
     //setHighlight(b);
 }
