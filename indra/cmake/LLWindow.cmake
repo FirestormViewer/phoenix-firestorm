@@ -18,7 +18,7 @@ if (USESYSTEMLIBS)
       )
 else (USESYSTEMLIBS)
   if (LINUX)
-    if( NOT USE_SDL2 )
+    if( USE_SDL1 )
       use_prebuilt_binary(SDL)
       set (SDL_FOUND TRUE)
 	  

@@ -724,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4699b8389dfb754da0393ddb5d325722</string>
+              <string>f283a064c30695bd7bf071f1bd481f32</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95882/856117/colladadom-2.3.569219-darwin64-569219.tar.bz2</string>
+			  <string>https://3p.firestormviewer.org/colladadom-2.3.222232011-darwin64-222232011.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -738,7 +738,7 @@
               <key>hash</key>
               <string>e1a8e9eca2894687b3532474ffc9b326</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.222130404-linux64-222130404.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222130404-linux64-222130404.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -748,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>343e46ea49a08ad6596d3dc702d5b812</string>
+              <string>1c094d709a35b252bba7b6ef1871085c</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95883/856128/colladadom-2.3.569219-windows-569219.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -760,9 +760,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>de5bdfb61b31db56c5fe7d0962ad11e2</string>
+              <string>a7596da3696fc423ec1bc7d6764c01ab</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95884/856129/colladadom-2.3.569219-windows64-569219.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1098,11 +1098,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9aac95d85fd3f044da3fd9dd44ed5ca2</string>
+              <string>21d50d222f005c033452ee3fad44bff1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.06-linux64_bionic-220911506.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.07-linux64_bionic-222191132.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2975,7 +2975,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <string>http://3p.firestormviewer.org/threejs-0.132.2-linux64-213500940.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>darwin64</string>
+            <string>linux64</string>
           </map>
           <key>darwin64</key>
           <map>

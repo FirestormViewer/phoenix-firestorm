@@ -852,8 +852,6 @@ public:
 
 				llassert(size[0] >= gOctreeMinSize);
 
-				llassert(size[0] >= gOctreeMinSize);
-
 				//copy our children to a new branch
 				LLOctreeNode<T>* newnode = new LLOctreeNode<T>(center, size, this);
 				

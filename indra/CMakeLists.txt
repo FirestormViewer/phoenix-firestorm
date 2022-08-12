@@ -6,6 +6,8 @@
 ## 3.8 added VS_DEBUGGER_WORKING_DIRECTORY support
 cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 
+set(CMAKE_CXX_STANDARD 17) #<FS> Enable c++17 on all platforms
+
 set(ROOT_PROJECT_NAME "SecondLife" CACHE STRING
     "The root project/makefile/solution name. Defaults to SecondLife.")
 project(${ROOT_PROJECT_NAME})

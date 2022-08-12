@@ -14,6 +14,8 @@
 			<pie_slice label="Sauvegarde" name="Backup"/>
 			<pie_slice label="Collada" name="Collada"/>
 		</pie_menu>
+		<pie_slice label="Voir dans l'inv." name="Show original"/>
+		<pie_slice label="Inspecter" name="Avatar Inspect"/>
 		<pie_slice label="Textures" name="Debug..."/>
 	</pie_menu>
 	<pie_slice label="S'asseoir ici" name="Sit Down Here"/>
@@ -22,6 +24,11 @@
 	<pie_slice label="Gestes" name="Gestures"/>
 	<pie_menu label="Apparence &gt;" name="Appearance &gt;">
 		<pie_slice label="Modifier la silhouette" name="Edit My Shape"/>
+		<pie_menu name="ResetMenu" label="Réinit. &gt;">
+			<pie_slice label="Squel. &amp; Anim." name="Reset Skeleton And Animations"/>
+			<pie_slice label="Squelette" name="Reset Skeleton"/>
+			<pie_slice label="LOD du mesh" name="Reset Mesh LOD"/>
+		</pie_menu>
 		<pie_slice label="Modifier la tenue" name="Edit My Outfit"/>
 		<pie_slice label="Dump XML" name="Dump XML"/>
 		<pie_slice label="Voltigement" name="Hover Height"/>
