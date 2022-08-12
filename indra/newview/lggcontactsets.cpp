@@ -766,11 +766,6 @@ uuid_vec_t LGGContactSets::getListOfPseudonymAvs()
 {
 	uuid_vec_t pseudonyms{};
 
-	for (uuid_map_t::iterator itr = mPseudonyms.begin(); itr != mPseudonyms.end(); ++itr)
-	{
-		pseudonyms.push_back(itr->first);
-	}
-
 	for (const auto& [id, pseudonym] : mPseudonyms)
 	{
 		pseudonyms.emplace_back(pseudonym);
