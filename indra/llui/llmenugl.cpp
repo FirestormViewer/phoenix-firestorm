@@ -1545,16 +1545,16 @@ void LLMenuItemBranchDownGL::onFocusLost()
 {
     // needed for tab-based selection
     LLMenuItemBranchGL::onFocusLost();
-    LLMenuGL::setKeyboardMode(FALSE);
-    setHighlight(FALSE);
+    //LLMenuGL::setKeyboardMode(FALSE);
+    //setHighlight(FALSE);
 }
 
 void LLMenuItemBranchDownGL::setFocus(BOOL b)
 {
     // needed for tab-based selection
     LLMenuItemBranchGL::setFocus(b);
-    LLMenuGL::setKeyboardMode(b);
-    setHighlight(b);
+    //LLMenuGL::setKeyboardMode(b);
+    //setHighlight(b);
 }
 
 BOOL LLMenuItemBranchDownGL::handleKeyHere(KEY key, MASK mask)
