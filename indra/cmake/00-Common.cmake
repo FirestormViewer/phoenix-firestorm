@@ -109,38 +109,6 @@ if (WINDOWS)
       /DNOMINMAX
 #      /DDOM_DYNAMIC            # For shared library colladadom
       )
-
-  # <FS:Ansariel> AVX/AVX2 support
-  if (USE_AVX_OPTIMIZATION)
-  add_compile_options(
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Oi
-      /Ot
-      /arch:AVX
-      /fp:fast
-      )
-  elseif (USE_AVX2_OPTIMIZATION)
-  add_compile_options(
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Oi
-      /Ot
-      /arch:AVX2
-      /fp:fast
-      )
-  else (USE_AVX_OPTIMIZATION)
-  # </FS:Ansariel> AVX/AVX2 support
   add_compile_options(
       /GS
       /TP
@@ -154,13 +122,20 @@ if (WINDOWS)
 #      /arch:SSE2
       /fp:fast
       )
-  # Nicky: x64 implies SSE2
-  if( ADDRESS_SIZE EQUAL 32 )
-    add_definitions( /arch:SSE2 )
-  endif()
+
   # <FS:Ansariel> AVX/AVX2 support
+  if (USE_AVX_OPTIMIZATION)
+    add_compile_options(/arch:AVX)
+  elseif (USE_AVX2_OPTIMIZATION)
+    add_compile_options(/arch:AVX2)
+  else (USE_AVX_OPTIMIZATION)
+    # Nicky: x64 implies SSE2
+    if (ADDRESS_SIZE EQUAL 32)
+      add_compile_options(/arch:SSE2)
+    endif()
   endif (USE_AVX_OPTIMIZATION)
-     
+  # </FS:Ansariel> AVX/AVX2 support
+
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
     add_definitions(/WX)
