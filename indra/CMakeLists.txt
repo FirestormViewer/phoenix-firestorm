@@ -8,8 +8,8 @@ cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD 17) #<FS> Enable c++17 on all platforms
 
-set(ROOT_PROJECT_NAME "SecondLife" CACHE STRING
-    "The root project/makefile/solution name. Defaults to SecondLife.")
+set(ROOT_PROJECT_NAME "Firestorm" CACHE STRING
+    "The root project/makefile/solution name. Defaults to Firestorm.")
 project(${ROOT_PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -23,8 +23,8 @@ if (WINDOWS)
 endif (WINDOWS)
 
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
-      "Build type.  One of: Debug Release RelWithDebInfo" FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING
+      "Build type.  One of: Release RelWithDebInfo" FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 #<FS:AW optional opensim support>
