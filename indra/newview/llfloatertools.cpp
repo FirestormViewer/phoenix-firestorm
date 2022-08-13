@@ -659,14 +659,33 @@ void LLFloaterTools::refresh()
             LLViewerObject* selected_object = mObjectSelection->getFirstObject();
             if (selected_object)
             {
-                // Select a parcel at the currently selected object's position.
-                LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+                // <FS:Ansariel> FIRE-20387: Editing HUD attachment shows [CAPACITY_STRING] in tools floater
+                //LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+                if (!selected_object->isAttachment())
+                {
+                    LLViewerParcelMgr::getInstance()->selectParcelAt(selected_object->getPositionGlobal());
+                }
+                else
+                {
+                    const LLStringExplicit empty_str("");
+                    childSetTextArg("more info label", "[CAPACITY_STRING]", empty_str);
+                }
+                // </FS:Ansariel>
             }
             else
             {
                 LL_WARNS() << "Failed to get selected object" << LL_ENDL;
             }
         }
+        // <FS:Ansariel> Bring back remaining capacity info
+        else
+        {
+            // Selection crosses parcel bounds.
+            // We don't display remaining land capacity in this case.
+            const LLStringExplicit empty_str("");
+            childSetTextArg("more info label", "[CAPACITY_STRING]", empty_str);
+        }
+        // </FS:Ansariel>
 
         // <FS:Ansariel> We got this already
         //if (object_count == 1)
@@ -1484,6 +1503,27 @@ void LLFloaterTools::updateLandImpacts()
 	{
 		return;
 	}
+
+	// <FS:Ansariel> Bring back remaining capacity info
+	S32 rezzed_prims = parcel->getSimWidePrimCount();
+	S32 total_capacity = parcel->getSimWideMaxPrimCapacity();
+	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
+	if (region)
+	{
+		S32 max_tasks_per_region = (S32)region->getMaxTasks();
+		total_capacity = llmin(total_capacity, max_tasks_per_region);
+	}
+	std::string remaining_capacity_str = "";
+
+	if (gMeshRepo.meshRezEnabled())
+	{
+		LLStringUtil::format_map_t remaining_capacity_args;
+		remaining_capacity_args["LAND_CAPACITY"] = llformat("%d", total_capacity - rezzed_prims);
+		remaining_capacity_str = getString("status_remaining_capacity", remaining_capacity_args);
+	}
+
+	childSetTextArg("more info label", "[CAPACITY_STRING]", remaining_capacity_str);
+	// </FS:Ansariel>
 
 	// Update land impacts info in the weights floater
 	LLFloaterObjectWeights* object_weights_floater = LLFloaterReg::findTypedInstance<LLFloaterObjectWeights>("object_weights");
