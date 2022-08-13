@@ -1090,8 +1090,9 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	// <FS>
 	getChildView("more info label")->setVisible(!land_visible && have_selection);
 	getChildView("selection_count")->setVisible(!land_visible && have_selection);
-    getChildView("selection_faces")->setVisible(LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool()
-                                                && LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1);
+	// <FS:Ansariel> We got this already
+    //getChildView("selection_faces")->setVisible(LLToolFace::getInstance() == LLToolMgr::getInstance()->getCurrentTool()
+    //                                            && LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1);
 	getChildView("selection_empty")->setVisible(!land_visible && !have_selection);
 	
 	//mTab->setVisible(!land_visible);
