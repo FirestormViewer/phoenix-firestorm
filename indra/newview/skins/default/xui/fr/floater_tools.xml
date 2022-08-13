@@ -126,7 +126,7 @@
 		Aucune sélection effectuée.
 	</text>
 	<text name="more info label">
-		[secondlife:///app/openfloater/object_weights Plus d&apos;infos]
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Plus d&apos;infos]
 	</text>
 	<tab_container name="Object Info Tabs">
 		<panel label="Général" name="General">
