@@ -74,7 +74,7 @@ LLUUID cmd_line_mPackagerDest;
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(std::string_view ifolder)
 {
-	LLUUID folder = gInventory.findCategoryByName(ifolder.data());
+	LLUUID folder = gInventory.findCategoryByName(static_cast<std::string>(ifolder));
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 	gInventory.collectDescendents(folder, cats, items, FALSE);
@@ -565,7 +565,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 	
 	if (sFSCmdLine)
 	{
-		std::istringstream i(revised_text.data());
+		std::istringstream i(static_cast<std::string>(revised_text));
 		std::string command;
 		i >> command;
 		if (!command.empty())
@@ -938,7 +938,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 					}
 					else
 					{
-						region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1).data());
+						region_name = LLWeb::escapeURL(static_cast<std::string>(revised_text.substr(command.length() + 1)));
 						LLVector3d agentPos = gAgent.getPositionGlobal();
 						agent_x = ll_round((F32)agentPos.mdV[VX]);
 						agent_y = ll_round((F32)agentPos.mdV[VY]);
@@ -963,7 +963,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 				F32 result = 0.f;
 				if (revised_text.length() > command.length() + 1)
 				{
-					std::string expr = revised_text.substr(command.length() + 1).data();
+					std::string expr = static_cast<std::string>(revised_text.substr(command.length() + 1));
 					LLStringUtil::toUpper(expr);
 					std::string original_expr = expr;
 
@@ -1748,7 +1748,7 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 
 void cmdline_tp2name(std::string_view target)
 {
-	LLUUID avkey = cmdline_partial_name2key(target.data());
+	LLUUID avkey = cmdline_partial_name2key(static_cast<std::string>(target));
 	if (avkey.notNull() && avkey != gAgentID)
 	{
 		LLAvatarActions::teleportTo(avkey);
@@ -1860,7 +1860,7 @@ bool cmdline_packager(std::string_view message, const LLUUID& fromID, const LLUU
 		}
 		while(comma < csv.length());
 		
-		report_to_nearby_chat(llformat("Packager: adding objects: \"%s\"", csv.data()));
+		report_to_nearby_chat(llformat("Packager: adding objects: \"%s\"", static_cast<std::string>(csv).c_str()));
 		return true;
 	}
 	else if (cmd == "kpackagerend") {
