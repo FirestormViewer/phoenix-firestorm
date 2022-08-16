@@ -76,6 +76,8 @@ namespace FSPerfStats
     static constexpr U32 TUNE_AVATARS_ONLY{0};
     static constexpr U32 TUNE_SCENE_AND_AVATARS{1};
 
+    extern F64 cpu_hertz;
+
     extern std::atomic<int64_t> tunedAvatars;
     extern std::atomic<U64> renderAvatarMaxART_ns;
     extern bool belowTargetFPS;
@@ -183,6 +185,7 @@ namespace FSPerfStats
         static inline StatsRecorder& getInstance()
         {
             static StatsRecorder instance;
+            FSPerfStats::cpu_hertz = (F64)LLTrace::BlockTimer::countsPerSecond();
             return instance;
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};
@@ -491,9 +494,9 @@ namespace FSPerfStats
     };
 
     
-    inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
-    inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
-    inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
+    inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / FSPerfStats::cpu_hertz; };
+    inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / FSPerfStats::cpu_hertz; };
+    inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / FSPerfStats::cpu_hertz; };
 
     using RecordSceneTime = RecordTime<ObjType_t::OT_GENERAL>;
     using RecordAvatarTime = RecordTime<ObjType_t::OT_AVATAR>;
