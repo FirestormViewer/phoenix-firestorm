@@ -40,8 +40,8 @@
 #include "llviewerobjectlist.h"
 
 // own headers
-#include "llfloaterlocalmesh.h"
-#include "lllocalmesh.h"
+#include "vjfloaterlocalmesh.h"
+#include "vjlocalmesh.h"
 
 static const S32 LOCAL_TRACKING_ID_COLUMN = 4;
 

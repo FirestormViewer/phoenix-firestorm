@@ -42,11 +42,11 @@
 #include <boost/filesystem.hpp>
 
 // local mesh headers
-#include "lllocalmesh.h"
-#include "llfloaterlocalmesh.h"
+#include "vjlocalmesh.h"
+#include "vjfloaterlocalmesh.h"
 
 // local mesh importers
-#include "lllocalmeshimportdae.h"
+#include "vjlocalmeshimportdae.h"
 
 
 /*==========================================*/

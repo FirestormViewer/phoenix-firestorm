@@ -28,8 +28,8 @@
 #include "llviewerprecompiledheaders.h"
 
 /* own header */
-#include "lllocalmesh.h"
-#include "lllocalmeshimportdae.h"
+#include "vjlocalmesh.h"
+#include "vjlocalmeshimportdae.h"
 
 /* linden headers */
 #include "llmodelloader.h"

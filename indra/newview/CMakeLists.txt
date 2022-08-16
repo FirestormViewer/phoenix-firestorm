@@ -223,9 +223,9 @@ set(viewer_SOURCE_FILES
     llagentwearablesfetch.cpp
 
     # local mesh
-    lllocalmesh.cpp
-    llfloaterlocalmesh.cpp
-    lllocalmeshimportdae.cpp
+    vjlocalmesh.cpp
+    vjfloaterlocalmesh.cpp
+    vjlocalmeshimportdae.cpp
 
     llaccountingcostmanager.cpp
     llaisapi.cpp
@@ -1002,9 +1002,9 @@ set(viewer_HEADER_FILES
     llagentwearablesfetch.h
 
     # local mesh
-    lllocalmesh.h
-    llfloaterlocalmesh.h
-    lllocalmeshimportdae.h
+    vjlocalmesh.h
+    vjfloaterlocalmesh.h
+    vjlocalmeshimportdae.h
 
     llaccountingcostmanager.h
     llaisapi.h
