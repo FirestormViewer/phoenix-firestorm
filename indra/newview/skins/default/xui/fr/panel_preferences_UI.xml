@@ -175,6 +175,15 @@
 				pixels (Redémarrage requis)
 20 par défaut pour le [VIEWER_GENERATION], 18 pour le Viewer 1.
 			</text>
+			<text name="text_box_notecard_font" width="170">
+				Police de l'éditeur de notices :
+			</text>
+			<combo_box name="FSNotecardFontName" tool_tip="Nom de la police utilisée dans l'éditeur de notices" />
+			<combo_box name="FSNotecardFontSize" tool_tip="Taille de la police utilisée dans l'éditeur de notices">
+				<combo_item name="Small" label="Petite"/>
+				<combo_item name="Medium" label="Moyenne"/>
+				<combo_item name="Large" label="Grande"/>
+			</combo_box>
 		</panel>
 	</tab_container>
 </panel>
