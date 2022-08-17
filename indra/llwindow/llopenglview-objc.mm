@@ -551,7 +551,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
         eventData.mKeyEvent = NativeKeyEventData::KEYDOWN;
         // <FS:Ansariel> Speculative fix for FIRE-31473
         //callKeyDown(&eventData, [theEvent keyCode], 0, [[theEvent characters] characterAtIndex:0]);
-        callKeyDown(&eventData, [theEvent keyCode], 0, L'\0']);
+        callKeyDown(&eventData, [theEvent keyCode], 0, L'\0');
     }
     else
     {
