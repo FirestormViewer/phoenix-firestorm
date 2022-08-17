@@ -1481,6 +1481,7 @@ void FSFloaterIM::updateMessages()
 			std::string from = msg["from"].asString();
 			std::string message = msg["message"].asString();
 			bool is_history = msg["is_history"].asBoolean();
+			bool is_region_msg = msg["is_region_msg"].asBoolean();
 
 			LLChat chat;
 			chat.mFromID = from_id;
@@ -1488,7 +1489,11 @@ void FSFloaterIM::updateMessages()
 			chat.mFromName = from;
 			chat.mTimeStr = time;
 			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
-			
+			if (is_region_msg)
+			{
+				chat.mSourceType = CHAT_SOURCE_REGION;
+			}
+
 			// Bold group moderators' chat -KC
 			//<FS:HG> FS-1734 seperate name and text styles for moderator
 			//if (!is_history && bold_mods_chat && pIMSession && pIMSession->mSpeakers)
