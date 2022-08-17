@@ -109,38 +109,6 @@ if (WINDOWS)
       /DNOMINMAX
 #      /DDOM_DYNAMIC            # For shared library colladadom
       )
-
-  # <FS:Ansariel> AVX/AVX2 support
-  if (USE_AVX_OPTIMIZATION)
-  add_compile_options(
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Oi
-      /Ot
-      /arch:AVX
-      /fp:fast
-      )
-  elseif (USE_AVX2_OPTIMIZATION)
-  add_compile_options(
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Oi
-      /Ot
-      /arch:AVX2
-      /fp:fast
-      )
-  else (USE_AVX_OPTIMIZATION)
-  # </FS:Ansariel> AVX/AVX2 support
   add_compile_options(
       /GS
       /TP
@@ -154,13 +122,20 @@ if (WINDOWS)
 #      /arch:SSE2
       /fp:fast
       )
-  # Nicky: x64 implies SSE2
-  if( ADDRESS_SIZE EQUAL 32 )
-    add_definitions( /arch:SSE2 )
-  endif()
+
   # <FS:Ansariel> AVX/AVX2 support
+  if (USE_AVX_OPTIMIZATION)
+    add_compile_options(/arch:AVX)
+  elseif (USE_AVX2_OPTIMIZATION)
+    add_compile_options(/arch:AVX2)
+  else (USE_AVX_OPTIMIZATION)
+    # Nicky: x64 implies SSE2
+    if (ADDRESS_SIZE EQUAL 32)
+      add_compile_options(/arch:SSE2)
+    endif()
   endif (USE_AVX_OPTIMIZATION)
-     
+  # </FS:Ansariel> AVX/AVX2 support
+
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
     add_definitions(/WX)
@@ -276,9 +251,13 @@ if (LINUX OR DARWIN)
     set(GCC_CXX_WARNINGS "$[GCC_WARNINGS] -Wno-reorder -Wno-unused-const-variable -Wno-format-extra-args -Wno-unused-private-field -Wno-unused-function -Wno-tautological-compare -Wno-empty-body -Wno-unused-variable -Wno-unused-value")
   else (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
   #elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable")
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable")
   endif ()
 
+  if(LINUX)
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable -Wno-pragmas -Wno-deprecated")
+  endif()
+  
   set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
 

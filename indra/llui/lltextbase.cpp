@@ -2540,6 +2540,18 @@ void LLTextBase::setFont(const LLFontGL* font)
 {
 	mFont = font;
 	mStyleDirty = true;
+
+	// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+	for (auto segment : mSegments)
+	{
+		LLStyleConstSP style = segment->getStyle();
+		LLStyleSP new_style(new LLStyle(*style));
+		new_style->setFont(mFont);
+		LLStyleConstSP sp(new_style);
+		segment->setStyle(sp);
+	}
+	needsReflow();
+	// </FS:Ansariel>
 }
 
 void LLTextBase::needsReflow(S32 index)

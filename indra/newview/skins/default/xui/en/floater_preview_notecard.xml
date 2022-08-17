@@ -60,6 +60,11 @@
      name="desc"
      width="296" />
     <text_editor
+     bg_focus_color="NotecardBackgroundColor"
+     bg_writeable_color="NotecardBackgroundColor"
+     bg_selected_color="NotecardSelectionColor"
+     text_color="NotecardTextColor"
+     cursor_color="NotecardCursorColor"
      type="string"
      length="1"
      embedded_items="true"

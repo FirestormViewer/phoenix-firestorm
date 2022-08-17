@@ -250,6 +250,15 @@ Domyślnie 0. Większa wartość może sprawiać kłopoty.
           pikseli (wymaga restartu)
 [VIEWER_GENERATION] domyślnie 20. V1 domyślnie 18.
         </text>
+        <text name="text_box_notecard_font" width="135">
+            Czcionka edytora notek:
+        </text>
+        <combo_box name="FSNotecardFontName" tool_tip="Nazwa czcionki używanej w edytorze notek" />
+        <combo_box name="FSNotecardFontSize" tool_tip="Rozmiar czcionki używanej w edytorze notek">
+            <combo_item name="Small" label="Mała" />
+            <combo_item name="Medium" label="Średnia" />
+            <combo_item name="Large" label="Duża" />
+        </combo_box>
     </panel>
 </tab_container>
 </panel>

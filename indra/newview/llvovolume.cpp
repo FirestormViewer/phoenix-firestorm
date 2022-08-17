@@ -1915,7 +1915,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global, BOOL should_update_octree_bounds)
             break;
         // </FS:ND>
 
-        LLFace *face = mDrawable->getFace(i);
+        LLFace* face = mDrawable->getFace(i);
         if (!face)
         {
             continue;
@@ -6549,7 +6549,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 	}
 #endif
 	
-
+	//calculate maximum number of vertices to store in a single buffer
 	static LLCachedControl<S32> max_vbo_size(gSavedSettings, "RenderMaxVBOSize", 512);
 	U32 max_vertices = (max_vbo_size * 1024)/LLVertexBuffer::calcVertexSize(group->getSpatialPartition()->mVertexDataMask);
 	max_vertices = llmin(max_vertices, (U32) 65535);
@@ -7031,7 +7031,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 				// can we safely treat this as an alpha mask?
 				// <FS:Beq> Nothing actually sets facecolor use the TE alpha instead.
 				// if (facep->getFaceColor().mV[3] <= 0.f)
-				if ((te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f) && te->getGlow() == 0.0 )
+				if ((te->getAlpha() <= 0.f || facep->getFaceColor().mV[3] <= 0.f) && te->getGlow() == 0.0 && !LLDrawPoolAlpha::sShowDebugAlpha)
 				// </FS:Beq>
 				{ //100% transparent, don't render unless we're highlighting transparent
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("facep->alpha -> invisible");

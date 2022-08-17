@@ -22121,6 +22121,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>3</integer>
   </map>
+  <key>360QualitySelection</key>
+  <map>
+    <key>Comment</key>
+    <string>Quality level for the 360 snapshot</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>128</integer>
+  </map>
   <key>MFAHash</key>
   <map>
     <key>Comment</key>
@@ -25663,6 +25674,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>Scripting</string>
+    </map>
+    <key>FSNotecardFontName</key>
+    <map>
+      <key>Comment</key>
+      <string>The name of the font used for the notecard editor</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>SansSerif</string>
+    </map>
+    <key>FSNotecardFontSize</key>
+    <map>
+      <key>Comment</key>
+      <string>The size of the font used for the notecard editor</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Medium</string>
     </map>
     <key>FSEnableRightclickOnTransparentObjects</key>
     <map>

@@ -5458,10 +5458,10 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		Meine Premium-Mitgliedschaft
 	</string>
 	<string name="DeleteItems">
-		Ausgewählte Objekte löschen?
+		Ausgewählte [COUNT_SELECTION] Objekte löschen ([COUNT_TOTAL] insgesamt)?
 	</string>
 	<string name="DeleteItem">
-		Ausgewähltes Objekt löschen?
+		Ausgewähltes Objekt löschen ([COUNT_TOTAL] insgesamt)?
 	</string>
 	<string name="EmptyOutfitText">
 		Keine Objekte in diesem Outfit

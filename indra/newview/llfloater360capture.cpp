@@ -112,7 +112,8 @@ BOOL LLFloater360Capture::postBuild()
 
     // UX/UI called for preview mode (always the first index/option)
     // by default each time vs restoring the last value
-    mQualityRadioGroup->setSelectedIndex(0);
+    // <FS:Ansariel> UX/UI has no clue what the users actually want!
+    //mQualityRadioGroup->setSelectedIndex(0);
 
     // Construct a URL pointing to the first page to load. Although
     // we do not use this page for anything (after some significant
