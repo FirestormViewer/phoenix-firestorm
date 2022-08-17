@@ -255,6 +255,18 @@
           пикселей (необходим перезапуск)
 [VIEWER_GENERATION] по умолчанию 20. V1 по умолчанию 18.
         </text>
+        <text name="text_box_notecard_font" width="120">
+          Шрифт Редактора Заметок:
+        </text>
+        <combo_box name="FSNotecardFontName" tool_tip="Название шрифта, используемого в редакторе заметок"/>
+        <combo_box name="FSNotecardFontSize" tool_tip="Размер шрифта, используемого в редакторе заметок">
+             <combo_item name="Monospace" label="Моноширинный"/>
+             <combo_item name="Scripting" label="Прописной"/>
+             <combo_item name="Cascadia" label="Код Каскадии"/>
+             <combo_item name="Small" label="Мелкий"/>
+             <combo_item name="Medium" label="Средний"/>
+             <combo_item name="Large" label="Крупный"/>
+        </combo_box>
     </panel>
 </tab_container>
 </panel>
