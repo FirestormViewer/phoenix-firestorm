@@ -4685,7 +4685,6 @@ void LLVivoxVoiceClient::messageEvent(
 						0,						// default arg
 						LLUUID::null,			// default arg
 						LLVector3::zero);		// default arg
-
 			}
 		}		
 	}
