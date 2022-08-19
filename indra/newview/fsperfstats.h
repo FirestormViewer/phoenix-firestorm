@@ -185,7 +185,6 @@ namespace FSPerfStats
         static inline StatsRecorder& getInstance()
         {
             static StatsRecorder instance;
-            FSPerfStats::cpu_hertz = (F64)LLTrace::BlockTimer::countsPerSecond();
             return instance;
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};

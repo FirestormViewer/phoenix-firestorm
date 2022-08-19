@@ -138,6 +138,8 @@ namespace FSPerfStats
         // create a queue
         // create a thread to consume from the queue
         tunables.initialiseFromSettings();
+        FSPerfStats::cpu_hertz = (F64)LLTrace::BlockTimer::countsPerSecond();
+
         t.detach();
     }
 
