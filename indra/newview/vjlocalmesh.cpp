@@ -345,15 +345,15 @@ bool LLLocalMeshObject::getIsRiggedObject()
 LLLocalMeshFile::LLLocalMeshFile(std::string filename, bool try_lods)
 {
 	// initialize safe defaults
-	for (size_t lod_iter = 0; lod_iter < 4; ++lod_iter)
+	for (size_t lod_iter = 0; lod_iter < LOCAL_NUM_LODS; ++lod_iter)
 	{
-		mFilenames[lod_iter].empty();
+		mFilenames[lod_iter].clear();
 		mLastModified[lod_iter].clear();
 		mLoadedSuccessfully[lod_iter] = false;
 	}
 	
 	mTryLODFiles = try_lods;
-	mShortName.empty();
+	mShortName.clear();
 	mLoadingLog.clear();
 	mExtension = LLLocalMeshFileExtension::EXTEN_NONE;
 	mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_NONE;
@@ -437,19 +437,19 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 
 	// another recheck that mFilenames[3] main file is present,
 	// in case the file got deleted and the user hits reload - it'll error out here.
-	if (!boost::filesystem::exists(mFilenames[3]))
+	if (!boost::filesystem::exists(mFilenames[LOCAL_LOD_HIGH]))
 	{
 		// filename provided doesn't exist, just stop.
 		mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
-		pushLog("LLLocalMeshFile", "Couldn't find filename: " + mFilenames[3], true);
+		pushLog("LLLocalMeshFile", "Couldn't find filename: " + mFilenames[LOCAL_LOD_HIGH], true);
 		return;
 	}
 
 	// check for lod filenames
 	if (mTryLODFiles)
 	{
-		size_t dot_position = mFilenames[3].find_last_of(".");
-		if (dot_position == mFilenames[3].npos)
+		size_t dot_position = mFilenames[LOCAL_LOD_HIGH].find_last_of(".");
+		if (dot_position == mFilenames[LOCAL_LOD_HIGH].npos)
 		{
 			// should theoretically never happen, we did check extension before,
 			// but "should never happen" doesn't mean we shouldn't check.
@@ -460,9 +460,9 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 
 		pushLog("LLLocalMeshFile", "Seeking LOD files...");
 		// up to LOD2, LOD3 being the highest is always done by this point.
-		for (size_t lodfile_iter = 0; lodfile_iter < 3; ++lodfile_iter)
+		for (size_t lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_MEDIUM; ++lodfile_iter)
 		{
-			std::string current_lod_filename = mFilenames[3];
+			std::string current_lod_filename = mFilenames[LOCAL_LOD_HIGH];
 			std::string lod_string = "_LOD" + std::to_string(lodfile_iter);
 
 			current_lod_filename.insert(dot_position, lod_string);
@@ -498,7 +498,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 		// we're counting back because LOD3 is most likely to have showstopper problems,
 		// so i'd rather not load other lods if LOD3 is found to be broken.
 		// int rather than size_t because we're iterating over LODS 3 to 0, stopping at -1
-		for (signed int lod_idx = 3; lod_idx >= 0; --lod_idx)
+		for (signed int lod_idx = LOCAL_LOD_HIGH; lod_idx >= LOCAL_LOD_LOWEST; --lod_idx)
 		{
 			LLLocalMeshFileLOD current_lod = static_cast<LLLocalMeshFileLOD>(lod_idx);
 			

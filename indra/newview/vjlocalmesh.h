@@ -40,7 +40,8 @@ enum LLLocalMeshFileLOD
 	LOCAL_LOD_LOWEST,
 	LOCAL_LOD_LOW,
 	LOCAL_LOD_MEDIUM,
-	LOCAL_LOD_HIGH
+	LOCAL_LOD_HIGH,
+	LOCAL_NUM_LODS
 };
 
 
@@ -204,9 +205,9 @@ class LLLocalMeshFile
 		void pushLog(std::string who, std::string what, bool is_error = false);
 
 	private:
-		std::array<std::string, 4> mFilenames;
-		std::array<LLSD, 4> mLastModified;
-		std::array<bool, 4> mLoadedSuccessfully; 
+		std::array<std::string, LOCAL_NUM_LODS> mFilenames;
+		std::array<LLSD, LOCAL_NUM_LODS> mLastModified;
+		std::array<bool, LOCAL_NUM_LODS> mLoadedSuccessfully; 
 		bool mTryLODFiles;
 		std::string mShortName;
 		std::vector<std::string> mLoadingLog;
