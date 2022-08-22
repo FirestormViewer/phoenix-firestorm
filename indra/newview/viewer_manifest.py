@@ -858,7 +858,7 @@ class WindowsManifest(ViewerManifest):
 
         # <FS:ND> Properly name OS version, also add Phoenix- in front of installer name
         #installer_file = self.installer_base_name() + '_Setup.exe'
-        installer_file = self.fs_installer_name() + "_Setup.exe"
+        installer_file = self.fs_installer_basename() + "_Setup.exe"
         # </FS:ND>
         
         substitution_strings['installer_file'] = installer_file
