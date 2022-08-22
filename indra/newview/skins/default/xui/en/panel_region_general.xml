@@ -29,7 +29,8 @@
      left_delta="50"
      name="region_text"
      top_delta="0"
-     width="400">
+     use_ellipses="true"
+     width="235">
         unknown
     </text>
     <text
