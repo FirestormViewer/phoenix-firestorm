@@ -858,7 +858,7 @@ class WindowsManifest(ViewerManifest):
 
         # <FS:ND> Properly name OS version, also add Phoenix- in front of installer name
         #installer_file = self.installer_base_name() + '_Setup.exe'
-        installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe" % substitution_strings
+        installer_file = self.fs_installer_name() + "_Setup.exe"
         # </FS:ND>
         
         substitution_strings['installer_file'] = installer_file
@@ -1623,8 +1623,11 @@ class DarwinManifest(ViewerManifest):
 
         volname=CHANNEL_VENDOR_BASE+" Installer"  # DO NOT CHANGE without understanding comment above
 
-        imagename = self.installer_base_name()
-
+        # <FS:ND> Make sure all our package names look similar 
+        #imagename = self.installer_base_name()
+        imagename = self.fs_installer_basename()
+        # </FS:ND>
+        
         sparsename = imagename + ".sparseimage"
         finalname = imagename + ".dmg"
         # make sure we don't have stale files laying about
@@ -2076,9 +2079,9 @@ class LinuxManifest(ViewerManifest):
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
-        installer_name_components = ['Phoenix',self.app_name(),'-'.join(self.args['version'])]
-        installer_name = "-".join(installer_name_components)
+
         #installer_name = self.installer_base_name()
+        installer_name = self.fs_installer_basename()
 
         self.fs_save_breakpad_symbols("linux")
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
