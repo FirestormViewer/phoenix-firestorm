@@ -2076,8 +2076,8 @@ class LinuxManifest(ViewerManifest):
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
-        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
-        installer_name = "_".join(installer_name_components)
+        installer_name_components = ['Phoenix',self.app_name(),'-'.join(self.args['version'])]
+        installer_name = "-".join(installer_name_components)
         #installer_name = self.installer_base_name()
 
         self.fs_save_breakpad_symbols("linux")
