@@ -2778,31 +2778,32 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
   if (USE_BUGSPLAT)
     # BugSplat symbol-file generation
     if (WINDOWS)
+	#<FS:ND> Comment this out, we do our own symbol package which also includes the exe and build_data.json 
       # Just pack up a tarball containing only the .pdb file for the
       # executable. Because we intend to use cygwin tar, we must render
       # VIEWER_SYMBOL_FILE in cygwin path syntax.
-      execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
-        OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-      execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
-        OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-      add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
-        # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.bz2;
-        # testing a string suffix is painful enough in CMake language that
-        # we'll continue assuming it until forced to generalize.
-        COMMAND "tar"
-        ARGS
-          "cjf"
-          "${VIEWER_SYMBOL_FILE_CYGWIN}"
-          "-C"
-          "${PARENT_DIRECTORY_CYGWIN}"
-          "firestorm-bin.pdb"
-        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
-        COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
-        )
-      add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
-      add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
+      # execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
+        # OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
+        # OUTPUT_STRIP_TRAILING_WHITESPACE)
+      # execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
+        # OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
+        # OUTPUT_STRIP_TRAILING_WHITESPACE)
+      # add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
+        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.bz2;
+        # # testing a string suffix is painful enough in CMake language that
+        # # we'll continue assuming it until forced to generalize.
+        # COMMAND "tar"
+        # ARGS
+          # "cjf"
+          # "${VIEWER_SYMBOL_FILE_CYGWIN}"
+          # "-C"
+          # "${PARENT_DIRECTORY_CYGWIN}"
+          # "firestorm-bin.pdb"
+        # DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
+        # COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
+        # )
+      # add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
+      # add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
     endif (WINDOWS)
     if (DARWIN)
       # Have to run dsymutil first, then pack up the resulting .dSYM directory
@@ -2861,7 +2862,7 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
     endif (LINUX)
   endif (USE_BUGSPLAT)
 
-  if (NOT LINUX) #Linux generates symbols via viewer_manifest.py/fs_viewer_manifest.py
+  if (DARWIN) #Linux/Windows generates symbols via viewer_manifest.py/fs_viewer_manifest.py
 	# for both Bugsplat and Breakpad
 	add_dependencies(llpackage generate_symbols)
   endif()

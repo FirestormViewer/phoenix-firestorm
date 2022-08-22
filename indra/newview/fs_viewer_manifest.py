@@ -99,15 +99,13 @@ class FSViewerManifest:
         except:
             print("Cannot run pdbcopy, packaging private symbols")
 
-        # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
-        # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
-        # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for now.
-        symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows-%d.tar" % (self.args['configuration'].lower(),
-                                                                                    self.fs_channel_legacy_oneword(),
-                                                                                    '-'.join(self.args['version']),
-                                                                                    self.args['viewer_flavor'],
-                                                                                    self.address_size),
-                                                                                    'w')
+        tarName = "%s/Phoenix_%s_%s_%s_pdbsymbols-windows-%d.tar.xz" % (self.args['configuration'].lower(),
+                                                                        self.fs_channel_legacy_oneword(),
+                                                                        '-'.join(self.args['version']),
+                                                                        self.args['viewer_flavor'],
+                                                                        self.address_size)                                      
+        # Store windows symbols we want to keep for debugging in a tar file.
+        symbolTar = tarfile.open( name=tarName, mode="w:xz")
         symbolTar.add( "%s/Firestorm-bin.exe" % self.args['configuration'].lower(), "firestorm-bin.exe" )
         symbolTar.add( "%s/build_data.json" % self.args['configuration'].lower(), "build_data.json" )
         symbolTar.add( "%s/%s" % (self.args['configuration'].lower(),pdbName), pdbName )
