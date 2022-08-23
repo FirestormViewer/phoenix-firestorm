@@ -170,6 +170,7 @@ set(viewer_SOURCE_FILES
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
     fsfloaternearbychat.cpp
+    fsfloaterpartialinventory.cpp
     fsfloaterplacedetails.cpp
     fsfloaterposestand.cpp
     fsfloaterprofile.cpp
@@ -944,6 +945,7 @@ set(viewer_HEADER_FILES
     fsfloaterim.h
     fsfloaterimcontainer.h
     fsfloaternearbychat.h
+    fsfloaterpartialinventory.h
     fsfloaterplacedetails.h
     fsfloaterposestand.h
     fsfloaterprofile.h
