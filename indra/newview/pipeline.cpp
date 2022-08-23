@@ -11563,36 +11563,71 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar)
 
 bool LLPipeline::hasRenderBatches(const U32 type) const
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+	
 	return sCull->getRenderMapSize(type) > 0;
 }
 
 LLCullResult::drawinfo_iterator LLPipeline::beginRenderMap(U32 type)
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+
 	return sCull->beginRenderMap(type);
 }
 
 LLCullResult::drawinfo_iterator LLPipeline::endRenderMap(U32 type)
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+
 	return sCull->endRenderMap(type);
 }
 
 LLCullResult::sg_iterator LLPipeline::beginAlphaGroups()
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+
 	return sCull->beginAlphaGroups();
 }
 
 LLCullResult::sg_iterator LLPipeline::endAlphaGroups()
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+
 	return sCull->endAlphaGroups();
 }
 
 LLCullResult::sg_iterator LLPipeline::beginRiggedAlphaGroups()
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+
     return sCull->beginRiggedAlphaGroups();
 }
 
 LLCullResult::sg_iterator LLPipeline::endRiggedAlphaGroups()
 {
+	// <FS:ND>  FIRE-31942, sCull can be invalid if triggering 360 snapshosts fast enough  (due to snapshots running in their own co routine)
+	if( !sCull )
+		return {};
+	// </FS:ND>
+
     return sCull->endRiggedAlphaGroups();
 }
 
