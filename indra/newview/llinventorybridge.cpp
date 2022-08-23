@@ -4680,6 +4680,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Show folder in new window option
 	items.push_back((std::string("Show in new Window")));
 
 	// Add menu items that are dependent on the contents of the folder.
