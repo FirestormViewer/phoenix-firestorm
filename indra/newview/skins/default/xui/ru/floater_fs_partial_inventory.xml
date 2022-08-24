@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater name="fs_partial_inventory" title="Инвентарь">
+	<floater.string name="title">Инвентарь: [FOLDERNAME]</floater.string>
+	<filter_editor label="Фильтровать папку инвентаря" name="flt_search" />
+</floater>
