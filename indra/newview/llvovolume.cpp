@@ -5664,7 +5664,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 			}
 		}
 		
-		// if (type == LLRenderPass::PASS_ALPHA) // <FS:Beq> allow tracking through pipeline
+		if (type == LLRenderPass::PASS_ALPHA)
 		{ //for alpha sorting
 			facep->setDrawInfo(draw_info);
 		}
@@ -6617,14 +6617,6 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		LLFace* facep = *face_iter;
 		LLViewerTexture* tex = facep->getTexture();
         const LLTextureEntry* te = facep->getTextureEntry();
-		// <FS:Beq> Don't batch fully transparent faces
-		if (te && ( te->getAlpha() == 0.f ) && ( te->getGlow() == 0.0 ) && !LLDrawPoolAlpha::sShowDebugAlpha)
-		{
-			facep->setSize(0,0);
-			++face_iter;
-			continue;
-		}
-		// </FS:Beq>
 		LLMaterialPtr mat = te->getMaterialParams();
         LLMaterialID matId = te->getMaterialID();
 
@@ -7029,10 +7021,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 			else if (is_alpha)
 			{
 				// can we safely treat this as an alpha mask?
-				// <FS:Beq> Nothing actually sets facecolor use the TE alpha instead.
-				// if (facep->getFaceColor().mV[3] <= 0.f)
-				if ((te->getAlpha() <= 0.f || facep->getFaceColor().mV[3] <= 0.f) && te->getGlow() == 0.0 && !LLDrawPoolAlpha::sShowDebugAlpha)
-				// </FS:Beq>
+				if (facep->getFaceColor().mV[3] <= 0.f)
 				{ //100% transparent, don't render unless we're highlighting transparent
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("facep->alpha -> invisible");
 					registerFace(group, facep, LLRenderPass::PASS_ALPHA_INVISIBLE);
