@@ -83,6 +83,7 @@
 	<menu_item_call label="Protéger" name="ProtectFolder"/>
 	<menu_item_call label="Copier l&apos;UUID (identifiant universel unique)" name="Copy Asset UUID"/>
 	<menu_item_call label="Affiche le Panneau principal" name="Show in Main Panel"/>
+	<menu_item_call label="Afficher dans une nouvelle fenêtre" name="Show in new Window"/>
 	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>
 	<menu_item_call label="Couper" name="Cut"/>
 	<menu_item_call label="Copier" name="Copy"/>
