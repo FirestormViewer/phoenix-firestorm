@@ -11749,7 +11749,7 @@ You may not alter the shape of a mesh object
    name="FullRegionCantEnter"
    type="notify">
    <tag>fail</tag>
-You can't enter this region because \nthe region is full.
+You can't enter this region because the region is full.
   </notification>
 
   <notification
@@ -12555,7 +12555,7 @@ Unable to buy pass right now.  Try again later.
    name="CantCreateObjectParcelFull"
    type="notify">
    <tag>fail</tag>
-Can't create object because \nthe parcel is full.
+Can't create object because the parcel is full.
   </notification>
 
   <notification

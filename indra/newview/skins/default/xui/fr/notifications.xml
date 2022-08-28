@@ -4635,7 +4635,7 @@ Elle est peut-être pleine ou sur le point de redémarrer.
 		Vous ne pouvez pas changer la forme d&apos;un objet avec maillage.
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Vous ne pouvez pas pénétrer dans cette région car \ncar la région est pleine.
+		Vous ne pouvez pas pénétrer dans cette région car car la région est pleine.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Échec du lien -- les propriétaires sont différents
@@ -4939,7 +4939,7 @@ Veuillez sélectionner un terrain plus petit.
 		Impossible d&apos;acheter le pass actuellement.  Réessayez ultérieurement.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Création de l&apos;objet impossible car \nla parcelle est pleine.
+		Création de l&apos;objet impossible car la parcelle est pleine.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Échec du placement de l&apos;objet à l&apos;emplacement spécifié.  Veuillez réessayer.

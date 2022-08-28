@@ -4398,7 +4398,7 @@ Spróbuj ponownie za minutę.
 		Nie możesz zmieniać kształtu obiektu meszowego.
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Nie możesz wejść do tego regionu, \nponieważ jest pełny.
+		Nie możesz wejść do tego regionu, ponieważ jest pełny.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Scalanie nie powiodło się -- właściciele są różni
@@ -4706,7 +4706,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		Nie można w tej chwili kupić przepustki. Spróbuj ponownie później.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Nie można utworzyć obiektu, \n ponieważ działka jest pełna.
+		Nie można utworzyć obiektu, ponieważ działka jest pełna.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Nie udało się umieścić obiektu w żądanej lokalizacji. Spróbuj ponownie.

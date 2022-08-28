@@ -4514,7 +4514,7 @@ https://wiki.firestormviewer.org/fs_voice
 		Не разрешается изменять форму меш-объекта
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Вам нет доступа в этот регион: \nрегион заполнен.
+		Вам нет доступа в этот регион: регион заполнен.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Связь невозможна -- разные владельцы
@@ -4818,7 +4818,7 @@ https://wiki.firestormviewer.org/fs_voice
 		Сейчас нельзя купить пропуск.  Повторите попытку позже.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Невозможно создать объект:\nучасток заполнен.
+		Невозможно создать объект: участок заполнен.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Не удалось поместить объект в указанное место.  Повторите попытку.
