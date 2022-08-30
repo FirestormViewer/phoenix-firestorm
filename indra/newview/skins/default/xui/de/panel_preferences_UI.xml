@@ -264,6 +264,23 @@ Standard 0. Größere Werte können nicht korrekt funktionieren.
 			Pixel (Erfordert Neustart)
 [VIEWER_GENERATION]-Standard 20. Viewer 1-Standard 18.
 		</text>
+		<text name="text_box_notecard_font" width="125">
+			Schrift für Notizkarten:
+		</text>
+		<combo_box name="FSNotecardFontName" tool_tip="Name der Schrift, die für den Notizkarten-Editor verwendet wird">
+			<combo_item name="Sans Serif" label="Sans Serif"/>
+			<combo_item name="Monospace" label="Monospace"/>
+			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
+		</combo_box>
+		<combo_box name="FSNotecardFontSize" tool_tip="Größe der Schrift, die für den Notizkarten-Editor verwendet wird">
+			<combo_item name="Monospace" label="Monospace"/>
+			<combo_item name="Scripting" label="Scripting"/>
+			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item name="Small" label="Klein"/>
+			<combo_item name="Medium" label="Mittel"/>
+			<combo_item name="Large" label="Groß"/>
+		</combo_box>
 	</panel>
 </tab_container>
 </panel>

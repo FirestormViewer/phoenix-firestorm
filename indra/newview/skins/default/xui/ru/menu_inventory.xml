@@ -10,7 +10,6 @@
 	<menu_item_call label="Активировать" name="Marketplace Activate"/>
 	<menu_item_call label="Деактивировать" name="Marketplace Deactivate"/>
 	<menu_item_call label="Поделиться" name="Share"/>
-	<menu_item_call label="Купить" name="Task Buy"/>
 	<menu_item_call label="Открыть" name="Task Open"/>
 	<menu_item_call label="Проиграть" name="Task Play"/>
 	<menu_item_call label="Свойства" name="Task Properties"/>
@@ -85,6 +84,8 @@
 	<menu_item_call label="Защитить папку" name="ProtectFolder"/>
 	<menu_item_call label="Снять защиту папки" name="UnprotectFolder"/>
 	<menu_item_call label="Копировать идентификатор UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Показать в главной панели" name="Show in Main Panel"/>
+	<menu_item_call label="Показать в новом окне" name="Show in new Window"/>
 	<menu_item_call label="Возврат к последней позиции" name="Restore to Last Position"/>
 	<menu_item_call label="Копировать" name="Copy"/>
 	<menu_item_call label="Вырезать" name="Cut"/>
@@ -92,7 +93,6 @@
 	<menu_item_call label="Вставить как ссылку" name="Paste As Link"/>
 	<menu_item_call label="Найти все ссылки" name="Find Links"/>
 	<menu_item_call label="Заменить ссылки" name="Replace Links"/>
-	<menu_item_call label="Удалить ссылку" name="Remove Link"/>
 	<menu_item_call label="Удалить" name="Delete"/>
 	<menu_item_call label="Очистить неработающие ссылки" name="Cleanup broken Links"/>
 	<menu_item_call label="Переместить в папку по умолчанию" name="Move to Default Folder"/>
@@ -114,7 +114,6 @@
 	<menu_item_call label="Сохранить как" name="Save As"/>
 	<menu_item_call label="Сохранить в" name="Save Selected As"/>
 	<menu_item_call label="Надеть" name="Wearable And Object Wear"/>
-	<menu_item_call label="Найти в общем виде" name="Show in Main Panel"/>
 	<menu_item_call label="Добавить" name="Wearable Add"/>
 	<menu label="Прикрепить к" name="Attach To"/>
 	<menu label="Прикрепить на экран" name="Attach To HUD"/>
@@ -125,7 +124,8 @@
 	<menu_item_call label="Снять" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Применить только к себе"/>
 	<menu_item_call name="Settings Apply Parcel" label="Применить к Участку"/>
-	<menu_item_call label="Отправить на Marketplace" name="Marketplace Send"/>
+	<menu_item_call label="Создать папку из выбранных" name="New folder from selected"/>
+	<menu_item_call label="Разгруппировать элементы папки" name="Ungroup folder items"/>
 	<menu_item_call label="Копировать в списки товаров торгового центра" name="Marketplace Copy"/>
 	<menu_item_call label="Переместить в списки товаров торгового центра" name="Marketplace Move"/>
 	<menu_item_call label="--нет опций--" name="--no options--"/>

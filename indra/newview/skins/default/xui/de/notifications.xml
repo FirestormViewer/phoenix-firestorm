@@ -4329,7 +4329,7 @@ Sie ist voll oder startet in Kürze neu.
 		Sie können die Form eines Mesh-Objekts nicht ändern.
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Sie können diese Region nicht betreten, \nda die Region voll ist.
+		Sie können diese Region nicht betreten, da die Region voll ist.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Verknüpfungsfehler – Eigentümer sind unterschiedlich
@@ -4587,7 +4587,7 @@ Wählen Sie eine kleinere Landfläche aus.
 	<notification name="CantDivideLandCantFindParcel">
 		Land kann nicht geteilt werden.
 Parzelle kann nicht gefunden werden.
-Bitte melden Sie den Fehler über „Hilfe“ -&gt; „Fehler melden“.
+Bitte melden Sie das Problem über „Hilfe“ -&gt; „Problem melden“.
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
 		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt.
@@ -4633,7 +4633,7 @@ Wählen Sie eine kleinere Landfläche aus.
 		Passkauf momentan nicht möglich.  Versuchen Sie es später erneut.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Objekt kann nicht erstellt werden, \nda die Parzelle voll ist.
+		Objekt kann nicht erstellt werden, da die Parzelle voll ist.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Objekt konnte nicht an festgelegtem Ort platziert werden.  Versuchen Sie es erneut.
@@ -5570,7 +5570,7 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 		Mehrfach-Import von Windlight abgeschlossen.
 	</notification>
 	<notification name="AttachedRiggedObjectToHUD">
-		Der Anhang „[NAME]“ enthält geriggtes Mesh, ist aber am HUD-Punkt „[HUD_POINT]“ angehängt. Das bedeutet, dass Sie es korrekt sehen werden, alle anderen werden es hingegen gar nicht sehen. Denken Sie darüber nach, den Anhang zu entfernen und an einem regulären Punkt am Körper anzuhängen.
+		Der Anhang „[NAME]“ enthält geriggtes Mesh, ist aber am HUD-Punkt „[HUD_POINT]“ angehängt. Geriggte Meshes an HUD-Punkten sind nicht sichtbar, weder für Sie selbst noch für andere. Denken Sie darüber nach, den Anhang zu entfernen und an einem regulären Punkt am Körper anzuhängen.
 		<usetemplate ignoretext="Warnen, wenn ein geriggtes Mesh an einem HUD-Punkt angehängt wird." name="notifyignore"/>
 	</notification>
 	<notification name="WarnForceLoginURL">

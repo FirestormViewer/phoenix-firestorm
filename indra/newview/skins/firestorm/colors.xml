@@ -878,4 +878,16 @@
   <color
       name="UploadDialogBackground"
       reference="floater_bg_color_a" />
+  <color
+     name="NotecardBackgroundColor"
+     reference="TextBgFocusColor" />
+  <color
+     name="NotecardTextColor"
+     reference="TextFgColor" />
+  <color
+     name="NotecardSelectionColor"
+     reference="simpleeditor_bg_selected" />
+  <color
+     name="NotecardCursorColor"
+     reference="TextCursorColor" />
 </colors>

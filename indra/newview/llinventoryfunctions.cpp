@@ -2653,7 +2653,38 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 			// </FS:Ansariel>
 
 			LLSD args;
-			args["QUESTION"] = LLTrans::getString(root->getSelectedCount() > 1 ? "DeleteItems" :  "DeleteItem");
+			// <FS:Ansariel> FIRE-31816: Include selection count when deleting more than one object from inventory
+			//args["QUESTION"] = LLTrans::getString(root->getSelectedCount() > 1 ? "DeleteItems" :  "DeleteItem");
+			//args["QUESTION"] = LLTrans::getString(root->getSelectedCount() > 1 ? "DeleteItems" : "DeleteItem", args);
+			LLLocale locale("");
+			std::string count_str{};
+			S32 selection_count = root->getSelectedCount();
+			S32 total_count{ 0 };
+
+			for (const auto item : root->getSelectedItems())
+			{
+				total_count++;
+
+				LLFolderViewModelItemInventory * view_model = dynamic_cast<LLFolderViewModelItemInventory *>(item->getViewModelItem());
+				if (view_model)
+				{
+					auto cat = model->getCategory(view_model->getUUID());
+					if (cat)
+					{
+						LLInventoryModel::cat_array_t cats;
+						LLInventoryModel::item_array_t items;
+						model->collectDescendents(cat->getUUID(), cats, items, TRUE);
+						total_count += (S32)(cats.size() + items.size());
+					}
+				}
+			}
+
+			LLResMgr::instance().getIntegerString(count_str, selection_count);
+			args["COUNT_SELECTION"] = count_str;
+			LLResMgr::instance().getIntegerString(count_str, total_count);
+			args["COUNT_TOTAL"] = count_str;
+			args["QUESTION"] = LLTrans::getString(selection_count > 1 ? "DeleteItems" : "DeleteItem", args);
+			// </FS:Ansariel>
 			LLNotificationsUtil::add("DeleteItems", args, LLSD(), boost::bind(&LLInventoryAction::onItemsRemovalConfirmation, _1, _2, root->getHandle()));
 		}
         // Note: marketplace listings will be updated in the callback if delete confirmed

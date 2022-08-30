@@ -135,7 +135,7 @@
 	<text name="selection_empty">
 		Zaznacz coś!
 	</text>
-	<text name="remaining_capacity">
+	<text name="more info label">
 		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Więcej]
 	</text>
 	<tab_container name="Object Info Tabs">
@@ -255,15 +255,15 @@
 		</panel>
 		<panel label="Obiekt" name="Object">
 			<panel.string name="paste_position">
-				Wklej pozycję
+Wklej pozycję
 [VALUE]
 			</panel.string>
 			<panel.string name="paste_size">
-				Wklej rozmiar
+Wklej rozmiar
 [VALUE]
 			</panel.string>
 			<panel.string name="paste_rotation">
-				Wklej obrót
+Wklej obrót
 [VALUE]
 			</panel.string>
 			<check_box label="Zablokowany" name="checkbox locked" tool_tip="Chroni obiekt przed przesunięciem lub usunięciem. Bardzo pomocne w czasie budowania, aby uniknąć niezamierzonych edycji."/>
@@ -275,21 +275,21 @@
 			</text>
 			<button name="copy_pos_btn" label="K" tool_tip="Kopiuj pozycję"/>
 			<button name="paste_pos_btn" label="W" tool_tip="Wklej pozycję"/>
-			<button name="paste_pos_clip_btn" label="w" tool_tip="Wklej pozycję ze schowka"/>
+			<button name="paste_pos_clip_btn" label="w" tool_tip="Spróbuj wkleić pozycję ze schowka"/>
 			<text name="label size">
 				Rozmiar (metry)
 			</text>
 			<button name="copy_size_btn" label="K" tool_tip="Kopiuj rozmiar"/>
 			<button name="paste_size_btn" label="W" tool_tip="Wklej rozmiar"/>
-			<button name="paste_size_clip_btn" label="w" tool_tip="Wklej rozmiar ze schowka"/>
+			<button name="paste_size_clip_btn" label="w" tool_tip="Spróbuj wkleić rozmiar ze schowka"/>
 			<text name="label rotation">
 				Obrót (stopnie)
 			</text>
 			<button name="copy_rot_btn" label="K" tool_tip="Kopiuj obrót"/>
 			<button name="paste_rot_btn" label="W" tool_tip="Wklej obrót"/>
-			<button name="paste_rot_clip_btn" label="w" tool_tip="Wklej obrót ze schowka"/>
-			<button label="Kopiuj" name="copy_params_btn" tool_tip="Kopiuj parametry do schowka"/>
-			<button label="Wklej" name="paste_params_btn" tool_tip="Wklej parametry ze schowka"/>
+			<button name="paste_rot_clip_btn" label="w" tool_tip="Spróbuj wkleić obrót ze schowka"/>
+			<button label="Kopiuj" name="copy_params_btn" tool_tip="Kopiuj parametry obiektu do schowka"/>
+			<button label="Wklej" name="paste_params_btn" tool_tip="Wklej parametry obiektu ze schowka"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Klocek" name="Box"/>
 				<combo_box.item label="Walec" name="Cylinder"/>
@@ -431,6 +431,8 @@ Nis ↔ Najniż
 			</text>
 			<check_box label="Animowany mesz" name="Animated Mesh Checkbox Ctrl" tool_tip="Umożliwia niezależne animowanie obiektów riggowanych" />
 			<check_box label="Elastyczność" name="Flexible1D Checkbox Ctrl" tool_tip="Elastyczność wzdłuż osi Z (tylko po stronie klienta)"/>
+			<button name="copy_features_btn" tool_tip="Skopiuj parametry cech do schowka" />
+			<button name="paste_features_btn" tool_tip="Wklej parametry cech ze schowka" />
 			<spinner label="Gładkość" name="FlexNumSections"/>
 			<spinner label="Ciężar" name="FlexGravity"/>
 			<spinner label="Tarcie" name="FlexFriction"/>

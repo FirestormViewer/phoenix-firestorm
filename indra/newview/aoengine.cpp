@@ -223,19 +223,18 @@ bool AOEngine::foreignAnimations()
 
 	LL_DEBUGS("AOEngine") << "Checking for foreign animation on seat " << seat << LL_ENDL;
 
-	for (LLVOAvatar::AnimSourceIterator sourceIterator = gAgentAvatarp->mAnimationSources.begin();
-		sourceIterator != gAgentAvatarp->mAnimationSources.end(); ++sourceIterator)
+	for (const auto&[source_id, animation_id] : gAgentAvatarp->mAnimationSources)
 	{
 		// skip animations run by the avatar itself
-		if (sourceIterator->first != gAgentID)
+		if (source_id != gAgentID)
 		{
 			// find the source object where the animation came from
-			LLViewerObject* source = gObjectList.findObject(sourceIterator->first);
+			LLViewerObject* source = gObjectList.findObject(source_id);
 
 			// proceed if it's not an attachment
 			if (source && !source->isAttachment())
 			{
-				LL_DEBUGS("AOEngine") << "Source " << sourceIterator->first << " is running animation " << sourceIterator->second << LL_ENDL;
+				LL_DEBUGS("AOEngine") << "Source " << source_id << " is running animation " << animation_id << LL_ENDL;
 
 				// get the source's root prim
 				LLViewerObject* sourceRoot = dynamic_cast<LLViewerObject*>(source->getRoot());
@@ -243,7 +242,7 @@ bool AOEngine::foreignAnimations()
 				// if the root prim is the same as the animation source, report back as TRUE
 				if (sourceRoot && sourceRoot->getID() == seat)
 				{
-					LL_DEBUGS("AOEngine") << "foreign animation " << sourceIterator->second << " found on seat." << LL_ENDL;
+					LL_DEBUGS("AOEngine") << "foreign animation " << animation_id << " found on seat." << LL_ENDL;
 					return true;
 				}
 			}
@@ -1018,12 +1017,12 @@ bool AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, cons
 
 		if (cats)
 		{
-			for (S32 index = 0; index < cats->size(); ++index)
+			for (auto cat : *cats)
 			{
-				if (cats->at(index)->getName().compare(state->mName) == 0)
+				if (cat->getName().compare(state->mName) == 0)
 				{
 					LL_DEBUGS("AOEngine") << "UUID found!" << LL_ENDL;
-					newStateFolderUUID = cats->at(index)->getUUID();
+					newStateFolderUUID = cat->getUUID();
 					state->mInventoryUUID = newStateFolderUUID;
 					break;
 				}
@@ -1195,8 +1194,7 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 inde
 	// this item was not an animation link, move it to lost and found
 	if (move)
 	{
-		LLInventoryModel* model = &gInventory;
-		model->changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
+		gInventory.changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
 		LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
 		update();
 		return false;
@@ -1209,7 +1207,7 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 inde
 
 	state->mAnimations.erase(state->mAnimations.begin() + index);
 
-	if (state->mAnimations.size() == 0)
+	if (state->mAnimations.empty())
 	{
 		LL_DEBUGS("AOEngine") << "purging folder " << state->mName << " from inventory because it's empty." << LL_ENDL;
 
@@ -1219,12 +1217,18 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 inde
 
 		if (cats)
 		{
-			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
+			for (auto cat : *cats)
 			{
-				LLPointer<LLInventoryCategory> cat = (*it);
 				std::vector<std::string> params;
 				LLStringUtil::getTokens(cat->getName(), params, ":");
-				std::string stateName = params[0];
+
+				if (params.empty())
+				{
+					LL_WARNS("AOEngine") << "Unexpected folder found in ao set folder: " << cat->getName() << LL_ENDL;
+					return false;
+				}
+
+				const std::string& stateName = params[0];
 
 				if (state->mName.compare(stateName) == 0)
 				{
@@ -1290,25 +1294,25 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
 
 	if (items)
 	{
-		for (S32 num = 0; num < items->size(); ++num)
+		for (auto item : *items)
 		{
-			LL_DEBUGS("AOEngine") << "Found animation link " << items->at(num)->LLInventoryItem::getName()
-				<< " desc " << items->at(num)->LLInventoryItem::getDescription()
-				<< " asset " << items->at(num)->getAssetUUID() << LL_ENDL;
+			LL_DEBUGS("AOEngine") << "Found animation link " << item->LLInventoryItem::getName()
+				<< " desc " << item->LLInventoryItem::getDescription()
+				<< " asset " << item->getAssetUUID() << LL_ENDL;
 
 			AOSet::AOAnimation anim;
-			anim.mAssetUUID = items->at(num)->getAssetUUID();
-			LLViewerInventoryItem* linkedItem = items->at(num)->getLinkedItem();
+			anim.mAssetUUID = item->getAssetUUID();
+			LLViewerInventoryItem* linkedItem = item->getLinkedItem();
 			if (!linkedItem)
 			{
-				LL_WARNS("AOEngine") << "linked item for link " << items->at(num)->LLInventoryItem::getName() << " not found (broken link). Skipping." << LL_ENDL;
+				LL_WARNS("AOEngine") << "linked item for link " << item->LLInventoryItem::getName() << " not found (broken link). Skipping." << LL_ENDL;
 				continue;
 			}
 			anim.mName = linkedItem->LLInventoryItem::getName();
-			anim.mInventoryUUID = items->at(num)->getUUID();
+			anim.mInventoryUUID = item->getUUID();
 
 			S32 sortOrder;
-			if (!LLStringUtil::convertToS32(items->at(num)->LLInventoryItem::getDescription(), sortOrder))
+			if (!LLStringUtil::convertToS32(item->LLInventoryItem::getDescription(), sortOrder))
 			{
 				sortOrder = -1;
 			}
@@ -1370,9 +1374,8 @@ void AOEngine::update()
 
 	if (categories)
 	{
-		for (S32 index = 0; index < categories->size(); ++index)
+		for (auto currentCategory : *categories)
 		{
-			LLViewerInventoryCategory* currentCategory = categories->at(index);
 			const std::string& setFolderName = currentCategory->getName();
 
 			if (setFolderName.empty())
@@ -1383,6 +1386,11 @@ void AOEngine::update()
 
 			std::vector<std::string> params;
 			LLStringUtil::getTokens(setFolderName, params, ":");
+			if (params.empty())
+			{
+				LL_WARNS("AOEngine") << "Unexpected folder found in ao set folder: " << currentCategory->getName() << LL_ENDL;
+				continue;
+			}
 
 			AOSet* newSet = getSetByName(params[0]);
 			if (!newSet)
@@ -1440,11 +1448,16 @@ void AOEngine::update()
 				gInventory.getDirectDescendentsOf(currentCategory->getUUID(), stateCategories, items);
 				newSet->setComplete(true);
 
-				for (S32 state_index = 0; state_index < stateCategories->size(); ++state_index)
+				for (auto stateCategory : *stateCategories)
 				{
 					std::vector<std::string> state_params;
-					LLStringUtil::getTokens(stateCategories->at(state_index)->getName(), state_params, ":");
-					std::string stateName = state_params[0];
+					LLStringUtil::getTokens(stateCategory->getName(), state_params, ":");
+					if (params.empty())
+					{
+						LL_WARNS("AOEngine") << "Unexpected state folder found in ao set: " << stateCategory->getName() << LL_ENDL;
+						continue;
+					}
+					const std::string& stateName = state_params[0];
 
 					AOSet::AOState* state = newSet->getStateByName(stateName);
 					if (!state)
@@ -1454,7 +1467,7 @@ void AOEngine::update()
 					}
 					LL_DEBUGS("AOEngine") << "Reading state " << stateName << LL_ENDL;
 
-					state->mInventoryUUID = stateCategories->at(state_index)->getUUID();
+					state->mInventoryUUID = stateCategory->getUUID();
 					for (U32 num = 1; num < state_params.size(); ++num)
 					{
 						if (state_params[num] == "CY")
@@ -1544,11 +1557,11 @@ void AOEngine::reload(bool aFromTimer)
 AOSet* AOEngine::getSetByName(const std::string& name) const
 {
 	AOSet* found = nullptr;
-	for (U32 index = 0; index < mSets.size(); ++index)
+	for (auto set : mSets)
 	{
-		if (mSets[index]->getName().compare(name) == 0)
+		if (set->getName().compare(name) == 0)
 		{
-			found = mSets[index];
+			found = set;
 			break;
 		}
 	}
@@ -1692,9 +1705,8 @@ void AOEngine::saveState(const AOSet::AOState* state)
 
 void AOEngine::saveSettings()
 {
-	for (U32 index = 0; index < mSets.size(); ++index)
+	for (auto set : mSets)
 	{
-		AOSet* set = mSets[index];
 		if (set->getDirty())
 		{
 			saveSet(set);
@@ -1772,9 +1784,9 @@ void AOEngine::inMouselook(bool mouselook)
 void AOEngine::setDefaultSet(AOSet* set)
 {
 	mDefaultSet = set;
-	for (U32 index = 0; index < mSets.size(); ++index)
+	for (auto set : mSets)
 	{
-		mSets[index]->setDirty(true);
+		set->setDirty(true);
 	}
 }
 
@@ -1910,12 +1922,12 @@ void AOEngine::tick()
 		gInventory.getDirectDescendentsOf(categoryID, categories, items);
 		LL_DEBUGS("AOEngine") << "cat " << categories->size() << " items " << items->size() << LL_ENDL;
 
-		for (S32 index = 0; index < categories->size(); ++index)
+		for (auto cat : *categories)
 		{
-			const std::string& catName = categories->at(index)->getName();
+			const std::string& catName = cat->getName();
 			if (catName.compare(ROOT_AO_FOLDER) == 0)
 			{
-				mAOFolder = categories->at(index)->getUUID();
+				mAOFolder = cat->getUUID();
 				break;
 			}
 		}

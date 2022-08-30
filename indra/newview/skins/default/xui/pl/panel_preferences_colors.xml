@@ -197,13 +197,32 @@
 			<color_swatch name="console_background" tool_tip="Wybierz kolor konsoli"/>
 			<slider label="Przezroczystość:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
 			<text name="preferences_search_label">
-				Podśw. wyników wyszukiwania w opcjach:
+				Wyniki wyszukiwania w opcjach:
 			</text>
 			<color_swatch name="preferences_search_color" tool_tip="Wybierz kolor dla podświetlenia wyników wyszukiwania w opcjach"/>
 			<text name="area_search_beacon_color_label">
 				Emiter śledzenia (np. przeszukiwania obszaru):
 			</text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Wybierz kolor emitera śledzenia, np. dla przeszukiwania obszaru" />
+			<text name="notecard_editor_color_label">
+				Kolory notek:
+			</text>
+			<text name="notecard_editor_writable_text_color_label">
+				Tekst:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Kolor tekstu notek" />
+			<text name="notecard_editor_writable_bg_color_label" width="30">
+				Tło:
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Kolor tła notek" />
+			<text name="notecard_editor_writable_cursor_color_label">
+				Kursor:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Kolor kursora notek" />
+			<text name="notecard_editor_writable_selection_color_label" width="75">
+				Zaznaczenie:
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Kolor zaznaczonego tekstu dla notek" />
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 			<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>
