@@ -4070,6 +4070,10 @@ Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
 		Versuch, eine ungültige oder nicht lesbare Bilddatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
 Versuch abgebrochen.
 	</notification>
+	<notification name="LocalGLTFVerifyFail">
+		Versuch, eine ungültige oder nicht lesbare GFLTF-Materialdatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
+Versuch abgebrochen.
+	</notification>
 	<notification name="PathfindingReturnMultipleItems">
 		Sie sind dabei, [NUM_ITEMS] Objekte zurückzugeben. Möchten Sie diesen Vorgang wirklich fortsetzen?
 		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte zurückgeben?" name="okcancelignore" notext="Nein" yestext="Ja"/>

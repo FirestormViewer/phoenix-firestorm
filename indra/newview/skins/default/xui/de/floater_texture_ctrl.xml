@@ -26,6 +26,11 @@
 	<text name="preview_disabled">
 		Vorschau deaktiviert
 	</text>
+	<combo_box name="textures_material_combo">
+		<combo_box.item name="Materials_Textures" label="Materialien &amp; Texturen"/>
+		<combo_box.item name="Textures" label="Texturen"/>
+		<combo_box.item name="Materials" label="Materialien"/>
+	</combo_box>
 	<check_box label="Ordner anzeigen" name="show_folders_check"/>
 	<search_editor label="Texturen filtern" name="inventory search editor"/>
 	<button label="Hinzufügen" label_selected="Hinzufügen" name="l_add_btn"/>

@@ -6451,6 +6451,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="ExperiencePermissionShort17">
 		Umgebung
 	</string>
+	<string name="Material Texture Name Header">
+		Vorhandene Texturen im Material:
+	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Unterhaltungen werden nicht protokolliert. Um ein Protokoll zu starten, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Chat“.
 	</string>
