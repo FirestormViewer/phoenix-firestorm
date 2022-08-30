@@ -10,6 +10,7 @@
  left="0"
  mouse_opaque="false"
  name="status"
+ tab_stop="false"
  top="19"
  width="1000">
   <!-- icon

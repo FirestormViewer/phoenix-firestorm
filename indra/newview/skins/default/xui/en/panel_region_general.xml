@@ -29,7 +29,8 @@
      left_delta="50"
      name="region_text"
      top_delta="0"
-     width="400">
+     use_ellipses="true"
+     width="235">
         unknown
     </text>
     <text
@@ -94,7 +95,7 @@
      right="-55"
      name="grid_position_x"
      top_delta="0"
-     initial_value="unknown"
+     default_text="n/a"
      width="40" />
     <line_editor
      follows="right|top"
@@ -104,7 +105,7 @@
      right="-10"
      name="grid_position_y"
      top_delta="0"
-     initial_value="unknown"
+     default_text="n/a"
      width="40" />
     <text
      follows="left|top"

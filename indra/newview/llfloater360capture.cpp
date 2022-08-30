@@ -112,7 +112,8 @@ BOOL LLFloater360Capture::postBuild()
 
     // UX/UI called for preview mode (always the first index/option)
     // by default each time vs restoring the last value
-    mQualityRadioGroup->setSelectedIndex(0);
+    // <FS:Ansariel> UX/UI has no clue what the users actually want!
+    //mQualityRadioGroup->setSelectedIndex(0);
 
     // Construct a URL pointing to the first page to load. Although
     // we do not use this page for anything (after some significant
@@ -319,6 +320,11 @@ const std::string LLFloater360Capture::getHTMLBaseFolder()
 // triggered when the 'capture' button in the UI is pressed
 void LLFloater360Capture::onCapture360ImagesBtn()
 {
+    // <FS:Beq> FIRE-31942 Avoid CoRo that appears to never usefully yield
+    // Allow option to re-enable on the off chance a low power machine can benefit
+    if(gSavedSettings.getBOOL("FSUseCoRoFor360Capture"))
+    {
+    // </FS:Beq>
     // launch the main capture code in a coroutine so we can
     // yield/suspend at some points to give the main UI
     // thread a look-in occasionally.
@@ -326,6 +332,13 @@ void LLFloater360Capture::onCapture360ImagesBtn()
     {
         capture360Images();
     });
+    // <FS:Beq> FIRE-31942 Avoid CoRo that appears to never usefully yield
+    }
+    else
+    {
+        capture360Images();
+    }
+    // </FS:Beq>
 }
 
 // Gets the full path name for a given JavaScript file in the HTML folder. We
@@ -682,6 +695,7 @@ void LLFloater360Capture::capture360Images()
 
     // allow the UI to update by suspending and waiting for the
     // main render loop to update the UI
+    if(gSavedSettings.getBOOL("FSUseCoRoFor360Capture")) // <FS:Beq/> FIRE-31942 - make apparently pointless CoRo optional (just in case)
     suspendForAFrame();
 }
 
@@ -892,7 +906,7 @@ const std::string LLFloater360Capture::generate_proposed_filename()
         // this looks complex but it's straightforward - removes all non-alpha chars from a string
         // which in this case is the SL region name - we use it as a proposed filename but the user is free to change
         std::string region_name = region->getName();
-        std::replace_if(region_name.begin(), region_name.end(), std::not1(std::ptr_fun(isalnum)), '_');
+        std::replace_if(region_name.begin(), region_name.end(), [](const auto& c) { return isalnum(c) == 0; }, '_');
         if (region_name.length() > 0)
         {
             filename << region_name;

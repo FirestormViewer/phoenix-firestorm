@@ -67,7 +67,7 @@ extern S32 gMaxAgentGroups;
 
 S32 FSCommon::sObjectAddMsg = 0;
 
-void report_to_nearby_chat(const std::string& message)
+void report_to_nearby_chat(std::string_view message)
 {
 	LLChat chat;
 	chat.mText = message;
@@ -81,16 +81,16 @@ std::string format_string(std::string text, const LLStringUtil::format_map_t& ar
 	return text;
 }
 
-bool is_irc_me_prefix(const std::string& text)
+bool is_irc_me_prefix(std::string_view text)
 {
-	const std::string prefix = text.substr(0, 4);
+	const std::string_view prefix = text.substr(0, 4);
 	return (prefix == "/me " || prefix == "/me'");
 }
 
-std::string unescape_name(const std::string& name)
+std::string unescape_name(std::string_view name)
 {
 	// bugfix for SL-46920: preventing filenames that break stuff.
-	char * curl_str = curl_unescape(name.c_str(), name.size());
+	char * curl_str = curl_unescape(name.data(), name.size()); // Calling data() should be ok here because we also pass the length
 	std::string unescaped_name(curl_str);
 	curl_free(curl_str);
 	curl_str = NULL;

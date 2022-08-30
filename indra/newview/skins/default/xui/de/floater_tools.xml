@@ -146,7 +146,7 @@
 		Flächen ausgewählt: [FACES_STRING]
 	</text>
 	<text name="more info label">
-		[secondlife:///app/openfloater/object_weights Mehr Infos]
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Mehr Infos]
 	</text>
 	<text name="selection_weight">
 		Physikgewicht [PHYS_WEIGHT], Darstellungskosten [DISP_WEIGHT].

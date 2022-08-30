@@ -1439,7 +1439,7 @@ void LLPanelEditWearable::changeCamera(U8 subpart)
         gMorphView->setCameraOffset( subpart_entry->mCameraOffset );
         if (gSavedSettings.getBOOL("AppearanceCameraMovement"))
         {
-            gAgentCamera.setFocusOnAvatar(FALSE, FALSE);
+        //    gAgentCamera.setFocusOnAvatar(FALSE, FALSE); <FS:Beq/> FIRE-31959 Restore proper turning behaviour.
             gMorphView->updateCamera();
         }
 }

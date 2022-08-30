@@ -1231,11 +1231,6 @@ bool LLFace::canRenderAsMask()
 	{
 		return false;
 	}
-
-	// <FS:Beq> shortcircuit fully alpha faces
-	if (getViewerObject()->isHUDAttachment()) { return false; }
-	if (te->getAlpha() == 0.0f && (te->getGlow() == 0.f)) { return true; }
-	// </FS:Beq>
 	
 	LLMaterial* mat = te->getMaterialParams();
 	if (mat && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)

@@ -72,9 +72,9 @@ std::string cmd_line_mPackagerTargetFolderName;
 LLUUID cmd_line_mPackagerTargetFolder;
 LLUUID cmd_line_mPackagerDest;
 
-LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
+LLViewerInventoryItem::item_array_t findInventoryInFolder(std::string_view ifolder)
 {
-	LLUUID folder = gInventory.findCategoryByName(ifolder);
+	LLUUID folder = gInventory.findCategoryByName(static_cast<std::string>(ifolder));
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 	gInventory.collectDescendents(folder, cats, items, FALSE);
@@ -88,14 +88,15 @@ class JCZdrop : public LLEventTimer
 public:
 	BOOL mRunning;
 	
-	JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string sFolder, std::string sUUID, bool package = false) : LLEventTimer(1.f), mRunning(FALSE)
-	{
-		mPackage = package;
-		mStack = stack;
-		mDestination = dest;
-		mFolderName = sFolder;
-		mDropUUID = sUUID;
-	}
+	JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string_view sFolder, std::string_view sUUID, bool package = false) 
+		: LLEventTimer(1.f),
+		mRunning(FALSE),
+		mPackage(package),
+		mStack(stack),
+		mDestination(dest),
+		mFolderName(sFolder),
+		mDropUUID(sUUID)
+	{ }
 
 	~JCZdrop()
 	{
@@ -129,7 +130,7 @@ public:
 		LLViewerObject* objectp = gObjectList.findObject(mDestination);
 		if (objectp)
 		{
-			report_to_nearby_chat(std::string("transferring ") + subj->getName());
+			report_to_nearby_chat(std::string("Transferring ") + subj->getName());
 			LLToolDragAndDrop::dropInventory(objectp, subj, LLToolDragAndDrop::SOURCE_AGENT, gAgentID);
 			if (mStack.size() > 0)
 			{
@@ -137,7 +138,7 @@ public:
 			}
 			else
 			{
-				return (mStack.size() == 0);
+				return (mStack.empty());
 			}
 		}
 		else
@@ -156,7 +157,7 @@ private:
 	bool mPackage;
 };
 
-JCZdrop* zdrop;
+JCZdrop* gZDrop{ nullptr };
 
 class ZdCleanup: public LLEventTimer
 {
@@ -168,7 +169,7 @@ public:
 
 	BOOL tick()
 	{
-		zdrop = NULL;
+		gZDrop = nullptr;
 		return TRUE;
 	}
 };
@@ -193,7 +194,7 @@ class JCZtake : public LLEventTimer
 public:
 	BOOL mRunning;
 
-	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY, bool use_selection = true, std::vector<U32> to_take = std::vector<U32>()) :
+	JCZtake(const LLUUID& target, bool package = false, const LLUUID& destination = LLUUID::null, std::string_view dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY, bool use_selection = true, std::vector<U32> to_take = std::vector<U32>()) :
 		LLEventTimer(0.66f),
 		mTarget(target),
 		mRunning(FALSE),
@@ -255,11 +256,14 @@ public:
 						mToTake.push_back(localid);
 					}
 				}
-				if (mToTake.size() > 0) mState = ZTS_TAKE;
+				if (!mToTake.empty())
+				{
+					mState = ZTS_TAKE;
+				}
 				break;
 
 			case ZTS_TAKE:
-				if (mToTake.size() > 0)
+				if (!mToTake.empty())
 				{
 					std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
 					mPackSize = mToTake.size() + inventory.size();
@@ -285,7 +289,7 @@ public:
 
 					if (mToTake.size() % 10 == 0)
 					{
-						if (mToTake.size() == 0)
+						if (mToTake.empty())
 						{
 							if (mPackage)
 							{
@@ -348,7 +352,8 @@ public:
 
 					if (itemstack.size() >= mPackSize || mCountdown == 0)
 					{
-						if (itemstack.size() < mPackSize) {
+						if (itemstack.size() < mPackSize)
+						{
 							report_to_nearby_chat("Phase 1 of the packager finished, but some items mave have been missed.");
 						}
 						else
@@ -358,8 +363,8 @@ public:
 
 						report_to_nearby_chat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
 
-						LLUUID sdest = LLUUID(mPackageDest);
-						new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
+						LLUUID sdest{ mPackageDest };
+						gZDrop = new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
 
 						doZtCleanup();
 						mState = ZTS_DONE;
@@ -388,7 +393,7 @@ private:
 	EZtakeState mState;
 };
 
-JCZtake* ztake;
+JCZtake* gZTake{ nullptr };
 
 class LOZtCleanup: public LLEventTimer
 {
@@ -400,9 +405,9 @@ public:
 
 	BOOL tick()
 	{
-		ztake->mRunning = TRUE;
-		delete ztake;
-		ztake = NULL;
+		gZTake->mRunning = TRUE;
+		delete gZTake;
+		gZTake = nullptr;
 		return TRUE;
 	}
 };
@@ -470,7 +475,7 @@ public:
 		{
 			report_to_nearby_chat(llformat("%i...", mCountdown--));
 		}
-		else if (mToTake.size() > 0)
+		else if (!mToTake.empty())
 		{
 			msg->newMessageFast(_PREHASH_DeRezObject);
 			msg->nextBlockFast(_PREHASH_AgentData);
@@ -492,7 +497,7 @@ public:
 
 			if (mToTake.size() % 10 == 0) 
 			{
-				if (mToTake.size() == 0) 
+				if (mToTake.empty()) 
 				{
 					report_to_nearby_chat("Mtake has taken all selected objects. Say \"mtake off\" to deactivate Mtake or select more objects to continue.");
 				} 
@@ -515,7 +520,7 @@ private:
 	S32 zeroClearY;
 	S32 zeroClearZ;
 };
-TMZtake* mtake;
+TMZtake* gMTake;
 
 void invrepair()
 {
@@ -534,7 +539,7 @@ void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
 	report_to_nearby_chat(llformat("%s: (%s)", id.asString().c_str(), name.c_str()));
 }
 
-bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_gesture)
+bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gesture)
 {
 	static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
 	static LLCachedControl<std::string> sFSCmdLinePos(gSavedSettings, "FSCmdLinePos");
@@ -556,12 +561,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings, "FSCmdLineMusic");
 	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
 	static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
-	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 	
 	if (sFSCmdLine)
 	{
-		std::istringstream i(revised_text);
+		std::istringstream i(static_cast<std::string>(revised_text));
 		std::string command;
 		i >> command;
 		if (!command.empty())
@@ -651,7 +655,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					return false;
 				}
 			}
-			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 			else if (command == sFSCmdLineBandwidth())
 			{
 				S32 band_width;
@@ -667,7 +670,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					return false;
 				}
 			}
-			//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 			else if (command == sFSCmdLineAO())
 			{
 				std::string status;
@@ -936,7 +938,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else
 					{
-						region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1));
+						region_name = LLWeb::escapeURL(static_cast<std::string>(revised_text.substr(command.length() + 1)));
 						LLVector3d agentPos = gAgent.getPositionGlobal();
 						agent_x = ll_round((F32)agentPos.mdV[VX]);
 						agent_y = ll_round((F32)agentPos.mdV[VY]);
@@ -961,7 +963,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				F32 result = 0.f;
 				if (revised_text.length() > command.length() + 1)
 				{
-					std::string expr = revised_text.substr(command.length()+1);
+					std::string expr = static_cast<std::string>(revised_text.substr(command.length() + 1));
 					LLStringUtil::toUpper(expr);
 					std::string original_expr = expr;
 
@@ -1024,7 +1026,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
-					std::string name = revised_text.substr(command.length() + 1);
+					std::string_view name = revised_text.substr(command.length() + 1);
 					cmdline_tp2name(name);
 				}
 				return false;
@@ -1047,7 +1049,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (setting == "on")
 					{
-						if (zdrop)
+						if (gZDrop)
 						{
 							report_to_nearby_chat("Zdrop is already active.");
 						}
@@ -1083,12 +1085,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 											report_to_nearby_chat("Verifying folder location...");
 											std::stack<LLViewerInventoryItem*> inventorystack;
 											std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(folder);
-											for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
+											for (const auto& item : inventory)
 											{
-												LLViewerInventoryItem* item = *it;
-												inventorystack.push(item);
+												inventorystack.emplace(item);
 											}
-											if (inventorystack.size())
+											if (!inventorystack.empty())
 											{
 												report_to_nearby_chat(llformat("Found folder \"%s\".", folder.c_str()));
 												report_to_nearby_chat(llformat("Found prim \"%s\".", destination.c_str()));
@@ -1097,7 +1098,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 												report_to_nearby_chat("Do not have the prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
 												report_to_nearby_chat("Use \"zdrop off\" to stop the transfer");
 												LLUUID sdest = LLUUID(destination);
-												zdrop = new JCZdrop(inventorystack, sdest, folder.c_str(), destination.c_str());
+												gZDrop = new JCZdrop(inventorystack, sdest, folder.c_str(), destination.c_str());
 											}
 										}
 										else
@@ -1121,15 +1122,15 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else if (setting == "off")
 					{
-						if (!zdrop)
+						if (!gZDrop)
 						{
 							report_to_nearby_chat("Zdrop is already deactivated.");
 						}
 						else
 						{
-							zdrop ->mRunning = TRUE;
-							delete zdrop;
-							zdrop = NULL;
+							gZDrop->mRunning = TRUE;
+							delete gZDrop;
+							gZDrop = nullptr;
 						}
 					}
 					else
@@ -1151,7 +1152,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (setting == "on")
 					{
-						if (ztake)
+						if (gZTake)
 						{
 							report_to_nearby_chat("Ztake is already active.");
 						}
@@ -1172,7 +1173,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								if (folder.notNull())
 								{
 									report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-									ztake = new JCZtake(folder);
+									gZTake = new JCZtake(folder);
 								}
 								else
 								{
@@ -1188,15 +1189,15 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else if (setting == "off")
 					{
-						if (!ztake)
+						if (!gZTake)
 						{
 							report_to_nearby_chat("Ztake is already deactivated.");
 						}
 						else
 						{
-							ztake->mRunning = TRUE;
-							delete ztake;
-							ztake = NULL;
+							gZTake->mRunning = TRUE;
+							delete gZTake;
+							gZTake = nullptr;
 						}
 					}
 					else
@@ -1241,7 +1242,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							if (folder.notNull())
 							{
 								report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-								ztake = new JCZtake(folder, true, LLUUID(destination), folder_name, (command == "cpackage") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY);
+								gZTake = new JCZtake(folder, true, LLUUID(destination), folder_name, (command == "cpackage") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY);
 							}
 							else
 							{
@@ -1307,7 +1308,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 												U32 localid = objectp->getLocalID();
 												if (std::find(to_take.begin(), to_take.end(), localid) == to_take.end())
 												{
-													to_take.push_back(localid);
+													to_take.emplace_back(localid);
 												}
 											}
 										}
@@ -1320,7 +1321,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 									else
 									{
 										report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-										ztake = new JCZtake(folder, true, LLUUID(destination), folder_name, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, to_take);
+										gZTake = new JCZtake(folder, true, LLUUID(destination), folder_name, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, to_take);
 									}
 								}
 								else
@@ -1438,7 +1439,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 										U32 localid = objectp->getLocalID();
 										if (std::find(to_take.begin(), to_take.end(), localid) == to_take.end())
 										{
-											to_take.push_back(localid);
+											to_take.emplace_back(localid);
 										}
 									}
 								}
@@ -1451,7 +1452,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							else
 							{
 								report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-								ztake = new JCZtake(folder, true, LLUUID::null, folder_name, (command == "kcopy") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY, false, to_take);
+								gZTake = new JCZtake(folder, true, LLUUID::null, folder_name, (command == "kcopy") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY, false, to_take);
 							}
 						}
 						else
@@ -1474,7 +1475,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (setting == "on")
 					{
-						if (mtake)
+						if (gMTake)
 						{
 							report_to_nearby_chat("Mtake is already active.");
 						}
@@ -1495,7 +1496,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								if (folder.notNull())
 								{
 									report_to_nearby_chat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-									mtake = new TMZtake(folder);
+									gMTake = new TMZtake(folder);
 								}
 								else
 								{
@@ -1511,15 +1512,15 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else if (setting == "off")
 					{
-						if (!mtake)
+						if (!gMTake)
 						{
 							report_to_nearby_chat("Mtake is already deactivated.");
 						}
 						else
 						{
-							mtake->mRunning = TRUE;
-							delete mtake;
-							mtake = NULL;
+							gMTake->mRunning = TRUE;
+							delete gMTake;
+							gMTake = nullptr;
 						}
 					}
 					else
@@ -1729,29 +1730,25 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	LLStringUtil::toLower(partial_name);
 	LLStringUtil::replaceString(partial_name, ".", " ");
 
-	FSRadar* radar = FSRadar::getInstance();
-	if (radar)
+	FSRadar::entry_map_t radar_list = FSRadar::getInstance()->getRadarList();
+	FSRadar::entry_map_t::iterator it_end = radar_list.end();
+	for (const auto& [avid, entry] : radar_list)
 	{
-		FSRadar::entry_map_t radar_list = radar->getRadarList();
-		FSRadar::entry_map_t::iterator it_end = radar_list.end();
-		for (FSRadar::entry_map_t::iterator it = radar_list.begin(); it != it_end; ++it)
-		{
-			FSRadarEntry* entry = it->second;
-			av_name = entry->getUserName();
+		av_name = entry->getUserName();
 
-			LLStringUtil::toLower(av_name);
-			if (strstr(av_name.c_str(), partial_name.c_str()))
-			{
-				return entry->getId();
-			}
+		LLStringUtil::toLower(av_name);
+		if (strstr(av_name.c_str(), partial_name.c_str()))
+		{
+			return entry->getId();
 		}
 	}
+
 	return LLUUID::null;
 }
 
-void cmdline_tp2name(const std::string& target)
+void cmdline_tp2name(std::string_view target)
 {
-	LLUUID avkey = cmdline_partial_name2key(target);
+	LLUUID avkey = cmdline_partial_name2key(static_cast<std::string>(target));
 	if (avkey.notNull() && avkey != gAgentID)
 	{
 		LLAvatarActions::teleportTo(avkey);
@@ -1822,17 +1819,17 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	msg->sendReliable(gAgent.getRegionHost());
 }
 
-bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID)
+bool cmdline_packager(std::string_view message, const LLUUID& fromID, const LLUUID& ownerID)
 {
 	if (message.empty() || cmd_line_mPackagerDest.isNull() || fromID != cmd_line_mPackagerDest)
 	{
 		return false;
 	}
 
-	std::string cmd = message.substr(0, 12);
+	std::string_view cmd = message.substr(0, 12);
 
 	if (cmd == "kpackageradd") {
-		std::string csv = message.substr(13, -1);
+		std::string_view csv = message.substr(13, -1);
 		std::string::size_type start = 0;
 		std::string::size_type comma = 0;
 		do 
@@ -1863,13 +1860,13 @@ bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LL
 		}
 		while(comma < csv.length());
 		
-		report_to_nearby_chat(llformat("Packager: adding objects: \"%s\"", csv.c_str()));
+		report_to_nearby_chat(llformat("Packager: adding objects: \"%s\"", static_cast<std::string>(csv).c_str()));
 		return true;
 	}
 	else if (cmd == "kpackagerend") {
 		
 		report_to_nearby_chat("Packager: finalizing.");
-		ztake = new JCZtake(cmd_line_mPackagerTargetFolder, true, cmd_line_mPackagerDest, cmd_line_mPackagerTargetFolderName, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, cmd_line_mPackagerToTake);
+		gZTake = new JCZtake(cmd_line_mPackagerTargetFolder, true, cmd_line_mPackagerDest, cmd_line_mPackagerTargetFolderName, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, cmd_line_mPackagerToTake);
 		cmd_line_mPackagerToTake.clear();
 		cmd_line_mPackagerTargetFolderName = "";
 		cmd_line_mPackagerTargetFolder.setNull();

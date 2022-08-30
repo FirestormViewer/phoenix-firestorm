@@ -1734,6 +1734,49 @@ Default 0. Larger values may not work well.
 [VIEWER_GENERATION] default 20. Viewer 1 default 18.
         </text>
 
+        <text
+         top_pad="10"
+         left="10"
+         follows="left|top"
+         name="text_box_notecard_font"
+         width="120">
+          Notecard Editor Font:
+        </text>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="-5"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSNotecardFontName"
+         width="150"
+         control_name="FSNotecardFontName"
+         tool_tip="Name of the font used in the notecard editor">
+             <combo_item name="Sans Serif" value="SansSerif" label="Sans Serif"/>
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
+        </combo_box>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="0"
+         left_pad="5"
+         follows="left|top"
+         max_chars="20"
+         mouse_opaque="true"
+         name="FSNotecardFontSize"
+         width="150"
+         control_name="FSNotecardFontSize"
+         tool_tip="Size of the font used in the notecard editor">
+             <combo_item name="Monospace" value="Monospace" label="Monospace"/>
+             <combo_item name="Scripting" value="Scripting" label="Scripting"/>
+             <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code"/>
+             <combo_item name="Small" value="Small" label="Small"/>
+             <combo_item name="Medium" value="Medium" label="Medium"/>
+             <combo_item name="Large" value="Large" label="Large"/>
+        </combo_box>
+
 <!-- not a live preview
         <text
          name="tooltip_textbox"

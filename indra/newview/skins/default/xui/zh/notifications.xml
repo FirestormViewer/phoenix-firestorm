@@ -3926,7 +3926,7 @@ SHA1 指紋：[MD5_DIGEST]
 		網面物件的形狀不得變更。
 	</notification>
 	<notification name="FullRegionCantEnter">
-		你無法進入這地區，\n因為地區滿載。
+		你無法進入這地區，因為地區滿載。
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		聯結失敗——所有人不同
@@ -4227,7 +4227,7 @@ SHA1 指紋：[MD5_DIGEST]
 		此時無法購買通行權。  請稍候再試一次。
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		無法建立物件，\n地段滿載。
+		無法建立物件，地段滿載。
 	</notification>
 	<notification name="FailedPlacingObject">
 		無法將物件置於指定地點。  請再試一次。

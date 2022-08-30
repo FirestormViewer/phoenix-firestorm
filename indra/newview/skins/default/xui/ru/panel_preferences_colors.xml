@@ -204,10 +204,30 @@
 			<text name="preferences_search_label">
 				Цвет подсветки поиска в настройках:
 			</text>
+			<color_swatch name="preferences_search_color" tool_tip="Выберите цвет подсветки поиска в настройках"/>
 			<text name="area_search_beacon_color_label">
 				Цвет маяка зоны поиска:
 			</text>
-			<color_swatch name="preferences_search_color" tool_tip="Выберите цвет подсветки поиска в настройках"/>
+			<color_swatch name="area_search_beacon_color" tool_tip="Выберите цвет маяка зоны поиска"/>
+			<text name="notecard_editor_color_label">
+				Цвета Заметок:
+			</text>
+			<text name="notecard_editor_writable_text_color_label" width="30">
+				Текст:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Цвет Текста Заметки"/>
+			<text name="notecard_editor_writable_bg_color_label" width="70">
+				Фон:
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Цвет Фона Заметки"/>
+			<text name="notecard_editor_writable_cursor_color_label" width="40">
+				Курсор:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Цвет Курсора Заметки"/>
+			<text name="notecard_editor_writable_selection_color_label" width="60">
+				Выделение:
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Цвет Выделенного Текста Заметки"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Всегда показывать диалоги скриптов на непрозрачном фоне"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Всегда показывать уведомления групп на непрозрачном фоне"/>
 			<check_box name="override_pie_color_checkbox" label="Изменить фон меню, цвет выбранных разделов и прозрачность круглого меню:"/>

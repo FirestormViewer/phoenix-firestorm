@@ -129,6 +129,12 @@ protected:
     bool writeToFile(const std::string& filename);
     std::string getTmpFileName();
 
+	// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+	boost::signals2::connection mFontNameChangedCallbackConnection;
+	boost::signals2::connection mFontSizeChangedCallbackConnection;
+	void onFontChanged();
+	// </FS:Ansariel>
+
 protected:
 	LLViewerTextEditor* mEditor;
 	LLButton* mSaveBtn;
