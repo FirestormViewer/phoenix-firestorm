@@ -10994,8 +10994,8 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	
 // <FS:CR> FIRE-8893  - Dump archetype xml to user defined location
-	(new LLFilePickerReplyThread(boost::bind(&LLVOAvatar::dumpArchetypeXMLCallback, this, _1, group_by_wearables),
-		LLFilePicker::FFSAVE_XML, outfilename))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLVOAvatar::dumpArchetypeXMLCallback, this, _1, group_by_wearables),
+		LLFilePicker::FFSAVE_XML, outfilename);
 }
 
 void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filenames, bool group_by_wearables)

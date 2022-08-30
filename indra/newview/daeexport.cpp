@@ -196,8 +196,8 @@ void ColladaExportFloater::updateUI()
 
 void ColladaExportFloater::onClickExport()
 {
-	(new LLFilePickerReplyThread(boost::bind(&ColladaExportFloater::onExportFileSelected, this, _1),
-		LLFilePicker::FFSAVE_COLLADA, LLDir::getScrubbedFileName(mObjectName + ".dae")))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&ColladaExportFloater::onExportFileSelected, this, _1),
+		LLFilePicker::FFSAVE_COLLADA, LLDir::getScrubbedFileName(mObjectName + ".dae"));
 }
 
 void ColladaExportFloater::onExportFileSelected(const std::vector<std::string>& filenames)

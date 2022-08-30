@@ -1815,7 +1815,7 @@ bool LLPanelRegionTerrainInfo::callbackTextureHeights(const LLSD& notification, 
 void LLPanelRegionTerrainInfo::onClickDownloadRaw(void* data)
 {
 	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
-	(new LLFilePickerReplyThread(boost::bind(&LLPanelRegionTerrainInfo::onDownloadRawFilepickerCB, self, _1), LLFilePicker::FFSAVE_RAW, "terrain.raw"))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelRegionTerrainInfo::onDownloadRawFilepickerCB, self, _1), LLFilePicker::FFSAVE_RAW, "terrain.raw");
 }
 
 void LLPanelRegionTerrainInfo::onDownloadRawFilepickerCB(const std::vector<std::string>& filenames)
@@ -1834,7 +1834,7 @@ void LLPanelRegionTerrainInfo::onDownloadRawFilepickerCB(const std::vector<std::
 void LLPanelRegionTerrainInfo::onClickUploadRaw(void* data)
 {
 	LLPanelRegionTerrainInfo* self = (LLPanelRegionTerrainInfo*)data;
-	(new LLFilePickerReplyThread(boost::bind(&LLPanelRegionTerrainInfo::onUploadRawFilepickerCB, self, _1), LLFilePicker::FFLOAD_RAW, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelRegionTerrainInfo::onUploadRawFilepickerCB, self, _1), LLFilePicker::FFLOAD_RAW, false);
 }
 
 void LLPanelRegionTerrainInfo::onUploadRawFilepickerCB(const std::vector<std::string>& filenames)

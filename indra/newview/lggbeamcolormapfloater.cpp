@@ -236,7 +236,7 @@ LLSD lggBeamColorMapFloater::getDataSerialized()
 void lggBeamColorMapFloater::onClickSave()
 {
 	std::string filename(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", "NewBeamColor.xml"));
-	(new LLFilePickerReplyThread(boost::bind(&lggBeamColorMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&lggBeamColorMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename);
 }
 
 void lggBeamColorMapFloater::onSaveCallback(const std::vector<std::string>& filenames)
@@ -261,7 +261,7 @@ void lggBeamColorMapFloater::onSaveCallback(const std::vector<std::string>& file
 
 void lggBeamColorMapFloater::onClickLoad()
 {
-	(new LLFilePickerReplyThread(boost::bind(&lggBeamColorMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+	(boost::bind(&lggBeamColorMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
 }
 
 void lggBeamColorMapFloater::onLoadCallback(const std::vector<std::string>& filenames)

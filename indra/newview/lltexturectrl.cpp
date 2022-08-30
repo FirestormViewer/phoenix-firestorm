@@ -41,12 +41,15 @@
 #include "llfolderviewmodel.h"
 #include "llinventory.h"
 #include "llinventoryfunctions.h"
+#include "llinventoryicon.h"
 #include "llinventorymodelbackgroundfetch.h"
 #include "llinventoryobserver.h"
 #include "llinventorypanel.h"
 #include "lllineeditor.h"
+#include "llmaterialeditor.h"
 #include "llui.h"
 #include "llviewerinventory.h"
+#include "llviewermenufile.h"	// LLFilePickerReplyThread
 #include "llpermissions.h"
 #include "llsaleinfo.h"
 #include "llassetstorage.h"
@@ -69,19 +72,12 @@
 #include "llradiogroup.h"
 #include "llfloaterreg.h"
 #include "lllocalbitmaps.h"
+#include "lllocalgltfmaterials.h"
 #include "llerror.h"
 
 #include "llavatarappearancedefines.h"
 
 #include "fscommon.h"
-
-static const S32 LOCAL_TRACKING_ID_COLUMN = 1;
-
-//static const char CURRENT_IMAGE_NAME[] = "Current Texture";
-//static const char WHITE_IMAGE_NAME[] = "Blank Texture";
-//static const char NO_IMAGE_NAME[] = "None";
-
-
 
 //static
 bool get_is_predefined_texture(LLUUID asset_id)
@@ -182,25 +178,15 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	mOnFloaterCloseCallback(NULL),
 	mSetImageAssetIDCallback(NULL),
 	mOnUpdateImageStatsCallback(NULL),
-	mBakeTextureEnabled(FALSE),
-	mLocalBitmapsAddedCallbackConnection() // <FS:Ansariel> Threaded filepickers
+	mBakeTextureEnabled(FALSE)
 {
 	mCanApplyImmediately = can_apply_immediately;
 	buildFromFile("floater_texture_ctrl.xml");
 	setCanMinimize(FALSE);
-
-	// <FS:Ansariel> Threaded filepickers
-	mLocalBitmapsAddedCallbackConnection = LLLocalBitmapMgr::getInstance()->setBitmapsAddedCallback(boost::bind(&LLFloaterTexturePicker::onLocalBitmapsAddedCallback, this));
 }
 
 LLFloaterTexturePicker::~LLFloaterTexturePicker()
 {
-	// <FS:Ansariel> Threaded filepickers
-	if (mLocalBitmapsAddedCallbackConnection.connected())
-	{
-		mLocalBitmapsAddedCallbackConnection.disconnect();
-	}
-	// </FS:Ansariel>
 }
 
 void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selection /*=true*/)
@@ -479,10 +465,16 @@ BOOL LLFloaterTexturePicker::postBuild()
 	childSetCommitCallback("show_folders_check", onShowFolders, this);
 	getChildView("show_folders_check")->setVisible( FALSE);
 
-	mFilterEdit = getChild<LLFilterEditor>("inventory search editor");
-	mFilterEdit->setCommitCallback(boost::bind(&LLFloaterTexturePicker::onFilterEdit, this, _2));
+    mFilterEdit = getChild<LLFilterEditor>("inventory search editor");
+    mFilterEdit->setCommitCallback(boost::bind(&LLFloaterTexturePicker::onFilterEdit, this, _2));
 
 	mInventoryPanel = getChild<LLInventoryPanel>("inventory panel");
+
+    mTextureMaterialsCombo = getChild<LLComboBox>("textures_material_combo");
+    mTextureMaterialsCombo->setCommitCallback(onSelectTextureMaterials, this);
+
+    // set the combo box to the first entry in the list (currently textures and materials)
+    mTextureMaterialsCombo->selectByValue(0);
 
 	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
 	//mModeSelector = getChild<LLComboBox>("mode_selection");
@@ -495,12 +487,12 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 	if(mInventoryPanel)
 	{
-		U32 filter_types = 0x0;
-		filter_types |= 0x1 << LLInventoryType::IT_TEXTURE;
-		filter_types |= 0x1 << LLInventoryType::IT_SNAPSHOT;
+        // to avoid having to make an assumption about which option is
+        // selected at startup, we call the same function that is triggered
+        // when a texture/materials/both choice is made and let it take care
+        // of setting the filters
+        onSelectTextureMaterials(0, this);
 
-		mInventoryPanel->setFilterTypes(filter_types);
-		//mInventoryPanel->setFilterPermMask(getFilterPermMask());  //Commented out due to no-copy texture loss.
 		mInventoryPanel->setFilterPermMask(mImmediateFilterPermMask);
 		mInventoryPanel->setSelectCallback(boost::bind(&LLFloaterTexturePicker::onSelectionChange, this, _1, _2));
 		mInventoryPanel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
@@ -521,7 +513,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 		
 
-		if (!mImageAssetID.isNull())
+		if(!mImageAssetID.isNull())
 		{
 			mInventoryPanel->setSelection(findItemID(mImageAssetID, FALSE), TAKE_FOCUS_NO);
 		}
@@ -533,7 +525,9 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 	mLocalScrollCtrl = getChild<LLScrollListCtrl>("l_name_list");
 	mLocalScrollCtrl->setCommitCallback(onLocalScrollCommit, this);
+    mLocalScrollCtrl->clearRows();
 	LLLocalBitmapMgr::getInstance()->feedScrollList(mLocalScrollCtrl);
+    LLLocalGLTFMaterialMgr::getInstance()->feedScrollList(mLocalScrollCtrl);
 
 	mNoCopyTextureSelected = FALSE;
 
@@ -838,8 +832,18 @@ void LLFloaterTexturePicker::onBtnSelect(void* userdata)
 	{
 		if (self->mLocalScrollCtrl->getVisible() && !self->mLocalScrollCtrl->getAllSelected().empty())
 		{
-			LLUUID temp_id = self->mLocalScrollCtrl->getFirstSelected()->getColumn(LOCAL_TRACKING_ID_COLUMN)->getValue().asUUID();
-			local_id = LLLocalBitmapMgr::getInstance()->getWorldID(temp_id);
+            LLSD data = self->mLocalScrollCtrl->getFirstSelected()->getValue();
+            LLUUID temp_id = data["id"];
+            S32 asset_type = data["type"].asInteger();
+
+            if (LLAssetType::AT_MATERIAL == asset_type)
+            {
+                local_id = LLLocalGLTFMaterialMgr::getInstance()->getWorldID(temp_id);
+            }
+            else
+            {
+                local_id = LLLocalBitmapMgr::getInstance()->getWorldID(temp_id);
+            }
 		}
 	}
 	
@@ -947,6 +951,7 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 	self->getChild<LLButton>("Transparent")->setVisible(index == 0 ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	self->getChild<LLButton>("None")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLButton>("Pipette")->setVisible(index == 0 ? TRUE : FALSE);
+    self->getChild<LLComboBox>("textures_material_combo")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLFilterEditor>("inventory search editor")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLInventoryPanel>("inventory panel")->setVisible(index == 0 ? TRUE : FALSE);
 
@@ -1021,22 +1026,14 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 // static
 void LLFloaterTexturePicker::onBtnAdd(void* userdata)
 {
-	// <FS:Ansariel> Threaded filepickers
-	//if (LLLocalBitmapMgr::getInstance()->addUnit() == true)
-	//{
-	//	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-	//	LLLocalBitmapMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
-	//}
-	LLLocalBitmapMgr::getInstance()->addUnit();
-	// </FS:Ansariel>
-}
+    LLFloaterTexturePicker* self = (LLFloaterTexturePicker*)userdata;
 
-// <FS:Ansariel> Threaded filepickers
-void LLFloaterTexturePicker::onLocalBitmapsAddedCallback()
-{
-	LLLocalBitmapMgr::getInstance()->feedScrollList(mLocalScrollCtrl);
+    // todo: there will be changes to texture picker to forbid
+    // selection of materials in some cases, like landmarks, once
+    // it gets implemented, update code to select FLOAD_* filter
+    // based on picker's material/texture mode.
+    LLFilePickerReplyThread::startPicker(boost::bind(&onPickerCallback, _1, self->getHandle()), LLFilePicker::FFLOAD_MATERIAL_TEXTURE, true);
 }
-// </FS:Ansariel>
 
 // static
 void LLFloaterTexturePicker::onBtnRemove(void* userdata)
@@ -1046,22 +1043,34 @@ void LLFloaterTexturePicker::onBtnRemove(void* userdata)
 
 	if (!selected_items.empty())
 	{
+
 		for(std::vector<LLScrollListItem*>::iterator iter = selected_items.begin();
 			iter != selected_items.end(); iter++)
 		{
 			LLScrollListItem* list_item = *iter;
 			if (list_item)
 			{
-				LLUUID tracking_id = list_item->getColumn(LOCAL_TRACKING_ID_COLUMN)->getValue().asUUID();
-				LLLocalBitmapMgr::getInstance()->delUnit(tracking_id);
+                LLSD data = self->mLocalScrollCtrl->getFirstSelected()->getValue();
+                LLUUID tracking_id = data["id"];
+                S32 asset_type = data["type"].asInteger();
+
+                if (LLAssetType::AT_MATERIAL == asset_type)
+                {
+                    LLLocalGLTFMaterialMgr::getInstance()->delUnit(tracking_id);
+                }
+                else
+                {
+                    LLLocalBitmapMgr::getInstance()->delUnit(tracking_id);
+                }
 			}
 		}
 
 		self->getChild<LLButton>("l_rem_btn")->setEnabled(false);
 		self->getChild<LLButton>("l_upl_btn")->setEnabled(false);
+        self->mLocalScrollCtrl->clearRows();
 		LLLocalBitmapMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
+        LLLocalGLTFMaterialMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
 	}
-
 }
 
 // static
@@ -1077,15 +1086,31 @@ void LLFloaterTexturePicker::onBtnUpload(void* userdata)
 
 	/* currently only allows uploading one by one, picks the first item from the selection list.  (not the vector!)
 	   in the future, it might be a good idea to check the vector size and if more than one units is selected - opt for multi-image upload. */
-	
-	LLUUID tracking_id = (LLUUID)self->mLocalScrollCtrl->getSelectedItemLabel(LOCAL_TRACKING_ID_COLUMN);
-	std::string filename = LLLocalBitmapMgr::getInstance()->getFilename(tracking_id);
 
-	if (!filename.empty())
-	{
-		LLFloaterReg::showInstance("upload_image", LLSD(filename));
-	}
+    LLSD data = self->mLocalScrollCtrl->getFirstSelected()->getValue();
+    LLUUID tracking_id = data["id"];
+    S32 asset_type = data["type"].asInteger();
 
+    if (LLAssetType::AT_MATERIAL == asset_type)
+    {
+        std::string filename = LLLocalGLTFMaterialMgr::getInstance()->getFilename(tracking_id);
+        if (!filename.empty())
+        {
+            LLMaterialEditor* me = (LLMaterialEditor*)LLFloaterReg::getInstance("material_editor");
+            if (me)
+            {
+                me->loadMaterialFromFile(filename);
+            }
+        }
+    }
+    else
+    {
+        std::string filename = LLLocalBitmapMgr::getInstance()->getFilename(tracking_id);
+        if (!filename.empty())
+        {
+            LLFloaterReg::showInstance("upload_image", LLSD(filename));
+        }
+    }
 }
 
 //static
@@ -1101,8 +1126,20 @@ void LLFloaterTexturePicker::onLocalScrollCommit(LLUICtrl* ctrl, void* userdata)
 
 	if (has_selection)
 	{
-		LLUUID tracking_id = (LLUUID)self->mLocalScrollCtrl->getSelectedItemLabel(LOCAL_TRACKING_ID_COLUMN); 
-		LLUUID inworld_id = LLLocalBitmapMgr::getInstance()->getWorldID(tracking_id);
+        LLSD data = self->mLocalScrollCtrl->getFirstSelected()->getValue();
+        LLUUID tracking_id = data["id"];
+        S32 asset_type = data["type"].asInteger();
+        LLUUID inworld_id;
+
+        if (LLAssetType::AT_MATERIAL == asset_type)
+        {
+            inworld_id = LLLocalGLTFMaterialMgr::getInstance()->getWorldID(tracking_id);
+        }
+        else
+        {
+            inworld_id = LLLocalBitmapMgr::getInstance()->getWorldID(tracking_id);
+        }
+
 		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
 		//if (self->mSetImageAssetIDCallback)
 		//{
@@ -1281,6 +1318,38 @@ void LLFloaterTexturePicker::onFilterEdit(const std::string& search_string )
 	mInventoryPanel->setFilterSubString(search_string);
 }
 
+void LLFloaterTexturePicker::onSelectTextureMaterials(LLUICtrl* ctrl, void *userdata)
+{
+    LLFloaterTexturePicker* self = (LLFloaterTexturePicker*)userdata;
+    int index = self->mTextureMaterialsCombo->getValue().asInteger();
+
+    // IMPORTANT: make sure these match the entries in floater_texture_ctrl.xml 
+    // for the textures_material_combo combo box
+    const int textures_and_materials = 0;
+    const int textures_only = 1;
+    const int materials_only = 2;
+
+    U32 filter_types = 0x0;
+
+    if (index == textures_and_materials)
+    {
+        filter_types |= 0x1 << LLInventoryType::IT_TEXTURE;
+        filter_types |= 0x1 << LLInventoryType::IT_SNAPSHOT;
+        filter_types |= 0x1 << LLInventoryType::IT_MATERIAL;
+    }
+    else if (index == textures_only)
+    {
+        filter_types |= 0x1 << LLInventoryType::IT_TEXTURE;
+        filter_types |= 0x1 << LLInventoryType::IT_SNAPSHOT;
+    }
+    else if (index == materials_only)
+    {
+        filter_types |= 0x1 << LLInventoryType::IT_MATERIAL;
+    }
+
+    self->mInventoryPanel->setFilterTypes(filter_types);
+}
+
 void LLFloaterTexturePicker::setLocalTextureEnabled(BOOL enabled)
 {
 	// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
@@ -1323,6 +1392,36 @@ void LLFloaterTexturePicker::setBakeTextureEnabled(BOOL enabled)
 	}
 	// </FS:Ansariel>
 	onModeSelect(0, this);
+}
+
+void LLFloaterTexturePicker::onPickerCallback(const std::vector<std::string>& filenames, LLHandle<LLFloater> handle)
+{
+    std::vector<std::string>::const_iterator iter = filenames.begin();
+    while (iter != filenames.end())
+    {
+        if (!iter->empty())
+        {
+            std::string temp_exten = gDirUtilp->getExtension(*iter);
+            if (temp_exten == "gltf" || temp_exten == "glb")
+            {
+                LLLocalGLTFMaterialMgr::getInstance()->addUnit(*iter);
+            }
+            else
+            {
+                LLLocalBitmapMgr::getInstance()->addUnit(*iter);
+            }
+        }
+        iter++;
+    }
+
+    // Todo: this should referesh all pickers, not just a current one
+    if (!handle.isDead())
+    {
+        LLFloaterTexturePicker* self = (LLFloaterTexturePicker*)handle.get();
+        self->mLocalScrollCtrl->clearRows();
+        LLLocalBitmapMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
+        LLLocalGLTFMaterialMgr::getInstance()->feedScrollList(self->mLocalScrollCtrl);
+    }
 }
 
 void LLFloaterTexturePicker::onTextureSelect( const LLTextureEntry& te )
@@ -1693,9 +1792,9 @@ void LLTextureCtrl::onFloaterClose()
 
 void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
 {
-	LLFloaterTexturePicker* floaterp = (LLFloaterTexturePicker*)mFloaterHandle.get();
+    LLFloaterTexturePicker* floaterp = (LLFloaterTexturePicker*)mFloaterHandle.get();
 
-	if( floaterp && getEnabled())
+    if( floaterp && getEnabled())
 	{
 		if (op == TEXTURE_CANCEL)
 			mViewModel->resetDirty();
@@ -1716,15 +1815,64 @@ void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
 			}
 			else
 			{
-			mImageItemID = floaterp->findItemID(floaterp->getAssetID(), FALSE);
-			LL_DEBUGS() << "mImageItemID: " << mImageItemID << LL_ENDL;
-			mImageAssetID = floaterp->getAssetID();
-			LL_DEBUGS() << "mImageAssetID: " << mImageAssetID << LL_ENDL;
+			    mImageItemID = floaterp->findItemID(floaterp->getAssetID(), FALSE);
+			    LL_DEBUGS() << "mImageItemID: " << mImageItemID << LL_ENDL;
+			    mImageAssetID = floaterp->getAssetID();
+			    LL_DEBUGS() << "mImageAssetID: " << mImageAssetID << LL_ENDL;
 			}
 
 			if (op == TEXTURE_SELECT && mOnSelectCallback)
 			{
-				mOnSelectCallback( this, LLSD() );
+                // determine if the selected item in inventory is a material
+                // by finding the item in inventory and inspecting its (IT_) type
+                LLUUID item_id = floaterp->findItemID(floaterp->getAssetID(), FALSE);
+                LLInventoryItem* item = gInventory.getItem(item_id);
+                if (item)
+                {
+                    if (item->getInventoryType() == LLInventoryType::IT_MATERIAL)
+                    {
+                        // ask the selection manager for the list of selected objects
+                        // to which the material will be applied.
+                        LLObjectSelectionHandle selectedObjectsHandle = LLSelectMgr::getInstance()->getSelection();
+                        if (selectedObjectsHandle.notNull())
+                        {
+                            LLObjectSelection* selectedObjects = selectedObjectsHandle.get();
+                            if (!selectedObjects->isEmpty())
+                            {
+                                // we have a selection - iterate over it
+                                for (LLObjectSelection::valid_iterator obj_iter = selectedObjects->valid_begin();
+                                        obj_iter != selectedObjects->valid_end();
+                                            ++obj_iter)
+                                {
+                                    LLSelectNode* object = *obj_iter;
+                                    LLViewerObject* viewer_object = object->getObject();
+                                    if (viewer_object)
+                                    {
+                                        // the asset ID of the material we want to apply
+                                        // the the selected objects
+                                        LLUUID asset_id = item->getAssetUUID();
+
+                                        // iterate over the faces in the object
+                                        // TODO: consider the case where user has 
+                                        // selected only certain faces
+                                        S32 num_faces = viewer_object->getNumTEs();
+                                        for (S32 face = 0; face < num_faces; face++)
+                                        {
+                                            viewer_object->setRenderMaterialID(face, asset_id);
+                                            dialog_refresh_all();
+                                        }
+                                        viewer_object->sendTEUpdate();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                // original behavior for textures, not materials
+                {
+                    mOnSelectCallback(this, LLSD());
+                }
 			}
 			else if (op == TEXTURE_CANCEL && mOnCancelCallback)
 			{
@@ -1735,8 +1883,10 @@ void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
 				// If the "no_commit_on_selection" parameter is set
 				// we commit only when user presses OK in the picker
 				// (i.e. op == TEXTURE_SELECT) or texture changes via DnD.
-				if (mCommitOnSelection || op == TEXTURE_SELECT)
-					onCommit();
+                if (mCommitOnSelection || op == TEXTURE_SELECT)
+                {
+                    onCommit();
+                }
 			}
 		}
 	}
@@ -1872,7 +2022,7 @@ void LLTextureCtrl::draw()
 	}
 	else//mImageAssetID == LLUUID::null
 	{
-		mTexturep = NULL;
+		mTexturep = NULL; 
 	}
 	
 	// Border

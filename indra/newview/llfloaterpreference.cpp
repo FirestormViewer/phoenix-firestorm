@@ -1863,7 +1863,7 @@ void LLFloaterPreference::setExternalEditor()
 	std::string cur_name(gSavedSettings.getString("ExternalEditor"));
 	std::string proposed_name(cur_name);
 
-	(new LLFilePickerReplyThread(boost::bind(&LLFloaterPreference::changeExternalEditorPath, this, _1), LLFilePicker::FFLOAD_EXE, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLFloaterPreference::changeExternalEditorPath, this, _1), LLFilePicker::FFLOAD_EXE, false);
 }
 
 void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string>& filenames)

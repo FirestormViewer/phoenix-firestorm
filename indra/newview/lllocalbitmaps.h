@@ -115,10 +115,9 @@ class LLLocalBitmapMgr : public LLSingleton<LLLocalBitmapMgr>
 	LLSINGLETON(LLLocalBitmapMgr);
 	~LLLocalBitmapMgr();
 public:
-	// <FS:Ansariel> Threaded filepickers
-	//bool         addUnit();
-	void         addUnit();
-	// </FS:Ansariel>
+	bool         addUnit();
+    bool         addUnit(const std::vector<std::string>& filenames);
+    bool         addUnit(const std::string& filename);
 	void         delUnit(LLUUID tracking_id);
 	bool 		checkTextureDimensions(std::string filename);
 
@@ -131,22 +130,11 @@ public:
 	void         setNeedsRebake();
 	void         doRebake();
 	
-	// <FS:Ansariel> Threaded filepickers
-	void         filePickerCallback(const std::vector<std::string>& filenames);
-	boost::signals2::connection setBitmapsAddedCallback(const boost::signals2::signal<void ()>::slot_type& cb)
-	{
-		return mBitmapsAddedSignal.connect(cb);
-	}
-	// </FS:Ansariel>
-		
 private:
 	std::list<LLLocalBitmap*>    mBitmapList;
 	LLLocalBitmapTimer           mTimer;
 	bool                         mNeedsRebake;
 	typedef std::list<LLLocalBitmap*>::iterator local_list_iter;
-
-	// <FS:Ansariel> Threaded filepickers
-	boost::signals2::signal<void ()> mBitmapsAddedSignal;
 };
 
 #endif

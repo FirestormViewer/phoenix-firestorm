@@ -156,7 +156,7 @@ mAvatarTabIndex(0)
 //static
 void LLFloaterModelPreview::onSelectUDPhysics(LLUICtrl* ctrl, void* userdata)
 {
-	(new LLFilePickerReplyThread(boost::bind(&updateUDPhysics, _1, _2), LLFilePicker::FFLOAD_COLLADA, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&updateUDPhysics, _1, _2), LLFilePicker::FFLOAD_COLLADA, false);
 }
 // </FS:Beq>
 

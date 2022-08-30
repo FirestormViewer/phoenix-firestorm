@@ -43,8 +43,7 @@
 #include "llviewertexture.h"
 #include "llwindow.h"
 
-// <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
-//class LLComboBox;
+class LLComboBox;
 class LLRadioGroup;
 class LLFloaterTexturePicker;
 class LLInventoryItem;
@@ -353,13 +352,16 @@ public:
 	static void		onBtnRemove(void* userdata);
 	static void		onBtnUpload(void* userdata);
 	static void		onLocalScrollCommit(LLUICtrl* ctrl, void* userdata);
-	void			onLocalBitmapsAddedCallback(); // <FS:Ansariel> Threaded filepickers
 
 	static void		onBakeTextureSelect(LLUICtrl* ctrl, void *userdata);
 	static void		onHideBaseMeshRegionCheck(LLUICtrl* ctrl, void *userdata);
 
+    static void     onSelectTextureMaterials(LLUICtrl* ctrl, void *userdata);
+
 	void 			setLocalTextureEnabled(BOOL enabled);
 	void 			setBakeTextureEnabled(BOOL enabled);
+
+    static void		onPickerCallback(const std::vector<std::string>& filenames, LLHandle<LLFloater> handle);
 
 protected:
 	LLPointer<LLViewerTexture> mTexturep;
@@ -384,6 +386,7 @@ protected:
 	BOOL				mActive;
 
 	LLFilterEditor*		mFilterEdit;
+    LLComboBox*         mTextureMaterialsCombo;
 	LLInventoryPanel*	mInventoryPanel;
 	PermissionMask		mImmediateFilterPermMask;
 	PermissionMask		mDnDFilterPermMask;
@@ -412,8 +415,6 @@ private:
 	set_on_update_image_stats_callback mOnUpdateImageStatsCallback;
 
 	BOOL mBakeTextureEnabled;
-
-	boost::signals2::connection mLocalBitmapsAddedCallbackConnection; // <FS:Ansariel> Threaded filepickers
 };
 
 #endif  // LL_LLTEXTURECTRL_H

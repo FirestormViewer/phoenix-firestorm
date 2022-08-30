@@ -1809,7 +1809,7 @@ void LLPanelEditWearable::initPreviousAlphaTextureEntry(LLAvatarAppearanceDefine
 // [FS:CR] FIRE-10986
 void LLPanelEditWearable::onClickedImportBtn()
 {
-	(new LLFilePickerReplyThread(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
 }
 
 void LLPanelEditWearable::onClickedImportBtnCallback(const std::vector<std::string>& filenames)

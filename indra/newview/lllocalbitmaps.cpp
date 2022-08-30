@@ -62,14 +62,15 @@
 #include "pipeline.h"
 #include "llmaterialmgr.h"
 #include "llimagedimensionsinfo.h"
+#include "llinventoryicon.h"
 #include "llviewercontrol.h"
 #include "lltrans.h"
 #include "llviewerdisplay.h"
-#include "llviewermenufile.h"
 
 /*=======================================*/
 /*  Formal declarations, constants, etc. */
 /*=======================================*/ 
+
 static const F32 LL_LOCAL_TIMER_HEARTBEAT   = 3.0;
 static const BOOL LL_LOCAL_USE_MIPMAPS      = true;
 static const S32 LL_LOCAL_DISCARD_LEVEL     = 0;
@@ -919,7 +920,6 @@ BOOL LLLocalBitmapTimer::tick()
 /*  LLLocalBitmapMgr: manager class      */
 /*=======================================*/ 
 LLLocalBitmapMgr::LLLocalBitmapMgr()
-	: mBitmapsAddedSignal() // <FS:Ansariel> Threaded filepickers
 {
 }
 
@@ -927,106 +927,72 @@ LLLocalBitmapMgr::~LLLocalBitmapMgr()
 {
     std::for_each(mBitmapList.begin(), mBitmapList.end(), DeletePointer());
     mBitmapList.clear();
-
-    mBitmapsAddedSignal.disconnect_all_slots(); // <FS:Ansariel> Threaded filepickers
 }
 
-// <FS:Ansariel> Threaded filepickers
-//bool LLLocalBitmapMgr::addUnit()
-//{
-//	bool add_successful = false;
-//
-//	LLFilePicker& picker = LLFilePicker::instance();
-//	if (picker.getMultipleOpenFiles(LLFilePicker::FFLOAD_IMAGE))
-//	{
-//		mTimer.stopTimer();
-//
-//		std::string filename = picker.getFirstFile();
-//		while(!filename.empty())
-//		{
-//			if(!checkTextureDimensions(filename))
-//			{
-//				filename = picker.getNextFile();
-//				continue;
-//			}
-//
-//			LLLocalBitmap* unit = new LLLocalBitmap(filename);
-//
-//			if (unit->getValid())
-//			{
-//				mBitmapList.push_back(unit);
-//				add_successful = true;
-//			}
-//			else
-//			{
-//				LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
-//					    << "Filename: " << filename << LL_ENDL;
-//
-//				LLSD notif_args;
-//				notif_args["FNAME"] = filename;
-//				LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
-//
-//				delete unit;
-//				unit = NULL;
-//			}
-//
-//			filename = picker.getNextFile();
-//		}
-//		
-//		mTimer.startTimer();
-//	}
-//
-//	return add_successful;
-//}
-
-void LLLocalBitmapMgr::addUnit()
-{
-	(new LLFilePickerReplyThread(boost::bind(&LLLocalBitmapMgr::filePickerCallback, this, _1), LLFilePicker::FFLOAD_IMAGE, true))->getFile();
-}
-
-void LLLocalBitmapMgr::filePickerCallback(const std::vector<std::string>& filenames)
+bool LLLocalBitmapMgr::addUnit()
 {
 	bool add_successful = false;
-	mTimer.stopTimer();
 
-	for (std::vector<std::string>::const_iterator it = filenames.begin(); it != filenames.end(); ++it)
+	LLFilePicker& picker = LLFilePicker::instance();
+	if (picker.getMultipleOpenFiles(LLFilePicker::FFLOAD_IMAGE))
 	{
-		std::string filename = *it;
+		mTimer.stopTimer();
 
-		if(!checkTextureDimensions(filename))
+		std::string filename = picker.getFirstFile();
+		while(!filename.empty())
 		{
-			continue;
+            add_successful |= addUnit(filename);
+			filename = picker.getNextFile();
 		}
-
-		LLLocalBitmap* unit = new LLLocalBitmap(filename);
-
-		if (unit->getValid())
-		{
-			mBitmapList.push_back(unit);
-			add_successful = true;
-		}
-		else
-		{
-			LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
-				    << "Filename: " << filename << LL_ENDL;
-
-			LLSD notif_args;
-			notif_args["FNAME"] = filename;
-			LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
-
-			delete unit;
-			unit = NULL;
-		}
+		
+		mTimer.startTimer();
 	}
 
-	mTimer.startTimer();
-
-	if (add_successful && !mBitmapsAddedSignal.empty())
-	{
-		mBitmapsAddedSignal();
-	}
+	return add_successful;
 }
-// </FS:Ansariel>
+bool LLLocalBitmapMgr::addUnit(const std::vector<std::string>& filenames)
+{
+    bool add_successful = false;
+    std::vector<std::string>::const_iterator iter = filenames.begin();
+    while (iter != filenames.end())
+    {
+        if (!iter->empty())
+        {
+            add_successful |= addUnit(*iter);
+        }
+        iter++;
+    }
+    return add_successful;
+}
+
+bool LLLocalBitmapMgr::addUnit(const std::string& filename)
+{
+    if (!checkTextureDimensions(filename))
+    {
+        return false;
+    }
+
+    LLLocalBitmap* unit = new LLLocalBitmap(filename);
+
+    if (unit->getValid())
+    {
+        mBitmapList.push_back(unit);
+        return true;
+    }
+    else
+    {
+        LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
+            << "Filename: " << filename << LL_ENDL;
+
+        LLSD notif_args;
+        notif_args["FNAME"] = filename;
+        LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
+
+        delete unit;
+        unit = NULL;
+        return false;
+    }
+}
 
 bool LLLocalBitmapMgr::checkTextureDimensions(std::string filename)
 {
@@ -1133,7 +1099,9 @@ void LLLocalBitmapMgr::feedScrollList(LLScrollListCtrl* ctrl)
 {
 	if (ctrl)
 	{
-		ctrl->clearRows();
+        std::string icon_name = LLInventoryIcon::getIconName(
+            LLAssetType::AT_TEXTURE,
+            LLInventoryType::IT_NONE);
 
 		if (!mBitmapList.empty())
 		{
@@ -1141,13 +1109,19 @@ void LLLocalBitmapMgr::feedScrollList(LLScrollListCtrl* ctrl)
 				 iter != mBitmapList.end(); iter++)
 			{
 				LLSD element;
-				element["columns"][0]["column"] = "unit_name";
-				element["columns"][0]["type"]   = "text";
-				element["columns"][0]["value"]  = (*iter)->getShortName();
 
-				element["columns"][1]["column"] = "unit_id_HIDDEN";
-				element["columns"][1]["type"]   = "text";
-				element["columns"][1]["value"]  = (*iter)->getTrackingID();
+                element["columns"][0]["column"] = "icon";
+                element["columns"][0]["type"] = "icon";
+                element["columns"][0]["value"] = icon_name;
+
+                element["columns"][1]["column"] = "unit_name";
+                element["columns"][1]["type"] = "text";
+                element["columns"][1]["value"] = (*iter)->getShortName();
+
+                LLSD data;
+                data["id"] = (*iter)->getTrackingID();
+                data["type"] = (S32)LLAssetType::AT_TEXTURE;
+                element["value"] = data;
 
 				ctrl->addElement(element);
 			}
