@@ -273,7 +273,6 @@ BOOL	LLPanelFace::postBuild()
 
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
 	childSetAction("button align textures", &LLPanelFace::onAlignTexture, this);
-	childSetAction("button save material", &LLPanelFace::onSaveMaterial, this);
 
 	// <FS:CR> Moved to the header so other functions can use them too.
 	//LLTextureCtrl*	mTextureCtrl;
@@ -1577,11 +1576,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
             // enable this UI box if a single face is selected.
             BOOL is_single_face = !LLSelectMgr::getInstance()->getSelection()->isMultipleTESelected();
-            childSetEnabled("button save material", static_cast<bool>(is_single_face));
             childSetEnabled("materialID", static_cast<bool>(is_single_face));   // doesn't work - why?
-
-            // TODO: 2022-04 conflicts with media button placement. hide the button if applying media
-            // i.e.  childSetVisible("button save material", !applying_media);
 
             if (material && editable)
 			{
