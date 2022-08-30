@@ -2998,5 +2998,9 @@ void LLPanelProfile::showClassified(const LLUUID& classified_id, bool edit)
     mTabContainer->selectTabPanel(mPanelClassifieds);
 }
 
-
+void LLPanelProfile::createClassified()
+{
+    mPanelClassifieds->createClassified();
+    mTabContainer->selectTabPanel(mPanelClassifieds);
+}
 

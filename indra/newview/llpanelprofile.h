@@ -409,6 +409,7 @@ public:
     void commitUnsavedChanges() override;
 
     void showClassified(const LLUUID& classified_id = LLUUID::null, bool edit = false);
+    void createClassified();
 
     LLAvatarData getAvatarData() { return mAvatarData; };
 
