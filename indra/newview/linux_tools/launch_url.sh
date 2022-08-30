@@ -45,7 +45,7 @@ if [ ! -z "$XBROWSER" ]; then
     echo "$0: Trying some others..."
 fi
 
-# Launcher the default GNOME browser.
+# Launch the default GNOME browser.
 if [ ! -z "$GNOME_DESKTOP_SESSION_ID" ] && which gnome-open >/dev/null; then
     gnome-open "$URL" &
     exit
@@ -60,6 +60,7 @@ fi
 # List of browser commands that will be tried in the order listed. x-www-browser
 # will be tried first, which is a debian alternative.
 BROWSER_COMMANDS="      \
+    xdg-open            \
     x-www-browser       \
     firefox             \
     mozilla-firefox     \

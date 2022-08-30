@@ -4756,7 +4756,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		メッシュオブジェクトの形状を変更することはできません
 	</notification>
 	<notification name="FullRegionCantEnter">
-		リージョンが埋まっているため、\nこのリージョンに入場できません。
+		リージョンが埋まっているため、このリージョンに入場できません。
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		リンクエラー -- 所有者が違います
@@ -5060,7 +5060,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		今すぐには入場許可を購入できません。後でもう一度お試しください。
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		区画が埋まっているため、オブジェクトを\n作成することができません。
+		区画が埋まっているため、オブジェクトを 作成することができません。
 	</notification>
 	<notification name="FailedPlacingObject">
 		指定した場所にオブジェクトを配置できませんでした。もう一度お試しください。

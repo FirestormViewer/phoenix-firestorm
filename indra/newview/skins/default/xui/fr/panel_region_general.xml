@@ -2,12 +2,15 @@
 <panel label="Région" name="General">
 	<text name="region_text_lbl">Région :</text>
 	<text name="region_text">inconnue</text>
-	<text name="estate_id_lbl" width="95">ID du domaine :</text>
-	<text name="version_channel_text_lbl">Version :</text>
-	<text name="version_channel_text">inconnue</text>
+	<text name="estate_id_lbl" width="95">ID du domaine : </text>
+	<line_editor name="estate_id" initial_value="inconnue"/>
+	<text name="region_type_lbl">Type : </text>
+	<text name="region_type">inconnu</text>
 	<text name="grid_position_lbl" width="115">Pos. dans la Grille :</text>
-	<text name="region_type_lbl">Type :</text>
-	<text name="region_type">inconnue</text>
+	<line_editor name="grid_position_x" default_text="n/a"/>
+	<line_editor name="grid_position_y" default_text="n/a"/>
+	<text name="version_channel_text_lbl">Version : </text>
+	<text name="version_channel_text">inconnue</text>
 	<check_box label="Interdire la terraformation" name="block_terraform_check"/>
 	<check_box label="Interdire le vol" name="block_fly_check"/>
 	<check_box label="Interdire le survol" name="block_fly_over_check" tool_tip="Empêche le survol des terrains"/>
@@ -19,7 +22,7 @@
 	<spinner label="Limite de personnes" name="agent_limit_spin" label_width="125" width="190"/>
 	<spinner label="Objets bonus" name="object_bonus_spin" label_width="125" width="190"/>
 	<text label="Classification" name="access_text">
-         Classification :
+		Classification :
 	</text>
 	<icons_combo_box label="Modérée" name="access_combo">
 		<icons_combo_box.item label="Adulte" name="Adult"/>

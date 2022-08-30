@@ -3956,7 +3956,7 @@ Tente novamente em instantes.
 		Você não pode alterar a forma de um objeto mesh
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Você não pode entrar nesta região porque \nela está cheia.
+		Você não pode entrar nesta região porque ela está cheia.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Falha na vinculação -- proprietários diferentes
@@ -4257,7 +4257,7 @@ Tente selecionar uma quantidade menor de terreno.
 		Não é possível comprar passe no momento.  Tente novamente mais tarde.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Não é possível criar objeto porque \no lote está cheio.
+		Não é possível criar objeto porque o lote está cheio.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Falha ao posicionar objeto em local específico.  Tente novamente.

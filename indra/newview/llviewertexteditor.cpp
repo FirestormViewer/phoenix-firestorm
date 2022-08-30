@@ -211,7 +211,9 @@ public:
 // [/SL:KB]
 	{
 
-		mStyle = new LLStyle(LLStyle::Params().font(LLFontGL::getFontSansSerif()));
+		// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+		//mStyle = new LLStyle(LLStyle::Params().font(LLFontGL::getFontSansSerif()));
+		mStyle = new LLStyle(LLStyle::Params().font(mEditor.getFont()));
 		mToolTip = inv_item->getName() + '\n' + inv_item->getDescription();
 	}
 
@@ -328,11 +330,15 @@ public:
 // [/SL:KB]
 
 	/*virtual*/ LLStyleConstSP		getStyle() const { return mStyle; }
+	/*virtual*/ void 				setStyle(LLStyleConstSP style) { mStyle = style; } // <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
 
 private:
 	LLUIImagePtr	mImage;
 	LLWString		mLabel;
-	LLStyleSP		mStyle;
+	// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+	//LLStyleSP		mStyle;
+	LLStyleConstSP	mStyle;
+	// </FS:Ansariel>
 	std::string		mToolTip;
 	LLPointer<LLInventoryItem> mItem;
 	LLTextEditor&	mEditor;
