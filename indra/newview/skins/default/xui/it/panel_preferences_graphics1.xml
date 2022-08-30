@@ -123,7 +123,6 @@
 			<slider label="Riserva aggiuntiva memoria cache texture (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="La percentuale di memoria video fisica riservata alle texture caricate nella cache che attualmente non vengono visualizzate." />
 			<slider label="Riserva di memoria video fisica (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="La percentuale di memoria video fisica riservata per altri usi." />
 			<spinner label="Distanza della nebbia:" name="fog" label_width="160" width="226"/>
-			<spinner label="Thread di decodifica immagine:" name="image_decode_threads" tool_tip="Il numero di thread da utilizzare per la decodifica delle immagini. 0 = Automatico, 1 = Sincrono, 2+ = specificato dall'utente. (consigliati 0 o 1)." />
 		</panel>
 		<panel label="Resa" name="Rendering">
 			<text name="World Updating">

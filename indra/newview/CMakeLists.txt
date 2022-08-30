@@ -440,7 +440,6 @@ set(viewer_SOURCE_FILES
     llfloatertelehub.cpp
     llfloatertestinspectors.cpp
     llfloatertestlistview.cpp
-    llfloatertexturefetchdebugger.cpp
     llfloatertools.cpp
     llfloatertopobjects.cpp
     llfloatertos.cpp
@@ -1228,7 +1227,6 @@ set(viewer_HEADER_FILES
     llfloatertelehub.h
     llfloatertestinspectors.h
     llfloatertestlistview.h
-    llfloatertexturefetchdebugger.h
     llfloatertools.h
     llfloatertopobjects.h
     llfloatertos.h
@@ -3048,6 +3046,19 @@ if (LL_TESTS)
 #     "${llslurl_test_sources}"
 #    "${test_libs}"
 #    )
+
+  set(llviewercontrollistener_test_sources
+    llviewercontrollistener.cpp
+    ../llxml/llcontrol.cpp
+    ../llxml/llxmltree.cpp
+    ../llxml/llxmlparser.cpp
+    ../llcommon/commoncontrol.cpp
+    )
+
+  LL_ADD_INTEGRATION_TEST(llviewercontrollistener
+    "${llviewercontrollistener_test_sources}"
+    "${test_libs}"
+    )
 
   LL_ADD_INTEGRATION_TEST(llviewernetwork
      llviewernetwork.cpp

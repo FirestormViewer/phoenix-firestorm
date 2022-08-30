@@ -122,7 +122,6 @@
 			<slider label="Dodatkowy zapas pamięci podręcznej tekstur (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Procent fizycznej pamięci wideo zarezerwowanej dla tekstur ładowanych do pamięci podręcznej, które obecnie nie są wyświetlane." />
 			<slider label="Fizyczny zapas pamięci wideo (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Procent fizycznej pamięci wideo zarezerwowanej do innego użytku." />
 			<spinner label="Stosunek odległości dla mgły:" name="fog"/>
-			<spinner label="Wątki dekodowania obrazów:" name="image_decode_threads" tool_tip="Liczba wątków używanych do dekodowania obrazów. 0 = Auto, 1 = Synchroniczne, 2+ = określone przez użytkownika. Zalecane 0 lub 1." />
 		</panel>
 		<panel name="Rendering">
 			<text name="World Updating">

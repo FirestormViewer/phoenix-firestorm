@@ -114,7 +114,6 @@
 // <FS:Ansariel> [FS communication UI]
 #include "fsfloatervoicecontrols.h"
 // </FS:Ansariel> [FS communication UI]
-#include "llfloatertexturefetchdebugger.h"
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0)
 #include "llfloaterscriptrecover.h"
 // [/SL:KB]
@@ -1823,7 +1822,6 @@ bool LLAppViewer::doFrame()
 			{
 				S32 non_interactive_ms_sleep_time = 100;
 				LLAppViewer::getTextureCache()->pause();
-				LLAppViewer::getImageDecodeThread()->pause();
 				ms_sleep(non_interactive_ms_sleep_time);
 			}
 
@@ -1844,7 +1842,6 @@ bool LLAppViewer::doFrame()
 					ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
-					LLAppViewer::getImageDecodeThread()->pause();
 				}
 			}
 
@@ -1898,25 +1895,12 @@ bool LLAppViewer::doFrame()
 			{
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df getTextureCache" )
 				LLAppViewer::getTextureCache()->pause();
-				LLAppViewer::getImageDecodeThread()->pause();
 				LLAppViewer::getTextureFetch()->pause();
 			}
 			if(!total_io_pending) //pause file threads if nothing to process.
 			{
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df LLVFSThread" )
 				LLLFSThread::sLocal->pause();
-			}
-
-			//texture fetching debugger
-			if(LLTextureFetchDebugger::isEnabled())
-			{
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df tex_fetch_debugger_instance" )
-				LLFloaterTextureFetchDebugger* tex_fetch_debugger_instance =
-					LLFloaterReg::findTypedInstance<LLFloaterTextureFetchDebugger>("tex_fetch_debugger");
-				if(tex_fetch_debugger_instance)
-				{
-					tex_fetch_debugger_instance->idle() ;
-				}
 			}
 
 			// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
@@ -1938,7 +1922,7 @@ bool LLAppViewer::doFrame()
 			// </FS:Ansariel>
 			{
 				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df resumeMainloopTimeout" )
-				resumeMainloopTimeout();
+			    resumeMainloopTimeout();
 			}
 			pingMainloopTimeout("Main:End");
 		}
@@ -1991,16 +1975,20 @@ S32 LLAppViewer::updateTextureThreads(F32 max_time)
 
 void LLAppViewer::flushLFSIO()
 {
-	while (1)
-	{
-		S32 pending = LLLFSThread::updateClass(0);
-		if (!pending)
-		{
-			break;
-		}
-		LL_INFOS() << "Waiting for pending IO to finish: " << pending << LL_ENDL;
-		ms_sleep(100);
-	}
+    S32 pending = LLLFSThread::updateClass(0);
+    if (pending > 0)
+    {
+        LL_INFOS() << "Waiting for pending IO to finish: " << pending << LL_ENDL;
+        while (1)
+        {
+            pending = LLLFSThread::updateClass(0);
+            if (!pending)
+            {
+                break;
+            }
+            ms_sleep(100);
+        }
+    }
 }
 
 bool LLAppViewer::cleanup()
@@ -2212,8 +2200,6 @@ bool LLAppViewer::cleanup()
 
 	LL_INFOS() << "Cache files removed" << LL_ENDL;
 
-	// Wait for any pending LFS IO
-	flushLFSIO();
 	LL_INFOS() << "Shutting down Views" << LL_ENDL;
 
 	// Destroy the UI
@@ -2451,13 +2437,13 @@ bool LLAppViewer::cleanup()
 	sTextureCache->shutdown();
 	sImageDecodeThread->shutdown();
 	sPurgeDiskCacheThread->shutdown();
-    if (mGeneralThreadPool)
-    {
-        mGeneralThreadPool->close();
-    }
+	if (mGeneralThreadPool)
+	{
+		mGeneralThreadPool->close();
+	}
 
 	sTextureFetch->shutDownTextureCacheThread() ;
-	sTextureFetch->shutDownImageDecodeThread() ;
+    LLLFSThread::sLocal->shutdown();
 
 	LL_INFOS() << "Shutting down message system" << LL_ENDL;
 	end_messaging_system();
@@ -2574,14 +2560,7 @@ void LLAppViewer::initGeneralThread()
         return;
     }
 
-    LLSD poolSizes{ gSavedSettings.getLLSD("ThreadPoolSizes") };
-    LLSD sizeSpec{ poolSizes["General"] };
-    LLSD::Integer poolSize{ sizeSpec.isInteger() ? sizeSpec.asInteger() : 3 };
-    LL_DEBUGS("ThreadPool") << "Instantiating General pool with "
-        << poolSize << " threads" << LL_ENDL;
-    // We don't want anyone, especially the main thread, to have to block
-    // due to this ThreadPool being full.
-    mGeneralThreadPool = new LL::ThreadPool("General", poolSize, 1024 * 1024);
+    mGeneralThreadPool = new LL::ThreadPool("General", 3);
     mGeneralThreadPool->start();
 }
 
@@ -2591,17 +2570,12 @@ bool LLAppViewer::initThreads()
 
 	LLImage::initClass(gSavedSettings.getBOOL("TextureNewByteRange"),gSavedSettings.getS32("TextureReverseByteRange"));
 
-	LLLFSThread::initClass(enable_threads && false);
-
-	//<FS:ND> Image thread pool from CoolVL
-	U32 imageThreads = gSavedSettings.getU32("FSImageDecodeThreads");
-	// </FS:ND>
+	LLLFSThread::initClass(enable_threads && true); // TODO: fix crashes associated with this shutdo
 
 	// Image decoding
-	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true, imageThreads);
+	LLAppViewer::sImageDecodeThread = new LLImageDecodeThread(enable_threads && true);
 	LLAppViewer::sTextureCache = new LLTextureCache(enable_threads && true);
 	LLAppViewer::sTextureFetch = new LLTextureFetch(LLAppViewer::getTextureCache(),
-													sImageDecodeThread,
 													enable_threads && true,
 													app_metrics_qa_mode);
 	LLAppViewer::sPurgeDiskCacheThread = new LLPurgeDiskCacheThread();
@@ -3955,7 +3929,7 @@ LLSD LLAppViewer::getViewerInfo() const
     //info["LOD_FACTOR"] = gSavedSettings.getF32("RenderVolumeLODFactor");
     //info["RENDER_QUALITY"] = (F32)gSavedSettings.getU32("RenderQualityPerformance");
     //info["GPU_SHADERS"] = gSavedSettings.getBOOL("RenderDeferred") ? "Enabled" : "Disabled";
-    //info["TEXTURE_MEMORY"] = gSavedSettings.getS32("TextureMemory");
+    //info["TEXTURE_MEMORY"] = gGLManager.mVRAM;
 	// </FS>
 
 #if LL_DARWIN
@@ -4103,15 +4077,6 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 	// </FS:PP>
 
-	// <FS:Ansariel> FIRE-11768: Include texture memory settings
-	info["TEXTUREMEMORYDYNAMIC"] = LLViewerTextureList::canUseDynamicTextureMemory() && gSavedSettings.getBOOL("FSDynamicTextureMemory");
-	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
-	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
-	info["TEXTUREMEMORYMIN"] = gSavedSettings.getS32("FSDynamicTextureMemoryMinTextureMemory");
-	info["TEXTUREMEMORYCACHERESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryCacheReserve");
-	info["TEXTUREMEMORYGPURESERVE"] = gSavedSettings.getS32("FSDynamicTextureMemoryGPUReserve");
-	// </FS:Ansariel>
-
 	return info;
 }
 
@@ -4182,17 +4147,6 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
 	if (info.has("BANDWIDTH")) //For added info in help floater
 	{
 		support << "\n" << LLTrans::getString("AboutSettings", args, default_string);
-	}
-	if (info.has("TEXTUREMEMORYDYNAMIC"))
-	{
-		if (info["TEXTUREMEMORYDYNAMIC"].asBoolean())
-		{
-			support << "\n" << LLTrans::getString("AboutTextureMemoryDynamic", args, default_string);
-		}
-		else
-		{
-			support << "\n" << LLTrans::getString("AboutTextureMemory", args, default_string);
-		}
 	}
 	if (info.has("DISK_CACHE_INFO"))
 	{
@@ -5593,10 +5547,6 @@ void LLAppViewer::idle()
 	//
 	// Special case idle if still starting up
 	//
-	if (LLStartUp::getStartupState() >= STATE_WORLD_INIT)
-	{
-		update_texture_time();
-	}
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
 		// Skip rest if idle startup returns false (essentially, no world yet)

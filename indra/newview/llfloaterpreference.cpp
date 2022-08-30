@@ -546,9 +546,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
-
-	// <FS:Ansariel> Dynamic texture memory calculation
-	gSavedSettings.getControl("FSDynamicTextureMemory")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::handleDynamicTextureMemoryChanged, this));
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -2088,16 +2085,6 @@ void LLFloaterPreference::refreshEnabledState()
 {
 	LLCheckBoxCtrl* ctrl_pbr = getChild<LLCheckBoxCtrl>("UsePBRShaders");
 
-	F32 mem_multiplier = gSavedSettings.getF32("RenderTextureMemoryMultiple");
-	
-	S32Megabytes min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
-	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
-
-	// <FS:Ansariel> Dynamic texture memory calculation
-	handleDynamicTextureMemoryChanged();
-
 #if ADDRESS_SIZE == 32
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
@@ -2180,29 +2167,6 @@ void LLFloaterPreference::refreshEnabledState()
 	}
 	// [/RLVa:KB]
 }
-
-// <FS:Ansariel> Dynamic texture memory calculation
-void LLFloaterPreference::handleDynamicTextureMemoryChanged()
-{
-	if (LLViewerTextureList::canUseDynamicTextureMemory())
-	{
-		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
-		childSetEnabled("FSDynamicTextureMemory", true);
-		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", dynamic_tex_mem_enabled);
-		childSetEnabled("FSDynamicTextureMemoryCacheReserve", dynamic_tex_mem_enabled);
-		childSetEnabled("FSDynamicTextureMemoryGPUReserve", dynamic_tex_mem_enabled);
-		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
-	}
-	else
-	{
-		childSetEnabled("FSDynamicTextureMemory", false);
-		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
-		childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
-		childSetEnabled("FSDynamicTextureMemoryGPUReserve", false);
-		childSetEnabled("GraphicsCardTextureMemory", true);
-	}
-}
-// </FS:Ansariel>
 
 // <FS:Zi> Support preferences search SLURLs
 void LLFloaterPreference::onCopySearch()

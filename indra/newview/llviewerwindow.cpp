@@ -529,27 +529,18 @@ public:
 		static LLCachedControl<bool> debugShowTime(gSavedSettings, "DebugShowTime");
 		if (debugShowTime)
 		{
+			// <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
 			{
-			const U32 y_inc2 = 15;
-				// <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
+				const U32 y_inc2 = 15;
 				addText(xpos, ypos, llformat("FPS: %3.1f", LLTrace::get_frame_recording().getPeriodMeanPerSec(LLStatViewer::FPS))); ypos += y_inc2;
-				
-				// </FS:Ansariel>
-				LLFrameTimer& timer = gTextureTimer;
-				F32 time = timer.getElapsedTimeF32();
-				S32 hours = (S32)(time / (60*60));
-				S32 mins = (S32)((time - hours*(60*60)) / 60);
-				S32 secs = (S32)((time - hours*(60*60) - mins*60));
-				addText(xpos, ypos, llformat("Texture: %d:%02d:%02d", hours,mins,secs)); ypos += y_inc2;
 			}
-			
-			{
+			// </FS:Ansariel>
+
 			F32 time = gFrameTimeSeconds;
 			S32 hours = (S32)(time / (60*60));
 			S32 mins = (S32)((time - hours*(60*60)) / 60);
 			S32 secs = (S32)((time - hours*(60*60) - mins*60));
 			addText(xpos, ypos, llformat("Time: %d:%02d:%02d", hours,mins,secs)); ypos += y_inc;
-		}
 		}
 		
 		//if (gSavedSettings.getBOOL("DebugShowMemory"))
@@ -6889,7 +6880,6 @@ void LLViewerWindow::stopGL(BOOL save_state)
 
 		// Pause texture decode threads (will get unpaused during main loop)
 		LLAppViewer::getTextureCache()->pause();
-		LLAppViewer::getImageDecodeThread()->pause();
 		LLAppViewer::getTextureFetch()->pause();
 				
 		gSky.destroyGL();
@@ -6936,8 +6926,6 @@ void LLViewerWindow::stopGL(BOOL save_state)
 			LLGLSLShader* shader = *(LLGLSLShader::sInstances.begin());
 			shader->unload();
 		}
-		
-		LL_INFOS() << "Remaining allocated texture memory: " << LLImageGL::sGlobalTextureMemory.value() << " bytes" << LL_ENDL;
 	}
 }
 

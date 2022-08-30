@@ -437,23 +437,6 @@ static bool handleMaxPartCountChanged(const LLSD& newvalue)
 	return true;
 }
 
-static bool handleVideoMemoryChanged(const LLSD& newvalue)
-{
-	gTextureList.updateMaxResidentTexMem(S32Megabytes(newvalue.asInteger()));
-	return true;
-}
-
-// <FS:Ansariel> Dynamic texture memory calculation
-static bool handleDynamicTextureMemoryChanged(const LLSD& newvalue)
-{
-	if (!newvalue.asBoolean())
-	{
-		gTextureList.updateMaxResidentTexMem(S32Megabytes(gSavedSettings.getS32("TextureMemory")));
-	}
-	return true;
-}
-// </FS:Ansariel>
-
 static bool handleChatFontSizeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
@@ -1213,7 +1196,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));
 	gSavedSettings.getControl("RenderHiDPI")->getSignal()->connect(boost::bind(&handleRenderHiDPIChanged, _2));
-	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
 	gSavedSettings.getControl("ChatConsoleFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
 	gSavedSettings.getControl("ChatPersistTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
 	gSavedSettings.getControl("ConsoleMaxLines")->getSignal()->connect(boost::bind(&handleConsoleMaxLinesChanged, _2));
@@ -1395,9 +1377,6 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Output device selection
 	gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&handleOutputDeviceChanged, _2));
-
-	// <FS:Ansariel> Dynamic texture memory calculation
-	gSavedSettings.getControl("FSDynamicTextureMemory")->getSignal()->connect(boost::bind(&handleDynamicTextureMemoryChanged, _2));
 
 	// <FS:Ansariel> Optional small camera floater
 	gSavedSettings.getControl("FSUseSmallCameraFloater")->getSignal()->connect(boost::bind(&handleSmallCameraFloaterChanged, _2));

@@ -25,193 +25,91 @@
  */
 
 #include "linden_common.h"
+
 #include "llimageworker.h"
 #include "llimagedxt.h"
+#include "threadpool.h"
 
- // <FS:ND> Image thread pool from CoolVL
-#include "boost/thread.hpp"
-std::atomic< U32 > s_ChildThreads;
-
-class PoolWorkerThread : public LLThread
+/*--------------------------------------------------------------------------*/
+class ImageRequest
 {
 public:
-	PoolWorkerThread(std::string name) : LLThread(name),
-		mCurrentRequest(NULL)
-	{
-	}
-	virtual void run()
-	{
-		while (!isQuitting())
-		{
-			auto *pReq = mCurrentRequest.exchange(nullptr);
+	ImageRequest(const LLPointer<LLImageFormatted>& image,
+				 S32 discard, BOOL needs_aux,
+				 const LLPointer<LLImageDecodeThread::Responder>& responder);
+	virtual ~ImageRequest();
 
-			if (pReq)
-				pReq->processRequestIntern();
-			checkPause();
-		}
-	}
-	bool isBusy()
-	{
-		auto *pReq = mCurrentRequest.load();
-		if (!pReq)
-			return false;
-
-		auto status = pReq->getStatus();
-
-		return status  == LLQueuedThread::STATUS_QUEUED || status == LLQueuedThread::STATUS_INPROGRESS;
-	}
-
-	bool runCondition()
-	{
-		return mCurrentRequest != NULL;
-	}
-
-	bool setRequest(LLImageDecodeThread::ImageRequest* req)
-	{
-		LLImageDecodeThread::ImageRequest* pOld{ nullptr };
-		bool bSuccess = mCurrentRequest.compare_exchange_strong(pOld, req);
-		wake();
-
-		return bSuccess;
-	}
+	/*virtual*/ bool processRequest();
+	/*virtual*/ void finishRequest(bool completed);
 
 private:
-	std::atomic< LLImageDecodeThread::ImageRequest * > mCurrentRequest;
+	// LLPointers stored in ImageRequest MUST be LLPointer instances rather
+	// than references: we need to increment the refcount when storing these.
+	// input
+	LLPointer<LLImageFormatted> mFormattedImage;
+	S32 mDiscardLevel;
+	BOOL mNeedsAux;
+	// output
+	LLPointer<LLImageRaw> mDecodedImageRaw;
+	LLPointer<LLImageRaw> mDecodedImageAux;
+	BOOL mDecodedRaw;
+	BOOL mDecodedAux;
+	LLPointer<LLImageDecodeThread::Responder> mResponder;
 };
-// </FS:ND>
+
 
 //----------------------------------------------------------------------------
 
 // MAIN THREAD
-LLImageDecodeThread::LLImageDecodeThread(bool threaded, U32 aSubThreads)
-	: LLQueuedThread("imagedecode", threaded)
+LLImageDecodeThread::LLImageDecodeThread(bool /*threaded*/)
 {
-	mCreationMutex = new LLMutex();
-
-	// <FS:ND> Image thread pool from CoolVL
-	if (aSubThreads == 0)
-	{
-		aSubThreads = boost::thread::hardware_concurrency();
-		if (!aSubThreads)
-			aSubThreads = 4U; // Use a sane default: 4 cores
-		if (aSubThreads > 8U)
-		{
-			// Using number of (virtual) cores - 1 (for the main image worker
-			// thread) - 1 (for the viewer main loop thread), further bound to
-			// a maximum of 32 threads (more than that is totally useless, even
-			// when flying over main land with 512m draw distance).
-			aSubThreads = llmin(aSubThreads - 2U, 32U);
-		}
-		else if (aSubThreads > 2U)
-		{
-			// Using number of (virtual) cores - 1 (for the main image worker
-			// thread).
-			--aSubThreads;
-		}
-	}
-	else if (aSubThreads == 1) // Disable if only 1
-		aSubThreads = 0;
-
-	s_ChildThreads = aSubThreads;
-	for (U32 i = 0; i < aSubThreads; ++i)
-	{
-		std::stringstream strm;
-		strm << "imagedecodethread" << (i + 1);
-
-		mThreadPool.push_back(std::make_shared< PoolWorkerThread>(strm.str()));
-		mThreadPool[i]->start();
-	}
-	// </FS:ND>
+    mThreadPool.reset(new LL::ThreadPool("ImageDecode", 8));
+    mThreadPool->start();
 }
 
 //virtual 
 LLImageDecodeThread::~LLImageDecodeThread()
-{
-	delete mCreationMutex ;
-}
+{}
 
 // MAIN THREAD
 // virtual
 S32 LLImageDecodeThread::update(F32 max_time_ms)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	LLMutexLock lock(mCreationMutex);
-	// <FS:Beq> instrument image decodes
-	{
-	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue1);
-	// </FS:Beq>
-	for (creation_list_t::iterator iter = mCreationList.begin();
-		 iter != mCreationList.end(); ++iter)
-	{
-		creation_info& info = *iter;
-		// ImageRequest* req = new ImageRequest(info.handle, info.image,
-		//				     info.priority, info.discard, info.needs_aux,
-		//				     info.responder);
-		ImageRequest* req = new ImageRequest(info.handle, info.image,
-			info.priority, info.discard, info.needs_aux,
-			info.responder, this);
-
-		bool res = addRequest(req);
-		if (!res)
-		{
-			LL_WARNS() << "request added after LLLFSThread::cleanupClass()" << LL_ENDL;
-			return 0;
-		}
-	}
-	mCreationList.clear();
-	// <FS:Beq> instrument image decodes
-	}
-	{
-	LL_PROFILE_ZONE_COLOR(tracy::Color::Blue2);
-	// </FS:Beq>
-	S32 res = LLQueuedThread::update(max_time_ms);
-	// FSPlot("img_decode_pending", (int64_t)res); 	// <FS:Beq/> instrument image decodes
-	return res;
-	} 	// <FS:Beq/> instrument image decodes
+    return getPending();
 }
 
-LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(LLImageFormatted* image, 
-	U32 priority, S32 discard, BOOL needs_aux, Responder* responder)
+S32 LLImageDecodeThread::getPending()
+{
+    return mThreadPool->getQueue().size();
+}
+
+LLImageDecodeThread::handle_t LLImageDecodeThread::decodeImage(
+    const LLPointer<LLImageFormatted>& image, 
+    S32 discard,
+    BOOL needs_aux,
+    const LLPointer<LLImageDecodeThread::Responder>& responder)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	// <FS:Beq> De-couple texture threading from mainloop
-	// LLMutexLock lock(mCreationMutex);
-	// handle_t handle = generateHandle();
-	// mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
-	handle_t handle = generateHandle();
-	// If we have a thread pool dispatch this directly.
-	// Note: addRequest could cause the handling to take place on the fetch thread, this is unlikely to be an issue. 
-	// if this is an actual problem we move the fallback to here and place the unfulfilled request into the legacy queue
-	if (s_ChildThreads > 0)
-	{
-		LL_PROFILE_ZONE_NAMED_COLOR("DecodeDecoupled", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
-		ImageRequest* req = new ImageRequest(handle, image,
-			priority, discard, needs_aux,
-			responder, this);
-		bool res = addRequest(req);
-		if (!res)
-		{
-			LL_WARNS() << "Decode request not added because we are exiting." << LL_ENDL;
-			return 0;
-		}
-	}
-	else
-	{
-		LL_PROFILE_ZONE_NAMED_COLOR("DecodeQueued", tracy::Color::Orange); // <FS:Beq> instrument the image decode pipeline
-		LLMutexLock lock(mCreationMutex);
-		mCreationList.push_back(creation_info(handle, image, priority, discard, needs_aux, responder));
-	}
-	// </FS:Beq>
-	return handle;
+
+    // Instantiate the ImageRequest right in the lambda, why not?
+    mThreadPool->getQueue().post(
+        [req = ImageRequest(image, discard, needs_aux, responder)]
+        () mutable
+        {
+            auto done = req.processRequest();
+            req.finishRequest(done);
+        });
+
+    // It's important to our consumer (LLTextureFetchWorker) that we return a
+    // nonzero handle. It is NOT important that the nonzero handle be unique:
+    // nothing is ever done with it except to compare it to zero, or zero it.
+    return 17;
 }
 
-// Used by unit test only
-// Returns the size of the mutex guarded list as an indication of sanity
-S32 LLImageDecodeThread::tut_size()
+void LLImageDecodeThread::shutdown()
 {
-	LLMutexLock lock(mCreationMutex);
-	S32 res = mCreationList.size();
-	return res;
+    mThreadPool->close();
 }
 
 LLImageDecodeThread::Responder::~Responder()
@@ -220,26 +118,19 @@ LLImageDecodeThread::Responder::~Responder()
 
 //----------------------------------------------------------------------------
 
-LLImageDecodeThread::ImageRequest::ImageRequest(handle_t handle, LLImageFormatted* image, 
-												U32 priority, S32 discard, BOOL needs_aux,
-												LLImageDecodeThread::Responder* responder,
-												LLImageDecodeThread *aQueue)
-	: LLQueuedThread::QueuedRequest(handle, priority, FLAG_AUTO_COMPLETE),
-	  mFormattedImage(image),
+ImageRequest::ImageRequest(const LLPointer<LLImageFormatted>& image, 
+							S32 discard, BOOL needs_aux,
+							const LLPointer<LLImageDecodeThread::Responder>& responder)
+	: mFormattedImage(image),
 	  mDiscardLevel(discard),
 	  mNeedsAux(needs_aux),
 	  mDecodedRaw(FALSE),
 	  mDecodedAux(FALSE),
-	  mResponder(responder),
-      mQueue( aQueue ) // <FS:ND/> Image thread pool from CoolVL
+	  mResponder(responder)
 {
-	//<FS:ND> Image thread pool from CoolVL
-	if (s_ChildThreads > 0)
-		mFlags |= FLAG_ASYNC;
-	// </FS:ND>
 }
 
-LLImageDecodeThread::ImageRequest::~ImageRequest()
+ImageRequest::~ImageRequest()
 {
 	mDecodedImageRaw = NULL;
 	mDecodedImageAux = NULL;
@@ -250,36 +141,13 @@ LLImageDecodeThread::ImageRequest::~ImageRequest()
 
 
 // Returns true when done, whether or not decode was successful.
-bool LLImageDecodeThread::ImageRequest::processRequest()
+bool ImageRequest::processRequest()
 {
-	// <FS:ND> Image thread pool from CoolVL
-
-	// If not async, decode using this thread
-	if ((mFlags & FLAG_ASYNC) == 0)
-		return processRequestIntern();
-
-	// Try to dispatch to a new thread, if this isn't possible decode on this thread
-	if (!mQueue->enqueRequest(this))
-		return processRequestIntern();
-	return true;
-	// </FS:ND>
-}
-
-bool LLImageDecodeThread::ImageRequest::processRequestIntern()
-{
-	// <FS:Beq> allow longer timeout for async and add instrumentation
-	// const F32 decode_time_slice = .1f;
-	LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	F32 decode_time_slice = .1f;
-	if(mFlags & FLAG_ASYNC)
-	{
-		decode_time_slice = 10.0f;// long time out as this is not an issue with async
-	}
-	// </FS:Beq>
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+	const F32 decode_time_slice = 0.f; //disable time slicing
 	bool done = true;
 	if (!mDecodedRaw && mFormattedImage.notNull())
 	{
-		LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange1); // <FS:Beq> instrument the image decode pipeline
 		// Decode primary channels
 		if (mDecodedImageRaw.isNull())
 		{
@@ -302,9 +170,9 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 		}
 
 		// <FS:ND> Probably out of memory crash
-		// done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
+		// done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice);
 		if( mDecodedImageRaw->getData() )
-			done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
+			done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice);
 		else
 		{
 			LL_WARNS() << "No memory for LLImageRaw of size " << (U32)mFormattedImage->getWidth() << "x" << (U32)mFormattedImage->getHeight() << "x"
@@ -318,7 +186,6 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 	}
 	if (done && mNeedsAux && !mDecodedAux && mFormattedImage.notNull())
 	{
-		LL_PROFILE_ZONE_COLOR(tracy::Color::DarkOrange2); // <FS:Beq> instrument the image decode pipeline
 		// Decode aux channel
 		if (!mDecodedImageAux)
 		{
@@ -326,28 +193,14 @@ bool LLImageDecodeThread::ImageRequest::processRequestIntern()
 											  mFormattedImage->getHeight(),
 											  1);
 		}
-		done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
+		done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4);
 		mDecodedAux = done && mDecodedImageAux->getData();
 	}
-	// <FS:Beq> report timeout on async thread (which leads to worker abort errors)
-	if(!done)
-	{
-		LL_WARNS("ImageDecode") << "Image decoding failed to complete with time slice=" << decode_time_slice << LL_ENDL;
-	}
-	// </FS:Beq>
-	//<FS:ND> Image thread pool from CoolVL
-	if (mFlags & FLAG_ASYNC)
-	{
-		setStatus(STATUS_COMPLETE);
-		finishRequest(true);
-		// always autocomplete
-		mQueue->completeRequest(mHashKey);
-	}
-	// </FS:ND>
+
 	return done;
 }
 
-void LLImageDecodeThread::ImageRequest::finishRequest(bool completed)
+void ImageRequest::finishRequest(bool completed)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	if (mResponder.notNull())
@@ -356,24 +209,4 @@ void LLImageDecodeThread::ImageRequest::finishRequest(bool completed)
 		mResponder->completed(success, mDecodedImageRaw, mDecodedImageAux);
 	}
 	// Will automatically be deleted
-}
-
-// Used by unit test only
-// Checks that a responder exists for this instance so that something can happen when completion is reached
-bool LLImageDecodeThread::ImageRequest::tut_isOK()
-{
-	return mResponder.notNull();
-}
-
-bool LLImageDecodeThread::enqueRequest(ImageRequest * req)
-{
-	for (auto &pThread : mThreadPool)
-	{
-		if (!pThread->isBusy())
-		{
-			if( pThread->setRequest(req) )
-				return true;
-		}
-	}
-	return false;
 }

@@ -817,7 +817,6 @@ U32 LLImageBase::getAllocationErrors()
 // LLImageRaw
 //---------------------------------------------------------------------------
 
-S32 LLImageRaw::sGlobalRawMemory = 0;
 S32 LLImageRaw::sRawImageCount = 0;
 
 LLImageRaw::LLImageRaw()
@@ -875,16 +874,13 @@ LLImageRaw::~LLImageRaw()
 U8* LLImageRaw::allocateData(S32 size)
 {
 	U8* res = LLImageBase::allocateData(size);
-	sGlobalRawMemory += getDataSize();
 	return res;
 }
 
 // virtual
 U8* LLImageRaw::reallocateData(S32 size)
 {
-	sGlobalRawMemory -= getDataSize();
 	U8* res = LLImageBase::reallocateData(size);
-	sGlobalRawMemory += getDataSize();
 	return res;
 }
 
@@ -897,7 +893,6 @@ void LLImageRaw::releaseData()
 // virtual
 void LLImageRaw::deleteData()
 {
-	sGlobalRawMemory -= getDataSize();
 	LLImageBase::deleteData();
 }
 
