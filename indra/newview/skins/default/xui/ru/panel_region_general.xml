@@ -18,8 +18,8 @@
 	<text name="grid_position_lbl">
 		Позиция сетки:
 	</text>
-	<line_editor name="grid_position_x" initial_value="неизв."/>
-	<line_editor name="grid_position_y" initial_value="неизв."/>
+	<line_editor name="grid_position_x" default_text="неизв."/>
+	<line_editor name="grid_position_y" default_text="неизв."/>
 	<text name="version_channel_text_lbl">
 		Версия:
 	</text>

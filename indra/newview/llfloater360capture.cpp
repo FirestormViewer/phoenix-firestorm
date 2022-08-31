@@ -320,6 +320,11 @@ const std::string LLFloater360Capture::getHTMLBaseFolder()
 // triggered when the 'capture' button in the UI is pressed
 void LLFloater360Capture::onCapture360ImagesBtn()
 {
+    // <FS:Beq> FIRE-31942 Avoid CoRo that appears to never usefully yield
+    // Allow option to re-enable on the off chance a low power machine can benefit
+    if(gSavedSettings.getBOOL("FSUseCoRoFor360Capture"))
+    {
+    // </FS:Beq>
     // launch the main capture code in a coroutine so we can
     // yield/suspend at some points to give the main UI
     // thread a look-in occasionally.
@@ -327,6 +332,13 @@ void LLFloater360Capture::onCapture360ImagesBtn()
     {
         capture360Images();
     });
+    // <FS:Beq> FIRE-31942 Avoid CoRo that appears to never usefully yield
+    }
+    else
+    {
+        capture360Images();
+    }
+    // </FS:Beq>
 }
 
 // Gets the full path name for a given JavaScript file in the HTML folder. We
@@ -683,6 +695,7 @@ void LLFloater360Capture::capture360Images()
 
     // allow the UI to update by suspending and waiting for the
     // main render loop to update the UI
+    if(gSavedSettings.getBOOL("FSUseCoRoFor360Capture")) // <FS:Beq/> FIRE-31942 - make apparently pointless CoRo optional (just in case)
     suspendForAFrame();
 }
 

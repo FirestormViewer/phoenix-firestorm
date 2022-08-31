@@ -49,22 +49,22 @@
 				<text name="beyond_shout_distance_tag_label">Hors de portée de cri</text>
 			</panel>
 			<panel name="client_tags_panel">
-				<text name="client_tags_colors">Couleur selon le Viewer : (OpenSim/AuroraSim seulement)</text>
+				<text name="client_tags_colors">Couleur selon la visionneuse : (OpenSim/AuroraSim seulement)</text>
 				<text name="whattagstoshow">Quelles étiquettes voulez-vous voir ?</text>
 				<combo_box name="ClientTagsVisibility">
 					<combo_box.item name="No Viewertags" label=" Aucun"/>
 					<combo_box.item name="TPVD Viewer" label="Les 'Third-Party Viewers' officiels"/>
-					<combo_box.item name="All known Viewers" label="Tous les Viewers connus (définis par une liste)"/>
-					<combo_box.item name="All Viewers" label="Tous les Viewers"/>
+					<combo_box.item name="All known Viewers" label="Toutes les visionneuses connues (définies par une liste)"/>
+					<combo_box.item name="All Viewers" label="Toutes les visionneuses"/>
 				</combo_box>
-				<text name="colorbasedonviewer">Couleur de l'étiquette basé sur le Viewer ?</text>
+				<text name="colorbasedonviewer">Couleur d'étiquette par visionneuse</text>
 				<combo_box name="ColorClienttags">
 					<combo_box.item name="Color not based on Viewer" label="Non"/>
-					<combo_box.item name="Single color per Viewer" label="Une couleur par Viewer"/>
-					<combo_box.item name="Multiple colors per Viewer" label="Plusieurs couleurs par Viewer"/>
+					<combo_box.item name="Single color per Viewer" label="Une couleur par visionneuse"/>
+					<combo_box.item name="Multiple colors per Viewer" label="Plusieurs couleurs par visionneuse"/>
 					<combo_box.item name="Userdefined color" label="Couleurs définies par l'utilisateur"/>
 				</combo_box>
-				<text name="listtodisplayviewertags_txt">Liste prédéfinie pour les étiquettes de Viewer ?</text>
+				<text name="listtodisplayviewertags_txt">Liste prédéf. d'étiquettes de visionneuse ?</text>
 				<combo_box name="UseLegacyClienttags">
 					<combo_box.item name="Don't use a list" label="Non"/>
 					<combo_box.item name="Local Clienttags" label="Liste statique"/>
@@ -95,6 +95,7 @@
 			<text name="floater_opacity">Transparence des fenêtres :</text>
 			<slider label="Actives :" name="active"/>
 			<slider label="Inactives :" name="inactive"/>
+			<slider label="Caméra / Mouvement :" name="camera_movement"/>
 			<text name="console_opacity">Transparence de la console :</text>
 			<color_swatch name="console_background" tool_tip="Sélectionnez la couleur de la console"/>
 			<slider label="Transparence :" name="console_background_opacity" tool_tip="Sélectionnez la transparence de l'arrière-plan de la console"/>
@@ -102,6 +103,25 @@
 			<color_swatch name="preferences_search_color" tool_tip="Sélectionnez la couleur des préférences surlignées par les résultats de recherche"/>
 			<text name="area_search_beacon_color_label">Couleur de la balise de recherche zonière : </text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Choix de la couleur de la balise de recherche zonière"/>
+			<text name="notecard_editor_color_label">
+				Couleurs de la notice :
+			</text>
+			<text name="notecard_editor_writable_text_color_label">
+				Texte:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Couleur du texte de la notice"/>
+			<text name="notecard_editor_writable_bg_color_label">
+				Arrière-plan :
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Couleur d'arrière-plan de la notice"/>
+			<text name="notecard_editor_writable_cursor_color_label">
+				Curs. :
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Couleur du curseur dans la notice"/>
+			<text name="notecard_editor_writable_selection_color_label">
+				Sélection :
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Couleur du texte sélectionné dans la notice"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Toujours afficher les dialogues de scripts sur un arrière-plan opaque"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Toujours afficher les notices de groupe avec un arrière-plan opaque"/>
 			<check_box name="override_pie_color_checkbox" label="Définir la couleur d'arrière-plan et la transparence des menus circulaires :"/>

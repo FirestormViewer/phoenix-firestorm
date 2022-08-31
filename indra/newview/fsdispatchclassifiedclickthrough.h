@@ -28,7 +28,7 @@
 #ifndef FS_DISPATCHCLASSIFIEDCLICKTHROUGH_H
 #define FS_DISPATCHCLASSIFIEDCLICKTHROUGH_H
 
-#include "fspanelclassified.h"
+#include "llpanelprofileclassifieds.h"
 #include "lldispatcher.h"
 
 // "classifiedclickthrough"
@@ -51,7 +51,7 @@ public:
 		S32 map_clicks = atoi(strings[2].c_str());
 		S32 profile_clicks = atoi(strings[3].c_str());
 
-		FSPanelClassifiedInfo::setClickThrough(
+		LLPanelProfileClassified::setClickThrough(
 			classified_id, teleport_clicks, map_clicks, profile_clicks, false);
 
 		return true;

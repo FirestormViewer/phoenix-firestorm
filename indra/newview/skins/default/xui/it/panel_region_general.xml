@@ -19,8 +19,8 @@
 	<text name="grid_position_lbl" right="-75">
 		Pos. grid:
 	</text>
-	<line_editor name="grid_position_x" initial_value="scon"/>
-	<line_editor name="grid_position_y" initial_value="scon"/>
+	<line_editor name="grid_position_x" default_text="scon"/>
+	<line_editor name="grid_position_y" default_text="scon"/>
 	<text name="region_type_lbl">
 		Tipo:
 	</text>

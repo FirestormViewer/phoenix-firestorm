@@ -571,9 +571,9 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
 	}
 	msg->getU32Fast(_PREHASH_RegionInfo, _PREHASH_EstateID, estate_id);
 
-	panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD((F32) estate_id));
-	panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD((F32) grid_pos_x));
-	panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD((F32) grid_pos_y));
+	panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD::Integer(estate_id));
+	panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD::Integer(grid_pos_x));
+	panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD::Integer(grid_pos_y));
 	// </FS:Zi>
 
 	// DEBUG PANEL
