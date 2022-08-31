@@ -19,8 +19,8 @@
 	<text name="grid_position_lbl">
 		Grid-Position:
 	</text>
-	<line_editor name="grid_position_x" initial_value="unbekannt"/>
-	<line_editor name="grid_position_y" initial_value="unbekannt"/>
+	<line_editor name="grid_position_x" default_text="n./v."/>
+	<line_editor name="grid_position_y" default_text="n./v."/>
 	<text name="region_type_lbl">
 		Typ:
 	</text>

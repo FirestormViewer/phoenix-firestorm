@@ -19,17 +19,13 @@ include_directories(
     ${LLXML_INCLUDE_DIRS}
     # ${LIBS_PREBUILT_DIR}/include/collada
     # ${LIBS_PREBUILT_DIR}/include/collada/1.4
-    ${COLLADA_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     )
 include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
     ${LLXML_SYSTEM_INCLUDE_DIRS}
-    )
-include_directories(SYSTEM
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    ${LLXML_SYSTEM_INCLUDE_DIRS}
     ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
+    ${COLLADA_INCLUDE_DIRS}
     )
 
 set(llprimitive_SOURCE_FILES

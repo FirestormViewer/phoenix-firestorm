@@ -1830,10 +1830,10 @@
      <text
        follows="left|top"
        layout="topleft"
-       left="30"
+       left="250"
        height="12"
        name="area_search_beacon_color_label"
-       top_pad="15"
+       top_delta="-17"
        width="400">
        Area search beacon Color:
      </text>
@@ -1843,7 +1843,7 @@
      height="24"
      label_height="0"
      layout="topleft"
-     left="40"
+     left="260"
      top_pad="5"
      name="area_search_beacon_color"
      tool_tip="Choose area search beacon color"
@@ -1854,6 +1854,133 @@
         <color_swatch.commit_callback
         function="Pref.applyUIColor"
         parameter="AreaSearchBeaconColor" />
+     </color_swatch>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="30"
+       height="12"
+       name="notecard_editor_color_label"
+       top_pad="15"
+       width="400">
+       Notecard Colors:
+     </text>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="40"
+       height="12"
+       name="notecard_editor_writable_text_color_label"
+       top_pad="15"
+       width="30">
+       Text:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left_pad="10"
+     top_delta="-6"
+     name="notecard_editor_writable_text_color"
+     tool_tip="Notecard Text Color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="NotecardTextColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="NotecardTextColor" />
+     </color_swatch>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left_pad="20"
+       height="12"
+       name="notecard_editor_writable_bg_color_label"
+       top_delta="6"
+       width="70">
+       Background:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left_pad="10"
+     top_delta="-6"
+     name="notecard_editor_writable_bg_color"
+     tool_tip="Notecard Background Color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="NotecardBackgroundColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="NotecardBackgroundColor" />
+     </color_swatch>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left_pad="20"
+       height="12"
+       name="notecard_editor_writable_cursor_color_label"
+       top_delta="6"
+       width="40">
+       Cursor:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left_pad="10"
+     top_delta="-6"
+     name="notecard_editor_writable_cursor_color"
+     tool_tip="Notecard Cursor Color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="NotecardCursorColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="NotecardCursorColor" />
+     </color_swatch>
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left_pad="20"
+       height="12"
+       name="notecard_editor_writable_selection_color_label"
+       top_delta="6"
+       width="60">
+       Selection:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left_pad="10"
+     top_delta="-6"
+     name="notecard_editor_writable_selection_color"
+     tool_tip="Notecard Selected Text Color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="NotecardSelectionColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="NotecardSelectionColor" />
      </color_swatch>
 
      <check_box

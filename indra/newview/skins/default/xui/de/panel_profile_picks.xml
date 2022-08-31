@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Auswahlen" name="panel_picks">
+	<string name="no_picks" value="Keine Auswahl"/>
+
+	<layout_stack name="main_stack">
+		<layout_panel name="buttons_header">
+			<text name="header_text">
+				Erzählen Sie von Ihren Lieblingsorten in [GRID].
+			</text>
+			<button label="Neu..." tool_tip="Erstellt eine neue Auswahl an der aktuellen Position" name="new_btn"/>
+			<button label="Löschen..." tool_tip="Löscht die aktuell ausgewählte Auswahl" name="delete_btn"/>
+		</layout_panel>
+		<layout_panel name="main_body">
+			<text name="picks_panel_text">
+				Laden...
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

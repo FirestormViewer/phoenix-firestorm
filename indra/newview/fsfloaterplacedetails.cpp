@@ -46,7 +46,6 @@
 #include "lllandmarkactions.h"
 #include "lllandmarklist.h"
 #include "llnotificationsutil.h"
-#include "llpanelpick.h"
 #include "llpanelplaceprofile.h"
 #include "llpanellandmarkinfo.h"
 #include "llparcel.h"
@@ -191,8 +190,7 @@ FSFloaterPlaceDetails::FSFloaterPlaceDetails(const LLSD& seed)
 	mIsInEditMode(false),
 	mIsInCreateMode(false),
 	mGlobalPos(),
-	mDisplayInfo(NONE),
-	mPickPanel(NULL)
+	mDisplayInfo(NONE)
 {
 	mParcelObserver = new FSPlaceDetailsPlacesParcelObserver(this);
 	mRemoteParcelObserver = new FSPlaceDetailsRemoteParcelInfoObserver(this);
@@ -566,14 +564,6 @@ void FSFloaterPlaceDetails::setItem(LLInventoryItem* item)
 	}
 }
 
-void FSFloaterPlaceDetails::togglePickPanel(BOOL visible)
-{
-	if (mPickPanel)
-	{
-		mPickPanel->setVisible(visible);
-	}
-}
-
 // static
 void FSFloaterPlaceDetails::showPlaceDetails(const LLSD& key)
 {
@@ -785,19 +775,6 @@ void FSFloaterPlaceDetails::onOverflowMenuItemClicked(const LLSD& param)
 	}
 	else if (item == "pick")
 	{
-		if (mPickPanel == NULL)
-		{
-			mPickPanel = LLPanelPickEdit::create();
-			addChild(mPickPanel);
-
-			mPickPanel->setExitCallback(boost::bind(&FSFloaterPlaceDetails::togglePickPanel, this, FALSE));
-			mPickPanel->setCancelCallback(boost::bind(&FSFloaterPlaceDetails::togglePickPanel, this, FALSE));
-			mPickPanel->setSaveCallback(boost::bind(&FSFloaterPlaceDetails::togglePickPanel, this, FALSE));
-		}
-
-		togglePickPanel(TRUE);
-		mPickPanel->onOpen(LLSD());
-
 		LLPanelPlaceInfo* panel = mPanelPlaceInfo;
 		if (mDisplayInfo == LANDMARK)
 		{
@@ -806,11 +783,7 @@ void FSFloaterPlaceDetails::onOverflowMenuItemClicked(const LLSD& param)
 
 		if (panel)
 		{
-			panel->createPick(mGlobalPos, mPickPanel);
-
-			LLRect rect = panel->getRect();
-			mPickPanel->reshape(rect.getWidth(), rect.getHeight());
-			mPickPanel->setRect(rect);
+			panel->createPick(mGlobalPos);
 		}
 	}
 	else if (item == "add_to_favbar")

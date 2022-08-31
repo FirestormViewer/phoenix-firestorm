@@ -1840,11 +1840,9 @@ void LLScriptEdCore::onFontChanged()
 	if (font)
 	{
 		mEditor->setFont(font);
-		mEditor->needsReflow();
 		if (mPostEditor)
 		{
 			mPostEditor->setFont(font);
-			mPostEditor->needsReflow();
 		}
 	}
 }

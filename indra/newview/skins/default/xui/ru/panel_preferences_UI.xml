@@ -127,7 +127,6 @@
     </panel>
     <panel label="Интерфейс окон" name="UI-interface-windows-tab">
         <check_box label="Открыть профиль аватара при нажатии на его имя" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Открыть профиль аватара при нажатии на его имя" />
-        <check_box name="FSUseWebProfiles" label="Использовать web профили по умолчанию" tool_tip="Использовать web профили по умолчанию" />
         <check_box label="Отключить автоматическое открытие списка заблокированного" name="FSDisableBlockListAutoOpen" tool_tip="Отключить автоматическое открытие списка заблокированного, юкогда вы блокируете аватара или объект" />
         <check_box label="Открывать окна в стиле [SHORT_VIEWER_GENERATION] для 'Друзья' и 'Группы'" name="FSUseV2Friends" tool_tip="Когда вы включите эту опцию, друзья / группы будут открыты в окнах - в противном случае, это будет сделано в Контактах." />
         <check_box label="Использовать устаревшие окно свойства объектов" name="FSUseLegacyObjectProperties" tool_tip="Если включено, при открытии свойств объекта будет использоваться старое окно свойств."/>
@@ -255,6 +254,18 @@
           пикселей (необходим перезапуск)
 [VIEWER_GENERATION] по умолчанию 20. V1 по умолчанию 18.
         </text>
+        <text name="text_box_notecard_font" width="120">
+          Шрифт Редактора Заметок:
+        </text>
+        <combo_box name="FSNotecardFontName" tool_tip="Название шрифта, используемого в редакторе заметок"/>
+        <combo_box name="FSNotecardFontSize" tool_tip="Размер шрифта, используемого в редакторе заметок">
+             <combo_item name="Monospace" label="Моноширинный"/>
+             <combo_item name="Scripting" label="Прописной"/>
+             <combo_item name="Cascadia" label="Код Каскадии"/>
+             <combo_item name="Small" label="Мелкий"/>
+             <combo_item name="Medium" label="Средний"/>
+             <combo_item name="Large" label="Крупный"/>
+        </combo_box>
     </panel>
 </tab_container>
 </panel>

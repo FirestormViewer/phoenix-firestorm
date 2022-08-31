@@ -50,7 +50,7 @@ LL_ARGS_PASSTHRU=""
 JOBS="0"
 WANTS_NINJA=$FALSE
 WANTS_VSCODE=$FALSE
-USE_VSTOOL=$TRUE
+USE_VSTOOL=$FALSE
 TESTBUILD_PERIOD="0"
 SINGLEGRID_URI=""
 
@@ -88,7 +88,7 @@ showUsage()
     echo "  --ninja                  : Build using Ninja"
     echo "  --vscode                 : Exports compile commands for VSCode (Linux only)"
     echo "  --compiler-cache         : Try to detect and use compiler cache (needs also --ninja for OSX and Windows)"
-    echo "  --no-vstools             : Do not use vstool to setup project startup properties (windows only)"
+    echo "  --vstools                : Use vstool to setup project startup properties (Windows only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
     echo
@@ -98,7 +98,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache no-vstools jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodstudio openal ninja vscode compiler-cache vstools jobs: platform: kdu opensim no-opensim singlegrid: avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -138,7 +138,7 @@ getArgs()
           ninja)          WANTS_NINJA=$TRUE;;
           vscode)         WANTS_VSCODE=$TRUE;;
           compiler-cache) WANTS_CACHE=$TRUE;;
-		  no-vstools)     USE_VSTOOL=$FALSE;;
+          vstools)        USE_VSTOOL=$TRUE;;
 
           help)           showUsage && exit 0;;
 
@@ -578,7 +578,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     cmake -G "$TARGET" ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
-          $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
+          $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee $LOG
 
     if [ $TARGET_PLATFORM == "windows" -a $USE_VSTOOL -eq $TRUE ] ; then
         echo "Setting startup project via vstool"

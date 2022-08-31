@@ -4146,7 +4146,7 @@ Prueba otra vez dentro de un minuto.
 		No se puede cambiar la forma de un objeto de la malla
 	</notification>
 	<notification name="FullRegionCantEnter">
-		No puedes entrar en esta región porque \nla región está llena.
+		No puedes entrar en esta región porque la región está llena.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Error de vínculo: los propietarios son diferentes
@@ -4447,7 +4447,7 @@ Prueba a seleccionar un terreno más pequeño.
 		No se puede comprar el pase ahora mismo. Vuelve a intentarlo más tarde.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		No se puede crear el objeto porque \nla parcela está llena.
+		No se puede crear el objeto porque la parcela está llena.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Error al colocar el objeto en el lugar especificado.  Vuelve a intentarlo.

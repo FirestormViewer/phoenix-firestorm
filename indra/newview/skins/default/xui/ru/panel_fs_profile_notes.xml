@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_notes" label="Заметки">
-    <text name="status_message" value="Частные заметки об этом аватаре:" />
-    <text name="status_message2" value="Позволить этому аватару:" />
-    <check_box name="status_check" label="Видеть, когда я в сети" />
-    <check_box name="map_check" label="Искать меня на карте" />
-    <check_box name="objects_check" label="Редактировать, удалять или брать мои объекты"/>
-</panel>

@@ -1166,4 +1166,16 @@
   <color
       name="ChatHistoryMessageFromLog"
       reference="White_50" />
+  <color
+     name="NotecardBackgroundColor"
+     reference="TextBgFocusColor" />
+  <color
+     name="NotecardTextColor"
+     reference="TextFgColor" />
+  <color
+     name="NotecardSelectionColor"
+     reference="EmphasisColor" />
+  <color
+     name="NotecardCursorColor"
+     reference="TextCursorColor" />
 </colors>

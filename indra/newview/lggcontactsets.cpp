@@ -103,7 +103,7 @@ std::string LGGContactSets::getDefaultFilename()
 	return path;
 }
 
-LLSD LGGContactSets::exportContactSet(const std::string& set_name)
+LLSD LGGContactSets::exportContactSet(std::string_view set_name)
 {
 	LLSD ret;
 
@@ -113,9 +113,9 @@ LLSD LGGContactSets::exportContactSet(const std::string& set_name)
 		ret["groupname"] = set->mName;
 		ret["color"] = set->mColor.getValue();
 		ret["notices"] = set->mNotify;
-		for (uuid_set_t::iterator friend_itr = set->mFriends.begin(); friend_itr != set->mFriends.end(); ++friend_itr)
+		for (const auto& friend_id : set->mFriends)
 		{
-			ret["friends"][(*friend_itr).asString()] = "";
+			ret["friends"][friend_id.asString()] = "";
 		}
 	}
 
@@ -176,12 +176,12 @@ void LGGContactSets::saveToDisk()
 	file.close();
 }
 
-bool LGGContactSets::saveContactSetToDisk(const std::string& set_name, const std::string& filename)
+bool LGGContactSets::saveContactSetToDisk(std::string_view set_name, std::string_view filename)
 {
 	if (isValidSet(set_name))
 	{
 		llofstream file;
-		file.open(filename.c_str());
+		file.open(filename.data());
 		LLSDSerialize::toPrettyXML(exportContactSet(set_name), file);
 		file.close();
 		return true;
@@ -300,7 +300,7 @@ void LGGContactSets::importFromLLSD(const LLSD& data)
 	}
 }
 
-LLColor4 LGGContactSets::getSetColor(const std::string& set_name)
+LLColor4 LGGContactSets::getSetColor(std::string_view set_name)
 {
 	ContactSet* set = getContactSet(set_name);
 	if (set)
@@ -318,7 +318,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 	bool rlv_shownames = !RlvActions::canShowName(RlvActions::SNC_DEFAULT, uuid);
 	LLColor4 color = cur_color;
 	
-	if (uuid == gAgent.getID())
+	if (uuid == gAgentID)
 	{
 		switch (type)
 		{
@@ -338,7 +338,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				break;
 		}
 	}
-	else if (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL)
+	else if (LLAvatarTracker::instance().getBuddyInfo(uuid))
 	{
 		switch (type)
 		{
@@ -452,7 +452,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 	return color;
 }
 
-LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::string& ignored_set_name)
+LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, std::string_view ignored_set_name)
 {
 	LLColor4 color = getDefaultColor();
 	if (ignored_set_name == CS_SET_NO_SETS)
@@ -462,9 +462,8 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 
 	U32 lowest = U32_MAX;
 	string_vec_t contact_sets = getFriendSets(friend_id);
-	for (string_vec_t::iterator it = contact_sets.begin(); it != contact_sets.end(); ++it)
+	for (const auto& set_name : contact_sets)
 	{
-		std::string set_name = *it;
 		if (set_name != ignored_set_name)
 		{
 			U32 set_size = (U32)getFriendsInSet(set_name).size();
@@ -489,7 +488,7 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 	{
 		if (isFriendInSet(friend_id, ignored_set_name) && !isInternalSetName(ignored_set_name))
 		{
-			return mContactSets[ignored_set_name]->mColor;
+			return mContactSets[ignored_set_name.data()]->mColor;
 		}
 	}
 	return color;
@@ -555,21 +554,20 @@ bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGC
 
 string_vec_t LGGContactSets::getFriendSets(const LLUUID& friend_id)
 {
-	string_vec_t sets;
+	string_vec_t sets{};
 
 	contact_set_map_t::iterator set_itr_end = mContactSets.end();
-	for (contact_set_map_t::iterator itr = mContactSets.begin(); itr != set_itr_end; ++itr)
+	for (const auto& [set_name, set] : mContactSets)
 	{
-		ContactSet* set = itr->second;
 		if (set->hasFriend(friend_id))
 		{
-			sets.push_back(set->mName);
+			sets.emplace_back(set->mName);
 		}
 	}
 	return sets;
 }
 
-uuid_vec_t LGGContactSets::getFriendsInSet(const std::string& set_name)
+uuid_vec_t LGGContactSets::getFriendsInSet(std::string_view set_name)
 {
 	uuid_vec_t friends;
 
@@ -593,9 +591,9 @@ uuid_vec_t LGGContactSets::getFriendsInSet(const std::string& set_name)
 	ContactSet* set = getContactSet(set_name);
 	if (set)
 	{
-		for (uuid_set_t::iterator itr = set->mFriends.begin(); itr != set->mFriends.end(); ++itr)
+		for (const auto& id : set->mFriends)
 		{
-			friends.push_back(*itr);
+			friends.emplace_back(id);
 		}
 	}
 
@@ -604,11 +602,11 @@ uuid_vec_t LGGContactSets::getFriendsInSet(const std::string& set_name)
 
 string_vec_t LGGContactSets::getAllContactSets()
 {
-	string_vec_t sets;
+	string_vec_t sets{};
 
-	for (contact_set_map_t::iterator itr = mContactSets.begin(); itr != mContactSets.end(); ++itr)
+	for (const auto& [set_name, set] : mContactSets)
 	{
-		sets.push_back(itr->second->mName);
+		sets.push_back(set->mName);
 	}
 
 	return sets;
@@ -616,11 +614,10 @@ string_vec_t LGGContactSets::getAllContactSets()
 
 uuid_vec_t LGGContactSets::getFriendsInAnySet()
 {
-	std::set<LLUUID> friendsInAnySet;
+	uuid_set_t friendsInAnySet{};
 
-	for (contact_set_map_t::iterator set_itr = mContactSets.begin(); set_itr != mContactSets.end(); ++set_itr)
+	for (const auto& [set_name, set] : mContactSets)
 	{
-		ContactSet* set = set_itr->second;
 		for (uuid_set_t::iterator itr = set->mFriends.begin(); itr != set->mFriends.end(); ++itr)
 		{
 			friendsInAnySet.insert(*itr);
@@ -632,9 +629,8 @@ uuid_vec_t LGGContactSets::getFriendsInAnySet()
 
 bool LGGContactSets::isFriendInSet(const LLUUID& friend_id)
 {
-	for (contact_set_map_t::iterator itr = mContactSets.begin(); itr != mContactSets.end(); ++itr)
+	for (const auto& [set_name, set] :  mContactSets)
 	{
-		ContactSet* set = itr->second;
 		if (set->hasFriend(friend_id))
 		{
 			return true;
@@ -644,7 +640,7 @@ bool LGGContactSets::isFriendInSet(const LLUUID& friend_id)
 	return false;
 }
 
-bool LGGContactSets::isFriendInSet(const LLUUID& friend_id, const std::string& set_name)
+bool LGGContactSets::isFriendInSet(const LLUUID& friend_id, std::string_view set_name)
 {
 	if (set_name == CS_SET_ALL_SETS)
 	{
@@ -678,9 +674,9 @@ bool LGGContactSets::isFriendInSet(const LLUUID& friend_id, const std::string& s
 bool LGGContactSets::notifyForFriend(const LLUUID& friend_id)
 {
 	string_vec_t sets = getFriendSets(friend_id);
-	for (string_vec_t::const_iterator itr = sets.begin(); itr != sets.end(); ++itr)
+	for (const auto& set_name : sets)
 	{
-		if (mContactSets[*itr]->mNotify)
+		if (mContactSets[set_name]->mNotify)
 		{
 			return true;
 		}
@@ -688,7 +684,7 @@ bool LGGContactSets::notifyForFriend(const LLUUID& friend_id)
 	return false;
 }
 
-void LGGContactSets::addToSet(const uuid_vec_t& avatar_ids, const std::string& set_name)
+void LGGContactSets::addToSet(const uuid_vec_t& avatar_ids, std::string_view set_name)
 {
 	LLAvatarTracker& tracker = LLAvatarTracker::instance();
 
@@ -701,7 +697,7 @@ void LGGContactSets::addToSet(const uuid_vec_t& avatar_ids, const std::string& s
 
 		if (isValidSet(set_name))
 		{
-			mContactSets[set_name]->mFriends.insert(avatar_id);
+			mContactSets[set_name.data()]->mFriends.insert(avatar_id);
 		}
 	}
 
@@ -734,9 +730,9 @@ void LGGContactSets::removeNonFriendFromList(const LLUUID& non_friend_id, bool s
 void LGGContactSets::removeFriendFromAllSets(const LLUUID& friend_id, bool save_changes /*= true*/)
 {
 	string_vec_t sets = getFriendSets(friend_id);
-	for (string_vec_t::const_iterator itr = sets.begin(); itr != sets.end(); ++itr)
+	for (const auto& set_name : sets)
 	{
-		removeFriendFromSet(friend_id, (*itr), save_changes);
+		removeFriendFromSet(friend_id, set_name, save_changes);
 	}
 }
 
@@ -753,13 +749,13 @@ bool LGGContactSets::isNonFriend(const LLUUID& non_friend_id)
 uuid_vec_t LGGContactSets::getListOfNonFriends()
 {
 	LLAvatarTracker& tracker = LLAvatarTracker::instance();
-	uuid_vec_t nonfriends;
+	uuid_vec_t nonfriends{};
 
 	for (const auto& friend_id : mExtraAvatars)
 	{
 		if (!tracker.isBuddy(friend_id))
 		{
-			nonfriends.push_back(friend_id);
+			nonfriends.emplace_back(friend_id);
 		}
 	}
 
@@ -768,17 +764,17 @@ uuid_vec_t LGGContactSets::getListOfNonFriends()
 
 uuid_vec_t LGGContactSets::getListOfPseudonymAvs()
 {
-	uuid_vec_t pseudonyms;
+	uuid_vec_t pseudonyms{};
 
-	for (uuid_map_t::iterator itr = mPseudonyms.begin(); itr != mPseudonyms.end(); ++itr)
+	for (const auto& [id, pseudonym] : mPseudonyms)
 	{
-		pseudonyms.push_back(itr->first);
+		pseudonyms.emplace_back(pseudonym);
 	}
 
 	return pseudonyms;
 }
 
-void LGGContactSets::setPseudonym(const LLUUID& friend_id, const std::string& pseudonym)
+void LGGContactSets::setPseudonym(const LLUUID& friend_id, std::string_view pseudonym)
 {
 	LLAvatarNameCache* inst = LLAvatarNameCache::getInstance();
 	mPseudonyms[friend_id] = pseudonym;
@@ -863,9 +859,9 @@ bool LGGContactSets::hasPseudonym(const LLUUID& friend_id)
 bool LGGContactSets::hasPseudonym(uuid_vec_t ids)
 {
 	bool has_pseudonym = false;
-	for (uuid_vec_t::const_iterator id = ids.begin(); id != ids.end(); ++id)
+	for (const auto& id : ids)
 	{
-		if (hasPseudonym(*id))
+		if (hasPseudonym(id))
 		{
 			has_pseudonym = true;
 			break;
@@ -882,9 +878,9 @@ bool LGGContactSets::hasDisplayNameRemoved(const LLUUID& friend_id)
 bool LGGContactSets::hasDisplayNameRemoved(uuid_vec_t ids)
 {
 	bool has_pseudonym = false;
-	for (uuid_vec_t::const_iterator id = ids.begin(); id != ids.end(); ++id)
+	for (const auto& id : ids)
 	{
-		if (hasDisplayNameRemoved(*id))
+		if (hasDisplayNameRemoved(id))
 		{
 			has_pseudonym = true;
 			break;
@@ -903,7 +899,7 @@ void LGGContactSets::removeDisplayName(const LLUUID& friend_id)
 	setPseudonym(friend_id, CS_PSEUDONYM);
 }
 
-void LGGContactSets::removeFriendFromSet(const LLUUID& friend_id, const std::string& set_name, bool save_changes /*= true*/)
+void LGGContactSets::removeFriendFromSet(const LLUUID& friend_id, std::string_view set_name, bool save_changes /*= true*/)
 {
 	if (set_name == CS_SET_EXTRA_AVS)
 	{
@@ -926,12 +922,12 @@ void LGGContactSets::removeFriendFromSet(const LLUUID& friend_id, const std::str
 	}
 }
 
-bool LGGContactSets::isValidSet(const std::string& set_name)
+bool LGGContactSets::isValidSet(std::string_view set_name)
 {
-	return (mContactSets.find(set_name) != mContactSets.end());
+	return (mContactSets.find(set_name.data()) != mContactSets.end());
 }
 
-void LGGContactSets::addSet(const std::string& set_name)
+void LGGContactSets::addSet(std::string_view set_name)
 {
 	if (!isInternalSetName(set_name) && !isValidSet(set_name))
 	{
@@ -939,21 +935,21 @@ void LGGContactSets::addSet(const std::string& set_name)
 		set->mName = set_name;
 		set->mColor = LLColor4::red;
 		set->mNotify = false;
-		mContactSets[set_name] = set;
+		mContactSets[set_name.data()] = set;
 		saveToDisk();
 		mChangedSignal(UPDATED_LISTS);
 	}
 }
 
-bool LGGContactSets::renameSet(const std::string& set_name, const std::string& new_set_name)
+bool LGGContactSets::renameSet(std::string_view set_name, std::string_view new_set_name)
 {
 	if (!isInternalSetName(set_name) && isValidSet(set_name) &&
 		!isInternalSetName(new_set_name) && !isValidSet(new_set_name))
 	{
 		ContactSet* set = getContactSet(set_name);
 		set->mName = new_set_name;
-		mContactSets.erase(set_name);
-		mContactSets[new_set_name] = set;
+		mContactSets.erase(set_name.data());
+		mContactSets[new_set_name.data()] = set;
 		saveToDisk();
 		mChangedSignal(UPDATED_LISTS);
 		return true;
@@ -961,27 +957,27 @@ bool LGGContactSets::renameSet(const std::string& set_name, const std::string& n
 	return false;
 }
 
-void LGGContactSets::removeSet(const std::string& set_name)
+void LGGContactSets::removeSet(std::string_view set_name)
 {
-	contact_set_map_t::iterator found = mContactSets.find(set_name);
+	contact_set_map_t::iterator found = mContactSets.find(set_name.data());
 	if (found != mContactSets.end())
 	{
 		LLAvatarTracker& tracker = LLAvatarTracker::instance();
 		uuid_vec_t non_friends_for_removal;
 		ContactSet* cset = found->second;
-		for (uuid_set_t::iterator member_it = cset->mFriends.begin(); member_it != cset->mFriends.end(); ++member_it)
+		for (const auto& friend_id : cset->mFriends)
 		{
-			if (!tracker.isBuddy(*member_it) &&
-				getFriendSets(*member_it).size() == 1 && // Current set is only set!
-				!hasPseudonym(*member_it))
+			if (!tracker.isBuddy(friend_id) &&
+				getFriendSets(friend_id).size() == 1 && // Current set is only set!
+				!hasPseudonym(friend_id))
 			{
-				non_friends_for_removal.push_back(*member_it);
+				non_friends_for_removal.emplace_back(friend_id);
 			}
 		}
 
-		for (uuid_vec_t::iterator nf_it = non_friends_for_removal.begin(); nf_it != non_friends_for_removal.end(); ++nf_it)
+		for (const auto& non_friend_id : non_friends_for_removal)
 		{
-			removeNonFriendFromList(*nf_it, false);
+			removeNonFriendFromList(non_friend_id, false);
 		}
 
 		delete found->second;
@@ -991,7 +987,7 @@ void LGGContactSets::removeSet(const std::string& set_name)
 	}
 }
 
-void LGGContactSets::setNotifyForSet(const std::string& set_name, bool notify)
+void LGGContactSets::setNotifyForSet(std::string_view set_name, bool notify)
 {
 	ContactSet* set = getContactSet(set_name);
 	if (set)
@@ -1001,7 +997,7 @@ void LGGContactSets::setNotifyForSet(const std::string& set_name, bool notify)
 	}
 }
 
-bool LGGContactSets::getNotifyForSet(const std::string& set_name)
+bool LGGContactSets::getNotifyForSet(std::string_view set_name)
 {
 	ContactSet* set = getContactSet(set_name);
 	if (set)
@@ -1011,7 +1007,7 @@ bool LGGContactSets::getNotifyForSet(const std::string& set_name)
 	return false;
 }
 
-void LGGContactSets::setSetColor(const std::string& set_name, const LLColor4& color)
+void LGGContactSets::setSetColor(std::string_view set_name, const LLColor4& color)
 {
 	ContactSet* set = getContactSet(set_name);
 	if (set)
@@ -1021,7 +1017,7 @@ void LGGContactSets::setSetColor(const std::string& set_name, const LLColor4& co
 	}
 }
 
-bool LGGContactSets::isInternalSetName(const std::string& set_name)
+bool LGGContactSets::isInternalSetName(std::string_view set_name)
 {
 	return (set_name.empty() ||
 			set_name == CS_SET_EXTRA_AVS ||
@@ -1031,21 +1027,21 @@ bool LGGContactSets::isInternalSetName(const std::string& set_name)
 			set_name == CS_GLOBAL_SETTINGS);
 }
 
-LGGContactSets::ContactSet* LGGContactSets::getContactSet(const std::string& set_name)
+LGGContactSets::ContactSet* LGGContactSets::getContactSet(std::string_view set_name)
 {
 	if (set_name.empty())
 	{
 		LL_WARNS("ContactSets") << "No contact set specified" << LL_ENDL;
-		return NULL;
+		return nullptr;
 	}
 
-	contact_set_map_t::iterator found = mContactSets.find(set_name);
+	contact_set_map_t::iterator found = mContactSets.find(set_name.data());
 	if (found != mContactSets.end())
 	{
 		return found->second;
 	}
 	LL_WARNS("ContactSets") << "No contact set named " << set_name << LL_ENDL;
-	return NULL;
+	return nullptr;
 }
 
 bool LGGContactSets::checkCustomName(const LLUUID& id, bool& dn_removed, std::string& pseudonym)
@@ -1097,7 +1093,7 @@ bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification,
 			instance.removeFriendFromSet(id, set_name, false);
 
 			if (!tracker.isBuddy(id) &&
-				instance.getFriendSets(id).size() == 0 &&
+				instance.getFriendSets(id).empty() &&
 				!instance.hasPseudonym(id))
 			{
 				instance.removeNonFriendFromList(id, false);

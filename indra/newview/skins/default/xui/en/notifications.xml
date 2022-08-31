@@ -1514,7 +1514,19 @@ Insufficient funds to create classified.
 
   <notification
    icon="alertmodal.tga"
-   name="DeleteAvatarPick"
+   name="ProfileDeleteClassified"
+   type="alertmodal">
+Delete classified &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt;?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ProfileDeletePick"
    type="alertmodal">
 Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
     <tag>confirm</tag>
@@ -1522,6 +1534,32 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
      name="okcancelbuttons"
      notext="Cancel"
      yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="ProfileUnpublishedClassified"
+   type="alert">
+    You have unpublished classifieds. They will be lost if you close the window.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="ProfileUnsavedChanges"
+   type="alert">
+    You have usaved changes.
+    <tag>confirm</tag>
+    <tag>save</tag>
+    <usetemplate
+     canceltext="Cancel"
+     name="yesnocancelbuttons"
+     notext="Discard"
+     yestext="Save"/>
   </notification>
 
   <notification
@@ -11749,7 +11787,7 @@ You may not alter the shape of a mesh object
    name="FullRegionCantEnter"
    type="notify">
    <tag>fail</tag>
-You can't enter this region because \nthe region is full.
+You can't enter this region because the region is full.
   </notification>
 
   <notification
@@ -12434,7 +12472,7 @@ Try selecting a smaller piece of land.
    <tag>fail</tag>
 Can't divide land.
 Can't find the parcel.
-Please report with Help -> Report Bug...
+Please report with Help -> Report Problem...
   </notification>
 
   <notification
@@ -12555,7 +12593,7 @@ Unable to buy pass right now.  Try again later.
    name="CantCreateObjectParcelFull"
    type="notify">
    <tag>fail</tag>
-Can't create object because \nthe parcel is full.
+Can't create object because the parcel is full.
   </notification>
 
   <notification
@@ -13505,18 +13543,6 @@ the region &quot;[REGION]&quot;?
      yestext="OK"/>
   </notification>
   <notification
-   name="PickLimitReached"
-   label=""
-   type="alertmodal">
-    <unique/>
-    <tag>fail</tag>
-    <tag>confirm</tag>
-    Can't create another pick because the maximum number of picks have been created already.
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
-  <notification
    icon="alertmodal.tga"
    name="GlobalOnlineStatusToggle"
    type="alertmodal">
@@ -13858,7 +13884,7 @@ Firestorm Animation Overrider: [AO_MESSAGE]
    icon="alertmodal.tga"
    name="AttachedRiggedObjectToHUD"
    type="alertmodal">
-An attachment named "[NAME]" contains rigged mesh but is attached to the HUD point "[HUD_POINT]". This means you will see it rendered correctly, but everyone else is not going to be able see it at all. You might want to consider taking it off and re-attaching it to a regular body attachment point.
+An attachment named "[NAME]" contains rigged mesh but is attached to the HUD point "[HUD_POINT]". Rigged meshes attached to HUD points won't be visible at all - neither for you nor for anybody else. You might want to consider taking it off and re-attaching it to a regular body attachment point.
    <usetemplate
     ignoretext="Warn me when a rigged attachment is worn on a HUD attachment point"
     name="notifyignore"/>

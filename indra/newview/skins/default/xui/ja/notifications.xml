@@ -4756,7 +4756,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		メッシュオブジェクトの形状を変更することはできません
 	</notification>
 	<notification name="FullRegionCantEnter">
-		リージョンが埋まっているため、\nこのリージョンに入場できません。
+		リージョンが埋まっているため、このリージョンに入場できません。
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		リンクエラー -- 所有者が違います
@@ -5060,7 +5060,7 @@ Phoenix/Firestorm ビューワのサポート・グループへようこそ！
 		今すぐには入場許可を購入できません。後でもう一度お試しください。
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		区画が埋まっているため、オブジェクトを\n作成することができません。
+		区画が埋まっているため、オブジェクトを 作成することができません。
 	</notification>
 	<notification name="FailedPlacingObject">
 		指定した場所にオブジェクトを配置できませんでした。もう一度お試しください。
@@ -5458,14 +5458,6 @@ Flickrの認証に失敗しました。もう一度試してみて下さい。�
 	<notification name="SnoozeDurationInvalidInput">
     居眠り時間には有効な数字を入力して下さい！
 		<tag>fail</tag>
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	
-	<notification name="PickLimitReached" label="">
-		<unique/>
-		<tag>fail</tag>
-		<tag>confirm</tag>
-    既にピック数の上限に達しているため、新しいピックを追加することはできません。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	

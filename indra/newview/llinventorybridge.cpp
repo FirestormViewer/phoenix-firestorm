@@ -3735,6 +3735,12 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		gSavedPerAccountSettings.setLLSD("FSProtectedFolders", new_protected_folders);
 	}
 	// </FS:Ansariel>
+	// <FS:Ansariel> Show folder in new window option
+	else if ("show_in_new_window" == action)
+	{
+		LLFloaterReg::showInstance("fs_partial_inventory", LLSD().with("start_folder_id", mUUID).with("start_folder_name", mDisplayName));
+	}
+	// </FS:Ansariel>
 }
 
 void LLFolderBridge::gatherMessage(std::string& message, S32 depth, LLError::ELevel log_level)
@@ -4676,6 +4682,9 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		}
 	}
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Show folder in new window option
+	items.push_back((std::string("Show in new Window")));
 
 	// Add menu items that are dependent on the contents of the folder.
 	LLViewerInventoryCategory* category = (LLViewerInventoryCategory *) model->getCategory(mUUID);

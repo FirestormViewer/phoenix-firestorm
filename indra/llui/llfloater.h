@@ -477,6 +477,7 @@ public:
 
 protected:
 	bool			mSaveRect;
+	bool			mDefaultRectForGroup;
 	std::string		mRectControl;
 	std::string		mPosXControl;
 	std::string		mPosYControl;

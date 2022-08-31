@@ -31,8 +31,6 @@
 
 #include "fsavatarsearchmenu.h"
 #include "fsdispatchclassifiedclickthrough.h"
-#include "fspanelclassified.h"
-#include "fspanelprofile.h"
 #include "fsscrolllistctrl.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
@@ -53,7 +51,8 @@
 #include "llloadingindicator.h"
 #include "lllogininstance.h"
 #include "llnotificationsutil.h"
-#include "llpanelclassified.h"
+#include "llpanelprofile.h"
+#include "llpanelprofileclassifieds.h"
 #include "llparcel.h"
 #include "llproductinforequest.h"
 #include "llqueryflags.h"
@@ -183,7 +182,7 @@ public:
 					LL_INFOS("Search") << "Classified stat request via capability" << LL_ENDL;
 					LLSD body;
 					body["classified_id"] = c_info->classified_id;
-					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, c_info->classified_id, _1));
+					LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelProfileClassified::handleSearchStatResponse, c_info->classified_id, _1));
 				}
 			}
 		}
@@ -309,15 +308,6 @@ BOOL FSFloaterSearch::postBuild()
 	mPanelClassifieds	= findChild<FSPanelSearchClassifieds>("panel_ls_classifieds");
 	mPanelWeb			= findChild<FSPanelSearchWeb>("panel_ls_web");
 
-	// <KC> If skin has legacy full profile view, use it
-	mPanelProfile = mPanelPeople->findChild<FSPanelProfile>("panel_profile_view");
-	if (mPanelProfile)
-	{
-		mPanelProfile->setVisible(false);
-		mPanelProfile->setEmbedded(true);
-		mPanelPeople->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
-	}
-
 	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
 	mDetailTitle =		getChild<LLTextEditor>("title");
 	mDetailDesc =		getChild<LLTextEditor>("desc");
@@ -354,12 +344,7 @@ void FSFloaterSearch::onTabChange()
 		mDetailsPanel->setVisible(false);
 		mPanelWeb->resetFocusOnLoad();
 	}
-	// <KC> If on legacy people search and skin uses full profile preview, hide preview panel
-	else if (active_panel == mPanelPeople && mPanelProfile)
-	{
-		mDetailsPanel->setVisible(false);
-	}
-	else
+	else if (active_panel == mPanelPeople)
 	{
 		mDetailsPanel->setVisible(mHasSelection);
 	}
@@ -402,19 +387,8 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 		switch (type)
 		{
 			case SC_AVATAR:
-				{
-					// <KC> If skin has legacy full profile view, use it
-					if (mPanelProfile)
-					{
-						mPanelProfile->setVisible(true);
-						mPanelProfile->onOpen(selected_item);
-					}
-					else
-					{
-						LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
-						LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
-					}
-				}
+				LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
+				LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
 				break;
 			case SC_GROUP:
 				mGroupPropertiesRequest = new FSSearchGroupInfoObserver(selected_item, this);

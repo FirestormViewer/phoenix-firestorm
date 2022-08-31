@@ -931,6 +931,36 @@ LLLocalBitmapMgr::~LLLocalBitmapMgr()
     mBitmapsAddedSignal.disconnect_all_slots(); // <FS:Ansariel> Threaded filepickers
 }
 
+LLUUID LLLocalBitmapMgr::addUnit(const std::string &filename)
+{
+    if (!checkTextureDimensions(filename))
+    {
+        return LLUUID::null;
+    }
+
+    LLLocalBitmap* unit = new LLLocalBitmap(filename);
+
+    if (unit->getValid())
+    {
+        mBitmapList.push_back(unit);
+        return unit->getTrackingID();
+    }
+    else
+    {
+        LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
+            << "Filename: " << filename << LL_ENDL;
+
+        LLSD notif_args;
+        notif_args["FNAME"] = filename;
+        LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
+
+        delete unit;
+        unit = NULL;
+    }
+
+    return LLUUID::null;
+}
+
 // <FS:Ansariel> Threaded filepickers
 //bool LLLocalBitmapMgr::addUnit()
 //{
@@ -989,33 +1019,11 @@ void LLLocalBitmapMgr::filePickerCallback(const std::vector<std::string>& filena
 	bool add_successful = false;
 	mTimer.stopTimer();
 
-	for (std::vector<std::string>::const_iterator it = filenames.begin(); it != filenames.end(); ++it)
+	for (const auto& filename : filenames)
 	{
-		std::string filename = *it;
-
-		if(!checkTextureDimensions(filename))
+		if (addUnit(filename).notNull())
 		{
-			continue;
-		}
-
-		LLLocalBitmap* unit = new LLLocalBitmap(filename);
-
-		if (unit->getValid())
-		{
-			mBitmapList.push_back(unit);
 			add_successful = true;
-		}
-		else
-		{
-			LL_WARNS() << "Attempted to add invalid or unreadable image file, attempt cancelled.\n"
-				    << "Filename: " << filename << LL_ENDL;
-
-			LLSD notif_args;
-			notif_args["FNAME"] = filename;
-			LLNotificationsUtil::add("LocalBitmapsVerifyFail", notif_args);
-
-			delete unit;
-			unit = NULL;
 		}
 	}
 
