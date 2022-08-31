@@ -11269,6 +11269,8 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar)
         if (preview_avatar)
         {
             // Only show rigged attachments for preview
+            // For the sake of performance and so that static
+            // objects won't obstruct previewing changes
             LLVOAvatar::attachment_map_t::iterator iter;
             for (iter = avatar->mAttachmentPoints.begin();
                 iter != avatar->mAttachmentPoints.end();
@@ -11281,12 +11283,33 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar)
                 {
                     LLViewerObject* attached_object = attachment_iter->get();
                     // <FS:Ansariel> FIRE-31966: Some mesh bodies/objects don't show in shape editor previews -> show everything but animesh
-                    //if (attached_object && attached_object->isRiggedMesh())
+                    //if (attached_object)
+                    //{
+                    //    if (attached_object->isRiggedMesh())
+                    //    {
+                    //        markVisible(attached_object->mDrawable->getSpatialBridge(), *viewer_camera);
+                    //    }
+                    //    else
+                    //    {
+                    //        // sometimes object is a linkset and rigged mesh is a child
+                    //        LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
+                    //        for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
+                    //            iter != child_list.end(); iter++)
+                    //        {
+                    //            LLViewerObject* child = *iter;
+                    //            if (child->isRiggedMesh())
+                    //            {
+                    //                markVisible(attached_object->mDrawable->getSpatialBridge(), *viewer_camera);
+                    //                break;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     if (attached_object && !attached_object->getControlAvatar())
-                    // </FS:Ansariel>
                     {
                         markVisible(attached_object->mDrawable->getSpatialBridge(), *viewer_camera);
                     }
+                    // </FS:Ansariel>
                 }
             }
         }

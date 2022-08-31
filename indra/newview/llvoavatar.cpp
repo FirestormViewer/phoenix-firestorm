@@ -11831,7 +11831,7 @@ void LLVOAvatar::updateVisualComplexity()
 // with an avatar. This will be either an attached object or an animated
 // object.
 void LLVOAvatar::accountRenderComplexityForObject(
-    const LLViewerObject *attached_object,
+    LLViewerObject *attached_object,
     const F32 max_attachment_complexity,
     LLVOVolume::texture_cost_t& textures,
     U32& cost,
@@ -11931,7 +11931,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
                     && attached_object->mDrawable)
                 {
                     textures.clear();
-
+                    BOOL is_rigged_mesh = attached_object->isRiggedMesh();
         mAttachmentSurfaceArea += attached_object->recursiveGetScaledSurfaceArea();
 
                     const LLVOVolume* volume = attached_object->mDrawable->getVOVolume();
@@ -11952,6 +11952,7 @@ void LLVOAvatar::accountRenderComplexityForObject(
                             iter != child_list.end(); ++iter)
                         {
                             LLViewerObject* childp = *iter;
+                            is_rigged_mesh |= childp->isRiggedMesh();
                             const LLVOVolume* chld_volume = dynamic_cast<LLVOVolume*>(childp);
                             if (chld_volume)
                             {
@@ -11959,6 +11960,16 @@ void LLVOAvatar::accountRenderComplexityForObject(
                                 hud_object_complexity.objectsCost += chld_volume->getRenderCost(textures);
                                 hud_object_complexity.objectsCount++;
                             }
+                        }
+                        if (is_rigged_mesh && !attached_object->mRiggedAttachedWarned)
+                        {
+                            LLSD args;                            
+                            LLViewerInventoryItem* itemp = gInventory.getItem(attached_object->getAttachmentItemID());
+                            args["NAME"] = itemp ? itemp->getName() : LLTrans::getString("Unknown");
+                            args["POINT"] = LLTrans::getString(getTargetAttachmentPoint(attached_object)->getName());
+                            LLNotificationsUtil::add("RiggedMeshAttachedToHUD", args);
+
+                            attached_object->mRiggedAttachedWarned = true;
                         }
 
                         hud_object_complexity.texturesCount += textures.size();
@@ -12088,64 +12099,12 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)
 			{
-                const LLViewerObject* attached_object = attachment_iter->get();
+                LLViewerObject* attached_object = attachment_iter->get();
                 accountRenderComplexityForObject(attached_object, max_attachment_complexity,
                                                  // <FS:Ansariel> Show per-item complexity in COF
                                                  //textures, cost, hud_complexity_list, object_complexity_list);
                                                  textures, cost, hud_complexity_list, object_complexity_list, item_complexity, temp_item_complexity);
                                                  // </FS:Ansariel>
-
-				// <FS:Zi> FIRE-31330: Check if this attachment is on the HUD and contains rigged mesh.
-				//         No need for isSelf() as HUD attachments always are owned by us.
-				//         NOTE: This function should be revised once we have better information
-				//         about pending/loaded rigging data and moved to a more appropriate
-				//         place in the code. For now, this is a good spot as the complexity calculation
-				//         gets updated when rigging data arrives, so we can reliably identify rigged
-				//         attachments where the skinning information took a while to load.
-				if (attached_object->isHUDAttachment() && attached_object->mCheckRigOnHUD && !attached_object->isTempAttachment())
-				{
-					// check if the root object is rigged
-					bool is_rigged = attached_object->isRiggedMesh();
-
-					// if not, check if any of its children is rigged
-					if (!is_rigged)
-					{
-						LLViewerObject::const_child_list_t& child_list = attached_object->getChildren();
-						for (auto childp : child_list)
-						{
-							if (childp && childp->isRiggedMesh())
-							{
-								is_rigged = true;
-								break;
-							}
-						}
-					}
-
-					// if it is rigged, display the warning dialog once per object
-					if (is_rigged)
-					{
-						// can't use attached_object as it is const, so grab it from the iterator instead
-						attachment_iter->get()->mCheckRigOnHUD = false;
-
-						LLSD args;
-
-						LLViewerInventoryItem* inv_object = gInventory.getItem(attached_object->getAttachmentItemID());
-
-						if (inv_object)
-						{
-							args["NAME"] = inv_object->getName();
-						}
-						else
-						{
-							args["NAME"] = LLTrans::getString("Unknown");
-						}
-
-						// can't use attached_object as it is const, so grab it from the iterator instead
-						args["HUD_POINT"] = LLTrans::getString(getTargetAttachmentPoint(attachment_iter->get())->getName());
-						LLNotificationsUtil::add("AttachedRiggedObjectToHUD", args);
-					}
-				}
-				// </FS:Zi>
 			}
 		}
 

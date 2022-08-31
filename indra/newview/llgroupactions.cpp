@@ -203,8 +203,7 @@ public:
 	virtual void processGroupData() = 0;
 protected:
 	LLUUID mGroupId;
-private:
-	bool mRequestProcessed;
+    bool mRequestProcessed;
 };
 
 class LLFetchLeaveGroupData: public LLFetchGroupMemberData
@@ -217,6 +216,22 @@ public:
 	 {
 		 LLGroupActions::processLeaveGroupDataResponse(mGroupId);
 	 }
+     void changed(LLGroupChange gc)
+     {
+         if (gc == GC_PROPERTIES && !mRequestProcessed)
+         {
+             LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupId);
+             if (!gdatap)
+             {
+                 LL_WARNS() << "GroupData was NULL" << LL_ENDL;
+             } 
+             else
+             {
+                 processGroupData();
+                 mRequestProcessed = true;
+             }
+         }
+     }
 };
 
 LLFetchLeaveGroupData* gFetchLeaveGroupData = NULL;

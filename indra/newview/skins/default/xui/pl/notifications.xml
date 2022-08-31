@@ -5196,10 +5196,6 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 		Animator Firestorma: [AO_MESSAGE]
 		<usetemplate ignoretext="Ostrzegaj mnie, gdy Animator Firestorma jest proszony o dostęp przez oskryptowany obiekt" name="notifyignore" />
 	</notification>
-	<notification name="AttachedRiggedObjectToHUD">
-		Dodatek o nazwie "[NAME]" zawiera riggowany mesz, ale jest dołączony do punktu HUD "[HUD_POINT]". Riggowane mesze dołączone do punktów HUD nie są w ogóle widoczne - ani dla Ciebie, ani dla nikogo innego. Rozważ zdjęcie go i ponowne dołączenie do zwykłego punktu doczepienia.
-		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="notifyignore" />
-	</notification>
 	<notification name="WarnForceLoginURL">
 		Wygląda na to, że adres URL ekranu logowania jest zastępowany w celach testowych.
 

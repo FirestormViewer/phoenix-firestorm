@@ -4888,6 +4888,14 @@ Entpacken: [UNPACK_TIME]s [USIZE]KB
 		Ausgewählte Objekte müssen sich im selben Ordner befinden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RiggedMeshAttachedToHUD">
+		Ein Object „[NAME]“, angehängt am HUD-Punkt „[POINT]“, enthält geriggtes Mesh.
+
+Geriggte Mesh-Objekte sind dafür gemacht, um am Avatar angehängt zu werden. Weder Sie selbst noch andere werden dieses sehen.
+
+Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem Avatar-Punkt an.
+		<usetemplate ignoretext="Warnen, falls geriggtes Mesh an einem HUD-Punkt angehängt ist." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		
@@ -5580,10 +5588,6 @@ Falls Sie diesen Nutzungsbestimmungen nicht zustimmen, sollten keinerlei finanzi
 	</notification>
 	<notification name="WindlightBulkImportFinished">
 		Mehrfach-Import von Windlight abgeschlossen.
-	</notification>
-	<notification name="AttachedRiggedObjectToHUD">
-		Der Anhang „[NAME]“ enthält geriggtes Mesh, ist aber am HUD-Punkt „[HUD_POINT]“ angehängt. Geriggte Meshes an HUD-Punkten sind nicht sichtbar, weder für Sie selbst noch für andere. Denken Sie darüber nach, den Anhang zu entfernen und an einem regulären Punkt am Körper anzuhängen.
-		<usetemplate ignoretext="Warnen, wenn ein geriggtes Mesh an einem HUD-Punkt angehängt wird." name="notifyignore"/>
 	</notification>
 	<notification name="WarnForceLoginURL">
 		URL der Startseite des Anmeldebildschirms wird für Testzwecke übersteuert.
