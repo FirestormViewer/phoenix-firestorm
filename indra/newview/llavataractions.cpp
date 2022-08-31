@@ -90,7 +90,7 @@
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "fsassetblacklist.h"
-#include "llagentpicksinfo.cpp"
+#include "llagentpicksinfo.h"
 #include "llfloaterregioninfo.h"
 #include "llfloaterreporter.h"
 #include "llparcel.h"
