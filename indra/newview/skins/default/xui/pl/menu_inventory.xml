@@ -85,6 +85,7 @@
 	<menu_item_call label="Nie chroń" name="UnprotectFolder" />
 	<menu_item_call label="Kopiuj identyfikator UUID" name="Copy Asset UUID"/>
 	<menu_item_call label="Znajdź w widoku ogólnym" name="Show in Main Panel"/>
+	<menu_item_call label="Pokaż w nowym oknie" name="Show in new Window" />
 	<menu_item_call label="Przywróć na ostatnią pozycję" name="Restore to Last Position"/>
 	<menu_item_call label="Kopiuj" name="Copy"/>
 	<menu_item_call label="Wytnij" name="Cut"/>
@@ -123,6 +124,8 @@
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call name="Settings Apply Local" label="Stosuj tylko dla mnie" />
 	<menu_item_call name="Settings Apply Parcel" label="Stosuj dla działki" />
+	<menu_item_call label="Utwórz folder z wybranych" name="New folder from selected" />
+	<menu_item_call label="Rozgrupuj elementy folderu" name="Ungroup folder items" />
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>

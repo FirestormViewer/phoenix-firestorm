@@ -42,6 +42,7 @@
 // [RLVa:KB] - Checked: RLVa-2.1.0
 #include <list>
 // [/RLVa:KB]
+#include <string_view>
 
 #if LL_LINUX
 #include <wctype.h>

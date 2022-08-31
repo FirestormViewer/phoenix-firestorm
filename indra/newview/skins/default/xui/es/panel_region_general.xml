@@ -19,8 +19,6 @@
 	<text name="grid_position_lbl">
 		Pos. en la red:
 	</text>
-	<line_editor name="grid_position_x" initial_value="desconocida"/>
-	<line_editor name="grid_position_y" initial_value="desconocida"/>
 	<text name="region_type_lbl">
 		Tipo:
 	</text>

@@ -371,7 +371,7 @@ void LLHUDText::updateVisibility()
 
 	if (!mSourceObject)
 	{
-		LL_WARNS() << "HUD text: mSourceObject is NULL,  mOnHUDAttachment: " << mOnHUDAttachment << LL_ENDL;
+		LL_WARNS_ONCE() << "HUD text: mSourceObject is NULL,  mOnHUDAttachment: " << mOnHUDAttachment << LL_ENDL;
 		mVisible = TRUE;
 		if (mOnHUDAttachment)
 		{

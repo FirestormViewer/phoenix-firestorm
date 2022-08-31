@@ -396,13 +396,13 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 		Verbindungsabbruch wird getestet
 	</string>
 	<string name="SocialFacebookConnecting">
-		Verbinde mit Facebook...
+		Mit Facebook verbinden...
 	</string>
 	<string name="SocialFacebookPosting">
-		Poste...
+		Posten...
 	</string>
 	<string name="SocialFacebookDisconnecting">
-		Trenne Verbindung zu Facebook...
+		Facebook-Verbindung trennen...
 	</string>
 	<string name="SocialFacebookErrorConnecting">
 		Problem beim Verbinden mit Facebook
@@ -411,7 +411,7 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 		Problem beim Posten auf Facebook
 	</string>
 	<string name="SocialFacebookErrorDisconnecting">
-		Problem beim Trennen der Verbindung zu Facebook
+		Problem beim Trennen der Facebook-Verbindung
 	</string>
 	<string name="SocialFlickrConnecting">
 		Verbinden mit Flickr...
@@ -2866,25 +2866,25 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 		(wird nach Veröffentlichung aktualisiert)
 	</string>
 	<string name="NoPicksClassifiedsText">
-		Sie haben keine Auswahl oder Anzeigen erstelllt. Klicken Sie auf die „Plus“-Schaltfläche, um eine Auswahl oder Anzeige zu erstellen.
+		Sie haben keine Auswahl oder Anzeigen erstelllt. Klicken Sie auf die Schaltfläche „Neu“, um eine Auswahl oder Anzeige zu erstellen.
+	</string>
+	<string name="NoPicksText">
+		Sie haben keine Auswahl erstellt. Klicken Sie auf die Schaltfläche „Neu“, um eine Auswahl zu erstellen.
+	</string>
+	<string name="NoClassifiedsText">
+		Sie haben keine Anzeigen erstellt. Klicken Sie auf die Schaltfläche „Neu“, um eine Anzeige zu erstellen.
 	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		Der Einwohner hat keine Auswahl oder Anzeigen
 	</string>
-	<string name="PicksClassifiedsLoadingText">
-		Wird geladen...
-	</string>
-	<string name="NoPicksText">
-		Du hast noch keine Auswahl erstellt.
-	</string>
 	<string name="NoAvatarPicksText">
-		Der Einwohner hat keine Auswahl.
-	</string>
-	<string name="NoClassifiedsText">
-		Sie haben keine Anzeige erstelllt. Klicken Sie auf die „Plus“-Schaltfläche, um eine Anzeige zu erstellen.
+		Der Einwohner hat keine Auswahl
 	</string>
 	<string name="NoAvatarClassifiedsText">
-		Der Einwohner hat keine Anzeigen.
+		Der Einwohner hat keine Anzeigen
+	</string>
+	<string name="PicksClassifiedsLoadingText">
+		Wird geladen...
 	</string>
 	<string name="MultiPreviewTitle">
 		Vorschau
@@ -4888,6 +4888,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="facebook_post_success">
 		Sie haben auf Facebook gepostet.
 	</string>
+	<string name="facebook_post_success">
+		Sie haben auf Facebook gepostet.
+	</string>
 	<string name="flickr_post_success">
 		Sie haben auf Flickr gepostet.
 	</string>
@@ -5458,10 +5461,10 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		Meine Premium-Mitgliedschaft
 	</string>
 	<string name="DeleteItems">
-		Ausgewählte Objekte löschen?
+		Ausgewählte [COUNT_SELECTION] Objekte löschen ([COUNT_TOTAL] insgesamt)?
 	</string>
 	<string name="DeleteItem">
-		Ausgewähltes Objekt löschen?
+		Ausgewähltes Objekt löschen ([COUNT_TOTAL] insgesamt)?
 	</string>
 	<string name="EmptyOutfitText">
 		Keine Objekte in diesem Outfit

@@ -43,7 +43,7 @@
 	</scroll_container>
 	<panel label="bottom_panel" name="bottom_panel">
 		<layout_stack name="bottom_panel_ls">
-			<layout_panel name="show_on_map_btn_lp">
+			<layout_panel name="cancel_btn_lp">
 				<button label="Annulla" name="cancel_btn"/>
 			</layout_panel>
 		</layout_stack>

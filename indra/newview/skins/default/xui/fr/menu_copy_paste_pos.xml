@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Copy Paste Position Menu">
+	<menu_item_call label="Copier tous" name="psr_copy"/>
+	<menu_item_call label="Copier la position" name="pos_copy"/>
+	<menu_item_call label="Coller tous" name="psr_paste"/>
+	<menu_item_call label="Coller la position" name="pos_paste"/>
+</toggleable_menu>

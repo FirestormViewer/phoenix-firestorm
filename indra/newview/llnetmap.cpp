@@ -2046,9 +2046,9 @@ void LLNetMap::setAvatarMarkColors(const uuid_vec_t& avatar_ids, const LLSD& col
 	// Use the name as color definition name from colors.xml
 	LLColor4 mark_color = LLUIColorTable::instance().getColor(color.asString(), LLColor4::green);
 
-	for (uuid_vec_t::const_iterator it = avatar_ids.begin(); it != avatar_ids.end(); ++it)
+	for (const auto& avatar_id : avatar_ids)
 	{
-		sAvatarMarksMap[*it] = mark_color;
+		sAvatarMarksMap[avatar_id] = mark_color;
 	}
 }
 
@@ -2063,13 +2063,9 @@ void LLNetMap::clearAvatarMarkColor(const LLUUID& avatar_id)
 // static
 void LLNetMap::clearAvatarMarkColors(const uuid_vec_t& avatar_ids)
 {
-	for (uuid_vec_t::const_iterator it = avatar_ids.begin(); it != avatar_ids.end(); ++it)
+	for (const auto& avatar_id : avatar_ids)
 	{
-		avatar_marks_map_t::iterator found = sAvatarMarksMap.find(*it);
-		if (found != sAvatarMarksMap.end())
-		{
-			sAvatarMarksMap.erase(found);
-		}
+		sAvatarMarksMap.erase(avatar_id);
 	}
 }
 
@@ -2091,10 +2087,7 @@ LLColor4 LLNetMap::getAvatarColor(const LLUUID& avatar_id)
 	color = cs_instance.colorize(avatar_id, color, LGG_CS_MINIMAP);
 
 	// Color based on contact sets prefs
-	if (cs_instance.hasFriendColorThatShouldShow(avatar_id, LGG_CS_MINIMAP))
-	{
-		color = cs_instance.getFriendColor(avatar_id);
-	}
+	cs_instance.hasFriendColorThatShouldShow(avatar_id, LGG_CS_MINIMAP, color);
 
 	// Mark Avatars with special colors
 	avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);

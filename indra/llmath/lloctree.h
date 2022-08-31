@@ -839,8 +839,6 @@ public:
 
 				llassert(size[0] >= gOctreeMinSize);
 
-				llassert(size[0] >= gOctreeMinSize);
-
 				//copy our children to a new branch
                 oct_node* newnode = new oct_node(center, size, this);
 				

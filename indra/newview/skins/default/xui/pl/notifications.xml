@@ -3633,6 +3633,13 @@ Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dl
 		Nie można wyświetlić podglądu tej tekstury - jest niekopiowalna lub/oraz nietransferowalna.
 		<usetemplate ignoretext="Ostrzegaj, gdy podgląd na żywo nie może wyświetlić niekopiowalnych/nietransferowalnych tekstur" name="okignore" />
 	</notification>
+	<notification name="FacePasteFailed">
+		Wklejanie nie powiodło się. [REASON]
+	</notification>
+	<notification name="FacePasteTexturePermissions">
+		Zastosowano teksturę z ograniczonymi uprawnieniami, obiekt odziedziczy więc te uprawnienia.
+		<usetemplate ignoretext="Wklejanie: zastosowano teksturę z ograniczonymi uprawnieniami" name="notifyignore" />
+	</notification>
 	<notification name="ConfirmLeaveCall">
 		Czy jesteś pewien/pewna, że chcesz zakończyć rozmowę?
 		<usetemplate ignoretext="Potwierdź zanim rozmowa głosowa zostanie zakończona" name="okcancelignore" notext="Nie" yestext="Tak"/>
@@ -4391,7 +4398,7 @@ Spróbuj ponownie za minutę.
 		Nie możesz zmieniać kształtu obiektu meszowego.
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Nie możesz wejść do tego regionu, \nponieważ jest pełny.
+		Nie możesz wejść do tego regionu, ponieważ jest pełny.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Scalanie nie powiodło się -- właściciele są różni
@@ -4699,7 +4706,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		Nie można w tej chwili kupić przepustki. Spróbuj ponownie później.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Nie można utworzyć obiektu, \n ponieważ działka jest pełna.
+		Nie można utworzyć obiektu, ponieważ działka jest pełna.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Nie udało się umieścić obiektu w żądanej lokalizacji. Spróbuj ponownie.
@@ -5165,6 +5172,15 @@ Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 			<button name="cancel" text="Anuluj" />
 		</form>
 	</notification>
+	<notification label="Utwórz podfolder" name="CreateSubfolder">
+		Nazwij nowy folder:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="SameFolderRequired">
+		Wybrane elementy muszą znajdować się w tym samym folderze.
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.
 
@@ -5181,7 +5197,7 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 		<usetemplate ignoretext="Ostrzegaj mnie, gdy Animator Firestorma jest proszony o dostęp przez oskryptowany obiekt" name="notifyignore" />
 	</notification>
 	<notification name="AttachedRiggedObjectToHUD">
-		Dodatek o nazwie "[NAME]" zawiera riggowany mesz, ale jest dołączony do punktu HUD "[HUD_POINT]". Oznacza to, że Ty co prawda zobaczysz go poprawnie wyrenderowany, ale wszyscy inni nie będą mogli. Rozważ zdjęcie go i ponowne dołączenie do zwykłego punktu doczepienia.
+		Dodatek o nazwie "[NAME]" zawiera riggowany mesz, ale jest dołączony do punktu HUD "[HUD_POINT]". Riggowane mesze dołączone do punktów HUD nie są w ogóle widoczne - ani dla Ciebie, ani dla nikogo innego. Rozważ zdjęcie go i ponowne dołączenie do zwykłego punktu doczepienia.
 		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="notifyignore" />
 	</notification>
 	<notification name="WarnForceLoginURL">

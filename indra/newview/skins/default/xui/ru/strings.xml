@@ -2842,8 +2842,20 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="NoPicksClassifiedsText">
 		Вы еще не создали подборку или объявление. Нажмите на кнопку 'Плюс', которая находится ниже, чтобы создать подборку или объявление.
 	</string>
+	<string name="NoPicksText">
+		Вы не сделали никакой подборки. Нажмите кнопку Создать, чтобы сделать подборку.
+	</string>
+	<string name="NoClassifiedsText">
+		Вы не сделали никакой рекламы. Нажмите кнопку Создать, чтобы сделать рекламу.
+	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		У пользователя нет подборок или объявлений
+	</string>
+	<string name="NoAvatarPicksText">
+		У пользователя нет подборки
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		У пользователя нет объявлений
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Загрузка...
@@ -5372,10 +5384,10 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Мое Премиум-членство
 	</string>
 	<string name="DeleteItems">
-		Удалить выбранные объекты?
+		Удалить выбранные [COUNT_SELECTION] объекты? ([COUNT_TOTAL]] всего)
 	</string>
 	<string name="DeleteItem">
-		Удалить выбранный объект?
+		Удалить выбранный объект? ([COUNT_TOTAL]] всего)
 	</string>
 	<string name="EmptyOutfitText">
 		Для этого комплекта одежды нет вещей

@@ -628,8 +628,8 @@ class WindowsManifest(ViewerManifest):
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
-            self.path("msvcp140.dll")
-            self.path("vcruntime140.dll")
+            self.path_optional("msvcp140.dll") # FS:ND make them optional to be able to build with VS2022, on a developer PC this will not be harmful
+            self.path_optional("vcruntime140.dll") # FS:ND make them optional to be able to build with VS2022, on a developer PC this will not be harmful
             self.path_optional("vcruntime140_1.dll")
 
             # SLVoice executable
@@ -720,10 +720,11 @@ class WindowsManifest(ViewerManifest):
                 self.path("v8_context_snapshot.bin")
 
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
+            # FS:ND They are all optional, as when compilig with VS2022 they won't be available'
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                               'sharedlibs', 'Release')):
-                self.path("msvcp140.dll")
-                self.path("vcruntime140.dll")
+                self.path_optional("msvcp140.dll")
+                self.path_optional("vcruntime140.dll")
                 self.path_optional("vcruntime140_1.dll")
 
             # CEF files common to all configurations
@@ -858,7 +859,7 @@ class WindowsManifest(ViewerManifest):
 
         # <FS:ND> Properly name OS version, also add Phoenix- in front of installer name
         #installer_file = self.installer_base_name() + '_Setup.exe'
-        installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe" % substitution_strings
+        installer_file = self.fs_installer_basename() + "_Setup.exe"
         # </FS:ND>
         
         substitution_strings['installer_file'] = installer_file
@@ -1625,8 +1626,11 @@ class DarwinManifest(ViewerManifest):
 
         volname=CHANNEL_VENDOR_BASE+" Installer"  # DO NOT CHANGE without understanding comment above
 
-        imagename = self.installer_base_name()
-
+        # <FS:ND> Make sure all our package names look similar 
+        #imagename = self.installer_base_name()
+        imagename = self.fs_installer_basename()
+        # </FS:ND>
+        
         sparsename = imagename + ".sparseimage"
         finalname = imagename + ".dmg"
         # make sure we don't have stale files laying about
@@ -2079,9 +2083,9 @@ class LinuxManifest(ViewerManifest):
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
-        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
-        installer_name = "_".join(installer_name_components)
+
         #installer_name = self.installer_base_name()
+        installer_name = self.fs_installer_basename()
 
         self.fs_save_breakpad_symbols("linux")
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms

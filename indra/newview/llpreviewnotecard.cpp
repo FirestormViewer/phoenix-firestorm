@@ -76,6 +76,10 @@ LLPreviewNotecard::LLPreviewNotecard(const LLSD& key) //const LLUUID& item_id,
 	// <FS:Ansariel> FIRE-24306: Retain cursor position when saving notecards
 	,mCursorPos(0)
 	,mScrollPos(0)
+	// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+	,mFontNameChangedCallbackConnection()
+	,mFontSizeChangedCallbackConnection()
+	// </FS:Ansariel>
 {
 	const LLInventoryItem *item = getItem();
 	if (item)
@@ -87,6 +91,17 @@ LLPreviewNotecard::LLPreviewNotecard(const LLSD& key) //const LLUUID& item_id,
 LLPreviewNotecard::~LLPreviewNotecard()
 {
 	delete mLiveFile;
+
+	// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+	if (mFontNameChangedCallbackConnection.connected())
+	{
+		mFontNameChangedCallbackConnection.disconnect();
+	}
+	if (mFontSizeChangedCallbackConnection.connected())
+	{
+		mFontSizeChangedCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 BOOL LLPreviewNotecard::postBuild()
@@ -117,6 +132,12 @@ BOOL LLPreviewNotecard::postBuild()
 		getChildView("Delete")->setEnabled(!source_library);
 	}
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
+
+	// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+	mFontNameChangedCallbackConnection = gSavedSettings.getControl("FSNotecardFontName")->getSignal()->connect(boost::bind(&LLPreviewNotecard::onFontChanged, this));
+	mFontSizeChangedCallbackConnection = gSavedSettings.getControl("FSNotecardFontSize")->getSignal()->connect(boost::bind(&LLPreviewNotecard::onFontChanged, this));
+	onFontChanged();
+	// </FS:Ansariel>
 
 	return LLPreview::postBuild();
 }
@@ -983,5 +1004,15 @@ void LLPreviewNotecard::checkCloseAfterSave()
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> FIRE-29425: User-selectable font and size for notecards
+void LLPreviewNotecard::onFontChanged()
+{
+	LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(gSavedSettings.getString("FSNotecardFontName"), gSavedSettings.getString("FSNotecardFontSize"), LLFontGL::NORMAL));
+	if (font)
+	{
+		mEditor->setFont(font);
+	}
+}
+// </FS:Ansariel>
 
 // EOF

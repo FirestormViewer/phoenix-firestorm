@@ -81,7 +81,7 @@ if (LINUX)
       libfreetype.a
       )
 
-  if( NOT USE_SDL2 )
+  if( USE_SDL1 )
     list(APPEND viewer_SOURCE_FILES
             llkeyboardsdl.cpp
             llwindowsdl.cpp

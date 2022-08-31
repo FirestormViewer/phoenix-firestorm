@@ -39,7 +39,6 @@
 class LLLandmark;
 class LLMenuButton;
 class LLPanelLandmarkInfo;
-class LLPanelPickEdit;
 class LLPanelPlaceProfile;
 struct LLParcelData;
 class LLToggleableMenu;
@@ -61,7 +60,6 @@ public:
 	void changedGlobalPos(const LLVector3d& global_pos);
 	void changedParcelSelection();
 	void processParcelDetails(const LLParcelData& parcel_details);
-	void togglePickPanel(BOOL visible);
 
 	static void showPlaceDetails(const LLSD& key);
 
@@ -95,7 +93,6 @@ private:
 	void setItem(LLInventoryItem* item);
 	void onSLURLBuilt(std::string& slurl);
 
-	LLPanelPickEdit*						mPickPanel;
 	LLPanelLandmarkInfo*					mPanelLandmarkInfo;
 	LLPanelPlaceProfile*					mPanelPlaceInfo;
 

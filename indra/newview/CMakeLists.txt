@@ -104,12 +104,8 @@ include_directories(
     ${LLWINDOW_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
     ${LLLOGIN_INCLUDE_DIRS}
-    ${LIBS_PREBUILT_DIR}/include/collada
-    ${LIBS_PREBUILD_DIR}/include/hunspell
     ${OPENAL_LIB_INCLUDE_DIRS}
-    ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
-    ${COLLADA_INCLUDE_DIRS}
     ${LLAPPEARANCE_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -120,6 +116,10 @@ include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
     ${LLXML_SYSTEM_INCLUDE_DIRS}
     ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
+    ${LIBS_PREBUILT_DIR}/include/collada
+    ${LIBS_PREBUILT_DIR}/include/collada/1.4
+    ${LIBS_PREBUILD_DIR}/include/hunspell
+    ${COLLADA_INCLUDE_DIRS}
     )
 
 if (USE_BUGSPLAT)
@@ -170,9 +170,9 @@ set(viewer_SOURCE_FILES
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
     fsfloaternearbychat.cpp
+    fsfloaterpartialinventory.cpp
     fsfloaterplacedetails.cpp
     fsfloaterposestand.cpp
-    fsfloaterprofile.cpp
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
@@ -194,13 +194,10 @@ set(viewer_SOURCE_FILES
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
     fspanelblocklist.cpp
-    fspanelclassified.cpp
     fspanelcontactsets.cpp
     fspanelimcontrolpanel.cpp
     fspanellogin.cpp
     fspanelprefs.cpp
-    fspanelprofile.cpp
-    fspanelprofileclassifieds.cpp
     fspanelradar.cpp
     fsparticipantlist.cpp
     fspose.cpp
@@ -346,6 +343,7 @@ set(viewer_SOURCE_FILES
     llfloatercamera.cpp
     llfloatercamerapresets.cpp
     llfloaterchatvoicevolume.cpp
+    llfloaterclassified.cpp
     llfloatercolorpicker.cpp
     llfloaterconversationlog.cpp
     llfloaterconversationpreview.cpp
@@ -410,10 +408,12 @@ set(viewer_SOURCE_FILES
     fsfloaterperformance.cpp 
     llfloaterperms.cpp
     llfloaterpostprocess.cpp
+    llfloaterprofile.cpp
     llfloaterpreference.cpp
     # llfloaterpreferencesgraphicsadvanced.cpp
     llfloaterpreferenceviewadvanced.cpp
     llfloaterpreviewtrash.cpp
+    llfloaterprofiletexture.cpp
     llfloaterproperties.cpp
     llfloaterregiondebugconsole.cpp
     llfloaterregioninfo.cpp
@@ -448,7 +448,6 @@ set(viewer_SOURCE_FILES
     llfloatervoiceeffect.cpp
     llfloatervoicevolume.cpp
     llfloaterwebcontent.cpp
-    llfloaterwebprofile.cpp
     llfloaterwhitelistentry.cpp
     llfloaterwindowsize.cpp
     llfloaterworldmap.cpp
@@ -594,7 +593,6 @@ set(viewer_SOURCE_FILES
     llpanelmediasettingsgeneral.cpp
     llpanelmediasettingspermissions.cpp
     llpanelmediasettingssecurity.cpp
-    llpanelme.cpp
     llpanelnearbymedia.cpp
     llpanelobject.cpp
     llpanelobjectinventory.cpp
@@ -604,8 +602,6 @@ set(viewer_SOURCE_FILES
     llpanelpeople.cpp
     llpanelpeoplemenus.cpp
     llpanelpermissions.cpp
-    llpanelpick.cpp
-    llpanelpicks.cpp
     llpanelplaceinfo.cpp
     llpanelplaceprofile.cpp
     llpanelplaces.cpp
@@ -614,6 +610,8 @@ set(viewer_SOURCE_FILES
     llpanelpresetspulldown.cpp
     llpanelprimmediacontrols.cpp
     llpanelprofile.cpp
+    llpanelprofileclassifieds.cpp
+    llpanelprofilepicks.cpp
     llpanelsnapshot.cpp
     llpanelsnapshotinventory.cpp
     llpanelsnapshotlocal.cpp
@@ -944,9 +942,9 @@ set(viewer_HEADER_FILES
     fsfloaterim.h
     fsfloaterimcontainer.h
     fsfloaternearbychat.h
+    fsfloaterpartialinventory.h
     fsfloaterplacedetails.h
     fsfloaterposestand.h
-    fsfloaterprofile.h
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
@@ -970,12 +968,9 @@ set(viewer_HEADER_FILES
     fsnearbychatvoicemonitor.h
     fspanelblocklist.h
     fspanelcontactsets.h
-    fspanelclassified.h
     fspanelimcontrolpanel.h
     fspanellogin.h
     fspanelprefs.h
-    fspanelprofile.h
-    fspanelprofileclassifieds.h
     fspanelradar.h
     fsparticipantlist.h
     fspose.h
@@ -1123,6 +1118,7 @@ set(viewer_HEADER_FILES
     llfloatercamerapresets.h
     llfloatercamera.h
     llfloaterchatvoicevolume.h
+    llfloaterclassified.h
     llfloatercolorpicker.h
     llfloaterconversationlog.h
     llfloaterconversationpreview.h
@@ -1190,10 +1186,12 @@ set(viewer_HEADER_FILES
     fsfloaterperformance.h
     llfloaterperms.h
     llfloaterpostprocess.h
+    llfloaterprofile.h
     llfloaterpreference.h
     # llfloaterpreferencesgraphicsadvanced.h
     llfloaterpreferenceviewadvanced.h
     llfloaterpreviewtrash.h
+    llfloaterprofiletexture.h
     llfloaterproperties.h
     llfloaterregiondebugconsole.h
     llfloaterregioninfo.h
@@ -1228,7 +1226,6 @@ set(viewer_HEADER_FILES
     llfloatervoiceeffect.h
     llfloatervoicevolume.h
     llfloaterwebcontent.h
-    llfloaterwebprofile.h
     llfloaterwhitelistentry.h
     llfloaterwindowsize.h
     llfloaterworldmap.h
@@ -1364,7 +1361,6 @@ set(viewer_HEADER_FILES
     llpanelmediasettingsgeneral.h
     llpanelmediasettingspermissions.h
     llpanelmediasettingssecurity.h
-    llpanelme.h
     llpanelnearbymedia.h
     llpanelobject.h
     llpanelobjectinventory.h
@@ -1374,8 +1370,6 @@ set(viewer_HEADER_FILES
     llpanelpeople.h
     llpanelpeoplemenus.h
     llpanelpermissions.h
-    llpanelpick.h
-    llpanelpicks.h
     llpanelplaceinfo.h
     llpanelplaceprofile.h
     llpanelplaces.h
@@ -1384,6 +1378,8 @@ set(viewer_HEADER_FILES
     llpanelpresetspulldown.h
     llpanelprimmediacontrols.h
     llpanelprofile.h
+    llpanelprofileclassifieds.h
+    llpanelprofilepicks.h
     llpanelsnapshot.h
     llpanelteleporthistory.h
     llpaneltiptoast.h
@@ -2778,31 +2774,32 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
   if (USE_BUGSPLAT)
     # BugSplat symbol-file generation
     if (WINDOWS)
+	#<FS:ND> Comment this out, we do our own symbol package which also includes the exe and build_data.json 
       # Just pack up a tarball containing only the .pdb file for the
       # executable. Because we intend to use cygwin tar, we must render
       # VIEWER_SYMBOL_FILE in cygwin path syntax.
-      execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
-        OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-      execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
-        OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-      add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
-        # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.bz2;
-        # testing a string suffix is painful enough in CMake language that
-        # we'll continue assuming it until forced to generalize.
-        COMMAND "tar"
-        ARGS
-          "cjf"
-          "${VIEWER_SYMBOL_FILE_CYGWIN}"
-          "-C"
-          "${PARENT_DIRECTORY_CYGWIN}"
-          "firestorm-bin.pdb"
-        DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
-        COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
-        )
-      add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
-      add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
+      # execute_process(COMMAND "cygpath" "-u" "${VIEWER_SYMBOL_FILE}"
+        # OUTPUT_VARIABLE VIEWER_SYMBOL_FILE_CYGWIN
+        # OUTPUT_STRIP_TRAILING_WHITESPACE)
+      # execute_process(COMMAND "cygpath" "-u" "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}"
+        # OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
+        # OUTPUT_STRIP_TRAILING_WHITESPACE)
+      # add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
+        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.bz2;
+        # # testing a string suffix is painful enough in CMake language that
+        # # we'll continue assuming it until forced to generalize.
+        # COMMAND "tar"
+        # ARGS
+          # "cjf"
+          # "${VIEWER_SYMBOL_FILE_CYGWIN}"
+          # "-C"
+          # "${PARENT_DIRECTORY_CYGWIN}"
+          # "firestorm-bin.pdb"
+        # DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-bin.pdb"
+        # COMMENT "Packing viewer PDB into ${VIEWER_SYMBOL_FILE_CYGWIN}"
+        # )
+      # add_custom_target(generate_symbols DEPENDS "${VIEWER_SYMBOL_FILE}" ${VIEWER_BINARY_NAME})
+      # add_dependencies(generate_symbols ${VIEWER_BINARY_NAME})
     endif (WINDOWS)
     if (DARWIN)
       # Have to run dsymutil first, then pack up the resulting .dSYM directory
@@ -2861,7 +2858,7 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
     endif (LINUX)
   endif (USE_BUGSPLAT)
 
-  if (NOT LINUX) #Linux generates symbols via viewer_manifest.py/fs_viewer_manifest.py
+  if (DARWIN) #Linux/Windows generates symbols via viewer_manifest.py/fs_viewer_manifest.py
 	# for both Bugsplat and Breakpad
 	add_dependencies(llpackage generate_symbols)
   endif()

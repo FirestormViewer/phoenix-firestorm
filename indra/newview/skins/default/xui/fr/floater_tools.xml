@@ -125,7 +125,7 @@
 	<text name="selection_empty">
 		Aucune sélection effectuée.
 	</text>
-	<text name="remaining_capacity">
+	<text name="more info label">
 		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Plus d&apos;infos]
 	</text>
 	<tab_container name="Object Info Tabs">
@@ -259,6 +259,18 @@
 			</panel>
 		</panel>
 		<panel label="Objet" name="Object">
+			<panel.string name="paste_position">
+Coller position
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_size">
+Coller taille
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_rotation">
+Coller rotation
+[VALUE]
+			</panel.string>
 			<check_box label="Verrouillé" name="checkbox locked" tool_tip="Empêche l&apos;objet d&apos;être déplacé ou supprimé. Utile pendant la construction pour éviter les modifications involontaires."/>
 			<check_box label="Physique" name="Physical Checkbox Ctrl" tool_tip="Permet à l&apos;objet d&apos;être poussé et affecté par la gravité"/>
 			<check_box label="Temporaire" name="Temporary Checkbox Ctrl" tool_tip="Les objets sont supprimés une minute après leur création"/>
@@ -269,18 +281,29 @@
 			<spinner label="X" name="Pos X"/>
 			<spinner label="Y" name="Pos Y"/>
 			<spinner label="Z" name="Pos Z"/>
+			<button label="C" name="copy_pos_btn" tool_tip="Copie la position"/>
+			<button label="P" name="paste_pos_btn" tool_tip="Colle la position"/>
+			<button label="p" name="paste_pos_clip_btn" tool_tip="Essaie de coller la position depuis le presse-papiers"/>
 			<text name="label size">
 				Taille (mètres)
 			</text>
 			<spinner label="X" name="Scale X"/>
 			<spinner label="Y" name="Scale Y"/>
 			<spinner label="Z" name="Scale Z"/>
+			<button label="C" name="copy_size_btn" tool_tip="Copie la taille"/>
+			<button label="P" tool_tip="Colle la taille"/>
+			<button label="p" name="paste_size_clip_btn" tool_tip="Essaie de coller la taille depuis le presse-papiers"/>
 			<text name="label rotation">
 				Rotation (degrés)
 			</text>
 			<spinner label="X" name="Rot X"/>
 			<spinner label="Y" name="Rot Y"/>
 			<spinner label="Z" name="Rot Z"/>
+			<button label="C" name="copy_rot_btn" tool_tip="Copie la rotation"/>
+			<button label="P" name="paste_rot_btn" tool_tip="Colle la rotation"/>
+			<button label="p" name="paste_rot_clip_btn" tool_tip="Essaie de coller la rotation depuis le presse-papiers"/>
+			<button name="copy_params_btn" tool_tip="Copie les paramètres de l'objet dans le presse-papiers"/>
+			<button name="paste_params_btn" tool_tip="Colle les paramètres de l'objet à partir du presse-papiers"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Boîte" name="Box"/>
 				<combo_box.item label="Cylindre" name="Cylinder"/>
@@ -368,6 +391,40 @@
 				<combo_box.item label="Plan" name="Plane"/>
 				<combo_box.item label="Cylindre" name="Cylinder"/>
 			</combo_box>
+			<text name="mesh_info_label" >
+				Informations sur le maillage :
+			</text>
+			<text name="lod_num_tris" value="Nbre triangles"/>
+			<text name="mesh_lod_label">
+Haut:
+Moyen:
+Bas:
+Le plus bas:
+			</text>
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="Par défaut" name="Default"/>
+				<combo_box.item label="Haut" name="High"/>
+				<combo_box.item label="Moyen" name="Medium"/>
+				<combo_box.item label="Bas" name="Low"/>
+				<combo_box.item label="Le plus bas" name="Lowest/Imposter"/>
+			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="Comportement LOD de l'objet :"/>
+			<text name="object_radius" value="Rayon de l'objet :"/>
+			<text name="LOD_swap_factors_label" value="Facteurs LOD"/>
+			<text name="LOD_swap_defaults_label" value="Par défaut" tool_tip="Le paramètre par défaut du facteur LOD qui sera appliqué par la plupart des visualiseurs.."/>
+			<text name="LOD_swap_usr_label" tool_tip="Vos paramètres, tiré de RenderVolumeLODFactor" value="Les votres"/>
+			<text name="LOD_swap_label" value="Changement de LOD"/>
+			<string name="ll_lod_tooltip_msg">Paramètres par défaut du visualiseur de Linden Lab Second Life ([FACTOR])</string>
+			<string name="fs_lod_tooltip_msg">Paramètres par défaut de [APP_NAME] ([FACTOR])</string>
+			<text name="LOD_swap_usr_current" tool_tip="Votre facteur de LOD actuel" value="[FACTOR]"/>
+			<text name="LOD_swap_LOD_Change_label">
+Haut ↔ Moy.
+Moy. ↔ Bas
+Bas ↔ Plus bas
+			</text>
+			<text name="LODSwapTableDscriptionsText" tool_tip="Bonne conduite : Les créateurs doivent assurer un bon comportement LOD pour les paramètres par défaut dans toutes les visualiseurs.">
+				Ce tableau indique les limites de changement de niveau de détail en mètres à partir de la caméra.
+			</text>
 		</panel>
 		<panel label="Attributs" name="Features">
 			<panel.string name="None">
@@ -387,6 +444,8 @@
 			</text>
 			<check_box label="Maillage animé" name="Animated Mesh Checkbox Ctrl" tool_tip="Permet aux objets maillés calés d&apos;être animés indépendamment"/>
 			<check_box label="Flexibilité" name="Flexible1D Checkbox Ctrl" tool_tip="Permet à l&apos;objet de se plier le long de l&apos;axe Z (côté client uniquement)"/>
+			<button name="copy_features_btn" tool_tip="Copier les paramètres de la fonction dans le presse-papiers"/>
+			<button name="paste_features_btn" tool_tip="Coller les paramètres de la fonction à partir du presse-papiers"/>
 			<spinner label="Souplesse" name="FlexNumSections"/>
 			<spinner label="Gravité" name="FlexGravity"/>
 			<spinner label="Élasticité" name="FlexFriction"/>

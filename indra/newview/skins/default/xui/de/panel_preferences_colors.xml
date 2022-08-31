@@ -206,6 +206,26 @@
 			<text name="area_search_beacon_color_label">
 				Farbe für Markierung der Umgebungssuche:
 			</text>
+			
+			<text name="notecard_editor_color_label">
+				Farben für Notizkarten:
+			</text>
+			<text name="notecard_editor_writable_text_color_label">
+				Text:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Farbe für Notizkarten-Text"/>
+			<text name="notecard_editor_writable_bg_color_label">
+				Hintergrund:
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Farbe für Notizkarten-Hintergrund"/>
+			<text name="notecard_editor_writable_cursor_color_label">
+				Cursor:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Farbe für Notizkarten-Cursor"/>
+			<text name="notecard_editor_writable_selection_color_label">
+				Auswahl:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Farbe für selektierten Text in Notizkarten"/>
 			<color_swatch name="area_search_beacon_color" tool_tip="Farbe für Markierung der Umgebungssuche"/>
 			<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>

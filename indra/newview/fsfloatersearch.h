@@ -48,7 +48,7 @@ class LLGroupMgrObserver;
 class LLSearchEditor;
 class LLSearchComboBox;
 class FSFloaterSearch;
-class FSPanelProfile;
+class LLPanelProfile;
 class FSScrollListCtrl;
 
 struct SearchQuery : public LLInitParam::Block<SearchQuery>
@@ -412,7 +412,6 @@ private:
 	LLTextureCtrl*	mDetailSnapshotParcel;
 	LLIconCtrl*		mDetailMaturity;
 	LLTabContainer*	mTabContainer;
-	FSPanelProfile*	mPanelProfile;
 };
 
 #endif // FS_FLOATERSEARCH_H
