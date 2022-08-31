@@ -32,6 +32,8 @@
 #include "fsradar.h"
 #include "lggcontactsets.h"
 #include "llagent.h"
+#include "llfloaterprofile.h"
+#include "llfloaterreg.h"
 #include "llviewercontrol.h"
 #include "llviewerregion.h"
 #include "llvoavatar.h"
@@ -223,12 +225,14 @@ class LLDisplayNameUpdate : public LLHTTPNode
 		}
 		else
 		{
-			FSRadar* radar = FSRadar::getInstance();
-			if (radar)
-			{
-				radar->updateName(agent_id);
-			}
+			FSRadar::getInstance()->updateName(agent_id);
 		}
+
+        LLFloaterProfile* profile_floater = dynamic_cast<LLFloaterProfile*>(LLFloaterReg::findInstance("profile", LLSD().with("id", agent_id)));
+        if (profile_floater)
+        {
+            profile_floater->refreshName();
+        }
 	}
 };
 

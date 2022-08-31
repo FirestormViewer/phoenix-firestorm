@@ -57,11 +57,13 @@
 #include "llfloatercamera.h"
 #include "llfloatercamerapresets.h"
 #include "llfloaterchatvoicevolume.h"
+#include "llfloaterclassified.h"
 #include "llfloaterconversationlog.h"
 #include "llfloaterconversationpreview.h"
 #include "llfloatercreatelandmark.h"
 #include "llfloaterdeleteprefpreset.h"
 #include "llfloaterdestinations.h"
+#include "llfloaterdisplayname.h"
 #include "llfloatereditextdaycycle.h"
 #include "llfloaterenvironmentadjust.h"
 #include "llfloaterexperienceprofile.h"
@@ -114,6 +116,7 @@
 #include "llfloaterpreferencesgraphicsadvanced.h"
 #include "llfloaterpreferenceviewadvanced.h"
 #include "llfloaterpreviewtrash.h"
+#include "llfloaterprofile.h"
 #include "llfloaterproperties.h"
 #include "llfloaterregiondebugconsole.h"
 #include "llfloaterregioninfo.h"
@@ -143,7 +146,6 @@
 #include "llfloateruipreview.h"
 #include "llfloatervoiceeffect.h"
 #include "llfloaterwebcontent.h"
-#include "llfloaterwebprofile.h"
 #include "llfloatervoicevolume.h"
 #include "llfloaterwhitelistentry.h"
 #include "llfloaterwindowsize.h"
@@ -161,7 +163,7 @@
 #include "fsfloaternearbychat.h"
 // <FS:Ansariel> [FS communication UI]
 #include "llpanelblockedlist.h"
-#include "llpanelclassified.h"
+#include "llpanelprofileclassifieds.h"
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"
 #include "llpreviewnotecard.h"
@@ -198,7 +200,6 @@
 #include "fsfloaterpartialinventory.h"
 #include "fsfloaterplacedetails.h"
 #include "fsfloaterposestand.h"
-#include "fsfloaterprofile.h"
 #include "fsfloaterprotectedfolders.h"
 #include "fsfloaterradar.h"
 #include "fsfloatersearch.h"
@@ -209,7 +210,7 @@
 #include "fsfloatervramusage.h"
 #include "fsfloaterwearablefavorites.h"
 #include "fsmoneytracker.h"
-#include "fspanelclassified.h"
+//#include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
 #include "llfloaterdisplayname.h"
@@ -289,6 +290,7 @@ void LLViewerFloaterReg::registerFloaters()
 	//LLFloaterReg::add("nearby_chat", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterIMNearbyChat::buildFloater);
 	LLFloaterReg::add("fs_nearby_chat", "floater_fs_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterNearbyChat>);
 	// </FS:Ansariel> [FS communication UI]
+    LLFloaterReg::add("classified", "floater_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterClassified>);
 	LLFloaterReg::add("compile_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCompileQueue>);
 	LLFloaterReg::add("conversation", "floater_conversation_log.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterConversationLog>);
 	LLFloaterReg::add("add_landmark", "floater_create_landmark.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCreateLandmark>);
@@ -343,7 +345,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLInspectRemoteObjectUtil::registerFloater();
 	LLFloaterVoiceVolumeUtil::registerFloater();
 	LLNotificationsUI::registerFloater();
-	LLFloaterDisplayNameUtil::registerFloater(); // <FS:Ansariel> Bring back display name floater
+	LLFloaterDisplayNameUtil::registerFloater();
 	
 	LLFloaterReg::add("lagmeter", "floater_lagmeter.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLagMeter>);
 	LLFloaterReg::add("land_holdings", "floater_land_holdings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLandHoldings>);
@@ -396,7 +398,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("prefs_translation", "floater_translation_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterTranslationSettings>);
 	LLFloaterReg::add("prefs_spellchecker", "floater_spellcheck.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSpellCheckerSettings>);
 	LLFloaterReg::add("prefs_autoreplace", "floater_autoreplace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAutoReplaceSettings>);
-	LLFloaterReg::add("picks", "floater_picks.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 	LLFloaterReg::add("pref_joystick", "floater_joystick.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterJoystick>);
 	LLFloaterReg::add("preview_anim", "floater_preview_animation.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewAnim>/*, "preview"*/);
 	LLFloaterReg::add("preview_conversation", "floater_conversation_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterConversationPreview>);
@@ -455,8 +456,7 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("outfit_snapshot", "floater_outfit_snapshot.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterOutfitSnapshot>);
 	// <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
-	LLFloaterReg::add("my_profile", "floater_my_web_profile.xml", (LLFloaterBuildFunc)&LLFloaterWebProfile::create);
-	LLFloaterReg::add("profile", "floater_web_profile.xml", (LLFloaterBuildFunc)&LLFloaterWebProfile::create);
+    LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
 	LLFloaterReg::add("guidebook", "floater_how_to.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHowTo>);
 
 	LLFloaterReg::add("big_preview", "floater_big_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBigPreview>);
@@ -484,7 +484,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("export_collada", "floater_export_collada.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ColladaExportFloater>);
 	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
 	LLFloaterReg::add("flickr", "floater_flickr.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterFlickr>);
-	LLFloaterReg::add("fs_floater_profile", "floater_fs_profile_view.xml", &LLFloaterReg::build<FSFloaterProfile>);
 	LLFloaterReg::add("fs_asset_blacklist", "floater_fs_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAssetBlacklist>);
 	LLFloaterReg::add("fs_avatar_render_settings", "floater_fs_avatar_render_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarRenderSettings>);
 	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
@@ -513,7 +512,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("performance", "floater_performance.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPerformance>);
 	LLFloaterReg::add(PHOTOTOOLS_FLOATER, "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
 	LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
-	LLFloaterReg::add("publish_classified_fs", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSPublishClassifiedFloater>);
 	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
 	LLFloaterReg::add("region_tracker", "floater_region_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ALFloaterRegionTracker>);
 	LLFloaterReg::add("search_replace", "floater_search_replace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearchReplace>);

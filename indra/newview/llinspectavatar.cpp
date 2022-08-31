@@ -45,7 +45,6 @@
 #include "llfloater.h"
 #include "llfloaterreg.h"
 #include "lltextbox.h"
-#include "lltooltip.h"	// positionViewNearMouse()
 #include "lltrans.h"
 
 // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
@@ -329,17 +328,7 @@ void LLInspectAvatar::onOpen(const LLSD& data)
 	}
 	// </FS:Ansariel>
 
-	// Position the inspector relative to the mouse cursor
-	// Similar to how tooltips are positioned
-	// See LLToolTipMgr::createToolTip
-	if (data.has("pos"))
-	{
-		LLUI::getInstance()->positionViewNearMouse(this, data["pos"]["x"].asInteger(), data["pos"]["y"].asInteger());
-	}
-	else
-	{
-		LLUI::getInstance()->positionViewNearMouse(this);
-	}
+	LLInspect::repositionInspector(data);
 
 	// Generate link to avatar profile.
 	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again

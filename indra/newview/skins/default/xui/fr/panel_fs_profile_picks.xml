@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_picks" label="Favoris">
-	<text name="Tell everyone about your favorite places in Second Life.">Montrez à tout le monde vos endroits préférés dans [GRID].</text>
-	<button name="new_btn" label="Nouveau..."/>
-	<button name="delete_btn" label="Supprimer..."/>
-	<text name="picks_panel_text">Chargement...</text>
-</panel>

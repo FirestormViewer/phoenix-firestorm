@@ -594,9 +594,21 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 		Sie haben nicht genügend Geld, um eine Anzeige zu erstellen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="DeleteAvatarPick">
+	<notification name="ProfileDeleteClassified">
+		Anzeige &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt; löschen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="ProfileDeletePick">
 		Auswahl &lt;nolink&gt;[PICK]&lt;/nolink&gt; löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="ProfileUnpublishedClassified">
+		Sie haben unveröffentlichte Anzeigen. Diese gehen verloren, falls Sie das Fenster jetzt schließen.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="ProfileUnsavedChanges">
+		Sie haben ungespeicherte Änderungen.
+		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Verwerfen" yestext="Speichern"/>
 	</notification>
 	<notification name="DeleteOutfits">
 		Das/Die ausgewählte(n) Outfit(s) löschen?
@@ -5562,10 +5574,6 @@ Welche Bezeichnung soll für die Region
 	</notification>
 	<notification name="SnoozeDurationInvalidInput">
 		Bitte geben Sie einen gültigen Wert für die Zeitspanne ein!
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="PickLimitReached">
-		Neue Auswahl kann nicht erstellt werden, da bereits die maximale Anzahl an Auswahlen erstellt wurde.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
