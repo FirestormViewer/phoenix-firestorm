@@ -2730,25 +2730,25 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		(zostanie zaktualizowane po publikacji)
 	</string>
 	<string name="NoPicksClassifiedsText">
-		Nie dodałeś/aś nic do Ulubionych i Reklam. Kliknij na przycisk + poniżej, aby dodać miejsce do Ulubionych lub Reklam.
-	</string>
-	<string name="NoAvatarPicksClassifiedsText">
-		Brak ulubionych miejsc/reklam
-	</string>
-	<string name="PicksClassifiedsLoadingText">
-		Ładowanie...
+		Nie dodano nic do Miejsc i Reklam. Kliknij na przycisk Nowe, aby utworzyć Miejsce lub Reklamę.
 	</string>
 	<string name="NoPicksText">
-		Nie masz żadnych ulubionych miejsc
+		Nie dodano żadnych Miejsc. Kliknij na przycisk Nowe, aby utworzyć Miejsce.
+	</string>
+	<string name="NoClassifiedsText">
+		Nie dodano żadnych reklam. Kliknij na przycisk Nowa, aby utworzyć reklamę.
+	</string>
+	<string name="NoAvatarPicksClassifiedsText">
+		Użytkownik nie ma ulubionych miejsc ani reklam
 	</string>
 	<string name="NoAvatarPicksText">
 		Użytkownik nie ma ulubionych miejsc
 	</string>
-	<string name="NoClassifiedsText">
-		Nie masz żadnych reklam. Kliknij na przycisk Plus poniżej, aby jakąś utworzyć.
-	</string>
 	<string name="NoAvatarClassifiedsText">
 		Użytkownik nie ma reklam
+	</string>
+	<string name="PicksClassifiedsLoadingText">
+		Ładowanie...
 	</string>
 	<string name="MultiPreviewTitle">
 		Podgląd
