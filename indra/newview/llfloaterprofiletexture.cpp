@@ -71,7 +71,7 @@ BOOL LLFloaterProfileTexture::postBuild()
     mCloseButton->setCommitCallback([this](LLUICtrl*, void*) { closeFloater(); }, nullptr);
 
     // <FS:Ansariel> Add refresh function
-    getChild<LLButton>("btn_refresh")->setCommitCallback([this](LLUICtrl*, void*) { refresh(); }, nullptr);
+    getChild<LLButton>("btn_refresh")->setCommitCallback([this](LLUICtrl*, void*) { refreshTexture(); }, nullptr);
 
 	return TRUE;
 }
@@ -230,7 +230,7 @@ void LLFloaterProfileTexture::onTextureLoaded(
 }
 
 // <FS:Ansariel> Add refresh function
-void LLFloaterProfileTexture::refresh()
+void LLFloaterProfileTexture::refreshTexture()
 {
     if (mImageID.notNull() && mImage.notNull())
     {
