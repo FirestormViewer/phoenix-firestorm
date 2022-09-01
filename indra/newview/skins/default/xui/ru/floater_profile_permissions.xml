@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="profile_permissions">
+	<string name="description_string" value="Разрешить [AGENT_NAME]:" />
+	<text name="perm_description" value="Разрешить пользователю:"/>
+	<check_box name="online_check" label="Увидеть, когда я в сети"/>
+	<check_box name="map_check" label="Найди меня на карте мира"/>
+	<check_box name="objects_check" label="Править, удалять или брать мои объекты"/>
+	<button name="perms_btn_ok" label="Да"/>
+	<button name="perms_btn_cancel" label="Отмена"/>
+</floater>
