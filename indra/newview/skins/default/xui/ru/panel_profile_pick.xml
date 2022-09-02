@@ -13,7 +13,7 @@
 		<layout_panel name="actions_lp">
 			<layout_stack name="actions_stack">
 				<layout_panel name="map_btn_lp">
-					<button name="show_on_map_btn" label="Показать на карте"/>
+					<button name="show_on_map_btn" label="На карте"/>
 				</layout_panel>
 				<layout_panel name="tp_btn_lp">
 					<button name="teleport_btn" label="Телепорт"/>
