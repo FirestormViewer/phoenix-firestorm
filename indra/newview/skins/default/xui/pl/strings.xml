@@ -5135,10 +5135,10 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Moje członkostwo Premium
 	</string>
 	<string name="DeleteItems">
-		Usunąć [COUNT_SELECTION] zaznaczonych obiektów ([COUNT_TOTAL]] łącznie)?
+		Usunąć [COUNT_SELECTION] zaznaczonych obiektów ([COUNT_TOTAL] łącznie)?
 	</string>
 	<string name="DeleteItem">
-		Usunąć zaznaczony obiekt ([COUNT_TOTAL]] łącznie)?
+		Usunąć zaznaczony obiekt ([COUNT_TOTAL] łącznie)?
 	</string>
 	<string name="EmptyOutfitText">
 		W tym stroju nie ma elementów
