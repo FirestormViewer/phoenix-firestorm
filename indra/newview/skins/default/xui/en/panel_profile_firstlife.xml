@@ -26,6 +26,7 @@
     />
     <icon
      name="real_world_pic"
+     interactable="true"
      image_name="Generic_Person_Large"
      follows="top|left"
      layout="topleft"
