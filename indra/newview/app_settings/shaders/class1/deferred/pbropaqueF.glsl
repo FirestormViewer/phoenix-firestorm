@@ -76,25 +76,31 @@ VARYING vec2 vary_texcoord1;
     VARYING vec2 vary_texcoord2;
 #endif
 
+uniform float minimum_alpha; // PBR alphaMode: MASK, See: mAlphaCutoff, setAlphaCutoff()
+
 vec2 encode_normal(vec3 n);
 vec3 linear_to_srgb(vec3 c);
-
-const float M_PI = 3.141592653589793;
 
 void main()
 {
 // IF .mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
 //    vec3 col = vertex_color.rgb * diffuseLookup(vary_texcoord0.xy).rgb;
 // else
-    vec3 col = vertex_color.rgb * texture2D(diffuseMap, vary_texcoord0.xy).rgb;
+    vec4 albedo = texture2D(diffuseMap, vary_texcoord0.xy).rgba;
+    if (albedo.a < minimum_alpha)
+    {
+        discard;
+    }
+
+    vec3 col = vertex_color.rgb * albedo.rgb;
 
 #ifdef HAS_NORMAL_MAP
     vec4 norm = texture2D(bumpMap, vary_texcoord1.xy);
-    norm.xyz = norm.xyz * 2 - 1;
+    norm.xyz = normalize(norm.xyz * 2 - 1);
 
-	vec3 tnorm = vec3(dot(norm.xyz,vary_mat0),
-			  dot(norm.xyz,vary_mat1),
-			  dot(norm.xyz,vary_mat2));
+    vec3 tnorm = vec3(dot(norm.xyz,vary_mat0),
+                      dot(norm.xyz,vary_mat1),
+                      dot(norm.xyz,vary_mat2));
 #else
     vec4 norm = vec4(0,0,0,1.0);
 //    vec3 tnorm = vary_normal;
@@ -102,8 +108,7 @@ void main()
 #endif
 
     tnorm = normalize(tnorm.xyz);
-
-    norm.xyz = normalize(tnorm.xyz);
+    norm.xyz = tnorm.xyz;
 
     // RGB = Occlusion, Roughness, Metal
     // default values, see LLViewerTexture::sDefaultPBRORMImagep

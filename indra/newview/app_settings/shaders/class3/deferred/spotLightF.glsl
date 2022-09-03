@@ -85,6 +85,7 @@ uniform mat4 inv_proj;
 vec3 BRDFLambertian( vec3 reflect0, vec3 reflect90, vec3 c_diff, float specWeight, float vh );
 vec3 BRDFSpecularGGX( vec3 reflect0, vec3 reflect90, float alphaRoughness, float specWeight, float vh, float nl, float nv, float nh );
 void calcHalfVectors(vec3 lv, vec3 n, vec3 v, out vec3 h, out vec3 l, out float nh, out float nl, out float nv, out float vh, out float lightDist);
+float calcLegacyDistanceAttenuation(float distance, float falloff);
 bool clipProjectedLightVars(vec3 center, vec3 pos, out float dist, out float l_dist, out vec3 lv, out vec4 proj_tc );
 vec3 getLightIntensitySpot(vec3 lightColor, float lightRange, float lightDistance, vec3 v);
 vec4 getNormalEnvIntensityFlags(vec2 screenpos, out vec3 n, out float envIntensity);
@@ -97,6 +98,8 @@ vec3 srgb_to_linear(vec3 c);
 vec4 texture2DLodSpecular(vec2 tc, float lod);
 
 vec4 getPosition(vec2 pos_screen);
+
+const float M_PI = 3.14159265;
 
 void main()
 {
@@ -129,9 +132,7 @@ void main()
     vec3 n;
     vec4 norm = getNormalEnvIntensityFlags(tc, n, envIntensity); // need `norm.w` for GET_GBUFFER_FLAG()
 
-    float dist_atten = 1.0 - (dist + falloff)/(1.0 + falloff);
-    dist_atten *= dist_atten;
-    dist_atten *= 2.0;
+    float dist_atten = calcLegacyDistanceAttenuation(dist, falloff);
     if (dist_atten <= 0.0)
     {
         discard;
@@ -174,8 +175,13 @@ void main()
                 dlit = getProjectedLightDiffuseColor( l_dist, proj_tc.xy );
                 slit = getProjectedLightSpecularColor( pos, n );
 
-                colorDiffuse = shadow * dist_atten * nl * (dlit*0.5 + BRDFLambertian ( reflect0, reflect90, c_diff    , specWeight, vh ));
-                colorSpec    = shadow * dist_atten * nl * (slit     + BRDFSpecularGGX( reflect0, reflect90, alphaRough, specWeight, vh, nl, nv, nh ));
+                float exposure = M_PI;
+                dlit *= exposure;
+                slit *= exposure;
+
+                colorDiffuse = shadow * lit * dlit * BRDFLambertian ( reflect0, reflect90, c_diff    , specWeight, vh );
+                colorSpec    = shadow * lit * slit * BRDFSpecularGGX( reflect0, reflect90, alphaRough, specWeight, vh, nl, nv, nh );
+                colorSpec   += shadow * lit *        BRDFSpecularGGX( reflect0, reflect90, alphaRough, specWeight, vh, nl, nv, nh );
 
   #if DEBUG_PBR_SPOT_DIFFUSE
                 colorDiffuse = dlit.rgb; colorSpec = vec3(0);

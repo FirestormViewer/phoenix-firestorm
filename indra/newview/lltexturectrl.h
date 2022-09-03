@@ -79,6 +79,15 @@ public:
 		TEXTURE_CANCEL
 	} ETexturePickOp;
 
+    // Should match the entries in floater_texture_ctrl.xml 
+    // for the textures_material_combo combo box
+    typedef enum e_pick_inventory_type
+    {
+        PICK_TEXTURE_MATERIAL = 0,
+        PICK_TEXTURE = 1,
+        PICK_MATERIAL = 2,
+    } EPickInventoryType;
+
 public:
 	struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
 	{
@@ -213,7 +222,11 @@ public:
 
 	LLViewerFetchedTexture* getTexture() { return mTexturep; }
 
-	void setBakeTextureEnabled(BOOL enabled);
+    void setBakeTextureEnabled(bool enabled);
+    bool getBakeTextureEnabled() const { return mBakeTextureEnabled; }
+
+    void setInventoryPickType(EPickInventoryType type);
+    EPickInventoryType getInventoryPickType() { return mInventoryPickType; };
 
 	// <FS:Ansariel> Mask texture if desired
 	void setIsMasked(BOOL masked) { mIsMasked = masked; }
@@ -255,7 +268,8 @@ private:
 	std::string				 	mLoadingPlaceholderString;
 	S32						 	mLabelWidth;
 	bool						mOpenTexPreview;
-	BOOL						mBakeTextureEnabled;
+	bool						mBakeTextureEnabled;
+    LLTextureCtrl::EPickInventoryType mInventoryPickType;
 
 	// <FS:Ansariel> Mask texture if desired
 	BOOL						mIsMasked;
@@ -342,9 +356,7 @@ public:
 	static void		onBtnBlank(void* userdata);
 	static void		onBtnTransparent( void* userdata ); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	static void		onBtnNone(void* userdata);
-	static void		onBtnClear(void* userdata);
 	void			onSelectionChange(const std::deque<LLFolderViewItem*> &items, BOOL user_action);
-	static void		onShowFolders(LLUICtrl* ctrl, void* userdata);
 	static void		onApplyImmediateCheck(LLUICtrl* ctrl, void* userdata);
 	void			onTextureSelect(const LLTextureEntry& te);
 
@@ -361,6 +373,8 @@ public:
 
 	void 			setLocalTextureEnabled(BOOL enabled);
 	void 			setBakeTextureEnabled(BOOL enabled);
+
+    void setInventoryPickType(LLTextureCtrl::EPickInventoryType type);
 
     static void		onPickerCallback(const std::vector<std::string>& filenames, LLHandle<LLFloater> handle);
 
@@ -407,6 +421,7 @@ private:
 	bool mCanApply;
 	bool mCanPreview;
 	bool mPreviewSettingChanged;
+    LLTextureCtrl::EPickInventoryType mInventoryPickType;
 
 
 	texture_selected_callback mTextureSelectedCallback;

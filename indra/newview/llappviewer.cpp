@@ -2457,8 +2457,13 @@ bool LLAppViewer::cleanup()
 	//MUST happen AFTER SUBSYSTEM_CLEANUP(LLCurl)
 	delete sTextureCache;
     sTextureCache = NULL;
-	delete sTextureFetch;
-    sTextureFetch = NULL;
+    if (sTextureFetch)
+    {
+        sTextureFetch->shutdown();
+        sTextureFetch->waitOnPending();
+        delete sTextureFetch;
+        sTextureFetch = NULL;
+    }
 	delete sImageDecodeThread;
     sImageDecodeThread = NULL;
 	delete mFastTimerLogThread;
