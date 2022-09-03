@@ -504,9 +504,21 @@ Czy na pewno chcesz kontynuować?
 	<notification name="ClassifiedInsufficientFunds">
 		Nie posiadasz wystarczających środków aby dodać reklamę.
 	</notification>
-	<notification name="DeleteAvatarPick">
+	<notification name="ProfileDeleteClassified">
+		Usunąć reklamę &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt;?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
+	<notification name="ProfileDeletePick">
 		Usunąć miejsce &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
+	<notification name="ProfileUnpublishedClassified">
+		Masz nieopublikowane reklamy. Przepadną, jeśli zamkniesz okno.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
+	<notification name="ProfileUnsavedChanges">
+		Masz niezapisane zmiany.
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Odrzuć" yestext="Zapisz" />
 	</notification>
 	<notification name="DeleteOutfits">
 		Skasować wybrane stroje?
@@ -5049,6 +5061,9 @@ Czy chcesz autoryzować [APP_NAME] do przesyłania zdjęć na Flickr?
 	</notification>
 	<notification name="SnoozeDurationInvalidInput">
 		Okres tymczasowego wyciszenia czatu grupowego musi być liczbą!
+	</notification>
+	<notification name="PickLimitReached">
+		Nie można utworzyć kolejnego Miejsca, ponieważ limit ich ilości został osiągnięty.
 	</notification>
 	<notification name="GlobalOnlineStatusToggle">
 		Ze względu na obciążenie serwera masowa zmiana widoczności online może zająć trochę czasu. Prosimy o cierpliwość.

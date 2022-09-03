@@ -58,6 +58,7 @@
 #include "rlvactions.h"
 #include "rlvcommon.h"
 // [/RLVa:KB]
+#include "fsfloaterpartialinventory.h"
 
 class LLInventoryRecentItemsPanel;
 class LLAssetFilteredInventoryPanel;
@@ -1899,6 +1900,11 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 	// </FS:Ansariel>
 	{
 		LLFloaterSidePanelContainer* inventory_floater = dynamic_cast<LLFloaterSidePanelContainer*>(*iter);
+
+		// <FS:Ansariel> Guard against nullpointer access violation
+		if (!inventory_floater)
+			continue;
+
 		inventory_panel = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
 
 		if (inventory_floater && inventory_panel && inventory_floater->getVisible())
@@ -1912,6 +1918,23 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 			}
 		}
 	}
+
+	// <FS:Ansariel> Show folder in new window option
+	LLFloaterReg::const_instance_list_t& inst_list_partial = LLFloaterReg::getFloaterList("fs_partial_inventory");
+	for (const auto inst : inst_list_partial)
+	{
+		if (inst->getVisible())
+		{
+			S32 z_order = gFloaterView->getZOrder(inst);
+			if (z_order < z_min)
+			{
+				res = static_cast<FSFloaterPartialInventory*>(inst)->getInventoryPanel();
+				z_min = z_order;
+				active_inv_floaterp = inst;
+			}
+		}
+	}
+	// </FS:Ansariel>
 
 	if (res)
 	{

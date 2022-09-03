@@ -90,6 +90,7 @@
 #include "fslslbridge.h"
 #include "fsradar.h"
 #include "fsassetblacklist.h"
+#include "llagentpicksinfo.h"
 #include "llfloaterregioninfo.h"
 #include "llfloaterreporter.h"
 #include "llparcel.h"
@@ -503,6 +504,14 @@ void LLAvatarActions::showPick(const LLUUID& avatar_id, const LLUUID& pick_id)
 // static
 void LLAvatarActions::createPick()
 {
+    // <FS:Ansariel> FIRE-7694 / BUG-932 / MAINT-1999
+    if (LLAgentPicksInfo::getInstance()->isPickLimitReached())
+    {
+        LLNotificationsUtil::add("PickLimitReached");
+        return;
+    }
+    // </FS:Ansariel>
+
     LLFloaterProfile* profilefloater = dynamic_cast<LLFloaterProfile*>(LLFloaterReg::showInstance("profile", LLSD().with("id", gAgent.getID())));
     LLViewerRegion* region = gAgent.getRegion();
     if (profilefloater && region)

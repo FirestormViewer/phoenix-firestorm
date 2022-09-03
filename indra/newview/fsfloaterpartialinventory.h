@@ -28,9 +28,9 @@
 #define FS_FLOATERPARTIALINVENTORY_H
 
 #include "llfloater.h"
+#include "llinventorypanel.h"
 
 class LLFilterEditor;
-class LLInventoryPanel;
 
 class FSFloaterPartialInventory : public LLFloater
 {
@@ -40,6 +40,8 @@ public:
 
 	BOOL postBuild() override;
 	void onOpen(const LLSD& key) override;
+
+	LLInventoryPanel* getInventoryPanel() const { return mInventoryList; };
 
 private:
 	LLUUID				mRootFolderId;

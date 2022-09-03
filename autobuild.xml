@@ -2586,16 +2586,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88fb222412b98a7f371d6bf2ff42a973</string>
+              <string>c7c1f7f656d155b5af852ae1ef4954d9</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.211211036-linux64-211211036.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222441031-linux64-222441031.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.3.180841957</string>
+        <string>0.13.222441031</string>
       </map>
       <key>openal</key>
       <map>
