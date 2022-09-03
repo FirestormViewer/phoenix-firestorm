@@ -34,6 +34,7 @@
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Material" name="Materials"/>
+		<combo_box.item label="PBR" name="PBR"/>
 		<combo_box.item label="Medien" name="Media"/>
 	</combo_box>
 	<radio_group name="radio_material_type">
@@ -41,7 +42,13 @@
 		<radio_item label="Holprigkeit (normal)" name="Bumpiness (normal)"/>
 		<radio_item label="Glanz (specular)" name="Shininess (specular)"/>
 	</radio_group>
+	<radio_group name="radio_pbr_type">
+		<radio_item label="Albedo/ausstrahlend" name="Albedo/emissive"/>
+		<radio_item label="Normal" name="Normal"/>
+		<radio_item label="Metallisch/Unenbenheit" name="Metallic/roughness"/>
+	</radio_group>
 	<texture_picker label="Textur" name="texture control" tool_tip="Klicken, um ein Bild zu wählen"/>
+	<texture_picker label="PBR" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
 	<text name="label alphamode">
 		Alpha-Modus
 	</text>
