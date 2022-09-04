@@ -584,11 +584,11 @@ void LLViewerTexture::updateClass()
 
 	LLViewerMediaTexture::updateClass();
 
-	static LLCachedControl<U32> fsMaxTexMem(gSavedSettings, "FSMaxTexMemory");
-
-	if ((fsMaxTexMem > 0 && LLImageGL::getTextureBytesAllocated() > ((U64)fsMaxTexMem * 1024 * 1024 * 0.75)) || isMemoryForTextureLow())
-
+	// <FS:Ansariel> Option to limit max texture memory
 	//if(isMemoryForTextureLow())
+	static LLCachedControl<U32> fsMaxTexMem(gSavedSettings, "FSMaxTexMemory");
+	if ((fsMaxTexMem > 0 && LLImageGL::getTextureBytesAllocated() > ((U64)fsMaxTexMem * 1024 * 1024 * 0.75)) || isMemoryForTextureLow())
+	// </FS:Ansariel>
 	{
 		// Note: isMemoryForTextureLow() uses 1s delay, make sure we waited enough for it to recheck
 		if (sEvaluationTimer.getElapsedTimeF32() > GPU_MEMORY_CHECK_WAIT_TIME)
