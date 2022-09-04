@@ -558,9 +558,10 @@ void LLGLTexMemBar::draw()
     U32 texFetchLatMed = U32(recording.getMean(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
     U32 texFetchLatMax = U32(recording.getMax(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
 
-    text = llformat("GL Free: %d MB Sys Free: %d MB FBO: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
+    text = llformat("GL Free: %d MB Sys Free: %d MB GL Tex: %d MB FBO: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
                     gViewerWindow->getWindow()->getAvailableVRAMMegabytes(),
                     LLMemory::getAvailableMemKB()/1024,
+					LLImageGL::getTextureBytesAllocated() / 1024 / 1024,
 					LLRenderTarget::sBytesAllocated/(1024*1024),
 					discard_bias,
 					cache_usage,
@@ -585,12 +586,10 @@ void LLGLTexMemBar::draw()
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 	// VRAM Mem Bar
-
-	left = bar_left;
 	text = "VRAM";
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
-	left = bar_left + 35;
+	left = left + 35;
 	right = left + bar_width;
 	
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
@@ -605,6 +604,31 @@ void LLGLTexMemBar::draw()
 	right = left + llfloor(gpu_used * bar_scale);
 
 	gl_rect_2d(left, top, right, bottom, color);
+
+	static LLCachedControl<U32> fsMaxTexMem(gSavedSettings, "FSMaxTexMemory");
+	if (fsMaxTexMem > 0)
+	{
+		left = left + bar_width + 10;
+		text = "Bound";
+		LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height * 6,
+			text_color, LLFontGL::LEFT, LLFontGL::TOP);
+		left = left + 45;
+		right = left + bar_width;
+
+		gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
+		gl_rect_2d(left, top, right, bottom);
+
+		U64 max_texmem = ((U64)fsMaxTexMem) * 1024 * 1024;
+		U64 texmem_used = LLImageGL::getTextureBytesAllocated();
+		color = (texmem_used < llfloor(max_texmem * texmem_lower_bound_scale)) ? LLColor4::green :
+			(texmem_used < max_texmem) ? LLColor4::yellow : LLColor4::red;
+		color[VALPHA] = .75f;
+
+		bar_scale = (F32)bar_width / max_texmem;
+		right = left + llclamp(llfloor(texmem_used * bar_scale), 0, bar_width);
+
+		gl_rect_2d(left, top, right, bottom, color);
+	}
 	// </FS:Ansariel>
 
 	U32 cache_read(0U), cache_write(0U), res_wait(0U);
