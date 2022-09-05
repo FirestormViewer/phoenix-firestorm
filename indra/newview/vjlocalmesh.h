@@ -60,11 +60,10 @@ class LLLocalMeshFace
 			std::array<float, 4> mJointWeights;
 		};
 
-	public:
 		void setFaceBoundingBox(LLVector4 data_in, bool initial_values = false);
 
-		int                     getNumVerts() { return mPositions.size(); }
-		int						getNumIndices() { return mIndices.size(); }
+		int                     getNumVerts() const { return mPositions.size(); }
+		int						getNumIndices() const { return mIndices.size(); }
 
 		std::vector<int>&       getIndices()					{ return mIndices; };
 		std::vector<LLVector4>& getPositions()					{ return mPositions; };
@@ -93,10 +92,9 @@ class LLLocalMeshObject
 {
 	public:
 		// life cycle management
-		LLLocalMeshObject(std::string name);
+		explicit LLLocalMeshObject(std::string_view name);
 		~LLLocalMeshObject();
 
-	public:
 		// translation and scale
 		void computeObjectBoundingBox();
 		void computeObjectTransform(const LLMatrix4& scene_transform);
@@ -109,13 +107,13 @@ class LLLocalMeshObject
 		// getters
 		std::vector<std::unique_ptr<LLLocalMeshFace>>& getFaces(LLLocalMeshFileLOD lod) { return mFaces[lod]; };
 		std::pair<LLVector4, LLVector4>& getObjectBoundingBox() { return mObjectBoundingBox; };
-		std::string		getObjectName()			{ return mObjectName; };
-		LLVector4		getObjectTranslation()	{ return mObjectTranslation; };
-		LLVector4		getObjectSize()			{ return mObjectSize; };
-		LLVector4		getObjectScale()		{ return mObjectScale; };
-		LLMeshSkinInfo& getObjectMeshSkinInfo() { return mMeshSkinInfo; };
-		LLVolumeParams	getVolumeParams()		{ return mVolumeParams; };
-		bool			getIsRiggedObject();
+		LLVector4		getObjectTranslation() const	{ return mObjectTranslation; };
+		std::string		getObjectName() const		{ return mObjectName; };
+		LLVector4		getObjectSize() const		{ return mObjectSize; };
+		LLVector4		getObjectScale() const		{ return mObjectScale; };
+		LLMeshSkinInfo& getObjectMeshSkinInfo() 	{ return mMeshSkinInfo; };
+		LLVolumeParams	getVolumeParams() const		{ return mVolumeParams; };
+		bool			getIsRiggedObject() const;
 
 	private:
 		// internal data keeping
@@ -151,7 +149,7 @@ class LLLocalMeshFile
 		};
 
 		// for future gltf support, possibly more.
-		enum LLLocalMeshFileExtension
+		enum class LLLocalMeshFileExtension
 		{
 			EXTEN_DAE,
 			EXTEN_NONE
@@ -173,16 +171,14 @@ class LLLocalMeshFile
 			std::array<bool, 4> mStatus;
 		};
 		
-	public:
 		// life cycle management
-		LLLocalMeshFile(std::string filename, bool try_lods);
+		LLLocalMeshFile(const std::string& filename, bool try_lods);
 		~LLLocalMeshFile();
 	
 		// disallowing copy
 		LLLocalMeshFile(const LLLocalMeshFile& local_mesh_file) = delete;
 		LLLocalMeshFile& operator=(const LLLocalMeshFile& local_mesh_file) = delete;
 
-	public:
 		// file loading
 		void reloadLocalMeshObjects(bool initial_load = false);
 		LLLocalMeshFileStatus reloadLocalMeshObjectsCheck();
@@ -193,16 +189,16 @@ class LLLocalMeshFile
 		// info getters
 		bool notifyNeedsUIUpdate();
 		LLLocalMeshFileInfo getFileInfo();
-		std::string getFilename(LLLocalMeshFileLOD lod) { return mFilenames[lod]; };
-		LLUUID getFileID() { return mLocalMeshFileID; };
-		std::vector<std::string> getFileLog() { return mLoadingLog; };
+		std::string getFilename(LLLocalMeshFileLOD lod) const { return mFilenames[lod]; };
+		LLUUID getFileID() const { return mLocalMeshFileID; };
+		std::vector<std::string> getFileLog() const { return mLoadingLog; };
 
 		// viewer object
 		void updateVObjects();
 		void applyToVObject(LLUUID viewer_object_id, int object_index, bool use_scale);
 
 		// misc
-		void pushLog(std::string who, std::string what, bool is_error = false);
+		void pushLog(const std::string& who, const std::string& what, bool is_error = false);
 
 	private:
 		std::array<std::string, LOCAL_NUM_LODS> mFilenames;
@@ -227,16 +223,14 @@ class LLLocalMeshFile
 /*  user facing manager class. */
 /*=============================*/
 class LLLocalMeshSystem : public LLSingleton<LLLocalMeshSystem>
-{
-	
-	public:
+{	
 		// life cycle management
 		LLSINGLETON(LLLocalMeshSystem);
+	public:
 		~LLLocalMeshSystem();
 
-	public:
 		// file management
-		void addFile(std::string filename, bool try_lods);
+		void addFile(const std::string& filename, bool try_lods);
 		void deleteFile(LLUUID local_file_id);
 		void reloadFile(LLUUID local_file_id);
 
@@ -251,8 +245,8 @@ class LLLocalMeshSystem : public LLSingleton<LLLocalMeshSystem>
 		// floater two-way communication
 		void registerFloaterPointer(LLFloaterLocalMesh* floater_ptr);
 		void triggerFloaterRefresh();
-		std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> getFileInfoVector();
-		std::vector<std::string> getFileLog(LLUUID local_file_id);
+		std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> getFileInfoVector() const;
+		std::vector<std::string> getFileLog(LLUUID local_file_id) const;
 
 	private:
 		std::vector<std::unique_ptr<LLLocalMeshFile>> mLoadedFileList;

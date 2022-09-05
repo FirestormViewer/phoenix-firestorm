@@ -78,16 +78,14 @@ void LLLocalMeshFace::setFaceBoundingBox(LLVector4 data_in, bool initial_values)
 /*  volumeid and volumeparams for vobj.     */
 /*  when applied - fills vobj volume.       */
 /*==========================================*/
-LLLocalMeshObject::LLLocalMeshObject(std::string name)
+LLLocalMeshObject::LLLocalMeshObject(std::string_view name):
+	mObjectName(name)
 {
-	mObjectName = name;
 	mSculptID.generate();
 	mVolumeParams.setSculptID(mSculptID, LL_SCULPT_TYPE_MESH);
 }
 
-LLLocalMeshObject::~LLLocalMeshObject()
-{
-}
+LLLocalMeshObject::~LLLocalMeshObject() = default;
 
 void LLLocalMeshObject::computeObjectBoundingBox()
 {
@@ -318,7 +316,7 @@ void LLLocalMeshObject::attachSkinInfo()
 	}
 }
 
-bool LLLocalMeshObject::getIsRiggedObject()
+bool LLLocalMeshObject::getIsRiggedObject() const
 {
 	bool result = false;
 	auto& main_lod_faces = mFaces[LLLocalMeshFileLOD::LOCAL_LOD_HIGH];
@@ -342,7 +340,7 @@ bool LLLocalMeshObject::getIsRiggedObject()
 /*  owns filenames [main and lods]          */
 /*  owns the loaded local mesh objects      */
 /*==========================================*/
-LLLocalMeshFile::LLLocalMeshFile(std::string filename, bool try_lods)
+LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 {
 	// initialize safe defaults
 	for (size_t lod_iter = 0; lod_iter < LOCAL_NUM_LODS; ++lod_iter)
@@ -361,7 +359,7 @@ LLLocalMeshFile::LLLocalMeshFile(std::string filename, bool try_lods)
 	mLocalMeshFileNeedsUIUpdate = false;
 	mLoadedObjectList.clear();
 	mSavedObjectSculptIDs.clear();
-
+	
 	pushLog("LLLocalMeshFile", "Initializing with filename: " + filename);
 
 	// check if main filename exists, just in case
@@ -377,8 +375,7 @@ LLLocalMeshFile::LLLocalMeshFile(std::string filename, bool try_lods)
 	mShortName = boost::filesystem::path(filename).filename().generic_string();
 
 	// check if we have a valid extension, can't switch with string can we?
-	std::string exten_str = boost::filesystem::extension(filename);
-	if (exten_str == ".dae")
+	if (std::string exten_str = boost::filesystem::extension(filename); exten_str == ".dae")
 	{
 		mExtension = LLLocalMeshFileExtension::EXTEN_DAE;
 		pushLog("LLLocalMeshFile", "Extension found: COLLADA");
@@ -399,10 +396,7 @@ LLLocalMeshFile::LLLocalMeshFile(std::string filename, bool try_lods)
 	reloadLocalMeshObjects(true);
 }
 
-LLLocalMeshFile::~LLLocalMeshFile()
-{
-
-}
+LLLocalMeshFile::~LLLocalMeshFile() = default;
 
 void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 {
@@ -500,7 +494,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 		// int rather than size_t because we're iterating over LODS 3 to 0, stopping at -1
 		for (signed int lod_idx = LOCAL_LOD_HIGH; lod_idx >= LOCAL_LOD_LOWEST; --lod_idx)
 		{
-			LLLocalMeshFileLOD current_lod = static_cast<LLLocalMeshFileLOD>(lod_idx);
+			auto current_lod = static_cast<LLLocalMeshFileLOD>(lod_idx);
 			
 			// do we have a filename for this lod?
 			if (mFilenames[lod_idx].empty())
@@ -653,9 +647,8 @@ bool LLLocalMeshFile::updateLastModified(LLLocalMeshFileLOD lod)
 		const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(utf8str_to_utf16str(current_filename)));
 	#endif
 
-	LLSD new_last_modified = asctime(localtime(&temp_time));
 
-	if (new_last_modified.asString() != current_last_modified.asString())
+	if (LLSD new_last_modified = asctime(localtime(&temp_time)); new_last_modified.asString() != current_last_modified.asString())
 	{
 		file_updated = true;
 		mLastModified[lod] = new_last_modified;
@@ -754,7 +747,7 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 			continue;
 		}
 
-		LLLocalMeshFileLOD current_lod = static_cast<LLLocalMeshFileLOD>(lod_reverse_iter);
+		auto current_lod = static_cast<LLLocalMeshFileLOD>(lod_reverse_iter);
 		mLoadedObjectList[object_index]->fillVolume(current_lod);
 	}
 
@@ -775,7 +768,7 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 	// NOTE: this ^^ (or lod change) causes renderer crash on mesh with degenerate primitives.
 }
 
-void LLLocalMeshFile::pushLog(std::string who, std::string what, bool is_error)
+void LLLocalMeshFile::pushLog(const std::string& who, const std::string& what, bool is_error) 
 {
 	std::string log_msg = "[ " + who + " ] ";
 	if (is_error)
@@ -806,7 +799,7 @@ LLLocalMeshSystem::~LLLocalMeshSystem()
 	mLoadedFileList.clear();
 }
 
-void LLLocalMeshSystem::addFile(std::string filename, bool try_lods)
+void LLLocalMeshSystem::addFile(const std::string& filename, bool try_lods)
 {
 	auto loaded_file = std::make_unique<LLLocalMeshFile>(filename, try_lods);
 	mLoadedFileList.push_back(std::move(loaded_file));
@@ -985,7 +978,7 @@ void LLLocalMeshSystem::triggerFloaterRefresh()
 	}
 }
 
-std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> LLLocalMeshSystem::getFileInfoVector()
+std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> LLLocalMeshSystem::getFileInfoVector() const
 {
 	std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> result;
 
@@ -997,7 +990,7 @@ std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> LLLocalMeshSystem::getFileInfo
 	return result;
 }
 
-std::vector<std::string> LLLocalMeshSystem::getFileLog(LLUUID local_file_id)
+std::vector<std::string> LLLocalMeshSystem::getFileLog(LLUUID local_file_id) const
 {
 	std::vector<std::string> result;
 
