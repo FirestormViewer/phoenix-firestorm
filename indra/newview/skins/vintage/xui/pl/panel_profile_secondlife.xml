@@ -2,37 +2,39 @@
 <panel name="panel_profile" label="Profil">
 	<string name="no_partner_text" value="Brak" />
 	<string name="no_group_text" value="Brak" />
+	<string name="age_format">
+Urodziny: [REG_DATE]
+([AGE])
+	</string>
 	<string name="FSDev" value=" Programista" />
 	<string name="FSSupp" value=" Wsparcie" />
 	<string name="FSQualityAssurance" value=" Łowca błędów" />
 	<string name="texture_picker_label" value="Zdjęcie profilowe" />
 	<text name="name_label" value="Imię:" />
+	<button name="set_name" label="Imię:" tool_tip="Ustaw Imię Wyświetlane" />
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(ładowanie...)" />
 		<menu_button name="copy_btn" tool_tip="Opcje kopiowania" />
 	</panel>
-	<button name="set_name" tool_tip="Ustaw Imię Wyświetlane" />
-	<icon tool_tip="Znajomy może zobaczyć mój status online" name="can_see_online" />
-	<icon tool_tip="Znajomy nie może zobaczyć mojego statusu online" name="cant_see_online" />
-	<icon tool_tip="Znajomy może mnie zobaczyć na mapie" name="can_see_on_map" />
-	<icon tool_tip="Znajomy nie może mnie zobaczyć na mapie" name="cant_see_on_map" />
-	<icon tool_tip="Znajomy może edytować moje obiekty" name="can_edit_objects" />
-	<icon tool_tip="Znajomy nie może edytować moich obiektów" name="cant_edit_objects" />
-	<text name="Key:" value="Klucz:" />
-	<text_editor name="user_key" value="(ładowanie...)" />
+	<text name="Key:" halign="right" value="Klucz:" />
 	<layout_stack name="imagepositioner">
 		<layout_panel name="image_action_panel">
 			<menu_button name="image_action_btn" tool_tip="Wykonaj czynności związane ze zdjęciem profilowym" />
 		</layout_panel>
 		<layout_panel name="label_stack">
-			<text name="label" value="Urodziny:" />
+			<icon tool_tip="Znajomy może zobaczyć mój status online" name="can_see_online" />
+			<icon tool_tip="Znajomy nie może zobaczyć mojego statusu online" name="cant_see_online" />
+			<icon tool_tip="Znajomy może mnie zobaczyć na mapie" name="can_see_on_map" />
+			<icon tool_tip="Znajomy nie może mnie zobaczyć na mapie" name="cant_see_on_map" />
+			<icon tool_tip="Znajomy może edytować moje obiekty" name="can_edit_objects" />
+			<icon tool_tip="Znajomy nie może edytować moich obiektów" name="cant_edit_objects" />
 			<text_editor name="user_age" value="(ładowanie...)" />
 			<text name="label2" value="Konto:" />
 		</layout_panel>
 	</layout_stack>
-	<text name="About:" value="Info:" />
 	<text name="Groups:" value="Grupy:" />
 	<button name="group_invite" tool_tip="Zaproś do grupy" />
+	<text name="About:" value="Info:" />
 	<text name="Give item:" value="Podaruj:" />
 	<text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu, aby dać go tej osobie.">
 		Upuść przedmiot w tym miejscu.

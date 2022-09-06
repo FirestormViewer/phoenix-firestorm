@@ -5,20 +5,9 @@
 	</panel.string>
 	<layout_stack name="main_pick_stack">
 		<layout_panel name="main_pick_lp">
-			<text name="title_label">
-				Nazwa:
-			</text>
-			<text name="description_label">
-				Opis:
-			</text>
-			<text name="location_label">
-				Lokalizacja:
-			</text>
 			<line_editor name="pick_location">
 				Ładowanie...
 			</line_editor>
-		</layout_panel>
-		<layout_panel name="actions_lp">
 			<layout_stack name="actions_stack">
 				<layout_panel name="map_btn_lp">
 					<button name="show_on_map_btn" label="Pokaż na mapie" />
