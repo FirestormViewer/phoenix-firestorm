@@ -15,46 +15,70 @@
     single_instance="false"
     save_dock_state="false"
     title="Local Mesh">
-  
-  <scroll_list
-      name="l_name_list"
-      left="10"
-      top="25"
-      width="485"
-      height="223"
-      follows="left|top|right|bottom"
-      column_padding="0"
-      draw_heading="true"
-      multi_select="true"
-      search_column="1"
-      visible="true">
-    <column name="unit_status" label="Status" width="55" />
-    <column name="unit_name" label="Name" dynamicwidth="true" />
-    <column name="unit_lods" label="LODs" width="55" />
-    <column name="unit_objects" label="Objects" width="55" />
-    <column name="unit_id_HIDDEN" label="ID" width="0" />
-  </scroll_list>
-  
-  <text_editor
-    name="text_log"
-    max_length="65536"
-    left="10"
-    top="25"
-    width="485"
-    height="223"    
-    follows="left|top|right|bottom"
-    type="string"
-    embedded_items="false"
-    font="SansSerif"
-    ignore_tab="false"
-    layout="topleft"
-    parse_urls="false"
-    spellcheck="false"
-    read_only="true"
-    word_wrap="false"
-    visible="false">
-  </text_editor>
 
+    <tab_container
+      follows="top|left"
+      top="20"
+      left="0"
+      height="223"
+      width="500"
+      name="local_mesh_tabs"
+      tab_position="top"
+      enable_tabs_flashing="true"
+      tabs_flashing_color="MenuItemFlashBgColor">
+      <last_tab
+      tab_top_image_flash="TabTop_Right_Flashing"/> 
+      <panel
+      help_topic="add_local_mesh"
+      label="Local Mesh Assets"
+      layout="topleft"
+      name="local_mesh_assets_panel"
+      title="Local Mesh Assets">          
+        <fs_scroll_list
+          name="l_name_list"
+          left_delta="5"
+          top_pad="5"
+          width="495"
+          height="220"
+          content_type="Objects"
+          follows="left|top|right|bottom"
+          column_padding="0"
+          draw_heading="true"
+          multi_select="true"
+          search_column="1"
+          visible="true">
+          <column name="unit_status" label="Status" width="55" />
+          <column name="unit_name" label="Name" dynamicwidth="true" />
+          <column name="unit_lods" label="LODs" width="55" />
+          <column name="unit_objects" label="Objects" width="55" />
+          <column name="unit_id_HIDDEN" label="ID" width="0" />
+        </fs_scroll_list>
+      </panel>
+      <panel
+        label="Log"
+        layout="topleft"
+        name="logs_panel"
+        help_topic="text_log">
+        <text_editor
+          name="local_mesh_log"
+          max_length="65536"
+          left_delta="5"
+          top_pad="5"
+          width="500"
+          height="220"    
+          follows="left|top|right|bottom"
+          type="string"
+          embedded_items="false"
+          font="SansSerif"
+          ignore_tab="false"
+          layout="topleft"
+          parse_urls="false"
+          spellcheck="false"
+          read_only="true"
+          word_wrap="false">
+        </text_editor>
+      </panel>
+  </tab_container>
   <button
     height="18"
     label="Apply"
@@ -132,14 +156,13 @@
       name="btn_clear"
       width="75"
       visible="true"/>
-  <button
+      <button
       height="18"
-      label="Show Log"
+      label="Rez Donor"
       layout="topleft"
       left="420"
       top="275"
-      name="btn_showlog"
+      name="btn_rez"
       width="75"
-      visible="true"/>
-  
+      visible="true"/> 
   </floater>

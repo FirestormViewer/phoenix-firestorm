@@ -28,8 +28,9 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llfilepicker.h"
+#include "llinventoryicon.h"
 #include "llviewermenufile.h"
-#include "llscrolllistctrl.h"
+#include "fsscrolllistctrl.h"
 #include "llcheckboxctrl.h"
 #include "llviewertexteditor.h"
 #include "llcombobox.h"
@@ -52,8 +53,8 @@ static const S32 LOCAL_TRACKING_ID_COLUMN = 4;
 class LLFloaterLocalMeshFilePicker : public LLFilePickerThread
 {
 public:
-	LLFloaterLocalMeshFilePicker(LLFloaterLocalMesh* parent_floater);
-	virtual void notify(const std::vector<std::string>& filenames);
+	explicit LLFloaterLocalMeshFilePicker(LLFloaterLocalMesh* parent_floater);
+	void notify(const std::vector<std::string>& filenames) final;
 
 private:
 	LLFloaterLocalMesh* mParentFloater;
@@ -85,10 +86,9 @@ LLFloaterLocalMesh::LLFloaterLocalMesh(const LLSD & key) :
 	mLastSelectedObject.setNull();
 }
 
-LLFloaterLocalMesh::~LLFloaterLocalMesh(void)
-{
+LLFloaterLocalMesh::~LLFloaterLocalMesh(void) = default;
 
-}
+//static 
 
 void LLFloaterLocalMesh::onOpen(const LLSD & key)
 {
@@ -113,6 +113,7 @@ void LLFloaterLocalMesh::onClose(bool app_quitting)
 void LLFloaterLocalMesh::onSelectionChangedCallback()
 {
 	reloadLowerUI();
+	showLog();
 }
 
 BOOL LLFloaterLocalMesh::postBuild()
@@ -122,43 +123,51 @@ BOOL LLFloaterLocalMesh::postBuild()
 	childSetAction("btn_remove", LLFloaterLocalMesh::onBtnRemove, this);
 	childSetAction("btn_apply", LLFloaterLocalMesh::onBtnApply, this);
 	childSetAction("btn_clear", LLFloaterLocalMesh::onBtnClear, this);
-	childSetAction("btn_showlog", LLFloaterLocalMesh::onBtnShowLog, this);
-	
-	LLScrollListCtrl* scroll_ctrl = getChild<LLScrollListCtrl>("l_name_list");
-	if (scroll_ctrl)
+	childSetAction("btn_rez", LLFloaterLocalMesh::onBtnRez, this);
+
+
+
+	mTabContainer = findChild<LLTabContainer>("local_mesh_tabs");
+	if(mTabContainer)
 	{
-		scroll_ctrl->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onFileListCommitCallback, this));
+		mLogPanel = mTabContainer->getChild<LLViewerTextEditor>("local_mesh_log");
+		mScrollCtrl = mTabContainer->getChild<FSScrollListCtrl>("l_name_list");
+		mScrollCtrl->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onFileListCommitCallback, this));
+		// mTabContainer->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onTabChange, this));
 	}
+
 
 	reloadLowerUI();
 	return TRUE;
 }
 
-void LLFloaterLocalMesh::draw()
+void LLFloaterLocalMesh::update_selected_target(LLUUID selected_id)
 {
-	// check if selection has changed.
-	LLUUID selected_id;
-	selected_id.setNull();
-
-	auto current_object = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
-	if (current_object)
-	{
-		selected_id = current_object->getID();
-	}
-
-	if (selected_id != mLastSelectedObject)
+	if ( selected_id != mLastSelectedObject )
 	{
 		mLastSelectedObject = selected_id;
 		onSelectionChangedCallback();
 	}
+}
 
+void LLFloaterLocalMesh::draw()
+{
+	// check if selection has changed.
+	if (auto current_object = LLSelectMgr::getInstance()->getSelection()->getFirstObject())
+	{
+		update_selected_target( current_object->getID() );
+	}
+	else
+	{
+		update_selected_target( LLUUID::null );
+	}
 	// continue drawing
 	LLFloater::draw();
 }
 
 void LLFloaterLocalMesh::onBtnAdd(void* userdata)
 {
-	LLFloaterLocalMesh* self = (LLFloaterLocalMesh*)userdata;
+	auto* self = (LLFloaterLocalMesh*)userdata;
 	(new LLFloaterLocalMeshFilePicker(self))->getFile();
 }
 
@@ -177,19 +186,13 @@ void LLFloaterLocalMesh::onBtnAddCallback(std::string filename)
 
 void LLFloaterLocalMesh::onBtnReload(void* userdata)
 {
-	LLFloaterLocalMesh* self = (LLFloaterLocalMesh*)userdata;
+	auto* self = static_cast<LLFloaterLocalMesh*>(userdata);
 	if (!self)
 	{
 		return;
 	}
 
-	LLScrollListCtrl* scroll_ctrl = self->getChild<LLScrollListCtrl>("l_name_list");
-	if (!scroll_ctrl)
-	{
-		return;
-	}
-
-	auto selected_item = scroll_ctrl->getFirstSelected();
+	auto selected_item = self->mScrollCtrl->getFirstSelected();
 	if (!selected_item)
 	{
 		return;
@@ -207,20 +210,14 @@ void LLFloaterLocalMesh::onBtnReload(void* userdata)
 
 void LLFloaterLocalMesh::onBtnRemove(void* userdata)
 {
-	LLFloaterLocalMesh* self = (LLFloaterLocalMesh*)userdata;
+	auto* self = static_cast<LLFloaterLocalMesh*>(userdata);
 	if (!self)
 	{
 		return;
 	}
 
-	LLScrollListCtrl* scroll_ctrl = self->getChild<LLScrollListCtrl>("l_name_list");
-	if (!scroll_ctrl)
-	{
-		return;
-	}
-
 	// more checks necessary, apparently.
-	auto selected_item = scroll_ctrl->getFirstSelected();
+	auto selected_item = self->mScrollCtrl->getFirstSelected();
 	if (!selected_item)
 	{
 		return;
@@ -239,20 +236,13 @@ void LLFloaterLocalMesh::onBtnRemove(void* userdata)
 
 void LLFloaterLocalMesh::onBtnApply(void* userdata)
 {
-	LLFloaterLocalMesh* self = (LLFloaterLocalMesh*)userdata;
+	auto* self = static_cast<LLFloaterLocalMesh*>(userdata);
 	if (!self)
 	{
 		return;
 	}
 
-	// check scroll_ctrl pointers
-	auto scroll_ctrl = self->getChild<LLScrollListCtrl>("l_name_list");
-	if (!scroll_ctrl)
-	{
-		return;
-	}
-
-	auto scroll_ctrl_selected_item = scroll_ctrl->getFirstSelected();
+	auto scroll_ctrl_selected_item = self->mScrollCtrl->getFirstSelected();
 	if (!scroll_ctrl_selected_item)
 	{
 		return;
@@ -296,7 +286,7 @@ void LLFloaterLocalMesh::onBtnApply(void* userdata)
 
 void LLFloaterLocalMesh::onBtnClear(void* userdata)
 {
-	LLFloaterLocalMesh* self = (LLFloaterLocalMesh*)userdata;
+	auto* self = static_cast<LLFloaterLocalMesh*>(userdata);
 	if (!self)
 	{
 		return;
@@ -311,72 +301,127 @@ void LLFloaterLocalMesh::onBtnClear(void* userdata)
 	LLLocalMeshSystem::getInstance()->clearVObject(selected_object_id);
 }
 
-void LLFloaterLocalMesh::onBtnShowLog(void* userdata)
+bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
 {
-	LLFloaterLocalMesh* self = (LLFloaterLocalMesh*)userdata;
-	if (!self)
+	// Make sure we are expecting this.
+	// if (!mRezPending)
+	// {
+	// 	return false;
+	// }
+	if(!object)
 	{
-		return;
+		return false;
 	}
 
-	LLScrollListCtrl* scroll_ctrl = self->getChild<LLScrollListCtrl>("l_name_list");
-	LLTextEditor* text_ctrl = self->getChild<LLViewerTextEditor>("text_log");
-	LLButton* log_btn = self->getChild<LLButton>("btn_showlog");
+	// Select the new object
+	LLSelectMgr::getInstance()->selectObjectAndFamily(object, TRUE);
+	update_selected_target( object->getID() );
 
-	if ((!scroll_ctrl) || (!text_ctrl) || (!log_btn))
+
+	// LLUUID local_id{"aee92334-90e9-110b-7c03-0ff3bc19de63"};
+	LLUUID local_id{};
+
+	auto* volp = object->getVolume();
+	if(!volp) 
 	{
-		return;
+		return false;
 	}
+	auto volume_params{volp->getParams()};
 
-	bool scroll_visible = scroll_ctrl->getVisible();
+	object->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, TRUE, TRUE);
+	auto *sculpt_params = (LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+
+	if (sculpt_params)
+	{
+		sculpt_params->setSculptTexture( local_id, LL_SCULPT_TYPE_MESH);
+		volume_params.setSculptID(local_id, LL_SCULPT_TYPE_MESH);
+		object->updateVolume(volume_params);
+	}
+	else
+	{
+		return false;
+	}
+	auto scroll_ctrl_selected_item = this->mScrollCtrl->getFirstSelected();
+	if(!scroll_ctrl_selected_item){return true;}; // at this point we have a valid object even if we can't fill it.
+
+	auto scroll_ctrl_selected_column = scroll_ctrl_selected_item->getColumn(LOCAL_TRACKING_ID_COLUMN);
+	if(!scroll_ctrl_selected_column){return true;}; // at this point we have a valid object even if we can't fill it.
+
+	auto objectlist_combo_box = this->getChild<LLComboBox>("object_apply_list");
+	if(!objectlist_combo_box){return true;}; // at this point we have a valid object even if we can't fill it.
 	
-	std::string btn_text = (scroll_visible) ? "Show List" : "Show Log";
-	log_btn->setLabel(btn_text);
+	// TODO: replace this with check box. "apply selected"
+	bool apply_local { scroll_ctrl_selected_item && scroll_ctrl_selected_column && objectlist_combo_box };
 
-	scroll_ctrl->setVisible(!scroll_visible);
-	text_ctrl->setVisible(scroll_visible);
-
-	if (text_ctrl->getVisible())
+	if ( apply_local )
 	{
-		text_ctrl->clear();
-
-		// make sure something is actually selected, or we crash
-		auto scroll_ctrl_selected_item = scroll_ctrl->getFirstSelected();
-		if (!scroll_ctrl_selected_item)
+		local_id = scroll_ctrl_selected_column->getValue().asUUID();
+		// fill it up with local goodness
+		bool use_scale = false;
+		auto checkbox_use_scale = this->getChild<LLCheckBoxCtrl>("chkbox_use_scale");
+		if (checkbox_use_scale)
 		{
-			return;
+			use_scale = checkbox_use_scale->get();
 		}
 
-		auto scroll_ctrl_selected_column = scroll_ctrl_selected_item->getColumn(LOCAL_TRACKING_ID_COLUMN);
-		if (!scroll_ctrl_selected_column)
+		// // make sure the selection is still valid, and if so - get id.
+
+		// get selected local file id, object idx and use_scale boolean
+		int object_idx = objectlist_combo_box->getFirstSelectedIndex();
+		LLLocalMeshSystem::getInstance()->applyVObject(object->getID(), local_id, object_idx, use_scale);
+		auto* volp = object->getVolume();
+		if(!volp) 
 		{
-			return;
+			return true;
 		}
+		volume_params = volp->getParams();
+		object->updateVolume(volume_params);
+	}
+	return true;
+}
 
-		// something is selected, yay. request log
-		LLUUID file_id = scroll_ctrl_selected_column->getValue().asUUID();
-		auto log = LLLocalMeshSystem::getInstance()->getFileLog(file_id);
+void LLFloaterLocalMesh::onBtnRez(void* userdata)
+{
+	auto* self = (LLFloaterLocalMesh*)userdata;
 
-		for (auto log_string : log)
-		{
-			text_ctrl->appendText(log_string, true);
-		}
+	self->mObjectCreatedCallback = gObjectList.setNewObjectCallback(boost::bind(&LLFloaterLocalMesh::processPrimCreated, self, _1));
+	LLToolMgr::getInstance()->getCurrentToolset()->selectTool( (LLTool *) LLToolCompCreate::getInstance());
 
+}
+
+void LLFloaterLocalMesh::showLog()
+{
+	// load a log file for the newly selected item
+	mLogPanel->clear();
+	// make sure something is actually selected, or we crash
+	auto scroll_ctrl_selected_item = mScrollCtrl->getFirstSelected();
+	if (!scroll_ctrl_selected_item)
+	{
+		return;
+	}
+
+	auto scroll_ctrl_selected_column = scroll_ctrl_selected_item->getColumn(LOCAL_TRACKING_ID_COLUMN);
+	if (!scroll_ctrl_selected_column)
+	{
+		return;
+	}
+
+	// something is selected, yay. request log
+	LLUUID file_id = scroll_ctrl_selected_column->getValue().asUUID();
+	auto log = LLLocalMeshSystem::getInstance()->getFileLog(file_id);
+
+	for (auto log_string : log)
+	{
+		mLogPanel->appendText(log_string, true);
 	}
 }
 
 void LLFloaterLocalMesh::reloadFileList(bool keep_selection)
 {
-	LLScrollListCtrl* scroll_ctrl = getChild<LLScrollListCtrl>("l_name_list");
-	if (!scroll_ctrl)
-	{
-		return;
-	}
-
 	auto& fileinfo_vec = LLLocalMeshSystem::getInstance()->getFileInfoVector();
-	int selected_num = scroll_ctrl->getFirstSelectedIndex();
+	int selected_num = mScrollCtrl->getFirstSelectedIndex();
 
-	scroll_ctrl->clearRows();
+	mScrollCtrl->clearRows();
 	for (auto& cinfo : fileinfo_vec)
 	{
 		std::string status_text;
@@ -432,8 +477,14 @@ void LLFloaterLocalMesh::reloadFileList(bool keep_selection)
 
 			lod_state += current_state;
 		}
-
+		std::string icon_name = LLInventoryIcon::getIconName(
+													LLAssetType::AT_OBJECT, 
+													LLInventoryType::IT_OBJECT);
 		LLSD element;
+		element["columns"][0]["column"] = "drag to rez";
+		element["columns"][0]["type"] = "icon";
+		element["columns"][0]["value"] = icon_name;
+
 		element["columns"][0]["column"] = "unit_status";
 		element["columns"][0]["type"] = "text";
 		element["columns"][0]["value"] = status_text;
@@ -453,27 +504,28 @@ void LLFloaterLocalMesh::reloadFileList(bool keep_selection)
 		element["columns"][4]["column"] = "unit_id_HIDDEN";
 		element["columns"][4]["type"] = "text";
 		element["columns"][4]["value"] = cinfo.mLocalID;
+		element["value"] = "fcff33f4-82b7-367a-632e-1673b7142982";
 
-		scroll_ctrl->addElement(element);
+		mScrollCtrl->addElement(element);
 	}
 
-	if ((keep_selection) && (selected_num >= 0) && (selected_num < scroll_ctrl->getItemCount()))
+	if ( keep_selection && (selected_num >= 0) && (selected_num < mScrollCtrl->getItemCount()) )
 	{
-		scroll_ctrl->selectNthItem(selected_num);
+		mScrollCtrl->selectNthItem(selected_num);
 		reloadLowerUI();
 	}
-	else if (scroll_ctrl->getItemCount() == 1)
+	else if (mScrollCtrl->getItemCount() == 1)
 	{
 		// if we've just got the one item, select it.
 		// this prevents the need to explicitly select a list item when first adding a file.
-		scroll_ctrl->selectNthItem(0);
+		mScrollCtrl->selectNthItem(0);
 	}
 }
 
 void LLFloaterLocalMesh::onFileListCommitCallback()
 {
-	// i rather not register reloadLowerUI as callback, unless that's preferable?
 	reloadLowerUI();
+	showLog();
 }
 
 void LLFloaterLocalMesh::reloadLowerUI()
@@ -487,17 +539,12 @@ void LLFloaterLocalMesh::reloadLowerUI()
 	LLUUID selected_file_id; 
 	selected_file_id.setNull();
 
-	auto scroll_ctrl = getChild<LLScrollListCtrl>("l_name_list");
-	if (scroll_ctrl)
+	if (auto selected_item = mScrollCtrl->getFirstSelected())
 	{
-		auto selected_item = scroll_ctrl->getFirstSelected();
-		if (selected_item)
+		auto selected_column = selected_item->getColumn(LOCAL_TRACKING_ID_COLUMN);
+		if (selected_column)
 		{
-			auto selected_column = selected_item->getColumn(LOCAL_TRACKING_ID_COLUMN);
-			if (selected_column)
-			{
-				selected_file_id = selected_column->getValue().asUUID();
-			}
+			selected_file_id = selected_column->getValue().asUUID();
 		}
 	}
 
@@ -575,7 +622,7 @@ void LLFloaterLocalMesh::reloadLowerUI()
 		objectlist_combo_box->clearRows();
 
 		// and if it is loaded & active, fill object list
-		if ((selected_file_active) && (!selected_object_list.empty()))
+		if (selected_file_active && (!selected_object_list.empty()))
 		{
 			for (auto object_name : selected_object_list)
 			{
@@ -612,7 +659,7 @@ void LLFloaterLocalMesh::toggleSelectTool(bool toggle)
 	}
 }
 
-LLUUID LLFloaterLocalMesh::getCurrentSelectionIfValid()
+LLUUID LLFloaterLocalMesh::getCurrentSelectionIfValid() const
 {
 	LLUUID result;
 	result.setNull();

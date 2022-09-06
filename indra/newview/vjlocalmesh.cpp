@@ -454,7 +454,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 
 		pushLog("LLLocalMeshFile", "Seeking LOD files...");
 		// up to LOD2, LOD3 being the highest is always done by this point.
-		for (size_t lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_MEDIUM; ++lodfile_iter)
+		for (size_t lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_HIGH; ++lodfile_iter)
 		{
 			std::string current_lod_filename = mFilenames[LOCAL_LOD_HIGH];
 			std::string lod_string = "_LOD" + std::to_string(lodfile_iter);

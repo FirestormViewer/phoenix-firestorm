@@ -27,21 +27,22 @@
 #pragma once
 
 #include "llfloater.h"
+#include "lltabcontainer.h"
 class LLObjectSelection;
 
+class LLFloaterLocalMeshFilePicker;
 
 class LLFloaterLocalMesh : public LLFloater
 {
 	public:
-		LLFloaterLocalMesh(const LLSD& key);
-		virtual ~LLFloaterLocalMesh(void);
+		explicit LLFloaterLocalMesh(const LLSD& key);
+		~LLFloaterLocalMesh(void) final;
 
-	public:
-		void onOpen(const LLSD& key);
-		void onClose(bool app_quitting);
+		void onOpen(const LLSD& key) final;
+		void onClose(bool app_quitting) final;
 		void onSelectionChangedCallback();
-		virtual BOOL postBuild();
-		virtual void draw();
+		BOOL postBuild() final;
+		void draw() final;
 
 		/* add    - loads a new file, adds it to the list and reads it.
 		   reload - re-loads a selected file, reapplies it to viewer objects.
@@ -57,15 +58,23 @@ class LLFloaterLocalMesh : public LLFloater
 		static void onBtnRemove(void* userdata);
 		static void onBtnApply(void* userdata);
 		static void onBtnClear(void* userdata);
-		static void onBtnShowLog(void* userdata);
+		static void onBtnRez(void* userdata);
+
+		bool processPrimCreated(LLViewerObject* object);
 
 		void reloadFileList(bool keep_selection);
 		void onFileListCommitCallback();
 		void reloadLowerUI();	
 		void toggleSelectTool(bool toggle);
-		LLUUID getCurrentSelectionIfValid();
+		LLUUID getCurrentSelectionIfValid() const;
 
 	private:
+		void update_selected_target(LLUUID selected_id);
+		boost::signals2::connection mObjectCreatedCallback;
+		void showLog();
+		LLTabContainer * mTabContainer;
+		LLTextEditor * mLogPanel;
+		LLScrollListCtrl * mScrollCtrl;
 		// llsafehandle is deprecated.
 		LLPointer<LLObjectSelection> mObjectSelection;
 
