@@ -284,7 +284,6 @@ BOOL	LLPanelFace::postBuild()
 	//LLColorSwatchCtrl*	mShinyColorSwatch;
 
 	//LLComboBox*		mComboTexGen;
-	//LLComboBox*		mComboMatMedia;
 
 	//LLCheckBoxCtrl	*mCheckFullbright;
 	
@@ -295,10 +294,11 @@ BOOL	LLPanelFace::postBuild()
 
 	setMouseOpaque(FALSE);
 
-    LLTextureCtrl*	pbr_ctrl = getChild<LLTextureCtrl>("pbr_control");
+    LLTextureCtrl*	pbr_ctrl = findChild<LLTextureCtrl>("pbr_control");
     if (pbr_ctrl)
     {
-        pbr_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+        pbr_ctrl->setDefaultImageAssetID(LLUUID::null);
+        pbr_ctrl->setBlankImageAssetID(LLUUID::null); // should there be some empty default material?
         pbr_ctrl->setCommitCallback(boost::bind(&LLPanelFace::onCommitPbr, this, _2));
         pbr_ctrl->setOnCancelCallback(boost::bind(&LLPanelFace::onCancelPbr, this, _2));
         pbr_ctrl->setOnSelectCallback(boost::bind(&LLPanelFace::onSelectPbr, this, _2));
@@ -417,21 +417,21 @@ BOOL	LLPanelFace::postBuild()
 		mComboTexGen->setFollows(FOLLOWS_LEFT | FOLLOWS_TOP);	
 	}
 
-	mComboMatMedia = getChild<LLComboBox>("combobox matmedia");
+    mComboMatMedia = findChild<LLComboBox>("combobox matmedia");
 	if(mComboMatMedia)
 	{
-		mComboMatMedia->setCommitCallback(LLPanelFace::onCommitMaterialsMedia,this);
-		mComboMatMedia->selectNthItem(MATMEDIA_MATERIAL);
+        mComboMatMedia->setCommitCallback(LLPanelFace::onCommitMaterialsMedia,this);
+        mComboMatMedia->selectNthItem(MATMEDIA_MATERIAL);
 	}
 
-	mRadioMatType = getChild<LLRadioGroup>("radio_material_type");
+	mRadioMatType = findChild<LLRadioGroup>("radio_material_type");
     if(mRadioMatType)
     {
         mRadioMatType->setCommitCallback(LLPanelFace::onCommitMaterialType, this);
         mRadioMatType->selectNthItem(MATTYPE_DIFFUSE);
     }
 
-    mRadioPbrType = getChild<LLRadioGroup>("radio_pbr_type");
+    mRadioPbrType = findChild<LLRadioGroup>("radio_pbr_type");
     if (mRadioPbrType)
     {
         mRadioPbrType->setCommitCallback(LLPanelFace::onCommitPbrType, this);
@@ -1796,7 +1796,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		clearCtrls();
 
 		// Disable non-UICtrls
-        LLTextureCtrl*	pbr_ctrl = getChild<LLTextureCtrl>("pbr_control");
+        LLTextureCtrl*	pbr_ctrl = findChild<LLTextureCtrl>("pbr_control");
         if (pbr_ctrl)
         {
             pbr_ctrl->setImageAssetID(LLUUID::null);
@@ -2284,7 +2284,7 @@ void LLPanelFace::onSelectPbr(const LLSD& data)
 {
     LLSelectMgr::getInstance()->saveSelectedObjectTextures();
 
-    LLTextureCtrl* pbr_ctrl = getChild<LLTextureCtrl>("pbr_control");
+    LLTextureCtrl* pbr_ctrl = findChild<LLTextureCtrl>("pbr_control");
     if (!pbr_ctrl) return;
     if (!pbr_ctrl->getTentative())
     {
@@ -3829,7 +3829,7 @@ void LLPanelFace::onTextureSelectionChanged(LLInventoryItem* itemp)
 
 void LLPanelFace::onPbrSelectionChanged(LLInventoryItem* itemp)
 {
-    LLTextureCtrl* pbr_ctrl = getChild<LLTextureCtrl>("pbr_control");
+    LLTextureCtrl* pbr_ctrl = findChild<LLTextureCtrl>("pbr_control");
     if (pbr_ctrl)
     {
         LLUUID obj_owner_id;
