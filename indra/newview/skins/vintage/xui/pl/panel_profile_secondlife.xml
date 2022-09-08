@@ -16,7 +16,7 @@ Urodziny: [REG_DATE]
 		<text_editor name="complete_name" value="(ładowanie...)" />
 		<menu_button name="copy_btn" tool_tip="Opcje kopiowania" />
 	</panel>
-	<text name="Key:" halign="right" value="Klucz:" />
+	<text name="Key:" value="Klucz:" />
 	<layout_stack name="imagepositioner">
 		<layout_panel name="image_action_panel">
 			<menu_button name="image_action_btn" tool_tip="Wykonaj czynności związane ze zdjęciem profilowym" />
