@@ -22,16 +22,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f332d752a72cb524eb5db8ee6fdba3da</string>
+              <string>e6eecee825b9159b3be34b5fd21ef3e0</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64_bionic-221151857.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL-2.0.20-linux64-222521433.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.15</string>
+        <string>2.0.20</string>
       </map>
       <key>gstreamer10</key>
       <map>
