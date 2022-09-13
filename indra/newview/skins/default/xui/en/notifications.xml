@@ -1552,7 +1552,7 @@ Delete pick &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
    icon="alert.tga"
    name="ProfileUnsavedChanges"
    type="alert">
-    You have usaved changes.
+    You have unsaved changes.
     <tag>confirm</tag>
     <tag>save</tag>
     <usetemplate
@@ -13538,6 +13538,18 @@ the region &quot;[REGION]&quot;?
     type="alertmodal">
     Please enter a valid number for the snooze duration!
     <tag>fail</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
+   name="PickLimitReached"
+   label=""
+   type="alertmodal">
+    <unique/>
+    <tag>fail</tag>
+    <tag>confirm</tag>
+    Can't create another pick because the maximum number of picks have been created already.
     <usetemplate
      name="okbutton"
      yestext="OK"/>

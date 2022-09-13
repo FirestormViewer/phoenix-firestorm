@@ -1676,8 +1676,6 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         //mMenuClipboardColor->setEnabled(editable && single_volume);
         mBtnCopyFaces->setEnabled(editable && single_volume);
         mBtnPasteFaces->setEnabled(editable && !mClipboardParams.emptyMap() && (mClipboardParams.has("color") || mClipboardParams.has("texture")));
-
-		LL_INFOS() << "ADBG: enabled = " << (editable && !mClipboardParams.emptyMap() && (mClipboardParams.has("color") || mClipboardParams.has("texture")) ? "true" : "false") << LL_ENDL;
         // </FS>
 
 		// Set variable values for numeric expressions

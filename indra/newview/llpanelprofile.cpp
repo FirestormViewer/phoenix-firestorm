@@ -2493,6 +2493,7 @@ BOOL LLPanelProfileFirstLife::postBuild()
     mSaveChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
+    mPicture->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowPhoto(); }); // <FS:PP> Make "first life" picture clickable
 
     return TRUE;
 }
@@ -2532,6 +2533,23 @@ void LLPanelProfileFirstLife::setProfileImageUploaded(const LLUUID &image_asset_
 {
     mPicture->setValue(image_asset_id);
     mImageId = image_asset_id;
+
+    // <FS:PP> Make "first life" picture clickable
+    LLFloater *floater = mFloaterProfileTextureHandle.get();
+    if (floater)
+    {
+        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+        if (mImageId.notNull())
+        {
+            texture_view->loadAsset(mImageId);
+        }
+        else
+        {
+            texture_view->resetAsset();
+        }
+    }
+    // </FS:PP> Make "first life" picture clickable
+
     setProfileImageUploading(false);
 }
 
@@ -2630,6 +2648,52 @@ void LLPanelProfileFirstLife::onRemovePhoto()
     }
 }
 
+// <FS:PP> Make "first life" picture clickable
+void LLPanelProfileFirstLife::onShowPhoto()
+{
+    if (!getIsLoaded())
+    {
+        return;
+    }
+
+    LLFloater *floater = mFloaterProfileTextureHandle.get();
+    if (!floater)
+    {
+        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+        if (parent_floater)
+        {
+            LLFloaterProfileTexture * texture_view = new LLFloaterProfileTexture(parent_floater);
+            mFloaterProfileTextureHandle = texture_view->getHandle();
+            if (mImageId.notNull())
+            {
+                texture_view->loadAsset(mImageId);
+            }
+            else
+            {
+                texture_view->resetAsset();
+            }
+            texture_view->openFloater();
+            texture_view->setVisibleAndFrontmost(TRUE);
+            parent_floater->addDependentFloater(mFloaterProfileTextureHandle);
+        }
+    }
+    else // already open
+    {
+        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+        texture_view->setMinimized(FALSE);
+        texture_view->setVisibleAndFrontmost(TRUE);
+        if (mImageId.notNull())
+        {
+            texture_view->loadAsset(mImageId);
+        }
+        else
+        {
+            texture_view->resetAsset();
+        }
+    }
+}
+// </FS:PP> Make "first life" picture clickable
+
 void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
 {
     if (mImageId == id)
@@ -2654,6 +2718,22 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
         {
             mPicture->setValue("Generic_Person_Large");
         }
+
+        // <FS:PP> Make "first life" picture clickable
+        LLFloater *floater = mFloaterProfileTextureHandle.get();
+        if (floater)
+        {
+            LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+            if (mImageId == LLUUID::null)
+            {
+                texture_view->resetAsset();
+            }
+            else
+            {
+                texture_view->loadAsset(mImageId);
+            }
+        }
+        // </FS:PP> Make "first life" picture clickable
 
         mRemovePhoto->setEnabled(mImageId.notNull());
     }

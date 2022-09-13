@@ -22,16 +22,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f332d752a72cb524eb5db8ee6fdba3da</string>
+              <string>e6eecee825b9159b3be34b5fd21ef3e0</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64_bionic-221151857.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL-2.0.20-linux64-222521433.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.15</string>
+        <string>2.0.20</string>
       </map>
       <key>gstreamer10</key>
       <map>
@@ -2622,16 +2622,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88fb222412b98a7f371d6bf2ff42a973</string>
+              <string>c7c1f7f656d155b5af852ae1ef4954d9</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.211211036-linux64-211211036.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222441031-linux64-222441031.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.3.180841957</string>
+        <string>0.13.222441031</string>
       </map>
       <key>openal</key>
       <map>
@@ -2918,9 +2918,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5f4bc956734e53ef99125ae9aae3a87</string>
+              <string>db89d5ce9695457cc1e94cf657678f1a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64_bionic-220651719.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64-222532329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

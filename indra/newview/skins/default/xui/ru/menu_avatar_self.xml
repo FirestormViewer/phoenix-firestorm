@@ -2,8 +2,8 @@
 <context_menu name="Self Pie">
 	<menu_item_call label="Сесть" name="Sit Down Here"/>
 	<menu_item_call label="Встать" name="Stand Up"/>
-	<context_menu label="Снять &gt;" name="Take Off &gt;">
-		<context_menu label="Одежду &gt;" name="Clothes &gt;">
+	<context_menu label="Снять" name="Take Off &gt;">
+		<context_menu label="Одежду" name="Clothes &gt;">
 			<menu_item_call label="Рубашку" name="Shirt"/>
 			<menu_item_call label="Штаны" name="Pants"/>
 			<menu_item_call label="Юбку" name="Skirt"/>
@@ -38,4 +38,5 @@
 	<menu_item_call label="Обновить текстуру" name="Texture Refresh"/>
 	<menu_item_call label="Дамп XML" name="Dump XML"/>
 	<menu_item_call label="Блокировать владельца частиц" name="Mute Particle"/>
+	<menu_item_call label="Смотреть Профиль" name="show_avatar_profile"/>
 </context_menu>

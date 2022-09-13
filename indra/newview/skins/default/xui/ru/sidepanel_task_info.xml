@@ -147,7 +147,7 @@
 			<button label="Купить" name="buy_btn" tool_tip="Откройте окно Купить. Требуется, чтобы объект был выставлен на продажу." />
 		</layout_panel>
 		<layout_panel name="details_btn_panel">
-			<button label="Подробности" name="details_btn" tool_tip="Откройте окно осмотра объекта." />
+			<button label="Подробно" name="details_btn" tool_tip="Откройте окно осмотра объекта." />
 		</layout_panel>
 	</layout_stack>
 </panel>

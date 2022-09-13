@@ -28,7 +28,6 @@
 
 #include "fsfloaterpartialinventory.h"
 #include "llfiltereditor.h"
-#include "llinventorypanel.h"
 
 //=========================================================================
 
