@@ -695,17 +695,11 @@ BOOL LLPanelPeople::postBuild()
 	mAllFriendList = friends_tab->getChild<LLAvatarList>("avatars_all");
 	mOnlineFriendList->setNoItemsCommentText(getString("no_friends_online"));
 	mOnlineFriendList->setShowIcons("FriendsListShowIcons");
-	// <FS:Ansariel> Firestorm radar
-	//mOnlineFriendList->showPermissions("FriendsListShowPermissions");
-	mOnlineFriendList->showPermissions(true);
-	// </FS:Ansariel> Firestorm radar
+	mOnlineFriendList->showPermissions("FriendsListShowPermissions");
 	mOnlineFriendList->setShowCompleteName(!gSavedSettings.getBOOL("FriendsListHideUsernames"));
 	mAllFriendList->setNoItemsCommentText(getString("no_friends"));
 	mAllFriendList->setShowIcons("FriendsListShowIcons");
-	// <FS:Ansariel> Firestorm radar
-	//mAllFriendList->showPermissions("FriendsListShowPermissions");
-	mAllFriendList->showPermissions(true);
-	// </FS:Ansariel> Firestorm radar
+	mAllFriendList->showPermissions("FriendsListShowPermissions");
 	mAllFriendList->setShowCompleteName(!gSavedSettings.getBOOL("FriendsListHideUsernames"));
 
 	LLPanel* nearby_tab = getChild<LLPanel>(NEARBY_TAB_NAME);

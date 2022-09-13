@@ -567,10 +567,15 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
     {
         mPickName->setEnabled(TRUE);
         mPickDescription->setEnabled(TRUE);
-        mSetCurrentLocationButton->setVisible(TRUE);
+        // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
+        // mSetCurrentLocationButton->setVisible(TRUE);
+        childSetVisible("set_to_curr_location_btn_lp", true);
+        // </FS:Zi>
     }
     else
     {
+        // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
+        childSetVisible("set_to_curr_location_btn_lp", false);
         mSnapshotCtrl->setEnabled(FALSE);
     }
 }

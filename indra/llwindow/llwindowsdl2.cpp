@@ -1040,9 +1040,14 @@ BOOL LLWindowSDL::getFullscreen()
 
 BOOL LLWindowSDL::getPosition(LLCoordScreen *position)
 {
-    // *FIX: can anything be done with this?
-	position->mX = 0;
-	position->mY = 0;
+	int x;
+	int y;
+
+	SDL_GetWindowPosition(mWindow, &x, &y);
+
+	position->mX = x;
+	position->mY = y;
+
     return TRUE;
 }
 

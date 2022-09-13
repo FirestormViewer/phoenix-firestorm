@@ -5379,10 +5379,10 @@ Si le problème persiste, vérifiez la configuration de votre réseau et de votr
 		Mon abonnement Premium
 	</string>
 	<string name="DeleteItems">
-		Supprimer les [COUNT_SELECTION] articles sélectionnés ([COUNT_TOTAL]] total) ?
+		Supprimer les [COUNT_SELECTION] articles sélectionnés ([COUNT_TOTAL] total) ?
 	</string>
 	<string name="DeleteItem">
-		Supprimer l&apos;article sélectionné ([COUNT_TOTAL]] total) ?
+		Supprimer l&apos;article sélectionné ([COUNT_TOTAL] total) ?
 	</string>
 	<string name="EmptyOutfitText">
 		Cette tenue ne contient aucun article.
