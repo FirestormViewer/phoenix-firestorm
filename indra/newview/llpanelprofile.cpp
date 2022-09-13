@@ -2293,6 +2293,16 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     }
 }
 
+// <FS:Ansariel> RLVa support
+void LLPanelProfileSecondLife::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+    if (behavior == RLV_BHVR_SHOWLOC || behavior == RLV_BHVR_SHOWWORLDMAP)
+    {
+        updateButtons();
+    }
+}
+// </FS:Ansariel>
+
 //////////////////////////////////////////////////////////////////////////
 // LLPanelProfileWeb
 
