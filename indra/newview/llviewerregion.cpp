@@ -341,6 +341,24 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
             return;
         }
 
+        if (!LLWorld::instanceExists())
+        {
+            LL_WARNS("AppInit", "Capabilities") << "Received capabilities, but world no longer exists!" << LL_ENDL;
+            return;
+        }
+
+        regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
+        if (!regionp) //region was removed
+        {
+            LL_WARNS("AppInit", "Capabilities") << "Received capabilities for region that no longer exists!" << LL_ENDL;
+            return; // this error condition is not recoverable.
+        }
+
+        impl = regionp->getRegionImplNC();
+
+        // <FS:Ansariel> Fix seed cap retry count
+        //++(impl->mSeedCapAttempts);
+
         if (!result.isMap() || result.has("error"))
         {
             LL_WARNS("AppInit", "Capabilities") << "Malformed response" << LL_ENDL;
@@ -359,24 +377,6 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
 
         // remove the http_result from the llsd
         result.erase("http_result");
-
-        if (!LLWorld::instanceExists())
-        {
-            LL_WARNS("AppInit", "Capabilities") << "Received capabilities, but world no longer exists!" << LL_ENDL;
-            return;
-        }
-
-        regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
-        if (!regionp) //region was removed
-        {
-            LL_WARNS("AppInit", "Capabilities") << "Received capabilities for region that no longer exists!" << LL_ENDL;
-            return; // this error condition is not recoverable.
-        }
-
-        impl = regionp->getRegionImplNC();
-
-        // <FS:Ansariel> Fix seed cap retry count
-        //++(impl->mSeedCapAttempts);
 
         if (id != impl->mHttpResponderID) // region is no longer referring to this request
         {
@@ -2456,6 +2456,11 @@ void LLViewerRegion::requestSimulatorFeatures()
         std::string coroname =
             LLCoros::instance().launch("LLViewerRegionImpl::requestSimulatorFeatureCoro",
                                        boost::bind(&LLViewerRegionImpl::requestSimulatorFeatureCoro, url, getHandle()));
+
+        // requestSimulatorFeatures can be called from other coros,
+        // launch() acts like a suspend()
+        // Make sure we are still good to do
+        LLCoros::checkStop();
         
         LL_INFOS("AppInit", "SimulatorFeatures") << "Launching " << coroname << " requesting simulator features from " << url << " for region " << getRegionID() << LL_ENDL;
     }
@@ -3352,6 +3357,12 @@ void LLViewerRegion::setSeedCapability(const std::string& url)
         std::string coroname =
             LLCoros::instance().launch("LLEnvironmentRequest::requestBaseCapabilitiesCompleteCoro",
             boost::bind(&LLViewerRegionImpl::requestBaseCapabilitiesCompleteCoro, getHandle()));
+
+        // setSeedCapability can be called from other coros,
+        // launch() acts like a suspend()
+        // Make sure we are still good to do
+        LLCoros::checkStop();
+
 		return;
     }
 	
@@ -3364,6 +3375,11 @@ void LLViewerRegion::setSeedCapability(const std::string& url)
     std::string coroname =
         LLCoros::instance().launch("LLViewerRegionImpl::requestBaseCapabilitiesCoro",
         boost::bind(&LLViewerRegionImpl::requestBaseCapabilitiesCoro, getHandle()));
+
+    // setSeedCapability can be called from other coros,
+    // launch() acts like a suspend()
+    // Make sure we are still good to do
+    LLCoros::checkStop();
 
     LL_INFOS("AppInit", "Capabilities") << "Launching " << coroname << " requesting seed capabilities from " << url << " for region " << getRegionID() << LL_ENDL;
 }

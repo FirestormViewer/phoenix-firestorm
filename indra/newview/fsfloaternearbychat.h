@@ -87,7 +87,6 @@ public:
 	void updateFSUseNearbyChatConsole(const LLSD &data);
 	static bool isWordsName(const std::string& name);
 
-	void enableTranslationButton(bool enabled);
 	LLChatEntry* getChatBox() { return mInputEditor; }
 
 	S32 getMessageArchiveLength() {return mMessageArchive.size();}

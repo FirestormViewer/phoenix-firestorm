@@ -292,11 +292,6 @@ void LLFloaterTranslationSettings::onBtnOK()
 	gSavedSettings.setString("TranslationService", getSelectedService());
 	gSavedSettings.setString("BingTranslateAPIKey", getEnteredBingKey());
 	gSavedSettings.setString("GoogleTranslateAPIKey", getEnteredGoogleKey());
-	// <FS:Ansariel> [FS communication UI]
-	//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-	//		showTranslationCheckbox(LLTranslate::isTranslationConfigured());
-	(LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat"))->
-			enableTranslationButton(LLTranslate::isTranslationConfigured());
-	// </FS:Ansariel> [FS communication UI]
+
 	closeFloater(false);
 }

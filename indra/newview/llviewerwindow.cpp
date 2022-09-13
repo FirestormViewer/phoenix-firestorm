@@ -2451,15 +2451,14 @@ void LLViewerWindow::initWorldUI()
 	// nav_bar_container->addChild(navbar);
 	// nav_bar_container->setVisible(TRUE);
 
-    //// Navigation bar is outside visible area, expand status_bar_container to show it
-    //S32 new_height = nav_bar_container->getRect().getHeight() + status_bar_container->getRect().getHeight();
-    //S32 new_width = status_bar_container->getRect().getWidth();
-    //status_bar_container->reshape(new_width, new_height, TRUE);
-
 	// if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
 	// {
 	//		navbar->setVisible(FALSE);
 	// 	}
+    // else
+    // {
+    //    reshapeStatusBarContainer();
+    //}
 
 	// Force navigation bar to initialize
 	LLNavigationBar::getInstance();
@@ -7154,6 +7153,27 @@ LLRect LLViewerWindow::getChatConsoleRect()
 	// </FS:Ansariel>
 
 	return console_rect;
+}
+
+void LLViewerWindow::reshapeStatusBarContainer()
+{
+    LLPanel* status_bar_container = getRootView()->getChild<LLPanel>("status_bar_container");
+    LLView* nav_bar_container = getRootView()->getChild<LLView>("nav_bar_container");
+
+    S32 new_height = status_bar_container->getRect().getHeight();
+    S32 new_width = status_bar_container->getRect().getWidth();
+
+    if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+    {
+        // Navigation bar is outside visible area, expand status_bar_container to show it
+        new_height += nav_bar_container->getRect().getHeight();
+    }
+    else
+    {
+        // collapse status_bar_container
+        new_height -= nav_bar_container->getRect().getHeight();
+    }
+    status_bar_container->reshape(new_width, new_height, TRUE);
 }
 //----------------------------------------------------------------------------
 

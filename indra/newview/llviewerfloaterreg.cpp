@@ -222,6 +222,7 @@
 #include "particleeditor.h"
 #include "quickprefs.h"
 // handle secondlife:///app/openfloater/{NAME} URLs
+const std::string FLOATER_PROFILE("profile");
 class LLFloaterOpenHandler : public LLCommandHandler
 {
 public:
@@ -238,8 +239,20 @@ public:
 
 		const std::string floater_name = LLURI::unescape(params[0].asString());
 		// <FS:Zi> Support passing arguments to opened floater like secondlife:///app/openfloater/{NAME}?tab=msg&subtab=xyz
-		// LLFloaterReg::showInstance(floater_name);
-		LLFloaterReg::showInstance(floater_name, query_map);
+        //LLSD key;
+        //if (floater_name == FLOATER_PROFILE)
+        //{
+        //    key["id"] = gAgentID;
+        //}
+		//LLFloaterReg::showInstance(floater_name, key);
+        if (floater_name == FLOATER_PROFILE)
+        {
+            LLSD key;
+            key["id"] = gAgentID;
+            LLFloaterReg::showInstance(floater_name, key);
+            return true;
+        }
+        LLFloaterReg::showInstance(floater_name, query_map);
 
 		return true;
 	}

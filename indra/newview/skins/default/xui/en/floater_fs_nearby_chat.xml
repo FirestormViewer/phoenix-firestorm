@@ -36,30 +36,6 @@
     name="ls_control_panel"
     top="2"
     left="3">
-    <layout_panel
-      name="lp_translate_btn"
-      auto_resize="false"
-      user_resize="false"
-      top="0"
-      layout="topleft"
-      height="20"
-      width="26"
-      follows="left|top">
-      <button
-      follows="left|top"
-      top="0"
-      width="24"
-      height="20"
-      left_delta="2"
-      image_overlay="TabIcon_Translate_Off"
-      control_name="TranslateChat"
-      is_toggle="true"
-      image_hover_unselected="Toolbar_Middle_Over"
-      image_selected="Toolbar_Middle_Selected"
-      image_unselected="Toolbar_Middle_Off"
-      tool_tip="Use selected translation service"
-      name="translate_btn"/>
-    </layout_panel>
      <layout_panel
       name="lp_chat_history_btn"
       auto_resize="false"
