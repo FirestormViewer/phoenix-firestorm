@@ -104,7 +104,7 @@
 			<text name="area_search_beacon_color_label">Couleur de la balise de recherche zonière : </text>
 			<color_swatch name="area_search_beacon_color" tool_tip="Choix de la couleur de la balise de recherche zonière"/>
 			<text name="notecard_editor_color_label">
-				Couleurs de la notice :
+				Couleurs des notices :
 			</text>
 			<text name="notecard_editor_writable_text_color_label">
 				Texte:

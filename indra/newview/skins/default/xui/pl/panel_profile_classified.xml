@@ -22,7 +22,7 @@
 		Wyłączone
 	</panel.string>
 	<panel.string name="location_notice">
-		(zostanie zaktualizowane po zapisaniu)
+		(zaktualizuje się po zapisaniu)
 	</panel.string>
 	<string name="publish_label">
 		Publikuj
@@ -77,7 +77,7 @@
 							<icons_combo_box.item name="mature_ci" label="Treść Moderate" />
 							<icons_combo_box.item name="pg_ci" label="Treść General" />
 						</icons_combo_box>
-						<check_box name="auto_renew_edit" label="Ponawiaj automatycznie co tydzień" />
+						<check_box name="auto_renew_edit" label="Auto-ponawiaj co tydzień" />
 					</panel>
 				</panel>
 			</scroll_container>
