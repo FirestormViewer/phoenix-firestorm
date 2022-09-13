@@ -26,18 +26,7 @@
 	<text name="preview_disabled">
 		Vorschau deaktiviert
 	</text>
-	<layout_stack name="inventory_stack">
-		<layout_panel name="combo_layout">
-			<combo_box name="textures_material_combo">
-				<combo_box.item name="Materials_Textures" label="Materialien &amp; Texturen"/>
-				<combo_box.item name="Textures" label="Texturen"/>
-				<combo_box.item name="Materials" label="Materialien"/>
-			</combo_box>
-		</layout_panel>
-		<layout_panel name="inventory_layout">
-			<search_editor label="Texturen filtern" name="inventory search editor"/>
-		</layout_panel>
-	</layout_stack>
+	<filter_editor label="Texturen filtern" name="inventory search editor"/>
 	<button label="Hinzufügen" label_selected="Hinzufügen" name="l_add_btn"/>
 	<button label="Entfernen" label_selected="Entfernen" name="l_rem_btn"/>
 	<button label="Hochladen" label_selected="Hochladen" name="l_upl_btn"/>
