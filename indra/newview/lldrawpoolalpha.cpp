@@ -51,6 +51,8 @@
 #include "llvoavatar.h"
 #include "fsperfstats.h" // <FS:Beq> performance stats support
 
+#include "llenvironment.h"
+
 BOOL LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
 
 #define current_shader (LLGLSLShader::sCurBoundShaderPtr)
@@ -82,6 +84,11 @@ void LLDrawPoolAlpha::prerender()
     // TODO: is this even necessay?  These are probably set to never discard
     LLViewerFetchedTexture::sFlatNormalImagep->addTextureStats(1024.f*1024.f);
     LLViewerFetchedTexture::sWhiteImagep->addTextureStats(1024.f * 1024.f);
+
+    if (LLPipeline::sRenderPBR)
+    {
+        gPipeline.setupHWLights(NULL);
+    }
 }
 
 S32 LLDrawPoolAlpha::getNumPostDeferredPasses() 
@@ -650,65 +657,121 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 					}
 				}
 
-				LLRenderPass::applyModelMatrix(params);
+                LLRenderPass::applyModelMatrix(params);
 
-				LLMaterial* mat = NULL;
+                LLMaterial* mat = NULL;
+                LLGLTFMaterial *gltf_mat = params.mGLTFMaterial; // Also see: LLPipeline::getPoolTypeFromTE()
+                bool is_pbr = LLPipeline::sRenderPBR && gltf_mat;
 
-				if (deferred_render)
-				{
-					mat = params.mMaterial;
-				}
-				
-				if (params.mFullbright)
-				{
-					// Turn off lighting if it hasn't already been so.
-					if (light_enabled || !initialized_lighting)
-					{
-						initialized_lighting = TRUE;
-						target_shader = fullbright_shader;
-
-						light_enabled = FALSE;
-					}
-				}
-				// Turn on lighting if it isn't already.
-				else if (!light_enabled || !initialized_lighting)
-				{
-					initialized_lighting = TRUE;
-					target_shader = simple_shader;
-					light_enabled = TRUE;
-				}
-
-				if (deferred_render && mat)
-				{
-					U32 mask = params.mShaderMask;
-
-					llassert(mask < LLMaterial::SHADER_COUNT);
-					target_shader = &(gDeferredMaterialProgram[mask]);
-
-					if (LLPipeline::sUnderWaterRender)
-					{
-						target_shader = &(gDeferredMaterialWaterProgram[mask]);
-					}
-
-                    if (params.mAvatar != nullptr)
+                if (is_pbr && gltf_mat->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_BLEND)
+                {
+                    target_shader = &gDeferredPBRAlphaProgram[rigged];
+                    if (current_shader != target_shader)
                     {
-                        llassert(target_shader->mRiggedVariant != nullptr);
-                        target_shader = target_shader->mRiggedVariant;
+                        gPipeline.bindDeferredShader(*target_shader);
                     }
 
-					if (current_shader != target_shader)
-					{
-						gPipeline.bindDeferredShader(*target_shader);
-					}
-				}
-				else if (!params.mFullbright)
-				{
-					target_shader = simple_shader;
-				}
-				else
-				{
-					target_shader = fullbright_shader;
-				}
+                    if (params.mTexture.notNull())
+                    {
+                        gGL.getTexUnit(0)->bindFast(params.mTexture); // diffuse
+                    }
+                    else
+                    {
+                        gGL.getTexUnit(0)->bindFast(LLViewerFetchedTexture::sWhiteImagep);
+                    }
+
+                    if (params.mNormalMap)
+                    {
+                        target_shader->bindTexture(LLShaderMgr::BUMP_MAP, params.mNormalMap);
+                    }
+                    else
+                    {
+                        target_shader->bindTexture(LLShaderMgr::BUMP_MAP, LLViewerFetchedTexture::sFlatNormalImagep);
+                    }
+
+                    if (params.mSpecularMap)
+                    {
+                        target_shader->bindTexture(LLShaderMgr::SPECULAR_MAP, params.mSpecularMap); // PBR linear packed Occlusion, Roughness, Metal.
+                    }
+                    else
+                    {
+                        target_shader->bindTexture(LLShaderMgr::SPECULAR_MAP, LLViewerFetchedTexture::sWhiteImagep);
+                    }
+
+                    if (params.mEmissiveMap)
+                    {
+                        target_shader->bindTexture(LLShaderMgr::EMISSIVE_MAP, params.mEmissiveMap);  // PBR sRGB Emissive
+                    }
+                    else
+                    {
+                        target_shader->bindTexture(LLShaderMgr::EMISSIVE_MAP, LLViewerFetchedTexture::sWhiteImagep);
+                    }
+
+                    target_shader->uniform1f(LLShaderMgr::ROUGHNESS_FACTOR, params.mGLTFMaterial->mRoughnessFactor);
+                    target_shader->uniform1f(LLShaderMgr::METALLIC_FACTOR, params.mGLTFMaterial->mMetallicFactor);
+                    target_shader->uniform3fv(LLShaderMgr::EMISSIVE_COLOR, 1, params.mGLTFMaterial->mEmissiveColor.mV);
+
+                    target_shader->mLightHash = 0;
+                    gGL.syncLightState(); // Set light uniforms
+                }
+                else
+                {
+                    if (deferred_render)
+                    {
+                        mat = params.mMaterial;
+                    }
+
+                    if (params.mFullbright)
+                    {
+                        // Turn off lighting if it hasn't already been so.
+                        if (light_enabled || !initialized_lighting)
+                        {
+                            initialized_lighting = TRUE;
+                            target_shader = fullbright_shader;
+
+                            light_enabled = FALSE;
+                        }
+                    }
+                    // Turn on lighting if it isn't already.
+                    else if (!light_enabled || !initialized_lighting)
+                    {
+                        initialized_lighting = TRUE;
+                        target_shader = simple_shader;
+                        light_enabled = TRUE;
+                    }
+
+                    if (deferred_render && mat)
+                    {
+                        U32 mask = params.mShaderMask;
+
+                        llassert(mask < LLMaterial::SHADER_COUNT);
+                        target_shader = &(gDeferredMaterialProgram[mask]);
+
+                        if (LLPipeline::sUnderWaterRender)
+                        {
+                            target_shader = &(gDeferredMaterialWaterProgram[mask]);
+                        }
+
+                        if (params.mAvatar != nullptr)
+                        {
+                            llassert(target_shader->mRiggedVariant != nullptr);
+                            target_shader = target_shader->mRiggedVariant;
+                        }
+
+                        if (current_shader != target_shader)
+                        {
+                            gPipeline.bindDeferredShader(*target_shader);
+                        }
+                    }
+                    else if (!params.mFullbright)
+                    {
+                        target_shader = simple_shader;
+                    }
+                    else
+                    {
+                        target_shader = fullbright_shader;
+                    }
+                }
 				
                 if (params.mAvatar != nullptr)
                 {

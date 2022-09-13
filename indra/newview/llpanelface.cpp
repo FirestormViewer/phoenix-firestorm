@@ -1201,10 +1201,10 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					mTextureCtrl->setTentative(FALSE);
 					mTextureCtrl->setEnabled(editable);
 					mTextureCtrl->setImageAssetID(id);
-					getChildView("combobox alphamode")->setEnabled(editable && mIsAlpha && transparency <= 0.f);
-					getChildView("label alphamode")->setEnabled(editable && mIsAlpha);
-					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha);
-					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha);
+					getChildView("combobox alphamode")->setEnabled(editable && mIsAlpha && transparency <= 0.f && !has_pbr_material);
+					getChildView("label alphamode")->setEnabled(editable && mIsAlpha && !has_pbr_material);
+					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
+					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
 
 					mTextureCtrl->setBakeTextureEnabled(TRUE);
 				}
@@ -1227,10 +1227,10 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					mTextureCtrl->setTentative(TRUE);
 					mTextureCtrl->setEnabled(editable);
 					mTextureCtrl->setImageAssetID(id);
-					getChildView("combobox alphamode")->setEnabled(editable && mIsAlpha && transparency <= 0.f);
-					getChildView("label alphamode")->setEnabled(editable && mIsAlpha);
-					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha);
-					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha);
+					getChildView("combobox alphamode")->setEnabled(editable && mIsAlpha && transparency <= 0.f && !has_pbr_material);
+					getChildView("label alphamode")->setEnabled(editable && mIsAlpha && !has_pbr_material);
+					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
+					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
 					
 					mTextureCtrl->setBakeTextureEnabled(TRUE);
 				}
@@ -1981,8 +1981,8 @@ void LLPanelFace::updateVisibility()
 
 	// Diffuse texture controls
 	getChildView("texture control")->setVisible(show_texture && show_material);
-	getChildView("label alphamode")->setVisible((show_texture && show_material) || show_pbr);
-	getChildView("combobox alphamode")->setVisible((show_texture && show_material) || show_pbr);
+	getChildView("label alphamode")->setVisible(show_texture && show_material);
+	getChildView("combobox alphamode")->setVisible(show_texture && show_material);
 	getChildView("label maskcutoff")->setVisible(false);
 	getChildView("maskcutoff")->setVisible(false);
 	if ((show_texture && show_material) || show_pbr)

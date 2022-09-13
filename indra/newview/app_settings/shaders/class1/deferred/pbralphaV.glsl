@@ -1,5 +1,5 @@
 /** 
- * @file pbropaqueV.glsl
+ * @file class1\deferred\pbralphaV.glsl
  *
  * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -37,56 +37,108 @@ uniform mat3 normal_matrix;
 uniform mat4 modelview_projection_matrix;
 #endif
 
+#if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
+  #if !defined(HAS_SKIN)
+    uniform mat4 modelview_matrix;
+  #endif
+    VARYING vec3 vary_position;
+#endif
+
 uniform mat4 texture_matrix0;
+
+#ifdef HAS_SHADOW
+VARYING vec3 vary_fragcoord;
+uniform float near_clip;
+#endif
 
 ATTRIBUTE vec3 position;
 ATTRIBUTE vec4 diffuse_color;
 ATTRIBUTE vec3 normal;
-ATTRIBUTE vec4 tangent;
 ATTRIBUTE vec2 texcoord0;
-ATTRIBUTE vec2 texcoord1;
-ATTRIBUTE vec2 texcoord2;
 
-VARYING vec2 vary_texcoord0;
+
+#ifdef HAS_NORMAL_MAP
+ATTRIBUTE vec4 tangent;
+ATTRIBUTE vec2 texcoord1;
+
+VARYING vec3 vary_mat0;
+VARYING vec3 vary_mat1;
+VARYING vec3 vary_mat2;
+
 VARYING vec2 vary_texcoord1;
+#else
+VARYING vec3 vary_normal;
+#endif
+
+#ifdef HAS_SPECULAR_MAP
+ATTRIBUTE vec2 texcoord2;
 VARYING vec2 vary_texcoord2;
+#endif
  
 VARYING vec4 vertex_color;
-
-VARYING vec3 vary_tangent;
-flat out float vary_sign;
-VARYING vec3 vary_normal;
+VARYING vec2 vary_texcoord0;
 
 void main()
 {
 #ifdef HAS_SKIN
 	mat4 mat = getObjectSkinnedTransform();
-
 	mat = modelview_matrix * mat;
-
 	vec3 pos = (mat*vec4(position.xyz,1.0)).xyz;
-
-	gl_Position = projection_matrix*vec4(pos,1.0);
-
+#if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
+	vary_position = pos;
+#endif
+    vec4 vert = projection_matrix * vec4(pos,1.0);
 #else
 	//transform vertex
-	gl_Position = modelview_projection_matrix * vec4(position.xyz, 1.0); 
+    vec4 vert = modelview_projection_matrix * vec4(position.xyz, 1.0);
 #endif
-	
-	vary_texcoord0 = (texture_matrix0 * vec4(texcoord0,0,1)).xy;
-	vary_texcoord1 = (texture_matrix0 * vec4(texcoord1,0,1)).xy;
-	vary_texcoord2 = (texture_matrix0 * vec4(texcoord2,0,1)).xy;
-#ifdef HAS_SKIN
-	vec3 n = (mat*vec4(normal.xyz+position.xyz,1.0)).xyz-pos.xyz;
-	vec3 t = (mat*vec4(tangent.xyz+position.xyz,1.0)).xyz-pos.xyz;
-#else //HAS_SKIN
-	vec3 n = normal_matrix * normal;
-	vec3 t = normal_matrix * tangent.xyz;
+    gl_Position = vert;
+
+#if HAS_SHADOW
+    vary_fragcoord.xyz = vert.xyz + vec3(0,0,near_clip);
 #endif
 
-    vary_tangent = normalize(t);
-    vary_sign = tangent.w;
-    vary_normal = normalize(n);
+	vary_texcoord0 = (texture_matrix0 * vec4(texcoord0,0,1)).xy;
+	
+#ifdef HAS_NORMAL_MAP
+	vary_texcoord1 = (texture_matrix0 * vec4(texcoord1,0,1)).xy;
+#endif
+
+#ifdef HAS_SPECULAR_MAP
+	vary_texcoord2 = (texture_matrix0 * vec4(texcoord2,0,1)).xy;
+#endif
+
+#ifdef HAS_SKIN
+	vec3 n = normalize((mat*vec4(normal.xyz+position.xyz,1.0)).xyz-pos.xyz);
+  #ifdef HAS_NORMAL_MAP
+	vec3 t = normalize((mat*vec4(tangent.xyz+position.xyz,1.0)).xyz-pos.xyz);
+	vec3 b = cross(n, t)*tangent.w;
+	
+	vary_mat0 = vec3(t.x, b.x, n.x);
+	vary_mat1 = vec3(t.y, b.y, n.y);
+	vary_mat2 = vec3(t.z, b.z, n.z);
+  #else //HAS_NORMAL_MAP
+    vary_normal  = n;
+  #endif //HAS_NORMAL_MAP
+#else //HAS_SKIN
+	vec3 n = normalize(normal_matrix * normal);
+  #ifdef HAS_NORMAL_MAP
+	vec3 t = normalize(normal_matrix * tangent.xyz);
+	vec3 b = cross(n,t)*tangent.w;
+
+	vary_mat0 = vec3(t.x, b.x, n.x);
+	vary_mat1 = vec3(t.y, b.y, n.y);
+	vary_mat2 = vec3(t.z, b.z, n.z);
+  #else //HAS_NORMAL_MAP
+	vary_normal = n;
+  #endif //HAS_NORMAL_MAP
+#endif //HAS_SKIN
 	
 	vertex_color = diffuse_color;
+
+#if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
+  #if !defined(HAS_SKIN)
+	vary_position = (modelview_matrix*vec4(position.xyz, 1.0)).xyz;
+  #endif
+#endif
 }

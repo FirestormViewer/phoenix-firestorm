@@ -606,7 +606,7 @@ static void settings_to_globals()
 
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 
-	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLContextCoreProfile");
+    LLRender::sGLCoreProfile = TRUE; // Now required, ignoring gSavedSettings.getBOOL("RenderGLContextCoreProfile");
 	LLRender::sNsightDebugSupport = gSavedSettings.getBOOL("RenderNsightDebugSupport");
 	// <FS:Ansariel> Vertex Array Objects are required in OpenGL core profile
 	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
