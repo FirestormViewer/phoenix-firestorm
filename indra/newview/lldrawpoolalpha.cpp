@@ -663,9 +663,16 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                 LLGLTFMaterial *gltf_mat = params.mGLTFMaterial; // Also see: LLPipeline::getPoolTypeFromTE()
                 bool is_pbr = LLPipeline::sRenderPBR && gltf_mat;
 
+                LLGLDisable cull_face(is_pbr && gltf_mat->mDoubleSided ? GL_CULL_FACE : 0);
+
                 if (is_pbr && gltf_mat->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_BLEND)
                 {
-                    target_shader = &gDeferredPBRAlphaProgram[rigged];
+                    target_shader = &gDeferredPBRAlphaProgram;
+                    if (params.mAvatar != nullptr)
+                    {
+                        target_shader = target_shader->mRiggedVariant;
+                    }
+
                     if (current_shader != target_shader)
                     {
                         gPipeline.bindDeferredShader(*target_shader);
@@ -710,9 +717,6 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     target_shader->uniform1f(LLShaderMgr::ROUGHNESS_FACTOR, params.mGLTFMaterial->mRoughnessFactor);
                     target_shader->uniform1f(LLShaderMgr::METALLIC_FACTOR, params.mGLTFMaterial->mMetallicFactor);
                     target_shader->uniform3fv(LLShaderMgr::EMISSIVE_COLOR, 1, params.mGLTFMaterial->mEmissiveColor.mV);
-
-                    target_shader->mLightHash = 0;
-                    gGL.syncLightState(); // Set light uniforms
                 }
                 else
                 {
