@@ -68,6 +68,10 @@
 #include "llviewermenu.h"
 #include "llviewernetwork.h"
 
+#if LL_SDL2
+#include "llwindow.h"
+#endif
+
 #include "fscommon.h"
 #include "llchatentry.h"
 #include "llfocusmgr.h"
@@ -1210,6 +1214,50 @@ FSChatHistory::~FSChatHistory()
 	this->clear();
 }
 
+void FSChatHistory::updateChatInputLine()
+{
+	if(!mChatInputLine)
+	{
+		// get our focus root
+		LLUICtrl* focusRoot=findRootMostFocusRoot();
+		if(focusRoot)
+		{
+			// focus on the next item that is a text input control
+			focusRoot->focusNextItem(true);
+			// remember the control's pointer if it really is a LLLineEditor
+			mChatInputLine = dynamic_cast<LLChatEntry*>(gFocusMgr.getKeyboardFocus());
+		}
+	}
+}
+
+#if LL_SDL2
+void FSChatHistory::setFocus(BOOL b)
+{
+	LLTextEditor::setFocus(b);
+
+	// IME - International input compositing, i.e. for Japanese / Chinese text input
+	updateChatInputLine();
+
+	if (b && mChatInputLine)
+	{
+		// Make sure the IME is in the right place, on top of the input line
+		LLRect screen_pos = mChatInputLine->calcScreenRect();
+		LLCoordGL ime_pos(screen_pos.mLeft, screen_pos.mBottom + gSavedSettings.getS32("SDL2IMEChatHistoryVerticalOffset"));
+
+		// shift by a few pixels so the IME doesn't pop to the left side when the input
+		// field is very close to the left edge
+		ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]) + 5;
+		ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
+
+		getWindow()->setLanguageTextInput(ime_pos);
+	}
+
+	// this floater is not an LLPreeditor but we are only interested in the pointer anyway
+	// so hopefully we will get away with this
+	getWindow()->allowLanguageTextInput((LLPreeditor*) this, true);
+}
+#endif
+
 void FSChatHistory::initFromParams(const FSChatHistory::Params& p)
 {
 	// initialize the LLTextEditor base class first ... -Zi
@@ -1794,19 +1842,8 @@ BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 		return LLTextEditor::handleUnicodeCharHere(uni_char);
 	}
 
-	// we don't know which is our chat input line yet
-	if(!mChatInputLine)
-	{
-		// get our focus root
-		LLUICtrl* focusRoot=findRootMostFocusRoot();
-		if(focusRoot)
-		{
-			// focus on the next item that is a text input control
-			focusRoot->focusNextItem(true);
-			// remember the control's pointer if it really is a LLLineEditor
-			mChatInputLine = dynamic_cast<LLChatEntry*>(gFocusMgr.getKeyboardFocus());
-		}
-	}
+	// we might not know which is our chat input line yet
+	updateChatInputLine();
 
 	// do we know our chat input line now?
 	if(mChatInputLine)

@@ -26203,5 +26203,38 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>SDL2IMEDefaultVerticalOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Default vertical offset to apply to the international input method editor for Japanese, Chinese, etc.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>18</integer>
+    </map>
+    <key>SDL2IMEChatHistoryVerticalOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Chat History: Vertical offset to apply to the international input method editor for Japanese, Chinese, etc.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>14</integer>
+    </map>
+    <key>SDL2IMEMediaVerticalOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Media: Vertical offset to apply to the international input method editor for Japanese, Chinese, etc.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-4</integer>
+    </map>
 </map>
 </llsd>
