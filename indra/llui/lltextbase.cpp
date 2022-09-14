@@ -50,12 +50,6 @@
 
 #include "fsregistrarutils.h"
 
-// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
-#if LL_SDL2
-extern LLControlGroup gSavedSettings;
-#endif
-// </FS:Zi>
-
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
 const F32	TRIPLE_CLICK_INTERVAL = 0.3f;	// delay between double and triple click.
@@ -653,7 +647,7 @@ void LLTextBase::drawCursor()
 			ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
 			// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
 #if LL_SDL2
-			static LLCachedControl<S32> sdl2_ime_default_vertical_offset(*LLControlGroup::getInstance("Global"), "SDL2IMEDefaultVerticalOffset");
+			static LLUICachedControl<S32> sdl2_ime_default_vertical_offset("SDL2IMEDefaultVerticalOffset");
 			ime_pos.mY += sdl2_ime_default_vertical_offset;
 #endif
 			// </FS:Zi>
