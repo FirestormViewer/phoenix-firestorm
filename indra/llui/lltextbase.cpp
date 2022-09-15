@@ -645,6 +645,12 @@ void LLTextBase::drawCursor()
 
 			ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]);
 			ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
+			// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+			static LLUICachedControl<S32> sdl2_ime_default_vertical_offset("SDL2IMEDefaultVerticalOffset");
+			ime_pos.mY += sdl2_ime_default_vertical_offset;
+#endif
+			// </FS:Zi>
 			getWindow()->setLanguageTextInput( ime_pos );
 		}
 	}
