@@ -99,16 +99,24 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 
 	LLMatrix4 scene_transform_base;
 
-	domAsset::domUnit* unit = daeSafeCast<domAsset::domUnit>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUnit::ID())));
-	scene_transform_base.setIdentity();
-	if (unit)
-	{
-		F32 meter = unit->getMeter();
-		scene_transform_base.mMatrix[0][0] = meter;
-		scene_transform_base.mMatrix[1][1] = meter;
-		scene_transform_base.mMatrix[2][2] = meter;
-	}
+	static auto always_use_meter_scale = LLUICachedControl<bool>("FSLocalMeshScaleAlwaysMeters", false);
 
+	if(!always_use_meter_scale)
+	{
+		domAsset::domUnit* unit = daeSafeCast<domAsset::domUnit>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUnit::ID())));
+		scene_transform_base.setIdentity();
+		if (unit)
+		{
+			F32 meter = unit->getMeter();
+			scene_transform_base.mMatrix[0][0] = meter;
+			scene_transform_base.mMatrix[1][1] = meter;
+			scene_transform_base.mMatrix[2][2] = meter;
+		}
+	}
+	else
+	{
+		scene_transform_base.setIdentity();
+	}
 	//get up axis rotation
 	LLMatrix4 rotation;
 	
@@ -468,7 +476,8 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	auto& skininfo = current_object->getObjectMeshSkinInfo();
 
 	// basically copy-pasted from linden magic
-	LLMatrix4 normalized_transformation, mesh_scale;
+	LLMatrix4 normalized_transformation;
+	LLMatrix4 mesh_scale;
 	normalized_transformation.setTranslation(LLVector3(inverse_translation));
 	mesh_scale.initScale(LLVector3(objct_size));
 	mesh_scale *= normalized_transformation;

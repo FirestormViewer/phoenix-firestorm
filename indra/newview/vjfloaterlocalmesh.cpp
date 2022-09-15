@@ -29,6 +29,7 @@
 
 #include "llfilepicker.h"
 #include "llinventoryicon.h"
+#include "llviewercontrol.h"
 #include "llviewermenufile.h"
 #include "fsscrolllistctrl.h"
 #include "llcheckboxctrl.h"
@@ -37,6 +38,7 @@
 #include "llselectmgr.h"
 #include "lltoolmgr.h"
 #include "lltoolcomp.h"
+#include "llmodelpreview.h"
 
 #include "llviewerobjectlist.h"
 
@@ -125,8 +127,6 @@ BOOL LLFloaterLocalMesh::postBuild()
 	childSetAction("btn_clear", LLFloaterLocalMesh::onBtnClear, this);
 	childSetAction("btn_rez", LLFloaterLocalMesh::onBtnRez, this);
 
-
-
 	mTabContainer = findChild<LLTabContainer>("local_mesh_tabs");
 	if(mTabContainer)
 	{
@@ -136,6 +136,7 @@ BOOL LLFloaterLocalMesh::postBuild()
 		// mTabContainer->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onTabChange, this));
 	}
 
+	getChild<LLComboBox>("lod_suffix_combo")->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onSuffixStandardSelected, this, (LLUICtrl*)this));
 
 	reloadLowerUI();
 	return TRUE;
@@ -173,14 +174,10 @@ void LLFloaterLocalMesh::onBtnAdd(void* userdata)
 
 void LLFloaterLocalMesh::onBtnAddCallback(std::string filename)
 {
-	bool try_lods = false;
-	auto checkbox_use_lods = getChild<LLCheckBoxCtrl>("chkbox_use_lods");
-	if (checkbox_use_lods)
-	{
-		try_lods = checkbox_use_lods->get();
-	}
+	static const bool try_lods {true};
 
 	LLLocalMeshSystem::getInstance()->addFile(filename, try_lods);
+	showLog();
 }
 
 
@@ -261,14 +258,6 @@ void LLFloaterLocalMesh::onBtnApply(void* userdata)
 		return;
 	}
 
-	// checkbox pointer
-	bool use_scale = false;
-	auto checkbox_use_scale = self->getChild<LLCheckBoxCtrl>("chkbox_use_scale");
-	if (checkbox_use_scale)
-	{
-		use_scale = checkbox_use_scale->get();
-	}
-
 	// make sure the selection is still valid, and if so - get id.
 	LLUUID selected_object_id = self->getCurrentSelectionIfValid();
 	if (selected_object_id.isNull())
@@ -281,7 +270,75 @@ void LLFloaterLocalMesh::onBtnApply(void* userdata)
 	int object_idx = objectlist_combo_box->getFirstSelectedIndex();
 
 	// finally tell local mesh system to apply
-	LLLocalMeshSystem::getInstance()->applyVObject(selected_object_id, file_id, object_idx, use_scale);
+	LLLocalMeshSystem::getInstance()->applyVObject(selected_object_id, file_id, object_idx, true);
+}
+
+//static
+void LLFloaterLocalMesh::onSuffixStandardSelected(LLUICtrl* ctrl, void* userdata)
+{
+	S32 which{0};
+// SL standard LODs are the reverse of every other game engine (LOD0 least detail)
+// SL has no suffix for the HIGH LOD
+	static const std::array<std::string,5> sl_suffixes = {
+		"LOD0",
+		"LOD1",
+		"LOD2",
+		"",
+		"PHYS"
+	};
+// Game engines (UE, Unity, CryEngine, Godot, etc.) all use LOD0 as highest. 
+// They typically also label the high with a suffix too
+	static const std::array<std::string,5> std_suffixes = {
+		"LOD3",
+		"LOD2",
+		"LOD1",
+		"LOD0",
+		"PHYS"
+	};
+// Human friendly. When making things manually people naturally use names.
+	static const std::array<std::string,5> desc_suffixes = {
+		"LOWEST",
+		"LOW",
+		"MED",
+		"HIGH",
+		"PHYS"
+	};
+	auto * self = (LLFloaterLocalMesh *)ctrl;
+
+	if (LLCtrlSelectionInterface* iface = self->childGetSelectionInterface("lod_suffix_combo"))
+	{
+		which = iface->getFirstSelectedIndex();
+	}
+	else
+	{
+		LL_WARNS() << "no UI element found! nothing changed" << LL_ENDL;
+		return;
+	}
+	gSavedSettings.setS32("FSMeshLodSuffixScheme",which);
+	switch (which)
+	{
+		case 1: // SL
+			for (int i = 0; i < LLModel::NUM_LODS; i++)
+			{
+				gSavedSettings.setString(LLModelPreview::sSuffixVarNames[i], sl_suffixes[i]);
+			}
+			break;
+		case 2: // standard
+			for (int i = 0; i < LLModel::NUM_LODS; i++)
+			{
+				gSavedSettings.setString(LLModelPreview::sSuffixVarNames[i], std_suffixes[i]);
+			}
+			break;
+		case 3: // descriptive english
+			for (int i = 0; i < LLModel::NUM_LODS; i++)
+			{
+				gSavedSettings.setString(LLModelPreview::sSuffixVarNames[i], desc_suffixes[i]);
+			}
+			break;
+		default: 
+			LL_WARNS() << "no standard selected, nothing changed" << LL_ENDL;
+			break;
+	};
 }
 
 void LLFloaterLocalMesh::onBtnClear(void* userdata)
@@ -303,11 +360,6 @@ void LLFloaterLocalMesh::onBtnClear(void* userdata)
 
 bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
 {
-	// Make sure we are expecting this.
-	// if (!mRezPending)
-	// {
-	// 	return false;
-	// }
 	if(!object)
 	{
 		return false;
@@ -357,25 +409,21 @@ bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
 	{
 		local_id = scroll_ctrl_selected_column->getValue().asUUID();
 		// fill it up with local goodness
-		bool use_scale = false;
-		auto checkbox_use_scale = this->getChild<LLCheckBoxCtrl>("chkbox_use_scale");
-		if (checkbox_use_scale)
-		{
-			use_scale = checkbox_use_scale->get();
-		}
+		static const bool use_scale {true};
 
 		// // make sure the selection is still valid, and if so - get id.
 
 		// get selected local file id, object idx and use_scale boolean
 		int object_idx = objectlist_combo_box->getFirstSelectedIndex();
 		LLLocalMeshSystem::getInstance()->applyVObject(object->getID(), local_id, object_idx, use_scale);
-		auto* volp = object->getVolume();
+		volp = object->getVolume();
 		if(!volp) 
 		{
 			return true;
 		}
 		volume_params = volp->getParams();
 		object->updateVolume(volume_params);
+		object->markForUpdate(true);
 	}
 	return true;
 }
@@ -481,9 +529,6 @@ void LLFloaterLocalMesh::reloadFileList(bool keep_selection)
 													LLAssetType::AT_OBJECT, 
 													LLInventoryType::IT_OBJECT);
 		LLSD element;
-		element["columns"][0]["column"] = "drag to rez";
-		element["columns"][0]["type"] = "icon";
-		element["columns"][0]["value"] = icon_name;
 
 		element["columns"][0]["column"] = "unit_status";
 		element["columns"][0]["type"] = "text";
@@ -514,11 +559,11 @@ void LLFloaterLocalMesh::reloadFileList(bool keep_selection)
 		mScrollCtrl->selectNthItem(selected_num);
 		reloadLowerUI();
 	}
-	else if (mScrollCtrl->getItemCount() == 1)
+	else if (mScrollCtrl->getItemCount() > 0)
 	{
-		// if we've just got the one item, select it.
-		// this prevents the need to explicitly select a list item when first adding a file.
-		mScrollCtrl->selectNthItem(0);
+		// select the last item in the list
+		mScrollCtrl->selectNthItem( mScrollCtrl->getItemCount()-1 );
+		reloadLowerUI();
 	}
 }
 

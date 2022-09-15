@@ -59,6 +59,7 @@ class LLFloaterLocalMesh : public LLFloater
 		static void onBtnApply(void* userdata);
 		static void onBtnClear(void* userdata);
 		static void onBtnRez(void* userdata);
+		static void onSuffixStandardSelected(LLUICtrl* ctrl, void *userdata);
 
 		bool processPrimCreated(LLViewerObject* object);
 

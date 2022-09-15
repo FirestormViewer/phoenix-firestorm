@@ -33,6 +33,7 @@
 #include "llvolumemgr.h"
 #include "pipeline.h"
 #include "llviewercontrol.h"
+#include "llmodelpreview.h"
 
 // STL headers
 #include <chrono>
@@ -359,8 +360,10 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 	mLocalMeshFileNeedsUIUpdate = false;
 	mLoadedObjectList.clear();
 	mSavedObjectSculptIDs.clear();
-	
-	pushLog("LLLocalMeshFile", "Initializing with filename: " + filename);
+
+	mShortName = std::string(boost::filesystem::path(filename).stem().string());
+	auto base_lod_filename {stripSuffix(mShortName)};
+	pushLog("LLLocalMeshFile", "Initializing with base filename: " + base_lod_filename);
 
 	// check if main filename exists, just in case
 	if (!boost::filesystem::exists(filename))
@@ -371,8 +374,8 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 		return;
 	}
 
-	mFilenames[3] = filename;
-	mShortName = boost::filesystem::path(filename).filename().generic_string();
+	// for the high lod we just store the filename fromthe file picker
+	mFilenames[LOCAL_LOD_HIGH] = filename;
 
 	// check if we have a valid extension, can't switch with string can we?
 	if (std::string exten_str = boost::filesystem::extension(filename); exten_str == ".dae")
@@ -442,38 +445,32 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 	// check for lod filenames
 	if (mTryLODFiles)
 	{
-		size_t dot_position = mFilenames[LOCAL_LOD_HIGH].find_last_of(".");
-		if (dot_position == mFilenames[LOCAL_LOD_HIGH].npos)
-		{
-			// should theoretically never happen, we did check extension before,
-			// but "should never happen" doesn't mean we shouldn't check.
-			pushLog("LLLocalMeshFile", "Filename extension error, loading stopped.", true);
-			mLocalMeshFileStatus = LLLocalMeshFileStatus::STATUS_ERROR;
-			return;
-		}
-
 		pushLog("LLLocalMeshFile", "Seeking LOD files...");
 		// up to LOD2, LOD3 being the highest is always done by this point.
-		for (size_t lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_HIGH; ++lodfile_iter)
+		for (S32 lodfile_iter = LOCAL_LOD_LOWEST; lodfile_iter < LOCAL_LOD_HIGH; ++lodfile_iter)
 		{
-			std::string current_lod_filename = mFilenames[LOCAL_LOD_HIGH];
-			std::string lod_string = "_LOD" + std::to_string(lodfile_iter);
-
-			current_lod_filename.insert(dot_position, lod_string);
-			if (boost::filesystem::exists(current_lod_filename))
+			// lod filenames may be empty because this is first time through or because the lod didn't exist before.
+			if( mFilenames[lodfile_iter].empty() )
 			{
-				pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename + " found, adding.");
-				mFilenames[lodfile_iter] = current_lod_filename;
-			}
+				auto filepath { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).parent_path() };
+				auto lod_suffix { getLodSuffix(lodfile_iter) };
+				auto extension { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).extension() };
 
-			else
-			{
-				pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename + " not found, skipping.");
-				mFilenames[lodfile_iter].clear();
+				boost::filesystem::path current_lod_filename = filepath / (mShortName + lod_suffix + extension.string());
+				if ( boost::filesystem::exists( current_lod_filename ) )
+				{
+					pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename.string() + " found, adding.");
+					mFilenames[lodfile_iter] = current_lod_filename.string();
+				}
+
+				else
+				{
+					pushLog("LLLocalMeshFile", "LOD filename " + current_lod_filename.string() + " not found, skipping.");
+					mFilenames[lodfile_iter].clear();
+				}
 			}
 		}
 	}
-
 	else
 	{
 		pushLog("LLLocalMeshFile", "Skipping LOD 2-0 files, as specified.");
@@ -759,7 +756,6 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 	if ((!target_object->isAttachment()) && use_scale)
 	{
 		auto scale = mLoadedObjectList[object_index]->getObjectSize();
-		// scale *= 0.01; /* NOTE: magic number */
 		target_object->setScale(LLVector3(scale), false);
 	}
 
@@ -803,7 +799,7 @@ void LLLocalMeshSystem::addFile(const std::string& filename, bool try_lods)
 {
 	auto loaded_file = std::make_unique<LLLocalMeshFile>(filename, try_lods);
 	mLoadedFileList.push_back(std::move(loaded_file));
-	triggerFloaterRefresh();
+	triggerFloaterRefresh(false);
 
 	triggerCheckFileAsyncStatus();
 }
@@ -970,11 +966,11 @@ void LLLocalMeshSystem::registerFloaterPointer(LLFloaterLocalMesh* floater_ptr)
 	mFloaterPtr = floater_ptr;
 }
 
-void LLLocalMeshSystem::triggerFloaterRefresh()
+void LLLocalMeshSystem::triggerFloaterRefresh(bool keep_selection)
 {
 	if (mFloaterPtr)
 	{
-		mFloaterPtr->reloadFileList(true);
+		mFloaterPtr->reloadFileList(keep_selection);
 	}
 }
 
