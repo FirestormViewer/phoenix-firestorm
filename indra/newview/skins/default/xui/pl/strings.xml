@@ -1682,6 +1682,14 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 		Wystapił błąd podczas otwierania listy rzeczy z Marketplace.
 Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
+	<string name="InventoryMarketplaceConnectionError">
+		Wystapił błąd podczas łączenia z Marketplace.
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+		Wystapił błąd podczas łączenia z Marketplace. Powód: [REASON]
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Twój folder rzeczy na Marketplace jest pusty.
 	</string>
