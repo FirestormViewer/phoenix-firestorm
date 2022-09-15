@@ -731,6 +731,12 @@ void LLTextBase::drawCursor()
 
 			ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]);
 			ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
+			// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+			static LLUICachedControl<S32> sdl2_ime_default_vertical_offset("SDL2IMEDefaultVerticalOffset");
+			ime_pos.mY += sdl2_ime_default_vertical_offset;
+#endif
+			// </FS:Zi>
 			getWindow()->setLanguageTextInput( ime_pos );
 		}
 	}
@@ -2245,6 +2251,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, url));
 	registrar.add("Url.AddFriend", boost::bind(&LLUrlAction::addFriend, url));
 	registrar.add("Url.RemoveFriend", boost::bind(&LLUrlAction::removeFriend, url));
+    registrar.add("Url.ReportAbuse", boost::bind(&LLUrlAction::reportAbuse, url));
 	registrar.add("Url.SendIM", boost::bind(&LLUrlAction::sendIM, url));
 	registrar.add("Url.ShowOnMap", boost::bind(&LLUrlAction::showLocationOnMap, url));
 	registrar.add("Url.CopyLabel", boost::bind(&LLUrlAction::copyLabelToClipboard, url));

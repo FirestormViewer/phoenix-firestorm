@@ -96,8 +96,17 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		 */
 		LLView* getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args);
 
+		// try to fill in mChatInputLine
+		void updateChatInputLine();
+
 	public:
 		~FSChatHistory();
+
+#if LL_SDL2
+		// IME - International input compositing, i.e. for Japanese / Chinese text input
+		/* virtual */ void  setFocus(BOOL b);
+#endif
+
 		LLSD getValue() const;
 		void initFromParams(const Params&);
 

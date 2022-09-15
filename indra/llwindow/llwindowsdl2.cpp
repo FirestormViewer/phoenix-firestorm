@@ -39,6 +39,7 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llfindlocale.h"
+#include "llframetimer.h"
 
 #ifdef LL_GLIB
 #include <glib.h>
@@ -390,6 +391,10 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 	mIsMinimized = -1;
 	mFSAASamples = fsaa_samples;
 
+	// IME - International input compositing, i.e. for Japanese / Chinese text input
+	// Preeditor means here the actual XUI input field currently in use
+	mPreeditor = nullptr;
+
 #if LL_X11
 	mSDL_XWindowID = None;
 	mSDL_Display = NULL;
@@ -653,6 +658,10 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
 	SDL_SetHint( SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0" );
 	SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+
+	// IME - International input compositing, i.e. for Japanese / Chinese text input
+	// Request the IME interface to show over-the-top compositing while typing
+	SDL_SetHint( SDL_HINT_IME_INTERNAL_EDITING, "1");
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 )
 	{
@@ -1758,6 +1767,7 @@ void LLWindowSDL::gatherInput()
     static int rightClick = 0;
     static Uint32 lastLeftDown = 0;
     static Uint32 lastRightDown = 0;
+	static U64 previousTextinputTime = 0;
     SDL_Event event;
 
     // Handle all outstanding SDL events
@@ -1796,9 +1806,10 @@ void LLWindowSDL::gatherInput()
 					else
 						handleUnicodeUTF16(key, mKeyModifiers);
 				}
+				previousTextinputTime = LLFrameTimer::getTotalTime();
 				break;
 			}
-			
+
             case SDL_KEYDOWN:
 				mKeyVirtualKey = event.key.keysym.sym;
 				mKeyModifiers = event.key.keysym.mod;
@@ -1808,6 +1819,19 @@ void LLWindowSDL::gatherInput()
 				if (mKeyVirtualKey == SDLK_RETURN2 || mKeyVirtualKey == SDLK_KP_ENTER)
 				{
 					mKeyVirtualKey = SDLK_RETURN;
+				}
+
+				if (mKeyVirtualKey == SDLK_RETURN)
+				{
+					// block spurious enter key events that break up IME entered lines in teh wrong places
+					U64 eventTimeDiff = LLFrameTimer::getTotalTime() - previousTextinputTime;
+					previousTextinputTime = 0;
+
+					if (eventTimeDiff < 20000)
+					{
+						LL_INFOS() << "SDL_KEYDOWN(SDLK_RETURN) event came too fast after SDL_TEXTINPUT, blocked - Time: " << eventTimeDiff << LL_ENDL;
+						break;
+					}
 				}
 
 				gKeyboard->handleKeyDown(mKeyVirtualKey, mKeyModifiers );
@@ -2645,5 +2669,52 @@ void LLWindowSDL::toggleVSync(bool enable_vsync)
 	SDL_GL_SetSwapInterval(enable_vsync);
 }
 // </FS:Zi>
+
+// IME - International input compositing, i.e. for Japanese / Chinese text input
+// Put the IME window at the right place (near current text input).
+// Point coordinates should be the top of the current text line.
+void LLWindowSDL::setLanguageTextInput(const LLCoordGL& position)
+{
+	LLCoordWindow win_pos;
+	convertCoords( position, &win_pos );
+
+	SDL_Rect r;
+	r.x = win_pos.mX;
+	r.y = win_pos.mY;
+	r.w = 500;
+	r.h = 16;
+
+	SDL_SetTextInputRect(&r);
+}
+
+// IME - International input compositing, i.e. for Japanese / Chinese text input
+void LLWindowSDL::allowLanguageTextInput(LLPreeditor *preeditor, BOOL b)
+{
+	if (preeditor != mPreeditor && !b)
+	{
+		// This condition may occur with a call to
+		// setEnabled(BOOL) from LLTextEditor or LLLineEditor
+		// when the control is not focused.
+		// We need to silently ignore the case so that
+		// the language input status of the focused control
+		// is not disturbed.
+		return;
+	}
+
+	// Take care of old and new preeditors.
+	if (preeditor != mPreeditor || !b)
+	{
+		mPreeditor = (b ? preeditor : nullptr);
+	}
+
+	if (b)
+	{
+		SDL_StartTextInput();
+	}
+	else
+	{
+		SDL_StopTextInput();
+	}
+}
 
 #endif // LL_SDL

@@ -704,9 +704,6 @@ void LLIMWellWindow::sessionAdded(const LLUUID& session_id,
 	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
 	if (!session) return;
 
-	// no need to spawn chiclets for participants in P2P calls called through Avaline
-	if (session->isP2P() && session->isOtherParticipantAvaline()) return;
-
 	if (mMessageList->getItemByValue(session_id)) return;
 
 	addIMRow(session_id, 0, name, other_participant_id);	

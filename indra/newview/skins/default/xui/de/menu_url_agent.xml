@@ -11,6 +11,7 @@
 	<menu_item_call label="Teleport anfordern" name="request_teleport"/>
 	<menu_item_call label="Einwohner verfolgen" name="track_agent"/>
 	<menu_item_call label="Freund entfernen..." name="remove_friend"/>
+	<menu_item_call label="Missbrauch melden" name="report_abuse"/>
 	<menu_item_call label="Blockieren" name="Block"/>
 	<context_menu label="Moderator-Optionen" name="GroupModerationSubmenu">
 		<menu_item_call label="Text-Chat zulassen" name="AllowGroupChat"/>

@@ -128,6 +128,9 @@ public:
 	/*virtual*/ void *getPlatformWindow();
 	/*virtual*/ void bringToFront();
 
+	/*virtual*/ void allowLanguageTextInput(LLPreeditor* preeditor, BOOL b);
+	/*virtual*/ void setLanguageTextInput(const LLCoordGL& pos);
+
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
 	/*virtual*/ void openFile(const std::string& file_name);
 
@@ -201,6 +204,7 @@ protected:
 	SDL_Surface* mSurface;
 	SDL_GLContext mContext;
 	SDL_Cursor*	mSDLCursors[UI_CURSOR_COUNT];
+	LLPreeditor* mPreeditor;
 
 	std::string mWindowTitle;
 	double		mOriginalAspectRatio;

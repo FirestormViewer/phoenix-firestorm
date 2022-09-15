@@ -48,6 +48,12 @@
 #include "llviewermenu.h"
 #include "llviewermenufile.h" // LLFilePickerThread
 
+// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+#include "llwindow.h"
+#endif
+// </FS:Zi>
+
 // linden library includes
 #include "llfocusmgr.h"
 #include "llsdutil.h"
@@ -411,6 +417,34 @@ void LLMediaCtrl::onFocusLost()
 //           This might go away later.
 void LLMediaCtrl::setFocus(BOOL b)
 {
+	// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+	// IME - International input compositing, i.e. for Japanese / Chinese text input
+
+	// Caveat: we currently don't know the position of the input cursor inside the
+	// media control box, so the IME will pop up somewhere at the top instead,
+	// which is not ideal and needs more research
+
+	if (b)
+	{
+		// Make sure the IME is in the right place, on top of the input line
+		LLRect screen_pos = calcScreenRect();
+		LLCoordGL ime_pos(screen_pos.mLeft, screen_pos.mTop + gSavedSettings.getS32("SDL2IMEMediaVerticalOffset"));
+
+		// shift by a few pixels so the IME doesn't pop to the left side when the nedia
+		// control is very close to the left edge
+		ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]) + 5;
+		ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
+
+		getWindow()->setLanguageTextInput(ime_pos);
+	}
+
+	// this floater is not an LLPreeditor but we are only interested in the pointer anyway
+	// so hopefully we will get away with this
+	getWindow()->allowLanguageTextInput((LLPreeditor*) this, b);
+#endif
+	// </FS:Zi>
+
 	if (b)
 	{
 		onFocusReceived();

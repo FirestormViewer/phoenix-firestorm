@@ -61,6 +61,7 @@
 #include "llcommandhandler.h"
 #include "llfloaterprofiletexture.h"
 #include "llfloaterreg.h"
+#include "llfloaterreporter.h"
 #include "llfilepicker.h"
 #include "llfirstuse.h"
 #include "llgroupactions.h"
@@ -587,6 +588,22 @@ public:
 			}
 			return true;
 		}
+
+        // reportAbuse is here due to convoluted avatar handling
+        // in LLScrollListCtrl and LLTextBase
+        if (verb == "reportAbuse" && web == NULL) 
+        {
+            LLAvatarName av_name;
+            if (LLAvatarNameCache::get(avatar_id, &av_name))
+            {
+                LLFloaterReporter::showFromAvatar(avatar_id, av_name.getCompleteName());
+            }
+            else
+            {
+                LLFloaterReporter::showFromAvatar(avatar_id, "not avaliable");
+            }
+            return true;
+        }
 		return false;
 	}
 };
@@ -946,8 +963,6 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mSaveDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
-
-    //getChild<LLButton>("open_notes")->setCommitCallback([this](LLUICtrl*, void*) { onOpenNotes(); }, nullptr); // <FS:Ansariel> Doesn't exist (anymore)
 
     mCanSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
@@ -2277,25 +2292,6 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
 }
-
-// <FS:Ansariel> Doesn't exist (anymore)
-//void LLPanelProfileSecondLife::onOpenNotes()
-//{
-//    LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-//    if (!parent_floater)
-//    {
-//        return;
-//    }
-//
-//    LLTabContainer* tab_container = parent_floater->findChild<LLTabContainer>("panel_profile_tabs", TRUE);
-//    if (!tab_container)
-//    {
-//        return;
-//    }
-//
-//    tab_container->selectTabByName(PANEL_NOTES);
-//}
-// </FS:Ansariel>
 
 // <FS:Ansariel> RLVa support
 void LLPanelProfileSecondLife::updateRlvRestrictions(ERlvBehaviour behavior)

@@ -130,6 +130,7 @@ public:
 
 	static U32 getTextureCacheVersion() ;
 	static U32 getObjectCacheVersion() ;
+    static U32 getDiskCacheVersion() ;
 
 	const std::string& getSerialNumber() { return mSerialNumber; }
 
@@ -150,16 +151,17 @@ public:
 	void removeMarkerFiles();
 
 	void removeDumpDir();
-	// LLAppViewer testing helpers.
-	// *NOTE: These will potentially crash the viewer. Only for debugging.
-	virtual void forceErrorLLError();
-	virtual void forceErrorBreakpoint();
-	virtual void forceErrorBadMemoryAccess();
-	virtual void forceErrorInfiniteLoop();
-	virtual void forceErrorSoftwareException();
-	virtual void forceErrorDriverCrash();
-	virtual void forceErrorCoroutineCrash();
-	virtual void forceErrorThreadCrash();
+    // LLAppViewer testing helpers.
+    // *NOTE: These will potentially crash the viewer. Only for debugging.
+    virtual void forceErrorLLError();
+    virtual void forceErrorBreakpoint();
+    virtual void forceErrorBadMemoryAccess();
+    virtual void forceErrorInfiniteLoop();
+    virtual void forceErrorSoftwareException();
+    virtual void forceErrorDriverCrash();
+    // <FS:Ansariel> Wrongly merged back in by LL
+    //virtual void forceErrorCoroutineCrash();
+    virtual void forceErrorThreadCrash();
 
 	// The list is found in app_settings/settings_files.xml
 	// but since they are used explicitly in code,
