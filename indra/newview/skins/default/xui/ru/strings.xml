@@ -816,9 +816,6 @@ support@secondlife.com.
 	<string name="GroupNameNone">
 		(нет)
 	</string>
-	<string name="AvalineCaller">
-		Avaline Caller [ORDER]
-	</string>
 	<string name="AssetErrorNone">
 		Ошибок нет
 	</string>
@@ -5384,10 +5381,10 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Мое Премиум-членство
 	</string>
 	<string name="DeleteItems">
-		Удалить выбранные [COUNT_SELECTION] объекты? ([COUNT_TOTAL]] всего)
+		Удалить выбранные [COUNT_SELECTION] объекты? ([COUNT_TOTAL] всего)
 	</string>
 	<string name="DeleteItem">
-		Удалить выбранный объект? ([COUNT_TOTAL]] всего)
+		Удалить выбранный объект? ([COUNT_TOTAL] всего)
 	</string>
 	<string name="EmptyOutfitText">
 		Для этого комплекта одежды нет вещей

@@ -420,8 +420,6 @@ can be attached to notecards.
 	<!-- Group name: text shown for LLUUID::null -->
 	<string name="GroupNameNone">(none)</string>
 
-	<string name="AvalineCaller">Avaline Caller [ORDER]</string>
-
 	<!-- Asset errors. Used in llassetstorage.cpp, translation from error code to error message. -->
 	<string name="AssetErrorNone">No error</string>
 	<string name="AssetErrorRequestFailed">Asset request: failed</string>
@@ -810,6 +808,14 @@ The [[MARKETPLACE_CREATE_STORE_URL] Marketplace store] is returning errors.
 	</string>
 	<string name="InventoryMarketplaceError">
 An error occurred while opening Marketplace Listings.
+If you continue to receive this message, please contact Second Life support for assistance at http://support.secondlife.com
+	</string>
+	<string name="InventoryMarketplaceConnectionError">
+Marketplace Listings failed to connect.
+If you continue to receive this message, please contact Second Life support for assistance at http://support.secondlife.com
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+Marketplace Listings failed to connect. Reason: [REASON]
 If you continue to receive this message, please contact Second Life support for assistance at http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">Your Marketplace Listings folder is empty.</string>
@@ -2501,8 +2507,8 @@ If you continue to experience problems, please check your network and firewall s
   <string name="MembershipPremiumText">My Premium membership</string>
 
   <!-- Question strings for delete items notifications -->
-  <string name="DeleteItems">Delete selected [COUNT_SELECTION] items ([COUNT_TOTAL]] total)?</string>
-  <string name="DeleteItem">Delete selected item ([COUNT_TOTAL]] total)?</string>
+  <string name="DeleteItems">Delete selected [COUNT_SELECTION] items ([COUNT_TOTAL] total)?</string>
+  <string name="DeleteItem">Delete selected item ([COUNT_TOTAL] total)?</string>
 
   <string name="EmptyOutfitText">There are no items in this outfit</string>
 

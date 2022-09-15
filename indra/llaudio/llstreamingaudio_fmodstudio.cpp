@@ -523,7 +523,8 @@ FMOD_RESULT LLAudioStreamManagerFMODSTUDIO::getOpenState(FMOD_OPENSTATE& state, 
 
 void LLStreamingAudio_FMODSTUDIO::setBufferSizes(U32 streambuffertime, U32 decodebuffertime)
 {
-    Check_FMOD_Error(mSystem->setStreamBufferSize(streambuffertime / 1000 * 128 * 128, FMOD_TIMEUNIT_RAWBYTES), "FMOD::System::setStreamBufferSize");
+    if (Check_FMOD_Error(mSystem->setStreamBufferSize(streambuffertime / 1000 * 128 * 128, FMOD_TIMEUNIT_RAWBYTES), "FMOD::System::setStreamBufferSize"))
+        return;
     FMOD_ADVANCEDSETTINGS settings;
     memset(&settings, 0, sizeof(settings));
     settings.cbSize = sizeof(settings);
@@ -542,7 +543,7 @@ bool LLStreamingAudio_FMODSTUDIO::releaseDeadStreams()
         {
             LL_INFOS() << "Closed dead stream" << LL_ENDL;
             delete streamp;
-            mDeadStreams.erase(iter++);
+            iter = mDeadStreams.erase(iter);
         }
         else
         {

@@ -3990,15 +3990,15 @@ LLTearOffMenu::~LLTearOffMenu()
 void LLTearOffMenu::draw()
 {
 	mMenu->setBackgroundVisible(isBackgroundOpaque());
-	// <FS:Ansariel> FIRE-31823: Torn off menu doesn't update enabled/visible state
+	// <FS:Ansariel> FIRE-31823: Do it before reshaping - needsArrange can change visbility status of items!
 	mMenu->needsArrange();
 
 	if (getRect().getHeight() != mTargetHeight)
 	{
 		// animate towards target height
         reshape(getRect().getWidth(), llceil(lerp((F32)getRect().getHeight(), (F32)mTargetHeight, LLSmoothInterpolation::getInterpolant(0.05f))));
-        //mMenu->needsArrange(); // <FS:Ansariel> FIRE-31823: Torn off menu doesn't update enabled/visible state
 	}
+	//mMenu->needsArrange(); // <FS:Ansariel> FIRE-31823: Do it before reshaping - needsArrange can change visbility status of items!
 	LLFloater::draw();
 }
 

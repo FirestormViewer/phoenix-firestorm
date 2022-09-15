@@ -61,6 +61,7 @@
 #include "llcommandhandler.h"
 #include "llfloaterprofiletexture.h"
 #include "llfloaterreg.h"
+#include "llfloaterreporter.h"
 #include "llfilepicker.h"
 #include "llfirstuse.h"
 #include "llgroupactions.h"
@@ -587,6 +588,22 @@ public:
 			}
 			return true;
 		}
+
+        // reportAbuse is here due to convoluted avatar handling
+        // in LLScrollListCtrl and LLTextBase
+        if (verb == "reportAbuse" && web == NULL) 
+        {
+            LLAvatarName av_name;
+            if (LLAvatarNameCache::get(avatar_id, &av_name))
+            {
+                LLFloaterReporter::showFromAvatar(avatar_id, av_name.getCompleteName());
+            }
+            else
+            {
+                LLFloaterReporter::showFromAvatar(avatar_id, "not avaliable");
+            }
+            return true;
+        }
 		return false;
 	}
 };
@@ -946,8 +963,6 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mSaveDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardDescriptionChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
-
-    //getChild<LLButton>("open_notes")->setCommitCallback([this](LLUICtrl*, void*) { onOpenNotes(); }, nullptr); // <FS:Ansariel> Doesn't exist (anymore)
 
     mCanSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantSeeOnlineIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
@@ -2278,25 +2293,6 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     }
 }
 
-// <FS:Ansariel> Doesn't exist (anymore)
-//void LLPanelProfileSecondLife::onOpenNotes()
-//{
-//    LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-//    if (!parent_floater)
-//    {
-//        return;
-//    }
-//
-//    LLTabContainer* tab_container = parent_floater->findChild<LLTabContainer>("panel_profile_tabs", TRUE);
-//    if (!tab_container)
-//    {
-//        return;
-//    }
-//
-//    tab_container->selectTabByName(PANEL_NOTES);
-//}
-// </FS:Ansariel>
-
 // <FS:Ansariel> RLVa support
 void LLPanelProfileSecondLife::updateRlvRestrictions(ERlvBehaviour behavior)
 {
@@ -2476,6 +2472,7 @@ BOOL LLPanelProfileFirstLife::postBuild()
     mSaveChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
+    mPicture->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowPhoto(); }); // <FS:PP> Make "first life" picture clickable
 
     return TRUE;
 }
@@ -2515,6 +2512,23 @@ void LLPanelProfileFirstLife::setProfileImageUploaded(const LLUUID &image_asset_
 {
     mPicture->setValue(image_asset_id);
     mImageId = image_asset_id;
+
+    // <FS:PP> Make "first life" picture clickable
+    LLFloater *floater = mFloaterProfileTextureHandle.get();
+    if (floater)
+    {
+        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+        if (mImageId.notNull())
+        {
+            texture_view->loadAsset(mImageId);
+        }
+        else
+        {
+            texture_view->resetAsset();
+        }
+    }
+    // </FS:PP> Make "first life" picture clickable
+
     setProfileImageUploading(false);
 }
 
@@ -2613,6 +2627,52 @@ void LLPanelProfileFirstLife::onRemovePhoto()
     }
 }
 
+// <FS:PP> Make "first life" picture clickable
+void LLPanelProfileFirstLife::onShowPhoto()
+{
+    if (!getIsLoaded())
+    {
+        return;
+    }
+
+    LLFloater *floater = mFloaterProfileTextureHandle.get();
+    if (!floater)
+    {
+        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+        if (parent_floater)
+        {
+            LLFloaterProfileTexture * texture_view = new LLFloaterProfileTexture(parent_floater);
+            mFloaterProfileTextureHandle = texture_view->getHandle();
+            if (mImageId.notNull())
+            {
+                texture_view->loadAsset(mImageId);
+            }
+            else
+            {
+                texture_view->resetAsset();
+            }
+            texture_view->openFloater();
+            texture_view->setVisibleAndFrontmost(TRUE);
+            parent_floater->addDependentFloater(mFloaterProfileTextureHandle);
+        }
+    }
+    else // already open
+    {
+        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+        texture_view->setMinimized(FALSE);
+        texture_view->setVisibleAndFrontmost(TRUE);
+        if (mImageId.notNull())
+        {
+            texture_view->loadAsset(mImageId);
+        }
+        else
+        {
+            texture_view->resetAsset();
+        }
+    }
+}
+// </FS:PP> Make "first life" picture clickable
+
 void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
 {
     if (mImageId == id)
@@ -2637,6 +2697,22 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
         {
             mPicture->setValue("Generic_Person_Large");
         }
+
+        // <FS:PP> Make "first life" picture clickable
+        LLFloater *floater = mFloaterProfileTextureHandle.get();
+        if (floater)
+        {
+            LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
+            if (mImageId == LLUUID::null)
+            {
+                texture_view->resetAsset();
+            }
+            else
+            {
+                texture_view->loadAsset(mImageId);
+            }
+        }
+        // </FS:PP> Make "first life" picture clickable
 
         mRemovePhoto->setEnabled(mImageId.notNull());
     }

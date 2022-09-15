@@ -185,7 +185,6 @@ private:
     void onShowAgentProfileTexture();
     void onShowTexturePicker();
     void onCommitProfileImage(const LLUUID& id);
-    //void onOpenNotes(); // <FS:Ansariel> Doesn't exist (anymore)
 
     // <FS:Ansariel> Fix LL UI/UX design accident
     void updateButtons();
@@ -341,6 +340,13 @@ protected:
     std::string		mCurrentDescription;
     LLUUID			mImageId;
     bool			mHasUnsavedChanges;
+
+// <FS:PP> Make "first life" picture clickable
+private:
+    LLHandle<LLFloater>	mFloaterProfileTextureHandle;
+    void onShowPhoto();
+// </FS:PP> Make "first life" picture clickable
+
 };
 
 /**

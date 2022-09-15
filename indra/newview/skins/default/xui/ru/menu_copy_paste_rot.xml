@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Copy Paste Rotation Menu">
+    <menu_item_call label="Копировать всё" name="psr_copy"/>
+    <menu_item_call label="Копировать вращение" name="rot_copy"/>
+    <menu_item_call label="Вставить всё" name="psr_paste"/>
+    <menu_item_call label="Вставить вращение" name="rot_paste"/>
+</toggleable_menu>

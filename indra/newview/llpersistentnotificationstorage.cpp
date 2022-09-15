@@ -167,15 +167,19 @@ void LLPersistentNotificationStorage::loadNotifications()
 	LL_INFOS("LLPersistentNotificationStorage") << "finished loading notifications" << LL_ENDL;
 }
 
+void LLPersistentNotificationStorage::reset()
+{
+    // <FS:Ansariel> FIRE-20655: Don't try to add illegal characters to persisted notifications filename
+    //std::string file_name = "open_notifications_" + LLGridManager::getInstance()->getGrid() + ".xml";
+    std::string file_name = "open_notifications_" + LLDir::getScrubbedFileName(LLGridManager::getInstance()->getGrid()) + ".xml";
+    // </FS:Ansariel>
+    setFileName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file_name));
+    setOldFileName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "open_notifications.xml"));
+}
+
 void LLPersistentNotificationStorage::initialize()
 {
-	// <FS:Ansariel> FIRE-20655: Don't try to add illegal characters to persisted notifications filename
-	//std::string file_name = "open_notifications_" + LLGridManager::getInstance()->getGrid() + ".xml";
-	std::string file_name = "open_notifications_" + LLDir::getScrubbedFileName(LLGridManager::getInstance()->getGrid()) + ".xml";
-	// </FS:Ansariel>
-	setFileName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file_name));
-	setOldFileName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "open_notifications.xml"));
-
+    reset();
 	LLNotifications::instance().getChannel("Persistent")->
 		connectChanged(boost::bind(&LLPersistentNotificationStorage::onPersistentChannelChanged, this, _1));
 }

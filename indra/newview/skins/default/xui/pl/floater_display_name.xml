@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Display Name" title="Zmień Wyświetlane Imię">
 	<text name="info_text">
-		Imię, które nadałaś/eś Twojemu awatarowi jest nazywane Wyświetlanym Imieniem. Możesz je zmienić raz w tygodniu.
+		Twoje Wyświetlane Imię to takie, które inni widzą nad Twoją głową. Możesz je zmienić raz w tygodniu.
 	</text>
 	<text name="lockout_text">
 		Nie możesz zmienić swojego Imienia do: [TIME].

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Profil">
+	<string name="no_partner_text" value="Brak" />
+	<string name="no_group_text" value="Brak" />
+	<string name="age_format">
+Urodziny: [REG_DATE]
+([AGE])
+	</string>
+	<string name="FSDev" value=" Programista" />
+	<string name="FSSupp" value=" Wsparcie" />
+	<string name="FSQualityAssurance" value=" Łowca błędów" />
+	<string name="texture_picker_label" value="Zdjęcie profilowe" />
+	<text name="name_label" value="Imię:" />
+	<button name="set_name" label="Imię:" tool_tip="Ustaw Imię Wyświetlane" />
+	<panel name="name_holder">
+		<text_editor name="complete_name" value="(ładowanie...)" />
+		<menu_button name="copy_btn" tool_tip="Opcje kopiowania" />
+	</panel>
+	<text name="Key:" value="Klucz:" />
+	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Wykonaj czynności związane ze zdjęciem profilowym" />
+		</layout_panel>
+		<layout_panel name="label_stack">
+			<icon tool_tip="Znajomy może zobaczyć mój status online" name="can_see_online" />
+			<icon tool_tip="Znajomy nie może zobaczyć mojego statusu online" name="cant_see_online" />
+			<icon tool_tip="Znajomy może mnie zobaczyć na mapie" name="can_see_on_map" />
+			<icon tool_tip="Znajomy nie może mnie zobaczyć na mapie" name="cant_see_on_map" />
+			<icon tool_tip="Znajomy może edytować moje obiekty" name="can_edit_objects" />
+			<icon tool_tip="Znajomy nie może edytować moich obiektów" name="cant_edit_objects" />
+			<text_editor name="user_age" value="(ładowanie...)" />
+			<text name="label2" value="Konto:" />
+		</layout_panel>
+	</layout_stack>
+	<text name="Groups:" value="Grupy:" />
+	<button name="group_invite" tool_tip="Zaproś do grupy" />
+	<text name="About:" value="Info:" />
+	<text name="Give item:" value="Podaruj:" />
+	<text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu, aby dać go tej osobie.">
+		Upuść przedmiot w tym miejscu.
+	</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button name="show_on_map_btn" label="Znajdź na mapie" tool_tip="Znajdź Rezydenta na mapie" label_selected="Znajdź na mapie" />
+			<button name="pay" label="Zapłać" tool_tip="Zapłać temu Rezydentowi" label_selected="Zapłać" />
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button name="teleport" label="Proponuj teleport" tool_tip="Zaproponuj teleport Rezydentowi" label_selected="Proponuj teleport" />
+			<button name="im" label="Czat prywatny (IM)" tool_tip="Rozpocznij nową sesję czatu prywatnego (IM)" label_selected="Czat prywatny (IM)" />
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button name="add_friend" label="Dodaj znajomego" tool_tip="Zaproponuj znajomość Rezydentowi" label_selected="Dodaj znajomego" />
+			<button name="block" label="Zablokuj" tool_tip="Zablokuj tego Rezydenta" />
+			<button name="unblock" label="Odblokuj" tool_tip="Odblokuj tego Rezydenta" />
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search" label="Pokaż w wyszukiwarce" tool_tip="Pozwól innym zobaczyć Cię w wynikach wyszukiwania" />
+	<button name="save_description_changes" label="Zapisz" />
+	<button name="discard_description_changes" label="Odrzuć" />
+</panel>

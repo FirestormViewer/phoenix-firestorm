@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="Résidents" name="people_panel">
-	<string name="no_recent_people" value="Personne de récent. Pour rechercher des résidents avec qui passer du temps, voir [secondlife:///app/search/people Rechercher] ou [secondlife:///app/worldmap Carte du monde]."/>
+	<string name="no_recent_people" value="Personne ne s'est manifesté récemment."/>
 	<string name="no_filtered_recent_people" value="Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] Rechercher]."/>
 	<string name="no_one_near" value="Personne près de vous. Pour rechercher des résidents avec qui passer du temps, voir [secondlife:///app/search/people Rechercher] ou [secondlife:///app/worldmap Carte du monde]."/>
 	<string name="no_one_filtered_near" value="Vous n&apos;avez pas trouvé ce que vous cherchiez ? Essayez [secondlife:///app/search/people/[SEARCH_TERM] Rechercher]."/>
@@ -19,32 +19,52 @@ Pour rechercher des résidents avec qui passer du temps, utilisez [secondlife://
 	<string name="MiniMapToolTipMsg" value="[REGION](Carte : double-clic ; Panoramique : Maj + faire glisser)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION](Téléportation : double-clic ; Panoramique : Maj + faire glisser)"/>
 	<string name="GroupCountWithInfo" value="Vous appartenez à [COUNT] groupes, et pouvez en rejoindre [REMAINING] autres.  [secondlife:/// Vous en voulez plus ?]"/>
+	<panel.string name="empty_list">
+		Ce cercle est vide.
+	</panel.string>
+	<panel.string name="no_sets">
+		Pas de cercles
+	</panel.string>
+	<panel.string name="all_sets">
+		Tous les cercles
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Alias
+	</panel.string>
+	<panel.string name="AllFriendsTitle">
+		Tous ([ALL])
+	</panel.string>
+	<panel.string name="OnlineFriendsTitle">
+		En ligne ([ONLINE])
+	</panel.string>
 	<tab_container name="tabs">
-		<panel label="PRÈS DE VOUS" name="nearby_panel">
-			<panel label="bottom_panel" name="nearby_buttons_panel">
+		<panel label="Prés de vous" name="nearby_panel">
+<!-- FS:Ansariel: Firestorm radar
+			<panel name="nearby_buttons_panel">
 				<filter_editor label="Filtrer les personnes" name="nearby_filter_input"/>
 				<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
 				<menu_button name="nearby_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
 				<button name="add_friend_btn" tool_tip="Proposer à ce résident de devenir votre ami"/>
 				<dnd_button name="nearby_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
 			</panel>
+-->
 		</panel>
-		<panel label="AMIS" name="friends_panel">
-			<panel label="bottom_panel" name="friends_buttons_panel">
+		<panel label="Amis" name="friends_panel">
+			<panel name="friends_buttons_panel">
 				<filter_editor label="Filtrer les personnes" name="friends_filter_input"/>
 				<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
 				<menu_button name="friends_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
 				<button name="friends_add_btn" tool_tip="Proposer à ce résident de devenir votre ami"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Basculer la visibilité du statut global de présence ligne"/>
 				<dnd_button name="friends_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
 			</panel>
-			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="En ligne"/>
-				<accordion_tab name="tab_all" title="Tout"/>
-				<accordion_tab name="tab_suggested_friends" title="Personnes avec lesquelles vous aimeriez peut-être devenir ami(e)"/>
-			</accordion>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="En ligne"/>
+				<panel name="tab_all" title="Tout"/>
+			</tab_container>
 		</panel>
-		<panel label="GROUPES" name="groups_panel">
-			<panel label="bottom_panel" name="groups_buttons_panel">
+		<panel label="Groupes" name="groups_panel">
+			<panel name="groups_buttons_panel">
 				<filter_editor label="Filtrer les groupes" name="groups_filter_input"/>
 				<menu_button name="groups_gear_btn" tool_tip="Actions sur le groupe sélectionné"/>
 				<menu_button name="groups_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
@@ -55,8 +75,8 @@ Pour rechercher des résidents avec qui passer du temps, utilisez [secondlife://
 				Vous appartenez à [COUNT] groupes, et pouvez en rejoindre [REMAINING] autres.
 			</text>
 		</panel>
-		<panel label="RÉCENT" name="recent_panel">
-			<panel label="bottom_panel" name="recent_buttons_panel">
+		<panel label="Récent" name="recent_panel">
+			<panel name="recent_buttons_panel">
 				<filter_editor label="Filtrer les personnes" name="recent_filter_input"/>
 				<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
 				<menu_button name="recent_view_btn" tool_tip="Options d&apos;affichage/de tri"/>
@@ -64,8 +84,11 @@ Pour rechercher des résidents avec qui passer du temps, utilisez [secondlife://
 				<dnd_button name="recent_del_btn" tool_tip="Supprimer la personne sélectionnée des amis"/>
 			</panel>
 		</panel>
-		<panel label="BLOQUÉ" name="blocked_panel">
+		<panel label="Bloqué" name="blocked_panel">
 			<panel label="Résidents et objets ignorés" name="panel_block_list_sidetray"/>
+		</panel>
+		<panel label="Cercles" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="Cercles de contacts"/>
 		</panel>
 	</tab_container>
 </panel>

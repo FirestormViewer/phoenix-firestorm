@@ -36,8 +36,8 @@
        name="pick_snapshot"
        top="10"
        left="10"
-       height="161"
-       width="260"
+       height="179"
+       width="290"
        follows="left|top"
        layout="topleft"
        fallback_image="default_land_picture.j2c"
@@ -70,7 +70,7 @@
       />
       <text
        name="description_label"
-       top_pad="10"
+       top_pad="5"
        left="10"
        height="15"
        width="280"
@@ -91,7 +91,7 @@
        enabled="false"
        top_pad="2"
        left="10"
-       height="45"
+       height="35"
        width="290"
        follows="all"
        layout="topleft"

@@ -1474,13 +1474,13 @@ SHA1 指紋：[MD5_DIGEST]
 		無法設定地區材質：
 地形材質 [TEXTURE_NUM] 的位元深度 [TEXTURE_BIT_DEPTH] 無效。
 
-請將材質 [TEXTURE_NUM] 替換成 24 位元 512x512 或更小圖像，然後點按「套用」。
+請將材質 [TEXTURE_NUM] 替換成 24 位元 [MAX_SIZE]x[MAX_SIZE] 或更小圖像，然後點按「套用」。
 	</notification>
 	<notification name="InvalidTerrainSize">
 		無法設定地區材質：
 地形材質 [TEXTURE_NUM] 的尺寸 [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y] 太大。
 
-請將材質 [TEXTURE_NUM] 替換成 24 位元 512x512 或更小圖像，然後點按「套用」。
+請將材質 [TEXTURE_NUM] 替換成 24 位元 [MAX_SIZE]x[MAX_SIZE] 或更小圖像，然後點按「套用」。
 	</notification>
 	<notification name="RawUploadStarted">
 		上傳開始。 視你的連線速度而定，這最多需時兩分鐘。

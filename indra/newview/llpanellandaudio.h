@@ -68,6 +68,7 @@ private:
 // </FS:CR>
 	LLCheckBoxCtrl* mCheckAVSoundAny;
 	LLCheckBoxCtrl* mCheckAVSoundGroup;
+    LLCheckBoxCtrl* mCheckObscureMOAP;
 
 	LLSafeHandle<LLParcelSelection>&	mParcel;
 

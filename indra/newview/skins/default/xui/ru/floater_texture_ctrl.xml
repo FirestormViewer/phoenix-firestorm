@@ -61,7 +61,7 @@
 	<!-- bottom static -->
 	<line_editor name="TextureKey" tool_tip="Ключ Текстуры"/>
 	<button name="TextureKeyApply" label="Прим. UUID" width="100" tool_tip="Применить этот UUID"/>
-	<button label="ОК" label_selected="ОК" name="Select" left="150"/>
+	<button label="Да" label_selected="Да" name="Select" left="150"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
 	<check_box initial_value="true" label="Применить сейчас" name="apply_immediate_check" width="200"/>
 </floater>

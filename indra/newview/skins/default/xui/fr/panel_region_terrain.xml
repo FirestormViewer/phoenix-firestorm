@@ -5,7 +5,7 @@
 	<spinner label="Niveau de la mer" name="water_height_spin"/>
 	<spinner label="Altitude maximale" name="terrain_raise_spin"/>
 	<spinner label="Altitude minimale" name="terrain_lower_spin"/>
-	<text name="detail_texture_text">Textures du terrain (Requis : fichiers .tga de taille 512x512 ou 1024x1024, 24 bits)</text>
+	<text name="detail_texture_text">Textures du terrain (Requis : fichiers .tga de taille 1024x1024, 24 bits)</text>
 	<text name="height_text_lbl" width="95">1 (Basse altitude)</text>
 	<text name="height_text_lbl2" left_pad="60">2</text>
 	<text name="height_text_lbl3" width="70">3</text>
