@@ -466,7 +466,7 @@ void LLFloaterLocalMesh::showLog()
 
 void LLFloaterLocalMesh::reloadFileList(bool keep_selection)
 {
-	auto& fileinfo_vec = LLLocalMeshSystem::getInstance()->getFileInfoVector();
+	const auto& fileinfo_vec = LLLocalMeshSystem::getInstance()->getFileInfoVector();
 	int selected_num = mScrollCtrl->getFirstSelectedIndex();
 
 	mScrollCtrl->clearRows();
@@ -596,7 +596,7 @@ void LLFloaterLocalMesh::reloadLowerUI()
 	std::vector<std::string> selected_object_list;
 	if (!selected_file_id.isNull())
 	{
-		auto& fileinfo_vector = LLLocalMeshSystem::getInstance()->getFileInfoVector();
+		const auto& fileinfo_vector = LLLocalMeshSystem::getInstance()->getFileInfoVector();
 		for (auto fileinfo : fileinfo_vector)
 		{
 			if (selected_file_id == fileinfo.mLocalID)

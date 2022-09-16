@@ -402,9 +402,7 @@ bool LLLocalMeshImportDAE::processObject(domMesh* current_mesh, LLLocalMeshObjec
 				submesh_load_success = readMesh_Polylist(current_submesh.get(), current_polylist_set);
 				break;
 			}
-
 			// NOTE: polygon schema
-			/*
 			case submesh_type::SUBMESH_POLYGONS:
 			{
 				// polygons type schema is deprecated, no modern DCC exports that.
@@ -412,7 +410,11 @@ bool LLLocalMeshImportDAE::processObject(domMesh* current_mesh, LLLocalMeshObjec
 				pushLog("DAE Importer", "POLYGONS type schema is deprecated.");
 				break;
 			}
-			*/
+			default:
+			{
+				pushLog("DAE Importer", "Attempting to load face idx " + std::to_string(idx) + " of unknown type.");
+				break;
+			}
 		}
 
 		if (submesh_load_success)
@@ -469,7 +471,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	pushLog("DAE Importer", "Preparing transformations and bind shape matrix.");
 
 	// grab transformations
-	LLVector4 inverse_translation = current_object->getObjectTranslation() *= -1.f; // seems legit
+	LLVector4 inverse_translation = current_object->getObjectTranslation() * -1.f;
 	LLVector4 objct_size = current_object->getObjectSize();
 
 	// this is basically the data_out but for skinning data
