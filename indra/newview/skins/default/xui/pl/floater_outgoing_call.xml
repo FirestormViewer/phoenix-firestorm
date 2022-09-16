@@ -16,7 +16,7 @@
 		Łączenie: [CALLEE_NAME]
 	</text>
 	<text name="calling">
-		Dzwonienie: [CALEE_NAME]
+		Dzwonienie: [CALLEE_NAME]
 	</text>
 	<text name="noanswer">
 		Brak odpowiedzi. Proszę spróbować później.

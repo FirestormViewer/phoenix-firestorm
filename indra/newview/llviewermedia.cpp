@@ -3261,7 +3261,7 @@ bool LLViewerMediaImpl::isForcedUnloaded() const
 	}
 
 	// If this media's class is not supposed to be shown, unload
-	if (!shouldShowBasedOnClass())
+	if (!shouldShowBasedOnClass() || isObscured())
 	{
 		return true;
 	}
@@ -3944,6 +3944,26 @@ bool LLViewerMediaImpl::shouldShowBasedOnClass() const
 
 		return show_media_outside_parcel;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//
+bool LLViewerMediaImpl::isObscured() const
+{
+    if (getUsedInUI() || isParcelMedia()) return false;
+
+    LLParcel* agent_parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+    if (!agent_parcel)
+    {
+        return false;
+    }
+    
+    if (agent_parcel->getObscureMOAP() && !isInAgentParcel())
+    {
+        return true;
+    }
+
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

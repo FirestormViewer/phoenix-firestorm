@@ -59,46 +59,6 @@
 #include "rlvcommon.h"
 
 static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids);
-void reshape_floater(FSFloaterVoiceControls* floater, S32 delta_height);
-
-class LLNonAvatarCaller : public LLAvatarListItem
-{
-public:
-	LLNonAvatarCaller() : LLAvatarListItem(false)
-	{
-
-	}
-	BOOL postBuild()
-	{
-		BOOL rv = LLAvatarListItem::postBuild();
-
-		if (rv)
-		{
-			setOnline(true);
-			showLastInteractionTime(false);
-			setShowProfileBtn(false);
-			setShowInfoBtn(false);
-			mAvatarIcon->setValue("Avaline_Icon");
-			mAvatarIcon->setToolTip(std::string(""));
-		}
-		return rv;
-	}
-
-	void setName(const std::string& name)
-	{
-		const std::string& formatted_phone = LLTextUtil::formatPhoneNumber(name);
-		LLAvatarListItem::setAvatarName(formatted_phone);
-		LLAvatarListItem::setAvatarToolTip(formatted_phone);
-	}
-
-	void setSpeakerId(const LLUUID& id) { mSpeakingIndicator->setSpeakerId(id); }
-};
-
-
-static void* create_non_avatar_caller(void*)
-{
-	return new LLNonAvatarCaller;
-}
 
 LLVoiceChannel* FSFloaterVoiceControls::sCurrentVoiceChannel = NULL;
 
@@ -107,7 +67,6 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 , mSpeakerManager(NULL)
 , mParticipants(NULL)
 , mAvatarList(NULL)
-, mNonAvatarCaller(NULL)
 , mVoiceType(VC_LOCAL_CHAT)
 , mAgentPanel(NULL)
 , mSpeakingIndicator(NULL)
@@ -120,7 +79,6 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 	static LLUICachedControl<S32> voice_left_remove_delay ("VoiceParticipantLeftRemoveDelay", 10);
 	mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), voice_left_remove_delay);
 
-	mFactoryMap["non_avatar_caller"] = LLCallbackMap(create_non_avatar_caller, NULL);
 	LLVoiceClient::instance().addObserver(this);
 	LLTransientFloaterMgr::getInstance()->addControlView(this);
 
@@ -155,9 +113,6 @@ BOOL FSFloaterVoiceControls::postBuild()
 	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&FSFloaterVoiceControls::onAvatarListRefreshed, this));
 
 	childSetAction("leave_call_btn", boost::bind(&FSFloaterVoiceControls::leaveCall, this));
-
-	mNonAvatarCaller = findChild<LLNonAvatarCaller>("non_avatar_caller");
-	mNonAvatarCaller->setVisible(FALSE);
 
 	mVolumeSlider = findChild<LLSliderCtrl>("volume_slider");
 	mMuteButton = findChild<LLButton>("mute_btn");
@@ -283,11 +238,6 @@ void FSFloaterVoiceControls::updateSession()
 		case IM_NOTHING_SPECIAL:
 		case IM_SESSION_P2P_INVITE:
 			mVoiceType = VC_PEER_TO_PEER;
-
-			if (!im_session->mOtherParticipantIsAvatar)
-			{
-				mVoiceType = VC_PEER_TO_PEER_AVALINE;
-			}
 			break;
 		case IM_SESSION_CONFERENCE_START:
 		case IM_SESSION_GROUP_START:
@@ -298,7 +248,7 @@ void FSFloaterVoiceControls::updateSession()
 			}
 			else
 			{
-				mVoiceType = VC_AD_HOC_CHAT;				
+				mVoiceType = VC_AD_HOC_CHAT;
 			}
 			break;
 		default:
@@ -348,37 +298,24 @@ void FSFloaterVoiceControls::updateSession()
 
 void FSFloaterVoiceControls::refreshParticipantList()
 {
-	bool non_avatar_caller = VC_PEER_TO_PEER_AVALINE == mVoiceType;
-
-	if (non_avatar_caller)
-	{
-		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSpeakerManager->getSessionID());
-		mNonAvatarCaller->setSpeakerId(session->mOtherParticipantID);
-		mNonAvatarCaller->setName(session->mName);
-	}
-
 	// Ansariel: Changed for RLVa @shownearby
-	//mNonAvatarCaller->setVisible(non_avatar_caller);
 	//mAvatarList->setVisible(!non_avatar_caller);
 	updateListVisibility();
 
-	if (!non_avatar_caller)
-	{
-		llassert(mParticipants == NULL); // check for possible memory leak
-		mParticipants = new FSParticipantList(mSpeakerManager, mAvatarList, true, mVoiceType != VC_GROUP_CHAT && mVoiceType != VC_AD_HOC_CHAT, false);
-		mParticipants->setValidateSpeakerCallback(boost::bind(&FSFloaterVoiceControls::validateSpeaker, this, _1));
-		const U32 speaker_sort_order = gSavedSettings.getU32("SpeakerParticipantDefaultOrder");
-		mParticipants->setSortOrder(FSParticipantList::EParticipantSortOrder(speaker_sort_order));
+	llassert(mParticipants == NULL); // check for possible memory leak
+	mParticipants = new FSParticipantList(mSpeakerManager, mAvatarList, true, mVoiceType != VC_GROUP_CHAT && mVoiceType != VC_AD_HOC_CHAT, false);
+	mParticipants->setValidateSpeakerCallback(boost::bind(&FSFloaterVoiceControls::validateSpeaker, this, _1));
+	const U32 speaker_sort_order = gSavedSettings.getU32("SpeakerParticipantDefaultOrder");
+	mParticipants->setSortOrder(FSParticipantList::EParticipantSortOrder(speaker_sort_order));
 		
-		if (LLLocalSpeakerMgr::getInstance() == mSpeakerManager)
-		{
-			mAvatarList->setNoItemsCommentText(getString("no_one_near"));
-		}
-
-		// we have to made delayed initialization of voice state of participant list.
-		// it will be performed after first LLAvatarList refreshing in the onAvatarListRefreshed().
-		mInitParticipantsVoiceState = true;
+	if (LLLocalSpeakerMgr::getInstance() == mSpeakerManager)
+	{
+		mAvatarList->setNoItemsCommentText(getString("no_one_near"));
 	}
+
+	// we have to made delayed initialization of voice state of participant list.
+	// it will be performed after first LLAvatarList refreshing in the onAvatarListRefreshed().
+	mInitParticipantsVoiceState = true;
 }
 
 void FSFloaterVoiceControls::onAvatarListRefreshed()
@@ -494,15 +431,8 @@ void FSFloaterVoiceControls::updateTitle()
 		title = getString("title_nearby");
 		break;
 	case VC_PEER_TO_PEER:
-	case VC_PEER_TO_PEER_AVALINE:
 		{
 			title = voice_channel->getSessionName();
-
-			if (VC_PEER_TO_PEER_AVALINE == mVoiceType)
-			{
-				title = LLTextUtil::formatPhoneNumber(title);
-			}
-
 			LLStringUtil::format_map_t args;
 			args["[NAME]"] = title;
 			title = getString("title_peer_2_peer", args);
@@ -896,7 +826,6 @@ void FSFloaterVoiceControls::reset(const LLVoiceChannel::EState& new_state)
 
 	// Ansariel: Changed for RLVa @shownearby
 	//mAvatarList->setVisible(TRUE);
-	//mNonAvatarCaller->setVisible(FALSE);
 	updateListVisibility();
 
 	mSpeakerManager = NULL;
@@ -913,26 +842,12 @@ void FSFloaterVoiceControls::updateListVisibility()
 	if (mIsRlvShowNearbyRestricted && mVoiceType == VC_LOCAL_CHAT)
 	{
 		mAvatarList->setVisible(FALSE);
-		mNonAvatarCaller->setVisible(FALSE);
 		mRlvRestrictedText->setVisible(TRUE);
 	}
 	else
 	{
+		mAvatarList->setVisible(TRUE);
 		mRlvRestrictedText->setVisible(FALSE);
-
-		if (mParticipants)
-		{
-			// Case coming from refreshParticipantList
-			bool non_avatar_caller = VC_PEER_TO_PEER_AVALINE == mVoiceType;
-			mNonAvatarCaller->setVisible(non_avatar_caller);
-			mAvatarList->setVisible(!non_avatar_caller);
-		}
-		else
-		{
-			// Case coming from reset()
-			mAvatarList->setVisible(TRUE);
-			mNonAvatarCaller->setVisible(FALSE);
-		}
 	}
 }
 //EOF

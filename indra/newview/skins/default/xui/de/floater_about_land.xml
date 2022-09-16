@@ -463,6 +463,10 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<check_box label="Voice aktivieren" name="parcel_enable_voice_channel"/>
 			<check_box label="Voice aktivieren (vom Grundbesitz eingerichtet)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Voice auf diese Parzelle beschränken" name="parcel_enable_voice_channel_local"/>
+			<text name="media">
+				Medien:
+			</text>
+			<check_box label="MOAP verdecken" name="obscure_moap" tool_tip="Media on a Prim außerhalb der Parzelle sollen nicht automatisch für Avatare innerhalb der Parzelle abgespielt werden und umgekehrt."/>
 		</panel>
 		<panel label="Zugang" name="land_access_panel">
 			<panel.string name="access_estate_defined">

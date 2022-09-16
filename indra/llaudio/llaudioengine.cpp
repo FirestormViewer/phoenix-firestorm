@@ -289,7 +289,7 @@ void LLAudioEngine::idle(F32 max_decode_time)
 		{
 			// The source is done playing, clean it up.
 			delete sourcep;
-			mAllSources.erase(iter++);
+            iter = mAllSources.erase(iter);
 			continue;
 		}
 
@@ -854,7 +854,8 @@ void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_i
 	addAudioSource(asp);
 	if (pos_global.isExactlyZero())
 	{
-		asp->setAmbient(true);
+		// For sound preview and UI
+		asp->setForcedPriority(true);
 	}
 	else
 	{
@@ -1321,7 +1322,7 @@ LLAudioSource::LLAudioSource(const LLUUID& id, const LLUUID& owner_id, const F32
 	mPriority(0.f),
 	mGain(gain),
 	mSourceMuted(false),
-	mAmbient(false),
+	mForcedPriority(false),
 	mLoop(false),
 	mSyncMaster(false),
 	mSyncSlave(false),
@@ -1470,7 +1471,7 @@ void LLAudioSource::update()
 
 void LLAudioSource::updatePriority()
 {
-	if (isAmbient())
+	if (isForcedPriority())
 	{
 		mPriority = 1.f;
 	}

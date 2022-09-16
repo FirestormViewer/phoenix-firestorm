@@ -98,6 +98,7 @@ struct LLVoiceVersionInfo
 {
 	std::string serverType;
 	std::string serverVersion;
+	std::string mBuildVersion;
 };
 
 //////////////////////////////////

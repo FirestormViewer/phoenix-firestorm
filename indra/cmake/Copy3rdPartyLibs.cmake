@@ -93,8 +93,8 @@ if(WINDOWS)
 
     set(release_files ${release_files} growl++.dll growl.dll )
     if (FMODSTUDIO)
-      set(debug_files ${debug_files} fmodL.dll)
-      set(release_files ${release_files} fmod.dll)
+        set(debug_files ${debug_files} fmodL.dll)
+        set(release_files ${release_files} fmod.dll)
     endif (FMODSTUDIO)
 
     if (OPENAL)

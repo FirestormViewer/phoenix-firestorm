@@ -223,6 +223,11 @@ set(viewer_SOURCE_FILES
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.cpp
 
+    # local mesh
+    vjlocalmesh.cpp
+    vjfloaterlocalmesh.cpp
+    vjlocalmeshimportdae.cpp
+
     llaccountingcostmanager.cpp
     llaisapi.cpp
     llagent.cpp
@@ -1002,6 +1007,11 @@ set(viewer_HEADER_FILES
     llfloaterflickr.h
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.h
+
+    # local mesh
+    vjlocalmesh.h
+    vjfloaterlocalmesh.h
+    vjlocalmeshimportdae.h
 
     llaccountingcostmanager.h
     llaisapi.h

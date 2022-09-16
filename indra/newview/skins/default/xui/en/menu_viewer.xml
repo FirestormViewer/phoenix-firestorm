@@ -2234,6 +2234,16 @@
                  parameter="" />
             </menu_item_call>
         </menu>
+
+        <!-- local mesh begin -->
+        <menu_item_call
+           enabled="true"
+           label="Local Mesh"
+           name="local_mesh">
+          <menu_item_call.on_click function="Floater.Show" parameter="local_mesh_floater"/>
+        </menu_item_call>
+        <!-- local mesh end -->
+      
         <menu_item_call
             label="Material Editor"
             name="material_editor_menu_item">
@@ -3917,6 +3927,12 @@
                  function="Advanced.ForceErrorBadMemoryAccess" />
             </menu_item_call>
             <menu_item_call
+             label="Force Bad Memory Access in Coroutine"
+             name="Force Bad Memory Access in Coroutine">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorBadMemoryAccessCoro" />
+            </menu_item_call>
+            <menu_item_call
              label="Force Infinite Loop"
              name="Force Infinite Loop">
                 <menu_item_call.on_click
@@ -3935,10 +3951,10 @@
                  function="Advanced.ForceErrorSoftwareException" />
             </menu_item_call>
             <menu_item_call
-             label="Force a Crash in a Coroutine"
-             name="Force a Crash in a Coroutine">
+             label="Force Software Exception in Coroutine"
+             name="Force Software Exception in Coroutine">
                 <menu_item_call.on_click
-                 function="Advanced.ForceErrorCoroutineCrash" />
+                 function="Advanced.ForceErrorSoftwareExceptionCoro" />
             </menu_item_call>
             <menu_item_call
              label="Force a Crash in a Thread"

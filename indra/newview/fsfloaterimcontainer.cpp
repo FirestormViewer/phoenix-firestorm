@@ -407,9 +407,6 @@ void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::str
 	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
 	if (!session) return;
 
-	// no need to spawn chiclets for participants in P2P calls called through Avaline
-	if (session->isP2P() && session->isOtherParticipantAvaline()) return;
-
 	FSFloaterIM::onNewIMReceived(session_id);
 }
 

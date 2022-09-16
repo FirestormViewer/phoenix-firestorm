@@ -750,6 +750,10 @@ void LLVivoxVoiceClient::voiceControlCoro()
         // surviving longer than LLVivoxVoiceClient
         voiceControlStateMachine(state);
     }
+    catch (const LLCoros::Stop&)
+    {
+        LL_DEBUGS("LLVivoxVoiceClient") << "Received a shutdown exception" << LL_ENDL;
+    }
     catch (const LLContinueError&)
     {
         LOG_UNHANDLED_EXCEPTION("LLVivoxVoiceClient");
@@ -4729,6 +4733,23 @@ void LLVivoxVoiceClient::sessionNotificationEvent(std::string &sessionHandle, st
 	}
 }
 
+void LLVivoxVoiceClient::voiceServiceConnectionStateChangedEvent(int statusCode, std::string &statusString, std::string &build_id)
+{
+	// We don't generally need to process this. However, one occurence is when we first connect, and so it is the
+	// earliest opportunity to learn what we're connected to.
+	if (statusCode)
+	{
+		LL_WARNS("Voice") << "VoiceServiceConnectionStateChangedEvent statusCode: " << statusCode <<
+			"statusString: " << statusString << LL_ENDL;
+		return;
+	}
+	if (build_id.empty())
+	{
+		return;
+	}
+	mVoiceVersion.mBuildVersion = build_id;
+}
+
 void LLVivoxVoiceClient::auxAudioPropertiesEvent(F32 energy)
 {
 	LL_DEBUGS("VoiceEnergy") << "got energy " << energy << LL_ENDL;
@@ -4919,7 +4940,7 @@ void LLVivoxVoiceClient::sessionState::VerifySessions()
         if ((*it).expired())
         {
             LL_WARNS("Voice") << "Expired session found! removing" << LL_ENDL;
-            mSession.erase(it++);
+            it = mSession.erase(it);
         }
         else
             ++it;
@@ -6994,7 +7015,7 @@ void LLVivoxVoiceClient::deleteVoiceFont(const LLUUID& id)
 		if (list_iter->second == id)
 		{
 			LL_DEBUGS("VoiceFont") << "Removing " << id << " from the voice font list." << LL_ENDL;
-			mVoiceFontList.erase(list_iter++);
+            list_iter = mVoiceFontList.erase(list_iter);
 			mVoiceFontListDirty = true;
 		}
 		else
@@ -7733,6 +7754,8 @@ void LLVivoxProtocolParser::EndTag(const char *tag)
 			connectorHandle = string;
 		else if (!stricmp("VersionID", tag))
 			versionID = string;
+		else if (!stricmp("Version", tag))
+			mBuildID = string;
 		else if (!stricmp("AccountHandle", tag))
 			accountHandle = string;
 		else if (!stricmp("State", tag))
@@ -8035,7 +8058,8 @@ void LLVivoxProtocolParser::processResponse(std::string tag)
 			// We don't need to process this, but we also shouldn't warn on it, since that confuses people.
 		}
 		else if (!stricmp(eventTypeCstr, "VoiceServiceConnectionStateChangedEvent"))
-		{	// Yet another ignored event
+		{
+			LLVivoxVoiceClient::getInstance()->voiceServiceConnectionStateChangedEvent(statusCode, statusString, mBuildID);
 		}
 		else if (!stricmp(eventTypeCstr, "AudioDeviceHotSwapEvent"))
 		{

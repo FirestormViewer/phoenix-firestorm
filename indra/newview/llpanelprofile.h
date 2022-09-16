@@ -185,7 +185,6 @@ private:
     void onShowAgentProfileTexture();
     void onShowTexturePicker();
     void onCommitProfileImage(const LLUUID& id);
-    //void onOpenNotes(); // <FS:Ansariel> Doesn't exist (anymore)
 
     // <FS:Ansariel> Fix LL UI/UX design accident
     void updateButtons();
