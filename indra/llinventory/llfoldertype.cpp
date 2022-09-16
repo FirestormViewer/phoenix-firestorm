@@ -122,6 +122,7 @@ LLFolderDictionary::LLFolderDictionary()
 	addEntry(LLFolderType::FT_MARKETPLACE_VERSION,  new FolderEntry("version",  FALSE, FALSE, FALSE));
 		 
     addEntry(LLFolderType::FT_SETTINGS,             new FolderEntry("settings", TRUE, FALSE, TRUE));
+    addEntry(LLFolderType::FT_MATERIAL,             new FolderEntry("material", TRUE, FALSE, TRUE));
 
 	addEntry(LLFolderType::FT_MY_SUITCASE,			new FolderEntry("suitcase", TRUE, FALSE, TRUE)); // <FS:Ansariel> OpenSim HG-support
 

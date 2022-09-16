@@ -260,6 +260,7 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onChangeModelFolder();
+    void onChangePBRFolder();
 	void onChangeTextureFolder();
 	void onChangeSoundFolder();
 	void onChangeAnimationFolder();

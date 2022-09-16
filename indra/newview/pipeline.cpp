@@ -10108,9 +10108,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
         LLRenderPass::PASS_NORMMAP,
         LLRenderPass::PASS_NORMMAP_EMISSIVE,
         LLRenderPass::PASS_NORMSPEC,
-        LLRenderPass::PASS_NORMSPEC_EMISSIVE,
-        LLRenderPass::PASS_PBR_OPAQUE, // NOTE: Assumes PASS_PBR_OPAQUE_RIGGED is consecutive
-        //LLRenderPass::PASS_PBR_OPAQUE_RIGGED,
+        LLRenderPass::PASS_NORMSPEC_EMISSIVE
     };
 
     LLGLEnable cull(GL_CULL_FACE);
@@ -10194,7 +10192,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
 
     if (use_shader)
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow geom"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_GEOM);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow geom");
 
         gDeferredShadowProgram.unbind();
         renderGeomShadow(shadow_cam);
@@ -10203,13 +10201,13 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
     }
     else
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow geom"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_GEOM);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow geom");
 
         renderGeomShadow(shadow_cam);
     }
 
     {
-        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_ALPHA);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha");
         LL_PROFILE_GPU_ZONE("shadow alpha");
         for (int i = 0; i < 2; ++i)
         {
@@ -10225,19 +10223,19 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
                 LLVertexBuffer::MAP_TEXTURE_INDEX;
 
             {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha masked"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_ALPHA_MASKED);
+                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha masked");
                 renderMaskedObjects(LLRenderPass::PASS_ALPHA_MASK, mask, TRUE, TRUE, rigged);
             }
 
             {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha blend"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_ALPHA_BLEND);
+                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha blend");
                 LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(0.598f);
                 renderAlphaObjects(mask, TRUE, TRUE, rigged);
             }
 
 
             {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow fullbright alpha masked"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_FULLBRIGHT_ALPHA_MASKED);
+                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow fullbright alpha masked");
                 gDeferredShadowFullbrightAlphaMaskProgram.bind(rigged);
                 LLGLSLShader::sCurBoundShaderPtr->uniform1f(LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH, (float)target_width);
                 LLGLSLShader::sCurBoundShaderPtr->uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
@@ -10246,7 +10244,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
 
 
             {
-                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha grass"); //LL_RECORD_BLOCK_TIME(FTM_SHADOW_ALPHA_GRASS);
+                LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha grass");
                 gDeferredTreeShadowProgram.bind(rigged);
                 if (i == 0)
                 {
@@ -10259,6 +10257,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
                 renderMaskedObjects(LLRenderPass::PASS_MATERIAL_ALPHA_MASK, no_idx_mask, true, false, rigged);
                 renderMaskedObjects(LLRenderPass::PASS_SPECMAP_MASK, no_idx_mask, true, false, rigged);
                 renderMaskedObjects(LLRenderPass::PASS_NORMMAP_MASK, no_idx_mask, true, false, rigged);
+                renderMaskedObjects(LLRenderPass::PASS_PBR_OPAQUE, no_idx_mask, true, false, rigged);
             }
         }
     }

@@ -624,6 +624,7 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
 	gSavedPerAccountSettings.getControl("ModelUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeModelFolder, this));
+    gSavedPerAccountSettings.getControl("PBRUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangePBRFolder, this));
 	gSavedPerAccountSettings.getControl("TextureUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeTextureFolder, this));
 	gSavedPerAccountSettings.getControl("SoundUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeSoundFolder, this));
 	gSavedPerAccountSettings.getControl("AnimationUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeAnimationFolder, this));
@@ -1139,6 +1140,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	onChangeMaturity();
 
 	onChangeModelFolder();
+    onChangePBRFolder();
 	onChangeTextureFolder();
 	onChangeSoundFolder();
 	onChangeAnimationFolder();
@@ -2796,6 +2798,14 @@ void LLFloaterPreference::onChangeModelFolder()
     if (gInventory.isInventoryUsable())
     {
         getChild<LLTextBox>("upload_models")->setText(get_category_path(LLFolderType::FT_OBJECT));
+    }
+}
+
+void LLFloaterPreference::onChangePBRFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_pbr")->setText(get_category_path(LLFolderType::FT_MATERIAL));
     }
 }
 
