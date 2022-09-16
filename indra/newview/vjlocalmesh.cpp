@@ -362,6 +362,7 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 	mSavedObjectSculptIDs.clear();
 
 	mShortName = std::string(boost::filesystem::path(filename).stem().string());
+	std::string stripSuffix(std::string);
 	auto base_lod_filename {stripSuffix(mShortName)};
 	pushLog("LLLocalMeshFile", "Initializing with base filename: " + base_lod_filename);
 
@@ -453,6 +454,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 			if( mFilenames[lodfile_iter].empty() )
 			{
 				auto filepath { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).parent_path() };
+				std::string getLodSuffix(S32);
 				auto lod_suffix { getLodSuffix(lodfile_iter) };
 				auto extension { boost::filesystem::path(mFilenames[LOCAL_LOD_HIGH]).extension() };
 
