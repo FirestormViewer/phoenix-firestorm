@@ -105,13 +105,13 @@
   <check_box
     control_name="RenderVSyncEnable"
     height="16"
-    initial_value="true"
+    initial_value="false"
     label="Enable VSync"
     layout="topleft"
     left="30"
     top_delta="16"
     name="vsync"
-    tool_tip="Synchronizes the frame rate to the refresh rate of the monitor, which results in smooth performance."
+    tool_tip="Synchronizes the frame rate to the refresh rate of the monitor, can result in increased stutter and input lag."
     width="315" />
 
   <text

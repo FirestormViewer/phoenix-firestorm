@@ -252,6 +252,8 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 	mMDCImplCount = 0;
 	mLastRiggingInfoLOD = -1;
 	mResetDebugText = false;
+	mIsLocalMesh = false;
+	mIsLocalMeshUsingScale = false;
 }
 
 LLVOVolume::~LLVOVolume()
@@ -344,6 +346,14 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 	static LLCachedControl<bool> fsEnforceStrictObjectCheck(gSavedSettings, "FSEnforceStrictObjectCheck");
 	bool enfore_strict_object_check = LLGridManager::instance().isInSecondLife() && fsEnforceStrictObjectCheck;
 	// </FS:Ansariel>
+
+	// local mesh begin
+	// rationale: we don't want server updates for a local object, cause the server tends to override things.
+	if (mIsLocalMesh)
+	{
+		return 0;
+	}
+	// local mesh end
 
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);

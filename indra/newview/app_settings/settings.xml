@@ -5481,7 +5481,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -26257,6 +26257,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>-4</integer>
+    </map>
+    <key>FSLocalMeshScaleAlwaysMeters</key>
+    <map>
+      <key>Comment</key>
+      <string>Ignore the units specified by the Collada file. Useful when importing from tools such as Maya</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 </map>
 </llsd>

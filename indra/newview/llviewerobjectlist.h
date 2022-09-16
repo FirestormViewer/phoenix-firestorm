@@ -159,6 +159,7 @@ public:
 	void cleanupReferences(LLViewerObject *objectp);
 
 	S32 findReferences(LLDrawable *drawablep) const; // Find references to drawable in all objects, and return value.
+	std::vector<LLUUID> findMeshObjectsBySculptID(LLUUID target_sculpt_id);
 
 	S32 getOrphanParentCount() const { return (S32) mOrphanParents.size(); }
 	S32 getOrphanCount() const { return mNumOrphans; }
