@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Lokalny mesz">
+	<tab_container name="local_mesh_tabs">
+		<panel name="local_mesh_assets_panel" label="Lokalne mesze" title="Lokalne mesze">
+			<fs_scroll_list name="l_name_list">
+				<column name="unit_name" label="Nazwa" />
+				<column name="unit_lods" label="Detale" />
+				<column name="unit_objects" label="Obiekty" />
+			</fs_scroll_list>
+		</panel>
+		<panel name="local_mesh_settings_panel" label="Opcje">
+			<check_box name="local_mesh_scale_use_meters" label="Załóż, że rozmiar jest w metrach" tool_tip="Zignoruj jednostki skali w cm używane przez narzędzia takie jak Maya." />
+			<text name="lod_suffix_label">
+				Sufiksy LOD:
+			</text>
+			<combo_box name="lod_suffix_combo" tool_tip="Wybierz ustawienie wstępne lub ustaw własne... || Standard SL - (Najniższy to LOD0, a Wysoki nie ma sufiksu). || Silnik gry — Unity/UE5 itd. (Najniższy=LOD3, Wysoki=LOD0). || Słowa LOD — angielskie nazwy LOD (Najniższy='LOWEST', Wysoki='HIGH').">
+				<combo_item name="choose_one">Obecne</combo_item>
+				<combo_item name="suff_sl">Standard SL</combo_item>
+				<combo_item name="suff_unity">Standard silników gier</combo_item>
+				<combo_item name="suff_descriptive">Słowa LOD</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				Najniższy:
+			</text>
+			<line_editor name="suf_lowest" tool_tip="Sufiks używany do identyfikacji pliku na dysku z najniższym LOD oraz modelami." />
+			<text name="suf_low_lab">
+				Niski:
+			</text>
+			<line_editor name="suf_low" tool_tip="Sufiks używany do identyfikacji pliku na dysku z niskim LOD oraz modelami." />
+			<text name="suf_medium_lab">
+				Średni:
+			</text>
+			<line_editor name="suf_medium" tool_tip="Sufiks używany do identyfikacji pliku na dysku ze średnim LOD oraz modelami." />
+			<text name="suf_high_lab">
+				Wysoki:
+			</text>
+			<line_editor name="suf_high" tool_tip="Sufiks używany do identyfikacji pliku na dysku z wysokim LOD oraz modelami." />
+			<text name="suf_physics_lab">
+				Fizyka:
+			</text>
+			<line_editor name="suf_physics" tool_tip="Sufiks używany do identyfikacji pliku na dysku z fizyką oraz modelami." />
+		</panel>
+	</tab_container>
+	<button name="btn_apply" label="Zastosuj" />
+	<button name="btn_add" label="Dodaj" />
+	<button name="btn_remove" label="Usuń" />
+	<button name="btn_reload" label="Przeładuj" />
+	<button name="btn_clear" label="Czyść" />
+	<button name="btn_rez" label="Rezuj wybrane" tool_tip="Utwórz czysty mesz w świecie i zastosuj na nim Twoim wybranym lokalnym meszem. Tworzy to pusty obiekt w świecie." />
+</floater>

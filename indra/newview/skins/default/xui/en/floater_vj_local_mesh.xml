@@ -128,10 +128,7 @@
         follows="left|top"
         width="180"
         top_pad="5"
-        tool_tip="Choose a standard or manually edit...
-SL default - (Lowest is LOD0, High has no suffix).
-Game Engine - Unity/UE5, etc. (Lowest=LOD3, High=LOD0).
-LOD Names - English LOD names, (Lowest='LOWEST', High='HIGH').">
+        tool_tip="Choose a standard or manually edit... || SL default - (Lowest is LOD0, High has no suffix). || Game Engine - Unity/UE5, etc. (Lowest=LOD3, High=LOD0). || LOD Names - English LOD names, (Lowest='LOWEST', High='HIGH').">
         <combo_item name="choose_one">Current</combo_item>
         <combo_item name="suff_sl">SL Standard</combo_item>
         <combo_item name="suff_unity">Games Engine Standard</combo_item>
@@ -269,10 +266,7 @@ LOD Names - English LOD names, (Lowest='LOWEST', High='HIGH').">
     left="105"
     top="253"
     width="315"
-    visible="true">
-    />
-  </combo_box>
-
+    visible="true" />
   <button name="btn_add"
     height="18"
     label="Add"
