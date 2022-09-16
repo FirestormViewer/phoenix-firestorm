@@ -2033,6 +2033,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="InvFolder Settings">
 		Einstellungen
 	</string>
+	<string name="InvFolder Materials">
+		Materialien
+	</string>
 	<string name="InvFolder Friends">
 		Freunde
 	</string>

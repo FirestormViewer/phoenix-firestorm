@@ -257,6 +257,9 @@
 		<text name="title_models">
 			Models
 		</text>
+		<text name="title_pbr">
+			PBR-Materialien
+		</text>
 		<text name="upload_help">
 			Um einen Zielordner zu ändern, im Inventar auf den gewünschten Ordner rechts-klicken und
 „Als Standard nutzen für“ auswählen.
