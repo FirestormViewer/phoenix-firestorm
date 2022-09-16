@@ -1168,7 +1168,7 @@ std::string LLLocalMeshImportDAE::getElementName(daeElement* element_current, in
 	// in case all else fails, fallback naming
 	if (result.empty())
 	{
-		result = "object_" + fallback_index;
+		result = "object_" + std::to_string(fallback_index);
 	}
 
 	return result;
