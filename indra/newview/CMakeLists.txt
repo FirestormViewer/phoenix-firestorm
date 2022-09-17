@@ -1816,9 +1816,11 @@ if (WINDOWS)
     # the .pch file.
     # All sources added to viewer_SOURCE_FILES
     # at this point use it.
-    if(USE_PRECOMPILED_HEADERS)
-       set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
-    endif(USE_PRECOMPILED_HEADERS)
+    # <FS:Ansariel> Don't need this anymore - CMake will add a forced include to each translation unit now...
+    #if(USE_PRECOMPILED_HEADERS)
+    #   set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
+    #endif(USE_PRECOMPILED_HEADERS)
+    # </FS:Ansariel>
 
     # Replace the icons with the appropriate ones for the channel
     # ('test' is the default)
