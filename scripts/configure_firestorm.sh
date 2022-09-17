@@ -359,7 +359,10 @@ then
     if [ "$OSTYPE" = "cygwin" ] ; then
         export AUTOBUILD_EXEC="$(cygpath -u $AUTOBUILD)"
     fi
-
+    if [ -z "$AUTOBUILD_EXEC" ]
+    then
+        export AUTOBUILD_EXEC=`which autobuild`
+    fi
     # load autobuild provided shell functions and variables
     eval "$("$AUTOBUILD_EXEC" source_environment)"
     # vsvars is needed for determing path to VS runtime redist files in Copy3rdPartyLibs.cmake
@@ -605,9 +608,15 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             make -j $JOBS | tee -a $LOG
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
-        msbuild.exe Firestorm.sln /p:Configuration=${BTYPE} /flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
-                    /flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" /p:Platform=${AUTOBUILD_WIN_VSPLATFORM} /t:Build /p:useenv=true \
-                    /verbosity:normal /toolsversion:15.0 /p:"VCBuildAdditionalOptions= /incremental"
+        if [ "${AUTOBUILD_VSVER}" -ge 170 ] ; then
+            msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
+                -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
+                -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
+        else
+            msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
+                -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
+                -verbosity:normal -toolsversion:15.0 -p:"VCBuildAdditionalOptions= /incremental"
+        fi
     fi
 fi
 
