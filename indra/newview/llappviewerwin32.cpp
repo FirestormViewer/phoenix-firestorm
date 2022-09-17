@@ -76,13 +76,7 @@
 // Bugsplat (http://bugsplat.com) crash reporting tool
 #ifdef LL_BUGSPLAT
 #include "BugSplat.h"
-
-#if LL_USESYSTEMLIBS
-#include "jsoncpp/reader.h" // JSON
-#else
-#include "json/reader.h" // JSON
-#endif
-
+#include "json/reader.h"                 // JsonCpp
 #include "llagent.h"                // for agent location
 #include "llviewerregion.h"
 #include "llvoavatarself.h"         // for agent name

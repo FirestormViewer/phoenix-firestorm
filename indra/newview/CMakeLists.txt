@@ -24,25 +24,13 @@ include(JsonCpp)
 include(LLAppearance)
 include(LLAudio)
 include(LLCA)
-include(LLCharacter)
 include(LLCommon)
 include(LLCoreHttp)
 include(LLImage)
-include(LLImageJ2COJ)
-include(LLInventory)
 include(LLKDU)
-include(LLLogin)
-include(LLMath)
-include(LLMeshOptimizer)
-include(LLMessage)
 include(LLPhysicsExtensions)
-include(LLPlugin)
 include(LLPrimitive)
-include(LLRender)
-include(LLUI)
-include(LLFileSystem)
 include(LLWindow)
-include(LLXML)
 include(NDOF)
 include(NVAPI)
 include(OPENAL)
@@ -53,16 +41,18 @@ include(TemplateCheck)
 include(ThreeJS)
 include(Tracy)
 include(UI)
-include(UnixInstall)
 include(ViewerMiscLibs)
 #include(ViewerManager) # <FS:Ansariel> Remove VMP
 include(VisualLeakDetector)
 include(ZLIBNG)
 include(URIPARSER)
+include(LLPrimitive)
 include(Growl)
 include(ColladaDom)
 include(jemalloc)
 include(Discord)
+
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -70,63 +60,27 @@ if( LLPHYSICSEXTENSIONS_SRC_DIR )
 
 if (NOT HAVOK_TPV)
    # When using HAVOK_TPV, the library is precompiled, so no need for this
+
+   # Stub and probably havok lib itself is a hack, autobuild loads a 3p that really is a source tarball
+   # which includes a CMakeList.txt and then this whole source tree gets pushed into out build ... :/
+   # To make matters worse there is a internal assumption about the structure of the viewers CMake layout,
+   # which means we need to duct tape this togther ...
+
    add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
+
+   # Another hack that works with newer cmake versions:
+   cmake_policy( SET CMP0079 NEW)
+   if( TARGET llphysicsextensionsstub )
+      target_link_libraries(llphysicsextensionsstub llcommon llmath)
+   endif()
+   if( TARGET llphysicsextensions )
+      target_link_libraries(llphysicsextensions llrender )
+   endif()
 endif (NOT HAVOK_TPV)
 
 # <FS:ND>
 endif( LLPHYSICSEXTENSIONS_SRC_DIR )
 # </FS:ND>
-
-if(FMODSTUDIO)
-  include_directories(${FMODSTUDIO_INCLUDE_DIR})
-endif(FMODSTUDIO)
-
-include_directories(
-    ${DBUSGLIB_INCLUDE_DIRS}
-    ${JSONCPP_INCLUDE_DIR}
-    ${GLOD_INCLUDE_DIR} # <FS:Beq/> restore GLOD
-    ${LLAUDIO_INCLUDE_DIRS}
-    ${LLCHARACTER_INCLUDE_DIRS}
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLCOREHTTP_INCLUDE_DIRS}
-    ${LLPHYSICS_INCLUDE_DIRS}
-    ${LLIMAGE_INCLUDE_DIRS}
-    ${LLKDU_INCLUDE_DIRS}
-    ${LLINVENTORY_INCLUDE_DIRS}
-    ${LLMATH_INCLUDE_DIRS}
-    ${LLMESHOPTIMIZER_INCLUDE_DIRS}
-    ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLPLUGIN_INCLUDE_DIRS}
-    ${LLPRIMITIVE_INCLUDE_DIRS}
-    ${LLRENDER_INCLUDE_DIRS}
-    ${LLUI_INCLUDE_DIRS}
-    ${LLFILESYSTEM_INCLUDE_DIRS}
-    ${LLWINDOW_INCLUDE_DIRS}
-    ${LLXML_INCLUDE_DIRS}
-    ${LLLOGIN_INCLUDE_DIRS}
-    ${OPENAL_LIB_INCLUDE_DIRS}
-    ${GROWL_INCLUDE_DIRS}
-    ${LLAPPEARANCE_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${TRACY_INCLUDE_DIR}
-    )
-
-include_directories(SYSTEM
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    ${LLXML_SYSTEM_INCLUDE_DIRS}
-    ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
-    ${LIBS_PREBUILT_DIR}/include/collada
-    ${LIBS_PREBUILT_DIR}/include/collada/1.4
-    ${LIBS_PREBUILD_DIR}/include/hunspell
-    ${COLLADA_INCLUDE_DIRS}
-    )
-
-if (USE_BUGSPLAT)
-  include_directories(AFTER
-    ${BUGSPLAT_INCLUDE_DIR}
-    )
-endif (USE_BUGSPLAT)
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
@@ -1665,6 +1619,9 @@ set(viewer_HEADER_FILES
     NACLfloaterexploresounds.h
     )
 
+# <FS:Ansariel> Flickr / Discord keys and fsversionvalues headers are generated in here
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+
 # <exodus>
 # Generate the flickr keys header.
 configure_file(
@@ -1750,25 +1707,6 @@ if (DARWIN)
          )
 # [FS]
 
-  find_library(AGL_LIBRARY AGL)
-  find_library(APPKIT_LIBRARY AppKit)
-  find_library(COCOA_LIBRARY Cocoa)
-  find_library(IOKIT_LIBRARY IOKit)
-  find_library(COREAUDIO_LIBRARY CoreAudio)
-
-  set(viewer_LIBRARIES
-    ${COCOA_LIBRARY}
-    ${AGL_LIBRARY}
-    ${IOKIT_LIBRARY}
-    ${COREAUDIO_LIBRARY}
-    )
-
-  if (USE_BUGSPLAT)
-    list(APPEND viewer_LIBRARIES
-      ${BUGSPLAT_LIBRARIES}
-      )
-  endif (USE_BUGSPLAT)
-
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
     firestorm_icon.icns
@@ -1782,12 +1720,7 @@ if (DARWIN)
     Japanese.lproj/language.txt
     Korean.lproj/language.txt
     )
-  set_source_files_properties(
-    ${viewer_RESOURCE_FILES}
-    PROPERTIES
-    HEADER_FILE_ONLY TRUE
-    #MACOSX_PACKAGE_LOCATION Resources #don't do this! this tells cmake to copy the files.
-    )
+
   SOURCE_GROUP("Resources" FILES ${viewer_RESOURCE_FILES})
   list(APPEND viewer_SOURCE_FILES ${viewer_RESOURCE_FILES})
 endif (DARWIN)
@@ -1810,12 +1743,6 @@ if (LINUX)
 
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
-    set(viewer_LIBRARIES
-        Xinerama
-        )
-    if (OPENAL)
-      LIST(APPEND viewer_LIBRARIES ${OPENAL_LIBRARIES})
-    endif (OPENAL)
 
     # <FS:ND> Enable user to create a ctags database via using -DND_CTAGS=On
     if( ND_CTAGS )
@@ -1887,11 +1814,7 @@ if (WINDOWS)
     # All sources added to viewer_SOURCE_FILES
     # at this point use it.
     if(USE_PRECOMPILED_HEADERS)
-        set_source_files_properties(llviewerprecompiledheaders.cpp
-            PROPERTIES
-            COMPILE_FLAGS "/Ycllviewerprecompiledheaders.h"
-            )
-        set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
+       set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
     endif(USE_PRECOMPILED_HEADERS)
 
     # Replace the icons with the appropriate ones for the channel
@@ -2000,26 +1923,7 @@ if (WINDOWS)
 
     SOURCE_GROUP("Resource Files" FILES ${viewer_RESOURCE_FILES})
 
-    if (NOT USESYSTEMLIBS)
-        list(APPEND viewer_SOURCE_FILES ${viewer_RESOURCE_FILES})
-    endif (NOT USESYSTEMLIBS)
-
-# see EXP-1765 - theory is opengl32.lib needs to be included before gdi32.lib (windows libs)
-    set(viewer_LIBRARIES
-        opengl32
-        ${WINDOWS_LIBRARIES}
-        comdlg32
-        dxguid
-        imm32
-        kernel32
-        odbc32
-        odbccp32
-        oleaut32
-        shell32
-        Vfw32
-        wer
-        winspool
-        )
+    list(APPEND viewer_SOURCE_FILES ${viewer_RESOURCE_FILES})
 
     find_library(INTEL_MEMOPS_LIBRARY
                  NAMES ll_intel_memops
@@ -2029,8 +1933,10 @@ if (WINDOWS)
                  )
     mark_as_advanced(INTEL_MEMOPS_LIBRARY)
 
+
     if (INTEL_MEMOPS_LIBRARY)
-      list(APPEND viewer_LIBRARIES ${INTEL_MEMOPS_LIBRARY})
+      add_library( ll::intel_memops INTERFACE IMPORTED )
+      target_link_libraries( ll::intel_memops ${INTEL_MEMOPS_LIBRARY} )
     endif (INTEL_MEMOPS_LIBRARY)
 
     # <FS:Ansariel> Apply correct manifests to both 32 and 64 bit versions
@@ -2049,9 +1955,6 @@ if (WINDOWS)
     endif (ADDRESS_SIZE EQUAL 64)
     # </FS:Ansariel>
 
-    if (OPENAL)
-      LIST(APPEND viewer_LIBRARIES ${OPENAL_LIBRARIES})
-    endif (OPENAL)
 endif (WINDOWS)
 
 # Add the xui files. This is handy for searching for xui elements
@@ -2152,9 +2055,7 @@ source_group("Character File" FILES ${viewer_CHARACTER_FILES})
 
 set_source_files_properties(${viewer_CHARACTER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
-if (NOT USESYSTEMLIBS)
-    list(APPEND viewer_SOURCE_FILES ${viewer_CHARACTER_FILES})
-endif (NOT USESYSTEMLIBS)
+list(APPEND viewer_SOURCE_FILES ${viewer_CHARACTER_FILES})
 
 # <FS:Ansariel> Add Firestorm folders
 file(GLOB viewer_FONT_FILES fonts/*.xml)
@@ -2181,42 +2082,27 @@ if (WINDOWS)
   list(APPEND viewer_SOURCE_FILES ${viewer_INSTALLER_FILES})
 endif (WINDOWS)
 
-if (OPENAL)
-  set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_OPENAL")
-endif (OPENAL)
-
-if (FMODSTUDIO)
-  set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_FMODSTUDIO")
-  set(FMODWRAPPER_LIBRARY ${FMODSTUDIO_LIBRARY})
-endif (FMODSTUDIO)
-
-# <FS:Ansariel> Output device selection
-# set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-set_source_files_properties(llstartup.cpp llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
-# </FS:Ansariel>
-
 if (HAVOK OR HAVOK_TPV)
   set(LLSTARTUP_COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS} -DLL_HAVOK")
 endif (HAVOK OR HAVOK_TPV)
 
-# progress view disables/enables icons based on available packages
-set_source_files_properties(llprogressview.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+if( DEFINED LLSTARTUP_COMPILE_FLAGS )
+   # progress view disables/enables icons based on available packages
+   set_source_files_properties(llprogressview.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+
+   set_source_files_properties(llstartup.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+  # <FS:Ansariel> Output device selection
+  set_source_files_properties(llfloaterpreference.cpp PROPERTIES COMPILE_FLAGS "${LLSTARTUP_COMPILE_FLAGS}")
+  # </FS:Ansariel>
+endif()
 
 list(APPEND viewer_SOURCE_FILES ${viewer_HEADER_FILES})
-
-set_source_files_properties(${viewer_HEADER_FILES}
-                            PROPERTIES HEADER_FILE_ONLY TRUE)
 
 add_executable(${VIEWER_BINARY_NAME}
     WIN32
     MACOSX_BUNDLE
     ${viewer_SOURCE_FILES}
     )
-
-if (USE_BUGSPLAT)
-  set_property(TARGET ${VIEWER_BINARY_NAME}
-    PROPERTY COMPILE_DEFINITIONS "${BUGSPLAT_DEFINE}")
-endif (USE_BUGSPLAT)
 
 # add package files
 file(GLOB EVENT_HOST_SCRIPT_GLOB_LIST
@@ -2242,11 +2128,7 @@ if (WINDOWS)
         )
 
     if(USE_PRECOMPILED_HEADERS)
-        set_target_properties(
-            ${VIEWER_BINARY_NAME}
-            PROPERTIES
-            COMPILE_FLAGS "/Yullviewerprecompiledheaders.h"
-            )
+       target_precompile_headers( ${VIEWER_BINARY_NAME} PRIVATE llviewerprecompiledheaders.h )
     endif(USE_PRECOMPILED_HEADERS)
 
     # If adding a file to viewer_manifest.py in the WindowsManifest.construct() method, be sure to add the dependency
@@ -2265,37 +2147,18 @@ if (WINDOWS)
       # The following commented dependencies are determined at variably at build time. Can't do this here.
       ${CMAKE_SOURCE_DIR}/../etc/message.xml
       ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/llcommon.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapr-1.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libaprutil-1.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapriconv-1.dll
-      # <FS:Beq> Restore GLOD build dependencies
-      ${SHARED_LIB_STAGING_DIR}/Release/glod.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/glod.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/glod.dll
-      # </FS:Beq>
-      ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
-      # <FS:Ansariel> Only copy OpenJPEG dll if needed
-      #${SHARED_LIB_STAGING_DIR}/Release/openjp2.dll
-      #${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjp2.dll
-      #${SHARED_LIB_STAGING_DIR}/Debug/openjp2.dll
-      # </FS:Ansariel>
-      ${SHARED_LIB_STAGING_DIR}/Release/libhunspell.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libhunspell.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll
-      ${SHARED_LIB_STAGING_DIR}/Release/uriparser.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/uriparser.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/SLVoice.exe
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libsndfile-1.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxoal.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ca-bundle.crt
-      ${GOOGLE_PERF_TOOLS_SOURCE}
+      #${SHARED_LIB_STAGING_DIR}/openjpeg.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
+      ${SHARED_LIB_STAGING_DIR}/libhunspell.dll
+      ${SHARED_LIB_STAGING_DIR}/uriparser.dll
+      #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/SLVoice.exe
+      #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/libsndfile-1.dll
+      #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/vivoxoal.dll
+      ${AUTOBUILD_INSTALL_DIR}/ca-bundle.crt
       ${CMAKE_CURRENT_SOURCE_DIR}/licenses-win32.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable.txt
       ${viewer_APPSETTINGS_FILES}
       ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
+      ${SHARED_LIB_STAGING_DIR}/Release/glod.dll # <FS:Beq> Restore GLOD build dependencies
       SLPlugin
       media_plugin_cef
       media_plugin_libvlc
@@ -2306,42 +2169,39 @@ if (WINDOWS)
     if (NOT USE_KDU)
         list(APPEND COPY_INPUT_DEPENDENCIES
             ${SHARED_LIB_STAGING_DIR}/Release/openjp2.dll
-            ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjp2.dll
-            ${SHARED_LIB_STAGING_DIR}/Debug/openjp2.dll
             )
     endif (NOT USE_KDU)
     # </FS:Ansariel>
 
     if (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxsdk_x64.dll
-            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ortp_x64.dll
-           ${ARCH_PREBUILT_DIRS_RELEASE}/libcrypto-1_1-x64.dll
-           ${ARCH_PREBUILT_DIRS_RELEASE}/libssl-1_1-x64.dll
-            )
+       list(APPEND COPY_INPUT_DEPENDENCIES
+               ${SHARED_LIB_STAGING_DIR}/vivoxsdk_x64.dll
+               ${SHARED_LIB_STAGING_DIR}/ortp_x64.dll
+               ${ARCH_PREBUILT_DIRS_RELEASE}/libcrypto-1_1-x64.dll
+               ${ARCH_PREBUILT_DIRS_RELEASE}/libssl-1_1-x64.dll
+               )
     else (ADDRESS_SIZE EQUAL 64)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxsdk.dll
-            ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ortp.dll
-            ${ARCH_PREBUILT_DIRS_RELEASE}/libcrypto-1_1.dll
-            ${ARCH_PREBUILT_DIRS_RELEASE}/libssl-1_1.dll
-            )
+       list(APPEND COPY_INPUT_DEPENDENCIES
+               ${SHARED_LIB_STAGING_DIR}/vivoxsdk.dll
+               ${SHARED_LIB_STAGING_DIR}/ortp.dll
+               ${ARCH_PREBUILT_DIRS_RELEASE}/libcrypto-1_1.dll
+               ${ARCH_PREBUILT_DIRS_RELEASE}/libssl-1_1.dll
+               )
     endif (ADDRESS_SIZE EQUAL 64)
 
-    if (FMODSTUDIO)
+    if (TARGET ll::fmodstudio)
       list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
+           ${SHARED_LIB_STAGING_DIR}/fmod.dll
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
           )
-    endif (FMODSTUDIO)
+    endif ()
 
-    if (OPENAL)
+    if (TARGET ll::openal)
       list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/OpenAL32.dll
-           ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
+           ${SHARED_LIB_STAGING_DIR}/OpenAL32.dll
+           ${SHARED_LIB_STAGING_DIR}/alut.dll
           )
-    endif (OPENAL)
+    endif ()
 
     add_custom_command(
       OUTPUT  ${CMAKE_CFG_INTDIR}/copy_touched.bat
@@ -2352,16 +2212,16 @@ if (WINDOWS)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
-        "--fmodstudio=${FMODSTUDIO}"
-        "--openal=${OPENAL}"
+        "--fmodstudio=${USE_FMODSTUDIO}"
+        "--openal=${USE_OPENAL}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
-        --buildtype=${CMAKE_BUILD_TYPE}
+        --buildtype=$<CONFIG>
         "--channel=${VIEWER_CHANNEL}"
         --configuration=${CMAKE_CFG_INTDIR}
-        --dest=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}
+        --dest=${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>
         --grid=${GRID}
         --source=${CMAKE_CURRENT_SOURCE_DIR}
-        --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/copy_touched.bat
+        --touch=${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>/copy_touched.bat
         --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
         --viewer_flavor=${ND_VIEWER_FLAVOR}
       DEPENDS
@@ -2409,21 +2269,21 @@ if (WINDOWS)
         OUTPUT ${CMAKE_CFG_INTDIR}/touched.bat
         COMMAND ${PYTHON_EXECUTABLE}
         ARGS
-          ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
-          --arch=${ARCH}
-          --artwork=${ARTWORK_DIR}
-          "--bugsplat=${BUGSPLAT_DB}"
-          "--fmodstudio=${FMODSTUDIO}"
-          "--openal=${OPENAL}"
-          --build=${CMAKE_CURRENT_BINARY_DIR}
-          --buildtype=${CMAKE_BUILD_TYPE}
-          "--channel=${VIEWER_CHANNEL}"
-          --configuration=${CMAKE_CFG_INTDIR}
-          --dest=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}
-          --grid=${GRID}
-          --source=${CMAKE_CURRENT_SOURCE_DIR}
-          --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/touched.bat
-          --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
+              ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
+              --arch=${ARCH}
+              --artwork=${ARTWORK_DIR}
+              "--bugsplat=${BUGSPLAT_DB}"
+              "--fmodstudio=${USE_FMODSTUDIO}"
+              "--openal=${USE_OPENAL}"
+              --build=${CMAKE_CURRENT_BINARY_DIR}
+              --buildtype=$<CONFIG>
+              "--channel=${VIEWER_CHANNEL}"
+              --configuration=${CMAKE_CFG_INTDIR}
+              --dest=${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>
+              --grid=${GRID}
+              --source=${CMAKE_CURRENT_SOURCE_DIR}
+              --touch=${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>/touched.bat
+              --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
         DEPENDS
             ${VIEWER_BINARY_NAME}
@@ -2433,8 +2293,7 @@ if (WINDOWS)
         )
 
       add_custom_target(llpackage ALL DEPENDS
-        ${CMAKE_CFG_INTDIR}/touched.bat
-        windows-setup-build-all
+              ${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>/touched.bat
         )
         # temporarily disable packaging of event_host until hg subrepos get
         # sorted out on the parabuild cluster...
@@ -2487,61 +2346,36 @@ endif (WINDOWS)
 # modern version.
 
 target_link_libraries(${VIEWER_BINARY_NAME}
-    ${LEGACY_STDIO_LIBS}
-    ${PNG_PRELOAD_ARCHIVES}
-    ${ZLIBNG_PRELOAD_ARCHIVES}
-    ${URIPARSER_PRELOAD_ARCHIVES}
-    ${GOOGLE_PERFTOOLS_LIBRARIES}
-    ${LLAUDIO_LIBRARIES}
-    ${LLCHARACTER_LIBRARIES}
-    ${LLIMAGE_LIBRARIES}
-    ${LLINVENTORY_LIBRARIES}
-    ${LLMESHOPTIMIZER_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLPLUGIN_LIBRARIES}
-    ${LLPRIMITIVE_LIBRARIES}
-    ${LLRENDER_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
-    ${LLUI_LIBRARIES}
-    ${LLFILESYSTEM_LIBRARIES}
-    ${LLWINDOW_LIBRARIES}
-    ${LLXML_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${LLCOREHTTP_LIBRARIES}
-    ${LLCOMMON_LIBRARIES}
-    ${NDOF_LIBRARY}
-    ${NVAPI_LIBRARY}
-    ${HUNSPELL_LIBRARY}
-    ${viewer_LIBRARIES}
-    ${BOOST_PROGRAM_OPTIONS_LIBRARY}
-    ${BOOST_REGEX_LIBRARY}
-    ${BOOST_FIBER_LIBRARY}
-    ${BOOST_WAVE_LIBRARY} #FS specific
-    ${BOOST_THREAD_LIBRARY} #FS specific
-    ${BOOST_CONTEXT_LIBRARY}
-    ${GLIB_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${FMODWRAPPER_LIBRARY} # must come after LLAudio
-    ${OPENAL_LIBRARIES}
-    ${GLOD_LIBRARIES} # <FS:Beq/> restore GLOD dependencies    
-    ${OPENGL_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    #${SDL_LIBRARY}
-    ${SMARTHEAP_LIBRARY}
-    ${UI_LIBRARIES}
-    ${WINDOWS_LIBRARIES}
-    ${EXPAT_LIBRARIES}
-    ${XMLRPCEPI_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
-    ${CRYPTO_LIBRARIES}
-    ${LLLOGIN_LIBRARIES}
-    ${LLPHYSICS_LIBRARIES}
-    ${LLPHYSICSEXTENSIONS_LIBRARIES}
-    ${LLAPPEARANCE_LIBRARIES}
-    ${TRACY_LIBRARY}
-    ${GROWL_LIBRARY}
-    ${GIO_LIBRARIES}
-    )
+        llaudio
+        llcharacter
+        llimage
+        llinventory
+        llmessage
+        llplugin
+        llprimitive
+        llrender
+        llui
+        llfilesystem
+        llwindow
+        llxml
+        llmath
+        llcorehttp
+        llcommon
+        llmeshoptimizer
+        ll::ndof
+        lllogin
+        llprimitive
+        llappearance
+        ${LLPHYSICSEXTENSIONS_LIBRARIES}
+        ll::bugsplat
+        ll::tracy
+        fs::glod # <FS:Beq/> restore GLOD dependencies
+        fs::growl # <FS:Ansariel> Growl support
+        )
+
+if( TARGET ll::intel_memops )
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
+endif()
 
 target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
 
@@ -2550,12 +2384,16 @@ if (USE_BUGSPLAT)
     ${BUGSPLAT_LIBRARIES}
     )
 endif (USE_BUGSPLAT)
-	
+
 if (WINDOWS)
     target_link_libraries(${VIEWER_BINARY_NAME}
     ${GROWL_LIBRARY}
     )
 endif (WINDOWS)
+
+if( TARGET ll::nvapi )
+   target_link_libraries(${VIEWER_BINARY_NAME} ll::nvapi )
+endif()
 
 if (LINUX)
     target_link_libraries(${VIEWER_BINARY_NAME} "dl" )
@@ -2568,27 +2406,12 @@ if (LINUX)
   set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
-  if (NOT ENABLE_MEDIA_PLUGINS)
-	set(COPY_INPUT_DEPENDENCIES
-      ${VIEWER_BINARY_NAME}
-      SLPlugin
-      media_plugin_cef
-      media_plugin_gstreamer10
-      #media_plugin_libvlc
-      llcommon
-	  linux-crash-logger
-      )
-  else (NOT ENABLE_MEDIA_PLUGINS)
-	set(COPY_INPUT_DEPENDENCIES
-      ${VIEWER_BINARY_NAME}
-      #linux-crash-logger
-      SLPlugin
-      media_plugin_cef
-      media_plugin_gstreamer10
-      llcommon
-	  linux-crash-logger
-      )
-  endif (NOT ENABLE_MEDIA_PLUGINS)
+  set(COPY_INPUT_DEPENDENCIES
+    ${VIEWER_BINARY_NAME}
+    SLPlugin
+    #media_plugin_gstreamer010
+    llcommon
+    )
 
   add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
   
@@ -2600,8 +2423,8 @@ if (LINUX)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
-        "--fmodstudio=${FMODSTUDIO}"
-        "--openal=${OPENAL}"
+        "--fmodstudio=${USE_FMODSTUDIO}"
+        "--openal=${USE_OPENAL}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2626,8 +2449,8 @@ if (LINUX)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
-      "--fmodstudio=${FMODSTUDIO}"
-      "--openal=${OPENAL}"
+      "--fmodstudio=${USE_FMODSTUDIO}"
+      "--openal=${USE_OPENAL}"
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       "--channel=${VIEWER_CHANNEL}"
@@ -2699,7 +2522,7 @@ if (DARWIN)
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${MACOSX_BUNDLE_GUI_IDENTIFIER}"
     )
 
-  set(VIEWER_APP_BUNDLE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app")
+  set(VIEWER_APP_BUNDLE "${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>/${product}.app")
   set(VIEWER_APP_EXE "${VIEWER_APP_BUNDLE}/Contents/MacOS/${product}")
   set(VIEWER_APP_DSYM "${VIEWER_APP_EXE}.dSYM")
   set(VIEWER_APP_XCARCHIVE "${VIEWER_APP_BUNDLE}/../${product}.xcarchive.zip")
@@ -2720,10 +2543,10 @@ if (DARWIN)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
-      "--fmodstudio=${FMODSTUDIO}"
-      "--openal=${OPENAL}"
+      "--fmodstudio=${USE_FMODSTUDIO}"
+      "--openal=${USE_OPENAL}"
       --build=${CMAKE_CURRENT_BINARY_DIR}
-      --buildtype=${CMAKE_BUILD_TYPE}
+      --buildtype=$<CONFIG>
       --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
       "--channel=${VIEWER_CHANNEL}"
       --configuration=${CMAKE_CFG_INTDIR}
@@ -2756,8 +2579,8 @@ if (DARWIN)
           --arch=${ARCH}
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
-          "--fmodstudio=${FMODSTUDIO}"
-          "--openal=${OPENAL}"
+          "--fmodstudio=${USE_FMODSTUDIO}"
+          "--openal=${USE_OPENAL}"
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}
           "--channel=${VIEWER_CHANNEL}"
@@ -2765,7 +2588,7 @@ if (DARWIN)
           --dest=${VIEWER_APP_BUNDLE}
           --grid=${GRID}
           --source=${CMAKE_CURRENT_SOURCE_DIR}
-          --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
+          --touch=${CMAKE_CURRENT_BINARY_DIR}/$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,>/.${product}.bat
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --viewer_flavor=${ND_VIEWER_FLAVOR}
           ${SIGNING_SETTING}
@@ -2900,10 +2723,15 @@ if (LL_TESTS)
   )
 
   set(test_libs
-    ${LLCOMMON_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    ${CURL_LIBRARIES}
-    ${NGHTTP2_LIBRARIES}
+          llcommon
+          llfilesystem
+          llxml
+          llmessage
+          llcharacter
+          llui
+          lllogin
+          llplugin
+          llappearance
     )
 
   set_source_files_properties(
@@ -2921,17 +2749,6 @@ if (LL_TESTS)
     LL_TEST_ADDITIONAL_LIBRARIES "${test_libs}"
   )
 
-  set_source_files_properties(
-    llviewerhelputil.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_LIBRARIES "${BOOST_SYSTEM_LIBRARY}"
-  )
-
-  set_source_files_properties(
-    llremoteparcelrequest.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_LIBRARIES "${BOOST_SYSTEM_LIBRARY}"
-  )
 
   set_source_files_properties(
     llworldmap.cpp
@@ -2939,27 +2756,23 @@ if (LL_TESTS)
     PROPERTIES
     LL_TEST_ADDITIONAL_SOURCE_FILES 
     tests/llviewertexture_stub.cpp
-    #llviewertexturelist.cpp
-    LL_TEST_ADDITIONAL_LIBRARIES "${BOOST_SYSTEM_LIBRARY}"
   )
 
   set_source_files_properties(
     llmediadataclient.cpp
     PROPERTIES
-    LL_TEST_ADDITIONAL_LIBRARIES "${LLPRIMITIVE_LIBRARIES}"
-  )
-
-  set_source_files_properties(
-    llagentaccess.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_LIBRARIES "${BOOST_SYSTEM_LIBRARY}"
+    LL_TEST_ADDITIONAL_LIBRARIES llprimitive
   )
 
   set_source_files_properties(
     lllogininstance.cpp
     PROPERTIES
     LL_TEST_ADDITIONAL_SOURCE_FILES llversioninfo.cpp
-    LL_TEST_ADDITIONAL_LIBRARIES "${BOOST_SYSTEM_LIBRARY}"
+  )
+  set_property( SOURCE
+          ${viewer_TEST_SOURCE_FILES}
+          PROPERTY
+          LL_TEST_ADDITIONAL_LIBRARIES ${test_libs}
   )
 
   ##################################################
@@ -2981,41 +2794,28 @@ if (LL_TESTS)
   # if(USE_PRECOMPILED_HEADERS)
   #     set(test_sources "${test_sources}" llviewerprecompiledheaders.cpp)
   # endif(USE_PRECOMPILED_HEADERS)
-  set(test_libs
-    ${LLMESSAGE_LIBRARIES}
-    ${WINDOWS_LIBRARIES}
-    ${LLFILESYSTEM_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${LLCOMMON_LIBRARIES}
-    ${GOOGLEMOCK_LIBRARIES}
-    )
 
-  if (LINUX)
-    # llcommon uses `clock_gettime' which is provided by librt on linux.
-    set(LIBRT_LIBRARY
-      rt
-      )
-  endif (LINUX)
 
   set(test_libs
-    ${WINDOWS_LIBRARIES}
-    ${LLFILESYSTEM_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${LLCOMMON_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLCOREHTTP_LIBRARIES}
-    ${GOOGLEMOCK_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
-    ${CRYPTO_LIBRARIES}
-    ${LIBRT_LIBRARY}
-    ${BOOST_FIBER_LIBRARY}
-    ${BOOST_CONTEXT_LIBRARY}
-  )
+          llfilesystem
+          llmath
+          llcommon
+          llmessage
+          llcorehttp
+          llxml
+          llui
+          llplugin
+          llappearance
+          lllogin
+          llprimitive
+          lllogin
+          )
 
   LL_ADD_INTEGRATION_TEST(cppfeatures
     ""
     "${test_libs}"
     )
+
   LL_ADD_INTEGRATION_TEST(llsechandler_basic
     llsechandler_basic.cpp
     "${test_libs}"
@@ -3055,15 +2855,6 @@ if (LL_TESTS)
   #ADD_VIEWER_BUILD_TEST(lltextureinfo viewer)
   #ADD_VIEWER_BUILD_TEST(lltextureinfodetails viewer)
 
-include(LLAddBuildTest)
-SET(viewer_TEST_SOURCE_FILES
-  llagentaccess.cpp
-  )
-set_source_files_properties(
-  ${viewer_TEST_SOURCE_FILES}
-  PROPERTIES
-    LL_TEST_ADDITIONAL_SOURCE_FILES llviewerprecompiledheaders.cpp
-  )
 
 endif (LL_TESTS)
 

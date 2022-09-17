@@ -38,7 +38,13 @@
 // external library headers
 #include <boost/scoped_ptr.hpp>
 #include <boost/range.hpp>          // boost::begin(), boost::end()
+
+#ifdef LL_USESYSTEMLIBS
+#include <xmlrpc.h>
+#else
 #include <xmlrpc-epi/xmlrpc.h>
+#endif
+
 #include "curl/curl.h"
 
 // other Linden headers
@@ -343,11 +349,10 @@ public:
 		
 		switch (curlcode)
 		{
+#if CURLE_SSL_PEER_CERTIFICATE != CURLE_SSL_CACERT
 			case CURLE_SSL_PEER_CERTIFICATE:
-// <FS:ND/> CURLE_SSL_CACERT has been deprecated, the LIBCURL-VERSION_NUM check is probably no checking for the lowest curl vesion this did happen
-#if LIBCURL_VERSION_NUM < 0x075100
-			case CURLE_SSL_CACERT:
 #endif
+			case CURLE_SSL_CACERT:
                 data["certificate"] = mTransaction->getErrorCertData();
 				break;
 

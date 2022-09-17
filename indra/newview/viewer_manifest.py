@@ -97,7 +97,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 # include the entire shaders directory recursively
                 self.path("shaders")
                 # include the extracted list of contributors
-                contributions_path = "../../doc/contributions.txt"
+                contributions_path = os.path.join(self.args['source'], "..", "..", "doc", "contributions.txt")
                 contributor_names = self.extract_names(contributions_path)
                 self.put_in_file(contributor_names.encode(), "contributors.txt", src=contributions_path)
 
@@ -527,7 +527,7 @@ class WindowsManifest(ViewerManifest):
             self.cmakedirs(os.path.dirname(dst))
             self.created_paths.append(dst)
             if not os.path.isdir(src):
-                if(self.args['configuration'].lower() == 'debug'):
+                if(self.args['buildtype'].lower() == 'debug'):
                     test_assembly_binding(src, "Microsoft.VC80.DebugCRT", "8.0.50727.4053")
                 else:
                     test_assembly_binding(src, "Microsoft.VC80.CRT", "8.0.50727.4053")
@@ -550,7 +550,7 @@ class WindowsManifest(ViewerManifest):
             self.created_paths.append(dst)
             if not os.path.isdir(src):
                 try:
-                    if(self.args['configuration'].lower() == 'debug'):
+                    if(self.args['buildtype'].lower() == 'debug'):
                         test_assembly_binding(src, "Microsoft.VC80.DebugCRT", "")
                     else:
                         test_assembly_binding(src, "Microsoft.VC80.CRT", "")
@@ -599,7 +599,7 @@ class WindowsManifest(ViewerManifest):
         
         # Get shared libs from the shared libs staging directory
         with self.prefix(src=os.path.join(self.args['build'], os.pardir,
-                                          'sharedlibs', self.args['configuration'])):
+                                          'sharedlibs', self.args['buildtype'])):
 
             # Mesh 3rd party libs needed for auto LOD and collada reading
             try:
@@ -610,7 +610,7 @@ class WindowsManifest(ViewerManifest):
 
             # Get fmodstudio dll if needed
             if self.args['fmodstudio'] == 'ON':
-                if(self.args['configuration'].lower() == 'debug'):
+                if(self.args['buildtype'].lower() == 'debug'):
                     self.path("fmodL.dll")
                 else:
                     self.path("fmod.dll")
@@ -721,7 +721,7 @@ class WindowsManifest(ViewerManifest):
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
             # FS:ND They are all optional, as when compilig with VS2022 they won't be available'
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
-                                              'sharedlibs', 'Release')):
+                                              'sharedlibs', self.args['buildtype'])):
                 self.path_optional("msvcp140.dll")
                 self.path_optional("vcruntime140.dll")
                 self.path_optional("vcruntime140_1.dll")
@@ -1475,7 +1475,7 @@ class DarwinManifest(ViewerManifest):
 
                 # Fmod studio dylibs (vary based on configuration)
                 if self.args['fmodstudio'] == 'ON':
-                    if self.args['configuration'].lower() == 'debug':
+                    if self.args['buildtype'].lower() == 'debug':
                         for libfile in (
                                     "libfmodL.dylib",
                                     ):
