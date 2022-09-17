@@ -999,15 +999,6 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		if (!addDeferredAttachments(mRT->deferredScreen)) return false;
 	
 		GLuint screenFormat = GL_RGBA16;
-		if (gGLManager.mIsAMD)
-		{
-			screenFormat = GL_RGBA12;
-		}
-
-		if (gGLManager.mGLVersion < 4.f && gGLManager.mIsNVIDIA)
-		{
-			screenFormat = GL_RGBA16F_ARB;
-		}
         
 		if (!mRT->screen.allocate(resX, resY, screenFormat, FALSE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
 		if (samples > 0)
@@ -1203,8 +1194,7 @@ void LLPipeline::refreshCachedSettings()
 	LLPipeline::sUseOcclusion = 
 			(!gUseWireframe
 			&& LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") 
-			&& gSavedSettings.getBOOL("UseOcclusion") 
-			&& gGLManager.mHasOcclusionQuery) ? 2 : 0;
+			&& gSavedSettings.getBOOL("UseOcclusion")) ? 2 : 0;
 	
     WindLightUseAtmosShaders = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("WindLightUseAtmosShaders");
     RenderDeferred = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("RenderDeferred");
@@ -2517,8 +2507,7 @@ static LLTrace::BlockTimerStatHandle FTM_CULL("Object Culling");
 void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, LLPlane* planep, bool hud_attachments)
 {
 	static LLCachedControl<bool> use_occlusion(gSavedSettings,"UseOcclusion");
-	static bool can_use_occlusion = LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") 
-									&& gGLManager.mHasOcclusionQuery;
+    static bool can_use_occlusion = LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion");
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE; //LL_RECORD_BLOCK_TIME(FTM_CULL);
 
@@ -10114,7 +10103,7 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
     LLGLEnable cull(GL_CULL_FACE);
 
     //enable depth clamping if available
-    LLGLEnable depth_clamp(gGLManager.mHasDepthClamp ? GL_DEPTH_CLAMP : 0);
+    //LLGLEnable depth_clamp(GL_DEPTH_CLAMP);
 
     if (use_shader)
     {

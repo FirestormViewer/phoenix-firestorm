@@ -2090,22 +2090,14 @@ void LLFloaterPreference::refreshEnabledState()
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
 
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
-		!gGLManager.mHasVertexBufferObject)
-	{
-		getChildView("vbo")->setEnabled(FALSE);
-		getChildView("vbo_stream")->setEnabled(FALSE);
-	}
-	else
 #if LL_DARWIN
-		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
-		getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
+	getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
+	getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
 #else
-		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
+	getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
 #endif
 
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
-		!gGLManager.mHasVertexBufferObject)
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures"))
 	{
 		getChildView("texture compression")->setEnabled(FALSE);
 	}
@@ -2129,7 +2121,7 @@ void LLFloaterPreference::refreshEnabledState()
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
 
 	// Reflections
-	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
+	BOOL reflections = LLCubeMap::sUseCubeMaps;
 	ctrl_reflections->setEnabled(reflections);
 
 	// WindLight

@@ -4395,8 +4395,6 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="UseOcclusion" />
-                <menu_item_check.on_enable
-                 function="Advanced.EnableObjectObjectOcclusion" />
             </menu_item_check>
           <menu_item_separator />
 

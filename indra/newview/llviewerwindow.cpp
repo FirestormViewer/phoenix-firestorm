@@ -648,29 +648,6 @@ public:
 		{
 			LLTrace::Recording& last_frame_recording = LLTrace::get_frame_recording().getLastRecording();
 
-			if (gGLManager.mHasATIMemInfo)
-			{
-				S32 meminfo[4];
-				glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
-
-				addText(xpos, ypos, llformat("%.2f MB Texture Memory Free", meminfo[0]/1024.f));
-				ypos += y_inc;
-
-				if (gGLManager.mHasVertexBufferObject)
-				{
-					glGetIntegerv(GL_VBO_FREE_MEMORY_ATI, meminfo);
-					addText(xpos, ypos, llformat("%.2f MB VBO Memory Free", meminfo[0]/1024.f));
-					ypos += y_inc;
-				}
-			}
-			else if (gGLManager.mHasNVXMemInfo)
-			{
-				S32 free_memory;
-				glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &free_memory);
-				addText(xpos, ypos, llformat("%.2f MB Video Memory Free", free_memory/1024.f));
-				ypos += y_inc;
-			}
-
 			//show streaming cost/triangle count of known prims in current region OR selection
 			{
 				F32 cost = 0.f;
@@ -2101,11 +2078,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LL_DEBUGS("Window") << "Loading feature tables." << LL_ENDL;
 
 	// Initialize OpenGL Renderer
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
-		!gGLManager.mHasVertexBufferObject)
-	{
-		gSavedSettings.setBOOL("RenderVBOEnable", FALSE);
-	}
 	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
 	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
 	gGL.init(true);
@@ -2120,7 +2092,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		LLFeatureManager::getInstance()->applyRecommendedSettings();
 		gSavedSettings.setBOOL("ProbeHardwareOnStartup", FALSE);
 	}
-	
+
 	// If we crashed while initializng GL stuff last time, disable certain features
 	if (gSavedSettings.getBOOL("RenderInitError"))
 	{

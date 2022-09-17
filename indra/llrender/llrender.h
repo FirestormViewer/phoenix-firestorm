@@ -514,8 +514,6 @@ private:
 	eBlendFactor mCurrBlendAlphaSFactor;
 	eBlendFactor mCurrBlendAlphaDFactor;
 
-	F32				mMaxAnisotropy;
-
 	std::vector<LLVector3> mUIOffset;
 	std::vector<LLVector3> mUIScale;
 

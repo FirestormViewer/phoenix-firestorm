@@ -225,7 +225,6 @@ void LLTextureBar::draw()
 		{ "CCH", LLColor4::cyan },	// LOAD_FROM_TEXTURE_CACHE
 		{ "DSK", LLColor4::blue },	// CACHE_POST
 		{ "NET", LLColor4::green },	// LOAD_FROM_NETWORK
-		{ "SIM", LLColor4::green },	// LOAD_FROM_SIMULATOR
 		{ "HTW", LLColor4::green },	// WAIT_HTTP_RESOURCE
 		// <FS:Ansariel> Unique state codes
 		//{ "HTW", LLColor4::green },	// WAIT_HTTP_RESOURCE2

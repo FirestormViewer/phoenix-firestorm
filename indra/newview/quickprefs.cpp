@@ -1044,7 +1044,7 @@ void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
-	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
+	BOOL reflections = LLCubeMap::sUseCubeMaps;
 	mCtrlReflectionDetail->setEnabled(reflections);
 
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
@@ -1065,38 +1065,6 @@ void FloaterQuickPrefs::refreshSettings()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	mCtrlShadowDetail->setEnabled(enabled);
-
-	// disabled windlight
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
-	{
-		sky_label->setEnabled(FALSE);
-		sky_slider->setEnabled(FALSE);
-		sky_spinner->setEnabled(FALSE);
-		sky_default_button->setEnabled(FALSE);
-
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-	}
-
-	// disabled deferred
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
-		!gGLManager.mHasFramebufferObject)
-	{
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-	}
 
 	// disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))

@@ -13914,20 +13914,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-  <key>RenderUseTransformFeedback</key>
-  <map>
-    <key>Comment</key>
-    <string>[EXPERIMENTAL] Use transform feedback shaders for LoD updates</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-    <key>Backup</key>
-    <integer>0</integer>
-  </map>
-
   <key>RenderVBOMappingDisable</key>
     <map>
       <key>Comment</key>
