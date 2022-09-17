@@ -4903,7 +4903,9 @@ void LLWindowWin32::LLWindowWin32Thread::updateVRAMUsage()
         }
         F32 eu_error = (F32)((S32)eu_mb - (S32)cu_mb) / (F32)cu_mb;
 
-        U32 target_mb = info.Budget / 1024 / 1024;
+        // <FS:Ansariel> Use corrected budget...
+        //U32 target_mb = info.Budget / 1024 / 1024;
+        U32 target_mb = budget_mb;
 
         if (target_mb > 4096)  // if 4GB are installed, try to leave 2GB free 
         {
