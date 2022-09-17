@@ -1386,13 +1386,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
                         LL_WARNS(LOG_TXT) << "Trying to fetch a texture of non-default type by UUID. This probably won't work!" << LL_ENDL;
 					}
 					setUrl(http_url + "/?texture_id=" + mID.asString().c_str());
-					LL_WARNS(LOG_TXT) << "Texture URL: " << mUrl << LL_ENDL;
+					LL_DEBUGS(LOG_TXT) << "Texture URL: " << mUrl << LL_ENDL;
 					mWriteToCacheState = CAN_WRITE ; //because this texture has a fixed texture id.
 				}
 				else
 				{
 					mCanUseHTTP = false ;
-					LL_WARNS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
+					LL_DEBUGS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
 				}
 			}
 			else
@@ -1428,8 +1428,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			mSentRequest = QUEUED;
 			mFetcher->addToNetworkQueue(this);
 			recordTextureStart(false);
-			setPriority(LLWorkerThread::PRIORITY_LOW | mWorkPriority);
-			
 			return false;
 		}
 		// </FS:Ansariel>
@@ -1442,6 +1440,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 	// <FS:Ansariel> OpenSim compatibility
 	if (mState == LOAD_FROM_SIMULATOR)
 	{
+        LL_PROFILE_ZONE_NAMED_CATEGORY_THREAD("tfwdw - LOAD_FROM_SIMULATOR");
 		if (mFormattedImage.isNull())
 		{
 			mFormattedImage = new LLImageJ2C;
@@ -1471,7 +1470,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				LL_WARNS(LOG_TXT) << mID << " processSimulatorPackets() failed to load buffer" << LL_ENDL;
 				return true; // failed
 			}
-			setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
+
 			if (mLoadedDiscard < 0)
 			{
 				LL_WARNS(LOG_TXT) << mID << " mLoadedDiscard is " << mLoadedDiscard
@@ -1485,7 +1484,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		else
 		{
 			mFetcher->addToNetworkQueue(this); // failsafe
-			setPriority(LLWorkerThread::PRIORITY_LOW | mWorkPriority);
 			recordTextureStart(false);
 		}
 		return false;
@@ -1689,9 +1687,9 @@ bool LLTextureFetchWorker::doWork(S32 param)
 						setState(INIT);
 						mCanUseHTTP = false;
 						mUrl.clear();
-						setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
 						releaseHttpSemaphore();
-						return false;
+						//return false;
+                        return doWork(param);
 					}
 					// </FS:Ansariel>
 				}
@@ -2787,6 +2785,7 @@ bool LLTextureFetch::createRequest(FTType f_type, const std::string& url, const 
 // protected
 void LLTextureFetch::addToNetworkQueue(LLTextureFetchWorker* worker)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	lockQueue();														// +Mfq
 	bool in_request_map = (mRequestMap.find(worker->mID) != mRequestMap.end()) ;
 	unlockQueue();														// -Mfq
@@ -2808,6 +2807,7 @@ void LLTextureFetch::addToNetworkQueue(LLTextureFetchWorker* worker)
 // Threads:  T*
 void LLTextureFetch::removeFromNetworkQueue(LLTextureFetchWorker* worker, bool cancel)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLMutexLock lock(&mNetworkQueueMutex);								// +Mfnq
 	size_t erased = mNetworkQueue.erase(worker->mID);
 	if (cancel && erased > 0)
@@ -2853,7 +2853,7 @@ void LLTextureFetch::deleteRequest(const LLUUID& id, bool cancel)
 		unlockQueue();													// -Mfq
 
 		llassert_always(erased_1 > 0) ;
-	removeFromNetworkQueue(worker, cancel); // <FS:Ansariel> OpenSim compatibility
+		removeFromNetworkQueue(worker, cancel); // <FS:Ansariel> OpenSim compatibility
 		llassert_always(!(worker->getFlags(LLWorkerClass::WCF_DELETE_REQUESTED))) ;
 
 		worker->scheduleDelete();	
@@ -2882,7 +2882,7 @@ void LLTextureFetch::removeRequest(LLTextureFetchWorker* worker, bool cancel)
 	unlockQueue();														// -Mfq
 
 	llassert_always(erased_1 > 0) ;
-		removeFromNetworkQueue(worker, cancel); // <FS:Ansariel> OpenSim compatibility
+	removeFromNetworkQueue(worker, cancel); // <FS:Ansariel> OpenSim compatibility
 	llassert_always(!(worker->getFlags(LLWorkerClass::WCF_DELETE_REQUESTED))) ;
 
 	worker->scheduleDelete();	
@@ -3270,6 +3270,7 @@ void LLTextureFetch::threadedUpdate()
 // Threads:  Tmain
 void LLTextureFetch::sendRequestListToSimulators()
 {
+    LL_PROFILE_ZONE_SCOPED;
 	// All requests
 	const F32 REQUEST_DELTA_TIME = 0.10f; // 10 fps
 	
@@ -3320,7 +3321,6 @@ void LLTextureFetch::sendRequestListToSimulators()
 				req->mLastPacket >= req->mTotalPackets-1)
 			{
 				// We have all the packets... make sure this is high priority
-// 			req->setPriority(LLWorkerThread::PRIORITY_HIGH | req->mWorkPriority);
 				continue;
 			}
 			F32 elapsed = req->mRequestedDeltaTimer.getElapsedTimeF32();
@@ -3369,6 +3369,7 @@ void LLTextureFetch::sendRequestListToSimulators()
 					gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 				}
 				S32 packet = req->mLastPacket + 1;
+                //LL_INFOS() << req->mID << ": " << req->mImagePriority << LL_ENDL;
 				gMessageSystem->nextBlockFast(_PREHASH_RequestImage);
 				gMessageSystem->addUUIDFast(_PREHASH_Image, req->mID);
 				gMessageSystem->addS8Fast(_PREHASH_DiscardLevel, (S8)req->mDesiredDiscard);
@@ -3533,6 +3534,7 @@ void LLTextureFetchWorker::setState(e_state new_state)
 bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8 codec, U16 packets, U32 totalbytes,
 										U16 data_size, U8* data)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLTextureFetchWorker* worker = getWorker(id);
 	bool res = true;
 
@@ -3584,7 +3586,6 @@ bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8
 	llassert_always(totalbytes > 0);
 	llassert_always(data_size == FIRST_PACKET_SIZE || data_size == worker->mFileSize);
 	res = worker->insertPacket(0, data, data_size);
-	worker->setPriority(LLWorkerThread::PRIORITY_HIGH | worker->mWorkPriority);
 	worker->setState(LLTextureFetchWorker::LOAD_FROM_SIMULATOR);
 	worker->unlockWorkMutex();											// -Mw
 	return res;
@@ -3594,6 +3595,7 @@ bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8
 // Threads:  T*
 bool LLTextureFetch::receiveImagePacket(const LLHost& host, const LLUUID& id, U16 packet_num, U16 data_size, U8* data)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLTextureFetchWorker* worker = getWorker(id);
 	bool res = true;
 
@@ -3634,7 +3636,6 @@ bool LLTextureFetch::receiveImagePacket(const LLHost& host, const LLUUID& id, U1
 	if ((worker->mState == LLTextureFetchWorker::LOAD_FROM_SIMULATOR) ||
 		(worker->mState == LLTextureFetchWorker::LOAD_FROM_NETWORK))
 	{
-		worker->setPriority(LLWorkerThread::PRIORITY_HIGH | worker->mWorkPriority);
 		worker->setState(LLTextureFetchWorker::LOAD_FROM_SIMULATOR);
 	}
 	else
