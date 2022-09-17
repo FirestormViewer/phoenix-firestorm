@@ -17,7 +17,7 @@ if (WINDOWS)
     foreach(hive HKEY_CURRENT_USER HKEY_LOCAL_MACHINE)
       # prefer more recent Python versions to older ones, if multiple versions
       # are installed
-      foreach(pyver 3.11 3.10 3.9 3.8 3.7)
+      foreach(pyver 3.11 3.10 3.9)
         list(APPEND regpaths "[${hive}\\SOFTWARE\\Python\\PythonCore\\${pyver}\\InstallPath]")
       endforeach()
     endforeach()
@@ -37,6 +37,7 @@ if (WINDOWS)
       "$ENV{PROGRAMFILES} (x86)/Python*"
       "c:/Python*")
 
+    set(Python3_FIND_REGISTRY "LAST")
     find_program(python
       NAMES python3.exe python.exe
       NO_DEFAULT_PATH # added so that cmake does not find cygwin python
