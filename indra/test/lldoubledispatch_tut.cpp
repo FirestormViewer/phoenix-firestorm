@@ -35,8 +35,9 @@
 #include "lldoubledispatch.h"
 // STL headers
 // std headers
-#include <string>
 #include <iostream>
+#include <memory>
+#include <string>
 #include <typeinfo>
 // external library headers
 // other Linden headers

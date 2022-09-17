@@ -724,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f283a064c30695bd7bf071f1bd481f32</string>
+              <string>a880dfc15fcb330baf548a85324cd88a</string>
               <key>url</key>
-			  <string>https://3p.firestormviewer.org/colladadom-2.3.222232011-darwin64-222232011.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104133/913090/colladadom-2.3.574693-darwin64-574693.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -748,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1c094d709a35b252bba7b6ef1871085c</string>
+              <string>7e84441d9c7cf019a7bdc7b818b16c27</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104112/912957/colladadom-2.3.574693-windows-574693.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -760,16 +760,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a7596da3696fc423ec1bc7d6764c01ab</string>
+              <string>2eaffbb8a93b03a732d3c47055a8efcb</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104135/913103/colladadom-2.3.574693-windows64-574693.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.3.569219</string>
+        <string>2.3.574693</string>
       </map>
       <key>cubemaptoequirectangular</key>
       <map>
@@ -4182,7 +4182,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>windows</key>
         <map>
           <key>build_directory</key>
-          <string>build-vc${AUTOBUILD_VSVER|150}-$AUTOBUILD_ADDRSIZE</string>
+          <string>build-vc${AUTOBUILD_VSVER|170}-$AUTOBUILD_ADDRSIZE</string>
           <key>configurations</key>
           <map>
             <key>RelWithDebInfo</key>

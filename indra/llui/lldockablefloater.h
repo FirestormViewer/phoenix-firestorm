@@ -30,6 +30,7 @@
 #include "llerror.h"
 #include "llfloater.h"
 #include "lldockcontrol.h"
+#include <memory>
 
 /**
  * Represents floater that can dock.

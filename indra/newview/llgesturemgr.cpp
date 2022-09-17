@@ -777,7 +777,7 @@ struct IsGesturePlaying
 {
 	bool operator()(const LLMultiGesture* gesture) const
 	{
-		return gesture->mPlaying ? true : false;
+		return bool(gesture->mPlaying);
 	}
 };
 
