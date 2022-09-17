@@ -12,8 +12,6 @@
 #    "if(${CMAKE_VERSION} VERSION_LESS "3.20.0")" that can also be removed
 cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
-set(CMAKE_CXX_STANDARD 17) #<FS> Enable c++17 on all platforms
-
 set(ROOT_PROJECT_NAME "Firestorm" CACHE STRING
     "The root project/makefile/solution name. Defaults to Firestorm.")
 project(${ROOT_PROJECT_NAME})
