@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Локальный Меш">
+  <tab_container name="local_mesh_tabs">
+    <panel name="local_mesh_assets_panel"
+      label="Активы Локального Меша"
+      title="Активы Локального Меша">
+      <fs_scroll_list name="l_name_list">
+        <column name="unit_status" label="Статус"/>
+        <column name="unit_name" label="Название"/>
+        <column name="unit_lods" label="LOD-ы"/>
+        <column name="unit_objects" label="Объекты"/>
+        <column name="unit_id_HIDDEN" label="ID"/>
+      </fs_scroll_list>
+    </panel>
+    <panel name="logs_panel" label="Лог"/>
+    <panel name="local_mesh_settings_panel" label="Настройки">
+      <check_box name="local_mesh_scale_use_meters"
+        label="Предположим, что масштаб указан в метрах."
+        tool_tip="Игнорируйте единицы измерения масштаба в сантиметрах, используемые такими инструментами, как Maya" />
+      <text name="lod_suffix_label">
+        Суффиксы LOD:
+      </text>
+      <combo_box name="lod_suffix_combo"
+        tool_tip="Выберите стандарт или отредактируйте вручную... || По умолчанию СЛ - (Низший как LOD0, Высокий без суффикса). || Игровой Движок - Unity/UE5, и т.п. (Низший=LOD3, Высокий=LOD0). || Имена LOD - Английские имена LOD, (Низший='LOWEST', Высокий='HIGH').">
+        <combo_item name="choose_one">Текущий</combo_item>
+        <combo_item name="suff_sl">Стандарт СЛ</combo_item>
+        <combo_item name="suff_unity">Стандарт Игрового Движка</combo_item>
+        <combo_item name="suff_descriptive">Имена LOD</combo_item>
+      </combo_box>
+      <text name="suf_lowest_lab">
+        Низший:
+      </text>
+      <line_editor name="suf_lowest"
+        tool_tip="Суффикс, используемый для идентификации файла с низшим LOD на диске и моделей внутри файла."/>
+      <text name="suf_low_lab">
+        Низкий:
+      </text>
+      <line_editor name="suf_low"
+        tool_tip="Суффикс, используемый для идентификации файла с низким LOD на диске и моделей внутри файла."/>
+      <text name="suf_medium_lab">
+        Средний:
+      </text>
+      <line_editor name="suf_medium"
+        tool_tip="Суффикс, используемый для идентификации файла с средним LOD на диске и моделей внутри файла."/>
+      <text name="suf_high_lab">
+        Высокий:
+      </text>
+      <line_editor name="suf_high"
+        tool_tip="Суффикс, используемый для идентификации файла с высоким LOD на диске и моделей внутри файла."/>
+      <text name="suf_physics_lab">
+        Физика:
+      </text>
+      <line_editor name="suf_physics"
+        tool_tip="Суффикс, используемый для идентификации файла физики на диске и моделей внутри файла."/>
+    </panel>
+  </tab_container>
+  <button name="btn_apply" label="Применить"/>
+  <button name="btn_add" label="Добавить"/>
+  <button name="btn_remove" label="Удалить"/>
+  <button name="btn_reload" label="Перезагруз."/>
+  <button name="btn_clear" label="Очистить"/>
+  <button name="btn_rez" label="Рез выбраных"
+    tool_tip="Создайте донорский меш в мире и заполните его выбранным локальным мешем. Это создаст пустой объект в мире."/>
+</floater>
