@@ -412,6 +412,9 @@ texture :
 				URL de la 
 musique :
 			</text>
+			<button name="stream_add_btn" tool_tip="Ajouter l'URL du flux de musique à la liste des flux enregistrés"/>
+			<button name="stream_delete_btn" tool_tip="Supprimer l'URL du flux de musique de la liste des flux enregistrés"/>
+			<button name="stream_copy_btn" tool_tip="Copier l'URL du flux de musique dans le presse-papiers"/>
 			<text name="Sound:">
 				Son :
 			</text>
@@ -427,6 +430,10 @@ musique :
 			<check_box label="Activer le chat vocal" name="parcel_enable_voice_channel"/>
 			<check_box label="Activer la voix (contrôlé par le domaine)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Limiter le chat vocal à cette parcelle" name="parcel_enable_voice_channel_local"/>
+			<text name="media">
+				Média:
+			</text>
+			<check_box label="Masquer MOAP" name="obscure_moap" tool_tip="Les médias d'un prim situé en dehors de la parcelle ne doivent pas être lus automatiquement par un agent situé dans cette parcelle et vice versa."/>
 		</panel>
 		<panel label="Accès" name="land_access_panel">
 			<panel.string name="access_estate_defined">

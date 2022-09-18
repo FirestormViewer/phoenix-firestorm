@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Maillage local">
+	<tab_container name="local_mesh_tabs">
+		<panel name="local_mesh_assets_panel" label="Maillages locaux" title="Maillages locaux">
+			<fs_scroll_list name="l_name_list">
+				<column name="unit_status" label="Statut" />
+				<column name="unit_name" label="Nom" />
+				<column name="unit_lods" label="Détails" />
+				<column name="unit_objects" label="Objets" />
+			</fs_scroll_list>
+		</panel>
+		<panel name="local_mesh_settings_panel" label="Paramètres">
+			<check_box name="local_mesh_scale_use_meters" label="Suppose que l'échelle est en mètres." tool_tip="Ignore les unités d'échelle en cm utilisées par des outils tels que Maya." />
+			<text name="lod_suffix_label">
+				Suffixes LOD :
+			</text>
+			<combo_box name="lod_suffix_combo" tool_tip="Sélectionnez un pré-réglage ou définissez le vôtre... || Standard SL - (le plus bas est LOD0 et le plus haut n'a pas de suffixe). || Moteur de jeu - Unity/UE5 etc. (le plus bas=LOD3, le plus élevé=LOD0). || Mots LOD - Noms anglais des LODs (Le plus bas='LOWEST', Le plus élevé='HIGH')." >
+			<combo_item name="choose_one">Actuel</combo_item>
+			<combo_item name="suff_sl">Standard SL</combo_item>
+			<combo_item name="suff_unity">Standard de moteur de jeu</combo_item>
+			<combo_item name="suff_descriptive">Noms LOD</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				Le plus bas :
+			</text>
+			<line_editor name="suf_lowest" tool_tip="Le suffixe utilisé pour identifier le fichier LOD le plus bas sur le disque et les modèles dans un fichier." />
+			<text name="suf_low_lab">
+				Bas :
+			</text>
+			<line_editor name="suf_low" tool_tip="Le suffixe utilisé pour identifier le fichier LOD bas sur le disque et les modèles dans un fichier." />
+			<text name="suf_medium_lab">
+				Moyen :
+			</text>
+			<line_editor name="suf_medium" tool_tip="Le suffixe utilisé pour identifier le fichier LOD moyen sur le disque et les modèles dans un fichier." />
+			<text name="suf_high_lab">
+				Élevé :
+			</text>
+			<line_editor name="suf_high" tool_tip="Le suffixe utilisé pour identifier le fichier LOD élevé sur le disque et les modèles dans un fichier." />
+			<text name="suf_physics_lab">
+				Physique :
+			</text>
+			<line_editor name="suf_physics" tool_tip="Le suffixe utilisé pour identifier le fichier physique sur le disque et les modèles dans un fichier." />
+		</panel>
+	</tab_container>
+	<button name="btn_apply" label="Appliquer" />
+	<button name="btn_add" label="Ajouter" />
+	<button name="btn_remove" label="Supprimer" />
+	<button name="btn_reload" label="Recharger" />
+	<button name="btn_clear" label="Effacer" />
+	<button name="btn_rez" label="Poser sélection" tool_tip="Créer un maillage générateur dans le monde et le remplir avec le maillage local sélectionné. Cela crée un objet vide dans le monde." />
+</floater>
