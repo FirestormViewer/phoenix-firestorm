@@ -392,7 +392,7 @@ Coller rotation
 				<combo_box.item label="Cylindre" name="Cylinder"/>
 			</combo_box>
 			<text name="mesh_info_label" >
-				Informations sur le maillage :
+				Info maillage :
 			</text>
 			<text name="lod_num_tris" value="Nbre triangles"/>
 			<text name="mesh_lod_label">
@@ -409,18 +409,18 @@ Le plus bas:
 				<combo_box.item label="Le plus bas" name="Lowest/Imposter"/>
 			</combo_box>
 			<text name="ObjectLODbehaviourLabel" value="Comportement LOD de l'objet :"/>
-			<text name="object_radius" value="Rayon de l'objet :"/>
+			<text name="object_radius" value="Rayon objet :"/>
 			<text name="LOD_swap_factors_label" value="Facteurs LOD"/>
 			<text name="LOD_swap_defaults_label" value="Par défaut" tool_tip="Le paramètre par défaut du facteur LOD qui sera appliqué par la plupart des visualiseurs.."/>
-			<text name="LOD_swap_usr_label" tool_tip="Vos paramètres, tiré de RenderVolumeLODFactor" value="Les votres"/>
-			<text name="LOD_swap_label" value="Changement de LOD"/>
+			<text name="LOD_swap_usr_label" tool_tip="Vos paramètres, tiré de RenderVolumeLODFactor" value="Vôtres"/>
+			<text name="LOD_swap_label" value="Swap LOD"/>
 			<string name="ll_lod_tooltip_msg">Paramètres par défaut du visualiseur de Linden Lab Second Life ([FACTOR])</string>
 			<string name="fs_lod_tooltip_msg">Paramètres par défaut de [APP_NAME] ([FACTOR])</string>
 			<text name="LOD_swap_usr_current" tool_tip="Votre facteur de LOD actuel" value="[FACTOR]"/>
 			<text name="LOD_swap_LOD_Change_label">
 Haut ↔ Moy.
 Moy. ↔ Bas
-Bas ↔ Plus bas
+Bas ↔ + bas
 			</text>
 			<text name="LODSwapTableDscriptionsText" tool_tip="Bonne conduite : Les créateurs doivent assurer un bon comportement LOD pour les paramètres par défaut dans toutes les visualiseurs.">
 				Ce tableau indique les limites de changement de niveau de détail en mètres à partir de la caméra.

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="save_camera_preset" title="Enreg. réglages de la caméra">
+	<string name="btn_label_save">
+		Enregistrer
+	</string>
+	<string name="btn_label_replace">
+		Remplacer
+	</string>
+	<radio_group name="radio_save_preset">
+		<radio_item label="Enregistrer comme nouveau réglage" name="new_preset" />
+		<radio_item label="Remplacer le réglage" name="replace_preset" />
+	</radio_group>
+	<button label="Enregistrer" name="save" />
+	<button label="Annuler" name="cancel" />
+</floater>

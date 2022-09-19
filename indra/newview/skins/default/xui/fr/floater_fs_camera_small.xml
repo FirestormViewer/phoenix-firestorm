@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="fs_camera_floater_small" title="Contrôle de la caméra">
+	<floater.string name="rotate_tooltip">
+		Faites pivoter la caméra autour du sujet
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Zoomez sur le sujet
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Déplacez la caméra vers le haut, le bas, la gauche et la droite.
+	</floater.string>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="Faites pivoter la caméra autour du sujet" />
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="Zoomez sur le sujet" />
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="Déplacez la caméra vers le haut, le bas, la gauche et la droite." />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="buttons_view">
+		<panel_camera_item name="front_view" tool_tip="Vue de devant" />
+		<panel_camera_item name="group_view" tool_tip="Vue de côté" />
+		<panel_camera_item name="rear_view" tool_tip="Vue de l'arrière" />
+	</panel>
+	<panel name="buttons">
+		<panel_camera_item name="object_view" tool_tip="Vue de l'objet" />
+		<panel_camera_item name="mouselook_view" tool_tip="Vue à la première personne" />
+		<panel_camera_item name="reset_view" tool_tip="Réinitialiser la vue" />
+	</panel>
+</floater>

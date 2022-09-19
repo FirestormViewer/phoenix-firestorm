@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Outfit">
+	<menu_item_call label="Porter - Remplacer votre tenue" name="wear_replace" />
+	<menu_item_call label="Porter - Ajouter à votre tenue" name="wear_add" />
+	<menu_item_call label="Retirer - Retirer de votre tenue" name="take_off" />
+	<menu_item_call label="Charger une photo ([UPLOAD_COST] L$)" name="upload_photo" />
+	<menu_item_call label="Sélectionner une photo" name="select_photo" />
+	<menu_item_call label="Prendre une photo" name="take_snapshot" />
+	<menu_item_call label="Supprimer la photo" name="remove_photo" />
+	<menu label="Nouveau vêtement" name="New Clothes">
+		<menu_item_call label="Nouvelle chemise" name="New Shirt"/>
+		<menu_item_call label="Nouveaux pantalons" name="New Pants"/>
+		<menu_item_call label="Nouvelles chaussures" name="New Shoes"/>
+		<menu_item_call label="Nouvelles chaussettes" name="New Socks"/>
+		<menu_item_call label="Nouvelle veste" name="New Jacket"/>
+		<menu_item_call label="Nouvelle jupe" name="New Skirt"/>
+		<menu_item_call label="Nouveaux gants" name="New Gloves"/>
+		<menu_item_call label="Nouveau T-shirt" name="New Undershirt"/>
+		<menu_item_call label="Nouveau sous-vêtement" name="New Underpants"/>
+		<menu_item_call label="Nouvelle couche alpha" name="New Alpha"/>
+		<menu_item_call label="Nouveau physique" name="New Physics"/>
+		<menu_item_call label="Nouveau tatouage" name="New Tattoo"/>
+	</menu>
+	<menu label="Nouvelle partie du corps" name="New Body Parts">
+		<menu_item_call label="Nouvelle silhouette" name="New Shape"/>
+		<menu_item_call label="Nouvelle peau" name="New Skin"/>
+		<menu_item_call label="Nouveaux cheveux" name="New Hair"/>
+		<menu_item_call label="Nouveaux yeux" name="New Eyes"/>
+	</menu>
+	<menu_item_call label="Modifier votre tenue" name="edit" />
+	<menu_item_call label="Renommer la tenue" name="rename" />
+	<menu_item_call label="Supprimer la tenue" name="delete" />
+</context_menu>
