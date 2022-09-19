@@ -1816,7 +1816,12 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     }
     else if (item_name == "toggle_block_agent")
     {
-        LLAvatarActions::toggleBlock(agent_id);
+        <FS:PP> Swap block/unblock buttons properly
+        // LLAvatarActions::toggleBlock(agent_id);
+        bool is_blocked = LLAvatarActions::toggleBlock(agent_id);
+        mBlockButton->setVisible(!is_blocked);
+        mUnblockButton->setVisible(is_blocked);
+        // </FS:PP>
     }
     else if (item_name == "copy_user_id")
     {
