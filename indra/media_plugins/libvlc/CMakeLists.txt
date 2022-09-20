@@ -8,6 +8,7 @@ include(LLImage)
 include(LLWindow)
 include(Linking)
 include(PluginAPI)
+include(MediaPluginBase)   # <FS:Zi> Linux volume catcher
 
 include(LibVLCPlugin)
 

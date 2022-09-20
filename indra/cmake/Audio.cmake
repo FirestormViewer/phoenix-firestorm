@@ -11,6 +11,7 @@ target_include_directories( ll::vorbis SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/inc
 if (WINDOWS)
   target_link_libraries(ll::vorbis INTERFACE ogg_static vorbis_static vorbisenc_static vorbisfile_static )
 else (WINDOWS)
-  target_link_libraries(ll::vorbis INTERFACE ogg vorbis vorbisenc vorbisfile )
+  # <FS:Zi> These must be in this order, or it won't link: vorbisenc vorbisfile vorbis ogg
+  target_link_libraries(ll::vorbis INTERFACE vorbisenc vorbisfile vorbis ogg)
 endif (WINDOWS)
 

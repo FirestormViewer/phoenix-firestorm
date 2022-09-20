@@ -2,6 +2,8 @@
 
 # Growl is actually libnotify on linux systems.
 
+if (DARWIN OR WINDOWS) # <FS:Zi> no need to do these things on Linux
+
 include_guard()
 add_library( fs::growl INTERFACE IMPORTED )
 
@@ -13,8 +15,9 @@ elseif (DARWIN)
   target_link_libraries( fs:growl INTERFACE libgrowl.dylib libgrowl++.dylib)
 endif (WINDOWS)
 
-add_compile_definitions(HAS_GROWL)
-
 target_include_directories( fs::growl SYSTEM INTERFACE
         ${AUTOBUILD_INSTALL_DIR}/include/Growl
         )
+endif (DARWIN OR WINDOWS) # <FS:Zi> no need to do these things on Linux
+
+add_compile_definitions(HAS_GROWL)

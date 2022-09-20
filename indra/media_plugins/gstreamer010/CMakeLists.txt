@@ -10,6 +10,7 @@ include(LLWindow)
 include(Linking)
 include(PluginAPI)
 include(OpenGL)
+include(MediaPluginBase)   # <FS:Zi> Linux volume catcher
 
 include(GStreamer010Plugin)
 

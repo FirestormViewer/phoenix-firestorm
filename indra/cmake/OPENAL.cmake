@@ -9,6 +9,12 @@ include_guard()
 # It probably makes sense to to completely remove it
 
 set(USE_OPENAL OFF CACHE BOOL "Enable OpenAL")
+
+# <FS:Zi> Always download the libopenal.so library on Linux for SLVoice
+if (LINUX)
+  use_prebuilt_binary(openal)
+endif (LINUX)
+
 # ND: To streamline arguments passed, switch from OPENAL to USE_OPENAL
 # To not break all old build scripts convert old arguments but warn about it
 if(OPENAL)

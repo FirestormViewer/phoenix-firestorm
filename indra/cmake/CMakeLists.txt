@@ -13,7 +13,6 @@ set(cmake_SOURCE_FILES
         bugsplat.cmake
         BuildVersion.cmake
         CEFPlugin.cmake
-        CEFPlugin.cmake
         CMakeCopyIfDifferent.cmake
         ConfigurePkgConfig.cmake
         CURL.cmake
@@ -45,6 +44,7 @@ set(cmake_SOURCE_FILES
         LLTestCommand.cmake
         LLWindow.cmake
         Linking.cmake
+        MediaPluginBase.cmake    # <FS:Zi> Linux volume catcher
         Meshoptimizer.cmake
         NDOF.cmake
         OPENAL.cmake

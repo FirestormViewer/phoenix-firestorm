@@ -10,7 +10,7 @@ if (WINDOWS)
 elseif (DARWIN)
   target_link_libraries( fs::glod INTERFACE libGLOD.dylib)
 elseif (LINUX)
-  target_link_libraries( fs::glod INTERFACE libGLOD.a)
+  target_link_libraries( fs::glod INTERFACE libGLOD.a libvds.a)
 endif (WINDOWS)
 
 target_include_directories( fs::glod SYSTEM INTERFACE

@@ -216,7 +216,7 @@ if (LINUX OR DARWIN)
     list(APPEND GCC_WARNINGS "$[GCC_WARNINGS] -Wno-reorder -Wno-unused-const-variable -Wno-format-extra-args -Wno-unused-private-field -Wno-unused-function -Wno-tautological-compare -Wno-empty-body -Wno-unused-variable -Wno-unused-value")
   else (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
   #elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    list(APPEND GCC_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable")
+    list(APPEND GCC_WARNINGS -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable)
   endif ()
 
   add_compile_options(${GCC_WARNINGS})

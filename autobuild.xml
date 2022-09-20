@@ -22,9 +22,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e6eecee825b9159b3be34b5fd21ef3e0</string>
+              <string>db1a758da143fe0177df2b472eaa8d78</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL-2.0.20-linux64-222521433.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64-222610218.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -45,7 +45,7 @@
         <string>gstreamer10</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
+          <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
@@ -55,7 +55,7 @@
               <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
         </map>
         <key>version</key>
@@ -83,7 +83,7 @@
               <string>http://3p.firestormviewer.org/breakpad-4708e6fb-linux64_bionic-220392253.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
         </map>
         <key>version</key>
@@ -111,7 +111,7 @@
               <string>http://3p.firestormviewer.org/glib-2.56.0.220911433-linux64_bionic-220911433.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
         </map>
         <key>version</key>
@@ -325,7 +325,7 @@
             <key>name</key>
             <string>darwin</string>
           </map>
-          <key>linux</key>
+          <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
@@ -335,7 +335,7 @@
               <uri>http://3p.firestormviewer.org/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -831,16 +831,6 @@
             <key>name</key>
             <string>windows64</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ac54672e0b38f52726f5c99047c913e4</string>
-              <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89306/815431/cubemaptoequirectangular-1.1.0-windows64-564841.tar.bz2</string>
-            </map>
-          </map>
         </map>
         <key>version</key>
         <string>1.1.0</string>
@@ -952,7 +942,7 @@
         <key>license</key>
         <string>MPL</string>
         <key>license_file</key>
-        <string>LICENSES/LICENSE.txt</string>
+        <string>LICENSES/CEF_LICENSE.txt</string>
         <key>name</key>
         <string>dullahan</string>
         <key>platforms</key>
@@ -2642,16 +2632,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c7c1f7f656d155b5af852ae1ef4954d9</string>
+              <string>411c000af6328e454ff7064f90c18a81</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222441031-linux64-222441031.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222610246-linux64-222610246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.13.222441031</string>
+        <string>0.13.222610246</string>
       </map>
       <key>openal</key>
       <map>
@@ -3818,6 +3808,50 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>default</string>
+            </map>
+            <key>ReleaseFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--platform linux</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--kdu</string>
+                  <string>--fmodstudio</string>
+                  <string>--platform linux</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS</string>
+            </map>
+            <key>ReleaseFS_open</key>
+              <map>
+                <key>build</key>
+                <map>
+                  <key>options</key>
+                  <array>
+                    <string>--build</string>
+                    <string>--platform linux</string>
+                    <string>--package</string>
+                  </array>
+                </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform linux</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_open</string>
             </map>
           </map>
           <key>name</key>

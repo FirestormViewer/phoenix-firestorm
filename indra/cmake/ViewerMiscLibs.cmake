@@ -2,7 +2,7 @@
 include(Prebuilt)
 
 if (LINUX)
-  #use_prebuilt_binary(libuuid)
+  use_prebuilt_binary(libuuid)
   add_library( ll::fontconfig INTERFACE IMPORTED )
 
   if( NOT USE_CONAN )

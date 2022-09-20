@@ -2375,7 +2375,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ll::bugsplat
         ll::tracy
         fs::glod # <FS:Beq/> restore GLOD dependencies
-        fs::growl # <FS:Ansariel> Growl support
+        # fs::growl # <FS:Ansariel> Growl support <FS:Zi> added further down for win/mac only
         )
 
 if( TARGET ll::intel_memops )
@@ -2392,6 +2392,7 @@ endif (USE_BUGSPLAT)
 
 if (WINDOWS)
     target_link_libraries(${VIEWER_BINARY_NAME}
+    fs::growl # <FS:Ansariel> Growl support
     ${GROWL_LIBRARY}
     )
 endif (WINDOWS)
@@ -2401,7 +2402,15 @@ if( TARGET ll::nvapi )
 endif()
 
 if (LINUX)
-    target_link_libraries(${VIEWER_BINARY_NAME} "dl" )
+    # <FS:Zi> put these additional libraries in the viewer build target here as it didn't
+    # work to put them in via their cmake/* files
+    target_link_libraries(${VIEWER_BINARY_NAME}
+        "dl"
+        # <FS:Zi> I wish I knew how to make this cleaner, this looks like a mess
+        "fontconfig"    # <FS:Zi> tried ll::fontconfig, didn't work
+        ll::vorbis
+        ${GIO_LIBRARIES}
+    )
 endif (LINUX)
 
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
@@ -2414,11 +2423,13 @@ if (LINUX)
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
     SLPlugin
-    #media_plugin_gstreamer010
+    media_plugin_cef
+    media_plugin_gstreamer010
     llcommon
+    linux-crash-logger
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer010 media_plugin_cef linux-crash-logger)
   
   add_custom_command(
       OUTPUT ${product}.tar.bz2

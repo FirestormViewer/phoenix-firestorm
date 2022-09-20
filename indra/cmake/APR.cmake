@@ -34,10 +34,11 @@ elseif (DARWIN)
           iconv
           )
 else (WINDOWS)
+  # linux
   target_link_libraries( ll::apr INTERFACE
           apr-1
           aprutil-1
-          iconv
+          # iconv    # <FS:Zi> Doesn't seem to be necessary for Linux
           uuid
           rt
           )

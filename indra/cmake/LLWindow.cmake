@@ -16,7 +16,6 @@ if (LINUX)
   #use_prebuilt_binary(SDL)
   
   target_include_directories( ll::SDL SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include)
-  target_link_libraries( ll::SDL INTERFACE SDL directfb fusion direct X11)
 
   if( USE_SDL1 )
     target_compile_definitions( ll::SDL INTERFACE LL_SDL=1 )
@@ -25,7 +24,7 @@ if (LINUX)
     use_prebuilt_binary(SDL)
     set (SDL_FOUND TRUE)
 
-    target_link_libraries (sdl INTERFACE SDL directfb fusion direct X11)
+    target_link_libraries (ll::SDL INTERFACE SDL directfb fusion direct X11)
 
   else()
     target_compile_definitions( ll::SDL INTERFACE LL_SDL2=1 LL_SDL=1 )
