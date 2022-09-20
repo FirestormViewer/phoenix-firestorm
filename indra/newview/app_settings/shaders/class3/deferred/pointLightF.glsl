@@ -57,16 +57,19 @@ uniform vec2 screen_res;
 uniform mat4 inv_proj;
 uniform vec4 viewport;
 
-vec3 BRDFLambertian( vec3 reflect0, vec3 reflect90, vec3 c_diff, float specWeight, float vh );
-vec3 BRDFSpecularGGX( vec3 reflect0, vec3 reflect90, float alphaRoughness, float specWeight, float vh, float nl, float nv, float nh );
 void calcHalfVectors(vec3 lv, vec3 n, vec3 v, out vec3 h, out vec3 l, out float nh, out float nl, out float nv, out float vh, out float lightDist);
 float calcLegacyDistanceAttenuation(float distance, float falloff);
-vec3 getLightIntensityPoint(vec3 lightColor, float lightRange, float lightDistance);
 vec4 getNormalEnvIntensityFlags(vec2 screenpos, out vec3 n, out float envIntensity);
 vec4 getPosition(vec2 pos_screen);
 vec2 getScreenXY(vec4 clip);
-void initMaterial( vec3 diffuse, vec3 packedORM, out float alphaRough, out vec3 c_diff, out vec3 reflect0, out vec3 reflect90, out float specWeight );
 vec3 srgb_to_linear(vec3 c);
+
+vec3 pbrPunctual(vec3 diffuseColor, vec3 specularColor, 
+                    float perceptualRoughness, 
+                    float metallic,
+                    vec3 n, // normal
+                    vec3 v, // surface point to camera
+                    vec3 l); //surface point to light
 
 void main()
 {
@@ -96,25 +99,20 @@ void main()
 
     if (GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_PBR))
     {
-        vec3 colorDiffuse  = vec3(0);
-        vec3 colorSpec     = vec3(0);
         vec3 colorEmissive = spec.rgb; // PBR sRGB Emissive.  See: pbropaqueF.glsl
-        vec3 packedORM     = texture2DRect(emissiveRect, tc).rgb; // PBR linear packed Occlusion, Roughness, Metal. See: pbropaqueF.glsl
-        float lightSize    = size;
-        vec3 lightColor    = color; // Already in linear, see pipeline.cpp: volume->getLightLinearColor();
+        vec3 orm = texture2DRect(emissiveRect, tc).rgb; //orm is packed into "emissiveRect" to keep the data in linear color space
+        float perceptualRoughness = orm.g;
+        float metallic = orm.b;
+        vec3 f0 = vec3(0.04);
+        vec3 baseColor = diffuse.rgb;
+        
+        vec3 diffuseColor = baseColor.rgb*(vec3(1.0)-f0);
+        diffuseColor *= 1.0 - metallic;
 
-        vec3 c_diff, reflect0, reflect90;
-        float alphaRough, specWeight;
-        initMaterial( diffuse, packedORM, alphaRough, c_diff, reflect0, reflect90, specWeight );
+        vec3 specularColor = mix(f0, baseColor.rgb, metallic);
 
-        if (nl > 0.0)
-        {
-            vec3 intensity = dist_atten * nl * lightColor; // Legacy attenuation
-            colorDiffuse += intensity * BRDFLambertian (reflect0, reflect90, c_diff    , specWeight, vh);
-            colorSpec    += intensity * BRDFSpecularGGX(reflect0, reflect90, alphaRough, specWeight, vh, nl, nv, nh);
-        }
-
-        final_color = colorDiffuse + colorSpec;
+        vec3 intensity = dist_atten * color * 3.0; // Legacy attenuation
+        final_color += intensity*pbrPunctual(diffuseColor, specularColor, perceptualRoughness, metallic, n.xyz, v, normalize(lv));
     }
     else
     {

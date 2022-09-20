@@ -227,7 +227,6 @@ void LLGLSLShader::stopProfile(U32 count, U32 mode)
 
 void LLGLSLShader::placeProfileQuery()
 {
-#if 1 || !LL_DARWIN
     if (mTimerQuery == 0)
     {
         glGenQueries(1, &mSamplesQuery);
@@ -269,12 +268,10 @@ void LLGLSLShader::placeProfileQuery()
 
     glBeginQuery(GL_SAMPLES_PASSED, mSamplesQuery);
     glBeginQuery(GL_TIME_ELAPSED, mTimerQuery);
-#endif
 }
 
 void LLGLSLShader::readProfileQuery(U32 count, U32 mode)
 {
-#if !LL_DARWIN
     glEndQuery(GL_TIME_ELAPSED);
     glEndQuery(GL_SAMPLES_PASSED);
 
@@ -307,7 +304,6 @@ void LLGLSLShader::readProfileQuery(U32 count, U32 mode)
 
     sTotalDrawCalls++;
     mDrawCalls++;
-#endif
 }
 
 
@@ -679,7 +675,6 @@ void LLGLSLShader::mapUniform(GLint index, const vector<LLStaticHashedString> * 
 
 
     glGetActiveUniform(mProgramObject, index, 1024, &length, &size, &type, (GLchar *)name);
-#if !LL_DARWIN
     if (size > 0)
     {
         switch(type)
@@ -721,7 +716,6 @@ void LLGLSLShader::mapUniform(GLint index, const vector<LLStaticHashedString> * 
         }
         mTotalUniformSize += size;
     }
-#endif
 
     S32 location = glGetUniformLocation(mProgramObject, name);
     if (location != -1)

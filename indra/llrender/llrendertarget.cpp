@@ -301,13 +301,11 @@ bool LLRenderTarget::addColorAttachment(U32 color_fmt)
 	mTex.push_back(tex);
 	mInternalFormat.push_back(color_fmt);
 
-#if !LL_DARWIN
 	if (gDebugGL)
 	{ //bind and unbind to validate target
 		bindTarget();
 		flush();
 	}
-#endif
     
     
 	return true;
@@ -471,6 +469,7 @@ void LLRenderTarget::release()
 
 void LLRenderTarget::bindTarget()
 {
+    LL_PROFILE_GPU_ZONE("bindTarget");
     llassert(mFBO);
 
 	if (mFBO)
@@ -577,6 +576,7 @@ void LLRenderTarget::bindTexture(U32 index, S32 channel, LLTexUnit::eTextureFilt
 
 void LLRenderTarget::flush(bool fetch_depth)
 {
+    LL_PROFILE_GPU_ZONE("rt flush");
 	gGL.flush();
     llassert(mFBO);
 	if (!mFBO)

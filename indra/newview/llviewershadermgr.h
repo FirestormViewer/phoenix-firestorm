@@ -306,6 +306,7 @@ extern LLGLSLShader			gDeferredWLMoonProgram;
 extern LLGLSLShader			gDeferredStarProgram;
 extern LLGLSLShader			gDeferredFullbrightShinyProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
+extern LLGLSLShader         gDeferredGenBrdfLutProgram;
 // [RLVa:KB] - @setsphere
 extern LLGLSLShader			gRlvSphereProgram;
 // [/RLVa:KB]

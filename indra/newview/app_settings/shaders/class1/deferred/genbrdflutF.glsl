@@ -1,5 +1,5 @@
 /** 
- * @file radianceGenF.glsl
+ * @file class1/deferred/genbrdflut.glsl
  *
  * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -22,25 +22,8 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
- 
 
-/*[EXTRA_CODE_HERE]*/
-
-#ifdef DEFINE_GL_FRAGCOLOR
-out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
-
-uniform samplerCubeArray   reflectionProbes;
-uniform int sourceIdx;
-
-VARYING vec3 vary_dir;
-
-// =============================================================================================================
-// Parts of this file are (c) 2018 Sascha Willems
-// SNIPPED FROM https://github.com/SaschaWillems/Vulkan-glTF-PBR/blob/master/data/shaders/prefilterenvmap.frag
-/*
+/*  Taken from Sascha Willem's Vulkan GLTF refernce implementation
 MIT License
 
 Copyright (c) 2018 Sascha Willems
@@ -63,12 +46,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-// =============================================================================================================
 
+/*[EXTRA_CODE_HERE]*/
 
-//uniform float roughness;
+VARYING vec2 vary_uv;
 
-uniform float mipLevel;
+out vec4 outColor;
+
+#define NUM_SAMPLES 1024
 
 const float PI = 3.1415926536;
 
@@ -114,60 +99,43 @@ vec3 importanceSample_GGX(vec2 Xi, float roughness, vec3 normal)
 	return normalize(tangentX * H.x + tangentY * H.y + normal * H.z);
 }
 
-// Normal Distribution function
-float D_GGX(float dotNH, float roughness)
+// Geometric Shadowing function
+float G_SchlicksmithGGX(float dotNL, float dotNV, float roughness)
 {
-	float alpha = roughness * roughness;
-	float alpha2 = alpha * alpha;
-	float denom = dotNH * dotNH * (alpha2 - 1.0) + 1.0;
-	return (alpha2)/(PI * denom*denom); 
+	float k = (roughness * roughness) / 2.0;
+	float GL = dotNL / (dotNL * (1.0 - k) + k);
+	float GV = dotNV / (dotNV * (1.0 - k) + k);
+	return GL * GV;
 }
 
-vec3 prefilterEnvMap(vec3 R)
+vec2 BRDF(float NoV, float roughness)
 {
-	vec3 N = R;
-	vec3 V = R;
-	vec3 color = vec3(0.0);
-	float totalWeight = 0.0;
-	float envMapDim = 256.0;
-    int numSamples = 8;
-    
-    float numMips = 7.0;
+	// Normal always points along z-axis for the 2D lookup 
+	const vec3 N = vec3(0.0, 0.0, 1.0);
+	vec3 V = vec3(sqrt(1.0 - NoV*NoV), 0.0, NoV);
 
-    float roughness = (mipLevel+1)/numMips;
-
-	for(uint i = 0u; i < numSamples; i++) {
-		vec2 Xi = hammersley2d(i, numSamples);
+	vec2 LUT = vec2(0.0);
+	for(uint i = 0u; i < NUM_SAMPLES; i++) {
+		vec2 Xi = hammersley2d(i, NUM_SAMPLES);
 		vec3 H = importanceSample_GGX(Xi, roughness, N);
 		vec3 L = 2.0 * dot(V, H) * H - V;
-		float dotNL = clamp(dot(N, L), 0.0, 1.0);
-		if(dotNL > 0.0) {
-			// Filtering based on https://placeholderart.wordpress.com/2015/07/28/implementation-notes-runtime-environment-map-filtering-for-image-based-lighting/
 
-			float dotNH = clamp(dot(N, H), 0.0, 1.0);
-			float dotVH = clamp(dot(V, H), 0.0, 1.0);
+		float dotNL = max(dot(N, L), 0.0);
+		float dotNV = max(dot(N, V), 0.0);
+		float dotVH = max(dot(V, H), 0.0); 
+		float dotNH = max(dot(H, N), 0.0);
 
-			// Probability Distribution Function
-			float pdf = D_GGX(dotNH, roughness) * dotNH / (4.0 * dotVH) + 0.0001;
-			// Slid angle of current smple
-			float omegaS = 1.0 / (float(numSamples) * pdf);
-			// Solid angle of 1 pixel across all cube faces
-			float omegaP = 4.0 * PI / (6.0 * envMapDim * envMapDim);
-			// Biased (+1.0) mip level for better result
-			//float mip = roughness == 0.0 ? 0.0 : max(0.5 * log2(omegaS / omegaP) + 1.0, 0.0f);
-            float mip = clamp(0.5 * log2(omegaS / omegaP) + 1.0, 0.0f, 7.f);
-			color += textureLod(reflectionProbes, vec4(L,sourceIdx), mip).rgb * dotNL;
-			totalWeight += dotNL;
-
+		if (dotNL > 0.0) {
+			float G = G_SchlicksmithGGX(dotNL, dotNV, roughness);
+			float G_Vis = (G * dotVH) / (dotNH * dotNV);
+			float Fc = pow(1.0 - dotVH, 5.0);
+			LUT += vec2((1.0 - Fc) * G_Vis, Fc * G_Vis);
 		}
 	}
-	return (color / totalWeight);
+	return LUT / float(NUM_SAMPLES);
 }
 
-void main()
-{		
-	vec3 N = normalize(vary_dir);
-	frag_color = vec4(prefilterEnvMap(N), 1.0);
+void main() 
+{
+	outColor = vec4(BRDF(vary_uv.s, 1.0-vary_uv.t), 0.0, 1.0);
 }
-// =============================================================================================================
-

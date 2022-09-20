@@ -253,6 +253,7 @@ LLGLSLShader            gDeferredSkinnedFullbrightShinyProgram;
 LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 LLGLSLShader            gDeferredSkinnedFullbrightAlphaMaskProgram;
 LLGLSLShader			gNormalMapGenProgram;
+LLGLSLShader            gDeferredGenBrdfLutProgram;
 // [RLVa:KB] - @setsphere
 LLGLSLShader			gRlvSphereProgram;
 // [/RLVa:KB]
@@ -1265,6 +1266,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredHighlightSpecularProgram.unload();
 
 		gNormalMapGenProgram.unload();
+        gDeferredGenBrdfLutProgram.unload();
+
 		for (U32 i = 0; i < LLMaterial::SHADER_COUNT*2; ++i)
 		{
 			gDeferredMaterialProgram[i].unload();
@@ -2876,6 +2879,17 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gNormalMapGenProgram.mShaderGroup = LLGLSLShader::SG_SKY;
 		success = gNormalMapGenProgram.createShader(NULL, NULL);
 	}
+
+    if (success && gGLManager.mHasCubeMapArray)
+    {
+        gDeferredGenBrdfLutProgram.mName = "Brdf Gen Shader";
+        gDeferredGenBrdfLutProgram.mShaderFiles.clear();
+        gDeferredGenBrdfLutProgram.mShaderFiles.push_back(make_pair("deferred/genbrdflutV.glsl", GL_VERTEX_SHADER));
+        gDeferredGenBrdfLutProgram.mShaderFiles.push_back(make_pair("deferred/genbrdflutF.glsl", GL_FRAGMENT_SHADER));
+        gDeferredGenBrdfLutProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        success = gDeferredGenBrdfLutProgram.createShader(NULL, NULL);
+    }
+
 
 	return success;
 }
