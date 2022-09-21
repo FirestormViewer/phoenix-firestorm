@@ -22,16 +22,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f332d752a72cb524eb5db8ee6fdba3da</string>
+              <string>db1a758da143fe0177df2b472eaa8d78</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64_bionic-221151857.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64-222610218.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.15</string>
+        <string>2.0.20</string>
       </map>
       <key>gstreamer10</key>
       <map>
@@ -164,9 +164,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1f887cbafc0fe2af1e85783de0f14102</string>
+              <string>0008a7b291fa1863ba41424b4e3ac302</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/jemalloc-5.2.1-linux64-210451204.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jemalloc-5.3.0-linux64-222631217.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -724,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4699b8389dfb754da0393ddb5d325722</string>
+              <string>f283a064c30695bd7bf071f1bd481f32</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95882/856117/colladadom-2.3.569219-darwin64-569219.tar.bz2</string>
+			  <string>https://3p.firestormviewer.org/colladadom-2.3.222232011-darwin64-222232011.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -736,9 +736,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e1a8e9eca2894687b3532474ffc9b326</string>
+              <string>30b1a9b7637f7a1546d38430064ca582</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/colladadom-2.3.222130404-linux64-222130404.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222261253-linux64-222261253.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -748,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>343e46ea49a08ad6596d3dc702d5b812</string>
+              <string>1c094d709a35b252bba7b6ef1871085c</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95883/856128/colladadom-2.3.569219-windows-569219.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -760,9 +760,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>de5bdfb61b31db56c5fe7d0962ad11e2</string>
+              <string>a7596da3696fc423ec1bc7d6764c01ab</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/95884/856129/colladadom-2.3.569219-windows64-569219.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -942,7 +942,7 @@
         <key>license</key>
         <string>MPL</string>
         <key>license_file</key>
-        <string>LICENSES/LICENSE.txt</string>
+        <string>LICENSES/CEF_LICENSE.txt</string>
         <key>name</key>
         <string>dullahan</string>
         <key>platforms</key>
@@ -952,9 +952,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2653c3627fd8687ff9e003425fd14834</string>
+              <string>439d92ec73f0500ba1671faad2bd8090</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/90199/821852/dullahan-1.12.3.202111032211_91.1.21_g9dd45fe_chromium-91.0.4472.114-darwin64-565428.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104637/916643/dullahan-1.12.4.202209142017_91.1.21_g9dd45fe_chromium-91.0.4472.114-darwin64-575005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -964,9 +964,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b4003772562a5dd40bc112eec7cba5f5</string>
+              <string>2a7c01da15de77bc1fd1863327174d5e</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/90201/821871/dullahan-1.12.3.202111032221_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows-565428.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104638/916654/dullahan-1.12.4.202209142021_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows-575005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -976,9 +976,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d9030d7a7390b3bda7de2adcc27e535a</string>
+              <string>d06bee9b2517fbb09ba1a65e6d675361</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/90200/821876/dullahan-1.12.3.202111032221_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows64-565428.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104639/916659/dullahan-1.12.4.202209142021_91.1.21_g9dd45fe_chromium-91.0.4472.114-windows64-575005.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -988,16 +988,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8d532edd648448d78e6daa0cc5f821f9</string>
+              <string>d3f4d83e7b81673731ece92125473b00</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202202071031_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-220380931.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202209171157_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-222600157.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.12.3.202111032221_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
+        <string>1.12.4.202209142021_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
       </map>
       <key>expat</key>
       <map>
@@ -1098,11 +1098,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9aac95d85fd3f044da3fd9dd44ed5ca2</string>
+              <string>21d50d222f005c033452ee3fad44bff1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.06-linux64_bionic-220911506.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.07-linux64_bionic-222191132.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2622,16 +2622,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88fb222412b98a7f371d6bf2ff42a973</string>
+              <string>411c000af6328e454ff7064f90c18a81</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.211211036-linux64-211211036.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222610246-linux64-222610246.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.3.180841957</string>
+        <string>0.13.222441031</string>
       </map>
       <key>openal</key>
       <map>
@@ -2906,9 +2906,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6ce3cbaed968a69fb7a2cca80220874d</string>
+              <string>b583668b28fde0490e6953f10e93e4ab</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80380/758537/slvoice-4.10.0000.32327.5fc3fe7c.558436-darwin64-558436.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/98681/871545/slvoice-4.10.0000.32327.5fc3fe7c.571099-darwin64-571099.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2918,9 +2918,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5f4bc956734e53ef99125ae9aae3a87</string>
+              <string>db89d5ce9695457cc1e94cf657678f1a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64_bionic-220651719.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/slvoice-3.2-linux64-222532329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2930,9 +2930,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2eb38c5eff4d0f18fbb89d0c30c4f0a4</string>
+              <string>6e0ed41653955afe8eeb8945776cf07b</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80382/758550/slvoice-4.10.0000.32327.5fc3fe7c.558436-windows-558436.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/98683/871560/slvoice-4.10.0000.32327.5fc3fe7c.571099-windows-571099.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2942,16 +2942,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9ee8f3cbc5369c598a998c61961ed16d</string>
+              <string>c39735851fd05c194d0be09b8f9e8cb7</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80381/758551/slvoice-4.10.0000.32327.5fc3fe7c.558436-windows64-558436.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/98682/871552/slvoice-4.10.0000.32327.5fc3fe7c.571099-windows64-571099.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>4.10.0000.32327.5fc3fe7c.558436</string>
+        <string>4.10.0000.32327.5fc3fe7c.571099</string>
       </map>
       <key>threejs</key>
       <map>
@@ -2975,7 +2975,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <string>http://3p.firestormviewer.org/threejs-0.132.2-linux64-213500940.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>darwin64</string>
+            <string>linux64</string>
           </map>
           <key>darwin64</key>
           <map>

@@ -234,6 +234,8 @@ void LLParcel::init(const LLUUID &owner_id,
 
     setRegionAllowEnvironmentOverride(FALSE);
     setParcelEnvironmentVersion(INVALID_PARCEL_ENVIRONMENT_VERSION);
+
+    setObscureMOAP(false);
 }
 
 void LLParcel::overrideOwner(const LLUUID& owner_id, BOOL is_group_owned)
@@ -540,6 +542,7 @@ void LLParcel::packMessage(LLSD& msg)
 	msg["see_avs"] = (LLSD::Boolean) getSeeAVs();
 	msg["group_av_sounds"] = (LLSD::Boolean) getAllowGroupAVSounds();
 	msg["any_av_sounds"] = (LLSD::Boolean) getAllowAnyAVSounds();
+    msg["obscure_moap"] = (LLSD::Boolean) getObscureMOAP();
 }
 
 
@@ -1269,5 +1272,5 @@ U32 LLParcel::countExperienceKeyType( U32 type )
 	return std::count_if(
 		boost::begin(mExperienceKeys | boost::adaptors::map_values), 
 		boost::end(mExperienceKeys | boost::adaptors::map_values), 
-		std::bind2nd(std::equal_to<U32>(), type));
+		[type](U32 key) { return key == type; });
 }

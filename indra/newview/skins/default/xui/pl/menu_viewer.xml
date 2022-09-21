@@ -251,6 +251,7 @@
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
+		<menu_item_call label="Lokalny mesz" name="local_mesh" />
 		<menu_item_call label="Cofnij" name="Undo"/>
 		<menu_item_call label="Ponów" name="Redo"/>
 	</menu>
@@ -286,7 +287,7 @@
 		<menu_item_call label="Blogi: [SECOND_LIFE]" name="Second Life Blogs"/> -->
 		<menu_item_check label="Sprawdź stan świata" name="Grid Status"/>
 		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse"/>
-		<menu_item_call label="Zgłoś błędy klienta" name="Report Bug"/>
+		<menu_item_call label="Zgłoś problem" name="Report Bug"/>
 		<menu_item_call label="Zderzenia, popchnięcia i uderzenia" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Włącz przycisk Sysinfo" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informacje o [APP_NAME]" name="About Second Life"/>
@@ -439,10 +440,11 @@
 			<menu_item_call label="Wymuś pułapkę w programie (breakpoint)" name="Force Breakpoint"/>
 			<menu_item_call label="Wymuś błąd LLError i spowoduj awarię" name="Force LLError And Crash"/>
 			<menu_item_call label="Wymuś błąd dostępu do pamięci" name="Force Bad Memory Access"/>
+			<menu_item_call label="Wymuś zły dostęp do pamięci we współprogramie (coroutine)" name="Force Bad Memory Access in Coroutine" />
 			<menu_item_call label="Wymuś nieskończoną pętlę" name="Force Infinite Loop"/>
 			<menu_item_call label="Wymuś awarię sterownika" name="Force Driver Carsh"/>
 			<menu_item_call label="Wymuś wyjątek programu" name="Force Software Exception"/>
-			<menu_item_call label="Wymuś awarię we współprogramie (coroutine)" name="Force a Crash in a Coroutine" />
+			<menu_item_call label="Wymuś wyjątek we współprogramie (coroutine)" name="Force Software Exception in Coroutine" />
 			<menu_item_call label="Wymuś awarię w wątku" name="Force a Crash in a Thread" />
 			<menu_item_call label="Wymuś rozłączenie Przeglądarki" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Symulacja wycieku pamięci" name="Memory Leaking Simulation"/>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_add_payment_method">
+	<panel name="wrapper_panel">
+		<text name="title_txt">
+			Ajouter un moyen de paiement pour acheter des Lindens et mieux profiter de Second Life.
+		</text>
+		<button label="Démarrer" name="continue_btn" />
+		<button label="Plus tard" name="close_btn" />
+		<text name="image_left_desc">
+			Créez l'avatar que vous aimez. Faites votre choix parmi des millions d'articles dans les boutiques et sur la place du marché de Second Life. Votre style est ici.
+		</text>
+		<text name="image_center_desc">
+			Soutenez vos artistes et animateurs préférés. Vous les aiderez à créer de grandes expériences.
+		</text>
+		<text name="image_right_desc">
+			Créez la maison de vos rêves. Les millions d'articles disponibles à l'achat peuvent rendre votre foyer unique.
+		</text>
+	</panel>
+</floater>

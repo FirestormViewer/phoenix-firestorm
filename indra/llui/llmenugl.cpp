@@ -1545,16 +1545,18 @@ void LLMenuItemBranchDownGL::onFocusLost()
 {
     // needed for tab-based selection
     LLMenuItemBranchGL::onFocusLost();
-    LLMenuGL::setKeyboardMode(FALSE);
-    setHighlight(FALSE);
+    // <FS:Ansariel> FIRE-31882 / FIRE-31896 / FIRE-31913 / FIRE-31920: Fix all kind of weird menu focus issues
+    //LLMenuGL::setKeyboardMode(FALSE);
+    //setHighlight(FALSE);
 }
 
 void LLMenuItemBranchDownGL::setFocus(BOOL b)
 {
     // needed for tab-based selection
     LLMenuItemBranchGL::setFocus(b);
-    LLMenuGL::setKeyboardMode(b);
-    setHighlight(b);
+    // <FS:Ansariel> FIRE-31882 / FIRE-31896 / FIRE-31913 / FIRE-31920: Fix all kind of weird menu focus issues
+    //LLMenuGL::setKeyboardMode(b);
+    //setHighlight(b);
 }
 
 BOOL LLMenuItemBranchDownGL::handleKeyHere(KEY key, MASK mask)
@@ -3988,15 +3990,15 @@ LLTearOffMenu::~LLTearOffMenu()
 void LLTearOffMenu::draw()
 {
 	mMenu->setBackgroundVisible(isBackgroundOpaque());
-	// <FS:Ansariel> FIRE-31823: Torn off menu doesn't update enabled/visible state
+	// <FS:Ansariel> FIRE-31823: Do it before reshaping - needsArrange can change visbility status of items!
 	mMenu->needsArrange();
 
 	if (getRect().getHeight() != mTargetHeight)
 	{
 		// animate towards target height
         reshape(getRect().getWidth(), llceil(lerp((F32)getRect().getHeight(), (F32)mTargetHeight, LLSmoothInterpolation::getInterpolant(0.05f))));
-        //mMenu->needsArrange(); // <FS:Ansariel> FIRE-31823: Torn off menu doesn't update enabled/visible state
 	}
+	//mMenu->needsArrange(); // <FS:Ansariel> FIRE-31823: Do it before reshaping - needsArrange can change visbility status of items!
 	LLFloater::draw();
 }
 

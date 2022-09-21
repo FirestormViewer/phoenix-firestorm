@@ -16,8 +16,6 @@
 	<text name="grid_position_lbl">
 		Pozycja siatki:
 	</text>
-	<line_editor name="grid_position_x" initial_value="nieznana"/>
-	<line_editor name="grid_position_y" initial_value="nieznana"/>
 	<text name="version_channel_text_lbl">
 		Wersja:
 	</text>

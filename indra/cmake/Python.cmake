@@ -13,17 +13,14 @@ if (WINDOWS)
       NO_DEFAULT_PATH
       )
   else()
+    set(Python3_FIND_REGISTRY "LAST")
     find_program(PYTHON_EXECUTABLE
       NAMES python.exe
       NO_DEFAULT_PATH # added so that cmake does not find cygwin python
       PATHS
-      [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.7\\InstallPath]
-      [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.8\\InstallPath]
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.9\\InstallPath]
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.10\\InstallPath]
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.11\\InstallPath]
-      [HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\3.7\\InstallPath]
-      [HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\3.8\\InstallPath]
       [HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\3.9\\InstallPath]
       [HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\3.10\\InstallPath]
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\3.11\\InstallPath]

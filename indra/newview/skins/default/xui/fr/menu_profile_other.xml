@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Avatar Profile Menu">
+	<menu_item_call label="Message IM" name="im" />
+	<menu_item_call label="Proposer une téléportation" name="offer_teleport" />
+	<menu_item_call label="Demander une téléportation" name="request_teleport" />
+	<menu_item_call label="Appel vocal" name="voice_call" />
+	<menu_item_call label="Journaux de discussion..." name="chat_history" />
+	<menu_item_call label="Ajouter aux amis" name="add_friend" />
+	<menu_item_call label="Supprimer un ami" name="remove_friend" />
+	<menu_item_call label="Inviter au groupe..." name="invite_to_group" />
+	<menu_item_call label="Permissions" name="agent_permissions" />
+	<menu_item_call label="Carte" name="map" />
+	<menu_item_call label="Partager" name="share" />
+	<menu_item_call label="Payer" name="pay" />
+	<menu_item_check label="Bloquer/Débloquer" name="block_unblock" />
+	<menu_item_call label="Copier le nom d'affichage" name="copy_display_name" />
+	<menu_item_call label="Copier le nom"	name="copy_name" />
+	<menu_item_call label="Copier l'UUID" name="copy_id" />
+</toggleable_menu>

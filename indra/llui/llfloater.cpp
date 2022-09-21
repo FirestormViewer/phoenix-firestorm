@@ -276,6 +276,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mMinHeight(p.min_height),
 	mHeaderHeight(p.header_height),
 	mLegacyHeaderHeight(p.legacy_header_height),
+	mDefaultRectForGroup(true),
 	mMinimized(FALSE),
 	mForeground(FALSE),
 	mFirstLook(TRUE),
@@ -829,17 +830,13 @@ void LLFloater::closeFloater(bool app_quitting)
 		for(handle_set_iter_t dependent_it = mDependents.begin();
 			dependent_it != mDependents.end(); )
 		{
-			
 			LLFloater* floaterp = dependent_it->get();
-			if (floaterp)
-			{
-				++dependent_it;
-				floaterp->closeFloater(app_quitting);
-			}
-			else
-			{
-				mDependents.erase(dependent_it++);
-			}
+            dependent_it = mDependents.erase(dependent_it);
+            if (floaterp)
+            {
+                floaterp->mDependeeHandle = LLHandle<LLFloater>();
+                floaterp->closeFloater(app_quitting);
+            }
 		}
 		
 		cleanupHandles();
@@ -994,7 +991,10 @@ bool LLFloater::applyRectControl()
 		// </FS:Ansariel>
 
 		// other floaters in our group, position ourselves relative to them and don't save the rect
-		mRectControl.clear();
+		if (mDefaultRectForGroup)
+		{
+			mRectControl.clear();
+		}
 		mPositioning = LLFloaterEnums::POSITIONING_CASCADE_GROUP;
 	}
 	else
@@ -1527,7 +1527,7 @@ void LLFloater::cleanupHandles()
 		LLFloater* floaterp = dependent_it->get();
 		if (!floaterp)
 		{
-			mDependents.erase(dependent_it++);
+            dependent_it = mDependents.erase(dependent_it);
 		}
 		else
 		{
@@ -3854,8 +3854,15 @@ void LLFloater::stackWith(LLFloater& other)
 	}
 	next_rect.translate(floater_offset, -floater_offset);
 
-	next_rect.setLeftTopAndSize(next_rect.mLeft, next_rect.mTop, getRect().getWidth(), getRect().getHeight());
-	
+	const LLRect& rect = getControlGroup()->getRect(mRectControl);
+	if (rect.notEmpty() && !mDefaultRectForGroup && mResizable)
+	{
+		next_rect.setLeftTopAndSize(next_rect.mLeft, next_rect.mTop, llmax(mMinWidth, rect.getWidth()), llmax(mMinHeight, rect.getHeight()));
+	}
+	else
+	{
+		next_rect.setLeftTopAndSize(next_rect.mLeft, next_rect.mTop, getRect().getWidth(), getRect().getHeight());
+	}
 	setShape(next_rect);
 
 	if (!other.getHost())

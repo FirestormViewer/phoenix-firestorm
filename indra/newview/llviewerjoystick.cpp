@@ -563,6 +563,14 @@ void LLViewerJoystick::updateStatus()
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_INPUT;
 #if LIB_NDOF
 
+	// <FS:Zi> FIRE-32004 - fix crash when opening joystick config and the device structure
+	//                      is not yet initialized or missing the necessary data inside
+	if (!mNdofDev || !mNdofDev->private_data)
+	{
+		return;
+	}
+	// </FS:Zi>
+
 	ndof_update(mNdofDev);
 
 	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes

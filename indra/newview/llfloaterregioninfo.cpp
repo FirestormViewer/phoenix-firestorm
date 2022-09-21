@@ -571,9 +571,9 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
 	}
 	msg->getU32Fast(_PREHASH_RegionInfo, _PREHASH_EstateID, estate_id);
 
-	panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD((F32) estate_id));
-	panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD((F32) grid_pos_x));
-	panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD((F32) grid_pos_y));
+	panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD::Integer(estate_id));
+	panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD::Integer(grid_pos_x));
+	panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD::Integer(grid_pos_y));
 	// </FS:Zi>
 
 	// DEBUG PANEL
@@ -719,9 +719,7 @@ void LLFloaterRegionInfo::refreshFromRegion(LLViewerRegion* region)
 	std::for_each(
 		mInfoPanels.begin(),
 		mInfoPanels.end(),
-		llbind2nd(
-			std::mem_fun(&LLPanelRegionInfo::refreshFromRegion),
-			region));
+		[region](info_panels_t::value_type panel) { panel->refreshFromRegion(region); });
     mEnvironmentPanel->refreshFromRegion(region);
 }
 
@@ -1508,6 +1506,7 @@ void LLPanelRegionDebugInfo::onClickDebugConsole(void* data)
 
 BOOL LLPanelRegionTerrainInfo::validateTextureSizes()
 {
+    static const S32 MAX_TERRAIN_TEXTURE_SIZE = 1024;
 	for(S32 i = 0; i < TERRAIN_TEXTURE_COUNT; ++i)
 	{
 		std::string buffer;
@@ -1529,20 +1528,19 @@ BOOL LLPanelRegionTerrainInfo::validateTextureSizes()
 			LLSD args;
 			args["TEXTURE_NUM"] = i+1;
 			args["TEXTURE_BIT_DEPTH"] = llformat("%d",components * 8);
+            args["MAX_SIZE"] = MAX_TERRAIN_TEXTURE_SIZE;
 			LLNotificationsUtil::add("InvalidTerrainBitDepth", args);
 			return FALSE;
 		}
 
-		// <FS:Ansariel> Allow terrain textures up to 1024x1024 pixels
-		//               as in Phoenix (FIRE-2319)
-		//if (width > 512 || height > 512)
-		if (width > 1024 || height > 1024)
+		if (width > MAX_TERRAIN_TEXTURE_SIZE || height > MAX_TERRAIN_TEXTURE_SIZE)
 		{
 
 			LLSD args;
 			args["TEXTURE_NUM"] = i+1;
 			args["TEXTURE_SIZE_X"] = width;
 			args["TEXTURE_SIZE_Y"] = height;
+            args["MAX_SIZE"] = MAX_TERRAIN_TEXTURE_SIZE;
 			LLNotificationsUtil::add("InvalidTerrainSize", args);
 			return FALSE;
 			
@@ -3922,7 +3920,7 @@ void LLPanelEstateAccess::searchAgent(LLNameListCtrl* listCtrl, const std::strin
 	if (!search_string.empty())
 	{
 		listCtrl->setSearchColumn(0); // name column
-		listCtrl->selectItemByPrefix(search_string, FALSE);
+		listCtrl->searchItems(search_string, false, true);
 	}
 	else
 	{

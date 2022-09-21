@@ -1050,16 +1050,17 @@ bool LLScriptEdCore::loadScriptText(const std::string& filename)
 	buffer[nread] = '\0';
 	fclose(file);
 
-	// <FS:Zi> Optionally convert tabs to spaces
-	// mEditor->setText(LLStringExplicit(buffer));
-	std::string scriptText=LLStringExplicit(buffer);
-	if(gSavedSettings.getBOOL("ExternalEditorConvertTabsToSpaces"))
-	{
-		LLStringUtil::replaceTabsWithSpaces(scriptText,mEditor->spacesPerTab());
-	}
-	// </FS:Zi>
-	mEditor->setText(scriptText);
 
+    std::string text = std::string(buffer);
+    // <FS:Zi> Optionally convert tabs to spaces
+    //LLStringUtil::replaceTabsWithSpaces(text, LLTextEditor::spacesPerTab());
+
+    if(gSavedSettings.getBOOL("ExternalEditorConvertTabsToSpaces"))
+    {
+        LLStringUtil::replaceTabsWithSpaces(text, LLTextEditor::spacesPerTab());
+    }
+    // </FS:Zi>
+    mEditor->setText(text);
 	delete[] buffer;
 
 	return true;
@@ -1839,11 +1840,9 @@ void LLScriptEdCore::onFontChanged()
 	if (font)
 	{
 		mEditor->setFont(font);
-		mEditor->needsReflow();
 		if (mPostEditor)
 		{
 			mPostEditor->setFont(font);
-			mPostEditor->needsReflow();
 		}
 	}
 }

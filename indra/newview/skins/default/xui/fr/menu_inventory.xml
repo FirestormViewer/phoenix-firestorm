@@ -83,6 +83,7 @@
 	<menu_item_call label="Protéger" name="ProtectFolder"/>
 	<menu_item_call label="Copier l&apos;UUID (identifiant universel unique)" name="Copy Asset UUID"/>
 	<menu_item_call label="Affiche le Panneau principal" name="Show in Main Panel"/>
+	<menu_item_call label="Afficher dans une nouvelle fenêtre" name="Show in new Window"/>
 	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>
 	<menu_item_call label="Couper" name="Cut"/>
 	<menu_item_call label="Copier" name="Copy"/>
@@ -117,6 +118,8 @@
 	<menu_item_call label="Enlever" name="Take Off"/>
 	<menu_item_call label="Appliquer uniquement à moi-même" name="Settings Apply Local"/>
 	<menu_item_call label="Appliquer à la parcelle" name="Settings Apply Parcel"/>
+	<menu_item_call label="Créer un dossier à partir de la sélection" name="New folder from selected"/>
+	<menu_item_call label="Dégrouper les éléments du dossier" name="Ungroup folder items"/>
 	<menu_item_call label="Copier dans les annonces Place du marché" name="Marketplace Copy"/>
 	<menu_item_call label="Déplacer dans les annonces Place du marché" name="Marketplace Move"/>
 	<menu_item_call label="--aucune option--" name="--no options--"/>

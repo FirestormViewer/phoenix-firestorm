@@ -76,7 +76,6 @@
 			<check_box label="Mostrar la barra de búsqueda" name="ShowSearchTopBar" />
 		</panel>
 		<panel name="UI-interface-windows-tab">
-			<check_box name="FSUseWebProfiles" label="Usar perfiles web por defecto" tool_tip="Muestra los perfiles como una página web en vez de usar los paneles de estilo V1"/>
 			<check_box label="Desactivar la apertura automática de la lista de bloqueados" name="FSDisableBlockListAutoOpen" tool_tip="Desactiva la apertura automática de la lista de bloqueados cuando se bloquean avatares u objetos."/>
 			<text name="standalone_textbox">
 				Usar ventanas independientes para:

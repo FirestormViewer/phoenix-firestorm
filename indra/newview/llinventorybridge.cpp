@@ -1213,7 +1213,10 @@ void LLInvFVBridge::addMarketplaceContextMenuOptions(U32 flags,
         LLInventoryModel::cat_array_t categories;
         LLInventoryModel::item_array_t items;
         gInventory.collectDescendents(local_version_folder_id, categories, items, FALSE);
-        if (categories.size() >= gSavedSettings.getU32("InventoryOutboxMaxFolderCount"))
+        LLCachedControl<U32> max_depth(gSavedSettings, "InventoryOutboxMaxFolderDepth", 4);
+        LLCachedControl<U32> max_count(gSavedSettings, "InventoryOutboxMaxFolderCount", 20);
+        if (categories.size() >= max_count
+            || depth > (max_depth + 1))
         {
             disabled_items.push_back(std::string("New Folder"));
         }
@@ -3732,6 +3735,12 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		gSavedPerAccountSettings.setLLSD("FSProtectedFolders", new_protected_folders);
 	}
 	// </FS:Ansariel>
+	// <FS:Ansariel> Show folder in new window option
+	else if ("show_in_new_window" == action)
+	{
+		LLFloaterReg::showInstance("fs_partial_inventory", LLSD().with("start_folder_id", mUUID).with("start_folder_name", mDisplayName));
+	}
+	// </FS:Ansariel>
 }
 
 void LLFolderBridge::gatherMessage(std::string& message, S32 depth, LLError::ELevel log_level)
@@ -4673,6 +4682,9 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		}
 	}
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Show folder in new window option
+	items.push_back((std::string("Show in new Window")));
 
 	// Add menu items that are dependent on the contents of the folder.
 	LLViewerInventoryCategory* category = (LLViewerInventoryCategory *) model->getCategory(mUUID);

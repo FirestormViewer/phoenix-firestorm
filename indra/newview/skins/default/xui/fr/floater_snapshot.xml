@@ -2,16 +2,13 @@
 <floater name="Snapshot" title="Photos">
 	<floater.string name="unknown">inconnu</floater.string>
 	<string name="postcard_progress_str">Envoi par mail</string>
-	<string name="facebook_progress_str">Publication sur Facebook</string>
-	<string name="profile_progress_str">Publication</string>
+	<string name="profile_progress_str">Publication en cours</string>
 	<string name="inventory_progress_str">Enregistrement dans l'inventaire</string>
 	<string name="local_progress_str">Enregistrement sur le disque</string>
-	<string name="facebook_succeeded_str">Image envoyée</string>
 	<string name="profile_succeeded_str">Image uploadée</string>
 	<string name="postcard_succeeded_str">Mail envoyé !</string>
 	<string name="inventory_succeeded_str">Enregistré dans l'inventaire !</string>
 	<string name="local_succeeded_str">Enregistré sur le disque !</string>
-	<string name="facebook_failed_str">Erreur lors de l'envoi de votre image sur votre Timeline Facebook.</string>
 	<string name="profile_failed_str">Erreur lors de l'envoi de l'image sur le flux de votre profil.</string>
 	<string name="postcard_failed_str">Erreur lors de l'envoi du mail.</string>
 	<string name="inventory_failed_str">Erreur lors de l'enregistrement dans l'inventaire.</string>
@@ -20,7 +17,7 @@
 		<button label="Actualiser" name="new_snapshot_btn"/>
 		<panel name="advanced_options_panel">
 			<text name="layer_type_label">Capturer :</text>
-			<combo_box label="Qualité de l'image" name="layer_types">
+			<combo_box label="Type d'image" name="layer_types">
 				<combo_box.item label="Couleurs" name="Colors"/>
 				<combo_box.item label="Profondeur" name="Depth"/>
 				<combo_box.item label="Profondeur (24 bits)" name="Depth24"/>
@@ -31,18 +28,24 @@
 			<check_box label="Figer l'écran (plein écran)" name="freeze_frame_check"/>
 			<check_box label="Actualisation automatique" name="auto_snapshot_check"/>
 			<text name="filter_list_label">Filtre :</text>
-			<combo_box name="filters_combobox" tool_tip="Filtres pour l'image"><combo_box.item label="Pas de filtre" name="NoFilter"/></combo_box>
+			<combo_box name="filters_combobox" tool_tip="Filtres pour l'image">
+				<combo_box.item label="Pas de filtre" name="NoFilter"/>
+			</combo_box>
 		</panel>
 		<panel name="succeeded_panel">
 			<text name="succeeded_lbl">Réussi</text>
 		</panel>
 		<panel name="failed_panel">
-			<text name="failed_lbl">Erreur</text>
+			<text name="failed_lbl">Échec</text>
 		</panel>
 		<text name="working_lbl">En cours</text>
 		<text name="refresh_lbl">Actualisez pour sauvegarder.</text>
 	</view>
-	<text name="image_res_text">[WIDTH]px (Largeur) x [HEIGHT]px (Hauteur)</text>
-	<text name="file_size_label">[SIZE] Ko</text>
+	<text name="image_res_text">
+		[WIDTH]px (Largeur) x [HEIGHT]px (Hauteur)
+	</text>
+	<text name="file_size_label">
+		[SIZE] Ko
+	</text>
 	<button label="Photo 360°" name="360_label"/>
 </floater>

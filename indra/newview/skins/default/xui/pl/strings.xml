@@ -777,9 +777,6 @@ mogą być dołączane do notek.
 	<string name="GroupNameNone">
 		(brak danych)
 	</string>
-	<string name="AvalineCaller">
-		Avaline [ORDER]
-	</string>
 	<string name="AssetErrorNone">
 		Brak błędu
 	</string>
@@ -1683,6 +1680,14 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="InventoryMarketplaceError">
 		Wystapił błąd podczas otwierania listy rzeczy z Marketplace.
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+	</string>
+	<string name="InventoryMarketplaceConnectionError">
+		Wystapił błąd podczas łączenia z Marketplace.
+Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+		Wystapił błąd podczas łączenia z Marketplace. Powód: [REASON]
 Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą techniczną Second Life: http://support.secondlife.com
 	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
@@ -2730,25 +2735,25 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		(zostanie zaktualizowane po publikacji)
 	</string>
 	<string name="NoPicksClassifiedsText">
-		Nie dodałeś/aś nic do Ulubionych i Reklam. Kliknij na przycisk + poniżej, aby dodać miejsce do Ulubionych lub Reklam.
-	</string>
-	<string name="NoAvatarPicksClassifiedsText">
-		Brak ulubionych miejsc/reklam
-	</string>
-	<string name="PicksClassifiedsLoadingText">
-		Ładowanie...
+		Nie dodano nic do Miejsc i Reklam. Kliknij na przycisk Nowe, aby utworzyć Miejsce lub Reklamę.
 	</string>
 	<string name="NoPicksText">
-		Nie masz żadnych ulubionych miejsc
+		Nie dodano żadnych Miejsc. Kliknij na przycisk Nowe, aby utworzyć Miejsce.
+	</string>
+	<string name="NoClassifiedsText">
+		Nie dodano żadnych reklam. Kliknij na przycisk Nowa, aby utworzyć reklamę.
+	</string>
+	<string name="NoAvatarPicksClassifiedsText">
+		Użytkownik nie ma ulubionych miejsc ani reklam
 	</string>
 	<string name="NoAvatarPicksText">
 		Użytkownik nie ma ulubionych miejsc
 	</string>
-	<string name="NoClassifiedsText">
-		Nie masz żadnych reklam. Kliknij na przycisk Plus poniżej, aby jakąś utworzyć.
-	</string>
 	<string name="NoAvatarClassifiedsText">
 		Użytkownik nie ma reklam
+	</string>
+	<string name="PicksClassifiedsLoadingText">
+		Ładowanie...
 	</string>
 	<string name="MultiPreviewTitle">
 		Podgląd
@@ -5135,10 +5140,10 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Moje członkostwo Premium
 	</string>
 	<string name="DeleteItems">
-		Usunąć zaznaczone obiekty?
+		Usunąć [COUNT_SELECTION] zaznaczonych obiektów ([COUNT_TOTAL] łącznie)?
 	</string>
 	<string name="DeleteItem">
-		Usunąć zaznaczony obiekt?
+		Usunąć zaznaczony obiekt ([COUNT_TOTAL] łącznie)?
 	</string>
 	<string name="EmptyOutfitText">
 		W tym stroju nie ma elementów

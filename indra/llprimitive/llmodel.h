@@ -52,6 +52,7 @@ public:
 	void fromLLSD(LLSD& data);
 	LLSD asLLSD(bool include_joints, bool lock_scale_if_joint_position) const;
     void updateHash();
+    U32 sizeBytes() const;
 
 	LLUUID mMeshID;
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
@@ -117,6 +118,14 @@ public:
 		{
 			return mPositions.empty();
 		}
+
+        U32 sizeBytes() const
+        {
+            U32 res = sizeof(std::vector<LLVector3>) * 2;
+            res += sizeof(LLVector3) * mPositions.size();
+            res += sizeof(LLVector3) * mNormals.size();
+            return res;
+        }
 	};
 
 	class Decomposition
@@ -127,6 +136,7 @@ public:
 		void fromLLSD(LLSD& data);
 		LLSD asLLSD() const;
 		bool hasHullList() const;
+        U32 sizeBytes() const;
 
 		void merge(const Decomposition* rhs);
 

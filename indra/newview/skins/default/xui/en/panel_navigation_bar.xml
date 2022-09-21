@@ -8,6 +8,7 @@
  top="19"
  left="0"
  follows="left|top|right"
+ focus_root="true"
  height="39"
  layout="topleft"
  name="navigation_bar"

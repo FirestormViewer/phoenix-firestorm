@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="groups" title="Utilisateurs enregistrés">
+    <button label="Oublier" label_selected="Oublier" name="forget" />
+    <check_box label="Supprimer également les données locales" name="delete_data" tool_tip="Supprime les fichiers locaux : historique de chat, capture d'écran de la dernière session, cookies du navigateur, historique de téléportation, paramètres de la barre d'outils, etc. Certains fichiers locaux sont partagés entre les grilles."/>
+</floater>

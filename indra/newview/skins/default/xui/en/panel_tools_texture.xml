@@ -21,7 +21,7 @@
             </panel.string>
             <panel.string
              name="paste_error_inventory_not_found">
-              One or more texture not found in inventory.
+              One or more textures not found in inventory.
             </panel.string>
             <panel.string
              name="paste_options">
@@ -542,10 +542,7 @@
 			 top_pad="4"
 			 tool_tip="Add Media"
 			 label="Choose..."
-			 width="85">
-				<button.commit_callback
-				function="BuildTool.AddMedia"/>
-			</button>
+			 width="85"/>
 			<button
 			 follows="top|left"
 			 height="18"
@@ -555,10 +552,7 @@
 			 tool_tip="Delete this media texture"
 			 top_delta="0"
 			 label="Remove"
-			 width="85">
-				<button.commit_callback
-				function="BuildTool.DeleteMedia"/>
-			</button>
+			 width="85"/>
             <button
 			 follows="left|top"
 			 height="18"
@@ -615,7 +609,7 @@
              width="265" />
             <button
              follows="top|left"
-             height="20"
+             height="18"
              layout="topleft"
              left_pad="0"
              image_overlay="Edit_Flip_X"
@@ -645,7 +639,7 @@
              width="265" />
             <button
              follows="top|left"
-             height="20"
+             height="18"
              layout="topleft"
              left_pad="0"
              image_overlay="Edit_Flip_X"

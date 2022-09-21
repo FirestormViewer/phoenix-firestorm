@@ -10,7 +10,7 @@
 	<spinner label="Limite altezza" name="terrain_raise_spin"/>
 	<spinner bottom_delta="-34" label="Limite profondità" name="terrain_lower_spin"/>
 	<text name="detail_texture_text">
-		Texture terreno (richiede file 512x512/1024x1024 24 bit TGA)
+		Texture terreno (richiede file 1024x1024 24 bit TGA)
 	</text>
 	<text name="height_text_lbl">
 		1 (basso)

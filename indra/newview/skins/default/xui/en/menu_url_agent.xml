@@ -104,6 +104,13 @@
         </menu_item_call>
     <menu_item_separator
      layout="topleft" />
+    <menu_item_call
+     label="Report Abuse"
+     layout="topleft"
+     name="report_abuse">
+        <menu_item_call.on_click
+         function="Url.ReportAbuse" />
+    </menu_item_call>
     <menu_item_check
      label="Block"
      layout="topleft"

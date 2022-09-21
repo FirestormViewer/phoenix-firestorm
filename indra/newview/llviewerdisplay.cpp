@@ -102,6 +102,9 @@ F32			gSavedDrawDistance = 0.0f;
 F32			gLastDrawDistanceStep = 0.0f;
 // <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 LLFrameTimer gPostTeleportFinishKillObjectDelayTimer;
+// <FS:Ansariel> FIRE-15917 / FIRE-31906: Mesh attachments sometimes vanish after teleports
+bool postTeleportResetVB = false;
+LLFrameTimer postTeleportResetVBTimer;
 
 BOOL gForceRenderLandFence = FALSE;
 BOOL gDisplaySwapBuffers = FALSE;
@@ -332,6 +335,17 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	stop_glerror();
 
 	gPipeline.disableLights();
+
+	// <FS:Ansariel> FIRE-15917 / FIRE-31906: Mesh attachments sometimes vanish after teleports
+	static LLCachedControl<F32> teleportArrivalDelay(gSavedSettings, "TeleportArrivalDelay");
+	if (postTeleportResetVB && postTeleportResetVBTimer.getElapsedTimeF32() > teleportArrivalDelay())
+	{
+		LL_INFOS("Teleport") << "Resetting Vertex Buffers after TP finished" << LL_ENDL;
+		postTeleportResetVB = false;
+		postTeleportResetVBTimer.stop();
+		gPipeline.resetVertexBuffers();
+	}
+	// </FS:Ansariel>
 	
 	//reset vertex buffers if needed
 	gPipeline.doResetVertexBuffers();
@@ -556,6 +570,11 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 			// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
 			gPostTeleportFinishKillObjectDelayTimer.reset();
+
+			// <FS:Ansariel> FIRE-15917 / FIRE-31906: Mesh attachments sometimes vanish after teleports
+			postTeleportResetVB = true;
+			postTeleportResetVBTimer.start();
+			// </FS:Ansariel>
 			break;
 
 		case LLAgent::TELEPORT_ARRIVING:
@@ -854,7 +873,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				glh::matrix4f proj = get_current_projection();
 				glh::matrix4f mod = get_current_modelview();
 				glViewport(0,0,512,512);
-				LLVOAvatar::updateFreezeCounter() ;
 
 				LLVOAvatar::updateImpostors();
 

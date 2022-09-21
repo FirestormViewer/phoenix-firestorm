@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Профиль">
+	<string name="status_online">В сети</string>
+	<string name="status_offline">Не в сети</string>
+	<string name="no_partner_text" value="Никто"/>
+	<string name="no_group_text" value="Никто"/>
+	<string name="FSDev" value=" Разработчик"/>
+	<string name="FSSupp" value=" Поддержка"/>
+	<string name="FSQualityAssurance" value=" Отладчик"/>
+	<string name="FSGW" value=" Шлюз"/>
+	<text name="name_label" value="Имя:"/>
+	<panel name="name_holder">
+		<text_editor name="complete_name" value="(загрузка...)"/>
+		<menu_button name="copy_btn" tool_tip="Копировать"/>
+	</panel>
+	<button name="set_name" tool_tip="Задать отображаемое имя"/>
+	<icon name="can_see_online" tool_tip="Друг может видеть мой статус в сети"/>
+	<icon name="cant_see_online" tool_tip="Друг не может мой статус в сети"/>
+	<icon name="can_see_on_map" tool_tip="Друг может видеть меня на карте"/>
+	<icon name="cant_see_on_map" tool_tip="Друг не может видеть меня на карте"/>
+	<icon name="can_edit_objects" tool_tip="Друг может править мои объекты"/>
+	<icon name="cant_edit_objects" tool_tip="Друг не может править мои объекты"/>
+	<text name="Key:" value="Ключ:"/>
+	<text_editor name="user_key" value="(загрузка...)"/>
+	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Выполнение действий, связанных с изображением профиля"/>
+		</layout_panel>
+		<layout_panel name="label_stack">
+			<text name="label" value="Возраст:"/>
+			<text_editor name="user_age" value="(загрузка...)"/>
+			<text name="label2" value="Аккаунт:"/>
+			<text name="partner_label" value="Партнер:"/>
+		</layout_panel>
+	</layout_stack>
+	<text name="About:" value="О себе:"/>
+	<text name="Groups:" value="Группы:"/>
+	<button name="group_invite" tool_tip="Пригласить в группу"/>
+	<text name="Give item:" value="Дать:"/>
+	<text name="Give inventory" tool_tip="Сбросить вещи из инвентаря здесь для передачи их этому игроку.">Сбросить вещь из инвентаря здесь.</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button name="show_on_map_btn" label="Найти на карте" tool_tip="Найти жителя на карте" label_selected="Найти на карте"/>
+			<button name="pay" label="Оплатить" tool_tip="Выплатить деньги жителю" label_selected="Оплатить"/>
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button name="teleport" label="Предложить телепорт" tool_tip="Предложить телепорт этому жителю" label_selected="Предложить телепорт"/>
+			<button name="im" label="Мгновенное сообщение" tool_tip="Начать сеанс мгновенного сообщения" label_selected="Мгновенное сообщение"/>
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button name="add_friend" label="Добавить друга" tool_tip="Предложить дружбу этому жителю" label_selected="Добавить друга"/>
+			<button name="block" label="Заблокировать" tool_tip="Заблокировать этого жителя"/>
+			<button name="unblock" label="Разблокировать" tool_tip="Разблокировать этого жителя"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search" label="Показать в поиске" tool_tip="Позволить людям видеть вас в результатах поиска"/>
+	<button name="save_description_changes" label="Сохранить"/>
+	<button name="discard_description_changes" label="Отказаться"/>
+</panel>

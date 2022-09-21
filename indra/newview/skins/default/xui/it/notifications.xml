@@ -1468,13 +1468,13 @@ Scegli solo un oggetto e riprova.
 		Impossibile impostare le texture della regione:
 La texture del terreno [TEXTURE_NUM] ha una profondità di bit pari a [TEXTURE_BIT_DEPTH] non corretta.
 
-Sostituisci la texture [TEXTURE_NUM] con una a 24-bit 1024x1024 o una immagine più piccola e quindi clicca nuovamente su &apos;Applica&apos;.
+Sostituisci la texture [TEXTURE_NUM] con una a 24-bit [MAX_SIZE]x[MAX_SIZE] o una immagine più piccola e quindi clicca nuovamente su &apos;Applica&apos;.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Impossibile impostare le texture di regione:
 La texture del terreno [TEXTURE_NUM] è troppo grande se a [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Sostituisci la texture [TEXTURE_NUM] con una a 24-bit 1024x1024 oppure con una immagine più piccola e quindi clicca di nuovo &apos;Applica&apos;.
+Sostituisci la texture [TEXTURE_NUM] con una a 24-bit [MAX_SIZE]x[MAX_SIZE] oppure con una immagine più piccola e quindi clicca di nuovo &apos;Applica&apos;.
 	</notification>
 	<notification name="RawUploadStarted">
 		Importazione iniziata. Può impiegare fino a due minuti, a seconda della velocità della tua connessione.
@@ -2703,6 +2703,9 @@ Prova a selezionare una parte di terreno più piccola.
 	</notification>
 	<notification name="NoContentToSearch">
 		Seleziona almeno un tipo di contenuto per la ricerca (Generale, Moderato o Adulti).
+	</notification>
+	<notification name="FacebookConnect">
+		[MESSAGE]
 	</notification>
 	<notification name="EventNotification">
 		Notifica eventi:

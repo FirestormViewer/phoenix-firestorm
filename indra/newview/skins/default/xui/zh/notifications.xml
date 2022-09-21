@@ -1474,13 +1474,13 @@ SHA1 指紋：[MD5_DIGEST]
 		無法設定地區材質：
 地形材質 [TEXTURE_NUM] 的位元深度 [TEXTURE_BIT_DEPTH] 無效。
 
-請將材質 [TEXTURE_NUM] 替換成 24 位元 512x512 或更小圖像，然後點按「套用」。
+請將材質 [TEXTURE_NUM] 替換成 24 位元 [MAX_SIZE]x[MAX_SIZE] 或更小圖像，然後點按「套用」。
 	</notification>
 	<notification name="InvalidTerrainSize">
 		無法設定地區材質：
 地形材質 [TEXTURE_NUM] 的尺寸 [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y] 太大。
 
-請將材質 [TEXTURE_NUM] 替換成 24 位元 512x512 或更小圖像，然後點按「套用」。
+請將材質 [TEXTURE_NUM] 替換成 24 位元 [MAX_SIZE]x[MAX_SIZE] 或更小圖像，然後點按「套用」。
 	</notification>
 	<notification name="RawUploadStarted">
 		上傳開始。 視你的連線速度而定，這最多需時兩分鐘。
@@ -2570,6 +2570,9 @@ SHA1 指紋：[MD5_DIGEST]
 		請至少選擇一種要搜索的內容分級（一般普級、適度成人、完全成人）。
 	</notification>
 	<notification name="SystemMessage">
+		[MESSAGE]
+	</notification>
+	<notification name="FacebookConnect">
 		[MESSAGE]
 	</notification>
 	<notification name="FlickrConnect">
@@ -3926,7 +3929,7 @@ SHA1 指紋：[MD5_DIGEST]
 		網面物件的形狀不得變更。
 	</notification>
 	<notification name="FullRegionCantEnter">
-		你無法進入這地區，\n因為地區滿載。
+		你無法進入這地區，因為地區滿載。
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		聯結失敗——所有人不同
@@ -4227,7 +4230,7 @@ SHA1 指紋：[MD5_DIGEST]
 		此時無法購買通行權。  請稍候再試一次。
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		無法建立物件，\n地段滿載。
+		無法建立物件，地段滿載。
 	</notification>
 	<notification name="FailedPlacingObject">
 		無法將物件置於指定地點。  請再試一次。

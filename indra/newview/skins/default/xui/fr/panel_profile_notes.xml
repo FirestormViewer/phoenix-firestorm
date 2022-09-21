@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Notes &amp; respect de la vie privée" name="panel_notes">
+	<text name="status_message" value="Prenez des notes sur cette personne. Personne ne peut les voir."/>
+	<button name="notes_save_changes" label="Enregistrer" />
+	<button name="notes_discard_changes" label="Annuler" />
+</panel>

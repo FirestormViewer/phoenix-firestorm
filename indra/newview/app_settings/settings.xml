@@ -355,17 +355,6 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>FSUseWebProfiles</key>
-  <map>
-    <key>Comment</key>
-    <string>Shows web profiles instead of the v1-style profile floater</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
   <key>FSTPHistoryTZ</key>
   <map>
     <key>Comment</key>
@@ -2110,17 +2099,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>AvalinePhoneSeparator</key>
-    <map>
-      <key>Comment</key>
-      <string>Separator of phone parts to have Avaline numbers human readable in Voice Control Panel</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>-</string>
     </map>
     <key>AvatarAxisDeadZone0</key>
     <map>
@@ -5503,7 +5481,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -6973,11 +6951,11 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]</string>
+      <string>https://search.[GRID]/?query_term=[QUERY]&amp;search_type=[TYPE][COLLECTION]&amp;maturity=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]</string>
       <key>Backup</key>
       <integer>0</integer>
       <!-- LL, possibly privacy leaking search string 
-      <string>https://search.[GRID]/viewer/[CATEGORY]/?q=[QUERY]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
+      <string>https://search.[GRID]/?query_term=[QUERY]&amp;search_type=[TYPE][COLLECTION]&amp;maturity=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
 	  -->
     </map>
     <key>GuidebookURL</key>
@@ -8209,6 +8187,17 @@
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>DiskCacheVersion</key>
+    <map>
+      <key>Comment</key>
+      <string>Version number of disk cache</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>LocalFileSystemBrowsingEnabled</key>
@@ -14007,7 +13996,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
-			<string>https://jira.firestormviewer.org/secure/CreateIssueDetails!init.jspa?pid=10005&amp;issuetype=1&amp;priority=3&amp;environment=[ENVIRONMENT]</string>
+			<string>https://jira.firestormviewer.org/secure/CreateIssueDetails!init.jspa?pid=10003&amp;issuetype=8&amp;priority=3&amp;environment=[ENVIRONMENT]</string>
 		</map>
 	<key>RevokePermsOnStopAnimation</key>
     <map>
@@ -14640,17 +14629,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>BasicUITooltips</key>
-    <map>
-      <key>Comment</key>
-      <string>Show tooltips for various 2D UI elements like buttons or checkboxes, won't supress tooltips like drag'n'drop, inworld, links or media</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>BasicUITooltips</key>
     <map>
@@ -20209,6 +20187,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>AllowSelectAvatar</key>
+    <map>
+      <key>Comment</key>
+      <string>Allows user to select and move avatars, move is viewer sided, does not propagate to server, also supresses avatar position updates while avatars are selected</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
      <key>WebProfileFloaterRect</key>
     <map>
       <key>Comment</key>
@@ -22199,6 +22188,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>3</integer>
+  </map>
+  <key>360QualitySelection</key>
+  <map>
+    <key>Comment</key>
+    <string>Quality level for the 360 snapshot</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>128</integer>
   </map>
   <key>MFAHash</key>
   <map>
@@ -25743,6 +25743,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>Scripting</string>
     </map>
+    <key>FSNotecardFontName</key>
+    <map>
+      <key>Comment</key>
+      <string>The name of the font used for the notecard editor</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>SansSerif</string>
+    </map>
+    <key>FSNotecardFontSize</key>
+    <map>
+      <key>Comment</key>
+      <string>The size of the font used for the notecard editor</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Medium</string>
+    </map>
     <key>FSEnableRightclickOnTransparentObjects</key>
     <map>
       <key>Comment</key>
@@ -26270,6 +26292,61 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>473405</integer>
+    </map>
+    <key>FSUseCoRoFor360Capture</key>
+    <map>
+      <key>Comment</key>
+      <string>Use co-routine to extract 360 photos.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>SDL2IMEDefaultVerticalOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Default vertical offset to apply to the international input method editor for Japanese, Chinese, etc.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>18</integer>
+    </map>
+    <key>SDL2IMEChatHistoryVerticalOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Chat History: Vertical offset to apply to the international input method editor for Japanese, Chinese, etc.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>14</integer>
+    </map>
+    <key>SDL2IMEMediaVerticalOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Media: Vertical offset to apply to the international input method editor for Japanese, Chinese, etc.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-4</integer>
+    </map>
+    <key>FSLocalMeshScaleAlwaysMeters</key>
+    <map>
+      <key>Comment</key>
+      <string>Ignore the units specified by the Collada file. Useful when importing from tools such as Maya</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 </map>
 </llsd>

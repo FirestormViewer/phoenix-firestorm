@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Favoris" name="panel_picks">
+	<string name="no_picks" value="Pas de favoris"/>
+	<layout_stack name="main_stack">
+		<layout_panel name="buttons_header">
+			<text name="header_text">
+				Faites connaître aux autres résidents vos endroits favoris dans [GRID].
+			</text>
+			<button label="Nouveau..." name="new_btn"/>
+			<button label="Supprimer..." name="delete_btn"/>
+		</layout_panel>
+		<layout_panel name="main_body">
+			<text name="picks_panel_text">
+				En cours de chargement...
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

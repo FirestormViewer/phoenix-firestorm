@@ -293,6 +293,9 @@ static const F32 MIN_UI_SCALE = 0.75f;
 static const F32 MAX_UI_SCALE = 7.0f;
 static const F32 MIN_DISPLAY_SCALE = 0.75f;
 
+// <FS:Ansariel> FIRE-31852: Now it aggressively executes gestures within focussed floaters...
+//static const char KEY_MOUSELOOK = 'M';
+
 static LLCachedControl<std::string>	sSnapshotBaseName(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseName", "Snapshot"));
 static LLCachedControl<std::string>	sSnapshotDir(LLCachedControl<std::string>(gSavedPerAccountSettings, "SnapshotBaseDir", ""));
 
@@ -822,6 +825,12 @@ public:
 				// </FS:Ansariel>
 
 				addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Cache Read/Write ", LLMeshRepository::sCacheBytesRead/(1024.f*1024.f), LLMeshRepository::sCacheBytesWritten/(1024.f*1024.f)));
+                ypos += y_inc;
+
+                addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Skins/Decompositions Memory", LLMeshRepository::sCacheBytesSkins / (1024.f*1024.f), LLMeshRepository::sCacheBytesDecomps / (1024.f*1024.f)));
+                ypos += y_inc;
+
+                addText(xpos, ypos, llformat("%.3f MB Mesh Headers Memory", LLMeshRepository::sCacheBytesHeaders / (1024.f*1024.f)));
 
 				ypos += y_inc;
 			}
@@ -1667,9 +1676,11 @@ void LLViewerWindow::handleFocusLost(LLWindow *window)
 	showCursor();
 	getWindow()->setMouseClipping(FALSE);
 
-	// If losing focus while keys are down, reset them.
+	// If losing focus while keys are down, handle them as
+    // an 'up' to correctly release states, then reset states
 	if (gKeyboard)
 	{
+        gKeyboard->resetKeyDownAndHandle();
 		gKeyboard->resetKeys();
 	}
 
@@ -3296,8 +3307,17 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
     if (keyboard_focus
         && !gFocusMgr.getKeystrokesOnly())
     {
-        LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(keyboard_focus);
-        if (cur_focus && cur_focus->acceptsTextInput())
+        //Most things should fall through, but mouselook is an exception,
+        //don't switch to mouselook if any floater has focus
+        // <FS:Ansariel> FIRE-31852: Now it aggressively executes gestures within focussed floaters...
+        //if ((key == KEY_MOUSELOOK) && !(mask & (MASK_CONTROL | MASK_ALT)))
+        //{
+        //    return TRUE;
+        //}
+
+        //LLUICtrl* cur_focus = dynamic_cast<LLUICtrl*>(keyboard_focus);
+        //if (cur_focus && cur_focus->acceptsTextInput())
+        // </FS:Ansariel>
         {
 #ifdef LL_WINDOWS
             // On windows Alt Gr key generates additional Ctrl event, as result handling situations

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+  name="panel_pick_info"
+  top="0"
+  left="0"
+  height="380"
+  width="314"
+  follows="all"
+  layout="topleft"
+  help_topic="profile_pick_info">
+
+  <panel.string
+    name="location_notice">
+      (will update after save)
+  </panel.string>
+
+  <!-- main stack -->
+  <layout_stack
+    name="main_pick_stack"
+    left="1"
+    right="-1"
+    top="0"
+    bottom="-1"
+    follows="all"
+    layout="topleft"
+    orientation="vertical"
+    animate="false">
+
+    <!-- main panel -->
+    <layout_panel
+      follows="all"
+      layout="bottomleft"
+      left_pad="2"
+      name="main_pick_lp"
+      auto_resize="true"
+      height="340">
+
+      <!-- snapshot stack -->
+      <layout_stack
+        name="pick_snapshot_stack"
+        left="1"
+        right="-1"
+        top="0"
+        height="174"
+        follows="top|left|right"
+        layout="topleft"
+        orientation="horizontal"
+        animate="false">
+
+        <layout_panel
+          follows="top|left|right"
+          layout="topleft"
+          name="pick_snapshot_resizer_left"
+          auto_resize="true"
+          height="174"
+          width="1" />
+
+        <!-- snapshot panel -->
+        <layout_panel
+          follows="top|left|right"
+          layout="topleft"
+          name="pick_snapshot_center_panel"
+          auto_resize="false"
+          height="174"
+          width="310">
+
+          <texture_picker
+            name="pick_snapshot"
+            height="174"
+            width="310"
+            follows="top|left"
+            layout="topleft"
+            fallback_image="default_land_picture.j2c" />
+
+        </layout_panel>
+        <!-- snapshot panel -->
+
+        <layout_panel
+          follows="top|left|right"
+          layout="topleft"
+          name="pick_snapshot_resizer_right"
+          auto_resize="true"
+          height="174"
+          width="1" />
+
+      </layout_stack>
+      <!-- snapshot stack -->
+
+      <line_editor
+        name="pick_name"
+        enabled="false"
+        top_pad="-12"
+        height="20"
+        right="-1"
+        follows="left|right|top"
+        layout="topleft" />
+
+      <text_editor
+        name="pick_desc"
+        trusted_content="false"
+        always_show_icons="true"
+        enabled="false"
+        left_delta="2"
+        top_pad="5"
+        height="100"
+        right="-2"
+        follows="all"
+        layout="topleft"
+        allow_html="true"
+        border_visible="true"
+        h_pad="4"
+        max_length="1023"
+        v_pad="3"
+        word_wrap="true" />
+
+      <line_editor
+        name="pick_location"
+        enabled="false"
+        top_pad="5"
+        right="-1"
+        left_delta="-2"
+        height="20"
+        follows="left|right|bottom"
+        layout="topleft"
+        length="1"
+        type="string">
+          Loading...
+      </line_editor>
+
+      <!-- actions stack -->
+      <layout_stack
+        name="actions_stack"
+        left="1"
+        right="-1"
+        top_pad="4"
+        height="25"
+        follows="bottom|left|right"
+        layout="topleft"
+        orientation="horizontal"
+        animate="false">
+
+        <layout_panel
+          follows="all"
+          layout="topleft"
+          name="util_resizer_left"
+          auto_resize="true"
+          width="1" />
+
+        <layout_panel
+          follows="all"
+          layout="bottomleft"
+          left_pad="2"
+          name="map_btn_lp"
+          auto_resize="false"
+          width="100">
+
+          <button
+            name="show_on_map_btn"
+            label="Show on Map"
+            left="0"
+            top="0"
+            height="23"
+            width="100"
+            follows="left|top"
+            layout="topleft" />
+
+        </layout_panel>
+
+        <layout_panel
+          follows="all"
+          layout="bottomleft"
+          left_pad="2"
+          name="tp_btn_lp"
+          auto_resize="false"
+          width="100">
+
+          <button
+            name="teleport_btn"
+            label="Teleport"
+            left="0"
+            top="0"
+            height="23"
+            width="100"
+            follows="left|top"
+            layout="topleft" />
+
+        </layout_panel>
+
+        <layout_panel
+          follows="all"
+          layout="bottomleft"
+          left_pad="2"
+          name="set_to_curr_location_btn_lp"
+          auto_resize="false"
+          width="100">
+
+          <button
+            name="set_to_curr_location_btn"
+            label="Set Location"
+            tool_tip="Set to Current Location"
+            left="0"
+            top="0"
+            height="23"
+            width="100"
+            follows="left|top"
+            layout="topleft" />
+
+        </layout_panel>
+
+        <layout_panel
+          follows="all"
+          layout="topleft"
+          name="util_resizer_right"
+          auto_resize="true"
+          width="1" />
+
+      </layout_stack>
+      <!-- actions stack -->
+
+    </layout_panel>
+    <!-- main panel -->
+
+    <!-- save changes hiding panel -->
+    <layout_panel
+      follows="all"
+      layout="bottomleft"
+      right="-1"
+      height="40"
+      name="save_changes_lp">
+
+      <view_border
+        bevel_style="none"
+        height="0"
+        follows="bottom|left|right"
+        layout="topleft"
+        left="1"
+        name="save_emphasis_border"
+        top_pad="3"
+        right="-1" />
+
+      <!-- save changes stack -->
+      <layout_stack
+        name="save_changes_stack"
+        left="1"
+        right="-1"
+        top_pad="11"
+        height="25"
+        follows="bottom|left|right"
+        layout="topleft"
+        orientation="horizontal"
+        animate="false">
+
+        <layout_panel
+          follows="all"
+          layout="topleft"
+          name="save_resizer_left"
+          auto_resize="true"
+          width="1" />
+
+        <layout_panel
+          follows="all"
+          layout="bottomleft"
+          left_pad="2"
+          name="create_btn_lp"
+          auto_resize="false"
+          width="130">
+
+          <button
+            name="create_changes_btn"
+            label="Create Pick"
+            left="0"
+            top="0"
+            height="23"
+            width="130"
+            follows="left|top"
+            layout="topleft" />
+
+        </layout_panel>
+
+        <layout_panel
+          follows="all"
+          layout="bottomleft"
+          left_pad="2"
+          name="save_btn_lp"
+          auto_resize="false"
+          width="130">
+
+          <button
+            name="save_changes_btn"
+            label="Save Pick"
+            left="0"
+            top="0"
+            height="23"
+            width="130"
+            follows="left|top"
+            layout="topleft" />
+
+        </layout_panel>
+
+        <layout_panel
+          follows="all"
+          layout="bottomleft"
+          left_pad="2"
+          name="cancel_btn_lp"
+          auto_resize="false"
+          width="130">
+
+          <button
+            name="cancel_changes_btn"
+            label="Cancel"
+            left="0"
+            top="0"
+            height="23"
+            width="130"
+            follows="left|top"
+            layout="topleft" />
+
+        </layout_panel>
+
+        <layout_panel
+          follows="all"
+          layout="topleft"
+          name="save_resizer_right"
+          auto_resize="true"
+          width="1" />
+
+      </layout_stack>
+      <!-- save changes stack -->
+
+    </layout_panel>
+    <!-- save changes hiding panel -->
+
+  </layout_stack>
+  <!-- main stack -->
+
+</panel>

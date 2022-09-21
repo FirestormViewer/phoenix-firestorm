@@ -2164,6 +2164,12 @@ void LLLineEditor::draw()
 
 				ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]);
 				ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
+				// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+				static LLUICachedControl<S32> sdl2_ime_default_vertical_offset("SDL2IMEDefaultVerticalOffset");
+				ime_pos.mY += sdl2_ime_default_vertical_offset;
+#endif
+				// </FS:Zi>
 				getWindow()->setLanguageTextInput( ime_pos );
 			}
 		}
@@ -2313,12 +2319,21 @@ void LLLineEditor::setFocus( BOOL new_state )
 
 	if (new_state)
 	{
+		// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+		// Linux/SDL2 doesn't currently allow to disable IME, so we remove the restrictions on
+		// password entry fields and prevalidated input fields. Otherwise those fields would
+		// be completely inaccessible.
+		getWindow()->allowLanguageTextInput(this, true);
+#else
+		// </FS:Zi>
 		// Allow Language Text Input only when this LineEditor has
 		// no prevalidate function attached.  This criterion works
 		// fine on 1.15.0.2, since all prevalidate func reject any
 		// non-ASCII characters.  I'm not sure on future versions,
 		// however.
 		getWindow()->allowLanguageTextInput(this, mPrevalidateFunc == NULL);
+#endif // <FS:Zi>
 	}
 }
 
@@ -2498,7 +2513,16 @@ void LLLineEditor::updateAllowingLanguageInput()
 		// test app, no window available
 		return;	
 	}
+	// <FS:Zi> IME - International input compositing, i.e. for Japanese / Chinese text input
+#if LL_SDL2
+	// Linux/SDL2 doesn't currently allow to disable IME, so we remove the restrictions on
+	// password entry fields and prevalidated input fields. Otherwise those fields would
+	// be completely inaccessible.
+	if (hasFocus() && !mReadOnly)
+#else
+	// </FS:Zi>
 	if (hasFocus() && !mReadOnly && !mDrawAsterixes && mPrevalidateFunc == NULL)
+#endif // <FS:Zi>
 	{
 		window->allowLanguageTextInput(this, TRUE);
 	}

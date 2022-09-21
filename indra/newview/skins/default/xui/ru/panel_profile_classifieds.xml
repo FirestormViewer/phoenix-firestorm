@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_profile_classifieds" label="Реклама">
+	<string name="no_classifieds" value="Нет рекламы"/>
+	<layout_stack name="main_stack">
+		<layout_panel name="buttons_header">
+			<button name="new_btn" label="Новый..." tool_tip="Создать новую рекламу в текущем местоположении"/>
+			<button name="delete_btn" label="Удалить..." tool_tip="Удалить выбранную рекламу"/>
+		</layout_panel>
+		<layout_panel name="main_body">
+			<text name="classifieds_panel_text">Загрузка...</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

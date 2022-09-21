@@ -247,6 +247,7 @@
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
+		<menu_item_call label="Lokales Mesh" name="local_mesh" />
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
         <menu_item_call label="Lokaler Bitmap-Browser" name="Local Bitmap Browser"/>
@@ -270,7 +271,7 @@
 		<menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
 		<menu_item_call label="Missbrauch melden" name="Report Abuse"/>
-		<menu_item_call label="Fehler melden" name="Report Bug"/>
+		<menu_item_call label="Problem melden" name="Report Bug"/>
 		<menu_item_call label="Rempler, Stöße &amp; Schläge" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Sysinfo-Button aktivieren" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Info über [APP_NAME]" name="About Second Life"/>
@@ -444,11 +445,12 @@
 		<menu label="Fehler erzwingen" name="Force Errors">
 			<menu_item_call label="Haltepunkt erzwingen" name="Force Breakpoint"/>
 			<menu_item_call label="LLError erzwingen und abstürzen" name="Force LLError And Crash"/>
-			<menu_item_call label="Erzwinge fehlerhaften Speicherzugriff" name="Force Bad Memory Access"/>
+			<menu_item_call label="Fehlerhaften Speicherzugriff erzwingen" name="Force Bad Memory Access"/>
+			<menu_item_call label="Fehlerhaften Speicherzugriff in Coroutine erzwingen" name="Force Bad Memory Access in Coroutine"/>
 			<menu_item_call label="Endlosschleife erzwingen" name="Force Infinite Loop"/>
 			<menu_item_call label="Treiber-Absturz erzwingen" name="Force Driver Carsh"/>
 			<menu_item_call label="Softwareausnahme erzwingen" name="Force Software Exception"/>
-			<menu_item_call label="Absturz in Coroutine erzwingen" name="Force a Crash in a Coroutine"/>
+			<menu_item_call label="Softwareausnahme in Coroutine erzwingen" name="Force Software Exception in Coroutine"/>
 			<menu_item_call label="Absturz in Thread erzwingen" name="Force a Crash in a Thread"/>
 			<menu_item_call label="Verbindungsabbruch erzwingen" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Speicherverlust simulieren" name="Memory Leaking Simulation"/>

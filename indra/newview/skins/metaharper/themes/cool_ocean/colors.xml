@@ -874,4 +874,16 @@
   <color
     name="OutfitGalleryItemUnselected"
     value="0.4 0.4 0.4 1" />
+  <color
+     name="NotecardBackgroundColor"
+     reference="TextBgFocusColor" />
+  <color
+     name="NotecardTextColor"
+     reference="TextFgColor" />
+  <color
+     name="NotecardSelectionColor"
+     reference="EmphasisColor" />
+  <color
+     name="NotecardCursorColor"
+     reference="TextCursorColor" />
 </colors>

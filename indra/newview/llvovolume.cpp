@@ -252,6 +252,8 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 	mMDCImplCount = 0;
 	mLastRiggingInfoLOD = -1;
 	mResetDebugText = false;
+	mIsLocalMesh = false;
+	mIsLocalMeshUsingScale = false;
 }
 
 LLVOVolume::~LLVOVolume()
@@ -344,6 +346,14 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 	static LLCachedControl<bool> fsEnforceStrictObjectCheck(gSavedSettings, "FSEnforceStrictObjectCheck");
 	bool enfore_strict_object_check = LLGridManager::instance().isInSecondLife() && fsEnforceStrictObjectCheck;
 	// </FS:Ansariel>
+
+	// local mesh begin
+	// rationale: we don't want server updates for a local object, cause the server tends to override things.
+	if (mIsLocalMesh)
+	{
+		return 0;
+	}
+	// local mesh end
 
 	LLColor4U color;
 	const S32 teDirtyBits = (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR|TEM_CHANGE_MEDIA);
@@ -1915,7 +1925,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global, BOOL should_update_octree_bounds)
             break;
         // </FS:ND>
 
-        LLFace *face = mDrawable->getFace(i);
+        LLFace* face = mDrawable->getFace(i);
         if (!face)
         {
             continue;
@@ -5319,10 +5329,10 @@ LLControlAVBridge::LLControlAVBridge(LLDrawable* drawablep, LLViewerRegion* regi
 bool can_batch_texture(LLFace* facep)
 {
 	// <FS:Beq> fix batching when materials disabled and alpha none/masked.
-	// if (facep->getTextureEntry()->getBumpmap())
-	// { //bump maps aren't worked into texture batching yet
-	// 	return false;
-	// }
+	if (facep->getTextureEntry()->getBumpmap())
+	{ //bump maps aren't worked into texture batching yet
+		return false;
+	}
 
 	// if (facep->getTextureEntry()->getMaterialParams().notNull())
 	// { //materials don't work with texture batching yet
@@ -5332,8 +5342,12 @@ bool can_batch_texture(LLFace* facep)
 	if (LLPipeline::sRenderDeferred && te )
 	{
 		auto mat = te->getMaterialParams();
-		if(mat && (mat->getNormalID() != LLUUID::null || mat->getSpecularID() != LLUUID::null))
+		if(mat.notNull() && (mat->getNormalID() != LLUUID::null || mat->getSpecularID() != LLUUID::null || (te->getAlpha() >0.f && te->getAlpha() < 1.f ) ) )
 		{
+			// we have a materials block but we cannot batch materials.
+			// however, materials blocks can and do exist due to alpha masking and those are batchable, 
+			// but we further need to check in case blending is overriding the mask
+			// except when the blend is 100% transparent
 			return false;
 		}
 	}
@@ -5664,7 +5678,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 			}
 		}
 		
-		// if (type == LLRenderPass::PASS_ALPHA) // <FS:Beq> allow tracking through pipeline
+		if (type == LLRenderPass::PASS_ALPHA)
 		{ //for alpha sorting
 			facep->setDrawInfo(draw_info);
 		}
@@ -6549,7 +6563,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 	}
 #endif
 	
-
+	//calculate maximum number of vertices to store in a single buffer
 	static LLCachedControl<S32> max_vbo_size(gSavedSettings, "RenderMaxVBOSize", 512);
 	U32 max_vertices = (max_vbo_size * 1024)/LLVertexBuffer::calcVertexSize(group->getSpatialPartition()->mVertexDataMask);
 	max_vertices = llmin(max_vertices, (U32) 65535);
@@ -6617,14 +6631,6 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		LLFace* facep = *face_iter;
 		LLViewerTexture* tex = facep->getTexture();
         const LLTextureEntry* te = facep->getTextureEntry();
-		// <FS:Beq> Don't batch fully transparent faces
-		if (te && ( te->getAlpha() == 0.f ) && ( te->getGlow() == 0.0 ) && !LLDrawPoolAlpha::sShowDebugAlpha)
-		{
-			facep->setSize(0,0);
-			++face_iter;
-			continue;
-		}
-		// </FS:Beq>
 		LLMaterialPtr mat = te->getMaterialParams();
         LLMaterialID matId = te->getMaterialID();
 
@@ -7029,10 +7035,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 			else if (is_alpha)
 			{
 				// can we safely treat this as an alpha mask?
-				// <FS:Beq> Nothing actually sets facecolor use the TE alpha instead.
-				// if (facep->getFaceColor().mV[3] <= 0.f)
-				if ((te->getAlpha() <=0.f || facep->getFaceColor().mV[3] <= 0.f) && te->getGlow() == 0.0 )
-				// </FS:Beq>
+				if (facep->getFaceColor().mV[3] <= 0.f)
 				{ //100% transparent, don't render unless we're highlighting transparent
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("facep->alpha -> invisible");
 					registerFace(group, facep, LLRenderPass::PASS_ALPHA_INVISIBLE);

@@ -10,6 +10,7 @@
 	<menu_item_call label="Carte" name="map"/>
 	<menu_item_call label="Partager" name="Share"/>
 	<menu_item_call label="Payer" name="Pay"/>
+	<menu_item_call label="Signaler une infraction" name="Report Abuse"/>
 	<menu_item_check label="Ignorer / Cesser d'ignorer" name="Block/Unblock"/>
 	<menu_item_check label="Ignorer les messages" name="MuteText"/>
 </toggleable_menu>

@@ -1539,13 +1539,13 @@ Lütfen sadece bir nesne seçin ve tekrar deneyin.
 		Bölge dokuları ayarlanamadı:
 [TEXTURE_NUM] numaralı yüzey dokusu geçersiz bir bit derinliğine ([TEXTURE_BIT_DEPTH]) sahip.
 
-[TEXTURE_NUM] numaralı dokuyu 24 bit 1024x1024 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
+[TEXTURE_NUM] numaralı dokuyu 24 bit [MAX_SIZE]x[MAX_SIZE] veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Bölge dokuları ayarlanamadı:
 [TEXTURE_NUM] numaralı yüzey dokusu çok büyük ([TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y]).
 
-[TEXTURE_NUM] numaralı dokuyu 24 bit 1024x1024 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
+[TEXTURE_NUM] numaralı dokuyu 24 bit [MAX_SIZE]x[MAX_SIZE] veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
 	</notification>
 	<notification name="RawUploadStarted">
 		Karşıya yükleme başlatıldı. Bağlantı hızına bağlı olarak iki dakika kadar sürebilir.
@@ -2681,6 +2681,9 @@ Daha küçük bir arazi parçası seçmeyi deneyin.
 		Lütfen arama yapmak için en az bir içerik türü seçin (Genel, Orta Seviye veya Yetişkin)
 	</notification>
 	<notification name="SystemMessage">
+		[MESSAGE]
+	</notification>
+	<notification name="FacebookConnect">
 		[MESSAGE]
 	</notification>
 	<notification name="FlickrConnect">
@@ -4058,7 +4061,7 @@ Lütfen bir dakika sonra tekrar deneyin.
 		Bir örgü nesnesinin şeklini değiştiremezsiniz
 	</notification>
 	<notification name="FullRegionCantEnter">
-		Bu bölgeye giremezsiniz çünkü \nbölge dolu.
+		Bu bölgeye giremezsiniz çünkü bölge dolu.
 	</notification>
 	<notification name="LinkFailedOwnersDiffer">
 		Bağlantı başarısız oldu -- sahipler farklı
@@ -4359,7 +4362,7 @@ Daha küçük bir arazi parçası seçmeyi deneyin.
 		Şu anda geçiş hakkı satın alınamıyor.  Daha sonra tekrar deneyin.
 	</notification>
 	<notification name="CantCreateObjectParcelFull">
-		Nesne oluşturulamıyor çünkü \nparsel dolu.
+		Nesne oluşturulamıyor çünkü parsel dolu.
 	</notification>
 	<notification name="FailedPlacingObject">
 		Belirtilen konuma nesne yerleştirilemedi.  Lütfen tekrar deneyin.
