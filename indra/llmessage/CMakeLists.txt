@@ -17,8 +17,6 @@ include(Tut)
 include(Python)
 include(JsonCpp)
 
-include_directories (${CMAKE_CURRENT_SOURCE_DIR})
-
 set(llmessage_SOURCE_FILES
     fscorehttputil.cpp
     llassetstorage.cpp
