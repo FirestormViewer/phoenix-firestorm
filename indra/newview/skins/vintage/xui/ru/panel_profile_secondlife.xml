@@ -2,6 +2,7 @@
 <panel name="panel_profile" label="Профиль">
 	<string name="status_online">В сети</string>
 	<string name="status_offline">Не в сети</string>
+	<string name="status_unknown">Неизвестно</string>
 	<string name="no_partner_text" value="Нет" />
 	<string name="no_group_text" value="Нет" />
 	<string name="age_format">
