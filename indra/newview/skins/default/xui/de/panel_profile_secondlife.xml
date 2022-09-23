@@ -6,6 +6,9 @@
 	<string name="status_offline">
 		Offline
 	</string>
+	<string name="status_unknown">
+		Unbekannt
+	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
 	</string>

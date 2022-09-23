@@ -1228,6 +1228,10 @@
     <color
      name="StatusUserOffline"
      reference="BrightRed" />
+    <!-- for legacy profiles -->
+    <color
+     name="StatusUserUnknown"
+     reference="White" />
 
 	<!-- Groups visible in profiles -->
 	<color
