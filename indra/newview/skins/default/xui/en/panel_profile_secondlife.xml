@@ -20,6 +20,11 @@
         Offline
     </string>
     <string
+     name="status_unknown"
+    >
+        Unknown
+    </string>
+    <string
      name="CaptionTextAcctInfo"
     >
        [ACCTTYPE]
