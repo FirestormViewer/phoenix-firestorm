@@ -201,6 +201,7 @@ private:
     void onShowAgentPermissionsDialog();
     void onShowAgentProfileTexture();
     void onShowTexturePicker();
+    void onSecondLifePicChanged();  // <FS:Zi> Allow proper texture swatch handling
     void onCommitProfileImage(const LLUUID& id);
 
     // <FS:Ansariel> Fix LL UI/UX design accident
@@ -217,7 +218,10 @@ private:
     //LLComboBox*			mShowInSearchCombo;
 	LLCheckBoxCtrl*		mShowInSearchCheckbox;
 	// </FS:Ansariel>
-	LLIconCtrl*			mSecondLifePic;
+    // <FS:Zi> Allow proper texture swatch handling
+	// LLIconCtrl*			mSecondLifePic;
+	LLTextureCtrl*		mSecondLifePic;
+    // </FS:Zi>
 	LLPanel*			mSecondLifePicLayout;
     LLTextEditor*		mDescriptionEdit;
     //LLMenuButton*		mAgentActionMenuButton; // <FS:Ansariel> Fix LL UI/UX design accident
@@ -341,6 +345,7 @@ protected:
     void onUploadPhoto();
     void onChangePhoto();
     void onRemovePhoto();
+    void onFirstLifePicChanged();   // <FS:Zi> Allow proper texture swatch handling
     void onCommitPhoto(const LLUUID& id);
     void setDescriptionText(const std::string &text);
     void onSetDescriptionDirty();
@@ -348,7 +353,10 @@ protected:
     void onDiscardDescriptionChanges();
 
 	LLTextEditor*	mDescriptionEdit;
-    LLIconCtrl*		mPicture;
+    // <FS:Zi> Allow proper texture swatch handling
+    // LLIconCtrl*		mPicture;
+    LLTextureCtrl* mPicture;
+    // </FS:Zi>
     LLButton* mUploadPhoto;
     LLButton* mChangePhoto;
     LLButton* mRemovePhoto;
@@ -360,13 +368,6 @@ protected:
     std::string		mCurrentDescription;
     LLUUID			mImageId;
     bool			mHasUnsavedChanges;
-
-// <FS:PP> Make "first life" picture clickable
-private:
-    LLHandle<LLFloater>	mFloaterProfileTextureHandle;
-    void onShowPhoto();
-// </FS:PP> Make "first life" picture clickable
-
 };
 
 /**

@@ -231,15 +231,14 @@
       auto_resize="false"
       user_resize="false">
 
-      <icon
+      <texture_picker
         name="2nd_life_pic"
         top="0"
         left="0"
         width="158"
         height="158"
         follows="all"
-        layout="topleft"
-        interactable="true" />
+        layout="topleft" />
 
       <loading_indicator
         name="image_upload_indicator"
