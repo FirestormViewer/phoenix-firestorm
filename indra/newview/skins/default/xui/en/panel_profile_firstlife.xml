@@ -29,6 +29,7 @@
      image_name="Generic_Person_Large"
      follows="top|left"
      layout="topleft"
+     show_caption="false"
      top="10"
      left="8"
      height="200"

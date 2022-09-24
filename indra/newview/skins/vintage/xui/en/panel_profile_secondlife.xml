@@ -238,6 +238,7 @@
         width="158"
         height="158"
         follows="all"
+        show_caption="false"
         layout="topleft" />
 
       <loading_indicator
