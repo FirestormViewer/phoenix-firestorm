@@ -243,6 +243,7 @@ private:
     LLButton*			mBlockButton;
     LLButton*			mUnblockButton;
     LLButton*			mAddFriendButton;
+    LLButton*			mRemoveFriendButton;    // <FS:Zi> Add "Remove Friend" button to profile
     LLButton*			mPayButton;
     LLButton*			mIMButton;
     LLMenuButton*		mOverflowButton;

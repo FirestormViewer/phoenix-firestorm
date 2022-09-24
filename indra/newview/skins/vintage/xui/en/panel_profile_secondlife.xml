@@ -658,6 +658,16 @@
         label_selected="Add Friend" />
 
       <button
+        name="remove_friend"
+        label="Remove Friend"
+        tool_tip="Terminate friendship with the Resident"
+        top_delta="0"
+        height="20"
+        follows="left|top|right"
+        layout="topleft"
+        label_selected="Remove Friend" />
+
+      <button
         name="block"
         label="Block"
         tool_tip="Block this Resident"

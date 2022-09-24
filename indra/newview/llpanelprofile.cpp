@@ -954,6 +954,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mBlockButton = getChild<LLButton>("block");
     mUnblockButton = getChild<LLButton>("unblock");
     mAddFriendButton = getChild<LLButton>("add_friend");
+    mRemoveFriendButton = getChild<LLButton>("remove_friend");    // <FS:Zi> Add "Remove Friend" button to profile
     mPayButton = getChild<LLButton>("pay");
     mIMButton = getChild<LLButton>("im");
     mOverflowButton = getChild<LLMenuButton>("overflow_btn");
@@ -969,6 +970,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mBlockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
     mUnblockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
     mAddFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("add_friend")); }, nullptr);
+    mRemoveFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("remove_friend")); }, nullptr);   // <FS:Zi> Add "Remove Friend" button to profile
     mPayButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("pay")); }, nullptr);
     mIMButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("im")); }, nullptr);
     // </FS:Ansariel>
@@ -1167,6 +1169,7 @@ void LLPanelProfileSecondLife::resetData()
     mTeleportButton->setVisible(!own_profile);
     mIMButton->setVisible(!own_profile);
     mAddFriendButton->setVisible(!own_profile);
+    mRemoveFriendButton->setVisible(!own_profile);   // <FS:Zi> Add "Remove Friend" button to profile
     mBlockButton->setVisible(!own_profile);
     mUnblockButton->setVisible(!own_profile);
     mGroupList->setShowNone(!own_profile);
@@ -1713,7 +1716,11 @@ void LLPanelProfileSecondLife::updateButtons()
             mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
             // </FS:Ansariel>
             //Disable "Add Friend" button for friends.
-            mAddFriendButton->setEnabled(false);
+            // <FS:Zi> Add "Remove Friend" button to profile
+            // mAddFriendButton->setEnabled(false);
+            mAddFriendButton->setVisible(false);
+            mRemoveFriendButton->setVisible(true);
+            // </FS:Zi>
         }
         else
         {
@@ -1723,7 +1730,11 @@ void LLPanelProfileSecondLife::updateButtons()
                 gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive));
             mTeleportButton->setEnabled(can_offer_tp);
             // </FS:Ansariel>
-            mAddFriendButton->setEnabled(true);
+            // <FS:Zi> Add "Remove Friend" button to profile
+            // mAddFriendButton->setEnabled(true);
+            mAddFriendButton->setVisible(true);
+            mRemoveFriendButton->setVisible(false);
+            // </FS:Zi>
         }
 
         // <FS:Ansariel> RLVa support
