@@ -357,16 +357,13 @@ then
 
     echo "Setting environment variables for Visual Studio..."
     if [ "$OSTYPE" = "cygwin" ] ; then
-        # load autobuild provided shell functions and variables
-        eval "$("$AUTOBUILD_EXEC" source_environment)"
-        # vsvars is needed for determing path to VS runtime redist files in Copy3rdPartyLibs.cmake
-        load_vsvars
-    else
-        # load autobuild provided shell functions and variables
-        eval "$("$AUTOBUILD" source_environment)"
-        # vsvars is needed for determing path to VS runtime redist files in Copy3rdPartyLibs.cmake
-        load_vsvars
+        export AUTOBUILD_EXEC="$(cygpath -u $AUTOBUILD)"
     fi
+
+    # load autobuild provided shell functions and variables
+    eval "$("$AUTOBUILD_EXEC" source_environment)"
+    # vsvars is needed for determing path to VS runtime redist files in Copy3rdPartyLibs.cmake
+    load_vsvars
 fi
 
 if [ -z "$AUTOBUILD_VARIABLES_FILE" ]
