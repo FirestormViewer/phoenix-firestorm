@@ -20,6 +20,7 @@
 	<text name="language_textbox2">
 		(Erfordert Neustart)
 	</text>
+	<check_box label="IME-Texteingabe aktivieren" name="use_ime" tool_tip="Input Method Editor für Texteingabe aktivieren - nur für spezielle Sprachen wie z.B. Japanisch oder Chinesisch benötigt."/>
 	<text name="maturity_desired_prompt" width="320">
 		Auf Inhalte mit folgender Einstufung zugreifen:
 	</text>

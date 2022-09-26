@@ -253,6 +253,10 @@
 	<color
 		name="StatusUserOffline"
 		reference="LabelDisabledColor" />
+	<!-- for legacy profiles -->
+	<color
+		name="StatusUserUnknown"
+		reference="EmphasisColor" />
 	<color
 		name="ChatTimestampColor"
 		value="0.5 0.5 0.5 1.0" />

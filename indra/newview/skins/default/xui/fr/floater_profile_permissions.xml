@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="profile_permissions">
+	<string name="description_string" value="Autoriser [AGENT_NAME] à:" />
+	<text name="perm_description" value="Autoriser cette personne à :" />
+	<check_box name="online_check" label="Voir quand je suis en ligne" />
+	<check_box name="map_check" label="Me trouver sur la carte" />
+	<check_box name="objects_check" label="Modifier, supprimer ou prendre mes objets" />
+	<button name="perms_btn_cancel" label="Annuler" />
+</floater>

@@ -100,6 +100,8 @@ static const std::string PANEL_PROFILE_VIEW = "panel_profile_view";
 static const std::string PROFILE_PROPERTIES_CAP = "AgentProfile";
 static const std::string PROFILE_IMAGE_UPLOAD_CAP = "UploadAgentProfileImage";
 
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+const U32 AVATAR_ONLINE_UNDEFINED			= 0x1 << 31;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -164,7 +166,14 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
 
     avatar_data->flags = 0;
 
-    if (result["online"].asBoolean())
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    // if (result["online"].asBoolean())
+    if (result["online"].isUndefined())
+    {
+        avatar_data->flags |= AVATAR_ONLINE_UNDEFINED;
+    }
+    else if (result["online"].asBoolean())
+    // </FS:Zi>
     {
         avatar_data->flags |= AVATAR_ONLINE;
     }
@@ -889,6 +898,8 @@ LLPanelProfileSecondLife::~LLPanelProfileSecondLife()
     if (getAvatarId().notNull())
     {
         LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+        // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+        LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(), &mPropertiesObserver);
     }
 
     if (LLVoiceClient::instanceExists())
@@ -916,7 +927,10 @@ BOOL LLPanelProfileSecondLife::postBuild()
     //mShowInSearchCombo      = getChild<LLComboBox>("show_in_search");
     mShowInSearchCheckbox   = getChild<LLCheckBoxCtrl>("show_in_search");
     // </FS:Ansariel>
-    mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
+    // <FS:Zi> Allow proper texture swatch handling
+    // mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
+    mSecondLifePic          = getChild<LLTextureCtrl>("2nd_life_pic");
+    // <FS:Zi>
     mSecondLifePicLayout    = getChild<LLPanel>("image_panel");
     mDescriptionEdit        = getChild<LLTextEditor>("sl_description_edit");
     // mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu"); // <FS:Ansariel> Fix LL UI/UX design accident
@@ -940,6 +954,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mBlockButton = getChild<LLButton>("block");
     mUnblockButton = getChild<LLButton>("unblock");
     mAddFriendButton = getChild<LLButton>("add_friend");
+    mRemoveFriendButton = getChild<LLButton>("remove_friend");    // <FS:Zi> Add "Remove Friend" button to profile
     mPayButton = getChild<LLButton>("pay");
     mIMButton = getChild<LLButton>("im");
     mOverflowButton = getChild<LLMenuButton>("overflow_btn");
@@ -955,6 +970,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mBlockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
     mUnblockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
     mAddFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("add_friend")); }, nullptr);
+    mRemoveFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("remove_friend")); }, nullptr);   // <FS:Zi> Add "Remove Friend" button to profile
     mPayButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("pay")); }, nullptr);
     mIMButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("im")); }, nullptr);
     // </FS:Ansariel>
@@ -970,13 +986,28 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mCantSeeOnMapIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCanEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
-    mSecondLifePic->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentProfileTexture(); });
+    // <FS:Zi> Allow proper texture swatch handling
+    // mSecondLifePic->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentProfileTexture(); });
+    mSecondLifePic->setCommitCallback(boost::bind(&LLPanelProfileSecondLife::onSecondLifePicChanged, this));
+    // </FS:Zi>
 
     // <FS:Ansariel> RLVa support
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileSecondLife::updateRlvRestrictions, this, _1));
 
     return TRUE;
 }
+
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+void LLPanelProfileSecondLife::onAvatarProperties(const LLAvatarData* d)
+{
+    // only update the "unknown" status if they are showing as online, otherwise
+    // we still don't know their true status
+    if (d->agent_id == gAgentID && d->flags & AVATAR_ONLINE)
+    {
+        processOnlineStatus(false, true, true);
+    }
+}
+// </FS:Zi>
 
 void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 {
@@ -1050,6 +1081,9 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 
     // <FS:Ansariel> Display agent ID
     getChild<LLUICtrl>("user_key")->setValue(avatar_id.asString());
+
+    // <FS:Zi> Allow proper texture swatch handling
+    mSecondLifePic->setEnabled(own_profile);
 
     mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
 }
@@ -1135,6 +1169,7 @@ void LLPanelProfileSecondLife::resetData()
     mTeleportButton->setVisible(!own_profile);
     mIMButton->setVisible(!own_profile);
     mAddFriendButton->setVisible(!own_profile);
+    mRemoveFriendButton->setVisible(!own_profile);   // <FS:Zi> Add "Remove Friend" button to profile
     mBlockButton->setVisible(!own_profile);
     mUnblockButton->setVisible(!own_profile);
     mGroupList->setShowNone(!own_profile);
@@ -1157,6 +1192,14 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
                             gAgent.isGodlike() || relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS),
                             (avatar_data->flags & AVATAR_ONLINE));
     }
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    else if (avatar_data->flags & AVATAR_ONLINE_UNDEFINED)
+    {
+        // being a friend who doesn't show online status and appears online can't happen
+        // so this is our marker for "undefined"
+        processOnlineStatus(true, false, true);
+    }
+    // </FS:Zi>
 
     fillCommonData(avatar_data);
 
@@ -1601,6 +1644,23 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
 
 void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_online, bool online)
 {
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    // being a friend who doesn't show online status and appears online can't happen
+    // so this is our marker for "undefined"
+    if (is_friend && !show_online && online)
+    {
+        mStatusText->setVisible(true);
+        mStatusText->setValue(getString("status_unknown"));
+        mStatusText->setColor(LLUIColorTable::getInstance()->getColor("StatusUserUnknown"));
+
+        mPropertiesObserver.mPanelProfile = this;
+        mPropertiesObserver.mRequester = gAgentID;
+        LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), &mPropertiesObserver);
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+
+        return;
+    }
+    // </FS:Zi>
     // <FS:Ansariel> Fix LL UI/UX design accident
     //childSetVisible("frind_layout", is_friend);
     //childSetVisible("online_layout", online && show_online);
@@ -1656,7 +1716,11 @@ void LLPanelProfileSecondLife::updateButtons()
             mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
             // </FS:Ansariel>
             //Disable "Add Friend" button for friends.
-            mAddFriendButton->setEnabled(false);
+            // <FS:Zi> Add "Remove Friend" button to profile
+            // mAddFriendButton->setEnabled(false);
+            mAddFriendButton->setVisible(false);
+            mRemoveFriendButton->setVisible(true);
+            // </FS:Zi>
         }
         else
         {
@@ -1666,7 +1730,11 @@ void LLPanelProfileSecondLife::updateButtons()
                 gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive));
             mTeleportButton->setEnabled(can_offer_tp);
             // </FS:Ansariel>
-            mAddFriendButton->setEnabled(true);
+            // <FS:Zi> Add "Remove Friend" button to profile
+            // mAddFriendButton->setEnabled(true);
+            mAddFriendButton->setVisible(true);
+            mRemoveFriendButton->setVisible(false);
+            // </FS:Zi>
         }
 
         // <FS:Ansariel> RLVa support
@@ -1816,7 +1884,12 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     }
     else if (item_name == "toggle_block_agent")
     {
-        LLAvatarActions::toggleBlock(agent_id);
+        // <FS:PP> Swap block/unblock buttons properly
+        // LLAvatarActions::toggleBlock(agent_id);
+        bool is_blocked = LLAvatarActions::toggleBlock(agent_id);
+        mBlockButton->setVisible(!is_blocked);
+        mUnblockButton->setVisible(is_blocked);
+        // </FS:PP>
     }
     else if (item_name == "copy_user_id")
     {
@@ -2230,6 +2303,13 @@ void LLPanelProfileSecondLife::onShowTexturePicker()
     }
 }
 
+// <FS:Zi> Allow proper texture swatch handling
+void LLPanelProfileSecondLife::onSecondLifePicChanged()
+{
+    onCommitProfileImage(mSecondLifePic->getImageAssetID());
+}
+// </FS:Zi>
+
 void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
 {
     if (mImageId == id)
@@ -2458,7 +2538,10 @@ LLPanelProfileFirstLife::~LLPanelProfileFirstLife()
 BOOL LLPanelProfileFirstLife::postBuild()
 {
     mDescriptionEdit = getChild<LLTextEditor>("fl_description_edit");
-    mPicture = getChild<LLIconCtrl>("real_world_pic");
+    // <FS:Zi> Allow proper texture swatch handling
+    // mPicture = getChild<LLIconCtrl>("real_world_pic");
+    mPicture = getChild<LLTextureCtrl>("real_world_pic");
+    // </FS:Zi>
 
     mUploadPhoto = getChild<LLButton>("fl_upload_image");
     mChangePhoto = getChild<LLButton>("fl_change_image");
@@ -2472,7 +2555,7 @@ BOOL LLPanelProfileFirstLife::postBuild()
     mSaveChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
-    mPicture->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowPhoto(); }); // <FS:PP> Make "first life" picture clickable
+    mPicture->setCommitCallback(boost::bind(&LLPanelProfileFirstLife::onFirstLifePicChanged, this));    // <FS:Zi> Allow proper texture swatch handling
 
     return TRUE;
 }
@@ -2486,6 +2569,9 @@ void LLPanelProfileFirstLife::onOpen(const LLSD& key)
         // Otherwise as the only focusable element it will be selected
         mDescriptionEdit->setTabStop(FALSE);
     }
+
+    // <FS:Zi> Allow proper texture swatch handling
+    mPicture->setEnabled(getSelfProfile());
 
     resetData();
 }
@@ -2512,22 +2598,6 @@ void LLPanelProfileFirstLife::setProfileImageUploaded(const LLUUID &image_asset_
 {
     mPicture->setValue(image_asset_id);
     mImageId = image_asset_id;
-
-    // <FS:PP> Make "first life" picture clickable
-    LLFloater *floater = mFloaterProfileTextureHandle.get();
-    if (floater)
-    {
-        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
-        if (mImageId.notNull())
-        {
-            texture_view->loadAsset(mImageId);
-        }
-        else
-        {
-            texture_view->resetAsset();
-        }
-    }
-    // </FS:PP> Make "first life" picture clickable
 
     setProfileImageUploading(false);
 }
@@ -2627,51 +2697,12 @@ void LLPanelProfileFirstLife::onRemovePhoto()
     }
 }
 
-// <FS:PP> Make "first life" picture clickable
-void LLPanelProfileFirstLife::onShowPhoto()
+// <FS:Zi> Allow proper texture swatch handling
+void LLPanelProfileFirstLife::onFirstLifePicChanged()
 {
-    if (!getIsLoaded())
-    {
-        return;
-    }
-
-    LLFloater *floater = mFloaterProfileTextureHandle.get();
-    if (!floater)
-    {
-        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-        if (parent_floater)
-        {
-            LLFloaterProfileTexture * texture_view = new LLFloaterProfileTexture(parent_floater);
-            mFloaterProfileTextureHandle = texture_view->getHandle();
-            if (mImageId.notNull())
-            {
-                texture_view->loadAsset(mImageId);
-            }
-            else
-            {
-                texture_view->resetAsset();
-            }
-            texture_view->openFloater();
-            texture_view->setVisibleAndFrontmost(TRUE);
-            parent_floater->addDependentFloater(mFloaterProfileTextureHandle);
-        }
-    }
-    else // already open
-    {
-        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
-        texture_view->setMinimized(FALSE);
-        texture_view->setVisibleAndFrontmost(TRUE);
-        if (mImageId.notNull())
-        {
-            texture_view->loadAsset(mImageId);
-        }
-        else
-        {
-            texture_view->resetAsset();
-        }
-    }
+    onCommitPhoto(mPicture->getImageAssetID());
 }
-// </FS:PP> Make "first life" picture clickable
+// </FS:Zi>
 
 void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
 {
@@ -2697,22 +2728,6 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
         {
             mPicture->setValue("Generic_Person_Large");
         }
-
-        // <FS:PP> Make "first life" picture clickable
-        LLFloater *floater = mFloaterProfileTextureHandle.get();
-        if (floater)
-        {
-            LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
-            if (mImageId == LLUUID::null)
-            {
-                texture_view->resetAsset();
-            }
-            else
-            {
-                texture_view->loadAsset(mImageId);
-            }
-        }
-        // </FS:PP> Make "first life" picture clickable
 
         mRemovePhoto->setEnabled(mImageId.notNull());
     }
@@ -3080,3 +3095,17 @@ void LLPanelProfile::createClassified()
     mTabContainer->selectTabPanel(mPanelClassifieds);
 }
 
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+FSPanelPropertiesObserver::FSPanelPropertiesObserver() : LLAvatarPropertiesObserver(),
+    mPanelProfile(nullptr)
+{
+}
+
+void FSPanelPropertiesObserver::processProperties(void* data, EAvatarProcessorType type)
+{
+    if (type == APT_PROPERTIES && mPanelProfile)
+    {
+        mPanelProfile->onAvatarProperties(static_cast<const LLAvatarData*>(data));
+    }
+}
+// </FS:Zi>

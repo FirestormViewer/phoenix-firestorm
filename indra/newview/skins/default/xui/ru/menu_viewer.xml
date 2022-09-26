@@ -287,6 +287,7 @@
 			<menu_item_call label="Несколько..." name="Bulk Upload"/>
 			<menu_item_call label="Импортировать..." name="import linkset"/>
 		</menu>
+		<menu_item_call label="Локальный Меш" name="local_mesh"/>
 		<menu_item_call label="Отменить" name="Undo"/>
 		<menu_item_call label="Повторить" name="Redo"/>
 	</menu>

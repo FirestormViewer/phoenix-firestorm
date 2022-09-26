@@ -1702,6 +1702,14 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 		Une erreur est survenue lors de l’ouverture des annonces de la Place du marché.
 Si vous continuez de recevoir ce message, contactez l’assistance Second Life à http://support.secondlife.com pour obtenir de l’aide.
 	</string>
+	<string name="InventoryMarketplaceConnectionError">
+		La connexion au listing de Marketplace a échoué.
+Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante http://support.secondlife.com
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+		La connexion au listing de Marketplace a échoué. Raison :: [REASON]
+Si vous continuez à recevoir ce message, veuillez contacter l'assistance de Second Life à l'adresse suivante http://support.secondlife.com
+	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Votre dossier Annonces de la Place du marché est vide.
 	</string>

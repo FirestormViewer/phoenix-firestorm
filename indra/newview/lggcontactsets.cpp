@@ -556,7 +556,6 @@ string_vec_t LGGContactSets::getFriendSets(const LLUUID& friend_id)
 {
 	string_vec_t sets{};
 
-	contact_set_map_t::iterator set_itr_end = mContactSets.end();
 	for (const auto& [set_name, set] : mContactSets)
 	{
 		if (set->hasFriend(friend_id))

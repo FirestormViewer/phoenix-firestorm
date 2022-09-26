@@ -68,7 +68,7 @@
 		</panel>
 		<panel label="Paramètres matériels" name="Hardware Settings">
 			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
-			<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui permet d'obtenir des performances fluides."/>
+			<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
 			<check_box label="Activer les Streamed VBOs" name="vbo_stream" tool_tip="Désactiver cette option peut améliorer les performances lorsque les VBO sont activés. La désactivation de ce paramètre améliore grandement les performances sur certaines cartes graphiques Intel et AMD."/>
 			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
 			<check_box label="Active la prise en charge des écrans HiDPI (Mac OSX seulement; Redémarrage requis)" name="use HiDPI" tool_tip="Active OpenGL pour l'affichage haute résolution."/>

@@ -20,6 +20,11 @@
         Offline
     </string>
     <string
+     name="status_unknown"
+    >
+        Unknown
+    </string>
+    <string
      name="CaptionTextAcctInfo"
     >
        [ACCTTYPE]
@@ -346,15 +351,15 @@
          height="158"
          auto_resize="false"
          user_resize="false">
-            <icon
+            <texture_picker
              name="2nd_life_pic"
              top="0"
              left="0"
              width="158"
              height="158"
              follows="all"
-             layout="topleft"
-             interactable="true"/>
+             show_caption="false"
+             layout="topleft" />
 
             <loading_indicator
              name="image_upload_indicator"
@@ -664,6 +669,16 @@
              follows="left|top|right"
              layout="topleft"
              label_selected="Add Friend"
+            />
+            <button
+             name="remove_friend"
+             label="Remove Friend"
+             tool_tip="Terminate friendship with the Resident"
+             top_delta="0"
+             height="20"
+             follows="left|top|right"
+             layout="topleft"
+             label_selected="Remove Friend"
             />
             <button
              name="block"

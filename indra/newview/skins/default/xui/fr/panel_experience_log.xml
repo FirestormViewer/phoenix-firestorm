@@ -13,7 +13,7 @@
 			<button name="btn_report_xp" label="Signaler"/>
 		</layout_panel>
 		<layout_panel name="button_panel">
-			<check_box label="Notifier tous les évènements de la journée" name="notify_all"/>
+			<check_box label="Comm. tous les évts Jrs" name="notify_all"/>
 			<button name="btn_clear" label="Effacer"/>
 		</layout_panel>
 	</layout_stack>

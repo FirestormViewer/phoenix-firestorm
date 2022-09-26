@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_profile" label="Profil">
+	<string name="status_unknown">
+		Nieznane
+	</string>
 	<string name="no_partner_text" value="Brak" />
 	<string name="no_group_text" value="Brak" />
 	<string name="age_format">

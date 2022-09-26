@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_snapshot" title="Photo de la tenue">
+	<floater.string name="unknown">
+		inconnu
+	</floater.string>
+	<string name="inventory_progress_str">
+		Enregistrement dans l'inventaire
+	</string>
+	<string name="inventory_succeeded_str">
+		Enregistré dans l'inventaire !!
+	</string>
+	<string name="inventory_failed_str">
+		Échec de l'enregistrement.
+	</string>
+	<view name="controls_container">
+		<button label="Rafraîchir" name="new_snapshot_btn" />
+		<panel name="advanced_options_panel">
+			<text name="layer_type_label">
+				Capture :
+			</text>
+			<combo_box label="Couches de l'image" name="layer_types">
+				<combo_box.item label="Couleurs" name="Colors" />
+				<combo_box.item label="Profondeur" name="Depth" />
+				<combo_box.item label="Profondeur (24 bits)" name="Depth24" />
+			</combo_box>
+			<check_box label="Interface" name="ui_check" />
+			<check_box label="Solde L$" name="currency_check" />
+			<check_box label="HUDs" name="hud_check" />
+			<check_box label="Geler l'image (plein écran)" name="freeze_frame_check" />
+			<check_box label="Actualisation automatique" name="auto_snapshot_check" />
+			<text name="filter_list_label">
+				Filtre :
+			</text>
+			<combo_box name="filters_combobox" tool_tip="Filtres d'images">
+				<combo_box.item label="Pas de filtre" name="NoFilter" />
+			</combo_box>
+		</panel>
+		<panel name="succeeded_panel">
+			<text name="succeeded_lbl">
+				Succés
+			</text>
+		</panel>
+		<panel name="failed_panel">
+			<text name="failed_lbl">
+				Échec
+			</text>
+		</panel>
+		<text name="working_lbl">
+			Je travaille
+		</text>
+		<text name="refresh_lbl">
+			Actualisez pour enregistrer.
+		</text>
+	</view>
+	<text name="image_res_text">
+		[WIDTH]px (largeur) x [HEIGHT]px (hauteur)
+	</text>
+	<text name="file_size_label">
+		[SIZE] Ko
+	</text>
+</floater>
