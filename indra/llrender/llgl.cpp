@@ -1370,6 +1370,8 @@ void LLGLManager::initExtensions()
     }
 #endif
 
+    // NOTE: version checks against mGLVersion should bias down by 0.01 because of F32 errors
+    
     // OpenGL 4.x capabilities
     mHasCubeMapArray = mGLVersion >= 3.99f; 
     mHasTransformFeedback = mGLVersion >= 3.99f;
@@ -1379,6 +1381,8 @@ void LLGLManager::initExtensions()
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, (GLint*) &mGLMaxVertexRange);
 	glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint*) &mGLMaxIndexRange);
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*) &mGLMaxTextureSize);
+
+    mInited = TRUE;
 
 #if (LL_WINDOWS || LL_LINUX) && !LL_MESA_HEADLESS
 	LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
@@ -1403,7 +1407,14 @@ void LLGLManager::initExtensions()
     wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)GLH_EXT_GET_PROC_ADDRESS("wglCreateContextAttribsARB");
 #endif
 
+
+    // Load entire OpenGL API through GetProcAddress, leaving sections beyond mGLVersion unloaded
+
     // GL_VERSION_1_2
+    if (mGLVersion < 1.19f)
+    {
+        return;
+    }
     glDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawRangeElements");
     glTexImage3D = (PFNGLTEXIMAGE3DPROC)GLH_EXT_GET_PROC_ADDRESS("glTexImage3D");
     glTexSubImage3D = (PFNGLTEXSUBIMAGE3DPROC)GLH_EXT_GET_PROC_ADDRESS("glTexSubImage3D");
@@ -1411,6 +1422,10 @@ void LLGLManager::initExtensions()
 
 
     // GL_VERSION_1_3
+    if (mGLVersion < 1.29f)
+    {
+        return;
+    }
     glActiveTexture = (PFNGLACTIVETEXTUREPROC)GLH_EXT_GET_PROC_ADDRESS("glActiveTexture");
     glSampleCoverage = (PFNGLSAMPLECOVERAGEPROC)GLH_EXT_GET_PROC_ADDRESS("glSampleCoverage");
     glCompressedTexImage3D = (PFNGLCOMPRESSEDTEXIMAGE3DPROC)GLH_EXT_GET_PROC_ADDRESS("glCompressedTexImage3D");
@@ -1459,6 +1474,10 @@ void LLGLManager::initExtensions()
     glMultTransposeMatrixd = (PFNGLMULTTRANSPOSEMATRIXDPROC)GLH_EXT_GET_PROC_ADDRESS("glMultTransposeMatrixd");
 
     // GL_VERSION_1_4
+    if (mGLVersion < 1.39f)
+    {
+        return;
+    }
     glBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)GLH_EXT_GET_PROC_ADDRESS("glBlendFuncSeparate");
     glMultiDrawArrays = (PFNGLMULTIDRAWARRAYSPROC)GLH_EXT_GET_PROC_ADDRESS("glMultiDrawArrays");
     glMultiDrawElements = (PFNGLMULTIDRAWELEMENTSPROC)GLH_EXT_GET_PROC_ADDRESS("glMultiDrawElements");
@@ -1506,6 +1525,10 @@ void LLGLManager::initExtensions()
     glWindowPos3sv = (PFNGLWINDOWPOS3SVPROC)GLH_EXT_GET_PROC_ADDRESS("glWindowPos3sv");
 
     // GL_VERSION_1_5
+    if (mGLVersion < 1.49f)
+    {
+        return;
+    }
     glGenQueries = (PFNGLGENQUERIESPROC)GLH_EXT_GET_PROC_ADDRESS("glGenQueries");
     glDeleteQueries = (PFNGLDELETEQUERIESPROC)GLH_EXT_GET_PROC_ADDRESS("glDeleteQueries");
     glIsQuery = (PFNGLISQUERYPROC)GLH_EXT_GET_PROC_ADDRESS("glIsQuery");
@@ -1527,6 +1550,10 @@ void LLGLManager::initExtensions()
     glGetBufferPointerv = (PFNGLGETBUFFERPOINTERVPROC)GLH_EXT_GET_PROC_ADDRESS("glGetBufferPointerv");
 
     // GL_VERSION_2_0
+    if (mGLVersion < 1.9f)
+    {
+        return;
+    }
     glBlendEquationSeparate = (PFNGLBLENDEQUATIONSEPARATEPROC)GLH_EXT_GET_PROC_ADDRESS("glBlendEquationSeparate");
     glDrawBuffers = (PFNGLDRAWBUFFERSPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawBuffers");
     glStencilOpSeparate = (PFNGLSTENCILOPSEPARATEPROC)GLH_EXT_GET_PROC_ADDRESS("glStencilOpSeparate");
@@ -1622,6 +1649,10 @@ void LLGLManager::initExtensions()
     glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)GLH_EXT_GET_PROC_ADDRESS("glVertexAttribPointer");
 
     // GL_VERSION_2_1
+    if (mGLVersion < 2.09f)
+    {
+        return;
+    }
     glUniformMatrix2x3fv = (PFNGLUNIFORMMATRIX2X3FVPROC)GLH_EXT_GET_PROC_ADDRESS("glUniformMatrix2x3fv");
     glUniformMatrix3x2fv = (PFNGLUNIFORMMATRIX3X2FVPROC)GLH_EXT_GET_PROC_ADDRESS("glUniformMatrix3x2fv");
     glUniformMatrix2x4fv = (PFNGLUNIFORMMATRIX2X4FVPROC)GLH_EXT_GET_PROC_ADDRESS("glUniformMatrix2x4fv");
@@ -1630,6 +1661,10 @@ void LLGLManager::initExtensions()
     glUniformMatrix4x3fv = (PFNGLUNIFORMMATRIX4X3FVPROC)GLH_EXT_GET_PROC_ADDRESS("glUniformMatrix4x3fv");
 
     // GL_VERSION_3_0
+    if (mGLVersion < 2.99f)
+    {
+        return;
+    }
     glColorMaski = (PFNGLCOLORMASKIPROC)GLH_EXT_GET_PROC_ADDRESS("glColorMaski");
     glGetBooleani_v = (PFNGLGETBOOLEANI_VPROC)GLH_EXT_GET_PROC_ADDRESS("glGetBooleani_v");
     glGetIntegeri_v = (PFNGLGETINTEGERI_VPROC)GLH_EXT_GET_PROC_ADDRESS("glGetIntegeri_v");
@@ -1716,6 +1751,10 @@ void LLGLManager::initExtensions()
     glIsVertexArray = (PFNGLISVERTEXARRAYPROC)GLH_EXT_GET_PROC_ADDRESS("glIsVertexArray");
 
     // GL_VERSION_3_1
+    if (mGLVersion < 3.09f)
+    {
+        return;
+    }
     glDrawArraysInstanced = (PFNGLDRAWARRAYSINSTANCEDPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawArraysInstanced");
     glDrawElementsInstanced = (PFNGLDRAWELEMENTSINSTANCEDPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawElementsInstanced");
     glTexBuffer = (PFNGLTEXBUFFERPROC)GLH_EXT_GET_PROC_ADDRESS("glTexBuffer");
@@ -1730,6 +1769,10 @@ void LLGLManager::initExtensions()
     glUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)GLH_EXT_GET_PROC_ADDRESS("glUniformBlockBinding");
 
     // GL_VERSION_3_2
+    if (mGLVersion < 3.19f)
+    {
+        return;
+    }
     glDrawElementsBaseVertex = (PFNGLDRAWELEMENTSBASEVERTEXPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawElementsBaseVertex");
     glDrawRangeElementsBaseVertex = (PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawRangeElementsBaseVertex");
     glDrawElementsInstancedBaseVertex = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawElementsInstancedBaseVertex");
@@ -1751,6 +1794,10 @@ void LLGLManager::initExtensions()
     glSampleMaski = (PFNGLSAMPLEMASKIPROC)GLH_EXT_GET_PROC_ADDRESS("glSampleMaski");
 
     // GL_VERSION_3_3
+    if (mGLVersion < 3.29f)
+    {
+        return;
+    }
     glBindFragDataLocationIndexed = (PFNGLBINDFRAGDATALOCATIONINDEXEDPROC)GLH_EXT_GET_PROC_ADDRESS("glBindFragDataLocationIndexed");
     glGetFragDataIndex = (PFNGLGETFRAGDATAINDEXPROC)GLH_EXT_GET_PROC_ADDRESS("glGetFragDataIndex");
     glGenSamplers = (PFNGLGENSAMPLERSPROC)GLH_EXT_GET_PROC_ADDRESS("glGenSamplers");
@@ -1811,6 +1858,10 @@ void LLGLManager::initExtensions()
     glSecondaryColorP3uiv = (PFNGLSECONDARYCOLORP3UIVPROC)GLH_EXT_GET_PROC_ADDRESS("glSecondaryColorP3uiv");
 
     // GL_VERSION_4_0
+    if (mGLVersion < 3.99f)
+    {
+        return;
+    }
     glMinSampleShading = (PFNGLMINSAMPLESHADINGPROC)GLH_EXT_GET_PROC_ADDRESS("glMinSampleShading");
     glBlendEquationi = (PFNGLBLENDEQUATIONIPROC)GLH_EXT_GET_PROC_ADDRESS("glBlendEquationi");
     glBlendEquationSeparatei = (PFNGLBLENDEQUATIONSEPARATEIPROC)GLH_EXT_GET_PROC_ADDRESS("glBlendEquationSeparatei");
@@ -1859,6 +1910,10 @@ void LLGLManager::initExtensions()
     glGetQueryIndexediv = (PFNGLGETQUERYINDEXEDIVPROC)GLH_EXT_GET_PROC_ADDRESS("glGetQueryIndexediv");
 
     // GL_VERSION_4_1
+    if (mGLVersion < 4.09f)
+    {
+        return;
+    }
     glReleaseShaderCompiler = (PFNGLRELEASESHADERCOMPILERPROC)GLH_EXT_GET_PROC_ADDRESS("glReleaseShaderCompiler");
     glShaderBinary = (PFNGLSHADERBINARYPROC)GLH_EXT_GET_PROC_ADDRESS("glShaderBinary");
     glGetShaderPrecisionFormat = (PFNGLGETSHADERPRECISIONFORMATPROC)GLH_EXT_GET_PROC_ADDRESS("glGetShaderPrecisionFormat");
@@ -1949,6 +2004,10 @@ void LLGLManager::initExtensions()
     glGetDoublei_v = (PFNGLGETDOUBLEI_VPROC)GLH_EXT_GET_PROC_ADDRESS("glGetDoublei_v");
 
     // GL_VERSION_4_2
+    if (mGLVersion < 4.19f)
+    {
+        return;
+    }
     glDrawArraysInstancedBaseInstance = (PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawArraysInstancedBaseInstance");
     glDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawElementsInstancedBaseInstance");
     glDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawElementsInstancedBaseVertexBaseInstance");
@@ -1963,6 +2022,10 @@ void LLGLManager::initExtensions()
     glDrawTransformFeedbackStreamInstanced = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC)GLH_EXT_GET_PROC_ADDRESS("glDrawTransformFeedbackStreamInstanced");
 
     // GL_VERSION_4_3
+    if (mGLVersion < 4.29f)
+    {
+        return;
+    }
     glClearBufferData = (PFNGLCLEARBUFFERDATAPROC)GLH_EXT_GET_PROC_ADDRESS("glClearBufferData");
     glClearBufferSubData = (PFNGLCLEARBUFFERSUBDATAPROC)GLH_EXT_GET_PROC_ADDRESS("glClearBufferSubData");
     glDispatchCompute = (PFNGLDISPATCHCOMPUTEPROC)GLH_EXT_GET_PROC_ADDRESS("glDispatchCompute");
@@ -2008,6 +2071,10 @@ void LLGLManager::initExtensions()
     glGetObjectPtrLabel = (PFNGLGETOBJECTPTRLABELPROC)GLH_EXT_GET_PROC_ADDRESS("glGetObjectPtrLabel");
 
     // GL_VERSION_4_4
+    if (mGLVersion < 4.39f)
+    {
+        return;
+    }
     glBufferStorage = (PFNGLBUFFERSTORAGEPROC)GLH_EXT_GET_PROC_ADDRESS("glBufferStorage");
     glClearTexImage = (PFNGLCLEARTEXIMAGEPROC)GLH_EXT_GET_PROC_ADDRESS("glClearTexImage");
     glClearTexSubImage = (PFNGLCLEARTEXSUBIMAGEPROC)GLH_EXT_GET_PROC_ADDRESS("glClearTexSubImage");
@@ -2019,6 +2086,10 @@ void LLGLManager::initExtensions()
     glBindVertexBuffers = (PFNGLBINDVERTEXBUFFERSPROC)GLH_EXT_GET_PROC_ADDRESS("glBindVertexBuffers");
 
     // GL_VERSION_4_5
+    if (mGLVersion < 4.49f)
+    {
+        return;
+    }
     glClipControl = (PFNGLCLIPCONTROLPROC)GLH_EXT_GET_PROC_ADDRESS("glClipControl");
     glCreateTransformFeedbacks = (PFNGLCREATETRANSFORMFEEDBACKSPROC)GLH_EXT_GET_PROC_ADDRESS("glCreateTransformFeedbacks");
     glTransformFeedbackBufferBase = (PFNGLTRANSFORMFEEDBACKBUFFERBASEPROC)GLH_EXT_GET_PROC_ADDRESS("glTransformFeedbackBufferBase");
@@ -2143,15 +2214,16 @@ void LLGLManager::initExtensions()
     glTextureBarrier = (PFNGLTEXTUREBARRIERPROC)GLH_EXT_GET_PROC_ADDRESS("glTextureBarrier");
 
     // GL_VERSION_4_6
+    if (mGLVersion < 4.59f)
+    {
+        return;
+    }
     glSpecializeShader = (PFNGLSPECIALIZESHADERPROC)GLH_EXT_GET_PROC_ADDRESS("glSpecializeShader");
     glMultiDrawArraysIndirectCount = (PFNGLMULTIDRAWARRAYSINDIRECTCOUNTPROC)GLH_EXT_GET_PROC_ADDRESS("glMultiDrawArraysIndirectCount");
     glMultiDrawElementsIndirectCount = (PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC)GLH_EXT_GET_PROC_ADDRESS("glMultiDrawElementsIndirectCount");
     glPolygonOffsetClamp = (PFNGLPOLYGONOFFSETCLAMPPROC)GLH_EXT_GET_PROC_ADDRESS("glPolygonOffsetClamp");
     
-    LL_DEBUGS("RenderInit") << "GL Probe: Got symbols" << LL_ENDL;
 #endif
-
-    mInited = TRUE;
 }
 
 void rotate_quat(LLQuaternion& rotation)

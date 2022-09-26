@@ -32,7 +32,6 @@
 		<string>RenderGlowResolutionPow</string>
 		<string>RenderLocalLights</string>
 		<string>RenderMaxPartCount</string>
-		<string>RenderPBR</string>
 		<string>RenderQualityPerformance</string>
 		<string>RenderReflectionDetail</string>
 		<string>RenderReflectionProbeDetail</string>

@@ -76,7 +76,9 @@ vec3  fullbrightAtmosTransportFrag(vec3 light, vec3 additive, vec3 atten);
 vec3  fullbrightScaleSoftClip(vec3 light);
 
 // reflection probe interface
-void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyEnv, 
+void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
+        vec3 pos, vec3 norm, float glossiness);
+void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyEnv, 
         vec3 pos, vec3 norm, float glossiness, float envIntensity);
 void applyGlossEnv(inout vec3 color, vec3 glossenv, vec4 spec, vec3 pos, vec3 norm);
 void applyLegacyEnv(inout vec3 color, vec3 legacyenv, vec4 spec, vec3 pos, vec3 norm, float envIntensity);
@@ -145,18 +147,18 @@ void main()
     if (hasPBR)
     {
         norm.xyz           = getNorm(tc);
-        vec3 orm = texture2DRect(emissiveRect, tc).rgb; //orm is packed into "emissiveRect" to keep the data in linear color space
+        vec3 orm = texture2DRect(specularRect, tc).rgb; 
         float perceptualRoughness = orm.g;
         float metallic = orm.b;
         float ao = orm.r * ambocc;
 
-        vec3 colorEmissive = texture2DRect(specularRect, tc).rgb; //specularRect is sRGB sampler, result is in linear space
+        vec3 colorEmissive = texture2DRect(emissiveRect, tc).rgb;
 
         // PBR IBL
         float gloss      = 1.0 - perceptualRoughness;
         vec3  irradiance = vec3(0);
         vec3  radiance  = vec3(0);
-        sampleReflectionProbes(irradiance, radiance, legacyenv, pos.xyz, norm.xyz, gloss, 0.0);
+        sampleReflectionProbes(irradiance, radiance, pos.xyz, norm.xyz, gloss);
         irradiance       = max(srgb_to_linear(amblit),irradiance) * ambocc*4.0;
 
         vec3 f0 = vec3(0.04);
@@ -164,7 +166,6 @@ void main()
         
         //baseColor.rgb = vec3(0,0,0);
         //colorEmissive = srgb_to_linear(norm.xyz*0.5+0.5);
-
 
         vec3 diffuseColor = baseColor.rgb*(vec3(1.0)-f0);
         diffuseColor *= 1.0 - metallic;
@@ -195,12 +196,10 @@ void main()
         float da          = clamp(dot(norm.xyz, light_dir.xyz), 0.0, 1.0);
         da                = pow(da, light_gamma);
 
-        diffuse.rgb = linear_to_srgb(diffuse.rgb); // SL-14035
+        //diffuse.rgb = linear_to_srgb(diffuse.rgb); // SL-14035
 
-        sampleReflectionProbes(ambenv, glossenv, legacyenv, pos.xyz, norm.xyz, spec.a, envIntensity);
-        ambenv.rgb = linear_to_srgb(ambenv.rgb); 
-        glossenv.rgb = linear_to_srgb(glossenv.rgb);
-        legacyenv.rgb = linear_to_srgb(legacyenv.rgb);
+        sampleReflectionProbesLegacy(ambenv, glossenv, legacyenv, pos.xyz, norm.xyz, spec.a, envIntensity);
+        vec3 debug = legacyenv;
 
         amblit = max(ambenv, amblit);
         color.rgb = amblit*ambocc;
@@ -228,16 +227,13 @@ void main()
 
         color.rgb = mix(color.rgb, diffuse.rgb, diffuse.a);
 
-        if (envIntensity > 0.0)
-        {  // add environmentmap
-            //fudge darker
-            legacyenv *= 0.5*diffuse.a+0.5;
-            applyLegacyEnv(color, legacyenv, spec, pos.xyz, norm.xyz, envIntensity);
-        }
-
         if (GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_ATMOS))
         {
             color = mix(atmosFragLighting(color, additive, atten), fullbrightAtmosTransportFrag(color, additive, atten), diffuse.a);
+            if (envIntensity > 0.0)
+            {  // add environmentmap
+                applyLegacyEnv(color, legacyenv, spec, pos.xyz, norm.xyz, envIntensity);
+            }
             color = mix(scaleSoftClipFrag(color), fullbrightScaleSoftClip(color), diffuse.a);
         }
 
@@ -249,8 +245,6 @@ void main()
 
         // convert to linear as fullscreen lights need to sum in linear colorspace
         // and will be gamma (re)corrected downstream...
-        //color = ambenv;
-        //color.b = diffuse.a;
         frag_color.rgb = srgb_to_linear(color.rgb);
     }
 

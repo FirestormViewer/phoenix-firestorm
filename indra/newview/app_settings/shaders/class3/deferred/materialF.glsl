@@ -64,12 +64,10 @@ out vec4 frag_color;
 float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 #endif
 
-#ifdef HAS_REFLECTION_PROBES
-void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv, 
+void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv, 
         vec3 pos, vec3 norm, float glossiness, float envIntensity);
 void applyGlossEnv(inout vec3 color, vec3 glossenv, vec4 spec, vec3 pos, vec3 norm);
 void applyLegacyEnv(inout vec3 color, vec3 legacyenv, vec4 spec, vec3 pos, vec3 norm, float envIntensity);
-#endif
 
 uniform samplerCube environmentMap;
 uniform sampler2D     lightFunc;
@@ -244,11 +242,6 @@ void main()
     }
 #endif
 
-#if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
-	vec3 gamma_diff = diffcol.rgb;
-	diffcol.rgb = srgb_to_linear(diffcol.rgb);
-#endif
-
 #ifdef HAS_SPECULAR_MAP
     vec4 spec = texture2D(specularMap, vary_texcoord2.xy);
     spec.rgb *= specular_color.rgb;
@@ -293,7 +286,7 @@ void main()
 
 #if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
 
-    //forward rendering, output just lit sRGBA
+    //forward rendering, output lit linear color
     vec3 pos = vary_position;
 
     float shadow = 1.0f;
@@ -331,31 +324,16 @@ void main()
     da = pow(da, 1.0 / 1.3);
     vec3 sun_contrib = min(da, shadow) * sunlit;
 
-#ifdef HAS_REFLECTION_PROBES
     vec3 ambenv;
     vec3 glossenv;
     vec3 legacyenv;
-    sampleReflectionProbes(ambenv, glossenv, legacyenv, pos.xyz, norm.xyz, spec.a, envIntensity);
+    sampleReflectionProbesLegacy(ambenv, glossenv, legacyenv, pos.xyz, norm.xyz, spec.a, envIntensity);
     amblit = max(ambenv, amblit);
     color.rgb = amblit;
-#else
-
-    color = amblit;
-
-    //darken ambient for normals perpendicular to light vector so surfaces in shadow 
-    // and facing away from light still have some definition to them.
-    // do NOT gamma correct this dot product so ambient lighting stays soft
-    float ambient = min(abs(dot(norm.xyz, sun_dir.xyz)), 1.0);
-    ambient *= 0.5;
-    ambient *= ambient;
-    ambient = (1.0 - ambient);
-
-    color *= ambient;
-#endif
 
     color += sun_contrib;
 
-    color *= gamma_diff.rgb;
+    color *= diffcol.rgb;
 
     float glare = 0.0;
 
@@ -373,40 +351,14 @@ void main()
 
         color += spec_contrib;
 
-#ifdef HAS_REFLECTION_PROBES
         applyGlossEnv(color, glossenv, spec, pos.xyz, norm.xyz);
-#endif
     }
-
-
-    color = mix(color.rgb, diffcol.rgb, diffuse.a);
-
-#ifdef HAS_REFLECTION_PROBES
-    if (envIntensity > 0.0)
-    {  // add environmentmap
-        //fudge darker
-        legacyenv *= 0.5*diffuse.a+0.5;
-        
-        applyLegacyEnv(color, legacyenv, spec, pos.xyz, norm.xyz, envIntensity);
-    }
-#else
-    if (envIntensity > 0.0)
-    {
-        //add environmentmap
-        vec3 env_vec = env_mat * refnormpersp;
-
-        vec3 reflected_color = textureCube(environmentMap, env_vec).rgb;
-
-        color = mix(color, reflected_color, envIntensity);
-
-        float cur_glare = max(reflected_color.r, reflected_color.g);
-        cur_glare = max(cur_glare, reflected_color.b);
-        cur_glare *= envIntensity*4.0;
-        glare += cur_glare;
-    }
-#endif
 
     color = atmosFragLighting(color, additive, atten);
+    if (envIntensity > 0.0)
+    {  // add environmentmap
+        applyLegacyEnv(color, legacyenv, spec, pos.xyz, norm.xyz, envIntensity);
+    }
     color = scaleSoftClipFrag(color);
 
     //convert to linear before adding local lights
@@ -417,6 +369,8 @@ void main()
     vec3 light = vec3(0, 0, 0);
     
     final_specular.rgb = srgb_to_linear(final_specular.rgb); // SL-14035
+
+    color = mix(color.rgb, srgb_to_linear(diffcol.rgb), diffuse.a);
 
 #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, npos, diffuse.rgb, final_specular, pos.xyz, norm.xyz, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, glare, light_attenuation[i].w );
 
@@ -433,9 +387,6 @@ void main()
     glare = min(glare, 1.0);
     float al = max(diffcol.a, glare)*vertex_color.a;
 
-    //convert to srgb as this color is being written post gamma correction
-    color = linear_to_srgb(color);
-
 #ifdef WATER_FOG
     vec4 temp = applyWaterFogView(pos, vec4(color, al));
     color = temp.rgb;
@@ -447,7 +398,7 @@ void main()
 #else // mode is not DIFFUSE_ALPHA_MODE_BLEND, encode to gbuffer 
 
     // deferred path               // See: C++: addDeferredAttachment(), shader: softenLightF.glsl
-    frag_data[0] = final_color;    // gbuffer is sRGB
+    frag_data[0] = final_color;    // gbuffer is sRGB for legacy materials
     frag_data[1] = final_specular; // XYZ = Specular color. W = Specular exponent.
     frag_data[2] = final_normal;   // XY = Normal.  Z = Env. intensity. W = 1 skip atmos (mask off fog)
 #endif

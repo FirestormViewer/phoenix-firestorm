@@ -12695,7 +12695,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderPBR</key>
   <map>
     <key>Comment</key>
-    <string>Use PBR rendering pipeline (Physically Based Rendering).</string>
+    <string>DEPRECATED - only true supported - Use PBR rendering pipeline (Physically Based Rendering).</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -13414,7 +13414,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderReflectionProbeDetail</key>
   <map>
     <key>Comment</key>
-    <string>Detail of reflections.</string>
+    <string>Detail of reflections. (-1 - Disabled, 0 - Static Only, 1 - Static + Dynamic, 2 - Realtime)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -13675,17 +13675,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
-  </map>
-  <key>RenderUseMikktSpace</key>
-  <map>
-    <key>Comment</key>
-    <string>Use Mikkt Space tangents on GLTF materials.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
   </map>
   <key>RenderUseTriStrips</key>
   <map>

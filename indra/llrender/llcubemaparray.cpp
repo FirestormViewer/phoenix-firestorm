@@ -107,29 +107,35 @@ LLCubeMapArray::~LLCubeMapArray()
 {
 }
 
-void LLCubeMapArray::allocate(U32 resolution, U32 components, U32 count)
+void LLCubeMapArray::allocate(U32 resolution, U32 components, U32 count, BOOL use_mips)
 {
     U32 texname = 0;
 
     LLImageGL::generateTextures(1, &texname);
 
-    mImage = new LLImageGL(resolution, resolution, components, TRUE);
+    mImage = new LLImageGL(resolution, resolution, components, use_mips);
     mImage->setTexName(texname);
     mImage->setTarget(sTargets[0], LLTexUnit::TT_CUBE_MAP_ARRAY);
 
-    mImage->setUseMipMaps(TRUE);
-    mImage->setHasMipMaps(TRUE);
+    mImage->setUseMipMaps(use_mips);
+    mImage->setHasMipMaps(use_mips);
 
     bind(0);
 
-    glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, GL_RGB, resolution, resolution, count*6, 0,
+    glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, GL_RGB16F, resolution, resolution, count*6, 0,
         GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
     mImage->setAddressMode(LLTexUnit::TAM_CLAMP);
 
-    mImage->setFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
-
-    glGenerateMipmap(GL_TEXTURE_CUBE_MAP_ARRAY);
+    if (use_mips)
+    {
+        mImage->setFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP_ARRAY);
+    }
+    else
+    {
+        mImage->setFilteringOption(LLTexUnit::TFO_BILINEAR);
+    }
 
     unbind();
 }
@@ -137,7 +143,7 @@ void LLCubeMapArray::allocate(U32 resolution, U32 components, U32 count)
 void LLCubeMapArray::bind(S32 stage)
 {
     mTextureStage = stage;
-    gGL.getTexUnit(stage)->bindManual(LLTexUnit::TT_CUBE_MAP_ARRAY, getGLName(), TRUE);
+    gGL.getTexUnit(stage)->bindManual(LLTexUnit::TT_CUBE_MAP_ARRAY, getGLName(), mImage->getUseMipMaps());
 }
 
 void LLCubeMapArray::unbind()

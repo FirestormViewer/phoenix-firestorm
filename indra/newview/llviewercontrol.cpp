@@ -530,7 +530,7 @@ static bool handleRenderLocalLightsChanged(const LLSD& newvalue)
 	return true;
 }
 
-static bool handleRenderPBRChanged(const LLSD& newvalue)
+static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
 {
     if (gPipeline.isInit())
     {
@@ -1191,7 +1191,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderResolutionMultiplier")->getSignal()->connect(boost::bind(&handleRenderResolutionDivisorChanged, _2));
 // [/SL:KB]
 	// DEPRECATED - gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&handleRenderDeferredChanged, _2));
-    gSavedSettings.getControl("RenderPBR")->getSignal()->connect(boost::bind(&handleRenderPBRChanged, _2));
+    gSavedSettings.getControl("RenderReflectionProbeDetail")->getSignal()->connect(boost::bind(&handleReflectionProbeDetailChanged, _2));
 	gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));

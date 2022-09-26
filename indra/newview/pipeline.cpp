@@ -374,6 +374,7 @@ bool	LLPipeline::sRenderFrameTest = false;
 bool	LLPipeline::sRenderAttachedLights = true;
 bool	LLPipeline::sRenderAttachedParticles = true;
 bool	LLPipeline::sRenderDeferred = false;
+bool	LLPipeline::sReflectionProbesEnabled = false;
 bool    LLPipeline::sRenderPBR = false;
 S32		LLPipeline::sVisibleLightCount = 0;
 bool	LLPipeline::sRenderingHUDs;
@@ -397,14 +398,12 @@ void validate_framebuffer_object();
 
 // Add color attachments for deferred rendering
 // target -- RenderTarget to add attachments to
-// for_impostor -- whether or not these render targets are for an impostor (if true, avoids implicit sRGB conversions)
 bool addDeferredAttachments(LLRenderTarget& target, bool for_impostor = false)
 {
-    bool pbr = gSavedSettings.getBOOL("RenderPBR");
     bool valid = true
-        && target.addColorAttachment(for_impostor ? GL_RGBA : GL_SRGB8_ALPHA8) // frag-data[1] specular or PBR sRGB Emissive
+        && target.addColorAttachment(GL_RGBA) // frag-data[1] specular OR PBR ORM
         && target.addColorAttachment(GL_RGB10_A2)                              // frag_data[2] normal+z+fogmask, See: class1\deferred\materialF.glsl & softenlight
-        && (pbr ? target.addColorAttachment(GL_RGBA) : true);                  // frag_data[3] PBR linear packed Occlusion, Roughness, Metal. See: pbropaqueF.glsl
+        && target.addColorAttachment(GL_RGBA);                  // frag_data[3] PBR emissive
     return valid;
 }
 
@@ -603,7 +602,6 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("UseOcclusion");
 	// DEPRECATED -- connectRefreshCachedSettingsSafe("WindLightUseAtmosShaders");
 	// DEPRECATED -- connectRefreshCachedSettingsSafe("RenderDeferred");
-    connectRefreshCachedSettingsSafe("RenderPBR");
 	connectRefreshCachedSettingsSafe("RenderDeferredSunWash");
 	connectRefreshCachedSettingsSafe("RenderFSAASamples");
 	connectRefreshCachedSettingsSafe("RenderResolutionDivisor");
@@ -993,7 +991,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		const U32 occlusion_divisor = 3;
 
 		//allocate deferred rendering color buffers
-		if (!mRT->deferredScreen.allocate(resX, resY, GL_SRGB8_ALPHA8, TRUE, TRUE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
+		if (!mRT->deferredScreen.allocate(resX, resY, GL_RGBA, TRUE, TRUE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
 		if (!mRT->deferredDepth.allocate(resX, resY, 0, TRUE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
 		if (!mRT->occlusionDepth.allocate(resX/occlusion_divisor, resY/occlusion_divisor, 0, TRUE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
 		if (!addDeferredAttachments(mRT->deferredScreen)) return false;
@@ -1157,12 +1155,10 @@ void LLPipeline::updateRenderBump()
 // static
 void LLPipeline::updateRenderDeferred()
 {
-    sRenderDeferred = !gUseWireframe &&
-                      RenderDeferred &&
-                      LLRenderTarget::sUseFBO &&
-                      LLPipeline::sRenderBump &&
-                      WindLightUseAtmosShaders;
-    sRenderPBR = sRenderDeferred && gSavedSettings.getBOOL("RenderPBR");
+    sRenderDeferred = !gUseWireframe;
+    sRenderPBR = sRenderDeferred;
+    static LLCachedControl<S32> sProbeDetail(gSavedSettings, "RenderReflectionProbeDetail", -1);
+    sReflectionProbesEnabled = sProbeDetail >= 0 && gGLManager.mGLVersion > 3.99f;
 
     exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
 
@@ -6462,6 +6458,22 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
 	}
 }
 
+void LLPipeline::adjustAmbient(const LLSettingsSky* sky, LLColor4& ambient)
+{
+    //bump ambient based on reflection probe ambiance of probes are disabled 
+    // so sky settings that rely on probes for ambiance don't go completely dark
+    // on low end hardware
+    if (!LLPipeline::sReflectionProbesEnabled)
+    {
+        F32 ambiance = linearTosRGB(sky->getReflectionProbeAmbiance());
+
+        for (int i = 0; i < 3; ++i)
+        {
+            ambient.mV[i] = llmax(ambient.mV[i], ambiance);
+        }
+    }
+}
+
 void LLPipeline::setupHWLights(LLDrawPool* pool)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
@@ -6472,7 +6484,9 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 
     // Ambient
     LLColor4 ambient = psky->getTotalAmbient();
-		gGL.setAmbientLightColor(ambient);
+    adjustAmbient(psky.get(), ambient);
+    
+	gGL.setAmbientLightColor(ambient);
 
     bool sun_up  = environment.getIsSunUp();
     bool moon_up = environment.getIsMoonUp();
@@ -7972,7 +7986,7 @@ void LLPipeline::renderFinalize()
                            RenderDepthOfField &&
                             !gCubeSnapshot;
 
-        bool multisample = RenderFSAASamples > 1 && mRT->fxaaBuffer.isComplete();
+        bool multisample = RenderFSAASamples > 1 && mRT->fxaaBuffer.isComplete() && !gCubeSnapshot;
         exoPostProcess::instance().multisample = multisample;	// <FS:CR> Import Vignette from Exodus
 // [RLVa:KB] - @setsphere
         if (multisample && !pRenderBuffer)
@@ -8513,7 +8527,6 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
         deferred_target->bindTexture(0,channel, LLTexUnit::TFO_POINT); // frag_data[0]
 	}
 
-    // NOTE: PBR sRGB Emissive -- See: C++: addDeferredAttachments(), GLSL: pbropaqueF.glsl
     channel = shader.enableTexture(LLShaderMgr::DEFERRED_SPECULAR, deferred_target->getUsage());
 	if (channel > -1)
 	{
@@ -8526,7 +8539,6 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
         deferred_target->bindTexture(2, channel, LLTexUnit::TFO_POINT); // frag_data[2]
 	}
 
-    // NOTE: PBR linear packed Occlusion, Roughness, Metal -- See: C++: addDeferredAttachments(), GLSL: pbropaqueF.glsl
     channel = shader.enableTexture(LLShaderMgr::DEFERRED_EMISSIVE, deferred_target->getUsage());
     if (channel > -1)
     {
@@ -9325,64 +9337,6 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget *screen_target)
 
     screen_target->flush();
 
-    // gamma correct lighting
-    gGL.matrixMode(LLRender::MM_PROJECTION);
-    gGL.pushMatrix();
-    gGL.loadIdentity();
-    gGL.matrixMode(LLRender::MM_MODELVIEW);
-    gGL.pushMatrix();
-    gGL.loadIdentity();
-
-    {
-        LL_PROFILE_GPU_ZONE("gamma correct");
-        LLGLDepthTest depth(GL_FALSE, GL_FALSE);
-
-        LLVector2 tc1(0, 0);
-        LLVector2 tc2((F32) screen_target->getWidth() * 2, (F32) screen_target->getHeight() * 2);
-
-        screen_target->bindTarget();
-        // Apply gamma correction to the frame here.
-        gDeferredPostGammaCorrectProgram.bind();
-        // mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
-        S32 channel = 0;
-        channel     = gDeferredPostGammaCorrectProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, screen_target->getUsage());
-        if (channel > -1)
-        {
-            screen_target->bindTexture(0, channel, LLTexUnit::TFO_POINT);
-        }
-
-        gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, screen_target->getWidth(), screen_target->getHeight());
-
-        //F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
-        static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
-
-        gDeferredPostGammaCorrectProgram.uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
-
-        // <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
-        //gGL.begin(LLRender::TRIANGLE_STRIP);
-        //gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-        //gGL.vertex2f(-1,-1);
-
-        //gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-        //gGL.vertex2f(-1,3);
-
-        //gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-        //gGL.vertex2f(3,-1);
-
-        //gGL.end();
-        drawAuxiliaryVB(tc1, tc2);
-        // </FS:Ansariel>
-
-        gGL.getTexUnit(channel)->unbind(screen_target->getUsage());
-        gDeferredPostGammaCorrectProgram.unbind();
-        screen_target->flush();
-    }
-
-    gGL.matrixMode(LLRender::MM_PROJECTION);
-    gGL.popMatrix();
-    gGL.matrixMode(LLRender::MM_MODELVIEW);
-    gGL.popMatrix();
-
     screen_target->bindTarget();
 
     {  // render non-deferred geometry (alpha, fullbright, glow)
@@ -9416,6 +9370,66 @@ void LLPipeline::renderDeferredLighting(LLRenderTarget *screen_target)
 
         renderGeomPostDeferred(*LLViewerCamera::getInstance());
         popRenderTypeMask();
+    }
+
+    screen_target->flush();
+
+    if (!gCubeSnapshot)
+    {
+        // gamma correct lighting
+        gGL.matrixMode(LLRender::MM_PROJECTION);
+        gGL.pushMatrix();
+        gGL.loadIdentity();
+        gGL.matrixMode(LLRender::MM_MODELVIEW);
+        gGL.pushMatrix();
+        gGL.loadIdentity();
+
+        {
+            LL_PROFILE_GPU_ZONE("gamma correct");
+
+            LLGLDepthTest depth(GL_FALSE, GL_FALSE);
+
+            LLVector2 tc1(0, 0);
+            LLVector2 tc2((F32)screen_target->getWidth() * 2, (F32)screen_target->getHeight() * 2);
+
+            screen_target->bindTarget();
+            // Apply gamma correction to the frame here.
+            gDeferredPostGammaCorrectProgram.bind();
+            // mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
+            S32 channel = 0;
+            channel = gDeferredPostGammaCorrectProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, screen_target->getUsage());
+            if (channel > -1)
+            {
+                screen_target->bindTexture(0, channel, LLTexUnit::TFO_POINT);
+            }
+
+            gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, screen_target->getWidth(), screen_target->getHeight());
+
+            F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+
+            gDeferredPostGammaCorrectProgram.uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f / 2.2f));
+
+            gGL.begin(LLRender::TRIANGLE_STRIP);
+            gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
+            gGL.vertex2f(-1, -1);
+
+            gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
+            gGL.vertex2f(-1, 3);
+
+            gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
+            gGL.vertex2f(3, -1);
+
+            gGL.end();
+
+            gGL.getTexUnit(channel)->unbind(screen_target->getUsage());
+            gDeferredPostGammaCorrectProgram.unbind();
+            screen_target->flush();
+        }
+
+        gGL.matrixMode(LLRender::MM_PROJECTION);
+        gGL.popMatrix();
+        gGL.matrixMode(LLRender::MM_MODELVIEW);
+        gGL.popMatrix();
     }
 
     if (!gCubeSnapshot)
@@ -9633,8 +9647,24 @@ void LLPipeline::unbindDeferredShader(LLGLSLShader &shader)
 	shader.unbind();
 }
 
+void LLPipeline::setEnvMat(LLGLSLShader& shader)
+{
+    F32* m = gGLModelView;
+
+    F32 mat[] = { m[0], m[1], m[2],
+                    m[4], m[5], m[6],
+                    m[8], m[9], m[10] };
+
+    shader.uniformMatrix3fv(LLShaderMgr::DEFERRED_ENV_MAT, 1, TRUE, mat);
+}
+
 void LLPipeline::bindReflectionProbes(LLGLSLShader& shader)
 {
+    if (!sReflectionProbesEnabled)
+    {
+        return;
+    }
+
     S32 channel = shader.enableTexture(LLShaderMgr::REFLECTION_PROBES, LLTexUnit::TT_CUBE_MAP_ARRAY);
     bool bound = false;
     if (channel > -1 && mReflectionMapManager.mTexture.notNull())
@@ -9654,13 +9684,7 @@ void LLPipeline::bindReflectionProbes(LLGLSLShader& shader)
     {
         mReflectionMapManager.setUniforms();
 
-        F32* m = gGLModelView;
-
-        F32 mat[] = { m[0], m[1], m[2],
-                      m[4], m[5], m[6],
-                      m[8], m[9], m[10] };
-
-        shader.uniformMatrix3fv(LLShaderMgr::DEFERRED_ENV_MAT, 1, TRUE, mat);
+        setEnvMat(shader);
     }
 }
 
