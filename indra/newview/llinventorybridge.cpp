@@ -3741,6 +3741,21 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		LLFloaterReg::showInstance("fs_partial_inventory", LLSD().with("start_folder_id", mUUID).with("start_folder_name", mDisplayName));
 	}
 	// </FS:Ansariel>
+
+	// <FS:Zi> Add "Reload folder" action to inventory
+	else if ("reload_folder" == action)
+	{
+		LLViewerInventoryCategory *cat = model->getCategory(mUUID);
+
+		if (!cat)
+		{
+			return;
+		}
+
+		cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+        cat->fetch();
+	}
+	// </FS:Zi>
 }
 
 void LLFolderBridge::gatherMessage(std::string& message, S32 depth, LLError::ELevel log_level)
@@ -4685,6 +4700,20 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 
 	// <FS:Ansariel> Show folder in new window option
 	items.push_back((std::string("Show in new Window")));
+
+	// <FS:Zi> Add "Reload folder" action to inventory
+	// only allow reload for a single, non-root folder to prevent misuse
+	if (!(flags & ITEM_IN_MULTI_SELECTION))
+	{
+		if (mUUID != model->findCategoryUUIDForType(LLFolderType::FT_ROOT_INVENTORY))
+		{
+			if (mUUID != model->findLibraryCategoryUUIDForType(LLFolderType::FT_ROOT_INVENTORY))
+			{
+				items.push_back(std::string("ReloadFolder"));
+			}
+		}
+	}
+	// </FS:Zi>
 
 	// Add menu items that are dependent on the contents of the folder.
 	LLViewerInventoryCategory* category = (LLViewerInventoryCategory *) model->getCategory(mUUID);
