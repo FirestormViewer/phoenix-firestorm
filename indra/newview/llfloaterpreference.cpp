@@ -805,6 +805,12 @@ BOOL LLFloaterPreference::postBuild()
 	mPopupFilter = getChild<LLFilterEditor>("popup_filter");
 	// </FS:Zi>
 
+	// <FS:Zi> SDL2 IME support
+#if LL_SDL2
+	childSetVisible("use_ime", true);
+#endif
+	// </FS:Zi>
+
 	return TRUE;
 }
 
