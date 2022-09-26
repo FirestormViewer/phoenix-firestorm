@@ -1005,7 +1005,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         {
             mRadioMatType->selectNthItem(MATTYPE_DIFFUSE);
         }
-        radio_mat_type->setEnabled(editable);
+        mRadioMatType->setEnabled(editable);
 
         //LLRadioGroup* radio_pbr_type = getChild<LLRadioGroup>("radio_pbr_type");
         if (mRadioPbrType->getSelectedIndex() < PBRTYPE_BASE_COLOR)
@@ -4611,7 +4611,7 @@ void LLPanelFace::onPasteFaces()
 	LLPanelFacePasteTexFunctor paste_color_func(this, PASTE_COLOR);
 	selected_objects->applyToTEs(&paste_color_func);
 
-	LLPanelFaceUpdateFunctor sendfunc(true);
+	LLPanelFaceUpdateFunctor sendfunc(true, true);
 	selected_objects->applyToObjects(&sendfunc);
 
 	LLPanelFaceNavigateHomeFunctor navigate_home_func;
