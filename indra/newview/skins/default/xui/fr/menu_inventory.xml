@@ -47,7 +47,7 @@
 		<menu_item_call label="Nouvelle eau" name="New Water"/>
 		<menu_item_call label="Nouveau cycle du jour" name="New Day Cycle"/>
 	</menu>
-	<menu label="Utiliser comme défaut pour" name="upload_def">
+	<menu label="Utiliser comme dossier par défaut pour" name="upload_def">
 		<menu_item_call label="Chargements d’images" name="Image uploads"/>
 		<menu_item_call label="Chargements de sons" name="Sound uploads"/>
 		<menu_item_call label="Chargements d’animations" name="Animation uploads"/>
@@ -84,6 +84,7 @@
 	<menu_item_call label="Copier l&apos;UUID (identifiant universel unique)" name="Copy Asset UUID"/>
 	<menu_item_call label="Affiche le Panneau principal" name="Show in Main Panel"/>
 	<menu_item_call label="Afficher dans une nouvelle fenêtre" name="Show in new Window"/>
+	<menu_item_call label="Recharger le dossier" name="ReloadFolder"/>
 	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>
 	<menu_item_call label="Couper" name="Cut"/>
 	<menu_item_call label="Copier" name="Copy"/>
