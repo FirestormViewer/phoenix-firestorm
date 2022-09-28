@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- name="panel_picks"
+ name="panel_profile_picks"
  label="Picks"
  top="0"
  left="0"
