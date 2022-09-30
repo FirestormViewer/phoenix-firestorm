@@ -31,6 +31,7 @@
 			allow_text_entry="true"
 			max_chars="256"
 			follows="left|right|top"
+			force_disable_fulltext_search="true"
 			layout="topleft" />
 
 		<button
@@ -419,6 +420,7 @@
 		right="-24"
 		height="20"
 		follows="left|right|top"
+		force_disable_fulltext_search="true"
 		layout="topleft" />
 
 	<button
