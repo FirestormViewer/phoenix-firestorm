@@ -5,15 +5,19 @@
 	<menu_item_call label="Ayır" name="Detach"/>
 	<menu_item_call label="Otur" name="Sit Down Here"/>
 	<menu_item_call label="Kalk" name="Stand Up"/>
-	<menu_item_call label="Görünümüm" name="Change Outfit"/>
-	<menu_item_call label="Dış Görünümümü Düzenle" name="Edit Outfit"/>
-	<menu_item_call label="Şeklimi Düzenle" name="Edit My Shape"/>
-	<menu_item_call label="Konum Yüksekliği" name="Hover Height"/>
-	<menu_item_call label="İskeleti Sıfırla" name="Reset Skeleton"/>
-	<menu_item_call label="İskeleti ve Animasyonları Sıfırla" name="Reset Skeleton And Animations"/>
-	<menu_item_call label="Arkadaşlarım" name="Friends..."/>
-	<menu_item_call label="Gruplarım" name="Groups..."/>
-	<menu_item_call label="Profilim" name="Profile..."/>
+	<context_menu label="Dış görünüş" name="AppearanceSubmenu">
+		<menu_item_call label="Görünümüm" name="Change Outfit"/>
+		<menu_item_call label="Şeklimi Düzenle" name="Edit Shape"/>
+		<menu_item_call label="Dış Görünümümü Düzenle" name="Edit Outfit Parts" />
+		<menu_item_call label="Konum Yüksekliği" name="Hover Height"/>
+		<menu_item_call label="İskeleti Sıfırla" name="Reset Skeleton"/>
+		<menu_item_call label="İskeleti ve Animasyonları Sıfırla" name="Reset Skeleton And Animations"/>
+	</context_menu>
+	<context_menu label="Toplum" name="CommunitySubmenu">
+		<menu_item_call label="Arkadaşlarım" name="Friends..."/>
+		<menu_item_call label="Gruplarım" name="Groups..."/>
+		<menu_item_call label="Profilim" name="Profile..."/>
+	</context_menu>
 	<menu_item_call label="Dokularda Hata Ayıkla" name="Debug..."/>
 	<menu_item_call label="XML Dökümünü Al" name="Dump XML"/>
 	<menu_item_call label="Bırak" name="Drop"/>
