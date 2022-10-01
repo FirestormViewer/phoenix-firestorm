@@ -1833,6 +1833,7 @@ void LLObjectSelection::applyNoCopyTextureToTEs(LLViewerInventoryItem* item)
 
 		S32 num_tes = llmin((S32)object->getNumTEs(), (S32)object->getNumFaces());
 		bool texture_copied = false;
+        bool updated = false;
 		for (S32 te = 0; te < num_tes; ++te)
 		{
 			if (node->isTESelected(te))
@@ -1841,21 +1842,67 @@ void LLObjectSelection::applyNoCopyTextureToTEs(LLViewerInventoryItem* item)
 				// without making any copies
 				if (!texture_copied)
 				{
-					LLToolDragAndDrop::handleDropTextureProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
+					LLToolDragAndDrop::handleDropMaterialProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
 					texture_copied = true;
 				}
 
 				// apply texture for the selected faces
 				add(LLStatViewer::EDIT_TEXTURE, 1);
 				object->setTEImage(te, image);
-				dialog_refresh_all();
-
-				// send the update to the simulator
-				object->sendTEUpdate();
+                updated = true;
 			}
 		}
+
+        if (updated) // not nessesary? sendTEUpdate update supposed to be done by sendfunc
+        {
+            dialog_refresh_all();
+
+            // send the update to the simulator
+            object->sendTEUpdate();
+        }
 	}
 }
+
+void LLObjectSelection::applyNoCopyPbrMaterialToTEs(LLViewerInventoryItem* item)
+{
+    if (!item)
+    {
+        return;
+    }
+
+    LLUUID asset_id = item->getAssetUUID();
+
+    for (iterator iter = begin(); iter != end(); ++iter)
+    {
+        LLSelectNode* node = *iter;
+        LLViewerObject* object = (*iter)->getObject();
+        if (!object)
+        {
+            continue;
+        }
+
+        S32 num_tes = llmin((S32)object->getNumTEs(), (S32)object->getNumFaces());
+        bool material_copied = false;
+        for (S32 te = 0; te < num_tes; ++te)
+        {
+            if (node->isTESelected(te))
+            {
+                //(no-copy) materials must be moved to the object's inventory only once
+                // without making any copies
+                if (!material_copied && asset_id.notNull())
+                {
+                    LLToolDragAndDrop::handleDropMaterialProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
+                    material_copied = true;
+                }
+
+                // apply texture for the selected faces
+                //add(LLStatViewer::EDIT_TEXTURE, 1);
+                object->setRenderMaterialID(te, asset_id, false /*will be sent later*/);
+            }
+        }
+    }
+}
+
 
 //-----------------------------------------------------------------------------
 // selectionSetImage()
@@ -2038,12 +2085,11 @@ void LLSelectMgr::selectionSetGLTFMaterial(const LLUUID& mat_id)
         }
     };
 
-    // TODO: once PBR starts supporting permissions, implement/figure this out
-    /*if (item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
+    if (item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
     {
-        getSelection()->applyNoCopyTextureToTEs(item);
+        getSelection()->applyNoCopyPbrMaterialToTEs(item);
     }
-    else*/
+    else
     {
         f setfunc(item, mat_id);
         getSelection()->applyToTEs(&setfunc);
@@ -2083,6 +2129,7 @@ void LLSelectMgr::selectionSetGLTFMaterial(const LLUUID& mat_id)
                 effectp->setColor(LLColor4U(gAgent.getEffectColor()));
             }
 
+            dialog_refresh_all();
             object->sendTEUpdate();
             return true;
         }
@@ -2349,7 +2396,7 @@ void LLSelectMgr::selectionSetBumpmap(U8 bumpmap, const LLUUID &image_id)
     {
         LLViewerObject *object = mSelectedObjects->getFirstRootObject();
         if (!object) return;
-        LLToolDragAndDrop::handleDropTextureProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
+        LLToolDragAndDrop::handleDropMaterialProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
     }
     getSelection()->applyToTEs(&setfunc);
 	
@@ -2409,7 +2456,7 @@ void LLSelectMgr::selectionSetShiny(U8 shiny, const LLUUID &image_id)
     {
         LLViewerObject *object = mSelectedObjects->getFirstRootObject();
         if (!object) return;
-        LLToolDragAndDrop::handleDropTextureProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
+        LLToolDragAndDrop::handleDropMaterialProtections(object, item, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null);
     }
     getSelection()->applyToTEs(&setfunc);
 

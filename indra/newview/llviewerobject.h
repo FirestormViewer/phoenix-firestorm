@@ -503,7 +503,7 @@ public:
 	// manager until we have better iterators.
 	void updateInventory(LLViewerInventoryItem* item, U8 key, bool is_new);
 	void updateInventoryLocal(LLInventoryItem* item, U8 key); // Update without messaging.
-	void updateTextureInventory(LLViewerInventoryItem* item, U8 key, bool is_new);
+	void updateMaterialInventory(LLViewerInventoryItem* item, U8 key, bool is_new);
 	LLInventoryObject* getInventoryObject(const LLUUID& item_id);
 
 	// Get content except for root category
@@ -511,8 +511,6 @@ public:
 	LLInventoryObject* getInventoryRoot();
 	LLViewerInventoryItem* getInventoryItemByAsset(const LLUUID& asset_id);
 	S16 getInventorySerial() const { return mInventorySerialNum; }
-
-	bool isTextureInInventory(LLViewerInventoryItem* item);
 
 	// These functions does viewer-side only object inventory modifications
 	void updateViewerInventoryAsset(
@@ -646,6 +644,8 @@ public:
 	std::vector<LLVector3> mUnselectedChildrenPositions ;
 
 private:
+    bool isAssetInInventory(LLViewerInventoryItem* item);
+
 	ExtraParameter* createNewParameterEntry(U16 param_type);
 	ExtraParameter* getExtraParameterEntry(U16 param_type) const;
 	ExtraParameter* getExtraParameterEntryCreate(U16 param_type);

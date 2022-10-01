@@ -85,8 +85,8 @@ public:
         BUMP_MAP,                           //  "bumpMap"
         BUMP_MAP2,                          //  "bumpMap2"
         ENVIRONMENT_MAP,                    //  "environmentMap"
-        REFLECTION_PROBES,                     //  "reflectionProbes"
-        IRRADIANCE_PROBES,                     //  "irradianceProbes"
+        REFLECTION_PROBES,                  //  "reflectionProbes"
+        IRRADIANCE_PROBES,                  //  "irradianceProbes"
         CLOUD_NOISE_MAP,                    //  "cloud_noise_texture"
         CLOUD_NOISE_MAP_NEXT,               //  "cloud_noise_texture_next"
         FULLBRIGHT,                         //  "fullbright"
@@ -94,9 +94,12 @@ public:
         SUNLIGHT_COLOR,                     //  "sunlight_color"
         AMBIENT,                            //  "ambient_color"
         BLUE_HORIZON,                       //  "blue_horizon"
+        BLUE_HORIZON_LINEAR,                //  "blue_horizon_linear"
         BLUE_DENSITY,                       //  "blue_density"
+        BLUE_DENSITY_LINEAR,                //  "blue_density_linear"
         HAZE_HORIZON,                       //  "haze_horizon"
         HAZE_DENSITY,                       //  "haze_density"
+        HAZE_DENSITY_LINEAR,                //  "haze_density_linear"
         CLOUD_SHADOW,                       //  "cloud_shadow"
         DENSITY_MULTIPLIER,                 //  "density_multiplier"
         DISTANCE_MULTIPLIER,                //  "distance_multiplier"
@@ -275,6 +278,9 @@ public:
         WATER_EDGE_FACTOR,                  //  "water_edge"
         SUN_UP_FACTOR,                      //  "sun_up_factor"
         MOONLIGHT_COLOR,                    //  "moonlight_color"
+        MOONLIGHT_LINEAR,                    //  "moonlight_LINEAR"
+        SUNLIGHT_LINEAR,                     //  "sunlight_linear"
+        AMBIENT_LINEAR,                     //  "ambient_linear"
         END_RESERVED_UNIFORMS
     } eGLSLReservedUniforms;
     // clang-format on

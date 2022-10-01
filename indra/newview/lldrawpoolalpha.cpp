@@ -151,7 +151,7 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
 
     fullbright_shader   = (LLPipeline::sImpostorRender) ? &gDeferredFullbrightAlphaMaskProgram :
         (LLPipeline::sUnderWaterRender) ? &gDeferredFullbrightWaterProgram : &gDeferredFullbrightAlphaMaskProgram;
-    prepare_alpha_shader(fullbright_shader, true, false);
+    prepare_alpha_shader(fullbright_shader, true, true);
 
     simple_shader   = (LLPipeline::sImpostorRender) ? &gDeferredAlphaImpostorProgram :
         (LLPipeline::sUnderWaterRender) ? &gDeferredAlphaWaterProgram : &gDeferredAlphaProgram;
@@ -799,7 +799,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     if (current_shader != target_shader)
                     {// If we need shaders, and we're not ALREADY using the proper shader, then bind it
                     // (this way we won't rebind shaders unnecessarily).
-                        target_shader->bind();
+                        gPipeline.bindDeferredShader(*target_shader);
                     }
 
                     LLVector4 spec_color(1, 1, 1, 1);

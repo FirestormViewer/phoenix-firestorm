@@ -25,7 +25,7 @@
 
 // Implementation for when reflection probes are disabled
 
-uniform float minimumReflectionAmbiance;
+uniform float reflection_probe_ambiance;
 
 uniform samplerCube environmentMap;
 
@@ -36,7 +36,7 @@ vec3 srgb_to_linear(vec3 c);
 void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
         vec3 pos, vec3 norm, float glossiness)
 {
-    ambenv = vec3(0,0,0);
+    ambenv = vec3(reflection_probe_ambiance * 0.25);
     
     vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
     vec3 env_vec = env_mat * refnormpersp;
@@ -46,12 +46,12 @@ void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
 void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv, 
         vec3 pos, vec3 norm, float glossiness, float envIntensity)
 {
-    ambenv = vec3(0,0,0);
+    ambenv = vec3(reflection_probe_ambiance * 0.25);
     
     vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
     vec3 env_vec = env_mat * refnormpersp;
 
-    legacyenv = textureCube(environmentMap, env_vec).rgb;
+    legacyenv = srgb_to_linear(textureCube(environmentMap, env_vec).rgb);
 
     glossenv = legacyenv;
 }
@@ -63,6 +63,6 @@ void applyGlossEnv(inout vec3 color, vec3 glossenv, vec4 spec, vec3 pos, vec3 no
 
 void applyLegacyEnv(inout vec3 color, vec3 legacyenv, vec4 spec, vec3 pos, vec3 norm, float envIntensity)
 {
-    color = mix(color.rgb, legacyenv, envIntensity);
+    color = mix(color.rgb, legacyenv*1.5, envIntensity);
 }
 
