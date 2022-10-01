@@ -53,6 +53,7 @@ Urodziny: [REG_DATE]
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
 			<button name="add_friend" label="Dodaj znajomego" tool_tip="Zaproponuj znajomość Rezydentowi" label_selected="Dodaj znajomego" />
+			<button name="remove_friend" label="Usuń znajomego" tool_tip="Zerwij znajomość z Rezydentem" label_selected="Usuń znajomego" />
 			<button name="block" label="Zablokuj" tool_tip="Zablokuj tego Rezydenta" />
 			<button name="unblock" label="Odblokuj" tool_tip="Odblokuj tego Rezydenta" />
 		</layout_panel>
