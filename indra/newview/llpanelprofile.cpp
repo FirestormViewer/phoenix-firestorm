@@ -1211,7 +1211,8 @@ void LLPanelProfileSecondLife::resetData()
 
     // <FS:Ansariel> Fix LL UI/UX design accident
     //childSetVisible("partner_layout", FALSE);
-    mStatusText->setVisible(FALSE);
+    // <FS:Zi> Always show the online status text, just set it to "offline" when a friend is hiding
+    // mStatusText->setVisible(FALSE);
     mCopyMenuButton->setVisible(FALSE);
     mGroupInviteButton->setVisible(!own_profile);
     if (own_profile && LLAvatarName::useDisplayNames())
@@ -1724,7 +1725,6 @@ void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_onl
     // so this is our marker for "undefined"
     if (is_friend && !show_online && online)
     {
-        mStatusText->setVisible(true);
         mStatusText->setValue(getString("status_unknown"));
         mStatusText->setColor(LLUIColorTable::getInstance()->getColor("StatusUserUnknown"));
 
@@ -1740,7 +1740,8 @@ void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_onl
     //childSetVisible("frind_layout", is_friend);
     //childSetVisible("online_layout", online && show_online);
     //childSetVisible("offline_layout", !online && show_online);
-    mStatusText->setVisible(show_online);
+    // <FS:Zi> Always show the online status text, just set it to "offline" when a friend is hiding
+    // mStatusText->setVisible(show_online);
 
     std::string status = getString(online ? "status_online" : "status_offline");
 
