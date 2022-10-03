@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Destacados" name="panel_picks">
 	<string name="no_picks" value="No hay destacados"/>
-	<text name="Tell everyone about your favorite places in Second Life.">
-		Cuéntale a todos sobre tus lugares favoritos de [GRID].
-	</text>
-	<button label="Nuevo..." name="new_btn"/>
-	<button label="Eliminar..." name="delete_btn"/>
-	<text name="picks_panel_text">
-		Cargando...
-	</text>
+	<layout_stack name="main_stack">
+		<layout_panel name="buttons_header">
+			<text name="header_text">
+				Cuéntale a todos sobre tus lugares favoritos de [GRID].
+			</text>
+			<button label="Nuevo..." name="new_btn"/>
+			<button label="Eliminar..." name="delete_btn"/>
+		</layout_panel>
+		<layout_panel name="main_body">
+			<text name="picks_panel_text">
+				Cargando...
+			</text>
+		</layout_panel>
+	</layout_stack>
 </panel>
