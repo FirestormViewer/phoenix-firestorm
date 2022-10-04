@@ -1599,7 +1599,7 @@ void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
     std::string register_date = getString("age_format");
     LLSD args_age;
     // <FS:Ansariel> Fix LL UI/UX design accident
-    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
+    std::string birth_date = LLTrans::getString(!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() ? "AvatarBirthDateFormat" : "AvatarBirthDateFormat_legacy");
     LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)born_on.secondsSinceEpoch()));
     args_age["[REG_DATE]"] = birth_date;
     // </FS:Ansariel>
