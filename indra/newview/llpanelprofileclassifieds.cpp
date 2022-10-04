@@ -218,6 +218,8 @@ LLPanelProfileClassifieds::~LLPanelProfileClassifieds()
 
 void LLPanelProfileClassifieds::onOpen(const LLSD& key)
 {
+    LL_INFOS("profiles") << "Inside onOpen classifieds panel" << LL_ENDL;
+
     LLPanelProfilePropertiesProcessorTab::onOpen(key);
 
     resetData();

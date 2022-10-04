@@ -78,6 +78,7 @@
 #include "llviewertexturelist.h"
 #include "llvoiceclient.h"
 #include "llweb.h"
+#include "llviewernetwork.h" // <FS:Beq> For LLGridManager
 
 #include "fsdata.h"
 #include "llviewermenu.h"
@@ -884,7 +885,7 @@ void LLFloaterProfilePermissions::onCancel()
 // LLPanelProfileSecondLife
 
 LLPanelProfileSecondLife::LLPanelProfileSecondLife()
-    : LLPanelProfileTab()
+    : LLPanelProfilePropertiesProcessorTab() // <FS:Beq/> alter ancestry to re-enable UDP
     , mAvatarNameCacheConnection()
     , mHasUnsavedDescriptionChanges(false)
     , mWaitingForImageUpload(false)
@@ -1011,8 +1012,7 @@ void LLPanelProfileSecondLife::onAvatarProperties(const LLAvatarData* d)
 
 void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 {
-    LLPanelProfileTab::onOpen(key);
-
+    LLPanelProfilePropertiesProcessorTab::onOpen(key); // <FS:Beq/> alter ancestry to re-enable UDP
     resetData();
 
     LLUUID avatar_id = getAvatarId();
@@ -1055,7 +1055,16 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     //    // Todo: use PeopleContextMenu instead?
     //    mAgentActionMenuButton->setMenu("menu_profile_other.xml", LLMenuButton::MP_BOTTOM_RIGHT);
     //}
+// <FS:Beq> Remove the menu thingy and just have click picture to change
+// if (own_profile)
+// only if we are in opensim and opensim doesn't have the image upload cap
+#ifdef OPENSIM
+    std::string cap_url = gAgent.getRegionCapability(PROFILE_IMAGE_UPLOAD_CAP);
+    if( own_profile && (!LLGridManager::instance().isInOpenSim() || !cap_url.empty() ) )
+#else
     if (own_profile)
+#endif
+// </FS:Beq>        
     {
         mImageActionMenuButton->setVisible(TRUE);
         mImageActionMenuButton->setMenu("menu_fs_profile_image_actions.xml", LLMenuButton::MP_BOTTOM_RIGHT);
@@ -1103,6 +1112,15 @@ void LLPanelProfileSecondLife::updateData()
         }
         else
         {
+            // <FS:Beq> restore UDP profiles for opensim that does not support the cap
+#ifdef OPENSIM            
+            if (LLGridManager::instance().isInOpenSim() && !(getSelfProfile() /* TODO(Beq):No longer neeed? && !getEmbedded()*/))
+            {
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
+            }            
+            else
+#endif
+            // </FS:Beq>
             LL_WARNS() << "Failed to update profile data, no cap found" << LL_ENDL;
         }
     }
@@ -1115,6 +1133,43 @@ void LLPanelProfileSecondLife::refreshName()
         mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
     }
 }
+
+// <FS:Beq> Restore UDP profiles
+void LLPanelProfileSecondLife::apply(LLAvatarData* data)
+{
+#ifdef OPENSIM
+    if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
+	{
+		data->image_id = mImageId;
+		data->about_text = mDescriptionEdit->getValue().asString();
+		data->allow_publish = mShowInSearchCheckbox->getValue();
+
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(data);
+	}
+#endif
+}
+
+void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorType type)
+{
+	if (APT_PROPERTIES == type)
+	{
+		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+			processProfileProperties(avatar_data);
+			setLoaded();
+		}
+	}
+	else if (APT_GROUPS == type)
+	{
+		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
+		if(avatar_groups && getAvatarId() == avatar_groups->avatar_id)
+		{
+			processGroupProperties(avatar_groups);
+		}
+	}
+}
+// </FS:Beq>
 
 void LLPanelProfileSecondLife::resetData()
 {
@@ -1207,6 +1262,26 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     fillPartnerData(avatar_data);
 
     fillAccountStatus(avatar_data);
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+    {
+        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
+        if (!floater_profile)
+        {
+            // floater is dead, so panels are dead as well
+            return;
+        }
+        LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+        auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+        if (!panel_profile)
+        {
+            LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+        }        
+        panel_profile->setAvatarData(avatar_data);
+    }
+#endif
+// </FS:Beq>
 
     setLoaded();
 
@@ -1524,7 +1599,7 @@ void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
     std::string register_date = getString("age_format");
     LLSD args_age;
     // <FS:Ansariel> Fix LL UI/UX design accident
-    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
+    std::string birth_date = LLTrans::getString(!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() ? "AvatarBirthDateFormat" : "AvatarBirthDateFormat_legacy");
     LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)born_on.secondsSinceEpoch()));
     args_age["[REG_DATE]"] = birth_date;
     // </FS:Ansariel>
@@ -1613,7 +1688,7 @@ void LLPanelProfileSecondLife::setAvatarId(const LLUUID& avatar_id)
             LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
         }
 
-        LLPanelProfileTab::setAvatarId(avatar_id);
+        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id); // <FS:Beq/> Change ancestry to restore UDP profiles
 
         if (LLAvatarActions::isFriend(getAvatarId()))
         {
@@ -2155,6 +2230,39 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("sl_about_text", mDescriptionText)));
     }
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+    else if(LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (getIsLoaded() && getSelfProfile())
+        {
+            LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", gAgentID));
+            if (!floater_profile)
+            {
+                // floater is dead, so panels are dead as well
+                return;
+            }
+            LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+            auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+            if (!panel_profile)
+            {
+                LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            }
+            else
+            {
+                auto avatar_data = panel_profile->getAvatarData();
+                avatar_data.agent_id = gAgentID;
+                avatar_data.avatar_id = gAgentID;
+                avatar_data.image_id = mImageId;
+                avatar_data.about_text = mDescriptionEdit->getValue().asString();
+                avatar_data.allow_publish = mShowInSearchCheckbox->getValue();
+
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(&avatar_data);
+            }
+        }        
+    }
+#endif
+// </FS:Beq>
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
@@ -2370,6 +2478,21 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     }
     else
     {
+// <FS:Beq> Make OpenSim profiles work again
+#ifdef OPENSIM        
+        if(LLGridManager::getInstance()->isInOpenSim())
+        {
+            mImageId = id;
+            // save immediately only if description changes are not pending.
+            if(!mHasUnsavedDescriptionChanges)
+            {
+                onSaveDescriptionChanges();
+            }
+        }
+        else
+#endif
+// </FS:Beq>
+
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
 }
@@ -2438,6 +2561,14 @@ void LLPanelProfileWeb::updateData()
     }
 }
 
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+void LLPanelProfileWeb::apply(LLAvatarData* data)
+{
+	data->profile_url = mURLHome;
+}
+#endif
+// </FS:Beq>
 void LLPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     mAvatarNameCacheConnection.disconnect();
@@ -2527,7 +2658,7 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 //////////////////////////////////////////////////////////////////////////
 
 LLPanelProfileFirstLife::LLPanelProfileFirstLife()
- : LLPanelProfileTab()
+ : LLPanelProfilePropertiesProcessorTab()  // <FS:Beq/> alter ancestry to re-enable UDP
  , mHasUnsavedChanges(false)
 {
 }
@@ -2563,7 +2694,7 @@ BOOL LLPanelProfileFirstLife::postBuild()
 
 void LLPanelProfileFirstLife::onOpen(const LLSD& key)
 {
-    LLPanelProfileTab::onOpen(key);
+    LLPanelProfilePropertiesProcessorTab::onOpen(key); // <FS:Beq/> alter ancestry to re-enable UDP
 
     if (!getSelfProfile())
     {
@@ -2734,6 +2865,21 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
     }
     else
     {
+// <FS:Beq> Make OpenSim profiles work again
+#ifdef OPENSIM        
+        if(LLGridManager::getInstance()->isInOpenSim())
+        {
+            mImageId = id;
+            mImageId = id;
+            // save immediately only if description changes are not pending.
+            if(!mHasUnsavedChanges)
+            {
+                onSaveDescriptionChanges();
+            }
+        }
+        else
+#endif
+// </FS:Beq>
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
 }
@@ -2764,6 +2910,38 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("fl_about_text", mCurrentDescription)));
     }
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+    else if(LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (getIsLoaded() && getSelfProfile())
+        {
+            LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", gAgentID));
+            if (!floater_profile)
+            {
+                // floater is dead, so panels are dead as well
+                return;
+            }
+            LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+            auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+            if (!panel_profile)
+            {
+                LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            }
+            else
+            {
+                auto avatar_data = panel_profile->getAvatarData();
+                avatar_data.agent_id = gAgentID;
+                avatar_data.avatar_id = gAgentID;
+                avatar_data.fl_image_id = mImageId;
+                avatar_data.fl_about_text = mDescriptionEdit->getValue().asString();
+
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(&avatar_data);
+            }
+        }        
+    }
+#endif
+// </FS:Beq>
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
@@ -2778,6 +2956,20 @@ void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
 {
     setDescriptionText(mCurrentDescription);
 }
+
+// <FS:Beq> Restore UDP profiles
+void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorType type)
+{
+    if (APT_PROPERTIES == type)
+	{
+        const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+            processProperties(avatar_data);
+        }
+    }
+}
+// </FS:Beq>
 
 void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
 {
@@ -2797,15 +2989,38 @@ void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
     setLoaded();
 }
 
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+void LLPanelProfileFirstLife::apply(LLAvatarData* data)
+{
+	data->fl_image_id = mImageId;
+	data->fl_about_text = mDescriptionEdit->getValue().asString();
+}
+#endif
+// </FS:Beq>
+
 void LLPanelProfileFirstLife::resetData()
 {
     setDescriptionText(std::string());
     mPicture->setValue("Generic_Person_Large");
     mImageId = LLUUID::null;
 
-    mUploadPhoto->setVisible(getSelfProfile());
-    mChangePhoto->setVisible(getSelfProfile());
-    mRemovePhoto->setVisible(getSelfProfile());
+// <FS:Beq> remove the buttons and just have click image to update profile
+// mUploadPhoto->setVisible(getSelfProfile());
+// mChangePhoto->setVisible(getSelfProfile());
+// mRemovePhoto->setVisible(getSelfProfile());
+    auto show_image_buttons = getSelfProfile();
+#ifdef OPENSIM
+    std::string cap_url = gAgent.getRegionCapability(PROFILE_IMAGE_UPLOAD_CAP);
+    if( cap_url.empty() && LLGridManager::instance().isInOpenSim() )
+    {
+        show_image_buttons = false;
+    }
+#endif
+    mUploadPhoto->setVisible(show_image_buttons);
+    mChangePhoto->setVisible(show_image_buttons);
+    mRemovePhoto->setVisible(show_image_buttons);
+// </FS:Beq>
     mSaveChanges->setVisible(getSelfProfile());
     mDiscardChanges->setVisible(getSelfProfile());
 }
@@ -2827,7 +3042,7 @@ void LLPanelProfileFirstLife::setLoaded()
 //////////////////////////////////////////////////////////////////////////
 
 LLPanelProfileNotes::LLPanelProfileNotes()
-: LLPanelProfileTab()
+: LLPanelProfilePropertiesProcessorTab()  // <FS:Beq/> alter ancestry to re-enable UDP
  , mHasUnsavedChanges(false)
 {
 
@@ -2850,6 +3065,14 @@ void LLPanelProfileNotes::updateData()
             LLCoros::instance().launch("requestAgentUserInfoCoro",
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
+// <FS:Beq> Restore UDO profiles
+#ifdef OPENSIM        
+        else
+        {
+		    LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);            
+        }
+#endif
+// </FS:Beq>
     }
 }
 
@@ -2928,6 +3151,19 @@ void LLPanelProfileNotes::processProperties(LLAvatarNotes* avatar_notes)
     mNotesEditor->setEnabled(TRUE);
     setLoaded();
 }
+// <FS:Beq> Restore UDP profiles
+void LLPanelProfileNotes::processProperties(void * data, EAvatarProcessorType type)
+{
+    if (APT_NOTES == type)
+	{
+		LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
+		if (avatar_notes && getAvatarId() == avatar_notes->target_id)
+        {
+            processProperties(avatar_notes);
+        }
+    }
+}
+// </FS:Beq>
 
 void LLPanelProfileNotes::resetData()
 {
@@ -2939,7 +3175,7 @@ void LLPanelProfileNotes::setAvatarId(const LLUUID& avatar_id)
 {
     if (avatar_id.notNull())
     {
-        LLPanelProfileTab::setAvatarId(avatar_id);
+        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id); // <FS:Beq/> alter ancestry to re-enable UDP
     }
 }
 
@@ -3013,18 +3249,30 @@ void LLPanelProfile::updateData()
     if (!getStarted() && avatar_id.notNull())
     {
         setIsLoading();
-
         mPanelSecondlife->setIsLoading();
         mPanelPicks->setIsLoading();
         mPanelFirstlife->setIsLoading();
         mPanelNotes->setIsLoading();
-
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+        mPanelSecondlife->updateData();
+        mPanelPicks->updateData();
+        mPanelFirstlife->updateData();
+        mPanelNotes->updateData();
+#endif
+// </FS:Beq>
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         if (!cap_url.empty())
         {
             LLCoros::instance().launch("requestAgentUserInfoCoro",
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
+// <FS:Beq> Restore UDP profiles
+        else
+        {
+		        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
+        }
+// </FS:Beq>
     }
 }
 
@@ -3079,8 +3327,26 @@ void LLPanelProfile::commitUnsavedChanges()
     mPanelClassifieds->commitUnsavedChanges();
     mPanelFirstlife->commitUnsavedChanges();
     mPanelNotes->commitUnsavedChanges();
+    // <FS:Beq> restore UDP - this is effectvely the apply() method from the previous incarnation
+#ifdef OPENSIM
+	if ( (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile() )
+	{
+		//KC - Avatar data is spread over 3 different panels
+		// collect data from the last 2 and give to the first to save
+        LLAvatarData data = mAvatarData;
+		data.avatar_id = gAgentID;
+        // these three collate data so need to be called in sequence.
+		mPanelFirstlife->apply(&data);
+		mPanelWeb->apply(&data);
+		mPanelSecondlife->apply(&data);
+        // These three triggered above
+		// mPanelInterests->apply();
+		// mPanelPicks->apply();
+		// mPanelNotes->apply();
+	}
+#endif
+    // </FS:Beq>
 }
-
 void LLPanelProfile::showClassified(const LLUUID& classified_id, bool edit)
 {
     if (classified_id.notNull())

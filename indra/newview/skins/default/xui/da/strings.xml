@@ -4049,6 +4049,9 @@ Krænkelsesanmeldelse
 		Kvinde - Wow
 	</string>
 	<string name="AvatarBirthDateFormat">
+		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormat_legacy">
 		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">

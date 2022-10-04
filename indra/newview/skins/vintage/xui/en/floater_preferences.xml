@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  positioning="centered"
- default_tab_group="1"
+ default_tab_group="2"
  height="521"
  layout="topleft"
  name="Preferences"
@@ -57,6 +57,7 @@ https://accounts.secondlife.com/change_email/
 		max_length_bytes="255"
 		name="search_prefs_edit"
 		right="-34"
+		tab_group="2"
 		text_pad_left="6"
 		tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the setting's name or comment."
 		top="21">

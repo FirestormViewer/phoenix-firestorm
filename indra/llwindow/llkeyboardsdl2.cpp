@@ -148,7 +148,7 @@ void LLKeyboardSDL::resetMaskKeys()
 		mKeyLevel[KEY_CONTROL] = TRUE;
 	}
 
-	if(mask & KMOD_LALT)
+	if(mask & KMOD_ALT)
 	{
 		mKeyLevel[KEY_ALT] = TRUE;
 	}
@@ -170,7 +170,7 @@ MASK LLKeyboardSDL::updateModifiers(const U32 mask)
 		out_mask |= MASK_CONTROL;
 	}
 
-	if(mask & KMOD_LALT)
+	if(mask & KMOD_ALT)
 	{
 		out_mask |= MASK_ALT;
 	}
@@ -252,7 +252,7 @@ MASK LLKeyboardSDL::currentMask(BOOL for_mouse_event)
 		result |= MASK_SHIFT;
 	if (mask & KMOD_CTRL)
 		result |= MASK_CONTROL;
-	if (mask & KMOD_LALT)
+	if (mask & KMOD_ALT)
 		result |= MASK_ALT;
 
 	// For keyboard events, consider Meta keys equivalent to Control
