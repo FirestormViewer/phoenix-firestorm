@@ -250,7 +250,7 @@ elseif(LINUX)
         ${EXPAT_COPY}
         libhunspell-1.3.so.0.0.0
         libopenal.so
-        #libopenjpeg.so
+        libopenjp2.so
         libuuid.so.16
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0

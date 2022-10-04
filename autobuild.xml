@@ -2708,9 +2708,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>53966a7ba6342395acb7ce15bc3fbe0a</string>
+              <string>6bb03fe0b9dd44d3850ae9cae2161d76</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.203000304-darwin-203000304.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/105416/922669/openjpeg-2.5.0.575468-darwin64-575468.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2732,9 +2732,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ba2034b4a372fd46c3e09f56bede38a7</string>
+              <string>a01d66d72d7c865364cd5761e56e8735</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.4.0.211361403-windows-211361403.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/105418/922681/openjpeg-2.5.0.575468-windows-575468.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2744,16 +2744,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d7ac606703a9330a2d8a3f7276cb6894</string>
+              <string>8bd727bc7d6e0e6223e9ea49c14dd511</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.4.0.211361407-windows64-211361407.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/105419/922682/openjpeg-2.5.0.575468-windows64-575468.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.4.0</string>
+        <string>2.5.0.575468</string>
       </map>
       <key>openssl</key>
       <map>

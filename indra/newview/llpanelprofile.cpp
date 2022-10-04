@@ -1589,6 +1589,8 @@ void LLPanelProfileSecondLife::fillRightsData()
 void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
 {
     // <FS:Ansariel> Fix LL UI/UX design accident
+    //// Date from server comes already converted to stl timezone,
+    //// so display it as an UTC + 0
     //std::string name_and_date = getString("date_format");
     //LLSD args_name;
     //args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
