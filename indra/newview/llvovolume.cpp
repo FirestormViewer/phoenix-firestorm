@@ -6643,10 +6643,10 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		LLMaterialPtr mat = te->getMaterialParams();
         LLMaterialID matId = te->getMaterialID();
 
-		if (distance_sort)
-		{
-			tex = NULL;
-		}
+		// if (distance_sort)
+		// {
+		// 	tex = NULL;
+		// }
 
 		if (last_tex == tex)
 		{
@@ -6731,7 +6731,11 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
 							tex = facep->getTexture();
 
-							if (texture_count < MAX_TEXTURE_COUNT)
+							// <FS:Beq> Quick hack test of proper batching logic
+							// if (texture_count < MAX_TEXTURE_COUNT)
+							// only add to the batch if this is a new texture
+							if (cur_tex == texture_count && texture_count < MAX_TEXTURE_COUNT)
+							// </FS:Beq>
 							{
 								texture_list[texture_count++] = tex;
 							}
