@@ -982,7 +982,11 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	// </FS>
 
 	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
-	if (active_panel && (active_panel->getName() != "All Items"))
+	// <FS:Zi> Don't offer "Show in Main View" for folders opened in separate inventory views
+	//         as there are no tabs to switch to
+	// if (active_panel && (active_panel->getName() != "All Items"))
+	if (active_panel && (active_panel->getName() != "All Items") && (active_panel->getName() != "inv_panel"))
+	// </FS:Zi>
 	{
 		items.push_back(std::string("Show in Main Panel"));
 	}
