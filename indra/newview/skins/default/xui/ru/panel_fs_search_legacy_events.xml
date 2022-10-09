@@ -12,6 +12,7 @@
 			<combo_box.item label="Любая категория" name="any"/>
 			<combo_box.item label="Обсуждение" name="discussion"/>
 			<combo_box.item label="Спорт" name="sports"/>
+			<combo_box.item label="Живая дискотека" name="dj"/>
 			<combo_box.item label="Живая музыка" name="music"/>
 			<combo_box.item label="Коммерция" name="commercial"/>
 			<combo_box.item label="Ночная жизнь/Развлечения" name="nightlife"/>
