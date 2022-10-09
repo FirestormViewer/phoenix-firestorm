@@ -6754,6 +6754,30 @@ class LLToolsSelectNextPartFace : public view_listener_t
 
             if (fwd || ifwd)
             {
+                // <FS:Zi> FIRE-32282: fix face selection cycle starting at face 1 instead of face 0
+                // is more than one face selected in the whole set?
+                if (LLSelectMgr::getInstance()->getSelection()->getTECount() > 1)
+                {
+                    // count the number of selected faces on the current link
+                    S32 count = 0;
+                    S32 num_tes = to_select->getNumTEs();
+                    for (S32 te = 0; te < num_tes; te++)
+                    {
+                        if (nodep->isTESelected(te))
+                        {
+                            ++count;
+                        }
+                    }
+
+                    // if all faces of the current link are selected, set a flag to make sure the
+                    // next selected face will be face 0
+                    if (count == num_tes)
+                    {
+                        selected_te = -1;
+                    }
+                }
+                // </FS:Zi>
+
                 if (selected_te < 0)
                 {
                     new_te = 0;
