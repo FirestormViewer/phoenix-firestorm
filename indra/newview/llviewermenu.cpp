@@ -6737,6 +6737,16 @@ class LLToolsSelectNextPartFace : public view_listener_t
         bool ifwd = (userdata.asString() == "includenext");
         bool iprev = (userdata.asString() == "includeprevious");
 
+		// <FS:Zi> Make shift+click on forward/back buttons work like includenext/previous
+		if (gKeyboard->currentMask(false) & MASK_SHIFT)
+		{
+			ifwd = fwd;
+			iprev = prev;
+			fwd = false;
+			prev = false;
+		}
+		// </FS:Zi>
+
         LLViewerObject* to_select = NULL;
         bool restart_face_on_part = !cycle_faces;
         S32 new_te = 0;
@@ -6886,6 +6896,10 @@ class LLToolsSelectNextPartFace : public view_listener_t
                     }
                 }
                 LLSelectMgr::getInstance()->selectObjectOnly(to_select, new_te);
+
+                // <FS:Zi> Add this back in additionally to selectObjectOnly() to get the lastOperadedTE()
+                // function back working to properly shift+cycle through faces
+                LLSelectMgr::getInstance()->addAsIndividual(to_select, new_te, false);
             }
             else
             {
