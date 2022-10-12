@@ -130,7 +130,8 @@ namespace
     Atom XA_CLIPBOARD;
     Atom XA_TARGETS;
     Atom PVT_PASTE_BUFFER;
-    long const MAX_PASTE_BUFFER_SIZE = 16383;
+	// Unused in the current clipboard implementation -Zi
+    // long const MAX_PASTE_BUFFER_SIZE = 16383;
 
     void filterSelectionRequest( XEvent aEvent )
     {
@@ -277,11 +278,23 @@ bool LLWindowSDL::getSelectionText( Atom aSelection, Atom aType, LLWString &text
     maybe_lock_display();
 
     Atom type;
-    int format{};
-    unsigned long len{},remaining {};
+	int format {};
+	unsigned long len {}, size {};
     unsigned char* data = nullptr;
+
+	// get type and size of the clipboard contents first
+	XGetWindowProperty( mSDL_Display, mSDL_XWindowID,
+						PVT_PASTE_BUFFER, 0, 0, False,
+						AnyPropertyType, &type, &format, &len,
+						&size, &data);
+    XFree(data);
+
+	// now get the real data, we don't really have a size limit here, but we need
+	// to tell the X11 clipboard how much space we have, which happens to be exactly
+	// the size of the current clipboard contents
+	unsigned long remaining {};
     int res = XGetWindowProperty(mSDL_Display, mSDL_XWindowID,
-                                 PVT_PASTE_BUFFER, 0, MAX_PASTE_BUFFER_SIZE, False,
+                                 PVT_PASTE_BUFFER, 0, size, False,
                                  AnyPropertyType, &type, &format, &len,
                                  &remaining, &data);
     if (data && len)
@@ -1779,11 +1792,40 @@ void LLWindowSDL::gatherInput()
 	static U64 previousTextinputTime = 0;
     SDL_Event event;
 
+	// mask to apply to the keyup/keydown modifiers to handle AltGr keys correctly
+	static U32 altGrMask = 0x00;
+
     // Handle all outstanding SDL events
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
         {
+			case SDL_SYSWMEVENT:
+			{
+				XEvent e = event.syswm.msg->msg.x11.event;
+				if (e.type == KeyPress || e.type == KeyRelease)
+				{
+					// XLookupKeysym doesn't work here because of the weird way the "index" is
+					// tied to the e->state and we don't get the necessary information at this
+					// point, so we use the more expensive XLookupString which apparently knows
+					// all of the secrets inside XKeyEvent. -Zi
+
+					KeySym ks;
+					static char str[256+1];
+					XLookupString((XKeyEvent *) &e, str, 256, &ks, nullptr);
+
+					if (ks == XK_ISO_Level3_Shift)
+					{
+						altGrMask = KMOD_RALT;
+					}
+					else if (ks == XK_Alt_R)
+					{
+						altGrMask = 0x00;
+					}
+				}
+				break;
+			}
+
 			case SDL_MOUSEWHEEL:
 				if( event.wheel.y != 0 )
 					mCallbacks->handleScrollWheel(this, -event.wheel.y);
@@ -1803,6 +1845,10 @@ void LLWindowSDL::gatherInput()
 			{
 				auto string = utf8str_to_utf16str( event.text.text );
 				mKeyModifiers = gKeyboard->currentMask( FALSE );
+				if (altGrMask)
+				{
+					mKeyModifiers &= ~MASK_ALT;
+				}
 				mInputType = "textinput";
 				for( auto key: string )
 				{
@@ -1821,7 +1867,7 @@ void LLWindowSDL::gatherInput()
 
             case SDL_KEYDOWN:
 				mKeyVirtualKey = event.key.keysym.sym;
-				mKeyModifiers = event.key.keysym.mod;
+				mKeyModifiers = event.key.keysym.mod & (~altGrMask);
 				mInputType = "keydown";
 
 				// treat all possible Enter/Return keys the same
@@ -1863,7 +1909,7 @@ void LLWindowSDL::gatherInput()
 
             case SDL_KEYUP:
 				mKeyVirtualKey = event.key.keysym.sym;
-				mKeyModifiers = event.key.keysym.mod;
+				mKeyModifiers = event.key.keysym.mod & (~altGrMask);
 				mInputType = "keyup";
 
 				// treat all possible Enter/Return keys the same

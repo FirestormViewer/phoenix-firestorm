@@ -61,6 +61,11 @@ enum ECameraPreset
 	/** Current view when a preset is saved */
 	CAMERA_PRESET_CUSTOM,
 
+// <FS:PP> Third Person Perspective camera
+	/** "Based on Penny Patton's optimized camera settings" */
+	CAMERA_PRESET_TPP_VIEW,
+// </FS:PP>
+
 // [RLVa:KB] - @setcam_eyeoffset and @setcam_focusoffset
 	/* Used by RLVa */
 	CAMERA_RLV_SETCAM_VIEW,

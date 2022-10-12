@@ -12,6 +12,7 @@
 			<combo_box.item label="Wszystkie kategorie" name="any" />
 			<combo_box.item label="Dyskusje" name="discussion" />
 			<combo_box.item label="Sportowe" name="sports" />
+			<combo_box.item label="DJ na żywo" name="dj" />
 			<combo_box.item label="Muzyka na żywo" name="music" />
 			<!-- <combo_box.item label="???" name="mystery_category" /> -->
 			<combo_box.item label="Handlowe" name="commercial" />

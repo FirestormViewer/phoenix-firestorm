@@ -82,7 +82,7 @@ public:
 * Panel for displaying Avatar's second life related info.
 */
 class LLPanelProfileSecondLife
-	: public LLPanelProfileTab
+	: public LLPanelProfilePropertiesProcessorTab
 	, public LLFriendObserver
 	, public LLVoiceClientStatusObserver
 {
@@ -110,6 +110,8 @@ public:
 	/**
 	 * Sends update data request to server.
 	 */
+    void apply(LLAvatarData* data);
+    void processProperties(void* data, EAvatarProcessorType type) override;
 	void updateData() override;
     void refreshName();
 
@@ -293,6 +295,7 @@ public:
 	 * Loads web profile.
 	 */
 	void updateData() override;
+    void apply(LLAvatarData* data);
 
 	void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event) override;
 
@@ -318,7 +321,7 @@ private:
 * Panel for displaying Avatar's first life related info.
 */
 class LLPanelProfileFirstLife
-	: public LLPanelProfileTab
+	: public LLPanelProfilePropertiesProcessorTab
 {
 public:
 	LLPanelProfileFirstLife();
@@ -329,7 +332,8 @@ public:
 	BOOL postBuild() override;
 
     void processProperties(const LLAvatarData* avatar_data);
-
+    void processProperties(void * data, EAvatarProcessorType type) override;
+    void apply(LLAvatarData* data);
 	void resetData() override;
 
     void setProfileImageUploading(bool loading);
@@ -375,7 +379,7 @@ protected:
  * Panel for displaying Avatar's notes and modifying friend's rights.
  */
 class LLPanelProfileNotes
-	: public LLPanelProfileTab
+	: public LLPanelProfilePropertiesProcessorTab
 {
 public:
 	LLPanelProfileNotes();
@@ -388,7 +392,7 @@ public:
 	BOOL postBuild() override;
 
     void processProperties(LLAvatarNotes* avatar_notes);
-
+    void processProperties(void * data, EAvatarProcessorType type) override;
 	void resetData() override;
 
 	void updateData() override;
@@ -440,6 +444,7 @@ public:
     void createClassified();
 
     LLAvatarData getAvatarData() { return mAvatarData; };
+    void setAvatarData(const LLAvatarData* avatar_data){ mAvatarData = *avatar_data; };
 
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
