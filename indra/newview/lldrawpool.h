@@ -48,27 +48,33 @@ public:
 	enum
 	{
 		// Correspond to LLPipeline render type
-        // NOTE: Keep in sync with gPoolNames
+        // Also controls render order, so passes that don't use alpha masking/blending should come before
+        // other passes to preserve hierarchical Z for occlusion queries.  Occlusion queries happen just
+        // before grass, so grass should be the first alpha masked pool.  Other ordering should be done
+        // based on fill rate and likelihood to occlude future passes (faster, large occluders first).
+        //  
 		POOL_SIMPLE = 1,
 		POOL_GROUND,
 		POOL_FULLBRIGHT,
 		POOL_BUMP,
-		POOL_MATERIALS,
-		POOL_TERRAIN,	
-		POOL_SKY,
-		POOL_WL_SKY,
+		POOL_TERRAIN,
+        POOL_MATERIALS,
+        POOL_GRASS,
 		POOL_TREE,
 		POOL_ALPHA_MASK,
 		POOL_FULLBRIGHT_ALPHA_MASK,
-		POOL_GRASS,
+        POOL_SKY,
+        POOL_WL_SKY,
 		POOL_INVISIBLE, // see below *
 		POOL_AVATAR,
 		POOL_CONTROL_AV, // Animesh
-		POOL_VOIDWATER,
-		POOL_WATER,
 		POOL_GLOW,
-		POOL_ALPHA,
+		POOL_ALPHA_PRE_WATER,
+        POOL_VOIDWATER,
+        POOL_WATER,
+        POOL_ALPHA_POST_WATER,
 		POOL_PBR_OPAQUE,
+        POOL_ALPHA, // note there is no actual "POOL_ALPHA" but pre-water and post-water pools consume POOL_ALPHA faces
 		NUM_POOL_TYPES,
 		// * invisiprims work by rendering to the depth buffer but not the color buffer, occluding anything rendered after them
 		// - and the LLDrawPool types enum controls what order things are rendered in
@@ -197,6 +203,142 @@ public:
         PASS_PBR_OPAQUE_RIGGED,
 		NUM_RENDER_TYPES,
 	};
+
+	#ifdef LL_PROFILER_ENABLE_TRACY_OPENGL
+    static inline const char* lookupPassName(U32 pass)
+    {
+        switch (pass)
+        {
+            case PASS_SIMPLE:
+                return "PASS_SIMPLE";
+            case PASS_SIMPLE_RIGGED:
+                return "PASS_SIMPLE_RIGGED";
+            case PASS_GRASS:
+                return "PASS_GRASS";
+            case PASS_FULLBRIGHT:
+                return "PASS_FULLBRIGHT";
+            case PASS_FULLBRIGHT_RIGGED:
+                return "PASS_FULLBRIGHT_RIGGED";
+            case PASS_INVISIBLE:
+                return "PASS_INVISIBLE";
+            case PASS_INVISIBLE_RIGGED:
+                return "PASS_INVISIBLE_RIGGED";
+            case PASS_INVISI_SHINY:
+                return "PASS_INVISI_SHINY";
+            case PASS_INVISI_SHINY_RIGGED:
+                return "PASS_INVISI_SHINY_RIGGED";
+            case PASS_FULLBRIGHT_SHINY:
+                return "PASS_FULLBRIGHT_SHINY";
+            case PASS_FULLBRIGHT_SHINY_RIGGED:
+                return "PASS_FULLBRIGHT_SHINY_RIGGED";
+            case PASS_SHINY:
+                return "PASS_SHINY";
+            case PASS_SHINY_RIGGED:
+                return "PASS_SHINY_RIGGED";
+            case PASS_BUMP:
+                return "PASS_BUMP";
+            case PASS_BUMP_RIGGED:
+                return "PASS_BUMP_RIGGED";
+            case PASS_POST_BUMP:
+                return "PASS_POST_BUMP";
+            case PASS_POST_BUMP_RIGGED:
+                return "PASS_POST_BUMP_RIGGED";
+            case PASS_MATERIAL:
+                return "PASS_MATERIAL";
+            case PASS_MATERIAL_RIGGED:
+                return "PASS_MATERIAL_RIGGED";
+            case PASS_MATERIAL_ALPHA:
+                return "PASS_MATERIAL_ALPHA";
+            case PASS_MATERIAL_ALPHA_RIGGED:
+                return "PASS_MATERIAL_ALPHA_RIGGED";
+            case PASS_MATERIAL_ALPHA_MASK:
+                return "PASS_MATERIAL_ALPHA_MASK";
+            case PASS_MATERIAL_ALPHA_MASK_RIGGED:
+                return "PASS_MATERIAL_ALPHA_MASK_RIGGED";
+            case PASS_MATERIAL_ALPHA_EMISSIVE:
+                return "PASS_MATERIAL_ALPHA_EMISSIVE";
+            case PASS_MATERIAL_ALPHA_EMISSIVE_RIGGED:
+                return "PASS_MATERIAL_ALPHA_EMISSIVE_RIGGED";
+            case PASS_SPECMAP:
+                return "PASS_SPECMAP";
+            case PASS_SPECMAP_RIGGED:
+                return "PASS_SPECMAP_RIGGED";
+            case PASS_SPECMAP_BLEND:
+                return "PASS_SPECMAP_BLEND";
+            case PASS_SPECMAP_BLEND_RIGGED:
+                return "PASS_SPECMAP_BLEND_RIGGED";
+            case PASS_SPECMAP_MASK:
+                return "PASS_SPECMAP_MASK";
+            case PASS_SPECMAP_MASK_RIGGED:
+                return "PASS_SPECMAP_MASK_RIGGED";
+            case PASS_SPECMAP_EMISSIVE:
+                return "PASS_SPECMAP_EMISSIVE";
+            case PASS_SPECMAP_EMISSIVE_RIGGED:
+                return "PASS_SPECMAP_EMISSIVE_RIGGED";
+            case PASS_NORMMAP:
+                return "PASS_NORMAMAP";
+            case PASS_NORMMAP_RIGGED:
+                return "PASS_NORMMAP_RIGGED";
+            case PASS_NORMMAP_BLEND:
+                return "PASS_NORMMAP_BLEND";
+            case PASS_NORMMAP_BLEND_RIGGED:
+                return "PASS_NORMMAP_BLEND_RIGGED";
+            case PASS_NORMMAP_MASK:
+                return "PASS_NORMMAP_MASK";
+            case PASS_NORMMAP_MASK_RIGGED:
+                return "PASS_NORMMAP_MASK_RIGGED";
+            case PASS_NORMMAP_EMISSIVE:
+                return "PASS_NORMMAP_EMISSIVE";
+            case PASS_NORMMAP_EMISSIVE_RIGGED:
+                return "PASS_NORMMAP_EMISSIVE_RIGGED";
+            case PASS_NORMSPEC:
+                return "PASS_NORMSPEC";
+            case PASS_NORMSPEC_RIGGED:
+                return "PASS_NORMSPEC_RIGGED";
+            case PASS_NORMSPEC_BLEND:
+                return "PASS_NORMSPEC_BLEND";
+            case PASS_NORMSPEC_BLEND_RIGGED:
+                return "PASS_NORMSPEC_BLEND_RIGGED";
+            case PASS_NORMSPEC_MASK:
+                return "PASS_NORMSPEC_MASK";
+            case PASS_NORMSPEC_MASK_RIGGED:
+                return "PASS_NORMSPEC_MASK_RIGGED";
+            case PASS_NORMSPEC_EMISSIVE:
+                return "PASS_NORMSPEC_EMISSIVE";
+            case PASS_NORMSPEC_EMISSIVE_RIGGED:
+                return "PASS_NORMSPEC_EMISSIVE_RIGGED";
+            case PASS_GLOW:
+                return "PASS_GLOW";
+            case PASS_GLOW_RIGGED:
+                return "PASS_GLOW_RIGGED";
+            case PASS_ALPHA:
+                return "PASS_ALPHA";
+            case PASS_ALPHA_RIGGED:
+                return "PASS_ALPHA_RIGGED";
+            case PASS_ALPHA_MASK:
+                return "PASS_ALPHA_MASK";
+            case PASS_ALPHA_MASK_RIGGED:
+                return "PASS_ALPHA_MASK_RIGGED";
+            case PASS_FULLBRIGHT_ALPHA_MASK:
+                return "PASS_FULLBRIGHT_ALPHA_MASK";
+            case PASS_FULLBRIGHT_ALPHA_MASK_RIGGED:
+                return "PASS_FULLBRIGHT_ALPHA_MASK_RIGGED";
+            case PASS_ALPHA_INVISIBLE:
+                return "PASS_ALPHA_INVISIBLE";
+            case PASS_ALPHA_INVISIBLE_RIGGED:
+                return "PASS_ALPHA_INVISIBLE_RIGGED";
+            case PASS_PBR_OPAQUE:
+                return "PASS_PBR_OPAQUE";
+            case PASS_PBR_OPAQUE_RIGGED:
+                return "PASS_PBR_OPAQUE_RIGGED";
+
+            default:
+                return "Unknown pass";
+        }
+	}
+	#else
+    static inline const char* lookupPass(U32 pass) { return ""; }
+	#endif
 
 	LLRenderPass(const U32 type);
 	virtual ~LLRenderPass();

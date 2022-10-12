@@ -62,7 +62,7 @@ public:
     void update();
 
     // add a probe for the given spatial group
-    LLReflectionMap* addProbe(LLSpatialGroup* group);
+    LLReflectionMap* addProbe(LLSpatialGroup* group = nullptr);
     
     // Populate "maps" with the N most relevant Reflection Maps where N is no more than maps.size()
     // If less than maps.size() ReflectionMaps are available, will assign trailing elements to nullptr.
@@ -154,6 +154,8 @@ private:
 
     LLReflectionMap* mUpdatingProbe = nullptr;
     U32 mUpdatingFace = 0;
+
+    LLPointer<LLReflectionMap> mDefaultProbe;  // default reflection probe to fall back to for pixels with no probe influences (should always be at cube index 0)
 
     // number of reflection probes to use for rendering (based on saved setting RenderReflectionProbeCount)
     U32 mReflectionProbeCount;

@@ -290,8 +290,8 @@ public:
 
 
 	void renderGeom(LLCamera& camera, bool forceVBOUpdate = false);
-	void renderGeomDeferred(LLCamera& camera);
-	void renderGeomPostDeferred(LLCamera& camera, bool do_occlusion=true);
+	void renderGeomDeferred(LLCamera& camera, bool do_occlusion = false);
+	void renderGeomPostDeferred(LLCamera& camera);
 	void renderGeomShadow(LLCamera& camera);
 	void bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_target = nullptr);
 	void setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep);
@@ -306,7 +306,7 @@ public:
 
     
 
-	void renderDeferredLighting(LLRenderTarget* light_target);
+	void renderDeferredLighting();
 	void postDeferredGammaCorrect(LLRenderTarget* screen_target);
 
 	void generateWaterReflection(LLCamera& camera);
@@ -487,6 +487,8 @@ public:
 		RENDER_TYPE_VOIDWATER					= LLDrawPool::POOL_VOIDWATER,
 		RENDER_TYPE_WATER						= LLDrawPool::POOL_WATER,
  		RENDER_TYPE_ALPHA						= LLDrawPool::POOL_ALPHA,
+        RENDER_TYPE_ALPHA_PRE_WATER             = LLDrawPool::POOL_ALPHA_PRE_WATER,
+        RENDER_TYPE_ALPHA_POST_WATER            = LLDrawPool::POOL_ALPHA_POST_WATER,
 		RENDER_TYPE_GLOW						= LLDrawPool::POOL_GLOW,
 		RENDER_TYPE_PASS_SIMPLE 				= LLRenderPass::PASS_SIMPLE,
         RENDER_TYPE_PASS_SIMPLE_RIGGED = LLRenderPass::PASS_SIMPLE_RIGGED,
@@ -923,22 +925,23 @@ protected:
 	// For quick-lookups into mPools (mapped by texture pointer)
 	std::map<uintptr_t, LLDrawPool*>	mTerrainPools;
 	std::map<uintptr_t, LLDrawPool*>	mTreePools;
-	LLDrawPoolAlpha*			mAlphaPool;
-	LLDrawPool*					mSkyPool;
-	LLDrawPool*					mTerrainPool;
-	LLDrawPool*					mWaterPool;
-	LLDrawPool*					mGroundPool;
-	LLRenderPass*				mSimplePool;
-	LLRenderPass*				mGrassPool;
-	LLRenderPass*				mAlphaMaskPool;
-	LLRenderPass*				mFullbrightAlphaMaskPool;
-	LLRenderPass*				mFullbrightPool;
-	LLDrawPool*					mInvisiblePool;
-	LLDrawPool*					mGlowPool;
-	LLDrawPool*					mBumpPool;
-	LLDrawPool*					mMaterialsPool;
-	LLDrawPool*					mWLSkyPool;
-	LLDrawPool*					mPBROpaquePool;
+	LLDrawPoolAlpha*			mAlphaPoolPreWater = nullptr;
+    LLDrawPoolAlpha*            mAlphaPoolPostWater = nullptr;
+	LLDrawPool*					mSkyPool = nullptr;
+	LLDrawPool*					mTerrainPool = nullptr;
+	LLDrawPool*					mWaterPool = nullptr;
+	LLDrawPool*					mGroundPool = nullptr;
+	LLRenderPass*				mSimplePool = nullptr;
+	LLRenderPass*				mGrassPool = nullptr;
+	LLRenderPass*				mAlphaMaskPool = nullptr;
+	LLRenderPass*				mFullbrightAlphaMaskPool = nullptr;
+	LLRenderPass*				mFullbrightPool = nullptr;
+	LLDrawPool*					mInvisiblePool = nullptr;
+	LLDrawPool*					mGlowPool = nullptr;
+	LLDrawPool*					mBumpPool = nullptr;
+	LLDrawPool*					mMaterialsPool = nullptr;
+	LLDrawPool*					mWLSkyPool = nullptr;
+	LLDrawPool*					mPBROpaquePool = nullptr;
 	// Note: no need to keep an quick-lookup to avatar pools, since there's only one per avatar
 	
 public:

@@ -118,6 +118,11 @@ public:
         mVector3s.push_back({ index, value });
     }
 
+    void uniform3fv(S32 index, const F32* value)
+    {
+        mVector3s.push_back({ index, LLVector3(value) });
+    }
+
     void apply(LLGLSLShader* shader);
    
 
@@ -294,6 +299,10 @@ public:
     // this pointer should be set to whichever shader represents this shader's rigged variant
     LLGLSLShader* mRiggedVariant = nullptr;
 
+	#ifdef LL_PROFILER_ENABLE_TRACY_OPENGL
+    void setLabel(const char* label);
+	#endif
+
 private:
 	void unloadInternal();
 };
@@ -305,5 +314,10 @@ extern LLGLSLShader			gSolidColorProgram;
 //Alpha mask shader (declared here so llappearance can access properly)
 extern LLGLSLShader			gAlphaMaskProgram;
 
+#ifdef LL_PROFILER_ENABLE_TRACY_OPENGL
+#define LL_SET_SHADER_LABEL(shader) shader.setLabel(#shader)
+#else
+#define LL_SET_SHADER_LABEL(shader, label)
+#endif
 
 #endif

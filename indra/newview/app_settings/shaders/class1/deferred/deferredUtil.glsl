@@ -179,6 +179,13 @@ vec4 getNormalEnvIntensityFlags(vec2 screenpos, out vec3 n, out float envIntensi
     return packedNormalEnvIntensityFlags;
 }
 
+// get linear depth value given a depth buffer sample d and znear and zfar values
+float linearDepth(float d, float znear, float zfar)
+{
+    d = d * 2.0 - 1.0;
+    return znear * 2.0 * zfar / (zfar + znear - d * (zfar - znear));
+}
+
 float getDepth(vec2 pos_screen)
 {
     float depth = texture2DRect(depthMap, pos_screen).r;
@@ -310,15 +317,20 @@ vec4 getPosition(vec2 pos_screen)
     return pos;
 }
 
+// get position given a normalized device coordinate
+vec3 getPositionWithNDC(vec3 ndc)
+{
+    vec4 pos = inv_proj * vec4(ndc, 1.0);
+    return pos.xyz / pos.w;
+}
+
 vec4 getPositionWithDepth(vec2 pos_screen, float depth)
 {
     vec2 sc = getScreenCoordinate(pos_screen);
-    vec4 ndc = vec4(sc.x, sc.y, 2.0*depth-1.0, 1.0);
-    vec4 pos = inv_proj * ndc;
-    pos /= pos.w;
-    pos.w = 1.0;
-    return pos;
+    vec3 ndc = vec3(sc.x, sc.y, 2.0*depth-1.0);
+    return vec4(getPositionWithNDC(ndc), 1.0);
 }
+
 
 vec2 getScreenXY(vec4 clip)
 {
@@ -493,3 +505,28 @@ vec3 pbrPunctual(vec3 diffuseColor, vec3 specularColor,
 
     return color;
 }
+
+uniform vec4 waterPlane;
+uniform float waterSign;
+
+// discard if given position in eye space is on the wrong side of the waterPlane according to waterSign
+void waterClip(vec3 pos)
+{
+    // TODO: make this less branchy
+    if (waterSign > 0)
+    {
+        if ((dot(pos.xyz, waterPlane.xyz) + waterPlane.w) < -0.1)
+        {
+            discard;
+        }
+    }
+    else
+    {
+        if ((dot(pos.xyz, waterPlane.xyz) + waterPlane.w) > -0.1)
+        {
+            discard;
+        }
+    }
+
+}
+

@@ -109,7 +109,7 @@ void LLHUDText::render()
 	if (!mOnHUDAttachment && sDisplayText)
 	{
 		LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
-		LLGLDisable gls_stencil(GL_STENCIL_TEST);
+		//LLGLDisable gls_stencil(GL_STENCIL_TEST);
 		renderText();
 	}
 }

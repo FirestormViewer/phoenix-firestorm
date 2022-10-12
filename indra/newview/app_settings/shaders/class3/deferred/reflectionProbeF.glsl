@@ -114,8 +114,7 @@ bool shouldSampleProbe(int i, vec3 pos)
 void preProbeSample(vec3 pos)
 {
     // TODO: make some sort of structure that reduces the number of distance checks
-
-    for (int i = 0; i < refmapCount; ++i)
+    for (int i = 1; i < refmapCount; ++i)
     {
         // found an influencing probe
         if (shouldSampleProbe(i, pos))
@@ -200,6 +199,12 @@ void preProbeSample(vec3 pos)
             }
         }
     }
+
+    if (probeInfluences == 0)
+    { // probe at index 0 is a special fallback probe
+        probeIndex[0] = 0;
+        probeInfluences = 1;
+    }
 }
 
 // from https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
@@ -239,7 +244,7 @@ bool intersect(const Ray &ray) const
         return true; 
 } */
 
-// adapted -- assume that origin is inside sphere, return distance from origin to edge of sphere
+// adapted -- assume that origin is inside sphere, return intersection of ray with edge of sphere
 vec3 sphereIntersect(vec3 origin, vec3 dir, vec3 center, float radius2)
 { 
         float t0, t1; // solutions for t if the ray intersects 
@@ -310,31 +315,56 @@ vec3 boxIntersect(vec3 origin, vec3 dir, int i)
 // Tap a reflection probe
 // pos - position of pixel
 // dir - pixel normal
+// vi - return value of intersection point with influence volume
+// wi - return value of approximate world space position of sampled pixel
 // lod - which mip to bias towards (lower is higher res, sharper reflections)
 // c - center of probe
 // r2 - radius of probe squared
 // i - index of probe 
-// vi - point at which reflection vector struck the influence volume, in clip space
-vec3 tapRefMap(vec3 pos, vec3 dir, float lod, vec3 c, float r2, int i)
+vec3 tapRefMap(vec3 pos, vec3 dir, out float w, out vec3 vi, out vec3 wi, float lod, vec3 c, int i)
 {
     //lod = max(lod, 1);
     // parallax adjustment
 
     vec3 v;
+
     if (refIndex[i].w < 0)
     {
         v = boxIntersect(pos, dir, i);
+        w = 1.0;
     }
     else
     {
-        v = sphereIntersect(pos, dir, c, r2);
+        float r = refSphere[i].w; // radius of sphere volume
+        float rr = r * r; // radius squared
+
+        v = sphereIntersect(pos, dir, c, rr);
+
+        float p = float(abs(refIndex[i].w)); // priority
+ 
+        float r1 = r * 0.1; // 90% of radius (outer sphere to start interpolating down)
+        vec3 delta = pos.xyz - refSphere[i].xyz;
+        float d2 = max(dot(delta, delta), 0.001);
+        float r2 = r1 * r1;
+
+        float atten = 1.0 - max(d2 - r2, 0.0) / max((rr - r2), 0.001);
+
+        w = 1.0 / d2;
+        w *= atten;
     }
 
+    vi = v;
+
     v -= c;
+    vec3 d = normalize(v);
+
     v = env_mat * v;
-    {
-        return textureLod(reflectionProbes, vec4(v.xyz, refIndex[i].x), lod).rgb;
-    }
+    
+    vec4 ret = textureLod(reflectionProbes, vec4(v.xyz, refIndex[i].x), lod);
+
+    wi = d * ret.a * 256.0+c;
+
+    return ret.rgb;
 }
 
 // Tap an irradiance map
@@ -343,20 +373,32 @@ vec3 tapRefMap(vec3 pos, vec3 dir, float lod, vec3 c, float r2, int i)
 // c - center of probe
 // r2 - radius of probe squared
 // i - index of probe 
-// vi - point at which reflection vector struck the influence volume, in clip space
-vec3 tapIrradianceMap(vec3 pos, vec3 dir, vec3 c, float r2, int i)
+vec3 tapIrradianceMap(vec3 pos, vec3 dir, out float w, vec3 c, int i)
 {
-    //lod = max(lod, 1);
     // parallax adjustment
-
     vec3 v;
     if (refIndex[i].w < 0)
     {
         v = boxIntersect(pos, dir, i);
+        w = 1.0;
     }
     else
     {
-        v = sphereIntersect(pos, dir, c, r2);
+        float r = refSphere[i].w; // radius of sphere volume
+        float p = float(abs(refIndex[i].w)); // priority
+        float rr = r * r; // radius squred
+
+        v = sphereIntersect(pos, dir, c, rr);
+
+        float r1 = r * 0.1; // 75% of radius (outer sphere to start interpolating down)
+        vec3 delta = pos.xyz - refSphere[i].xyz;
+        float d2 = dot(delta, delta);
+        float r2 = r1 * r1;
+
+        w = 1.0 / d2;
+
+        float atten = 1.0 - max(d2 - r2, 0.0) / (rr - r2);
+        w *= atten;
     }
 
     v -= c;
@@ -366,7 +408,7 @@ vec3 tapIrradianceMap(vec3 pos, vec3 dir, vec3 c, float r2, int i)
     }
 }
 
-vec3 sampleProbes(vec3 pos, vec3 dir, float lod, float minweight)
+vec3 sampleProbes(vec3 pos, vec3 dir, float lod, bool errorCorrect)
 {
     float wsum = 0.0;
     vec3 col = vec3(0,0,0);
@@ -379,49 +421,41 @@ vec3 sampleProbes(vec3 pos, vec3 dir, float lod, float minweight)
         {
             continue;
         }
-        float r = refSphere[i].w; // radius of sphere volume
-        float p = float(abs(refIndex[i].w)); // priority
-        
-        float rr = r*r; // radius squred
-        float r1 = r * 0.1; // 75% of radius (outer sphere to start interpolating down)
-        vec3 delta = pos.xyz-refSphere[i].xyz;
-        float d2 = dot(delta,delta);
-        float r2 = r1*r1; 
+
+        float w;
+        vec3 vi, wi;
+        vec3 refcol;
+
         
         {
-            vec3 refcol = tapRefMap(pos, dir, lod, refSphere[i].xyz, rr, i);
-            
-            float w = 1.0/d2;
+            if (errorCorrect && refIndex[i].w >= 0)
+            { // error correction is on and this probe is a sphere
+              //take a sample to get depth value, then error correct
+                refcol = tapRefMap(pos, dir, w, vi, wi, abs(lod + 2), refSphere[i].xyz, i);
 
-            float atten = 1.0-max(d2-r2, 0.0)/(rr-r2);
-            w *= atten;
-            //w *= p; // boost weight based on priority
-            col += refcol*w;
-            
-            wsum += w;
-        }
-    }
+                //adjust lookup by distance result
+                float d = length(vi - wi);
+                vi += dir * d;
 
-    if (probeInfluences <= 1)
-    { //edge-of-scene probe or no probe influence, mix in with embiggened version of probes closest to camera 
-        for (int idx = 0; idx < 8; ++idx)
-        {
-            if (refIndex[idx].w < 0)
-            { // don't fallback to box probes, they are *very* specific
-                continue;
+                vi -= refSphere[i].xyz;
+
+                vi = env_mat * vi;
+
+                refcol = textureLod(reflectionProbes, vec4(vi, refIndex[i].x), lod).rgb;
+
+                // weight by vector correctness
+                vec3 pi = normalize(wi - pos);
+                w = max(dot(pi, dir), 0.1);
+                w = pow(w, 32.0);
             }
-            int i = idx;
-            vec3 delta = pos.xyz-refSphere[i].xyz;
-            float d2 = dot(delta,delta);
-            
+            else
             {
-                vec3 refcol = tapRefMap(pos, dir, lod, refSphere[i].xyz, d2, i);
-                
-                float w = 1.0/d2;
-                w *= w;
-                col += refcol*w;
-                wsum += w;
+                refcol = tapRefMap(pos, dir, w, vi, wi, lod, refSphere[i].xyz, i);
             }
+
+            col += refcol.rgb*w;
+
+            wsum += w;
         }
     }
 
@@ -450,49 +484,14 @@ vec3 sampleProbeAmbient(vec3 pos, vec3 dir)
         {
             continue;
         }
-        float r = refSphere[i].w; // radius of sphere volume
-        float p = float(abs(refIndex[i].w)); // priority
-        
-        float rr = r*r; // radius squred
-        float r1 = r * 0.1; // 75% of radius (outer sphere to start interpolating down)
-        vec3 delta = pos.xyz-refSphere[i].xyz;
-        float d2 = dot(delta,delta);
-        float r2 = r1*r1; 
         
         {
-            vec3 refcol = tapIrradianceMap(pos, dir, refSphere[i].xyz, rr, i);
-            
-            float w = 1.0/d2;
+            float w;
+            vec3 refcol = tapIrradianceMap(pos, dir, w, refSphere[i].xyz, i);
 
-            float atten = 1.0-max(d2-r2, 0.0)/(rr-r2);
-            w *= atten;
-            //w *= p; // boost weight based on priority
             col += refcol*w;
             
             wsum += w;
-        }
-    }
-
-    if (probeInfluences <= 1)
-    { //edge-of-scene probe or no probe influence, mix in with embiggened version of probes closest to camera 
-        for (int idx = 0; idx < 8; ++idx)
-        {
-            if (refIndex[idx].w < 0)
-            { // don't fallback to box probes, they are *very* specific
-                continue;
-            }
-            int i = idx;
-            vec3 delta = pos.xyz-refSphere[i].xyz;
-            float d2 = dot(delta,delta);
-            
-            {
-                vec3 refcol = tapIrradianceMap(pos, dir, refSphere[i].xyz, d2, i);
-                
-                float w = 1.0/d2;
-                w *= w;
-                col += refcol*w;
-                wsum += w;
-            }
         }
     }
 
@@ -505,7 +504,7 @@ vec3 sampleProbeAmbient(vec3 pos, vec3 dir)
 }
 
 void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
-        vec3 pos, vec3 norm, float glossiness)
+        vec3 pos, vec3 norm, float glossiness, bool errorCorrect)
 {
     // TODO - don't hard code lods
     float reflection_lods = 7;
@@ -516,7 +515,14 @@ void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
     ambenv = sampleProbeAmbient(pos, norm);
 
     float lod = (1.0-glossiness)*reflection_lods;
-    glossenv = sampleProbes(pos, normalize(refnormpersp), lod, 1.f);
+    glossenv = sampleProbes(pos, normalize(refnormpersp), lod, errorCorrect);
+}
+
+void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
+    vec3 pos, vec3 norm, float glossiness)
+{
+    sampleReflectionProbes(ambenv, glossenv,
+        pos, norm, glossiness, false);
 }
 
 void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv,
@@ -533,12 +539,12 @@ void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout 
     if (glossiness > 0.0)
     {
         float lod = (1.0-glossiness)*reflection_lods;
-        glossenv = sampleProbes(pos, normalize(refnormpersp), lod, 1.f);
+        glossenv = sampleProbes(pos, normalize(refnormpersp), lod, false);
     }
 
     if (envIntensity > 0.0)
     {
-        legacyenv = sampleProbes(pos, normalize(refnormpersp), 0.0, 1.f);
+        legacyenv = sampleProbes(pos, normalize(refnormpersp), 0.0, false);
     }
 }
 

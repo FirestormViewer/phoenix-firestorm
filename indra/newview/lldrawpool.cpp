@@ -87,9 +87,12 @@ LLDrawPool *LLDrawPool::createPool(const U32 type, LLViewerTexture *tex0)
 	case POOL_GLOW:
 		poolp = new LLDrawPoolGlow();
 		break;
-	case POOL_ALPHA:
-		poolp = new LLDrawPoolAlpha();
+	case POOL_ALPHA_PRE_WATER:
+		poolp = new LLDrawPoolAlpha(LLDrawPool::POOL_ALPHA_PRE_WATER);
 		break;
+    case POOL_ALPHA_POST_WATER:
+        poolp = new LLDrawPoolAlpha(LLDrawPool::POOL_ALPHA_POST_WATER);
+        break;
 	case POOL_AVATAR:
 	case POOL_CONTROL_AV:
 		poolp = new LLDrawPoolAvatar(type);
@@ -212,15 +215,6 @@ void LLDrawPool::renderPostDeferred(S32 pass)
 //virtual
 void LLDrawPool::endRenderPass( S32 pass )
 {
-	/*for (U32 i = 0; i < gGLManager.mNumTextureImageUnits; i++)
-	{ //dummy cleanup of any currently bound textures
-		if (gGL.getTexUnit(i)->getCurrType() != LLTexUnit::TT_NONE)
-		{
-			gGL.getTexUnit(i)->unbind(gGL.getTexUnit(i)->getCurrType());
-			gGL.getTexUnit(i)->disable();
-		}
-	}*/
-
 	//make sure channel 0 is active channel
 	gGL.getTexUnit(0)->activate();
 }
@@ -646,7 +640,7 @@ void LLRenderPass::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL ba
 
     LLGLDisable cull(params.mGLTFMaterial && params.mGLTFMaterial->mDoubleSided ? GL_CULL_FACE : 0);
 
-    LLGLEnableFunc stencil_test(GL_STENCIL_TEST, params.mSelected, &LLGLCommonFunc::selected_stencil_test);
+    //LLGLEnableFunc stencil_test(GL_STENCIL_TEST, params.mSelected, &LLGLCommonFunc::selected_stencil_test);
 
     params.mVertexBuffer->setBufferFast(mask);
     params.mVertexBuffer->drawRangeFast(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);

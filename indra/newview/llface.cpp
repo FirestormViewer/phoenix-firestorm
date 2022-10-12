@@ -700,7 +700,7 @@ void LLFace::renderOneWireframe(const LLColor4 &color, F32 fogCfx, bool wirefram
 
     {
         LLGLDisable depth(wireframe_selection ? 0 : GL_BLEND);
-        LLGLEnable stencil(wireframe_selection ? 0 : GL_STENCIL_TEST);
+        //LLGLEnable stencil(wireframe_selection ? 0 : GL_STENCIL_TEST);
 
         if (!wireframe_selection)
         { //modify wireframe into outline selection mode
@@ -1415,7 +1415,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	if (rebuild_color)
 	{ //decide if shiny goes in alpha channel of color
 		if (tep && 
-			getPoolType() != LLDrawPool::POOL_ALPHA)  // <--- alpha channel MUST contain transparency, not shiny
+			!isInAlphaPool())  // <--- alpha channel MUST contain transparency, not shiny
 	{
 			LLMaterial* mat = tep->getMaterialParams().get();
 						
@@ -2751,4 +2751,11 @@ S32 LLFace::getRiggedIndex(U32 type) const
 U64 LLFace::getSkinHash()
 {
     return mSkinInfo ? mSkinInfo->mHash : 0;
+}
+
+bool LLFace::isInAlphaPool() const
+{
+    return  getPoolType() == LLDrawPool::POOL_ALPHA ||
+        getPoolType() == LLDrawPool::POOL_ALPHA_PRE_WATER ||
+        getPoolType() == LLDrawPool::POOL_ALPHA_POST_WATER;
 }

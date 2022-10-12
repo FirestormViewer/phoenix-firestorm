@@ -855,6 +855,13 @@ BOOL LLSurface::idleUpdate(F32 max_update_time)
 			}
 		}
 	}
+
+    if (did_update)
+    {
+        // some patches changed, update region reflection probes
+        mRegionp->updateReflectionProbes();
+    }
+
 	return did_update;
 }
 

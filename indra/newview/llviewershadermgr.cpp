@@ -512,7 +512,7 @@ void LLViewerShaderMgr::setShaders()
     S32 obj_class = 2;
     S32 effect_class = 2;
     S32 wl_class = 1;
-    S32 water_class = 2;
+    S32 water_class = 3;
     S32 deferred_class = 0;
 
     if (useRenderDeferred)
@@ -1028,9 +1028,12 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 		// load water shader
 		gWaterProgram.mName = "Water Shader";
 		gWaterProgram.mFeatures.calculatesAtmospherics = true;
+        gWaterProgram.mFeatures.hasAtmospherics = true;
+        gWaterProgram.mFeatures.hasWaterFog = true;
 		gWaterProgram.mFeatures.hasGamma = true;
 		gWaterProgram.mFeatures.hasTransport = true;
         gWaterProgram.mFeatures.hasSrgb = true;
+        gWaterProgram.mFeatures.hasReflectionProbes = true;
 		gWaterProgram.mShaderFiles.clear();
 		gWaterProgram.mShaderFiles.push_back(make_pair("environment/waterV.glsl", GL_VERTEX_SHADER));
 		gWaterProgram.mShaderFiles.push_back(make_pair("environment/waterF.glsl", GL_FRAGMENT_SHADER));
@@ -1045,9 +1048,12 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 	// load water shader
 		gWaterEdgeProgram.mName = "Water Edge Shader";
 		gWaterEdgeProgram.mFeatures.calculatesAtmospherics = true;
+        gWaterEdgeProgram.mFeatures.hasAtmospherics = true;
+        gWaterEdgeProgram.mFeatures.hasWaterFog = true;
 		gWaterEdgeProgram.mFeatures.hasGamma = true;
 		gWaterEdgeProgram.mFeatures.hasTransport = true;
         gWaterEdgeProgram.mFeatures.hasSrgb = true;
+        gWaterEdgeProgram.mFeatures.hasReflectionProbes = true;
 		gWaterEdgeProgram.mShaderFiles.clear();
 		gWaterEdgeProgram.mShaderFiles.push_back(make_pair("environment/waterV.glsl", GL_VERTEX_SHADER));
 		gWaterEdgeProgram.mShaderFiles.push_back(make_pair("environment/waterF.glsl", GL_FRAGMENT_SHADER));
@@ -1939,6 +1945,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
             shader->mFeatures.hasTransport = true;
             shader->mFeatures.hasShadows = use_sun_shadow;
             shader->mFeatures.hasReflectionProbes = true;
+            shader->mFeatures.hasWaterFog = true;
 
             if (mShaderLevel[SHADER_DEFERRED] < 1)
             {
@@ -3823,6 +3830,7 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
     if (success)
     {
         gReflectionMipProgram.mName = "Reflection Mip Shader";
+        gReflectionMipProgram.mFeatures.isDeferred = true;
         gReflectionMipProgram.mShaderFiles.clear();
         gReflectionMipProgram.mShaderFiles.push_back(make_pair("interface/splattexturerectV.glsl", GL_VERTEX_SHADER));
         gReflectionMipProgram.mShaderFiles.push_back(make_pair("interface/reflectionmipF.glsl", GL_FRAGMENT_SHADER));

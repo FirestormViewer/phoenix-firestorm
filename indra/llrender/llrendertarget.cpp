@@ -150,6 +150,7 @@ bool LLRenderTarget::allocate(U32 resx, U32 resy, U32 color_fmt, bool depth, boo
 		if (mDepth)
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+            llassert(!mStencil); // use of stencil buffer is deprecated (performance penalty)
 			if (mStencil)
 			{
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepth);
@@ -370,6 +371,7 @@ void LLRenderTarget::shareDepthBuffer(LLRenderTarget& target)
 		glBindFramebuffer(GL_FRAMEBUFFER, target.mFBO);
 		stop_glerror();
 
+        llassert(!mStencil); // deprecated -- performance penalty
 		if (mStencil)
 		{
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepth);
@@ -417,6 +419,7 @@ void LLRenderTarget::release()
 
 		if (mUseDepth)
 		{ //detach shared depth buffer
+            llassert(!mStencil); //deprecated, performance penalty
 			if (mStencil)
 			{ //attached as a renderbuffer
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0);
@@ -515,7 +518,8 @@ void LLRenderTarget::clear(U32 mask_in)
 	U32 mask = GL_COLOR_BUFFER_BIT;
 	if (mUseDepth)
 	{
-		mask |= GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
+        mask |= GL_DEPTH_BUFFER_BIT; // stencil buffer is deprecated, performance pnealty | GL_STENCIL_BUFFER_BIT;
+        
 	}
 	if (mFBO)
 	{
@@ -623,6 +627,8 @@ void LLRenderTarget::flush(bool fetch_depth)
 void LLRenderTarget::copyContents(LLRenderTarget& source, S32 srcX0, S32 srcY0, S32 srcX1, S32 srcY1,
 						S32 dstX0, S32 dstY0, S32 dstX1, S32 dstY1, U32 mask, U32 filter)
 {
+    LL_PROFILE_GPU_ZONE("LLRenderTarget::copyContents");
+
 	GLboolean write_depth = mask & GL_DEPTH_BUFFER_BIT ? TRUE : FALSE;
 
 	LLGLDepthTest depth(write_depth, write_depth);

@@ -41,6 +41,7 @@
 #include "llcapabilityprovider.h"
 #include "m4math.h"					// LLMatrix4
 #include "llframetimer.h"
+#include "llreflectionmap.h"
 
 // Surface id's
 #define LAND  1
@@ -428,6 +429,9 @@ public:
 
 	static BOOL isNewObjectCreationThrottleDisabled() {return sNewObjectCreationThrottle < 0;}
 
+    // rebuild reflection probe list
+    void updateReflectionProbes();
+
 private:
 	void addToVOCacheTree(LLVOCacheEntry* entry);
 	LLViewerObject* addNewObject(LLVOCacheEntry* entry);
@@ -616,6 +620,10 @@ private:
 	LLFrameTimer mMaterialsCapThrottleTimer;
 	LLFrameTimer mRenderInfoRequestTimer;
 	LLFrameTimer mRenderInfoReportTimer;
+
+    // list of reflection maps being managed by this llviewer region
+    std::vector<LLPointer<LLReflectionMap> > mReflectionMaps;
+
 };
 
 inline BOOL LLViewerRegion::getRegionProtocol(U64 protocol) const

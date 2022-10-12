@@ -42,6 +42,7 @@
 #include "lllandmark.h"
 #include "lllandmarkactions.h"
 #include "lllandmarklist.h"
+#include "llmaterialeditor.h"
 #include "llmemorystream.h"
 #include "llmenugl.h"
 #include "llnotecard.h"
@@ -625,6 +626,7 @@ LLUIImagePtr LLEmbeddedItems::getItemImage(llwchar ext_char) const
 			case LLAssetType::AT_GESTURE:		img_name = "Inv_Gesture";	break;
 			case LLAssetType::AT_MESH:      	img_name = "Inv_Mesh";	    break;
             case LLAssetType::AT_SETTINGS:      img_name = "Inv_Settings"; break;
+            case LLAssetType::AT_MATERIAL:      img_name = "Inv_Material"; break;
 			default:                        	img_name = "Inv_Invalid";  break; // use the Inv_Invalid icon for undefined object types (see MAINT-3981)
 
 		}
@@ -1210,6 +1212,9 @@ BOOL LLViewerTextEditor::openEmbeddedItem(LLPointer<LLInventoryItem> item, llwch
 		case LLAssetType::AT_SETTINGS:
 			openEmbeddedSetting(item, wc);
 			return TRUE;
+        case LLAssetType::AT_MATERIAL:
+            openEmbeddedGLTFMaterial(item, wc);
+            return TRUE;
 		case LLAssetType::AT_NOTECARD:
 		case LLAssetType::AT_LSL_TEXT:
 		case LLAssetType::AT_CLOTHING:
@@ -1300,6 +1305,26 @@ void LLViewerTextEditor::openEmbeddedSetting(LLInventoryItem* item, llwchar wc)
 	{
 		LLNotificationsUtil::add("NoEnvironmentSettings");
 	}
+}
+
+void LLViewerTextEditor::openEmbeddedGLTFMaterial(LLInventoryItem* item, llwchar wc)
+{
+    if (!item)
+    {
+        return;
+    }
+
+    LLSD floater_key;
+    floater_key["objectid"] = mObjectID;
+    floater_key["notecardid"] = mNotecardInventoryID;
+    LLMaterialEditor* preview = LLFloaterReg::getTypedInstance<LLMaterialEditor>("material_editor", floater_key);
+    if (preview)
+    {
+        preview->setAuxItem(item);
+        preview->setNotecardInfo(mNotecardInventoryID, mObjectID);
+        preview->openFloater(floater_key);
+        preview->setFocus(TRUE);
+    }
 }
 
 void LLViewerTextEditor::showUnsavedAlertDialog( LLInventoryItem* item )

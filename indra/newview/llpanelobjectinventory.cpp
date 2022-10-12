@@ -1361,10 +1361,12 @@ void LLTaskMaterialBridge::openItem()
         LLSD floater_key;
         floater_key["taskid"] = mPanel->getTaskUUID();
         floater_key["itemid"] = mUUID;
-        LLMaterialEditor* mat = LLFloaterReg::showTypedInstance<LLMaterialEditor>("material_editor", floater_key, TAKE_FOCUS_YES);
+        LLMaterialEditor* mat = LLFloaterReg::getTypedInstance<LLMaterialEditor>("material_editor", floater_key);
         if (mat)
         {
             mat->setObjectID(mPanel->getTaskUUID());
+            mat->openFloater(floater_key);
+            mat->setFocus(TRUE);
         }
     }
 }
