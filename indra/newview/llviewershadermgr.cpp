@@ -470,7 +470,6 @@ void LLViewerShaderMgr::setShaders()
     initAttribsAndUniforms();
     gPipeline.releaseGLBuffers();
 
-    LLPipeline::sWaterReflections = LLPipeline::sRenderTransparentWater;
     LLPipeline::sRenderGlow = gSavedSettings.getBOOL("RenderGlow"); 
     LLPipeline::updateRenderDeferred();
     
@@ -1037,6 +1036,11 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 		gWaterProgram.mShaderFiles.clear();
 		gWaterProgram.mShaderFiles.push_back(make_pair("environment/waterV.glsl", GL_VERTEX_SHADER));
 		gWaterProgram.mShaderFiles.push_back(make_pair("environment/waterF.glsl", GL_FRAGMENT_SHADER));
+        gWaterProgram.clearPermutations();
+        if (LLPipeline::sRenderTransparentWater)
+        {
+            gWaterProgram.addPermutation("TRANSPARENT_WATER", "1");
+        }
 		gWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;
 		gWaterProgram.mShaderLevel = mShaderLevel[SHADER_WATER];
 		success = gWaterProgram.createShader(NULL, NULL);
@@ -1058,6 +1062,11 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 		gWaterEdgeProgram.mShaderFiles.push_back(make_pair("environment/waterV.glsl", GL_VERTEX_SHADER));
 		gWaterEdgeProgram.mShaderFiles.push_back(make_pair("environment/waterF.glsl", GL_FRAGMENT_SHADER));
 		gWaterEdgeProgram.addPermutation("WATER_EDGE", "1");
+        gWaterEdgeProgram.clearPermutations();
+        if (LLPipeline::sRenderTransparentWater)
+        {
+            gWaterEdgeProgram.addPermutation("TRANSPARENT_WATER", "1");
+        }
 		gWaterEdgeProgram.mShaderGroup = LLGLSLShader::SG_WATER;
 		gWaterEdgeProgram.mShaderLevel = mShaderLevel[SHADER_WATER];
 		success = gWaterEdgeProgram.createShader(NULL, NULL);
@@ -1075,6 +1084,11 @@ BOOL LLViewerShaderMgr::loadShadersWater()
 		gUnderWaterProgram.mShaderFiles.push_back(make_pair("environment/underWaterF.glsl", GL_FRAGMENT_SHADER));
 		gUnderWaterProgram.mShaderLevel = mShaderLevel[SHADER_WATER];        
 		gUnderWaterProgram.mShaderGroup = LLGLSLShader::SG_WATER;       
+        gUnderWaterProgram.clearPermutations();
+        if (LLPipeline::sRenderTransparentWater)
+        {
+            gUnderWaterProgram.addPermutation("TRANSPARENT_WATER", "1");
+        }
 		success = gUnderWaterProgram.createShader(NULL, NULL);
 		llassert(success);
 	}

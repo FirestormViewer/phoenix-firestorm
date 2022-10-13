@@ -487,7 +487,7 @@ inline const LLColor3 srgbColor3(const LLColor3 &a) {
 	return srgbColor;
 }
 
-inline const LLColor3 linearColor3(const F32* v) {
+inline const LLColor3 linearColor3p(const F32* v) {
     LLColor3 linearColor;
     linearColor.mV[0] = sRGBtoLinear(v[0]);
     linearColor.mV[1] = sRGBtoLinear(v[1]);
@@ -498,12 +498,12 @@ inline const LLColor3 linearColor3(const F32* v) {
 
 template<class T>
 inline const LLColor3 linearColor3(const T& a) {
-    return linearColor3(a.mV);
+    return linearColor3p(a.mV);
 }
 
 template<class T>
 inline const LLVector3 linearColor3v(const T& a) {
-    return LLVector3(linearColor3(a.mV).mV);
+    return LLVector3(linearColor3p(a.mV).mV);
 }
 
 #endif

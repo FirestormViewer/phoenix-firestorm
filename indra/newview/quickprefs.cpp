@@ -595,7 +595,6 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
-		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
 
 		// Vignette UI controls
 		mSpinnerVignetteX = getChild<LLSpinCtrl>("VignetteSpinnerX");
@@ -1044,9 +1043,6 @@ void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
-	BOOL reflections = LLCubeMap::sUseCubeMaps;
-	mCtrlReflectionDetail->setEnabled(reflections);
-
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
 	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
@@ -1078,13 +1074,6 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
-	}
-
-	// disabled reflections
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionDetail"))
-	{
-		mCtrlReflectionDetail->setEnabled(FALSE);
-		mCtrlReflectionDetail->setValue(FALSE);
 	}
 
 	// <FS:CR> FIRE-9630 - Vignette UI controls

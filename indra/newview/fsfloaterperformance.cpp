@@ -164,7 +164,6 @@ BOOL FSFloaterPerformance::postBuild()
 
     LLAvatarComplexityControls::setIndirectMaxArc();
     // store the current setting as the users desired reflection detail and DD
-    gSavedSettings.setS32("FSUserTargetReflections", LLPipeline::RenderReflectionDetail);
     if(!FSPerfStats::tunables.userAutoTuneEnabled)
     {
         if (gSavedDrawDistance)

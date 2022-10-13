@@ -13392,7 +13392,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderReflectionDetail</key>
     <map>
       <key>Comment</key>
-      <string>Detail of reflection render pass.</string>
+      <string>DEPRECATED -- use RenderTransparentWater and RenderReflectionProbeDetail -- Detail of reflection render pass.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -26078,17 +26078,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSUserTargetReflections</key>
-    <map>
-      <key>Comment</key>
-      <string>Set by auto tune floater on build</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>4</integer>
     </map>
     <key>FSReportRegionRestartToChat</key>
     <map>

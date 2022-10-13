@@ -2124,12 +2124,6 @@ void LLFloaterPreference::refreshEnabledState()
 		fsaa_ctrl->setValue((LLSD::Integer) 0);
 	}
 
-	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
-
-	// Reflections
-	BOOL reflections = LLCubeMap::sUseCubeMaps;
-	ctrl_reflections->setEnabled(reflections);
-
 	// WindLight
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 	sky->setEnabled(TRUE);
@@ -2220,30 +2214,22 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 
 void LLFloaterPreference::disableUnavailableSettings()
 {	
-	LLComboBox* ctrl_reflections   = getChild<LLComboBox>("Reflections");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	
     // disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
-		ctrl_ssao->setEnabled(FALSE);
+		ctrl_ssao->setEnabled(FALSE);   
 		ctrl_ssao->setValue(FALSE);
 	}
 	
 	// disabled deferred shadows
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
-	{
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-	}
-
-	// disabled reflections
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionDetail"))
-	{
-		ctrl_reflections->setEnabled(FALSE);
-		ctrl_reflections->setValue(FALSE);
-	}
+    if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
+    {
+        ctrl_shadows->setEnabled(FALSE);
+        ctrl_shadows->setValue(0);
+    }
 }
 
 void LLFloaterPreference::refresh()

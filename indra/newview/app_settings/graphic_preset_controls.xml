@@ -33,7 +33,6 @@
 		<string>RenderLocalLights</string>
 		<string>RenderMaxPartCount</string>
 		<string>RenderQualityPerformance</string>
-		<string>RenderReflectionDetail</string>
 		<string>RenderReflectionProbeDetail</string>
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>

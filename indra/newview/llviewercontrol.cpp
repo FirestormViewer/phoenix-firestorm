@@ -1117,12 +1117,6 @@ void handleUserTargetDrawDistanceChanged(const LLSD& newValue)
 	FSPerfStats::tunables.userTargetDrawDistance = newval;
 }
 
-void handleUserTargetReflectionsChanged(const LLSD& newValue)
-{
-	const auto newval = gSavedSettings.getS32("FSUserTargetReflections");
-	FSPerfStats::tunables.userTargetReflections = newval;
-}
-
 void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
 {
 	const auto newval = gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled");
@@ -1413,7 +1407,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSAutoTuneLock")->getSignal()->connect(boost::bind(&handleAutoTuneLockChanged, _2));
 	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
 	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
-	gSavedSettings.getControl("FSUserTargetReflections")->getSignal()->connect(boost::bind(&handleUserTargetReflectionsChanged, _2));
 	gSavedSettings.getControl("FSAutoTuneRenderFarClipTarget")->getSignal()->connect(boost::bind(&handleUserTargetDrawDistanceChanged, _2));
 	gSavedSettings.getControl("FSAutoTuneImpostorFarAwayDistance")->getSignal()->connect(boost::bind(&handleUserImpostorDistanceChanged, _2));
 	gSavedSettings.getControl("FSAutoTuneImpostorByDistEnabled")->getSignal()->connect(boost::bind(&handleUserImpostorByDistEnabledChanged, _2));

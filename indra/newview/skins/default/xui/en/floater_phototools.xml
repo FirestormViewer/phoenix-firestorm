@@ -475,59 +475,6 @@
 			</panel>
 
 			<panel
-			 name="P_W_R_Types"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="36"
-			 border_visible="true"
-			 background_visible="true">
-				<text
-				 name="T_W_R_Types"
-				 follows="left|top"
-				 height="15"
-				 left="10" 
-				 top_pad="13"
-				 width="75"
-				 layout="topleft"
-				 tool_tip="Determines what will show up in water reflections.">
-					Type
-				</text>
-				<combo_box
-				 control_name="RenderReflectionDetail"
-				 height="22"
-				 layout="topleft"
-				 left_pad="20"
-				 top_delta="-5"
-				 name="Reflections"
-				 width="165"
-				 follows="left|right">
-					<combo_box.item
-					 label="Minimal"
-					 name="0"
-					 value="0"/>
-					<combo_box.item
-					 label="Terrain and trees"
-					 name="1"
-					 value="1"/>
-					<combo_box.item
-					 label="All static objects"
-					 name="2"
-					 value="2"/>
-					<combo_box.item
-					 label="All avatars and objects"
-					 name="3"
-					 value="3"/>
-					<combo_box.item
-					 label="Everything"
-					 name="4"
-					 value="4"/>
-				</combo_box>
-			</panel>
-		
-			<panel
 			 name="P_R_Res"
 			 follows="top|left"
 			 layout="topleft"

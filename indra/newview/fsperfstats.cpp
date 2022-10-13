@@ -79,7 +79,6 @@ namespace FSPerfStats
         if( tuningFlag & UserAutoTuneEnabled ){ gSavedSettings.setBOOL("FSAutoTuneFPS", userAutoTuneEnabled); };
         if( tuningFlag & UserAutoTuneLock ){ gSavedSettings.setBOOL("FSAutoTuneLock", userAutoTuneLock); };
         if( tuningFlag & UserTargetFPS ){ gSavedSettings.setU32("FSTargetFPS", userTargetFPS); };
-        if( tuningFlag & UserTargetReflections ){ gSavedSettings.setS32("FSUserTargetReflections", userTargetReflections); };
         // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
         if( tuningFlag & UserARTCutoff ){ gSavedSettings.setF32("FSRenderAvatarMaxART", userARTCutoffSliderValue); };
         resetChanges();
@@ -125,7 +124,6 @@ namespace FSPerfStats
         FSPerfStats::tunables.userImpostorDistanceTuningEnabled = gSavedSettings.getBOOL("FSAutoTuneImpostorByDistEnabled");
         FSPerfStats::tunables.userFPSTuningStrategy = gSavedSettings.getU32("FSTuningFPSStrategy");
         FSPerfStats::tunables.userTargetFPS = gSavedSettings.getU32("FSTargetFPS");
-        FSPerfStats::tunables.userTargetReflections = gSavedSettings.getS32("FSUserTargetReflections");
         FSPerfStats::tunables.userAutoTuneEnabled = gSavedSettings.getBOOL("FSAutoTuneFPS");
         FSPerfStats::tunables.userAutoTuneLock = gSavedSettings.getBOOL("FSAutoTuneLock");
         // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
@@ -378,24 +376,13 @@ namespace FSPerfStats
                 {
                     if(tunables.userFPSTuningStrategy == TUNE_SCENE_AND_AVATARS)
                     {
-                        // 1 - hack the water to opaque. all non opaque have a significant hit, this is a big boost for (arguably) a minor visual hit.
-                        // the other reflection options make comparatively little change and if this overshoots we'll be stepping back up later
-                        if(LLPipeline::RenderReflectionDetail != -2)
+                        // step down the DD by 10m per update
+                        auto new_dd = (LLPipeline::RenderFarClip - DD_STEP > tunables.userMinDrawDistance)?(LLPipeline::RenderFarClip - DD_STEP) : tunables.userMinDrawDistance;
+                        if(new_dd != LLPipeline::RenderFarClip)
                         {
-                            FSPerfStats::tunables.updateReflectionDetail(-2);
+                            FSPerfStats::tunables.updateFarClip( new_dd );
                             FSPerfStats::lastGlobalPrefChange = gFrameCount;
                             return;
-                        }
-                        else // deliberately "else" here so we only do one of these in any given frame
-                        {
-                            // step down the DD by 10m per update
-                            auto new_dd = (LLPipeline::RenderFarClip - DD_STEP > tunables.userMinDrawDistance)?(LLPipeline::RenderFarClip - DD_STEP) : tunables.userMinDrawDistance;
-                            if(new_dd != LLPipeline::RenderFarClip)
-                            {
-                                FSPerfStats::tunables.updateFarClip( new_dd );
-                                FSPerfStats::lastGlobalPrefChange = gFrameCount;
-                                return;
-                            }
                         }
                     }
                     // if we reach here, we've no more changes to make to tune scenery so we'll resort to agressive Avatar tuning
@@ -470,11 +457,6 @@ namespace FSPerfStats
                         FSPerfStats::tunables.updateFarClip( std::min(LLPipeline::RenderFarClip + DD_STEP, tunables.userTargetDrawDistance) );
                         FSPerfStats::lastGlobalPrefChange = gFrameCount;
                         return;
-                    }
-                    if( (tot_frame_time_raw * 1.5) < target_frame_time_raw )
-                    {
-                        // if everything else is "max" and we have >50% headroom let's knock the water quality up a notch at a time.
-                        FSPerfStats::tunables.updateReflectionDetail( std::min(LLPipeline::RenderReflectionDetail + 1, tunables.userTargetReflections) );
                     }
                 }
             }

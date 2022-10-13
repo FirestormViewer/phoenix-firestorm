@@ -2116,14 +2116,11 @@ set(viewer_APPSETTINGS_FILES
     app_settings/grass.xml
     app_settings/grids.xml
     app_settings/growl_notifications.xml
-    app_settings/high_graphics.xml
     app_settings/ignorable_dialogs.xml
     app_settings/key_bindings.xml
     app_settings/keywords.ini
     app_settings/keywords_lsl_default.xml
     app_settings/logcontrol.xml
-    app_settings/low_graphics.xml
-    app_settings/mid_graphics.xml
     app_settings/posestand.xml
     app_settings/quick_preferences.xml
     app_settings/scriptlibrary_aa.xml
@@ -2141,7 +2138,6 @@ set(viewer_APPSETTINGS_FILES
     app_settings/std_bump.ini
     #app_settings/toolbars.xml  FS:AO moved to skins
     app_settings/trees.xml
-    app_settings/ultra_graphics.xml
     app_settings/viewerart.xml
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg

@@ -906,7 +906,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		{
 			LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("display - 3")
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Imagery");
-			gPipeline.generateWaterReflection(camera); // <FS:Ansariel> Factor out calls to getInstance
 			gPipeline.generateHighlight(camera); // <FS:Ansariel> Factor out calls to getInstance
 			gPipeline.renderPhysicsDisplay();
 		}
@@ -1393,7 +1392,7 @@ void render_hud_attachments()
 		
 		gPipeline.stateSort(hud_cam, result);
 
-		gPipeline.renderGeom(hud_cam);
+		gPipeline.renderGeomPostDeferred(hud_cam);
 
 		LLSpatialGroup::sNoDelete = FALSE;
 		//gPipeline.clearReferences();
