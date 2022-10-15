@@ -6896,9 +6896,6 @@ class LLToolsSelectNextPartFace : public view_listener_t
                     }
                 }
                 LLSelectMgr::getInstance()->selectObjectOnly(to_select, new_te);
-
-                // <FS:Zi> Add this back in additionally to selectObjectOnly() to get the lastOperadedTE()
-                // function back working to properly shift+cycle through faces
                 LLSelectMgr::getInstance()->addAsIndividual(to_select, new_te, false);
             }
             else

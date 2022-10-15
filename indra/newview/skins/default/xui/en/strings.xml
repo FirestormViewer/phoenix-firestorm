@@ -2504,7 +2504,7 @@ If you continue to experience problems, please check your network and firewall s
   <string name="Premium_PlusMembership">Premium Plus</string>
   <string name="InternalMembership">Internal</string> <!-- No need to translate -->
 
-  <string name="MembershipUpgradeText">Upgrade to Premium</string>
+  <string name="MembershipUpgradeText">Change membership plan...</string>
   <string name="MembershipPremiumText">My Premium membership</string>
 
   <!-- Question strings for delete items notifications -->

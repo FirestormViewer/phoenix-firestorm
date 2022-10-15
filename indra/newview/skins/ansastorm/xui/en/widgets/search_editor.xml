@@ -7,7 +7,7 @@
   text_pad_right="2" 
   select_on_focus="true"
   text_tentative_color="TextFgTentativeColor"
-  highlight_text_field="false"
+  highlight_text_field="true"
   background_image="TextField_Off"
   background_image_disabled="TextField_Disabled"
   background_image_focused="TextField_Active"
