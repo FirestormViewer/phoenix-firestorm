@@ -97,9 +97,11 @@
 		<text name="linksets_name_label">
 			Name
 		</text>
+		<search_editor label="Objekte nach Name" name="filter_by_name"/>
 		<text name="linksets_desc_label">
 			Beschreibung
 		</text>
+		<search_editor label="Objekte nach Beschreibung" name="filter_by_description"/>
 		<combo_box name="filter_by_linkset_use">
 			<combo_box.item label="Nach Linkset-Nutzung filtern..." name="filter_by_linkset_use_none"/>
 			<combo_box.item label="Begehbar" name="filter_by_linkset_use_walkable"/>
