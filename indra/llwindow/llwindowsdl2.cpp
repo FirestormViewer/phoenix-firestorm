@@ -41,6 +41,10 @@
 #include "llfindlocale.h"
 #include "llframetimer.h"
 
+// if there is a better methood to get at the settings from llwindow/ let me know! -Zi
+#include "llcontrol.h"
+extern LLControlGroup gSavedSettings;
+
 #ifdef LL_GLIB
 #include <glib.h>
 #endif
@@ -675,6 +679,8 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
 	// IME - International input compositing, i.e. for Japanese / Chinese text input
 	// Request the IME interface to show over-the-top compositing while typing
+	mIMEEnabled = gSavedSettings.getBOOL("SDL2IMEEnabled");
+
 	if (mIMEEnabled)
 	{
 		SDL_SetHint( SDL_HINT_IME_INTERNAL_EDITING, "1");
@@ -2691,6 +2697,10 @@ void* LLWindowSDL::createSharedContext()
 		LLCoordScreen size;
 		if (getSize(&size))
 		{
+			// tickle window size to fix font going blocky on login screen since SDL 2.24.0
+			size.mX--;
+			setSize(size);
+			size.mX++;
 			setSize(size);
 		}
 

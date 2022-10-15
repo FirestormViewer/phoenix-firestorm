@@ -22,16 +22,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>db1a758da143fe0177df2b472eaa8d78</string>
+              <string>ba107bef7cdb9c8548d62e749d9af6fd</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64-222610218.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL2-2.24.1-linux64-222872152.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.0.20</string>
+        <string>2.24.1</string>
       </map>
       <key>gstreamer10</key>
       <map>
@@ -2622,16 +2622,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>411c000af6328e454ff7064f90c18a81</string>
+              <string>8ad6779b81899afb7bd803ac2e2af37a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222610246-linux64-222610246.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222872202-linux64-222872202.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.13.222441031</string>
+        <string>0.13.222872202</string>
       </map>
       <key>openal</key>
       <map>
