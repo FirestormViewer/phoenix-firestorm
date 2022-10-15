@@ -41,6 +41,10 @@
 #include "llfindlocale.h"
 #include "llframetimer.h"
 
+// if there is a better methood to get at the settings from llwindow/ let me know! -Zi
+#include "llcontrol.h"
+extern LLControlGroup gSavedSettings;
+
 #ifdef LL_GLIB
 #include <glib.h>
 #endif
@@ -130,7 +134,8 @@ namespace
     Atom XA_CLIPBOARD;
     Atom XA_TARGETS;
     Atom PVT_PASTE_BUFFER;
-    long const MAX_PASTE_BUFFER_SIZE = 16383;
+	// Unused in the current clipboard implementation -Zi
+    // long const MAX_PASTE_BUFFER_SIZE = 16383;
 
     void filterSelectionRequest( XEvent aEvent )
     {
@@ -277,11 +282,23 @@ bool LLWindowSDL::getSelectionText( Atom aSelection, Atom aType, LLWString &text
     maybe_lock_display();
 
     Atom type;
-    int format{};
-    unsigned long len{},remaining {};
+	int format {};
+	unsigned long len {}, size {};
     unsigned char* data = nullptr;
+
+	// get type and size of the clipboard contents first
+	XGetWindowProperty( mSDL_Display, mSDL_XWindowID,
+						PVT_PASTE_BUFFER, 0, 0, False,
+						AnyPropertyType, &type, &format, &len,
+						&size, &data);
+    XFree(data);
+
+	// now get the real data, we don't really have a size limit here, but we need
+	// to tell the X11 clipboard how much space we have, which happens to be exactly
+	// the size of the current clipboard contents
+	unsigned long remaining {};
     int res = XGetWindowProperty(mSDL_Display, mSDL_XWindowID,
-                                 PVT_PASTE_BUFFER, 0, MAX_PASTE_BUFFER_SIZE, False,
+                                 PVT_PASTE_BUFFER, 0, size, False,
                                  AnyPropertyType, &type, &format, &len,
                                  &remaining, &data);
     if (data && len)
@@ -662,6 +679,8 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
 	// IME - International input compositing, i.e. for Japanese / Chinese text input
 	// Request the IME interface to show over-the-top compositing while typing
+	mIMEEnabled = gSavedSettings.getBOOL("SDL2IMEEnabled");
+
 	if (mIMEEnabled)
 	{
 		SDL_SetHint( SDL_HINT_IME_INTERNAL_EDITING, "1");
@@ -2678,6 +2697,10 @@ void* LLWindowSDL::createSharedContext()
 		LLCoordScreen size;
 		if (getSize(&size))
 		{
+			// tickle window size to fix font going blocky on login screen since SDL 2.24.0
+			size.mX--;
+			setSize(size);
+			size.mX++;
 			setSize(size);
 		}
 

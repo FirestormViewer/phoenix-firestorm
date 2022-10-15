@@ -45,6 +45,11 @@ static const std::string PRESETS_REAR_VIEW = PRESETS_REAR + PRESETS_VIEW_SUFFIX;
 static const std::string PRESETS_FRONT_VIEW = PRESETS_FRONT + PRESETS_VIEW_SUFFIX;
 static const std::string PRESETS_SIDE_VIEW = PRESETS_SIDE + PRESETS_VIEW_SUFFIX;
 
+// <FS:PP> Third Person Perspective camera
+static const std::string PRESETS_TPP = "TPP";
+static const std::string PRESETS_TPP_VIEW = PRESETS_TPP + PRESETS_VIEW_SUFFIX;
+// </FS:PP>
+
 enum EDefaultOptions
 {
 	DEFAULT_SHOW,

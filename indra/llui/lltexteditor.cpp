@@ -1872,7 +1872,14 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 					remove(mCursorPos, 1, FALSE);
 				}
 			}
+// <FS:Zi> FIRE-32175 - Linux/SDL2: Alt-Tab pushes a tab character into scripts and notecards
+#if LL_SDL2
+			// catch spurious ALT+Tab
+			else if (!mask)
+#else
+// </FS:Zi>
 			else
+#endif	// <FS:Zi> FIRE-32175 - Linux/SDL2: Alt-Tab pushes a tab character into scripts and notecards
 			{
 			// </FS:Ansariel>
 				S32 spaces_needed = SPACES_PER_TAB - (offset % SPACES_PER_TAB);
