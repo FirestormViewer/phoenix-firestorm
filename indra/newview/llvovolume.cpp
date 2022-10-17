@@ -5339,21 +5339,22 @@ LLControlAVBridge::LLControlAVBridge(LLDrawable* drawablep, LLViewerRegion* regi
 
 bool can_batch_texture(LLFace* facep)
 {
-	// <FS:Beq> fix batching when materials disabled and alpha none/masked.
 	if (facep->getTextureEntry()->getBumpmap())
 	{ //bump maps aren't worked into texture batching yet
 		return false;
 	}
 
+	// <FS:Beq> fix batching when materials disabled and alpha none/masked.
 	// if (facep->getTextureEntry()->getMaterialParams().notNull())
 	// { //materials don't work with texture batching yet
 	// 	return false;
 	// }
 	const auto te = facep->getTextureEntry();
-	if (LLPipeline::sRenderDeferred && te )
+	if ( LLPipeline::sRenderDeferred && te )
 	{
 		auto mat = te->getMaterialParams();
-		if(mat.notNull() && (mat->getNormalID() != LLUUID::null || mat->getSpecularID() != LLUUID::null || (te->getAlpha() >0.f && te->getAlpha() < 1.f ) ) )
+		// if(mat.notNull() && (mat->getNormalID() != LLUUID::null || mat->getSpecularID() != LLUUID::null || (te->getAlpha() >0.f && te->getAlpha() < 1.f ) ) )
+		if( mat.notNull() && ( !mat->isEmpty() || ( (te->getAlpha() >0.f &&  te->getAlpha() < 1.f ) && mat->getDiffuseAlphaMode() != LLMaterial::DIFFUSE_ALPHA_MODE_BLEND) ) )
 		{
 			// we have a materials block but we cannot batch materials.
 			// however, materials blocks can and do exist due to alpha masking and those are batchable, 
@@ -5545,6 +5546,11 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 	bool batchable = false;
 
 	U32 shader_mask = 0xFFFFFFFF; //no shader
+
+	if(mat && mat->isEmpty() && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)
+	{
+		mat = nullptr;
+	}
 
 	if (mat)
 	{
