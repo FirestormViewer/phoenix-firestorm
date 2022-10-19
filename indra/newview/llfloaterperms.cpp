@@ -126,6 +126,7 @@ const std::string LLFloaterPermsDefault::sCategoryNames[CAT_LAST] =
 	"Gestures",
 	"Wearables",
 	"Settings"
+	"Materials"
 };
 
 BOOL LLFloaterPermsDefault::postBuild()

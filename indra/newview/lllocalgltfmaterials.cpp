@@ -152,16 +152,16 @@ bool LLLocalGLTFMaterial::updateSelf()
 
             if (mLastModified.asString() != new_last_modified.asString())
             {
-                LLPointer<LLGLTFMaterial> raw_material;
+                LLPointer<LLFetchedGLTFMaterial> raw_material;
                 if (mWorldID.notNull())
                 {
                     // update existing material
                     // will create a new one if material doesn't exist yet
-                    raw_material = gGLTFMaterialList.getMaterial(mWorldID);
+                    raw_material = (LLFetchedGLTFMaterial*)gGLTFMaterialList.getMaterial(mWorldID);
                 }
                 else
                 {
-                    raw_material = new LLGLTFMaterial();
+                    raw_material = new LLFetchedGLTFMaterial();
                 }
                 if (loadMaterial(raw_material, mMaterialIndex))
                 {
@@ -270,7 +270,7 @@ bool LLLocalGLTFMaterial::loadMaterial(LLPointer<LLGLTFMaterial> mat, S32 index)
             }
 
             // sets everything, but textures will have inaccurate ids
-            LLTinyGLTFHelper::setFromModel(mat, model_in, index);
+            mat->setFromModel(model_in, index);
 
             std::string folder = gDirUtilp->getDirName(filename_lc);
             tinygltf::Material material_in = model_in.materials[index];

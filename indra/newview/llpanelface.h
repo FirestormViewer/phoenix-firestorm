@@ -497,6 +497,7 @@ private:
 	 */
     void onTextureSelectionChanged(LLInventoryItem* itemp);
     void onPbrSelectionChanged(LLInventoryItem* itemp);
+    void onPbrStartEditing();
 
     // <FS> Extended copy & paste buttons
     //LLMenuButton*   mMenuClipboardColor;

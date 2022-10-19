@@ -521,13 +521,43 @@
 
     </pie_menu>
 
-    <pie_slice
-        label="Edit"
-        name="Edit...">
-        <pie_slice.on_click
-            function="Object.Edit" />
-        <pie_slice.on_enable
-            function="EnableEdit"/>
-    </pie_slice>
+    <pie_menu
+        label="Edit &gt;"
+        name="Edit Object Pie More 1">
+
+        <pie_slice
+            label="Edit Mat."
+            name="EditGLTFMaterial">
+            <pie_slice.on_click
+                function="Object.EditGLTFMaterial" />
+            <pie_slice.on_enable
+                function="EnableEditGLTFMaterial"/>
+        </pie_slice>
+
+        <pie_slice
+            label="Save Mat."
+            name="SaveGLTFMaterial">
+            <pie_slice.on_click
+                function="Object.SaveGLTFMaterial" />
+            <pie_slice.on_enable
+                function="EnableSaveGLTFMaterial"/>
+        </pie_slice>
+
+        <pie_separator/>
+        <pie_separator/>
+        <pie_separator/>
+        <pie_separator/>
+        <pie_separator/>
+
+        <pie_slice
+            label="Edit Object"
+            name="Edit...">
+            <pie_slice.on_click
+                function="Object.Edit" />
+            <pie_slice.on_enable
+                function="EnableEdit"/>
+        </pie_slice>
+
+    </pie_menu>
 
 </pie_menu>

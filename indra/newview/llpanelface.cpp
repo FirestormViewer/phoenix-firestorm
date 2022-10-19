@@ -46,6 +46,7 @@
 #include "llcombobox.h"
 #include "lldrawpoolbump.h"
 #include "llface.h"
+#include "llgltfmateriallist.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h" // gInventory
 #include "llinventorymodelbackgroundfetch.h"
@@ -53,6 +54,7 @@
 #include "llfloaterreg.h"
 #include "lllineeditor.h"
 #include "llmaterialmgr.h"
+#include "llmaterialeditor.h"
 #include "llmediactrl.h"
 #include "llmediaentry.h"
 #include "llmenubutton.h"
@@ -91,6 +93,7 @@
 #include "llsdserialize.h"
 #include "llinventorymodel.h"
 
+using namespace std::literals;
 
 //
 // Constant definitions for comboboxes
@@ -330,6 +333,9 @@ BOOL	LLPanelFace::postBuild()
         pbr_ctrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
         pbr_ctrl->setBakeTextureEnabled(false);
         pbr_ctrl->setInventoryPickType(LLTextureCtrl::PICK_MATERIAL);
+
+        // TODO - design real UI for activating live editing
+        pbr_ctrl->setRightMouseUpCallback(boost::bind(&LLPanelFace::onPbrStartEditing, this));
     }
 
 	mTextureCtrl = getChild<LLTextureCtrl>("texture control");
@@ -4755,6 +4761,17 @@ void LLPanelFace::onPbrSelectionChanged(LLInventoryItem* itemp)
             LLNotificationsUtil::add("LivePreviewUnavailable");
         }
     }
+}
+
+void LLPanelFace::onPbrStartEditing()
+{
+    bool   identical;
+    LLUUID material_id;
+    LLSelectedTE::getPbrMaterialId(material_id, identical);
+
+    LL_DEBUGS() << "loading material live editor with asset " << material_id << LL_ENDL;
+
+    LLMaterialEditor::loadLiveMaterial(material_id);
 }
 
 bool LLPanelFace::isIdenticalPlanarTexgen()
