@@ -233,7 +233,11 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
 	p.item_top_pad = default_params.item_top_pad - (default_params.item_height - fsFolderViewItemHeight) / 2 - 1;
 	// </FS:Ansariel>
 
-    return LLUICtrlFactory::create<LLFolderView>(p);
+	LLFolderView* fv = LLUICtrlFactory::create<LLFolderView>(p);
+	fv->setCallbackRegistrar(&mCommitCallbackRegistrar);
+	fv->setEnableRegistrar(&mEnableCallbackRegistrar);
+
+	return fv;
 }
 
 void LLInventoryPanel::clearFolderRoot()
@@ -286,6 +290,7 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	}
 	mCommitCallbackRegistrar.popScope();
 	mFolderRoot.get()->setCallbackRegistrar(&mCommitCallbackRegistrar);
+	mFolderRoot.get()->setEnableRegistrar(&mEnableCallbackRegistrar);
 	
 	// Scroller
 		LLRect scroller_view_rect = getRect();

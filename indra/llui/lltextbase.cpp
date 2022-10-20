@@ -303,6 +303,12 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 LLTextBase::~LLTextBase()
 {
 	mSegments.clear();
+	LLContextMenu* menu = static_cast<LLContextMenu*>(mPopupMenuHandle.get());
+	if (menu)
+	{
+		menu->die();
+		mPopupMenuHandle.markDead();
+	}
 	delete mURLClickSignal;
 	delete mIsFriendSignal;
 	delete mIsObjectBlockedSignal;

@@ -1536,6 +1536,7 @@ void LLPanelObjectInventory::reset()
 	mFolders = LLUICtrlFactory::create<LLFolderView>(p);
 
 	mFolders->setCallbackRegistrar(&mCommitCallbackRegistrar);
+	mFolders->setEnableRegistrar(&mEnableCallbackRegistrar);
 
 	if (hasFocus())
 	{
