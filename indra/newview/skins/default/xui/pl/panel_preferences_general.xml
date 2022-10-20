@@ -20,6 +20,7 @@
 	<text name="language_textbox2">
 		(Restart wymagany)
 	</text>
+	<check_box label="Wprowadzanie tekstu IME" name="use_ime" tool_tip="Użyj edytora międzynarodowych metod wprowadzania. Jest potrzebny tylko w przypadku określonych języków, takich jak japoński, chiński itp." />
 	<text name="maturity_desired_prompt">
 		Chcę mieć dostęp do miejsc:
 	</text>

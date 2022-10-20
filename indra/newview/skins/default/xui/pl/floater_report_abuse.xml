@@ -3,6 +3,10 @@
 	<floater.string name="Screenshot">
 		Zdjęcie ekranu
 	</floater.string>
+	<floater.string name="chat_report_format">
+Czas: [MSG_TIME]
+Tekst: [MSG_DESCRIPTION]
+	</floater.string>
 	<button tool_tip="Odśwież zdjęcie" name="refresh_screenshot"/>
 	<text name="reporter_title">
 		Zgłasza:

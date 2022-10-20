@@ -2215,6 +2215,16 @@
                  parameter="" />
             </menu_item_call>
         </menu>
+
+        <!-- local mesh begin -->
+        <menu_item_call
+           enabled="true"
+           label="Local Mesh"
+           name="local_mesh">
+          <menu_item_call.on_click function="Floater.Show" parameter="local_mesh_floater"/>
+        </menu_item_call>
+        <!-- local mesh end -->
+      
         <menu_item_separator/>
         <menu_item_call
          enabled="false"

@@ -22,15 +22,19 @@
 		<context_menu label="Détacher" name="Object Detach"/>
 		<menu_item_call label="Tout détacher" name="Detach All"/>
 	</context_menu>
-	<menu_item_call label="Changer de tenue" name="Chenge Outfit"/>
-	<menu_item_call label="Modifier la tenue" name="Edit Outfit"/>
-	<menu_item_call label="Modifier la silhouette" name="Edit My Shape"/>
-	<menu_item_call label="Voltigement" name="Hover Height"/>
-	<menu_item_call label="Réinitialiser le squelette" name="Reset Skeleton"/>
-	<menu_item_call label="Réinitialiser le squelette et les animations" name="Reset Skeleton And Animations"/>
-	<menu_item_call label="Amis" name="Friends..."/>
-	<menu_item_call label="Groupes" name="Groups..."/>
-	<menu_item_call label="Profil" name="Profile..."/>
+	<context_menu label="Apparence" name="AppearanceSubmenu">
+		<menu_item_call label="Changer de tenue" name="Chenge Outfit"/>
+		<menu_item_call label="Modifier la tenue" name="Edit Outfit Parts"/>
+		<menu_item_call label="Modifier la silhouette" name="Edit My Shape"/>
+		<menu_item_call label="Voltigement" name="Hover Height"/>
+		<menu_item_call label="Réinitialiser le squelette" name="Reset Skeleton"/>
+		<menu_item_call label="Réinitialiser le squelette et les animations" name="Reset Skeleton And Animations"/>
+	</context_menu>
+	<context_menu label="Communauté" name="CommunitySubmenu">
+		<menu_item_call label="Amis" name="Friends..."/>
+		<menu_item_call label="Groupes" name="Groups..."/>
+		<menu_item_call label="Profil" name="Profile..."/>
+	</context_menu>
 	<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
 	<menu_item_call label="Afficher les textures" name="Debug..."/>
 	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>

@@ -6,6 +6,9 @@
 	<string name="status_offline">
 		Déconnecté
 	</string>
+	<string name="status_unknown">
+		Inconnu
+	</string>
 	<string name="no_partner_text" value="Aucun"/>
 	<string name="no_group_text" value="Aucun"/>
 	<string name="FSDev" value="Développeur"/>
@@ -55,6 +58,7 @@
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
 			<button label="Ajouter un ami" label_selected="Ajouter un ami" name="add_friend" tool_tip="Proposer à ce résident de devenir votre ami"/>
+			<button name="remove_friend" label="Supprimer l'ami" tool_tip="Mettre un terme à l'amitié avec le résident" label_selected="Supprimer l'ami"/>
 			<button label="Bloquer" name="block" tool_tip="Bloquer ce Résident"/>
 			<button label="Débloquer" name="unblock" tool_tip="Débloquer ce Résident"/>
 		</layout_panel>

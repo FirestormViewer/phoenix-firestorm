@@ -3,7 +3,7 @@
 	<text name="info_text">Le nom que vous choisissez d'utiliser pour votre avatar est appelé le nom d'affichage. Vous pouvez le changer une fois par semaine.</text>
 	<text name="lockout_text">Vous ne pouvez changer votre nom avant le [TIME].</text>
 	<text name="set_name_label">Nouveau nom :</text>
-	<text name="name_confirm_label">Ressaisissez votre nouveau nom :</text>
+	<text name="name_confirm_label">Réécrivez le nom :</text>
 	<button label="Enregistrer" name="save_btn" tool_tip="Enregistre votre nouveau nom"/>
 	<button label="Supprimer" name="reset_btn" tool_tip="Supprime votre nom d'affichage"/>
 	<button label="Annuler" name="cancel_btn"/>

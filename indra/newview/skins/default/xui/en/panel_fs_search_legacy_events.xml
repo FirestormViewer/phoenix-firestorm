@@ -87,6 +87,7 @@
 			<combo_box.item label="" value="filter_separator" enabled="false" />
 			<combo_box.item label="Discussion" name="discussion" value="18" />
 			<combo_box.item label="Sports" name="sports" value="19" />
+			<combo_box.item label="Live DJ" name="dj" value="30" />
 			<combo_box.item label="Live Music" name="music" value="20" />
 			<!-- <combo_box.item label="???" name="mystery_category" value="21" /> -->
 			<combo_box.item label="Commercial" name="commercial" value="22" />

@@ -319,6 +319,8 @@ public:
     //virtual
     void updateRiggingInfo();
     S32 mLastRiggingInfoLOD;
+	bool mIsLocalMesh;
+	bool mIsLocalMeshUsingScale;
     
     // Functions that deal with media, or media navigation
     

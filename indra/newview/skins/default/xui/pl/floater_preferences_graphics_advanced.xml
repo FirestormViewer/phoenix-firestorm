@@ -9,7 +9,7 @@
 	<text name="PostProcessText">
 		Niska
 	</text>
-	<check_box label="Włącz VSync" name="vsync" tool_tip="Synchronizuje liczbę klatek na sekundę z częstotliwością odświeżania monitora, co zapewnia płynne działanie." />
+	<check_box label="Włącz VSync" name="vsync" tool_tip="Synchronizuje liczbę klatek na sekundę z częstotliwością odświeżania monitora, może skutkować zmniejszeniem widocznej płynności i opóźnieniami." />
 	<text name="AvatarText">
 		Awatar
 	</text>

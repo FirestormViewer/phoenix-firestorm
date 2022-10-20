@@ -2449,6 +2449,24 @@ S32 LLViewerObjectList::findReferences(LLDrawable *drawablep) const
 	return num_refs;
 }
 
+std::vector<LLUUID> LLViewerObjectList::findMeshObjectsBySculptID(LLUUID target_sculpt_id)
+{
+	std::vector<LLUUID> result;
+	// getting IDs rather than object/vovobject pointers here because
+	// of the extra safety if later calling them through findObject
+
+	for (auto current_object : mObjects)
+	{
+		if ((current_object->isMesh()) &&
+			(current_object->getVolume()) && 
+			(current_object->getVolume()->getParams().getSculptID() == target_sculpt_id))
+		{
+			result.push_back(current_object->getID());
+		}
+	}
+
+	return result;
+}
 
 void LLViewerObjectList::orphanize(LLViewerObject *childp, U32 parent_id, U32 ip, U32 port)
 {

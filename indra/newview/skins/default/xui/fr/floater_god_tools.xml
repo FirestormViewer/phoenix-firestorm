@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="godtools floater" title="Outils de dieu">
+	<tab_container name="GodTools Tabs">
+		<panel label="Grille" name="grid">
+			<button label="Vider le cache de visibilité sur la carte de cette région" label_selected="Vider le cache de visibilité sur la carte de cette région" name="Flush This Region&apos;s Map Visibility Caches"/>
+		</panel>
+		<panel name="region">
+			<text name="Region Name:">
+				Nom région :
+			</text>
+			<check_box label="Prélude" name="check prelude" tool_tip="Cochez cette option pour que la région soit un prélude."/>
+			<check_box label="Soleil fixe" name="check fixed sun" tool_tip="Fixer la position du soleil (comme dans Région/Domaine &gt; Terrain)."/>
+			<check_box label="Réinit. domicile aprés téléport." name="check reset home" tool_tip="Lorsque le résident se téléporte, il réinitialise son domicile à la position de destination."/>
+			<check_box label="Visible" name="check visible" tool_tip="Sélectionnez cette option pour que la région soit visible par tous."/>
+			<check_box label="Dégâts" name="check damage" tool_tip="Sélectionnez pour activer l'option de dégâts dans la région."/>
+			<check_box label="Bloquer le suivi du trafic" name="block dwell" tool_tip="Sélectionnez cette option pour bloquer la surveillance du trafic (trafic) dans la région."/>
+			<check_box label="Bloquer la terraformation" name="block terraform" tool_tip="Sélectionnez cette option pour bloquer la terraformation dans la région."/>
+			<check_box label="Bac à sable" name="is sandbox" tool_tip="Définit la région comme un bac à sable (sandbox)"/>
+			<button label="Enreg. le terrain" label_selected="Enreg. le terrain" name="Bake Terrain" tool_tip="(Bake Terrain) Enregistrer le terrain actuel comme du terrain de référence en cas d'annulation des modifications de terraformation."/>
+			<button label="Réinit. terrain" label_selected="Réinit. terrain" name="Revert Terrain" tool_tip="Remplacer le terrain actuel par le terrain par défaut."/>
+			<button label="Ech. terrain" label_selected="Ech. terrain" name="Swap Terrain" tool_tip="Echanger le terrain actuel avec le terrain par défaut"/>
+			<text name="estate id">
+				ID de la région :
+			</text>
+			<text name="parent id">
+				ID du parent :
+			</text>
+			<line_editor name="parentestate" tool_tip="Il s'agit du domaine parent de cette région"/>
+			<text name="Grid Pos: ">
+				Pos. sur la grille :
+			</text>
+			<line_editor name="gridposx" tool_tip="Position x de la grille pour la région"/>
+			<line_editor name="gridposy" tool_tip="Position y de la grille pour la région"/>
+			<text name="Redirect to Grid: ">
+				Redir. vers grille :
+			</text>
+			<text name="billable factor text">
+				Taux de paiement :
+			</text>
+			<text name="land cost text">
+				L$/m² :
+			</text>
+			<button label="Rafraîchir" label_selected="Odśwież" name="Refresh" tool_tip="Cliquez ici pour rafraîchir les informations ci-dessus"/>
+			<button label="Appliquer" label_selected="Appliquer" name="Apply" tool_tip="Cliquez ici pour appliquer les changements ci-dessus"/>
+			<button label="Sélect. région" label_selected="Sélect. région" name="Select Region" tool_tip="Sélectionnez la région entière en utilisant les outils d'édition du terrain"/>
+			<button label="Enreg. auto maint." label_selected="Enreg. auto maint." name="Autosave now" tool_tip="Enregistrer l'état gzippé dans le répertoire autosave"/>
+		</panel>
+		<panel label="Objets" name="objects">
+			<panel.string name="no_target">
+				(pas de cible)
+			</panel.string>
+			<text name="Region Name:">
+				Nom région :
+			</text>
+			<check_box label="Désact. scripts" name="disable scripts" tool_tip="Sélectionnez cette option pour désactiver les scripts dans cette région."/>
+			<check_box label="Désact. collisions" name="disable collisions" tool_tip="Sélectionnez cette option pour désactiver les collisions autres que les avatars dans cette région."/>
+			<check_box label="Désact. physique" name="disable physics" tool_tip="Sélectionnez pour désactiver la physique dans cette région"/>
+			<button label="Appliquer" label_selected="Appliquer" name="Apply" tool_tip="Cliquez ici pour appliquer les changements ci-dessus"/>
+			<button label="Définir la cible" label_selected="Définir la cible" name="Set Target" tool_tip="Définir l'avatar cible pour la suppression d'un objet"/>
+			<text name="target_avatar_name">
+				(pas de cible)
+			</text>
+			<button label="Supprimer les objets scriptés de la cible sur d'autres terrains" label_selected="Supprimer les objets scriptés de la cible sur d'autres terrains" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Supprime tous les objets scriptés appartenant à la cible sur les terrains n'appartenant pas à la cible. Les objets (non copiable) seront renvoyés."/>
+			<button label="Supprimer les objets scriptés de la cible sur *tout* terrain" label_selected="Supprimer les objets scriptés de la cible sur *tout* terrain" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Supprime tous les objets scriptés appartenant à la cible dans cette région. Les objets (non copiable) seront renvoyés."/>
+			<button label="Supprimez *TOUS* les objets de la cible." label_selected="Supprimez *TOUS* les objets de la cible." name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Supprime tous les objets appartenant à la cible dans cette région. Les objets (non copiable) seront renvoyés."/>
+			<button label="Principales collisions" label_selected="Principales collisions" name="Get Top Colliders" tool_tip="Liste des objets les plus touchés par les collisions"/>
+			<button label="Scripts principaux" label_selected="Scripts principaux" name="Get Top Scripts" tool_tip="Liste des objets qui passent le plus de temps à exécuter des scripts."/>
+			<button label="Résumé des scripts" label_selected="Résumé des scripts" name="Scripts digest" tool_tip="Affiche une liste de tous les scripts et le nombre d'occurrences de chacun d'entre eux."/>
+		</panel>
+		<panel label="Demande" name="request">
+			<text name="Destination:">
+				Destination :
+			</text>
+			<combo_box name="destination">
+				<combo_box.item label="Sélection" name="item1"/>
+				<combo_box.item label="Agent de la région" name="item2"/>
+			</combo_box>
+			<text name="Request:">
+				Requête :
+			</text>
+			<combo_box name="request">
+				<combo_box.item label="collisions &lt;pas&gt;" name="item1"/>
+				<combo_box.item label="scripts &lt;nombre&gt;,&lt;motifs facultatifs&gt;" name="item2"/>
+				<combo_box.item label="objets &lt;motifs&gt;" name="item3"/>
+				<combo_box.item label="objets posés &lt;asset_id&gt;" name="item4"/>
+			</combo_box>
+			<text name="Parameter:">
+				Paramètre :
+			</text>
+			<button label="Demander" label_selected="Demander" name="Make Request"/>
+		</panel>
+	</tab_container>
+</floater>

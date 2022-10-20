@@ -63,12 +63,26 @@ class LLPanelProfileClassifieds;
 class LLPanelProfilePicks;
 class LLViewerFetchedTexture;
 
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+class LLPanelProfileSecondLife;
+
+class FSPanelPropertiesObserver : public LLAvatarPropertiesObserver
+{
+public:
+    FSPanelPropertiesObserver();
+
+	virtual void processProperties(void* data, EAvatarProcessorType type);
+
+    LLUUID mRequester;
+    LLPanelProfileSecondLife* mPanelProfile;
+};
+// </FS:Zi>
 
 /**
 * Panel for displaying Avatar's second life related info.
 */
 class LLPanelProfileSecondLife
-	: public LLPanelProfileTab
+	: public LLPanelProfilePropertiesProcessorTab
 	, public LLFriendObserver
 	, public LLVoiceClientStatusObserver
 {
@@ -96,6 +110,8 @@ public:
 	/**
 	 * Sends update data request to server.
 	 */
+    void apply(LLAvatarData* data);
+    void processProperties(void* data, EAvatarProcessorType type) override;
 	void updateData() override;
     void refreshName();
 
@@ -108,6 +124,9 @@ public:
     void commitUnsavedChanges() override;
 
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
+
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    void onAvatarProperties(const LLAvatarData* d);
 
 protected:
 	/**
@@ -184,6 +203,7 @@ private:
     void onShowAgentPermissionsDialog();
     void onShowAgentProfileTexture();
     void onShowTexturePicker();
+    void onSecondLifePicChanged();  // <FS:Zi> Allow proper texture swatch handling
     void onCommitProfileImage(const LLUUID& id);
 
     // <FS:Ansariel> Fix LL UI/UX design accident
@@ -200,7 +220,10 @@ private:
     //LLComboBox*			mShowInSearchCombo;
 	LLCheckBoxCtrl*		mShowInSearchCheckbox;
 	// </FS:Ansariel>
-	LLIconCtrl*			mSecondLifePic;
+    // <FS:Zi> Allow proper texture swatch handling
+	// LLIconCtrl*			mSecondLifePic;
+	LLTextureCtrl*		mSecondLifePic;
+    // </FS:Zi>
 	LLPanel*			mSecondLifePicLayout;
     LLTextEditor*		mDescriptionEdit;
     //LLMenuButton*		mAgentActionMenuButton; // <FS:Ansariel> Fix LL UI/UX design accident
@@ -222,6 +245,7 @@ private:
     LLButton*			mBlockButton;
     LLButton*			mUnblockButton;
     LLButton*			mAddFriendButton;
+    LLButton*			mRemoveFriendButton;    // <FS:Zi> Add "Remove Friend" button to profile
     LLButton*			mPayButton;
     LLButton*			mIMButton;
     LLMenuButton*		mOverflowButton;
@@ -244,6 +268,9 @@ private:
     boost::signals2::connection mRlvBehaviorCallbackConnection;
     void updateRlvRestrictions(ERlvBehaviour behavior);
     // </FS:Ansariel>
+
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    FSPanelPropertiesObserver mPropertiesObserver;
 };
 
 
@@ -268,6 +295,7 @@ public:
 	 * Loads web profile.
 	 */
 	void updateData() override;
+    void apply(LLAvatarData* data);
 
 	void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event) override;
 
@@ -293,7 +321,7 @@ private:
 * Panel for displaying Avatar's first life related info.
 */
 class LLPanelProfileFirstLife
-	: public LLPanelProfileTab
+	: public LLPanelProfilePropertiesProcessorTab
 {
 public:
 	LLPanelProfileFirstLife();
@@ -304,7 +332,8 @@ public:
 	BOOL postBuild() override;
 
     void processProperties(const LLAvatarData* avatar_data);
-
+    void processProperties(void * data, EAvatarProcessorType type) override;
+    void apply(LLAvatarData* data);
 	void resetData() override;
 
     void setProfileImageUploading(bool loading);
@@ -321,6 +350,7 @@ protected:
     void onUploadPhoto();
     void onChangePhoto();
     void onRemovePhoto();
+    void onFirstLifePicChanged();   // <FS:Zi> Allow proper texture swatch handling
     void onCommitPhoto(const LLUUID& id);
     void setDescriptionText(const std::string &text);
     void onSetDescriptionDirty();
@@ -328,7 +358,10 @@ protected:
     void onDiscardDescriptionChanges();
 
 	LLTextEditor*	mDescriptionEdit;
-    LLIconCtrl*		mPicture;
+    // <FS:Zi> Allow proper texture swatch handling
+    // LLIconCtrl*		mPicture;
+    LLTextureCtrl* mPicture;
+    // </FS:Zi>
     LLButton* mUploadPhoto;
     LLButton* mChangePhoto;
     LLButton* mRemovePhoto;
@@ -340,20 +373,13 @@ protected:
     std::string		mCurrentDescription;
     LLUUID			mImageId;
     bool			mHasUnsavedChanges;
-
-// <FS:PP> Make "first life" picture clickable
-private:
-    LLHandle<LLFloater>	mFloaterProfileTextureHandle;
-    void onShowPhoto();
-// </FS:PP> Make "first life" picture clickable
-
 };
 
 /**
  * Panel for displaying Avatar's notes and modifying friend's rights.
  */
 class LLPanelProfileNotes
-	: public LLPanelProfileTab
+	: public LLPanelProfilePropertiesProcessorTab
 {
 public:
 	LLPanelProfileNotes();
@@ -366,7 +392,7 @@ public:
 	BOOL postBuild() override;
 
     void processProperties(LLAvatarNotes* avatar_notes);
-
+    void processProperties(void * data, EAvatarProcessorType type) override;
 	void resetData() override;
 
 	void updateData() override;
@@ -418,6 +444,7 @@ public:
     void createClassified();
 
     LLAvatarData getAvatarData() { return mAvatarData; };
+    void setAvatarData(const LLAvatarData* avatar_data){ mAvatarData = *avatar_data; };
 
     friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 

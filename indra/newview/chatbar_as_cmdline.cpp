@@ -1731,7 +1731,6 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	LLStringUtil::replaceString(partial_name, ".", " ");
 
 	FSRadar::entry_map_t radar_list = FSRadar::getInstance()->getRadarList();
-	FSRadar::entry_map_t::iterator it_end = radar_list.end();
 	for (const auto& [avid, entry] : radar_list)
 	{
 		av_name = entry->getUserName();

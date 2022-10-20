@@ -32,6 +32,12 @@
 // Library includes
 #include "llwindow.h"	// getGamma()
 
+// <FS:Zi> Handle IME text input getting enabled or disabled
+#if LL_SDL2
+#include "llwindowsdl2.h"
+#endif
+// </FS:Zi>
+
 // For Listeners
 #include "llaudioengine.h"
 #include "llagent.h"
@@ -1138,6 +1144,17 @@ void handleBandwidthChanged(const LLSD& newValue)
 }
 // </FS:Ansariel>
 
+// <FS:Zi> Handle IME text input getting enabled or disabled
+#if LL_SDL2
+static bool handleSDL2IMEEnabledChanged(const LLSD& newvalue)
+{
+    ((LLWindowSDL*)gViewerWindow->getWindow())->enableIME(newvalue.asBoolean());
+
+    return true;
+}
+#endif
+// </FS:Zi>
+
 ////////////////////////////////////////////////////////////////////////////
 
 LLPointer<LLControlVariable> setting_get_control(LLControlGroup& group, const std::string& setting)
@@ -1427,6 +1444,12 @@ void settings_setup_listeners()
 	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
 	setting_setup_signal_listener(gSavedSettings, "FSTuningFPSStrategy", handleFPSTuningStrategyChanged);
 	// </FS:Beq>
+
+	// <FS:Zi> Handle IME text input getting enabled or disabled
+#if LL_SDL2
+	gSavedSettings.getControl("SDL2IMEEnabled")->getSignal()->connect(boost::bind(&handleSDL2IMEEnabledChanged, _2));
+#endif
+	// </FS:Zi>
 }
 
 #if TEST_CACHED_CONTROL

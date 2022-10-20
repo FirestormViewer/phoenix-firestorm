@@ -136,6 +136,8 @@ public:
 
         /*virtual*/ void setTitle(const std::string& title);
 	
+	void enableIME(bool b);
+
 	static std::vector<std::string> getDynamicFallbackFontList();
 
 	// Not great that these are public, but they have to be accessible
@@ -205,6 +207,7 @@ protected:
 	SDL_GLContext mContext;
 	SDL_Cursor*	mSDLCursors[UI_CURSOR_COUNT];
 	LLPreeditor* mPreeditor;
+	bool mIMEEnabled;
 
 	std::string mWindowTitle;
 	double		mOriginalAspectRatio;

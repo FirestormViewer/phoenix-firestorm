@@ -1389,7 +1389,7 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	// <FS:Ansariel> Mask texture if desired
 	mIsMasked(FALSE)
 {
-
+	mCaptionHeight = p.show_caption ? BTN_HEIGHT_SMALL : 0;		// <FS:Zi> leave some room underneath the image for the caption
 	// Default of defaults is white image for diff tex
 	//
 	LLUUID whiteImage( gSavedSettings.getString( "UIImgWhiteUUID" ) );
@@ -1408,7 +1408,9 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	addChild( mCaption );
 
 	S32 image_top = getRect().getHeight();
-	S32 image_bottom = BTN_HEIGHT_SMALL;
+	// <FS:Zi> leave some room underneath the image for the caption
+	// S32 image_bottom = BTN_HEIGHT_SMALL;
+	S32 image_bottom = mCaptionHeight;
 	S32 image_middle = (image_top + image_bottom) / 2;
 	S32 line_height = LLFontGL::getFontSansSerifSmall()->getLineHeight();
 
@@ -1427,7 +1429,9 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	addChild( mTentativeLabel );
 
 	LLRect border_rect = getLocalRect();
-	border_rect.mBottom += BTN_HEIGHT_SMALL;
+	// <FS:Zi> leave some room underneath the image for the caption
+	// border_rect.mBottom += BTN_HEIGHT_SMALL;
+	border_rect.mBottom += mCaptionHeight;
 	LLViewBorder::Params vbparams(p.border);
 	vbparams.name("border");
 	vbparams.rect(border_rect);
@@ -1893,7 +1897,9 @@ void LLTextureCtrl::draw()
 	}
 	
 	// Border
-	LLRect border( 0, getRect().getHeight(), getRect().getWidth(), BTN_HEIGHT_SMALL );
+	// <FS:Zi> leave some room underneath the image for the caption
+	// LLRect border( 0, getRect().getHeight(), getRect().getWidth(), BTN_HEIGHT_SMALL );
+	LLRect border( 0, getRect().getHeight(), getRect().getWidth(), mCaptionHeight );
 	gl_rect_2d( border, mBorderColor.get(), FALSE );
 
 	// Interior
