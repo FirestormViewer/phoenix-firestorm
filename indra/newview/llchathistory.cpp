@@ -1163,10 +1163,7 @@ LLChatHistory::LLChatHistory(const LLChatHistory::Params& p)
 
 LLSD LLChatHistory::getValue() const
 {
-  LLSD* text=new LLSD(); 
-  text->assign(mEditor->getText());
-  return *text;
-    
+	return LLSD(mEditor->getText());
 }
 
 LLChatHistory::~LLChatHistory()
