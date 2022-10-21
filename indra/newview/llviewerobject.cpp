@@ -432,11 +432,6 @@ void LLViewerObject::deleteTEImages()
 		delete[] mTESpecularMaps;
 		mTESpecularMaps = NULL;
 	}	
-
-    mGLTFBaseColorMaps.clear();
-    mGLTFNormalMaps.clear();
-    mGLTFMetallicRoughnessMaps.clear();
-    mGLTFEmissiveMaps.clear();
 }
 
 void LLViewerObject::markDead()
@@ -4929,11 +4924,6 @@ void LLViewerObject::setNumTEs(const U8 num_tes)
 			mTEImages = new_images;
 			mTENormalMaps = new_normmaps;
 			mTESpecularMaps = new_specmaps;
-
-            mGLTFBaseColorMaps.resize(num_tes);
-            mGLTFNormalMaps.resize(num_tes);
-            mGLTFMetallicRoughnessMaps.resize(num_tes);
-            mGLTFEmissiveMaps.resize(num_tes);
 		}
 		else
 		{
@@ -5103,14 +5093,28 @@ void LLViewerObject::updateTEMaterialTextures(U8 te)
 		mTESpecularMaps[te] = LLViewerTextureManager::getFetchedTexture(spec_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_ALM, LLViewerTexture::LOD_TEXTURE);
 	}
 
-    auto fetch_texture = [](const LLUUID& id, LLViewerObject *obj)
+    LLFetchedGLTFMaterial* mat = (LLFetchedGLTFMaterial*) getTE(te)->getGLTFRenderMaterial();
+    LLUUID mat_id = getRenderMaterialID(te);
+    if (mat == nullptr && mat_id.notNull())
+    {
+        mat = (LLFetchedGLTFMaterial*) gGLTFMaterialList.getMaterial(mat_id);
+        getTE(te)->setGLTFMaterial(mat);
+    }
+    else if (mat_id.isNull() && mat != nullptr)
+    {
+        mat = nullptr;
+        getTE(te)->setGLTFMaterial(nullptr);
+    }
+
+    auto fetch_texture = [this](const LLUUID& id)
     {
         LLViewerFetchedTexture* img = nullptr;
         if (id.notNull())
         {
             if (LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(id))
             {
-                LLViewerTexture* viewerTexture = obj->getBakedTextureForMagicId(id);
+                 // TODO -- fall back to LLTextureEntry::mGLTFRenderMaterial when overriding with baked texture
+                LLViewerTexture* viewerTexture = getBakedTextureForMagicId(id);
                 img = viewerTexture ? dynamic_cast<LLViewerFetchedTexture*>(viewerTexture) : nullptr;
             }
             else
@@ -5123,34 +5127,13 @@ void LLViewerObject::updateTEMaterialTextures(U8 te)
         return img;
     };
 
-    LLGLTFMaterial* mat = getTE(te)->getGLTFMaterial();
-    LLUUID mat_id = getRenderMaterialID(te);
-    if (mat == nullptr && mat_id.notNull())
-    {
-        mat = gGLTFMaterialList.getMaterial(mat_id);
-        getTE(te)->setGLTFMaterial(mat);
-    }
-    else if (mat_id.isNull() && mat != nullptr)
-    {
-        mat = nullptr;
-        getTE(te)->setGLTFMaterial(nullptr);
-    }
-
     if (mat != nullptr)
     {
-        mGLTFBaseColorMaps[te] = fetch_texture(mat->mBaseColorId, this);
-        mGLTFNormalMaps[te] = fetch_texture(mat->mNormalId, this);
-        mGLTFMetallicRoughnessMaps[te] = fetch_texture(mat->mMetallicRoughnessId, this);
-        mGLTFEmissiveMaps[te] = fetch_texture(mat->mEmissiveId, this);
+        mat->mBaseColorTexture = fetch_texture(mat->mBaseColorId);
+        mat->mNormalTexture = fetch_texture(mat->mNormalId);
+        mat->mMetallicRoughnessTexture = fetch_texture(mat->mMetallicRoughnessId);
+        mat->mEmissiveTexture= fetch_texture(mat->mEmissiveId);
     }
-    else
-    {
-        mGLTFBaseColorMaps[te] = nullptr;
-        mGLTFNormalMaps[te] = nullptr;
-        mGLTFMetallicRoughnessMaps[te] = nullptr;
-        mGLTFEmissiveMaps[te] = nullptr;
-    }
-
 }
 
 void LLViewerObject::refreshBakeTexture()
@@ -5505,8 +5488,37 @@ S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMateri
 	setTENormalMap(te, (pMaterialParams) ? pMaterialParams->getNormalID() : LLUUID::null);
 	setTESpecularMap(te, (pMaterialParams) ? pMaterialParams->getSpecularID() : LLUUID::null);
 
-	refreshMaterials();
 	return retval;
+}
+
+S32 LLViewerObject::setTEGLTFMaterialOverride(U8 te, LLGLTFMaterial* override_mat)
+{
+    S32 retval = TEM_CHANGE_NONE;
+
+    LLTextureEntry* tep = getTE(te);
+    if (!tep)
+    {
+        LL_WARNS() << "No texture entry for te " << (S32)te << ", object " << mID << LL_ENDL;
+        return retval;
+    }
+
+    LLFetchedGLTFMaterial* src_mat = (LLFetchedGLTFMaterial*) tep->getGLTFMaterial();
+
+    tep->setGLTFMaterialOverride(override_mat);
+
+    if (override_mat && src_mat)
+    {
+        LLFetchedGLTFMaterial* render_mat = new LLFetchedGLTFMaterial(*src_mat);
+        render_mat->applyOverride(*override_mat);
+        tep->setGLTFRenderMaterial(render_mat);
+        retval = TEM_CHANGE_TEXTURE;
+    }
+    else if (tep->setGLTFRenderMaterial(nullptr))
+    {
+        retval = TEM_CHANGE_TEXTURE;
+    }
+
+    return retval;
 }
 
 void LLViewerObject::refreshMaterials()

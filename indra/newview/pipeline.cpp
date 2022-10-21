@@ -1770,7 +1770,7 @@ U32 LLPipeline::getPoolTypeFromTE(const LLTextureEntry* te, LLViewerTexture* ima
 	}
 		
 	LLMaterial* mat = te->getMaterialParams().get();
-    LLGLTFMaterial* gltf_mat = te->getGLTFMaterial();
+    LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
 	bool color_alpha = te->getColor().mV[3] < 0.999f;
 	bool alpha = color_alpha;
@@ -3920,15 +3920,26 @@ void LLPipeline::touchTexture(LLViewerTexture* tex, F32 vsize)
 void LLPipeline::touchTextures(LLDrawInfo* info)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
-    for (int i = 0; i < info->mTextureList.size(); ++i)
-    {
-        touchTexture(info->mTextureList[i], info->mTextureListVSize[i]);
-    }
 
-    touchTexture(info->mTexture, info->mVSize);
-    touchTexture(info->mSpecularMap, info->mVSize);
-    touchTexture(info->mNormalMap, info->mVSize);
-    touchTexture(info->mEmissiveMap, info->mVSize);
+    auto& mat = info->mGLTFMaterial;
+    if (mat.notNull())
+    {
+        touchTexture(mat->mBaseColorTexture, info->mVSize);
+        touchTexture(mat->mNormalTexture, info->mVSize);
+        touchTexture(mat->mMetallicRoughnessTexture, info->mVSize);
+        touchTexture(mat->mEmissiveTexture, info->mVSize);
+    }
+    else
+    {
+        for (int i = 0; i < info->mTextureList.size(); ++i)
+        {
+            touchTexture(info->mTextureList[i], info->mTextureListVSize[i]);
+        }
+
+        touchTexture(info->mTexture, info->mVSize);
+        touchTexture(info->mSpecularMap, info->mVSize);
+        touchTexture(info->mNormalMap, info->mVSize);
+    }
 }
 
 void LLPipeline::postSort(LLCamera& camera)

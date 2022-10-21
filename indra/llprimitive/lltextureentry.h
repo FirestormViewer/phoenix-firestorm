@@ -135,10 +135,6 @@ public:
 	S32  setMaterialID(const LLMaterialID& pMaterialID);
 	S32  setMaterialParams(const LLMaterialPtr pMaterialParams);
 	
-    void setGLTFMaterial(LLGLTFMaterial* material) { mGLTFMaterial = material; }
-    LLGLTFMaterial* getGLTFMaterial() { return mGLTFMaterial; }
-
-
 	virtual const LLUUID &getID() const { return mID; }
 	const LLColor4 &getColor() const { return mColor; }
     const F32 getAlpha() const { return mColor.mV[VALPHA]; }
@@ -166,8 +162,6 @@ public:
     F32  getGlow() const { return mGlow; }
 	const LLMaterialID& getMaterialID() const { return mMaterialID; };
 	const LLMaterialPtr getMaterialParams() const { return mMaterial; };
-
-    LLGLTFMaterial* getGLTFMaterial() const { return mGLTFMaterial; }
 
     // *NOTE: it is possible for hasMedia() to return true, but getMediaData() to return NULL.
     // CONVERSELY, it is also possible for hasMedia() to return false, but getMediaData()
@@ -200,6 +194,19 @@ public:
 	// Media flags
 	enum { MF_NONE = 0x0, MF_HAS_MEDIA = 0x1 };
 
+    // GLTF asset
+    void setGLTFMaterial(LLGLTFMaterial* material);
+    LLGLTFMaterial* getGLTFMaterial() const { return mGLTFMaterial; }
+
+    // GLTF override
+    LLGLTFMaterial* getGLTFMaterialOverride() { return mGLTFMaterialOverrides; }
+    void setGLTFMaterialOverride(LLGLTFMaterial* mat) { mGLTFMaterialOverrides = mat; }
+
+    // GLTF render material
+    // nuanced behavior here -- if there is no render material, fall back to getGLTFMaterial, but ONLY for the getter, not the setter
+    LLGLTFMaterial* getGLTFRenderMaterial() const { return mGLTFRenderMaterial.notNull() ? mGLTFRenderMaterial.get() : getGLTFMaterial(); }
+    S32 setGLTFRenderMaterial(LLGLTFMaterial* mat);
+
 public:
 	F32                 mScaleS;                // S, T offset
 	F32                 mScaleT;                // S, T offset
@@ -226,7 +233,17 @@ protected:
 	bool                mMaterialUpdatePending;
 	LLMaterialID        mMaterialID;
 	LLMaterialPtr		mMaterial;
-    LLPointer<LLGLTFMaterial> mGLTFMaterial;  // if present, ignore mMaterial
+    
+    // Reference to GLTF material asset state
+    // On the viewer, this should be the same LLGLTFMaterial instance that exists in LLGLTFMaterialList
+    LLPointer<LLGLTFMaterial> mGLTFMaterial;  
+
+    // GLTF material parameter overrides -- the viewer will use this data to override material parameters
+    // set by the asset and store the results in mRenderGLTFMaterial
+    LLPointer<LLGLTFMaterial> mGLTFMaterialOverrides;
+
+    // GLTF material to use for rendering -- will always be an LLFetchedGLTFMaterial
+    LLPointer<LLGLTFMaterial> mGLTFRenderMaterial; 
 
 	// Note the media data is not sent via the same message structure as the rest of the TE
 	LLMediaEntry*		mMediaEntry;			// The media data for the face

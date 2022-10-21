@@ -2811,6 +2811,24 @@ S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialPa
 	return TEM_CHANGE_TEXTURE;
 }
 
+S32 LLVOVolume::setTEGLTFMaterialOverride(U8 te, LLGLTFMaterial* mat)
+{
+    S32 retval = LLViewerObject::setTEGLTFMaterialOverride(te, mat);
+
+    if (retval == TEM_CHANGE_TEXTURE)
+    {
+        if (!mDrawable.isNull())
+        {
+            gPipeline.markTextured(mDrawable);
+            gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL);
+        }
+        mFaceMappingChanged = TRUE;
+    }
+
+    return retval;
+}
+
+
 S32 LLVOVolume::setTEScale(const U8 te, const F32 s, const F32 t)
 {
 	S32 res = LLViewerObject::setTEScale(te, s, t);
@@ -2843,6 +2861,7 @@ S32 LLVOVolume::setTEScaleT(const U8 te, const F32 t)
 	}
 	return res;
 }
+
 
 void LLVOVolume::updateTEData()
 {
@@ -5502,7 +5521,7 @@ bool can_batch_texture(LLFace* facep)
 		return false;
 	}
 	
-    if (facep->getTextureEntry()->getGLTFMaterial() != nullptr)
+    if (facep->getTextureEntry()->getGLTFRenderMaterial() != nullptr)
     { // PBR materials break indexed texture batching
         return false;
     }
@@ -5679,7 +5698,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
     
     LLUUID mat_id;
 
-    LLGLTFMaterial* gltf_mat = facep->getTextureEntry()->getGLTFMaterial();
+    auto* gltf_mat = (LLFetchedGLTFMaterial*) facep->getTextureEntry()->getGLTFRenderMaterial();
     if (gltf_mat != nullptr)
     {
         mat_id = gltf_mat->getHash(); // TODO: cache this hash
@@ -5808,21 +5827,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
         if (gltf_mat)
         {
-            LLViewerObject* vobj = facep->getViewerObject();
-            U8 te = facep->getTEOffset();
-
-            draw_info->mTexture = vobj->getGLTFBaseColorMap(te);
-            draw_info->mNormalMap = vobj->getGLTFNormalMap(te);
-            draw_info->mSpecularMap = vobj->getGLTFMetallicRoughnessMap(te);
-            draw_info->mEmissiveMap = vobj->getGLTFEmissiveMap(te);
-            if (draw_info->mGLTFMaterial->mAlphaMode == LLGLTFMaterial::ALPHA_MODE_MASK)
-            {
-                draw_info->mAlphaMaskCutoff = gltf_mat->mAlphaCutoff * gltf_mat->mBaseColor.mV[3];
-            }
-            else
-            {
-                draw_info->mAlphaMaskCutoff = 1.f;
-            }
+            // nothing to do, render pools will reference the GLTF material
         }
         else if (mat)
 		{
@@ -6222,7 +6227,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 bool is_pbr = false;
 #endif
 #else
-                LLGLTFMaterial *gltf_mat = facep->getTextureEntry()->getGLTFMaterial();
+                LLGLTFMaterial *gltf_mat = facep->getTextureEntry()->getGLTFRenderMaterial();
                 bool is_pbr = gltf_mat != nullptr;
 #endif
 
@@ -6370,7 +6375,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 							if (!te)
 								continue;
 
-                            LLGLTFMaterial* gltf_mat = te->getGLTFMaterial();
+                            LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
 							if (LLPipeline::sRenderDeferred && 
                                 (gltf_mat != nullptr || (te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())))
@@ -7095,7 +7100,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
 			BOOL is_alpha = (facep->getPoolType() == LLDrawPool::POOL_ALPHA) ? TRUE : FALSE;
 		
-            LLGLTFMaterial* gltf_mat = te->getGLTFMaterial();
+            LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
             LLMaterial* mat = nullptr;
             bool can_be_shiny = false;
