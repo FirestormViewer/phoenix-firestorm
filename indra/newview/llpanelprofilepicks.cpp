@@ -140,6 +140,8 @@ LLPanelProfilePicks::~LLPanelProfilePicks()
 
 void LLPanelProfilePicks::onOpen(const LLSD& key)
 {
+    LL_INFOS("profiles") << "Inside onOpen picks panel" << LL_ENDL;
+
     LLPanelProfilePropertiesProcessorTab::onOpen(key);
 
     resetData();
@@ -227,7 +229,6 @@ BOOL LLPanelProfilePicks::postBuild()
     LLTextBox* intro_txt = getChild<LLTextBox>("header_text");
     intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
     // </FS:Ansariel>
-
     return TRUE;
 }
 

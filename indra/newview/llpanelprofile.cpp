@@ -78,6 +78,7 @@
 #include "llviewertexturelist.h"
 #include "llvoiceclient.h"
 #include "llweb.h"
+#include "llviewernetwork.h" // <FS:Beq> For LLGridManager
 
 #include "fsdata.h"
 #include "llviewermenu.h"
@@ -100,6 +101,8 @@ static const std::string PANEL_PROFILE_VIEW = "panel_profile_view";
 static const std::string PROFILE_PROPERTIES_CAP = "AgentProfile";
 static const std::string PROFILE_IMAGE_UPLOAD_CAP = "UploadAgentProfileImage";
 
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+const U32 AVATAR_ONLINE_UNDEFINED			= 0x1 << 31;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -164,7 +167,14 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
 
     avatar_data->flags = 0;
 
-    if (result["online"].asBoolean())
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    // if (result["online"].asBoolean())
+    if (result["online"].isUndefined())
+    {
+        avatar_data->flags |= AVATAR_ONLINE_UNDEFINED;
+    }
+    else if (result["online"].asBoolean())
+    // </FS:Zi>
     {
         avatar_data->flags |= AVATAR_ONLINE;
     }
@@ -875,7 +885,7 @@ void LLFloaterProfilePermissions::onCancel()
 // LLPanelProfileSecondLife
 
 LLPanelProfileSecondLife::LLPanelProfileSecondLife()
-    : LLPanelProfileTab()
+    : LLPanelProfilePropertiesProcessorTab() // <FS:Beq/> alter ancestry to re-enable UDP
     , mAvatarNameCacheConnection()
     , mHasUnsavedDescriptionChanges(false)
     , mWaitingForImageUpload(false)
@@ -889,6 +899,8 @@ LLPanelProfileSecondLife::~LLPanelProfileSecondLife()
     if (getAvatarId().notNull())
     {
         LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+        // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+        LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(), &mPropertiesObserver);
     }
 
     if (LLVoiceClient::instanceExists())
@@ -916,7 +928,10 @@ BOOL LLPanelProfileSecondLife::postBuild()
     //mShowInSearchCombo      = getChild<LLComboBox>("show_in_search");
     mShowInSearchCheckbox   = getChild<LLCheckBoxCtrl>("show_in_search");
     // </FS:Ansariel>
-    mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
+    // <FS:Zi> Allow proper texture swatch handling
+    // mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
+    mSecondLifePic          = getChild<LLTextureCtrl>("2nd_life_pic");
+    // <FS:Zi>
     mSecondLifePicLayout    = getChild<LLPanel>("image_panel");
     mDescriptionEdit        = getChild<LLTextEditor>("sl_description_edit");
     // mAgentActionMenuButton  = getChild<LLMenuButton>("agent_actions_menu"); // <FS:Ansariel> Fix LL UI/UX design accident
@@ -940,6 +955,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mBlockButton = getChild<LLButton>("block");
     mUnblockButton = getChild<LLButton>("unblock");
     mAddFriendButton = getChild<LLButton>("add_friend");
+    mRemoveFriendButton = getChild<LLButton>("remove_friend");    // <FS:Zi> Add "Remove Friend" button to profile
     mPayButton = getChild<LLButton>("pay");
     mIMButton = getChild<LLButton>("im");
     mOverflowButton = getChild<LLMenuButton>("overflow_btn");
@@ -955,6 +971,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mBlockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
     mUnblockButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("toggle_block_agent")); }, nullptr);
     mAddFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("add_friend")); }, nullptr);
+    mRemoveFriendButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("remove_friend")); }, nullptr);   // <FS:Zi> Add "Remove Friend" button to profile
     mPayButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("pay")); }, nullptr);
     mIMButton->setCommitCallback([this](LLUICtrl*, void*) { onCommitMenu(LLSD("im")); }, nullptr);
     // </FS:Ansariel>
@@ -970,7 +987,10 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mCantSeeOnMapIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCanEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
     mCantEditObjectsIcon->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentPermissionsDialog(); });
-    mSecondLifePic->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentProfileTexture(); });
+    // <FS:Zi> Allow proper texture swatch handling
+    // mSecondLifePic->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowAgentProfileTexture(); });
+    mSecondLifePic->setCommitCallback(boost::bind(&LLPanelProfileSecondLife::onSecondLifePicChanged, this));
+    // </FS:Zi>
 
     // <FS:Ansariel> RLVa support
     mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelProfileSecondLife::updateRlvRestrictions, this, _1));
@@ -978,10 +998,21 @@ BOOL LLPanelProfileSecondLife::postBuild()
     return TRUE;
 }
 
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+void LLPanelProfileSecondLife::onAvatarProperties(const LLAvatarData* d)
+{
+    // only update the "unknown" status if they are showing as online, otherwise
+    // we still don't know their true status
+    if (d->agent_id == gAgentID && d->flags & AVATAR_ONLINE)
+    {
+        processOnlineStatus(false, true, true);
+    }
+}
+// </FS:Zi>
+
 void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 {
-    LLPanelProfileTab::onOpen(key);
-
+    LLPanelProfilePropertiesProcessorTab::onOpen(key); // <FS:Beq/> alter ancestry to re-enable UDP
     resetData();
 
     LLUUID avatar_id = getAvatarId();
@@ -1024,7 +1055,16 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     //    // Todo: use PeopleContextMenu instead?
     //    mAgentActionMenuButton->setMenu("menu_profile_other.xml", LLMenuButton::MP_BOTTOM_RIGHT);
     //}
+// <FS:Beq> Remove the menu thingy and just have click picture to change
+// if (own_profile)
+// only if we are in opensim and opensim doesn't have the image upload cap
+#ifdef OPENSIM
+    std::string cap_url = gAgent.getRegionCapability(PROFILE_IMAGE_UPLOAD_CAP);
+    if( own_profile && (!LLGridManager::instance().isInOpenSim() || !cap_url.empty() ) )
+#else
     if (own_profile)
+#endif
+// </FS:Beq>        
     {
         mImageActionMenuButton->setVisible(TRUE);
         mImageActionMenuButton->setMenu("menu_fs_profile_image_actions.xml", LLMenuButton::MP_BOTTOM_RIGHT);
@@ -1051,6 +1091,9 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     // <FS:Ansariel> Display agent ID
     getChild<LLUICtrl>("user_key")->setValue(avatar_id.asString());
 
+    // <FS:Zi> Allow proper texture swatch handling
+    mSecondLifePic->setEnabled(own_profile);
+
     mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
 }
 
@@ -1069,6 +1112,15 @@ void LLPanelProfileSecondLife::updateData()
         }
         else
         {
+            // <FS:Beq> restore UDP profiles for opensim that does not support the cap
+#ifdef OPENSIM            
+            if (LLGridManager::instance().isInOpenSim() && !(getSelfProfile() /* TODO(Beq):No longer neeed? && !getEmbedded()*/))
+            {
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
+            }            
+            else
+#endif
+            // </FS:Beq>
             LL_WARNS() << "Failed to update profile data, no cap found" << LL_ENDL;
         }
     }
@@ -1081,6 +1133,43 @@ void LLPanelProfileSecondLife::refreshName()
         mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
     }
 }
+
+// <FS:Beq> Restore UDP profiles
+void LLPanelProfileSecondLife::apply(LLAvatarData* data)
+{
+#ifdef OPENSIM
+    if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
+	{
+		data->image_id = mImageId;
+		data->about_text = mDescriptionEdit->getValue().asString();
+		data->allow_publish = mShowInSearchCheckbox->getValue();
+
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(data);
+	}
+#endif
+}
+
+void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorType type)
+{
+	if (APT_PROPERTIES == type)
+	{
+		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+			processProfileProperties(avatar_data);
+			setLoaded();
+		}
+	}
+	else if (APT_GROUPS == type)
+	{
+		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
+		if(avatar_groups && getAvatarId() == avatar_groups->avatar_id)
+		{
+			processGroupProperties(avatar_groups);
+		}
+	}
+}
+// </FS:Beq>
 
 void LLPanelProfileSecondLife::resetData()
 {
@@ -1122,7 +1211,8 @@ void LLPanelProfileSecondLife::resetData()
 
     // <FS:Ansariel> Fix LL UI/UX design accident
     //childSetVisible("partner_layout", FALSE);
-    mStatusText->setVisible(FALSE);
+    // <FS:Zi> Always show the online status text, just set it to "offline" when a friend is hiding
+    // mStatusText->setVisible(FALSE);
     mCopyMenuButton->setVisible(FALSE);
     mGroupInviteButton->setVisible(!own_profile);
     if (own_profile && LLAvatarName::useDisplayNames())
@@ -1135,6 +1225,7 @@ void LLPanelProfileSecondLife::resetData()
     mTeleportButton->setVisible(!own_profile);
     mIMButton->setVisible(!own_profile);
     mAddFriendButton->setVisible(!own_profile);
+    mRemoveFriendButton->setVisible(!own_profile);   // <FS:Zi> Add "Remove Friend" button to profile
     mBlockButton->setVisible(!own_profile);
     mUnblockButton->setVisible(!own_profile);
     mGroupList->setShowNone(!own_profile);
@@ -1157,12 +1248,40 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
                             gAgent.isGodlike() || relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS),
                             (avatar_data->flags & AVATAR_ONLINE));
     }
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    else if (avatar_data->flags & AVATAR_ONLINE_UNDEFINED)
+    {
+        // being a friend who doesn't show online status and appears online can't happen
+        // so this is our marker for "undefined"
+        processOnlineStatus(true, false, true);
+    }
+    // </FS:Zi>
 
     fillCommonData(avatar_data);
 
     fillPartnerData(avatar_data);
 
     fillAccountStatus(avatar_data);
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+    {
+        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
+        if (!floater_profile)
+        {
+            // floater is dead, so panels are dead as well
+            return;
+        }
+        LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+        auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+        if (!panel_profile)
+        {
+            LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+        }        
+        panel_profile->setAvatarData(avatar_data);
+    }
+#endif
+// </FS:Beq>
 
     setLoaded();
 
@@ -1480,7 +1599,7 @@ void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
     std::string register_date = getString("age_format");
     LLSD args_age;
     // <FS:Ansariel> Fix LL UI/UX design accident
-    std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
+    std::string birth_date = LLTrans::getString(!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() ? "AvatarBirthDateFormat" : "AvatarBirthDateFormat_legacy");
     LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)born_on.secondsSinceEpoch()));
     args_age["[REG_DATE]"] = birth_date;
     // </FS:Ansariel>
@@ -1569,7 +1688,7 @@ void LLPanelProfileSecondLife::setAvatarId(const LLUUID& avatar_id)
             LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
         }
 
-        LLPanelProfileTab::setAvatarId(avatar_id);
+        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id); // <FS:Beq/> Change ancestry to restore UDP profiles
 
         if (LLAvatarActions::isFriend(getAvatarId()))
         {
@@ -1601,11 +1720,28 @@ void LLPanelProfileSecondLife::updateOnlineStatus()
 
 void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_online, bool online)
 {
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    // being a friend who doesn't show online status and appears online can't happen
+    // so this is our marker for "undefined"
+    if (is_friend && !show_online && online)
+    {
+        mStatusText->setValue(getString("status_unknown"));
+        mStatusText->setColor(LLUIColorTable::getInstance()->getColor("StatusUserUnknown"));
+
+        mPropertiesObserver.mPanelProfile = this;
+        mPropertiesObserver.mRequester = gAgentID;
+        LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), &mPropertiesObserver);
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+
+        return;
+    }
+    // </FS:Zi>
     // <FS:Ansariel> Fix LL UI/UX design accident
     //childSetVisible("frind_layout", is_friend);
     //childSetVisible("online_layout", online && show_online);
     //childSetVisible("offline_layout", !online && show_online);
-    mStatusText->setVisible(show_online);
+    // <FS:Zi> Always show the online status text, just set it to "offline" when a friend is hiding
+    // mStatusText->setVisible(show_online);
 
     std::string status = getString(online ? "status_online" : "status_offline");
 
@@ -1656,7 +1792,11 @@ void LLPanelProfileSecondLife::updateButtons()
             mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
             // </FS:Ansariel>
             //Disable "Add Friend" button for friends.
-            mAddFriendButton->setEnabled(false);
+            // <FS:Zi> Add "Remove Friend" button to profile
+            // mAddFriendButton->setEnabled(false);
+            mAddFriendButton->setVisible(false);
+            mRemoveFriendButton->setVisible(true);
+            // </FS:Zi>
         }
         else
         {
@@ -1666,7 +1806,11 @@ void LLPanelProfileSecondLife::updateButtons()
                 gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, ERlvExceptionCheck::Permissive));
             mTeleportButton->setEnabled(can_offer_tp);
             // </FS:Ansariel>
-            mAddFriendButton->setEnabled(true);
+            // <FS:Zi> Add "Remove Friend" button to profile
+            // mAddFriendButton->setEnabled(true);
+            mAddFriendButton->setVisible(true);
+            mRemoveFriendButton->setVisible(false);
+            // </FS:Zi>
         }
 
         // <FS:Ansariel> RLVa support
@@ -2086,6 +2230,39 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("sl_about_text", mDescriptionText)));
     }
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+    else if(LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (getIsLoaded() && getSelfProfile())
+        {
+            LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", gAgentID));
+            if (!floater_profile)
+            {
+                // floater is dead, so panels are dead as well
+                return;
+            }
+            LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+            auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+            if (!panel_profile)
+            {
+                LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            }
+            else
+            {
+                auto avatar_data = panel_profile->getAvatarData();
+                avatar_data.agent_id = gAgentID;
+                avatar_data.avatar_id = gAgentID;
+                avatar_data.image_id = mImageId;
+                avatar_data.about_text = mDescriptionEdit->getValue().asString();
+                avatar_data.allow_publish = mShowInSearchCheckbox->getValue();
+
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(&avatar_data);
+            }
+        }        
+    }
+#endif
+// </FS:Beq>
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
@@ -2235,6 +2412,13 @@ void LLPanelProfileSecondLife::onShowTexturePicker()
     }
 }
 
+// <FS:Zi> Allow proper texture swatch handling
+void LLPanelProfileSecondLife::onSecondLifePicChanged()
+{
+    onCommitProfileImage(mSecondLifePic->getImageAssetID());
+}
+// </FS:Zi>
+
 void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
 {
     if (mImageId == id)
@@ -2294,6 +2478,21 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     }
     else
     {
+// <FS:Beq> Make OpenSim profiles work again
+#ifdef OPENSIM        
+        if(LLGridManager::getInstance()->isInOpenSim())
+        {
+            mImageId = id;
+            // save immediately only if description changes are not pending.
+            if(!mHasUnsavedDescriptionChanges)
+            {
+                onSaveDescriptionChanges();
+            }
+        }
+        else
+#endif
+// </FS:Beq>
+
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
 }
@@ -2362,6 +2561,14 @@ void LLPanelProfileWeb::updateData()
     }
 }
 
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+void LLPanelProfileWeb::apply(LLAvatarData* data)
+{
+	data->profile_url = mURLHome;
+}
+#endif
+// </FS:Beq>
 void LLPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     mAvatarNameCacheConnection.disconnect();
@@ -2451,7 +2658,7 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 //////////////////////////////////////////////////////////////////////////
 
 LLPanelProfileFirstLife::LLPanelProfileFirstLife()
- : LLPanelProfileTab()
+ : LLPanelProfilePropertiesProcessorTab()  // <FS:Beq/> alter ancestry to re-enable UDP
  , mHasUnsavedChanges(false)
 {
 }
@@ -2463,7 +2670,10 @@ LLPanelProfileFirstLife::~LLPanelProfileFirstLife()
 BOOL LLPanelProfileFirstLife::postBuild()
 {
     mDescriptionEdit = getChild<LLTextEditor>("fl_description_edit");
-    mPicture = getChild<LLIconCtrl>("real_world_pic");
+    // <FS:Zi> Allow proper texture swatch handling
+    // mPicture = getChild<LLIconCtrl>("real_world_pic");
+    mPicture = getChild<LLTextureCtrl>("real_world_pic");
+    // </FS:Zi>
 
     mUploadPhoto = getChild<LLButton>("fl_upload_image");
     mChangePhoto = getChild<LLButton>("fl_change_image");
@@ -2477,20 +2687,23 @@ BOOL LLPanelProfileFirstLife::postBuild()
     mSaveChanges->setCommitCallback([this](LLUICtrl*, void*) { onSaveDescriptionChanges(); }, nullptr);
     mDiscardChanges->setCommitCallback([this](LLUICtrl*, void*) { onDiscardDescriptionChanges(); }, nullptr);
     mDescriptionEdit->setKeystrokeCallback([this](LLTextEditor* caller) { onSetDescriptionDirty(); });
-    mPicture->setMouseUpCallback([this](LLUICtrl*, S32 x, S32 y, MASK mask) { onShowPhoto(); }); // <FS:PP> Make "first life" picture clickable
+    mPicture->setCommitCallback(boost::bind(&LLPanelProfileFirstLife::onFirstLifePicChanged, this));    // <FS:Zi> Allow proper texture swatch handling
 
     return TRUE;
 }
 
 void LLPanelProfileFirstLife::onOpen(const LLSD& key)
 {
-    LLPanelProfileTab::onOpen(key);
+    LLPanelProfilePropertiesProcessorTab::onOpen(key); // <FS:Beq/> alter ancestry to re-enable UDP
 
     if (!getSelfProfile())
     {
         // Otherwise as the only focusable element it will be selected
         mDescriptionEdit->setTabStop(FALSE);
     }
+
+    // <FS:Zi> Allow proper texture swatch handling
+    mPicture->setEnabled(getSelfProfile());
 
     resetData();
 }
@@ -2517,22 +2730,6 @@ void LLPanelProfileFirstLife::setProfileImageUploaded(const LLUUID &image_asset_
 {
     mPicture->setValue(image_asset_id);
     mImageId = image_asset_id;
-
-    // <FS:PP> Make "first life" picture clickable
-    LLFloater *floater = mFloaterProfileTextureHandle.get();
-    if (floater)
-    {
-        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
-        if (mImageId.notNull())
-        {
-            texture_view->loadAsset(mImageId);
-        }
-        else
-        {
-            texture_view->resetAsset();
-        }
-    }
-    // </FS:PP> Make "first life" picture clickable
 
     setProfileImageUploading(false);
 }
@@ -2632,51 +2829,12 @@ void LLPanelProfileFirstLife::onRemovePhoto()
     }
 }
 
-// <FS:PP> Make "first life" picture clickable
-void LLPanelProfileFirstLife::onShowPhoto()
+// <FS:Zi> Allow proper texture swatch handling
+void LLPanelProfileFirstLife::onFirstLifePicChanged()
 {
-    if (!getIsLoaded())
-    {
-        return;
-    }
-
-    LLFloater *floater = mFloaterProfileTextureHandle.get();
-    if (!floater)
-    {
-        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-        if (parent_floater)
-        {
-            LLFloaterProfileTexture * texture_view = new LLFloaterProfileTexture(parent_floater);
-            mFloaterProfileTextureHandle = texture_view->getHandle();
-            if (mImageId.notNull())
-            {
-                texture_view->loadAsset(mImageId);
-            }
-            else
-            {
-                texture_view->resetAsset();
-            }
-            texture_view->openFloater();
-            texture_view->setVisibleAndFrontmost(TRUE);
-            parent_floater->addDependentFloater(mFloaterProfileTextureHandle);
-        }
-    }
-    else // already open
-    {
-        LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
-        texture_view->setMinimized(FALSE);
-        texture_view->setVisibleAndFrontmost(TRUE);
-        if (mImageId.notNull())
-        {
-            texture_view->loadAsset(mImageId);
-        }
-        else
-        {
-            texture_view->resetAsset();
-        }
-    }
+    onCommitPhoto(mPicture->getImageAssetID());
 }
-// </FS:PP> Make "first life" picture clickable
+// </FS:Zi>
 
 void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
 {
@@ -2703,26 +2861,25 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
             mPicture->setValue("Generic_Person_Large");
         }
 
-        // <FS:PP> Make "first life" picture clickable
-        LLFloater *floater = mFloaterProfileTextureHandle.get();
-        if (floater)
-        {
-            LLFloaterProfileTexture * texture_view = dynamic_cast<LLFloaterProfileTexture*>(floater);
-            if (mImageId == LLUUID::null)
-            {
-                texture_view->resetAsset();
-            }
-            else
-            {
-                texture_view->loadAsset(mImageId);
-            }
-        }
-        // </FS:PP> Make "first life" picture clickable
-
         mRemovePhoto->setEnabled(mImageId.notNull());
     }
     else
     {
+// <FS:Beq> Make OpenSim profiles work again
+#ifdef OPENSIM        
+        if(LLGridManager::getInstance()->isInOpenSim())
+        {
+            mImageId = id;
+            mImageId = id;
+            // save immediately only if description changes are not pending.
+            if(!mHasUnsavedChanges)
+            {
+                onSaveDescriptionChanges();
+            }
+        }
+        else
+#endif
+// </FS:Beq>
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
 }
@@ -2753,6 +2910,38 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("fl_about_text", mCurrentDescription)));
     }
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+    else if(LLGridManager::getInstance()->isInOpenSim())
+    {
+        if (getIsLoaded() && getSelfProfile())
+        {
+            LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", gAgentID));
+            if (!floater_profile)
+            {
+                // floater is dead, so panels are dead as well
+                return;
+            }
+            LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+            auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+            if (!panel_profile)
+            {
+                LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
+            }
+            else
+            {
+                auto avatar_data = panel_profile->getAvatarData();
+                avatar_data.agent_id = gAgentID;
+                avatar_data.avatar_id = gAgentID;
+                avatar_data.fl_image_id = mImageId;
+                avatar_data.fl_about_text = mDescriptionEdit->getValue().asString();
+
+                LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(&avatar_data);
+            }
+        }        
+    }
+#endif
+// </FS:Beq>
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
@@ -2767,6 +2956,20 @@ void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
 {
     setDescriptionText(mCurrentDescription);
 }
+
+// <FS:Beq> Restore UDP profiles
+void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorType type)
+{
+    if (APT_PROPERTIES == type)
+	{
+        const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+            processProperties(avatar_data);
+        }
+    }
+}
+// </FS:Beq>
 
 void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
 {
@@ -2786,15 +2989,38 @@ void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
     setLoaded();
 }
 
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+void LLPanelProfileFirstLife::apply(LLAvatarData* data)
+{
+	data->fl_image_id = mImageId;
+	data->fl_about_text = mDescriptionEdit->getValue().asString();
+}
+#endif
+// </FS:Beq>
+
 void LLPanelProfileFirstLife::resetData()
 {
     setDescriptionText(std::string());
     mPicture->setValue("Generic_Person_Large");
     mImageId = LLUUID::null;
 
-    mUploadPhoto->setVisible(getSelfProfile());
-    mChangePhoto->setVisible(getSelfProfile());
-    mRemovePhoto->setVisible(getSelfProfile());
+// <FS:Beq> remove the buttons and just have click image to update profile
+// mUploadPhoto->setVisible(getSelfProfile());
+// mChangePhoto->setVisible(getSelfProfile());
+// mRemovePhoto->setVisible(getSelfProfile());
+    auto show_image_buttons = getSelfProfile();
+#ifdef OPENSIM
+    std::string cap_url = gAgent.getRegionCapability(PROFILE_IMAGE_UPLOAD_CAP);
+    if( cap_url.empty() && LLGridManager::instance().isInOpenSim() )
+    {
+        show_image_buttons = false;
+    }
+#endif
+    mUploadPhoto->setVisible(show_image_buttons);
+    mChangePhoto->setVisible(show_image_buttons);
+    mRemovePhoto->setVisible(show_image_buttons);
+// </FS:Beq>
     mSaveChanges->setVisible(getSelfProfile());
     mDiscardChanges->setVisible(getSelfProfile());
 }
@@ -2816,7 +3042,7 @@ void LLPanelProfileFirstLife::setLoaded()
 //////////////////////////////////////////////////////////////////////////
 
 LLPanelProfileNotes::LLPanelProfileNotes()
-: LLPanelProfileTab()
+: LLPanelProfilePropertiesProcessorTab()  // <FS:Beq/> alter ancestry to re-enable UDP
  , mHasUnsavedChanges(false)
 {
 
@@ -2839,6 +3065,14 @@ void LLPanelProfileNotes::updateData()
             LLCoros::instance().launch("requestAgentUserInfoCoro",
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
+// <FS:Beq> Restore UDO profiles
+#ifdef OPENSIM        
+        else
+        {
+		    LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);            
+        }
+#endif
+// </FS:Beq>
     }
 }
 
@@ -2917,6 +3151,19 @@ void LLPanelProfileNotes::processProperties(LLAvatarNotes* avatar_notes)
     mNotesEditor->setEnabled(TRUE);
     setLoaded();
 }
+// <FS:Beq> Restore UDP profiles
+void LLPanelProfileNotes::processProperties(void * data, EAvatarProcessorType type)
+{
+    if (APT_NOTES == type)
+	{
+		LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
+		if (avatar_notes && getAvatarId() == avatar_notes->target_id)
+        {
+            processProperties(avatar_notes);
+        }
+    }
+}
+// </FS:Beq>
 
 void LLPanelProfileNotes::resetData()
 {
@@ -2928,7 +3175,7 @@ void LLPanelProfileNotes::setAvatarId(const LLUUID& avatar_id)
 {
     if (avatar_id.notNull())
     {
-        LLPanelProfileTab::setAvatarId(avatar_id);
+        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id); // <FS:Beq/> alter ancestry to re-enable UDP
     }
 }
 
@@ -3002,18 +3249,30 @@ void LLPanelProfile::updateData()
     if (!getStarted() && avatar_id.notNull())
     {
         setIsLoading();
-
         mPanelSecondlife->setIsLoading();
         mPanelPicks->setIsLoading();
         mPanelFirstlife->setIsLoading();
         mPanelNotes->setIsLoading();
-
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+        mPanelSecondlife->updateData();
+        mPanelPicks->updateData();
+        mPanelFirstlife->updateData();
+        mPanelNotes->updateData();
+#endif
+// </FS:Beq>
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         if (!cap_url.empty())
         {
             LLCoros::instance().launch("requestAgentUserInfoCoro",
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
+// <FS:Beq> Restore UDP profiles
+        else
+        {
+		        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
+        }
+// </FS:Beq>
     }
 }
 
@@ -3068,8 +3327,26 @@ void LLPanelProfile::commitUnsavedChanges()
     mPanelClassifieds->commitUnsavedChanges();
     mPanelFirstlife->commitUnsavedChanges();
     mPanelNotes->commitUnsavedChanges();
+    // <FS:Beq> restore UDP - this is effectvely the apply() method from the previous incarnation
+#ifdef OPENSIM
+	if ( (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile() )
+	{
+		//KC - Avatar data is spread over 3 different panels
+		// collect data from the last 2 and give to the first to save
+        LLAvatarData data = mAvatarData;
+		data.avatar_id = gAgentID;
+        // these three collate data so need to be called in sequence.
+		mPanelFirstlife->apply(&data);
+		mPanelWeb->apply(&data);
+		mPanelSecondlife->apply(&data);
+        // These three triggered above
+		// mPanelInterests->apply();
+		// mPanelPicks->apply();
+		// mPanelNotes->apply();
+	}
+#endif
+    // </FS:Beq>
 }
-
 void LLPanelProfile::showClassified(const LLUUID& classified_id, bool edit)
 {
     if (classified_id.notNull())
@@ -3085,3 +3362,17 @@ void LLPanelProfile::createClassified()
     mTabContainer->selectTabPanel(mPanelClassifieds);
 }
 
+// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+FSPanelPropertiesObserver::FSPanelPropertiesObserver() : LLAvatarPropertiesObserver(),
+    mPanelProfile(nullptr)
+{
+}
+
+void FSPanelPropertiesObserver::processProperties(void* data, EAvatarProcessorType type)
+{
+    if (type == APT_PROPERTIES && mPanelProfile)
+    {
+        mPanelProfile->onAvatarProperties(static_cast<const LLAvatarData*>(data));
+    }
+}
+// </FS:Zi>

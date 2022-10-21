@@ -746,6 +746,14 @@ bool LLGLManager::initGL()
 		LL_WARNS("RenderInit") << "GL Drivers do not support GL_ARB_multitexture" << LL_ENDL;
 		return false;
 	}
+
+    if (!mHasFramebufferObject)
+    {
+        mHasRequirements = FALSE;
+
+        LL_WARNS("RenderInit") << "GL Drivers do not support GL_ARB_framebuffer_object" << LL_ENDL;
+        return false;
+    }
 	
 	stop_glerror();
 
@@ -761,14 +769,6 @@ bool LLGLManager::initGL()
 
 	//HACK always disable texture multisample, use FXAA instead
 	mHasTextureMultisample = FALSE;
-#if LL_WINDOWS
-// <FS:CR> FIRE-7603: Revert MAINT-804 because FBO's and shadows appear to be working now!
-	//if (mIsIntel && mGLVersion <= 3.f)
-	//{ //never try to use framebuffer objects on older intel drivers (crashy)
-	//	mHasFramebufferObject = FALSE;
-	//}
-// </FS:CR>
-#endif
 
 	if (mHasFramebufferObject)
 	{

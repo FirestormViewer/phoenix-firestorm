@@ -121,6 +121,7 @@
 	<menu_item_call label="Bearbeiten" name="Wearable Edit"/>
 	<menu_item_call label="In Gesamtansicht anzeigen" name="Show in Main Panel"/>
 	<menu_item_call label="In neuem Fenster anzeigen" name="Show in new Window"/>
+	<menu_item_call label="Ordner neu laden" name="ReloadFolder"/>
 	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh Attachment"/>
 	<menu_item_call label="Ausziehen" name="Take Off"/>

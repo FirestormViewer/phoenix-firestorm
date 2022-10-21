@@ -114,6 +114,17 @@
      width="130">
         (Requires restart)
     </text>
+    <check_box
+     control_name="SDL2IMEEnabled"
+     height="16"
+     label="Use IME Text Input"
+     layout="topleft"
+     left_pad="5"
+     name="use_ime"
+     top_delta="5"
+     width="256"
+     visible="false"
+     tool_tip="Use the international input method editor, only needed for specific languages like Japanese, Chinese, etc." />
 <!--maturity-->
      <text
      type="string"

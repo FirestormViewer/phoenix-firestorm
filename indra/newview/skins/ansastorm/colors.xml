@@ -837,10 +837,10 @@
     <color
      name="MapFrustumColor"
      reference="White_10" />
-<!-- Changed Color -->
     <color
-     name="MapFrustumRotatingColor"
-     reference="White_25" />
+     name="MapParcelOutlineColor"
+     value="1 1 1 1" />
+<!-- Changed Color -->
     <color
      name="MapTrackColor"
      reference="Red" />
@@ -894,9 +894,6 @@
      name="ModelUploaderLabels"
       value="1 0.6 0 1" />
     <color
-      name="MiniMapPropertyLine"
-      value="1 1 1 1" />
-  <color
      name="MultiSliderDisabledThumbColor"
      reference="EmphasisColor" />
     <color
@@ -1228,6 +1225,10 @@
     <color
      name="StatusUserOffline"
      reference="BrightRed" />
+    <!-- for legacy profiles -->
+    <color
+     name="StatusUserUnknown"
+     reference="White" />
 
 	<!-- Groups visible in profiles -->
 	<color

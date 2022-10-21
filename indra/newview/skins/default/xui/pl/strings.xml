@@ -5047,6 +5047,9 @@ Raport o Nadużyciu
 		Nowe otoczenie
 	</string>
 	<string name="AvatarBirthDateFormat">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">

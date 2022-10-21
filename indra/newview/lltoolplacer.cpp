@@ -66,6 +66,7 @@
 #include "llprimitive.h"
 #include "llwindow.h"			// incBusyCount()
 #include "material_codes.h"
+#include "lluiusage.h"
 
 // [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
 #include "rlvhandler.h"
@@ -301,6 +302,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 							   gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
 	}
 
+	LLUIUsage::instance().logCommand("Build.ObjectAdd");
 	gMessageSystem->newMessageFast(_PREHASH_ObjectAdd);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());

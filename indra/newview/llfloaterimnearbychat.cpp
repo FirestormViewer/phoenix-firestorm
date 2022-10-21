@@ -708,7 +708,6 @@ void LLFloaterIMNearbyChat::sendChatFromViewer(const std::string &utf8text, ECha
 
 void LLFloaterIMNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate)
 {
-	LLUIUsage::instance().logCommand("Chat.Send"); // pseuo-command
 	// Look for "/20 foo" channel chats.
 	S32 channel = 0;
 	LLWString out_text = stripChannelNumber(wtext, &channel);
@@ -920,6 +919,12 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 		}
 	}
 // [/RLVa:KB]
+
+	LL_DEBUGS("UIUsage") << "Nearby chat, text " << utf8_out_text << " type " << type << " channel " << channel << LL_ENDL;
+	if (type != CHAT_TYPE_START && type != CHAT_TYPE_STOP) // prune back some redundant logging
+	{
+		LLUIUsage::instance().logCommand("Chat.SendNearby"); // pseuo-command
+	}
 
     LLMessageSystem* msg = gMessageSystem;
 

@@ -806,6 +806,12 @@ BOOL LLFloaterPreference::postBuild()
 	mPopupFilter = getChild<LLFilterEditor>("popup_filter");
 	// </FS:Zi>
 
+	// <FS:Zi> SDL2 IME support
+#if LL_SDL2
+	childSetVisible("use_ime", true);
+#endif
+	// </FS:Zi>
+
 	return TRUE;
 }
 
@@ -2107,7 +2113,6 @@ void LLFloaterPreference::refreshEnabledState()
 	//BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 	//					bumpshiny &&
 	//					shaders && 
-	//					gGLManager.mHasFramebufferObject &&
 	//					(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	//ctrl_deferred->setEnabled(enabled);
@@ -2221,7 +2226,6 @@ void LLFloaterPreference::refreshEnabledState()
 
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-						gGLManager.mHasFramebufferObject &&
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	ctrl_deferred->setEnabled(enabled);
@@ -2360,8 +2364,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	}
 
 	// disabled deferred
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
-		!gGLManager.mHasFramebufferObject)
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);

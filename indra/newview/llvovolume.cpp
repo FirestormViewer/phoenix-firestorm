@@ -1899,7 +1899,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global, BOOL should_update_octree_bounds)
         // updates needed, set REBUILD_RIGGED accordingly.
 
         // Without the flag, this will remove unused rigged volumes, which we are not currently very aggressive about.
-        updateRiggedVolume();
+        updateRiggedVolume(false);
     }
 
     LLVolume* volume = mRiggedVolume;
@@ -2198,7 +2198,7 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 	
 	if (mDrawable->isState(LLDrawable::REBUILD_RIGGED))
 	{
-		updateRiggedVolume();
+        updateRiggedVolume(false);
 		genBBoxes(FALSE);
 		mDrawable->clearState(LLDrawable::REBUILD_RIGGED);
 	}
@@ -4860,7 +4860,7 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 	{
 		if ((pick_rigged) || (getAvatar() && (getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
 		{
-			updateRiggedVolume(true);
+            updateRiggedVolume(true, LLRiggedVolume::DO_NOT_UPDATE_FACES);
 			volume = mRiggedVolume;
 			transform = false;
 		}
@@ -4935,6 +4935,9 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 				continue;
 			}
 
+            // This calculates the bounding box of the skinned mesh from scratch. It's actually quite expensive, but not nearly as expensive as building a full octree.
+            // rebuild_face_octrees = false because an octree for this face will be built later only if needed for narrow phase picking.
+            updateRiggedVolume(true, i, false);
 			face_hit = volume->lineSegmentIntersect(local_start, local_end, i,
 													&p, &tc, &n, &tn);
 			
@@ -5058,13 +5061,13 @@ void LLVOVolume::clearRiggedVolume()
 	}
 }
 
-void LLVOVolume::updateRiggedVolume(bool force_update)
+void LLVOVolume::updateRiggedVolume(bool force_treat_as_rigged, LLRiggedVolume::FaceIndex face_index, bool rebuild_face_octrees)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
 	//Update mRiggedVolume to match current animation frame of avatar. 
 	//Also update position/size in octree.  
 
-	if ((!force_update) && (!treatAsRigged()))
+    if ((!force_treat_as_rigged) && (!treatAsRigged()))
 	{
 		clearRiggedVolume();
 		
@@ -5093,10 +5096,10 @@ void LLVOVolume::updateRiggedVolume(bool force_update)
 		updateRelativeXform();
 	}
 
-	mRiggedVolume->update(skin, avatar, volume);
+    mRiggedVolume->update(skin, avatar, volume, face_index, rebuild_face_octrees);
 }
 
-void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* volume)
+void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* volume, FaceIndex face_index, bool rebuild_face_octrees)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
 	bool copy = false;
@@ -5127,7 +5130,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 		if (is_paused)
 		{
             S32 frames_paused = LLFrameTimer::getFrameCount() - avatar->getMotionController().getPausedFrame();
-            if (frames_paused > 2)
+            if (frames_paused > 1)
             {
                 return;
             }
@@ -5146,7 +5149,24 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
     S32 rigged_vert_count = 0;
     S32 rigged_face_count = 0;
     LLVector4a box_min, box_max;
-	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
+    S32 face_begin;
+    S32 face_end;
+    if (face_index == DO_NOT_UPDATE_FACES)
+    {
+        face_begin = 0;
+        face_end = 0;
+    }
+    else if (face_index == UPDATE_ALL_FACES)
+    {
+        face_begin = 0;
+        face_end = volume->getNumVolumeFaces();
+    }
+    else
+    {
+        face_begin = face_index;
+        face_end = face_begin + 1;
+    }
+    for (S32 i = face_begin; i < face_end; ++i)
 	{
 		const LLVolumeFace& vol_face = volume->getVolumeFace(i);
 		
@@ -5234,27 +5254,18 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 			}
 
-		// <FS:ND> Crashfix if mExtents is 0
-		if( dst_face.mExtents )
-		// </FS:ND>
-
+            if (rebuild_face_octrees)
 			{
-    			delete dst_face.mOctree;
-				dst_face.mOctree = NULL;
-
-				LLVector4a size;
-				size.setSub(dst_face.mExtents[1], dst_face.mExtents[0]);
-				size.splat(size.getLength3().getF32()*0.5f);
-			
+                dst_face.destroyOctree();
 				// <FS:ND> Create a debug log for octree insertions if requested.
 				static LLCachedControl<bool> debugOctree(gSavedSettings,"FSCreateOctreeLog");
 				bool _debugOT( debugOctree );
 				if( _debugOT )
 					nd::octree::debug::gOctreeDebug += 1;
 				// </FS:ND>
-				
-				dst_face.createOctree(1.f);
-			
+
+                dst_face.createOctree();
+
 				// <FS:ND> Reset octree log
 				if( _debugOT )
 					nd::octree::debug::gOctreeDebug -= 1;
@@ -5789,7 +5800,7 @@ static inline void add_face(T*** list, U32* count, T* face)
     {
         if (count[1] < MAX_FACE_COUNT)
         {
-            face->setDrawOrderIndex(count[1]);
+            //face->setDrawOrderIndex(count[1]);
             list[1][count[1]++] = face;
         }
     }
@@ -5797,15 +5808,40 @@ static inline void add_face(T*** list, U32* count, T* face)
     {
         if (count[0] < MAX_FACE_COUNT)
         {
-            face->setDrawOrderIndex(count[0]);
+            //face->setDrawOrderIndex(count[0]);
             list[0][count[0]++] = face;
         }
     }
 }
 
+// return index into linkset for given object (0 for root prim)
+U32 get_linkset_index(LLVOVolume* vobj)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
+    if (vobj->isRootEdit())
+    {
+        return 0;
+    }
+
+    LLViewerObject* root = vobj->getRootEdit();
+    U32 idx = 1;
+    for (const auto& child : root->getChildren())
+    {
+        if (child == vobj)
+        {
+            return idx;
+        }
+        ++idx;
+    }
+
+    llassert(false);
+    return idx; //should never get here
+}
+
 void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
+
 	if (group->changeLOD())
 	{
 		group->mLastUpdateDistance = group->mDistance;
@@ -6010,6 +6046,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 avatar->addAttachmentOverridesForObject(vobj, NULL, false);
             }
             
+            U32 linkset_index = get_linkset_index(vobj);
+
             // Standard rigged mesh attachments: 
 			bool rigged = !vobj->isAnimatedObject() && skinInfo && vobj->isAttachment();
             // Animated objects. Have to check for isRiggedMesh() to
@@ -6028,6 +6066,9 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				{
 					continue;
 				}
+
+                // order by linkset index first and face index second
+                facep->setDrawOrderIndex(linkset_index * 100 + i);
 
 				//ALWAYS null out vertex buffer on rebuild -- if the face lands in a render
 				// batch, it will recover its vertex buffer reference from the spatial group
@@ -6053,11 +6094,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                     if (facep->isState(LLFace::RIGGED))
                     { 
                         //face is not rigged but used to be, remove from rigged face pool
-                        LLDrawPoolAvatar* pool = (LLDrawPoolAvatar*) facep->getPool();
-                        if (pool)
-                        {
-                            pool->removeFace(facep);
-                        }
                         facep->clearState(LLFace::RIGGED);
                         facep->mAvatar = NULL;
                         facep->mSkinInfo = NULL;
@@ -6248,7 +6284,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			else
 			{
 				drawablep->clearState(LLDrawable::RIGGED);
-                vobj->updateRiggedVolume();
+                vobj->updateRiggedVolume(false);
 			}
 		}
 	}
@@ -6359,7 +6395,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 			{
 				LLDrawable* drawablep = (LLDrawable*)(*drawable_iter)->getDrawable();
 
-				if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL) && !drawablep->isState(LLDrawable::RIGGED) )
+				if (drawablep && !drawablep->isDead() && drawablep->isState(LLDrawable::REBUILD_ALL))
 				{
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("Rebuild all non-Rigged");
 					LLVOVolume* vobj = drawablep->getVOVolume();
@@ -6404,8 +6440,6 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 							LLVertexBuffer* buff = face->getVertexBuffer();
 							if (buff)
 							{
-								llassert(!face->isState(LLFace::RIGGED));
-
 								if (!face->getGeometryVolume(*volume, face->getTEOffset(), 
 									vobj->getRelativeXform(), vobj->getRelativeXformInvTrans(), face->getGeomIndex()))
 								{ //something's gone wrong with the vertex buffer accounting, rebuild this group 
@@ -6534,6 +6568,13 @@ struct CompareBatchBreakerRigged
     }
 };
 
+struct CompareDrawOrder
+{
+    bool operator()(const LLFace* const& lhs, const LLFace* const& rhs)
+    {
+        return lhs->getDrawOrderIndex() < rhs->getDrawOrderIndex();
+    }
+};
 
 U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace** faces, U32 face_count, BOOL distance_sort, BOOL batch_textures, BOOL rigged)
 {
@@ -6577,6 +6618,11 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             {
                 //sort faces by things that break batches, including avatar and mesh id
                 std::sort(faces, faces + face_count, CompareBatchBreakerRigged());
+            }
+            else
+            {
+                // preserve legacy draw order for rigged faces
+                std::sort(faces, faces + face_count, CompareDrawOrder());
             }
         }
         else if (!distance_sort)

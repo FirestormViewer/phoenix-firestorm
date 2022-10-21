@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="particle_editor_floater" title="Éditeur de particules">
+	<panel name="particle_editor_panel">
+		<panel name="top_left_panel">
+			<text name="Pattern_Label">
+				Modèle :
+			</text>
+			<combo_box name="pattern_type_combo">
+				<combo_box.item label="Explosion" name="explode"/>
+				<combo_box.item label="Angle" name="angle"/>
+				<combo_box.item label="Angle - cône" name="angle_cone"/>
+				<combo_box.item label="Angle - cône creux" name="angle_cone_empty"/>
+				<combo_box.item label="Chute" name="drop"/>
+			</combo_box>
+			<text name="Texture_Label">
+				Texture :
+			</text>
+			<text name="Burst_Rate_Label">
+				Vit. d'impulsion :
+			</text>
+			<text name="Burst_Count_Label">
+				Nbre d'impulsions :
+			</text>
+			<text name="Burst_Radius_Label">
+				Rayon éclatement :
+			</text>
+			<text name="Angle_Begin_Label">
+				Angle de départ :
+			</text>
+			<text name="Burst_Speed_Min_Label">
+				Le plus lent :
+			</text>
+			<text name="Angle_End_Label">
+				Angle de fin :
+			</text>
+			<text name="Burst_Speed_Max_Label">
+				Le plus rapide:
+			</text>
+			<text name="Source_Max_Age_Label">
+				Âge max. source :
+			</text>
+			<text name="Start_Alpha_Label">
+				Alpha de départ :
+			</text>
+			<text name="Particles_Max_Age_Label">
+				Âge max. particules:
+			</text>
+			<text name="End_Alpha_Label">
+				Alpha final :
+			</text>
+			<text name="Start_Glow_Label">
+				Lueur initiale :
+			</text>
+			<combo_box name="blend_func_src_combo">
+				<combo_box.item label="Mélanger les bits un" name="blend_one" />
+				<combo_box.item label="Mélanger les bits zéro" name="blend_zero" />
+				<combo_box.item label="Mélanger la couleur cible" name="blend_dest_color" />
+				<combo_box.item label="Mélanger la couleur source" name="blend_src_color" />
+				<combo_box.item label="Mélange 1 - Couleur cible" name="blend_one_minus_dest_color" />
+				<combo_box.item label="Mélange 1 - Couleur source" name="blend_one_minus_src_color" />
+				<combo_box.item label="Source de mélange alpha" name="blend_src_alpha" />
+				<combo_box.item label="Mélange 1 - source alpha" name="blend_one_minus_src_alpha" />
+			</combo_box>
+			<text name="End_Glow_Label">
+				Lueur de fin :
+			</text>
+			<combo_box name="blend_func_dest_combo">
+				<combo_box.item label="Mélanger les bits un" name="blend_one" />
+				<combo_box.item label="Mélanger les bits zéro" name="blend_zero" />
+				<combo_box.item label="Mélanger la couleur cible" name="blend_dest_color" />
+				<combo_box.item label="Mélanger la couleur source" name="blend_src_color" />
+				<combo_box.item label="Mélange 1 - Couleur cible" name="blend_one_minus_dest_color" />
+				<combo_box.item label="Mélange 1 - Couleur source" name="blend_one_minus_src_color" />
+				<combo_box.item label="Source de mélange alpha" name="blend_src_alpha" />
+				<combo_box.item label="Mix 1 - source alpha" name="blend_one_minus_src_alpha" />
+			</combo_box>
+			<text name="Scale_Start_Label">
+				Échelle départ :
+			</text>
+			<text name="End_Label">
+				Fin :
+			</text>
+		</panel>
+		<panel name="top_right_panel">
+			<check_box name="bounce_checkbox" label="Rebonds"/>
+			<check_box name="emissive_checkbox" label="Émissions"/>
+			<check_box name="follow_source_checkbox" label="Source du suivi"/>
+			<check_box name="follow_velocity_checkbox" label="Suivre la vitesse"/>
+			<check_box name="interpolate_color_checkbox" label="Interpoler la couleur"/>
+			<check_box name="interpolate_scale_checkbox" label="Interpoler la taille"/>
+			<check_box name="target_position_checkbox" label="Viser l'objet"/>
+			<check_box name="target_linear_checkbox" label="Viser linéairement"/>
+			<check_box name="wind_checkbox" label="Vent"/>
+			<check_box name="ribbon_checkbox" label="Ruban"/>
+			<button name="copy_button" label="Copier" tool_tip="Copier les paramètres de l'éditeur de particules dans le presse-papiers sous forme de script LSL."/>
+			<button name="inject_button" label="Insérer" tool_tip="Insèrer un système de particules prédéfini dans l'objet sélectionné."/>
+		</panel>
+		<panel name="bottom_left_panel">
+			<text name="Target_Key_Label">
+				Clé de la cible :
+			</text>
+			<button name="clear_target_button" tool_tip="Effacer l'objet ou l'avatar cible."/>
+			<button name="pick_target_button" tool_tip="Cliquez ici pour sélectionner l'objet ou l'avatar cible des particules."/>
+			<text name="Acceleration_Label">
+				Accélération :
+			</text>
+			<text name="Omega_Label">
+				Rotation :
+			</text>
+		</panel>
+		<panel name="bottom_right_panel">
+			<color_swatch label="Coul. départ" name="start_color_selector"/>
+			<color_swatch label="Coul. fin" name="end_color_selector"/>
+		</panel>
+	</panel>
+</floater>

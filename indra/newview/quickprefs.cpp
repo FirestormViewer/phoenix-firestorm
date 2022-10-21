@@ -1066,7 +1066,6 @@ void FloaterQuickPrefs::refreshSettings()
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
 						bumpshiny &&
 						shaders &&
-						gGLManager.mHasFramebufferObject &&
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
 
 	mCtrlDeferred->setEnabled(enabled);
@@ -1106,8 +1105,7 @@ void FloaterQuickPrefs::refreshSettings()
 	}
 
 	// disabled deferred
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
-		!gGLManager.mHasFramebufferObject)
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
