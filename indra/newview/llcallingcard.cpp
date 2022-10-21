@@ -53,6 +53,7 @@
 #include "llviewerobjectlist.h"
 #include "llvoavatar.h"
 #include "llavataractions.h"
+#include "lluiusage.h"
 
 // Firestorm includes
 #include "fscommon.h"
@@ -302,6 +303,8 @@ void LLAvatarTracker::copyBuddyList(buddy_map_t& buddies) const
 void LLAvatarTracker::terminateBuddy(const LLUUID& id)
 {
 	LL_DEBUGS() << "LLAvatarTracker::terminateBuddy()" << LL_ENDL;
+	LLUIUsage::instance().logCommand("Agent.TerminateFriendship");
+
 	LLRelationship* buddy = get_ptr_in_map(mBuddyInfo, id);
 	if(!buddy) return;
 	mBuddyInfo.erase(id);

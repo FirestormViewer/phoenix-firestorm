@@ -47,6 +47,7 @@ class LLInventoryObserver;
 class LLItemInfo;
 class LLLineEditor;
 class LLTabContainer;
+class LLWorldMapView;
 
 // <FS:Ansariel> Parcel details on map
 class FSWorldMapParcelInfoObserver : public LLRemoteParcelInfoObserver
@@ -189,11 +190,7 @@ protected:
 	// </FS:Ansariel> Parcel details on map
 
 private:
-	LLPanel*			mPanel;		// Panel displaying the map
-
-	// Ties to LLWorldMapView::sMapScale, in pixels per region
-	F32						mCurZoomVal;
-	LLFrameTimer			mZoomTimer;
+    LLWorldMapView* mMapView; // Panel displaying the map
 
 	// update display of teleport destination coordinates - pos is in global coordinates
 	void updateTeleportCoordsDisplay( const LLVector3d& pos );

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map" title="MİNİ-HARİTA">
-	<floater.string name="ToolTipMsg">
-		[REGION](Haritayı açmak için çift tıkla, yatay hareket için shift çek)
-	</floater.string>
-	<floater.string name="AltToolTipMsg">
-		[REGION](Işınlamak için çift tıkla, yatay hareket için shift çek)
-	</floater.string>
 	<floater.string name="mini_map_caption">
 		Mini-harita
 	</floater.string>

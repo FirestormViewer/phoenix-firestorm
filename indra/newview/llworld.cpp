@@ -1207,14 +1207,13 @@ void LLWorld::updateParticles()
 void LLWorld::renderPropertyLines()
 {
 	S32 region_count = 0;
-	S32 vertex_count = 0;
 
 	for (region_list_t::iterator iter = mVisibleRegionList.begin();
 		 iter != mVisibleRegionList.end(); ++iter)
 	{
 		LLViewerRegion* regionp = *iter;
 		region_count++;
-		vertex_count += regionp->renderPropertyLines();
+		regionp->renderPropertyLines();
 	}
 }
 
@@ -1222,7 +1221,6 @@ void LLWorld::renderPropertyLines()
 void LLWorld::updateNetStats()
 {
 	F64Bits bits;
-	U32 packets = 0;
 
 	for (region_list_t::iterator iter = mActiveRegionList.begin();
 		 iter != mActiveRegionList.end(); ++iter)
@@ -1230,7 +1228,6 @@ void LLWorld::updateNetStats()
 		LLViewerRegion* regionp = *iter;
 		regionp->updateNetStats();
 		bits += regionp->mBitsReceived;
-		packets += llfloor( regionp->mPacketsReceived );
 		regionp->mBitsReceived = (F32Bits)0.f;
 		regionp->mPacketsReceived = 0.f;
 	}

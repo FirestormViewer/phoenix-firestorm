@@ -51,8 +51,6 @@ public:
 	/*virtual*/ F32 getCurrentTransparency();
 
 private:
-	// <FS:Ansariel> Unused as of 06-02-2014; Handled in LLNetMap
-	//void handleZoom(const LLSD& userdata);
 	void setDirectionPos( LLTextBox* text_box, F32 rotation );
 	void updateMinorDirections();
 

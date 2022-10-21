@@ -258,6 +258,9 @@
 						<combo_item name="physics_lowest">
 							Niedrigste
 						</combo_item>
+						<combo_item name="physics_bounding_box">
+							Bounding Box
+						</combo_item>
 						<combo_item name="physics_cube">
 							Würfel
 						</combo_item>
