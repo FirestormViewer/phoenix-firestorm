@@ -159,12 +159,12 @@ LLNetMap::LLNetMap (const Params & p)
 
 LLNetMap::~LLNetMap()
 {
-	auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
-	if (menu)
-	{
-		menu->die();
-		mPopupMenuHandle.markDead();
-	}
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
+    {
+        menu->die();
+        mPopupMenuHandle.markDead();
+    }
 
 	// <FS:Ansariel> Protect avatar name lookup callbacks
 	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
@@ -261,7 +261,6 @@ BOOL LLNetMap::postBuild()
     LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
     mPopupMenuHandle = menu->getHandle();
     menu->setItemEnabled("Re-center map", false);
-
     return TRUE;
 }
 
@@ -364,8 +363,12 @@ void LLNetMap::draw()
         mCentering = false;
     }
 
-    bool can_recenter_map = !(centered || mCentering || auto_centering);
-    mPopupMenu->setItemEnabled("Re-center map", can_recenter_map);
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
+    {
+        bool can_recenter_map = !(centered || mCentering || auto_centering);
+        menu->setItemEnabled("Re-center map", can_recenter_map);
+    }
     updateAboutLandPopupButton();
 
 	// Prepare a scissor region
@@ -1051,14 +1054,15 @@ void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color,
 
 bool LLNetMap::isMouseOnPopupMenu()
 {
-    if (!mPopupMenu->isOpen())
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (!menu || !menu->isOpen())
     {
         return false;
     }
 
     S32 popup_x;
     S32 popup_y;
-    LLUI::getInstance()->getMousePositionLocal(mPopupMenu, &popup_x, &popup_y);
+    LLUI::getInstance()->getMousePositionLocal(menu, &popup_x, &popup_y);
     // *NOTE: Tolerance is larger than it needs to be because the context menu is offset from the mouse when the menu is opened from certain
     // directions. This may be a quirk of LLMenuGL::showPopup. -Cosmic,2022-03-22
     constexpr S32 tolerance = 10;
@@ -1069,7 +1073,7 @@ bool LLNetMap::isMouseOnPopupMenu()
     {
         for (S32 sign_y = -1; sign_y <= 1; sign_y += 2)
         {
-            if (mPopupMenu->pointInView(popup_x + (sign_x * tolerance), popup_y + (sign_y * tolerance)))
+            if (menu->pointInView(popup_x + (sign_x * tolerance), popup_y + (sign_y * tolerance)))
             {
                 return true;
             }
@@ -1080,7 +1084,8 @@ bool LLNetMap::isMouseOnPopupMenu()
 
 void LLNetMap::updateAboutLandPopupButton()
 {
-    if (!mPopupMenu->isOpen())
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (!menu || !menu->isOpen())
     {
         return;
     }
@@ -1088,7 +1093,7 @@ void LLNetMap::updateAboutLandPopupButton()
     LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosGlobal(mPopupWorldPos);
     if (!region)
     {
-        mPopupMenu->setItemEnabled("About Land", false);
+        menu->setItemEnabled("About Land", false);
     }
     else
     {
@@ -1103,7 +1108,7 @@ void LLNetMap::updateAboutLandPopupButton()
             {
                 valid_parcel = hover_parcel->getOwnerID().notNull();
             }
-            mPopupMenu->setItemEnabled("About Land", valid_parcel);
+            menu->setItemEnabled("About Land", valid_parcel);
         }
     }
 }
@@ -1809,8 +1814,8 @@ void LLNetMap::handleTextureType(const LLSD& sdParam) const
 
 BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
-	if (menu)
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
 	{
 		mPopupWorldPos = viewPosToGlobal(x, y);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
@@ -2135,12 +2140,12 @@ void LLNetMap::handleStartTracking()
 
 void LLNetMap::handleStopTracking (const LLSD& userdata)
 {
-	auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
-	if (menu)
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
 	{
 		// <FS:Ansariel> Hide tracking option instead of disabling
-		//menu->setItemEnabled ("Stop tracking", false);
-		menu->setItemVisible ("Stop tracking", false);
+		//menu->setItemEnabled ("Stop Tracking", false);
+		menu->setItemVisible ("Stop Tracking", false);
 		// </FS:Ansariel>
 		LLTracker::stopTracking (LLTracker::isTracking(NULL));
 	}
