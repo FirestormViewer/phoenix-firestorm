@@ -74,6 +74,7 @@
 #include "llui.h"
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
+#include "lluiusage.h"
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -647,6 +648,8 @@ bool LLToolPie::walkToClickedLocation()
         return false;
     }
 
+	LLUIUsage::instance().logCommand("Agent.WalkToClickedLocation");
+	
     LLPickInfo saved_pick = mPick;
     if (gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK)
     {

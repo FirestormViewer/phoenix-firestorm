@@ -70,6 +70,10 @@ LangString CloseSecondLifeUnInstMB ${LANG_GERMAN} "Firestorm kann nicht entfernt
 ; CheckNetworkConnection
 LangString CheckNetworkConnectionDP ${LANG_GERMAN} "Prüfe Netzwerkverbindung..."
 
+; error during installation
+LangString ErrorSecondLifeInstallRetry ${LANG_GERMAN} "Firestorm konnte nicht korrekt installiert werden, einige Dateien wurden eventuell nicht korrekt von der Installationroutine kopiert."
+LangString ErrorSecondLifeInstallSupport ${LANG_GERMAN} "Bitte laden Sie den Viewer erneut von https://www.firestormviewer.org/downloads/ und versuchen Sie die Installation erneut. Sollte das Problem weiterhin bestehen, dann kontaktieren Sie unseren Support unter https://www.firestormviewer.org/support/."
+
 ; ask to remove user's data files
 LangString RemoveDataFilesMB ${LANG_GERMAN} "Einstellungs- und Cache-Dateien in Dokumente und Einstellungen löschen?"
 

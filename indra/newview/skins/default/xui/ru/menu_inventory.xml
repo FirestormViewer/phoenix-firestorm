@@ -86,6 +86,7 @@
 	<menu_item_call label="Копировать идентификатор UUID" name="Copy Asset UUID"/>
 	<menu_item_call label="Показать в главной панели" name="Show in Main Panel"/>
 	<menu_item_call label="Показать в новом окне" name="Show in new Window"/>
+	<menu_item_call label="Перезагрузить папку" name="ReloadFolder"/>
 	<menu_item_call label="Возврат к последней позиции" name="Restore to Last Position"/>
 	<menu_item_call label="Копировать" name="Copy"/>
 	<menu_item_call label="Вырезать" name="Cut"/>

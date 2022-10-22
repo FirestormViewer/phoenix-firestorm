@@ -1293,6 +1293,12 @@ void FSChatHistory::setFocus(BOOL b)
 {
 	LLTextEditor::setFocus(b);
 
+	// IME - Don't do anything here if IME is disabled
+	if (!gSavedSettings.getBOOL("SDL2IMEEnabled"))
+	{
+		return;
+	}
+
 	// IME - International input compositing, i.e. for Japanese / Chinese text input
 	updateChatInputLine();
 

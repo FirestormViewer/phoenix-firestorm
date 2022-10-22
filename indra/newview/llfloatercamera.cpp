@@ -728,6 +728,12 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 	{
 		gAgentCamera.switchCameraPreset(CAMERA_PRESET_FRONT_VIEW);
 	}
+	// <FS:PP> Third Person Perspective camera
+	else if (PRESETS_TPP_VIEW == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_TPP_VIEW);
+	}
+	// </FS:PP>
 	else
 	{
 		gAgentCamera.switchCameraPreset(CAMERA_PRESET_CUSTOM);

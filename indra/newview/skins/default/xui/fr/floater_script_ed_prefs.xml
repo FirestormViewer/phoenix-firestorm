@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_script_colors" title="Paramètres de l'éditeur de script">
+	<text name="color_pickers_label">
+		Sélectionnez les couleurs souhaitées :
+	</text>
+	<text name="text_label">
+		Texte
+	</text>
+	<text name="cursor_label">
+		Curseur
+	</text>
+	<text name="background_label">
+		Arrière plan
+	</text>
+	<text name="section_label">
+		Sections
+	</text>
+	<text name="datatype_label">
+		Types de données
+	</text>
+	<text name="event_label">
+		Événements
+	</text>
+	<text name="comment_label">
+		Commentaires
+	</text>
+	<text name="function_label">
+		Fonction
+	</text>
+	<text name="string_literal_label">
+		Littéraux de chaîne
+	</text>
+	<text name="constant_label">
+		Constante
+	</text>
+	<text name="i_constant_label">
+		Entiers
+	</text>
+	<text name="s_constant_label">
+		Chaînes de caract.
+	</text>
+	<text name="f_constant_label">
+		Nombres flottants.
+	</text>
+	<text name="c_constant_label">
+		Struct. complexes
+	</text>
+	<text name="flow_control_label">
+		Flux de contrôle.
+	</text>
+	<text name="preprocessor_label">
+		Préprocesseur
+	</text>
+	<text name="prefs_label">
+		Options de l'éditeur de script :
+	</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="Remplacer les tabulations par des espaces" />
+	<check_box label="Activer le préprocesseur LSL" tool_tip="Le préprocesseur LSL sera actif lorsque cette option est sélectionnée." name="preproc_checkbox" />
+	<check_box label="Optimiseur" tool_tip="Lorsque cette option est sélectionnée, le préprocesseur LSL optimise l'espace occupé par les scripts." name="preprocoptimizer_checkbox" />
+	<check_box label="Instruction Switch()" tool_tip="Lorsque cette option est sélectionnée, le préprocesseur LSL autorise l'utilisation d'instructions switch() pour contrôler le déroulement du script." name="preprocswitch_checkbox" />
+	<check_box label="Listes non structurées" tool_tip="Lorsque cette option est sélectionnée, le préprocesseur LSL permet l'utilisation d'extensions syntaxiques pour gérer les listes." name="preproclazy_checkbox" />
+	<check_box label="#includes à partir du disque dur" tool_tip="Lorsque cette option est sélectionnée, le préprocesseur LSL autorise les instructions #include (inclure) à faire référence à des fichiers sur votre disque dur." name="preprocinclude_checkbox" />
+	<text name="lslpreprocinclude_textbox">
+		Chemin d'inclusion du préprocesseur :
+	</text>
+	<button label_selected="Parcourir" name="SetPreprocInclude" />
+	<text name="advanced_label">
+		Options avancées :
+	</text>
+	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Diriger llOwnerSay à la fenêtre de débogage du script" />
+	<check_box name="FSScriptEditorRecompileButton_checkbox" label="Activer bouton recompilation (utile pour les #include)" />
+</floater>

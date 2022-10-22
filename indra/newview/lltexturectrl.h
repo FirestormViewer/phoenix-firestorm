@@ -98,6 +98,7 @@ public:
 									caption_text;
 
 		Optional<LLViewBorder::Params> border;
+		Optional<bool>			show_caption;			// <FS:Zi> leave some room underneath the image for the caption
 
 		Params()
 		:	image_id("image"),
@@ -110,6 +111,7 @@ public:
 			border_color("border_color"),
 			fallback_image("fallback_image"),
 			multiselect_text("multiselect_text"),
+			show_caption("show_caption", true),			// <FS:Zi> leave some room underneath the image for the caption
 			caption_text("caption_text"),
 			border("border")
 		{}
@@ -241,6 +243,7 @@ private:
 	LLHandle<LLFloater>			mFloaterHandle;
 	LLTextBox*				 	mTentativeLabel;
 	LLTextBox*				 	mCaption;
+	S32							mCaptionHeight;	// <FS:Zi> leave some room underneath the image for the caption
 	std::string				 	mLabel;
 	BOOL					 	mAllowNoTexture; // If true, the user can select "none" as an option
 	BOOL						mAllowLocalTexture;

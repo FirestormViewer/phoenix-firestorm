@@ -60,6 +60,7 @@
 #include "llvoavatarself.h"
 #include "llworld.h"
 #include "llpanelface.h"
+#include "lluiusage.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -1323,10 +1324,12 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 	LLMessageSystem* msg = gMessageSystem;
 	if (mSource == SOURCE_NOTECARD)
 	{
+		LLUIUsage::instance().logCommand("Object.RezObjectFromNotecard");
 		msg->newMessageFast(_PREHASH_RezObjectFromNotecard);
 	}
 	else
 	{
+		LLUIUsage::instance().logCommand("Object.RezObject");
 		msg->newMessageFast(_PREHASH_RezObject);
 	}
 	msg->nextBlockFast(_PREHASH_AgentData);

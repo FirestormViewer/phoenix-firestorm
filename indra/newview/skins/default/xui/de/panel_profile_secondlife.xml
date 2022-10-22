@@ -6,6 +6,9 @@
 	<string name="status_offline">
 		Offline
 	</string>
+	<string name="status_unknown">
+		Unbekannt
+	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
 	</string>
@@ -69,6 +72,7 @@
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
 			<button label="Freund hinzufügen" label_selected="Freund hinzufügen" name="add_friend" tool_tip="Dem Einwohner die Freundschaft anbieten"/>
+			<button label="Freund entfernen" label_selected="Freund entfernen" name="remove_friend" tool_tip="Die Freundschaft mit diesem Einwohner beenden"/>
 			<button label="Blockieren" name="block" tool_tip="Diesen Einwohner blockieren"/>
 			<button label="Blockierung aufheben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren"/>
 		</layout_panel>

@@ -684,6 +684,7 @@ class WindowsManifest(ViewerManifest):
 
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
+        self.path("cube.dae")
 
         with self.prefix(src=pkgdir):
             self.path("ca-bundle.crt")
@@ -1382,6 +1383,8 @@ class DarwinManifest(ViewerManifest):
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
+                self.path("cube.dae")
+
                 self.path("VivoxAUP.txt")
                 self.path("LGPL-license.txt")
                 with self.prefix(src=pkgdir,dst=""):
@@ -2003,6 +2006,7 @@ class LinuxManifest(ViewerManifest):
         #    print("Skipping llcommon.so (assuming llcommon was linked statically))"
 
         self.path("featuretable_linux.txt")
+        self.path("cube.dae")
 
         with self.prefix(src=pkgdir, dst="bin"):
             self.path("ca-bundle.crt")

@@ -12,7 +12,7 @@
 	<text name="PostProcessText">
 		Faible
 	</text>
-	<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui permet d'obtenir des performances fluides."/>
+	<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
 	<text name="AvatarText">
 		Avatar
 	</text>

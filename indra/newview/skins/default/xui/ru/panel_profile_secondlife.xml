@@ -2,6 +2,7 @@
 <panel name="panel_profile" label="Профиль">
 	<string name="status_online">В сети</string>
 	<string name="status_offline">Не в сети</string>
+	<string name="status_unknown">Неизвестно</string>
 	<string name="no_partner_text" value="Никто"/>
 	<string name="no_group_text" value="Никто"/>
 	<string name="FSDev" value=" Разработчик"/>
@@ -49,6 +50,7 @@
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
 			<button name="add_friend" label="Добавить друга" tool_tip="Предложить дружбу этому жителю" label_selected="Добавить друга"/>
+			<button name="remove_friend" label="Удалить друга" tool_tip="Прекратить дружбу с жителем" label_selected="Удалить друга"/>
 			<button name="block" label="Заблокировать" tool_tip="Заблокировать этого жителя"/>
 			<button name="unblock" label="Разблокировать" tool_tip="Разблокировать этого жителя"/>
 		</layout_panel>

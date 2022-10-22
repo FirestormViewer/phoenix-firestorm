@@ -110,6 +110,7 @@ void LLPresetsManager::createCameraDefaultPresets()
 	bool is_default_created = createDefaultCameraPreset(PRESETS_REAR_VIEW);
 	is_default_created |= createDefaultCameraPreset(PRESETS_FRONT_VIEW);
 	is_default_created |= createDefaultCameraPreset(PRESETS_SIDE_VIEW);
+	is_default_created |= createDefaultCameraPreset(PRESETS_TPP_VIEW); // <FS:PP> Third Person Perspective camera
 
 	if (is_default_created)
 	{
@@ -236,6 +237,7 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& subdirectory, p
 			mPresetNames.push_back(PRESETS_FRONT_VIEW);
 			mPresetNames.push_back(PRESETS_REAR_VIEW);
 			mPresetNames.push_back(PRESETS_SIDE_VIEW);
+			mPresetNames.push_back(PRESETS_TPP_VIEW); // <FS:PP> Third Person Perspective camera
 		}
 	}
 
@@ -389,7 +391,6 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	else
 	{
 		ECameraPreset new_camera_preset = (ECameraPreset)gSavedSettings.getU32("CameraPresetType");
-		bool new_camera_offsets = false;
 		if (IS_CAMERA)
 		{
 			if (isDefaultCameraPreset(name))
@@ -406,12 +407,17 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 				{
 					new_camera_preset = CAMERA_PRESET_FRONT_VIEW;
 				}
+				// <FS:PP> Third Person Perspective camera
+				else if (PRESETS_TPP_VIEW == name)
+				{
+					new_camera_preset = CAMERA_PRESET_TPP_VIEW;
+				}
+				// <FS:PP>
 			}
 			else 
 			{
 				new_camera_preset = CAMERA_PRESET_CUSTOM;
 			}
-			new_camera_offsets = (!isDefaultCameraPreset(name) || (ECameraPreset)gSavedSettings.getU32("CameraPresetType") != new_camera_preset);
 		}
 		for (std::vector<std::string>::iterator it = name_list.begin(); it != name_list.end(); ++it)
 		{
@@ -608,12 +614,18 @@ bool LLPresetsManager::deletePreset(const std::string& subdirectory, std::string
 
 bool LLPresetsManager::isDefaultCameraPreset(std::string preset_name)
 {
-	return (preset_name == PRESETS_REAR_VIEW || preset_name == PRESETS_SIDE_VIEW || preset_name == PRESETS_FRONT_VIEW);
+	// <FS:PP> Third Person Perspective camera
+	// return (preset_name == PRESETS_REAR_VIEW || preset_name == PRESETS_SIDE_VIEW || preset_name == PRESETS_FRONT_VIEW);
+	return (preset_name == PRESETS_REAR_VIEW || preset_name == PRESETS_SIDE_VIEW || preset_name == PRESETS_FRONT_VIEW || preset_name == PRESETS_TPP_VIEW);
+	// </FS:PP>
 }
 
 bool LLPresetsManager::isTemplateCameraPreset(std::string preset_name)
 {
-	return (preset_name == PRESETS_REAR || preset_name == PRESETS_SIDE || preset_name == PRESETS_FRONT);
+	// <FS:PP> Third Person Perspective camera
+	// return (preset_name == PRESETS_REAR || preset_name == PRESETS_SIDE || preset_name == PRESETS_FRONT);
+	return (preset_name == PRESETS_REAR || preset_name == PRESETS_SIDE || preset_name == PRESETS_FRONT || preset_name == PRESETS_TPP);
+	// </FS:PP>
 }
 
 void LLPresetsManager::resetCameraPreset(std::string preset_name)

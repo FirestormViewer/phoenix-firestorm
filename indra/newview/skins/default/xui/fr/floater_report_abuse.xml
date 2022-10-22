@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_report_abuse" title="Signaler un abus">
 	<floater.string name="Screenshot">Capture d'écran</floater.string>
+	<floater.string name="chat_report_format">
+Heure : [MSG_TIME]
+Texte : [MSG_DESCRIPTION]
+	</floater.string>
 	<button tool_tip="Actualiser la capture d'écran" name="refresh_screenshot"/>
 	<check_box label="Utiliser cette capture d'écran" name="screen_check"/>
 	<text name="reporter_title">Signaleur :</text>
@@ -34,7 +38,7 @@
 	</combo_box>
 	<text name="abuser_name_title">Nom du contrevenant :</text>
 	<button label="Sélectionnez" name="select_abuser" tool_tip="Sélectionnez le nom du contrevenant dans la liste"/>
-	<text name="abuser_name_title2">Emplacement de l'abus :</text>
+	<text name="abuser_name_title2">Emplacement de l'infraction :</text>
 	<text name="sum_title">Résumé :</text>
 	<text name="dscr_title">Détails :</text>
 	<text name="bug_aviso">Veuillez être aussi précis que possible</text>

@@ -10,11 +10,16 @@
 	</context_menu>
 	<menu_item_call label="Usiądź tutaj" name="Sit Down Here"/>
 	<menu_item_call label="Wstań" name="Stand Up"/>
-	<menu_item_call label="Mój wygląd" name="NowWearing" />
-	<menu_item_call label="Zmień strój" name="Change Outfit" />
-	<menu_item_call label="Edytuj kształt" name="Edit Shape" />
-	<menu_item_call label="Edytuj strój" name="Edit Outfit Parts" />
-	<menu_item_call label="Uniesienie" name="Hover Height"/>
+	<context_menu label="Wygląd" name="AppearanceSubmenu">
+		<menu_item_call label="Mój wygląd" name="NowWearing" />
+		<menu_item_call label="Zmień strój" name="Change Outfit" />
+		<menu_item_call label="Edytuj kształt" name="Edit Shape" />
+		<menu_item_call label="Edytuj strój" name="Edit Outfit Parts" />
+		<menu_item_call label="Uniesienie" name="Hover Height"/>
+		<menu_item_call label="Reset szkieletu" name="Reset Skeleton"/>
+		<menu_item_call label="Reset szkieletu i animacji" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Reset detali meszu" name="Reset Mesh LOD" />
+	</context_menu>
 	<context_menu label="Zdejmij" name="Take Off &gt;">
 		<context_menu label="Ubranie" name="Clothes &gt;">
 			<menu_item_call label="Koszula" name="Shirt" />
@@ -37,12 +42,11 @@
 	<menu_item_call label="Usiądź / wstań" name="Sit stand" />
 	<menu_item_call label="Lataj / wyląduj" name="Fly land" />
 	<menu_item_call label="Zatrzymaj animacje" name="Stop Animating My Avatar" />
-	<menu_item_call label="Reset szkieletu" name="Reset Skeleton"/>
-	<menu_item_call label="Reset szkieletu i animacji" name="Reset Skeleton And Animations"/>
-	<menu_item_call label="Reset detali meszu" name="Reset Mesh LOD" />
-	<menu_item_call label="Moi znajomi" name="Friends..."/>
-	<menu_item_call label="Moje grupy" name="Groups..."/>
-	<menu_item_call label="Mój profil" name="Profile..."/>
+	<context_menu label="Społeczność" name="CommunitySubmenu">
+		<menu_item_call label="Moi znajomi" name="Friends..."/>
+		<menu_item_call label="Moje grupy" name="Groups..."/>
+		<menu_item_call label="Mój profil" name="Profile..."/>
+	</context_menu>
 	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 	<menu_item_call label="Profil obiektu" name="Object Inspect" />
 	<menu_item_call label="Inspekcja" name="Object_Inspect_Floater" />

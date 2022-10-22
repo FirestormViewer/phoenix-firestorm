@@ -5360,6 +5360,9 @@ Missbrauchsbericht
 		Tanzen8
 	</string>
 	<string name="AvatarBirthDateFormat">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
@@ -6606,18 +6609,7 @@ Support-Bereich der Website Secondlife.com und melden Sie das Problem.
 	<string name="FSCmdLineRSP">
 		Maximale Bandbreite gesetzt auf: [VALUE] kbit/s.
 	</string>
-	
-	<!-- NetMap double click action tooltip messages -->
-	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
-		[AGENT][REGION](Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
-	</string>
-	<string name="NetMapDoubleClickTeleportToolTipMsg">
-		[REGION](Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
-	</string>
-	<string name="NetMapDoubleClickNoActionToolTipMsg">
-		[REGION]
-	</string>
-	
+
 	<!-- Nearby Chat Collision Messages -->
 	<string name="Collision_Bump">
 		[NAME] hat Sie gestoßen.
