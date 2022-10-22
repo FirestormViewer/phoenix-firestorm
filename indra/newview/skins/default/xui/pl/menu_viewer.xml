@@ -522,6 +522,9 @@
 			<menu_item_check label="Pinguj pozycje interpolowanych obiektów" name="Ping Interpolate Object Positions"/>
 			<menu_item_call label="Zagub pakiet" name="Drop a Packet" shortcut=""/>
 		</menu>
+		<menu label="Pamięć podręczna" name="Cache">
+			<menu_item_call label="Wyczyść pamięć podręczną dysku" name="Purge Disk Cache" />
+		</menu>
 		<menu_item_call label="Zrzut oskryptowanej kamery" name="Dump Scripted Camera"/>
 		<menu label="Nagrywanie" name="Recorder">
 			<menu_item_call label="Rozpocznij nagrywanie zdarzeń" name="Start event recording"/>

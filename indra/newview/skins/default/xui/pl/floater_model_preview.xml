@@ -128,6 +128,7 @@
                         <combo_item name="physics_medium">Średnie</combo_item>
                         <combo_item name="physics_low">Niskie</combo_item>
                         <combo_item name="physics_lowest">Najniższe</combo_item>
+                        <combo_item name="physics_bounding_box"> Bryła brzegowa </combo_item>
                         <combo_item name="physics_cube"> Sześcian </combo_item>
                         <combo_item name="physics_hex"> Heksagon </combo_item>
                         <combo_item name="physics_ud"> Użytkownika </combo_item>
