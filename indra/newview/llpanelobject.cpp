@@ -111,6 +111,9 @@ enum {
 	MI_HOLE_COUNT
 };
 
+// <FS:Ansariel> Defined in llviewerjointattachment.h
+//const F32 MAX_ATTACHMENT_DIST = 3.5f; // meters
+
 //static const std::string LEGACY_FULLBRIGHT_DESC =LLTrans::getString("Fullbright");
 
 BOOL	LLPanelObject::postBuild()
@@ -2261,12 +2264,7 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 	// <FS:Zi> Building spin controls for attachments
 	LLVector3d new_pos_global;
 
-	if (mObject->isAttachment())
-	{
-		newpos.clamp(LLVector3(-MAX_ATTACHMENT_DIST,-MAX_ATTACHMENT_DIST,-MAX_ATTACHMENT_DIST),LLVector3(MAX_ATTACHMENT_DIST,MAX_ATTACHMENT_DIST,MAX_ATTACHMENT_DIST));
-	}
-	// </FS:Zi> Building spin controls for attachments
-	else
+	if (!mObject->isAttachment())
 	{
 		// Clamp the Z height
 		const F32 height = newpos.mV[VZ];
@@ -2301,6 +2299,16 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		// won't get dumped by the simulator.
 		new_pos_global = regionp->getPosGlobalFromRegion(newpos);
 	}
+    else
+    {
+        if (newpos.length() > MAX_ATTACHMENT_DIST)
+        {
+            newpos.clampLength(MAX_ATTACHMENT_DIST);
+            mCtrlPosX->set(newpos.mV[VX]);
+            mCtrlPosY->set(newpos.mV[VY]);
+            mCtrlPosZ->set(newpos.mV[VZ]);
+        }
+    }
 
 	// <FS:Zi> Building spin controls for attachments
 	// partly copied from llmaniptranslate.cpp to get the positioning right
@@ -2878,9 +2886,13 @@ void LLPanelObject::onPastePos()
     if (!mObject->isAttachment())
     {
         F32 max_width = regionp->getWidth(); // meters
-        mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, max_width);
-        mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, max_width);
-       //height will get properly clammed by sendPosition
+        mClipboardPos.mV[VX] = llclamp(mClipboardPos.mV[VX], 0.f, max_width);
+        mClipboardPos.mV[VY] = llclamp(mClipboardPos.mV[VY], 0.f, max_width);
+        //height will get properly clamped by sendPosition
+    }
+    else
+    {
+        mClipboardPos.clampLength(MAX_ATTACHMENT_DIST);
     }
 
     mCtrlPosX->set( mClipboardPos.mV[VX] );
