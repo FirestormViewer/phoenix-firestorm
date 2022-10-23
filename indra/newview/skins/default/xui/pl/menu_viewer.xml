@@ -337,6 +337,7 @@
 			<menu_item_check label="Ukryj cząsteczki" name="Hide Particles"/>
 			<menu_item_check label="Ukryj zaznaczone" name="Hide Selected"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent"/>
+			<menu_item_check label="- pokaż riggowaną przezroczystość" name="Include Transparent Rigged" />
 			<menu_item_check label="Pokaż celownik myszki" name="ShowCrosshairs"/>
 			<menu label="Chmurki pomocy" name="Hover Tips">
 				<menu_item_check label="Pokazuj chmurki pomocy" name="Show Tips"/>
