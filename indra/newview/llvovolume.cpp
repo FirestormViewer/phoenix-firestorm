@@ -5800,7 +5800,7 @@ static inline void add_face(T*** list, U32* count, T* face)
     {
         if (count[1] < MAX_FACE_COUNT)
         {
-            //face->setDrawOrderIndex(count[1]);
+            face->setDrawOrderIndex(count[1]); // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
             list[1][count[1]++] = face;
         }
     }
@@ -5808,35 +5808,37 @@ static inline void add_face(T*** list, U32* count, T* face)
     {
         if (count[0] < MAX_FACE_COUNT)
         {
-            //face->setDrawOrderIndex(count[0]);
+            face->setDrawOrderIndex(count[0]); // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
             list[0][count[0]++] = face;
         }
     }
 }
 
+// <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
 // return index into linkset for given object (0 for root prim)
-U32 get_linkset_index(LLVOVolume* vobj)
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
-    if (vobj->isRootEdit())
-    {
-        return 0;
-    }
-
-    LLViewerObject* root = vobj->getRootEdit();
-    U32 idx = 1;
-    for (const auto& child : root->getChildren())
-    {
-        if (child == vobj)
-        {
-            return idx;
-        }
-        ++idx;
-    }
-
-    llassert(false);
-    return idx; //should never get here
-}
+//U32 get_linkset_index(LLVOVolume* vobj)
+//{
+//    LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE;
+//    if (vobj->isRootEdit())
+//    {
+//        return 0;
+//    }
+//
+//    LLViewerObject* root = vobj->getRootEdit();
+//    U32 idx = 1;
+//    for (const auto& child : root->getChildren())
+//    {
+//        if (child == vobj)
+//        {
+//            return idx;
+//        }
+//        ++idx;
+//    }
+//
+//    llassert(false);
+//    return idx; //should never get here
+//}
+// </FS:Ansariel>
 
 void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 {
@@ -6046,7 +6048,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                 avatar->addAttachmentOverridesForObject(vobj, NULL, false);
             }
             
-            U32 linkset_index = get_linkset_index(vobj);
+            // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
+            //U32 linkset_index = get_linkset_index(vobj);
 
             // Standard rigged mesh attachments: 
 			bool rigged = !vobj->isAnimatedObject() && skinInfo && vobj->isAttachment();
@@ -6068,7 +6071,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				}
 
                 // order by linkset index first and face index second
-                facep->setDrawOrderIndex(linkset_index * 100 + i);
+                // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
+                //facep->setDrawOrderIndex(linkset_index * 100 + i);
 
 				//ALWAYS null out vertex buffer on rebuild -- if the face lands in a render
 				// batch, it will recover its vertex buffer reference from the spatial group
@@ -6094,6 +6098,13 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
                     if (facep->isState(LLFace::RIGGED))
                     { 
                         //face is not rigged but used to be, remove from rigged face pool
+                        // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
+                        LLDrawPoolAvatar* pool = (LLDrawPoolAvatar*)facep->getPool();
+                        if (pool)
+                        {
+                            pool->removeFace(facep);
+                        }
+                        // </FS:Ansariel>
                         facep->clearState(LLFace::RIGGED);
                         facep->mAvatar = NULL;
                         facep->mSkinInfo = NULL;
@@ -6568,13 +6579,15 @@ struct CompareBatchBreakerRigged
     }
 };
 
-struct CompareDrawOrder
-{
-    bool operator()(const LLFace* const& lhs, const LLFace* const& rhs)
-    {
-        return lhs->getDrawOrderIndex() < rhs->getDrawOrderIndex();
-    }
-};
+// <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
+//struct CompareDrawOrder
+//{
+//    bool operator()(const LLFace* const& lhs, const LLFace* const& rhs)
+//    {
+//        return lhs->getDrawOrderIndex() < rhs->getDrawOrderIndex();
+//    }
+//};
+// </FS:Ansariel>
 
 U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace** faces, U32 face_count, BOOL distance_sort, BOOL batch_textures, BOOL rigged)
 {
@@ -6619,11 +6632,13 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
                 //sort faces by things that break batches, including avatar and mesh id
                 std::sort(faces, faces + face_count, CompareBatchBreakerRigged());
             }
-            else
-            {
-                // preserve legacy draw order for rigged faces
-                std::sort(faces, faces + face_count, CompareDrawOrder());
-            }
+            // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
+            //else
+            //{
+            //    // preserve legacy draw order for rigged faces
+            //    std::sort(faces, faces + face_count, CompareDrawOrder());
+            //}
+            // </FS:Ansariel>
         }
         else if (!distance_sort)
         {
