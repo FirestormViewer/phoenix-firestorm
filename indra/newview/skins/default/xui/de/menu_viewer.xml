@@ -321,6 +321,7 @@
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
+			<menu_item_check label="- Durchsichtige geriggte Netze einschließen" name="Include Transparent Rigged"/>
 			<menu_item_check label="Fadenkreuz für Mouselook anzeigen" name="ShowCrosshairs"/>
 			<menu label="Schwebe-Tipps" name="Hover Tips">
 				<menu_item_check label="Tipps anzeigen" name="Show Tips"/>
