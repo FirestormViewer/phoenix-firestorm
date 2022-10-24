@@ -67,6 +67,7 @@
 #include "llsdserialize.h"
 #include "llcallstack.h"
 #include "llcorehttputil.h"
+#include "lluiusage.h"
 
 // Firestorm includes
 #include "fslslbridge.h"
@@ -3240,6 +3241,7 @@ void LLVOAvatarSelf::onCustomizeStart(bool disable_camera_switch)
 {
 	if (isAgentAvatarValid())
 	{
+		LLUIUsage::instance().logCommand("Avatar.CustomizeStart");
 		if (!gAgentAvatarp->mEndCustomizeCallback.get())
 		{
 			gAgentAvatarp->mEndCustomizeCallback = new LLUpdateAppearanceOnDestroy;

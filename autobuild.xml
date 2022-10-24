@@ -1840,7 +1840,7 @@
       <key>libpng</key>
       <map>
         <key>copyright</key>
-        <string>Copyright (c) 2004, 2006-2013 Glenn Randers-Pehrson</string>
+        <string>Copyright (c) 1995-2022 The PNG Reference Library Authors.</string>
         <key>description</key>
         <string>PNG Reference library</string>
         <key>license</key>
@@ -1868,9 +1868,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83ae55031f81dace9dcf688cc5510010</string>
+              <string>134089ec8c1eead9436b69c326790fc0</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/libpng-1.6.8.180841558-linux64-180841558.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libpng-1.6.38.222890126-linux64-222890126.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

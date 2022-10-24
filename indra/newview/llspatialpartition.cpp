@@ -1595,6 +1595,62 @@ void pushVertsColorCoded(LLSpatialGroup* group, U32 mask)
 	}
 }
 
+// return false if drawable is rigged and:
+//  - a linked rigged drawable has a different spatial group
+//  - a linked rigged drawable face has the wrong draw order index
+bool check_rigged_group(LLDrawable* drawable)
+{
+    if (drawable->isState(LLDrawable::RIGGED))
+    {
+        LLSpatialGroup* group = drawable->getSpatialGroup();
+        LLDrawable* root = drawable->getRoot();
+
+        if (root->isState(LLDrawable::RIGGED) && root->getSpatialGroup() != group)
+        {
+            llassert(false);
+            return false;
+        }
+
+        S32 last_draw_index = -1;
+        if (root->isState(LLDrawable::RIGGED))
+        {
+            for (auto& face : root->getFaces())
+            {
+                if ((S32) face->getDrawOrderIndex() <= last_draw_index)
+                {
+                    llassert(false);
+                    return false;
+                }
+                last_draw_index = face->getDrawOrderIndex();
+            }
+        }
+
+        for (auto& child : root->getVObj()->getChildren())
+        {
+            if (child->mDrawable->isState(LLDrawable::RIGGED))
+            {
+                for (auto& face : child->mDrawable->getFaces())
+                {
+                    if ((S32) face->getDrawOrderIndex() <= last_draw_index)
+                    {
+                        llassert(false);
+                        return false;
+                    }
+                    last_draw_index = face->getDrawOrderIndex();
+                }
+            }
+            
+            if (child->mDrawable->getSpatialGroup() != group)
+            {
+                llassert(false);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 void renderOctree(LLSpatialGroup* group)
 {
 	//render solid object bounding box, color
@@ -1639,6 +1695,9 @@ void renderOctree(LLSpatialGroup* group)
 				{
 					continue;
 				}
+
+                llassert(check_rigged_group(drawable));
+
 				if (!group->getSpatialPartition()->isBridge())
 				{
 					gGL.pushMatrix();
@@ -3092,7 +3151,7 @@ public:
 
 	}
 
-	void visit(const LLOctreeNode<LLVolumeTriangle>* branch)
+    void visit(const LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>* branch)
 	{
 		LLVolumeOctreeListener* vl = (LLVolumeOctreeListener*) branch->getListener(0);
 
@@ -3134,7 +3193,7 @@ public:
 			}
 
 			gGL.begin(LLRender::TRIANGLES);
-			for (LLOctreeNode<LLVolumeTriangle>::const_element_iter iter = branch->getDataBegin();
+            for (LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>::const_element_iter iter = branch->getDataBegin();
 					iter != branch->getDataEnd();
 					++iter)
 			{
@@ -3231,14 +3290,14 @@ void renderRaycast(LLDrawable* drawablep)
 					{
 						F32 t = 1.f;
 
-						if (!face.mOctree)
+                        if (!face.getOctree())
 						{
 							((LLVolumeFace*) &face)->createOctree(); 
 						}
 
 						LLRenderOctreeRaycast render(start, dir, &t);
 					
-						render.traverse(face.mOctree);
+                        render.traverse(face.getOctree());
 					}
 
 					gGL.popMatrix();		
@@ -3855,9 +3914,9 @@ BOOL LLSpatialPartition::isVisible(const LLVector3& v)
 // <FS:ND> Class to watch for any octree changes while iterating. Will catch child insertion/removal as well as data insertion/removal.
 // Template so it can be used for than LLOctreeNode< LLDrawable > if needed
 
-template< typename T > class ndOctreeListener: public LLOctreeListener< T >
+template< typename T, typename T_PTR > class ndOctreeListener: public LLOctreeListener< T, T_PTR >
 {
-	typedef LLOctreeNode< T > tNode;
+	typedef LLOctreeNode< T, T_PTR > tNode;
 	typedef std::vector< LLPointer< LLTreeListener< T > > > tListener;
 
 	tNode *mNode;
@@ -3929,13 +3988,13 @@ public:
 	}
 };
 
-typedef ndOctreeListener< LLViewerOctreeEntry > ndDrawableOctreeListener;
+typedef ndOctreeListener< LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry> > ndDrawableOctreeListener;
 typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
 
 // </FS:ND>
 
 LL_ALIGN_PREFIX(16)
-class LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry>
+class LLOctreeIntersect : public LLOctreeTraveler<LLViewerOctreeEntry, LLPointer<LLViewerOctreeEntry>>
 {
 public:
 	LL_ALIGN_16(LLVector4a mStart);

@@ -631,7 +631,7 @@ static void settings_to_globals()
 
 	gDebugWindowProc = gSavedSettings.getBOOL("DebugWindowProc");
 	gShowObjectUpdates = gSavedSettings.getBOOL("ShowObjectUpdates");
-	LLWorldMapView::sMapScale = gSavedSettings.getF32("MapScale");
+    LLWorldMapView::setScaleSetting(gSavedSettings.getF32("MapScale"));
 	
 #if LL_DARWIN
 	gHiDPISupport = gSavedSettings.getBOOL("RenderHiDPI");
@@ -2914,10 +2914,24 @@ bool LLAppViewer::initConfiguration()
 	//Load settings files list
 	std::string settings_file_list = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "settings_files.xml");
 	LLXMLNodePtr root;
-	BOOL success  = LLXMLNode::parseFile(settings_file_list, root, NULL);
+	BOOL success = LLXMLNode::parseFile(settings_file_list, root, NULL);
 	if (!success)
 	{
-        LL_ERRS() << "Cannot load default configuration file " << settings_file_list << LL_ENDL;
+        LL_WARNS() << "Cannot load default configuration file " << settings_file_list << LL_ENDL;
+        if (gDirUtilp->fileExists(settings_file_list))
+        {
+            LL_ERRS() << "Cannot load default configuration file settings_files.xml. "
+                << "Please reinstall viewer from https://secondlife.com/support/downloads/ "
+                << "and contact https://support.secondlife.com if issue persists after reinstall."
+                << LL_ENDL;
+        }
+        else
+        {
+            LL_ERRS() << "Default configuration file settings_files.xml not found. "
+                << "Please reinstall viewer from https://secondlife.com/support/downloads/ "
+                << "and contact https://support.secondlife.com if issue persists after reinstall."
+                << LL_ENDL;
+        }
 	}
 
 	mSettingsLocationList = new SettingsFiles();
@@ -4228,7 +4242,7 @@ void LLAppViewer::cleanupSavedSettings()
 		}
 	}
 
-	gSavedSettings.setF32("MapScale", LLWorldMapView::sMapScale );
+    gSavedSettings.setF32("MapScale", LLWorldMapView::getScaleSetting());
 
 	// Some things are cached in LLAgent.
 	if (gAgent.isInitialized())
@@ -5068,15 +5082,23 @@ bool LLAppViewer::initCache()
 	// initialize the new disk cache using saved settings
 	const std::string cache_dir_name = gSavedSettings.getString("DiskCacheDirName");
 
+	const U32 MB = 1024 * 1024;
+    const uintmax_t MIN_CACHE_SIZE = 256 * MB;
+	const uintmax_t MAX_CACHE_SIZE = 9984ll * MB;
+    const uintmax_t setting_cache_total_size = uintmax_t(gSavedSettings.getU32("CacheSize")) * MB;
+    const uintmax_t cache_total_size = llclamp(setting_cache_total_size, MIN_CACHE_SIZE, MAX_CACHE_SIZE);
+    // <FS:Ansariel> Better cache size control
+    //const F64 disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
+    //const F6432 texture_cache_percent = 100.0 - disk_cache_percent;
+    // </FS:Ansariel>
+
     // note that the maximum size of this cache is defined as a percentage of the 
     // total cache size - the 'CacheSize' pref - for all caches. 
-    // <FS:Ansariel> Better asset cache size control
-    //const unsigned int cache_total_size_mb = gSavedSettings.getU32("CacheSize");
-    //const double disk_cache_percent = gSavedSettings.getF32("DiskCachePercentOfTotal");
-    //const unsigned int disk_cache_mb = cache_total_size_mb * disk_cache_percent / 100;
+    // <FS:Ansariel> Better cache size control
+    //const uintmax_t disk_cache_size = uintmax_t(cache_total_size * disk_cache_percent / 100);
     const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
+    const uintmax_t disk_cache_size = disk_cache_mb * 1024ULL * 1024ULL;
     // </FS:Ansariel>
-    const uintmax_t disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
 	const bool enable_cache_debug_info = gSavedSettings.getBOOL("EnableDiskCacheDebugInfo");
 
 	bool texture_cache_mismatch = false;
@@ -5155,7 +5177,7 @@ bool LLAppViewer::initCache()
 	// </FS:Ansariel>
 
     const std::string cache_dir = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name);
-    LLDiskCache::initParamSingleton(cache_dir, disk_cache_bytes, enable_cache_debug_info);
+    LLDiskCache::initParamSingleton(cache_dir, disk_cache_size, enable_cache_debug_info);
 
 	if (!read_only)
 	{
@@ -5215,22 +5237,17 @@ bool LLAppViewer::initCache()
 	LLSplashScreen::update(LLTrans::getString("StartupInitializingTextureCache"));
 
 	// Init the texture cache
-	// Allocate 80% of the cache size for textures
-	const S32 MB = 1024 * 1024;
-	const S64 MIN_CACHE_SIZE = 256 * MB;
-	const S64 MAX_CACHE_SIZE = 9984ll * MB;
+    // Allocate the remaining percent which is not allocated to the disk cache
+	// <FS:Ansariel> Better cache size control
+	//const S64 texture_cache_size = S64(cache_total_size * texture_cache_percent / 100);
+	const S64 texture_cache_size = (S64)cache_total_size;
+	// </FS:Ansariel>
 
-	S64 cache_size = (S64)(gSavedSettings.getU32("CacheSize")) * MB;
-	cache_size = llclamp(cache_size, MIN_CACHE_SIZE, MAX_CACHE_SIZE);
-
-	S64 texture_cache_size = cache_size;
-
-	S64 extra = LLAppViewer::getTextureCache()->initCache(LL_PATH_CACHE, texture_cache_size, texture_cache_mismatch);
-	texture_cache_size -= extra;
+    LLAppViewer::getTextureCache()->initCache(LL_PATH_CACHE, texture_cache_size, texture_cache_mismatch);
 
 	LLVOCache::getInstance()->initCache(LL_PATH_CACHE, gSavedSettings.getU32("CacheNumberOfRegionsForObjects"), getObjectCacheVersion());
 
-		return true;
+    return true;
 }
 
 void LLAppViewer::addOnIdleCallback(const boost::function<void()>& cb)
@@ -5953,8 +5970,7 @@ void LLAppViewer::idle()
 			audio_update_wind(false);
 
 			// this line actually commits the changes we've made to source positions, etc.
-			const F32 max_audio_decode_time = 0.002f; // 2 ms decode time
-			gAudiop->idle(max_audio_decode_time);
+			gAudiop->idle();
 		}
 	}
 

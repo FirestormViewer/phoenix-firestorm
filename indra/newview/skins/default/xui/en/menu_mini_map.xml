@@ -271,38 +271,50 @@
   </menu_item_call>
   <menu_item_separator
   name="Stop Tracking Separator" />
+
   <menu
    label="Zoom"
    name="Minimap Zoom">
-	<menu_item_call
+    <menu_item_check
+     label="Very close"
+     name="Zoom very close">
+        <menu_item_check.on_check
+         function="Minimap.Zoom.Check"
+         parameter="very close" />
+        <menu_item_check.on_click
+         function="Minimap.Zoom.Set"
+         parameter="very close" />
+    </menu_item_check>
+    <menu_item_check
      label="Close"
-     name="Zoom Close">
-        <menu_item_call.on_click
-         function="Minimap.Zoom"
+     name="Zoom close">
+        <menu_item_check.on_check
+         function="Minimap.Zoom.Check"
          parameter="close" />
-    </menu_item_call>
-    <menu_item_call
-     label="Medium"
-     name="Zoom Medium">
-        <menu_item_call.on_click
-         function="Minimap.Zoom"
+        <menu_item_check.on_click
+         function="Minimap.Zoom.Set"
+         parameter="close" />
+    </menu_item_check>
+    <menu_item_check
+     label="Medium (Default)"
+     name="Zoom medium">
+        <menu_item_check.on_check
+         function="Minimap.Zoom.Check"
          parameter="medium" />
-    </menu_item_call>
-    <menu_item_call
+        <menu_item_check.on_click
+         function="Minimap.Zoom.Set"
+         parameter="medium" />
+    </menu_item_check>
+    <menu_item_check
      label="Far"
-     name="Zoom Far">
-        <menu_item_call.on_click
-         function="Minimap.Zoom"
+     name="Zoom far">
+        <menu_item_check.on_check
+         function="Minimap.Zoom.Check"
          parameter="far" />
-    </menu_item_call>
-    <menu_item_separator/>
-    <menu_item_call
-     label="Default"
-     name="Zoom Default">
-        <menu_item_call.on_click
-         function="Minimap.Zoom"
-         parameter="default" />
-    </menu_item_call>
+        <menu_item_check.on_click
+         function="Minimap.Zoom.Set"
+         parameter="far" />
+    </menu_item_check>
   </menu>
   <menu
    label="Show"
@@ -358,9 +370,9 @@
      name="Property Lines">
       <menu_item_check.on_click
        function="Minimap.ToggleOverlay"
-       parameter="MiniMapPropertyLines" />
+       parameter="MiniMapShowPropertyLines" />
       <menu_item_check.on_check
-       control="MiniMapPropertyLines" />
+       control="MiniMapShowPropertyLines" />
     </menu_item_check>
     <menu_item_check
      label="Parcels for Sale"
@@ -371,7 +383,7 @@
       <menu_item_check.on_check
        control="MiniMapForSaleParcels" />
       <menu_item_check.on_enable
-       control="MiniMapPropertyLines" />
+       control="MiniMapShowPropertyLines" />
     </menu_item_check>
     <menu_item_separator />
     <menu_item_check
@@ -396,23 +408,40 @@
     </menu_item_check>
   </menu>
     <menu_item_check
-       label="Rotate Map"
-       name="Rotate Map">
+       label="North at top"
+       name="North at top">
           <menu_item_check.on_check
-             control="MiniMapRotate" />
+             function="Minimap.MapOrientation.Check"
+             parameter="north_at_top" />
           <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="MiniMapRotate" />
+             function="Minimap.MapOrientation.Set"
+             parameter="north_at_top" />
     </menu_item_check>
     <menu_item_check
-       label="Auto Center"
-       name="Auto Center">
+       label="Camera at top"
+       name="Camera at top">
+          <menu_item_check.on_check
+             function="Minimap.MapOrientation.Check"
+             parameter="camera_at_top" />
+          <menu_item_check.on_click
+             function="Minimap.MapOrientation.Set"
+             parameter="camera_at_top" />
+    </menu_item_check>
+    <menu_item_check
+       label="Auto-center map"
+       name="Auto-center map">
           <menu_item_check.on_check
              control="MiniMapAutoCenter" />
           <menu_item_check.on_click
              function="ToggleControl"
              parameter="MiniMapAutoCenter" />
     </menu_item_check>
+    <menu_item_call
+       label="Re-center map"
+       name="Re-center map">
+          <menu_item_call.on_click
+             function="Minimap.Center.Activate" />
+    </menu_item_call>
     <menu
      label="Chat Distance Rings"
      name="Chat Distance Rings Menu">
@@ -455,6 +484,12 @@
       </menu_item_check>
     </menu>
     <menu_item_separator />
+    <menu_item_call
+     label="About Land"
+     name="About Land">
+        <menu_item_call.on_click
+         function="Minimap.AboutLand" />
+    </menu_item_call>
     <menu_item_call
      label="Place Profile"
      name="Place Profile">

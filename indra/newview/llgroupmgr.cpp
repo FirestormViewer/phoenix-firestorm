@@ -64,6 +64,7 @@
 #include "llviewerregion.h"
 #include <boost/regex.hpp>
 #include "llcorehttputil.h"
+#include "lluiusage.h"
 
 // [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1)
 #include "llimview.h"
@@ -1881,6 +1882,9 @@ void LLGroupMgr::sendGroupRoleMemberChanges(const LLUUID& group_id)
 //static
 void LLGroupMgr::sendGroupMemberJoin(const LLUUID& group_id)
 {
+
+	LLUIUsage::instance().logCommand("Group.Join");
+
 	LLMessageSystem *msg = gMessageSystem;
 
 	msg->newMessageFast(_PREHASH_JoinGroupRequest);

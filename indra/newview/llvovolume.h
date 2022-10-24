@@ -67,7 +67,15 @@ public:
 	{
 	}
 
-	void update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* src_volume);
+    using FaceIndex = S32;
+    static const FaceIndex UPDATE_ALL_FACES = -1;
+    static const FaceIndex DO_NOT_UPDATE_FACES = -2;
+    void update(
+        const LLMeshSkinInfo* skin,
+        LLVOAvatar* avatar,
+        const LLVolume* src_volume,
+        FaceIndex face_index = UPDATE_ALL_FACES,
+        bool rebuild_face_octrees = true);
 
     std::string mExtraDebugText;
 };
@@ -387,8 +395,12 @@ public:
 	S32 getMDCImplCount() { return mMDCImplCount; }
 	
 
-	//rigged volume update (for raycasting)
-	void updateRiggedVolume(bool force_update = false);
+    // Rigged volume update (for raycasting)
+    // By default, this updates the bounding boxes of all the faces and builds an octree for precise per-triangle raycasting
+    void updateRiggedVolume(
+        bool force_treat_as_rigged,
+        LLRiggedVolume::FaceIndex face_index = LLRiggedVolume::UPDATE_ALL_FACES,
+        bool rebuild_face_octrees = true);
 	LLRiggedVolume* getRiggedVolume();
 
 	//returns true if volume should be treated as a rigged volume
@@ -402,7 +414,7 @@ public:
 	void clearRiggedVolume();
 
 protected:
-	S32	computeLODDetail(F32	distance, F32 radius, F32 lod_factor);
+	S32	computeLODDetail(F32 distance, F32 radius, F32 lod_factor);
 	BOOL calcLOD();
 	LLFace* addFace(S32 face_index);
 	void updateTEData();
