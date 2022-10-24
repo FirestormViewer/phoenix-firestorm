@@ -23,6 +23,7 @@
 * $/LicenseInfo$
 */
 
+
 /*[EXTRA_CODE_HERE]*/
 
 //class1/deferred/materialF.glsl
@@ -40,13 +41,12 @@ out vec4 frag_data[4];
 void main()
 {
 #if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
-    frag_color = vec4(1,0,0,0.5);
+    frag_color = vec4(1, 0, 0, 0.5);
 #else
     // emissive red PBR material
-    frag_data[0] = vec4(0,0,0,0);
-    frag_data[1] = vec4(0,0,0,0);
-    frag_data[2] = vec4(1,0,0,GBUFFER_FLAG_HAS_PBR);
-    frag_data[3] = vec4(1,0,0,0);
+    frag_data[0] = vec4(0, 0, 0, 0);
+    frag_data[1] = vec4(0, 0, 0, 0);
+    frag_data[2] = vec4(1, 0, 0, GBUFFER_FLAG_HAS_PBR);
+    frag_data[3] = vec4(1, 0, 0, 0);
 #endif
 }
-

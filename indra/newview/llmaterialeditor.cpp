@@ -1401,17 +1401,31 @@ void LLMaterialEditor::loadMaterialFromFile(const std::string& filename, S32 ind
     }
 }
 
-void LLMaterialEditor::loadLiveMaterial(LLUUID &asset_id)
+void LLMaterialEditor::loadLive()
 {
     LLMaterialEditor* me = (LLMaterialEditor*)LLFloaterReg::getInstance("material_editor", LLSD(LIVE_MATERIAL_EDITOR_KEY));
-    me->setTitle(me->getString("material_override_title"));
-    me->setAssetId(asset_id);
-    if (asset_id.notNull())
+    if (me->setFromSelection())
     {
-        me->setFromGLTFMaterial(gGLTFMaterialList.getMaterial(asset_id));
+        me->mIsOverride = true;
+        me->setTitle(me->getString("material_override_title"));
+        me->childSetVisible("save", false);
+        me->childSetVisible("save_as", false);
+
+        me->openFloater();
+        me->setFocus(TRUE);
     }
-    me->openFloater();
-    me->setFocus(TRUE);
+}
+
+void LLMaterialEditor::loadObjectSave()
+{
+    LLMaterialEditor* me = (LLMaterialEditor*)LLFloaterReg::getInstance("material_editor", LLSD(LIVE_MATERIAL_EDITOR_KEY));
+    if (me->setFromSelection())
+    {
+        me->mIsOverride = false;
+        me->childSetVisible("save", false);
+        me->openFloater();
+        me->setFocus(TRUE);
+    }
 }
 
 void LLMaterialEditor::loadFromGLTFMaterial(LLUUID &asset_id)
@@ -1872,42 +1886,24 @@ public:
 
     bool apply(LLViewerObject* objectp, S32 te) override
     {
+        // post override from given object and te to the simulator
+        // requestData should have:
+        //  object_id - UUID of LLViewerObject
+        //  side - S32 index of texture entry
+        //  gltf_json - String of GLTF json for override data
+
         if (objectp && objectp->permModify() && objectp->getVolume())
         {
-            //LLVOVolume* vobjp = (LLVOVolume*)objectp;
-            S32 local_id = objectp->getLocalID();
-
             LLPointer<LLGLTFMaterial> material = new LLGLTFMaterial();
-            LLPointer<LLGLTFMaterial> base;
+            
             mEditor->getGLTFMaterial(material);
 
-            tinygltf::Model model_out;
-
-            if(mAssetID != LLUUID::null)
-            {
-                base = gGLTFMaterialList.getMaterial(mAssetID);
-                material->writeOverridesToModel(model_out, 0, base);
-            }
-            else
-            {
-                material->writeToModel(model_out, 0);
-            }
-
-            std::string overrides_json;
-            {
-                tinygltf::TinyGLTF gltf;
-                std::ostringstream str;
-
-                gltf.WriteGltfSceneToStream(&model_out, str, false, false);
-
-                overrides_json = str.str();
-                LL_DEBUGS() << "overrides_json " << overrides_json << LL_ENDL;
-            }
-
+            std::string overrides_json = material->asJSON();
+            
             LLSD overrides = llsd::map(
-                "local_id", local_id,
+                "object_id", objectp->getID(),
                 "side", te,
-                "overrides", overrides_json
+                "gltf_json", overrides_json
             );
             LLCoros::instance().launch("modifyMaterialCoro", std::bind(&LLMaterialEditor::modifyMaterialCoro, mEditor, mCapUrl, overrides));
         }
@@ -1922,7 +1918,7 @@ private:
 
 void LLMaterialEditor::applyToSelection()
 {
-    if (!mKey.isUUID() || mKey.asUUID() != LIVE_MATERIAL_EDITOR_KEY)
+    if (!mIsOverride)
     {
         // Only apply if working with 'live' materials
         // Might need a better way to distinguish 'live' mode.
@@ -1991,6 +1987,28 @@ void LLMaterialEditor::setFromGLTFMaterial(LLGLTFMaterial* mat)
     setAlphaMode(mat->getAlphaMode());
     setAlphaCutoff(mat->mAlphaCutoff);
 }
+
+bool LLMaterialEditor::setFromSelection()
+{
+    struct LLSelectedTEGetGLTFRenderMaterial : public LLSelectedTEGetFunctor<LLPointer<LLGLTFMaterial> >
+    {
+        LLPointer<LLGLTFMaterial> get(LLViewerObject* object, S32 te_index)
+        {
+            return object->getTE(te_index)->getGLTFRenderMaterial(); // present user with combined override + asset
+        }
+    } func;
+
+    LLPointer<LLGLTFMaterial> mat;
+    LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue(&func, mat);
+    if (mat.notNull())
+    {
+        setFromGLTFMaterial(mat);
+        return true;
+    }
+
+    return false;
+}
+
 
 void LLMaterialEditor::loadAsset()
 {

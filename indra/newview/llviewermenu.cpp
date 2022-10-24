@@ -3639,7 +3639,7 @@ void load_life_gltf_material(bool copy)
     }
     else
     {
-        LLMaterialEditor::loadLiveMaterial(mat_id);
+        LLMaterialEditor::loadLive();
     }
 
     LLViewerJoystick::getInstance()->moveObjects(true);
@@ -3648,12 +3648,13 @@ void load_life_gltf_material(bool copy)
 
 void handle_object_edit_gltf_material()
 {
-    load_life_gltf_material(false);
+    handle_object_edit();
+    LLMaterialEditor::loadLive();
 }
 
 void handle_object_save_gltf_material()
 {
-    load_life_gltf_material(true);
+    LLMaterialEditor::loadObjectSave();
 }
 
 void handle_attachment_edit(const LLUUID& inv_item_id)
