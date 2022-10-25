@@ -304,7 +304,6 @@ endif(NOT WORD_SIZE EQUAL 32)
 target_link_libraries(
         llcommon
         ll::apr
-        ll::bugsplat
         ll::expat
         ll::jsoncpp
         ll::zlib-ng
@@ -315,7 +314,7 @@ target_link_libraries(
     )
 
 target_include_directories(llcommon INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(llcommon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
+target_include_directories(llcommon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_dependencies(llcommon stage_third_party_libs)
 
