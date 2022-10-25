@@ -1686,6 +1686,9 @@ void LLNetMap::createParcelImage()
 
 BOOL LLNetMap::handleMouseDown(S32 x, S32 y, MASK mask)
 {
+    // <FS:Ansariel> FIRE-32339: Mini map can't be dragged anymore
+    if (!(mask & MASK_SHIFT)) return FALSE;
+
     // Start panning
     gFocusMgr.setMouseCapture(this);
 
@@ -1865,10 +1868,10 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mPopupMenu->buildDrawLabels();
 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
-		mPopupMenu->setItemVisible("Stop tracking", LLTracker::isTracking(0));
+		mPopupMenu->setItemVisible("Stop Tracking", LLTracker::isTracking(0));
 		mPopupMenu->setItemVisible("Stop Tracking Separator", LLTracker::isTracking(0));
 // [/SL:KB]
-//		mPopupMenu->setItemEnabled("Stop tracking", LLTracker::isTracking(0));
+//		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
 		LLMenuGL::showPopup(this, mPopupMenu, x, y);
 	}
 	return TRUE;
@@ -2127,8 +2130,8 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 	if (mPopupMenu)
 	{
 		// <FS:Ansariel> Hide tracking option instead of disabling
-		//mPopupMenu->setItemEnabled ("Stop tracking", false);
-		mPopupMenu->setItemVisible ("Stop tracking", false);
+		//mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		mPopupMenu->setItemVisible ("Stop Tracking", false);
 		// </FS:Ansariel>
 		LLTracker::stopTracking (LLTracker::isTracking(NULL));
 	}
