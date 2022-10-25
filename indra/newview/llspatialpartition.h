@@ -275,6 +275,8 @@ public:
                 return lhs->mAvatarp < rhs->mAvatarp;
             }
 
+            // <FS:Ansariel> BUG-232794: Restore old rigged mesh draw order
+            //return lhs->mRenderOrder < rhs->mRenderOrder;
             return lhs->mRenderOrder > rhs->mRenderOrder;
         }
     };

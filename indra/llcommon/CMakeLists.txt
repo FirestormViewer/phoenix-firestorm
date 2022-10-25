@@ -254,6 +254,11 @@ set(llcommon_HEADER_FILES
     StackWalker.h
     )
     
+if (DARWIN)
+  list(APPEND llcommon_HEADER_FILES llsys_objc.h)
+  list(APPEND llcommon_SOURCE_FILES llsys_objc.mm)
+endif (DARWIN)
+    
 # <FS:Beq/> Tracy Profiler support
 list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
 
@@ -309,8 +314,8 @@ target_link_libraries(
         ll::tracy
     )
 
-target_include_directories( llcommon  INTERFACE   ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories( llcommon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
+target_include_directories(llcommon INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(llcommon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
 
 add_dependencies(llcommon stage_third_party_libs)
 

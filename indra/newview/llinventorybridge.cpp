@@ -982,7 +982,11 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	// </FS>
 
 	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
-	if (active_panel && (active_panel->getName() != "All Items"))
+	// <FS:Zi> Don't offer "Show in Main View" for folders opened in separate inventory views
+	//         as there are no tabs to switch to
+	// if (active_panel && (active_panel->getName() != "All Items"))
+	if (active_panel && (active_panel->getName() != "All Items") && (active_panel->getName() != "inv_panel"))
+	// </FS:Zi>
 	{
 		items.push_back(std::string("Show in Main Panel"));
 	}
@@ -3741,6 +3745,21 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		LLFloaterReg::showInstance("fs_partial_inventory", LLSD().with("start_folder_id", mUUID).with("start_folder_name", mDisplayName));
 	}
 	// </FS:Ansariel>
+
+	// <FS:Zi> Add "Reload folder" action to inventory
+	else if ("reload_folder" == action)
+	{
+		LLViewerInventoryCategory *cat = model->getCategory(mUUID);
+
+		if (!cat)
+		{
+			return;
+		}
+
+		cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+        cat->fetch();
+	}
+	// </FS:Zi>
 }
 
 void LLFolderBridge::gatherMessage(std::string& message, S32 depth, LLError::ELevel log_level)
@@ -4200,7 +4219,20 @@ void LLFolderBridge::perform_pasteFromClipboard()
 				{
 					if (item && can_move_to_landmarks(item))
 					{
-						dropToFavorites(item);
+                        if (LLClipboard::instance().isCutMode())
+                        {
+                            LLViewerInventoryItem* viitem = dynamic_cast<LLViewerInventoryItem*>(item);
+                            llassert(viitem);
+                            if (viitem)
+                            {
+                                //changeItemParent() implicity calls dirtyFilter
+                                changeItemParent(model, viitem, parent_id, FALSE);
+                            }
+                        }
+                        else
+                        {
+                            dropToFavorites(item);
+                        }
 					}
 				}
 				else if (LLClipboard::instance().isCutMode())
@@ -4686,6 +4718,20 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	// <FS:Ansariel> Show folder in new window option
 	items.push_back((std::string("Show in new Window")));
 
+	// <FS:Zi> Add "Reload folder" action to inventory
+	// only allow reload for a single, non-root folder to prevent misuse
+	if (!(flags & ITEM_IN_MULTI_SELECTION))
+	{
+		if (mUUID != model->findCategoryUUIDForType(LLFolderType::FT_ROOT_INVENTORY))
+		{
+			if (mUUID != model->findLibraryCategoryUUIDForType(LLFolderType::FT_ROOT_INVENTORY))
+			{
+				items.push_back(std::string("ReloadFolder"));
+			}
+		}
+	}
+	// </FS:Zi>
+
 	// Add menu items that are dependent on the contents of the folder.
 	LLViewerInventoryCategory* category = (LLViewerInventoryCategory *) model->getCategory(mUUID);
 	if (category && (marketplace_listings_id != mUUID))
@@ -4749,7 +4795,7 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 			items.push_back(std::string("IM All Contacts In Folder"));
 		}
 
-        if (((flags & ITEM_IN_MULTI_SELECTION) == 0) && hasChildren())
+        if (((flags & ITEM_IN_MULTI_SELECTION) == 0) && hasChildren() && (type != LLFolderType::FT_OUTFIT))
         {
             items.push_back(std::string("Ungroup folder items"));
         }

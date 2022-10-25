@@ -10,11 +10,16 @@
 	</context_menu>
 	<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
 	<menu_item_call label="Aufstehen" name="Stand Up"/>
-	<menu_item_call label="Aktuelles Outfit" name="NowWearing"/>
-	<menu_item_call label="Outfit wechseln" name="Change Outfit"/>
-	<menu_item_call label="Form bearbeiten" name="Edit My Shape"/>
-	<menu_item_call label="Outfit bearbeiten" name="Edit Outfit"/>
-	<menu_item_call label="Schwebehöhe" name="Hover Height"/>
+	<context_menu label="Aussehen" name="AppearanceSubmenu">
+		<menu_item_call label="Aktuelles Outfit" name="NowWearing" />
+		<menu_item_call label="Outfit wechseln" name="Change Outfit" />
+		<menu_item_call label="Form bearbeiten" name="Edit Shape" />
+		<menu_item_call label="Outfit bearbeiten" name="Edit Outfit Parts" />
+		<menu_item_call label="Schwebehöhe" name="Hover Height"/>
+		<menu_item_call label="Skelett zurücksetzen" name="Reset Skeleton"/>
+		<menu_item_call label="Skelett und Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Mesh LOD zurücksetzen" name="Reset Mesh LOD"/>
+	</context_menu>
 	<context_menu label="Ausziehen" name="Take Off &gt;">
 		<context_menu label="Kleidung" name="Clothes &gt;">
 			<menu_item_call label="Hemd" name="Shirt"/>
@@ -35,12 +40,11 @@
 		<context_menu label="Abnehmen" name="Detach Self"/>
 		<menu_item_call label="Alles abnehmen" name="Detach All"/>
 	</context_menu>
-	<menu_item_call label="Skelett zurücksetzen" name="Reset Skeleton"/>
-	<menu_item_call label="Skelett und Animationen zurücksetzen" name="Reset Skeleton And Animations"/>
-	<menu_item_call label="Mesh LOD zurücksetzen" name="Reset Mesh LOD"/>
-	<menu_item_call label="Freunde" name="Friends..."/>
-	<menu_item_call label="Gruppen" name="Groups..."/>
-	<menu_item_call label="Profil" name="Profile..."/>
+	<context_menu label="Gemeinschaft" name="CommunitySubmenu">
+		<menu_item_call label="Freunde" name="Friends..."/>
+		<menu_item_call label="Gruppen" name="Groups..."/>
+		<menu_item_call label="Profil" name="Profile..."/>
+	</context_menu>
 	<menu_item_call label="XML ausgeben" name="Dump XML"/>
 	<menu_item_call label="Objektprofil" name="Object Inspect"/>
 	<menu_item_call label="Untersuchen" name="Object_Inspect_Floater"/>

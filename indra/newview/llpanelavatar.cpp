@@ -84,6 +84,19 @@ void LLPanelProfileTab::setAvatarId(const LLUUID& avatar_id)
     {
         mAvatarId = avatar_id;
         mSelfProfile = (getAvatarId() == gAgentID);
+
+        // <FS:Zi> FIRE-32179: Make drag-n-drop sharing of items possible again
+        LLProfileDropTarget* target = getChild<LLProfileDropTarget>("drop_target");
+        if (avatar_id == gAgentID)
+        {
+            // hide drop target on own profile
+            target->setVisible(false);
+        }
+        else
+        {
+            target->setAgentID(avatar_id);
+        }
+        // </FS:Zi>
     }
 }
 

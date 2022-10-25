@@ -1009,7 +1009,7 @@ void LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<
 					workingTransform.mMatrix[i][j] = domArray[i + j * 4];
 				}
 			}
-			LLVector3 trans = workingTransform.getTranslation();
+			// LLVector3 trans = workingTransform.getTranslation();
 			joint_transforms[node_name] = workingTransform;
 		}
 	}

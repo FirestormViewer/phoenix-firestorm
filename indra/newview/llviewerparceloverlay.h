@@ -72,6 +72,7 @@ public:
 
 	// Returns the number of vertices drawn
 	S32				renderPropertyLines();
+    void			renderPropertyLinesOnMinimap(F32 scale_pixels_per_meter, const F32* parcel_outline_color);
 
 	U8				ownership( const LLVector3& pos) const;
 	U8				parcelLineFlags( const LLVector3& pos) const;
@@ -85,7 +86,7 @@ public:
 
 	void	idleUpdate(bool update_now = false);
 	void	updateGL();
-
+    
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	typedef boost::signals2::signal<void (const LLViewerRegion*)> update_signal_t;
 	static boost::signals2::connection setUpdateCallback(const update_signal_t::slot_type & cb);
@@ -95,7 +96,9 @@ private:
 	// This is in parcel rows and columns, not grid rows and columns
 	// Stored in bottom three bits.
 	U8		ownership(S32 row, S32 col) const	
-				{ return 0x7 & mOwnership[row * mParcelGridsPerEdge + col]; }
+				{ return parcelFlags(row, col, (U8)0x7); }
+
+    U8		parcelFlags(S32 row, S32 col, U8 flags) const;
 
 	void	addPropertyLine(std::vector<LLVector3>& vertex_array,
 				std::vector<LLColor4U>& color_array,

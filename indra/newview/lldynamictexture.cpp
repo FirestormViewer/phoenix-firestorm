@@ -129,7 +129,7 @@ void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 		// </FS:Beq>
 	}
 
-	if (gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete())
+	if (gPipeline.mBake.isComplete())
 	{ //using offscreen render target, just use the bottom left corner
 		mOrigin.set(0, 0);
 	}
@@ -216,7 +216,7 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 		return TRUE;
 	}
 
-	bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mBake.isComplete();
+	bool use_fbo = gPipeline.mBake.isComplete();
 
 	if (use_fbo)
 	{

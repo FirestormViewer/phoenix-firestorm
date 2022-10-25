@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<densityctrl label="Densité" name="density_ctrl">
+	<text name="exponential_term_label">
+		Période exponentielle
+	</text>
+	<text name="exponential_scale_factor_label">
+		Facteur d'échelle exponentiel.
+	</text>
+	<text name="linear_term_label">
+		Période linéaire
+	</text>
+	<text name="constant_term_label">
+		Période constante
+	</text>
+	<text name="max_altitude_label">
+		Hauteur maximale
+	</text>
+	<text name="aniso_factor_label">
+		Facteur d'anisotropie
+	</text>
+</densityctrl>

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map">
-	<floater.string name="ToolTipMsg">
-		[AGENT][REGION](Kliknij dwa razy by otworzyć Mapę, przeciągaj z shiftem by zmienić skalę)
+	<floater.string name="ParcelSalePriceMsg">
+		Cena: [PRICE]L$ ([PRICE_PER_SQM]L$/m²)
 	</floater.string>
-	<floater.string name="AltToolTipMsg">
-		[REGION](Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
+	<floater.string name="ParcelSaleAreaMsg">
+		Obszar: [AREA]m²
+	</floater.string>
+	<floater.string name="ParcelOwnerMsg">
+		Właściciel: [PARCEL_OWNER]
+	</floater.string>
+	<floater.string name="ToolTipHintMsg">
+		Podwójny klik by otworzyć mapę
+	</floater.string>
+	<floater.string name="AltToolTipHintMsg">
+		Podwójny klik by teleportować
 	</floater.string>
 	<floater.string name="mini_map_caption">
 		Minimapa

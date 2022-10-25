@@ -22,16 +22,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>db1a758da143fe0177df2b472eaa8d78</string>
+              <string>ba107bef7cdb9c8548d62e749d9af6fd</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/SDL2-2.0.20-linux64-222610218.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/SDL2-2.24.1-linux64-222872152.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.0.20</string>
+        <string>2.24.1</string>
       </map>
       <key>gstreamer10</key>
       <map>
@@ -164,9 +164,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1f887cbafc0fe2af1e85783de0f14102</string>
+              <string>0008a7b291fa1863ba41424b4e3ac302</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/jemalloc-5.2.1-linux64-210451204.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/jemalloc-5.3.0-linux64-222631217.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1084,11 +1084,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>971a4c8accc851994039ef36785bed38</string>
+              <string>fec86a4837ae9c6932c10af11851c4d0</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.07-darwin-222051107.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.09-darwin64-5.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1098,11 +1098,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>21d50d222f005c033452ee3fad44bff1</string>
+              <string>a45bb657d668b7f1b4fa4c88eb81a80a</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.07-linux64_bionic-222191132.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.09-linux64-222891103.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1112,11 +1112,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>611c5389b0354e6b64a7de50b93fafdb</string>
+              <string>6dd278518e791dbc2841e337feb295db</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.07-windows-222041046.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.09-windows-222890940.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1126,18 +1126,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1b0b4d70d172c9b1eaac211f051ca599</string>
+              <string>1b7ced6f750b12f0d014556705019534</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.07-windows64-222041047.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.09-windows64-222890941.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.07</string>
+        <string>2.02.09</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1886,7 +1886,7 @@
       <key>libpng</key>
       <map>
         <key>copyright</key>
-        <string>Copyright (c) 2004, 2006-2013 Glenn Randers-Pehrson</string>
+        <string>Copyright (c) 1995-2022 The PNG Reference Library Authors.</string>
         <key>description</key>
         <string>PNG Reference library</string>
         <key>license</key>
@@ -1914,9 +1914,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83ae55031f81dace9dcf688cc5510010</string>
+              <string>134089ec8c1eead9436b69c326790fc0</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/libpng-1.6.8.180841558-linux64-180841558.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libpng-1.6.38.222890126-linux64-222890126.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2632,16 +2632,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>411c000af6328e454ff7064f90c18a81</string>
+              <string>8ad6779b81899afb7bd803ac2e2af37a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222610246-linux64-222610246.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/open_libndofdev-0.13.222872202-linux64-222872202.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
         </map>
         <key>version</key>
-        <string>0.13.222610246</string>
+        <string>0.13.222872202</string>
       </map>
       <key>openal</key>
       <map>

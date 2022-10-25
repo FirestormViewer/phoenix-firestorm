@@ -181,3 +181,10 @@ endif (llwindow_HEADER_FILES)
 
 target_link_libraries (llwindow ${llwindow_LINK_LIBRARIES})
 target_include_directories( llwindow  INTERFACE   ${CMAKE_CURRENT_SOURCE_DIR})
+  
+if (DARWIN)
+  include(CMakeFindFrameworks)
+  find_library(CARBON_LIBRARY Carbon)
+  target_link_libraries(llwindow ${CARBON_LIBRARY})
+endif (DARWIN)
+

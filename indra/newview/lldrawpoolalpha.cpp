@@ -52,6 +52,7 @@
 #include "fsperfstats.h" // <FS:Beq> performance stats support
 
 BOOL LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
+BOOL LLDrawPoolAlpha::sShowDebugAlphaRigged = FALSE;
 
 #define current_shader (LLGLSLShader::sCurBoundShaderPtr)
 
@@ -59,6 +60,7 @@ static BOOL deferred_render = FALSE;
 
 // minimum alpha before discarding a fragment
 static const F32 MINIMUM_ALPHA = 0.004f; // ~ 1/255
+
 // minimum alpha before discarding a fragment when rendering impostors
 static const F32 MINIMUM_IMPOSTOR_ALPHA = 0.1f;
 
@@ -148,6 +150,10 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
         (LLPipeline::sUnderWaterRender) ? &gDeferredAlphaWaterProgram : &gDeferredAlphaProgram;
     prepare_alpha_shader(simple_shader, false, true); //prime simple shader (loads shadow relevant uniforms)
 
+    for (int i = 0; i < LLMaterial::SHADER_COUNT; ++i)
+    {
+        prepare_alpha_shader(LLPipeline::sUnderWaterRender ? &gDeferredMaterialWaterProgram[i] : &gDeferredMaterialProgram[i], false, false); // note: bindDeferredShader will get called during render loop for materials
+    }
 
     // first pass, render rigged objects only and render to depth buffer
     forwardRender(true);
@@ -216,8 +222,14 @@ void LLDrawPoolAlpha::render(S32 pass)
     {
         minimum_alpha = MINIMUM_IMPOSTOR_ALPHA;
     }
+
     prepare_forward_shader(fullbright_shader, minimum_alpha);
     prepare_forward_shader(simple_shader, minimum_alpha);
+
+    for (int i = 0; i < LLMaterial::SHADER_COUNT; ++i)
+    {
+        prepare_forward_shader(LLPipeline::sUnderWaterRender ? &gDeferredMaterialWaterProgram[i] : &gDeferredMaterialProgram[i], minimum_alpha);
+    }
 
     //first pass -- rigged only and drawn to depth buffer
     forwardRender(true);
@@ -289,15 +301,17 @@ void LLDrawPoolAlpha::renderDebugAlpha()
 
 		gGL.diffuseColor4f(0, 1, 0, 1);
 		pushBatches(LLRenderPass::PASS_INVISIBLE, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
-
+        // <FS:Beq> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
+        if (sShowDebugAlphaRigged)
+        {
+        // </FS:Beq>
         gHighlightProgram.mRiggedVariant->bind();
-        gGL.diffuseColor4f(1, 0, 0, 1);
-
+        gGL.diffuseColor4f(0, 1, 0, 1);// <FS:Beq/> FIRE-32132 et al. (can plain PASS_ALPHA_MASK_RIGGED exist?) paint it green if so.
         pushRiggedBatches(LLRenderPass::PASS_ALPHA_MASK_RIGGED, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
         pushRiggedBatches(LLRenderPass::PASS_ALPHA_INVISIBLE_RIGGED, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
 
         // Material alpha mask
-        gGL.diffuseColor4f(0, 0, 1, 1);
+        gGL.diffuseColor4f(0, 1, 1, 1);// <FS:Beq/> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
         pushRiggedBatches(LLRenderPass::PASS_MATERIAL_ALPHA_MASK_RIGGED, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
         pushRiggedBatches(LLRenderPass::PASS_NORMMAP_MASK_RIGGED, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
         pushRiggedBatches(LLRenderPass::PASS_SPECMAP_MASK_RIGGED, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
@@ -306,6 +320,9 @@ void LLDrawPoolAlpha::renderDebugAlpha()
 
         gGL.diffuseColor4f(0, 1, 0, 1);
         pushRiggedBatches(LLRenderPass::PASS_INVISIBLE_RIGGED, LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, FALSE);
+        // <FS:Beq> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
+        }
+        // </FS:Beq>
         LLGLSLShader::sCurBoundShaderPtr->unbind();
 	}
 }
@@ -333,16 +350,6 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
                 for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)
                 {
                     LLDrawInfo& params = **k;
-                    // <FS:Beq> Capture render times
-                    if(params.mFace)
-                    {
-                        LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-                        if(vobj->isAttachment())
-                        {
-                            trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-                        }
-                    }
-                    // </FS:Beq>
 
                     if (params.mParticle)
                     {
@@ -350,7 +357,30 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
                     }
 
                     bool rigged = (params.mAvatar != nullptr);
+                    // <FS:Beq> Capture render times
+                    if(params.mFace)
+                    {
+                        LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+                        if(vobj->isAttachment())
+                        {
+                            trackAttachments( vobj, rigged, &ratPtr );
+                        }
+                    }
+                    // </FS:Beq>
                     gHighlightProgram.bind(rigged);
+                    // <FS:Beq> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
+                    if (rigged && !sShowDebugAlphaRigged)
+                    {
+                        // if we don't want to show rigged alpha highlights then skip
+                        continue;
+                    }
+                    else if (rigged && sShowDebugAlphaRigged)
+                    {
+                        // if we do and this is rigged then use a different colour
+                        gGL.diffuseColor4f(1, 0.5, 0, 1);
+                    }
+                    else // NB dangling else to drop through to "normal behaviour"
+                    // </FS:Beq>
                     gGL.diffuseColor4f(1, 0, 0, 1);
 
                     if (rigged)

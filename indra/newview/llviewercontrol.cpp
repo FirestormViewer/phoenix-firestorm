@@ -32,6 +32,12 @@
 // Library includes
 #include "llwindow.h"	// getGamma()
 
+// <FS:Zi> Handle IME text input getting enabled or disabled
+#if LL_SDL2
+#include "llwindowsdl2.h"
+#endif
+// </FS:Zi>
+
 // For Listeners
 #include "llaudioengine.h"
 #include "llagent.h"
@@ -98,7 +104,6 @@
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"
-#include "llnetmap.h"
 #include "llnotificationsutil.h"
 #include "llpanelplaces.h"
 #include "llstatusbar.h"
@@ -794,13 +799,6 @@ static void handleAutohideChatbarChanged(const LLSD& new_value)
 }
 // </FS:Ansariel>
 
-// <FS:Ansariel> Synchronize tooltips throughout instances
-static void handleNetMapDoubleClickActionChanged()
-{
-	LLNetMap::updateToolTipMsg();
-}
-// </FS:Ansariel> Synchronize tooltips throughout instances
-
 // <FS:Ansariel> Clear places / teleport history search filter
 static void handleUseStandaloneTeleportHistoryFloaterChanged()
 {
@@ -1137,275 +1135,321 @@ void handleFPSTuningStrategyChanged(const LLSD& newValue)
 	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
 	FSPerfStats::tunables.userFPSTuningStrategy = newval;
 }
-
 // </FS:Beq>
+
+// <FS:Ansariel> FIRE-6809: Quickly moving the bandwidth slider has no effect
+void handleBandwidthChanged(const LLSD& newValue)
+{
+	sBandwidthUpdater.update(newValue);
+}
+// </FS:Ansariel>
+
+// <FS:Zi> Handle IME text input getting enabled or disabled
+#if LL_SDL2
+static bool handleSDL2IMEEnabledChanged(const LLSD& newvalue)
+{
+    ((LLWindowSDL*)gViewerWindow->getWindow())->enableIME(newvalue.asBoolean());
+
+    return true;
+}
+#endif
+// </FS:Zi>
 
 ////////////////////////////////////////////////////////////////////////////
 
+LLPointer<LLControlVariable> setting_get_control(LLControlGroup& group, const std::string& setting)
+{
+    LLPointer<LLControlVariable> cntrl_ptr = group.getControl(setting);
+    if (cntrl_ptr.isNull())
+    {
+        LL_ERRS() << "Unable to set up setting listener for " << setting
+            << ". Please reinstall viewer from  https ://secondlife.com/support/downloads/ and contact https://support.secondlife.com if issue persists after reinstall."
+            << LL_ENDL;
+    }
+    return cntrl_ptr;
+}
+
+void setting_setup_signal_listener(LLControlGroup& group, const std::string& setting, std::function<void(const LLSD& newvalue)> callback)
+{
+    setting_get_control(group, setting)->getSignal()->connect([callback](LLControlVariable* control, const LLSD& new_val, const LLSD& old_val)
+    {
+        callback(new_val);
+    });
+}
+
+void setting_setup_signal_listener(LLControlGroup& group, const std::string& setting, std::function<void()> callback)
+{
+    setting_get_control(group, setting)->getSignal()->connect([callback](LLControlVariable* control, const LLSD& new_val, const LLSD& old_val)
+    {
+        callback();
+    });
+}
+
 void settings_setup_listeners()
 {
-	gSavedSettings.getControl("FirstPersonAvatarVisible")->getSignal()->connect(boost::bind(&handleRenderAvatarMouselookChanged, _2));
-	gSavedSettings.getControl("RenderFarClip")->getSignal()->connect(boost::bind(&handleRenderFarClipChanged, _2));
-	gSavedSettings.getControl("RenderTerrainDetail")->getSignal()->connect(boost::bind(&handleTerrainDetailChanged, _2));
-	gSavedSettings.getControl("OctreeStaticObjectSizeFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
-	gSavedSettings.getControl("OctreeDistanceFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
-	gSavedSettings.getControl("OctreeMaxNodeCapacity")->getSignal()->connect(boost::bind(&handleRepartition, _2));
-	gSavedSettings.getControl("OctreeAlphaDistanceFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
-	gSavedSettings.getControl("OctreeAttachmentSizeFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
-	gSavedSettings.getControl("RenderMaxTextureIndex")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("RenderUseTriStrips")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderUIBuffer")->getSignal()->connect(boost::bind(&handleWindowResized, _2));
-	gSavedSettings.getControl("RenderDepthOfField")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
-	gSavedSettings.getControl("RenderFSAASamples")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
-	gSavedSettings.getControl("RenderSpecularResX")->getSignal()->connect(boost::bind(&handleLUTBufferChanged, _2));
-	gSavedSettings.getControl("RenderSpecularResY")->getSignal()->connect(boost::bind(&handleLUTBufferChanged, _2));
-	gSavedSettings.getControl("RenderSpecularExponent")->getSignal()->connect(boost::bind(&handleLUTBufferChanged, _2));
-	gSavedSettings.getControl("RenderAnisotropic")->getSignal()->connect(boost::bind(&handleAnisotropicChanged, _2));
-	gSavedSettings.getControl("RenderShadowResolutionScale")->getSignal()->connect(boost::bind(&handleShadowsResized, _2));
-	gSavedSettings.getControl("RenderGlow")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
-	gSavedSettings.getControl("RenderGlow")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("RenderGlowResolutionPow")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
-	gSavedSettings.getControl("RenderAvatarCloth")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("RenderGammaFull")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("RenderVolumeLODFactor")->getSignal()->connect(boost::bind(&handleVolumeLODChanged, _2));
-	gSavedSettings.getControl("RenderAvatarLODFactor")->getSignal()->connect(boost::bind(&handleAvatarLODChanged, _2));
-	gSavedSettings.getControl("RenderAvatarPhysicsLODFactor")->getSignal()->connect(boost::bind(&handleAvatarPhysicsLODChanged, _2));
-	gSavedSettings.getControl("RenderTerrainLODFactor")->getSignal()->connect(boost::bind(&handleTerrainLODChanged, _2));
-	gSavedSettings.getControl("RenderTreeLODFactor")->getSignal()->connect(boost::bind(&handleTreeLODChanged, _2));
-	gSavedSettings.getControl("RenderFlexTimeFactor")->getSignal()->connect(boost::bind(&handleFlexLODChanged, _2));
-	gSavedSettings.getControl("RenderGamma")->getSignal()->connect(boost::bind(&handleGammaChanged, _2));
-	gSavedSettings.getControl("RenderFogRatio")->getSignal()->connect(boost::bind(&handleFogRatioChanged, _2));
-	gSavedSettings.getControl("RenderMaxPartCount")->getSignal()->connect(boost::bind(&handleMaxPartCountChanged, _2));
-	gSavedSettings.getControl("RenderDynamicLOD")->getSignal()->connect(boost::bind(&handleRenderDynamicLODChanged, _2));
-	gSavedSettings.getControl("RenderLocalLights")->getSignal()->connect(boost::bind(&handleRenderLocalLightsChanged, _2));
-	gSavedSettings.getControl("RenderDebugTextureBind")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderAutoMaskAlphaDeferred")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderAutoMaskAlphaNonDeferred")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderObjectBump")->getSignal()->connect(boost::bind(&handleRenderBumpChanged, _2));
-	gSavedSettings.getControl("RenderMaxVBOSize")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-    gSavedSettings.getControl("RenderVSyncEnable")->getSignal()->connect(boost::bind(&handleVSyncChanged, _2));
-	gSavedSettings.getControl("RenderDeferredNoise")->getSignal()->connect(boost::bind(&handleReleaseGLBufferChanged, _2));
-	gSavedSettings.getControl("RenderDebugPipeline")->getSignal()->connect(boost::bind(&handleRenderDebugPipelineChanged, _2));
-	gSavedSettings.getControl("RenderResolutionDivisor")->getSignal()->connect(boost::bind(&handleRenderResolutionDivisorChanged, _2));
+    setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderTerrainDetail", handleTerrainDetailChanged);
+	setting_setup_signal_listener(gSavedSettings, "OctreeStaticObjectSizeFactor", handleRepartition);
+	setting_setup_signal_listener(gSavedSettings, "OctreeDistanceFactor", handleRepartition);
+	setting_setup_signal_listener(gSavedSettings, "OctreeMaxNodeCapacity", handleRepartition);
+	setting_setup_signal_listener(gSavedSettings, "OctreeAlphaDistanceFactor", handleRepartition);
+	setting_setup_signal_listener(gSavedSettings, "OctreeAttachmentSizeFactor", handleRepartition);
+	setting_setup_signal_listener(gSavedSettings, "RenderMaxTextureIndex", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderUseTriStrips", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderUIBuffer", handleWindowResized);
+	setting_setup_signal_listener(gSavedSettings, "RenderDepthOfField", handleReleaseGLBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderFSAASamples", handleReleaseGLBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderSpecularResX", handleLUTBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAnisotropic", handleAnisotropicChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
+	setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAvatarCloth", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "WindLightUseAtmosShaders", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAvatarLODFactor", handleAvatarLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAvatarPhysicsLODFactor", handleAvatarPhysicsLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderTerrainLODFactor", handleTerrainLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderTreeLODFactor", handleTreeLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderFlexTimeFactor", handleFlexLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderGamma", handleGammaChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderFogRatio", handleFogRatioChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderMaxPartCount", handleMaxPartCountChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderDynamicLOD", handleRenderDynamicLODChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderLocalLights", handleRenderLocalLightsChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderDebugTextureBind", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaDeferred", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaNonDeferred", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderObjectBump", handleRenderBumpChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderMaxVBOSize", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderVSyncEnable", handleVSyncChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderDeferredNoise", handleReleaseGLBufferChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderDebugPipeline", handleRenderDebugPipelineChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderResolutionDivisor", handleRenderResolutionDivisorChanged);
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
-	gSavedSettings.getControl("RenderResolutionMultiplier")->getSignal()->connect(boost::bind(&handleRenderResolutionDivisorChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "RenderResolutionMultiplier", handleRenderResolutionDivisorChanged);
 // [/SL:KB]
-	gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&handleRenderDeferredChanged, _2));
-	gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
-	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));
-	gSavedSettings.getControl("RenderHiDPI")->getSignal()->connect(boost::bind(&handleRenderHiDPIChanged, _2));
-	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
-	gSavedSettings.getControl("ChatConsoleFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
-	gSavedSettings.getControl("ChatPersistTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
-	gSavedSettings.getControl("ConsoleMaxLines")->getSignal()->connect(boost::bind(&handleConsoleMaxLinesChanged, _2));
-	gSavedSettings.getControl("UploadBakedTexOld")->getSignal()->connect(boost::bind(&handleUploadBakedTexOldChanged, _2));
-	gSavedSettings.getControl("UseOcclusion")->getSignal()->connect(boost::bind(&handleUseOcclusionChanged, _2));
-	gSavedSettings.getControl("AudioLevelMaster")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelSFX")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelUI")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelAmbient")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelMusic")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelMedia")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelVoice")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelDoppler")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelRolloff")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("AudioLevelUnderwaterRolloff")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("MuteAudio")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("MuteMusic")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("MuteMedia")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("MuteVoice")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("MuteAmbient")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("MuteUI")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
-	gSavedSettings.getControl("RenderVBOEnable")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderUseVAO")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderVBOMappingDisable")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderUseStreamVBO")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("RenderPreferStreamDraw")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
-	gSavedSettings.getControl("WLSkyDetail")->getSignal()->connect(boost::bind(&handleWLSkyDetailChanged, _2));
-	gSavedSettings.getControl("JoystickAxis0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("JoystickAxis1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("JoystickAxis2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("JoystickAxis3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("JoystickAxis4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("JoystickAxis5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("JoystickAxis6")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisScale6")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("FlycamAxisDeadZone6")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisScale0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisScale1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisScale2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisScale3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisScale4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisScale5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisDeadZone0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisDeadZone1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisDeadZone2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisDeadZone3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisDeadZone4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("AvatarAxisDeadZone5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisScale0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisScale1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisScale2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisScale3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisScale4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisScale5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisDeadZone0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisDeadZone1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisDeadZone2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisDeadZone3")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisDeadZone4")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("BuildAxisDeadZone5")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
-	gSavedSettings.getControl("DebugViews")->getSignal()->connect(boost::bind(&handleDebugViewsChanged, _2));
-	gSavedSettings.getControl("UserLogFile")->getSignal()->connect(boost::bind(&handleLogFileChanged, _2));
-	gSavedSettings.getControl("RenderHideGroupTitle")->getSignal()->connect(boost::bind(handleHideGroupTitleChanged, _2));
-	gSavedSettings.getControl("HighResSnapshot")->getSignal()->connect(boost::bind(handleHighResSnapshotChanged, _2));
-	gSavedSettings.getControl("EnableVoiceChat")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("PTTCurrentlyEnabled")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("PushToTalkButton")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("PushToTalkToggle")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("VoiceEarLocation")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("VoiceInputAudioDevice")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("VoiceOutputAudioDevice")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("AudioLevelMic")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));
-	gSavedSettings.getControl("LipSyncEnabled")->getSignal()->connect(boost::bind(&handleVoiceClientPrefsChanged, _2));	
-	gSavedSettings.getControl("VelocityInterpolate")->getSignal()->connect(boost::bind(&handleVelocityInterpolate, _2));
-	gSavedSettings.getControl("QAMode")->getSignal()->connect(boost::bind(&show_debug_menus));
-	gSavedSettings.getControl("UseDebugMenus")->getSignal()->connect(boost::bind(&show_debug_menus));
-	gSavedSettings.getControl("AgentPause")->getSignal()->connect(boost::bind(&toggle_agent_pause, _2));
+	setting_setup_signal_listener(gSavedSettings, "RenderDeferred", handleRenderDeferredChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
+	setting_setup_signal_listener(gSavedSettings, "TextureMemory", handleVideoMemoryChanged);
+	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", handleChatFontSizeChanged);
+	setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged);
+	setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
+	setting_setup_signal_listener(gSavedSettings, "UploadBakedTexOld", handleUploadBakedTexOldChanged);
+	setting_setup_signal_listener(gSavedSettings, "UseOcclusion", handleUseOcclusionChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelMaster", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelSFX", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelUI", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelAmbient", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelMusic", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelMedia", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelVoice", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelDoppler", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelRolloff", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelUnderwaterRolloff", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "MuteAudio", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "MuteMusic", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "MuteMedia", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderVBOEnable", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderUseVAO", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderVBOMappingDisable", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderUseStreamVBO", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderPreferStreamDraw", handleResetVertexBuffersChanged);
+	setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "JoystickAxis6", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale6", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone6", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone0", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone1", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone2", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone3", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone4", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone5", handleJoystickChanged);
+	setting_setup_signal_listener(gSavedSettings, "DebugViews", handleDebugViewsChanged);
+	setting_setup_signal_listener(gSavedSettings, "UserLogFile", handleLogFileChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderHideGroupTitle", handleHideGroupTitleChanged);
+	setting_setup_signal_listener(gSavedSettings, "HighResSnapshot", handleHighResSnapshotChanged);
+	setting_setup_signal_listener(gSavedSettings, "EnableVoiceChat", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "PTTCurrentlyEnabled", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "PushToTalkButton", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "PushToTalkToggle", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "VoiceEarLocation", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "VoiceInputAudioDevice", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "VoiceOutputAudioDevice", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "AudioLevelMic", handleVoiceClientPrefsChanged);
+	setting_setup_signal_listener(gSavedSettings, "LipSyncEnabled", handleVoiceClientPrefsChanged);	
+	setting_setup_signal_listener(gSavedSettings, "VelocityInterpolate", handleVelocityInterpolate);
+	setting_setup_signal_listener(gSavedSettings, "QAMode", show_debug_menus);
+	setting_setup_signal_listener(gSavedSettings, "UseDebugMenus", show_debug_menus);
+	setting_setup_signal_listener(gSavedSettings, "AgentPause", toggle_agent_pause);
 	// <FS:Zi> Is done inside XUI now, using visibility_control
-	// gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&toggle_show_navigation_panel, _2));
+	// setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", toggle_show_navigation_panel);
 	// </FS:Zi>
 	// <FS:Zi> We don't have the mini location bar
-	// gSavedSettings.getControl("ShowMiniLocationPanel")->getSignal()->connect(boost::bind(&toggle_show_mini_location_panel, _2));
+	// setting_setup_signal_listener(gSavedSettings, "ShowMiniLocationPanel", toggle_show_mini_location_panel);
 	// </FS: Zi>
-	gSavedSettings.getControl("ShowMenuBarLocation")->getSignal()->connect(boost::bind(&toggle_show_menubar_location_panel, _2));
-	gSavedSettings.getControl("ShowObjectRenderingCost")->getSignal()->connect(boost::bind(&toggle_show_object_render_cost, _2));
-	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
-	gSavedSettings.getControl("ShowStartLocation")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2)); // <FS:Ansariel> Show start location setting has no effect on login
-	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
-	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
-	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
-	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
-	gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
-	gSavedSettings.getControl("RenderAutoMuteByteLimit")->getSignal()->connect(boost::bind(&handleRenderAutoMuteByteLimitChanged, _2));
-	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getCommitSignal()->connect(boost::bind(&handleAvatarHoverOffsetChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "ShowMenuBarLocation", toggle_show_menubar_location_panel);
+	setting_setup_signal_listener(gSavedSettings, "ShowObjectRenderingCost", toggle_show_object_render_cost);
+	setting_setup_signal_listener(gSavedSettings, "ForceShowGrid", handleForceShowGrid);
+	// <FS:Ansariel> Show start location setting has no effect on login
+	setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
+	setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
+	setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
+	setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
+	setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);
+	setting_setup_signal_listener(gSavedSettings, "DebugAvatarJoints", handleDebugAvatarJointsChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderAutoMuteByteLimit", handleRenderAutoMuteByteLimitChanged);
+
+    setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
-	gSavedSettings.getControl(RlvSettingNames::Main)->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
+	setting_setup_signal_listener(gSavedSettings, RlvSettingNames::Main, RlvSettings::onChangedSettingMain);
 // [/RLVa:KB]
-	// <FS:Zi> Is done inside XUI now, using visibility_control
-	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
-	// </FS:Zi>
 	// NaCl - Antispam Registry
-	gSavedSettings.getControl("_NACL_AntiSpamGlobalQueue")->getSignal()->connect(boost::bind(&handleNaclAntiSpamGlobalQueueChanged, _2));
-	gSavedSettings.getControl("_NACL_AntiSpamTime")->getSignal()->connect(boost::bind(&handleNaclAntiSpamTimeChanged, _2));
-	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamGlobalQueue", handleNaclAntiSpamGlobalQueueChanged);
+	setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamTime", handleNaclAntiSpamTimeChanged);
+	setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamAmount", handleNaclAntiSpamAmountChanged);
 	// NaCl End
-	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&handleAutohideChatbarChanged, _2));
-
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
+	setting_setup_signal_listener(gSavedSettings, "AutohideChatBar", handleAutohideChatbarChanged);
 
 	// <FS:Ansariel> Clear places / teleport history search filter
-	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloaterChanged));
-	
-	// <FS:CR> Pose stand ground lock
-	gSavedSettings.getControl("FSPoseStandLock")->getSignal()->connect(boost::bind(&handleSetPoseStandLock, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSUseStandaloneTeleportHistoryFloater", handleUseStandaloneTeleportHistoryFloaterChanged);
 
-	gSavedPerAccountSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
-	gSavedPerAccountSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
-	gSavedPerAccountSettings.getControl("RelockMoveLockAfterMovement")->getCommitSignal()->connect(boost::bind(&handleMovelockAfterMoveOptionChanged, _2));
-	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));
+	// <FS:CR> Pose stand ground lock
+	setting_setup_signal_listener(gSavedSettings, "FSPoseStandLock", handleSetPoseStandLock);
+
+	setting_setup_signal_listener(gSavedPerAccountSettings, "UseLSLFlightAssist", handleFlightAssistOptionChanged);
+	setting_setup_signal_listener(gSavedPerAccountSettings, "UseMoveLock", handleMovelockOptionChanged);
+	setting_setup_signal_listener(gSavedPerAccountSettings, "RelockMoveLockAfterMovement", handleMovelockAfterMoveOptionChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSBuildToolDecimalPrecision", handleDecimalPrecisionChanged);
 
 	// <FS:PP> External integrations (OC, LM etc.) for Bridge
-	gSavedPerAccountSettings.getControl("BridgeIntegrationOC")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
-	gSavedPerAccountSettings.getControl("BridgeIntegrationLM")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
+	setting_setup_signal_listener(gSavedPerAccountSettings, "BridgeIntegrationOC", handleExternalIntegrationsOptionChanged);
+	setting_setup_signal_listener(gSavedPerAccountSettings, "BridgeIntegrationLM", handleExternalIntegrationsOptionChanged);
 
-	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
-	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSNameTagShowLegacyUsernames", handleUsernameFormatOptionChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSTrimLegacyNames", handleLegacyTrimOptionChanged);
 
 	// <FS:Ansariel> [FS communication UI]
-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
+	setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::processChatHistoryStyleUpdate);
+	setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
+	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);
 	// </FS:Ansariel> [FS communication UI]
 
-	gSavedPerAccountSettings.getControl("GlobalOnlineStatusToggle")->getSignal()->connect(boost::bind(&handleGlobalOnlineStatusChanged, _2));
+	setting_setup_signal_listener(gSavedPerAccountSettings, "GlobalOnlineStatusToggle", handleGlobalOnlineStatusChanged);
 
 	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
-	gSavedSettings.getControl("FSHudTextFadeDistance")->getSignal()->connect(boost::bind(&LLHUDText::onFadeSettingsChanged));
-	gSavedSettings.getControl("FSHudTextFadeRange")->getSignal()->connect(boost::bind(&LLHUDText::onFadeSettingsChanged));
+	setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeDistance", LLHUDText::onFadeSettingsChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeRange", LLHUDText::onFadeSettingsChanged);
 
 	//<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
-	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&BandwidthUpdater::update, sBandwidthUpdater, _2));
-	gSavedSettings.getControl("FSContactListShowSearch")->getSignal()->connect(boost::bind(&handleContactListShowSearchChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "ThrottleBandwidthKBPS", handleBandwidthChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSContactListShowSearch", handleContactListShowSearchChanged);
 
 	// <FS:Ansariel> Debug setting to disable log throttle
-	gSavedSettings.getControl("FSEnableLogThrottle")->getSignal()->connect(boost::bind(&handleLogThrottleChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSEnableLogThrottle", handleLogThrottleChanged);
 
 	// <FS:Ansariel> FIRE-18250: Option to disable default eye movement
-	gSavedSettings.getControl("FSStaticEyesUUID")->getSignal()->connect(boost::bind(&handleStaticEyesChanged));
-	gSavedPerAccountSettings.getControl("FSStaticEyes")->getSignal()->connect(boost::bind(&handleStaticEyesChanged));
+	setting_setup_signal_listener(gSavedSettings, "FSStaticEyesUUID", handleStaticEyesChanged);
+	setting_setup_signal_listener(gSavedPerAccountSettings, "FSStaticEyes", handleStaticEyesChanged);
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> FIRE-20288: Option to render friends only
-	gSavedPerAccountSettings.getControl("FSRenderFriendsOnly")->getSignal()->connect(boost::bind(&handleRenderFriendsOnlyChanged, _2));
+	setting_setup_signal_listener(gSavedPerAccountSettings, "FSRenderFriendsOnly", handleRenderFriendsOnlyChanged);
 
 	// <FS:Ansariel> Notification not showing if hiding the UI
-	gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&handleNavbarSettingsChanged));
-	gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&handleNavbarSettingsChanged));
+	setting_setup_signal_listener(gSavedSettings, "ShowNavbarFavoritesPanel", handleNavbarSettingsChanged);
+	setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", handleNavbarSettingsChanged);
 	// </FS:Ansariel>
 
 	// <FS:LO> Add ability for the statistics window to not be able to receive focus
-	gSavedSettings.getControl("FSStatisticsNoFocus")->getSignal()->connect(boost::bind(&handleFSStatisticsNoFocusChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSStatisticsNoFocus", handleFSStatisticsNoFocusChanged);
 	// </FS:LO>
 
 	// <FS:Ansariel> Output device selection
-	gSavedSettings.getControl("FSOutputDeviceUUID")->getSignal()->connect(boost::bind(&handleOutputDeviceChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSOutputDeviceUUID", handleOutputDeviceChanged);
 
 	// <FS:Ansariel> Dynamic texture memory calculation
-	gSavedSettings.getControl("FSDynamicTextureMemory")->getSignal()->connect(boost::bind(&handleDynamicTextureMemoryChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSDynamicTextureMemory", handleDynamicTextureMemoryChanged);
 
 	// <FS:Ansariel> Optional small camera floater
-	gSavedSettings.getControl("FSUseSmallCameraFloater")->getSignal()->connect(boost::bind(&handleSmallCameraFloaterChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSUseSmallCameraFloater", handleSmallCameraFloaterChanged);
 
 	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
-	gSavedSettings.getControl("FSStatusBarTimeFormat")->getSignal()->connect(boost::bind(&handleStatusbarTimeformatChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSStatusBarTimeFormat", handleStatusbarTimeformatChanged);
 
 	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
-	gSavedSettings.getControl("FSPlayDefaultBentoAnimation")->getSignal()->connect(boost::bind(&handlePlayBentoIdleAnimationChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSPlayDefaultBentoAnimation", handlePlayBentoIdleAnimationChanged);
 
 	// <FS:Ansariel> Better asset cache size control
-	gSavedSettings.getControl("FSDiskCacheSize")->getSignal()->connect(boost::bind(&handleDiskCacheSizeChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheSize", handleDiskCacheSizeChanged);
 
 	// <FS:Beq> perf floater controls
-	gSavedSettings.getControl("FSTargetFPS")->getSignal()->connect(boost::bind(&handleTargetFPSChanged, _2));
-	gSavedSettings.getControl("FSAutoTuneFPS")->getSignal()->connect(boost::bind(&handleAutoTuneFPSChanged, _2));
-	gSavedSettings.getControl("FSAutoTuneLock")->getSignal()->connect(boost::bind(&handleAutoTuneLockChanged, _2));
-	gSavedSettings.getControl("FSRenderAvatarMaxART")->getSignal()->connect(boost::bind(&handleRenderAvatarMaxARTChanged, _2));
-	gSavedSettings.getControl("FSPerfStatsCaptureEnabled")->getSignal()->connect(boost::bind(&handlePerformanceStatsEnabledChanged, _2));
-	gSavedSettings.getControl("FSUserTargetReflections")->getSignal()->connect(boost::bind(&handleUserTargetReflectionsChanged, _2));
-	gSavedSettings.getControl("FSAutoTuneRenderFarClipTarget")->getSignal()->connect(boost::bind(&handleUserTargetDrawDistanceChanged, _2));
-	gSavedSettings.getControl("FSAutoTuneImpostorFarAwayDistance")->getSignal()->connect(boost::bind(&handleUserImpostorDistanceChanged, _2));
-	gSavedSettings.getControl("FSAutoTuneImpostorByDistEnabled")->getSignal()->connect(boost::bind(&handleUserImpostorByDistEnabledChanged, _2));
-	gSavedSettings.getControl("FSTuningFPSStrategy")->getSignal()->connect(boost::bind(&handleFPSTuningStrategyChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "FSTargetFPS", handleTargetFPSChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneFPS", handleAutoTuneFPSChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneLock", handleAutoTuneLockChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSRenderAvatarMaxART", handleRenderAvatarMaxARTChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSPerfStatsCaptureEnabled", handlePerformanceStatsEnabledChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSUserTargetReflections", handleUserTargetReflectionsChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneRenderFarClipTarget", handleUserTargetDrawDistanceChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneImpostorFarAwayDistance", handleUserImpostorDistanceChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSTuningFPSStrategy", handleFPSTuningStrategyChanged);
 	// </FS:Beq>
+
+	// <FS:Zi> Handle IME text input getting enabled or disabled
+#if LL_SDL2
+	gSavedSettings.getControl("SDL2IMEEnabled")->getSignal()->connect(boost::bind(&handleSDL2IMEEnabledChanged, _2));
+#endif
+	// </FS:Zi>
 }
 
 #if TEST_CACHED_CONTROL

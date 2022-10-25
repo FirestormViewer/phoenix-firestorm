@@ -391,6 +391,8 @@ void LLModel::setVolumeFaceData(
 	U32 num_verts, 
 	U32 num_indices)
 {
+    llassert(num_indices % 3 == 0);
+
 	LLVolumeFace& face = mVolumeFaces[f];
 
 	face.resizeVertices(num_verts);
@@ -904,7 +906,6 @@ LLSD LLModel::writeModel(
 
 LLSD LLModel::writeModelToStream(std::ostream& ostr, LLSD& mdl, BOOL nowrite, BOOL as_slm)
 {
-	
 	std::string::size_type cur_offset = 0;
 
 	LLSD header;

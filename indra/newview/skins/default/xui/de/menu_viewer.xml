@@ -247,6 +247,7 @@
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
+		<menu_item_call label="Lokales Mesh" name="local_mesh" />
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
         <menu_item_call label="Lokaler Bitmap-Browser" name="Local Bitmap Browser"/>
@@ -320,6 +321,7 @@
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
+			<menu_item_check label="- Durchsichtige geriggte Netze einschließen" name="Include Transparent Rigged"/>
 			<menu_item_check label="Fadenkreuz für Mouselook anzeigen" name="ShowCrosshairs"/>
 			<menu label="Schwebe-Tipps" name="Hover Tips">
 				<menu_item_check label="Tipps anzeigen" name="Show Tips"/>
@@ -531,6 +533,9 @@
 			<menu_item_check label="Objektposition laut Geschwindigkeit interpolieren" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Positionen der interpolierten Objekte anfragen" name="Ping Interpolate Object Positions"/>
 			<menu_item_call label="Ein Paket fallenlassen" name="Drop a Packet"/>
+		</menu>
+		<menu label="Cache" name="Cache">
+			<menu_item_call label="Disk-Cache leeren" name="Purge Disk Cache"/>
 		</menu>
 		<menu_item_call label="Geskriptete Kamera ausgeben" name="Dump Scripted Camera"/>
 		<menu label="Rekorder" name="Recorder">

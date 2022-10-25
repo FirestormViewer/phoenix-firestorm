@@ -51,6 +51,8 @@
 
 // The minor cardinal direction labels are hidden if their height is more
 // than this proportion of the map.
+// <FS:Ansariel> FIRE-32341: Make minor directions visible at reasonable mini map size again
+//const F32 MAP_MINOR_DIR_THRESHOLD = 0.035f;
 const F32 MAP_MINOR_DIR_THRESHOLD = 0.07f;
 
 const S32 MAP_PADDING_LEFT = 0;
@@ -81,46 +83,54 @@ LLFloaterMap::~LLFloaterMap()
 
 BOOL LLFloaterMap::postBuild()
 {
-	mMap = getChild<LLNetMap>("Net Map");
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	//{
-	//	mMap->setToolTipMsg(getString("AltToolTipMsg"));
-	//}
-	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	//{
-	//	mMap->setToolTipMsg(getString("ToolTipMsg"));
-	//}
-	// </FS:Ansariel> Synchronize tooltips throughout instances
-	sendChildToBack(mMap);
-	
-	mTextBoxNorth = getChild<LLTextBox> ("floater_map_north");
-	mTextBoxEast = getChild<LLTextBox> ("floater_map_east");
-	mTextBoxWest = getChild<LLTextBox> ("floater_map_west");
-	mTextBoxSouth = getChild<LLTextBox> ("floater_map_south");
-	mTextBoxSouthEast = getChild<LLTextBox> ("floater_map_southeast");
-	mTextBoxNorthEast = getChild<LLTextBox> ("floater_map_northeast");
-	mTextBoxSouthWest = getChild<LLTextBox> ("floater_map_southwest");
-	mTextBoxNorthWest = getChild<LLTextBox> ("floater_map_northwest");
+    mMap = getChild<LLNetMap>("Net Map");
+    mMap->setToolTipMsg(getString("ToolTipMsg"));
+    mMap->setParcelNameMsg(getString("ParcelNameMsg"));
+    mMap->setParcelSalePriceMsg(getString("ParcelSalePriceMsg"));
+    mMap->setParcelSaleAreaMsg(getString("ParcelSaleAreaMsg"));
+    mMap->setParcelOwnerMsg(getString("ParcelOwnerMsg"));
+    mMap->setRegionNameMsg(getString("RegionNameMsg"));
+    mMap->setToolTipHintMsg(getString("ToolTipHintMsg"));
+    mMap->setAltToolTipHintMsg(getString("AltToolTipHintMsg"));
+    sendChildToBack(mMap);
 
-	// <FS:Ansariel> Remove titlebar
-	stretchMiniMap(getRect().getWidth() - MAP_PADDING_LEFT - MAP_PADDING_RIGHT,
-		getRect().getHeight() - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
+    mTextBoxNorth     = getChild<LLTextBox>("floater_map_north");
+    mTextBoxEast      = getChild<LLTextBox>("floater_map_east");
+    mTextBoxWest      = getChild<LLTextBox>("floater_map_west");
+    mTextBoxSouth     = getChild<LLTextBox>("floater_map_south");
+    mTextBoxSouthEast = getChild<LLTextBox>("floater_map_southeast");
+    mTextBoxNorthEast = getChild<LLTextBox>("floater_map_northeast");
+    mTextBoxSouthWest = getChild<LLTextBox>("floater_map_southwest");
+    mTextBoxNorthWest = getChild<LLTextBox>("floater_map_northwest");
 
-	updateMinorDirections();
+    mTextBoxNorth->reshapeToFitText();
+    mTextBoxEast->reshapeToFitText();
+    mTextBoxWest->reshapeToFitText();
+    mTextBoxSouth->reshapeToFitText();
+    mTextBoxSouthEast->reshapeToFitText();
+    mTextBoxNorthEast->reshapeToFitText();
+    mTextBoxSouthWest->reshapeToFitText();
+    mTextBoxNorthWest->reshapeToFitText();
 
-	// Get the drag handle all the way in back
-	sendChildToBack(getDragHandle());
 
-	// <FS:Ansariel> Remove titlebar
-	setIsChrome(TRUE);
-	getDragHandle()->setTitleVisible(TRUE);
-	// </FS:Ansariel>
-	
-	// keep onscreen
-	gFloaterView->adjustToFitScreen(this, FALSE);
+    // <FS:Ansariel> Remove titlebar
+    stretchMiniMap(getRect().getWidth() - MAP_PADDING_LEFT - MAP_PADDING_RIGHT,
+        getRect().getHeight() - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
 
-	return TRUE;
+    updateMinorDirections();
+
+    // Get the drag handle all the way in back
+    sendChildToBack(getDragHandle());
+
+    // <FS:Ansariel> Remove titlebar
+    setIsChrome(TRUE);
+    getDragHandle()->setTitleVisible(TRUE);
+    // </FS:Ansariel>
+
+    // keep onscreen
+    gFloaterView->adjustToFitScreen(this, false);
+
+    return true;
 }
 
 BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
@@ -156,23 +166,44 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
     return TRUE;
 }
 
-void LLFloaterMap::setDirectionPos( LLTextBox* text_box, F32 rotation )
+void LLFloaterMap::setDirectionPos(LLTextBox *text_box, F32 rotation)
 {
-	// Rotation is in radians.
-	// Rotation of 0 means x = 1, y = 0 on the unit circle.
+    // Rotation is in radians.
+    // Rotation of 0 means x = 1, y = 0 on the unit circle.
 
-	F32 map_half_height = (F32)(getRect().getHeight() / 2) - getHeaderHeight()/2;
-	F32 map_half_width = (F32)(getRect().getWidth() / 2) ;
-	F32 text_half_height = (F32)(text_box->getRect().getHeight() / 2);
-	F32 text_half_width = (F32)(text_box->getRect().getWidth() / 2);
-	F32 radius = llmin( map_half_height - text_half_height, map_half_width - text_half_width );
+    F32 map_half_height  = (F32) (getRect().getHeight() / 2) - (getHeaderHeight() / 2);
+    F32 map_half_width   = (F32) (getRect().getWidth() / 2);
+    F32 text_half_height = (F32) (text_box->getRect().getHeight() / 2);
+    F32 text_half_width  = (F32) (text_box->getRect().getWidth() / 2);
+    F32 extra_padding    = (F32) (mTextBoxNorth->getRect().getWidth() / 2);
+    F32 pos_half_height  = map_half_height - text_half_height - extra_padding;
+    F32 pos_half_width   = map_half_width - text_half_width - extra_padding;
 
-	// Inset by a little to account for position display.
-	radius -= 8.f;
+    F32 corner_angle               = atan2(pos_half_height, pos_half_width);
+    F32 rotation_mirrored_into_top = abs(fmodf(rotation, F_PI));
+    if (rotation < 0)
+    {
+        rotation_mirrored_into_top = F_PI - rotation_mirrored_into_top;
+    }
+    F32  rotation_mirrored_into_top_right = (F_PI_BY_TWO - abs(rotation_mirrored_into_top - F_PI_BY_TWO));
+    bool at_left_right_edge               = rotation_mirrored_into_top_right < corner_angle;
 
-	text_box->setOrigin( 
-		ll_round(map_half_width - text_half_width + radius * cos( rotation )),
-		ll_round(map_half_height - text_half_height + radius * sin( rotation )) );
+    F32 part_x = cos(rotation);
+    F32 part_y = sin(rotation);
+    F32 y;
+    F32 x;
+    if (at_left_right_edge)
+    {
+        x = std::copysign(pos_half_width, part_x);
+        y = x * part_y / part_x;
+    }
+    else
+    {
+        y = std::copysign(pos_half_height, part_y);
+        x = y * part_x / part_y;
+    }
+
+    text_box->setOrigin(ll_round(map_half_width + x - text_half_width), ll_round(map_half_height + y - text_half_height));
 }
 
 void LLFloaterMap::updateMinorDirections()
@@ -238,34 +269,6 @@ void LLFloaterMap::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 	updateMinorDirections();
 }
-
-// <FS:Ansariel> Unused as of 06-02-2014; Handled in LLNetMap
-//void LLFloaterMap::handleZoom(const LLSD& userdata)
-//{
-//	std::string level = userdata.asString();
-//	
-//	F32 scale = 0.0f;
-//	if (level == std::string("default"))
-//	{
-//		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-//		if(pvar)
-//		{
-//			pvar->resetToDefault();
-//			scale = gSavedSettings.getF32("MiniMapScale");
-//		}
-//	}
-//	else if (level == std::string("close"))
-//		scale = LLNetMap::MAP_SCALE_MAX;
-//	else if (level == std::string("medium"))
-//		scale = LLNetMap::MAP_SCALE_MID;
-//	else if (level == std::string("far"))
-//		scale = LLNetMap::MAP_SCALE_MIN;
-//	if (scale != 0.0f)
-//	{
-//		mMap->setScale(scale);
-//	}
-//}
-// </FS:Ansariel>
 
 LLFloaterMap* LLFloaterMap::getInstance()
 {

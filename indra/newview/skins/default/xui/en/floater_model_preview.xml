@@ -854,6 +854,7 @@
                         <combo_item name="physics_cube"> Cube </combo_item>
                         <combo_item name="physics_hex"> Hexagon </combo_item>
                         <combo_item name="physics_ud"> User Defined </combo_item>
+                        <combo_item name="physics_bounding_box"> Bounding Box </combo_item>
                         <combo_item name="load_from_file"> From file   </combo_item>
                     </combo_box>
                     <line_editor

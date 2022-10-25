@@ -2448,7 +2448,8 @@ Abuse Report</string>
   <string name="dance8">dance8</string>
 
   <!-- birth date format shared by avatar inspector and profile panels -->
-  <string name="AvatarBirthDateFormat">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]</string>
+  <string name="AvatarBirthDateFormat">[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]</string>
+  <string name="AvatarBirthDateFormat_legacy">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]</string>
 
   <string name="DefaultMimeType">none/none</string>
   <string name="texture_load_dimensions_error">Can't load images larger than [WIDTH]*[HEIGHT]</string>
@@ -2865,11 +2866,6 @@ name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string
   <!-- Replacement for hardcoded UI strings -->
   <string name="UnknownRegion">(unknown region)</string>
   <string name="UnknownPosition">(unknown position)</string>
-
-  <!-- NetMap double click action tooltip messages -->
-  <string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION](Double-click to open Map, shift-drag to pan)</string>
-  <string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Double-click to teleport, shift-drag to pan)</string>
-  <string name="NetMapDoubleClickNoActionToolTipMsg">[REGION]</string>
 
   <!-- Nearby Chat Collision Messages -->
   <string name="Collision_Bump">[NAME] bumped you.</string>
