@@ -524,7 +524,11 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
 				{
 					errorMessage = "Failed reading animation file";
 				}
+
+				delete motionp; // <FS:Ansariel> Memory leak fix
 			}
+
+			delete[] buffer; // <FS:Ansariel> Memory leak fix
 		}
     }
     else

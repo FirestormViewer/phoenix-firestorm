@@ -20,5 +20,5 @@
 	<slider name="volume_slider" tool_tip="Siła głosu"/>
 	<button name="info_btn" tool_tip="Więcej informacji"/>
 	<button name="profile_btn" tool_tip="Zobacz profil"/>
-	<output_monitor name="speaking_indicator" tool_tip="Awatar jest w zasięgu czatu głosowego, siła głosu podczas mówienia"/>
+	<output_monitor name="speaking_indicator" tool_tip="Siła głosu"/>
 </panel>

@@ -42,16 +42,16 @@
      name="RegionNameMsg">
         Region: [REGION_NAME]
     </floater.string>
-	<floater.string
+    <floater.string
      name="ToolTipHintMsg">
         Double-click to open map
-	</floater.string>
-	<floater.string
+    </floater.string>
+    <floater.string
      name="AltToolTipHintMsg">
         Double-click to teleport
-	</floater.string>
-	<floater.string name="mini_map_caption">
-	Mini-map
+    </floater.string>
+    <floater.string name="mini_map_caption">
+        Mini-map
     </floater.string>
     <net_map
      bg_color="Transparent"

@@ -70,6 +70,7 @@ public:
     bool uploadMatrixPalette(const LLDrawInfo& params);
 
 	static BOOL sShowDebugAlpha;
+	static BOOL sShowDebugAlphaRigged;
 
 private:
 	LLGLSLShader* target_shader;

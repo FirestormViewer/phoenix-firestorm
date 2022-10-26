@@ -131,6 +131,7 @@
                         <combo_item name="physics_cube"> Sześcian </combo_item>
                         <combo_item name="physics_hex"> Heksagon </combo_item>
                         <combo_item name="physics_ud"> Użytkownika </combo_item>
+                        <combo_item name="physics_bounding_box"> Bryła brzegowa </combo_item>
                         <combo_item name="load_from_file">Z pliku</combo_item>
                     </combo_box>
                     <button name="physics_browse" label="Przeglądaj"/>

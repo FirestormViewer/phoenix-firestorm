@@ -158,6 +158,9 @@ protected:
 
 	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
 	S32					mNumFrames;
+
+	// <FS:Zi> FIRE-32315: Animation preview sometimes fails when FS AO is enabled
+	bool				mAOEnabled;
 };
 
 #endif  // LL_LLFLOATERBVHPREVIEW_H
