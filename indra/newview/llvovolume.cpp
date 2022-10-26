@@ -88,6 +88,7 @@
 #include "llcallstack.h"
 #include "llsculptidsize.h"
 #include "llavatarappearancedefines.h"
+#include "llgltfmateriallist.h"
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
@@ -6107,6 +6108,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				continue;
 			}
 
+            // apply any pending material overrides
+            gGLTFMaterialList.applyQueuedOverrides(vobj);
 
 //<FS:Beq> Stop doing stupid stuff we don;t need to.
 // Moving this inside a debug enabled check
