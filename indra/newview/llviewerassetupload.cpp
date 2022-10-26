@@ -528,7 +528,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
 				delete motionp; // <FS:Ansariel> Memory leak fix
 			}
 
-			delete buffer; // <FS:Ansariel> Memory leak fix
+			delete[] buffer; // <FS:Ansariel> Memory leak fix
 		}
     }
     else
