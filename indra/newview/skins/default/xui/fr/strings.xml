@@ -6306,12 +6306,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="UnknownPosition">
 		(position inconnue)
 	</string>
-	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
-		[AGENT][REGION](Double clic pour ouvrir la carte,  Maj-glisser pour vous déplacer)
-	</string>
-	<string name="NetMapDoubleClickTeleportToolTipMsg">
-		[REGION](Double clic pour vous téléporter,  Maj-glisser pour vous déplacer)
-	</string>
 	<string name="Collision_Bump">
 		[NAME] vous avez été heurté.
 	</string>

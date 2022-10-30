@@ -16,5 +16,5 @@
 	<slider name="volume_slider" tool_tip="Volume de la voix"/>
 	<button name="info_btn" tool_tip="Plus d'informations"/>
 	<button name="profile_btn" tool_tip="Voir le profil"/>
-	<output_monitor name="speaking_indicator" tool_tip="Indique que l'avatar est à portée de voix ainsi que son volume sonore s'il parle"/>
+	<output_monitor name="speaking_indicator" tool_tip="Volume de la voix"/>
 </panel>

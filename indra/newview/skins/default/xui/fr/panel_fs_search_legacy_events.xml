@@ -10,6 +10,7 @@
 			<combo_box.item label="Toutes catégories" name="any"/>
 			<combo_box.item label="Discussions" name="discussion"/>
 			<combo_box.item label="Sports" name="sports"/>
+			<combo_box.item label="DJ en direct" name="dj" />
 			<combo_box.item label="Musique" name="music"/>
 			<combo_box.item label="Commercial" name="commercial"/>
 			<combo_box.item label="Clubbing/Divertissement" name="nightlife"/>
