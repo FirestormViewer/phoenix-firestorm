@@ -103,10 +103,15 @@ public:
     // will promt to select specific one
     static void loadMaterialFromFile(const std::string& filename, S32 index = -1);
 
-    void onSelectionChanged(); // // live overrides selection changes
+    void onSelectionChanged(); // live overrides selection changes
     void saveLiveValues(); // for restoration on cancel
+
+    static void updateLive();
+    static void updateLive(const LLUUID &object_id, S32 te);
     static void loadLive();
-    static void loadObjectSave();
+
+    static void saveObjectsMaterialAs();
+    static void onSaveObjectsMaterialAsMsgCallback(const LLSD& notification, const LLSD& response);
 
     static void loadFromGLTFMaterial(LLUUID &asset_id);
 
@@ -136,7 +141,6 @@ public:
     bool decodeAsset(const std::vector<char>& buffer);
 
     bool saveIfNeeded();
-    static bool saveToInventoryItem(const std::string &buffer, const LLUUID &item_id, const LLUUID &task_id);
 
     static void finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId);
 
@@ -221,11 +225,12 @@ public:
     // initialize the UI from a default GLTF material
     void loadDefaults();
 
-    void modifyMaterialCoro(std::string cap_url, LLSD overrides);
-
     U32 getUnsavedChangesFlags() { return mUnsavedChanges; }
 
 private:
+    static bool updateInventoryItem(const std::string &buffer, const LLUUID &item_id, const LLUUID &task_id);
+    static void createInventoryItem(const std::string &buffer, const std::string &name, const std::string &desc);
+
     void setFromGLTFMaterial(LLGLTFMaterial* mat);
     bool setFromSelection();
 
@@ -283,8 +288,11 @@ private:
 
     // if true, this instance is live instance editing overrides
     bool mIsOverride = false;
+    bool mOverrideInProgress = false;
     // local id, texture ids per face for object overrides
     // for "cancel" support
+    static LLUUID mOverrideObjectId; // static to avoid searching for the floater
+    static S32 mOverrideObjectTE;
     std::map<U32, uuid_vec_t> mObjectOverridesSavedValues;
     boost::signals2::connection mSelectionUpdateSlot;
 };

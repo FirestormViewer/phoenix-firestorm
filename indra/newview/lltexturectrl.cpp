@@ -539,7 +539,6 @@ BOOL LLFloaterTexturePicker::postBuild()
 	LLToolPipette::getInstance()->setToolSelectCallback(boost::bind(&LLFloaterTexturePicker::onTextureSelect, this, _1));
 	
 	getChild<LLComboBox>("l_bake_use_texture_combo_box")->setCommitCallback(onBakeTextureSelect, this);
-	getChild<LLCheckBoxCtrl>("hide_base_mesh_region")->setCommitCallback(onHideBaseMeshRegionCheck, this);
 
 	setBakeTextureEnabled(TRUE);
 	return TRUE;
@@ -593,7 +592,7 @@ void LLFloaterTexturePicker::draw()
 		}
 
 		getChildView("Default")->setEnabled(mImageAssetID != mDefaultImageAssetID || mTentative);
-		getChildView("Blank")->setEnabled((mImageAssetID != mBlankImageAssetID && mBlankImageAssetID != mDefaultImageAssetID) || mTentative);
+		getChildView("Blank")->setEnabled((mImageAssetID != mBlankImageAssetID && mBlankImageAssetID.notNull()) || mTentative);
 		getChildView("Transparent")->setEnabled(mImageAssetID != mTransparentImageAssetID || mTentative); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 		getChildView("None")->setEnabled(mAllowNoTexture && (!mImageAssetID.isNull() || mTentative));
 
@@ -774,8 +773,9 @@ void LLFloaterTexturePicker::onBtnTransparent(void* userdata)
 void LLFloaterTexturePicker::onBtnNone(void* userdata)
 {
 	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
+    self->setCanApply(true, true);
 	self->setImageID( LLUUID::null );
-	self->commitCancel();
+    self->commitIfImmediateSet();
 }
 
 /*
@@ -941,7 +941,6 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 	self->getChild<LLButton>("Blank")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLButton>("Transparent")->setVisible(index == 0 ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	self->getChild<LLButton>("None")->setVisible(index == 0 ? TRUE : FALSE);
-	self->getChild<LLButton>("Pipette")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLFilterEditor>("inventory search editor")->setVisible(index == 0 ? TRUE : FALSE);
 	self->getChild<LLInventoryPanel>("inventory panel")->setVisible(index == 0 ? TRUE : FALSE);
 
@@ -951,7 +950,10 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 	self->getChild<LLScrollListCtrl>("l_name_list")->setVisible(index == 1 ? TRUE : FALSE);
 
 	self->getChild<LLComboBox>("l_bake_use_texture_combo_box")->setVisible(index == 2 ? TRUE : FALSE);
-	self->getChild<LLCheckBoxCtrl>("hide_base_mesh_region")->setVisible(FALSE);// index == 2 ? TRUE : FALSE);
+
+    bool pipette_visible = (index == 0)
+        && (self->mInventoryPickType != LLTextureCtrl::PICK_MATERIAL);
+	self->getChild<LLButton>("Pipette")->setVisible(pipette_visible);
 
 	if (index == 2)
 	{
@@ -1235,13 +1237,6 @@ void LLFloaterTexturePicker::onBakeTextureSelect(LLUICtrl* ctrl, void *user_data
 	}
 }
 
-//static
-void LLFloaterTexturePicker::onHideBaseMeshRegionCheck(LLUICtrl* ctrl, void *user_data)
-{
-	//LLFloaterTexturePicker* picker = (LLFloaterTexturePicker*)user_data;
-	//LLCheckBoxCtrl* check_box = (LLCheckBoxCtrl*)ctrl;
-}
-
 void LLFloaterTexturePicker::updateFilterPermMask()
 {
 	//mInventoryPanel->setFilterPermMask( getFilterPermMask() );  Commented out due to no-copy texture loss.
@@ -1383,6 +1378,16 @@ void LLFloaterTexturePicker::setInventoryPickType(LLTextureCtrl::EPickInventoryT
     mInventoryPickType = type;
     refreshLocalList();
     refreshInventoryFilter();
+
+    if (mInventoryPickType == LLTextureCtrl::PICK_MATERIAL)
+    {
+        getChild<LLButton>("Pipette")->setVisible(false);
+    }
+    else
+    {
+        S32 index = mModeSelector->getValue().asInteger();
+        getChild<LLButton>("Pipette")->setVisible(index == 0);
+    }
 }
 
 void LLFloaterTexturePicker::onPickerCallback(const std::vector<std::string>& filenames, LLHandle<LLFloater> handle)
@@ -1433,10 +1438,20 @@ void LLFloaterTexturePicker::onTextureSelect( const LLTextureEntry& te )
 	if (inventory_item_id.notNull())
 	{
 		LLToolPipette::getInstance()->setResult(TRUE, "");
-		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
-		setCanApply(true, true);
-		// </FS:Ansariel>
-		setImageID(te.getID());
+        if (mInventoryPickType == LLTextureCtrl::PICK_MATERIAL)
+        {
+            // tes have no data about material ids
+            // Plus gltf materials are layered with overrides,
+            // which mean that end result might have no id.
+            LL_WARNS() << "tes have no data about material ids" << LL_ENDL;
+        }
+        else
+        {
+            // <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+            setCanApply(true, true);
+            // </FS:Ansariel>
+            setImageID(te.getID());
+        }
 
 		mNoCopyTextureSelected = FALSE;
 		LLInventoryItem* itemp = gInventory.getItem(inventory_item_id);

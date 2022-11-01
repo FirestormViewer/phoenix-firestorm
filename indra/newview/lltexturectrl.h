@@ -368,7 +368,6 @@ public:
 	static void		onLocalScrollCommit(LLUICtrl* ctrl, void* userdata);
 
 	static void		onBakeTextureSelect(LLUICtrl* ctrl, void *userdata);
-	static void		onHideBaseMeshRegionCheck(LLUICtrl* ctrl, void *userdata);
 
 	void 			setLocalTextureEnabled(BOOL enabled);
 	void 			setBakeTextureEnabled(BOOL enabled);

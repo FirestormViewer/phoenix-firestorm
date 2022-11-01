@@ -485,6 +485,7 @@ public:
 		RENDER_TYPE_INVISIBLE					= LLDrawPool::POOL_INVISIBLE,
 		RENDER_TYPE_VOIDWATER					= LLDrawPool::POOL_VOIDWATER,
 		RENDER_TYPE_WATER						= LLDrawPool::POOL_WATER,
+        RENDER_TYPE_GLTF_PBR                    = LLDrawPool::POOL_GLTF_PBR,
  		RENDER_TYPE_ALPHA						= LLDrawPool::POOL_ALPHA,
         RENDER_TYPE_ALPHA_PRE_WATER             = LLDrawPool::POOL_ALPHA_PRE_WATER,
         RENDER_TYPE_ALPHA_POST_WATER            = LLDrawPool::POOL_ALPHA_POST_WATER,
@@ -545,8 +546,8 @@ public:
         RENDER_TYPE_PASS_NORMSPEC_MASK_RIGGED = LLRenderPass::PASS_NORMSPEC_MASK_RIGGED,
 		RENDER_TYPE_PASS_NORMSPEC_EMISSIVE		= LLRenderPass::PASS_NORMSPEC_EMISSIVE,
         RENDER_TYPE_PASS_NORMSPEC_EMISSIVE_RIGGED = LLRenderPass::PASS_NORMSPEC_EMISSIVE_RIGGED,
-        RENDER_TYPE_PASS_PBR_OPAQUE               = LLRenderPass::PASS_PBR_OPAQUE,
-        RENDER_TYPE_PASS_PBR_OPAQUE_RIGGED        = LLRenderPass::PASS_PBR_OPAQUE_RIGGED,
+        RENDER_TYPE_PASS_GLTF_PBR                 = LLRenderPass::PASS_GLTF_PBR,
+        RENDER_TYPE_PASS_GLTF_PBR_RIGGED        = LLRenderPass::PASS_GLTF_PBR_RIGGED,
 		// Following are object types (only used in drawable mRenderType)
 		RENDER_TYPE_HUD = LLRenderPass::NUM_RENDER_TYPES,
 		RENDER_TYPE_VOLUME,
@@ -828,7 +829,7 @@ protected:
 	};
 	typedef std::set< Light, Light::compare > light_set_t;
 	
-	LLDrawable::drawable_set_t		mLights;
+	LLDrawable::ordered_drawable_set_t	mLights;
 	light_set_t						mNearbyLights; // lights near camera
 	LLColor4						mHWLightColors[8];
 	

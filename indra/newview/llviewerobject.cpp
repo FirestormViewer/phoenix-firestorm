@@ -4930,8 +4930,37 @@ void LLViewerObject::setNumTEs(const U8 num_tes)
 		{
 			deleteTEImages();
 		}
+
+        S32 original_tes = getNumTEs();
+
 		LLPrimitive::setNumTEs(num_tes);
 		setChanged(TEXTURE);
+
+        // touch up GLTF materials
+        if (original_tes > 0)
+        {
+            for (int i = original_tes; i < getNumTEs(); ++i)
+            {
+                LLTextureEntry* src = getTE(original_tes - 1);
+                LLTextureEntry* tep = getTE(i);
+                setRenderMaterialID(i, getRenderMaterialID(original_tes - 1), false);
+
+                if (tep)
+                {
+                    LLGLTFMaterial* base_material = src->getGLTFMaterial();
+                    LLGLTFMaterial* override_material = src->getGLTFMaterialOverride();
+                    if (base_material && override_material)
+                    {
+                        tep->setGLTFMaterialOverride(new LLGLTFMaterial(*override_material));
+
+                        LLGLTFMaterial* render_material = new LLFetchedGLTFMaterial();
+                        *render_material = *base_material;
+                        render_material->applyOverride(*override_material);
+                        tep->setGLTFRenderMaterial(render_material);
+                    }
+                }
+            }
+        }
 
 		if (mDrawable.notNull())
 		{
@@ -5504,6 +5533,13 @@ S32 LLViewerObject::setTEGLTFMaterialOverride(U8 te, LLGLTFMaterial* override_ma
     }
 
     LLFetchedGLTFMaterial* src_mat = (LLFetchedGLTFMaterial*) tep->getGLTFMaterial();
+
+    if (!src_mat)
+    { // we can get into this state if an override has arrived before the viewer has
+        // received or handled an update, return TEM_CHANGE_NONE to signal to LLGLTFMaterialList that it
+        // should queue the update for later
+        return retval;
+    }
 
     tep->setGLTFMaterialOverride(override_mat);
 
@@ -6314,6 +6350,7 @@ LLViewerObject::ExtraParameter* LLViewerObject::createNewParameterEntry(U16 para
       }
 	  default:
 	  {
+          llassert(false); // invalid parameter type
 		  LL_INFOS() << "Unknown param type." << LL_ENDL;
 		  break;
 	  }
@@ -6324,6 +6361,7 @@ LLViewerObject::ExtraParameter* LLViewerObject::createNewParameterEntry(U16 para
 		ExtraParameter* new_entry = new ExtraParameter;
 		new_entry->data = new_block;
 		new_entry->in_use = false; // not in use yet
+        llassert(mExtraParameterList[param_type] == nullptr); // leak -- redundantly allocated parameter entry
 		mExtraParameterList[param_type] = new_entry;
 		return new_entry;
 	}
@@ -7300,132 +7338,108 @@ const LLUUID& LLViewerObject::getRenderMaterialID(U8 te) const
     return LLUUID::null;
 }
 
-void LLViewerObject::setRenderMaterialID(U8 te, const LLUUID& id, bool update_server)
+void LLViewerObject::setRenderMaterialID(S32 te_in, const LLUUID& id, bool update_server)
 {
-    if (id.notNull())
-    {
-        getTE(te)->setGLTFMaterial(gGLTFMaterialList.getMaterial(id));
+    // implementation is delicate
 
-        if (!hasRenderMaterialParams())
+    // if update is bound for server, should always null out GLTFRenderMaterial and GLTFMaterialOverride even if ids haven't changed
+    //  (the case where ids haven't changed indicates the user has reapplied the original material, in which case overrides should be dropped)
+    // otherwise, should only null out where ids have changed 
+    //  (the case where ids have changed but overrides are still present is from unsynchronized updates from the simulator)
+    
+    S32 start_idx = 0;
+    S32 end_idx = getNumTEs();
+
+    if (te_in != -1)
+    {
+        start_idx = te_in;
+        end_idx = start_idx + 1;
+    }
+
+    start_idx = llmax(start_idx, 0);
+    end_idx = llmin(end_idx, (S32) getNumTEs());
+
+    // update local state
+    for (S32 te = start_idx; te < end_idx; ++te)
+    {
+        
+        LLGLTFMaterial* new_material = nullptr;
+        LLTextureEntry* tep = getTE(te);
+
+        if (id.notNull())
         {
-            // make sure param section exists
-            // but do not update server to avoid race conditions
-            ExtraParameter* param = getExtraParameterEntryCreate(LLNetworkData::PARAMS_RENDER_MATERIAL);
-            if (param)
-            {
-                param->in_use = true;
-            }
+            new_material = gGLTFMaterialList.getMaterial(id);
+        }
+        
+        bool material_changed = tep->getGLTFMaterial() != new_material;
+
+        if (update_server || material_changed)
+        { 
+            tep->setGLTFRenderMaterial(nullptr);
+            tep->setGLTFMaterialOverride(nullptr);
+        }
+
+        if (new_material != tep->getGLTFMaterial())
+        {
+            tep->setGLTFMaterial(new_material);
         }
     }
-    else
-    {
-        getTE(te)->setGLTFMaterial(nullptr);
-    }
 
+    // signal to render pipe that render batches must be rebuilt for this object
     faceMappingChanged();
     gPipeline.markTextured(mDrawable);
 
-    LLRenderMaterialParams* param_block = (LLRenderMaterialParams*)getParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL);
-    if (param_block)
+    if (update_server)
     {
-        param_block->setMaterial(te, id);
-
-        if (param_block->isEmpty())
-        { // might be empty if id is null
-            if (hasRenderMaterialParams())
-            {
-                if (update_server)
-                {
-                    setParameterEntryInUse(LLNetworkData::PARAMS_RENDER_MATERIAL, FALSE, true);
-                }
-                else
-                {
-                    ExtraParameter* param = getExtraParameterEntryCreate(LLNetworkData::PARAMS_RENDER_MATERIAL);
-                    if (param)
-                    {
-                        param->in_use = false;
-                    }
-                }
-            }
-        }
-        else if (update_server)
+        // blank out any override data on the ser
+        for (S32 te = start_idx; te < end_idx; ++te)
         {
-            parameterChanged(LLNetworkData::PARAMS_RENDER_MATERIAL, true);
+            LLCoros::instance().launch("modifyMaterialCoro",
+                std::bind(&LLGLTFMaterialList::modifyMaterialCoro,
+                    gAgent.getRegionCapability("ModifyMaterialParams"),
+                    llsd::map(
+                        "object_id", getID(),
+                        "side", te), nullptr));
+        }
+
+        // update and send LLRenderMaterialParams
+        LLRenderMaterialParams* param_block = (LLRenderMaterialParams*)getParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL);
+        if (!param_block && id.notNull())
+        { // block doesn't exist, but it will need to
+            param_block = (LLRenderMaterialParams*) createNewParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL)->data;
+        }
+
+        if (param_block)
+        { // update existing parameter block
+            for (S32 te = start_idx; te < end_idx; ++te)
+            {
+                param_block->setMaterial(te, id);
+            }
+
+            bool in_use_changed = setParameterEntryInUse(LLNetworkData::PARAMS_RENDER_MATERIAL, !param_block->isEmpty(), true);
+
+            if (!in_use_changed)
+            { // in use didn't change, but the parameter did
+                parameterChanged(LLNetworkData::PARAMS_RENDER_MATERIAL, param_block, !param_block->isEmpty(), true);
+            }
         }
     }
 }
 
 void LLViewerObject::setRenderMaterialIDs(const LLUUID& id)
 {
-    if (id.notNull())
-    {
-        if (!hasRenderMaterialParams())
-        {
-            // make sure param section exists
-            // but do not update server to avoid race conditions
-            ExtraParameter* param = getExtraParameterEntryCreate(LLNetworkData::PARAMS_RENDER_MATERIAL);
-            if (param)
-            {
-                param->in_use = true;
-            }
-        }
-    }
-
-    LLRenderMaterialParams* param_block = nullptr;
-    if (hasRenderMaterialParams())
-    {
-        param_block = (LLRenderMaterialParams*)getParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL);
-    }
-
-    LLGLTFMaterial* material = id.isNull() ? nullptr : gGLTFMaterialList.getMaterial(id);
-    const S32 num_tes = llmin((S32)getNumTEs(), (S32)getNumFaces());
-
-    for (S32 te = 0; te < num_tes; te++)
-    {
-        getTE(te)->setGLTFMaterial(material);
-
-        if (param_block)
-        {
-            param_block->setMaterial(te, id);
-        }
-    }
-
-    faceMappingChanged();
-    gPipeline.markTextured(mDrawable);
-
-    if (param_block)
-    {
-        if (param_block->isEmpty())
-        {
-            setHasRenderMaterialParams(false);
-        }
-        else
-        {
-            parameterChanged(LLNetworkData::PARAMS_RENDER_MATERIAL, true);
-        }
-    }
+    setRenderMaterialID(-1, id);
 }
 
 void LLViewerObject::setRenderMaterialIDs(const LLRenderMaterialParams* material_params, bool local_origin)
 {
     if (!local_origin)
     {
-        const S32 num_tes = llmin((S32)getNumTEs(), (S32)getNumFaces()); // avatars have TEs but no faces
-        for (S32 te = 0; te < num_tes; ++te)
+        for (S32 te = 0; te < getNumTEs(); ++te)
         {
             const LLUUID& id = material_params ? material_params->getMaterial(te) : LLUUID::null;
-            if (id.notNull())
-            {
-                getTE(te)->setGLTFMaterial(gGLTFMaterialList.getMaterial(id));
-                setHasRenderMaterialParams(true);
-            }
-            else
-            {
-                getTE(te)->setGLTFMaterial(nullptr);
-            }
+            setRenderMaterialID(te, id, false);
         }
-        faceMappingChanged();
-        gPipeline.markTextured(mDrawable);
     }
 }
 

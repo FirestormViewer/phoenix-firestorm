@@ -296,6 +296,8 @@ BOOL	LLPanelFace::postBuild()
 
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
 	childSetAction("button align textures", &LLPanelFace::onAlignTexture, this);
+    childSetAction("pbr_from_inventory", &LLPanelFace::onClickBtnLoadInvPBR, this);
+    childSetAction("edit_selected_pbr", &LLPanelFace::onClickBtnEditPBR, this);
 
 	// <FS:CR> Moved to the header so other functions can use them too.
 	//LLTextureCtrl*	mTextureCtrl;
@@ -319,7 +321,7 @@ BOOL	LLPanelFace::postBuild()
     if (pbr_ctrl)
     {
         pbr_ctrl->setDefaultImageAssetID(LLUUID::null);
-        pbr_ctrl->setBlankImageAssetID(LLUUID::null); // should there be some empty default material?
+        pbr_ctrl->setBlankImageAssetID(LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID);
         pbr_ctrl->setCommitCallback(boost::bind(&LLPanelFace::onCommitPbr, this, _2));
         pbr_ctrl->setOnCancelCallback(boost::bind(&LLPanelFace::onCancelPbr, this, _2));
         pbr_ctrl->setOnSelectCallback(boost::bind(&LLPanelFace::onSelectPbr, this, _2));
@@ -333,9 +335,6 @@ BOOL	LLPanelFace::postBuild()
         pbr_ctrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
         pbr_ctrl->setBakeTextureEnabled(false);
         pbr_ctrl->setInventoryPickType(LLTextureCtrl::PICK_MATERIAL);
-
-        // TODO - design real UI for activating live editing
-        pbr_ctrl->setRightMouseUpCallback(boost::bind(&LLPanelFace::onPbrStartEditing, this));
     }
 
 	mTextureCtrl = getChild<LLTextureCtrl>("texture control");
@@ -1079,6 +1078,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
             pbr_ctrl->setImageAssetID(pbr_id);
             has_pbr_material = pbr_id.notNull();
         }
+        getChildView("pbr_from_inventory")->setEnabled(editable);
+        getChildView("edit_selected_pbr")->setEnabled(editable && has_pbr_material);
 
 		//LLTextureCtrl*	texture_ctrl = getChild<LLTextureCtrl>("texture control");
 		//LLTextureCtrl*	shinytexture_ctrl = getChild<LLTextureCtrl>("shinytexture control");
@@ -1594,8 +1595,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			LLUICtrl* glow_ctrl = getChild<LLUICtrl>("glow");
 			glow_ctrl->setValue(glow);
 			glow_ctrl->setTentative(!identical_glow);
-			glow_ctrl->setEnabled(editable && !has_pbr_material);
-			getChildView("glow label")->setEnabled(editable && !has_pbr_material);
+			glow_ctrl->setEnabled(editable);
+			getChildView("glow label")->setEnabled(editable);
 		}
 
 		{
@@ -1882,6 +1883,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		getChildView("label shininess")->setEnabled(FALSE);
 		getChildView("label bumpiness")->setEnabled(FALSE);
 		getChildView("button align")->setEnabled(FALSE);
+        getChildView("pbr_from_inventory")->setEnabled(FALSE);
+        getChildView("edit_selected_pbr")->setEnabled(FALSE);
 		//getChildView("has media")->setEnabled(FALSE);
 		//getChildView("media info set")->setEnabled(FALSE);
 
@@ -2835,6 +2838,8 @@ void LLPanelFace::updateVisibility()
 
     // PBR controls
     getChildView("pbr_control")->setVisible(show_pbr);
+    getChildView("pbr_from_inventory")->setVisible(show_pbr);
+    getChildView("edit_selected_pbr")->setVisible(show_pbr);
 }
 
 // static
@@ -3809,6 +3814,19 @@ void LLPanelFace::onAlignTexture(void* userdata)
     self->alignTestureLayer();
 }
 
+void LLPanelFace::onClickBtnLoadInvPBR(void* userdata)
+{
+    // Shouldn't this be "save to inventory?"
+    LLPanelFace* self = (LLPanelFace*)userdata;
+    LLTextureCtrl* pbr_ctrl = self->findChild<LLTextureCtrl>("pbr_control");
+    pbr_ctrl->showPicker(true);
+}
+
+void LLPanelFace::onClickBtnEditPBR(void* userdata)
+{
+    LLMaterialEditor::loadLive();
+}
+
 enum EPasteMode
 {
     PASTE_COLOR,
@@ -4761,17 +4779,6 @@ void LLPanelFace::onPbrSelectionChanged(LLInventoryItem* itemp)
             LLNotificationsUtil::add("LivePreviewUnavailable");
         }
     }
-}
-
-void LLPanelFace::onPbrStartEditing()
-{
-    bool   identical;
-    LLUUID material_id;
-    LLSelectedTE::getPbrMaterialId(material_id, identical);
-
-    LL_DEBUGS() << "loading material live editor with asset " << material_id << LL_ENDL;
-
-    LLMaterialEditor::loadLive();
 }
 
 bool LLPanelFace::isIdenticalPlanarTexgen()

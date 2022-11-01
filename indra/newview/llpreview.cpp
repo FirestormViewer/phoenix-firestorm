@@ -126,13 +126,17 @@ const LLInventoryItem *LLPreview::getItem() const
 	}
 	else if (mObjectUUID.isNull())
 	{
-		// it's an inventory item, so get the item.
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-11 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
-		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType())
+		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType() && mItemUUID.notNull())
 			item = gInventory.getItem(mItemUUID);
 		else
 			item = mAuxItem;
 // [/SL:KB]
+        //if (mItemUUID.notNull())
+        //{
+        //    // it's an inventory item, so get the item.
+        //    item = gInventory.getItem(mItemUUID);
+        //}
 	}
 	else
 	{
