@@ -1064,7 +1064,7 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 #else
     if (own_profile)
 #endif
-// </FS:Beq>        
+// </FS:Beq>
     {
         mImageActionMenuButton->setVisible(TRUE);
         mImageActionMenuButton->setMenu("menu_fs_profile_image_actions.xml", LLMenuButton::MP_BOTTOM_RIGHT);
@@ -1113,11 +1113,11 @@ void LLPanelProfileSecondLife::updateData()
         else
         {
             // <FS:Beq> restore UDP profiles for opensim that does not support the cap
-#ifdef OPENSIM            
+#ifdef OPENSIM
             if (LLGridManager::instance().isInOpenSim() && !(getSelfProfile() /* TODO(Beq):No longer neeed? && !getEmbedded()*/))
             {
                 LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
-            }            
+            }
             else
 #endif
             // </FS:Beq>
@@ -1138,7 +1138,7 @@ void LLPanelProfileSecondLife::refreshName()
 void LLPanelProfileSecondLife::apply(LLAvatarData* data)
 {
 #ifdef OPENSIM
-    if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
+	if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
 	{
 		data->image_id = mImageId;
 		data->about_text = mDescriptionEdit->getValue().asString();
@@ -1262,9 +1262,10 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     fillPartnerData(avatar_data);
 
     fillAccountStatus(avatar_data);
+
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
+    if (LLGridManager::instance().isInOpenSim())
     {
         LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
         if (!floater_profile)
@@ -1272,13 +1273,16 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
             // floater is dead, so panels are dead as well
             return;
         }
-        LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-        auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
-        if (!panel_profile)
+        LLPanel* panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
+        auto* panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+        if (panel_profile)
+        {
+            panel_profile->setAvatarData(avatar_data);
+        }
+        else
         {
             LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
-        }        
-        panel_profile->setAvatarData(avatar_data);
+        }
     }
 #endif
 // </FS:Beq>
