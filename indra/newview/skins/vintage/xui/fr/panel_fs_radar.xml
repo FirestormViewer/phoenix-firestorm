@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_radar">
+	<string name="TypingColumnIcon" value="radarbox_p"/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (Un double-clic permet d'ouvrir la carte, un glissement avec Maj permet de déplacer la carte.)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Un double-clic permet de se téléporter, un glissement avec Maj permet de déplacer la carte.)"/>
+	<string name="avatar_name_count" value="Nom [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<layout_stack name="radar_ls">
+			<layout_panel name="radarlayout">
+				<radar_list name="radar_list">
+					<radar_list.columns label="Nom" name="name" tool_tip="[TOTAL] avatars, [IN_REGION] dans la même région, [IN_CHAT_RANGE] dans le rayon de discussion"/>
+					<radar_list.columns name="voice_level" tool_tip="Conversations vocales"/>
+					<radar_list.columns name="in_region" tool_tip="Il se trouve dans la même région (vert) ou dans la même parcelle (vert-jaune)."/>
+					<radar_list.columns name="typing_status" tool_tip="Il est en train d'écrire"/>
+					<radar_list.columns name="sitting_status" tool_tip="Il est assis"/>
+					<radar_list.columns name="flags" tool_tip="Statut des informations de paiement"/>
+					<radar_list.columns name="has_notes" tool_tip="L'avatar a des notes"/>
+					<radar_list.columns label="Âge" name="age"/>
+					<radar_list.columns label="Heure" name="seen"/>
+					<radar_list.columns label="Distance" name="range"/>
+				</radar_list>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

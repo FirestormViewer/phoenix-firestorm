@@ -290,6 +290,7 @@
 			<menu_item_check label="Masquer les particules" name="Hide Particles"/>
 			<menu_item_check label="Masquer la sélection" name="Hide Selected"/>
 			<menu_item_check label="Mettre la transparence en surbrillance" name="Highlight Transparent"/>
+			<menu_item_check label="- Inclure les transparents riggés" name="Include Transparent Rigged"/>
 			<menu_item_check label="Afficher le réticule de la vue subjective" name="ShowCrosshairs"/>
 			<menu label="Conseils" name="Hover Tips">
 				<menu_item_check label="Afficher les conseils" name="Show Tips"/>
@@ -476,6 +477,9 @@
 			<menu_item_check label="Objets d&apos;interpolation de vitesse" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Interpolation ping des positions des objets" name="Ping Interpolate Object Positions"/>
 			<menu_item_call label="Abandonner un paquet" name="Drop a Packet"/>
+		</menu>
+		<menu label="Cache" name="Cache">
+			<menu_item_call label="Purger le cache du disque" name="Purge Disk Cache"/>
 		</menu>
 		<menu_item_call label="Dump caméra scriptée" name="Dump Scripted Camera"/>
 		<menu label="Enregistreur" name="Recorder">

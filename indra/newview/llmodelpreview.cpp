@@ -2509,14 +2509,17 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
 {
     // <FS:Beq> Log things properly
     // LL_INFOS() << "Generating lod " << which_lod << " using meshoptimizer" << LL_ENDL;
-    std::ostringstream out;
-    out << "Generating lod " << which_lod << " using meshoptimizer";
-    LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
-    LLFloaterModelPreview::addStringToLog(out, false);
+    {
+        std::ostringstream out;
+        out << "Generating lod " << which_lod << " using meshoptimizer";
+        LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, false);
+    }
+    // </FS:Beq>
     // Allow LoD from -1 to LLModel::LOD_PHYSICS
     if (which_lod < -1 || which_lod > LLModel::NUM_LODS - 1)
     {
-        // std::ostringstream out; // <FS:Beq/> already instantiated
+        std::ostringstream out; 
         out << "Invalid level of detail: " << which_lod;
         LL_WARNS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true); // <FS:Beq/> if you don't flash the log tab on error when do you?
@@ -2726,7 +2729,11 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                         // (indices_decimator / res_ratio) by itself is likely to overshoot to a differend
                         // side due to overal lack of precision, and we don't need an ideal result, which
                         // likely does not exist, just a better one, so a partial correction is enough.
-                        F32 sloppy_decimator = indices_decimator * (indices_decimator / sloppy_ratio + 1) / 2;
+                        F32 sloppy_decimator{indices_decimator};
+                        // if(sloppy_ratio > 0)
+                        // {
+                        sloppy_decimator = indices_decimator * (indices_decimator / sloppy_ratio + 1) / 2;
+                        // }
                         sloppy_ratio = genMeshOptimizerPerModel(base, target_model, sloppy_decimator, lod_error_threshold, MESH_OPTIMIZER_NO_TOPOLOGY);
                     }
 
@@ -2777,12 +2784,16 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                         //     << " lod " << which_lod
                         //     << " resulting ratio " << precise_ratio
                         //     << " simplified using per model method." << LL_ENDL;
-                        out << "Model " << target_model->getName()
-                            << " lod " << which_lod
-                            << " resulting ratio " << precise_ratio
-                            << " simplified using per model method.";
-                        LL_INFOS() << out.str() << LL_ENDL;
-                        LLFloaterModelPreview::addStringToLog(out, false);
+                        {
+                            std::ostringstream out;
+                            out << "Model " << target_model->getName()
+                                << " lod " << which_lod
+                                << " resulting ratio " << precise_ratio
+                                << " simplified using per model method.";
+                            LL_INFOS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, false);
+                        }
+                        // </FS:Beq>
                     }
                     else
                     {
@@ -2791,12 +2802,14 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                         //     << " lod " << which_lod
                         //     << " resulting ratio " << sloppy_ratio
                         //     << " sloppily simplified using per model method." << LL_ENDL;
+                        std::ostringstream out;
                         out << "Model " << target_model->getName()
                             << " lod " << which_lod
                             << " resulting ratio " << sloppy_ratio
                             << " sloppily simplified using per model method.";
                         LL_INFOS() << out.str() << LL_ENDL;
                         LLFloaterModelPreview::addStringToLog(out, false);
+                        // </FS:Beq>
                     }
                 }
                 else
@@ -2806,12 +2819,14 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
                         //     << " lod " << which_lod
                         //     << " resulting ratio " << precise_ratio
                         //     << " simplified using per model method." << LL_ENDL;
+                        std::ostringstream out;
                         out << "Bad MeshOptimisation result for Model " << target_model->getName()
                             << " lod " << which_lod
                             << " resulting ratio " << precise_ratio
                             << " simplified using per model method.";
                         LL_WARNS() << out.str() << LL_ENDL;
                         LLFloaterModelPreview::addStringToLog(out, true);
+                        // </FS:Beq>
                 }
             }
 
@@ -3278,7 +3293,6 @@ void LLModelPreview::updateStatusMessages()
         out << "Loader returned errors, model can't be uploaded";
         LL_INFOS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true);
-        out.str("");
         // </FS:Beq>
     }
 
@@ -3296,7 +3310,6 @@ void LLModelPreview::updateStatusMessages()
             out << "Invalid rig, there might be issues with uploading Joint positions";
             LL_INFOS() << out.str() << LL_ENDL;
             LLFloaterModelPreview::addStringToLog(out, true);
-            out.str("");
             // </FS:Beq>
         }
     }
@@ -3861,7 +3874,6 @@ void LLModelPreview::createPreviewAvatar(void)
         out << "Failed to create preview avatar for upload model window";
         LL_INFOS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true);
-        out.str("");
         // </FS:Beq>
     }
 }
@@ -3964,6 +3976,7 @@ void LLModelPreview::lookupLODModelFiles(S32 lod)
         out << "Auto Loading LOD" << next_lod << " from " << lod_filename;
         LL_INFOS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true);
+        out.str("");
         // </FS:Beq>
         LLFloaterModelPreview* fmp = LLFloaterModelPreview::sInstance;
         if (fmp)

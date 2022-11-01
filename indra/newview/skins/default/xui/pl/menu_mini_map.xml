@@ -40,10 +40,10 @@
 	<menu_item_call label="Zacznij śledzić" name="Start Tracking"/>
 	<menu_item_call label="Przestań śledzić" name="Stop Tracking"/>
 	<menu label="Powiększenie" name="Minimap Zoom">
-		<menu_item_call label="Duże" name="Zoom Close"/>
-		<menu_item_call label="Średnie" name="Zoom Medium"/>
-		<menu_item_call label="Małe" name="Zoom Far"/>
-		<menu_item_call label="Domyślne" name="Zoom Default"/>
+		<menu_item_check label="Bardzo duże" name="Zoom very close" />
+		<menu_item_check label="Duże" name="Zoom close"/>
+		<menu_item_check label="Średnie (domyślne)" name="Zoom medium"/>
+		<menu_item_check label="Małe" name="Zoom far"/>
 	</menu>
 	<menu label="Pokaż" name="Minimap Show">
 		<menu_item_check label="Obiekty" name="Objects"/>
@@ -55,14 +55,17 @@
 		<menu_item_check label="Tekstury terenu" name="Terrain Textures"/>
 		<menu_item_check label="Tekstury mapy świata" name="World Map Textures"/>
 	</menu>
-	<menu_item_check label="Obracaj mapę" name="Rotate Map"/>
-	<menu_item_check label="Autocentrowanie" name="Auto Center"/>
+	<menu_item_check label="Północ na górze" name="North at top" />
+	<menu_item_check label="Kamera na górze" name="Camera at top" />
+	<menu_item_check label="Autocentrowanie mapy" name="Auto-center map" />
+	<menu_item_call label="Centruj mapę" name="Re-center map" />
 	<menu label="Pierścienie zasięgu czatu" name="Chat Distance Rings Menu">
 		<menu_item_check label="Pokaż pierścienie zasięgu" name="Chat Distance Rings" />
 		<menu_item_check label="Pierścień zasięgu szeptu" name="Whisper Distance Ring" />
 		<menu_item_check label="Pierścień zasięgu czatu" name="Chat Distance Ring" />
 		<menu_item_check label="Pierścień zasięgu krzyku" name="Shout Distance Ring" />
 	</menu>
-	<menu_item_call label="Profil miejsca" name="Place Profile"/>
-	<menu_item_call label="Mapa świata" name="World Map"/>
+	<menu_item_call label="O działce" name="About Land" />
+	<menu_item_call label="Profil miejsca" name="Place Profile" />
+	<menu_item_call label="Mapa świata" name="World Map" />
 </menu>

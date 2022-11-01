@@ -66,6 +66,15 @@ public:
     LLSD asLLSD() const;
     void fromLLSD(const LLSD& material_data);
 
+    bool isEmpty() const
+    {
+        if( mNormalID.notNull() || mSpecularID.notNull() ) //|| mDiffuseAlphaMode != DIFFUSE_ALPHA_MODE_BLEND)
+        {
+            return false;
+	    }
+	    return true;
+    }
+
     const LLUUID&   getNormalID() const;
     void            setNormalID(const LLUUID& normal_id);
 

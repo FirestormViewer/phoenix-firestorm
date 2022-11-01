@@ -1084,11 +1084,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>082cf96b1fa31030fa9d47113e8574c3</string>
+              <string>fec86a4837ae9c6932c10af11851c4d0</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.08-darwin64-4.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.09-darwin64-5.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1158,9 +1158,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5818ed2d9b29bad00878f3e26b09b7f9</string>
+              <string>6fdcfcc9aa1d01164c0f7ca5590859bb</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/fontconfig-2.11.0-linux64-180841833.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/fontconfig-2.12.6-linux64-223020909.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1200,9 +1200,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0dab99c682433145aa8f5e26d8940afd</string>
+              <string>41db760508e6b48ae3a291ad2d1aef3d</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/freetype-2.4.4.180841832-linux64-180841832.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/freetype-2.8.1.223020901-linux64-223020901.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

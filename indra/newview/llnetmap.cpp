@@ -1697,6 +1697,9 @@ void LLNetMap::createParcelImage()
 
 BOOL LLNetMap::handleMouseDown(S32 x, S32 y, MASK mask)
 {
+    // <FS:Ansariel> FIRE-32339: Mini map can't be dragged anymore
+    if (!(mask & MASK_SHIFT)) return FALSE;
+
     // Start panning
     gFocusMgr.setMouseCapture(this);
 
@@ -1881,10 +1884,10 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		menu->buildDrawLabels();
 		menu->updateParent(LLMenuGL::sMenuContainer);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
-		menu->setItemVisible("Stop tracking", LLTracker::isTracking(0));
+		menu->setItemVisible("Stop Tracking", LLTracker::isTracking(0));
 		menu->setItemVisible("Stop Tracking Separator", LLTracker::isTracking(0));
 // [/SL:KB]
-//		menu->setItemEnabled("Stop tracking", LLTracker::isTracking(0));
+//		menu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
 		LLMenuGL::showPopup(this, menu, x, y);
 	}
 	return TRUE;

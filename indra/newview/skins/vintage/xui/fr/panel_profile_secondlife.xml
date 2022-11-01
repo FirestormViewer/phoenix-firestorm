@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Profil">
+	<string name="status_online">
+		En ligne
+	</string>
+	<string name="status_offline">
+		Hors ligne
+	</string>
+	<string name="status_unknown">
+		Inconnu
+	</string>
+	<string name="no_partner_text" value="Aucun" />
+	<string name="no_group_text" value="Aucun" />
+	<string name="age_format">
+Anniversaire : [REG_DATE]
+([AGE])
+	</string>
+	<string name="FSDev" value=" Développeur" />
+	<string name="FSSupp" value=" Support" />
+	<string name="FSQualityAssurance" value=" Chasseur de bogues" />
+	<string name="texture_picker_label" value="Photo du profil" />
+	<text name="name_label" value="Nom :" />
+	<button name="set_name" label="Nom :" tool_tip="Définir le nom d'affichage'" />
+	<panel name="name_holder">
+		<text_editor name="complete_name" value="(chargement en cours...)" />
+		<menu_button name="copy_btn" tool_tip="Options de copie" />
+	</panel>
+	<text name="Key:" value="Clé :" />
+	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Effectue des actions liées à la photo du profil" />
+		</layout_panel>
+		<layout_panel name="label_stack">
+			<icon tool_tip="Mes amis peuvent voir si je suis connecté" name="can_see_online" />
+			<icon tool_tip="Mes amis ne peuvent pas voir si je suis connecté" name="cant_see_online" />
+			<icon tool_tip="Mes amis peuvent me voir sur la carte" name="can_see_on_map" />
+			<icon tool_tip="Mes amis ne peuvent pas me voir sur la carte" name="cant_see_on_map" />
+			<icon tool_tip="Mes amis peuvent modifier mes objets" name="can_edit_objects" />
+			<icon tool_tip="Mes amis ne peuvent pas modifier mes objets" name="cant_edit_objects" />
+			<text_editor name="user_age" value="(chargement en cours...)" />
+			<text name="label2" value="Compte :" />
+			<text name="partner_label" value="Partenaire :"/>
+		</layout_panel>
+	</layout_stack>
+	<text name="Groups:" value="Groupes :" />
+	<button name="group_invite" tool_tip="Inviter dans le groupe" />
+	<text name="About:" value="Info :" />
+	<text name="Give item:" value="Donner :" />
+	<text name="Give inventory" tool_tip="Déposez ici des objets pour les donner à cette personne.">
+		Déposez des objets ici.
+	</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button name="show_on_map_btn" label="Trouver sur la carte" tool_tip="Trouver un résident sur la carte" label_selected="Trouver sur la carte" />
+			<button name="pay" label="Payer" tool_tip="Payer ce résident" label_selected="Payer" />
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button name="teleport" label="Prop. téléportation" tool_tip="Proposer une téléportation au résident" label_selected="Proposer une téléportation" />
+			<button name="im" label="Discussion privée (IM)" tool_tip="Commencer une nouvelle discussion privée (IM)" label_selected="Discussion privée (IM)" />
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button name="add_friend" label="Ajouter un ami" tool_tip="Proposer son amitié au résident" label_selected="Ajouter un ami" />
+			<button name="remove_friend" label="Interr. amitié" tool_tip="Mettre fin à l'amitié avec le résident" label_selected="Interr. amitié" />
+			<button name="block" label="Bloquer" tool_tip="Bloquer ce résident" />
+			<button name="unblock" label="Débloquer" tool_tip="Débloquer ce résident" />
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search" label="Afficher dans la recherche" tool_tip="Laissez les autres vous voir dans les résultats de recherche" />
+	<button name="save_description_changes" label="Enregistrer" />
+	<button name="discard_description_changes" label="Annuler" />
+</panel>
