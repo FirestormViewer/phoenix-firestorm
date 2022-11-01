@@ -47,8 +47,10 @@
 		<radio_item label="Normal" name="Normal"/>
 		<radio_item label="Metallisch/Unenbenheit" name="Metallic/roughness"/>
 	</radio_group>
-	<texture_picker label="Textur" name="texture control" tool_tip="Klicken, um ein Bild zu wählen"/>
 	<texture_picker label="PBR" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
+	<button name="pbr_from_inventory" label="Aus Inventory wählen"/>
+	<button name="edit_selected_pbr" label="Ausgewählte bearbeiten"/>
+	<texture_picker label="Textur" name="texture control" tool_tip="Klicken, um ein Bild zu wählen"/>
 	<text name="label alphamode">
 		Alpha-Modus
 	</text>
