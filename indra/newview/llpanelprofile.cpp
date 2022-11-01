@@ -1273,8 +1273,7 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
             // floater is dead, so panels are dead as well
             return;
         }
-        LLPanel* panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-        auto* panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+        LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, TRUE);
         if (panel_profile)
         {
             panel_profile->setAvatarData(avatar_data);
