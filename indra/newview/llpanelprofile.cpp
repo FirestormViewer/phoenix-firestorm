@@ -1261,7 +1261,6 @@ void LLPanelProfileSecondLife::resetData()
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
 {
-    LLUUID avatar_id = getAvatarId();
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
     if ((relationship != NULL || gAgent.isGodlike()) && !getSelfProfile())
     {
@@ -1286,23 +1285,26 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     fillPartnerData(avatar_data);
 
     fillAccountStatus(avatar_data);
+
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
+    if (LLGridManager::instance().isInOpenSim())
     {
-        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
+        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", getAvatarId()));
         if (!floater_profile)
         {
             // floater is dead, so panels are dead as well
             return;
         }
-        LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-        auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
-        if (!panel_profile)
+        LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, TRUE);
+        if (panel_profile)
+        {
+            panel_profile->setAvatarData(avatar_data);
+        }
+        else
         {
             LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
-        }        
-        panel_profile->setAvatarData(avatar_data);
+        }
     }
 #endif
 // </FS:Beq>
