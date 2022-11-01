@@ -55,6 +55,10 @@ exportMutliArchDRIPath() {
 ##   driver bug, try enabling this option and report whether it helps:
 #export LL_ATI_MOUSE_CURSOR_BUG=x
 
+## Help fontconfig find its default configuration file, otherwise the viewer will stall
+## with Fontconfig error: Cannot load default config file
+export FONTCONFIG_PATH=/etc/fonts
+
 if [ "`uname -m`" = "x86_64" ]; then
     echo '64-bit Linux detected.'
 fi

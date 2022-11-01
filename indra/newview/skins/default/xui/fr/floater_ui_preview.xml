@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gui_preview_tool" title="Outil de prévisualisation de XUI">
+	<string name="ExternalEditorNotSet">
+Sélectionnez un éditeur en définissant la variable d'environnement LL_XUI_EDITOR
+ou le paramètre ExternalEditor
+ou en spécifiant son chemin dans le champ "Editor Path".
+	</string>
+	<panel name="main_panel">
+		<text name="select_language_label">
+			Langue principale :
+		</text>
+		<combo_box name="language_select_combo">
+			<combo_box.item label="en" name="item1" value="en"/>
+		</combo_box>
+		<button label="Afficher" label_selected="Afficher" name="display_floater" tool_tip="Afficher le flotteur XUI défini par le fichier XML sélectionné"/>
+		<button label="Masquer" label_selected="Masquer" name="close_displayed_floater" tool_tip="Ferme le flotteur actuellement affiché, s'il existe."/>
+		<button label="Modifier..." label_selected="Modifier..." name="edit_floater" tool_tip="Modifie le flotteur XUI défini par le fichier XML sélectionné (ouvre un éditeur externe).  Ouvre la version anglaise si aucune version localisée n'existe."/>
+		<button label="Enregistrer" label_selected="Enregistrer" name="save_floater" tool_tip="Enregistrer le flotteur XUI défini par le fichier XML sélectionné"/>
+		<button label="Tout enregistrer" label_selected="Tout enreg." name="save_all_floaters" tool_tip="Sauvegarder tous les flotteurs XUI définis par la langue sélectionnée"/>
+		<button label="&gt; &gt;" label_selected="&lt; &lt;" name="toggle_overlap_panel" tool_tip="Basculez la mise en évidence et le panneau d'affichage des éléments qui se chevauchent ; cliquez avec le bouton droit de la souris sur un élément pour le sélectionner pour cette fonctionnalité.  L'élément sélectionné est marqué par un rectangle rouge."/>
+		<text name="select_language_label_2">
+			Langue secondaire :
+		</text>
+		<combo_box name="language_select_combo_2">
+			<combo_box.item label="en" name="item1" value="en" />
+		</combo_box>
+		<button label="Afficher" name="display_floater_2" tool_tip="Afficher le flotteur XUI défini par le fichier XML sélectionné"/>
+		<button label="Masquer" name="close_displayed_floater_2" tool_tip="Ferme le flotteur actuellement affiché, s'il existe."/>
+		<button label="Exporter le schéma" name="export_schema"/>
+		<button label="Rafraîchir" name="refresh_btn"/>
+		<check_box label="Aff. les rectangles" name="show_rectangles"/>
+		<scroll_list label="Nom" name="name_list">
+		<scroll_list.columns label="Titre" name="title_column"/>
+		<scroll_list.columns label="Fichier" name="file_column"/>
+		<scroll_list.columns label="Nœud de premier niveau" name="top_level_node_column"/>
+		</scroll_list>
+		<panel name="editor_panel">
+			<text name="editor_path_label">
+				Accès à l'éditeur :
+			</text>
+			<line_editor name="executable_path_field" tool_tip="Le chemin complet vers un éditeur (exécutable) pour éditer les fichiers XML des flotteurs (les guillemets ne sont pas nécessaires)."/>
+			<button label="Parcourir..." label_selected="Parcourir..." name="browse_for_executable" tool_tip="Browse for an editor (executable) to edit floater XML files"/>
+			<text name="executable_args_label">
+				Args de l'éditeur :
+			</text>
+			<line_editor name="executable_args_field" tool_tip="Arguments de la ligne de commande de l'éditeur ; utilisez &apos;%FILE%&apos; pour faire référence au fichier cible ; &apos;VotreProgramme.exe NomDeFichier.xml&apos; sera exécuté si ce champ est vide."/>
+		</panel>
+		<panel name="vlt_panel">
+			<text name="diff_file_label">
+				Fich. delta :
+			</text>
+			<line_editor name="vlt_diff_path_field" tool_tip="Le chemin d'accès complet à un fichier de différence de localisation XML D0 ou D1 généré par le Viewer Localization Toolkit."/>
+			<button label="Parcourir..." label_selected="Parcourir..." name="browse_for_vlt_diffs" tool_tip="Recherche d'un fichier de différence D0 ou D1 généré par le VLT pour mettre en évidence les fichiers et les éléments modifiés."/>
+			<button label="Mises en évidence des différences" label_selected="Ne pus mettre en évidence les différences" name="toggle_vlt_diff_highlight" tool_tip="Mise en évidence des fichiers et des éléments contenant des données de localisation modifiées."/>
+		</panel>
+	</panel>
+	<scroll_container name="overlap_scroll">
+		<panel name="overlap_dummy_panel">
+			<overlap_panel label="Overlap Panel" name="overlap_panel" tool_tip="Ce panneau affiche l'élément actuellement sélectionné et tous les éléments qui le recouvrent, séparés par des lignes horizontales."/>
+			<text name="overlap_panel_label">
+				Éléments superposés :
+			</text>
+		</panel>
+	</scroll_container>
+</floater>

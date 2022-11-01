@@ -162,6 +162,9 @@
 					<combo_item name="physics_lowest">
 						Le plus faible
 					</combo_item>
+					<combo_item name="physics_bounding_box">
+						Boîte englobante
+					</combo_item>
 					<combo_item name="physics_cube">
 						Cube
 					</combo_item>
@@ -317,8 +320,9 @@
 			</text>
 			<line_editor name="suf_physics" tool_tip="Le suffixe utilisé pour identifier le fichier physique sur le disque et les modèles dans un fichier."/>
 			<text name="mesh_preview_ud_preset_label">
-				Physique prédéfini par l'utilisateur :
+				Physique prédéf. par l'utilisateur :
 			</text>
+			<button label="Parcourir..." label_selected="Parcourir..." name="set_user_def_phys"/>
 			<line_editor name="ud_physics" tool_tip="Chemin d'accès complet à une définition de maillage Collada simple à utiliser pour le physique."/>
 			<button label_selected="Parcourir" name="set_user_def_phys"/>
 			<text name="mesh_preview_colors_label">
@@ -329,6 +333,7 @@
 			</text>
 			<color_swatch label="Arrière-plan" tool_tip="Couleur d'arrière-plan pour l'uploader" name="mesh_preview_canvas_color"/>
 			<color_swatch label="Arêtes du modèle" tool_tip="Couleur des arêtes du modèle dans l'aperçu de l'uploader" name="mesh_preview_edge_color"/>
+			<color_swatch label="Lumière ambiante" tool_tip="Niveau de lumière ambiante dans la fenêtre d'aperçu (affecte également l'aperçu des animations, etc.)" name="preview_ambient_color"/>
 			<text name="physics_settings_label">
 				Physiques :
 			</text>

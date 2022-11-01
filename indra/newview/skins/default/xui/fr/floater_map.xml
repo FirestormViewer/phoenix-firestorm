@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map">
+	<floater.string name="ParcelSalePriceMsg">
+		Prix : L$[PRICE] (L$[PRICE_PER_SQM]/m²)
+	</floater.string>
+	<floater.string name="ParcelSaleAreaMsg">
+		Surface : [AREA]m²
+	</floater.string>
+	<floater.string name="ParcelOwnerMsg">
+		Propriétaire : [PARCEL_OWNER]
+	</floater.string>
+	<floater.string name="RegionNameMsg">
+		Région : [REGION_NAME]
+	</floater.string>
+	<floater.string name="ToolTipHintMsg">
+		Double-cliquez pour ouvrir la carte
+	</floater.string>
+	<floater.string name="AltToolTipHintMsg">
+		Double-clicquez pour vous téléporter
+	</floater.string>
 	<floater.string name="mini_map_caption">
-         Mini-carte
+		Mini-carte
 	</floater.string>
 	<text label="N" name="floater_map_north">
-         N
+		N
 	</text>
 	<text label="E" name="floater_map_east">
-         E
+		E
 	</text>
 	<text label="O" name="floater_map_west">
-         O
+		O
 	</text>
 	<text label="S" name="floater_map_south">
-         S
+		S
 	</text>
 	<text label="SE" name="floater_map_southeast">
-         SE
+		SE
 	</text>
 	<text label="NE" name="floater_map_northeast">
-         NE
+		NE
 	</text>
 	<text label="SO" name="floater_map_southwest">
-         SO
+		SO
 	</text>
 	<text label="NO" name="floater_map_northwest">
-         NO
+		NO
 	</text>
 </floater>
