@@ -5523,6 +5523,7 @@ S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMateri
 
 S32 LLViewerObject::setTEGLTFMaterialOverride(U8 te, LLGLTFMaterial* override_mat)
 {
+    LL_PROFILE_ZONE_SCOPED;
     S32 retval = TEM_CHANGE_NONE;
 
     LLTextureEntry* tep = getTE(te);
