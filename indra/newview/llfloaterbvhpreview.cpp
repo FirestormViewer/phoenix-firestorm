@@ -67,6 +67,8 @@
 #include "llviewercontrol.h" // for gSavedSettings 
 #include "llvoavatarself.h" 
 
+#include "aoengine.h"	// <FS:Zi> FIRE-32315: Animation preview sometimes fails when FS AO is enabled
+
 S32 LLFloaterBvhPreview::sOwnAvatarInstanceCount = 0; // <FS> Preview on own avatar
 
 const S32 PREVIEW_BORDER_WIDTH = 2;
@@ -137,6 +139,13 @@ LLFloaterBvhPreview::LLFloaterBvhPreview(const std::string& filename) :
 	if (mUseOwnAvatar)
 	{
 		sOwnAvatarInstanceCount++;
+
+		// // Switch FS AO off during preview
+		mAOEnabled = gSavedPerAccountSettings.getBOOL("UseAO");
+		if (mAOEnabled)
+		{
+			AOEngine::getInstance()->enable(false);
+		}
 	}
 	// </FS>
 
@@ -534,6 +543,12 @@ LLFloaterBvhPreview::~LLFloaterBvhPreview()
 			gAgentAvatarp->deactivateAllMotions();
 			gAgentAvatarp->startDefaultMotions();
 			gAgentAvatarp->startMotion(ANIM_AGENT_STAND);
+		}
+
+		// Switch FS AO back on if it was disabled during preview
+		if (mAOEnabled)
+		{
+			AOEngine::getInstance()->enable(true);
 		}
 	}
 	// </FS>

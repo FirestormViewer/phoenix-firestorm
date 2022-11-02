@@ -253,7 +253,7 @@ elseif(LINUX)
         #libopenjpeg.so
         libuuid.so.16
         libuuid.so.16.0.22
-        libfontconfig.so.1.8.0
+        libfontconfig.so.1.10.1
         libfontconfig.so.1
         libaprutil-1.so.0
         libapr-1.so.0

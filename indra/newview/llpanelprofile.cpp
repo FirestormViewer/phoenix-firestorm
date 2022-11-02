@@ -1064,7 +1064,7 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
 #else
     if (own_profile)
 #endif
-// </FS:Beq>        
+// </FS:Beq>
     {
         mImageActionMenuButton->setVisible(TRUE);
         mImageActionMenuButton->setMenu("menu_fs_profile_image_actions.xml", LLMenuButton::MP_BOTTOM_RIGHT);
@@ -1113,11 +1113,11 @@ void LLPanelProfileSecondLife::updateData()
         else
         {
             // <FS:Beq> restore UDP profiles for opensim that does not support the cap
-#ifdef OPENSIM            
+#ifdef OPENSIM
             if (LLGridManager::instance().isInOpenSim() && !(getSelfProfile() /* TODO(Beq):No longer neeed? && !getEmbedded()*/))
             {
                 LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
-            }            
+            }
             else
 #endif
             // </FS:Beq>
@@ -1138,7 +1138,7 @@ void LLPanelProfileSecondLife::refreshName()
 void LLPanelProfileSecondLife::apply(LLAvatarData* data)
 {
 #ifdef OPENSIM
-    if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
+	if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
 	{
 		data->image_id = mImageId;
 		data->about_text = mDescriptionEdit->getValue().asString();
@@ -1262,9 +1262,10 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     fillPartnerData(avatar_data);
 
     fillAccountStatus(avatar_data);
+
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
+    if (LLGridManager::instance().isInOpenSim())
     {
         LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
         if (!floater_profile)
@@ -1272,13 +1273,15 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
             // floater is dead, so panels are dead as well
             return;
         }
-        LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-        auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
-        if (!panel_profile)
+        LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, TRUE);
+        if (panel_profile)
+        {
+            panel_profile->setAvatarData(avatar_data);
+        }
+        else
         {
             LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
-        }        
-        panel_profile->setAvatarData(avatar_data);
+        }
     }
 #endif
 // </FS:Beq>
@@ -2242,8 +2245,7 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
                 // floater is dead, so panels are dead as well
                 return;
             }
-            LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-            auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+            LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, TRUE);
             if (!panel_profile)
             {
                 LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
@@ -2259,7 +2261,7 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
 
                 LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(&avatar_data);
             }
-        }        
+        }
     }
 #endif
 // </FS:Beq>
@@ -2479,7 +2481,7 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     else
     {
 // <FS:Beq> Make OpenSim profiles work again
-#ifdef OPENSIM        
+#ifdef OPENSIM
         if(LLGridManager::getInstance()->isInOpenSim())
         {
             mImageId = id;
@@ -2569,6 +2571,7 @@ void LLPanelProfileWeb::apply(LLAvatarData* data)
 }
 #endif
 // </FS:Beq>
+
 void LLPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     mAvatarNameCacheConnection.disconnect();
@@ -2866,7 +2869,7 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
     else
     {
 // <FS:Beq> Make OpenSim profiles work again
-#ifdef OPENSIM        
+#ifdef OPENSIM
         if(LLGridManager::getInstance()->isInOpenSim())
         {
             mImageId = id;
@@ -2922,8 +2925,7 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
                 // floater is dead, so panels are dead as well
                 return;
             }
-            LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-            auto *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
+            LLPanelProfile* panel_profile = floater_profile->findChild<LLPanelProfile>(PANEL_PROFILE_VIEW, TRUE);
             if (!panel_profile)
             {
                 LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
@@ -2938,7 +2940,7 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
 
                 LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(&avatar_data);
             }
-        }        
+        }
     }
 #endif
 // </FS:Beq>
@@ -3012,7 +3014,7 @@ void LLPanelProfileFirstLife::resetData()
     auto show_image_buttons = getSelfProfile();
 #ifdef OPENSIM
     std::string cap_url = gAgent.getRegionCapability(PROFILE_IMAGE_UPLOAD_CAP);
-    if( cap_url.empty() && LLGridManager::instance().isInOpenSim() )
+    if (cap_url.empty() && LLGridManager::instance().isInOpenSim())
     {
         show_image_buttons = false;
     }
@@ -3066,10 +3068,10 @@ void LLPanelProfileNotes::updateData()
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
 // <FS:Beq> Restore UDO profiles
-#ifdef OPENSIM        
+#ifdef OPENSIM
         else
         {
-		    LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);            
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);
         }
 #endif
 // </FS:Beq>
@@ -3270,7 +3272,7 @@ void LLPanelProfile::updateData()
 // <FS:Beq> Restore UDP profiles
         else
         {
-		        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
         }
 // </FS:Beq>
     }
