@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+  <layout_stack name="bottom_toolbar_stack">
+  <layout_panel name="bottom_chat_bar_panel">
+  <layout_stack name="chat_bar_utility_bar_stack">
+  <layout_panel name="chat_panel">
+  <layout_stack name="bottom_chat_stack">
+  <layout_panel name="bottom_chat_bar_panel">
+  <button name="local_chat_button" tool_tip="Afficher/masquer la fenêtre de discussion à proximité (CTRL+H)" label="Discussion à proximité" width="92" />
+  <fs_nearby_chat_control name="default_chat_bar" label="Pour une discussion à proximité" />
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  <layout_panel name="utility_bar_layout_panel">
+  <panel name="utility_bar_panel">
+  <button name="utility_parcel_audio_stream_button" tool_tip="Lecture/arrêt de la musique en continu sur le terrain" />
+  <button name="utility_parcel_media_button" tool_tip="Lecture/Pause du média de la parcelle" />
+  <slider name="System Volume" tool_tip="Régler le volume" />
+  <button name="mute_audio" tool_tip="Couper le son" />
+  <button name="show_volume_controls_button" tool_tip="Afficher le contrôle du volume" />
+  </panel>
+  </layout_panel>
+  <layout_panel name="voice_chat_controls_layout_panel">
+  <panel name="voice_chat_controls_panel">
+  <button name="show_voice_controls_button" tool_tip="Afficher les appels vocaux à proximité" />
+  <button name="utility_talk_button" tool_tip="Pressez pour parler. Cliquez sur le cadenas pour activer/désactiver la fonction 'presser pour parler'." label="Parler" />
+  <button name="utility_push_to_talk_lock_button" tool_tip="Commute la fonction 'presser pour parler'." />
+  <nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Activité actuelle du canal vocal" />
+  </panel>
+  </layout_panel>
+  <layout_panel name="quick_preferences_button_layout_panel">
+  <panel name="quick_preferences_button_panel">
+  <button name="enable_disable_ao_button" tool_tip="Activer/désactiver le gestionnaire d'animations dans le client" />
+  <button name="show_ao_interface_button" tool_tip="Afficher/masquer l'interface du gestionnaire d'animations dans le client" />
+  <button name="show_quick_prefs_button" tool_tip="Paramètres pratiques pour les options fréquemment modifiées" />
+  </panel>
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  <layout_panel name="bottom_toolbar_panel">
+    <button name="open_chat_bar_button" tool_tip="Afficher la barre de discussion (Entrée)" />
+  </layout_panel>
+  </layout_stack>
+</toolbar_view>

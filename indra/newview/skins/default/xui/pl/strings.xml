@@ -5747,12 +5747,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="UnknownPosition">
 		(nieznana pozycja)
 	</string>
-	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
-		[AGENT][REGION](Kliknij dwa razy by otworzyć Mapę, przeciągaj z shiftem by zmienić skalę)
-	</string>
-	<string name="NetMapDoubleClickTeleportToolTipMsg">
-		[REGION](Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
-	</string>
 	<string name="Collision_Bump">
 		[NAME] zderzył/a się z Tobą.
 	</string>

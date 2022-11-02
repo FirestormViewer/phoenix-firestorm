@@ -11000,6 +11000,26 @@ class LLViewCheckHighlightTransparent : public view_listener_t
 		return new_value;
 	}
 };
+// <FS:Beq> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
+class LLViewHighlightTransparentRigged : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLDrawPoolAlpha::sShowDebugAlphaRigged = !LLDrawPoolAlpha::sShowDebugAlphaRigged;
+        gPipeline.resetVertexBuffers();
+		return true;
+	}
+};
+
+class LLViewCheckHighlightTransparentRigged : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = LLDrawPoolAlpha::sShowDebugAlphaRigged;
+		return new_value;
+	}
+};
+// </FS:Beq>
 
 class LLViewBeaconWidth : public view_listener_t
 {
@@ -12022,6 +12042,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLViewLookAtLastChatter(), "View.LookAtLastChatter");
 	view_listener_t::addMenu(new LLViewShowHoverTips(), "View.ShowHoverTips");
 	view_listener_t::addMenu(new LLViewHighlightTransparent(), "View.HighlightTransparent");
+	view_listener_t::addMenu(new LLViewHighlightTransparentRigged(), "View.HighlightTransparentRigged"); // <FS:Beq/> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
 	view_listener_t::addMenu(new LLViewToggleRenderType(), "View.ToggleRenderType");
 	view_listener_t::addMenu(new LLViewShowHUDAttachments(), "View.ShowHUDAttachments");
 	view_listener_t::addMenu(new LLZoomer(1.2f), "View.ZoomOut");
@@ -12038,6 +12059,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLViewCheckJoystickFlycam(), "View.CheckJoystickFlycam");
 	view_listener_t::addMenu(new LLViewCheckShowHoverTips(), "View.CheckShowHoverTips");
 	view_listener_t::addMenu(new LLViewCheckHighlightTransparent(), "View.CheckHighlightTransparent");
+	view_listener_t::addMenu(new LLViewCheckHighlightTransparentRigged(), "View.CheckHighlightTransparentRigged");// <FS:Beq/> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
 	view_listener_t::addMenu(new LLViewCheckRenderType(), "View.CheckRenderType");
 	view_listener_t::addMenu(new LLViewStatusAway(), "View.Status.CheckAway");
 	view_listener_t::addMenu(new LLViewStatusDoNotDisturb(), "View.Status.CheckDoNotDisturb");

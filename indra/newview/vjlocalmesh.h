@@ -244,6 +244,7 @@ class LLLocalMeshSystem : public LLSingleton<LLLocalMeshSystem>
 
 		// floater two-way communication
 		void registerFloaterPointer(LLFloaterLocalMesh* floater_ptr);
+		LLFloaterLocalMesh* getFloaterPointer(){return mFloaterPtr;};
 		void triggerFloaterRefresh( bool keep_selection=true );
 		std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> getFileInfoVector() const;
 		std::vector<std::string> getFileLog(LLUUID local_file_id) const;

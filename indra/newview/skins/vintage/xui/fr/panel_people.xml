@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Personnes" name="people_panel">
+	<string name="no_recent_people" value="Aucun appel récent. Vous voulez rencontrer des gens ? Essayez d'utiliser le [secondlife:///app/search/people Moteur de recherche] ou la [secondlife:///app/worldmap Carte du monde]." />
+	<string name="no_filtered_recent_people" value="Vous n'avez pas trouvé ce que vous cherchiez ? Essayez d'utiliser le [secondlife:///app/search/people/[SEARCH_TERM] Moteur de recherche]." />
+	<string name="no_one_near" value="Il n'y a personne autour. Vous voulez rencontrer des gens ? Essayez d'utiliser le [secondlife:///app/search/people Moteur de recherche] ou la [secondlife:///app/worldmap Carte du monde]." />
+	<string name="no_one_filtered_near" value="Vous n'avez pas trouvé ce que vous cherchiez ? Essayez d'utiliser le [secondlife:///app/search/people/[SEARCH_TERM] Moteur de recherche]." />
+	<string name="no_friends_online" value="Aucun ami en ligne" />
+	<string name="no_friends" value="Pas d'amis" />
+	<string name="no_friends_msg">
+		Recherchez des amis avec le [secondlife:///app/search/people Moteur de recherche] ou cliquez avec le bouton droit de la souris sur le résident et proposez-lui de faire connaissance..
+Vous voulez rencontrer des gens ? Essayez d'utiliser la [secondlife:///app/worldmap Carte du monde].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Vous n'avez pas trouvé ce que vous cherchiez ? Essayez d'utiliser le [secondlife:///app/search/people/[SEARCH_TERM] Moteur de recherche].
+	</string>
+	<string name="people_filter_label" value="Filtrer les personnes" />
+	<string name="groups_filter_label" value="Filtrer les groupes" />
+	<string name="no_filtered_groups_msg" value="Vous n'avez pas trouvé ce que vous cherchiez ? Essayez d'utiliser le [secondlife:///app/search/groups/[SEARCH_TERM] Moteur de recherche]." />
+	<string name="no_groups_msg" value="Vous voulez rejoindre un groupe ? Essayez d'utiliser le [secondlife:///app/search/groups Moteur de recherche]." />
+	<string name="MiniMapToolTipMsg" value="[REGION] (Un double-clic permet d'ouvrir la carte, glisser avec Maj permet de déplacer la carte.)" />
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Double-clic pour se téléporter, glisser avec Maj permet de déplacer la carte.)" />
+	<string name="GroupCountWithInfo" value="Vous appartenez à [COUNT] et vous pouvez encore rejoindre [REMAINING]. [secondlife:/// En savoir plus?]" />
+	<string name="avatar_name_count" value="Nom [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+	<panel.string name="empty_list">
+		Cet ensemble de contacts est vide.
+	</panel.string>
+	<panel.string name="no_sets">
+		Pas d'ensembles.
+	</panel.string>
+	<panel.string name="all_sets">
+		Tous les ensembles
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Alias
+	</panel.string>
+	<tab_container name="tabs">
+		<panel label="Proche" name="nearby_panel">
+			<tab_container name="tabcont_radarpeople_main">
+				<panel name="panel_radar" label="Liste" />
+				<panel name="radarmap_options_panel" label="Options">
+					<scroll_container label="Options" name="radarmap_options_scroll_container">
+						<container_view name="radarmap_options_container_view" label="Options">
+							<panel name="radarmap_options_scrolled_panel">
+								<check_box label="Afficher la mini-carte au-dessus du radar" name="ShowRadarMinimap"/>
+								<check_box label="Afficher les avatars bloqués et en liste noire" name="FSRadarShowMutedAndDerendered"/>
+								<check_box label="Signaler une entrée du champ de vision" name="RadarReportDrawRangeEnter"/>
+								<check_box label="Signaler une sortie du champ de vision" name="RadarReportDrawRangeLeaving"/>
+								<check_box label="Signaler les entrées dans le rayon de discussion" name="RadarReportChatRangeEnter"/>
+								<check_box label="Signaler ceux qui sortent du rayon de discussion" name="RadarReportChatRangeLeave"/>
+								<check_box label="Signaler ceux qui rentrent dans votre région" name="RadarReportSimRangeEnter"/>
+								<check_box label="Signaler ceux qui quittent votre région" name="RadarReportSimRangeLeave"/>
+								<check_box label="Signaler les alertes d'entrée aux scripts" name="RadarEnterChannelAlert"/>
+								<check_box label="Signaler les alertes de sorties aux scripts" name="RadarLeaveChannelAlert"/>
+								<check_box label="Améliorer le radar avec LSL Bridge" tool_tip="Si cette option est activée, les fonctions radar responsables de la détermination de la position des avatars à haute altitude sont assistées par le pont LSL-Bridge, en particulier lorsqu'ils se trouvent au-delà de la distance d'affichage'." name="FSRadarEnhanceByBridge"/>
+								<check_box label="Colorez les noms en fonction de la distance" name="FSRadarColorNamesByDistance"/>
+								<check_box label="Distance limite :" tool_tip="Limite les résultats à une distance spécifique" name="LimitRadarByRange" />
+								<text name="radarmap_range_label" value="Format des noms sur le radar :"/>
+								<combo_box name="RadarNameFormat">
+									<combo_box.item name="RadarNameFormat_display" label="Nom d'affichage seulement" />
+									<combo_box.item name="RadarNameFormat_user" label="Nom du compte seulement" />
+									<combo_box.item name="RadarNameFormat_displayuser" label="Nom d'affichage (Nom du compte)" />
+									<combo_box.item name="RadarNameFormat_userdisplay" label="Nom du compte (Nom d'affichage)" />
+								</combo_box>
+								<text name="columns_label" value="Colonnes visibles :" />
+								<check_box label="Conversations vocales" name="column_voice" />
+								<check_box label="Temps" name="column_seen" />
+								<check_box label="Âge" name="column_age" />
+								<check_box label="Dans la même région" name="column_region" />
+								<check_box label="En train d'écrire" name="column_typing_status" />
+								<check_box label="Assis" name="column_sitting_status" />
+								<check_box label="Informations de paiement" name="column_flags" />
+								<check_box label="Notes" name="notes_flags" />
+							</panel>
+						</container_view>
+					</scroll_container>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel label="Récents" name="recent_panel" />
+		<panel label="Bloqués" name="blocked_panel" />
+	</tab_container>
+</panel>
