@@ -15,6 +15,8 @@
 		<columns name="date" label="Date"/>
 	</fs_scroll_list>
 	<button name="remove_btn" label="Supprimer la sélection des éléments blacklistés" height="23" width="320"/>
-	<button name="remove_temp_btn" label="Supprimer temporairement"/>
+	<button name="remove_temp_btn" label="Suppr. temporairement"/>
+	<button name="play_btn" label="Jouer le son" tool_tip="Lecture du son sélectionné ; un seul élément sonore à la fois peut être sélectionné pour la lecture.." width="120" />
+	<button name="stop_btn" label="Ne pas jouer" tool_tip="Arrête la lecture du son en cours." width="120" />
 	<button name="close_btn" label="Fermer"/>
 </floater>

@@ -243,9 +243,27 @@ elseif(LINUX)
     # or ARCH_PREBUILT_DIRS
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     # *FIX - figure out what to do with duplicate libalut.so here -brad
-    set(release_files
-            ${EXPAT_COPY}
-            )
+    #<FS:TS> Even if we're doing USESYSTEMLIBS, there are a few libraries we
+    # have to deal with
+    if (NOT USESYSTEMLIBS)
+      set(release_files
+        #libdb-5.1.so
+        ${EXPAT_COPY}
+        libhunspell-1.3.so.0.0.0
+        libopenal.so
+        #libopenjpeg.so
+        libuuid.so.16
+        libuuid.so.16.0.22
+        libfontconfig.so.1.10.1
+        libfontconfig.so.1
+        libaprutil-1.so.0
+        libapr-1.so.0
+       )
+    else (NOT USESYSTEMLIBS)
+      set(release_files
+        libGLOD.so
+       )
+    endif (NOT USESYSTEMLIBS)
 
      if( USE_AUTOBUILD_3P )
          list( APPEND release_files
@@ -256,7 +274,7 @@ elseif(LINUX)
                  libhunspell-1.3.so.0.0.0
                  libuuid.so.16
                  libuuid.so.16.0.22
-                 libfontconfig.so.1.8.0
+                 libfontconfig.so.1.10.1
                  libfontconfig.so.1
                  libgmodule-2.0.a
                  libgobject-2.0.a

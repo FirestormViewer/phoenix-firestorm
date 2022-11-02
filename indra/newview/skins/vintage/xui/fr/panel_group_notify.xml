@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_group_notify">
+	<text name="group_notice" value="Notice de groupe" />
+	<text name="title" value="Nom de l'expéditeur / Nom du groupe" />
+	<text name="attachment_label" value="Jointe :" />
+	<panel name="attachment_container">
+		<text name="attachment" value="Pièce jointe" />
+	</panel>
+	<button label="Annonces" name="btn_notices" />
+	<button label="Discussions" name="btn_groupchat" />
+</panel>
