@@ -122,6 +122,7 @@
 #include "llscenemonitor.h"
 #include "llavatarrenderinfoaccountant.h"
 #include "lllocalbitmaps.h"
+#include "llperfstats.h" 
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -1591,25 +1592,23 @@ bool LLAppViewer::frame()
 
 bool LLAppViewer::doFrame()
 {
-	LL_RECORD_BLOCK_TIME(FTM_FRAME);
-
-	// <FS:Beq> Perfstats collection Frame boundary
-	{
-	// and now adjust the visuals from previous frame.
-    if(FSPerfStats::tunables.userAutoTuneEnabled && FSPerfStats::tunables.tuningFlag != FSPerfStats::Tunables::Nothing)
+    LL_RECORD_BLOCK_TIME(FTM_FRAME);
     {
-    	FSPerfStats::tunables.applyUpdates();
+    // and now adjust the visuals from previous frame.
+    if(LLPerfStats::tunables.userAutoTuneEnabled && LLPerfStats::tunables.tuningFlag != LLPerfStats::Tunables::Nothing)
+    {
+        LLPerfStats::tunables.applyUpdates();
     }
 
-	FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_FRAME);
-
+    LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_FRAME);
     if (!LLWorld::instanceExists())
     {
         LLWorld::createInstance();
     }
 
-	LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
-	LLSD newFrame;
+    LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
+    LLSD newFrame;
+    {
 // <FS:Beq> profiling enablement. 
 // This ifdef is optional but better to avoid even low overhead code in main loop where not needed.
 #ifdef TRACY_ENABLE
@@ -1645,76 +1644,75 @@ bool LLAppViewer::doFrame()
 // </FS:Beq>
 	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
 	LLTimer frameTimer;
-	{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> perf stats
+        LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE); // perf stats
 
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
-	{
-        LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df LLTrace");
-        if (LLFloaterReg::instanceVisible("block_timers"))
         {
-            LLTrace::BlockTimer::processTimes();
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df LLTrace");
+            if (LLFloaterReg::instanceVisible("block_timers"))
+            {
+	LLTrace::BlockTimer::processTimes();
+            }
+
+	LLTrace::get_frame_recording().nextPeriod();
+	LLTrace::BlockTimer::logStats();
         }
-        
-        LLTrace::get_frame_recording().nextPeriod();
-        LLTrace::BlockTimer::logStats();
-	}
 
-	LLTrace::get_thread_recorder()->pullFromChildren();
+        LLTrace::get_thread_recorder()->pullFromChildren();
 
-	//clear call stack records
-	LL_CLEAR_CALLSTACKS();
+        //clear call stack records
+        LL_CLEAR_CALLSTACKS();
 	} // <FS:Beq/> perf stats (close NonRender/IDLE tracking starting at event pump)
-	{
-		{FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq> ensure we have the entire top scope of frame covered (input event and coro)
+    {
+        {
 
-		LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df processMiscNativeEvents" )
-		pingMainloopTimeout("Main:MiscNativeWindowEvents");
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df processMiscNativeEvents")
+            pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
-		if (gViewerWindow)
-		{
-			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
-			gViewerWindow->getWindow()->processMiscNativeEvents();
-		}
+            if (gViewerWindow)
+            {
+                LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+                gViewerWindow->getWindow()->processMiscNativeEvents();
+            }
 
-		{
-			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df gatherInput" )
-			pingMainloopTimeout("Main:GatherInput");
-		}
+            {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df gatherInput")
+		pingMainloopTimeout("Main:GatherInput");
+            }
 
-		if (gViewerWindow)
-		{
+            if (gViewerWindow)
+            {
 			LL_RECORD_BLOCK_TIME(FTM_MESSAGES2);
-			if (!restoreErrorTrap())
-			{
-				LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
-			}
+                if (!restoreErrorTrap())
+                {
+                    LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
+                }
 
-			gViewerWindow->getWindow()->gatherInput();
-		}
+                gViewerWindow->getWindow()->gatherInput();
+            }
 
-		//memory leaking simulation
-		if (gSimulateMemLeak)
-		{
-			LLFloaterMemLeak* mem_leak_instance =
-				LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
-			if (mem_leak_instance)
-			{
-				mem_leak_instance->idle();
-			}
-		}
+            //memory leaking simulation
+            if (gSimulateMemLeak)
+            {
+                LLFloaterMemLeak* mem_leak_instance =
+                    LLFloaterReg::findTypedInstance<LLFloaterMemLeak>("mem_leaking");
+                if (mem_leak_instance)
+                {
+                    mem_leak_instance->idle();
+                }
+            }
 
-		{
-			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df mainloop" )
-			// canonical per-frame event
-			mainloop.post(newFrame);
-		}
-		{
-			LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df suspend" )
-			// give listeners a chance to run
-			llcoro::suspend();
-			// if one of our coroutines threw an uncaught exception, rethrow it now
-			LLCoros::instance().rethrow();
-		}
+            {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df mainloop")
+		// canonical per-frame event
+		mainloop.post(newFrame);
+            }
+            {
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df suspend")
+		// give listeners a chance to run
+		llcoro::suspend();
+            }
+        }
 		}// <FS:Beq> ensure we have the entire top scope of frame covered (close input event and coro "idle")
 
 		if (!LLApp::isExiting())
@@ -1732,8 +1730,7 @@ bool LLAppViewer::doFrame()
 				&& (gHeadlessClient || !gViewerWindow->getShowProgress())
 				&& !gFocusMgr.focusLocked())
 			{
-				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df JoystickKeyboard" )
+                LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE);
 				joystick->scanJoystick();
 				gKeyboard->scanKeyboard();
                 gViewerInput.scanMouse();
@@ -1749,19 +1746,21 @@ bool LLAppViewer::doFrame()
 
 			// Update state based on messages, user input, object idle.
 			{
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df pauseMainloopTimeout" )
-				pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
-			}
+				{
+					LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df pauseMainloopTimeout" )
+					pauseMainloopTimeout(); // *TODO: Remove. Messages shouldn't be stalling for 20+ seconds!
+				}
 
-			{
-				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
-				idle();
-			}
+				{
+                    LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE);
+					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
+					idle();
+				}
 
-			{
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df resumeMainloopTimeout" )
-				resumeMainloopTimeout();
+				{
+					LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df resumeMainloopTimeout" )
+					resumeMainloopTimeout();
+				}
 			}
 
 			if (gDoDisconnect && (LLStartUp::getStartupState() == STATE_STARTED))
@@ -1789,15 +1788,15 @@ bool LLAppViewer::doFrame()
 
 				display();
 
-				{
-					FSPerfStats::RecordSceneTime T(FSPerfStats::StatType_t::RENDER_IDLE);
-					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Snapshot")
-					pingMainloopTimeout("Main:Snapshot");
-					LLFloaterSnapshot::update(); // take snapshots
-					LLFloaterOutfitSnapshot::update();
-					gGLActive = FALSE;
-				}
-			}
+                {
+                    LLPerfStats::RecordSceneTime T(LLPerfStats::StatType_t::RENDER_IDLE);
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP( "df Snapshot" )
+                    pingMainloopTimeout("Main:Snapshot");
+                    LLFloaterSnapshot::update(); // take snapshots
+                    LLFloaterOutfitSnapshot::update();
+                    gGLActive = FALSE;
+                }
+		}
 		}
 
 		{
@@ -1842,8 +1841,8 @@ bool LLAppViewer::doFrame()
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)
 				{
-					FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_SLEEP );
-					ms_sleep(milliseconds_to_sleep);
+                    LLPerfStats::RecordSceneTime T ( LLPerfStats::StatType_t::RENDER_SLEEP );
+                    ms_sleep(milliseconds_to_sleep);
 					// also pause worker threads during this wait period
 					LLAppViewer::getTextureCache()->pause();
 					LLAppViewer::getImageDecodeThread()->pause();
@@ -1966,8 +1965,7 @@ bool LLAppViewer::doFrame()
 
 		LL_INFOS() << "Exiting main_loop" << LL_ENDL;
 	}
-
-	}FSPerfStats::StatsRecorder::endFrame();
+    }LLPerfStats::StatsRecorder::endFrame();
     LL_PROFILER_FRAME_END
 
 	return ! LLApp::isRunning();

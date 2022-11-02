@@ -1665,6 +1665,9 @@ set(viewer_HEADER_FILES
     NACLfloaterexploresounds.h
     )
 
+  list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
+  list(APPEND viewer_HEADER_FILES llperfstats.h)
+
 # <exodus>
 # Generate the flickr keys header.
 configure_file(

@@ -214,6 +214,7 @@
 #include "llstacktrace.h"
 #include "fsperfstats.h"
 #include "threadpool.h"
+#include "llperfstats.h"
 
 
 #if LL_WINDOWS
@@ -2214,9 +2215,8 @@ bool idle_startup()
 		update_static_eyes();
 		// </FS:KC>
 
-		// <FS:Beq>
-		gAgent.addRegionChangedCallback(boost::bind(&FSPerfStats::StatsRecorder::clearStats));
-		// </FS:Beq>
+
+		gAgent.addRegionChangedCallback(boost::bind(&LLPerfStats::StatsRecorder::clearStats));
 
 		// *Note: this is where gWorldMap used to be initialized.
 
@@ -4401,6 +4401,9 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 // [/SL:KB]
 	
+	LLPerfStats::StatsRecorder::setEnabled(gSavedSettings.getBOOL("PerfStatsCaptureEnabled"));
+	LLPerfStats::StatsRecorder::setFocusAv(gAgentID);
+
 	// Agent id needed for parcel info request in LLUrlEntryParcel
 	// to resolve parcel name.
 	LLUrlEntryParcel::setAgentID(gAgentID);

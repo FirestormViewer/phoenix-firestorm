@@ -44,6 +44,7 @@ public:
     void showSelectedPanel(LLPanel* selected_panel);
     void showMainPanel();
     void hidePanels();
+    void showAutoadjustmentsPanel();
 
     void detachItem(const LLUUID& item_id);
 
@@ -66,8 +67,7 @@ private:
     void onClickShadows();
     void onClickAdvancedLighting();
 
-    void updateMaxComplexity();
-    void updateComplexityText();
+    void updateMaxRenderTime();
 
     static void changeQualityLevel(const std::string& notif);
 
@@ -76,6 +76,7 @@ private:
     LLPanel* mComplexityPanel;
     LLPanel* mHUDsPanel;
     LLPanel* mSettingsPanel;
+    LLPanel* mAutoadjustmentsPanel;
     LLNameListCtrl* mHUDList;
     LLNameListCtrl* mObjectList;
     LLNameListCtrl* mNearbyList;
@@ -86,7 +87,7 @@ private:
 
     S32 mNearbyMaxComplexity;
 
-    boost::signals2::connection	mComplexityChangedSignal;
+    boost::signals2::connection	mMaxARTChangedSignal;
 };
 
 #endif // LL_LLFLOATERPERFORMANCE_H

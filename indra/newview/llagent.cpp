@@ -4888,8 +4888,6 @@ void LLAgent::handleTeleportFinished()
         }
     }
 
-    // <FS:Ansariel> [FS performance floater]
-    //gPipeline.setAdjustmentTimerExpiry(gSavedSettings.getF32("InitialAdjustmentTimeout"));
 }
 
 void LLAgent::handleTeleportFailed()
@@ -4922,8 +4920,6 @@ void LLAgent::handleTeleportFailed()
 
     mTPNeedsNeabyChatSeparator = false;
 
-    // <FS:Ansariel> [FS performance floater]
-    //gPipeline.setAdjustmentTimerExpiry(gSavedSettings.getF32("InitialAdjustmentTimeout"));
 }
 
 /*static*/

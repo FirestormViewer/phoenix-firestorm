@@ -119,6 +119,8 @@
 #include "llrendersphere.h"
 #include "llskinningutil.h"
 
+#include "llperfstats.h"
+
 #include <boost/lexical_cast.hpp>
 
 #include "fscommon.h"
@@ -2702,10 +2704,10 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		LL_INFOS() << "Warning!  Idle on dead avatar" << LL_ENDL;
 		return;
 	}
-	// <FS:Beq> record time and refresh "tooSlow" status
-	FSPerfStats::RecordAvatarTime T(getID(), FSPerfStats::StatType_t::RENDER_IDLE); // per avatar "idle" time.
-	updateTooSlow();
-	// </FS:Beq>;
+    // record time and refresh "tooSlow" status
+    LLPerfStats::RecordAvatarTime T(getID(), LLPerfStats::StatType_t::RENDER_IDLE); // per avatar "idle" time.
+    updateTooSlow();
+
 	static LLCachedControl<bool> disable_all_render_types(gSavedSettings, "DisableAllRenderTypes");
 	if (!(gPipeline.hasRenderType(mIsControlAvatar ? LLPipeline::RENDER_TYPE_CONTROL_AV : LLPipeline::RENDER_TYPE_AVATAR))
 		&& !disable_all_render_types && !isSelf())
@@ -3358,7 +3360,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 
 			// Firestorm Clouds
 			// do not generate particles for dummy or overly-complex avatars
-			if (!mIsDummy && !isTooComplex())
+			if (!mIsDummy && !isTooComplex() && !isTooSlowWithShadows())
 			{
 				setParticleSource(sCloud, getID());
 			}
@@ -4306,7 +4308,7 @@ bool LLVOAvatar::isVisuallyMuted()
 		// </FS:Ansariel>
 		else 
 		{
-			muted = isTooComplex();
+			muted = isTooComplex() || isTooSlowWithShadows();
 		}
 	}
 
@@ -9311,6 +9313,94 @@ bool LLVOAvatar::isTooComplex() const
 	return too_complex;
 }
 
+// use Avatar Render Time as complexity metric
+// markARTStale - Mark stale and set the frameupdate to now so that we can wait at least one frame to get a revised number.
+void LLVOAvatar::markARTStale()
+{
+    mARTStale=true;
+    mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+}
+
+// Udpate Avatar state based on render time
+void LLVOAvatar::updateTooSlow()
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
+    static LLCachedControl<bool> alwaysRenderFriends(gSavedSettings, "AlwaysRenderFriends");
+    static LLCachedControl<bool> allowSelfImpostor(gSavedSettings, "AllowSelfImpostor");
+    const auto id = getID();
+
+    // mTooSlow - Is the avatar flagged as being slow (includes shadow time)
+    // mTooSlowWithoutShadows - Is the avatar flagged as being slow even with shadows removed.
+    // mARTStale - the rendertime we have is stale because of an update. We need to force a re-render to re-assess slowness
+
+    if( mARTStale )
+    {
+        if ( LLFrameTimer::getFrameCount() - mLastARTUpdateFrame < 5 ) 
+        {
+            // LL_INFOS() << this->getFullname() << " marked stale " << LL_ENDL;
+            // we've not had a chance to update yet (allow a few to be certain a full frame has passed)
+            return;
+        }
+
+        mARTStale = false;
+        mTooSlow = false;
+        mTooSlowWithoutShadows = false;
+        // LL_INFOS() << this->getFullname() << " refreshed ART combined = " << mRenderTime << " @ " << mLastARTUpdateFrame << LL_ENDL;
+    }
+
+    // Either we're not stale or we've updated.
+
+    U64 render_time_raw;
+    U64 render_geom_time_raw;
+
+    if( !mTooSlow ) 
+    {
+        // we are fully rendered, so we use the live values
+        std::lock_guard<std::mutex> lock{LLPerfStats::bufferToggleLock};
+        render_time_raw = LLPerfStats::StatsRecorder::get(LLPerfStats::ObjType_t::OT_AVATAR, id, LLPerfStats::StatType_t::RENDER_COMBINED);
+        render_geom_time_raw = LLPerfStats::StatsRecorder::get(LLPerfStats::ObjType_t::OT_AVATAR, id, LLPerfStats::StatType_t::RENDER_GEOMETRY);
+    }
+    else
+    {
+        // use the cached values.
+        render_time_raw = mRenderTime;
+        render_geom_time_raw = mGeomTime;		
+    }
+    if( (LLPerfStats::renderAvatarMaxART_ns > 0) && 
+        (LLPerfStats::raw_to_ns(render_time_raw) >= LLPerfStats::renderAvatarMaxART_ns) ) 
+    {
+        if( !mTooSlow ) // if we were previously not slow (with or without shadows.)
+        {			
+            // if we weren't capped, we are now
+            mLastARTUpdateFrame = LLFrameTimer::getFrameCount();
+            mRenderTime = render_time_raw;
+            mGeomTime = render_geom_time_raw;
+            mARTStale = false;
+            mTooSlow = true;
+        }
+        if(!mTooSlowWithoutShadows) // if we were not previously above the full impostor cap
+        {
+            bool render_friend_or_exception =  	( alwaysRenderFriends && LLAvatarTracker::instance().isBuddy( id ) ) ||
+                ( getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER ); 
+            if( (!isSelf() || allowSelfImpostor) && !render_friend_or_exception  )
+            {
+                // Note: slow rendering Friends still get their shadows zapped.
+                mTooSlowWithoutShadows = (LLPerfStats::raw_to_ns(render_geom_time_raw) >= LLPerfStats::renderAvatarMaxART_ns);
+            }
+        }
+    }
+    else
+    {
+        // LL_INFOS() << this->getFullname() << " ("<< (combined?"combined":"geometry") << ") good render time = " << LLPerfStats::raw_to_ns(render_time_raw) << " vs ("<< LLVOAvatar::sRenderTimeCap_ns << " set @ " << mLastARTUpdateFrame << LL_ENDL;
+        mTooSlow = false;
+        mTooSlowWithoutShadows = false;	
+    }
+    if(mTooSlow)
+    {
+        LLPerfStats::tunedAvatars++; // increment the number of avatars that have been tweaked.
+    }
+}
+
 //-----------------------------------------------------------------------------
 // findMotion()
 //-----------------------------------------------------------------------------
@@ -12382,7 +12472,7 @@ LLVOAvatar::AvatarOverallAppearance LLVOAvatar::getOverallAppearance() const
 		{	// Always want to see this AV as an impostor
 			result = AOA_JELLYDOLL;
 		}
-		else if (isTooComplex())
+		else if (isTooComplex() || isTooSlowWithShadows())
 		{
 			result = AOA_JELLYDOLL;
 		}
@@ -12417,7 +12507,7 @@ void LLVOAvatar::calcMutedAVColor()
         new_color = LLColor4::grey4;
         change_msg = " blocked: color is grey4";
     }
-    else if (!isTooComplex())
+    else if (!isTooComplex() && !isTooSlowWithShadows())
     {
         new_color = LLColor4::white;
         change_msg = " simple imposter ";

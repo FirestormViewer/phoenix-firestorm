@@ -50,8 +50,6 @@ LLFloaterPreferenceGraphicsAdvanced::LLFloaterPreferenceGraphicsAdvanced(const L
     mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateMaxNonImpostors,this));
     mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",   boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity,this));
 
-    mCommitCallbackRegistrar.add("Pref.AutoAdjustWarning", boost::bind(&LLFloaterPreference::showAutoAdjustWarning));
-
     mCommitCallbackRegistrar.add("Pref.Cancel", boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onBtnCancel, this, _2));
     mCommitCallbackRegistrar.add("Pref.OK",     boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onBtnOK, this, _2));
 
@@ -81,9 +79,6 @@ BOOL LLFloaterPreferenceGraphicsAdvanced::postBuild()
 #endif
 
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateComplexityText, this));
-
-    getChild<LLComboBox>("ShadowDetail")->setMouseDownCallback(boost::bind(&LLFloaterPreference::showAutoAdjustWarning));
-    getChild<LLComboBox>("Reflections")->setMouseDownCallback(boost::bind(&LLFloaterPreference::showAutoAdjustWarning));
 
     return TRUE;
 }
@@ -277,8 +272,7 @@ void LLFloaterPreferenceGraphicsAdvanced::disableUnavailableSettings()
     }
 
     // disabled deferred
-    if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
-        !gGLManager.mHasFramebufferObject)
+    if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
     {
         ctrl_shadows->setEnabled(FALSE);
         ctrl_shadows->setValue(0);
@@ -415,7 +409,6 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 
     BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
         ((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-        gGLManager.mHasFramebufferObject &&
         (ctrl_wind_light->get()) ? TRUE : FALSE;
 
     ctrl_deferred->setEnabled(enabled);
