@@ -377,6 +377,7 @@
 			<menu_item_check label="Скрыть частицы" name="Hide Particles"/>
 			<menu_item_check label="Скрыть выбранное" name="Hide Selected"/>
 			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
+			<menu_item_check label="- включая ригованное прозрачное" name="Include Transparent Rigged"/>
 			<menu_item_check label="Показывать прицел при виде от первого лица" name="ShowCrosshairs"/>
 			<menu label="Всплывающие подсказки" name="Hover Tips">
 				<menu_item_check label="Показывать Подсказки" name="Show Tips"/>

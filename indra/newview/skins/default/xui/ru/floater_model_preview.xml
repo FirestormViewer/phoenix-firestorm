@@ -131,6 +131,7 @@
             <combo_item name="physics_cube">Куб</combo_item>
             <combo_item name="physics_hex">Шестиугольник</combo_item>
             <combo_item name="physics_ud">Определенные</combo_item>
+            <combo_item name="physics_bounding_box">Ограничительная рамка</combo_item>
             <combo_item name="load_from_file">Из файла</combo_item>
           </combo_box>
           <button label="Обзор..." name="physics_browse"/>
