@@ -6753,7 +6753,8 @@ class LLToolsSelectNextPartFace : public view_listener_t
         bool iprev = (userdata.asString() == "includeprevious");
 
 		// <FS:Zi> Make shift+click on forward/back buttons work like includenext/previous
-		if (gKeyboard->currentMask(false) & MASK_SHIFT)
+		//         (filter out the menu shortcuts by testing for ifwd / iprev)
+		if (gKeyboard->currentMask(false) & MASK_SHIFT && !ifwd && !iprev)
 		{
 			ifwd = fwd;
 			iprev = prev;
