@@ -666,7 +666,7 @@ void FSLSLBridge::cleanUpPreCreation()
 	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
 
 	mAllowedDetachables.clear();
-	for (const auto item : items)
+	for (const auto& item : items)
 	{
 		const LLUUID& item_id = item->getUUID();
 		if (get_is_item_worn(item_id))
@@ -701,7 +701,7 @@ void FSLSLBridge::finishCleanUpPreCreation()
 	NameCollectFunctor namefunctor(mCurrentFullName);
 	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
 
-	for (const auto item : items)
+	for (const auto& item : items)
 	{
 		LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << item->getName() << " (" << item->getUUID() << ")" << LL_ENDL;
 		remove_inventory_item(item->getUUID(), nullptr, true); // Don't wait for callback from server to update inventory model
@@ -1501,7 +1501,7 @@ LLUUID FSLSLBridge::findFSCategory()
 		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
 		if (cats)
 		{
-			for (const auto cat : *cats)
+			for (const auto& cat : *cats)
 			{
 				if (cat->getName() == FS_BRIDGE_FOLDER)
 				{
@@ -1543,7 +1543,7 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 		gInventory.getDirectDescendentsOf(LibRootID, cats, items);
 		if (cats)
 		{
-			for (const auto cat : *cats)
+			for (const auto& cat : *cats)
 			{
 				if (cat->getName() == "Objects")
 				{
@@ -1555,7 +1555,7 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 						gInventory.getDirectDescendentsOf(LibObjectsCatID, objects_cats, objects_items);
 						if (objects_cats)
 						{
-							for (const auto object_cat : *objects_cats)
+							for (const auto& object_cat : *objects_cats)
 							{
 								if (object_cat->getName() == FS_BRIDGE_CONTAINER_FOLDER)
 								{
@@ -1586,7 +1586,7 @@ LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, c
 
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (const auto item : items)
+	for (const auto& item : items)
 	{
 		if (!item->getIsLinkType() && (item->getType() == LLAssetType::AT_OBJECT))
 		{
@@ -1622,7 +1622,7 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 	NameCollectFunctor namefunctor(nameToCleanUp);
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (const auto item : items)
+	for (const auto& item : items)
 	{
 		if (!item->getIsLinkType() && (item->getUUID() != mpBridge->getUUID()))
 		{
@@ -1674,7 +1674,7 @@ void FSLSLBridge::detachOtherBridges()
 	//detach everything except current valid bridge - if any
 	gInventory.collectDescendents(catID, cats, items, FALSE);
 
-	for (const auto item : items)
+	for (const auto& item : items)
 	{
 		if (get_is_item_worn(item->getUUID()) &&
 			((!fsBridge) || (item->getUUID() != fsBridge->getUUID())))
