@@ -34,14 +34,36 @@
 #include <mutex>
 #include "lluuid.h"
 #include "llfasttimer.h"
+#include "blockingconcurrentqueue.h" // <FS:Beq/> reinstate faster queues
 #include "llapp.h"
 #include "llprofiler.h"
 #include "pipeline.h"
 
+// <FS:Beq> Additional logging options. These can skew inworld numbers so onyl use for debugging and tracking issues
+#ifdef TRACY_ENABLE
+// USAGE_TRACKING - displays overlapping stats that may imply double counting.
+// ATTACHMENT_TRACKING - displays detailed tracking info for Avatar and Attachment. very heavy overhead.
+// #define USAGE_TRACKING
+#define ATTACHMENT_TRACKING
+#else
+#undef USAGE_TRACKING
+#undef ATTACHMENT_TRACKING
+#endif
+// </FS:Beq>
 extern U32 gFrameCount;
 extern LLUUID gAgentID;
 namespace LLPerfStats
 {
+// <FS:Beq> Additional logging options. These can skew inworld numbers so onyl use for debugging and tracking issues
+#ifdef USAGE_TRACKING
+    extern std::atomic<int64_t> inUse;
+    extern std::atomic<int64_t> inUseAvatar;
+    extern std::atomic<int64_t> inUseScene;
+    extern std::atomic<int64_t> inUseAttachment;
+    extern std::atomic<int64_t> inUseAttachmentRigged;
+    extern std::atomic<int64_t> inUseAttachmentUnRigged;
+#endif
+// </FS:Beq>
 // Note if changing these, they should correspond with the log range of the correpsonding sliders
     static constexpr U64 ART_UNLIMITED_NANOS{50000000};
     static constexpr U64 ART_MINIMUM_NANOS{100000};
@@ -54,6 +76,7 @@ namespace LLPerfStats
 
     static constexpr U32 TUNE_AVATARS_ONLY{0};
     static constexpr U32 TUNE_SCENE_AND_AVATARS{1};
+    extern F64 cpu_hertz; // <FS:Beq/> reinstate thread safety
 
     extern std::atomic<int64_t> tunedAvatars;
     extern std::atomic<U64> renderAvatarMaxART_ns;
@@ -80,7 +103,7 @@ namespace LLPerfStats
         RENDER_SLEEP,
         RENDER_LFS,
         RENDER_MESHREPO,
-        //RENDER_FPSLIMIT,
+        RENDER_FPSLIMIT,// <FS:Beq/> restore this for FS
         RENDER_FPS,
         RENDER_IDLE,
         RENDER_DONE, // toggle buffer & clearbuffer (see processUpdate for hackery)
@@ -156,7 +179,10 @@ namespace LLPerfStats
     extern Tunables tunables;
 
     class StatsRecorder{
-        using Queue = LLThreadSafeQueue<StatsRecord>;
+		// <FS:Beq> we don't want to be using lock based queues
+	    // using Queue = LLThreadSafeQueue<StatsRecord>;
+        using Queue = moodycamel::BlockingConcurrentQueue<StatsRecord>;
+		// </FS:Beq>
     public:
 
         static inline StatsRecorder& getInstance()
@@ -166,10 +192,14 @@ namespace LLPerfStats
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};
         static inline const LLUUID& getFocusAv(){return focusAv;};
-        static inline void send(StatsRecord && upd){StatsRecorder::getInstance().q.pushFront(std::move(upd));};
-        static void endFrame(){StatsRecorder::getInstance().q.pushFront(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
-        static void clearStats(){StatsRecorder::getInstance().q.pushFront(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 1});};
-
+		// <FS:Beq> We do not want to use lock based queues
+        // static inline void send(StatsRecord && upd){StatsRecorder::getInstance().q.pushFront(std::move(upd));};
+        // static void endFrame(){StatsRecorder::getInstance().q.pushFront(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
+        // static void clearStats(){StatsRecorder::getInstance().q.pushFront(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 1});};
+        static inline void send(StatsRecord && upd){StatsRecorder::getInstance().q.enqueue(std::move(upd));};
+        static void endFrame(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
+        static void clearStats(){StatsRecorder::getInstance().q.enqueue(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 1});};
+		// </FS:Beq>
         static inline void setEnabled(bool on_or_off){collectionEnabled=on_or_off;};
         static inline void enable()     { collectionEnabled=true; };
         static inline void disable()    { collectionEnabled=false; };
@@ -201,7 +231,7 @@ namespace LLPerfStats
         static int countNearbyAvatars(S32 distance);
 // StatsArray is a uint64_t for each possible statistic type.
         using StatsArray    = std::array<uint64_t, static_cast<size_t>(LLPerfStats::StatType_t::STATS_COUNT)>;
-        using StatsMap      = std::unordered_map<LLUUID, StatsArray, boost::hash<LLUUID>>;
+        using StatsMap      = std::unordered_map<LLUUID, StatsArray, FSUUIDHash>; // <FS:Beq/>
         using StatsTypeMatrix = std::array<StatsMap, static_cast<size_t>(LLPerfStats::ObjType_t::OT_COUNT)>;
         using StatsSummaryArray = std::array<StatsArray, static_cast<size_t>(LLPerfStats::ObjType_t::OT_COUNT)>;
 
@@ -241,6 +271,13 @@ namespace LLPerfStats
             auto& avKey{upd.avID};
             auto type {upd.statType};
             auto val {upd.time};
+            // <FS:Beq> markup to support coverage testing on stats collection
+            #ifdef TRACY_ENABLE
+            LL_PROFILE_ZONE_TEXT(key.toStringFast(obstr), 36);
+            LL_PROFILE_ZONE_TEXT(avKey.toStringFast(avstr), 36);
+            LL_PROFILE_ZONE_NUM(val);
+            #endif
+            // </FS:Beq>
 
             if (ot == ObjType_t::OT_GENERAL)
             {
@@ -317,19 +354,24 @@ namespace LLPerfStats
 
             while( enabled() && !LLApp::isExiting() )
             {
-                auto count = 0;
-                while (count < 10)
-                {
-                    if (instance.q.tryPopFor(std::chrono::milliseconds(10), upd[count]))
-                    {
-                        count++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                //LL_PROFILER_THREAD_BEGIN("PerfStats");
+			    // <FS:Beq> We don't want these queues
+			    // auto count = 0;
+                // while (count < 10)
+                // {
+                //    if (instance.q.tryPopFor(std::chrono::milliseconds(10), upd[count]))
+                //     {
+                //         count++;
+                //     }
+                //     else
+                //     {
+                //         break;
+                //     }
+                // }
+                // //LL_PROFILER_THREAD_BEGIN("PerfStats");
+
+                auto count = instance.q.wait_dequeue_bulk_timed(upd, 10, std::chrono::milliseconds(10));
+                LL_PROFILER_THREAD_BEGIN("PerfStats");
+				// </FS:Beq>
                 if(count)
                 {
                     // LL_INFOS("perfstats") << "processing " << count << " updates." << LL_ENDL;
@@ -338,7 +380,7 @@ namespace LLPerfStats
                         instance.processUpdate(upd[i]);
                     }
                 }
-                //LL_PROFILER_THREAD_END("PerfStats");
+                LL_PROFILER_THREAD_END("PerfStats"); // <FS:Beq/>
             }
         }
 
@@ -366,7 +408,35 @@ namespace LLPerfStats
                     start{LLTrace::BlockTimer::getCPUClockCount64()},
                     stat{type, ObjTypeDiscriminator, std::move(av), std::move(id), 0, isRiggedAtt, isHUDAtt}
         {
-            //LL_PROFILE_ZONE_COLOR(tracy::Color::Orange);
+            // <FS:Beq> extra profiling coverage tracking
+            // LL_PROFILE_ZONE_COLOR(tracy::Color::Orange);
+            LL_PROFILE_ZONE_COLOR(tracy::Color::Orange);
+        #ifdef USAGE_TRACKING
+            if(stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT)
+            {
+                LL_PROFILE_PLOT_CONFIG_SQUARE("InUse");
+                LL_PROFILE_PLOT_CONFIG_SQUARE("InUseAttachment");
+                LL_PROFILE_PLOT_CONFIG_SQUARE("InUseAttachmentRigged");
+                LL_PROFILE_PLOT_CONFIG_SQUARE("InUseAttachmentUnRigged");
+
+                if(!stat.isRigged && FSPerfStats::inUseAvatar){LL_PROFILE_ZONE_TEXT("OVERLAP AVATAR",14);}
+                FSPerfStats::inUse++;
+                LL_PROFILE_PLOT("InUse", (int64_t)FSPerfStats::inUse);
+                FSPerfStats::inUseAttachment++;
+                LL_PROFILE_PLOT("InUseAttachment", (int64_t)FSPerfStats::inUseAttachment);
+                if (stat.isRigged)
+                {
+                    FSPerfStats::inUseAttachmentRigged++;
+                    LL_PROFILE_PLOT("InUseAttachmentRigged", (int64_t)FSPerfStats::inUseAttachmentRigged);
+                }
+                else
+                {
+                    FSPerfStats::inUseAttachmentUnRigged++;
+                    LL_PROFILE_PLOT("InUseAttachmentUnRigged", (int64_t)FSPerfStats::inUseAttachmentUnRigged);
+                }
+            }
+        #endif
+            // </FS:Beq>
         };
 
         template < ObjType_t OD = ObjTypeDiscriminator,
@@ -374,13 +444,31 @@ namespace LLPerfStats
         explicit RecordTime( StatType_t type ):RecordTime<ObjTypeDiscriminator>(LLUUID::null, LLUUID::null, type )
         {
             LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
+            // <FS:Beq> extra profiling coverage tracking
+            #ifdef USAGE_TRACKING
+            LLPerfStats::inUseScene++;
+            LL_PROFILE_PLOT("InUseScene", (int64_t)LLPerfStats::inUseScene);
+            LLPerfStats::inUse++;
+            LL_PROFILE_PLOT("InUse", (int64_t)LLPerfStats::inUse);
+            #endif
+            // </FS:Beq>
         };
 
         template < ObjType_t OD = ObjTypeDiscriminator,
                    std::enable_if_t<OD == ObjType_t::OT_AVATAR> * = nullptr>
         RecordTime( const LLUUID & av, StatType_t type ):RecordTime<ObjTypeDiscriminator>(std::move(av), LLUUID::null, type)
         {
-            //LL_PROFILE_ZONE_COLOR(tracy::Color::Purple);
+            // <FS:Beq> extra profiling coverage tracking
+            // LL_PROFILE_ZONE_COLOR(tracy::Color::Purple)
+            LL_PROFILE_ZONE_COLOR(tracy::Color::Purple);
+        #ifdef USAGE_TRACKING
+            if(LLPerfStats::inUseAvatar){LL_PROFILE_ZONE_TEXT("OVERLAP AVATAR",14);}
+            FSPerfStats::inUseAvatar++;
+            LL_PROFILE_PLOT("InUseAv", (int64_t)LLPerfStats::inUseAvatar);
+            LLPerfStats::inUse++;
+            LL_PROFILE_PLOT("InUse", (int64_t)LLPerfStats::inUse);
+        #endif
+            // </FS:Beq>
         };
 
         ~RecordTime()
@@ -392,15 +480,60 @@ namespace LLPerfStats
 
             //LL_PROFILE_ZONE_COLOR(tracy::Color::Red);
 
+        // <FS:Beq> extra profiling coverage tracking
+        #ifdef USAGE_TRACKING
+            --FSPerfStats::inUse;
+            LL_PROFILE_PLOT("InUse", (int64_t)FSPerfStats::inUse);
+            if (stat.objType == FSPerfStats::ObjType_t::OT_ATTACHMENT)
+            {
+                --FSPerfStats::inUseAttachment;
+                LL_PROFILE_PLOT("InUseAttachment", (int64_t)FSPerfStats::inUseAttachment);
+                if (stat.isRigged)
+                {
+                    --FSPerfStats::inUseAttachmentRigged;
+                    LL_PROFILE_PLOT("InUseAttachmentRigged", (int64_t)FSPerfStats::inUseAttachmentRigged);
+                }
+                else
+                {
+                    --FSPerfStats::inUseAttachmentUnRigged;
+                    LL_PROFILE_PLOT("InUseAttachmentUnRigged", (int64_t)FSPerfStats::inUseAttachmentUnRigged);
+                }
+            }
+            if (stat.objType == FSPerfStats::ObjType_t::OT_GENERAL)
+            {
+                --FSPerfStats::inUseScene;
+                LL_PROFILE_PLOT("InUseScene", (int64_t)FSPerfStats::inUseScene);
+            }
+            if( stat.objType == FSPerfStats::ObjType_t::OT_AVATAR )
+            {
+                --FSPerfStats::inUseAvatar;
+                LL_PROFILE_PLOT("InUseAv", (int64_t)FSPerfStats::inUseAvatar);
+            }
+        #endif
+        // </FS:Beq>
             stat.time = LLTrace::BlockTimer::getCPUClockCount64() - start;
+        // <FS:Beq> extra profiling coverage tracking
+        #ifdef ATTACHMENT_TRACKING
+            static char obstr[36];
+            static char avstr[36];
+            LL_PROFILE_ZONE_NUM(static_cast<U64>(stat.objType));
+            LL_PROFILE_ZONE_TEXT(stat.avID.toStringFast(avstr), 36);
+            LL_PROFILE_ZONE_TEXT(stat.objID.toStringFast(obstr), 36);
+            LL_PROFILE_ZONE_NUM(stat.time);
+        #endif
+        // </FS:Beq>
             StatsRecorder::send(std::move(stat));
         };
     };
-
+    // <FS:Beq> use thread safe/low overhead cpu frequency tracking (might need to add refresh to this)
+    // inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
+    // inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
+    // inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
     
-    inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
-    inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
-    inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
+    inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / LLPerfStats::cpu_hertz; };
+    inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / LLPerfStats::cpu_hertz; };
+    inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / LLPerfStats::cpu_hertz; };
+    // </FS:Beq>
 
     using RecordSceneTime = RecordTime<ObjType_t::OT_GENERAL>;
     using RecordAvatarTime = RecordTime<ObjType_t::OT_AVATAR>;
@@ -435,6 +568,20 @@ static inline void trackAttachments(const T * vobj, bool isRigged, RATptr* ratPt
         auto& obj = rootAtt->getAttachmentItemID();
         if (!*ratPtrp || (*ratPtrp)->stat.objID != obj || (*ratPtrp)->stat.avID != av)
         {
+            // <FS:Beq> extra profiling coverage tracking
+            #if TRACY_ENABLE && defined(ATTACHMENT_TRACKING)
+            LL_PROFILE_ZONE_NAMED_COLOR( "trackAttachments:new", tracy::Color::Red);
+            auto& str = rootAtt->getAttachmentItemName();
+            LL_PROFILE_ZONE_TEXT(str.c_str(), str.size());
+            LL_PROFILE_ZONE_TEXT(isRigged ? "Rigged" : "Unrigged", 8);
+            static char avStr[36];
+            av.toStringFast(avStr);
+            static char obStr[4];
+            obj.toShortString(obStr);
+            LL_PROFILE_ZONE_TEXT( avStr, 36);
+            LL_PROFILE_ZONE_TEXT( obStr, 4);
+            #endif
+            // </FS:Beq>
             if (*ratPtrp)
             {
                 // deliberately reset to ensure destruction before construction of replacement.

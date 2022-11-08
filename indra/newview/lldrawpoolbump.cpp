@@ -547,8 +547,6 @@ void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL
     for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k) 
 	{
 		LLDrawInfo& params = **k;
-		// <FS:Beq> Capture render times
-		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 		
         LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 

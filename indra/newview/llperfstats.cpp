@@ -37,11 +37,22 @@ extern LLControlGroup gSavedSettings;
 
 namespace LLPerfStats
 {
+// <FS:Beq> extra profiling
+ #ifdef USAGE_TRACKING
+    std::atomic<int64_t> inUse{0};
+    std::atomic<int64_t> inUseAvatar{0};
+    std::atomic<int64_t> inUseScene{0};
+    std::atomic<int64_t> inUseAttachment{0};
+    std::atomic<int64_t> inUseAttachmentRigged{0};
+    std::atomic<int64_t> inUseAttachmentUnRigged{0};
+#endif
+// </FS:Beq>
     std::atomic<int64_t> tunedAvatars{0};
     std::atomic<U64> renderAvatarMaxART_ns{(U64)(ART_UNLIMITED_NANOS)}; // highest render time we'll allow without culling features
     bool belowTargetFPS{false};
     U32 lastGlobalPrefChange{0}; 
     std::mutex bufferToggleLock{};
+    F64 cpu_hertz{0.0}; // <FS:Beq/> reinstate threadsafe frequency
 
     Tunables tunables;
 
@@ -126,6 +137,7 @@ namespace LLPerfStats
         // create a queue
         // create a thread to consume from the queue
         tunables.initialiseFromSettings();
+        LLPerfStats::cpu_hertz = (F64)LLTrace::BlockTimer::countsPerSecond(); // <FS:Beq/> reinstate threadsafe frequency
         t.detach();
     }
 
@@ -156,11 +168,13 @@ namespace LLPerfStats
             StatType_t::RENDER_COMBINED,
             StatType_t::RENDER_IDLE };
 
-
-        if( /*sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] != 0 ||*/ sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] != 0 )
+        // <FS:Beq> restore FPSLimit reporting
+        // if( /*sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] != 0 ||*/ sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] != 0 )
+        if( sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] != 0 || sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] != 0 )
+        // </FS:Beq>
         {
             unreliable = true;
-            //lastStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)];
+            lastStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_FPSLIMIT)];// <FS:Beq/> restore FPSLimit reporting
             lastStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_SLEEP)];
             lastStats[static_cast<size_t>(StatType_t::RENDER_FRAME)] = sceneStats[static_cast<size_t>(StatType_t::RENDER_FRAME)]; //  bring over the total frame render time to deal with region crossing overlap issues
         }
@@ -316,7 +330,7 @@ namespace LLPerfStats
         // sleep time is basically forced sleep when window out of focus 
         auto tot_sleep_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_SLEEP);
         // similar to sleep time, induced by FPS limit
-        //auto tot_limit_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_FPSLIMIT);
+        auto tot_limit_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_FPSLIMIT);// <FS:Beq/> restore FPSLimit reporting
 
 
         // the time spent this frame on the "doFrame" call. Treated as "tot time for frame"
@@ -332,15 +346,15 @@ namespace LLPerfStats
         }
 
         // The frametime budget we have based on the target FPS selected
-        auto target_frame_time_raw = (U64)llround((F64)LLTrace::BlockTimer::countsPerSecond()/(tunables.userTargetFPS==0?1:tunables.userTargetFPS));
+        auto target_frame_time_raw = (U64)llround(LLPerfStats::cpu_hertz/(tunables.userTargetFPS==0?1:tunables.userTargetFPS));// <FS:Beq/> reinstate threadsafe frequency
         // LL_INFOS() << "Effective FPS(raw):" << tot_frame_time_raw << " Target:" << target_frame_time_raw << LL_ENDL;
         auto inferredFPS{1000/(U32)std::max(raw_to_ms(tot_frame_time_raw),1.0)};
         U32 settingsChangeFrequency{inferredFPS > 25?inferredFPS:25};
-        /*if( tot_limit_time_raw != 0)
+        if( tot_limit_time_raw != 0)// <FS:Beq/> restore FPSLimit reporting
         {
             // This could be problematic.
             tot_frame_time_raw -= tot_limit_time_raw;
-        }*/
+        }// <FS:Beq/> restore FPSLimit reporting
         // 1) Is the target frame time lower than current?
         if( target_frame_time_raw <= tot_frame_time_raw )
         {

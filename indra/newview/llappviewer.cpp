@@ -287,7 +287,6 @@ using namespace LL;
 #include "fsassetblacklist.h"
 
 // #include "fstelemetry.h" // <FS:Beq> Tracy profiler support
-#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 #if LL_LINUX && LL_GTK
 #include "glib.h"
@@ -1608,44 +1607,42 @@ bool LLAppViewer::doFrame()
 
     LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
     LLSD newFrame;
+	LLTimer frameTimer; // <FS:Beq/> relocated - <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
     {
+    	LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE); // perf stats
 // <FS:Beq> profiling enablement. 
 // This ifdef is optional but better to avoid even low overhead code in main loop where not needed.
 #ifdef TRACY_ENABLE
-	static bool one_time{false};
-	static LLCachedControl<bool> defer_profiling(gSavedSettings, "DeferProfilingUntilConnected");
-	if( !one_time && (gFrameCount % 10 == 0) )
-	{
-
-		// LL_INFOS() << "Profiler active: " <<  (LLProfiler::active?"True":"False") << LL_ENDL;
-		// LL_INFOS() << "deferred_profiling: " <<  (defer_profiling?"True":"False") << LL_ENDL;
-		// LL_INFOS() << "connected: " <<  (LL_PROFILE_IS_CONNECTED?"True":"False") << LL_ENDL;
-
-		if( ( !LLProfiler::active ) && ( defer_profiling && LL_PROFILE_IS_CONNECTED ) )
+		static bool one_time{false};
+		static LLCachedControl<bool> defer_profiling(gSavedSettings, "DeferProfilingUntilConnected");
+		if( !one_time && (gFrameCount % 10 == 0) )
 		{
-			LLProfiler::active = true;
-			gSavedSettings.setBOOL( "ProfilingActive", LLProfiler::active );
-			one_time=true; // prevent reset race if we disable manually.
-			LL_INFOS() << "Profiler or collector connected" << LL_ENDL;
+
+			// LL_INFOS() << "Profiler active: " <<  (LLProfiler::active?"True":"False") << LL_ENDL;
+			// LL_INFOS() << "deferred_profiling: " <<  (defer_profiling?"True":"False") << LL_ENDL;
+			// LL_INFOS() << "connected: " <<  (LL_PROFILE_IS_CONNECTED?"True":"False") << LL_ENDL;
+
+			if( ( !LLProfiler::active ) && ( defer_profiling && LL_PROFILE_IS_CONNECTED ) )
+			{
+				LLProfiler::active = true;
+				gSavedSettings.setBOOL( "ProfilingActive", LLProfiler::active );
+				one_time=true; // prevent reset race if we disable manually.
+				LL_INFOS() << "Profiler or collector connected" << LL_ENDL;
+			}
+			if( !defer_profiling )
+			{
+				// no point in checking if we are not waiting.
+				// TODO(Beq): At the moment we have only two options
+				// 1) start capturing immediately
+				// 2) start capturing only when a profiler is connected
+				// Ideally we could have another flag to control profiling at start
+				// this would then allow a fully manual enablement.
+				one_time = true;
+				LL_INFOS() << "Manual profiling control selected" << LL_ENDL;
+			}
 		}
-		if( !defer_profiling )
-		{
-			// no point in checking if we are not waiting.
-			// TODO(Beq): At the moment we have only two options
-			// 1) start capturing immediately
-			// 2) start capturing only when a profiler is connected
-			// Ideally we could have another flag to control profiling at start
-			// this would then allow a fully manual enablement.
-			one_time = true;
-			LL_INFOS() << "Manual profiling control selected" << LL_ENDL;
-		}
-	}
 #endif
 // </FS:Beq>
-	// <FS:Ansariel> FIRE-22297: FPS limiter not working properly on Mac/Linux
-	LLTimer frameTimer;
-        LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE); // perf stats
-
 	nd::etw::logFrame(); // <FS:ND> Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df LLTrace");
@@ -1662,11 +1659,11 @@ bool LLAppViewer::doFrame()
 
         //clear call stack records
         LL_CLEAR_CALLSTACKS();
-	} // <FS:Beq/> perf stats (close NonRender/IDLE tracking starting at event pump)
+	} 
     {
         {
-
-            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df processMiscNativeEvents")
+            LLPerfStats::RecordSceneTime T(LLPerfStats::StatType_t::RENDER_IDLE); // <FS:Beq/> ensure we have the entire top scope of frame covered (input event and coro)
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df processMiscNativeEvents");
             pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
             if (gViewerWindow)
@@ -1870,8 +1867,6 @@ bool LLAppViewer::doFrame()
 				// <FS:Beq> instrument image decodes
 				{
 					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("updateTextureThreads");
-					// FSPlot("max_time_ms",max_time);
-				// <FS:Beq/>
 				work_pending += updateTextureThreads(max_time);
 				}	// <FS:Beq/> instrument image decodes
 
@@ -1926,7 +1921,7 @@ bool LLAppViewer::doFrame()
 			if (fsLimitFramerate && LLStartUp::getStartupState() == STATE_STARTED && !gTeleportDisplay && !logoutRequestSent() && max_fps > F_APPROXIMATELY_ZERO)
 			{
 				// Sleep a while to limit frame rate.
-				FSPerfStats::RecordSceneTime T ( FSPerfStats::StatType_t::RENDER_FPSLIMIT );
+				LLPerfStats::RecordSceneTime T ( LLPerfStats::StatType_t::RENDER_FPSLIMIT );
 				F32 min_frame_time = 1.f / (F32)max_fps;
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
@@ -5855,7 +5850,7 @@ void LLAppViewer::idle()
 
         if (!(logoutRequestSent() && hasSavedFinalSnapshot()))
 		{
-			FSPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
+			LLPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
 			gObjectList.update(gAgent);
 		}
 	}

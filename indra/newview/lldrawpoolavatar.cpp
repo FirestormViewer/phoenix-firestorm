@@ -60,7 +60,6 @@
 // void drawBoxOutline(const LLVector3& pos,const LLVector3& size);	// llspatialpartition.cpp
 // </FS:Zi>
 #include "llnetmap.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
