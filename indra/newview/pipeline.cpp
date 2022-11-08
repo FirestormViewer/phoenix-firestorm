@@ -11212,7 +11212,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar)
                               << " is " << ( too_complex ? "" : "not ") << "too complex"
                               << LL_ENDL;
 
-    bool too_slow = avatar->isTooSlowWithShadows();
+    bool too_slow = avatar->isTooSlowWithoutShadows();// <FS:Beq/> only if we really have to do we imposter.
 
     pushRenderTypeMask();
 

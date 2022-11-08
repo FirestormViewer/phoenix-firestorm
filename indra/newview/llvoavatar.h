@@ -351,7 +351,6 @@ public:
 	static F32		sLODFactor; // user-settable LOD factor
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
-	static U64		sRenderTimeLimit_ns; // <FS:Beq/> nanosecond time limit for avatar rendering 0 is unlimited. 
 	static LLPartSysData sCloud;
 
     static LLPointer<LLViewerTexture>  sCloudTexture;
@@ -401,6 +400,10 @@ public:
 
     void            calcMutedAVColor();
     void            markARTStale();
+	// <FS:Beq> refactoring post LL merge
+	void 			clearSlowARTCache();
+	void 			setSlowARTCache(U64 full_render_time, U64 geometry_render_time);
+	// </FS:Beq>
 
 protected:
 	LLViewerStats::PhaseMap& getPhases() { return mPhases; }
@@ -421,19 +424,10 @@ private:
 	LLColor4		mMutedAVColor;
 	LLFrameTimer	mFullyLoadedTimer;
 	LLFrameTimer	mRuthTimer;
-	U32				mLastARTUpdateFrame{0};
-	U64				mRenderTime{0};
-	U64				mGeomTime{0};
-	bool			mARTStale{true};
-	bool			mARTCapped{false};
-	// <FS:Beq> variables to hold "slowness" status
-	bool			mTooSlow{false};
-	bool			mTooSlowWithoutShadows{false};
-	// </FS:Beq>
 
     U32				mLastARTUpdateFrame{0};
     U64				mRenderTime{0};
-    U64				mGeomTime{0};
+    U64				mRenderTimeNoShadows{0};
     bool			mARTStale{true};
     bool			mARTCapped{false};
     // variables to hold "slowness" status
