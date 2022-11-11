@@ -418,9 +418,6 @@ public:
 	static void updateRenderDeferred();
 	static void refreshCachedSettings();
 
-    // <FS:Ansariel> [FS performance floater]
-    //static void onToggleAutoFPS();
-
 	void addDebugBlip(const LLVector3& position, const LLColor4& color);
 
 	void hidePermanentObjects( std::vector<U32>& restoreList );
@@ -429,10 +426,6 @@ public:
 	void hideObject( const LLUUID& id );
 	void restoreHiddenObject( const LLUUID& id );
     void handleShadowDetailChanged();
-
-    // <FS:Ansariel> [FS performance floater]
-    //void autoAdjustSettings();
-    //void setAdjustmentTimerExpiry(F32 expiration);
 
 private:
 	void unloadShaders();
@@ -756,9 +749,6 @@ protected:
 	U64						mRenderDebugMask;
 	U64						mOldRenderDebugMask;
 	std::stack<U32>			mRenderDebugFeatureStack;
-
-    // <FS:Ansariel> [FS performance floater]
-    //LLTimer* mUpdateTimer;
 
 	/////////////////////////////////////////////
 	//

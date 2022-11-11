@@ -54,6 +54,7 @@
 #include "llfloaterabout.h"
 #include "llfavoritesbar.h"
 #include "llfloaterpreferencesgraphicsadvanced.h"
+#include "llfloaterperformance.h"
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimsession.h"
@@ -128,6 +129,7 @@
 #include "llpresetsmanager.h"
 
 #include "llsearchableui.h"
+#include "llperfstats.h"
 
 // Firestorm Includes
 #include "exogroupmutelist.h"
@@ -164,8 +166,6 @@
 #include <CoreFoundation/CFBundle.h>	// [FS:CR]
 #endif
 // </FS:LO>
-
-#include "fsperfstats.h"// <FS:Beq/> perfstats
 
 // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 #include "llfiltereditor.h"
@@ -468,6 +468,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	// </FS:Zi>
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
 	mCommitCallbackRegistrar.add("Pref.RenderExceptions",       boost::bind(&LLFloaterPreference::onClickRenderExceptions, this));
+	// mCommitCallbackRegistrar.add("Pref.AutoAdjustments",         boost::bind(&LLFloaterPreference::onClickAutoAdjustments, this)); // <FS:Beq/> Not required in FS at present
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",	boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",	boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
@@ -487,7 +488,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.RememberedUsernames",    boost::bind(&LLFloaterPreference::onClickRememberedUsernames, this));
 	mCommitCallbackRegistrar.add("Pref.SpellChecker",           boost::bind(&LLFloaterPreference::onClickSpellChecker, this));
 	mCommitCallbackRegistrar.add("Pref.Advanced",				boost::bind(&LLFloaterPreference::onClickAdvanced, this));
-    mCommitCallbackRegistrar.add("Pref.AutoAdjustWarning",				boost::bind(&LLFloaterPreference::showAutoAdjustWarning));
 
 	// <FS:Ansariel> Improved graphics preferences
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreference::updateMaxNonImpostors, this));
@@ -1232,17 +1232,18 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
 	//bool started = (LLStartUp::getStartupState() == STATE_STARTED);
-
-	//LLButton* load_btn = findChild<LLButton>("PrefLoadButton");
+    //LLButton* load_btn = findChild<LLButton>("PrefLoadButton");
 	//LLButton* save_btn = findChild<LLButton>("PrefSaveButton");
 	//LLButton* delete_btn = findChild<LLButton>("PrefDeleteButton");
 	//LLButton* exceptions_btn = findChild<LLButton>("RenderExceptionsButton");
-	//if (load_btn && save_btn && delete_btn && exceptions_btn)
+	// LLButton* auto_adjustments_btn = findChild<LLButton>("AutoAdjustmentsButton");
+    //if (load_btn && save_btn && delete_btn && exceptions_btn && auto_adjustments_btn)
 	//{
 	//	load_btn->setEnabled(started);
 	//	save_btn->setEnabled(started);
 	//	delete_btn->setEnabled(started);
 	//	exceptions_btn->setEnabled(started);
+    //  auto_adjustments_btn->setEnabled(started);
 	//}
 	// </FS:Ansariel>
 	collectSearchableItems();
@@ -1255,6 +1256,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
 			tabcontainer->selectFirstTab();
 		// </FS:ND>
+
 	}
 	// <FS:Zi> Support for tab/subtab links like:
 	//         secondlife:///app/openfloater/preferences?tab=backup
@@ -2843,24 +2845,23 @@ void LLAvatarComplexityControls::setText(U32 value, LLTextBox* text_box, bool sh
 	}
 }
 
-// <FS:Beq> redner time controls
 void LLAvatarComplexityControls::updateMaxRenderTime(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val)
 {
-	setRenderTimeText((F32)(FSPerfStats::renderAvatarMaxART_ns/1000), value_label, short_val);
+    setRenderTimeText((F32)(LLPerfStats::renderAvatarMaxART_ns/1000), value_label, short_val);
 }
 
 void LLAvatarComplexityControls::setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val)
 {
-	if (0 == value)
-	{
-		text_box->setText(LLTrans::getString("no_limit"));
-	}
-	else
-	{
-		text_box->setText(llformat("%.0f", value));
-	}
+    if (0 == value)
+    {
+        text_box->setText(LLTrans::getString("no_limit"));
+    }
+    else
+    {
+        text_box->setText(llformat("%.0f", value));
+    }
 }
-// </FS:Beq>
+
 void LLFloaterPreference::updateMaxComplexity()
 {
 	// Called when the IndirectMaxComplexity control changes
@@ -3023,6 +3024,17 @@ void LLFloaterPreference::onClickRenderExceptions()
 {
     LLFloaterReg::showInstance("avatar_render_settings");
 }
+
+// <FS:Beq> Not currently used in FS
+// void LLFloaterPreference::onClickAutoAdjustments()
+// {
+//     LLFloaterPerformance* performance_floater = LLFloaterReg::showTypedInstance<LLFloaterPerformance>("performance");
+//     if (performance_floater)
+//     {
+//         performance_floater->showAutoadjustmentsPanel();
+//     }
+// }
+// </FS:Beq>
 
 void LLFloaterPreference::onClickAdvanced()
 {
@@ -3199,23 +3211,6 @@ void LLFloaterPreference::updateClickActionViews()
 void LLFloaterPreference::updateSearchableItems()
 {
     mSearchDataDirty = true;
-}
-
-void LLFloaterPreference::showAutoAdjustWarning()
-{
-    static LLCachedControl<bool> use_auto_adjust(gSavedSettings,"AutoFPS");
-    if (use_auto_adjust)
-    {
-        LLNotificationsUtil::add("AutoFPSConfirmDisable", LLSD(), LLSD(),
-            [](const LLSD&notif, const LLSD&resp)
-        {
-            S32 opt = LLNotificationsUtil::getSelectedOption(notif, resp);
-            if (opt == 0)
-            {
-                gSavedSettings.setBOOL("AutoFPS", FALSE);
-            }
-        });
-    }
 }
 
 void LLFloaterPreference::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
