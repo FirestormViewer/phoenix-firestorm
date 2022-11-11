@@ -4,13 +4,13 @@
         [HOURS] ч
     </floater.string>
     <floater.string name="Hour">
-        ч
+        ч.
     </floater.string>
     <floater.string name="Minutes">
         [MINUTES] мин.
     </floater.string>
     <floater.string name="Minute">
-        минута
+        мин.
     </floater.string>
     <floater.string name="Seconds">
         [SECONDS] с.
@@ -431,6 +431,10 @@
             <check_box label="Включить голос" name="parcel_enable_voice_channel"/>
             <check_box label="Включить голос (устанавливается владельцем острова)" name="parcel_enable_voice_channel_is_estate_disabled" width="300" />
             <check_box label="Ограничить голос границами данного участка" name="parcel_enable_voice_channel_local"/>
+            <text name="media">
+                Медиа:
+            </text>
+            <check_box label="Непонятные Медина на объекте" name="obscure_moap" tool_tip="Медиа на объекте, расположенном за пределами участка, не должен автоматически воспроизводиться для агента внутри этой участка и наоборот."/>
         </panel>
         <panel label="Доступ" name="land_access_panel">
             <panel.string name="access_estate_defined">
