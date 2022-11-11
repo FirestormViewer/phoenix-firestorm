@@ -63,7 +63,6 @@ private:
 	void onClickRemovePseudonym();
 
 	void refreshContactSets();
-	void removeAvatarFromSet();
 	void resetControls();
 
 	void updateSets(LGGContactSets::EContactSetUpdate type);

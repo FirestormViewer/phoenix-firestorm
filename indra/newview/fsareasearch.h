@@ -175,7 +175,7 @@ private:
 	void getNameFromUUID(const LLUUID& id, std::string& name, bool group, bool& name_requested);
 
 	void updateCounterText();
-	bool regexTest(std::string text);
+	bool regexTest(std::string_view text);
 	void findObjects();
 	void processRequestQueue();
 

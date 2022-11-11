@@ -203,35 +203,34 @@ void LLPhysicsShapeBuilderUtil::determinePhysicsShape(const LLPhysicsVolumeParam
 	{
 		specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
 	}
-    else if (volume_params.isMeshSculpt() &&
-             // Check overall dimensions, not individual triangles.
-             (scale.mV[0] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
-              scale.mV[1] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
-              scale.mV[2] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE
-              ) )
-    {
-        // Server distinguishes between user-specified or default convex mesh, vs server's thin-triangle override, but we don't.
-        specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
-    }
+	// <FS:Beq> restore proper behaviour.
+    // else if (volume_params.isMeshSculpt() &&
+    //          // Check overall dimensions, not individual triangles.
+    //          (scale.mV[0] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
+    //           scale.mV[1] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
+    //           scale.mV[2] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE
+    //           ) )
+    // {
+    //     // Server distinguishes between user-specified or default convex mesh, vs server's thin-triangle override, but we don't.
+    //     specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
+    // }
+	// </FS:Beq>
 	else if ( volume_params.isSculpt() ) // Is a sculpt of any kind (mesh or legacy)
 	{
 		//<FS:Beq> [BUG-134006] Viewer code is not aligned to server code when calculating physics shape for thin objects.
 		specOut.mType = PhysicsShapeSpecification::INVALID;
 		// <FS:Beq> FIRE-23053 - add decomp check analysed mesh physics is not correctly displayed for thin meshes
 		//		if (volume_params.isMeshSculpt()){
-		if (volume_params.isMeshSculpt() && !hasDecomp){
-			static const float SHAPE_BUILDER_CONVEXIFICATION_SIZE_MESH = 0.5;
-			// it's a mesh and only one size is smaller than min. 
-			for (S32 i = 0; i < 3; ++i)
-			{
-				if (scale[i] < SHAPE_BUILDER_CONVEXIFICATION_SIZE_MESH)
-				{
-					specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
-				}
-			}
+		if ( (volume_params.isMeshSculpt() && !hasDecomp) &&
+             (scale.mV[0] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
+              scale.mV[1] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE ||
+              scale.mV[2] < SHAPE_BUILDER_USER_MESH_CONVEXIFICATION_SIZE
+              ) )
+	    {			
+			specOut.mType = PhysicsShapeSpecification::PRIM_CONVEX;
 		}
 		if (specOut.mType == PhysicsShapeSpecification::INVALID)
-			//</FS:Beq>
+			//</FS:Beq> note: dangling if....(hopefully this will go away with PR sent to LL)
 			specOut.mType = volume_params.isMeshSculpt() ? PhysicsShapeSpecification::USER_MESH : PhysicsShapeSpecification::SCULPT;
 	}
 	else // Resort to mesh 
