@@ -1710,7 +1710,6 @@ bool LLAppViewer::doFrame()
 		llcoro::suspend();
             }
         }
-		}// <FS:Beq> ensure we have the entire top scope of frame covered (close input event and coro "idle")
 
 		if (!LLApp::isExiting())
 		{

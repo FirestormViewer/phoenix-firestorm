@@ -167,8 +167,6 @@
 #endif
 // </FS:LO>
 
-#include "fsperfstats.h"// <FS:Beq/> perfstats
-
 // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 #include "llfiltereditor.h"
 #include "llviewershadermgr.h"
@@ -470,7 +468,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	// </FS:Zi>
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
 	mCommitCallbackRegistrar.add("Pref.RenderExceptions",       boost::bind(&LLFloaterPreference::onClickRenderExceptions, this));
-	mCommitCallbackRegistrar.add("Pref.AutoAdjustments",         boost::bind(&LLFloaterPreference::onClickAutoAdjustments, this));
+	// mCommitCallbackRegistrar.add("Pref.AutoAdjustments",         boost::bind(&LLFloaterPreference::onClickAutoAdjustments, this)); // <FS:Beq/> Not required in FS at present
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",	boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",	boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
@@ -3027,14 +3025,16 @@ void LLFloaterPreference::onClickRenderExceptions()
     LLFloaterReg::showInstance("avatar_render_settings");
 }
 
-void LLFloaterPreference::onClickAutoAdjustments()
-{
-    LLFloaterPerformance* performance_floater = LLFloaterReg::showTypedInstance<LLFloaterPerformance>("performance");
-    if (performance_floater)
-    {
-        performance_floater->showAutoadjustmentsPanel();
-    }
-}
+// <FS:Beq> Not currently used in FS
+// void LLFloaterPreference::onClickAutoAdjustments()
+// {
+//     LLFloaterPerformance* performance_floater = LLFloaterReg::showTypedInstance<LLFloaterPerformance>("performance");
+//     if (performance_floater)
+//     {
+//         performance_floater->showAutoadjustmentsPanel();
+//     }
+// }
+// </FS:Beq>
 
 void LLFloaterPreference::onClickAdvanced()
 {
