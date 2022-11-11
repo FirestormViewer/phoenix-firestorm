@@ -1266,7 +1266,9 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
 	LLFloater* root_floater = gFloaterView->getParentFloater(panel);
 	LLInventoryPanel* inv_panel = dynamic_cast<LLInventoryPanel*>(panel);
 	LLFloaterAvatarPicker* picker =
-		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, FALSE, root_floater->getName());
+		// <FS:Ansariel> FIRE-32377: Don't include own avatar when sharing items
+		//LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, FALSE, root_floater->getName());
+		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, TRUE, root_floater->getName());
 	if (!picker)
 	{
 		return;

@@ -64,9 +64,9 @@ static const std::string FS_ERROR_ATTRIBUTE = "error=";
 class NameCollectFunctor : public LLInventoryCollectFunctor
 {
 public:
-	NameCollectFunctor(std::string name)
+	NameCollectFunctor(std::string_view name)
 	{
-		sName = name;
+		sName = static_cast<std::string>(name);
 	}
 	virtual ~NameCollectFunctor() {}
 	virtual bool operator()(LLInventoryCategory* cat,
@@ -147,7 +147,7 @@ void FSLSLBridge::setTimerResult(TimerResult result)
 	mTimerResult = result;
 }
 
-bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID)
+bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, const LLUUID& ownerID)
 {
 	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
 
@@ -175,7 +175,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	{
 		return false;
 	}
-	std::string tag = message.substr(0, tagend + 1);
+	std::string_view tag = message.substr(0, tagend + 1);
 	std::string ourBridge = findFSCategory().asString();
 	//</FS:TS> FIRE-962
 	
@@ -199,9 +199,9 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		size_t authEnd   = message.find("</bridgeAuth>");
 		size_t verStart  = message.find(bridge_ver_tag) + bridge_ver_tag.size();
 		size_t verEnd    = message.find("</bridgeVer>");
-		std::string bURL = message.substr(urlStart,urlEnd - urlStart);
-		std::string bAuth = message.substr(authStart,authEnd - authStart);
-		std::string bVer = message.substr(verStart,verEnd - verStart);
+		std::string bURL = static_cast<std::string>(message.substr(urlStart,urlEnd - urlStart));
+		std::string bAuth = static_cast<std::string>(message.substr(authStart,authEnd - authStart));
+		std::string bVer = static_cast<std::string>(message.substr(verStart,verEnd - verStart));
 
 		// Verify Authorization
 		if (ourBridge != bAuth)
@@ -402,7 +402,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		size_t getScriptInfoEnd = message.find("</bridgeGetScriptInfo>");
 		if (getScriptInfoEnd != std::string::npos)
 		{
-			std::string getScriptInfoString = message.substr(tag_size, getScriptInfoEnd - tag_size);
+			std::string getScriptInfoString = static_cast<std::string>(message.substr(tag_size, getScriptInfoEnd - tag_size));
 			std::istringstream strStreamGetScriptInfo(getScriptInfoString);
 			std::string scriptInfoToken;
 			LLSD scriptInfoArray = LLSD::emptyArray();
@@ -556,7 +556,7 @@ bool FSLSLBridge::canUseBridge()
 	return (isBridgeValid() && sUseLSLBridge && !mCurrentURL.empty());
 }
 
-bool FSLSLBridge::viewerToLSL(const std::string& message, Callback_t aCallback)
+bool FSLSLBridge::viewerToLSL(std::string_view message, Callback_t aCallback)
 {
 	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
 
@@ -571,32 +571,21 @@ bool FSLSLBridge::viewerToLSL(const std::string& message, Callback_t aCallback)
 		pCallback = FSLSLBridgeRequest_Success;
 	}
 
-	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message), pCallback, FSLSLBridgeRequest_Failure);
+	// Calling data() should be fine here since message is a view on a null-terminated string
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message.data()), pCallback, FSLSLBridgeRequest_Failure);
 
 	return true;
 }
 
 bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal)
 {
-	std::string boolVal = "0";
-
-	if (gSavedPerAccountSettings.getBOOL(msgVal))
-	{
-		boolVal = "1";
-	}
-
-	return viewerToLSL(msgVal + "|" + boolVal );
+	const std::string boolVal = gSavedPerAccountSettings.getBOOL(msgVal) ? "1" : "0";
+	return viewerToLSL(msgVal + "|" + boolVal);
 }
 
 bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal, bool contentVal)
 {
-	std::string boolVal = "0";
-
-	if (contentVal)
-	{
-		boolVal = "1";
-	}
-
+	const std::string boolVal = contentVal ? "1" : "0";
 	return viewerToLSL(msgVal + "|" + boolVal);
 }
 
@@ -677,9 +666,9 @@ void FSLSLBridge::cleanUpPreCreation()
 	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
 
 	mAllowedDetachables.clear();
-	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	for (const auto& item : items)
 	{
-		LLUUID item_id= (*it)->getUUID();
+		const LLUUID& item_id = item->getUUID();
 		if (get_is_item_worn(item_id))
 		{
 			LL_INFOS("FSLSLBridge") << "Found worn object " << item_id << " bridge category - detaching..." << LL_ENDL;
@@ -712,10 +701,10 @@ void FSLSLBridge::finishCleanUpPreCreation()
 	NameCollectFunctor namefunctor(mCurrentFullName);
 	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
 
-	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	for (const auto& item : items)
 	{
-		LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << (*it)->getName() << " (" << (*it)->getUUID() << ")" << LL_ENDL;
-		remove_inventory_item((*it)->getUUID(), nullptr, true); // Don't wait for callback from server to update inventory model
+		LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << item->getName() << " (" << item->getUUID() << ")" << LL_ENDL;
+		remove_inventory_item(item->getUUID(), nullptr, true); // Don't wait for callback from server to update inventory model
 	}
 	gInventory.notifyObservers();
 
@@ -1143,6 +1132,9 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 {
 	LL_DEBUGS("FSLSLBridge") << "Entering bridge container setup..." << LL_ENDL;
+	
+	if (!object->getRegion())
+		return;
 
 	LLProfileParams profParams(LL_PCODE_PROFILE_CIRCLE, 0.230f, 0.250f, 0.95f);
 	LLPathParams pathParams(LL_PCODE_PATH_CIRCLE, 0.2f, 0.22f, 
@@ -1509,11 +1501,11 @@ LLUUID FSLSLBridge::findFSCategory()
 		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
 		if (cats)
 		{
-			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
+			for (const auto& cat : *cats)
 			{
-				if ((*it)->getName() == FS_BRIDGE_FOLDER)
+				if (cat->getName() == FS_BRIDGE_FOLDER)
 				{
-					bridgeCatID = (*it)->getUUID();
+					bridgeCatID = cat->getUUID();
 					break;
 				}
 			}
@@ -1551,11 +1543,11 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 		gInventory.getDirectDescendentsOf(LibRootID, cats, items);
 		if (cats)
 		{
-			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
+			for (const auto& cat : *cats)
 			{
-				if ((*it)->getName() == "Objects")
+				if (cat->getName() == "Objects")
 				{
-					LLUUID LibObjectsCatID = (*it)->getUUID();
+					const LLUUID& LibObjectsCatID = cat->getUUID();
 					if (LibObjectsCatID.notNull())
 					{
 						LLInventoryModel::item_array_t* objects_items;
@@ -1563,11 +1555,11 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 						gInventory.getDirectDescendentsOf(LibObjectsCatID, objects_cats, objects_items);
 						if (objects_cats)
 						{
-							for (LLInventoryModel::cat_array_t::iterator object_it = objects_cats->begin(); object_it != objects_cats->end(); ++object_it)
+							for (const auto& object_cat : *objects_cats)
 							{
-								if ((*object_it)->getName() == FS_BRIDGE_CONTAINER_FOLDER)
+								if (object_cat->getName() == FS_BRIDGE_CONTAINER_FOLDER)
 								{
-									mBridgeContainerFolderID = (*object_it)->getUUID();
+									mBridgeContainerFolderID = object_cat->getUUID();
 									LL_INFOS("FSLSLBridge") << "FSBridge container category found in library. UUID: " << mBridgeContainerFolderID << LL_ENDL;
 									gInventory.fetchDescendentsOf(mBridgeContainerFolderID);
 									return mBridgeContainerFolderID;
@@ -1594,12 +1586,11 @@ LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, c
 
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (LLViewerInventoryItem::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	for (const auto& item : items)
 	{
-		const LLViewerInventoryItem* itemp = *it;
-		if (!itemp->getIsLinkType() && (itemp->getType() == LLAssetType::AT_OBJECT))
+		if (!item->getIsLinkType() && (item->getType() == LLAssetType::AT_OBJECT))
 		{
-			itemID = itemp->getUUID();
+			itemID = item->getUUID();
 			break;
 		}
 	}
@@ -1631,13 +1622,12 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 	NameCollectFunctor namefunctor(nameToCleanUp);
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (LLViewerInventoryItem::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	for (const auto& item : items)
 	{
-		const LLViewerInventoryItem* itemp = *it;
-		if (!itemp->getIsLinkType() && (itemp->getUUID() != mpBridge->getUUID()))
+		if (!item->getIsLinkType() && (item->getUUID() != mpBridge->getUUID()))
 		{
-			LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << itemp->getName() << " (" << itemp->getUUID() << ")" << LL_ENDL;
-			remove_inventory_item(itemp->getUUID(), nullptr, true);
+			LL_INFOS("FSLSLBridge") << "Bridge folder cleanup: Deleting " << item->getName() << " (" << item->getUUID() << ")" << LL_ENDL;
+			remove_inventory_item(item->getUUID(), nullptr, true);
 		}
 	}
 
@@ -1684,13 +1674,12 @@ void FSLSLBridge::detachOtherBridges()
 	//detach everything except current valid bridge - if any
 	gInventory.collectDescendents(catID, cats, items, FALSE);
 
-	for (LLViewerInventoryItem::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	for (const auto& item : items)
 	{
-		const LLViewerInventoryItem* itemp = *it;
-		if (get_is_item_worn(itemp->getUUID()) &&
-			((!fsBridge) || (itemp->getUUID() != fsBridge->getUUID())))
+		if (get_is_item_worn(item->getUUID()) &&
+			((!fsBridge) || (item->getUUID() != fsBridge->getUUID())))
 		{
-			LLVOAvatarSelf::detachAttachmentIntoInventory(itemp->getUUID());
+			LLVOAvatarSelf::detachAttachmentIntoInventory(item->getUUID());
 		}
 	}
 }
