@@ -28,6 +28,7 @@
 
 #include "llrefcount.h"
 #include "llmemory.h"
+#include "m3math.h"
 #include "v4color.h"
 #include "v3color.h"
 #include "v2math.h"
@@ -53,6 +54,8 @@ public:
         LLVector2 mOffset = { 0.f, 0.f };
         LLVector2 mScale = { 1.f, 1.f };
         F32 mRotation = 0.f;
+
+        LLMatrix3 asMatrix();
     };
 
     enum AlphaMode
@@ -82,6 +85,10 @@ public:
 
     bool mDoubleSided = false;
     AlphaMode mAlphaMode = ALPHA_MODE_OPAQUE;
+
+    // override specific flags for state that can't use off-by-epsilon or UUID hack
+    bool mOverrideDoubleSided = false;
+    bool mOverrideAlphaMode = false;
 
     // get a UUID based on a hash of this LLGLTFMaterial
     LLUUID getHash() const
@@ -131,10 +138,6 @@ public:
     void setTextureRotation(TextureInfo texture_info, float rotation);
 
     // Default value accessors
-    static LLUUID getDefaultBaseColorId();
-    static LLUUID getDefaultNormalId();
-    static LLUUID getDefaultEmissiveId();
-    static LLUUID getDefaultMetallicRoughnessId();
     static F32 getDefaultAlphaCutoff();
     static S32 getDefaultAlphaMode();
     static F32 getDefaultMetallicFactor();

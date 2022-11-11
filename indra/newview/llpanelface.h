@@ -232,6 +232,7 @@ protected:
     static void		onAlignTexture(void*);
     static void 	onClickBtnLoadInvPBR(void* userdata);
     static void 	onClickBtnEditPBR(void* userdata);
+    static void 	onClickBtnSavePBR(void* userdata);
 
     // <FS> Extended copy & paste buttons
     void            onCopyFaces();

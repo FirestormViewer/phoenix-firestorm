@@ -1898,9 +1898,14 @@ void LLObjectSelection::applyNoCopyPbrMaterialToTEs(LLViewerInventoryItem* item)
                 // apply texture for the selected faces
                 //add(LLStatViewer::EDIT_TEXTURE, 1);
                 object->setRenderMaterialID(te, asset_id, false /*will be sent later*/);
+
+                // blank out any override data on the server
+                LLGLTFMaterialList::queueApply(object->getID(), te, asset_id);
             }
         }
     }
+
+    LLGLTFMaterialList::flushUpdates();
 }
 
 
@@ -2034,7 +2039,10 @@ void LLSelectMgr::selectionSetGLTFMaterial(const LLUUID& mat_id)
                 objectp->setParameterEntryInUse(LLNetworkData::PARAMS_RENDER_MATERIAL, TRUE, false /*prevent an update*/);
             }
 
-            objectp->setRenderMaterialID(te, asset_id);
+            objectp->setRenderMaterialID(te, asset_id, false /*prevent an update to prevent a race condition*/);
+
+            // blank out any override data on the server
+            LLGLTFMaterialList::queueApply(objectp->getID(), te, asset_id);
 
             return true;
         }
@@ -2064,13 +2072,19 @@ void LLSelectMgr::selectionSetGLTFMaterial(const LLUUID& mat_id)
             LLRenderMaterialParams* param_block = (LLRenderMaterialParams*)object->getParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL);
             if (param_block)
             {
+                // To not cause multiple competing request that modify
+                // same param field send update only once per object
                 if (param_block->isEmpty())
                 {
                     object->setHasRenderMaterialParams(false);
                 }
-                else
+                else if (object->hasRenderMaterialParams())
                 {
                     object->parameterChanged(LLNetworkData::PARAMS_RENDER_MATERIAL, true);
+                }
+                else
+                {
+                    object->setHasRenderMaterialParams(true);
                 }
             }
 
@@ -2090,6 +2104,8 @@ void LLSelectMgr::selectionSetGLTFMaterial(const LLUUID& mat_id)
         }
     } sendfunc(item);
     getSelection()->applyToObjects(&sendfunc);
+
+    LLGLTFMaterialList::flushUpdates();
 }
 
 //-----------------------------------------------------------------------------
@@ -2283,10 +2299,33 @@ void LLSelectMgr::selectionRevertGLTFMaterials()
             }
 
             LLSelectNode* nodep = mSelectedObjects->findNode(objectp);
-            if (nodep && te < (S32)nodep->mSavedGLTFMaterials.size())
+            if (nodep && te < (S32)nodep->mSavedGLTFMaterialIds.size())
             {
-                LLUUID asset_id = nodep->mSavedGLTFMaterials[te];
+                // Restore base material
+                LLUUID asset_id = nodep->mSavedGLTFMaterialIds[te];
                 objectp->setRenderMaterialID(te, asset_id, false /*wait for bulk update*/);
+
+
+                // todo: make sure this does not cause race condition with setRenderMaterialID
+                // when we are reverting from null id to non null plus override
+                if (te < (S32)nodep->mSavedGLTFOverrideMaterials.size()
+                    && nodep->mSavedGLTFOverrideMaterials[te].notNull()
+                    && asset_id.notNull())
+                {
+                    // Restore overrides
+                    LLSD overrides;
+                    overrides["object_id"] = objectp->getID();
+                    overrides["side"] = te;
+
+                    overrides["gltf_json"] = nodep->mSavedGLTFOverrideMaterials[te]->asJSON();
+                    LLGLTFMaterialList::queueUpdate(overrides);
+                } 
+                else
+                {
+                    //blank override out
+                    LLGLTFMaterialList::queueApply(objectp->getID(), te, asset_id);
+                }
+
             }
             return true;
         }
@@ -2309,9 +2348,13 @@ void LLSelectMgr::selectionRevertGLTFMaterials()
                 {
                     object->setHasRenderMaterialParams(false);
                 }
-                else
+                else if (object->hasRenderMaterialParams())
                 {
                     object->parameterChanged(LLNetworkData::PARAMS_RENDER_MATERIAL, true);
+                }
+                else
+                {
+                    object->setHasRenderMaterialParams(true);
                 }
             }
 
@@ -6024,12 +6067,33 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
                 if (can_copy && can_transfer && node->getObject()->getVolume())
                 {
                     uuid_vec_t material_ids;
+                    gltf_materials_vec_t materials;
                     LLVOVolume* vobjp = (LLVOVolume*)node->getObject();
                     for (int i = 0; i < vobjp->getNumTEs(); ++i)
                     {
                         material_ids.push_back(vobjp->getRenderMaterialID(i));
+
+                        // Make a copy to ensure we won't affect live material
+                        // with any potential changes nor live changes will be
+                        // reflected in a saved copy.
+                        // Like changes from local material (reuses pointer) or
+                        // from live editor (revert mechanics might modify this)
+                        LLGLTFMaterial* old_override = node->getObject()->getTE(i)->getGLTFMaterialOverride();
+                        if (old_override)
+                        {
+                            LLPointer<LLGLTFMaterial> mat = new LLGLTFMaterial(*old_override);
+                            materials.push_back(mat);
+                        }
+                        else
+                        {
+                            materials.push_back(nullptr);
+                        }
                     }
-                    node->savedGLTFMaterials(material_ids);
+                    node->saveGLTFMaterialIds(material_ids);
+
+                    // processObjectProperties does not include overrides so this
+                    // might need to be moved to LLGLTFMaterialOverrideDispatchHandler
+                    node->saveGLTFOverrideMaterials(materials);
                 }
 			}
 
@@ -6794,7 +6858,8 @@ LLSelectNode::LLSelectNode(const LLSelectNode& nodep)
 	}
 	
 	saveTextures(nodep.mSavedTextures);
-    savedGLTFMaterials(nodep.mSavedGLTFMaterials);
+    saveGLTFMaterialIds(nodep.mSavedGLTFMaterialIds);
+    saveGLTFOverrideMaterials(nodep.mSavedGLTFOverrideMaterials);
 }
 
 LLSelectNode::~LLSelectNode()
@@ -6928,16 +6993,30 @@ void LLSelectNode::saveTextures(const uuid_vec_t& textures)
 	}
 }
 
-void LLSelectNode::savedGLTFMaterials(const uuid_vec_t& materials)
+void LLSelectNode::saveGLTFMaterialIds(const uuid_vec_t& materials)
 {
     if (mObject.notNull())
     {
-        mSavedGLTFMaterials.clear();
+        mSavedGLTFMaterialIds.clear();
 
         for (uuid_vec_t::const_iterator materials_it = materials.begin();
             materials_it != materials.end(); ++materials_it)
         {
-            mSavedGLTFMaterials.push_back(*materials_it);
+            mSavedGLTFMaterialIds.push_back(*materials_it);
+        }
+    }
+}
+
+void LLSelectNode::saveGLTFOverrideMaterials(const gltf_materials_vec_t& materials)
+{
+    if (mObject.notNull())
+    {
+        mSavedGLTFOverrideMaterials.clear();
+
+        for (gltf_materials_vec_t::const_iterator mat_it = materials.begin();
+            mat_it != materials.end(); ++mat_it)
+        {
+            mSavedGLTFOverrideMaterials.push_back(*mat_it);
         }
     }
 }

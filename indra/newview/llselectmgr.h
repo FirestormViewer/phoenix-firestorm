@@ -176,6 +176,8 @@ typedef enum e_selection_type
 	SELECT_TYPE_HUD
 }ESelectType;
 
+typedef std::vector<LLPointer<LLGLTFMaterial> > gltf_materials_vec_t;
+
 const S32 TE_SELECT_MASK_ALL = 0xFFFFFFFF;
 
 //<FS:Beq> Physics view in edit mode changes
@@ -202,11 +204,19 @@ public:
 	LLViewerObject* getObject();
 	void setObject(LLViewerObject* object);
 	// *NOTE: invalidate stored textures and colors when # faces change
+    // Used by tools floater's color/texture pickers to restore changes
 	void saveColors();
 	void saveShinyColors();
 	void saveTextures(const uuid_vec_t& textures);
-    void savedGLTFMaterials(const uuid_vec_t& materials);
 	void saveTextureScaleRatios(LLRender::eTexIndex index_to_query);
+
+    // GLTF materials are applied to objects by ids,
+    // overrides get applied on top of materials resulting in
+    // final gltf material that users see.
+    // Ids get applied and restored by tools floater,
+    // overrides get applied in live material editor
+    void saveGLTFMaterialIds(const uuid_vec_t& materials);
+    void saveGLTFOverrideMaterials(const gltf_materials_vec_t& materials);
 
 	BOOL allowOperationOnNode(PermissionBit op, U64 group_proxy_power) const;
 
@@ -243,7 +253,8 @@ public:
 	std::vector<LLColor4>	mSavedColors;
 	std::vector<LLColor4>	mSavedShinyColors;
 	uuid_vec_t		mSavedTextures;
-    uuid_vec_t		mSavedGLTFMaterials;
+    uuid_vec_t		mSavedGLTFMaterialIds;
+    gltf_materials_vec_t mSavedGLTFOverrideMaterials;
 	std::vector<LLVector3>  mTextureScaleRatios;
 	std::vector<LLVector3>	mSilhouetteVertices;	// array of vertices to render silhouette of object
 	std::vector<LLVector3>	mSilhouetteNormals;	// array of normals to render silhouette of object
