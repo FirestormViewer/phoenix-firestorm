@@ -2806,6 +2806,13 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="UnableToLoadNotecard">
 		Notizkarten-Asset konnte nicht geladen werden.
 	</notification>
+	<notification name="UnableToLoadMaterial">
+		Material konnte nicht geladen werden.
+Bitte erneut versuchen.
+	</notification>
+	<notification name="MissingMaterialCaps">
+		Nicht mit einer Region verbunden, die Material unterstützt.
+	</notification>
 	<notification name="ScriptMissing">
 		Skript fehlt in Datenbank.
 	</notification>
