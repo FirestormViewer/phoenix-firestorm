@@ -564,7 +564,7 @@ HUDs
     </panel>
   </panel>
   <panel
-      filename="panel_performance_nearby_fs.xml"
+      filename="panel_fs_performance_nearby.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -572,7 +572,7 @@ HUDs
       visible="false"
       top="115" />
   <panel
-      filename="panel_performance_complexity_fs.xml"
+      filename="panel_fs_performance_complexity.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -580,7 +580,7 @@ HUDs
       visible="false"
       top="115" />
   <panel
-      filename="panel_performance_preferences_fs.xml"
+      filename="panel_fs_performance_preferences.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -588,7 +588,7 @@ HUDs
       visible="false"
       top="115" />
   <panel
-      filename="panel_performance_huds_fs.xml"
+      filename="panel_fs_performance_huds.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -596,7 +596,7 @@ HUDs
       visible="false"
       top="115" />
   <panel
-      filename="panel_performance_autotune_fs.xml"
+      filename="panel_fs_performance_autotune.xml"
       follows="all"
       layout="topleft"
       left="0"
