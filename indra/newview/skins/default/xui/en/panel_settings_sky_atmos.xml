@@ -1,339 +1,411 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-        border="true"
-        follows="all"
-        label="Atmosphere &amp; Lighting"
-        layout="topleft"
-        left="0"
-        name="panel_settings_sky_atmos"
-        top="0">
-    <layout_stack
-            name="main_ls"
-            follows="all"
-            layout="topleft"
-            left="5"
-            top="5"
-            right="-5"
-            bottom="-5"
-            orientation="vertical">
-        <layout_panel
-                name="top_lp"
-                border="true"
-                bevel_style="in"
-                auto_resize="false"
-                user_resize="false"
-                visible="true"
-                height="75">
+border="true"
+follows="all"
+label="Atmos"
+layout="topleft"
+left="0"
+name="panel_settings_sky_atmos"
+top="0">
+		
+	<panel
+	name="P_Atmosphere_Header"
+	follows="left|top"
+	layout="topleft"
+	top_pad="5"
+	left="0"
+	width="250"
+	height="22"
+	bg_alpha_color="EmphasisColor"
+	border_visible="true"
+	border_thickness="1"
+	background_visible="true">
+	
+		<text
+		name="T_Atmosphere_Header"
+		follows="left|top"
+		layout="topleft"
+		left="5"
+		font="SansSerif"
+		value="Atmospheric Colors"/>
+			
+	</panel>
 
-            <text
-                    name="ambient_color_label"
-                    follows="left|top"
-                    height="10"
-                    layout="topleft"
-                    left_pad="15"
-                    top_pad="15"
-                    width="100">
-                Ambient Color:
-            </text>
-            <color_swatch
-                    can_apply_immediately="true"
-                    follows="left|top"
-                    height="37"
-                    label_height="0"
-                    layout="topleft"
-                    left_delta="0"
-                    name="ambient_light"
-                    top_pad="5"
-                    width="60" />
-            <text
-                    name="blue_horizon_label"
-                    follows="left"
-                    height="10"
-                    layout="topleft"
-                    left_delta="110"
-                    top_delta="-15"
-                    width="100">
-                Blue Horizon:
-            </text>
-            <color_swatch
-                    can_apply_immediately="true"
-                    follows="left|top"
-                    height="37"
-                    label_height="0"
-                    layout="topleft"
-                    left_delta="0"
-                    name="blue_horizon"
-                    top_pad="5"
-                    width="60" />
-            <text
-                    name="blue_density_label"
-                    follows="left"
-                    height="10"
-                    layout="topleft"
-                    left_delta="110"
-                    top_delta="-15"
-                    width="100">
-                Blue Density:
-            </text>
-            <color_swatch
-                    can_apply_immediately="true"
-                    follows="left|top"
-                    height="37"
-                    label_height="0"
-                    layout="topleft"
-                    left_delta="0"
-                    name="blue_density"
-                    top_pad="5"
-                    width="60" />
-        </layout_panel>
-        <layout_panel
-                name="bottom_lp"
-                border="true"
-                bevel_style="in"
-                auto_resize="true"
-                user_resize="false"
-                visible="true">
-            <layout_stack name="atmosphere1"
-                    left="5"
-                    top="5"
-                    right="-5"
-                    bottom="-5"
-                    follows="left|top|right|bottom"
-                    orientation="hoizontal">
-                <layout_panel
-                        name="left_lp"
-                        border="false"
-                        bevel_style="in"
-                        auto_resize="true"
-                        user_resize="false"
-                        visible="true"
-                        min_width="225">
-                    <text
-                            name="haze_horizon_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="10"
-                            width="100">
-                        Haze Horizon:
-                    </text>
-                    <slider
-                            decimal_digits="2"
-                            follows="left|top"
-                            height="16"
-                            increment="0.01"
-                            initial_value="0"
-                            layout="topleft"
-                            left_pad="5"
-                            min_val="0"
-                            max_val="5"
-                            name="haze_horizon"
-                            top_delta="0"
-                            width="207"
-                            can_edit_text="true"/>
-                    <text
-                            name="haze_density_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="100">
-                        Haze Density:
-                    </text>
-                    <slider
-                            decimal_digits="2"
-                            follows="left|top"
-                            height="16"
-                            increment="0.01"
-                            initial_value="0"
-                            layout="topleft"
-                            left_pad="5"
-                            min_val="0"
-                            max_val="5"
-                            name="haze_density"
-                            top_delta="0"
-                            width="207"
-                            can_edit_text="true"/>
-                    <text
-                            name="moisture_level_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="100">
-                        Moisture Level:
-                    </text>
-                     <slider
-                            decimal_digits="3"
-                            follows="left|top"
-                            height="14"
-                            increment="0.001"
-                            initial_value="0"
-                            left_pad="5"
-                            top_delta="0"
-                            layout="topleft"
-                            min_val="0"
-                            max_val="1"
-                            name="moisture_level"
-                            width="207"
-                            can_edit_text="true"/>
-                    <text
-                            name="droplet_radius_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="100">
-                        Droplet Radius:
-                    </text>
-                    <slider
-                            decimal_digits="2"
-                            follows="left|top"
-                            height="14"
-                            increment="0.01"
-                            initial_value="0"
-                            left_pad="5"
-                            top_delta="0"
-                            layout="topleft"
-                            min_val="5.0"
-                            max_val="1000.0"
-                            name="droplet_radius"
-                            width="207"
-                            can_edit_text="true"/>
-                    <text
-                            name="ice_level_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="100">
-                        Ice Level:
-                    </text>
-                    <slider
-                            decimal_digits="3"
-                            follows="left|top"
-                            height="14"
-                            increment="0.001"
-                            initial_value="0"
-                            left_pad="5"
-                            layout="topleft"
-                            top_delta="0"
-                            min_val="0"
-                            max_val="1"
-                            name="ice_level"
-                            width="207"
-                            can_edit_text="true"/>
-                </layout_panel>            
-                <layout_panel
-                        name="right_lp"
-                        border="false"
-                        bevel_style="in"
-                        auto_resize="true"
-                        user_resize="false"
-                        visible="true"
-                        min_width="225">
-                    <text
-                            name="density_multiplier_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="10"
-                            width="105">
-                        Density Multiplier:
-                    </text>
-                    <slider
-                            decimal_digits="4"
-                            follows="left|top"
-                            height="16"
-                            increment="0.0001"
-                            initial_value="0"
-                            layout="topleft"
-                            left_pad="5"
-                            min_val="0.0001"
-                            max_val="2"
-                            name="density_multip"
-                            top_delta="0"
-                            width="219"
-                            can_edit_text="true"/>
-                    <text
-                            name="distance_multiplier_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="105">
-                        Distance Multiplier:
-                    </text>
-                    <slider
-                            decimal_digits="2"
-                            follows="left|top"
-                            height="16"
-                            increment="0.01"
-                            initial_value="0.8"
-                            layout="topleft"
-                            left_pad="5"
-                            min_val="0.05"
-                            max_val="1000"
-                            name="distance_multip"
-                            top_delta="0"
-                            width="219"
-                            can_edit_text="true"/>
-                    <text
-                            name="maximum_altitude_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="105">
-                        Maximum Altitude:
-                    </text>
-                    <slider
-                            decimal_digits="1"
-                            follows="left|top"
-                            height="16"
-                            increment="0.01"
-                            initial_value="0"
-                            layout="topleft"
-                            left_pad="5"
-                            min_val="0"
-                            max_val="10000"
-                            name="max_alt"
-                            top_delta="0"
-                            width="219"
-                            can_edit_text="true"/>
-                            <text
-                            name="scene_gamma_label"
-                            follows="left|top"
-                            height="10"
-                            layout="topleft"
-                            left="5"
-                            top_pad="15"
-                            width="105">
-                        Scene Gamma:
-                    </text>
-                    <slider
-                            decimal_digits="2"
-                            follows="left|top"
-                            height="16"
-                            increment="0.01"
-                            initial_value="0"
-                            layout="topleft"
-                            left_pad="5"
-                            max_val="20"
-                            name="scene_gamma"
-                            top_delta="0"
-                            width="219"
-                            can_edit_text="true"/>
-                </layout_panel>            
-            </layout_stack>                
-        </layout_panel>
-    </layout_stack>
+	<panel
+	name="P_Atmos_Settings"
+	follows="left|top"
+	layout="topleft"
+	top_pad="5"
+	left="0"
+	width="250"
+	height="95"
+	border_visible="true"
+	bevel_style="in"
+	background_visible="true">
+
+		<text
+		name="ambient_color_label"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left="5"
+		top_pad="10"
+		width="55">
+		Ambient:
+		</text>
+				
+		<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="25"
+		label_height="0"
+		layout="topleft"
+		left_delta="55"
+		name="ambient_light"
+		top_delta="-5"
+		width="185" />
+				
+		<text
+		name="blue_horizon_label"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left="5"
+		top_pad="10"
+		width="55">
+		BluHrz:
+		</text>
+				
+		<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="25"
+		label_height="0"
+		layout="topleft"
+		left_delta="55"
+		name="blue_horizon"
+		top_delta="-5"
+		width="185" />
+			
+		<text
+		name="blue_density_label"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left="5"
+		top_pad="10"
+		width="55">
+		Blue Den:
+		</text>
+				
+		<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="25"
+		label_height="0"
+		layout="topleft"
+		left_delta="55"
+		name="blue_density"
+		top_delta="-5"
+		width="185" />
+	</panel>
+
+	<panel
+	name="P_Atmosphere_Header"
+	follows="left|top"
+	layout="topleft"
+	top_pad="5"
+	left="0"
+	width="250"
+	height="22"
+	bg_alpha_color="EmphasisColor"
+	border_visible="true"
+	border_thickness="1"
+	background_visible="true">
+	
+		<text
+		name="T_Atmosphere_Header"
+		follows="left|top"
+		layout="topleft"
+		left="5"
+		font="SansSerif"
+		value="Atmosphere Settings"/>
+			
+	</panel>
+
+	<panel
+	name="P_Atmosphere_OtherSettings"
+	follows="left|top"
+	layout="topleft"
+	top_pad="5"
+	left="0"
+	width="250"
+	height="115"
+	border_visible="true"
+	bevel_style="in"
+	background_visible="true">
+
+		<text
+		name="haze_horizon_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		
+		width="50">
+		HazHoz:
+		</text>
+
+		<slider
+		decimal_digits="3"
+		follows="left|top"
+		height="16"
+		increment="0.001"
+		initial_value="0"
+		layout="topleft"
+		left="55"
+		min_val="0"
+		max_val="5"
+		name="haze_horizon"
+		left_pad="50"
+		width="190"
+		can_edit_text="true"/>
+		
+		<text
+		name="haze_density_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		HazDen:
+		</text>
+		
+		<slider
+		decimal_digits="3"
+		follows="left|top"
+		height="16"
+		increment="0.001"
+		initial_value="0"
+		layout="topleft"
+		left="55"
+		min_val="0"
+		max_val="5"
+		name="haze_density"
+		left_pad="50"
+		width="190"
+		can_edit_text="true"/>
+
+		<text
+		name="density_multiplier_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		Density:
+		</text>
+		
+		<slider
+		decimal_digits="4"
+		follows="left|top"
+		height="16"
+		increment="0.0001"
+		initial_value="0"
+		layout="topleft"
+		left="55"
+		min_val="0.0001"
+		max_val="2"
+		name="density_multip"
+		left_pad="50"
+		width="190"
+		can_edit_text="true"/>
+		
+		<text
+		name="distance_multiplier_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		Distance Multiplier:
+		</text>
+		
+		<slider
+		decimal_digits="2"
+		follows="left|top"
+		height="16"
+		increment="0.01"
+		initial_value="0.8"
+		layout="topleft"
+		left="55"
+		min_val="0.05"
+		max_val="1000"
+		name="distance_multip"
+		left_pad="50"
+		width="190"
+		can_edit_text="true"/>
+		
+		<text
+		name="maximum_altitude_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		MaxAlt:
+		</text>
+		
+		<slider
+		decimal_digits="1"
+		follows="left|top"
+		height="16"
+		increment="0.01"
+		initial_value="0"
+		layout="topleft"
+		left="55"
+		min_val="0"
+		max_val="10000"
+		name="max_alt"
+		left_pad="50"
+		width="190"
+		can_edit_text="true"/>
+		
+		<text
+		name="scene_gamma_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		Gamma:
+		</text>
+		
+		<slider
+		decimal_digits="2"
+		follows="left|top"
+		height="16"
+		increment="0.1"
+		initial_value="0"
+		layout="topleft"
+		left="55"
+		max_val="20"
+		name="scene_gamma"
+		left_pad="50"
+		width="190"
+		can_edit_text="true"/>
+	</panel>
+
+	<panel
+	name="P_Rainbow_Header"
+	follows="left|top"
+	layout="topleft"
+	top_pad="5"
+	left="0"
+	width="250"
+	height="22"
+	bg_alpha_color="EmphasisColor"
+	border_visible="true"
+	border_thickness="1"
+	background_visible="true">
+	
+		<text
+		name="T_Rainbow_Header"
+		follows="left|top"
+		layout="topleft"
+		left="5"
+		font="SansSerif"
+		value="Rainbow and Halo Settings"
+		width="250"/>
+		
+	</panel>
+	
+
+	<panel
+		name="P_Rainbow_OtherSettings"
+		follows="left|top"
+		layout="topleft"
+		top_pad="5"
+		left="0"
+		width="250"
+		height="60"
+		border_visible="true"
+		bevel_style="in"
+		background_visible="true">
+		
+		<text
+		name="moisture_level_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		Moisture:
+		</text>
+		
+		<slider
+		decimal_digits="3"
+		follows="left|top"
+		height="16"
+		increment="0.001"
+		initial_value="0"
+		left="55"
+		left_pad="50"
+		layout="topleft"
+		min_val="0"
+		max_val="1"
+		name="moisture_level"
+		width="190"
+		can_edit_text="true"/>
+		
+		<text
+		name="droplet_radius_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		Droplet:
+		</text>
+		
+		<slider
+		decimal_digits="3"
+		follows="left|top"
+		height="16"
+		increment="0.001"
+		initial_value="0"
+		left="55"
+		left_pad="50"
+		layout="topleft"
+		min_val="5.0"
+		max_val="1000.0"
+		name="droplet_radius"
+		width="190"
+		can_edit_text="true"/>
+		
+		<text
+		name="ice_level_label"
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="5"
+		width="50">
+		Ice Level:
+		</text>
+		
+		<slider
+		decimal_digits="3"
+		follows="left|top"
+		height="16"
+		increment="0.001"
+		initial_value="0"
+		left="55"
+		layout="topleft"
+		left_pad="50"
+		min_val="0"
+		max_val="1"
+		name="ice_level"
+		width="190"
+		can_edit_text="true"/>
+	</panel>
 </panel>
