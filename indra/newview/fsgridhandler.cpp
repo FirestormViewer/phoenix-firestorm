@@ -1425,7 +1425,6 @@ std::string LLGridManager::getAppSLURLBase(const std::string& grid)
 class FSGridManagerCommandHandler : public LLCommandHandler
 {
 public:
-	// not allowed from outside the app
 	FSGridManagerCommandHandler() : LLCommandHandler("gridmanager", UNTRUSTED_THROTTLE),
 		mDownloadConnection()
 	{ }
@@ -1445,6 +1444,8 @@ public:
 			return false;
 		}
 
+		// Automatically add and select grid via secondlife:///app/gridmanager/addgrid/<URL-encoded login URI>
+		// Example: secondlife:///app/gridmanager/addgrid/http%3A%2F%2Fgrid.avatarlife.com%3A8002
 		if (params[0].asString() == "addgrid")
 		{
 			std::string login_uri = LLURI::unescape(params[1].asString());
