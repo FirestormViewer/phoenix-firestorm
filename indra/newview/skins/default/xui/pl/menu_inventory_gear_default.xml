@@ -30,5 +30,6 @@
 	<menu_item_check name="inventory_filter_only_modify" label="Tylko modyfikowalne" />
 	<menu_item_check name="inventory_filter_only_copy" label="Tylko kopiowalne" />
 	<menu_item_check name="inventory_filter_only_transfer" label="Tylko transferowalne" />
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Tylko podniesione razem" />
 	<menu_item_call label="Opróżnij Kosz" name="empty_trash"/>
 </toggleable_menu>
