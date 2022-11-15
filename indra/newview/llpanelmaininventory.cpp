@@ -169,6 +169,11 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	// <FS:Ansariel> Add handler for being able to directly route to onCustomAction
 	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
 
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	mCommitCallbackRegistrar.add("Inventory.CoalescedObjects.Toggle", boost::bind(&LLPanelMainInventory::onCoalescedObjectsToggled, this, _2));
+	mEnableCallbackRegistrar.add("Inventory.CoalescedObjects.Check", boost::bind(&LLPanelMainInventory::isCoalescedObjectsChecked, this, _2));
+	// </FS:Zi>
+
 	mSavedFolderState = new LLSaveFolderState();
 	mSavedFolderState->setApply(FALSE);
 
@@ -2026,6 +2031,28 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 
 	return FALSE;
 }
+
+// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+void LLPanelMainInventory::onCoalescedObjectsToggled(const LLSD& userdata)
+{
+	const std::string command_name = userdata.asString();
+	if (command_name == "coalesced_objects_only")
+	{
+		getActivePanel()->setFilterCoalescedObjects(!getActivePanel()->getFilterCoalescedObjects());
+	}
+}
+
+bool LLPanelMainInventory::isCoalescedObjectsChecked(const LLSD& userdata)
+{
+	const std::string command_name = userdata.asString();
+	if (command_name == "coalesced_objects_only")
+	{
+		return getActivePanel()->getFilterCoalescedObjects();
+	}
+
+	return false;
+}
+// </FS:Zi>
 
 // <FS:Zi> Filter Links Menu
 void LLPanelMainInventory::onFilterLinksChecked(const LLSD& userdata)

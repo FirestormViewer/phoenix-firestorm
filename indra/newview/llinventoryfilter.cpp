@@ -54,6 +54,8 @@
 #include "fsgridhandler.h" // <FS:Beq> need to check if in opensim
 #endif
 
+#include "llinventorydefines.h"		// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+
 LLInventoryFilter::FilterOps::FilterOps(const Params& p)
 :	mFilterObjectTypes(p.object_types),
 	mFilterCategoryTypes(p.category_types),
@@ -69,6 +71,7 @@ LLInventoryFilter::FilterOps::FilterOps(const Params& p)
 	mFilterTypes(p.types),
 	mFilterUUID(p.uuid),
 	mFilterLinks(p.links),
+	mCoalescedObjectsOnly(p.coalesced_objects_only),		// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 	mSearchVisibility(p.search_visibility)
 {
 }
@@ -338,6 +341,21 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
                 break;
             }
         default:
+            // <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+            if (mFilterOps.mCoalescedObjectsOnly)
+            {
+                // only bother to get the inventory item pointer if we are actually showing only coalesced objects
+                LLInventoryItem* item = gInventory.getItem(object_id);
+                if (item)
+                {
+                    if (!(item->getFlags() & LLInventoryItemFlags::II_FLAGS_OBJECT_HAS_MULTIPLE_ITEMS))
+                    {
+                        return false;
+                    }
+                }
+            }
+            // </ FS:Zi>
+
             if ((1LL << object_type & mFilterOps.mFilterObjectTypes) == U64(0))
             {
                 return FALSE;
@@ -688,6 +706,9 @@ bool LLInventoryFilter::isNotDefault() const
 	not_default |= (mFilterOps.mMaxDate != mDefaultFilterOps.mMaxDate);
 	not_default |= (mFilterOps.mHoursAgo != mDefaultFilterOps.mHoursAgo);
 
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	not_default |= (mFilterOps.mCoalescedObjectsOnly != mDefaultFilterOps.mCoalescedObjectsOnly);
+
 	return not_default != 0;
 }
 
@@ -760,6 +781,22 @@ void LLInventoryFilter::setFilterObjectTypes(U64 types)
 	updateFilterTypes(types, mFilterOps.mFilterObjectTypes);
 	mFilterOps.mFilterTypes |= FILTERTYPE_OBJECT;
 }
+
+// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+void LLInventoryFilter::setFilterCoalescedObjects(bool coalesced)
+{
+	mFilterOps.mCoalescedObjectsOnly = coalesced;
+
+	LLInventoryFilter::EFilterModified modifyMode = FILTER_LESS_RESTRICTIVE;
+
+	if (coalesced)
+	{
+		modifyMode = FILTER_MORE_RESTRICTIVE;
+	}
+
+	setModified(modifyMode);
+}
+// </FS:Zi>
 
 void LLInventoryFilter::setFilterCategoryTypes(U64 types)
 {
@@ -1545,6 +1582,8 @@ LLInventoryFilter& LLInventoryFilter::operator=( const  LLInventoryFilter&  othe
 	setFilterPermissions(other.getFilterPermissions());
 	setFilterSubString(other.getFilterSubString());
 	setDateRangeLastLogoff(other.isSinceLogoff());
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	setFilterCoalescedObjects(other.getFilterCoalescedObjects());
 	return *this;
 }
 
@@ -1567,6 +1606,8 @@ void LLInventoryFilter::toParams(Params& params) const
 	params.filter_ops.search_visibility = getSearchVisibilityTypes();
 	params.substring = getFilterSubString();
 	params.since_logoff = isSinceLogoff();
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	params.filter_ops.coalesced_objects_only = getFilterCoalescedObjects();
 }
 
 void LLInventoryFilter::fromParams(const Params& params)
@@ -1639,6 +1680,13 @@ void LLInventoryFilter::fromParams(const Params& params)
 		setDateRangeLastLogoff(params.since_logoff);
 	}
 	// </FS:Ansariel>
+
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	if (params.filter_ops.coalesced_objects_only.isProvided())
+	{
+		setFilterCoalescedObjects(params.filter_ops.coalesced_objects_only);
+	}
+	// </FS:Zi>
 }
 
 U64 LLInventoryFilter::getFilterTypes() const

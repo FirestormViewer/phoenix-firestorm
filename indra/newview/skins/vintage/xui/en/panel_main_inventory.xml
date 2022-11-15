@@ -486,6 +486,17 @@
 				parameter="only_transfer" />
 		</menu_item_check>
 		<!-- </FS:Zi> -->
+		<menu_item_separator />
+		<menu_item_check
+			name="inventory_filter_coalesced_objects_only"
+			label="Only Coalesced">
+			<on_click
+				function="Inventory.CoalescedObjects.Toggle"
+				parameter="coalesced_objects_only" />
+			<on_check
+				function="Inventory.CoalescedObjects.Check"
+				parameter="coalesced_objects_only" />
+		</menu_item_check>
 	</menu>
 
 	</menu_bar>
