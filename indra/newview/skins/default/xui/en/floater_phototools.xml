@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 <floater
- positioning="left"
+ positioning="right"
  can_resize="false"
  can_dock="false"
  can_close="true"
@@ -254,7 +254,8 @@
 				 label_selected=""
 				 scale_image="true"
 				/>
-								
+				
+				
 				<button
 				 follows="top|left|right"
 				 height="20"
@@ -280,37 +281,13 @@
 			</panel>
 
 			<panel
-			 name="PT_WL_Presets"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="0"
-			 width="285"
-			 height="22"
-			 bg_alpha_color="Phototools_Header"
-			 border_visible="true"
-			 border_thickness="1"
-			 background_visible="true">
-				<text
-				 name="T_WL_Presets" 
-				 follows="left|top"
-				 layout="topleft"
-				 left="10"
-				 font="SansSerif"
-				 height="17"
-				 width="200">
-					Customizing Presets 
-				</text>
-			</panel>
-
-			<panel
 			 visible="true"
 			 name="P_Q_Windlights"
 			 follows="top|left"
 			 layout="topleft"
 			 top_pad="5"
 			 left="4"
-			 width="135"
+			 width="275"
 			 height="135"
 			 border_visible="true"
 			 background_visible="true">
@@ -318,31 +295,31 @@
 				 name="T_Q_Windlights"
 				 follows="left|top"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
-				 width="125">
-					Quick Selection
+				 width="155">
+					Quick Environments
 				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 name="horiz_separator1"
 				 top_pad="-7"
-				 width="125"/>
+				 width="255"/>
 				<button
 				 follows="left|top"
 				 name="Sunrise"
 				 height="20"
 				 label="Sunrise"
 				 layout="topleft"
-				 left="05"
+				 left="10"
 				 top_pad="5"
-				 width="125">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunrise"/>
@@ -353,9 +330,9 @@
 				 height="20"
 				 label="Noon"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="2"
-				 width="125">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="noon"/>
@@ -366,9 +343,9 @@
 				 height="20"
 				 label="Sunset"
 				 layout="topleft"
-				 left="05"
+				 left="10"
 				 top_pad="2"
-				 width="125">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunset"/>
@@ -379,9 +356,9 @@
 				 height="20"
 				 label="Midnight"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="2"
-				 width="125">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="midnight"/>
@@ -392,17 +369,17 @@
 				 height="20"
 				 label="Shared Environment"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="2"
-				 width="125">
+				 width="255">
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="region"/>
 				</button>
 			</panel>
-
+			
 			<panel
-			 visible="True"
+			 visible="false"
 			 name="P_WL_Presets"
 			 follows="top|left"
 			 layout="topleft"
@@ -416,90 +393,87 @@
 				 name="T_WL_Presets"
 				 follows="left|top"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
 				 tool_tip="Click an item below to create new preset or modify an existing one."
-				 width="130">
-					Manage Presets
+				 width="150">
+					Windlight Presets
 				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 name="horiz_separator2"
 				 top_pad="-7"
-				 width="125"/>
-				<!--button
+				 width="120"/>
+				<button
 				 follows="left|top"
 				 name="new_sky_preset"
 				 height="20"
 				 label="New Sky Preset"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="5"
-				 width="125">
+				 width="120">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_sky"/>
-				</button-->
+				</button>
 				<button
 				 follows="left|top"
 				 name="edit_sky_preset"
 				 height="20"
-				 label="Sky Preset"
+				 label="Edit Sky Preset"
 				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 width="125">
+				 left="10"
+				 top_pad="2"
+				 width="120">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_sky"/>
 				</button>
 			
-				<!--view_border
+				<view_border
 				 bevel_style="none"
 				 follows="left|top"
 				 height="0"
 				 layout="topleft"
 				 left="5"
 				 name="horiz_separator3"
-				 top_pad="5"
-				 width="125"/-->
-				<!--button
+				 top_pad="10"
+				 width="125"/>
+				<button
 				 follows="left|top"
 				 name="new_water_preset"
 				 height="20"
 				 label="New Water Preset"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="10"
-				 width="125">
+				 width="120">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_water"/>
-				</button-->
+				</button>
 				<button
 				 follows="left|top"
 				 name="edit_water_preset"
 				 height="20"
-				 label="Water Preset"
+				 label="Edit Water Preset"
 				 layout="topleft"
-				 left="5"
+				 left="10"
 				 top_pad="2"
-				 width="125">
+				 width="120">
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_water"/>
 				</button>
-				
-
-
 			</panel>
-			
+
 			<panel
 			 name="P_W_Reflections"
 			 follows="top|left"
@@ -584,7 +558,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="75"
+			 height="54"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -784,7 +758,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="180"
+			 height="165"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -802,7 +776,7 @@
 				 control_name="RenderShadowResolutionScale"
 				 follows="left|right"
 				 height="16"
-				 increment="0.5"
+				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -895,11 +869,11 @@
 				 control_name="RenderShadowBlurSize"
 				 follows="left|right"
 				 height="16"
-				 increment="1"
+				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0.00"
-				 max_val="20"
+				 max_val="4"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -944,11 +918,11 @@
 				 name="SB_Shd_Soften"
 				 follows="left|right"
 				 height="16"
-				 increment="0.01"
+				 increment="0.001"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0.01"
-				 max_val="1"
+				 min_val="0.001"
+				 max_val="3"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1072,60 +1046,7 @@
 				</button>
 
 				<text
-				 name="T_FOV_Cutoff"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
-				 width="80">
-					Spot Offset
-				</text>
-				<slider_bar
-				 name="SB_FOV_Cutoff"
-				 can_edit_text="true"
-				 control_name="RenderSpotShadowOffset"
-				 follows="left|right"
-				 height="16"
-				 increment="0.0001"
-				 decimal_digits="4"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="0"
-				 max_val=".04"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_FOV_Cutoff"
-				 can_edit_text="true"
-				 control_name="RenderSpotShadowOffset"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="4"
-				 follows="top|right"
-				 max_val="100"
-				 min_val="0"
-				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
-				<button
-				 follows="left|top"
-				 name="FOV_Cutoff_Reset"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderSpotShadowOffset"/>
-				</button>
-				
-				<text																																																												
-				name="T_Shd_Bias"
+				 name="T_Shd_Bias"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
@@ -1142,8 +1063,8 @@
 				 increment="0.0001"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="-.00001"
-				 max_val="0.01"
+				 min_val="-.008"
+				 max_val="0"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1229,7 +1150,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="115"
+			 height="120"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1397,7 +1318,7 @@
 				 increment="0.001"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="-10"
+				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
@@ -1442,7 +1363,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0.001"
-				 max_val="5"
+				 max_val="3"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1568,7 +1489,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="185"
+			 height="175"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1632,7 +1553,6 @@
 				</text>
 				<slider_bar
 				 name="SB_FOV"
-				 
 				 control_name="CameraFieldOfView"
 				 follows="left|top"
 				 height="16"
@@ -1645,7 +1565,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_FOV"
-				 
 				 control_name="CameraFieldOfView"
 				 top_delta="-3"
 				 label_width="0"
@@ -1655,8 +1574,7 @@
 				 max_val="360"
 				 min_val="-360"
 				 width="53"
-				 increment="0.1"
-								/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_FOV"
@@ -1684,7 +1602,6 @@
 				</text>
 				<slider_bar
 				 name="SB_F_Number"
-
 				 control_name="CameraFNumber"
 				 follows="top|left"
 				 height="16"
@@ -1697,7 +1614,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_F_Number"
-				 
 				 control_name="CameraFNumber"
 				 top_delta="-3"
 				 label_width="0"
@@ -1707,8 +1623,7 @@
 				 max_val="128"
 				 min_val="-128"
 				 width="53"
-				 increment=".01"
-								/>
+				 increment=".01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_F_Number"
@@ -1736,7 +1651,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Focal_Length"
-				 
 				 control_name="CameraFocalLength"
 				 follows="top|left"
 				 height="16"
@@ -1749,7 +1663,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Focal_Length"
-				 
 				 control_name="CameraFocalLength"
 				 top_delta="-3"
 				 label_width="0"
@@ -1759,8 +1672,7 @@
 				 max_val="10000"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-								/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Focal_Length"
@@ -1788,7 +1700,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Foc_Time"
-				 
 				 control_name="CameraFocusTransitionTime"
 				 follows="top|left"
 				 height="16"
@@ -1801,7 +1712,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Foc_Time"
-				 
 				 control_name="CameraFocusTransitionTime"
 				 top_delta="-3"
 				 label_width="0"
@@ -1811,8 +1721,7 @@
 				 max_val="100"
 				 min_val=".001"
 				 width="53"
-				 increment="0.01"
-									/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Foc_Time"
