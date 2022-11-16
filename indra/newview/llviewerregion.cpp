@@ -54,6 +54,7 @@
 #include "llfloatergodtools.h"
 #include "llfloaterreporter.h"
 #include "llfloaterregioninfo.h"
+#include "llgltfmateriallist.h"
 #include "llhttpnode.h"
 #include "llregioninfomodel.h"
 #include "llsdutil.h"
@@ -221,6 +222,7 @@ public:
 	LLVOCacheEntry::vocache_entry_set_t   mVisibleEntries; //must-be-created visible entries wait for objects creation.	
 	LLVOCacheEntry::vocache_entry_priority_list_t mWaitingList; //transient list storing sorted visible entries waiting for object creation.
 	std::set<U32>                          mNonCacheableCreatedList; //list of local ids of all non-cacheable objects
+    LLVOCacheEntry::vocache_extras_entry_map_t mCacheExtraJson; // for materials
 
 	// time?
 	// LRU info?
@@ -833,7 +835,10 @@ void LLViewerRegion::loadObjectCache()
 
 	if(LLVOCache::instanceExists())
 	{
-		LLVOCache::getInstance()->readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap) ;
+        LLVOCache & vocache = LLVOCache::instance();
+		vocache.readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap)  ;
+        vocache.readGenericExtrasFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheExtraJson);
+
 		if (mImpl->mCacheMap.empty())
 		{
 			mCacheDirty = TRUE;
@@ -858,8 +863,10 @@ void LLViewerRegion::saveObjectCache()
 	{
 		const F32 start_time_threshold = 600.0f; //seconds
 		bool removal_enabled = sVOCacheCullingEnabled && (mRegionTimer.getElapsedTimeF32() > start_time_threshold); //allow to remove invalid objects from object cache file.
-		
-		LLVOCache::getInstance()->writeToCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap, mCacheDirty, removal_enabled) ;
+
+        LLVOCache & instance = LLVOCache::instance();
+		instance.writeToCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap, mCacheDirty, removal_enabled)  ;
+        instance.writeGenericExtrasToCache(mHandle, mImpl->mCacheID, mImpl->mCacheExtraJson, mCacheDirty, removal_enabled);
 		mCacheDirty = FALSE;
 	}
 
@@ -1908,7 +1915,7 @@ LLViewerObject* LLViewerRegion::addNewObject(LLVOCacheEntry* entry)
 
 	LLViewerObject* obj = NULL;
 	if(!entry->getEntry()->hasDrawable()) //not added to the rendering pipeline yet
-	{
+	{ 
 		//add the object
 		obj = gObjectList.processObjectUpdateFromCache(entry, this);
 		if(obj)
@@ -2810,7 +2817,7 @@ LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLDataPackerB
             LL_DEBUGS("AnimatedObjects") << " got update for local_id " << local_id << LL_ENDL;
             dumpStack("AnimatedObjectsStack");
 
-			// Update the cache entry
+			// Update the cache entry 
 			entry->updateEntry(crc, dp);
 
 			decodeBoundingInfo(entry);
@@ -2827,7 +2834,7 @@ LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLDataPackerB
 		// Create new entry and add to map
 		result = CACHE_UPDATE_ADDED;
 		entry = new LLVOCacheEntry(local_id, crc, dp);
-		record(LLStatViewer::OBJECT_CACHE_HIT_RATE, LLUnits::Ratio::fromValue(0));
+		record(LLStatViewer::OBJECT_CACHE_HIT_RATE, LLUnits::Ratio::fromValue(0)); 
 		
 		mImpl->mCacheMap[local_id] = entry;
 		
@@ -2843,6 +2850,22 @@ LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLViewerObjec
 	eCacheUpdateResult result = cacheFullUpdate(dp, flags);
 
 	return result;
+}
+
+void LLViewerRegion::cacheFullUpdateExtras(LLSD const & extras, std::string const & extras_raw)
+{
+    LLUUID object_id = extras["object_id"].asUUID();
+    LLViewerObject * obj = gObjectList.findObject(object_id);
+    if (obj != nullptr)
+    {
+        U32 local_id = obj->getLocalID();
+
+        mImpl->mCacheExtraJson[local_id] = LLVOCacheEntry::ExtrasEntry{extras, extras_raw};
+    }
+    else
+    {
+        LL_WARNS() << "got material override for unknown object_id, cannot cache it" << LL_ENDL;
+    }
 }
 
 LLVOCacheEntry* LLViewerRegion::getCacheEntryForOctree(U32 local_id)
@@ -2869,7 +2892,7 @@ LLVOCacheEntry* LLViewerRegion::getCacheEntry(U32 local_id, bool valid)
 		}
 	}
 	return NULL;
-	}
+}
 
 void LLViewerRegion::addCacheMiss(U32 id, LLViewerRegion::eCacheMissType miss_type)
 {
@@ -2943,6 +2966,9 @@ bool LLViewerRegion::probeCache(U32 local_id, U32 crc, U32 flags, U8 &cache_miss
 
 			entry->setValid();
 			decodeBoundingInfo(entry);
+
+            loadCacheMiscExtras(local_id, entry, crc);
+
 			return true;
 		}
 		else
@@ -3765,3 +3791,11 @@ std::string LLViewerRegion::getSimHostName()
 	return std::string("...");
 }
 
+void LLViewerRegion::loadCacheMiscExtras(U32 local_id, LLVOCacheEntry * entry, U32 crc)
+{
+    auto iter = mImpl->mCacheExtraJson.find(local_id);
+    if (iter != mImpl->mCacheExtraJson.end())
+    {
+        LLGLTFMaterialList::loadCacheOverrides(iter->second.extras_raw);
+    }
+}

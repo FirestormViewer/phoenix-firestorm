@@ -961,7 +961,7 @@ void LLViewerObjectList::renderObjectBeacons()
 			const LLVector3 &thisline = debug_beacon.mPositionAgent;
 		
 			gGL.begin(LLRender::LINES);
-			gGL.color4fv(color.mV);
+			gGL.color4fv(linearColor4(color).mV);
 			draw_cross_lines(thisline, 2.0f, 2.0f, 50.f);
 			draw_line_cube(0.10f, thisline);
 			
@@ -992,7 +992,7 @@ void LLViewerObjectList::renderObjectBeacons()
 
 			const LLVector3 &thisline = debug_beacon.mPositionAgent;
 			gGL.begin(LLRender::LINES);
-			gGL.color4fv(debug_beacon.mColor.mV);
+			gGL.color4fv(linearColor4(debug_beacon.mColor).mV);
 			draw_cross_lines(thisline, 0.5f, 0.5f, 0.5f);
 			draw_line_cube(0.10f, thisline);
 

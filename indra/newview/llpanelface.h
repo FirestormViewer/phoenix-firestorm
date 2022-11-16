@@ -104,6 +104,8 @@ public:
     void			unloadMedia();
 	void			changePrecision(S32 decimal_precision);	// <FS:CR> Adjustable decimal precision
 
+    static void onGLTFMaterialUpdate(const LLUUID& object_id, S32 side);
+
     /*virtual*/ void draw();
 
 	LLMaterialPtr createDefaultMaterial(LLMaterialPtr current_material)
@@ -176,6 +178,7 @@ protected:
 	//
 	// @param force_set_values forces spinners to set value even if they are focused
 	void updateUI(bool force_set_values = false);
+    void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool force_set_values);
 
 	// Convenience func to determine if all faces in selection have
 	// identical planar texgen settings during edits
@@ -228,6 +231,11 @@ protected:
 	static void		onCommitGlow(				LLUICtrl* ctrl, void *userdata);
 	static void		onCommitPlanarAlign(		LLUICtrl* ctrl, void* userdata);
 	static void		onCommitRepeatsPerMeter(	LLUICtrl* ctrl, void* userinfo);
+    static void     onCommitGLTFTextureScaleU(LLUICtrl* ctrl, void* userinfo);
+    static void     onCommitGLTFTextureScaleV(LLUICtrl* ctrl, void* userinfo);
+    static void     onCommitGLTFRotation(LLUICtrl* ctrl, void* userinfo);
+    static void     onCommitGLTFTextureTranslationU(LLUICtrl* ctrl, void* userinfo);
+    static void     onCommitGLTFTextureTranslationV(LLUICtrl* ctrl, void* userinfo);
 	static void		onClickAutoFix(void*);
     static void		onAlignTexture(void*);
     static void 	onClickBtnLoadInvPBR(void* userdata);
@@ -342,6 +350,7 @@ private:
 	// Do NOT call updateUI from within this function.
 	//
 	void updateVisibility();
+    void updateVisibilityGLTF();
 
 	// Hey look everyone, a type-safe alternative to copy and paste! :)
 	//

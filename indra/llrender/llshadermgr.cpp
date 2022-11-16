@@ -222,6 +222,14 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
+	if (features->hasScreenSpaceReflections)
+	{
+        if (!shader->attachFragmentObject("deferred/screenSpaceReflUtil.glsl"))
+        {
+            return FALSE;
+        }
+	}
+
     if (features->hasShadows)
 	{
         if (!shader->attachFragmentObject("deferred/shadowUtil.glsl"))
@@ -1169,10 +1177,6 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedAttribs.push_back("weight4");
 	mReservedAttribs.push_back("clothing");
 	mReservedAttribs.push_back("texture_index");
-    mReservedAttribs.push_back("basecolor_texcoord"); // GLTF
-    mReservedAttribs.push_back("normal_texcoord"); // GLTF
-    mReservedAttribs.push_back("metallic_roughness_texcoord"); // GLTF
-    mReservedAttribs.push_back("emissive_texcoord"); // GLTF
 	
 	//matrix state
 	mReservedUniforms.push_back("modelview_matrix");
@@ -1180,6 +1184,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("inv_proj");
 	mReservedUniforms.push_back("modelview_projection_matrix");
     mReservedUniforms.push_back("inv_modelview");
+    mReservedUniforms.push_back("identity_matrix");
 	mReservedUniforms.push_back("normal_matrix");
 	mReservedUniforms.push_back("texture_matrix0");
 	mReservedUniforms.push_back("texture_matrix1");

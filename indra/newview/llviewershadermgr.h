@@ -247,8 +247,8 @@ extern LLGLSLShader			gWLMoonProgram;
 // Post Process Shaders
 extern LLGLSLShader			gPostColorFilterProgram;
 extern LLGLSLShader			gPostNightVisionProgram;
+extern LLGLSLShader         gPostScreenSpaceReflectionProgram;
 extern LLGLSLShader			gPostVignetteProgram;	// <FS:CR> Import Vignette from Exodus
-
 
 // Deferred rendering shaders
 extern LLGLSLShader			gDeferredImpostorProgram;

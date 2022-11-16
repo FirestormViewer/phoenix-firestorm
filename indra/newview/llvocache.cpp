@@ -170,7 +170,7 @@ LLVOCacheEntry::~LLVOCacheEntry()
 }
 
 void LLVOCacheEntry::updateEntry(U32 crc, LLDataPackerBinaryBuffer &dp)
-{
+{ 
 	if(mCRC != crc)
 	{
 		mCRC = crc;
@@ -1444,7 +1444,12 @@ void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 
 	return ;
 }
-	
+
+void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_extras_entry_map_t& cache_extras_entry_map)
+{
+    LL_DEBUGS() << "TODO" << LL_ENDL;
+}
+
 void LLVOCache::purgeEntries(U32 size)
 {
 	while(mHeaderEntryQueue.size() > size)
@@ -1580,4 +1585,8 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
 	}
 
 	return ;
+}
+
+void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_extras_entry_map_t& cache_extras_entry_map, BOOL dirty_cache, bool removal_enabled)
+{
 }
