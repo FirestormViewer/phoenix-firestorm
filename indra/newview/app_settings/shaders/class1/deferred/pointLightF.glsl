@@ -88,7 +88,7 @@ void main()
     lv = normalize(lv);
     da = dot(norm, lv);
     
-    float noise = texture2D(noiseMap, frag.xy/128.0).b;
+    float noise = texture2D(noiseMap, frag.xy).b;
     
     vec3 col = texture2D(diffuseRect, frag.xy).rgb;
 

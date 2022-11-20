@@ -1524,24 +1524,6 @@ void LLAppViewer::initMaxHeapSize()
     LLMemory::initMaxHeapSizeGB(max_heap_size_gb);
 }
 
-static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
-static LLTrace::BlockTimerStatHandle FTM_MESSAGES2("System Messages2");
-static LLTrace::BlockTimerStatHandle FTM_SLEEP1("Sleep1");
-static LLTrace::BlockTimerStatHandle FTM_SLEEP2("Sleep2");
-static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
-
-static LLTrace::BlockTimerStatHandle FTM_TEXTURE_CACHE("Texture Cache");
-static LLTrace::BlockTimerStatHandle FTM_DECODE("Image Decode");
-static LLTrace::BlockTimerStatHandle FTM_FETCH("Image Fetch");
-
-static LLTrace::BlockTimerStatHandle FTM_LFS("LFS Thread");
-static LLTrace::BlockTimerStatHandle FTM_PAUSE_THREADS("Pause Threads");
-static LLTrace::BlockTimerStatHandle FTM_IDLE("Idle");
-static LLTrace::BlockTimerStatHandle FTM_PUMP("Pump");
-static LLTrace::BlockTimerStatHandle FTM_PUMP_SERVICE("Service");
-static LLTrace::BlockTimerStatHandle FTM_SERVICE_CALLBACK("Callback");
-static LLTrace::BlockTimerStatHandle FTM_AGENT_AUTOPILOT("Autopilot");
-static LLTrace::BlockTimerStatHandle FTM_AGENT_UPDATE("Update");
 
 // externally visible timers
 LLTrace::BlockTimerStatHandle FTM_FRAME("Frame");
@@ -1669,7 +1651,7 @@ bool LLAppViewer::doFrame()
 
 		if (gViewerWindow)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_MESSAGES);
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("System Messages");
 			gViewerWindow->getWindow()->processMiscNativeEvents();
 		}
 
@@ -1680,7 +1662,7 @@ bool LLAppViewer::doFrame()
 
 		if (gViewerWindow)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_MESSAGES2);
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("System Messages");
 			if (!restoreErrorTrap())
 			{
 				LL_WARNS() << " Someone took over my signal/exception handler (post messagehandling)!" << LL_ENDL;
@@ -1752,7 +1734,7 @@ bool LLAppViewer::doFrame()
 
 			{
 				FSPerfStats::RecordSceneTime T (FSPerfStats::StatType_t::RENDER_IDLE);
-				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
+				LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle");
 				idle();
 			}
 
@@ -1813,7 +1795,7 @@ bool LLAppViewer::doFrame()
 			static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime", -1);
 			if(yield_time >= 0)
 			{
-				LL_RECORD_BLOCK_TIME(FTM_YIELD);
+                LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Yield");
 				LL_PROFILE_ZONE_NUM( yield_time )
 				ms_sleep(yield_time);
 			}
@@ -1872,7 +1854,7 @@ bool LLAppViewer::doFrame()
 				}	// <FS:Beq/> instrument image decodes
 
 				{
-					LL_RECORD_BLOCK_TIME(FTM_LFS);
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("LFS Thread");
  					io_pending += LLLFSThread::updateClass(1);
 				}
 
@@ -1914,7 +1896,7 @@ bool LLAppViewer::doFrame()
 				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 				if (milliseconds_to_sleep > 0)
 				{
-					LL_RECORD_BLOCK_TIME(FTM_SLEEP2);
+					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("sleep2");
 					ms_sleep(milliseconds_to_sleep);
 				}
 			}
@@ -1959,15 +1941,15 @@ S32 LLAppViewer::updateTextureThreads(F32 max_time)
 {
 	S32 work_pending = 0;
 	{
-		LL_RECORD_BLOCK_TIME(FTM_TEXTURE_CACHE);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Texture Cache");
  		work_pending += LLAppViewer::getTextureCache()->update(max_time); // unpauses the texture cache thread
 	}
 	{
-		LL_RECORD_BLOCK_TIME(FTM_DECODE);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Image Decode");
 	 	work_pending += LLAppViewer::getImageDecodeThread()->update(max_time); // unpauses the image thread
 	}
 	{
-		LL_RECORD_BLOCK_TIME(FTM_FETCH);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Image Fetch");
 	 	work_pending += LLAppViewer::getTextureFetch()->update(max_time); // unpauses the texture fetch thread
 	}
 	return work_pending;
@@ -5652,7 +5634,7 @@ void LLAppViewer::idle()
 		}
 
 		{
-			LL_RECORD_BLOCK_TIME(FTM_AGENT_AUTOPILOT);
+            LL_PROFILE_ZONE_NAMED_CATEGORY_APP("Autopilot");
 			// Handle automatic walking towards points
 			gAgentPilot.updateTarget();
 			gAgent.autoPilot(&yaw);
@@ -5668,7 +5650,7 @@ void LLAppViewer::idle()
 							|| (agent_force_update_time > (1.0f / (F32) AGENT_FORCE_UPDATES_PER_SECOND));
 		if (force_update || (agent_update_time > (1.0f / (F32) AGENT_UPDATES_PER_SECOND)))
 		{
-			LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK; //LL_RECORD_BLOCK_TIME(FTM_AGENT_UPDATE);
+			LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 			// Send avatar and camera info
 			mLastAgentControlFlags = gAgent.getControlFlags();
 			mLastAgentForceUpdate = force_update ? 0 : agent_force_update_time;
@@ -5722,7 +5704,7 @@ void LLAppViewer::idle()
 
 	if (!gDisconnected)
 	{
-		LL_RECORD_BLOCK_TIME(FTM_NETWORK);
+        LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("Network");
 
 	    ////////////////////////////////////////////////
 	    //

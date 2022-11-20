@@ -217,6 +217,7 @@ protected:
 
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);
     static bool hasSettingsInventory();
+    static bool hasMaterialsInventory();
 	/**
 	 * Set upload cost in "Upload" sub menu.
 	 */

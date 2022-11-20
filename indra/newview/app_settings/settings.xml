@@ -13681,7 +13681,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderUseTriStrips</key>
   <map>
     <key>Comment</key>
-    <string>Use triangle strips for rendering prims.</string>
+    <string>DEPRECATED - now always assumed to be false - Use triangle strips for rendering prims.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

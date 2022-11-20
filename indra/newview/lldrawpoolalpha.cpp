@@ -185,10 +185,10 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
     LLGLSLShader* materialShader = LLPipeline::sUnderWaterRender ? gDeferredMaterialWaterProgram : gDeferredMaterialProgram;
     for (int i = 0; i < LLMaterial::SHADER_COUNT*2; ++i)
     {
-        prepare_alpha_shader(&materialShader[i], false, false, water_sign);
+        prepare_alpha_shader(&materialShader[i], false, true, water_sign);
     }
 
-    prepare_alpha_shader(&gDeferredPBRAlphaProgram, false, false, water_sign);
+    prepare_alpha_shader(&gDeferredPBRAlphaProgram, false, true, water_sign);
 
     // first pass, render rigged objects only and render to depth buffer
     forwardRender(true);
@@ -438,7 +438,7 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
                         params.mGroup->rebuildMesh();
                     }
                     params.mVertexBuffer->setBufferFast(rigged ? mask | LLVertexBuffer::MAP_WEIGHT4 : mask);
-                    params.mVertexBuffer->drawRangeFast(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
+                    params.mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
                 }
             }
         }
@@ -467,7 +467,7 @@ inline void Draw(LLDrawInfo* draw, U32 mask)
 {
     draw->mVertexBuffer->setBufferFast(mask);
     LLRenderPass::applyModelMatrix(*draw);
-	draw->mVertexBuffer->drawRangeFast(draw->mDrawMode, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);                    
+	draw->mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);                    
 }
 
 bool LLDrawPoolAlpha::TexSetup(LLDrawInfo* draw, bool use_material)
@@ -491,13 +491,11 @@ bool LLDrawPoolAlpha::TexSetup(LLDrawInfo* draw, bool use_material)
         {
             if (draw->mNormalMap)
             {
-                draw->mNormalMap->addTextureStats(draw->mVSize);
                 current_shader->bindTexture(LLShaderMgr::BUMP_MAP, draw->mNormalMap);
             }
 
             if (draw->mSpecularMap)
             {
-                draw->mSpecularMap->addTextureStats(draw->mVSize);
                 current_shader->bindTexture(LLShaderMgr::SPECULAR_MAP, draw->mSpecularMap);
             }
         }
@@ -563,7 +561,7 @@ void LLDrawPoolAlpha::drawEmissive(U32 mask, LLDrawInfo* draw)
 {
     LLGLSLShader::sCurBoundShaderPtr->uniform1f(LLShaderMgr::EMISSIVE_BRIGHTNESS, 1.f);
     draw->mVertexBuffer->setBufferFast((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
-	draw->mVertexBuffer->drawRangeFast(draw->mDrawMode, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);
+	draw->mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);
 }
 
 
@@ -743,9 +741,10 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                         target_shader = target_shader->mRiggedVariant;
                     }
 
+                    // shader must be bound before LLGLTFMaterial::bind
                     if (current_shader != target_shader)
                     {
-                        gPipeline.bindDeferredShader(*target_shader);
+                        gPipeline.bindDeferredShaderFast(*target_shader);
                     }
 
                     params.mGLTFMaterial->bind(target_shader);
@@ -793,11 +792,6 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                             llassert(target_shader->mRiggedVariant != nullptr);
                             target_shader = target_shader->mRiggedVariant;
                         }
-
-                        if (current_shader != target_shader)
-                        {
-                            gPipeline.bindDeferredShader(*target_shader);
-                        }
                     }
                     else if (!params.mFullbright)
                     {
@@ -817,7 +811,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     if (current_shader != target_shader)
                     {// If we need shaders, and we're not ALREADY using the proper shader, then bind it
                     // (this way we won't rebind shaders unnecessarily).
-                        gPipeline.bindDeferredShader(*target_shader);
+                        gPipeline.bindDeferredShaderFast(*target_shader);
                     }
 
                     LLVector4 spec_color(1, 1, 1, 1);
@@ -888,7 +882,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     }
 
                     params.mVertexBuffer->setBufferFast(drawMask);
-                    params.mVertexBuffer->drawRangeFast(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
+                    params.mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
 
                     if (reset_minimum_alpha)
                     {
