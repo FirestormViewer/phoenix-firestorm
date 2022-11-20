@@ -462,7 +462,6 @@
 			<menu_item_check label="Kamera-Versatz" name="Camera Offset"/>
 			<menu_item_check label="Framerate randomisieren" name="Randomize Framerate"/>
 			<menu_item_check label="Periodischer langsamer Frame" name="Periodic Slow Frame"/>
-			<menu_item_check label="Frame-Test" name="Frame Test"/>
 			<menu_item_check label="Rahmenprofil" name="Frame Profile"/>
 			<menu_item_call label="Benchmark" name="Benchmark"/>
 		</menu>

@@ -6,6 +6,12 @@
 	<floater.string name="pick title">
 		Auswählen:
 	</floater.string>
+	<floater.string name="pick_material">
+		Auswählen: Material
+	</floater.string>
+	<floater.string name="pick_texture">
+		Auswählen: Textur
+	</floater.string>
 	<text name="Multiple">
 		Mehrere Texturen
 	</text>
