@@ -900,10 +900,10 @@ void LLRender::init(bool needs_vertex_buffer)
 	GLfloat range[2];
 	glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, range);
 	stop_glerror();
-	mMaxLineWidthAliased = F32(range[1]);
+	mMaxLineWidthAliased = range[1];
 	glGetFloatv(GL_SMOOTH_LINE_WIDTH_RANGE, range);
 	stop_glerror();
-	mMaxLineWidthSmooth = F32(range[1]);
+	mMaxLineWidthSmooth = range[1];
 	// </FS:Ansariel>
 }
 
@@ -1550,11 +1550,7 @@ void LLRender::setAmbientLightColor(const LLColor4& color)
 // <FS> Line width OGL core profile fix by Rye Mutt
 void LLRender::setLineWidth(F32 line_width)
 {
-	if (LLRender::sGLCoreProfile)
-	{
-		line_width = 1.f;
-	}
-	else if (line_width > 1.f)
+	if (line_width > 1.f)
 	{
 		line_width = llmin(line_width, glIsEnabled(GL_LINE_SMOOTH) ? mMaxLineWidthSmooth : mMaxLineWidthAliased);
 	}
