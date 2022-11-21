@@ -48,7 +48,6 @@
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
-		<string>TextureMemory</string>
 		<string>WLSkyDetail</string>
 	</array>
 </llsd>
