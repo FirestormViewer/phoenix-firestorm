@@ -321,6 +321,20 @@
 	<menu_item_separator />
 	<!-- </FS:Zi> -->
 
+	<!-- <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects -->
+	<menu_item_check
+		name="inventory_filter_coalesced_objects_only"
+		label="Only Coalesced">
+		<on_click
+			function="Inventory.CoalescedObjects.Toggle"
+			parameter="coalesced_objects_only" />
+		<on_check
+			function="Inventory.CoalescedObjects.Check"
+			parameter="coalesced_objects_only" />
+	</menu_item_check>
+	<menu_item_separator />
+	<!-- </FS:Zi> -->
+
 	<menu_item_call
      label="Empty Trash"
      layout="topleft"

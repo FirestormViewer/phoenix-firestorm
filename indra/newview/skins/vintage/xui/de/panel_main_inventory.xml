@@ -74,6 +74,7 @@
 			<menu_item_check name="inventory_filter_show_links" label="Zeige Links"/>
 			<menu_item_check name="inventory_filter_only_links" label="Zeige nur Links"/>
 			<menu_item_check name="inventory_filter_hide_links" label="Links ausblenden"/>
+			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
 		</menu>
 	</menu_bar>
 

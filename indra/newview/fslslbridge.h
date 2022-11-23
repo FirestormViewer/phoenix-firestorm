@@ -65,8 +65,8 @@ public:
 
 	typedef std::function<void(const LLSD &)> Callback_t;
 
-	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
-	bool viewerToLSL(const std::string& message, Callback_t = nullptr);
+	bool lslToViewer(std::string_view message, const LLUUID& fromID, const LLUUID& ownerID);
+	bool viewerToLSL(std::string_view message, Callback_t = nullptr);
 
 	bool updateBoolSettingValue(const std::string& msgVal);
 	bool updateBoolSettingValue(const std::string& msgVal, bool contentVal);

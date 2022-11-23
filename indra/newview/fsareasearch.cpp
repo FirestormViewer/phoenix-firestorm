@@ -67,19 +67,19 @@
 #include "rlvhandler.h"
 
 // max number of objects that can be (de-)selected in a single packet.
-const S32 MAX_OBJECTS_PER_PACKET = 255;
+constexpr S32 MAX_OBJECTS_PER_PACKET = 255;
 
 // time in seconds between refreshes when active
-const F32 REFRESH_INTERVAL = 1.0f;
+constexpr F32 REFRESH_INTERVAL = 1.0f;
 
 // this is used to prevent refreshing too often and affecting performance.
-const F32 MIN_REFRESH_INTERVAL = 0.25f;
+constexpr F32 MIN_REFRESH_INTERVAL = 0.25f;
 
 // how far the avatar needs to move to trigger a distance update
-const F32 MIN_DISTANCE_MOVED = 1.0f;
+constexpr F32 MIN_DISTANCE_MOVED = 1.0f;
 
 // timeout to resend object properties request again
-const F32 REQUEST_TIMEOUT = 30.0f;
+constexpr F32 REQUEST_TIMEOUT = 30.0f;
 
 std::string RLVa_hideNameIfRestricted(std::string const &name)
 {
@@ -1185,7 +1185,7 @@ void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& ful
 		}
 	}
 
-    mPanelList->updateName(id, full_name);
+	mPanelList->updateName(id, full_name);
 }
 
 void FSAreaSearch::updateCounterText()
@@ -1283,7 +1283,7 @@ void FSAreaSearch::onCommitLine()
 	}
 }
 
-bool FSAreaSearch::regexTest(std::string text)
+bool FSAreaSearch::regexTest(std::string_view text)
 {
 	// couple regex patters one can use for testing. The regex will match a UUID.
 	// boost::regex pattern("[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}");
@@ -1292,8 +1292,8 @@ bool FSAreaSearch::regexTest(std::string text)
 
 	try
 	{
-		std::string test_text = "asdfghjklqwerty1234567890";
-		boost::regex pattern(text.c_str());
+		static const std::string test_text = "asdfghjklqwerty1234567890";
+		boost::regex pattern(text.data());
 		boost::regex_match(test_text, pattern);
 	}
 	catch(boost::regex_error& e)
@@ -1822,15 +1822,15 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 					if (camera_aspect < 1.0f || invert)
 					{
 						angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect());
-						distance = width * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+						distance = width * 0.5f * 1.1f / tanf(angle_of_view * 0.5f);
 					}
 					else
 					{
 						angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView());
-						distance = height * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+						distance = height * 0.5f * 1.1f / tanf(angle_of_view * 0.5f);
 					}
 
-					distance += depth * 0.5;
+					distance += depth * 0.5f;
 
 					// Verify that the bounding box isn't inside the near clip.  Using OBB-plane intersection to check if the
 					// near-clip plane intersects with the bounding box, and if it does, adjust the distance such that the

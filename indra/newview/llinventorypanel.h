@@ -202,6 +202,10 @@ public:
 	BOOL getSinceLogoff();
 	void setFilterLinks(U64 filter_links);
 	U64 getFilterLinks();		// <FS:Zi> Filter Links Menu
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	void setFilterCoalescedObjects(bool coalesced);
+	bool getFilterCoalescedObjects();
+	// </FS:Zi>
 	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
 	void setFilterPermissions(PermissionMask filter_permissions);
 	PermissionMask getFilterPermissions();

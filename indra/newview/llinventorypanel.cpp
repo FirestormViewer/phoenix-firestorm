@@ -523,6 +523,18 @@ U64 LLInventoryPanel::getFilterLinks()
 }
 // </FS:Zi> Filter Links Menu
 
+// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+void LLInventoryPanel::setFilterCoalescedObjects(bool coalesced)
+{
+	getFilter().setFilterCoalescedObjects(coalesced);
+}
+
+bool LLInventoryPanel::getFilterCoalescedObjects()
+{
+	return getFilter().getFilterCoalescedObjects();
+}
+// </FS:Zi>
+
 void LLInventoryPanel::setSearchType(LLInventoryFilter::ESearchType type)
 {
 	getFilter().setSearchType(type);

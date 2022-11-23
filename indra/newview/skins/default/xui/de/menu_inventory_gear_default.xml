@@ -37,5 +37,6 @@
 	<menu_item_check name="inventory_filter_only_copy" label="Nur kopierbar"/>
 	<menu_item_check name="inventory_filter_only_transfer" label="Nur transferierbar"/>
 	<!-- ## Zi: Filter Links Menu -->
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
 	<menu_item_call label="Papierkorb ausleeren" name="empty_trash"/>
 </toggleable_menu>
