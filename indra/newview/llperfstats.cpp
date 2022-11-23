@@ -52,7 +52,6 @@ namespace LLPerfStats
     bool belowTargetFPS{false};
     U32 lastGlobalPrefChange{0}; 
     std::mutex bufferToggleLock{};
-    F64 cpu_hertz{0.0}; // <FS:Beq/> reinstate threadsafe frequency
 
     F64 cpu_hertz{0.0};
 

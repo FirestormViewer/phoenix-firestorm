@@ -682,7 +682,7 @@ void FSFloaterPerformance::populateNearbyList()
             auto render_av_idle  = LLPerfStats::StatsRecorder::get(AvType, avatar->getID(),LLPerfStats::StatType_t::RENDER_IDLE);
             LLPerfStats::bufferToggleLock.unlock();
 
-            auto is_slow = avatar->isTooSlowWithShadows();
+            auto is_slow = avatar->isTooSlow();
 
             LLSD item;
             item["id"] = avatar->getID();
