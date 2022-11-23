@@ -1,4 +1,5 @@
 # -*- cmake -*-
+set(CMAKE_VERBOSE_MAKEFILE ON) # <FS:Zi> remove this once things work
 
 # <FS:ND> Try to find pulse header, if we got them we can use the linux volume catcher
 if (LINUX)
@@ -19,11 +20,10 @@ if (LINUX)
   message( "Building with linux volume catcher" )
   set(LINUX_VOLUME_CATCHER linux_volume_catcher.cpp)
 
-endif()
-
-
-set(MEDIA_PLUGIN_BASE_INCLUDE_DIRS
+  set(MEDIA_PLUGIN_BASE_INCLUDE_DIRS
     ${LIBS_OPEN_DIR}/media_plugins/base/
     )
 
-set(MEDIA_PLUGIN_BASE_LIBRARIES media_plugin_base)
+  set(MEDIA_PLUGIN_BASE_LIBRARIES media_plugin_base)
+
+endif()    # <FS:Zi> make sure no changes happen to other platforms by moving endif() here
