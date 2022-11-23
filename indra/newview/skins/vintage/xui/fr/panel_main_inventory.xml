@@ -73,7 +73,7 @@
 			<menu_item_check name="inventory_filter_only_modify" label="Modifiables uniquement" />
 			<menu_item_check name="inventory_filter_only_copy" label="Seulement copiables" />
 			<menu_item_check name="inventory_filter_only_transfer" label="Seulement transférables" />
-			<menu_item_check name="inventory_show_partial_results" label="Afficher les résultats partiels de la recherche" />
+			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Uniquement les éléments regroupés"/>
 		</menu>
 	</menu_bar>
 	<filter_editor label="Inventaire de filtres" name="inventory search editor" tool_tip="Saisissez un ou plusieurs mots à rechercher, en les séparant par un signe '+' "/>

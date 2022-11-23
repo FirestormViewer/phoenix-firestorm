@@ -105,15 +105,6 @@
          show_icons="false"
          show_voice_volume="false"
          width="280" />
-        <panel
-         filename="panel_avatar_list_item.xml"
-         follows="left|right|top"
-         height="24"
-         layout="topleft"
-         left="0"
-         name="non_avatar_caller"
-         top="10"
-         width="276" />
         <text
          follows="all"
          font="SansSerif"

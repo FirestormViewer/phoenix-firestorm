@@ -74,9 +74,7 @@
 			<menu_item_check name="inventory_filter_only_modify" label="Nur modifizierbar"/>
 			<menu_item_check name="inventory_filter_only_copy" label="Nur kopierbar"/>
 			<menu_item_check name="inventory_filter_only_transfer" label="Nur transferierbar"/>
-			<!-- Not implemented yet
-			<menu_item_check name="inventory_show_partial_results" label="Zeige unvollständige Suchergebnisse"/>
-			-->
+			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
 		</menu>
 	</menu_bar>
 	<filter_editor label="Inventar filtern" name="inventory search editor" tool_tip="Einen oder mehrere Suchbegriffe eingeben, getrennt durch '+'"/>

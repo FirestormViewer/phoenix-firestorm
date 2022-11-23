@@ -140,6 +140,7 @@ public:
 			Optional<EFolderShow>		show_folder_state;
 			Optional<PermissionMask>	permissions;
 			Optional<EFilterCreatorType> creator_type;
+			Optional<bool>				coalesced_objects_only;		// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 
 			Params()
 			:	types("filter_types", FILTERTYPE_OBJECT),
@@ -155,6 +156,7 @@ public:
 				date_search_direction("date_search_direction", FILTERDATEDIRECTION_NEWER),
 				show_folder_state("show_folder_state", SHOW_NON_EMPTY_FOLDERS),
 				creator_type("creator_type", FILTERCREATOR_ALL),
+				coalesced_objects_only("coalesced_objects_only", false),	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 				permissions("permissions", PERM_NONE)
 			{}
 		};
@@ -178,6 +180,8 @@ public:
 		EFolderShow			mShowFolderState;
 		PermissionMask		mPermissions;
 		EFilterCreatorType	mFilterCreatorType;
+
+		bool			mCoalescedObjectsOnly;	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 	};
 							
 	struct Params : public LLInitParam::Block<Params>
@@ -267,6 +271,11 @@ public:
 
 	// <FS>
 	BOOL 				getFilterWorn() const { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
+
+	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+	void				setFilterCoalescedObjects(bool coalesced);
+	bool				getFilterCoalescedObjects() const { return mFilterOps.mCoalescedObjectsOnly; }
+	// </FS:Zi>
 
 	// +-------------------------------------------------------------------+
 	// + Execution And Results

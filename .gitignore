@@ -114,3 +114,4 @@ indra/tracy
 firestorm.code-workspace
 
 .cache/clangd/index/
+*-compiled.glsl
