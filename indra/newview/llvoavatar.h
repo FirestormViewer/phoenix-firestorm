@@ -370,12 +370,10 @@ public:
     // check and return current state relative to limits
     // default will test only the geometry (combined=false).
     // this allows us to disable shadows separately on complex avatars.
-    inline bool 	isTooSlowWithShadows() const {return mTooSlow;};
+
     inline bool 	isTooSlowWithoutShadows() const {return mTooSlowWithoutShadows;};
-    inline bool 	isTooSlow(bool combined = false) const 
-    {
-        return(combined?mTooSlow:mTooSlowWithoutShadows);
-    }
+    bool 	isTooSlow() const;
+
     void 			updateTooSlow();
 
 	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual

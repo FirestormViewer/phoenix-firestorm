@@ -78,6 +78,8 @@ namespace LLPerfStats
     static constexpr U32 TUNE_SCENE_AND_AVATARS{1};
     extern F64 cpu_hertz; // <FS:Beq/> reinstate thread safety
 
+    extern F64 cpu_hertz;
+
     extern std::atomic<int64_t> tunedAvatars;
     extern std::atomic<U64> renderAvatarMaxART_ns;
     extern bool belowTargetFPS;
@@ -525,15 +527,10 @@ namespace LLPerfStats
             StatsRecorder::send(std::move(stat));
         };
     };
-    // <FS:Beq> use thread safe/low overhead cpu frequency tracking (might need to add refresh to this)
-    // inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
-    // inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
-    // inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / (F64)LLTrace::BlockTimer::countsPerSecond(); };
     
     inline double raw_to_ns(U64 raw)    { return (static_cast<double>(raw) * 1000000000.0) / LLPerfStats::cpu_hertz; };
     inline double raw_to_us(U64 raw)    { return (static_cast<double>(raw) *    1000000.0) / LLPerfStats::cpu_hertz; };
     inline double raw_to_ms(U64 raw)    { return (static_cast<double>(raw) *       1000.0) / LLPerfStats::cpu_hertz; };
-    // </FS:Beq>
 
     using RecordSceneTime = RecordTime<ObjType_t::OT_GENERAL>;
     using RecordAvatarTime = RecordTime<ObjType_t::OT_AVATAR>;

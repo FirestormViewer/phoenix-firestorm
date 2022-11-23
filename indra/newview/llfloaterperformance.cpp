@@ -262,7 +262,7 @@ void LLFloaterPerformance::populateHUDList()
 
         row[1]["column"] = "complex_value";
         row[1]["type"] = "text";
-        row[1]["value"] = llformat( "%.f",LLPerfStats::raw_to_us(hud_render_time_raw) );
+        row[1]["value"] = llformat( "%.f", llmax(LLPerfStats::raw_to_us(hud_render_time_raw), (double)1));
         row[1]["font"]["name"] = "SANSSERIF";
  
         row[2]["column"] = "name";
@@ -321,7 +321,7 @@ void LLFloaterPerformance::populateObjectList()
 
             row[1]["column"] = "complex_value";
             row[1]["type"] = "text";
-            row[1]["value"] = llformat("%.f", LLPerfStats::raw_to_us(attach_render_time_raw));
+            row[1]["value"] = llformat("%.f", llmax(LLPerfStats::raw_to_us(attach_render_time_raw), (double)1));
             row[1]["font"]["name"] = "SANSSERIF";
 
             row[2]["column"] = "name";
@@ -372,7 +372,7 @@ void LLFloaterPerformance::populateNearbyList()
             auto render_av_raw  = LLPerfStats::StatsRecorder::get(AvType, avatar->getID(),LLPerfStats::StatType_t::RENDER_COMBINED);
             LLPerfStats::bufferToggleLock.unlock();
 
-            auto is_slow = avatar->isTooSlowWithShadows();
+            auto is_slow = avatar->isTooSlow();
             LLSD item;
             item["id"] = avatar->getID();
             LLSD& row = item["columns"];

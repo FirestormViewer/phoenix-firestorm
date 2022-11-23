@@ -3359,7 +3359,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 
 			// Firestorm Clouds
 			// do not generate particles for dummy or overly-complex avatars
-			if (!mIsDummy && !isTooComplex() && !isTooSlowWithShadows())
+			if (!mIsDummy && !isTooComplex() && !isTooSlow())
 			{
 				setParticleSource(sCloud, getID());
 			}
@@ -9223,6 +9223,18 @@ bool LLVOAvatar::isTooComplex() const
 	return too_complex;
 }
 
+bool LLVOAvatar::isTooSlow() const
+{
+    static LLCachedControl<bool> always_render_friends(gSavedSettings, "AlwaysRenderFriends");
+    bool render_friend =  (LLAvatarTracker::instance().isBuddy(getID()) && always_render_friends);
+
+    if (render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+    {
+        return false;
+    }
+    return mTooSlow;
+}
+
 // use Avatar Render Time as complexity metric
 // <FS:Beq> refactor for clarity post LL merge
 void LLVOAvatar::clearSlowARTCache()
@@ -12468,7 +12480,7 @@ void LLVOAvatar::calcMutedAVColor()
         change_msg = " blocked: color is grey4";
     }
 	// <FS:Beq> we don't want jelly dolls
-    // else if (!isTooComplex() && !isTooSlowWithShadows())
+    // else if (!isTooComplex() && !isTooSlow())
     else if (!isTooComplex())
     // </FS:Beq>
     {
