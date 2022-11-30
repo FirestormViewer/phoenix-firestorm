@@ -562,7 +562,10 @@
 			<menu_item_call label="Отключить журнал сообщений" name="Disable Message Log"/>
 			<menu_item_check label="Скорость интерполяции объектов" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Время ответа интерполяции позиции объекта" name="Ping Interpolate Object Positions"/>
-			<menu_item_call label="Снижение пакета" name="Drop a Packet"/>
+			<menu_item_call label="Сбросить пакет" name="Drop a Packet"/>
+		</menu>
+		<menu label="Кэш" name="Cache">
+			<menu_item_call label="Очистить кэш диска" name="Purge Disk Cache"/>
 		</menu>
 		<menu_item_call label="Дамп камеры со скриптами" name="Dump Scripted Camera"/>
 		<menu label="Запись" name="Recorder">
