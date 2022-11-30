@@ -2124,6 +2124,16 @@ void LLFloaterPreference::refreshEnabledState()
 		fsaa_ctrl->setValue((LLSD::Integer) 0);
 	}
 
+	if (!LLFeatureManager::instance().isFeatureAvailable("RenderFSAASamples"))
+	{
+		fsaa_ctrl->setEnabled(FALSE);
+	}
+
+	if (!LLFeatureManager::instance().isFeatureAvailable("RenderReflectionProbeDetail"))
+	{
+		getChildView("ReflectionDetail")->setEnabled(FALSE);
+	}
+
 	// WindLight
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 	sky->setEnabled(TRUE);

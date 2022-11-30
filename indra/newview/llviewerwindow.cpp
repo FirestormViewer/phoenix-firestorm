@@ -1986,15 +1986,22 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	U32 fsaa_samples)
 	*/
 	// create window
-    mWindow = LLWindowManager::createWindow(this,
+
+    U32 max_core_count = gSavedSettings.getU32("EmulateCoreCount");
+    U32 max_vram = gSavedSettings.getU32("RenderMaxVRAMBudget");
+    F32 max_gl_version = gSavedSettings.getF32("RenderMaxOpenGLVersion");
+    
+	mWindow = LLWindowManager::createWindow(this,
 		p.title, p.name, p.x, p.y, p.width, p.height, 0,
 		p.fullscreen, 
 		gHeadlessClient,
 		gSavedSettings.getBOOL("RenderVSyncEnable"),
 		!gHeadlessClient,
 		p.ignore_pixel_depth,
-		//0); //don't use window level anti-aliasing
-		0, //don't use window level anti-aliasing
+		0,
+        max_core_count,
+        max_vram,
+        max_gl_version, //don't use window level anti-aliasing
 		useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 
 	if (NULL == mWindow)

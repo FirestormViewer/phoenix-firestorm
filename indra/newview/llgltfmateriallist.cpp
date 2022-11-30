@@ -32,7 +32,6 @@
 #include "lldispatcher.h"
 #include "llfetchedgltfmaterial.h"
 #include "llfilesystem.h"
-#include "llmaterialeditor.h"
 #include "llsdserialize.h"
 #include "lltinygltfhelper.h"
 #include "llviewercontrol.h"
@@ -42,6 +41,7 @@
 #include "llviewerstats.h"
 #include "llcorehttputil.h"
 #include "llagent.h"
+#include "llvocache.h"
 #include "llworld.h"
 
 #include "tinygltf/tiny_gltf.h"
@@ -146,6 +146,11 @@ public:
     LLGLTFMaterialOverrideDispatchHandler() = default;
     ~LLGLTFMaterialOverrideDispatchHandler() override = default;
 
+    void addCallback(void(*callback)(const LLUUID& object_id, S32 side))
+    {
+        mSelectionCallbacks.push_back(callback);
+    }
+
     bool operator()(const LLDispatcher* dispatcher, const std::string& key, const LLUUID& invoice, const sparam_t& strings) override
     {
         LL_PROFILE_ZONE_SCOPED;
@@ -159,14 +164,14 @@ public:
         LLSD message;
 
         sparam_t::const_iterator it = strings.begin();
-        if (it != strings.end()) {
+        if (it != strings.end())
+        {
             const std::string& llsdRaw = *it++;
             std::istringstream llsdData(llsdRaw);
             if (!LLSDSerialize::deserialize(message, llsdData, llsdRaw.length()))
             {
                 LL_WARNS() << "LLGLTFMaterialOverrideDispatchHandler: Attempted to read parameter data into LLSD but failed:" << llsdRaw << LL_ENDL;
             }
-            LLGLTFMaterialList::writeCacheOverrides(message, llsdRaw);
         }
         else
         {
@@ -175,12 +180,51 @@ public:
             return false;
         }
 
-        if (!message.has("object_id"))
+        LLGLTFOverrideCacheEntry object_override;
+        if (!object_override.fromLLSD(message))
         {
             // malformed message, nothing we can do to handle it
             LL_DEBUGS("GLTF") << "Message without id:" << message << LL_ENDL;
             return false;
         }
+
+        // Cache the data
+        {
+            LL_DEBUGS("GLTF") << "material overrides cache" << LL_ENDL;
+
+            // default to main region if message doesn't specify
+            LLViewerRegion * region = gAgent.getRegion();;
+
+            if (object_override.mHasRegionHandle)
+            {
+                // TODO start requiring this once server sends this for all messages
+                region = LLWorld::instance().getRegionFromHandle(object_override.mRegionHandle);
+            }
+
+            if (region)
+            {
+                region->cacheFullUpdateGLTFOverride(object_override);
+            }
+            else
+            {
+                LL_WARNS("GLTF") << "could not access region for material overrides message cache, region_handle: " << LL_ENDL;
+            }
+        }
+        applyData(object_override);
+        return true;
+    }
+
+    void doSelectionCallbacks(const LLUUID& object_id, S32 side)
+    {
+        for (auto& callback : mSelectionCallbacks)
+        {
+            callback(object_id, side);
+        }
+    }
+
+    void applyData(const LLGLTFOverrideCacheEntry &object_override)
+    {
+        // Parse the data
 
         LL::WorkQueue::ptr_t main_queue = LL::WorkQueue::getInstance("mainloop");
         LL::WorkQueue::ptr_t general_queue = LL::WorkQueue::getInstance("General");
@@ -188,109 +232,96 @@ public:
         struct ReturnData
         {
         public:
-            std::vector<LLPointer<LLGLTFMaterial> > mMaterialVector;
-            std::vector<bool> mResults;
+            LLPointer<LLGLTFMaterial> mMaterial;
+            S32 mSide;
+            bool mSuccess;
         };
 
         // fromJson() is performance heavy offload to a thread.
         main_queue->postTo(
             general_queue,
-            [message]() // Work done on general queue
+            [object_override]() // Work done on general queue
         {
-            ReturnData result;
+            std::vector<ReturnData> results;
 
-            if (message.has("sides") && message.has("gltf_json"))
+            if (!object_override.mSides.empty())
             {
-                LLSD const& sides = message.get("sides");
-                LLSD const& gltf_json = message.get("gltf_json");
-
-                if (sides.isArray() && gltf_json.isArray() &&
-                    sides.size() != 0 &&
-                    sides.size() == gltf_json.size())
+                results.reserve(object_override.mSides.size());
+                // parse json
+                std::map<S32, std::string>::const_iterator iter = object_override.mSides.begin();
+                std::map<S32, std::string>::const_iterator end = object_override.mSides.end();
+                while (iter != end)
                 {
-                    // message should be interpreted thusly:
-                    ///  sides is a list of face indices
-                    //   gltf_json is a list of corresponding json
-                    //   any side not represented in "sides" has no override
-                    result.mResults.resize(sides.size());
-                    result.mMaterialVector.resize(sides.size());
+                    LLPointer<LLGLTFMaterial> override_data = new LLGLTFMaterial();
+                    std::string warn_msg, error_msg;
 
-                    // parse json
-                    for (int i = 0; i < sides.size(); ++i)
+                    bool success = override_data->fromJSON(iter->second, warn_msg, error_msg);
+
+                    ReturnData result;
+                    result.mSuccess = success;
+                    result.mSide = iter->first;
+
+                    if (success)
                     {
-                        LLPointer<LLGLTFMaterial> override_data = new LLGLTFMaterial();
-
-                        std::string gltf_json_str = gltf_json[i].asString();
-
-                        std::string warn_msg, error_msg;
-
-                        bool success = override_data->fromJSON(gltf_json_str, warn_msg, error_msg);
-
-                        result.mResults[i] = success;
-
-                        if (success)
-                        {
-                            result.mMaterialVector[i] = override_data;
-                        }
-                        else
-                        {
-                            LL_WARNS("GLTF") << "failed to parse GLTF override data.  errors: " << error_msg << " | warnings: " << warn_msg << LL_ENDL;
-                        }
+                        result.mMaterial = override_data;
                     }
+                    else
+                    {
+                        LL_WARNS("GLTF") << "failed to parse GLTF override data.  errors: " << error_msg << " | warnings: " << warn_msg << LL_ENDL;
+                    }
+
+                    results.push_back(result);
+                    iter++;
                 }
             }
-            return result;
+            return results;
         },
-            [message](ReturnData result) // Callback to main thread
+            [object_override, this](std::vector<ReturnData> results) // Callback to main thread
             {
 
-            LLUUID object_id = message.get("object_id").asUUID();
-            LLViewerObject * obj = gObjectList.findObject(object_id);
+            LLViewerObject * obj = gObjectList.findObject(object_override.mObjectId);
 
-            if (result.mResults.size() > 0 )
+            if (results.size() > 0 )
             {
-                LLSD const& sides = message.get("sides");
                 std::unordered_set<S32> side_set;
 
-                for (int i = 0; i < result.mResults.size(); ++i)
+                for (int i = 0; i < results.size(); ++i)
                 {
-                    if (result.mResults[i])
+                    if (results[i].mSuccess)
                     {
-                        S32 side = sides[i].asInteger();
                         // flag this side to not be nulled out later
-                        side_set.insert(sides[i]);
+                        side_set.insert(results[i].mSide);
 
-                        if (!obj || !obj->setTEGLTFMaterialOverride(side, result.mMaterialVector[i]))
+                        if (!obj || !obj->setTEGLTFMaterialOverride(results[i].mSide, results[i].mMaterial))
                         {
                             // object not ready to receive override data, queue for later
-                            gGLTFMaterialList.queueOverrideUpdate(object_id, side, result.mMaterialVector[i]);
+                            gGLTFMaterialList.queueOverrideUpdate(object_override.mObjectId, results[i].mSide, results[i].mMaterial);
                         }
-                        else if (obj && obj->isAnySelected())
+                        else if (obj && obj->getTE(i) && obj->getTE(i)->isSelected())
                         {
-                            LLMaterialEditor::updateLive(object_id, side);
+                            doSelectionCallbacks(object_override.mObjectId, results[i].mSide);
                         }
                     }
                     else
                     {
                         // unblock material editor
-                        if (obj && obj->isAnySelected())
+                        if (obj && obj->getTE(i) && obj->getTE(i)->isSelected())
                         {
-                            LLMaterialEditor::updateLive(object_id, sides[i].asInteger());
+                            doSelectionCallbacks(object_override.mObjectId, results[i].mSide);
                         }
                     }
                 }
 
                 if (obj && side_set.size() != obj->getNumTEs())
                 { // object exists and at least one texture entry needs to have its override data nulled out
-                    bool object_has_selection = obj->isAnySelected();
                     for (int i = 0; i < obj->getNumTEs(); ++i)
                     {
                         if (side_set.find(i) == side_set.end())
                         {
                             obj->setTEGLTFMaterialOverride(i, nullptr);
-                            if (object_has_selection)
+                            if (obj->getTE(i) && obj->getTE(i)->isSelected())
                             {
-                                LLMaterialEditor::updateLive(object_id, i);
+                                doSelectionCallbacks(object_override.mObjectId, i);
                             }
                         }
                     }
@@ -298,20 +329,21 @@ public:
             }
             else if (obj)
             { // override list was empty or an error occurred, null out all overrides for this object
-                bool object_has_selection = obj->isAnySelected();
                 for (int i = 0; i < obj->getNumTEs(); ++i)
                 {
                     obj->setTEGLTFMaterialOverride(i, nullptr);
-                    if (object_has_selection)
+                    if (obj->getTE(i) && obj->getTE(i)->isSelected())
                     {
-                        LLMaterialEditor::updateLive(obj->getID(), i);
+                        doSelectionCallbacks(obj->getID(), i);
                     }
                 }
             }
         });
-
-        return true;
     }
+
+private:
+
+    std::vector<void(*)(const LLUUID& object_id, S32 side)> mSelectionCallbacks;
 };
 
 namespace
@@ -339,20 +371,19 @@ void LLGLTFMaterialList::applyQueuedOverrides(LLViewerObject* obj)
 
     if (iter != mQueuedOverrides.end())
     {
-        bool object_has_selection = obj->isAnySelected();
         override_list_t& overrides = iter->second;
         for (int i = 0; i < overrides.size(); ++i)
         {
             if (overrides[i].notNull())
             {
-                if (!obj->getTE(i)->getGLTFMaterial())
+                if (!obj->getTE(i) || !obj->getTE(i)->getGLTFMaterial())
                 { // object doesn't have its base GLTF material yet, don't apply override (yet)
                     return;
                 }
                 obj->setTEGLTFMaterialOverride(i, overrides[i]);
-                if (object_has_selection)
+                if (obj->getTE(i)->isSelected())
                 {
-                    LLMaterialEditor::updateLive(id, i);
+                    handle_gltf_override_message.doSelectionCallbacks(id, i);
                 }
             }
         }
@@ -439,8 +470,11 @@ void LLGLTFMaterialList::flushUpdates(void(*done_callback)(bool))
 
         sUpdates = LLSD::emptyArray();
     }
+}
 
-    
+void LLGLTFMaterialList::addSelectionUpdateCallback(void(*update_callback)(const LLUUID& object_id, S32 side))
+{
+    handle_gltf_override_message.addCallback(update_callback);
 }
 
 class AssetLoadUserData
@@ -695,32 +729,7 @@ void LLGLTFMaterialList::modifyMaterialCoro(std::string cap_url, LLSD overrides,
     }
 }
 
-void LLGLTFMaterialList::writeCacheOverrides(LLSD const & message, std::string const & llsdRaw)
+void LLGLTFMaterialList::loadCacheOverrides(const LLGLTFOverrideCacheEntry& override)
 {
-    LL_DEBUGS("GLTF") << "material overrides cache" << LL_ENDL;
-
-    // default to main region if message doesn't specify
-    LLViewerRegion * region = gAgent.getRegion();;
-
-    if (message.has("region_handle_low") && message.has("region_handle_high"))
-    {
-        // TODO start requiring this once server sends this for all messages
-        U64 region_handle_low = message["region_handle_low"].asInteger();
-        U64 region_handle_high = message["region_handle_high"].asInteger();
-        U64 region_handle = (region_handle_low & 0x00000000ffffffffUL) || (region_handle_high << 32);
-        region = LLWorld::instance().getRegionFromHandle(region_handle);
-    }
-
-    if (region) {
-        region->cacheFullUpdateExtras(message, llsdRaw);
-    } else {
-        LL_WARNS("GLTF") << "could not access region for material overrides message cache, region_handle: " << LL_ENDL;
-    }
-}
-
-void LLGLTFMaterialList::loadCacheOverrides(std::string const & message)
-{
-    std::vector<std::string> strings(1, message);
-
-    handle_gltf_override_message(nullptr, "", LLUUID::null, strings);
+    handle_gltf_override_message.applyData(override);
 }

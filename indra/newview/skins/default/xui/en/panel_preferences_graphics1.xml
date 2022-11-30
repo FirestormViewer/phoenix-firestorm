@@ -336,7 +336,7 @@
          layout="topleft"
          left_delta="5"
          top_pad="3"
-         name="ReflectionDetial"
+         name="ReflectionDetail"
          width="150">
           <combo_box.item
            label="Disabled"

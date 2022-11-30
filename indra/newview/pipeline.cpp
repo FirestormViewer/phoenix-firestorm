@@ -728,6 +728,8 @@ void LLPipeline::cleanup()
 	mDeferredVB = NULL;
 
 	mCubeVB = NULL;
+
+    mReflectionMapManager.cleanup();
 }
 
 //============================================================================
@@ -8632,6 +8634,12 @@ void LLPipeline::bindLightFunc(LLGLSLShader& shader)
     {
         gGL.getTexUnit(channel)->bindManual(LLTexUnit::TT_TEXTURE, mLightFunc);
     }
+
+    channel = shader.enableTexture(LLShaderMgr::DEFERRED_BRDF_LUT, LLTexUnit::TT_TEXTURE);
+    if (channel > -1)
+    {
+        mPbrBrdfLut.bindTexture(0, channel);
+    }
 }
 
 void LLPipeline::bindShadowMaps(LLGLSLShader& shader)
@@ -8757,12 +8765,6 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     {
         deferred_target->bindTexture(3, channel, LLTexUnit::TFO_POINT); // frag_data[3]
         gGL.getTexUnit(channel)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
-    }
-
-    channel = shader.enableTexture(LLShaderMgr::DEFERRED_BRDF_LUT, LLTexUnit::TT_TEXTURE);
-    if (channel > -1)
-    {
-        mPbrBrdfLut.bindTexture(0, channel);
     }
 
 #if 0

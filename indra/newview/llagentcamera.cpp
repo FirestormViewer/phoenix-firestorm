@@ -2262,6 +2262,15 @@ F32 LLAgentCamera::getCameraOffsetScale() const
 F32 LLAgentCamera::getCameraMaxZoomDistance(bool allow_disabled_constraints /* = false*/)
 // </FS:Ansariel>
 {
+    // <FS:Ansariel> FIRE-23470: Fix camera controls zoom glitch
+    //// SL-14706 / SL-14885 TPV have relaxed camera constraints allowing you to mousewheeel zoom WAY out.
+    //static LLCachedControl<bool> s_disable_camera_constraints(gSavedSettings, "DisableCameraConstraints", false);
+    //if (s_disable_camera_constraints)
+    //{
+    //    return (F32)INT_MAX;
+    //}
+    // </FS:Ansariel>
+
     // Ignore "DisableCameraConstraints", we don't want to be out of draw range when we focus onto objects or avatars
     // Freeing the camera movement some more... ok, a lot -KC
     static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");

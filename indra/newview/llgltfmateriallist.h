@@ -35,6 +35,7 @@
 #include <unordered_map>
 
 class LLFetchedGLTFMaterial;
+class LLGLTFOverrideCacheEntry;
 
 class LLGLTFMaterialList
 {
@@ -73,6 +74,8 @@ public:
     // Automatically called once per frame, but may be called explicitly
     // for cases that care about the done_callback forwarded to LLCoros::instance().launch
     static void flushUpdates(void(*done_callback)(bool) = nullptr);
+
+    static void addSelectionUpdateCallback(void(*update_callback)(const LLUUID& object_id, S32 side));
     
     // Queue an explicit LLSD ModifyMaterialParams update apply given override data
     //  overrides -- LLSD map (or array of maps) in the format:
@@ -89,10 +92,7 @@ public:
     // any override data that arrived before the object was ready to receive it
     void applyQueuedOverrides(LLViewerObject* obj);
 
-    // takes both the parsed message and its raw text to avoid unnecessary re serialization
-    static void writeCacheOverrides(LLSD const & message, std::string const & llsdRaw);
-
-    static void loadCacheOverrides(std::string const & message_raw);
+    static void loadCacheOverrides(const LLGLTFOverrideCacheEntry& override);
 
 private:
     friend class LLGLTFMaterialOverrideDispatchHandler;

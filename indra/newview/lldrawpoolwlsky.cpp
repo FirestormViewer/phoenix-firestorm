@@ -266,15 +266,15 @@ void LLDrawPoolWLSky::renderStars(const LLVector3& camPosLocal) const
 	gGL.pushMatrix();
 	gGL.translatef(camPosLocal.mV[0], camPosLocal.mV[1], camPosLocal.mV[2]);
 	gGL.rotatef(gFrameTimeSeconds*0.01f, 0.f, 0.f, 1.f);
-	gCustomAlphaProgram.bind();
-	gCustomAlphaProgram.uniform1f(sCustomAlpha, star_alpha.mV[3]);
+	gStarsProgram.bind();
+	gStarsProgram.uniform1f(sCustomAlpha, star_alpha.mV[3]);
 
 	gSky.mVOWLSkyp->drawStars();
 
     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	gGL.popMatrix();
-	gCustomAlphaProgram.unbind();
-}
+		gStarsProgram.unbind(); // SL-14113 was gCustomAlphaProgram
+	}
 
 void LLDrawPoolWLSky::renderStarsDeferred(const LLVector3& camPosLocal) const
 {
@@ -319,6 +319,7 @@ void LLDrawPoolWLSky::renderStarsDeferred(const LLVector3& camPosLocal) const
 
 	gGL.pushMatrix();
 	gGL.translatef(camPosLocal.mV[0], camPosLocal.mV[1], camPosLocal.mV[2]);
+	gGL.rotatef(gFrameTimeSeconds*0.01f, 0.f, 0.f, 1.f);
     gDeferredStarProgram.uniform1f(LLShaderMgr::BLEND_FACTOR, blend_factor);
 
     if (LLPipeline::sReflectionRender)
@@ -451,11 +452,14 @@ void LLDrawPoolWLSky::renderSkyClouds(const LLVector3& camPosLocal, F32 camHeigh
 
 void LLDrawPoolWLSky::renderHeavenlyBodies()
 {
-	LLGLSPipelineBlendSkyBox gls_skybox(true, false);
+    if (!gSky.mVOSkyp) return;
+
+	//LLGLSPipelineBlendSkyBox gls_skybox(true, false);
+    LLGLSPipelineBlendSkyBox gls_skybox(true, true); // SL-14113 we need moon to write to depth to clip stars behind
 
     LLVector3 const & origin = LLViewerCamera::getInstance()->getOrigin();
 	gGL.pushMatrix();
-	gGL.translatef(origin.mV[0], origin.mV[1], origin.mV[2]);	        
+	gGL.translatef(origin.mV[0], origin.mV[1], origin.mV[2]);
 
 	LLFace * face = gSky.mVOSkyp->mFace[LLVOSky::FACE_SUN];
 
@@ -581,8 +585,8 @@ void LLDrawPoolWLSky::renderDeferred(S32 pass)
     if (gPipeline.canUseWindLightShaders())
     {
         renderSkyHazeDeferred(origin, camHeightLocal);
-        renderStarsDeferred(origin);
         renderHeavenlyBodies();
+        renderStarsDeferred(origin);
         renderSkyCloudsDeferred(origin, camHeightLocal, cloud_shader);
     }
     gGL.setColorMask(true, true);
@@ -600,8 +604,8 @@ void LLDrawPoolWLSky::render(S32 pass)
     LLVector3 const & origin = LLViewerCamera::getInstance()->getOrigin();
     
 	renderSkyHaze(origin, camHeightLocal);    
+    renderHeavenlyBodies();
     renderStars(origin);
-    renderHeavenlyBodies();	
 	renderSkyClouds(origin, camHeightLocal, cloud_shader);
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
