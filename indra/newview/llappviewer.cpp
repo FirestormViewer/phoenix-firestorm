@@ -2062,12 +2062,12 @@ bool LLAppViewer::cleanup()
 
     // Give any remaining SLPlugin instances a chance to exit cleanly.
     LLPluginProcessParent::shutdown();
+	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
+	// disconnectViewer();
+	// LLViewerCamera::deleteSingleton();
 
-	disconnectViewer();
-	LLViewerCamera::deleteSingleton();
-
-	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
-	
+	// LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	// </FS:Beq>
 	if (gKeyboard)
 	{
 		gKeyboard->resetKeys();
@@ -4869,6 +4869,11 @@ void LLAppViewer::removeDumpDir()
 
 void LLAppViewer::forceQuit()
 {
+	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
+	disconnectViewer();
+	LLViewerCamera::deleteSingleton();
+	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	// </FS:Beq>
 	LLApp::setQuitting();
 }
 
@@ -6339,7 +6344,12 @@ void LLAppViewer::idleNetwork()
 		}
 	}
 	add(LLStatViewer::NUM_NEW_OBJECTS, gObjectList.mNumNewObjects);
-
+	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
+	if(gDisconnected)
+	{
+		return;
+	}
+	// </FS:Beq>
 	// Retransmit unacknowledged packets.
 	gXferManager->retransmitUnackedPackets();
 	gAssetStorage->checkForTimeouts();
@@ -6368,6 +6378,7 @@ void LLAppViewer::disconnectViewer()
 	{
 		return;
 	}
+	gDisconnected = TRUE;// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
 	//
 	// Cleanup after quitting.
 	//
@@ -6450,7 +6461,7 @@ void LLAppViewer::disconnectViewer()
 	LLDestroyClassList::instance().fireCallbacks();
 
 	cleanup_xfer_manager();
-	gDisconnected = TRUE;
+	// gDisconnected = TRUE; // <FS:Beq/> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
 
 	// Pass the connection state to LLUrlEntryParcel not to attempt
 	// parcel info requests while disconnected.
