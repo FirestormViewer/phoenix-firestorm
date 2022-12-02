@@ -802,6 +802,11 @@ für diese Region angehängt werden.
 Berechtigungseinschränkungen für den 
 nächsten Eigentümer angehängt werden.
 	</string>
+	<string name="TooltipTextureRestrictedDrop">
+		Nur Texturen mit unbeschränkten
+Kopier- und Transfer-Berechtigungen
+sind erlaubt.
+	</string>
 	<string name="Searching">
 		Suchen...
 	</string>

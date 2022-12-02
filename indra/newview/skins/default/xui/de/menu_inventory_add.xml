@@ -5,6 +5,7 @@
 		<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 		<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 		<menu_item_call label="Modell..." name="Upload Model"/>
+		<menu_item_call label="Material..." name="Upload Material"/>
 		<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 		<menu_item_call label="Linkset importieren..." name="import linkset"/>
 	</menu>
