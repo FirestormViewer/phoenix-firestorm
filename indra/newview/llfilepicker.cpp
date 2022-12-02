@@ -190,6 +190,7 @@ BOOL LLFilePicker::setupFilter(ELoadFilter filter)
 		SOUND_FILTER \
 		IMAGE_FILTER \
 		ANIM_FILTER \
+		MATERIAL_FILTER \
 		L"\0";
 		break;
 	case FFLOAD_EXE:

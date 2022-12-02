@@ -2370,7 +2370,6 @@ void LLPanelProfileSecondLife::onShowTexturePicker()
                 getString("texture_picker_label"), // "SELECT PHOTO", // <FS:Ansariel> Fix LL UI/UX design accident
                 PERM_NONE,
                 PERM_NONE,
-                PERM_NONE,
                 FALSE,
                 NULL);
 
@@ -2776,7 +2775,6 @@ void LLPanelProfileFirstLife::onChangePhoto()
                 FALSE,
                 FALSE,
                 getString("texture_picker_label"), // "SELECT PHOTO", // <FS:Ansariel> Fix LL UI/UX design accident
-                PERM_NONE,
                 PERM_NONE,
                 PERM_NONE,
                 FALSE,

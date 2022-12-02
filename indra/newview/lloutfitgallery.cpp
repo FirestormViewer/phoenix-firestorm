@@ -1360,7 +1360,6 @@ void LLOutfitGallery::onSelectPhoto(LLUUID selected_outfit_id)
                 LLTrans::getString("TexturePickerOutfitHeader"), // "SELECT PHOTO", // <FS:Ansariel> Localizable floater header
                 PERM_NONE,
                 PERM_NONE,
-                PERM_NONE,
                 FALSE,
                 NULL);
 

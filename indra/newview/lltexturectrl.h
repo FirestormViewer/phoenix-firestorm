@@ -190,10 +190,7 @@ public:
 					{ mImmediateFilterPermMask = mask; }
 	void			setDnDFilterPermMask(PermissionMask mask)
 						{ mDnDFilterPermMask = mask; }
-	void			setNonImmediateFilterPermMask(PermissionMask mask)
-					{ mNonImmediateFilterPermMask = mask; }
 	PermissionMask	getImmediateFilterPermMask() { return mImmediateFilterPermMask; }
-	PermissionMask	getNonImmediateFilterPermMask() { return mNonImmediateFilterPermMask; }
 
 	void			closeDependentFloater();
 
@@ -232,7 +229,7 @@ public:
 	void setIsMasked(BOOL masked) { mIsMasked = masked; }
 
 private:
-	BOOL allowDrop(LLInventoryItem* item);
+	BOOL allowDrop(LLInventoryItem* item, EDragAndDropType cargo_type, std::string& tooltip_msg);
 	BOOL doDrop(LLInventoryItem* item);
 
 private:
@@ -259,7 +256,6 @@ private:
 	BOOL						mAllowLocalTexture;
 	PermissionMask			 	mImmediateFilterPermMask;
 	PermissionMask				mDnDFilterPermMask;
-	PermissionMask			 	mNonImmediateFilterPermMask;
 	BOOL					 	mCanApplyImmediately;
 	BOOL					 	mCommitOnSelection;
 	BOOL					 	mNeedsRawImageData;
@@ -296,7 +292,6 @@ public:
 		const std::string& label,
 		PermissionMask immediate_filter_perm_mask,
 		PermissionMask dnd_filter_perm_mask,
-		PermissionMask non_immediate_filter_perm_mask,
 		BOOL can_apply_immediately,
 		LLUIImagePtr fallback_image_name
 		);
@@ -329,9 +324,7 @@ public:
 	LLView*			getOwner() const { return mOwner; }
 	void			setOwner(LLView* owner) { mOwner = owner; }
 	void			stopUsingPipette();
-	PermissionMask 	getFilterPermMask();
 
-	void updateFilterPermMask();
 	void commitIfImmediateSet();
 	void commitCancel();
 
@@ -405,7 +398,6 @@ protected:
 	LLInventoryPanel*	mInventoryPanel;
 	PermissionMask		mImmediateFilterPermMask;
 	PermissionMask		mDnDFilterPermMask;
-	PermissionMask		mNonImmediateFilterPermMask;
 	BOOL				mCanApplyImmediately;
 	BOOL				mNoCopyTextureSelected;
 	F32					mContextConeOpacity;

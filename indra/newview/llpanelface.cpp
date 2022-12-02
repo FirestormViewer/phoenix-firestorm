@@ -1107,8 +1107,18 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
         if (mComboMatMedia->getCurrentIndex() < MATMEDIA_MATERIAL)
         {
-            mComboMatMedia->selectNthItem(MATMEDIA_MATERIAL);
+            // When selecting an object with a pbr and UI combo is not set,
+            // set to pbr option, otherwise to a texture (material)
+            if (has_pbr_material)
+            {
+                mComboMatMedia->selectNthItem(MATMEDIA_PBR);
+            }
+            else
+            {
+                mComboMatMedia->selectNthItem(MATMEDIA_MATERIAL);
+            }
         }
+
         mComboMatMedia->setEnabled(editable);
 
 		//LLRadioGroup* radio_mat_type = getChild<LLRadioGroup>("radio_material_type");
@@ -1175,7 +1185,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
 		F32 transparency = (1.f - color.mV[VALPHA]) * 100.f;
 		getChild<LLUICtrl>("ColorTrans")->setValue(editable ? transparency : 0);
-		getChildView("ColorTrans")->setEnabled(editable);
+		getChildView("ColorTrans")->setEnabled(editable && has_material);
 
 		// Specular map
 		LLSelectedTEMaterial::getSpecularID(specmap_id, identical_spec);
@@ -1964,11 +1974,11 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
         LLUICtrl* gltfCtrlTextureOffsetU = getChild<LLUICtrl>("gltfTextureOffsetU");
         LLUICtrl* gltfCtrlTextureOffsetV = getChild<LLUICtrl>("gltfTextureOffsetV");
 
-        gltfCtrlTextureScaleU->setEnabled(show_texture_info && has_pbr_capabilities);
-        gltfCtrlTextureScaleV->setEnabled(show_texture_info && has_pbr_capabilities);
-        gltfCtrlTextureRotation->setEnabled(show_texture_info && has_pbr_capabilities);
-        gltfCtrlTextureOffsetU->setEnabled(show_texture_info && has_pbr_capabilities);
-        gltfCtrlTextureOffsetV->setEnabled(show_texture_info && has_pbr_capabilities);
+        gltfCtrlTextureScaleU->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
+        gltfCtrlTextureScaleV->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
+        gltfCtrlTextureRotation->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
+        gltfCtrlTextureOffsetU->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
+        gltfCtrlTextureOffsetV->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
 
         // Control values are set in setMaterialOverridesFromSelection
     }
