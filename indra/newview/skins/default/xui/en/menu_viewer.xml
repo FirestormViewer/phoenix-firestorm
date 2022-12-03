@@ -647,7 +647,6 @@
         <menu_item_call
          label="Leave Admin Status"
          name="Leave Admin Options"
-         shortcut="control|alt|shift|G"
 		 visible="false">
             <menu_item_call.on_click
              function="Advanced.LeaveAdminStatus" />
@@ -3906,8 +3905,7 @@
          tear_off="true">
             <menu_item_call
              label="Force Breakpoint"
-             name="Force Breakpoint"
-             shortcut="control|alt|shift|B">
+             name="Force Breakpoint">
                 <menu_item_call.on_click
                  function="Advanced.ForceErrorBreakpoint" />
             </menu_item_call>
@@ -4350,15 +4348,13 @@
             </menu_item_check>
             <menu_item_call
              label="Selected Texture Info Basis"
-             name="Selected Texture Info Basis"
-             shortcut="control|alt|shift|T">
+             name="Selected Texture Info Basis">
                 <menu_item_call.on_click
                  function="Advanced.SelectedTextureInfo" />
             </menu_item_call>
             <menu_item_call
              label="Selected Material Info"
-             name="Selected Material Info"
-             shortcut="control|alt|shift|M">
+             name="Selected Material Info">
                 <menu_item_call.on_click
                  function="Advanced.SelectedMaterialInfo" />
             </menu_item_call>
@@ -5253,8 +5249,7 @@
             </menu_item_call>
             <menu_item_call
              label="Debug Avatar Textures"
-             name="Debug Avatar Textures"
-             shortcut="control|alt|shift|K">
+             name="Debug Avatar Textures">
                 <menu_item_call.on_click
                  function="Advanced.DebugAvatarTextures" />
             </menu_item_call>
@@ -5402,8 +5397,7 @@
         </menu_item_call>
         <menu_item_call
          label="Leave Admin Status"
-         name="Leave Admin Options"
-         shortcut="control|alt|shift|G">
+         name="Leave Admin Options">
             <menu_item_call.on_click
              function="Advanced.LeaveAdminStatus" />
         </menu_item_call>
@@ -5432,8 +5426,7 @@
          tear_off="true">
             <menu_item_call
              label="Take Copy"
-             name="Admin Take Copy"
-             shortcut="control|alt|shift|O">
+             name="Admin Take Copy">
                 <menu_item_call.on_click
                  function="Admin.ForceTakeCopy" />
                 <menu_item_call.on_enable
@@ -5457,8 +5450,7 @@
             </menu_item_call>
             <menu_item_call
              label="Delete"
-             name="Delete"
-             shortcut="control|alt|shift|Del">
+             name="Delete">
                 <menu_item_call.on_click
                  function="Admin.HandleForceDelete" />
                 <menu_item_call.on_enable
@@ -5466,8 +5458,7 @@
             </menu_item_call>
             <menu_item_call
              label="Lock"
-             name="Lock"
-             shortcut="control|alt|shift|L">
+             name="Lock">
                 <menu_item_call.on_click
                  function="Admin.HandleObjectLock" />
                 <menu_item_call.on_enable
@@ -5475,8 +5466,7 @@
             </menu_item_call>
             <menu_item_call
              label="Get Assets IDs"
-             name="Get Assets IDs"
-             shortcut="control|alt|shift|I">
+             name="Get Assets IDs">
                 <menu_item_call.on_click
                  function="Admin.HandleObjectAssetIDs" />
                 <menu_item_call.on_enable
@@ -5498,8 +5488,7 @@
             </menu_item_call>
             <menu_item_call
              label="Set to Linden Content"
-             name="Set to Linden Content"
-             shortcut="control|alt|shift|C">
+             name="Set to Linden Content">
                 <menu_item_call.on_click
                  function="Admin.HandleForceParcelToContent" />
                 <menu_item_call.on_enable
