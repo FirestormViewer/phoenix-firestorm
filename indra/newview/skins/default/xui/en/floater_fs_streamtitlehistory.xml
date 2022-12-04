@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="stream_history"
+ title="Recently playing:"
+ can_resize="false"
+ height="185"
+ width="400"
+ layout="topleft"
+ save_rect="true"
+>
+	<fs_scroll_list
+		draw_heading="true"
+		top="3"
+		follows="all"
+		bottom="-5"
+		right="-10"
+		layout="topleft"
+		left="10"
+		name="history"
+		can_sort="false">
+		<columns
+			label="Title"
+			name="title" />
+	</fs_scroll_list>
+</floater>

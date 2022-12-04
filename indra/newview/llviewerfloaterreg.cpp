@@ -204,6 +204,7 @@
 #include "fsfloaterradar.h"
 #include "fsfloatersearch.h"
 #include "fsfloaterstatistics.h"
+#include "fsfloaterstreamtitle.h"
 #include "fsfloaterteleporthistory.h"
 #include "fsfloatervoicecontrols.h"
 #include "fsfloatervolumecontrols.h"
@@ -504,6 +505,8 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
 	LLFloaterReg::add("fs_protectedfolders", "floater_fs_protectedfolders.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterProtectedFolders>);
 	LLFloaterReg::add("fs_radar", "floater_fs_radar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterRadar>);
+	LLFloaterReg::add("fs_streamtitle", "floater_fs_streamtitle.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitle>);
+	LLFloaterReg::add("fs_streamtitlehistory", "floater_fs_streamtitlehistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitleHistory>);
 	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
 	LLFloaterReg::add("fs_voice_controls", "floater_fs_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVoiceControls>);
 	LLFloaterReg::add("fs_volume_controls", "floater_fs_volume_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVolumeControls>);
