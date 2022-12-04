@@ -224,6 +224,8 @@ void FSFloaterStreamTitle::updateStreamTitle(std::string_view streamtitle) noexc
 	mCurrentTitle = mTitletext->getText();
 	mCurrentDrawnTitle = mCurrentTitle;
 
+	mTitletext->setToolTip(mCurrentTitle);
+
 	checkTitleWidth();
 }
 

@@ -30,7 +30,6 @@
 #ifndef STREAMTITLEDISPLAY_H
 #define STREAMTITLEDISPLAY_H
 
-#include "lleventtimer.h"
 #include "llsingleton.h"
 
 class StreamTitleDisplay : public LLSingleton<StreamTitleDisplay>
