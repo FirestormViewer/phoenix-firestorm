@@ -36,7 +36,9 @@
 #include "lltextbox.h"
 #include "llviewercontrol.h"
 
-constexpr size_t MAX_HISTORY_ENTRIES{ 10 };
+static constexpr size_t MAX_HISTORY_ENTRIES{ 10 };
+static constexpr F32 SCROLL_STEP_DELAY{ 0.25f };
+static constexpr F32 SCROLL_END_DELAY{ 4.f };
 
 FSStreamTitleManager::~FSStreamTitleManager()
 {
@@ -48,7 +50,7 @@ FSStreamTitleManager::~FSStreamTitleManager()
 
 void FSStreamTitleManager::initSingleton()
 {
-	if (!gAudiop && !gAudiop->getStreamingAudioImpl())
+	if (!gAudiop || !gAudiop->getStreamingAudioImpl())
 	{
 		return;
 	}
@@ -159,7 +161,7 @@ void FSFloaterStreamTitleHistory::draw()
 //////////////////////////////////////////////////////////////////////////
 
 FSFloaterStreamTitle::FSFloaterStreamTitle(const LLSD& key)
-	: LLFloater(key), LLEventTimer(1.f)
+	: LLFloater(key), LLEventTimer(SCROLL_STEP_DELAY)
 {
 	mEventTimer.stop();
 }
@@ -262,14 +264,14 @@ BOOL FSFloaterStreamTitle::tick()
 {
 	if (mResetTitle)
 	{
-		mPeriod = 4.f;
+		mPeriod = SCROLL_END_DELAY;
 		mEventTimer.reset();
 		mCurrentDrawnTitle = mCurrentTitle;
 		mResetTitle = false;
 	}
 	else
 	{
-		mPeriod = 1.f;
+		mPeriod = SCROLL_STEP_DELAY;
 		mEventTimer.reset();
 		mCurrentDrawnTitle.erase(mCurrentDrawnTitle.begin());
 	}
@@ -281,7 +283,7 @@ BOOL FSFloaterStreamTitle::tick()
 
 	if (textbox_width > text_width)
 	{
-		mPeriod = 4.f;
+		mPeriod = SCROLL_END_DELAY;
 		mEventTimer.reset();
 		mResetTitle = true;
 	}

@@ -45,7 +45,7 @@
 
 void StreamTitleDisplay::initSingleton()
 {
-	if (!gAudiop && !gAudiop->getStreamingAudioImpl())
+	if (!gAudiop || !gAudiop->getStreamingAudioImpl())
 	{
 		return;
 	}
