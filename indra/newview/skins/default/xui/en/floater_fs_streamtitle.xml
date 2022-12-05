@@ -3,10 +3,10 @@
  name="stream_info"
  title="Now playing:"
  can_resize="true"
- height="20"
+ height="46"
  width="400"
  layout="topleft"
- min_height="20"
+ min_height="46"
  min_width="200"
  save_rect="true"
 >
