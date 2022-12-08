@@ -33,6 +33,8 @@
 		<check_box label="Transparentes Wasser" name="TransparentWater"/>
 		<check_box label="Lokale Lichtquellen" name="LocalLights"/>
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>
+		<check_box label="Reflexionen" name="ReflectionsEnabled"/>
+		<check_box label="Screen Space Reflections" name="ScreenSpaceReflections"/>
 		<text name="shadows_label">
 			Schatten:
 		</text>
@@ -41,11 +43,10 @@
 			<combo_box.item label="Sonne/Mond" name="1"/>
 			<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
 		</combo_box>
-		<text name="RenderReflectionDetailText">
-			Reflexionen:
+		<text name="ReflectionDetailText">
+			Reflexionsdetail:
 		</text>
 		<combo_box name="ReflectionDetail">
-			<combo_box.item label="Deaktiviert" name="-1"/>
 			<combo_box.item label="Nur statisch" name="0"/>
 			<combo_box.item label="Statisch &amp; Dynamisch" name="1"/>
 			<combo_box.item label="Echtzeit" name="2"/>
