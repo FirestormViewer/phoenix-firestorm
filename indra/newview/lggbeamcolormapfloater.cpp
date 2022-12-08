@@ -261,7 +261,7 @@ void lggBeamColorMapFloater::onSaveCallback(const std::vector<std::string>& file
 
 void lggBeamColorMapFloater::onClickLoad()
 {
-	(boost::bind(&lggBeamColorMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
+	LLFilePickerReplyThread::startPicker(boost::bind(&lggBeamColorMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
 }
 
 void lggBeamColorMapFloater::onLoadCallback(const std::vector<std::string>& filenames)
