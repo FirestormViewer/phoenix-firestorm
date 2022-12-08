@@ -2129,11 +2129,6 @@ void LLFloaterPreference::refreshEnabledState()
 		fsaa_ctrl->setEnabled(FALSE);
 	}
 
-	if (!LLFeatureManager::instance().isFeatureAvailable("RenderReflectionProbeDetail"))
-	{
-		getChildView("ReflectionDetail")->setEnabled(FALSE);
-	}
-
 	// WindLight
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 	sky->setEnabled(TRUE);
@@ -2153,6 +2148,19 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	ctrl_shadow->setEnabled(enabled);
+
+	enabled = FALSE;
+	if (!LLFeatureManager::instance().isFeatureAvailable("RenderReflectionsEnabled"))
+	{
+		getChildView("ReflectionsEnabled")->setEnabled(FALSE);
+	}
+	else
+	{
+		enabled = gSavedSettings.getBOOL("RenderReflectionsEnabled");
+	}
+	getChildView("ReflectionDetail")->setEnabled(enabled);
+	//getChildView("ReflectionDetailText")->setEnabled(enabled);
+	getChildView("ScreenSpaceReflections")->setEnabled(enabled);
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();

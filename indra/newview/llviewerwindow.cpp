@@ -4465,6 +4465,7 @@ void LLViewerWindow::saveLastMouse(const LLCoordGL &point)
 	}
 }
 
+#if 0 //Broken
 // <FS:Beq> Changes to add physics view support into edit mode
 //pragma region FSShowPhysicsInEditMode
 
@@ -4472,22 +4473,22 @@ const float offset_units = 3.0;
 const float offset_factor = -3.0;
 
 // decorator for renderMeshBaseHull from llspatialpartition. but with our own offsets to avoid glitching.
-void renderMeshBaseHullPhysics(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color)
+void renderMeshBaseHullPhysics(LLVOVolume* volume, U32 data_mask, LLColor4& color)
 {
 			LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glPolygonOffset(offset_factor, offset_units);
 			gGL.diffuseColor4fv(color.mV);
-			renderMeshBaseHull(volume, data_mask, color, line_color);
+			renderMeshBaseHull(volume, data_mask, color);
 }
 
 // decorator for render_hull from llspatialpartition. but with our own offsets to avoid glitching.
-void renderHullPhysics(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color)
+void renderHullPhysics(LLModel::PhysicsMesh& mesh, const LLColor4& color)
 {
 	LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); 
 	glPolygonOffset(offset_factor, offset_units);
-	render_hull(mesh, color, line_color);
+	render_hull(mesh, color);
 }
 
 // Draw a physics shape with the edges highlighted in 'line_color'
@@ -5019,6 +5020,7 @@ void renderOnePhysicsShape(LLViewerObject* objectp)
 }
 // End Firestorm additions that add the ability to visualise the physics shape in edit mode.
 //</FS:Beq> Physics display in edit mode changes
+#endif
 
 // Draws the selection outlines for the currently selected objects
 // Must be called after displayObjects is called, which sets the mGLName parameter
@@ -5050,6 +5052,7 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 		
 		stop_glerror();
 		
+#if 0 // Broken
 		// <FS:Beq> Additions to display/tools in edit mode
 		if (LLToolMgr::getInstance()->inEdit() && selection->getSelectType() != SELECT_TYPE_HUD)
 		{
@@ -5115,6 +5118,7 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 			}
 		}
 		// </FS:Beq>
+#endif
 
 		// setup HUD render
 		if (selection->getSelectType() == SELECT_TYPE_HUD && LLSelectMgr::getInstance()->getSelection()->getObjectCount())

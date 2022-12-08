@@ -65,8 +65,8 @@ void pushVerts(LLVolume* volume);
 void drawBoxOutline(const LLVector3& pos, const LLVector3& size);
 void drawBox(const LLVector3& c, const LLVector3& r);
 S32 get_physics_detail(const LLVolumeParams& volume_params, const LLVector3& scale);
-void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color);
-void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color);
+void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color);
+void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color);
 //</FS:BEQ>
 
 class LLDrawInfo : public LLRefCount
@@ -445,7 +445,7 @@ public:
 	LLSpatialBridge* asBridge() { return mBridge; }
 	BOOL isBridge() { return asBridge() != NULL; }
 
-	void renderPhysicsShapes();
+	void renderPhysicsShapes(bool depth_only);
 	void renderDebug();
 	void renderIntersectingBBoxes(LLCamera* camera);
 	void restoreGL();

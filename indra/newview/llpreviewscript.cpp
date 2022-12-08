@@ -2371,13 +2371,39 @@ void LLPreviewLSL::finishedLSLUpload(LLUUID itemId, LLSD response)
     }
 }
 
+bool LLPreviewLSL::failedLSLUpload(LLUUID itemId, LLUUID taskId, LLSD response, std::string reason)
+{
+    LLSD floater_key;
+    if (taskId.notNull())
+    {
+        floater_key["taskid"] = taskId;
+        floater_key["itemid"] = itemId;
+    }
+    else
+    {
+        floater_key = LLSD(itemId);
+    }
+
+    LLPreviewLSL* preview = LLFloaterReg::findTypedInstance<LLPreviewLSL>("preview_script", floater_key);
+    if (preview)
+    {
+        // unfreeze floater
+        LLSD errors;
+        errors.append(LLTrans::getString("UploadFailed") + reason);
+        preview->callbackLSLCompileFailed(errors);
+        return true;
+    }
+
+    return false;
+}
+
 // <FS:ND> Asset uploader that can be used for LSL and Mono
 class FSScriptAssetUpload: public LLScriptAssetUpload
 {
 	bool m_bMono;
 public:
-	FSScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish, bool a_bMono)
-	: LLScriptAssetUpload(itemId, buffer, finish)
+	FSScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish, uploadFailed_f failure, bool a_bMono)
+	: LLScriptAssetUpload(itemId, buffer, finish, failure)
 	{
 		m_bMono = a_bMono;
 	}
@@ -2464,13 +2490,14 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
             //    [old_asset_id](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
             //        LLFileSystem::removeFile(old_asset_id, LLAssetType::AT_LSL_TEXT);
             //        LLPreviewLSL::finishedLSLUpload(itemId, response);
-            //    }));
+            //    },
+            //LLPreviewLSL::failedLSLUpload));
             LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<FSScriptAssetUpload>(mItemUUID, buffer, 
                 [old_asset_id](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
                     LLFileSystem::removeFile(old_asset_id, LLAssetType::AT_LSL_TEXT);
                     LLPreviewLSL::finishedLSLUpload(itemId, response);
                 },
-                domono));
+                LLPreviewLSL::failedLSLUpload, domono));
 
             LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
         }
@@ -3110,7 +3137,8 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
                 [isRunning, old_asset_id](LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response) { 
                         LLFileSystem::removeFile(old_asset_id, LLAssetType::AT_LSL_TEXT);
                         LLLiveLSLEditor::finishLSLUpload(itemId, taskId, newAssetId, response, isRunning);
-                }));
+                },
+                nullptr)); // needs failure handling?
 
         LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
     }

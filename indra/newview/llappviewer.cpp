@@ -1489,7 +1489,6 @@ bool LLAppViewer::init()
 
     //LLSimpleton creations
     LLEnvironment::createInstance();
-    LLEnvironment::getInstance()->initSingleton();
     LLWorld::createInstance();
     LLSelectMgr::createInstance();
     LLViewerCamera::createInstance();
