@@ -61,8 +61,8 @@ public:
     /*virtual*/ bool supportsAdjustableBufferSizes(){return true;}
     /*virtual*/ void setBufferSizes(U32 streambuffertime, U32 decodebuffertime);
     //Streamtitle display DKO
-    virtual bool getNewMetadata(LLSD& metadata);
-    // DKO
+    LLSD getCurrentMetadata() const noexcept { return mMetadata; }
+
 private:
     bool releaseDeadStreams();
 
@@ -77,12 +77,9 @@ private:
     std::string mPendingURL;
     F32 mGain;
     // <DKO> Streamtitle display
-    bool mNewMetadata;
     LLSD mMetadata;
-    // </DKO> Streamtitle display
 
     bool mWasAlreadyPlaying;
 };
-
 
 #endif // LL_STREAMINGAUDIO_FMODSTUDIO_H

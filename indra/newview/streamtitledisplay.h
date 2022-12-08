@@ -30,18 +30,21 @@
 #ifndef STREAMTITLEDISPLAY_H
 #define STREAMTITLEDISPLAY_H
 
-#include "lleventtimer.h"
+#include "llsingleton.h"
 
-class StreamTitleDisplay : LLEventTimer
+class StreamTitleDisplay : public LLSingleton<StreamTitleDisplay>
 {
+	LLSINGLETON_EMPTY_CTOR(StreamTitleDisplay);
+
 public:
-	StreamTitleDisplay();
 	~StreamTitleDisplay() { }
-private:
-	BOOL tick();
-	void checkMetadata();
-	void sendStreamTitleToChat(const std::string& Title);
-	LLSD mMetadata;
+
+protected:
+	void initSingleton() override;
+	void checkMetadata(const LLSD& metadata);
+	void sendStreamTitleToChat(std::string_view Title);
+
+	boost::signals2::connection mMetadataUpdateConnection;
 };
 
 #endif // STREAMTITLEDISPLAY_H

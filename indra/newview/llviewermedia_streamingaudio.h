@@ -51,7 +51,7 @@ class LLStreamingAudio_MediaPlugins : public LLStreamingAudioInterface
 	/*virtual*/ std::string getURL();
 
 	// <FS:ND> For FS metadata extraction
-	virtual bool getNewMetadata(LLSD& metadata);
+	LLSD getCurrentMetadata() const noexcept { return mMetadata; }
 	// </FS:ND>
 
 private:
@@ -62,8 +62,11 @@ private:
 	std::string mURL;
 
 	// <FS:ND> stream metadata from plugin
+	void updateMetadata() noexcept;
+
 	std::string mArtist;
 	std::string mTitle;
+	LLSD mMetadata;
 	// </FS:ND>
 
 	F32 mGain;
