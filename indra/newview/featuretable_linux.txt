@@ -1,4 +1,4 @@
-version 33
+version 34
 // The version number above should be incremented IF AND ONLY IF some
 // change has been made that is sufficiently important to justify
 // resetting the graphics preferences of all users to the recommended
@@ -46,7 +46,8 @@ RenderMaxPartCount			1	8192
 RenderObjectBump			1	1
 RenderLocalLights			1	1
 RenderTransparentWater      1   1
-RenderReflectionProbeDetail		1	2
+RenderReflectionsEnabled    1   1
+RenderReflectionProbeDetail	1	2
 RenderTerrainDetail			1	1
 RenderTerrainLODFactor		1	2.0
 RenderTreeLODFactor			1	1.0
@@ -89,7 +90,8 @@ RenderGlowResolutionPow		1	8
 RenderLocalLights			1	0
 RenderMaxPartCount			1	256
 RenderTransparentWater      1   0
-RenderReflectionProbeDetail	1	-1
+RenderReflectionsEnabled    1   0
+RenderReflectionProbeDetail	1	0
 RenderTerrainDetail			1	0
 RenderTerrainLODFactor		1	1
 RenderTreeLODFactor			1	0
@@ -114,7 +116,8 @@ RenderGlowResolutionPow		1	8
 RenderMaxPartCount			1	2048
 RenderLocalLights			1	1
 RenderTransparentWater      1   0
-RenderReflectionProbeDetail	1	-1
+RenderReflectionsEnabled    1   0
+RenderReflectionProbeDetail	1	0
 RenderTerrainDetail			1	1
 RenderTerrainLODFactor		1	1.0
 RenderTreeLODFactor			1	0.5
@@ -148,6 +151,7 @@ RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
 RenderFSAASamples			1	2
+RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	0
 
 //
@@ -173,6 +177,7 @@ RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
 RenderFSAASamples			1	2
+RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 
 //
@@ -198,6 +203,7 @@ RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
 RenderFSAASamples			1	2
+RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 
 //
@@ -223,6 +229,7 @@ RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
 RenderFSAASamples			1	2
+RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 
 //
@@ -248,6 +255,7 @@ RenderDeferredSSAO			1	1
 RenderUseAdvancedAtmospherics 1 0
 RenderShadowDetail			1	2
 RenderFSAASamples			1	2
+RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 
 //
@@ -295,4 +303,6 @@ RenderGLContextCoreProfile         1   0
 
 list GL3
 RenderFSAASamples           0   0
-RenderReflectionProbeDetail	0	-1
+RenderReflectionsEnabled    0   0
+RenderReflectionProbeDetail	0	0
+
