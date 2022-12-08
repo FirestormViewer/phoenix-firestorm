@@ -609,13 +609,15 @@ class WindowsManifest(ViewerManifest):
                 print ("Skipping GLOD library (assumming linked statically)")
 
             # Get fmodstudio dll if needed
-            if self.args['fmodstudio'] == 'ON':
+            # if self.args['fmodstudio'] == 'ON':
+            if self.args['fmodstudio'].lower() == 'on':
                 if(self.args['configuration'].lower() == 'debug'):
                     self.path("fmodL.dll")
                 else:
                     self.path("fmod.dll")
 
-            if self.args['openal'] == 'ON':
+            # if self.args['openal'] == 'ON':
+            if self.args['openal'].lower() == 'on':
                 # Get openal dll
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
@@ -1344,6 +1346,7 @@ class DarwinManifest(ViewerManifest):
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
             bugsplat_db = self.args.get('bugsplat')
+            print(f"debug: bugsplat_db={bugsplat_db}")
             if bugsplat_db:
                 # Inject BugsplatServerURL into Info.plist if provided.
                 Info_plist = self.dst_path_of("Info.plist")
@@ -1477,17 +1480,26 @@ class DarwinManifest(ViewerManifest):
                     self.path2basename(relpkgdir, libfile)
 
                 # Fmod studio dylibs (vary based on configuration)
-                if self.args['fmodstudio'] == 'ON':
+                # <FS:Beq> Fix intolerant processing of booleans
+                # if self.args['fmodstudio'].lower() == 'ON':
+                usefmod = self.args['fmodstudio'].lower()
+                print(f"debug: fmodstudio={usefmod}")
+                if usefmod == 'on':
                     if self.args['configuration'].lower() == 'debug':
+                        print("debug: fmodstudio is used in debug")
                         for libfile in (
                                     "libfmodL.dylib",
                                     ):
                             dylibs += path_optional(os.path.join(debpkgdir, libfile), libfile)
                     else:
+                        print("debug: fmodstudio is used in release")
                         for libfile in (
                                     "libfmod.dylib",
                                     ):
+                            
+                            print("debug: adding {} to dylibs for fmodstudio".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+                print(f"debug: dylibs = {dylibs}")
 
                 # our apps
                 executable_path = {}
@@ -1832,7 +1844,12 @@ class DarwinManifest(ViewerManifest):
 
         finally:
             # Unmount the image even if exceptions from any of the above 
-            self.run_command(['hdiutil', 'detach', '-force', devfile])
+            for tries in range(10):
+                try:
+                    self.run_command(['hdiutil', 'detach', '-force', devfile])
+                except ManifestError as err:
+                    print(f"detach failed on attempt {tries}")
+                    time.sleep(1)
 
         print("Converting temp disk image to final disk image")
         self.run_command(['hdiutil', 'convert', sparsename, '-format', 'UDZO',
@@ -2199,7 +2216,8 @@ class Linux_i686_Manifest(LinuxManifest):
                 print("tcmalloc files not found, skipping")
                 pass
 
-            if self.args['fmodstudio'] == 'ON':
+            # if self.args['fmodstudio'] == 'ON':
+            if self.args['fmodstudio'].lower() == 'on':
                 try:
                     self.path("libfmod.so")
                     self.path("libfmod.so*")
@@ -2240,7 +2258,8 @@ class Linux_x86_64_Manifest(LinuxManifest):
             # is now in the slvoice package, and we need to just use it as is.
             # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
 
-            if self.args['fmodstudio'] == 'ON':
+            # if self.args['fmodstudio'] == 'ON':
+            if self.args['fmodstudio'].lower() == 'on':
                 try:
                     self.path("libfmod.so")
                     self.path("libfmod.so*")
