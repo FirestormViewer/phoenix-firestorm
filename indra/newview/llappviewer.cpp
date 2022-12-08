@@ -2062,6 +2062,7 @@ bool LLAppViewer::cleanup()
 	// LLViewerCamera::deleteSingleton();
 
 	// LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	LLViewerCamera::deleteSingleton();
 	// </FS:Beq>
 	if (gKeyboard)
 	{
@@ -4866,7 +4867,6 @@ void LLAppViewer::forceQuit()
 {
 	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
 	disconnectViewer();
-	LLViewerCamera::deleteSingleton();
 	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
 	// </FS:Beq>
 	LLApp::setQuitting();
