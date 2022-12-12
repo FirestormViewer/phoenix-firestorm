@@ -238,6 +238,7 @@
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
 #include "fsfloatersearch.h"
+#include "fsfloaterstreamtitle.h"
 #include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
@@ -3892,7 +3893,8 @@ void LLStartUp::multimediaInit()
 	display_startup();
 
 	// Also initialise the stream titles.
-	new StreamTitleDisplay();
+	StreamTitleDisplay::instance();
+	FSStreamTitleManager::instance();
 }
 
 void LLStartUp::fontInit()

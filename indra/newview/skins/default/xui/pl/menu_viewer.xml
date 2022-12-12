@@ -110,8 +110,9 @@
 		<menu_item_call label="Cele podróży" name="Destinations"/>
 		<menu_item_call label="Wydarzenia" name="Events"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
-		<menu_item_check label="Mapa Świata" name="World Map"/>
-		<menu_item_check label="Śledzenie Regionów" name="Region Tracker"/>
+		<menu_item_check label="Mapa świata" name="World Map"/>
+		<menu_item_check label="Śledzenie regionów" name="Region Tracker"/>
+		<menu_item_check label="Teraz odtwarzane" name="Stream Title" />
 		<menu_item_call label="Zapamiętaj to miejsce (LM)" name="Create Landmark Here"/>
 		<menu_item_call label="Profil miejsca" name="Place Profile"/>
 		<menu_item_call label="O działce" name="About Land"/>
