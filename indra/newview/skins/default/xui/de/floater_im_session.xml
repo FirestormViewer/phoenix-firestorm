@@ -31,17 +31,6 @@
 				<button name="close_btn" tool_tip="Diese Unterhaltung beenden"/>
 				<button name="expand_collapse_btn" tool_tip="Dieses Fenster schließen/erweitern"/>
 			</layout_panel>
-			<layout_panel name="body_panel">
-				<layout_stack name="im_panels">
-					<layout_panel name="right_part_holder">
-						<layout_stack name="translate_and_chat_stack">
-							<layout_panel name="translate_chat_checkbox_lp">
-								<check_box label="Chat übersetzen" name="translate_chat_checkbox"/>
-							</layout_panel>
-						</layout_stack>
-					</layout_panel>
-				</layout_stack>
-			</layout_panel>
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">
 					<layout_panel name="input_editor_layout_panel">

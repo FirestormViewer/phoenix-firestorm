@@ -5,9 +5,6 @@
 
 <layout_stack name="ls_control_panel">
 
-	<layout_panel name="lp_translate_btn">
-		<button tool_tip="選択した翻訳サービスを利用します。" name="translate_btn"/>
-	</layout_panel>
     <layout_panel name="lp_chat_history_btn">
 		<button tool_tip="周辺チャット履歴を開きます。" name="chat_history_btn"/>
 	</layout_panel>

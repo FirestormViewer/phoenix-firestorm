@@ -10,15 +10,6 @@
 				<button name="close_btn" tool_tip="Mettre fin à cette conversation"/>
 				<button name="expand_collapse_btn" tool_tip="Réduire/Développer ce panneau"/>
 			</layout_panel>
-			<layout_panel name="body_panel">
-				<layout_stack name="im_panels">
-					<layout_panel name="right_part_holder">
-						<layout_stack name="translate_and_chat_stack">
-							<layout_panel name="translate_chat_checkbox_lp"><check_box label="Traduire le chat" name="translate_chat_checkbox"/></layout_panel>
-						</layout_stack>
-					</layout_panel>
-				</layout_stack>
-			</layout_panel>
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">
 					<layout_panel name="input_button_layout_panel"><button name="minz_btn" tool_tip="Affiche/Masque le panneau des messages"/></layout_panel>

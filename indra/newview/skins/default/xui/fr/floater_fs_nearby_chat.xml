@@ -2,7 +2,6 @@
 <floater name="nearby_chat" title="Chat local">
 	<floater.string name="chatbox_label">Au chat local</floater.string>
 	<layout_stack name="ls_control_panel">
-		<layout_panel name="lp_translate_btn"><button tool_tip="Utiliser le service de traduction sélectionné" name="translate_btn"/></layout_panel>
 		<layout_panel name="lp_chat_history_btn"><button tool_tip="Ouvrir l'historique de conversation." name="chat_history_btn"/></layout_panel>
 		<layout_panel name="lp_chat_history_muted_btn"><button tool_tip="Affiche le texte ignoré dans l'historique de conversation." name="chat_history_muted_btn"/></layout_panel>
 		<layout_panel name="lp_options_btn"><menu_button tool_tip="Options du Chat" name="chat_options_btn"/></layout_panel>
