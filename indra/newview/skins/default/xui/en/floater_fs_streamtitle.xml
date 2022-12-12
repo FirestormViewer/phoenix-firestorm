@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="stream_info"
+ title="Now playing:"
+ can_resize="true"
+ height="46"
+ width="400"
+ layout="topleft"
+ min_height="46"
+ min_width="200"
+ save_rect="true"
+>
+<floater.string name="NoStream">
+	No stream playing
+</floater.string>
+	<text
+		top="3"
+		follows="left|top|right"
+		height="16"
+		width="320"
+		layout="topleft"
+		left="10"
+		name="streamtitle"
+		use_ellipses="true"
+		wrap="false"
+		/>
+	<button
+		top_delta="-2"
+		follows="top|right"
+		height="16"
+		width="60"
+		layout="topleft"
+		name="btn_history"
+		label="History"
+		right="-5"
+		/>
+</floater>

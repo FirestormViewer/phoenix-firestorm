@@ -90,7 +90,7 @@ public:
 
 		void sessionInitReplyReceived(const LLUUID& new_session_id);
 		void addMessagesFromHistory(const std::list<LLSD>& history);
-		void addMessage(const std::string& from, const LLUUID& from_id, const std::string& utf8_text, const std::string& time, const bool is_history = false);
+		void addMessage(const std::string& from, const LLUUID& from_id, const std::string& utf8_text, const std::string& time, const bool is_history = false, bool is_region_msg = false);
 		void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state, const LLVoiceChannel::EDirection& direction);
 		
 		/** @deprecated */
@@ -240,8 +240,8 @@ public:
 	 * It sends new message signal for each added message.
 	 */
 	// <FS:Ansariel> Added is_announcement parameter
-	//bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
-	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, bool is_announcement = false, bool keyword_alert_performed = false);
+	//bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, bool is_region_msg = false);
+	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, bool is_region_msg = false, bool is_announcement = false, bool keyword_alert_performed = false);
 
 	/**
 	 * Similar to addMessage(...) above but won't send a signal about a new message added
@@ -250,7 +250,7 @@ public:
 	//LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 	//	const std::string& utf8_text, bool log2file = true);
 	LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-		const std::string& utf8_text, bool log2file = true, bool is_announcement = false);
+		const std::string& utf8_text, bool log2file = true, bool is_region_msg = false, bool is_announcement = false);
 
 	/**
 	 * Add a system message to an IM Model
@@ -331,8 +331,8 @@ private:
 	 * Add message to a list of message associated with session specified by session_id
 	 */
 	// <FS:Ansariel> Added is_announcement parameter
-	//bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
-	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, bool is_announcement = false);
+	//bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, bool is_region_msg = false);
+	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, bool is_region_msg = false, bool is_announcement = false);
 };
 
 class LLIMSessionObserver
@@ -373,7 +373,7 @@ public:
 					U32 parent_estate_id = 0,
 					const LLUUID& region_id = LLUUID::null,
 					const LLVector3& position = LLVector3::zero,
-					bool link_name = false,
+					bool is_region_msg = false,
 					bool is_announcement = false, // <FS:Ansariel> Special parameter indicating announcement
 					bool keyword_alert_performed = false // <FS:Ansariel> Pass info if keyword alert has been performed
 					);

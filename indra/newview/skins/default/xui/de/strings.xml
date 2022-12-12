@@ -6488,6 +6488,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
 		Die Physikform enthält ungültige Bestätigungsdaten. Versuchen Sie, das Physikmodell zu korrigieren.
 	</string>
+	<string name="Mav_Details_MAV_BLOCK_MISSING">
+		Fehlende Daten. Stellen Sie sicher, dass die höchste Detailstufe vorhanden und gültig ist. Setzen Sie das Physikmodell, falls es nicht gesetzt ist.
+	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		Die Physikform hat keine korrekte Version. Legen Sie die korrekte Version für das Physikmodell fest.
 	</string>

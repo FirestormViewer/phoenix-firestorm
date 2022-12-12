@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="stream_info" title="Сейчас играет:">
+	<floater.string name="NoStream">
+		Нет воспроизведения потока
+	</floater.string>
+	<button name="btn_history" label="История"/>
+</floater>

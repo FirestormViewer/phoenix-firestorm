@@ -49,7 +49,7 @@
 
 extern LLPipeline gPipeline;
 // <FS:Ansariel> Moved to header file
-//const F32 MAX_ATTACHMENT_DIST = 3.5f; // meters?
+//const F32 MAX_ATTACHMENT_DIST = 3.5f; // meters
 
 //-----------------------------------------------------------------------------
 // LLViewerJointAttachment()

@@ -750,7 +750,7 @@ bool toggle_agent_pause(const LLSD& newvalue)
 
 	//LLNavigationBar::getInstance()->setVisible(value);
 	//gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
-
+    //gViewerWindow->reshapeStatusBarContainer();
 	//return true;
 // }
 

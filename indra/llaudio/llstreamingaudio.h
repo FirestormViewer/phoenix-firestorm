@@ -29,6 +29,7 @@
 #define LL_STREAMINGAUDIO_H
 
 #include "stdtypes.h" // from llcommon
+#include <boost/signals2.hpp>
 
 // Entirely abstract.  Based exactly on the historic API.
 class LLStreamingAudioInterface
@@ -49,7 +50,15 @@ class LLStreamingAudioInterface
 	virtual void setBufferSizes(U32 streambuffertime, U32 decodebuffertime){};
 
 	// These three are Firestorm additions and thus optional.
-	virtual bool getNewMetadata(LLSD& metadata) { return false; }
+	using metadata_update_callback_t = boost::signals2::signal<void(const LLSD& metadata)>;
+	virtual boost::signals2::connection setMetadataUpdateCallback(const metadata_update_callback_t::slot_type& cb) noexcept
+	{
+		return mMetadataUpdateSignal.connect(cb);
+	}
+	virtual LLSD getCurrentMetadata() const noexcept { return LLSD(); }
+
+protected:
+	metadata_update_callback_t mMetadataUpdateSignal;
 };
 
 #endif // LL_STREAMINGAUDIO_H

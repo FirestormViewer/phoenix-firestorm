@@ -45,11 +45,13 @@
 #include "llxmltree.h"
 #include "message.h"
 
+#include "lldrawpoolbump.h" // to init bumpmap images
 #include "lltexturecache.h"
 #include "lltexturefetch.h"
 #include "llviewercontrol.h"
 #include "llviewertexture.h"
 #include "llviewermedia.h"
+#include "llviewernetwork.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
 #include "pipeline.h"
@@ -142,9 +144,6 @@ void LLViewerTextureList::doPreloadImages()
 	//uv_test->setClamp(FALSE, FALSE);
 	//uv_test->setMipFilterNearest(TRUE, TRUE);
 
-	// prefetch specific UUIDs
-	LLViewerTextureManager::getFetchedTexture(IMG_SHOT);
-	LLViewerTextureManager::getFetchedTexture(IMG_SMOKE_POOF);
 	LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTextureFromFile("silhouette.j2c", FTT_LOCAL_FILE, MIPMAP_YES, LLViewerFetchedTexture::BOOST_UI);
 	if (image) 
 	{
@@ -161,12 +160,6 @@ void LLViewerTextureList::doPreloadImages()
 	if (image) 
 	{
 		image->setAddressMode(LLTexUnit::TAM_WRAP);
-		mImagePreloads.insert(image);
-	}
-	image = LLViewerTextureManager::getFetchedTexture(DEFAULT_WATER_NORMAL, FTT_DEFAULT, MIPMAP_YES, LLViewerFetchedTexture::BOOST_UI);
-	if (image) 
-	{
-		image->setAddressMode(LLTexUnit::TAM_WRAP);	
 		mImagePreloads.insert(image);
 	}
 	image = LLViewerTextureManager::getFetchedTextureFromFile("transparent.j2c", FTT_LOCAL_FILE, MIPMAP_YES, LLViewerFetchedTexture::BOOST_UI, LLViewerTexture::FETCHED_TEXTURE,
@@ -201,7 +194,21 @@ void LLViewerTextureList::doPreloadImages()
 
 static std::string get_texture_list_name()
 {
-	return gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "texture_list_" + gSavedSettings.getString("LoginLocation") + "." + gDirUtilp->getUserName() + ".xml");
+    // <FS:Ansariel> OpenSim compatibility
+    //if (LLGridManager::getInstance()->isInProductionGrid())
+    if (LLGridManager::getInstance()->isInSLMain())
+    // </FS:Ansariel>
+    {
+        return gDirUtilp->getExpandedFilename(LL_PATH_CACHE,
+            "texture_list_" + gSavedSettings.getString("LoginLocation") + "." + gDirUtilp->getUserName() + ".xml");
+    }
+    else
+    {
+        const std::string& grid_id_str = LLGridManager::getInstance()->getGridId();
+        const std::string& grid_id_lower = utf8str_tolower(grid_id_str);
+        return gDirUtilp->getExpandedFilename(LL_PATH_CACHE,
+            "texture_list_" + gSavedSettings.getString("LoginLocation") + "." + gDirUtilp->getUserName() + "." + grid_id_lower + ".xml");
+    }
 }
 
 void LLViewerTextureList::doPrefetchImages()
@@ -209,6 +216,26 @@ void LLViewerTextureList::doPrefetchImages()
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
 	gTextureTimer.start();
 	gTextureTimer.pause();
+
+    // todo: do not load without getViewerAssetUrl()
+    // either fail login without caps or provide this
+    // in some other way, textures won't load otherwise
+    LLViewerFetchedTexture *imagep = findImage(DEFAULT_WATER_NORMAL, TEX_LIST_STANDARD);
+    if (!imagep)
+    {
+        // add it to mImagePreloads only once
+        imagep = LLViewerTextureManager::getFetchedTexture(DEFAULT_WATER_NORMAL, FTT_DEFAULT, MIPMAP_YES, LLViewerFetchedTexture::BOOST_UI);
+        if (imagep)
+        {
+            imagep->setAddressMode(LLTexUnit::TAM_WRAP);
+            mImagePreloads.insert(imagep);
+        }
+    }
+
+    LLViewerTextureManager::getFetchedTexture(IMG_SHOT);
+    LLViewerTextureManager::getFetchedTexture(IMG_SMOKE_POOF);
+
+    LLStandardBumpmap::addstandard();
 
 	if (LLAppViewer::instance()->getPurgeCache())
 	{
@@ -1760,6 +1787,7 @@ void LLViewerTextureList::updateTexMemDynamic()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// <FS:Ansariel> OpenSim compatibility
 // static
 void LLViewerTextureList::receiveImageHeader(LLMessageSystem *msg, void **user_data)
 {
@@ -1904,7 +1932,7 @@ void LLViewerTextureList::receiveImagePacket(LLMessageSystem *msg, void **user_d
 		delete[] data;
 	}
 }
-
+// </FS:Ansariel>
 
 // We've been that the asset server does not contain the requested image id.
 // static
