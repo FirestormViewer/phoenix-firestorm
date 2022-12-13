@@ -670,10 +670,10 @@ public:
 
 	void showInspector()
 	{
-//		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) return;
+//		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType) return;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		// Don't double-click show the inspector if we're not showing the info control
-		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) ) return;
+		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType) ) return;
 // [/RLVa:KB]
 		
 		if (mSourceType == CHAT_SOURCE_OBJECT)
@@ -847,6 +847,7 @@ public:
 				icon->setValue(LLSD("OBJECT_Icon"));
 				break;
 			case CHAT_SOURCE_SYSTEM:
+			case CHAT_SOURCE_REGION:
 				icon->setValue(LLSD("SL_Logo"));
 				break;
 			case CHAT_SOURCE_TELEPORT:
@@ -1000,9 +1001,9 @@ protected:
 
 	void showInfoCtrl()
 	{
-//		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType;
+//		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		const bool isVisible = mShowInfoCtrl && !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType;
+		const bool isVisible = mShowInfoCtrl && !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType;
 // [/RLVa:KB]
 		if (isVisible)
 		{
@@ -1413,9 +1414,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				mEditor->appendText(chat.mFromName + delimiter, prependNewLineState, link_params);
 				prependNewLineState = false;
 			}
-//			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log)
+//			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && chat.mSourceType != CHAT_SOURCE_REGION)
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && !chat.mRlvNamesFiltered)
+			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && chat.mSourceType != CHAT_SOURCE_REGION && !chat.mRlvNamesFiltered)
 // [/RLVa:KB]
 			{
 				LLStyle::Params link_params(body_message_params);

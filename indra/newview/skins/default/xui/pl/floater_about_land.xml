@@ -409,7 +409,7 @@ teksturę:
 			<check_box label="Rozmowy włączone" name="parcel_enable_voice_channel"/>
 			<check_box label="Rozmowy włączone (ustawione przez Majątek)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Ogranicz komunikację głosową do obszaru tej działki" name="parcel_enable_voice_channel_local"/>
-			<check_box label="Maskuj MOAP" name="obscure_moap" tool_tip="Media na primach znajdujących się poza tą działką nie powinny odtwarzać się automatycznie dla rezydentów będących na niej - i odwrotnie." />
+			<check_box label="Ogranicz MOAP do obecnej działki" name="obscure_moap" tool_tip="Media na primach znajdujących się poza tą działką nie powinny odtwarzać się automatycznie dla rezydentów będących na niej - i odwrotnie." />
 		</panel>
 		<panel label="Dostęp" name="land_access_panel">
 			<panel.string name="access_estate_defined">

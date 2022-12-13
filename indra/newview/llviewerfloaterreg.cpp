@@ -103,7 +103,7 @@
 #include "llfloaterobjectweights.h"
 #include "llfloateropenobject.h"
 #include "llfloateroutfitphotopreview.h"
-#include "llfloateroutfitsnapshot.h"
+#include "llfloatersimpleoutfitsnapshot.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloaterpathfindingconsole.h"
 #include "llfloaterpathfindinglinksets.h"
@@ -204,6 +204,7 @@
 #include "fsfloaterradar.h"
 #include "fsfloatersearch.h"
 #include "fsfloaterstatistics.h"
+#include "fsfloaterstreamtitle.h"
 #include "fsfloaterteleporthistory.h"
 #include "fsfloatervoicecontrols.h"
 #include "fsfloatervolumecontrols.h"
@@ -225,6 +226,7 @@
 
 
 // handle secondlife:///app/openfloater/{NAME} URLs
+const std::string FLOATER_PROFILE("profile");
 class LLFloaterOpenHandler : public LLCommandHandler
 {
 public:
@@ -241,8 +243,20 @@ public:
 
 		const std::string floater_name = LLURI::unescape(params[0].asString());
 		// <FS:Zi> Support passing arguments to opened floater like secondlife:///app/openfloater/{NAME}?tab=msg&subtab=xyz
-		// LLFloaterReg::showInstance(floater_name);
-		LLFloaterReg::showInstance(floater_name, query_map);
+        //LLSD key;
+        //if (floater_name == FLOATER_PROFILE)
+        //{
+        //    key["id"] = gAgentID;
+        //}
+		//LLFloaterReg::showInstance(floater_name, key);
+        if (floater_name == FLOATER_PROFILE)
+        {
+            LLSD key;
+            key["id"] = gAgentID;
+            LLFloaterReg::showInstance(floater_name, key);
+            return true;
+        }
+        LLFloaterReg::showInstance(floater_name, query_map);
 
 		return true;
 	}
@@ -458,7 +472,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("scene_load_stats", "floater_scene_load_stats.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSceneLoadStats>);
 	LLFloaterReg::add("stop_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterNotRunQueue>);
 	LLFloaterReg::add("snapshot", "floater_snapshot.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSnapshot>);
-    LLFloaterReg::add("outfit_snapshot", "floater_outfit_snapshot.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterOutfitSnapshot>);
+    LLFloaterReg::add("simple_outfit_snapshot", "floater_simple_outfit_snapshot.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSimpleOutfitSnapshot>);
 	// <FS:CR> Search floater is deferred to login now so we can tell what grid we're in.
     //LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
     LLFloaterReg::add("profile", "floater_profile.xml",(LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProfile>);
@@ -504,6 +518,8 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
 	LLFloaterReg::add("fs_protectedfolders", "floater_fs_protectedfolders.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterProtectedFolders>);
 	LLFloaterReg::add("fs_radar", "floater_fs_radar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterRadar>);
+	LLFloaterReg::add("fs_streamtitle", "floater_fs_streamtitle.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitle>);
+	LLFloaterReg::add("fs_streamtitlehistory", "floater_fs_streamtitlehistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterStreamTitleHistory>);
 	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
 	LLFloaterReg::add("fs_voice_controls", "floater_fs_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVoiceControls>);
 	LLFloaterReg::add("fs_volume_controls", "floater_fs_volume_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVolumeControls>);

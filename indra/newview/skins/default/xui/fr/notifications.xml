@@ -5404,9 +5404,6 @@ Veuillez noter que "Utiliser l'environnement partagé" et "Basé sur le cycle jo
 	<notification name="FSAOScriptedNotification">
 		Superviseur d'animation Firestorm : [AO_MESSAGE]
 	</notification>
-	<notification name="AttachedRiggedObjectToHUD">
-		Un objet attaché "[NAME]" contient du mesh lié à l'avatar mais est attaché au point HUD "[HUD_POINT]". Les mesh liés à l'avatar attachés à un point HUD ne seront visibles ni par vous ni par les autres. Retirez et de réattachez à un point d'attachement normal du corps.
-	</notification>
 	<notification name="WarnForceLoginURL">
 		L'URL de l'écran d'accueil de connexion est remplacée à des fins de test.
 

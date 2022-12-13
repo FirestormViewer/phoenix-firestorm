@@ -30,6 +30,7 @@
 
 #include "llfloater.h"
 #include "llwearableitemslist.h"
+#include <optional>
 
 class LLButton;
 class LLFilterEditor;
@@ -91,6 +92,8 @@ private:
 
 	void onOptionsMenuItemClicked(const LLSD& userdata);
 	bool onOptionsMenuItemChecked(const LLSD& userdata);
+
+	static std::optional<LLUUID> getWearableFavoritesFolderID();
 
 	bool mInitialized;
 

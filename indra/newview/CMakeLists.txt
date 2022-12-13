@@ -132,6 +132,7 @@ set(viewer_SOURCE_FILES
     fsfloaterradar.cpp
     fsfloatersearch.cpp
     fsfloaterstatistics.cpp
+    fsfloaterstreamtitle.cpp
     fsfloaterteleporthistory.cpp
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
@@ -356,9 +357,9 @@ set(viewer_SOURCE_FILES
     llfloaternotificationsconsole.cpp
     llfloaternotificationstabbed.cpp
     llfloateroutfitphotopreview.cpp 
-    llfloateroutfitsnapshot.cpp
     llfloaterobjectweights.cpp
     llfloateropenobject.cpp
+    llfloatersimpleoutfitsnapshot.cpp
     llfloaterpathfindingcharacters.cpp
     llfloaterpathfindingconsole.cpp
     llfloaterpathfindinglinksets.cpp
@@ -909,6 +910,7 @@ set(viewer_HEADER_FILES
     fsfloaterradar.h
     fsfloatersearch.h
     fsfloaterstatistics.h
+    fsfloaterstreamtitle.h
     fsfloaterteleporthistory.h
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h
@@ -1139,9 +1141,9 @@ set(viewer_HEADER_FILES
     llfloaternotificationsconsole.h
     llfloaternotificationstabbed.h
     llfloateroutfitphotopreview.h
-    llfloateroutfitsnapshot.h
     llfloaterobjectweights.h
     llfloateropenobject.h
+    llfloatersimpleoutfitsnapshot.h
     llfloaterpathfindingcharacters.h
     llfloaterpathfindingconsole.h
     llfloaterpathfindinglinksets.h

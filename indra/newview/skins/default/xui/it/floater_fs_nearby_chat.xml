@@ -4,9 +4,6 @@
 		Chat locale
 	</floater.string>
 	<layout_stack name="ls_control_panel">
-		<layout_panel name="lp_translate_btn">
-			<button tool_tip="Usa il servizio traduzioni selezionato" name="translate_btn"/>
-		</layout_panel>
 		<layout_panel name="lp_chat_history_btn">
 			<button tool_tip="Apri il log della chat locale" name="chat_history_btn"/>
 		</layout_panel>

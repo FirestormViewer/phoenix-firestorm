@@ -666,7 +666,7 @@ extern char const* const _PREHASH_GroupRolesCount;
 extern char const* const _PREHASH_SimulatorBlock;
 extern char const* const _PREHASH_GroupID;
 extern char const* const _PREHASH_AgentVel;
-extern char const* const _PREHASH_RequestImage;
+extern char const* const _PREHASH_RequestImage; // <FS:Ansariel> OpenSim compatibility
 extern char const* const _PREHASH_NetStats;
 extern char const* const _PREHASH_AgentPos;
 extern char const* const _PREHASH_AgentSit;
@@ -1047,7 +1047,7 @@ extern char const* const _PREHASH_SortOrder;
 extern char const* const _PREHASH_Hunter;
 extern char const* const _PREHASH_SunAngVelocity;
 extern char const* const _PREHASH_BinaryBucket;
-extern char const* const _PREHASH_ImagePacket;
+extern char const* const _PREHASH_ImagePacket; // <FS:Ansariel> OpenSim compatibility
 extern char const* const _PREHASH_StartGroupProposal;
 extern char const* const _PREHASH_EnergyLevel;
 extern char const* const _PREHASH_PriceForListing;
@@ -1236,7 +1236,7 @@ extern char const* const _PREHASH_ForceScriptControlRelease;
 extern char const* const _PREHASH_ParcelRelease;
 extern char const* const _PREHASH_VFileType;
 extern char const* const _PREHASH_EjectGroupMemberReply;
-extern char const* const _PREHASH_ImageData;
+extern char const* const _PREHASH_ImageData; // <FS:Ansariel> OpenSim compatibility
 extern char const* const _PREHASH_SimulatorViewerTimeMessage;
 extern char const* const _PREHASH_Rotation;
 extern char const* const _PREHASH_Selection;

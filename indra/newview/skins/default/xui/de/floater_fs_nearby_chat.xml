@@ -4,9 +4,6 @@
 		An Chat in der Nähe
 	</floater.string>
 	<layout_stack name="ls_control_panel">
-		<layout_panel name="lp_translate_btn">
-			<button name="translate_btn" tool_tip="Chat mit konfiguriertem Dienst übersetzen"/>
-		</layout_panel>
 		<layout_panel name="lp_chat_history_btn">
 			<button name="chat_history_btn" tool_tip="Verlauf für Chat in der Nähe öffnen"/>
 		</layout_panel>

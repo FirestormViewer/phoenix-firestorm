@@ -25,6 +25,13 @@
 		<check_box label="Aktiviert" name="enable_media"/>
 		<slider label="Voice-Chat" name="Voice Volume"/>
 		<check_box label="Aktiviert" name="enable_voice_check_volume"/>
+		<text name="Listen media from" width="170">
+			Medien und Klänge hören von:
+		</text>
+		<radio_group name="media_ear_location">
+			<radio_item label="Kamera-Position" name="0"/>
+			<radio_item label="Avatar-Position" name="1"/>
+		</radio_group>
 		<text name="auto_unmute_label">
 			Stummschaltung nach Teleport automatisch aufheben:
 		</text>

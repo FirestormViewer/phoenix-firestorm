@@ -67,7 +67,6 @@
 #include "llstylemap.h"
 #include "lltextbox.h"
 #include "lltrans.h"
-#include "lltranslate.h"
 #include "llviewercontrol.h"
 #include "llviewermenu.h"//for gMenuHolder
 #include "llviewerstats.h"
@@ -141,8 +140,6 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputPanels = getChild<LLLayoutStack>("input_panels");
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
-
-	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
 	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
 
@@ -663,11 +660,6 @@ BOOL FSFloaterNearbyChat::getVisible()
 		
 	// getVisible() returns TRUE when Tabbed IM window is minimized.
 	return is_active && !im_container->isMinimized() && im_container->getVisible();
-}
-
-void FSFloaterNearbyChat::enableTranslationButton(bool enabled)
-{
-	getChildView("translate_btn")->setEnabled(enabled);
 }
 
 // virtual
