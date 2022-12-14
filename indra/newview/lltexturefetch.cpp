@@ -1446,7 +1446,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				else
 				{
 					mCanUseHTTP = false ;
-					LL_WARNS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
+					LL_DEBUGS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
 				}
 			}
 			else
