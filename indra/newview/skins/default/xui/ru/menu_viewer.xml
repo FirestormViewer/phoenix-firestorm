@@ -127,6 +127,7 @@
 		<menu_item_check label="Мини карта" name="Mini-Map"/>
 		<menu_item_check label="Карта мира" name="World Map"/>
 		<menu_item_check label="Отслеживание региона" name="Region Tracker"/>
+		<menu_item_check label="Название Потока" name="Stream Title"/>
 		<menu_item_call label="Создать закладку" name="Create Landmark Here"/>
 		<menu_item_call label="Профиль локации" name="Place Profile"/>
 		<menu_item_call label="Детали участка" name="About Land"/>

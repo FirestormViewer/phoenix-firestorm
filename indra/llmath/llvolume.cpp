@@ -5139,6 +5139,17 @@ void LLVolumeFace::optimize(F32 angle_cutoff)
 	{
 		U16 index = mIndices[i];
 
+        if (index >= mNumVertices)
+        {
+            // invalid index
+            // replace with a valid index to avoid crashes
+            index = mNumVertices - 1;
+            mIndices[i] = index;
+
+            // Needs better logging
+            LL_DEBUGS_ONCE("LLVOLUME") << "Invalid index, substituting" << LL_ENDL;
+        }
+
 		LLVolumeFace::VertexData cv;
 		getVertexData(index, cv);
 		

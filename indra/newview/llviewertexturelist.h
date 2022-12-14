@@ -132,6 +132,7 @@ public:
 	S32 getNumImages()					{ return mImageList.size(); }
 
 	// Local UI images
+    // Local UI images
 	void doPreloadImages();
     // Network images. Needs caps and cache to work
 	void doPrefetchImages();

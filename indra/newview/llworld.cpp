@@ -188,7 +188,6 @@ void LLWorld::refreshLimits()
 		mMinPrimYPos = 0.f;
 		mMinPrimZPos = OS_MIN_OBJECT_Z;
 		mMaxDragDistance = 10000.f;
-		mClassicCloudsEnabled = FALSE;
 		mAllowParcelWindLight = TRUE;
 		mEnableTeenMode = FALSE; //get saved settings?
 		mEnforceMaxBuild = FALSE;
@@ -228,7 +227,6 @@ void LLWorld::refreshLimits()
 		mMinPrimYPos = 0.f;
 		mMinPrimZPos = SL_MIN_OBJECT_Z;
 		mMaxDragDistance = 10000.f;
-		mClassicCloudsEnabled = FALSE;
 		mAllowParcelWindLight = FALSE;
 		mEnableTeenMode = FALSE; //get saved settings?
 		mEnforceMaxBuild = FALSE;
@@ -415,7 +413,6 @@ void LLWorld::setTerrainDetailScale(F32 val)
 void LLWorld::setAllowMinimap(BOOL val)			{ mAllowMinimap = val; }
 void LLWorld::setAllowPhysicalPrims(BOOL val)	{ mAllowPhysicalPrims = val; }
 void LLWorld::setAllowRenderWater(BOOL val)		{ mAllowRenderWater = val; }
-void LLWorld::setSkyUseClassicClouds(BOOL val)	{ mClassicCloudsEnabled = val; }
 void LLWorld::setAllowParcelWindLight(BOOL val) { mAllowParcelWindLight = val; }
 void LLWorld::setEnableTeenMode(BOOL val)		{ mEnableTeenMode = val; }
 void LLWorld::setEnforceMaxBuild(BOOL val)		{ mEnforceMaxBuild = val; }

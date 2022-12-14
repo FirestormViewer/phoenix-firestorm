@@ -3485,12 +3485,11 @@ void LLAgent::processMaturityPreferenceFromServer(const LLSD &result, U8 perferr
 
 bool LLAgent::requestPostCapability(const std::string &capName, LLSD &postData, httpCallback_t cbSuccess, httpCallback_t cbFailure)
 {
-    std::string url;
-
-    // <FS:Ansariel> FIRE-21323: Crashfix
-    //url = getRegion()->getCapability(capName);
-    url = getRegion() ? getRegion()->getCapability(capName) : "";
-    // </FS:Ansariel>
+    if (!getRegion())
+    {
+        return false;
+    }
+    std::string url = getRegion()->getCapability(capName);
 
     if (url.empty())
     {

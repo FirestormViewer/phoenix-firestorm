@@ -180,6 +180,9 @@ public:
 	// cancel() can restore them.	
 	void saveSettings();
 
+	void saveIgnoredNotifications();
+	void restoreIgnoredNotifications();
+
 	void setCacheLocation(const LLStringExplicit& location);
 	// <FS:Ansariel> Sound cache
 	void setSoundCacheLocation(const LLStringExplicit& location);
@@ -325,6 +328,9 @@ private:
 
 	void onUpdateFilterTerm( bool force = false );
 	void collectSearchableItems();
+    void filterIgnorableNotifications();
+
+    std::map<std::string, bool> mIgnorableNotifs;
 
 	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 	LLScrollListCtrl* mPopupList;

@@ -5320,10 +5320,6 @@ https://wiki.firestormviewer.org/fs_voice
 		Диспетчер анимаций (AO): [AO_MESSAGE]
 		<usetemplate ignoretext="Предупредить меня, когда к функции Диспетчера анимаций (AO) обращается скриптовый объект" name="notifyignore"/>
 	</notification>
-	<notification name="AttachedRiggedObjectToHUD">
-		Предмет с названием "[NAME]" является ригованым мешем, но прикреплен на экран в "[HUD_POINT]". Ригованные меши прикрепленные на экран вообще не будут видны - ни вам, ни кому-либо другому. Возможно, вы захотите снять его и снова прикрепить к обычной точке крепления на теле.
-		<usetemplate ignoretext="Предупреждать меня когда ригованные вещи прикрепляются на экран пользователя." name="notifyignore"/>
-	</notification>
 	<notification name="WarnForceLoginURL">
 		URL-адрес заставки входа в систему переопределен в целях тестирования.
 

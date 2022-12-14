@@ -5193,6 +5193,14 @@ Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 	<notification name="SameFolderRequired">
 		Wybrane elementy muszą znajdować się w tym samym folderze.
 	</notification>
+	<notification name="RiggedMeshAttachedToHUD">
+		Dodatek o nazwie "[NAME]" dołączony do HUD "[POINT]" zawiera riggowany mesz.
+
+Riggowane mesze są przeznaczone do dodawania do samego awatara. Ani ty, ani nikt inny nie zobaczy tego obiektu.
+
+Jeśli chcesz zobaczyć ten obiekt, to usuń go i ponownie dołącz do punktu doczepienia na awatarze.
+		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="okignore" />
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.
 
@@ -5207,10 +5215,6 @@ Pamiętaj, że nie można wybrać "otoczenia współdzielonego" i "bazowanego na
 	<notification name="FSAOScriptedNotification">
 		Animator Firestorma: [AO_MESSAGE]
 		<usetemplate ignoretext="Ostrzegaj mnie, gdy Animator Firestorma jest proszony o dostęp przez oskryptowany obiekt" name="notifyignore" />
-	</notification>
-	<notification name="AttachedRiggedObjectToHUD">
-		Dodatek o nazwie "[NAME]" zawiera riggowany mesz, ale jest dołączony do punktu HUD "[HUD_POINT]". Riggowane mesze dołączone do punktów HUD nie są w ogóle widoczne - ani dla Ciebie, ani dla nikogo innego. Rozważ zdjęcie go i ponowne dołączenie do zwykłego punktu doczepienia.
-		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="notifyignore" />
 	</notification>
 	<notification name="WarnForceLoginURL">
 		Wygląda na to, że adres URL ekranu logowania jest zastępowany w celach testowych.

@@ -225,7 +225,7 @@
 #include "llcommandlineparser.h"
 #include "llfloatermemleak.h"
 #include "llfloaterreg.h"
-#include "llfloateroutfitsnapshot.h"
+#include "llfloatersimpleoutfitsnapshot.h"
 #include "llfloatersnapshot.h"
 #include "llsidepanelinventory.h"
 #include "llatmosphere.h"
@@ -1776,7 +1776,7 @@ bool LLAppViewer::doFrame()
                     LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Snapshot")
                     pingMainloopTimeout("Main:Snapshot");
                     LLFloaterSnapshot::update(); // take snapshots
-                    LLFloaterOutfitSnapshot::update();
+                    LLFloaterSimpleOutfitSnapshot::update();
                     gGLActive = FALSE;
                 }
             }
@@ -2033,6 +2033,7 @@ bool LLAppViewer::cleanup()
 	// LLViewerCamera::deleteSingleton();
 
 	// LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	LLViewerCamera::deleteSingleton();
 	// </FS:Beq>
 	if (gKeyboard)
 	{
@@ -4828,7 +4829,6 @@ void LLAppViewer::forceQuit()
 {
 	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
 	disconnectViewer();
-	LLViewerCamera::deleteSingleton();
 	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
 	// </FS:Beq>
 	LLApp::setQuitting();

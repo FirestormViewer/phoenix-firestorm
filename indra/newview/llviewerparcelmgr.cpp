@@ -2061,7 +2061,7 @@ void LLViewerParcelMgr::optionallyStartMusic(const std::string &music_url, const
 		// only play music when you enter a new parcel if the UI control for this
 		// was not *explicitly* stopped by the user. (part of SL-4878)
         // <FS> Media/Stream separation
-		//LLPanelNearByMedia* nearby_media_panel = gStatusBar->getNearbyMediaPanel();
+		//LLPanelNearByMedia* nearby_media_panel = gStatusBar ? gStatusBar->getNearbyMediaPanel() : NULL;
         LLViewerAudio* viewer_audio = LLViewerAudio::getInstance();
 
         // ask mode //todo constants
