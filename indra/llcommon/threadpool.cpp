@@ -33,7 +33,6 @@
 // anticipate doing so. So a worker thread that's simply waiting for incoming
 // tasks should really sleep a little. Override the default fiber scheduler to
 // implement that.
-#if LL_WINDOWS
 struct sleepy_robin: public boost::fibers::algo::round_robin
 {
     virtual void suspend_until( std::chrono::steady_clock::time_point const&) noexcept
@@ -57,7 +56,6 @@ struct sleepy_robin: public boost::fibers::algo::round_robin
         // take any special action to wake it.
     }
 };
-#endif
 
 /*****************************************************************************
 *   ThreadPoolBase
