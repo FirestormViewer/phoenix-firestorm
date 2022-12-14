@@ -13951,13 +13951,6 @@ Unpacking: [UNPACK_TIME]s [USIZE]KB
       yestext="OK"/>
   </notification>
 
-<notification
- icon="notifytip.tga"
- name="MaterialCreated"
- type="notifytip">
-Material successfully created.  Asset ID: [ASSET_ID]
-</notification>
-
   <notification
     icon="alertmodal.tga"
     name="RiggedMeshAttachedToHUD"
@@ -13972,6 +13965,24 @@ If you want to see this object, remove it and re-attach it to an avatar attachme
         ignoretext="Warn me when rigged mesh is attached to HUD point."
         name="okignore"
         yestext="OK"/>
+  </notification>
+
+<notification
+ icon="notifytip.tga"
+ name="MaterialCreated"
+ type="notifytip">
+Material successfully created.  Asset ID: [ASSET_ID]
+</notification>
+
+  <notification
+    icon="notifytip.tga"
+    name="ReflectionProbeApplied"
+    persist="true"
+    type="alertmodal">
+    Your object has been set to the default Reflection Probe state, which is an invisible, phantom, 5m sphere.  To learn more about Reflection Probes and how to use them, see the Knowledge Base.
+    <usetemplate ignoretext="Reflection Probe tips"
+                 name="okignore"
+                 yestext="OK"/>
   </notification>
 
   <notification

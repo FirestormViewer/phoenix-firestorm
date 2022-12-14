@@ -539,6 +539,12 @@ void LLViewerObject::markDead()
 			LLFollowCamMgr::getInstance()->removeFollowCamParams(mID);
 		}
 
+        if (mReflectionProbe.notNull())
+        {
+            mReflectionProbe->mViewerObject = nullptr;
+            mReflectionProbe = nullptr;
+        }
+
 		sNumZombieObjects++;
 
 		// We can't assume the region will still be around beyond this point

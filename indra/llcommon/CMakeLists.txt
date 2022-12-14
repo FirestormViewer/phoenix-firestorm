@@ -188,6 +188,7 @@ set(llcommon_HEADER_FILES
     llinitdestroyclass.h
     llinitparam.h
     llinstancetracker.h
+    llinstancetrackersubclass.h
     llkeybind.h
     llkeythrottle.h
     llleap.h
@@ -260,6 +261,7 @@ set(llcommon_HEADER_FILES
     stdtypes.h
     stringize.h
     threadpool.h
+    threadpool_fwd.h
     threadsafeschedule.h
     timer.h
     tuple.h

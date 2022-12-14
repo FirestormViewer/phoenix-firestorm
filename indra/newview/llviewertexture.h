@@ -561,9 +561,13 @@ public:
 	static LLPointer<LLViewerFetchedTexture> sMissingAssetImagep;	// Texture to show for an image asset that is not in the database
 	static LLPointer<LLViewerFetchedTexture> sWhiteImagep;	// Texture to show NOTHING (whiteness)
 	static LLPointer<LLViewerFetchedTexture> sDefaultImagep; // "Default" texture for error cases, the only case of fetched texture which is generated in local.
-	static LLPointer<LLViewerFetchedTexture> sSmokeImagep; // Old "Default" translucent texture
 	static LLPointer<LLViewerFetchedTexture> sFlatNormalImagep; // Flat normal map denoting no bumpiness on a surface
 	static LLPointer<LLViewerFetchedTexture> sDefaultIrradiancePBRp; // PBR: irradiance
+
+    // not sure why, but something is iffy about the loading of this particular texture, use the accessor instead of accessing directly
+    static LLPointer<LLViewerFetchedTexture> sSmokeImagep; // Old "Default" translucent texture
+    static LLViewerFetchedTexture* getSmokeImage();
+
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 	static LLPointer<LLViewerFetchedTexture> sDefaultDiffuseImagep;
 // [/SL:KB]

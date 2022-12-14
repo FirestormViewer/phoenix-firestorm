@@ -749,7 +749,7 @@ void LLDrawPoolWater::renderWater()
 
 LLViewerTexture *LLDrawPoolWater::getDebugTexture()
 {
-	return LLViewerFetchedTexture::sSmokeImagep;
+    return LLViewerTextureManager::getFetchedTexture(IMG_SMOKE);
 }
 
 LLColor3 LLDrawPoolWater::getDebugColor() const

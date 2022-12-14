@@ -3502,7 +3502,7 @@ BOOL LLVOVolume::isReflectionProbe() const
     return getParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE);
 }
 
-void LLVOVolume::setIsReflectionProbe(BOOL is_probe)
+bool LLVOVolume::setIsReflectionProbe(BOOL is_probe)
 {
     BOOL was_probe = isReflectionProbe();
     if (is_probe != was_probe)
@@ -3518,9 +3518,11 @@ void LLVOVolume::setIsReflectionProbe(BOOL is_probe)
     }
 
     updateReflectionProbePtr();
+
+    return was_probe != is_probe;
 }
 
-void LLVOVolume::setReflectionProbeAmbiance(F32 ambiance)
+bool LLVOVolume::setReflectionProbeAmbiance(F32 ambiance)
 {
     LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
     if (param_block)
@@ -3529,11 +3531,14 @@ void LLVOVolume::setReflectionProbeAmbiance(F32 ambiance)
         {
             param_block->setAmbiance(ambiance);
             parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+            return true;
         }
     }
+
+    return false;
 }
 
-void LLVOVolume::setReflectionProbeNearClip(F32 near_clip)
+bool LLVOVolume::setReflectionProbeNearClip(F32 near_clip)
 {
     LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
     if (param_block)
@@ -3542,11 +3547,14 @@ void LLVOVolume::setReflectionProbeNearClip(F32 near_clip)
         {
             param_block->setClipDistance(near_clip);
             parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+            return true;
         }
     }
+
+    return false;
 }
 
-void LLVOVolume::setReflectionProbeIsBox(bool is_box)
+bool LLVOVolume::setReflectionProbeIsBox(bool is_box)
 {
     LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
     if (param_block)
@@ -3555,11 +3563,14 @@ void LLVOVolume::setReflectionProbeIsBox(bool is_box)
         {
             param_block->setIsBox(is_box);
             parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+            return true;
         }
     }
+
+    return false;
 }
 
-void LLVOVolume::setReflectionProbeIsDynamic(bool is_dynamic)
+bool LLVOVolume::setReflectionProbeIsDynamic(bool is_dynamic)
 {
     LLReflectionProbeParams* param_block = (LLReflectionProbeParams*)getParameterEntry(LLNetworkData::PARAMS_REFLECTION_PROBE);
     if (param_block)
@@ -3568,8 +3579,11 @@ void LLVOVolume::setReflectionProbeIsDynamic(bool is_dynamic)
         {
             param_block->setIsDynamic(is_dynamic);
             parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+            return true;
         }
     }
+
+    return false;
 }
 
 F32 LLVOVolume::getReflectionProbeAmbiance() const

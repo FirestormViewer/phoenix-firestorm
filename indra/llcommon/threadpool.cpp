@@ -38,11 +38,17 @@ struct sleepy_robin: public boost::fibers::algo::round_robin
 {
     virtual void suspend_until( std::chrono::steady_clock::time_point const&) noexcept
     {
+#if LL_WINDOWS
         // round_robin holds a std::condition_variable, and
         // round_robin::suspend_until() calls
         // std::condition_variable::wait_until(). On Windows, that call seems
         // busier than it ought to be. Try just sleeping.
         Sleep(1);
+#else
+        // currently unused other than windows, but might as well have something here
+        // different units than Sleep(), but we actually just want to sleep for any de-minimis duration
+        usleep(1);
+#endif
     }
 
     virtual void notify() noexcept
@@ -54,16 +60,17 @@ struct sleepy_robin: public boost::fibers::algo::round_robin
 #endif
 
 /*****************************************************************************
-*   ThreadPool
+*   ThreadPoolBase
 *****************************************************************************/
-LL::ThreadPool::ThreadPool(const std::string& name, size_t threads, size_t capacity):
+LL::ThreadPoolBase::ThreadPoolBase(const std::string& name, size_t threads,
+                                   WorkQueueBase* queue):
     super(name),
-    mQueue(name, capacity),
     mName("ThreadPool:" + name),
-    mThreadCount(getConfiguredWidth(name, threads))
+    mThreadCount(getConfiguredWidth(name, threads)),
+    mQueue(queue)
 {}
 
-void LL::ThreadPool::start()
+void LL::ThreadPoolBase::start()
 {
     for (size_t i = 0; i < mThreadCount; ++i)
     {
@@ -91,17 +98,17 @@ void LL::ThreadPool::start()
         });
 }
 
-LL::ThreadPool::~ThreadPool()
+LL::ThreadPoolBase::~ThreadPoolBase()
 {
     close();
 }
 
-void LL::ThreadPool::close()
+void LL::ThreadPoolBase::close()
 {
-    if (! mQueue.isClosed())
+    if (! mQueue->isClosed())
     {
         LL_DEBUGS("ThreadPool") << mName << " closing queue and joining threads" << LL_ENDL;
-        mQueue.close();
+        mQueue->close();
         for (auto& pair: mThreads)
         {
             LL_DEBUGS("ThreadPool") << mName << " waiting on thread " << pair.first << LL_ENDL;
@@ -111,7 +118,7 @@ void LL::ThreadPool::close()
     }
 }
 
-void LL::ThreadPool::run(const std::string& name)
+void LL::ThreadPoolBase::run(const std::string& name)
 {
 #if LL_WINDOWS
     // Try using sleepy_robin fiber scheduler.
@@ -123,13 +130,13 @@ void LL::ThreadPool::run(const std::string& name)
     LL_DEBUGS("ThreadPool") << name << " stopping" << LL_ENDL;
 }
 
-void LL::ThreadPool::run()
+void LL::ThreadPoolBase::run()
 {
-    mQueue.runUntilClose();
+    mQueue->runUntilClose();
 }
 
 //static
-size_t LL::ThreadPool::getConfiguredWidth(const std::string& name, size_t dft)
+size_t LL::ThreadPoolBase::getConfiguredWidth(const std::string& name, size_t dft)
 {
     LLSD poolSizes;
     try
@@ -170,7 +177,7 @@ size_t LL::ThreadPool::getConfiguredWidth(const std::string& name, size_t dft)
 }
 
 //static
-size_t LL::ThreadPool::getWidth(const std::string& name, size_t dft)
+size_t LL::ThreadPoolBase::getWidth(const std::string& name, size_t dft)
 {
     auto instance{ getInstance(name) };
     if (instance)
