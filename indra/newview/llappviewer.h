@@ -287,6 +287,7 @@ private:
 	void idleNetwork();
 
 	void sendLogoutRequest();
+	void persistCachesAndSettings();
 	void disconnectViewer();
 
 	// *FIX: the app viewer class should be some sort of singleton, no?
