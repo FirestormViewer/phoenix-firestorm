@@ -353,6 +353,7 @@ struct LLWindowWin32::LLWindowWin32Thread : public LL::ThreadPool
     {
         try
         {
+            LL_DEBUGS("Window") << "post( callable ) to work queue" << LL_ENDL; // <FS:Beq/> extra debug for threaded window handler
             getQueue().post(std::forward<CALLABLE>(func));
         }
         catch (const LLThreadSafeQueueInterrupt&)
@@ -4737,7 +4738,10 @@ void LLWindowWin32::LLWindowWin32Thread::run()
             //process any pending functions
             getQueue().runPending();
         }
-        
+        // <FS:Beq> This is very verbose even for debug so it has it's own debug tag
+        LL_DEBUGS("WindowVerbose") << "PreCheck Done - closed="  << getQueue().isClosed() << " size=" << getQueue().size() << LL_ENDL;
+        // </FS:Beq>
+
 #if 0
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - Sleep");
@@ -4746,6 +4750,7 @@ void LLWindowWin32::LLWindowWin32Thread::run()
         }
 #endif
     }
+	logger.always("done - queue closed on windows thread.");// <FS:Beq/> extra debug for threaded window handler
 }
 
 void LLWindowWin32::post(const std::function<void()>& func)
