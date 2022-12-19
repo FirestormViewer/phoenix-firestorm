@@ -2,84 +2,181 @@ name: Build viewer
 on: push
 env:
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
-  EXTRA_ARGS: -DFMODSTUDIO=Off -DUSE_KDU=Off
+  EXTRA_ARGS: -DFMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
+  build_secrets_checkout: ${{github.workspace}}/signing
+
 jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-11,ubuntu-18.04,windows-2022]
+        os: [macos-10.15,ubuntu-18.04,windows-2022]
         grid: [sl,os]
         addrsize: [64,32]
         exclude:
           - os: ubuntu-18.04
             addrsize: 32
-          - os: macos-11
+          - os: macos-10.15
             addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
-        - name: Set OS flag
-          if: matrix.grid == 'os'
-          run: echo "FS_GRID=-DOPENSIM:BOOL=ON" >> $GITHUB_ENV
-          shell: bash
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        if: runner.os != 'Windows'
+        id: py311
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: pip3 install -r requirements.txt
+      - name: Check python version
+        run: python -V
+      - name: Checkout build var
+        uses: actions/checkout@v3
+        with:
+          repository: FirestormViewer/fs-build-variables
+          path: build-variables
+      - name: Setup rclone and download the folder
+        uses: beqjanus/setup-rclone@main
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
-        - name: Set SL flag
-          if: matrix.grid == 'sl'
-          run: echo "FS_GRID=-DOPENSIM:BOOL=OFF" >> $GITHUB_ENV
-          shell: bash
-          
-        - name: Get the code
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 1
+      - name: Set OS flag
+        if: matrix.grid == 'os'
+        run: echo "FS_GRID=-DOPENSIM:BOOL=ON" >> $GITHUB_ENV
+        shell: bash
 
-        - name: Checkout build var
-          uses: actions/checkout@v3
-          with:
-            repository: FirestormViewer/fs-build-variables
-            path: build-variables
+      - name: Set channel name
+        if: matrix.addrsize == '64'
+        run: echo "FS_RELEASE_CHAN=Releasex64" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Set channel name for 32 bit
+        if: matrix.addrsize == '32'
+        run: echo "FS_RELEASE_CHAN=Release" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Set SL flag
+        if: matrix.grid == 'sl'
+        run: echo "FS_GRID=-DOPENSIM:BOOL=OFF -DHAVOK_TPV:BOOL=ON" >> $GITHUB_ENV
+        shell: bash
         
-        - name: set VSVER for Windows builds
-          if: runner.os == 'Windows'
-          run: echo "AUTOBUILD_VSVER=170" >> $GITHUB_ENV
-          shell: bash
+      - name: Get the code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-        - name: Install required Ubuntu packages
-          if: runner.os == 'Linux'
-          run: sudo apt-get install python3-setuptools mesa-common-dev libgl1-mesa-dev libxinerama-dev libxrandr-dev libpulse-dev libglu1-mesa-dev
+      - name: Checkout build var
+        uses: actions/checkout@v3
+        with:
+          repository: FirestormViewer/fs-build-variables
+          path: build-variables
 
-        - name: install autobuild
-          run: pip3 install git+https://github.com/Nicky-D/autobuild@main_nd
+      - name: rclone the private 3p packages on Windows
+        if: runner.os == 'Windows'
+        run: 'rclone copy fs_bundles: --include "*windows*bz2" .'
+      - name: rclone the private 3p packages on MacOS
+        if: runner.os == 'MacOS'
+        run: 'rclone copy fs_bundles: --include "*darwin*bz2" .'
+      - name: rclone the private 3p packages on Linux
+        if: runner.os == 'Linux'
+        run: 'rclone copy fs_bundles: --include "*linux*bz2" .'
 
-        - name: install autobuild
-          run: pip3 install llbase
+      - name: set VSVER for Windows builds
+        if: runner.os == 'Windows'
+        run: echo "AUTOBUILD_VSVER=170" >> $GITHUB_ENV
+        shell: bash
+      - name: Install certificate
+        if: runner.os == 'macOS'
+        env:
+          FS_CERT: ${{ secrets.FS_CERT }}
+          FS_CERT_PASS: ${{ secrets.FS_CERT_PASS }}
+          FS_KEYCHAIN_PASS: ${{ secrets.FS_KEYCHAIN_PASS }}
+          NOTARIZE_CREDS: ${{ secrets.NOTARIZE_CREDS }}
+        run: |
+          mkdir -p ${build_secrets_checkout}/code-signing-osx
+          echo -n "$FS_CERT" | base64 --decode --output ${build_secrets_checkout}/code-signing-osx/fs-cert.p12
+          echo -n "$FS_CERT_PASS" >${build_secrets_checkout}/code-signing-osx/password.txt
+          echo -n "$NOTARIZE_CREDS" | base64 --decode --output ${build_secrets_checkout}/code-signing-osx/notarize_creds.sh
+          security create-keychain -p "$FS_KEYCHAIN_PASS" ~/Library/Keychains/viewer.keychain
+          security set-keychain-settings -lut 21600 ~/Library/Keychains/viewer.keychain
+          security unlock-keychain -p "$FS_KEYCHAIN_PASS" ~/Library/Keychains/viewer.keychain
+          security import ${build_secrets_checkout}/code-signing-osx/fs-cert.p12 -P "$FS_CERT_PASS" -A -t cert -f pkcs12 -k ~/Library/Keychains/viewer.keychain
+          security set-key-partition-list -S apple-tool:,apple:, -s -k "$FS_KEYCHAIN_PASS" -t private ~/Library/Keychains/viewer.keychain
+          security list-keychain -d user -s ~/Library/Keychains/viewer.keychain
+      - name: Install required Ubuntu packages
+        if: runner.os == 'Linux'
+        run: sudo apt-get install python3-setuptools mesa-common-dev libgl1-mesa-dev libxinerama-dev libxrandr-dev libpulse-dev libglu1-mesa-dev
+      - name: install autobuild
+        run: pip3 install git+https://github.com/Nicky-D/autobuild@main_nd
 
-        - name: Configure
-          run: autobuild configure -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{github.ref_name}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
-          shell: bash
-        
-        - name: build
-          run: autobuild build -c ReleaseFS -A${{matrix.addrsize}} --no-configure
-          shell: bash
+      - name: install autobuild
+        run: pip3 install llbase
 
-        - name: publish ${{ matrix.os }} artifacts
-          if: runner.os == 'Windows'
-          uses: actions/upload-artifact@v3
-          with:
-            name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
-            path: |
-              build-*/newview/Release/*Setup.exe
-              build-*/newview/Release/*.xz
+      - name: edit installables (64 bit)
+        if: runner.os == 'Windows' && matrix.addrsize == 64
+        run: |
+          autobuild installables edit llphysicsextensions_tpv platform=windows${{matrix.addrsize}} url='file:///\${{ github.workspace }}\llphysicsextensions_tpv-1.0.571939-windows${{matrix.addrsize}}-571939.tar.bz2'
+          autobuild installables edit fmodstudio platform=windows${{matrix.addrsize}} url='file:///\${{ github.workspace }}\fmodstudio-2.02.09-windows${{matrix.addrsize}}-222890941.tar.bz2'
+        shell: bash
 
-        - name: publish ${{ matrix.os }} artifacts
-          if: runner.os == 'Linux'
-          uses: actions/upload-artifact@v3
-          with:
-            name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
-            path: build-linux-*/newview/*.xz
+      - name: edit installables (32 bit)
+        if: runner.os == 'Windows' && matrix.addrsize == 32
+        run: |
+          autobuild installables edit llphysicsextensions_tpv platform=windows url='file:///\${{ github.workspace }}\llphysicsextensions_tpv-1.0.571939-windows-571939.tar.bz2'
+          autobuild installables edit fmodstudio platform=windows url='file:///\${{ github.workspace }}\fmodstudio-2.02.09-windows-222890940.tar.bz2'
+        shell: bash
 
-        - name: publish ${{ matrix.os }} artifacts
-          if: runner.os == 'macOS'
-          uses: actions/upload-artifact@v3
-          with:
-            name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
-            path: build-darwin-*/newview/*.dmg
+      - name: edit installables (32/64 agnostic)
+        if: runner.os == 'Windows'
+        run: |
+          autobuild installables edit kdu platform=windows url='file:///\${{ github.workspace }}\kdu-8.2-windows-212351246.tar.bz2'
+        shell: bash
+      
+      - name: edit installables
+        if: runner.os == 'macOS'
+        run: |
+          autobuild installables edit llphysicsextensions_tpv platform=darwin${{matrix.addrsize}} url='file:////${{ github.workspace }}/llphysicsextensions_tpv-1.0.571939-darwin${{matrix.addrsize}}-571939.tar.bz2'
+          autobuild installables edit kdu platform=darwin url='file:////${{ github.workspace }}/kdu-8.2-darwin-212431232.tar.bz2'
+          autobuild installables --debug edit fmodstudio platform=darwin${{matrix.addrsize}} url='file:////${{ github.workspace }}/fmodstudio-2.02.09-darwin${{matrix.addrsize}}-5.tar.bz2'
+        shell: bash
+
+      - name: edit installables
+        if: runner.os == 'Linux'
+        run: |
+          autobuild installables edit kdu platform=linux${{matrix.addrsize}} url='file:////${{ github.workspace }}/kdu-8.2-linux${{matrix.addrsize}}_bionic-220911445.tar.bz2'
+          autobuild installables edit fmodstudio platform=linux${{matrix.addrsize}} url='file:////${{ github.workspace }}/fmodstudio-2.02.09-linux${{matrix.addrsize}}-222891103.tar.bz2'
+        shell: bash
+
+      - name: Configure
+        run: autobuild configure --debug -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
+        shell: bash
+      
+      - name: build
+        run: autobuild build --debug -c ReleaseFS -A${{matrix.addrsize}} --no-configure
+        shell: bash
+
+      - name: publish Windows artifacts
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
+          path: |
+            build-*/newview/Release/*Setup.exe
+            build-*/newview/Release/*.xz
+
+      - name: publish Linux artifacts
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
+          path: | 
+            build-linux-*/newview/*.xz
+            build-linux-*/newview/*.bz2
+
+      - name: publish MacOS artifacts
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
+          path: |
+            build-darwin-*/newview/*.dmg
+            build-darwin-*/newview/*.bz2

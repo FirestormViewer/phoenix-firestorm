@@ -1756,7 +1756,9 @@ bool LLAppViewer::doFrame()
                 {
                     LLVoiceClient::getInstance()->terminate();
                 }
-
+				// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
+				persistCachesAndSettings();
+				// </FS:Beq>
 				disconnectViewer();
 				resumeMainloopTimeout();
 			}
@@ -2028,13 +2030,11 @@ bool LLAppViewer::cleanup()
 
     // Give any remaining SLPlugin instances a chance to exit cleanly.
     LLPluginProcessParent::shutdown();
-	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
-	// disconnectViewer();
-	// LLViewerCamera::deleteSingleton();
 
-	// LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	disconnectViewer();
 	LLViewerCamera::deleteSingleton();
-	// </FS:Beq>
+
+	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
 	if (gKeyboard)
 	{
 		gKeyboard->resetKeys();
@@ -4828,8 +4828,7 @@ void LLAppViewer::removeDumpDir()
 void LLAppViewer::forceQuit()
 {
 	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
-	disconnectViewer();
-	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	persistCachesAndSettings();
 	// </FS:Beq>
 	LLApp::setQuitting();
 }
@@ -6326,14 +6325,48 @@ void LLAppViewer::idleNetwork()
 		mAgentRegionLastAlive = this_region_alive;
 	}
 }
+void LLAppViewer::persistCachesAndSettings()
+{
+	// Save inventory to disk if appropriate
+    if (gInventory.isInventoryUsable()
+        && gAgent.getID().notNull()) // Shouldn't be null at this stage
+    {
+		LL_INFOS() << "Saving Inventory Cache" << LL_ENDL;
+        gInventory.cache(gInventory.getRootFolderID(), gAgent.getID());
+        if (gInventory.getLibraryRootFolderID().notNull()
+            && gInventory.getLibraryOwnerID().notNull())
+        {
+            gInventory.cache(
+                gInventory.getLibraryRootFolderID(),
+                gInventory.getLibraryOwnerID());
+        }
+		LL_INFOS() << "Saving Inventory Cache : COMPLETED" << LL_ENDL;
+    }
+	else
+	{
+		LL_INFOS() << "Not Saving Inventory Cache : Inventory is currently unusable" << LL_ENDL;
+	}
+	// Persist name cache
+	LLAvatarNameCache::instance().setCustomNameCheckCallback(LLAvatarNameCache::custom_name_check_callback_t()); // <FS:Ansariel> Contact sets
+	LL_INFOS() << "Saving Name Cache" << LL_ENDL;
+	saveNameCache();
+	LL_INFOS() << "Saving Name Cache : COMPLETED" << LL_ENDL;
 
+    // Save experience cache if appropriate
+	if (LLExperienceCache::instanceExists())
+	{
+		LL_INFOS() << "Saving Experience Cache" << LL_ENDL;
+		LLExperienceCache::instance().cleanup();
+		LL_INFOS() << "Saving Experience Cache : COMPLETED" << LL_ENDL;
+	}
+
+}
 void LLAppViewer::disconnectViewer()
 {
 	if (gDisconnected)
 	{
 		return;
 	}
-	gDisconnected = TRUE;// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
 	//
 	// Cleanup after quitting.
 	//
@@ -6363,30 +6396,32 @@ void LLAppViewer::disconnectViewer()
 	{
 		LLSelectMgr::getInstance()->deselectAll();
 	}
+	// <FS:Beq> [FIRE-32453] [BUG-232971] Persist before disconnect
+	// Moved to separate function
+	// // save inventory if appropriate
+    // if (gInventory.isInventoryUsable()
+    //     && gAgent.getID().notNull()) // Shouldn't be null at this stage
+    // {
+    //     gInventory.cache(gInventory.getRootFolderID(), gAgent.getID());
+    //     if (gInventory.getLibraryRootFolderID().notNull()
+    //         && gInventory.getLibraryOwnerID().notNull())
+    //     {
+    //         gInventory.cache(
+    //             gInventory.getLibraryRootFolderID(),
+    //             gInventory.getLibraryOwnerID());
+    //     }
+    // }
 
-	// save inventory if appropriate
-    if (gInventory.isInventoryUsable()
-        && gAgent.getID().notNull()) // Shouldn't be null at this stage
-    {
-        gInventory.cache(gInventory.getRootFolderID(), gAgent.getID());
-        if (gInventory.getLibraryRootFolderID().notNull()
-            && gInventory.getLibraryOwnerID().notNull())
-        {
-            gInventory.cache(
-                gInventory.getLibraryRootFolderID(),
-                gInventory.getLibraryOwnerID());
-        }
-    }
+	// LLAvatarNameCache::instance().setCustomNameCheckCallback(LLAvatarNameCache::custom_name_check_callback_t()); // <FS:Ansariel> Contact sets
+	// saveNameCache();
+	// if (LLExperienceCache::instanceExists())
+	// {
+	// 	// TODO: LLExperienceCache::cleanup() logic should be moved to
+	// 	// cleanupSingleton().
+	// 	LLExperienceCache::instance().cleanup();
+	// }
 
-	LLAvatarNameCache::instance().setCustomNameCheckCallback(LLAvatarNameCache::custom_name_check_callback_t()); // <FS:Ansariel> Contact sets
-	saveNameCache();
-	if (LLExperienceCache::instanceExists())
-	{
-		// TODO: LLExperienceCache::cleanup() logic should be moved to
-		// cleanupSingleton().
-		LLExperienceCache::instance().cleanup();
-	}
-
+	// </FS:Beq>
 	// close inventory interface, close all windows
 	LLSidepanelInventory::cleanup();
 
@@ -6416,7 +6451,7 @@ void LLAppViewer::disconnectViewer()
 	LLDestroyClassList::instance().fireCallbacks();
 
 	cleanup_xfer_manager();
-	// gDisconnected = TRUE; // <FS:Beq/> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
+	gDisconnected = TRUE; 
 
 	// Pass the connection state to LLUrlEntryParcel not to attempt
 	// parcel info requests while disconnected.
